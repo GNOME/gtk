@@ -1628,6 +1628,66 @@ gtk_clist_set_shift (GtkCList * clist,
     GTK_CLIST_CLASS_FW (clist)->draw_row (clist, NULL, row, clist_row);
 }
 
+void
+gtk_clist_set_selectable (GtkCList    *clist,
+			  gint         row,
+			  gboolean     selectable)
+{
+  GtkCListRow *clist_row;
+
+  g_return_if_fail (clist != NULL);
+  g_return_if_fail (GTK_IS_CLIST (clist));
+
+  if (row < 0 || row >= clist->rows)
+    return;
+
+  clist_row = (g_list_nth (clist->row_list, row))->data;
+
+  if (selectable == clist_row->selectable)
+    return;
+
+  clist_row->selectable = selectable;
+
+  if (!selectable && clist_row->state == GTK_STATE_SELECTED)
+    {
+      if (clist->anchor >= 0 &&
+	  clist->selection_mode == GTK_SELECTION_EXTENDED)
+	{
+	  if ((gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_FOCUS (clist)))
+	    {
+	      GTK_CLIST_UNSET_FLAG (clist, CLIST_DRAG_SELECTION);
+	      gtk_grab_remove (GTK_WIDGET (clist));
+	      gdk_pointer_ungrab (GDK_CURRENT_TIME);
+	      if (clist->htimer)
+		{
+		  gtk_timeout_remove (clist->htimer);
+		  clist->htimer = 0;
+		}
+	      if (clist->vtimer)
+		{
+		  gtk_timeout_remove (clist->vtimer);
+		  clist->vtimer = 0;
+		}
+	    }
+	  GTK_CLIST_CLASS_FW (clist)->resync_selection (clist, NULL);
+	}
+      unselect_row (clist, row, -1, NULL);
+    }      
+}
+
+gboolean
+gtk_clist_get_selectable (GtkCList *clist,
+			  gint      row)
+{
+  g_return_val_if_fail (clist != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_CLIST (clist), FALSE);
+
+  if (row < 0 || row >= clist->rows)
+    return FALSE;
+
+  return GTK_CLIST_ROW (g_list_nth (clist->row_list, row))->selectable;
+}
+
 gint
 gtk_clist_append (GtkCList * clist,
 		  gchar * text[])
@@ -4041,7 +4101,7 @@ real_select_row (GtkCList * clist,
 
   clist_row = (g_list_nth (clist->row_list, row))->data;
 
-  if (clist_row->state != GTK_STATE_NORMAL)
+  if (clist_row->state != GTK_STATE_NORMAL || !clist_row->selectable)
     return;
 
   clist_row->state = GTK_STATE_SELECTED;
@@ -4750,6 +4810,7 @@ row_new (GtkCList * clist)
 
   clist_row->fg_set = FALSE;
   clist_row->bg_set = FALSE;
+  clist_row->selectable = TRUE;
   clist_row->state = GTK_STATE_NORMAL;
   clist_row->data = NULL;
   clist_row->destroy = NULL;
@@ -4935,7 +4996,15 @@ gtk_clist_focus_in (GtkWidget     *widget,
 
   if (clist->selection_mode == GTK_SELECTION_BROWSE &&
       clist->selection == NULL && clist->focus_row > -1)
-    select_row (clist, clist->focus_row, -1, (GdkEvent *) event);
+    {
+      GList *list;
+
+      list = g_list_nth (clist->row_list, clist->focus_row);
+      if (list && GTK_CLIST_ROW (list)->selectable)
+	select_row (clist, clist->focus_row, -1, (GdkEvent *) event);
+      else
+	gtk_widget_draw_focus (widget);
+    }
   else
     gtk_widget_draw_focus (widget);
 
@@ -5004,10 +5073,8 @@ toggle_focus_row (GtkCList *clist)
     {
     case  GTK_SELECTION_SINGLE:
     case  GTK_SELECTION_MULTIPLE:
-      
       toggle_row (clist, clist->focus_row, 0, NULL);
       break;
-      
     case GTK_SELECTION_EXTENDED:
       g_list_free (clist->undo_selection);
       g_list_free (clist->undo_unselection);
@@ -5025,7 +5092,6 @@ toggle_focus_row (GtkCList *clist)
 
       GTK_CLIST_CLASS_FW (clist)->resync_selection (clist, NULL);
       break;
-      
     default:
       break;
     }
@@ -5301,7 +5367,6 @@ resync_selection (GtkCList *clist,
 
   if (clist->undo_selection)
     {
-
       list = clist->selection;
       clist->selection = clist->undo_selection;
       clist->selection_end = g_list_last (clist->selection);
@@ -5314,30 +5379,36 @@ resync_selection (GtkCList *clist,
 	  if (row < i || row > e)
 	    {
 	      clist_row = g_list_nth (clist->row_list, row)->data;
-	      clist_row->state = GTK_STATE_SELECTED;
-	      unselect_row (clist, row, -1, event);
-	      clist->undo_selection = g_list_prepend
-		(clist->undo_selection, GINT_TO_POINTER (row));
+	      if (clist_row->selectable)
+		{
+		  clist_row->state = GTK_STATE_SELECTED;
+		  unselect_row (clist, row, -1, event);
+		  clist->undo_selection = g_list_prepend
+		    (clist->undo_selection, GINT_TO_POINTER (row));
+		}
 	    }
 	}
     }    
 
   for (list = g_list_nth (clist->row_list, i); i <= e; i++, list = list->next)
-    if (g_list_find (clist->selection, GINT_TO_POINTER(i)))
+    if (GTK_CLIST_ROW (list)->selectable)
       {
-	if (GTK_CLIST_ROW (list)->state == GTK_STATE_NORMAL)
+	if (g_list_find (clist->selection, GINT_TO_POINTER(i)))
 	  {
-	    GTK_CLIST_ROW (list)->state = GTK_STATE_SELECTED;
-	    unselect_row (clist, i, -1, event);
-	    clist->undo_selection = g_list_prepend (clist->undo_selection,
-						    GINT_TO_POINTER (i));
+	    if (GTK_CLIST_ROW (list)->state == GTK_STATE_NORMAL)
+	      {
+		GTK_CLIST_ROW (list)->state = GTK_STATE_SELECTED;
+		unselect_row (clist, i, -1, event);
+		clist->undo_selection = g_list_prepend (clist->undo_selection,
+							GINT_TO_POINTER (i));
+	      }
 	  }
-      }
-    else if (GTK_CLIST_ROW (list)->state == GTK_STATE_SELECTED)
-      {
-	GTK_CLIST_ROW (list)->state = GTK_STATE_NORMAL;
-	clist->undo_unselection = g_list_prepend (clist->undo_unselection,
-						  GINT_TO_POINTER (i));
+	else if (GTK_CLIST_ROW (list)->state == GTK_STATE_SELECTED)
+	  {
+	    GTK_CLIST_ROW (list)->state = GTK_STATE_NORMAL;
+	    clist->undo_unselection = g_list_prepend (clist->undo_unselection,
+						      GINT_TO_POINTER (i));
+	  }
       }
 
   for (list = clist->undo_unselection; list; list = list->next)
@@ -5431,12 +5502,13 @@ update_extended_selection (GtkCList *clist,
     {
       for (i = s1, list = g_list_nth (clist->row_list, i); i <= e1;
 	   i++, list = list->next)
-	{
-	  if (GTK_CLIST_CLASS_FW (clist)->selection_find (clist, i, list))
-            GTK_CLIST_ROW (list)->state = GTK_STATE_SELECTED;
-          else
-            GTK_CLIST_ROW (list)->state = GTK_STATE_NORMAL;
-	}
+	if (GTK_CLIST_ROW (list)->selectable)
+	  {
+	    if (GTK_CLIST_CLASS_FW (clist)->selection_find (clist, i, list))
+	      GTK_CLIST_ROW (list)->state = GTK_STATE_SELECTED;
+	    else
+	      GTK_CLIST_ROW (list)->state = GTK_STATE_NORMAL;
+	  }
 
       top = ROW_TOP_YPIXEL (clist, clist->focus_row);
 
@@ -5468,7 +5540,8 @@ update_extended_selection (GtkCList *clist,
     {
       for (i = s2, list = g_list_nth (clist->row_list, i); i <= e2;
 	   i++, list = list->next)
-	if (GTK_CLIST_ROW (list)->state != clist->anchor_state)
+	if (GTK_CLIST_ROW (list)->selectable &&
+	    GTK_CLIST_ROW (list)->state != clist->anchor_state)
 	  GTK_CLIST_ROW (list)->state = clist->anchor_state;
 
       top = ROW_TOP_YPIXEL (clist, clist->focus_row);
@@ -5493,7 +5566,7 @@ update_extended_selection (GtkCList *clist,
 	gtk_clist_moveto (clist, clist->focus_row, -1, 1, 0);
 
       y2 = ROW_TOP_YPIXEL (clist, s2);
-      h2 = (e2-s2+1) * (clist->row_height + CELL_SPACING);
+      h2 = (e2 - s2 + 1) * (clist->row_height + CELL_SPACING);
     }
 
   area.y = MAX (0, MIN (y1, y2));
@@ -5981,7 +6054,8 @@ fake_unselect_all (GtkCList * clist,
 
   if (row >= 0 && (work = g_list_nth (clist->row_list, row)))
     {
-      if (GTK_CLIST_ROW (work)->state == GTK_STATE_NORMAL)
+      if (GTK_CLIST_ROW (work)->state == GTK_STATE_NORMAL &&
+	  GTK_CLIST_ROW (work)->selectable)
 	{
 	  GTK_CLIST_ROW (work)->state = GTK_STATE_SELECTED;
 	  
@@ -6016,7 +6090,8 @@ fake_toggle_row (GtkCList *clist,
 {
   GList *work;
 
-  if (!(work = g_list_nth (clist->row_list, row)))
+  if (!(work = g_list_nth (clist->row_list, row))||
+      !GTK_CLIST_ROW (work)->selectable)
     return;
   
   if (GTK_CLIST_ROW (work)->state == GTK_STATE_NORMAL)

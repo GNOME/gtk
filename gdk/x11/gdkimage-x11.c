@@ -84,7 +84,7 @@ gdk_image_new_bitmap(GdkVisual *visual, gpointer data, gint w, gint h)
         Visual *xvisual;
         GdkImage *image;
         GdkImagePrivate *private;
-        private = g_new(GdkImagePrivate, 1);
+        private = malloc (sizeof (GdkImagePrivate));
         image = (GdkImage *) private;
         private->xdisplay = gdk_display;
         private->image_put = gdk_image_put_normal;
@@ -165,7 +165,7 @@ gdk_image_new (GdkImageType  type,
       break;
 
     default:
-      private = g_new (GdkImagePrivate, 1);
+      private = malloc (sizeof (GdkImagePrivate));
       image = (GdkImage*) private;
 
       private->xdisplay = gdk_display;
@@ -187,7 +187,7 @@ gdk_image_new (GdkImageType  type,
 	    {
 	      private->image_put = gdk_image_put_shared;
 
-	      private->x_shm_info = g_new (XShmSegmentInfo, 1);
+	      private->x_shm_info = malloc (sizeof (XShmSegmentInfo));
 	      x_shm_info = private->x_shm_info;
 
 	      private->ximage = XShmCreateImage (private->xdisplay, xvisual, visual->depth,
@@ -196,7 +196,7 @@ gdk_image_new (GdkImageType  type,
 		{
 		  g_warning ("XShmCreateImage failed");
 		  
-		  g_free (image);
+		  free (image);
 		  gdk_use_xshm = False;
 		  return NULL;
 		}
@@ -210,8 +210,8 @@ gdk_image_new (GdkImageType  type,
 		  g_warning ("shmget failed!");
 
 		  XDestroyImage (private->ximage);
-		  g_free (private->x_shm_info);
-		  g_free (image);
+		  free (private->x_shm_info);
+		  free (image);
 
 		  gdk_use_xshm = False;
 		  return NULL;
@@ -228,8 +228,8 @@ gdk_image_new (GdkImageType  type,
 		  XDestroyImage (private->ximage);
 		  shmctl (x_shm_info->shmid, IPC_RMID, 0);
 		  
-		  g_free (private->x_shm_info);
-		  g_free (image);
+		  free (private->x_shm_info);
+		  free (image);
 
 		  return NULL;
 		}
@@ -253,8 +253,8 @@ gdk_image_new (GdkImageType  type,
 		  shmdt (x_shm_info->shmaddr);
 		  shmctl (x_shm_info->shmid, IPC_RMID, 0);
                   
-		  g_free (private->x_shm_info);
-		  g_free (image);
+		  free (private->x_shm_info);
+		  free (image);
 
 		  gdk_use_xshm = False;
 		  return NULL;
@@ -265,12 +265,12 @@ gdk_image_new (GdkImageType  type,
 	    }
 	  else
 	    {
-	      g_free (image);
+	      free (image);
 	      return NULL;
 	    }
 	  break;
 #else /* USE_SHM */
-	  g_free (image);
+	  free (image);
 	  return NULL;
 #endif /* USE_SHM */
 	case GDK_IMAGE_NORMAL:
@@ -279,8 +279,7 @@ gdk_image_new (GdkImageType  type,
 	  private->ximage = XCreateImage (private->xdisplay, xvisual, visual->depth,
 					  ZPixmap, 0, 0, width, height, 32, 0);
 
-	  private->ximage->data = g_new (char, private->ximage->bytes_per_line *
-					  private->ximage->height);
+	  private->ximage->data = malloc (sizeof (char) * private->ximage->bytes_per_line * private->ximage->height);
 	  break;
 
 	case GDK_IMAGE_FASTEST:
@@ -331,7 +330,7 @@ gdk_image_get (GdkWindow *window,
   if (win_private->destroyed)
     return NULL;
 
-  private = g_new (GdkImagePrivate, 1);
+  private = malloc (sizeof (GdkImagePrivate));
   image = (GdkImage*) private;
 
   private->xdisplay = gdk_display;
@@ -412,7 +411,7 @@ gdk_image_destroy (GdkImage *image)
       shmdt (x_shm_info->shmaddr);
       shmctl (x_shm_info->shmid, IPC_RMID, 0);
       
-      g_free (private->x_shm_info);
+      free (private->x_shm_info);
 
       image_list = g_list_remove (image_list, image);
 #else /* USE_SHM */
@@ -424,7 +423,7 @@ gdk_image_destroy (GdkImage *image)
       g_assert_not_reached ();
     }
 
-  g_free (image);
+  free (image);
 }
 
 static void

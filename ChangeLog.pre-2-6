@@ -25,26 +25,6 @@ Fri Sep 11 15:36:33 1998  Owen Taylor  <otaylor@redhat.com>
 	* gdk/gdk.c (gdk_event_translate): Don't pass events
 	on destroyed widgets to the gdk_input layer.
 
-Thu Sep 10 22:19:35 1998  Owen Taylor  <otaylor@redhat.com>
-
-	* gtk/gtktext.c: - Save first_cut_pixels when switching
-	sizes, so that if we switch to the _same_ size,
-	we don't move lines around.
-
-	- Make sure that the text area always has a size of at
-	least 1x1, then do all computations when realized.
-
-        - When fetching lines in recompute_geometry, make
-	sure we fetch enough lines to cover the screen.
-	
-Sat Sep  5 16:01:19 1998  Owen Taylor  <otaylor@gtk.org>
-
-	* gdk/gdkinputxfree.h gdk/gdk.c gdk/gdkinputgxi.h:
-	When the pointer is grabbed on an input window,
-	either explicitely, or through press-grab, and
-	then grabbed on a non-input window, ungrab the
-	devices.
-
 Thu Sep  3 19:45:34 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkthemes.c: Use g_module instead of dlopen()
@@ -54,16 +34,6 @@ Thu Sep  3 19:30:11 1998  Owen Taylor  <otaylor@redhat.com>
 	* gtk/gtktooltips.c (gtk_tooltips_expose): Check
 	if we've changed widgets since the expose event
 	was queued.
-
-Tue Sep  1 10:53:52 1998  Owen Taylor  <otaylor@redhat.com>
-
-	* gtk/gtkprogress.c (gtk_progress_finalize): Unref
-	the adjustment.
-
-	* gtk/gtkmenu.c: Modified reference counting so
-	that the reference count from the toplevel that
-	the menu creates to the menu is invisible to the
-	application.
 
 Mon Aug 31 15:33:13 1998  Owen Taylor  <otaylor@redhat.com>
 
@@ -165,6 +135,141 @@ Thu Aug 20 18:27:29 EDT 1998 The Rasterman <raster@redhat.com>
 	
 Thu Aug 20 18:27:29 EDT 1998 The Rasterman <raster@redhat.com>
 	* made gtkrc scanner append dir that gtkrc is read from to pixmap path.
+
+Tue Sep 15 11:06:13 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_move_resize): Don't request
+	a new size from the WM if we asked for the same size
+	before and our request was rejected.
+
+	* gtk/gtkwindow.c (gtk_window_configure_event): If
+	in response to a request, we get a configure event
+	with unchanged dimensions, send a synthetic expose
+	since ForgetGravity won't expose our window.
+
+Thu Sep 10 22:19:35 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktext.c: - Save first_cut_pixels when switching
+	sizes, so that if we switch to the _same_ size,
+	we don't move lines around.
+
+	- Make sure that the text area always has a size of at
+	least 1x1, then do all computations when realized.
+
+        - When fetching lines in recompute_geometry, make
+	sure we fetch enough lines to cover the screen.
+	
+Mon Sep 14 21:47:35 CDT 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* gdk/gdkimage.c: changed g_new()s to malloc()s and 
+	  g_free()s to free()s to avoid mixing g_new()s with 
+	  free()s.  X itself uses free() on some of the 
+	  malloced memory.
+
+Sat Sep 12 10:44:06 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtkfilesel.c: Maintain a list of directories like
+	/afs we know contain only directories, and avoid
+	stat'ing files in those directories. (Because
+	stat'ing all files in /afs is extremely expensive)
+
+	To support automounters, try to open directories,
+	even if we couldn't find them when reading their
+	parent directory.
+
+Thu Sep  3 10:29:03 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk.m4: Conditionalize check for GTK_MAJOR_VERSION,
+	to allow the same gtk.m4 to work for 1.0.x and
+	1.1.x.
+
+Fri Sep 11 15:25:10 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkclist.c (gtk_clist_set_selectable): new function
+	to set/unset the selectable flag of a single row.
+	(gtk_clist_get_selectable): new function 
+	to get the state of the selectable flag
+
+	* gtk/gtkctree.c (gtk_ctree_node_set_selectable)
+	(gtk_ctree_node_get_selectable): clist analogons
+	
+Thu Sep 10 17:04:03 1998  Raph Levien  <raph@gimp.org>
+
+	* gtk/testrgb.c (testrgb_rgb_test): Small changes to the test
+	pattern.
+
+	* gdk/gdkrgb.c (gdk_rgb_convert_gray4_pack): Fixed some alignment
+	bugs in the 4bit gray cases.
+
+Wed Sep  9 02:48:44 PDT 1998 Manish Singh <yosh@gimp.org>
+
+	* configure.in: added -posix check for NeXTStep
+
+	* gtk/testthreads.c: applied part of gtk-joke-980907-0 to use
+	a unique buffer for each thread.
+
+	* docs/gtk-config.1: clarified copyright
+
+Tue Sep  8 05:19:51 1998  Tim Janik  <timj@gtk.org>
+
+	* gdk/gdk.c (gdk_init): use g_atexit() instead of ATEXIT.
+
+	* gtk/gtkmain.c (gtk_init): use g_atexit() instead of ATEXIT.
+
+	* gtk/gtkobject.c (gtk_object_init_type): use g_atexit() instead of
+	ATEXIT.
+	
+	* ltconfig: use GLib's ltconfig which honours lcc.
+
+Mon Sep  7 20:09:23 PDT 1998 Manish Singh <yosh@gimp.org>
+
+	* configure.in: comment the -std1 check and save LIBS properly
+
+Sun Sep  6 12:36:23 PDT 1998 Manish Singh <yosh@gimp.org>
+
+	* gtk/testrgb.c: #include <stdlib.h>
+
+Sat Sep  5 16:01:19 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gdk/gdkinputxfree.h gdk/gdk.c gdk/gdkinputgxi.h:
+	When the pointer is grabbed on an input window,
+	either explicitely, or through press-grab, and
+	then grabbed on a non-input window, ungrab the
+	devices.
+
+Sat Sep  5 07:13:19 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktypeutils.h: don't include any gdk headers.
+	added structure definitions for GtkTypeObject and GtkTypeClass,
+	which cover the very basic fields of GtkObject and GtkObjectClass,
+	which are actually used by the type system.
+	
+	* gtk/gtktypeutils.c: don't include gtkobject.h or gtkcontainer.h,
+	we only refer to our own structures. improved class inheritance
+	sanity checking a bit.
+
+	* gtk/gtkobject.h: placed appropriate comments at the beginnings
+	of the GtkObject and GtkObjectClass structures, which explain
+	their relationship to GtkTypeObject and GtkTypeClass.
+
+	* gtk/gtktypeutils.h:
+	* gtk/gtkobject.h:
+	moved GTK_STRUCT_OFFSET(), GTK_CHECK_CAST(), GTK_CHECK_CLASS_CAST(),
+	GTK_CHECK_TYPE() and GTK_CHECK_CLASS_TYPE() macro definitions from
+ 	gtkobject.h to gtktypeutils.h.
+
+	* gtk/gtkobject.h:
+	* gtk/gtkobject.c:
+	removed gtk_object_check_cast() and gtk_object_check_class_cast()
+	functions. to keep source compatibility, we can provide macro aliases
+ 	for the corresponding gtk_type_* functions. but then again, people
+ 	shouldn't have been using these functions anyways since they were part
+ 	of Gtk's internal API.
+
+	* gtk/gtktypeutils.h:
+	* gtk/gtktypeutils.c:
+	implemented gtk_type_check_object_cast() and gtk_type_check_class_cast()
+	functions to check GtkTypeObject and GtkTypeClass types.
 
 Thu Sep  3 07:16:54 1998  Tim Janik  <timj@gtk.org>
 

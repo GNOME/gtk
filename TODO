@@ -37,6 +37,8 @@ Bugs:
 
  * Expose events aren't being generated correctly for DND demo
 
+ * MappingNotify events produce warnings.
+
 Additions:
  * implement keyboard navigation in menus
 
@@ -277,6 +279,3 @@ Themes
 
  - When a scale gets shown/hidden only queue a redraw on the
    non-window portion, not the whole area.
-
-
-

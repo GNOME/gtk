@@ -127,11 +127,11 @@ main (int argc, char **argv)
 
   for (i=0; i<5; i++)
     {
-      char buffer[10];
+      char buffer[5][10];
       pthread_t thread;
       
-      sprintf(buffer, "Thread %i", i);
-      if (pthread_create (&thread, NULL, counter, buffer))
+      sprintf(buffer[i], "Thread %i", i);
+      if (pthread_create (&thread, NULL, counter, buffer[i]))
 	{
 	  fprintf(stderr, "Couldn't create thread\n");
 	  exit(1);

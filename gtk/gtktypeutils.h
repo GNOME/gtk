@@ -20,7 +20,7 @@
 #define __GTK_TYPE_UTILS_H__
 
 
-#include <gdk/gdk.h>
+#include <glib.h>
 
 
 #ifdef __cplusplus
@@ -74,7 +74,47 @@ typedef enum
 #define	GTK_TYPE_FUNDAMENTAL_LAST	GTK_TYPE_OBJECT
 
 
+/* retrive a structure offset */
+#ifdef offsetof
+#define GTK_STRUCT_OFFSET(struct, field)        ((gint) offsetof (struct, field))
+#else /* !offsetof */
+#define GTK_STRUCT_OFFSET(struct, field)        ((gint) ((gchar*) &((struct*) 0)->field))
+#endif /* !offsetof */
+
+
+/* The debugging versions of the casting macros make sure the cast is "ok"
+ *  before proceeding, but they are definately slower than their less
+ *  careful counterparts as they involve extra ``is a'' checks.
+ */
+#ifdef GTK_NO_CHECK_CASTS
+#  define GTK_CHECK_CAST(tobj, cast_type, cast)       ((cast*) (tobj))
+#  define GTK_CHECK_CLASS_CAST(tclass,cast_type,cast) ((cast*) (tclass))
+#else /* !GTK_NO_CHECK_CASTS */
+#  define GTK_CHECK_CAST(tobj, cast_type, cast) \
+      ((cast*) gtk_type_check_object_cast ((GtkTypeObject*) (tobj), (cast_type)))
+#  define GTK_CHECK_CLASS_CAST(tclass,cast_type,cast) \
+      ((cast*) gtk_type_check_class_cast ((GtkTypeClass*) (tclass), (cast_type)))
+#endif /* GTK_NO_CHECK_CASTS */
+
+/* Determines whether `type_object' and `type_class' are a type of `otype'.
+ */
+#define GTK_CHECK_TYPE(type_object, otype)       ( \
+  gtk_type_is_a (((GtkTypeObject*) (type_object))->klass->type, (otype)) \
+)
+#define GTK_CHECK_CLASS_TYPE(type_class, otype)  ( \
+  gtk_type_is_a (((GtkTypeClass*) (type_class))->type, (otype)) \
+)
+
+
+
+
+/* A GtkType holds a unique type id
+ */
 typedef guint GtkType;
+
+typedef struct _GtkTypeObject	GtkTypeObject;
+typedef struct _GtkTypeClass	GtkTypeClass;
+
 
 /* Builtin Types
  */
@@ -116,6 +156,35 @@ typedef void (*GtkSignalMarshaller) (GtkObject      *object,
 /* deprecated */
 typedef void (*GtkArgGetFunc)	   (GtkObject*, GtkArg*, guint);
 typedef void (*GtkArgSetFunc)	   (GtkObject*, GtkArg*, guint);
+
+
+/* A GtkTypeObject defines the minimum structure requirements
+ * for type instances. Type instances returned from gtk_type_new ()
+ * and initialized through a GtkObjectInitFunc need to directly inherit
+ * from this structure or at least copy its fields one by one.
+ */
+struct _GtkTypeObject
+{
+  /* A pointer to the objects class. This will actually point to
+   *  the derived objects class struct (which will be derived from
+   *  GtkTypeClass).
+   */
+  GtkTypeClass	*klass;
+};
+
+
+/* A GtkTypeClass defines the minimum structure requirements for
+ * a types class. Classes returned from gtk_type_class () and
+ * initialized through a GtkClassInitFunc need to directly inherit
+ * from this structure or at least copy its fields one by one.
+ */
+struct _GtkTypeClass
+{
+  /* The type identifier for the objects class. There is
+   *  one unique identifier per class.
+   */
+  GtkType type;
+};
 
 
 struct _GtkArg
@@ -259,6 +328,10 @@ void		gtk_type_describe_tree		(GtkType	 type,
 						 gboolean	 show_size);
 gint		gtk_type_is_a			(GtkType	 type,
 						 GtkType	 is_a_type);
+GtkTypeObject*	gtk_type_check_object_cast	(GtkTypeObject	*type_object,
+						 GtkType         cast_type);
+GtkTypeClass*	gtk_type_check_class_cast	(GtkTypeClass	*klass,
+						 GtkType         cast_type);
 GtkType		gtk_type_register_enum		(const gchar	*type_name,
 						 GtkEnumValue	*values);
 GtkType		gtk_type_register_flags		(const gchar	*type_name,

@@ -17,9 +17,7 @@
  * Boston, MA 02111-1307, USA.
  */
 #include <string.h>
-#include "gtkobject.h"
 #include "gtktypeutils.h"
-#include "gtkcontainer.h"
 
 
 #define	TYPE_NODES_BLOCK_SIZE	(200)
@@ -331,7 +329,7 @@ gpointer
 gtk_type_new (GtkType type)
 {
   GtkTypeNode *node;
-  GtkObject *object;
+  GtkTypeObject *tobject;
   gpointer klass;
   guint i;
   
@@ -340,13 +338,14 @@ gtk_type_new (GtkType type)
   
   klass = gtk_type_class (type);
   node->chunk_alloc_locked = TRUE;
+
   if (node->mem_chunk)
     {
-      object = g_mem_chunk_alloc (node->mem_chunk);
-      memset (object, 0, node->type_info.object_size);
+      tobject = g_mem_chunk_alloc (node->mem_chunk);
+      memset (tobject, 0, node->type_info.object_size);
     }
   else
-    object = g_malloc0 (node->type_info.object_size);
+    tobject = g_malloc0 (node->type_info.object_size);
   
   /* we need to call the base classes' object_init_func for derived
    * objects with the object's ->klass field still pointing to the
@@ -360,15 +359,15 @@ gtk_type_new (GtkType type)
       LOOKUP_TYPE_NODE (pnode, node->supers[i]);
       if (pnode->type_info.object_init_func)
 	{
-	  object->klass = pnode->klass;
-	  pnode->type_info.object_init_func (object);
+	  tobject->klass = pnode->klass;
+	  pnode->type_info.object_init_func (tobject);
 	}
     }
-  object->klass = klass;
+  tobject->klass = klass;
   if (node->type_info.object_init_func)
-    node->type_info.object_init_func (object);
+    node->type_info.object_init_func (tobject);
   
-  return object;
+  return tobject;
 }
 
 void
@@ -501,11 +500,13 @@ gtk_type_class_init (GtkType type)
   
   if (!node->klass && node->type_info.class_size)
     {
-      GtkObjectClass *object_class;
+      GtkTypeClass *type_class;
       GtkTypeNode *base_node;
       GSList *slist;
       
-      g_assert (node->type_info.class_size >= sizeof (GtkObjectClass));
+      if (node->type_info.class_size < sizeof (GtkTypeClass))
+	g_warning ("The `%s' class is too small to inherit from GtkTypeClass",
+		   node->type_info.type_name);
       
       node->klass = g_malloc0 (node->type_info.class_size);
       
@@ -514,6 +515,12 @@ gtk_type_class_init (GtkType type)
 	  GtkTypeNode *parent;
 	  
 	  LOOKUP_TYPE_NODE (parent, node->parent_type);
+	  
+	  if (node->type_info.class_size < parent->type_info.class_size)
+	    g_warning ("The `%s' class is smaller than its parent class `%s'",
+		       node->type_info.type_name,
+		       node->type_info.type_name);
+	  
 	  if (!parent->klass)
 	    {
 	      gtk_type_class_init (parent->type);
@@ -525,8 +532,8 @@ gtk_type_class_init (GtkType type)
 	    memcpy (node->klass, parent->klass, parent->type_info.class_size);
 	}
       
-      object_class = node->klass;
-      object_class->type = node->type;
+      type_class = node->klass;
+      type_class->type = node->type;
       
       /* stack all base class initialization functions, so we
        * call them in ascending order.
@@ -557,6 +564,86 @@ gtk_type_class_init (GtkType type)
       if (node->type_info.class_init_func)
 	node->type_info.class_init_func (node->klass);
     }
+}
+
+static inline gchar*
+gtk_type_descriptive_name (GtkType type)
+{
+  gchar *name;
+
+  name = gtk_type_name (type);
+  if (!name)
+    name = "(unknown)";
+
+  return name;
+}
+
+GtkTypeObject*
+gtk_type_check_object_cast (GtkTypeObject  *type_object,
+			    GtkType         cast_type)
+{
+  if (!type_object)
+    {
+      g_warning ("invalid cast from (NULL) pointer to `%s'",
+		 gtk_type_descriptive_name (cast_type));
+      return type_object;
+    }
+  if (!type_object->klass)
+    {
+      g_warning ("invalid unclassed pointer in cast to `%s'",
+		 gtk_type_descriptive_name (cast_type));
+      return type_object;
+    }
+  /* currently, GTK_TYPE_OBJECT is the lowest fundamental type
+   * dominator for types that introduce classes.
+   */
+  if (type_object->klass->type < GTK_TYPE_OBJECT)
+    {
+      g_warning ("invalid class type `%s' in cast to `%s'",
+		 gtk_type_descriptive_name (type_object->klass->type),
+		 gtk_type_descriptive_name (cast_type));
+      return type_object;
+    }
+  if (!gtk_type_is_a (type_object->klass->type, cast_type))
+    {
+      g_warning ("invalid cast from `%s' to `%s'",
+		 gtk_type_descriptive_name (type_object->klass->type),
+		 gtk_type_descriptive_name (cast_type));
+      return type_object;
+    }
+
+  return type_object;
+}
+
+GtkTypeClass*
+gtk_type_check_class_cast (GtkTypeClass   *klass,
+			   GtkType         cast_type)
+{
+  if (!klass)
+    {
+      g_warning ("invalid class cast from (NULL) pointer to `%s'",
+		 gtk_type_descriptive_name (cast_type));
+      return klass;
+    }
+  /* currently, GTK_TYPE_OBJECT is the lowest fundamental type
+   * dominator for types that introduce classes.
+   */
+  if (klass->type < GTK_TYPE_OBJECT)
+    {
+      g_warning ("invalid class type `%s' in class cast to `%s'",
+		 gtk_type_descriptive_name (klass->type),
+		 gtk_type_descriptive_name (cast_type));
+      return klass;
+    }
+  if (!gtk_type_is_a (klass->type, cast_type))
+    {
+      g_warning ("invalid class cast from `%s' to `%s'",
+		 gtk_type_descriptive_name (klass->type),
+		 gtk_type_descriptive_name (cast_type));
+      return klass;
+    }
+
+  return klass;
 }
 
 GtkEnumValue*
