@@ -770,6 +770,7 @@ gdk_rgb_convert_8 (GdkImage *image,
    public domain. */
 
 #define DM_WIDTH 128
+#define DM_WIDTH_SHIFT 7
 #define DM_HEIGHT 128
 static guchar DM[128][128] =
 {
@@ -905,6 +906,7 @@ static guchar DM[128][128] =
 
 #else
 #define DM_WIDTH 8
+#define DM_WIDTH_SHIFT 3
 #define DM_HEIGHT 8
 static guchar DM[8][8] =
 {
@@ -918,6 +920,28 @@ static guchar DM[8][8] =
   { 63, 31, 55, 23, 61, 29, 53, 21 }
 };
 #endif
+
+static guint32 *DM_565 = NULL;
+
+static void
+gdk_rgb_preprocess_dm_565 (void)
+{
+  int i;
+  guint32 dith;
+
+  if (DM_565 == NULL)
+    {
+      DM_565 = g_new (guint32, DM_WIDTH * DM_HEIGHT);
+      for (i = 0; i < DM_WIDTH * DM_HEIGHT; i++)
+	{
+	  dith = DM[0][i] >> 3;
+	  DM_565[i] = (dith << 20) | dith | (((7 - dith) >> 1) << 10);
+#ifdef VERBOSE
+	  g_print ("%i %x %x\n", i, dith, DM_565[i]);
+#endif
+	}
+    }
+}
 
 static void
 gdk_rgb_convert_8_d666 (GdkImage *image,
@@ -1369,6 +1393,132 @@ gdk_rgb_convert_565_br (GdkImage *image,
 
 /* Thanks to Ray Lehtiniemi for a patch that resulted in a ~25% speedup
    in this mode. */
+#ifdef HAIRY_CONVERT_565
+static void
+gdk_rgb_convert_565_d (GdkImage *image,
+		     gint x0, gint y0, gint width, gint height,
+		     guchar *buf, int rowstride,
+		     gint x_align, gint y_align, GdkRgbCmap *cmap)
+{
+  /* Now this is what I'd call some highly tuned code! */
+  int x, y;
+  guchar *obuf, *obptr;
+  gint bpl;
+  guchar *bptr, *bp2;
+
+  width += x_align;
+  height += y_align;
+  
+  bptr = buf;
+  bpl = image->bpl;
+  obuf = ((guchar *)image->mem) + y0 * bpl + x0 * 2;
+  for (y = y_align; y < height; y++)
+    {
+      guint32 *dmp = DM_565 + ((y & (DM_HEIGHT - 1)) << DM_WIDTH_SHIFT);
+      bp2 = bptr;
+      obptr = obuf;
+      if (width < 8 || (((unsigned long)obuf | (unsigned long) bp2) & 3))
+	{
+	  for (x = x_align; x < width; x++)
+	    {
+	      gint32 rgb = *bp2++ << 20;
+	      rgb += *bp2++ << 10;
+	      rgb += *bp2++;
+	      rgb += dmp[x & (DM_WIDTH - 1)];
+	      rgb += 0x10040100
+		- ((rgb & 0x1e0001e0) >> 5)
+		- ((rgb & 0x00070000) >> 6);
+
+	      ((unsigned short *)obuf)[0] =
+		((rgb & 0x0f800000) >> 12) |
+		((rgb & 0x0003f000) >> 7) |
+		((rgb & 0x000000f8) >> 3);
+	      obptr += 2;
+	    }
+	}
+      else
+	{
+	  for (x = x_align; x < width - 3; x += 4)
+	    {
+	      guint32 r1b0g0r0;
+	      guint32 g2r2b1g1;
+	      guint32 b3g3r3b2;
+	      guint32 rgb02, rgb13;
+
+	      r1b0g0r0 = ((guint32 *)bp2)[0];
+	      g2r2b1g1 = ((guint32 *)bp2)[1];
+	      b3g3r3b2 = ((guint32 *)bp2)[2];
+	      rgb02 =
+		((r1b0g0r0 & 0xff) << 20) +
+		((r1b0g0r0 & 0xff00) << 2) +
+		((r1b0g0r0 & 0xff0000) >> 16) +
+		dmp[x & (DM_WIDTH - 1)];
+	      rgb02 += 0x10040100
+		- ((rgb02 & 0x1e0001e0) >> 5)
+		- ((rgb02 & 0x00070000) >> 6);
+	      rgb13 =
+		((r1b0g0r0 & 0xff000000) >> 4) +
+		((g2r2b1g1 & 0xff) << 10) +
+		((g2r2b1g1 & 0xff00) >> 8) +
+		dmp[(x + 1) & (DM_WIDTH - 1)];
+	      rgb13 += 0x10040100
+		- ((rgb13 & 0x1e0001e0) >> 5)
+		- ((rgb13 & 0x00070000) >> 6);
+	      ((guint32 *)obptr)[0] =
+		((rgb02 & 0x0f800000) >> 12) |
+		((rgb02 & 0x0003f000) >> 7) |
+		((rgb02 & 0x000000f8) >> 3) |
+		((rgb13 & 0x0f800000) << 4) |
+		((rgb13 & 0x0003f000) << 9) |
+		((rgb13 & 0x000000f8) << 13);
+	      rgb02 =
+		((g2r2b1g1 & 0xff0000) << 4) +
+		((g2r2b1g1 & 0xff000000) >> 14) +
+		(b3g3r3b2 & 0xff) +
+		dmp[(x + 2) & (DM_WIDTH - 1)];
+	      rgb02 += 0x10040100
+		- ((rgb02 & 0x1e0001e0) >> 5)
+		- ((rgb02 & 0x00070000) >> 6);
+	      rgb13 =
+		((b3g3r3b2 & 0xff00) << 12) +
+		((b3g3r3b2 & 0xff0000) >> 6) +
+		((b3g3r3b2 & 0xff000000) >> 24) +
+		dmp[(x + 3) & (DM_WIDTH - 1)];
+	      rgb13 += 0x10040100
+		- ((rgb13 & 0x1e0001e0) >> 5)
+		- ((rgb13 & 0x00070000) >> 6);
+	      ((guint32 *)obptr)[1] =
+		((rgb02 & 0x0f800000) >> 12) |
+		((rgb02 & 0x0003f000) >> 7) |
+		((rgb02 & 0x000000f8) >> 3) |
+		((rgb13 & 0x0f800000) << 4) |
+		((rgb13 & 0x0003f000) << 9) |
+		((rgb13 & 0x000000f8) << 13);
+	      bp2 += 12;
+	      obptr += 8;
+	    }
+	  for (; x < width; x++)
+	    {
+	      gint32 rgb = *bp2++ << 20;
+	      rgb += *bp2++ << 10;
+	      rgb += *bp2++;
+	      rgb += dmp[x & (DM_WIDTH - 1)];
+	      rgb += 0x10040100
+		- ((rgb & 0x1e0001e0) >> 5)
+		- ((rgb & 0x00070000) >> 6);
+
+	      ((unsigned short *)obuf)[0] =
+		((rgb & 0x0f800000) >> 12) |
+		((rgb & 0x0003f000) >> 7) |
+		((rgb & 0x000000f8) >> 3);
+	      obptr += 2;
+	    }
+	}
+      bptr += rowstride;
+      obuf += bpl;
+    }
+}
+#else
 static void
 gdk_rgb_convert_565_d (GdkImage *image,
                        gint x0, gint y0, gint width, gint height,
@@ -1389,18 +1539,15 @@ gdk_rgb_convert_565_d (GdkImage *image,
 
   for (y = y_align; y < height; y++)
     {
-      guchar * dmp = DM[y & (DM_HEIGHT - 1)];
-      guchar * bp2 = bptr;
+      guint32 *dmp = DM_565 + ((y & (DM_HEIGHT - 1)) << DM_WIDTH_SHIFT);
+      guchar *bp2 = bptr;
 
       for (x = x_align; x < width; x++)
         {
           gint32 rgb = *bp2++ << 20;
           rgb += *bp2++ << 10;
           rgb += *bp2++;
-          {
-            gint32 dith = dmp[x & (DM_WIDTH - 1)] >> 3;
-            rgb += ((dith << 20) | dith | (((7 - dith) >> 1) << 10));
-          }
+	  rgb += dmp[x & (DM_WIDTH - 1)];
           rgb += 0x10040100
             - ((rgb & 0x1e0001e0) >> 5)
             - ((rgb & 0x00070000) >> 6);
@@ -1415,6 +1562,7 @@ gdk_rgb_convert_565_d (GdkImage *image,
       obuf += bpl;
     }
 }
+#endif
 
 static void
 gdk_rgb_convert_555 (GdkImage *image,
@@ -2175,6 +2323,7 @@ gdk_rgb_select_conv (GdkImage *image)
       conv = gdk_rgb_convert_565;
       conv_d = gdk_rgb_convert_565_d;
       conv_gray = gdk_rgb_convert_565_gray;
+      gdk_rgb_preprocess_dm_565 ();
     }
   else if (bpp == 2 && depth == 16 &&
 	   vtype == GDK_VISUAL_TRUE_COLOR && byterev &&
