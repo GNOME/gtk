@@ -450,7 +450,7 @@ $(srcdir)/stamp-gtkmarshal.h: @REBUILD@ gtkmarshal.list gtkmarshal.h
 	&& (cmp -s xgen-gmh gtkmarshal.h || cp xgen-gmh gtkmarshal.h) \
 	&& rm -f xgen-gmh xgen-gmh~ \
 	&& echo timestamp > $(@F)
-$(srcdir)/gtkmarshal.c: $(srcdir)/stamp-gtkmarshal.h
+$(srcdir)/gtkmarshal.c: @REBUILD@ $(srcdir)/stamp-gtkmarshal.h
 	cd $(srcdir) \
 	&& glib-genmarshal --prefix=gtk_marshal gtkmarshal.list --body >> xgen-gmc \
 	&& cp xgen-gmc gtkmarshal.c \

@@ -94,7 +94,7 @@ gtk_signal_emit_stop_by_name (GtkObject   *object,
 {
   g_return_if_fail (GTK_IS_OBJECT (object));
   
-  g_signal_stop_emission (object, g_signal_lookup (name, G_OBJECT_TYPE (object)));
+  g_signal_stop_emission (object, g_signal_lookup (name, G_OBJECT_TYPE (object)), 0);
 }
 
 void
@@ -106,7 +106,7 @@ gtk_signal_connect_object_while_alive (GtkObject    *object,
   g_return_if_fail (GTK_IS_OBJECT (object));
   
   g_signal_connect_closure (object,
-			    g_signal_lookup (signal, G_OBJECT_TYPE (object)),
+			    g_signal_lookup (signal, G_OBJECT_TYPE (object)), 0,
 			    g_cclosure_new_object_swap (func, alive_object),
 			    FALSE);
 }
@@ -125,7 +125,7 @@ gtk_signal_connect_while_alive (GtkObject    *object,
   closure = g_cclosure_new (func, func_data, NULL);
   g_object_watch_closure (G_OBJECT (alive_object), closure);
   g_signal_connect_closure (object,
-			    g_signal_lookup (signal, G_OBJECT_TYPE (object)),
+			    g_signal_lookup (signal, G_OBJECT_TYPE (object)), 0,
 			    closure,
 			    FALSE);
 }
@@ -144,7 +144,7 @@ gtk_signal_connect_full (GtkObject           *object,
   g_return_val_if_fail (unsupported == NULL, 0);
   
   return g_signal_connect_closure (object,
-				   g_signal_lookup (name, G_OBJECT_TYPE (object)),
+				   g_signal_lookup (name, G_OBJECT_TYPE (object)), 0,
 				   (object_signal
 				    ? g_cclosure_new_swap
 				    : g_cclosure_new) (func,
@@ -164,7 +164,7 @@ gtk_signal_compat_matched (GtkObject       *object,
   
   g_return_if_fail (GTK_IS_OBJECT (object));
   
-  id = g_signal_handler_find (object, match, 0, NULL, func, data);
+  id = g_signal_handler_find (object, match, 0, 0, NULL, func, data);
   
   if (!id)
     g_warning ("unable to find signal handler for object(%p) with func(%p) and data(%p)",
@@ -333,7 +333,7 @@ gtk_signal_emitv (GtkObject *object,
   if (query.return_type != G_TYPE_NONE)
     g_value_init (&rvalue, query.return_type);
   
-  g_signal_emitv (params, signal_id, &rvalue);
+  g_signal_emitv (params, signal_id, 0, &rvalue);
   
   if (query.return_type != G_TYPE_NONE)
     {

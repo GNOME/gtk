@@ -47,7 +47,7 @@ extern "C" {
 #define	gtk_signal_init()			      g_type_init()
 #define	gtk_signal_lookup			      g_signal_lookup
 #define	gtk_signal_name				      g_signal_name
-#define	gtk_signal_emit_stop			      g_signal_stop_emission
+#define	gtk_signal_emit_stop(i,s)		      g_signal_stop_emission ((i), (s), 0)
 #define	gtk_signal_connect(o,s,f,d)		      gtk_signal_connect_full ((o), (s), (f), 0, (d), 0, 0, 0)
 #define	gtk_signal_connect_after(o,s,f,d)	      gtk_signal_connect_full ((o), (s), (f), 0, (d), 0, 0, 1)
 #define	gtk_signal_connect_object(o,s,f,d)	      gtk_signal_connect_full ((o), (s), (f), 0, (d), 0, 1, 0)
@@ -64,12 +64,12 @@ extern "C" {
 #define	gtk_signal_handler_unblock_by_func(o,f,d)     gtk_signal_compat_matched ((o), (f), (d), G_SIGNAL_MATCH_FUNC | \
                                                                                                 G_SIGNAL_MATCH_DATA, 2)
 #define	gtk_signal_handler_unblock_by_data(o,d)	      gtk_signal_compat_matched ((o), 0, (d), G_SIGNAL_MATCH_DATA, 2)
-#define	gtk_signal_handler_pending		      g_signal_has_handler_pending
+#define	gtk_signal_handler_pending(i,s,b)	      g_signal_has_handler_pending ((i), 0, (s), (b))
 #define	gtk_signal_handler_pending_by_func(o,s,b,f,d) (g_signal_handler_find ((o), G_SIGNAL_MATCH_ID | \
 			                                                           G_SIGNAL_MATCH_FUNC | \
                                                                                    G_SIGNAL_MATCH_DATA | \
                                                                                    ((b) ? 0 : G_SIGNAL_MATCH_UNBLOCKED), \
-                                   			                           (s), 0, (f), (d)) != 0)
+                                   			                           (s), 0, 0, (f), (d)) != 0)
 
 
 /* --- compat functions --- */

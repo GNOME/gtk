@@ -1,3 +1,7 @@
+Fri Oct 27 18:51:44 2000  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtksignal.[hc]: adapt to GSignal signature changes.
+
 2000-10-27  Robert Brady  <robert@suse.co.uk>
 
 	* configure.in (ALL_LINGUAS): Add en@IPA (English, phonetic), 
