@@ -1,3 +1,9 @@
+Fri Aug  1 15:33:59 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtksocket.c: Patch from Denis Mikhalkin to
+	forward KeyRelease events as well as KeyPress events.
+	(#115597)
+
 Fri Aug  1 15:06:25 2003  Owen Taylor  <otaylor@redhat.com>
  
  	* gdk/gdk.c (gdk_parse_args): g_set_prgname("<unknown>")

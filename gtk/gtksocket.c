@@ -64,7 +64,7 @@ static void     gtk_socket_hierarchy_changed    (GtkWidget        *widget,
 						 GtkWidget        *old_toplevel);
 static void     gtk_socket_grab_notify          (GtkWidget        *widget,
 						 gboolean          was_grabbed);
-static gboolean gtk_socket_key_press_event      (GtkWidget        *widget,
+static gboolean gtk_socket_key_event            (GtkWidget        *widget,
 						 GdkEventKey      *event);
 static void     gtk_socket_claim_focus          (GtkSocket        *socket,
 						 gboolean          send_event);
@@ -194,7 +194,8 @@ gtk_socket_class_init (GtkSocketClass *class)
   widget_class->size_allocate = gtk_socket_size_allocate;
   widget_class->hierarchy_changed = gtk_socket_hierarchy_changed;
   widget_class->grab_notify = gtk_socket_grab_notify;
-  widget_class->key_press_event = gtk_socket_key_press_event;
+  widget_class->key_press_event = gtk_socket_key_event;
+  widget_class->key_release_event = gtk_socket_key_event;
   widget_class->focus = gtk_socket_focus;
   
   container_class->remove = gtk_socket_remove;
@@ -778,8 +779,8 @@ gtk_socket_grab_notify (GtkWidget *widget,
 }
 
 static gboolean
-gtk_socket_key_press_event (GtkWidget   *widget,
-			    GdkEventKey *event)
+gtk_socket_key_event (GtkWidget   *widget,
+                      GdkEventKey *event)
 {
   GtkSocket *socket = GTK_SOCKET (widget);
   
@@ -788,7 +789,7 @@ gtk_socket_key_press_event (GtkWidget   *widget,
       GdkScreen *screen = gdk_drawable_get_screen (socket->plug_window);
       XEvent xevent;
       
-      xevent.xkey.type = KeyPress;
+      xevent.xkey.type = (event->type == GDK_KEY_PRESS) ? KeyPress : KeyRelease;
       xevent.xkey.window = GDK_WINDOW_XWINDOW (socket->plug_window);
       xevent.xkey.root = GDK_WINDOW_XWINDOW (gdk_screen_get_root_window (screen));
       xevent.xkey.time = event->time;
