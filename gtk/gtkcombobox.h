@@ -66,10 +66,13 @@ GtkWidget    *gtk_combo_box_new              (void);
 GtkWidget    *gtk_combo_box_new_with_model   (GtkTreeModel    *model);
 
 /* grids */
+gint          gtk_combo_box_get_wrap_width         (GtkComboBox *combo_box);
 void          gtk_combo_box_set_wrap_width         (GtkComboBox *combo_box,
                                                     gint         width);
+gint          gtk_combo_box_get_row_span_column    (GtkComboBox *combo_box);
 void          gtk_combo_box_set_row_span_column    (GtkComboBox *combo_box,
                                                     gint         row_span);
+gint          gtk_combo_box_get_column_span_column (GtkComboBox *combo_box);
 void          gtk_combo_box_set_column_span_column (GtkComboBox *combo_box,
                                                     gint         column_span);
 

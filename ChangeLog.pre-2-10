@@ -1,3 +1,10 @@
+Thu May  6 00:02:21 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_get_wrap_width): 
+	(gtk_combo_box_get_row_span_column): 
+	(gtk_combo_box_get_column_span_column): Add missing getters
+	for readwrite properies. (#135649)
+
 Wed May  5 23:42:42 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcombobox.h: 

@@ -3024,6 +3024,26 @@ gtk_combo_box_new_with_model (GtkTreeModel *model)
 }
 
 /**
+ * gtk_combo_box_get_wrap_width:
+ * @combo_box: A #GtkComboBox.
+ *
+ * Returns the wrap width which is used to determine the number
+ * of columns for the popup menu. If the wrap width is larger than
+ * 1, the combo box is in table mode.
+ *
+ * Returns: the wrap width.
+ *
+ * Since: 2.6
+ */
+gint
+gtk_combo_box_get_wrap_width (GtkComboBox *combo_box)
+{
+  g_return_val_if_fail (GTK_IS_COMBO_BOX (combo_box), -1);
+
+  return combo_box->priv->wrap_width;
+}
+
+/**
  * gtk_combo_box_set_wrap_width:
  * @combo_box: A #GtkComboBox.
  * @width: Preferred number of columns.
@@ -3050,6 +3070,24 @@ gtk_combo_box_set_wrap_width (GtkComboBox *combo_box,
       
       g_object_notify (G_OBJECT (combo_box), "wrap_width");
     }
+}
+
+/**
+ * gtk_combo_box_get_row_span_column:
+ * @combo_box: A #GtkComboBox.
+ *
+ * Returns the column with row span information for @combo_box.
+ *
+ * Returns: the row span column.
+ *
+ * Since: 2.6
+ */
+gint
+gtk_combo_box_get_row_span_column (GtkComboBox *combo_box)
+{
+  g_return_val_if_fail (GTK_IS_COMBO_BOX (combo_box), -1);
+
+  return combo_box->priv->row_column;
 }
 
 /**
@@ -3082,6 +3120,24 @@ gtk_combo_box_set_row_span_column (GtkComboBox *combo_box,
  
       g_object_notify (G_OBJECT (combo_box), "row_span_column");
     }
+}
+
+/**
+ * gtk_combo_box_get_column_span_column:
+ * @combo_box: A #GtkComboBox.
+ *
+ * Returns the column with column span information for @combo_box.
+ *
+ * Returns: the column span column.
+ *
+ * Since: 2.6
+ */
+gint
+gtk_combo_box_get_column_span_column (GtkComboBox *combo_box)
+{
+  g_return_val_if_fail (GTK_IS_COMBO_BOX (combo_box), -1);
+
+  return combo_box->priv->col_column;
 }
 
 /**

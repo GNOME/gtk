@@ -1,3 +1,7 @@
+Thu May  6 00:04:03 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-sections.txt: Add missing getters.
+
 Wed May  5 23:46:19 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk-sections.txt: Add gtk_combo_box_get_active_text().
