@@ -1,3 +1,12 @@
+2003-12-29  Federico Mena Quintero  <federico@ximian.com>
+
+	Make show_all() work for the extra and preview widgets; reported
+	by Paolo Maggi.
+
+	* gtk/gtkfilechooserdefault.c (set_preview_widget): show_all() the
+	preview widget.
+	(set_extra_widget): show_all() the extra widget.
+
 Mon Dec 29 12:22:22 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkuimanager.c (do_updates): 

@@ -460,7 +460,7 @@ set_preview_widget (GtkFileChooserDefault *impl,
   impl->preview_widget = preview_widget;
   if (impl->preview_widget)
     {
-      gtk_widget_show (impl->preview_widget);
+      gtk_widget_show_all (impl->preview_widget);
       gtk_container_add (GTK_CONTAINER (impl->preview_frame),
 			 impl->preview_widget);
     }
@@ -1594,7 +1594,7 @@ set_extra_widget (GtkFileChooserDefault *impl,
   impl->extra_widget = extra_widget;
   if (impl->extra_widget)
     {
-      gtk_widget_show (impl->extra_widget);
+      gtk_widget_show_all (impl->extra_widget);
       gtk_box_pack_end (GTK_BOX (impl), impl->extra_widget, FALSE, FALSE, 0);
     }
 }
