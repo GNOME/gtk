@@ -246,7 +246,8 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
     g_signal_new ("add_widget",
 		  G_OBJECT_CLASS_TYPE (klass),
 		  G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE,
-		  G_STRUCT_OFFSET (GtkUIManagerClass, add_widget), NULL, NULL,
+		  G_STRUCT_OFFSET (GtkUIManagerClass, add_widget),
+		  NULL, NULL,
 		  g_cclosure_marshal_VOID__OBJECT,
 		  G_TYPE_NONE, 1, 
 		  GTK_TYPE_WIDGET);
@@ -287,12 +288,13 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
   ui_manager_signals[CONNECT_PROXY] =
     g_signal_new ("connect_proxy",
 		  G_OBJECT_CLASS_TYPE (klass),
-		  0, 
-		  G_STRUCT_OFFSET (GtkUIManagerClass, connect_proxy),  
+		  G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE,
+		  G_STRUCT_OFFSET (GtkUIManagerClass, connect_proxy),
 		  NULL, NULL,
 		  _gtk_marshal_VOID__OBJECT_OBJECT,
 		  G_TYPE_NONE, 2, 
-		  GTK_TYPE_ACTION, GTK_TYPE_WIDGET);
+		  GTK_TYPE_ACTION,
+		  GTK_TYPE_WIDGET);
 
   /**
    * GtkUIManager::disconnect_proxy:
@@ -308,11 +310,13 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
   ui_manager_signals[DISCONNECT_PROXY] =
     g_signal_new ("disconnect_proxy",
 		  G_OBJECT_CLASS_TYPE (klass),
-		  G_STRUCT_OFFSET (GtkUIManagerClass, disconnect_proxy),  
-		  0, NULL, NULL,
+		  G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE,
+		  G_STRUCT_OFFSET (GtkUIManagerClass, disconnect_proxy),
+		  NULL, NULL,
 		  _gtk_marshal_VOID__OBJECT_OBJECT,
-		  G_TYPE_NONE, 2, 
-		  GTK_TYPE_ACTION, GTK_TYPE_WIDGET);
+		  G_TYPE_NONE, 2,
+		  GTK_TYPE_ACTION,
+		  GTK_TYPE_WIDGET);
 
   /**
    * GtkUIManager::pre_activate:
@@ -330,10 +334,11 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
   ui_manager_signals[PRE_ACTIVATE] =
     g_signal_new ("pre_activate",
 		  G_OBJECT_CLASS_TYPE (klass),
-		  G_STRUCT_OFFSET (GtkUIManagerClass, pre_activate),  
-		  0, NULL, NULL,
+		  G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE,
+		  G_STRUCT_OFFSET (GtkUIManagerClass, pre_activate),
+		  NULL, NULL,
 		  _gtk_marshal_VOID__OBJECT,
-		  G_TYPE_NONE, 1, 
+		  G_TYPE_NONE, 1,
 		  GTK_TYPE_ACTION);
 
   /**
@@ -352,11 +357,19 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
   ui_manager_signals[POST_ACTIVATE] =
     g_signal_new ("post_activate",
 		  G_OBJECT_CLASS_TYPE (klass),
-		  G_STRUCT_OFFSET (GtkUIManagerClass, post_activate),  
-		  0, NULL, NULL,
+		  G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE,
+		  G_STRUCT_OFFSET (GtkUIManagerClass, post_activate),
+		  NULL, NULL,
 		  _gtk_marshal_VOID__OBJECT,
-		  G_TYPE_NONE, 1, 
+		  G_TYPE_NONE, 1,
 		  GTK_TYPE_ACTION);
+
+  klass->add_widget = NULL;
+  klass->actions_changed = NULL;
+  klass->connect_proxy = NULL;
+  klass->disconnect_proxy = NULL;
+  klass->pre_activate = NULL;
+  klass->post_activate = NULL;
 
   g_type_class_add_private (gobject_class, sizeof (GtkUIManagerPrivate));
 }

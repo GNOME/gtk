@@ -1,3 +1,9 @@
+2004-05-03  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkuimanager.c (gtk_ui_manager_class_init): Call
+	g_signal_new() correctly and initialize the signal fields.  Fixes
+	#141749; patch based on Michael Natterer's.
+
 u2004-05-03  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkselection.c (_gtk_selection_request): Fix
