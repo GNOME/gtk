@@ -1,5 +1,13 @@
 2001-04-18  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtkwindow.c (gtk_window_class_init): add signals and binding
+	set, so keybindings are configurable	
+	(gtk_window_activate_default): Change to activate the focus widget
+	instead if there's a focus widget, to be consistent with the
+	behavior that previously existed in key_press_event
+
+2001-04-18  Havoc Pennington  <hp@redhat.com>
+
 	* gdk/gdkkeyuni.c: Handle numeric keypad keysyms; bug #50201
 
 2001-04-18  Havoc Pennington  <hp@redhat.com>

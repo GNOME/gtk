@@ -495,6 +495,20 @@ it's larger
 @height: 
 
 
+<!-- ##### SIGNAL GtkWindow::activate-default ##### -->
+<para>
+
+</para>
+
+@window: the object which received the signal.
+
+<!-- ##### SIGNAL GtkWindow::activate-focus ##### -->
+<para>
+
+</para>
+
+@window: the object which received the signal.
+
 <!-- ##### SIGNAL GtkWindow::frame-event ##### -->
 <para>
 
@@ -503,6 +517,14 @@ it's larger
 @window: the object which received the signal.
 @event: 
 @Returns: 
+
+<!-- ##### SIGNAL GtkWindow::move-focus ##### -->
+<para>
+
+</para>
+
+@window: the object which received the signal.
+@arg1: 
 
 <!-- ##### SIGNAL GtkWindow::set-focus ##### -->
 <para>

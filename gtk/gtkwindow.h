@@ -113,6 +113,13 @@ struct _GtkWindowClass
 			    GtkWidget *focus);
   gboolean (* frame_event) (GtkWidget *widget,
 			    GdkEvent  *event);
+
+  /* G_SIGNAL_ACTION signals for keybindings */
+
+  void     (* activate_focus)          (GtkWindow       *window);
+  void     (* activate_default)        (GtkWindow       *window);
+  void     (* move_focus)              (GtkWindow       *window,
+                                        GtkDirectionType direction);  
 };
 
 

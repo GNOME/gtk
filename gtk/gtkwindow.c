@@ -52,6 +52,9 @@
 enum {
   SET_FOCUS,
   FRAME_EVENT,
+  ACTIVATE_FOCUS,
+  ACTIVATE_DEFAULT,
+  MOVE_FOCUS,
   LAST_SIGNAL
 };
 
@@ -144,6 +147,11 @@ static gint gtk_window_focus              (GtkContainer     *container,
 				           GtkDirectionType  direction);
 static void gtk_window_real_set_focus     (GtkWindow         *window,
 					   GtkWidget         *focus);
+
+static void gtk_window_real_activate_default (GtkWindow         *window);
+static void gtk_window_real_activate_focus   (GtkWindow         *window);
+static void gtk_window_move_focus            (GtkWindow         *window,
+                                              GtkDirectionType   dir);
 
 static void gtk_window_move_resize        (GtkWindow         *window);
 static gboolean gtk_window_compare_hints  (GdkGeometry       *geometry_a,
@@ -261,11 +269,12 @@ gtk_window_class_init (GtkWindowClass *klass)
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
-
+  GtkBindingSet *binding_set;
+  
   object_class = (GtkObjectClass*) klass;
   widget_class = (GtkWidgetClass*) klass;
   container_class = (GtkContainerClass*) klass;
-
+  
   parent_class = gtk_type_class (gtk_bin_get_type ());
 
   gobject_class->shutdown = gtk_window_shutdown;
@@ -301,6 +310,10 @@ gtk_window_class_init (GtkWindowClass *klass)
   klass->set_focus = gtk_window_real_set_focus;
   klass->frame_event = gtk_window_frame_event;
 
+  klass->activate_default = gtk_window_real_activate_default;
+  klass->activate_focus = gtk_window_real_activate_focus;
+  klass->move_focus = gtk_window_move_focus;
+  
   /* Construct */
   g_object_class_install_property (gobject_class,
                                    PROP_TYPE,
@@ -392,13 +405,14 @@ gtk_window_class_init (GtkWindowClass *klass)
   /* Style props are set or not */
 
   window_signals[SET_FOCUS] =
-    gtk_signal_new ("set_focus",
-                    GTK_RUN_LAST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkWindowClass, set_focus),
-                    gtk_marshal_VOID__OBJECT,
-		    GTK_TYPE_NONE, 1,
-                    GTK_TYPE_WIDGET);
+    g_signal_newc ("set_focus",
+                   G_TYPE_FROM_CLASS (object_class),
+                   G_SIGNAL_RUN_LAST,
+                   G_STRUCT_OFFSET (GtkWindowClass, set_focus),
+                   NULL, NULL,
+                   gtk_marshal_VOID__OBJECT,
+                   G_TYPE_NONE, 1,
+                   GTK_TYPE_WIDGET);
   
   window_signals[FRAME_EVENT] =
     g_signal_newc ("frame_event",
@@ -410,9 +424,97 @@ gtk_window_class_init (GtkWindowClass *klass)
 		   G_TYPE_BOOLEAN, 1,
 		   GDK_TYPE_EVENT);
 
+  window_signals[ACTIVATE_FOCUS] =
+    g_signal_newc ("activate_focus",
+                   G_OBJECT_CLASS_TYPE (object_class),
+                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                   GTK_SIGNAL_OFFSET (GtkWindowClass, activate_focus),
+		   NULL, NULL,
+		   gtk_marshal_VOID__VOID,
+                   G_TYPE_NONE,
+                   0);
+
+  window_signals[ACTIVATE_DEFAULT] =
+    g_signal_newc ("activate_default",
+                   G_OBJECT_CLASS_TYPE (object_class),
+                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                   GTK_SIGNAL_OFFSET (GtkWindowClass, activate_default),
+		   NULL, NULL,
+		   gtk_marshal_VOID__VOID,
+                   G_TYPE_NONE,
+                   0);
+
+  window_signals[MOVE_FOCUS] =
+    g_signal_newc ("move_focus",
+                   G_OBJECT_CLASS_TYPE (object_class),
+                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                   GTK_SIGNAL_OFFSET (GtkWindowClass, move_focus),
+		   NULL, NULL,
+		   gtk_marshal_VOID__ENUM,
+                   G_TYPE_NONE,
+                   1,
+                   GTK_TYPE_DIRECTION_TYPE);
+  
   if (!mnemonic_hash_table)
     mnemonic_hash_table = g_hash_table_new (mnemonic_hash,
 					    mnemonic_equal);
+
+  /*
+   * Key bindings
+   */
+
+  binding_set = gtk_binding_set_by_class (klass);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_space, 0,
+                                "activate_focus", 0);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_Return, 0,
+                                "activate_default", 0);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Enter, 0,
+                                "activate_default", 0);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_Up, 0,
+                                "move_focus", 1,
+                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_UP);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Up, 0,
+                                "move_focus", 1,
+                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_UP);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_Down, 0,
+                                "move_focus", 1,
+                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_DOWN);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Down, 0,
+                                "move_focus", 1,
+                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_DOWN);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_Left, 0,
+                                "move_focus", 1,
+                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_LEFT);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Left, 0,
+                                "move_focus", 1,
+                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_LEFT);  
+
+  gtk_binding_entry_add_signal (binding_set, GDK_Right, 0,
+                                "move_focus", 1,
+                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_RIGHT);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Right, 0,
+                                "move_focus", 1,
+                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_RIGHT);  
+
+  gtk_binding_entry_add_signal (binding_set, GDK_Tab, 0,
+                                "move_focus", 1,
+                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_FORWARD);
+  gtk_binding_entry_add_signal (binding_set, GDK_ISO_Left_Tab, 0,
+                                "move_focus", 1,
+                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_FORWARD);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_Tab, GDK_SHIFT_MASK,
+                                "move_focus", 1,
+                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_BACKWARD);
+  gtk_binding_entry_add_signal (binding_set, GDK_ISO_Left_Tab, GDK_SHIFT_MASK,
+                                "move_focus", 1,
+                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_BACKWARD);
 }
 
 static void
@@ -954,7 +1056,7 @@ gtk_window_set_position (GtkWindow         *window,
 }
 
 gboolean 
-gtk_window_activate_focus (GtkWindow      *window)
+gtk_window_activate_focus (GtkWindow *window)
 {
   g_return_val_if_fail (window != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
@@ -962,7 +1064,7 @@ gtk_window_activate_focus (GtkWindow      *window)
   if (window->focus_widget)
     {
       if (GTK_WIDGET_IS_SENSITIVE (window->focus_widget))
-	gtk_widget_activate (window->focus_widget);
+        gtk_widget_activate (window->focus_widget);
       return TRUE;
     }
 
@@ -970,14 +1072,21 @@ gtk_window_activate_focus (GtkWindow      *window)
 }
 
 gboolean
-gtk_window_activate_default (GtkWindow      *window)
+gtk_window_activate_default (GtkWindow *window)
 {
   g_return_val_if_fail (window != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
 
-  if (window->default_widget && GTK_WIDGET_IS_SENSITIVE (window->default_widget))
+  if (window->default_widget && GTK_WIDGET_IS_SENSITIVE (window->default_widget) &&
+      (!window->focus_widget || !GTK_WIDGET_RECEIVES_DEFAULT (window->focus_widget)))
     {
       gtk_widget_activate (window->default_widget);
+      return TRUE;
+    }
+  else if (window->focus_widget)
+    {
+      if (GTK_WIDGET_IS_SENSITIVE (window->focus_widget))
+        gtk_widget_activate (window->focus_widget);
       return TRUE;
     }
 
@@ -2035,7 +2144,6 @@ gtk_window_key_press_event (GtkWidget   *widget,
 			    GdkEventKey *event)
 {
   GtkWindow *window;
-  GtkDirectionType direction = 0;
   gboolean handled;
 
   g_return_val_if_fail (widget != NULL, FALSE);
@@ -2058,86 +2166,34 @@ gtk_window_key_press_event (GtkWidget   *widget,
   if (!handled)
     handled = gtk_accel_groups_activate (GTK_OBJECT (window), event->keyval, event->state);
 
-  if (!handled)
-    {
-      switch (event->keyval)
-	{
-	case GDK_space:
-	  if (window->focus_widget)
-	    {
-	      if (GTK_WIDGET_IS_SENSITIVE (window->focus_widget))
-		gtk_widget_activate (window->focus_widget);
-	      handled = TRUE;
-	    }
-	  break;
-	case GDK_Return:
-	case GDK_KP_Enter:
-	  if (window->default_widget && GTK_WIDGET_IS_SENSITIVE (window->default_widget) &&
-	      (!window->focus_widget || !GTK_WIDGET_RECEIVES_DEFAULT (window->focus_widget)))
-	    {
-	      gtk_widget_activate (window->default_widget);
-	      handled = TRUE;
-	    }
-          else if (window->focus_widget)
-	    {
-	      if (GTK_WIDGET_IS_SENSITIVE (window->focus_widget))
-		gtk_widget_activate (window->focus_widget);
-	      handled = TRUE;
-	    }
-	  break;
-	case GDK_Up:
-	case GDK_Down:
-	case GDK_Left:
-	case GDK_Right:
-	case GDK_KP_Up:
-	case GDK_KP_Down:
-	case GDK_KP_Left:
-	case GDK_KP_Right:
-	case GDK_Tab:
-	case GDK_ISO_Left_Tab:
-	  switch (event->keyval)
-	    {
-	    case GDK_Up:
-	    case GDK_KP_Up:
-	      direction = GTK_DIR_UP;
-	      break;
-	    case GDK_Down:
-	    case GDK_KP_Down:
-	      direction = GTK_DIR_DOWN;
-	      break;
-	    case GDK_Left:
-	    case GDK_KP_Left:
-	      direction = GTK_DIR_LEFT;
-	      break;
-	    case GDK_Right:
-	    case GDK_KP_Right:
-	      direction = GTK_DIR_RIGHT;
-	      break;
-	    case GDK_Tab:
-	    case GDK_ISO_Left_Tab:
-	      if (event->state & GDK_SHIFT_MASK)
-		direction = GTK_DIR_TAB_BACKWARD;
-	      else
-		direction = GTK_DIR_TAB_FORWARD;
-              break;
-            default :
-              direction = GTK_DIR_UP; /* never reached, but makes compiler happy */
-	    }
-
-	  gtk_container_focus (GTK_CONTAINER (widget), direction);
-
-	  if (!GTK_CONTAINER (window)->focus_child)
-	    gtk_window_set_focus (GTK_WINDOW (widget), NULL);
-	  else
-	    handled = TRUE;
-	  break;
-	}
-    }
-
+  /* Chain up, invokes binding set */
   if (!handled && GTK_WIDGET_CLASS (parent_class)->key_press_event)
     handled = GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event);
 
   return handled;
+}
+
+
+static void
+gtk_window_real_activate_default (GtkWindow *window)
+{
+  gtk_window_activate_default (window);
+}
+
+static void
+gtk_window_real_activate_focus (GtkWindow *window)
+{
+  gtk_window_activate_focus (window);
+}
+
+static void
+gtk_window_move_focus (GtkWindow       *window,
+                       GtkDirectionType dir)
+{
+  gtk_container_focus (GTK_CONTAINER (window), dir);
+  
+  if (!GTK_CONTAINER (window)->focus_child)
+    gtk_window_set_focus (window, NULL);
 }
 
 static gint
@@ -2443,6 +2499,8 @@ gtk_window_real_set_focus (GtkWindow *window,
       (def_flags != GTK_WIDGET_FLAGS (window->default_widget)))
     gtk_widget_queue_draw (window->default_widget);
 }
+
+
 
 /*********************************
  * Functions related to resizing *
