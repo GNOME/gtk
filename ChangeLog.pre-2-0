@@ -1,3 +1,10 @@
+Wed Sep 19 16:16:38 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/win32/gdkcolor-win32.c gdk/x11/gdkcolor-x11.c 
+	  gdk/linux-fb/gdkcolor-fb.c:
+	Fix propagated (flags && GDK_COLOR_WRITEABLE) typo.
+	(#59723)
+
 Wed Sep 19 16:12:16 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkpixbuf-render.c: Allow -1 for width/height
