@@ -174,7 +174,7 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
                                    g_param_spec_string ("title",
                                                         _("Title"),
                                                         _("The title of the font selection dialog"),
-                                                        _("Pick a font"),
+                                                        _("Pick a Font"),
                                                         (G_PARAM_READABLE |
                                                          G_PARAM_WRITABLE)));
 

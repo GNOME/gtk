@@ -216,7 +216,7 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
                                    g_param_spec_string ("title", 
 							_("Title"), 
                                                         _("The title of the color selection dialog"),
-                                                        _("Pick a color"),
+                                                        _("Pick a Color"),
                                                         (G_PARAM_READABLE | G_PARAM_WRITABLE)));
 
   /**
@@ -570,7 +570,7 @@ gtk_color_button_init (GtkColorButton *color_button)
   gtk_container_add (GTK_CONTAINER (frame), color_button->priv->drawing_area);
   gtk_widget_show (color_button->priv->drawing_area);
 
-  color_button->priv->title = g_strdup (_("Pick a color")); /* default title */
+  color_button->priv->title = g_strdup (_("Pick a Color")); /* default title */
 
   /* Create the buffer for the image so that we can create an image.  
    * Also create the picker's pixmap.

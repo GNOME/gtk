@@ -1,3 +1,9 @@
+Thu Nov  6 00:21:41 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcolorbutton.c (gtk_color_button_init): 
+	* gtk/gtkfontbutton.c (gtk_font_button_init): Improve the 
+	consistency of titles.  (#126193, Damon Chaplin)
+
 Wed Nov  5 22:49:36 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkmenu.c (gtk_menu_set_tearoff_state): Set torn off 
