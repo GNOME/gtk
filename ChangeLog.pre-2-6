@@ -612,7 +612,7 @@ Wed Nov 12 21:40:10 2003  Matthias Clasen  <maclas@gmx.de>
 Wed Nov 12 21:00:10 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkinputdialog.c (gtk_input_dialog_init): Clarify the
-	label for the empty list. String change.  (#95446, Tomas Ãgren)
+	label for the empty list. String change.  (#95446, Tomas Ögren)
 
 Wed Nov 12 20:57:50 2003  Matthias Clasen  <maclas@gmx.de>
 
@@ -4513,7 +4513,7 @@ Fri Jun  6 11:07:33 2003  Owen Taylor  <otaylor@redhat.com>
 	* gtk/gtkwidget.c (event_window_still_viewable): 
 	Before delivering an event to a widget, check that
 	(if relevant), the event's window is still viewable.
-	(#105642, Dennis BjÃ¶rklund)
+	(#105642, Dennis Björklund)
 
 	* gdk/gdkwindow.c (_gdk_window_destroy_hierarchy): 
 	NULL out private->parent, since after destruction
@@ -4662,7 +4662,7 @@ Thu Jun  5 16:52:54 2003  Owen Taylor  <otaylor@redhat.com>
 
 Thu Jun  5 17:20:40 2003  Owen Taylor  <otaylor@redhat.com>
 	 
-	 #107883, Gustavo GirÃ¡ldez
+	 #107883, Gustavo Giráldez
 
 	* gtk/gtktextlayout.c (gtk_text_layout_emit_changed):
 	Split out the case where we know we changed, and 
@@ -5994,7 +5994,7 @@ Mon Jan 27 22:43:11 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreestore.c (gtk_tree_store_sort_helper): don't just bail
 	out if the level only has one item, recurse over the child if there
-	is one. (Fixes #100458, reported by GaÃ«l Le Mignot).
+	is one. (Fixes #100458, reported by Gaël Le Mignot).
 
 Mon Jan 27 22:41:26 2003  Kristian Rietveld  <kris@gtk.org>
 
