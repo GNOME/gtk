@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 2003-02-04 10:14+0200\n"
-"PO-Revision-Date: 2003-02-04 13:41--500\n"
+"POT-Creation-Date: 2003-02-10 11:47+0200\n"
+"PO-Revision-Date: 2003-02-10 05:18--500\n"
 "Last-Translator: Yuriy Syrota <yuri@renome.rovno.ua>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -600,7 +600,7 @@ msgstr "Ширина чи висота зображення TIFF рівна ну
 #: gdk-pixbuf/io-tiff.c:215
 #: gdk-pixbuf/io-tiff.c:224
 msgid "Dimensions of TIFF image too large"
-msgstr ""
+msgstr "Зображення формату FIFF надто велике"
 
 #: gdk-pixbuf/io-tiff.c:234
 #: gdk-pixbuf/io-tiff.c:246
@@ -647,7 +647,7 @@ msgstr "Не вистачає пам'яті для завантаження зо
 
 #: gdk-pixbuf/io-wbmp.c:334
 msgid "Couldn't save the rest"
-msgstr ""
+msgstr "Не вдалося зберегти залишок"
 
 #: gdk-pixbuf/io-wbmp.c:368
 msgid "The WBMP image format"
@@ -843,7 +843,7 @@ msgstr "Мінімальна ширина нащадка"
 
 #: gtk/gtkbbox.c:120
 msgid "Minimum width of buttons inside the box"
-msgstr ""
+msgstr "Мінімальна ширина кнопок в контейнері"
 
 #: gtk/gtkbbox.c:128
 msgid "Minimum child height"
@@ -851,23 +851,23 @@ msgstr "Мінімальна висота нащадка"
 
 #: gtk/gtkbbox.c:129
 msgid "Minimum height of buttons inside the box"
-msgstr ""
+msgstr "Мінімальна висота кнопок в контейнері"
 
 #: gtk/gtkbbox.c:137
 msgid "Child internal width padding"
-msgstr ""
+msgstr "Внутрішнє заповнення по ширині"
 
 #: gtk/gtkbbox.c:138
 msgid "Amount to increase child's size on either side"
-msgstr ""
+msgstr "Степінь збільшення розміру елемента по горизонталі"
 
 #: gtk/gtkbbox.c:146
 msgid "Child internal height padding"
-msgstr ""
+msgstr "Внутрішнє заповнення по висоті"
 
 #: gtk/gtkbbox.c:147
 msgid "Amount to increase child's size on the top and bottom"
-msgstr ""
+msgstr "Степінь збільшення розміру елемента по вертикалі"
 
 #: gtk/gtkbbox.c:155
 msgid "Layout style"
@@ -879,7 +879,7 @@ msgstr ""
 
 #: gtk/gtkbbox.c:164
 msgid "Secondary"
-msgstr ""
+msgstr "Вторинний"
 
 #: gtk/gtkbbox.c:165
 msgid "If TRUE, the child appears in a secondary group of children, suitable for, e.g., help buttons"
@@ -896,7 +896,7 @@ msgstr "Розмір проміжка між нащадками"
 #: gtk/gtkbox.c:138
 #: gtk/gtknotebook.c:444
 msgid "Homogeneous"
-msgstr ""
+msgstr "Гомогенний"
 
 #: gtk/gtkbox.c:139
 msgid "Whether the children should all be the same size"
@@ -905,7 +905,7 @@ msgstr "Чи всі нащадки мають мати однаковий роз
 #: gtk/gtkbox.c:146
 #: gtk/gtkpreview.c:132
 msgid "Expand"
-msgstr ""
+msgstr "Розширювати"
 
 #: gtk/gtkbox.c:147
 msgid "Whether the child should receive extra space when the parent grows"
@@ -918,7 +918,7 @@ msgstr "Гарнітура:"
 
 #: gtk/gtkbox.c:154
 msgid "Whether extra space given to the child should be allocated to the child or used as padding"
-msgstr ""
+msgstr "Чи мають всі вкладені елементи розширюватися разом із збільшенням розмірів батьківського елемента"
 
 #: gtk/gtkbox.c:160
 msgid "Padding"
@@ -964,7 +964,7 @@ msgstr "Текст віджета позначки в кнопці, якщо к�
 #: gtk/gtkbutton.c:197
 #: gtk/gtklabel.c:311
 msgid "Use underline"
-msgstr ""
+msgstr "Використовувати підкреслення"
 
 #: gtk/gtkbutton.c:198
 #: gtk/gtklabel.c:312
@@ -973,11 +973,11 @@ msgstr ""
 
 #: gtk/gtkbutton.c:205
 msgid "Use stock"
-msgstr ""
+msgstr "Використовувати влаштоване"
 
 #: gtk/gtkbutton.c:206
 msgid "If set, the label is used to pick a stock item instead of being displayed"
-msgstr ""
+msgstr "Якщо встановлено, позначку буде використано для вибору з влаштованих елементів замість відображення"
 
 #: gtk/gtkbutton.c:213
 msgid "Border relief"
