@@ -664,7 +664,6 @@ gif_get_lzw (GifContext *context)
 	gint v;
 
 	if (context->pixbuf == NULL) {
-		g_print ("making a new pixbuf\n");
 		context->pixbuf = gdk_pixbuf_new (ART_PIX_RGB,
 						  context->gif89.transparent,
 						  8,
