@@ -1903,8 +1903,8 @@ gtk_text_layout_free_line_display (GtkTextLayout      *layout,
         {
           g_slist_foreach (display->cursors, (GFunc)g_free, NULL);
           g_slist_free (display->cursors);
-          g_slist_free (display->shaped_objects);
         }
+      g_slist_free (display->shaped_objects);
 
       g_free (display);
     }

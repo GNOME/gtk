@@ -276,7 +276,7 @@ set_markup (GtkLabel    *label,
     }
 
   if (text)
-    gtk_label_set_text (label, text);
+    gtk_label_set_text_internal (label, text);
 
   if (attrs)
     {

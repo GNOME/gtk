@@ -4747,6 +4747,8 @@ create_clist (void)
 	    }
 	}
 
+      gtk_style_unref (style);
+      
       separator = gtk_hseparator_new ();
       gtk_box_pack_start (GTK_BOX (vbox), separator, FALSE, TRUE, 0);
 

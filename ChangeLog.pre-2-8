@@ -1,3 +1,19 @@
+2001-01-24    <alexl@redhat.com>
+
+	* gtk/gtkimage.c:
+	Splitted gtk_image_clear into gtk_image_clear() and
+	gtk_image_reset(). Call gtk_image_clear() in ::destroy
+	to avoid leaks.
+
+	* gtk/gtklabel.c (set_markup):
+	Don't leak text.
+
+	* gtk/gtktextlayout.c:
+	Always free display->shaped_objects.
+
+	* gtk/testgtk.c (create_clist):
+	Don't leak custom style.
+
 2001-01-23    <alexl@redhat.com>
 
 	* gtk/gtkcolorsel.c (grab_color_at_mouse):
