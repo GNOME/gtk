@@ -1,3 +1,7 @@
+Thu Nov 15 16:07:42 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtknotebook.c: Some small drawing fixes for scroll arrows.
+
 Thu Nov 15 14:19:34 2001  Owen Taylor  <otaylor@redhat.com>
  
  	* gdk/gdkwindow.c (gdk_window_invalidate_maybe_recurse): Cal

@@ -699,6 +699,7 @@ gtk_notebook_get_event_window_position (GtkNotebook  *notebook,
 					GdkRectangle *rectangle)
 {
   GtkWidget *widget = GTK_WIDGET (notebook);
+  gint border_width = GTK_CONTAINER (notebook)->border_width;
 
   if (notebook->show_tabs && notebook->children)
     {
@@ -706,24 +707,24 @@ gtk_notebook_get_event_window_position (GtkNotebook  *notebook,
 	{
 	  GtkNotebookPage *page = notebook->children->data;
 
-	  rectangle->x = widget->allocation.x;
-	  rectangle->y = widget->allocation.y;
+	  rectangle->x = widget->allocation.x + border_width;
+	  rectangle->y = widget->allocation.y + border_width;
 	  
 	  switch (notebook->tab_pos)
 	    {
 	    case GTK_POS_TOP:
 	    case GTK_POS_BOTTOM:
-	      rectangle->width = widget->allocation.width;
+	      rectangle->width = widget->allocation.width - 2 * border_width;
 	      rectangle->height = page->requisition.height;
 	      if (notebook->tab_pos == GTK_POS_BOTTOM)
-		rectangle->y += widget->allocation.height - rectangle->height;
+		rectangle->y += widget->allocation.height - 2 * border_width - rectangle->height;
 	      break;
 	    case GTK_POS_LEFT:
 	    case GTK_POS_RIGHT:
 	      rectangle->width = page->requisition.width;
-	      rectangle->height = widget->allocation.height;
+	      rectangle->height = widget->allocation.height - 2 * border_width;
 	      if (notebook->tab_pos == GTK_POS_RIGHT)
-		rectangle->x += widget->allocation.width - rectangle->width;
+		rectangle->x += widget->allocation.width - 2 * border_width - rectangle->width;
 	      break;
 	    }
 	}
@@ -1246,28 +1247,14 @@ gtk_notebook_get_arrow_rect (GtkNotebook  *notebook,
       switch (notebook->tab_pos)
 	{
 	case GTK_POS_LEFT:
-	  rectangle->x = event_window_pos.x + (event_window_pos.width - rectangle->width) / 2;
-	  break;
 	case GTK_POS_RIGHT:
-	  rectangle->x = event_window_pos.x + event_window_pos.width - (event_window_pos.width - rectangle->width) / 2;
+	  rectangle->x = event_window_pos.x + (event_window_pos.width - rectangle->width) / 2;
+	  rectangle->y = event_window_pos.y + event_window_pos.height - rectangle->height;
 	  break;
 	case GTK_POS_TOP:
 	case GTK_POS_BOTTOM:
 	  rectangle->x = event_window_pos.x + event_window_pos.width - rectangle->width;
-	  break;
-	}
-      
-      switch (notebook->tab_pos)
-	{
-	case GTK_POS_LEFT:
-	case GTK_POS_RIGHT:
-	  rectangle->y = event_window_pos.y + event_window_pos.height - rectangle->height;
-	  break;
-	case GTK_POS_TOP:
 	  rectangle->y = event_window_pos.y + (event_window_pos.height - rectangle->height) / 2;
-	  break;
-	case GTK_POS_BOTTOM:
-	  rectangle->y = event_window_pos.y + event_window_pos.height - (event_window_pos.height - rectangle->height) / 2;
 	  break;
 	}
     }
