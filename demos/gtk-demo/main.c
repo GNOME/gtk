@@ -122,7 +122,7 @@ read_line (FILE *stream, GString *str)
     {
       int c;
       
-#ifndef HAVE_FLOCKFILE
+#ifdef HAVE_FLOCKFILE
       c = getc_unlocked (stream);
 #else
       c = getc (stream);

@@ -1,3 +1,8 @@
+Sat Feb 28 14:48:35 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* demos/gtk-demo/main.c (read_line): #ifdef HAVE_FLOCKFILE, 
+	not #ifndef HAVE_FLOCKFILE. (#135642, J. Ali Harlow)
+
 2004-02-28  Hans Breuer  <hans@breuer.org>
 
 	* gtk/gtkfilesystemwin32.c : adapt to add -> insert_bookmark
@@ -7982,7 +7987,7 @@ Fri Jun  6 11:05:45 2003  Hidetoshi Tajima  <hidetoshi.tajima@sun.com>
 Thu Jun  5 20:35:40 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* demos/Makefile.am: Conditionalize dependencies for
-	gdk-pixbuf-csource on cross-compilation (#112391, J. Ali Harlowe). 
+	gdk-pixbuf-csource on cross-compilation (#112391, J. Ali Harlow). 
 	Buildtest-inline-pixbufs.h in srcdir. Don't try to build 
 	test-inline-pixbufs.h if we don't have libpng.
 
