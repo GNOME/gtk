@@ -2,6 +2,7 @@
 #include "mi.h"
 #include <string.h>
 
+#include <pango/pangoft2.h>
 #include <freetype/ftglyph.h>
 
 #ifndef g_alloca
@@ -879,10 +880,6 @@ gdk_fb_drawable_clear (GdkDrawable *d)
   _gdk_windowing_window_clear_area (d, 0, 0, GDK_DRAWABLE_IMPL_FBDATA (d)->width, GDK_DRAWABLE_IMPL_FBDATA (d)->height);
 }
 
-extern FT_Library gdk_fb_ft_lib;
-
-extern void pango_fb_font_set_size(PangoFont *font);
-
 static void
 gdk_fb_draw_glyphs (GdkDrawable      *drawable,
 		    GdkGC	     *gc,
@@ -891,9 +888,14 @@ gdk_fb_draw_glyphs (GdkDrawable      *drawable,
 		    gint              y,
 		    PangoGlyphString *glyphs)
 {
-  int i;
-  int xpos;
   GdkFBDrawingContext fbdc;
+  FT_Bitmap bitmap;
+  GdkPixmapFBData pixmap;
+  PangoFT2Subfont subfont_index;
+  PangoGlyphInfo *gi;
+  FT_Face face;
+  FT_UInt glyph_index;
+  int i, xpos;
 
   g_return_if_fail (font);
 
@@ -901,20 +903,39 @@ gdk_fb_draw_glyphs (GdkDrawable      *drawable,
 
   /* Fake its existence as a pixmap */
 
-  pango_fb_font_set_size (font);
-
-  for (i = xpos = 0; i < glyphs->num_glyphs; i++)
+  pixmap.drawable_data.abs_x = 0;
+  pixmap.drawable_data.abs_y = 0;
+  pixmap.drawable_data.depth = 78;
+  
+  gi = glyphs->glyphs;
+  for (i = 0, xpos = 0; i < glyphs->num_glyphs; i++, gi++)
     {
-      PangoFBGlyphInfo *pgi;
+      if (gi->glyph)
+	{
+	  glyph_index = PANGO_FT2_GLYPH_INDEX (gi->glyph);
+	  subfont_index = PANGO_FT2_GLYPH_SUBFONT (gi->glyph);
+	  face = pango_ft2_get_face (font, subfont_index);
 
-      pgi = pango_fb_font_get_glyph_info (font, glyphs->glyphs[i].glyph);
+	  if (face)
+	    {
+	      /* Draw glyph */
+	      FT_Load_Glyph (face, glyph_index, FT_LOAD_DEFAULT);
+	      if (face->glyph->format != ft_glyph_format_bitmap)
+		FT_Render_Glyph (face->glyph, ft_render_mode_normal);
 
-      gdk_fb_draw_drawable_3 (drawable, gc, (GdkPixmap *)&pgi->fbd,
-			      &fbdc,
-			      0, 0,
-			      x + PANGO_PIXELS (xpos) + pgi->left ,  y - pgi->top + 1,
-			      pgi->fbd.drawable_data.width, pgi->fbd.drawable_data.height);
-
+	      pixmap.drawable_data.mem = face->glyph->bitmap.buffer;
+	      pixmap.drawable_data.rowstride = face->glyph->bitmap.pitch;
+	      pixmap.drawable_data.width = face->glyph->bitmap.width;
+	      pixmap.drawable_data.height = face->glyph->bitmap.rows;
+	      
+	      gdk_fb_draw_drawable_3 (drawable, gc, (GdkPixmap *)&pixmap,
+				      &fbdc,
+				      0, 0,
+				      x + PANGO_PIXELS (xpos) + face->glyph->bitmap_left,
+				      y - face->glyph->bitmap_top + 1,
+				      face->glyph->bitmap.width, face->glyph->bitmap.rows);
+	    }
+	}
       xpos += glyphs->glyphs[i].geometry.width;
     }
 

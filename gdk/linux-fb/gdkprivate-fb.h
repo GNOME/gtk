@@ -158,9 +158,6 @@ typedef struct {
   int size;
 } GdkFontPrivateFB;
 
-void gdk_fb_font_init(void);
-void gdk_fb_font_fini(void);
-
 typedef struct {
   /* Empty */
 } GdkImagePrivateFB;
@@ -267,11 +264,9 @@ void       gdk_fb_window_move_resize          (GdkWindow       *window,
 					       gint             height,
 					       gboolean         send_expose_events);
 GdkWindow *gdk_fb_window_find_focus           (void);
-
-
-GdkGC *   _gdk_fb_gc_new                     (GdkDrawable     *drawable,
-					      GdkGCValues     *values,
-					      GdkGCValuesMask  values_mask);
+GdkGC *   _gdk_fb_gc_new                      (GdkDrawable     *drawable,
+					       GdkGCValues     *values,
+					       GdkGCValuesMask  values_mask);
 
 #define _GDK_FB_GC_DEPTH (1<<31)
 void      _gdk_fb_gc_calc_state              (GdkGC           *gc,
@@ -399,31 +394,6 @@ void     gdk_fb_mouse_get_info (gint            *x,
 				gint            *y,
 				GdkModifierType *mask);
 
-
-#define PANGO_TYPE_FB_FONT              (pango_fb_font_get_type ())
-#define PANGO_FB_FONT(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), PANGO_TYPE_FB_FONT, PangoFBFont))
-
-typedef struct _PangoFBFont        PangoFBFont;
-
-struct _PangoFBFont
-{
-  PangoFont parent;
-
-  FT_Face ftf;
-  PangoFontDescription desc;
-  PangoCoverage *coverage;
-  GHashTable *glyph_info;
-};
-
-typedef struct {
-  PangoRectangle extents[2];
-  GdkPixmapFBData fbd;
-  int top, left;
-} PangoFBGlyphInfo;
-
-GType             pango_fb_font_get_type       (void) G_GNUC_CONST;
-PangoFBGlyphInfo *pango_fb_font_get_glyph_info (PangoFont  *font,
-						PangoGlyph  glyph);
 
 extern void CM(void); /* Check for general mem corruption */
 extern void RP(GdkDrawable *drawable); /* Same, for pixmaps */

@@ -40,6 +40,14 @@ static gpointer parent_class = NULL;
 
 static void recompute_drawable (GdkDrawable *drawable);
 static void gdk_fb_window_raise (GdkWindow *window);
+static GdkRegion* gdk_window_fb_get_visible_region (GdkDrawable *drawable);
+
+typedef struct
+{
+  GdkWindowChildChanged changed;
+  GdkWindowChildGetPos get_pos;
+  gpointer user_data;
+}  GdkWindowChildHandlerData;
 
 static void
 g_free_2nd (gpointer a, gpointer b, gpointer data)
@@ -71,11 +79,15 @@ static void
 gdk_window_impl_fb_class_init (GdkWindowFBClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  /*  GdkDrawableClass *drawable_class = GDK_DRAWABLE_CLASS (klass); */
+  GdkDrawableClass *drawable_class = GDK_DRAWABLE_CLASS (klass);
   
   parent_class = g_type_class_peek_parent (klass);
 
   object_class->finalize = gdk_window_impl_fb_finalize;
+  
+  /* Visible and clip regions are the same */
+  drawable_class->get_clip_region = gdk_window_fb_get_visible_region;
+  drawable_class->get_visible_region = gdk_window_fb_get_visible_region;
 }
 
 static void
@@ -784,6 +796,7 @@ gdk_window_resize (GdkWindow *window,
 		   gint       height)
 {
   GdkWindowObject *private;
+  gint x, y;
   
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -794,7 +807,21 @@ gdk_window_resize (GdkWindow *window,
     width = 1;
   if (height < 1)
     height = 1;
-  gdk_window_move_resize (window, private->x, private->y, width, height);
+
+  x = private->x;
+  y = private->y;
+  
+  if (private->parent && (private->parent->window_type != GDK_WINDOW_CHILD))
+    {
+      GdkWindowChildHandlerData *data;
+      
+      data = g_object_get_data (G_OBJECT (private->parent), "gdk-window-child-handler");
+
+      if (data)
+	(*data->get_pos) (window, &x, &y, data->user_data);
+    }
+
+  gdk_window_move_resize (window, x, y, width, height);
 }
 
 static void
@@ -902,6 +929,16 @@ gdk_fb_window_move_resize (GdkWindow *window,
 
   private = (GdkWindowObject*) window;
 
+  if (private->parent && (private->parent->window_type != GDK_WINDOW_CHILD))
+    {
+      GdkWindowChildHandlerData *data;
+      
+      data = g_object_get_data (G_OBJECT (private->parent), "gdk-window-child-handler");
+
+      if (data && (*data->changed) (window, x, y, width, height, data->user_data))
+	  return;
+    }
+  
   if (!private->destroyed)
     {
       GdkRegion *old_region = NULL;
@@ -937,7 +974,7 @@ gdk_fb_window_move_resize (GdkWindow *window,
 	      gdk_region_offset (region, dx, dy);
 	      gdk_region_intersect (region, new_region);
 
-	      if (region->numRects)
+	      if (region->numRects && ((dx != 0) || (dy != 0)))
 		{
 		  GdkFBDrawingContext fbdc;
 
@@ -1411,6 +1448,28 @@ gdk_window_get_root_origin (GdkWindow *window,
   gdk_window_get_deskrelative_origin (window, x, y);
 }
 
+static GdkRegion*
+gdk_window_fb_get_visible_region (GdkDrawable *drawable)
+{
+  GdkDrawableFBData *priv = GDK_DRAWABLE_FBDATA (drawable);
+  GdkRectangle result_rect;
+  GdkRectangle screen_rect;
+
+  result_rect.x = 0;
+  result_rect.y = 0;
+  result_rect.width = priv->width;
+  result_rect.height = priv->height;
+
+  screen_rect.x = -priv->abs_x;
+  screen_rect.y = -priv->abs_y;
+  screen_rect.width = gdk_display->modeinfo.xres;
+  screen_rect.height = gdk_display->modeinfo.yres;
+  
+  gdk_rectangle_intersect (&result_rect, &screen_rect, &result_rect);
+  
+  return gdk_region_rectangle (&result_rect);
+}
+
 GdkWindow*
 gdk_window_get_pointer (GdkWindow       *window,
 			gint            *x,
@@ -1599,13 +1658,58 @@ gdk_window_set_group (GdkWindow *window,
 }
 
 void
-gdk_window_set_decorations (GdkWindow      *window,
-			    GdkWMDecoration decorations)
+_gdk_window_set_child_handler (GdkWindow             *window,
+			       GdkWindowChildChanged changed,
+			       GdkWindowChildGetPos  get_pos,
+			       gpointer              user_data)
 {
+  GdkWindowChildHandlerData *data;
+    
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  /* N/A */
+  data = g_new (GdkWindowChildHandlerData, 1);
+  data->changed = changed;
+  data->get_pos = get_pos;
+  data->user_data = user_data;
+
+  g_object_set_data_full (G_OBJECT (window), "gdk-window-child-handler",
+			  data, (GDestroyNotify) g_free);
+}
+
+void
+gdk_window_set_decorations (GdkWindow      *window,
+			    GdkWMDecoration decorations)
+{
+  GdkWMDecoration *dec;
+    
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  dec = g_new (GdkWMDecoration, 1);
+  *dec = decorations;
+
+  g_object_set_data_full (G_OBJECT (window), "gdk-window-decorations",
+			  dec, (GDestroyNotify) g_free);
+}
+
+gboolean
+_gdk_window_get_decorations(GdkWindow *window,
+			    GdkWMDecoration *decorations)
+{
+  GdkWMDecoration *dec;
+    
+  g_return_val_if_fail (window != NULL, FALSE);
+  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
+
+
+  dec = g_object_get_data (G_OBJECT (window), "gdk-window-decorations");
+  if (dec)
+    {
+      *decorations = *dec;
+      return TRUE;
+    }
+  return FALSE;
 }
 
 void

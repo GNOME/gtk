@@ -634,8 +634,6 @@ _gdk_windowing_init_check (int argc, char **argv)
   if (!gdk_display)
     return FALSE;
 
-  gdk_fb_font_init ();
-
   if (!gdk_fb_keyboard_open ())
     {
       g_warning ("Failed to initialize keyboard");
@@ -1009,8 +1007,6 @@ gdk_windowing_exit (void)
   
   gdk_fb_keyboard_close ();
   
-  gdk_fb_font_fini ();
-
   gdk_fb_display_destroy (gdk_display);
   
   gdk_display = NULL;
