@@ -1,3 +1,15 @@
+2005-02-22  Federico Mena Quintero  <federico@ximian.com>
+
+	Merged from gtk-2-6:
+
+	Fix #164940, patch by Ben Maurer and Tommi Komulainen.
+
+	* gdk/gdkrgb.c (gdk_rgb_convert_565_d): Constify the "dmp" variable.
+	(gdk_rgb_convert_565_d): Likewise.
+	(DM_565): Made a static const precomputed array to avoid
+	allocating it at runtime.
+	(gdk_rgb_preprocess_dm_565): #ifdef out.
+
 2005-02-20  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkwindow.c: 
