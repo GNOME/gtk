@@ -109,13 +109,13 @@ of the text.
 
 <!-- ##### FUNCTION gtk_editable_get_selection_bounds ##### -->
 <para>
-
+Gets the current selection bounds, if there is a selection.
 </para>
 
-@editable: 
-@start: 
-@end: 
-@Returns: 
+@editable: a #GtkEditable widget.
+@start: location to store the starting position, or %NULL. 
+@end: location to store the end position, or %NULL. 
+@Returns: %TRUE if there is a selection.
 
 
 <!-- ##### FUNCTION gtk_editable_insert_text ##### -->

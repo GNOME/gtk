@@ -1,5 +1,7 @@
 2001-10-10  Matthias Clasen   <matthiasc@poet.de>
 
+	* gtk/tmpl/gtkcalendar.sgml, gtk/tmpl/gtkeditable.sgml: Update.
+
 	* gdk-pixbuf/gdk-pixbuf.sgml: Add entity for tmpl/inline.sgml.
 
 	* gdk-pixbuf/tmpl/inline.sgml: Update.

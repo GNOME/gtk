@@ -15,8 +15,8 @@ gtk_calendar_select_month(). The exact day can be selected from the displayed
 month using gtk_calendar_select_day().
 </para>
 <para>
-FIXME: (check)To place a visual marker on a particular day, use
-gtk_calendar_mark_day() and to remove the marker, gtk_calendar_unmark_day().
+To place a visual marker on a particular day, use gtk_calendar_mark_day() 
+and to remove the marker, gtk_calendar_unmark_day().
 Alternative, all marks can be cleared with gtk_calendar_clear_marks().
 </para>
 <para>
@@ -97,7 +97,7 @@ the calendar.</entry>
 
 <!-- ##### FUNCTION gtk_calendar_new ##### -->
 <para>
-Creates a new calendar. FIXME:default date.
+Creates a new calendar, with the current date being selected. 
 </para>
 
 @Returns: a #GtkCalendar.
@@ -111,7 +111,7 @@ Shifts the calendar to a different month.
 @calendar: a #GtkCalendar.
 @month: a month number.
 @year: the year the month is in.
-@Returns: FIXME.
+@Returns: %TRUE.
 
 
 <!-- ##### FUNCTION gtk_calendar_select_day ##### -->
@@ -125,50 +125,50 @@ Selects a day from the current month.
 
 <!-- ##### FUNCTION gtk_calendar_mark_day ##### -->
 <para>
-
+Places a visual marker on a particular day.
 </para>
 
-@calendar: 
-@day: 
-@Returns: 
+@calendar: a #GtkCalendar.
+@day: the day number to mark.
+@Returns: %TRUE.
 
 
 <!-- ##### FUNCTION gtk_calendar_unmark_day ##### -->
 <para>
-
+Removes the visual marker from a particular day.
 </para>
 
-@calendar: 
-@day: 
-@Returns: 
+@calendar: a #GtkCalendar.
+@day: the day number to unmark.
+@Returns: %TRUE.
 
 
 <!-- ##### FUNCTION gtk_calendar_clear_marks ##### -->
 <para>
-
+Remove all visual markers.
 </para>
 
-@calendar: 
+@calendar: a #GtkCalendar.
 
 
 <!-- ##### FUNCTION gtk_calendar_display_options ##### -->
 <para>
-
+Sets display options (whether to display the heading and the month headings).
 </para>
 
-@calendar: 
-@flags: 
+@calendar: a #GtkCalendar. 
+@flags: the display options to set.
 
 
 <!-- ##### FUNCTION gtk_calendar_get_date ##### -->
 <para>
-
+Obtains the selected date from a #GtkCalendar.
 </para>
 
-@calendar: 
-@year: 
-@month: 
-@day: 
+@calendar: a #GtkCalendar.
+@year: location to store the year number.
+@month: location to store the month number.
+@day: location to store the day number.
 
 
 <!-- ##### FUNCTION gtk_calendar_freeze ##### -->
