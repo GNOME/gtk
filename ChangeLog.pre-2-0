@@ -1,5 +1,10 @@
 2001-06-14  Havoc Pennington  <hp@redhat.com>
 
+	* demos/gtk-demo/main.c (load_file): fix bug identified by
+	warnings I just added to gtktextbuffer
+
+2001-06-14  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtkwindow.c (window_group_cleanup_grabs): fix other typo
 
 	* gtk/gtkwidget.c (gtk_widget_propagate_state): fix typo

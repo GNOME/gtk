@@ -491,7 +491,7 @@ load_file (const gchar *filename)
 	case 3:
 	  /* Reading program body */
 	  gtk_text_buffer_insert (source_buffer, &start, p, -1);
-	  gtk_text_buffer_insert (info_buffer, &start, "\n", 1);
+	  gtk_text_buffer_insert (source_buffer, &start, "\n", 1);
 	  break;
 	}
     }
