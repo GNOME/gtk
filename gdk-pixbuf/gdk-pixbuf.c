@@ -56,11 +56,10 @@ gdk_pixbuf_scale (GdkPixBuf *pixbuf, gint w, gint h)
 
     alphagamma = NULL;
 
-    affine[0] = affine[3] = 1;
-    affine[4] = affine[5] = 0;
+    affine[1] = affine[2] = affine[4] = affine[5] = 0;
     
-    affine[1] = w / (pixbuf->art_pixbuf->width);
-    affine[2] = h / (pixbuf->art_pixbuf->height);
+    affine[0] = w / (pixbuf->art_pixbuf->width);
+    affine[3] = h / (pixbuf->art_pixbuf->height);
 
     spb = g_new (GdkPixBuf, 1);
 
@@ -79,7 +78,7 @@ gdk_pixbuf_scale (GdkPixBuf *pixbuf, gint w, gint h)
 	 spb->art_pixbuf = art_pixbuf_new_rgba(pixels, w, h, (w * 4));
 #endif
     } else {
-	 art_alloc (h * w * 3);
+	 pixels = art_alloc (h * w * 3);
 	 art_rgb_affine( pixels, 0, 0, w, h, (w * 3),
 			 pixbuf->art_pixbuf->pixels,
 			 pixbuf->art_pixbuf->width,
@@ -87,5 +86,7 @@ gdk_pixbuf_scale (GdkPixBuf *pixbuf, gint w, gint h)
 			 pixbuf->art_pixbuf->rowstride,
 			 affine, ART_FILTER_NEAREST, alphagamma);
 	 spb->art_pixbuf = art_pixbuf_new_rgb(pixels, w, h, (w * 3)); 
+	 spb->ref_count = 0;
+	 spb->unref_func = NULL;
     }
 }
