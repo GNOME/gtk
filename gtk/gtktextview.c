@@ -76,7 +76,6 @@
  */
 
 #define FOCUS_EDGE_WIDTH 1
-#define DRAG_THRESHOLD 8
 
 #define SCREEN_WIDTH(widget) text_window_get_width (GTK_TEXT_VIEW (widget)->text_window)
 #define SCREEN_HEIGHT(widget) text_window_get_height (GTK_TEXT_VIEW (widget)->text_window)
@@ -3204,16 +3203,14 @@ gtk_text_view_motion_event (GtkWidget *widget, GdkEventMotion *event)
       text_view->drag_start_x >= 0)
     {
       gint x, y;
-      gint dx, dy;
 
       gdk_window_get_pointer (text_view->text_window->bin_window,
                               &x, &y, NULL);
 
-      dx = text_view->drag_start_x - x;
-      dy = text_view->drag_start_y - y;
-
-      if (ABS (dx) > DRAG_THRESHOLD ||
-          ABS (dy) > DRAG_THRESHOLD)
+      if (gtk_drag_check_threshold (widget,
+				    text_view->drag_start_x, 
+				    text_view->drag_start_y,
+				    x, y))
         {
           GtkTextIter iter;
           gint buffer_x, buffer_y;

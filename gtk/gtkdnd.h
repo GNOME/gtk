@@ -131,6 +131,12 @@ void gtk_drag_set_default_icon (GdkColormap   *colormap,
 			        gint           hot_y);
 
 
+gboolean gtk_drag_check_threshold (GtkWidget *widget,
+				   gint       start_x,
+				   gint       start_y,
+				   gint       current_x,
+				   gint       current_y);
+
 /* Internal functions */
 void gtk_drag_source_handle_event (GtkWidget *widget,
 				   GdkEvent  *event);

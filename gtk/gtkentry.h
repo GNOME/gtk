@@ -58,6 +58,7 @@ struct _GtkEntry
   guint      editable : 1;
   guint      visible  : 1;
   guint      overwrite_mode : 1;
+  guint      in_drag : 1;	/* Dragging within the selection */
 
   guint16 text_length;	/* length in use, in chars */
   guint16 text_max_length;
@@ -87,6 +88,11 @@ struct _GtkEntry
 
   guint16 preedit_length;	/* length of preedit string, in bytes */
   guint16 preedit_cursor;	/* offset of cursor within preedit string, in chars */
+
+  gint dnd_position;		/* In chars, -1 == no DND cursor */
+
+  gint drag_start_x;
+  gint drag_start_y;
   
   gunichar invisible_char;
 };

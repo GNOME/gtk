@@ -31,6 +31,7 @@
 #include "gdk/gdkkeysyms.h"
 #include "gtkbindings.h"
 #include "gtkclipboard.h"
+#include "gtkdnd.h"
 #include "gtkentry.h"
 #include "gtkimmulticontext.h"
 #include "gtkintl.h"
@@ -76,6 +77,19 @@ enum {
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
+typedef enum {
+  CURSOR_STANDARD,
+  CURSOR_DND
+} CursorType;
+
+static GtkTargetEntry target_table[] = {
+  { "UTF8_STRING",   0, 0 },
+  { "COMPOUND_TEXT", 0, 0 },
+  { "TEXT",          0, 0 },
+  { "text/plain",    0, 0 },
+  { "STRING",        0, 0 }
+};
+
 /* GObject, GtkObject methods
  */
 static void   gtk_entry_class_init           (GtkEntryClass    *klass);
@@ -118,6 +132,29 @@ static void   gtk_entry_direction_changed    (GtkWidget        *widget,
 					      GtkTextDirection  previous_dir);
 static void   gtk_entry_state_changed        (GtkWidget        *widget,
 					      GtkStateType      previous_state);
+
+static gboolean gtk_entry_drag_motion        (GtkWidget        *widget,
+					      GdkDragContext   *context,
+					      gint              x,
+					      gint              y,
+					      guint             time);
+static void     gtk_entry_drag_leave         (GtkWidget        *widget,
+					      GdkDragContext   *context,
+					      guint             time);
+static void     gtk_entry_drag_data_received (GtkWidget        *widget,
+					      GdkDragContext   *context,
+					      gint              x,
+					      gint              y,
+					      GtkSelectionData *selection_data,
+					      guint             info,
+					      guint             time);
+static void     gtk_entry_drag_data_get      (GtkWidget        *widget,
+					      GdkDragContext   *context,
+					      GtkSelectionData *selection_data,
+					      guint             info,
+					      guint             time);
+static void     gtk_entry_drag_data_delete   (GtkWidget        *widget,
+					      GdkDragContext   *context);
 
 /* GtkEditable method implementations
  */
@@ -174,7 +211,8 @@ static void gtk_entry_preedit_changed_cb  (GtkIMContext      *context,
 /* Internal routines
  */
 static void         gtk_entry_draw_text                (GtkEntry       *entry);
-static void         gtk_entry_draw_cursor              (GtkEntry       *entry);
+static void         gtk_entry_draw_cursor              (GtkEntry       *entry,
+							CursorType      type);
 static PangoLayout *gtk_entry_get_layout               (GtkEntry       *entry,
 							gboolean        include_preedit);
 static void         gtk_entry_queue_draw               (GtkEntry       *entry);
@@ -183,6 +221,7 @@ static void         gtk_entry_recompute                (GtkEntry       *entry);
 static gint         gtk_entry_find_position            (GtkEntry       *entry,
 							gint            x);
 static void         gtk_entry_get_cursor_locations     (GtkEntry       *entry,
+							CursorType      type,
 							gint           *strong_x,
 							gint           *weak_x);
 static void         gtk_entry_adjust_scroll            (GtkEntry       *entry);
@@ -297,6 +336,12 @@ gtk_entry_class_init (GtkEntryClass *class)
   widget_class->style_set = gtk_entry_style_set;
   widget_class->direction_changed = gtk_entry_direction_changed;
   widget_class->state_changed = gtk_entry_state_changed;
+
+  widget_class->drag_motion = gtk_entry_drag_motion;
+  widget_class->drag_leave = gtk_entry_drag_leave;
+  widget_class->drag_data_received = gtk_entry_drag_data_received;
+  widget_class->drag_data_get = gtk_entry_drag_data_get;
+  widget_class->drag_data_delete = gtk_entry_drag_data_delete;
 
   class->insert_text = gtk_entry_real_insert_text;
   class->delete_text = gtk_entry_real_delete_text;
@@ -629,7 +674,13 @@ gtk_entry_init (GtkEntry *entry)
   entry->editable = TRUE;
   entry->visible = TRUE;
   entry->invisible_char = '*';
+  entry->dnd_position = -1;
   
+  gtk_drag_dest_set (GTK_WIDGET (entry),
+                     GTK_DEST_DEFAULT_DROP | GTK_DEST_DEFAULT_HIGHLIGHT,
+                     target_table, G_N_ELEMENTS (target_table),
+                     GDK_ACTION_COPY | GDK_ACTION_MOVE);
+
   /* This object is completely private. No external entity can gain a reference
    * to it; so we create it here and destroy it in finalize().
    */
@@ -883,7 +934,14 @@ gtk_entry_expose (GtkWidget      *widget,
   else if (entry->text_area == event->window)
     {
       gtk_entry_draw_text (GTK_ENTRY (widget));
-      gtk_entry_draw_cursor (GTK_ENTRY (widget));
+
+      if ((entry->visible || entry->invisible_char != 0) &&
+	  GTK_WIDGET_HAS_FOCUS (widget) &&
+	  entry->selection_bound == entry->current_pos)
+	gtk_entry_draw_cursor (GTK_ENTRY (widget), CURSOR_STANDARD);
+
+      if (entry->dnd_position != -1)
+	gtk_entry_draw_cursor (GTK_ENTRY (widget), CURSOR_DND);
     }
 
   return FALSE;
@@ -896,6 +954,7 @@ gtk_entry_button_press (GtkWidget      *widget,
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEditable *editable = GTK_EDITABLE (widget);
   gint tmp_pos;
+  gint sel_start, sel_end;
 
   entry = GTK_ENTRY (widget);
   editable = GTK_EDITABLE (widget);
@@ -916,12 +975,26 @@ gtk_entry_button_press (GtkWidget      *widget,
       switch (event->type)
 	{
 	case GDK_BUTTON_PRESS:
-	  gtk_entry_reset_im_context (entry);
-	  
-	  entry->current_pos = tmp_pos;
-	  entry->selection_bound = tmp_pos;
+	  if (gtk_editable_get_selection_bounds (editable, &sel_start, &sel_end) &&
+	      tmp_pos >= sel_start && tmp_pos <= sel_end)
+	    {
+	      /* Click inside the selection - we'll either start a drag, or
+	       * clear the selection
+	       */
 
-	  gtk_entry_recompute (entry);
+	      entry->in_drag = TRUE;
+	      entry->drag_start_x = event->x + entry->scroll_offset;
+	      entry->drag_start_y = event->y + entry->scroll_offset;
+	    }
+	  else
+	    {
+	      gtk_entry_reset_im_context (entry);
+	      
+	      entry->current_pos = tmp_pos;
+	      entry->selection_bound = tmp_pos;
+
+	      gtk_entry_recompute (entry);
+	    }
 	  
 	  break;
 
@@ -962,13 +1035,28 @@ gtk_entry_button_release (GtkWidget      *widget,
 			  GdkEventButton *event)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
-  GtkEditable *editable = GTK_EDITABLE (widget);
 
   if (event->window != entry->text_area || entry->button != event->button)
     return FALSE;
 
+  if (entry->in_drag)
+    {
+      gint tmp_pos = gtk_entry_find_position (entry, entry->drag_start_x);
+
+      gtk_entry_reset_im_context (entry);
+	      
+      entry->current_pos = tmp_pos;
+      entry->selection_bound = tmp_pos;
+	      
+      gtk_entry_recompute (entry);
+
+      entry->in_drag = 0;
+    }
+  
   entry->button = 0;
   
+  gtk_entry_update_primary_selection (entry);
+	      
   return FALSE;
 }
 
@@ -985,12 +1073,35 @@ gtk_entry_motion_notify (GtkWidget      *widget,
   if (event->is_hint || (entry->text_area != event->window))
     gdk_window_get_pointer (entry->text_area, NULL, NULL, NULL);
 
-  tmp_pos = gtk_entry_find_position (entry, event->x + entry->scroll_offset);
-
-  if (tmp_pos != entry->current_pos)
+  if (entry->in_drag)
     {
-      entry->current_pos = tmp_pos;
-      gtk_entry_recompute (entry);
+      if (gtk_drag_check_threshold (widget,
+				    entry->drag_start_x, entry->drag_start_y,
+				    event->x + entry->scroll_offset, event->y))
+	{
+	  GdkDragContext *context;
+	  GtkTargetList *target_list = gtk_target_list_new (target_table, G_N_ELEMENTS (target_table));
+	  
+	  context = gtk_drag_begin (widget, target_list, GDK_ACTION_COPY | GDK_ACTION_MOVE,
+			  entry->button, (GdkEvent *)event);
+
+	  
+	  entry->in_drag = FALSE;
+	  entry->button = 0;
+	  
+	  gtk_target_list_unref (target_list);
+	  gtk_drag_set_icon_default (context);
+	}
+    }
+  else
+    {
+      tmp_pos = gtk_entry_find_position (entry, event->x + entry->scroll_offset);
+
+      if (tmp_pos != entry->current_pos)
+	{
+	  entry->current_pos = tmp_pos;
+	  gtk_entry_recompute (entry);
+	}
     }
       
   return TRUE;
@@ -1241,6 +1352,43 @@ gtk_entry_style_set	(GtkWidget      *widget,
     }
 }
 
+static char *
+strstr_len (const char *haystack,
+	    int         haystack_len,
+	    const char *needle)
+{
+  int i;
+
+  g_return_val_if_fail (haystack != NULL, NULL);
+  g_return_val_if_fail (needle != NULL, NULL);
+  
+  if (haystack_len < 0)
+    return strstr (haystack, needle);
+  else
+    {
+      const char *p = haystack;
+      int needle_len = strlen (needle);
+      const char *end = haystack + haystack_len - needle_len;
+
+      if (needle_len == 0)
+	return (char *)haystack;
+
+      while (*p && p <= end)
+	{
+	  for (i = 0; i < needle_len; i++)
+	    if (p[i] != needle[i])
+	      goto next;
+
+	  return (char *)p;
+
+	next:
+	  p += needle_len;
+	}
+    }
+
+  return NULL;
+}
+
 /* Default signal handlers
  */
 static void
@@ -1251,9 +1399,25 @@ gtk_entry_real_insert_text (GtkEntry    *entry,
 {
   gint index;
   gint n_chars;
+  gchar line_separator[7];
+  gint len;
+  gchar *p;
 
   if (new_text_length < 0)
     new_text_length = strlen (new_text);
+
+  /* We don't want to allow inserting paragraph delimeters
+   */
+  pango_find_paragraph_boundary (new_text, new_text_length, &new_text_length, NULL);
+
+  /* Or line separators - this is really painful
+   */
+  len = g_unichar_to_utf8 (0x2028, line_separator); /* 0x2028 == LS */
+  line_separator[len] = '\0';
+  
+  p = strstr_len (new_text, new_text_length, line_separator);
+  if (p)
+    new_text_length = p - new_text;
 
   n_chars = g_utf8_strlen (new_text, new_text_length);
   if (entry->text_max_length > 0 && n_chars + entry->text_length > entry->text_max_length)
@@ -1807,39 +1971,32 @@ gtk_entry_draw_text (GtkEntry *entry)
 }
 
 static void
-gtk_entry_draw_cursor (GtkEntry *entry)
+gtk_entry_draw_cursor (GtkEntry  *entry,
+		       CursorType type)
 {
   g_return_if_fail (entry != NULL);
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
-  if (!entry->visible && entry->invisible_char == 0)
-    return;
-  
   if (GTK_WIDGET_DRAWABLE (entry))
     {
       GtkWidget *widget = GTK_WIDGET (entry);
 
-      if (GTK_WIDGET_HAS_FOCUS (widget) &&
-	  (entry->selection_bound == entry->current_pos))
-	{
-	  gint xoffset = INNER_BORDER - entry->scroll_offset;
-	  gint strong_x, weak_x;
-	  gint text_area_height;
+      gint xoffset = INNER_BORDER - entry->scroll_offset;
+      gint strong_x, weak_x;
+      gint text_area_height;
 
-	  gdk_window_get_size (entry->text_area, NULL, &text_area_height);
-
-	  gtk_entry_get_cursor_locations (entry, &strong_x, &weak_x);
-
-	  gdk_draw_line (entry->text_area, widget->style->bg_gc[GTK_STATE_SELECTED], 
-			 xoffset + strong_x, INNER_BORDER,
-			 xoffset + strong_x, text_area_height - INNER_BORDER);
-
-	  if (weak_x != strong_x)
-	    gdk_draw_line (entry->text_area, widget->style->fg_gc[GTK_STATE_NORMAL], 
-			   xoffset + weak_x, INNER_BORDER,
-			   xoffset + weak_x, text_area_height - INNER_BORDER);
-
-	}
+      gdk_window_get_size (entry->text_area, NULL, &text_area_height);
+      
+      gtk_entry_get_cursor_locations (entry, type, &strong_x, &weak_x);
+      
+      gdk_draw_line (entry->text_area, widget->style->bg_gc[GTK_STATE_SELECTED], 
+		     xoffset + strong_x, INNER_BORDER,
+		     xoffset + strong_x, text_area_height - INNER_BORDER);
+      
+      if (weak_x != strong_x)
+	gdk_draw_line (entry->text_area, widget->style->fg_gc[GTK_STATE_NORMAL], 
+		       xoffset + weak_x, INNER_BORDER,
+		       xoffset + weak_x, text_area_height - INNER_BORDER);
     }
 }
 
@@ -1906,22 +2063,28 @@ gtk_entry_find_position (GtkEntry *entry,
 }
 
 static void
-gtk_entry_get_cursor_locations (GtkEntry *entry,
-				gint     *strong_x,
-				gint     *weak_x)
+gtk_entry_get_cursor_locations (GtkEntry   *entry,
+				CursorType  type,
+				gint       *strong_x,
+				gint       *weak_x)
 {
   PangoLayout *layout = gtk_entry_get_layout (entry, TRUE);
   const gchar *text;
   PangoRectangle strong_pos, weak_pos;
   gint index;
   
-  text = pango_layout_get_text (layout);
-
-  index =
-    g_utf8_offset_to_pointer (text,
-                              entry->current_pos +
-                              entry->preedit_cursor) - text;
-  
+  if (type == CURSOR_STANDARD)
+    {
+      text = pango_layout_get_text (layout);
+      index = g_utf8_offset_to_pointer (text, entry->current_pos + entry->preedit_cursor) - text;
+    }
+  else /* type == CURSOR_DND */
+    {
+      index = g_utf8_offset_to_pointer (entry->text, entry->dnd_position) - entry->text;
+      if (entry->dnd_position > entry->current_pos)
+	index += entry->preedit_length;
+    }
+      
   pango_layout_get_cursor_pos (layout, index, &strong_pos, &weak_pos);
   g_object_unref (G_OBJECT (layout));
 
@@ -1990,7 +2153,7 @@ gtk_entry_adjust_scroll (GtkEntry *entry)
    * put the weak cursor on screen if possible.
    */
 
-  gtk_entry_get_cursor_locations (entry, &strong_x, &weak_x);
+  gtk_entry_get_cursor_locations (entry, CURSOR_STANDARD, &strong_x, &weak_x);
   
   strong_xoffset = strong_x - entry->scroll_offset;
 
@@ -2481,4 +2644,146 @@ gtk_entry_popup_menu (GtkEntry       *entry,
   gtk_menu_popup (GTK_MENU (entry->popup_menu), NULL, NULL,
 		  NULL, NULL,
 		  event->button, event->time);
+}
+
+static void
+gtk_entry_drag_leave (GtkWidget        *widget,
+		      GdkDragContext   *context,
+		      guint             time)
+{
+  GtkEntry *entry;
+
+  entry = GTK_ENTRY (widget);
+
+  entry->dnd_position = -1;
+  gtk_widget_queue_draw (widget);
+}
+
+static gboolean
+gtk_entry_drag_motion (GtkWidget        *widget,
+		       GdkDragContext   *context,
+		       gint              x,
+		       gint              y,
+		       guint             time)
+{
+  GtkEntry *entry;
+  GtkWidget *source_widget;
+  GdkDragAction suggested_action;
+  gint new_position, old_position;
+  gint sel1, sel2;
+  
+  entry = GTK_ENTRY (widget);
+
+  x -= widget->style->xthickness;
+  y -= widget->style->ythickness;
+  
+  old_position = entry->dnd_position;
+  new_position = gtk_entry_find_position (entry, x + entry->scroll_offset);
+
+  source_widget = gtk_drag_get_source_widget (context);
+  suggested_action = context->suggested_action;
+
+  if (!gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &sel1, &sel2) ||
+      new_position < sel1 || new_position > sel2)
+    {
+      if (source_widget == widget)
+	{
+	  /* Default to MOVE, unless the user has
+	   * pressed ctrl or alt to affect available actions
+	   */
+	  if ((context->actions & GDK_ACTION_MOVE) != 0)
+	    suggested_action = GDK_ACTION_MOVE;
+	}
+          
+      entry->dnd_position = new_position;
+    }
+  else
+    {
+      if (source_widget == widget)
+	suggested_action = 0;	/* Can't drop in selection where drag started */
+      
+      entry->dnd_position = -1;
+    }
+
+  gdk_drag_status (context, suggested_action, time);
+  
+  if (entry->dnd_position != old_position)
+    gtk_widget_queue_draw (widget);
+
+  return TRUE;
+}
+
+static void
+gtk_entry_drag_data_received (GtkWidget        *widget,
+			      GdkDragContext   *context,
+			      gint              x,
+			      gint              y,
+			      GtkSelectionData *selection_data,
+			      guint             info,
+			      guint             time)
+{
+  GtkEntry *entry;
+  GtkEditable *editable;
+  gchar *str;
+
+  entry = GTK_ENTRY (widget);
+  editable = GTK_EDITABLE (widget);
+
+  str = gtk_selection_data_get_text (selection_data);
+
+  if (str)
+    {
+      gint new_position;
+      gint sel1, sel2;
+
+      new_position = gtk_entry_find_position (entry, x + entry->scroll_offset);
+
+      if (!gtk_editable_get_selection_bounds (editable, &sel1, &sel2) ||
+	  new_position < sel1 || new_position > sel2)
+	{
+	  gtk_editable_insert_text (editable, str, -1, &new_position);
+	}
+      else
+	{
+	  /* Replacing selection */
+	  gtk_editable_delete_text (editable, sel1, sel2);
+	  gtk_editable_insert_text (editable, str, -1, &sel1);
+	}
+      
+      g_free (str);
+    }
+}
+
+static void
+gtk_entry_drag_data_get (GtkWidget        *widget,
+			 GdkDragContext   *context,
+			 GtkSelectionData *selection_data,
+			 guint             info,
+			 guint             time)
+{
+  gint sel_start, sel_end;
+
+  GtkEditable *editable = GTK_EDITABLE (widget);
+  
+  if (gtk_editable_get_selection_bounds (editable, &sel_start, &sel_end))
+    {
+      gchar *str = gtk_editable_get_chars (editable, sel_start, sel_end);
+
+      gtk_selection_data_set_text (selection_data, str);
+      
+      g_free (str);
+    }
+
+}
+
+static void
+gtk_entry_drag_data_delete (GtkWidget      *widget,
+			    GdkDragContext *context)
+{
+  gint sel_start, sel_end;
+
+  GtkEditable *editable = GTK_EDITABLE (widget);
+  
+  if (gtk_editable_get_selection_bounds (editable, &sel_start, &sel_end))
+    gtk_editable_delete_text (editable, sel_start, sel_end);
 }

@@ -2473,8 +2473,6 @@ xdnd_manage_source_filter (GdkDragContext *context,
 			   GdkWindow      *window,
 			   gboolean        add_filter)
 {
-  gint old_warnings = 0;	/* quiet gcc */
-
   gdk_error_trap_push ();
 
   if (!GDK_WINDOW_DESTROYED (window))
