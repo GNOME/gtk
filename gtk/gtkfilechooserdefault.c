@@ -117,7 +117,6 @@ struct _GtkFileChooserDefault
   guint preview_widget_active : 1;
   guint select_multiple : 1;
   guint show_hidden : 1;
-  guint changing_folder : 1;
   guint list_sort_ascending : 1;
   guint bookmarks_set : 1;
 };
@@ -137,6 +136,18 @@ enum {
   FILE_LIST_COL_MTIME,
   FILE_LIST_COL_NUM_COLUMNS
 };
+
+/* Identifiers for target types */
+enum {
+  TEXT_URI_LIST
+};
+
+/* Target types for DnD in the shortcuts list */
+static GtkTargetEntry shortcuts_targets[] = {
+  { "text/uri-list", 0, TEXT_URI_LIST }
+};
+
+static const int num_shortcuts_targets = sizeof (shortcuts_targets) / sizeof (shortcuts_targets[0]);
 
 /* Standard icon size */
 /* FIXME: maybe this should correspond to the font size in the tree views... */
@@ -384,6 +395,30 @@ error_dialog (GtkFileChooserDefault *impl,
   g_error_free (error);
 }
 
+/* Displays an error message about not being able to get information for a file.
+ * Frees the GError as well.
+ */
+static void
+error_getting_info_dialog (GtkFileChooserDefault *impl,
+			   const GtkFilePath     *path,
+			   GError                *error)
+{
+  error_dialog (impl,
+		_("Could not retrieve information about %s:\n%s"),
+		path, error);
+}
+
+/* Shows an error dialog about not being able to add a bookmark */
+static void
+error_could_not_add_bookmark_dialog (GtkFileChooserDefault *impl,
+				     const GtkFilePath     *path,
+				     GError                *error)
+{
+  error_dialog (impl,
+		_("Could not add a bookmark for %s:\n%s"),
+		path, error);
+}
+
 static void
 update_preview_widget_visibility (GtkFileChooserDefault *impl)
 {
@@ -437,11 +472,11 @@ get_file_info (GtkFileSystem *file_system, const GtkFilePath *path, GError **err
     return NULL;
 
   parent_folder = gtk_file_system_get_folder (file_system, parent_path,
+					      GTK_FILE_INFO_DISPLAY_NAME
 #if 0
-					      GTK_FILE_INFO_DISPLAY_NAME | GTK_FILE_INFO_ICON,
-#else
-					      GTK_FILE_INFO_DISPLAY_NAME,
+					      | GTK_FILE_INFO_ICON
 #endif
+					      | GTK_FILE_INFO_IS_FOLDER,
 					      error);
   gtk_file_path_free (parent_path);
 
@@ -513,19 +548,6 @@ shortcuts_insert_path (GtkFileChooserDefault *impl,
     g_object_unref (pixbuf);
 
   return TRUE;
-}
-
-/* Displays an error message about not being able to get information for a file.
- * Frees the GError as well.
- */
-static void
-error_getting_info_dialog (GtkFileChooserDefault *impl,
-			   const GtkFilePath     *path,
-			   GError                *error)
-{
-  error_dialog (impl,
-		_("Could not retrieve information about %s:\n%s"),
-		path, error);
 }
 
 /* Appends an item for the user's home directory to the shortcuts model */
@@ -836,19 +858,42 @@ create_folder_tree (GtkFileChooserDefault *impl)
   return impl->tree_scrollwin;
 }
 
+/* Tries to add a bookmark from a path name */
+static void
+shortcuts_add_bookmark_from_path (GtkFileChooserDefault *impl,
+				  const GtkFilePath     *path)
+{
+  GtkFileInfo *info;
+  GError *error;
+
+  error = NULL;
+  info = get_file_info (impl->file_system, path, &error);
+
+  if (!info)
+    error_getting_info_dialog (impl, path, error);
+  else if (!gtk_file_info_get_is_folder (info))
+    {
+      char *msg;
+
+      msg = g_strdup_printf (_("Could not add bookmark for %s because it is not a folder."),
+			     gtk_file_path_get_string (path));
+      error_message (impl, msg);
+      g_free (msg);
+    }
+  else
+    {
+      error = NULL;
+      if (!gtk_file_system_add_bookmark (impl->file_system, path, &error))
+	error_could_not_add_bookmark_dialog (impl, path, error);
+    }
+}
+
 /* Callback used when the "Add bookmark" button is clicked */
 static void
 add_bookmark_button_clicked_cb (GtkButton *button,
 				GtkFileChooserDefault *impl)
 {
-  GError *error;
-
-  error = NULL;
-  if (!gtk_file_system_add_bookmark (impl->file_system, impl->current_folder, &error))
-    error_dialog (impl,
-		  _("Could not add bookmark for %s:\n%s"),
-		  impl->current_folder,
-		  error);
+  shortcuts_add_bookmark_from_path (impl, impl->current_folder);
 }
 
 /* Callback used when the "Remove bookmark" button is clicked */
@@ -937,6 +982,82 @@ bookmarks_check_remove_sensitivity (GtkFileChooserDefault *impl)
   gtk_widget_set_sensitive (impl->remove_bookmark_button, is_bookmark);
 }
 
+/* Converts raw selection data from text/uri-list to a list of strings */
+static GSList *
+split_uris (const char *data)
+{
+  GSList *uris;
+  const char *p, *start;
+
+  uris = NULL;
+
+  start = data;
+
+  for (p = start; *p != 0; p++)
+    if (*p == '\r' && *(p + 1) == '\n')
+      {
+	char *name;
+
+	name = g_strndup (start, p - start);
+	uris = g_slist_prepend (uris, name);
+
+	start = p + 2;
+	p = start;
+      }
+
+  uris = g_slist_reverse (uris);
+  return uris;
+}
+
+/* Callback used when we get the drag data for the bookmarks list.  We add the
+ * received URIs as bookmarks if they are folders.
+ */
+static void
+shortcuts_drag_data_received_cb (GtkWidget          *widget,
+				 GdkDragContext     *context,
+				 gint                x,
+				 gint                y,
+				 GtkSelectionData   *selection_data,
+				 guint               info,
+				 guint               time_,
+				 gpointer            data)
+{
+  GtkFileChooserDefault *impl;
+  GSList *uris, *l;
+
+  impl = GTK_FILE_CHOOSER_DEFAULT (data);
+
+  uris = split_uris (selection_data->data);
+
+  for (l = uris; l; l = l->next)
+    {
+      char *uri;
+      GtkFilePath *path;
+
+      uri = l->data;
+      path = gtk_file_system_uri_to_path (impl->file_system, uri);
+
+      if (path)
+	{
+	  shortcuts_add_bookmark_from_path (impl, path);
+	  gtk_file_path_free (path);
+	}
+      else
+	{
+	  char *msg;
+
+	  msg = g_strdup_printf (_("Could not add a bookmark for %s because it is an invalid path name."),
+				 uri);
+	  error_message (impl, msg);
+	  g_free (msg);
+	}
+
+      g_free (uri);
+    }
+
+  g_slist_free (uris);
+}
+
 /* Creates the widgets for the shortcuts and bookmarks tree */
 static GtkWidget *
 create_shortcuts_tree (GtkFileChooserDefault *impl)
@@ -968,14 +1089,23 @@ create_shortcuts_tree (GtkFileChooserDefault *impl)
   impl->shortcuts_tree = gtk_tree_view_new ();
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (impl->shortcuts_tree), FALSE);
 
+  gtk_drag_dest_set (impl->shortcuts_tree,
+		     GTK_DEST_DEFAULT_ALL,
+		     shortcuts_targets,
+		     num_shortcuts_targets,
+		     GDK_ACTION_COPY);
+
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->shortcuts_tree));
   gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
   gtk_tree_selection_set_select_function (selection,
 					  shortcuts_select_func,
 					  impl, NULL);
   
-  g_signal_connect (impl->shortcuts_tree, "row_activated",
+  g_signal_connect (impl->shortcuts_tree, "row-activated",
 		    G_CALLBACK (shortcuts_row_activated), impl);
+
+  g_signal_connect (impl->shortcuts_tree, "drag-data-received",
+		    G_CALLBACK (shortcuts_drag_data_received_cb), impl);
 
   gtk_container_add (GTK_CONTAINER (impl->shortcuts_scrollwin), impl->shortcuts_tree);
   gtk_widget_show (impl->shortcuts_tree);
@@ -2232,9 +2362,7 @@ shortcuts_row_activated (GtkTreeView           *tree_view,
       return;
     }
 
-  impl->changing_folder = TRUE;
   _gtk_file_chooser_set_current_folder_path (GTK_FILE_CHOOSER (impl), model_path);
-  impl->changing_folder = FALSE;
 }
 
 static gboolean

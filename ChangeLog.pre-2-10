@@ -1,3 +1,16 @@
+2003-12-01  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c (create_shortcuts_tree): Set the
+	shortcuts tree as a drag destination.
+	(shortcuts_drag_data_received_cb): New callback.
+	(get_file_info): Also fetch information on whether the file is a folder.
+	(add_bookmark_button_clicked_cb): Use error_could_not_add_bookmark_dialog().
+	(error_could_not_add_bookmark_dialog): New function.
+	(shortcuts_add_bookmark_from_path): New helper function.
+	(add_bookmark_button_clicked_cb): Use shortcuts_add_bookmark_from_path().
+	(shortcuts_row_activated): We no longer need the changing_folder flag.
+	(struct _GtkFileChooserDefault): Likewise.
+
 Sun Nov 30 17:31:32 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktoolbar.c (slide_idle_handler): return TRUE if there are
