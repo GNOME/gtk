@@ -142,12 +142,12 @@ gdk_font_from_description (PangoFontDescription *desc)
   g_free (lang);
   g_object_unref (G_OBJECT (context));
 
-  font->ascent = PANGO_PIXELS (metrics->ascent);
-  font->descent = PANGO_PIXELS (metrics->descent);
+  font->ascent = PANGO_PIXELS (pango_font_metrics_get_ascent (metrics));
+  font->descent = PANGO_PIXELS (pango_font_metrics_get_descent (metrics));
 
   g_assert ((font->ascent > 0) || (font->descent > 0));
 
-  pango_metrics_unref (metrics);
+  pango_font_metrics_unref (metrics);
   
   return font;
 }
@@ -158,7 +158,7 @@ gdk_font_load (const gchar *font_name)
 {
   GdkFont *font;
   GdkFontPrivateFB *private;
-  PangoFontDescription desc;
+  PangoFontDescription *desc;
   gchar **pieces;
 
   g_return_val_if_fail (font_name != NULL, NULL);
@@ -167,14 +167,7 @@ gdk_font_load (const gchar *font_name)
   if (font)
     return font;
 
-  /* Default values */
-  desc.family_name = NULL;
-  desc.style = PANGO_STYLE_NORMAL;
-  desc.weight = PANGO_WEIGHT_NORMAL;
-  desc.variant = PANGO_VARIANT_NORMAL;
-  desc.stretch = PANGO_STRETCH_NORMAL;
-  
-  desc.size = 0;
+  desc = pango_font_description_new ();
   
   pieces = g_strsplit (font_name, "-", 8);
 
@@ -189,27 +182,27 @@ gdk_font_load (const gchar *font_name)
       break;
 
     if (strcmp (pieces[2], "*")!=0)
-      desc.family_name = g_strdup (pieces[2]);
+      pango_font_description_set_family (desc, g_strdup (pieces[2]));
     
     if (!pieces[3])
       break;
     
     if (strcmp (pieces[3], "light")==0)
-      desc.weight = PANGO_WEIGHT_LIGHT;
+      pango_font_description_set_weight (desc, PANGO_WEIGHT_LIGHT);
     if (strcmp (pieces[3], "medium")==0)
-      desc.weight = PANGO_WEIGHT_NORMAL;
+      pango_font_description_set_weight (desc, PANGO_WEIGHT_NORMAL);
     if (strcmp (pieces[3], "bold")==0)
-      desc.weight = PANGO_WEIGHT_BOLD;
+      pango_font_description_set_weight (desc, PANGO_WEIGHT_BOLD);
     
     if (!pieces[4])
       break;
     
     if (strcmp (pieces[4], "r")==0)
-      desc.style = PANGO_STYLE_NORMAL;
+      pango_font_description_set_style (desc, PANGO_STYLE_NORMAL);
     if (strcmp (pieces[4], "i")==0)
-      desc.style = PANGO_STYLE_ITALIC;
+      pango_font_description_set_style (desc, PANGO_STYLE_ITALIC);
     if (strcmp (pieces[4], "o")==0)
-      desc.style = PANGO_STYLE_OBLIQUE;
+      pango_font_description_set_style (desc, PANGO_STYLE_OBLIQUE);
     
     if (!pieces[5])
       break;
@@ -219,13 +212,13 @@ gdk_font_load (const gchar *font_name)
       break;
 
     if (strcmp (pieces[7], "*")!=0)
-      desc.size = atoi (pieces[7]) * PANGO_SCALE;
-    if (desc.size == 0)
-      desc.size = 12 * PANGO_SCALE;
+      pango_font_description_set_size  (desc, atoi (pieces[7]) * PANGO_SCALE);
+    if (pango_font_description_get_size (desc) == 0)
+      pango_font_description_set_size (desc, 12 * PANGO_SCALE);
     
   } while (0);
   
-  font = gdk_font_from_description (&desc);
+  font = gdk_font_from_description (desc);
   private = (GdkFontPrivateFB*) font;
   private->name = g_strdup (font_name);
 
@@ -233,7 +226,7 @@ gdk_font_load (const gchar *font_name)
 
   g_strfreev(pieces);
 
-  g_free (desc.family_name);
+  pango_font_description_free (desc);
   
   return font;
 }

@@ -1,3 +1,14 @@
+2001-10-24  Alex Larsson  <alexl@redhat.com>
+
+	* gdk/linux-fb/gdkfont-fb.c:
+	Update to new Pango APIs
+
+	* gdk/linux-fb/gdkproperty-fb.c:
+	Update to new GdkAtom APIs
+
+	* gdk/linux-fb/gdkwindow-fb.c:
+	Remove warnings
+
 Mon Oct 22 20:07:21 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreestore.c (gtk_tree_store_prepend): Fix docs, #62808

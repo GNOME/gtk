@@ -67,7 +67,7 @@ gdk_atom_intern (const gchar *atom_name,
 gchar*
 gdk_atom_name (GdkAtom atom)
 {
-  if (atom < 256)
+  if (GPOINTER_TO_UINT (atom) < 256)
     {
       
       switch (GPOINTER_TO_UINT (atom))
@@ -89,7 +89,7 @@ gdk_atom_name (GdkAtom atom)
 	}
     }
   else
-    return g_strdup (g_quark_to_string (atom - 256));
+    return g_strdup (g_quark_to_string (GPOINTER_TO_UINT (atom) - 256));
 }
 
 static void

@@ -2220,14 +2220,12 @@ void
 gdk_window_get_frame_extents (GdkWindow    *window,
                               GdkRectangle *rect)
 {
-  g_return_val_if_fail (window != NULL, 0);
+  g_return_if_fail (window != NULL);
   
   rect->x = GDK_DRAWABLE_IMPL_FBDATA (window)->abs_x;
   rect->y = GDK_DRAWABLE_IMPL_FBDATA (window)->abs_y;
   rect->width = GDK_DRAWABLE_IMPL_FBDATA (window)->width;
   rect->height = GDK_DRAWABLE_IMPL_FBDATA (window)->height;
-
-  return TRUE;
 }
 
 GdkWindow*
