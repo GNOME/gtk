@@ -12,7 +12,8 @@ LDADDS = @STRIP_BEGIN@ 				\
 @STRIP_END@
 
 libgdk_pixbuf_xlib_1_3_la_LDFLAGS =         \
-	-export-dynamic
+	-export-dynamic						\
+	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
 
 libgdk_pixbuf_xlib_1_3_la_SOURCES =         \
 	gdk-pixbuf-xlib-private.h	\
