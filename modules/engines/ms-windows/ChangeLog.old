@@ -1,9 +1,15 @@
+2003-11-14  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/wimp_style.c: Protect against buffer overflows when grabbing fonts and
+	generating RC strings. Get the Progress and Status widget backgrounds to behave
+	properly on themes like "Brick".
+	
 2003-11-05  Dom Lachowicz <cinamod@hotmail.com>
 
 	* src/wimp_style.c: Toolbar steppers get drawn ETCHED_IN when pressed now. More 
 	consistent with Win32 behavior.
 	* src/Theme/gtk-2.0/gtkrc: Make menubars have shadow=NONE. More
-	consisten with Win32 behavior, though Win32 apps tend to differ in this
+	consistent with Win32 behavior, though Win32 apps tend to differ in this
 	area. Setup menu and toolbar icon sizes to be compatible with win32
 	
 2003-11-04  Dom Lachowicz <cinamod@hotmail.com>

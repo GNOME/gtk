@@ -148,7 +148,7 @@ get_system_font(XpThemeClass klazz, XpThemeFont type, LOGFONT *out_lf)
 }
 
 static char *
-sys_font_to_pango_font (XpThemeClass klazz, XpThemeFont type, char * buf)
+sys_font_to_pango_font (XpThemeClass klazz, XpThemeFont type, char * buf, size_t bufsiz)
 {
   HDC hDC;
   HWND hwnd;
@@ -204,7 +204,7 @@ sys_font_to_pango_font (XpThemeClass klazz, XpThemeFont type, char * buf)
 	} else
 		pt_size = 10;
 
-    sprintf(buf, "%s %s %s %d", lf.lfFaceName, style, weight, pt_size);
+    g_snprintf(buf, bufsiz, "%s %s %s %d", lf.lfFaceName, style, weight, pt_size);
 
     return buf;
    }
@@ -217,7 +217,10 @@ sys_font_to_pango_font (XpThemeClass klazz, XpThemeFont type, char * buf)
 #define SPI_GETMENUSHOWDELAY 106
 #endif
 
-#define XP_THEME_CLASS_UNKNOWN XP_THEME_CLASS_BUTTON
+/* I don't know the proper XP theme class for things like
+   HIGHLIGHTTEXT, so we'll just define it to be "BUTTON"
+   for now */
+#define XP_THEME_CLASS_TEXT XP_THEME_CLASS_BUTTON
 
 static void
 setup_menu_settings (void)
@@ -291,15 +294,6 @@ wimp_style_setup_system_settings (void)
 
   setup_menu_settings ();
 
-#if 0
-  /* TODO: there's an ICONMETRICS struct that we should probably use instead */
-  g_object_set (G_OBJECT (settings), "gtk-toolbar-icon-size",
-		GTK_ICON_SIZE_SMALL_TOOLBAR, NULL);
-
-  g_object_set (G_OBJECT (settings), "gtk-icon-sizes",
-		"gtk-menu=10,10 : gtk-button=16,16 : gtk-small-toolbar=16,16 : gtk-large-toolbar=16,16 : gtk-dialog=32,32 : gtk-dnd=32,32", NULL);
-#endif
-
   /*
      http://developer.gnome.org/doc/API/2.0/gtk/GtkSettings.html
      http://msdn.microsoft.com/library/default.asp?url=/library/en-us/sysinfo/base/systemparametersinfo.asp
@@ -312,7 +306,7 @@ setup_system_font(GtkStyle *style)
 {
   char buf[256], * font; /* It's okay, lfFaceName is smaller than 32 chars */
 
-  if ((font = sys_font_to_pango_font(XP_THEME_CLASS_UNKNOWN, XP_THEME_FONT_MESSAGE, buf)) != NULL)
+  if ((font = sys_font_to_pango_font(XP_THEME_CLASS_TEXT, XP_THEME_FONT_MESSAGE, buf, sizeof (buf))) != NULL)
     style->font_desc = pango_font_description_from_string(font);
 }
 
@@ -341,6 +335,150 @@ get_system_metric(XpThemeClass klazz, int id)
   return rval;
 }
 
+#if 0
+static void
+setup_default_style (void)
+{
+	GdkColor btnface;
+	GdkColor highlight;
+	GdkColor window;
+	GdkColor windowtext;
+	GdkColor highlighttext;
+	GdkColor graytext;
+	GdkColor btntext;
+	GdkColor dark;
+	GdkColor light;
+	GdkColor mid;
+	GdkColor text_aa[5];
+
+	char buf[2048];
+
+	sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON,  COLOR_BTNFACE,       &btnface);
+	sys_color_to_gtk_color(XP_THEME_CLASS_TEXT,    COLOR_HIGHLIGHT,     &highlight);
+	sys_color_to_gtk_color(XP_THEME_CLASS_WINDOW,  COLOR_WINDOW,        &window);
+	sys_color_to_gtk_color(XP_THEME_CLASS_WINDOW,  COLOR_WINDOWTEXT,    &windowtext);
+	sys_color_to_gtk_color(XP_THEME_CLASS_TEXT,    COLOR_HIGHLIGHTTEXT, &highlighttext);
+	sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON,  COLOR_GRAYTEXT,      &graytext);
+	sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON,  COLOR_BTNTEXT,       &btntext);
+	sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON,  COLOR_3DSHADOW,      &dark);
+	sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON,  COLOR_3DHILIGHT,     &light);
+
+	mid.red = (light.red + dark.red) / 2;
+	mid.green = (light.green + dark.green) / 2;
+	mid.blue = (light.blue + dark.blue) / 2;
+
+	text_aa[0].red = (windowtext.red + window.red) / 2;
+	text_aa[0].green = (windowtext.green + window.green) / 2;
+	text_aa[0].blue = (windowtext.blue + window.blue) / 2;
+	text_aa[1].red = (highlighttext.red + highlight.red) / 2;
+	text_aa[1].green = (highlighttext.green + highlight.green) / 2;
+	text_aa[1].blue = (highlighttext.blue + highlight.blue) / 2;
+
+	text_aa[2].red = (graytext.red + btnface.red) / 2;
+	text_aa[2].green = (graytext.green + btnface.green) / 2;
+	text_aa[2].blue = (graytext.blue + btnface.blue) / 2;
+
+	text_aa[3].red = (btntext.red + btnface.red) / 2;
+	text_aa[3].green = (btntext.green + btnface.green) / 2;
+	text_aa[3].blue = (btntext.blue + btnface.blue) / 2;
+
+	text_aa[4].red = (windowtext.red + window.red) / 2;
+	text_aa[4].green = (windowtext.green + window.green) / 2;
+	text_aa[4].blue = (windowtext.blue + window.blue) / 2;
+
+  	g_snprintf(buf, sizeof (buf),
+  		  "style \"wimp-base\" = \"wimp-default\"\n"
+		  "{\n"
+		  "bg[NORMAL] = { %d, %d, %d }\n"
+		  "bg[SELECTED] = { %d, %d, %d }\n"
+		  "bg[INSENSITIVE] = { %d, %d, %d }\n"
+		  "bg[ACTIVE] = { %d, %d, %d }\n"
+		  "bg[PRELIGHT] = { %d, %d, %d }\n"
+		  "base[NORMAL] = { %d, %d, %d }\n"
+		  "base[SELECTED] = { %d, %d, %d }\n"
+		  "base[INSENSITIVE] = { %d, %d, %d }\n"
+		  "base[ACTIVE] = { %d, %d, %d }\n"
+		  "base[PRELIGHT] = { %d, %d, %d }\n"
+  		  "text[NORMAL] = { %d, %d, %d }\n"
+  		  "text[SELECTED] = { %d, %d, %d }\n"
+  		  "text[INSENSITIVE] = { %d, %d, %d }\n"
+  		  "text[ACTIVE] = { %d, %d, %d }\n"
+  		  "text[PRELIGHT] = { %d, %d, %d }\n"
+		  "fg[NORMAL] = { %d, %d, %d }\n"
+		  "fg[SELECTED] = { %d, %d, %d }\n"
+		  "fg[INSENSITIVE] = { %d, %d, %d }\n"
+		  "fg[ACTIVE] = { %d, %d, %d }\n"
+		  "fg[PRELIGHT] = { %d, %d, %d }\n"
+		  "dark[NORMAL] = { %d, %d, %d }\n"
+		  "dark[SELECTED] = { %d, %d, %d }\n"
+		  "dark[INSENSITIVE] = { %d, %d, %d }\n"
+		  "dark[ACTIVE] = { %d, %d, %d }\n"
+		  "dark[PRELIGHT] = { %d, %d, %d }\n"
+		  "light[NORMAL] = { %d, %d, %d }\n"
+		  "light[SELECTED] = { %d, %d, %d }\n"
+		  "light[INSENSITIVE] = { %d, %d, %d }\n"
+		  "light[ACTIVE] = { %d, %d, %d }\n"
+		  "light[PRELIGHT] = { %d, %d, %d }\n"
+		  "text_aa[NORMAL] = { %d, %d, %d }\n"
+		  "text_aa[SELECTED] = { %d, %d, %d }\n"
+		  "text_aa[INSENSITIVE] = { %d, %d, %d }\n"
+		  "text_aa[ACTIVE] = { %d, %d, %d }\n"
+		  "text_aa[PRELIGHT] = { %d, %d, %d }\n"
+		  "}\n",
+
+		  /* bg */
+		  btnface.red, btnface.green, btnface.blue,
+		  highlight.red, highlight.green, highlight.blue,
+		  btnface.red, btnface.green, btnface.blue,
+		  btnface.red, btnface.green, btnface.blue,
+		  btnface.red, btnface.green, btnface.blue,
+
+		  /* base */
+		  window.red, window.green, window.blue,
+		  highlight.red, highlight.green, highlight.blue,
+		  btnface.red, btnface.green, btnface.blue,
+		  btnface.red, btnface.green, btnface.blue,
+		  window.red, window.green, window.blue,
+
+		  /* text */
+		  windowtext.red, windowtext.green, windowtext.blue,
+		  highlighttext.red, highlighttext.green, highlighttext.blue,
+		  graytext.red, graytext.green, graytext.blue,
+		  btntext.red, btntext.green, btntext.blue,
+		  windowtext.red, windowtext.green, windowtext.blue,
+
+		  /* fg */
+		  btntext.red, btntext.green, btntext.blue,
+		  highlighttext.red, highlighttext.green, highlighttext.blue,
+		  graytext.red, graytext.green, graytext.blue,
+		  btntext.red, btntext.green, btntext.blue,
+		  windowtext.red, windowtext.green, windowtext.blue,
+
+		  /* dark */
+		  dark.red, dark.green, dark.blue,
+		  dark.red, dark.green, dark.blue,
+		  dark.red, dark.green, dark.blue,
+		  dark.red, dark.green, dark.blue,
+		  dark.red, dark.green, dark.blue,
+
+		  /* light */
+		  light.red, light.green, light.blue,
+		  light.red, light.green, light.blue,
+		  light.red, light.green, light.blue,
+		  light.red, light.green, light.blue,
+		  light.red, light.green, light.blue,
+
+		  /* text_aa */
+		  text_aa[0].red, text_aa[0].green, text_aa[0].blue,
+		  text_aa[1].red, text_aa[1].green, text_aa[1].blue,
+		  text_aa[2].red, text_aa[2].green, text_aa[2].blue,
+		  text_aa[3].red, text_aa[3].green, text_aa[3].blue,
+		  text_aa[4].red, text_aa[4].green, text_aa[4].blue
+		  );
+		  gtk_rc_parse_string(buf);
+}
+#endif
+
 static void
 setup_wimp_rc_style(void)
 {
@@ -366,10 +504,10 @@ setup_wimp_rc_style(void)
   gint paned_size = 15;
 
   /* Prelight */
-  sys_color_to_gtk_color(XP_THEME_CLASS_UNKNOWN, COLOR_HIGHLIGHTTEXT, &fg_prelight);
-  sys_color_to_gtk_color(XP_THEME_CLASS_UNKNOWN, COLOR_HIGHLIGHT, &bg_prelight);
-  sys_color_to_gtk_color(XP_THEME_CLASS_UNKNOWN, COLOR_HIGHLIGHT, &base_prelight);
-  sys_color_to_gtk_color(XP_THEME_CLASS_UNKNOWN, COLOR_HIGHLIGHTTEXT, &text_prelight);
+  sys_color_to_gtk_color(XP_THEME_CLASS_TEXT, COLOR_HIGHLIGHTTEXT, &fg_prelight);
+  sys_color_to_gtk_color(XP_THEME_CLASS_TEXT, COLOR_HIGHLIGHT, &bg_prelight);
+  sys_color_to_gtk_color(XP_THEME_CLASS_TEXT, COLOR_HIGHLIGHT, &base_prelight);
+  sys_color_to_gtk_color(XP_THEME_CLASS_TEXT, COLOR_HIGHLIGHTTEXT, &text_prelight);
 
   sys_color_to_gtk_color(XP_THEME_CLASS_MENU, COLOR_MENUTEXT, &menu_text_color);
   sys_color_to_gtk_color(XP_THEME_CLASS_MENU, COLOR_MENU, &menu_color);
@@ -386,9 +524,11 @@ setup_wimp_rc_style(void)
   sys_color_to_gtk_color(XP_THEME_CLASS_PROGRESS, COLOR_HIGHLIGHT, &progress_back);
 
   /* Enable coloring for menus. */
-  font_ptr = sys_font_to_pango_font (XP_THEME_CLASS_MENU, XP_THEME_FONT_MENU,font_buf);
-  sprintf(buf, "style \"wimp-menu\" = \"wimp-default\"\n"
-          "{fg[PRELIGHT] = { %d, %d, %d }\n"
+  font_ptr = sys_font_to_pango_font (XP_THEME_CLASS_MENU, XP_THEME_FONT_MENU,font_buf, sizeof (font_buf));
+  g_snprintf(buf, sizeof (buf),
+  		  "style \"wimp-menu\" = \"wimp-default\"\n"
+          "{\n"
+		  "fg[PRELIGHT] = { %d, %d, %d }\n"
           "bg[PRELIGHT] = { %d, %d, %d }\n"
           "text[PRELIGHT] = { %d, %d, %d }\n"
           "base[PRELIGHT] = { %d, %d, %d }\n"
@@ -419,8 +559,9 @@ setup_wimp_rc_style(void)
   gtk_rc_parse_string(buf);
 
   /* enable tooltip fonts */
-  font_ptr = sys_font_to_pango_font (XP_THEME_CLASS_STATUS, XP_THEME_FONT_STATUS,font_buf);
-  sprintf(buf, "style \"wimp-tooltips-caption\" = \"wimp-default\"\n"
+  font_ptr = sys_font_to_pango_font (XP_THEME_CLASS_STATUS, XP_THEME_FONT_STATUS,font_buf, sizeof (font_buf));
+  g_snprintf(buf, sizeof (buf),
+  	  "style \"wimp-tooltips-caption\" = \"wimp-default\"\n"
 	  "{fg[NORMAL] = { %d, %d, %d }\n"
 	  "%s = \"%s\"\n"
 	  "}widget \"gtk-tooltips.GtkLabel\" style \"wimp-tooltips-caption\"\n",
@@ -431,7 +572,8 @@ setup_wimp_rc_style(void)
           (font_ptr ? font_ptr : " font name should go here"));
   gtk_rc_parse_string(buf);
 
-  sprintf(buf, "style \"wimp-tooltips\" = \"wimp-default\"\n"
+  g_snprintf(buf, sizeof (buf),
+  	  "style \"wimp-tooltips\" = \"wimp-default\"\n"
 	  "{bg[NORMAL] = { %d, %d, %d }\n"
 	  "}widget \"gtk-tooltips*\" style \"wimp-tooltips\"\n",
           tooltip_back.red,
@@ -440,17 +582,21 @@ setup_wimp_rc_style(void)
   gtk_rc_parse_string(buf);
 
   /* enable font theming for status bars */
-  font_ptr = sys_font_to_pango_font (XP_THEME_CLASS_STATUS, XP_THEME_FONT_STATUS,font_buf);
-  sprintf(buf, "style \"wimp-statusbar\" = \"wimp-default\"\n"
+  font_ptr = sys_font_to_pango_font (XP_THEME_CLASS_STATUS, XP_THEME_FONT_STATUS,font_buf, sizeof (font_buf));
+  g_snprintf(buf, sizeof (buf),
+  	  "style \"wimp-status\" = \"wimp-default\"\n"
 	  "{%s = \"%s\"\n"
-	  "}widget_class \"*GtkStatusbar*\" style \"wimp-statusbar\"\n",
+	  "bg[NORMAL] = { %d, %d, %d }\n"
+	  "}widget_class \"*GtkStatus*\" style \"wimp-status\"\n",
           (font_ptr ? "font_name" : "#"),
-          (font_ptr ? font_ptr : " font name should go here"));
+          (font_ptr ? font_ptr : " font name should go here"),
+          btn_face.red, btn_face.green, btn_face.blue);
   gtk_rc_parse_string(buf);
 
   /* enable coloring for text on buttons
      TODO: use GetThemeMetric for the border and outside border */
-  sprintf(buf, "style \"wimp-button\" = \"wimp-default\"\n"
+  g_snprintf(buf, sizeof (buf),
+  	  "style \"wimp-button\" = \"wimp-default\"\n"
 	  "{\n"
 	  "bg[NORMAL] = { %d, %d, %d }\n"
 	  "bg[PRELIGHT] = { %d, %d, %d }\n"
@@ -469,16 +615,20 @@ setup_wimp_rc_style(void)
   gtk_rc_parse_string(buf);
 
   /* enable coloring for progress bars */
-  sprintf(buf, "style \"wimp-progress\" = \"wimp-default\"\n"
+  g_snprintf(buf, sizeof (buf),
+      "style \"wimp-progress\" = \"wimp-default\"\n"
 	  "{bg[PRELIGHT] = { %d, %d, %d }\n"
+	  "bg[NORMAL] = { %d, %d, %d }\n"
 	  "}widget_class \"*GtkProgress*\" style \"wimp-progress\"\n",
 	  progress_back.red,
       progress_back.green,
-      progress_back.blue);
+      progress_back.blue,
+      btn_face.red, btn_face.green, btn_face.blue);
   gtk_rc_parse_string(buf);
 
   /* scrollbar thumb width and height */
-  sprintf(buf, "style \"wimp-vscrollbar\" = \"wimp-default\"\n"
+  g_snprintf(buf, sizeof (buf),
+  	  "style \"wimp-vscrollbar\" = \"wimp-default\"\n"
 	  "{GtkRange::slider-width = %d\n"
 	  "GtkRange::stepper-size = %d\n"
 	  "GtkRange::stepper-spacing = 0\n"
@@ -488,7 +638,8 @@ setup_wimp_rc_style(void)
 	  get_system_metric(XP_THEME_CLASS_SCROLLBAR, SM_CXVSCROLL));
   gtk_rc_parse_string(buf);
 
-  sprintf(buf, "style \"wimp-hscrollbar\" = \"wimp-default\"\n"
+  g_snprintf(buf, sizeof (buf),
+  	  "style \"wimp-hscrollbar\" = \"wimp-default\"\n"
 	  "{GtkRange::slider-width = %d\n"
 	  "GtkRange::stepper-size = %d\n"
 	  "GtkRange::stepper-spacing = 0\n"
@@ -499,7 +650,8 @@ setup_wimp_rc_style(void)
   gtk_rc_parse_string(buf);
 
   /* radio/check button sizes */
-  sprintf(buf, "style \"wimp-checkbutton\" = \"wimp-button\"\n"
+  g_snprintf(buf, sizeof (buf),
+  	  "style \"wimp-checkbutton\" = \"wimp-button\"\n"
 	  "{GtkCheckButton::indicator-size = 13\n"
 	  "}widget_class \"*GtkCheckButton*\" style \"wimp-checkbutton\"\n");
   gtk_rc_parse_string(buf);
@@ -508,7 +660,8 @@ setup_wimp_rc_style(void)
   nc.cbSize = sizeof(nc);
   if (SystemParametersInfo(SPI_GETNONCLIENTMETRICS, sizeof(nc), &nc, 0))
     paned_size = abs(nc.lfStatusFont.lfHeight) + 4;
-  sprintf(buf, "style \"wimp-paned\" = \"wimp-default\"\n"
+  g_snprintf(buf, sizeof (buf),
+  	  "style \"wimp-paned\" = \"wimp-default\"\n"
 	  "{GtkPaned::handle-size = %d\n"
 	  "}widget_class \"*GtkPaned*\" style \"wimp-paned\"\n", paned_size);
   gtk_rc_parse_string(buf);
@@ -521,31 +674,31 @@ setup_system_styles(GtkStyle *style)
 
   /* Default background */
   sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON,  COLOR_BTNFACE,   &style->bg[GTK_STATE_NORMAL]);
-  sys_color_to_gtk_color(XP_THEME_CLASS_UNKNOWN, COLOR_HIGHLIGHT, &style->bg[GTK_STATE_SELECTED]);
+  sys_color_to_gtk_color(XP_THEME_CLASS_TEXT,    COLOR_HIGHLIGHT, &style->bg[GTK_STATE_SELECTED]);
   sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON,  COLOR_BTNFACE,   &style->bg[GTK_STATE_INSENSITIVE]);
   sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON,  COLOR_BTNFACE,   &style->bg[GTK_STATE_ACTIVE]);
   sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON,  COLOR_BTNFACE,   &style->bg[GTK_STATE_PRELIGHT]);
 
   /* Default base */
   sys_color_to_gtk_color(XP_THEME_CLASS_WINDOW,  COLOR_WINDOW,    &style->base[GTK_STATE_NORMAL]);
-  sys_color_to_gtk_color(XP_THEME_CLASS_UNKNOWN, COLOR_HIGHLIGHT, &style->base[GTK_STATE_SELECTED]);
+  sys_color_to_gtk_color(XP_THEME_CLASS_TEXT,    COLOR_HIGHLIGHT, &style->base[GTK_STATE_SELECTED]);
   sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON,  COLOR_BTNFACE,   &style->base[GTK_STATE_INSENSITIVE]);
   sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON,  COLOR_BTNFACE,   &style->base[GTK_STATE_ACTIVE]);
   sys_color_to_gtk_color(XP_THEME_CLASS_WINDOW,  COLOR_WINDOW,    &style->base[GTK_STATE_PRELIGHT]);
 
   /* Default text */
   sys_color_to_gtk_color(XP_THEME_CLASS_WINDOW,  COLOR_WINDOWTEXT,    &style->text[GTK_STATE_NORMAL]);
-  sys_color_to_gtk_color(XP_THEME_CLASS_UNKNOWN, COLOR_HIGHLIGHTTEXT, &style->text[GTK_STATE_SELECTED]);
+  sys_color_to_gtk_color(XP_THEME_CLASS_TEXT,    COLOR_HIGHLIGHTTEXT, &style->text[GTK_STATE_SELECTED]);
   sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON,  COLOR_GRAYTEXT,      &style->text[GTK_STATE_INSENSITIVE]);
   sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON,  COLOR_BTNTEXT,       &style->text[GTK_STATE_ACTIVE]);
   sys_color_to_gtk_color(XP_THEME_CLASS_WINDOW,  COLOR_WINDOWTEXT,    &style->text[GTK_STATE_PRELIGHT]);
 
   /* Default forgeground */
   sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON,  COLOR_BTNTEXT,       &style->fg[GTK_STATE_NORMAL]);
-  sys_color_to_gtk_color(XP_THEME_CLASS_UNKNOWN, COLOR_HIGHLIGHTTEXT, &style->fg[GTK_STATE_SELECTED]);
-  sys_color_to_gtk_color(XP_THEME_CLASS_UNKNOWN, COLOR_GRAYTEXT,      &style->fg[GTK_STATE_INSENSITIVE]);
+  sys_color_to_gtk_color(XP_THEME_CLASS_TEXT,    COLOR_HIGHLIGHTTEXT, &style->fg[GTK_STATE_SELECTED]);
+  sys_color_to_gtk_color(XP_THEME_CLASS_TEXT,    COLOR_GRAYTEXT,      &style->fg[GTK_STATE_INSENSITIVE]);
   sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON,  COLOR_BTNTEXT,       &style->fg[GTK_STATE_ACTIVE]);
-  sys_color_to_gtk_color(XP_THEME_CLASS_UNKNOWN, COLOR_WINDOWTEXT, &style->fg[GTK_STATE_PRELIGHT]);
+  sys_color_to_gtk_color(XP_THEME_CLASS_WINDOW,  COLOR_WINDOWTEXT,    &style->fg[GTK_STATE_PRELIGHT]);
 
   for (i = 0; i < 5; i++)
     {
@@ -1615,8 +1768,8 @@ static void
 wimp_style_init_from_rc (GtkStyle * style, GtkRcStyle * rc_style)
 {
   setup_system_font (style);
-  setup_system_styles (style);
   setup_menu_settings ();
+  setup_system_styles (style);
   parent_class->init_from_rc(style, rc_style);
 }
 
