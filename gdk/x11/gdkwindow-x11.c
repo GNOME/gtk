@@ -485,6 +485,18 @@ gdk_window_hide (GdkWindow *window)
 }
 
 void
+gdk_window_withdraw (GdkWindow *window)
+{
+  GdkWindowPrivate *private;
+
+  g_return_if_fail (window != NULL);
+
+  private = (GdkWindowPrivate*) window;
+  if (!private->destroyed)
+    XWithdrawWindow (private->xdisplay, private->xwindow, 0);
+}
+
+void
 gdk_window_move (GdkWindow *window,
 		 gint       x,
 		 gint       y)
