@@ -10,6 +10,7 @@ EXTRA_DIST =	\
         gtk.m4          \
 	makecopyright	\
 	TODO		\
+	examples/README.1ST \
 	examples/aspectframe/Makefile  \
 	examples/aspectframe/aspectframe.c  \
 	examples/buttons/Makefile  \
