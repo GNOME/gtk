@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 1999-09-03 14:16-0500\n"
+"POT-Creation-Date: 1999-09-03 05:20+0200\n"
 "PO-Revision-Date: 1999-07-23 14:45+CET\n"
 "Last-Translator: GNOME PL Team\n"
 "Language-Team: Polish <gnomepl@pandora.info.bielsko.pl>\n"
