@@ -385,6 +385,44 @@ gtk_text_buffer_insert_at_cursor (GtkTextBuffer *buffer,
   gtk_text_buffer_insert(buffer, &iter, text, len);
 }
 
+gboolean
+gtk_text_buffer_insert_interactive(GtkTextBuffer *buffer,
+                                   GtkTextIter   *iter,
+                                   const gchar   *text,
+                                   gint           len,
+                                   gboolean       editable_by_default)
+{
+  g_return_val_if_fail(GTK_IS_TEXT_BUFFER(buffer), FALSE);
+  g_return_val_if_fail(text != NULL, FALSE);
+  
+  if (gtk_text_iter_editable (iter, editable_by_default))
+    {
+      gtk_text_buffer_insert (buffer, iter, text, len);
+      return TRUE;
+    }
+  else
+    return FALSE;
+}
+
+gboolean
+gtk_text_buffer_insert_interactive_at_cursor (GtkTextBuffer *buffer,
+                                              const gchar   *text,
+                                              gint           len,
+                                              gboolean       default_editable)
+{
+  GtkTextIter iter;
+
+  g_return_val_if_fail(GTK_IS_TEXT_BUFFER(buffer), FALSE);
+  g_return_val_if_fail(text != NULL, FALSE);
+  
+  gtk_text_buffer_get_iter_at_mark(buffer, &iter,
+                                   gtk_text_buffer_get_mark (buffer,
+                                                             "insert"));
+
+  return gtk_text_buffer_insert_interactive (buffer, &iter, text, len,
+                                             default_editable);
+}
+
 /*
  * Deletion
  */
@@ -397,7 +435,7 @@ gtk_text_buffer_real_delete_text(GtkTextBuffer *buffer,
   g_return_if_fail(GTK_IS_TEXT_BUFFER(buffer));
   g_return_if_fail(start != NULL);
   g_return_if_fail(end != NULL);
-
+  
   gtk_text_btree_delete(start, end);
 
   /* may have deleted the selection... */
@@ -420,6 +458,8 @@ gtk_text_buffer_emit_delete(GtkTextBuffer *buffer,
   if (gtk_text_iter_equal(start, end))
     return;
 
+  gtk_text_iter_reorder (start, end);
+  
   gtk_signal_emit(GTK_OBJECT(buffer),
                   signals[DELETE_TEXT],
                   start, end);
@@ -435,6 +475,109 @@ gtk_text_buffer_delete (GtkTextBuffer *buffer,
   g_return_if_fail(end != NULL);
   
   gtk_text_buffer_emit_delete(buffer, start, end);
+}
+
+gboolean
+gtk_text_buffer_delete_interactive (GtkTextBuffer *buffer,
+                                    GtkTextIter   *start_iter,
+                                    GtkTextIter   *end_iter,
+                                    gboolean       default_editable)
+{
+  GtkTextMark *end_mark;
+  GtkTextMark *start_mark;
+  GtkTextIter iter;
+  gboolean current_state;
+  gboolean deleted_stuff = FALSE;
+
+  /* Delete all editable text in the range start_iter, end_iter */
+  
+  g_return_val_if_fail(GTK_IS_TEXT_BUFFER(buffer), FALSE);
+  g_return_val_if_fail (start_iter != NULL, FALSE);
+  g_return_val_if_fail (end_iter != NULL, FALSE);
+
+  gtk_text_iter_reorder (start_iter, end_iter);
+  
+  start_mark = gtk_text_buffer_create_mark (buffer, NULL, 
+                                            start_iter, TRUE);
+  end_mark = gtk_text_buffer_create_mark (buffer, NULL, 
+                                          end_iter, FALSE);
+  iter = *start_iter;
+  
+  current_state = gtk_text_iter_editable (&iter, default_editable);
+  
+  while (gtk_text_iter_forward_find_tag_toggle (&iter, NULL))
+    {
+      gboolean new_state;
+      gboolean done = FALSE;
+      GtkTextIter end;
+
+      gtk_text_buffer_get_iter_at_mark (buffer, &end, end_mark);
+      
+      if (gtk_text_iter_compare (&iter, &end) >= 0)
+        {
+          done = TRUE;
+          iter = end; /* clamp to the last boundary */
+        }
+
+      new_state = gtk_text_iter_editable (&iter, default_editable);
+
+      if (current_state == new_state)
+        {
+          if (done)
+            {
+              if (current_state)
+                {
+                  /* We're ending an editable region. Delete said region. */
+                  GtkTextIter start;
+
+                  gtk_text_buffer_get_iter_at_mark (buffer, &start, start_mark);
+
+                  gtk_text_buffer_delete (buffer, &start, &iter);
+
+                  deleted_stuff = TRUE;
+                }
+
+              break;
+            }
+          else
+            continue;
+        }
+
+      if (current_state && !new_state)
+        {
+          /* End of an editable region. Delete it. */
+          GtkTextIter start;
+          
+          gtk_text_buffer_get_iter_at_mark (buffer, &start, start_mark);
+          
+          gtk_text_buffer_delete (buffer, &start, &iter);
+
+          current_state = FALSE;
+          deleted_stuff = TRUE;
+        }
+      else
+        {
+          /* We are at the start of an editable region. We won't be deleting
+           * the previous region. Move start mark to start of this region.
+           */
+
+          g_assert (!current_state && new_state);          
+          
+          gtk_text_buffer_move_mark (buffer, start_mark,
+                                     &iter);
+
+
+          current_state = TRUE;
+        }
+
+      if (done)
+        break;
+    }
+
+  gtk_text_buffer_delete_mark (buffer, start_mark);
+  gtk_text_buffer_delete_mark (buffer, end_mark);
+  
+  return deleted_stuff;
 }
 
 /*
@@ -546,8 +689,6 @@ gtk_text_buffer_set_mark(GtkTextBuffer *buffer,
   GtkTextIter location;
   GtkTextMark *mark;
   
-  g_return_val_if_fail(GTK_IS_TEXT_BUFFER(buffer), NULL);
-  
   mark = gtk_text_btree_set_mark(buffer->tree,
                                  existing_mark,
                                  mark_name,
@@ -576,6 +717,8 @@ gtk_text_buffer_create_mark(GtkTextBuffer *buffer,
                             const GtkTextIter *where,
                             gboolean left_gravity)
 {
+  g_return_val_if_fail(GTK_IS_TEXT_BUFFER(buffer), NULL);
+  
   return gtk_text_buffer_set_mark(buffer, NULL, mark_name, where,
                                   left_gravity, FALSE);
 }
@@ -586,6 +729,8 @@ gtk_text_buffer_move_mark(GtkTextBuffer *buffer,
                           const GtkTextIter *where)
 {
   g_return_if_fail (mark != NULL);
+  g_return_if_fail (!gtk_text_mark_deleted (mark));
+  g_return_if_fail(GTK_IS_TEXT_BUFFER(buffer));
   
   gtk_text_buffer_set_mark(buffer, mark, NULL, where, FALSE, TRUE);
 }
@@ -595,6 +740,8 @@ gtk_text_buffer_get_iter_at_mark(GtkTextBuffer *buffer,
                                  GtkTextIter *iter,
                                  GtkTextMark *mark)
 {
+  g_return_if_fail (mark != NULL);
+  g_return_if_fail (!gtk_text_mark_deleted (mark));
   g_return_if_fail(GTK_IS_TEXT_BUFFER(buffer));
 
   gtk_text_btree_get_iter_at_mark(buffer->tree,
@@ -606,6 +753,8 @@ void
 gtk_text_buffer_delete_mark(GtkTextBuffer *buffer,
                             GtkTextMark *mark)
 {
+  g_return_if_fail (mark != NULL);
+  g_return_if_fail (!gtk_text_mark_deleted (mark));
   g_return_if_fail(GTK_IS_TEXT_BUFFER(buffer));
 
   gtk_text_btree_remove_mark (buffer->tree, mark);
@@ -1186,8 +1335,12 @@ selection_received (GtkWidget        *widget,
         
         utf = gtk_text_latin1_to_utf((const gchar*)selection_data->data,
                                      selection_data->length);
-        gtk_text_buffer_insert (buffer, &insert_point,
-                                utf, -1);
+        if (buffer->paste_interactive)
+          gtk_text_buffer_insert_interactive (buffer, &insert_point,
+                                              utf, -1, buffer->paste_default_editable);
+        else
+          gtk_text_buffer_insert (buffer, &insert_point,
+                                  utf, -1);
         g_free(utf);
       }
       break;
@@ -1216,8 +1369,13 @@ selection_received (GtkWidget        *widget,
             gchar *utf;
 
             utf = gtk_text_latin1_to_utf(list[i], strlen(list[i]));
-            
-            gtk_text_buffer_insert(buffer, &insert_point, utf, -1);
+
+            if (buffer->paste_interactive)
+              gtk_text_buffer_insert_interactive (buffer, &insert_point,
+                                                  utf, -1, buffer->paste_default_editable);
+            else
+              gtk_text_buffer_insert (buffer, &insert_point,
+                                      utf, -1);
 
             g_free(utf);
           }
@@ -1306,9 +1464,14 @@ gtk_text_buffer_update_clipboard_selection(GtkTextBuffer *buffer)
 }
 
 static void
-paste(GtkTextBuffer *buffer, GdkAtom selection, guint32 time)
+paste (GtkTextBuffer *buffer, GdkAtom selection, guint32 time,
+       gboolean interactive,
+       gboolean default_editable)
 {
   ensure_handlers(buffer);
+
+  buffer->paste_interactive = interactive;
+  buffer->paste_default_editable = default_editable;
   
   gtk_selection_convert (buffer->selection_widget, selection,
                          utf8_atom, time);
@@ -1317,25 +1480,31 @@ paste(GtkTextBuffer *buffer, GdkAtom selection, guint32 time)
 void
 gtk_text_buffer_paste_primary_selection(GtkTextBuffer      *buffer,
                                         GtkTextIter        *override_location,
-                                        guint32 time)
+                                        guint32 time,
+                                        gboolean interactive,
+                                        gboolean default_editable)
 {
   if (override_location != NULL)
     gtk_text_buffer_create_mark(buffer,
                                 "__paste_point_override",
                                 override_location, FALSE);
   
-  paste(buffer, GDK_SELECTION_PRIMARY, time);
+  paste(buffer, GDK_SELECTION_PRIMARY, time, interactive, default_editable);
 }
 
 void
 gtk_text_buffer_paste_clipboard        (GtkTextBuffer      *buffer,
-                                        guint32              time)
+                                        guint32              time,
+                                        gboolean            interactive,
+                                        gboolean            default_editable)
 {
-  paste(buffer, clipboard_atom, time);
+  paste(buffer, clipboard_atom, time, interactive, default_editable);
 }
 
 gboolean
-gtk_text_buffer_delete_selection (GtkTextBuffer      *buffer)
+gtk_text_buffer_delete_selection (GtkTextBuffer *buffer,
+                                  gboolean interactive,
+                                  gboolean default_editable)
 {
   GtkTextIter start;
   GtkTextIter end;
@@ -1346,7 +1515,11 @@ gtk_text_buffer_delete_selection (GtkTextBuffer      *buffer)
     }
   else
     {
-      gtk_text_buffer_delete(buffer, &start, &end);
+      if (interactive)
+        gtk_text_buffer_delete_interactive (buffer, &start, &end, default_editable);
+      else
+        gtk_text_buffer_delete (buffer, &start, &end);
+      
       gtk_text_buffer_update_primary_selection(buffer);
       return TRUE; /* We deleted stuff */
     }
@@ -1355,7 +1528,9 @@ gtk_text_buffer_delete_selection (GtkTextBuffer      *buffer)
 static void
 cut_or_copy(GtkTextBuffer *buffer,
             guint32 time,
-            gboolean delete_region_after)
+            gboolean delete_region_after,
+            gboolean interactive,
+            gboolean default_editable)
 {
   /* We prefer to cut the selected region between selection_bound and
      insertion point. If that region is empty, then we cut the region
@@ -1389,22 +1564,29 @@ cut_or_copy(GtkTextBuffer *buffer,
       set_clipboard_contents_nocopy(buffer, text);
       
       if (delete_region_after)
-        gtk_text_buffer_delete(buffer, &start, &end);
+        {
+          if (interactive)
+            gtk_text_buffer_delete_interactive (buffer, &start, &end, default_editable);
+          else
+            gtk_text_buffer_delete (buffer, &start, &end);
+        }
     }
 }
 
 void
 gtk_text_buffer_cut (GtkTextBuffer      *buffer,
-                     guint32              time)
+                     guint32              time,
+                     gboolean interactive,
+                     gboolean default_editable)
 {
-  cut_or_copy(buffer, time, TRUE);
+  cut_or_copy(buffer, time, TRUE, interactive, default_editable);
 }
 
 void
 gtk_text_buffer_copy                   (GtkTextBuffer      *buffer,
                                         guint32              time)
 {
-  cut_or_copy(buffer, time, FALSE);
+  cut_or_copy(buffer, time, FALSE, FALSE, TRUE);
 }
 
 

@@ -35,6 +35,41 @@ gtk_text_mark_get_name (GtkTextMark *mark)
   return g_strdup (seg->body.mark.name);
 }
 
+
+GtkTextMark *
+gtk_text_mark_ref (GtkTextMark *mark)
+{
+  GtkTextLineSegment *seg;
+
+  seg = (GtkTextLineSegment*)mark;
+
+  mark_segment_ref (seg);
+
+  return mark;
+}
+
+void
+gtk_text_mark_unref (GtkTextMark *mark)
+{
+  GtkTextLineSegment *seg;
+
+  seg = (GtkTextLineSegment*)mark;
+  
+  mark_segment_unref (seg);
+}
+
+gboolean
+gtk_text_mark_deleted (GtkTextMark *mark)
+{
+  GtkTextLineSegment *seg;
+  
+  g_return_val_if_fail (mark != NULL, FALSE);
+
+  seg = (GtkTextLineSegment*)mark;
+  
+  return seg->body.mark.tree == NULL;
+}
+
 /*
  * Macro that determines the size of a mark segment:
  */

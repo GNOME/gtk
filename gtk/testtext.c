@@ -20,6 +20,7 @@ struct _Buffer
   GtkTextBuffer *buffer;
   char *filename;
   gint untitled_serial;
+  GtkTextTag *not_editable_tag;
 };
 
 struct _View
@@ -840,6 +841,53 @@ do_direction_changed (gpointer             callback_data,
 }
 
 static void
+do_editable_changed (gpointer callback_data,
+                     guint callback_action,
+                     GtkWidget *widget)
+{
+  View *view = view_from_widget (widget);
+
+  gtk_text_view_set_editable (GTK_TEXT_VIEW (view->text_view), callback_action);
+}
+
+static void
+do_cursor_visible_changed (gpointer callback_data,
+                           guint callback_action,
+                           GtkWidget *widget)
+{
+  View *view = view_from_widget (widget);
+
+  gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (view->text_view), callback_action);
+}
+
+static void
+do_apply_editable (gpointer callback_data,
+                   guint callback_action,
+                   GtkWidget *widget)
+{
+  View *view = view_from_widget (widget);
+  GtkTextIter start;
+  GtkTextIter end;
+  
+  if (gtk_text_buffer_get_selection_bounds (view->buffer->buffer,
+                                            &start, &end))
+    {
+      if (callback_action)
+        {
+          gtk_text_buffer_remove_tag (view->buffer->buffer,
+                                      "ineditable",
+                                      &start, &end);
+        }
+      else
+        {
+          gtk_text_buffer_apply_tag (view->buffer->buffer,
+                                     "ineditable",
+                                     &start, &end);
+        }
+    }
+}
+
+static void
 view_init_menus (View *view)
 {
   GtkTextDirection direction = gtk_widget_get_direction (view->text_view);
@@ -893,9 +941,19 @@ static GtkItemFactoryEntry menu_items[] =
   { "/Settings/Wrap _Off",   NULL,      do_wrap_changed,  GTK_WRAPMODE_NONE, "<RadioItem>" },
   { "/Settings/Wrap _Words", NULL,      do_wrap_changed,  GTK_WRAPMODE_WORD, "/Settings/Wrap Off" },
   { "/Settings/sep1",        NULL,      0,                0, "<Separator>" },
+  { "/Settings/Editable", NULL,      do_editable_changed,  TRUE, "<RadioItem>" },
+  { "/Settings/Not editable",    NULL,      do_editable_changed,  FALSE, "/Settings/Editable" },
+  { "/Settings/sep1",        NULL,      0,                0, "<Separator>" },
+
+  { "/Settings/Cursor visible",    NULL,      do_cursor_visible_changed,  TRUE, "<RadioItem>" },
+  { "/Settings/Cursor not visible", NULL,      do_cursor_visible_changed,  FALSE, "/Settings/Cursor visible" },
+  { "/Settings/sep1",        NULL,      0,                0, "<Separator>" },
+  
   { "/Settings/Left-to-Right", NULL,    do_direction_changed,  GTK_TEXT_DIR_LTR, "<RadioItem>" },
   { "/Settings/Right-to-Left", NULL,    do_direction_changed,  GTK_TEXT_DIR_RTL, "/Settings/Left-to-Right" },
-  
+  { "/_Attributes",   	  NULL,         0,                0, "<Branch>" },
+  { "/Attributes/Editable",   	  NULL,         do_apply_editable, TRUE, NULL },
+  { "/Attributes/Not editable",   	  NULL,         do_apply_editable, FALSE, NULL },
   { "/_Test",   	 NULL,         0,           0, "<Branch>" },
   { "/Test/_Example",  	 NULL,         do_example,  0, NULL },
 };
@@ -1061,6 +1119,12 @@ create_buffer (void)
   buffer->filename = NULL;
   buffer->untitled_serial = -1;
 
+  buffer->not_editable_tag = gtk_text_buffer_create_tag (buffer->buffer,
+                                                         "ineditable");
+  gtk_object_set (GTK_OBJECT (buffer->not_editable_tag),
+                  "editable", FALSE,
+                  "foreground", "purple", NULL);
+  
   buffers = g_slist_prepend (buffers, buffer);
   
   return buffer;

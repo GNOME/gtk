@@ -64,6 +64,10 @@ struct _GtkTextView {
 
   GtkWrapMode wrap_mode;	/* Default wrap mode */
 
+  gboolean editable;            /* default editability */
+
+  gboolean cursor_visible;
+  
   GdkWindow *bin_window;
   GtkAdjustment *hadjustment;
   GtkAdjustment *vadjustment;
@@ -143,6 +147,15 @@ void           gtk_text_view_get_visible_rect      (GtkTextView   *text_view,
 void           gtk_text_view_set_wrap_mode         (GtkTextView   *text_view,
 						    GtkWrapMode    wrap_mode);
 GtkWrapMode    gtk_text_view_get_wrap_mode         (GtkTextView   *text_view);
+
+void           gtk_text_view_set_editable          (GtkTextView   *text_view,
+                                                    gboolean       setting);
+gboolean       gtk_text_view_get_editable          (GtkTextView   *text_view);
+
+void           gtk_text_view_set_cursor_visible    (GtkTextView   *text_view,
+                                                    gboolean       setting);
+gboolean       gtk_text_view_get_cursor_visible    (GtkTextView   *text_view);
+
 
 #ifdef __cplusplus
 }

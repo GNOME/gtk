@@ -2532,6 +2532,10 @@ gtk_text_btree_remove_mark (GtkTextBTree *tree,
   if (segment->body.mark.name)
     g_hash_table_remove(tree->mark_table, segment->body.mark.name);
   mark_segment_unref(segment);
+
+  segment->body.mark.tree = NULL;
+  segment->body.mark.line = NULL;
+  
   segments_changed(tree);
 }
 

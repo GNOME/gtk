@@ -42,6 +42,8 @@ struct _GtkTextBuffer {
   GtkWidget *selection_widget;
   gboolean have_selection;
   gboolean selection_handlers_installed;
+  gboolean paste_interactive;
+  gboolean paste_default_editable;
 };
 
 struct _GtkTextBufferClass {
@@ -105,11 +107,27 @@ void gtk_text_buffer_insert_at_cursor  (GtkTextBuffer *buffer,
                                         const gchar   *text,
                                         gint           len);
 
-/* Delete from the buffer */
+gboolean gtk_text_buffer_insert_interactive           (GtkTextBuffer *buffer,
+                                                       GtkTextIter   *iter,
+                                                       const gchar   *text,
+                                                       gint           len,
+                                                       gboolean       default_editable);
+gboolean gtk_text_buffer_insert_interactive_at_cursor (GtkTextBuffer *buffer,
+                                                       const gchar   *text,
+                                                       gint           len,
+                                                       gboolean       default_editable);
 
-void gtk_text_buffer_delete           (GtkTextBuffer *buffer,
-                                       GtkTextIter   *start_iter,
-                                       GtkTextIter   *end_iter);
+
+/* Delete from the buffer */
+void     gtk_text_buffer_delete             (GtkTextBuffer *buffer,
+                                             GtkTextIter   *start_iter,
+                                             GtkTextIter   *end_iter);
+gboolean gtk_text_buffer_delete_interactive (GtkTextBuffer *buffer,
+                                             GtkTextIter   *start_iter,
+                                             GtkTextIter   *end_iter,
+                                             gboolean       default_editable);
+
+
 
 /* Obtain strings from the buffer */
 gchar          *gtk_text_buffer_get_text            (GtkTextBuffer     *buffer,
@@ -207,16 +225,26 @@ void            gtk_text_buffer_set_modified            (GtkTextBuffer *buffer,
 void            gtk_text_buffer_set_clipboard_contents  (GtkTextBuffer *buffer,
                                                          const gchar   *text);
 const gchar    *gtk_text_buffer_get_clipboard_contents  (GtkTextBuffer *buffer);
+
+
 void            gtk_text_buffer_paste_primary_selection (GtkTextBuffer *buffer,
                                                          GtkTextIter   *override_location,
-                                                         guint32        time);
-gboolean        gtk_text_buffer_delete_selection        (GtkTextBuffer *buffer);
+                                                         guint32        time,
+                                                         gboolean       interactive,
+                                                         gboolean       default_editable);
+gboolean        gtk_text_buffer_delete_selection        (GtkTextBuffer *buffer,
+                                                         gboolean       interactive,
+                                                         gboolean       default_editable);
 void            gtk_text_buffer_cut                     (GtkTextBuffer *buffer,
-                                                         guint32        time);
+                                                         guint32        time,
+                                                         gboolean       interactive,
+                                                         gboolean       default_editable);
 void            gtk_text_buffer_copy                    (GtkTextBuffer *buffer,
                                                          guint32        time);
 void            gtk_text_buffer_paste_clipboard         (GtkTextBuffer *buffer,
-                                                         guint32        time);
+                                                         guint32        time,
+                                                         gboolean       interactive,
+                                                         gboolean       default_editable);
 gboolean        gtk_text_buffer_get_selection_bounds    (GtkTextBuffer *buffer,
                                                          GtkTextIter   *start,
                                                          GtkTextIter   *end);

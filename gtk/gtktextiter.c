@@ -859,6 +859,26 @@ gtk_text_iter_has_tag           (const GtkTextIter   *iter,
 }
 
 gboolean
+gtk_text_iter_editable (const GtkTextIter *iter,
+                        gboolean           default_setting)
+{
+  GtkTextStyleValues *values;
+  gboolean retval;
+  
+  values = gtk_text_style_values_new ();
+
+  values->editable = default_setting;
+
+  gtk_text_iter_get_style_values (iter, values);
+
+  retval = values->editable;
+  
+  gtk_text_style_values_unref (values);
+
+  return retval;
+}
+
+gboolean
 gtk_text_iter_starts_line (const GtkTextIter   *iter)
 {
   GtkTextRealIter *real;
@@ -931,6 +951,37 @@ gtk_text_iter_get_chars_in_line (const GtkTextIter   *iter)
     }
 
   return count;
+}
+
+gboolean
+gtk_text_iter_get_style_values (const GtkTextIter  *iter,
+                                GtkTextStyleValues *values)
+{
+  GtkTextTag** tags;
+  gint tag_count = 0;
+
+  /* Get the tags at this spot */
+  tags = gtk_text_btree_get_tags (iter, &tag_count);
+
+  /* No tags, use default style */
+  if (tags == NULL || tag_count == 0)
+    {
+      if (tags)
+        g_free (tags);
+
+      return FALSE;
+    }
+  
+  /* Sort tags in ascending order of priority */
+  gtk_text_tag_array_sort (tags, tag_count);
+  
+  gtk_text_style_values_fill_from_tags (values,
+                                        tags,
+                                        tag_count);
+
+  g_free (tags);
+
+  return TRUE;
 }
 
 /*
