@@ -1926,7 +1926,7 @@ gdk_rgb_convert_555_br (GdkRgbInfo *image_info, GdkImage *image,
 	   */
 	  ((unsigned short *)obuf)[x] = ((r & 0xf8) >> 1) |
 	    ((g & 0xc0) >> 6) |
-	    ((g & 0x18) << 10) |
+	    ((g & 0x38) << 10) |
 	    ((b & 0xf8) << 5);
 	}
       bptr += rowstride;

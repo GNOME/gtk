@@ -1,3 +1,76 @@
+Wed Feb 28 19:10:43 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkclist.c (real_remove_row): Patch from ChiDeok
+	Hwang to move call to sync_selection() up a few lines
+	to before the row list is modified, to fix crash when
+	removing rows in the undo_selection list.
+
+	(Test case provided by Daniel Elstner:
+
+        http://mail.gnome.org/archives/gtk-list/2001-February/msg00359.html)
+
+Fri Feb 23 15:06:48 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktree.c (gtk_tree_class_init): Do the setting
+	of tree->root_tree in parent_set rather than _map(), 
+	fixing #50892 in a bit better manner.
+
+Thu Feb 22 17:07:58 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenu.c (gtk_menu_popup): Don't flip cursor. (#50934)
+
+Tue Feb  2 11:22:33 2001  Jody Goldberg <jgoldberg@home.com>
+
+	* gtk/gtkstyle.c : Remove duplicate fwd decl for
+	gtk_default_draw_shadow.
+
+ue Feb 20 11:40:58 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkimage.c (gdk_image_new): Remove excess 
+	warning, make warnings more verbose, treat a error
+	in shmat as permanent, and don't try again.
+	(#51163, Ed Randall.)
+
+Mon Feb 19 20:15:28 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrange.c (gtk_range_timer_1st_time): Add an initial
+	delay for the first click before starting to scroll.
+	(based on #51026, gtk-enf-990512-0.patch, Eric Fisher)
+
+	* gtk/gtktext.c: GtkText should have I-beam cursor. 
+	(based on gtk-enf-990513-1.patch, Eric Fisher.)
+
+Mon Feb 19 16:42:19 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtklayout.c (gtk_layout_allocate_child): Tiny
+	cleanup to remove some references to unused
+	->xoffset, ->yoffset.
+
+Mon Feb 19 14:20:36 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkrgb.c (gdk_rgb_convert_555_br): Fix incorrect
+	mask. (#51039, fix from Martin Maierhofer)
+
+Fri Feb 16 20:09:42 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkctree.c (gtk_ctree_class_init): Add bindings
+	for unshifted + and shifted = for non-us keyboards.
+	Make <Control>+ and <Control>- work as well as 
+	<Control>KP_Plus, <Control>KP_Minus for recursive
+	open/close.  (#2682, René Seindal)
+
+Fri Feb 16 18:50:59 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenushell.c (gtk_real_menu_shell_cancel): Unset
+	the active menu item before deactivating the menu,
+	so gtk_menu_popdown doesn't change the history. (#50964)
+	
+Fri Feb 16 15:55:22 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktreeitem.c (gtk_tree_item_draw_lines): 
+	draw lines with text_gc rather than black_gc.
+	(Patch from Vlad Harchev <hvv hippo ru>, #50926)
+
 Thu Mar  1 19:50:56 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeviewcolumn.c (_gtk_tree_view_column_realize_button):

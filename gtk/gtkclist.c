@@ -2788,6 +2788,8 @@ real_remove_row (GtkCList *clist,
     gtk_signal_emit (GTK_OBJECT (clist), clist_signals[UNSELECT_ROW],
 		     row, -1, NULL);
 
+  sync_selection (clist, row, SYNC_REMOVE);
+
   /* reset the row end pointer if we're removing at the end of the list */
   clist->rows--;
   if (clist->row_list == list)
@@ -2802,8 +2804,6 @@ real_remove_row (GtkCList *clist,
 
   if (row < ROW_FROM_YPIXEL (clist, 0))
     clist->voffset += clist->row_height + CELL_SPACING;
-
-  sync_selection (clist, row, SYNC_REMOVE);
 
   if (clist->selection_mode == GTK_SELECTION_BROWSE && !clist->selection &&
       clist->focus_row >= 0)

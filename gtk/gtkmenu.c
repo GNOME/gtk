@@ -568,24 +568,18 @@ gtk_menu_popup (GtkMenu		    *menu,
   
   if (xgrab_shell && (!GTK_MENU_SHELL (xgrab_shell)->have_xgrab))
     {
-      GdkCursor *cursor = gdk_cursor_new (GDK_ARROW);
-
       if ((gdk_pointer_grab (xgrab_shell->window, TRUE,
 			     GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
 			     GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK |
 			     GDK_POINTER_MOTION_MASK,
-			     NULL, cursor, activate_time) == 0))
+			     NULL, NULL, activate_time) == 0))
 	{
 	  if (gdk_keyboard_grab (xgrab_shell->window, TRUE,
 			      activate_time) == 0)
 	    GTK_MENU_SHELL (xgrab_shell)->have_xgrab = TRUE;
 	  else
-	    {
-	      gdk_pointer_ungrab (activate_time);
-	    }
+	    gdk_pointer_ungrab (activate_time);
 	}
-
-      gdk_cursor_destroy (cursor);
     }
 
   gtk_menu_scroll_to (menu, menu->scroll_offset);

@@ -267,7 +267,7 @@ gdk_image_new (GdkImageType  type,
 		   */
 		  if (errno != EINVAL)
 		    {
-		      g_warning ("shmget failed!");
+		      g_warning ("shmget failed: error %d (%s)", errno, g_strerror (errno));
 		      gdk_use_xshm = False;
 		    }
 
@@ -284,7 +284,7 @@ gdk_image_new (GdkImageType  type,
 
 	      if (x_shm_info->shmaddr == (char*) -1)
 		{
-		  g_warning ("shmat failed!");
+		  g_warning ("shmat failed: error %d (%s)", errno, g_strerror (errno));
 
 		  XDestroyImage (private->ximage);
 		  shmctl (x_shm_info->shmid, IPC_RMID, 0);
@@ -292,6 +292,12 @@ gdk_image_new (GdkImageType  type,
 		  g_free (private->x_shm_info);
 		  g_free (image);
 
+		  /* Failure in shmat is almost certainly permanent. Most likely error is
+		   * EMFILE, which would mean that we've exceeded the per-process
+		   * Shm segment limit.
+		   */
+		  gdk_use_xshm = False;
+		  
 		  return NULL;
 		}
 

@@ -704,8 +704,8 @@ gtk_layout_allocate_child (GtkLayout      *layout,
   GtkAllocation allocation;
   GtkRequisition requisition;
 
-  allocation.x = child->x - layout->xoffset;
-  allocation.y = child->y - layout->yoffset;
+  allocation.x = child->x;
+  allocation.y = child->y;
   gtk_widget_get_child_requisition (child->widget, &requisition);
   allocation.width = requisition.width;
   allocation.height = requisition.height;

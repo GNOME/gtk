@@ -43,6 +43,8 @@ static void gtk_tree_class_init      (GtkTreeClass   *klass);
 static void gtk_tree_init            (GtkTree        *tree);
 static void gtk_tree_destroy         (GtkObject      *object);
 static void gtk_tree_map             (GtkWidget      *widget);
+static void gtk_tree_parent_set      (GtkWidget      *widget,
+				      GtkWidget      *previous_parent);
 static void gtk_tree_unmap           (GtkWidget      *widget);
 static void gtk_tree_realize         (GtkWidget      *widget);
 static gint gtk_tree_expose          (GtkWidget      *widget,
@@ -117,6 +119,7 @@ gtk_tree_class_init (GtkTreeClass *class)
   
   widget_class->map = gtk_tree_map;
   widget_class->unmap = gtk_tree_unmap;
+  widget_class->parent_set = gtk_tree_parent_set;
   widget_class->realize = gtk_tree_realize;
   widget_class->expose_event = gtk_tree_expose;
   widget_class->motion_notify_event = gtk_tree_motion_notify;
@@ -170,7 +173,7 @@ static void
 gtk_tree_init (GtkTree *tree)
 {
   tree->children = NULL;
-  tree->root_tree = NULL;
+  tree->root_tree = tree;
   tree->selection = NULL;
   tree->tree_owner = NULL;
   tree->selection_mode = GTK_SELECTION_SINGLE;
@@ -503,21 +506,44 @@ gtk_tree_forall (GtkContainer *container,
 }
 
 static void
-gtk_tree_map (GtkWidget *widget)
+gtk_tree_unselect_all (GtkTree *tree)
 {
-  GtkTree *tree;
+  GList *tmp_list, *selection;
+  GtkWidget *tmp_item;
+      
+  selection = tree->selection;
+  tree->selection = NULL;
+
+  tmp_list = selection;
+  while (tmp_list)
+    {
+      tmp_item = selection->data;
+
+      if (tmp_item->parent &&
+	  GTK_IS_TREE (tmp_item->parent) &&
+	  GTK_TREE (tmp_item->parent)->root_tree == tree)
+	gtk_tree_item_deselect (GTK_TREE_ITEM (tmp_item));
+
+      gtk_widget_unref (tmp_item);
+
+      tmp_list = tmp_list->next;
+    }
+
+  g_list_free (selection);
+}
+
+static void
+gtk_tree_parent_set (GtkWidget *widget,
+		     GtkWidget *previous_parent)
+{
+  GtkTree *tree = GTK_TREE (widget);
   GtkWidget *child;
   GList *children;
   
-  
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_TREE (widget));
-  
-  GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
-  tree = GTK_TREE (widget);
-  
-  if(GTK_IS_TREE(widget->parent)) 
+  if (widget->parent && GTK_IS_TREE (widget->parent))
     {
+      gtk_tree_unselect_all (tree);
+      
       /* set root tree for this tree */
       tree->root_tree = GTK_TREE(widget->parent)->root_tree;
       
@@ -527,9 +553,34 @@ gtk_tree_map (GtkWidget *widget)
 	tree->indent_value;
       tree->view_mode = GTK_TREE(GTK_WIDGET(tree)->parent)->view_mode;
       tree->view_line = GTK_TREE(GTK_WIDGET(tree)->parent)->view_line;
-    } 
+    }
   else
-    tree->root_tree = tree;
+    {
+      tree->root_tree = tree;
+      
+      tree->level = 0;
+      tree->current_indent = 0;
+    }
+
+  children = tree->children;
+  while (children)
+    {
+      child = children->data;
+      children = children->next;
+      
+      if (GTK_TREE_ITEM (child)->subtree)
+	gtk_tree_parent_set (GTK_TREE_ITEM (child)->subtree, child);
+    }
+}
+
+static void
+gtk_tree_map (GtkWidget *widget)
+{
+  GtkTree *tree = GTK_TREE (widget);
+  GtkWidget *child;
+  GList *children;
+  
+  GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
   
   children = tree->children;
   while (children)
@@ -1019,12 +1070,6 @@ gtk_real_tree_select_child (GtkTree   *tree,
   g_return_if_fail (child != NULL);
   g_return_if_fail (GTK_IS_TREE_ITEM (child));
 
-  if (!tree->root_tree)
-    {
-      g_warning (G_STRLOC ": unable to select a child in a tree prior to realization");
-      return;
-    }
-  
   root_selection = tree->root_tree->selection;
   
   switch (tree->root_tree->selection_mode)

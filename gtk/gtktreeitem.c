@@ -564,6 +564,7 @@ gtk_tree_item_draw_lines (GtkWidget *widget)
   GtkTreeItem* item;
   GtkTree* tree;
   guint lx1, ly1, lx2, ly2;
+  GdkGC* gc;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_TREE_ITEM (widget));
@@ -573,6 +574,8 @@ gtk_tree_item_draw_lines (GtkWidget *widget)
 
   if (!tree->view_line)
     return;
+
+  gc = widget->style->text_gc[GTK_STATE_NORMAL];
 
   /* draw vertical line */
   lx1 = item->pixmaps_box->allocation.width;
@@ -585,7 +588,7 @@ gtk_tree_item_draw_lines (GtkWidget *widget)
     ly2 = (ly2 / 2) + (ly2 % 2);
 
   if (tree != tree->root_tree)
-    gdk_draw_line (widget->window, widget->style->black_gc, lx1, ly1, lx2, ly2);
+    gdk_draw_line (widget->window, gc, lx1, ly1, lx2, ly2);
 
   /* draw vertical line for subtree connecting */
   if(g_list_last(tree->children)->data != (gpointer)widget)
@@ -594,15 +597,14 @@ gtk_tree_item_draw_lines (GtkWidget *widget)
   lx2 += DEFAULT_DELTA;
 
   if (item->subtree && item->expanded)
-    gdk_draw_line (widget->window, widget->style->black_gc,
+    gdk_draw_line (widget->window, gc,
 		   lx2, ly2, lx2, widget->allocation.height);
 
   /* draw horizontal line */
   ly1 = ly2;
   lx2 += 2;
 
-  gdk_draw_line (widget->window, widget->style->black_gc,
-		 lx1, ly1, lx2, ly2);
+  gdk_draw_line (widget->window, gc, lx1, ly1, lx2, ly2);
 
   lx2 -= DEFAULT_DELTA+2;
   ly1 = 0;
@@ -617,7 +619,7 @@ gtk_tree_item_draw_lines (GtkWidget *widget)
 	  lx1 = lx2 -= tree->indent_value;
 	  
 	  if (g_list_last (tree->children)->data != item)
-	    gdk_draw_line (widget->window, widget->style->black_gc, lx1, ly1, lx2, ly2);
+	    gdk_draw_line (widget->window, gc, lx1, ly1, lx2, ly2);
 	  item = GTK_TREE_ITEM (tree->tree_owner);
 	  tree = GTK_TREE (GTK_WIDGET (tree)->parent);
 	} 

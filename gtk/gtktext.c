@@ -1310,9 +1310,14 @@ gtk_text_realize (GtkWidget *widget)
   attributes.y = (widget->style->ythickness + TEXT_BORDER_ROOM);
   attributes.width = MAX (1, (gint)widget->allocation.width - (gint)attributes.x * 2);
   attributes.height = MAX (1, (gint)widget->allocation.height - (gint)attributes.y * 2);
+
+  attributes.cursor = gdk_cursor_new (GDK_XTERM);
+  attributes_mask |= GDK_WA_CURSOR;
   
   text->text_area = gdk_window_new (widget->window, &attributes, attributes_mask);
   gdk_window_set_user_data (text->text_area, text);
+
+  gdk_cursor_destroy (attributes.cursor); /* The X server will keep it around as long as necessary */
   
   widget->style = gtk_style_attach (widget->style, widget->window);
   

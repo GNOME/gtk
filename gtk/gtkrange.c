@@ -30,7 +30,8 @@
 #include "gtksignal.h"
 
 #define SCROLL_TIMER_LENGTH  20
-#define SCROLL_INITIAL_DELAY 100
+#define SCROLL_INITIAL_DELAY 250  /* must hold button this long before ... */
+#define SCROLL_LATER_DELAY   100  /* ... it starts repeating at this rate  */
 #define SCROLL_DELAY_LENGTH  300
 
 #define RANGE_CLASS(w)  GTK_RANGE_GET_CLASS (w)
@@ -1519,6 +1520,35 @@ gtk_range_scroll (GtkRange *range,
 }
 
 
+static gboolean
+gtk_range_timer_1st_time (GtkRange *range)
+{
+  /*
+   * If the real timeout function succeeds and the timeout is still set,
+   * replace it with a quicker one so successive scrolling goes faster.
+   */
+  gtk_object_ref (GTK_OBJECT (range));
+
+  if (RANGE_CLASS (range)->timer (range))
+    {
+      if (range->timer)
+	{
+	  /* We explicitely remove ourselves here in the paranoia
+	   * that due to things happening above in the callback
+	   * above, we might have been removed, and another added.
+	   */
+	  g_source_remove (range->timer);
+	  range->timer = gtk_timeout_add (SCROLL_LATER_DELAY,
+					  (GtkFunction) RANGE_CLASS (range)->timer,
+					  range);
+	}
+    }
+  
+  gtk_object_unref (GTK_OBJECT (range));
+  
+  return FALSE;  /* don't keep calling this function */
+}
+
 static void
 gtk_range_add_timer (GtkRange *range)
 {
@@ -1528,8 +1558,8 @@ gtk_range_add_timer (GtkRange *range)
     {
       range->need_timer = TRUE;
       range->timer = gtk_timeout_add (SCROLL_INITIAL_DELAY,
-				      (GtkFunction) RANGE_CLASS (range)->timer,
-				      (gpointer) range);
+				      (GtkFunction) gtk_range_timer_1st_time,
+				      range);
     }
 }
 

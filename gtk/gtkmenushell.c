@@ -1040,6 +1040,10 @@ gtk_real_menu_shell_activate_current (GtkMenuShell      *menu_shell,
 static void
 gtk_real_menu_shell_cancel (GtkMenuShell      *menu_shell)
 {
+  /* Unset the active menu item so gtk_menu_popdown() doesn't see it.
+   */
+  gtk_menu_shell_deselect (menu_shell);
+  
   gtk_menu_shell_deactivate (menu_shell);
   gtk_signal_emit (GTK_OBJECT (menu_shell), menu_shell_signals[SELECTION_DONE]);
 }
