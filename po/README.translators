@@ -1,7 +1,7 @@
 All the .po files are now in UTF-8!
 
 For information on editing UTF-8 files on Unix, see
-<http://www.cl.cam.ac.uk/~mgk25/ucs-fonts.html>
+<http://www.cl.cam.ac.uk/~mgk25/unicode.html>
 
 If you just want to convert it back to your native encoding to
 edit and then convert again to UTF-8 to commit, please see the
