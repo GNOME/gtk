@@ -967,6 +967,12 @@ run_destroy_handler (GtkDialog *dialog, gpointer data)
  *   gtk_widget_destroy (dialog);
  * </programlisting></informalexample>
  * 
+ * Note that even though the recursive main loop gives the effect of a
+ * modal dialog (it prevents the user from interacting with other 
+ * windows while the dialog is run), callbacks such as timeouts, 
+ * IO channel watches, DND drops, etc, <emphasis>will</emphasis> be 
+ * triggered during a gtk_dialog_run() call.
+ * 
  * Return value: response ID
  **/
 gint

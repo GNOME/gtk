@@ -1,5 +1,8 @@
 2005-01-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkdialog.c (gtk_dialog_run): Some clarification
+	regarding modality.  (#112903, Dave Bordoley)
+
 	* gtk/gtkfixed.c (gtk_fixed_set_has_window): 
 	Add a little motivation.  (#145556, Tommi Komulainen)
 
