@@ -1,3 +1,8 @@
+2002-09-24  German Poo Caaman~o <gpoo@ubiobio.cl>
+
+	* es.po: Fixed bug #93072 by Juan Manuel García Molina
+			<juanma_gm@wanadoo.es>.
+
 2002-09-09  Yanko Kaneti <yaneti@declera.com>
 
 	* bg.po: "Translate" "default:LTR" correctly. ..doh..
