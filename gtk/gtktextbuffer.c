@@ -97,6 +97,7 @@ static void gtk_text_buffer_real_remove_tag            (GtkTextBuffer     *buffe
 static void gtk_text_buffer_real_changed               (GtkTextBuffer     *buffer);
 
 static GtkTextBTree* get_btree (GtkTextBuffer *buffer);
+static void          free_log_attr_cache (GtkTextLogAttrCache *cache);
 
 static GtkObjectClass *parent_class = NULL;
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -292,6 +293,11 @@ gtk_text_buffer_finalize (GObject *object)
       gtk_text_btree_unref (buffer->btree);
       buffer->btree = NULL;
     }
+
+  if (buffer->log_attr_cache)
+    free_log_attr_cache (buffer->log_attr_cache);
+
+  buffer->log_attr_cache = NULL;
   
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -2612,6 +2618,155 @@ gtk_text_buffer_get_selection_bounds   (GtkTextBuffer      *buffer,
   return gtk_text_btree_get_selection_bounds (get_btree (buffer), start, end);
 }
 
+/*
+ * Logical attribute cache
+ */
+
+#define ATTR_CACHE_SIZE 2
+
+typedef struct _CacheEntry CacheEntry;
+struct _CacheEntry
+{
+  gint line;
+  gint char_len;
+  PangoLogAttr *attrs;
+};
+
+
+struct _GtkTextLogAttrCache
+{
+  gint chars_changed_stamp;
+  CacheEntry entries[ATTR_CACHE_SIZE];
+};
+
+static void
+free_log_attr_cache (GtkTextLogAttrCache *cache)
+{
+  gint i = 0;
+  while (i < ATTR_CACHE_SIZE)
+    {
+      g_free (cache->entries[i].attrs);
+      ++i;
+    }
+  g_free (cache);
+}
+
+static void
+clear_log_attr_cache (GtkTextLogAttrCache *cache)
+{
+  gint i = 0;
+  while (i < ATTR_CACHE_SIZE)
+    {
+      g_free (cache->entries[i].attrs);
+      cache->entries[i].attrs = NULL;
+      ++i;
+    }
+}
+
+static PangoLogAttr*
+compute_log_attrs (const GtkTextIter *iter,
+                   gint              *char_lenp)
+{
+  GtkTextIter start;
+  GtkTextIter end;
+  gchar *paragraph;
+  gint char_len, byte_len;
+  PangoLogAttr *attrs = NULL;
+  gchar *lang;
+  
+  start = *iter;
+  end = *iter;
+
+  gtk_text_iter_set_line_offset (&start, 0);
+  gtk_text_iter_forward_line (&end);
+
+  paragraph = gtk_text_iter_get_slice (&start, &end);
+  char_len = g_utf8_strlen (paragraph, -1);
+  byte_len = strlen (paragraph);
+
+  g_assert (char_len > 0);
+
+  if (char_lenp)
+    *char_lenp = char_len;
+  
+  attrs = g_new (PangoLogAttr, char_len);
+  
+  lang = gtk_text_iter_get_language (&start);
+  
+  pango_get_log_attrs (paragraph, byte_len, -1,
+                       lang,
+                       attrs);
+  
+  g_free (lang);
+
+  g_free (paragraph);
+
+  return attrs;
+}
+
+/* The return value from this is valid until you call this a second time.
+ */
+const PangoLogAttr*
+_gtk_text_buffer_get_line_log_attrs (GtkTextBuffer     *buffer,
+                                     const GtkTextIter *anywhere_in_line,
+                                     gint              *char_len)
+{
+  gint line;
+  GtkTextLogAttrCache *cache;
+  gint i;
+  
+  g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), NULL);
+  g_return_val_if_fail (anywhere_in_line != NULL, NULL);
+  g_return_val_if_fail (!gtk_text_iter_is_last (anywhere_in_line), NULL);
+
+  /* FIXME we also need to recompute log attrs if the language tag at
+   * the start of a paragraph changes
+   */
+  
+  if (buffer->log_attr_cache == NULL)
+    {
+      buffer->log_attr_cache = g_new0 (GtkTextLogAttrCache, 1);
+      buffer->log_attr_cache->chars_changed_stamp =
+        gtk_text_btree_get_chars_changed_stamp (get_btree (buffer));
+    }
+  else if (buffer->log_attr_cache->chars_changed_stamp !=
+           gtk_text_btree_get_chars_changed_stamp (get_btree (buffer)))
+    {
+      clear_log_attr_cache (buffer->log_attr_cache);
+    }
+  
+  cache = buffer->log_attr_cache;
+  line = gtk_text_iter_get_line (anywhere_in_line);
+
+  i = 0;
+  while (i < ATTR_CACHE_SIZE)
+    {
+      if (cache->entries[i].attrs &&
+          cache->entries[i].line == line)
+        {
+          if (char_len)
+            *char_len = cache->entries[i].char_len;
+          return cache->entries[i].attrs;
+        }
+      ++i;
+    }
+  
+  /* Not in cache; open up the first cache entry */
+  if (cache->entries[ATTR_CACHE_SIZE-1].attrs)
+    g_free (cache->entries[ATTR_CACHE_SIZE-1].attrs);
+  
+  g_memmove (cache->entries + 1, cache->entries,
+             sizeof (CacheEntry) * (ATTR_CACHE_SIZE - 1));
+
+  cache->entries[0].line = line;
+  cache->entries[0].attrs = compute_log_attrs (anywhere_in_line,
+                                               &cache->entries[0].char_len);
+
+  if (char_len)
+    *char_len = cache->entries[0].char_len;
+  
+  return cache->entries[0].attrs;
+}
 
 /*
  * Debug spew

@@ -445,7 +445,7 @@ gtk_text_child_anchor_queue_resize (GtkTextChildAnchor *anchor,
   seg = anchor->segment;
 
   if (seg->body.child.tree == NULL)
-    return NULL;
+    return;
   
   gtk_text_buffer_get_iter_at_child_anchor (layout->buffer,
                                             &start, anchor);

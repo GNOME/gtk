@@ -1268,7 +1268,7 @@ gtk_text_iter_editable (const GtkTextIter *iter,
  *
  * Return value: language in effect at @iter
  **/
-static gchar*
+gchar*
 gtk_text_iter_get_language (const GtkTextIter *iter)
 {
   GtkTextAttributes *values;
@@ -2384,14 +2384,14 @@ gtk_text_iter_backward_lines (GtkTextIter *iter, gint count)
     }
 }
 
-typedef gboolean (* FindLogAttrFunc) (PangoLogAttr *attrs,
-                                      gint          offset,
-                                      gint          min_offset,
-                                      gint          len,
-                                      gint         *found_offset);
+typedef gboolean (* FindLogAttrFunc) (const PangoLogAttr *attrs,
+                                      gint                offset,
+                                      gint                min_offset,
+                                      gint                len,
+                                      gint               *found_offset);
 
 static gboolean
-find_word_end_func (PangoLogAttr *attrs,
+find_word_end_func (const PangoLogAttr *attrs,
                     gint          offset,
                     gint          min_offset,
                     gint          len,
@@ -2410,7 +2410,7 @@ find_word_end_func (PangoLogAttr *attrs,
 }
 
 static gboolean
-is_word_end_func (PangoLogAttr *attrs,
+is_word_end_func (const PangoLogAttr *attrs,
                   gint          offset,
                   gint          min_offset,
                   gint          len,
@@ -2420,7 +2420,7 @@ is_word_end_func (PangoLogAttr *attrs,
 }
 
 static gboolean
-find_word_start_func (PangoLogAttr *attrs,
+find_word_start_func (const PangoLogAttr *attrs,
                       gint          offset,
                       gint          min_offset,
                       gint          len,
@@ -2439,7 +2439,7 @@ find_word_start_func (PangoLogAttr *attrs,
 }
 
 static gboolean
-is_word_start_func (PangoLogAttr *attrs,
+is_word_start_func (const PangoLogAttr *attrs,
                     gint          offset,
                     gint          min_offset,
                     gint          len,
@@ -2449,7 +2449,7 @@ is_word_start_func (PangoLogAttr *attrs,
 }
 
 static gboolean
-inside_word_func (PangoLogAttr *attrs,
+inside_word_func (const PangoLogAttr *attrs,
                   gint          offset,
                   gint          min_offset,
                   gint          len,
@@ -2464,52 +2464,27 @@ inside_word_func (PangoLogAttr *attrs,
 }
 
 static gboolean
-test_log_attrs (GtkTextIter       *iter,
+test_log_attrs (const GtkTextIter *iter,
                 FindLogAttrFunc    func,
                 gint              *found_offset)
 {
-  GtkTextIter start;
-  GtkTextIter end;
   gchar *paragraph;
-  gint char_len, byte_len;
-  PangoLogAttr *attrs;
+  gint char_len;
+  const PangoLogAttr *attrs;
   int offset;
   gboolean result = FALSE;
 
   g_return_val_if_fail (iter != NULL, FALSE);
 
-  start = *iter;
-  end = *iter;
-
-  gtk_text_iter_set_line_offset (&start, 0);
-  gtk_text_iter_forward_line (&end);
-
-  paragraph = gtk_text_iter_get_slice (&start, &end);
-  char_len = g_utf8_strlen (paragraph, -1);
-  byte_len = strlen (paragraph);
+  attrs = _gtk_text_buffer_get_line_log_attrs (gtk_text_iter_get_buffer (iter),
+                                               iter, &char_len);
 
   offset = gtk_text_iter_get_line_offset (iter);
 
-  if (char_len > 0 && offset < char_len)
-    {
-      gchar *lang;
-
-      attrs = g_new (PangoLogAttr, char_len);
-
-      lang = gtk_text_iter_get_language (iter);
-
-      pango_get_log_attrs (paragraph, byte_len, -1,
-                           lang,
-                           attrs);
-
-      g_free (lang);
-
-      result = (* func) (attrs, offset, 0, char_len, found_offset);
-
-      g_free (attrs);
-    }
-
-  g_free (paragraph);
+  g_assert (char_len > 0);
+  
+  if (offset < char_len)
+    result = (* func) (attrs, offset, 0, char_len, found_offset);
 
   return result;
 }

@@ -40,7 +40,7 @@ extern "C" {
 #define GTK_COLOR_SELECTION_CLASS(klass)		(GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_COLOR_SELECTION, GtkColorSelectionClass))
 #define GTK_IS_COLOR_SELECTION(obj)			(GTK_CHECK_TYPE ((obj), GTK_TYPE_COLOR_SELECTION))
 #define GTK_IS_COLOR_SELECTION_CLASS(klass)		(GTK_CHECK_CLASS_TYPE ((obj), GTK_TYPE_COLOR_SELECTION))
-#define GTK_COLOR_SELECTION_GET_CLASS(obj)              (GTK_CHECK_GET_CLAS ((obj), GTK_TYPE_COLOR_SELECTION, GtkColorSelectionClass))
+#define GTK_COLOR_SELECTION_GET_CLASS(obj)              (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_COLOR_SELECTION, GtkColorSelectionClass))
 
 
 typedef struct _GtkColorSelection       GtkColorSelection;

@@ -134,8 +134,8 @@ gboolean gtk_text_iter_ends_line         (const GtkTextIter   *iter);
 gint     gtk_text_iter_get_chars_in_line (const GtkTextIter   *iter);
 
 gboolean gtk_text_iter_get_attributes    (const GtkTextIter    *iter,
-                                          GtkTextAttributes   *values);
-
+                                          GtkTextAttributes    *values);
+gchar*   gtk_text_iter_get_language      (const GtkTextIter    *iter);
 gboolean gtk_text_iter_is_last           (const GtkTextIter    *iter);
 gboolean gtk_text_iter_is_first          (const GtkTextIter    *iter);
 

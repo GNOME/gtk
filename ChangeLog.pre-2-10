@@ -1,3 +1,20 @@
+2000-12-08  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextbtree.c (gtk_text_btree_insert): fix breakage here
+	that cause a segfault on text insertion
+
+	* gtk/gtktextchild.c (gtk_text_child_anchor_queue_resize): fix 
+	warning
+
+	* gtk/gtktextiter.c (test_log_attrs): use
+	_gtk_text_buffer_get_line_log_attrs to speed things up a bit
+
+	* gtk/gtktextbuffer.c (_gtk_text_buffer_get_line_log_attrs): 
+	Get log attrs for a line, using a cache stored on the buffer
+	
+	* gtk/gtkcolorsel.h (GTK_COLOR_SELECTION_GET_CLASS): fix typo,
+	reported by Jeff Franks
+
 2000-12-08  Alexander Larsson  <alla@lysator.liu.se>
 
 	* gdk/linux-fb/gdkmouse-fb.c (gdk_fb_mouse_ms_open):
@@ -145,6 +162,7 @@
 	(return bytes not chars)
 
 2000-12-05  Elliot Lee  <sopwith@redhat.com>
+
 	* gdk/gdkcolor.h: Make GdkColor specify element sizes
 	to avoid waste on 64-bit platforms.
 

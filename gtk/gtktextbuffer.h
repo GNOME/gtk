@@ -44,6 +44,8 @@ extern "C" {
 
 typedef struct _GtkTextBTree GtkTextBTree;
 
+typedef struct _GtkTextLogAttrCache GtkTextLogAttrCache;
+
 #define GTK_TYPE_TEXT_BUFFER            (gtk_text_buffer_get_type ())
 #define GTK_TEXT_BUFFER(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_TEXT_BUFFER, GtkTextBuffer))
 #define GTK_TEXT_BUFFER_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_TEXT_BUFFER, GtkTextBufferClass))
@@ -61,6 +63,8 @@ struct _GtkTextBuffer
   GtkTextBTree *btree;
 
   GtkTextBuffer *clipboard_contents;
+
+  GtkTextLogAttrCache *log_attr_cache;
   
   /* Whether the buffer has been modified since last save */
   guint modified : 1;
@@ -312,12 +316,16 @@ gboolean        gtk_text_buffer_get_selection_bounds    (GtkTextBuffer *buffer,
                                                          GtkTextIter   *end);
 gboolean        gtk_text_buffer_delete_selection        (GtkTextBuffer *buffer,
                                                          gboolean       interactive,
-                                                         gboolean       default_editable);
-
+                                                         gboolean       default_editable);                                                    
+                                                    
 /* INTERNAL private stuff */
 void            _gtk_text_buffer_spew                  (GtkTextBuffer      *buffer);
 
 GtkTextBTree*   _gtk_text_buffer_get_btree             (GtkTextBuffer      *buffer);
+
+const PangoLogAttr* _gtk_text_buffer_get_line_log_attrs (GtkTextBuffer     *buffer,
+                                                         const GtkTextIter *anywhere_in_line,
+                                                         gint              *char_len);
 
 #ifdef __cplusplus
 }

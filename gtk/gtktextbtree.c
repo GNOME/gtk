@@ -976,6 +976,10 @@ gtk_text_btree_insert (GtkTextIter *iter,
                                      &delim,
                                      &eol);      
 
+      /* make these relative to the start of the text */
+      delim += sol;
+      eol += sol;
+      
       chunk_len = eol - sol;
 
       seg = _gtk_char_segment_new (&text[sol], chunk_len);
