@@ -1,3 +1,10 @@
+2000-11-15  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextdisplay.c (gtk_text_layout_draw): Remove extra pixel
+	from the cursor
+	(render_layout_line): fix reversed test that caused weird
+	underlines to get drawn
+
 2000-11-15  Alexander Larsson  <alla@lysator.liu.se>
 
 	* gdk/linux-fb/gdkprivate-fb.h:

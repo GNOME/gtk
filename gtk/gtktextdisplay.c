@@ -265,10 +265,10 @@ render_layout_line (GdkDrawable        *drawable,
         {
           if (need_ink)
             pango_glyph_string_extents (run->glyphs, run->item->analysis.font,
-                                        NULL, &logical_rect);
+                                        &ink_rect, &logical_rect);
           else
             pango_glyph_string_extents (run->glyphs, run->item->analysis.font,
-                                        &ink_rect, &logical_rect);
+                                        NULL, &logical_rect);
         }
       else
         {
@@ -785,7 +785,7 @@ gtk_text_layout_draw (GtkTextLayout *layout,
                          line_display->x_offset + cursor->x,
                          current_y + line_display->top_margin + cursor->y,
                          line_display->x_offset + cursor->x,
-                         current_y + line_display->top_margin + cursor->y + cursor->height);
+                         current_y + line_display->top_margin + cursor->y + cursor->height - 1);
 
           cursor_list = cursor_list->next;
         }
