@@ -1,3 +1,8 @@
+Thu Dec 12 18:25:17 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktextview.c (gtk_text_view_button_press_event): 
+	return TRUE when button 3 is pressed, fixes #78324.
+
 Thu Dec 12 10:12:39 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktextview.c: Turn off DEBUG_VALIDATION_AND_SCROLLING

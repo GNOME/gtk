@@ -3818,6 +3818,7 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
       else if (event->button == 3)
         {
 	  gtk_text_view_do_popup (text_view, event);
+	  return TRUE;
         }
     }
   else if ((event->type == GDK_2BUTTON_PRESS ||
