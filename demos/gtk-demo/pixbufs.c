@@ -265,6 +265,7 @@ do_pixbufs (GtkWidget *do_widget)
     {
       gtk_widget_destroy (window);
       window = NULL;
+      g_object_unref (frame);
     }
 
   return window;
