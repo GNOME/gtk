@@ -9,6 +9,14 @@ Fri Dec 12 00:12:01 2003  Matthias Clasen  <maclas@gmx.de>
 	* gdk/gdkkeyuni.c: Add keysyms Ukrainian_ghe_with_upturn,
 	Ukrainian_GHE_WITH_UPTURN. (#128529)
 
+Tue Dec  8 09:41:00 2003  Tim Evans  <t.evans@aranz.com>
+
+	* gdk/win32/gdkwindow-win32.[ch]: Implement
+	gdk_window_set_icon_list() for Win32, with support for big and
+	small icons and support for alpha-channel icons under Windows
+	XP. Replaces the previous implementation of gdk_window_set_icon().
+	(#128762)
+	
 2003-12-08  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkdisplay-win32.c: Use <multimon.h> when compiling
