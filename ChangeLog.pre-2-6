@@ -1,3 +1,9 @@
+Sat Dec  8 16:12:10 2001  Christopher Blizzard  <blizzard@redhat.com>
+
+	* gdk/gdk.c (gdk_init_check): Fallback to setting the prgname to
+	"<unknown>" if someone doesn't pass in a valid argc.  (Patch from
+	Fabrice Bellet <fabrice@gnu.org>, #54127).
+
 Sat Dec  8 10:04:54 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkrbtree.c (_gtk_rbtree_debug_spew): Add debug spew to lots

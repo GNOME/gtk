@@ -299,7 +299,10 @@ gdk_init_check (int    *argc,
 	    g_set_prgname ((*argv)[0]);
 	}
     }
-
+  else
+    {
+      g_set_prgname ("<unknown>");
+    }
   
 #ifdef G_ENABLE_DEBUG
   {
