@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.1.12\n"
 "POT-Creation-Date: 1999-01-28 00:37-0600\n"
-"PO-Revision-Date: 1999-01-17 02:15:42+0900\n"
+"PO-Revision-Date: 1999-02-04 13:46:19+0900\n"
 "Last-Translator: Sung-Hyun Nam <namsh@lgic.co.kr>\n"
 "Language-Team: Korean <ko@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -70,7 +70,7 @@ msgstr "파일"
 #: gtk/gtkfilesel.c:499 gtk/gtkfilesel.c:1453
 #, c-format
 msgid "Directory unreadable: %s"
-msgstr "자료방을 읽을 수 없슴: %s"
+msgstr "자료방을 읽을 수 없음: %s"
 
 #: gtk/gtkfilesel.c:531
 msgid "Create Dir"
@@ -336,7 +336,7 @@ msgstr "글꼴: (필터 적용)"
 
 #: gtk/gtkfontsel.c:2627
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
-msgstr "MAX_FONTS 초과. 몇몇 글꼴은 잃어버릴 수 있슴."
+msgstr "MAX_FONTS 초과. 몇몇 글꼴은 잃어버릴 수 있음."
 
 #: gtk/gtkfontsel.c:3472
 msgid "Apply"
@@ -361,7 +361,7 @@ msgstr "입력"
 
 #: gtk/gtkinputdialog.c:200
 msgid "No input devices"
-msgstr "입력 장치 없슴"
+msgstr "입력 장치 없음"
 
 #: gtk/gtkinputdialog.c:229
 msgid "Device:"
@@ -440,18 +440,18 @@ msgstr "페이지 %u"
 #: gtk/gtkrc.c:1521
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr "이미지 파일을 pixmap_path에서 찾을 수 없슴: \"%s\" 라인 %d"
+msgstr "이미지 파일을 pixmap_path에서 찾을 수 없음: \"%s\" 라인 %d"
 
 #: gtk/gtkrc.c:1524
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "이미지 파일을 pixmap_path에서 찾을 수 없슴: \"%s\""
+msgstr "이미지 파일을 pixmap_path에서 찾을 수 없음: \"%s\""
 
 #: gtk/gtkthemes.c:71
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
-msgstr "모듈을 module_path에서 찾을 수 없슴: \"%s\","
+msgstr "모듈을 module_path에서 찾을 수 없음: \"%s\","
 
 #: gtk/gtktipsquery.c:172
 msgid "--- No Tip ---"
-msgstr "--- 팁 없슴 ---"
+msgstr "--- 팁 없음 ---"
