@@ -7,6 +7,14 @@
 
 	* gdk/gdk.def: Add gdk_xid_table_insert.
 
+	* gdk/win32/gdkprivate-win32.h
+	* gdk/win32/gdkevents-win32.c
+	* gdk/win32/gdkinput-win32.c
+	* gdk/win32/gdkwindow-win32.c: Remove the superfluous
+	extension_events field in the GdkWindowWin32Data struct. Use only
+	the extension_events field in GdkWindowPrivate. Previously one was
+	set, and the other one tested, which broke tablet functionality.
+
 1999-12-18  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkfont-win32.c (gdk_text_size, gdk_text_extents):

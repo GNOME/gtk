@@ -110,7 +110,6 @@ gdk_win32_window_alloc (void)
   GDK_WINDOW_WIN32DATA (window)->bg_type = GDK_WIN32_BG_NORMAL;
   GDK_WINDOW_WIN32DATA (window)->xcursor = NULL;
   GDK_WINDOW_WIN32DATA (window)->hint_flags = 0;
-  GDK_WINDOW_WIN32DATA (window)->extension_events = 0;
   GDK_WINDOW_WIN32DATA (window)->extension_events_selected = FALSE;
   
   GDK_WINDOW_WIN32DATA (window)->input_locale = GetKeyboardLayout (0);
@@ -301,7 +300,6 @@ gdk_window_new (GdkWindow     *parent,
   private->drawable.width = (attributes->width > 1) ? (attributes->width) : (1);
   private->drawable.height = (attributes->height > 1) ? (attributes->height) : (1);
   private->drawable.window_type = attributes->window_type;
-  GDK_WINDOW_WIN32DATA (window)->extension_events = 0;
   GDK_WINDOW_WIN32DATA (window)->extension_events_selected = FALSE;
 
   if (attributes_mask & GDK_WA_VISUAL)

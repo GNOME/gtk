@@ -1096,7 +1096,7 @@ gdk_input_win32_other_event (GdkEvent  *event,
        */
     dijkstra:
       if (!GDK_WINDOW_WIN32DATA (window)->extension_events_selected
-	  || !(GDK_WINDOW_WIN32DATA (window)->extension_events & masktest))
+	  || !(((GdkWindowPrivate *) window)->extension_events & masktest))
 	{
 	  GDK_NOTE (EVENTS, g_print ("...not selected\n"));
 

@@ -207,7 +207,6 @@ struct _GdkWindowWin32Data
   gint hint_min_width, hint_min_height;
   gint hint_max_width, hint_max_height;
 
-  gint extension_events;
   gboolean extension_events_selected;
 
   HKL input_locale;

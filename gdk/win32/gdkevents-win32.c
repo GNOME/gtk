@@ -3423,7 +3423,7 @@ gdk_event_translate (GdkEvent *event,
 			 xevent->hwnd,
 			 LOWORD (xevent->lParam), HIWORD (xevent->lParam)));
 
-      if (GDK_WINDOW_WIN32DATA(window)->extension_events != 0
+      if (((GdkWindowPrivate *) window)->extension_events != 0
 	  && gdk_input_ignore_core)
 	{
 	  GDK_NOTE (EVENTS, g_print ("...ignored\n"));
