@@ -1,5 +1,5 @@
 /* GDK - The GIMP Drawing Kit
- * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+ * Copyright (C) 1995-1999 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -244,6 +244,8 @@ gdk_window_cache_filter (GdkXEvent *xev,
 		  {
 		    cache->children = g_list_remove_link (cache->children, node);
 		    node->next = above_node->next;
+		    if (node->next)
+		      node->next->prev = node;
 		    node->prev = above_node;
 		    above_node->next = node;
 		  }
@@ -254,6 +256,7 @@ gdk_window_cache_filter (GdkXEvent *xev,
     case CreateNotify:
       {
 	XCreateWindowEvent *xcwe = &xevent->xcreatewindow;
+
 	if (!g_hash_table_lookup (cache->child_hash, 
 				  GUINT_TO_POINTER (xcwe->window))) 
 	  gdk_window_cache_add (cache, xcwe->window, 
@@ -378,6 +381,8 @@ gdk_window_cache_destroy (GdkWindowCache *cache)
   g_list_foreach (cache->children, (GFunc)g_free, NULL);
   g_list_free (cache->children);
   g_hash_table_destroy (cache->child_hash);
+
+  g_free (cache);
 }
 
 static Window

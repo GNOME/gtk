@@ -1,3 +1,18 @@
+Fri Jan  8 19:00:17 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkdnd.c (gdk_window_cache_filter): Fixed
+	some list-manipulation breakage.
+
+	* gdk/gdkdnd.c (gdk_window_cache_destroy): Free 
+	window cache structure.
+
+	* gtk/gtkdnd.c (gtk_drag_set_icon_pixmap): Set an
+	event mask on the drag window so clicking on it
+	doesn't pop up root menus, etc.
+
+	* gtk/gtkdnd.c (gtk_drag_button_release_cb): Remove
+	signal handlers at button release.
+
 Fri Jan  8 00:42:00 1999  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkspinbutton.c (gtk_spin_button_get_value_as_int)
