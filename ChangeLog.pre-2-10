@@ -1,3 +1,11 @@
+Tue Feb 17 00:06:26 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkpaned.c, gtk/gtk[hv]paned.c: (gtk-fortier-980215-0)
+	  From Patrice Fortier <Patrice.Fortier@aquarel.fr>
+
+	  Add a widget->window for paned windows, so they
+	  can be reparented properly.
+
 Mon Feb 16 23:47:09 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtkviewport.c: (gtk-fortier-980130-0)

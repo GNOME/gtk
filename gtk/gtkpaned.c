@@ -89,7 +89,7 @@ gtk_paned_class_init (GtkPanedClass *class)
 static void
 gtk_paned_init (GtkPaned *paned)
 {
-  GTK_WIDGET_SET_FLAGS (paned, GTK_NO_WINDOW);
+  GTK_WIDGET_UNSET_FLAGS (paned, GTK_NO_WINDOW);
 
   paned->child1 = NULL;
   paned->child2 = NULL;
@@ -119,37 +119,44 @@ gtk_paned_realize (GtkWidget *widget)
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
   paned = GTK_PANED (widget);
 
+  attributes.x = widget->allocation.x;
+  attributes.y = widget->allocation.y;
+  attributes.width = widget->allocation.width;
+  attributes.height = widget->allocation.height;
+  attributes.window_type = GDK_WINDOW_CHILD;
+  attributes.wclass = GDK_INPUT_OUTPUT;
+  attributes.visual = gtk_widget_get_visual (widget);
+  attributes.colormap = gtk_widget_get_colormap (widget);
+  attributes.event_mask = gtk_widget_get_events (widget) | GDK_EXPOSURE_MASK;
+  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
+
+  widget->window = gdk_window_new (gtk_widget_get_parent_window (widget),
+				   &attributes, attributes_mask);
+  gdk_window_set_user_data (widget->window, paned);
+
   attributes.x = paned->handle_xpos;
   attributes.y = paned->handle_ypos;
   attributes.width = paned->handle_size;
   attributes.height = paned->handle_size;
-  attributes.wclass = GDK_INPUT_OUTPUT;
-  attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.visual = gtk_widget_get_visual (widget);
-  attributes.colormap = gtk_widget_get_colormap (widget);
   attributes.cursor = paned->cursor = gdk_cursor_new (GDK_CROSS);
-  attributes.event_mask = gtk_widget_get_events (widget);
-  attributes.event_mask |= (GDK_EXPOSURE_MASK |
-			    GDK_BUTTON_PRESS_MASK |
+  attributes.event_mask |= (GDK_BUTTON_PRESS_MASK |
 			    GDK_BUTTON_RELEASE_MASK |
 			    GDK_POINTER_MOTION_MASK |
 			    GDK_POINTER_MOTION_HINT_MASK);
+  attributes_mask |= GDK_WA_CURSOR;
 
-  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP |
-    GDK_WA_CURSOR;
+  paned->handle = gdk_window_new (widget->window,
+				  &attributes, attributes_mask);
+  gdk_window_set_user_data (paned->handle, paned);
 
-  paned->handle = gdk_window_new (gtk_widget_get_parent_window (widget), &attributes, attributes_mask);
-  gdk_window_set_user_data (paned->handle, widget);
-  gdk_window_show (paned->handle);
-  gdk_window_raise (paned->handle);
-
-  widget->window = gtk_widget_get_parent_window (widget);
-  gdk_window_ref (widget->window);
   widget->style = gtk_style_attach (widget->style, widget->window);
 
+  gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
   gtk_style_set_background (widget->style, paned->handle, GTK_STATE_NORMAL);
-}
 
+  gdk_window_show (paned->handle);
+}
+  
 static void
 gtk_paned_map (GtkWidget *widget)
 {
@@ -161,8 +168,7 @@ gtk_paned_map (GtkWidget *widget)
   GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
   paned = GTK_PANED (widget);
 
-  gdk_window_show (paned->handle);
-  gtk_widget_queue_draw (widget);
+  gdk_window_show (widget->window);
 
   if (paned->child1 &&
       GTK_WIDGET_VISIBLE (paned->child1) &&
@@ -177,29 +183,12 @@ gtk_paned_map (GtkWidget *widget)
 static void
 gtk_paned_unmap (GtkWidget *widget)
 {
-  GtkPaned *paned;
-
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_PANED (widget));
 
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
-  paned = GTK_PANED (widget);
 
-  gdk_window_clear_area (widget->window,
-			 widget->allocation.x,
-			 widget->allocation.y,
-			 widget->allocation.width,
-			 widget->allocation.height);
-  gdk_window_hide (paned->handle);
-
-  if (paned->child1 &&
-      GTK_WIDGET_VISIBLE (paned->child1) &&
-      GTK_WIDGET_MAPPED (paned->child1))
-    gtk_widget_unmap (paned->child1);
-  if (paned->child2 &&
-      GTK_WIDGET_VISIBLE (paned->child2) &&
-      GTK_WIDGET_MAPPED (paned->child2))
-    gtk_widget_unmap (paned->child2);
+  gdk_window_hide (widget->window);
 }
 
 static void
