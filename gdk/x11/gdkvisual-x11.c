@@ -20,6 +20,7 @@
 #include <X11/Xutil.h>
 #include "gdk.h"
 #include "gdkprivate.h"
+#include "gdkx.h"
 
 
 static void  gdk_visual_add            (GdkVisual *visual);

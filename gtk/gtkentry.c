@@ -36,7 +36,7 @@
 enum {
   ARG_0,
   ARG_MAX_LENGTH,
-  ARG_VISIBILITY,
+  ARG_VISIBILITY
 };
 
 

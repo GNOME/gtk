@@ -2880,11 +2880,8 @@ real_tree_expand (GtkCTree     *ctree,
   work = GTK_CTREE_ROW (node)->children;
   if (work)
     {
-      GtkCList *clist;
       gint tmp = 0;
       gint row;
-
-      clist = GTK_CLIST (ctree);
 
       while (GTK_CTREE_NODE_NEXT (work))
 	{
@@ -2948,11 +2945,8 @@ real_tree_collapse (GtkCTree     *ctree,
   work = GTK_CTREE_ROW (node)->children;
   if (work)
     {
-      GtkCList *clist;
       gint tmp = 0;
       gint row;
-
-      clist = GTK_CLIST (ctree);
 
       while (work && GTK_CTREE_ROW (work)->level > level)
 	{

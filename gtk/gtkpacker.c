@@ -508,7 +508,7 @@ gtk_packer_set_spacing (GtkPacker *packer,
       packer->spacing = spacing;
       gtk_widget_queue_resize (GTK_WIDGET (packer));
     }
-};
+}
 
 GtkWidget*
 gtk_packer_new (void)
@@ -1102,7 +1102,7 @@ XExpansion (GList *children, gint cavityWidth)
   if (curExpand < minExpand)
     minExpand = curExpand;
   return (minExpand < 0) ? 0 : minExpand; 
-};
+}
 
 static void 
 gtk_packer_size_allocate (GtkWidget *widget, GtkAllocation  *allocation)

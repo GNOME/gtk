@@ -142,7 +142,7 @@ const guint gtk_binary_age = GTK_BINARY_AGE;
 const guint gtk_interface_age = GTK_INTERFACE_AGE;
 
 static gboolean iteration_done = FALSE;
-static guint main_level = 0;
+static guint gtk_main_loop_level = 0;
 static gint gtk_initialized = FALSE;
 static GdkEvent *next_event = NULL;
 static GList *current_events = NULL;
@@ -523,7 +523,7 @@ gtk_main (void)
   GtkInitFunction *init;
   int old_done;
   
-  main_level++;
+  gtk_main_loop_level++;
   
   tmp_list = functions = init_functions;
   init_functions = NULL;
@@ -554,7 +554,7 @@ gtk_main (void)
 
 	  quit_functions = g_list_remove_link (quit_functions, quit_functions);
 
-	  if ((quitf->main_level && quitf->main_level != main_level) ||
+	  if ((quitf->main_level && quitf->main_level != gtk_main_loop_level) ||
 	      gtk_quit_invoke_function (quitf))
 	    {
 	      reinvoke_list = g_list_prepend (reinvoke_list, quitf);
@@ -567,23 +567,23 @@ gtk_main (void)
 	}
       if (reinvoke_list)
 	{
-	  GList *tmp_list;
+	  GList *work;
 	  
-	  tmp_list = g_list_last (reinvoke_list);
+	  work = g_list_last (reinvoke_list);
 	  if (quit_functions)
-	    quit_functions->prev = tmp_list;
-	  tmp_list->next = quit_functions;
-	  quit_functions = tmp_list;
+	    quit_functions->prev = work;
+	  work->next = quit_functions;
+	  quit_functions = work;
 	}
     }
 	      
-  main_level--;
+  gtk_main_loop_level--;
 }
 
 guint
 gtk_main_level (void)
 {
-  return main_level;
+  return gtk_main_loop_level;
 }
 
 void
@@ -1436,16 +1436,6 @@ gtk_input_add_full (gint source,
     }
   else
     return gdk_input_add_full (source, condition, function, data, destroy);
-}
-
-guint
-gtk_input_add_interp (gint source,
-		      GdkInputCondition condition,
-		      GtkCallbackMarshal callback,
-		      gpointer data,
-		      GtkDestroyNotify destroy)
-{
-  return gtk_input_add_full (source, condition, NULL, callback, data, destroy);
 }
 
 void

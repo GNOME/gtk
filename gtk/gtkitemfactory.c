@@ -319,15 +319,15 @@ gtk_item_factory_propagate_accelerator (GtkItemFactoryItem *item,
 					    GTK_ACCEL_VISIBLE);
 	      else
 		{
-		  GSList *slist;
+		  GSList *work;
 		  
-		  slist = gtk_accel_group_entries_from_object (GTK_OBJECT (widget));
-		  while (slist)
+		  work = gtk_accel_group_entries_from_object (GTK_OBJECT (widget));
+		  while (work)
 		    {
 		      GtkAccelEntry *ac_entry;
 		      
-		      ac_entry = slist->data;
-		      slist = slist->next;
+		      ac_entry = work->data;
+		      work = work->next;
 		      if (ac_entry->accel_flags & GTK_ACCEL_VISIBLE &&
 			  ac_entry->accel_group == ifactory->accel_group &&
 			  ac_entry->signal_id == signal_id)
@@ -636,7 +636,7 @@ gtk_item_factory_from_path (const gchar      *path)
 }
 
 static void
-gtk_item_factory_destroy (GtkObject		 *object)
+gtk_item_factory_destroy (GtkObject *object)
 {
   GtkItemFactory *ifactory;
   GSList *slist;
@@ -648,14 +648,14 @@ gtk_item_factory_destroy (GtkObject		 *object)
 
   if (ifactory->widget)
     {
-      GtkObject *object;
+      GtkObject *dobj;
 
-      object = GTK_OBJECT (ifactory->widget);
+      dobj = GTK_OBJECT (ifactory->widget);
 
-      gtk_object_ref (object);
-      gtk_object_sink (object);
-      gtk_object_destroy (object);
-      gtk_object_unref (object);
+      gtk_object_ref (dobj);
+      gtk_object_sink (dobj);
+      gtk_object_destroy (dobj);
+      gtk_object_unref (dobj);
 
       ifactory->widget = NULL;
     }

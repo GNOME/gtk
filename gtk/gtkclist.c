@@ -1916,19 +1916,19 @@ gtk_clist_swap_rows (GtkCList * clist,
   swap = link1->data;
   link1->data = link2->data;
   link2->data = swap;
-
+  
   list = clist->selection;
   while (list)
     {
       if (GPOINTER_TO_INT (list->data) == row1)
-	GPOINTER_TO_INT (list->data) = row2;
-
-       if (GPOINTER_TO_INT (list->data) == row2)
-	GPOINTER_TO_INT (list->data) = row1;
-
+	list->data = GINT_TO_POINTER (row2);
+      
+      if (GPOINTER_TO_INT (list->data) == row2)
+	list->data = GINT_TO_POINTER (row1);
+      
       list = list->next;
     }
-
+  
   if (!GTK_CLIST_FROZEN (clist))
     {
       if (gtk_clist_row_is_visible (clist, row1) != GTK_VISIBILITY_NONE)
@@ -2074,7 +2074,7 @@ gtk_clist_row_is_visible (GtkCList * clist,
   return GTK_VISIBILITY_FULL;
 }
 
-GtkAdjustment *
+static GtkAdjustment*
 gtk_clist_get_vadjustment (GtkCList * clist)
 {
   g_return_val_if_fail (clist != NULL, NULL);
@@ -2083,7 +2083,7 @@ gtk_clist_get_vadjustment (GtkCList * clist)
   return gtk_range_get_adjustment (GTK_RANGE (clist->vscrollbar));
 }
 
-GtkAdjustment *
+static GtkAdjustment*
 gtk_clist_get_hadjustment (GtkCList * clist)
 {
   g_return_val_if_fail (clist != NULL, NULL);

@@ -696,7 +696,7 @@ gtk_accel_group_entries_from_object (GtkObject	     *object)
 
 gboolean
 gtk_accelerator_valid (guint		  keyval,
-		       guint		  modifiers)
+		       GdkModifierType	  modifiers)
 {
   guint invalid_accelerator_vals[] = {
     GDK_BackSpace, GDK_Delete, GDK_KP_Delete,
@@ -1016,7 +1016,7 @@ gtk_accelerator_name (guint           accelerator_key,
 }
 
 void
-gtk_accelerator_set_default_mod_mask (guint           default_mod_mask)
+gtk_accelerator_set_default_mod_mask (GdkModifierType default_mod_mask)
 {
   default_accel_mod_mask = default_mod_mask & GDK_MODIFIER_MASK;
 }

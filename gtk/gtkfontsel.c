@@ -385,18 +385,18 @@ static gint    gtk_font_selection_dialog_on_configure(GtkWidget      *widget,
 static GtkWindowClass *font_selection_parent_class = NULL;
 static GtkNotebookClass *font_selection_dialog_parent_class = NULL;
 
-guint
+GtkType
 gtk_font_selection_get_type()
 {
-  static guint font_selection_type = 0;
+  static GtkType font_selection_type = 0;
 
   if(!font_selection_type)
     {
-      GtkTypeInfo fontsel_info =
+      GtkTypeInfo fontsel_type_info =
       {
 	"GtkFontSelection",
-	sizeof(GtkFontSelection),
-	sizeof(GtkFontSelectionClass),
+	sizeof (GtkFontSelection),
+	sizeof (GtkFontSelectionClass),
 	(GtkClassInitFunc) gtk_font_selection_class_init,
 	(GtkObjectInitFunc) gtk_font_selection_init,
 	/* reserved_1 */ NULL,
@@ -404,8 +404,8 @@ gtk_font_selection_get_type()
         (GtkClassInitFunc) NULL,
       };
 
-      font_selection_type = gtk_type_unique (gtk_notebook_get_type(),
-					     &fontsel_info);
+      font_selection_type = gtk_type_unique (GTK_TYPE_NOTEBOOK,
+					     &fontsel_type_info);
     }
 
   return font_selection_type;
@@ -418,7 +418,7 @@ gtk_font_selection_class_init(GtkFontSelectionClass *klass)
 
   object_class = (GtkObjectClass *) klass;
 
-  font_selection_parent_class = gtk_type_class (gtk_notebook_get_type ());
+  font_selection_parent_class = gtk_type_class (GTK_TYPE_NOTEBOOK);
 
   object_class->destroy = gtk_font_selection_destroy;
 
@@ -853,7 +853,7 @@ gtk_font_selection_new()
 {
   GtkFontSelection *fontsel;
 
-  fontsel = gtk_type_new (gtk_font_selection_get_type ());
+  fontsel = gtk_type_new (GTK_TYPE_FONT_SELECTION);
 
   return GTK_WIDGET (fontsel);
 }
@@ -3068,7 +3068,7 @@ gtk_font_selection_create_xlfd (gint		  size,
  *****************************************************************************/
 
 guint
-gtk_font_selection_dialog_get_type	(void)
+gtk_font_selection_dialog_get_type (void)
 {
   static guint font_selection_dialog_type = 0;
 
@@ -3086,7 +3086,7 @@ gtk_font_selection_dialog_get_type	(void)
         (GtkClassInitFunc) NULL,
       };
 
-      font_selection_dialog_type = gtk_type_unique (gtk_window_get_type (), &fontsel_diag_info);
+      font_selection_dialog_type = gtk_type_unique (GTK_TYPE_WINDOW, &fontsel_diag_info);
     }
 
   return font_selection_dialog_type;
@@ -3099,7 +3099,7 @@ gtk_font_selection_dialog_class_init (GtkFontSelectionDialogClass *klass)
 
   object_class = (GtkObjectClass*) klass;
 
-  font_selection_dialog_parent_class = gtk_type_class (gtk_window_get_type ());
+  font_selection_dialog_parent_class = gtk_type_class (GTK_TYPE_WINDOW);
 }
 
 static void
@@ -3161,7 +3161,7 @@ gtk_font_selection_dialog_new	(const gchar	  *title)
 {
   GtkFontSelectionDialog *fontseldiag;
 
-  fontseldiag = gtk_type_new (gtk_font_selection_dialog_get_type ());
+  fontseldiag = gtk_type_new (GTK_TYPE_FONT_SELECTION_DIALOG);
   gtk_window_set_title (GTK_WINDOW (fontseldiag),
 			title ? title : "Font Selection");
 

@@ -173,7 +173,7 @@ static GMemChunk *aux_info_mem_chunk = NULL;
 
 static GdkColormap *default_colormap = NULL;
 static GdkVisual *default_visual = NULL;
-static GtkStyle *default_style = NULL;
+static GtkStyle *gtk_default_style = NULL;
 
 static GSList *colormap_stack = NULL;
 static GSList *visual_stack = NULL;
@@ -2770,26 +2770,26 @@ gtk_widget_reset_rc_styles (GtkWidget *widget)
 void
 gtk_widget_set_default_style (GtkStyle *style)
 {
-   if (style != default_style)
+   if (style != gtk_default_style)
      {
-       if (default_style)
-	 gtk_style_unref (default_style);
-       default_style = style;
-       if (default_style)
-	 gtk_style_ref (default_style);
+       if (gtk_default_style)
+	 gtk_style_unref (gtk_default_style);
+       gtk_default_style = style;
+       if (gtk_default_style)
+	 gtk_style_ref (gtk_default_style);
      }
 }
 
 GtkStyle*
 gtk_widget_get_default_style (void)
 {
-  if (!default_style)
+  if (!gtk_default_style)
     {
-      default_style = gtk_style_new ();
-      gtk_style_ref (default_style);
+      gtk_default_style = gtk_style_new ();
+      gtk_style_ref (gtk_default_style);
     }
   
-  return default_style;
+  return gtk_default_style;
 }
 
 void

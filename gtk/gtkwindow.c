@@ -932,8 +932,7 @@ gtk_window_read_rcfiles (GtkWidget *widget,
       toplevels = gdk_window_get_toplevels();
       while (toplevels)
 	{
-	  GtkWidget *widget;
-	  gdk_window_get_user_data (toplevels->data, (gpointer *)&widget);
+	  gdk_window_get_user_data (toplevels->data, (gpointer*) &widget);
 	  
 	  if (widget)
 	    gtk_widget_reset_rc_styles (widget);
