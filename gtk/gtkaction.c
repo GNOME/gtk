@@ -599,7 +599,7 @@ connect_proxy (GtkAction *action,
       if (action->private_data->accel_quark)
 	{
 	  gtk_menu_item_set_accel_path (GTK_MENU_ITEM (proxy),
-				g_quark_to_string (action->private_data->accel_quark));
+					g_quark_to_string (action->private_data->accel_quark));
 	}
 
       g_signal_connect_object (proxy, "activate",
@@ -657,11 +657,6 @@ static void
 disconnect_proxy (GtkAction *action, 
 		  GtkWidget *proxy)
 {
-  static guint notify_id = 0;
-
-  if (!notify_id)
-    notify_id = g_signal_lookup ("notify", G_TYPE_OBJECT);
-
   g_object_set_data (G_OBJECT (proxy), "gtk-action", NULL);
 
   /* remove proxy from list of proxies */
@@ -687,13 +682,15 @@ disconnect_proxy (GtkAction *action,
   g_signal_handlers_disconnect_by_func (action,
 					G_CALLBACK (gtk_action_sync_label),
 					proxy);
-
-  gtk_menu_item_set_accel_path (GTK_MENU_ITEM (proxy), NULL);
+  
+  if (GTK_IS_MENU_ITEM (widget))
+    gtk_menu_item_set_accel_path (GTK_MENU_ITEM (widget), NULL);
 
   /* toolbar button specific synchronisers ... */
   g_signal_handlers_disconnect_by_func (action,
 					G_CALLBACK (gtk_action_sync_short_label),
 					proxy);
+
   g_signal_handlers_disconnect_by_func (proxy,
 					G_CALLBACK (gtk_action_create_menu_proxy),
 					action);

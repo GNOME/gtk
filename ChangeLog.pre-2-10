@@ -1,3 +1,8 @@
+2003-09-07  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkaction.c (disconnect_proxy): Make disconnect work
+	for toolitems.
+
 2003-09-06  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkaction.c (gtk_action_connect_proxy): Disconnect from 
