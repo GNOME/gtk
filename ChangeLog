@@ -1,3 +1,26 @@
+2002-10-16  Havoc Pennington  <hp@redhat.com>
+
+	* gdk/x11/gdkscreen-x11.c (gdk_screen_get_monitor_geometry): add
+	g_return_if_fail for monitor number <= 0
+
+	* gtk/gtkmenu.c (gtk_menu_position): handle case where pointer 
+	is outside the screen.
+
+	* gtk/gtkwindow.c (get_monitor_center): factor out 
+	the code to position a window in center
+	(gtk_window_compute_configure_request): use here
+	(gtk_window_constrain_position): use here, the 
+	code here wasn't multihead-aware
+
+	* gdk/x11/gdkevents-x11.c (get_real_window): function to
+	return the window the event describes, rather than the window
+	that received the event.
+	(gdk_event_translate): use result of that function for 
+	filling in GdkEvent::window, which only matters for 
+	MapNotify/UnmapNotify and ConfigureNotify, in practice.
+
+	Unbreaks various things using SubstructureNotifyMask.
+
 Thu Oct 17 16:13:28 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcheckbutton.c gtk/gtkradiobutton.c: Make

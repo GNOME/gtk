@@ -4419,6 +4419,89 @@ get_effective_position (GtkWindow *window)
   return pos;
 }
 
+static int
+get_center_monitor_of_window (GtkWindow *window)
+{
+  /* We could try to sort out the relative positions of the monitors and
+   * stuff, or we could just be losers and assume you have a row
+   * or column of monitors.
+   */
+  return gdk_screen_get_n_monitors (window->screen)) / 2;
+}
+
+static int
+get_monitor_containing_pointer (GtkWindow *window)
+{
+  gint px, py;
+  gint monitor_num;
+  GdkScreen *pointer_screen;
+
+  gdk_display_get_pointer (gdk_screen_get_display (window->screen),
+                           &pointer_screen,
+                           &px, &py, NULL);
+
+  if (pointer_screen == window->screen)
+    monitor_num = gdk_screen_get_monitor_at_point (window->screen, px, py);
+  else
+    monitor_num = -1;
+
+  return monitor_num;
+}
+
+static void
+center_window_on_monitor (GtkWindow *window,
+                          gint       w,
+                          gint       h,
+                          gint      *x,
+                          gint      *y)
+{
+  GdkRectangle monitor;
+  int monitor_num;
+
+  monitor_num = get_monitor_containing_pointer (window);
+  
+  if (monitor_num == -1)
+    monitor_num = get_center_monitor_of_window (window);
+  
+  gdk_screen_get_monitor_geometry (window->screen, monitor_num, &monitor);
+  
+  *x = (monitor.width - w) / 2 + monitor.x;
+  *y = (monitor.height - h) / 2 + monitor.y;
+
+  /* Be sure we aren't off the monitor, ignoring _NET_WM_STRUT
+   * and WM decorations.
+   */
+  if (*x < monitor.x)
+    *x = monitor.x;
+  if (*y < monitor.y)
+    *y = monitor.y;
+}
+
+static void
+clamp_window_to_rectangle (gint               *x,
+                           gint               *y,
+                           gint                w,
+                           gint                h,
+                           const GdkRectangle *rect)
+{
+  gint outside_w, outside_h;
+  
+  outside_w = (*x + w) - (rect->x + rect->width);
+  if (outside_w > 0)
+    *x -= outside_w;
+
+  outside_h = (y + h) - (rect->y + rect->height);
+  if (outside_h > 0)
+    *y -= outside_h; 
+
+  /* if larger than the screen, center on the screen. */
+  if (*x < rect->x)
+    *x += (rect->x - *x) / 2;
+  if (*y < rect->y)
+    *y += (rect->y - *y) / 2;
+}
+
+
 static void
 gtk_window_compute_configure_request (GtkWindow    *window,
                                       GdkRectangle *request,
@@ -4471,35 +4554,39 @@ gtk_window_compute_configure_request (GtkWindow    *window,
            */
         case GTK_WIN_POS_CENTER_ALWAYS:
         case GTK_WIN_POS_CENTER:
-          {
-	    gint px, py, monitor_num;
-	    GdkRectangle monitor;
-
-	    gdk_window_get_pointer (gdk_screen_get_root_window (window->screen),
-				    &px, &py, NULL);
-	    
-	    monitor_num = gdk_screen_get_monitor_at_point (window->screen, px, py);
-	    if (monitor_num == -1)
-	      monitor_num = 0;
-	    
-	    gdk_screen_get_monitor_geometry (window->screen, monitor_num, &monitor);
-	    
-	    x = (monitor.width - w) / 2 + monitor.x;
-	    y = (monitor.height - h) / 2 + monitor.y;
-          }
+          center_window_on_monitor (window, w, h, &x, &y);
           break;
       
         case GTK_WIN_POS_CENTER_ON_PARENT:
           {
+            gint monitor_num;
+            GdkRectangle monitor;
+            gint offscreen_w, offscreen_h;
             gint ox, oy;
             
             g_assert (GTK_WIDGET_MAPPED (parent_widget)); /* established earlier */
+
+            if (parent_widget->window != NULL)
+              monitor_num = gdk_screen_get_monitor_at_window (window->screen,
+                                                              parent_widget->window);
+            else
+              monitor_num = -1;
             
             gdk_window_get_origin (parent_widget->window,
                                    &ox, &oy);
             
             x = ox + (parent_widget->allocation.width - w) / 2;
             y = oy + (parent_widget->allocation.height - h) / 2;
+            
+            /* Clamp onto current monitor, ignoring _NET_WM_STRUT and
+             * WM decorations. If parent wasn't on a monitor, just
+             * give up.
+             */
+            if (monitor_num >= 0)
+              {
+                gdk_screen_get_monitor_geometry (window->screen, monitor_num, &monitor);
+                clamp_window_to_rectangle (&x, &y, w, h, &monitor);
+              }
           }
           break;
 
@@ -4507,14 +4594,35 @@ gtk_window_compute_configure_request (GtkWindow    *window,
           {
             gint screen_width = gdk_screen_get_width (window->screen);
             gint screen_height = gdk_screen_get_height (window->screen);
-            int px, py;
+	    gint monitor_num;
+	    GdkRectangle monitor;
+            gint offscreen_w, offscreen_h;
+            GdkScreen *pointer_screen;
+            gint px, py;
             
-            gdk_window_get_pointer (gdk_screen_get_root_window (window->screen),
-				    &px, &py, NULL);
+            gdk_display_get_pointer (gdk_screen_get_display (window->screen),
+                                     &pointer_screen,
+                                     &px, &py, NULL);
+
+            if (pointer_screen == window->screen)
+              monitor_num = gdk_screen_get_monitor_at_point (window->screen, px, py);
+            else
+              monitor_num = -1;
+            
             x = px - w / 2;
             y = py - h / 2;
             x = CLAMP (x, 0, screen_width - w);
             y = CLAMP (y, 0, screen_height - h);
+
+            /* Clamp onto current monitor, ignoring _NET_WM_STRUT and
+             * WM decorations. Don't try to figure out what's going
+             * on if the mouse wasn't inside a monitor.
+             */
+            if (monitor_num >= 0)
+              {
+                gdk_screen_get_monitor_geometry (window->screen, monitor_num, &monitor);
+                clamp_window_to_rectangle (&x, &y, w, h, &monitor);
+              }
           }
           break;
 
@@ -4555,11 +4663,8 @@ gtk_window_constrain_position (GtkWindow    *window,
   if (window->position == GTK_WIN_POS_CENTER_ALWAYS)
     {
       gint center_x, center_y;
-      gint screen_width = gdk_screen_get_width (window->screen);
-      gint screen_height = gdk_screen_get_height (window->screen);
-      
-      center_x = (screen_width - new_width) / 2;
-      center_y = (screen_height - new_height) / 2;
+
+      center_window_on_monitor (window, new_width, new_height, &center_x, &center_y);
       
       *x = center_x;
       *y = center_y;

@@ -330,6 +330,7 @@ gdk_screen_get_monitor_geometry (GdkScreen    *screen,
 {
   g_return_if_fail (GDK_IS_SCREEN (screen));
   g_return_if_fail (monitor_num < GDK_SCREEN_X11 (screen)->num_monitors);
+  g_return_if_fail (monitor_num >= 0);
 
   *dest = GDK_SCREEN_X11 (screen)->monitors[monitor_num];
 }

@@ -512,6 +512,53 @@ set_screen_from_root (GdkDisplay *display,
   gdk_event_set_screen (event, screen);
 }
 
+/* Return the window this has to do with, if any, rather
+ * than the frame or root window that was selecting
+ * for substructure
+ */
+static Window
+get_real_window (XEvent *event)
+{
+  switch (event->type)
+    {      
+    case CreateNotify:
+      return event->xcreatewindow.window;
+      
+    case DestroyNotify:
+      return event->xdestroywindow.window;
+
+    case UnmapNotify:
+      return event->xunmap.window;
+
+    case MapNotify:
+      return event->xmap.window;
+
+    case MapRequest:
+      return event->xmaprequest.window;
+
+    case ReparentNotify:
+     return event->xreparent.window;
+      
+    case ConfigureNotify:
+      return event->xconfigure.window;
+      
+    case ConfigureRequest:
+      return event->xconfigurerequest.window;
+
+    case GravityNotify:
+      return event->xgravity.window;
+
+    case CirculateNotify:
+      return event->xcirculate.window;
+
+    case CirculateRequest:
+      return event->xcirculaterequest.window;
+
+    default:
+      return event->xany.window;
+    }
+}
+
 static gboolean
 gdk_event_translate (GdkDisplay *display,
 		     GdkEvent   *event,
@@ -531,6 +578,7 @@ gdk_event_translate (GdkDisplay *display,
   GdkScreen *screen = NULL;
   GdkScreenX11 *screen_x11 = NULL;
   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
+  Window xwindow;
   
   return_val = FALSE;
 
@@ -569,9 +617,13 @@ gdk_event_translate (GdkDisplay *display,
 	return_val = FALSE;
     }
 
-  /* Find the GdkWindow that this event occurred in. */
+  /* Find the GdkWindow that this event relates to.
+   * Basically this means substructure events
+   * are reported same as structure events
+   */
+  xwindow = get_real_window (xevent);
   
-  window = gdk_window_lookup_for_display (display, xevent->xany.window);
+  window = gdk_window_lookup_for_display (display, xwindow);
   window_private = (GdkWindowObject *) window;
 
   if (window)
@@ -590,16 +642,18 @@ gdk_event_translate (GdkDisplay *display,
       if (GDK_IS_WINDOW (window))
         {
           window_impl = GDK_WINDOW_IMPL_X11 (window_private->impl);
-	  
-          if (xevent->xany.window != GDK_WINDOW_XID (window))
+
+          /* Move key events on focus window to the real toplevel, and
+           * filter out all other events on focus window
+           */          
+          if (xwindow == window_impl->focus_window)
             {
-              g_assert (xevent->xany.window == window_impl->focus_window);
-              
               switch (xevent->type)
                 {
                 case KeyPress:
                 case KeyRelease:
-                  xevent->xany.window = GDK_WINDOW_XID (window);
+                  xwindow = GDK_WINDOW_XID (window);
+                  xevent->xany.window = xwindow;
                   break;
                 default:
                   return FALSE;
@@ -636,7 +690,7 @@ gdk_event_translate (GdkDisplay *display,
     }
       
   if (screen_x11 && screen_x11->wmspec_check_window != None &&
-      xevent->xany.window == screen_x11->wmspec_check_window)
+      xwindow == screen_x11->wmspec_check_window)
     {
       if (xevent->type == DestroyNotify)
         {
