@@ -127,7 +127,12 @@ void     gtk_container_foreach_full (GtkContainer       *container,
 				     GtkCallbackMarshal  marshal,
 				     gpointer            callback_data,
 				     GtkDestroyNotify    notify);
-GList*   gtk_container_children     (GtkContainer       *container);
+GList*   gtk_container_get_children     (GtkContainer       *container);
+
+#ifndef GTK_DISABLE_DEPRECATED
+#define gtk_container_children gtk_container_get_children
+#endif
+
 void     gtk_container_propagate_expose (GtkContainer   *container,
 					 GtkWidget      *child,
 					 GdkEventExpose *event);

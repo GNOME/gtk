@@ -1588,7 +1588,7 @@ gtk_real_toolbar_style_changed (GtkToolbar      *toolbar,
 		if (child->label && !GTK_WIDGET_VISIBLE (child->label))
 		  gtk_widget_show (child->label);
 
-		box = (GtkWidget*)gtk_container_children (GTK_CONTAINER (child->widget))->data;
+		box = (GtkWidget*)gtk_container_get_children (GTK_CONTAINER (child->widget))->data;
 
 		if (GTK_IS_HBOX (box))
 		{
@@ -1632,7 +1632,7 @@ gtk_real_toolbar_style_changed (GtkToolbar      *toolbar,
 		if (child->label && !GTK_WIDGET_VISIBLE (child->label))
 		  gtk_widget_show (child->label);
 
-		box = (GtkWidget*)gtk_container_children (GTK_CONTAINER (child->widget))->data;
+		box = (GtkWidget*)gtk_container_get_children (GTK_CONTAINER (child->widget))->data;
 		
 		if (GTK_IS_VBOX (box))
 		{

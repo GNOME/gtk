@@ -1398,7 +1398,7 @@ gtk_container_set_focus_child (GtkContainer *container,
 }
 
 GList*
-gtk_container_children (GtkContainer *container)
+gtk_container_get_children (GtkContainer *container)
 {
   GList *children;
 

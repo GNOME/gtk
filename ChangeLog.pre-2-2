@@ -1,3 +1,12 @@
+Thu Aug 23 19:33:54 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcontainer.[ch]: Rename gtk_container_children()
+	to gtk_container_get_children. Added deprecated compatibility
+	macro. (Suggested by Vitaly Tishkov, #59051)
+
+	* gtk/gtktoolbar.c gtkdialog.c: Fix gtk_container_children()
+	calls.
+
 Thu Aug 23 19:10:01 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmenubar.h (gtk_menu_bar_insert): Deprecate 
