@@ -3155,7 +3155,7 @@ gtk_font_selection_set_font_name (GtkFontSelection *fontsel,
 				  const gchar      *fontname)
 {
   gchar *family, *field;
-  gint index, prop, size;
+  gint index, prop, size, row;
   guint16 foundry, value;
   gchar family_buffer[XLFD_MAX_FIELD_LEN];
   gchar field_buffer[XLFD_MAX_FIELD_LEN];
@@ -3231,9 +3231,14 @@ gtk_font_selection_set_font_name (GtkFontSelection *fontsel,
   
   /* Now find the best style match. */
   fontsel->font_index = index;
-  gtk_clist_select_row(GTK_CLIST(fontsel->font_clist), index, 0);
-  if (GTK_WIDGET_MAPPED (fontsel->font_clist))
-    gtk_clist_moveto(GTK_CLIST(fontsel->font_clist), index, -1, 0.5, 0);
+  row = gtk_clist_find_row_from_data (GTK_CLIST (fontsel->font_clist),
+				      GINT_TO_POINTER (index));
+  if (row != -1)
+    {
+      gtk_clist_select_row (GTK_CLIST (fontsel->font_clist), row, 0);
+      if (GTK_WIDGET_MAPPED (fontsel->font_clist))
+	gtk_clist_moveto (GTK_CLIST (fontsel->font_clist), row, -1, 0.5, 0);
+    }
   
   gtk_font_selection_show_available_styles (fontsel);
   /* This will load the font. */

@@ -1,3 +1,9 @@
+Wed Jan 31 19:23:01 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfontsel.c (gtk_font_selection_set_font_name): 
+	Apply patch gtk-gharris-000907-0.patch (Guy Harris) fixing problem where 
+	wrong row was selected when filters filtered out some fonts.
+
 Wed Jan 31 18:49:33 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkoptionmenu.c (gtk_option_menu_item_state_changed_cb):
