@@ -32,6 +32,7 @@
 #include "gtkliststore.h"
 #include "gtkmain.h"
 #include "gtkmenu.h"
+#include "gtkseparatormenuitem.h"
 #include "gtktearoffmenuitem.h"
 #include "gtktogglebutton.h"
 #include "gtktreeselection.h"
@@ -73,6 +74,7 @@ struct _GtkComboBoxPrivate
 
   gint col_column;
   gint row_column;
+  gint separator_column;
 
   gint wrap_width;
 
@@ -171,6 +173,7 @@ enum {
   PROP_WRAP_WIDTH,
   PROP_ROW_SPAN_COLUMN,
   PROP_COLUMN_SPAN_COLUMN,
+  PROP_ROW_SEPARATOR_COLUMN,
   PROP_ACTIVE,
   PROP_ADD_TEAROFFS
 };
@@ -482,9 +485,9 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                    g_param_spec_int ("row_span_column",
                                                      P_("Row span column"),
                                                      P_("TreeModel column containing the row span values"),
-                                                     0,
+                                                     -1,
                                                      G_MAXINT,
-                                                     0,
+                                                     -1,
                                                      G_PARAM_READWRITE));
 
   g_object_class_install_property (object_class,
@@ -492,9 +495,19 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                    g_param_spec_int ("column_span_column",
                                                      P_("Column span column"),
                                                      P_("TreeModel column containing the column span values"),
-                                                     0,
+                                                     -1,
                                                      G_MAXINT,
-                                                     0,
+                                                     -1,
+                                                     G_PARAM_READWRITE));
+
+  g_object_class_install_property (object_class,
+                                   PROP_ROW_SEPARATOR_COLUMN,
+                                   g_param_spec_int ("row_separator_column",
+                                                     P_("Row separator column"),
+                                                     P_("Boolean TreeModel column specifying which rows are separators"),
+                                                     -1,
+                                                     G_MAXINT,
+                                                     -1,
                                                      G_PARAM_READWRITE));
 
   g_object_class_install_property (object_class,
@@ -563,6 +576,7 @@ gtk_combo_box_init (GtkComboBox *combo_box)
   combo_box->priv->active_item = -1;
   combo_box->priv->col_column = -1;
   combo_box->priv->row_column = -1;
+  combo_box->priv->separator_column = -1;
 }
 
 static void
@@ -589,6 +603,10 @@ gtk_combo_box_set_property (GObject      *object,
 
       case PROP_COLUMN_SPAN_COLUMN:
         gtk_combo_box_set_column_span_column (combo_box, g_value_get_int (value));
+        break;
+
+      case PROP_ROW_SEPARATOR_COLUMN:
+        gtk_combo_box_set_row_separator_column (combo_box, g_value_get_int (value));
         break;
 
       case PROP_ACTIVE:
@@ -628,6 +646,10 @@ gtk_combo_box_get_property (GObject    *object,
 
       case PROP_COLUMN_SPAN_COLUMN:
         g_value_set_int (value, combo_box->priv->col_column);
+        break;
+
+      case PROP_ROW_SEPARATOR_COLUMN:
+        g_value_set_int (value, combo_box->priv->separator_column);
         break;
 
       case PROP_ACTIVE:
@@ -1153,7 +1175,10 @@ menu_row_is_sensitive (GtkComboBox *combo_box,
   GtkWidget *cell_view;
   GList *cells, *list;
   gboolean sensitive;
-
+  
+  if (!GTK_IS_CELL_VIEW_MENU_ITEM (item))
+    return FALSE;
+    
   cell_view = gtk_bin_get_child (GTK_BIN (item));
   
   gtk_cell_view_set_cell_data (GTK_CELL_VIEW (cell_view));
@@ -1185,6 +1210,19 @@ tree_column_row_is_sensitive (GtkComboBox *combo_box,
 
   if (!combo_box->priv->column)
     return TRUE;
+
+  if (combo_box->priv->separator_column != -1)
+    {
+      gboolean is_separator;
+
+      gtk_tree_model_get (combo_box->priv->model,
+			  iter,
+			  combo_box->priv->separator_column, &is_separator,
+			  -1);
+
+      if (is_separator)
+	return FALSE;
+    }
 
   gtk_tree_view_column_cell_set_cell_data (combo_box->priv->column,
 					   combo_box->priv->model,
@@ -1266,13 +1304,13 @@ update_menu_sensitivity (GtkComboBox *combo_box)
   children = gtk_container_get_children (GTK_CONTAINER (menu));
   child = children;
 
-  if (child && GTK_IS_TEAROFF_MENU_ITEM (child->data))
-    child = child->next;
-
   for (i = 0; i < items; i++, child = child->next)
     {
       GtkWidget *item = GTK_WIDGET (child->data);
       gboolean sensitive;
+
+      if (!GTK_IS_CELL_VIEW_MENU_ITEM (item))
+	continue;
 
       sensitive = menu_row_is_sensitive (combo_box, item);
       gtk_widget_set_sensitive (item, sensitive);
@@ -1327,7 +1365,7 @@ gtk_combo_box_popup (GtkComboBox *combo_box)
 
   gtk_widget_show_all (combo_box->priv->popup_frame);
   gtk_combo_box_list_position (combo_box, &x, &y, &width, &height);
-
+  
   gtk_widget_set_size_request (combo_box->priv->popup_window, width, -1);  
   gtk_window_move (GTK_WINDOW (combo_box->priv->popup_window), x, y);
 
@@ -1378,6 +1416,7 @@ gtk_combo_box_popdown (GtkComboBox *combo_box)
     }
 
   gtk_combo_box_list_remove_grabs (combo_box);
+
   gtk_widget_hide_all (combo_box->priv->popup_window);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (combo_box->priv->button),
                                 FALSE);
@@ -1755,8 +1794,7 @@ gtk_combo_box_scroll_event (GtkWidget          *widget,
                             GdkEventScroll     *event)
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
-  gint index;
-  gint items;
+  gint index, new_index, items;
     
   index = gtk_combo_box_get_active (combo_box);
 
@@ -1765,11 +1803,23 @@ gtk_combo_box_scroll_event (GtkWidget          *widget,
       items = gtk_tree_model_iter_n_children (combo_box->priv->model, NULL);
       
       if (event->direction == GDK_SCROLL_UP)
-        index--;
-      else 
-        index++;
+	{
+	  new_index = index - 1;
+	  while (new_index >= 0 && !row_is_sensitive (combo_box, new_index))
+	    new_index--;
+	  if (new_index < 0)
+	    new_index = index;
+	}
+      else
+	{
+	  new_index = index + 1;
+	  while (new_index < items && !row_is_sensitive (combo_box, new_index))
+	    new_index++;
+	  if (new_index == items)
+	    new_index = index;
+	}
 
-      gtk_combo_box_set_active (combo_box, CLAMP (index, 0, items - 1));
+      gtk_combo_box_set_active (combo_box, CLAMP (new_index, 0, items - 1));
     }
 
   return TRUE;
@@ -1905,16 +1955,33 @@ gtk_combo_box_menu_fill (GtkComboBox *combo_box)
   for (i = 0; i < items; i++)
     {
       GtkTreePath *path;
+      GtkTreeIter iter;
+      gboolean is_separator;
 
       path = gtk_tree_path_new_from_indices (i, -1);
-      tmp = gtk_cell_view_menu_item_new_from_model (combo_box->priv->model,
-                                                    path);
-      g_signal_connect (tmp, "activate",
-                        G_CALLBACK (gtk_combo_box_menu_item_activate),
-                        combo_box);
 
-      cell_view_sync_cells (combo_box,
-                            GTK_CELL_VIEW (GTK_BIN (tmp)->child));
+      if (combo_box->priv->separator_column != -1)
+	{
+	  gtk_tree_model_get_iter (combo_box->priv->model, &iter, path);
+	  gtk_tree_model_get (combo_box->priv->model, &iter, 
+			      combo_box->priv->separator_column, &is_separator, -1);
+	}
+      else
+	is_separator = FALSE;
+
+      if (is_separator)
+	tmp = gtk_separator_menu_item_new ();
+      else
+	{
+	  tmp = gtk_cell_view_menu_item_new_from_model (combo_box->priv->model,
+							path);
+	  g_signal_connect (tmp, "activate",
+			    G_CALLBACK (gtk_combo_box_menu_item_activate),
+			    combo_box);
+	  
+	  cell_view_sync_cells (combo_box,
+				GTK_CELL_VIEW (GTK_BIN (tmp)->child));
+	}
 
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), tmp);
 
@@ -2345,6 +2412,21 @@ gtk_combo_box_menu_row_changed (GtkTreeModel *model,
  * list style
  */
 
+static gboolean
+row_is_separator (GtkTreeModel      *model,
+		  GtkTreeIter       *iter,
+		  gpointer           data)
+{
+  GtkComboBox *combo_box = GTK_COMBO_BOX (data);
+  gboolean is_separator = FALSE;
+
+  if (combo_box->priv->separator_column != -1)
+    gtk_tree_model_get (combo_box->priv->model, iter, 
+			combo_box->priv->separator_column, &is_separator, -1);
+
+  return is_separator;
+}
+
 static void
 gtk_combo_box_list_setup (GtkComboBox *combo_box)
 {
@@ -2399,7 +2481,8 @@ gtk_combo_box_list_setup (GtkComboBox *combo_box)
                                      FALSE);
   gtk_tree_view_set_hover_selection (GTK_TREE_VIEW (combo_box->priv->tree_view),
 				     TRUE);
-
+  gtk_tree_view_set_row_separator_func (GTK_TREE_VIEW (combo_box->priv->tree_view),
+					row_is_separator, combo_box, NULL);
   if (combo_box->priv->model)
     gtk_tree_view_set_model (GTK_TREE_VIEW (combo_box->priv->tree_view),
 			     combo_box->priv->model);
@@ -3303,7 +3386,7 @@ gtk_combo_box_set_row_span_column (GtkComboBox *combo_box,
   g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
 
   col = gtk_tree_model_get_n_columns (combo_box->priv->model);
-  g_return_if_fail (row_span >= 0 && row_span < col);
+  g_return_if_fail (row_span >= -1 && row_span < col);
 
   if (row_span != combo_box->priv->row_column)
     {
@@ -3353,7 +3436,7 @@ gtk_combo_box_set_column_span_column (GtkComboBox *combo_box,
   g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
 
   col = gtk_tree_model_get_n_columns (combo_box->priv->model);
-  g_return_if_fail (column_span >= 0 && column_span < col);
+  g_return_if_fail (column_span >= -1 && column_span < col);
 
   if (column_span != combo_box->priv->col_column)
     {
@@ -3875,4 +3958,55 @@ gtk_combo_box_set_add_tearoffs (GtkComboBox *combo_box,
       gtk_combo_box_relayout (combo_box);
       g_object_notify (G_OBJECT (combo_box), "add_tearoffs");
     }
+}
+
+/**
+ * gtk_combo_box_set_row_separator_column:
+ * @combo_box: a #GtkComboBox
+ * @column: the index of a boolean model column, or -1 to 
+ *   turn off separators
+ * 
+ * Sets the row separator column index. 
+ * This model column contains boolean values which indicate 
+ * whether a row is to be drawn as a separator or now. 
+ * Setting the index to -1 turns off separators.
+ *
+ * Since: 2.6
+ **/
+void
+gtk_combo_box_set_row_separator_column (GtkComboBox *combo_box,
+					gint         column)
+{
+  gint col;
+
+  g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
+  col = gtk_tree_model_get_n_columns (combo_box->priv->model);
+  g_return_if_fail (column >= -1 && column < col);
+
+  if (combo_box->priv->separator_column != column)
+    {
+      combo_box->priv->separator_column = column;
+
+      gtk_widget_queue_draw (combo_box);
+
+      g_object_notify (G_OBJECT (combo_box), "row_separator_column");
+    }
+}
+
+/**
+ * gtk_combo_box_get_row_separator_column:
+ * @combo_box: a #GtkComboBox
+ * 
+ * Returns the current row separator column index.
+ * 
+ * Return value: the row separator column index
+ *
+ * Since: 2.6
+ **/
+gint
+gtk_combo_box_get_row_separator_column (GtkComboBox *combo_box)
+{
+  g_return_val_if_fail (GTK_IS_COMBO_BOX (combo_box), -1);
+
+  return combo_box->priv->separator_column;
 }

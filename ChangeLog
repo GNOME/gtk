@@ -1,3 +1,43 @@
+2004-07-07  Matthias Clasen  <mclasen@redhat.com>
+
+	Support separators in combo boxes and more generally in tree 
+	views  (#135873):
+	
+	* gtk/gtkcombobox.h: 
+	* gtk/gtkcombobox.c (gtk_combo_box_get_row_separator_column):
+	* gtk/gtkcombobox.c (gtk_combo_box_set_row_separator_column):
+	Add a ::row-separator-column property with getter and setter, 
+	which can indicate a boolean model column to determine which
+	rows are separators. 
+
+	* gtk/gtkcombobox.c: Display separator rows as separator menu 
+	items in menu mode, and by using the new treeview separator 
+	functionality in list mode.
+
+	* gtk/gtktreeview.h: 
+	* gtk/gtktreeview.c (gtk_tree_view_get_row_separator_func): 
+	* gtk/gtktreeview.c (gtk_tree_view_set_row_separator_func): 
+	Add a callback to determine whether a row is a separator.
+	
+	* gtk/gtktreeview.c (gtk_tree_view_bin_expose): 
+	* gtk/gtktreeview.c (gtk_tree_view_create_row_drag_icon): 
+	* gtk/gtktreeview.c (validate_row): Use the new callback
+	to determine whether a row is a separator, and draw it
+	as a separator then. Since separators should take up less
+	vertical space than regular rows, this requires removing
+	the redundant MAX(...,expander_size) calls which appear in
+	many places. Instead, the MAX() is now only done in 
+	validate_row(), and only if the row is not a separator.
+	To catch possible side effects of this intrusive change,
+	I have left EXPANDER_MAX() calls in place of the MAX() calls
+	which will emit a warning if something breaks. They should
+	be removed before 2.6.
+
+	* gtk/gtktreeselection.c (row_is_selectable): Don't let 
+	separator rows be selected.
+	
+	* tests/testcombo.c (create_blaat): Add a separator column.
+
 Tue Jul  6 22:58:00 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/x11/gdkwindow-x11.c (gdk_x11_window_set_user_time): Fix

@@ -127,7 +127,7 @@ create_blaat ()
 
         cellview = gtk_cell_view_new ();
 
-        store = gtk_list_store_new (2, GDK_TYPE_PIXBUF, G_TYPE_STRING);
+        store = gtk_list_store_new (3, GDK_TYPE_PIXBUF, G_TYPE_STRING, G_TYPE_BOOLEAN);
 
         pixbuf = gtk_widget_render_icon (cellview, GTK_STOCK_DIALOG_WARNING,
                                          GTK_ICON_SIZE_BUTTON, NULL);
@@ -135,6 +135,7 @@ create_blaat ()
         gtk_list_store_set (store, &iter,
                             0, pixbuf,
                             1, "gtk-stock-dialog-warning",
+			    2, FALSE,
                             -1);
 
         pixbuf = gtk_widget_render_icon (cellview, GTK_STOCK_STOP,
@@ -143,6 +144,7 @@ create_blaat ()
         gtk_list_store_set (store, &iter,
                             0, pixbuf,
                             1, "gtk-stock-stop",
+			    2, FALSE,
                             -1);
 
         pixbuf = gtk_widget_render_icon (cellview, GTK_STOCK_NEW,
@@ -151,6 +153,7 @@ create_blaat ()
         gtk_list_store_set (store, &iter,
                             0, pixbuf,
                             1, "gtk-stock-new",
+			    2, FALSE,
                             -1);
 
         pixbuf = gtk_widget_render_icon (cellview, GTK_STOCK_CLEAR,
@@ -159,6 +162,23 @@ create_blaat ()
         gtk_list_store_set (store, &iter,
                             0, pixbuf,
                             1, "gtk-stock-clear",
+			    2, FALSE,
+                            -1);
+
+        gtk_list_store_append (store, &iter);
+        gtk_list_store_set (store, &iter,
+                            0, NULL,
+                            1, "separator",
+			    2, TRUE,
+                            -1);
+
+        pixbuf = gtk_widget_render_icon (cellview, GTK_STOCK_OPEN,
+                                         GTK_ICON_SIZE_BUTTON, NULL);
+        gtk_list_store_append (store, &iter);
+        gtk_list_store_set (store, &iter,
+                            0, pixbuf,
+                            1, "gtk-stock-open",
+			    2, FALSE,
                             -1);
 
         gtk_widget_destroy (cellview);
@@ -196,8 +216,7 @@ set_sensitive (GtkCellLayout   *cell_layout,
 
   path = gtk_tree_model_get_path (tree_model, iter);
   indices = gtk_tree_path_get_indices (path);
-
-  sensitive = indices[0] % 2;
+  sensitive = indices[0] != 1;
   gtk_tree_path_free (path);
 
   g_object_set (cell, "sensitive", sensitive, NULL);
@@ -295,7 +314,9 @@ main (int argc, char **argv)
 					    renderer,
 					    set_sensitive,
 					    NULL, NULL);
-        gtk_combo_box_set_active (GTK_COMBO_BOX (combobox), 1);
+	gtk_combo_box_set_row_separator_column (GTK_COMBO_BOX (combobox), 2);
+						
+        gtk_combo_box_set_active (GTK_COMBO_BOX (combobox), 0);
 
 
         /* GtkComboBox (grid mode) */

@@ -1319,21 +1319,29 @@ row_is_selectable (GtkTreeSelection *selection,
 		   GtkTreePath      *path)
 {
   GList *list;
-  gboolean sensitive;
-  
-  sensitive = FALSE;
+  GtkTreeIter iter;
+  gboolean sensitive = FALSE;
+
+  if (!gtk_tree_model_get_iter (selection->tree_view->priv->model, &iter, path))
+    sensitive = TRUE;
+
+  if (!sensitive && selection->tree_view->priv->row_separator_func)
+    {
+      /* never allow separators to be selected */
+      if ((* selection->tree_view->priv->row_separator_func) (selection->tree_view->priv->model,
+							      &iter,
+							      selection->tree_view->priv->row_separator_data))
+	return FALSE;
+    }
+
   for (list = selection->tree_view->priv->columns; list && !sensitive; list = list->next)
     {
       GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN (list->data);
-      GtkTreeIter iter;
 
       if (!column->visible)
 	continue;
 
-      if (gtk_tree_model_get_iter (selection->tree_view->priv->model, &iter, path))
-	sensitive = tree_column_is_sensitive (column, selection->tree_view->priv->model, &iter);
-      else
-	sensitive = TRUE;
+      sensitive = tree_column_is_sensitive (column, selection->tree_view->priv->model, &iter);
     }
 
   if (!sensitive)
