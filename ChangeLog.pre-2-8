@@ -1,5 +1,7 @@
 2005-02-24  Matthias Clasen  <mclasen@redhat.com>
 
+	* NEWS: Updates.
+
 	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_select_path): 
 	Don't leak parent_path.  (#168435, Morten Welinder)
 

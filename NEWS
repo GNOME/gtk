@@ -1,3 +1,19 @@
+Overview of Changes from GTK+ 2.6.2 to GTK+ 2.6.3
+=================================================
+* gtk_window_present(): Use the timestamp of the last 
+  user interaction when focusing the window.  [Elijah Newren]
+* Icon theme
+ - Avoid scaling icons in the file chooser [Vincent Noel]
+ - Make icon theme caching work on ppc64 [Manish Singh]
+* Win32 bug fixes [Tor Lillqvist]
+* Other bug fixes [Rodney Dawes, Tommi Komulainen,
+  Christian Persch, Manish Singh, Billy Biggs, Ben Maurer,
+  Jorn Baayen, Jonathan Blandford, Murray Cumming, 
+  Olivier Sessink, Matthias, Gustavo Carneiro, Morten
+  Welinder, Samuel Hym, Doug Morgan, Ivan Wong]
+* Documentation improvements [Matthias]
+* New and improved translations (be,bg,ca,cy,el,en_GB,fa,ja,hu,pt_BR,th,uk,xh)
+
 Overview of Changes from GTK+ 2.6.1 to GTK+ 2.6.2
 =================================================
 * Speed up size allocation of labels, progress bars and
