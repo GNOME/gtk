@@ -1,3 +1,11 @@
+ Sat Jun  5 00:59:12 2004  Matthias Clasen  <maclas@gmx.de>
+ 
+	Merged from 2.4
+
+	* gdk-pixbuf-animation.c: 
+	* gdk-pixbuf-io.c: Convert filenames to UTF-8 when embedding
+ 	them in error messages.  (#143654, Sven Neumann)
+ 
 Sun May 16 22:53:47 2004  Matthias Clasen  <maclas@gmx.de>
 
         Merged from 2.4
