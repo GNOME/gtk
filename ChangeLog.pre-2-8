@@ -1,3 +1,15 @@
+2004-07-14  Federico Mena Quintero  <federico@ximian.com>
+
+	Fix #126295:
+
+	* gtk/gtktreeview.c (gtk_tree_view_bin_expose): Draw a focus
+	indicator along the edge of the bin_window when the tree is empty.
+	(grab_focus_and_unset_draw_keyfocus): New helper function.
+	(gtk_tree_view_button_press): Remove a bit of superfluous code.
+	Use the helper function to save on duplicated code.
+	(gtk_tree_view_button_press): Grab the focus if the tree is empty.
+	(gtk_tree_view_focus): Allow focusing into an empty tree.
+
 2004-07-14  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkaboutdialog.c (add_credits_page): Don't use

@@ -2077,6 +2077,15 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
     }
 }
 
+/* Grabs the focus and unsets the GTK_TREE_VIEW_DRAW_KEYFOCUS flag */
+static void
+grab_focus_and_unset_draw_keyfocus (GtkTreeView *tree_view)
+{
+  if (!GTK_WIDGET_HAS_FOCUS (tree_view))
+    gtk_widget_grab_focus (GTK_WIDGET (tree_view));
+  GTK_TREE_VIEW_UNSET_FLAG (tree_view, GTK_TREE_VIEW_DRAW_KEYFOCUS);
+}
+
 static gboolean
 gtk_tree_view_button_press (GtkWidget      *widget,
 			    GdkEventButton *event)
@@ -2106,13 +2115,8 @@ gtk_tree_view_button_press (GtkWidget      *widget,
   /* Because grab_focus can cause reentrancy, we delay grab_focus until after
    * we're done handling the button press.
    */
-  if (event->window == tree_view->priv->bin_window &&
-      tree_view->priv->tree != NULL)
-    {
-    }
 
-  if (event->window == tree_view->priv->bin_window &&
-      tree_view->priv->tree != NULL)
+  if (event->window == tree_view->priv->bin_window)
     {
       GtkRBNode *node;
       GtkRBTree *tree;
@@ -2129,6 +2133,13 @@ gtk_tree_view_button_press (GtkWidget      *widget,
       gboolean row_double_click = FALSE;
       gboolean rtl;
 
+      /* Empty tree? */
+      if (tree_view->priv->tree == NULL)
+	{
+	  grab_focus_and_unset_draw_keyfocus (tree_view);
+	  return TRUE;
+	}
+
       /* are we in an arrow? */
       if (tree_view->priv->prelight_node &&
           GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_ARROW_PRELIT))
@@ -2144,9 +2155,8 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 					event->x,
 					event->y);
 	    }
-	  if (!GTK_WIDGET_HAS_FOCUS (widget))
-	    gtk_widget_grab_focus (widget);
-	  GTK_TREE_VIEW_UNSET_FLAG (tree_view, GTK_TREE_VIEW_DRAW_KEYFOCUS);
+
+	  grab_focus_and_unset_draw_keyfocus (tree_view);
 	  return TRUE;
 	}
 
@@ -2159,9 +2169,7 @@ gtk_tree_view_button_press (GtkWidget      *widget,
       if (node == NULL)
 	{
 	  /* We clicked in dead space */
-	  if (!GTK_WIDGET_HAS_FOCUS (widget))
-	    gtk_widget_grab_focus (widget);
-	  GTK_TREE_VIEW_UNSET_FLAG (tree_view, GTK_TREE_VIEW_DRAW_KEYFOCUS);
+	  grab_focus_and_unset_draw_keyfocus (tree_view);
 	  return TRUE;
 	}
 
@@ -2211,9 +2219,7 @@ gtk_tree_view_button_press (GtkWidget      *widget,
       if (column == NULL)
 	{
 	  gtk_tree_path_free (path);
-	  if (!GTK_WIDGET_HAS_FOCUS (widget))
-	    gtk_widget_grab_focus (widget);
-	  GTK_TREE_VIEW_UNSET_FLAG (tree_view, GTK_TREE_VIEW_DRAW_KEYFOCUS);
+	  grab_focus_and_unset_draw_keyfocus (tree_view);
 	  return FALSE;
 	}
 
@@ -2392,15 +2398,11 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 
       gtk_tree_path_free (path);
 
-      /* If we activated the row we don't want to grab focus back, as moving
-       * focus to another widget is pretty common.
+      /* If we activated the row through a double click we don't want to grab
+       * focus back, as moving focus to another widget is pretty common.
        */
       if (!row_double_click)
-	{
-	  if (!GTK_WIDGET_HAS_FOCUS (widget))
-	    gtk_widget_grab_focus (widget);
-	  GTK_TREE_VIEW_UNSET_FLAG (tree_view, GTK_TREE_VIEW_DRAW_KEYFOCUS);
-	}
+	grab_focus_and_unset_draw_keyfocus (tree_view);
 
       return TRUE;
     }
@@ -3245,6 +3247,32 @@ gtk_tree_view_motion (GtkWidget      *widget,
   return FALSE;
 }
 
+/* Draws a focus rectangle near the edge of the bin_window; used when the tree
+ * is empty.
+ */
+static void
+draw_empty_focus (GtkTreeView *tree_view, GdkRectangle *clip_area)
+{
+  gint w, h;
+
+  if (!GTK_WIDGET_HAS_FOCUS (tree_view))
+    return;
+
+  gdk_drawable_get_size (tree_view->priv->bin_window, &w, &h);
+
+  w -= 2;
+  h -= 2;
+
+  if (w > 0 && h > 0)
+    gtk_paint_focus (GTK_WIDGET (tree_view)->style,
+		     tree_view->priv->bin_window,
+		     GTK_WIDGET_STATE (tree_view),
+		     clip_area,
+		     GTK_WIDGET (tree_view),
+		     NULL,
+		     1, 1, w, h);
+}
+
 /* Warning: Very scary function.
  * Modify at your own risk
  *
@@ -3299,7 +3327,10 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 			NULL);
 
   if (tree_view->priv->tree == NULL)
-    return TRUE;
+    {
+      draw_empty_focus (tree_view, &event->area);
+      return TRUE;
+    }
 
   /* clip event->area to the visible area */
   if (event->area.height < 0)
@@ -6533,37 +6564,23 @@ gtk_tree_view_focus (GtkWidget        *widget,
 	  return FALSE;
 	case GTK_DIR_TAB_FORWARD:
 	case GTK_DIR_DOWN:
-	  if (tree_view->priv->tree == NULL)
-	    return FALSE;
 	  gtk_widget_grab_focus (widget);
 	  return TRUE;
+	default:
+	  g_assert_not_reached ();
+	  return FALSE;
 	}
     }
 
   /* Case 2. We don't have focus at all. */
   if (!GTK_WIDGET_HAS_FOCUS (container))
     {
-      if (tree_view->priv->tree == NULL &&
-	  (direction == GTK_DIR_TAB_BACKWARD ||
-	   direction == GTK_DIR_UP))
-	return gtk_tree_view_header_focus (tree_view, direction);
-      if (((direction == GTK_DIR_TAB_FORWARD) ||
-	   (direction == GTK_DIR_RIGHT) ||
-	   (direction == GTK_DIR_DOWN) ||
-	   (direction == GTK_DIR_LEFT)) &&
-	  gtk_tree_view_header_focus (tree_view, direction))
-	return TRUE;
-
-      if (tree_view->priv->tree == NULL)
-	return FALSE;
-      gtk_widget_grab_focus (widget);
+      if (!gtk_tree_view_header_focus (tree_view, direction))
+	gtk_widget_grab_focus (widget);
       return TRUE;
     }
 
   /* Case 3. We have focus already. */
-  if (tree_view->priv->tree == NULL)
-    return gtk_tree_view_header_focus (tree_view, direction);
-
   if (direction == GTK_DIR_TAB_BACKWARD)
     return (gtk_tree_view_header_focus (tree_view, direction));
   else if (direction == GTK_DIR_TAB_FORWARD)
