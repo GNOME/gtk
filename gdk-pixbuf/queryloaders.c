@@ -101,7 +101,11 @@ query_module (const char *dir, const char *file)
 		g_free (info);
 	}
 	else {
-		g_fprintf (stderr, "Cannot load loader %s\n", path);
+		if (module == NULL)
+			g_fprintf (stderr, "g_module_open() failed for %s: %s\n", path,
+				   g_module_error());
+	        else
+			g_fprintf (stderr, "Cannot load loader %s\n", path);
 	}
 	if (module)
 		g_module_close (module);
