@@ -299,30 +299,37 @@ msgstr "*"
 msgid "(nil)"
 msgstr "(nulo)"
 
+#, fuzzy
 msgid "heavy"
 msgstr ""
 
+#, fuzzy
 msgid "extrabold"
 msgstr ""
 
 msgid "bold"
 msgstr "negritas"
 
+#, fuzzy
 msgid "demibold"
 msgstr ""
 
+#, fuzzy
 msgid "medium"
 msgstr ""
 
 msgid "normal"
 msgstr "normal"
 
+#, fuzzy
 msgid "light"
 msgstr ""
 
+#, fuzzy
 msgid "extralight"
 msgstr ""
 
+#, fuzzy
 msgid "thin"
 msgstr ""
 
