@@ -1096,7 +1096,6 @@ load_themes (GtkIconTheme *icon_theme)
 		  else
 		    unthemed_icon->no_svg_filename = abs_file;
 
-		  g_print ("found unthemed icon %s\n", abs_file); 
 		  g_hash_table_insert (priv->unthemed_icons,
 				       base_name,
 				       unthemed_icon);
