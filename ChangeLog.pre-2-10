@@ -1,3 +1,8 @@
+Thu Sep 20 16:20:47 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkrgb.c (gdk_rgb_allocate_images): Remove unnecessary
+	call to gdk_image_new_bitmap().
+
 Thu Sep 20 15:31:35 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcalendar.c (gtk_calendar_init): Use the current
