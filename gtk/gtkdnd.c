@@ -2158,6 +2158,7 @@ gtk_drag_source_set_icon_stock (GtkWidget   *widget,
   
   gtk_drag_source_unset_icon (site);
 
+  site->icon_type = GTK_IMAGE_STOCK;
   site->icon_data.stock.stock_id = g_strdup (stock_id);
 }
 
