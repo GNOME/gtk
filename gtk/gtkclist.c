@@ -877,6 +877,25 @@ gtk_clist_moveto (GtkCList * clist,
     }
 }
 
+GtkCellType 
+gtk_clist_get_cell_type (GtkCList * clist,
+			 gint row,
+			 gint column)
+{
+  GtkCListRow *clist_row;
+
+  g_return_val_if_fail (clist != NULL, -1);
+
+  if (row < 0 || row >= clist->rows)
+    return -1;
+  if (column < 0 || column >= clist->columns)
+    return -1;
+
+  clist_row = (g_list_nth (clist->row_list, row))->data;
+
+  return clist_row->cell[column].type;
+}
+
 void
 gtk_clist_set_text (GtkCList * clist,
 		    gint row,
@@ -906,6 +925,32 @@ gtk_clist_set_text (GtkCList * clist,
       if (gtk_clist_row_isvisable (clist, row))
 	draw_row (clist, NULL, row, clist_row);
     }
+}
+
+gint
+gtk_clist_get_text (GtkCList * clist,
+		    gint row,
+		    gint column,
+		    gchar ** text)
+{
+  GtkCListRow *clist_row;
+
+  g_return_val_if_fail (clist != NULL, 0);
+
+  if (row < 0 || row >= clist->rows)
+    return 0;
+  if (column < 0 || column >= clist->columns)
+    return 0;
+
+  clist_row = (g_list_nth (clist->row_list, row))->data;
+
+  if (clist_row->cell[column].type != GTK_CELL_TEXT)
+    return 0;
+
+  if (text)
+    *text = GTK_CELL_TEXT (clist_row->cell[column])->text;
+
+  return 1;
 }
 
 void
@@ -938,6 +983,35 @@ gtk_clist_set_pixmap (GtkCList * clist,
     }
 }
 
+gint
+gtk_clist_get_pixmap (GtkCList * clist,
+		      gint row,
+		      gint column,
+		      GdkPixmap ** pixmap,
+		      GdkBitmap ** mask)
+{
+  GtkCListRow *clist_row;
+
+  g_return_val_if_fail (clist != NULL, 0);
+
+  if (row < 0 || row >= clist->rows)
+    return 0;
+  if (column < 0 || column >= clist->columns)
+    return 0;
+
+  clist_row = (g_list_nth (clist->row_list, row))->data;
+
+  if (clist_row->cell[column].type != GTK_CELL_PIXMAP)
+    return 0;
+
+  if (pixmap)
+    *pixmap = GTK_CELL_PIXMAP (clist_row->cell[column])->pixmap;
+  if (mask)
+    *mask = GTK_CELL_PIXMAP (clist_row->cell[column])->mask;
+
+  return 1;
+}
+
 void
 gtk_clist_set_pixtext (GtkCList * clist,
 		       gint row,
@@ -968,6 +1042,41 @@ gtk_clist_set_pixtext (GtkCList * clist,
       if (gtk_clist_row_isvisable (clist, row))
 	draw_row (clist, NULL, row, clist_row);
     }
+}
+
+gint
+gtk_clist_get_pixtext (GtkCList * clist,
+		       gint row,
+		       gint column,
+		       gchar ** text,
+		       guint8 * spacing,
+		       GdkPixmap ** pixmap,
+		       GdkBitmap ** mask)
+{
+  GtkCListRow *clist_row;
+
+  g_return_val_if_fail (clist != NULL, 0);
+
+  if (row < 0 || row >= clist->rows)
+    return 0;
+  if (column < 0 || column >= clist->columns)
+    return 0;
+
+  clist_row = (g_list_nth (clist->row_list, row))->data;
+
+  if (clist_row->cell[column].type != GTK_CELL_PIXTEXT)
+    return 0;
+
+  if (text)
+    *text = GTK_CELL_PIXTEXT (clist_row->cell[column])->text;
+  if (spacing)
+    *spacing = GTK_CELL_PIXTEXT (clist_row->cell[column])->spacing;
+  if (pixmap)
+    *pixmap = GTK_CELL_PIXTEXT (clist_row->cell[column])->pixmap;
+  if (mask)
+    *mask = GTK_CELL_PIXTEXT (clist_row->cell[column])->mask;
+
+  return 1;
 }
 
 void
@@ -1048,6 +1157,12 @@ gtk_clist_append (GtkCList * clist,
   clist_row = row_new (clist);
   clist->rows++;
 
+  /* set the text in the row's columns */
+  if (text)
+    for (i = 0; i < clist->columns; i++)
+      if (text[i])
+        cell_set_text (clist, clist_row, i, text[i]);
+
   /* keeps track of the end of the list so the list 
    * doesn't have to be traversed every time a item is added */
   if (!clist->row_list)
@@ -1069,12 +1184,6 @@ gtk_clist_append (GtkCList * clist,
     }
   else
     clist->row_list_end = (g_list_append (clist->row_list_end, clist_row))->next;
-
-  /* set the text in the row's columns */
-  if (text)
-    for (i = 0; i < clist->columns; i++)
-      if (text[i])
-        cell_set_text (clist, clist_row, i, text[i]);
   
   /* redraw the list if it's not frozen */
   if (!GTK_CLIST_FROZEN (clist))
@@ -1107,6 +1216,12 @@ gtk_clist_insert (GtkCList * clist,
   /* create the row */
   clist_row = row_new (clist);
 
+  /* set the text in the row's columns */
+  if (text)
+    for (i = 0; i < clist->columns; i++)
+      if (text[i])
+	cell_set_text (clist, clist_row, i, text[i]);
+
   /* reset the row end pointer if we're inserting at the
    * end of the list */
   if (row == clist->rows)
@@ -1115,12 +1230,6 @@ gtk_clist_insert (GtkCList * clist,
     clist->row_list = g_list_insert (clist->row_list, clist_row, row);
 
   clist->rows++;
-
-  /* set the text in the row's columns */
-  if (text)
-    for (i = 0; i < clist->columns; i++)
-      if (text[i])
-	cell_set_text (clist, clist_row, i, text[i]);
 
   /* redraw the list if it isn't frozen */
   if (!GTK_CLIST_FROZEN (clist))
@@ -1269,6 +1378,38 @@ gtk_clist_get_row_data (GtkCList * clist,
 
   clist_row = (g_list_nth (clist->row_list, row))->data;
   return clist_row->data;
+}
+
+gint
+gtk_clist_find_row_from_data (GtkCList * clist,
+			      gpointer data)
+{
+  GList *list;
+  gint n;
+
+  g_return_val_if_fail (clist != NULL, -1);
+  g_return_val_if_fail (GTK_IS_CLIST (clist), -1);
+
+  if (clist->rows < 1)
+    return -1; /* is this an optimization or just worthless? */
+
+  n = 0;
+  list = clist->row_list;
+  while (list)
+    {
+      GtkCListRow *clist_row;
+
+      clist_row = list->data;
+      if (clist_row->data == data)
+        break;
+      n++;
+      list = list->next;
+    }
+
+  if (list)
+    return n;
+
+  return -1;
 }
 
 void

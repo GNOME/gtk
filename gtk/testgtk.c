@@ -1573,9 +1573,16 @@ static gint clist_selected_row = 0;
 void
 add1000_clist (GtkWidget *widget, gpointer data)
 {
-  gint i;
+  gint i, row;
   char text[TESTGTK_CLIST_COLUMNS][50];
   char *texts[TESTGTK_CLIST_COLUMNS];
+  GdkBitmap *mask;
+  GdkPixmap *pixmap;
+  
+  pixmap = gdk_pixmap_create_from_xpm (GTK_CLIST (data)->clist_window, 
+				       &mask, 
+				       &GTK_WIDGET (data)->style->white,
+				       "test.xpm");
 
   for (i = 0; i < TESTGTK_CLIST_COLUMNS; i++)
     {
@@ -1583,6 +1590,7 @@ add1000_clist (GtkWidget *widget, gpointer data)
       sprintf (text[i], "Column %d", i);
     }
   
+  texts[3] = NULL;
   sprintf (text[1], "Right");
   sprintf (text[2], "Center");
   
@@ -1590,10 +1598,13 @@ add1000_clist (GtkWidget *widget, gpointer data)
   for (i = 0; i < 1000; i++)
     {
       sprintf (text[0], "Row %d", clist_rows++);
-      gtk_clist_append (GTK_CLIST (data), texts);
+      row = gtk_clist_append (GTK_CLIST (data), texts);
+      gtk_clist_set_pixtext (GTK_CLIST (data), row, 3, "Testing", 5, pixmap, mask);
     }
   gtk_clist_thaw (GTK_CLIST (data));
 
+  gdk_pixmap_unref (pixmap);
+  gdk_bitmap_unref (mask);
 }
 
 void
@@ -1654,7 +1665,11 @@ select_clist (GtkWidget *widget,
 	      gint column, 
 	      GdkEventButton *bevent)
 {
-  gint button = 0;
+  gint button = 0, i;
+  guint8 spacing;
+  gchar *text;
+  GdkPixmap *pixmap;
+  GdkBitmap *mask;
 
   if (bevent)
     button = bevent->button;
@@ -1662,16 +1677,45 @@ select_clist (GtkWidget *widget,
   g_print ("GtkCList Selection: row %d column %d button %d\n", 
 	   row, column, button);
 
+  for (i = 0; i < TESTGTK_CLIST_COLUMNS; i++)
+    {
+      switch (gtk_clist_get_cell_type (GTK_CLIST (widget), row, i))
+	{
+	case GTK_CELL_TEXT:
+	  g_print ("CELL %d GTK_CELL_TEXT\n", i);
+	  gtk_clist_get_text (GTK_CLIST (widget), row, i, &text);
+	  g_print ("TEXT: %s\n", text);
+	  break;
+
+	case GTK_CELL_PIXMAP:
+	  g_print ("CELL %d GTK_CELL_PIXMAP\n", i);
+	  gtk_clist_get_pixmap (GTK_CLIST (widget), row, i, &pixmap, &mask);
+	  g_print ("PIXMAP: %d\n", (int) pixmap);
+	  g_print ("MASK: %d\n", (int) mask);
+	  break;
+
+	case GTK_CELL_PIXTEXT:
+	  g_print ("CELL %d GTK_CELL_PIXTEXT\n", i);
+	  gtk_clist_get_pixtext (GTK_CLIST (widget), row, i, &text, &spacing, &pixmap, &mask);
+	  g_print ("TEXT: %s\n", text);
+	  g_print ("SPACING: %d\n", spacing);
+	  g_print ("PIXMAP: %d\n", (int) pixmap);
+	  g_print ("MASK: %d\n", (int) mask);
+	  break;
+
+	default:
+	  break;
+	}
+    }
+
+  g_print ("\n\n");
+
   clist_selected_row = row;
 }
 
 void
 list_selection_clist (GtkWidget *widget, gpointer data)
 {
-  GList *list;
-  GtkCListRow *clist_row;
-  GtkCList *clist;
-
 }
 
 void
@@ -1729,9 +1773,10 @@ create_clist ()
       /* create GtkCList here so we have a pointer to throw at the 
        * button callbacks -- more is done with it later */
       clist = gtk_clist_new_with_titles (TESTGTK_CLIST_COLUMNS, titles);
+      /*clist = gtk_clist_new (TESTGTK_CLIST_COLUMNS);*/
 
       /* control buttons */
-      button = gtk_button_new_with_label ("Add 1,000 Rows");
+      button = gtk_button_new_with_label ("Add 1,000 Rows With Pixmaps");
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
 
       gtk_signal_connect (GTK_OBJECT (button),
@@ -1807,6 +1852,11 @@ create_clist ()
       /* 
        * the rest of the clist configuration
        */
+      /*
+      gtk_clist_set_column_title (GTK_CLIST (clist), 0, "Hello");
+      gtk_clist_set_column_title (GTK_CLIST (clist), 4, "Joe 4");
+      */
+      gtk_clist_column_titles_passive (GTK_CLIST (clist));
       gtk_clist_set_row_height (GTK_CLIST (clist), 20);
       
       gtk_signal_connect (GTK_OBJECT (clist), 

@@ -350,11 +350,23 @@ void gtk_clist_moveto (GtkCList * clist,
 gint gtk_clist_row_isvisable (GtkCList * clist,
 			      gint row);
 
+/* returns the cell type */
+GtkCellType gtk_clist_get_cell_type (GtkCList * clist,
+				     gint row,
+				     gint column);
+
 /* sets a given cell's text, replacing it's current contents */
 void gtk_clist_set_text (GtkCList * clist,
 			 gint row,
 			 gint column,
 			 gchar * text);
+
+/* for the "get" functions, any of the return pointer can be
+ * NULL if you are not interested */
+gint gtk_clist_get_text (GtkCList * clist,
+			 gint row,
+			 gint column,
+			 gchar ** text);
 
 /* sets a given cell's pixmap, replacing it's current contents */
 void gtk_clist_set_pixmap (GtkCList * clist,
@@ -362,6 +374,12 @@ void gtk_clist_set_pixmap (GtkCList * clist,
 			   gint column,
 			   GdkPixmap * pixmap,
 			   GdkBitmap * mask);
+
+gint gtk_clist_get_pixmap (GtkCList * clist,
+			   gint row,
+			   gint column,
+			   GdkPixmap ** pixmap,
+			   GdkBitmap ** mask);
 
 /* sets a given cell's pixmap and text, replacing it's current contents */
 void gtk_clist_set_pixtext (GtkCList * clist,
@@ -371,6 +389,14 @@ void gtk_clist_set_pixtext (GtkCList * clist,
 			    guint8 spacing,
 			    GdkPixmap * pixmap,
 			    GdkBitmap * mask);
+
+gint gtk_clist_get_pixtext (GtkCList * clist,
+			    gint row,
+			    gint column,
+			    gchar ** text,
+			    guint8 * spacing,
+			    GdkPixmap ** pixmap,
+			    GdkBitmap ** mask);
 
 /* sets the foreground color of a row, the colar must already
  * be allocated */
@@ -415,6 +441,11 @@ void gtk_clist_set_row_data (GtkCList * clist,
 /* returns the data set for a row */
 gpointer gtk_clist_get_row_data (GtkCList * clist,
 				 gint row);
+
+/* givin a data pointer, find the first (and hopefully only!)
+ * row that points to that data, or -1 if none do */
+gint gtk_clist_find_row_from_data (GtkCList * clist,
+				   gpointer data);
 
 /* force selection of a row */
 void gtk_clist_select_row (GtkCList * clist,
