@@ -381,7 +381,7 @@ gtk_progress_changed (GtkAdjustment *adjustment,
    * the size request
    */
   if (progress->use_text_format && progress->show_text)
-    gtk_widget_queue_resize (progress);
+    gtk_widget_queue_resize (GTK_WIDGET (progress));
   else
     GTK_PROGRESS_GET_CLASS (progress)->update (progress);
 }
