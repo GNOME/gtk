@@ -1,3 +1,16 @@
+2002-01-12  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkselection-win32.c (gdk_selection_convert): Report
+	failure to requestor also if we cannot handle the target asked
+	for.
+
+	* gdk/win32/gdkdnd-win32.c: Some indentation fixes.
+
+	Applying more of the Archaeopteryx Software patches:
+
+	* gdk/win32/gdkgc-win32.c (predraw_set_foreground): Better error
+	checking.
+
 2002-01-09  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkprivate-win32.h

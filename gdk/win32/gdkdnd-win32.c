@@ -161,9 +161,9 @@ gdk_drag_context_unref (GdkDragContext *context)
 }
 
 static GdkDragContext *
-gdk_drag_context_find (gboolean is_source,
-		       GdkWindow   *source,
-		       GdkWindow   *dest)
+gdk_drag_context_find (gboolean  is_source,
+		       GdkWindow *source,
+		       GdkWindow *dest)
 {
   GList *tmp_list = contexts;
   GdkDragContext *context;
@@ -865,7 +865,8 @@ local_send_drop (GdkDragContext *context, guint32 time)
 }
 
 static void
-gdk_drag_do_leave (GdkDragContext *context, guint32 time)
+gdk_drag_do_leave (GdkDragContext *context,
+		   guint32         time)
 {
   if (context->dest_window)
     {
@@ -885,8 +886,8 @@ gdk_drag_do_leave (GdkDragContext *context, guint32 time)
 }
 
 GdkDragContext * 
-gdk_drag_begin (GdkWindow     *window,
-		GList         *targets)
+gdk_drag_begin (GdkWindow *window,
+		GList     *targets)
 {
   GList *tmp_list;
   source_drag_context *ctx;
@@ -1096,9 +1097,9 @@ gdk_drag_abort (GdkDragContext *context,
 /* Destination side */
 
 void
-gdk_drag_status (GdkDragContext   *context,
-		 GdkDragAction     action,
-		 guint32           time)
+gdk_drag_status (GdkDragContext *context,
+		 GdkDragAction   action,
+		 guint32         time)
 {
   GdkDragContext *src_context;
   GdkEvent tmp_event;
@@ -1120,7 +1121,6 @@ gdk_drag_status (GdkDragContext   *context,
       tmp_event.dnd.window = context->source_window;
       tmp_event.dnd.send_event = FALSE;
       tmp_event.dnd.context = src_context;
-
       tmp_event.dnd.time = GDK_CURRENT_TIME; /* FIXME? */
 
       if (action == GDK_ACTION_DEFAULT)
@@ -1133,9 +1133,9 @@ gdk_drag_status (GdkDragContext   *context,
 }
 
 void 
-gdk_drop_reply (GdkDragContext   *context,
-		gboolean          ok,
-		guint32           time)
+gdk_drop_reply (GdkDragContext *context,
+		gboolean        ok,
+		guint32         time)
 {
   g_return_if_fail (context != NULL);
 
@@ -1153,9 +1153,9 @@ gdk_drop_reply (GdkDragContext   *context,
 }
 
 void
-gdk_drop_finish (GdkDragContext   *context,
-		 gboolean          success,
-		 guint32           time)
+gdk_drop_finish (GdkDragContext *context,
+		 gboolean        success,
+		 guint32         time)
 {
   GdkDragContextPrivate *private;
   GdkDragContext *src_context;

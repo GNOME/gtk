@@ -404,6 +404,8 @@ gdk_selection_convert (GdkWindow *requestor,
 	  dropfiles_prop = NULL;
 	}
     }
+  else
+    property = GDK_NONE;
 
   /* Generate a selection notify message so that we actually fetch
    * the data (if property == gdk_selection_property) or indicating failure

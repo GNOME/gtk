@@ -938,7 +938,6 @@ gdk_win32_destroy_hdc (HWND hwnd,
   if ((hbr = GetCurrentObject (hdc, OBJ_BRUSH)) == NULL)
     WIN32_GDI_FAILED ("GetCurrentObject");
 
-    
   if (hwnd == NULL)
     {
       if (!DeleteDC (hdc))
@@ -1214,7 +1213,7 @@ predraw_set_foreground (GdkGCWin32Data          *data,
 			GdkColormapPrivateWin32 *colormap_private)
 {
   COLORREF fg;
-  HBRUSH hbr, old_hbr;
+  HBRUSH hbr;
 
   if (colormap_private == NULL)
     {
@@ -1289,13 +1288,13 @@ predraw_set_foreground (GdkGCWin32Data          *data,
 	WIN32_GDI_FAILED ("CreateSolidBrush");
       break;
   }
-  old_hbr = SelectObject (data->xgc, hbr);
-  if (old_hbr == NULL)
-    WIN32_GDI_FAILED ("SelectObject");
-  else
+  if (hbr != NULL)
     {
-      if (!DeleteObject (old_hbr))
-        WIN32_GDI_FAILED ("DeleteObject");
+      HBRUSH old_hbr = SelectObject (data->xgc, hbr);
+      if (old_hbr == NULL)
+	WIN32_GDI_FAILED ("SelectObject");
+      else if (!DeleteObject (old_hbr))
+	WIN32_GDI_FAILED ("DeleteObject");
     }
 }  
 
