@@ -1794,6 +1794,14 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 	  tree_view->priv->cursor)
 	{
 	  GtkTreePath *cursor = gtk_tree_row_reference_get_path (tree_view->priv->cursor);
+	  GtkTreeIter iter;
+
+	  gtk_tree_model_get_iter (tree_view->priv->model, &iter, path);
+	  gtk_tree_view_column_cell_set_cell_data (column,
+						   tree_view->priv->model,
+						   &iter,
+						   GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_PARENT),
+						   node->children?TRUE:FALSE);
 
 	  if ((cursor && !gtk_tree_path_compare (cursor, path))
 	      || !_gtk_tree_view_column_has_editable_cell (column))
@@ -1802,14 +1810,6 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 
 	      /* FIXME: get the right flags */
 	      guint flags = 0;
-	      GtkTreeIter iter;
-
-	      gtk_tree_model_get_iter (tree_view->priv->model, &iter, path);
-	      gtk_tree_view_column_cell_set_cell_data (column,
-						       tree_view->priv->model,
-						       &iter,
-						       GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_PARENT),
-						       node->children?TRUE:FALSE);
 
 	      path_string = gtk_tree_path_to_string (path);
 
@@ -1822,11 +1822,20 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 		{
 		  if (cell_editable != NULL)
 		    {
+		      gint left, right;
+		      GdkRectangle area;
+
+		      area = cell_area;
+		      _gtk_tree_view_column_get_neighbor_sizes (column,	_gtk_tree_view_column_get_editable_cell (column), &left, &right);
+
+		      area.x += left;
+		      area.width -= right + left;
+
 		      gtk_tree_view_real_start_editing (tree_view,
 							column,
 							path,
 							cell_editable,
-							&cell_area,
+							&area,
 							(GdkEvent *)event,
 							flags);
 		      gtk_tree_path_free (path);
@@ -1840,6 +1849,7 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 	  if (cursor)
 	    gtk_tree_path_free (cursor);
 	}
+
       /* select */
       pre_val = tree_view->priv->vadjustment->value;
 

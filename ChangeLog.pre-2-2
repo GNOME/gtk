@@ -1,3 +1,18 @@
+Sun Apr 14 16:56:59 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeprivate.h: add _gtk_tree_view_column_get_editable_cell and
+	_gtk_tree_view_column_get_neighbor_sizes
+
+	* gtk/gtktreeviewcolumn.c (struct _GtkTreeViewColumnCellInfo): add
+	real_width field,
+	(_gtk_tree_view_column_get_editable_cell): implement,
+	(gtk_tree_view_column_cell_process_action): fill info->real_width
+	(_gtk_tree_view_column_get_neighbor_sizes): implement
+
+	* gtk/gtktreeview.c (gtk_tree_view_button_press): make the "editable
+	widget" show up with the same size as the actual cell, so it doesnt
+	cover the complete column if there are any other cells in that column.
+
 2002-04-14  Abigail Brady  <morwen@evilmagic.org>
 
 	* gtk/gtkfilesel.c: Fix typo in message.

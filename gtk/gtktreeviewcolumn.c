@@ -64,6 +64,7 @@ struct _GtkTreeViewColumnCellInfo
   gpointer func_data;
   GtkDestroyNotify destroy;
   gint requested_width;
+  gint real_width;
   guint expand : 1;
   guint pack : 1;
   guint has_focus : 1;
@@ -1051,6 +1052,19 @@ _gtk_tree_view_column_has_editable_cell (GtkTreeViewColumn *column)
       return TRUE;
 
   return FALSE;
+}
+
+GtkCellRenderer *
+_gtk_tree_view_column_get_editable_cell (GtkTreeViewColumn *column)
+{
+  GList *list;
+
+  for (list = column->cell_list; list; list = list ->next)
+    if (((GtkTreeViewColumnCellInfo *)list->data)->cell->mode ==
+	GTK_CELL_RENDERER_MODE_EDITABLE)
+      return ((GtkTreeViewColumnCellInfo *)list->data)->cell;
+
+  return NULL;
 }
 
 /* Public Functions */
@@ -2349,6 +2363,7 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 
       real_cell_area.width = info->requested_width +
 	(info->expand?extra_space:0);
+      info->real_width = real_cell_area.width;
       real_cell_area.x += focus_line_width;
       if (action == CELL_ACTION_RENDER)
 	{
@@ -2447,6 +2462,7 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 
       real_cell_area.width = info->requested_width +
 	(info->expand?extra_space:0);
+      info->real_width = real_cell_area.width;
       if (action == CELL_ACTION_RENDER)
 	{
 	  gtk_cell_renderer_render (info->cell,
@@ -2697,4 +2713,56 @@ _gtk_tree_view_column_stop_editing (GtkTreeViewColumn *tree_column)
   g_return_if_fail (tree_column->editable_widget != NULL);
 
   tree_column->editable_widget = NULL;
+}
+
+void
+_gtk_tree_view_column_get_neighbor_sizes (GtkTreeViewColumn *column,
+					  GtkCellRenderer   *cell,
+					  gint              *left,
+					  gint              *right)
+{
+  GList *list;
+
+  if (left)
+    {
+      *left = 0;
+
+      for (list = column->cell_list; list; list = list->next)
+        {
+	  GtkTreeViewColumnCellInfo *info =
+	    (GtkTreeViewColumnCellInfo *)list->data;
+
+	  if (info->cell == cell)
+	    break;
+
+	  *left += info->real_width;
+	}
+    }
+
+  if (right)
+    {
+      *right = 0;
+
+      for (list = column->cell_list; list; list = list->next)
+        {
+	  GtkTreeViewColumnCellInfo *info =
+	    (GtkTreeViewColumnCellInfo *)list->data;
+
+	  if (info->cell == cell)
+	    break;
+	}
+
+      /* skip cell */
+      if (list && list->next)
+        {
+	  list = list->next;
+	  for ( ; list; list = list->next)
+	    {
+	      GtkTreeViewColumnCellInfo *info =
+	        (GtkTreeViewColumnCellInfo *)list->data;
+
+	      *right += info->real_width;
+	    }
+	}
+    }
 }
