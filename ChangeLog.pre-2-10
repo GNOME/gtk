@@ -1,3 +1,8 @@
+2005-02-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_menu_fill_level): Don't leak a 
+	path here.  (#168443, Morten Welinder)
+
 2005-02-24  Robert Ögren  <gtk@roboros.com>
 
 	Implement better handling of Wintab tablet context overlap on
