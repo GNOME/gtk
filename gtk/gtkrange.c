@@ -174,10 +174,9 @@ static void          gtk_range_reset_update_timer       (GtkRange      *range);
 static void          gtk_range_remove_update_timer      (GtkRange      *range);
 static GdkRectangle* get_area                           (GtkRange      *range,
                                                          MouseLocation  location);
-static gboolean      gtk_range_real_change_value       (GtkRange      *range,
-                                                        GtkScrollType  scroll,
-                                                        gdouble        value,
-                                                        gpointer       data);
+static gboolean      gtk_range_real_change_value        (GtkRange      *range,
+                                                         GtkScrollType  scroll,
+                                                         gdouble        value);
 static void          gtk_range_update_value             (GtkRange      *range);
 
 
@@ -2385,8 +2384,7 @@ get_area (GtkRange     *range,
 static gboolean
 gtk_range_real_change_value (GtkRange     *range,
                              GtkScrollType scroll,
-                             gdouble       value,
-                             gpointer      data)
+                             gdouble       value)
 {
   /* potentially adjust the bounds _before we clamp */
   g_signal_emit (range, signals[ADJUST_BOUNDS], 0, value);
