@@ -1,5 +1,7 @@
 2004-12-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/tmpl/drawing.sgml: Document GdkTrapezoid.
+
 	* gtk/tmpl/gtkcelleditable.sgml: 
 	* gtk/tmpl/gtkcellview.sgml: 
 	* gtk/tmpl/gtktreeviewcolumn.sgml: 

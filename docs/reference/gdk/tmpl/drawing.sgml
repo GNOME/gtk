@@ -298,15 +298,22 @@ function.
 
 <!-- ##### STRUCT GdkTrapezoid ##### -->
 <para>
-
+Specifies a trapezpoid for use by the gdk_draw_trapezoids().
+The trapezoids used here have parallel, horizontal top and 
+bottom edges. 
 </para>
 
-@y1: 
-@x11: 
-@x21: 
-@y2: 
-@x12: 
-@x22: 
+@x1: the x coordinate of the start point.
+@y1: the y coordinate of the start point.
+@x2: the x coordinate of the end point.
+@y2: the y coordinate of the end point.
+
+@y1: the y coordinate of the top edge
+@x11: the x coordinate of the top left corner
+@x21: the x coordinate of the top right corner
+@y2: the y coordinate of the bottom edge
+@x12: the x coordinate of the bottom left corner
+@x22: the x coordinate of the bottom right corner
 
 <!-- ##### FUNCTION gdk_draw_glyphs ##### -->
 <para>
