@@ -889,7 +889,7 @@ gtk_label_setup_mnemonic (GtkLabel *label,
     }
   
   if (label->mnemonic_keyval == GDK_VoidSymbol)
-    return;
+    goto done;
 
   toplevel = gtk_widget_get_toplevel (widget);
   if (GTK_WIDGET_TOPLEVEL (toplevel))
@@ -916,6 +916,7 @@ gtk_label_setup_mnemonic (GtkLabel *label,
 	}
     }
   
+ done:
   g_object_set_data (G_OBJECT (label), "gtk-mnemonic-menu", mnemonic_menu);
 }
 

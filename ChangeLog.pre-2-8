@@ -1,5 +1,17 @@
 2004-12-22  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtklabel.c (gtk_label_setup_mnemonic): Don't forget to
+	null the mnemonic_menu when unsetting a mnemonic, reported
+	by Owen Taylor.
+
+2004-12-21  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkliststore.c (generate_order): Generate the order the
+	way it is supposed to be, order[new_pos] == old_pos.
+	(gtk_list_store_reorder): Invert the order before using it.
+
+2004-12-22  Matthias Clasen  <mclasen@redhat.com>
+
 	Fix sorting of list stores.  (#161886, Marcin Krzyzanowski)
 
 	* gtk/gtkliststore.c (generate_order): Generate the order the
@@ -14,6 +26,7 @@ Wed Dec 22 01:24:01 2004  Jonathan Blandford  <jrb@redhat.com>
 	* gtk/queryimmodules.c (main): print out the version and binary
 	name in the header comment.  Problem reported by Seth Nickell.
 
+>>>>>>> 1.6232
 2004-12-20  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkliststore.c (gtk_list_store_sort_iter_changed): Pass a
