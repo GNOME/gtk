@@ -8,10 +8,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 2.2.0\n"
+"Project-Id-Version: gtk+ 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-10 00:22-0400\n"
-"PO-Revision-Date: 2004-04-18 23:45+0300\n"
+"POT-Creation-Date: 2004-07-13 22:19+0300\n"
+"PO-Revision-Date: 2004-07-13 22:20+0300\n"
 "Last-Translator: Sami Pesonen <sampeson@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -906,15 +906,15 @@ msgstr "Väriympyrä"
 msgid "Color Selection"
 msgstr "Värin valinta"
 
-#: gtk/gtkentry.c:4300 gtk/gtktextview.c:6933
+#: gtk/gtkentry.c:4312 gtk/gtktextview.c:6933
 msgid "Select _All"
 msgstr "Valitse k_aikki"
 
-#: gtk/gtkentry.c:4310 gtk/gtktextview.c:6943
+#: gtk/gtkentry.c:4322 gtk/gtktextview.c:6943
 msgid "Input _Methods"
 msgstr "Syöttö_tavat"
 
-#: gtk/gtkentry.c:4320 gtk/gtktextview.c:6954
+#: gtk/gtkentry.c:4332 gtk/gtktextview.c:6954
 msgid "_Insert Unicode Control Character"
 msgstr "_Lisää Unicode-säätömerkki"
 
@@ -942,7 +942,7 @@ msgstr ""
 "Kirjanmerkkiä kohteelle \"%s\" ei voi lisätä:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:760 gtk/gtkfilechooserdefault.c:5332
+#: gtk/gtkfilechooserdefault.c:760 gtk/gtkfilechooserdefault.c:5349
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -1063,51 +1063,51 @@ msgstr "Ei voinut löytää polun kohdetta"
 msgid "shortcut %s does not exist"
 msgstr "pikavalinta %s ei ole olemassa"
 
-#: gtk/gtkfilechooserdefault.c:5105
+#: gtk/gtkfilechooserdefault.c:5122
 msgid "Type name of new folder"
 msgstr "Kirjoita uuden hakemiston nimi"
 
-#: gtk/gtkfilechooserdefault.c:5134
+#: gtk/gtkfilechooserdefault.c:5151
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d tavu"
 msgstr[1] "%d tavua"
 
-#: gtk/gtkfilechooserdefault.c:5136
+#: gtk/gtkfilechooserdefault.c:5153
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f kt"
 
-#: gtk/gtkfilechooserdefault.c:5138
+#: gtk/gtkfilechooserdefault.c:5155
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f Mt"
 
-#: gtk/gtkfilechooserdefault.c:5140
+#: gtk/gtkfilechooserdefault.c:5157
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f Gt"
 
-#: gtk/gtkfilechooserdefault.c:5185
+#: gtk/gtkfilechooserdefault.c:5202
 msgid "Today"
 msgstr "Tänään"
 
-#: gtk/gtkfilechooserdefault.c:5187
+#: gtk/gtkfilechooserdefault.c:5204
 msgid "Yesterday"
 msgstr "Eilen"
 
-#: gtk/gtkfilechooserdefault.c:5198
+#: gtk/gtkfilechooserdefault.c:5215
 msgid "Unknown"
 msgstr "Tuntematon"
 
-#: gtk/gtkfilechooserdefault.c:5293
+#: gtk/gtkfilechooserdefault.c:5310
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr ""
 "Valitsemaasi hakemistoon ei voi siirtyä, sillä antamasi polku on "
 "virheellinen."
 
-#: gtk/gtkfilechooserdefault.c:5370
+#: gtk/gtkfilechooserdefault.c:5387
 #, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1116,15 +1116,15 @@ msgstr ""
 "Hakemiston \"%s\" valitseminen ei onnistunut:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5409
+#: gtk/gtkfilechooserdefault.c:5426
 msgid "Open Location"
 msgstr "Avaa sijainti"
 
-#: gtk/gtkfilechooserdefault.c:5416
+#: gtk/gtkfilechooserdefault.c:5433
 msgid "Save in Location"
 msgstr "Tallenna kohteeseen"
 
-#: gtk/gtkfilechooserdefault.c:5435
+#: gtk/gtkfilechooserdefault.c:5452
 msgid "_Location:"
 msgstr "_Sijainti:"
 
@@ -1339,9 +1339,9 @@ msgid "Filesystem"
 msgstr "Tiedostojärjestelmä"
 
 #: gtk/gtkfilesystemunix.c:731
-#, fuzzy, c-format
+#, c-format
 msgid "Could not get a stock icon for %s"
-msgstr "Tiedoston \"%s\" tietojen saaminen epäonnistui: %s"
+msgstr "Tiedoston %s vakiokuvaketta ei löytynyt."
 
 #: gtk/gtkfilesystemunix.c:826
 #, c-format
@@ -1553,18 +1553,18 @@ msgstr "Ryhmä"
 msgid "The radio tool button whose group this button belongs to."
 msgstr "Työkalupalkin vaihtoehtopainike, jonka ryhmään tämä painike kuuluu."
 
-#: gtk/gtkrc.c:2390
+#: gtk/gtkrc.c:2391
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Ei löytänyt sisällytettävää tiedostoa \"%s\"."
 
 # , c-format
-#: gtk/gtkrc.c:3029 gtk/gtkrc.c:3032
+#: gtk/gtkrc.c:3030 gtk/gtkrc.c:3033
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kuvatiedostoa ei löytynyt pixmap_path:sta: \"%s\""
 
-#: gtk/gtkrc.c:3467
+#: gtk/gtkrc.c:3468
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Kuvan polku \"%s\" ei voi olla suhteellinen, %s, rivi %d"
