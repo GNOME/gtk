@@ -256,8 +256,63 @@ gtk_object_class_add_signals (GtkObjectClass *class,
   for (i = 0; i < nsignals; i++)
     new_signals[class->nsignals + i] = signals[i];
 
+  g_free (class->signals);
   class->signals = new_signals;
   class->nsignals += nsignals;
+}
+
+/*****************************************
+ * gtk_object_class_add_user_signal:
+ *
+ *   arguments:
+ *
+ *   results:
+ *****************************************/
+
+gint
+gtk_object_class_add_user_signal (GtkObjectClass     *class,
+				  const gchar        *name,
+				  GtkSignalMarshaller marshaller,
+				  GtkType             return_val,
+				  gint                nparams,
+				  ...)
+{
+  GtkType *params;
+  guint i;
+  va_list args;
+  gint signal_id;
+
+  g_return_val_if_fail (class != NULL, 0);
+
+  if (nparams > 0)
+    {
+      params = g_new (GtkType, nparams);
+
+      va_start (args, nparams);
+
+      for (i = 0; i < nparams; i++)
+	params[i] = va_arg (args, GtkType);
+
+      va_end (args);
+    }
+  else
+    params = NULL;
+
+  signal_id = gtk_signal_newv (name,
+			       0,
+			       class->type,
+			       0,
+			       marshaller,
+			       return_val,
+			       nparams,
+			       params);
+
+  g_free (params);
+
+  if (signal_id)
+    gtk_object_class_add_signals (class, &signal_id, 1);
+
+  return signal_id;
 }
 
 /*****************************************

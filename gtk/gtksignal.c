@@ -161,15 +161,60 @@ gtk_signal_new (const gchar         *name,
 		...)
 {
   GtkType *params;
+  guint i;
+  va_list args;
+  gint return_id;
+
+  g_return_val_if_fail (nparams < 16, 0);
+
+  if (nparams > 0)
+    {
+      params = g_new (GtkType, nparams);
+
+      va_start (args, nparams);
+
+      for (i = 0; i < nparams; i++)
+	params[i] = va_arg (args, GtkType);
+
+      va_end (args);
+    }
+  else
+    params = NULL;
+
+  return_id = gtk_signal_newv (name,
+			       run_type,
+			       object_type,
+			       function_offset,
+			       marshaller,
+			       return_val,
+			       nparams,
+			       params);
+
+  g_free (params);
+
+  return return_id;
+}
+
+gint
+gtk_signal_newv (const gchar         *name,
+		 GtkSignalRunType     run_type,
+		 gint                 object_type,
+		 gint                 function_offset,
+		 GtkSignalMarshaller  marshaller,
+		 GtkType              return_val,
+		 gint                 nparams,
+		 GtkType	     *params)
+{
   GtkSignal *signal;
   GtkSignalInfo info;
   gint *type;
-  gint i;
-  va_list args;
+  guint i;
 
   g_return_val_if_fail (name != NULL, 0);
   g_return_val_if_fail (marshaller != NULL, 0);
-  g_return_val_if_fail (nparams < 10, 0);
+  g_return_val_if_fail (nparams < 16, 0);
+  if (nparams)
+    g_return_val_if_fail (params != NULL, 0);
 
   if (initialize)
     gtk_signal_init ();
@@ -186,33 +231,54 @@ gtk_signal_new (const gchar         *name,
     }
 
   signal = g_new (GtkSignal, 1);
-  signal->info.name = g_strdup(name);
+  signal->info.name = g_strdup (name);
   signal->info.object_type = object_type;
   signal->info.signal_type = next_signal++;
   signal->function_offset = function_offset;
   signal->run_type = run_type;
   signal->marshaller = marshaller;
   signal->return_val = return_val;
-  signal->params = NULL;
   signal->nparams = nparams;
-
-  g_hash_table_insert (signal_hash_table, &signal->info.signal_type, signal);
-  g_hash_table_insert (signal_info_hash_table, &signal->info, &signal->info.signal_type);
 
   if (nparams > 0)
     {
       signal->params = g_new (GtkType, nparams);
-      params = signal->params;
-
-      va_start (args, nparams);
 
       for (i = 0; i < nparams; i++)
-	params[i] = va_arg (args, GtkType);
-
-      va_end (args);
+	signal->params[i] = params[i];
     }
+  else
+    signal->params = NULL;
+
+  g_hash_table_insert (signal_hash_table, &signal->info.signal_type, signal);
+  g_hash_table_insert (signal_info_hash_table, &signal->info, &signal->info.signal_type);
 
   return signal->info.signal_type;
+}
+
+GtkSignalQuery*
+gtk_signal_query (gint                 signal_num)
+{
+  GtkSignalQuery *query;
+  GtkSignal *signal;
+
+  signal = g_hash_table_lookup (signal_hash_table, &signal_num);
+  if (signal)
+    {
+      query = g_new (GtkSignalQuery, 1);
+
+      query->object_type = signal->info.object_type;
+      query->signal_name = signal->info.name;
+      query->is_user_signal = signal->function_offset == 0;
+      query->run_type = signal->run_type;
+      query->return_val = signal->return_val;
+      query->nparams = signal->nparams;
+      query->params = signal->params;
+    }
+  else
+    query = NULL;
+
+  return query;
 }
 
 gint
@@ -871,7 +937,7 @@ gtk_signal_real_emit (GtkObject *object,
       gtk_emission_add (&current_emissions, object, signal_type);
 
     restart:
-      if (GTK_RUN_TYPE (signal->run_type) != GTK_RUN_LAST)
+      if (GTK_RUN_TYPE (signal->run_type) != GTK_RUN_LAST && signal->function_offset != 0)
 	{
 	  signal_func_offset = (guchar**) ((guchar*) object->klass + signal->function_offset);
 	  if (*signal_func_offset)
@@ -898,7 +964,7 @@ gtk_signal_real_emit (GtkObject *object,
 	  goto restart;
 	}
 
-      if (GTK_RUN_TYPE (signal->run_type) != GTK_RUN_FIRST)
+      if (GTK_RUN_TYPE (signal->run_type) != GTK_RUN_FIRST && signal->function_offset != 0)
 	{
 	  signal_func_offset = (guchar**) ((guchar*) object->klass + signal->function_offset);
 	  if (*signal_func_offset)
@@ -965,31 +1031,44 @@ gtk_signal_connect_by_type (GtkObject       *object,
 			    gint             after,
 			    gint             no_marshal)
 {
+  GtkObjectClass *class;
   GtkHandler *handler;
-  gint *object_signals;
-  gint nsignals;
   gint found_it;
-  gint i;
 
   g_return_val_if_fail (object != NULL, 0);
   g_return_val_if_fail (object->klass != NULL, 0);
-  g_return_val_if_fail (object->klass->signals != NULL, 0);
 
   /* Search through the signals for this object and make
-   *  sure the one we are adding is valid. If it isn't then
-   *  issue a warning and return.
+   *  sure the one we are adding is valid. We need to perform
+   *  the lookup on the objects parents as well. If it isn't
+   *  valid then issue a warning and return.
    */
-  object_signals = object->klass->signals;
-  nsignals = object->klass->nsignals;
   found_it = FALSE;
-
-  for (i = 0; i < nsignals; i++)
-    if (object_signals[i] == signal_type)
-      {
-	found_it = TRUE;
-	break;
-      }
-
+  class = object->klass;
+  while (class)
+    {
+      GtkType parent;
+      gint *object_signals;
+      gint  nsignals;
+      guint i;
+      
+      object_signals = class->signals;
+      nsignals = class->nsignals;
+      
+      for (i = 0; i < nsignals; i++)
+	if (object_signals[i] == signal_type)
+	  {
+	    found_it = TRUE;
+	    break;
+	  }
+      
+      parent = gtk_type_parent (class->type);
+      if (parent)
+	class = gtk_type_class (parent);
+      else
+	class = NULL;
+    }
+  
   if (!found_it)
     {
       g_warning ("could not find signal (%d) in object's list of signals", signal_type);

@@ -161,6 +161,18 @@ struct _GtkObjectClass
 };
 
 
+/* For the purpose of user signals we need the signal function
+ * and signal marshaller signatures already in this place.
+ */
+#define GTK_SIGNAL_FUNC(f)  ((GtkSignalFunc) f)
+
+typedef void (*GtkSignalFunc)       (void);
+typedef void (*GtkSignalMarshaller) (GtkObject      *object,
+				     GtkSignalFunc   func,
+				     gpointer        func_data,
+				     GtkArg         *args);
+
+
 /* Get the type identifier for GtkObject's.
  */
 guint	gtk_object_get_type		(void);
@@ -170,6 +182,15 @@ guint	gtk_object_get_type		(void);
 void	gtk_object_class_add_signals	(GtkObjectClass	*klass,
 					 gint           *signals,
 					 gint            nsignals);
+
+/* Append a user defined signal without default handler to a class.
+ */
+gint    gtk_object_class_add_user_signal (GtkObjectClass     *klass,
+					  const gchar        *name,
+					  GtkSignalMarshaller marshaller,
+					  GtkType             return_val,
+					  gint                nparams,
+					  ...);
 
 GtkObject*	gtk_object_new		(guint		type,
 					 ...);

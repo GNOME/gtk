@@ -356,6 +356,8 @@ gtk_type_class_init (GtkTypeNode *node)
 
       object_class = node->klass;
       object_class->type = node->type;
+      object_class->signals = NULL;
+      object_class->nsignals = 0;
       object_class->n_args = 0;
 
       if (node->type_info.class_init_func)

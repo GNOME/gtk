@@ -35,14 +35,7 @@ extern "C" {
 #define GTK_SIGNAL_OFFSET(t, f) ((int) ((char*) &((t*) 0)->f))
 #endif /* offsetof */
 
-#define GTK_SIGNAL_FUNC(f)  ((GtkSignalFunc) f)
-
-
-typedef void (*GtkSignalFunc)       (void);
-typedef void (*GtkSignalMarshaller) (GtkObject      *object,
-				     GtkSignalFunc   func,
-				     gpointer        func_data,
-				     GtkArg         *args);
+  
 typedef void (*GtkSignalMarshal)    (GtkObject      *object,
 				     gpointer        data,
 				     gint            nparams,
@@ -51,6 +44,18 @@ typedef void (*GtkSignalMarshal)    (GtkObject      *object,
 				     GtkType         return_type);
 typedef void (*GtkSignalDestroy)    (gpointer        data);
 
+typedef struct _GtkSignalQuery		GtkSignalQuery;
+
+struct	_GtkSignalQuery
+{
+  gint		   object_type;
+  const gchar	  *signal_name;
+  gboolean	   is_user_signal;
+  GtkSignalRunType run_type;
+  GtkType	   return_val;
+  guint		   nparams;
+  const GtkType	  *params;
+};
 
 gint   gtk_signal_new                     (const gchar         *name,
 					   GtkSignalRunType     run_type,
@@ -60,6 +65,14 @@ gint   gtk_signal_new                     (const gchar         *name,
 					   GtkType              return_val,
 					   gint                 nparams,
 					   ...);
+gint   gtk_signal_newv                    (const gchar         *name,
+					   GtkSignalRunType     run_type,
+					   gint                 object_type,
+					   gint                 function_offset,
+					   GtkSignalMarshaller  marshaller,
+					   GtkType              return_val,
+					   gint                 nparams,
+					   GtkType	       *params);
 gint   gtk_signal_lookup                  (const gchar         *name,
 					   gint                 object_type);
 gchar* gtk_signal_name                    (gint                 signal_num);
@@ -114,6 +127,12 @@ void   gtk_signal_default_marshaller      (GtkObject           *object,
 					   GtkArg              *args);
 void   gtk_signal_set_funcs               (GtkSignalMarshal     marshal_func,
 					   GtkSignalDestroy     destroy_func);
+
+/* Report internal information about a signal. The caller has the response
+ *  to invoke a supsequent g_free (returned_data); but must leave the
+ *  contents of GtkSignalQuery untouched.
+ */
+GtkSignalQuery* gtk_signal_query	  (gint			signal_num);
 
 
 #ifdef __cplusplus
