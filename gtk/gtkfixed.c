@@ -515,7 +515,7 @@ gtk_fixed_set_has_window (GtkFixed *fixed,
  * gtk_fixed_get_has_window:
  * @fixed: a #GtkWidget
  * 
- * Gets whether the #GtkFixed has it's own #GdkWindow.
+ * Gets whether the #GtkFixed has its own #GdkWindow.
  * See gdk_fixed_set_has_window().
  * 
  * Return value: %TRUE if @fixed has its own window.

@@ -482,7 +482,7 @@ The base structure for a GTK+ type. Every type inherits this as a base structure
 
 <!-- ##### TYPEDEF GtkEnumValue ##### -->
 <para>
-A structure which contains a single enum value, and its name, and it's
+A structure which contains a single enum value, and its name, and its
 nickname.
 </para>
 

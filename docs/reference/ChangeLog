@@ -1,5 +1,12 @@
 2003-04-07  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/tmpl/gtkenums.sgml, gtk/tmpl/gtkmain.sgml,
+	gtk/tmpl/gtkpaned.sgml, gtk/tmpl/gtkradiobutton.sgml,
+	gtk/tmpl/gtkspinbutton.sgml, gtk/tmpl/gtkstatusbar.sgml,
+	gtk/tmpl/gtktext.sgml, gtk/tmpl/gtktogglebuttons.sgml,
+	gtk/tmpl/gtktreeviewcolumn.sgml, gtk/tmpl/gtktypeutils.sgml: Fix
+	numerous misspellings of possessive "its".  (#110027, Doug Quale)
+
 	* gtk/tmpl/gtktypeutils.sgml: Add some deprecation info.
 
 2003-04-01  Matthias Clasen  <maclas@gmx.de>

@@ -118,7 +118,7 @@ gtk_tree_selection_finalize (GObject *object)
  * _gtk_tree_selection_new:
  *
  * Creates a new #GtkTreeSelection object.  This function should not be invoked,
- * as each #GtkTreeView will create it's own #GtkTreeSelection.
+ * as each #GtkTreeView will create its own #GtkTreeSelection.
  *
  * Return value: A newly created #GtkTreeSelection object.
  **/
@@ -137,7 +137,7 @@ _gtk_tree_selection_new (void)
  * @tree_view: The #GtkTreeView.
  *
  * Creates a new #GtkTreeSelection object.  This function should not be invoked,
- * as each #GtkTreeView will create it's own #GtkTreeSelection.
+ * as each #GtkTreeView will create its own #GtkTreeSelection.
  *
  * Return value: A newly created #GtkTreeSelection object.
  **/

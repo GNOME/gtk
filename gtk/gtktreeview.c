@@ -8908,7 +8908,7 @@ gtk_tree_view_scroll_to_point (GtkTreeView *tree_view,
  *
  * If @use_align is %FALSE, then the alignment arguments are ignored, and the
  * tree does the minimum amount of work to scroll the cell onto the screen.
- * This means that the cell will be scrolled to the edge closest to it's current
+ * This means that the cell will be scrolled to the edge closest to its current
  * position.  If the cell is currently visible on the screen, nothing is done.
  *
  * This function only works if the model is set, and @path is a valid row on the

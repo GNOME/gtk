@@ -7,7 +7,7 @@ create buttons which retain their state.
 <!-- ##### SECTION Long_Description ##### -->
 <para>
 A #GtkToggleButton is a #GtkButton which will remain 'pressed-in' when
-clicked. Clicking again will cause the toggle button to return to it's
+clicked. Clicking again will cause the toggle button to return to its
 normal state.
 </para>
 <para>
@@ -141,7 +141,7 @@ application ever to call this function.
 
 <!-- ##### FUNCTION gtk_toggle_button_get_active ##### -->
 <para>
-Queries a #GtkToggleButton and returns it's current state. Returns %TRUE if
+Queries a #GtkToggleButton and returns its current state. Returns %TRUE if
 the toggle button is pressed in and %FALSE if it is raised.
 </para>
 

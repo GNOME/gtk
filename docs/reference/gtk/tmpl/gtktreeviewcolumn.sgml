@@ -18,7 +18,7 @@ widget.  It determines the geometry, type
 
 <!-- ##### ENUM GtkTreeViewColumnSizing ##### -->
 <para>
-The sizing method the column uses to determine it's width.  Please note
+The sizing method the column uses to determine its width.  Please note
 that @GTK_TREE_VIEW_COLUMN_AUTOSIZE are inefficient for large views, and
 can make columns appear choppy.
 </para>

@@ -52,7 +52,7 @@ Internal #GtkText data type.  Should not be accessed directly.
 Creates a new #GtkText widget, initialized with the given pointers to
 #GtkAdjustments.  These pointers can be used to track the viewing position
 of the #GtkText widget.  Passing %NULL to either or both of them will make
-the #GtkText create it's own.  You can set these later with the function
+the #GtkText create its own.  You can set these later with the function
 gtk_text_set_adjustment().
 </para>
 
@@ -213,7 +213,7 @@ Returns the character at the given index within the #GtkText widget.
 
 <!-- ##### ARG GtkText:hadjustment ##### -->
 <para>
-Used by the #GtkText widget to keep track of the size of it's horizontal
+Used by the #GtkText widget to keep track of the size of its horizontal
 text.
 </para>
 
@@ -224,7 +224,7 @@ Boolean value indicating whether line wrap is enabled or not.
 
 <!-- ##### ARG GtkText:vadjustment ##### -->
 <para>
-Used by the #GtkText widget to keep track of the size of it's vertical
+Used by the #GtkText widget to keep track of the size of its vertical
 text.
 </para>
 

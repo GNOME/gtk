@@ -140,7 +140,7 @@ GTK_SPIN_PAGE_BACKWARD</entry>
 <row>
 <entry>GTK_SPIN_HOME, 
 GTK_SPIN_END</entry>
-<entry>These set the spin button's value to the minimum or maxmimum possible values, (set by it's #GtkAdjustment), respectively.</entry>
+<entry>These set the spin button's value to the minimum or maxmimum possible values, (set by its #GtkAdjustment), respectively.</entry>
 </row>
 <row>
 <entry>GTK_SPIN_USER_DEFINED</entry>

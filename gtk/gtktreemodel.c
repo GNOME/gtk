@@ -579,7 +579,7 @@ gtk_tree_path_prev (GtkTreePath *path)
  * gtk_tree_path_up:
  * @path: A #GtkTreePath.
  *
- * Moves the @path to point to it's parent node, if it has a parent.
+ * Moves the @path to point to its parent node, if it has a parent.
  *
  * Return value: %TRUE if @path has a parent, and the move was made.
  **/
@@ -1048,7 +1048,7 @@ gtk_tree_model_iter_parent (GtkTreeModel *tree_model,
  * entire file-hierarchy in memory, just the sections that are currently being
  * displayed by every current view.
  *
- * A model should be expected to be able to get an iter independent of it's
+ * A model should be expected to be able to get an iter independent of its
  * reffed state.
  **/
 void
@@ -1644,7 +1644,7 @@ disconnect_ref_callbacks (GtkTreeModel *model)
  * 
  * Creates a row reference based on @path.  This reference will keep pointing to
  * the node pointed to by @path, so long as it exists.  It listens to all
- * signals emitted by @model, and updates it's path appropriately.  If @path
+ * signals emitted by @model, and updates its path appropriately.  If @path
  * isn't a valid path in @model, then %NULL is returned.
  * 
  * Return value: A newly allocated #GtkTreeRowReference, or %NULL

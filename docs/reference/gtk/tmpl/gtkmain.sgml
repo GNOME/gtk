@@ -428,7 +428,7 @@ used by GTK+ wrappers for languages other than C.
 
 <!-- ##### FUNCTION gtk_quit_remove ##### -->
 <para>
-Removes a quit handler by it's identifier.
+Removes a quit handler by its identifier.
 </para>
 
 @quit_handler_id: Identifier for the handler returned when installing it.
@@ -436,7 +436,7 @@ Removes a quit handler by it's identifier.
 
 <!-- ##### FUNCTION gtk_quit_remove_by_data ##### -->
 <para>
-Removes a quit handler identified by it's @data field.
+Removes a quit handler identified by its @data field.
 </para>
 
 @data: The pointer passed as @data to gtk_quit_add() or gtk_quit_add_full().
