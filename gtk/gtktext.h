@@ -27,14 +27,17 @@
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
 
 
-#define GTK_TEXT(obj)          GTK_CHECK_CAST (obj, gtk_text_get_type (), GtkText)
-#define GTK_TEXT_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_text_get_type (), GtkTextClass)
-#define GTK_IS_TEXT(obj)       GTK_CHECK_TYPE (obj, gtk_text_get_type ())
+#define GTK_TYPE_TEXT                  (gtk_text_get_type ())
+#define GTK_TEXT(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_TEXT, GtkText))
+#define GTK_TEXT_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_TEXT, GtkTextClass))
+#define GTK_IS_TEXT(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_TEXT))
+#define GTK_IS_TEXT_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TEXT))
 
-
+  
 typedef struct _GtkPropertyMark   GtkPropertyMark;
 typedef struct _GtkText           GtkText;
 typedef struct _GtkTextClass      GtkTextClass;
@@ -158,11 +161,11 @@ struct _GtkTextClass
 };
 
 
-guint      gtk_text_get_type        (void);
+GtkType    gtk_text_get_type        (void);
 GtkWidget* gtk_text_new             (GtkAdjustment *hadj,
 				     GtkAdjustment *vadj);
 void       gtk_text_set_editable    (GtkText       *text,
-				     gint           editable);
+				     gboolean       editable);
 void       gtk_text_set_word_wrap   (GtkText       *text,
 				     gint           word_wrap);
 void       gtk_text_set_adjustments (GtkText       *text,

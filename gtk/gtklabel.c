@@ -111,7 +111,7 @@ gtk_label_set_arg (GtkObject	  *object,
   switch (arg_id)
     {
     case ARG_LABEL:
-      gtk_label_set (label, GTK_VALUE_STRING (*arg));
+      gtk_label_set (label, GTK_VALUE_STRING (*arg) ? GTK_VALUE_STRING (*arg) : "");
       break;
     case ARG_JUSTIFY:
       gtk_label_set_justify (label, GTK_VALUE_ENUM (*arg));

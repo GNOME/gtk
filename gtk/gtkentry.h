@@ -26,12 +26,15 @@
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
 
 
-#define GTK_ENTRY(obj)          GTK_CHECK_CAST (obj, gtk_entry_get_type (), GtkEntry)
-#define GTK_ENTRY_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_entry_get_type (), GtkEntryClass)
-#define GTK_IS_ENTRY(obj)       GTK_CHECK_TYPE (obj, gtk_entry_get_type ())
+#define GTK_TYPE_ENTRY                  (gtk_entry_get_type ())
+#define GTK_ENTRY(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_ENTRY, GtkEntry))
+#define GTK_ENTRY_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_ENTRY, GtkEntryClass))
+#define GTK_IS_ENTRY(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_ENTRY))
+#define GTK_IS_ENTRY_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ENTRY))
 
 
 typedef struct _GtkEntry       GtkEntry;
@@ -71,29 +74,30 @@ struct _GtkEntryClass
   GtkEditableClass parent_class;
 };
 
-guint      gtk_entry_get_type       (void);
-GtkWidget* gtk_entry_new            (void);
-GtkWidget* gtk_entry_new_with_max_length (guint16   max);
-void       gtk_entry_set_text       (GtkEntry      *entry,
-				     const gchar   *text);
-void       gtk_entry_append_text    (GtkEntry      *entry,
-				     const gchar   *text);
-void       gtk_entry_prepend_text   (GtkEntry      *entry,
-				     const gchar   *text);
-void       gtk_entry_set_position   (GtkEntry      *entry,
-				     gint           position);
-gchar*     gtk_entry_get_text       (GtkEntry      *entry);
-void       gtk_entry_select_region  (GtkEntry      *entry,
-				     gint           start,
-				     gint           end);
-void       gtk_entry_set_visibility (GtkEntry      *entry,
-				     gboolean       visible);
-void       gtk_entry_set_editable   (GtkEntry      *entry,
-				     gboolean       editable);
-void       gtk_entry_adjust_scroll  (GtkEntry      *entry);
+GtkType    gtk_entry_get_type       		(void);
+GtkWidget* gtk_entry_new            		(void);
+GtkWidget* gtk_entry_new_with_max_length	(guint16   max);
+void       gtk_entry_set_text       		(GtkEntry      *entry,
+						 const gchar   *text);
+void       gtk_entry_append_text    		(GtkEntry      *entry,
+						 const gchar   *text);
+void       gtk_entry_prepend_text   		(GtkEntry      *entry,
+						 const gchar   *text);
+void       gtk_entry_set_position   		(GtkEntry      *entry,
+						 gint           position);
+gchar*     gtk_entry_get_text       		(GtkEntry      *entry);
+void       gtk_entry_select_region  		(GtkEntry      *entry,
+						 gint           start,
+						 gint           end);
+void       gtk_entry_set_visibility 		(GtkEntry      *entry,
+						 gboolean       visible);
+void       gtk_entry_set_editable   		(GtkEntry      *entry,
+						 gboolean       editable);
+void       gtk_entry_adjust_scroll  		(GtkEntry      *entry);
 /* text is truncated if needed */
-void       gtk_entry_set_max_length (GtkEntry      *entry,
-				     guint16        max);
+void       gtk_entry_set_max_length 		(GtkEntry      *entry,
+						 guint16        max);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

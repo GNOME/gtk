@@ -33,8 +33,21 @@
 #define DRAW_TIMEOUT     20
 #define INNER_BORDER     2
 
+enum {
+  ARG_0,
+  ARG_MAX_LENGTH,
+  ARG_VISIBILITY,
+};
+
+
 static void gtk_entry_class_init          (GtkEntryClass     *klass);
 static void gtk_entry_init                (GtkEntry          *entry);
+static void gtk_entry_set_arg      	  (GtkObject         *object,
+					   GtkArg            *arg,
+					   guint              arg_id);
+static void gtk_entry_get_arg		  (GtkObject         *object,
+					   GtkArg            *arg,
+					   guint              arg_id);
 static void gtk_entry_finalize            (GtkObject         *object);
 static void gtk_entry_realize             (GtkWidget         *widget);
 static void gtk_entry_unrealize           (GtkWidget         *widget);
@@ -200,10 +213,10 @@ static GtkTextFunction alt_keys[26] =
 };
 
 
-guint
+GtkType
 gtk_entry_get_type (void)
 {
-  static guint entry_type = 0;
+  static GtkType entry_type = 0;
 
   if (!entry_type)
     {
@@ -219,7 +232,7 @@ gtk_entry_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      entry_type = gtk_type_unique (gtk_editable_get_type (), &entry_info);
+      entry_type = gtk_type_unique (GTK_TYPE_EDITABLE, &entry_info);
     }
 
   return entry_type;
@@ -235,9 +248,13 @@ gtk_entry_class_init (GtkEntryClass *class)
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
   editable_class = (GtkEditableClass*) class;
+  parent_class = gtk_type_class (GTK_TYPE_EDITABLE);
 
-  parent_class = gtk_type_class (gtk_editable_get_type ());
+  gtk_object_add_arg_type ("GtkEntry::max_length", GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_MAX_LENGTH);
+  gtk_object_add_arg_type ("GtkEntry::visibility", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_VISIBILITY);
 
+  object_class->set_arg = gtk_entry_set_arg;
+  object_class->get_arg = gtk_entry_get_arg;
   object_class->finalize = gtk_entry_finalize;
 
   widget_class->realize = gtk_entry_realize;
@@ -275,6 +292,51 @@ gtk_entry_class_init (GtkEntryClass *class)
 }
 
 static void
+gtk_entry_set_arg (GtkObject      *object,
+		   GtkArg         *arg,
+		   guint           arg_id)
+{
+  GtkEntry *entry;
+
+  entry = GTK_ENTRY (object);
+
+  switch (arg_id)
+    {
+    case ARG_MAX_LENGTH:
+      gtk_entry_set_max_length (entry, GTK_VALUE_UINT (*arg));
+      break;
+    case ARG_VISIBILITY:
+      gtk_entry_set_visibility (entry, GTK_VALUE_BOOL (*arg));
+      break;
+    default:
+      break;
+    }
+}
+
+static void
+gtk_entry_get_arg (GtkObject      *object,
+		   GtkArg         *arg,
+		   guint           arg_id)
+{
+  GtkEntry *entry;
+
+  entry = GTK_ENTRY (object);
+
+  switch (arg_id)
+    {
+    case ARG_MAX_LENGTH:
+      GTK_VALUE_UINT (*arg) = entry->text_max_length;
+      break;
+    case ARG_VISIBILITY:
+      GTK_VALUE_BOOL (*arg) = entry->visible;
+      break;
+    default:
+      arg->type = GTK_TYPE_INVALID;
+      break;
+    }
+}
+
+static void
 gtk_entry_init (GtkEntry *entry)
 {
   GTK_WIDGET_SET_FLAGS (entry, GTK_CAN_FOCUS);
@@ -300,15 +362,17 @@ gtk_entry_init (GtkEntry *entry)
 GtkWidget*
 gtk_entry_new (void)
 {
-  return GTK_WIDGET (gtk_type_new (gtk_entry_get_type ()));
+  return GTK_WIDGET (gtk_type_new (GTK_TYPE_ENTRY));
 }
 
 GtkWidget*
 gtk_entry_new_with_max_length (guint16 max)
 {
   GtkEntry *entry;
-  entry = gtk_type_new (gtk_entry_get_type ());
+
+  entry = gtk_type_new (GTK_TYPE_ENTRY);
   entry->text_max_length = max;
+
   return GTK_WIDGET (entry);
 }
 
@@ -380,6 +444,7 @@ gtk_entry_set_position (GtkEntry *entry,
     GTK_EDITABLE(entry)->current_pos = entry->text_length;
   else
     GTK_EDITABLE(entry)->current_pos = position;
+  gtk_entry_adjust_scroll (entry);
 }
 
 static void
@@ -403,13 +468,12 @@ gtk_entry_set_visibility (GtkEntry *entry,
 
 void
 gtk_entry_set_editable(GtkEntry *entry,
-		       gboolean editable)
+		       gboolean  editable)
 {
   g_return_if_fail (entry != NULL);
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
-  GTK_EDITABLE (entry)->editable = editable;
-  gtk_entry_queue_draw (entry);
+  gtk_editable_set_editable (GTK_EDITABLE (entry), editable);
 }
 
 gchar*
@@ -1471,9 +1535,10 @@ gtk_entry_adjust_scroll (GtkEntry *entry)
 
   if (xoffset < 0)
     entry->scroll_offset += xoffset;
-
   else if (xoffset > text_area_width)
     entry->scroll_offset += xoffset - text_area_width + 1;
+
+  gtk_widget_queue_draw (GTK_WIDGET (entry));
 }
 
 static void

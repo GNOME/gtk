@@ -26,12 +26,15 @@
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
 
 
-#define GTK_EDITABLE(obj)          GTK_CHECK_CAST (obj, gtk_editable_get_type (), GtkEditable)
-#define GTK_EDITABLE_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_editable_get_type (), GtkEditableClass)
-#define GTK_IS_EDITABLE(obj)       GTK_CHECK_TYPE (obj, gtk_editable_get_type ())
+#define GTK_TYPE_EDITABLE            (gtk_editable_get_type ())
+#define GTK_EDITABLE(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_EDITABLE, GtkEditable))
+#define GTK_EDITABLE_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_EDITABLE, GtkEditableClass))
+#define GTK_IS_EDITABLE(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_EDITABLE))
+#define GTK_IS_EDITABLE_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_EDITABLE))
 
 
 typedef struct _GtkEditable       GtkEditable;
@@ -70,6 +73,8 @@ struct _GtkEditableClass
 
   /* Bindings actions */
   void (* activate)        (GtkEditable *editable);
+  void (* set_editable)    (GtkEditable *editable,
+			    gboolean	 is_editable);
   void (* move_cursor)     (GtkEditable *editable,
 			    gint         x,
 			    gint         y);
@@ -110,7 +115,7 @@ struct _GtkEditableClass
 			 gint            position);
 };
 
-guint      gtk_editable_get_type       (void);
+GtkType    gtk_editable_get_type       (void);
 void       gtk_editable_select_region  (GtkEditable      *editable,
 					gint              start,
 					gint              end);
@@ -121,7 +126,7 @@ void       gtk_editable_insert_text   (GtkEditable       *editable,
 void       gtk_editable_delete_text    (GtkEditable      *editable,
 					gint              start_pos,
 					gint              end_pos);
-gchar *    gtk_editable_get_chars      (GtkEditable      *editable,
+gchar*     gtk_editable_get_chars      (GtkEditable      *editable,
 					gint              start_pos,
 					gint              end_pos);
 void       gtk_editable_cut_clipboard  (GtkEditable      *editable);
@@ -136,6 +141,8 @@ void       gtk_editable_changed         (GtkEditable    *editable);
 void       gtk_editable_set_position    (GtkEditable    *editable,
 					 gint            position);
 gint       gtk_editable_get_position    (GtkEditable    *editable);
+void       gtk_editable_set_editable    (GtkEditable    *editable,
+					 gboolean        is_editable);
 
 
 #ifdef __cplusplus

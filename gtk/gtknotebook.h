@@ -55,7 +55,7 @@ struct _GtkNotebook
   
   guint32 timer;
   
-  gint16 tab_border;
+  guint16 tab_border;
   
   guint show_tabs : 1;
   guint show_border : 1;
@@ -72,9 +72,9 @@ struct _GtkNotebookClass
 {
   GtkContainerClass parent_class;
   
-  void (* switch_page)       (GtkNotebook *notebook,
+  void (* switch_page)       (GtkNotebook     *notebook,
                               GtkNotebookPage *page,
-			      gint page_num);
+			      guint            page_num);
 };
 
 struct _GtkNotebookPage
@@ -130,7 +130,7 @@ void       gtk_notebook_set_show_border   (GtkNotebook      *notebook,
 void       gtk_notebook_set_scrollable    (GtkNotebook      *notebook,
 					   gint              scrollable);
 void       gtk_notebook_set_tab_border    (GtkNotebook      *notebook,
-					   gint              border_width);
+					   guint             border_width);
 void       gtk_notebook_popup_enable      (GtkNotebook      *notebook);
 void       gtk_notebook_popup_disable     (GtkNotebook      *notebook);
 

@@ -1,3 +1,32 @@
+Thu Jul 16 18:24:41 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtknotebook.h: 
+	* gtk/gtknotebook.c: signdness corrections all ove the place.
+	implementation of object arguments: GtkNotebook::enable_popup,
+ 	GtkNotebook::tab_pos, GtkNotebook::tab_border, GtkNotebook::show_tabs,
+	GtkNotebook::show_border, GtkNotebook::scrollable and GtkNotebook::page.
+	begun implementation of child args, we have GtkNotebook::tab_label, but
+	GtkNotebook::menu_label and GtkNotebook::position still lack the
+	implementation.
+	(gtk_notebook_remove_page):
+	(gtk_notebook_current_page): allow negative indices (-1) as alias for
+	the last page.
+
+	* gtk/gtkentry.h:
+	* gtk/gtkentry.c: GtkType and macro fixups. implementation of object
+	arguments GtkEntry::max_length and GtkEntry::visibility.
+	(gtk_entry_adjust_scroll): queue a redraw.
+
+	* gtk/gtkeditable.h:
+	* gtk/gtkeditable.c: GtkType und macro fixups. implementation of
+	object arguments GtkEditable::text_position and GtkEditable::editable.
+ 	new (action) signal GtkEditable::set_editable.
+	provide a default handler for GtkEditable::changed that queues a redraw.
+
+	* gtk/gtktext.h: 
+	* gtk/gtktext.c: GtkType und macro fixups. override GtkEditable::
+	set_editable.
+
 Thu Jul 16 14:42:11 1998  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkctree.c (gtk_ctree_button_release): fix for sigsegv in

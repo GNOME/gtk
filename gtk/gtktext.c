@@ -174,23 +174,25 @@ static void  gtk_text_adjustment     (GtkAdjustment  *adjustment,
 static void  gtk_text_disconnect     (GtkAdjustment  *adjustment,
 				      GtkText        *text);
 
-static void gtk_text_insert_text    (GtkEditable       *editable,
-				     const gchar       *new_text,
-				     gint               new_text_length,
-				     gint               *position);
-static void gtk_text_delete_text    (GtkEditable        *editable,
-				     gint               start_pos,
-				     gint               end_pos);
-static void gtk_text_update_text    (GtkEditable       *editable,
-				     gint               start_pos,
-				     gint               end_pos);
-static gchar *gtk_text_get_chars    (GtkEditable       *editable,
-				     gint               start,
-				     gint               end);
-static void gtk_text_set_selection  (GtkEditable       *editable,
-				     gint               start,
-				     gint               end);
-
+static void gtk_text_insert_text       (GtkEditable       *editable,
+					const gchar       *new_text,
+					gint               new_text_length,
+					gint               *position);
+static void gtk_text_delete_text       (GtkEditable        *editable,
+					gint               start_pos,
+					gint               end_pos);
+static void gtk_text_update_text       (GtkEditable       *editable,
+					gint               start_pos,
+					gint               end_pos);
+static gchar *gtk_text_get_chars       (GtkEditable       *editable,
+					gint               start,
+					gint               end);
+static void gtk_text_set_selection     (GtkEditable       *editable,
+					gint               start,
+					gint               end);
+static void gtk_text_real_set_editable (GtkEditable       *editable,
+					gboolean           is_editable);
+     
 /* Event handlers */
 static void  gtk_text_draw              (GtkWidget         *widget,
 					 GdkRectangle      *area);
@@ -445,10 +447,10 @@ static GtkTextFunction alt_keys[26] =
 /*			        Widget Crap                           */
 /**********************************************************************/
 
-guint
+GtkType
 gtk_text_get_type (void)
 {
-  static guint text_type = 0;
+  static GtkType text_type = 0;
 
   if (!text_type)
     {
@@ -464,7 +466,7 @@ gtk_text_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      text_type = gtk_type_unique (gtk_editable_get_type (), &text_info);
+      text_type = gtk_type_unique (GTK_TYPE_EDITABLE, &text_info);
     }
 
   return text_type;
@@ -481,7 +483,7 @@ gtk_text_class_init (GtkTextClass *class)
   widget_class = (GtkWidgetClass*) class;
   editable_class = (GtkEditableClass*) class;
 
-  parent_class = gtk_type_class (gtk_editable_get_type ());
+  parent_class = gtk_type_class (GTK_TYPE_EDITABLE);
 
   object_class->destroy = gtk_text_destroy;
   object_class->finalize = gtk_text_finalize;
@@ -501,6 +503,7 @@ gtk_text_class_init (GtkTextClass *class)
   widget_class->focus_in_event = gtk_text_focus_in;
   widget_class->focus_out_event = gtk_text_focus_out;
 
+  editable_class->set_editable = gtk_text_real_set_editable;
   editable_class->insert_text = gtk_text_insert_text;
   editable_class->delete_text = gtk_text_delete_text;
 
@@ -555,7 +558,7 @@ gtk_text_new (GtkAdjustment *hadj,
 {
   GtkText *text;
 
-  text = gtk_type_new (gtk_text_get_type ());
+  text = gtk_type_new (GTK_TYPE_TEXT);
 
   gtk_text_set_adjustments (text, hadj, vadj);
 
@@ -580,17 +583,28 @@ gtk_text_set_word_wrap (GtkText *text,
 
 void
 gtk_text_set_editable (GtkText *text,
-		       gint     editable)
+		       gboolean is_editable)
 {
-  GtkWidget *widget;
-
   g_return_if_fail (text != NULL);
   g_return_if_fail (GTK_IS_TEXT (text));
 
-  widget = GTK_WIDGET (text);
-  GTK_EDITABLE(text)->editable = (editable != FALSE);
+  gtk_editable_set_editable (GTK_EDITABLE (text), is_editable);
+}
+
+static void
+gtk_text_real_set_editable (GtkEditable *editable,
+			    gboolean     is_editable)
+{
+  GtkText *text;
+
+  g_return_if_fail (editable != NULL);
+  g_return_if_fail (GTK_IS_TEXT (editable));
+
+  text = GTK_TEXT (editable);
+
+  editable->editable = (is_editable != FALSE);
   
-  if (editable)
+  if (is_editable)
     draw_cursor (text, TRUE);
   else
     undraw_cursor (text, TRUE);

@@ -44,6 +44,24 @@ enum {
   STEP_NEXT
 };
 
+enum {
+  ARG_0,
+  ARG_TAB_POS,
+  ARG_SHOW_TABS,
+  ARG_SHOW_BORDER,
+  ARG_SCROLLABLE,
+  ARG_TAB_BORDER,
+  ARG_PAGE,
+  ARG_ENABLE_POPUP
+};
+
+enum {
+  CHILD_ARG_0,
+  CHILD_ARG_TAB_LABEL,
+  CHILD_ARG_MENU_LABEL,
+  CHILD_ARG_POSITION
+};
+
 typedef void (*GtkNotebookSignal) (GtkObject       *object,
 				   GtkNotebookPage *arg1,
 				   gint             arg2,
@@ -51,6 +69,20 @@ typedef void (*GtkNotebookSignal) (GtkObject       *object,
 
 static void gtk_notebook_class_init          (GtkNotebookClass *klass);
 static void gtk_notebook_init                (GtkNotebook      *notebook);
+static void gtk_notebook_set_arg	     (GtkObject        *object,
+					      GtkArg           *arg,
+					      guint             arg_id);
+static void gtk_notebook_get_arg	     (GtkObject        *object,
+					      GtkArg           *arg,
+					      guint             arg_id);
+static void gtk_notebook_set_child_arg	     (GtkContainer     *container,
+					      GtkWidget        *child,
+					      GtkArg           *arg,
+					      guint             arg_id);
+static void gtk_notebook_get_child_arg	     (GtkContainer     *container,
+					      GtkWidget        *child,
+					      GtkArg           *arg,
+					      guint             arg_id);
 static void gtk_notebook_destroy             (GtkObject        *object);
 static void gtk_notebook_map                 (GtkWidget        *widget);
 static void gtk_notebook_unmap               (GtkWidget        *widget);
@@ -84,13 +116,13 @@ static void gtk_notebook_remove              (GtkContainer     *container,
 					      GtkWidget        *widget);
 static void gtk_notebook_real_remove         (GtkNotebook      *notebook,
 					      GList            *list,
-					      gint              page_num);
+					      guint             page_num);
 static void gtk_notebook_foreach             (GtkContainer     *container,
 					      GtkCallback       callback,
 					      gpointer          callback_data);
 static void gtk_notebook_switch_page         (GtkNotebook      *notebook,
 					      GtkNotebookPage  *page,
-					      gint              page_num);
+					      guint             page_num);
 static void gtk_notebook_draw_tab            (GtkNotebook      *notebook,
 					      GtkNotebookPage  *page,
 					      GdkRectangle     *area);
@@ -124,7 +156,7 @@ static void gtk_notebook_switch_focus_tab    (GtkNotebook      *notebook,
                                               GList            *new_child);
 static void gtk_real_notebook_switch_page    (GtkNotebook      *notebook,
 					      GtkNotebookPage  *page,
-					      gint              page_num);
+					      guint             page_num);
 static void gtk_notebook_marshal_signal      (GtkObject        *object,
 					      GtkSignalFunc     func,
 					      gpointer          func_data,
@@ -133,7 +165,7 @@ static void gtk_notebook_menu_switch_page    (GtkWidget        *widget,
 					      GtkNotebookPage  *page);
 static void gtk_notebook_update_labels       (GtkNotebook      *notebook,
 					      GList            *list,
-					      gint              page_num);
+					      guint             page_num);
 static void gtk_notebook_menu_detacher       (GtkWidget        *widget,
 					      GtkMenu          *menu);
 static void gtk_notebook_menu_label_unparent (GtkWidget        *widget, 
@@ -182,8 +214,21 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
   container_class = (GtkContainerClass*) class;
-
   parent_class = gtk_type_class (gtk_container_get_type ());
+
+  gtk_object_add_arg_type ("GtkNotebook::page", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_PAGE);
+  gtk_object_add_arg_type ("GtkNotebook::tab_pos", GTK_TYPE_POSITION_TYPE, GTK_ARG_READWRITE, ARG_TAB_POS);
+  gtk_object_add_arg_type ("GtkNotebook::tab_border", GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_TAB_BORDER);
+  gtk_object_add_arg_type ("GtkNotebook::show_tabs", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_SHOW_TABS);
+  gtk_object_add_arg_type ("GtkNotebook::show_border", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_SHOW_BORDER);
+  gtk_object_add_arg_type ("GtkNotebook::scrollable", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_SCROLLABLE);
+  gtk_object_add_arg_type ("GtkNotebook::enable_popup", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_ENABLE_POPUP);
+
+  gtk_container_add_child_arg_type ("GtkNotebook::tab_label", GTK_TYPE_STRING, GTK_ARG_READWRITE, CHILD_ARG_TAB_LABEL);
+  /*
+   * gtk_container_add_child_arg_type ("GtkNotebook::menu_label", GTK_TYPE_STRING, GTK_ARG_READWRITE, CHILD_ARG_MENU_LABEL);
+   * gtk_container_add_child_arg_type ("GtkNotebook::position", GTK_TYPE_INT, GTK_ARG_READWRITE, CHILD_ARG_POSITION);
+   */
 
   notebook_signals[SWITCH_PAGE] =
     gtk_signal_new ("switch_page",
@@ -193,10 +238,12 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                     gtk_notebook_marshal_signal,
                     GTK_TYPE_NONE, 2,
 		    GTK_TYPE_POINTER,
-		    GTK_TYPE_INT);
+		    GTK_TYPE_UINT);
 
   gtk_object_class_add_signals (object_class, notebook_signals, LAST_SIGNAL);
 
+  object_class->set_arg = gtk_notebook_set_arg;
+  object_class->get_arg = gtk_notebook_get_arg;
   object_class->destroy = gtk_notebook_destroy;
 
   widget_class->map = gtk_notebook_map;
@@ -221,9 +268,200 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   container_class->foreach = gtk_notebook_foreach;
   container_class->focus = gtk_notebook_focus;
   container_class->set_focus_child = gtk_notebook_set_focus_child;
+  container_class->get_child_arg = gtk_notebook_get_child_arg;
+  container_class->set_child_arg = gtk_notebook_set_child_arg;
   container_class->child_type = gtk_notebook_child_type;
 
   class->switch_page = gtk_real_notebook_switch_page;
+}
+
+static void
+gtk_notebook_set_arg (GtkObject      *object,
+		      GtkArg         *arg,
+		      guint           arg_id)
+{
+  GtkNotebook *notebook;
+
+  notebook = GTK_NOTEBOOK (object);
+
+  switch (arg_id)
+    {
+    case ARG_SHOW_TABS:
+      gtk_notebook_set_show_tabs (notebook, GTK_VALUE_BOOL (*arg));
+      break;
+    case ARG_SHOW_BORDER:
+      gtk_notebook_set_show_border (notebook, GTK_VALUE_BOOL (*arg));
+      break;
+    case ARG_SCROLLABLE:
+      gtk_notebook_set_scrollable (notebook, GTK_VALUE_BOOL (*arg));
+      break;
+    case ARG_ENABLE_POPUP:
+      if (GTK_VALUE_BOOL (*arg))
+	gtk_notebook_popup_enable (notebook);
+      else
+	gtk_notebook_popup_disable (notebook);
+      break;
+    case ARG_PAGE:
+      gtk_notebook_set_page (notebook, GTK_VALUE_INT (*arg));
+      break;
+    case ARG_TAB_POS:
+      gtk_notebook_set_tab_pos (notebook, GTK_VALUE_ENUM (*arg));
+      break;
+    case ARG_TAB_BORDER:
+      gtk_notebook_set_tab_border (notebook, GTK_VALUE_UINT (*arg));
+      break;
+    default:
+      break;
+    }
+}
+
+static void
+gtk_notebook_get_arg (GtkObject      *object,
+		      GtkArg         *arg,
+		      guint           arg_id)
+{
+  GtkNotebook *notebook;
+
+  notebook = GTK_NOTEBOOK (object);
+
+  switch (arg_id)
+    {
+    case ARG_SHOW_TABS:
+      GTK_VALUE_BOOL (*arg) = notebook->show_tabs;
+      break;
+    case ARG_SHOW_BORDER:
+      GTK_VALUE_BOOL (*arg) = notebook->show_border;
+      break;
+    case ARG_SCROLLABLE:
+      GTK_VALUE_BOOL (*arg) = notebook->scrollable;
+      break;
+    case ARG_ENABLE_POPUP:
+      GTK_VALUE_BOOL (*arg) = notebook->menu != NULL;
+      break;
+    case ARG_PAGE:
+      GTK_VALUE_INT (*arg) = gtk_notebook_current_page (notebook);
+      break;
+    case ARG_TAB_POS:
+      GTK_VALUE_ENUM (*arg) = notebook->tab_pos;
+      break;
+    case ARG_TAB_BORDER:
+      GTK_VALUE_UINT (*arg) = notebook->tab_border;
+      break;
+    default:
+      arg->type = GTK_TYPE_INVALID;
+      break;
+    }
+}
+
+static void
+gtk_notebook_set_child_arg (GtkContainer     *container,
+			    GtkWidget        *child,
+			    GtkArg           *arg,
+			    guint             arg_id)
+{
+  GtkNotebook *notebook;
+  GtkNotebookPage *page = NULL;
+  GList *list;
+
+  notebook = GTK_NOTEBOOK (container);
+
+  for (list = notebook->children; list; list = list->next)
+    {
+      page = list->data;
+      if (page->child == child)
+	break;
+    }
+  if (!list)
+    return;
+
+  switch (arg_id)
+    {
+    case CHILD_ARG_TAB_LABEL:
+      /* a NULL pointer indicates a default_tab setting, otherwise
+       * we need to set the associated label
+       */
+      if (GTK_VALUE_STRING (*arg))
+	{
+	  page->default_tab = FALSE;
+	  if (page->tab_label)
+	    gtk_widget_unparent (page->tab_label);
+	  page->tab_label = gtk_label_new (GTK_VALUE_STRING (*arg));
+	  gtk_widget_set_parent (page->tab_label, GTK_WIDGET (notebook));
+	  if (notebook->show_tabs)
+	    gtk_widget_show (page->tab_label);
+	}
+      else
+	{
+	  page->default_tab = TRUE;
+	  if (page->tab_label)
+	    gtk_widget_unparent (page->tab_label);
+	  if (!notebook->show_tabs)
+	    page->tab_label = NULL;
+	  else
+	    {
+	      gchar string[32];
+
+	      sprintf (string, "Page %u", g_list_index (notebook->children, page) + 1);
+	      page->tab_label = gtk_label_new (string);
+	      gtk_widget_set_parent (page->tab_label, GTK_WIDGET (notebook));
+	      gtk_widget_show (page->tab_label);
+	    }
+	}
+      break;
+    case CHILD_ARG_MENU_LABEL:
+      break;
+    case CHILD_ARG_POSITION:
+      break;
+    default:
+      break;
+    }
+}
+
+static void
+gtk_notebook_get_child_arg (GtkContainer     *container,
+			    GtkWidget        *child,
+			    GtkArg           *arg,
+			    guint             arg_id)
+{
+  GtkNotebook *notebook;
+  GtkNotebookPage *page = NULL;
+  GList *list;
+
+  notebook = GTK_NOTEBOOK (container);
+
+  for (list = notebook->children; list; list = list->next)
+    {
+      page = list->data;
+      if (page->child == child)
+	break;
+    }
+  if (!list)
+    {
+      arg->type = GTK_TYPE_INVALID;
+      return;
+    }
+
+  switch (arg_id)
+    {
+    case CHILD_ARG_TAB_LABEL:
+      if (page->default_tab)
+	GTK_VALUE_STRING (*arg) = NULL;
+      else
+	{
+	  if (page->tab_label && GTK_IS_LABEL (page->tab_label))
+	    GTK_VALUE_STRING (*arg) = g_strdup (GTK_LABEL (page->tab_label)->label);
+	  else
+	    GTK_VALUE_STRING (*arg) = NULL;
+	}
+      break;
+    case CHILD_ARG_MENU_LABEL:
+      break;
+    case CHILD_ARG_POSITION:
+      break;
+    default:
+      arg->type = GTK_TYPE_INVALID;
+      break;
+    }
 }
 
 static GtkType
@@ -439,15 +677,26 @@ gtk_notebook_insert_page_menu (GtkNotebook *notebook,
 
 void
 gtk_notebook_remove_page (GtkNotebook *notebook,
-			  gint         page_num)
+			  gint        page_num)
 {
   GList *list;
 
   g_return_if_fail (notebook != NULL);
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
 
-  if ((list = g_list_nth (notebook->children, page_num)))
-    gtk_notebook_real_remove (notebook, list, page_num);
+  if (page_num >= 0)
+    {
+      list = g_list_nth (notebook->children, page_num);
+      if (list)
+	gtk_notebook_real_remove (notebook, list, page_num);
+    }
+  else
+    {
+      list = g_list_last (notebook->children);
+      if (list)
+	gtk_notebook_real_remove (notebook, list,
+				  g_list_index (notebook->children, list->data));
+    }
 }
 
 static void
@@ -469,7 +718,7 @@ gtk_notebook_remove (GtkContainer *container,
   GtkNotebook *notebook;
   GtkNotebookPage *page;
   GList *children;
-  gint page_num;
+  guint page_num;
 
   g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_NOTEBOOK (container));
@@ -495,7 +744,7 @@ gtk_notebook_remove (GtkContainer *container,
 static void
 gtk_notebook_real_remove (GtkNotebook *notebook,
 			  GList        *list,
-			  gint          page_num)
+			  guint         page_num)
 {
   GtkNotebookPage *page;
   GList * next_list;
@@ -596,16 +845,26 @@ gtk_notebook_current_page (GtkNotebook *notebook)
 
 void
 gtk_notebook_set_page (GtkNotebook *notebook,
-		       gint         page_num)
+		       gint        page_num)
 {
   GList *list;
-
+  
   g_return_if_fail (notebook != NULL);
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
 
-  if ((list = g_list_nth (notebook->children, page_num)))
-      gtk_notebook_switch_page (notebook, 
-				((GtkNotebookPage *)(list->data)), page_num);
+  if (page_num >= 0)
+    {
+      list = g_list_nth (notebook->children, page_num);
+      if (list)
+	gtk_notebook_switch_page (notebook, list->data, page_num);
+    }
+  else
+    {
+      list = g_list_last (notebook->children);
+      if (list)
+	gtk_notebook_switch_page (notebook, list->data,
+				  g_list_index (notebook->children, list->data));
+    }
 }
 
 void
@@ -1825,7 +2084,7 @@ gtk_notebook_draw_arrow (GtkNotebook *notebook, guint arrow)
 static void
 gtk_real_notebook_switch_page (GtkNotebook     *notebook,
 			       GtkNotebookPage *page,
-			       gint             page_num)
+			       guint            page_num)
 {
   g_return_if_fail (notebook != NULL);
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
@@ -2633,7 +2892,7 @@ gtk_notebook_menu_switch_page (GtkWidget *widget,
 {
   GtkNotebook *notebook;
   GList *children;
-  gint page_num;
+  guint page_num;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (page != NULL);
@@ -2661,7 +2920,7 @@ gtk_notebook_menu_switch_page (GtkWidget *widget,
 static void
 gtk_notebook_switch_page (GtkNotebook     *notebook,
 			  GtkNotebookPage *page,
-			  gint             page_num)
+			  guint            page_num)
 { 
   g_return_if_fail (notebook != NULL);
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
@@ -2942,12 +3201,12 @@ gtk_notebook_key_press (GtkWidget   *widget,
 
 void
 gtk_notebook_set_tab_border (GtkNotebook *notebook,
-			     gint         tab_border)
+			     guint        tab_border)
 {
   g_return_if_fail (notebook != NULL);
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
 
-  if (notebook->tab_border != tab_border && tab_border > 0)
+  if (notebook->tab_border != tab_border)
     {
       notebook->tab_border = tab_border;
 
@@ -2959,7 +3218,7 @@ gtk_notebook_set_tab_border (GtkNotebook *notebook,
 static void
 gtk_notebook_update_labels (GtkNotebook *notebook,
 			    GList       *list,
-			    gint        page_num)
+			    guint        page_num)
 {
   GtkNotebookPage *page;
   gchar string[32];
@@ -2968,7 +3227,7 @@ gtk_notebook_update_labels (GtkNotebook *notebook,
     {
       page = list->data;
       list = list->next;
-      sprintf (string, "Page %d", page_num);
+      sprintf (string, "Page %u", page_num);
       if (notebook->show_tabs && page->default_tab)
 	gtk_label_set (GTK_LABEL (page->tab_label), string);
       if (notebook->menu && page->default_menu)

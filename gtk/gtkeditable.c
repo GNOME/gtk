@@ -38,6 +38,7 @@ enum {
   DELETE_TEXT,
   /* Binding actions */
   ACTIVATE,
+  SET_EDITABLE,
   MOVE_CURSOR,
   MOVE_WORD,
   MOVE_PAGE,
@@ -52,8 +53,21 @@ enum {
   LAST_SIGNAL
 };
 
+enum {
+  ARG_0,
+  ARG_TEXT_POSITION,
+  ARG_EDITABLE
+};
+  
+
 static void gtk_editable_class_init          (GtkEditableClass *klass);
 static void gtk_editable_init                (GtkEditable      *editable);
+static void gtk_editable_set_arg	     (GtkObject        *object,
+					      GtkArg           *arg,
+					      guint             arg_id);
+static void gtk_editable_get_arg	     (GtkObject        *object,
+					      GtkArg           *arg,
+					      guint             arg_id);
 static void gtk_editable_finalize            (GtkObject        *object);
 static gint gtk_editable_selection_clear     (GtkWidget        *widget,
 					     GdkEventSelection *event);
@@ -68,9 +82,11 @@ static void gtk_editable_set_selection    (GtkEditable      *editable,
 					   gint              end);
 static guint32 gtk_editable_get_event_time (GtkEditable     *editable);
 
-static void gtk_real_editable_cut_clipboard   (GtkEditable     *editable);
-static void gtk_real_editable_copy_clipboard  (GtkEditable     *editable);
-static void gtk_real_editable_paste_clipboard (GtkEditable     *editable);
+static void gtk_editable_real_cut_clipboard   (GtkEditable     *editable);
+static void gtk_editable_real_copy_clipboard  (GtkEditable     *editable);
+static void gtk_editable_real_paste_clipboard (GtkEditable     *editable);
+static void gtk_editable_real_set_editable    (GtkEditable     *editable,
+					       gboolean         is_editable);
 
 
 static void gtk_editable_marshal_signal_1    (GtkObject * object,
@@ -107,10 +123,10 @@ typedef void (*GtkEditableSignal3) (GtkObject * object,
 				 gint arg1,
 				 gpointer data);
 
-guint
+GtkType
 gtk_editable_get_type (void)
 {
-  static guint editable_type = 0;
+  static GtkType editable_type = 0;
 
   if (!editable_type)
     {
@@ -126,7 +142,7 @@ gtk_editable_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      editable_type = gtk_type_unique (gtk_widget_get_type (), &editable_info);
+      editable_type = gtk_type_unique (GTK_TYPE_WIDGET, &editable_info);
     }
 
   return editable_type;
@@ -141,7 +157,7 @@ gtk_editable_class_init (GtkEditableClass *class)
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
 
-  parent_class = gtk_type_class (gtk_widget_get_type ());
+  parent_class = gtk_type_class (GTK_TYPE_WIDGET);
 
   editable_signals[CHANGED] =
     gtk_signal_new ("changed",
@@ -181,6 +197,15 @@ gtk_editable_class_init (GtkEditableClass *class)
 		    GTK_SIGNAL_OFFSET (GtkEditableClass, activate),
 		    gtk_signal_default_marshaller,
 		    GTK_TYPE_NONE, 0);
+
+  editable_signals[SET_EDITABLE] =
+    gtk_signal_new ("set-editable",
+		    GTK_RUN_LAST | GTK_RUN_ACTION,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkEditableClass, set_editable),
+		    gtk_editable_marshal_signal_3,
+		    GTK_TYPE_NONE, 1,
+		    GTK_TYPE_BOOL);
 
   editable_signals[MOVE_CURSOR] =
     gtk_signal_new ("move_cursor",
@@ -282,6 +307,11 @@ gtk_editable_class_init (GtkEditableClass *class)
 
   gtk_object_class_add_signals (object_class, editable_signals, LAST_SIGNAL);
 
+  gtk_object_add_arg_type ("GtkEditable::text_position", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_TEXT_POSITION);
+  gtk_object_add_arg_type ("GtkEditable::editable", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_EDITABLE);
+    
+  object_class->set_arg = gtk_editable_set_arg;
+  object_class->get_arg = gtk_editable_get_arg;
   object_class->finalize = gtk_editable_finalize;
 
   widget_class->selection_clear_event = gtk_editable_selection_clear;
@@ -289,9 +319,10 @@ gtk_editable_class_init (GtkEditableClass *class)
 
   class->insert_text = NULL;
   class->delete_text = NULL;
-  class->changed = NULL;
+  class->changed = (void (*) (GtkEditable*)) gtk_widget_queue_draw;
 
   class->activate = NULL;
+  class->set_editable = gtk_editable_real_set_editable;
 
   class->move_cursor = NULL;
   class->move_word = NULL;
@@ -303,14 +334,59 @@ gtk_editable_class_init (GtkEditableClass *class)
   class->kill_word = NULL;
   class->kill_line = NULL;
 
-  class->cut_clipboard = gtk_real_editable_cut_clipboard;
-  class->copy_clipboard = gtk_real_editable_copy_clipboard;
-  class->paste_clipboard = gtk_real_editable_paste_clipboard;
+  class->cut_clipboard = gtk_editable_real_cut_clipboard;
+  class->copy_clipboard = gtk_editable_real_copy_clipboard;
+  class->paste_clipboard = gtk_editable_real_paste_clipboard;
 
   class->update_text = NULL;
   class->get_chars = NULL;
   class->set_selection = NULL;
   class->set_position = NULL;
+}
+
+static void
+gtk_editable_set_arg (GtkObject      *object,
+		      GtkArg         *arg,
+		      guint           arg_id)
+{
+  GtkEditable *editable;
+
+  editable = GTK_EDITABLE (object);
+
+  switch (arg_id)
+    {
+    case ARG_TEXT_POSITION:
+      gtk_editable_set_position (editable, GTK_VALUE_INT (*arg));
+      break;
+    case ARG_EDITABLE:
+      gtk_editable_set_editable (editable, GTK_VALUE_BOOL (*arg));
+      break;
+    default:
+      break;
+    }
+}
+
+static void
+gtk_editable_get_arg (GtkObject      *object,
+		      GtkArg         *arg,
+		      guint           arg_id)
+{
+  GtkEditable *editable;
+
+  editable = GTK_EDITABLE (object);
+
+  switch (arg_id)
+    {
+    case ARG_TEXT_POSITION:
+      GTK_VALUE_INT (*arg) = editable->current_pos;
+      break;
+    case ARG_EDITABLE:
+      GTK_VALUE_BOOL (*arg) = editable->editable;
+      break;
+    default:
+      arg->type = GTK_TYPE_INVALID;
+      break;
+    }
 }
 
 static void
@@ -492,6 +568,9 @@ gtk_editable_set_position      (GtkEditable      *editable,
 gint
 gtk_editable_get_position (GtkEditable      *editable)
 {
+  g_return_val_if_fail (editable != NULL, -1);
+  g_return_val_if_fail (GTK_IS_EDITABLE (editable), -1);
+
   return editable->current_pos;
 }
 
@@ -688,6 +767,9 @@ gtk_editable_delete_selection (GtkEditable *editable)
   guint start;
   guint end;
 
+  g_return_if_fail (editable != NULL);
+  g_return_if_fail (GTK_IS_EDITABLE (editable));
+
   if (!editable->editable)
     return;
 
@@ -713,6 +795,8 @@ gtk_editable_claim_selection (GtkEditable *editable,
 			      gboolean  claim, 
 			      guint32   time)
 {
+  g_return_if_fail (editable != NULL);
+  g_return_if_fail (GTK_IS_EDITABLE (editable));
   g_return_if_fail (GTK_WIDGET_REALIZED (editable));
 
   editable->has_selection = FALSE;
@@ -735,6 +819,9 @@ gtk_editable_select_region (GtkEditable *editable,
 			    gint         start,
 			    gint         end)
 {
+  g_return_if_fail (editable != NULL);
+  g_return_if_fail (GTK_IS_EDITABLE (editable));
+  
   if (GTK_WIDGET_REALIZED (editable))
     gtk_editable_claim_selection (editable, start != end, GDK_CURRENT_TIME);
 
@@ -785,36 +872,72 @@ gtk_editable_get_event_time (GtkEditable *editable)
 void
 gtk_editable_cut_clipboard (GtkEditable *editable)
 {
+  g_return_if_fail (editable != NULL);
+  g_return_if_fail (GTK_IS_EDITABLE (editable));
+  
   gtk_signal_emit (GTK_OBJECT (editable), editable_signals[CUT_CLIPBOARD]);
 }
 
 void
 gtk_editable_copy_clipboard (GtkEditable *editable)
 {
+  g_return_if_fail (editable != NULL);
+  g_return_if_fail (GTK_IS_EDITABLE (editable));
+  
   gtk_signal_emit (GTK_OBJECT (editable), editable_signals[COPY_CLIPBOARD]);
 }
 
 void
 gtk_editable_paste_clipboard (GtkEditable *editable)
 {
+  g_return_if_fail (editable != NULL);
+  g_return_if_fail (GTK_IS_EDITABLE (editable));
+  
   gtk_signal_emit (GTK_OBJECT (editable), editable_signals[PASTE_CLIPBOARD]);
 }
 
-static void
-gtk_real_editable_cut_clipboard (GtkEditable *editable)
+void
+gtk_editable_set_editable (GtkEditable    *editable,
+			   gboolean        is_editable)
 {
-  gtk_real_editable_copy_clipboard (editable);
+  g_return_if_fail (editable != NULL);
+  g_return_if_fail (GTK_IS_EDITABLE (editable));
+  
+  gtk_signal_emit (GTK_OBJECT (editable), editable_signals[SET_EDITABLE], is_editable != FALSE);
+}
+
+static void
+gtk_editable_real_set_editable (GtkEditable    *editable,
+				gboolean        is_editable)
+{
+  g_return_if_fail (editable != NULL);
+  g_return_if_fail (GTK_IS_EDITABLE (editable));
+
+  editable->editable = is_editable != FALSE;
+  gtk_widget_queue_draw (GTK_WIDGET (editable));
+}
+
+static void
+gtk_editable_real_cut_clipboard (GtkEditable *editable)
+{
+  g_return_if_fail (editable != NULL);
+  g_return_if_fail (GTK_IS_EDITABLE (editable));
+  
+  gtk_editable_real_copy_clipboard (editable);
   gtk_editable_delete_selection (editable);
 }
 
 static void
-gtk_real_editable_copy_clipboard (GtkEditable *editable)
+gtk_editable_real_copy_clipboard (GtkEditable *editable)
 {
-  guint32 time = gtk_editable_get_event_time (editable);
-
+  guint32 time;
   gint selection_start_pos; 
   gint selection_end_pos;
 
+  g_return_if_fail (editable != NULL);
+  g_return_if_fail (GTK_IS_EDITABLE (editable));
+  
+  time = gtk_editable_get_event_time (editable);
   selection_start_pos = MIN (editable->selection_start_pos, editable->selection_end_pos);
   selection_end_pos = MAX (editable->selection_start_pos, editable->selection_end_pos);
  
@@ -830,10 +953,14 @@ gtk_real_editable_copy_clipboard (GtkEditable *editable)
 }
 
 static void
-gtk_real_editable_paste_clipboard (GtkEditable *editable)
+gtk_editable_real_paste_clipboard (GtkEditable *editable)
 {
-  guint32 time = gtk_editable_get_event_time (editable);
+  guint32 time;
 
+  g_return_if_fail (editable != NULL);
+  g_return_if_fail (GTK_IS_EDITABLE (editable));
+  
+  time = gtk_editable_get_event_time (editable);
   if (editable->editable)
     gtk_selection_convert (GTK_WIDGET(editable), 
 			   clipboard_atom, ctext_atom, time);
@@ -842,6 +969,9 @@ gtk_real_editable_paste_clipboard (GtkEditable *editable)
 void
 gtk_editable_changed (GtkEditable *editable)
 {
+  g_return_if_fail (editable != NULL);
+  g_return_if_fail (GTK_IS_EDITABLE (editable));
+  
   gtk_signal_emit (GTK_OBJECT (editable), editable_signals[CHANGED]);
 }
 
