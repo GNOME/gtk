@@ -991,13 +991,6 @@ if test "x$gdktarget" = "xlinux-fb" || test "x$gdktarget" = "xx11" ; then
 fi
 
 if test "x$gdktarget" = "xx11"; then
-  #
-  # Check for fontconfig 
-  #
-  if $PKG_CONFIG --exists 'fontconfig >= 2.2.91' ; then : ; else
-    AC_MSG_ERROR([fontconfig 2.2.91 is required for x11 target])
-  fi
-
   # We start off with the libraries from Pango
 
   ## be sure we also have Pango built with Xft2 support

@@ -1,3 +1,9 @@
+Mon Feb 23 11:20:34 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in: Remove the configure.in check for fontconfig 
+	entirely; it's not needed, since PangoXft implies that sufficiently
+	new fontconfig is present.
+
 Mon Feb 23 02:26:53 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtkpathbar.c (gtk_path_bar_finalize):
@@ -43,9 +49,6 @@ Sat Feb 21 19:09:55 2004  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtksettings.c (gtk_default_substitute): Guard the FC_HINT_STYLE
 	stuff with an #ifdef, so we still build with most fontconfig versions.
-
-	* configure.in: Bump the fontconfig version requirement down to 1.0.1,
-	to match pango (probably isn't needed at all, but doesn't hurt).
 
 Sun Feb 22 03:03:29 2004  Matthias Clasen  <maclas@gmx.de>
 
