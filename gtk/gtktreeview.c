@@ -44,8 +44,6 @@
 #include "win32/gdkwin32.h"
 #elif defined(GDK_WINDOWING_FB)
 #include "linux-fb/gdkfb.h"
-#elif defined (GDK_WINDOWING_NANOX)
-#include "nanox/gdkprivate-nanox.h"
 #endif
 
 

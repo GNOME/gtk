@@ -500,17 +500,12 @@ libgtk_x11_includedir = $(includedir)/gtk-2.0/gtk
 libgtk_x11_include_HEADERS = $(gtk_target_headers)
 libgtk_x11_1_3_la_SOURCES = $(gtk_target_sources)
 endif
-if USE_NANOX
-libgtk_nanox_includedir = $(includedir)/gtk-2.0/gtk
-libgtk_nanox_include_HEADERS = $(gtk_target_headers)
-libgtk_nanox_1_3_la_SOURCES = $(gtk_target_sources)
-endif
 if USE_LINUX_FB
 libgtk_linux_fb_includedir = $(includedir)/gtk-2.0/gtk
 libgtk_linux_fb_include_HEADERS = $(gtk_target_headers)
 libgtk_linux_fb_1_3_la_SOURCES = $(gtk_target_sources)
 endif
-EXTRA_LTLIBRARIES = libgtk-x11-1.3.la libgtk-nanox-1.3.la libgtk-linux-fb-1.3.la
+EXTRA_LTLIBRARIES = libgtk-x11-1.3.la libgtk-linux-fb-1.3.la
 
 
 # We create a dummy theme for the default GTK+ theme
