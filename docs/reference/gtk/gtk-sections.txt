@@ -110,9 +110,12 @@ gtk_action_create_tool_item
 gtk_action_connect_proxy
 gtk_action_disconnect_proxy
 gtk_action_get_proxies
+gtk_action_connect_accelerator
+gtk_action_disconnect_accelerator
 gtk_action_block_activate_from
 gtk_action_unblock_activate_from
 gtk_action_set_accel_path
+gtk_action_set_accel_group
 <SUBSECTION Standard>
 GTK_TYPE_ACTION
 GTK_ACTION

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 #include <gtk/gtk.h>
 
 struct { const gchar *filename; guint merge_id; } merge_ids[] = {
@@ -17,6 +18,12 @@ dump_tree (GtkWidget    *button,
   dump = gtk_ui_manager_get_ui (merge);
   g_message (dump);
   g_free (dump);
+}
+
+static void
+dump_accels (void)
+{
+  gtk_accel_map_save_fd (STDOUT_FILENO);
 }
 
 static void
@@ -536,6 +543,10 @@ main (int argc, char **argv)
 
   button = gtk_button_new_with_label ("Dump Tree");
   g_signal_connect (button, "clicked", G_CALLBACK (dump_tree), merge);
+  gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+
+  button = gtk_button_new_with_label ("Dump Accels");
+  g_signal_connect (button, "clicked", G_CALLBACK (dump_accels), NULL);
   gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
   view = create_tree_view (merge);

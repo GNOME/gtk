@@ -56,6 +56,7 @@ typedef enum
   NODE_TYPE_MENUITEM,
   NODE_TYPE_TOOLITEM,
   NODE_TYPE_SEPARATOR,
+  NODE_TYPE_ACCELERATOR
 } NodeType;
 
 
@@ -861,6 +862,24 @@ start_element_handler (GMarkupParseContext *context,
 
   switch (element_name[0])
     {
+    case 'a':
+      if (ctx->state == STATE_ROOT && !strcmp (element_name, "accelerator"))
+	{
+	  ctx->state = STATE_ROOT;
+	  ctx->current = get_child_node (self, ctx->current,
+					 node_name, strlen (node_name),
+					 NODE_TYPE_ACCELERATOR,
+					 TRUE, FALSE);
+	  if (NODE_INFO (ctx->current)->action_name == 0)
+	    NODE_INFO (ctx->current)->action_name = action_quark;
+
+	  node_prepend_ui_reference (NODE_INFO (ctx->current),
+				     ctx->merge_id, action_quark);
+	  NODE_INFO (ctx->current)->dirty = TRUE;
+
+	  raise_error = FALSE;
+	}
+      break;
     case 'u':
       if (ctx->state == STATE_START && !strcmp (element_name, "ui"))
 	{
@@ -1131,7 +1150,6 @@ static GMarkupParser ui_parser = {
   cleanup
 };
 
-
 static guint
 add_ui_from_string (GtkUIManager *self,
 		    const gchar  *buffer, 
@@ -1205,8 +1223,8 @@ gtk_ui_manager_add_ui_from_string (GtkUIManager *self,
   const gchar *p;
   const gchar *end;
 
-  g_return_val_if_fail (GTK_IS_UI_MANAGER (self), FALSE);
-  g_return_val_if_fail (buffer != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_UI_MANAGER (self), 0);
+  g_return_val_if_fail (buffer != NULL, 0);
 
   if (length < 0)
     length = strlen (buffer);
@@ -1245,6 +1263,8 @@ gtk_ui_manager_add_ui_from_file (GtkUIManager *self,
   gchar *buffer;
   gint length;
   guint res;
+
+  g_return_val_if_fail (GTK_IS_UI_MANAGER (self), 0);
 
   if (!g_file_get_contents (filename, &buffer, &length, error))
     return 0;
@@ -1364,6 +1384,9 @@ gtk_ui_manager_add_ui (GtkUIManager        *self,
 	  break;
 	case GTK_UI_MANAGER_POPUP:
 	  node_type = NODE_TYPE_POPUP;
+	  break;
+	case GTK_UI_MANAGER_ACCELERATOR:
+	  node_type = NODE_TYPE_ACCELERATOR;
 	  break;
 	default: ;
 	  /* do nothing */
@@ -1734,6 +1757,9 @@ update_node (GtkUIManager *self,
 	  goto recurse_children;
 	}
 
+      if (action)
+	gtk_action_set_accel_group (action, self->private_data->accel_group);
+
       /* If the widget already has a proxy and the action hasn't changed, then
        * we only have to update the tearoff menu items.
        */
@@ -1765,11 +1791,7 @@ update_node (GtkUIManager *self,
 	  break;
 	case NODE_TYPE_POPUP:
 	  if (info->proxy == NULL) 
-	    {
-	      info->proxy = gtk_menu_new ();
-	      gtk_menu_set_accel_group (GTK_MENU (info->proxy), 
-					self->private_data->accel_group);
-	    }
+	    info->proxy = gtk_menu_new ();
 	  break;
 	case NODE_TYPE_MENU:
 	  {
@@ -1806,7 +1828,6 @@ update_node (GtkUIManager *self,
 		    tearoff = gtk_tearoff_menu_item_new ();
 		    gtk_menu_shell_append (GTK_MENU_SHELL (menu), tearoff);
 		    gtk_menu_item_set_submenu (GTK_MENU_ITEM (info->proxy), menu);
-		    gtk_menu_set_accel_group (GTK_MENU (menu), self->private_data->accel_group);
 		    gtk_menu_shell_insert (GTK_MENU_SHELL (menushell), info->proxy, pos);
 		  }
 	      }
@@ -2045,6 +2066,9 @@ update_node (GtkUIManager *self,
 		}
 	    }
 	  break;
+	case NODE_TYPE_ACCELERATOR:
+	  gtk_action_connect_accelerator (action);
+	  break;
 	}
 
       if (action)
@@ -2065,10 +2089,10 @@ update_node (GtkUIManager *self,
       child = current->next;
       update_node (self, current, add_tearoffs && (info->type != NODE_TYPE_POPUP));
     }
-  
-  if (info->proxy)
+
+  if (info->proxy) 
     {
-      if (info->type == NODE_TYPE_MENU)
+      if (info->type == NODE_TYPE_MENU) 
 	update_smart_separators (gtk_menu_item_get_submenu (GTK_MENU_ITEM (info->proxy)));
       else if (info->type == NODE_TYPE_TOOLBAR)
 	update_smart_separators (info->proxy);
@@ -2081,6 +2105,8 @@ update_node (GtkUIManager *self,
 	gtk_widget_destroy (info->proxy);
       if (info->extra)
 	gtk_widget_destroy (info->extra);
+      if (info->type == NODE_TYPE_ACCELERATOR)
+	gtk_action_disconnect_accelerator (info->action);
       free_node (node);
       g_node_destroy (node);
     }
@@ -2181,7 +2207,8 @@ static const gchar *open_tag_format[] = {
   "%*s<popup name='%s' action=\"%s\">\n",
   "%*s<menuitem name=\"%s\" action=\"%s\"/>\n", 
   "%*s<toolitem name=\"%s\" action=\"%s\"/>\n", 
-  "%*s<separator/>\n",
+  "%*s<separator name=\"%s\"/>\n",
+  "%*s<accelerator name=\"%s\" action=\"%s\"/>\n",
 };
 
 static const gchar *close_tag_format[] = {
@@ -2193,6 +2220,7 @@ static const gchar *close_tag_format[] = {
   "%*s</placeholder>\n",
   "%*s</placeholder>\n",
   "%*s</popup>\n",
+  "",
   "",
   "",
   "",

@@ -15,7 +15,7 @@ action groups.
 The UI definitions are specified in an XML format which can be
 roughly described by the following DTD. 
 <programlisting>
-&lt;!ELEMENT ui          (menubar|toolbar|popup)* &gt;
+&lt;!ELEMENT ui          (menubar|toolbar|popup|accelerator)* &gt;
 &lt;!ELEMENT menubar     (menuitem|separator|placeholder|menu)* &gt;
 &lt;!ELEMENT menu        (menuitem|separator|placeholder|menu)* &gt;
 &lt;!ELEMENT popup       (menuitem|separator|placeholder|menu)* &gt;
@@ -24,6 +24,7 @@ roughly described by the following DTD.
 &lt;!ELEMENT menuitem     EMPTY &gt;
 &lt;!ELEMENT toolitem     EMPTY &gt;
 &lt;!ELEMENT separator    EMPTY &gt;
+&lt;!ELEMENT accelerator  EMPTY &gt;
 &lt;!ATTLIST menubar      name               &num;IMPLIED &gt;
 &lt;!ATTLIST toolbar      name               &num;IMPLIED &gt;
 &lt;!ATTLIST popup        name               &num;IMPLIED &gt;
@@ -37,6 +38,8 @@ roughly described by the following DTD.
 &lt;!ATTLIST toolitem     name               &num;IMPLIED
                        action             &num;REQUIRED
                        position (top|bot) &num;IMPLIED &gt;
+&lt;!ATTLIST accelerator  name               &num;IMPLIED
+                       action             &num;REQUIRED &gt;
 </programlisting>
 There are some additional restrictions beyond those specified in the
 DTD, e.g. every toolitem must have a toolbar in its anchestry and
@@ -105,6 +108,9 @@ action</para></listitem>
 <listitem><para>a #GtkSeparatorMenuItem or
 #GtkSeparatorToolItem</para></listitem> 
 </varlistentry>
+<varlistentry><term>accelerator</term>
+<listitem><para>a keyboard accelerator</para></listitem> 
+</varlistentry>
 </variablelist>
 </para>
 <para>
@@ -127,6 +133,16 @@ has the path <literal>/ui/menubar/JustifyMenu/Left</literal> and the
 toolitem with the same name has path 
 <literal>/ui/toolbar1/JustifyToolItems/Left</literal>.
 </para>
+</refsect2>
+<refsect2>
+<title>Accelerators</title>
+<para>
+Every action has an accelerator path. Accelerators are installed together with
+menuitem proxies, but they can also be explicitly added with &lt;accelerator&gt;
+elements in the UI definition. This makes it possible to have accelerators for
+actions even if they have no visible proxies.
+</para>
+</refsect2>
 <refsect2 id="Smart-Separators">
 <title>Smart Separators</title>
 <para>
@@ -137,7 +153,6 @@ next to each other, are hidden. This is a useful feature, since the merging of U
 from multiple sources can make it hard or impossible to determine in advance whether a 
 separator will end up in such an unfortunate position.
 </para>
-</refsect2>
 </refsect2>
 
 <!-- ##### SECTION See_Also ##### -->
@@ -282,6 +297,7 @@ what UI element to create.
 @GTK_UI_MANAGER_MENUITEM: Create a menuitem.
 @GTK_UI_MANAGER_TOOLITEM: Create a toolitem.
 @GTK_UI_MANAGER_SEPARATOR: Create a separator.
+@GTK_UI_MANAGER_ACCELERATOR: Install an accelerator.
 
 <!-- ##### FUNCTION gtk_ui_manager_add_ui ##### -->
 <para>

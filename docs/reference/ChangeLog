@@ -1,3 +1,8 @@
+2003-09-18  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-sections.txt: 
+	* gtk/tmpl/gtkuimanager.sgml: Updates for accelerator-only actions.
+
 2003-09-16  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkaction.sgml: 

@@ -59,7 +59,10 @@ struct _GtkActionPrivate
   guint is_important    : 1;
 
   /* accelerator */
-  GQuark accel_quark;
+  guint          accel_count;
+  GtkAccelGroup *accel_group;
+  GClosure      *accel_closure;
+  GQuark         accel_quark;
 
   /* list of proxy widgets */
   GSList *proxies;
@@ -130,10 +133,16 @@ static void gtk_action_get_property (GObject         *object,
 
 static GtkWidget *create_menu_item    (GtkAction *action);
 static GtkWidget *create_tool_item    (GtkAction *action);
-static void       connect_proxy       (GtkAction *action,
-				       GtkWidget *proxy);
+static void       connect_proxy       (GtkAction     *action,
+				       GtkWidget     *proxy);
 static void       disconnect_proxy    (GtkAction *action,
 				       GtkWidget *proxy);
+static void       closure_accel_activate (GClosure     *closure,
+					  GValue       *return_value,
+					  guint         n_param_values,
+					  const GValue *param_values,
+					  gpointer      invocation_hint,
+					  gpointer      marshal_data);
 
 static GObjectClass *parent_class = NULL;
 static guint         action_signals[LAST_SIGNAL] = { 0 };
@@ -260,7 +269,17 @@ gtk_action_init (GtkAction *action)
   action->private_data->label_set = FALSE;
   action->private_data->short_label_set = FALSE;
 
+  action->private_data->accel_count = 0;
+  action->private_data->accel_closure = 
+    g_closure_new_object (sizeof (GClosure), G_OBJECT (action));
+  g_closure_set_marshal (action->private_data->accel_closure, 
+			 closure_accel_activate);
+  g_closure_ref (action->private_data->accel_closure);
+  g_closure_sink (action->private_data->accel_closure);
+
   action->private_data->accel_quark = 0;
+  action->private_data->accel_count = 0;
+  action->private_data->accel_group = NULL;
 
   action->private_data->proxies = NULL;
 }
@@ -277,6 +296,10 @@ gtk_action_finalize (GObject *object)
   g_free (action->private_data->short_label);
   g_free (action->private_data->tooltip);
   g_free (action->private_data->stock_id);
+
+  g_object_unref (action->private_data->accel_closure);
+  if (action->private_data->accel_group)
+    g_object_unref (action->private_data->accel_group);
 }
 
 static void
@@ -441,7 +464,7 @@ remove_proxy (GtkWidget *proxy,
 	      GtkAction *action)
 {
   if (GTK_IS_MENU_ITEM (proxy))
-    gtk_menu_item_set_accel_path (GTK_MENU_ITEM (proxy), NULL);
+    gtk_action_disconnect_accelerator (action);
 
   action->private_data->proxies = g_slist_remove (action->private_data->proxies, proxy);
 }
@@ -524,8 +547,8 @@ gtk_action_create_menu_proxy (GtkToolItem *tool_item,
 }
 
 static void
-connect_proxy (GtkAction *action, 
-	       GtkWidget *proxy)
+connect_proxy (GtkAction     *action, 
+	       GtkWidget     *proxy)
 {
   g_object_ref (action);
   g_object_set_data_full (G_OBJECT (proxy), "gtk-action", action,
@@ -552,6 +575,13 @@ connect_proxy (GtkAction *action,
       GtkWidget *label;
       /* menu item specific synchronisers ... */
       
+      if (action->private_data->accel_quark)
+ 	{
+	  gtk_action_connect_accelerator (action);
+ 	  gtk_menu_item_set_accel_path (GTK_MENU_ITEM (proxy),
+ 					g_quark_to_string (action->private_data->accel_quark));
+ 	}
+      
       label = GTK_BIN (proxy)->child;
 
       /* make sure label is a label */
@@ -560,16 +590,20 @@ connect_proxy (GtkAction *action,
 	  gtk_container_remove (GTK_CONTAINER (proxy), label);
 	  label = NULL;
 	}
+
       if (!label)
-	{
-	  label = g_object_new (GTK_TYPE_ACCEL_LABEL,
-				"use_underline", TRUE,
-				"xalign", 0.0,
-				"visible", TRUE,
-				"parent", proxy,
-				"accel_widget", proxy,
-				NULL);
-	}
+	label = g_object_new (GTK_TYPE_ACCEL_LABEL,
+			      "use_underline", TRUE,
+			      "xalign", 0.0,
+			      "visible", TRUE,
+			      "parent", proxy,
+			      NULL);
+      
+      if (GTK_IS_ACCEL_LABEL (label) && action->private_data->accel_quark)
+	g_object_set (G_OBJECT (label),
+		      "accel_closure", action->private_data->accel_closure,
+		      NULL);
+
       gtk_label_set_label (GTK_LABEL (label), action->private_data->label);
       g_signal_connect_object (action, "notify::label",
 			       G_CALLBACK (gtk_action_sync_label), proxy, 0);
@@ -599,15 +633,10 @@ connect_proxy (GtkAction *action,
 				   proxy, 0);
 	}
 
-      if (action->private_data->accel_quark)
-	{
-	  gtk_menu_item_set_accel_path (GTK_MENU_ITEM (proxy),
-					g_quark_to_string (action->private_data->accel_quark));
-	}
-
       g_signal_connect_object (proxy, "activate",
 			       G_CALLBACK (gtk_action_activate), action,
 			       G_CONNECT_SWAPPED);
+
     }
   else if (GTK_IS_TOOL_BUTTON (proxy))
     {
@@ -923,6 +952,21 @@ gtk_action_unblock_activate_from (GtkAction *action,
 				     action);
 }
 
+static void
+closure_accel_activate (GClosure     *closure,
+                        GValue       *return_value,
+                        guint         n_param_values,
+                        const GValue *param_values,
+                        gpointer      invocation_hint,
+                        gpointer      marshal_data)
+{
+  if (GTK_ACTION (closure->data)->private_data->sensitive)
+    g_signal_emit (closure->data, action_signals[ACTIVATE], 0);
+
+  /* we handled the accelerator */
+  g_value_set_boolean (return_value, TRUE);
+}
+
 /**
  * gtk_action_set_accel_path:
  * @action: the action object
@@ -938,5 +982,93 @@ void
 gtk_action_set_accel_path (GtkAction   *action, 
 			   const gchar *accel_path)
 {
+  g_return_if_fail (GTK_IS_ACTION (action));
+
   action->private_data->accel_quark = g_quark_from_string (accel_path);
+}
+
+/**
+ * gtk_action_set_accel_group:
+ * @action: the action object
+ * @accel_group: a #GtkAccelGroup or %NULL
+ * 
+ * Sets the #GtkAccelGroup in which the accelerator for this action
+ * will be installed.
+ *
+ * Since: 2.4
+ **/
+void
+gtk_action_set_accel_group (GtkAction     *action,
+			    GtkAccelGroup *accel_group)
+{
+  g_return_if_fail (GTK_IS_ACTION (action));
+  g_return_if_fail (accel_group == NULL || GTK_IS_ACCEL_GROUP (accel_group));
+  
+  if (accel_group)
+    g_object_ref (accel_group);
+  if (action->private_data->accel_group)
+    g_object_unref (action->private_data->accel_group);
+
+  action->private_data->accel_group = accel_group;
+}
+
+/**
+ * gtk_action_connect_accelerator:
+ * @action: a #GtkAction
+ * 
+ * Installs the accelerator for @action if @action has an
+ * accel path and group. See gtk_action_set_accel_path() and 
+ * gtk_action_set_accel_group()
+ *
+ * Since multiple proxies may independently trigger the installation
+ * of the accelerator, the @action counts the number of times this
+ * function has been called and doesn't remove the accelerator until
+ * gtk_action_disconnect_accelerator() has been called as many times.
+ *
+ * Since: 2.4
+ **/
+void 
+gtk_action_connect_accelerator (GtkAction *action)
+{
+  g_return_if_fail (GTK_IS_ACTION (action));
+
+  if (!action->private_data->accel_quark ||
+      !action->private_data->accel_group)
+    return;
+
+  if (action->private_data->accel_count == 0)
+    {
+      const gchar *accel_path = 
+	g_quark_to_string (action->private_data->accel_quark);
+      
+      gtk_accel_group_connect_by_path (action->private_data->accel_group,
+				       accel_path,
+				       action->private_data->accel_closure);
+    }
+
+  action->private_data->accel_count++;
+}
+
+/**
+ * gtk_action_disconnect_accelerator:
+ * @action: a #GtkAction
+ * 
+ * Undoes the effect of one call to gtk_action_connect_accelerator().
+ *
+ * Since: 2.4
+ **/
+void 
+gtk_action_disconnect_accelerator (GtkAction *action)
+{
+  g_return_if_fail (GTK_IS_ACTION (action));
+
+  if (!action->private_data->accel_quark ||
+      !action->private_data->accel_group)
+    return;
+
+  action->private_data->accel_count--;
+
+  if (action->private_data->accel_count == 0)
+    gtk_accel_group_disconnect (action->private_data->accel_group,
+				action->private_data->accel_closure);
 }

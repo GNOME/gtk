@@ -1,5 +1,46 @@
 2003-09-18  Matthias Clasen  <maclas@gmx.de>
 
+	Install accelerators on actions, not on proxies, support
+	accelerator-only actions:
+	
+	* gtk/gtkmenu.c (get_accel_path): New function to get the accel path
+	and its lock status either via _gtk_widget_get_accel_path() or by 
+	looking at the accel_path stored in the menu item itself and determining
+	its lock status by peeking into the contained accel label. This was
+	already (accidentally) committed a week ago.
+
+	* gtk/gtkaction.h (gtk_action_set_accel_group):
+	(gtk_action_[dis]connect_accelerator): New functions.
+
+	* gtk/gtkaction.c (struct _GtkActionPrivate): Add accel_group,
+	accel_closure and accel_count. We must have a reference to the accel_group,
+	since we need it in connect_proxy. The count is necessary to ensure
+	that the accelerator isn't removed before the last proxy requesting 
+	it has been unmerged.
+	(connect_proxy): Connect the accelerator to the 
+	action now, only set the accel_path on the menuitem.
+	(remove_proxy): Disconnect the accelerator from the action, not from
+	the menuitem.
+	(gtk_action_set_accel_group): Set the accel group. 
+	(gtk_action_[dis]connect_accelerator): Count the number of times
+	this functions have been called and install/remove the accelerator if
+	the count leaves/reaches zero.
+
+	* gtk/gtkuimanager.h (GtkUIManagerItemType): Add 
+	GTK_UI_MANAGER_ACCELERATOR.
+
+	* gtk/gtkuimanager.c (NodeType): Add NODE_TYPE_ACCELERATOR.
+	(start_element_handler): Create NODE_TYPE_ACCELERATOR nodes from
+	<accelerator> elements.
+	(gtk_ui_manager_add_ui): Create NODE_TYPE_ACCELERATOR nodes when
+	type is GTK_UI_MANAGER_ACCELERATOR.
+	(update_node): Set the accel group on actions before creating their
+	proxies. Don't set the accel group on created menus. For 
+	NODE_TYPE_ACCELERATOR nodes, [dis]connect the actions' accelerator.
+	(print_node): Also emit <accelerator> elements.
+
+	* tests/testmerge.c (dump_accels): Add a "Dump Accels" button. 
+
 	* gtk/gtkuimanager.c (update_node): Robustness improvements.
 
 2003-09-17  Matthias Clasen  <maclas@gmx.de>

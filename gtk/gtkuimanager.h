@@ -81,7 +81,8 @@ typedef enum {
   GTK_UI_MANAGER_POPUP,
   GTK_UI_MANAGER_MENUITEM,
   GTK_UI_MANAGER_TOOLITEM,
-  GTK_UI_MANAGER_SEPARATOR
+  GTK_UI_MANAGER_SEPARATOR,
+  GTK_UI_MANAGER_ACCELERATOR
 } GtkUIManagerItemType;
 
 GType          gtk_ui_manager_get_type            (void);
