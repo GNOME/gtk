@@ -37,8 +37,3 @@ Creates a new #GtkHScale.
 @Returns: a new #GtkHScale.
 
 
-<!-- ##### ARG GtkHScale:adjustment ##### -->
-<para>
-the #GtkAdjustment which sets the range of the scale.
-</para>
-

@@ -150,3 +150,8 @@ box.
 @ipad_y: the vertical padding that should be used by each button in @widget.
 
 
+<!-- ##### ARG GtkButtonBox:layout-style ##### -->
+<para>
+
+</para>
+

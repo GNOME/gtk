@@ -34,8 +34,10 @@ GtkTreeViewColumn
 @alignment: 
 @window: 
 @xalign: 
-@model_changed_signal: 
+@property_changed_signal: 
+@clickable_signal: 
 @width: 
+@requested_width: 
 @min_width: 
 @max_width: 
 @displayed_width: 
@@ -53,7 +55,7 @@ GtkTreeViewColumn
 @sort_column_id: 
 @sort_order: 
 @visible: 
-@button_active: 
+@clickable: 
 @dirty: 
 @show_sort_indicator: 
 @maybe_reordered: 
@@ -239,6 +241,8 @@ GtkTreeViewColumn
 </para>
 
 @tree_column: 
+@clickable: 
+<!-- # Unused Parameters # -->
 @active: 
 
 

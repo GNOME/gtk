@@ -1,3 +1,8 @@
+Fri May 18 12:28:08 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/tmpl/gtksizegroup.sgml gtk/gtk-sections.txt gtk/gtk.types:
+	Add documentation about GtkSizeGroup.
+
 2001-05-11  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/tmpl/gtkvruler.sgml, 

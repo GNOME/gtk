@@ -75,6 +75,7 @@
 <!entity GtkScrollbar SYSTEM "sgml/gtkscrollbar.sgml">
 <!entity GtkScrolledWindow SYSTEM "sgml/gtkscrolledwindow.sgml">
 <!entity GtkSeparator SYSTEM "sgml/gtkseparator.sgml">
+<!entity GtkSizeGroup SYSTEM "sgml/gtksizegroup.sgml">
 <!entity GtkSocket SYSTEM "sgml/gtksocket.sgml">
 <!entity GtkSpinButton SYSTEM "sgml/gtkspinbutton.sgml">
 <!entity GtkStatusbar SYSTEM "sgml/gtkstatusbar.sgml">
@@ -352,6 +353,7 @@ An advanced widget set.
         &GtkHandleBox;
         &GtkIMContext;
         &GtkIMMulticontext;
+        &GtkSizeGroup;
         &GtkTooltips;
         &GtkViewport;
     </sect1>

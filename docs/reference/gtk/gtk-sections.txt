@@ -1917,7 +1917,24 @@ GTK_TYPE_SETTINGS
 gtk_settings_get_type
 </SECTION>
 
-
+<SECTION>
+<FILE>gtksizegroup</FILE>
+<TITLE>GtkSizeGroup</TITLE>
+GtkSizeGroupMode
+gtk_size_group_new
+gtk_size_group_set_mode
+gtk_size_group_get_mode
+gtk_size_group_add_widget
+gtk_size_group_remove_widget
+<SUBSECTION Standard>
+GTK_SIZE_GROUP
+GTK_IS_SIZE_GROUP
+GTK_TYPE_SIZE_GROUP
+gtk_size_group_get_type
+GTK_SIZE_GROUP_CLASS
+GTK_IS_SIZE_GROUP_CLASS
+GTK_SIZE_GROUP_GET_CLASS
+</SECTION>
 
 <SECTION>
 <FILE>gtksocket</FILE>

@@ -301,6 +301,18 @@ Use to get the value of a GtkArg whose GtkType is GTK_TYPE_C_FOREIGN
 
 @a: 
 
+<!-- ##### ARG GtkAccelLabel:accel-width ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkContainer:reallocate-redraws ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### STRUCT GtkData ##### -->
 <para>
 The #GtkData-struct struct contains no public fields.
@@ -540,6 +552,18 @@ gtk_font_selection_set_filter().
 </para>
 
 
+<!-- ##### ARG GtkHScale:adjustment ##### -->
+<para>
+the #GtkAdjustment which sets the range of the scale.
+</para>
+
+
+<!-- ##### ARG GtkHScrollbar:adjustment ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### STRUCT GtkIMContextSimple ##### -->
 <para>
 
@@ -720,6 +744,18 @@ line in a wrapped paragraph.
 <para>
 Pixels to offset the text horizontally or vertically, useful to
 produce superscript and subscript.
+</para>
+
+
+<!-- ##### ARG GtkVScale:adjustment ##### -->
+<para>
+the #GtkAdjustment which sets the range of the scale.
+</para>
+
+
+<!-- ##### ARG GtkVScrollbar:adjustment ##### -->
+<para>
+
 </para>
 
 
