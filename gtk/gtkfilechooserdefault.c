@@ -303,6 +303,7 @@ static void     gtk_file_chooser_default_get_property (GObject               *ob
 						       GParamSpec            *pspec);
 static void     gtk_file_chooser_default_dispose      (GObject               *object);
 static void     gtk_file_chooser_default_show_all       (GtkWidget             *widget);
+static void     gtk_file_chooser_default_map            (GtkWidget             *widget);
 static void     gtk_file_chooser_default_hierarchy_changed (GtkWidget          *widget,
 							    GtkWidget          *previous_toplevel);
 static void     gtk_file_chooser_default_style_set      (GtkWidget             *widget,
@@ -537,6 +538,7 @@ gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
   gobject_class->dispose = gtk_file_chooser_default_dispose;
 
   widget_class->show_all = gtk_file_chooser_default_show_all;
+  widget_class->map = gtk_file_chooser_default_map;
   widget_class->hierarchy_changed = gtk_file_chooser_default_hierarchy_changed;
   widget_class->style_set = gtk_file_chooser_default_style_set;
   widget_class->screen_changed = gtk_file_chooser_default_screen_changed;
@@ -4037,6 +4039,20 @@ get_is_file_filtered (GtkFileChooserDefault *impl,
   return !result;
 }
 
+/* GtkWidget::map method */
+static void
+gtk_file_chooser_default_map (GtkWidget *widget)
+{
+  GtkFileChooserDefault *impl;
+
+  impl = GTK_FILE_CHOOSER_DEFAULT (widget);
+
+  GTK_WIDGET_CLASS (parent_class)->map (widget);
+
+  change_folder_and_display_error (impl, impl->current_folder);
+  bookmarks_changed_cb (impl->file_system, impl);
+}
+
 static gboolean
 list_model_filter_func (GtkFileSystemModel *model,
 			GtkFilePath        *path,
@@ -5288,6 +5304,8 @@ gtk_file_chooser_default_initial_focus (GtkFileChooserEmbed *chooser_embed)
     {
       if (impl->load_state == LOAD_FINISHED)
 	browse_files_select_first_row (impl);
+      else
+	pending_op_queue (impl, PENDING_OP_SELECT_FIRST, NULL);
 
       widget = impl->browse_files_tree_view;
     }

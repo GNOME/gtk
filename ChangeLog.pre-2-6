@@ -1,3 +1,27 @@
+2004-12-14  Federico Mena Quintero  <federico@ximian.com>
+
+	Merged from gtk-2-4:
+
+	Fix #145470:
+
+	* gtk/gtkfilechooserdefault.c
+	(gtk_file_chooser_default_initial_focus): Queue a pending
+	operation to select the first row if we are not finished loading
+	yet.
+	(gtk_file_chooser_default_class_init): Override GtkWidget::map().
+	(gtk_file_chooser_default_map): New ::map() handler; refresh the
+	file and bookmark lists.
+
+	* gtk/gtkfilechooserdialog.c (gtk_file_chooser_dialog_class_init):
+	Override GtkWidget::map() and GtkWidget::unmap().
+	(gtk_file_chooser_dialog_constructor): Don't call initial_focus()
+	here.
+	(gtk_file_chooser_dialog_map): Map the file chooser widget if
+	needed.  Call initial_focus() here.
+	(gtk_file_chooser_dialog_unmap): Unmap the file chooser widget.
+	When we are re-mapped, the widget will get mapped as well and it
+	will have a chance to refresh.
+
 2004-12-14  Matthias Clasen  <mclasen@redhat.com>
 
 	* README.win32: Fix a typo
