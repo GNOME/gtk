@@ -238,8 +238,6 @@ config_func (GtkWidget *drawing_area, GdkEventConfigure *event, gpointer data)
     
 	pixbuf = (GdkPixbuf *)gtk_object_get_data(GTK_OBJECT(drawing_area), "pixbuf");
 
-	g_print("X:%d Y:%d\n", event->width, event->height);
-
 #if 0
 	if (((event->width) != (pixbuf->art_pixbuf->width)) ||
 	    ((event->height) != (pixbuf->art_pixbuf->height))) 
@@ -411,14 +409,23 @@ main (int argc, char **argv)
 		return 0;
 	} else {
 		for (i = 1; i < argc; i++) {
-
 			animation = gdk_pixbuf_animation_new_from_file (argv[i]);
 
 			if (animation) {
+				gint i = 0;
 				GList *listptr;
 				for (listptr = animation->frames; listptr; listptr = listptr->next){
-					g_print ("in a frame\n");
-					new_testrgb_window (((GdkPixbufFrame *)listptr->data)->pixbuf, "File");
+					gchar *title;
+					title = g_strdup_printf ("Frame %d", i);
+					g_print ("Frame %d  x:%d y:%d width:%d height:%d\n",
+						 i,
+						 ((GdkPixbufFrame *)listptr->data)->x_offset,
+						 ((GdkPixbufFrame *)listptr->data)->y_offset,
+						 gdk_pixbuf_get_width (((GdkPixbufFrame *)listptr->data)->pixbuf),
+						 gdk_pixbuf_get_height (((GdkPixbufFrame *)listptr->data)->pixbuf));
+					new_testrgb_window (((GdkPixbufFrame *)listptr->data)->pixbuf, title);
+					g_free (title);
+					i++;
 				}
 				found_valid = TRUE;
 			}

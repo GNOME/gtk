@@ -1,3 +1,8 @@
+2000-04-06  Jonathan Blandford  <jrb@redhat.com>
+
+	* gdk-pixbuf/testanimation.c (main): add more info to the
+	testanimation frames.
+
 2000-04-04  Ettore Perazzoli  <ettore@helixcode.com>
 
 	* gdk-pixbuf/gdk-pixbuf-animation.c
