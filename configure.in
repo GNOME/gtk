@@ -32,9 +32,9 @@ GLIB_AC_DIVERT_BEFORE_HELP([
 #
 GTK_MAJOR_VERSION=2
 GTK_MINOR_VERSION=1
-GTK_MICRO_VERSION=3
-GTK_INTERFACE_AGE=0
-GTK_BINARY_AGE=103
+GTK_MICRO_VERSION=4
+GTK_INTERFACE_AGE=1
+GTK_BINARY_AGE=104
 GTK_VERSION=$GTK_MAJOR_VERSION.$GTK_MINOR_VERSION.$GTK_MICRO_VERSION
 dnl This is the X.Y used in -lgtk-FOO-X.Y
 GTK_API_VERSION=2.0
@@ -88,7 +88,7 @@ AC_SUBST(GDK_PIXBUF_MICRO)
 AC_SUBST(GDK_PIXBUF_VERSION)
 
 ## Versions of dependencies
-GLIB_REQUIRED_VERSION=2.1.3
+GLIB_REQUIRED_VERSION=2.1.4
 PANGO_REQUIRED_VERSION=1.0.1
 ATK_REQUIRED_VERSION=1.0.1
 
@@ -393,10 +393,7 @@ ALL_LINGUAS="az be bg ca cs cy da de el en_GB en@IPA es et eu fa fi fr ga gl he 
 AM_GLIB_GNU_GETTEXT
 LIBS="$LIBS $INTLLIBS"
 
-# AM_GLIB_GNU_GETTEXT above substs $DATADIRNAME
-# this is the directory where the *.{mo,gmo} files are installed
-gtklocaledir='${prefix}/${DATADIRNAME}/locale'
-AC_SUBST(gtklocaledir)
+AM_GLIB_DEFINE_LOCALEDIR(GTK_LOCALEDIR)
 
 dnl The DU4 header files don't provide library prototypes unless 
 dnl -std1 is given to the native cc.
