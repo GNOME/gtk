@@ -1,5 +1,5 @@
 # Note that this is NOT a relocatable package
-%define ver      1.0.2
+%define ver      1.0.3
 %define rel      SNAP
 %define prefix   /usr
 
@@ -46,9 +46,13 @@ are in gtk+-devel.
 
 %changelog
 
+* Sat May 23 1998 Shawn T. Amundson <amundson@gtk.org>
+
+- Changed version to 1.0.3
+
 * Wed May 13 1998 Owen Taylor <otaylor@gtk.org>
 
-- Changed version to 1.0.1
+- Changed version to 1.0.2
 
 * Sun May  3 1998 Shawn T. Amundson <amundson@gtk.org>
 

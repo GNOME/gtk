@@ -1,3 +1,7 @@
+Overview of Changes in GTK+ 1.0.3:
+
+* Bug fixes, including fix for visuals on SGI machines
+
 Overview of Changes in GTK+ 1.0.2:
 
 * Speedups for type creation and especially gtk_type_is_a() checks.
