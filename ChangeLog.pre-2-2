@@ -1,5 +1,8 @@
 2002-11-21  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/gtkwidget.c (gtk_widget_get_ancestor): Add a note about
+	reflexive ancestry.  (#99085, Frederic Lespez)
+
 	* docs/tutorial/gtk-tut.sgml: 
 	* examples/calendar/calendar.c: Numerous fixes to the calendar 
 	example.  (#97956, Owen Taylor)

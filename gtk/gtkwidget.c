@@ -1652,8 +1652,6 @@ gtk_widget_destroyed (GtkWidget      *widget,
 void
 gtk_widget_show (GtkWidget *widget)
 {
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  
   if (!GTK_WIDGET_VISIBLE (widget))
     {
       g_object_ref (widget);
@@ -5350,6 +5348,9 @@ gtk_widget_get_toplevel (GtkWidget *widget)
  * it should not be unreferenced. See note about checking for a toplevel
  * #GtkWindow in the docs for gtk_widget_get_toplevel().
  * 
+ * Note that unlike gtk_widget_is_ancestor(), gtk_widget_get_ancestor() 
+ * considers @widget to be an ancestor of itself.
+ *
  * Return value: the ancestor widget, or %NULL if not found
  **/
 GtkWidget*
