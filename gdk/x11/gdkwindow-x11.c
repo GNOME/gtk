@@ -366,7 +366,21 @@ gdk_window_new (GdkWindow     *parent,
   private->y = y;
   impl->width = (attributes->width > 1) ? (attributes->width) : (1);
   impl->height = (attributes->height > 1) ? (attributes->height) : (1);
-  private->window_type = attributes->window_type;
+
+  if (attributes->wclass == GDK_INPUT_ONLY)
+    {
+      /* Backwards compatiblity - we've always ignored
+       * attributes->window_type for input-only windows
+       * before
+       */
+      if (GDK_WINDOW_TYPE (parent) == GDK_WINDOW_ROOT &&
+	  GDK_WINDOW_TYPE (parent) == GDK_WINDOW_FOREIGN)
+	private->window_type = GDK_WINDOW_TEMP;
+      else
+	private->window_type = GDK_WINDOW_CHILD;
+    }
+  else
+    private->window_type = attributes->window_type;
 
   _gdk_window_init_position (GDK_WINDOW (private));
   if (impl->position_info.big)

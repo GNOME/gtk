@@ -1,3 +1,12 @@
+Fri Jul  6 15:38:33 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_class_init):
+	G_SIGNAL_TYPE_STATIC_SCOPE GtkSelectionData to
+	restore some workingness.
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_new): Fix 
+	handle of window type for input-only windows.
+
 Thu Jul  5 21:53:46 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkbbox.[ch] gtk/gtkbox.[ch] gtk/gtk[hv]bbox.c:
