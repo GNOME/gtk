@@ -1,3 +1,11 @@
+Sat Sep  8 01:44:18 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_cell_set_dirty):
+	remove g_print.
+
+	* gtk/gtktreeview.c (gtk_tree_view_set_model): unref model when we
+	change models, #59899
+
 2001-09-07  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtkmain.c: move some docs inline

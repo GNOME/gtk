@@ -45,6 +45,26 @@ Utility function to manipulate lists of named, typed arguments.
 Implementation of Object Properties
 
 
+<!-- ##### SECTION ./tmpl/gtkcellrenderertextpixbuf.sgml:Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION ./tmpl/gtkcellrenderertextpixbuf.sgml:See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION ./tmpl/gtkcellrenderertextpixbuf.sgml:Short_Description ##### -->
+
+
+
+<!-- ##### SECTION ./tmpl/gtkcellrenderertextpixbuf.sgml:Title ##### -->
+GtkCellRendererTextPixbuf
+
+
 <!-- ##### SECTION ./tmpl/gtkdata.sgml:Long_Description ##### -->
 <para>
 The #GtkData object is a very simple object intended to be used as a base
@@ -1671,6 +1691,13 @@ arrow.
 @menu_item: the menu item
 @show_toggle_indicator: unused
 @show_submenu_indicator: whether to show the arrow or not
+
+<!-- ##### MACRO gtk_notebook_set_page ##### -->
+<para>
+</para>
+
+@notebook: 
+@page_num: 
 
 <!-- ##### FUNCTION gtk_object_arg_get ##### -->
 <para>

@@ -2357,61 +2357,7 @@ gtk_tree_view_column_cell_set_dirty (GtkTreeViewColumn *tree_column)
     }
   tree_column->dirty = TRUE;
 
-  g_print ("in gtk_tree_view_column_cell_set_dirty\n");
   if (tree_column->tree_view)
     gtk_widget_queue_resize (tree_column->tree_view);
 }
 
-
-#if 0
-static void
-gtk_tree_view_column_cell_foreach (GtkTreeViewColumn *tree_column,
-				   gboolean           direction,
-				   GFunc              function,
-				   gpointer           data)
-{
-  GList *list;
-  GtkTreeViewColumnCellInfo *info;
-
-  if (direction == 1)
-    {
-      for (list = tree_column->cell_list; list; list = list->next)
-	{
-	  info = list->data;
-	  if (info->pack == GTK_PACK_END)
-	    continue;
-	  if ((*function) (info, data))
-	    return;
-	}
-	   
-      for (list = g_list_llast (tree_column->cell_list); list; list = list->prev)
-	{
-	  info = list->data;
-	  if (info->pack == GTK_PACK_START)
-	    continue;
-	  if ((*function) (info, data))
-	    return;
-	}
-    }
-  else
-    {
-      for (list = g_list_llast (tree_column->cell_list); list; list = list->prev)
-	{
-	  info = list->data;
-	  if (info->pack == GTK_PACK_START)
-	    continue;
-	  if ((*function) (info, data))
-	    return;
-	}
-      for (list = tree_column->cell_list; list; list = list->next)
-	{
-	  info = list->data;
-	  if (info->pack == GTK_PACK_END)
-	    continue;
-	  if ((*function) (info, data))
-	    return;
-	}
-
-    }
-}
-#endif

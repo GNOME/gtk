@@ -60,7 +60,6 @@ gtk/gtkbutton.c
 gtk/gtkcellrenderer.c
 gtk/gtkcellrendererpixbuf.c
 gtk/gtkcellrenderertext.c
-gtk/gtkcellrenderertextpixbuf.c
 gtk/gtkcellrenderertoggle.c
 gtk/gtkcheckbutton.c
 gtk/gtkcheckmenuitem.c

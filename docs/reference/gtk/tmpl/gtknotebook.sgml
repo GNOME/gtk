@@ -132,15 +132,6 @@ Deprecated compatibility macro.
 @Returns: 
 
 
-<!-- ##### MACRO gtk_notebook_set_page ##### -->
-<para>
-</para>
-
-<!-- # Unused Parameters # -->
-@notebook: 
-@page_num: 
-
-
 <!-- ##### FUNCTION gtk_notebook_next_page ##### -->
 <para>
 </para>
