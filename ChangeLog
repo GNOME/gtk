@@ -1,3 +1,15 @@
+2005-03-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkentrycompletion.c (gtk_entry_completion_class_init): 
+	Document that inline completion requires text-column to be set.
+	(gtk_entry_completion_compute_prefix): Return NULL if text-column
+	is not set.
+
+	* gtk/gtkentry.c (check_completion_callback): Call 
+	gtk_entry_completion_complete() before inserting the prefix,
+	otherwise the prefix may depend on (random) state of the
+	filter model.  
+
 2005-03-15  Anders Carlsson  <andersca@imendio.com>
 
 	* docs/iconcache.txt:
