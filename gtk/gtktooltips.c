@@ -120,10 +120,11 @@ gtk_tooltips_destroy_data (GtkTooltipsData *tooltipsdata)
 {
   g_free (tooltipsdata->tip_text);
   g_free (tooltipsdata->tip_private);
-  if (tooltipsdata->row) {
-    g_list_foreach (tooltipsdata->row, gtk_tooltips_free_string, 0);
-    g_list_free (tooltipsdata->row);
-  }
+  if (tooltipsdata->row)
+    {
+      g_list_foreach (tooltipsdata->row, gtk_tooltips_free_string, 0);
+      g_list_free (tooltipsdata->row);
+    }
   gtk_signal_disconnect_by_data (GTK_OBJECT (tooltipsdata->widget),
  				 (gpointer) tooltipsdata);
   gtk_object_remove_data (GTK_OBJECT (tooltipsdata->widget), tooltips_data_key);
@@ -201,10 +202,11 @@ gtk_tooltips_layout_text (GtkTooltips *tooltips, GtkTooltipsData *data)
   if (!tooltips->tip_window)
     gtk_tooltips_force_window (tooltips);
 
-  if (data->row) {
-    g_list_foreach (data->row, gtk_tooltips_free_string, 0);
-    g_list_free (data->row);
-  }
+  if (data->row)
+    {
+      g_list_foreach (data->row, gtk_tooltips_free_string, 0);
+      g_list_free (data->row);
+    }
   data->row = 0;
   data->font = tooltips->tip_window->style->font;
   data->width = 0;
