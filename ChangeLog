@@ -1,5 +1,9 @@
 Sun Mar 15 08:27:06 1998  Tim Janik  <timj@gimp.org>
 
+	* gtk/gtktipsquery.c (gtk_tips_query_set_labels): changed run type
+	of GtkTipsQuery::widget_entered to GTK_RUN_LAST, so it can be overidden
+	by the user.
+
 	* gtk/gtkwindow.c (gtk_window_configure_event): small fix by
 	Assar Westerlund <assar@sics.se>.
 

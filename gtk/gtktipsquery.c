@@ -175,7 +175,7 @@ gtk_tips_query_class_init (GtkTipsQueryClass *class)
 		    GTK_TYPE_NONE, 0);
   tips_query_signals[SIGNAL_WIDGET_ENTERED] =
     gtk_signal_new ("widget_entered",
-		    GTK_RUN_FIRST,
+		    GTK_RUN_LAST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkTipsQueryClass, widget_entered),
 		    gtk_tips_query_marshal_widget_entered,

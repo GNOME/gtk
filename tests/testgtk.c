@@ -1731,8 +1731,23 @@ create_pixmap ()
     gtk_widget_destroy (window);
 }
 
+static void
+tips_query_widget_entered (GtkTipsQuery   *tips_query,
+			   GtkWidget      *widget,
+			   const gchar    *tip_text,
+			   const gchar    *tip_private,
+			   GtkWidget	  *toggle)
+{
+  if (GTK_TOGGLE_BUTTON (toggle)->active)
+    {
+      gtk_label_set (GTK_LABEL (tips_query), tip_text ? "There is a Tip!" : "There is no Tip!");
+      /* don't let GtkTipsQuery reset it's label */
+      gtk_signal_emit_stop_by_name (GTK_OBJECT (tips_query), "widget_entered");
+    }
+}
+
 static gint
-tips_query_widget_selected (GtkObject      *object,
+tips_query_widget_selected (GtkWidget      *tips_query,
 			    GtkWidget      *widget,
 			    const gchar    *tip_text,
 			    const gchar    *tip_private,
@@ -1742,7 +1757,7 @@ tips_query_widget_selected (GtkObject      *object,
   if (widget)
     g_print ("Help \"%s\" requested for <%s>\n",
 	     tip_private ? tip_private : "None",
-	     gtk_type_name (widget->object.klass->type));
+	     gtk_type_name (GTK_OBJECT_TYPE (widget)));
 
   return TRUE;
 }
@@ -1755,6 +1770,7 @@ create_tooltips ()
   GtkWidget *box2;
   GtkWidget *box3;
   GtkWidget *button;
+  GtkWidget *toggle;
   GtkWidget *frame;
   GtkWidget *tips_query;
   GtkWidget *separator;
@@ -1801,16 +1817,16 @@ create_tooltips ()
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
       gtk_widget_show (button);
 
-      gtk_tooltips_set_tip (tooltips,button,"This is button 2", "ContextHelp/buttons/2");
-
-      button = gtk_toggle_button_new_with_label ("button3");
-      gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-      gtk_widget_show (button);
-
       gtk_tooltips_set_tip (tooltips,
 			    button,
-			    "This is button 3. This is also a really long tooltip which probably won't fit on a single line and will therefore need to be wrapped. Hopefully the wrapping will work correctly.",
-			    "ContextHelp/buttons/3_long");
+			    "This is button 2. This is also a really long tooltip which probably won't fit on a single line and will therefore need to be wrapped. Hopefully the wrapping will work correctly.",
+			    "ContextHelp/buttons/2_long");
+
+      toggle = gtk_toggle_button_new_with_label ("Override TipsQuery Label");
+      gtk_box_pack_start (GTK_BOX (box2), toggle, TRUE, TRUE, 0);
+      gtk_widget_show (toggle);
+
+      gtk_tooltips_set_tip (tooltips, toggle, "Toggle TipsQuery view.", "Hi msw! ;)");
 
       box3 =
 	gtk_widget_new (gtk_vbox_get_type (),
@@ -1840,6 +1856,7 @@ create_tooltips ()
 		      "GtkWidget::visible", TRUE,
 		      "GtkWidget::parent", box3,
 		      "GtkTipsQuery::caller", button,
+		      "GtkObject::signal::widget_entered", tips_query_widget_entered, toggle,
 		      "GtkObject::signal::widget_selected", tips_query_widget_selected, NULL,
 		      NULL);
       
