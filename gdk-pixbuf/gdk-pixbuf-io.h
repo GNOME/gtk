@@ -26,6 +26,8 @@
 #include "gdk-pixbuf.h"
 #include <stdio.h>
 
+typedef void (* ModulePreparedNotifyFunc) (GdkPixbuf *pixbuf, gpointer user_data);
+
 typedef struct _ModuleType ModuleType;
 struct _ModuleType {
 	char *module_name;
@@ -33,7 +35,14 @@ struct _ModuleType {
 	GModule *module;
 	GdkPixbuf *(* load) (FILE *f);
         GdkPixbuf *(* load_xpm_data) (const gchar **data);
+
+        /* Incremental loading */
+        gpointer   (* begin_load)    (ModulePreparedNotifyFunc func, gpointer user_data);
+        void       (* stop_load)     (gpointer context);
+        void       (* load_increment)(gpointer context, guchar *buf, guint size);
+        GdkPixbuf *(* get_pixbuf)    (gpointer context);
 };
 
 
 ModuleType *gdk_pixbuf_get_module (gchar *buffer, gint size);
+

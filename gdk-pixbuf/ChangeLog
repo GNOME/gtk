@@ -1,3 +1,10 @@
+1999-10-26  Havoc Pennington  <hp@pobox.com>
+
+	* src/gdk-pixbuf-loader.h: fix signals 
+
+	* src/gdk-pixbuf-io.h: add new vtable fields
+	
+
 1999-10-26  Jonathan Blandford  <jrb@redhat.com>
 
 	* src/gdk-pixbuf-loader.h: New Class.  Beginning of progrssive

@@ -56,11 +56,10 @@ typedef struct _GdkPixbufLoaderClass GdkPixbufLoaderClass;
 struct _GdkPixbufLoaderClass {
 	GtkObjectClass parent_class;
 
-	void (* area_updated) (GdkPixbufLoader *loader,
-			       int x, int y, int width, int height);
-	void (* area_prepared) (GdkPixbufLoader *loader,
-				GdkPixbuf *image,
-				int x, int y, int width, int height);
+	void (* area_prepared) (GdkPixbufLoader *loader);
+
+	void (* area_updated)  (GdkPixbufLoader *loader,
+                                int x, int y, int width, int height);
 };
 
 
