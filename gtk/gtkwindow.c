@@ -455,7 +455,9 @@ gtk_window_set_default (GtkWindow *window,
     {
       if (window->default_widget)
 	{
-	  GTK_WIDGET_UNSET_FLAGS (window->default_widget, GTK_HAS_DEFAULT);
+	  if (window->focus_widget != window->default_widget ||
+	      !GTK_WIDGET_RECEIVES_DEFAULT (window->default_widget))
+	    GTK_WIDGET_UNSET_FLAGS (window->default_widget, GTK_HAS_DEFAULT);
 	  gtk_widget_draw_default (window->default_widget);
 	}
 
@@ -463,7 +465,9 @@ gtk_window_set_default (GtkWindow *window,
 
       if (window->default_widget)
 	{
-	  GTK_WIDGET_SET_FLAGS (window->default_widget, GTK_HAS_DEFAULT);
+	  if (window->focus_widget == NULL ||
+	      !GTK_WIDGET_RECEIVES_DEFAULT (window->focus_widget))
+	    GTK_WIDGET_SET_FLAGS (window->default_widget, GTK_HAS_DEFAULT);
 	  gtk_widget_draw_default (window->default_widget);
 	}
     }
