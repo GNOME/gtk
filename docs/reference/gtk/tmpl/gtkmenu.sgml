@@ -192,12 +192,10 @@ See gtk_menu_set_accel_group().
 
 <!-- ##### FUNCTION gtk_menu_set_title ##### -->
 <para>
-Sets the title string for the menu.  The title is displayed when the menu
-is shown as a tearoff menu.
 </para>
 
-@menu: a #GtkMenu.
-@title: a string containing the title for the menu.
+@menu:
+@title: 
 
 
 <!-- ##### FUNCTION gtk_menu_get_tearoff_state ##### -->

@@ -134,6 +134,8 @@ static void gtk_menu_reparent       (GtkMenu           *menu,
 static void gtk_menu_remove         (GtkContainer      *menu,
 				     GtkWidget         *widget);
 
+static void gtk_menu_update_title   (GtkMenu           *menu);
+
 static void _gtk_menu_refresh_accel_paths (GtkMenu *menu,
 					   gboolean group_changed);
 
@@ -288,8 +290,7 @@ gtk_menu_get_property (GObject     *object,
   switch (prop_id)
     {
     case PROP_TEAROFF_TITLE:
-      g_value_set_string (value, gtk_object_get_data (GTK_OBJECT (menu), 
-						      "gtk-menu-title"));
+      g_value_set_string (value, gtk_menu_get_title (menu));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -464,6 +465,9 @@ gtk_menu_attach_to_widget (GtkMenu	       *menu,
   /* we don't need to set the style here, since
    * we are a toplevel widget.
    */
+
+  /* Fallback title for menu comes from attach widget */
+  gtk_menu_update_title (menu);
 }
 
 GtkWidget*
@@ -503,6 +507,9 @@ gtk_menu_detach (GtkMenu *menu)
   
   g_free (data);
   
+  /* Fallback title for menu comes from attach widget */
+  gtk_menu_update_title (menu);
+
   gtk_widget_unref (GTK_WIDGET (menu));
 }
 
@@ -971,6 +978,30 @@ gtk_menu_set_tearoff_hints (GtkMenu *menu,
 				 GDK_HINT_MAX_SIZE|GDK_HINT_MIN_SIZE);
 }
 
+static void
+gtk_menu_update_title (GtkMenu *menu)
+{
+  if (menu->tearoff_window)
+    {
+      const gchar *title;
+      GtkWidget *attach_widget;
+
+      title = gtk_menu_get_title (menu);
+      if (!title)
+	{
+	  attach_widget = gtk_menu_get_attach_widget (menu);
+	  if (GTK_IS_MENU_ITEM (attach_widget))
+	    {
+	      GtkWidget *child = GTK_BIN (attach_widget)->child;
+	      if (GTK_IS_LABEL (child))
+		title = gtk_label_get_text (GTK_LABEL (child));
+	    }
+	}
+      
+      if (title)
+	gtk_window_set_title (GTK_WINDOW (menu->tearoff_window), title);
+    }
+}
 
 void       
 gtk_menu_set_tearoff_state (GtkMenu  *menu,
@@ -992,9 +1023,6 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
 
 	  if (!menu->tearoff_window)
 	    {
-	      GtkWidget *attach_widget;
-	      gchar *title;
-	      
 	      menu->tearoff_window = g_object_connect (gtk_widget_new (GTK_TYPE_WINDOW,
 								       "type", GTK_WINDOW_TOPLEVEL,
 								       NULL),
@@ -1008,30 +1036,17 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
 				  "event",
 				  GTK_SIGNAL_FUNC (gtk_menu_window_event), 
 				  GTK_OBJECT (menu));
+
+	      gtk_menu_update_title (menu);
+
 	      gtk_widget_realize (menu->tearoff_window);
 	      
-	      title = gtk_object_get_data (GTK_OBJECT (menu), "gtk-menu-title");
-	      if (!title)
-		{
-		  attach_widget = gtk_menu_get_attach_widget (menu);
-		  if (GTK_IS_MENU_ITEM (attach_widget))
-		    {
-		      GtkWidget *child = GTK_BIN (attach_widget)->child;
-		      if (GTK_IS_LABEL (child))
-			gtk_label_get (GTK_LABEL (child), &title);
-		    }
-		}
-
-	      if (title)
-		gdk_window_set_title (menu->tearoff_window->window, title);
-
 	      gdk_window_set_decorations (menu->tearoff_window->window, 
 					  GDK_DECOR_ALL |
 					  GDK_DECOR_RESIZEH |
 					  GDK_DECOR_MINIMIZE |
 					  GDK_DECOR_MAXIMIZE);
-	      gtk_window_set_policy (GTK_WINDOW (menu->tearoff_window),
-				     FALSE, FALSE, TRUE);
+	      gtk_window_set_resizable (GTK_WINDOW (menu->tearoff_window), FALSE);
 
 	      menu->tearoff_hbox = gtk_hbox_new (FALSE, FALSE);
 	      gtk_container_add (GTK_CONTAINER (menu->tearoff_window), menu->tearoff_hbox);
@@ -1103,14 +1118,27 @@ gtk_menu_get_tearoff_state (GtkMenu *menu)
   return menu->torn_off;
 }
 
+/**
+ * gtk_menu_set_title:
+ * @menu: a #GtkMenu
+ * @title: a string containing the title for the menu.
+ * 
+ * Sets the title string for the menu.  The title is displayed when the menu
+ * is shown as a tearoff menu.
+ **/
 void       
 gtk_menu_set_title (GtkMenu     *menu,
 		    const gchar *title)
 {
   g_return_if_fail (GTK_IS_MENU (menu));
 
-  gtk_object_set_data_full (GTK_OBJECT (menu), "gtk-menu-title",
+  if (title)
+    g_object_set_data_full (G_OBJECT (menu), "gtk-menu-title",
 			    g_strdup (title), (GtkDestroyNotify) g_free);
+  else
+    g_object_set_data (G_OBJECT (menu), "gtk-menu-title", NULL);
+    
+  gtk_menu_update_title (menu);
   g_object_notify (G_OBJECT (menu), "tearoff_title");
 }
 
