@@ -1,3 +1,21 @@
+Tue Sep 14 23:20:56 2004  Søren Sandmann  <sandmann@redhat.com>
+
+	* gtk/gtkaction.c (connect_proxy): Call
+	gtk_tool_item_rebuild_menu().
+
+	* gtk/gtktoolitem.c (gtk_tool_item_class_init): Update
+	documentation for GtkToolItem::create_menu_proxy.
+
+	* gtk/gtktoolitem.c (gtk_tool_item_rebuild_menu): New
+	API to make the toolbar update itself when the proxy menu item
+	for a tool item changes.
+
+	* gtk/gtktoolbutton.c (gtk_tool_button_construct_contents): Call
+	gtk_tool_item_rebuild_menu here()
+
+	* gtk/gtktoolbutton.c (gtk_tool_button_construct_contents):
+	Remove redundant check for need_label.
+
 2004-09-14  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkmain.c (do_post_parse_initialization): Remove an unused 

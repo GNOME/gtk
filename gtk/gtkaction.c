@@ -869,9 +869,9 @@ connect_proxy (GtkAction     *action,
 	}
 
       if (gtk_menu_item_get_submenu (GTK_MENU_ITEM (proxy)) == NULL)
-      g_signal_connect_object (proxy, "activate",
-			       G_CALLBACK (gtk_action_activate), action,
-			       G_CONNECT_SWAPPED);
+	g_signal_connect_object (proxy, "activate",
+				 G_CALLBACK (gtk_action_activate), action,
+				 G_CONNECT_SWAPPED);
 
     }
   else if (GTK_IS_TOOL_ITEM (proxy))
@@ -903,6 +903,8 @@ connect_proxy (GtkAction     *action,
 			       G_CALLBACK (gtk_action_create_menu_proxy),
 			       action, 0);
 
+      gtk_tool_item_rebuild_menu (GTK_TOOL_ITEM (proxy));
+
       /* toolbar button specific synchronisers ... */
       if (GTK_IS_TOOL_BUTTON (proxy))
 	{
@@ -920,10 +922,10 @@ connect_proxy (GtkAction     *action,
 	  g_signal_connect_object (action, "notify::stock-id",
 				   G_CALLBACK (gtk_action_sync_property), 
 				   proxy, 0);
-      g_signal_connect_object (proxy, "clicked",
-			       G_CALLBACK (gtk_action_activate), action,
-			       G_CONNECT_SWAPPED);
-    }
+	  g_signal_connect_object (proxy, "clicked",
+				   G_CALLBACK (gtk_action_activate), action,
+				   G_CONNECT_SWAPPED);
+	}
     }
   else if (GTK_IS_BUTTON (proxy))
     {

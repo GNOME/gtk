@@ -1234,7 +1234,7 @@ gtk_toolbar_begin_sliding (GtkToolbar *toolbar)
     }
 
   /* This resize will run before the first idle handler. This
-   * will make sure that items get the right goal allocatiuon
+   * will make sure that items get the right goal allocation
    * so that the idle handler will not immediately return
    * FALSE
    */
@@ -3734,6 +3734,12 @@ internal_insert_element (GtkToolbar          *toolbar,
 /*
  * ToolbarContent methods
  */
+typedef enum {
+  UNKNOWN,
+  YES,
+  NO,
+} TriState;
+
 struct _ToolbarContent
 {
   ContentType	type;
@@ -3748,6 +3754,7 @@ struct _ToolbarContent
       GtkAllocation	goal_allocation;
       guint		is_placeholder : 1;
       guint		disappearing : 1;
+      TriState		has_menu : 2;
     } tool_item;
     
     struct
@@ -4238,8 +4245,11 @@ toolbar_content_set_child_visible (ToolbarContent *content,
 	}
       else
 	{
-	  content->u.compatibility.space_visible = visible;
-	  gtk_widget_queue_draw (GTK_WIDGET (toolbar));
+	  if (content->u.compatibility.space_visible != visible)
+	    {
+	      content->u.compatibility.space_visible = visible;
+	      gtk_widget_queue_draw (GTK_WIDGET (toolbar));
+	    }
 	}
       break;
     }
@@ -4470,13 +4480,34 @@ toolbar_content_retrieve_menu_item (ToolbarContent *content)
 static gboolean
 toolbar_content_has_proxy_menu_item (ToolbarContent *content)
 {
-  GtkWidget *menu_item;
+  if (content->type == TOOL_ITEM)
+    {
+      GtkWidget *menu_item;
 
-  menu_item = toolbar_content_retrieve_menu_item (content);
+      if (content->u.tool_item.has_menu == YES)
+	return TRUE;
+      else if (content->u.tool_item.has_menu == NO)
+	return FALSE;
 
-  return menu_item != NULL;
+      menu_item = toolbar_content_retrieve_menu_item (content);
+
+      content->u.tool_item.has_menu = menu_item? YES : NO;
+      
+      return menu_item != NULL;
+    }
+  else
+    {
+      return FALSE;
+    }
 }
- 
+
+static void
+toolbar_content_set_unknown_menu_status (ToolbarContent *content)
+{
+  if (content->type == TOOL_ITEM)
+    content->u.tool_item.has_menu = UNKNOWN;
+}
+
 static gboolean
 toolbar_content_is_separator (ToolbarContent *content)
 {
@@ -4722,4 +4753,22 @@ _gtk_toolbar_elide_underscores (const gchar *original)
   *q = '\0';
   
   return result;
+}
+
+void
+_gtk_toolbar_rebuild_menu (GtkToolbar *toolbar)
+{
+  GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
+  GList *list;
+
+  priv->need_rebuild = TRUE;
+
+  for (list = priv->content; list != NULL; list = list->next)
+    {
+      ToolbarContent *content = list->data;
+
+      toolbar_content_set_unknown_menu_status (content);
+    }
+  
+  gtk_widget_queue_resize (GTK_WIDGET (toolbar));
 }

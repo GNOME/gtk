@@ -179,8 +179,9 @@ gtk_tool_item_class_init (GtkToolItemClass *klass)
  * GtkToolItem::create-menu-proxy:
  * @toolitem: the object the signal was emitted on
  *
- * This signal is emitted when the toolbar is displaying an overflow menu.
- * In response the tool item should either 
+ * This signal is emitted when the toolbar needs information from @tool_item
+ * about whether the item should appear in the toolbar overflow menu. In
+ * response the tool item should either
  * <itemizedlist>
  * <listitem> call gtk_tool_item_set_proxy_menu_item() with a %NULL
  * pointer and return %TRUE to indicate that the item should not appear
@@ -195,7 +196,12 @@ gtk_tool_item_class_init (GtkToolItemClass *klass)
  * installs a menu item.
  * </listitem>
  * </itemizedlist>
- * 
+ *
+ * The toolbar may cache the result of this signal. When the tool item changes
+ * how it will respond to this signal it must call gtk_tool_item_rebuild_menu()
+ * to invalidate the cache and ensure that the toolbar rebuilds its overflow
+ * menu.
+ *
  * Return value: %TRUE if the signal was handled, %FALSE if not
  **/
   toolitem_signals[CREATE_MENU_PROXY] =
@@ -1004,7 +1010,8 @@ gtk_tool_item_retrieve_proxy_menu_item (GtkToolItem *tool_item)
   
   g_return_val_if_fail (GTK_IS_TOOL_ITEM (tool_item), NULL);
 
-  g_signal_emit (tool_item, toolitem_signals[CREATE_MENU_PROXY], 0, &retval);
+  g_signal_emit (tool_item, toolitem_signals[CREATE_MENU_PROXY], 0,
+		 &retval);
   
   return tool_item->priv->menu_item;
 }
@@ -1038,6 +1045,34 @@ gtk_tool_item_get_proxy_menu_item (GtkToolItem *tool_item,
     return tool_item->priv->menu_item;
 
   return NULL;
+}
+
+/**
+ * gtk_tool_item_rebuild_menu()
+ * @tool_item: a #GtkToolItem
+ * 
+ * Calling this function signals to the toolbar that the
+ * overflow menu item for @tool_item has changed. If the
+ * overflow menu is visible when this function it called,
+ * the menu will be rebuilt.
+ *
+ * The function must be called when the tool item
+ * changes what it will do in response to the "create_menu_proxy"
+ * signal.
+ * 
+ * Since: 2.6
+ **/
+void
+gtk_tool_item_rebuild_menu (GtkToolItem *tool_item)
+{
+  GtkWidget *widget;
+  
+  g_return_if_fail (GTK_IS_TOOL_ITEM (tool_item));
+
+  widget = GTK_WIDGET (tool_item);
+  
+  if (widget->parent && GTK_IS_TOOLBAR (widget->parent))
+    _gtk_toolbar_rebuild_menu (GTK_TOOLBAR (widget->parent));
 }
 
 /**

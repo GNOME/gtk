@@ -262,14 +262,6 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
   GtkIconSize icon_size;
   GtkWidget *box = NULL;
 
-  if (gtk_tool_item_get_proxy_menu_item (tool_item, MENU_ID))
-    {
-      /* Remove item, so it will be recreated on the next
-       * create_proxy_menu_item()
-       */
-      gtk_tool_item_set_proxy_menu_item (tool_item, MENU_ID, NULL);
-    }
-  
   if (button->priv->icon_widget && button->priv->icon_widget->parent)
     {
       gtk_container_remove (GTK_CONTAINER (button->priv->icon_widget->parent),
@@ -304,12 +296,7 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
     {
       need_label = TRUE;
     }
-  
-  if (style != GTK_TOOLBAR_ICONS &&
-      ((style != GTK_TOOLBAR_BOTH_HORIZ ||
-	gtk_tool_item_get_is_important (GTK_TOOL_ITEM (button)))))
-    need_label = TRUE;
-  
+
   if (need_label)
     {
       if (button->priv->label_widget)
@@ -407,6 +394,8 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
   gtk_button_set_relief (GTK_BUTTON (button->priv->button),
 			 gtk_tool_item_get_relief_style (GTK_TOOL_ITEM (button)));
 
+  gtk_tool_item_rebuild_menu (tool_item);
+  
   gtk_widget_queue_resize (GTK_WIDGET (button));
 }
 

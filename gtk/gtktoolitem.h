@@ -110,6 +110,7 @@ GtkWidget *     gtk_tool_item_get_proxy_menu_item      (GtkToolItem *tool_item,
 void            gtk_tool_item_set_proxy_menu_item      (GtkToolItem *tool_item,
 							const gchar *menu_item_id,
 							GtkWidget   *menu_item);
+void		gtk_tool_item_rebuild_menu	       (GtkToolItem *tool_item);
 
 /* internal function */
 void       _gtk_tool_item_toolbar_reconfigured (GtkToolItem *tool_item);
