@@ -1,3 +1,9 @@
+2004-02-26  Federico Mena Quintero  <federico@ximian.com>
+
+	* configure.in: Added a comment to inform translators that they
+	must add .po files to both po/ and po-properties/ when they add
+	new languages to ALL_LINGUAS.
+
 Wed Feb 25 15:36:50 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkselection-x11.c (gdk_utf8_to_compound_text_for_display):
