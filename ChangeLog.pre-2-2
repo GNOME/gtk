@@ -1,3 +1,7 @@
+2001-09-07  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtk.h: tsk tsk, jrb broke the build
+
 Fri Sep  7 20:45:29 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_pack_{start,end}):
