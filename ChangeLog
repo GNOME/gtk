@@ -1,3 +1,9 @@
+2005-02-23  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkaboutdialog.c (gtk_about_dialog_init) 
+	(gtk_about_dialog_new): Move initialization code from _new to 
+	_init.  (#168249, Murray Cumming) 
+
 Wed Feb 23 17:34:01 2005  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_node_queue_redraw): Patch from

@@ -158,6 +158,7 @@ static void                 display_credits_dialog          (GtkWidget          
 							     gpointer            data);
 static void                 display_license_dialog          (GtkWidget          *button,
 							     gpointer            data);
+static void                 close_cb                        (GtkAboutDialog     *about);
 				 
 				 				       
 static GtkAboutDialogActivateLinkFunc activate_email_hook = NULL;
@@ -506,6 +507,13 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   gtk_window_set_resizable (GTK_WINDOW (about), FALSE);
 
   gtk_widget_pop_composite_child ();
+
+  /* force defaults */
+  gtk_about_dialog_set_name (about, NULL);
+  gtk_about_dialog_set_logo (about, NULL);
+
+  /* Close dialog on user response */
+  g_signal_connect (about, "response", G_CALLBACK (close_cb), NULL);
 }
 
 static void
@@ -2090,16 +2098,6 @@ GtkWidget *
 gtk_about_dialog_new (void)
 {
   GtkAboutDialog *dialog = g_object_new (GTK_TYPE_ABOUT_DIALOG, NULL);
-
-  /* force defaults */
-  gtk_about_dialog_set_name (dialog, NULL);
-  gtk_about_dialog_set_logo (dialog, NULL);
-
-  /* Close dialog on user response */
-  g_signal_connect (dialog,
-                    "response",
-                    G_CALLBACK (close_cb),
-                    NULL);
 
   return GTK_WIDGET (dialog);
 }
