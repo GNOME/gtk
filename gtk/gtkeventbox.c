@@ -24,9 +24,9 @@ static void gtk_event_box_class_init               (GtkEventBoxClass *klass);
 static void gtk_event_box_init                     (GtkEventBox      *event_box);
 static void gtk_event_box_realize                  (GtkWidget        *widget);
 static void gtk_event_box_size_request             (GtkWidget        *widget,
-						   GtkRequisition   *requisition);
+						    GtkRequisition   *requisition);
 static void gtk_event_box_size_allocate            (GtkWidget        *widget,
-						   GtkAllocation    *allocation);
+						    GtkAllocation    *allocation);
 static void gtk_event_box_draw                     (GtkWidget    *widget,
 						   GdkRectangle *area);
 static gint gtk_event_box_expose                   (GtkWidget      *widget,
