@@ -96,6 +96,8 @@ void          gtk_combo_box_insert_text      (GtkComboBox     *combo_box,
                                               const gchar     *text);
 void          gtk_combo_box_prepend_text     (GtkComboBox     *combo_box,
                                               const gchar     *text);
+void          gtk_combo_box_remove_text      (GtkComboBox     *combo_box,
+                                              gint             position);
 
 G_END_DECLS
 

@@ -1,3 +1,9 @@
+Wed Nov 19 23:19:23 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkcombobox.[ch] (gtk_combo_box_scroll_event): move function
+	to a somewhat more logical place,
+	(gtk_combo_box_remove_text): New function (#125262, Owen Taylor).
+
 Wed Nov 19 22:15:01 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkentry.c (gtk_entry_completion_timeout): always resize

@@ -1171,6 +1171,31 @@ gtk_combo_box_expose_event (GtkWidget      *widget,
   return FALSE;
 }
 
+static gboolean
+gtk_combo_box_scroll_event (GtkWidget          *widget,
+                            GdkEventScroll     *event)
+{
+  GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
+  gint index;
+  gint items;
+    
+  index = gtk_combo_box_get_active (combo_box);
+
+  if (index != -1)
+    {
+      items = gtk_tree_model_iter_n_children (combo_box->priv->model, NULL);
+      
+      if (event->direction == GDK_SCROLL_UP)
+        index--;
+      else 
+        index++;
+
+      gtk_combo_box_set_active (combo_box, CLAMP (index, 0, items - 1));
+    }
+
+  return TRUE;
+}
+
 /*
  * menu style
  */
@@ -2670,28 +2695,30 @@ gtk_combo_box_prepend_text (GtkComboBox *combo_box,
   gtk_list_store_set (store, &iter, 0, text, -1);
 }
 
-static gboolean
-gtk_combo_box_scroll_event (GtkWidget          *widget,
-                            GdkEventScroll     *event)
+/**
+ * gtk_combo_box_remove_text:
+ * @combo_box: A #GtkComboBox constructed with gtk_combo_box_new_text().
+ * @position: Index of the item to remove.
+ *
+ * Removes the string at @position from @combo_box. Note that you can only use
+ * this function with combo boxes constructed with gtk_combo_box_new_text().
+ *
+ * Since: 2.4
+ */
+void
+gtk_combo_box_remove_text (GtkComboBox *combo_box,
+                           gint         position)
 {
-  GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
-  gint index;
-  gint items;
-    
-  index = gtk_combo_box_get_active (combo_box);
+  GtkTreeIter iter;
+  GtkListStore *store;
 
-  if (index != -1)
-    {
-      items = gtk_tree_model_iter_n_children (combo_box->priv->model, NULL);
-      
-      if (event->direction == GDK_SCROLL_UP)
-        index--;
-      else 
-        index++;
+  g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
+  g_return_if_fail (GTK_IS_LIST_STORE (combo_box->priv->model));
+  g_return_if_fail (position >= 0);
 
-      gtk_combo_box_set_active (combo_box, CLAMP (index, 0, items - 1));
-    }
+  store = GTK_LIST_STORE (combo_box->priv->model);
 
-  return TRUE;
+  if (gtk_tree_model_iter_nth_child (combo_box->priv->model, &iter,
+                                     NULL, position))
+    gtk_list_store_remove (store, &iter);
 }
-
