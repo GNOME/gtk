@@ -1,3 +1,8 @@
+Tue Jan 27 02:00:37 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktreeitem.c (gtk_tree_item_add_pixmaps): Avoid a 
+	compiler warning.  (#122725, Kjartan Maraas)
+	
 Tue Jan 27 01:46:54 2004  Matthias Clasen  <maclas@gmx.de>
 
 	Make menus work better on Xinerama (#126150):
