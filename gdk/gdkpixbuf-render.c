@@ -68,10 +68,14 @@ gdk_pixbuf_render_threshold_alpha (GdkPixbuf *pixbuf, GdkBitmap *bitmap,
 	g_return_if_fail (apb->bits_per_sample == 8);
 
 	g_return_if_fail (bitmap != NULL);
+	g_return_if_fail (width >= 0 && height >= 0);
 	g_return_if_fail (src_x >= 0 && src_x + width <= apb->width);
 	g_return_if_fail (src_y >= 0 && src_y + height <= apb->height);
 
 	g_return_if_fail (alpha_threshold >= 0 && alpha_threshold <= 255);
+
+	if (width == 0 || height == 0)
+		return;
 
 	gc = gdk_gc_new (bitmap);
 
@@ -134,6 +138,7 @@ remove_alpha (ArtPixBuf *apb, int x, int y, int width, int height, int *rowstrid
 
 	g_assert (apb->n_channels == 4);
 	g_assert (apb->has_alpha);
+	g_assert (width > 0 && height > 0);
 	g_assert (x >= 0 && x + width <= apb->width);
 	g_assert (y >= 0 && y + height <= apb->height);
 
@@ -207,8 +212,12 @@ gdk_pixbuf_render_to_drawable (GdkPixbuf *pixbuf,
 	g_return_if_fail (drawable != NULL);
 	g_return_if_fail (gc != NULL);
 
+	g_return_if_fail (width >= 0 && height >= 0);
 	g_return_if_fail (src_x >= 0 && src_x + width <= apb->width);
 	g_return_if_fail (src_y >= 0 && src_y + height <= apb->height);
+
+	if (width == 0 || height == 0)
+		return;
 
 	/* This will have to be modified once libart supports other image types.
 	 * Also, GdkRGB does not have gdk_draw_rgb_32_image_dithalign(), so we
@@ -287,8 +296,12 @@ gdk_pixbuf_render_to_drawable_alpha (GdkPixbuf *pixbuf, GdkDrawable *drawable,
 	g_return_if_fail (apb->bits_per_sample == 8);
 
 	g_return_if_fail (drawable != NULL);
+	g_return_if_fail (width >= 0 && height >= 0);
 	g_return_if_fail (src_x >= 0 && src_x + width <= apb->width);
 	g_return_if_fail (src_y >= 0 && src_y + height <= apb->height);
+
+	if (width == 0 || height == 0)
+		return;
 
 	gc = gdk_gc_new (drawable);
 
