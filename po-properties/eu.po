@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-02 23:58-0500\n"
+"POT-Creation-Date: 2004-12-16 12:37-0500\n"
 "PO-Revision-Date: 2004-03-08 12:21GMT\n"
 "Last-Translator: Hizkuntza Politikarako Sailburuordetza <hizpol@ej-gv.es>\n"
 "Language-Team: basque <itzulpena@euskalgnu.org>\n"
@@ -101,7 +101,7 @@ msgstr "Bistaratze lehenetsia"
 msgid "The default display for GDK"
 msgstr "GDKren bistaratze lehenetsia"
 
-#: gdk/gdkpango.c:574 gtk/gtkinvisible.c:116 gtk/gtkwindow.c:574
+#: gdk/gdkpango.c:574 gtk/gtkinvisible.c:116 gtk/gtkwindow.c:533
 msgid "Screen"
 msgstr "Pantaila"
 
@@ -257,7 +257,7 @@ msgid "A unique name for the action."
 msgstr ""
 
 #: gtk/gtkaction.c:204 gtk/gtkbutton.c:220 gtk/gtkexpander.c:206
-#: gtk/gtkframe.c:127 gtk/gtklabel.c:318 gtk/gtktoolbutton.c:181
+#: gtk/gtkframe.c:127 gtk/gtklabel.c:320 gtk/gtktoolbutton.c:181
 msgid "Label"
 msgstr "Etiketa"
 
@@ -341,7 +341,7 @@ msgstr ""
 msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr ""
 
-#: gtk/gtkaction.c:282 gtk/gtkactiongroup.c:142 gtk/gtkcellrenderer.c:221
+#: gtk/gtkaction.c:282 gtk/gtkactiongroup.c:142 gtk/gtkcellrenderer.c:222
 #: gtk/gtkwidget.c:450
 msgid "Sensitive"
 msgstr "Sentikorra"
@@ -645,7 +645,8 @@ msgstr ""
 "botoietarako egoki"
 
 #
-#: gtk/gtkbox.c:130 gtk/gtkexpander.c:230 gtk/gtktreeviewcolumn.c:250
+#: gtk/gtkbox.c:130 gtk/gtkexpander.c:230 gtk/gtkiconview.c:447
+#: gtk/gtktreeviewcolumn.c:250
 msgid "Spacing"
 msgstr "Tartea"
 
@@ -722,12 +723,12 @@ msgid ""
 "widget"
 msgstr "Etiketa-trepetaren testua botoi barruan, botoiak etiketa-trepeta badu"
 
-#: gtk/gtkbutton.c:228 gtk/gtkexpander.c:214 gtk/gtklabel.c:339
+#: gtk/gtkbutton.c:228 gtk/gtkexpander.c:214 gtk/gtklabel.c:341
 #: gtk/gtktoolbutton.c:188
 msgid "Use underline"
 msgstr "Erabili azpimarra"
 
-#: gtk/gtkbutton.c:229 gtk/gtkexpander.c:215 gtk/gtklabel.c:340
+#: gtk/gtkbutton.c:229 gtk/gtkexpander.c:215 gtk/gtklabel.c:342
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -906,119 +907,119 @@ msgid "If TRUE, week numbers are displayed"
 msgstr ""
 
 #
-#: gtk/gtkcellrenderer.c:204
+#: gtk/gtkcellrenderer.c:205
 msgid "mode"
 msgstr "modua"
 
-#: gtk/gtkcellrenderer.c:205
+#: gtk/gtkcellrenderer.c:206
 msgid "Editable mode of the CellRenderer"
 msgstr "CellRenderer-en modu editagarria"
 
 #
-#: gtk/gtkcellrenderer.c:214
+#: gtk/gtkcellrenderer.c:215
 msgid "visible"
 msgstr "ikusgai"
 
-#: gtk/gtkcellrenderer.c:215
+#: gtk/gtkcellrenderer.c:216
 msgid "Display the cell"
 msgstr "Bistaratu gelaxka"
 
-#: gtk/gtkcellrenderer.c:222
+#: gtk/gtkcellrenderer.c:223
 #, fuzzy
 msgid "Display the cell sensitive"
 msgstr "Bistaratu gelaxka"
 
 #
-#: gtk/gtkcellrenderer.c:229
+#: gtk/gtkcellrenderer.c:230
 msgid "xalign"
 msgstr "xalign"
 
 #
-#: gtk/gtkcellrenderer.c:230
+#: gtk/gtkcellrenderer.c:231
 msgid "The x-align"
 msgstr "x lerrokatzea"
 
-#: gtk/gtkcellrenderer.c:240
+#: gtk/gtkcellrenderer.c:241
 msgid "yalign"
 msgstr "yalign"
 
 #
-#: gtk/gtkcellrenderer.c:241
+#: gtk/gtkcellrenderer.c:242
 msgid "The y-align"
 msgstr "y lerrokatzea"
 
-#: gtk/gtkcellrenderer.c:251
+#: gtk/gtkcellrenderer.c:252
 msgid "xpad"
 msgstr "xpad"
 
-#: gtk/gtkcellrenderer.c:252
+#: gtk/gtkcellrenderer.c:253
 msgid "The xpad"
 msgstr "x betegarria"
 
-#: gtk/gtkcellrenderer.c:262
+#: gtk/gtkcellrenderer.c:263
 msgid "ypad"
 msgstr "ypad"
 
-#: gtk/gtkcellrenderer.c:263
+#: gtk/gtkcellrenderer.c:264
 msgid "The ypad"
 msgstr "y betegarria"
 
 #
-#: gtk/gtkcellrenderer.c:273
+#: gtk/gtkcellrenderer.c:274
 msgid "width"
 msgstr "zabalera"
 
 #
-#: gtk/gtkcellrenderer.c:274
+#: gtk/gtkcellrenderer.c:275
 msgid "The fixed width"
 msgstr "zabalera finkoa"
 
 #
-#: gtk/gtkcellrenderer.c:284
+#: gtk/gtkcellrenderer.c:285
 msgid "height"
 msgstr "altuera"
 
-#: gtk/gtkcellrenderer.c:285
+#: gtk/gtkcellrenderer.c:286
 msgid "The fixed height"
 msgstr "Altuera finkoa"
 
-#: gtk/gtkcellrenderer.c:295
+#: gtk/gtkcellrenderer.c:296
 msgid "Is Expander"
 msgstr "Zabaltzailea da"
 
-#: gtk/gtkcellrenderer.c:296
+#: gtk/gtkcellrenderer.c:297
 msgid "Row has children"
 msgstr "Errenkadak umeak ditu"
 
-#: gtk/gtkcellrenderer.c:305
+#: gtk/gtkcellrenderer.c:306
 msgid "Is Expanded"
 msgstr "Zabalduta dago"
 
-#: gtk/gtkcellrenderer.c:306
+#: gtk/gtkcellrenderer.c:307
 msgid "Row is an expander row, and is expanded"
 msgstr "Errenkada errenkada zabaltzailea da eta zabalduta dago"
 
-#: gtk/gtkcellrenderer.c:314
+#: gtk/gtkcellrenderer.c:315
 msgid "Cell background color name"
 msgstr "Gelaxkaren atzeko planoaren kolore-izena"
 
-#: gtk/gtkcellrenderer.c:315
+#: gtk/gtkcellrenderer.c:316
 msgid "Cell background color as a string"
 msgstr "Gelaxkaren atzeko planoaren kolorea kate gisa"
 
-#: gtk/gtkcellrenderer.c:322
+#: gtk/gtkcellrenderer.c:323
 msgid "Cell background color"
 msgstr "Gelaxkaren atzeko planoaren kolorea"
 
-#: gtk/gtkcellrenderer.c:323
+#: gtk/gtkcellrenderer.c:324
 msgid "Cell background color as a GdkColor"
 msgstr "Gelaxkaren atzeko planoaren kolorea GdkColor gisa"
 
-#: gtk/gtkcellrenderer.c:331
+#: gtk/gtkcellrenderer.c:332
 msgid "Cell background set"
 msgstr "Gelaxkaren atzeko planoaren ezarpena"
 
-#: gtk/gtkcellrenderer.c:332
+#: gtk/gtkcellrenderer.c:333
 msgid "Whether this tag affects the cell background color"
 msgstr ""
 "Etiketa honek gelaxkaren atzeko planoaren koloreari eragiten dion ala ez "
@@ -1107,7 +1108,7 @@ msgstr "Errendatu gaiaren motorrera pasatzeko xehetasunak "
 msgid "Value of the progress bar"
 msgstr "Aurrerapen-barran bistaratu beharreko testua"
 
-#: gtk/gtkcellrendererprogress.c:133 gtk/gtkcellrenderertext.c:204
+#: gtk/gtkcellrendererprogress.c:133 gtk/gtkcellrenderertext.c:213
 #: gtk/gtkentry.c:573 gtk/gtkprogressbar.c:220
 msgid "Text"
 msgstr "Testua"
@@ -1117,177 +1118,177 @@ msgstr "Testua"
 msgid "Text on the progress bar"
 msgstr "Aurrerapen-barran bistaratu beharreko testua"
 
-#: gtk/gtkcellrenderertext.c:205
+#: gtk/gtkcellrenderertext.c:214
 msgid "Text to render"
 msgstr "Errendatu beharreko testua"
 
-#: gtk/gtkcellrenderertext.c:212
+#: gtk/gtkcellrenderertext.c:221
 msgid "Markup"
 msgstr "Markaketa"
 
-#: gtk/gtkcellrenderertext.c:213
+#: gtk/gtkcellrenderertext.c:222
 msgid "Marked up text to render"
 msgstr "Errendatu beharreko testu markatua"
 
-#: gtk/gtkcellrenderertext.c:220 gtk/gtklabel.c:325
+#: gtk/gtkcellrenderertext.c:229 gtk/gtklabel.c:327
 msgid "Attributes"
 msgstr "Atributuak"
 
-#: gtk/gtkcellrenderertext.c:221
+#: gtk/gtkcellrenderertext.c:230
 msgid "A list of style attributes to apply to the text of the renderer"
 msgstr "Errendatzaileko testuari aplikatu beharreko estilo-atributuen zerrenda"
 
-#: gtk/gtkcellrenderertext.c:228
+#: gtk/gtkcellrenderertext.c:237
 msgid "Single Paragraph Mode"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:229
+#: gtk/gtkcellrenderertext.c:238
 msgid "Whether or not to keep all text in a single paragraph"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:237 gtk/gtkcellview.c:181 gtk/gtktexttag.c:207
+#: gtk/gtkcellrenderertext.c:246 gtk/gtkcellview.c:182 gtk/gtktexttag.c:207
 msgid "Background color name"
 msgstr "Atzeko planoaren kolore-izena"
 
-#: gtk/gtkcellrenderertext.c:238 gtk/gtkcellview.c:182 gtk/gtktexttag.c:208
+#: gtk/gtkcellrenderertext.c:247 gtk/gtkcellview.c:183 gtk/gtktexttag.c:208
 msgid "Background color as a string"
 msgstr "Atzeko planoaren kolorea kate gisa"
 
-#: gtk/gtkcellrenderertext.c:245 gtk/gtkcellview.c:188 gtk/gtktexttag.c:215
+#: gtk/gtkcellrenderertext.c:254 gtk/gtkcellview.c:189 gtk/gtktexttag.c:215
 msgid "Background color"
 msgstr "Atzeko planoaren kolorea"
 
-#: gtk/gtkcellrenderertext.c:246 gtk/gtkcellview.c:189
+#: gtk/gtkcellrenderertext.c:255 gtk/gtkcellview.c:190
 msgid "Background color as a GdkColor"
 msgstr "Atzeko planoaren kolorea GdkColor gisa"
 
-#: gtk/gtkcellrenderertext.c:253 gtk/gtktexttag.c:241
+#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:241
 msgid "Foreground color name"
 msgstr "Aurreko planoaren kolore-izena"
 
-#: gtk/gtkcellrenderertext.c:254 gtk/gtktexttag.c:242
+#: gtk/gtkcellrenderertext.c:263 gtk/gtktexttag.c:242
 msgid "Foreground color as a string"
 msgstr "Aurreko planoaren kolorea kate gisa"
 
-#: gtk/gtkcellrenderertext.c:261 gtk/gtktexttag.c:249
+#: gtk/gtkcellrenderertext.c:270 gtk/gtktexttag.c:249
 msgid "Foreground color"
 msgstr "Aurreko planoaren kolorea"
 
-#: gtk/gtkcellrenderertext.c:262
+#: gtk/gtkcellrenderertext.c:271
 msgid "Foreground color as a GdkColor"
 msgstr "Aurreko planoaren kolorea GdkColor gisa"
 
 #
-#: gtk/gtkcellrenderertext.c:270 gtk/gtkentry.c:505 gtk/gtktexttag.c:275
+#: gtk/gtkcellrenderertext.c:279 gtk/gtkentry.c:505 gtk/gtktexttag.c:275
 #: gtk/gtktextview.c:577
 msgid "Editable"
 msgstr "Editagarria"
 
-#: gtk/gtkcellrenderertext.c:271 gtk/gtktexttag.c:276 gtk/gtktextview.c:578
+#: gtk/gtkcellrenderertext.c:280 gtk/gtktexttag.c:276 gtk/gtktextview.c:578
 msgid "Whether the text can be modified by the user"
 msgstr "Erabiltzaileak testua alda dezakeen ala ez adierazten du"
 
-#: gtk/gtkcellrenderertext.c:278 gtk/gtkcellrenderertext.c:286
+#: gtk/gtkcellrenderertext.c:287 gtk/gtkcellrenderertext.c:295
 #: gtk/gtkfontsel.c:222 gtk/gtktexttag.c:283 gtk/gtktexttag.c:291
 msgid "Font"
 msgstr "Letra-tipoa"
 
-#: gtk/gtkcellrenderertext.c:279
+#: gtk/gtkcellrenderertext.c:288
 msgid "Font description as a string"
 msgstr "Letra-tipoaren azalpena kate gisa"
 
-#: gtk/gtkcellrenderertext.c:287 gtk/gtktexttag.c:292
+#: gtk/gtkcellrenderertext.c:296 gtk/gtktexttag.c:292
 msgid "Font description as a PangoFontDescription struct"
 msgstr "Letra-tipoaren azalpena PangoFontDescription-en egitura gisa"
 
 #
-#: gtk/gtkcellrenderertext.c:295 gtk/gtktexttag.c:300
+#: gtk/gtkcellrenderertext.c:304 gtk/gtktexttag.c:300
 msgid "Font family"
 msgstr "Letra-tipoen familia"
 
-#: gtk/gtkcellrenderertext.c:296 gtk/gtktexttag.c:301
+#: gtk/gtkcellrenderertext.c:305 gtk/gtktexttag.c:301
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
 msgstr ""
 "Letra-tipoen familien izena; adibidez, Sans, Helvetica, Times, Monospace"
 
 #
-#: gtk/gtkcellrenderertext.c:303 gtk/gtkcellrenderertext.c:304
+#: gtk/gtkcellrenderertext.c:312 gtk/gtkcellrenderertext.c:313
 #: gtk/gtktexttag.c:308
 msgid "Font style"
 msgstr "Letra-tipoaren estiloa"
 
-#: gtk/gtkcellrenderertext.c:312 gtk/gtkcellrenderertext.c:313
+#: gtk/gtkcellrenderertext.c:321 gtk/gtkcellrenderertext.c:322
 #: gtk/gtktexttag.c:317
 msgid "Font variant"
 msgstr "Letra-tipoaren aldaera"
 
-#: gtk/gtkcellrenderertext.c:321 gtk/gtkcellrenderertext.c:322
+#: gtk/gtkcellrenderertext.c:330 gtk/gtkcellrenderertext.c:331
 #: gtk/gtktexttag.c:326
 msgid "Font weight"
 msgstr "Letraren zabalera"
 
 #
-#: gtk/gtkcellrenderertext.c:331 gtk/gtkcellrenderertext.c:332
+#: gtk/gtkcellrenderertext.c:340 gtk/gtkcellrenderertext.c:341
 #: gtk/gtktexttag.c:337
 msgid "Font stretch"
 msgstr "Letra-tipo tiratua"
 
 #
-#: gtk/gtkcellrenderertext.c:340 gtk/gtkcellrenderertext.c:341
+#: gtk/gtkcellrenderertext.c:349 gtk/gtkcellrenderertext.c:350
 #: gtk/gtktexttag.c:346
 msgid "Font size"
 msgstr "Letra-tamaina"
 
 #
-#: gtk/gtkcellrenderertext.c:350 gtk/gtktexttag.c:366
+#: gtk/gtkcellrenderertext.c:359 gtk/gtktexttag.c:366
 msgid "Font points"
 msgstr "Letraren puntuak"
 
-#: gtk/gtkcellrenderertext.c:351 gtk/gtktexttag.c:367
+#: gtk/gtkcellrenderertext.c:360 gtk/gtktexttag.c:367
 msgid "Font size in points"
 msgstr "Letra-tamaina puntutan"
 
 #
-#: gtk/gtkcellrenderertext.c:360 gtk/gtktexttag.c:356
+#: gtk/gtkcellrenderertext.c:369 gtk/gtktexttag.c:356
 msgid "Font scale"
 msgstr "Letra-tipoaren eskala"
 
-#: gtk/gtkcellrenderertext.c:361
+#: gtk/gtkcellrenderertext.c:370
 msgid "Font scaling factor"
 msgstr "Letra-tipoa eskalatzeko faktorea"
 
-#: gtk/gtkcellrenderertext.c:370 gtk/gtktexttag.c:425
+#: gtk/gtkcellrenderertext.c:379 gtk/gtktexttag.c:425
 msgid "Rise"
 msgstr "Goratzea"
 
-#: gtk/gtkcellrenderertext.c:371
+#: gtk/gtkcellrenderertext.c:380
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative)"
 msgstr ""
 "Testuaren desplazamendua oinarri-lerroaren gainetik (oinarri-lerroaren "
 "azpitik goratzea negatiboa bada)"
 
-#: gtk/gtkcellrenderertext.c:381 gtk/gtktexttag.c:465
+#: gtk/gtkcellrenderertext.c:390 gtk/gtktexttag.c:465
 msgid "Strikethrough"
 msgstr "Marratua"
 
-#: gtk/gtkcellrenderertext.c:382 gtk/gtktexttag.c:466
+#: gtk/gtkcellrenderertext.c:391 gtk/gtktexttag.c:466
 msgid "Whether to strike through the text"
 msgstr "Testua marratuko den ala ez adierazten du"
 
-#: gtk/gtkcellrenderertext.c:389 gtk/gtktexttag.c:473
+#: gtk/gtkcellrenderertext.c:398 gtk/gtktexttag.c:473
 msgid "Underline"
 msgstr "Azpimarra"
 
-#: gtk/gtkcellrenderertext.c:390 gtk/gtktexttag.c:474
+#: gtk/gtkcellrenderertext.c:399 gtk/gtktexttag.c:474
 msgid "Style of underline for this text"
 msgstr "Testu honen azpimarra-estiloa"
 
-#: gtk/gtkcellrenderertext.c:398 gtk/gtktexttag.c:385
+#: gtk/gtkcellrenderertext.c:407 gtk/gtktexttag.c:385
 msgid "Language"
 msgstr "Hizkuntza"
 
-#: gtk/gtkcellrenderertext.c:399
+#: gtk/gtkcellrenderertext.c:408
 msgid ""
 "The language this text is in, as an ISO code. Pango can use this as a hint "
 "when rendering the text. If you don't understand this parameter, you "
@@ -1297,147 +1298,157 @@ msgstr ""
 "dezake testua bihurtzean. Parametro hori ulertzen ez baduzu, beharbada ez "
 "duzu beharko"
 
-#: gtk/gtkcellrenderertext.c:407 gtk/gtklabel.c:431 gtk/gtkprogressbar.c:242
+#: gtk/gtkcellrenderertext.c:416 gtk/gtklabel.c:433 gtk/gtkprogressbar.c:242
 msgid "Ellipsize"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:408
+#: gtk/gtkcellrenderertext.c:417
 msgid ""
 "The preferred place to ellipsize the string, if the cell renderer does not "
 "have enough room to display the entire string, if at all"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:418 gtk/gtkcellview.c:196 gtk/gtktexttag.c:510
+#: gtk/gtkcellrenderertext.c:434 gtk/gtkfilechooserbutton.c:360
+#: gtk/gtklabel.c:453
+#, fuzzy
+msgid "Width In Characters"
+msgstr "Zabalera karakteretan"
+
+#: gtk/gtkcellrenderertext.c:435 gtk/gtklabel.c:454
+msgid "The desired width of the label, in characters"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:447 gtk/gtkcellview.c:197 gtk/gtktexttag.c:510
 msgid "Background set"
 msgstr "Atzeko planoaren ezarpena"
 
-#: gtk/gtkcellrenderertext.c:419 gtk/gtkcellview.c:197 gtk/gtktexttag.c:511
+#: gtk/gtkcellrenderertext.c:448 gtk/gtkcellview.c:198 gtk/gtktexttag.c:511
 msgid "Whether this tag affects the background color"
 msgstr ""
 "Etiketa honek atzeko planoaren koloreari eragiten dion ala ez adierazten du"
 
-#: gtk/gtkcellrenderertext.c:422 gtk/gtktexttag.c:522
+#: gtk/gtkcellrenderertext.c:451 gtk/gtktexttag.c:522
 msgid "Foreground set"
 msgstr "Aurreko planoaren ezarpena"
 
-#: gtk/gtkcellrenderertext.c:423 gtk/gtktexttag.c:523
+#: gtk/gtkcellrenderertext.c:452 gtk/gtktexttag.c:523
 msgid "Whether this tag affects the foreground color"
 msgstr ""
 "Etiketa honek aurreko planoaren koloreari eragiten dion ala ez adierazten du"
 
-#: gtk/gtkcellrenderertext.c:426 gtk/gtktexttag.c:530
+#: gtk/gtkcellrenderertext.c:455 gtk/gtktexttag.c:530
 msgid "Editability set"
 msgstr "Editagarritasunaren ezarpena"
 
-#: gtk/gtkcellrenderertext.c:427 gtk/gtktexttag.c:531
+#: gtk/gtkcellrenderertext.c:456 gtk/gtktexttag.c:531
 msgid "Whether this tag affects text editability"
 msgstr ""
 "Etiketa honek testuaren editagarritasunari eragiten dion ala ez adierazten du"
 
-#: gtk/gtkcellrenderertext.c:430 gtk/gtktexttag.c:534
+#: gtk/gtkcellrenderertext.c:459 gtk/gtktexttag.c:534
 msgid "Font family set"
 msgstr "Letra-tipoen familiaren ezarpena"
 
-#: gtk/gtkcellrenderertext.c:431 gtk/gtktexttag.c:535
+#: gtk/gtkcellrenderertext.c:460 gtk/gtktexttag.c:535
 msgid "Whether this tag affects the font family"
 msgstr ""
 "Etiketa honek letra-tipoen familiari eragiten dion ala ez adierazten du"
 
 #
-#: gtk/gtkcellrenderertext.c:434 gtk/gtktexttag.c:538
+#: gtk/gtkcellrenderertext.c:463 gtk/gtktexttag.c:538
 msgid "Font style set"
 msgstr "Letra-tipoen estiloaren ezarpena"
 
-#: gtk/gtkcellrenderertext.c:435 gtk/gtktexttag.c:539
+#: gtk/gtkcellrenderertext.c:464 gtk/gtktexttag.c:539
 msgid "Whether this tag affects the font style"
 msgstr ""
 "Etiketa honek letra-tipoen estiloari eragiten dion ala ez adierazten du"
 
-#: gtk/gtkcellrenderertext.c:438 gtk/gtktexttag.c:542
+#: gtk/gtkcellrenderertext.c:467 gtk/gtktexttag.c:542
 msgid "Font variant set"
 msgstr "Letra-tipoen aldaeraren ezarpena"
 
-#: gtk/gtkcellrenderertext.c:439 gtk/gtktexttag.c:543
+#: gtk/gtkcellrenderertext.c:468 gtk/gtktexttag.c:543
 msgid "Whether this tag affects the font variant"
 msgstr ""
 "Etiketa honek letra-tipoen aldaerari eragiten dion ala ez adierazten du"
 
-#: gtk/gtkcellrenderertext.c:442 gtk/gtktexttag.c:546
+#: gtk/gtkcellrenderertext.c:471 gtk/gtktexttag.c:546
 msgid "Font weight set"
 msgstr "Letraren zabaleraren ezarpena"
 
-#: gtk/gtkcellrenderertext.c:443 gtk/gtktexttag.c:547
+#: gtk/gtkcellrenderertext.c:472 gtk/gtktexttag.c:547
 msgid "Whether this tag affects the font weight"
 msgstr "Etiketa honek letraren zabalerari eragiten dion ala ez adierazten du"
 
-#: gtk/gtkcellrenderertext.c:446 gtk/gtktexttag.c:550
+#: gtk/gtkcellrenderertext.c:475 gtk/gtktexttag.c:550
 msgid "Font stretch set"
 msgstr "Letra-tipo tiratuaren ezarpena"
 
-#: gtk/gtkcellrenderertext.c:447 gtk/gtktexttag.c:551
+#: gtk/gtkcellrenderertext.c:476 gtk/gtktexttag.c:551
 msgid "Whether this tag affects the font stretch"
 msgstr ""
 "Etiketa honek letra-tipoaren luzatzeari eragiten dion ala ez adierazten du"
 
-#: gtk/gtkcellrenderertext.c:450 gtk/gtktexttag.c:554
+#: gtk/gtkcellrenderertext.c:479 gtk/gtktexttag.c:554
 msgid "Font size set"
 msgstr "Letra-tamainaren ezarpena"
 
-#: gtk/gtkcellrenderertext.c:451 gtk/gtktexttag.c:555
+#: gtk/gtkcellrenderertext.c:480 gtk/gtktexttag.c:555
 msgid "Whether this tag affects the font size"
 msgstr "Etiketa honek letraren tamainari eragiten dion ala ez adierazten du"
 
 #
-#: gtk/gtkcellrenderertext.c:454 gtk/gtktexttag.c:558
+#: gtk/gtkcellrenderertext.c:483 gtk/gtktexttag.c:558
 msgid "Font scale set"
 msgstr "Letra-tipoaren eskalaren ezarpena"
 
-#: gtk/gtkcellrenderertext.c:455 gtk/gtktexttag.c:559
+#: gtk/gtkcellrenderertext.c:484 gtk/gtktexttag.c:559
 msgid "Whether this tag scales the font size by a factor"
 msgstr ""
 "Etiketa honek faktore batez letraren tamaina eskalatzen duen ala ez "
 "adierazten du"
 
-#: gtk/gtkcellrenderertext.c:458 gtk/gtktexttag.c:578
+#: gtk/gtkcellrenderertext.c:487 gtk/gtktexttag.c:578
 msgid "Rise set"
 msgstr "Goratzearen ezarpena "
 
-#: gtk/gtkcellrenderertext.c:459 gtk/gtktexttag.c:579
+#: gtk/gtkcellrenderertext.c:488 gtk/gtktexttag.c:579
 msgid "Whether this tag affects the rise"
 msgstr "Etiketa honek goratzeari eragiten dion ala ez adierazten du"
 
-#: gtk/gtkcellrenderertext.c:462 gtk/gtktexttag.c:594
+#: gtk/gtkcellrenderertext.c:491 gtk/gtktexttag.c:594
 msgid "Strikethrough set"
 msgstr "Marratuaren ezarpena"
 
-#: gtk/gtkcellrenderertext.c:463 gtk/gtktexttag.c:595
+#: gtk/gtkcellrenderertext.c:492 gtk/gtktexttag.c:595
 msgid "Whether this tag affects strikethrough"
 msgstr "Etiketa honek marratuari eragiten dion ala ez adierazten du"
 
-#: gtk/gtkcellrenderertext.c:466 gtk/gtktexttag.c:602
+#: gtk/gtkcellrenderertext.c:495 gtk/gtktexttag.c:602
 msgid "Underline set"
 msgstr "Azpimarraren ezarpena"
 
-#: gtk/gtkcellrenderertext.c:467 gtk/gtktexttag.c:603
+#: gtk/gtkcellrenderertext.c:496 gtk/gtktexttag.c:603
 msgid "Whether this tag affects underlining"
 msgstr "Etiketa honek azpimarrari eragiten dion ala ez adierazten du"
 
-#: gtk/gtkcellrenderertext.c:470 gtk/gtktexttag.c:566
+#: gtk/gtkcellrenderertext.c:499 gtk/gtktexttag.c:566
 msgid "Language set"
 msgstr "Hizkuntzaren ezarpena"
 
-#: gtk/gtkcellrenderertext.c:471 gtk/gtktexttag.c:567
+#: gtk/gtkcellrenderertext.c:500 gtk/gtktexttag.c:567
 msgid "Whether this tag affects the language the text is rendered as"
 msgstr ""
 "Etiketa honek testua errendatzen den hizkuntzari eragiten dion ala ez "
 "adierazten du"
 
-#: gtk/gtkcellrenderertext.c:474
+#: gtk/gtkcellrenderertext.c:503
 #, fuzzy
 msgid "Ellipsize set"
 msgstr "Goratzearen ezarpena "
 
-#: gtk/gtkcellrenderertext.c:475
+#: gtk/gtkcellrenderertext.c:504
 #, fuzzy
 msgid "Whether this tag affects the ellipsize mode"
 msgstr "Etiketa honek goratzeari eragiten dion ala ez adierazten du"
@@ -1526,7 +1537,7 @@ msgid "Whether or not to give the color an alpha value"
 msgstr ""
 
 #
-#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:238
+#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:346
 #: gtk/gtkfontbutton.c:176 gtk/gtktreeviewcolumn.c:298
 msgid "Title"
 msgstr "Izenburua"
@@ -1536,7 +1547,7 @@ msgstr "Izenburua"
 msgid "The title of the color selection dialog"
 msgstr "Leihoaren izenburua"
 
-#: gtk/gtkcolorbutton.c:233 gtk/gtkcolorsel.c:1839
+#: gtk/gtkcolorbutton.c:233 gtk/gtkcolorsel.c:1848
 msgid "Current Color"
 msgstr "Uneko kolorea"
 
@@ -1545,7 +1556,7 @@ msgstr "Uneko kolorea"
 msgid "The selected color"
 msgstr "Uneko kolorea"
 
-#: gtk/gtkcolorbutton.c:248 gtk/gtkcolorsel.c:1846
+#: gtk/gtkcolorbutton.c:248 gtk/gtkcolorsel.c:1855
 msgid "Current Alpha"
 msgstr "Uneko alfa"
 
@@ -1554,37 +1565,37 @@ msgstr "Uneko alfa"
 msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "Uneko opakutasun-balioa (0 guztiz gardena, 65535 guztiz opakua)"
 
-#: gtk/gtkcolorsel.c:1825
+#: gtk/gtkcolorsel.c:1834
 msgid "Has Opacity Control"
 msgstr "Opakutasun-kontrola du"
 
-#: gtk/gtkcolorsel.c:1826
+#: gtk/gtkcolorsel.c:1835
 msgid "Whether the color selector should allow setting opacity"
 msgstr ""
 "Kolore-hautatzaileak opakutasuna ezartzeko baimena eman behar duen ala ez "
 "adierazten du"
 
-#: gtk/gtkcolorsel.c:1832
+#: gtk/gtkcolorsel.c:1841
 msgid "Has palette"
 msgstr "Paleta dauka"
 
-#: gtk/gtkcolorsel.c:1833
+#: gtk/gtkcolorsel.c:1842
 msgid "Whether a palette should be used"
 msgstr "Paleta erabili behar den ala ez adierazten du"
 
-#: gtk/gtkcolorsel.c:1840
+#: gtk/gtkcolorsel.c:1849
 msgid "The current color"
 msgstr "Uneko kolorea"
 
-#: gtk/gtkcolorsel.c:1847
+#: gtk/gtkcolorsel.c:1856
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "Uneko opakutasun-balioa (0 guztiz gardena, 65535 guztiz opakua)"
 
-#: gtk/gtkcolorsel.c:1861
+#: gtk/gtkcolorsel.c:1870
 msgid "Custom palette"
 msgstr "Paleta pertsonalizatua"
 
-#: gtk/gtkcolorsel.c:1862
+#: gtk/gtkcolorsel.c:1871
 msgid "Palette to use in the color selector"
 msgstr "Kolore-hautatzailean erabili beharreko paleta"
 
@@ -1809,20 +1820,20 @@ msgstr ""
 "Elkarrizketa-koadroaren behekaldeko botoi-arearen inguruko ertzaren zabalera"
 
 #
-#: gtk/gtkentry.c:485 gtk/gtklabel.c:396
+#: gtk/gtkentry.c:485 gtk/gtklabel.c:398
 msgid "Cursor Position"
 msgstr "Kurtsorearen posizioa"
 
-#: gtk/gtkentry.c:486 gtk/gtklabel.c:397
+#: gtk/gtkentry.c:486 gtk/gtklabel.c:399
 msgid "The current position of the insertion cursor in chars"
 msgstr "Txertatze-kurtsorearen uneko posizioa karakteretan"
 
 #
-#: gtk/gtkentry.c:495 gtk/gtklabel.c:406
+#: gtk/gtkentry.c:495 gtk/gtklabel.c:408
 msgid "Selection Bound"
 msgstr "Hautapen-muga"
 
-#: gtk/gtkentry.c:496 gtk/gtklabel.c:407
+#: gtk/gtkentry.c:496 gtk/gtklabel.c:409
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "Hautapenaren kontrako bukaera kurtsoretik zenbat karakteretara dagoen."
@@ -1937,7 +1948,7 @@ msgstr "Graduatzailearen gutxieneko luzera"
 msgid "Minimum length of the search key in order to look up matches"
 msgstr ""
 
-#: gtk/gtkentrycompletion.c:295 gtk/gtkiconview.c:361
+#: gtk/gtkentrycompletion.c:295 gtk/gtkiconview.c:368
 #, fuzzy
 msgid "Text column"
 msgstr "Bilaketa-zutabea"
@@ -2002,11 +2013,11 @@ msgstr "Trepeta trepeta lehenetsia izan daitekeen ala ez adierazten du"
 msgid "Text of the expander's label"
 msgstr "Markoaren etiketako testua"
 
-#: gtk/gtkexpander.c:222 gtk/gtklabel.c:332
+#: gtk/gtkexpander.c:222 gtk/gtklabel.c:334
 msgid "Use markup"
 msgstr "Erabili markaketa"
 
-#: gtk/gtkexpander.c:223 gtk/gtklabel.c:333
+#: gtk/gtkexpander.c:223 gtk/gtklabel.c:335
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "Etiketako testuak XML markaketa dauka. Ikus pango_parse_markup()"
 
@@ -2137,33 +2148,28 @@ msgstr ""
 "Fitxategiak sortzeko/manipulatzeko botoiak bistaratu behar diren ala ez "
 "adierazten du"
 
-#: gtk/gtkfilechooserbutton.c:223
+#: gtk/gtkfilechooserbutton.c:331
 msgid "Dialog"
 msgstr ""
 
-#: gtk/gtkfilechooserbutton.c:224
+#: gtk/gtkfilechooserbutton.c:332
 msgid "The file chooser dialog to use."
 msgstr ""
 
-#: gtk/gtkfilechooserbutton.c:239
+#: gtk/gtkfilechooserbutton.c:347
 #, fuzzy
 msgid "The title of the file chooser dialog."
 msgstr "Leihoaren izenburua"
 
-#: gtk/gtkfilechooserbutton.c:252
-#, fuzzy
-msgid "Width In Characters"
-msgstr "Zabalera karakteretan"
-
-#: gtk/gtkfilechooserbutton.c:253
+#: gtk/gtkfilechooserbutton.c:361
 msgid "The desired width of the button widget, in characters."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:623
+#: gtk/gtkfilechooserdefault.c:625
 msgid "Default file chooser backend"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:624
+#: gtk/gtkfilechooserdefault.c:626
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr ""
 
@@ -2360,75 +2366,126 @@ msgstr ""
 "erabiltiko den adierazten du"
 
 #
-#: gtk/gtkiconview.c:324
+#: gtk/gtkiconview.c:331
 #, fuzzy
 msgid "Selection mode"
 msgstr "Hautapen-muga"
 
-#: gtk/gtkiconview.c:325
+#: gtk/gtkiconview.c:332
 #, fuzzy
 msgid "The selection mode"
 msgstr "Unean hautatutako fitxategi-izena"
 
-#: gtk/gtkiconview.c:343
+#: gtk/gtkiconview.c:350
 #, fuzzy
 msgid "Pixbuf column"
 msgstr "Bilaketa-zutabea"
 
-#: gtk/gtkiconview.c:344
+#: gtk/gtkiconview.c:351
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr ""
 
-#: gtk/gtkiconview.c:362
+#: gtk/gtkiconview.c:369
 msgid "Model column used to retrieve the text from"
 msgstr ""
 
-#: gtk/gtkiconview.c:381
+#: gtk/gtkiconview.c:388
 #, fuzzy
 msgid "Markup column"
 msgstr "Markaketa"
 
-#: gtk/gtkiconview.c:382
+#: gtk/gtkiconview.c:389
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr ""
 
-#: gtk/gtkiconview.c:389
+#: gtk/gtkiconview.c:396
 #, fuzzy
 msgid "Icon View Model"
 msgstr "TreeView modeloa"
 
-#: gtk/gtkiconview.c:390
+#: gtk/gtkiconview.c:397
 #, fuzzy
 msgid "The model for the icon view"
 msgstr "Zuhaitz-ikuspegirako modeloa"
 
-#: gtk/gtkiconview.c:397 gtk/gtkprogressbar.c:152 gtk/gtktoolbar.c:507
+#: gtk/gtkiconview.c:413
+#, fuzzy
+msgid "Number of columns"
+msgstr "Taulako zutabeen kopurua"
+
+#: gtk/gtkiconview.c:414
+#, fuzzy
+msgid "Number of columns to display"
+msgstr "Bistaratu beharreko hamartarren kopurua"
+
+#: gtk/gtkiconview.c:431
+#, fuzzy
+msgid "Width for each item"
+msgstr "Fitxa-etiketen inguruko ertzaren zabalera"
+
+#: gtk/gtkiconview.c:432
+msgid "The width used for each item"
+msgstr ""
+
+#: gtk/gtkiconview.c:448
+msgid "Space which is inserted between cells of an item"
+msgstr ""
+
+#
+#: gtk/gtkiconview.c:463
+#, fuzzy
+msgid "Row Spacing"
+msgstr "Errenkaden tartea"
+
+#: gtk/gtkiconview.c:464
+msgid "Space which is inserted between grid rows"
+msgstr ""
+
+#: gtk/gtkiconview.c:479
+#, fuzzy
+msgid "Column Spacing"
+msgstr "Zutabeen tartea"
+
+#: gtk/gtkiconview.c:480
+msgid "Space which is inserted between grid column"
+msgstr ""
+
+#: gtk/gtkiconview.c:495
+#, fuzzy
+msgid "Margin"
+msgstr "Ezkerreko marjina"
+
+#: gtk/gtkiconview.c:496
+msgid "Space which is inserted at the edges of the icon view"
+msgstr ""
+
+#: gtk/gtkiconview.c:512 gtk/gtkprogressbar.c:152 gtk/gtktoolbar.c:507
 msgid "Orientation"
 msgstr "Orientazioa"
 
-#: gtk/gtkiconview.c:398
+#: gtk/gtkiconview.c:513
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr ""
 
 #
-#: gtk/gtkiconview.c:406
+#: gtk/gtkiconview.c:521
 #, fuzzy
 msgid "Selection Box Color"
 msgstr "Hautapen-muga"
 
-#: gtk/gtkiconview.c:407
+#: gtk/gtkiconview.c:522
 #, fuzzy
 msgid "Color of the selection box"
 msgstr "Leihoaren izenburua"
 
 #
-#: gtk/gtkiconview.c:413
+#: gtk/gtkiconview.c:528
 #, fuzzy
 msgid "Selection Box Alpha"
 msgstr "Hautapen-muga"
 
-#: gtk/gtkiconview.c:414
+#: gtk/gtkiconview.c:529
 #, fuzzy
 msgid "Opacity of the selection box"
 msgstr "Leihoaren izenburua"
@@ -2515,7 +2572,7 @@ msgid "GdkPixbufAnimation to display"
 msgstr "Bistaratu beharreko GdkPixbufAnimation "
 
 #
-#: gtk/gtkimage.c:257 gtk/gtkwindow.c:566
+#: gtk/gtkimage.c:257 gtk/gtkwindow.c:525
 #, fuzzy
 msgid "Icon Name"
 msgstr "Letra-tipoaren izena"
@@ -2547,23 +2604,23 @@ msgstr ""
 msgid "Whether images should be shown in menus"
 msgstr "Fitxak erakutsi behar diren ala ez adierazten du"
 
-#: gtk/gtkinvisible.c:117 gtk/gtkwindow.c:575
+#: gtk/gtkinvisible.c:117 gtk/gtkwindow.c:534
 msgid "The screen where this window will be displayed"
 msgstr "Leiho hau bistaratuko den pantaila"
 
-#: gtk/gtklabel.c:319
+#: gtk/gtklabel.c:321
 msgid "The text of the label"
 msgstr "Etiketako testua"
 
-#: gtk/gtklabel.c:326
+#: gtk/gtklabel.c:328
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Etiketako testuari aplikatu beharreko estilo-atributuen zerrenda"
 
-#: gtk/gtklabel.c:347 gtk/gtktexttag.c:376 gtk/gtktextview.c:594
+#: gtk/gtklabel.c:349 gtk/gtktexttag.c:376 gtk/gtktextview.c:594
 msgid "Justification"
 msgstr "Justifikazioa"
 
-#: gtk/gtklabel.c:348
+#: gtk/gtklabel.c:350
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
@@ -2573,11 +2630,11 @@ msgstr ""
 "eragiten bere esleipenaren barruko etiketaren lerrokatzeari. Ikus GtkMisc::"
 "xalign horretarako"
 
-#: gtk/gtklabel.c:356
+#: gtk/gtklabel.c:358
 msgid "Pattern"
 msgstr "Eredua"
 
-#: gtk/gtklabel.c:357
+#: gtk/gtklabel.c:359
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline"
@@ -2585,72 +2642,72 @@ msgstr ""
 "_ karaktereak dauzkan katea, azpimarratu beharreko testuko karaktereei "
 "dagozkien kokalekutan"
 
-#: gtk/gtklabel.c:364
+#: gtk/gtklabel.c:366
 msgid "Line wrap"
 msgstr "Lerro-itzulbira"
 
-#: gtk/gtklabel.c:365
+#: gtk/gtklabel.c:367
 msgid "If set, wrap lines if the text becomes too wide"
 msgstr "Ezarrita badago, testua zabalegia bada lerroak itzulbiratu egingo dira"
 
 #
-#: gtk/gtklabel.c:371
+#: gtk/gtklabel.c:373
 msgid "Selectable"
 msgstr "Hautagarria"
 
-#: gtk/gtklabel.c:372
+#: gtk/gtklabel.c:374
 msgid "Whether the label text can be selected with the mouse"
 msgstr "Etiketako testua saguarekin hauta daitekeen ala ez adierazten du"
 
-#: gtk/gtklabel.c:378
+#: gtk/gtklabel.c:380
 msgid "Mnemonic key"
 msgstr "Tekla mnemoteknikoa"
 
-#: gtk/gtklabel.c:379
+#: gtk/gtklabel.c:381
 msgid "The mnemonic accelerator key for this label"
 msgstr "Etiketa honen tekla bizkortzaile mnemoteknikoa"
 
-#: gtk/gtklabel.c:387
+#: gtk/gtklabel.c:389
 msgid "Mnemonic widget"
 msgstr "Trepeta mnemoteknikoa"
 
-#: gtk/gtklabel.c:388
+#: gtk/gtklabel.c:390
 msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr ""
 "Etiketako tekla mnemoteknikoa sakatuta dagoenean aktibatuko den trepeta"
 
-#: gtk/gtklabel.c:432
+#: gtk/gtklabel.c:434
 msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string, if at all"
 msgstr ""
 
-#: gtk/gtklabel.c:449
-#, fuzzy
-msgid "Width In Chararacters"
-msgstr "Zabalera karakteretan"
-
-#: gtk/gtklabel.c:450
-msgid "The desired width of the label, in characters"
-msgstr ""
-
 #
-#: gtk/gtklabel.c:470
+#: gtk/gtklabel.c:474
 #, fuzzy
 msgid "Single Line Mode"
 msgstr "Hautapen-muga"
 
-#: gtk/gtklabel.c:471
+#: gtk/gtklabel.c:475
 #, fuzzy
 msgid "Whether the label is in single line mode"
 msgstr "Etiketako testua saguarekin hauta daitekeen ala ez adierazten du"
 
-#: gtk/gtklabel.c:488
+#: gtk/gtklabel.c:492
 msgid "Angle"
 msgstr ""
 
-#: gtk/gtklabel.c:489
+#: gtk/gtklabel.c:493
 msgid "Angle at which the label is rotated"
+msgstr ""
+
+#: gtk/gtklabel.c:513
+#, fuzzy
+msgid "Maximum Width In Characters"
+msgstr "Zabalera karakteretan"
+
+#: gtk/gtklabel.c:514
+msgid "The desired maximum width of the label, in characters"
 msgstr ""
 
 #: gtk/gtklayout.c:635 gtk/gtkviewport.c:136
@@ -2677,124 +2734,124 @@ msgstr "Diseinuaren zabalera"
 msgid "The height of the layout"
 msgstr "Diseinuaren altuera"
 
-#: gtk/gtkmenu.c:521
+#: gtk/gtkmenu.c:524
 msgid "Tearoff Title"
 msgstr "Askagarriaren izenburua"
 
-#: gtk/gtkmenu.c:522
+#: gtk/gtkmenu.c:525
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr "Menu hau bereiztean leiho-kudeatzaileak bistara dezakeen izenburua"
 
-#: gtk/gtkmenu.c:536
+#: gtk/gtkmenu.c:539
 #, fuzzy
 msgid "Tearoff State"
 msgstr "Askagarriaren izenburua"
 
-#: gtk/gtkmenu.c:537
+#: gtk/gtkmenu.c:540
 #, fuzzy
 msgid "A boolean that indicates whether the menu is torn-off"
 msgstr "Menu hau bereiztean leiho-kudeatzaileak bistara dezakeen izenburua"
 
-#: gtk/gtkmenu.c:543
+#: gtk/gtkmenu.c:546
 #, fuzzy
 msgid "Vertical Padding"
 msgstr "Tarte betegarri bertikala"
 
-#: gtk/gtkmenu.c:544
+#: gtk/gtkmenu.c:547
 #, fuzzy
 msgid "Extra space at the top and bottom of the menu"
 msgstr "Trepetaren goian eta behean gehitu beharreko lekua, pixeletan"
 
-#: gtk/gtkmenu.c:552
+#: gtk/gtkmenu.c:555
 #, fuzzy
 msgid "Vertical Offset"
 msgstr "Eskala bertikala"
 
-#: gtk/gtkmenu.c:553
+#: gtk/gtkmenu.c:556
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr ""
 
 #
-#: gtk/gtkmenu.c:561
+#: gtk/gtkmenu.c:564
 #, fuzzy
 msgid "Horizontal Offset"
 msgstr "Eskala horizontala"
 
-#: gtk/gtkmenu.c:562
+#: gtk/gtkmenu.c:565
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 msgstr ""
 
-#: gtk/gtkmenu.c:572
+#: gtk/gtkmenu.c:575
 #, fuzzy
 msgid "Left Attach"
 msgstr "Ezkerreko eranskina"
 
-#: gtk/gtkmenu.c:573 gtk/gtktable.c:205
+#: gtk/gtkmenu.c:576 gtk/gtktable.c:205
 msgid "The column number to attach the left side of the child to"
 msgstr "Umearen ezkerreko aldean erantsi beharreko zutabeen kopurua"
 
-#: gtk/gtkmenu.c:580
+#: gtk/gtkmenu.c:583
 #, fuzzy
 msgid "Right Attach"
 msgstr "Eskuineko eranskina"
 
-#: gtk/gtkmenu.c:581
+#: gtk/gtkmenu.c:584
 #, fuzzy
 msgid "The column number to attach the right side of the child to"
 msgstr "Umearen ezkerreko aldean erantsi beharreko zutabeen kopurua"
 
-#: gtk/gtkmenu.c:588
+#: gtk/gtkmenu.c:591
 #, fuzzy
 msgid "Top Attach"
 msgstr "Goiko eranskina"
 
-#: gtk/gtkmenu.c:589
+#: gtk/gtkmenu.c:592
 #, fuzzy
 msgid "The row number to attach the top of the child to"
 msgstr "Umearen behean erantsi beharreko errenkaden kopurua"
 
-#: gtk/gtkmenu.c:596
+#: gtk/gtkmenu.c:599
 #, fuzzy
 msgid "Bottom Attach"
 msgstr "Beheko eranskina"
 
-#: gtk/gtkmenu.c:597 gtk/gtktable.c:226
+#: gtk/gtkmenu.c:600 gtk/gtktable.c:226
 msgid "The row number to attach the bottom of the child to"
 msgstr "Umearen behean erantsi beharreko errenkaden kopurua"
 
-#: gtk/gtkmenu.c:684
+#: gtk/gtkmenu.c:687
 msgid "Can change accelerators"
 msgstr "Bizkortzaileak alda daitezke"
 
-#: gtk/gtkmenu.c:685
+#: gtk/gtkmenu.c:688
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Tekla menu-elementuan sakatzean menu-bizkortzailea alda daitekeen ala ez "
 "adierazten du"
 
-#: gtk/gtkmenu.c:690
+#: gtk/gtkmenu.c:693
 msgid "Delay before submenus appear"
 msgstr "Azpimenuak agertu aurreko atzerapena"
 
-#: gtk/gtkmenu.c:691
+#: gtk/gtkmenu.c:694
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Azpimenua agertzeko erakusleak menu-elementu baten gainean gutxienez "
 "zenbatdenbora egon behar duen"
 
-#: gtk/gtkmenu.c:698
+#: gtk/gtkmenu.c:701
 msgid "Delay before hiding a submenu"
 msgstr "Azpimenua ezkutatu aurreko atzerapena"
 
-#: gtk/gtkmenu.c:699
+#: gtk/gtkmenu.c:702
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -4629,7 +4686,7 @@ msgid "Whether to display the column"
 msgstr "Zutabea bistaratu behar den ala ez adierazten du"
 
 #
-#: gtk/gtktreeviewcolumn.c:233 gtk/gtkwindow.c:497
+#: gtk/gtktreeviewcolumn.c:233 gtk/gtkwindow.c:456
 msgid "Resizable"
 msgstr "Neurriz alda daiteke"
 
@@ -4920,53 +4977,53 @@ msgstr ""
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr ""
 
-#: gtk/gtkwidget.c:1378
+#: gtk/gtkwidget.c:1407
 msgid "Interior Focus"
 msgstr "Barneko fokua"
 
-#: gtk/gtkwidget.c:1379
+#: gtk/gtkwidget.c:1408
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr ""
 "Foku-adierazlea trepeten barruan marraztu behar den ala ez adierazten du"
 
-#: gtk/gtkwidget.c:1385
+#: gtk/gtkwidget.c:1414
 msgid "Focus linewidth"
 msgstr "Enfokatu lerroaren zabalera"
 
-#: gtk/gtkwidget.c:1386
+#: gtk/gtkwidget.c:1415
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Foku-adierazlearen lerroaren zabalera, pixeletan"
 
-#: gtk/gtkwidget.c:1392
+#: gtk/gtkwidget.c:1421
 msgid "Focus line dash pattern"
 msgstr "Enfokatu marra etenaren eredua"
 
-#: gtk/gtkwidget.c:1393
+#: gtk/gtkwidget.c:1422
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "Marra etenaren eredua foku-adierazlea marrazteko erabiltzen da"
 
-#: gtk/gtkwidget.c:1398
+#: gtk/gtkwidget.c:1427
 msgid "Focus padding"
 msgstr "Fokuaren tarte betegarria"
 
-#: gtk/gtkwidget.c:1399
+#: gtk/gtkwidget.c:1428
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr ""
 "Foku-adierazlearen eta trepetako 'laukia'ren arteko zabalera, pixeletan"
 
-#: gtk/gtkwidget.c:1404
+#: gtk/gtkwidget.c:1433
 msgid "Cursor color"
 msgstr "Kurtsorearen kolorea"
 
-#: gtk/gtkwidget.c:1405
+#: gtk/gtkwidget.c:1434
 msgid "Color with which to draw insertion cursor"
 msgstr "Txertatze-kurtsorea marrazteko kolorea"
 
-#: gtk/gtkwidget.c:1410
+#: gtk/gtkwidget.c:1439
 msgid "Secondary cursor color"
 msgstr "Kurtsorearen bigarren mailako kolorea"
 
-#: gtk/gtkwidget.c:1411
+#: gtk/gtkwidget.c:1440
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -4974,47 +5031,47 @@ msgstr ""
 "Eskuinetik ezkerrera eta ezkerretik eskuinera doan testu nahasia editatzean, "
 "bigarren txertatze-kurtsorea marrazteko kolorea"
 
-#: gtk/gtkwidget.c:1416
+#: gtk/gtkwidget.c:1445
 msgid "Cursor line aspect ratio"
 msgstr "Kurtsore-lerroaren aspektu-erlazioa"
 
-#: gtk/gtkwidget.c:1417
+#: gtk/gtkwidget.c:1446
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Txertatze-kurtsorea marrazteko aspektu-erlazioa"
 
 #
-#: gtk/gtkwindow.c:455
+#: gtk/gtkwindow.c:414
 msgid "Window Type"
 msgstr "Leiho-mota"
 
-#: gtk/gtkwindow.c:456
+#: gtk/gtkwindow.c:415
 msgid "The type of the window"
 msgstr "Leihoa zein motatakoa den"
 
 #
-#: gtk/gtkwindow.c:464
+#: gtk/gtkwindow.c:423
 msgid "Window Title"
 msgstr "Leiho-izenburua"
 
-#: gtk/gtkwindow.c:465
+#: gtk/gtkwindow.c:424
 msgid "The title of the window"
 msgstr "Leihoaren izenburua"
 
 #
-#: gtk/gtkwindow.c:472
+#: gtk/gtkwindow.c:431
 #, fuzzy
 msgid "Window Role"
 msgstr "Leiho-izenburua"
 
-#: gtk/gtkwindow.c:473
+#: gtk/gtkwindow.c:432
 msgid "Unique identifier for the window to be used when restoring a session"
 msgstr ""
 
-#: gtk/gtkwindow.c:480
+#: gtk/gtkwindow.c:439
 msgid "Allow Shrink"
 msgstr "Baimendu uzkurtzea"
 
-#: gtk/gtkwindow.c:482
+#: gtk/gtkwindow.c:441
 #, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
@@ -5023,24 +5080,24 @@ msgstr ""
 "EGIA bada, leihoak ez du gutxieneko tamainarik. Hori EGIA jartzea ia beti "
 "ideia txarra izaten da"
 
-#: gtk/gtkwindow.c:489
+#: gtk/gtkwindow.c:448
 msgid "Allow Grow"
 msgstr "Baimendu handitzea"
 
-#: gtk/gtkwindow.c:490
+#: gtk/gtkwindow.c:449
 msgid "If TRUE, users can expand the window beyond its minimum size"
 msgstr ""
 "EGIA bada, erabiltzaileek leihoa gutxieneko tamainatik gora zabal dezakete"
 
-#: gtk/gtkwindow.c:498
+#: gtk/gtkwindow.c:457
 msgid "If TRUE, users can resize the window"
 msgstr "EGIA bada, erabiltzaileek leihoaren tamaina alda dezakete"
 
-#: gtk/gtkwindow.c:505
+#: gtk/gtkwindow.c:464
 msgid "Modal"
 msgstr "Modala"
 
-#: gtk/gtkwindow.c:506
+#: gtk/gtkwindow.c:465
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
@@ -5048,78 +5105,78 @@ msgstr ""
 "EGIA bada, leihoa modala da (beste leihoak ezin dira erabili hau gainean "
 "dagoen bitartean)"
 
-#: gtk/gtkwindow.c:513
+#: gtk/gtkwindow.c:472
 msgid "Window Position"
 msgstr "Leihoaren kokalekua"
 
-#: gtk/gtkwindow.c:514
+#: gtk/gtkwindow.c:473
 msgid "The initial position of the window"
 msgstr "Leihoaren hasierako kokalekua"
 
-#: gtk/gtkwindow.c:522
+#: gtk/gtkwindow.c:481
 msgid "Default Width"
 msgstr "Zabalera lehenetsia"
 
-#: gtk/gtkwindow.c:523
+#: gtk/gtkwindow.c:482
 msgid "The default width of the window, used when initially showing the window"
 msgstr ""
 "Leihoaren zabalera lehenetsia, hasieran leihoa erakustean erabiltzen dena"
 
-#: gtk/gtkwindow.c:532
+#: gtk/gtkwindow.c:491
 msgid "Default Height"
 msgstr "Altuera lehenetsia"
 
-#: gtk/gtkwindow.c:533
+#: gtk/gtkwindow.c:492
 msgid ""
 "The default height of the window, used when initially showing the window"
 msgstr ""
 "Leihoaren altuera lehenetsia, hasieran leihoa erakustean erabiltzen dena"
 
-#: gtk/gtkwindow.c:542
+#: gtk/gtkwindow.c:501
 msgid "Destroy with Parent"
 msgstr "Deuseztatu gurasoarekin"
 
-#: gtk/gtkwindow.c:543
+#: gtk/gtkwindow.c:502
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr ""
 "Gurasoa deuseztatzean, leiho hau ere deuseztatu behar den ala ez adierazten "
 "du"
 
-#: gtk/gtkwindow.c:550
+#: gtk/gtkwindow.c:509
 msgid "Icon"
 msgstr "Ikonoa"
 
-#: gtk/gtkwindow.c:551
+#: gtk/gtkwindow.c:510
 msgid "Icon for this window"
 msgstr "Leiho honen ikonoa"
 
-#: gtk/gtkwindow.c:567
+#: gtk/gtkwindow.c:526
 #, fuzzy
 msgid "Name of the themed icon for this window"
 msgstr "Leiho honen ikonoa"
 
 #
-#: gtk/gtkwindow.c:582
+#: gtk/gtkwindow.c:541
 msgid "Is Active"
 msgstr "Aktibo dago"
 
-#: gtk/gtkwindow.c:583
+#: gtk/gtkwindow.c:542
 msgid "Whether the toplevel is the current active window"
 msgstr "Goi-maila unean aktibo dagoen leihoa den ala ez adierazten du"
 
-#: gtk/gtkwindow.c:590
+#: gtk/gtkwindow.c:549
 msgid "Focus in Toplevel"
 msgstr "Fokua goi-mailan"
 
-#: gtk/gtkwindow.c:591
+#: gtk/gtkwindow.c:550
 msgid "Whether the input focus is within this GtkWindow"
 msgstr "Sarrera-fokua GtkWindow honen barruan dagoen ala ez adierazten du"
 
-#: gtk/gtkwindow.c:598
+#: gtk/gtkwindow.c:557
 msgid "Type hint"
 msgstr "Motari buruzko arrastoa"
 
-#: gtk/gtkwindow.c:599
+#: gtk/gtkwindow.c:558
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
@@ -5127,57 +5184,57 @@ msgstr ""
 "Mahai-gaineko inguruneari hau zein leiho-mota den eta nola tratatu behar den "
 "ulertzen laguntzeko informazio laburra."
 
-#: gtk/gtkwindow.c:607
+#: gtk/gtkwindow.c:566
 msgid "Skip taskbar"
 msgstr "Saltatu ataza-barra"
 
-#: gtk/gtkwindow.c:608
+#: gtk/gtkwindow.c:567
 msgid "TRUE if the window should not be in the task bar."
 msgstr "EGIA leihoak ataza-barran egon behar ez badu."
 
-#: gtk/gtkwindow.c:615
+#: gtk/gtkwindow.c:574
 msgid "Skip pager"
 msgstr "Saltatu orrialdekatzailea"
 
-#: gtk/gtkwindow.c:616
+#: gtk/gtkwindow.c:575
 msgid "TRUE if the window should not be in the pager."
 msgstr "EGIA leihoak orrialdekatzailean egon behar ez badu."
 
-#: gtk/gtkwindow.c:630
+#: gtk/gtkwindow.c:589
 #, fuzzy
 msgid "Accept focus"
 msgstr "Fokua da"
 
-#: gtk/gtkwindow.c:631
+#: gtk/gtkwindow.c:590
 #, fuzzy
 msgid "TRUE if the window should receive the input focus."
 msgstr "EGIA leihoak orrialdekatzailean egon behar ez badu."
 
-#: gtk/gtkwindow.c:645
+#: gtk/gtkwindow.c:604
 #, fuzzy
 msgid "Focus on map"
 msgstr "Fokua goi-mailan"
 
-#: gtk/gtkwindow.c:646
+#: gtk/gtkwindow.c:605
 #, fuzzy
 msgid "TRUE if the window should receive the input focus when mapped."
 msgstr "EGIA leihoak orrialdekatzailean egon behar ez badu."
 
-#: gtk/gtkwindow.c:660
+#: gtk/gtkwindow.c:619
 #, fuzzy
 msgid "Decorated"
 msgstr "Direktorioak"
 
-#: gtk/gtkwindow.c:661
+#: gtk/gtkwindow.c:620
 #, fuzzy
 msgid "Whether the window should be decorated by the window manager"
 msgstr "EGIA leihoak orrialdekatzailean egon behar ez badu."
 
-#: gtk/gtkwindow.c:676
+#: gtk/gtkwindow.c:635
 msgid "Gravity"
 msgstr ""
 
-#: gtk/gtkwindow.c:677
+#: gtk/gtkwindow.c:636
 #, fuzzy
 msgid "The window gravity of the window"
 msgstr "Leihoa zein motatakoa den"
@@ -5197,6 +5254,10 @@ msgstr "IM egoeraren estiloa"
 #: modules/input/gtkimcontextxim.c:340
 msgid "How to draw the input method statusbar"
 msgstr "Egoera-barraren sarrera-metodoa nola marraztu"
+
+#, fuzzy
+#~ msgid "Width In Chararacters"
+#~ msgstr "Zabalera karakteretan"
 
 #, fuzzy
 #~ msgid "Whether the browse dialog is visible or not."

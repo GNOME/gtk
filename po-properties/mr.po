@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.mr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-02 23:58-0500\n"
+"POT-Creation-Date: 2004-12-16 12:37-0500\n"
 "PO-Revision-Date: 2004-03-13 14:59+0530\n"
 "Last-Translator: Jitendra Shah <jitendras@vsnl.com>\n"
 "Language-Team:  Marathi <www.indictrans.org>\n"
@@ -108,7 +108,7 @@ msgid "The default display for GDK"
 msgstr ""
 
 # gtk/gtkinputdialog.c:246
-#: gdk/gdkpango.c:574 gtk/gtkinvisible.c:116 gtk/gtkwindow.c:574
+#: gdk/gdkpango.c:574 gtk/gtkinvisible.c:116 gtk/gtkwindow.c:533
 msgid "Screen"
 msgstr "पडदा"
 
@@ -273,7 +273,7 @@ msgstr ""
 
 # gtk/gtkbutton.c:189 gtk/gtkframe.c:125 gtk/gtklabel.c:280
 #: gtk/gtkaction.c:204 gtk/gtkbutton.c:220 gtk/gtkexpander.c:206
-#: gtk/gtkframe.c:127 gtk/gtklabel.c:318 gtk/gtktoolbutton.c:181
+#: gtk/gtkframe.c:127 gtk/gtklabel.c:320 gtk/gtktoolbutton.c:181
 msgid "Label"
 msgstr "लेबल"
 
@@ -362,7 +362,7 @@ msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr ""
 
 # gtk/gtkwidget.c:430
-#: gtk/gtkaction.c:282 gtk/gtkactiongroup.c:142 gtk/gtkcellrenderer.c:221
+#: gtk/gtkaction.c:282 gtk/gtkactiongroup.c:142 gtk/gtkcellrenderer.c:222
 #: gtk/gtkwidget.c:450
 msgid "Sensitive"
 msgstr "संवेदनशील"
@@ -708,7 +708,8 @@ msgstr ""
 "जर मुल्य TRUE(खरे), असेल तर ही उप चौकट दुय्यम गटात मानली जाईल,उदा. 'मदतकरा' ही बटणे"
 
 # gtk/gtkbox.c:125
-#: gtk/gtkbox.c:130 gtk/gtkexpander.c:230 gtk/gtktreeviewcolumn.c:250
+#: gtk/gtkbox.c:130 gtk/gtkexpander.c:230 gtk/gtkiconview.c:447
+#: gtk/gtktreeviewcolumn.c:250
 msgid "Spacing"
 msgstr "मोकळी जागा ठेवा"
 
@@ -794,13 +795,13 @@ msgid ""
 msgstr "जर बटणांमधे लेबल widget असेल तर, बटणांमधील लेबल विजेटची वाक्यरचना"
 
 # gtk/gtkbutton.c:197 gtk/gtklabel.c:301
-#: gtk/gtkbutton.c:228 gtk/gtkexpander.c:214 gtk/gtklabel.c:339
+#: gtk/gtkbutton.c:228 gtk/gtkexpander.c:214 gtk/gtklabel.c:341
 #: gtk/gtktoolbutton.c:188
 msgid "Use underline"
 msgstr "अधोरेखीत करा "
 
 # gtk/gtkbutton.c:198 gtk/gtklabel.c:302
-#: gtk/gtkbutton.c:229 gtk/gtkexpander.c:215 gtk/gtklabel.c:340
+#: gtk/gtkbutton.c:229 gtk/gtkexpander.c:215 gtk/gtklabel.c:342
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -998,150 +999,150 @@ msgid "If TRUE, week numbers are displayed"
 msgstr ""
 
 # gtk/gtkcellrenderer.c:103
-#: gtk/gtkcellrenderer.c:204
+#: gtk/gtkcellrenderer.c:205
 msgid "mode"
 msgstr "रीत"
 
 # gtk/gtkcellrenderer.c:104
-#: gtk/gtkcellrenderer.c:205
+#: gtk/gtkcellrenderer.c:206
 msgid "Editable mode of the CellRenderer"
 msgstr "CellRenderer ची संपादन करण्याची रीत"
 
 # gtk/gtkcellrenderer.c:113
-#: gtk/gtkcellrenderer.c:214
+#: gtk/gtkcellrenderer.c:215
 msgid "visible"
 msgstr "सुस्पष्ट चित्र"
 
 # gtk/gtkcellrenderer.c:114
-#: gtk/gtkcellrenderer.c:215
+#: gtk/gtkcellrenderer.c:216
 msgid "Display the cell"
 msgstr "कोष दाखवा"
 
 # gtk/gtkcellrenderer.c:114
-#: gtk/gtkcellrenderer.c:222
+#: gtk/gtkcellrenderer.c:223
 #, fuzzy
 msgid "Display the cell sensitive"
 msgstr "कोष दाखवा"
 
 # gtk/gtkcellrenderer.c:122
-#: gtk/gtkcellrenderer.c:229
+#: gtk/gtkcellrenderer.c:230
 msgid "xalign"
 msgstr "ओळ x दिशेने हलवा"
 
 # gtk/gtkcellrenderer.c:123
-#: gtk/gtkcellrenderer.c:230
+#: gtk/gtkcellrenderer.c:231
 #, fuzzy
 msgid "The x-align"
 msgstr "ही ओळ x दिशेने हलवा"
 
 # gtk/gtkcellrenderer.c:133
-#: gtk/gtkcellrenderer.c:240
+#: gtk/gtkcellrenderer.c:241
 msgid "yalign"
 msgstr "ओळ y दिशेने हलवा"
 
 # gtk/gtkcellrenderer.c:134
-#: gtk/gtkcellrenderer.c:241
+#: gtk/gtkcellrenderer.c:242
 #, fuzzy
 msgid "The y-align"
 msgstr "ही ओळ y दिशेने हलवा"
 
 # gtk/gtkcellrenderer.c:144
-#: gtk/gtkcellrenderer.c:251
+#: gtk/gtkcellrenderer.c:252
 msgid "xpad"
 msgstr "x पॅड"
 
 # gtk/gtkcellrenderer.c:145
-#: gtk/gtkcellrenderer.c:252
+#: gtk/gtkcellrenderer.c:253
 #, fuzzy
 msgid "The xpad"
 msgstr "x हे पॅड"
 
 # gtk/gtkcellrenderer.c:155
-#: gtk/gtkcellrenderer.c:262
+#: gtk/gtkcellrenderer.c:263
 msgid "ypad"
 msgstr "y पॅड"
 
 # gtk/gtkcellrenderer.c:156
-#: gtk/gtkcellrenderer.c:263
+#: gtk/gtkcellrenderer.c:264
 #, fuzzy
 msgid "The ypad"
 msgstr "y हे पॅड"
 
 # gtk/gtkcellrenderer.c:166
-#: gtk/gtkcellrenderer.c:273
+#: gtk/gtkcellrenderer.c:274
 msgid "width"
 msgstr "रुंदी "
 
 # gtk/gtkcellrenderer.c:167
-#: gtk/gtkcellrenderer.c:274
+#: gtk/gtkcellrenderer.c:275
 #, fuzzy
 msgid "The fixed width"
 msgstr "ठराविक रुंदी"
 
 # gtk/gtkcellrenderer.c:177
-#: gtk/gtkcellrenderer.c:284
+#: gtk/gtkcellrenderer.c:285
 msgid "height"
 msgstr "उंची "
 
 # gtk/gtkcellrenderer.c:178
-#: gtk/gtkcellrenderer.c:285
+#: gtk/gtkcellrenderer.c:286
 #, fuzzy
 msgid "The fixed height"
 msgstr "ठराविक उंची"
 
 # gtk/gtkcellrenderer.c:188
-#: gtk/gtkcellrenderer.c:295
+#: gtk/gtkcellrenderer.c:296
 msgid "Is Expander"
 msgstr "विस्तारक आहे"
 
 # gtk/gtkcellrenderer.c:189
-#: gtk/gtkcellrenderer.c:296
+#: gtk/gtkcellrenderer.c:297
 #, fuzzy
 msgid "Row has children"
 msgstr "ओळीमध्ये उपरचना आहेत"
 
 # gtk/gtkcellrenderer.c:198
-#: gtk/gtkcellrenderer.c:305
+#: gtk/gtkcellrenderer.c:306
 msgid "Is Expanded"
 msgstr "विस्तारीत आहे"
 
 # gtk/gtkcellrenderer.c:199
-#: gtk/gtkcellrenderer.c:306
+#: gtk/gtkcellrenderer.c:307
 msgid "Row is an expander row, and is expanded"
 msgstr "ओळ ही विस्तारक ओळ आहे आणि ती विस्तारीत केली आहे"
 
 # gtk/gtkcellrenderertext.c:198 gtk/gtktexttag.c:209
-#: gtk/gtkcellrenderer.c:314
+#: gtk/gtkcellrenderer.c:315
 #, fuzzy
 msgid "Cell background color name"
 msgstr "पार्श्वरंगाचे नाव "
 
 # gtk/gtkcellrenderertext.c:199 gtk/gtktexttag.c:210
-#: gtk/gtkcellrenderer.c:315
+#: gtk/gtkcellrenderer.c:316
 #, fuzzy
 msgid "Cell background color as a string"
 msgstr "पार्श्वरंगाचे नाव"
 
 # gtk/gtkcellrenderertext.c:206 gtk/gtktexttag.c:217
-#: gtk/gtkcellrenderer.c:322
+#: gtk/gtkcellrenderer.c:323
 #, fuzzy
 msgid "Cell background color"
 msgstr "पार्श्वरंग"
 
 # gtk/gtkcellrenderertext.c:207 gtk/gtktexttag.c:218
-#: gtk/gtkcellrenderer.c:323
+#: gtk/gtkcellrenderer.c:324
 #, fuzzy
 msgid "Cell background color as a GdkColor"
 msgstr "Gdk रंगाप्रमाणे पार्श्वरंग"
 
 # gtk/gtkcellrenderertext.c:361 gtk/gtktexttag.c:512
-#: gtk/gtkcellrenderer.c:331
+#: gtk/gtkcellrenderer.c:332
 #, fuzzy
 msgid "Cell background set"
 msgstr "पार्श्वभूमी समायोजन"
 
 # gtk/gtkcellrenderertext.c:362 gtk/gtktexttag.c:513
-#: gtk/gtkcellrenderer.c:332
+#: gtk/gtkcellrenderer.c:333
 #, fuzzy
 msgid "Whether this tag affects the cell background color"
 msgstr "हा टॅग पार्श्वरंगाला प्रभावित करेल का"
@@ -1243,7 +1244,7 @@ msgid "Value of the progress bar"
 msgstr "gtk प्रगती सूचकपट्टी मध्ये दर्शविण्याचा मजकुर"
 
 # gtk/gtkcellrenderertext.c:174 gtk/gtkentry.c:523 gtk/gtkprogressbar.c:207
-#: gtk/gtkcellrendererprogress.c:133 gtk/gtkcellrenderertext.c:204
+#: gtk/gtkcellrendererprogress.c:133 gtk/gtkcellrenderertext.c:213
 #: gtk/gtkentry.c:573 gtk/gtkprogressbar.c:220
 msgid "Text"
 msgstr "लिखाण"
@@ -1255,374 +1256,385 @@ msgid "Text on the progress bar"
 msgstr "gtk प्रगती सूचकपट्टी मध्ये दर्शविण्याचा मजकुर"
 
 # gtk/gtkcellrenderertext.c:175
-#: gtk/gtkcellrenderertext.c:205
+#: gtk/gtkcellrenderertext.c:214
 msgid "Text to render"
 msgstr "दाखवण्यासाठी लिखाण"
 
 # gtk/gtkcellrenderertext.c:182
-#: gtk/gtkcellrenderertext.c:212
+#: gtk/gtkcellrenderertext.c:221
 msgid "Markup"
 msgstr "(हवे ते लिखाण) चिन्हांकित करा  "
 
 # gtk/gtkcellrenderertext.c:183
-#: gtk/gtkcellrenderertext.c:213
+#: gtk/gtkcellrenderertext.c:222
 msgid "Marked up text to render"
 msgstr "दाखवण्यासाठी चिन्हांकित केलेले लिखाण "
 
 # gtk/gtkcellrenderertext.c:190 gtk/gtklabel.c:287
-#: gtk/gtkcellrenderertext.c:220 gtk/gtklabel.c:325
+#: gtk/gtkcellrenderertext.c:229 gtk/gtklabel.c:327
 msgid "Attributes"
 msgstr "गुणविशेष"
 
 # gtk/gtkcellrenderertext.c:191
-#: gtk/gtkcellrenderertext.c:221
+#: gtk/gtkcellrenderertext.c:230
 #, fuzzy
 msgid "A list of style attributes to apply to the text of the renderer"
 msgstr "दाखवण्यायोग्य लिखाणाला लागु करण्यासाठी गुणविशेष शैलींची यादी"
 
-#: gtk/gtkcellrenderertext.c:228
+#: gtk/gtkcellrenderertext.c:237
 msgid "Single Paragraph Mode"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:229
+#: gtk/gtkcellrenderertext.c:238
 msgid "Whether or not to keep all text in a single paragraph"
 msgstr ""
 
 # gtk/gtkcellrenderertext.c:198 gtk/gtktexttag.c:209
-#: gtk/gtkcellrenderertext.c:237 gtk/gtkcellview.c:181 gtk/gtktexttag.c:207
+#: gtk/gtkcellrenderertext.c:246 gtk/gtkcellview.c:182 gtk/gtktexttag.c:207
 msgid "Background color name"
 msgstr "पार्श्वरंगाचे नाव "
 
 # gtk/gtkcellrenderertext.c:199 gtk/gtktexttag.c:210
-#: gtk/gtkcellrenderertext.c:238 gtk/gtkcellview.c:182 gtk/gtktexttag.c:208
+#: gtk/gtkcellrenderertext.c:247 gtk/gtkcellview.c:183 gtk/gtktexttag.c:208
 msgid "Background color as a string"
 msgstr "पार्श्वरंगाचे नाव"
 
 # gtk/gtkcellrenderertext.c:206 gtk/gtktexttag.c:217
-#: gtk/gtkcellrenderertext.c:245 gtk/gtkcellview.c:188 gtk/gtktexttag.c:215
+#: gtk/gtkcellrenderertext.c:254 gtk/gtkcellview.c:189 gtk/gtktexttag.c:215
 msgid "Background color"
 msgstr "पार्श्वरंग"
 
 # gtk/gtkcellrenderertext.c:207 gtk/gtktexttag.c:218
-#: gtk/gtkcellrenderertext.c:246 gtk/gtkcellview.c:189
+#: gtk/gtkcellrenderertext.c:255 gtk/gtkcellview.c:190
 msgid "Background color as a GdkColor"
 msgstr "Gdk रंगाप्रमाणे पार्श्वरंग"
 
 # gtk/gtkcellrenderertext.c:214 gtk/gtktexttag.c:243
-#: gtk/gtkcellrenderertext.c:253 gtk/gtktexttag.c:241
+#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:241
 msgid "Foreground color name"
 msgstr "पृष्ठभागावरील रंगाचे नाव "
 
 # gtk/gtkcellrenderertext.c:215 gtk/gtktexttag.c:244
-#: gtk/gtkcellrenderertext.c:254 gtk/gtktexttag.c:242
+#: gtk/gtkcellrenderertext.c:263 gtk/gtktexttag.c:242
 msgid "Foreground color as a string"
 msgstr "पृष्ठभागावरील रंगाचे नाव"
 
 # gtk/gtkcellrenderertext.c:222 gtk/gtktexttag.c:251
-#: gtk/gtkcellrenderertext.c:261 gtk/gtktexttag.c:249
+#: gtk/gtkcellrenderertext.c:270 gtk/gtktexttag.c:249
 msgid "Foreground color"
 msgstr "पृष्ठभागावरील रंग"
 
 # gtk/gtkcellrenderertext.c:223 gtk/gtktexttag.c:252
-#: gtk/gtkcellrenderertext.c:262
+#: gtk/gtkcellrenderertext.c:271
 msgid "Foreground color as a GdkColor"
 msgstr "Gdk रंगाप्रमाणे पार्श्वरंग"
 
 # gtk/gtkcellrenderertext.c:231 gtk/gtkentry.c:455 gtk/gtktexttag.c:277
 # gtk/gtktextview.c:568
-#: gtk/gtkcellrenderertext.c:270 gtk/gtkentry.c:505 gtk/gtktexttag.c:275
+#: gtk/gtkcellrenderertext.c:279 gtk/gtkentry.c:505 gtk/gtktexttag.c:275
 #: gtk/gtktextview.c:577
 msgid "Editable"
 msgstr "संपादनयोग्य"
 
 # gtk/gtkcellrenderertext.c:232 gtk/gtktexttag.c:278 gtk/gtktextview.c:569
-#: gtk/gtkcellrenderertext.c:271 gtk/gtktexttag.c:276 gtk/gtktextview.c:578
+#: gtk/gtkcellrenderertext.c:280 gtk/gtktexttag.c:276 gtk/gtktextview.c:578
 msgid "Whether the text can be modified by the user"
 msgstr "उपयोगकर्त्याद्वारे लिखाणात सुधारणा करता येईल काय"
 
 # gtk/gtkcellrenderertext.c:239 gtk/gtkcellrenderertext.c:247
 # gtk/gtkfontsel.c:209 gtk/gtktexttag.c:285 gtk/gtktexttag.c:293
-#: gtk/gtkcellrenderertext.c:278 gtk/gtkcellrenderertext.c:286
+#: gtk/gtkcellrenderertext.c:287 gtk/gtkcellrenderertext.c:295
 #: gtk/gtkfontsel.c:222 gtk/gtktexttag.c:283 gtk/gtktexttag.c:291
 msgid "Font"
 msgstr "फोन्ट(अक्षर रचना)"
 
 # gtk/gtkcellrenderertext.c:240 gtk/gtktexttag.c:286
-#: gtk/gtkcellrenderertext.c:279
+#: gtk/gtkcellrenderertext.c:288
 msgid "Font description as a string"
 msgstr "सलगपणे येणारे फोन्टचे वर्णन"
 
 # gtk/gtkcellrenderertext.c:248 gtk/gtktexttag.c:294
-#: gtk/gtkcellrenderertext.c:287 gtk/gtktexttag.c:292
+#: gtk/gtkcellrenderertext.c:296 gtk/gtktexttag.c:292
 msgid "Font description as a PangoFontDescription struct"
 msgstr "पांगोफोन्ट संरचनेप्रमाणे फोन्टचे वर्णन"
 
 # gtk/gtkcellrenderertext.c:256 gtk/gtktexttag.c:302
-#: gtk/gtkcellrenderertext.c:295 gtk/gtktexttag.c:300
+#: gtk/gtkcellrenderertext.c:304 gtk/gtktexttag.c:300
 msgid "Font family"
 msgstr "फोन्ट परिवार"
 
 # gtk/gtkcellrenderertext.c:257 gtk/gtktexttag.c:303
-#: gtk/gtkcellrenderertext.c:296 gtk/gtktexttag.c:301
+#: gtk/gtkcellrenderertext.c:305 gtk/gtktexttag.c:301
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
 msgstr "फोन्ट परिवाराचे नाव  जसे Sans, Helvetica, Times, Monospace"
 
 # gtk/gtkcellrenderertext.c:264 gtk/gtkcellrenderertext.c:265
 # gtk/gtktexttag.c:310 gtk/gtktexttag.c:311
-#: gtk/gtkcellrenderertext.c:303 gtk/gtkcellrenderertext.c:304
+#: gtk/gtkcellrenderertext.c:312 gtk/gtkcellrenderertext.c:313
 #: gtk/gtktexttag.c:308
 msgid "Font style"
 msgstr "फोन्ट शैली "
 
 # gtk/gtkcellrenderertext.c:273 gtk/gtkcellrenderertext.c:274
 # gtk/gtktexttag.c:319 gtk/gtktexttag.c:320
-#: gtk/gtkcellrenderertext.c:312 gtk/gtkcellrenderertext.c:313
+#: gtk/gtkcellrenderertext.c:321 gtk/gtkcellrenderertext.c:322
 #: gtk/gtktexttag.c:317
 msgid "Font variant"
 msgstr "रूपांतर करणारा फोन्ट"
 
 # gtk/gtkcellrenderertext.c:282 gtk/gtkcellrenderertext.c:283
 # gtk/gtktexttag.c:328 gtk/gtktexttag.c:329
-#: gtk/gtkcellrenderertext.c:321 gtk/gtkcellrenderertext.c:322
+#: gtk/gtkcellrenderertext.c:330 gtk/gtkcellrenderertext.c:331
 #: gtk/gtktexttag.c:326
 msgid "Font weight"
 msgstr "फोन्टचे वजन(परिमाण)"
 
 # gtk/gtkcellrenderertext.c:292 gtk/gtkcellrenderertext.c:293
 # gtk/gtktexttag.c:339 gtk/gtktexttag.c:340
-#: gtk/gtkcellrenderertext.c:331 gtk/gtkcellrenderertext.c:332
+#: gtk/gtkcellrenderertext.c:340 gtk/gtkcellrenderertext.c:341
 #: gtk/gtktexttag.c:337
 msgid "Font stretch"
 msgstr "फोन्टची ताणक्षमता"
 
 # gtk/gtkcellrenderertext.c:301 gtk/gtkcellrenderertext.c:302
 # gtk/gtktexttag.c:348 gtk/gtktexttag.c:349
-#: gtk/gtkcellrenderertext.c:340 gtk/gtkcellrenderertext.c:341
+#: gtk/gtkcellrenderertext.c:349 gtk/gtkcellrenderertext.c:350
 #: gtk/gtktexttag.c:346
 msgid "Font size"
 msgstr "फोन्टचा आकार"
 
 # gtk/gtkcellrenderertext.c:311 gtk/gtktexttag.c:368
-#: gtk/gtkcellrenderertext.c:350 gtk/gtktexttag.c:366
+#: gtk/gtkcellrenderertext.c:359 gtk/gtktexttag.c:366
 msgid "Font points"
 msgstr "फोन्टचे बिंदू"
 
 # gtk/gtkcellrenderertext.c:312 gtk/gtktexttag.c:369
-#: gtk/gtkcellrenderertext.c:351 gtk/gtktexttag.c:367
+#: gtk/gtkcellrenderertext.c:360 gtk/gtktexttag.c:367
 msgid "Font size in points"
 msgstr "बिदूंच्या रुपातील फोन्टचा आकार"
 
 # gtk/gtkcellrenderertext.c:321 gtk/gtktexttag.c:358 gtk/gtktexttag.c:359
-#: gtk/gtkcellrenderertext.c:360 gtk/gtktexttag.c:356
+#: gtk/gtkcellrenderertext.c:369 gtk/gtktexttag.c:356
 msgid "Font scale"
 msgstr "फोन्टचे प्रमाण "
 
 # gtk/gtkcellrenderertext.c:322
-#: gtk/gtkcellrenderertext.c:361
+#: gtk/gtkcellrenderertext.c:370
 msgid "Font scaling factor"
 msgstr "फोन्टचा आकार ठरविणारा घटक"
 
 # gtk/gtkcellrenderertext.c:331 gtk/gtktexttag.c:427
-#: gtk/gtkcellrenderertext.c:370 gtk/gtktexttag.c:425
+#: gtk/gtkcellrenderertext.c:379 gtk/gtktexttag.c:425
 msgid "Rise"
 msgstr "वाढ"
 
 # gtk/gtkcellrenderertext.c:332 gtk/gtktexttag.c:428
-#: gtk/gtkcellrenderertext.c:371
+#: gtk/gtkcellrenderertext.c:380
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative)"
 msgstr "लेखनप्रयोग आधारओळीच्या वर करावा (जर वाढ नसेल तर आधारओळीच्या खाली)"
 
 # gtk/gtkcellrenderertext.c:342 gtk/gtktexttag.c:467
-#: gtk/gtkcellrenderertext.c:381 gtk/gtktexttag.c:465
+#: gtk/gtkcellrenderertext.c:390 gtk/gtktexttag.c:465
 msgid "Strikethrough"
 msgstr "नकोअसणारे लेखन नष्ट करा"
 
 # gtk/gtkcellrenderertext.c:343 gtk/gtktexttag.c:468
-#: gtk/gtkcellrenderertext.c:382 gtk/gtktexttag.c:466
+#: gtk/gtkcellrenderertext.c:391 gtk/gtktexttag.c:466
 msgid "Whether to strike through the text"
 msgstr "लेखन/त्यातील भाग काढायचा आहे का"
 
 # gtk/gtkcellrenderertext.c:350 gtk/gtktexttag.c:475
-#: gtk/gtkcellrenderertext.c:389 gtk/gtktexttag.c:473
+#: gtk/gtkcellrenderertext.c:398 gtk/gtktexttag.c:473
 msgid "Underline"
 msgstr "अधोरेखन"
 
 # gtk/gtkcellrenderertext.c:351 gtk/gtktexttag.c:476
-#: gtk/gtkcellrenderertext.c:390 gtk/gtktexttag.c:474
+#: gtk/gtkcellrenderertext.c:399 gtk/gtktexttag.c:474
 msgid "Style of underline for this text"
 msgstr "हे लेखन अधोरेखीत करण्याची शैली"
 
 # gtk/gtktexttag.c:387
-#: gtk/gtkcellrenderertext.c:398 gtk/gtktexttag.c:385
+#: gtk/gtkcellrenderertext.c:407 gtk/gtktexttag.c:385
 msgid "Language"
 msgstr "भाषा"
 
-#: gtk/gtkcellrenderertext.c:399
+#: gtk/gtkcellrenderertext.c:408
 msgid ""
 "The language this text is in, as an ISO code. Pango can use this as a hint "
 "when rendering the text. If you don't understand this parameter, you "
 "probably don't need it"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:407 gtk/gtklabel.c:431 gtk/gtkprogressbar.c:242
+#: gtk/gtkcellrenderertext.c:416 gtk/gtklabel.c:433 gtk/gtkprogressbar.c:242
 msgid "Ellipsize"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:408
+#: gtk/gtkcellrenderertext.c:417
 msgid ""
 "The preferred place to ellipsize the string, if the cell renderer does not "
 "have enough room to display the entire string, if at all"
 msgstr ""
 
+# gtk/gtkentry.c:503
+#: gtk/gtkcellrenderertext.c:434 gtk/gtkfilechooserbutton.c:360
+#: gtk/gtklabel.c:453
+#, fuzzy
+msgid "Width In Characters"
+msgstr "अक्षरमालेची लांबी"
+
+#: gtk/gtkcellrenderertext.c:435 gtk/gtklabel.c:454
+msgid "The desired width of the label, in characters"
+msgstr ""
+
 # gtk/gtkcellrenderertext.c:361 gtk/gtktexttag.c:512
-#: gtk/gtkcellrenderertext.c:418 gtk/gtkcellview.c:196 gtk/gtktexttag.c:510
+#: gtk/gtkcellrenderertext.c:447 gtk/gtkcellview.c:197 gtk/gtktexttag.c:510
 msgid "Background set"
 msgstr "पार्श्वभूमी समायोजन"
 
 # gtk/gtkcellrenderertext.c:362 gtk/gtktexttag.c:513
-#: gtk/gtkcellrenderertext.c:419 gtk/gtkcellview.c:197 gtk/gtktexttag.c:511
+#: gtk/gtkcellrenderertext.c:448 gtk/gtkcellview.c:198 gtk/gtktexttag.c:511
 msgid "Whether this tag affects the background color"
 msgstr "हा टॅग पार्श्वरंगाला प्रभावित करेल का"
 
 # gtk/gtkcellrenderertext.c:365 gtk/gtktexttag.c:524
-#: gtk/gtkcellrenderertext.c:422 gtk/gtktexttag.c:522
+#: gtk/gtkcellrenderertext.c:451 gtk/gtktexttag.c:522
 msgid "Foreground set"
 msgstr "पृष्ठभागाचे समायोजन"
 
 # gtk/gtkcellrenderertext.c:366 gtk/gtktexttag.c:525
-#: gtk/gtkcellrenderertext.c:423 gtk/gtktexttag.c:523
+#: gtk/gtkcellrenderertext.c:452 gtk/gtktexttag.c:523
 msgid "Whether this tag affects the foreground color"
 msgstr "हा टॅग पृष्ठभागाचे रंग प्रभावित करेल का"
 
 # gtk/gtkcellrenderertext.c:369 gtk/gtktexttag.c:532
-#: gtk/gtkcellrenderertext.c:426 gtk/gtktexttag.c:530
+#: gtk/gtkcellrenderertext.c:455 gtk/gtktexttag.c:530
 msgid "Editability set"
 msgstr "संपादकीय क्षमता"
 
 # gtk/gtkcellrenderertext.c:370 gtk/gtktexttag.c:533
-#: gtk/gtkcellrenderertext.c:427 gtk/gtktexttag.c:531
+#: gtk/gtkcellrenderertext.c:456 gtk/gtktexttag.c:531
 msgid "Whether this tag affects text editability"
 msgstr "संपादन क्षमतेवर या टॅगचा प्रभाव राहील का"
 
 # gtk/gtkcellrenderertext.c:373 gtk/gtktexttag.c:536
-#: gtk/gtkcellrenderertext.c:430 gtk/gtktexttag.c:534
+#: gtk/gtkcellrenderertext.c:459 gtk/gtktexttag.c:534
 msgid "Font family set"
 msgstr "फोन्ट परिवार संच"
 
 # gtk/gtkcellrenderertext.c:374 gtk/gtktexttag.c:537
-#: gtk/gtkcellrenderertext.c:431 gtk/gtktexttag.c:535
+#: gtk/gtkcellrenderertext.c:460 gtk/gtktexttag.c:535
 msgid "Whether this tag affects the font family"
 msgstr "फोन्ट परिवार क्षमतेवर ह्या टॅगचा प्रभाव राहू शकेल का"
 
 # gtk/gtkcellrenderertext.c:377 gtk/gtktexttag.c:540
-#: gtk/gtkcellrenderertext.c:434 gtk/gtktexttag.c:538
+#: gtk/gtkcellrenderertext.c:463 gtk/gtktexttag.c:538
 msgid "Font style set"
 msgstr "फोन्ट शैलींचा संच"
 
 # gtk/gtkcellrenderertext.c:378 gtk/gtktexttag.c:541
-#: gtk/gtkcellrenderertext.c:435 gtk/gtktexttag.c:539
+#: gtk/gtkcellrenderertext.c:464 gtk/gtktexttag.c:539
 msgid "Whether this tag affects the font style"
 msgstr "या फोन्ट शैलीवर या टॅगचा प्रभाव राहील का"
 
 # gtk/gtkcellrenderertext.c:381 gtk/gtktexttag.c:544
-#: gtk/gtkcellrenderertext.c:438 gtk/gtktexttag.c:542
+#: gtk/gtkcellrenderertext.c:467 gtk/gtktexttag.c:542
 msgid "Font variant set"
 msgstr "फोन्ट रूपांतर संच"
 
 # gtk/gtkcellrenderertext.c:382 gtk/gtktexttag.c:545
-#: gtk/gtkcellrenderertext.c:439 gtk/gtktexttag.c:543
+#: gtk/gtkcellrenderertext.c:468 gtk/gtktexttag.c:543
 msgid "Whether this tag affects the font variant"
 msgstr "फोन्ट रूपांतर संचावर ह्या टॅगचा प्रभाव राहील का"
 
 # gtk/gtkcellrenderertext.c:385 gtk/gtktexttag.c:548
-#: gtk/gtkcellrenderertext.c:442 gtk/gtktexttag.c:546
+#: gtk/gtkcellrenderertext.c:471 gtk/gtktexttag.c:546
 msgid "Font weight set"
 msgstr "फोन्टचा परिमाण संच"
 
 # gtk/gtkcellrenderertext.c:386 gtk/gtktexttag.c:549
-#: gtk/gtkcellrenderertext.c:443 gtk/gtktexttag.c:547
+#: gtk/gtkcellrenderertext.c:472 gtk/gtktexttag.c:547
 msgid "Whether this tag affects the font weight"
 msgstr "फोन्ट परिमाण संचावर या टॅगचा प्रभाव राहील का"
 
 # gtk/gtkcellrenderertext.c:389 gtk/gtktexttag.c:552
-#: gtk/gtkcellrenderertext.c:446 gtk/gtktexttag.c:550
+#: gtk/gtkcellrenderertext.c:475 gtk/gtktexttag.c:550
 msgid "Font stretch set"
 msgstr "फोन्टची ताणक्षमता दाखवणारा संच"
 
 # gtk/gtkcellrenderertext.c:390 gtk/gtktexttag.c:553
-#: gtk/gtkcellrenderertext.c:447 gtk/gtktexttag.c:551
+#: gtk/gtkcellrenderertext.c:476 gtk/gtktexttag.c:551
 msgid "Whether this tag affects the font stretch"
 msgstr "फोन्टच्या ताणक्षमतेवर या टॅगचा प्रभाव राहील का"
 
 # gtk/gtkcellrenderertext.c:393 gtk/gtktexttag.c:556
-#: gtk/gtkcellrenderertext.c:450 gtk/gtktexttag.c:554
+#: gtk/gtkcellrenderertext.c:479 gtk/gtktexttag.c:554
 msgid "Font size set"
 msgstr "फोन्टच्या आकारांचा संच"
 
 # gtk/gtkcellrenderertext.c:394 gtk/gtktexttag.c:557
-#: gtk/gtkcellrenderertext.c:451 gtk/gtktexttag.c:555
+#: gtk/gtkcellrenderertext.c:480 gtk/gtktexttag.c:555
 msgid "Whether this tag affects the font size"
 msgstr "फोन्टच्या आकाराच्या संचावर ह्या टॅगचा प्रभाव राहील का"
 
 # gtk/gtkcellrenderertext.c:397 gtk/gtktexttag.c:560
-#: gtk/gtkcellrenderertext.c:454 gtk/gtktexttag.c:558
+#: gtk/gtkcellrenderertext.c:483 gtk/gtktexttag.c:558
 msgid "Font scale set"
 msgstr "फोन्ट प्रमाण संच"
 
 # gtk/gtkcellrenderertext.c:398 gtk/gtktexttag.c:561
-#: gtk/gtkcellrenderertext.c:455 gtk/gtktexttag.c:559
+#: gtk/gtkcellrenderertext.c:484 gtk/gtktexttag.c:559
 msgid "Whether this tag scales the font size by a factor"
 msgstr "फोन्टचा आकार बदलण्याच्या क्रियेवर ह्या टॅगचा प्रभाव राहील का"
 
 # gtk/gtkcellrenderertext.c:401 gtk/gtktexttag.c:580
-#: gtk/gtkcellrenderertext.c:458 gtk/gtktexttag.c:578
+#: gtk/gtkcellrenderertext.c:487 gtk/gtktexttag.c:578
 msgid "Rise set"
 msgstr "वाढ संच"
 
 # gtk/gtkcellrenderertext.c:402 gtk/gtktexttag.c:581
-#: gtk/gtkcellrenderertext.c:459 gtk/gtktexttag.c:579
+#: gtk/gtkcellrenderertext.c:488 gtk/gtktexttag.c:579
 msgid "Whether this tag affects the rise"
 msgstr "वाढीवर ह्या टॅगचा प्रभाव राहील का"
 
 # gtk/gtkcellrenderertext.c:405 gtk/gtktexttag.c:596
-#: gtk/gtkcellrenderertext.c:462 gtk/gtktexttag.c:594
+#: gtk/gtkcellrenderertext.c:491 gtk/gtktexttag.c:594
 msgid "Strikethrough set"
 msgstr "लेखन खोडण्याची क्रिया"
 
 # gtk/gtkcellrenderertext.c:406 gtk/gtktexttag.c:597
-#: gtk/gtkcellrenderertext.c:463 gtk/gtktexttag.c:595
+#: gtk/gtkcellrenderertext.c:492 gtk/gtktexttag.c:595
 msgid "Whether this tag affects strikethrough"
 msgstr "लेखन खोडण्याच्या क्रियेवर ह्या टॅगचा प्रभाव राहील का"
 
 # gtk/gtkcellrenderertext.c:409 gtk/gtktexttag.c:604
-#: gtk/gtkcellrenderertext.c:466 gtk/gtktexttag.c:602
+#: gtk/gtkcellrenderertext.c:495 gtk/gtktexttag.c:602
 msgid "Underline set"
 msgstr "अधोरेखन"
 
 # gtk/gtkcellrenderertext.c:410 gtk/gtktexttag.c:605
-#: gtk/gtkcellrenderertext.c:467 gtk/gtktexttag.c:603
+#: gtk/gtkcellrenderertext.c:496 gtk/gtktexttag.c:603
 msgid "Whether this tag affects underlining"
 msgstr "अधोरेखनावर ह्या टॅगचा प्रभाव राहील का"
 
 # gtk/gtktexttag.c:568
-#: gtk/gtkcellrenderertext.c:470 gtk/gtktexttag.c:566
+#: gtk/gtkcellrenderertext.c:499 gtk/gtktexttag.c:566
 msgid "Language set"
 msgstr "भाषा संच"
 
 # gtk/gtktexttag.c:569
-#: gtk/gtkcellrenderertext.c:471 gtk/gtktexttag.c:567
+#: gtk/gtkcellrenderertext.c:500 gtk/gtktexttag.c:567
 msgid "Whether this tag affects the language the text is rendered as"
 msgstr "ह्या टॅगचा मजकुरासाठी वापरलेल्या भाषेवर परिणाम होऊ शकतो का"
 
 # gtk/gtkcellrenderertext.c:401 gtk/gtktexttag.c:580
-#: gtk/gtkcellrenderertext.c:474
+#: gtk/gtkcellrenderertext.c:503
 #, fuzzy
 msgid "Ellipsize set"
 msgstr "वाढ संच"
 
 # gtk/gtkcellrenderertext.c:402 gtk/gtktexttag.c:581
-#: gtk/gtkcellrenderertext.c:475
+#: gtk/gtkcellrenderertext.c:504
 #, fuzzy
 msgid "Whether this tag affects the ellipsize mode"
 msgstr "वाढीवर ह्या टॅगचा प्रभाव राहील का"
@@ -1732,7 +1744,7 @@ msgid "Whether or not to give the color an alpha value"
 msgstr ""
 
 # gtk/gtktreeviewcolumn.c:238
-#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:238
+#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:346
 #: gtk/gtkfontbutton.c:176 gtk/gtktreeviewcolumn.c:298
 msgid "Title"
 msgstr "शीर्षक"
@@ -1744,7 +1756,7 @@ msgid "The title of the color selection dialog"
 msgstr "विन्डोचे शीर्षक"
 
 # gtk/gtkcolorsel.c:1718
-#: gtk/gtkcolorbutton.c:233 gtk/gtkcolorsel.c:1839
+#: gtk/gtkcolorbutton.c:233 gtk/gtkcolorsel.c:1848
 msgid "Current Color"
 msgstr "सध्याचा रंग"
 
@@ -1755,7 +1767,7 @@ msgid "The selected color"
 msgstr "सध्याचा रंग"
 
 # gtk/gtkcolorsel.c:1725
-#: gtk/gtkcolorbutton.c:248 gtk/gtkcolorsel.c:1846
+#: gtk/gtkcolorbutton.c:248 gtk/gtkcolorsel.c:1855
 msgid "Current Alpha"
 msgstr "चालू अल्फा"
 
@@ -1766,42 +1778,42 @@ msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "चालू अपारदर्शकता मूल्य (० म्हणजे पूर्ण पारदर्शक, ६५५३५ म्हणजे पूर्ण अपारदर्शक )"
 
 # gtk/gtkcolorsel.c:1704
-#: gtk/gtkcolorsel.c:1825
+#: gtk/gtkcolorsel.c:1834
 msgid "Has Opacity Control"
 msgstr "अपारदर्शकता नियंत्रक आहे"
 
 # gtk/gtkcolorsel.c:1705
-#: gtk/gtkcolorsel.c:1826
+#: gtk/gtkcolorsel.c:1835
 msgid "Whether the color selector should allow setting opacity"
 msgstr "रंगनिवडकाने अपारदर्शकाचे नियंत्रण करावे काय"
 
 # gtk/gtkcolorsel.c:1711
-#: gtk/gtkcolorsel.c:1832
+#: gtk/gtkcolorsel.c:1841
 msgid "Has palette"
 msgstr "रंगफळी आहे"
 
 # gtk/gtkcolorsel.c:1712
-#: gtk/gtkcolorsel.c:1833
+#: gtk/gtkcolorsel.c:1842
 msgid "Whether a palette should be used"
 msgstr "रंगफळी वापरावी काय"
 
 # gtk/gtkcolorsel.c:1719
-#: gtk/gtkcolorsel.c:1840
+#: gtk/gtkcolorsel.c:1849
 msgid "The current color"
 msgstr "सध्याचा रंग"
 
 # gtk/gtkcolorsel.c:1726
-#: gtk/gtkcolorsel.c:1847
+#: gtk/gtkcolorsel.c:1856
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "चालू अपारदर्शकता मूल्य (० म्हणजे पूर्ण पारदर्शक, ६५५३५ म्हणजे पूर्ण अपारदर्शक )"
 
 # gtk/gtkcolorsel.c:1739
-#: gtk/gtkcolorsel.c:1861
+#: gtk/gtkcolorsel.c:1870
 msgid "Custom palette"
 msgstr "वापरात असणारी रंगफळी"
 
 # gtk/gtkcolorsel.c:1740
-#: gtk/gtkcolorsel.c:1862
+#: gtk/gtkcolorsel.c:1871
 msgid "Palette to use in the color selector"
 msgstr "रंगनिवडकामध्ये वापरायची रंगफळी"
 
@@ -2065,23 +2077,23 @@ msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "ह्या मजकुराच्या तळभागातील बटणाभोवती असणाऱ्या जागेची रुंदी"
 
 # gtk/gtkentry.c:435 gtk/gtklabel.c:358
-#: gtk/gtkentry.c:485 gtk/gtklabel.c:396
+#: gtk/gtkentry.c:485 gtk/gtklabel.c:398
 msgid "Cursor Position"
 msgstr "कर्सरचे स्थान"
 
 # gtk/gtkentry.c:436 gtk/gtklabel.c:359
-#: gtk/gtkentry.c:486 gtk/gtklabel.c:397
+#: gtk/gtkentry.c:486 gtk/gtklabel.c:399
 #, fuzzy
 msgid "The current position of the insertion cursor in chars"
 msgstr "अक्षरामध्ये असणारी कर्सरची वर्तमान स्थिती."
 
 # gtk/gtkentry.c:445 gtk/gtklabel.c:368
-#: gtk/gtkentry.c:495 gtk/gtklabel.c:406
+#: gtk/gtkentry.c:495 gtk/gtklabel.c:408
 msgid "Selection Bound"
 msgstr "निर्बंधित निवड"
 
 # gtk/gtkentry.c:446 gtk/gtklabel.c:369
-#: gtk/gtkentry.c:496 gtk/gtklabel.c:407
+#: gtk/gtkentry.c:496 gtk/gtklabel.c:409
 #, fuzzy
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
@@ -2217,7 +2229,7 @@ msgid "Minimum length of the search key in order to look up matches"
 msgstr ""
 
 # gtk/gtktreeview.c:586
-#: gtk/gtkentrycompletion.c:295 gtk/gtkiconview.c:361
+#: gtk/gtkentrycompletion.c:295 gtk/gtkiconview.c:368
 #, fuzzy
 msgid "Text column"
 msgstr "स्तंभामधून शोधा"
@@ -2289,12 +2301,12 @@ msgid "Text of the expander's label"
 msgstr "फ्रेम लेबलचा मजकुर"
 
 # gtk/gtklabel.c:294
-#: gtk/gtkexpander.c:222 gtk/gtklabel.c:332
+#: gtk/gtkexpander.c:222 gtk/gtklabel.c:334
 msgid "Use markup"
 msgstr "मार्कअप चा प्रयोग करा"
 
 # gtk/gtklabel.c:295
-#: gtk/gtkexpander.c:223 gtk/gtklabel.c:333
+#: gtk/gtkexpander.c:223 gtk/gtklabel.c:335
 #, fuzzy
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "लेबलच्या पाठ्य मध्ये  XML मार्कअप संयुक्त आहे , Pango-Parse_markup() बघा."
@@ -2434,35 +2446,29 @@ msgstr "सीमा दाखवा"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "फाइली निर्माण/अदलाबदल करण्याची बटणे प्रदर्शित करावित का"
 
-#: gtk/gtkfilechooserbutton.c:223
+#: gtk/gtkfilechooserbutton.c:331
 msgid "Dialog"
 msgstr ""
 
-#: gtk/gtkfilechooserbutton.c:224
+#: gtk/gtkfilechooserbutton.c:332
 msgid "The file chooser dialog to use."
 msgstr ""
 
 # gtk/gtkwindow.c:417
-#: gtk/gtkfilechooserbutton.c:239
+#: gtk/gtkfilechooserbutton.c:347
 #, fuzzy
 msgid "The title of the file chooser dialog."
 msgstr "विन्डोचे शीर्षक"
 
-# gtk/gtkentry.c:503
-#: gtk/gtkfilechooserbutton.c:252
-#, fuzzy
-msgid "Width In Characters"
-msgstr "अक्षरमालेची लांबी"
-
-#: gtk/gtkfilechooserbutton.c:253
+#: gtk/gtkfilechooserbutton.c:361
 msgid "The desired width of the button widget, in characters."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:623
+#: gtk/gtkfilechooserdefault.c:625
 msgid "Default file chooser backend"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:624
+#: gtk/gtkfilechooserdefault.c:626
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr ""
 
@@ -2701,83 +2707,139 @@ msgid ""
 msgstr ""
 
 # gtk/gtkentry.c:445 gtk/gtklabel.c:368
-#: gtk/gtkiconview.c:324
+#: gtk/gtkiconview.c:331
 #, fuzzy
 msgid "Selection mode"
 msgstr "निर्बंधित निवड"
 
 # gtk/gtkfilesel.c:537
-#: gtk/gtkiconview.c:325
+#: gtk/gtkiconview.c:332
 #, fuzzy
 msgid "The selection mode"
 msgstr "सध्या निवडलेल्या फाइलचे नाव"
 
 # gtk/gtktreeview.c:586
-#: gtk/gtkiconview.c:343
+#: gtk/gtkiconview.c:350
 #, fuzzy
 msgid "Pixbuf column"
 msgstr "स्तंभामधून शोधा"
 
-#: gtk/gtkiconview.c:344
+#: gtk/gtkiconview.c:351
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr ""
 
-#: gtk/gtkiconview.c:362
+#: gtk/gtkiconview.c:369
 msgid "Model column used to retrieve the text from"
 msgstr ""
 
 # gtk/gtkcellrenderertext.c:182
-#: gtk/gtkiconview.c:381
+#: gtk/gtkiconview.c:388
 #, fuzzy
 msgid "Markup column"
 msgstr "(हवे ते लिखाण) चिन्हांकित करा  "
 
-#: gtk/gtkiconview.c:382
+#: gtk/gtkiconview.c:389
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr ""
 
 # gtk/gtktreeview.c:514
-#: gtk/gtkiconview.c:389
+#: gtk/gtkiconview.c:396
 #, fuzzy
 msgid "Icon View Model"
 msgstr "ट्रीमॉडेलच्या(बहुस्तरीय) स्वरुपात पहा"
 
 # gtk/gtktreeview.c:515
-#: gtk/gtkiconview.c:390
+#: gtk/gtkiconview.c:397
 #, fuzzy
 msgid "The model for the icon view"
 msgstr "ट्रीमॉडेलचे (बहुस्तरीय) स्वरुप"
 
+# gtk/gtktable.c:166
+#: gtk/gtkiconview.c:413
+#, fuzzy
+msgid "Number of columns"
+msgstr "टेबलमधील स्तंभ संख्या"
+
+# gtk/gtkspinbutton.c:256
+#: gtk/gtkiconview.c:414
+#, fuzzy
+msgid "Number of columns to display"
+msgstr "प्रदर्शित केली जाणारी दशांकाची संख्या"
+
+# gtk/gtknotebook.c:380
+#: gtk/gtkiconview.c:431
+#, fuzzy
+msgid "Width for each item"
+msgstr "टैब लेबल भोवतीच्या सीमेची रुंदी"
+
+#: gtk/gtkiconview.c:432
+msgid "The width used for each item"
+msgstr ""
+
+#: gtk/gtkiconview.c:448
+msgid "Space which is inserted between cells of an item"
+msgstr ""
+
+# gtk/gtktable.c:174
+#: gtk/gtkiconview.c:463
+#, fuzzy
+msgid "Row Spacing"
+msgstr "ओळीमधील रिकामी जागा"
+
+#: gtk/gtkiconview.c:464
+msgid "Space which is inserted between grid rows"
+msgstr ""
+
+# gtk/gtktable.c:183
+#: gtk/gtkiconview.c:479
+#, fuzzy
+msgid "Column Spacing"
+msgstr "स्तंभामधील रिकामी जागा"
+
+#: gtk/gtkiconview.c:480
+msgid "Space which is inserted between grid column"
+msgstr ""
+
+# gtk/gtktextview.c:594
+#: gtk/gtkiconview.c:495
+#, fuzzy
+msgid "Margin"
+msgstr "डावीकडील समास"
+
+#: gtk/gtkiconview.c:496
+msgid "Space which is inserted at the edges of the icon view"
+msgstr ""
+
 # gtk/gtkprogressbar.c:139 gtk/gtktoolbar.c:224
-#: gtk/gtkiconview.c:397 gtk/gtkprogressbar.c:152 gtk/gtktoolbar.c:507
+#: gtk/gtkiconview.c:512 gtk/gtkprogressbar.c:152 gtk/gtktoolbar.c:507
 msgid "Orientation"
 msgstr "कल"
 
-#: gtk/gtkiconview.c:398
+#: gtk/gtkiconview.c:513
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr ""
 
 # gtk/gtkentry.c:445 gtk/gtklabel.c:368
-#: gtk/gtkiconview.c:406
+#: gtk/gtkiconview.c:521
 #, fuzzy
 msgid "Selection Box Color"
 msgstr "निर्बंधित निवड"
 
 # gtk/gtkwindow.c:417
-#: gtk/gtkiconview.c:407
+#: gtk/gtkiconview.c:522
 #, fuzzy
 msgid "Color of the selection box"
 msgstr "विन्डोचे शीर्षक"
 
 # gtk/gtkentry.c:445 gtk/gtklabel.c:368
-#: gtk/gtkiconview.c:413
+#: gtk/gtkiconview.c:528
 #, fuzzy
 msgid "Selection Box Alpha"
 msgstr "निर्बंधित निवड"
 
 # gtk/gtkwindow.c:417
-#: gtk/gtkiconview.c:414
+#: gtk/gtkiconview.c:529
 #, fuzzy
 msgid "Opacity of the selection box"
 msgstr "विन्डोचे शीर्षक"
@@ -2883,7 +2945,7 @@ msgid "GdkPixbufAnimation to display"
 msgstr "गतीचित्र प्रदर्शित करण्यासाठी लागणारे Gdk अक्षरबिंदु संच"
 
 # gtk/gtksettings.c:215
-#: gtk/gtkimage.c:257 gtk/gtkwindow.c:566
+#: gtk/gtkimage.c:257 gtk/gtkwindow.c:525
 #, fuzzy
 msgid "Icon Name"
 msgstr "फोन्टचे नाव"
@@ -2920,28 +2982,28 @@ msgstr ""
 msgid "Whether images should be shown in menus"
 msgstr "टॅब दाखवायचे आहेत की नाहीत"
 
-#: gtk/gtkinvisible.c:117 gtk/gtkwindow.c:575
+#: gtk/gtkinvisible.c:117 gtk/gtkwindow.c:534
 msgid "The screen where this window will be displayed"
 msgstr ""
 
 # gtk/gtklabel.c:281
-#: gtk/gtklabel.c:319
+#: gtk/gtklabel.c:321
 #, fuzzy
 msgid "The text of the label"
 msgstr "लेबलवरील मजकुर"
 
 # gtk/gtklabel.c:288
-#: gtk/gtklabel.c:326
+#: gtk/gtklabel.c:328
 #, fuzzy
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "लेबलवरील मजकुर वाचण्यासाठी लागू होणाऱ्या शैलींची यादी"
 
 # gtk/gtklabel.c:309 gtk/gtktexttag.c:378 gtk/gtktextview.c:585
-#: gtk/gtklabel.c:347 gtk/gtktexttag.c:376 gtk/gtktextview.c:594
+#: gtk/gtklabel.c:349 gtk/gtktexttag.c:376 gtk/gtktextview.c:594
 msgid "Justification"
 msgstr "समर्थण"
 
-#: gtk/gtklabel.c:348
+#: gtk/gtklabel.c:350
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
@@ -2949,12 +3011,12 @@ msgid ""
 msgstr ""
 
 # gtk/gtklabel.c:318
-#: gtk/gtklabel.c:356
+#: gtk/gtklabel.c:358
 msgid "Pattern"
 msgstr "स्वरुप"
 
 # gtk/gtklabel.c:319
-#: gtk/gtklabel.c:357
+#: gtk/gtklabel.c:359
 #, fuzzy
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
@@ -2963,83 +3025,83 @@ msgstr ""
 "अक्षर मालिकेतील अक्षरे आणि मजकुरातील अक्षरे यांची स्थिती परस्पर पुरक आहेअधोरेखीत करा."
 
 # gtk/gtklabel.c:326
-#: gtk/gtklabel.c:364
+#: gtk/gtklabel.c:366
 msgid "Line wrap"
 msgstr "ओळ कव्हर करा"
 
 # gtk/gtklabel.c:327
-#: gtk/gtklabel.c:365
+#: gtk/gtklabel.c:367
 #, fuzzy
 msgid "If set, wrap lines if the text becomes too wide"
 msgstr "जर मजकुर खुप पसरट होत असेल, तर ओळी कव्हर करा"
 
 # gtk/gtklabel.c:333
-#: gtk/gtklabel.c:371
+#: gtk/gtklabel.c:373
 msgid "Selectable"
 msgstr "निवडण्याजोगे"
 
 # gtk/gtklabel.c:334
-#: gtk/gtklabel.c:372
+#: gtk/gtklabel.c:374
 #, fuzzy
 msgid "Whether the label text can be selected with the mouse"
 msgstr "माउस वापरुन लेबलमधील मजकुर निवडता येईल का?"
 
 # gtk/gtklabel.c:340
-#: gtk/gtklabel.c:378
+#: gtk/gtklabel.c:380
 msgid "Mnemonic key"
 msgstr "निमोनिक बटण"
 
 # gtk/gtklabel.c:341
-#: gtk/gtklabel.c:379
+#: gtk/gtklabel.c:381
 #, fuzzy
 msgid "The mnemonic accelerator key for this label"
 msgstr "ह्या लेबलसाठी हे निमोनिक वेगवर्धक बटण आहे."
 
 # gtk/gtklabel.c:349
-#: gtk/gtklabel.c:387
+#: gtk/gtklabel.c:389
 msgid "Mnemonic widget"
 msgstr "निमोनिक विजेट"
 
 # gtk/gtklabel.c:350
-#: gtk/gtklabel.c:388
+#: gtk/gtklabel.c:390
 #, fuzzy
 msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr "लेबलचे निमोनिक बटण दाबल्यावर हा विजेट कार्यान्वित होतो"
 
-#: gtk/gtklabel.c:432
+#: gtk/gtklabel.c:434
 msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string, if at all"
 msgstr ""
 
-# gtk/gtkentry.c:503
-#: gtk/gtklabel.c:449
-#, fuzzy
-msgid "Width In Chararacters"
-msgstr "अक्षरमालेची लांबी"
-
-#: gtk/gtklabel.c:450
-msgid "The desired width of the label, in characters"
-msgstr ""
-
 # gtk/gtkentry.c:445 gtk/gtklabel.c:368
-#: gtk/gtklabel.c:470
+#: gtk/gtklabel.c:474
 #, fuzzy
 msgid "Single Line Mode"
 msgstr "निर्बंधित निवड"
 
 # gtk/gtklabel.c:334
-#: gtk/gtklabel.c:471
+#: gtk/gtklabel.c:475
 #, fuzzy
 msgid "Whether the label is in single line mode"
 msgstr "माउस वापरुन लेबलमधील मजकुर निवडता येईल का?"
 
-#: gtk/gtklabel.c:488
+#: gtk/gtklabel.c:492
 msgid "Angle"
 msgstr ""
 
-#: gtk/gtklabel.c:489
+#: gtk/gtklabel.c:493
 msgid "Angle at which the label is rotated"
+msgstr ""
+
+# gtk/gtkentry.c:503
+#: gtk/gtklabel.c:513
+#, fuzzy
+msgid "Maximum Width In Characters"
+msgstr "अक्षरमालेची लांबी"
+
+#: gtk/gtklabel.c:514
+msgid "The desired maximum width of the label, in characters"
 msgstr ""
 
 # gtk/gtklayout.c:617 gtk/gtkviewport.c:132
@@ -3077,12 +3139,12 @@ msgid "The height of the layout"
 msgstr "रचनेची ऊंची"
 
 # gtk/gtkmenu.c:191
-#: gtk/gtkmenu.c:521
+#: gtk/gtkmenu.c:524
 msgid "Tearoff Title"
 msgstr "शिर्षक उडवा"
 
 # gtk/gtkmenu.c:192
-#: gtk/gtkmenu.c:522
+#: gtk/gtkmenu.c:525
 #, fuzzy
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
@@ -3090,113 +3152,113 @@ msgid ""
 msgstr "हा मेनु काढुन टाकल्यानंतर विन्डो मॅनेजर असे शिर्षक देता येतेकृती बंद"
 
 # gtk/gtkmenu.c:191
-#: gtk/gtkmenu.c:536
+#: gtk/gtkmenu.c:539
 #, fuzzy
 msgid "Tearoff State"
 msgstr "शिर्षक उडवा"
 
 # gtk/gtkmenu.c:192
-#: gtk/gtkmenu.c:537
+#: gtk/gtkmenu.c:540
 #, fuzzy
 msgid "A boolean that indicates whether the menu is torn-off"
 msgstr "हा मेनु काढुन टाकल्यानंतर विन्डो मॅनेजर असे शिर्षक देता येतेकृती बंद"
 
 # gtk/gtkalignment.c:112
-#: gtk/gtkmenu.c:543
+#: gtk/gtkmenu.c:546
 #, fuzzy
 msgid "Vertical Padding"
 msgstr "ओळींची उभी रचना"
 
 # gtk/gtkmisc.c:128
-#: gtk/gtkmenu.c:544
+#: gtk/gtkmenu.c:547
 #, fuzzy
 msgid "Extra space at the top and bottom of the menu"
 msgstr "अक्षररुपात, विडगेटची वरील आणि खालील बाजू जोडण्यासाठी लागणारी मोकळी जागा"
 
 # gtk/gtkalignment.c:130
-#: gtk/gtkmenu.c:552
+#: gtk/gtkmenu.c:555
 #, fuzzy
 msgid "Vertical Offset"
 msgstr "ओळींची उभी रचना "
 
-#: gtk/gtkmenu.c:553
+#: gtk/gtkmenu.c:556
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr ""
 
 # gtk/gtkalignment.c:121
-#: gtk/gtkmenu.c:561
+#: gtk/gtkmenu.c:564
 #, fuzzy
 msgid "Horizontal Offset"
 msgstr "आडव्या रेषेचे प्रमाण"
 
-#: gtk/gtkmenu.c:562
+#: gtk/gtkmenu.c:565
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 msgstr ""
 
-#: gtk/gtkmenu.c:572
+#: gtk/gtkmenu.c:575
 msgid "Left Attach"
 msgstr ""
 
-#: gtk/gtkmenu.c:573 gtk/gtktable.c:205
+#: gtk/gtkmenu.c:576 gtk/gtktable.c:205
 msgid "The column number to attach the left side of the child to"
 msgstr ""
 
-#: gtk/gtkmenu.c:580
+#: gtk/gtkmenu.c:583
 msgid "Right Attach"
 msgstr ""
 
-#: gtk/gtkmenu.c:581
+#: gtk/gtkmenu.c:584
 msgid "The column number to attach the right side of the child to"
 msgstr ""
 
-#: gtk/gtkmenu.c:588
+#: gtk/gtkmenu.c:591
 msgid "Top Attach"
 msgstr ""
 
-#: gtk/gtkmenu.c:589
+#: gtk/gtkmenu.c:592
 msgid "The row number to attach the top of the child to"
 msgstr ""
 
 # gtk/gtkstock.c:290
-#: gtk/gtkmenu.c:596
+#: gtk/gtkmenu.c:599
 #, fuzzy
 msgid "Bottom Attach"
 msgstr "खालच्या भागात(_B)"
 
-#: gtk/gtkmenu.c:597 gtk/gtktable.c:226
+#: gtk/gtkmenu.c:600 gtk/gtktable.c:226
 msgid "The row number to attach the bottom of the child to"
 msgstr ""
 
 # gtk/gtkmenu.c:260
-#: gtk/gtkmenu.c:684
+#: gtk/gtkmenu.c:687
 msgid "Can change accelerators"
 msgstr "वेगकारके बदलले जाऊ शकतात का"
 
 # gtk/gtkmenu.c:261
-#: gtk/gtkmenu.c:685
+#: gtk/gtkmenu.c:688
 #, fuzzy
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr "मेनूवरील एखादे बटण दाबून मेनुमधील गतीकारके बदलता येईल का?"
 
-#: gtk/gtkmenu.c:690
+#: gtk/gtkmenu.c:693
 msgid "Delay before submenus appear"
 msgstr ""
 
-#: gtk/gtkmenu.c:691
+#: gtk/gtkmenu.c:694
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 
-#: gtk/gtkmenu.c:698
+#: gtk/gtkmenu.c:701
 msgid "Delay before hiding a submenu"
 msgstr ""
 
-#: gtk/gtkmenu.c:699
+#: gtk/gtkmenu.c:702
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -5284,7 +5346,7 @@ msgid "Whether to display the column"
 msgstr "स्तंभ प्रदर्शित करायचा आहे का ?"
 
 # gtk/gtktreeviewcolumn.c:182 gtk/gtkwindow.c:441
-#: gtk/gtktreeviewcolumn.c:233 gtk/gtkwindow.c:497
+#: gtk/gtktreeviewcolumn.c:233 gtk/gtkwindow.c:456
 msgid "Resizable"
 msgstr "आकार बदलता येतो"
 
@@ -5631,66 +5693,66 @@ msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr ""
 
 # gtk/gtkwidget.c:1051
-#: gtk/gtkwidget.c:1378
+#: gtk/gtkwidget.c:1407
 msgid "Interior Focus"
 msgstr "प्रकाशित अंतर्भाग"
 
 # gtk/gtkwidget.c:1052
-#: gtk/gtkwidget.c:1379
+#: gtk/gtkwidget.c:1408
 #, fuzzy
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "विजेटचा आतील भाग प्रकाशमय करायचा आहे का"
 
 # gtk/gtkwidget.c:1058
-#: gtk/gtkwidget.c:1385
+#: gtk/gtkwidget.c:1414
 msgid "Focus linewidth"
 msgstr "ओळींची रुंदी प्रकाशित करा"
 
 # gtk/gtkwidget.c:1059
-#: gtk/gtkwidget.c:1386
+#: gtk/gtkwidget.c:1415
 #, fuzzy
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "प्रकाशित सूचक ओळींची रुंदी"
 
 # gtk/gtkwidget.c:1065
-#: gtk/gtkwidget.c:1392
+#: gtk/gtkwidget.c:1421
 msgid "Focus line dash pattern"
 msgstr "प्रकाशित करणारी ओळ तुटक रेषेच्या कोणत्या स्वरुपात दाखवावी"
 
 # gtk/gtkwidget.c:1066
-#: gtk/gtkwidget.c:1393
+#: gtk/gtkwidget.c:1422
 #, fuzzy
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "प्रकाशित ओळ बनविण्यासाठी वापरायची तुटक रेषा पध्दती "
 
 # gtk/gtkwidget.c:1071
-#: gtk/gtkwidget.c:1398
+#: gtk/gtkwidget.c:1427
 msgid "Focus padding"
 msgstr ""
 
 # gtk/gtkwidget.c:1072
-#: gtk/gtkwidget.c:1399
+#: gtk/gtkwidget.c:1428
 #, fuzzy
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "प्रकाशित सूचक ओळी आणि विजेट 'चौकट' यांच्या मधील चित्रकणांच्या स्वरुपातील रुंदी"
 
 # gtk/gtkwidget.c:1077
-#: gtk/gtkwidget.c:1404
+#: gtk/gtkwidget.c:1433
 msgid "Cursor color"
 msgstr "कर्सरचा रंग"
 
 # gtk/gtkwidget.c:1078
-#: gtk/gtkwidget.c:1405
+#: gtk/gtkwidget.c:1434
 msgid "Color with which to draw insertion cursor"
 msgstr "ज्या रंगाने कर्सर बनवायचा आहे तो रंग"
 
 # gtk/gtkwidget.c:1083
-#: gtk/gtkwidget.c:1410
+#: gtk/gtkwidget.c:1439
 msgid "Secondary cursor color"
 msgstr "कर्सरचा दुय्यम रंग"
 
 # gtk/gtkwidget.c:1084
-#: gtk/gtkwidget.c:1411
+#: gtk/gtkwidget.c:1440
 #, fuzzy
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
@@ -5700,52 +5762,52 @@ msgstr ""
 "डावीकडून-उजवीकडे असा मजकुर असताना"
 
 # gtk/gtkwidget.c:1089
-#: gtk/gtkwidget.c:1416
+#: gtk/gtkwidget.c:1445
 msgid "Cursor line aspect ratio"
 msgstr ""
 
 # gtk/gtkwidget.c:1090
-#: gtk/gtkwidget.c:1417
+#: gtk/gtkwidget.c:1446
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr ""
 
 # gtk/gtkwindow.c:406
-#: gtk/gtkwindow.c:455
+#: gtk/gtkwindow.c:414
 msgid "Window Type"
 msgstr "विन्डोचा प्रकार"
 
 # gtk/gtkwindow.c:407
-#: gtk/gtkwindow.c:456
+#: gtk/gtkwindow.c:415
 msgid "The type of the window"
 msgstr "विन्डोचा प्रकार"
 
 # gtk/gtkwindow.c:416
-#: gtk/gtkwindow.c:464
+#: gtk/gtkwindow.c:423
 msgid "Window Title"
 msgstr "विन्डोचे शीर्षक"
 
 # gtk/gtkwindow.c:417
-#: gtk/gtkwindow.c:465
+#: gtk/gtkwindow.c:424
 msgid "The title of the window"
 msgstr "विन्डोचे शीर्षक"
 
 # gtk/gtkwindow.c:416
-#: gtk/gtkwindow.c:472
+#: gtk/gtkwindow.c:431
 #, fuzzy
 msgid "Window Role"
 msgstr "विन्डोचे शीर्षक"
 
-#: gtk/gtkwindow.c:473
+#: gtk/gtkwindow.c:432
 msgid "Unique identifier for the window to be used when restoring a session"
 msgstr ""
 
 # gtk/gtkwindow.c:424
-#: gtk/gtkwindow.c:480
+#: gtk/gtkwindow.c:439
 msgid "Allow Shrink"
 msgstr "आकुंचित करावे"
 
 # gtk/gtkwindow.c:426
-#: gtk/gtkwindow.c:482
+#: gtk/gtkwindow.c:441
 #, fuzzy, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
@@ -5753,29 +5815,29 @@ msgid ""
 msgstr "जर खरेअसेल तर, या विंडोला किमाण आकार नाही . "
 
 # gtk/gtkwindow.c:433
-#: gtk/gtkwindow.c:489
+#: gtk/gtkwindow.c:448
 msgid "Allow Grow"
 msgstr "वाढ होऊ द्यावी"
 
 # gtk/gtkwindow.c:434
-#: gtk/gtkwindow.c:490
+#: gtk/gtkwindow.c:449
 #, fuzzy
 msgid "If TRUE, users can expand the window beyond its minimum size"
 msgstr "जर खरे TRUE आहे, तर उपयोगकर्ता विन्डोला त्याच्या किमान आकारापेक्षा मोठे करू शकतो"
 
 # gtk/gtkwindow.c:442
-#: gtk/gtkwindow.c:498
+#: gtk/gtkwindow.c:457
 #, fuzzy
 msgid "If TRUE, users can resize the window"
 msgstr "जर खरे TRUE आहे, तर उपयोगकर्ता विन्डोचा आकार  बदलु शकतो"
 
 # gtk/gtkwindow.c:449
-#: gtk/gtkwindow.c:505
+#: gtk/gtkwindow.c:464
 msgid "Modal"
 msgstr "पध्दतविषयक"
 
 # gtk/gtkwindow.c:450
-#: gtk/gtkwindow.c:506
+#: gtk/gtkwindow.c:465
 #, fuzzy
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
@@ -5785,23 +5847,23 @@ msgstr ""
 "असेल तेव्हा  इतर विन्डो वापरली जाऊ शकत नाही) "
 
 # gtk/gtkwindow.c:457
-#: gtk/gtkwindow.c:513
+#: gtk/gtkwindow.c:472
 msgid "Window Position"
 msgstr "विन्डोची स्थिति"
 
 # gtk/gtkwindow.c:458
-#: gtk/gtkwindow.c:514
+#: gtk/gtkwindow.c:473
 #, fuzzy
 msgid "The initial position of the window"
 msgstr "विन्डोची प्रारंभिक स्थिती"
 
 # gtk/gtkwindow.c:466
-#: gtk/gtkwindow.c:522
+#: gtk/gtkwindow.c:481
 msgid "Default Width"
 msgstr "सर्वसाधारण रुंदी"
 
 # gtk/gtkwindow.c:467
-#: gtk/gtkwindow.c:523
+#: gtk/gtkwindow.c:482
 #, fuzzy
 msgid "The default width of the window, used when initially showing the window"
 msgstr ""
@@ -5809,12 +5871,12 @@ msgstr ""
 "दाखवले जाईल"
 
 # gtk/gtkwindow.c:476
-#: gtk/gtkwindow.c:532
+#: gtk/gtkwindow.c:491
 msgid "Default Height"
 msgstr "सर्वसाधारण ऊंची"
 
 # gtk/gtkwindow.c:477
-#: gtk/gtkwindow.c:533
+#: gtk/gtkwindow.c:492
 #, fuzzy
 msgid ""
 "The default height of the window, used when initially showing the window"
@@ -5823,115 +5885,115 @@ msgstr ""
 "दाखवले जाईल."
 
 # gtk/gtkwindow.c:486
-#: gtk/gtkwindow.c:542
+#: gtk/gtkwindow.c:501
 msgid "Destroy with Parent"
 msgstr "मोठे चित्र काढून टाका"
 
 # gtk/gtkwindow.c:487
-#: gtk/gtkwindow.c:543
+#: gtk/gtkwindow.c:502
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "मोठे चित्र काढून टाकल्यावर ही विंडोपण काढून टाकायची का"
 
 # gtk/gtkwindow.c:494
-#: gtk/gtkwindow.c:550
+#: gtk/gtkwindow.c:509
 msgid "Icon"
 msgstr "आइकान"
 
 # gtk/gtkwindow.c:495
-#: gtk/gtkwindow.c:551
+#: gtk/gtkwindow.c:510
 msgid "Icon for this window"
 msgstr "ह्या विन्डोकरीता आइकान"
 
 # gtk/gtkwindow.c:495
-#: gtk/gtkwindow.c:567
+#: gtk/gtkwindow.c:526
 #, fuzzy
 msgid "Name of the themed icon for this window"
 msgstr "ह्या विन्डोकरीता आइकान"
 
 # gtk/gtkcheckmenuitem.c:115 gtk/gtktogglebutton.c:130
-#: gtk/gtkwindow.c:582
+#: gtk/gtkwindow.c:541
 #, fuzzy
 msgid "Is Active"
 msgstr "क्रियाशील"
 
 # gtk/gtkwidget.c:466
-#: gtk/gtkwindow.c:583
+#: gtk/gtkwindow.c:542
 #, fuzzy
 msgid "Whether the toplevel is the current active window"
 msgstr "हा विडगेट सर्वसाधारण विडगेट आहे का"
 
-#: gtk/gtkwindow.c:590
+#: gtk/gtkwindow.c:549
 msgid "Focus in Toplevel"
 msgstr ""
 
-#: gtk/gtkwindow.c:591
+#: gtk/gtkwindow.c:550
 msgid "Whether the input focus is within this GtkWindow"
 msgstr ""
 
-#: gtk/gtkwindow.c:598
+#: gtk/gtkwindow.c:557
 msgid "Type hint"
 msgstr ""
 
-#: gtk/gtkwindow.c:599
+#: gtk/gtkwindow.c:558
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
 msgstr ""
 
-#: gtk/gtkwindow.c:607
+#: gtk/gtkwindow.c:566
 msgid "Skip taskbar"
 msgstr ""
 
-#: gtk/gtkwindow.c:608
+#: gtk/gtkwindow.c:567
 msgid "TRUE if the window should not be in the task bar."
 msgstr ""
 
-#: gtk/gtkwindow.c:615
+#: gtk/gtkwindow.c:574
 msgid "Skip pager"
 msgstr ""
 
 # gtk/gtkpaned.c:218
-#: gtk/gtkwindow.c:616
+#: gtk/gtkwindow.c:575
 #, fuzzy
 msgid "TRUE if the window should not be in the pager."
 msgstr "स्थितीमुल्य वापरायचे असेल तर हे बरोबर आहे"
 
-#: gtk/gtkwindow.c:630
+#: gtk/gtkwindow.c:589
 msgid "Accept focus"
 msgstr ""
 
 # gtk/gtkwidget.c:473
-#: gtk/gtkwindow.c:631
+#: gtk/gtkwindow.c:590
 #, fuzzy
 msgid "TRUE if the window should receive the input focus."
 msgstr "जर खरे आहे, तर प्रकाशमय केल्यावर हा विडगेट सर्वसाधारण कार्य स्वीकारतो"
 
-#: gtk/gtkwindow.c:645
+#: gtk/gtkwindow.c:604
 msgid "Focus on map"
 msgstr ""
 
 # gtk/gtkwidget.c:473
-#: gtk/gtkwindow.c:646
+#: gtk/gtkwindow.c:605
 #, fuzzy
 msgid "TRUE if the window should receive the input focus when mapped."
 msgstr "जर खरे आहे, तर प्रकाशमय केल्यावर हा विडगेट सर्वसाधारण कार्य स्वीकारतो"
 
-#: gtk/gtkwindow.c:660
+#: gtk/gtkwindow.c:619
 msgid "Decorated"
 msgstr ""
 
 # gtk/gtkwidget.c:466
-#: gtk/gtkwindow.c:661
+#: gtk/gtkwindow.c:620
 #, fuzzy
 msgid "Whether the window should be decorated by the window manager"
 msgstr "हा विडगेट सर्वसाधारण विडगेट आहे का"
 
-#: gtk/gtkwindow.c:676
+#: gtk/gtkwindow.c:635
 msgid "Gravity"
 msgstr ""
 
 # gtk/gtkwindow.c:407
-#: gtk/gtkwindow.c:677
+#: gtk/gtkwindow.c:636
 #, fuzzy
 msgid "The window gravity of the window"
 msgstr "विन्डोचा प्रकार"
@@ -5955,6 +6017,11 @@ msgstr "रिक्त स्थानाची शैली"
 #, fuzzy
 msgid "How to draw the input method statusbar"
 msgstr "टूलबार कसे बनवायचे आहेत"
+
+# gtk/gtkentry.c:503
+#, fuzzy
+#~ msgid "Width In Chararacters"
+#~ msgstr "अक्षरमालेची लांबी"
 
 # gtk/gtkwidget.c:424
 #, fuzzy

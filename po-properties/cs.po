@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-13 20:38+0100\n"
+"POT-Creation-Date: 2004-12-16 12:37-0500\n"
 "PO-Revision-Date: 2004-12-13 22:32+0100\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -607,7 +607,8 @@ msgstr ""
 "Je-li TRUE, potomek se objeví v sekundární skupině potomků, vhodné např. pro "
 "tlačítka nápovědy."
 
-#: gtk/gtkbox.c:130 gtk/gtkexpander.c:230 gtk/gtktreeviewcolumn.c:250
+#: gtk/gtkbox.c:130 gtk/gtkexpander.c:230 gtk/gtkiconview.c:447
+#: gtk/gtktreeviewcolumn.c:250
 msgid "Spacing"
 msgstr "Mezery"
 
@@ -1074,19 +1075,19 @@ msgstr "Režim jednoho odstavce"
 msgid "Whether or not to keep all text in a single paragraph"
 msgstr "Jestli udržovat všechen text v jednom odstavci"
 
-#: gtk/gtkcellrenderertext.c:246 gtk/gtkcellview.c:181 gtk/gtktexttag.c:207
+#: gtk/gtkcellrenderertext.c:246 gtk/gtkcellview.c:182 gtk/gtktexttag.c:207
 msgid "Background color name"
 msgstr "Název barvy pozadí"
 
-#: gtk/gtkcellrenderertext.c:247 gtk/gtkcellview.c:182 gtk/gtktexttag.c:208
+#: gtk/gtkcellrenderertext.c:247 gtk/gtkcellview.c:183 gtk/gtktexttag.c:208
 msgid "Background color as a string"
 msgstr "Barva pozadí jako řetězec"
 
-#: gtk/gtkcellrenderertext.c:254 gtk/gtkcellview.c:188 gtk/gtktexttag.c:215
+#: gtk/gtkcellrenderertext.c:254 gtk/gtkcellview.c:189 gtk/gtktexttag.c:215
 msgid "Background color"
 msgstr "Barva pozadí"
 
-#: gtk/gtkcellrenderertext.c:255 gtk/gtkcellview.c:189
+#: gtk/gtkcellrenderertext.c:255 gtk/gtkcellview.c:190
 msgid "Background color as a GdkColor"
 msgstr "Barva pozadí jako GdkColor"
 
@@ -1229,7 +1230,7 @@ msgstr ""
 "Preferované místo, kde zkrátit řetězec, pokud vykreslovač buňky nemá dost "
 "místa na zobrazení celého řetězce, pokud vůbec nečeho"
 
-#: gtk/gtkcellrenderertext.c:434 gtk/gtkfilechooserbutton.c:252
+#: gtk/gtkcellrenderertext.c:434 gtk/gtkfilechooserbutton.c:360
 #: gtk/gtklabel.c:453
 msgid "Width In Characters"
 msgstr "Šířka ve znacích"
@@ -1238,11 +1239,11 @@ msgstr "Šířka ve znacích"
 msgid "The desired width of the label, in characters"
 msgstr "Požadovaná šířka popisku ve znacích"
 
-#: gtk/gtkcellrenderertext.c:447 gtk/gtkcellview.c:196 gtk/gtktexttag.c:510
+#: gtk/gtkcellrenderertext.c:447 gtk/gtkcellview.c:197 gtk/gtktexttag.c:510
 msgid "Background set"
 msgstr "Pozadí nastaveno"
 
-#: gtk/gtkcellrenderertext.c:448 gtk/gtkcellview.c:197 gtk/gtktexttag.c:511
+#: gtk/gtkcellrenderertext.c:448 gtk/gtkcellview.c:198 gtk/gtktexttag.c:511
 msgid "Whether this tag affects the background color"
 msgstr "Jestli tento tag ovlivňuje barvu pozadí"
 
@@ -1438,7 +1439,7 @@ msgstr "Používat alfu"
 msgid "Whether or not to give the color an alpha value"
 msgstr "Jestli dát barvě hodnotu alfa"
 
-#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:238
+#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:346
 #: gtk/gtkfontbutton.c:176 gtk/gtktreeviewcolumn.c:298
 msgid "Title"
 msgstr "Titulek"
@@ -1819,7 +1820,7 @@ msgstr "Minimální délka klíče"
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Minimální délka hledaného klíče, aby se hledaly odpovídající položky"
 
-#: gtk/gtkentrycompletion.c:295 gtk/gtkiconview.c:361
+#: gtk/gtkentrycompletion.c:295 gtk/gtkiconview.c:368
 msgid "Text column"
 msgstr "Sloupec textu"
 
@@ -1992,27 +1993,27 @@ msgstr "Zobrazovat skryté"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Jestli mají být zobrazovány skryté soubory a adresáře"
 
-#: gtk/gtkfilechooserbutton.c:223
+#: gtk/gtkfilechooserbutton.c:331
 msgid "Dialog"
 msgstr "Dialog"
 
-#: gtk/gtkfilechooserbutton.c:224
+#: gtk/gtkfilechooserbutton.c:332
 msgid "The file chooser dialog to use."
 msgstr "Dialog výběru souborů, který používat."
 
-#: gtk/gtkfilechooserbutton.c:239
+#: gtk/gtkfilechooserbutton.c:347
 msgid "The title of the file chooser dialog."
 msgstr "Titulek dialogu výběru souborů."
 
-#: gtk/gtkfilechooserbutton.c:253
+#: gtk/gtkfilechooserbutton.c:361
 msgid "The desired width of the button widget, in characters."
 msgstr "Požadovaná šířka widgetu tlačítka ve znacích."
 
-#: gtk/gtkfilechooserdefault.c:623
+#: gtk/gtkfilechooserdefault.c:625
 msgid "Default file chooser backend"
 msgstr "Implicitní backend výběru souborů"
 
-#: gtk/gtkfilechooserdefault.c:624
+#: gtk/gtkfilechooserdefault.c:626
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Název backendu GtkFileChooser, který používat implicitně"
 
@@ -2191,65 +2192,119 @@ msgstr ""
 "Jestli používat hodnotu vlastnosti snap_edge nebo hodnotu odvozenou z "
 "handle_position"
 
-#: gtk/gtkiconview.c:324
+#: gtk/gtkiconview.c:331
 msgid "Selection mode"
 msgstr "Režim výběru"
 
-#: gtk/gtkiconview.c:325
+#: gtk/gtkiconview.c:332
 msgid "The selection mode"
 msgstr "Režim výběru"
 
-#: gtk/gtkiconview.c:343
+#: gtk/gtkiconview.c:350
 msgid "Pixbuf column"
 msgstr "Sloupec pixbufu"
 
-#: gtk/gtkiconview.c:344
+#: gtk/gtkiconview.c:351
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr "Sloupec modelu používaný pro získání pixbufu ikony"
 
-#: gtk/gtkiconview.c:362
+#: gtk/gtkiconview.c:369
 msgid "Model column used to retrieve the text from"
 msgstr "Sloupec modelu používaný pro získání textu"
 
-#: gtk/gtkiconview.c:381
+#: gtk/gtkiconview.c:388
 msgid "Markup column"
 msgstr "Sloupec značek"
 
-#: gtk/gtkiconview.c:382
+#: gtk/gtkiconview.c:389
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr ""
 "Sloupec modelu používaný pro získání textu, pokud se používají značky Pango"
 
-#: gtk/gtkiconview.c:389
+#: gtk/gtkiconview.c:396
 msgid "Icon View Model"
 msgstr "Model ikonového pohledu"
 
-#: gtk/gtkiconview.c:390
+#: gtk/gtkiconview.c:397
 msgid "The model for the icon view"
 msgstr "Model pro ikonový pohled"
 
-#: gtk/gtkiconview.c:397 gtk/gtkprogressbar.c:152 gtk/gtktoolbar.c:507
+#: gtk/gtkiconview.c:413
+#, fuzzy
+msgid "Number of columns"
+msgstr "Počet kanálů"
+
+#: gtk/gtkiconview.c:414
+#, fuzzy
+msgid "Number of columns to display"
+msgstr "Počet zobrazovaných desetinných míst"
+
+#: gtk/gtkiconview.c:431
+#, fuzzy
+msgid "Width for each item"
+msgstr "Widget, který používat jako popisek položky"
+
+#: gtk/gtkiconview.c:432
+msgid "The width used for each item"
+msgstr ""
+
+#: gtk/gtkiconview.c:448
+#, fuzzy
+msgid "Space which is inserted between cells of an item"
+msgstr "Místo, které je vložené mezi buňky"
+
+#: gtk/gtkiconview.c:463
+#, fuzzy
+msgid "Row Spacing"
+msgstr "Rozestup řádků"
+
+#: gtk/gtkiconview.c:464
+#, fuzzy
+msgid "Space which is inserted between grid rows"
+msgstr "Místo, které je vložené mezi buňky"
+
+#: gtk/gtkiconview.c:479
+#, fuzzy
+msgid "Column Spacing"
+msgstr "Rozestup sloupců"
+
+#: gtk/gtkiconview.c:480
+#, fuzzy
+msgid "Space which is inserted between grid column"
+msgstr "Místo, které je vložené mezi buňky"
+
+#: gtk/gtkiconview.c:495
+#, fuzzy
+msgid "Margin"
+msgstr "Levý okraj"
+
+#: gtk/gtkiconview.c:496
+#, fuzzy
+msgid "Space which is inserted at the edges of the icon view"
+msgstr "Místo, které je vložené mezi buňky"
+
+#: gtk/gtkiconview.c:512 gtk/gtkprogressbar.c:152 gtk/gtktoolbar.c:507
 msgid "Orientation"
 msgstr "Orientace"
 
-#: gtk/gtkiconview.c:398
+#: gtk/gtkiconview.c:513
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr "Jak jsou text a ikony každé položky navzájem relativně umístěny"
 
-#: gtk/gtkiconview.c:406
+#: gtk/gtkiconview.c:521
 msgid "Selection Box Color"
 msgstr "Barva obdélníku výběru"
 
-#: gtk/gtkiconview.c:407
+#: gtk/gtkiconview.c:522
 msgid "Color of the selection box"
 msgstr "Barva obdélníku výběru"
 
-#: gtk/gtkiconview.c:413
+#: gtk/gtkiconview.c:528
 msgid "Selection Box Alpha"
 msgstr "Alfa obdélníku výběru"
 
-#: gtk/gtkiconview.c:414
+#: gtk/gtkiconview.c:529
 msgid "Opacity of the selection box"
 msgstr "Neprůhlednost obdélníku výběru"
 
@@ -2448,11 +2503,13 @@ msgid "Angle at which the label is rotated"
 msgstr "Úhel, o který je popisek rotován"
 
 #: gtk/gtklabel.c:513
-msgid "Maximal Width In Characters"
+#, fuzzy
+msgid "Maximum Width In Characters"
 msgstr "Maximální šířka ve znacích"
 
 #: gtk/gtklabel.c:514
-msgid "The desired maximal width of the label, in characters"
+#, fuzzy
+msgid "The desired maximum width of the label, in characters"
 msgstr "Požadovaná maximální šířka popisku ve znacích"
 
 #: gtk/gtklayout.c:635 gtk/gtkviewport.c:136

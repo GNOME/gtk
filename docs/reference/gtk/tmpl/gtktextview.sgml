@@ -381,6 +381,18 @@ types related to the text widget and how they work together.
 @y: 
 
 
+<!-- ##### FUNCTION gtk_text_view_get_iter_at_position ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@iter: 
+@trailing: 
+@x: 
+@y: 
+
+
 <!-- ##### FUNCTION gtk_text_view_buffer_to_window_coords ##### -->
 <para>
 

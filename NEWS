@@ -117,7 +117,7 @@ Overview of Changes from GTK+ 2.5.6 to GTK+ 2.6.0
 * Bug fixes [Kazuki IWAMOTO, Damon Chaplin, Matthias, Christian, 
   Michael Natterer, Jonathan Blandford, Manish Singh, John Finlay, 
   Robert Ögren, Mariano Suárez-Alvarez, Marco Pesenti Gritti,
-  Tommi Komulainen, R. McFarland]
+  Tommi Komulainen, R. McFarland, Jorn Baayen, Dennis Cranston]
 * Documentation improvements [Matthias, Jay Camp, Paolo Borelli,
   David Lodge]
 * New and improved translations (bg,nb,no,nso,pt_BR,zh_CN)

@@ -1,3 +1,7 @@
+2004-12-16  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.6.0 ===
+
 2004-12-14  Adam Weinberger  <adamw@gnome.org>
 
 	* en_CA.po: Updated Canadian English translation.
@@ -7,9 +11,9 @@
 	* cs.po: Updated Czech translation.
 
 2004-12-13  David Lodge <dave@cirt.net>
-                                                                                
-        * en_GB.po: Updated British translation.
-                                                                                
+
+	* en_GB.po: Updated British translation.
+
 2004-12-13  Adam Weinberger  <adamw@gnome.org>
 
 	* en_CA.po: Updated Canadian English translation.

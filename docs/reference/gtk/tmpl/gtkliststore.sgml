@@ -213,6 +213,30 @@ run on older versions of GTK+, it is worth keeping the iter around.
 @store: 
 
 
+<!-- ##### FUNCTION gtk_list_store_insert_with_values ##### -->
+<para>
+
+</para>
+
+@list_store: 
+@iter: 
+@position: 
+@Varargs: 
+
+
+<!-- ##### FUNCTION gtk_list_store_insert_with_valuesv ##### -->
+<para>
+
+</para>
+
+@list_store: 
+@iter: 
+@position: 
+@columns: 
+@values: 
+@n_values: 
+
+
 <!-- ##### FUNCTION gtk_list_store_prepend ##### -->
 <para>
 

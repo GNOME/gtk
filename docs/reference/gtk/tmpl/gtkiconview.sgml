@@ -96,6 +96,26 @@ private fields and should not be directly accessed.
 
 @iconview: the object which received the signal.
 
+<!-- ##### ARG GtkIconView:column-spacing ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkIconView:columns ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkIconView:item-width ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkIconView:margin ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkIconView:markup-column ##### -->
 <para>
 
@@ -116,7 +136,17 @@ private fields and should not be directly accessed.
 
 </para>
 
+<!-- ##### ARG GtkIconView:row-spacing ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkIconView:selection-mode ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkIconView:spacing ##### -->
 <para>
 
 </para>
@@ -293,6 +323,114 @@ selected rows.  It will be called on every selected row in the view.
 
 
 <!-- ##### FUNCTION gtk_icon_view_get_orientation ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_set_columns ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@columns: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_get_columns ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_set_item_width ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@item_width: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_get_item_width ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_set_spacing ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@spacing: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_get_spacing ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_set_row_spacing ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@row_spacing: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_get_row_spacing ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_set_column_spacing ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@column_spacing: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_get_column_spacing ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_set_margin ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@margin: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_get_margin ##### -->
 <para>
 
 </para>
