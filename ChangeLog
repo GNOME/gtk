@@ -1,3 +1,14 @@
+2005-02-11  Matthias Clasen  <mclasen@redhat.com>
+
+	Complete the fix for #165770, Vincent Untz:
+	
+	* gtk/gtkfilechooserbutton.c (FALLBACK_ICON_SIZE): Make the
+	fallback size be 16, to be equal to the default for
+	GTK_ICON_SIZE_MENU (in gtkiconfactory.c:init_icon_sizes()).
+	(gtk_file_chooser_button_init):
+	(change_icon_theme): Use GTK_ICON_SIZE_MENU instead of
+	GTK_ICON_SIZE_SMALL_TOOLBAR. 
+
 2005-02-09  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkmenushell.c (gtk_real_menu_shell_move_current): Fix RTL
