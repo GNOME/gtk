@@ -17,5 +17,5 @@ theme2_main.lo
 # NEED to do this to install sample theme (run testgtk with --theme theme2) 
 # for user
 
-ln -sf `pwd`/.libs ~/themes
-cp -r theme_data/* ~/themes
+ln -sf `pwd`.libs ~/themes
+cp -r theme_data/* ~/themes/

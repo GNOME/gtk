@@ -38,6 +38,7 @@ typedef struct _themebuttondecoration
 typedef struct _themebuttonconfig
 {
    /* Border between outside of button and any children (eg label) */
+   GdkImlibBorder         button_padding;
    ThemeButtonBorder      border;
    ThemeButtonBackground  background;
    int                    number_of_decorations;
@@ -46,6 +47,5 @@ typedef struct _themebuttonconfig
 
 typedef struct _themeconfig
 {
-   GdkImlibBorder    button_padding;
    ThemeButtonConfig buttonconfig[3][5][2];
 } ThemeConfig;

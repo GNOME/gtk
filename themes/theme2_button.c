@@ -39,10 +39,14 @@ button_border (GtkWidget        *widget)
    else if (GTK_WIDGET_STATE(widget)==GTK_STATE_PRELIGHT)    state=2;
    else if (GTK_WIDGET_STATE(widget)==GTK_STATE_SELECTED)    state=3;
    else if (GTK_WIDGET_STATE(widget)==GTK_STATE_INSENSITIVE) state=4;
-   GTK_CONTAINER(widget)->internal_border_left=cf->button_padding.left;
-   GTK_CONTAINER(widget)->internal_border_right=cf->button_padding.right;
-   GTK_CONTAINER(widget)->internal_border_top=cf->button_padding.top;
-   GTK_CONTAINER(widget)->internal_border_bottom=cf->button_padding.bottom;
+   GTK_CONTAINER(widget)->internal_border_left=
+     cf->buttonconfig[def][state][foc].button_padding.left;
+   GTK_CONTAINER(widget)->internal_border_right=
+     cf->buttonconfig[def][state][foc].button_padding.right;
+   GTK_CONTAINER(widget)->internal_border_top=
+     cf->buttonconfig[def][state][foc].button_padding.top;
+   GTK_CONTAINER(widget)->internal_border_bottom=
+     cf->buttonconfig[def][state][foc].button_padding.bottom;
 }
 
 void 
@@ -63,6 +67,7 @@ button_draw               (GtkWidget        *widget,
    struct _butinfo *bi;
    int state,def,foc;
    ThemeConfig *cf;
+   int i,x,y,w,h;
    
    cf=(ThemeConfig *)th_dat.data;
    bi=gtk_object_get_data(GTK_OBJECT(widget),"gtk-widget-theme-data");
@@ -111,11 +116,33 @@ button_draw               (GtkWidget        *widget,
 	bi->w=widget->allocation.width;bi->h=widget->allocation.height;
 	bi->state=state;bi->foc=foc;bi->def=def;
      }
-/*	if (GTK_WIDGET_STATE(widget)==GTK_STATE_ACTIVE)
-	  gdk_imlib_paste_image(imgs->im4,widget->window,6,
-				(widget->allocation.height>>1)-6,
-				12,12);
- */
+   if (cf->buttonconfig[def][state][foc].border.image)
+     {
+	gdk_imlib_paste_image_border(cf->buttonconfig[def][state][foc].border.image,
+				     widget->window,
+				     0,0,widget->allocation.width,
+				     widget->allocation.height);
+     }
+   for(i=0;i<cf->buttonconfig[def][state][foc].number_of_decorations;i++)
+     {
+	if (cf->buttonconfig[def][state][foc].decoration[i].image)
+	  {
+	     x=cf->buttonconfig[def][state][foc].decoration[i].xabs+
+	       ((cf->buttonconfig[def][state][foc].decoration[i].xrel*
+		 widget->allocation.width)>>10);
+	     y=cf->buttonconfig[def][state][foc].decoration[i].yabs+
+	       ((cf->buttonconfig[def][state][foc].decoration[i].yrel*
+		 widget->allocation.height)>>10);
+	     w=cf->buttonconfig[def][state][foc].decoration[i].x2abs+
+	       ((cf->buttonconfig[def][state][foc].decoration[i].x2rel*
+		 widget->allocation.width)>>10)-x;
+	     h=cf->buttonconfig[def][state][foc].decoration[i].y2abs+
+	       ((cf->buttonconfig[def][state][foc].decoration[i].y2rel*
+		 widget->allocation.height)>>10)-y;
+	     gdk_imlib_paste_image(cf->buttonconfig[def][state][foc].decoration[i].image,
+				   widget->window,x,y,w,h);
+	  }
+     }
 }
 
 void 
