@@ -1,3 +1,10 @@
+Sun Mar  7 02:38:00 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_size_request): Do a 
+	size_request on the button and cell_view_frame, otherwise
+	their style will still be the default here in the initial 
+	size_request. (#136301, Mark McLoughlin)
+
 2004-03-06  Gustavo J. A. M. Carneiro  <gustavo@users.sourceforge.net>
 
 	* gtk/gtktoolbar.c (internal_insert_element): Check return value

@@ -624,7 +624,7 @@ static void
 gtk_combo_box_style_set (GtkWidget *widget,
                          GtkStyle  *previous)
 {
-  gboolean appearance;
+  gboolean appears_as_list;
   GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
 
   gtk_widget_queue_resize (widget);
@@ -636,11 +636,10 @@ gtk_combo_box_style_set (GtkWidget *widget,
     return;
 
   gtk_widget_style_get (widget,
-                        "appears-as-list", &appearance,
+                        "appears-as-list", &appears_as_list,
                         NULL);
 
-  /* TRUE is windows style */
-  if (appearance)
+  if (appears_as_list)
     {
       /* Destroy all the menu mode widgets, if they exist. */
       if (GTK_IS_MENU (combo_box->priv->popup_widget))
@@ -1206,9 +1205,10 @@ gtk_combo_box_size_request (GtkWidget      *widget,
 
       if (combo_box->priv->cell_view)
         {
-          GtkRequisition sep_req, arrow_req;
+          GtkRequisition button_req, sep_req, arrow_req;
           gint border_width, xthickness, ythickness;
 
+          gtk_widget_size_request (combo_box->priv->button, &button_req);
           border_width = GTK_CONTAINER (combo_box->priv->button)->border_width;
           xthickness = combo_box->priv->button->style->xthickness;
           ythickness = combo_box->priv->button->style->ythickness;
@@ -1223,8 +1223,8 @@ gtk_combo_box_size_request (GtkWidget      *widget,
 
           width = bin_req.width + sep_req.width + arrow_req.width;
 
-          height += border_width + 1 + xthickness * 2 + 4;
-          width += border_width + 1 + ythickness * 2 + 4;
+          height += border_width + 1 + ythickness * 2 + 4;
+          width += border_width + 1 + xthickness * 2 + 4;
 
           requisition->width = width;
           requisition->height = height;
@@ -1242,13 +1242,14 @@ gtk_combo_box_size_request (GtkWidget      *widget,
   else
     {
       /* list mode */
-      GtkRequisition button_req;
+      GtkRequisition button_req, frame_req;
 
       /* sample + frame */
       *requisition = bin_req;
 
       if (combo_box->priv->cell_view_frame)
         {
+	  gtk_widget_size_request (combo_box->priv->cell_view_frame, &frame_req);
           requisition->width += 2 *
             (GTK_CONTAINER (combo_box->priv->cell_view_frame)->border_width +
              GTK_WIDGET (combo_box->priv->cell_view_frame)->style->xthickness);
