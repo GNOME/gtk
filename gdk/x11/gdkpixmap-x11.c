@@ -87,10 +87,10 @@ gdk_pixmap_new (GdkWindow *window,
 }
 
 GdkPixmap *
-gdk_bitmap_create_from_data (GdkWindow *window,
-			     gchar     *data,
-			     gint       width,
-			     gint       height)
+gdk_bitmap_create_from_data (GdkWindow   *window,
+			     const gchar *data,
+			     gint         width,
+			     gint         height)
 {
   GdkPixmap *pixmap;
   GdkWindowPrivate *private;
@@ -122,7 +122,7 @@ gdk_bitmap_create_from_data (GdkWindow *window,
 
   private->xwindow = XCreateBitmapFromData (private->xdisplay,
 					    window_private->xwindow,
-					    data, width, height);
+					    (char *)data, width, height);
 
   gdk_xid_table_insert (&private->xwindow, pixmap);
 
@@ -130,13 +130,13 @@ gdk_bitmap_create_from_data (GdkWindow *window,
 }
 
 GdkPixmap*
-gdk_pixmap_create_from_data (GdkWindow *window,
-			     gchar     *data,
-			     gint       width,
-			     gint       height,
-			     gint       depth,
-			     GdkColor  *fg,
-			     GdkColor  *bg)
+gdk_pixmap_create_from_data (GdkWindow   *window,
+			     const gchar *data,
+			     gint         width,
+			     gint         height,
+			     gint         depth,
+			     GdkColor    *fg,
+			     GdkColor    *bg)
 {
   GdkPixmap *pixmap;
   GdkWindowPrivate *private;
@@ -174,7 +174,7 @@ gdk_pixmap_create_from_data (GdkWindow *window,
 
   private->xwindow = XCreatePixmapFromBitmapData (private->xdisplay,
 						  window_private->xwindow,
-						  data, width, height,
+						  (char *)data, width, height,
 						  fg->pixel, bg->pixel, depth);
 
   gdk_xid_table_insert (&private->xwindow, pixmap);

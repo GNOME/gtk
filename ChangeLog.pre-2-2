@@ -1,3 +1,15 @@
+Tue Nov 24 11:11:05 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtklayout.[ch]: Fixed up copyright message.
+
+	* gdk/gdkrgb.c (DM): Make the dither matrix constant
+	so it can be shared.
+
+	* gtk/gtkdnd.c: Make cursor bitmaps const.
+
+	* gdk/gdk.h gdk/gdkpixmap.c: Added const to 
+	gdk_pixmap/bitmap_create_from_data.
+
 Tue Nov 24 07:46:09 1998  Tim Janik  <timj@gtk.org>
 
 	* docs/Changes-1.2.txt: added a section on scrolled windows and

@@ -846,7 +846,7 @@ gdk_rgb_convert_8 (GdkImage *image,
 #define DM_WIDTH 128
 #define DM_WIDTH_SHIFT 7
 #define DM_HEIGHT 128
-static guchar DM[128][128] =
+static const guchar DM[128][128] =
 {
   { 0, 41, 23, 5, 17, 39, 7, 15, 62, 23, 40, 51, 31, 47, 9, 32, 52, 27, 57, 25, 6, 61, 27, 52, 37, 7, 40, 63, 18, 36, 10, 42, 25, 62, 45, 34, 20, 42, 37, 14, 35, 29, 50, 10, 61, 2, 40, 8, 37, 12, 58, 22, 5, 41, 10, 39, 0, 60, 11, 46, 2, 55, 38, 17, 36, 59, 13, 54, 37, 56, 8, 29, 16, 13, 63, 22, 41, 55, 7, 20, 49, 14, 23, 55, 37, 23, 19, 36, 15, 49, 23, 63, 30, 14, 38, 27, 53, 13, 22, 41, 19, 31, 7, 19, 50, 30, 49, 16, 3, 32, 56, 40, 29, 34, 8, 48, 19, 45, 4, 51, 12, 46, 35, 49, 16, 42, 12, 62 },
   { 30, 57, 36, 54, 47, 34, 52, 27, 43, 4, 28, 7, 17, 36, 62, 13, 44, 7, 18, 48, 33, 21, 44, 14, 30, 47, 12, 33, 5, 55, 31, 58, 13, 30, 4, 17, 52, 10, 60, 26, 46, 0, 39, 27, 42, 22, 47, 25, 60, 32, 9, 38, 48, 17, 59, 30, 49, 18, 34, 25, 51, 19, 5, 48, 21, 8, 28, 46, 1, 32, 41, 19, 54, 47, 37, 18, 28, 11, 44, 30, 39, 56, 2, 33, 8, 42, 61, 28, 58, 8, 46, 9, 41, 4, 58, 7, 21, 48, 59, 10, 52, 14, 42, 57, 12, 25, 7, 53, 42, 24, 11, 50, 17, 59, 42, 2, 36, 60, 32, 17, 63, 29, 21, 7, 59, 32, 24, 39 },
@@ -1028,7 +1028,7 @@ gdk_rgb_convert_8_d666 (GdkImage *image,
   guchar *obuf, *obptr;
   guchar *bptr, *bp2;
   gint r, g, b;
-  guchar *dmp;
+  const guchar *dmp;
   gint dith;
 
   bptr = buf;
@@ -1068,7 +1068,7 @@ gdk_rgb_convert_8_d (GdkImage *image,
   guchar *obuf, *obptr;
   guchar *bptr, *bp2;
   gint r, g, b;
-  guchar *dmp;
+  const guchar *dmp;
   gint dith;
   gint rs, gs, bs;
 
@@ -2012,7 +2012,7 @@ gdk_rgb_convert_truecolor_lsb_d (GdkImage *image,
   gint i;
   gint dith;
   gint r1, g1, b1;
-  guchar *dmp;
+  const guchar *dmp;
 
   r_right = 8 - image_info->visual->red_prec;
   r_left = image_info->visual->red_shift;
@@ -2129,7 +2129,7 @@ gdk_rgb_convert_truecolor_msb_d (GdkImage *image,
   gint shift, shift_init;
   gint dith;
   gint r1, g1, b1;
-  guchar *dmp;
+  const guchar *dmp;
 
   r_right = 8 - image_info->visual->red_prec;
   r_left = image_info->visual->red_shift;
@@ -2186,7 +2186,7 @@ gdk_rgb_convert_4 (GdkImage *image,
   guchar *obuf, *obptr;
   guchar *bptr, *bp2;
   gint r, g, b;
-  guchar *dmp;
+  const guchar *dmp;
   gint dith;
 
   bptr = buf;
@@ -2309,7 +2309,7 @@ gdk_rgb_convert_gray4_d (GdkImage *image,
   guchar *obuf, *obptr;
   guchar *bptr, *bp2;
   gint r, g, b;
-  guchar *dmp;
+  const guchar *dmp;
   gint prec, right;
   gint gray;
 
@@ -2349,7 +2349,7 @@ gdk_rgb_convert_gray4_d_pack (GdkImage *image,
   guchar *obuf, *obptr;
   guchar *bptr, *bp2;
   gint r, g, b;
-  guchar *dmp;
+  const guchar *dmp;
   gint prec, right;
   gint gray;
   guchar pix0, pix1;
@@ -2409,7 +2409,7 @@ gdk_rgb_convert_1 (GdkImage *image,
   guchar *obuf, *obptr;
   guchar *bptr, *bp2;
   gint r, g, b;
-  guchar *dmp;
+  const guchar *dmp;
   gint dith;
   guchar byte;
 

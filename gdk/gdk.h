@@ -419,17 +419,17 @@ GdkPixmap* gdk_pixmap_new		(GdkWindow  *window,
 					 gint	     width,
 					 gint	     height,
 					 gint	     depth);
-GdkBitmap* gdk_bitmap_create_from_data	(GdkWindow  *window,
-					 gchar	    *data,
-					 gint	     width,
-					 gint	     height);
-GdkPixmap* gdk_pixmap_create_from_data	(GdkWindow  *window,
-					 gchar	    *data,
-					 gint	     width,
-					 gint	     height,
-					 gint	     depth,
-					 GdkColor   *fg,
-					 GdkColor   *bg);
+GdkBitmap* gdk_bitmap_create_from_data	(GdkWindow   *window,
+					 const gchar *data,
+					 gint	      width,
+					 gint	      height);
+GdkPixmap* gdk_pixmap_create_from_data	(GdkWindow   *window,
+					 const gchar *data,
+					 gint	      width,
+					 gint	      height,
+					 gint	      depth,
+					 GdkColor    *fg,
+					 GdkColor    *bg);
 GdkPixmap* gdk_pixmap_create_from_xpm	(GdkWindow  *window,
 					 GdkBitmap **mask,
 					 GdkColor   *transparent_color,
