@@ -793,7 +793,6 @@ palette_set_color (GtkWidget         *drawing_area,
 		   gdouble           *color)
 {
   gdouble *new_color = g_new (double, 4);
-  gdouble *old_color;
   GdkColor gdk_color;
   
   gdk_color.red = UNSCALE (color[0]);
@@ -823,20 +822,13 @@ palette_set_color (GtkWidget         *drawing_area,
       
       gtk_object_set_data (GTK_OBJECT (drawing_area), "color_set", GINT_TO_POINTER (1));
     }
-  else
-    {
-      old_color = (gdouble *) gtk_object_get_data (GTK_OBJECT (drawing_area), "color_val");
-      if (old_color)
-	{
-	  g_free (old_color);
-	}
-    }
+
   new_color[0] = color[0];
   new_color[1] = color[1];
   new_color[2] = color[2];
   new_color[3] = 1.0;
   
-  gtk_object_set_data (GTK_OBJECT (drawing_area), "color_val", new_color);
+  g_object_set_data_full (G_OBJECT (drawing_area), "color_val", new_color, (GDestroyNotify)g_free);
 }
 
 static gboolean
@@ -1762,6 +1754,8 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   priv->default_alpha_set = FALSE;
   
   priv->tooltips = gtk_tooltips_new ();
+  g_object_ref (priv->tooltips);
+  gtk_object_sink (GTK_OBJECT (priv->tooltips));
   
   gtk_box_set_spacing (GTK_BOX (colorsel), 4);
   top_hbox = gtk_hbox_new (FALSE, 8);
@@ -1924,7 +1918,7 @@ gtk_color_selection_destroy (GtkObject *object)
 
   if (priv->tooltips)
     {
-      gtk_object_destroy (GTK_OBJECT (priv->tooltips));
+      g_object_unref (priv->tooltips);
       priv->tooltips = NULL;
     }
   

@@ -941,23 +941,23 @@ gdk_synthesize_window_state (GdkWindow     *window,
                              GdkWindowState unset_flags,
                              GdkWindowState set_flags)
 {
-  GdkEventWindowState temp_event;
+  GdkEvent temp_event;
   GdkWindowState old;
   
   g_return_if_fail (window != NULL);
   
-  temp_event.window = window;
-  temp_event.type = GDK_WINDOW_STATE;
-  temp_event.send_event = FALSE;
+  temp_event.window_state.window = window;
+  temp_event.window_state.type = GDK_WINDOW_STATE;
+  temp_event.window_state.send_event = FALSE;
   
-  old = ((GdkWindowObject*) temp_event.window)->state;
+  old = ((GdkWindowObject*) temp_event.window_state.window)->state;
   
-  temp_event.changed_mask = (unset_flags | set_flags) ^ old;
-  temp_event.new_window_state = old;
-  temp_event.new_window_state |= set_flags;
-  temp_event.new_window_state &= ~unset_flags;
+  temp_event.window_state.changed_mask = (unset_flags | set_flags) ^ old;
+  temp_event.window_state.new_window_state = old;
+  temp_event.window_state.new_window_state |= set_flags;
+  temp_event.window_state.new_window_state &= ~unset_flags;
 
-  if (temp_event.new_window_state == old)
+  if (temp_event.window_state.new_window_state == old)
     return; /* No actual work to do, nothing changed. */
 
   /* Actually update the field in GdkWindow, this is sort of an odd
@@ -965,7 +965,7 @@ gdk_synthesize_window_state (GdkWindow     *window,
    * inconsistent state to the user.
    */
   
-  ((GdkWindowObject*) window)->state = temp_event.new_window_state;
+  ((GdkWindowObject*) window)->state = temp_event.window_state.new_window_state;
 
   /* We only really send the event to toplevels, since
    * all the window states don't apply to non-toplevels.
@@ -977,7 +977,7 @@ gdk_synthesize_window_state (GdkWindow     *window,
     case GDK_WINDOW_TOPLEVEL:
     case GDK_WINDOW_DIALOG:
     case GDK_WINDOW_TEMP: /* ? */
-      gdk_event_put ((GdkEvent*) &temp_event);
+      gdk_event_put (&temp_event);
       break;
       
     case GDK_WINDOW_FOREIGN:

@@ -1,3 +1,20 @@
+Tue Dec  4 12:06:13 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcolorsel.c: Ref and sink priv->tooltips in
+	init() and unref priv->tooltips in destroy rather
+	than calling gtk_object_destroy() which has no
+	effect on memory management. (#66104, HideToshi
+	Tajima)
+
+	* gtk/gtkcolorsel.c (palette_set_color): Use g_object_set_data_full()
+	so we free the when the object is freed. (Fixes memory
+	leak, #66096, HideToshi Tajima)
+
+	* gdk/gdkevents.c (gdk_synthesize_window_state): Use 
+	a full GdkEvent structure to avoid reads of uninitialized/
+	invalid memory in gdk_event_put() (#65877, patch
+	from Hidetoshi Tajima)
+
 Tue Dec  4 11:06:54 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmenuitem.c: Revert my last mistaken change - 
