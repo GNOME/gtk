@@ -484,18 +484,13 @@ gtk_window_set_modal (GtkWindow *window,
   g_return_if_fail (window != NULL);
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-  modal = modal != FALSE;
+  window->modal = modal != FALSE;
 
-  /* If the widget was showed already, adjust it's grab state */
-  if (GTK_WIDGET_VISIBLE (window) && window->modal != modal)
-    {
-      if (modal)
-	gtk_grab_add (GTK_WIDGET (window));
-      else
-	gtk_grab_remove (GTK_WIDGET (window));
-    }
-  
-  window->modal = modal;
+  /* adjust desired modality state */
+  if (GTK_WIDGET_VISIBLE (window) && window->modal)
+    gtk_grab_add (GTK_WIDGET (window));
+  else
+    gtk_grab_remove (GTK_WIDGET (window));
 }
 
 void
@@ -786,8 +781,6 @@ gtk_window_hide (GtkWidget *widget)
 
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_VISIBLE);
   gtk_widget_unmap (widget);
-
-  window->modal = GTK_WIDGET_HAS_GRAB (window);
 
   if (window->modal)
     gtk_grab_remove (widget);

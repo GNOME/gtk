@@ -1,3 +1,11 @@
+Sat Feb 20 20:59:25 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwindow.c: hm, set_modal doesn't really work with random
+	gtk_grab_add/gtk_grab_remove calls. either the window user uses
+	the set_modal interface or he places grab_add/grab_remove on his own.
+	(gtk_window_set_modal): enforce modality state either way.
+	(gtk_window_hide): revert previous change.
+
 Sat Feb 20 20:04:48 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkcalendar.c (gtk_calendar_button_press): increment years and
