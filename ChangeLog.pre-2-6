@@ -1,3 +1,8 @@
+Wed Jul  7 15:03:30 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmain.c (gtk_events_pending): Unlock around call
+	to g_main_pending() as well.
+
 Wed Jul  7 14:59:01 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmain.c (gtk_main_iteration): Unlock around

@@ -539,7 +539,13 @@ gtk_main_quit (void)
 gint
 gtk_events_pending (void)
 {
-  return g_main_pending();
+  gboolean result;
+  
+  GDK_THREADS_LEAVE ();  
+  result = g_main_pending();
+  GDK_THREADS_ENTER ();
+
+  return result;
 }
 
 gint 
