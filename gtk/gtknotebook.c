@@ -2151,7 +2151,6 @@ gtk_notebook_remove (GtkContainer *container,
   GtkNotebook *notebook;
   GtkNotebookPage *page;
   GList *children;
-  guint page_num;
 
   g_return_if_fail (GTK_IS_NOTEBOOK (container));
   g_return_if_fail (widget != NULL);
@@ -2159,7 +2158,6 @@ gtk_notebook_remove (GtkContainer *container,
   notebook = GTK_NOTEBOOK (container);
 
   children = notebook->children;
-  page_num = 0;
   while (children)
     {
       page = children->data;
@@ -2168,7 +2166,6 @@ gtk_notebook_remove (GtkContainer *container,
 	  gtk_notebook_real_remove (notebook, children, FALSE);
 	  break;
 	}
-      page_num++;
       children = children->next;
     }
 }

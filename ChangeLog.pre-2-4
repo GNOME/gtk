@@ -1,3 +1,8 @@
+Thu Aug  7 16:40:21 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtknotebook.c (gtk_notebook_remove): Remove leftover
+	page_num variable (Archit Baweja)
+
 2003-08-07  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkspinbutton.c (gtk_spin_button_default_input): Use g_strtod() to cope with C libraries with
