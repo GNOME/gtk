@@ -143,17 +143,38 @@ additional environment variables.
       <listitem><para>Miscellaneous information</para></listitem>
     </varlistentry>
     <varlistentry>
+      <term>plugsocket</term>
+      <listitem><para>Cross-process embedding</para></listitem>
+    </varlistentry>
+    <varlistentry>
       <term>text</term>
-      <listitem><para>Information about text widget internals</para></listitem>
+      <listitem><para>Text widget internals</para></listitem>
     </varlistentry>
     <varlistentry>
       <term>tree</term>
-      <listitem><para>Information about tree widget internals</para></listitem>
+      <listitem><para>Tree widget internals</para></listitem>
     </varlistentry>
     <varlistentry>
       <term>updates</term>
       <listitem><para>Visual feedback about window updates</para></listitem>
     </varlistentry>
+    <varlistentry>
+      <term>keybindings</term>
+      <listitem><para>Keybindings</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>multihead</term>
+      <listitem><para>Working on multiple displays</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>modules</term>
+      <listitem><para>Loading of modules</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>geometry</term>
+      <listitem><para>Size allocation</para></listitem>
+    </varlistentry>
+
   </variablelist>
   The special value <literal>all</literal> can be used to turn on all debug options.
   </para>

@@ -1,5 +1,9 @@
 2004-10-08  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkdebug.h: 
+	* gtk/gtkwidget.c (gtk_widget_size_allocate): Add a new debug
+	flag, geometry, to debug size allocation.
+
 	* gtk/gtktreeview.c (gtk_tree_view_button_press): Set cell data
 	unconditionally.  (#152562, Federico Mena Quintero)
 
