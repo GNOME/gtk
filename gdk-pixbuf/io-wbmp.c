@@ -199,7 +199,7 @@ get_mbi(struct wbmp_progressive_state *context, guchar **buf, guint *buf_size, i
   } while(n < sizeof(intbuf) && (intbuf[n-1] & 0x80));
 
  out:
-  if(!rv || !(intbuf[n-1] & 0x80))
+  if(!rv || (intbuf[n-1] & 0x80))
     {
       rv = save_rest(context, intbuf, n);
 
@@ -263,6 +263,8 @@ gboolean gdk_pixbuf__wbmp_image_load_increment(gpointer data, guchar * buf,
 		  {
 		    context->need_height = FALSE;
 		    context->pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, FALSE, 8, context->width, context->height);
+		    g_assert(context->pixbuf);
+
 		    if(context->prepared_func)
 		      context->prepared_func(context->pixbuf, context->user_data);
 		  }
@@ -283,7 +285,7 @@ gboolean gdk_pixbuf__wbmp_image_load_increment(gpointer data, guchar * buf,
 			  goto out;
 
 			ptr = context->pixbuf->pixels + context->pixbuf->rowstride * context->cury + context->curx * 3;
-			for(xoff = 0; xoff < 8; xoff++, ptr += 3)
+			for(xoff = 7; xoff >= 0; xoff--, ptr += 3)
 			  {
 			    guchar pixval;
 
