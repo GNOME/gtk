@@ -29,10 +29,6 @@
                                         ;  gdk_point_copy
                                         ;  gdk_point_destroy)
 
-(define-boxed GdkColormap
-  gdk_colormap_ref
-  gdk_colormap_unref)
-
 (define-boxed GdkVisual
   gdk_visual_ref
   gdk_visual_unref)

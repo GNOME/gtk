@@ -54,7 +54,6 @@ extern "C" {
 typedef struct _GdkImageClass	       GdkImageClass;
 typedef struct _GdkImagePrivate	       GdkImagePrivate;
 typedef struct _GdkGCPrivate	       GdkGCPrivate;
-typedef struct _GdkColormapPrivate     GdkColormapPrivate;
 typedef struct _GdkColorInfo           GdkColorInfo;
 typedef struct _GdkFontPrivate	       GdkFontPrivate;
 typedef struct _GdkEventFilter	       GdkEventFilter;
@@ -107,14 +106,6 @@ typedef enum {
 struct _GdkColorInfo
 {
   GdkColorInfoFlags flags;
-  guint ref_count;
-};
-
-struct _GdkColormapPrivate
-{
-  GdkColormap colormap;
-  GdkVisual *visual;
-
   guint ref_count;
 };
 

@@ -537,7 +537,7 @@ _gdk_pixmap_create_from_xpm (GdkWindow  *window,
       visual = gdk_drawable_get_visual (window);
     }
   else
-    visual = ((GdkColormapPrivate *)colormap)->visual;
+    visual = colormap->visual;
   
   buffer = (*get_buf) (op_header, handle);
   if (buffer == NULL)

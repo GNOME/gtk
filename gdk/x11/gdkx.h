@@ -36,12 +36,12 @@
 #include <gdk/x11/gdkwindow-x11.h>
 #include <gdk/x11/gdkpixmap-x11.h>
 
-typedef struct _GdkGCXData          GdkGCXData;
-typedef struct _GdkColormapPrivateX GdkColormapPrivateX;
-typedef struct _GdkCursorPrivate    GdkCursorPrivate;
-typedef struct _GdkFontPrivateX     GdkFontPrivateX;
-typedef struct _GdkImagePrivateX    GdkImagePrivateX;
-typedef struct _GdkVisualPrivate    GdkVisualPrivate;
+typedef struct _GdkGCXData             GdkGCXData;
+typedef struct _GdkColormapPrivateData GdkColormapPrivateData;
+typedef struct _GdkCursorPrivate       GdkCursorPrivate;
+typedef struct _GdkFontPrivateX        GdkFontPrivateX;
+typedef struct _GdkImagePrivateX       GdkImagePrivateX;
+typedef struct _GdkVisualPrivate       GdkVisualPrivate;
 
 #ifdef USE_XIM
 typedef struct _GdkICPrivate        GdkICPrivate;
@@ -82,10 +82,8 @@ struct _GdkVisualPrivate
   Visual *xvisual;
 };
 
-struct _GdkColormapPrivateX
+struct _GdkColormapPrivateData
 {
-  GdkColormapPrivate base;
-
   Colormap xcolormap;
   Display *xdisplay;
   gint private_val;
@@ -128,8 +126,8 @@ struct _GdkICPrivate
 #define GDK_IMAGE_XDISPLAY(image)     (((GdkImagePrivate*) image)->xdisplay)
 #define GDK_IMAGE_XIMAGE(image)       (((GdkImagePrivate*) image)->ximage)
 #define GDK_GC_XDISPLAY(gc)           (GDK_GC_XDATA(gc)->xdisplay)
-#define GDK_COLORMAP_XDISPLAY(cmap)   (((GdkColormapPrivateX *)cmap)->xdisplay)
-#define GDK_COLORMAP_XCOLORMAP(cmap)  (((GdkColormapPrivateX *)cmap)->xcolormap)
+#define GDK_COLORMAP_XDISPLAY(cmap)   (((GdkColormapPrivateData *)GDK_COLORMAP (cmap)->windowing_data)->xdisplay)
+#define GDK_COLORMAP_XCOLORMAP(cmap)  (((GdkColormapPrivateData *)GDK_COLORMAP (cmap)->windowing_data)->xcolormap)
 #define GDK_VISUAL_XVISUAL(vis)       (((GdkVisualPrivate*) vis)->xvisual)
 #define GDK_FONT_XDISPLAY(font)       (((GdkFontPrivate*) font)->xdisplay)
 #define GDK_FONT_XFONT(font)          (((GdkFontPrivateX *)font)->xfont)
