@@ -1,3 +1,15 @@
+2004-03-01  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c (list_model_filter_func): Test for
+	filter_info.uri correctly.  Fixes #135379, pointed out by Damon
+	Chaplin.
+	(shortcuts_get_index): Compute the bookmarks index correctly.
+	Fixes #135714, pointed out by Damon Chaplin.
+	(gtk_file_chooser_default_list_shortcut_folders): Handle the case
+	with no shortcuts, and don't run off the end of the list if there
+	are no bookmarks and their separator.  Fixes #135572, patch by
+	Damon Chaplin.
+
 Mon Mar  1 12:23:06 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtklabel.c: Handle dynamically resolved bidi direction

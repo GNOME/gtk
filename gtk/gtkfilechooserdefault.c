@@ -884,7 +884,7 @@ shortcuts_get_index (GtkFileChooserDefault *impl,
     goto out;
 
   /* If there are no bookmarks there won't be a separator */
-  n += impl->num_shortcuts > 0 ? 1 : 0;
+  n += (impl->num_bookmarks > 0) ? 1 : 0;
 
   if (where == SHORTCUTS_BOOKMARKS)
     goto out;
@@ -2418,7 +2418,7 @@ list_model_filter_func (GtkFileSystemModel *model,
   if (needed & GTK_FILE_FILTER_URI)
     {
       filter_info.uri = gtk_file_system_path_to_uri (impl->file_system, path);
-      if (filter_info.filename)
+      if (filter_info.uri)
 	filter_info.contains |= GTK_FILE_FILTER_URI;
     }
   else
@@ -3076,6 +3076,9 @@ gtk_file_chooser_default_list_shortcut_folders (GtkFileChooser *chooser)
   int i;
   GSList *list;
 
+  if (impl->num_shortcuts == 0)
+    return NULL;
+
   pos = shortcuts_get_pos_for_shortcut_folder (impl, 0);
   if (!gtk_tree_model_iter_nth_child (GTK_TREE_MODEL (impl->shortcuts_model), &iter, NULL, pos))
     g_assert_not_reached ();
@@ -3091,8 +3094,11 @@ gtk_file_chooser_default_list_shortcut_folders (GtkFileChooser *chooser)
 
       list = g_slist_prepend (list, gtk_file_path_copy (shortcut));
 
-      if (!gtk_tree_model_iter_next (GTK_TREE_MODEL (impl->shortcuts_model), &iter))
-	g_assert_not_reached ();
+      if (i != impl->num_shortcuts - 1)
+	{
+	  if (!gtk_tree_model_iter_next (GTK_TREE_MODEL (impl->shortcuts_model), &iter))
+	    g_assert_not_reached ();
+	}
     }
 
   return g_slist_reverse (list);
