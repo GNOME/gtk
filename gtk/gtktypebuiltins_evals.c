@@ -21,6 +21,15 @@ static GtkEnumValue _gtk_c_tree_line_style_values[] = {
   { GTK_CTREE_LINES_NONE, "GTK_CTREE_LINES_NONE", "none" },
   { 0, NULL, NULL }
 };
+static GtkEnumValue _gtk_c_tree_expansion_values[] = {
+  { GTK_CTREE_EXPANSION_EXPAND, "GTK_CTREE_EXPANSION_EXPAND", "expand" },
+  { GTK_CTREE_EXPANSION_EXPAND_RECURSIVE, "GTK_CTREE_EXPANSION_EXPAND_RECURSIVE", "expand-recursive" },
+  { GTK_CTREE_EXPANSION_COLLAPSE, "GTK_CTREE_EXPANSION_COLLAPSE", "collapse" },
+  { GTK_CTREE_EXPANSION_COLLAPSE_RECURSIVE, "GTK_CTREE_EXPANSION_COLLAPSE_RECURSIVE", "collapse-recursive" },
+  { GTK_CTREE_EXPANSION_TOGGLE, "GTK_CTREE_EXPANSION_TOGGLE", "toggle" },
+  { GTK_CTREE_EXPANSION_TOGGLE_RECURSIVE, "GTK_CTREE_EXPANSION_TOGGLE_RECURSIVE", "toggle-recursive" },
+  { 0, NULL, NULL }
+};
 static GtkEnumValue _gtk_debug_flag_values[] = {
   { GTK_DEBUG_OBJECTS, "GTK_DEBUG_OBJECTS", "objects" },
   { GTK_DEBUG_MISC, "GTK_DEBUG_MISC", "misc" },
@@ -381,6 +390,12 @@ static GtkEnumValue _gdk_debug_flag_values[] = {
   { GDK_DEBUG_DND, "GDK_DEBUG_DND", "dnd" },
   { GDK_DEBUG_COLOR_CONTEXT, "GDK_DEBUG_COLOR_CONTEXT", "color-context" },
   { GDK_DEBUG_XIM, "GDK_DEBUG_XIM", "xim" },
+  { 0, NULL, NULL }
+};
+static GtkEnumValue _gdk_rgb_dither_values[] = {
+  { GDK_RGB_DITHER_NONE, "GDK_RGB_DITHER_NONE", "none" },
+  { GDK_RGB_DITHER_NORMAL, "GDK_RGB_DITHER_NORMAL", "normal" },
+  { GDK_RGB_DITHER_MAX, "GDK_RGB_DITHER_MAX", "max" },
   { 0, NULL, NULL }
 };
 static GtkEnumValue _gdk_window_type_values[] = {

@@ -265,7 +265,7 @@ gtk_ctree_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      ctree_type = gtk_type_unique (gtk_clist_get_type (), &ctree_info);
+      ctree_type = gtk_type_unique (GTK_TYPE_CLIST, &ctree_info);
     }
 
   return ctree_type;
@@ -337,8 +337,8 @@ gtk_ctree_class_init (GtkCTreeClass *klass)
   container_class = (GtkContainerClass *) klass;
   clist_class = (GtkCListClass *) klass;
 
-  parent_class = gtk_type_class (gtk_clist_get_type ());
-  container_class = gtk_type_class (gtk_container_get_type ());
+  parent_class = gtk_type_class (GTK_TYPE_CLIST);
+  container_class = gtk_type_class (GTK_TYPE_CONTAINER);
 
   ctree_signals[TREE_SELECT_ROW] =
     gtk_signal_new ("tree_select_row",
@@ -3728,7 +3728,7 @@ gtk_ctree_new_with_titles (gint   columns,
   g_return_val_if_fail (columns > 0, NULL);
   g_return_val_if_fail (tree_column >= 0 && tree_column < columns, NULL);
 
-  widget = gtk_type_new (gtk_ctree_get_type ());
+  widget = gtk_type_new (GTK_TYPE_CTREE);
   gtk_ctree_construct (GTK_CTREE (widget), columns, tree_column, titles);
   return widget;
 }

@@ -31,12 +31,12 @@ extern "C"
 {
 #endif				/* __cplusplus */
 
-#define GTK_CTREE(obj) \
-  (GTK_CHECK_CAST ((obj), gtk_ctree_get_type (), GtkCTree))
-#define GTK_CTREE_CLASS(klass) \
-  (GTK_CHECK_CLASS_CAST ((klass), gtk_ctree_get_type (), GtkCTreeClass))
-#define GTK_IS_CTREE(obj) \
-  (GTK_CHECK_TYPE ((obj), gtk_ctree_get_type ()))
+#define GTK_TYPE_CTREE            (gtk_ctree_get_type ())
+#define GTK_CTREE(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_CTREE, GtkCTree))
+#define GTK_CTREE_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_CTREE, GtkCTreeClass))
+#define GTK_IS_CTREE(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_CTREE))
+#define GTK_IS_CTREE_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CTREE))
+
 #define GTK_CTREE_ROW(_glist_) ((GtkCTreeRow *)((_glist_)->data))
 #define GTK_CTREE_TREE(_ctree_, _glist_) \
   ((GtkCellTree *) &(((GtkCTreeRow *)((_glist_)->data))->cell[(_ctree_)->tree_col]))

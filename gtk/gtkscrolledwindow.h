@@ -31,9 +31,11 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define GTK_SCROLLED_WINDOW(obj)          GTK_CHECK_CAST (obj, gtk_scrolled_window_get_type (), GtkScrolledWindow)
-#define GTK_SCROLLED_WINDOW_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_scrolled_window_get_type (), GtkScrolledWindowClass)
-#define GTK_IS_SCROLLED_WINDOW(obj)       GTK_CHECK_TYPE (obj, gtk_scrolled_window_get_type ())
+#define GTK_TYPE_SCROLLED_WINDOW            (gtk_scrolled_window_get_type ())
+#define GTK_SCROLLED_WINDOW(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_SCROLLED_WINDOW, GtkScrolledWindow))
+#define GTK_SCROLLED_WINDOW_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_SCROLLED_WINDOW, GtkScrolledWindowClass))
+#define GTK_IS_SCROLLED_WINDOW(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_SCROLLED_WINDOW))
+#define GTK_IS_SCROLLED_WINDOW_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_SCROLLED_WINDOW))
 
 
 typedef struct _GtkScrolledWindow       GtkScrolledWindow;
@@ -61,7 +63,7 @@ struct _GtkScrolledWindowClass
 };
 
 
-guint          gtk_scrolled_window_get_type        (void);
+GtkType        gtk_scrolled_window_get_type        (void);
 GtkWidget*     gtk_scrolled_window_new             (GtkAdjustment     *hadjustment,
 						    GtkAdjustment     *vadjustment);
 void           gtk_scrolled_window_construct      (GtkScrolledWindow *scrolled_window,

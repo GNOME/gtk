@@ -855,9 +855,12 @@ gtk_object_add_arg_type (const char *arg_name,
   g_return_if_fail (arg_name != NULL);
   g_return_if_fail (arg_type > GTK_TYPE_NONE);
   g_return_if_fail (arg_id > 0);
-  g_return_if_fail ((arg_flags & GTK_ARG_READWRITE) != 0);
   g_return_if_fail ((arg_flags & GTK_ARG_CHILD_ARG) == 0);
-
+  if (arg_flags & GTK_ARG_CONSTRUCT)
+    g_return_if_fail ((arg_flags & GTK_ARG_READWRITE) == GTK_ARG_READWRITE);
+  else
+    g_return_if_fail ((arg_flags & GTK_ARG_READWRITE) != 0);
+    
   if (!object_arg_info_ht)
     object_arg_info_ht = g_hash_table_new (gtk_arg_info_hash,
 					   gtk_arg_info_equal);

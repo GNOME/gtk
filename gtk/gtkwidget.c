@@ -798,10 +798,10 @@ gtk_widget_set_arg (GtkObject   *object,
       gtk_widget_set_uposition (widget, -2, GTK_VALUE_INT (*arg));
       break;
     case ARG_WIDTH:
-      gtk_widget_set_usize (widget, GTK_VALUE_INT (*arg), -1);
+      gtk_widget_set_usize (widget, GTK_VALUE_INT (*arg), -2);
       break;
     case ARG_HEIGHT:
-      gtk_widget_set_usize (widget, -1, GTK_VALUE_INT (*arg));
+      gtk_widget_set_usize (widget, -2, GTK_VALUE_INT (*arg));
       break;
     case ARG_VISIBLE:
       if (GTK_VALUE_BOOL(*arg))
@@ -3011,9 +3011,9 @@ gtk_widget_set_usize (GtkWidget *widget,
       gtk_object_set_data_by_id (GTK_OBJECT (widget), aux_info_key_id, aux_info);
     }
   
-  if (width > -1)
+  if (width > -2)
     aux_info->width = width;
-  if (height > -1)
+  if (height > -2)
     aux_info->height = height;
   
   if (GTK_WIDGET_VISIBLE (widget))

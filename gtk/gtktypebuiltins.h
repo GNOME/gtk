@@ -3,6 +3,7 @@
 extern GtkType GTK_TYPE_CELL_TYPE;
 extern GtkType GTK_TYPE_C_TREE_POS;
 extern GtkType GTK_TYPE_C_TREE_LINE_STYLE;
+extern GtkType GTK_TYPE_C_TREE_EXPANSION;
 extern GtkType GTK_TYPE_DEBUG_FLAG;
 extern GtkType GTK_TYPE_ACCEL_FLAGS;
 extern GtkType GTK_TYPE_ARROW_TYPE;
@@ -50,6 +51,7 @@ extern GtkType GTK_TYPE_TREE_VIEW_MODE;
 extern GtkType GTK_TYPE_FUNDAMENTAL_TYPE;
 extern GtkType GTK_TYPE_WIDGET_FLAGS;
 extern GtkType GTK_TYPE_GDK_DEBUG_FLAG;
+extern GtkType GTK_TYPE_GDK_RGB_DITHER;
 extern GtkType GTK_TYPE_GDK_WINDOW_TYPE;
 extern GtkType GTK_TYPE_GDK_WINDOW_CLASS;
 extern GtkType GTK_TYPE_GDK_IMAGE_TYPE;
@@ -101,4 +103,4 @@ extern GtkType GTK_TYPE_GDK_WINDOW;
 extern GtkType GTK_TYPE_GDK_EVENT;
 extern GtkType GTK_TYPE_GDK_COLOR;
 
-#define	GTK_TYPE_NUM_BUILTINS	(100)
+#define	GTK_TYPE_NUM_BUILTINS	(102)

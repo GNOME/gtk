@@ -57,15 +57,15 @@ typedef enum
   GTK_CELL_WIDGET
 } GtkCellType;
 
-#define GTK_TYPE_CLIST                    (gtk_clist_get_type ())
-#define GTK_CLIST(obj)                    (GTK_CHECK_CAST ((obj), gtk_clist_get_type (), GtkCList))
-#define GTK_CLIST_CLASS(klass)            (GTK_CHECK_CLASS_CAST ((klass), gtk_clist_get_type (), GtkCListClass))
-#define GTK_IS_CLIST(obj)                 (GTK_CHECK_TYPE ((obj), gtk_clist_get_type ()))
-#define GTK_IS_CLIST_CLASS(klass)         (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CLIST))
+#define GTK_TYPE_CLIST            (gtk_clist_get_type ())
+#define GTK_CLIST(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_CLIST, GtkCList))
+#define GTK_CLIST_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_CLIST, GtkCListClass))
+#define GTK_IS_CLIST(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_CLIST))
+#define GTK_IS_CLIST_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CLIST))
 
-#define GTK_CLIST_FLAGS(clist)            (GTK_CLIST (clist)->flags)
-#define GTK_CLIST_SET_FLAG(clist,flag)    (GTK_CLIST_FLAGS (clist) |= (GTK_ ## flag))
-#define GTK_CLIST_UNSET_FLAG(clist,flag)  (GTK_CLIST_FLAGS (clist) &= ~(GTK_ ## flag))
+#define GTK_CLIST_FLAGS(clist)             (GTK_CLIST (clist)->flags)
+#define GTK_CLIST_SET_FLAG(clist,flag)     (GTK_CLIST_FLAGS (clist) |= (GTK_ ## flag))
+#define GTK_CLIST_UNSET_FLAG(clist,flag)   (GTK_CLIST_FLAGS (clist) &= ~(GTK_ ## flag))
 
 #define GTK_CLIST_FROZEN(clist)            (GTK_CLIST_FLAGS (clist) & GTK_CLIST_FROZEN)
 #define GTK_CLIST_IN_DRAG(clist)           (GTK_CLIST_FLAGS (clist) & GTK_CLIST_IN_DRAG)

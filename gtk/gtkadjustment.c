@@ -53,7 +53,7 @@ gtk_adjustment_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      adjustment_type = gtk_type_unique (gtk_data_get_type (), &adjustment_info);
+      adjustment_type = gtk_type_unique (GTK_TYPE_DATA, &adjustment_info);
     }
 
   return adjustment_type;

@@ -402,7 +402,7 @@ gtk_clist_get_type (void)
 	(GtkClassInitFunc) NULL,
       };
 
-      clist_type = gtk_type_unique (gtk_container_get_type (), &clist_info);
+      clist_type = gtk_type_unique (GTK_TYPE_CONTAINER, &clist_info);
     }
 
   return clist_type;
@@ -419,7 +419,7 @@ gtk_clist_class_init (GtkCListClass * klass)
   widget_class = (GtkWidgetClass *) klass;
   container_class = (GtkContainerClass *) klass;
 
-  parent_class = gtk_type_class (gtk_container_get_type ());
+  parent_class = gtk_type_class (GTK_TYPE_CONTAINER);
 
   clist_signals[SELECT_ROW] =
     gtk_signal_new ("select_row",
@@ -961,7 +961,7 @@ gtk_clist_new_with_titles (gint columns,
 
   g_return_val_if_fail (titles != NULL, NULL);
   
-  widget = gtk_type_new (gtk_clist_get_type ());
+  widget = gtk_type_new (GTK_TYPE_CLIST);
   
   gtk_clist_construct (GTK_CLIST (widget), columns, titles);
 
@@ -976,7 +976,7 @@ gtk_clist_new (gint columns)
   if (columns < 1)
     return NULL;
 
-  clist = gtk_type_new (gtk_clist_get_type ());
+  clist = gtk_type_new (GTK_TYPE_CLIST);
   gtk_clist_construct (clist, columns, NULL);
   return GTK_WIDGET (clist);
 }

@@ -347,8 +347,8 @@ struct _GtkWidgetAuxInfo
 {
   gint16  x;
   gint16  y;
-  guint16 width;
-  guint16 height;
+  gint16 width;
+  gint16 height;
 };
 
 struct _GtkWidgetShapeInfo

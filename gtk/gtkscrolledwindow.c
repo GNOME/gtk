@@ -22,9 +22,22 @@
 
 #define SCROLLBAR_SPACING(w) (GTK_SCROLLED_WINDOW_CLASS (GTK_OBJECT (w)->klass)->scrollbar_spacing)
 
+enum {
+  ARG_0,
+  ARG_VIEWPORT,
+  ARG_HSCROLLBAR_POLICY,
+  ARG_VSCROLLBAR_POLICY
+};
+
 
 static void gtk_scrolled_window_class_init         (GtkScrolledWindowClass *klass);
 static void gtk_scrolled_window_init               (GtkScrolledWindow      *scrolled_window);
+static void gtk_scrolled_window_set_arg		   (GtkObject              *object,
+						    GtkArg                 *arg,
+						    guint                   arg_id);
+static void gtk_scrolled_window_get_arg		   (GtkObject              *object,
+						    GtkArg                 *arg,
+						    guint                   arg_id);
 static void gtk_scrolled_window_destroy            (GtkObject              *object);
 static void gtk_scrolled_window_finalize           (GtkObject              *object);
 static void gtk_scrolled_window_map                (GtkWidget              *widget);
@@ -51,10 +64,10 @@ static void gtk_scrolled_window_adjustment_changed (GtkAdjustment          *adju
 static GtkContainerClass *parent_class = NULL;
 
 
-guint
+GtkType
 gtk_scrolled_window_get_type (void)
 {
-  static guint scrolled_window_type = 0;
+  static GtkType scrolled_window_type = 0;
 
   if (!scrolled_window_type)
     {
@@ -70,7 +83,7 @@ gtk_scrolled_window_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      scrolled_window_type = gtk_type_unique (gtk_container_get_type (), &scrolled_window_info);
+      scrolled_window_type = gtk_type_unique (GTK_TYPE_CONTAINER, &scrolled_window_info);
     }
 
   return scrolled_window_type;
@@ -86,9 +99,23 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
   container_class = (GtkContainerClass*) class;
+  parent_class = gtk_type_class (GTK_TYPE_CONTAINER);
 
-  parent_class = gtk_type_class (gtk_container_get_type ());
+  gtk_object_add_arg_type ("GtkScrolledWindow::viewport",
+			   GTK_TYPE_VIEWPORT,
+			   GTK_ARG_READWRITE | GTK_ARG_CONSTRUCT,
+			   ARG_VIEWPORT);
+  gtk_object_add_arg_type ("GtkScrolledWindow::hscrollbar_policy",
+			   GTK_TYPE_POLICY_TYPE,
+			   GTK_ARG_READWRITE,
+			   ARG_HSCROLLBAR_POLICY);
+  gtk_object_add_arg_type ("GtkScrolledWindow::vscrollbar_policy",
+			   GTK_TYPE_POLICY_TYPE,
+			   GTK_ARG_READWRITE,
+			   ARG_VSCROLLBAR_POLICY);
 
+  object_class->set_arg = gtk_scrolled_window_set_arg;
+  object_class->get_arg = gtk_scrolled_window_get_arg;
   object_class->destroy = gtk_scrolled_window_destroy;
   object_class->finalize = gtk_scrolled_window_finalize;
 
@@ -103,6 +130,67 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   container_class->foreach = gtk_scrolled_window_foreach;
 
   class->scrollbar_spacing = 5;
+}
+
+static void
+gtk_scrolled_window_set_arg (GtkObject        *object,
+			     GtkArg           *arg,
+			     guint             arg_id)
+{
+  GtkScrolledWindow *scrolled_window;
+
+  scrolled_window = GTK_SCROLLED_WINDOW (object);
+
+  switch (arg_id)
+    {
+      GtkWidget *viewport;
+
+    case ARG_VIEWPORT:
+      g_return_if_fail (scrolled_window->viewport == NULL);
+      viewport = GTK_VALUE_POINTER (*arg);
+      if (!viewport)
+	viewport = gtk_viewport_new (NULL, NULL);
+      scrolled_window->viewport = viewport;
+      gtk_scrolled_window_construct (scrolled_window, NULL, NULL);
+    case ARG_HSCROLLBAR_POLICY:
+      gtk_scrolled_window_set_policy (scrolled_window,
+				      GTK_VALUE_ENUM (*arg),
+				      scrolled_window->vscrollbar_policy);
+      break;
+    case ARG_VSCROLLBAR_POLICY:
+      gtk_scrolled_window_set_policy (scrolled_window,
+				      scrolled_window->hscrollbar_policy,
+				      GTK_VALUE_ENUM (*arg));
+      break;
+    default:
+      break;
+    }
+}
+
+static void
+gtk_scrolled_window_get_arg (GtkObject        *object,
+			     GtkArg           *arg,
+			     guint             arg_id)
+{
+  GtkScrolledWindow *scrolled_window;
+
+  scrolled_window = GTK_SCROLLED_WINDOW (object);
+
+  switch (arg_id)
+    {
+    case ARG_VIEWPORT:
+      GTK_VALUE_POINTER (*arg) = scrolled_window->viewport;
+      break;
+    case ARG_HSCROLLBAR_POLICY:
+      GTK_VALUE_ENUM (*arg) = scrolled_window->hscrollbar_policy;
+      break;
+    case ARG_VSCROLLBAR_POLICY:
+      GTK_VALUE_ENUM (*arg) = scrolled_window->vscrollbar_policy;
+      break;
+    default:
+      arg->type = GTK_TYPE_INVALID;
+      break;
+    }
 }
 
 static void
@@ -124,7 +212,7 @@ gtk_scrolled_window_new (GtkAdjustment *hadjustment,
 {
   GtkWidget *scrolled_window;
 
-  scrolled_window = gtk_type_new (gtk_scrolled_window_get_type ());
+  scrolled_window = gtk_type_new (GTK_TYPE_SCROLLED_WINDOW);
 
   gtk_scrolled_window_construct (GTK_SCROLLED_WINDOW (scrolled_window), hadjustment, vadjustment);
   
@@ -138,9 +226,14 @@ gtk_scrolled_window_construct (GtkScrolledWindow *scrolled_window,
 {
   g_return_if_fail (scrolled_window != NULL);
   g_return_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window));
-  g_return_if_fail (scrolled_window->viewport == NULL);
+  g_return_if_fail (scrolled_window->hscrollbar == NULL);
+  g_return_if_fail (scrolled_window->vscrollbar == NULL);
 
-  scrolled_window->viewport = gtk_viewport_new (hadjustment, vadjustment);
+  if (scrolled_window->viewport)
+    g_return_if_fail (hadjustment == NULL && vadjustment == NULL);
+  else
+    scrolled_window->viewport = gtk_viewport_new (hadjustment, vadjustment);
+
   hadjustment = gtk_viewport_get_hadjustment (GTK_VIEWPORT (scrolled_window->viewport));
   vadjustment = gtk_viewport_get_vadjustment (GTK_VIEWPORT (scrolled_window->viewport));
   gtk_container_set_resize_mode (GTK_CONTAINER (scrolled_window->viewport), GTK_RESIZE_PARENT);

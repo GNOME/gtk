@@ -23,6 +23,14 @@
    (tabbed GTK_CTREE_LINES_TABBED)
    (none GTK_CTREE_LINES_NONE))
 
+(define-enum GtkCTreeExpansion
+   (expand GTK_CTREE_EXPANSION_EXPAND)
+   (expand-recursive GTK_CTREE_EXPANSION_EXPAND_RECURSIVE)
+   (collapse GTK_CTREE_EXPANSION_COLLAPSE)
+   (collapse-recursive GTK_CTREE_EXPANSION_COLLAPSE_RECURSIVE)
+   (toggle GTK_CTREE_EXPANSION_TOGGLE)
+   (toggle-recursive GTK_CTREE_EXPANSION_TOGGLE_RECURSIVE))
+
 ; enumerations from "./gtkdebug.h"
 
 (define-flags GtkDebugFlag
@@ -361,6 +369,13 @@
    (dnd GDK_DEBUG_DND)
    (color-context GDK_DEBUG_COLOR_CONTEXT)
    (xim GDK_DEBUG_XIM))
+
+; enumerations from "../gdk/gdkrgb.h"
+
+(define-enum GdkRgbDither
+   (none GDK_RGB_DITHER_NONE)
+   (normal GDK_RGB_DITHER_NORMAL)
+   (max GDK_RGB_DITHER_MAX))
 
 ; enumerations from "../gdk/gdktypes.h"
 

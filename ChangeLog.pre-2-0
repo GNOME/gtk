@@ -1,3 +1,33 @@
+Thu Jul 16 01:27:15 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwidget.h:
+	* gtk/gtkwidget.c (gtk_widget_set_usize): handle negative values
+	similar to gtk_widget_set_uposition(). that is: -1=unspecified,
+	-2=leave untouched. changed the width/height field of GtkWidgetAuxInfo
+	to be gint16s rather than guint16s, since that's what the code expected
+	(for a long time actually).
+
+	* gtk/gtkviewport.c:
+	added support for object arguments: GtkViewport::shadow_type,
+ 	GtkViewport::vadjustment and GtkViewport::hadjustment.
+ 	(gtk_viewport_add): chain gtk_bin_add.
+
+	* gtk/gtkscrolledwindow.c: 
+	added support for object argument: GtkScrolledWindow::hscrollbar_policy,
+	GtkScrolledWindow::vscrollbar_policy and GtkScrolledWindow::viewport.
+
+	* gtk/gtkadjustment.h: 
+	* gtk/gtkadjustment.c: 
+	* gtk/gtkctree.h: 
+	* gtk/gtkclist.h: 
+	* gtk/gtkctree.c: 
+	* gtk/gtkclist.c:
+	* gtk/gtkscrolledwindow.h:
+	* gtk/gtkscrolledwindow.c:
+	* gtk/gtkviewport.h:
+	* gtk/gtkviewport.c:
+	GtkType and macro fixups.
+
 Thu Jul 16 01:10:02 1998  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkctree.h :

@@ -30,9 +30,11 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define GTK_VIEWPORT(obj)          GTK_CHECK_CAST (obj, gtk_viewport_get_type (), GtkViewport)
-#define GTK_VIEWPORT_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_viewport_get_type (), GtkViewportClass)
-#define GTK_IS_VIEWPORT(obj)       GTK_CHECK_TYPE (obj, gtk_viewport_get_type ())
+#define GTK_TYPE_VIEWPORT            (gtk_viewport_get_type ())
+#define GTK_VIEWPORT(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_VIEWPORT, GtkViewport))
+#define GTK_VIEWPORT_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_VIEWPORT, GtkViewportClass))
+#define GTK_IS_VIEWPORT(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_VIEWPORT))
+#define GTK_IS_VIEWPORT_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_VIEWPORT))
 
 
 typedef struct _GtkViewport       GtkViewport;
@@ -42,7 +44,7 @@ struct _GtkViewport
 {
   GtkBin bin;
 
-  gint shadow_type;
+  guint shadow_type;
   GdkWindow *view_window;
   GdkWindow *bin_window;
   GtkAdjustment *hadjustment;
@@ -55,7 +57,7 @@ struct _GtkViewportClass
 };
 
 
-guint          gtk_viewport_get_type        (void);
+GtkType        gtk_viewport_get_type        (void);
 GtkWidget*     gtk_viewport_new             (GtkAdjustment *hadjustment,
 					     GtkAdjustment *vadjustment);
 GtkAdjustment* gtk_viewport_get_hadjustment (GtkViewport   *viewport);
