@@ -1,3 +1,9 @@
+1998-12-17  Sebastian Wilhelmi  <wilhelmi@ira.uka.de>
+
+	* gdk/gdkim.c: Define gdk_use_mb outside USE_XIM guard. Removed
+	unnecessary USE_XIM guard inside another. Made gdk_use_mb
+	static. Compile gdk_set_locale also if not USE_XIM.	
+
 Thu Dec 17 00:26:01 1998 Shawn T. Amundson <amundson@gtk.org>
 
 	* Released GTK+ 1.1.9

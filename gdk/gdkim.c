@@ -23,6 +23,12 @@
 #include "gdki18n.h"
 #include "gdkx.h"
 
+/* If this variable is FALSE, it indicates that we should
+ * avoid trying to use multibyte conversion functions and
+ * assume everything is 1-byte per character
+ */
+static gboolean gdk_use_mb;
+
 #ifdef USE_XIM
 
 #include <stdarg.h>
@@ -39,14 +45,6 @@ typedef struct {
   gchar	  *name;
   gpointer value;
 } GdkImArg;
-
-/* If this variable is FALSE, it indicates that we should
- * avoid trying to use multibyte conversion functions and
- * assume everything is 1-byte per character
- */
-gboolean gdk_use_mb;
-
-#ifdef USE_XIM
 
 static void   gdk_im_instantiate_cb      (Display *display,
  					  XPointer client_data,
@@ -130,6 +128,8 @@ gdk_set_locale (void)
   
   return setlocale (LC_ALL,NULL);
 }
+
+#ifdef USE_XIM
 
 /*
  *--------------------------------------------------------------
