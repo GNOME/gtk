@@ -60,7 +60,7 @@ system call. This function is called by gtk_set_locale() and so GTK+
 applications should use that instead.
 </para>
 <para>
-The locale to use is determined by the <envvar>LANG</envvar> environment variable,
+The locale to use is determined by the <envar>LANG</envar> environment variable,
 so to run an application in a certain locale you can do something like this:
 <informalexample>
 <programlisting>
@@ -134,7 +134,7 @@ Sets the program class.
 
 <!-- ##### FUNCTION gdk_get_display ##### -->
 <para>
-Gets the name of the display, which usually comes from the <envvar>DISPLAY</envvar>
+Gets the name of the display, which usually comes from the <envar>DISPLAY</envar>
 environment variable or the <option>--display</option> command line option.
 </para>
 

@@ -111,7 +111,8 @@ How to compile GTK+ itself
 	  <application>gtk-doc</application> package is installed.  If
 	  it is, then it will use it to extract and build the
 	  documentation for the GTK+ library.  These options
-	  can be used to explicitly control whether gtk-doc should be
+	  can be used to explicitly control whether 
+          <application>gtk-doc</application> should be
 	  used or not.  If it is not used, the distributed,
 	  pre-generated HTML files will be installed instead of
 	  building them on your machine.
