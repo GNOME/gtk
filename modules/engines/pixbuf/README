@@ -1,0 +1,17 @@
+The code in this directory is a GTK+ theme engine based on the earlier
+pixmap theme engine.
+
+The config files are meant to be compatible, but instead of rendering
+using Imlib, it renders using GdkPixbuf.  This makes the memory
+management much more understandable, and also allows us to use
+GdkPixbuf's high quality scaling.
+
+Most of the code was reworked/rewritten in the process to make it more
+understandable and maintainable.
+
+There are lots of bugs here, a considersable number of bugs. But it's
+cleaned up a great deal from the older pixmap engine. Please don't
+make it uglier again.
+
+Owen Taylor <otaylor@redhat.com>
+6 February 2000
