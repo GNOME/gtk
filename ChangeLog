@@ -1,3 +1,19 @@
+Tue Jul  8 12:50:20 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktoolbutton.c (gtk_tool_button_get_icon_widget): fix a
+	type check, (#116947, Krasimir Angelov)
+
+	* gtk/gtktoolbar.c: Use new GtkToolItem accessors.
+	
+	* gtk/gtktoolitem.[ch]: Use a private struct to hold the instance
+	data. Not instance private data yet, because of bug 116921.
+
+	* gtk/gtktoolitem.h: new accessors:
+		gtk_tool_item_get_homogeneous ()
+		gtk_tool_item_get_expand ()
+		gtk_tool_item_get_pack_end ()
+		gtk_tool_item_get_use_drag_window ()
+
 Mon Jul  7 16:50:32 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkcellrenderertext.c

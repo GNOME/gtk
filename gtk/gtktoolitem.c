@@ -44,6 +44,25 @@ enum {
   PROP_VISIBLE_VERTICAL,
 };
 
+struct _GtkToolItemPrivate
+{
+  gchar *tip_text;
+  gchar *tip_private;
+
+  guint visible_horizontal : 1;
+  guint visible_vertical : 1;
+  guint homogeneous : 1;
+  guint expand : 1;
+  guint pack_end : 1;
+  guint use_drag_window : 1;
+  guint overflow_item : 1;
+
+  GdkWindow *drag_window;
+  
+  gchar *menu_item_id;
+  GtkWidget *menu_item;
+};
+  
 static void gtk_tool_item_init       (GtkToolItem *toolitem);
 static void gtk_tool_item_class_init (GtkToolItemClass *class);
 static void gtk_tool_item_finalize    (GObject *object);
@@ -170,6 +189,11 @@ gtk_tool_item_class_init (GtkToolItemClass *klass)
 		  GTK_TYPE_TOOLTIPS,
 		  G_TYPE_STRING,
 		  G_TYPE_STRING);		  
+
+  /* FIXME: enable this when bug 116921 is fixed */
+#if 0
+  g_type_class_add_private (object_class, sizeof (GtkToolItemPrivate));
+#endif
 }
 
 static void
@@ -177,10 +201,16 @@ gtk_tool_item_init (GtkToolItem *toolitem)
 {
   GTK_WIDGET_UNSET_FLAGS (toolitem, GTK_CAN_FOCUS);  
 
-  toolitem->visible_horizontal = TRUE;
-  toolitem->visible_vertical = TRUE;
-  toolitem->homogeneous = FALSE;
-  toolitem->expand = FALSE;
+  /* FIXME: enable this when bug 116921 is fixed */
+#if 0
+  toolitem->priv = GTK_TOOL_ITEM_GET_PRIVATE (toolitem);
+#endif
+  toolitem->priv = g_new0 (GtkToolItemPrivate, 1);
+
+  toolitem->priv->visible_horizontal = TRUE;
+  toolitem->priv->visible_vertical = TRUE;
+  toolitem->priv->homogeneous = FALSE;
+  toolitem->priv->expand = FALSE;
 }
 
 static void
@@ -188,8 +218,8 @@ gtk_tool_item_finalize (GObject *object)
 {
   GtkToolItem *item = GTK_TOOL_ITEM (object);
 
-  if (item->menu_item)
-    g_object_unref (item->menu_item);
+  if (item->priv->menu_item)
+    g_object_unref (item->priv->menu_item);
   
   if (G_OBJECT_CLASS (parent_class)->finalize)
     G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -234,10 +264,10 @@ gtk_tool_item_get_property (GObject    *object,
   switch (prop_id)
     {
     case PROP_VISIBLE_HORIZONTAL:
-      g_value_set_boolean (value, toolitem->visible_horizontal);
+      g_value_set_boolean (value, toolitem->priv->visible_horizontal);
       break;
     case PROP_VISIBLE_VERTICAL:
-      g_value_set_boolean (value, toolitem->visible_vertical);
+      g_value_set_boolean (value, toolitem->priv->visible_vertical);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -251,7 +281,7 @@ create_drag_window (GtkToolItem *toolitem)
   GdkWindowAttr attributes;
   gint attributes_mask, border_width;
 
-  g_return_if_fail (toolitem->use_drag_window == TRUE);
+  g_return_if_fail (toolitem->priv->use_drag_window == TRUE);
 
   widget = GTK_WIDGET (toolitem);
   border_width = GTK_CONTAINER (toolitem)->border_width;
@@ -267,9 +297,9 @@ create_drag_window (GtkToolItem *toolitem)
 
   attributes_mask = GDK_WA_X | GDK_WA_Y;
 
-  toolitem->drag_window = gdk_window_new (gtk_widget_get_parent_window (widget),
+  toolitem->priv->drag_window = gdk_window_new (gtk_widget_get_parent_window (widget),
 					  &attributes, attributes_mask);
-  gdk_window_set_user_data (toolitem->drag_window, toolitem);
+  gdk_window_set_user_data (toolitem->priv->drag_window, toolitem);
 }
 
 static void
@@ -283,7 +313,7 @@ gtk_tool_item_realize (GtkWidget *widget)
   widget->window = gtk_widget_get_parent_window (widget);
   g_object_ref (widget->window);
 
-  if (toolitem->use_drag_window)
+  if (toolitem->priv->use_drag_window)
     create_drag_window(toolitem);
 
   widget->style = gtk_style_attach (widget->style, widget->window);
@@ -292,11 +322,11 @@ gtk_tool_item_realize (GtkWidget *widget)
 static void
 destroy_drag_window (GtkToolItem *toolitem)
 {
-  if (toolitem->drag_window)
+  if (toolitem->priv->drag_window)
     {
-      gdk_window_set_user_data (toolitem->drag_window, NULL);
-      gdk_window_destroy (toolitem->drag_window);
-      toolitem->drag_window = NULL;
+      gdk_window_set_user_data (toolitem->priv->drag_window, NULL);
+      gdk_window_destroy (toolitem->priv->drag_window);
+      toolitem->priv->drag_window = NULL;
     }
 }
 
@@ -319,8 +349,8 @@ gtk_tool_item_map (GtkWidget *widget)
 
   toolitem = GTK_TOOL_ITEM (widget);
   GTK_WIDGET_CLASS (parent_class)->map (widget);
-  if (toolitem->drag_window)
-    gdk_window_show (toolitem->drag_window);
+  if (toolitem->priv->drag_window)
+    gdk_window_show (toolitem->priv->drag_window);
 }
 
 static void
@@ -329,8 +359,8 @@ gtk_tool_item_unmap (GtkWidget *widget)
   GtkToolItem *toolitem;
 
   toolitem = GTK_TOOL_ITEM (widget);
-  if (toolitem->drag_window)
-    gdk_window_hide (toolitem->drag_window);
+  if (toolitem->priv->drag_window)
+    gdk_window_hide (toolitem->priv->drag_window);
   GTK_WIDGET_CLASS (parent_class)->unmap (widget);
 }
 
@@ -368,8 +398,8 @@ gtk_tool_item_size_allocate (GtkWidget     *widget,
   widget->allocation = *allocation;
   border_width = GTK_CONTAINER (widget)->border_width;
 
-  if (toolitem->drag_window)
-    gdk_window_move_resize (toolitem->drag_window,
+  if (toolitem->priv->drag_window)
+    gdk_window_move_resize (toolitem->priv->drag_window,
                             widget->allocation.x + border_width,
                             widget->allocation.y + border_width,
                             widget->allocation.width - border_width * 2,
@@ -488,12 +518,20 @@ gtk_tool_item_set_expand (GtkToolItem *tool_item,
     
   expand = expand != FALSE;
 
-  if (tool_item->expand != expand)
+  if (tool_item->priv->expand != expand)
     {
-      tool_item->expand = expand;
+      tool_item->priv->expand = expand;
       gtk_widget_child_notify (GTK_WIDGET (tool_item), "expand");
       gtk_widget_queue_resize (GTK_WIDGET (tool_item));
     }
+}
+
+gboolean
+gtk_tool_item_get_expand (GtkToolItem *tool_item)
+{
+  g_return_val_if_fail (GTK_IS_TOOL_ITEM (tool_item), FALSE);
+
+  return tool_item->priv->expand;
 }
 
 void
@@ -504,12 +542,20 @@ gtk_tool_item_set_pack_end (GtkToolItem *tool_item,
     
   pack_end = pack_end != FALSE;
 
-  if (tool_item->pack_end != pack_end)
+  if (tool_item->priv->pack_end != pack_end)
     {
-      tool_item->pack_end = pack_end;
+      tool_item->priv->pack_end = pack_end;
       gtk_widget_child_notify (GTK_WIDGET (tool_item), "pack_end");
       gtk_widget_queue_resize (GTK_WIDGET (tool_item));
     }
+}
+
+gboolean
+gtk_tool_item_get_pack_end (GtkToolItem *tool_item)
+{
+  g_return_val_if_fail (GTK_IS_TOOL_ITEM (tool_item), FALSE);
+
+  return tool_item->priv->pack_end;
 }
 
 void
@@ -520,12 +566,20 @@ gtk_tool_item_set_homogeneous (GtkToolItem *tool_item,
     
   homogeneous = homogeneous != FALSE;
 
-  if (tool_item->homogeneous != homogeneous)
+  if (tool_item->priv->homogeneous != homogeneous)
     {
-      tool_item->homogeneous = homogeneous;
+      tool_item->priv->homogeneous = homogeneous;
       gtk_widget_child_notify (GTK_WIDGET (tool_item), "homogeneous");
       gtk_widget_queue_resize (GTK_WIDGET (tool_item));
     }
+}
+
+gboolean
+gtk_tool_item_get_homogeneous (GtkToolItem *tool_item)
+{
+  g_return_val_if_fail (GTK_IS_TOOL_ITEM (tool_item), FALSE);
+
+  return tool_item->priv->homogeneous;
 }
 
 static gboolean
@@ -566,17 +620,17 @@ gtk_tool_item_set_use_drag_window (GtkToolItem *toolitem,
 
   use_drag_window = use_drag_window != FALSE;
 
-  if (toolitem->use_drag_window != use_drag_window)
+  if (toolitem->priv->use_drag_window != use_drag_window)
     {
-      toolitem->use_drag_window = use_drag_window;
+      toolitem->priv->use_drag_window = use_drag_window;
       
       if (use_drag_window)
 	{
-	  if (!toolitem->drag_window && GTK_WIDGET_REALIZED (toolitem))
+	  if (!toolitem->priv->drag_window && GTK_WIDGET_REALIZED (toolitem))
 	    {
 	      create_drag_window(toolitem);
 	      if (GTK_WIDGET_MAPPED (toolitem))
-		gdk_window_show (toolitem->drag_window);
+		gdk_window_show (toolitem->priv->drag_window);
 	    }
 	}
       else
@@ -584,6 +638,14 @@ gtk_tool_item_set_use_drag_window (GtkToolItem *toolitem,
 	  destroy_drag_window (toolitem);
 	}
     }
+}
+
+gboolean
+gtk_tool_item_get_use_drag_window (GtkToolItem *toolitem)
+{
+  g_return_val_if_fail (GTK_IS_TOOL_ITEM (toolitem), FALSE);
+
+  return toolitem->priv->use_drag_window;
 }
 
 void
@@ -594,9 +656,9 @@ gtk_tool_item_set_visible_horizontal (GtkToolItem *toolitem,
 
   visible_horizontal = visible_horizontal != FALSE;
 
-  if (toolitem->visible_horizontal != visible_horizontal)
+  if (toolitem->priv->visible_horizontal != visible_horizontal)
     {
-      toolitem->visible_horizontal = visible_horizontal;
+      toolitem->priv->visible_horizontal = visible_horizontal;
 
       g_object_notify (G_OBJECT (toolitem), "visible_horizontal");
 
@@ -609,7 +671,7 @@ gtk_tool_item_get_visible_horizontal (GtkToolItem *toolitem)
 {
   g_return_val_if_fail (GTK_IS_TOOL_ITEM (toolitem), FALSE);
 
-  return toolitem->visible_horizontal;
+  return toolitem->priv->visible_horizontal;
 }
 
 void
@@ -620,9 +682,9 @@ gtk_tool_item_set_visible_vertical (GtkToolItem *toolitem,
 
   visible_vertical = visible_vertical != FALSE;
 
-  if (toolitem->visible_vertical != visible_vertical)
+  if (toolitem->priv->visible_vertical != visible_vertical)
     {
-      toolitem->visible_vertical = visible_vertical;
+      toolitem->priv->visible_vertical = visible_vertical;
 
       g_object_notify (G_OBJECT (toolitem), "visible_vertical");
 
@@ -635,7 +697,7 @@ gtk_tool_item_get_visible_vertical (GtkToolItem *toolitem)
 {
   g_return_val_if_fail (GTK_IS_TOOL_ITEM (toolitem), FALSE);
 
-  return toolitem->visible_vertical;
+  return toolitem->priv->visible_vertical;
 }
 
 GtkWidget *
@@ -647,7 +709,7 @@ gtk_tool_item_retrieve_proxy_menu_item (GtkToolItem *tool_item)
 
   g_signal_emit (tool_item, toolitem_signals[CREATE_MENU_PROXY], 0, &retval);
   
-  return tool_item->menu_item;
+  return tool_item->priv->menu_item;
 }
 
 GtkWidget *
@@ -657,8 +719,8 @@ gtk_tool_item_get_proxy_menu_item (GtkToolItem *tool_item,
   g_return_val_if_fail (GTK_IS_TOOL_ITEM (tool_item), NULL);
   g_return_val_if_fail (menu_item_id != NULL, NULL);
 
-  if (tool_item->menu_item_id && strcmp (tool_item->menu_item_id, menu_item_id) == 0)
-    return tool_item->menu_item;
+  if (tool_item->priv->menu_item_id && strcmp (tool_item->priv->menu_item_id, menu_item_id) == 0)
+    return tool_item->priv->menu_item;
 
   return NULL;
 }
@@ -672,15 +734,15 @@ gtk_tool_item_set_proxy_menu_item (GtkToolItem *tool_item,
   g_return_if_fail (menu_item == NULL || GTK_IS_MENU_ITEM (menu_item));
   g_return_if_fail (menu_item_id != NULL);
 
-  if (tool_item->menu_item_id)
-    g_free (tool_item->menu_item_id);
+  if (tool_item->priv->menu_item_id)
+    g_free (tool_item->priv->menu_item_id);
       
-  tool_item->menu_item_id = g_strdup (menu_item_id);
+  tool_item->priv->menu_item_id = g_strdup (menu_item_id);
 
-  if (tool_item->menu_item != menu_item)
+  if (tool_item->priv->menu_item != menu_item)
     {
-      if (tool_item->menu_item)
-	g_object_unref (G_OBJECT (tool_item->menu_item));
+      if (tool_item->priv->menu_item)
+	g_object_unref (G_OBJECT (tool_item->priv->menu_item));
       
       if (menu_item)
 	{
@@ -688,6 +750,12 @@ gtk_tool_item_set_proxy_menu_item (GtkToolItem *tool_item,
 	  gtk_object_sink (GTK_OBJECT (menu_item));
 	}
       
-      tool_item->menu_item = menu_item;
+      tool_item->priv->menu_item = menu_item;
     }
+}
+
+GdkWindow *
+_gtk_tool_item_get_drag_window (GtkToolItem *tool_item)
+{
+  return tool_item->priv->drag_window;
 }

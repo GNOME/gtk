@@ -212,8 +212,8 @@ gtk_tool_button_init (GtkToolButton      *button,
 		      GtkToolButtonClass *klass)
 {
   GtkToolItem *toolitem = GTK_TOOL_ITEM (button);
-  
-  toolitem->homogeneous = TRUE;
+
+  gtk_tool_item_set_homogeneous (toolitem, TRUE);
 
   /* create button */
   button->button = g_object_new (klass->button_type, NULL);
@@ -257,8 +257,8 @@ gtk_tool_button_size_allocate (GtkWidget     *widget,
   widget->allocation = *allocation;
   border_width = GTK_CONTAINER (widget)->border_width;
 
-  if (toolitem->drag_window && GTK_WIDGET_REALIZED (widget))
-    gdk_window_move_resize (toolitem->drag_window,
+  if (gtk_tool_item_get_use_drag_window (toolitem) && GTK_WIDGET_REALIZED (widget))
+    gdk_window_move_resize (_gtk_tool_item_get_drag_window (toolitem),
                             widget->allocation.x + border_width,
                             widget->allocation.y + border_width,
                             widget->allocation.width - border_width * 2,
@@ -776,7 +776,7 @@ gtk_tool_button_get_label_widget (GtkToolButton *button)
 GtkWidget *
 gtk_tool_button_get_icon_widget (GtkToolButton *button)
 {
-  g_return_val_if_fail (GTK_IS_BUTTON (button), NULL);
+  g_return_val_if_fail (GTK_IS_TOOL_BUTTON (button), NULL);
 
   return button->icon_widget;
 }

@@ -150,7 +150,7 @@ set_expand_func(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
 
   gtk_tree_model_get (model, iter, 0, &tool_item, -1);
 
-  g_object_set (G_OBJECT (cell), "active", tool_item->expand, NULL);
+  g_object_set (G_OBJECT (cell), "active", gtk_tool_item_get_expand (tool_item), NULL);
   g_object_unref (tool_item);
 }
 
@@ -166,7 +166,7 @@ expand_toggled(GtkCellRendererToggle *cell, const gchar *path_str,
   gtk_tree_model_get_iter (model, &iter, path);
 
   gtk_tree_model_get (model, &iter, 0, &tool_item, -1);
-  gtk_tool_item_set_expand (tool_item, !tool_item->expand);
+  gtk_tool_item_set_expand (tool_item, !gtk_tool_item_get_expand (tool_item));
   g_object_unref (tool_item);
 
   gtk_tree_model_row_changed (model, path, &iter);
@@ -181,7 +181,7 @@ set_pack_end_func(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
 
   gtk_tree_model_get (model, iter, 0, &tool_item, -1);
 
-  g_object_set (G_OBJECT (cell), "active", tool_item->pack_end, NULL);
+  g_object_set (G_OBJECT (cell), "active", gtk_tool_item_get_pack_end (tool_item), NULL);
   g_object_unref (tool_item);
 }
 
@@ -197,7 +197,7 @@ pack_end_toggled(GtkCellRendererToggle *cell, const gchar *path_str,
   gtk_tree_model_get_iter (model, &iter, path);
 
   gtk_tree_model_get (model, &iter, 0, &tool_item, -1);
-  gtk_tool_item_set_pack_end (tool_item, !tool_item->pack_end);
+  gtk_tool_item_set_pack_end (tool_item, !gtk_tool_item_get_pack_end (tool_item));
   g_object_unref (tool_item);
 
   gtk_tree_model_row_changed (model, path, &iter);
@@ -212,7 +212,7 @@ set_homogeneous_func(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
 
   gtk_tree_model_get (model, iter, 0, &tool_item, -1);
 
-  g_object_set (G_OBJECT (cell), "active", tool_item->homogeneous, NULL);
+  g_object_set (G_OBJECT (cell), "active", gtk_tool_item_get_homogeneous (tool_item), NULL);
   g_object_unref (tool_item);
 }
 
@@ -228,7 +228,7 @@ homogeneous_toggled(GtkCellRendererToggle *cell, const gchar *path_str,
   gtk_tree_model_get_iter (model, &iter, path);
 
   gtk_tree_model_get (model, &iter, 0, &tool_item, -1);
-  gtk_tool_item_set_homogeneous (tool_item, !tool_item->homogeneous);
+  gtk_tool_item_set_homogeneous (tool_item, !gtk_tool_item_get_homogeneous (tool_item));
   g_object_unref (tool_item);
 
   gtk_tree_model_row_changed (model, path, &iter);

@@ -539,8 +539,10 @@ toolbar_item_visible (GtkToolbar  *toolbar,
 		      GtkToolItem *item)
 {
   if (GTK_WIDGET_VISIBLE (item) &&
-      ((toolbar->orientation == GTK_ORIENTATION_HORIZONTAL && item->visible_horizontal) ||
-       (toolbar->orientation == GTK_ORIENTATION_VERTICAL && item->visible_vertical)))
+      ((toolbar->orientation == GTK_ORIENTATION_HORIZONTAL &&
+	gtk_tool_item_get_visible_horizontal (item)) ||
+       (toolbar->orientation == GTK_ORIENTATION_VERTICAL &&
+	gtk_tool_item_get_visible_vertical (item))))
     {
       GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
       
@@ -560,6 +562,23 @@ toolbar_item_visible (GtkToolbar  *toolbar,
     }
   
   return FALSE;
+}
+
+static void
+toolbar_item_set_is_overflow (GtkToolItem *item,
+			      gboolean     is_overflow)
+{
+  g_object_set_data (G_OBJECT (item), "gtk-toolbar-item-is-overflow", GINT_TO_POINTER (is_overflow));
+}
+
+static gboolean
+toolbar_item_get_is_overflow (GtkToolItem *item)
+{
+  gpointer result;
+
+  result = g_object_get_data (G_OBJECT (item), "gtk-toolbar-item-is-overflow");
+
+  return GPOINTER_TO_INT (result);
 }
 
 static void
@@ -784,7 +803,7 @@ gtk_toolbar_size_request (GtkWidget      *widget,
       max_child_width = MAX (max_child_width, requisition.width);
       max_child_height = MAX (max_child_height, requisition.height);
 
-      if (GTK_TOOL_ITEM (item)->homogeneous && GTK_BIN (item)->child)
+      if (gtk_tool_item_get_homogeneous (item) && GTK_BIN (item)->child)
 	{
 	  max_homogeneous_child_width = MAX (max_homogeneous_child_width, requisition.width);
 	  max_homogeneous_child_height = MAX (max_homogeneous_child_height, requisition.height);
@@ -810,7 +829,7 @@ gtk_toolbar_size_request (GtkWidget      *widget,
 	{
 	  size = space_size;
 	}
-      else if (item->homogeneous)
+      else if (gtk_tool_item_get_homogeneous (item))
 	{
 	  size = homogeneous_size;
 	}
@@ -826,7 +845,7 @@ gtk_toolbar_size_request (GtkWidget      *widget,
 	    size = requisition.height;
 	}
       
-      if (item->pack_end)
+      if (gtk_tool_item_get_pack_end (item))
 	pack_end_size += size;
       else
 	pack_front_size += size;
@@ -910,14 +929,14 @@ get_item_size (GtkToolbar *toolbar,
   
   if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      if (item->homogeneous)
+      if (gtk_tool_item_get_homogeneous (item))
 	return toolbar->button_maxw;
       else
 	return requisition.width;
     }
   else
     {
-      if (item->homogeneous)
+      if (gtk_tool_item_get_homogeneous (item))
 	return toolbar->button_maxh;
       else
 	return requisition.height;
@@ -1007,7 +1026,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
       GtkAllocation *allocation = &(allocations[n_items - i - 1]);
       gint item_size;
       
-      if (!item->pack_end || !toolbar_item_visible (toolbar, item))
+      if (!gtk_tool_item_get_pack_end (item) || !toolbar_item_visible (toolbar, item))
 	continue;
 
       item_size = get_item_size (toolbar, GTK_WIDGET (item));
@@ -1015,15 +1034,15 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
 	{
 	  size -= item_size;
 	  allocation->width = item_size;
-	  item->overflow_item = FALSE;
+	  toolbar_item_set_is_overflow (item, FALSE);
 	}
       else
 	{
 	  while (list)
 	    {
 	      item = list->data;
-	      if (item->pack_end)
-		item->overflow_item = TRUE;
+	      if (gtk_tool_item_get_pack_end (item))
+		toolbar_item_set_is_overflow (item, TRUE);
 	      
 	      list = list->prev;
 	    }
@@ -1037,7 +1056,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
       GtkToolItem *item = list->data;
       gint item_size;
 
-      if (item->pack_end || !toolbar_item_visible (toolbar, item))
+      if (gtk_tool_item_get_pack_end (item) || !toolbar_item_visible (toolbar, item))
 	continue;
 
       item_size = get_item_size (toolbar, GTK_WIDGET (item));
@@ -1045,15 +1064,15 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
 	{
 	  size -= item_size;
 	  allocations[i].width = item_size;
-	  item->overflow_item = FALSE;
+	  toolbar_item_set_is_overflow (item, FALSE);
 	}
       else
 	{
 	  while (list)
 	    {
 	      item = list->data;
-	      if (!item->pack_end)
-		item->overflow_item = TRUE;
+	      if (!gtk_tool_item_get_pack_end (item))
+		toolbar_item_set_is_overflow (item, TRUE);
 	      list = list->next;
 	    }
 	  break;
@@ -1072,8 +1091,9 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
     {
       GtkToolItem *item = list->data;
       
-      if (toolbar_item_visible (toolbar, item) && item->expand &&
-	  !item->overflow_item && GTK_BIN (item)->child)
+      if (toolbar_item_visible (toolbar, item) &&
+	  gtk_tool_item_get_expand (item) &&
+	  !toolbar_item_get_is_overflow (item) && GTK_BIN (item)->child)
 	{
 	  n_expand_items++;
 	}
@@ -1083,8 +1103,8 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
     {
       GtkToolItem *item = list->data;
       
-      if (toolbar_item_visible (toolbar, item) && item->expand &&
-	  !item->overflow_item && GTK_BIN (item)->child)
+      if (toolbar_item_visible (toolbar, item) && gtk_tool_item_get_expand (item) &&
+	  !toolbar_item_get_is_overflow (item) && GTK_BIN (item)->child)
 	{
 	  gint extra = size / n_expand_items;
 	  if (size % n_expand_items != 0)
@@ -1104,7 +1124,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
     {
       GtkToolItem *item = list->data;
       
-      if (toolbar_item_visible (toolbar, item) && !item->overflow_item && !item->pack_end)
+      if (toolbar_item_visible (toolbar, item) && !toolbar_item_get_is_overflow (item) && !gtk_tool_item_get_pack_end (item))
 	{
 	  allocations[i].x = pos;
 	  allocations[i].y = border_width;
@@ -1120,7 +1140,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
     {
       GtkToolItem *item = list->data;
       
-      if (toolbar_item_visible (toolbar, item) && !item->overflow_item && item->pack_end)
+      if (toolbar_item_visible (toolbar, item) && !toolbar_item_get_is_overflow (item) && gtk_tool_item_get_pack_end (item))
 	{
 	  GtkAllocation *allocation = &(allocations[n_items - i - 1]);
 
@@ -1175,7 +1195,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
     {
       GtkToolItem *item = list->data;
       
-      if (toolbar_item_visible (toolbar, item) && !item->overflow_item)
+      if (toolbar_item_visible (toolbar, item) && !toolbar_item_get_is_overflow (item))
 	{
 	  gtk_widget_size_allocate (GTK_WIDGET (item), &(allocations[i]));
 	  gtk_widget_set_child_visible (GTK_WIDGET (item), TRUE);
@@ -1244,7 +1264,7 @@ gtk_toolbar_list_children_in_focus_order (GtkToolbar       *toolbar,
   for (list = priv->items; list != NULL; list = list->next)
     {
       GtkToolItem *item = list->data;
-      if (!item->pack_end)
+      if (!gtk_tool_item_get_pack_end (item))
 	result = g_list_prepend (result, item);
     }
 
@@ -1252,7 +1272,7 @@ gtk_toolbar_list_children_in_focus_order (GtkToolbar       *toolbar,
     {
       GtkToolItem *item = list->data;
 
-      if (item->pack_end)
+      if (gtk_tool_item_get_pack_end (item))
 	result = g_list_prepend (result, item);
     }
 
@@ -1516,7 +1536,7 @@ find_drop_pos (GtkToolbar *toolbar,
     {
       item = GTK_TOOL_ITEM (items->data);
       index++;
-      if (GTK_WIDGET_DRAWABLE (item) && !item->pack_end)
+      if (GTK_WIDGET_DRAWABLE (item) && !gtk_tool_item_get_pack_end (item))
 	{
 	  gint pos, distance;
 
@@ -1639,15 +1659,15 @@ gtk_toolbar_get_child_property (GtkContainer *container,
   switch (property_id)
     {
     case CHILD_PROP_PACK_END:
-      g_value_set_boolean (value, item->pack_end);
+      g_value_set_boolean (value, gtk_tool_item_get_pack_end (item));
       break;
 
     case CHILD_PROP_HOMOGENEOUS:
-      g_value_set_boolean (value, item->homogeneous);
+      g_value_set_boolean (value, gtk_tool_item_get_homogeneous (item));
       break;
 
     case CHILD_PROP_EXPAND:
-      g_value_set_boolean (value, item->expand);
+      g_value_set_boolean (value, gtk_tool_item_get_expand (item));
       break;
 
     default:
@@ -1896,7 +1916,7 @@ show_menu (GtkToolbar     *toolbar,
     {
       GtkToolItem *item = list->data;
 
-      if (toolbar_item_visible (toolbar, item) && item->overflow_item)
+      if (toolbar_item_visible (toolbar, item) && toolbar_item_get_is_overflow (item))
 	{
 	  GtkWidget *menu_item = gtk_tool_item_retrieve_proxy_menu_item (item);
 
