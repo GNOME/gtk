@@ -28,6 +28,7 @@
 #include "gtkframe.h"
 #include "gtkhbbox.h"
 #include "gtkbutton.h"
+#include "gtkintl.h"
 
 
 static void gtk_color_selection_dialog_class_init (GtkColorSelectionDialogClass *klass);

@@ -29,7 +29,6 @@
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkcolorsel.h>
 #include <gtk/gtkvbox.h>
-#include <gtk/gtkintl.h>
 
 #ifdef __cplusplus
 extern "C" {
