@@ -78,6 +78,7 @@ struct _GdkDisplayX11
   gboolean use_xshm;
   gboolean have_shm_pixmaps;
   GdkTristate have_render;
+  GdkTristate have_render_with_trapezoids;
   gboolean have_xfixes;
   gint xfixes_event_base;
 

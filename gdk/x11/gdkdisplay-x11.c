@@ -206,6 +206,7 @@ gdk_display_open (const gchar *display_name)
   display_x11->leader_window_title_set = FALSE;
 
   display_x11->have_render = GDK_UNKNOWN;
+  display_x11->have_render_with_trapezoids = GDK_UNKNOWN;
 
 #ifdef HAVE_XFIXES
   if (XFixesQueryExtension (display_x11->xdisplay, 

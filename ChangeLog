@@ -1,3 +1,19 @@
+2005-01-18  Matthias Clasen  <mclasen@redhat.com>
+
+	Avoid X errors when running against servers which
+	implement XRender < 0.4.  (#164427, Albert Chin)
+	
+	* gdk/x11/gdkprivate-x11.h:
+	* gdk/x11/gdkdrawable-x11.c (_gdk_x11_have_render_with_trapezoids): 
+	New function to check for trapezoid support in XRender.
+	(gdk_x11_draw_trapezoids, _gdk_x11_drawable_draw_xtrapezoids): 
+	Use it here.
+	
+	* gdk/x11/gdkdisplay-x11.h (struct _GdkDisplayX11): Add a 
+	separate have_render_with_trapezoids field.
+
+	* gdk/x11/gdkdisplay-x11.c (gdk_display_open): Initialize it.
+
 2005-01-17  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkiconview.c: Remove debug output. (#164376, Jens Finke)
