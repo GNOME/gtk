@@ -52,7 +52,7 @@ msgstr "OLDU"
 #: gtk/gtkfilesel.c:968 gtk/gtkfilesel.c:1083 gtk/gtkfontsel.c:3514
 #: gtk/gtkgamma.c:424
 msgid "Cancel"
-msgstr "Læºv et"
+msgstr "Læðv et"
 
 #: gtk/gtkcolorsel.c:1738
 msgid "Help"
@@ -144,7 +144,7 @@ msgstr "Meyil:"
 
 #: gtk/gtkfontsel.c:214
 msgid "Set Width:"
-msgstr "Uzunluºunu Göstær:"
+msgstr "Uzunluðunu Göstær:"
 
 #: gtk/gtkfontsel.c:215
 msgid "Add Style:"
