@@ -30,26 +30,33 @@
 #include <tiffio.h>
 #include "gdk-pixbuf.h"
 #include "gdk-pixbuf-io.h"
+#include <unistd.h>
 
 
 
-/* Destroy notification function for the libart pixbuf */
-static void
-free_buffer (gpointer user_data, gpointer data)
+typedef struct _TiffData TiffData;
+struct _TiffData
 {
-	free (data);
-}
+	ModulePreparedNotifyFunc func;
+	gpointer user_data;
 
-/* Shared library entry point */
+	gchar *tempname;
+	FILE *file;
+	gboolean all_okay;
+};
+
+
+
 GdkPixbuf *
-image_load (FILE *f)
+image_load_real (FILE *f, TiffData *context)
 {
 	TIFF *tiff;
 	guchar *pixels = NULL;
 	guchar *tmppix;
 	gint w, h, x, y, num_pixs, fd;
 	uint32 *rast, *tmp_rast;
-
+	GdkPixbuf *pixbuf;
+	
 	fd = fileno (f);
 	tiff = TIFFFdOpen (fd, "libpixbuf-tiff", "r");
 
@@ -59,6 +66,10 @@ image_load (FILE *f)
 	TIFFGetField (tiff, TIFFTAG_IMAGEWIDTH, &w);
 	TIFFGetField (tiff, TIFFTAG_IMAGELENGTH, &h);
 	num_pixs = w * h;
+	pixbuf = gdk_pixbuf_new (ART_PIX_RGB, TRUE, 8, w, h);
+
+	if (context)
+		(* context->func) (pixbuf, context->user_data);
 
 	/* Yes, it needs to be _TIFFMalloc... */
 	rast = (uint32 *) _TIFFmalloc (num_pixs * sizeof (uint32));
@@ -69,7 +80,7 @@ image_load (FILE *f)
 	}
 
 	if (TIFFReadRGBAImage (tiff, w, h, rast, 0)) {
-		pixels = malloc (num_pixs * 4);
+		pixels = gdk_pixbuf_get_pixels (pixbuf);
 		if (!pixels) {
 			_TIFFfree (rast);
 			TIFFClose (tiff);
@@ -97,46 +108,53 @@ image_load (FILE *f)
 	_TIFFfree (rast);
 	TIFFClose (tiff);
 
-	return gdk_pixbuf_new_from_data (pixels, ART_PIX_RGB, TRUE,
-					 w, h, w * 4,
-					 free_buffer, NULL);
+	if (context)
+		gdk_pixbuf_unref (pixbuf);
+
+	return pixbuf;
 }
 
-/* Progressive loader */
+
 
+/* Static loader */
+
+GdkPixbuf *
+image_load (FILE *f)
+{
+	return image_load_real (f, NULL);
+}
+
+
+
+/* Progressive loader */
 /*
  * Tiff loading progressively cannot be done.  We write it to a file, then load
- * the file when it's done.  
+ * the file when it's done.  It's not pretty.
  */
 
-typedef struct _TiffData TiffData;
-struct _TiffData
-{
-	ModulePreparedNotifyFunc *func;
-	gpointer user_data;
-
-	FILE *file;
-};
-
 gpointer
-image_begin_load (ModulePreparedNotifyFunc *func, gpointer user_data)
+image_begin_load (ModulePreparedNotifyFunc func, gpointer user_data)
 {
 	TiffData *context;
 	gint fd;
-	char template[21];
-	
+
 	context = g_new (TiffData, 1);
 	context->func = func;
 	context->user_data = user_data;
+	context->all_okay = TRUE;
+	context->tempname = g_strdup ("/tmp/gdkpixbuf-tif-tmp.XXXXXX");
+	fd = mkstemp (context->tempname);
+	if (fd < 0) {
+		g_free (context);
+		return NULL;
+	}
 
-	strncpy (template, "/tmp/temp-tiffXXXXXX", strlen ("/tmp/temp-tiffXXXXXX"));
-	fd = mkstemp (template);
-	g_print ("fd=%d\n", fd);
 	context->file = fdopen (fd, "w");
-	if (context->file == NULL)
-		g_print ("it's null\n");
-	else
-		g_print ("it's not null\n");
+	if (context->file == NULL) {
+		g_free (context);
+		return NULL;
+	}
+
 	return context;
 }
 
@@ -144,8 +162,16 @@ void
 image_stop_load (gpointer data)
 {
 	TiffData *context = (TiffData*) data;
+
+	g_return_if_fail (data != NULL);
+
+	fflush (context->file);
+	rewind (context->file);
+	if (context->all_okay)
+		image_load_real (context->file, context);
+
 	fclose (context->file);
-/*	unlink (context->file);*/
+	unlink (context->tempname);
 	g_free ((TiffData *) context);
 }
 
@@ -154,7 +180,13 @@ image_load_increment (gpointer data, guchar *buf, guint size)
 {
 	TiffData *context = (TiffData *) data;
 
-	g_assert (context->file != NULL);
-	fwrite (buf, sizeof (guchar), size, context->file);
+	g_return_val_if_fail (data != NULL, FALSE);
+
+	if (fwrite (buf, sizeof (guchar), size, context->file) != size) {
+		context->all_okay = FALSE;
+		return FALSE;
+	}
+
 	return TRUE;
 }
+

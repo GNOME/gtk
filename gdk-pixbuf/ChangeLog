@@ -2,6 +2,7 @@
 
 	* src/io-tiff.c (image_load_increment): started work on the tiff
 	non-incremental loader.
+	(image_begin_load): Finished the incremental loader. 
 
 	* src/io-gif.c (image_load_increment): started work on the gif
 	incremental loader.
