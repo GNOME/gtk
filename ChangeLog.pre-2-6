@@ -1,3 +1,12 @@
+2000-09-29  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtktextview.c: Implement the side windows.
+
+	* gtk/testtext.c: Implement simple line numbering in the 
+	left side window; seems to make scrolling sloooow. Oops.
+	Also, cursor blink is for some reason causing redraws
+	of the line numbers. Should investigate...
+
 2000-09-28  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextview.c: Set up infrastructure to deal with lots of 

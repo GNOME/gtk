@@ -1104,6 +1104,18 @@ gtk_text_view_finalize (GObject *object)
     gtk_object_unref (GTK_OBJECT (text_view->vadjustment));
 
   text_window_free (text_view->text_window);
+
+  if (text_view->left_window)
+    text_window_free (text_view->left_window);
+
+  if (text_view->top_window)
+    text_window_free (text_view->top_window);
+
+  if (text_view->right_window)
+    text_window_free (text_view->right_window);
+  
+  if (text_view->bottom_window)
+    text_window_free (text_view->bottom_window);
   
   gtk_object_unref (GTK_OBJECT (text_view->im_context));  
   
@@ -1192,6 +1204,18 @@ gtk_text_view_size_request (GtkWidget      *widget,
 
   requisition->width = text_view->text_window->requisition.width + FOCUS_EDGE_WIDTH * 2;
   requisition->height = text_view->text_window->requisition.height + FOCUS_EDGE_WIDTH * 2;
+
+  if (text_view->left_window)
+    requisition->width += text_view->left_window->requisition.width;
+
+  if (text_view->right_window)
+    requisition->width += text_view->right_window->requisition.width;
+
+  if (text_view->top_window)
+    requisition->height += text_view->top_window->requisition.height;
+
+  if (text_view->bottom_window)
+    requisition->height += text_view->bottom_window->requisition.height;
 }
 
 static void
@@ -1203,7 +1227,12 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   gint y;
   GtkAdjustment *vadj;
   gboolean yoffset_changed = FALSE;
-  GdkRectangle child_rect;
+  gint width, height;
+  GdkRectangle text_rect;
+  GdkRectangle left_rect;
+  GdkRectangle right_rect;
+  GdkRectangle top_rect;
+  GdkRectangle bottom_rect;
   
   text_view = GTK_TEXT_VIEW (widget);
   
@@ -1215,23 +1244,89 @@ gtk_text_view_size_allocate (GtkWidget *widget,
                               allocation->x, allocation->y,
                               allocation->width, allocation->height);
     }
+
+  /* distribute width/height among child windows. Ensure all
+   * windows get at least a 1x1 allocation.
+   */
+
+  width = allocation->width - FOCUS_EDGE_WIDTH * 2;
+
+  if (text_view->left_window)
+    left_rect.width = text_view->left_window->requisition.width;
+  else
+    left_rect.width = 1;
+
+  width -= left_rect.width;
+
+  if (text_view->right_window)
+    right_rect.width = text_view->right_window->requisition.width;
+  else
+    right_rect.width = 1;
+
+  width -= right_rect.width;
+
+  text_rect.width = MAX (1, width);
+
+  top_rect.width = text_rect.width;
+  bottom_rect.width = text_rect.width;
+
+
+  height = allocation->height - FOCUS_EDGE_WIDTH * 2;
+
+  if (text_view->top_window)
+    top_rect.height = text_view->top_window->requisition.height;
+  else
+    top_rect.height = 1;
+
+  height -= top_rect.height;
+
+  if (text_view->bottom_window)
+    bottom_rect.height = text_view->bottom_window->requisition.height;
+  else
+    bottom_rect.height = 1;
+
+  height -= bottom_rect.height;
+
+  text_rect.height = MAX (1, height);
+
+  left_rect.height = text_rect.height;
+  right_rect.height = text_rect.height;
+
+  /* Origins */
+  left_rect.x = FOCUS_EDGE_WIDTH;
+  top_rect.y = FOCUS_EDGE_WIDTH;
+
+  text_rect.x = left_rect.x + left_rect.width;
+  text_rect.y = top_rect.y + top_rect.height;
   
-  child_rect = *allocation;
+  left_rect.y = text_rect.y;
+  right_rect.y = text_rect.y;
 
-  child_rect.x = FOCUS_EDGE_WIDTH;
-  child_rect.y = FOCUS_EDGE_WIDTH;
-  child_rect.width -= FOCUS_EDGE_WIDTH * 2;
-  child_rect.height -= FOCUS_EDGE_WIDTH * 2;
-
-  if (child_rect.width < 0 || child_rect.height < 0)
-    {
-      /* Write over the other windows with the text window. */
-      child_rect = *allocation;
-    }
+  top_rect.x = text_rect.x;
+  bottom_rect.x = text_rect.x;
+  
+  right_rect.x = text_rect.x + text_rect.width;
+  bottom_rect.y = text_rect.y + text_rect.height;  
   
   text_window_size_allocate (text_view->text_window,
-                             &child_rect);
+                             &text_rect);
 
+  if (text_view->left_window)
+    text_window_size_allocate (text_view->left_window,
+                               &left_rect);
+
+  if (text_view->right_window)
+    text_window_size_allocate (text_view->right_window,
+                               &right_rect);
+
+  if (text_view->top_window)
+    text_window_size_allocate (text_view->top_window,
+                               &top_rect);
+
+  if (text_view->bottom_window)
+    text_window_size_allocate (text_view->bottom_window,
+                               &bottom_rect);
+  
   gtk_text_view_ensure_layout (text_view);
   gtk_text_layout_set_screen_width (text_view->layout,
                                     SCREEN_WIDTH (text_view));
@@ -1424,17 +1519,31 @@ gtk_text_view_realize (GtkWidget *widget)
   widget->window = gdk_window_new (gtk_widget_get_parent_window (widget),
 				   &attributes, attributes_mask);
   gdk_window_set_user_data (widget->window, widget);
-  
-  text_window_realize (text_view->text_window, widget->window);
-  
+
+  /* must come before text_window_realize calls */
   widget->style = gtk_style_attach (widget->style, widget->window);
 
   gdk_window_set_background (widget->window,
-                             &widget->style->base[GTK_WIDGET_STATE (widget)]);
+                             &widget->style->bg[GTK_WIDGET_STATE (widget)]);
   
-  gdk_window_set_background (text_view->text_window->bin_window,
-                             &widget->style->base[GTK_WIDGET_STATE (widget)]);
+  text_window_realize (text_view->text_window, widget->window);
 
+  if (text_view->left_window)
+    text_window_realize (text_view->left_window,
+                         widget->window);
+
+  if (text_view->top_window)
+    text_window_realize (text_view->top_window,
+                         widget->window);
+
+  if (text_view->right_window)
+    text_window_realize (text_view->right_window,
+                         widget->window);
+  
+  if (text_view->bottom_window)
+    text_window_realize (text_view->bottom_window,
+                         widget->window);
+  
   gtk_text_view_ensure_layout (text_view);
 }
 
@@ -1458,6 +1567,18 @@ gtk_text_view_unrealize (GtkWidget *widget)
     }
 
   text_window_unrealize (text_view->text_window);
+
+  if (text_view->left_window)
+    text_window_unrealize (text_view->left_window);
+
+  if (text_view->top_window)
+    text_window_unrealize (text_view->top_window);
+
+  if (text_view->right_window)
+    text_window_unrealize (text_view->right_window);
+  
+  if (text_view->bottom_window)
+    text_window_unrealize (text_view->bottom_window);
   
   gtk_text_view_destroy_layout (text_view);
   
@@ -1473,12 +1594,29 @@ gtk_text_view_style_set (GtkWidget *widget,
   if (GTK_WIDGET_REALIZED (widget))
     {
       gdk_window_set_background (widget->window,
-                                 &widget->style->base[GTK_WIDGET_STATE (widget)]);
+                                 &widget->style->bg[GTK_WIDGET_STATE (widget)]);
       
       gdk_window_set_background (text_view->text_window->bin_window,
 				 &widget->style->base[GTK_WIDGET_STATE (widget)]);
 
-      gtk_text_view_set_attributes_from_style (text_view, text_view->layout->default_style, widget->style);
+      if (text_view->left_window)
+        gdk_window_set_background (text_view->left_window->bin_window,
+                                   &widget->style->bg[GTK_WIDGET_STATE (widget)]);
+      if (text_view->right_window)
+        gdk_window_set_background (text_view->right_window->bin_window,
+                                   &widget->style->bg[GTK_WIDGET_STATE (widget)]);
+
+      if (text_view->top_window)
+        gdk_window_set_background (text_view->top_window->bin_window,
+                                   &widget->style->bg[GTK_WIDGET_STATE (widget)]);      
+
+      if (text_view->bottom_window)
+        gdk_window_set_background (text_view->bottom_window->bin_window,
+                                   &widget->style->bg[GTK_WIDGET_STATE (widget)]);
+      
+      gtk_text_view_set_attributes_from_style (text_view,
+                                               text_view->layout->default_style,
+                                               widget->style);
       gtk_text_layout_default_style_changed (text_view->layout);
     }
 }
@@ -1845,18 +1983,81 @@ gtk_text_view_paint (GtkWidget *widget, GdkRectangle *area)
 }
 
 static void
+send_expose (GtkTextView   *text_view,
+             GtkTextWindow *win,
+             GdkRectangle  *area)
+{
+  GdkEventExpose event;
+  
+  event.type = GDK_EXPOSE;
+  event.send_event = TRUE;
+  event.window = win->bin_window;
+  event.area = *area;
+  event.count = 0;
+
+  /* Fix coordinates (convert widget coords to window coords) */
+  gtk_text_view_window_to_buffer_coords (text_view,
+                                         GTK_TEXT_WINDOW_WIDGET,
+                                         event.area.x,
+                                         event.area.y,
+                                         &event.area.x,
+                                         &event.area.y);
+  
+  gtk_text_view_buffer_to_window_coords (text_view,
+                                         win->type,
+                                         event.area.x,
+                                         event.area.y,
+                                         &event.area.x,
+                                         &event.area.y);
+
+      
+  gdk_window_ref (event.window);
+  gtk_widget_event (GTK_WIDGET (text_view), (GdkEvent*) &event);
+  gdk_window_unref (event.window);
+}
+
+static void
 gtk_text_view_draw (GtkWidget *widget, GdkRectangle *area)
-{  
+{
+  GdkRectangle intersection;
+  GtkTextView *text_view;
+
+  text_view = GTK_TEXT_VIEW (widget);
+  
   gtk_text_view_paint (widget, area);
 
   /* If the area overlaps the "edge" of the widget, draw the focus
    * rectangle
    */
-  if (TRUE || area->x < FOCUS_EDGE_WIDTH ||
+  if (area->x < FOCUS_EDGE_WIDTH ||
       area->y < FOCUS_EDGE_WIDTH ||
       (area->x + area->width) > (widget->allocation.width - FOCUS_EDGE_WIDTH) ||
       (area->y + area->height) > (widget->allocation.height - FOCUS_EDGE_WIDTH))
     gtk_widget_draw_focus (widget);
+
+  /* Synthesize expose events for the user-drawn border windows,
+   * just as we would for a drawing area.
+   */
+
+  if (text_view->left_window &&
+      gdk_rectangle_intersect (area, &text_view->left_window->allocation,
+                               &intersection))
+    send_expose (text_view, text_view->left_window, &intersection);
+  
+  if (text_view->right_window &&
+      gdk_rectangle_intersect (area, &text_view->right_window->allocation,
+                               &intersection))
+    send_expose (text_view, text_view->right_window, &intersection);
+
+  if (text_view->top_window &&
+      gdk_rectangle_intersect (area, &text_view->top_window->allocation,
+                               &intersection))
+    send_expose (text_view, text_view->top_window, &intersection);
+  
+  if (text_view->bottom_window &&
+      gdk_rectangle_intersect (area, &text_view->bottom_window->allocation,
+                               &intersection))
+    send_expose (text_view, text_view->bottom_window, &intersection);
 }
 
 static gint
@@ -1870,37 +2071,6 @@ gtk_text_view_expose_event (GtkWidget *widget, GdkEventExpose *event)
     gtk_widget_draw_focus (widget);
   
   return TRUE;
-}
-
-#include <execinfo.h>
-#include <stdio.h>
-#include <stdlib.h>
-
-static void
-print_backtrace (void)
-{
-  char **symbols;
-  void *addresses[50];
-  int i;
-  int size;
-
-  size = backtrace (addresses, 50);
-  
-  symbols = backtrace_symbols (addresses, size);
-
-  printf ("TRACE\n");
-  
-  i = 0;
-  while (i < size)
-    {
-      printf ("  %s\n", symbols[i]);
-      
-      ++i;
-    }
-
-  free (symbols);
-  
-  printf ("END\n");
 }
 
 static void
@@ -3052,6 +3222,27 @@ gtk_text_view_value_changed (GtkAdjustment *adj,
 
   if (dx != 0 || dy != 0)
     {
+      if (dy != 0)
+        {
+          if (text_view->left_window)
+            text_window_scroll (text_view->left_window, 0, dy);
+          if (text_view->right_window)
+            text_window_scroll (text_view->right_window, 0, dy);
+        }
+
+      if (dx != 0)
+        {
+          if (text_view->top_window)
+            text_window_scroll (text_view->top_window, dx, 0);
+          if (text_view->bottom_window)
+            text_window_scroll (text_view->bottom_window, dx, 0);
+        }
+
+      /* It looks nicer to scroll the main area last, because
+       * it takes a while, and making the side areas update
+       * afterward emphasizes the slowness of scrolling the
+       * main area.
+       */
       text_window_scroll (text_view->text_window, dx, dy);
     }
 }
@@ -3244,8 +3435,17 @@ text_window_realize (GtkTextWindow *win,
       
       gtk_im_context_set_client_window (GTK_TEXT_VIEW (win->widget)->im_context,
                                         win->window);
-    }
 
+
+      gdk_window_set_background (win->bin_window,
+                                 &win->widget->style->base[GTK_WIDGET_STATE (win->widget)]);
+    }
+  else
+    {
+      gdk_window_set_background (win->bin_window,
+                                 &win->widget->style->bg[GTK_WIDGET_STATE (win->widget)]);
+    }
+  
   g_object_set_qdata (G_OBJECT (win->window),
                       g_quark_from_static_string ("gtk-text-view-text-window"),
                       win);
@@ -3347,10 +3547,31 @@ gtk_text_view_get_window (GtkTextView *text_view,
       break;
       
     case GTK_TEXT_WINDOW_LEFT:
+      if (text_view->left_window)
+        return text_view->left_window->bin_window;
+      else
+        return NULL;
+      break;
+      
     case GTK_TEXT_WINDOW_RIGHT:
+      if (text_view->right_window)
+        return text_view->right_window->bin_window;
+      else
+        return NULL;
+      break;
+      
     case GTK_TEXT_WINDOW_TOP:
+      if (text_view->top_window)
+        return text_view->top_window->bin_window;
+      else
+        return NULL;
+      break;
+      
     case GTK_TEXT_WINDOW_BOTTOM:
-      return NULL;
+      if (text_view->bottom_window)
+        return text_view->bottom_window->bin_window;
+      else
+        return NULL;
       break;
 
     default:
@@ -3385,6 +3606,68 @@ gtk_text_view_get_window_type (GtkTextView *text_view,
     }
 }
 
+static void
+buffer_to_widget (GtkTextView      *text_view,
+                  gint              buffer_x,
+                  gint              buffer_y,
+                  gint             *window_x,
+                  gint             *window_y)
+{
+  if (window_x)
+    {
+      *window_x = buffer_x - text_view->xoffset + FOCUS_EDGE_WIDTH;
+      if (text_view->left_window)
+        *window_x += text_view->left_window->allocation.width;
+    }
+  
+  if (window_y)
+    {
+      *window_y = buffer_y - text_view->yoffset + FOCUS_EDGE_WIDTH;
+      if (text_view->top_window)
+        *window_y += text_view->top_window->allocation.height;
+    }
+}
+
+static void
+widget_to_text_window (GtkTextWindow *win,
+                       gint           widget_x,
+                       gint           widget_y,
+                       gint          *window_x,
+                       gint          *window_y)
+{
+  if (window_x)
+    *window_x = widget_x - win->allocation.x;
+
+  if (window_y)
+    *window_y = widget_y - win->allocation.y;
+}
+
+static void
+buffer_to_text_window (GtkTextView   *text_view,
+                       GtkTextWindow *win,
+                       gint           buffer_x,
+                       gint           buffer_y,
+                       gint          *window_x,
+                       gint          *window_y)
+{
+  if (win == NULL)
+    {
+      g_warning ("Attempt to convert text buffer coordinates to coordinates "
+                 "for a nonexistent child window of GtkTextView");
+      return;
+    }
+  
+  buffer_to_widget (text_view,
+                    buffer_x, buffer_y,
+                    window_x, window_y);
+
+  widget_to_text_window (win,
+                         window_x ? *window_x : 0,
+                         window_y ? *window_y : 0,
+                         window_x,
+                         window_y);
+}
+
 void
 gtk_text_view_buffer_to_window_coords (GtkTextView      *text_view,
                                        GtkTextWindowType win,
@@ -3393,24 +3676,14 @@ gtk_text_view_buffer_to_window_coords (GtkTextView      *text_view,
                                        gint             *window_x,
                                        gint             *window_y)
 {
-  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), NULL);
+  g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
 
   switch (win)
     {
     case GTK_TEXT_WINDOW_WIDGET:
-      if (window_x)
-        {
-          *window_x = buffer_x - text_view->xoffset + FOCUS_EDGE_WIDTH;
-          if (text_view->left_window)
-            *window_x += text_view->left_window->allocation.width;
-        }
-
-      if (window_y)
-        {
-          *window_y = buffer_y - text_view->yoffset + FOCUS_EDGE_WIDTH;
-          if (text_view->top_window)
-            *window_y += text_view->top_window->allocation.height;
-        }
+      buffer_to_widget (text_view,
+                        buffer_x, buffer_y,
+                        window_x, window_y);
       break;
       
     case GTK_TEXT_WINDOW_TEXT:
@@ -3421,16 +3694,101 @@ gtk_text_view_buffer_to_window_coords (GtkTextView      *text_view,
       break;
       
     case GTK_TEXT_WINDOW_LEFT:
+      buffer_to_text_window (text_view,
+                             text_view->left_window,
+                             buffer_x, buffer_y,
+                             window_x, window_y);
+      break;
+      
     case GTK_TEXT_WINDOW_RIGHT:
+      buffer_to_text_window (text_view,
+                             text_view->right_window,
+                             buffer_x, buffer_y,
+                             window_x, window_y);
+      break;
+      
     case GTK_TEXT_WINDOW_TOP:
+      buffer_to_text_window (text_view,
+                             text_view->top_window,
+                             buffer_x, buffer_y,
+                             window_x, window_y);
+      break;
+      
     case GTK_TEXT_WINDOW_BOTTOM:
-      g_warning ("FIXME");
+      buffer_to_text_window (text_view,
+                             text_view->bottom_window,
+                             buffer_x, buffer_y,
+                             window_x, window_y);
       break;
 
     default:
       g_warning ("%s: Unknown GtkTextWindowType", G_STRLOC);
       break;
     }
+}
+
+static void
+widget_to_buffer (GtkTextView *text_view,
+                  gint         widget_x,
+                  gint         widget_y,
+                  gint        *buffer_x,
+                  gint        *buffer_y)
+{
+  if (buffer_x)
+    {
+      *buffer_x = widget_x - FOCUS_EDGE_WIDTH + text_view->xoffset;
+      if (text_view->left_window)
+        *buffer_x -= text_view->left_window->allocation.width;
+    }
+  
+  if (buffer_y)
+    {
+      *buffer_y = widget_y - FOCUS_EDGE_WIDTH + text_view->yoffset;
+      if (text_view->top_window)
+        *buffer_y -= text_view->top_window->allocation.height;
+    }
+}
+
+static void
+text_window_to_widget (GtkTextWindow *win,
+                       gint           window_x,
+                       gint           window_y,
+                       gint          *widget_x,
+                       gint          *widget_y)
+{
+  if (widget_x)
+    *widget_x = window_x + win->allocation.x;
+
+  if (widget_y)
+    *widget_y = window_y + win->allocation.y;
+}
+
+static void
+text_window_to_buffer (GtkTextView   *text_view,
+                       GtkTextWindow *win,
+                       gint           window_x,
+                       gint           window_y,
+                       gint          *buffer_x,
+                       gint          *buffer_y)
+{
+  if (win == NULL)
+    {
+      g_warning ("Attempt to convert GtkTextView buffer coordinates into "
+                 "coordinates for a nonexistent child window.");
+      return;
+    }
+  
+  text_window_to_widget (win,
+                         window_x,
+                         window_y,
+                         buffer_x,
+                         buffer_y);
+
+  widget_to_buffer (text_view,
+                    buffer_x ? *buffer_x : 0,
+                    buffer_y ? *buffer_y : 0,
+                    buffer_x,
+                    buffer_y);
 }
 
 void
@@ -3441,24 +3799,14 @@ gtk_text_view_window_to_buffer_coords (GtkTextView      *text_view,
                                        gint             *buffer_x,
                                        gint             *buffer_y)
 {
-  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), NULL);
+  g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
 
   switch (win)
     {
     case GTK_TEXT_WINDOW_WIDGET:
-      if (buffer_x)
-        {
-          *buffer_x = window_x - FOCUS_EDGE_WIDTH + text_view->xoffset;
-          if (text_view->left_window)
-            *buffer_x -= text_view->left_window->allocation.width;
-        }
-
-      if (buffer_y)
-        {
-          *buffer_y = window_y - FOCUS_EDGE_WIDTH + text_view->yoffset;
-          if (text_view->top_window)
-            *buffer_y -= text_view->top_window->allocation.height;
-        }
+      widget_to_buffer (text_view,
+                        window_x, window_y,
+                        buffer_x, buffer_y);
       break;
       
     case GTK_TEXT_WINDOW_TEXT:
@@ -3469,10 +3817,31 @@ gtk_text_view_window_to_buffer_coords (GtkTextView      *text_view,
       break;
       
     case GTK_TEXT_WINDOW_LEFT:
+      text_window_to_buffer (text_view,
+                             text_view->left_window,
+                             window_x, window_y,
+                             buffer_x, buffer_y);
+      break;
+      
     case GTK_TEXT_WINDOW_RIGHT:
+      text_window_to_buffer (text_view,
+                             text_view->right_window,
+                             window_x, window_y,
+                             buffer_x, buffer_y);
+      break;
+      
     case GTK_TEXT_WINDOW_TOP:
+      text_window_to_buffer (text_view,
+                             text_view->top_window,
+                             window_x, window_y,
+                             buffer_x, buffer_y);
+      break;
+      
     case GTK_TEXT_WINDOW_BOTTOM:
-      g_warning ("FIXME");
+      text_window_to_buffer (text_view,
+                             text_view->bottom_window,
+                             window_x, window_y,
+                             buffer_x, buffer_y);
       break;
 
     default:
@@ -3481,3 +3850,113 @@ gtk_text_view_window_to_buffer_coords (GtkTextView      *text_view,
     }
 }
 
+static void
+set_window_width (GtkTextView      *text_view,
+                  gint              width,
+                  GtkTextWindowType type,
+                  GtkTextWindow   **winp)
+{
+  if (width == 0)
+    {
+      if (*winp)
+        {
+          text_window_free (*winp);
+          *winp = NULL;
+          gtk_widget_queue_resize (GTK_WIDGET (text_view));
+        }
+    }
+  else
+    {
+      if (*winp == NULL)
+        {
+          *winp = text_window_new (type,
+                                   GTK_WIDGET (text_view),
+                                   width, 0);
+        }
+      else
+        {
+          if ((*winp)->requisition.width == width)
+            return;
+        }
+
+      gtk_widget_queue_resize (GTK_WIDGET (text_view));
+    }
+}
+
+
+static void
+set_window_height (GtkTextView      *text_view,
+                   gint              height,
+                   GtkTextWindowType type,
+                   GtkTextWindow   **winp)
+{
+  if (height == 0)
+    {
+      if (*winp)
+        {
+          text_window_free (*winp);
+          *winp = NULL;
+          gtk_widget_queue_resize (GTK_WIDGET (text_view));
+        }
+    }
+  else
+    {
+      if (*winp == NULL)
+        {
+          *winp = text_window_new (type,
+                                   GTK_WIDGET (text_view),
+                                   0, height);
+        }
+      else
+        {
+          if ((*winp)->requisition.height == height)
+            return;
+        }
+
+      gtk_widget_queue_resize (GTK_WIDGET (text_view));
+    }
+}
+
+void
+gtk_text_view_set_left_window_width (GtkTextView *text_view,
+                                     gint         width)
+{
+  g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
+  g_return_if_fail (width >= 0);
+        
+  set_window_width (text_view, width, GTK_TEXT_WINDOW_LEFT,
+                    &text_view->left_window);
+}
+
+void
+gtk_text_view_set_right_window_width (GtkTextView *text_view,
+                                      gint         width)
+{
+  g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
+  g_return_if_fail (width >= 0);
+
+  set_window_width (text_view, width, GTK_TEXT_WINDOW_RIGHT,
+                    &text_view->right_window);
+}
+
+void
+gtk_text_view_set_top_window_height (GtkTextView *text_view,
+                                     gint         height)
+{
+  g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
+  g_return_if_fail (height >= 0);
+
+  set_window_height (text_view, height, GTK_TEXT_WINDOW_TOP,
+                     &text_view->top_window);
+}
+
+void
+gtk_text_view_set_bottom_window_height (GtkTextView *text_view,
+                                        gint         height)
+{
+  g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
+  g_return_if_fail (height >= 0);
+
+  set_window_height (text_view, height, GTK_TEXT_WINDOW_BOTTOM,
+                     &text_view->bottom_window);
+}
