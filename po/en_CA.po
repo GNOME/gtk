@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-08 02:01-0500\n"
-"PO-Revision-Date: 2005-01-06 03:57-0400\n"
+"POT-Creation-Date: 2005-01-10 20:16-0500\n"
+"PO-Revision-Date: 2005-01-10 03:57-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: English/Canada <adamw@FreeBSD.org>\n"
 "MIME-Version: 1.0\n"
@@ -1479,32 +1479,32 @@ msgstr "Couldn't convert filename"
 msgid "(Empty)"
 msgstr "(Empty)"
 
-#: gtk/gtkfilesystemunix.c:415 gtk/gtkfilesystemunix.c:429
-#: gtk/gtkfilesystemunix.c:626 gtk/gtkfilesystemwin32.c:482
+#: gtk/gtkfilesystemunix.c:440 gtk/gtkfilesystemunix.c:632
+#: gtk/gtkfilesystemunix.c:1739 gtk/gtkfilesystemwin32.c:482
 #: gtk/gtkfilesystemwin32.c:495 gtk/gtkfilesystemwin32.c:1530
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "Error getting information for '%s': %s"
 
-#: gtk/gtkfilesystemunix.c:495 gtk/gtkfilesystemwin32.c:537
+#: gtk/gtkfilesystemunix.c:501 gtk/gtkfilesystemwin32.c:537
 #, c-format
 msgid "Error creating directory '%s': %s"
 msgstr "Error creating directory '%s': %s"
 
-#: gtk/gtkfilesystemunix.c:575 gtk/gtkfilesystemwin32.c:597
+#: gtk/gtkfilesystemunix.c:581 gtk/gtkfilesystemwin32.c:597
 msgid "This file system does not support mounting"
 msgstr "This file system does not support mounting"
 
-#: gtk/gtkfilesystemunix.c:583
+#: gtk/gtkfilesystemunix.c:589
 msgid "Filesystem"
 msgstr "Filesystem"
 
-#: gtk/gtkfilesystemunix.c:740
+#: gtk/gtkfilesystemunix.c:746
 #, c-format
 msgid "Could not get a stock icon for %s"
 msgstr "Could not get a stock icon for %s"
 
-#: gtk/gtkfilesystemunix.c:835
+#: gtk/gtkfilesystemunix.c:841
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1513,25 +1513,25 @@ msgstr ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
 "Please use a different name."
 
-#: gtk/gtkfilesystemunix.c:1443 gtk/gtkfilesystemwin32.c:1004
+#: gtk/gtkfilesystemunix.c:1446 gtk/gtkfilesystemwin32.c:1004
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Bookmark saving failed: %s"
 
-#: gtk/gtkfilesystemunix.c:1495
+#: gtk/gtkfilesystemunix.c:1498
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "'%s' already exists in the bookmarks list"
 
-#: gtk/gtkfilesystemunix.c:1557
+#: gtk/gtkfilesystemunix.c:1560
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "'%s' does not exist in the bookmarks list"
 
-#: gtk/gtkfilesystemunix.c:1739
+#: gtk/gtkfilesystemunix.c:1699
 #, c-format
-msgid "Error getting information for '%s'"
-msgstr "Error getting information for '%s'"
+msgid "Error getting information for '/': %s"
+msgstr "Error getting information for '/': %s"
 
 #: gtk/gtkfontbutton.c:178 gtk/gtkfontbutton.c:295
 msgid "Pick a Font"
@@ -1690,7 +1690,7 @@ msgstr "(unknown)"
 msgid "clear"
 msgstr "clear"
 
-#: gtk/gtklabel.c:3930
+#: gtk/gtklabel.c:3931
 msgid "Select All"
 msgstr "Select All"
 
