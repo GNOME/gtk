@@ -1,3 +1,9 @@
+2002-07-02 Padraig O'Briain <padraig.obriain@sun.com>
+
+	* gtk/gtksocket.c (gtk_socket_hierarchy_changed):
+	Use hyphen instead of underscore in signal names in calls to
+	g_signal_connect_swapped (Fixes bug #86339)
+
 Tue Jul  2 00:33:26 2002  Jonathan Blandford  <jrb@gnome.org>
 
     * gtk/gtktreeview.c (validate_visible_area): only validate the

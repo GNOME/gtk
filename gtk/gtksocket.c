@@ -745,9 +745,9 @@ gtk_socket_hierarchy_changed (GtkWidget *widget,
       if (toplevel)
 	{
 	  gtk_window_add_accel_group (GTK_WINDOW (socket->toplevel), socket->accel_group);
-	  g_signal_connect_swapped (socket->toplevel, "notify::has_toplevel_focus",
+	  g_signal_connect_swapped (socket->toplevel, "notify::has-toplevel-focus",
 				    G_CALLBACK (socket_update_focus_in), socket);
-	  g_signal_connect_swapped (socket->toplevel, "notify::is_active",
+	  g_signal_connect_swapped (socket->toplevel, "notify::is-active",
 				    G_CALLBACK (socket_update_active), socket);
 	}
 
