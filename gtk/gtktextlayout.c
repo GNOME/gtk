@@ -254,6 +254,13 @@ gtk_text_layout_finalize (GObject *object)
       layout->rtl_context = NULL;
     }
   
+  if (layout->one_display_cache) 
+    {
+      GtkTextLineDisplay *tmp_display = layout->one_display_cache;
+      layout->one_display_cache = NULL;
+      gtk_text_layout_free_line_display (layout, tmp_display);
+    }
+
   (* G_OBJECT_CLASS (parent_class)->finalize) (object);
 }
 

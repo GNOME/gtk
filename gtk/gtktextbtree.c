@@ -511,6 +511,11 @@ _gtk_text_btree_unref (GtkTextBTree *tree)
       g_assert (g_hash_table_size (tree->mark_table) == 0);
       g_hash_table_destroy (tree->mark_table);
       tree->mark_table = NULL;
+      if (tree->child_anchor_table != NULL) 
+	{
+	  g_hash_table_destroy (tree->child_anchor_table);
+	  tree->child_anchor_table = NULL;
+	}
       
       g_object_unref (G_OBJECT (tree->insert_mark));
       tree->insert_mark = NULL;
