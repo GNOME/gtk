@@ -1,13 +1,13 @@
 # This is the Finnish locale definition for Gtk+.
-# Copyright (C) 1998 Free Software Foundation, Inc.
+# Copyright (C) 1998-2000 Free Software Foundation, Inc.
 # Mikko Rauhala <mjr@iki.fi>, 1999.
 # Minor changes: Pauli Virtanen, 2000
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.1.9\n"
-"POT-Creation-Date: 2000-03-30 12:49+0300\n"
-"PO-Revision-Date: 2000-03-30 12:56+0300\n"
+"POT-Creation-Date: 2000-04-17 21:53+0300\n"
+"PO-Revision-Date: 2000-04-17 12:56+0300\n"
 "Last-Translator: Pauli Virtanen <pauli.virtanen@saunalahti.fi>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -40,7 +40,7 @@ msgstr "Sininen:"
 
 #: gtk/gtkcolorsel.c:227
 msgid "Opacity:"
-msgstr "Läpinäkymättömyys:"
+msgstr "Peitto:"
 
 #. The OK button
 #: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:565 gtk/gtkfontsel.c:3785
@@ -62,7 +62,7 @@ msgstr "Ohje"
 #. The directories clist
 #: gtk/gtkfilesel.c:514
 msgid "Directories"
-msgstr "Hakemistot"
+msgstr "Kansiot"
 
 #. The files clist
 #: gtk/gtkfilesel.c:533
@@ -73,11 +73,11 @@ msgstr "Tiedostot"
 #: gtk/gtkfilesel.c:603 gtk/gtkfilesel.c:1642
 #, c-format
 msgid "Directory unreadable: %s"
-msgstr "Hakemisto ei luettavissa: %s"
+msgstr "Kansiota ei voi lukea: %s"
 
 #: gtk/gtkfilesel.c:635
 msgid "Create Dir"
-msgstr "Luo hakemisto"
+msgstr "Luo kansio"
 
 #: gtk/gtkfilesel.c:646 gtk/gtkfilesel.c:1029
 msgid "Delete File"
@@ -103,11 +103,11 @@ msgstr "Sulje"
 
 #: gtk/gtkfilesel.c:920
 msgid "Create Directory"
-msgstr "Luo hakemisto"
+msgstr "Luo kansio"
 
 #: gtk/gtkfilesel.c:934
 msgid "Directory name:"
-msgstr "Hakemiston nimi:"
+msgstr "Kansion nimi:"
 
 #. buttons
 #: gtk/gtkfilesel.c:947
@@ -162,11 +162,11 @@ msgstr "Pistekoko:"
 
 #: gtk/gtkfontsel.c:224
 msgid "Resolution X:"
-msgstr "X-resoluutio:"
+msgstr "X-tarkkuus:"
 
 #: gtk/gtkfontsel.c:225
 msgid "Resolution Y:"
-msgstr "Y-resoluutio:"
+msgstr "Y-tarkkuus:"
 
 #: gtk/gtkfontsel.c:226
 msgid "Spacing:"
@@ -184,7 +184,7 @@ msgstr "Merkistö:"
 #. of NULL initializers above
 #: gtk/gtkfontsel.c:472
 msgid "Font Property"
-msgstr "Kirjasimen ominaisuus"
+msgstr "Kirjasinlajin ominaisuus"
 
 #: gtk/gtkfontsel.c:473
 msgid "Requested Value"
@@ -233,21 +233,21 @@ msgstr "Esikatselu:"
 
 #: gtk/gtkfontsel.c:729
 msgid "Font Information"
-msgstr "Kirjasintiedot"
+msgstr "Kirjasinlajin tiedot"
 
 #: gtk/gtkfontsel.c:762
 msgid "Requested Font Name:"
-msgstr "Pyydetty kirjasimen nimi:"
+msgstr "Pyydetty kirjasinlajin nimi:"
 
 #: gtk/gtkfontsel.c:773
 msgid "Actual Font Name:"
-msgstr "Todellinen kirjasimen nimi:"
+msgstr "Todellinen kirjasinlajin nimi:"
 
 # , c-format
 #: gtk/gtkfontsel.c:784
 #, c-format
 msgid "%i fonts available with a total of %i styles."
-msgstr "%i kirjasinta saatavissa yhteensä %i:llä tyylillä."
+msgstr "%i kirjasinlajia saatavissa yhteensä %i:llä tyylillä."
 
 #: gtk/gtkfontsel.c:799
 msgid "Filter"
@@ -312,7 +312,7 @@ msgstr "[C]"
 
 #: gtk/gtkfontsel.c:1811
 msgid "The selected font is not available."
-msgstr "Valittua kirjasinlajia ei ole saatavissa."
+msgstr "Valittua kirjasinlajia ei ole saatavilla."
 
 #: gtk/gtkfontsel.c:1817
 msgid "The selected font is not a valid font."
@@ -328,7 +328,7 @@ msgstr "(tuntematon)"
 
 #: gtk/gtkfontsel.c:2022
 msgid "roman"
-msgstr "suora"
+msgstr "pysty"
 
 #: gtk/gtkfontsel.c:2034
 msgid "proportional"
@@ -360,7 +360,7 @@ msgstr "lihavoitu"
 
 #: gtk/gtkfontsel.c:2717
 msgid "demibold"
-msgstr "osalihavoitu"
+msgstr "puolilihava"
 
 #: gtk/gtkfontsel.c:2720
 msgid "medium"
@@ -392,7 +392,7 @@ msgstr "Toteuta"
 
 #: gtk/gtkfontsel.c:3814
 msgid "Font Selection"
-msgstr "Kirjasimen valinta"
+msgstr "Kirjasinlajin valinta"
 
 #: gtk/gtkgamma.c:395
 msgid "Gamma"
@@ -473,7 +473,7 @@ msgstr "ei"
 
 #: gtk/gtkinputdialog.c:578 gtk/gtkinputdialog.c:614
 msgid "(disabled)"
-msgstr "(poistettu)"
+msgstr "(ei käytössä)"
 
 #. and clear button
 #: gtk/gtkinputdialog.c:692
@@ -487,13 +487,13 @@ msgid "Page %u"
 msgstr "Sivu %u"
 
 # , c-format
-#: gtk/gtkrc.c:1785
+#: gtk/gtkrc.c:1801
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Kuvatiedostoa ei löytynyt pixmap_path:sta: \"%s\" rivi %d"
 
 # , c-format
-#: gtk/gtkrc.c:1788
+#: gtk/gtkrc.c:1804
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kuvatiedostoa ei löytynyt pixmap_path:sta: \"%s\""
