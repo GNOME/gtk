@@ -89,11 +89,19 @@ struct _GdkPixbufModule {
 	GdkPixbufAnimation *(* load_animation) (FILE    *f,
                                                 GError **error);
 
+        /* Saving */
         gboolean (* save) (FILE      *f,
                            GdkPixbuf *pixbuf,
                            gchar    **param_keys,
                            gchar    **param_values,
                            GError   **error);
+
+        gboolean (*save_to_callback) (GdkPixbufSaveFunc save_func,
+				      gpointer user_data,
+				      GdkPixbuf *pixbuf,
+				      gchar **option_keys,
+				      gchar **option_values,
+				      GError **error);
   
   /*< private >*/
 	void (*_reserved1) (void); 
@@ -101,7 +109,6 @@ struct _GdkPixbufModule {
 	void (*_reserved3) (void); 
 	void (*_reserved4) (void); 
 	void (*_reserved5) (void); 
-	void (*_reserved6) (void); 
 
 };
 
@@ -116,7 +123,7 @@ gboolean gdk_pixbuf_set_option  (GdkPixbuf   *pixbuf,
 
 typedef enum /*< skip >*/
 {
-  GDK_PIXBUF_FORMAT_WRITABLE = 1 << 0
+  GDK_PIXBUF_FORMAT_WRITABLE = 1 << 0,
 } GdkPixbufFormatFlags;
 
 struct _GdkPixbufFormat {

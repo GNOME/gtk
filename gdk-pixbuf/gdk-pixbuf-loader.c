@@ -225,7 +225,6 @@ gdk_pixbuf_loader_finalize (GObject *object)
 
         if (!priv->closed)
                 g_warning ("GdkPixbufLoader finalized without calling gdk_pixbuf_loader_close() - this is not allowed. You must explicitly end the data stream to the loader before dropping the last reference.");
-  
         if (priv->animation)
                 g_object_unref (priv->animation);
   

@@ -1,3 +1,29 @@
+Wed Jan  7 02:41:14 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixbuf-io.c (gdk_pixbuf_save_to_bufferv): 
+	* gdk-pixbuf-io.c (gdk_pixbuf_save_to_buffer): 
+	* gdk-pixbuf-io.c (gdk_pixbuf_save_to_callbackv): 
+	* gdk-pixbuf-io.c (gdk_pixbuf_save_to_callback): New public API
+	to save pixbufs to non-file locations.  (#82203, Tim Evans)
+
+	* gdk-pixbuf.h:
+	* gdk-pixbuf.def: Declare the new public API.
+
+	* gdk-pixbuf-io.h: Add save_to_callback to the module interface.
+	
+	* io-jpeg.c: 
+	* io-png.c: Implement save_to_callback.
+
+	* gdk-pixbuf-io.c (gdk_pixbuf_savev): 
+	* gdk-pixbuf-io.c (gdk_pixbuf_save): Update documentation. 
+
+	* gdk-pixbuf-io.c (gdk_pixbuf_real_save): Support saving via
+	image_module->save_to_callback.
+
+	* gdk-pixbuf-io.c (gdk_pixbuf_real_save_to_callback): New generic
+	save_to_callback function which falls back to image_module->save 
+	on a temp file.
+	
 Wed Jan  7 01:17:36 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_size_func): 

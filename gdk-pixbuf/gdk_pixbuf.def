@@ -33,6 +33,7 @@ EXPORTS
 	gdk_pixbuf_from_pixdata
 	gdk_pixbuf_get_bits_per_sample
 	gdk_pixbuf_get_colorspace
+	gdk_pixbuf_get_file_info
 	gdk_pixbuf_get_formats
 	gdk_pixbuf_get_has_alpha
 	gdk_pixbuf_get_height
@@ -60,6 +61,10 @@ EXPORTS
 	gdk_pixbuf_ref
 	gdk_pixbuf_saturate_and_pixelate
 	gdk_pixbuf_save
+	gdk_pixbuf_save_to_callback
+	gdk_pixbuf_save_to_callbackv
+	gdk_pixbuf_save_to_buffer
+	gdk_pixbuf_save_to_bufferv
 	gdk_pixbuf_savev
 	gdk_pixbuf_scale
 	gdk_pixbuf_scale_simple

@@ -1074,6 +1074,27 @@ collect_save_options (va_list   opts,
 }
 
 static gboolean
+save_to_file_callback (const gchar *buf,
+		       gsize        count,
+		       GError     **error,
+		       gpointer     data)
+{
+	FILE *filehandle = data;
+	gsize n;
+
+	n = fwrite (buf, 1, count, filehandle);
+	if (n != count) {
+                g_set_error (error,
+                             G_FILE_ERROR,
+                             g_file_error_from_errno (errno),
+                             _("Error writing to image file: %s"),
+                             g_strerror (errno));
+                return FALSE;
+	}
+	return TRUE;
+}
+
+static gboolean
 gdk_pixbuf_real_save (GdkPixbuf     *pixbuf, 
                       FILE          *filehandle, 
                       const char    *type, 
@@ -1092,7 +1113,21 @@ gdk_pixbuf_real_save (GdkPixbuf     *pixbuf,
                if (!_gdk_pixbuf_load_module (image_module, error))
                        return FALSE;
 
-       if (image_module->save == NULL) {
+       if (image_module->save) {
+	       /* save normally */
+	       return (* image_module->save) (filehandle, pixbuf,
+					      keys, values,
+					      error);
+       }
+       else if (image_module->save_to_callback) {
+	       /* save with simple callback */
+	       return (* image_module->save_to_callback) (save_to_file_callback,
+							  filehandle, pixbuf,
+							  keys, values,
+							  error);
+       }
+       else {
+	       /* can't save */
                g_set_error (error,
                             GDK_PIXBUF_ERROR,
                             GDK_PIXBUF_ERROR_UNSUPPORTED_OPERATION,
@@ -1100,10 +1135,122 @@ gdk_pixbuf_real_save (GdkPixbuf     *pixbuf,
                             type);
                return FALSE;
        }
-               
-       return (* image_module->save) (filehandle, pixbuf,
-                                      keys, values,
-                                      error);
+}
+
+#define TMP_FILE_BUF_SIZE 4096
+
+static gboolean
+save_to_callback_with_tmp_file (GdkPixbufModule   *image_module,
+				GdkPixbuf         *pixbuf,
+				GdkPixbufSaveFunc  save_func,
+				gpointer           user_data,
+				gchar            **keys,
+				gchar            **values,
+				GError           **error)
+{
+	int fd;
+	FILE *f = NULL;
+	gboolean retval = FALSE;
+	gchar *buf = NULL;
+	gsize n;
+	gchar *filename = NULL;
+
+	buf = g_try_malloc (TMP_FILE_BUF_SIZE);
+	if (buf == NULL) {
+		g_set_error (error,
+			     GDK_PIXBUF_ERROR,
+			     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+			     _("Insufficient memory to save image to callback"));
+		goto end;
+	}
+
+	fd = g_file_open_tmp ("gdkpixbuf-save-tmp.XXXXXX", &filename, error);
+	if (fd == -1)
+		goto end;
+	f = fdopen (fd, "wb+");
+	if (f == NULL) {
+		g_set_error (error,
+			     G_FILE_ERROR,
+			     g_file_error_from_errno (errno),
+			     _("Failed to open temporary file"));
+		goto end;
+	}
+	if (!(* image_module->save) (f, pixbuf, keys, values, error))
+		goto end;
+	rewind (f);
+	for (;;) {
+		n = fread (buf, 1, TMP_FILE_BUF_SIZE, f);
+		if (n > 0) {
+			if (!save_func (buf, n, error, user_data))
+				goto end;
+		}
+		if (n != TMP_FILE_BUF_SIZE) 
+			break;
+	}
+	if (ferror (f)) {
+		g_set_error (error,
+			     G_FILE_ERROR,
+			     g_file_error_from_errno (errno),
+			     _("Failed to read from temporary file"));
+		goto end;
+	}
+	retval = TRUE;
+
+ end:
+	/* cleanup and return retval */
+	if (f)
+		fclose (f);
+	if (filename) {
+		unlink (filename);
+		g_free (filename);
+	}
+	g_free (buf);
+
+	return retval;
+}
+
+static gboolean
+gdk_pixbuf_real_save_to_callback (GdkPixbuf         *pixbuf,
+				  GdkPixbufSaveFunc  save_func,
+				  gpointer           user_data,
+				  const char        *type, 
+				  gchar            **keys,
+				  gchar            **values,
+				  GError           **error)
+{
+       GdkPixbufModule *image_module = NULL;       
+
+       image_module = _gdk_pixbuf_get_named_module (type, error);
+
+       if (image_module == NULL)
+               return FALSE;
+       
+       if (image_module->module == NULL)
+               if (!_gdk_pixbuf_load_module (image_module, error))
+                       return FALSE;
+
+       if (image_module->save_to_callback) {
+	       /* save normally */
+	       return (* image_module->save_to_callback) (save_func, user_data, 
+							  pixbuf, keys, values,
+							  error);
+       }
+       else if (image_module->save) {
+	       /* use a temporary file */
+	       return save_to_callback_with_tmp_file (image_module, pixbuf,
+						      save_func, user_data, 
+						      keys, values,
+						      error);
+       }
+       else {
+	       /* can't save */
+               g_set_error (error,
+                            GDK_PIXBUF_ERROR,
+                            GDK_PIXBUF_ERROR_UNSUPPORTED_OPERATION,
+                            _("This build of gdk-pixbuf does not support saving the image format: %s"),
+                            type);
+               return FALSE;
+       }
 }
 
  
@@ -1115,8 +1262,25 @@ gdk_pixbuf_real_save (GdkPixbuf     *pixbuf,
  * @error: return location for error, or %NULL
  * @Varargs: list of key-value save options
  *
- * Saves pixbuf to a file in @type, which is currently "jpeg", "png" or
- * "ico".  If @error is set, %FALSE will be returned. Possible errors include 
+ * Saves pixbuf to a file in format @type. By default, "jpeg", "png" and 
+ * "ico" are possible file formats to save in, but more formats may be
+ * installed. The list of all writable formats can be determined in the 
+ * following way:
+ *
+ * <informalexample><programlisting>
+ * void add_if_writable (GdkPixbufFormat *data, GSList **list)
+ * {
+ *   if (gdk_pixbuf_format_is_writable (data))
+ *     *list = g_slist_prepend (*list, data);
+ * }
+ *
+ * GSList *formats = gdk_pixbuf_get_formats (<!-- -->);
+ * GSList *writable_formats = NULL;
+ * g_slist_foreach (formats, add_if_writable, &writable_formats);
+ * g_slist_free (formats);
+ * </programlisting></informalexample>
+ *
+ * If @error is set, %FALSE will be returned. Possible errors include 
  * those in the #GDK_PIXBUF_ERROR domain and those in the #G_FILE_ERROR domain.
  *
  * The variable argument list should be %NULL-terminated; if not empty,
@@ -1178,9 +1342,9 @@ gdk_pixbuf_save (GdkPixbuf  *pixbuf,
  * @option_values: values for named options
  * @error: return location for error, or %NULL
  *
- * Saves pixbuf to a file in @type, which is currently "jpeg" or "png".
- * If @error is set, %FALSE will be returned. See gdk_pixbuf_save () for more
- * details.
+ * Saves pixbuf to a file in @type, which is currently "jpeg", "png" or "ico".
+ * If @error is set, %FALSE will be returned. 
+ * See gdk_pixbuf_save () for more details.
  *
  * Return value: whether an error was set
  **/
@@ -1234,6 +1398,251 @@ gdk_pixbuf_savev (GdkPixbuf  *pixbuf,
        }
        
        return TRUE;
+}
+
+/**
+ * gdk_pixbuf_save_to_callback:
+ * @pixbuf: a #GdkPixbuf.
+ * @save_func: a function that is called to save each block of data that
+ *   the save routine generates.
+ * @user_data: user data to pass to the save function.
+ * @type: name of file format.
+ * @error: return location for error, or %NULL
+ * @Varargs: list of key-value save options
+ *
+ * Saves pixbuf in format @type by feeding the produced data to a 
+ * callback. Can be used when you want to store the image to something 
+ * other than a file, such as an in-memory buffer or a socket.  
+ * If @error is set, %FALSE will be returned. Possible errors
+ * include those in the #GDK_PIXBUF_ERROR domain and whatever the save
+ * function generates.
+ *
+ * See gdk_pixbuf_save() for more details.
+ *
+ * Return value: whether an error was set
+ *
+ * Since: 2.4
+ **/
+gboolean
+gdk_pixbuf_save_to_callback    (GdkPixbuf  *pixbuf,
+				GdkPixbufSaveFunc save_func,
+				gpointer user_data,
+				const char *type, 
+				GError    **error,
+				...)
+{
+        gchar **keys = NULL;
+        gchar **values = NULL;
+        va_list args;
+        gboolean result;
+        
+        g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+        
+        va_start (args, error);
+        
+        collect_save_options (args, &keys, &values);
+        
+        va_end (args);
+
+        result = gdk_pixbuf_save_to_callbackv (pixbuf, save_func, user_data,
+					       type, keys, values,
+					       error);
+
+        g_strfreev (keys);
+        g_strfreev (values);
+
+        return result;
+}
+
+/**
+ * gdk_pixbuf_save_to_callbackv:
+ * @pixbuf: a #GdkPixbuf.
+ * @save_func: a function that is called to save each block of data that
+ *   the save routine generates.
+ * @user_data: user data to pass to the save function.
+ * @type: name of file format.
+ * @option_keys: name of options to set, %NULL-terminated
+ * @option_values: values for named options
+ * @error: return location for error, or %NULL
+ *
+ * Saves pixbuf to a callback in format @type, which is currently "jpeg",
+ * "png" or "ico".  If @error is set, %FALSE will be returned. See
+ * gdk_pixbuf_save_to_callback () for more details.
+ *
+ * Return value: whether an error was set
+ *
+ * Since: 2.4
+ **/
+gboolean
+gdk_pixbuf_save_to_callbackv   (GdkPixbuf  *pixbuf, 
+				GdkPixbufSaveFunc save_func,
+				gpointer user_data,
+				const char *type,
+				char      **option_keys,
+				char      **option_values,
+				GError    **error)
+{
+        gboolean result;
+        
+       
+        g_return_val_if_fail (save_func != NULL, FALSE);
+        g_return_val_if_fail (type != NULL, FALSE);
+        g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+       
+       result = gdk_pixbuf_real_save_to_callback (pixbuf,
+						  save_func, user_data, type,
+						  option_keys, option_values,
+						  error);
+       
+       if (!result) {
+               g_return_val_if_fail (error == NULL || *error != NULL, FALSE);
+               return FALSE;
+       }
+
+       return TRUE;
+}
+
+/**
+ * gdk_pixbuf_save_to_buffer:
+ * @pixbuf: a #GdkPixbuf.
+ * @buffer: location to receive a pointer to the new buffer.
+ * @buffer_size: location to receive the size of the new buffer.
+ * @type: name of file format.
+ * @error: return location for error, or %NULL
+ * @Varargs: list of key-value save options
+ *
+ * Saves pixbuf to a new buffer in format @type, which is currently "jpeg",
+ * "png" or "ico".  This is a convenience function that uses
+ * gdk_pixbuf_save_to_callback() to do the real work. Note that the buffer 
+ * is not nul-terminated and may contain embedded  nuls.
+ * If @error is set, %FALSE will be returned and @string will be set to
+ * %NULL. Possible errors include those in the #GDK_PIXBUF_ERROR
+ * domain.
+ *
+ * See gdk_pixbuf_save() for more details.
+ *
+ * Return value: whether an error was set
+ *
+ * Since: 2.4
+ **/
+gboolean
+gdk_pixbuf_save_to_buffer      (GdkPixbuf  *pixbuf,
+				gchar     **buffer,
+				gsize      *buffer_size,
+				const char *type, 
+				GError    **error,
+				...)
+{
+        gchar **keys = NULL;
+        gchar **values = NULL;
+        va_list args;
+        gboolean result;
+        
+        g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+        
+        va_start (args, error);
+        
+        collect_save_options (args, &keys, &values);
+        
+        va_end (args);
+
+        result = gdk_pixbuf_save_to_bufferv (pixbuf, buffer, buffer_size,
+					     type, keys, values,
+					     error);
+
+        g_strfreev (keys);
+        g_strfreev (values);
+
+        return result;
+}
+
+struct SaveToBufferData {
+	gchar *buffer;
+	gsize len, max;
+};
+
+static gboolean
+save_to_buffer_callback (const gchar *data,
+			 gsize count,
+			 GError **error,
+			 gpointer user_data)
+{
+	struct SaveToBufferData *sdata = user_data;
+	gchar *new_buffer;
+	gsize new_max;
+
+	if (sdata->len + count > sdata->max) {
+		new_max = MAX (sdata->max*2, sdata->len + count);
+		new_buffer = g_try_realloc (sdata->buffer, new_max);
+		if (!new_buffer) {
+			g_set_error (error,
+				     GDK_PIXBUF_ERROR,
+				     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+				     _("Insufficient memory to save image into a buffer"));
+			return FALSE;
+		}
+		sdata->buffer = new_buffer;
+		sdata->max = new_max;
+	}
+	memcpy (sdata->buffer + sdata->len, data, count);
+	sdata->len += count;
+	return TRUE;
+}
+
+/**
+ * gdk_pixbuf_save_to_bufferv:
+ * @pixbuf: a #GdkPixbuf.
+ * @buffer: location to receive a pointer to the new buffer.
+ * @buffer_size: location to receive the size of the new buffer.
+ * @type: name of file format.
+ * @option_keys: name of options to set, %NULL-terminated
+ * @option_values: values for named options
+ * @error: return location for error, or %NULL
+ *
+ * Saves pixbuf to a new buffer in format @type, which is currently "jpeg",
+ * "png" or "ico".  See gdk_pixbuf_save_to_buffer() for more details.
+ *
+ * Return value: whether an error was set
+ *
+ * Since: 2.4
+ **/
+gboolean
+gdk_pixbuf_save_to_bufferv     (GdkPixbuf  *pixbuf,
+				gchar     **buffer,
+				gsize      *buffer_size,
+				const char *type, 
+				char      **option_keys,
+				char      **option_values,
+				GError    **error)
+{
+	static const gint initial_max = 1024;
+	struct SaveToBufferData sdata;
+
+	*buffer = NULL;
+	*buffer_size = 0;
+
+	sdata.buffer = g_try_malloc (initial_max);
+	sdata.max = initial_max;
+	sdata.len = 0;
+	if (!sdata.buffer) {
+                g_set_error (error,
+                             GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+			     _("Insufficient memory to save image into a buffer"));
+		return FALSE;
+	}
+
+	if (!gdk_pixbuf_save_to_callbackv (pixbuf,
+					   save_to_buffer_callback, &sdata,
+					   type, option_keys, option_values,
+					   error)) {
+		g_free (sdata.buffer);
+		return FALSE;
+	}
+
+	*buffer = sdata.buffer;
+	*buffer_size = sdata.len;
+	return TRUE;
 }
 
 /**

@@ -170,6 +170,45 @@ gboolean gdk_pixbuf_savev          (GdkPixbuf  *pixbuf,
                                     char      **option_values,
                                     GError    **error);
 
+/* Saving to a callback function */
+
+typedef gboolean (*GdkPixbufSaveFunc)   (const gchar *buf,
+					 gsize count,
+					 GError **error,
+					 gpointer data);
+
+gboolean gdk_pixbuf_save_to_callback    (GdkPixbuf  *pixbuf,
+					 GdkPixbufSaveFunc save_func,
+					 gpointer user_data,
+					 const char *type, 
+					 GError    **error,
+					 ...);
+
+gboolean gdk_pixbuf_save_to_callbackv   (GdkPixbuf  *pixbuf, 
+					 GdkPixbufSaveFunc save_func,
+					 gpointer user_data,
+					 const char *type,
+					 char      **option_keys,
+					 char      **option_values,
+					 GError    **error);
+
+/* Saving into a newly allocated char array */
+
+gboolean gdk_pixbuf_save_to_buffer      (GdkPixbuf  *pixbuf,
+					 gchar     **buffer,
+					 gsize      *buffer_size,
+					 const char *type, 
+					 GError    **error,
+					 ...);
+
+gboolean gdk_pixbuf_save_to_bufferv     (GdkPixbuf  *pixbuf,
+					 gchar     **buffer,
+					 gsize      *buffer_size,
+					 const char *type, 
+					 char      **option_keys,
+					 char      **option_values,
+					 GError    **error);
+
 /* Adding an alpha channel */
 GdkPixbuf *gdk_pixbuf_add_alpha (const GdkPixbuf *pixbuf, gboolean substitute_color,
 				 guchar r, guchar g, guchar b);
