@@ -1,3 +1,12 @@
+Fri May 19 06:49:23 2000  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkfontsel.c (gtk_font_selection_get_font_name): handle
+	"(nil)" foundries, patch from Grigorios Magklis.
+
+	* gtk/gtkfontsel.c (gtk_font_selection_load_font): don't crash
+	on non-available fonts, based on a patch by Grigorios Magklis
+	<maglis@cs.rochester.edu>.
+
 2000-05-18  Elliot Lee  <sopwith@redhat.com>
 
 	* gdk/x11/gdkregion-generic.c: If a region does not have any
