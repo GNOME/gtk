@@ -9,10 +9,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: GTK+ 2.3.1\n"
+"Project-Id-Version: GTK+ 2.3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-22 18:01-0500\n"
-"PO-Revision-Date: 2004-01-19 18:11+0100\n"
+"POT-Creation-Date: 2004-02-01 11:53+0100\n"
+"PO-Revision-Date: 2004-02-01 11:53+0100\n"
 "Last-Translator: Christian Neumair <chris@gnome-de.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -965,7 +965,7 @@ msgstr ""
 "Es konnte kein Lesezeichen für %s hinzugefügt werden:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:465 gtk/gtkfilechooserdefault.c:2917
+#: gtk/gtkfilechooserdefault.c:465 gtk/gtkfilechooserdefault.c:2937
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -1064,57 +1064,57 @@ msgid "Preview"
 msgstr "Vorschau"
 
 #. Change the current folder label
-#: gtk/gtkfilechooserdefault.c:2118
+#: gtk/gtkfilechooserdefault.c:2130
 #, c-format
 msgid "Current folder: %s"
 msgstr "Momentaner Ordner: %s"
 
 # CHECK - shortcuts == Lesezeichen?
-#: gtk/gtkfilechooserdefault.c:2521
+#: gtk/gtkfilechooserdefault.c:2533
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "Das Lesezeichen %s existiert nicht"
 
 # CHECK
-#: gtk/gtkfilechooserdefault.c:3063
+#: gtk/gtkfilechooserdefault.c:3083
 msgid "Type name of new folder"
 msgstr "Namen des anzulegenden Ordners eingeben"
 
-#: gtk/gtkfilechooserdefault.c:3090
+#: gtk/gtkfilechooserdefault.c:3110
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d Byte"
 msgstr[1] "%d Bytes"
 
-#: gtk/gtkfilechooserdefault.c:3092
+#: gtk/gtkfilechooserdefault.c:3112
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:3094
+#: gtk/gtkfilechooserdefault.c:3114
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:3096
+#: gtk/gtkfilechooserdefault.c:3116
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:3141
+#: gtk/gtkfilechooserdefault.c:3161
 msgid "Today"
 msgstr "Heute"
 
-#: gtk/gtkfilechooserdefault.c:3143
+#: gtk/gtkfilechooserdefault.c:3163
 msgid "Yesterday"
 msgstr "Gestern"
 
-#: gtk/gtkfilechooserdefault.c:3151
+#: gtk/gtkfilechooserdefault.c:3171
 msgid "%d/%b/%Y"
 msgstr "%d.%m.%Y"
 
-#: gtk/gtkfilechooserdefault.c:3154
+#: gtk/gtkfilechooserdefault.c:3174
 msgid "Unknown"
 msgstr "Unbekannt"
 
@@ -1306,39 +1306,32 @@ msgstr "Dateiname konnte nicht umgewandelt werden"
 msgid "(Empty)"
 msgstr "(Leer)"
 
-#: gtk/gtkfilesystemunix.c:335 gtk/gtkfilesystemwin32.c:417
+#: gtk/gtkfilesystemunix.c:351 gtk/gtkfilesystemwin32.c:373
 #, c-format
 msgid "error creating directory '%s': %s"
 msgstr "Fehler beim Anlegen des Verzeichnisses »%s«: %s"
 
-#: gtk/gtkfilesystemunix.c:378 gtk/gtkfilesystemwin32.c:458
+#: gtk/gtkfilesystemunix.c:392 gtk/gtkfilesystemwin32.c:414
 msgid "This file system does not support mounting"
 msgstr "Dieses Dateisystem unterstützt das Einbinden nicht"
 
-#: gtk/gtkfilesystemunix.c:386
+#: gtk/gtkfilesystemunix.c:400
 msgid "Filesystem"
 msgstr "Dateisystem"
 
-#: gtk/gtkfilesystemunix.c:648
-msgid "This file system does not support icons"
-msgstr "Dieses Dateisystem unterstützt keine Symbole"
-
-#: gtk/gtkfilesystemunix.c:661 gtk/gtkfilesystemunix.c:674
-msgid "This file system does not support bookmarks"
-msgstr "Dieses Dateisystem unterstützt keine Lesezeichen"
-
-#: gtk/gtkfilesystemunix.c:847 gtk/gtkfilesystemwin32.c:1197
+#: gtk/gtkfilesystemunix.c:419 gtk/gtkfilesystemunix.c:1295
+#: gtk/gtkfilesystemwin32.c:1154
 #, c-format
 msgid "error getting information for '%s': %s"
 msgstr "Fehler beim Abrufen der Informationen zu »%s«: %s"
 
-#: gtk/gtkfilesystemwin32.c:820
+#: gtk/gtkfilesystemunix.c:1005 gtk/gtkfilesystemwin32.c:777
 #, c-format
 msgid "Bookmark saving failed (%s)"
 msgstr "Speichern des Lesezeichens gescheitert (%s)"
 
 # CHECK - klingt dämlich
-#: gtk/gtkfilesystemwin32.c:976
+#: gtk/gtkfilesystemwin32.c:933
 msgid "This file system does not support icons for everything"
 msgstr "Dieses Dateisystem unterstützt keine Symbole für alles"
 
@@ -1393,7 +1386,7 @@ msgstr "_Gamma-Wert"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1559
+#: gtk/gtkiconfactory.c:1563
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Fehler beim Laden des Symbols: %s"
@@ -1406,6 +1399,10 @@ msgid ""
 "You can get a copy from:\n"
 "\t%s"
 msgstr ""
+"Das Symbol »%s« konnte nicht gefunden werden,\n"
+"ebenso wenig wie das Thema »%s«. Möglicherweise müssen Sie es installieren.\n"
+"Sie können sich eine Kopie herunterladen unter:\n"
+"\t%s"
 
 #: gtk/gtkicontheme.c:1247
 #, c-format
@@ -1660,11 +1657,11 @@ msgstr "_Persönlicher Ordner"
 
 #: gtk/gtkstock.c:301
 msgid "Increase Indent"
-msgstr ""
+msgstr "Einzug vermindern"
 
 #: gtk/gtkstock.c:302
 msgid "Decrease Indent"
-msgstr ""
+msgstr "Einzug erhöhen"
 
 #: gtk/gtkstock.c:303
 msgid "_Index"
@@ -1695,128 +1692,132 @@ msgid "_Right"
 msgstr "_Rechts"
 
 #: gtk/gtkstock.c:310
+msgid "_Network"
+msgstr "_Netzwerk"
+
+#: gtk/gtkstock.c:311
 msgid "_New"
 msgstr "_Neu"
 
-#: gtk/gtkstock.c:311
+#: gtk/gtkstock.c:312
 msgid "_No"
 msgstr "_Nein"
 
-#: gtk/gtkstock.c:312
+#: gtk/gtkstock.c:313
 msgid "_OK"
 msgstr "_OK"
 
-#: gtk/gtkstock.c:313
+#: gtk/gtkstock.c:314
 msgid "_Open"
 msgstr "Ö_ffnen"
 
-#: gtk/gtkstock.c:314
+#: gtk/gtkstock.c:315
 msgid "_Paste"
 msgstr "E_infügen"
 
-#: gtk/gtkstock.c:315
+#: gtk/gtkstock.c:316
 msgid "_Preferences"
 msgstr "_Einstellungen"
 
-#: gtk/gtkstock.c:316
+#: gtk/gtkstock.c:317
 msgid "_Print"
 msgstr "_Drucken"
 
-#: gtk/gtkstock.c:317
+#: gtk/gtkstock.c:318
 msgid "Print Pre_view"
 msgstr "Druck_vorschau"
 
 # Auch wenn im Original die Tastenkürzel kollidieren (_Preferences),
 # wir verwenden Ei_genschaften.
-#: gtk/gtkstock.c:318
+#: gtk/gtkstock.c:319
 msgid "_Properties"
 msgstr "Ei_genschaften"
 
-#: gtk/gtkstock.c:319
+#: gtk/gtkstock.c:320
 msgid "_Quit"
 msgstr "_Beenden"
 
-#: gtk/gtkstock.c:320
+#: gtk/gtkstock.c:321
 msgid "_Redo"
 msgstr "_Wiederholen"
 
-#: gtk/gtkstock.c:321
+#: gtk/gtkstock.c:322
 msgid "_Refresh"
 msgstr "_Aktualisieren"
 
-#: gtk/gtkstock.c:322
+#: gtk/gtkstock.c:323
 msgid "_Remove"
 msgstr "_Entfernen"
 
-#: gtk/gtkstock.c:323
+#: gtk/gtkstock.c:324
 msgid "_Revert"
 msgstr "_Zurücksetzen"
 
-#: gtk/gtkstock.c:324
+#: gtk/gtkstock.c:325
 msgid "_Save"
 msgstr "_Speichern"
 
-#: gtk/gtkstock.c:325
+#: gtk/gtkstock.c:326
 msgid "Save _As"
 msgstr "Speichern _unter"
 
-#: gtk/gtkstock.c:326
+#: gtk/gtkstock.c:327
 msgid "_Color"
 msgstr "_Farbe"
 
-#: gtk/gtkstock.c:327
+#: gtk/gtkstock.c:328
 msgid "_Font"
 msgstr "_Schrift"
 
-#: gtk/gtkstock.c:328
+#: gtk/gtkstock.c:329
 msgid "_Ascending"
 msgstr "_Aufsteigend"
 
-#: gtk/gtkstock.c:329
+#: gtk/gtkstock.c:330
 msgid "_Descending"
 msgstr "_Absteigend"
 
-#: gtk/gtkstock.c:330
+#: gtk/gtkstock.c:331
 msgid "_Spell Check"
 msgstr "_Rechtschreibprüfung"
 
-#: gtk/gtkstock.c:331
+#: gtk/gtkstock.c:332
 msgid "_Stop"
 msgstr "_Stopp"
 
-#: gtk/gtkstock.c:332
+#: gtk/gtkstock.c:333
 msgid "_Strikethrough"
 msgstr "_Durchstreichen"
 
-#: gtk/gtkstock.c:333
+#: gtk/gtkstock.c:334
 msgid "_Undelete"
 msgstr "_Löschen rückgängig"
 
-#: gtk/gtkstock.c:334
+#: gtk/gtkstock.c:335
 msgid "_Underline"
 msgstr "_Unterstreichen"
 
-#: gtk/gtkstock.c:335
+#: gtk/gtkstock.c:336
 msgid "_Undo"
 msgstr "_Rückgängig"
 
-#: gtk/gtkstock.c:336
+#: gtk/gtkstock.c:337
 msgid "_Yes"
 msgstr "_Ja"
 
-#: gtk/gtkstock.c:337
+#: gtk/gtkstock.c:338
 msgid "Zoom _100%"
 msgstr "Zoom _100%"
 
-#: gtk/gtkstock.c:338
+#: gtk/gtkstock.c:339
 msgid "Zoom to _Fit"
 msgstr "_Passend zoomen"
 
-#: gtk/gtkstock.c:339
+#: gtk/gtkstock.c:340
 msgid "Zoom _In"
 msgstr "_Heranzoomen"
 
-#: gtk/gtkstock.c:340
+#: gtk/gtkstock.c:341
 msgid "Zoom _Out"
 msgstr "_Wegzoomen"
 
