@@ -1,3 +1,14 @@
+2004-08-11  Matthias Clasen  <mclasen@redhat.com>
+
+	* pixops/pixops-internal.h: 
+	* pixops/pixops.c:
+	* pixops/*.S: underscore prefix the mmx implementations, in order
+	to not export them.
+
+	* gdk-pixbuf.symbols: Remove the mmx pixops implementations.
+
+	* abicheck.sh: No need to define INCLUDE_MMX_SYMBOLS any more.
+
 Tue Aug 10 23:53:59 2004  Matthias Clasen  <maclas@gmx.de>
 
 	Add hidden aliases for exported symbols which are

@@ -6,14 +6,14 @@ gcc2_compiled.:
 
 #if !defined(__MINGW32__) && !defined(__CYGWIN__)	
 	
-.globl pixops_composite_line_22_4a4_mmx
-	.type	 pixops_composite_line_22_4a4_mmx,@function
-pixops_composite_line_22_4a4_mmx:
+.globl _pixops_composite_line_22_4a4_mmx
+	.type	 _pixops_composite_line_22_4a4_mmx,@function
+_pixops_composite_line_22_4a4_mmx:
 	
 #else
 	
-.globl _pixops_composite_line_22_4a4_mmx
-_pixops_composite_line_22_4a4_mmx:
+.globl __pixops_composite_line_22_4a4_mmx
+__pixops_composite_line_22_4a4_mmx:
 	
 #endif
 /*

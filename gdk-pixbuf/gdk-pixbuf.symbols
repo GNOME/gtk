@@ -93,9 +93,3 @@ gdk_pixdata_deserialize
 gdk_pixdata_from_pixbuf
 gdk_pixdata_serialize
 gdk_pixdata_to_csource
-#ifdef INCLUDE_MMX_SYMBOLS
-pixops_composite_line_22_4a4_mmx
-pixops_composite_line_color_22_4a4_mmx
-pixops_have_mmx
-pixops_scale_line_22_33_mmx
-#endif

@@ -6,14 +6,14 @@ gcc2_compiled.:
 
 #if !defined(__MINGW32__) && !defined(__CYGWIN__)	
 	
-.globl pixops_scale_line_22_33_mmx
-	.type	 pixops_scale_line_22_33_mmx,@function
-pixops_scale_line_22_33_mmx:
+.globl _pixops_scale_line_22_33_mmx
+	.type	 _pixops_scale_line_22_33_mmx,@function
+_pixops_scale_line_22_33_mmx:
 	
 #else
 	
-.globl _pixops_scale_line_22_33_mmx
-_pixops_scale_line_22_33_mmx:
+.globl __pixops_scale_line_22_33_mmx
+__pixops_scale_line_22_33_mmx:
 	
 #endif
 /*

@@ -71,35 +71,45 @@ pixops_scale_nearest (guchar        *dest_buf,
 		      double         scale_x,
 		      double         scale_y)
 {
-  int i, j;
+  int i;
   int x;
   int x_step = (1 << SCALE_SHIFT) / scale_x;
   int y_step = (1 << SCALE_SHIFT) / scale_y;
+  int xmax, xstart, xstop, x_pos, y_pos;
+  const guchar *p;
 
-#define INNER_LOOP(SRC_CHANNELS,DEST_CHANNELS) 			\
-      for (j=0; j < (render_x1 - render_x0); j++)		\
+#define INNER_LOOP(SRC_CHANNELS,DEST_CHANNELS,ASSIGN_PIXEL)   	\
+      xmax = x + (render_x1 - render_x0) * x_step;              \
+      xstart = MIN (0, xmax);                                   \
+      xstop = MIN (src_width << SCALE_SHIFT, xmax);             \
+      p = src + (CLAMP (x, xstart, xstop) >> SCALE_SHIFT) * SRC_CHANNELS; \
+      while (x < xstart)                                        \
 	{							\
-	  const guchar *p = src + (x >> SCALE_SHIFT) * SRC_CHANNELS;	\
-								\
-	  dest[0] = p[0];					\
-	  dest[1] = p[1];					\
-	  dest[2] = p[2];					\
-						       		\
-	  if (DEST_CHANNELS == 4)				\
+	  ASSIGN_PIXEL;				       		\
+	  dest += DEST_CHANNELS;				\
+	  x += x_step;						\
+        }                                                       \
+      while (x < xstop)                                         \
 	    {							\
-	      if (SRC_CHANNELS == 4)				\
-		dest[3] = p[3];					\
-	      else						\
-		dest[3] = 0xff;					\
+	  p = src + (x >> SCALE_SHIFT) * SRC_CHANNELS;          \
+	  ASSIGN_PIXEL;				       		\
+	  dest += DEST_CHANNELS;				\
+	  x += x_step;						\
 	    }							\
-								\
+      x_pos = x >> SCALE_SHIFT;                                 \
+      p = src + CLAMP (x_pos, 0, src_width - 1) * SRC_CHANNELS; \
+      while (x < xmax)                                          \
+        {                                                       \
+	  ASSIGN_PIXEL;				       		\
 	  dest += DEST_CHANNELS;				\
 	  x += x_step;						\
 	}
 
   for (i = 0; i < (render_y1 - render_y0); i++)
     {
-      const guchar *src  = src_buf + (((i + render_y0) * y_step + y_step / 2) >> SCALE_SHIFT) * src_rowstride;
+      y_pos = ((i + render_y0) * y_step + y_step / 2) >> SCALE_SHIFT;
+      y_pos = CLAMP (y_pos, 0, src_height - 1);
+      const guchar *src  = src_buf + y_pos * src_rowstride;
       guchar       *dest = dest_buf + i * dest_rowstride;
 
       x = render_x0 * x_step + x_step / 2;
@@ -108,36 +118,25 @@ pixops_scale_nearest (guchar        *dest_buf,
 	{
 	  if (dest_channels == 3)
 	    {
-	      INNER_LOOP (3, 3);
+	      INNER_LOOP (3, 3, dest[0]=p[0];dest[1]=p[1];dest[2]=p[2]);
 	    }
 	  else
 	    {
-	      INNER_LOOP (3, 4);
+	      INNER_LOOP (3, 4, dest[0]=p[0];dest[1]=p[1];dest[2]=p[2]);
 	    }
 	}
       else if (src_channels == 4)
 	{
 	  if (dest_channels == 3)
 	    {
-	      INNER_LOOP (4, 3);
+	      INNER_LOOP (4, 3, dest[0]=p[0];dest[1]=p[1];dest[2]=p[2];dest[3]=0xff);
 	    }
 	  else
 	    {
-	      for (j=0; j < (render_x1 - render_x0); j++)
-		{
-		  const guchar *p = src + (x >> SCALE_SHIFT) * 4;
-		  guint32 *p32;
-
-		  p32 = (guint32 *) dest;
-		  *p32 = *((guint32 *) p);
-
-		  dest += 4;
-		  x += x_step;
-		}
+	      INNER_LOOP(4, 4, guint32 *p32=(guint32*)dest;*p32=*((guint32*)p));
 	    }
 	}
     }
-#undef INNER_LOOP
 }
 
 static void
@@ -159,23 +158,25 @@ pixops_composite_nearest (guchar        *dest_buf,
 			  double         scale_y,
 			  int            overall_alpha)
 {
-  int i, j;
+  int i;
   int x;
   int x_step = (1 << SCALE_SHIFT) / scale_x;
   int y_step = (1 << SCALE_SHIFT) / scale_y;
+  int xmax, xstart, xstop, x_pos, y_pos;
+  const guchar *p;
+  unsigned int  a0;
+
 
   for (i = 0; i < (render_y1 - render_y0); i++)
     {
-      const guchar *src  = src_buf + (((i + render_y0) * y_step + y_step / 2) >> SCALE_SHIFT) * src_rowstride;
+      y_pos = ((i + render_y0) * y_step + y_step / 2) >> SCALE_SHIFT;
+      y_pos = CLAMP (y_pos, 0, src_height - 1);
+      const guchar *src  = src_buf + y_pos * src_rowstride;
       guchar       *dest = dest_buf + i * dest_rowstride;
 
       x = render_x0 * x_step + x_step / 2;
       
-      for (j=0; j < (render_x1 - render_x0); j++)
-	{
-	  const guchar *p = src + (x >> SCALE_SHIFT) * src_channels;
-          unsigned int  a0;
-
+      INNER_LOOP(src_channels, dest_channels,
 	  if (src_has_alpha)
 	    a0 = (p[3] * overall_alpha) / 0xff;
 	  else
@@ -218,9 +219,7 @@ pixops_composite_nearest (guchar        *dest_buf,
                 }
               break;
             }
-	  dest += dest_channels;
-	  x += x_step;
-	}
+	);	      
     }
 }
 
@@ -254,13 +253,19 @@ pixops_composite_color_nearest (guchar        *dest_buf,
   int y_step = (1 << SCALE_SHIFT) / scale_y;
   int r1, g1, b1, r2, g2, b2;
   int check_shift = get_check_shift (check_size);
+  int xmax, xstart, xstop, x_pos, y_pos;
+  const guchar *p;
+  unsigned int  a0;
 
   for (i = 0; i < (render_y1 - render_y0); i++)
     {
-      const guchar *src  = src_buf + (((i + render_y0) * y_step + y_step/2) >> SCALE_SHIFT) * src_rowstride;
+      y_pos = ((i + render_y0) * y_step + y_step / 2) >> SCALE_SHIFT;
+      y_pos = CLAMP (y_pos, 0, src_height - 1);
+      const guchar *src  = src_buf + y_pos * src_rowstride;
       guchar       *dest = dest_buf + i * dest_rowstride;
 
       x = render_x0 * x_step + x_step / 2;
+      
       
       if (((i + check_y) >> check_shift) & 1)
 	{
@@ -283,12 +288,8 @@ pixops_composite_color_nearest (guchar        *dest_buf,
 	  b2 = color2 & 0xff;
 	}
 
-      for (j=0 ; j < (render_x1 - render_x0); j++)
-	{
-	  const guchar *p = src + (x >> SCALE_SHIFT) * src_channels;
-          int a0;
-	  int tmp;
-
+      j = 0;
+      INNER_LOOP(src_channels, dest_channels,
 	  if (src_has_alpha)
 	    a0 = (p[3] * overall_alpha + 0xff) >> 8;
 	  else
@@ -316,6 +317,8 @@ pixops_composite_color_nearest (guchar        *dest_buf,
 	      dest[2] = p[2];
               break;
             default:
+		     {
+		       unsigned int tmp;
               if (((j + check_x) >> check_shift) & 1)
                 {
                   tmp = ((int) p[0] - r2) * a0;
@@ -334,17 +337,18 @@ pixops_composite_color_nearest (guchar        *dest_buf,
                   tmp = ((int) p[2] - b1) * a0;
                   dest[2] = b1 + ((tmp + (tmp >> 8) + 0x80) >> 8);
                 }
+		     }
               break;
             }
 	  
 	  if (dest_channels == 4)
 	    dest[3] = 0xff;
 
-	  dest += dest_channels;
-	  x += x_step;
-	}
+		 j++;
+	);
     }
 }
+#undef INNER_LOOP
 
 static void
 composite_pixel (guchar *dest, int dest_x, int dest_channels, int dest_has_alpha,
@@ -546,7 +550,7 @@ composite_line_22_4a4_mmx_stub (int *weights, int n_x, int n_y,
       mmx_weights[j][7] = 0x00010001 * (weights[4*j + 3] >> 8);
     }
 
-  return pixops_composite_line_22_4a4_mmx (mmx_weights, dest, src[0], src[1], x_step, dest_end, x_init);
+  return _pixops_composite_line_22_4a4_mmx (mmx_weights, dest, src[0], src[1], x_step, dest_end, x_init);
 }
 #endif /* USE_MMX */
 
@@ -691,8 +695,8 @@ composite_line_color_22_4a4_mmx_stub (int *weights, int n_x, int n_y,
   colors[2] = (color2 & 0xff00) << 8 | (color2 & 0xff);
   colors[3] = (color2 & 0xff0000) >> 16;
 
-  return pixops_composite_line_color_22_4a4_mmx (mmx_weights, dest, src[0], src[1], x_step, dest_end, x_init,
-						 dest_x, check_shift, colors);
+  return _pixops_composite_line_color_22_4a4_mmx (mmx_weights, dest, src[0], src[1], x_step, dest_end, x_init,
+						  dest_x, check_shift, colors);
 }
 #endif /* USE_MMX */
 
@@ -842,7 +846,7 @@ scale_line_22_33_mmx_stub (int *weights, int n_x, int n_y,
       mmx_weights[j][7] = 0x00010001 * (weights[4*j + 3] >> 8);
     }
 
-  return pixops_scale_line_22_33_mmx (mmx_weights, dest, src[0], src[1], x_step, dest_end, x_init);
+  return _pixops_scale_line_22_33_mmx (mmx_weights, dest, src[0], src[1], x_step, dest_end, x_init);
 }
 #endif /* USE_MMX */
 
@@ -1385,7 +1389,7 @@ _pixops_composite_color (guchar         *dest_buf,
   PixopsLineFunc line_func;
   
 #ifdef USE_MMX
-  gboolean found_mmx = pixops_have_mmx();
+  gboolean found_mmx = _pixops_have_mmx ();
 #endif
 
   g_return_if_fail (!(dest_channels == 3 && dest_has_alpha));
@@ -1482,7 +1486,7 @@ _pixops_composite (guchar        *dest_buf,
   PixopsLineFunc line_func;
   
 #ifdef USE_MMX
-  gboolean found_mmx = pixops_have_mmx();
+  gboolean found_mmx = _pixops_have_mmx ();
 #endif
 
   g_return_if_fail (!(dest_channels == 3 && dest_has_alpha));
@@ -1558,7 +1562,7 @@ _pixops_scale (guchar        *dest_buf,
   PixopsLineFunc line_func;
 
 #ifdef USE_MMX
-  gboolean found_mmx = pixops_have_mmx();
+  gboolean found_mmx = _pixops_have_mmx ();
 #endif
 
   g_return_if_fail (!(dest_channels == 3 && dest_has_alpha));

@@ -6,14 +6,14 @@ gcc2_compiled.:
 
 #if !defined(__MINGW32__) && !defined(__CYGWIN__)	
 
-.globl pixops_have_mmx
-	.type	 pixops_have_mmx,@function
-pixops_have_mmx:
+.globl _pixops_have_mmx
+	.type	 _pixops_have_mmx,@function
+_pixops_have_mmx:
 
 #else
 
-.globl _pixops_have_mmx
-_pixops_have_mmx:
+.globl __pixops_have_mmx
+__pixops_have_mmx:
 
 #endif
 	
