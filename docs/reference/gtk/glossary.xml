@@ -153,9 +153,10 @@
     <glossterm>model column</glossterm>
     <glossdef>
       <para>
-        A column in a tree model, holding data of a certain type. The types which
-        can be stored in the columns of a model have to be specified when the model
-        is constructed, see e.g, <link linkend="gtk-list-store-new">gtk_list_store_new()</link>.
+        A column in a tree model, holding data of a certain type. 
+        The types which can be stored in the columns of a model 
+        have to be specified when the model is constructed, see 
+        e.g. <link linkend="gtk-list-store-new">gtk_list_store_new()</link>.
       </para>
       <glossseealso>
 	<glossterm linkend="view-column">view column</glossterm>
@@ -167,17 +168,18 @@
     <glossterm>model-view widget</glossterm>
     <glossdef>
       <para>
-        These widgets follow the well-known model-view pattern, which separates the
-        data (the model) to be displayed from the component which does the actual 
-        visualization (the view). Examples of this pattern in GTK+ are the 
-        <link linkend="GtkTreeView">GtkTreeView</link>/<link linkend="GtkTreeModel">GtkTreeModel</link>
+        These widgets follow the well-known model-view pattern, which separates
+        the data (the model) to be displayed from the component which does the 
+        actual visualization (the view). Examples of this pattern in GTK+ are 
+        the <link linkend="GtkTreeView">GtkTreeView</link>/<link linkend="GtkTreeModel">GtkTreeModel</link>
         and 
         <link linkend="GtkTextView">GtkTextView</link>/<link linkend="GtkTextBuffer">GtkTextBuffer</link>
       </para>
       <para>
-        One important advantage of this pattern is that it is possible to display the
-        same model in multiple views; another one that the separation of the model 
-        allows a great deal of flexibility, as demonstrated by e.g. 
+        One important advantage of this pattern is that it is possible to 
+        display the same model in multiple views; another one that the 
+        separation of the model allows a great deal of flexibility, as 
+        demonstrated by e.g. 
         <link linkend="GtkTreeModelSort">GtkTreeModelSort</link> or 
         <link linkend="GtkTreeModelFilter">GtkTreeModelFilter</link>.
       </para>
@@ -194,7 +196,7 @@
 	<constant>GTK_NO_WINDOW</constant> <link
 	linkend="GtkWidgetFlags">flag</link> set, and can be tested
 	with the <link
-	linkend="gtk-widget-no-window-caps"><function>GTK_WIDGET_NO_WINDOW()</function></link>
+	linkend="gtk-widget-no-window:caps"><function>GTK_WIDGET_NO_WINDOW()</function></link>
 	macro.
       </para>
     </glossdef>
@@ -231,7 +233,7 @@
 	Widgets that don't own the GdkWindow on which they draw are
 	called <glossterm linkend="no-window">no-window
 	widgets</glossterm>.  This can be tested with the <link
-	linkend="gtk-widget-no-window-caps"><function>GTK_WIDGET_NO_WINDOW()</function></link>
+	linkend="gtk-widget-no-window:caps"><function>GTK_WIDGET_NO_WINDOW()</function></link>
 	macro.  Normally, these widgets draw on their parent's
 	GdkWindow.
       </para>
@@ -270,11 +272,11 @@
       <para>
 	GDK inherited the concept of screen from the X window system, 
         which considers a screen to be a rectangular area, on which 
-        applications may place their windows. Each screen has a 
-        <glossterm linkend="rootwindow">root window</glossterm> which
-        defines the area of the screen. Screens under X may have quite
-        dissimilar <glossterm linkend="visual">visuals</glossterm>.
+        applications may place their windows. Screens under X may have 
+        quite dissimilar <glossterm linkend="visual">visuals</glossterm>.
         Each screen can stretch across multiple physical monitors.
+      </para>
+      <para>
         In GDK, screens are represented by 
         <link linkend="GdkScreen">GdkScreen</link> objects.
       </para>
@@ -286,8 +288,8 @@
     <glossdef>
       <para>
         A style encapsulates what GTK+ needs to know in order to draw
-        a widget. Styles can be modified with <link linkend="gtk-Resource-Files">resource 
-        files</link>.
+        a widget. Styles can be modified with 
+        <link linkend="gtk-Resource-Files">resource files</link>.
       </para>
     </glossdef>
   </glossentry>
@@ -298,8 +300,8 @@
       <para>
 	A <glossterm linkend="widget">widget</glossterm> that does not
 	require a <glossterm linkend="parent">parent</glossterm>
-	container.  The only toplevel widget in GTK+ is <link
-	linkend="GtkWindow">GtkWindow</link>.
+	container.  The only toplevel widgets in GTK+ are <link
+	linkend="GtkWindow">GtkWindow</link> and widgets derived from it.
       </para>
       <glossseealso>
 	<glossterm linkend="container">container</glossterm>
@@ -329,7 +331,25 @@
       </glossseealso>
     </glossdef>
   </glossentry>
-
+ 
+  <glossentry id="visual">
+    <glossterm>visual</glossterm>
+    <glossdef>
+      <para>
+        A visual describes how color information is stored in pixels.
+        A <glossterm linkend="screen">screen</glossterm> may support
+        multiple visuals. On modern hardware, the most common visuals
+        are truecolor visuals, which store a fixed number of bits 
+        (typically 8) for the red, green and blue components of a color.
+      </para>
+      <para>
+        On ancient hardware, one may still meet indexed visuals, which 
+        store color information as an index into a color map, or even
+        monochrome visuals. 
+      </para>
+    </glossdef>
+  </glossentry>
+ 
   <glossentry id="widget">
     <glossterm>widget</glossterm>
     <glossdef>
