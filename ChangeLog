@@ -1,3 +1,9 @@
+Sun Sep 29 13:11:13 2002  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtktypeutils.h: use #defines instead of enum for
+	GtkFundamentalType compat, to prevent 64-bit vs. 32-bit
+	confusion (#90400)
+
 2002-09-29  Tor Lillqvist  <tml@iki.fi>
 
 	* configure.in: Instead of forcing -fnative-struct into CFLAGS
