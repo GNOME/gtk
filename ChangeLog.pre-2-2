@@ -1,3 +1,16 @@
+Sun Jan 21 09:58:00 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_scroll_to_point): Make fail
+	when not realized.
+	(gtk_tree_view_scroll_to_cell): Make work when not realized.
+	(gtk_tree_view_realize): add scroll_to support
+	(gtk_tree_view_finalize): add a finalize method.  Populate.
+	(gtk_tree_view_insert_column): ref and sink the column.
+	(gtk_tree_view_append_column): ref and sink the column.
+	(gtk_tree_view_queue_draw_node): New function to handle redrawing
+	individual nodes.  Should make the code much more efficient, if
+	actually used.
+
 2001-01-19  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextlayout.c (gtk_text_layout_get_line_display):
@@ -1106,6 +1119,7 @@ Tue Jan  2 16:23:05 2001  Owen Taylor  <otaylor@redhat.com>
 	Attach the style to the window so that the style it is not
 	leaked when unrealizing the window.
 
+>>>>>>> 1.1626
 2000-12-18  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextview.c (gtk_text_view_delete_from_cursor): do
@@ -1600,6 +1614,7 @@ Mon Dec 11 10:02:26 2000  Owen Taylor  <otaylor@redhat.com>
 	* gtk/gtkcolorsel.h (GTK_COLOR_SELECTION_GET_CLASS): fix typo,
 	reported by Jeff Franks
 
+>>>>>>> 1.1623
 2000-12-08  Alexander Larsson  <alla@lysator.liu.se>
 
 	* gdk/linux-fb/gdkmouse-fb.c (gdk_fb_mouse_ms_open):

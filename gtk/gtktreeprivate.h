@@ -104,6 +104,12 @@ struct _GtkTreeViewPrivate
   gint pressed_button;
   gint press_start_x;
   gint press_start_y;
+
+  /* Scroll-to functionality when unrealized */
+  GtkTreePath *scroll_to_path;
+  GtkTreeViewColumn *scroll_to_column;
+  gfloat scroll_to_row_align;
+  gfloat scroll_to_col_align;
 };
 
 #ifdef __GNUC__
