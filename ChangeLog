@@ -1,3 +1,9 @@
+Fri Apr 18 17:14:33 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkevents.c (gdk_event_copy): Fix for the
+	case when gdk_event_copy() is called on a non-allocated
+	event. (#109716, reported by Rich Burridge)
+
 Fri Apr 18 16:57:44 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkdrawable-x11.c (draw_with_images/pixmaps):
