@@ -439,7 +439,8 @@ update_timeout (gpointer data)
         GError *error;
         
 	done = FALSE;
-        error = FALSE;
+        error = NULL;
+
 	if (!feof (status->imagefile)) {
 		gint nbytes;
                 
@@ -447,7 +448,6 @@ update_timeout (gpointer data)
 			       status->imagefile);
 
 
-                error = NULL;
                 if (!gdk_pixbuf_loader_write (GDK_PIXBUF_LOADER (status->loader), status->buf, nbytes, &error)) {
                         g_warning ("Error writing to loader: %s",
                                    error->message);
@@ -458,7 +458,7 @@ update_timeout (gpointer data)
                         
         } 
 	else 
-	  done = TRUE;
+                done = TRUE;
 	  
 	if (done) {
                 /* ignoring errors, we should not do that. */

@@ -1,3 +1,7 @@
+2003-03-20  Richard Kinder <r_kinder@yahoo.com>
+        * demos/testpixbuf.c (update_timeout): set error to NULL, not FALSE.
+        Fixes bug #108778.
+
 2003-03-20  Guntupalli Karunakar <karunakar@freedomink.org>
 
 	* configure.in: Added "ml" in ALL_LINGUAS
