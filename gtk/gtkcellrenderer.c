@@ -326,7 +326,7 @@ gtk_cell_renderer_render (GtkCellRenderer     *cell,
  *
  * Return value: %TRUE if the event was consumed/handled
  **/
-gint
+gboolean
 gtk_cell_renderer_event (GtkCellRenderer     *cell,
 			 GdkEvent            *event,
 			 GtkWidget           *widget,

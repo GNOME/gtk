@@ -605,7 +605,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                    G_SIGNAL_RUN_LAST,
                    GTK_SIGNAL_OFFSET (GtkTextTagClass, event),
 		   NULL, NULL,
-		   gtk_marshal_INT__OBJECT_BOXED_BOXED,
+		   gtk_marshal_BOOLEAN__OBJECT_BOXED_BOXED,
                    GTK_TYPE_INT,
                    3,
                    G_TYPE_OBJECT,
@@ -1616,7 +1616,7 @@ gtk_text_tag_set_priority (GtkTextTag *tag,
  * 
  * Return value: result of signal emission (whether the event was handled)
  **/
-gint
+gboolean
 gtk_text_tag_event (GtkTextTag        *tag,
                     GObject           *event_object,
                     GdkEvent          *event,

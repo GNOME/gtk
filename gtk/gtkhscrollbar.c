@@ -38,25 +38,25 @@ enum {
   ARG_ADJUSTMENT
 };
 
-static void gtk_hscrollbar_class_init       (GtkHScrollbarClass *klass);
-static void gtk_hscrollbar_init             (GtkHScrollbar      *hscrollbar);
-static void gtk_hscrollbar_set_arg          (GtkObject          *object,
-                                             GtkArg             *arg,
-                                             guint               arg_id);
-static void gtk_hscrollbar_get_arg          (GtkObject          *object,
-                                             GtkArg             *arg,
-                                             guint               arg_id);
-static void gtk_hscrollbar_realize          (GtkWidget          *widget);
-static void gtk_hscrollbar_size_allocate    (GtkWidget          *widget,
-                                             GtkAllocation      *allocation);
-static void gtk_hscrollbar_draw_step_forw   (GtkRange           *range);
-static void gtk_hscrollbar_draw_step_back   (GtkRange           *range);
-static void gtk_hscrollbar_slider_update    (GtkRange           *range);
-static void gtk_hscrollbar_calc_slider_size (GtkHScrollbar      *hscrollbar);
-static gint gtk_hscrollbar_trough_keys      (GtkRange *range,
-                                             GdkEventKey *key,
-                                             GtkScrollType *scroll,
-                                             GtkTroughType *pos);
+static void     gtk_hscrollbar_class_init       (GtkHScrollbarClass *klass);
+static void     gtk_hscrollbar_init             (GtkHScrollbar      *hscrollbar);
+static void     gtk_hscrollbar_set_arg          (GtkObject          *object,
+						 GtkArg             *arg,
+						 guint               arg_id);
+static void     gtk_hscrollbar_get_arg          (GtkObject          *object,
+						 GtkArg             *arg,
+						 guint               arg_id);
+static void     gtk_hscrollbar_realize          (GtkWidget          *widget);
+static void     gtk_hscrollbar_size_allocate    (GtkWidget          *widget,
+						 GtkAllocation      *allocation);
+static void     gtk_hscrollbar_draw_step_forw   (GtkRange           *range);
+static void     gtk_hscrollbar_draw_step_back   (GtkRange           *range);
+static void     gtk_hscrollbar_slider_update    (GtkRange           *range);
+static void     gtk_hscrollbar_calc_slider_size (GtkHScrollbar      *hscrollbar);
+static gboolean gtk_hscrollbar_trough_keys      (GtkRange           *range,
+						 GdkEventKey        *key,
+						 GtkScrollType      *scroll,
+						 GtkTroughType      *pos);
 
 
 GtkType
@@ -425,7 +425,7 @@ gtk_hscrollbar_calc_slider_size (GtkHScrollbar *hscrollbar)
     }
 }
 
-static gint
+static gboolean
 gtk_hscrollbar_trough_keys(GtkRange *range,
                            GdkEventKey *key,
                            GtkScrollType *scroll,

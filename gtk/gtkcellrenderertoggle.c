@@ -46,7 +46,7 @@ static void gtk_cell_renderer_toggle_render     (GtkCellRenderer            *cel
 						 GdkRectangle               *cell_area,
 						 GdkRectangle               *expose_area,
 						 guint                       flags);
-static gint gtk_cell_renderer_toggle_event      (GtkCellRenderer            *cell,
+static gboolean gtk_cell_renderer_toggle_event  (GtkCellRenderer            *cell,
 						 GdkEvent                   *event,
 						 GtkWidget                  *widget,
 						 gchar                      *path,

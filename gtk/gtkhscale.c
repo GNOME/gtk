@@ -37,36 +37,37 @@ enum {
   ARG_ADJUSTMENT
 };
 
-static void gtk_hscale_class_init    (GtkHScaleClass *klass);
-static void gtk_hscale_init          (GtkHScale      *hscale);
-static void gtk_hscale_set_arg       (GtkObject      *object,
-                                      GtkArg         *arg,
-                                      guint           arg_id);
-static void gtk_hscale_get_arg       (GtkObject      *object,
-                                      GtkArg         *arg,
-                                      guint           arg_id);
-static void gtk_hscale_realize       (GtkWidget      *widget);
-static void gtk_hscale_size_request  (GtkWidget      *widget,
-                                      GtkRequisition *requisition);
-static void gtk_hscale_size_allocate (GtkWidget      *widget,
-                                      GtkAllocation  *allocation);
-static void gtk_hscale_pos_trough    (GtkHScale      *hscale,
-                                      gint           *x,
-                                      gint           *y,
-                                      gint           *w,
-                                      gint           *h);
-static void gtk_hscale_pos_background (GtkHScale     *hscale,
-                                       gint          *x,
-                                       gint          *y,
-                                       gint          *w,
-                                       gint          *h);
-static void gtk_hscale_draw_slider   (GtkRange       *range);
-static void gtk_hscale_draw_value    (GtkScale       *scale);
-static gint gtk_hscale_trough_keys   (GtkRange *range,
-                                      GdkEventKey *key,
-                                      GtkScrollType *scroll,
-                                      GtkTroughType *pos);
-static void gtk_hscale_clear_background (GtkRange    *range);
+static void     gtk_hscale_class_init       (GtkHScaleClass *klass);
+static void     gtk_hscale_init             (GtkHScale      *hscale);
+static void     gtk_hscale_set_arg          (GtkObject      *object,
+					     GtkArg         *arg,
+					     guint           arg_id);
+static void     gtk_hscale_get_arg          (GtkObject      *object,
+					     GtkArg         *arg,
+					     guint           arg_id);
+static void     gtk_hscale_realize          (GtkWidget      *widget);
+static void     gtk_hscale_size_request     (GtkWidget      *widget,
+					     GtkRequisition *requisition);
+static void     gtk_hscale_size_allocate    (GtkWidget      *widget,
+					     GtkAllocation  *allocation);
+static void     gtk_hscale_pos_trough       (GtkHScale      *hscale,
+					     gint           *x,
+					     gint           *y,
+					     gint           *w,
+					     gint           *h);
+static void     gtk_hscale_pos_background   (GtkHScale      *hscale,
+					     gint           *x,
+					     gint           *y,
+					     gint           *w,
+					     gint           *h);
+static void     gtk_hscale_draw_slider      (GtkRange       *range);
+static void     gtk_hscale_draw_value       (GtkScale       *scale);
+static gboolean gtk_hscale_trough_keys      (GtkRange       *range,
+					     GdkEventKey    *key,
+					     GtkScrollType  *scroll,
+					     GtkTroughType  *pos);
+static void     gtk_hscale_clear_background (GtkRange       *range);
+
 
 GtkType
 gtk_hscale_get_type (void)
@@ -540,7 +541,7 @@ gtk_hscale_draw_value (GtkScale *scale)
     }
 }
 
-static gint
+static gboolean
 gtk_hscale_trough_keys (GtkRange *range,
 			GdkEventKey *key,
 			GtkScrollType *scroll,

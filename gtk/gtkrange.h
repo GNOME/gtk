@@ -97,23 +97,23 @@ struct _GtkRangeClass
 
   void (* draw_background)  (GtkRange *range);
   void (* clear_background) (GtkRange *range);
-  void (* draw_trough)     (GtkRange *range);
-  void (* draw_slider)     (GtkRange *range);
-  void (* draw_step_forw)  (GtkRange *range);
-  void (* draw_step_back)  (GtkRange *range);
-  void (* slider_update)   (GtkRange *range);
-  gint (* trough_click)    (GtkRange *range,
-			    gint      x,
-			    gint      y,
-			    gdouble  *jump_perc);
-  gint (* trough_keys)     (GtkRange *range,
-			    GdkEventKey *key,
-			    GtkScrollType *scroll,
-			    GtkTroughType *trough);
-  void (* motion)          (GtkRange *range,
-			    gint      xdelta,
-			    gint      ydelta);
-  gint (* timer)           (GtkRange *range);
+  void (* draw_trough)      (GtkRange *range);
+  void (* draw_slider)      (GtkRange *range);
+  void (* draw_step_forw)   (GtkRange *range);
+  void (* draw_step_back)   (GtkRange *range);
+  void (* slider_update)    (GtkRange *range);
+  gboolean (* trough_click) (GtkRange *range,
+			     gint      x,
+			     gint      y,
+			     gdouble  *jump_perc);
+  gboolean (* trough_keys)  (GtkRange      *range,
+			     GdkEventKey   *key,
+			     GtkScrollType *scroll,
+			     GtkTroughType *trough);
+  void (* motion)           (GtkRange *range,
+			     gint      xdelta,
+			     gint      ydelta);
+  gboolean (* timer)        (GtkRange *range);
 };
 
 
@@ -135,18 +135,18 @@ void           _gtk_range_draw_slider            (GtkRange      *range);
 void           _gtk_range_draw_step_forw         (GtkRange      *range);
 void           _gtk_range_draw_step_back         (GtkRange      *range);
 void           _gtk_range_slider_update          (GtkRange      *range);
-gint           _gtk_range_trough_click           (GtkRange      *range,
+gboolean       _gtk_range_trough_click           (GtkRange      *range,
                                                   gint           x,
                                                   gint           y,
                                                   gdouble       *jump_perc);
 
 void           _gtk_range_default_hslider_update (GtkRange      *range);
 void           _gtk_range_default_vslider_update (GtkRange      *range);
-gint           _gtk_range_default_htrough_click  (GtkRange      *range,
+gboolean       _gtk_range_default_htrough_click  (GtkRange      *range,
                                                   gint           x,
                                                   gint           y,
                                                   gdouble       *jump_perc);
-gint           _gtk_range_default_vtrough_click  (GtkRange      *range,
+gboolean       _gtk_range_default_vtrough_click  (GtkRange      *range,
                                                   gint           x,
                                                   gint           y,
                                                   gdouble       *jump_perc);

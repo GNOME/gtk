@@ -157,14 +157,15 @@ static void gtk_widget_real_size_request	 (GtkWidget	    *widget,
 						  GtkRequisition    *requisition);
 static void gtk_widget_real_size_allocate	 (GtkWidget	    *widget,
 						  GtkAllocation	    *allocation);
-static gint gtk_widget_real_key_press_event      (GtkWidget         *widget,
-						  GdkEventKey       *event);
-static gint gtk_widget_real_key_release_event    (GtkWidget         *widget,
-						  GdkEventKey       *event);
-static gint gtk_widget_real_focus_in_event       (GtkWidget         *widget,
-                                                  GdkEventFocus     *event);
-static gint gtk_widget_real_focus_out_event      (GtkWidget         *widget,
-                                                  GdkEventFocus     *event);
+static gboolean gtk_widget_real_key_press_event   (GtkWidget     *widget,
+						   GdkEventKey   *event);
+static gboolean gtk_widget_real_key_release_event (GtkWidget     *widget,
+						   GdkEventKey   *event);
+static gboolean gtk_widget_real_focus_in_event    (GtkWidget     *widget,
+						   GdkEventFocus *event);
+static gboolean gtk_widget_real_focus_out_event   (GtkWidget     *widget,
+						   GdkEventFocus *event);
+
 static void gtk_widget_style_set		 (GtkWidget	    *widget,
 						  GtkStyle          *previous_style);
 static void gtk_widget_direction_changed	 (GtkWidget	    *widget,
@@ -2240,7 +2241,7 @@ gtk_widget_real_activate_mnemonic (GtkWidget *widget,
   return TRUE;
 }
 
-static gint
+static gboolean
 gtk_widget_real_key_press_event (GtkWidget         *widget,
 				 GdkEventKey       *event)
 {
@@ -2258,7 +2259,7 @@ gtk_widget_real_key_press_event (GtkWidget         *widget,
   return handled;
 }
 
-static gint
+static gboolean
 gtk_widget_real_key_release_event (GtkWidget         *widget,
 				   GdkEventKey       *event)
 {
@@ -2276,7 +2277,7 @@ gtk_widget_real_key_release_event (GtkWidget         *widget,
   return handled;
 }
 
-static gint
+static gboolean
 gtk_widget_real_focus_in_event (GtkWidget     *widget,
                                 GdkEventFocus *event)
 {
@@ -2286,7 +2287,7 @@ gtk_widget_real_focus_in_event (GtkWidget     *widget,
   return FALSE;
 }
 
-static gint
+static gboolean
 gtk_widget_real_focus_out_event (GtkWidget     *widget,
                                  GdkEventFocus *event)
 {

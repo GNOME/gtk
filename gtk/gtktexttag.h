@@ -89,21 +89,22 @@ struct _GtkTextTag
   guint pad3 : 1;
 };
 
-struct _GtkTextTagClass {
+struct _GtkTextTagClass 
+{
   GObjectClass parent_class;
 
-  gint (* event) (GtkTextTag *tag,
-                  GObject *event_object,           /* widget, canvas item, whatever */
-                  GdkEvent *event,                 /* the event itself */
-                  const GtkTextIter *iter);        /* location of event in buffer */
+  gboolean (* event) (GtkTextTag        *tag,
+                      GObject           *event_object, /* widget, canvas item, whatever */
+                      GdkEvent          *event,        /* the event itself */
+                      const GtkTextIter *iter);        /* location of event in buffer */
 };
 
-GType      gtk_text_tag_get_type     (void) G_GNUC_CONST;
+GType        gtk_text_tag_get_type     (void) G_GNUC_CONST;
 GtkTextTag  *gtk_text_tag_new          (const gchar       *name);
 gint         gtk_text_tag_get_priority (GtkTextTag        *tag);
 void         gtk_text_tag_set_priority (GtkTextTag        *tag,
                                         gint               priority);
-gint         gtk_text_tag_event        (GtkTextTag        *tag,
+gboolean     gtk_text_tag_event        (GtkTextTag        *tag,
                                         GObject           *event_object,
                                         GdkEvent          *event,
                                         const GtkTextIter *iter);

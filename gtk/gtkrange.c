@@ -391,7 +391,7 @@ _gtk_range_slider_update (GtkRange *range)
     (* RANGE_CLASS (range)->slider_update) (range);
 }
 
-gint
+gboolean
 _gtk_range_trough_click (GtkRange  *range,
                          gint       x,
                          gint       y,
@@ -533,7 +533,7 @@ _gtk_range_default_vslider_update (GtkRange *range)
     }
 }
 
-gint
+gboolean
 _gtk_range_default_htrough_click (GtkRange  *range,
                                   gint       x,
                                   gint       y,
@@ -582,7 +582,7 @@ _gtk_range_default_htrough_click (GtkRange  *range,
   return GTK_TROUGH_NONE;
 }
 
-gint
+gboolean
 _gtk_range_default_vtrough_click (GtkRange  *range,
                                   gint       x,
                                   gint       y,

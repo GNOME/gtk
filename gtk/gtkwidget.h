@@ -260,7 +260,7 @@ struct _GtkWidgetClass
 				GtkTextDirection  previous_direction);
   
   /* accelerators */
-  gint (* add_accelerator)     (GtkWidget      *widget,
+  void (* add_accelerator)     (GtkWidget      *widget,
 				guint           accel_signal_id,
 				GtkAccelGroup  *accel_group,
 				guint           accel_key,
@@ -279,60 +279,60 @@ struct _GtkWidgetClass
   void (* grab_focus)          (GtkWidget      *widget);
   
   /* events */
-  gint (* event)		   (GtkWidget	       *widget,
-				    GdkEvent	       *event);
-  gint (* button_press_event)	   (GtkWidget	       *widget,
-				    GdkEventButton     *event);
-  gint (* button_release_event)	   (GtkWidget	       *widget,
-				    GdkEventButton     *event);
-  gint (* scroll_event)            (GtkWidget          *widget,
-				    GdkEventScroll     *event);
-  gint (* motion_notify_event)	   (GtkWidget	       *widget,
-				    GdkEventMotion     *event);
-  gint (* delete_event)		   (GtkWidget	       *widget,
-				    GdkEventAny	       *event);
-  gint (* destroy_event)	   (GtkWidget	       *widget,
-				    GdkEventAny	       *event);
-  gint (* expose_event)		   (GtkWidget	       *widget,
-				    GdkEventExpose     *event);
-  gint (* key_press_event)	   (GtkWidget	       *widget,
-				    GdkEventKey	       *event);
-  gint (* key_release_event)	   (GtkWidget	       *widget,
-				    GdkEventKey	       *event);
-  gint (* enter_notify_event)	   (GtkWidget	       *widget,
-				    GdkEventCrossing   *event);
-  gint (* leave_notify_event)	   (GtkWidget	       *widget,
-				    GdkEventCrossing   *event);
-  gint (* configure_event)	   (GtkWidget	       *widget,
-				    GdkEventConfigure  *event);
-  gint (* focus_in_event)	   (GtkWidget	       *widget,
-				    GdkEventFocus      *event);
-  gint (* focus_out_event)	   (GtkWidget	       *widget,
-				    GdkEventFocus      *event);
-  gint (* map_event)		   (GtkWidget	       *widget,
-				    GdkEventAny	       *event);
-  gint (* unmap_event)		   (GtkWidget	       *widget,
-				    GdkEventAny	       *event);
-  gint (* property_notify_event)   (GtkWidget	       *widget,
-				    GdkEventProperty   *event);
-  gint (* selection_clear_event)   (GtkWidget	       *widget,
-				    GdkEventSelection  *event);
-  gint (* selection_request_event) (GtkWidget	       *widget,
-				    GdkEventSelection  *event);
-  gint (* selection_notify_event)  (GtkWidget	       *widget,
-				    GdkEventSelection  *event);
-  gint (* proximity_in_event)	   (GtkWidget	       *widget,
-				    GdkEventProximity  *event);
-  gint (* proximity_out_event)	   (GtkWidget	       *widget,
-				    GdkEventProximity  *event);
-  gint (* visibility_notify_event)  (GtkWidget	       *widget,
-				     GdkEventVisibility *event);
-  gint (* client_event)		   (GtkWidget	       *widget,
-				    GdkEventClient     *event);
-  gint (* no_expose_event)	   (GtkWidget	       *widget,
-				    GdkEventAny	       *event);
-  gint (* window_state_event)      (GtkWidget          *widget,
-                                    GdkEventWindowState *event);
+  gboolean (* event)			(GtkWidget	     *widget,
+					 GdkEvent	     *event);
+  gboolean (* button_press_event)	(GtkWidget	     *widget,
+					 GdkEventButton      *event);
+  gboolean (* button_release_event)	(GtkWidget	     *widget,
+					 GdkEventButton      *event);
+  gboolean (* scroll_event)		(GtkWidget           *widget,
+					 GdkEventScroll      *event);
+  gboolean (* motion_notify_event)	(GtkWidget	     *widget,
+					 GdkEventMotion      *event);
+  gboolean (* delete_event)		(GtkWidget	     *widget,
+					 GdkEventAny	     *event);
+  gboolean (* destroy_event)		(GtkWidget	     *widget,
+					 GdkEventAny	     *event);
+  gboolean (* expose_event)		(GtkWidget	     *widget,
+					 GdkEventExpose      *event);
+  gboolean (* key_press_event)		(GtkWidget	     *widget,
+					 GdkEventKey	     *event);
+  gboolean (* key_release_event)	(GtkWidget	     *widget,
+					 GdkEventKey	     *event);
+  gboolean (* enter_notify_event)	(GtkWidget	     *widget,
+					 GdkEventCrossing    *event);
+  gboolean (* leave_notify_event)	(GtkWidget	     *widget,
+					 GdkEventCrossing    *event);
+  gboolean (* configure_event)		(GtkWidget	     *widget,
+					 GdkEventConfigure   *event);
+  gboolean (* focus_in_event)		(GtkWidget	     *widget,
+					 GdkEventFocus       *event);
+  gboolean (* focus_out_event)		(GtkWidget	     *widget,
+					 GdkEventFocus       *event);
+  gboolean (* map_event)		(GtkWidget	     *widget,
+					 GdkEventAny	     *event);
+  gboolean (* unmap_event)		(GtkWidget	     *widget,
+					 GdkEventAny	     *event);
+  gboolean (* property_notify_event)	(GtkWidget	     *widget,
+					 GdkEventProperty    *event);
+  gboolean (* selection_clear_event)	(GtkWidget	     *widget,
+					 GdkEventSelection   *event);
+  gboolean (* selection_request_event)	(GtkWidget	     *widget,
+					 GdkEventSelection   *event);
+  gboolean (* selection_notify_event)	(GtkWidget	     *widget,
+					 GdkEventSelection   *event);
+  gboolean (* proximity_in_event)	(GtkWidget	     *widget,
+					 GdkEventProximity   *event);
+  gboolean (* proximity_out_event)	(GtkWidget	     *widget,
+					 GdkEventProximity   *event);
+  gboolean (* visibility_notify_event)	(GtkWidget	     *widget,
+					 GdkEventVisibility  *event);
+  gboolean (* client_event)		(GtkWidget	     *widget,
+					 GdkEventClient	     *event);
+  gboolean (* no_expose_event)		(GtkWidget	     *widget,
+					 GdkEventAny	     *event);
+  gboolean (* window_state_event)	(GtkWidget	     *widget,
+					 GdkEventWindowState *event);
   
   /* selection */
   void (* selection_get)           (GtkWidget          *widget,
