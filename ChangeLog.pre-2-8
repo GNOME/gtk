@@ -1,5 +1,13 @@
 2005-04-05  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkicontheme.c: Store icon caches along with the
+	mtimes of the toplevel directories. The previous
+	mechanism of a hashtable-per-theme caused duplicate icon
+	caches for the same toplevel directory to be created.  
+	(#170030)
+
+2005-04-05  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkaboutdialog.c (gtk_about_dialog_init): Protect
 	the license and credits buttons from being affected by 
 	gtk_widget_show_all().  (#172724)
