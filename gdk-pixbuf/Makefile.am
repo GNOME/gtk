@@ -48,6 +48,7 @@ libgdk_pixbufincludedir = $(includedir)/gdk-pixbuf
 libgdk_pixbuf_la_SOURCES = 	\
 	gdk-pixbuf.c		\
 	gdk-pixbuf-data.c	\
+	gdk-pixbuf-drawable.c   \
 	gdk-pixbuf-io.c		\
 	gdk-pixbuf-loader.c	\
 	gdk-pixbuf-render.c	\
@@ -57,6 +58,7 @@ libgdk_pixbuf_la_LDFLAGS = -version-info 1:0:0
 
 libgdk_pixbufinclude_HEADERS =	\
 	gdk-pixbuf.h		\
+	gdk-pixbuf-drawable.h	\
 	gdk-pixbuf-loader.h	\
 	gnome-canvas-pixbuf.h
 
