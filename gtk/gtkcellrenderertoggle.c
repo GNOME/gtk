@@ -103,7 +103,7 @@ gtk_cell_renderer_toggle_init (GtkCellRendererToggle *celltoggle)
 {
   celltoggle->active = FALSE;
   celltoggle->radio = FALSE;
-  GTK_CELL_RENDERER (celltoggle)->can_activate = TRUE;
+  GTK_CELL_RENDERER (celltoggle)->mode = GTK_CELL_RENDERER_MODE_ACTIVATABLE;
   GTK_CELL_RENDERER (celltoggle)->xpad = 2;
   GTK_CELL_RENDERER (celltoggle)->ypad = 2;
 }
@@ -289,7 +289,7 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer *cell,
 	  state = GTK_STATE_ACTIVE;
 	}
     }
-  else if (! cell->can_activate)
+  else if (cell->mode == GTK_CELL_RENDERER_MODE_INERT)
     {
       state = GTK_STATE_INSENSITIVE;
     }

@@ -35,6 +35,13 @@ typedef enum
   GTK_CELL_RENDERER_SORTED      = 1 << 3
 } GtkCellRendererState;
 
+typedef enum
+{
+  GTK_CELL_RENDERER_MODE_INERT,
+  GTK_CELL_RENDERER_MODE_ACTIVATABLE,
+  GTK_CELL_RENDERER_MODE_EDITABLE,
+} GtkCellRendererMode;
+
 #define GTK_TYPE_CELL_RENDERER		  (gtk_cell_renderer_get_type ())
 #define GTK_CELL_RENDERER(obj)		  (GTK_CHECK_CAST ((obj), GTK_TYPE_CELL_RENDERER, GtkCellRenderer))
 #define GTK_CELL_RENDERER_CLASS(klass)	  (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_CELL_RENDERER, GtkCellRendererClass))
@@ -58,8 +65,7 @@ struct _GtkCellRenderer
   guint16 xpad;
   guint16 ypad;
 
-  guint can_activate : 1;
-  guint can_edit : 1;
+  guint mode : 2;
   guint visible : 1;
   guint is_expander : 1;
   guint is_expanded : 1;

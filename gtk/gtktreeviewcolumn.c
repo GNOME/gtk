@@ -2238,16 +2238,15 @@ _gtk_tree_view_column_cell_event (GtkTreeViewColumn  *tree_column,
 				  GdkRectangle       *cell_area,
 				  guint               flags)
 {
-  gboolean visible, can_activate, can_edit;
+  gboolean visible, mode;
 
   g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column), FALSE);
 
   g_object_get (G_OBJECT (((GtkTreeViewColumnCellInfo *) tree_column->cell_list->data)->cell),
 		"visible", &visible,
-		"can_activate", &can_activate,
-		"can_edit", &can_edit,
+		"mode", &mode,
 		NULL);
-  if (visible && can_activate)
+  if (visible && mode == GTK_CELL_RENDERER_MODE_ACTIVATABLE)
     {
       if (gtk_cell_renderer_activate (((GtkTreeViewColumnCellInfo *) tree_column->cell_list->data)->cell,
 				      event,
@@ -2258,7 +2257,7 @@ _gtk_tree_view_column_cell_event (GtkTreeViewColumn  *tree_column,
 				      flags))
 	return TRUE;
     }
-  else if (visible && can_edit)
+  else if (visible && mode == GTK_CELL_RENDERER_MODE_EDITABLE)
     {
       *editable_widget = gtk_cell_renderer_start_editing (((GtkTreeViewColumnCellInfo *) tree_column->cell_list->data)->cell,
 							  event,

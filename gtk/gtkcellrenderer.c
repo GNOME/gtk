@@ -34,8 +34,7 @@ static void gtk_cell_renderer_set_property  (GObject              *object,
 
 enum {
   PROP_ZERO,
-  PROP_CAN_ACTIVATE,
-  PROP_CAN_EDIT,
+  PROP_MODE,
   PROP_VISIBLE,
   PROP_XALIGN,
   PROP_YALIGN,
@@ -77,8 +76,7 @@ gtk_cell_renderer_get_type (void)
 static void
 gtk_cell_renderer_init (GtkCellRenderer *cell)
 {
-  cell->can_activate = FALSE;
-  cell->can_edit = FALSE;
+  cell->mode = GTK_CELL_RENDERER_MODE_INERT;
   cell->visible = TRUE;
   cell->width = -1;
   cell->height = -1;
@@ -100,23 +98,15 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
   class->get_size = NULL;
 
   g_object_class_install_property (object_class,
-				   PROP_CAN_ACTIVATE,
-				   g_param_spec_boolean ("can_activate",
-							 _("can_activate"),
-							 _("Cell can get activate events."),
-							 FALSE,
-							 G_PARAM_READABLE |
-							 G_PARAM_WRITABLE));
+				   PROP_MODE,
+				   g_param_spec_enum ("mode",
+						      _("mode"),
+						      _("Editable mode of the CellRenderer"),
+						      GTK_TYPE_CELL_RENDERER_MODE,
+						      GTK_CELL_RENDERER_MODE_INERT,
+						      G_PARAM_READABLE |
+						      G_PARAM_WRITABLE));
 
-  g_object_class_install_property (object_class,
-				   PROP_CAN_EDIT,
-				   g_param_spec_boolean ("can_edit",
-							 _("can_edit"),
-							 _("Cell supports CellEditable interface."),
-							 FALSE,
-							 G_PARAM_READABLE |
-							 G_PARAM_WRITABLE));
-  
   g_object_class_install_property (object_class,
 				   PROP_VISIBLE,
 				   g_param_spec_boolean ("visible",
@@ -222,11 +212,8 @@ gtk_cell_renderer_get_property (GObject     *object,
 
   switch (param_id)
     {
-    case PROP_CAN_ACTIVATE:
-      g_value_set_boolean (value, cell->can_activate);
-      break;
-    case PROP_CAN_EDIT:
-      g_value_set_boolean (value, cell->can_edit);
+    case PROP_MODE:
+      g_value_set_enum (value, cell->mode);
       break;
     case PROP_VISIBLE:
       g_value_set_boolean (value, cell->visible);
@@ -272,25 +259,9 @@ gtk_cell_renderer_set_property (GObject      *object,
 
   switch (param_id)
     {
-    case PROP_CAN_ACTIVATE:
-      cell->can_activate = g_value_get_boolean (value);
-      g_object_notify (object, "can_activate");
-      /* can_activate and can_edit are mutually exclusive */
-      if (cell->can_activate && cell->can_edit)
-	{
-	  cell->can_edit = FALSE;
-	  g_object_notify (object, "can_edit");
-	}
-      break;
-    case PROP_CAN_EDIT:
-      cell->can_edit = g_value_get_boolean (value);
-      g_object_notify (object, "can_edit");
-      /* can_activate and can_edit are mutually exclusive */
-      if (cell->can_activate && cell->can_edit)
-	{
-	  cell->can_activate = FALSE;
-	  g_object_notify (object, "can_activate");
-	}
+    case PROP_MODE:
+      cell->mode = g_value_get_enum (value);
+      g_object_notify (object, "mode");
       break;
     case PROP_VISIBLE:
       cell->visible = g_value_get_boolean (value);
@@ -457,7 +428,7 @@ gtk_cell_renderer_activate (GtkCellRenderer      *cell,
 {
   g_return_val_if_fail (GTK_IS_CELL_RENDERER (cell), FALSE);
 
-  if (! cell->can_activate)
+  if (cell->mode != GTK_CELL_RENDERER_MODE_ACTIVATABLE)
     return FALSE;
 
   if (GTK_CELL_RENDERER_GET_CLASS (cell)->activate == NULL)
@@ -499,7 +470,7 @@ gtk_cell_renderer_start_editing (GtkCellRenderer      *cell,
 {
   g_return_val_if_fail (GTK_IS_CELL_RENDERER (cell), NULL);
 
-  if (! cell->can_edit)
+  if (cell->mode != GTK_CELL_RENDERER_MODE_EDITABLE)
     return NULL;
 
   if (GTK_CELL_RENDERER_GET_CLASS (cell)->start_editing == NULL)
