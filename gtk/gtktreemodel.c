@@ -1146,6 +1146,10 @@ gtk_tree_model_foreach (GtkTreeModel            *model,
  * GtkTreeRowReference
  */
 
+static void gtk_tree_row_reference_unref_path (GtkTreePath  *path,
+					       GtkTreeModel *model,
+					       gboolean      free_last);
+
 #define ROW_REF_DATA_STRING "gtk-tree-row-refs"
 
 struct _GtkTreeRowReference
@@ -1256,10 +1260,6 @@ gtk_tree_row_ref_deleted_callback (GObject     *object,
    * deletion with the old path of the just-deleted row. Which means
    * that the deleted path is the same now-defunct "coordinate system"
    * as the path saved in the reference, which is what we want to fix.
-   *
-   * Note that this is different from the situation in "inserted," so
-   * while you might think you can cut-and-paste between these
-   * functions, it's not going to work. ;-)
    */
 
   tmp_list = refs->list;
@@ -1276,6 +1276,7 @@ gtk_tree_row_ref_deleted_callback (GObject     *object,
 	    }
 	  else if (gtk_tree_path_compare (path, reference->path) == 0)
 	    {
+	      gtk_tree_row_reference_unref_path (reference->path, reference->model, FALSE);
 	      gtk_tree_path_free (reference->path);
 	      reference->path = NULL;
 	    }
@@ -1353,6 +1354,42 @@ connect_ref_callbacks (GtkTreeModel *model)
 		    model);
 }
 
+
+/* We do this recursively so that we can unref children nodes before their parent */
+static void
+gtk_tree_row_reference_unref_path_helper (GtkTreePath  *path,
+					  GtkTreeModel *model,
+					  GtkTreeIter  *parent_iter,
+					  gint          depth,
+					  gboolean      free_last)
+{
+  GtkTreeIter iter;
+
+  if (free_last == FALSE && path->depth - 1 == depth)
+    return;
+  if (path->depth == depth)
+    return;
+
+  gtk_tree_model_iter_nth_child (model, &iter, NULL, path->indices[depth]);
+  gtk_tree_row_reference_unref_path_helper (path, model, &iter, depth + 1, free_last);
+  gtk_tree_model_unref_node (model, &iter);
+}
+
+static void
+gtk_tree_row_reference_unref_path (GtkTreePath  *path,
+				   GtkTreeModel *model,
+				   gboolean      free_last)
+{
+  GtkTreeIter iter;
+
+  if (free_last == FALSE && path->depth == 1)
+    return;
+      
+  gtk_tree_model_iter_nth_child (model, &iter, NULL, path->indices[0]);
+  gtk_tree_row_reference_unref_path_helper (path, model, &iter, 1, free_last);
+  gtk_tree_model_unref_node (model, &iter);
+}
+
 static void
 disconnect_ref_callbacks (GtkTreeModel *model)
 {
@@ -1373,6 +1410,18 @@ disconnect_ref_callbacks (GtkTreeModel *model)
 					NULL);
 }
 
+/**
+ * gtk_tree_row_reference_new:
+ * @model: A #GtkTreeModel
+ * @path: A valid #GtkTreePath
+ * 
+ * Creates a row reference based on @path.  This reference will keep pointing to
+ * the node pointed to by @path, so long as it exists.  It listens to all
+ * signals on model, and updates it's path appropriately.  If @path isn't a
+ * valid path in @model, then %NULL is returned.
+ * 
+ * Return value: A newly allocated #GtkTreeRowReference, or %NULL
+ **/
 GtkTreeRowReference *
 gtk_tree_row_reference_new (GtkTreeModel *model,
                             GtkTreePath  *path)
@@ -1390,11 +1439,31 @@ gtk_tree_row_reference_new_proxy (GObject      *proxy,
 {
   GtkTreeRowReference *reference;
   RowRefList *refs;
+  GtkTreeIter parent_iter;
+  gint i;
 
   g_return_val_if_fail (G_IS_OBJECT (proxy), NULL);
   g_return_val_if_fail (GTK_IS_TREE_MODEL (model), NULL);
   g_return_val_if_fail (path != NULL, NULL);
+  g_return_val_if_fail (path->depth > 0, NULL);
 
+  /* check that the path is valid */
+  if (gtk_tree_model_get_iter (model, &parent_iter, path) == FALSE)
+    return NULL;
+
+  /* Now we want to ref every node */
+  gtk_tree_model_iter_nth_child (model, &parent_iter, NULL, path->indices[0]);
+  gtk_tree_model_ref_node (model, &parent_iter);
+
+  for (i = 1; i < path->depth; i++)
+    {
+      GtkTreeIter iter;
+      gtk_tree_model_iter_nth_child (model, &iter, &parent_iter, path->indices[i]);
+      gtk_tree_model_ref_node (model, &iter);
+      parent_iter = iter;
+    }
+
+  /* Make ther row reference */
   reference = g_new (GtkTreeRowReference, 1);
 
   g_object_ref (proxy);
@@ -1499,7 +1568,10 @@ gtk_tree_row_reference_free (GtkTreeRowReference *reference)
   g_object_unref (reference->model);
 
   if (reference->path)
-    gtk_tree_path_free (reference->path);
+    {
+      gtk_tree_row_reference_unref_path (reference->path, reference->model, TRUE);
+      gtk_tree_path_free (reference->path);
+    }
 
   g_free (reference);
 }

@@ -632,7 +632,7 @@ gtk_tree_store_iter_has_child (GtkTreeModel *tree_model,
 			       GtkTreeIter  *iter)
 {
   g_return_val_if_fail (GTK_IS_TREE_STORE (tree_model), FALSE);
-  g_return_val_if_fail (iter != NULL, FALSE);
+  g_return_val_if_fail (iter->stamp == GTK_TREE_STORE (tree_model)->stamp, FALSE);
   g_return_val_if_fail (iter->user_data != NULL, FALSE);
 
   return G_NODE (iter->user_data)->children != NULL;

@@ -1,3 +1,15 @@
+Fri Oct  5 20:50:00 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreestore.c (gtk_tree_store_iter_has_child): improve
+	warning.
+
+	* gtk/gtktreemodel.c (gtk_tree_row_reference_new_proxy): ref and
+	unref nodes, #okay61676
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_sort): we listen
+	to the property; no need to clear the other columns.  Also, we go
+	to 'unsorted' if the model supports it.
+
 2001-10-05  Sven Neumann  <sven@gimp.org>
 
 	* demos/testpixbuf-save.c
