@@ -253,7 +253,26 @@
       <contact>gtk-devel-list@redhat.com</contact>
     </entry>
 
-  </section>
+
+    <entry size="small" status="0%" target="1.4">
+      <title>Cursors</title>
+      <description>
+	<p>
+          Two tasks: 1) move the cursors in the cursor font that people actually
+          care about to the top of the gdkcursor.h header file, and put a nice
+          list of the 15 cursors people actually care about in the docs 2) if
+          the cursor font lacks some commonly-useful cursors (like magnifying
+          glass), add these cursors to gdkcursor.h and then emulate them in
+          gdk_cursor_new by transparently creating the cursor from a bitmap.
+          The list of Qt cursors is worth http://doc.trolltech.com/qcursor.html
+          looking at for this task.
+	</p>
+      </description>
+      <contact>gtk-devel-list@redhat.com</contact>
+    </entry>
+
+
+  </section> <!-- GDK -->
 
   <section>
     <title>GTK+ Widgets</title>
@@ -396,5 +415,171 @@
       </description>
       <contact>gtk-devel-list@redhat.com</contact>
     </entry>
-  </section>
+
+    <entry size="small" status="0%" target="1.4">
+      <title>Make color handling more convenient</title>
+      <description>
+	<p>
+          Add some color convenience functions; such as a way to get an
+          allocated GdkColor from GdkRGB, and export functions from gtkstyle.c
+          that lighten/darken a given color, and set a color from HSV in
+          addition to RGB. Also, consider having static variables that contain
+          preallocated common colors (gtk_blue, gtk_red, etc.), the problem
+          being colormap issues.
+	</p>
+      </description>
+      <contact>gtk-devel-list@redhat.com</contact>
+    </entry>
+
+    <entry size="small" status="0%" target="1.4">
+      <title>Convenient widget setup</title>
+      <description>
+	<p>
+          Make it simpler to set all the basic attributes of a widget.  Might
+          want set_tooltip(), set_accel(), set_color(FOREGROUND, color),
+          set_min_size() (usize does this, but needs a rename), set_whatsthis(),
+          etc. set_accel() may not work for all widgets, may need a convenience
+          API for button and label accelerators specifically.
+	</p>
+        <p>
+          The idea is that it should be easy, out of the box, to set up a widget
+          with all the nice touches and features the widget really should
+          have. Users shouldn't need to do their own convenience functions for
+          this.
+        </p>
+
+      </description>
+      <contact>gtk-devel-list@redhat.com</contact>
+    </entry>
+
+    <entry size="medium" status="0%" target="> 1.4">
+      <title>Make selections/clipboard more convenient</title>
+      <description>
+	<p>
+          Make GtkSelectionData more like the MIME blobs in Swing and Qt.
+          Consider a GtkClipboard object to simplify cut-and-paste handling.
+	</p>
+      </description>
+      <contact>gtk-devel-list@redhat.com</contact>
+    </entry>
+
+
+    <entry size="small" status="10%" target="1.4">
+      <title>Stock label/icon system</title>
+      <description>
+	<p>
+          A system like GnomeStock for getting a standard labels/icons 
+          for menus and toolbars. Should be extensible by themes, and 
+          by libgnomeui. Some work already done on this.
+	</p>
+      </description>
+      <contact>hp@redhat.com</contact>
+    </entry>
+
+    <entry size="small" status="0%" target="1.4">
+      <title>GtkPixbuf</title>
+      <description>
+	<p>
+          gdk-pixbuf is moving to become a GTK+ dependency, a new image-display
+          widget is thus needed.
+	</p>
+      </description>
+      <contact>hp@redhat.com</contact>
+    </entry>
+
+    <entry size="big" status="0%" target="> 1.4">
+      <title>Session Management</title>
+      <description>
+	<p>
+          Look in to session management. Consider whether to use 
+          X11R6 SM, or some custom spec shared with KDE. Create
+          GTK+ API for this.
+	</p>
+      </description>
+      <contact>gtk-devel-list@redhat.com</contact>
+    </entry>
+
+    <entry size="big" status="0%" target="> 1.4">
+      <title>Online help enhancements</title>
+      <description>
+	<p>
+          Look at a small "What's This" popup widget, 
+          and a What's This system in general (this part 
+          could maybe be done for 1.4). A more difficult, probably 
+          a post-1.4 task, is to integrate a very simple little
+          help browser gizmo into GTK.
+	</p>
+      </description>
+      <contact>gtk-devel-list@redhat.com</contact>
+    </entry>
+
+    <entry size="small" status="0%" target="1.4">
+      <title>Attempt to fix GtkStatusbar</title>
+      <description>
+	<p>
+          GtkStatusbar is too inconvenient to use.
+          The only non-breakage-inducing fix we could
+          come up with is to permit 0 as a context ID, so you
+          don't have to use gtk_statusbar_get_context_id().
+	</p>
+      </description>
+      <contact>gtk-devel-list@redhat.com</contact>
+    </entry>
+    
+    <entry size="small" status="0%" target="1.4">
+      <title>Decruft GtkProgress, GtkProgressbar</title>
+      <description>
+	<p>
+          This interface is just a disaster of overcomplexity;
+          it should pretty much just be set_percentage(), 
+          pulse() (to move during activity mode), and set_text().
+          There's no reason that there are two objects, should 
+          just be one interface. Almost all the functions
+          that currently exist should be deprecated.
+	</p>
+      </description>
+      <contact>gtk-devel-list@redhat.com</contact>
+    </entry>
+
+    <entry size="small" status="0%" target="1.4">
+      <title>Entry validation hooks</title>
+      <description>
+	<p>
+          Simple hooks for validation in a GtkEntry.  Pretty much just a
+          "validate" callback which takes a string (current entry contents) and
+          returns either VALID, INVALID, or COULDBEVALID. Then the 
+          GtkEntry calls this function if it's set, and does the appropriate 
+          UI things. GTK should come with validators for int and float,
+          see GtkSpinButton where these are already implemented.
+	</p>
+      </description>
+      <contact>gtk-devel-list@redhat.com</contact>
+    </entry>
+
+
+    <entry size="medium" status="0%" target="> 1.4">
+      <title>Dock widget</title>
+      <description>
+	<p>
+          Add a widget like GnomeDock (perhaps based on GnomeDock)
+          that allows people to put rearrangeable toolbars, menubars, etc. 
+          around a central content area. The widget should have hooks for 
+          saving the current positions of the various docked bars.
+	</p>
+      </description>
+      <contact>gtk-devel-list@redhat.com</contact>
+    </entry>
+
+    <entry size="big" status="0%" target="> 1.4">
+      <title>Canvas widget</title>
+      <description>
+	<p>
+          Figure out how to get GnomeCanvas or a derived work into GTK+ itself.
+	</p>
+      </description>
+      <contact>gtk-devel-list@redhat.com</contact>
+    </entry>
+
+  </section> <!-- GTK+ -->
 </todo>
+
