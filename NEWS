@@ -1,3 +1,13 @@
+Overview of Changes in GTK+ 0.99.6:
+
+* Intermediate release to become 1.0.
+* More signedness corrections for handler functions in gtkmain.h.
+* Semantics of GtkWidget::delete_event changed.
+* Documentation updates.
+* Inclusion of Gtk tutorial.
+* Clean ups due to compiler warnings.
+* Various widget fixes.
+
 Overview of Fixes in GTK+ 0.99.5:
 
 * Signal signedness and naming corrections

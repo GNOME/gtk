@@ -97,7 +97,8 @@ Tue Mar 10 23:02:42 1998  Owen Taylor  <owt1@cornell.edu>
 Wed Mar 11 07:10:11 1998  Tim Janik  <timj@gimp.org>
 
 	* gtk/gtkspinbutton.h: 
-	* gtk/gtkspinbutton.c: applied gtk-hamann_jeske-980311-0.patch.gz.
+	* gtk/gtkspinbutton.c: applied gtk-hamann_jeske-980311-0.patch.gz,
+	to limit entered characters to numbers, '-' and '.'.
 
 Wed Mar 11 04:35:06 1998  Tim Janik  <timj@gimp.org>
 
