@@ -46,6 +46,7 @@ IGNORE_HFILES=			\
 	gtktexttypes.h		\
 	gtktextutil.h		\
 	gtktypebuiltins.h	\
+	gtkxembed.h		\
 	xembed.h
 
 # CFLAGS and LDFLAGS for compiling scan program. Only needed

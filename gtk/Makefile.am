@@ -445,7 +445,9 @@ gtk_c_sources =                 \
 
 gtk_plug_c_sources =            \
 	gtkplug.c		\
-	gtksocket.c
+	gtksocket.c		\
+	gtkxembed.c		\
+	gtkxembed.h
 
 # we use our own built_sources variable rules to avoid automake's
 # BUILT_SOURCES oddities
