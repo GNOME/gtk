@@ -24,17 +24,22 @@
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
-
+  
 
 #define GTK_BUTTON_BOX(obj)          GTK_CHECK_CAST (obj, gtk_button_box_get_type (), GtkButtonBox)
 #define GTK_BUTTON_BOX_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_button_box_get_type (), GtkButtonBoxClass)
 #define GTK_IS_BUTTON_BOX(obj)       GTK_CHECK_TYPE (obj, gtk_button_box_get_type ())
+  
 
 #define GTK_BUTTONBOX_DEFAULT -1
-#define GTK_BUTTONBOX_SPREAD   1
-#define GTK_BUTTONBOX_EDGE     2
-#define GTK_BUTTONBOX_START    3
-#define GTK_BUTTONBOX_END      4
+ 
+typedef enum {
+  GTK_BUTTONBOX_DEFAULT_STYLE,
+  GTK_BUTTONBOX_SPREAD,
+  GTK_BUTTONBOX_EDGE,
+  GTK_BUTTONBOX_START,
+  GTK_BUTTONBOX_END
+} GtkButtonBoxStyle;
 
 typedef struct _GtkButtonBox       GtkButtonBox;
 typedef struct _GtkButtonBoxClass  GtkButtonBoxClass;
@@ -47,7 +52,7 @@ struct _GtkButtonBox
   gint child_min_height;
   gint child_ipad_x;
   gint child_ipad_y;
-  gint layout_style;
+  GtkButtonBoxStyle layout_style;
 };
 
 struct _GtkButtonBoxClass
@@ -65,13 +70,14 @@ void gtk_button_box_set_child_size_default (gint min_width, gint min_height);
 void gtk_button_box_set_child_ipadding_default (gint ipad_x, gint ipad_y);
 
 gint gtk_button_box_get_spacing (GtkButtonBox *widget);
-gint gtk_button_box_get_layout (GtkButtonBox *widget);
+GtkButtonBoxStyle gtk_button_box_get_layout (GtkButtonBox *widget);
 void gtk_button_box_get_child_size (GtkButtonBox *widget,
 				    gint *min_width, gint *min_height);
 void gtk_button_box_get_child_ipadding (GtkButtonBox *widget, gint *ipad_x, gint *ipad_y);
 
 void gtk_button_box_set_spacing (GtkButtonBox *widget, gint spacing);
-void gtk_button_box_set_layout (GtkButtonBox *widget, gint layout_style);
+void gtk_button_box_set_layout (GtkButtonBox *widget, 
+				GtkButtonBoxStyle layout_style);
 void gtk_button_box_set_child_size (GtkButtonBox *widget,
 				    gint min_width, gint min_height);
 void gtk_button_box_set_child_ipadding (GtkButtonBox *widget, gint ipad_x, gint ipad_y);
