@@ -1,3 +1,12 @@
+Sun Sep  2 21:41:21 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkkeys-x11.c (update_keymaps): Set current serial
+	so that we don't eternally update the keymap after we
+	get a change notification.
+
+	* gtk/gtkmenuitem.c (gtk_menu_item_set_right_justified): Fix
+	incorrect cast.
+
 Sun Sep  2 23:27:16 2001  Kristian Rietveld  <kristian@planet.nl>
 
 	* gtk/gtktreemodelsort.[ch]: much changes in an attempt to make

@@ -124,6 +124,8 @@ update_keymaps (void)
       gint i;
       gint map_size;
 
+      current_serial = _gdk_keymap_serial;
+
       update_keyrange ();
       
       if (keymap)

@@ -840,7 +840,7 @@ gtk_menu_item_set_right_justified (GtkMenuItem *menu_item,
   if (right_justified != menu_item->right_justify)
     {
       menu_item->right_justify = right_justified;
-      gtk_widget_queue_resize (GTK_MENU_ITEM (menu_item));
+      gtk_widget_queue_resize (GTK_WIDGET (menu_item));
     }
 }
 
