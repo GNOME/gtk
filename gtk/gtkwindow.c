@@ -171,7 +171,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                     GTK_SIGNAL_OFFSET (GtkWindowClass, set_focus),
                     gtk_marshal_NONE__POINTER,
 		    GTK_TYPE_NONE, 1,
-                    GTK_TYPE_POINTER);
+                    GTK_TYPE_WIDGET);
 
   gtk_object_class_add_signals (object_class, window_signals, LAST_SIGNAL);
 

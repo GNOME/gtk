@@ -403,7 +403,7 @@ gtk_ctree_class_init (GtkCTreeClass *klass)
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkCTreeClass, tree_collapse),
 		    gtk_marshal_NONE__POINTER,
-		    GTK_TYPE_NONE, 1, GTK_TYPE_POINTER);
+		    GTK_TYPE_NONE, 1, GTK_TYPE_CTREE_NODE);
   ctree_signals[TREE_MOVE] =
     gtk_signal_new ("tree_move",
 		    GTK_RUN_LAST,

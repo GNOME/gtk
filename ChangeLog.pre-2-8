@@ -1,3 +1,13 @@
+Wed Feb 10 15:49:16 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwindow.c (gtk_window_class_init):
+	* gtk/gtkctree.c (gtk_ctree_class_init): applied patch from Paolo
+	Molaro to fix GTK_TYPE_POINTER args of ::tree_collapse and
+	::set_focus signals.
+
+	* docs/gtk_tut.sgml: s/menufactory/itemfactory, minor fixups
+	to the item factory example.
+
 Wed Feb 10 11:05:53 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkdnd.c: Reverted coding style "fixups"
@@ -130,7 +140,6 @@ Mon Feb  8 12:50:06 GMT 1999 Tony Gale  <gale@gtk.org>
 
 	* Makefile.am: update to include the latest Tutorial examples.
 
->>>>>>> 1.1009
 Sat Feb  6 11:20:16 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_idle_draw): Add the

@@ -9154,7 +9154,7 @@ disadvantages to each approach.
 The itemfactory is much easier to use, and to add new menus to,
 although writing a few wrapper functions to create menus using the
 manual method could go a long way towards usability. With the
-menufactory, it is not possible to add images or the character '/' to
+itemfactory, it is not possible to add images or the character '/' to
 the menus.
 
 <!-- ----------------------------------------------------------------- -->
@@ -9181,7 +9181,7 @@ menubars.  This first function is used to create a new menubar.
 
 <tscreen>
 <verb>
-GtkWidget *gtk_menu_bar_new( void );
+GtkWidget* gtk_menu_bar_new (void);
 </verb>
 </tscreen>
 
@@ -9190,7 +9190,7 @@ gtk_container_add to pack this into a window, or the box_pack
 functions to pack it into a box - the same as buttons.
 
 <tscreen><verb>
-GtkWidget *gtk_menu_new( void );
+GtkWidget* gtk_menu_new (void);
 </verb></tscreen>
 
 This function returns a pointer to a new menu, it is never actually
@@ -9202,13 +9202,13 @@ The next two calls are used to create menu items that are packed into
 the menu (and menubar).
 
 <tscreen><verb>
-GtkWidget *gtk_menu_item_new( void );
+GtkWidget* gtk_menu_item_new (void);
 </verb></tscreen>
 
 and
 
 <tscreen><verb>
-GtkWidget *gtk_menu_item_new_with_label( const char *label );
+GtkWidget* gtk_menu_item_new_with_label (const char *label);
 </verb></tscreen>
 
 These calls are used to create the menu items that are to be
@@ -9230,35 +9230,35 @@ standard <tt/File/ menu, with the options <tt/Open/, <tt/Save/ and
 <tt/Quit/ the code would look something like:
 
 <tscreen><verb>
-    file_menu = gtk_menu_new();    /* Don't need to show menus */
+    file_menu = gtk_menu_new ();    /* Don't need to show menus */
 
     /* Create the menu items */
-    open_item = gtk_menu_item_new_with_label("Open");
-    save_item = gtk_menu_item_new_with_label("Save");
-    quit_item = gtk_menu_item_new_with_label("Quit");
+    open_item = gtk_menu_item_new_with_label ("Open");
+    save_item = gtk_menu_item_new_with_label ("Save");
+    quit_item = gtk_menu_item_new_with_label ("Quit");
 
     /* Add them to the menu */
-    gtk_menu_append( GTK_MENU(file_menu), open_item);
-    gtk_menu_append( GTK_MENU(file_menu), save_item);
-    gtk_menu_append( GTK_MENU(file_menu), quit_item);
+    gtk_menu_append (GTK_MENU (file_menu), open_item);
+    gtk_menu_append (GTK_MENU (file_menu), save_item);
+    gtk_menu_append (GTK_MENU (file_menu), quit_item);
 
     /* Attach the callback functions to the activate signal */
-    gtk_signal_connect_object( GTK_OBJECT(open_items), "activate",
-                               GTK_SIGNAL_FUNC(menuitem_response),
+    gtk_signal_connect_object (GTK_OBJECT (open_items), "activate",
+                               GTK_SIGNAL_FUNC (menuitem_response),
                                (gpointer) "file.open");
-    gtk_signal_connect_object( GTK_OBJECT(save_items), "activate",
-                               GTK_SIGNAL_FUNC(menuitem_response),
+    gtk_signal_connect_object (GTK_OBJECT (save_items), "activate",
+                               GTK_SIGNAL_FUNC (menuitem_response),
                                (gpointer) "file.save");
 
     /* We can attach the Quit menu item to our exit function */
-    gtk_signal_connect_object( GTK_OBJECT(quit_items), "activate",
-                               GTK_SIGNAL_FUNC(destroy),
+    gtk_signal_connect_object (GTK_OBJECT (quit_items), "activate",
+                               GTK_SIGNAL_FUNC (destroy),
                                (gpointer) "file.quit");
 
     /* We do need to show menu items */
-    gtk_widget_show( open_item );
-    gtk_widget_show( save_item );
-    gtk_widget_show( quit_item );
+    gtk_widget_show (open_item);
+    gtk_widget_show (save_item);
+    gtk_widget_show (quit_item);
 </verb></tscreen>
 
 At this point we have our menu. Now we need to create a menubar and a
@@ -9266,39 +9266,39 @@ menu item for the <tt/File/ entry, to which we add our menu. The code
 looks like this:
 
 <tscreen><verb>
-    menu_bar = gtk_menu_bar_new();
-    gtk_container_add( GTK_CONTAINER(window), menu_bar);
-    gtk_widget_show( menu_bar );
+    menu_bar = gtk_menu_bar_new ();
+    gtk_container_add (GTK_CONTAINER (window), menu_bar);
+    gtk_widget_show (menu_bar);
 
-    file_item = gtk_menu_item_new_with_label("File");
-    gtk_widget_show(file_item);
+    file_item = gtk_menu_item_new_with_label ("File");
+    gtk_widget_show (file_item);
 </verb></tscreen>
 
 Now we need to associate the menu with <tt/file_item/. This is done
 with the function
 
 <tscreen>
-void gtk_menu_item_set_submenu( GtkMenuItem *menu_item,
-                                GtkWidget   *submenu );
+void gtk_menu_item_set_submenu (GtkMenuItem *menu_item,
+                                GtkWidget   *submenu);
 </tscreen>
 
 So, our example would continue with
 
 <tscreen><verb>
-    gtk_menu_item_set_submenu( GTK_MENU_ITEM(file_item), file_menu );
+    gtk_menu_item_set_submenu (GTK_MENU_ITEM (file_item), file_menu);
 </verb></tscreen>
 
 All that is left to do is to add the menu to the menubar, which is
 accomplished using the function
 
 <tscreen>
-void gtk_menu_bar_append( GtkMenuBar *menu_bar, GtkWidget *menu_item);
+void gtk_menu_bar_append (GtkMenuBar *menu_bar, GtkWidget *menu_item);
 </tscreen>
 
 which in our case looks like this:
 
 <tscreen><verb>
-    gtk_menu_bar_append( GTK_MENU_BAR (menu_bar), file_item );
+    gtk_menu_bar_append (GTK_MENU_BAR (menu_bar), file_item);
 </verb></tscreen>
 
 If we wanted the menu right justified on the menubar, such as help
@@ -9307,7 +9307,7 @@ menus often are, we can use the following function (again on
 menubar.
 
 <tscreen><verb>
-void gtk_menu_item_right_justify( GtkMenuItem *menu_item );
+void gtk_menu_item_right_justify (GtkMenuItem *menu_item);
 </verb></tscreen>
 
 Here is a summary of the steps needed to create a menu bar with menus
@@ -9325,7 +9325,7 @@ itself.
 menu item (the one created in the above step).
 <item> Create a new menubar using gtk_menu_bar_new. This step only
 needs to be done once when creating a series of menus on one menu bar.
-<item> Use gtk_menu_bar_append to put the root menu onto the menubar.
+<item> Use gtk_menu_bar_append() to put the root menu onto the menubar.
 </itemize>
 
 Creating a popup menu is nearly the same. The difference is that the
@@ -9337,8 +9337,8 @@ example.  Take these steps:
 <item>Create an event handling function. It needs to have the
 prototype
 <tscreen>
-static gint handler( GtkWidget *widget,
-                     GdkEvent  *event );
+static gint handler (GtkWidget *widget,
+                     GdkEvent  *event);
 </tscreen>
 and it will use the event to find out where to pop up the menu.
 <item>In the event handler, if the event is a mouse button press,
@@ -9346,9 +9346,9 @@ treat <tt>event</tt> as a button event (which it is) and use it as
 shown in the sample code to pass information to gtk_menu_popup().
 <item>Bind that event handler to a widget with
 <tscreen>
-    gtk_signal_connect_object(GTK_OBJECT(widget), "event",
-                              GTK_SIGNAL_FUNC (handler),
-                              GTK_OBJECT(menu));
+    gtk_signal_connect_object (GTK_OBJECT (widget), "event",
+                               GTK_SIGNAL_FUNC (handler),
+                               GTK_OBJECT (menu));
 </tscreen>
 where <tt>widget</tt> is the widget you are binding to,
 <tt>handler</tt> is the handling function, and <tt>menu</tt> is a menu
@@ -9385,17 +9385,17 @@ int main (int argc, char *argv[])
     gtk_init (&amp;argc, &amp;argv);
 
     /* create a new window */
-    window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    gtk_widget_set_usize( GTK_WIDGET (window), 200, 100);
-    gtk_window_set_title(GTK_WINDOW (window), "GTK Menu Test");
-    gtk_signal_connect(GTK_OBJECT (window), "delete_event",
-                       (GtkSignalFunc) gtk_main_quit, NULL);
+    window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    gtk_widget_set_usize (GTK_WIDGET (window), 200, 100);
+    gtk_window_set_title (GTK_WINDOW (window), "GTK Menu Test");
+    gtk_signal_connect (GTK_OBJECT (window), "delete_event",
+                        (GtkSignalFunc) gtk_main_quit, NULL);
 
     /* Init the menu-widget, and remember -- never
      * gtk_show_widget() the menu widget!! 
      * This is the menu that holds the menu items, the one that
      * will pop up when you click on the "Root Menu" in the app */
-    menu = gtk_menu_new();
+    menu = gtk_menu_new ();
 
     /* Next we make a little loop that makes three menu-entries for "test-menu".
      * Notice the call to gtk_menu_append.  Here we are adding a list of
@@ -9403,60 +9403,60 @@ int main (int argc, char *argv[])
      * signal on each of the menu items and setup a callback for it,
      * but it's omitted here to save space. */
 
-    for(i = 0; i < 3; i++)
+    for (i = 0; i < 3; i++)
         {
             /* Copy the names to the buf. */
-            sprintf(buf, "Test-undermenu - %d", i);
+            sprintf (buf, "Test-undermenu - %d", i);
 
             /* Create a new menu-item with a name... */
-            menu_items = gtk_menu_item_new_with_label(buf);
+            menu_items = gtk_menu_item_new_with_label (buf);
 
             /* ...and add it to the menu. */
-            gtk_menu_append(GTK_MENU (menu), menu_items);
+            gtk_menu_append (GTK_MENU (menu), menu_items);
 
 	    /* Do something interesting when the menuitem is selected */
-	    gtk_signal_connect_object(GTK_OBJECT(menu_items), "activate",
-		GTK_SIGNAL_FUNC(menuitem_response), (gpointer) g_strdup(buf));
+	    gtk_signal_connect_object (GTK_OBJECT (menu_items), "activate",
+		GTK_SIGNAL_FUNC (menuitem_response), (gpointer) g_strdup (buf));
 
             /* Show the widget */
-            gtk_widget_show(menu_items);
+            gtk_widget_show (menu_items);
         }
 
     /* This is the root menu, and will be the label
      * displayed on the menu bar.  There won't be a signal handler attached,
      * as it only pops up the rest of the menu when pressed. */
-    root_menu = gtk_menu_item_new_with_label("Root Menu");
+    root_menu = gtk_menu_item_new_with_label ("Root Menu");
 
-    gtk_widget_show(root_menu);
+    gtk_widget_show (root_menu);
 
     /* Now we specify that we want our newly created "menu" to be the menu
      * for the "root menu" */
-    gtk_menu_item_set_submenu(GTK_MENU_ITEM (root_menu), menu);
+    gtk_menu_item_set_submenu (GTK_MENU_ITEM (root_menu), menu);
 
     /* A vbox to put a menu and a button in: */
-    vbox = gtk_vbox_new(FALSE, 0);
-    gtk_container_add(GTK_CONTAINER(window), vbox);
-    gtk_widget_show(vbox);
+    vbox = gtk_vbox_new (FALSE, 0);
+    gtk_container_add (GTK_CONTAINER (window), vbox);
+    gtk_widget_show (vbox);
 
     /* Create a menu-bar to hold the menus and add it to our main window */
-    menu_bar = gtk_menu_bar_new();
-    gtk_box_pack_start(GTK_BOX(vbox), menu_bar, FALSE, FALSE, 2);
-    gtk_widget_show(menu_bar);
+    menu_bar = gtk_menu_bar_new ();
+    gtk_box_pack_start (GTK_BOX (vbox), menu_bar, FALSE, FALSE, 2);
+    gtk_widget_show (menu_bar);
 
     /* Create a button to which to attach menu as a popup */
-    button = gtk_button_new_with_label("press me");
-    gtk_signal_connect_object(GTK_OBJECT(button), "event",
-	GTK_SIGNAL_FUNC (button_press), GTK_OBJECT(menu));
-    gtk_box_pack_end(GTK_BOX(vbox), button, TRUE, TRUE, 2);
-    gtk_widget_show(button);
+    button = gtk_button_new_with_label ("press me");
+    gtk_signal_connect_object (GTK_OBJECT (button), "event",
+	GTK_SIGNAL_FUNC (button_press), GTK_OBJECT (menu));
+    gtk_box_pack_end (GTK_BOX (vbox), button, TRUE, TRUE, 2);
+    gtk_widget_show (button);
 
     /* And finally we append the menu-item to the menu-bar -- this is the
      * "root" menu-item I have been raving about =) */
-    gtk_menu_bar_append(GTK_MENU_BAR (menu_bar), root_menu);
+    gtk_menu_bar_append (GTK_MENU_BAR (menu_bar), root_menu);
 
     /* always display the window as the last step so it all splashes on
      * the screen at once. */
-    gtk_widget_show(window);
+    gtk_widget_show (window);
 
     gtk_main ();
 
@@ -9474,7 +9474,7 @@ static gint button_press (GtkWidget *widget, GdkEvent *event)
 
     if (event->type == GDK_BUTTON_PRESS) {
         GdkEventButton *bevent = (GdkEventButton *) event; 
-        gtk_menu_popup (GTK_MENU(widget), NULL, NULL, NULL, NULL,
+        gtk_menu_popup (GTK_MENU (widget), NULL, NULL, NULL, NULL,
                         bevent->button, bevent->time);
         /* Tell calling code that we have handled this event; the buck
          * stops here. */
@@ -9490,7 +9490,7 @@ static gint button_press (GtkWidget *widget, GdkEvent *event)
 
 static void menuitem_response (gchar *string)
 {
-    printf("%s\n", string);
+    printf ("%s\n", string);
 }
 /* example-end */
 </verb></tscreen>
@@ -9516,8 +9516,10 @@ Here is an example using the GTK item factory.
 #include <strings.h>
 
 /* Obligatory basic callback */
-static void print_hello(GtkWidget *w, gpointer data) {
-  g_message("Hello, World!\n");
+static void
+print_hello (GtkWidget *w, gpointer data)
+{
+  g_message ("Hello, World!\n");
 }
 
 /* This is the GtkItemFactoryEntry structure used to generate new menus.
@@ -9539,31 +9541,33 @@ static void print_hello(GtkWidget *w, gpointer data) {
            "<RadioItem>"      -> create a radio item
            <path>             -> path of a radio item to link against
            "<Separator>"      -> create a separator
-           "<Branch>"         -> create an item to hold sub items
+           "<Branch>"         -> create an item to hold sub items (optional)
            "<LastBranch>"     -> create a right justified branch 
 */
 
 static GtkItemFactoryEntry menu_items[] = {
-  {"/_File",         NULL,         NULL, 0, "<Branch>"},
-  {"/File/_New",     "<control>N", print_hello, 0, NULL},
-  {"/File/_Open",    "<control>O", print_hello, 0, NULL},
-  {"/File/_Save",    "<control>S", print_hello, 0, NULL},
-  {"/File/Save _As", NULL,         NULL, 0, NULL},
-  {"/File/sep1",     NULL,         NULL, 0, "<Separator>"},
-  {"/File/Quit",     "<control>Q", gtk_main_quit, 0, NULL},
-  {"/_Options",      NULL,         NULL, 0, "<Branch>"},
-  {"/Options/Test",  NULL,         NULL, 0, NULL},
-  {"/_Help",         NULL,         NULL, 0, "<LastBranch>"},
-  {"/_Help/About",   NULL,         NULL, 0, NULL},
+  { "/_File",         NULL,         NULL, 0, "<Branch>" },
+  { "/File/_New",     "<control>N", print_hello, 0, NULL },
+  { "/File/_Open",    "<control>O", print_hello, 0, NULL },
+  { "/File/_Save",    "<control>S", print_hello, 0, NULL },
+  { "/File/Save _As", NULL,         NULL, 0, NULL },
+  { "/File/sep1",     NULL,         NULL, 0, "<Separator>" },
+  { "/File/Quit",     "<control>Q", gtk_main_quit, 0, NULL },
+  { "/_Options",      NULL,         NULL, 0, "<Branch>" },
+  { "/Options/Test",  NULL,         NULL, 0, NULL },
+  { "/_Help",         NULL,         NULL, 0, "<LastBranch>" },
+  { "/_Help/About",   NULL,         NULL, 0, NULL },
 };
 
 
-void get_main_menu(GtkWidget *window, GtkWidget ** menubar) {
-  int nmenu_items = sizeof(menu_items) / sizeof(menu_items[0]);
+void
+get_main_menu (GtkWidget *window, GtkWidget ** menubar)
+{
   GtkItemFactory *item_factory;
   GtkAccelGroup *accel_group;
+  gint nmenu_items = sizeof (menu_items) / sizeof (menu_items[0]);
 
-  accel_group = gtk_accel_group_new();
+  accel_group = gtk_accel_group_new ();
 
   /* This function initializes the item factory.
      Param 1: The type of menu - can be GTK_TYPE_MENU_BAR, GTK_TYPE_MENU,
@@ -9573,49 +9577,51 @@ void get_main_menu(GtkWidget *window, GtkWidget ** menubar) {
               the accelerator table while generating menus.
   */
 
-  item_factory = gtk_item_factory_new(GTK_TYPE_MENU_BAR, "<main>", 
+  item_factory = gtk_item_factory_new (GTK_TYPE_MENU_BAR, "<main>", 
 				       accel_group);
 
   /* This function generates the menu items. Pass the item factory,
      the number of items in the array, the array itself, and any
      callback data for the the menu items. */
-  gtk_item_factory_create_items(item_factory, nmenu_items, menu_items, NULL);
+  gtk_item_factory_create_items (item_factory, nmenu_items, menu_items, NULL);
 
   /* Attach the new accelerator group to the window. */
   gtk_accel_group_attach (accel_group, GTK_OBJECT (window));
 
   if (menubar)
     /* Finally, return the actual menu bar created by the item factory. */ 
-    *menubar = gtk_item_factory_get_widget(item_factory, "<main>");
+    *menubar = gtk_item_factory_get_widget (item_factory, "<main>");
 }
 
-int main(int argc, char *argv[]) {
+int
+main (int argc, char *argv[])
+{
   GtkWidget *window;
   GtkWidget *main_vbox;
   GtkWidget *menubar;
   
-  gtk_init(&amp;argc, &amp;argv);
+  gtk_init (&amp;argc, &amp;argv);
   
-  window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-  gtk_signal_connect(GTK_OBJECT(window), "destroy", 
-		     GTK_SIGNAL_FUNC(gtk_main_quit), 
-		     "WM destroy");
-  gtk_window_set_title(GTK_WINDOW(window), "Item Factory");
-  gtk_widget_set_usize(GTK_WIDGET(window), 300, 200);
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_signal_connect (GTK_OBJECT (window), "destroy", 
+		      GTK_SIGNAL_FUNC (gtk_main_quit), 
+		      "WM destroy");
+  gtk_window_set_title (GTK_WINDOW(window), "Item Factory");
+  gtk_widget_set_usize (GTK_WIDGET(window), 300, 200);
   
-  main_vbox = gtk_vbox_new(FALSE, 1);
-  gtk_container_border_width(GTK_CONTAINER(main_vbox), 1);
-  gtk_container_add(GTK_CONTAINER(window), main_vbox);
-  gtk_widget_show(main_vbox);
+  main_vbox = gtk_vbox_new (FALSE, 1);
+  gtk_container_border_width (GTK_CONTAINER (main_vbox), 1);
+  gtk_container_add (GTK_CONTAINER (window), main_vbox);
+  gtk_widget_show (main_vbox);
   
-  get_main_menu(window, &amp;menubar);
-  gtk_box_pack_start(GTK_BOX(main_vbox), menubar, FALSE, TRUE, 0);
-  gtk_widget_show(menubar);
+  get_main_menu (window, &amp;menubar);
+  gtk_box_pack_start (GTK_BOX (main_vbox), menubar, FALSE, TRUE, 0);
+  gtk_widget_show (menubar);
   
-  gtk_widget_show(window);
-  gtk_main();
+  gtk_widget_show (window);
+  gtk_main ();
   
-  return(0);
+  return 0;
 }
 /* example-end */
 </verb></tscreen>
