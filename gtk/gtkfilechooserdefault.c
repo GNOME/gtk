@@ -464,6 +464,8 @@ shortcuts_insert_path (GtkFileChooserImplDefault *impl,
 		      SHORTCUTS_COL_PATH, path_copy,
 		      -1);
 
+  gtk_file_info_free (info);
+
   if (pixbuf)
     g_object_unref (pixbuf);
 
