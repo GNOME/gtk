@@ -43,6 +43,7 @@
 #include "gtktextview.h"
 #include "gtkimmulticontext.h"
 #include "gdk/gdkkeysyms.h"
+#include "gtktextutil.h"
 #include <string.h>
 
 /* How scrolling, validation, exposes, etc. work.
@@ -5693,6 +5694,15 @@ range_contains_editable_text (const GtkTextIter *start,
 }                             
 
 static void
+unichar_chosen_func (const char *text,
+                     gpointer    data)
+{
+  GtkTextView *text_view = GTK_TEXT_VIEW (data);
+
+  gtk_text_view_commit_text (text_view, text);
+}
+
+static void
 popup_targets_received (GtkClipboard     *clipboard,
 			GtkSelectionData *data,
 			gpointer          user_data)
@@ -5744,7 +5754,7 @@ popup_targets_received (GtkClipboard     *clipboard,
       gtk_widget_show (menuitem);
       gtk_menu_shell_append (GTK_MENU_SHELL (text_view->popup_menu), menuitem);
       
-      menuitem = gtk_menu_item_new_with_label (_("Input Methods"));
+      menuitem = gtk_menu_item_new_with_mnemonic (_("Input _Methods"));
       gtk_widget_show (menuitem);
       submenu = gtk_menu_new ();
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), submenu);
@@ -5752,6 +5762,18 @@ popup_targets_received (GtkClipboard     *clipboard,
       
       gtk_im_multicontext_append_menuitems (GTK_IM_MULTICONTEXT (text_view->im_context),
 					    GTK_MENU_SHELL (submenu));
+
+      menuitem = gtk_menu_item_new_with_mnemonic (_("_Insert Unicode control character"));
+      gtk_widget_show (menuitem);
+      gtk_widget_set_sensitive (menuitem, can_insert);
+      
+      submenu = gtk_menu_new ();
+      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), submenu);
+      gtk_menu_shell_append (GTK_MENU_SHELL (text_view->popup_menu), menuitem);      
+
+      _gtk_text_util_append_special_char_menuitems (GTK_MENU_SHELL (submenu),
+                                                    unichar_chosen_func,
+                                                    text_view);
       
       gtk_signal_emit (GTK_OBJECT (text_view),
 		       signals[POPULATE_POPUP],

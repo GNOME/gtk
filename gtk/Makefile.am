@@ -234,6 +234,7 @@ gtk_private_h_sources = @STRIP_BEGIN@ \
 	gtktextchildprivate.h   \
 	gtktextsegment.h	\
 	gtktexttypes.h		\
+	gtktextutil.h		\
 	gtktextiterprivate.h	\
 	gtktextmarkprivate.h	\
 	gtktexttagprivate.h	\
@@ -364,6 +365,7 @@ gtk_c_sources = @STRIP_BEGIN@   \
 	gtktexttag.c		\
 	gtktexttagtable.c	\
 	gtktexttypes.c		\
+	gtktextutil.c		\
 	gtktextview.c		\
 	gtkthemes.c		\
 	gtktipsquery.c		\

@@ -106,6 +106,18 @@ Wolberg's "Digital Image Warping", and is formally defined as the
 hyperbolic-filter sampling the ideal hyperbolic-filter interpolated
 image (the filter is designed to be idempotent for 1:1 pixel mapping).
 
+<!-- ##### FUNCTION gdk_pixbuf_scale_simple ##### -->
+<para>
+
+</para>
+
+@src: 
+@dest_width: 
+@dest_height: 
+@interp_type: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_pixbuf_scale ##### -->
 <para>
 
@@ -122,6 +134,27 @@ image (the filter is designed to be idempotent for 1:1 pixel mapping).
 @scale_x: 
 @scale_y: 
 @interp_type: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_composite_color_simple ##### -->
+<para>
+
+</para>
+
+@src: 
+@dest_width: 
+@dest_height: 
+@interp_type: 
+@overall_alpha: 
+@check_size: 
+@color1: 
+@color2: 
+@Returns: <!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
+End:
+-->
 
 
 <!-- ##### FUNCTION gdk_pixbuf_composite ##### -->
@@ -165,38 +198,5 @@ image (the filter is designed to be idempotent for 1:1 pixel mapping).
 @check_size: 
 @color1: 
 @color2: 
-
-
-<!-- ##### FUNCTION gdk_pixbuf_scale_simple ##### -->
-<para>
-
-</para>
-
-@src: 
-@dest_width: 
-@dest_height: 
-@interp_type: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_pixbuf_composite_color_simple ##### -->
-<para>
-
-</para>
-
-@src: 
-@dest_width: 
-@dest_height: 
-@interp_type: 
-@overall_alpha: 
-@check_size: 
-@color1: 
-@color2: 
-@Returns: <!--
-Local variables:
-mode: sgml
-sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
-End:
--->
 
 

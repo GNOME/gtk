@@ -1,3 +1,19 @@
+2001-12-06  Havoc Pennington  <hp@redhat.com>
+
+        Add Unicode control char menu, based on patch from Dov.
+	Bug #63495
+	
+	* gtk/gtkentry.c (gtk_entry_commit_cb): share code via
+	gtk_entry_enter_text
+	(gtk_entry_enter_text): function to do "typing in text"
+	(popup_targets_received): add the Unicode menu items
+
+	* gtk/gtktextview.c (popup_targets_received): add missing mnemonic
+	on Input Methods item, and add the unicode menu items.
+
+	* gtk/gtktextutil.h, gtk/gtktextutil.c: private utilities to be
+	used in GtkEntry and GtkTextView - may become public later.	
+
 2001-12-16  Kjartan Maraas  <kmaraas@gnome.org>
 
 	* gtk/gtkprogressbar.c: Fix a typo.

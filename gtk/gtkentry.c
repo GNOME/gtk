@@ -46,6 +46,7 @@
 #include "gtksettings.h"
 #include "gtkstock.h"
 #include "gtksignal.h"
+#include "gtktextutil.h"
 #include "gtkwindow.h"
 
 #define MIN_ENTRY_WIDTH  150
@@ -247,6 +248,8 @@ static gboolean gtk_entry_delete_surrounding_cb   (GtkIMContext *context,
 
 /* Internal routines
  */
+static void         gtk_entry_enter_text               (GtkEntry       *entry,
+                                                        const gchar    *str);
 static void         gtk_entry_set_positions            (GtkEntry       *entry,
 							gint            current_pos,
 							gint            selection_bound);
@@ -2226,19 +2229,7 @@ gtk_entry_commit_cb (GtkIMContext *context,
 		     const gchar  *str,
 		     GtkEntry     *entry)
 {
-  GtkEditable *editable = GTK_EDITABLE (entry);
-  gint tmp_pos = entry->current_pos;
-
-  if (gtk_editable_get_selection_bounds (editable, NULL, NULL))
-    gtk_editable_delete_selection (editable);
-  else
-    {
-      if (entry->overwrite_mode)
-        gtk_entry_delete_from_cursor (entry, GTK_DELETE_CHARS, 1);
-    }
-
-  gtk_editable_insert_text (editable, str, strlen (str), &tmp_pos);
-  gtk_editable_set_position (editable, tmp_pos);
+  gtk_entry_enter_text (entry, str);
 }
 
 static void 
@@ -2286,6 +2277,26 @@ gtk_entry_delete_surrounding_cb (GtkIMContext *slave,
 
 /* Internal functions
  */
+
+/* Used for im_commit_cb and inserting Unicode chars */
+static void
+gtk_entry_enter_text (GtkEntry       *entry,
+                      const gchar    *str)
+{
+  GtkEditable *editable = GTK_EDITABLE (entry);
+  gint tmp_pos = entry->current_pos;
+
+  if (gtk_editable_get_selection_bounds (editable, NULL, NULL))
+    gtk_editable_delete_selection (editable);
+  else
+    {
+      if (entry->overwrite_mode)
+        gtk_entry_delete_from_cursor (entry, GTK_DELETE_CHARS, 1);
+    }
+
+  gtk_editable_insert_text (editable, str, strlen (str), &tmp_pos);
+  gtk_editable_set_position (editable, tmp_pos);
+}
 
 /* All changes to entry->current_pos and entry->selection_bound
  * should go through this function.
@@ -3765,6 +3776,16 @@ popup_position_func (GtkMenu   *menu,
   *y = CLAMP (*y, 0, MAX (0, gdk_screen_height () - req.height));
 }
 
+
+static void
+unichar_chosen_func (const char *text,
+                     gpointer    data)
+{
+  GtkEntry *entry = GTK_ENTRY (data);
+
+  gtk_entry_enter_text (entry, text);
+}
+
 typedef struct
 {
   GtkEntry *entry;
@@ -3821,6 +3842,19 @@ popup_targets_received (GtkClipboard     *clipboard,
       
       gtk_im_multicontext_append_menuitems (GTK_IM_MULTICONTEXT (entry->im_context),
 					    GTK_MENU_SHELL (submenu));
+      
+      menuitem = gtk_menu_item_new_with_mnemonic (_("_Insert Unicode control character"));
+      gtk_widget_show (menuitem);
+      
+      submenu = gtk_menu_new ();
+      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), submenu);
+      gtk_menu_shell_append (GTK_MENU_SHELL (entry->popup_menu), menuitem);      
+
+      _gtk_text_util_append_special_char_menuitems (GTK_MENU_SHELL (submenu),
+                                                    unichar_chosen_func,
+                                                    entry);
+      if (!entry->editable)
+        gtk_widget_set_sensitive (menuitem, FALSE);
       
       gtk_signal_emit (GTK_OBJECT (entry),
 		       signals[POPULATE_POPUP],
