@@ -1,3 +1,9 @@
+2001-08-07  Matthias Clasen  <matthiasc@waldgeist.poet.de>
+
+	* gtk/gtkhsv.c (gtk_hsv_map, gtk_hsv_unmap): Reinstate these
+	functions in order to make mouse operation work again in the
+	color wheel. (#58604)
+
 2001-08-07  James Henstridge  <james@daa.com.au>
 
 	* gtk/gtkaccellabel.c (gtk_accel_label_set_accel_object): refetch
