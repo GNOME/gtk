@@ -412,7 +412,6 @@ void create_calendar()
 int main(int   argc,
          char *argv[] )
 {
-  gtk_set_locale ();
   gtk_init (&argc, &argv);
 
   create_calendar();

@@ -363,6 +363,28 @@ load_modules (const char *module_str)
   return gtk_modules;
 }
 
+static gboolean do_setlocale = TRUE;
+
+/**
+ * gtk_disable_setlocale:
+ * 
+ * Prevents gtk_init() and gtk_init_check() from automatically
+ * calling setlocale (LC_ALL, ""). You would want to use this
+ * function if you wanted to set the locale for your program
+ * to something other than the user's locale, or if you wanted
+ * to set different values for different locale categories.
+ *
+ * Most programs should not need to call this function.
+ **/
+static void
+gtk_disable_setlocale (void)
+{
+  if (gtk_initialized)
+    g_warning ("gtk_disable_setlocale() must be called before gtk_init()");
+    
+  do_setlocale = FALSE;
+}
+
 gboolean
 gtk_init_check (int	 *argc,
 		char   ***argv)
@@ -384,6 +406,9 @@ gtk_init_check (int	 *argc,
   g_set_message_handler (gtk_message);
   g_set_print_handler (gtk_print);
 #endif
+
+  if (do_setlocale)
+    setlocale (LC_ALL, "");
   
   /* Initialize "gdk". We pass along the 'argc' and 'argv'
    *  parameters as they contain information that GDK uses
@@ -656,17 +681,23 @@ gtk_exit (gint errorcode)
 /**
  * gtk_set_locale:
  *
+ * Initializes internationalization support for GTK+. gtk_init()
+ * automatically does this, so there is typically no point
+ * in calling this function.
  *
- * Initializes internationalization support for GTK+.  You
- * should call this function before gtk_init() if your application
- * supports internationalization.
+ * If you are calling this function because you changed the locale
+ * after GTK+ is was initialized, then calling this function
+ * may help a bit. (Note, however, that changing the locale
+ * after GTK+ is initialized may produce inconsistent results and
+ * is not really supported.)
  * 
- *  (In gory detail - sets the current locale according to the
+ * In detail - sets the current locale according to the
  * program environment. This is the same as calling the libc function
  * setlocale (LC_ALL, "") but also takes care of the locale specific
- * setup of the windowing system used by GDK.)
+ * setup of the windowing system used by GDK.
  * 
- * Return value: a string corresponding to the locale set, as with the C library function setlocale()
+ * Return value: a string corresponding to the locale set, as with the
+ * C library function setlocale()
  **/
 gchar*
 gtk_set_locale (void)

@@ -1225,7 +1225,7 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
       GdkPixbuf *pixbuf = NULL;
       image = NULL;
 
-      pixbuf = gdk_pixbuf_new_from_stream (-1,
+      pixbuf = gdk_pixbuf_new_from_inline (-1,
 					   entry->extra_data,
 					   FALSE,
 					   NULL);
