@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2002-01-31 09:59-0500\n"
-"PO-Revision-Date: 2002-01-31 13:59+0100\n"
+"POT-Creation-Date: 2002-02-01 21:52+0100\n"
+"PO-Revision-Date: 2002-02-01 21:52+0100\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -132,38 +132,34 @@ msgid "Not enough memory to load bitmap image"
 msgstr "Inte tillräckligt med minne för att läsa in bilden"
 
 #: gdk-pixbuf/io-ico.c:204
-#, fuzzy, c-format
+#, c-format
 msgid "Failure reading ICO: %s"
-msgstr "Misslyckades med att läsa GIF: %s"
+msgstr "Misslyckades med att läsa ICO: %s"
 
 #: gdk-pixbuf/io-ico.c:221
-#, fuzzy
 msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
-msgstr "GIF-filen saknade en del data (den kanske klipptes på något sätt?)"
+msgstr "ICO-filen saknade en del data (den kanske klipptes på något sätt?)"
 
 #: gdk-pixbuf/io-ico.c:259 gdk-pixbuf/io-ico.c:307 gdk-pixbuf/io-ico.c:370
 #: gdk-pixbuf/io-ico.c:423
-#, fuzzy
 msgid "Not enough memory to load icon"
-msgstr "Inte tillräckligt med minne för att läsa in GIF-filen"
+msgstr "Inte tillräckligt med minne för att läsa in ikonen"
 
 #: gdk-pixbuf/io-ico.c:329
 msgid "Icon has zero width"
-msgstr ""
+msgstr "Ikonen har ingen bredd"
 
 #: gdk-pixbuf/io-ico.c:339
 msgid "Icon has zero height"
-msgstr ""
+msgstr "Ikonen har ingen höjd"
 
 #: gdk-pixbuf/io-ico.c:384
-#, fuzzy
 msgid "Compressed icons are not supported"
-msgstr "Bildtypen \"%s\" stöds inte"
+msgstr "Komprimerade ikoner stöds inte"
 
 #: gdk-pixbuf/io-ico.c:472
-#, fuzzy
 msgid "Not enough memory to load ICO file"
-msgstr "Inte tillräckligt med minne för att läsa in GIF-filen"
+msgstr "Inte tillräckligt med minne för att läsa in ICO-filen"
 
 #: gdk-pixbuf/io-gif.c:218
 #, c-format
@@ -375,115 +371,104 @@ msgid "Insufficient memory to load PNM file"
 msgstr "Inte tillräckligt med minne för att läsa in PNM-fil"
 
 #: gdk-pixbuf/io-tga.c:157
-#, fuzzy
 msgid "Can't allocate memory for IOBuffer struct"
-msgstr "Kan inte allokera minne för inläsning av PNM-bild"
+msgstr "Kan inte allokera minne för IOBuffer-struct"
 
 #: gdk-pixbuf/io-tga.c:176
-#, fuzzy
 msgid "Can't allocate memory for IOBuffer data"
-msgstr "Kan inte allokera minne för inläsning av PNM-bild"
+msgstr "Kan inte allokera minne för IOBuffer-data"
 
 #: gdk-pixbuf/io-tga.c:187
 msgid "Can't realloc IOBuffer data"
-msgstr ""
+msgstr "Kan inte omallokera IOBuffer-data"
 
 #: gdk-pixbuf/io-tga.c:216
-#, fuzzy
 msgid "Can't allocate temporary IOBuffer data"
-msgstr "Kan inte allokera minne för inläsning av XPM-bild"
+msgstr "Kan inte allokera temporär IOBuffer-data"
 
 #: gdk-pixbuf/io-tga.c:249
-#, fuzzy
 msgid "fread() failed -- premature end-of-file probably encountered"
-msgstr "För tidigt filslut påträffades"
+msgstr "fread() misslyckades -- för tidigt filslut troligen påträffat"
 
 #: gdk-pixbuf/io-tga.c:259
-#, fuzzy
 msgid "fseek() failed -- premature end-of-file probably encountered"
-msgstr "För tidigt filslut påträffades"
+msgstr "fseek() misslyckades -- för tidigt filslut troligen påträffat"
 
 #: gdk-pixbuf/io-tga.c:288
 msgid "Can't allocate new pixbuf"
-msgstr ""
+msgstr "Kan inte allokera ny pixbuf"
 
 #: gdk-pixbuf/io-tga.c:557
 msgid "Can't allocate colormap structure"
-msgstr ""
+msgstr "Kan inte allokera färgkartestruktur"
 
 #: gdk-pixbuf/io-tga.c:564
 msgid "Can't allocate colormap entries"
-msgstr ""
+msgstr "Kan inte allokera färgkarteposter"
 
 #: gdk-pixbuf/io-tga.c:587
 msgid "Unexpected bitdepth for colormap entries"
-msgstr ""
+msgstr "Oväntat bitdjup för färgkarteposter"
 
 #: gdk-pixbuf/io-tga.c:607
 msgid "Can't allocate TGA header memory"
-msgstr ""
+msgstr "Kan inte allokera TGA-huvudmeny"
 
 #: gdk-pixbuf/io-tga.c:619
 msgid "TGA image comment length is too long"
-msgstr ""
+msgstr "TGA-bildkommentarlängd är för lång"
 
 #: gdk-pixbuf/io-tga.c:628
-#, fuzzy
 msgid "TGA image type not supported"
-msgstr "Bildtypen \"%s\" stöds inte"
+msgstr "TGA-bildtypen stöds inte"
 
 #: gdk-pixbuf/io-tga.c:671
-#, fuzzy
 msgid "Can't allocate memory for TGA context struct"
-msgstr "Kan inte allokera minne för inläsning av XPM-bild"
+msgstr "Kan inte allokera minne för TGA-kontextstruct"
 
 #: gdk-pixbuf/io-tga.c:735
 msgid "Excess data in file"
-msgstr ""
+msgstr "För mycket data i fil"
 
 #: gdk-pixbuf/io-tga.c:776
-#, fuzzy
 msgid "Can't allocate memory for TGA header"
-msgstr "Kan inte allokera minne för inläsning av PNM-bild"
+msgstr "Kan inte allokera minne för TGA-huvud"
 
 #: gdk-pixbuf/io-tga.c:786
 msgid "Too big value in the infolen field of TGA header."
-msgstr ""
+msgstr "För stort värde i infolen-fältet i TGA-huvud."
 
 #: gdk-pixbuf/io-tga.c:810
-#, fuzzy
 msgid "Can't allocate memory for TGA cmap temporary buffer"
-msgstr "Kan inte allokera minne för inläsning av XPM-bild"
+msgstr "Kan inte allokera minne för temporär TGA-cmap-buffert"
 
 #: gdk-pixbuf/io-tga.c:822
-#, fuzzy
 msgid "Can't allocate memory for TGA colormap struct"
-msgstr "Kan inte allokera minne för inläsning av XPM-bild"
+msgstr "Kan inte allokera minne för TGA-färgkartestruct"
 
 #: gdk-pixbuf/io-tga.c:831
-#, fuzzy
 msgid "Can't allocate memory for TGA colormap entries"
-msgstr "Kan inte allokera minne för inläsning av XPM-bild"
+msgstr "Kan inte allokera minne för TGA-färgkarteposter"
 
 #: gdk-pixbuf/io-tga.c:841
 msgid "Unexpected bitdepth for TGA colormap"
-msgstr ""
+msgstr "Oväntat bitdjup för TGA-färgkarta"
 
 #: gdk-pixbuf/io-tga.c:881
 msgid "Pseudo-Color image without colormap"
-msgstr ""
+msgstr "Pseudo-Color-bild utan färgkarta"
 
 #: gdk-pixbuf/io-tga.c:888
 msgid "Can't seek to image offset -- end-of-file probably encountered"
-msgstr ""
+msgstr "Kan inte spola till bildavstånd -- filslut troligen påträffat"
 
 #: gdk-pixbuf/io-tga.c:897 gdk-pixbuf/io-tga.c:993 gdk-pixbuf/io-tga.c:1059
 msgid "Can't allocate pixbuf"
-msgstr ""
+msgstr "Kan inte allokera pixbuf"
 
 #: gdk-pixbuf/io-tga.c:1125 gdk-pixbuf/io-tga.c:1154
 msgid "Unsupported TGA image type"
-msgstr ""
+msgstr "TGA-bildtypen stöds inte"
 
 #: gdk-pixbuf/io-tiff.c:152
 msgid "Could not get image width (bad TIFF file)"
@@ -1690,12 +1675,12 @@ msgid "Whether buttons for creating/manipulating files should be displayed."
 msgstr "Huruvida knappar för skapande/manipulering av filer ska visas."
 
 #: gtk/gtkfilesel.c:656
-msgid "Directories"
-msgstr "Kataloger"
+msgid "Folders"
+msgstr "Mappar"
 
 #: gtk/gtkfilesel.c:660
-msgid "_Directories"
-msgstr "_Kataloger"
+msgid "Fol_ders"
+msgstr "_Mappar"
 
 #: gtk/gtkfilesel.c:688
 msgid "Files"
@@ -1707,8 +1692,8 @@ msgstr "_Filer"
 
 #: gtk/gtkfilesel.c:768 gtk/gtkfilesel.c:2105
 #, c-format
-msgid "Directory unreadable: %s"
-msgstr "Katalogen är oläsbar: %s"
+msgid "Folder unreadable: %s"
+msgstr "Mappen är oläsbar: %s"
 
 #: gtk/gtkfilesel.c:892
 #, c-format
@@ -1722,8 +1707,8 @@ msgstr ""
 "Är du säker på att du vill välja den?"
 
 #: gtk/gtkfilesel.c:1022
-msgid "Crea_te Dir"
-msgstr "Ska_pa katalog"
+msgid "_New Folder"
+msgstr "_Ny mapp"
 
 #: gtk/gtkfilesel.c:1033
 msgid "De_lete File"
@@ -1736,16 +1721,16 @@ msgstr "_Byt namn på fil"
 #: gtk/gtkfilesel.c:1292
 #, c-format
 msgid ""
-"The directory name \"%s\" contains symbols that are not allowed in filenames"
-msgstr "Katalognamnet \"%s\" innehåller tecken som inte är tillåtna i filnamn"
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgstr "Mappnamnet \"%s\" innehåller tecken som inte är tillåtna i filnamn"
 
 #: gtk/gtkfilesel.c:1294
 #, c-format
 msgid ""
-"Error creating directory \"%s\": %s\n"
+"Error creating folder \"%s\": %s\n"
 "%s"
 msgstr ""
-"Fel vid skapande av katalogen \"%s\": %s\n"
+"Fel vid skapande av mappen \"%s\": %s\n"
 "%s"
 
 #: gtk/gtkfilesel.c:1295 gtk/gtkfilesel.c:1550
@@ -1754,16 +1739,16 @@ msgstr "Du använde troligen tecken som inte är tillåtna i filnamn."
 
 #: gtk/gtkfilesel.c:1303
 #, c-format
-msgid "Error creating directory \"%s\": %s\n"
-msgstr "Fel vid skapande av katalogen \"%s\": %s\n"
+msgid "Error creating folder \"%s\": %s\n"
+msgstr "Fel vid skapande av mappen \"%s\": %s\n"
 
 #: gtk/gtkfilesel.c:1337
-msgid "Create Directory"
-msgstr "Skapa katalog"
+msgid "New Folder"
+msgstr "Ny mapp"
 
 #: gtk/gtkfilesel.c:1352
-msgid "_Directory name:"
-msgstr "_Katalognamn:"
+msgid "_Folder name:"
+msgstr "_Mappnamn:"
 
 #. buttons
 #: gtk/gtkfilesel.c:1366 gtk/gtkfilesel.c:1495 gtk/gtkfilesel.c:1653
@@ -2010,88 +1995,80 @@ msgid "Error loading icon: %s"
 msgstr "Fel vid inläsning av ikonen: %s"
 
 #: gtk/gtkimage.c:129
-#, fuzzy
 msgid "Pixbuf"
-msgstr "Pixbuf-objekt"
+msgstr "Pixbuf"
 
 #: gtk/gtkimage.c:130
 msgid "A GdkPixbuf to display."
-msgstr ""
+msgstr "En GdkPixbuf att visa."
 
 #: gtk/gtkimage.c:137
 msgid "Pixmap"
-msgstr ""
+msgstr "Pixmap"
 
 #: gtk/gtkimage.c:138
 msgid "A GdkPixmap to display."
-msgstr ""
+msgstr "En GdkPixmap att visa."
 
 #: gtk/gtkimage.c:145
-#, fuzzy
 msgid "Image"
-msgstr "Sida"
+msgstr "Bild"
 
 #: gtk/gtkimage.c:146
 msgid "A GdkImage to display."
-msgstr ""
+msgstr "En GdkImage att visa."
 
 #: gtk/gtkimage.c:153
-#, fuzzy
 msgid "Mask"
-msgstr "Markup"
+msgstr "Mask"
 
 #: gtk/gtkimage.c:154
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
-msgstr ""
+msgstr "Maskbitmappsbild att använda med GdkImage eller GdkPixmap"
 
 #: gtk/gtkimage.c:162
-#, fuzzy
-msgid "Filename to load and siplay."
-msgstr "Misslyckades med att läsa in TIFF-bild"
+msgid "Filename to load and display."
+msgstr "Filnamn att läsa in och visa."
 
 #: gtk/gtkimage.c:170
 msgid "Stock ID"
-msgstr ""
+msgstr "Standard-ID"
 
 #: gtk/gtkimage.c:171
 msgid "Stock ID for a stock image to display."
-msgstr ""
+msgstr "Standard-ID för en standardbild att visa."
 
 #: gtk/gtkimage.c:178
-#, fuzzy
 msgid "Icon set"
-msgstr "Inkonsistent"
+msgstr "Ikonsamling"
 
 #: gtk/gtkimage.c:179
 msgid "Icon set to display."
-msgstr ""
+msgstr "Ikonsamling att visa."
 
 #: gtk/gtkimage.c:186
-#, fuzzy
 msgid "Icon size"
-msgstr "Typsnittsstorlek"
+msgstr "Ikonstorlek"
 
 #: gtk/gtkimage.c:187
 msgid "Size to use for stock icon or icon set."
-msgstr ""
+msgstr "Storlek att använda för standardikon eller ikonsamling."
 
 #: gtk/gtkimage.c:195
-#, fuzzy
 msgid "Animation"
-msgstr "Information"
+msgstr "Animation"
 
 #: gtk/gtkimage.c:196
 msgid "GdkPixbufAnimation to display."
-msgstr ""
+msgstr "GdkPixbufAnimation att visa."
 
 #: gtk/gtkimage.c:203
-#, fuzzy
 msgid "Storage type"
-msgstr "Kurvtyp"
+msgstr "Lagringstyp"
 
 #: gtk/gtkimage.c:204
 msgid "The representation being used for image data."
-msgstr ""
+msgstr "Representationen som används för bilddata."
 
 #: gtk/gtkimagemenuitem.c:124
 msgid "Image widget"
@@ -2302,19 +2279,19 @@ msgstr "Höjden på layouten."
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:614
+#: gtk/gtkmain.c:613
 msgid "default:LTR"
 msgstr "default:LTR"
 
 #: gtk/gtkmenu.c:189
 msgid "Tearoff Title"
-msgstr ""
+msgstr "Löstagbar titel"
 
 #: gtk/gtkmenu.c:190
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off."
-msgstr ""
+msgstr "En titel som kan visas av fönsterhanteraren då denna meny tas loss."
 
 #: gtk/gtkmenubar.c:151
 msgid "Style of bevel around the menubar"
@@ -2470,7 +2447,7 @@ msgstr ""
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Huruvida flikar ska ha samma storlek"
 
-#: gtk/gtknotebook.c:2339 gtk/gtknotebook.c:4594
+#: gtk/gtknotebook.c:2340 gtk/gtknotebook.c:4595
 #, c-format
 msgid "Page %u"
 msgstr "Sida %u"
@@ -2518,12 +2495,12 @@ msgstr "Storlek på handtag"
 msgid "Width of handle"
 msgstr "Bredd på handtag"
 
-#: gtk/gtkrc.c:2773 gtk/gtkrc.c:2776
+#: gtk/gtkrc.c:2797 gtk/gtkrc.c:2800
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kan inte hitta bildfil i \"pixmap_path\": \"%s\""
 
-#: gtk/gtkrc.c:3185
+#: gtk/gtkrc.c:3209
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Sökvägselement i bild: \"%s\" måste vara absolut, %s, rad %d"
@@ -2849,41 +2826,36 @@ msgid "Vertical Adjustment"
 msgstr "Vertikal justering"
 
 #: gtk/gtkscrolledwindow.c:191
-#, fuzzy
 msgid "Horizontal Scrollbar Policy"
-msgstr "Horisontell skala"
+msgstr "Policy för horisontella rullningslister"
 
 #: gtk/gtkscrolledwindow.c:192
 msgid "When the horizontal scrollbar is displayed"
-msgstr ""
+msgstr "När den horisontella rullningslisten visas"
 
 #: gtk/gtkscrolledwindow.c:199
-#, fuzzy
 msgid "Vertical Scrollbar Policy"
-msgstr "Vertikal skala"
+msgstr "Policy för vertikal rullningslista"
 
 #: gtk/gtkscrolledwindow.c:200
 msgid "When the vertical scrollbar is displayed"
-msgstr ""
+msgstr "När den vertikala rullningslisten visas"
 
 #: gtk/gtkscrolledwindow.c:208
-#, fuzzy
 msgid "Window Placement"
-msgstr "Fönstertitel"
+msgstr "Fönsterplacering"
 
 #: gtk/gtkscrolledwindow.c:209
 msgid "Where the contents are located with respect to the scrollbars"
-msgstr ""
+msgstr "Där innehållet placeras i förhållande till rullningslisterna"
 
 #: gtk/gtkscrolledwindow.c:216
-#, fuzzy
 msgid "Shadow Type"
 msgstr "Skuggtyp"
 
 #: gtk/gtkscrolledwindow.c:217
-#, fuzzy
 msgid "Style of bevel around the contents"
-msgstr "Stil på avfasning runt menyraden"
+msgstr "Stil på avfasning runt innehållet"
 
 #: gtk/gtksettings.c:147
 msgid "Double Click Time"
@@ -3601,43 +3573,43 @@ msgstr "Huruvida denna tagg påverkar textens synlighet"
 
 #: gtk/gtktextutil.c:46
 msgid "LRM _Left-to-right mark"
-msgstr ""
+msgstr "LRM-märke för _vänster-till-höger"
 
 #: gtk/gtktextutil.c:47
 msgid "RLM _Right-to-left mark"
-msgstr ""
+msgstr "RLM för _höger-till-vänster"
 
 #: gtk/gtktextutil.c:48
 msgid "LRE Left-to-right _embedding"
-msgstr ""
+msgstr "LRE-inbäddning för vänster-till-höger"
 
 #: gtk/gtktextutil.c:49
 msgid "RLE Right-to-left e_mbedding"
-msgstr ""
+msgstr "RLE-inbäddning för höger-till-vänster"
 
 #: gtk/gtktextutil.c:50
 msgid "LRO Left-to-right _override"
-msgstr ""
+msgstr "LRO-åsidosättning för vänster-till-höger"
 
 #: gtk/gtktextutil.c:51
 msgid "RLO Right-to-left o_verride"
-msgstr ""
+msgstr "RLO-åsidosättning för höger-till-vänster"
 
 #: gtk/gtktextutil.c:52
 msgid "PDF _Pop directional formatting"
-msgstr ""
+msgstr "PDF-_popriktningsformatering"
 
 #: gtk/gtktextutil.c:53
 msgid "ZWS _Zero width space"
-msgstr ""
+msgstr "ZWS-blanksteg _utan bredd"
 
 #: gtk/gtktextutil.c:54
 msgid "ZWN Zero width _joiner"
-msgstr ""
+msgstr "ZWN-_sammanslagare utan bredd"
 
 #: gtk/gtktextutil.c:55
 msgid "ZWNJ Zero width _non-joiner"
-msgstr ""
+msgstr "ZWNJ-_ickesammanslagare utan bredd"
 
 #: gtk/gtktextview.c:535
 msgid "Pixels Above Lines"
@@ -3764,14 +3736,12 @@ msgid "Size of icons in default toolbars"
 msgstr "Storlek på ikoner i standardverktygsrader"
 
 #: gtk/gtktreemodelsort.c:298
-#, fuzzy
 msgid "TreeModelSort Model"
-msgstr "Trädvymodell"
+msgstr "Modell för TreeModelSort"
 
 #: gtk/gtktreemodelsort.c:299
-#, fuzzy
 msgid "The model for the TreeModelSort to sort"
-msgstr "Modell för trädvyn"
+msgstr "Modell för TreeModelSort att sortera"
 
 #: gtk/gtktreeview.c:499
 msgid "TreeView Model"
@@ -4310,6 +4280,37 @@ msgstr "Vietnamesisk (VIQR)"
 #: modules/input/imxim.c:27
 msgid "X Input Method"
 msgstr "X-inmatningsmetod"
+
+#~ msgid "Filename to load and siplay."
+#~ msgstr "Filnamn att läsa in och visa."
+
+#~ msgid "Directories"
+#~ msgstr "Kataloger"
+
+#~ msgid "_Directories"
+#~ msgstr "_Kataloger"
+
+#~ msgid "Crea_te Dir"
+#~ msgstr "Ska_pa katalog"
+
+#~ msgid ""
+#~ "The directory name \"%s\" contains symbols that are not allowed in "
+#~ "filenames"
+#~ msgstr ""
+#~ "Katalognamnet \"%s\" innehåller tecken som inte är tillåtna i filnamn"
+
+#~ msgid ""
+#~ "Error creating directory \"%s\": %s\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Fel vid skapande av katalogen \"%s\": %s\n"
+#~ "%s"
+
+#~ msgid "Create Directory"
+#~ msgstr "Skapa katalog"
+
+#~ msgid "_Directory name:"
+#~ msgstr "_Katalognamn:"
 
 #~ msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 #~ msgstr "Kan inte hitta bildfil i \"pixmap_path\": \"%s\" rad %d"
