@@ -42,7 +42,6 @@
 #include <X11/Xlib.h>
 #include <X11/Xos.h>
 #include <X11/Xutil.h>
-#include <X11/Xmu/WinUtil.h>
 #include <X11/cursorfont.h>
 #include "gdk.h"
 #include "gdkprivate.h"

@@ -1,3 +1,10 @@
+Tue Jan 25 09:55:41 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.c: Remove useless #include of <X11/Xmu/WinUtil.h>,
+	  which was causing problems on various systems with Xmu.
+	  This hasn't been needed for a very long time.
+	  (Fixes #1185 3167)
+
 Sun Jan 23 22:27:36 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdki18n.h: Include <ctype.h> when defining
