@@ -2138,20 +2138,23 @@ gtk_window_compute_reposition (GtkWindow  *window,
 {
   GtkWidget *widget;
   GtkWindowPosition pos;
+  GtkWidget *parent_widget;
   
   widget = GTK_WIDGET (window);
 
   *x = -1;
   *y = -1;
 
+  parent_widget = (GtkWidget*) window->transient_parent;
+  
   pos = window->position;
   if (pos == GTK_WIN_POS_CENTER_ON_PARENT &&
-      (window->transient_parent == NULL ||
-       !GTK_WIDGET_MAPPED (window->transient_parent))
+      (parent_widget == NULL ||
+       !GTK_WIDGET_MAPPED (parent_widget)))
     pos = GTK_WIN_POS_NONE;
   
   switch (pos)
-    {
+  {
     case GTK_WIN_POS_CENTER:
     case GTK_WIN_POS_CENTER_ALWAYS:
       if (window->use_uposition)
@@ -2168,13 +2171,11 @@ gtk_window_compute_reposition (GtkWindow  *window,
       if (window->use_uposition)
         {
           gint ox, oy;
-          gdk_window_get_origin (window->transient_parent->window,
+          gdk_window_get_origin (parent_widget->window,
                                  &ox, &oy);
-          
-          g_assert (window->transient_parent);
                                  
-          *x = ox + (window->transient_parent->allocation.width - new_width) / 2;
-          *y = oy + (window->transient_parent->allocation.height - new_height) / 2;
+          *x = ox + (parent_widget->allocation.width - new_width) / 2;
+          *y = oy + (parent_widget->allocation.height - new_height) / 2;
         }
       break;
 

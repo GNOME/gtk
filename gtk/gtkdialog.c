@@ -106,6 +106,10 @@ gtk_dialog_init (GtkDialog *dialog)
 {
   GtkWidget *separator;
 
+  /* Dialog defaults to center on parent, unlike regular windows. */
+  gtk_window_set_position (GTK_WINDOW (dialog),
+                           GTK_WIN_POS_CENTER_ON_PARENT);
+  
   dialog->vbox = gtk_vbox_new (FALSE, 0);
 
   gtk_container_set_border_width (GTK_CONTAINER (dialog->vbox), 2);
