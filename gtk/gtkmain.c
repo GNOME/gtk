@@ -1169,7 +1169,7 @@ check_is_grabbed (GtkWidget *widget,
   if (grab_widget)
     return !(widget == grab_widget || gtk_widget_is_ancestor (widget, grab_widget));
   else
-    return TRUE;
+    return FALSE;
 }
 
 static void

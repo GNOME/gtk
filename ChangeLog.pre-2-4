@@ -1,3 +1,12 @@
+Sat Jan 26 19:04:37 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmain.c (check_is_grabbed): Return FALSE not true
+	in the grab_widget == NULL case. (Bug reported by 
+	Padraig O'Briain, #69735)
+
+	* gtk/gtkplug.c (handle_modality_on): Realize the modality
+	window so gtk_widget_event() doesn't complain :-((((.
+
 2002-01-25  Federico Mena Quintero  <federico@ximian.com>
 
 	Merge from gdk-pixbuf stable.
