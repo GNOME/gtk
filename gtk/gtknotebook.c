@@ -3324,7 +3324,7 @@ gtk_notebook_switch_focus_tab (GtkNotebook *notebook,
 	}
     }
   
-  if (!notebook->focus_tab)
+  if (!notebook->show_tabs || !notebook->focus_tab)
     return;
 
   if (old_tab)
@@ -3432,8 +3432,9 @@ gtk_notebook_update_labels (GtkNotebook *notebook,
 	gtk_label_set (GTK_LABEL (page->tab_label), string);
       if (notebook->menu && page->default_menu)
 	{
-	  if (GTK_IS_LABEL (page->tab_label))
-	    gtk_label_set (GTK_LABEL (page->menu_label), GTK_LABEL (page->tab_label)->label);
+	  if (page->tab_label && GTK_IS_LABEL (page->tab_label))
+	    gtk_label_set (GTK_LABEL (page->menu_label),
+			   GTK_LABEL (page->tab_label)->label);
 	  else
 	    gtk_label_set (GTK_LABEL (page->menu_label), string);
 	}

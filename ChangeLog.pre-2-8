@@ -1,3 +1,9 @@
+Tue Aug 18 17:22:22 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtknotebook.c (gtk_notebook_switch_focus_tab): 
+	* gtk/gtknotebook.c (gtk_notebook_update_labels): fix for sigsegv
+	in case of show_tabs == NULL
+
 Tue Aug 18 03:54:43 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkmain.c	(gtk_init): restricted the --g*fatal-* arguments
