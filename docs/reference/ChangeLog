@@ -1,3 +1,7 @@
+Thu Feb 12 23:30:25 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-sections.txt: Add gtk_combo_box_{popup,popdown}.
+
 Thu Feb 12 02:00:53 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtktreemodelfilter.sgml: 
