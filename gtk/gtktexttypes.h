@@ -117,20 +117,7 @@ extern const gunichar gtk_text_unknown_char;
 extern const gchar gtk_text_unknown_char_utf8[];
 
 gboolean gtk_text_byte_begins_utf8_char (const gchar *byte);
-guint    gtk_text_utf_to_latin1_char    (const gchar *p,
-                                         guchar      *l1_ch);
-gchar*   gtk_text_utf_to_latin1         (const gchar *p,
-                                         gint         len);
-gchar*   gtk_text_latin1_to_utf         (const gchar *latin1,
-                                         gint         len);
 
-
-gchar*   g_convert (const gchar *str,
-                    gint         len,
-                    const gchar *to_codeset,
-                    const gchar *from_codeset,
-                    gint        *bytes_converted);
-       
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
