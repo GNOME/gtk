@@ -1,3 +1,8 @@
+Fri Jul 18 20:06:57 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktextview.c (changed_handler): use
+	gtk_widget_queue_resize_noredraw().
+
 2003-07-16  Jody Goldberg <jody@gnome.org>
 
 	* gdk/x11/gdkwindow-x11.c (gdk_window_focus) : fix cut-n-paste-o

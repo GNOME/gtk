@@ -3342,8 +3342,7 @@ changed_handler (GtkTextLayout     *layout,
     if (old_req.width != new_req.width ||
         old_req.height != new_req.height)
       {
-        /* FIXME http://bugzilla.gnome.org/show_bug.cgi?id=72258 */
-        _gtk_size_group_queue_resize (widget);
+	gtk_widget_queue_resize_no_redraw (widget);
       }
   }
 }
