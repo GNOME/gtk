@@ -987,11 +987,13 @@ void
 gtk_window_set_title (GtkWindow   *window,
 		      const gchar *title)
 {
+  char *new_title;
+  
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-  if (window->title)
-    g_free (window->title);
-  window->title = g_strdup (title);
+  new_title = g_strdup (title);
+  g_free (window->title);
+  window->title = new_title;
 
   if (GTK_WIDGET_REALIZED (window))
     {
@@ -1077,13 +1079,13 @@ void
 gtk_window_set_role (GtkWindow   *window,
                      const gchar *role)
 {
+  char *new_role;
+  
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-  if (role == window->wm_role)
-    return;
-
+  new_role = g_strdup (role);
   g_free (window->wm_role);
-  window->wm_role = g_strdup (role);
+  window->wm_role = new_role;
 
   if (GTK_WIDGET_REALIZED (window))
     gdk_window_set_role (GTK_WIDGET (window)->window, window->wm_role);

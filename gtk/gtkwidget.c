@@ -3929,11 +3929,13 @@ void
 gtk_widget_set_name (GtkWidget	 *widget,
 		     const gchar *name)
 {
-  g_return_if_fail (GTK_IS_WIDGET (widget));
+  gchar *new_name;
   
-  if (widget->name)
-    g_free (widget->name);
-  widget->name = g_strdup (name);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  new_name = g_strdup (name);
+  g_free (widget->name);
+  widget->name = new_name;
 
   if (GTK_WIDGET_RC_STYLE (widget))
     gtk_widget_reset_rc_style (widget);

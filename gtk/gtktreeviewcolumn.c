@@ -2024,13 +2024,13 @@ void
 gtk_tree_view_column_set_title (GtkTreeViewColumn *tree_column,
 				const gchar       *title)
 {
+  gchar *new_title;
+  
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
 
+  new_title = g_strdup (title);
   g_free (tree_column->title);
-  if (title)
-    tree_column->title = g_strdup (title);
-  else
-    tree_column->title = NULL;
+  tree_column->title = new_title;
 
   gtk_tree_view_column_update_button (tree_column);
   g_object_notify (G_OBJECT (tree_column), "title");

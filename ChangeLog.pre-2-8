@@ -1,3 +1,12 @@
+Fri Nov  7 22:55:49 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkwindow.c (gtk_window_set_role): 
+	* gtk/gtkwindow.c (gtk_window_set_title): 
+	* gtk/gtkwidget.c (gtk_widget_set_name): 
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_set_title): 
+	* gtk/gtkbutton.c (gtk_button_set_label): Make string setters
+	safe for self-assignment.  (#122745, Soeren Sandmann)
+
 Thu Nov  6 20:41:40 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkstyle.c (gtk_style_attach): Fix doc comment.

@@ -1133,10 +1133,13 @@ void
 gtk_button_set_label (GtkButton   *button,
 		      const gchar *label)
 {
-  g_return_if_fail (GTK_IS_BUTTON (button));
+  gchar *new_label;
   
+  g_return_if_fail (GTK_IS_BUTTON (button));
+
+  new_label = g_strdup (label);
   g_free (button->label_text);
-  button->label_text = g_strdup (label);
+  button->label_text = new_label;
   
   gtk_button_construct_child (button);
   
