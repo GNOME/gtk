@@ -768,6 +768,16 @@ xlate_io (GIOChannel *gioc,
 			  (xlate_codes[j].modifier & GDK_SHIFT_MASK))
 			gdk_fb_redraw_all ();
 
+		      if ((xlate_codes[j].code == GDK_F2) &&
+			  (xlate_codes[j].modifier & GDK_SHIFT_MASK))
+			{
+			  static gint deg = 0;
+			  deg = (deg + 1) % 4;
+			    
+			  gdk_fb_set_rotation (deg);
+			}
+
+		      
 		      gdk_fb_handle_key (xlate_codes[j].code,
 					 xlate_codes[j].code,
 					 xlate_codes[j].modifier,

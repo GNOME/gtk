@@ -286,8 +286,8 @@ gdk_fb_mouse_open (void)
 
   mouse->dev = device;
   
-  mouse->x = gdk_display->modeinfo.xres / 2;
-  mouse->y = gdk_display->modeinfo.yres / 2;
+  mouse->x = gdk_display->fb_width / 2;
+  mouse->y = gdk_display->fb_height / 2;
 
   if (!device->open(mouse))
     {
@@ -645,8 +645,8 @@ gdk_fb_mouse_fidmour_packet (GdkFBMouse   *mouse,
       if (y > 8192)
 	y -= 16384;
       /* Now map touchscreen coords to screen coords */
-      x *= ((double)gdk_display->modeinfo.xres)/4096.0;
-      y *= ((double)gdk_display->modeinfo.yres)/4096.0;
+      x *= ((double)gdk_display->fb_width)/4096.0;
+      y *= ((double)gdk_display->fb_height)/4096.0;
     }
   
   if (n)

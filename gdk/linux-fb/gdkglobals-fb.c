@@ -41,3 +41,4 @@ GdkFBDisplay *gdk_display = NULL;
 GdkCursor *_gdk_fb_pointer_grab_cursor;
 GdkGC *_gdk_fb_screen_gc = NULL;
 GdkAtom gdk_selection_property;
+GdkFBAngle _gdk_fb_screen_angle = GDK_FB_0_DEGREES;

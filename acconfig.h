@@ -47,6 +47,9 @@
 /* Define to use XKB extension */
 #undef HAVE_XKB
 
+/* Define to use shadowfb in the linux-fb port */
+#undef ENABLE_SHADOW_FB
+
 #undef XINPUT_NONE
 #undef XINPUT_GXI
 #undef XINPUT_XFREE

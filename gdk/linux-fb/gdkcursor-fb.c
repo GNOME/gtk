@@ -337,6 +337,9 @@ gdk_fb_cursor_hide (void)
 			      last_location.y,
 			      last_contents_size.x,
 			      last_contents_size.y);
+      gdk_shadow_fb_update (last_location.x, last_location.y,
+			    last_location.x + last_contents_size.x,
+			    last_location.y + last_contents_size.y);
     }
 }
 
@@ -409,6 +412,9 @@ gdk_fb_cursor_unhide()
 			      last_location.x, last_location.y,
 			      pixmap_last->width,
 			      pixmap_last->height);
+      gdk_shadow_fb_update (last_location.x, last_location.y,
+			    last_location.x + pixmap_last->width,
+			    last_location.y + pixmap_last->height);
     }
   else
     gdk_fb_cursor_invalidate ();

@@ -48,6 +48,9 @@ gdk_window_scroll (GdkWindow *window,
 			      dest_rect.x, dest_rect.y,
 			      dest_rect.width, dest_rect.height,
 			      FALSE, FALSE);
+      gdk_shadow_fb_update (dest_rect.x - dx, dest_rect.y - dy,
+			    dest_rect.x - dx + dest_rect.width,
+			    dest_rect.y - dy + dest_rect.height);
     }
   
   gdk_window_invalidate_region (window, invalidate_region, TRUE);

@@ -209,8 +209,8 @@ gdk_window_new (GdkWindow     *parent,
   impl->drawable_data.width = (attributes->width > 1) ? (attributes->width) : (1);
   impl->drawable_data.height = (attributes->height > 1) ? (attributes->height) : (1);
   private->window_type = impl->drawable_data.window_type = attributes->window_type;
-  impl->drawable_data.mem = gdk_display->fbmem;
-  impl->drawable_data.rowstride = gdk_display->sinfo.line_length;
+  impl->drawable_data.mem = gdk_display->fb_mem;
+  impl->drawable_data.rowstride = gdk_display->fb_stride;
   gdk_window_move_resize (window, x, y,
 			  impl->drawable_data.width, impl->drawable_data.height);
 
@@ -775,9 +775,6 @@ gdk_window_hide (GdkWindow *window)
 
       private->mapped = FALSE;
 
-      if (private->parent == GDK_WINDOW_P(gdk_parent_root))
-	gdk_fb_drawable_clear(gdk_parent_root);
-
       mousewin = gdk_window_at_pointer (NULL, NULL);
       gdk_fb_window_send_crossing_events (mousewin, 
 					  GDK_CROSSING_NORMAL);
@@ -909,6 +906,33 @@ recompute_abs_positions(GdkDrawable *drawable,
 }
 
 static void
+recompute_rowstride(GdkDrawable *drawable)
+{
+  GList *l;
+  GdkWindowObject *private;
+
+  g_return_if_fail (GDK_IS_WINDOW (drawable));
+
+  private = GDK_WINDOW_P (drawable);
+
+  GDK_DRAWABLE_IMPL_FBDATA (private)->rowstride = gdk_display->fb_stride;
+  for (l = private->children; l; l = l->next)
+    recompute_rowstride (l->data);
+}
+
+void
+gdk_fb_recompute_all (void)
+{
+  GDK_DRAWABLE_IMPL_FBDATA (gdk_parent_root)->width = gdk_display->fb_width;
+  GDK_DRAWABLE_IMPL_FBDATA (gdk_parent_root)->height = gdk_display->fb_height;
+  
+  recompute_abs_positions (gdk_parent_root,
+			   0, 0, 0, 0,
+			   gdk_display->fb_width, gdk_display->fb_height);
+  recompute_rowstride (gdk_parent_root);
+}
+
+static void
 recompute_drawable (GdkDrawable *drawable)
 {
   if (GDK_IS_WINDOW (drawable))
@@ -1035,7 +1059,9 @@ gdk_fb_window_move_resize (GdkWindow *window,
 		    }
 		  gdk_fb_drawing_context_finalize (&fbdc);
 		}
-
+	      gdk_shadow_fb_update (region->extents.x1, region->extents.y1, 
+				    region->extents.x2, region->extents.y2);
+	      
 	      gdk_region_union (new_region, old_region);
 	      gdk_region_subtract (new_region, region);
 	      gdk_region_destroy (region);
@@ -1197,7 +1223,7 @@ _gdk_windowing_window_clear_area (GdkWindow *window,
       gdk_fb_drawing_context_finalize (&fbdc);
     }
   else if (!bgpm)
-    gdk_fb_draw_rectangle (GDK_DRAWABLE_IMPL (window), _gdk_fb_screen_gc, TRUE, x, y, width, height);
+    gdk_draw_rectangle (window, _gdk_fb_screen_gc, TRUE, x, y, width, height);
 }
 
 /* What's the diff? */
@@ -1489,8 +1515,8 @@ gdk_window_fb_get_visible_region (GdkDrawable *drawable)
 
   screen_rect.x = -priv->abs_x;
   screen_rect.y = -priv->abs_y;
-  screen_rect.width = gdk_display->modeinfo.xres;
-  screen_rect.height = gdk_display->modeinfo.yres;
+  screen_rect.width = gdk_display->fb_width;
+  screen_rect.height = gdk_display->fb_width;
   
   gdk_rectangle_intersect (&result_rect, &screen_rect, &result_rect);
   

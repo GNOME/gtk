@@ -22,6 +22,13 @@ extern const char *gdk_progclass;
 
 extern GdkAtom gdk_selection_property;
 
+typedef enum {
+  GDK_FB_0_DEGREES,
+  GDK_FB_90_DEGREES,
+  GDK_FB_180_DEGREES,
+  GDK_FB_270_DEGREES
+} GdkFBAngle;
+
 /* FB specific functions: */
 
 typedef gboolean (*GdkWindowChildChanged) (GdkWindow *window,
@@ -36,4 +43,7 @@ void      gdk_fb_window_set_child_handler (GdkWindow             *window,
 					   GdkWindowChildChanged changed,
 					   GdkWindowChildGetPos  get_pos,
 					   gpointer              user_data);
+
+void      gdk_fb_set_rotation             (GdkFBAngle angle);
+
 #endif /* GDKFB_H */

@@ -133,6 +133,8 @@ case $gdktarget in
   *) AC_MSG_ERROR([Invalid target for GDK: use x11, nanox or linux-fb.]);;
 esac
 
+AC_ARG_ENABLE(shadowfb, [  --disable-shadowfb      disable shadowfb support for linux-fb],,enable_shadowfb=yes)
+	
 if test "x$enable_debug" = "xyes"; then
   test "$cflags_set" = set || CFLAGS="$CFLAGS -g"
   GTK_DEBUG_FLAGS="-DG_ENABLE_DEBUG"
@@ -146,6 +148,7 @@ fi
 
 AC_DEFINE_UNQUOTED(GTK_COMPILED_WITH_DEBUGGING, "${enable_debug}")
 
+			
 # Build time sanity check...
 AM_SANITY_CHECK
 
@@ -591,11 +594,16 @@ if test "x$gdktarget" = "xlinux-fb"; then
   FREETYPE_CFLAGS="`$FREETYPE_CONFIG --cflags`"
   FREETYPE_LIBS="`$FREETYPE_CONFIG --libs`"
   CFLAGS="$CFLAGS $FREETYPE_CFLAGS"
+
+  if test x$enable_shadowfb = xyes ; then
+    AC_DEFINE(ENABLE_SHADOW_FB)
+  fi
   
   AM_CONDITIONAL(USE_LINUX_FB, true)
 else
   AM_CONDITIONAL(USE_LINUX_FB, false)
 fi
+AC_SUBST(ENABLE_SHADOW_FB)	
 AC_SUBST(FREETYPE_LIBS)
 AC_SUBST(FREETYPE_CFLAGS)
 

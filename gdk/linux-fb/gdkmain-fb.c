@@ -580,13 +580,13 @@ gdk_fb_display_new ()
   ioctl (display->fb_fd, FBIOBLANK, 0);
 
   /* We used to use sinfo.smem_len, but that seemed to be broken in many cases */
-  display->fbmem = mmap (NULL,
-			 display->modeinfo.yres * display->sinfo.line_length,
-			 PROT_READ|PROT_WRITE,
-			 MAP_SHARED,
-			 display->fb_fd,
-			 0);
-  g_assert (display->fbmem != MAP_FAILED);
+  display->fb_mmap = mmap (NULL,
+			   display->modeinfo.yres * display->sinfo.line_length,
+			   PROT_READ|PROT_WRITE,
+			   MAP_SHARED,
+			   display->fb_fd,
+			   0);
+  g_assert (display->fb_mmap != MAP_FAILED);
 
   if (display->sinfo.visual == FB_VISUAL_TRUECOLOR)
     {
@@ -594,6 +594,27 @@ gdk_fb_display_new ()
       display->green_byte = display->modeinfo.green.offset >> 3;
       display->blue_byte = display->modeinfo.blue.offset >> 3;
     }
+
+#ifdef ENABLE_SHADOW_FB
+  if (_gdk_fb_screen_angle % 2 == 0)
+    {
+      display->fb_width = display->modeinfo.xres;
+      display->fb_height = display->modeinfo.yres;
+    } 
+  else
+    {
+      display->fb_width = display->modeinfo.yres;
+      display->fb_height = display->modeinfo.xres;
+    }
+  display->fb_stride =
+    display->fb_width * (display->modeinfo.bits_per_pixel / 8);
+  display->fb_mem = g_malloc(display->fb_height * display->fb_stride);
+#else
+  display->fb_mem = display->fb_mmap;
+  display->fb_width = display->modeinfo.xres;
+  display->fb_height = display->modeinfo.yres;
+  display->fb_stride = display->sinfo.line_length;
+#endif
 
   return display;
 }
@@ -607,7 +628,7 @@ gdk_fb_display_destroy (GdkFBDisplay *display)
   /* Enable normal text on the console */
   ioctl (display->fb_fd, KDSETMODE, KD_TEXT);
   
-  munmap (display->fbmem, display->modeinfo.yres * display->sinfo.line_length);
+  munmap (display->fb_mmap, display->modeinfo.yres * display->sinfo.line_length);
   close (display->fb_fd);
 
   ioctl (display->console_fd, VT_ACTIVATE, display->start_vt);
@@ -634,6 +655,8 @@ _gdk_windowing_init_check (int argc, char **argv)
   if (!gdk_display)
     return FALSE;
 
+  gdk_shadow_fb_init ();
+  
   if (!gdk_fb_keyboard_open ())
     {
       g_warning ("Failed to initialize keyboard");
@@ -893,7 +916,7 @@ gdk_keyboard_ungrab (guint32 time)
 gint
 gdk_screen_width (void)
 {
-  return gdk_display->modeinfo.xres;
+  return gdk_display->fb_width;
 }
 
 /*
@@ -914,7 +937,7 @@ gdk_screen_width (void)
 gint
 gdk_screen_height (void)
 {
-  return gdk_display->modeinfo.yres;
+  return gdk_display->fb_height;
 }
 
 /*
@@ -1195,59 +1218,39 @@ gdk_event_make (GdkWindow *window,
   return NULL;
 }
 
-/* Debug hack. Call to find malloc area overwrites: */
-void CM (void)
+void
+gdk_fb_set_rotation (GdkFBAngle angle)
 {
-  static gpointer mymem = NULL;
-  gpointer arry[256];
-  int i;
-
-  return;
-
-  free (mymem);
-
-  for(i = 0; i < sizeof(arry)/sizeof(arry[0]); i++)
-    arry[i] = malloc (i+1);
-  for(i = 0; i < sizeof(arry)/sizeof(arry[0]); i++)
-    free (arry[i]);
-
-  mymem = malloc (256);
-}
-
-/* XXX badhack */
-typedef struct _GdkWindowPaint GdkWindowPaint;
-
-struct _GdkWindowPaint
-{
-  GdkRegion *region;
-  GdkPixmap *pixmap;
-  gint x_offset;
-  gint y_offset;
-};
-
-void RP (GdkDrawable *d)
-{
-#if 0
-  if (GDK_DRAWABLE_TYPE(d) == GDK_DRAWABLE_PIXMAP)
+  if (angle == _gdk_fb_screen_angle)
+    return;
+  
+#ifdef ENABLE_SHADOW_FB
+  if (gdk_display)
     {
-      if (!GDK_PIXMAP_FBDATA(d)->no_free_mem)
+      gdk_shadow_fb_stop_updates ();
+
+      _gdk_fb_screen_angle = angle;
+
+      if (angle % 2 == 0)
 	{
-	  guchar *oldmem = GDK_DRAWABLE_FBDATA(d)->mem;
-	  guint len = ((GDK_DRAWABLE_IMPL_FBDATA(d)->width * GDK_DRAWABLE_IMPL_FBDATA(d)->depth + 7) / 8) * GDK_DRAWABLE_IMPL_FBDATA(d)->height;
-	  GDK_DRAWABLE_IMPL_FBDATA(d)->mem = g_malloc(len);
-	  memcpy(GDK_DRAWABLE_IMPL_FBDATA(d)->mem, oldmem, len);
-	  g_free(oldmem);
+	  gdk_display->fb_width = gdk_display->modeinfo.xres;
+	  gdk_display->fb_height = gdk_display->modeinfo.yres;
+	} 
+      else
+	{
+	  gdk_display->fb_width = gdk_display->modeinfo.yres;
+	  gdk_display->fb_height = gdk_display->modeinfo.xres;
 	}
+      gdk_display->fb_stride =
+	gdk_display->fb_width * (gdk_display->modeinfo.bits_per_pixel / 8);
+      
+      gdk_fb_recompute_all();
+      gdk_fb_redraw_all ();
     }
   else
-    {
-      GSList *priv = GDK_WINDOW_P(d)->paint_stack;
-      for(; priv; priv = priv->next)
-	{
-	  GdkWindowPaint *p = priv->data;
-
-	  RP(p->pixmap);
-	}
-    }
+    _gdk_fb_screen_angle = angle;
+#else
+  g_warning ("Screen rotation without shadow fb not supported.");
 #endif
 }
+

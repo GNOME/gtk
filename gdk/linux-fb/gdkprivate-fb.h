@@ -40,7 +40,6 @@
 #include <stdio.h>
 #include <freetype/freetype.h>
 
-
 #define GDK_TYPE_DRAWABLE_IMPL_FBDATA (gdk_drawable_impl_fb_get_type ())
 #define GDK_DRAWABLE_IMPL_FBDATA(win) ((GdkDrawableFBData *)((GdkWindowObject *)(win))->impl)
 #define GDK_IS_DRAWABLE_IMPL_FBDATA(object)     (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_DRAWABLE_IMPL_FBDATA))
@@ -126,9 +125,15 @@ struct _GdkFBDisplay
   int tty_fd;
   int console_fd;
   int vt, start_vt;
-  
+
+  /* Used by rendering code: */
+  guchar *fb_mem;
+  gint fb_width; /* In pixels */
+  gint fb_height; /* In pixels */
+  gint fb_stride; /* In bytes */
+
   int fb_fd;
-  guchar *fbmem;
+  guchar *fb_mmap;
   gpointer active_cmap;
   gulong mem_len;
   struct fb_fix_screeninfo sinfo;
@@ -361,11 +366,20 @@ GdkGrabStatus gdk_fb_pointer_grab          (GdkWindow           *window,
 					    GdkCursor           *cursor,
 					    guint32              time,
 					    gboolean             implicit_grab);
-void gdk_fb_pointer_ungrab                 (guint32 time,
+void       gdk_fb_pointer_ungrab           (guint32 time,
 					    gboolean implicit_grab);
 
-guint32 gdk_fb_get_time                    (void);
+guint32    gdk_fb_get_time                 (void);
 
+void       gdk_shadow_fb_update            (gint                 minx,
+					    gint                 miny,
+					    gint                 maxx,
+					    gint                 maxy);
+void       gdk_shadow_fb_init              (void);
+void       gdk_shadow_fb_stop_updates      (void);
+void       gdk_fb_recompute_all            (void);
+
+extern GdkFBAngle _gdk_fb_screen_angle;
 
 extern GdkWindow *_gdk_fb_pointer_grab_window, *_gdk_fb_pointer_grab_window_events, *_gdk_fb_keyboard_grab_window, *_gdk_fb_pointer_grab_confine;
 extern GdkEventMask _gdk_fb_pointer_grab_events, _gdk_fb_keyboard_grab_events;
@@ -393,9 +407,5 @@ void     gdk_fb_mouse_close    (void);
 void     gdk_fb_mouse_get_info (gint            *x,
 				gint            *y,
 				GdkModifierType *mask);
-
-
-extern void CM(void); /* Check for general mem corruption */
-extern void RP(GdkDrawable *drawable); /* Same, for pixmaps */
 
 #endif /* __GDK_PRIVATE_FB_H__ */

@@ -1,5 +1,8 @@
+#include "config.h"
 #include "gdkprivate-fb.h"
 #include <string.h>
+#include <signal.h>
+#include <sys/time.h>
 
 /*
  * Reading pixel values from a generic drawable.
@@ -1200,6 +1203,251 @@ _gdk_fb_gc_calc_state (GdkGC           *gc,
 	  break;
 	}
     }
-
 }
+
+#ifdef ENABLE_SHADOW_FB
+static void
+gdk_shadow_fb_copy_rect_0 (gint x, gint y, gint width, gint height)
+{
+  guchar *dst, *src;
+  gint depth;
+
+  depth = gdk_display->modeinfo.bits_per_pixel / 8;
+
+  dst = gdk_display->fb_mmap + x * depth + gdk_display->sinfo.line_length * y;
+  src = gdk_display->fb_mem + x * depth + gdk_display->fb_stride * y;
+
+  width = width*depth;
+  while (height>0)
+    {
+      memcpy (dst, src, width);
+      dst += gdk_display->sinfo.line_length;
+      src += gdk_display->fb_stride;
+      height--;
+    }
+}
+
+static void
+gdk_shadow_fb_copy_rect_90 (gint x, gint y, gint width, gint height)
+{
+  guchar *dst, *src, *pdst;
+  gint depth;
+  gint w;
+  gint i;
+
+  depth = gdk_display->modeinfo.bits_per_pixel / 8;
+
+  src = gdk_display->fb_mem + x * depth + gdk_display->fb_stride * y;
+  dst = gdk_display->fb_mmap + y * depth + gdk_display->sinfo.line_length * (gdk_display->fb_width - x - 1);
+
+  while (height>0)
+    {
+      w = width;
+      pdst = dst;
+      while (w>0) {
+	for (i=0;i<depth;i++)
+	  *pdst++ = *src++;
+	pdst -= gdk_display->sinfo.line_length + depth;
+	w--;
+      }
+      dst += depth;
+      src += gdk_display->fb_stride - width * depth;
+      height--;
+    }
+}
+
+static void
+gdk_shadow_fb_copy_rect_180 (gint x, gint y, gint width, gint height)
+{
+  guchar *dst, *src, *pdst;
+  gint depth;
+  gint w;
+  gint i;
+
+  depth = gdk_display->modeinfo.bits_per_pixel / 8;
+
+  src = gdk_display->fb_mem + x * depth + gdk_display->fb_stride * y;
+  dst = gdk_display->fb_mmap + (gdk_display->fb_width - x - 1) * depth + gdk_display->sinfo.line_length * (gdk_display->fb_height - y - 1) ;
+
+  while (height>0)
+    {
+      w = width;
+      pdst = dst;
+      while (w>0) {
+	for (i=0;i<depth;i++)
+	  *pdst++ = *src++;
+	pdst -= 2 * depth;
+	w--;
+      }
+      dst -= gdk_display->sinfo.line_length;
+      src += gdk_display->fb_stride - width * depth;
+      height--;
+    }
+}
+
+static void
+gdk_shadow_fb_copy_rect_270 (gint x, gint y, gint width, gint height)
+{
+  guchar *dst, *src, *pdst;
+  gint depth;
+  gint w;
+  gint i;
+
+  depth = gdk_display->modeinfo.bits_per_pixel / 8;
+
+  src = gdk_display->fb_mem + x * depth + gdk_display->fb_stride * y;
+  dst = gdk_display->fb_mmap + (gdk_display->fb_height - y - 1) * depth + gdk_display->sinfo.line_length * x;
+
+  while (height>0)
+    {
+      w = width;
+      pdst = dst;
+      while (w>0) {
+	for (i=0;i<depth;i++)
+	  *pdst++ = *src++;
+	pdst += gdk_display->sinfo.line_length - depth;
+	w--;
+      }
+      dst -= depth;
+      src += gdk_display->fb_stride - width * depth;
+      height--;
+    }
+}
+
+static void (*shadow_copy_rect[4]) (gint x, gint y, gint width, gint height);
+
+volatile gint refresh_queued = 0;
+volatile gint refresh_x1, refresh_y1;
+volatile gint refresh_x2, refresh_y2;
+
+static void
+gdk_shadow_fb_refresh (int signum)
+{
+  gint minx, miny, maxx, maxy;
+
+  if (!refresh_queued)
+    {
+      struct itimerval timeout;
+      /* Stop the timer */ 
+      timeout.it_value.tv_sec = 0;
+      timeout.it_value.tv_usec = 0;
+      timeout.it_interval.tv_sec = 0;
+      timeout.it_interval.tv_usec = 0;
+      setitimer (ITIMER_REAL, &timeout, NULL);
+      return;
+    }
+ 
+  
+  minx = refresh_x1;
+  miny = refresh_y1;
+  maxx = refresh_x2;
+  maxy = refresh_y2;
+  refresh_queued = 0;
+
+  /* clip x */
+  if (minx < 0) {
+    minx = 0;
+    maxx = MAX (maxx, 0);
+  }
+  if (maxx >= gdk_display->fb_width) {
+    maxx = gdk_display->fb_width-1;
+    minx = MIN (minx, maxx);
+  }
+  /* clip y */
+  if (miny < 0) {
+    miny = 0;
+    maxy = MAX (maxy, 0);
+  }
+  if (maxy >= gdk_display->fb_height) {
+    maxy = gdk_display->fb_height-1;
+    miny = MIN (miny, maxy);
+  }
+  
+  (*shadow_copy_rect[_gdk_fb_screen_angle]) (minx, miny, maxx - minx + 1, maxy - miny + 1);
+}
+
+void
+gdk_shadow_fb_stop_updates (void)
+{
+  struct itimerval timeout;
+
+  refresh_queued = 0;
+
+  /* Stop the timer */ 
+  timeout.it_value.tv_sec = 0;
+  timeout.it_value.tv_usec = 0;
+  timeout.it_interval.tv_sec = 0;
+  timeout.it_interval.tv_usec = 0;
+  setitimer (ITIMER_REAL, &timeout, NULL);
+
+  refresh_queued = 0;
+}
+
+void
+gdk_shadow_fb_init (void)
+{
+  struct sigaction action;
+
+  action.sa_handler = gdk_shadow_fb_refresh;
+  sigemptyset (&action.sa_mask);
+  action.sa_flags = 0;
+  
+  sigaction (SIGALRM, &action, NULL);
+
+  shadow_copy_rect[GDK_FB_0_DEGREES] = gdk_shadow_fb_copy_rect_0;
+  shadow_copy_rect[GDK_FB_90_DEGREES] = gdk_shadow_fb_copy_rect_90;
+  shadow_copy_rect[GDK_FB_180_DEGREES] = gdk_shadow_fb_copy_rect_180;
+  shadow_copy_rect[GDK_FB_270_DEGREES] = gdk_shadow_fb_copy_rect_270;
+}
+
+/* maxx and maxy are included */
+void
+gdk_shadow_fb_update (gint minx, gint miny, gint maxx, gint maxy)
+{
+  struct itimerval timeout;
+  
+  g_assert (minx <= maxx);
+  g_assert (miny <= maxy);
+
+  if (refresh_queued)
+    {
+      refresh_x1 = MIN (refresh_x1, minx);
+      refresh_y1 = MIN (refresh_y1, miny);
+      refresh_x2 = MAX (refresh_x2, maxx);
+      refresh_y2 = MAX (refresh_y2, maxy);
+      refresh_queued = 1;
+    }
+  else
+    {
+      refresh_x1 = minx;
+      refresh_y1 = miny;
+      refresh_x2 = maxx;
+      refresh_y2 = maxy;
+      refresh_queued = 1;
+
+      getitimer (ITIMER_REAL, &timeout);
+      if (timeout.it_value.tv_usec == 0)
+	{
+	  timeout.it_value.tv_sec = 0;
+	  timeout.it_value.tv_usec = 20000; /* 20 ms => 50 fps */
+	  timeout.it_interval.tv_sec = 0;
+	  timeout.it_interval.tv_usec = 20000; /* 20 ms => 50 fps */
+	  setitimer (ITIMER_REAL, &timeout, NULL);
+	}
+    }
+  
+}
+#else
+
+void
+gdk_shadow_fb_update (gint minx, gint miny, gint maxx, gint maxy)
+{
+}
+
+void
+gdk_shadow_fb_init (void)
+{
+}
+
+#endif
 

@@ -1,3 +1,58 @@
+2001-01-11  Alexander Larsson  <alexl@redhat.com>
+
+	* acconfig.h:
+	Added ENABLE_SHADOW_FB
+
+	* configure.in:
+	Added --disable-shadowfb
+
+	* gdk/linux-fb/gdkcursor-fb.c:
+	Update shadowfb when updating cursor
+
+	* gdk/linux-fb/gdkdrawable-fb2.c:
+	Added wrappers for shadowfb that calls 	the normal drawable
+	methods, but calls gdk_shadow_fb_update(bounding box) when
+	GdkWindows are drawed to.
+	Moved gdk_draw_glyphs implementation to _gdk_draw_glyphs
+	which also returns the bounding box.
+
+	* gdk/linux-fb/gdkfb.h:
+	Added GdkFBAngle type and gdk_fb_set_rotation declaration.
+
+	* gdk/linux-fb/gdkgeometry-fb.c:
+	Update shadowfb when scrolling window.
+
+	* gdk/linux-fb/gdkglobals-fb.c:
+	Add _gdk_fb_screen_angle.
+	
+	* gdk/linux-fb/gdkkeyboard-fb.c:
+	Test code for screen rotation. Shift-F2 in the xlate driver
+	rotates the screen.
+
+	* gdk/linux-fb/gdkmain-fb.c:
+	Handle shadowfb. Add gdk_fb_set_rotation(). Remove CM and RP.
+
+	* gdk/linux-fb/gdkmouse-fb.c:
+	Use fb_width/height instead of modeinfo.xres/yres.
+
+	* gdk/linux-fb/gdkprivate-fb.h:
+	Added fb_men, fb_width, fb_height & fb_stride. When using
+	shadow fb these can differ from the framebuffer stuff.
+	Declarations for gdk_shadow_fb_update, gdk_shadow_fb_init,
+	gdk_shadow_fb_stop_updates, gdk_fb_recompute_all,
+	_gdk_fb_screen_angle. Removed CM, RP.
+
+	* gdk/linux-fb/gdkrender-fb.c:
+	Added code for shadowfb handling and screen rotation using
+	shadowfb.
+
+	* gdk/linux-fb/gdkwindow-fb.c:
+	Use fb_mem, fb_stride, fb_width, fb_height.
+	Added recompute_rowstride to reset the rowstride of all windows.
+	Added gdk_fb_recompute_all() which recomputes rootwindow size,
+	window abs positions and window rowstrides. Usefull when the
+	rotation has changed.
+
 Thu Jan 11 13:16:50 GMT 2001  Tony Gale <gale@gtk.org>
 
 	* docs/faq/gtk-faq.sgml: update to make web site updating easier
