@@ -1874,6 +1874,13 @@ list_remove (GtkWidget *widget,
 }
 
 static void
+list_clear (GtkWidget *widget,
+	    GtkWidget *list)
+{
+  gtk_list_clear_items (GTK_LIST (list), 3 - 1, 5 - 1);
+}
+
+static void
 create_list ()
 {
   static GtkWidget *window = NULL;
@@ -1951,6 +1958,14 @@ create_list ()
       GTK_WIDGET_UNSET_FLAGS (button, GTK_CAN_FOCUS);
       gtk_signal_connect (GTK_OBJECT (button), "clicked",
 			  GTK_SIGNAL_FUNC(list_add),
+			  list);
+      gtk_box_pack_start (GTK_BOX (box2), button, FALSE, TRUE, 0);
+      gtk_widget_show (button);
+
+      button = gtk_button_new_with_label ("clear items 3 - 5");
+      GTK_WIDGET_UNSET_FLAGS (button, GTK_CAN_FOCUS);
+      gtk_signal_connect (GTK_OBJECT (button), "clicked",
+			  GTK_SIGNAL_FUNC(list_clear),
 			  list);
       gtk_box_pack_start (GTK_BOX (box2), button, FALSE, TRUE, 0);
       gtk_widget_show (button);

@@ -411,13 +411,14 @@ gtk_list_clear_items (GtkList *list,
       if ((end < 0) || (end > nchildren))
 	end = nchildren;
 
-      g_return_if_fail (start < end);
+      if (start >= end)
+	return;
 
       start_list = g_list_nth (list->children, start);
       end_list = g_list_nth (list->children, end);
 
       if (start_list->prev)
-        start_list->prev->next = end_list;
+	start_list->prev->next = end_list;
       if (end_list && end_list->prev)
         end_list->prev->next = NULL;
       if (end_list)
@@ -441,17 +442,16 @@ gtk_list_clear_items (GtkList *list,
 	      gtk_widget_unref (widget);
 	    }
 
-	  /* list->children = g_list_remove (list->children, widget); */
-	  /* gtk_widget_unparent (widget); */
-
 	  gtk_widget_unparent (widget);
 	}
+
+      g_list_free (start_list);
 
       if (list->children && !list->selection &&
 	  (list->selection_mode == GTK_SELECTION_BROWSE))
 	{
-	  gtk_list_select_child (list, widget);
 	  widget = list->children->data;
+	  gtk_list_select_child (list, widget);
 	}
 
       if (selection_changed)

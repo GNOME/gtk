@@ -375,11 +375,17 @@ gtk_hscrollbar_trough_keys(GtkRange *range,
       break;
     case GDK_Home:
       return_val = TRUE;
-      *pos = GTK_TROUGH_START;
+      if (key->state & GDK_CONTROL_MASK)
+	*scroll = GTK_SCROLL_PAGE_BACKWARD;
+      else
+	*pos = GTK_TROUGH_START;
       break;
     case GDK_End:
       return_val = TRUE;
-      *pos = GTK_TROUGH_END;
+      if (key->state & GDK_CONTROL_MASK)
+	*scroll = GTK_SCROLL_PAGE_FORWARD;
+      else
+	*pos = GTK_TROUGH_END;
       break;
     }
   return return_val;

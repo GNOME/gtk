@@ -2,12 +2,10 @@ TODO BEFORE GTK 1.0
 -------------------
 
 Bugs:
- * gtk_list_clear_items: free start_list
- 
- * GtkComboBox: need to destroy gdk cursor
- 
  * Vertical scrollbar: the expose event looks hosed and is causing 
    quite a bit of flickering
+   Actually this affects both scrollbar implementation, you can best
+   tell if you run the application with --sync (timj)
 
  * signal parameters don't seem to get refreshed on recursive invokations
    of GTK_NO_RECURSE signals, which causes the restarted emissions to loose
