@@ -1,3 +1,13 @@
+2002-02-26  Matthias Clasen  <maclas@gmx.de>
+
+	Fixes for #72478:
+	
+	* gtk/tmpl/gtkprogressbar.sgml: Add note about new GtkProgressBar
+	API to introduction. 
+
+	* gtk/gtk-sections.txt: Reorder GtkProgressBar functions to move 
+	undeprecated API to top.
+
 Sat Feb 23 23:39:14 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/tmpl/gtktreemodel.sgml: Document gtk_tree_path_new_root(),

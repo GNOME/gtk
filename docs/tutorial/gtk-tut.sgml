@@ -5,7 +5,7 @@
 <book id="gtk-tut">
 
 <bookinfo>
-    <date>February 20, 2002</date>
+    <date>February 25, 2002</date>
     <title>GTK+ 2.0 Tutorial</title>
     <authorgroup>
       <author>
@@ -191,7 +191,7 @@ int main( int   argc,
 
 <para>You can compile the above program with gcc using:</para>
 <para><literallayout>
-<literal>gcc base.c -o base `pkg-config --cflags --libs gtk-2.0`</literal>
+<literal>gcc base.c -o base `pkg-config --cflags --libs gtk+-2.0`</literal>
 </literallayout></para>
 
 <para>The meaning of the unusual compilation options is explained below in
@@ -395,8 +395,8 @@ int main( int   argc,
 <para>To compile use:</para>
 
 <para><literallayout>
-<literal>gcc -Wall -g helloworld.c -o helloworld `pkg-config --cflags gtk-2.0` \</literal>
-<literal>    `pkg-config --libs gtk-2.0`</literal>
+<literal>gcc -Wall -g helloworld.c -o helloworld `pkg-config --cflags gtk+-2.0` \</literal>
+<literal>    `pkg-config --libs gtk+-2.0`</literal>
 </literallayout></para>
 
 <para>This uses the program <literal>pkg-config</literal>, which can be obtained from
@@ -2682,7 +2682,7 @@ struct _GtkAdjustment
 
 <para>If you don't like to poke directly at struct internals like a 
 <emphasis>real</emphasis> C programmer, you can use the following accessor to
-inspect the <literal>value</literal> of an adjustment:
+inspect the <literal>value</literal> of an adjustment:</para>
 
 <programlisting role="C">
 gdouble	gtk_adjustment_get_value( GtkAdjustment *adjustment);

@@ -18,23 +18,37 @@ When an application can determine how much work needs to take place
 progress, it can use the #GtkProgressBar in percentage mode and the user
 sees a growing bar indicating the percentage of the work that has
 been completed.  In this mode, the application is required to call
-either the gtk_progress_set_percentage() or gtk_progress_set_value()
-functions periodically to update the progress bar.
+gtk_progress_bar_set_fraction() periodically to update the progress bar.
 </para>
 
 <para>
 When an application has no accurate way of knowing the amount of work
-to do, it can use the #GtkProgressBar in activity mode.  In this mode
-the progress bar shows activity by a block moving back and forth within
-the progress area.
+to do, it can use the #GtkProgressBar in activity mode, which shows activity 
+by a block moving back and forth within the progress area. In this mode,
+the application is required to call gtk_progress_bar_pulse() perodically
+to update the progress bar.
 </para>
 
 <para>
 There is quite a bit of flexibility provided to control the appearance
 of the #GtkProgressBar.  Functions are provided to control the 
-orientation of the bar, optional text which can be displayed along with
-the bar, and the style in which the bar grows.
+orientation of the bar, optional text can be displayed along with
+the bar, and the step size used in activity mode can be set.
 </para>
+
+<note>
+<para>
+The #GtkProgressBar/#GtkProgress API in GTK 1.2 was bloated, needlessly complex
+and hard to use properly.  Therefore #GtkProgress has been deprecated
+completely and the #GtkProgressBar API has been reduced to the following 9
+functions: gtk_progress_bar_new(), gtk_progress_bar_pulse(), gtk_progress_bar_set_text(),
+gtk_progress_bar_set_fraction(), gtk_progress_bar_set_pulse_step(),
+gtk_progress_bar_set_orientation(), gtk_progress_bar_get_text(),
+gtk_progress_bar_get_fraction(), gtk_progress_bar_get_pulse_step(). These have
+been grouped at the beginning of this section, followed by a large chunk of 
+deprecated 1.2 compatibility functions.
+</para>
+</note>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
@@ -47,67 +61,6 @@ The #GtkProgressBar-struct struct contains private data only,
 and should be accessed using the functions below.
 </para>
 
-
-<!-- ##### ENUM GtkProgressBarStyle ##### -->
-<para>
-An enumeration representing the styles for drawing the progress bar.
-
-<informaltable pgwide=1 frame="none" role="enum">
-<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
-<tbody>
-
-<row>
-<entry>GTK_PROGRESS_CONTINUOUS</entry>
-<entry>The progress bar grows in a smooth, continuous manner.</entry>
-</row>
-
-<row>
-<entry>GTK_PROGRESS_DISCRETE</entry>
-<entry>The progress bar grows in discrete, visible blocks.</entry>
-</row>
-
-</tbody></tgroup></informaltable>
-</para>
-
-@GTK_PROGRESS_CONTINUOUS: 
-@GTK_PROGRESS_DISCRETE: 
-
-<!-- ##### ENUM GtkProgressBarOrientation ##### -->
-<para>
-An enumeration representing possible orientations and growth
-directions for the visible progress bar.
-
-<informaltable pgwide=1 frame="none" role="enum">
-<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
-<tbody>
-
-<row>
-<entry>GTK_PROGRESS_LEFT_TO_RIGHT</entry>
-<entry>A horizontal progress bar growing from left to right.</entry>
-</row>
-
-<row>
-<entry>GTK_PROGRESS_RIGHT_TO_LEFT</entry>
-<entry>A horizontal progress bar growing from right to left.</entry>
-</row>
-
-<row>
-<entry>GTK_PROGRESS_BOTTOM_TO_TOP</entry>
-<entry>A vertical progress bar growing from bottom to top.</entry>
-</row>
-
-<row>
-<entry>GTK_PROGRESS_TOP_TO_BOTTOM</entry>
-<entry>A vertical progress bar growing from top to bottom.</entry>
-</row>
-
-</tbody></tgroup></informaltable>
-</para>
-
-@GTK_PROGRESS_LEFT_TO_RIGHT: 
-@GTK_PROGRESS_RIGHT_TO_LEFT: 
-@GTK_PROGRESS_BOTTOM_TO_TOP: 
-@GTK_PROGRESS_TOP_TO_BOTTOM: 
 
 <!-- ##### FUNCTION gtk_progress_bar_new ##### -->
 <para>
@@ -152,6 +105,61 @@ Creates a new #GtkProgressBar.
 @fraction: 
 
 
+<!-- ##### FUNCTION gtk_progress_bar_set_orientation ##### -->
+<para>
+
+</para>
+
+@pbar: 
+@orientation: 
+
+
+<!-- ##### ENUM GtkProgressBarOrientation ##### -->
+<para>
+An enumeration representing possible orientations and growth
+directions for the visible progress bar.
+
+<informaltable pgwide=1 frame="none" role="enum">
+<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
+<tbody>
+
+<row>
+<entry>GTK_PROGRESS_LEFT_TO_RIGHT</entry>
+<entry>A horizontal progress bar growing from left to right.</entry>
+</row>
+
+<row>
+<entry>GTK_PROGRESS_RIGHT_TO_LEFT</entry>
+<entry>A horizontal progress bar growing from right to left.</entry>
+</row>
+
+<row>
+<entry>GTK_PROGRESS_BOTTOM_TO_TOP</entry>
+<entry>A vertical progress bar growing from bottom to top.</entry>
+</row>
+
+<row>
+<entry>GTK_PROGRESS_TOP_TO_BOTTOM</entry>
+<entry>A vertical progress bar growing from top to bottom.</entry>
+</row>
+
+</tbody></tgroup></informaltable>
+</para>
+
+@GTK_PROGRESS_LEFT_TO_RIGHT: 
+@GTK_PROGRESS_RIGHT_TO_LEFT: 
+@GTK_PROGRESS_BOTTOM_TO_TOP: 
+@GTK_PROGRESS_TOP_TO_BOTTOM: 
+
+<!-- ##### FUNCTION gtk_progress_bar_get_text ##### -->
+<para>
+
+</para>
+
+@pbar: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_progress_bar_get_fraction ##### -->
 <para>
 
@@ -170,7 +178,7 @@ Creates a new #GtkProgressBar.
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_progress_bar_get_text ##### -->
+<!-- ##### FUNCTION gtk_progress_bar_get_orientation ##### -->
 <para>
 
 </para>
@@ -197,6 +205,30 @@ Sets the style of the #GtkProgressBar.  The default style is
 @pbar: a #GtkProgressBar.
 @style: a #GtkProgressBarStyle value indicating the desired style.
 
+
+<!-- ##### ENUM GtkProgressBarStyle ##### -->
+<para>
+An enumeration representing the styles for drawing the progress bar.
+
+<informaltable pgwide=1 frame="none" role="enum">
+<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
+<tbody>
+
+<row>
+<entry>GTK_PROGRESS_CONTINUOUS</entry>
+<entry>The progress bar grows in a smooth, continuous manner.</entry>
+</row>
+
+<row>
+<entry>GTK_PROGRESS_DISCRETE</entry>
+<entry>The progress bar grows in discrete, visible blocks.</entry>
+</row>
+
+</tbody></tgroup></informaltable>
+</para>
+
+@GTK_PROGRESS_CONTINUOUS: 
+@GTK_PROGRESS_DISCRETE: 
 
 <!-- ##### FUNCTION gtk_progress_bar_set_discrete_blocks ##### -->
 <para>
@@ -228,24 +260,6 @@ mode.  Larger numbers make the visible block smaller.
 
 @pbar: a #GtkProgressBar.
 @blocks: number of blocks which can fit within the progress bar area.
-
-
-<!-- ##### FUNCTION gtk_progress_bar_set_orientation ##### -->
-<para>
-
-</para>
-
-@pbar: 
-@orientation: 
-
-
-<!-- ##### FUNCTION gtk_progress_bar_get_orientation ##### -->
-<para>
-
-</para>
-
-@pbar: 
-@Returns: 
 
 
 <!-- ##### FUNCTION gtk_progress_bar_update ##### -->

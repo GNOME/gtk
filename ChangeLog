@@ -1,3 +1,8 @@
+2002-02-25  Matthias Clasen  <maclas@gmx.de>
+
+	* docs/tutorial/gtk-tut.sgml: Fix typos in pkg-config 
+	invokations.  (#72476) 
+
 Mon Feb 25 18:59:27 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktooltips.c (start_keyboard_mode): Set the keyboard-mode
