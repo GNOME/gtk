@@ -32,10 +32,8 @@ typedef void     (*GdkWindowChildGetPos)  (GdkWindow *window,
 					   gint *x, gint *y,
 					   gpointer user_data);
 
-gboolean  _gdk_window_get_decorations   (GdkWindow       *window,
-					 GdkWMDecoration *decorations);
-void      _gdk_window_set_child_handler (GdkWindow             *window,
-					 GdkWindowChildChanged changed,
-					 GdkWindowChildGetPos  get_pos,
-					 gpointer              user_data);
+void      gdk_fb_window_set_child_handler (GdkWindow             *window,
+					   GdkWindowChildChanged changed,
+					   GdkWindowChildGetPos  get_pos,
+					   gpointer              user_data);
 #endif /* GDKFB_H */

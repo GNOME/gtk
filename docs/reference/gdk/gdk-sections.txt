@@ -465,6 +465,7 @@ gdk_window_set_transient_for
 gdk_window_set_role
 gdk_window_set_group
 gdk_window_set_decorations
+gdk_window_get_decorations
 GdkWMDecoration
 gdk_window_set_functions
 GdkWMFunction

@@ -1,3 +1,28 @@
+2001-01-08  Alexander Larsson  <alexl@redhat.com>
+
+	* docs/README.linux-fb:
+	Correct filename ~/.pangoft2_aliases
+
+	* gdk/gdkwindow.h:
+	Added new function gdk_window_get_decorations.
+
+	* gdk/linux-fb/gdkfb.h:
+	Removed _gdk_window_get_decorations declaration.
+	Renamed _gdk_window_set_child_handler to
+	gdk_fb_window_set_child_handler.
+
+	* gdk/linux-fb/gdkwindow-fb.c:
+	Renamed _gdk_window_set_child_handler to
+	gdk_fb_window_set_child_handler.
+
+	* gdk/x11/gdkwindow-x11.c:
+	New function gdk_window_get_mwm_hints().
+	Implemented gdk_window_get_decorations.
+
+	* docs/reference/gdk/tmpl/windows.sgml:
+	* docs/reference/gdk/gdk-sections.txt:
+	Added gdk_window_get_decorations docs.
+	
 2001-01-08  Alexander Larsson  <alla@lysator.liu.se>
 
 	* gdk/linux-fb/gdkwindow-fb.c (_gdk_fb_window_find_focus,

@@ -388,6 +388,8 @@ void	      gdk_window_set_group	 (GdkWindow	  *window,
 					  GdkWindow	  *leader);
 void	      gdk_window_set_decorations (GdkWindow	  *window,
 					  GdkWMDecoration  decorations);
+gboolean      gdk_window_get_decorations (GdkWindow       *window,
+					  GdkWMDecoration *decorations);
 void	      gdk_window_set_functions	 (GdkWindow	  *window,
 					  GdkWMFunction	   functions);
 GList *       gdk_window_get_toplevels   (void);

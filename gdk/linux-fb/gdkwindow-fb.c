@@ -1685,10 +1685,10 @@ gdk_window_set_group (GdkWindow *window,
 }
 
 void
-_gdk_window_set_child_handler (GdkWindow             *window,
-			       GdkWindowChildChanged changed,
-			       GdkWindowChildGetPos  get_pos,
-			       gpointer              user_data)
+gdk_fb_window_set_child_handler (GdkWindow             *window,
+				 GdkWindowChildChanged changed,
+				 GdkWindowChildGetPos  get_pos,
+				 gpointer              user_data)
 {
   GdkWindowChildHandlerData *data;
     
@@ -1721,8 +1721,8 @@ gdk_window_set_decorations (GdkWindow      *window,
 }
 
 gboolean
-_gdk_window_get_decorations(GdkWindow *window,
-			    GdkWMDecoration *decorations)
+gdk_window_get_decorations(GdkWindow *window,
+			   GdkWMDecoration *decorations)
 {
   GdkWMDecoration *dec;
     

@@ -50,7 +50,7 @@ To your $prefix/etc/pango/pangorc or ~/.pangorc.
 
 You must also set up font aliases for the fonts Sans, Serif and Monotype.
 This is done by creating a $prefix/etc/pango/pangoft2.aliases or
-~/.pangoft2.aliases file. You can also set the name of this file using the
+~/.pangoft2_aliases file. You can also set the name of this file using the
 key AliasFiles in the PangoFT2 section in pangorc.
 
 An example of a font alias file is:

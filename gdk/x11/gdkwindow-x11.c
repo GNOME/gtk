@@ -1851,6 +1851,34 @@ gdk_window_set_group (GdkWindow *window,
   XFree (wm_hints);
 }
 
+static MotifWmHints *
+gdk_window_get_mwm_hints (GdkWindow *window)
+{
+  static Atom hints_atom = None;
+  MotifWmHints *hints;
+  Atom type;
+  gint format;
+  gulong nitems;
+  gulong bytes_after;
+  
+  if (GDK_WINDOW_DESTROYED (window))
+    return NULL;
+  
+  if (!hints_atom)
+    hints_atom = XInternAtom (GDK_WINDOW_XDISPLAY (window), 
+			      _XA_MOTIF_WM_HINTS, FALSE);
+  
+  XGetWindowProperty (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window),
+		      hints_atom, 0, sizeof (MotifWmHints)/sizeof (long),
+		      False, AnyPropertyType, &type, &format, &nitems,
+		      &bytes_after, (guchar **)&hints);
+
+  if (type == None)
+    return NULL;
+  
+  return hints;
+}
+
 static void
 gdk_window_set_mwm_hints (GdkWindow *window,
 			  MotifWmHints *new_hints)
@@ -1911,6 +1939,29 @@ gdk_window_set_decorations (GdkWindow      *window,
   hints.decorations = decorations;
   
   gdk_window_set_mwm_hints (window, &hints);
+}
+
+gboolean
+gdk_window_get_decorations(GdkWindow *window,
+			   GdkWMDecoration *decorations)
+{
+  MotifWmHints *hints;
+  gboolean result = FALSE;
+
+  hints = gdk_window_get_mwm_hints (window);
+  
+  if (hints)
+    {
+      if (hints->flags & MWM_HINTS_DECORATIONS)
+	{
+	  *decorations = hints->decorations;
+	  result = TRUE;
+	}
+      
+      XFree (hints);
+    }
+
+  return result;
 }
 
 void
