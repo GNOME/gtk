@@ -2,6 +2,7 @@
 
 	* gtk/gtkiconview.c (gtk_icon_view_set_model): Check column types on the
 	new model, and check them all.  (#159389, Olivier Andrieu)
+	(gtk_icon_view_set_model): Queue a layout. (#159436, Olivier Andrieu)
 
 	* gdk/x11/gdkselection-x11.c (gdk_text_property_to_utf8_list_for_display): 
 	Don't crash if Xlib fails to return UTF-8. (#159373, Kristian Høgsberg) 
