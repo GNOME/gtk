@@ -1,3 +1,8 @@
+Fri Mar  1 17:00:28 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkpolyreg-generic.c: Fix some reported (but not significant)
+	UMR's from purify. (#73160, Morten Welinder)
+
 Fri Mar  1 16:48:19 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkscrolledwindow.c: Initialize the scrollbar spacing
