@@ -1,3 +1,7 @@
+2004-12-26  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtkexpander.sgml: Typo fix. (#162219, Masao Mutoh)
+
 2004-12-20  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkitemfactory.sgml: Document GtkTranslateFunc

@@ -1,3 +1,8 @@
+2004-12-26  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilechooser.c (gtk_file_chooser_set_action): 
+	Typo fix.  (#162219, Masao Mutoh)
+
 2004-12-23  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkliststore.c (gtk_list_store_iter_children): 

@@ -258,7 +258,7 @@ gtk_file_chooser_error_quark (void)
  * @chooser: a #GtkFileChooser
  * @action: the action that the file selector is performing
  * 
- * Sets the type of operation that that the chooser is performing; the
+ * Sets the type of operation that the chooser is performing; the
  * user interface is adapted to suit the selected action. For example,
  * an option to create a new folder might be shown if the action is
  * %GTK_FILE_CHOOSER_ACTION_SAVE but not if the action is

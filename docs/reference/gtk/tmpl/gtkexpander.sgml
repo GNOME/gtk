@@ -22,7 +22,7 @@ the triangles used in a #GtkTreeView.
     <title>Special Usage</title>
 
     <para>
-      There there are situations in which you may prefer to show and
+      There are situations in which you may prefer to show and
       hide the expanded widget yourself, such as when you want to
       actually create the widget at expansion time.  In this case,
       create a #GtkExpander but do not add a child to it.  The
