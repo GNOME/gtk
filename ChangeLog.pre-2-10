@@ -1,3 +1,8 @@
+Fri Jun 14 15:41:50 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c: Fix bug #84268, where validate_rows sometimes
+	didn't remove itself correctly.  Thanks to Dave Camp for the fix.
+
 Fri Jun 14 15:09:11 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_set_adjustments):

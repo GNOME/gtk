@@ -263,7 +263,7 @@ static gboolean validate_row             (GtkTreeView *tree_view,
 					  GtkTreePath *path);
 static void     validate_visible_area    (GtkTreeView *tree_view);
 static gboolean validate_rows_handler    (GtkTreeView *tree_view);
-static gboolean do_validate_rows	 (GtkTreeView *tree_view);
+static gboolean validate_rows            (GtkTreeView *tree_view);
 static gboolean presize_handler_callback (gpointer     data);
 static void     install_presize_handler  (GtkTreeView *tree_view);
 static void     install_scroll_sync_handler (GtkTreeView *tree_view);
@@ -1497,7 +1497,7 @@ gtk_tree_view_size_request (GtkWidget      *widget,
 
   /* we validate 50 rows initially just to make sure we have some size */
   /* in practice, with a lot of static lists, this should get a good width */
-  do_validate_rows (tree_view);
+  validate_rows (tree_view);
   gtk_tree_view_size_request_columns (tree_view);
   gtk_tree_view_update_size (GTK_TREE_VIEW (widget));
 
@@ -4057,10 +4057,8 @@ do_validate_rows (GtkTreeView *tree_view)
   g_assert (tree_view);
 
   if (tree_view->priv->tree == NULL)
-    {
-      tree_view->priv->validate_rows_timer = 0;
       return FALSE;
-    }
+
   do
     {
       if (! GTK_RBNODE_FLAG_SET (tree_view->priv->tree->root, GTK_RBNODE_DESCENDANTS_INVALID))
@@ -4167,11 +4165,25 @@ do_validate_rows (GtkTreeView *tree_view)
     gtk_tree_view_dy_to_top_row (tree_view);
 
   if (path) gtk_tree_path_free (path);
-  if (! retval)
-    tree_view->priv->validate_rows_timer = 0;
 
   return retval;
 }
+
+static gboolean
+validate_rows (GtkTreeView *tree_view)
+{
+  gboolean retval;
+  
+  retval = do_validate_rows (tree_view);
+  
+  if (! retval && tree_view->priv->validate_rows_timer)
+    {
+      g_source_remove (tree_view->priv->validate_rows_timer);
+      tree_view->priv->validate_rows_timer = 0;
+    }
+  
+    return retval;
+  }
 
 static gboolean
 validate_rows_handler (GtkTreeView *tree_view)
@@ -4181,7 +4193,9 @@ validate_rows_handler (GtkTreeView *tree_view)
   GDK_THREADS_ENTER ();
 
   retval = do_validate_rows (tree_view);
-  
+  if (! retval)
+    tree_view->priv->validate_rows_timer = 0;
+
   GDK_THREADS_LEAVE ();
 
   return retval;
@@ -4347,7 +4361,7 @@ _gtk_tree_view_install_mark_rows_col_dirty (GtkTreeView *tree_view)
 }
 
 /*
- * This function works synchronously (due to the while (do_validate_rows...)
+ * This function works synchronously (due to the while (validate_rows...)
  * loop).
  *
  * There was a check for column_type != GTK_TREE_VIEW_COLUMN_AUTOSIZE
@@ -4363,7 +4377,7 @@ _gtk_tree_view_column_autosize (GtkTreeView *tree_view,
   _gtk_tree_view_column_cell_set_dirty (column, FALSE);
 
   do_presize_handler (tree_view);
-  while (do_validate_rows (tree_view));
+  while (validate_rows (tree_view));
 
   gtk_widget_queue_resize (GTK_WIDGET (tree_view));
 }
