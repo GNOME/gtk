@@ -183,8 +183,9 @@ Mon Aug 11 11:10:07 2003  Owen Taylor  <otaylor@redhat.com>
 
 2003-08-07  Matthias Clasen  <maclas@gmx.de>
 
-	* gdk/x11/gdkevents-x11.c (gdk_check_wm_state_changed): Reset the toplevel->have_* flags before 
-	iterating over the _NET_WM_STATE atoms.  (#119217)
+	* gdk/x11/gdkevents-x11.c (gdk_check_wm_state_changed): Reset the
+	toplevel->have_* flags before iterating over the _NET_WM_STATE 
+	atoms.  (#119217) 
 
 Thu Aug  7 16:49:29 2003  Owen Taylor  <otaylor@redhat.com>
  
@@ -204,8 +205,8 @@ Thu Aug  7 16:40:21 2003  Owen Taylor  <otaylor@redhat.com>
 
 2003-08-07  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk/gtkspinbutton.c (gtk_spin_button_default_input): Use g_strtod() to cope with C libraries with
-	crippled locale support.  (#115293)
+	* gtk/gtkspinbutton.c (gtk_spin_button_default_input): Use g_strtod() to
+	cope with C libraries with crippled locale support.  (#115293)
 
 2003-08-07  Hans Breuer  <hans@breuer.org>
 
@@ -226,10 +227,8 @@ Thu Aug  7 16:40:21 2003  Owen Taylor  <otaylor@redhat.com>
 
 2003-08-07  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk/gtkspinbutton.c (gtk_spin_button_default_input): Use g_strtod(), not strtod() to cope with
-	C libraries with crippled locale support.  (#115293)
-
-	* gtk/gtkctree.c (draw_row): Don't cut descenders when rendering.  (#118646, Charles Kerr)
+	* gtk/gtkctree.c (draw_row): Don't cut descenders when 
+	rendering.  (#118646, Charles Kerr) 
 
 2003-08-06  Hans Breuer  <hans@breuer.org>
 
@@ -298,8 +297,8 @@ Mon Aug  4 14:53:46 2003  Owen Taylor  <otaylor@redhat.com>
 2003-08-03  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/x11/gdkscreen-x11.c (gdk_screen_get_n_monitors): 
-	(gdk_screen_get_monitor_geometry): Improve wording of the docs, avoid the
-	term "virtual screen".  (#119030, Tor Lillquist)
+	(gdk_screen_get_monitor_geometry): Improve wording of the docs, avoid
+	the term "virtual screen".  (#119030, Tor Lillquist)
 
 2003-08-02  Matthias Clasen  <maclas@gmx.de>
 
@@ -309,7 +308,8 @@ Mon Aug  4 14:53:46 2003  Owen Taylor  <otaylor@redhat.com>
 	* demos/pixbuf-init.c (pixbuf_init): 
 	* demos/gtk-demo/main.c (main): Use g_setenv().
 
-	* gdk/x11/gdkdisplay-x11.c (_gdk_windowing_set_default_display): Use g_unsetenv().
+	* gdk/x11/gdkdisplay-x11.c (_gdk_windowing_set_default_display): Use
+	g_unsetenv(). 
 
 Sat Aug  2 12:53:16 2003  Owen Taylor  <otaylor@redhat.com>
 
@@ -332,9 +332,9 @@ Sat Aug  2 12:53:16 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcolorsel.c (color_sample_drop_handle) 
 	(palette_drop_handle): 
-	* gtk/gtkcolorbutton.c (gtk_color_button_drag_data_received):  Accept drops with the 
-	wrong format, since the KDE color chooser incorrectly drops application/x-color with 
-	format 8.  (#118810)
+	* gtk/gtkcolorbutton.c (gtk_color_button_drag_data_received):  Accept
+	drops with the wrong format, since the KDE color chooser incorrectly
+	drops application/x-color with format 8.  (#118810)
 
 	* gtk/gtkcolorsel.c (color_sample_drop_handle) (palette_drop_handle): 
 	* gtk/gtkcolorbutton.c (gtk_color_button_drag_data_received):  
@@ -405,10 +405,11 @@ Thu Jul 31 23:09:02 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 2003-07-31  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk/gtkwindow.c (gtk_window_set_default_icon): Rename parameter pixbuf to icon, to 
-	pacify gtk-doc.
+	* gtk/gtkwindow.c (gtk_window_set_default_icon): Rename parameter pixbuf
+	to icon, to pacify gtk-doc.
 
-	* gtk/gtkwidget.c (gtk_widget_class_init): Fix formatting of drag-motion example.
+	* gtk/gtkwidget.c (gtk_widget_class_init): Fix formatting of drag-motion 
+	example. 
 
 Thu Jul 31 15:33:33 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
@@ -437,7 +438,8 @@ Wed Jul 30 17:03:58 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 2003-07-30  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk/gtkwidget.c (gtk_widget_class_init): Some updates to the DND signal docs.
+	* gtk/gtkwidget.c (gtk_widget_class_init): Some updates to the DND
+	signal docs. 
 
 2003-07-29  Tor Lillqvist  <tml@iki.fi>
 
@@ -703,8 +705,8 @@ Sat Jul 26 15:21:27 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 2003-07-24  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk/gtktextview.c (popup_targets_received): Make the "Input Methods" insensitive
-	when editing isn't possible.  (#118150)
+	* gtk/gtktextview.c (popup_targets_received): Make the "Input Methods"
+	insensitive when editing isn't possible.  (#118150)
 
 2003-07-23  Matthias Clasen  <maclas@gmx.de>
 
@@ -766,12 +768,14 @@ Sat Jul 19 12:13:20 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 2003-07-19  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkstock.h (GTK_STOCK_DIALOG_AUTHENTICATION): New stock id. 
-	* gtk/gtkiconfactory.c (get_default_icons): Add stock_dialog_authentication_48.  (#65765)
+	* gtk/gtkiconfactory.c (get_default_icons): Add
+	stock_dialog_authentication_48.  (#65765) 
 	* gtk/stock-icons/Makefile.am (VARIABLES2, IMAGES): Here too.
 	* gtk/stock-icons/stock_dialog_authentication_48.png: New image.
 
 	* gtk/gtkbbox.h: 
-	* gtk/gtkbbox.c (gtk_button_box_get_child_secondary): New function. (#64562)
+	* gtk/gtkbbox.c (gtk_button_box_get_child_secondary): New
+	function. (#64562) 
 
 Sat Jul 19 00:18:40 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
@@ -784,15 +788,20 @@ Sat Jul 19 00:18:40 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 2003-07-18  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk/gtkwindow.c: Add properties decorated and gravity.  (#80234)
+	* gtk/gtkwindow.c: Add properties decorated and gravity.  (#80234) 
 
-	* gtk/gtktextview.c (gtk_text_view_class_init): Add a new keybinding signal, move_viewport.
-	(gtk_text_view_move_viewport): New function which implements the move_viewport functionality.
-	(gtk_text_view_move_cursor_internal): If the cursor is not visible, move the viewport. (#78669)
+	* gtk/gtktextview.c (gtk_text_view_class_init): Add a new keybinding
+	signal, move_viewport. 
+	(gtk_text_view_move_viewport): New function which implements the
+	move_viewport functionality. 
+	(gtk_text_view_move_cursor_internal): If the cursor is not visible, move
+	the viewport. (#78669) 
 
-	* gtk/gtkenums.h (GtkScrollStep): New enumeration, used for move_viewport argument.
+	* gtk/gtkenums.h (GtkScrollStep): New enumeration, used for
+	move_viewport argument. 
 
-	* gtk/gtkstatusbar.c (gtk_statusbar_class_init): Add a has_resize_grip property.  (#111779)
+	* gtk/gtkstatusbar.c (gtk_statusbar_class_init): Add a has_resize_grip
+	property.  (#111779) 
 
 	* gtk/gtkwindow.h: 
 	* gtk/gtkwindow.c (gtk_window_set_default_icon): New method.  (#95816)
@@ -954,8 +963,8 @@ Sat Jul 12 15:28:26 2003  Kristian Rietveld  <kris@gtk.org>
 
 2003-07-11  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk/gtkicontheme.c (pixbuf_supports_svg): Use g_strfreev() to free mime_types. 
-	(#117219, Steve Chaplin)
+	* gtk/gtkicontheme.c (pixbuf_supports_svg): Use g_strfreev() to free
+	mime_types.  (#117219, Steve Chaplin)
 
 Tue Jul  8 20:11:04 2003  Owen Taylor  <otaylor@redhat.com>
 
@@ -1021,8 +1030,8 @@ Wed Jul  9 19:48:26 2003  Kristian Rietveld  <kris@gtk.org>
 
 2003-07-09  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk/gtkcontainer.c (gtk_container_focus_sort_tab): Consider the text direction
-	when sorting children.  (#116540, Soeren Sandmann)
+	* gtk/gtkcontainer.c (gtk_container_focus_sort_tab): Consider the text
+	direction when sorting children.  (#116540, Soeren Sandmann)
 
 Tue Jul  8 17:36:21 2003  Owen Taylor  <otaylor@redhat.com>
 
@@ -1189,7 +1198,8 @@ Sat Jul  5 09:55:38 2003  Owen Taylor  <otaylor@redhat.com>
 	* gdk/x11/gdkdnd-x11.c (gdk_drag_get_selection): 
 	Simplify handling of "XdndSelection".
 
-	* gdk/x11/gdkevents-x11.c (gdk_event_send_client_message_to_all_recurse): Somehow, 
+	* gdk/x11/gdkevents-x11.c
+	(gdk_event_send_client_message_to_all_recurse): Somehow,  
 	a WM_STATE => _NET_WM_STATE change hand been made here.
 
 	* gdk/x11/gdkproperty-x11.c (_gdk_x11_precache_atoms): Free
@@ -1458,12 +1468,14 @@ Tue Jul  1 22:49:25 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 2003-07-01  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk/gtkspinbutton.c (gtk_spin_button_set_digits): Improve docs.  (116364, Morten Welinder)
+	* gtk/gtkspinbutton.c (gtk_spin_button_set_digits): Improve docs.
+	(116364, Morten Welinder) 
 
-	* tests/testgtk.c: Use GtkFontButton and GtkColorButton to bring up the corresponding 
-	dialogs.
+	* tests/testgtk.c: Use GtkFontButton and GtkColorButton to bring up the
+	corresponding dialogs.
 
-	* gtk/Makefile.am (gtk_public_h_sources): Add gtkfontbutton.h, gtkcolorbutton.h. 
+	* gtk/Makefile.am (gtk_public_h_sources): Add gtkfontbutton.h,
+	gtkcolorbutton.h.  
 	(gtk_c_sources): Add gtkfontbutton.c, gtkcolorbutton.c. 
 
 	* gtk/gtkfontbutton.[hc]: New files containing a font picker widget. 
@@ -1487,7 +1499,8 @@ Tue Jul  1 22:49:25 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 	* gdk/gdkdisplay.h: 
 	* gdk/gdkcursor.h: RGBA cursor support based on Xcursor. New functions:
 	gdk_cursor_new_from_pixbuf(), gdk_display_supports_cursor_alpha(), 
-	gdk_display_supports_cursor_color(), gdk_display_get_default_cursor_size() and
+	gdk_display_supports_cursor_color(),
+	gdk_display_get_default_cursor_size() and 
 	gdk_display_get_maximal_cursor_size().  (#69436)
 
 2003-06-30  Tor Lillqvist  <tml@iki.fi>
@@ -1554,8 +1567,8 @@ Mon Jun 30 01:20:19 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 2003-06-29  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk/gtkwidget.c (gtk_widget_class_init): Remove a duplicate parameter from docs, some more formatting 
-	fixes. 
+	* gtk/gtkwidget.c (gtk_widget_class_init): Remove a duplicate parameter
+	from docs, some more formatting fixes. 
 
 2003-06-28  Tor Lillqvist  <tml@iki.fi>
 
@@ -1599,10 +1612,11 @@ Wed Jun 25 18:59:15 BST 2003  Tony Gale <gale@gtk.org>
 
 2003-06-24  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk/gtkspinbutton.c (gtk_spin_button_class_init): Add a blurb for shadow_type.
+	* gtk/gtkspinbutton.c (gtk_spin_button_class_init): Add a blurb for
+	shadow_type. 
 
 	* gtk/gtkwidget.c (gtk_widget_class_install_style_property_parser): 
-	(gtk_widget_class_list_style_properties): Use same parameter names as in 
+	(gtk_widget_class_list_style_properties): Use same parameter names as in  
 	header (to silence gtk-doc).
 
 	* gtk/gtkalignment.c (gtk_alignment_[gs]et_padding): Fix doc comments.
