@@ -9,28 +9,28 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-11-06 12:53+0100\n"
-"PO-Revision-Date: 2003-11-06 12:54+0100\n"
+"POT-Creation-Date: 2003-11-14 00:11+0100\n"
+"PO-Revision-Date: 2003-11-14 00:12+0100\n"
 "Last-Translator: Данило Шеган <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:712
-#: gdk-pixbuf/gdk-pixbuf-io.c:845 tests/testfilechooser.c:183
+#: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:731
+#: gdk-pixbuf/gdk-pixbuf-io.c:864 tests/testfilechooser.c:183
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Не може да отвори датотеку „%s“: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:158 gdk-pixbuf/gdk-pixbuf-io.c:722
+#: gdk-pixbuf/gdk-pixbuf-animation.c:158 gdk-pixbuf/gdk-pixbuf-io.c:741
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "Слика „%s“ не садржи податке"
 
 # ово има највише смисла
-#: gdk-pixbuf/gdk-pixbuf-animation.c:198 gdk-pixbuf/gdk-pixbuf-io.c:756
-#: gdk-pixbuf/gdk-pixbuf-io.c:882 tests/testfilechooser.c:222
+#: gdk-pixbuf/gdk-pixbuf-animation.c:198 gdk-pixbuf/gdk-pixbuf-io.c:775
+#: gdk-pixbuf/gdk-pixbuf-io.c:901 tests/testfilechooser.c:222
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -74,23 +74,23 @@ msgstr "Не може препознати начин записа слике у
 msgid "Unrecognized image file format"
 msgstr "Непознат начин записа слике"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:767
+#: gdk-pixbuf/gdk-pixbuf-io.c:786
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "Не може да учита слику „%s“: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:993
+#: gdk-pixbuf/gdk-pixbuf-io.c:1012
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "Ово издање програма gdk-pixbuf не подржава ову слику врсте %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1104
+#: gdk-pixbuf/gdk-pixbuf-io.c:1123
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "Не може да приступи „%s“ ради уписа: %s"
 
 # боље уснимљени од хр:спремљени/снимљени/запамћени??
-#: gdk-pixbuf/gdk-pixbuf-io.c:1125
+#: gdk-pixbuf/gdk-pixbuf-io.c:1144
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -1946,15 +1946,15 @@ msgstr "Количина плаве светлости у боји."
 msgid "_Opacity:"
 msgstr "_Провидност:"
 
-#: gtk/gtkcolorsel.c:1896
-msgid "Transparency of the currently-selected color."
-msgstr "Провидност тренутно изабране боје."
+#: gtk/gtkcolorsel.c:1896 gtk/gtkcolorsel.c:1907
+msgid "Transparency of the color."
+msgstr "Провидност боје."
 
-#: gtk/gtkcolorsel.c:1911
+#: gtk/gtkcolorsel.c:1914
 msgid "Color _Name:"
 msgstr "_Име боје:"
 
-#: gtk/gtkcolorsel.c:1926
+#: gtk/gtkcolorsel.c:1929
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
@@ -1962,7 +1962,7 @@ msgstr ""
 "Овде можете унети боју на HTML начин као хексадецималну вредност, или "
 "једноставно енглеско име боје као што је „orange“."
 
-#: gtk/gtkcolorsel.c:1945
+#: gtk/gtkcolorsel.c:1948
 msgid "_Palette"
 msgstr "_Палета"
 
@@ -2429,8 +2429,8 @@ msgstr "Прикажи сакривене"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Да ли се приказују сакривене датотеке и директоријуми"
 
-#: gtk/gtkfilechooser.c:1442 gtk/gtkfilechooser.c:1486
-#: gtk/gtkfilechooser.c:1561 gtk/gtkfilechooser.c:1605
+#: gtk/gtkfilechooser.c:1446 gtk/gtkfilechooser.c:1490
+#: gtk/gtkfilechooser.c:1565 gtk/gtkfilechooser.c:1609
 #, c-format
 msgid "Invalid filename: %s"
 msgstr "Неисправно име датотеке: %s"
@@ -2983,7 +2983,7 @@ msgstr ""
 msgid "Error loading icon: %s"
 msgstr "Грешка при учитавању иконице: %s"
 
-#: gtk/gtkicontheme.c:1195
+#: gtk/gtkicontheme.c:1217
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Икона „%s“ није присутна у теми"
@@ -3077,8 +3077,8 @@ msgid "Input"
 msgstr "Унос"
 
 #: gtk/gtkinputdialog.c:242
-msgid "No input devices"
-msgstr "Нема улазних уређаја"
+msgid "No extended input devices"
+msgstr "Нема проширених улазних уређаја"
 
 #: gtk/gtkinputdialog.c:254
 msgid "_Device:"
@@ -3276,102 +3276,102 @@ msgstr "Висина приказа"
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmenu.c:344
+#: gtk/gtkmenu.c:346
 msgid "Tearoff Title"
 msgstr "Наслов отргнутог"
 
-#: gtk/gtkmenu.c:345
+#: gtk/gtkmenu.c:347
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr "Наслов који може приказати управник прозора када се овај мени отргне"
 
-#: gtk/gtkmenu.c:351
+#: gtk/gtkmenu.c:353
 msgid "Vertical Padding"
 msgstr "Усправна попуна"
 
-#: gtk/gtkmenu.c:352
+#: gtk/gtkmenu.c:354
 msgid "Extra space at the top and bottom of the menu"
 msgstr "Количина размака који се додаје на врху и на дну менија"
 
-#: gtk/gtkmenu.c:360
+#: gtk/gtkmenu.c:362
 msgid "Vertical Offset"
 msgstr "Усправни померај"
 
-#: gtk/gtkmenu.c:361
+#: gtk/gtkmenu.c:363
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr "Када је мени заправо подмени, помери га усправно за овај број тачака"
 
-#: gtk/gtkmenu.c:369
+#: gtk/gtkmenu.c:371
 msgid "Horizontal Offset"
 msgstr "Водоравни померај"
 
-#: gtk/gtkmenu.c:370
+#: gtk/gtkmenu.c:372
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 msgstr "Када је мени заправо подмени, помери га водоравно за овај број тачака"
 
-#: gtk/gtkmenu.c:380
+#: gtk/gtkmenu.c:382
 msgid "Left Attach"
 msgstr "Лево припајање"
 
-#: gtk/gtkmenu.c:381 gtk/gtktable.c:203
+#: gtk/gtkmenu.c:383 gtk/gtktable.c:203
 msgid "The column number to attach the left side of the child to"
 msgstr "Број колоне за коју прикачити леву страну садржаног елемента"
 
-#: gtk/gtkmenu.c:388
+#: gtk/gtkmenu.c:390
 msgid "Right Attach"
 msgstr "Десно припајање"
 
-#: gtk/gtkmenu.c:389
+#: gtk/gtkmenu.c:391
 msgid "The column number to attach the right side of the child to"
 msgstr "Број колоне за коју прикачити десну страну садржаног елемента"
 
-#: gtk/gtkmenu.c:396
+#: gtk/gtkmenu.c:398
 msgid "Top Attach"
 msgstr "Горње припајање"
 
-#: gtk/gtkmenu.c:397
+#: gtk/gtkmenu.c:399
 msgid "The row number to attach the top of the child to"
 msgstr "Број реда за који прикачити горњу страну садржаног елемента"
 
-#: gtk/gtkmenu.c:404
+#: gtk/gtkmenu.c:406
 msgid "Bottom Attach"
 msgstr "Доње припајање"
 
-#: gtk/gtkmenu.c:405 gtk/gtktable.c:224
+#: gtk/gtkmenu.c:407 gtk/gtktable.c:224
 msgid "The row number to attach the bottom of the child to"
 msgstr "Број реда за који прикачити доњу страну садржаног елемента"
 
-#: gtk/gtkmenu.c:492
+#: gtk/gtkmenu.c:494
 msgid "Can change accelerators"
 msgstr "Дозвољена измена пречица"
 
-#: gtk/gtkmenu.c:493
+#: gtk/gtkmenu.c:495
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Да ли је дозвољена измена пречица притиском на тастере над ставком менија"
 
-#: gtk/gtkmenu.c:498
+#: gtk/gtkmenu.c:500
 msgid "Delay before submenus appear"
 msgstr "Време пре појаве подменија"
 
-#: gtk/gtkmenu.c:499
+#: gtk/gtkmenu.c:501
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Најмање време које се показивач миша мора задржати преко ставке менија да би "
 "се појавио подмени"
 
-#: gtk/gtkmenu.c:506
+#: gtk/gtkmenu.c:508
 msgid "Delay before hiding a submenu"
 msgstr "Време пре скривања подменија"
 
-#: gtk/gtkmenu.c:507
+#: gtk/gtkmenu.c:509
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
