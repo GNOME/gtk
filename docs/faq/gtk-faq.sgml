@@ -2,7 +2,7 @@
 <book>
 
 <bookinfo>
-  <date>November 13th 2003</date>
+  <date>November 20th 2003</date>
   <title>GTK+ FAQ</title>
   <authorgroup>
     <author>
@@ -268,7 +268,7 @@ in 21 Days" by Donna Martin
 
 <!-- ----------------------------------------------------------------- -->
 
-<sect1>
+<sect1 id="faq-MailLists">
 <title>Is there a mailing list (or mailing list archive) for
 GTK+? <emphasis>[GTK 2.x]</emphasis></title>
 
@@ -671,14 +671,14 @@ successful, try executing it.</para>
 
 <sect1>
 <title>Whats this CVS thing that everyone keeps talking about,
-and how do I access it?</title>
+and how do I access it? <emphasis>[GTK 2.x]</emphasis></title>
 
 <para>CVS is the Concurrent Version System and is a very
 popular means of version control for software projects. It is
-designed to allow multiple  authors to be able to
-simultanously operate on the same source tree.  This source
-tree is centrally maintained, but each developer has a local
-mirror of this repository that they make their changes to.</para>
+designed to allow multiple authors to simultanously operate on the same
+source tree.  This source tree is centrally maintained, but each
+developer has a local mirror of this repository that they make
+their changes to.</para>
 
 <para>The GTK+ developers use a CVS repository to store the
 master copy of the current development version of GTK+. As
@@ -725,12 +725,22 @@ need to get that as well:</para>
 </listitem>
 </itemizedlist>
 
+<para>The CVS archive stores both the current development version of
+GTK+ (the CVS HEAD branch) and all current and past stable versions.
+If you want to retrieve a specific version of GTK+ you have to specify
+the CVS tag corresponding to the version you want to checkout. If you
+want to checkout the current GTK+ 2.2 stable source code, you would need
+to use the following command:</para>
+
+<para><literallayout>
+<literal>cvs -z3 get -r gtk-2-2 gtk+</literal>
+</literallayout></para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
 
-<sect1>
-<title>How can I contribute to GTK+?</title>
+<sect1 id="faq-Patches">
+<title>How can I contribute to GTK+? <emphasis>[GTK 2.x]</emphasis></title>
 
 <para>It's simple. If something doesn't work like you think it
 should in a program, check the documentation to make sure
@@ -738,35 +748,15 @@ you're not missing something. If it is a true bug or missing
 feature, track it down in the GTK+ source, change it,  and
 then generate a patch in the form of a 'context diff'. This
 can be done using a command such as <literal>diff -ru
-&lt;oldfile&gt; &lt;newfile&gt;</literal>. Then upload the patchfile
-to:</para>
+&lt;oldfile&gt; &lt;newfile&gt;</literal>.</para>
 
-<para><literallayout>
-<literal>ftp://ftp.gtk.org/incoming</literal>
-</literallayout></para>
+<para>The patch should then be attached to a bug report in
+the GNOME bug tracking system, which can also be used to store
+general patches
+(<ulink url="http://bugzilla.gnome.org">http://bugzilla.gnome.org</ulink>).
+</para>
 
-<para>along with a README file. Make sure you follow the
-naming conventions or your patch will just be deleted! The
-filenames should be of this form:</para>
-
-<para><literallayout>
-<literal>gtk&lt;username&gt;-&lt;date yymmdd-n&gt;.patch.gz</literal>
-<literal>gtk-&lt;username&gt;-&lt;date yymmdd-n&gt;.patch.README</literal>
-</literallayout></para>
-
-<para>The "n" in the date indicates a unique number (starting
-from 0) of patches you uploaded that day.  It should be 0,
-unless you upload more than one patch in the same day.</para>
-
-<para>Example:</para>
-
-<para><literallayout>
-<literal>gtk-gale-982701-0.patch.gz</literal>
-<literal>gtk-gale-982701-0.patch.README</literal>
-</literallayout></para>
-
-<para>Once you upload <emphasis>anything</emphasis>, send the README to
-ftp-admin@gtk.org</para>
+<para>This method ensures that the patch will not be lost.</para>
 
 </sect1>
 
@@ -774,153 +764,51 @@ ftp-admin@gtk.org</para>
 
 <sect1>
 <title>How do I know if my patch got applied, and if not, why
-not?</title>
+not? <emphasis>[GTK 2.x]</emphasis></title>
 
-<para>Uploaded patches will be moved to
-<filename>ftp://ftp.gtk.org/pub/gtk/patches</filename> where one of the
-GTK+ development team will pick them up. If applied, they will be moved
-to <filename>/pub/gtk/patches/old</filename>.</para>
+<para>If you have used the GNOME bug tracking system (as stated
+<link linkend="faq-Patches">above</link>) then the status
+of your patch should be reflected in the bug report.</para>
 
-<para>Patches that aren't applied, for whatever reason, are
-moved to <filename>/pub/gtk/patches/unapplied</filename> or
-<filename>/pub/gtk/patches/outdated</filename>. At this point you can ask
-on the <literal>gtk-list</literal> mailing list why your patch wasn't
-applied. There are many possible reasons why patches may not
-be applied, ranging from it doesn't apply cleanly, to it isn't
-right. Don't be put off if your patch didn't make it first
-time round.</para>
-
+<para>The GTK+ developers will generally add comments to the bug
+report stating what needs to be done to get the patch applied,
+or why the patch is not appropriate.</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
 
 <sect1>
 <title>What is the policy on incorporating new widgets into
-the library?</title>
+the library? <emphasis>[GTK 2.x]</emphasis></title>
 
 <para>This is up to the authors, so you will have to ask them
 once you are done with your widget. As a general guideline,
-widgets that are  generally useful, work, and are not a
+widgets that are generally useful, work, and are not a
 disgrace to the widget set will gladly be included.</para>
 
+<para>The new widgets that get added to GTK+ are generally either
+replacements for existing widgets that are no longer
+deemed to be adequate, or have been developed externally to GTK+ but
+have been widely tested. One possible avenue for this is via
+<ulink url="http://cvs.gnome.org/lxr/source/libegg/">libegg</ulink>.</para>
+
+<para>Before you spend months of your valuable time implementing your
+revolutionary widget, it is highly recommended that you get some
+feedback on your idea via the appropriate 
+<link linkend="faq-MailLists">mailing list</link>.</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
 
 <sect1>
 <title>Is anyone working on bindings for languages other than
-C?</title>
+C? <emphasis>[GTK 2.x]</emphasis></title>
 
-<para>The GTK+ home page (<ulink
-url="http://www.gtk.org/">http://www.gtk.org/</ulink>)
-presents a list of GTK+ bindings.</para>
+<para>There is a list of <ulink url="http://www.gtk.org/bindings.html">
+language bindings</ulink> on the GTK+ website.</para>
 
-<itemizedlist>
-<listitem><simpara>There are several C++ wrappers for GTK+.</simpara>
-
-  <itemizedlist> 
-  <listitem><simpara>the gtkmm package, which is a wrapper for
-  GTK+. You can find the home page at <ulink
-  url="http://www.gtkmm.org">
-  http://www.gtkmm.org/</ulink>.</simpara>
-  </listitem>
-
-  <listitem><simpara>the VDK package, which was built as
-  the base package of a GTK+ application Borland-like
-  builder. The home page can be found at <ulink
-  url="http://vdkbuilder.sourceforge.net/">
-  http://vdkbuilder.sourceforge.net/</ulink>.</simpara>
-  </listitem>
-
-  <listitem><simpara>The wxWindows/Gtk package, a free C++ library for
-  cross-platform GUI development. The home page of this package is
-  <ulink url="http://www.wxwindows.org/">
-  http://www.wxwindows.org/</ulink>.</simpara>
-  </listitem>
-
-  </itemizedlist>
-</listitem>
-
-<listitem><simpara>There are three known Objective-c
-bindings currently in development:</simpara>
-
-  <itemizedlist> 
-  <listitem><simpara>The <ulink
-  url="http://www.gnome.org/">http://www.gnome.org/</ulink>
-  package of choice is objgtk. Objgtk is based on the Object class and
-  is maintained by <ulink url="mailto:sopwith@cuc.edu">Elliot
-  Lee</ulink>. Apparently, objgtk is being accepted as the `standard'
-  Objective-C binding for GTK+.</simpara>
-  </listitem>
-
-  <listitem><simpara>If you are more inclined towards the 
-  <ulink url="http://www.gnustep.org/">GNUstep project</ulink>,
-  you may want to check out GTKKit by 
-  <ulink url="mailto:helge@mdlink.de">Helge He&szlig;</ulink>.
-  The intention is to setup a GTK+ binding using the FoundationKit. 
-  GTKKit includes nicities like writing a XML-type template file to 
-  construct a GTK+ interface.</simpara>
-  </listitem>
-
-  <listitem><simpara>The GToolKit package, which can be found at
-  <ulink url="ftp://ftp.gtk.org/pub/gtk/objc-gtoolkit/">
-  ftp://ftp.gtk.org/pub/gtk/objc-gtoolkit/</ulink>.</simpara>
-  </listitem>
-  
-  </itemizedlist>
-</listitem>
-
-<listitem><simpara>Perl bindings <ulink
-url="ftp://ftp.gtk.org/pub/gtk/perl">
-ftp://ftp.gtk.org/pub/gtk/perl</ulink></simpara>
-</listitem>
-
-<listitem><simpara>Guile bindings. The home page is at
-<ulink url="http://www.ping.de/sites/zagadka/guile-gtk">
-http://www.ping.de/sites/zagadka/guile-gtk</ulink>.
-By the way, Guile is the GNU Project's implemention of R4RS Scheme (the
-standard). If you like Scheme, you may want to take a look at
-this.</simpara>
-</listitem>
-
-<listitem><simpara>David Monniaux reports:
-<quote>I've started a gtk-O'Caml binding system.
-The basics of the system, including callbacks, work fine.
-
-The current development is in
-<ulink url="http://www.ens-lyon.fr/~dmonniau/arcs">
-http://www.ens-lyon.fr/~dmonniau/arcs</ulink>
-</quote></simpara>
-</listitem>
-
-<listitem><simpara>Several python bindings have been done:</simpara>
-
-  <itemizedlist>
-  <listitem><simpara>pygtk is at 
-  <ulink url="http://www.daa.com.au/~james/pygtk">
-  http://www.daa.com.au/~james/pygtk</ulink> and 
-  <ulink url="ftp://ftp.gtk.org/pub/gtk/python">
-  ftp://ftp.gtk.org/pub/gtk/python</ulink></simpara>
-  </listitem>
-
-  <listitem><simpara>python-gtk is at
-  <ulink url="http://www.ucalgary.ca/~nascheme/python-gtk">
-  http://www.ucalgary.ca/~nascheme/python-gtk</ulink></simpara>
-  </listitem>
-  
-  </itemizedlist>
-</listitem>
-
-<listitem><simpara>There's are a couple of OpenGL/Mesa
-widgets available for GTK+. I suggest you start at
-<ulink url="http://www.student.oulu.fi/~jlof/gtkglarea/index.html">
-http://www.student.oulu.fi/~jlof/gtkglarea/index.html</ulink></simpara>
-</listitem>
-<listitem><simpara>Last, there are a lot of other language
-bindings for languages such as Eiffel, TOM, Pascal, Pike, etc.</simpara>
-</listitem>
-
-</itemizedlist>
+<para>The 'official' language bindings are C++, Ada and Python.
+However, bindings for many other languages are available.</para>
 </sect1>
 
 </chapter>
