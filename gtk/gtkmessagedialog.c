@@ -265,6 +265,7 @@ setup_primary_label_font (GtkMessageDialog *dialog)
       pango_font_description_set_weight (font_desc, PANGO_WEIGHT_BOLD);
       pango_font_description_set_size (font_desc, size * PANGO_SCALE_LARGE);
       gtk_widget_modify_font (dialog->label, font_desc);
+      pango_font_description_free (font_desc);
     }
 }
 
