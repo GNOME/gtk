@@ -1,3 +1,9 @@
+Fri Jun  8 19:49:29 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_real_select_cursor_row): New
+	keybinding.
+	(gtk_tree_view_focus): Fix merge conflict.
+
 Fri Jun  8 18:41:30 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_set_cursor): new function to

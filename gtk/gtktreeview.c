@@ -101,6 +101,7 @@ enum
   BEGIN_FREE_MOTION,
   END_FREE_MOTION,
   MOVE_CURSOR,
+  SELECT_CURSOR_ROW,
   TOGGLE_CURSOR_ROW,
   EXPAND_COLLAPSE_CURSOR_ROW,
   SELECT_CURSOR_PARENT,
@@ -224,6 +225,7 @@ static void gtk_tree_view_real_end_free_motion            (GtkTreeView     *tree
 static void gtk_tree_view_real_move_cursor                (GtkTreeView     *tree_view,
 							   GtkMovementStep  step,
 							   gint             count);
+static void gtk_tree_view_real_select_cursor_row          (GtkTreeView     *tree_view);
 static void gtk_tree_view_real_toggle_cursor_row          (GtkTreeView     *tree_view);
 static void gtk_tree_view_real_expand_collapse_cursor_row (GtkTreeView     *tree_view,
 							   gboolean         logical,
@@ -435,6 +437,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   class->begin_free_motion = gtk_tree_view_real_begin_free_motion;
   class->end_free_motion = gtk_tree_view_real_end_free_motion;
   class->move_cursor = gtk_tree_view_real_move_cursor;
+  class->select_cursor_row = gtk_tree_view_real_select_cursor_row;
   class->toggle_cursor_row = gtk_tree_view_real_toggle_cursor_row;
   class->expand_collapse_cursor_row = gtk_tree_view_real_expand_collapse_cursor_row;
   class->select_cursor_parent = gtk_tree_view_real_select_cursor_parent;
@@ -646,6 +649,15 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		   gtk_marshal_VOID__ENUM_INT,
 		   GTK_TYPE_NONE, 2, GTK_TYPE_MOVEMENT_STEP, GTK_TYPE_INT);
 
+  tree_view_signals[SELECT_CURSOR_ROW] =
+    g_signal_newc ("select_cursor_row",
+		   G_TYPE_FROM_CLASS (object_class),
+ 		   G_SIGNAL_RUN_LAST | GTK_RUN_ACTION,
+		   G_STRUCT_OFFSET (GtkTreeViewClass, select_cursor_row),
+		   NULL, NULL,
+		   gtk_marshal_NONE__NONE,
+		   GTK_TYPE_NONE, 0);
+
   tree_view_signals[TOGGLE_CURSOR_ROW] =
     g_signal_newc ("toggle_cursor_row",
 		   G_TYPE_FROM_CLASS (object_class),
@@ -707,11 +719,13 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   gtk_tree_view_add_move_binding (binding_set, GDK_Page_Down, 0,
 				  GTK_MOVEMENT_PAGES, 1);
 
-  gtk_tree_view_add_move_binding (binding_set, GDK_Right, 0,
-				  GTK_MOVEMENT_VISUAL_POSITIONS, 1);
-
-  gtk_tree_view_add_move_binding (binding_set, GDK_Left, 0,
-				  GTK_MOVEMENT_VISUAL_POSITIONS, -1);
+  gtk_binding_entry_add_signal (binding_set, GDK_Right, 0, "move_cursor", 2,
+				GTK_TYPE_ENUM, GTK_MOVEMENT_VISUAL_POSITIONS,
+				GTK_TYPE_INT, 1);
+				
+  gtk_binding_entry_add_signal (binding_set, GDK_Left, 0, "move_cursor", 2,
+				GTK_TYPE_ENUM, GTK_MOVEMENT_VISUAL_POSITIONS,
+				GTK_TYPE_INT, -1);
 
   gtk_binding_entry_add_signal (binding_set, GDK_f, GDK_CONTROL_MASK, "move_cursor", 2,
 				GTK_TYPE_ENUM, GTK_MOVEMENT_LOGICAL_POSITIONS,
@@ -722,6 +736,8 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 				GTK_TYPE_INT, -1);
 
   gtk_binding_entry_add_signal (binding_set, GDK_space, GDK_CONTROL_MASK, "toggle_cursor_row", 0);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_space, 0, "select_cursor_row", 0);
 
   /* expand and collapse rows */
   gtk_binding_entry_add_signal (binding_set, GDK_plus, 0, "expand_collapse_cursor_row", 3,
@@ -3927,6 +3943,7 @@ gtk_tree_view_focus (GtkWidget        *widget,
 {
   GtkTreeView *tree_view;
   GtkWidget *focus_child;
+  GtkContainer *container;
 
   g_return_val_if_fail (GTK_IS_TREE_VIEW (widget), FALSE);
   g_return_val_if_fail (GTK_WIDGET_VISIBLE (widget), FALSE);
@@ -5703,6 +5720,38 @@ gtk_tree_view_move_cursor_start_end (GtkTreeView *tree_view,
   gtk_tree_row_reference_free (tree_view->priv->cursor);
   tree_view->priv->cursor = gtk_tree_row_reference_new_proxy (G_OBJECT (tree_view), tree_view->priv->model, path);
   gtk_tree_view_clamp_node_visible (tree_view, cursor_tree, cursor_node);
+}
+
+static void
+gtk_tree_view_real_select_cursor_row (GtkTreeView *tree_view)
+{
+  GtkRBTree *cursor_tree = NULL;
+  GtkRBNode *cursor_node = NULL;
+  GtkTreePath *cursor_path = NULL;
+
+  cursor_path = NULL;
+  if (tree_view->priv->cursor)
+    cursor_path = gtk_tree_row_reference_get_path (tree_view->priv->cursor);
+
+  if (cursor_path == NULL)
+    return;
+
+  _gtk_tree_view_find_node (tree_view, cursor_path,
+			    &cursor_tree, &cursor_node);
+  if (cursor_tree == NULL)
+    return;
+
+  _gtk_tree_selection_internal_select_node (tree_view->priv->selection,
+					    cursor_node,
+					    cursor_tree,
+					    cursor_path,
+					    0);
+
+  gtk_tree_view_clamp_node_visible (tree_view, cursor_tree, cursor_node);
+
+  gtk_widget_grab_focus (GTK_WIDGET (tree_view));
+  gtk_tree_view_queue_draw_path (tree_view, cursor_path, NULL);
+  gtk_tree_path_free (cursor_path);
 }
 
 static void
