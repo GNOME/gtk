@@ -1,6 +1,7 @@
 ## Process this file with automake to produce Makefile.in
 
 libgdkincludedir = $(includedir)/gdk
+libgdkx11includedir = $(includedir)/gdk/x11
 
 INCLUDES = @STRIP_BEGIN@ 	\
 	-DG_LOG_DOMAIN=\"Gdk\"	\
@@ -73,14 +74,13 @@ libgdk_x11_la_SOURCES =    	\
 libgdkinclude_HEADERS = 	\
 	gdkx.h
 
+libgdkx11include_HEADERS = 	\
+	gdkdrawable-x11.h	\
+	gdkwindow-x11.h		\
+	gdkpixmap-x11.h
+
 EXTRA_PROGRAMS = gxid
 bin_PROGRAMS = @xinput_progs@
 
 gxid_SOURCES = gxid.c
 gxid_LDADD = $(LDADDS)
-
-install-data-local:
-	$(mkinstalldirs) $(includedir)/gdk
-	$(INSTALL_DATA) $(srcdir)/gdkx.h $(includedir)/gdk
-	$(mkinstalldirs) $(includedir)/gdk/x11
-	$(INSTALL_DATA) $(srcdir)/gdkprivate-x11.h $(includedir)/gdk/x11
