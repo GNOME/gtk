@@ -1,3 +1,9 @@
+Wed Nov 28 19:34:15 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkproperty-x11.c (gdk_property_change, gdk_property_get): 
+	Convert atoms to and from atoms for properties of type XA_ATOM.
+	(#65555, patch from Hidetoshi Tajima)
+
 Wed Nov 28 18:37:04 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtksocket.[ch] (gtk_socket_add_id): Rename 'id' parameter 

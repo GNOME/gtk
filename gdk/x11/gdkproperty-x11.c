@@ -381,27 +381,45 @@ gdk_property_get (GdkWindow   *window,
 
   if (data)
     {
-      switch (ret_format)
+      if (ret_prop_type == XA_ATOM)
 	{
-	case 8:
-	  ret_length = ret_nitems;
-	  break;
-	case 16:
-	  ret_length = sizeof(short) * ret_nitems;
-	  break;
-	case 32:
-	  ret_length = sizeof(long) * ret_nitems;
-	  break;
-	default:
-	  g_warning ("unknown property return format: %d", ret_format);
-	  XFree (ret_data);
-	  return FALSE;
-	}
+	  /*
+	   * data is an array of X atom, we need to convert it
+	   * to an array of GDK Atoms
+	   */
+	  gint i;
+	  GdkAtom *ret_atoms = g_new (GdkAtom *, ret_nitems);
+	  Atom *xatoms = (Atom *)ret_data;
 
-      *data = g_new (guchar, ret_length);
-      memcpy (*data, ret_data, ret_length);
-      if (actual_length)
-	*actual_length = ret_length;
+	  data = (guchar *)ret_atoms;
+
+	  for (i = 0; i < ret_nitems; i++)
+	    ret_atoms[i] = gdk_x11_xatom_to_atom (xatoms[i]);
+	}
+      else
+	{
+	  switch (ret_format)
+	    {
+	    case 8:
+	      ret_length = ret_nitems;
+	      break;
+	    case 16:
+	      ret_length = sizeof(short) * ret_nitems;
+	      break;
+	    case 32:
+	      ret_length = sizeof(long) * ret_nitems;
+	      break;
+	    default:
+	      g_warning ("unknown property return format: %d", ret_format);
+	      XFree (ret_data);
+	      return FALSE;
+	    }
+	  
+	  *data = g_new (guchar, ret_length);
+	  memcpy (*data, ret_data, ret_length);
+	  if (actual_length)
+	    *actual_length = ret_length;
+	}
     }
 
   XFree (ret_data);
@@ -442,8 +460,27 @@ gdk_property_change (GdkWindow    *window,
       xwindow = _gdk_root_window;
     }
 
-  XChangeProperty (xdisplay, xwindow, xproperty, xtype,
-		   format, mode, (guchar *)data, nelements);
+  if (xtype == XA_ATOM)
+    {
+      /*
+       * data is an array of GdkAtom, we need to convert it
+       * to an array of X Atoms
+       */
+      gint i;
+      GdkAtom *atoms = (GdkAtom*) data;
+      Atom *xatoms;
+
+      xatoms = g_new (Atom, nelements);
+      for (i = 0; i < nelements; i++)
+	xatoms[i] = gdk_x11_atom_to_xatom (atoms[i]);
+
+      XChangeProperty (xdisplay, xwindow, xproperty, xtype,
+                      format, mode, (guchar *)xatoms, nelements);
+      g_free (xatoms);
+    }
+  else
+    XChangeProperty (xdisplay, xwindow, xproperty, xtype,
+                    format, mode, (guchar *)data, nelements);
 }
 
 void
