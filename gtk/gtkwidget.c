@@ -881,7 +881,7 @@ gtk_widget_init (GtkWidget *widget)
   GdkColormap *colormap;
   GdkVisual *visual;
   
-  GTK_OBJECT_FLAGS (widget) = GTK_SENSITIVE | GTK_PARENT_SENSITIVE;
+  GTK_WIDGET_SET_FLAGS (widget, GTK_SENSITIVE | GTK_PARENT_SENSITIVE);
   widget->state = GTK_STATE_NORMAL;
   widget->saved_state = GTK_STATE_NORMAL;
   widget->name = NULL;
