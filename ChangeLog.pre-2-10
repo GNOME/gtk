@@ -1,3 +1,9 @@
+2004-10-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcellview.c (gtk_cell_view_get_size_of_row): Restore 
+	the size info for the current row after measuring another 
+	row.  (#154945, William Jon McCann)
+
 2004-10-14  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilechooserdefault.c (shortcuts_remove_rows): Don't

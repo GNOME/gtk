@@ -1055,6 +1055,9 @@ gtk_cell_view_get_size_of_row (GtkCellView    *cell_view,
   gtk_tree_row_reference_free (cell_view->priv->displayed_row);
   cell_view->priv->displayed_row = tmp;
 
+  /* restore actual size info */
+  gtk_cell_view_size_request (GTK_WIDGET (cell_view), &req);
+
   return TRUE;
 }
 
