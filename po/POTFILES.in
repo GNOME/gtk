@@ -47,6 +47,7 @@ gtk/gtkiconfactory.c
 gtk/gtkimage.c
 gtk/gtkimagemenuitem.c
 gtk/gtkinputdialog.c
+gtk/gtkinvisible.c
 gtk/gtklabel.c
 gtk/gtklayout.c
 gtk/gtkmain.c

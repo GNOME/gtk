@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2002-05-14 20:15+0200\n"
-"PO-Revision-Date: 2002-05-14 20:15+0200\n"
+"POT-Creation-Date: 2002-05-17 21:07+0200\n"
+"PO-Revision-Date: 2002-05-17 21:08+0200\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1197,7 +1197,7 @@ msgid "Whether the text can be modified by the user"
 msgstr "Huruvida texten kan ändras av användaren"
 
 #: gtk/gtkcellrenderertext.c:238 gtk/gtkcellrenderertext.c:246
-#: gtk/gtkfontsel.c:214 gtk/gtktexttag.c:285 gtk/gtktexttag.c:293
+#: gtk/gtkfontsel.c:217 gtk/gtktexttag.c:285 gtk/gtktexttag.c:293
 msgid "Font"
 msgstr "Typsnitt"
 
@@ -1843,11 +1843,11 @@ msgstr "Markera vid fokus"
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr "Huruvida ett fälts innehåll markeras då fältet får fokus."
 
-#: gtk/gtkentry.c:3867 gtk/gtklabel.c:3187
+#: gtk/gtkentry.c:3867 gtk/gtklabel.c:3188
 msgid "Select All"
 msgstr "Markera allt"
 
-#: gtk/gtkentry.c:3877 gtk/gtklabel.c:3197
+#: gtk/gtkentry.c:3877 gtk/gtklabel.c:3198
 msgid "Input Methods"
 msgstr "Inmatningsmetoder"
 
@@ -2057,19 +2057,19 @@ msgstr "Namnet är för långt"
 msgid "Couldn't convert filename"
 msgstr "Kunde inte konvertera filnamn"
 
-#: gtk/gtkfixed.c:120 gtk/gtklayout.c:597
+#: gtk/gtkfixed.c:120 gtk/gtklayout.c:603
 msgid "X position"
 msgstr "X-position"
 
-#: gtk/gtkfixed.c:121 gtk/gtklayout.c:598
+#: gtk/gtkfixed.c:121 gtk/gtklayout.c:604
 msgid "X position of child widget"
 msgstr "X-position på barnwidgeten"
 
-#: gtk/gtkfixed.c:130 gtk/gtklayout.c:607
+#: gtk/gtkfixed.c:130 gtk/gtklayout.c:613
 msgid "Y position"
 msgstr "Y-position"
 
-#: gtk/gtkfixed.c:131 gtk/gtklayout.c:608
+#: gtk/gtkfixed.c:131 gtk/gtklayout.c:614
 msgid "Y position of child widget"
 msgstr "Y-position på barnwidgeten"
 
@@ -2079,44 +2079,44 @@ msgstr "Y-position på barnwidgeten"
 msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "abcdefghijk ABCDEFGHIJK"
 
-#: gtk/gtkfontsel.c:207
+#: gtk/gtkfontsel.c:210
 msgid "Font name"
 msgstr "Typsnittsnamn"
 
-#: gtk/gtkfontsel.c:208
+#: gtk/gtkfontsel.c:211
 msgid "The X string that represents this font."
 msgstr "Den X-sträng som motsvarar detta typsnitt."
 
-#: gtk/gtkfontsel.c:215
+#: gtk/gtkfontsel.c:218
 msgid "The GdkFont that is currently selected."
 msgstr "Den GdkFont som är vald för tillfället."
 
-#: gtk/gtkfontsel.c:221
+#: gtk/gtkfontsel.c:224
 msgid "Preview text"
 msgstr "Förhandsgranskningstext"
 
-#: gtk/gtkfontsel.c:222
+#: gtk/gtkfontsel.c:225
 msgid "The text to display in order to demonstrate the selected font."
 msgstr "Den text som ska visas för att demonstrera det valda typsnittet."
 
-#: gtk/gtkfontsel.c:326
+#: gtk/gtkfontsel.c:332
 msgid "_Family:"
 msgstr "_Familj:"
 
-#: gtk/gtkfontsel.c:332
+#: gtk/gtkfontsel.c:338
 msgid "_Style:"
 msgstr "_Stil:"
 
-#: gtk/gtkfontsel.c:338
+#: gtk/gtkfontsel.c:344
 msgid "Si_ze:"
 msgstr "S_torlek:"
 
 #. create the text entry widget
-#: gtk/gtkfontsel.c:461
+#: gtk/gtkfontsel.c:467
 msgid "_Preview:"
 msgstr "_Förhandsgranskning:"
 
-#: gtk/gtkfontsel.c:1307
+#: gtk/gtkfontsel.c:1323
 msgid "Font Selection"
 msgstr "Typsnittsval"
 
@@ -2302,7 +2302,7 @@ msgstr "_Enhet:"
 msgid "Disabled"
 msgstr "Avstängd"
 
-#: gtk/gtkinputdialog.c:246 gtk/gtkwindow.c:501
+#: gtk/gtkinputdialog.c:246 gtk/gtkinvisible.c:113 gtk/gtkwindow.c:502
 msgid "Screen"
 msgstr "Mask"
 
@@ -2364,6 +2364,10 @@ msgstr "(okänd)"
 #: gtk/gtkinputdialog.c:667
 msgid "clear"
 msgstr "töm"
+
+#: gtk/gtkinvisible.c:114 gtk/gtkwindow.c:503
+msgid "The screen where this window will be displayed."
+msgstr "Den skärm där detta fönster kommer att visas."
 
 #: gtk/gtklabel.c:281
 msgid "The text of the label."
@@ -2439,35 +2443,35 @@ msgstr "Snabbtangentswidget"
 msgid "The widget to be activated when the label's mnemonic key is pressed."
 msgstr "Den widget som ska aktiveras då etikettens snabbtangent trycks ned."
 
-#: gtk/gtklayout.c:617 gtk/gtkviewport.c:132
+#: gtk/gtklayout.c:623 gtk/gtkviewport.c:132
 msgid "Horizontal adjustment"
 msgstr "Horisontell justering"
 
-#: gtk/gtklayout.c:618 gtk/gtkscrolledwindow.c:237
+#: gtk/gtklayout.c:624 gtk/gtkscrolledwindow.c:237
 msgid "The GtkAdjustment for the horizontal position."
 msgstr "GtkAdjustment på den horisontella positionen."
 
-#: gtk/gtklayout.c:625 gtk/gtkviewport.c:140
+#: gtk/gtklayout.c:631 gtk/gtkviewport.c:140
 msgid "Vertical adjustment"
 msgstr "Vertikal justering"
 
-#: gtk/gtklayout.c:626 gtk/gtkscrolledwindow.c:244
+#: gtk/gtklayout.c:632 gtk/gtkscrolledwindow.c:244
 msgid "The GtkAdjustment for the vertical position."
 msgstr "GtkAdjustment på den vertikala positionen."
 
-#: gtk/gtklayout.c:633 gtk/gtktreeviewcolumn.c:199
+#: gtk/gtklayout.c:639 gtk/gtktreeviewcolumn.c:199
 msgid "Width"
 msgstr "Bredd"
 
-#: gtk/gtklayout.c:634
+#: gtk/gtklayout.c:640
 msgid "The width of the layout."
 msgstr "Bredden på layouten."
 
-#: gtk/gtklayout.c:642
+#: gtk/gtklayout.c:648
 msgid "Height"
 msgstr "Höjd"
 
-#: gtk/gtklayout.c:643
+#: gtk/gtklayout.c:649
 msgid "The height of the layout."
 msgstr "Höjden på layouten."
 
@@ -2940,17 +2944,17 @@ msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "Hur långt bort i y-riktningen pilen ska flyttas då knappen trycks ned"
 
-#: gtk/gtkrc.c:2270
+#: gtk/gtkrc.c:2280
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Kan inte hitta inkluderingsfil: \"%s\""
 
-#: gtk/gtkrc.c:2912 gtk/gtkrc.c:2915
+#: gtk/gtkrc.c:2922 gtk/gtkrc.c:2925
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kan inte hitta bildfil i \"pixmap_path\": \"%s\""
 
-#: gtk/gtkrc.c:3350
+#: gtk/gtkrc.c:3360
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Sökvägselement till bild: \"%s\" måste vara absolut, %s, rad %d"
@@ -3589,7 +3593,7 @@ msgstr "Om SANT betyder detta att alla tabellceller har samma bredd/höjd"
 
 #: gtk/gtktable.c:200
 msgid "Left attachment"
-msgstr ""
+msgstr "Vänster fastsättning"
 
 #: gtk/gtktable.c:201
 msgid "The leftmost column of the child"
@@ -3597,7 +3601,7 @@ msgstr "Kolumnen längst till vänster på barnet"
 
 #: gtk/gtktable.c:207
 msgid "Right attachment"
-msgstr ""
+msgstr "Höger fastsättning"
 
 #: gtk/gtktable.c:208
 msgid "The rightmost column of the child"
@@ -3605,7 +3609,7 @@ msgstr "Kolumnen längst till höger på barnet"
 
 #: gtk/gtktable.c:214
 msgid "Top attachment"
-msgstr ""
+msgstr "Övre fastsättning"
 
 #: gtk/gtktable.c:215
 msgid "The uppermost row of the child"
@@ -3613,7 +3617,7 @@ msgstr "Raden längst upp på barnet"
 
 #: gtk/gtktable.c:221
 msgid "Bottom attachment"
-msgstr ""
+msgstr "Nedre fastsättning"
 
 #: gtk/gtktable.c:222
 msgid "The lowest row of the child"
@@ -4271,7 +4275,7 @@ msgstr "Gör expanderarna indenterade."
 msgid "Whether to display the column"
 msgstr "Huruvida kolumnen ska visas"
 
-#: gtk/gtktreeviewcolumn.c:191 gtk/gtkwindow.c:440
+#: gtk/gtktreeviewcolumn.c:191 gtk/gtkwindow.c:441
 msgid "Resizable"
 msgstr "Storleksändringsbar"
 
@@ -4584,27 +4588,27 @@ msgstr "Proportioner för markörrad"
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Proportioner att rita insättningsmarkören med"
 
-#: gtk/gtkwindow.c:405
+#: gtk/gtkwindow.c:406
 msgid "Window Type"
 msgstr "Fönstertyp"
 
-#: gtk/gtkwindow.c:406
+#: gtk/gtkwindow.c:407
 msgid "The type of the window"
 msgstr "Typen av fönster"
 
-#: gtk/gtkwindow.c:415
+#: gtk/gtkwindow.c:416
 msgid "Window Title"
 msgstr "Fönstertitel"
 
-#: gtk/gtkwindow.c:416
+#: gtk/gtkwindow.c:417
 msgid "The title of the window"
 msgstr "Titeln på fönstret"
 
-#: gtk/gtkwindow.c:423
+#: gtk/gtkwindow.c:424
 msgid "Allow Shrink"
 msgstr "Tillåt krympning"
 
-#: gtk/gtkwindow.c:425
+#: gtk/gtkwindow.c:426
 #, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
@@ -4613,23 +4617,23 @@ msgstr ""
 "Om SANT har fönstret ingen minsta storlek. Att ställa in detta till SANT är "
 "en dum idé i 99% av fallen."
 
-#: gtk/gtkwindow.c:432
+#: gtk/gtkwindow.c:433
 msgid "Allow Grow"
 msgstr "Tillåt växning"
 
-#: gtk/gtkwindow.c:433
+#: gtk/gtkwindow.c:434
 msgid "If TRUE, users can expand the window beyond its minimum size."
 msgstr "Om SANT kan användare utöka fönstret utöver dess minsta storlek."
 
-#: gtk/gtkwindow.c:441
+#: gtk/gtkwindow.c:442
 msgid "If TRUE, users can resize the window."
 msgstr "Om SANT kan användare storleksändra fönstret."
 
-#: gtk/gtkwindow.c:448
+#: gtk/gtkwindow.c:449
 msgid "Modal"
 msgstr "Modal"
 
-#: gtk/gtkwindow.c:449
+#: gtk/gtkwindow.c:450
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)."
@@ -4637,51 +4641,47 @@ msgstr ""
 "Om SANT är fönstret modalt (andra fönster är inte användbara så länge detta "
 "fönster visas)."
 
-#: gtk/gtkwindow.c:456
+#: gtk/gtkwindow.c:457
 msgid "Window Position"
 msgstr "Fönsterposition"
 
-#: gtk/gtkwindow.c:457
+#: gtk/gtkwindow.c:458
 msgid "The initial position of the window."
 msgstr "Den första positionen på fönstret."
 
-#: gtk/gtkwindow.c:465
+#: gtk/gtkwindow.c:466
 msgid "Default Width"
 msgstr "Standardbredd"
 
-#: gtk/gtkwindow.c:466
+#: gtk/gtkwindow.c:467
 msgid ""
 "The default width of the window, used when initially showing the window."
 msgstr "Standardbredden på fönstret, används då fönstret först visas."
 
-#: gtk/gtkwindow.c:475
+#: gtk/gtkwindow.c:476
 msgid "Default Height"
 msgstr "Standardhöjd"
 
-#: gtk/gtkwindow.c:476
+#: gtk/gtkwindow.c:477
 msgid ""
 "The default height of the window, used when initially showing the window."
 msgstr "Standardhöjden på fönstret, används då fönstret först visas."
 
-#: gtk/gtkwindow.c:485
+#: gtk/gtkwindow.c:486
 msgid "Destroy with Parent"
 msgstr "Förstör med förälder"
 
-#: gtk/gtkwindow.c:486
+#: gtk/gtkwindow.c:487
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "Om detta fönster ska förstöras då dess förälder förstörs"
 
-#: gtk/gtkwindow.c:493
+#: gtk/gtkwindow.c:494
 msgid "Icon"
 msgstr "Ikon"
 
-#: gtk/gtkwindow.c:494
+#: gtk/gtkwindow.c:495
 msgid "Icon for this window"
 msgstr "Ikon för detta fönster"
-
-#: gtk/gtkwindow.c:502
-msgid "The screen where this window will be displayed."
-msgstr "Den skärm där detta fönster kommer att visas."
 
 #. ID
 #: modules/input/imam-et.c:454
