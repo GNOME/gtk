@@ -301,7 +301,10 @@ gdk_win32_draw_arc (GdkDrawable *drawable,
 			   GDK_DRAWABLE_XID (drawable),
 			   x, y, width, height, angle1, angle2));
 
-  if (width != 0 && height != 0 && angle2 != 0)
+  /* Seems that drawing arcs with width or height <= 2 fails, at least
+   * with my TNT card.
+   */
+  if (width > 2 && height > 2 && angle2 != 0)
     {
       hdc = gdk_gc_predraw (drawable, gc_private,
 			    GDK_GC_FOREGROUND|GDK_GC_BACKGROUND);

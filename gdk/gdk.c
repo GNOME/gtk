@@ -294,7 +294,7 @@ gdk_init_check (int    *argc,
 	{
 	  gchar *d;
 	  
-	  d = strrchr((*argv)[0],'/');
+	  d = strrchr((*argv)[0], G_DIR_SEPARATOR);
 	  if (d != NULL)
 	    g_set_prgname (d + 1);
 	  else

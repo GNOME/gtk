@@ -1,5 +1,11 @@
 2000-05-02  Tor Lillqvist  <tml@iki.fi>
 
+	* gdk/win32/gdkdrawable-win32.c (gdk_win32_draw_arc): Don't try to
+	draw too narrow or too low arcs, they seem to fail, at least with
+	some display drivers.
+
+	* gdk/gdk.c (gdk_init_check): Use G_DIR_SEPARATOR.
+
 	Large changes to the Win32 backend, partially made necessary by
 	the changes to the backend-independent internal
 	structures. Attempts to implement similar backing store stuff as
