@@ -1,3 +1,36 @@
+Overview of Changes in GTK+ 1.0.0
+=================================
+
+* GtkTreeView fixes [Jonathan Blandford, Kristian Rietveld, Darin Adler]
+* Build fixes [Anders Carlsson, Tor Lillqvist, Manish Singh]
+* Bug fixes. [Thomas Leonard, Owen Taylor]
+
+Overview of Changes in GTK+ 1.0.0 rc1
+=====================================
+
+* GtkTreeView fixes [Kristian Rietveld, Jonathan Blandford, Richard Hult]
+* Text widget fixes [Havoc Pennington]
+* Efficiency fixes when using Xft [Owen Taylor]
+* Key handling fixes and other fixes for Win32 [Hans Breuer, Tor Lillqvist]
+* Try to fix key handling without XKEYBOARD extension [Owen]
+* Documentation fixes and improvements 
+  [Matthias Clasen, Alexey Malyshev, Akira Tagoh, Vitaly Tishkov]
+* Widget drawing improvments [Soeren Sandmann]
+* Allow cycling between multiple menu bars with <Control>Tab [Owen]
+* Try to build libraries with only shared library dependencies on Xft to 
+  deal with transition to Xft2 [Owen]
+* Portability fixes [Owen, Miroslaw Dobrzanski-Neumann]
+* Don't use red as the default cursor color [Owen]
+* Bug fixes, bug fixes, bug fixes.
+
+Other contributors: Darin Adler, Jacob Berkman, Kevin Breit, Hans Breuer, 
+  Anders Carlsson, Damon Chaplin, Finlay Dobbie, Jody Goldberg,
+  Andreas J. Guelzow, Scott Guilbeaux, Vlad Harchev, James Henstridge,
+  Tim Janik, Satyajit Kanungo, Charles Kerr, Sergey Kuzminov, Miles Lane, 
+  Alexander Larsson, Paolo Maggi, Skip Montaro, Jan Mynarik, Sven Neumann, 
+  Padraig O'Briain, Narayani Pattipati, Mark Patton, Havoc Pennington, 
+  Ettore Perazzoli, Guillermo S. Romero, Manish Singh, Morten Welinder
+
 Overview of Changes in GTK+ 1.3.15
 ==================================
 
