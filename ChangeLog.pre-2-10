@@ -1,3 +1,16 @@
+2005-03-23  Matthias Clasen  <mclasen@redhat.com>
+
+	Some cleanups to the GtkDialog code:  (#170746, 
+	Morten Welinder)
+	* gtk/gtkdialog.c (action_widget_activated): Simplify,
+	use _gtk_dialog_get_response_for_widget.
+	(gtk_dialog_add_action_widget): Use the correct signal
+	id for non-buttons.
+	(gtk_dialog_set_response_sensitive): 
+	(gtk_dialog_set_default_response): Use get_response_data.
+	(gtk_dialog_run): Don't disconnect the signals if the
+	dialog was destroyed while running.
+
 2005-03-22  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkpathbar.c (gtk_path_bar_unmap): 
