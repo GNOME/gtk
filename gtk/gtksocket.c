@@ -25,16 +25,6 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#include "gdkconfig.h"
-
-#if defined (GDK_WINDOWING_X11)
-#include "x11/gdkx.h"
-#elif defined (GDK_WINDOWING_WIN32)
-#include "win32/gdkwin32.h"
-#elif defined(GDK_WINDOWING_FB)
-#include "linux-fb/gdkfb.h"
-#endif
-
 #include "gdk/gdkkeysyms.h"
 #include "gtkmain.h"
 #include "gtkwindow.h"
@@ -42,9 +32,9 @@
 #include "gtksocket.h"
 #include "gtkdnd.h"
 
-#include "xembed.h"
+#include "x11/gdkx.h"
 
-#ifdef GDK_WINDOWING_X11
+#include "xembed.h"
 
 /* Forward declararations */
 
@@ -1096,8 +1086,7 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 			      GDK_WINDOW_XWINDOW (toplevel->window),
 			      RevertToParent, CurrentTime); /* FIXME? */
 	    }
-#endif	  
-	}
+#endif	  	}
       return_val = GDK_FILTER_REMOVE;
       break;
     case FocusOut:
@@ -1159,27 +1148,3 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
   
   return return_val;
 }
-
-#else
-
-GtkType
-gtk_socket_get_type (void)
-{
-  g_error ("GtkSocket not implemented");
-  return 0;
-}
-
-GtkWidget*
-gtk_socket_new ()
-{
-  g_error ("GtkSocket not implemented");
-  return NULL;
-}
-
-void           
-gtk_socket_steal (GtkSocket *socket, GdkNativeWindow id)
-{
-  g_error ("GtkSocket not implemented");
-}
-
-#endif /* GDK_WINDOWING */

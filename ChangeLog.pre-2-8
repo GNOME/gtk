@@ -1,5 +1,12 @@
 2001-04-23  Sven Neumann  <sven@gimp.org>
 
+	* gtk/Makefile.am
+	* gtk/gtkplug.c
+	* gtk/gtksocket.c: on request of Owen, reverted my last change 
+	and exclude gtkplug.c/gtksocket.c from the build for non-X11 targets
+
+2001-04-23  Sven Neumann  <sven@gimp.org>
+
 	* gtk/gtkplug.c: put into #ifdef GDK_WINDOWING_X11 to make GTK+
 	compile for non-X11 targets again
 

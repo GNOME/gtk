@@ -290,7 +290,6 @@ gtk_c_sources = @STRIP_BEGIN@   \
 	gtkpacker.c		\
 	gtkpaned.c		\
 	gtkpixmap.c		\
-	gtkplug.c               \
 	gtkpreview.c		\
 	gtkprogress.c		\
 	gtkprogressbar.c	\
@@ -307,7 +306,6 @@ gtk_c_sources = @STRIP_BEGIN@   \
 	gtkseparator.c		\
 	gtksettings.c		\
 	gtksignal.c		\
-	gtksocket.c             \
 	gtkspinbutton.c		\
 	gtkstock.c		\
 	gtkstyle.c		\
@@ -362,6 +360,13 @@ gtk_c_sources = @STRIP_BEGIN@   \
 	xembed.h		\
 @STRIP_END@
 
+if USE_X11
+gtk_plug_c_sources = @STRIP_BEGIN@   \
+	gtkplug.c		\
+	gtksocket.c
+@STRIP_END@
+endif
+
 # we use our own built_sources variable rules to avoid automake's
 # BUILT_SOURCES oddities
 # we generate frequently rebuild files piggyback on a stamp file, so sources
@@ -404,7 +409,7 @@ gtk_extra_sources = @STRIP_BEGIN@ \
 # setup GTK+ sources and their dependancies
 #
 gtk_target_headers = $(gtk_public_h_sources) $(gtk_built_public_sources) gtkcompat.h
-gtk_target_sources = $(gtk_c_sources)
+gtk_target_sources = $(gtk_c_sources) $(gtk_plug_c_sources)
 MAINTAINERCLEANFILES += $(gtk_built_sources)
 EXTRA_HEADERS +=
 EXTRA_DIST += $(gtk_private_h_sources) $(gtk_extra_sources)

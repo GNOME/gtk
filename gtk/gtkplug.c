@@ -25,10 +25,6 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#include "gdkconfig.h"
-
-#ifdef GDK_WINDOWING_X11
-
 #include "gtkmain.h"
 #include "gtkplug.h"
 
@@ -718,5 +714,3 @@ gtk_plug_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 
   return GDK_FILTER_CONTINUE;
 }
-
-#endif /* GDK_WINDOWING */
