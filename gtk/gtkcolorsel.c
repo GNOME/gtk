@@ -958,10 +958,6 @@ gtk_color_selection_drag_handle (GtkWidget        *widget,
   vals[2] = colors[2] * 0xffff;
   vals[3] = colorsel->use_opacity ? colors[3] * 0xffff : 0xffff;
 
-  g_print ("%x %x\n", vals[0], vals[3]);
-  g_print ("%g\n", colorsel->values[OPACITY]);
-  g_print ("%d\n", colorsel->use_opacity);
-
   gtk_selection_data_set (selection_data,
 			  gdk_atom_intern ("application/x-color", FALSE),
 			  16, (guchar *)vals, 8);

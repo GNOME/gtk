@@ -1,3 +1,14 @@
+Sun Feb 21 16:16:22 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkscrolledwindow.c gdk/gdkfont.c gdk/gdkim.c:
+	 Changed warnings from g_message() to g_warning().
+
+	* gdk/gdkim.c (gdk_ic_destroy): Changed g_print
+	 to g_message within GDK_NOTE()
+
+	* gtk/gtkcolorsel.c  gtk/gtkhandlebox.c:
+	 Removed some leftover debugging printfs.
+
 Sun Feb 21 15:59:55 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/MwmUtil.h gdk/gdkwindow.c: Account for the

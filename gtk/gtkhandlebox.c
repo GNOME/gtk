@@ -954,8 +954,6 @@ gtk_handle_box_button_changed (GtkWidget      *widget,
 	      hb->attach_allocation.width = width;
 	      hb->attach_allocation.height = height;
 
-	      g_print ("%d %d\n", width, height);
-	      
 	      hb->in_drag = TRUE;
 	      fleur = gdk_cursor_new (GDK_FLEUR);
 	      if (gdk_pointer_grab (widget->window,
@@ -1076,9 +1074,6 @@ gtk_handle_box_motion (GtkWidget      *widget,
 	  break;
 	}
 
-      g_print ("(%d %d), (%d %d)\n",
-	       float_pos1, float_pos2, attach_pos1, attach_pos2);
-      
       is_snapped = ((attach_pos1 - TOLERANCE < float_pos1) && 
 		    (attach_pos2 + TOLERANCE > float_pos2)) ||
 	           ((float_pos1 - TOLERANCE < attach_pos1) &&

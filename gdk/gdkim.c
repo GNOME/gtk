@@ -98,16 +98,16 @@ gdk_set_locale (void)
   gdk_use_mb = FALSE;
 
   if (!setlocale (LC_ALL,""))
-    g_message ("locale not supported by C library");
+    g_warning ("locale not supported by C library");
   
   if (!XSupportsLocale ())
     {
-      g_message ("locale not supported by Xlib, locale set to C");
+      g_warning ("locale not supported by Xlib, locale set to C");
       setlocale (LC_ALL, "C");
     }
   
   if (!XSetLocaleModifiers (""))
-    g_message ("can not set locale modifiers");
+    g_warning ("can not set locale modifiers");
 
   current_locale = setlocale (LC_ALL, NULL);
 
@@ -180,9 +180,9 @@ gdk_im_begin (GdkIC *ic, GdkWindow* window)
       if (private->xic)
 	{
 	  XSetICFocus (private->xic);
-	  GDK_NOTE (XIM, g_print ("im_begin icfocus : %p(%ld)\n",
-				  private->xic,
-				  GDK_WINDOW_XWINDOW(private->attr->focus_window)));
+	  GDK_NOTE (XIM, g_message ("im_begin icfocus : %p(%ld)\n",
+				    private->xic,
+				    GDK_WINDOW_XWINDOW(private->attr->focus_window)));
 	}
     }
   gdk_xim_ic = private;
@@ -212,7 +212,7 @@ gdk_im_end (void)
   if (gdk_xim_ic && gdk_xim_ic->xic)
     {
       XUnsetICFocus (gdk_xim_ic->xic);
-      GDK_NOTE (XIM, g_print ("im_end unfocus : %p\n", gdk_xim_ic->xic));
+      GDK_NOTE (XIM, g_message ("im_end unfocus : %p\n", gdk_xim_ic->xic));
     }
   gdk_xim_ic = NULL;
   gdk_xim_window = NULL;
@@ -674,7 +674,7 @@ gdk_ic_destroy (GdkIC *ic)
   if (gdk_xim_ic == private)
     gdk_im_end ();
   
-  GDK_NOTE (XIM, g_print("ic_destroy %p\n", private->xic));
+  GDK_NOTE (XIM, g_message ("ic_destroy %p\n", private->xic));
   if (private->xic != NULL)
     XDestroyIC (private->xic);
 

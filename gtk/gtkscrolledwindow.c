@@ -892,7 +892,7 @@ gtk_scrolled_window_add (GtkContainer *container,
   if (!gtk_widget_set_scroll_adjustments (child,
 					  gtk_range_get_adjustment (GTK_RANGE (scrolled_window->hscrollbar)),
 					  gtk_range_get_adjustment (GTK_RANGE (scrolled_window->vscrollbar))))
-    g_message ("gtk_scrolled_window_add(): cannot add non scrollable widget "
+    g_warning ("gtk_scrolled_window_add(): cannot add non scrollable widget "
 	       "use gtk_scrolled_window_add_with_viewport() instead");
 
   if (GTK_WIDGET_VISIBLE (child->parent))
