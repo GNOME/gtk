@@ -1,3 +1,48 @@
+Tue Nov 17 00:06:29 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtknotebook.h (struct _GtkNotebook): new flags : homogeneous;
+	new guints : tab_hborder, tab_vborder; marked tab_border deprecated
+	(struct _GtkNotebookPage): new flags : expand, fill, pack
+
+	* gtk/gtknotebook.h/c
+	(gtk_notebook_set_homogeneous_tabs): new function. set homogeneneous
+ 	tabs
+	(gtk_notebook_set_tab_border): set tab_h/vborder to tab_border
+	(gtk_notebook_set_tab_hborder): new function. set tab_hborder
+	(gtk_notebook_set_tab_vborder): new function. set tab_vborder
+	(gtk_notebook_query_tab_label): new function. get tab_label widget.
+	(gtk_notebook_set_tab_label): new function. set tab_label widget.
+	(gtk_notebook_set_tab_label_text): new function. set tab_label text.
+	(gtk_notebook_query_menu_label): new function. get tab_label widget.
+	(gtk_notebook_set_menu_label): new function. set tab_label widget.
+	(gtk_notebook_set_menu_label_text): new function. set tab_label text.
+	(gtk_notebook_set_tab_label_packing): new function. set tab_label
+ 	fill, expand, fill_type
+	(gtk_notebook_query_tab_label_packing): new function. get tab_label
+ 	fill, expand, fill_type
+
+	(gtk_notebook_real_page_position): return logic page number
+	(gtk_notebook_search_page) search next/prev logic page
+	(gtk_notebook_update_labels): set logic page number.
+	(gtk_notebook_page_compare): renamed gtk_notebook_find_page
+	(gtk_notebook_set/get_child_arg): new args CHILD_ARG_TAB_EXPAND,
+ 	CHILD_ARG_TAB_FILL, CHILD_ARG_TAB_PACK
+ 	(gtk_notebook_button_press) (gtk_notebook_key_press)
+ 	(gtk_notebook_focus) (gtk_notebook_pages_allocate)
+	(gtk_notebook_calc_tabs) (gtk_notebook_switch_focus_tab)
+ 	use gtk_notebook_search_page
+	(gtk_notebook_page_allocate): fixed allocation bug
+	(gtk_notebook_set/get_arg): new args TAB_HBORDER, TAB_VBORDER.
+	(gtk_notebook_init): unset GTK_NO_WINDOW flag
+	(gtk_notebook_size_request): check whether page->child is visible.
+ 	changes due to tab h/vborder, homogeneous tabs
+	(gtk_notebook_paint): don't draw invisible tabs
+	(gtk_notebook_switch_page): calculate page_num if it's less than 0
+ 	(gtk_notebook_append_*) (gtk_notebook_prepend_*)
+ 	(gtk_notebook_insert_page): removed sanity checks
+
+	* gtk/testgtk.c (create_notebook): extended Notebook sample a bit.
+
 Mon Nov 16 15:10:33 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktext.c: Optimizations for moving point n

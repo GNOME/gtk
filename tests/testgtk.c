@@ -5698,6 +5698,7 @@ GdkPixmap *book_open;
 GdkPixmap *book_closed;
 GdkBitmap *book_open_mask;
 GdkBitmap *book_closed_mask;
+GtkWidget *sample_notebook;
 
 static void
 page_switch (GtkWidget *widget, GtkNotebookPage *page, gint page_num)
@@ -5709,33 +5710,71 @@ page_switch (GtkWidget *widget, GtkNotebookPage *page, gint page_num)
 
   if (page == oldpage)
     return;
-
-  pixwid = ((GtkBoxChild*)(GTK_BOX (page->tab_label)->children->data))->widget;
+  pixwid = ((GtkBoxChild*)
+	    (GTK_BOX (page->tab_label)->children->data))->widget;
   gtk_pixmap_set (GTK_PIXMAP (pixwid), book_open, book_open_mask);
-  pixwid = ((GtkBoxChild*) (GTK_BOX (page->menu_label)->children->data))->widget;
+  pixwid = ((GtkBoxChild*)
+	    (GTK_BOX (page->menu_label)->children->data))->widget;
   gtk_pixmap_set (GTK_PIXMAP (pixwid), book_open, book_open_mask);
 
   if (oldpage)
     {
-      pixwid = ((GtkBoxChild*) (GTK_BOX 
-				(oldpage->tab_label)->children->data))->widget;
+      pixwid = ((GtkBoxChild*)
+		(GTK_BOX (oldpage->tab_label)->children->data))->widget;
       gtk_pixmap_set (GTK_PIXMAP (pixwid), book_closed, book_closed_mask);
-      pixwid = ((GtkBoxChild*) (GTK_BOX (oldpage->menu_label)->children->data))->widget;
+      pixwid = ((GtkBoxChild*)
+		(GTK_BOX (oldpage->menu_label)->children->data))->widget;
       gtk_pixmap_set (GTK_PIXMAP (pixwid), book_closed, book_closed_mask);
     }
+}
+
+static void
+tab_fill (GtkToggleButton *button, GtkWidget *child)
+{
+  gboolean expand;
+  GtkPackType pack_type;
+
+  gtk_notebook_query_tab_label_packing (GTK_NOTEBOOK (sample_notebook), child,
+					&expand, NULL, &pack_type);
+  gtk_notebook_set_tab_label_packing (GTK_NOTEBOOK (sample_notebook), child,
+				      expand, button->active, pack_type);
+}
+
+static void
+tab_expand (GtkToggleButton *button, GtkWidget *child)
+{
+  gboolean fill;
+  GtkPackType pack_type;
+
+  gtk_notebook_query_tab_label_packing (GTK_NOTEBOOK (sample_notebook), child,
+					NULL, &fill, &pack_type);
+  gtk_notebook_set_tab_label_packing (GTK_NOTEBOOK (sample_notebook), child,
+				      button->active, fill, pack_type);
+}
+
+static void
+tab_pack (GtkToggleButton *button, GtkWidget *child)
+	  
+{ 
+  gboolean expand;
+  gboolean fill;
+
+  gtk_notebook_query_tab_label_packing (GTK_NOTEBOOK (sample_notebook), child,
+					&expand, &fill, NULL);
+  gtk_notebook_set_tab_label_packing (GTK_NOTEBOOK (sample_notebook), child,
+				      expand, fill, button->active);
 }
 
 static void
 create_pages (GtkNotebook *notebook, gint start, gint end)
 {
   GtkWidget *child = NULL;
+  GtkWidget *button;
   GtkWidget *label;
-  GtkWidget *entry;
-  GtkWidget *box;
   GtkWidget *hbox;
+  GtkWidget *vbox;
   GtkWidget *label_box;
   GtkWidget *menu_box;
-  GtkWidget *button;
   GtkWidget *pixwid;
   gint i;
   char buffer[32];
@@ -5743,47 +5782,38 @@ create_pages (GtkNotebook *notebook, gint start, gint end)
   for (i = start; i <= end; i++)
     {
       sprintf (buffer, "Page %d", i);
-     
-      switch (i % 4)
-	{
-	case 3:
-	  child = gtk_button_new_with_label (buffer);
-	  gtk_container_border_width (GTK_CONTAINER(child), 10);
-	  break;
-	case 2:
-	  child = gtk_label_new (buffer);
-	  break;
-	case 1:
-	  child = gtk_frame_new (buffer);
-	  gtk_container_border_width (GTK_CONTAINER (child), 10);
-      
-	  box = gtk_vbox_new (TRUE,0);
-	  gtk_container_border_width (GTK_CONTAINER (box), 10);
-	  gtk_container_add (GTK_CONTAINER (child), box);
 
-	  label = gtk_label_new (buffer);
-	  gtk_box_pack_start (GTK_BOX(box), label, TRUE, TRUE, 5);
+      child = gtk_frame_new (buffer);
+      gtk_container_border_width (GTK_CONTAINER (child), 10);
 
-	  entry = gtk_entry_new ();
-	  gtk_box_pack_start (GTK_BOX(box), entry, TRUE, TRUE, 5);
-      
-	  hbox = gtk_hbox_new (TRUE,0);
-	  gtk_box_pack_start (GTK_BOX(box), hbox, TRUE, TRUE, 5);
+      vbox = gtk_vbox_new (TRUE,0);
+      gtk_container_border_width (GTK_CONTAINER (vbox), 10);
+      gtk_container_add (GTK_CONTAINER (child), vbox);
 
-	  button = gtk_button_new_with_label ("Ok");
-	  gtk_box_pack_start (GTK_BOX(hbox), button, TRUE, TRUE, 5);
+      hbox = gtk_hbox_new (TRUE,0);
+      gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 5);
 
-	  button = gtk_button_new_with_label ("Cancel");
-	  gtk_box_pack_start (GTK_BOX(hbox), button, TRUE, TRUE, 5);
-	  break;
-	case 0:
-	  child = gtk_frame_new (buffer);
-	  gtk_container_border_width (GTK_CONTAINER (child), 10);
+      button = gtk_check_button_new_with_label ("Fill Tab");
+      gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 5);
+      gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (button), TRUE);
+      gtk_signal_connect (GTK_OBJECT (button), "toggled",
+			  GTK_SIGNAL_FUNC (tab_fill), child);
 
-	  label = gtk_label_new (buffer);
-	  gtk_container_add (GTK_CONTAINER (child), label);
-	  break;
-	}
+      button = gtk_check_button_new_with_label ("Expand Tab");
+      gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 5);
+      gtk_signal_connect (GTK_OBJECT (button), "toggled",
+      GTK_SIGNAL_FUNC (tab_expand), child);
+
+      button = gtk_check_button_new_with_label ("Pack end");
+      gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 5);
+      gtk_signal_connect (GTK_OBJECT (button), "toggled",
+			  GTK_SIGNAL_FUNC (tab_pack), child);
+
+      button = gtk_button_new_with_label ("Hide Page");
+      gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 5);
+      gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+				 GTK_SIGNAL_FUNC (gtk_widget_hide),
+				 GTK_OBJECT (child));
 
       gtk_widget_show_all (child);
 
@@ -5794,7 +5824,7 @@ create_pages (GtkNotebook *notebook, gint start, gint end)
       label = gtk_label_new (buffer);
       gtk_box_pack_start (GTK_BOX (label_box), label, FALSE, TRUE, 0);
       gtk_widget_show_all (label_box);
-      
+
       menu_box = gtk_hbox_new (FALSE, 0);
       pixwid = gtk_pixmap_new (book_closed, book_closed_mask);
       gtk_box_pack_start (GTK_BOX (menu_box), pixwid, FALSE, TRUE, 0);
@@ -5802,7 +5832,6 @@ create_pages (GtkNotebook *notebook, gint start, gint end)
       label = gtk_label_new (buffer);
       gtk_box_pack_start (GTK_BOX (menu_box), label, FALSE, TRUE, 0);
       gtk_widget_show_all (menu_box);
-
       gtk_notebook_append_page_menu (notebook, child, label_box, menu_box);
     }
 }
@@ -5815,8 +5844,16 @@ rotate_notebook (GtkButton   *button,
 }
 
 static void
+show_all_pages (GtkButton   *button,
+		GtkNotebook *notebook)
+{  
+  gtk_container_foreach (GTK_CONTAINER (notebook),
+			 (GtkCallback) gtk_widget_show, NULL);
+}
+
+static void
 standard_notebook (GtkButton   *button,
-		   GtkNotebook *notebook)
+                   GtkNotebook *notebook)
 {
   gint i;
 
@@ -5829,7 +5866,7 @@ standard_notebook (GtkButton   *button,
 
 static void
 notabs_notebook (GtkButton   *button,
-		 GtkNotebook *notebook)
+                 GtkNotebook *notebook)
 {
   gint i;
 
@@ -5841,7 +5878,7 @@ notabs_notebook (GtkButton   *button,
 
 static void
 scrollable_notebook (GtkButton   *button,
-		     GtkNotebook *notebook)
+                     GtkNotebook *notebook)
 {
   gtk_notebook_set_show_tabs (notebook, TRUE);
   gtk_notebook_set_scrollable (notebook, TRUE);
@@ -5860,6 +5897,13 @@ notebook_popup (GtkToggleButton *button,
 }
 
 static void
+notebook_homogeneous (GtkToggleButton *button,
+		      GtkNotebook     *notebook)
+{
+  gtk_notebook_set_homogeneous_tabs (notebook, button->active);
+}
+
+static void
 create_notebook (void)
 {
   static GtkWidget *window = NULL;
@@ -5867,9 +5911,9 @@ create_notebook (void)
   GtkWidget *box2;
   GtkWidget *button;
   GtkWidget *separator;
-  GtkWidget *notebook;
   GtkWidget *omenu;
   GdkColor *transparent = NULL;
+  GtkWidget *label;
 
   static OptionMenuItem items[] =
   {
@@ -5892,72 +5936,91 @@ create_notebook (void)
       box1 = gtk_vbox_new (FALSE, 0);
       gtk_container_add (GTK_CONTAINER (window), box1);
 
-      notebook = gtk_notebook_new ();
-      gtk_signal_connect (GTK_OBJECT (notebook), "switch_page",
+      sample_notebook = gtk_notebook_new ();
+      gtk_signal_connect (GTK_OBJECT (sample_notebook), "switch_page",
 			  GTK_SIGNAL_FUNC (page_switch), NULL);
-      gtk_notebook_set_tab_pos (GTK_NOTEBOOK (notebook), GTK_POS_TOP);
-      gtk_box_pack_start (GTK_BOX (box1), notebook, TRUE, TRUE, 0);
-      gtk_container_border_width (GTK_CONTAINER (notebook), 10);
+      gtk_notebook_set_tab_pos (GTK_NOTEBOOK (sample_notebook), GTK_POS_TOP);
+      gtk_box_pack_start (GTK_BOX (box1), sample_notebook, TRUE, TRUE, 0);
+      gtk_container_border_width (GTK_CONTAINER (sample_notebook), 10);
 
-      gtk_widget_realize (notebook);
-      book_open = gdk_pixmap_create_from_xpm_d (notebook->window,
+      gtk_widget_realize (sample_notebook);
+      book_open = gdk_pixmap_create_from_xpm_d (sample_notebook->window,
 						&book_open_mask, 
 						transparent, 
 						book_open_xpm);
-      book_closed = gdk_pixmap_create_from_xpm_d (notebook->window,
+      book_closed = gdk_pixmap_create_from_xpm_d (sample_notebook->window,
 						  &book_closed_mask,
 						  transparent, 
 						  book_closed_xpm);
 
-      create_pages (GTK_NOTEBOOK (notebook), 1, 5);
+      create_pages (GTK_NOTEBOOK (sample_notebook), 1, 5);
 
       separator = gtk_hseparator_new ();
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 10);
       
-      box2 = gtk_hbox_new (TRUE, 5);
+      box2 = gtk_hbox_new (FALSE, 5);
+      gtk_container_border_width (GTK_CONTAINER (box2), 10);
       gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
-      
-      omenu = build_option_menu (items, 3, 0, notebook);
-      gtk_box_pack_start (GTK_BOX (box2), omenu, FALSE, FALSE, 0);
 
-      button = gtk_check_button_new_with_label ("enable popup menu");
-      gtk_box_pack_start (GTK_BOX (box2), button, FALSE, FALSE, 0);
+      button = gtk_check_button_new_with_label ("popup menu");
+      gtk_box_pack_start (GTK_BOX (box2), button, TRUE, FALSE, 0);
       gtk_signal_connect (GTK_OBJECT(button), "clicked",
 			  GTK_SIGNAL_FUNC (notebook_popup),
-			  GTK_OBJECT (notebook));
-      
+			  GTK_OBJECT (sample_notebook));
+
+      button = gtk_check_button_new_with_label ("homogeneous tabs");
+      gtk_box_pack_start (GTK_BOX (box2), button, TRUE, FALSE, 0);
+      gtk_signal_connect (GTK_OBJECT(button), "clicked",
+			  GTK_SIGNAL_FUNC (notebook_homogeneous),
+			  GTK_OBJECT (sample_notebook));
+
+      box2 = gtk_hbox_new (FALSE, 5);
+      gtk_container_border_width (GTK_CONTAINER (box2), 10);
+      gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
+
+      label = gtk_label_new ("Notebook Style :");
+      gtk_box_pack_start (GTK_BOX (box2), label, FALSE, TRUE, 0);
+
+      omenu = build_option_menu (items, 3, 0, sample_notebook);
+      gtk_box_pack_start (GTK_BOX (box2), omenu, FALSE, TRUE, 0);
+
+      button = gtk_button_new_with_label ("Show all Pages");
+      gtk_box_pack_start (GTK_BOX (box2), button, FALSE, TRUE, 0);
+      gtk_signal_connect (GTK_OBJECT (button), "clicked",
+			  GTK_SIGNAL_FUNC (show_all_pages), sample_notebook);
+
       box2 = gtk_hbox_new (TRUE, 10);
       gtk_container_border_width (GTK_CONTAINER (box2), 10);
       gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
-      
-      button = gtk_button_new_with_label ("close");
-      gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-				 GTK_SIGNAL_FUNC (gtk_widget_destroy),
-				 GTK_OBJECT (window));
-      gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
-      gtk_widget_grab_default (button);
-
-      button = gtk_button_new_with_label ("next");
-      gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-				 GTK_SIGNAL_FUNC (gtk_notebook_next_page),
-				 GTK_OBJECT (notebook));
-      gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
 
       button = gtk_button_new_with_label ("prev");
       gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
 				 GTK_SIGNAL_FUNC (gtk_notebook_prev_page),
-				 GTK_OBJECT (notebook));
+				 GTK_OBJECT (sample_notebook));
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+
+      button = gtk_button_new_with_label ("next");
+      gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+				 GTK_SIGNAL_FUNC (gtk_notebook_next_page),
+				 GTK_OBJECT (sample_notebook));
+      gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
 
       button = gtk_button_new_with_label ("rotate");
       gtk_signal_connect (GTK_OBJECT (button), "clicked",
-			  GTK_SIGNAL_FUNC (rotate_notebook),
-			  notebook);
+			  GTK_SIGNAL_FUNC (rotate_notebook), sample_notebook);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
+
+      separator = gtk_hseparator_new ();
+      gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 5);
+
+      button = gtk_button_new_with_label ("close");
+      gtk_container_border_width (GTK_CONTAINER (button), 5);
+      gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+				 GTK_SIGNAL_FUNC (gtk_widget_destroy),
+				 GTK_OBJECT (window));
+      gtk_box_pack_start (GTK_BOX (box1), button, FALSE, FALSE, 0);
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_grab_default (button);
     }
 
   if (!GTK_WIDGET_VISIBLE (window))
