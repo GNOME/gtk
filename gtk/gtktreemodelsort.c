@@ -804,6 +804,7 @@ gtk_tree_model_sort_rows_reordered (GtkTreeModel *s_model,
 
       gtk_tree_model_sort_sort_level (tree_model_sort, level,
 				      FALSE, FALSE);
+      gtk_tree_model_sort_increment_stamp (tree_model_sort);
 
       if (gtk_tree_path_get_depth (path))
 	{
@@ -1533,8 +1534,6 @@ gtk_tree_model_sort_sort_level (GtkTreeModelSort *tree_model_sort,
 
       gtk_tree_path_free (path);
     }
-
-  gtk_tree_model_sort_increment_stamp (tree_model_sort);
 
   /* recurse, if possible */
   if (recurse)
