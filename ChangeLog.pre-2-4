@@ -1,5 +1,20 @@
 2003-03-08  Matthias Clasen  <maclas@gmx.de>
 
+	Bug #107664 continued:
+
+	* gdk/x11/gdkinputprivate.h: 
+	* gdk/x11/gdkinput-none.c (_gdk_input_window_none_event): Remove. 
+	(_gdk_input_other_event): Return gboolean.
+	* gdk/x11/gdkinput-xfree.c (_gdk_input_window_none_event): Remove. 
+	(_gdk_input_other_event): Return gboolean.
+	* gdk/x11/gdkinput-x11.c (_gdk_input_common_other_event): Return gboolean.
+
+	* gdk/x11/gdkevents-x11.c (gdk_event_translate): Make return_val
+	gboolean, remove pointless call to _gdk_input_window_none_event.
+
+	* gdk/win32/gdkinput-win32.[hc] (_gdk_input_other_event): Return gboolean.
+	(_gdk_input_window_none_event): Remove.
+
 	* gtk/gtktextiter.c (_gtk_text_iter_get_indexable_segment): 
 	(_gtk_text_iter_get_any_segment): 
 	(_gtk_text_iter_get_segment_byte): 

@@ -687,7 +687,7 @@ _gdk_input_enter_event (GdkEventCrossing *event,
   input_window->root_y = root_y;
 }
 
-gint 
+gboolean 
 _gdk_input_other_event (GdkEvent  *event,
 			MSG       *msg,
 			GdkWindow *window)
@@ -956,7 +956,7 @@ _gdk_input_other_event (GdkEvent  *event,
       return TRUE;
     }
 #endif
-  return -1;
+  return FALSE;
 }
 
 gboolean
@@ -1112,13 +1112,6 @@ _gdk_input_ungrab_pointer (guint32 time)
 	}
     }
 #endif
-}
-
-gint 
-_gdk_input_window_none_event (GdkEvent *event,
-			      MSG      *msg)
-{
-  return -1;
 }
 
 gboolean

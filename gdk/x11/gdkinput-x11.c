@@ -520,7 +520,7 @@ gdk_input_translate_state(guint state, guint device_state)
 }
 
 
-gint 
+gboolean
 _gdk_input_common_other_event (GdkEvent         *event,
 			       XEvent           *xevent,
 			       GdkInputWindow   *input_window,
@@ -667,7 +667,7 @@ _gdk_input_common_other_event (GdkEvent         *event,
       return TRUE;
   }
 
-  return -1;			/* wasn't one of our event types */
+  return FALSE;			/* wasn't one of our event types */
 }
 
 gboolean
