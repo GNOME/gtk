@@ -418,7 +418,10 @@ gtk_vscrollbar_calc_slider_size (GtkVScrollbar *vscrollbar)
       gdk_window_get_size (range->slider, &slider_width, &slider_height);
       
       if (slider_height != height)
-        gdk_window_resize (range->slider, slider_width, height);
+	{
+	  gdk_window_resize (range->slider, slider_width, height);
+	  gdk_window_invalidate_rect (range->slider, NULL, FALSE);
+	}
     }
 }
 

@@ -418,7 +418,10 @@ gtk_hscrollbar_calc_slider_size (GtkHScrollbar *hscrollbar)
       gdk_window_get_size (range->slider, &slider_width, &slider_height);
       
       if (slider_width != width)
-        gdk_window_resize (range->slider, width, slider_height);
+	{
+	  gdk_window_resize (range->slider, width, slider_height);
+	  gdk_window_invalidate_rect (range->slider, NULL, FALSE);
+	}
     }
 }
 

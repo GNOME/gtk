@@ -1080,8 +1080,6 @@ _gdk_window_draw_image (GdkDrawable *drawable,
 static GSList *update_windows = NULL;
 static guint update_idle = 0;
 
-#define GDK_PRIORITY_REDRAW     (G_PRIORITY_HIGH_IDLE + 20)
-
 static void
 gdk_window_process_updates_internal (GdkWindow *window)
 {
@@ -1187,11 +1185,21 @@ gdk_window_invalidate_rect   (GdkWindow    *window,
 			      GdkRectangle *rect,
 			      gboolean      invalidate_children)
 {
+  GdkRectangle window_rect;
   GdkWindowPrivate *private = (GdkWindowPrivate *)window;
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
+  if (!rect)
+    {
+      window_rect.x = 0;
+      window_rect.y = 0;
+      window_rect.width = private->drawable.width;
+      window_rect.height = private->drawable.height;
+      rect = &window_rect;
+    }
+  
   if (private->update_area)
     {
       gdk_region_union_with_rect (private->update_area, rect);
