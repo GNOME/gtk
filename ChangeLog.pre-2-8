@@ -1,3 +1,11 @@
+Thu Jun 13 18:48:14 2002  Owen Taylor  <otaylor@redhat.com>
+
+ 	* gdk/x11/gdkcolor-x11.c: Make work
+	gdk_colormap_sync() work for DirectColor visuals 
+	as well. Fill in the ->colors array in
+	gdk_screen_get_system_colormap () for DirectColor visuals.
+	(#81954, Based on a patch from shivaram.upadhyayula@wipro.com)
+ 
 Thu Jun 13 17:50:36 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktextview.c gtk/gtkentry.c: Add the obsolete
