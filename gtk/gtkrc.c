@@ -2769,8 +2769,9 @@ gtk_rc_find_pixmap_in_path (GtkSettings  *settings,
     }
   
   if (scanner)
-    g_warning (_("Unable to locate image file in pixmap_path: \"%s\" line %d"),
-	       pixmap_file, scanner->line);
+    g_scanner_warn (scanner, 
+                    _("Unable to locate image file in pixmap_path: \"%s\""),
+                    pixmap_file);
   else
     g_warning (_("Unable to locate image file in pixmap_path: \"%s\""),
 	       pixmap_file);
@@ -3431,7 +3432,8 @@ gtk_rc_parse_stock_id (GScanner	 *scanner,
 static guint
 gtk_rc_parse_icon_source (GtkRcContext   *context,
 			  GScanner	 *scanner,
-                          GtkIconSet     *icon_set)
+                          GtkIconSet     *icon_set,
+                          gboolean       *icon_set_valid)
 {
   guint token;
   GtkIconSource *source;
@@ -3457,7 +3459,8 @@ gtk_rc_parse_icon_source (GtkRcContext   *context,
     }
 
   /* We continue parsing even if we didn't find the pixmap so that rest of the
-   * file is read, even if the syntax is bad
+   * file is read, even if the syntax is bad. However we don't validate the 
+   * icon_set so the caller can choose not to install it.
    */
   token = g_scanner_get_next_token (scanner);
 
@@ -3589,7 +3592,10 @@ gtk_rc_parse_icon_source (GtkRcContext   *context,
 
  done:
   if (gtk_icon_source_get_filename (source))
-    gtk_icon_set_add_source (icon_set, source);
+    {
+      gtk_icon_set_add_source (icon_set, source);
+      *icon_set_valid = TRUE;
+    }
   gtk_icon_source_free (source);
   
   return G_TOKEN_NONE;
@@ -3602,6 +3608,7 @@ gtk_rc_parse_stock (GtkRcContext   *context,
                     GtkIconFactory *factory)
 {
   GtkIconSet *icon_set = NULL;
+  gboolean icon_set_valid = FALSE;
   gchar *stock_id = NULL;
   guint token;
   
@@ -3633,7 +3640,8 @@ gtk_rc_parse_stock (GtkRcContext   *context,
       if (icon_set == NULL)
         icon_set = gtk_icon_set_new ();
       
-      token = gtk_rc_parse_icon_source (context, scanner, icon_set);
+      token = gtk_rc_parse_icon_source (context, 
+                                        scanner, icon_set, &icon_set_valid);
       if (token != G_TOKEN_NONE)
         {
           g_free (stock_id);
@@ -3652,7 +3660,7 @@ gtk_rc_parse_stock (GtkRcContext   *context,
         }
     }
 
-  if (icon_set)
+  if (icon_set && icon_set_valid)
     {
       gtk_icon_factory_add (factory,
                             stock_id,

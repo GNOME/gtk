@@ -1,5 +1,10 @@
 2002-01-29  Sven Neumann  <sven@gimp.org>
 
+	* gtk/gtkrc.c: don't install an empty icon_set if none of the image
+	files could be found in the pixmap_path (bug #69398).
+	
+2002-01-29  Sven Neumann  <sven@gimp.org>
+
 	* gdk/x11/gdkimage-x11.c (_gdk_x11_copy_to_image): fixed a segfault
 	that showed up when using the color picker.
 
