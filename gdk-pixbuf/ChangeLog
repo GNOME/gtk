@@ -1,5 +1,20 @@
 1999-12-02  Federico Mena Quintero  <federico@redhat.com>
 
+	Source files moved from src/ to gdk-pixbuf/, to be consistent with
+	other libraries.
+
+	* doc/Makefile.am: Modified for the new source directory.
+
+	* configure.in: Likewise.
+
+	* Makefile.am: Likewise.
+
+	* autogen.sh: Likewise.
+
+	* gdk-pixbuf/Makefile.am: Likewise.
+
+1999-12-02  Federico Mena Quintero  <federico@redhat.com>
+
 	* src/testpixbuf.c: #include <config.h>, and fix includes.
 
 	* src/testpixbuf-drawable.c: #include <config.h>, and fix includes.

@@ -1,23 +1,12 @@
-<TYPEDEF>
-<NAME>GdkPixbufCache</NAME>
-typedef struct {
-	int dummy;
-} GdkPixbufCache;
-</TYPEDEF>
 <FUNCTION>
-<NAME>gdk_pixbuf_cache_new</NAME>
-<RETURNS>GdkPixbufCache   *</RETURNS>
-long image_cache_limit,long pixmap_bitmap_cache_limit
+<NAME>gdk_pixbuf_rgb_from_drawable</NAME>
+<RETURNS>GdkPixbuf  *</RETURNS>
+GdkWindow *window, gint x, gint y, gint width, gint height
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_pixbuf_cache_destroy</NAME>
-<RETURNS>void  </RETURNS>
-GdkPixbufCache *cache
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_pixbuf_cache_load_image</NAME>
-<RETURNS>GdkPixbuf        *</RETURNS>
-GdkPixbufCache *cache,const char *file
+<NAME>gdk_pixbuf_rgba_from_drawable</NAME>
+<RETURNS>GdkPixbuf  *</RETURNS>
+GdkWindow *window, gint x, gint y, gint width, gint height
 </FUNCTION>
 <USER_FUNCTION>
 <NAME>ModulePreparedNotifyFunc</NAME>
@@ -56,6 +45,67 @@ gchar *buffer, gint size
 <NAME>gdk_pixbuf_load_module</NAME>
 <RETURNS>void  </RETURNS>
 GdkPixbufModule *image_module
+</FUNCTION>
+<MACRO>
+<NAME>GDK_TYPE_PIXBUF_LOADER</NAME>
+#define GDK_TYPE_PIXBUF_LOADER		   (gdk_pixbuf_loader_get_type ())
+</MACRO>
+<MACRO>
+<NAME>GDK_PIXBUF_LOADER</NAME>
+#define GDK_PIXBUF_LOADER(obj)		   (GTK_CHECK_CAST ((obj), GDK_TYPE_PIXBUF_LOADER, GdkPixbufLoader))
+</MACRO>
+<MACRO>
+<NAME>GDK_PIXBUF_LOADER_CLASS</NAME>
+#define GDK_PIXBUF_LOADER_CLASS(klass)	   (GTK_CHECK_CLASS_CAST ((klass), GDK_TYPE_PIXBUF_LOADER, GdkPixbufLoaderClass))
+</MACRO>
+<MACRO>
+<NAME>GDK_IS_PIXBUF_LOADER</NAME>
+#define GDK_IS_PIXBUF_LOADER(obj)	   (GTK_CHECK_TYPE ((obj), GDK_TYPE_PIXBUF_LOADER))
+</MACRO>
+<MACRO>
+<NAME>GDK_IS_PIXBUF_LOADER_CLASS</NAME>
+#define GDK_IS_PIXBUF_LOADER_CLASS(klass)  (GTK_CHECK_CLASS_TYPE ((klass), GDK_TYPE_PIXBUF_LOADER))
+</MACRO>
+<STRUCT>
+<NAME>GdkPixbufLoader</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkPixbufLoader</NAME>
+struct GdkPixbufLoader
+{
+	GtkObject object;
+
+	/* < Private > */
+	gpointer private;
+};
+</STRUCT>
+<STRUCT>
+<NAME>GdkPixbufLoaderClass</NAME>
+</STRUCT>
+<FUNCTION>
+<NAME>gdk_pixbuf_loader_get_type</NAME>
+<RETURNS>GtkType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_loader_new</NAME>
+<RETURNS>GdkPixbufLoader  *</RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_loader_write</NAME>
+<RETURNS>gboolean  </RETURNS>
+GdkPixbufLoader *loader, const gchar *buf, size_t count
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_loader_get_pixbuf</NAME>
+<RETURNS>GdkPixbuf  *</RETURNS>
+GdkPixbufLoader *loader
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_loader_close</NAME>
+<RETURNS>void  </RETURNS>
+GdkPixbufLoader *loader
 </FUNCTION>
 <STRUCT>
 <NAME>GdkPixbuf</NAME>
@@ -172,26 +222,6 @@ GdkPixbuf *pixbuf,GdkDrawable *drawable, GdkGC *gc,int src_x, int src_y,int dest
 <RETURNS>void  </RETURNS>
 GdkPixbuf *pixbuf, GdkDrawable *drawable,int src_x, int src_y,int dest_x, int dest_y,int width, int height,GdkPixbufAlphaMode alpha_mode,int alpha_threshold,GdkRgbDither dither,int x_dither, int y_dither
 </FUNCTION>
-<FUNCTION>
-<NAME>gdk_pixbuf_scale</NAME>
-<RETURNS>GdkPixbuf  *</RETURNS>
-const GdkPixbuf *pixbuf, gint w, gint h
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_pixbuf_rotate</NAME>
-<RETURNS>GdkPixbuf  *</RETURNS>
-GdkPixbuf *pixbuf, gdouble angle
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_pixbuf_rgb_from_drawable</NAME>
-<RETURNS>GdkPixbuf  *</RETURNS>
-GdkWindow *window, gint x, gint y, gint width, gint height
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_pixbuf_rgba_from_drawable</NAME>
-<RETURNS>GdkPixbuf  *</RETURNS>
-GdkWindow *window, gint x, gint y, gint width, gint height
-</FUNCTION>
 <MACRO>
 <NAME>GNOME_TYPE_CANVAS_PIXBUF</NAME>
 #define GNOME_TYPE_CANVAS_PIXBUF            (gnome_canvas_pixbuf_get_type ())
@@ -234,65 +264,4 @@ struct GnomeCanvasPixbuf {
 <NAME>gnome_canvas_pixbuf_get_type</NAME>
 <RETURNS>GtkType  </RETURNS>
 void
-</FUNCTION>
-<MACRO>
-<NAME>GDK_TYPE_PIXBUF_LOADER</NAME>
-#define GDK_TYPE_PIXBUF_LOADER		   (gdk_pixbuf_loader_get_type ())
-</MACRO>
-<MACRO>
-<NAME>GDK_PIXBUF_LOADER</NAME>
-#define GDK_PIXBUF_LOADER(obj)		   (GTK_CHECK_CAST ((obj), GDK_TYPE_PIXBUF_LOADER, GdkPixbufLoader))
-</MACRO>
-<MACRO>
-<NAME>GDK_PIXBUF_LOADER_CLASS</NAME>
-#define GDK_PIXBUF_LOADER_CLASS(klass)	   (GTK_CHECK_CLASS_CAST ((klass), GDK_TYPE_PIXBUF_LOADER, GdkPixbufLoaderClass))
-</MACRO>
-<MACRO>
-<NAME>GDK_IS_PIXBUF_LOADER</NAME>
-#define GDK_IS_PIXBUF_LOADER(obj)	   (GTK_CHECK_TYPE ((obj), GDK_TYPE_PIXBUF_LOADER))
-</MACRO>
-<MACRO>
-<NAME>GDK_IS_PIXBUF_LOADER_CLASS</NAME>
-#define GDK_IS_PIXBUF_LOADER_CLASS(klass)  (GTK_CHECK_CLASS_TYPE ((klass), GDK_TYPE_PIXBUF_LOADER))
-</MACRO>
-<STRUCT>
-<NAME>GdkPixbufLoader</NAME>
-</STRUCT>
-<STRUCT>
-<NAME>GdkPixbufLoader</NAME>
-struct GdkPixbufLoader
-{
-	GtkObject object;
-
-	/* < Private > */
-	gpointer private;
-};
-</STRUCT>
-<STRUCT>
-<NAME>GdkPixbufLoaderClass</NAME>
-</STRUCT>
-<FUNCTION>
-<NAME>gdk_pixbuf_loader_get_type</NAME>
-<RETURNS>GtkType  </RETURNS>
-void
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_pixbuf_loader_new</NAME>
-<RETURNS>GdkPixbufLoader  *</RETURNS>
-void
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_pixbuf_loader_write</NAME>
-<RETURNS>gboolean  </RETURNS>
-GdkPixbufLoader *loader, const gchar *buf, size_t count
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_pixbuf_loader_get_pixbuf</NAME>
-<RETURNS>GdkPixbuf  *</RETURNS>
-GdkPixbufLoader *loader
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_pixbuf_loader_close</NAME>
-<RETURNS>void  </RETURNS>
-GdkPixbufLoader *loader
 </FUNCTION>

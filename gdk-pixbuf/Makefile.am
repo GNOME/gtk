@@ -43,7 +43,7 @@ noinst_PROGRAMS = testpixbuf
 
 
 DEPS = libgdk_pixbuf.la
-INCLUDES = -I$(top_builddir)/src $(GLIB_CFLAGS) $(LIBART_CFLAGS) $(GTK_CFLAGS)
+INCLUDES = -I$(top_builddir)/gdk-pixbuf $(GLIB_CFLAGS) $(LIBART_CFLAGS) $(GTK_CFLAGS)
 AM_CPPFLAGS = "-DPIXBUF_LIBDIR=\"$(libexecdir)\""
 
 LDADDS = libgdk_pixbuf.la $(LIBART_LIBS) $(GLIB_LIBS) $(GTK_LIBS)

@@ -7,7 +7,7 @@ DOC_MODULE=gdk-pixbuf
 DOC_MAIN_SGML_FILE=gdk-pixbuf.sgml
 
 # The directory containing the source code (if it contains documentation).
-DOC_SOURCE_DIR=$(GDK_PIXBUF_DIR)/src
+DOC_SOURCE_DIR=$(GDK_PIXBUF_DIR)/gdk-pixbuf
 
 CFLAGS=`gnome-config --cflags gnomeui gdk_pixbuf`
 LDFLAGS=`gnome-config --libs gnomeui gdk_pixbuf`
