@@ -1229,7 +1229,7 @@ gtk_main_quit (void)
   g_main_loop_quit (main_loops->data);
 }
 
-gint
+gboolean
 gtk_events_pending (void)
 {
   gboolean result;

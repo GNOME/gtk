@@ -122,7 +122,7 @@ void     gtk_exit                 (gint    error_code);
 void           gtk_disable_setlocale    (void);
 gchar *        gtk_set_locale           (void);
 PangoLanguage *gtk_get_default_language (void);
-gint           gtk_events_pending       (void);
+gboolean       gtk_events_pending       (void);
 
 /* The following is the event func GTK+ registers with GDK
  * we expose it mainly to allow filtering of events between

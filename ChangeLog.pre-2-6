@@ -1,3 +1,9 @@
+Wed Jan  7 23:07:28 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkmain.h: 
+	* gtk/gtkmain.c (gtk_events_pending): Change the return value from 
+	gint to gboolean.  (#130718, reported by Johannes Weißl)
+
 Wed Jan  7 23:03:32 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkactiongroup.h: 
