@@ -1015,19 +1015,11 @@ gtk_widget_init (GtkWidget *widget)
   colormap = gtk_widget_peek_colormap ();
   visual = gtk_widget_peek_visual ();
   
-  /* XXX - should we ref the colormap and visual, too? */
-
   if (colormap != gtk_widget_get_default_colormap ())
-    {
-      /* gdk_colormap_ref (colormap); */
-      gtk_object_set_data (GTK_OBJECT (widget), colormap_key, colormap);
-    }
+    gtk_widget_set_colormap (widget, colormap);
 
   if (visual != gtk_widget_get_default_visual ())
-    {
-      /* gdk_visual_ref (visual); */
-      gtk_object_set_data (GTK_OBJECT (widget), visual_key, visual);
-    }
+    gtk_widget_set_visual (widget, visual);
 }
 
 /*****************************************
@@ -3910,6 +3902,59 @@ gtk_widget_get_visual (GtkWidget *widget)
     return visual;
 
   return gtk_widget_get_default_visual ();
+}
+
+/*****************************************
+ * gtk_widget_set_colormap:
+ *    Set the colormap for the widget to the given
+ *    value. Widget must not have been previously
+ *    realized. This probably should only be used
+ *    from an init() function.
+ *   arguments:
+ *    widget:
+ *    colormap:
+ *   results:
+ *****************************************/
+
+void
+gtk_widget_set_colormap (GtkWidget *widget, GdkColormap *colormap)
+{
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (!GTK_WIDGET_REALIZED (widget));
+  g_return_if_fail (colormap != NULL);
+
+  /* FIXME: reference count the colormap.
+   */
+  
+  gtk_object_set_data (GTK_OBJECT (widget), 
+		       colormap_key,
+		       colormap);
+}
+
+/*****************************************
+ * gtk_widget_set_visual:
+ *    Set the colormap for the widget to the given
+ *    value. Widget must not have been previously
+ *    realized. This probably should only be used
+ *    from an init() function.
+ *   arguments:
+ *    widget:
+ *    visual:
+ *   results:
+ *****************************************/
+
+void
+gtk_widget_set_visual (GtkWidget *widget, GdkVisual *visual)
+{
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (!GTK_WIDGET_REALIZED (widget));
+  g_return_if_fail (visual != NULL);
+  
+  gtk_object_set_data (GTK_OBJECT (widget), 
+		       visual_key,
+		       visual);
 }
 
 /*****************************************
