@@ -109,6 +109,8 @@ gtk_public_h_sources =          \
 	gtkcheckmenuitem.h	\
 	gtkclipboard.h		\
 	gtkclist.h		\
+	gtkclipboard.h		\
+	gtkcolorbutton.h	\
 	gtkcolorsel.h		\
 	gtkcolorseldialog.h	\
 	gtkcombo.h		\
@@ -126,6 +128,7 @@ gtk_public_h_sources =          \
 	gtkexpander.h		\
 	gtkfilesel.h		\
 	gtkfixed.h		\
+	gtkfontbutton.h		\
 	gtkfontsel.h		\
 	gtkframe.h		\
 	gtkgamma.h		\
@@ -282,6 +285,7 @@ gtk_c_sources =                 \
 	gtkseparatormenuitem.c	\
 	gtkclipboard.c		\
 	gtkclist.c		\
+	gtkcolorbutton.c	\
 	gtkcolorsel.c		\
 	gtkcolorseldialog.c	\
 	gtkcombo.c		\
@@ -297,6 +301,7 @@ gtk_c_sources =                 \
 	gtkexpander.c		\
 	gtkfilesel.c		\
 	gtkfixed.c		\
+	gtkfontbutton.c         \
 	gtkfontsel.c            \
 	gtkframe.c		\
 	gtkgamma.c		\

@@ -1,6 +1,13 @@
 2003-07-01  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk/gtk.h: Include gtkexpander.h
+	* gtk/Makefile.am (gtk_public_h_sources): Add gtkfontbutton.h, gtkcolorbutton.h. 
+	(gtk_c_sources): Add gtkfontbutton.c, gtkcolorbutton.c. 
+
+	* gtk/gtkfontbutton.[hc]: New files containing a font picker widget. 
+
+	* gtk/gtkcolorbutton.[hc]: New files containing a color picker widget. 
+
+	* gtk/gtk.h: Include gtkexpander.h, gtkfontbutton.h, gtkcolorbutton.h.
 
 	* gtk/gtkexpander.c: Small additions to the docs. 
 
