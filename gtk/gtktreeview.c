@@ -2445,11 +2445,12 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 					     0, 0, NULL, NULL,
 					     drag_data);
 
+	  tree_view->priv->drag_pos = i;
+	  tree_view->priv->x_drag = column->button->allocation.x + (rtl ? 0 : column->button->allocation.width);
+
 	  if (!GTK_WIDGET_HAS_FOCUS (widget))
 	    gtk_widget_grab_focus (widget);
 
-	  tree_view->priv->drag_pos = i;
-	  tree_view->priv->x_drag = column->button->allocation.x + (rtl ? 0 : column->button->allocation.width);
 	  return TRUE;
 	}
     }
