@@ -11,6 +11,7 @@
 # widget_class <widget_class_set> style <style_name>
 
 # testgtkrc2 introduces the green color in the button list
+
 include "testgtkrc2"
 
 pixmap_path "."

@@ -1,3 +1,8 @@
+Tue Jun 30 12:45:19 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkrc.c: code overhaul for simplicity and more descriptive
+	error messages.
+
 Tue Jun 30 09:24:40 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkaccelgroup.c (gtk_accelerator_parse): parse "<Release>"
