@@ -1,3 +1,11 @@
+2004-07-27  Anders Carlsson  <andersca@gnome.org>
+
+	* gtk/gtkaboutdialog.c: (gtk_about_dialog_init),
+	(text_view_style_set), (add_credits_page),
+	(display_credits_dialog), (display_license_dialog):
+	Remove dialog separators, fix text view background setting,
+	use Close buttons instead of OK buttons.
+	
 2004-07-27  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_ensure_interactive_directory): 

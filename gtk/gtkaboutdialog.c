@@ -20,7 +20,7 @@
  */
 
 /*
- * Author: Anders Carlsson <andersca@gnu.org>
+ * Author: Anders Carlsson <andersca@gnome.org>
  *
  * Modified by the GTK+ Team and others 1997-2004.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
@@ -302,6 +302,8 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   priv->regular_cursor = gdk_cursor_new (GDK_XTERM);
   priv->hovering_over_link = FALSE;
 
+  gtk_dialog_set_has_separator (GTK_DIALOG (about), FALSE);
+  
   /* Widgets */
   gtk_widget_push_composite_child ();
   vbox = gtk_vbox_new (FALSE, 8);
@@ -342,8 +344,8 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   gtk_widget_show (hbox);
 
   /* Add the OK button */
-  gtk_dialog_add_button (GTK_DIALOG (about), GTK_STOCK_OK, GTK_RESPONSE_OK);
-  gtk_dialog_set_default_response (GTK_DIALOG (about), GTK_RESPONSE_OK);
+  gtk_dialog_add_button (GTK_DIALOG (about), GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE);
+  gtk_dialog_set_default_response (GTK_DIALOG (about), GTK_RESPONSE_CLOSE);
 
   /* Add the credits button */
   button = gtk_button_new_from_stock (_("_Credits"));
@@ -1502,6 +1504,13 @@ credits_visibility_notify_event (GtkWidget          *text_view,
 }
 
 static void
+text_view_style_set (GtkWidget *widget, GtkStyle *prev_style, GtkWidget *text_view)
+{
+  gtk_widget_modify_base (text_view, GTK_STATE_NORMAL,
+			  &widget->style->bg[GTK_STATE_NORMAL]);
+}
+
+static void
 add_credits_page (GtkAboutDialog *about, 
 		  GtkWidget      *notebook,
 		  gchar          *title,
@@ -1528,6 +1537,9 @@ add_credits_page (GtkAboutDialog *about,
     }
 
   view = gtk_text_view_new ();
+  g_signal_connect (about, "style_set",
+		    G_CALLBACK (text_view_style_set), view);
+  
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
   gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (view), FALSE);
   gtk_text_view_set_editable (GTK_TEXT_VIEW (view), FALSE);
@@ -1542,10 +1554,6 @@ add_credits_page (GtkAboutDialog *about,
                     G_CALLBACK (credits_motion_notify_event), about);
   g_signal_connect (G_OBJECT (view), "visibility-notify-event", 
                     G_CALLBACK (credits_visibility_notify_event), about);
-
-  style = gtk_widget_get_style (view);
-  gtk_widget_modify_base (view, GTK_STATE_NORMAL, 
-			  &style->base[GTK_STATE_INSENSITIVE]);
 
   sw = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
@@ -1647,11 +1655,13 @@ display_credits_dialog (GtkWidget *button,
   dialog = gtk_dialog_new_with_buttons (_("Credits"),
 					GTK_WINDOW (about),
 					GTK_DIALOG_DESTROY_WITH_PARENT,
-					GTK_STOCK_OK, GTK_RESPONSE_OK,
+					GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
 					NULL);
+  gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
+  
   priv->credits_dialog = dialog;
   gtk_window_set_default_size (GTK_WINDOW (dialog), 360, 260);
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CLOSE);
 
   gtk_window_set_modal (GTK_WINDOW (dialog), 
 			gtk_window_get_modal (GTK_WINDOW (about)));
@@ -1707,11 +1717,12 @@ display_license_dialog (GtkWidget *button,
   dialog = gtk_dialog_new_with_buttons (_("License"),
 					GTK_WINDOW (about),
 					GTK_DIALOG_DESTROY_WITH_PARENT,
-					GTK_STOCK_OK, GTK_RESPONSE_OK,
+					GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
 					NULL);
+  gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
   priv->license_dialog = dialog;
   gtk_window_set_default_size (GTK_WINDOW (dialog), 420, 320);
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CLOSE);
 
   gtk_window_set_modal (GTK_WINDOW (dialog), 
 			gtk_window_get_modal (GTK_WINDOW (about)));
@@ -1723,6 +1734,8 @@ display_license_dialog (GtkWidget *button,
 		    &(priv->license_dialog));
 
   sw = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw),
+				       GTK_SHADOW_IN);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
 				  GTK_POLICY_AUTOMATIC,
 				  GTK_POLICY_AUTOMATIC);
