@@ -1,3 +1,29 @@
+Thu Apr 30 23:32:51 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_size_allocate):
+	Check to catch the case when the viewport fits in either
+ 	direction or both, instead of flip-flopping infinitely.
+
+	Only show/hide the scrollbars once at the end.
+
+Thu Apr 30 21:56:07 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_foreach): 
+	Include the scrollbars in the foreach call.
+	(gtk-fortier-980405-0.patch; 
+ 	 Patrice Fortier <Patrice.Fortier@aquarel.fr>). 
+
+	The notebook widget
+	really should also include its tabs, but that might cause
+	problems for programs if they
+
+Thu Apr 30 21:51:52 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkpixmap.c (gtk_pixmap_set): Only request a
+	resize if the size actually changed. 
+	(gtk-johannes-980414-0.patch ;	
+	 johannes@nada.kth.se (Johannes Keukelaar) )
+
 Thu Apr 30 10:22:59 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* glib/ltmain.sh glib/ltconfig glib/config.sub glib/config.guess:

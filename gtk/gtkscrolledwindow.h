@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
@@ -31,13 +31,13 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define GTK_SCROLLED_WINDOW(obj)	  (GTK_CHECK_CAST (obj, gtk_scrolled_window_get_type (), GtkScrolledWindow))
-#define GTK_SCROLLED_WINDOW_CLASS(klass)  (GTK_CHECK_CLASS_CAST (klass, gtk_scrolled_window_get_type (), GtkScrolledWindowClass))
-#define GTK_IS_SCROLLED_WINDOW(obj)	  (GTK_CHECK_TYPE (obj, gtk_scrolled_window_get_type ()))
+#define GTK_SCROLLED_WINDOW(obj)          GTK_CHECK_CAST (obj, gtk_scrolled_window_get_type (), GtkScrolledWindow)
+#define GTK_SCROLLED_WINDOW_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_scrolled_window_get_type (), GtkScrolledWindowClass)
+#define GTK_IS_SCROLLED_WINDOW(obj)       GTK_CHECK_TYPE (obj, gtk_scrolled_window_get_type ())
 
 
-typedef struct _GtkScrolledWindow	GtkScrolledWindow;
-typedef struct _GtkScrolledWindowClass	GtkScrolledWindowClass;
+typedef struct _GtkScrolledWindow       GtkScrolledWindow;
+typedef struct _GtkScrolledWindowClass  GtkScrolledWindowClass;
 
 struct _GtkScrolledWindow
 {
@@ -49,6 +49,8 @@ struct _GtkScrolledWindow
 
   guint8 hscrollbar_policy;
   guint8 vscrollbar_policy;
+  gint hscrollbar_visible : 1;
+  gint vscrollbar_visible : 1;
 };
 
 struct _GtkScrolledWindowClass
@@ -59,15 +61,15 @@ struct _GtkScrolledWindowClass
 };
 
 
-GtkType	       gtk_scrolled_window_get_type	   (void);
-GtkWidget*     gtk_scrolled_window_new		   (GtkAdjustment     *hadjustment,
+guint          gtk_scrolled_window_get_type        (void);
+GtkWidget*     gtk_scrolled_window_new             (GtkAdjustment     *hadjustment,
 						    GtkAdjustment     *vadjustment);
-void	       gtk_scrolled_window_construct	  (GtkScrolledWindow *scrolled_window,
+void           gtk_scrolled_window_construct      (GtkScrolledWindow *scrolled_window,
 						    GtkAdjustment     *hadjustment,
 						    GtkAdjustment     *vadjustment);
 GtkAdjustment* gtk_scrolled_window_get_hadjustment (GtkScrolledWindow *scrolled_window);
 GtkAdjustment* gtk_scrolled_window_get_vadjustment (GtkScrolledWindow *scrolled_window);
-void	       gtk_scrolled_window_set_policy	   (GtkScrolledWindow *scrolled_window,
+void           gtk_scrolled_window_set_policy      (GtkScrolledWindow *scrolled_window,
 						    GtkPolicyType      hscrollbar_policy,
 						    GtkPolicyType      vscrollbar_policy);
 
