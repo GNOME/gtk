@@ -1,3 +1,18 @@
+Tue Nov 20 23:01:01 2001  Kristian Rietveld  <kristian@planet.nl>
+
+	* gtk/gtktreemodel.c (gtk_tree_row_reference_unref_path):
+	replace gboolean free_last in the function parameters with
+	gint depth. Changes to reflect new situation.
+
+	* gtk/gtktreemodel.c (gtk_tree_row_reference_unref_path_helper):
+	replace gboolean free_last, with gint depth, add gint current_depth.
+	Changes to reflect new situation.
+
+	* gtk/gtktreemodel.c (gtk_tree_row_ref_deleted_callback): changes
+	to reflect new situation
+
+	* gtk/gtktreemodel.c (gtk_tree_row_reference_free): ditto
+
 Tue Nov 20 12:37:10 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtknotebook.c (gtk_notebook_paint): Fix problem

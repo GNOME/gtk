@@ -1182,7 +1182,8 @@ gtk_tree_model_foreach (GtkTreeModel            *model,
 
 static void gtk_tree_row_reference_unref_path (GtkTreePath  *path,
 					       GtkTreeModel *model,
-					       gboolean      free_last);
+					       gint          depth);
+
 
 #define ROW_REF_DATA_STRING "gtk-tree-row-refs"
 
@@ -1323,7 +1324,7 @@ gtk_tree_row_ref_deleted_callback (GObject     *object,
 	  /* We know it affects us. */
 	  if (path->indices[i] == reference->path->indices[i])
 	    {
-	      gtk_tree_row_reference_unref_path (reference->path, reference->model, FALSE);
+	      gtk_tree_row_reference_unref_path (reference->path, reference->model, reference->path->depth - 1);
 	      gtk_tree_path_free (reference->path);
 	      reference->path = NULL;
 	    }
@@ -1412,32 +1413,30 @@ gtk_tree_row_reference_unref_path_helper (GtkTreePath  *path,
 					  GtkTreeModel *model,
 					  GtkTreeIter  *parent_iter,
 					  gint          depth,
-					  gboolean      free_last)
+					  gint          current_depth)
 {
   GtkTreeIter iter;
 
-  if (free_last == FALSE && path->depth - 1 == depth)
-    return;
-  if (path->depth == depth)
+  if (depth == current_depth)
     return;
 
-  gtk_tree_model_iter_nth_child (model, &iter, parent_iter, path->indices[depth]);
-  gtk_tree_row_reference_unref_path_helper (path, model, &iter, depth + 1, free_last);
+  gtk_tree_model_iter_nth_child (model, &iter, parent_iter, path->indices[current_depth]);
+  gtk_tree_row_reference_unref_path_helper (path, model, &iter, depth, current_depth + 1);
   gtk_tree_model_unref_node (model, &iter);
 }
 
 static void
 gtk_tree_row_reference_unref_path (GtkTreePath  *path,
 				   GtkTreeModel *model,
-				   gboolean      free_last)
+				   gint          depth)
 {
   GtkTreeIter iter;
 
-  if (free_last == FALSE && path->depth == 1)
+  if (depth <= 0)
     return;
-      
+  
   gtk_tree_model_iter_nth_child (model, &iter, NULL, path->indices[0]);
-  gtk_tree_row_reference_unref_path_helper (path, model, &iter, 1, free_last);
+  gtk_tree_row_reference_unref_path_helper (path, model, &iter, depth, 1);
   gtk_tree_model_unref_node (model, &iter);
 }
 
@@ -1620,7 +1619,7 @@ gtk_tree_row_reference_free (GtkTreeRowReference *reference)
 
   if (reference->path)
     {
-      gtk_tree_row_reference_unref_path (reference->path, reference->model, TRUE);
+      gtk_tree_row_reference_unref_path (reference->path, reference->model, reference->path->depth);
       gtk_tree_path_free (reference->path);
     }
 
