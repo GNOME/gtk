@@ -1,3 +1,23 @@
+Tue Feb 27 02:29:20 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdnd.c (gtk_drag_find_widget): When recursing,
+	get the list of children and ref them all before walking
+	through the list, to prevent problems when the widget
+	hierarchy changes in ::drag_motion/drop handlers.
+
+	* gtk/gtkmain.c (gtk_propagate_event): Only activate
+	special key-press grab handling for widgets within
+	GtkWindows. Otherwise, fall through to normal case.
+
+	This prevents key events being sent twice to GtkInvisible
+	widgets, which can cause all sorts of mischief.
+
+Tue Feb 27 02:16:14 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmain.c (gtk_propagate_event): Only do special
+	key handling for grabs on subwidgets, if the key press
+	actually occurs within 
+
 Tue Feb 27 01:29:34 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in acconfig.h gdk/gdkfont.c gdk/gdkim.c INSTALL: Add a
