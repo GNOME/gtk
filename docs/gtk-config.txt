@@ -22,7 +22,7 @@ gtk-config can be invoked in one of three forms:
      Prints out the version of GTK installed
 
   gtk-config --cflags
-     Prints '-I' flags pointing to the installed d
+     Prints '-I' flags pointing to the installed header files.
 
   gtk-config --libs
      Prints out the linker flags necessary to link a program against GTK

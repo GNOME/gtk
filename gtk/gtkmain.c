@@ -265,7 +265,7 @@ gtk_init (int	 *argc,
    * C locale, or were using X's mb functions. (-DX_LOCALE && locale != C)
    */
 
-  current_locale = setlocale (LC_CTYPE, NULL);
+  current_locale = g_strdup(setlocale (LC_CTYPE, NULL));
   setlocale (LC_CTYPE, "C");
 
 #ifdef X_LOCALE
@@ -278,6 +278,7 @@ gtk_init (int	 *argc,
     }
 
   setlocale (LC_CTYPE, current_locale);
+  g_free (current_locale);
 
   GTK_NOTE(MISC, g_print("%s multi-byte string functions.\n", 
 			  gtk_use_mb ? "Using" : "Not using"));
@@ -1291,9 +1292,7 @@ gtk_invoke_timeout_function (GtkTimeoutFunction *timeoutf)
       args[0].name = NULL;
       args[0].type = GTK_TYPE_BOOL;
       args[0].d.pointer_data = &ret_val;
-      ((GtkCallbackMarshal)timeoutf->function) (NULL,
-						timeoutf->data,
-						0, args);
+      timeoutf->marshal (NULL, timeoutf->data,  0, args);
       return ret_val;
     }
 }

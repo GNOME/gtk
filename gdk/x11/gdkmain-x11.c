@@ -146,12 +146,17 @@ static RETSIGTYPE   gdk_signal                   (int          signum);
 
 
 #ifdef USE_XIM
+static guint         gdk_im_va_count     (va_list list);
+static XVaNestedList gdk_im_va_to_nested (va_list list, 
+                                          guint   count);
+
 static GdkIM  gdk_im_get		(void);
 static gint   gdk_im_open		(XrmDatabase db,
 					 gchar* res_name,
 					 gchar* rec_class);
 static void   gdk_im_close		(void);
 static void   gdk_ic_cleanup 		(void);
+
 #endif /* USE_XIM */
 
 /* Private variable declarations
@@ -3213,6 +3218,84 @@ gdk_dnd_drag_enter (Window dest)
 
 #ifdef USE_XIM
 
+/* The following routines duplicate functionality in Xlib to
+ * translate from varargs to X's internal opaque XVaNestedList.
+ * 
+ * If all vendors have stuck close to the reference implementation,
+ * then we should hopefully be OK. 
+ */
+
+/* This needs to match XIMArg as defined in Xlcint.h exactly */
+  
+typedef struct {
+  gchar   *name;
+  gpointer value;
+} GdkImArg;
+
+/*************************************************************
+ * gdk_im_va_count:
+ *    Counts the number of name/value pairs in the vararg list
+ *
+ *   arguments:
+ *     
+ *   results:
+ *************************************************************/
+
+static guint 
+gdk_im_va_count (va_list list)
+{
+  gint count = 0;
+  gchar *name;
+
+  name = va_arg (list, gchar *);
+  while (name)
+    {
+      count++;
+      (void)va_arg (list, gpointer);
+      name = va_arg (list, gchar *);
+    }
+
+  return count;
+}
+
+/*************************************************************
+ * gdk_im_va_to_nested:
+ *     Given a varargs list and the result of gdk_im_va_count,
+ *     create a XVaNestedList.
+ *
+ *   arguments:
+ *     
+ *   results:
+ *************************************************************/
+
+static XVaNestedList
+gdk_im_va_to_nested (va_list list, guint count)
+{
+  GdkImArg *result;
+  GdkImArg *arg;
+
+  gchar *name;
+
+  if (count == 0)
+    return NULL;
+
+  result = g_new (GdkImArg, count+1);
+  arg = result;
+
+  name = va_arg (list, gchar *);
+  while (name)
+    {
+      arg->name = name;
+      arg->value = va_arg (list, gpointer);
+      arg++;
+      name = va_arg (list, gchar *);
+    }
+
+  arg->name = NULL;
+
+  return (XVaNestedList)result;
+}
+
 /*
  *--------------------------------------------------------------
  * gdk_im_begin
@@ -3430,9 +3513,9 @@ gdk_ic_new (GdkWindow* client_window,
 	    GdkIMStyle style, ...)
 {
   va_list list;
-  void *argsptr;
   GdkICPrivate *private;
-  XVaNestedList preedit_attr;
+  XVaNestedList preedit_attr = NULL;
+  guint count;
 
   g_return_val_if_fail (client_window != NULL, NULL);
   g_return_val_if_fail (focus_window != NULL, NULL);
@@ -3441,10 +3524,13 @@ gdk_ic_new (GdkWindow* client_window,
   private = g_new (GdkICPrivate, 1);
 
   va_start (list, style);
-  argsptr = va_arg (list, void *);
-  preedit_attr =  (XVaNestedList)&argsptr;
+  count = gdk_im_va_count (list);
   va_end (list);
 
+  va_start (list, style);
+  preedit_attr = gdk_im_va_to_nested (list, count);
+  va_end (list);
+  
   private->style = gdk_im_decide_style (style);
   if (private->style != style)
     {
@@ -3459,6 +3545,9 @@ gdk_ic_new (GdkWindow* client_window,
 		      	XNFocusWindow,  GDK_WINDOW_XWINDOW (focus_window),
 		      	preedit_attr? XNPreeditAttributes : NULL, preedit_attr,
 		      	NULL);
+
+  g_free (preedit_attr);
+  
   if (!private->xic)
     {
       g_free (private);
@@ -3502,49 +3591,59 @@ void
 gdk_ic_set_values (GdkIC ic, ...)
 {
   va_list list;
-  void *argsptr;
   XVaNestedList args;
   GdkICPrivate *private;
+  guint count;
 
   g_return_if_fail (ic != NULL);
 
   private = (GdkICPrivate *) ic;
 
   va_start (list, ic);
-  argsptr = va_arg (list, void *);
-  args =  (XVaNestedList)&argsptr;
+  count = gdk_im_va_count (list);
+  va_end (list);
+
+  va_start (list, ic);
+  args = gdk_im_va_to_nested (list, count);
   va_end (list);
 
   XSetICValues (private->xic, XNVaNestedList, args, NULL);
+
+  g_free (args);
 }
 
 void 
 gdk_ic_get_values (GdkIC ic, ...)
 {
   va_list list;
-  void *argsptr;
   XVaNestedList args;
   GdkICPrivate *private;
+  guint count;
 
   g_return_if_fail (ic != NULL);
 
   private = (GdkICPrivate *) ic;
 
   va_start (list, ic);
-  argsptr = va_arg (list, void *);
-  args =  (XVaNestedList)&argsptr;
+  count = gdk_im_va_count (list);
+  va_end (list);
+
+  va_start (list, ic);
+  args = gdk_im_va_to_nested (list, count);
   va_end (list);
 
   XGetICValues (private->xic, XNVaNestedList, args, NULL);
+
+  g_free (args);
 }
 
 void 
 gdk_ic_set_attr (GdkIC ic, const char *target, ...)
 {
   va_list list;
-  void *argsptr;
   XVaNestedList attr;
   GdkICPrivate *private;
+  guint count;
 
   g_return_if_fail (ic != NULL);
   g_return_if_fail (target != NULL);
@@ -3552,20 +3651,25 @@ gdk_ic_set_attr (GdkIC ic, const char *target, ...)
   private = (GdkICPrivate *) ic;
 
   va_start (list, target);
-  argsptr = va_arg (list, void *);
-  attr =  (XVaNestedList)&argsptr;
+  count = gdk_im_va_count (list);
+  va_end (list);
+
+  va_start (list, target);
+  attr = gdk_im_va_to_nested (list, count);
   va_end (list);
 
   XSetICValues (private->xic, target, attr, NULL);
+
+  g_free (attr);
 }
 
 void 
 gdk_ic_get_attr (GdkIC ic, const char *target, ...)
 {
   va_list list;
-  void *argsptr;
   XVaNestedList attr;
   GdkICPrivate *private;
+  guint count;
 
   g_return_if_fail (ic != NULL);
   g_return_if_fail (target != NULL);
@@ -3573,11 +3677,16 @@ gdk_ic_get_attr (GdkIC ic, const char *target, ...)
   private = (GdkICPrivate *) ic;
 
   va_start (list, target);
-  argsptr = va_arg (list, void *);
-  attr =  (XVaNestedList)&argsptr;
+  count = gdk_im_va_count (list);
+  va_end (list);
+
+  va_start (list, target);
+  attr = gdk_im_va_to_nested (list, count);
   va_end (list);
 
   XGetICValues (private->xic, target, attr, NULL);
+
+  g_free (attr);
 }
 
 GdkEventMask 

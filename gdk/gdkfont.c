@@ -70,7 +70,10 @@ gdk_fontset_load (gchar *fontset_name)
 
   if (missing_charset_count)
     {
-      g_print ("Missing charsets in FontSet creation");
+      gint i;
+      g_print ("Missing charsets in FontSet creation\n");
+      for (i=0;i<missing_charset_count;i++)
+	g_print ("    %s\n", missing_charset_list[i]);
       XFreeStringList (missing_charset_list);
     }
 

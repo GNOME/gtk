@@ -4197,6 +4197,12 @@ dnd_drop (GtkWidget *button, GdkEvent *event)
   GtkWidget *vbox, *lbl, *btn;
   gchar *msg;
 
+  /* DND doesn't obey gtk_grab's, so check if we're already displaying
+   * drop modal dialog first
+   */
+  if (window)
+    return;
+
   window = gtk_window_new(GTK_WINDOW_DIALOG);
   gtk_container_border_width (GTK_CONTAINER(window), 10);
 
@@ -4204,7 +4210,7 @@ dnd_drop (GtkWidget *button, GdkEvent *event)
 		      GTK_SIGNAL_FUNC(dnd_drop_destroy_popup),
 		      &window);
   gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-		      GTK_SIGNAL_FUNC(dnd_drop_destroy_popup),
+		      GTK_SIGNAL_FUNC(gtk_false),
 		      &window);
 
   vbox = gtk_vbox_new(FALSE, 5);
@@ -4223,9 +4229,9 @@ dnd_drop (GtkWidget *button, GdkEvent *event)
 
   /* Provide an obvious way out of this heinousness */
   btn = gtk_button_new_with_label("Continue with life in\nspite of this oppression");
-  gtk_signal_connect (GTK_OBJECT (btn), "clicked",
-		      GTK_SIGNAL_FUNC(dnd_drop_destroy_popup),
-		      &window);
+  gtk_signal_connect_object (GTK_OBJECT (btn), "clicked",
+			     GTK_SIGNAL_FUNC(gtk_widget_destroy),
+			     GTK_OBJECT (window));
   gtk_widget_show(btn);
   gtk_box_pack_start_defaults(GTK_BOX(vbox), btn);
 

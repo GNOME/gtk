@@ -1,3 +1,17 @@
+Sat Mar 21 19:07:01 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/testgtk.c (dnd_drop): Don't respond to drops when
+	  grab is in effect. (workaround)
+
+	* gdk/gdkfont.c (gdk_fontset_load): More details on
+	  error messages.
+
+	* gdk/gdk.c: Translate va_list to XVaNestedList instead
+	  of just casting it.
+
+	* gtk/gtkmain.c: Make temporary copy of string returned by
+	  setlocale, since it may be changed by subsequent calls.
+
 Sat Mar 21 10:39:02 CET 1998 Paolo Molaro <lupus@debian.org>
 
 	* gtk/gtkcombo.[ch] "activate" signal can be disabled now
