@@ -145,8 +145,8 @@ _gtk_file_chooser_delegate_iface_init (GtkFileChooserIface *iface)
 
 /**
  * _gtk_file_chooser_set_delegate:
- * @receiver: a GOobject implementing #GtkFileChooser
- * @delegate: another GObject implementing #GtkFileChooser
+ * @receiver: a #GObject implementing #GtkFileChooser
+ * @delegate: another #GObject implementing #GtkFileChooser
  *
  * Establishes that calls on @receiver for #GtkFileChooser
  * methods should be delegated to @delegate, and that
@@ -162,7 +162,6 @@ _gtk_file_chooser_set_delegate (GtkFileChooser *receiver,
   g_return_if_fail (GTK_IS_FILE_CHOOSER (delegate));
 
   g_object_set_data (G_OBJECT (receiver), "gtk-file-chooser-delegate", delegate);
-
   g_signal_connect (delegate, "notify",
 		    G_CALLBACK (delegate_notify), receiver);
   g_signal_connect (delegate, "current-folder-changed",
@@ -294,11 +293,12 @@ delegate_notify (GObject    *object,
 		 GParamSpec *pspec,
 		 gpointer    data)
 {
-  if (pspec->param_id >= GTK_FILE_CHOOSER_PROP_FIRST &&
-      pspec->param_id <= GTK_FILE_CHOOSER_PROP_LAST)
-    {
-      g_object_notify (data, pspec->name);
-    }
+  gpointer iface;
+
+  iface = g_type_interface_peek (g_type_class_peek (G_OBJECT_TYPE (object)),
+				 gtk_file_chooser_get_type ());
+  if (g_object_interface_find_property (iface, pspec->name))
+    g_object_notify (data, pspec->name);
 }
 
 static void
