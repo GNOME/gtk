@@ -1,3 +1,8 @@
+Mon Nov 19 12:24:30 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtksocket.h (struct _GtkSocketClass): Fix return
+	of plug_added vfunc. (#64408, Jeff Franks)
+
 Mon Nov 19 12:07:20 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in (deps): Undef HAVE_STDLIB_H before
