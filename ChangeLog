@@ -1,3 +1,8 @@
+Tue Aug  5 00:24:13 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkmenu.c (gtk_menu_position): New positioning
+	algorithm.(#116649)
+
 Fri Aug  1 15:26:46 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktoolbar.c, gtk/toolitem.c: add new "is_important"
