@@ -328,9 +328,10 @@ if test x$enable_xim_inst = xmaybe ; then
 fi
 
 if test "x$enable_xim" = "xyes"; then
+  AC_DEFINE(USE_XIM)
   GTK_XIM_FLAGS="-DUSE_XIM"
-  if test "x$enable_xim_inst" = "xno"; then
-    AC_DEFINE(XIM_INST_IS_MISSING_OR_STRANGE)
+  if test "x$enable_xim_inst" = "xyes"; then
+    AC_DEFINE(USE_X11R6_XIM)
   fi
 fi
 

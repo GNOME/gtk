@@ -54,7 +54,7 @@ typedef struct {
   gpointer value;
 } GdkImArg;
 
-#ifndef XIM_INST_IS_MISSING_OR_STRANGE
+#ifdef USE_X11R6_XIM
 static void   gdk_im_instantiate_cb      (Display *display,
  					  XPointer client_data,
  					  XPointer call_data);
@@ -318,6 +318,7 @@ gdk_im_set_best_style (GdkIMStyle style)
   return xim_best_allowed_style;
 }
 
+#ifdef USE_X11R6_XIM
 static void
 gdk_im_destroy_cb (XIM im, XPointer client_data, XPointer call_data)
 {
@@ -340,13 +341,10 @@ gdk_im_destroy_cb (XIM im, XPointer client_data, XPointer call_data)
       private->xic = NULL;
     }
 
-#ifndef XIM_INST_IS_MISSING_OR_STRANGE
   XRegisterIMInstantiateCallback (gdk_display, NULL, NULL, NULL,
       				  gdk_im_instantiate_cb, NULL);
-#endif
 }
 
-#ifndef XIM_INST_IS_MISSING_OR_STRANGE
 static void
 gdk_im_instantiate_cb (Display *display,
     		       XPointer client_data, XPointer call_data)
@@ -366,7 +364,6 @@ gdk_im_instantiate_cb (Display *display,
 static gint
 gdk_im_real_open (void)
 {
-  XIMCallback destroy_cb;
   GList *node;
 
   xim_im = XOpenIM (GDK_DISPLAY(), NULL, NULL, NULL);
@@ -377,10 +374,14 @@ gdk_im_real_open (void)
     }
   else
     {
+#ifdef USE_X11R6_XIM
+      XIMCallback destroy_cb;
+
       destroy_cb.callback = gdk_im_destroy_cb;
       destroy_cb.client_data = NULL;
       if (NULL != XSetIMValues (xim_im, XNDestroyCallback, &destroy_cb, NULL))
 	GDK_NOTE (XIM, g_warning ("Could not set destroy callback to IM. Be careful to not destroy your input method."));
+#endif
 
       XGetIMValues (xim_im, XNQueryInputStyle, &xim_styles, NULL, NULL);
 
@@ -411,7 +412,7 @@ gdk_im_open (void)
   if (gdk_im_real_open ())
     return TRUE;
 
-#ifndef XIM_INST_IS_MISSING_OR_STRANGE
+#ifdef USE_X11R6_XIM
   XRegisterIMInstantiateCallback (gdk_display, NULL, NULL, NULL,
 				  gdk_im_instantiate_cb, NULL);
 #endif

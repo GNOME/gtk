@@ -35,10 +35,8 @@
 
 #undef RESOURCE_BASE
 
-/* Define to enable POSIX threading awareness */
-#undef USE_PTHREADS
-
-#undef XIM_INST_IS_MISSING_OR_STRANGE
+/* Define to use X11R6 additions to XIM */
+#undef USE_X11R6_XIM
 
 #undef XINPUT_NONE
 #undef XINPUT_GXI

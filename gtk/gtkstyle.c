@@ -396,8 +396,14 @@ gtk_style_new (void)
   style = g_new0 (GtkStyle, 1);
   
   if (!default_font)
-    default_font =
-      gdk_font_load ("-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*");
+    {
+      default_font =
+	gdk_font_load ("-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*");
+      if (!default_font)
+	default_font = gdk_font_load ("fixed");
+      if (!default_font)
+	g_error ("Unable to load default font.");
+    }
   
   style->font = default_font;
   gdk_font_ref (style->font);

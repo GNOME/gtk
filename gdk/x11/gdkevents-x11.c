@@ -1955,7 +1955,7 @@ gdk_events_queue (void)
 
   while (!gdk_event_queue_find_first() && XPending (gdk_display))
     {
-  #ifdef USE_XIM
+#ifdef USE_XIM
       Window w = None;
       
       XNextEvent (gdk_display, &xevent);
