@@ -1,3 +1,10 @@
+Wed Jan  9 21:31:44 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkliststore.c (gtk_list_store_sort): pass NULL to
+	gtk_tree_model_rows_reordered and not an iter with user_data
+	set to NULL (which is an invalid liststore iter, so
+	iter_n_children failed, etc)
+
 2002-01-09  Sven Neumann  <sven@gimp.org>
 
 	* tests/prop-editor.c: declared internal functions static.

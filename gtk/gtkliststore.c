@@ -1567,7 +1567,6 @@ gtk_list_store_compare_func (gconstpointer a,
 static void
 gtk_list_store_sort (GtkListStore *list_store)
 {
-  GtkTreeIter iter;
   GArray *sort_array;
   gint i;
   gint *new_order;
@@ -1611,11 +1610,10 @@ gtk_list_store_sort (GtkListStore *list_store)
   new_order = g_new (gint, list_store->length);
   for (i = 0; i < list_store->length; i++)
     new_order[i] = g_array_index (sort_array, SortTuple, i).offset;
+
   path = gtk_tree_path_new ();
-  iter.stamp = list_store->stamp;
-  iter.user_data = NULL;
   gtk_tree_model_rows_reordered (GTK_TREE_MODEL (list_store),
-				 path, &iter, new_order);
+				 path, NULL, new_order);
   gtk_tree_path_free (path);
   g_free (new_order);
   g_array_free (sort_array, TRUE);
