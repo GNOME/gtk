@@ -68,6 +68,8 @@
 #include "gtkdialog.h"
 #include "gtkmessagedialog.h"
 #include "gtkintl.h"
+#include "gtkdnd.h"
+#include "gtkeventbox.h"
 
 #if defined(G_OS_WIN32) || defined(G_WITH_CYGWIN)
 #define STRICT
@@ -588,6 +590,7 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   GtkWidget *confirm_area;
   GtkWidget *pulldown_hbox;
   GtkWidget *scrolled_win;
+  GtkWidget *eventbox;
   GtkDialog *dialog;
   
   char *dir_title [2];
@@ -692,11 +695,14 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   entry_vbox = gtk_vbox_new (FALSE, 2);
   gtk_box_pack_end (GTK_BOX (filesel->main_vbox), entry_vbox, FALSE, FALSE, 2);
   gtk_widget_show (entry_vbox);
-
+  
+  eventbox = gtk_event_box_new ();
   filesel->selection_text = label = gtk_label_new ("");
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-  gtk_box_pack_start (GTK_BOX (entry_vbox), label, FALSE, FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (eventbox), label);
+  gtk_box_pack_start (GTK_BOX (entry_vbox), eventbox, FALSE, FALSE, 0);
   gtk_widget_show (label);
+  gtk_widget_show (eventbox);
 
   filesel->selection_entry = gtk_entry_new ();
   gtk_signal_connect (GTK_OBJECT (filesel->selection_entry), "key_press_event",
@@ -728,6 +734,224 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   gtk_widget_grab_focus (filesel->selection_entry);
 }
 
+static gchar *
+uri_list_extract_first_uri (const gchar* uri_list)
+{
+  const gchar *p, *q;
+  
+  g_return_val_if_fail (uri_list != NULL, NULL);
+  
+  p = uri_list;
+  /* We don't actually try to validate the URI according to RFC
+   * 2396, or even check for allowed characters - we just ignore
+   * comments and trim whitespace off the ends.  We also
+   * allow LF delimination as well as the specified CRLF.
+   *
+   * We do allow comments like specified in RFC 2483.
+   */
+  while (p)
+    {
+      if (*p != '#')
+	{
+	  while (g_ascii_isspace(*p))
+	    p++;
+	  
+	  q = p;
+	  while (*q && (*q != '\n') && (*q != '\r'))
+	    q++;
+	  
+	  if (q > p)
+	    {
+	      q--;
+	      while (q > p && g_ascii_isspace (*q))
+		q--;
+
+	      if (q > p)
+		return g_strndup (p, q - p + 1);
+	    }
+	}
+      p = strchr (p, '\n');
+      if (p)
+	p++;
+    }
+  return NULL;
+}
+
+static void
+dnd_really_drop  (GtkWidget *dialog, gint response_id, GtkFileSelection *fs)
+{
+  gchar *filename;
+  
+  if (response_id == GTK_RESPONSE_YES)
+    {
+      filename = g_object_get_data (G_OBJECT (dialog), "gtk-fs-dnd-filename");
+
+      gtk_file_selection_set_filename (fs, filename);
+    }
+  
+  gtk_widget_destroy (dialog);
+}
+
+
+static void
+filenames_dropped (GtkWidget        *widget,
+		   GdkDragContext   *context,
+		   gint              x,
+		   gint              y,
+		   GtkSelectionData *selection_data,
+		   guint             info,
+		   guint             time)
+{
+  char *uri = NULL;
+  char *filename = NULL;
+  char *hostname;
+  char this_hostname[257];
+  int res;
+  GError *error = NULL;
+	
+  if (!selection_data->data)
+    return;
+
+  uri = uri_list_extract_first_uri ((char *)selection_data->data);
+  
+  if (!uri)
+    return;
+
+  filename = g_filename_from_uri (uri, &hostname, &error);
+  g_free (uri);
+  
+  if (!filename)
+    {
+      g_warning ("Error getting dropped filename: %s\n",
+		 error->message);
+      g_error_free (error);
+      return;
+    }
+
+  res = gethostname (this_hostname, 256);
+  this_hostname[256] = 0;
+  
+  if ((hostname == NULL) ||
+      (res == 0 && strcmp (hostname, this_hostname) == 0) ||
+      (strcmp (hostname, "localhost") == 0))
+    gtk_file_selection_set_filename (GTK_FILE_SELECTION (widget),
+				     filename);
+  else
+    {
+      GtkWidget *dialog;
+      
+      dialog = gtk_message_dialog_new (GTK_WINDOW (widget),
+				       GTK_DIALOG_DESTROY_WITH_PARENT,
+				       GTK_MESSAGE_QUESTION,
+				       GTK_BUTTONS_YES_NO,
+				       _("The file \"%s\" resides on another machine (called %s) and may not be availible to this program.\n"
+					 "Are you sure that you want to select it?"), filename, hostname);
+
+      g_object_set_data_full (G_OBJECT (dialog), "gtk-fs-dnd-filename", g_strdup (filename), g_free);
+      
+      g_signal_connect_data (dialog, "response",
+			     (GCallback) dnd_really_drop, 
+			     widget, NULL, 0);
+      
+      gtk_widget_show (dialog);
+    }
+
+  g_free (hostname);
+  g_free (filename);
+}
+
+enum
+{
+  TARGET_URILIST,
+  TARGET_UTF8_STRING,
+  TARGET_STRING,
+  TARGET_TEXT,
+  TARGET_COMPOUND_TEXT
+};
+
+
+static void
+filenames_drag_get (GtkWidget        *widget,
+		    GdkDragContext   *context,
+		    GtkSelectionData *selection_data,
+		    guint             info,
+		    guint             time,
+		    GtkFileSelection *filesel)
+{
+  gchar *file;
+  gchar *uri_list;
+  char hostname[256];
+  int res;
+  GError *error;
+
+  file = gtk_file_selection_get_filename (filesel);
+
+  if (file)
+    {
+      if (info == TARGET_URILIST)
+	{
+	  res = gethostname (hostname, 256);
+	  
+	  error = NULL;
+	  uri_list = g_filename_to_uri (file, (!res)?hostname:NULL, &error);
+	  if (!uri_list)
+	    {
+	      g_warning ("Error getting filename: %s\n",
+			 error->message);
+	      g_error_free (error);
+	      return;
+	    }
+	  
+	  gtk_selection_data_set (selection_data,
+				  selection_data->target, 8,
+				  (void *)uri_list, strlen((char *)uri_list));
+	  g_free (uri_list);
+	}
+      else
+	{
+	  g_print ("Setting text: '%s'\n", file);
+	  gtk_selection_data_set_text (selection_data, file);
+	}
+    }
+}
+
+static void
+file_selection_setup_dnd (GtkFileSelection *filesel)
+{
+  GtkWidget *eventbox;
+  static GtkTargetEntry drop_types[] = {
+    { "text/uri-list", 0, TARGET_URILIST}
+  };
+  static gint n_drop_types = sizeof(drop_types)/sizeof(drop_types[0]);
+  static GtkTargetEntry drag_types[] = {
+    { "text/uri-list", 0, TARGET_URILIST},
+    { "UTF8_STRING", 0, TARGET_UTF8_STRING },
+    { "STRING", 0, 0 },
+    { "TEXT",   0, 0 }, 
+    { "COMPOUND_TEXT", 0, 0 }
+  };
+  static gint n_drag_types = sizeof(drag_types)/sizeof(drag_types[0]);
+
+  gtk_drag_dest_set (GTK_WIDGET (filesel),
+		     GTK_DEST_DEFAULT_ALL,
+		     drop_types, n_drop_types,
+		     GDK_ACTION_COPY);
+
+  gtk_signal_connect (GTK_OBJECT(filesel), "drag_data_received",
+		      GTK_SIGNAL_FUNC(filenames_dropped), NULL);
+
+  eventbox = gtk_widget_get_parent (filesel->selection_text);
+  gtk_drag_source_set (eventbox,
+		       GDK_BUTTON1_MASK,
+		       drag_types, n_drag_types,
+		       GDK_ACTION_COPY);
+
+  gtk_signal_connect (GTK_OBJECT (eventbox),
+		      "drag_data_get",
+		      GTK_SIGNAL_FUNC (filenames_drag_get),
+		      filesel);
+}
+
 GtkWidget*
 gtk_file_selection_new (const gchar *title)
 {
@@ -737,6 +961,8 @@ gtk_file_selection_new (const gchar *title)
   gtk_window_set_title (GTK_WINDOW (filesel), title);
   gtk_dialog_set_has_separator (GTK_DIALOG (filesel), FALSE);
 
+  file_selection_setup_dnd (filesel);
+  
   return GTK_WIDGET (filesel);
 }
 

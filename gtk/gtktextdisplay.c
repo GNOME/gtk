@@ -250,7 +250,10 @@ render_layout_line (GdkDrawable        *drawable,
       
       if (selected)
         {
-          fg_gc = render_state->widget->style->text_gc[GTK_STATE_SELECTED];
+	  if (GTK_WIDGET_HAS_FOCUS (render_state->widget))
+	    fg_gc = render_state->widget->style->text_gc[GTK_STATE_SELECTED];
+	  else
+	    fg_gc = render_state->widget->style->text_gc [GTK_STATE_ACTIVE];
         }
       else
         {
@@ -494,6 +497,8 @@ render_para (GdkDrawable        *drawable,
   PangoLayoutIter *iter;
   PangoRectangle layout_logical;
   int screen_width;
+  GdkGC *fg_gc, *bg_gc;
+  gint state;
   
   gboolean first = TRUE;
 
@@ -508,6 +513,14 @@ render_para (GdkDrawable        *drawable,
 
   screen_width = line_display->total_width;
   
+  if (GTK_WIDGET_HAS_FOCUS (render_state->widget))
+    state = GTK_STATE_SELECTED;
+  else
+    state = GTK_STATE_ACTIVE;
+
+  fg_gc = render_state->widget->style->text_gc [state];
+  bg_gc = render_state->widget->style->base_gc [state];
+
   do
     {
       PangoLayoutLine *line = pango_layout_iter_get_line (iter);
@@ -547,7 +560,7 @@ render_para (GdkDrawable        *drawable,
           selection_end_index > line->length + byte_offset) /* All selected */
         {
           gdk_draw_rectangle (drawable,
-                              render_state->widget->style->base_gc[GTK_STATE_SELECTED],
+                              bg_gc,
                               TRUE,
                               x + line_display->left_margin,
                               selection_y,
@@ -577,12 +590,11 @@ render_para (GdkDrawable        *drawable,
                                                           selection_y,
                                                           selection_height,
                                                           selection_start_index, selection_end_index);
-
-              gdk_gc_set_clip_region (render_state->widget->style->text_gc [GTK_STATE_SELECTED], clip_region);
-              gdk_gc_set_clip_region (render_state->widget->style->base_gc [GTK_STATE_SELECTED], clip_region);
+              gdk_gc_set_clip_region (fg_gc, clip_region);
+              gdk_gc_set_clip_region (bg_gc, clip_region);
 
               gdk_draw_rectangle (drawable,
-                                  render_state->widget->style->base_gc[GTK_STATE_SELECTED],
+                                  bg_gc,
                                   TRUE,
                                   x + PANGO_PIXELS (line_rect.x),
                                   selection_y,
@@ -594,8 +606,8 @@ render_para (GdkDrawable        *drawable,
                                   y + PANGO_PIXELS (baseline),
                                   TRUE);
 
-              gdk_gc_set_clip_region (render_state->widget->style->text_gc [GTK_STATE_SELECTED], NULL);
-              gdk_gc_set_clip_region (render_state->widget->style->base_gc [GTK_STATE_SELECTED], NULL);
+              gdk_gc_set_clip_region (fg_gc, NULL);
+              gdk_gc_set_clip_region (bg_gc, NULL);
 
               gdk_region_destroy (clip_region);
 
@@ -605,7 +617,7 @@ render_para (GdkDrawable        *drawable,
                    (line_display->direction == GTK_TEXT_DIR_RTL && selection_end_index > byte_offset + line->length)))
                 {
                   gdk_draw_rectangle (drawable,
-                                      render_state->widget->style->base_gc[GTK_STATE_SELECTED],
+                                      bg_gc,
                                       TRUE,
                                       x + line_display->left_margin,
                                       selection_y,
@@ -625,7 +637,7 @@ render_para (GdkDrawable        *drawable,
                     PANGO_PIXELS (line_rect.x) - PANGO_PIXELS (line_rect.width);
 
                   gdk_draw_rectangle (drawable,
-                                      render_state->widget->style->base_gc[GTK_STATE_SELECTED],
+                                      bg_gc,
                                       TRUE,
                                       x + PANGO_PIXELS (line_rect.x) + PANGO_PIXELS (line_rect.width),
                                       selection_y,

@@ -1705,7 +1705,7 @@ draw_row (GtkCList     *clist,
 
       if (gdk_rectangle_intersect (area, &cell_rectangle, crect))
 	gdk_draw_rectangle (clist->clist_window,
-			    widget->style->base_gc[GTK_STATE_ACTIVE], TRUE,
+			    widget->style->base_gc[GTK_STATE_NORMAL], TRUE,
 			    crect->x, crect->y, crect->width, crect->height);
     }
   else
@@ -1714,7 +1714,7 @@ draw_row (GtkCList     *clist,
       crect = &cell_rectangle;
 
       gdk_draw_rectangle (clist->clist_window,
-			  widget->style->base_gc[GTK_STATE_ACTIVE], TRUE,
+			  widget->style->base_gc[GTK_STATE_NORMAL], TRUE,
 			  crect->x, crect->y, crect->width, crect->height);
     }
 
@@ -1761,7 +1761,7 @@ draw_row (GtkCList     *clist,
       if (!area || gdk_rectangle_intersect (area, &cell_rectangle, crect))
 	{
 	  gdk_draw_rectangle (clist->clist_window,
-			      widget->style->base_gc[GTK_STATE_ACTIVE], TRUE,
+			      widget->style->base_gc[GTK_STATE_NORMAL], TRUE,
 			      crect->x, crect->y, crect->width, crect->height);
 
 	  /* horizontal black lines */

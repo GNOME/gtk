@@ -30,7 +30,7 @@
 #include <gdk/gdk.h>
 #include <gtk/gtkmisc.h>
 #include <gtk/gtkwindow.h>
-
+#include <gtk/gtkmenu.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -78,6 +78,17 @@ struct _GtkLabel
 struct _GtkLabelClass
 {
   GtkMiscClass parent_class;
+
+  void (* move_cursor)     (GtkLabel       *label,
+			    GtkMovementStep step,
+			    gint            count,
+			    gboolean        extend_selection);
+  void (* copy_clipboard)  (GtkLabel       *label);
+  void (* select_all)      (GtkLabel       *label);
+  
+  /* Hook to customize right-click popup for selectable labels */
+  void (* populate_popup)   (GtkLabel       *label,
+                             GtkMenu        *menu);
 };
 
 GtkType               gtk_label_get_type          (void) G_GNUC_CONST;

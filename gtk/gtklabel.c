@@ -26,6 +26,7 @@
 #include <math.h>
 #include <string.h>
 #include "gtklabel.h"
+#include "gtkmain.h"
 #include "gtksignal.h"
 #include "gtkwindow.h"
 #include "gdk/gdkkeysyms.h"
@@ -33,16 +34,26 @@
 #include "gdk/gdki18n.h"
 #include <pango/pango.h>
 #include "gtkintl.h"
+#include "gtkseparatormenuitem.h"
 #include "gtkmenuitem.h"
 #include "gtknotebook.h"
+#include "gtkbindings.h"
 
 struct _GtkLabelSelectionInfo
 {
   GdkWindow *window;
   gint selection_anchor;
   gint selection_end;
+  GdkGC *cursor_gc;
+  GtkWidget *popup_menu;
 };
 
+enum {
+  MOVE_CURSOR,
+  COPY_CLIPBOARD,
+  POPULATE_POPUP,
+  LAST_SIGNAL
+};
 
 enum {
   PROP_0,
@@ -57,6 +68,8 @@ enum {
   PROP_MNEMONIC_KEYVAL,
   PROP_MNEMONIC_WIDGET
 };
+
+static guint signals[LAST_SIGNAL] = { 0 };
 
 static void gtk_label_class_init        (GtkLabelClass    *klass);
 static void gtk_label_init              (GtkLabel         *label);
@@ -126,11 +139,27 @@ static void gtk_label_select_region_index (GtkLabel *label,
                                            gint      anchor_index,
                                            gint      end_index);
 
-static gboolean gtk_label_mnemonic_activate (GtkWidget *widget,
-					     gboolean   group_cycling);
-static void     gtk_label_setup_mnemonic    (GtkLabel  *label,
-					     guint      last_key);
+static gboolean gtk_label_mnemonic_activate (GtkWidget         *widget,
+					     gboolean           group_cycling);
+static void     gtk_label_setup_mnemonic    (GtkLabel          *label,
+					     guint              last_key);
+static gboolean gtk_label_focus             (GtkWidget         *widget,
+					     GtkDirectionType   direction);
 
+/* For selectable lables: */
+static void gtk_label_move_cursor        (GtkLabel        *label,
+					  GtkMovementStep  step,
+					  gint             count,
+					  gboolean         extend_selection);
+static void gtk_label_copy_clipboard     (GtkLabel        *label);
+static void gtk_label_select_all         (GtkLabel        *label);
+static void gtk_label_do_popup           (GtkLabel        *label,
+					  GdkEventButton  *event);
+
+static gint gtk_label_move_forward_word  (GtkLabel        *label,
+					  gint             start);
+static gint gtk_label_move_backward_word (GtkLabel        *label,
+					  gint             start);
 
 static GtkMiscClass *parent_class = NULL;
 
@@ -162,11 +191,35 @@ gtk_label_get_type (void)
 }
 
 static void
+add_move_binding (GtkBindingSet  *binding_set,
+		  guint           keyval,
+		  guint           modmask,
+		  GtkMovementStep step,
+		  gint            count)
+{
+  g_return_if_fail ((modmask & GDK_SHIFT_MASK) == 0);
+  
+  gtk_binding_entry_add_signal (binding_set, keyval, modmask,
+				"move_cursor", 3,
+				GTK_TYPE_ENUM, step,
+				G_TYPE_INT, count,
+                                G_TYPE_BOOLEAN, FALSE);
+
+  /* Selection-extending version */
+  gtk_binding_entry_add_signal (binding_set, keyval, modmask | GDK_SHIFT_MASK,
+				"move_cursor", 3,
+				GTK_TYPE_ENUM, step,
+				G_TYPE_INT, count,
+                                G_TYPE_BOOLEAN, TRUE);
+}
+
+static void
 gtk_label_class_init (GtkLabelClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkObjectClass *object_class = GTK_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
+  GtkBindingSet *binding_set;
 
   parent_class = gtk_type_class (GTK_TYPE_MISC);
   
@@ -191,6 +244,34 @@ gtk_label_class_init (GtkLabelClass *class)
   widget_class->motion_notify_event = gtk_label_motion;
   widget_class->hierarchy_changed = gtk_label_hierarchy_changed;
   widget_class->mnemonic_activate = gtk_label_mnemonic_activate;
+  widget_class->focus = gtk_label_focus;
+
+  class->move_cursor = gtk_label_move_cursor;
+  class->copy_clipboard = gtk_label_copy_clipboard;
+  
+  signals[MOVE_CURSOR] = 
+      gtk_signal_new ("move_cursor",
+                      GTK_RUN_LAST | GTK_RUN_ACTION,
+                      GTK_CLASS_TYPE (object_class),
+                      GTK_SIGNAL_OFFSET (GtkLabelClass, move_cursor),
+                      gtk_marshal_VOID__ENUM_INT_BOOLEAN,
+                      GTK_TYPE_NONE, 3, GTK_TYPE_MOVEMENT_STEP, GTK_TYPE_INT, GTK_TYPE_BOOL);
+  
+  signals[COPY_CLIPBOARD] =
+    gtk_signal_new ("copy_clipboard",
+                    GTK_RUN_LAST | GTK_RUN_ACTION,
+                    GTK_CLASS_TYPE (object_class),
+                    GTK_SIGNAL_OFFSET (GtkLabelClass, copy_clipboard),
+                    gtk_marshal_VOID__VOID,
+                    GTK_TYPE_NONE, 0);
+  
+  signals[POPULATE_POPUP] =
+    gtk_signal_new ("populate_popup",
+		    GTK_RUN_LAST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkLabelClass, populate_popup),
+		    gtk_marshal_VOID__OBJECT,
+		    GTK_TYPE_NONE, 1, GTK_TYPE_MENU);
 
   g_object_class_install_property (G_OBJECT_CLASS(object_class),
                                    PROP_LABEL,
@@ -269,6 +350,90 @@ gtk_label_class_init (GtkLabelClass *class)
 							  "key is pressed."),
 							GTK_TYPE_WIDGET,
 							G_PARAM_READWRITE));
+
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_boxed ("cursor_color",
+							       _("Cursor color"),
+							       _("Color with which to draw insertion cursor"),
+							       GDK_TYPE_COLOR,
+							       G_PARAM_READABLE));
+  
+  /*
+   * Key bindings
+   */
+
+  binding_set = gtk_binding_set_by_class (class);
+
+  /* Moving the insertion point */
+  add_move_binding (binding_set, GDK_Right, 0,
+		    GTK_MOVEMENT_VISUAL_POSITIONS, 1);
+  
+  add_move_binding (binding_set, GDK_Left, 0,
+		    GTK_MOVEMENT_VISUAL_POSITIONS, -1);
+
+  add_move_binding (binding_set, GDK_KP_Right, 0,
+		    GTK_MOVEMENT_VISUAL_POSITIONS, 1);
+  
+  add_move_binding (binding_set, GDK_KP_Left, 0,
+		    GTK_MOVEMENT_VISUAL_POSITIONS, -1);
+  
+  add_move_binding (binding_set, GDK_f, GDK_CONTROL_MASK,
+		    GTK_MOVEMENT_LOGICAL_POSITIONS, 1);
+  
+  add_move_binding (binding_set, GDK_b, GDK_CONTROL_MASK,
+		    GTK_MOVEMENT_LOGICAL_POSITIONS, -1);
+  
+  add_move_binding (binding_set, GDK_Right, GDK_CONTROL_MASK,
+		    GTK_MOVEMENT_WORDS, 1);
+
+  add_move_binding (binding_set, GDK_Left, GDK_CONTROL_MASK,
+		    GTK_MOVEMENT_WORDS, -1);
+
+  add_move_binding (binding_set, GDK_KP_Right, GDK_CONTROL_MASK,
+		    GTK_MOVEMENT_WORDS, 1);
+
+  add_move_binding (binding_set, GDK_KP_Left, GDK_CONTROL_MASK,
+		    GTK_MOVEMENT_WORDS, -1);
+  
+  add_move_binding (binding_set, GDK_a, GDK_CONTROL_MASK,
+		    GTK_MOVEMENT_PARAGRAPH_ENDS, -1);
+
+  add_move_binding (binding_set, GDK_e, GDK_CONTROL_MASK,
+		    GTK_MOVEMENT_PARAGRAPH_ENDS, 1);
+
+  add_move_binding (binding_set, GDK_f, GDK_MOD1_MASK,
+		    GTK_MOVEMENT_WORDS, 1);
+
+  add_move_binding (binding_set, GDK_b, GDK_MOD1_MASK,
+		    GTK_MOVEMENT_WORDS, -1);
+
+  add_move_binding (binding_set, GDK_Home, 0,
+		    GTK_MOVEMENT_DISPLAY_LINE_ENDS, -1);
+
+  add_move_binding (binding_set, GDK_End, 0,
+		    GTK_MOVEMENT_DISPLAY_LINE_ENDS, 1);
+
+  add_move_binding (binding_set, GDK_KP_Home, 0,
+		    GTK_MOVEMENT_DISPLAY_LINE_ENDS, -1);
+
+  add_move_binding (binding_set, GDK_KP_End, 0,
+		    GTK_MOVEMENT_DISPLAY_LINE_ENDS, 1);
+  
+  add_move_binding (binding_set, GDK_Home, GDK_CONTROL_MASK,
+		    GTK_MOVEMENT_BUFFER_ENDS, -1);
+
+  add_move_binding (binding_set, GDK_End, GDK_CONTROL_MASK,
+		    GTK_MOVEMENT_BUFFER_ENDS, 1);
+
+  add_move_binding (binding_set, GDK_KP_Home, GDK_CONTROL_MASK,
+		    GTK_MOVEMENT_BUFFER_ENDS, -1);
+
+  add_move_binding (binding_set, GDK_KP_End, GDK_CONTROL_MASK,
+		    GTK_MOVEMENT_BUFFER_ENDS, 1);
+
+  /* copy */
+  gtk_binding_entry_add_signal (binding_set, GDK_c, GDK_CONTROL_MASK,
+				"copy_clipboard", 0);
 }
 
 static void 
@@ -1421,6 +1586,74 @@ get_layout_location (GtkLabel  *label,
     *yp = y;
 }
 
+static void
+gtk_label_draw_cursor (GtkLabel  *label, gint xoffset, gint yoffset)
+{
+  if (label->select_info == NULL)
+    return;
+  
+  if (GTK_WIDGET_DRAWABLE (label))
+    {
+      GtkWidget *widget = GTK_WIDGET (label);
+      
+      GtkTextDirection keymap_direction;
+      GtkTextDirection widget_direction;
+      PangoRectangle strong_pos, weak_pos;
+      gboolean split_cursor;
+      PangoRectangle *cursor1 = NULL;
+      PangoRectangle *cursor2 = NULL;
+      GdkGC *gc1 = NULL;
+      GdkGC *gc2 = NULL;
+
+      keymap_direction =
+	(gdk_keymap_get_direction (gdk_keymap_get_default ()) == PANGO_DIRECTION_LTR) ?
+	GTK_TEXT_DIR_LTR : GTK_TEXT_DIR_RTL;
+
+      widget_direction = gtk_widget_get_direction (widget);
+
+      gtk_label_ensure_layout (label, NULL, NULL);
+      
+      pango_layout_get_cursor_pos (label->layout, label->select_info->selection_end,
+				   &strong_pos, &weak_pos);
+
+      g_object_get (gtk_widget_get_settings (widget),
+		    "gtk-split-cursor", &split_cursor,
+		    NULL);
+
+      if (split_cursor)
+	{
+	  gc1 = label->select_info->cursor_gc;
+	  cursor1 = &strong_pos;
+
+	  if (strong_pos.x != weak_pos.x ||
+	      strong_pos.y != weak_pos.y)
+	    {
+	      gc2 = widget->style->black_gc;
+	      cursor2 = &weak_pos;
+	    }
+	}
+      else
+	{
+	  gc1 = label->select_info->cursor_gc;
+	  
+	  if (keymap_direction == widget_direction)
+	    cursor1 = &strong_pos;
+	  else
+	    cursor1 = &weak_pos;
+	}
+      
+      gdk_draw_line (widget->window, gc1,
+		     xoffset + PANGO_PIXELS (cursor1->x), yoffset + PANGO_PIXELS (cursor1->y),
+		     xoffset + PANGO_PIXELS (cursor1->x), yoffset + PANGO_PIXELS (cursor1->y + cursor1->height));
+      
+      if (gc2)
+	gdk_draw_line (widget->window, gc2,
+		       xoffset + PANGO_PIXELS (cursor2->x), yoffset + PANGO_PIXELS (cursor2->y),
+		       xoffset + PANGO_PIXELS (cursor2->x), yoffset + PANGO_PIXELS (cursor2->y + cursor2->height));
+    }
+}
+
+
 static gint
 gtk_label_expose (GtkWidget      *widget,
 		  GdkEventExpose *event)
@@ -1456,7 +1689,8 @@ gtk_label_expose (GtkWidget      *widget,
         {
           gint range[2];
           GdkRegion *clip;
-          
+	  GtkStateType state;
+	  
           range[0] = label->select_info->selection_anchor;
           range[1] = label->select_info->selection_end;
 
@@ -1476,18 +1710,25 @@ gtk_label_expose (GtkWidget      *widget,
            * region
            */
 
-          gdk_gc_set_clip_region (widget->style->white_gc, clip);
-          
+          gdk_gc_set_clip_region (widget->style->black_gc, clip);
+
+
+	  state = GTK_STATE_SELECTED;
+	  if (!GTK_WIDGET_HAS_FOCUS (widget))
+	    state = GTK_STATE_ACTIVE;
+	      
           gdk_draw_layout_with_colors (widget->window,
-                                       widget->style->white_gc,
+                                       widget->style->black_gc,
                                        x, y,
                                        label->layout,
-                                       &widget->style->fg[GTK_STATE_SELECTED],
-                                       &widget->style->bg[GTK_STATE_SELECTED]);
+                                       &widget->style->text[state],
+                                       &widget->style->base[state]);
 
-          gdk_gc_set_clip_region (widget->style->white_gc, NULL);
+          gdk_gc_set_clip_region (widget->style->black_gc, NULL);
           gdk_region_destroy (clip);
         }
+      else if (label->select_info && GTK_WIDGET_HAS_FOCUS (widget))
+	gtk_label_draw_cursor (label, x, y);
     }
 
   return TRUE;
@@ -1637,6 +1878,25 @@ gtk_label_set_text_with_mnemonic (GtkLabel    *label,
   gtk_label_setup_mnemonic (label, last_keyval);
 }
 
+static void
+gtk_label_realize_cursor_gc (GtkLabel *label)
+{
+  GdkColor *cursor_color;
+  GdkColor red = {0, 0xffff, 0x0000, 0x0000};
+
+  if (label->select_info == NULL)
+    return;
+  
+  if (label->select_info->cursor_gc)
+    gdk_gc_unref (label->select_info->cursor_gc);
+
+  gtk_widget_style_get (GTK_WIDGET (label), "cursor_color", &cursor_color, NULL);
+  label->select_info->cursor_gc = gdk_gc_new (GTK_WIDGET (label)->window);
+  if (cursor_color)
+    gdk_gc_set_rgb_fg_color (label->select_info->cursor_gc, cursor_color);
+  else
+    gdk_gc_set_rgb_fg_color (label->select_info->cursor_gc, &red);
+}
 
 static void
 gtk_label_realize (GtkWidget *widget)
@@ -1648,7 +1908,23 @@ gtk_label_realize (GtkWidget *widget)
   (* GTK_WIDGET_CLASS (parent_class)->realize) (widget);
 
   if (label->select_info)
-    gtk_label_create_window (label);
+    {
+      gtk_label_create_window (label);
+      gtk_label_realize_cursor_gc (label);
+    }
+}
+
+static void
+gtk_label_unrealize_cursor_gc (GtkLabel *label)
+{
+  if (label->select_info == NULL)
+    return;
+  
+  if (label->select_info->cursor_gc)
+    {
+      gdk_gc_unref (label->select_info->cursor_gc);
+      label->select_info->cursor_gc = NULL;
+    }
 }
 
 static void
@@ -1659,7 +1935,10 @@ gtk_label_unrealize (GtkWidget *widget)
   label = GTK_LABEL (widget);
 
   if (label->select_info)
-    gtk_label_destroy_window (label);
+    {
+      gtk_label_unrealize_cursor_gc (label);
+      gtk_label_destroy_window (label);
+    }
   
   (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
 }
@@ -1779,6 +2058,25 @@ get_layout_index (GtkLabel *label,
   *index += (cluster_end - cluster);
 }
 
+static void
+gtk_label_select_word (GtkLabel *label)
+{
+  gint min, max;
+  
+  gint start_index = gtk_label_move_backward_word (label, label->select_info->selection_end);
+  gint end_index = gtk_label_move_forward_word (label, label->select_info->selection_end);
+
+  min = MIN (label->select_info->selection_anchor,
+	     label->select_info->selection_end);
+  max = MAX (label->select_info->selection_anchor,
+	     label->select_info->selection_end);
+
+  min = MIN (min, start_index);
+  max = MAX (max, end_index);
+
+  gtk_label_select_region_index (label, min, max);
+}
+
 static gint
 gtk_label_button_press (GtkWidget      *widget,
                         GdkEventButton *event)
@@ -1791,40 +2089,73 @@ gtk_label_button_press (GtkWidget      *widget,
   if (label->select_info == NULL)
     return FALSE;
 
-  if (event->button != 1)
-    return FALSE;
-
-  get_layout_index (label, event->x, event->y, &index);
-  
-  if ((label->select_info->selection_anchor !=
-       label->select_info->selection_end) &&
-      (event->state & GDK_SHIFT_MASK))
+  if (event->button == 1)
     {
-      /* extend (same as motion) */
-      if (index < label->select_info->selection_end)
-        gtk_label_select_region_index (label,
-                                       index,
-                                       label->select_info->selection_end);
+      if (!GTK_WIDGET_HAS_FOCUS (widget))
+	gtk_widget_grab_focus (widget);
+
+      if (event->type == GDK_3BUTTON_PRESS)
+	{
+	  gtk_label_select_region_index (label, 0, strlen (label->label));
+	  return TRUE;
+	}
+      
+      if (event->type == GDK_2BUTTON_PRESS)
+	{
+	  gtk_label_select_word (label);
+	  return TRUE;
+	}
+      
+      get_layout_index (label, event->x, event->y, &index);
+      
+      if ((label->select_info->selection_anchor !=
+	   label->select_info->selection_end) &&
+	  (event->state & GDK_SHIFT_MASK))
+	{
+	  gint min, max;
+	  
+	  /* extend (same as motion) */
+	  min = MIN (label->select_info->selection_anchor,
+		     label->select_info->selection_end);
+	  max = MAX (label->select_info->selection_anchor,
+		     label->select_info->selection_end);
+	  
+	  min = MIN (min, index);
+	  max = MAX (max, index);
+	  
+	  gtk_label_select_region_index (label,
+					 min,
+					 max);
+	  
+	  /* ensure the anchor is opposite index */
+	  if (index == label->select_info->selection_anchor)
+	    {
+	      gint tmp = label->select_info->selection_end;
+	      label->select_info->selection_end = label->select_info->selection_anchor;
+	      label->select_info->selection_anchor = tmp;
+	    }
+	}
       else
-        gtk_label_select_region_index (label,
-                                       label->select_info->selection_anchor,
-                                       index);
-
-      /* ensure the anchor is opposite index */
-      if (index == label->select_info->selection_anchor)
-        {
-          gint tmp = label->select_info->selection_end;
-          label->select_info->selection_end = label->select_info->selection_anchor;
-          label->select_info->selection_anchor = tmp;
-        }
-    }
-  else
-    {
-      /* start a replacement */
-      gtk_label_select_region_index (label, index, index);
-    }
+	{
+	  if (event->type == GDK_3BUTTON_PRESS)
+	      gtk_label_select_region_index (label, 0, strlen (label->label));
+	  else if (event->type == GDK_2BUTTON_PRESS)
+	      gtk_label_select_word (label);
+	  else 
+	    /* start a replacement */
+	    gtk_label_select_region_index (label, index, index);
+	}
   
-  return TRUE;
+      return TRUE;
+    }
+  else if (event->button == 3 && event->type == GDK_BUTTON_PRESS)
+    {
+      gtk_label_do_popup (label, event);
+
+      return TRUE;
+      
+    }
+  return FALSE;
 }
 
 static gint
@@ -1948,14 +2279,15 @@ gtk_label_set_selectable (GtkLabel *label,
     {
       if (label->select_info == NULL)
         {
-          label->select_info = g_new (GtkLabelSelectionInfo, 1);
+          label->select_info = g_new0 (GtkLabelSelectionInfo, 1);
 
-          label->select_info->window = NULL;
-          label->select_info->selection_anchor = 0;
-          label->select_info->selection_end = 0;
-
+	  GTK_WIDGET_SET_FLAGS (label, GTK_CAN_FOCUS);
+      
           if (GTK_WIDGET_REALIZED (label))
-            gtk_label_create_window (label);
+	    {
+	      gtk_label_create_window (label);
+	      gtk_label_realize_cursor_gc (label);
+	    }
 
           if (GTK_WIDGET_MAPPED (label))
             gdk_window_show (label->select_info->window);
@@ -1968,12 +2300,18 @@ gtk_label_set_selectable (GtkLabel *label,
           /* unselect, to give up the selection */
           gtk_label_select_region (label, 0, 0);
           
+	  gtk_label_unrealize_cursor_gc (label);
+	  
           if (label->select_info->window)
-            gtk_label_destroy_window (label);
+	    {
+	      gtk_label_destroy_window (label);
+	    }
 
           g_free (label->select_info);
 
           label->select_info = NULL;
+
+	  GTK_WIDGET_UNSET_FLAGS (label, GTK_CAN_FOCUS);
         }
     }
   if (setting != old_setting)
@@ -2050,8 +2388,7 @@ clear_text_callback (GtkClipboard     *clipboard,
 
   if (label->select_info)
     {
-      label->select_info->selection_anchor = 0;
-      label->select_info->selection_end = 0;
+      label->select_info->selection_anchor = label->select_info->selection_end;
       
       gtk_label_clear_layout (label);
       gtk_widget_queue_draw (GTK_WIDGET (label));
@@ -2069,7 +2406,7 @@ gtk_label_select_region_index (GtkLabel *label,
     { "COMPOUND_TEXT", 0, 0 },
     { "UTF8_STRING", 0, 0 }
   };
-  
+
   g_return_if_fail (GTK_IS_LABEL (label));
   
   if (label->select_info)
@@ -2321,4 +2658,484 @@ gtk_label_get_use_underline (GtkLabel *label)
   g_return_val_if_fail (GTK_IS_LABEL (label), FALSE);
   
   return label->use_underline;
+}
+
+static gboolean
+gtk_label_focus (GtkWidget         *widget,
+		 GtkDirectionType   direction)
+{
+  /* We never want to be in the tab chain */
+  return FALSE;
+}
+
+/* Compute the X position for an offset that corresponds to the "more important
+ * cursor position for that offset. We use this when trying to guess to which
+ * end of the selection we should go to when the user hits the left or
+ * right arrow key.
+ */
+static void
+get_better_cursor (GtkLabel *label,
+		   gint      index,
+		   gint      *x,
+		   gint      *y)
+{
+  GtkTextDirection keymap_direction =
+    (gdk_keymap_get_direction (gdk_keymap_get_default ()) == PANGO_DIRECTION_LTR) ?
+    GTK_TEXT_DIR_LTR : GTK_TEXT_DIR_RTL;
+  GtkTextDirection widget_direction = gtk_widget_get_direction (GTK_WIDGET (label));
+  gboolean split_cursor;
+  PangoRectangle strong_pos, weak_pos;
+  
+  g_object_get (gtk_widget_get_settings (GTK_WIDGET (label)),
+		"gtk-split-cursor", &split_cursor,
+		NULL);
+
+  gtk_label_ensure_layout (label, NULL, NULL);
+  
+  pango_layout_get_cursor_pos (label->layout, index,
+			       &strong_pos, &weak_pos);
+
+  if (split_cursor)
+    {
+      *x = strong_pos.x / PANGO_SCALE;
+      *y = strong_pos.y / PANGO_SCALE;
+    }
+  else
+    {
+      if (keymap_direction == widget_direction)
+	{
+	  *x = strong_pos.x / PANGO_SCALE;
+	  *y = strong_pos.y / PANGO_SCALE;
+	}
+      else
+	{
+	  *x = weak_pos.x / PANGO_SCALE;
+	  *y = weak_pos.y / PANGO_SCALE;
+	}
+    }
+}
+
+
+static gint
+gtk_label_move_logically (GtkLabel *label,
+			  gint      start,
+			  gint      count)
+{
+  gint offset = g_utf8_pointer_to_offset (label->label,
+					  label->label + start);
+
+  if (label->label)
+    {
+      PangoLogAttr *log_attrs;
+      gint n_attrs;
+      gint length;
+
+      gtk_label_ensure_layout (label, NULL, NULL);
+      
+      length = g_utf8_strlen (label->label, -1);
+
+      pango_layout_get_log_attrs (label->layout, &log_attrs, &n_attrs);
+
+      while (count > 0 && offset < length)
+	{
+	  do
+	    offset++;
+	  while (offset < length && !log_attrs[offset].is_cursor_position);
+	  
+	  count--;
+	}
+      while (count < 0 && offset > 0)
+	{
+	  do
+	    offset--;
+	  while (offset > 0 && !log_attrs[offset].is_cursor_position);
+	  
+	  count++;
+	}
+      
+      g_free (log_attrs);
+    }
+
+  return g_utf8_offset_to_pointer (label->label, offset) - label->label;
+}
+
+static gint
+gtk_label_move_visually (GtkLabel *label,
+			 gint      start,
+			 gint      count)
+{
+  gint index;
+
+  index = start;
+  
+  while (count != 0)
+    {
+      int new_index, new_trailing;
+      gboolean split_cursor;
+      gboolean strong;
+
+      gtk_label_ensure_layout (label, NULL, NULL);
+
+      g_object_get (gtk_widget_get_settings (GTK_WIDGET (label)),
+		    "gtk-split-cursor", &split_cursor,
+		    NULL);
+
+      if (split_cursor)
+	strong = TRUE;
+      else
+	{
+	  GtkTextDirection keymap_direction =
+	    (gdk_keymap_get_direction (gdk_keymap_get_default ()) == PANGO_DIRECTION_LTR) ?
+	    GTK_TEXT_DIR_LTR : GTK_TEXT_DIR_RTL;
+
+	  strong = keymap_direction == gtk_widget_get_direction (GTK_WIDGET (label));
+	}
+      
+      if (count > 0)
+	{
+	  pango_layout_move_cursor_visually (label->layout, strong, index, 0, 1, &new_index, &new_trailing);
+	  count--;
+	}
+      else
+	{
+	  pango_layout_move_cursor_visually (label->layout, strong, index, 0, -1, &new_index, &new_trailing);
+	  count++;
+	}
+
+      if (new_index < 0 || new_index == G_MAXINT)
+	break;
+
+      index = new_index;
+      
+      while (new_trailing--)
+	index = g_utf8_next_char (label->label + new_index) - label->label;
+    }
+  
+  return index;
+}
+
+static gint
+gtk_label_move_forward_word (GtkLabel *label,
+			     gint      start)
+{
+  gint new_pos = g_utf8_pointer_to_offset (label->label,
+					   label->label + start);
+  gint length;
+
+  length = g_utf8_strlen (label->label, -1);
+  if (new_pos < length)
+    {
+      PangoLogAttr *log_attrs;
+      gint n_attrs;
+
+      gtk_label_ensure_layout (label, NULL, NULL);
+      
+      pango_layout_get_log_attrs (label->layout, &log_attrs, &n_attrs);
+      
+      /* Find the next word end */
+      new_pos++;
+      while (new_pos < n_attrs && !log_attrs[new_pos].is_word_end)
+	new_pos++;
+
+      g_free (log_attrs);
+    }
+
+  return g_utf8_offset_to_pointer (label->label, new_pos) - label->label;
+}
+
+
+static gint
+gtk_label_move_backward_word (GtkLabel *label,
+			      gint      start)
+{
+  gint new_pos = g_utf8_pointer_to_offset (label->label,
+					   label->label + start);
+  gint length;
+
+  length = g_utf8_strlen (label->label, -1);
+  
+  if (new_pos > 0)
+    {
+      PangoLogAttr *log_attrs;
+      gint n_attrs;
+
+      gtk_label_ensure_layout (label, NULL, NULL);
+      
+      pango_layout_get_log_attrs (label->layout, &log_attrs, &n_attrs);
+      
+      new_pos -= 1;
+
+      /* Find the previous word beginning */
+      while (new_pos > 0 && !log_attrs[new_pos].is_word_start)
+	new_pos--;
+
+      g_free (log_attrs);
+    }
+
+  return g_utf8_offset_to_pointer (label->label, new_pos) - label->label;
+}
+
+static void
+gtk_label_move_cursor (GtkLabel       *label,
+		       GtkMovementStep step,
+		       gint            count,
+		       gboolean        extend_selection)
+{
+  gint new_pos;
+  
+  if (label->select_info == NULL)
+    return;
+  
+  new_pos = label->select_info->selection_end;
+
+  if (label->select_info->selection_end != label->select_info->selection_anchor &&
+      !extend_selection)
+    {
+      /* If we have a current selection and aren't extending it, move to the
+       * start/or end of the selection as appropriate
+       */
+      switch (step)
+	{
+	case GTK_MOVEMENT_VISUAL_POSITIONS:
+	  {
+	    gint end_x, end_y;
+	    gint anchor_x, anchor_y;
+	    gboolean end_is_left;
+	    
+	    get_better_cursor (label, label->select_info->selection_end, &end_x, &end_y);
+	    get_better_cursor (label, label->select_info->selection_anchor, &anchor_x, &anchor_y);
+
+	    end_is_left = (end_y < anchor_y) || (end_y == anchor_y && end_x < anchor_x);
+	    
+	    if (count < 0)
+	      new_pos = end_is_left ? label->select_info->selection_end : label->select_info->selection_anchor;
+	    else
+	      new_pos = !end_is_left ? label->select_info->selection_end : label->select_info->selection_anchor;
+
+	    break;
+	  }
+	case GTK_MOVEMENT_LOGICAL_POSITIONS:
+	case GTK_MOVEMENT_WORDS:
+	  if (count < 0)
+	    new_pos = MIN (label->select_info->selection_end, label->select_info->selection_anchor);
+	  else
+	    new_pos = MAX (label->select_info->selection_end, label->select_info->selection_anchor);
+	  break;
+	case GTK_MOVEMENT_DISPLAY_LINE_ENDS:
+	case GTK_MOVEMENT_PARAGRAPH_ENDS:
+	case GTK_MOVEMENT_BUFFER_ENDS:
+	  /* FIXME: Can do better here */
+	  new_pos = count < 0 ? 0 : strlen (label->label);
+	  break;
+	case GTK_MOVEMENT_DISPLAY_LINES:
+	case GTK_MOVEMENT_PARAGRAPHS:
+	case GTK_MOVEMENT_PAGES:
+	  break;
+	}
+    }
+  else
+    {
+      switch (step)
+	{
+	case GTK_MOVEMENT_LOGICAL_POSITIONS:
+	  new_pos = gtk_label_move_logically (label, new_pos, count);
+	  break;
+	case GTK_MOVEMENT_VISUAL_POSITIONS:
+	  new_pos = gtk_label_move_visually (label, new_pos, count);
+	  break;
+	case GTK_MOVEMENT_WORDS:
+	  while (count > 0)
+	    {
+	      new_pos = gtk_label_move_forward_word (label, new_pos);
+	      count--;
+	    }
+	  while (count < 0)
+	    {
+	      new_pos = gtk_label_move_backward_word (label, new_pos);
+	      count++;
+	    }
+	  break;
+	case GTK_MOVEMENT_DISPLAY_LINE_ENDS:
+	case GTK_MOVEMENT_PARAGRAPH_ENDS:
+	case GTK_MOVEMENT_BUFFER_ENDS:
+	  /* FIXME: Can do better here */
+	  new_pos = count < 0 ? 0 : strlen (label->label);
+	  break;
+	case GTK_MOVEMENT_DISPLAY_LINES:
+	case GTK_MOVEMENT_PARAGRAPHS:
+	case GTK_MOVEMENT_PAGES:
+	  break;
+	}
+    }
+
+  if (extend_selection)
+    gtk_label_select_region_index (label,
+				   label->select_info->selection_anchor,
+				   new_pos);
+  else
+    gtk_label_select_region_index (label, new_pos, new_pos);
+}
+
+static void
+gtk_label_copy_clipboard (GtkLabel *label)
+{
+  if (label->text && label->select_info)
+    {
+      gint start, end;
+      gint len;
+      
+      start = MIN (label->select_info->selection_anchor,
+                   label->select_info->selection_end);
+      end = MAX (label->select_info->selection_anchor,
+                 label->select_info->selection_end);
+
+      len = strlen (label->text);
+
+      if (end > len)
+        end = len;
+
+      if (start > len)
+        start = len;
+
+      if (start != end)
+	gtk_clipboard_set_text (gtk_clipboard_get (GDK_NONE),
+				label->text + start, end - start);
+    }
+}
+
+static void
+gtk_label_select_all (GtkLabel *label)
+{
+  gtk_label_select_region_index (label, 0, strlen (label->label));
+}
+
+/* Quick hack of a popup menu
+ */
+static void
+activate_cb (GtkWidget *menuitem,
+	     GtkLabel  *label)
+{
+  const gchar *signal = gtk_object_get_data (GTK_OBJECT (menuitem), "gtk-signal");
+  gtk_signal_emit_by_name (GTK_OBJECT (label), signal);
+}
+
+static void
+append_action_signal (GtkLabel     *label,
+		      GtkWidget    *menu,
+		      const gchar  *label_text,
+		      const gchar  *signal,
+                      gboolean      sensitive)
+{
+  GtkWidget *menuitem = gtk_menu_item_new_with_label (label_text);
+
+  gtk_object_set_data (GTK_OBJECT (menuitem), "gtk-signal", (char *)signal);
+  gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
+		      GTK_SIGNAL_FUNC (activate_cb), label);
+
+  gtk_widget_set_sensitive (menuitem, sensitive);
+  
+  gtk_widget_show (menuitem);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+}
+
+static void
+popup_menu_detach (GtkWidget *attach_widget,
+		   GtkMenu   *menu)
+{
+  GtkLabel *label;
+  label = GTK_LABEL (attach_widget);
+
+  if (label->select_info)
+    label->select_info->popup_menu = NULL;
+}
+
+static void
+popup_position_func (GtkMenu   *menu,
+                     gint      *x,
+                     gint      *y,
+                     gboolean  *push_in,
+                     gpointer	user_data)
+{
+  GtkLabel *label;
+  GtkWidget *widget;
+  GtkRequisition req;
+  
+  label = GTK_LABEL (user_data);  
+  widget = GTK_WIDGET (label);
+
+  if (label->select_info == NULL)
+    return;
+  
+  g_return_if_fail (GTK_WIDGET_REALIZED (label));
+
+  gdk_window_get_origin (widget->window, x, y);      
+
+  gtk_widget_size_request (label->select_info->popup_menu, &req);
+  
+  *x += widget->allocation.width / 2;
+  *y += widget->allocation.height;
+
+  *x = CLAMP (*x, 0, MAX (0, gdk_screen_width () - req.width));
+  *y = CLAMP (*y, 0, MAX (0, gdk_screen_height () - req.height));
+}
+
+
+static void
+gtk_label_do_popup (GtkLabel       *label,
+                    GdkEventButton *event)
+{
+  GtkWidget *menuitem;
+  gboolean have_selection;
+
+  if (label->select_info == NULL)
+    return;
+    
+  if (label->select_info->popup_menu)
+    gtk_widget_destroy (label->select_info->popup_menu);
+  
+  label->select_info->popup_menu = gtk_menu_new ();
+
+  gtk_menu_attach_to_widget (GTK_MENU (label->select_info->popup_menu),
+                             GTK_WIDGET (label),
+                             popup_menu_detach);
+
+  have_selection =
+    label->select_info->selection_anchor != label->select_info->selection_end;
+
+
+  append_action_signal (label, label->select_info->popup_menu, _("Cut"), "cut_clipboard",
+                        FALSE);
+  append_action_signal (label, label->select_info->popup_menu, _("Copy"), "copy_clipboard",
+                        have_selection);
+  append_action_signal (label, label->select_info->popup_menu, _("Paste"), "paste_clipboard",
+                        FALSE);
+  
+  menuitem = gtk_menu_item_new_with_label (_("Select All"));
+  gtk_signal_connect_object (GTK_OBJECT (menuitem), "activate",
+			     GTK_SIGNAL_FUNC (gtk_label_select_all), label);
+  gtk_widget_show (menuitem);
+  gtk_menu_shell_append (GTK_MENU_SHELL (label->select_info->popup_menu), menuitem);
+
+  menuitem = gtk_separator_menu_item_new ();
+  gtk_widget_show (menuitem);
+  gtk_menu_shell_append (GTK_MENU_SHELL (label->select_info->popup_menu), menuitem);
+      
+  menuitem = gtk_menu_item_new_with_label (_("Input Methods"));
+  gtk_widget_show (menuitem);
+  gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), gtk_menu_new ());
+  gtk_widget_set_sensitive (menuitem, FALSE);
+  gtk_menu_shell_append (GTK_MENU_SHELL (label->select_info->popup_menu), menuitem);
+
+  gtk_signal_emit (GTK_OBJECT (label),
+                   signals[POPULATE_POPUP],
+                   label->select_info->popup_menu);
+  
+  if (event)
+    gtk_menu_popup (GTK_MENU (label->select_info->popup_menu), NULL, NULL,
+                    NULL, NULL,
+                    event->button, event->time);
+  else
+    gtk_menu_popup (GTK_MENU (label->select_info->popup_menu), NULL, NULL,
+                    popup_position_func, label,
+                    0, gtk_get_current_event_time ());
 }

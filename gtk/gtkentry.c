@@ -211,6 +211,7 @@ static void gtk_entry_cut_clipboard      (GtkEntry        *entry);
 static void gtk_entry_copy_clipboard     (GtkEntry        *entry);
 static void gtk_entry_paste_clipboard    (GtkEntry        *entry);
 static void gtk_entry_toggle_overwrite   (GtkEntry        *entry);
+static void gtk_entry_select_all         (GtkEntry        *entry);
 static void gtk_entry_real_activate      (GtkEntry        *entry);
 static void gtk_entry_popup_menu         (GtkWidget      *widget);
 
@@ -932,18 +933,17 @@ static void
 gtk_entry_realize_cursor_gc (GtkEntry *entry)
 {
   GdkColor *cursor_color;
+  GdkColor red = {0, 0xffff, 0x0000, 0x0000};
   
   if (entry->cursor_gc)
     gdk_gc_unref (entry->cursor_gc);
 
   gtk_widget_style_get (GTK_WIDGET (entry), "cursor_color", &cursor_color, NULL);
-  if (cursor_color)
-    {
       entry->cursor_gc = gdk_gc_new (entry->text_area);
-      gdk_gc_set_rgb_fg_color (entry->cursor_gc, cursor_color);
-    }
+  if (cursor_color)
+    gdk_gc_set_rgb_fg_color (entry->cursor_gc, cursor_color);
   else
-    entry->cursor_gc = gdk_gc_ref (GTK_WIDGET (entry)->style->base_gc[GTK_STATE_SELECTED]);
+    gdk_gc_set_rgb_fg_color (entry->cursor_gc, &red);
 }
 
 static void
@@ -2122,6 +2122,12 @@ gtk_entry_toggle_overwrite (GtkEntry *entry)
 }
 
 static void
+gtk_entry_select_all (GtkEntry *entry)
+{
+  gtk_entry_select_line (entry);
+}
+
+static void
 gtk_entry_real_activate (GtkEntry *entry)
 {
   GtkWindow *window;
@@ -2516,6 +2522,8 @@ gtk_entry_draw_text (GtkEntry *entry)
 	  gint start_index = g_utf8_offset_to_pointer (entry->text, start_pos) - entry->text;
 	  gint end_index = g_utf8_offset_to_pointer (entry->text, end_pos) - entry->text;
 	  GdkRegion *clip_region = gdk_region_new ();
+	  GdkGC *text_gc;
+	  GdkGC *selection_gc;
 
           line = pango_layout_get_lines (layout)->data;
           
@@ -2523,6 +2531,17 @@ gtk_entry_draw_text (GtkEntry *entry)
 
           pango_layout_get_extents (layout, NULL, &logical_rect);
           
+	  if (GTK_WIDGET_HAS_FOCUS (entry))
+	    {
+	      selection_gc = widget->style->base_gc [GTK_STATE_SELECTED];
+	      text_gc = widget->style->text_gc [GTK_STATE_SELECTED];
+	    }
+	  else
+	    {
+	      selection_gc = widget->style->base_gc [GTK_STATE_ACTIVE];
+	      text_gc = widget->style->text_gc [GTK_STATE_ACTIVE];
+	    }
+	  
 	  for (i=0; i < n_ranges; i++)
 	    {
 	      GdkRectangle rect;
@@ -2531,18 +2550,18 @@ gtk_entry_draw_text (GtkEntry *entry)
 	      rect.y = y;
 	      rect.width = (ranges[2*i + 1] - ranges[2*i]) / PANGO_SCALE;
 	      rect.height = logical_rect.height / PANGO_SCALE;
-	      
-	      gdk_draw_rectangle (entry->text_area, widget->style->base_gc [GTK_STATE_SELECTED], TRUE,
+		
+	      gdk_draw_rectangle (entry->text_area, selection_gc, TRUE,
 				  rect.x, rect.y, rect.width, rect.height);
 
 	      gdk_region_union_with_rect (clip_region, &rect);
 	    }
 
-	  gdk_gc_set_clip_region (widget->style->text_gc [GTK_STATE_SELECTED], clip_region);
-	  gdk_draw_layout (entry->text_area, widget->style->text_gc [GTK_STATE_SELECTED], 
+	  gdk_gc_set_clip_region (text_gc, clip_region);
+	  gdk_draw_layout (entry->text_area, text_gc, 
 			   x, y,
 			   layout);
-	  gdk_gc_set_clip_region (widget->style->text_gc [GTK_STATE_SELECTED], NULL);
+	  gdk_gc_set_clip_region (text_gc, NULL);
 	  
 	  gdk_region_destroy (clip_region);
 	  g_free (ranges);
@@ -3663,6 +3682,12 @@ gtk_entry_do_popup (GtkEntry       *entry,
                         have_selection);
   append_action_signal (entry, entry->popup_menu, _("Paste"), "paste_clipboard",
                         TRUE);
+
+  menuitem = gtk_menu_item_new_with_label (_("Select All"));
+  gtk_signal_connect_object (GTK_OBJECT (menuitem), "activate",
+			     GTK_SIGNAL_FUNC (gtk_entry_select_all), entry);
+  gtk_widget_show (menuitem);
+  gtk_menu_shell_append (GTK_MENU_SHELL (entry->popup_menu), menuitem);
 
   menuitem = gtk_separator_menu_item_new ();
   gtk_widget_show (menuitem);

@@ -404,21 +404,13 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
       width = indicator_size;
       height = indicator_size;
 
+      state_type = GTK_WIDGET_STATE (widget) == GTK_STATE_ACTIVE ? GTK_STATE_NORMAL : GTK_WIDGET_STATE (widget);
       if (GTK_TOGGLE_BUTTON (widget)->inconsistent)
-        {
-          state_type = GTK_WIDGET_STATE (widget) == GTK_STATE_ACTIVE ? GTK_STATE_NORMAL : GTK_WIDGET_STATE (widget);
-          shadow_type = GTK_SHADOW_ETCHED_IN;
-        }
+	shadow_type = GTK_SHADOW_ETCHED_IN;
       else if (GTK_TOGGLE_BUTTON (widget)->active)
-	{
-	  state_type = GTK_STATE_ACTIVE;
-	  shadow_type = GTK_SHADOW_IN;
-	}
+	shadow_type = GTK_SHADOW_IN;
       else
-	{
-	  shadow_type = GTK_SHADOW_OUT;
-	  state_type = GTK_WIDGET_STATE (widget);
-	}
+	shadow_type = GTK_SHADOW_OUT;
 
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
 	x = widget->allocation.x + widget->allocation.width - (width + x - widget->allocation.x);

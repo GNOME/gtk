@@ -463,7 +463,7 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
 	x = widget->allocation.x + widget->allocation.width - (indicator_size + x - widget->allocation.x);
 
       gtk_paint_option (widget->style, widget->window,
-			GTK_WIDGET_STATE (widget), shadow_type,
+			state_type, shadow_type,
 			area, widget, "radiobutton",
 			x, y, indicator_size, indicator_size);
     }

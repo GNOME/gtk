@@ -1,3 +1,35 @@
+2001-09-18  Alex Larsson  <alexl@redhat.com>
+
+        * gtk/gtkcheckbutton.c:
+	* gtk/gtkradiobutton.c:
+	Don't draw with GTK_STATE_ACTIVE.
+
+	* gtk/gtkclist.c:
+	* gtk/gtkctree.c:
+	Draw lines between rows with base_gc[GTK_STATE_NORMAL].
+
+	* gtk/gtktextdisplay.c:
+	Focused selection is drawn with base_gc [GTK_STATE_SELECTED] and
+	unfocused with base_gc [GTK_STATE_ACTIVE].
+	
+	* gtk/gtkentry.c:
+	Add select all menu-item.
+	Default cursor color is red.
+	Focused selection is drawn with base_gc [GTK_STATE_SELECTED] and
+	unfocused with base_gc [GTK_STATE_ACTIVE].
+
+	* gtk/gtklabel.[ch]:
+	Add keynav + menu to selectable lables.
+	Focused selection is drawn with base_gc [GTK_STATE_SELECTED] and
+	unfocused with base_gc [GTK_STATE_ACTIVE].
+
+	* gtk/gtkfilesel.c:
+	Add drag and drop support.
+
+	* gtk/gtkstyle.c:
+	(This was checked in earlier)
+	New default values for text/base SELECTED and ACTIVE
+	
 Tue Sep 18 23:51:49 2001  Tim Janik  <timj@gtk.org>
 
 	* configure.in: up version to 1.3.8, interface age 0,
