@@ -1,6 +1,6 @@
 # Romanian translation for gtk+
 # Copyright (C) 1999 - 2005 Free Software Foundation, Inc.
-# Dan Damian <dand@dnttm.ro>, 1999, 2000.
+# Dan Damian <dand@gnome.ro>, 1999, 2000.
 # Marius Andreiana <marius galuna.ro>, 2001, 2002.
 # Mişu Moldovan <dumol@go.ro>, 2003, 2004, 2005.
 #
@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk-2-6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-03-02 20:54+0100\n"
-"PO-Revision-Date: 2005-03-02 23:32+0200\n"
+"POT-Creation-Date: 2005-03-05 22:07+0100\n"
+"PO-Revision-Date: 2005-03-06 00:58+0200\n"
 "Last-Translator: Mişu Moldovan <dumol@go.ro>\n"
 "Language-Team: Română <gnomero-list@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -204,7 +204,7 @@ msgstr "Format imagine BMP"
 msgid "Failure reading GIF: %s"
 msgstr "Nu am reuşit să citesc fişierul GIF: %s"
 
-#: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1435 gdk-pixbuf/io-gif.c:1596
+#: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1463 gdk-pixbuf/io-gif.c:1624
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "Din fişierul GIF lipseau o parte din date (poate a fost trunchiat?)"
 
@@ -229,25 +229,29 @@ msgstr "Am întâlnit cod incorect"
 msgid "Circular table entry in GIF file"
 msgstr "Intrare circulară în tabel în fişierul GIF"
 
-#: gdk-pixbuf/io-gif.c:862 gdk-pixbuf/io-gif.c:1423 gdk-pixbuf/io-gif.c:1469
-#: gdk-pixbuf/io-gif.c:1584
+#: gdk-pixbuf/io-gif.c:862 gdk-pixbuf/io-gif.c:1451 gdk-pixbuf/io-gif.c:1497
+#: gdk-pixbuf/io-gif.c:1612
 msgid "Not enough memory to load GIF file"
 msgstr "Memorie insuficientă pentru a încărca fişierul GIF"
 
-#: gdk-pixbuf/io-gif.c:1088
+#: gdk-pixbuf/io-gif.c:947
+msgid "Not enough memory to composite a frame in GIF file"
+msgstr "Memorie insuficientă pentru a compune un cadru în fişierul GIF"
+
+#: gdk-pixbuf/io-gif.c:1116
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "Fişierul imagine GIF este corupt (compresie LZW incorectă)"
 
-#: gdk-pixbuf/io-gif.c:1138
+#: gdk-pixbuf/io-gif.c:1166
 msgid "File does not appear to be a GIF file"
 msgstr "Fişierul nu pare a fi de tip GIF"
 
-#: gdk-pixbuf/io-gif.c:1150
+#: gdk-pixbuf/io-gif.c:1178
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "Versiunea %s a formatului GIF nu este suportată"
 
-#: gdk-pixbuf/io-gif.c:1259
+#: gdk-pixbuf/io-gif.c:1287
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
@@ -255,11 +259,11 @@ msgstr ""
 "Imaginea GIF nu are o hartă globală de culoare şi un cadru al său nu are "
 "hartă locală de culoare."
 
-#: gdk-pixbuf/io-gif.c:1491
+#: gdk-pixbuf/io-gif.c:1519
 msgid "GIF image was truncated or incomplete."
 msgstr "Imaginea GIF era trunchiată sau incompletă."
 
-#: gdk-pixbuf/io-gif.c:1643
+#: gdk-pixbuf/io-gif.c:1671
 msgid "The GIF image format"
 msgstr "Formatul de imagine GIF"
 
@@ -461,8 +465,9 @@ msgstr "Fragmentele de text dintr-un PNG trebuie să fie caractere ASCII."
 #: gdk-pixbuf/io-png.c:854
 #, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr "Valoarea fragmentului de text PNG %s nu poate fi convertită la "
-"codarea ISO-8859-1."
+msgstr ""
+"Valoarea fragmentului de text PNG %s nu poate fi convertită la codarea ISO-"
+"8859-1."
 
 #: gdk-pixbuf/io-png.c:994
 msgid "The PNG image format"
@@ -698,35 +703,39 @@ msgstr "Formatul de imagine XBM"
 msgid "No XPM header found"
 msgstr "Antetul XPM nu a fost găsit"
 
-#: gdk-pixbuf/io-xpm.c:1237
+#: gdk-pixbuf/io-xpm.c:1238
+msgid "Invalid XPM header"
+msgstr "Antet XPM invalid"
+
+#: gdk-pixbuf/io-xpm.c:1246
 msgid "XPM file has image width <= 0"
 msgstr "Fişierul XPM are lăţimea imaginii negativă"
 
-#: gdk-pixbuf/io-xpm.c:1245
+#: gdk-pixbuf/io-xpm.c:1254
 msgid "XPM file has image height <= 0"
 msgstr "Fişierul XPM are înălţimea imaginii negativă"
 
-#: gdk-pixbuf/io-xpm.c:1253
+#: gdk-pixbuf/io-xpm.c:1262
 msgid "XPM has invalid number of chars per pixel"
 msgstr "XPM are un număr invalid de caractere/pixel"
 
-#: gdk-pixbuf/io-xpm.c:1260
+#: gdk-pixbuf/io-xpm.c:1269
 msgid "XPM file has invalid number of colors"
 msgstr "Fişierul XPM are un număr invalid de culori"
 
-#: gdk-pixbuf/io-xpm.c:1272 gdk-pixbuf/io-xpm.c:1281 gdk-pixbuf/io-xpm.c:1333
+#: gdk-pixbuf/io-xpm.c:1281 gdk-pixbuf/io-xpm.c:1290 gdk-pixbuf/io-xpm.c:1342
 msgid "Cannot allocate memory for loading XPM image"
 msgstr "Nu am reuşit să aloc memorie pentru încărcarea imaginii XPM"
 
-#: gdk-pixbuf/io-xpm.c:1295
+#: gdk-pixbuf/io-xpm.c:1304
 msgid "Cannot read XPM colormap"
 msgstr "Nu am reuşit să citesc harta de culoare XPM"
 
-#: gdk-pixbuf/io-xpm.c:1524
+#: gdk-pixbuf/io-xpm.c:1533
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "Nu am reuşit să scriu un fişier temporar la încărcarea imaginii XPM"
 
-#: gdk-pixbuf/io-xpm.c:1559
+#: gdk-pixbuf/io-xpm.c:1568
 msgid "The XPM image format"
 msgstr "Formatul de imagine XPM"
 
@@ -2204,4 +2213,3 @@ msgstr "Metodă de intrare X"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Nu putut obţine detalii despre fişierul „%s”: %s"
-
