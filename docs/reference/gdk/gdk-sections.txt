@@ -665,6 +665,7 @@ gdk_window_get_internal_paint_info
 gdk_window_set_user_data
 gdk_window_set_override_redirect
 gdk_window_set_accept_focus
+gdk_window_set_focus_on_map
 gdk_window_add_filter
 gdk_window_remove_filter
 GdkFilterFunc

@@ -4419,6 +4419,7 @@ gtk_window_set_type_hint
 gtk_window_set_skip_taskbar_hint
 gtk_window_set_skip_pager_hint
 gtk_window_set_accept_focus
+gtk_window_set_focus_on_map
 gtk_window_get_decorated
 gtk_window_get_default_icon_list
 gtk_window_get_default_size
@@ -4438,6 +4439,7 @@ gtk_window_get_type_hint
 gtk_window_get_skip_taskbar_hint
 gtk_window_get_skip_pager_hint
 gtk_window_get_accept_focus
+gtk_window_get_focus_on_map
 gtk_window_move
 gtk_window_parse_geometry
 gtk_window_reshow_with_initial_size

@@ -189,6 +189,7 @@ gdk_window_new (GdkWindow     *parent,
   private->parent = parent_private;
 
   private->accept_focus = TRUE;
+  private->focus_on_map = TRUE;
 
   if (attributes_mask & GDK_WA_X)
     x = attributes->x;
@@ -2006,6 +2007,22 @@ gdk_window_set_accept_focus (GdkWindow *window,
 
   if (private->accept_focus != accept_focus)
     private->accept_focus = accept_focus;
+}
+
+void
+gdk_window_set_focus_on_map (GdkWindow *window,
+			     gboolean focus_on_map)
+{
+  GdkWindowObject *private;
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  private = (GdkWindowObject *)window;  
+  
+  focus_on_map = focus_on_map != FALSE;
+
+  if (private->focus_on_map != focus_on_map)
+    private->focus_on_map = focus_on_map;
 }
 
 void          

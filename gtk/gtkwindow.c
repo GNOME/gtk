@@ -75,6 +75,7 @@ enum {
   PROP_SKIP_TASKBAR_HINT,
   PROP_SKIP_PAGER_HINT,
   PROP_ACCEPT_FOCUS,
+  PROP_FOCUS_ON_MAP,
   PROP_DECORATED,
   PROP_GRAVITY,
   
@@ -162,6 +163,7 @@ struct _GtkWindowPrivate
   guint skips_taskbar : 1;
   guint skips_pager : 1;
   guint accept_focus : 1;
+  guint focus_on_map : 1;
 };
 
 static void gtk_window_class_init         (GtkWindowClass    *klass);
@@ -602,6 +604,21 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                          G_PARAM_READWRITE));  
 
   /**
+   * GtkWindow:focus-on-map-hint:
+   *
+   * Whether the window should receive the input focus when mapped.
+   *
+   * Since: 2.6
+   */
+  g_object_class_install_property (gobject_class,
+				   PROP_FOCUS_ON_MAP,
+				   g_param_spec_boolean ("focus_on_map",
+                                                         P_("Focus on map"),
+                                                         P_("TRUE if the window should receive the input focus when mapped."),
+                                                         TRUE,
+                                                         G_PARAM_READWRITE));  
+
+  /**
    * GtkWindow:decorated:
    *
    * Whether the window should be decorated by the window manager.
@@ -764,6 +781,7 @@ gtk_window_init (GtkWindow *window)
   window->screen = gdk_screen_get_default ();
 
   priv->accept_focus = TRUE;
+  priv->focus_on_map = TRUE;
 
   colormap = _gtk_widget_peek_colormap ();
   if (colormap)
@@ -859,6 +877,10 @@ gtk_window_set_property (GObject      *object,
       gtk_window_set_accept_focus (window,
 				   g_value_get_boolean (value));
       break;
+    case PROP_FOCUS_ON_MAP:
+      gtk_window_set_focus_on_map (window,
+				   g_value_get_boolean (value));
+      break;
     case PROP_DECORATED:
       gtk_window_set_decorated (window, g_value_get_boolean (value));
       break;
@@ -951,6 +973,10 @@ gtk_window_get_property (GObject      *object,
     case PROP_ACCEPT_FOCUS:
       g_value_set_boolean (value,
                            gtk_window_get_accept_focus (window));
+      break;
+    case PROP_FOCUS_ON_MAP:
+      g_value_set_boolean (value,
+                           gtk_window_get_focus_on_map (window));
       break;
     case PROP_DECORATED:
       g_value_set_boolean (value, gtk_window_get_decorated (window));
@@ -2145,6 +2171,62 @@ gtk_window_get_accept_focus (GtkWindow *window)
   priv = GTK_WINDOW_GET_PRIVATE (window);
 
   return priv->accept_focus;
+}
+
+/**
+ * gtk_window_set_focus_on_map:
+ * @window: a #GtkWindow 
+ * @setting: %TRUE to let this window receive input focus on map
+ * 
+ * Windows may set a hint asking the desktop environment not to receive
+ * the input focus when the window is mapped.  This function sets this
+ * hint.
+ * 
+ * Since: 2.6
+ **/
+void
+gtk_window_set_focus_on_map (GtkWindow *window,
+			     gboolean   setting)
+{
+  GtkWindowPrivate *priv;
+
+  g_return_if_fail (GTK_IS_WINDOW (window));
+  
+  priv = GTK_WINDOW_GET_PRIVATE (window);
+
+  setting = setting != FALSE;
+
+  if (priv->focus_on_map != setting)
+    {
+      priv->focus_on_map = setting;
+      if (GTK_WIDGET_REALIZED (window))
+        gdk_window_set_focus_on_map (GTK_WIDGET (window)->window,
+				     priv->focus_on_map);
+      g_object_notify (G_OBJECT (window), "focus_on_map");
+    }
+}
+
+/**
+ * gtk_window_get_focus_on_map:
+ * @window: a #GtkWindow
+ * 
+ * Gets the value set by gtk_window_set_focus_on_map().
+ * 
+ * Return value: %TRUE if window should receive the input focus when
+ * mapped.
+ * 
+ * Since: 2.6
+ **/
+gboolean
+gtk_window_get_focus_on_map (GtkWindow *window)
+{
+  GtkWindowPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
+  
+  priv = GTK_WINDOW_GET_PRIVATE (window);
+
+  return priv->focus_on_map;
 }
 
 /**
@@ -3915,6 +3997,11 @@ gtk_window_realize (GtkWidget *widget)
     gdk_window_set_accept_focus (widget->window, TRUE);
   else
     gdk_window_set_accept_focus (widget->window, FALSE);
+
+  if (gtk_window_get_focus_on_map (window))
+    gdk_window_set_focus_on_map (widget->window, TRUE);
+  else
+    gdk_window_set_focus_on_map (widget->window, FALSE);
   
   if (window->modal)
     gdk_window_set_modal_hint (widget->window, TRUE);

@@ -750,6 +750,15 @@ Registers a window as a potential drop destination.
 @accept_focus: 
 
 
+<!-- ##### FUNCTION gdk_window_set_focus_on_map ##### -->
+<para>
+
+</para>
+
+@window: 
+@focus_on_map: 
+
+
 <!-- ##### FUNCTION gdk_window_add_filter ##### -->
 <para>
 

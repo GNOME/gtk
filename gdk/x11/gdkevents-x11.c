@@ -815,8 +815,8 @@ set_user_time (GdkWindow *window,
    * to update the latest user interaction time.
    */
   if (gdk_event_get_time (event) != GDK_CURRENT_TIME)
-    _gdk_x11_window_set_user_time (gdk_window_get_toplevel (window),
-				   gdk_event_get_time (event));
+    gdk_x11_window_set_user_time (gdk_window_get_toplevel (window),
+                                  gdk_event_get_time (event));
 }
 
 static gboolean

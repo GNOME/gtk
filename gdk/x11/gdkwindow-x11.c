@@ -458,8 +458,10 @@ setup_toplevel_window (GdkWindow *window, GdkWindow *parent)
 		   XA_WINDOW, 32, PropModeReplace,
 		   (guchar *) &GDK_DISPLAY_X11 (screen_x11->display)->leader_window, 1);
 
-  if (GDK_DISPLAY_X11 (screen_x11->display)->user_time != 0)
-    _gdk_x11_window_set_user_time (window, GDK_DISPLAY_X11 (screen_x11->display)->user_time);
+  if (!obj->focus_on_map)
+    gdk_x11_window_set_user_time(window, 0);
+  else if (GDK_DISPLAY_X11 (screen_x11->display)->user_time != 0)
+    gdk_x11_window_set_user_time(window, GDK_DISPLAY_X11 (screen_x11->display)->user_time);
 }
 
 /**
@@ -543,6 +545,7 @@ gdk_window_new (GdkWindow     *parent,
   private->parent = (GdkWindowObject *)parent;
 
   private->accept_focus = TRUE;
+  private->focus_on_map = TRUE;
 
   xattributes_mask = 0;
   
@@ -3312,7 +3315,44 @@ gdk_window_set_accept_focus (GdkWindow *window,
 }
 
 /**
- * _gdk_x11_window_set_user_time:
+ * gdk_window_set_focus_on_map:
+ * @window: a toplevel #GdkWindow
+ * @focus_on_map: %TRUE if the window should receive input focus when mapped
+ *
+ * Setting @focus_on_map to %FALSE hints the desktop environment that the
+ * window doesn't want to receive input focus when it is mapped.  
+ * focus_on_map should be turned off for windows that aren't triggered
+ * interactively (such as popups from network activity).
+ *
+ * On X, it is the responsibility of the window manager to interpret
+ * this hint. Window managers following the freedesktop.org window
+ * manager extension specification should respect it.
+ *
+ * Since: 2.6 
+ **/
+void
+gdk_window_set_focus_on_map (GdkWindow *window,
+			     gboolean focus_on_map)
+{
+  GdkWindowObject *private;
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  private = (GdkWindowObject *)window;  
+  
+  focus_on_map = focus_on_map != FALSE;
+
+  if (private->focus_on_map != focus_on_map)
+    {
+      private->focus_on_map = focus_on_map;
+
+      if ((!GDK_WINDOW_DESTROYED (window)) && (!private->focus_on_map))
+	gdk_x11_window_set_user_time (window, 0);
+    }
+}
+
+/**
+ * gdk_x11_window_set_user_time:
  * @window: A toplevel #GdkWindow
  * @timestamp: An XServer timestamp to which the property should be set
  *
@@ -3328,10 +3368,12 @@ gdk_window_set_accept_focus (GdkWindow *window,
  * Note that this property is automatically updated by GDK, so this
  * function should only be used by applications which handle input
  * events bypassing GDK.
+ *
+ * Since: 2.6
  **/
 void
-_gdk_x11_window_set_user_time (GdkWindow *window,
-			       guint32    timestamp)
+gdk_x11_window_set_user_time (GdkWindow *window,
+                              guint32    timestamp)
 {
   GdkDisplay *display;
   GdkDisplayX11 *display_x11;

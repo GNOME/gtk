@@ -736,6 +736,15 @@ Deprecated alias for gtk_window_set_position().
 @setting: 
 
 
+<!-- ##### FUNCTION gtk_window_set_focus_on_map ##### -->
+<para>
+
+</para>
+
+@window: 
+@setting: 
+
+
 <!-- ##### FUNCTION gtk_window_get_decorated ##### -->
 <para>
 

@@ -1,3 +1,38 @@
+2004-05-05  Elijah Newren  <newren@math.utah.edu>
+
+	Changes to support do-not-focus-on-map hint in conjunction with
+	_NET_WM_USER_TIME (#115650):
+
+	* gdk/gdkwindow.h (struct _GdkWindowObject): Add a new boolean
+	field focus_on_map
+	
+	* gdk/gdkwindow.h (gdk_window_set_accept_focus): New function to
+	set it.
+
+	* gtk/gtkwindow.[hc]: Add a boolean property "focus_on_map"
+	and gtk_window_get_focus_on_map() and gtk_window_set_focus_on_map().
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_new): 
+	* gdk/linux-fb/gdkwindow-fb.c (gdk_window_new): 
+	* gdk/x11/gdkwindow-x11.c (gdk_window_new):
+	Initialize the focus_on_map field to TRUE.
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_set_focus_on_map): 
+	* gdk/linux-fb/gdkwindow-fb.c (gdk_window_set_focus_on_map): 
+	* gdk/x11/gdkwindow-x11.c (gdk_window_set_focus_on_map): 
+	* gdk/x11/gdkwindow-x11.c (setup_toplevel_window):
+	Implementations for the various backends. The Win32 and linux-fb
+	implementations set the focus_on_map field, but don't use it yet
+	to actually implement noinput windows. The X implementation sets
+	_NET_WM_USER_TIME to 0 if focus_on_map is FALSE (see the EWMH).
+
+	* gdk/x11/gdkwindow-x11.h: 
+	* gdk/x11/gdkevents-x11.c (set_user_time): 
+	* gdk/x11/gdkinput-x11.c (_gdk_input_common_other_event): 
+	* gdk/x11/gdkwindow-x11.c (gdk_x11_window_set_user_time): 
+	s/_gdk_x11_window_set_user_time/gdk_x11_window_set_user_time/,
+	since we want that function to be part of the public API.
+
 Wed May  5 22:20:21 2004  Matthias Clasen  <maclas@gmx.de>
 
 	Merge from 2.4:

@@ -262,6 +262,7 @@ struct _GdkWindowObject
   guint destroyed : 2;
 
   guint accept_focus : 1;
+  guint focus_on_map : 1;
   
   GdkEventMask event_mask;
 };
@@ -321,6 +322,8 @@ void          gdk_window_set_override_redirect (GdkWindow     *window,
                                                 gboolean       override_redirect);
 void          gdk_window_set_accept_focus      (GdkWindow     *window,
 					        gboolean       accept_focus);
+void          gdk_window_set_focus_on_map      (GdkWindow     *window,
+					        gboolean       focus_on_map);
 void          gdk_window_add_filter            (GdkWindow     *window,
                                                 GdkFilterFunc  function,
                                                 gpointer       data);

@@ -124,7 +124,7 @@ struct _GdkToplevelX11
 GType gdk_window_impl_x11_get_type (void);
 
 GdkToplevelX11 *_gdk_x11_window_get_toplevel  (GdkWindow *window);
-void            _gdk_x11_window_set_user_time (GdkWindow *window,
+void             gdk_x11_window_set_user_time (GdkWindow *window,
                                                guint32    timestamp);
 
 G_END_DECLS
