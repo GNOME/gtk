@@ -1111,6 +1111,48 @@ gtk_draw_handle  (GtkStyle      *style,
 }
 
 /* Default functions */
+void
+gtk_style_apply_default_pixmap(GtkStyle     *style,
+			       GdkWindow    *window, 
+			       GtkStateType  state_type, 
+			       GdkRectangle *area, 
+			       gint x, 
+			       gint y, 
+			       gint width, 
+			       gint height)
+{
+  GdkRectangle new_rect, old_rect;
+  GdkGC       *gc;
+
+  if ((!style->bg_pixmap[state_type]) ||
+      (gdk_window_get_type(window) == GDK_WINDOW_PIXMAP))
+    {
+      gc = style->bg_gc[state_type];
+      if ((area) && (gdk_rectangle_intersect(area, &old_rect, &new_rect)))
+	gdk_draw_rectangle(window, gc, TRUE, 
+			   new_rect.x, new_rect.y, new_rect.width, new_rect.height);
+      else
+	gdk_draw_rectangle(window, gc, TRUE, 
+			   x, y, width, height);
+    }
+  else
+    {
+      if (style->bg_pixmap[state_type] == (GdkPixmap*) GDK_PARENT_RELATIVE)
+	gdk_window_set_back_pixmap(window, NULL, TRUE);
+      else
+	gdk_window_set_back_pixmap(window, style->bg_pixmap[state_type], FALSE);
+      
+      old_rect.x = x;
+      old_rect.y = y;
+      old_rect.width = width;
+      old_rect.height = height;
+      
+      if ((area) && (gdk_rectangle_intersect(area, &old_rect, &new_rect)))
+	gdk_window_clear_area(window, new_rect.x, new_rect.y, new_rect.width, new_rect.height);
+      else
+	gdk_window_clear_area(window, x, y, width, height);
+    }
+}
 
 static void
 gtk_default_draw_hline (GtkStyle     *style,
@@ -1217,8 +1259,8 @@ gtk_default_draw_shadow (GtkStyle      *style,
 			 gint           width,
 			 gint           height)
 {
-  GdkGC *gc1;
-  GdkGC *gc2;
+  GdkGC *gc1 = NULL;
+  GdkGC *gc2 = NULL;
   gint thickness_light;
   gint thickness_dark;
   gint i;
@@ -2062,12 +2104,6 @@ gtk_default_draw_box     (GtkStyle      *style,
 			  gint           width,
 			  gint           height)
 {
-   GdkGC *gc1;
-   GdkGC *gc2;
-   gint thickness_light;
-   gint thickness_dark;
-   gint i;
-   
    g_return_if_fail (style != NULL);
    g_return_if_fail (window != NULL);
    
@@ -2077,36 +2113,24 @@ gtk_default_draw_box     (GtkStyle      *style,
      gdk_window_get_size (window, &width, NULL);
    else if (height == -1)
      gdk_window_get_size (window, NULL, &height);
-   
-   switch (shadow_type)
-     {
-      case GTK_SHADOW_NONE:
-	gc1 = NULL;
-	gc2 = NULL;
-	break;
-      case GTK_SHADOW_IN:
-      case GTK_SHADOW_ETCHED_IN:
-	gc1 = style->light_gc[state_type];
-	gc2 = style->dark_gc[state_type];
-	break;
-      case GTK_SHADOW_OUT:
-      case GTK_SHADOW_ETCHED_OUT:
-	gc1 = style->dark_gc[state_type];
-	gc2 = style->light_gc[state_type];
-	break;
-          }
-   
-   if (area)
-     {
-	gdk_gc_set_clip_rectangle (style->bg_gc[state_type], area);
-     }
-   gdk_draw_rectangle(window, style->bg_gc[state_type], TRUE,
-		      x, y, width, height);
-   if (area)
-     {
-	gdk_gc_set_clip_rectangle (style->bg_gc[state_type], NULL);
-     }
-   gtk_paint_shadow (style, window, state_type, shadow_type, area, widget, detail,
+
+  if ((!style->bg_pixmap[state_type]) || 
+      (gdk_window_get_type(window) == GDK_WINDOW_PIXMAP))
+    {
+      if (area)
+	{
+	  gdk_gc_set_clip_rectangle (style->bg_gc[state_type], area);
+	}
+      gdk_draw_rectangle(window, style->bg_gc[state_type], TRUE,
+			 x, y, width, height);
+      if (area)
+	{
+	  gdk_gc_set_clip_rectangle (style->bg_gc[state_type], NULL);
+	}
+    }
+  else
+    gtk_style_apply_default_pixmap(style, window, state_type, area, x, y, width, height);
+  gtk_paint_shadow (style, window, state_type, shadow_type, area, widget, detail,
 		    x, y, width, height);
 }
 
@@ -2143,20 +2167,25 @@ gtk_default_draw_flat_box (GtkStyle      *style,
      gc1 = style->bg_gc[GTK_STATE_SELECTED];
    else if ((detail) && (!strcmp("viewportbin",detail)))
      gc1 = style->bg_gc[GTK_STATE_NORMAL];
-   if (area)
-     {
-	gdk_gc_set_clip_rectangle (gc1, area);
-     }
-   gdk_draw_rectangle (window, gc1, TRUE,
-		       x, y, width, height);
-   if ((detail) && (!strcmp("tooltip",detail)))
-     gdk_draw_rectangle (window, style->black_gc, FALSE,
-			 x, y, width - 1, height - 1);
-     
-   if (area)
-     {
-	gdk_gc_set_clip_rectangle (gc1, NULL);
-     }
+  if ((!style->bg_pixmap[state_type]) || (gc1 != style->bg_gc[state_type]) ||
+      (gdk_window_get_type(window) == GDK_WINDOW_PIXMAP))
+    {
+      if (area)
+	{
+	  gdk_gc_set_clip_rectangle (gc1, area);
+	}
+      gdk_draw_rectangle (window, gc1, TRUE,
+			  x, y, width, height);
+      if ((detail) && (!strcmp("tooltip",detail)))
+	gdk_draw_rectangle (window, style->black_gc, FALSE,
+			    x, y, width - 1, height - 1);
+      if (area)
+	{
+	  gdk_gc_set_clip_rectangle (gc1, NULL);
+	}
+    }
+  else
+    gtk_style_apply_default_pixmap(style, window, state_type, area, x, y, width, height);
 }
 
 static void 
@@ -2260,7 +2289,7 @@ static void gtk_default_draw_shadow_gap (GtkStyle      *style,
 					 gint           gap_x,
 					 gint           gap_width)
 {
-   GdkRectangle rect, new_area;
+   GdkRectangle rect;
    
    g_return_if_fail (style != NULL);
    g_return_if_fail (window != NULL);
@@ -2300,24 +2329,9 @@ static void gtk_default_draw_shadow_gap (GtkStyle      *style,
 	rect.width = 2;
 	rect.height = gap_width;
      }
-   
-   if (area)
-     {
-	if (gdk_rectangle_intersect(area, &rect, &new_area))
-	  {
-	     gdk_window_clear_area(window, new_area.x, new_area.y,
-				   new_area.width, new_area.height);
-	  }
-     }
-   else
-     {
-	new_area.x = rect.x;
-	new_area.y = rect.y;
-	new_area.width = rect.width;
-	new_area.height = rect.height;
-	gdk_window_clear_area(window, new_area.x, new_area.y,
-			      new_area.width, new_area.height);
-     }
+
+  gtk_style_apply_default_pixmap(style, window, state_type, area,
+				 rect.x, rect.y, rect.width, rect.height);
 }
 
 static void gtk_default_draw_box_gap (GtkStyle      *style,
@@ -2335,77 +2349,49 @@ static void gtk_default_draw_box_gap (GtkStyle      *style,
 				      gint           gap_x,
 				      gint           gap_width)
 {
-   GdkPoint    pt[6];
+   GdkRectangle rect;
 
    g_return_if_fail (style != NULL);
    g_return_if_fail (window != NULL);
 
-   if (gap_side == 0)
-     /* top */
+   gtk_paint_box (style, window, state_type, shadow_type, area, widget, detail, 
+		  x, y, width, height);
+
+  if (gap_side == 0)
+       /* top */
      {
-	pt[0].x = x + gap_x;
-	pt[0].y = y;
-	pt[1].x = x;
-	pt[1].y = y;
-	pt[2].x = x;
-	pt[2].y = y + height - 1;
-	pt[3].x = x + width - 1;
-	pt[3].y = y + height - 1;
-	pt[4].x = x + width - 1;
-	pt[4].y = y;
-	pt[5].x = x + gap_x + gap_width;
-	pt[5].y = y;
+	rect.x = x + gap_x;
+	rect.y = y;
+	rect.width = gap_width;
+	rect.height = 2;
      }
    else if (gap_side == 1)
      /* bottom */
      {
-	pt[5].x = x + gap_x;
-	pt[5].y = y + height - 1;
-	pt[4].x = x;
-	pt[4].y = y +  height - 1;
-	pt[3].x = x;
-	pt[3].y = y;
-	pt[2].x = x + width - 1;
-	pt[2].y = y;
-	pt[1].x = x + width - 1;
-	pt[1].y = y + height - 1;
-	pt[0].x = x + gap_x + gap_width;
-	pt[0].y = y + height - 1;
+	rect.x = x+ gap_x;
+	rect.y = y + height - 2;
+	rect.width = gap_width;
+	rect.height = 2;
      }
    else if (gap_side == 2)
      /* left */
      {
-	pt[5].x = x;
-	pt[5].y = y + gap_x;
-	pt[4].x = x;
-	pt[4].y = y;
-	pt[3].x = x + width - 1;
-	pt[3].y = y;
-	pt[2].x = x + width - 1;
-	pt[2].y = y + height - 1;
-	pt[1].x = x;
-	pt[1].y = y + height - 1;
-	pt[0].x = x;
-	pt[0].y = y + gap_x + gap_width;
+	rect.x = x;
+	rect.y = y + gap_x;
+	rect.width = 2;
+	rect.height = gap_width;
      }
    else if (gap_side == 3)
      /* right */
      {
-	pt[0].x = x + width - 1;
-	pt[0].y = y + gap_x;
-	pt[1].x = x + width - 1;
-	pt[1].y = y;
-	pt[2].x = x;
-	pt[2].y = y;
-	pt[3].x = x;
-	pt[3].y = y + height - 1;
-	pt[4].x = x + width - 1;
-	pt[4].y = y + height - 1;
-	pt[5].x = x + width - 1;
-	pt[5].y = y + gap_x + gap_width;
+	rect.x = x + width - 2;
+	rect.y = y + gap_x;
+	rect.width = 2;
+	rect.height = gap_width;
      }
-   
-   gtk_paint_polygon(style, window, state_type, shadow_type, area, widget, detail, pt, 6, TRUE);
+
+  gtk_style_apply_default_pixmap(style, window, state_type, area,
+				 rect.x, rect.y, rect.width, rect.height);
 }
 
 static void gtk_default_draw_extension (GtkStyle      *style,
@@ -2421,61 +2407,49 @@ static void gtk_default_draw_extension (GtkStyle      *style,
 					gint           height,
 					gint           gap_side)
 {
-   GdkPoint    pt[4];
+   GdkRectangle rect;
    
    g_return_if_fail (style != NULL);
    g_return_if_fail (window != NULL);
-   
+
+   gtk_paint_box (style, window, state_type, shadow_type, area, widget, detail, 
+		  x, y, width, height);
+
    if (gap_side == 0)
-     /* top */
+       /* top */
      {
-	pt[0].x = x;
-	pt[0].y = y;
-	pt[1].x = x;
-	pt[1].y = y + height - 1;
-	pt[2].x = x + width - 1;
-	pt[2].y = y + height - 1;
-	pt[3].x = x + width - 1;
-	pt[3].y = y;
+	rect.x = x + style->klass->xthickness;
+	rect.y = y;
+	rect.width = width - style->klass->xthickness * 2;
+	rect.height = style->klass->ythickness;
      }
    else if (gap_side == 1)
      /* bottom */
      {
-	pt[3].x = x;
-	pt[3].y = y + height - 1;
-	pt[2].x = x;
-	pt[2].y = y;
-	pt[1].x = x + width - 1;
-	pt[1].y = y;
-	pt[0].x = x + width - 1;
-	pt[0].y = y + height - 1;
+	rect.x = x + style->klass->xthickness;
+	rect.y = y + height - style->klass->ythickness; 
+	rect.width = width - style->klass->xthickness * 2;
+	rect.height = style->klass->ythickness;
      }
    else if (gap_side == 2)
      /* left */
      {
-	pt[3].x = x;
-	pt[3].y = y;
-	pt[2].x = x + width - 1;
-	pt[2].y = y;
-	pt[1].x = x + width - 1;
-	pt[1].y = y + height - 1;
-	pt[0].x = x;
-	pt[0].y = y + height - 1;
+	rect.x = x;
+	rect.y = y + style->klass->ythickness;
+	rect.width = style->klass->xthickness;
+	rect.height = height - style->klass->ythickness * 2;
      }
    else if (gap_side == 3)
      /* right */
      {
-	pt[0].x = x + width - 1;
-	pt[0].y = y;
-	pt[1].x = x;
-	pt[1].y = y;
-	pt[2].x = x;
-	pt[2].y = y + height - 1;
-	pt[3].x = x + width - 1;
-	pt[3].y = y + height - 1;
+	rect.x = x + width - style->klass->xthickness;
+	rect.y = y + style->klass->ythickness;
+	rect.width = style->klass->xthickness;
+	rect.height = height - style->klass->ythickness * 2;
      }
-   
-   gtk_paint_polygon(style, window, state_type, GTK_SHADOW_OUT, area, widget, detail, pt, 4, TRUE); 
+
+  gtk_style_apply_default_pixmap(style, window, state_type, area,
+				 rect.x, rect.y, rect.width, rect.height);
 }
 
 static void gtk_default_draw_focus   (GtkStyle      *style,
@@ -2615,8 +2589,8 @@ static void gtk_default_draw_handle  (GtkStyle      *style,
 				      gint           height,
 				      GtkOrientation orientation)
 {
-   int xx, yy;
-   int xthick, ythick;
+   gint xx, yy;
+   gint xthick, ythick;
    GdkGC *light_gc, *dark_gc;
    GdkRectangle dest;
    

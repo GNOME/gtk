@@ -352,7 +352,15 @@ void	  gtk_style_unref	   (GtkStyle	 *style);
 void	  gtk_style_set_background (GtkStyle	 *style,
 				    GdkWindow	 *window,
 				    GtkStateType  state_type);
-
+void      gtk_style_apply_default_pixmap(GtkStyle     *style,
+					 GdkWindow    *window, 
+					 GtkStateType  state_type, 
+					 GdkRectangle *area, 
+					 gint x, 
+					 gint y, 
+					 gint width, 
+					 gint height);
+      
 void gtk_draw_hline   (GtkStyle	     *style,
 		       GdkWindow     *window,
 		       GtkStateType   state_type,

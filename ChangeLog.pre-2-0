@@ -1,3 +1,8 @@
+Thu Jul 30 19:10:42 EDT 1998 The Rasterman <raster@redhat.com>
+	* Fixed defautl drawing code to no longer clobber the original style
+	  pixmap bgs as it did and added a helper funciton og gtkstyle.c to
+	  help with this.
+
 Thu Jul 30 18:09:21 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkrc.c gtk/gtkstyle.c: More mm fixups

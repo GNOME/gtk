@@ -86,6 +86,10 @@ void	  gtk_rc_set_image_loader(GtkImageLoader loader);
 GdkPixmap *gtk_rc_load_image (GdkColormap *colormap,
 			      GdkColor    *transparent_color,
 			      const gchar *filename);
+gchar      *gtk_rc_find_pixmap_in_path (GScanner *scanner,
+					gchar    *pixmap_file);
+gchar      *gtk_rc_find_module_in_path (GScanner *scanner,
+					gchar    *module_file);
 
 /* private functions/definitions */
 typedef enum {
@@ -116,6 +120,7 @@ typedef enum {
   GTK_RC_TOKEN_RC,
   GTK_RC_TOKEN_HIGHEST,
   GTK_RC_TOKEN_ENGINE,
+  GTK_RC_TOKEN_MODULE_PATH,
   GTK_RC_TOKEN_LAST
 } GtkRcTokenType;
 

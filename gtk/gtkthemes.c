@@ -53,57 +53,63 @@ gtk_theme_engine_get (gchar          *name)
   if (!engine_hash)
     engine_hash = g_hash_table_new (g_str_hash, g_str_equal);
    
-  printf("init theme\n");
   /* get the library name for the theme */
   
   result = g_hash_table_lookup (engine_hash, name);
 
   if (!result)
     {
-      gchar fullname[1024];
-      void *library;
+       gchar fullname[1024];
+       gchar *engine_path;
+       void *library;
       
-      g_snprintf(fullname,1024,"%s/themes/lib%s.so",getenv("HOME"),name);
-  
-      /* load the lib */
+       g_snprintf (fullname, 1024, "lib%s.so", name);
+       engine_path = gtk_rc_find_module_in_path(NULL, fullname);
 
-      printf ("Loading Theme %s\n", fullname);
-
-      library = dlopen(fullname, RTLD_NOW);
-      if (!library) 
-	fputs(dlerror(),stderr);
-      else
-	{
-	  result = g_new (GtkThemeEnginePrivate, 1);
-	  
-	  result->refcount = 1;
-	  result->name = g_strdup (name);
-	  result->library = library;
-	  
-	  /* extract symbols from the lib */   
-	  result->init=dlsym(library, "theme_init");
-	  result->exit=dlsym(library ,"theme_exit");
-
-	  /* call the theme's init (theme_init) function to let it setup anything */   
-	  result->init((GtkThemeEngine *)result);
-	  
-	  g_hash_table_insert (engine_hash, name, result);
+       if (!engine_path)
+	 return NULL;
+       
+       /* load the lib */
+       
+       printf ("Loading Theme %s\n", engine_path);
+       
+       library = dlopen(engine_path, RTLD_NOW);
+       g_free(engine_path);
+       if (!library)
+	 g_error(dlerror());
+       else
+	 {
+	    result = g_new (GtkThemeEnginePrivate, 1);
+	    
+	    result->refcount = 1;
+	    result->name = g_strdup (name);
+	    result->library = library;
+	    
+	    /* extract symbols from the lib */   
+	    result->init=dlsym(library, "theme_init");
+	    result->exit=dlsym(library ,"theme_exit");
+	    
+	    /* call the theme's init (theme_init) function to let it */
+	    /* setup anything it needs to set up. */
+	    result->init((GtkThemeEngine *)result);
+	    
+	    g_hash_table_insert (engine_hash, name, result);
+	    
+	    return (GtkThemeEngine *)result;
+	 }
       
-	  return (GtkThemeEngine *)result;
-	}
-      
-      if (!strcmp (name, "sample"))
-	{
-	  result = g_new (GtkThemeEnginePrivate, 1);
-	  result->engine = sample_engine;
-	  result->refcount = 1;
-	  return (GtkThemeEngine *)result;
-	}
-      else
-	return NULL;
+       if (!strcmp (name, "sample"))
+	 {
+	    result = g_new (GtkThemeEnginePrivate, 1);
+	    result->engine = sample_engine;
+	    result->refcount = 1;
+	    return (GtkThemeEngine *)result;
+	 }
+       else
+	 return NULL;
     }
-
-  return (GtkThemeEngine *)result;
+   
+   return (GtkThemeEngine *)result;
 }
 
 void

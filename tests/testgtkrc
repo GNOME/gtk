@@ -11,17 +11,38 @@
 # widget_class <widget_class_set> style <style_name>
 
 # testgtkrc2 sets all the buttons in the main window to blue by default
-include "testgtkrc2"
+#include "testgtkrc2"
 
-pixmap_path "."
+module_path ".:/home/raster/themes"
+
+pixmap_path ".:/home/raster/themes"
 
 style "default"
 {
-#  fontset = "-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*,*"
-  font = "-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*"
-  engine "th" { 
-      name = "Sssaample"
-      }
+  font = "-adobe-helvetica-medium-r-normal--8-*-*-*-*-*-*-*"
+  bg_pixmap[NORMAL] = "marble.xpm"
+  engine "win95" 
+  {
+  }
+  
+#  engine "th" 
+#    { 
+#      image 
+#        {
+#          function = BOX
+#	  file     = "box_default.png"
+#          border   = { 2, 2, 2, 2 }
+#        }
+#     image {
+#        function    = BOX
+#	file        = "box_out_normal.png"
+#	recolorable = TRUE
+#        border      = { 2, 2, 2, 2 }
+#	detail      = "button"
+#	state       = NORMAL
+#	shadow      = OUT
+#      }
+#    }
 }
 
 style "window"
@@ -33,7 +54,7 @@ style "scale"
 {
   fg[NORMAL] = { 1.0, 0, 0 }
   bg[PRELIGHT] = { 1.0, 1.0, 0 }
-  bg_pixmap[NORMAL] = "<parent>"
+#  bg_pixmap[NORMAL] = "<parent>"
 }
 
 style "button"
@@ -51,7 +72,7 @@ style "toggle_button" = "button"
 {
   fg[NORMAL] = { 1.0, 0, 0 }
   fg[ACTIVE] = { 1.0, 0, 0 }
-  bg_pixmap[NORMAL] = "<parent>"
+#  bg_pixmap[NORMAL] = "<parent>"
 }
 
 style "text"
@@ -88,7 +109,7 @@ style "red-bar"
 # override testgtk2, introduce the green color in the button list
 style 'button_list' = 'button'
 {
-  font = "-adobe-helvetica-medium-r-normal--*-100-*-*-*-*-*-*"
+#  font = "-adobe-helvetica-medium-r-normal--*-100-*-*-*-*-*-*"
   bg[PRELIGHT] = { 0, 0.75, 0x00 }
 }
 widget "main window.*GtkScrolledWindow.*GtkButton*" style "button_list"

@@ -85,13 +85,15 @@ static guint	   gtk_rc_parse_engine		   (GScanner	 *scanner,
 						    GtkRcStyle	 *rc_style);
 static guint	   gtk_rc_parse_pixmap_path	   (GScanner	 *scanner);
 static void	   gtk_rc_parse_pixmap_path_string (gchar *pix_path);
-static char*	   gtk_rc_find_pixmap_in_path	   (GScanner	 *scanner,
-						    gchar *pixmap_file);
+static guint	   gtk_rc_parse_module_path	   (GScanner	 *scanner);
+static void	   gtk_rc_parse_module_path_string (gchar *mod_path);
 static guint	   gtk_rc_parse_path_pattern	   (GScanner     *scanner);
 static void        gtk_rc_clear_hash_node          (gpointer   key, 
 						    gpointer   data, 
 						    gpointer   user_data);
 static void        gtk_rc_clear_styles             (void);
+static void        gtk_rc_append_default_pixmap_path (void);
+static void        gtk_rc_append_default_module_path (void);
 
 
 
@@ -167,6 +169,7 @@ static struct
   { "rc", GTK_RC_TOKEN_RC },
   { "highest", GTK_RC_TOKEN_HIGHEST },
   { "engine", GTK_RC_TOKEN_ENGINE },
+  { "module_path", GTK_RC_TOKEN_MODULE_PATH },
 };
 
 static guint n_symbols = sizeof (symbols) / sizeof (symbols[0]);
@@ -179,6 +182,8 @@ static GSList *gtk_rc_sets_class = NULL;
 
 #define GTK_RC_MAX_PIXMAP_PATHS 128
 static gchar *pixmap_path[GTK_RC_MAX_PIXMAP_PATHS];
+#define GTK_RC_MAX_MODULE_PATHS 128
+static gchar *module_path[GTK_RC_MAX_MODULE_PATHS];
 
 /* The files we have parsed, to reread later if necessary */
 GSList *rc_files = NULL;
@@ -187,11 +192,67 @@ static GtkImageLoader image_loader = NULL;
 
 /* RC file handling */
 
+static void
+gtk_rc_append_default_pixmap_path(void)
+{
+  gchar *var, *path;
+  gint n;
+
+  var = getenv("GTK_INSTALL_PREFIX");
+  if (var)
+    {
+      path = g_malloc(strlen(var) + strlen("/share/gtk/themes") +1);
+      sprintf(path, "%s%s", var, "/share/gtk/themes");
+    }
+  else
+    {
+      path = g_malloc(strlen(GTK_INSTALL_PREFIX) + strlen("/share/gtk/themes") +1);
+      sprintf(path, "%s%s", GTK_INSTALL_PREFIX, "/share/gtk/themes");
+    }
+  
+  for (n = 0; pixmap_path[n]; n++) ;
+  if (n >= GTK_RC_MAX_MODULE_PATHS - 1)
+    return;
+  pixmap_path[n++] = g_strdup(path);
+  pixmap_path[n] = g_strdup(path);
+  g_free(path);
+}
+
+static void
+gtk_rc_append_default_module_path(void)
+{
+  gchar *var, *path;
+  gint n;
+
+  var = getenv("GTK_INSTALL_PREFIX");
+  if (var)
+    {
+      path = g_malloc(strlen(var) + strlen("/lib/gtk/themes/engines") +1);
+      sprintf(path, "%s%s", var, "/lib/gtk/themes/engines");
+    }
+  else
+    {
+      path = g_malloc(strlen(GTK_INSTALL_PREFIX) + strlen("/lib/gtk/themes/engines") +1);
+      sprintf(path, "%s%s", GTK_INSTALL_PREFIX, "/lib/gtk/themes/engines");
+    }
+  
+  for (n = 0; module_path[n]; n++) ;
+  if (n >= GTK_RC_MAX_MODULE_PATHS - 1)
+    return;
+  module_path[n++] = g_strdup(path);
+  module_path[n] = g_strdup(path);
+  g_free(path);
+}
+
 void
 gtk_rc_init (void)
 {
   rc_style_ht = g_hash_table_new ((GHashFunc) gtk_rc_style_hash,
 				  (GCompareFunc) gtk_rc_style_compare);
+  pixmap_path[0] = NULL;
+  module_path[0] = NULL;
+  gtk_rc_append_default_pixmap_path();
+  gtk_rc_append_default_module_path();
 }
 
 void
@@ -891,6 +952,9 @@ gtk_rc_parse_statement (GScanner *scanner)
     case GTK_RC_TOKEN_CLASS:
       return gtk_rc_parse_path_pattern (scanner);
 
+    case GTK_RC_TOKEN_MODULE_PATH:
+      return gtk_rc_parse_module_path (scanner);
+       
     default:
       g_scanner_get_next_token (scanner);
       return /* G_TOKEN_SYMBOL */ GTK_RC_TOKEN_STYLE;
@@ -1197,7 +1261,7 @@ gtk_rc_parse_bg_pixmap (GScanner   *scanner,
   return G_TOKEN_NONE;
 }
 
-static gchar*
+gchar*
 gtk_rc_find_pixmap_in_path (GScanner *scanner,
 			    gchar    *pixmap_file)
 {
@@ -1219,10 +1283,48 @@ gtk_rc_find_pixmap_in_path (GScanner *scanner,
       
       g_free (buf);
     }
+
+  if (scanner)
+    g_warning ("Unable to locate image file in pixmap_path: \"%s\" line %d",
+	       pixmap_file, scanner->line);
+  else
+    g_warning ("Unable to locate image file in pixmap_path: \"%s\"",
+	       pixmap_file);
+    
+  return NULL;
+}
+
+gchar*
+gtk_rc_find_module_in_path (GScanner *scanner,
+			    gchar    *module_file)
+{
+  gint i;
+  gint fd;
+  gchar *buf;
   
-  g_warning ("Unable to locate image file in pixmap_path: \"%s\" line %d",
-	     pixmap_file, scanner->line);
+  for (i = 0; (i < GTK_RC_MAX_MODULE_PATHS) && (module_path[i] != NULL); i++)
+    {
+      printf("path %s\n",module_path[i]);
+      buf = g_malloc (strlen (module_path[i]) + strlen (module_file) + 2);
+      sprintf (buf, "%s%c%s", module_path[i], '/', module_file);
+      
+      fd = open (buf, O_RDONLY);
+      if (fd >= 0)
+	{
+	  close (fd);
+	  return buf;
+	}
+      
+      g_free (buf);
+    }
   
+  if (scanner)
+    g_warning ("Unable to locate loadable module in module_path: \"%s\" line %d",
+	       module_file, scanner->line);
+  else
+    g_warning ("Unable to locate loadable module in module_path: \"%s\",",
+	       module_file);
+    
   return NULL;
 }
 
@@ -1586,6 +1688,63 @@ gtk_rc_parse_pixmap_path_string (gchar *pix_path)
 	}
     }
   g_free (buf);
+  gtk_rc_append_default_pixmap_path();
+}
+
+static guint
+gtk_rc_parse_module_path (GScanner *scanner)
+{
+  guint token;
+  
+  token = g_scanner_get_next_token (scanner);
+  if (token != GTK_RC_TOKEN_MODULE_PATH)
+    return GTK_RC_TOKEN_MODULE_PATH;
+  
+  token = g_scanner_get_next_token (scanner);
+  if (token != G_TOKEN_STRING)
+    return G_TOKEN_STRING;
+  
+  gtk_rc_parse_module_path_string (scanner->value.v_string);
+  
+  return G_TOKEN_NONE;
+}
+
+static void
+gtk_rc_parse_module_path_string (gchar *mod_path)
+{
+  gchar *buf;
+  gint end_offset;
+  gint start_offset = 0;
+  gint path_len;
+  gint path_num;
+  
+  /* free the old one, or just add to the old one ? */
+  for (path_num=0; module_path[path_num]; path_num++)
+    {
+      g_free (module_path[path_num]);
+      module_path[path_num] = NULL;
+    }
+  
+  path_num = 0;
+  
+  path_len = strlen (mod_path);
+  
+  buf = g_strdup (mod_path);
+  
+  for (end_offset = 0; end_offset <= path_len; end_offset++)
+    {
+      if ((buf[end_offset] == ':') ||
+	  (end_offset == path_len))
+	{
+	  buf[end_offset] = '\0';
+	  module_path[path_num] = g_strdup (buf + start_offset);
+	  path_num++;
+	  module_path[path_num] = NULL;
+	  start_offset = end_offset + 1;
+	}
+    }
+  g_free (buf);
+  gtk_rc_append_default_module_path();
 }
 
 static guint
