@@ -266,6 +266,7 @@ gtk_message_dialog_get_property (GObject     *object,
     {
     case PROP_MESSAGE_TYPE:
       g_value_set_enum (value, gtk_message_dialog_get_message_type (dialog));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
