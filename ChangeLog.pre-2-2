@@ -1,3 +1,9 @@
+Sat Mar  2 16:12:03 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkradiobutton.c (gtk_radio_button_focus): Don't
+	do special focus handling if draw_indicator is not set.
+	(#64723, Damon Chaplin.)
+
 Sat Mar  2 15:48:04 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkentry.c (gtk_entry_new_with_max_length,
