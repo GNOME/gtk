@@ -1,3 +1,5 @@
+#include <string.h>
+
 #include <gtk/gtk.h>
 #include "gtkfilechooserdialog.h"
 #include "gtkfilechooser.h"
@@ -43,6 +45,17 @@ response_cb (GtkDialog *dialog,
   gtk_main_quit ();
 }
 
+static gboolean
+no_backup_files_filter (const GtkFileFilterInfo *filter_info,
+			gpointer                 data)
+{
+  gsize len = strlen (filter_info->display_name);
+  if (len > 0 && filter_info->display_name[len - 1] == '~')
+    return 0;
+  else
+    return 1;
+}
+
 int
 main (int argc, char **argv)
 {
@@ -52,6 +65,7 @@ main (int argc, char **argv)
   GtkWidget *dialog;
   GtkWidget *prop_editor;
   GtkFileSystem *file_system;
+  GtkFileFilter *filter;
   
   gtk_init (&argc, &argv);
 
@@ -79,9 +93,32 @@ main (int argc, char **argv)
 		    G_CALLBACK (print_current_folder), NULL);
   g_signal_connect (dialog, "response",
 		    G_CALLBACK (response_cb), NULL);
+
+  /* Filters */
+  filter = gtk_file_filter_new ();
+  gtk_file_filter_set_name (filter, "All Files");
+  gtk_file_filter_add_pattern (filter, "*");
+  gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
   
+  filter = gtk_file_filter_new ();
+  gtk_file_filter_set_name (filter, "No backup files");
+  gtk_file_filter_add_custom (filter, GTK_FILE_FILTER_DISPLAY_NAME,
+			      no_backup_files_filter, NULL, NULL);
+  gtk_file_filter_add_mime_type (filter, "image/png");
+  gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
+
+  /* Make this filter the default */
+  gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), filter);
+  
+  filter = gtk_file_filter_new ();
+  gtk_file_filter_set_name (filter, "PNG and JPEG");
+  gtk_file_filter_add_mime_type (filter, "image/jpeg");
+  gtk_file_filter_add_mime_type (filter, "image/png");
+  gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
+
   gtk_window_set_default_size (GTK_WINDOW (dialog), 600, 400);
-  gtk_widget_show (dialog);
+  /* show_all() to reveal bugs in composite widget handling */
+  gtk_widget_show_all (dialog);
 
   prop_editor = create_prop_editor (G_OBJECT (dialog), GTK_TYPE_FILE_CHOOSER);
 

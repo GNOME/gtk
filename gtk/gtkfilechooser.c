@@ -92,6 +92,12 @@ gtk_file_chooser_base_init (gpointer g_iface)
 								GTK_TYPE_FILE_SYSTEM,
 								G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
       g_object_interface_install_property (g_iface,
+					   g_param_spec_object ("filter",
+								_("Filter"),
+								_("The current filter for selecting which files are displayed"),
+								GTK_TYPE_FILE_FILTER,
+								G_PARAM_READWRITE));
+      g_object_interface_install_property (g_iface,
 					   g_param_spec_boolean ("folder-mode",
 								 _("Folder Mode"),
 								 _("Whether to select folders rather than files"),
@@ -932,6 +938,13 @@ gtk_file_chooser_get_preview_widget (GtkFileChooser *chooser)
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), NULL);
 
   g_object_get (chooser, "preview-widget", &preview_widget, NULL);
+  
+  /* Horrid hack; g_object_get() refs returned objects but
+   * that contradicts the memory management conventions
+   * for accessors.
+   */
+  if (preview_widget)
+    g_object_unref (preview_widget);
 
   return preview_widget;
 }
@@ -1046,3 +1059,107 @@ gtk_file_chooser_get_preview_uri (GtkFileChooser *chooser)
 
   return result;
 }
+
+/**
+ * gtk_file_chooser_add_filter:
+ * @chooser: a #GtkFileChooser
+ * @filter: a #GtkFileFilter
+ * 
+ * Adds @filter to the list of filters that the user can select between.
+ * When a filter is selected, only files that are passed by that
+ * filter are displayed.
+ **/
+void
+gtk_file_chooser_add_filter (GtkFileChooser *chooser,
+			     GtkFileFilter  *filter)
+{
+  g_return_if_fail (GTK_IS_FILE_CHOOSER (chooser));
+
+  GTK_FILE_CHOOSER_GET_IFACE (chooser)->add_filter (chooser, filter);
+}
+
+/**
+ * gtk_file_chooser_add_filter:
+ * @chooser: a #GtkFileChooser
+ * @filter: a #GtkFileFilter
+ * 
+ * Removes @filter from the list of filters that the user can select between.
+ **/
+void
+gtk_file_chooser_remove_filter (GtkFileChooser *chooser,
+				GtkFileFilter  *filter)
+{
+  g_return_if_fail (GTK_IS_FILE_CHOOSER (chooser));
+
+  GTK_FILE_CHOOSER_GET_IFACE (chooser)->remove_filter (chooser, filter);
+}
+
+/**
+ * gtk_file_chooser_list_filters:
+ * @choooser: a #GtkFileChooser
+ * 
+ * Lists the current set of user-selectable filters; see
+ * gtk_file_chooser_add_filter(), gtk_file_chooser_remove_filter().
+ * 
+ * Return value: a #GSList containing the current set of
+ *  user selectable filters. The contents of the list are
+ *  owned by GTK+, but you must free the list itself with
+ *  g_slist_free() when you are done with it.
+ **/
+GSList *
+gtk_file_chooser_list_filters  (GtkFileChooser *chooser)
+{
+  g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), NULL);
+
+  return GTK_FILE_CHOOSER_GET_IFACE (chooser)->list_filters (chooser);
+}
+
+/**
+ * gtk_file_chooser_set_filter:
+ * @chooser: a #GtkFileChooser
+ * @filter: a #GtkFileFilter
+ * 
+ * Sets the current filter; only the files that pass the
+ * filter will be displayed. If the user-selectable list of filters
+ * is non-empty, then the filter should be one of the filters
+ * in that list. Setting the current filter when the list of
+ * filters is empty is useful if you want to restrict the displayed
+ * set of files without letting the user change it.
+ **/
+void
+gtk_file_chooser_set_filter (GtkFileChooser *chooser,
+			     GtkFileFilter  *filter)
+{
+  g_return_if_fail (GTK_IS_FILE_CHOOSER (chooser));
+  g_return_if_fail (GTK_IS_FILE_FILTER (filter));
+
+  g_object_set (chooser, "filter", filter, NULL);
+}
+
+/**
+ * gtk_file_chooser_get_filter:
+ * @chooser: a #GtkFileChooser
+ * 
+ * Gets the current filter; see gtk_file_chooser_set_filter().
+ * 
+ * Return value: the current filter, or %NULL
+ **/
+GtkFileFilter *
+gtk_file_chooser_get_filter (GtkFileChooser *chooser)
+{
+  GtkFileFilter *filter;
+  
+  g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), NULL);
+
+  g_object_get (chooser, "filter", &filter, NULL);
+  /* Horrid hack; g_object_get() refs returned objects but
+   * that contradicts the memory management conventions
+   * for accessors.
+   */
+  if (filter)
+    g_object_unref (filter);
+
+  return filter;
+}
+
+

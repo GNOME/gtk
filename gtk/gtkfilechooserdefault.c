@@ -25,6 +25,7 @@
 #include "gtkfilechooser.h"
 #include "gtkfilesystemmodel.h"
 
+#include <gtk/gtkalignment.h>
 #include <gtk/gtkcellrendererpixbuf.h>
 #include <gtk/gtkcellrenderertext.h>
 #include <gtk/gtkentry.h>
@@ -32,6 +33,8 @@
 #include <gtk/gtkhpaned.h>
 #include <gtk/gtkicontheme.h>
 #include <gtk/gtklabel.h>
+#include <gtk/gtkmenuitem.h>
+#include <gtk/gtkoptionmenu.h>
 #include <gtk/gtkscrolledwindow.h>
 #include <gtk/gtktreeview.h>
 #include <gtk/gtktreemodelsort.h>
@@ -62,6 +65,9 @@ struct _GtkFileChooserImplDefault
 
   GtkFileChooserAction action;
 
+  GtkFileFilter *current_filter;
+  GSList *filters;
+  
   GtkFilePath *current_folder;
 
   guint folder_mode : 1;
@@ -70,6 +76,8 @@ struct _GtkFileChooserImplDefault
   guint select_multiple : 1;
   guint show_hidden : 1;
 
+  GtkWidget *filter_alignment;
+  GtkWidget *filter_option_menu;
   GtkWidget *tree_scrollwin;
   GtkWidget *tree;
   GtkWidget *list_scrollwin;
@@ -94,6 +102,7 @@ static void     gtk_file_chooser_impl_default_get_property (GObject             
 							    guint                  prop_id,
 							    GValue                *value,
 							    GParamSpec            *pspec);
+static void     gtk_file_chooser_impl_default_show_all     (GtkWidget             *widget);
 
 static void           gtk_file_chooser_impl_default_set_current_folder (GtkFileChooser    *chooser,
 									const GtkFilePath *path);
@@ -108,13 +117,23 @@ static void           gtk_file_chooser_impl_default_select_all         (GtkFileC
 static void           gtk_file_chooser_impl_default_unselect_all       (GtkFileChooser    *chooser);
 static GSList *       gtk_file_chooser_impl_default_get_paths          (GtkFileChooser    *chooser);
 static GtkFileSystem *gtk_file_chooser_impl_default_get_file_system    (GtkFileChooser    *chooser);
+static void           gtk_file_chooser_impl_default_add_filter         (GtkFileChooser    *chooser,
+									GtkFileFilter     *filter);
+static void           gtk_file_chooser_impl_default_remove_filter      (GtkFileChooser    *chooser,
+									GtkFileFilter     *filter);
+static GSList *       gtk_file_chooser_impl_default_list_filters       (GtkFileChooser    *chooser);
 
-static void tree_selection_changed (GtkTreeSelection          *tree_selection,
-				    GtkFileChooserImplDefault *impl);
-static void list_selection_changed (GtkTreeSelection          *tree_selection,
-				    GtkFileChooserImplDefault *impl);
-static void entry_activate         (GtkEntry                  *entry,
-				    GtkFileChooserImplDefault *impl);
+static void set_current_filter (GtkFileChooserImplDefault *impl,
+				GtkFileFilter             *filter);
+
+static void filter_option_menu_changed (GtkOptionMenu             *option_menu,
+					GtkFileChooserImplDefault *impl);
+static void tree_selection_changed     (GtkTreeSelection          *tree_selection,
+					GtkFileChooserImplDefault *impl);
+static void list_selection_changed     (GtkTreeSelection          *tree_selection,
+					GtkFileChooserImplDefault *impl);
+static void entry_activate             (GtkEntry                  *entry,
+					GtkFileChooserImplDefault *impl);
 
 static void tree_name_data_func (GtkTreeViewColumn *tree_column,
 				 GtkCellRenderer   *cell,
@@ -180,6 +199,7 @@ static void
 gtk_file_chooser_impl_default_class_init (GtkFileChooserImplDefaultClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 
   parent_class = g_type_class_peek_parent (class);
 
@@ -187,6 +207,8 @@ gtk_file_chooser_impl_default_class_init (GtkFileChooserImplDefaultClass *class)
   gobject_class->constructor = gtk_file_chooser_impl_default_constructor;
   gobject_class->set_property = gtk_file_chooser_impl_default_set_property;
   gobject_class->get_property = gtk_file_chooser_impl_default_get_property;
+
+  widget_class->show_all = gtk_file_chooser_impl_default_show_all;
 
   _gtk_file_chooser_install_properties (gobject_class);
 }
@@ -203,6 +225,9 @@ gtk_file_chooser_impl_default_iface_init (GtkFileChooserIface *iface)
   iface->set_current_folder = gtk_file_chooser_impl_default_set_current_folder;
   iface->get_current_folder = gtk_file_chooser_impl_default_get_current_folder;
   iface->set_current_name = gtk_file_chooser_impl_default_set_current_name;
+  iface->add_filter = gtk_file_chooser_impl_default_add_filter;
+  iface->remove_filter = gtk_file_chooser_impl_default_remove_filter;
+  iface->list_filters = gtk_file_chooser_impl_default_list_filters;
 }
 
 static void
@@ -273,6 +298,30 @@ gtk_file_chooser_impl_default_constructor (GType                  type,
   g_assert (impl->file_system);
 
   gtk_widget_push_composite_child ();
+
+  impl->filter_alignment = gtk_alignment_new (0.0, 0.5, 0.0, 1.0);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (impl->filter_alignment), 0, 6, 0, 0);
+  gtk_box_pack_start (GTK_BOX (impl), impl->filter_alignment, FALSE, FALSE, 0);
+  /* Don't show filter initially */
+
+  hbox = gtk_hbox_new (FALSE, 6);
+  gtk_container_add (GTK_CONTAINER (impl->filter_alignment), hbox);
+  gtk_widget_show (hbox);
+
+  label = gtk_label_new_with_mnemonic ("Files of _type:");
+  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+  gtk_widget_show (label);
+
+  impl->filter_option_menu = gtk_option_menu_new ();
+  gtk_option_menu_set_menu (GTK_OPTION_MENU (impl->filter_option_menu),
+			    gtk_menu_new ());
+  gtk_box_pack_start (GTK_BOX (hbox), impl->filter_option_menu, FALSE, FALSE, 0);
+  gtk_widget_show (impl->filter_option_menu);
+
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), impl->filter_option_menu);
+
+  g_signal_connect (impl->filter_option_menu, "changed",
+		    G_CALLBACK (filter_option_menu_changed), impl);
 
   hpaned = gtk_hpaned_new ();
   gtk_box_pack_start (GTK_BOX (impl), hpaned, TRUE, TRUE, 0);
@@ -415,6 +464,9 @@ gtk_file_chooser_impl_default_set_property (GObject         *object,
 	  }
       }
       break;
+    case GTK_FILE_CHOOSER_PROP_FILTER:
+      set_current_filter (impl, g_value_get_object (value));
+      break;
     case GTK_FILE_CHOOSER_PROP_FOLDER_MODE:
       {	
 	gboolean folder_mode = g_value_get_boolean (value);
@@ -481,6 +533,9 @@ gtk_file_chooser_impl_default_get_property (GObject         *object,
     case GTK_FILE_CHOOSER_PROP_ACTION:
       g_value_set_enum (value, impl->action);
       break;
+    case GTK_FILE_CHOOSER_PROP_FILTER:
+      g_value_set_object (value, impl->current_filter);
+      break;
     case GTK_FILE_CHOOSER_PROP_FOLDER_MODE:
       g_value_set_boolean (value, impl->folder_mode);
       break;
@@ -503,6 +558,16 @@ gtk_file_chooser_impl_default_get_property (GObject         *object,
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;    
     }
+}
+
+/* We override show-all since we have internal widgets that
+ * shouldn't be shown when you call show_all(), like the filter
+ * option menu.
+ */
+static void
+gtk_file_chooser_impl_default_show_all (GtkWidget *widget)
+{
+  gtk_widget_show (widget);
 }
 
 static void
@@ -587,7 +652,7 @@ gtk_file_chooser_impl_default_select_path (GtkFileChooser    *chooser,
       _gtk_file_chooser_set_current_folder_path (chooser, parent_path);
       gtk_file_path_free (parent_path);
       _gtk_file_system_model_path_do (impl->list_model, path,
-				     select_func, impl);
+				      select_func, impl);
     }
 }
 
@@ -689,6 +754,209 @@ gtk_file_chooser_impl_default_get_file_system (GtkFileChooser *chooser)
   GtkFileChooserImplDefault *impl = GTK_FILE_CHOOSER_IMPL_DEFAULT (chooser);
 
   return impl->file_system;
+}
+
+static GtkWidget *
+find_filter_menu_item (GtkFileChooserImplDefault *impl,
+		       GtkFileFilter             *filter,
+		       gint                      *index_return)
+{
+  GtkWidget *menu = gtk_option_menu_get_menu (GTK_OPTION_MENU (impl->filter_option_menu));
+  GList *children = gtk_container_get_children (GTK_CONTAINER (menu));
+  GList *tmp_list;
+  int index = 0;
+
+  if (index_return)
+    *index_return = -1;
+
+  for (tmp_list = children; tmp_list; tmp_list = tmp_list->next)
+    {
+      if (g_object_get_data (tmp_list->data, "gtk-file-filter") == filter)
+	{
+	  if (index_return)
+	    *index_return = index;
+	  return tmp_list->data;
+	}
+      index++;
+    }
+
+  g_list_free (children);
+  
+  return NULL;
+}
+
+static void
+gtk_file_chooser_impl_default_add_filter (GtkFileChooser *chooser,
+					  GtkFileFilter  *filter)
+{
+  GtkFileChooserImplDefault *impl = GTK_FILE_CHOOSER_IMPL_DEFAULT (chooser);
+  GtkWidget *menu;
+  GtkWidget *menu_item;
+  const gchar *name;
+
+  if (g_slist_find (impl->filters, filter))
+    {
+      g_warning ("gtk_file_chooser_add_filter() called on filter already in list\n");
+      return;
+    }
+
+  g_object_ref (filter);
+  gtk_object_sink (GTK_OBJECT (filter));
+  impl->filters = g_slist_append (impl->filters, filter);
+
+  name = gtk_file_filter_get_name (filter);
+  if (!name)
+    name = "Untitled filter";	/* Place-holder, doesn't need to be marked for translation */
+  
+  menu_item = gtk_menu_item_new_with_label (name);
+  g_object_set_data (G_OBJECT (menu_item), "gtk-file-filter", filter);
+  gtk_widget_show (menu_item);
+  
+  menu = gtk_option_menu_get_menu (GTK_OPTION_MENU (impl->filter_option_menu));
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
+  /* Option menus don't react to menu size changes properly */
+  gtk_widget_size_request (menu, NULL);
+
+  if (!g_slist_find (impl->filters, impl->current_filter))
+    set_current_filter (impl, filter);
+
+  gtk_widget_show (impl->filter_alignment);
+}
+
+static void
+gtk_file_chooser_impl_default_remove_filter (GtkFileChooser    *chooser,
+					     GtkFileFilter     *filter)
+{
+  GtkFileChooserImplDefault *impl = GTK_FILE_CHOOSER_IMPL_DEFAULT (chooser);
+  GtkWidget *menu;
+  GtkWidget *menu_item;
+    
+  if (!g_slist_find (impl->filters, filter))
+    {
+      g_warning ("gtk_file_chooser_remove_filter() called on filter not in list\n");
+      return;
+    }
+
+  impl->filters = g_slist_remove (impl->filters, filter);
+
+  if (filter == impl->current_filter)
+    {
+      if (impl->filters)
+	set_current_filter (impl, impl->filters->data);
+      else
+	set_current_filter (impl, NULL);
+    }
+
+  menu = gtk_option_menu_get_menu (GTK_OPTION_MENU (impl->filter_option_menu));
+  menu_item = find_filter_menu_item (impl, filter, NULL);
+  g_assert (menu_item);
+  gtk_widget_destroy (menu_item);
+  /* Option menus don't react to menu size changes properly */
+  gtk_widget_size_request (menu, NULL);
+  
+  g_object_unref (filter);
+
+  if (!impl->filters)
+    gtk_widget_hide (impl->filter_alignment);
+}
+
+static GSList *
+gtk_file_chooser_impl_default_list_filters (GtkFileChooser *chooser)
+{
+  GtkFileChooserImplDefault *impl = GTK_FILE_CHOOSER_IMPL_DEFAULT (chooser);
+
+  return g_slist_copy (impl->filters);
+}
+
+static gboolean
+list_model_filter_func (GtkFileSystemModel *model,
+			GtkFilePath        *path,
+			const GtkFileInfo  *file_info,
+			gpointer            user_data)
+{
+  GtkFileChooserImplDefault *impl = user_data;
+  GtkFileFilterInfo filter_info;
+  GtkFileFilterFlags needed;
+  gboolean result;
+  
+  if (!impl->current_filter)
+    return TRUE;
+
+  filter_info.contains = GTK_FILE_FILTER_DISPLAY_NAME | GTK_FILE_FILTER_MIME_TYPE;
+    
+  needed = gtk_file_filter_get_needed (impl->current_filter);
+  
+  filter_info.display_name = gtk_file_info_get_display_name (file_info);
+  filter_info.mime_type = gtk_file_info_get_mime_type (file_info);
+
+  if (needed & GTK_FILE_FILTER_FILENAME)
+    {
+      filter_info.filename = gtk_file_system_path_to_filename (impl->file_system, path);
+      if (filter_info.filename)
+	filter_info.contains |= GTK_FILE_FILTER_FILENAME;
+    }
+  else
+    filter_info.filename = NULL;
+
+  if (needed & GTK_FILE_FILTER_URI)
+    {
+      filter_info.uri = gtk_file_system_path_to_uri (impl->file_system, path);
+      if (filter_info.filename)
+	filter_info.contains |= GTK_FILE_FILTER_URI;
+    }
+  else
+    filter_info.uri = NULL;
+
+  result = gtk_file_filter_filter (impl->current_filter, &filter_info);
+
+  if (filter_info.filename)
+    g_free ((gchar *)filter_info.filename);
+  if (filter_info.uri)
+    g_free ((gchar *)filter_info.uri);
+
+  return result;
+}
+
+static void
+install_list_model_filter (GtkFileChooserImplDefault *impl)
+{
+  if (impl->current_filter)
+    _gtk_file_system_model_set_filter (impl->list_model,
+				       list_model_filter_func,
+				       impl);
+}
+
+static void
+set_current_filter (GtkFileChooserImplDefault *impl,
+		    GtkFileFilter             *filter)
+{
+  if (impl->current_filter != filter)
+    {
+      int menu_item_index;
+
+      /* If we have filters, new filter must be one of them
+       */
+      find_filter_menu_item (impl, filter, &menu_item_index);
+      if (impl->filters && menu_item_index < 0)
+	return;
+      
+      if (impl->current_filter)
+	g_object_unref (impl->current_filter);
+      impl->current_filter = filter;
+      if (impl->current_filter)
+	{
+	  g_object_ref (impl->current_filter);
+	  gtk_object_sink (GTK_OBJECT (filter));
+	}
+      
+      if (impl->filters)
+	gtk_option_menu_set_history (GTK_OPTION_MENU (impl->filter_option_menu),
+				     menu_item_index);
+
+      install_list_model_filter (impl);
+
+      g_object_notify (G_OBJECT (impl), "filter");
+    }
 }
 
 static gint
@@ -798,6 +1066,16 @@ update_chooser_entry (GtkFileChooserImplDefault *impl)
 }
      
 static void
+filter_option_menu_changed (GtkOptionMenu             *option_menu,
+			    GtkFileChooserImplDefault *impl)
+{
+  gint new_index = gtk_option_menu_get_history (GTK_OPTION_MENU (option_menu));
+  GtkFileFilter *new_filter = g_slist_nth_data (impl->filters, new_index);
+
+  set_current_filter (impl, new_filter);
+}
+
+static void
 tree_selection_changed (GtkTreeSelection          *selection,
 			GtkFileChooserImplDefault *impl)
 {
@@ -843,6 +1121,7 @@ tree_selection_changed (GtkTreeSelection          *selection,
 						 GTK_FILE_INFO_DISPLAY_NAME |
 						 GTK_FILE_INFO_SIZE); 
   _gtk_file_system_model_set_show_folders (impl->list_model, FALSE);
+  install_list_model_filter (impl);
   
   impl->sort_model = (GtkTreeModelSort *)gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (impl->list_model));
   gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->sort_model), 0, name_sort_func, impl, NULL);

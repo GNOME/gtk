@@ -21,6 +21,7 @@
 #ifndef __GTK_FILE_CHOOSER_H__
 #define __GTK_FILE_CHOOSER_H__
 
+#include "gtkfilefilter.h"
 #include <gtk/gtkwidget.h>
 
 G_BEGIN_DECLS
@@ -100,29 +101,19 @@ gboolean   gtk_file_chooser_get_preview_widget_active (GtkFileChooser *chooser);
 const char *gtk_file_chooser_get_preview_filename (GtkFileChooser *file_chooser);
 const char *gtk_file_chooser_get_preview_uri      (GtkFileChooser *file_chooser);
 
-
-#if 0
-/* Filters
+/* List of user selectable filters
  */
-void   gtk_file_chooser_add_filter    (GtkFileChooser *chooser,
-				       GtkFileFilter  *filter);
-void   gtk_file_chooser_remove_filter (GtkFileChooser *chooser,
-				       GtkFileFilter  *filter);
-GList *gtk_file_chooser_get_filters   (GtkFileChooser  *chooser);
+void    gtk_file_chooser_add_filter    (GtkFileChooser *chooser,
+					GtkFileFilter  *filter);
+void    gtk_file_chooser_remove_filter (GtkFileChooser *chooser,
+					GtkFileFilter  *filter);
+GSList *gtk_file_chooser_list_filters  (GtkFileChooser *chooser);
 
-
-/************************************************/
-
-static gboolean (*GtkFileFilterFunc) (const char *uri,
-				      const char *filename,
-				      gpointer    data);
-
-GtkFileFilter *gtk_file_filter_new_pattern   (const char            *pattern);
-GtkFileFilter *gtk_file_filter_new_mime_type (const char            *mime_type);
-GtkFileFilter *gtk_file_filter_new_callback  (GtkFileFilterFunction *func,
-					      gpointer               data,
-					      GDestroyNotify         notify);
-#endif
+/* Current filter
+ */
+void           gtk_file_chooser_set_filter (GtkFileChooser *chooser,
+					   GtkFileFilter  *filter);
+GtkFileFilter *gtk_file_chooser_get_filter (GtkFileChooser *chooser);
 
 G_END_DECLS
 

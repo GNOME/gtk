@@ -56,6 +56,14 @@ void                _gtk_file_system_model_set_show_folders (GtkFileSystemModel 
 void                _gtk_file_system_model_set_show_files   (GtkFileSystemModel *model,
 							     gboolean            show_files);
 
+typedef gboolean (*GtkFileSystemModelFilter) (GtkFileSystemModel *model,
+					      GtkFilePath        *path,
+					      const GtkFileInfo  *info,
+					      gpointer            user_data);
+
+void     _gtk_file_system_model_set_filter (GtkFileSystemModel      *model,
+					    GtkFileSystemModelFilter filter,
+					    gpointer                 user_data);
 
 typedef void (*GtkFileSystemModelPathFunc) (GtkFileSystemModel *model,
 					    GtkTreePath        *path,

@@ -44,6 +44,9 @@ struct _GtkFileSystemModel
   FileModelNode  *roots;
   GtkFileFolder  *root_folder;
 
+  GtkFileSystemModelFilter filter_func;
+  gpointer filter_data;
+
   GSList *idle_clears;
   GSource *idle_clear_source;
 
@@ -561,7 +564,8 @@ _gtk_file_system_model_new (GtkFileSystem     *file_system,
 			    GtkFileInfoType    types)
 {
   GtkFileSystemModel *model;
-  GSList *roots, *tmp_list;
+  GSList *roots = NULL;
+  GSList *tmp_list;
 
   g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
 
@@ -686,6 +690,16 @@ model_refilter_recurse (GtkFileSystemModel *model,
     }
 }
 
+static void
+model_refilter_all (GtkFileSystemModel *model)
+{
+  GtkTreePath *path;
+
+  path = gtk_tree_path_new ();
+  model_refilter_recurse (model, NULL, path);
+  gtk_tree_path_free (path);
+}
+
 /**
  * _gtk_file_system_model_set_show_hidden:
  * @model: a #GtkFileSystemModel
@@ -702,13 +716,8 @@ _gtk_file_system_model_set_show_hidden (GtkFileSystemModel *model,
 
   if (show_hidden != model->show_hidden)
     {
-      GtkTreePath *path;
-
       model->show_hidden = show_hidden;
-
-      path = gtk_tree_path_new ();
-      model_refilter_recurse (model, NULL, path);
-      gtk_tree_path_free (path);
+      model_refilter_all (model);
     }
 }
 
@@ -728,13 +737,8 @@ _gtk_file_system_model_set_show_folders (GtkFileSystemModel *model,
 
   if (show_folders != model->show_folders)
     {
-      GtkTreePath *path;
-
       model->show_folders = show_folders;
-
-      path = gtk_tree_path_new ();
-      model_refilter_recurse (model, NULL, path);
-      gtk_tree_path_free (path);
+      model_refilter_all (model);
     }
 }
 
@@ -755,13 +759,8 @@ _gtk_file_system_model_set_show_files (GtkFileSystemModel *model,
 
   if (show_files != model->show_files)
     {
-      GtkTreePath *path;
-
       model->show_files = show_files;
-
-      path = gtk_tree_path_new ();
-      model_refilter_recurse (model, NULL, path);
-      gtk_tree_path_free (path);
+      model_refilter_all (model);
     }
 }
 
@@ -898,6 +897,29 @@ find_and_ref_path (GtkFileSystemModel  *model,
 }
 
 /**
+ * _gtk_file_system_model_set_filter:
+ * @mode: a #GtkFileSystemModel
+ * @filter: function to be called for each file
+ * @user_data: data to pass to @filter
+ * 
+ * Sets a callback called for each file/directory to see whether
+ * it should be included in model. If this function was made
+ * public, we'd want to include a GDestroyNotify as well.
+ **/
+void
+_gtk_file_system_model_set_filter (GtkFileSystemModel      *model,
+				   GtkFileSystemModelFilter filter,
+				   gpointer                 user_data)
+{
+  g_return_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model));
+  
+  model->filter_func = filter;
+  model->filter_data = user_data;
+
+  model_refilter_all (model);
+}
+
+/**
  * _gtk_file_system_model_path_do:
  * @model: a #GtkFileSystemModel
  * @path: a path pointing to a file in the filesystem
@@ -1023,6 +1045,8 @@ file_model_node_is_visible (GtkFileSystemModel *model,
       if (!model->show_files && !is_folder)
 	return FALSE;
       if (!model->show_hidden && gtk_file_info_get_is_hidden (info))
+	return FALSE;
+      if (model->filter_func && !model->filter_func (model, node->path, info, model->filter_data))
 	return FALSE;
 
       return TRUE;

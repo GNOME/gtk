@@ -37,6 +37,14 @@ static void           delegate_select_all             (GtkFileChooser    *choose
 static void           delegate_unselect_all           (GtkFileChooser    *chooser);
 static GSList *       delegate_get_paths              (GtkFileChooser    *chooser);
 static GtkFileSystem *delegate_get_file_system        (GtkFileChooser    *chooser);
+static void           delegate_add_filter             (GtkFileChooser    *chooser,
+						       GtkFileFilter     *filter);
+static void           delegate_remove_filter          (GtkFileChooser    *chooser,
+						       GtkFileFilter     *filter);
+static GSList *       delegate_list_filters           (GtkFileChooser    *chooser);
+static void           delegate_notify                 (GObject           *object,
+						       GParamSpec        *pspec,
+						       gpointer           data);
 static void           delegate_current_folder_changed (GtkFileChooser    *chooser,
 						       gpointer           data);
 static void           delegate_selection_changed      (GtkFileChooser    *chooser,
@@ -66,6 +74,11 @@ _gtk_file_chooser_install_properties (GObjectClass *klass)
 				   g_param_spec_override ("file-system",
 							  GTK_TYPE_FILE_SYSTEM,
 							  G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
+  g_object_class_install_property (klass,
+				   GTK_FILE_CHOOSER_PROP_FILTER,
+				   g_param_spec_override ("filter",
+							  GTK_TYPE_FILE_FILTER,
+							  G_PARAM_READWRITE));
   g_object_class_install_property (klass,
 				   GTK_FILE_CHOOSER_PROP_FOLDER_MODE,
 				   g_param_spec_override ("folder-mode",
@@ -121,6 +134,9 @@ _gtk_file_chooser_delegate_iface_init (GtkFileChooserIface *iface)
   iface->unselect_all = delegate_unselect_all;
   iface->get_paths = delegate_get_paths;
   iface->get_file_system = delegate_get_file_system;
+  iface->add_filter = delegate_add_filter;
+  iface->remove_filter = delegate_remove_filter;
+  iface->list_filters = delegate_list_filters;
 }
 
 /**
@@ -143,6 +159,8 @@ _gtk_file_chooser_set_delegate (GtkFileChooser *receiver,
   
   g_object_set_data (G_OBJECT (receiver), "gtk-file-chooser-delegate", delegate);
 
+  g_signal_connect (delegate, "notify",
+		    G_CALLBACK (delegate_notify), receiver);
   g_signal_connect (delegate, "current-folder-changed",
 		    G_CALLBACK (delegate_current_folder_changed), receiver);
   g_signal_connect (delegate, "selection-changed",
@@ -194,6 +212,26 @@ delegate_get_file_system (GtkFileChooser *chooser)
 }
 
 static void
+delegate_add_filter (GtkFileChooser *chooser,
+		     GtkFileFilter  *filter)
+{
+  gtk_file_chooser_add_filter (get_delegate (chooser), filter);
+}
+
+static void
+delegate_remove_filter (GtkFileChooser *chooser,
+			GtkFileFilter  *filter)
+{
+  gtk_file_chooser_remove_filter (get_delegate (chooser), filter);
+}
+
+static GSList *
+delegate_list_filters (GtkFileChooser *chooser)
+{
+  return gtk_file_chooser_list_filters (get_delegate (chooser));
+}
+
+static void
 delegate_set_current_folder (GtkFileChooser    *chooser,
 			     const GtkFilePath *path)
 {
@@ -211,6 +249,18 @@ delegate_set_current_name (GtkFileChooser *chooser,
 			   const gchar    *name)
 {
   gtk_file_chooser_set_current_name (get_delegate (chooser), name);
+}
+
+static void
+delegate_notify (GObject    *object,
+		 GParamSpec *pspec,
+		 gpointer    data)
+{
+  if (pspec->param_id >= GTK_FILE_CHOOSER_PROP_FIRST &&
+      pspec->param_id <= GTK_FILE_CHOOSER_PROP_LAST)
+    {
+      g_object_notify (data, pspec->name);
+    }
 }
 
 static void

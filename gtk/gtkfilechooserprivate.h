@@ -34,18 +34,6 @@ struct _GtkFileChooserIface
 {
   GTypeInterface base_iface;
 
-  /* GtkFileChooser interface has the following properties:
-   *
-   *  action:          GtkFileChooserAction
-   *  folder_mode:     boolean
-   *  select_multiple: boolean
-   *  show_hidden:     boolean
-   *  local_only:      boolean
-   *
-   *  preview_widget:  GtkWidget
-   *  preview_widget_active: boolean
-   */
-
   /* Methods
    */
   void           (*set_current_folder) (GtkFileChooser    *chooser,
@@ -61,6 +49,12 @@ struct _GtkFileChooserIface
   void           (*unselect_all)       (GtkFileChooser    *chooser);
   GSList *       (*get_paths)          (GtkFileChooser    *chooser);
   GtkFileSystem *(*get_file_system)    (GtkFileChooser    *chooser);
+  void           (*add_filter)         (GtkFileChooser    *chooser,
+					GtkFileFilter     *filter);
+  void           (*remove_filter)      (GtkFileChooser    *chooser,
+					GtkFileFilter     *filter);
+  GSList *       (*list_filters)       (GtkFileChooser    *chooser);
+
   
   /* Signals
    */
