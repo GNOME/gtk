@@ -1637,7 +1637,7 @@ gtk_list_store_reorder_func (gconstpointer a,
 
 /**
  * gtk_list_store_reorder:
- * @store: A #GtkTreeStore.
+ * @store: A #GtkListStore.
  * @new_order: An integer array indicating the new order for the list.
  *
  * Reorders @store to follow the order indicated by @new_order. Note that
