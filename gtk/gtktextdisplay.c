@@ -803,7 +803,8 @@ gtk_text_layout_draw (GtkTextLayout *layout,
                                                 &line_start,
                                                 line, 0);
               line_end = line_start;
-              gtk_text_iter_forward_to_line_end (&line_end);
+	      if (!gtk_text_iter_ends_line (&line_end))
+		gtk_text_iter_forward_to_line_end (&line_end);
               byte_count = gtk_text_iter_get_line_index (&line_end);     
 
               if (gtk_text_iter_compare (&selection_start, &line_end) <= 0 &&
@@ -817,7 +818,7 @@ gtk_text_layout_draw (GtkTextLayout *layout,
                   if (gtk_text_iter_compare (&selection_end, &line_end) <= 0)
                     selection_end_index = gtk_text_iter_get_line_index (&selection_end);
                   else
-                    selection_end_index = byte_count;
+                    selection_end_index = MAX(byte_count, 1);
                 }
             }
 

@@ -6191,9 +6191,12 @@ gtk_text_view_preedit_changed_handler (GtkIMContext *context,
 
   gtk_im_context_get_preedit_string (context, &str, &attrs, &cursor_pos);
   gtk_text_layout_set_preedit_string (text_view->layout, str, attrs, cursor_pos);
-
   pango_attr_list_unref (attrs);
   g_free (str);
+
+  gtk_text_view_scroll_mark_onscreen (text_view,
+                                      gtk_text_buffer_get_mark (get_buffer (text_view),
+                                                                "insert"));
 }
 
 static gboolean
