@@ -57,7 +57,7 @@ msgstr "Poni¹ti"
 
 #: gtk/gtkcolorsel.c:1738
 msgid "Help"
-msgstr ""
+msgstr "Pomoæ"
 
 #. The directories clist
 #: gtk/gtkfilesel.c:430

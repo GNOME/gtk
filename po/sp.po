@@ -57,7 +57,7 @@ msgstr "Поништи"
 
 #: gtk/gtkcolorsel.c:1738
 msgid "Help"
-msgstr ""
+msgstr "Помоћ"
 
 #. The directories clist
 #: gtk/gtkfilesel.c:430
