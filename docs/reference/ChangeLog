@@ -1,3 +1,7 @@
+2004-06-22  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/tmpl/gcs.sgml: Move function docs inline.
+
 Mon Jun 21 00:46:20 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixbuf/gdk-pixbuf-sections.txt: Add 

@@ -44,8 +44,10 @@ The #GdkGCValues structure holds a set of values used
 to create or modify a graphics context.
 </para>
 
-@foreground: the foreground color.
-@background: the background color.
+@foreground: the foreground color. Note that gdk_gc_get_values()
+  only sets the pixel value.
+@background: the background color. Note that gdk_gc_get_values()
+  only sets the pixel value.
 @font: the default font.
 @function: the bitwise operation used when drawing.
 @fill: the fill style.
@@ -117,25 +119,21 @@ useful. For bitmaps, %GDK_AND and %GDK_OR are also useful.
 
 <!-- ##### FUNCTION gdk_gc_new ##### -->
 <para>
-Create a new graphics context with default values. 
 </para>
 
-@drawable: a #GdkDrawable. The created GC must always be used
- with drawables of the same depth as this one.
-@Returns: the new graphics context.
+@drawable: 
+@Returns:
 
 
 <!-- ##### FUNCTION gdk_gc_new_with_values ##### -->
 <para>
-Create a new GC with the given initial values.
+
 </para>
 
-@drawable: a #GdkDrawable. The created GC must always be used
- with drawables of the same depth as this one.
-@values: a structure containing initial values for the GC.
-@values_mask: a bit mask indicating which fields in @values
-   are set.
-@Returns: the new graphics context.
+@drawable: 
+@values: 
+@values_mask:
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_gc_get_screen ##### -->
@@ -166,13 +164,12 @@ Create a new GC with the given initial values.
 
 <!-- ##### MACRO gdk_gc_destroy ##### -->
 <para>
-Identical to gdk_gc_unref(). This function is obsolete
-and should not be used.
+This function is obsolete and should not be used.
 </para>
 
 <!-- # Unused Parameters # -->
 @gc: a #GdkGC.
-
+@Deprecated: Use gdk_object_unref() instead
 
 <!-- ##### FUNCTION gdk_gc_set_values ##### -->
 <para>
@@ -186,29 +183,29 @@ and should not be used.
 
 <!-- ##### FUNCTION gdk_gc_get_values ##### -->
 <para>
-Retrieves the current values from a graphics context.
+
 </para>
 
-@gc: a #GdkGC.
-@values: the #GdkGCValues structure in which to store the results.
+@gc:
+@values:
 
 
 <!-- ##### FUNCTION gdk_gc_set_foreground ##### -->
 <para>
-Sets the foreground color for a graphics context.
+
 </para>
 
-@gc: a #GdkGC.
-@color: the new foreground color.
+@gc: 
+@color: 
 
 
 <!-- ##### FUNCTION gdk_gc_set_background ##### -->
 <para>
-Sets the background color for a graphics context.
+
 </para>
 
-@gc: a #GdkGC.
-@color: the new background color.
+@gc:
+@color:
 
 
 <!-- ##### FUNCTION gdk_gc_set_rgb_fg_color ##### -->
@@ -231,34 +228,29 @@ Sets the background color for a graphics context.
 
 <!-- ##### FUNCTION gdk_gc_set_font ##### -->
 <para>
-Sets the font for a graphics context. (Note that
-all text-drawing functions in GDK take a @font
-argument; the value set here is used when that
-argument is %NULL.)
+
 </para>
 
-@gc: a #GdkGC.
-@font: the new font.
+@gc:
+@font:
 
 
 <!-- ##### FUNCTION gdk_gc_set_function ##### -->
 <para>
-Determines how the current pixel values and the
-pixel values being drawn are combined to produce
-the final pixel values.
+
 </para>
 
-@gc: a #GdkGC.
+@gc:
 @function: 
 
 
 <!-- ##### FUNCTION gdk_gc_set_fill ##### -->
 <para>
-Set the fill mode for a graphics context.
+
 </para>
 
-@gc: a #GdkGC.
-@fill: the new fill mode.
+@gc:
+@fill:
 
 
 <!-- ##### ENUM GdkFill ##### -->
@@ -279,93 +271,75 @@ Determines how primitives are drawn.
 
 <!-- ##### FUNCTION gdk_gc_set_tile ##### -->
 <para>
-Set a tile pixmap for a graphics context.
-This will only be used if the fill mode
-is %GDK_TILED.
+
 </para>
 
-@gc: a #GdkGC.
-@tile: the new tile pixmap.
+@gc:
+@tile:
 
 
 <!-- ##### FUNCTION gdk_gc_set_stipple ##### -->
 <para>
-Set the stipple bitmap for a graphics context. The
-stipple will only be used if the fill mode is
-%GDK_STIPPLED or %GDK_OPAQUE_STIPPLED.
+
 </para>
 
-@gc: a #GdkGC.
-@stipple: the new stipple bitmap.
+@gc: 
+@stipple: 
 
 
 <!-- ##### FUNCTION gdk_gc_set_ts_origin ##### -->
 <para>
-Set the origin when using tiles or stipples with
-the GC. The tile or stipple will be aligned such
-that the upper left corner of the tile or stipple
-will coincide with this point.
+
 </para>
 
-@gc: a #GdkGC.
-@x: the x-coordinate of the origin.
-@y: the y-coordinate of the origin.
+@gc:
+@x: 
+@y: 
 
 
 <!-- ##### FUNCTION gdk_gc_set_clip_origin ##### -->
 <para>
-Sets the origin of the clip mask. The coordinates are
-interpreted relative to the upper-left corner of
-the destination drawable of the current operation.
+
 </para>
 
-@gc: a #GdkGC.
-@x: the x-coordinate of the origin.
-@y: the y-coordinate of the origin.
+@gc:
+@x: 
+@y: 
 
 
 <!-- ##### FUNCTION gdk_gc_set_clip_mask ##### -->
 <para>
-Sets the clip mask for a graphics context from a bitmap.
-The clip mask is interpreted relative to the clip
-origin. (See gdk_gc_set_clip_origin()).
+
 </para>
 
-@gc: the #GdkGC.
-@mask: a bitmap.
+@gc: 
+@mask: 
 
 
 <!-- ##### FUNCTION gdk_gc_set_clip_rectangle ##### -->
 <para>
-Sets the clip mask for a graphics context from a
-rectangle. The clip mask is interpreted relative to the clip
-origin. (See gdk_gc_set_clip_origin()).
-
 </para>
 
-@gc: a #GdkGC.
-@rectangle: the rectangle to clip to.
+@gc: 
+@rectangle: 
 
 
 <!-- ##### FUNCTION gdk_gc_set_clip_region ##### -->
 <para>
-Sets the clip mask for a graphics context from a region structure.
-The clip mask is interpreted relative to the clip origin. (See
-gdk_gc_set_clip_origin()).
+
 </para>
 
-@gc: a #GdkGC.
-@region: the #GdkRegion.
+@gc:
+@region: 
 
 
 <!-- ##### FUNCTION gdk_gc_set_subwindow ##### -->
 <para>
-Sets how drawing with this GC on a window will affect child
-windows of that window. 
+
 </para>
 
-@gc: a #GdkGC.
-@mode: the subwindow mode.
+@gc: 
+@mode: 
 
 
 <!-- ##### ENUM GdkSubwindowMode ##### -->
@@ -379,28 +353,23 @@ windows of that window.
 
 <!-- ##### FUNCTION gdk_gc_set_exposures ##### -->
 <para>
-Sets whether copying non-visible portions of a drawable
-using this graphics context generate exposure events
-for the corresponding regions of the destination
-drawable. (See gdk_draw_drawable()).
+
 </para>
 
-@gc: a #GdkGC.
-@exposures: if %TRUE, exposure events will be generated.
+@gc: 
+@exposures: 
 
 
 <!-- ##### FUNCTION gdk_gc_set_line_attributes ##### -->
 <para>
-Sets various attributes of how lines are drawn. See
-the corresponding members of #GdkGCValues for full
-explanations of the arguments.
+
 </para>
 
-@gc: a #GdkGC.
-@line_width: the width of lines.
-@line_style: the dash-style for lines.
-@cap_style: the manner in which the ends of lines are drawn.
-@join_style: the in which lines are joined together.
+@gc: 
+@line_width: 
+@line_style: 
+@cap_style: 
+@join_style:
 
 
 <!-- ##### ENUM GdkLineStyle ##### -->
@@ -440,32 +409,22 @@ Determines how the joins between segments of a polygon are drawn.
 
 <!-- ##### FUNCTION gdk_gc_set_dashes ##### -->
 <para>
-Sets the way dashed-lines are drawn. Lines will be
-drawn with alternating on and off segments of the
-lengths specified in @dash_list. The manner in
-which the on and off segments are drawn is determined
-by the @line_style value of the GC. (This can
-be changed with gdk_gc_set_line_attributes().)
-</para>
-<para>
-The @dash_offset defines the phase of the pattern, specifying how many
-pixels into the dash-list the pattern should actually begin.
+
 </para>
 
-@gc: a #GdkGC.
-@dash_offset: the phase of the dash pattern.
-@dash_list: an array of dash lengths.
-@n: the number of elements in @dash_list.
+@gc: 
+@dash_offset: 
+@dash_list: 
+@n: 
 
 
 <!-- ##### FUNCTION gdk_gc_copy ##### -->
 <para>
-Copy the set of values from one graphics context
-onto another graphics context.
+
 </para>
 
-@dst_gc: the destination graphics context.
-@src_gc: the source graphics context.
+@dst_gc:
+@src_gc: 
 
 
 <!-- ##### FUNCTION gdk_gc_set_colormap ##### -->

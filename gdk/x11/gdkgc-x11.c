@@ -644,6 +644,15 @@ gdk_x11_gc_values_to_xvalues (GdkGCValues    *values,
 
 }
 
+/**
+ * gdk_gc_set_clip_rectangle:
+ * @gc: a #GdkGC.
+ * @rectangle: the rectangle to clip to.
+ * 
+ * Sets the clip mask for a graphics context from a
+ * rectangle. The clip mask is interpreted relative to the clip
+ * origin. (See gdk_gc_set_clip_origin()).
+ **/
 void
 gdk_gc_set_clip_rectangle (GdkGC	*gc,
 			   GdkRectangle *rectangle)
@@ -681,6 +690,15 @@ gdk_gc_set_clip_rectangle (GdkGC	*gc,
   x11_gc->dirty_mask |= GDK_GC_DIRTY_CLIP;
 }
 
+/**
+ * gdk_gc_set_clip_region:
+ * @gc: a #GdkGC.
+ * @region: the #GdkRegion. 
+ * 
+ * Sets the clip mask for a graphics context from a region structure.
+ * The clip mask is interpreted relative to the clip origin. (See
+ * gdk_gc_set_clip_origin()).
+ **/
 void
 gdk_gc_set_clip_region (GdkGC	  *gc,
 			GdkRegion *region)
@@ -719,6 +737,14 @@ gdk_gc_set_clip_region (GdkGC	  *gc,
 }
 
 
+/**
+ * gdk_gc_copy:
+ * @dst_gc: the destination graphics context.
+ * @src_gc: the source graphics context.
+ * 
+ * Copy the set of values from one graphics context
+ * onto another graphics context.
+ **/
 void
 gdk_gc_copy (GdkGC *dst_gc, GdkGC *src_gc)
 {

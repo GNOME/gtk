@@ -1,10 +1,17 @@
 2004-06-22  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/x11/gdkgc-x11.c: 
+	* gdk/gdkgc.c: Move function docs inline, add hints about 
+	obtaining rgb colors from gcs.  (#144688, Steve Chaplin)
+
+	* gtk/gtktreestore.c (gtk_tree_store_swap): Make this work
+	for children of the root.  (#139785, Jean-François Wauthy,
+	patch by John Finlay)
+
 	* gtk/gtkicontheme.h (GTK_ICON_THEME_GET_CLASS): Typo
 	fix.  (#144750, Jeff Franks) 
 
 2004-06-21  Michael Natterer  <mitch@gimp.org>
-
 	Merge from stable:
 
 	* gdk/x11/gdkdrawable-x11.[ch]: made convert_format() utility

@@ -73,6 +73,16 @@ gdk_gc_class_init (GObjectClass *class)
   class->finalize = gdk_gc_finalize;
 }
 
+
+/**
+ * gdk_gc_new:
+ * @drawable: a #GdkDrawable. The created GC must always be used
+ *   with drawables of the same depth as this one.
+ *
+ * Create a new graphics context with default values. 
+ *
+ * Returns: the new graphics context.
+ **/
 GdkGC*
 gdk_gc_new (GdkDrawable *drawable)
 {
@@ -81,6 +91,18 @@ gdk_gc_new (GdkDrawable *drawable)
   return gdk_gc_new_with_values (drawable, NULL, 0);
 }
 
+/**
+ * gdk_gc_new_with_values:
+ * @drawable: a #GdkDrawable. The created GC must always be used
+ *   with drawables of the same depth as this one.
+ * @values: a structure containing initial values for the GC.
+ * @values_mask: a bit mask indicating which fields in @values
+ *   are set.
+ * 
+ * Create a new GC with the given initial values.
+ * 
+ * Return value: the new graphics context.
+ **/
 GdkGC*
 gdk_gc_new_with_values (GdkDrawable	*drawable,
 			GdkGCValues	*values,
@@ -148,7 +170,9 @@ gdk_gc_ref (GdkGC *gc)
  * gdk_gc_unref:
  * @gc: a #GdkGC
  *
- * Deprecated function; use g_object_unref() instead.
+ * Decrement the reference count of @gc.
+ *
+ * Deprecated: Use g_object_unref() instead.
  **/
 void
 gdk_gc_unref (GdkGC *gc)
@@ -156,6 +180,16 @@ gdk_gc_unref (GdkGC *gc)
   g_object_unref (gc);
 }
 
+/**
+ * gdk_gc_get_values:
+ * @gc:  a #GdkGC.
+ * @values: the #GdkGCValues structure in which to store the results.
+ * 
+ * Retrieves the current values from a graphics context. Note that 
+ * only the pixel values of the @values->foreground and @values->background
+ * are filled, use gdk_colormap_query_color() to obtain the rgb values
+ * if you need them.
+ **/
 void
 gdk_gc_get_values (GdkGC       *gc,
 		   GdkGCValues *values)
@@ -199,6 +233,16 @@ gdk_gc_set_values (GdkGC           *gc,
   GDK_GC_GET_CLASS (gc)->set_values (gc, values, values_mask);
 }
 
+/**
+ * gdk_gc_set_foreground:
+ * @gc: a #GdkGC.
+ * @color: the new foreground color.
+ * 
+ * Sets the foreground color for a graphics context.
+ * Note that this function uses @color->pixel, use 
+ * gdk_gc_set_rgb_fg_color() to specify the foreground 
+ * color as red, green, blue components.
+ **/
 void
 gdk_gc_set_foreground (GdkGC	      *gc,
 		       const GdkColor *color)
@@ -212,6 +256,16 @@ gdk_gc_set_foreground (GdkGC	      *gc,
   gdk_gc_set_values (gc, &values, GDK_GC_FOREGROUND);
 }
 
+/**
+ * gdk_gc_set_background:
+ * @gc: a #GdkGC.
+ * @color: the new background color.
+ * 
+ * Sets the background color for a graphics context.
+ * Note that this function uses @color->pixel, use 
+ * gdk_gc_set_rgb_bg_color() to specify the background 
+ * color as red, green, blue components.
+ **/
 void
 gdk_gc_set_background (GdkGC	      *gc,
 		       const GdkColor *color)
@@ -225,6 +279,16 @@ gdk_gc_set_background (GdkGC	      *gc,
   gdk_gc_set_values (gc, &values, GDK_GC_BACKGROUND);
 }
 
+/**
+ * gdk_gc_set_font:
+ * @gc: a #GdkGC.
+ * @font: the new font. 
+ * 
+ * Sets the font for a graphics context. (Note that
+ * all text-drawing functions in GDK take a @font
+ * argument; the value set here is used when that
+ * argument is %NULL.)
+ **/
 void
 gdk_gc_set_font (GdkGC	 *gc,
 		 GdkFont *font)
@@ -238,6 +302,15 @@ gdk_gc_set_font (GdkGC	 *gc,
   gdk_gc_set_values (gc, &values, GDK_GC_FONT);
 }
 
+/**
+ * gdk_gc_set_function:
+ * @gc: a #GdkGC.
+ * @function: the #GdkFunction to use
+ * 
+ * Determines how the current pixel values and the
+ * pixel values being drawn are combined to produce
+ * the final pixel values.
+ **/
 void
 gdk_gc_set_function (GdkGC	 *gc,
 		     GdkFunction  function)
@@ -250,6 +323,13 @@ gdk_gc_set_function (GdkGC	 *gc,
   gdk_gc_set_values (gc, &values, GDK_GC_FUNCTION);
 }
 
+/**
+ * gdk_gc_set_fill:
+ * @gc: a #GdkGC.
+ * @fill: the new fill mode.
+ * 
+ * Set the fill mode for a graphics context.
+ **/
 void
 gdk_gc_set_fill (GdkGC	 *gc,
 		 GdkFill  fill)
@@ -262,6 +342,15 @@ gdk_gc_set_fill (GdkGC	 *gc,
   gdk_gc_set_values (gc, &values, GDK_GC_FILL);
 }
 
+/**
+ * gdk_gc_set_tile:
+ * @gc:  a #GdkGC.
+ * @tile:  the new tile pixmap.
+ * 
+ * Set a tile pixmap for a graphics context.
+ * This will only be used if the fill mode
+ * is %GDK_TILED.
+ **/
 void
 gdk_gc_set_tile (GdkGC	   *gc,
 		 GdkPixmap *tile)
@@ -274,6 +363,15 @@ gdk_gc_set_tile (GdkGC	   *gc,
   gdk_gc_set_values (gc, &values, GDK_GC_TILE);
 }
 
+/**
+ * gdk_gc_set_stipple:
+ * @gc: a #GdkGC.
+ * @stipple: the new stipple bitmap.
+ * 
+ * Set the stipple bitmap for a graphics context. The
+ * stipple will only be used if the fill mode is
+ * %GDK_STIPPLED or %GDK_OPAQUE_STIPPLED.
+ **/
 void
 gdk_gc_set_stipple (GdkGC     *gc,
 		    GdkPixmap *stipple)
@@ -286,6 +384,17 @@ gdk_gc_set_stipple (GdkGC     *gc,
   gdk_gc_set_values (gc, &values, GDK_GC_STIPPLE);
 }
 
+/**
+ * gdk_gc_set_ts_origin:
+ * @gc:  a #GdkGC.
+ * @x: the x-coordinate of the origin.
+ * @y: the y-coordinate of the origin.
+ * 
+ * Set the origin when using tiles or stipples with
+ * the GC. The tile or stipple will be aligned such
+ * that the upper left corner of the tile or stipple
+ * will coincide with this point.
+ **/
 void
 gdk_gc_set_ts_origin (GdkGC *gc,
 		      gint   x,
@@ -302,6 +411,16 @@ gdk_gc_set_ts_origin (GdkGC *gc,
 		     GDK_GC_TS_X_ORIGIN | GDK_GC_TS_Y_ORIGIN);
 }
 
+/**
+ * gdk_gc_set_clip_origin:
+ * @gc: a #GdkGC.
+ * @x: the x-coordinate of the origin.
+ * @y: the y-coordinate of the origin.
+ * 
+ * Sets the origin of the clip mask. The coordinates are
+ * interpreted relative to the upper-left corner of
+ * the destination drawable of the current operation.
+ **/
 void
 gdk_gc_set_clip_origin (GdkGC *gc,
 			gint   x,
@@ -318,6 +437,15 @@ gdk_gc_set_clip_origin (GdkGC *gc,
 		     GDK_GC_CLIP_X_ORIGIN | GDK_GC_CLIP_Y_ORIGIN);
 }
 
+/**
+ * gdk_gc_set_clip_mask:
+ * @gc: the #GdkGC.
+ * @mask: a bitmap.
+ * 
+ * Sets the clip mask for a graphics context from a bitmap.
+ * The clip mask is interpreted relative to the clip
+ * origin. (See gdk_gc_set_clip_origin()).
+ **/
 void
 gdk_gc_set_clip_mask (GdkGC	*gc,
 		      GdkBitmap *mask)
@@ -331,6 +459,14 @@ gdk_gc_set_clip_mask (GdkGC	*gc,
 }
 
 
+/**
+ * gdk_gc_set_subwindow:
+ * @gc: a #GdkGC.
+ * @mode: the subwindow mode.
+ * 
+ * Sets how drawing with this GC on a window will affect child
+ * windows of that window. 
+ **/
 void
 gdk_gc_set_subwindow (GdkGC	       *gc,
 		      GdkSubwindowMode	mode)
@@ -343,6 +479,16 @@ gdk_gc_set_subwindow (GdkGC	       *gc,
   gdk_gc_set_values (gc, &values, GDK_GC_SUBWINDOW);
 }
 
+/**
+ * gdk_gc_set_exposures:
+ * @gc: a #GdkGC.
+ * @exposures: if %TRUE, exposure events will be generated.
+ * 
+ * Sets whether copying non-visible portions of a drawable
+ * using this graphics context generate exposure events
+ * for the corresponding regions of the destination
+ * drawable. (See gdk_draw_drawable()).
+ **/
 void
 gdk_gc_set_exposures (GdkGC     *gc,
 		      gboolean   exposures)
@@ -355,6 +501,18 @@ gdk_gc_set_exposures (GdkGC     *gc,
   gdk_gc_set_values (gc, &values, GDK_GC_EXPOSURES);
 }
 
+/**
+ * gdk_gc_set_line_attributes:
+ * @gc: a #GdkGC.
+ * @line_width: the width of lines.
+ * @line_style: the dash-style for lines.
+ * @cap_style: the manner in which the ends of lines are drawn.
+ * @join_style: the in which lines are joined together.
+ * 
+ * Sets various attributes of how lines are drawn. See
+ * the corresponding members of #GdkGCValues for full
+ * explanations of the arguments.
+ **/
 void
 gdk_gc_set_line_attributes (GdkGC	*gc,
 			    gint	 line_width,
@@ -376,6 +534,24 @@ gdk_gc_set_line_attributes (GdkGC	*gc,
 		     GDK_GC_JOIN_STYLE);
 }
 
+/**
+ * gdk_gc_set_dashes:
+ * @gc: a #GdkGC.
+ * @dash_offset: the phase of the dash pattern.
+ * @dash_list: an array of dash lengths.
+ * @n: the number of elements in @dash_list.
+ * 
+ * Sets the way dashed-lines are drawn. Lines will be
+ * drawn with alternating on and off segments of the
+ * lengths specified in @dash_list. The manner in
+ * which the on and off segments are drawn is determined
+ * by the @line_style value of the GC. (This can
+ * be changed with gdk_gc_set_line_attributes().)
+ *
+ * The @dash_offset defines the phase of the pattern, 
+ * specifying how many pixels into the dash-list the pattern 
+ * should actually begin.
+ **/
 void
 gdk_gc_set_dashes (GdkGC *gc,
 		   gint	  dash_offset,
@@ -457,7 +633,7 @@ gdk_gc_set_colormap (GdkGC       *gc,
  * has a colormap, or if a colormap was set explicitely with
  * gdk_gc_set_colormap.
  * 
- * Return value: 
+ * Return value: the colormap of @gc, or %NULL if @gc doesn't have one.
  **/
 GdkColormap *
 gdk_gc_get_colormap (GdkGC *gc)
