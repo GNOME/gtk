@@ -1,5 +1,7 @@
 Fri Dec 26 11:20:03 1997  Scott Goehring  <scott@poverty.bloomington.in.us>
 
+	* gtk/Makefile.am (gtkinclude_HEADERS): added gtkhandlebox.c
+
 	* gtk/gtkhandlebox.c (gtk_handle_box_reparent): eliminated a
 	compiler warning caused by not casting an argument in a debugging
 	message. :)
