@@ -10,6 +10,56 @@ A #GtkExpander allows the user to hide or show its child by clicking on an expan
 the triangles used in a #GtkTreeView.
 </para>
 
+  <para>
+    Normally you use an expander as you would use any other descendant
+    of #GtkBin; you create the child widget and use
+    gtk_container_add() to add it to the expander.  When the expander
+    is toggled, it will take care of showing and hiding the child
+    automatically.
+  </para>
+
+  <section id="expander-special-usage">
+    <title>Special Usage</title>
+
+    <para>
+      There there are situations in which you may prefer to show and
+      hide the expanded widget yourself, such as when you want to
+      actually create the widget at expansion time.  In this case,
+      create a #GtkExpander but do not add a child to it.  The
+      expander widget has an <literal>expanded</literal> property
+      which can be used to monitor its expansion state.  You should
+      watch this property with a signal connection as follows:
+    </para>
+
+    <programlisting id="expander-callback-example">
+expander = gtk_expander_new_with_mnemonic ("_More Options");
+g_signal_connect (expander, "notify::expanded",
+                  G_CALLBACK (expander_callback), NULL);
+
+...
+
+static void
+expander_callback (GObject    *object,
+                   GParamSpec *param_spec,
+                   gpointer    user_data)
+{
+  GtkExpander *expander;
+
+  expander = GTK_EXPANDER (object);
+
+  if (gtk_expander_get_expanded (expander))
+    {
+      /* Show or create widgets */
+    }
+  else
+    {
+      /* Hide or destroy widgets */
+    }
+}
+
+    </programlisting>
+  </section>
+
 <!-- ##### SECTION See_Also ##### -->
 <para>
 

@@ -1,3 +1,8 @@
+2004-02-24  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/tmpl/gtkexpander.sgml: Added a section about usage when you
+	want to manage the expanded widgets yourself.
+
 Tue Feb 24 14:45:03 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* === Released 2.3.3 ===
