@@ -22,7 +22,8 @@ create_list (void)
    
     /* Create a new list and put it in the scrolled window */
     list = gtk_list_new ();
-    gtk_container_add (GTK_CONTAINER(scrolled_window), list);
+    gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (scrolled_window),
+                                           list);
     gtk_widget_show (list);
    
     /* Add some messages to the window */
@@ -114,11 +115,16 @@ main (int argc, char *argv[])
     gtk_signal_connect (GTK_OBJECT (window), "destroy",
 			GTK_SIGNAL_FUNC (gtk_main_quit), NULL);
     gtk_container_border_width (GTK_CONTAINER (window), 10);
-   
+    gtk_widget_set_usize (GTK_WIDGET(window), 450, 400);
+
     /* create a vpaned widget and add it to our toplevel window */
    
     vpaned = gtk_vpaned_new ();
     gtk_container_add (GTK_CONTAINER(window), vpaned);
+    gtk_paned_set_handle_size (GTK_PANED(vpaned),
+                               10);
+    gtk_paned_set_gutter_size (GTK_PANED(vpaned),
+                               15);                       
     gtk_widget_show (vpaned);
    
     /* Now create the contents of the two halves of the window */

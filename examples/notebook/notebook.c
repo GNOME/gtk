@@ -27,7 +27,7 @@ void remove_book (GtkButton *button, GtkNotebook *notebook)
 {
     gint page;
     
-    page = gtk_notebook_current_page(notebook);
+    page = gtk_notebook_get_current_page(notebook);
     gtk_notebook_remove_page (notebook, page);
     /* Need to refresh the widget -- 
      This forces the widget to redraw itself. */
@@ -60,8 +60,8 @@ int main (int argc, char *argv[])
 			GTK_SIGNAL_FUNC (delete), NULL);
     
     gtk_container_border_width (GTK_CONTAINER (window), 10);
-    
-    table = gtk_table_new(2,6,TRUE);
+
+    table = gtk_table_new(3,6,FALSE);
     gtk_container_add (GTK_CONTAINER (window), table);
     
     /* Create a new notebook, place the position of the tabs */
@@ -70,7 +70,7 @@ int main (int argc, char *argv[])
     gtk_table_attach_defaults(GTK_TABLE(table), notebook, 0,6,0,1);
     gtk_widget_show(notebook);
     
-    /* lets append a bunch of pages to the notebook */
+    /* Lets append a bunch of pages to the notebook */
     for (i=0; i < 5; i++) {
 	sprintf(bufferf, "Append Frame %d", i+1);
 	sprintf(bufferl, "Page %d", i+1);
@@ -87,16 +87,12 @@ int main (int argc, char *argv[])
 	label = gtk_label_new (bufferl);
 	gtk_notebook_append_page (GTK_NOTEBOOK (notebook), frame, label);
     }
-    
-    
-    /* now lets add a page to a specific spot */
+      
+    /* Now lets add a page to a specific spot */
     checkbutton = gtk_check_button_new_with_label ("Check me please!");
     gtk_widget_set_usize(checkbutton, 100, 75);
     gtk_widget_show (checkbutton);
-    
-    label = gtk_label_new ("Add spot");
-    gtk_container_add (GTK_CONTAINER (checkbutton), label);
-    gtk_widget_show (label);
+   
     label = gtk_label_new ("Add page");
     gtk_notebook_insert_page (GTK_NOTEBOOK (notebook), checkbutton, label, 2);
     
@@ -120,9 +116,8 @@ int main (int argc, char *argv[])
     
     /* Set what page to start at (page 4) */
     gtk_notebook_set_page (GTK_NOTEBOOK(notebook), 3);
-    
-    
-    /* create a bunch of buttons */
+
+    /* Create a bunch of buttons */
     button = gtk_button_new_with_label ("close");
     gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
 			       GTK_SIGNAL_FUNC (delete), NULL);
@@ -168,6 +163,6 @@ int main (int argc, char *argv[])
     
     gtk_main ();
     
-    return 0;
+    return(0);
 }
 /* example-end */

@@ -45,17 +45,13 @@ gint main (int argc, gchar *argv[])
 		       NULL);
 
     /* It isn't necessary to shadow the border, but it looks nice :) */
-    gtk_clist_set_border(GTK_CLIST(clist), GTK_SHADOW_OUT);
+    gtk_clist_set_shadow_type (GTK_CLIST(clist), GTK_SHADOW_OUT);
 
     /* What however is important, is that we set the column widths as
      * they will never be right otherwise. Note that the columns are
      * numbered from 0 and up (to 1 in this case).
      */
     gtk_clist_set_column_width (GTK_CLIST(clist), 0, 150);
-
-    /* Scollbars _only when needed_ */
-    gtk_clist_set_policy(GTK_CLIST(clist), GTK_POLICY_AUTOMATIC,
-					   GTK_POLICY_AUTOMATIC);
 
     /* Add the GtkCList widget to the vertical box and show it. */
     gtk_box_pack_start(GTK_BOX(vbox), clist, TRUE, TRUE, 0);
@@ -97,7 +93,7 @@ gint main (int argc, gchar *argv[])
     gtk_widget_show(window);
     gtk_main();
     
-    return 0;
+    return(0);
 }
 
 /* User clicked the "Add List" button. */

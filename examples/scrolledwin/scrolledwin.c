@@ -19,13 +19,13 @@ int main (int argc, char *argv[])
     gtk_init (&argc, &argv);
     
     /* Create a new dialog window for the scrolled window to be
-     * packed into.  A dialog is just like a normal window except it has a 
-     * vbox and a horizontal separator packed into it.  It's just a shortcut
+     * packed into. A dialog is just like a normal window except it has a 
+     * vbox and a horizontal separator packed into it. It's just a shortcut
      * for creating dialogs */
     window = gtk_dialog_new ();
     gtk_signal_connect (GTK_OBJECT (window), "destroy",
 			(GtkSignalFunc) destroy, NULL);
-    gtk_window_set_title (GTK_WINDOW (window), "dialog");
+    gtk_window_set_title (GTK_WINDOW (window), "GtkScrolledWindow example");
     gtk_container_border_width (GTK_CONTAINER (window), 0);
     gtk_widget_set_usize(window, 300, 300);
     
@@ -54,7 +54,8 @@ int main (int argc, char *argv[])
     gtk_table_set_col_spacings (GTK_TABLE (table), 10);
     
     /* pack the table into the scrolled window */
-    gtk_container_add (GTK_CONTAINER (scrolled_window), table);
+    gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (scrolled_window),
+                                           table);
     gtk_widget_show (table);
     
     /* this simply creates a grid of toggle buttons on the table

@@ -93,7 +93,8 @@ int main (int argc, char *argv[])
   gtk_signal_connect (GTK_OBJECT(tree), "selection_changed",
 		      GTK_SIGNAL_FUNC(cb_selection_changed), tree);
   /* Add it to the scrolled window */
-  gtk_container_add (GTK_CONTAINER(scrolled_win), tree);
+  gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW(scrolled_win),
+                                         tree);
   /* Set the selection mode */
   gtk_tree_set_selection_mode (GTK_TREE(tree),
 			       GTK_SELECTION_MULTIPLE);
