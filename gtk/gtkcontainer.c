@@ -875,7 +875,8 @@ gtk_container_queue_resize (GtkContainer *container)
   
   if (resize_container)
     {
-      if (GTK_WIDGET_DRAWABLE (resize_container))
+      if (GTK_WIDGET_VISIBLE (resize_container) &&
+	  (GTK_WIDGET_TOPLEVEL (resize_container) || GTK_WIDGET_DRAWABLE (resize_container)))
 	{
 	  switch (resize_container->resize_mode)
 	    {
