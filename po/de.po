@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0.x\n"
-"POT-Creation-Date: 2002-09-27 16:23+0200\n"
-"PO-Revision-Date: 2002-09-27 16:22+0100\n"
+"POT-Creation-Date: 2002-09-29 19:52+0200\n"
+"PO-Revision-Date: 2002-09-29 19:52+0100\n"
 "Last-Translator: Christian Neumair <chris@gnome-de.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -260,7 +260,7 @@ msgstr "Komprimierte Icons werden nicht unterstützt"
 msgid "Unsupported icon type"
 msgstr "Nicht unterstützter Icontyp"
 
-#: gdk-pixbuf/io-ico.c:499
+#: gdk-pixbuf/io-ico.c:500
 msgid "Not enough memory to load ICO file"
 msgstr "Nicht genug Speicher, um ICO-Bild zu laden"
 
@@ -1786,12 +1786,12 @@ msgid "Whether to select the contents of an entry when it is focused."
 msgstr ""
 "Soll der Inhalt eines Eintrages angewählt werden, wenn er fokussiert ist?"
 
-#: gtk/gtkentry.c:3877 gtk/gtklabel.c:3177
+#: gtk/gtkentry.c:3877 gtk/gtklabel.c:3179
 msgid "Select All"
 msgstr "Alles auswählen"
 
 # gtk/gtkentry.c:3567 gtk/gtktextview
-#: gtk/gtkentry.c:3887 gtk/gtklabel.c:3187
+#: gtk/gtkentry.c:3887 gtk/gtklabel.c:3189
 msgid "Input Methods"
 msgstr "Eingabemethoden"
 
@@ -1799,7 +1799,7 @@ msgstr "Eingabemethoden"
 msgid "_Insert Unicode control character"
 msgstr "Unicode-Steuerzeichen _einfügen"
 
-#: gtk/gtkfilesel.c:513 gtk/gtkimage.c:161
+#: gtk/gtkfilesel.c:513 gtk/gtkimage.c:163
 msgid "Filename"
 msgstr "Dateiname"
 
@@ -2158,79 +2158,79 @@ msgstr ""
 msgid "Error loading icon: %s"
 msgstr "Fehler beim Laden des Icons: %s"
 
-#: gtk/gtkimage.c:129
+#: gtk/gtkimage.c:131
 msgid "Pixbuf"
 msgstr "Pixbuf"
 
-#: gtk/gtkimage.c:130
+#: gtk/gtkimage.c:132
 msgid "A GdkPixbuf to display."
 msgstr "Anzuzeigender GdkPixbuf."
 
-#: gtk/gtkimage.c:137
+#: gtk/gtkimage.c:139
 msgid "Pixmap"
 msgstr "Pixmap"
 
-#: gtk/gtkimage.c:138
+#: gtk/gtkimage.c:140
 msgid "A GdkPixmap to display."
 msgstr "Anzuzeigende GdkPixmap."
 
-#: gtk/gtkimage.c:145
+#: gtk/gtkimage.c:147
 msgid "Image"
 msgstr "Bild"
 
-#: gtk/gtkimage.c:146
+#: gtk/gtkimage.c:148
 msgid "A GdkImage to display."
 msgstr "Anzuzeigendes GdkImage."
 
-#: gtk/gtkimage.c:153
+#: gtk/gtkimage.c:155
 msgid "Mask"
 msgstr "Maske"
 
-#: gtk/gtkimage.c:154
+#: gtk/gtkimage.c:156
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr "Maskenbitmap für GdkImage bzw. GdkPixmap"
 
-#: gtk/gtkimage.c:162
+#: gtk/gtkimage.c:164
 msgid "Filename to load and display."
 msgstr "Name der zu ladenden und anzuzeigenden Datei."
 
-#: gtk/gtkimage.c:170
+#: gtk/gtkimage.c:172
 msgid "Stock ID"
 msgstr "Repertoire-Kennung"
 
-#: gtk/gtkimage.c:171
+#: gtk/gtkimage.c:173
 msgid "Stock ID for a stock image to display."
 msgstr "Repertoire-Kennung des anzuzeigenden Standardicons."
 
-#: gtk/gtkimage.c:178
+#: gtk/gtkimage.c:180
 msgid "Icon set"
 msgstr "Iconsatz"
 
-#: gtk/gtkimage.c:179
+#: gtk/gtkimage.c:181
 msgid "Icon set to display."
 msgstr "Anzuzeigender Iconsatz."
 
-#: gtk/gtkimage.c:186
+#: gtk/gtkimage.c:188
 msgid "Icon size"
 msgstr "Icongröße"
 
-#: gtk/gtkimage.c:187
+#: gtk/gtkimage.c:189
 msgid "Size to use for stock icon or icon set."
 msgstr "Für Standardicon oder Iconsatz zu verwendende Größe."
 
-#: gtk/gtkimage.c:195
+#: gtk/gtkimage.c:197
 msgid "Animation"
 msgstr "Animation"
 
-#: gtk/gtkimage.c:196
+#: gtk/gtkimage.c:198
 msgid "GdkPixbufAnimation to display."
 msgstr "Anzuzeigende GdkPixbufAnimation."
 
-#: gtk/gtkimage.c:203
+#: gtk/gtkimage.c:205
 msgid "Storage type"
 msgstr "Speicherungsform"
 
-#: gtk/gtkimage.c:204
+#: gtk/gtkimage.c:206
 msgid "The representation being used for image data."
 msgstr "Das für Bilddaten verwendete Format."
 
@@ -2618,7 +2618,7 @@ msgstr ""
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Sollen die Reiter alle gleich groß sein?"
 
-#: gtk/gtknotebook.c:2440 gtk/gtknotebook.c:4696
+#: gtk/gtknotebook.c:2450 gtk/gtknotebook.c:4706
 #, c-format
 msgid "Page %u"
 msgstr "Seite %u"
@@ -3271,7 +3271,7 @@ msgid "_Copy"
 msgstr "_Kopieren"
 
 #: gtk/gtkstock.c:284
-msgid "C_ut"
+msgid "Cu_t"
 msgstr "_Ausschneiden"
 
 #: gtk/gtkstock.c:285
