@@ -1,3 +1,9 @@
+2003-08-09  Noah Levitt  <nlevitt@columbia.edu>
+
+	* gdk/gdkevents.h:
+	* docs/reference/gdk/tmpl/windows.sgml: Elaborate a bit more in the
+	docs on GdkFilterFunc and GdkFilterReturn.
+
 2003-08-09  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcalendar.c:  Add and hook in gtk_calendar_scroll,
