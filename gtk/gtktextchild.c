@@ -377,24 +377,27 @@ gtk_text_child_anchor_finalize (GObject *obj)
 
   seg = anchor->segment;
   
-  if (seg->body.child.tree != NULL)
+  if (seg)
     {
-      g_warning ("Someone removed a reference to a GtkTextChildAnchor "
-                 "they didn't own; the anchor is still in the text buffer "
-                 "and the refcount is 0.");
-      return;
-    }
+      if (seg->body.child.tree != NULL)
+        {
+          g_warning ("Someone removed a reference to a GtkTextChildAnchor "
+                     "they didn't own; the anchor is still in the text buffer "
+                     "and the refcount is 0.");
+          return;
+        }
       
-  tmp_list = seg->body.child.widgets;
-  while (tmp_list)
-    {
-      g_object_unref (tmp_list->data);
-      tmp_list = g_slist_next (tmp_list);
+      tmp_list = seg->body.child.widgets;
+      while (tmp_list)
+        {
+          g_object_unref (tmp_list->data);
+          tmp_list = g_slist_next (tmp_list);
+        }
+  
+      g_slist_free (seg->body.child.widgets);
+  
+      g_free (seg);
     }
-  
-  g_slist_free (seg->body.child.widgets);
-  
-  g_free (seg);
 
   anchor->segment = NULL;
 }

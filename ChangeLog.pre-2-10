@@ -1,3 +1,9 @@
+Sat Jan 31 23:13:43 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktextchild.c (gtk_text_child_anchor_finalize): Don't
+	crash when finalizing an unused GtkTextChildAnchor.  (#132260,
+	muppet)
+
 Sat Jan 31 22:41:57 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktreemodel.c (gtk_tree_model_rows_reordered): Correct
