@@ -40,7 +40,7 @@ static gint navailable_depths;
 static GdkVisualType available_types[6];
 static gint navailable_types;
 
-static char* visual_names[] =
+static gchar* visual_names[] =
 {
   "static gray",
   "grayscale",

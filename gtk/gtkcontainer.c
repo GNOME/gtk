@@ -308,6 +308,11 @@ void
 gtk_container_add (GtkContainer *container,
 		   GtkWidget    *widget)
 {
+  g_return_if_fail (container != NULL);
+  g_return_if_fail (GTK_IS_CONTAINER (container));
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
   gtk_signal_emit (GTK_OBJECT (container), container_signals[ADD], widget);
 }
 
@@ -317,7 +322,10 @@ gtk_container_remove (GtkContainer *container,
 {
   g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_CONTAINER (container));
-
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GTK_CONTAINER (widget->parent) == container);
+  
   if (container->focus_child == widget)
     container->focus_child = NULL;
 

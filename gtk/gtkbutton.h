@@ -28,9 +28,9 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define GTK_BUTTON(obj)          GTK_CHECK_CAST (obj, gtk_button_get_type (), GtkButton)
-#define GTK_BUTTON_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_button_get_type (), GtkButtonClass)
-#define GTK_IS_BUTTON(obj)       GTK_CHECK_TYPE (obj, gtk_button_get_type ())
+#define GTK_BUTTON(obj)          (GTK_CHECK_CAST ((obj), gtk_button_get_type (), GtkButton))
+#define GTK_BUTTON_CLASS(klass)  (GTK_CHECK_CLASS_CAST ((klass), gtk_button_get_type (), GtkButtonClass))
+#define GTK_IS_BUTTON(obj)       (GTK_CHECK_TYPE ((obj), gtk_button_get_type ()))
 
 
 typedef struct _GtkButton       GtkButton;

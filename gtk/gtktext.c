@@ -822,9 +822,9 @@ gtk_text_forward_delete (GtkText *text,
 }
 
 static gchar *    
-gtk_text_get_chars       (GtkEditable   *editable,
-			  gint           start_pos,
-			  gint           end_pos)
+gtk_text_get_chars (GtkEditable   *editable,
+		    gint           start_pos,
+		    gint           end_pos)
 {
   GtkText *text;
   

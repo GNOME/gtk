@@ -1288,7 +1288,7 @@ create_tree_sample(guint selection_mode,
 static void
 cb_create_tree(GtkWidget* w)
 {
-  guint selection_mode;
+  guint selection_mode = GTK_SELECTION_SINGLE;
   guint view_line;
   guint draw_line;
   guint no_root_item;

@@ -398,8 +398,8 @@ gtk_list_clear_items (GtkList *list,
   GList *start_list;
   GList *end_list;
   GList *tmp_list;
-  gint nchildren;
-  gint selection_changed;
+  guint nchildren;
+  gboolean selection_changed;
 
   g_return_if_fail (list != NULL);
   g_return_if_fail (GTK_IS_LIST (list));
@@ -819,6 +819,7 @@ gtk_list_add (GtkContainer *container,
   g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_LIST (container));
   g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_LIST_ITEM (widget));
 
   list = GTK_LIST (container);
 

@@ -1,3 +1,13 @@
+Wed Mar 11 04:35:06 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtklist.c:
+	* gtk/gtktree.h: 
+	* gtk/gtktree.c:
+	* gtk/gtktreeitem.h: 
+	* gtk/gtktreeitem.c: applied gtk-bolliet-980310-0.patch.gz which adds
+	more checks and implements gtk_tree_clear_items. made a bunch of style
+	and indentation fixes.
+
 Wed Mar 11 03:35:17 1998  Tim Janik  <timj@gimp.org>
 
 	* gtk/gtktooltips.h:
