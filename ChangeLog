@@ -1,3 +1,10 @@
+2004-10-30  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkicontheme.c (insert_theme): Sort the dir_mtimes 
+	list in the same way as the search path.
+	(theme_subdir_load): Avoid stat()ing subdirs if the theme 
+	directory doesn't exist.  (#156866)
+
 2004-10-29  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcellrendererpixbuf.c (gtk_cell_renderer_pixbuf_finalize): 
