@@ -1,3 +1,9 @@
+2002-03-27  Matthias Clasen  <maclas@gmx.de>
+
+	* io-png.c (gdk_pixbuf__png_image_load,
+	gdk_pixbuf__png_image_begin_load): Make libpng use g_malloc
+	instead of system malloc. 
+
 2002-03-26  Matthias Clasen  <maclas@gmx.de>
 
 	* io-tiff.c (tiff_image_parse): Don't leak pixbuf on error.
