@@ -1,5 +1,8 @@
 2004-03-08  Morten Welinder  <terra@gnome.org>
 
+	* gtk/gtkpathbar.c (_gtk_path_bar_set_path): If we fail, leave
+	widget unchanged.  Explicitly verify final directory.
+
 	* gtk/gtkfilesystemunix.c (gtk_file_system_unix_create_folder,
 	get_icon_type, filename_get_info): Protect errno.
 

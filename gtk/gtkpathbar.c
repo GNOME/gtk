@@ -808,6 +808,7 @@ _gtk_path_bar_set_path (GtkPathBar         *path_bar,
   GtkFilePath *path;
   gboolean first_directory = TRUE;
   gboolean result;
+  GList *new_buttons = NULL;
 
   g_return_val_if_fail (GTK_IS_PATH_BAR (path_bar), FALSE);
   g_return_val_if_fail (file_path != NULL, FALSE);
@@ -817,7 +818,6 @@ _gtk_path_bar_set_path (GtkPathBar         *path_bar,
   if (gtk_path_bar_check_parent_path (path_bar, file_path, path_bar->file_system))
     return TRUE;
       
-  gtk_path_bar_clear_buttons (path_bar);
   path = gtk_file_path_copy (file_path);
 
   gtk_widget_push_composite_child ();
@@ -831,6 +831,7 @@ _gtk_path_bar_set_path (GtkPathBar         *path_bar,
       GtkFileFolder *file_folder;
       GtkFileInfo *file_info;
       gboolean valid;
+      GtkFileInfoType needed = GTK_FILE_INFO_DISPLAY_NAME;
       ButtonType button_type;
 
       valid = gtk_file_system_get_parent (path_bar->file_system,
@@ -845,18 +846,23 @@ _gtk_path_bar_set_path (GtkPathBar         *path_bar,
 	  break;
 	}
 
-      if (parent_path)
-	file_folder = gtk_file_system_get_folder (path_bar->file_system, parent_path,
-						  GTK_FILE_INFO_DISPLAY_NAME, NULL);
-      else
-	file_folder = gtk_file_system_get_folder (path_bar->file_system, path,
-						  GTK_FILE_INFO_DISPLAY_NAME, NULL);
+      if (first_directory)
+	needed |= GTK_FILE_INFO_IS_FOLDER;
+
+      file_folder = gtk_file_system_get_folder
+	(path_bar->file_system,
+	 parent_path ? parent_path : path,
+	 needed,
+	 NULL);
 
       file_info = gtk_file_folder_get_info (file_folder, path, &err);
-      if (!file_info)
+      if (!file_info || (first_directory && !gtk_file_info_get_is_folder (file_info)))
 	{
 	  result = FALSE;
+
 	  g_propagate_error (error, err);
+	  if (file_info)
+	    gtk_file_info_free (file_info);
 	  g_object_unref (file_folder);
 	  gtk_file_path_free (parent_path);
 	  gtk_file_path_free (path);
@@ -870,8 +876,7 @@ _gtk_path_bar_set_path (GtkPathBar         *path_bar,
       gtk_file_path_free (path);
       g_object_unref (file_folder);
 
-      gtk_container_add (GTK_CONTAINER (path_bar), button);
-      path_bar->button_list = g_list_prepend (path_bar->button_list, button);
+      new_buttons = g_list_prepend (new_buttons, button);
 
       button_type = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (button), "gtk-path-bar-button-type"));
       if (button_type != NORMAL_BUTTON)
@@ -885,9 +890,34 @@ _gtk_path_bar_set_path (GtkPathBar         *path_bar,
       first_directory = FALSE;
     }
 
-  gtk_widget_pop_composite_child ();
+  if (result)
+    {
+      GList *l;
 
-  path_bar->button_list = g_list_reverse (path_bar->button_list);
+      gtk_path_bar_clear_buttons (path_bar);
+      path_bar->button_list = g_list_reverse (new_buttons);
+
+      for (l = path_bar->button_list; l; l = l->next)
+	{
+	  GtkWidget *button = l->data;
+	  gtk_container_add (GTK_CONTAINER (path_bar), button);
+	}
+    }
+  else
+    {
+      GList *l;
+
+      for (l = new_buttons; l; l = l->next)
+	{
+	  GtkWidget *button = l->data;
+	  gtk_widget_destroy (button);
+	  gtk_widget_unref (button);
+	}
+
+      g_list_free (new_buttons);
+    }
+
+  gtk_widget_pop_composite_child ();
 
   return result;
 }
