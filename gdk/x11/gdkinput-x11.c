@@ -572,6 +572,8 @@ _gdk_input_common_other_event (GdkEvent         *event,
       gdk_input_translate_coordinates (gdkdev,input_window, xdbe->axis_data,
 				       event->button.axes, 
 				       &event->button.x,&event->button.y);
+      event->button.x_root = event->button.x + input_window->root_x;
+      event->button.y_root = event->button.y + input_window->root_y;
       event->button.state = gdk_input_translate_state(xdbe->state,xdbe->device_state);
       event->button.button = xdbe->button;
 
@@ -668,6 +670,8 @@ _gdk_input_common_other_event (GdkEvent         *event,
       gdk_input_translate_coordinates(gdkdev,input_window,xdme->axis_data,
 				      event->motion.axes,
 				      &event->motion.x,&event->motion.y);
+      event->motion.x_root = event->motion.x + input_window->root_x;
+      event->motion.y_root = event->motion.y + input_window->root_y;
 
       event->motion.type = GDK_MOTION_NOTIFY;
       event->motion.window = input_window->window;

@@ -1,5 +1,9 @@
 2004-12-27  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/x11/gdkinput-x11.c (_gdk_input_common_other_event): 
+	Set x_root and y_root in button and motion events from 
+	extended input devices.  (#148715, Robert Ögren)
+
 	* gtk/gtktreeview.c (gtk_tree_view_class_init): Fix a 
 	typo.  (#162339, Alessio Dessi)
 
