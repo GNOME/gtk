@@ -594,7 +594,7 @@ gdk_pixdata_to_csource (GdkPixdata        *pixdata,
   guint bpp, width, height, rowstride;
   gboolean rle_encoded;
   gchar *macro_name;
-  guint8 *img_buffer, *img_buffer_end, *stream;
+  guint8 *img_buffer, *img_buffer_end, *stream = NULL;
   guint stream_length;
   GString *gstring;
   
@@ -725,6 +725,7 @@ gdk_pixdata_to_csource (GdkPixdata        *pixdata,
       guint pix_length = img_buffer_end - img_buffer;
       
       stream = gdk_pixdata_serialize (pixdata, &stream_length);
+      img_buffer = stream;
       img_buffer_end = stream + stream_length;
 
       APPEND (gstring, "%s%s%s %s[] = \n",
@@ -734,34 +735,33 @@ gdk_pixdata_to_csource (GdkPixdata        *pixdata,
       APPEND (gstring, "{ \"\"\n  /* Pixbuf magic (0x%x) */\n  \"",
 	      GDK_PIXBUF_MAGIC_NUMBER);
       cdata.pos = 3;
-      save_uchar (&cdata, *stream++); save_uchar (&cdata, *stream++);
-      save_uchar (&cdata, *stream++); save_uchar (&cdata, *stream++);
+      save_uchar (&cdata, *img_buffer++); save_uchar (&cdata, *img_buffer++);
+      save_uchar (&cdata, *img_buffer++); save_uchar (&cdata, *img_buffer++);
       APPEND (gstring, "\"\n  /* length: header (%u) + pixel_data (%u) */\n  \"",
 	      GDK_PIXDATA_HEADER_LENGTH,
 	      rle_encoded ? pix_length : rowstride * height);
       cdata.pos = 3;
-      save_uchar (&cdata, *stream++); save_uchar (&cdata, *stream++);
-      save_uchar (&cdata, *stream++); save_uchar (&cdata, *stream++);
+      save_uchar (&cdata, *img_buffer++); save_uchar (&cdata, *img_buffer++);
+      save_uchar (&cdata, *img_buffer++); save_uchar (&cdata, *img_buffer++);
       APPEND (gstring, "\"\n  /* pixdata_type (0x%x) */\n  \"",
 	      pixdata->pixdata_type);
       cdata.pos = 3;
-      save_uchar (&cdata, *stream++); save_uchar (&cdata, *stream++);
-      save_uchar (&cdata, *stream++); save_uchar (&cdata, *stream++);
+      save_uchar (&cdata, *img_buffer++); save_uchar (&cdata, *img_buffer++);
+      save_uchar (&cdata, *img_buffer++); save_uchar (&cdata, *img_buffer++);
       APPEND (gstring, "\"\n  /* rowstride (%u) */\n  \"",
 	      rowstride);
       cdata.pos = 3;
-      save_uchar (&cdata, *stream++); save_uchar (&cdata, *stream++);
-      save_uchar (&cdata, *stream++); save_uchar (&cdata, *stream++);
+      save_uchar (&cdata, *img_buffer++); save_uchar (&cdata, *img_buffer++);
+      save_uchar (&cdata, *img_buffer++); save_uchar (&cdata, *img_buffer++);
       APPEND (gstring, "\"\n  /* width (%u) */\n  \"", width);
       cdata.pos = 3;
-      save_uchar (&cdata, *stream++); save_uchar (&cdata, *stream++);
-      save_uchar (&cdata, *stream++); save_uchar (&cdata, *stream++);
+      save_uchar (&cdata, *img_buffer++); save_uchar (&cdata, *img_buffer++);
+      save_uchar (&cdata, *img_buffer++); save_uchar (&cdata, *img_buffer++);
       APPEND (gstring, "\"\n  /* height (%u) */\n  \"", height);
       cdata.pos = 3;
-      save_uchar (&cdata, *stream++); save_uchar (&cdata, *stream++);
-      save_uchar (&cdata, *stream++); save_uchar (&cdata, *stream++);
+      save_uchar (&cdata, *img_buffer++); save_uchar (&cdata, *img_buffer++);
+      save_uchar (&cdata, *img_buffer++); save_uchar (&cdata, *img_buffer++);
       APPEND (gstring, "\"\n  /* pixel_data: */\n");
-      img_buffer = stream;
     }
 
   /* pixel_data intro
@@ -812,8 +812,9 @@ gdk_pixdata_to_csource (GdkPixdata        *pixdata,
 
   /* cleanup
    */
+  g_free (stream);
   g_free (macro_name);
-  
+    
   return gstring;
 }
 
