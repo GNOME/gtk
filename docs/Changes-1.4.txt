@@ -4,4 +4,6 @@ Incompatible Changes from GTK+-1.2 to GTK+-1.4:
   has been unused since the main loop was moved into GLib
   prior to 1.2. 
 
-
+- The signature for GtkPrintFunc (used for gtk_item_factory_dump_items)
+  has been changed to take a 'const gchar *' instead of 'gchar *', to
+  match what we do for glib, and other similar cases.

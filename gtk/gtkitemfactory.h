@@ -42,7 +42,7 @@ extern "C" {
 
 
 typedef void	(*GtkPrintFunc)		   (gpointer		 func_data,
-					    gchar		*str);
+					    const gchar		*str);
 typedef gchar * (*GtkTranslateFunc)	   (const gchar		*path,
 					    gpointer             func_data);
 typedef	void	(*GtkItemFactoryCallback)  ();
@@ -172,7 +172,7 @@ void	gtk_item_factory_dump_rc	(const gchar		*file_name,
 					 GtkPatternSpec		*path_pspec,
 					 gboolean		 modified_only);
 void	gtk_item_factory_print_func	(gpointer		 FILE_pointer,
-					 gchar			*string);
+					 const gchar		*string);
 void	gtk_item_factory_create_item	(GtkItemFactory		*ifactory,
 					 GtkItemFactoryEntry	*entry,
 					 gpointer		 callback_data,

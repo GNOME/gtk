@@ -1,3 +1,9 @@
+Fri Jan 21 16:16:29 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkitemfactory.[ch] docs/Changes-1.4.txt: Make GtkPrintFunc
+	take a const string argument like GtkTranslateFunc. This will
+	require changes in use code.
+
 2000-01-19  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkwindow-win32.c (gdk_window_clear_area): The correct
