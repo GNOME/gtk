@@ -80,7 +80,7 @@ these fields.
 Describes a key press or key release event.
 </para>
 
-@type: the type of the event (%GDK_KEY_RELEASE or %GDK_KEY_RELEASE).
+@type: the type of the event (%GDK_KEY_PRESS or %GDK_KEY_RELEASE).
 @window: the window which received the event.
 @send_event: TRUE if the event was sent explicitly (e.g. using XSendEvent).
 @time: the time of the event in milliseconds.
