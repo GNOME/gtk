@@ -1168,7 +1168,7 @@ gtk_text_tag_set_property (GObject      *object,
     case PROP_BG_FULL_HEIGHT:
       text_tag->bg_full_height_set = TRUE;
       text_tag->values->bg_full_height = g_value_get_boolean (value);
-      g_object_notify (object, "bg_full_height_set");
+      g_object_notify (object, "background_full_height_set");
       break;
 
     case PROP_LANGUAGE:

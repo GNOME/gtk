@@ -1,3 +1,9 @@
+Sat Jun 15 16:10:00 2002  James M. Cape <jcape@ignore-your.tv>
+
+	* gtk/gtktexttag.c (gtk_text_tag_set_property):
+	Notify about "background-full-height-set", not
+	"bg_full_height_set".
+
 Fri Jun 14 12:50:21 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* Released 2.0.4.
