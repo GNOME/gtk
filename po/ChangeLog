@@ -1,3 +1,7 @@
+2003-02-09  Christian Rose  <menthos@menthos.com>
+
+	* en@IPA.po: Removed. It doesn't contain translations anyway.
+
 2003-02-08  Pablo Gonzalo del Campo <pablodc@bigfoot.com>
 
 	* es.po: Updated Spanish translation.

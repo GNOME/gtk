@@ -1,3 +1,7 @@
+2003-02-09  Christian Rose  <menthos@menthos.com>
+
+	* configure.in: Removed "en@IPA" from ALL_LINGUAS.
+
 2003-02-06  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/x11/gdkvisual-x11.c (gdk_visual_get_best_with_depth): Return
