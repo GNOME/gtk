@@ -15063,7 +15063,7 @@ Notebook, Progress Bar, Dialogs, and File selection widgets.  Thanks a
 lot Mark!  You've been a great help.
 
 <item>Tim Janik <tt><htmlurl url="mailto:timj@gtk.org"
-name="timj@psynet.net"></tt> for his great job on the Lists
+name="timj@gtk.org"></tt> for his great job on the Lists
 Widget. His excellent work on automatically extracting the widget tree
 and signal information from GTK. Thanks Tim :)
 

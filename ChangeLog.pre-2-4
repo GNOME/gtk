@@ -1,3 +1,10 @@
+Tue Jul 11 20:47:13 2000  Tim Janik  <timj@gtk.org>
+
+	* docs/gtk_tut_it.sgml (name): 
+	* docs/gtk_tut_fr.sgml (name): 
+	* docs/gtk_tut.sgml (name): scratched notion of completely
+	outdated email adress: s/timj@psynet.net/timj@gtk.org/.
+
 Tue Jul 11 08:04:58 2000  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtktree.c (gtk_real_tree_select_child): eek, i've never seen
