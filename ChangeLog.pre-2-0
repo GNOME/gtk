@@ -1,3 +1,8 @@
+2001-09-07  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextiter.c: add some lame code to handle G_MININT, fixes 
+	#57424
+
 Fri Sep  7 18:17:47 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdk.h gdk/x11/gdkmain-x11.c: Deprecate gdk_set/get_use_xshm, 

@@ -31,6 +31,8 @@
 #include <string.h>
 #include <ctype.h>
 
+#define FIX_OVERFLOWS(varname) if ((varname) == G_MININT) (varname) = G_MININT + 1
+
 typedef struct _GtkTextRealIter GtkTextRealIter;
 
 struct _GtkTextRealIter
@@ -2173,6 +2175,8 @@ gtk_text_iter_forward_chars (GtkTextIter *iter, gint count)
 
   g_return_val_if_fail (iter != NULL, FALSE);
 
+  FIX_OVERFLOWS (count);
+  
   real = gtk_text_iter_make_real (iter);
 
   if (real == NULL)
@@ -2243,6 +2247,8 @@ gtk_text_iter_backward_chars (GtkTextIter *iter, gint count)
 
   g_return_val_if_fail (iter != NULL, FALSE);
 
+  FIX_OVERFLOWS (count);
+  
   real = gtk_text_iter_make_real (iter);
 
   if (real == NULL)
@@ -2391,7 +2397,7 @@ gtk_text_iter_forward_line (GtkTextIter *iter)
   GtkTextRealIter *real;
 
   g_return_val_if_fail (iter != NULL, FALSE);
-
+  
   real = gtk_text_iter_make_real (iter);
 
   if (real == NULL)
@@ -2496,6 +2502,8 @@ gtk_text_iter_backward_line (GtkTextIter *iter)
 gboolean
 gtk_text_iter_forward_lines (GtkTextIter *iter, gint count)
 {
+  FIX_OVERFLOWS (count);
+  
   if (count < 0)
     return gtk_text_iter_backward_lines (iter, 0 - count);
   else if (count == 0)
@@ -2525,6 +2533,8 @@ gtk_text_iter_forward_lines (GtkTextIter *iter, gint count)
 gboolean
 gtk_text_iter_backward_lines (GtkTextIter *iter, gint count)
 {
+  FIX_OVERFLOWS (count);
+  
   if (count < 0)
     return gtk_text_iter_forward_lines (iter, 0 - count);
   else if (count == 0)
@@ -2864,6 +2874,8 @@ gtk_text_iter_forward_word_ends (GtkTextIter      *iter,
 {
   g_return_val_if_fail (iter != NULL, FALSE);
 
+  FIX_OVERFLOWS (count);
+  
   if (count == 0)
     return FALSE;
 
@@ -2898,6 +2910,8 @@ gtk_text_iter_backward_word_starts (GtkTextIter      *iter,
 {
   g_return_val_if_fail (iter != NULL, FALSE);
 
+  FIX_OVERFLOWS (count);
+  
   if (count < 0)
     return gtk_text_iter_forward_word_ends (iter, -count);
 
@@ -3223,6 +3237,8 @@ gtk_text_iter_forward_cursor_positions (GtkTextIter *iter,
 {
   g_return_val_if_fail (iter != NULL, FALSE);
 
+  FIX_OVERFLOWS (count);
+  
   if (count == 0)
     return FALSE;
   
@@ -3258,6 +3274,8 @@ gtk_text_iter_backward_cursor_positions (GtkTextIter *iter,
 {
   g_return_val_if_fail (iter != NULL, FALSE);
 
+  FIX_OVERFLOWS (count);
+  
   if (count == 0)
     return FALSE;
 
