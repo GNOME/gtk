@@ -1,5 +1,7 @@
 2004-11-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcombobox.c (gtk_combo_box_class_init): Add more docs.
+
 	* gtk/gtkfilefilter.c (gtk_file_filter_filter): Fix typo in
 	docs.
 

@@ -513,6 +513,17 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   parent_class = g_type_class_peek_parent (klass);
 
   /* signals */
+  /**
+   * GtkComboBox::changed:
+   * @widget: the object which received the signal
+   * 
+   * The changed signal gets emitted when the active
+   * item is changed. The can be due to the user selecting
+   * a different item from the list, or due to a 
+   * call to gtk_combo_box_set_active_iter().
+   *
+   * Since: 2.4
+   */
   combo_box_signals[CHANGED] =
     g_signal_new ("changed",
                   G_OBJECT_CLASS_TYPE (klass),
@@ -523,6 +534,14 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                   G_TYPE_NONE, 0);
 
   /* properties */
+  /**
+   * GtkComboBox:model:
+   *
+   * The model from which the combo box takes the values shown
+   * in the list. 
+   *
+   * Since: 2.4
+   */
   g_object_class_install_property (object_class,
                                    PROP_MODEL,
                                    g_param_spec_object ("model",
@@ -531,6 +550,15 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                         GTK_TYPE_TREE_MODEL,
                                                         G_PARAM_READWRITE));
 
+  /**
+   * GtkComboBox:wrap-width:
+   *
+   * If wrap-width is set to a positive value, the list will be
+   * displayed in multiple columns, the number of columns is
+   * determined by wrap-width.
+   *
+   * Since: 2.4
+   */
   g_object_class_install_property (object_class,
                                    PROP_WRAP_WIDTH,
                                    g_param_spec_int ("wrap_width",
@@ -541,6 +569,19 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                      0,
                                                      G_PARAM_READWRITE));
 
+
+  /**
+   * GtkComboBox:row-span-column:
+   *
+   * If this is set to a non-negative value, it must be the index of a column 
+   * of type %G_TYPE_INT in the model. 
+   *
+   * The values of that column are used to determine how many rows a value 
+   * in the list will span. Therefore, the values in the model column pointed 
+   * to by this property must be greater than zero and not larger than wrap-width.
+   *
+   * Since: 2.4
+   */
   g_object_class_install_property (object_class,
                                    PROP_ROW_SPAN_COLUMN,
                                    g_param_spec_int ("row_span_column",
@@ -551,6 +592,18 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                      -1,
                                                      G_PARAM_READWRITE));
 
+
+  /**
+   * GtkComboBox:column-span-column:
+   *
+   * If this is set to a non-negative value, it must be the index of a column 
+   * of type %G_TYPE_INT in the model. 
+   *
+   * The values of that column are used to determine how many columns a value 
+   * in the list will span. 
+   *
+   * Since: 2.4
+   */
   g_object_class_install_property (object_class,
                                    PROP_COLUMN_SPAN_COLUMN,
                                    g_param_spec_int ("column_span_column",
@@ -562,6 +615,16 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                      G_PARAM_READWRITE));
 
 
+  /**
+   * GtkComboBox:active:
+   *
+   * The item which is currently active. If the model is a non-flat treemodel,
+   * and the active item is not an immediate child of the root of the tree,
+   * this property has the value <literal>gtk_tree_path_get_indices (path)[0]</literal>,
+   * where <literal>path</literal> is the #GtkTreePath of the active item.
+   *
+   * Since: 2.4
+   */
   g_object_class_install_property (object_class,
                                    PROP_ACTIVE,
                                    g_param_spec_int ("active",
@@ -575,7 +638,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   /**
    * GtkComboBox:add-tearoffs:
    *
-   * The "add-tearoffs" property controls whether generated menus 
+   * The add-tearoffs property controls whether generated menus 
    * have tearoff menu items. 
    *
    * Note that this only affects menu style combo boxes.
@@ -593,7 +656,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   /**
    * GtkComboBox:has-frame:
    *
-   * The :has-frame property controls whether a frame
+   * The has-frame property controls whether a frame
    * is drawn around the entry.
    *
    * Since: 2.6
@@ -4175,7 +4238,10 @@ gtk_combo_box_set_column_span_column (GtkComboBox *combo_box,
  * @combo_box: A #GtkComboBox.
  *
  * Returns the index of the currently active item, or -1 if there's no
- * active item.
+ * active item. If the model is a non-flat treemodel, and the active item 
+ * is not an immediate child of the root of the tree, this function returns 
+ * <literal>gtk_tree_path_get_indices (path)[0]</literal>, where 
+ * <literal>path</literal> is the #GtkTreePath of the active item.
  *
  * Return value: An integer which is the index of the currently active item, or
  * -1 if there's no active item.
