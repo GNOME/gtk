@@ -1,3 +1,8 @@
+2003-04-03  Matthias Clasen  <maclas@gmx.de>
+
+	* demos/gtk-demo/main.c (demo_find_file): Only use files from the
+	current directory if it looks like the srcdir.  (#109357)
+
 2003-04-02  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkprogress.c (gtk_progress_get_percentage_from_value):
