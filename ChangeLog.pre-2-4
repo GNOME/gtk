@@ -1,3 +1,8 @@
+Mon Aug 17 05:10:29 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkmain.c (gtk_init): don't call module initializers multiple
+	times. changed --gtk-with-module to --gtk-module at owen's request.
+
 Mon Aug 17 03:47:55 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkmain.c (gtk_init): feature a new commandline option

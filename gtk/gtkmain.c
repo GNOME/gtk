@@ -309,12 +309,12 @@ gtk_init (int	 *argc,
 		}
 	      (*argv)[i] = NULL;
 	    }
-	  else if (strcmp ("--gtk-with-module", (*argv)[i]) == 0 ||
-		   strncmp ("--gtk-with-module=", (*argv)[i], 18) == 0)
+	  else if (strcmp ("--gtk-module", (*argv)[i]) == 0 ||
+		   strncmp ("--gtk-module=", (*argv)[i], 13) == 0)
 	    {
 	      GModule *module = NULL;
 	      GtkModuleInitFunc modinit_func = NULL;
-	      gchar *module_name = (*argv)[i] + 17;
+	      gchar *module_name = (*argv)[i] + 12;
 
 	      if (*module_name == '=')
 		module_name++;
@@ -339,7 +339,15 @@ gtk_init (int	 *argc,
 		  if (module &&
 		      g_module_symbol (module, "gtk_module_init", (gpointer*) &modinit_func) &&
 		      modinit_func)
-		    gtk_modinit_funcs = g_slist_prepend (gtk_modinit_funcs, modinit_func);
+		    {
+		      if (!g_slist_find (gtk_modinit_funcs, modinit_func))
+			gtk_modinit_funcs = g_slist_prepend (gtk_modinit_funcs, modinit_func);
+		      else
+			{
+			  g_module_close (module);
+			  module = NULL;
+			}
+		    }
 		}
 	      if (!modinit_func)
 		{
