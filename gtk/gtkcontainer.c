@@ -936,11 +936,8 @@ gtk_container_real_check_resize (GtkContainer *container)
       widget->requisition.height > widget->allocation.height)
     {
       if (GTK_IS_RESIZE_CONTAINER (container))
-	{
-	  gtk_widget_size_allocate (GTK_WIDGET (container),
-				    &GTK_WIDGET (container)->allocation);
-	  gtk_widget_queue_draw (GTK_WIDGET (container));
-	}
+	gtk_widget_size_allocate (GTK_WIDGET (container),
+				  &GTK_WIDGET (container)->allocation);
       else
 	gtk_widget_queue_resize (widget);
     }
@@ -1009,11 +1006,8 @@ gtk_container_resize_children (GtkContainer *container)
       if (resize_container->parent)
 	gtk_container_queue_resize (container);
       else
-	{
-	  gtk_widget_size_allocate (GTK_WIDGET (container),
-				    &GTK_WIDGET (container)->allocation);
-	  gtk_widget_queue_draw (GTK_WIDGET (container));
-	}
+	gtk_widget_size_allocate (GTK_WIDGET (container),
+				  &GTK_WIDGET (container)->allocation);
       return;
     }
 
@@ -1084,8 +1078,9 @@ gtk_container_resize_children (GtkContainer *container)
       widget = node->data;
       
       GTK_PRIVATE_UNSET_FLAG (widget, GTK_RESIZE_NEEDED);
+
       gtk_widget_size_allocate (widget, &widget->allocation);
-      gtk_widget_queue_draw (widget);
+
       gtk_widget_unref (widget);
     }
   g_slist_free (resize_containers);

@@ -59,16 +59,17 @@ struct _GtkNotebook
   guint16 tab_hborder;
   guint16 tab_vborder;
   
-  guint show_tabs       : 1;
-  guint homogeneous     : 1;
-  guint show_border     : 1;
-  guint tab_pos         : 2;
-  guint scrollable      : 1;
-  guint in_child        : 2;
-  guint click_child     : 2;
-  guint button          : 2;
-  guint need_timer      : 1;
-  guint child_has_focus : 1;
+  guint show_tabs          : 1;
+  guint homogeneous        : 1;
+  guint show_border        : 1;
+  guint tab_pos            : 2;
+  guint scrollable         : 1;
+  guint in_child           : 2;
+  guint click_child        : 2;
+  guint button             : 2;
+  guint need_timer         : 1;
+  guint child_has_focus    : 1;
+  guint have_visible_child : 1;
 };
 
 struct _GtkNotebookClass

@@ -1206,15 +1206,19 @@ gtk_widget_setv (GtkWidget *widget,
   gtk_object_setv (GTK_OBJECT (widget), nargs, args);
 }
 
-/*****************************************
- * gtk_widget_unparent:
- *   do any cleanup necessary necessary
- *   for setting parent = NULL.
- *
- *   arguments:
- *
- *   results:
- *****************************************/
+static inline void	   
+gtk_widget_queue_clear_child (GtkWidget *widget)
+{
+  GtkWidget *parent;
+
+  parent = widget->parent;
+  if (parent && GTK_WIDGET_DRAWABLE (parent))
+    gtk_widget_queue_clear_area (parent,
+				 widget->allocation.x,
+				 widget->allocation.y,
+				 widget->allocation.width,
+				 widget->allocation.height);
+}
 
 void
 gtk_widget_unparent (GtkWidget *widget)
@@ -1336,10 +1340,8 @@ gtk_widget_unparent (GtkWidget *widget)
 
       toplevel = toplevel->parent;
     }
-  if (widget->window &&
-      GTK_WIDGET_NO_WINDOW (widget) &&
-      GTK_WIDGET_DRAWABLE (widget))
-    gtk_widget_queue_clear (widget);
+
+  gtk_widget_queue_clear_child (widget);
 
   /* Reset the width and height here, to force reallocation if we
    * get added back to a new parent. This won't work if our new
@@ -1415,9 +1417,26 @@ gtk_widget_show (GtkWidget *widget)
   g_return_if_fail (GTK_IS_WIDGET (widget));
   
   if (!GTK_WIDGET_VISIBLE (widget))
-    gtk_signal_emit (GTK_OBJECT (widget), widget_signals[SHOW]);
+    {
+      gtk_widget_queue_resize (widget);
+      gtk_signal_emit (GTK_OBJECT (widget), widget_signals[SHOW]);
+    }
 }
 
+static void
+gtk_widget_real_show (GtkWidget *widget)
+{
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  
+  if (!GTK_WIDGET_VISIBLE (widget))
+    {
+      GTK_WIDGET_SET_FLAGS (widget, GTK_VISIBLE);
+
+      if (widget->parent && GTK_WIDGET_MAPPED (widget->parent))
+	gtk_widget_map (widget);
+    }
+}
 
 /*************************************************************
  * gtk_widget_show_now:
@@ -1478,7 +1497,25 @@ gtk_widget_hide (GtkWidget *widget)
   g_return_if_fail (GTK_IS_WIDGET (widget));
   
   if (GTK_WIDGET_VISIBLE (widget))
-    gtk_signal_emit (GTK_OBJECT (widget), widget_signals[HIDE]);
+    {
+      gtk_signal_emit (GTK_OBJECT (widget), widget_signals[HIDE]);
+      gtk_widget_queue_resize (widget);
+    }
+}
+
+static void
+gtk_widget_real_hide (GtkWidget *widget)
+{
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  
+  if (GTK_WIDGET_VISIBLE (widget))
+    {
+      GTK_WIDGET_UNSET_FLAGS (widget, GTK_VISIBLE);
+      
+      if (GTK_WIDGET_MAPPED (widget))
+	gtk_widget_unmap (widget);
+    }
 }
 
 gint
@@ -1538,8 +1575,10 @@ gtk_widget_map (GtkWidget *widget)
     {
       if (!GTK_WIDGET_REALIZED (widget))
 	gtk_widget_realize (widget);
-      
+
       gtk_signal_emit (GTK_OBJECT (widget), widget_signals[MAP]);
+
+      gtk_widget_queue_draw (widget);
     }
 }
 
@@ -1558,7 +1597,10 @@ gtk_widget_unmap (GtkWidget *widget)
   g_return_if_fail (GTK_IS_WIDGET (widget));
   
   if (GTK_WIDGET_MAPPED (widget))
-    gtk_signal_emit (GTK_OBJECT (widget), widget_signals[UNMAP]);
+    {
+      gtk_widget_queue_clear_child (widget);
+      gtk_signal_emit (GTK_OBJECT (widget), widget_signals[UNMAP]);
+    }
 }
 
 /*****************************************
@@ -1843,20 +1885,23 @@ gtk_widget_redraw_queue_remove (GtkWidget *widget)
 }
 
 void	   
-gtk_widget_queue_clear	  (GtkWidget *widget)
+gtk_widget_queue_clear (GtkWidget *widget)
 {
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if (GTK_WIDGET_NO_WINDOW (widget))
-    gtk_widget_queue_clear_area (widget, widget->allocation.x,
-				 widget->allocation.y,
-				 widget->allocation.width, 
-				 widget->allocation.height);
-  else
-    gtk_widget_queue_clear_area (widget, 0, 0, 
-				 widget->allocation.width, 
-				 widget->allocation.height);
+  if (widget->allocation.width || widget->allocation.height)
+    {
+      if (GTK_WIDGET_NO_WINDOW (widget))
+	gtk_widget_queue_clear_area (widget, widget->allocation.x,
+				     widget->allocation.y,
+				     widget->allocation.width, 
+				     widget->allocation.height);
+      else
+	gtk_widget_queue_clear_area (widget, 0, 0, 
+				     widget->allocation.width, 
+				     widget->allocation.height);
+    }
 }
 
 static gint
@@ -2175,6 +2220,9 @@ gtk_widget_queue_resize (GtkWidget *widget)
   if (GTK_IS_RESIZE_CONTAINER (widget))
     gtk_container_clear_resize_widgets (GTK_CONTAINER (widget));
 
+  if (GTK_WIDGET_DRAWABLE (widget))
+    gtk_widget_queue_clear (widget);
+
   if (widget->parent)
     gtk_container_queue_resize (GTK_CONTAINER (widget->parent));
   else if (GTK_WIDGET_TOPLEVEL (widget))
@@ -2302,6 +2350,7 @@ gtk_widget_size_allocate (GtkWidget	*widget,
 {
   GtkWidgetAuxInfo *aux_info;
   GtkAllocation real_allocation;
+  gboolean needs_draw = FALSE;
   
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
@@ -2317,7 +2366,46 @@ gtk_widget_size_allocate (GtkWidget	*widget,
 	real_allocation.y = aux_info->y;
     }
   
+  if (GTK_WIDGET_NO_WINDOW (widget))
+    {
+      if (widget->allocation.x != real_allocation.x ||
+	  widget->allocation.y != real_allocation.y ||
+	  widget->allocation.width != real_allocation.width ||
+	  widget->allocation.height != real_allocation.height)
+	{
+	  gtk_widget_queue_clear_child (widget);
+	  needs_draw = TRUE;
+	}
+    }
+  else if (widget->allocation.width != real_allocation.width ||
+	   widget->allocation.height != real_allocation.height)
+    {
+      gtk_widget_queue_clear_child (widget);
+      needs_draw = TRUE;
+    }
+
   gtk_signal_emit (GTK_OBJECT (widget), widget_signals[SIZE_ALLOCATE], &real_allocation);
+
+  if (needs_draw)
+    gtk_widget_queue_draw (widget);
+}
+
+static void
+gtk_widget_real_size_allocate (GtkWidget     *widget,
+			       GtkAllocation *allocation)
+{
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  widget->allocation = *allocation;
+  
+  if (GTK_WIDGET_REALIZED (widget) &&
+      !GTK_WIDGET_NO_WINDOW (widget))
+     {
+	gdk_window_move_resize (widget->window,
+				allocation->x, allocation->y,
+				allocation->width, allocation->height);
+     }
 }
 
 static void
@@ -4190,60 +4278,6 @@ gtk_widget_finalize (GtkObject *object)
 }
 
 /*****************************************
- * gtk_widget_real_show:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
-static void
-gtk_widget_real_show (GtkWidget *widget)
-{
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  
-  if (!GTK_WIDGET_VISIBLE (widget))
-    {
-      GTK_WIDGET_SET_FLAGS (widget, GTK_VISIBLE);
-      
-      if (widget->parent)
-	{
-	  gtk_widget_queue_resize (widget->parent);
-	  
-	  if (GTK_WIDGET_MAPPED (widget->parent))
-	    gtk_widget_map (widget);
-	}
-    }
-}
-
-/*****************************************
- * gtk_widget_real_hide:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
-static void
-gtk_widget_real_hide (GtkWidget *widget)
-{
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  
-  if (GTK_WIDGET_VISIBLE (widget))
-    {
-      GTK_WIDGET_UNSET_FLAGS (widget, GTK_VISIBLE);
-      
-      if (GTK_WIDGET_MAPPED (widget))
-	gtk_widget_unmap (widget);
-      
-      if (widget->parent)
-	gtk_widget_queue_resize (widget->parent);
-    }
-}
-
-/*****************************************
  * gtk_widget_real_map:
  *
  *   arguments:
@@ -4263,8 +4297,6 @@ gtk_widget_real_map (GtkWidget *widget)
       
       if (!GTK_WIDGET_NO_WINDOW (widget))
 	gdk_window_show (widget->window);
-      else
-	gtk_widget_queue_draw (widget);
     }
 }
 
@@ -4285,10 +4317,8 @@ gtk_widget_real_unmap (GtkWidget *widget)
   if (GTK_WIDGET_MAPPED (widget))
     {
       GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
-      
-      if (GTK_WIDGET_NO_WINDOW (widget))
-	gtk_widget_queue_clear (widget);
-      else
+
+      if (!GTK_WIDGET_NO_WINDOW (widget))
 	gdk_window_hide (widget->window);
     }
 }
@@ -4366,14 +4396,6 @@ gtk_widget_real_unrealize (GtkWidget *widget)
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_REALIZED);
 }
 
-/*****************************************
- * gtk_widget_real_draw:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
 static void
 gtk_widget_real_draw (GtkWidget	   *widget,
 		      GdkRectangle *area)
@@ -4407,34 +4429,6 @@ gtk_widget_real_size_request (GtkWidget         *widget,
 
   requisition->width = widget->requisition.width;
   requisition->height = widget->requisition.height;
-}
-
-static void
-gtk_widget_real_size_allocate (GtkWidget     *widget,
-			       GtkAllocation *allocation)
-{
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  if (GTK_WIDGET_NO_WINDOW (widget) &&
-      GTK_WIDGET_MAPPED (widget) &&
-      ((widget->allocation.x != allocation->x) ||
-       (widget->allocation.y != allocation->y) ||
-       (widget->allocation.width != allocation->width) ||
-       (widget->allocation.height != allocation->height)) &&
-      (widget->allocation.width != 0) &&
-      (widget->allocation.height != 0))
-    gtk_widget_queue_clear (widget);
-  
-  widget->allocation = *allocation;
-  
-  if (GTK_WIDGET_REALIZED (widget) &&
-      !GTK_WIDGET_NO_WINDOW (widget))
-     {
-	gdk_window_move_resize (widget->window,
-				allocation->x, allocation->y,
-				allocation->width, allocation->height);
-     }
 }
 
 /*****************************************

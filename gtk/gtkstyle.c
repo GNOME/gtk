@@ -688,43 +688,6 @@ gtk_style_destroy (GtkStyle *style)
 }
 
 void
-gtk_style_set_background (GtkStyle     *style,
-			  GdkWindow    *window,
-			  GtkStateType  state_type)
-{
-  GdkPixmap *pixmap;
-  gint parent_relative;
-  
-  if (style->engine && style->engine->set_background)
-    {
-      (*style->engine->set_background) (style, window, state_type);
-      return;
-    }
-  
-  g_return_if_fail (style != NULL);
-  g_return_if_fail (window != NULL);
-  
-  if (style->bg_pixmap[state_type])
-    {
-      if (style->bg_pixmap[state_type] == (GdkPixmap*) GDK_PARENT_RELATIVE)
-	{
-	  pixmap = NULL;
-	  parent_relative = TRUE;
-	}
-      else
-	{
-	  pixmap = style->bg_pixmap[state_type];
-	  parent_relative = FALSE;
-	}
-      
-      gdk_window_set_back_pixmap (window, pixmap, parent_relative);
-    }
-  else
-    gdk_window_set_background (window, &style->bg[state_type]);
-}
-
-
-void
 gtk_draw_hline (GtkStyle     *style,
 		GdkWindow    *window,
 		GtkStateType  state_type,
@@ -1088,16 +1051,54 @@ gtk_draw_handle  (GtkStyle      *style,
   (*style->klass->draw_handle) (style, window, state_type, shadow_type, NULL, NULL, NULL, x, y, width, height, orientation);
 }
 
+void
+gtk_style_set_background (GtkStyle     *style,
+			  GdkWindow    *window,
+			  GtkStateType  state_type)
+{
+  GdkPixmap *pixmap;
+  gint parent_relative;
+  
+  if (style->engine && style->engine->set_background)
+    {
+      (*style->engine->set_background) (style, window, state_type);
+      return;
+    }
+  
+  g_return_if_fail (style != NULL);
+  g_return_if_fail (window != NULL);
+  
+  if (style->bg_pixmap[state_type])
+    {
+      if (style->bg_pixmap[state_type] == (GdkPixmap*) GDK_PARENT_RELATIVE)
+	{
+	  pixmap = NULL;
+	  parent_relative = TRUE;
+	}
+      else
+	{
+	  pixmap = style->bg_pixmap[state_type];
+	  parent_relative = FALSE;
+	}
+      
+      gdk_window_set_back_pixmap (window, pixmap, parent_relative);
+    }
+  else
+    gdk_window_set_background (window, &style->bg[state_type]);
+}
+
+
 /* Default functions */
 void
-gtk_style_apply_default_pixmap (GtkStyle     *style,
-				GdkWindow    *window, 
-				GtkStateType  state_type, 
-				GdkRectangle *area, 
-				gint x, 
-				gint y, 
-				gint width, 
-				gint height)
+gtk_style_apply_default_background (GtkStyle     *style,
+				    GdkWindow    *window,
+				    gboolean	  copy_area,
+				    GtkStateType  state_type, 
+				    GdkRectangle *area, 
+				    gint          x, 
+				    gint          y, 
+				    gint          width, 
+				    gint          height)
 {
   GdkRectangle new_rect, old_rect;
   GdkGC       *gc;
@@ -1122,12 +1123,15 @@ gtk_style_apply_default_pixmap (GtkStyle     *style,
 	gdk_draw_rectangle (window, gc, TRUE, 
 			    x, y, width, height);
     }
-  else
+  else if (!copy_area || style->bg_pixmap[state_type] == (GdkPixmap*) GDK_PARENT_RELATIVE)
     {
-      if (style->bg_pixmap[state_type] == (GdkPixmap*) GDK_PARENT_RELATIVE)
-	gdk_window_set_back_pixmap (window, NULL, TRUE);
-      else
-	gdk_window_set_back_pixmap (window, style->bg_pixmap[state_type], FALSE);
+      if (!copy_area)
+	{
+	  if (style->bg_pixmap[state_type] == (GdkPixmap*) GDK_PARENT_RELATIVE)
+	    gdk_window_set_back_pixmap (window, NULL, TRUE);
+	  else
+	    gdk_window_set_back_pixmap (window, style->bg_pixmap[state_type], FALSE);
+	}
       
       old_rect.x = x;
       old_rect.y = y;
@@ -1138,6 +1142,23 @@ gtk_style_apply_default_pixmap (GtkStyle     *style,
 	gdk_window_clear_area (window, new_rect.x, new_rect.y, new_rect.width, new_rect.height);
       else
 	gdk_window_clear_area (window, x, y, width, height);
+    }
+  else
+    {
+      old_rect.x = x;
+      old_rect.y = y;
+      old_rect.width = width;
+      old_rect.height = height;
+
+      if (area && gdk_rectangle_intersect (area, &old_rect, &new_rect))
+	gdk_window_copy_area (window, style->bg_gc[state_type], new_rect.x, new_rect.y,
+			      style->bg_pixmap[state_type], 0, 0, new_rect.width, new_rect.height);
+      else
+	{
+	  gdk_window_clear_area (window, x, y, width, height);
+	  gdk_window_copy_area (window, style->bg_gc[state_type], x, y,
+				style->bg_pixmap[state_type], 0, 0, width, height);
+	}
     }
 }
 
@@ -2126,7 +2147,9 @@ gtk_default_draw_box     (GtkStyle      *style,
 	}
     }
   else
-    gtk_style_apply_default_pixmap (style, window, state_type, area, x, y, width, height);
+    gtk_style_apply_default_background (style, window,
+					widget && GTK_WIDGET_NO_WINDOW (widget),
+					state_type, area, x, y, width, height);
   
   gtk_paint_shadow (style, window, state_type, shadow_type, area, widget, detail,
 		    x, y, width, height);
@@ -2184,7 +2207,9 @@ gtk_default_draw_flat_box (GtkStyle      *style,
 	}
     }
   else
-    gtk_style_apply_default_pixmap(style, window, state_type, area, x, y, width, height);
+    gtk_style_apply_default_background (style, window,
+					widget && GTK_WIDGET_NO_WINDOW (widget),
+					state_type, area, x, y, width, height);
 }
 
 static void 
@@ -2519,8 +2544,9 @@ gtk_default_draw_box_gap (GtkStyle       *style,
   g_return_if_fail (style != NULL);
   g_return_if_fail (window != NULL);
   
-  gtk_style_apply_default_pixmap(style, window, state_type, area,
-				 x, y, width, height);
+  gtk_style_apply_default_background (style, window,
+				      widget && GTK_WIDGET_NO_WINDOW (widget),
+				      state_type, area, x, y, width, height);
   
   if ((width == -1) && (height == -1))
     gdk_window_get_size (window, &width, &height);
@@ -2740,8 +2766,9 @@ gtk_default_draw_extension (GtkStyle       *style,
   g_return_if_fail (style != NULL);
   g_return_if_fail (window != NULL);
   
-  gtk_style_apply_default_pixmap(style, window, GTK_STATE_NORMAL, area,
-				 x, y, width, height);
+  gtk_style_apply_default_background (style, window,
+				      widget && GTK_WIDGET_NO_WINDOW (widget),
+				      GTK_STATE_NORMAL, area, x, y, width, height);
   
   if ((width == -1) && (height == -1))
     gdk_window_get_size (window, &width, &height);
@@ -2796,11 +2823,13 @@ gtk_default_draw_extension (GtkStyle       *style,
       switch (gap_side)
 	{
 	case GTK_POS_TOP:
-	  gtk_style_apply_default_pixmap(style, window, state_type, area,
-					 x + style->klass->xthickness, 
-					 y, 
-					 width - (2 * style->klass->xthickness), 
-					 height - (style->klass->ythickness));
+	  gtk_style_apply_default_background (style, window,
+					      widget && GTK_WIDGET_NO_WINDOW (widget),
+					      state_type, area,
+					      x + style->klass->xthickness, 
+					      y, 
+					      width - (2 * style->klass->xthickness), 
+					      height - (style->klass->ythickness));
 	  gdk_draw_line (window, gc1,
 			 x, y, x, y + height - 2);
 	  gdk_draw_line (window, gc2,
@@ -2816,11 +2845,13 @@ gtk_default_draw_extension (GtkStyle       *style,
 			 x + width - 1, y, x + width - 1, y + height - 2);
 	  break;
 	case GTK_POS_BOTTOM:
-	  gtk_style_apply_default_pixmap(style, window, state_type, area,
-					 x + style->klass->xthickness, 
-					 y + style->klass->ythickness, 
-					 width - (2 * style->klass->xthickness), 
-					 height - (style->klass->ythickness));
+	  gtk_style_apply_default_background (style, window,
+					      widget && GTK_WIDGET_NO_WINDOW (widget),
+					      state_type, area,
+					      x + style->klass->xthickness, 
+					      y + style->klass->ythickness, 
+					      width - (2 * style->klass->xthickness), 
+					      height - (style->klass->ythickness));
 	  gdk_draw_line (window, gc1,
 			 x + 1, y, x + width - 2, y);
 	  gdk_draw_line (window, gc1,
@@ -2836,11 +2867,13 @@ gtk_default_draw_extension (GtkStyle       *style,
 			 x + width - 1, y + 1, x + width - 1, y + height - 1);
 	  break;
 	case GTK_POS_LEFT:
-	  gtk_style_apply_default_pixmap(style, window, state_type, area,
-					 x, 
-					 y + style->klass->ythickness, 
-					 width - (style->klass->xthickness), 
-					 height - (2 * style->klass->ythickness));
+	  gtk_style_apply_default_background (style, window,
+					      widget && GTK_WIDGET_NO_WINDOW (widget),
+					      state_type, area,
+					      x, 
+					      y + style->klass->ythickness, 
+					      width - (style->klass->xthickness), 
+					      height - (2 * style->klass->ythickness));
 	  gdk_draw_line (window, gc1,
 			 x, y, x + width - 2, y);
 	  gdk_draw_line (window, gc2,
@@ -2856,11 +2889,13 @@ gtk_default_draw_extension (GtkStyle       *style,
 			 x + width - 1, y + 1, x + width - 1, y + height - 2);
 	  break;
 	case GTK_POS_RIGHT:
-	  gtk_style_apply_default_pixmap(style, window, state_type, area,
-					 x + style->klass->xthickness, 
-					 y + style->klass->ythickness, 
-					 width - (style->klass->xthickness), 
-					 height - (2 * style->klass->ythickness));
+	  gtk_style_apply_default_background (style, window,
+					      widget && GTK_WIDGET_NO_WINDOW (widget),
+					      state_type, area,
+					      x + style->klass->xthickness, 
+					      y + style->klass->ythickness, 
+					      width - (style->klass->xthickness), 
+					      height - (2 * style->klass->ythickness));
 	  gdk_draw_line (window, gc1,
 			 x + 1, y, x + width - 1, y);
 	  gdk_draw_line (window, gc1,

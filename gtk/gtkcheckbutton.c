@@ -365,12 +365,18 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
       height = CHECK_BUTTON_CLASS (widget)->indicator_size;
       
       if (GTK_TOGGLE_BUTTON (widget)->active)
-	shadow_type = GTK_SHADOW_IN;
+	{
+	  state_type = GTK_STATE_ACTIVE;
+	  shadow_type = GTK_SHADOW_IN;
+	}
       else
-	shadow_type = GTK_SHADOW_OUT;
-      
+	{
+	  shadow_type = GTK_SHADOW_OUT;
+	  state_type = GTK_WIDGET_STATE (widget);
+	}
+
       gtk_paint_check (widget->style, window,
-		       GTK_WIDGET_STATE (widget), shadow_type,
+		       state_type, shadow_type,
 		       area, widget, "checkbutton",
 		       x + 1, y + 1, width, height);
     }

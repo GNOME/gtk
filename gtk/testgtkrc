@@ -26,14 +26,8 @@ class "GtkWidget" style "defaultfont"
 
 style "window"
 {
-#  bg_pixmap[NORMAL] = "marble.xpm"
+ # bg_pixmap[NORMAL] = "marble.xpm"
 }
-
-style "pix"
-{
-#  bg_pixmap[NORMAL] = "<parent>" # "marble.xpm" # "test.xpm"
-}
-widget_class "*Button*" style "pix"
 
 style "scale"
 {
@@ -52,7 +46,8 @@ style "toggle_button" = "button"
 {
   fg[NORMAL] = { 1.0, 0, 0 }
   fg[ACTIVE] = { 1.0, 0, 0 }
-  bg_pixmap[NORMAL] = "<parent>"
+  bg_pixmap[ACTIVE] = "check-y.xpm"
+  bg_pixmap[NORMAL] = "check-n.xpm"
 }
 
 style "text"

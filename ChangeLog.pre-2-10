@@ -1,3 +1,72 @@
+Tue Jan 12 13:47:07 1999  Tim Janik  <timj@gtk.org>
+
+	* reworked the redrawing heuristics somewhat, this fixed a bunch of
+	existing redrawing problems and majorly reduces overall redrawing needs
+	during normal operation. basically we now only queue redraws when
+	neccessary and much rely on the draw_area coalescing code in gtkwidget.c
+	to optimize the queued portions. widgets will now upon reallocation only
+	get redrawed if their allocation has changed. upon hide/show only the
+	area allocated by the child will be queued for the parent, this has the
+	side effect that parents which change their appearance in dependance on
+	the numer of visible children have to keep track of their children's
+	visiblity and eventually fully redraw themselves. this is a minor
+	constrain with great benefits in terms of redraw reduction, and only got
+	triggered by the notebook widget.
+
+	* gtk/gtkwidget.c:
+	(gtk_widget_queue_clear): don't bother if width and height == 0.
+	(gtk_widget_queue_clear_child): new static function to queue a redraw of
+	the area obscured by a child on a parent.
+	(gtk_widget_queue_resize): queue_clear the widget if it is drawable.
+	(gtk_widget_show): queue resize on the widget before showing.
+	(gtk_widget_hide): queue resize on the widget after hiding.
+	(gtk_widget_map): queue_draw the widget after mapping.
+	(gtk_widget_unmap): queue_clear_child the widget.
+	(gtk_widget_size_allocate): queue_clear_child and queue_draw if the
+	widget's allocation changed.
+	(gtk_widget_unparent): queue_clear_child so the parent redraws obscured
+	portions.
+	(gtk_widget_real_show):
+	(gtk_widget_real_hide):
+	(gtk_widget_real_map):
+	(gtk_widget_real_unmap):
+	(gtk_widget_real_size_allocate): don't bother with redraw queueing,
+	descendants that override these functions don't do either and we handle
+	all redrawing/resizing related stuff before or after the signal emission
+	now.
+
+	* gtk/gtkcontainer.c:
+	(gtk_container_resize_children): don't bother about redrawing anymore
+	since gtk_widget_size_allocate handles that for us now.
+
+	* gtk/gtknotebook.h:
+	* gtk/gtknotebook.c:
+	added a flag have_visible_child to indicate whether we need to draw
+	non child related portions at all, e.g. shadows etc.
+	(gtk_notebook_draw): if have_visible_child changed, do a full paint
+	instead of updating a small area only.
+
+Mon Jan 11 20:44:35 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkstyle.c: changed gtk_style_apply_default_pixmap to
+	gtk_style_apply_default_background which takes an extra argument
+	copy_area to determine NO_WINDOW widget pixmap copying.
+	changed callers accordingly.
+
+	* gtk/gtktogglebutton.c:
+	(gtk_toggle_size_allocate): 
+	(gtk_toggle_button_expose): 
+	(gtk_toggle_button_paint): avoid messing with our parent's window if
+	toggle_button->draw_indicator == TRUE and we are a NO_WINDOW widget.
+
+	* gtk/gtkcheckbutton.c (gtk_real_check_button_draw_indicator): draw
+	the draw_indicator with GTK_STATE_ACTIVE if the toggle button is active.
+
+	* gtk/check-n.xpm:
+	* gtk/check-y.xpm:
+	* gtk/testgtkrc: set pixmaps for ACTIVE and NORMAL check button
+	bg_pixmaps.
+
 Mon Jan 11 23:52:58 1999  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtklist.c (gtk_list_signal_drag_begin)

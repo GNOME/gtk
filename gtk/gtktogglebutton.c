@@ -42,8 +42,12 @@ static void gtk_toggle_button_class_init (GtkToggleButtonClass *klass);
 static void gtk_toggle_button_init       (GtkToggleButton      *toggle_button);
 static void gtk_toggle_button_paint      (GtkWidget            *widget,
 					  GdkRectangle         *area);
+static void gtk_toggle_button_size_allocate (GtkWidget         *widget,
+					     GtkAllocation     *allocation);
 static void gtk_toggle_button_draw       (GtkWidget            *widget,
 					  GdkRectangle         *area);
+static gint gtk_toggle_button_expose     (GtkWidget            *widget,
+					  GdkEventExpose       *event);
 static void gtk_toggle_button_pressed    (GtkButton            *button);
 static void gtk_toggle_button_released   (GtkButton            *button);
 static void gtk_toggle_button_clicked    (GtkButton            *button);
@@ -120,7 +124,9 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
   object_class->set_arg = gtk_toggle_button_set_arg;
   object_class->get_arg = gtk_toggle_button_get_arg;
 
+  widget_class->size_allocate = gtk_toggle_button_size_allocate;
   widget_class->draw = gtk_toggle_button_draw;
+  widget_class->expose_event = gtk_toggle_button_expose;
   widget_class->realize = gtk_toggle_button_realize;
   widget_class->unrealize = gtk_toggle_button_unrealize;
   widget_class->map = gtk_toggle_button_map;
@@ -140,6 +146,7 @@ gtk_toggle_button_init (GtkToggleButton *toggle_button)
 {
   toggle_button->active = FALSE;
   toggle_button->draw_indicator = FALSE;
+  GTK_WIDGET_UNSET_FLAGS (toggle_button, GTK_NO_WINDOW);
 }
 
 
@@ -234,13 +241,26 @@ gtk_toggle_button_set_mode (GtkToggleButton *toggle_button,
 
 	  gtk_widget_unrealize (widget);
 	  toggle_button->draw_indicator = draw_indicator;
+
+	  if (toggle_button->draw_indicator)
+	    GTK_WIDGET_SET_FLAGS (toggle_button, GTK_NO_WINDOW);
+	  else
+	    GTK_WIDGET_UNSET_FLAGS (toggle_button, GTK_NO_WINDOW);
+	  
 	  gtk_widget_realize (widget);
 
 	  if (visible)
 	    gtk_widget_show (widget);
 	}
       else
-	toggle_button->draw_indicator = draw_indicator;
+	{
+	  toggle_button->draw_indicator = draw_indicator;
+
+	  if (toggle_button->draw_indicator)
+	    GTK_WIDGET_SET_FLAGS (toggle_button, GTK_NO_WINDOW);
+	  else
+	    GTK_WIDGET_UNSET_FLAGS (toggle_button, GTK_NO_WINDOW);
+	}
 
       if (GTK_WIDGET_VISIBLE (toggle_button))
 	gtk_widget_queue_resize (GTK_WIDGET (toggle_button));
@@ -280,11 +300,11 @@ gtk_toggle_button_paint (GtkWidget    *widget,
   gint width, height;
   gint x, y;
 
+  button = GTK_BUTTON (widget);
+  toggle_button = GTK_TOGGLE_BUTTON (widget);
+
   if (GTK_WIDGET_DRAWABLE (widget))
     {
-      button = GTK_BUTTON (widget);
-      toggle_button = GTK_TOGGLE_BUTTON (widget);
-
       x = 0;
       y = 0;
       width = widget->allocation.width - GTK_CONTAINER (widget)->border_width * 2;
@@ -349,6 +369,26 @@ gtk_toggle_button_paint (GtkWidget    *widget,
 }
 
 static void
+gtk_toggle_button_size_allocate (GtkWidget     *widget,
+				 GtkAllocation *allocation)
+{
+  if (!GTK_WIDGET_NO_WINDOW (widget) &&
+      GTK_WIDGET_CLASS (parent_class)->size_allocate)
+    GTK_WIDGET_CLASS (parent_class)->size_allocate (widget, allocation);
+}
+
+static gint
+gtk_toggle_button_expose (GtkWidget      *widget,
+			  GdkEventExpose *event)
+{
+  if (!GTK_WIDGET_NO_WINDOW (widget) &&
+      GTK_WIDGET_CLASS (parent_class)->expose_event)
+    return GTK_WIDGET_CLASS (parent_class)->expose_event (widget, event);
+  else
+    return FALSE;
+}
+
+static void
 gtk_toggle_button_draw (GtkWidget    *widget,
 			GdkRectangle *area)
 {
@@ -362,7 +402,7 @@ gtk_toggle_button_draw (GtkWidget    *widget,
 
   bin = GTK_BIN (widget);
 
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (GTK_WIDGET_DRAWABLE (widget) && !GTK_WIDGET_NO_WINDOW (widget))
     {
       tmp_area = *area;
       tmp_area.x -= GTK_CONTAINER (widget)->border_width;
@@ -519,9 +559,8 @@ gtk_toggle_button_realize (GtkWidget *widget)
 			    GDK_ENTER_NOTIFY_MASK |
 			    GDK_LEAVE_NOTIFY_MASK);
 
-  if (toggle_button->draw_indicator)
+  if (GTK_WIDGET_NO_WINDOW (widget))
     {
-      GTK_WIDGET_SET_FLAGS (toggle_button, GTK_NO_WINDOW);
       attributes.wclass = GDK_INPUT_ONLY;
       attributes_mask = GDK_WA_X | GDK_WA_Y;
 
@@ -534,7 +573,6 @@ gtk_toggle_button_realize (GtkWidget *widget)
     }
   else
     {
-      GTK_WIDGET_UNSET_FLAGS (toggle_button, GTK_NO_WINDOW);
       attributes.wclass = GDK_INPUT_OUTPUT;
       attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
       attributes.visual = gtk_widget_get_visual (widget);
@@ -546,7 +584,7 @@ gtk_toggle_button_realize (GtkWidget *widget)
 
   widget->style = gtk_style_attach (widget->style, widget->window);
 
-  if (!toggle_button->draw_indicator)
+  if (!GTK_WIDGET_NO_WINDOW (widget))
     gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
 }
   
@@ -560,7 +598,7 @@ gtk_toggle_button_unrealize (GtkWidget *widget)
 
   toggle_button = GTK_TOGGLE_BUTTON (widget);
   
-  if (toggle_button->draw_indicator)
+  if (GTK_WIDGET_NO_WINDOW (widget))
     {
       gdk_window_set_user_data (toggle_button->event_window, NULL);
       gdk_window_destroy (toggle_button->event_window);
@@ -577,7 +615,7 @@ gtk_toggle_button_map (GtkWidget *widget)
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_TOGGLE_BUTTON (widget));
 
-  if (GTK_TOGGLE_BUTTON (widget)->draw_indicator)
+  if (GTK_WIDGET_NO_WINDOW (widget))
     gdk_window_show (GTK_TOGGLE_BUTTON (widget)->event_window);
 
   GTK_WIDGET_CLASS (parent_class)->map (widget);
@@ -589,7 +627,7 @@ gtk_toggle_button_unmap (GtkWidget *widget)
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_TOGGLE_BUTTON (widget));
 
-  if (GTK_TOGGLE_BUTTON (widget)->draw_indicator)
+  if (GTK_WIDGET_NO_WINDOW (widget))
     gdk_window_hide (GTK_TOGGLE_BUTTON (widget)->event_window);
 
   GTK_WIDGET_CLASS (parent_class)->unmap (widget);

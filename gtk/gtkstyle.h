@@ -332,24 +332,25 @@ struct _GtkStyleClass
 			 GtkOrientation orientation);
 };
 
-GtkStyle* gtk_style_new		   (void);
-GtkStyle* gtk_style_copy	   (GtkStyle	 *style);
-GtkStyle* gtk_style_attach	   (GtkStyle	 *style,
-				    GdkWindow	 *window);
-void	  gtk_style_detach	   (GtkStyle	 *style);
-GtkStyle* gtk_style_ref		   (GtkStyle	 *style);
-void	  gtk_style_unref	   (GtkStyle	 *style);
-void	  gtk_style_set_background (GtkStyle	 *style,
-				    GdkWindow	 *window,
-				    GtkStateType  state_type);
-void      gtk_style_apply_default_pixmap(GtkStyle     *style,
-					 GdkWindow    *window, 
-					 GtkStateType  state_type, 
-					 GdkRectangle *area, 
-					 gint x, 
-					 gint y, 
-					 gint width, 
-					 gint height);
+GtkStyle* gtk_style_new		            (void);
+GtkStyle* gtk_style_copy	            (GtkStyle	   *style);
+GtkStyle* gtk_style_attach	            (GtkStyle	   *style,
+					     GdkWindow	   *window);
+void	  gtk_style_detach	             (GtkStyle	   *style);
+GtkStyle* gtk_style_ref		             (GtkStyle	   *style);
+void	  gtk_style_unref	             (GtkStyle	   *style);
+void	  gtk_style_set_background           (GtkStyle	   *style,
+					      GdkWindow	   *window,
+					      GtkStateType  state_type);
+void      gtk_style_apply_default_background (GtkStyle     *style,
+					      GdkWindow    *window,
+					      gboolean	    copy_area,
+					      GtkStateType  state_type, 
+					      GdkRectangle *area, 
+					      gint          x, 
+					      gint          y, 
+					      gint          width, 
+					      gint          height);
       
 void gtk_draw_hline   (GtkStyle	     *style,
 		       GdkWindow     *window,

@@ -328,6 +328,7 @@ gtk_notebook_init (GtkNotebook *notebook)
   notebook->button = 0;
   notebook->need_timer = 0;
   notebook->child_has_focus = FALSE;
+  notebook->have_visible_child = FALSE;
 }
 
 GtkWidget*
@@ -882,17 +883,36 @@ gtk_notebook_draw (GtkWidget    *widget,
   g_return_if_fail (GTK_IS_NOTEBOOK (widget));
   g_return_if_fail (area != NULL);
 
+  notebook = GTK_NOTEBOOK (widget);
+
   if (GTK_WIDGET_DRAWABLE (widget))
     {
-      notebook = GTK_NOTEBOOK (widget);
+      gboolean have_visible_child;
 
-      gtk_notebook_paint (widget, area);
+      have_visible_child = notebook->cur_page && GTK_WIDGET_VISIBLE (notebook->cur_page->child);
+
+      if (have_visible_child != notebook->have_visible_child)
+	{
+	  GdkRectangle full_area;
+
+	  notebook->have_visible_child = have_visible_child;
+	  full_area.x = 0;
+	  full_area.y = 0;
+	  full_area.width = widget->allocation.width;
+	  full_area.height = widget->allocation.height;
+	  gtk_notebook_paint (widget, &full_area);
+	}
+      else
+	gtk_notebook_paint (widget, area);
+
       gtk_widget_draw_focus (widget);
 
-      if (notebook->cur_page &&
+      if (notebook->cur_page && GTK_WIDGET_VISIBLE (notebook->cur_page->child) &&
 	  gtk_widget_intersect (notebook->cur_page->child, area, &child_area))
 	gtk_widget_draw (notebook->cur_page->child, &child_area);
     }
+  else
+    notebook->have_visible_child = FALSE;
 }
 
 static gint
@@ -2110,11 +2130,10 @@ gtk_notebook_paint (GtkWidget    *widget,
 
   if (notebook->show_border && (!notebook->show_tabs || !notebook->children))
     {
-      
-      gtk_paint_box(widget->style, widget->window,
-		    GTK_STATE_NORMAL, GTK_SHADOW_OUT,
-		    area, widget, "notebook",
-		    x, y, width, height);
+      gtk_paint_box (widget->style, widget->window,
+		     GTK_STATE_NORMAL, GTK_SHADOW_OUT,
+		     area, widget, "notebook",
+		     x, y, width, height);
       return;
     }
 
