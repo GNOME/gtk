@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-19 04:35+0100\n"
-"PO-Revision-Date: 2004-12-19 13:00+0100\n"
+"POT-Creation-Date: 2005-01-02 12:25+0100\n"
+"PO-Revision-Date: 2005-01-02 15:09+0100\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -374,52 +374,52 @@ msgstr "Jestli je skupina akcí povolena."
 msgid "Whether the action group is visible."
 msgstr "Jestli je skupina akcí viditelná."
 
-#: gtk/gtkadjustment.c:108 gtk/gtkcellrendererprogress.c:115
+#: gtk/gtkadjustment.c:115 gtk/gtkcellrendererprogress.c:115
 #: gtk/gtkspinbutton.c:303
 msgid "Value"
 msgstr "Hodnota"
 
-#: gtk/gtkadjustment.c:109
+#: gtk/gtkadjustment.c:116
 msgid "The value of the adjustment"
 msgstr "Hodnota zarovnání"
 
-#: gtk/gtkadjustment.c:118
+#: gtk/gtkadjustment.c:132
 msgid "Minimum Value"
 msgstr "Minimální hodnota"
 
-#: gtk/gtkadjustment.c:119
+#: gtk/gtkadjustment.c:133
 msgid "The minimum value of the adjustment"
 msgstr "Minimální hodnota zarovnání"
 
-#: gtk/gtkadjustment.c:128
+#: gtk/gtkadjustment.c:152
 msgid "Maximum Value"
 msgstr "Maximální hodnota"
 
-#: gtk/gtkadjustment.c:129
+#: gtk/gtkadjustment.c:153
 msgid "The maximum value of the adjustment"
 msgstr "Maximální hodnota zarovnání"
 
-#: gtk/gtkadjustment.c:138
+#: gtk/gtkadjustment.c:169
 msgid "Step Increment"
 msgstr "Přírůstek o krok"
 
-#: gtk/gtkadjustment.c:139
+#: gtk/gtkadjustment.c:170
 msgid "The step increment of the adjustment"
 msgstr "Přírůstek zarovnání o krok"
 
-#: gtk/gtkadjustment.c:148
+#: gtk/gtkadjustment.c:186
 msgid "Page Increment"
 msgstr "Přírůstek o stránku"
 
-#: gtk/gtkadjustment.c:149
+#: gtk/gtkadjustment.c:187
 msgid "The page increment of the adjustment"
 msgstr "Přírůstek zarovnání o stránku"
 
-#: gtk/gtkadjustment.c:158
+#: gtk/gtkadjustment.c:206
 msgid "Page Size"
 msgstr "Velikost stránky"
 
-#: gtk/gtkadjustment.c:159
+#: gtk/gtkadjustment.c:207
 msgid "The page size of the adjustment"
 msgstr "Velikost stránky zarovnání"
 
@@ -704,7 +704,7 @@ msgstr ""
 "Je-li nastaveno, popis se použije pro výběr standardní položky místo jeho "
 "zobrazení"
 
-#: gtk/gtkbutton.c:244 gtk/gtkcombobox.c:675
+#: gtk/gtkbutton.c:244 gtk/gtkcombobox.c:678
 msgid "Focus on click"
 msgstr "Fokus při kliknutí"
 
@@ -1536,71 +1536,71 @@ msgstr "Hodnota v seznamu"
 msgid "Whether entered values must already be present in the list"
 msgstr "Jestli musí být zadaná hodnota již přítomna v seznamu"
 
-#: gtk/gtkcombobox.c:548
+#: gtk/gtkcombobox.c:551
 msgid "ComboBox model"
 msgstr "Model ComboBoxu"
 
-#: gtk/gtkcombobox.c:549
+#: gtk/gtkcombobox.c:552
 msgid "The model for the combo box"
 msgstr "Model pro kombinované pole"
 
-#: gtk/gtkcombobox.c:565
+#: gtk/gtkcombobox.c:568
 msgid "Wrap width"
 msgstr "Šířka zalamování"
 
-#: gtk/gtkcombobox.c:566
+#: gtk/gtkcombobox.c:569
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Šířka zalamování pro rozložení položek v mřížce"
 
-#: gtk/gtkcombobox.c:588
+#: gtk/gtkcombobox.c:591
 msgid "Row span column"
 msgstr "Sloupec rozsahu řádků"
 
-#: gtk/gtkcombobox.c:589
+#: gtk/gtkcombobox.c:592
 msgid "TreeModel column containing the row span values"
 msgstr "Sloupec TreeModel obsahující hodnoty rozsahu řádků"
 
-#: gtk/gtkcombobox.c:610
+#: gtk/gtkcombobox.c:613
 msgid "Column span column"
 msgstr "Sloupec rozsahu sloupců"
 
-#: gtk/gtkcombobox.c:611
+#: gtk/gtkcombobox.c:614
 msgid "TreeModel column containing the column span values"
 msgstr "Sloupec TreeModel obsahující hodnoty rozsahu sloupců"
 
-#: gtk/gtkcombobox.c:631
+#: gtk/gtkcombobox.c:634
 msgid "Active item"
 msgstr "Aktivní položka"
 
-#: gtk/gtkcombobox.c:632
+#: gtk/gtkcombobox.c:635
 msgid "The item which is currently active"
 msgstr "Položka, která je právě aktivní"
 
-#: gtk/gtkcombobox.c:651 gtk/gtkuimanager.c:228
+#: gtk/gtkcombobox.c:654 gtk/gtkuimanager.c:228
 msgid "Add tearoffs to menus"
 msgstr "Přidat odtrhávátka do menu"
 
-#: gtk/gtkcombobox.c:652
+#: gtk/gtkcombobox.c:655
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Jestli mají rozbalené comboboxy mít položku pro odtržení"
 
-#: gtk/gtkcombobox.c:667 gtk/gtkentry.c:530
+#: gtk/gtkcombobox.c:670 gtk/gtkentry.c:530
 msgid "Has Frame"
 msgstr "Má rám"
 
-#: gtk/gtkcombobox.c:668
+#: gtk/gtkcombobox.c:671
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Jestli kombinované pole kreslí rám okolo potomka"
 
-#: gtk/gtkcombobox.c:676
+#: gtk/gtkcombobox.c:679
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Jestli kombinované pole dostane fokus, když je na ně kliknuto myší"
 
-#: gtk/gtkcombobox.c:682
+#: gtk/gtkcombobox.c:685
 msgid "Appears as list"
 msgstr "Vypadá jako seznam"
 
-#: gtk/gtkcombobox.c:683
+#: gtk/gtkcombobox.c:686
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "Jestli mají rozbalené comboboxy vypadat jako seznamy a ne jako menu"
 
@@ -2525,111 +2525,111 @@ msgstr "Šířka rozložení"
 msgid "The height of the layout"
 msgstr "Výška rozložení"
 
-#: gtk/gtkmenu.c:524
+#: gtk/gtkmenu.c:526
 msgid "Tearoff Title"
 msgstr "Titulek pro odtrhnutí"
 
-#: gtk/gtkmenu.c:525
+#: gtk/gtkmenu.c:527
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr ""
 "Titulek, který může být zobrazen správcem oken, když je toto menu odtrženo"
 
-#: gtk/gtkmenu.c:539
+#: gtk/gtkmenu.c:541
 msgid "Tearoff State"
 msgstr "Stav odtrhnutí"
 
-#: gtk/gtkmenu.c:540
+#: gtk/gtkmenu.c:542
 msgid "A boolean that indicates whether the menu is torn-off"
 msgstr "Booleovská hodnota, která určuje, jestli je menu odtrženo"
 
-#: gtk/gtkmenu.c:546
+#: gtk/gtkmenu.c:548
 msgid "Vertical Padding"
 msgstr "Svislé doplnění"
 
-#: gtk/gtkmenu.c:547
+#: gtk/gtkmenu.c:549
 msgid "Extra space at the top and bottom of the menu"
 msgstr "Místo navíc nad a pod menu"
 
-#: gtk/gtkmenu.c:555
+#: gtk/gtkmenu.c:557
 msgid "Vertical Offset"
 msgstr "Svislé posunutí"
 
-#: gtk/gtkmenu.c:556
+#: gtk/gtkmenu.c:558
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr "Když menu je podmenu, umístit je svisle posunuté o tolik pixelů"
 
-#: gtk/gtkmenu.c:564
+#: gtk/gtkmenu.c:566
 msgid "Horizontal Offset"
 msgstr "Vodorovné posunutí"
 
-#: gtk/gtkmenu.c:565
+#: gtk/gtkmenu.c:567
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 msgstr "Když menu je podmenu, umístit je vodorovně posunuté o tolik pixelů"
 
-#: gtk/gtkmenu.c:575
+#: gtk/gtkmenu.c:577
 msgid "Left Attach"
 msgstr "Připevnění vlevo"
 
-#: gtk/gtkmenu.c:576 gtk/gtktable.c:205
+#: gtk/gtkmenu.c:578 gtk/gtktable.c:205
 msgid "The column number to attach the left side of the child to"
 msgstr "Číslo sloupce, ke kterému připevnit levou stranu potomka"
 
-#: gtk/gtkmenu.c:583
+#: gtk/gtkmenu.c:585
 msgid "Right Attach"
 msgstr "Připevnění vpravo"
 
-#: gtk/gtkmenu.c:584
+#: gtk/gtkmenu.c:586
 msgid "The column number to attach the right side of the child to"
 msgstr "Číslo sloupce, ke kterému připevnit pravou stranu potomka"
 
-#: gtk/gtkmenu.c:591
+#: gtk/gtkmenu.c:593
 msgid "Top Attach"
 msgstr "Připevnění nahoře"
 
-#: gtk/gtkmenu.c:592
+#: gtk/gtkmenu.c:594
 msgid "The row number to attach the top of the child to"
 msgstr "Číslo řádku, ke kterému připevnit horní stranu potomka"
 
-#: gtk/gtkmenu.c:599
+#: gtk/gtkmenu.c:601
 msgid "Bottom Attach"
 msgstr "Připevnění dole"
 
-#: gtk/gtkmenu.c:600 gtk/gtktable.c:226
+#: gtk/gtkmenu.c:602 gtk/gtktable.c:226
 msgid "The row number to attach the bottom of the child to"
 msgstr "Číslo řádku, ke kterému připevnit dolní stranu potomka"
 
-#: gtk/gtkmenu.c:687
+#: gtk/gtkmenu.c:689
 msgid "Can change accelerators"
 msgstr "Lze měnit akcelerátory"
 
-#: gtk/gtkmenu.c:688
+#: gtk/gtkmenu.c:690
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Jestli mohou akcelerátory menu být změněny stiskem klávesy nad položkou menu"
 
-#: gtk/gtkmenu.c:693
+#: gtk/gtkmenu.c:695
 msgid "Delay before submenus appear"
 msgstr "Prodleva před zobrazením podmenu"
 
-#: gtk/gtkmenu.c:694
+#: gtk/gtkmenu.c:696
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Minimální doba, kterou musí zůstat ukazatel nad položku menu, než se objeví "
 "podmenu"
 
-#: gtk/gtkmenu.c:701
+#: gtk/gtkmenu.c:703
 msgid "Delay before hiding a submenu"
 msgstr "Prodleva před skrytím podmenu"
 
-#: gtk/gtkmenu.c:702
+#: gtk/gtkmenu.c:704
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -4288,9 +4288,8 @@ msgstr "Expandovat pohybem"
 
 #: gtk/gtktreeview.c:693
 msgid ""
-"Whether rows should be expanded/collaped when the pointer moves over them"
-msgstr ""
-"Jestli mají být řádky rozbalovány/sbalovány, když přes ně přesouvá kurzor"
+"Whether rows should be expanded/collapsed when the pointer moves over them"
+msgstr "Jestli mají být řádky rozbalovány/sbalovány, když se nad nimi pohybuje kurzor"
 
 #: gtk/gtktreeview.c:713
 msgid "Vertical Separator Width"
