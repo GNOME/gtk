@@ -149,8 +149,6 @@ static gboolean gtk_label_mnemonic_activate (GtkWidget         *widget,
 					     gboolean           group_cycling);
 static void     gtk_label_setup_mnemonic    (GtkLabel          *label,
 					     guint              last_key);
-static gboolean gtk_label_focus             (GtkWidget         *widget,
-					     GtkDirectionType   direction);
 
 /* For selectable lables: */
 static void gtk_label_move_cursor        (GtkLabel        *label,
@@ -252,7 +250,6 @@ gtk_label_class_init (GtkLabelClass *class)
   widget_class->hierarchy_changed = gtk_label_hierarchy_changed;
   widget_class->screen_changed = gtk_label_screen_changed;
   widget_class->mnemonic_activate = gtk_label_mnemonic_activate;
-  widget_class->focus = gtk_label_focus;
 
   class->move_cursor = gtk_label_move_cursor;
   class->copy_clipboard = gtk_label_copy_clipboard;
@@ -2943,40 +2940,6 @@ gtk_label_get_use_underline (GtkLabel *label)
   g_return_val_if_fail (GTK_IS_LABEL (label), FALSE);
   
   return label->use_underline;
-}
-
-static gboolean
-gtk_label_focus (GtkWidget         *widget,
-		 GtkDirectionType   direction)
-{
-  GtkLabel *label = GTK_LABEL (widget);
-  GdkEvent *current_event;
-  gboolean is_control_tab = FALSE;
-  
-  /* We want to be in the tab chain only if we are selectable
-   * and Control-[Shift]Tab is pressed
-   */
-  if (label->select_info == NULL)
-    return FALSE;
-
-  current_event = gtk_get_current_event ();
-
-  if (current_event)
-    {
-      if (current_event->type == GDK_KEY_PRESS &&
-	  (current_event->key.keyval == GDK_Tab ||
-	   current_event->key.keyval == GDK_KP_Tab ||
-	   current_event->key.keyval == GDK_ISO_Left_Tab) &&
-	  (current_event->key.state & GDK_CONTROL_MASK) != 0)
-	is_control_tab = TRUE;
-      
-      gdk_event_free (current_event);
-    }
-      
-  if (is_control_tab)
-    return GTK_WIDGET_CLASS (parent_class)->focus (widget, direction);
-  else
-    return FALSE;
 }
 
 /* Compute the X position for an offset that corresponds to the "more important

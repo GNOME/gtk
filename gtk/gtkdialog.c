@@ -29,6 +29,7 @@
 #include "gtkbutton.h"
 #include "gtkdialog.h"
 #include "gtkhbbox.h"
+#include "gtklabel.h"
 #include "gtkhseparator.h"
 #include "gtkmarshalers.h"
 #include "gtkvbox.h"
@@ -329,6 +330,9 @@ gtk_dialog_delete_event_handler (GtkWidget   *widget,
  * widget in the tab chain, but if this results in the focus
  * ending up on one of the response widgets _other_ than the
  * default response, we focus the default response instead.
+ *
+ * Additionally, skip selectable labels when looking for the
+ * right initial focus widget.
  */
 static void
 gtk_dialog_map (GtkWidget *widget)
@@ -342,7 +346,11 @@ gtk_dialog_map (GtkWidget *widget)
     {
       GList *children, *tmp_list;
       
-      g_signal_emit_by_name (window, "move_focus", GTK_DIR_TAB_FORWARD);
+      do 
+	{
+	  g_signal_emit_by_name (window, "move_focus", GTK_DIR_TAB_FORWARD);
+	}
+      while (GTK_IS_LABEL (window->focus_widget));
 
       tmp_list = children = gtk_container_get_children (GTK_CONTAINER (dialog->action_area));
 
@@ -350,7 +358,10 @@ gtk_dialog_map (GtkWidget *widget)
 	{
 	  GtkWidget *child = tmp_list->data;
 
-	  if (child == window->focus_widget && child != window->default_widget && window->default_widget)
+	  if (window->focus_widget == NULL ||
+	      (child == window->focus_widget && 
+	       child != window->default_widget && 
+	       window->default_widget))
 	    {
 	      gtk_widget_grab_focus (window->default_widget);
 	      break;

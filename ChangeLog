@@ -1,3 +1,11 @@
+2004-09-29  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkdialog.c (gtk_dialog_map): Skip selectable labels when
+	looking for the initial focus widget.
+
+	* gtk/gtklabel.c (gtk_label_focus): Remove to put selectable labels 
+	in the regular focus chain again.
+
 2004-09-28  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcellrendererpixbuf.c (gtk_cell_renderer_pixbuf_render): Don't
