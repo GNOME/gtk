@@ -1,4 +1,9 @@
 Mon Nov 24 1997 Jay Painter <jpaint@serv.net>
+	* gtk/gtkaspectframe.c (gtk_aspect_frame_set): 
+	gtk-dairiki-971117-0.patch
+	Clear window when aspect ratio or alignment is changed.
+
+Mon Nov 24 1997 Jay Painter <jpaint@serv.net>
 	* gtk/gtkobject.h: fixed GTK_OBJECT_NSIGNALS macro
 
 Mon Nov 24 1997 Jay Painter <jpaint@serv.net>

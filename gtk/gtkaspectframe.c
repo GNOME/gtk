@@ -124,13 +124,22 @@ gtk_aspect_frame_set (GtkAspectFrame *aspect_frame,
       (aspect_frame->ratio != ratio) ||
       (aspect_frame->obey_child != obey_child))
     {
+      GtkWidget * this = GTK_WIDGET(aspect_frame);
+  
       aspect_frame->xalign = xalign;
       aspect_frame->yalign = yalign;
       aspect_frame->ratio = ratio;
       aspect_frame->obey_child = obey_child;
 
-      gtk_widget_size_allocate (GTK_WIDGET (aspect_frame), &(GTK_WIDGET (aspect_frame)->allocation));
-      gtk_widget_queue_draw (GTK_WIDGET (aspect_frame));
+      if (GTK_WIDGET_MAPPED(this))
+	  gdk_window_clear_area (this->window,
+				 this->allocation.x,
+				 this->allocation.y,
+				 this->allocation.width,
+				 this->allocation.height);
+
+      gtk_widget_size_allocate (this, &this->allocation);
+      gtk_widget_queue_draw (this);
     }
 }
 
