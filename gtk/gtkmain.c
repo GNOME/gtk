@@ -784,26 +784,6 @@ gtk_handle_current_timeouts (guint32 the_time)
     }
 }
 
-/* Utility function - make up for an ommision in glib */
-static GList *
-gtk_main_list_concat (GList *list1, GList *list2)
-{
-  GList *tmp_list;
-  GList *list;
-
-  if (list2)
-    {
-      tmp_list = g_list_last (list1);
-      if (tmp_list)
-	tmp_list->next = list2;
-      else
-	list1 = list2;
-      list2->prev = tmp_list;
-    }
-
-  return list1;
-}
-
 static void
 gtk_handle_timeouts ()
 {
@@ -832,7 +812,7 @@ gtk_handle_timeouts ()
 	      tmp_list = tmp_list->next;
 
 	      timeout_functions = g_list_remove_link (timeout_functions, tmp_list2);
-	      current_timeouts = gtk_main_list_concat (current_timeouts, tmp_list2);
+	      current_timeouts = g_list_concat (current_timeouts, tmp_list2);
 	    }
 	  else
 	    {
@@ -886,7 +866,7 @@ gtk_handle_current_idles ()
 	}
       else
 	{
-	  idle_functions = gtk_main_list_concat (idle_functions, tmp_list);
+	  idle_functions = g_list_concat (idle_functions, tmp_list);
 	}
     }
 }

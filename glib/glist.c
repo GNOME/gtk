@@ -202,6 +202,24 @@ g_list_insert (GList    *list,
   return list;
 }
 
+GList *
+g_list_concat (GList *list1, GList *list2)
+{
+  GList *tmp_list;
+
+  if (list2)
+    {
+      tmp_list = g_list_last (list1);
+      if (tmp_list)
+	tmp_list->next = list2;
+      else
+	list1 = list2;
+      list2->prev = tmp_list;
+    }
+
+  return list1;
+}
+
 GList*
 g_list_remove (GList    *list,
 	       gpointer  data)

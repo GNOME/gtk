@@ -174,6 +174,20 @@ g_slist_insert (GSList   *list,
   return list;
 }
 
+GSList *
+g_slist_concat (GSList *list1, GSList *list2)
+{
+  if (list2)
+    {
+      if (list1)
+	g_slist_last (list1)->next = list2;
+      else
+	list1 = list2;
+    }
+
+  return list1;
+}
+
 GSList*
 g_slist_remove (GSList   *list,
 		gpointer  data)
