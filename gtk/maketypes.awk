@@ -36,17 +36,18 @@ function set_type (set_type_1)
 {
   type_counter += 1;
   type_name = set_type_1;
-  type_macro = "GTK_TYPE";
-
-  tmp = type_name
-  gsub ("[A-Z][a-z]", "_&", tmp);
-# OK, the following is ridiculous. But easier than writing a loop
-  gsub ("[a-z]", "&@", tmp);
-  gsub ("@[A-Z]", "@&", tmp);
-  gsub ("@@", "_", tmp);
+  type_macro = "GTK_TYPE_";
+  
+  tmp = type_name;
+# OK, the following is ridiculous, and sed s///g would be far easier
+  gsub ("[A-Z]", "@&", tmp);
+  gsub ("[^A-Z]@", "&_", tmp);
+  gsub ("@", "", tmp);
+  gsub ("[A-Z][A-Z][A-Z][0-9a-z]", "@&", tmp);
+  gsub ("@..", "&_", tmp);
   gsub ("@", "", tmp);
   type_macro = type_macro toupper (tmp);
-  type_ident = tolower (tmp);
+  type_ident = "_" tolower (tmp);
 
   sub ("^GTK_TYPE_GTK_", "GTK_TYPE_", type_macro);
 }

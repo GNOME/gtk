@@ -2,8 +2,6 @@ For 1.2.0 release:
 -	remove deprecated functions from *.[hc] files.
 -	finish composite child stuff.
 -	implement constructor functionality for all widgets.
--	fix enum generation code which still puts out
-	GTK_TYPE_C_TREE_POS instead of GTK_TYPE_CTREE_POS
 	
 Bugs:
  * Change bitfields to guints from enums, or vice versa?

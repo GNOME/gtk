@@ -354,11 +354,11 @@ gtk_ctree_class_init (GtkCTreeClass *klass)
 			   GTK_ARG_READWRITE,
 			   ARG_USE_DRAG_ICONS);
   gtk_object_add_arg_type ("GtkCTree::line_style",
-			   GTK_TYPE_C_TREE_LINE_STYLE,
+			   GTK_TYPE_CTREE_LINE_STYLE,
 			   GTK_ARG_READWRITE,
 			   ARG_LINE_STYLE);
   gtk_object_add_arg_type ("GtkCTree::expander_style",
-			   GTK_TYPE_C_TREE_EXPANDER_STYLE,
+			   GTK_TYPE_CTREE_EXPANDER_STYLE,
 			   GTK_ARG_READWRITE,
 			   ARG_EXPANDER_STYLE);
   object_class->set_arg = gtk_ctree_set_arg;
@@ -407,7 +407,7 @@ gtk_ctree_class_init (GtkCTreeClass *klass)
 		    GTK_SIGNAL_OFFSET (GtkCTreeClass,
 				       change_focus_row_expansion),
 		    gtk_marshal_NONE__ENUM,
-		    GTK_TYPE_NONE, 1, GTK_TYPE_C_TREE_EXPANSION_TYPE);
+		    GTK_TYPE_NONE, 1, GTK_TYPE_CTREE_EXPANSION_TYPE);
   gtk_object_class_add_signals (object_class, ctree_signals, LAST_SIGNAL);
 
   widget_class->realize = gtk_ctree_realize;
@@ -3883,7 +3883,7 @@ void
 gtk_ctree_construct (GtkCTree    *ctree,
 		     gint         columns, 
 		     gint         tree_column,
-		     const gchar *titles[])
+		     gchar       *titles[])
 {
   GtkCList *clist;
 
@@ -3913,7 +3913,7 @@ gtk_ctree_construct (GtkCTree    *ctree,
 GtkWidget *
 gtk_ctree_new_with_titles (gint         columns, 
 			   gint         tree_column,
-			   const gchar *titles[])
+			   gchar       *titles[])
 {
   GtkWidget *widget;
 

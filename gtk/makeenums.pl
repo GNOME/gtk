@@ -199,11 +199,12 @@ while (<>) {
 	    print ")\n";
 
 	} else {
-	    ($valuename = $enumname) =~ s/([A-Z][a-z])/_$1/g;
-	    $valuename =~ s/([a-z])([A-Z])/$1_$2/g;
-	    $valuename = lc($valuename);
+	    my $valuename = $enumname;
+            $valuename =~ s/([^A-Z])([A-Z])/$1_$2/g;
+            $valuename =~ s/([A-Z][A-Z])([A-Z][0-9a-z])/$1_$2/g;
+            $valuename = lc($valuename);
 
-	    print "static GtkEnumValue $ {valuename}_values[] = {\n";
+	    print "static GtkEnumValue _${valuename}_values[] = {\n";
 	    for (@entries) {
 		my ($name,$nick) = @{$_};
 		print qq(  { $name, "$name", "$nick" },\n);

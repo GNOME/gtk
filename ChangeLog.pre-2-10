@@ -1,3 +1,16 @@
+Thu Nov 26 03:18:08 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkclist.h: 
+	* gtk/gtkctree.h: 
+	* gtk/gtkclist.c:
+	* gtk/gtkctree.c: reverted bogus and undocumented!!! changes from
+	Jay Cox (98/11/23 13:53:26) which `const' qualified char* arrays.
+
+	* gtk/maketypes.awk: changed underline substitution, so we get
+	GTK_TYPE_CTREE_POS instead of the broken GTK_TYPE_C_TREE_POS.
+	* gtk/makeenums.pl: likewise.
+	* gtk/gtkctree.c: adapted type names accordingly.
+
 Tue Nov 24 11:31:06 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* docs/Changes-1.2.txt: Edited section on the ScrolledWindow.

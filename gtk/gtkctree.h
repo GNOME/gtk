@@ -177,10 +177,10 @@ GtkType gtk_ctree_get_type                       (void);
 void gtk_ctree_construct                         (GtkCTree     *ctree,
 						  gint          columns, 
 						  gint          tree_column,
-						  const gchar  *titles[]);
+						  gchar        *titles[]);
 GtkWidget * gtk_ctree_new_with_titles            (gint          columns, 
 						  gint          tree_column,
-						  const gchar  *titles[]);
+						  gchar        *titles[]);
 GtkWidget * gtk_ctree_new                        (gint          columns, 
 						  gint          tree_column);
 GtkCTreeNode * gtk_ctree_insert_node             (GtkCTree     *ctree,

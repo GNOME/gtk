@@ -378,12 +378,12 @@ GtkType gtk_clist_get_type (void);
 /* constructors useful for gtk-- wrappers */
 void gtk_clist_construct (GtkCList *clist,
 			  gint      columns,
-			  const gchar *titles[]);
+			  gchar    *titles[]);
 
 /* create a new GtkCList */
 GtkWidget* gtk_clist_new             (gint   columns);
 GtkWidget* gtk_clist_new_with_titles (gint   columns,
-				      const gchar *titles[]);
+				      gchar *titles[]);
 
 /* set adjustments of clist */
 void gtk_clist_set_hadjustment (GtkCList      *clist,
@@ -605,16 +605,16 @@ gboolean gtk_clist_get_selectable (GtkCList *clist,
  * making it easier to append and modify a row
  */
 gint gtk_clist_prepend (GtkCList    *clist,
-		        const gchar *text[]);
+		        gchar       *text[]);
 gint gtk_clist_append  (GtkCList    *clist,
-			const gchar *text[]);
+			gchar       *text[]);
 
 /* inserts a row at index row and returns the row where it was
  * actually inserted (may be different from "row" in auto_sort mode)
  */
 gint gtk_clist_insert (GtkCList    *clist,
 		       gint         row,
-		       const gchar *text[]);
+		       gchar       *text[]);
 
 /* removes row at index row */
 void gtk_clist_remove (GtkCList *clist,
