@@ -1,3 +1,7 @@
+2003-08-29  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/*.c: Theme GTK toolbar arrows to XP chevrons, once my GTK patch is committed.
+
 2003-08-28  Dom Lachowicz <cinamod@hotmail.com>
 
 	* src/wimp_style.c: Change how we draw handle boxes in the non-XP case. This does not yet apply to GtkHandleBoxes

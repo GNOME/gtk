@@ -81,6 +81,7 @@ static const short element_part_map[]=
   RP_BAND,
   RP_GRIPPER,
   RP_GRIPPERVERT,
+  RP_CHEVRON,
   TP_BUTTON
 };
 
@@ -173,6 +174,7 @@ xp_theme_get_handle_by_element(XpThemeElement element)
     case XP_THEME_ELEMENT_REBAR:
     case XP_THEME_ELEMENT_GRIPPER_H:
     case XP_THEME_ELEMENT_GRIPPER_V:
+    case XP_THEME_ELEMENT_CHEVRON:
       klazz = XP_THEME_CLASS_REBAR;
       break;
 
@@ -262,6 +264,20 @@ xp_theme_map_gtk_state(XpThemeElement element, GtkStateType state)
     case XP_THEME_ELEMENT_GRIPPER_V:
       ret = 0;
       break;
+
+	case XP_THEME_ELEMENT_CHEVRON:
+		switch (state)
+		{
+        case GTK_STATE_PRELIGHT:
+          ret =  CHEVS_HOT;
+          break;
+        case GTK_STATE_SELECTED:
+        case GTK_STATE_ACTIVE:
+          ret =  CHEVS_PRESSED;
+          break;
+        default:
+          ret =  CHEVS_NORMAL;
+		}
 
     case XP_THEME_ELEMENT_TOOLBAR:
       ret = 1;

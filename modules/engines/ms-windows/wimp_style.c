@@ -724,6 +724,10 @@ draw_arrow (GtkStyle      *style,
 	    gint           width,
 	    gint           height)
 {
+  const gchar * name;
+
+  name = gtk_widget_get_name (widget);
+
   sanitize_size (window, &width, &height);
 
   if (detail && strcmp (detail, "spinbutton") == 0)
@@ -792,6 +796,12 @@ draw_arrow (GtkStyle      *style,
     }
   else
     {
+	  if (name && !strcmp (name, "gtk-toolbar-arrow"))
+	  {
+		  if (xp_theme_draw(window, XP_THEME_ELEMENT_CHEVRON, style, x, y, width, height, state))
+				return;
+	  }
+
       if (arrow_type == GTK_ARROW_UP || arrow_type == GTK_ARROW_DOWN)
 	{
 	  x += (width - 7) / 2;
@@ -855,6 +865,10 @@ draw_box (GtkStyle      *style,
 	  gint           width,
 	  gint           height)
 {
+  const gchar * name;
+
+  name = gtk_widget_get_name (widget);
+
   if (detail &&
       (!strcmp (detail, "button") ||
        !strcmp (detail, "buttondefault")))
@@ -928,7 +942,7 @@ draw_box (GtkStyle      *style,
 		return;
   	  }
   }
-  else if (!strcmp (gtk_widget_get_name (widget), "gtk-tooltips")) {
+  else if (name && !strcmp (name, "gtk-tooltips")) {
       if (xp_theme_draw (window, XP_THEME_ELEMENT_TOOLTIP, style, x, y, width, height, state_type))
         {
   		return;
