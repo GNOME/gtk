@@ -1,5 +1,12 @@
 2002-05-24  Dave Camp  <dave@ximian.com>
 
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_row_inserted): 
+	Built an iter directly instead of using
+	gtk_tree_model_sort_elt_get_path(), since that returns a path for
+	the child model.
+
+2002-05-24  Dave Camp  <dave@ximian.com>
+
 	* gtk/gtktreemodelsort.c: Use indices[i] >= level->array->len
 	rather than level->array->len > indices[i] in the bounds check.
 
