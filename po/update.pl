@@ -8,7 +8,7 @@
 
 $VERSION = "1.2.5 beta 2";
 $LANG    = $ARGV[0];
-$PACKAGE  = "gtk+";
+$PACKAGE  = "gtk20";
 
 if (! $LANG){
     print "update.pl:  missing file arguments\n";
