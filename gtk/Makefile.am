@@ -354,17 +354,17 @@ stamp-gtktypebuiltins.h: @REBUILD@ maketypes.awk stamp-gtk.defs gtktypebuiltins.
 	&& echo timestamp > $@
 gtktypebuiltins_vars.c: @REBUILD@ maketypes.awk stamp-gtk.defs
 	cd $(srcdir) \
-	&& $(AWK) -f maketypes.awk gtk.defs variables > xgen-gtbvc \
+	&& $(AWK) -f maketypes.awk gtk.defs variables > xgen-gtbvc
 	cp $(srcdir)/xgen-gtbvc gtktypebuiltins_vars.c \
 	&& rm -f $(srcdir)/xgen-gtbvc
 gtktypebuiltins_ids.c: @REBUILD@ maketypes.awk stamp-gtk.defs
 	cd $(srcdir) \
-	&& $(AWK) -f maketypes.awk gtk.defs entries > xgen-gtbic \
+	&& $(AWK) -f maketypes.awk gtk.defs entries > xgen-gtbic
 	cp $(srcdir)/xgen-gtbic gtktypebuiltins_ids.c \
 	&& rm -f $(srcdir)/xgen-gtbic
 gtktypebuiltins_evals.c: @REBUILD@ makeenums.pl $(gtk_public_h_sources) $(gdk_headers)
 	cd $(srcdir) \
-	&& $(PERL) makeenums.pl arrays $(gtk_public_h_sources) $(gdk_headers) > xgen-gtbec \
+	&& $(PERL) makeenums.pl arrays $(gtk_public_h_sources) $(gdk_headers) > xgen-gtbec
 	cp $(srcdir)/xgen-gtbec gtktypebuiltins_evals \
 	&& rm -f $(srcdir)/xgen-gtbec
 
