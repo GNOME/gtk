@@ -1,3 +1,8 @@
+2002-08-02  jacob berkman  <jacob@ximian.com>
+
+	* gdk/x11/gdkscreen-x11.c (check_xfree_xinerama): declare
+	screen_x11 variable to fix build w/ xinerama
+
 Fri Aug  2 00:43:15 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkdrawable-x11.[ch] gdk/x11/gdkgc-x11.c

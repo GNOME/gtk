@@ -415,6 +415,7 @@ check_xfree_xinerama (GdkScreen *screen)
 #ifdef HAVE_XFREE_XINERAMA
   if (XineramaIsActive (GDK_SCREEN_XDISPLAY (screen)))
     {
+      GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
       XineramaScreenInfo *monitors = XineramaQueryScreens (GDK_SCREEN_XDISPLAY (screen),
 							   &screen_x11->num_monitors);
       if (screen_x11->num_monitors <= 0)
