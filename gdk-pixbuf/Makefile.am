@@ -42,7 +42,7 @@ endif
 lib_LTLIBRARIES = 		\
 	libgdk_pixbuf-1.3.la
 
-loaderdir = $(libdir)/gtk-2.0/$(GTK_VERSION)/loaders
+loaderdir = $(libdir)/gtk-2.0/$(GTK_BINARY_VERSION)/loaders
 
 module_libs = libgdk_pixbuf-1.3.la $(GDK_PIXBUF_DEP_LIBS)
 
