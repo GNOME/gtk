@@ -621,11 +621,9 @@ gtk_container_destroy (GtkObject *object)
   container = GTK_CONTAINER (object);
   
   if (GTK_CONTAINER_RESIZE_PENDING (container))
-    {
-      container_resize_queue = g_slist_remove (container_resize_queue, container);
-      GTK_PRIVATE_UNSET_FLAG (container, GTK_RESIZE_PENDING);
-    }
-  gtk_container_clear_resize_widgets (container);
+    gtk_container_dequeue_resize_handler (container);
+  if (container->resize_widgets)
+    gtk_container_clear_resize_widgets (container);
   
   gtk_container_foreach (container, (GtkCallback) gtk_widget_destroy, NULL);
   
@@ -723,6 +721,16 @@ gtk_container_remove (GtkContainer *container,
   g_return_if_fail (widget->parent == GTK_WIDGET (container));
   
   gtk_signal_emit (GTK_OBJECT (container), container_signals[REMOVE], widget);
+}
+
+void
+gtk_container_dequeue_resize_handler (GtkContainer *container)
+{
+  g_return_if_fail (GTK_IS_CONTAINER (container));
+  g_return_if_fail (GTK_CONTAINER_RESIZE_PENDING (container));
+
+  container_resize_queue = g_slist_remove (container_resize_queue, container);
+  GTK_PRIVATE_UNSET_FLAG (container, GTK_RESIZE_PENDING);
 }
 
 void
@@ -828,15 +836,19 @@ gtk_container_queue_resize (GtkContainer *container)
   g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_CONTAINER (container));
 
+  /* clear resize widgets for resize containers
+   * before aborting prematurely. this is especially
+   * important for toplevels which may need imemdiate
+   * processing or their resize handler to be queued.
+   */
+  if (GTK_IS_RESIZE_CONTAINER (container))
+    gtk_container_clear_resize_widgets (container);
   if (GTK_OBJECT_DESTROYED (container) ||
       GTK_WIDGET_RESIZE_NEEDED (container))
     return;
-
-  if (GTK_IS_RESIZE_CONTAINER (container))
-    gtk_container_clear_resize_widgets (container);
-
+  
   resize_container = gtk_container_get_resize_container (container);
-
+  
   if (resize_container)
     {
       if (GTK_WIDGET_VISIBLE (resize_container))

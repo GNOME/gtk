@@ -1,3 +1,63 @@
+Tue Aug 31 06:58:52 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwidget.c (gtk_widget_event): when discarding exposes due
+	to already queued resizes (and therefore redraws) on a widget, check
+	its anchestry as well.
+
+	* gtk/gtkcontainer.c:
+	(gtk_container_queue_resize): clear resize widgets for resize
+	containers before aborting prematurely. this is especially important
+	for toplevels which may need imemdiate processing or their resize
+	handler to be queued.
+	(gtk_container_dequeue_resize_handler): added new internal function for
+	gtkwindow.c.
+
+	* gtk/gtkwindow.c (gtk_window_move_resize): if we are resizing due to a
+	configure event, take possible changes in window position into account
+	as well.
+	if we request a new window size, queue up a resize handler that will
+	last until the configure event response arrives.
+	combined the ->need_resize case (initial show) with the general size
+	(hints) changed case and added even more comments.
+	if !auto_shrink, only revert to the old allocation if the new size
+	is smaller than the current allocation.
+
+Tue Aug 31 11:55:20 1999  Owen Taylor  <otaylor@redhat.com>
+
+        * gtk/gtkwindow.c (gtk_window_set_arg, gtk_window_set_policy,
+                           gtk_window_set_geometry_hints
+                           gtk_window_set_default_size):
+        When hints are set, queue a resize so that the hints will
+        be eventually reset on the toplevel.
+
+        * gtk/gtkwindow.c (gtk_window_show): Use
+        gtk_window_compute_default_size(). Clear the need_resize flag
+        on the initail map so that we don't unnecessarily trigger the
+        resize code.
+
+        * gtk/gtkwindow.c (gtk_window_move_resize): Split apart
+        into separate functions. Compare the hints we are setting
+        with what we set last time so that we can accurately
+        tell when we need to reset the hints.
+
+        * gtk/gtkwindow.c (gtk_window_compute_default_size): New
+        function to figure out the size from requisition
+        and default_size.
+
+        * gtk/gtkwindow.c (gtk_window_constrain_size): Function
+        from fvwm to constrain a size to the geometry hints.
+
+        * gtk/gtkwindow.c (gtk_window_compare_hints): New functio
+        to compare two sets of geometry hints.
+
+        * gtk/gtkwindow.c (gtk_window_compute_hints): Renamed
+        from gtk_window_set_hints(), just compute the hints,
+        don't set them.
+
+        * gtk/gtkwindow.c (gtk_window_compute_reposition): Move
+        code from gtk_window_move_resize() to separate function,
+        rationalize a bit.
+
 Tue Aug 31 13:05:03 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtkrc.h: Move the ref_count member out of the GtkRcStyle
@@ -18,6 +78,7 @@ Tue Aug 31 13:05:03 1999  Owen Taylor  <otaylor@redhat.com>
 	* gtk/gtkrc.c: Use gtk_rc_style_find() consistently.
 	
 Mon Aug 30 19:00:00 1999 Pablo Saratxaga <srtxg@chanae.alphanet.ch>
+
 	* gtk/gtkfontsel.c: little i18n patch backported from gtk+ 1.3.0
 	( now all font properties showing in the font selector are 
 	translatable)

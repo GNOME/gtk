@@ -2702,6 +2702,7 @@ gtk_widget_event (GtkWidget *widget,
 
   switch (event->type)
     {
+      GtkWidget *parent;
     case GDK_NOTHING:
       signal_num = -1;
       break;
@@ -2779,7 +2780,14 @@ gtk_widget_event (GtkWidget *widget,
        * that have a resize pending, because a redraw is already queued for
        * them.
        */
-      if (!event->any.window || GTK_WIDGET_RESIZE_NEEDED (widget))
+      parent = widget;
+      while (parent)
+	{
+	  if (GTK_WIDGET_RESIZE_NEEDED (parent))
+	    break;
+	  parent = parent->parent;
+	}
+      if (!event->any.window || parent)
 	{
 	  gtk_widget_unref (widget);
 	  return TRUE;

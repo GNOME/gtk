@@ -54,11 +54,16 @@ enum {
 };
 
 typedef struct {
-  GdkGeometry    geometry;
+  /* Properties that the app has set on the window
+   */
+  GdkGeometry    geometry;	/* Geometry hints */
   GdkWindowHints mask;
-  GtkWidget     *widget;
-  gint           width;
+  GtkWidget     *widget;	/* subwidget to which hints apply */
+  gint           width;		/* Default size */
   gint           height;
+
+  GdkGeometry    last_geometry;	/* Last set of geometry hints we set */
+  GdkWindowHints last_flags;
   gint           last_width;
   gint           last_height;
 } GtkWindowGeometryInfo;
@@ -102,8 +107,30 @@ static gint gtk_window_client_event	  (GtkWidget	     *widget,
 static void gtk_window_check_resize       (GtkContainer      *container);
 static void gtk_window_real_set_focus     (GtkWindow         *window,
 					   GtkWidget         *focus);
+
 static void gtk_window_move_resize        (GtkWindow         *window);
-static void gtk_window_set_hints          (GtkWidget         *widget);
+static gboolean gtk_window_compare_hints  (GdkGeometry       *geometry_a,
+					   guint              flags_a,
+					   GdkGeometry       *geometry_b,
+					   guint              flags_b);
+static void gtk_window_compute_default_size (GtkWindow       *window,
+					     guint           *width,
+					     guint           *height);
+static void  gtk_window_constrain_size      (GtkWindow       *window,
+					     GdkGeometry     *geometry,
+					     guint            flags,
+					     gint             width,
+					     gint             height,
+					     gint            *new_width,
+					     gint            *new_height);
+static void gtk_window_compute_hints      (GtkWindow         *window, 
+					   GdkGeometry       *new_geometry,
+					   guint             *new_flags);
+static void gtk_window_compute_reposition (GtkWindow         *window,
+					   gint               new_width,
+					   gint               new_height,
+					   gint              *x,
+					   gint              *y);
 
 static void gtk_window_read_rcfiles       (GtkWidget         *widget,
 					   GdkEventClient    *event);
@@ -263,15 +290,18 @@ gtk_window_set_arg (GtkObject  *object,
       break;
     case ARG_AUTO_SHRINK:
       window->auto_shrink = (GTK_VALUE_BOOL (*arg) != FALSE);
-      gtk_window_set_hints (GTK_WIDGET (window));
+      if (GTK_WIDGET_REALIZED (window))
+	gtk_widget_queue_resize (GTK_WIDGET (window));
       break;
     case ARG_ALLOW_SHRINK:
       window->allow_shrink = (GTK_VALUE_BOOL (*arg) != FALSE);
-      gtk_window_set_hints (GTK_WIDGET (window));
+      if (GTK_WIDGET_REALIZED (window))
+	gtk_widget_queue_resize (GTK_WIDGET (window));
       break;
     case ARG_ALLOW_GROW:
       window->allow_grow = (GTK_VALUE_BOOL (*arg) != FALSE);
-      gtk_window_set_hints (GTK_WIDGET (window));
+      if (GTK_WIDGET_REALIZED (window))
+	gtk_widget_queue_resize (GTK_WIDGET (window));
       break;
     case ARG_MODAL:
       gtk_window_set_modal (window, GTK_VALUE_BOOL (*arg));
@@ -448,7 +478,8 @@ gtk_window_set_policy (GtkWindow *window,
   window->allow_grow = (allow_grow != FALSE);
   window->auto_shrink = (auto_shrink != FALSE);
 
-  gtk_window_set_hints (GTK_WIDGET (window));
+  if (GTK_WIDGET_REALIZED (window))
+    gtk_widget_queue_resize (GTK_WIDGET (window));
 }
 
 void
@@ -732,6 +763,9 @@ gtk_window_set_geometry_hints (GtkWindow       *window,
     info->geometry = *geometry;
 
   info->mask = geom_mask;
+
+  if (GTK_WIDGET_REALIZED (window))
+    gtk_widget_queue_resize (GTK_WIDGET (window));
 }
 
 void       
@@ -749,7 +783,9 @@ gtk_window_set_default_size (GtkWindow   *window,
     info->width = width;
   if (height >= 0)
     info->height = height;
-  gtk_widget_queue_resize (GTK_WIDGET (window));
+
+  if (GTK_WIDGET_REALIZED (window))
+    gtk_widget_queue_resize (GTK_WIDGET (window));
 }
   
 static void
@@ -796,17 +832,19 @@ gtk_window_show (GtkWidget *widget)
 
   if (!GTK_WIDGET_REALIZED (widget))
     {
-      GtkRequisition requisition;
-      GtkAllocation allocation = { 0, 0, 200, 200 };
+      guint width, height;
+      GtkAllocation allocation;
       
-      gtk_widget_size_request (widget, &requisition);
-      if (requisition.width || requisition.height)
-	{
-	  /* non-empty window */
-	  allocation.width = requisition.width;
-	  allocation.height = requisition.height;
-	}
+      gtk_widget_size_request (widget, NULL);
+      gtk_window_compute_default_size (GTK_WINDOW (widget), &width, &height);
+
+      allocation.width = 0;
+      allocation.height = 0;
+      allocation.width  = width;
+      allocation.height = height;
+      
       gtk_widget_size_allocate (widget, &allocation);
+      GTK_CONTAINER (widget)->need_resize = FALSE;
       
       gtk_widget_realize (widget);
     }
@@ -853,7 +891,6 @@ gtk_window_map (GtkWidget *widget)
       !GTK_WIDGET_MAPPED (window->bin.child))
     gtk_widget_map (window->bin.child);
 
-  gtk_window_set_hints (widget);
   gdk_window_show (widget->window);
 }
 
@@ -1356,258 +1393,6 @@ gtk_window_check_resize (GtkContainer *container)
 }
 
 static void
-gtk_window_move_resize (GtkWindow *window)
-{
-  GtkWidget *widget;
-  GtkWindowGeometryInfo *info;
-  GtkRequisition requisition;
-  GtkContainer *container;
-  gint x, y;
-  gint width, height;
-  gint new_width, new_height;
-  gint min_width, min_height;
-  gboolean requisition_changed;
-  gboolean hints_changed = FALSE;
-
-  g_return_if_fail (window != NULL);
-  g_return_if_fail (GTK_IS_WINDOW (window));
-
-  widget = GTK_WIDGET (window);
-  container = GTK_CONTAINER (widget);
-  info = gtk_window_get_geometry_info (window, FALSE);
-
-  /* get new requisition and figure whether it differs from current
-   */
-  gtk_widget_get_child_requisition (widget, &requisition);
-  width = requisition.width;
-  height = requisition.height;
-  gtk_widget_size_request (widget, &requisition);
-  requisition_changed = requisition.width != width || requisition.height != height;
-
-  /* figure out the new desired size, and
-   * check whether we need to reset hints
-   */
-  new_width = requisition.width;
-  new_height = requisition.height;
-  if (!new_width && !new_height)
-    {
-      /* empty window */
-      new_width = 200;
-      new_height = 200;
-    }
-  if (info)
-    {
-      new_width = info->width > 0 ? info->width : new_width;
-      new_height = info->height > 0 ? info->height : new_height;
-      hints_changed |= new_width != info->last_width || new_height != info->last_height;
-    }
-
-  /* Figure out the new minimum size */
-  if (info && (info->mask & (GDK_HINT_MIN_SIZE | GDK_HINT_BASE_SIZE)))
-    {
-      if (info->mask && GDK_HINT_MIN_SIZE)
-	{
-	  min_width = info->geometry.min_width;
-	  min_height = info->geometry.min_height;
-	}
-      else
-	{
-	  min_width = info->geometry.base_width;
-	  min_height = info->geometry.base_height;
-	}
-
-      if (info->widget)
-	{
-	  min_width += widget->requisition.width - info->widget->requisition.width;
-	  min_height += widget->requisition.height - info->widget->requisition.height;
-	}
-    }
-  else
-    {
-      min_width = MIN (widget->requisition.width, requisition.width);
-      min_height = MIN (widget->requisition.height, requisition.height);
-    }
-
-  if (hints_changed)
-    gtk_window_set_hints (widget);
-  
-  /* if we are not yet realized, only size_allocate the widget tree
-   */
-  if (!GTK_WIDGET_REALIZED (window))
-    {
-      GtkAllocation allocation;
-
-      allocation.x = 0;
-      allocation.y = 0;
-      allocation.width = new_width;
-      allocation.height = new_height;
-      
-      gtk_widget_size_allocate (widget, &allocation);
-
-      return;
-    }
-
-  /* calculate window position if neccessary
-   */
-  x = -1;
-  y = -1;
-  switch (window->position)
-    {
-    case GTK_WIN_POS_CENTER:
-      if (window->use_uposition || requisition_changed)
-	{
-	  gint screen_width = gdk_screen_width ();
-	  gint screen_height = gdk_screen_height ();
-	  
-	  x = (screen_width - new_width) / 2;
-	  y = (screen_height - new_height) / 2;
-	}
-      break;
-    case GTK_WIN_POS_MOUSE:
-      if (window->use_uposition)
-	{
-	  gint screen_width = gdk_screen_width ();
-	  gint screen_height = gdk_screen_height ();
-	  
-	  gdk_window_get_pointer (NULL, &x, &y, NULL);
-	  x -= new_width / 2;
-	  y -= new_height / 2;
-	  x = CLAMP (x, 0, screen_width - new_width);
-	  y = CLAMP (y, 0, screen_height - new_height);
-	}
-      break;
-    default:
-      if (window->use_uposition)
-	{
-	  GtkWidgetAuxInfo *aux_info;
-	  
-	  aux_info = gtk_object_get_data (GTK_OBJECT (widget), "gtk-aux-info");
-	  if (aux_info &&
-	      aux_info->x != -1 && aux_info->y != -1 &&
-	      aux_info->x != -2 && aux_info->y != -2)
-	    {
-	      x = aux_info->x;
-	      y = aux_info->y;
-	    }
-	}
-      break;
-    }
-  if (x != -1 && y != -1)
-    {
-      GtkWidgetAuxInfo *aux_info;
-      
-      /* we handle neccessary window positioning by hand here,
-       * so we can coalesce the window movement with possible
-       * resizes to get only one configure event.
-       * keep this in sync with gtk_widget_set_uposition().
-       */
-      gtk_widget_set_uposition (widget, -1, -1); /* ensure we have aux_info */
-      
-      aux_info = gtk_object_get_data (GTK_OBJECT (widget), "gtk-aux-info");
-      aux_info->x = x;
-      aux_info->y = y;
-      gdk_window_set_hints (widget->window, aux_info->x, aux_info->y, 0, 0, 0, 0, GDK_HINT_POS);
-      gdk_window_move (widget->window, aux_info->x, aux_info->y);
-      window->use_uposition = FALSE;
-    }
-  
-  if (x != -1 && y != -1)
-    {
-      gint geo_x, geo_y;
-
-      gdk_window_get_geometry (widget->window, &geo_x, &geo_y, &width, &height, NULL);
-      if (x == geo_x && y == geo_y)
-	{
-	  x = -1;
-	  y = -1;
-	}
-    }
-  else
-    gdk_window_get_geometry (widget->window, NULL, NULL, &width, &height, NULL);
-
-  /* away into the actuall resizing
-   */
-   if (window->handling_resize)
-    {
-      GtkAllocation allocation;
-
-      /* we just have to react to a resize by the window manager
-       * or the user, so simply size_allocate the widget tree.
-       * see gtk_window_configure_event() for this.
-       */
-      window->handling_resize = FALSE;
-
-      new_width = widget->allocation.width;
-      new_height = widget->allocation.height;
-
-      allocation.x = 0;
-      allocation.y = 0;
-      allocation.width = new_width;
-      allocation.height = new_height;
-      
-      gtk_widget_size_allocate (widget, &allocation);
-      gtk_widget_queue_draw (widget);
-    }
-   else if (container->need_resize)
-    {
-      /* we need a full layout, since visibility has changed and
-       * we didn't keep track of what changed.
-       */
-      container->need_resize = FALSE;
-      
-      if (x != -1 && y != -1)
-	gdk_window_move_resize (widget->window, x, y,
-				new_width,
-				new_height);
-      else
-	gdk_window_resize (widget->window,
-			   new_width,
-			   new_height);
-      window->resize_count += 1;
-
-      /* we are now awaiting the new configure event, which will cause a
-       * resize. as an optimization, we queue the resize already here so
-       * intermediate expose events get discarded.
-       */
-      gtk_widget_queue_resize (widget);
-    }
-  else if (requisition_changed &&
-	   ((window->auto_shrink && (width != new_width || height != new_height)) ||
-	    (width < min_width || height < min_height)))
-    {
-      /* As an optimization, we don't try to get a new size from the
-       * window manager if we asked for the same size last time and
-       * didn't get it.
-       * to achive this, we record GdkWindow resizes in resize_count and
-       * if we didn't get it, we'll catch that case in the
-       * gtk_window_configure_event() handler.
-       */
-      if (!window->auto_shrink)
-	{
-	  new_width = MAX (width, min_width);
-	  new_height = MAX (height, min_height);
-	}
-      
-      if (x != -1 && y != -1)
-	gdk_window_move_resize (widget->window, x, y,
-				new_width,
-				new_height);
-      else
-        gdk_window_resize (widget->window,
-			   new_width,
-			   new_height);
-      window->resize_count += 1;
-    }
-  else
-    {
-      if (x != -1 && y != -1)
-	gdk_window_move (widget->window, x, y);
-      
-      gtk_container_resize_children (GTK_CONTAINER (window));
-    }
-}
-
-static void
 gtk_window_real_set_focus (GtkWindow *window,
 			   GtkWidget *focus)
 {
@@ -1675,21 +1460,402 @@ gtk_window_real_set_focus (GtkWindow *window,
     gtk_widget_queue_draw (window->default_widget);
 }
 
+/*********************************
+ * Functions related to resizing *
+ *********************************/
+
 static void
-gtk_window_set_hints (GtkWidget *widget)
+gtk_window_move_resize (GtkWindow *window)
 {
-  GtkWindow *window;
-  GtkWidgetAuxInfo *aux_info;
+  GtkWidget *widget;
+  GtkContainer *container;
+  GtkWindowGeometryInfo *info;
   GdkGeometry new_geometry;
-  gint flags;
+  guint new_flags;
+  gint x, y;
+  gint width, height;
+  gint new_width, new_height;
+  gboolean size_changed = FALSE;
+  gboolean hints_changed = FALSE;
+
+  g_return_if_fail (GTK_IS_WINDOW (window));
+  g_return_if_fail (GTK_WIDGET_REALIZED (window));
+
+  widget = GTK_WIDGET (window);
+  container = GTK_CONTAINER (widget);
+  info = gtk_window_get_geometry_info (window, TRUE);
+
+  /* Compute new set of hints for the window
+   */
+  gtk_window_compute_hints (window, &new_geometry, &new_flags);
+
+  if (!gtk_window_compare_hints (&info->last_geometry, info->last_flags,
+				 &new_geometry, new_flags))
+    {
+      hints_changed = TRUE;
+      gdk_window_set_geometry_hints (widget->window,
+				     &new_geometry,
+				     new_flags);
+      info->last_geometry = new_geometry;
+      info->last_flags = new_flags;
+    }
+
+  /* Compute a new default size for the window
+   */
+  gtk_widget_size_request (widget, NULL);
+  gtk_window_compute_default_size (window, &new_width, &new_height);
+  
+  if (info->last_width < 0 ||
+      info->last_width != new_width ||
+      info->last_height != new_height)
+    {
+      size_changed = TRUE;
+
+      /* We currently always force a reposition in this case
+       */
+      if (window->position == GTK_WIN_POS_CENTER)
+	window->use_uposition = TRUE;
+    }
+
+  info->last_width = new_width;
+  info->last_height = new_height;
+  
+  /* From the default size and the allocation, figure out the size
+   * the window should be.
+   */
+  if (!size_changed ||
+      (!window->auto_shrink &&
+       new_width <= widget->allocation.width &&
+       new_height <= widget->allocation.height))
+    {
+      new_width = widget->allocation.width;
+      new_height = widget->allocation.height;
+    }
+  
+  if (size_changed || hints_changed)
+    gtk_window_constrain_size (window,
+			       &new_geometry, new_flags,
+			       new_width, new_height,
+			       &new_width, &new_height);
+
+  /* compute new window position if a move is required
+   */
+  gtk_window_compute_reposition (window, new_width, new_height, &x, &y);
+  if (x != -1 && y != -1)
+    {
+      gint geo_x, geo_y;
+
+      gdk_window_get_geometry (widget->window, &geo_x, &geo_y, &width, &height, NULL);
+
+      /* As an optimization, don't reposition the window if we are
+       * already positioned there
+       */
+      if (x == geo_x && y == geo_y)
+	{
+	  x = -1;
+	  y = -1;
+	}
+    }
+  else
+    gdk_window_get_geometry (widget->window, NULL, NULL, &width, &height, NULL);
+
+  /* handle actuall resizing
+   */
+  if (window->handling_resize)
+    { 
+      GtkAllocation allocation;
+      
+      /* if we are just responding to a configure event, which
+       * might be due to a resize by the window manager, the
+       * user, or a response to a resizing request we made
+       * earlier, we go ahead, allocate the new size and we're done
+       * (see gtk_window_configure_event() for more details).
+       */
+
+      window->handling_resize = FALSE;
+      
+      allocation = widget->allocation;
+      
+      gtk_widget_size_allocate (widget, &allocation);
+      gtk_widget_queue_draw (widget);
+      
+      if (x != -1 && y != -1)
+	gdk_window_move (widget->window, x, y);
+    }
+  else if (container->need_resize ||
+	   ((size_changed || hints_changed) &&
+	    (width != new_width || height != new_height)))
+    {
+      /* we handle two cases here:
+       * - (container->need_resize == TRUE)
+       *   we need a full layout, since visibility has changed and
+       *   we didn't keep track of what changed.
+       * - our requisition has changed and we need a different window size.
+       */
+
+      container->need_resize = FALSE;
+
+      /* request a new window size */
+      if (x != -1 && y != -1)
+	gdk_window_move_resize (GTK_WIDGET (window)->window, x, y, new_width, new_height);
+      else
+	gdk_window_resize (GTK_WIDGET (window)->window, new_width, new_height);
+      window->resize_count += 1;
+      
+      /* we are now awaiting the new configure event in response to our
+       * resizing request. the configure event will cause a new resize
+       * with ->handling_resize=TRUE.
+       * until then, we want to
+       * - discard expose events
+       * - coalesce resizes for our children
+       * - defer any window resizes until the configure event arrived
+       * to achive this, we queue a resize for the window, but remove its
+       * resizing handler, so resizing will not be handled from the next
+       * idle handler but when the configure event arrives.
+       *
+       * FIXME: we should also dequeue the pending redraws here, since
+       * we handle those ourselves in ->need_resize==TRUE.
+       */
+      gtk_container_queue_resize (container);
+      if (container->resize_mode == GTK_RESIZE_QUEUE)
+	gtk_container_dequeue_resize_handler (container);
+    }
+  else
+    {
+      if (x != -1 && y != -1)
+	gdk_window_move (widget->window, x, y);
+      
+      gtk_container_resize_children (GTK_CONTAINER (window));
+    }
+}
+
+/* Compare two sets of Geometry hints for equality.
+ */
+static gboolean
+gtk_window_compare_hints (GdkGeometry *geometry_a,
+			  guint        flags_a,
+			  GdkGeometry *geometry_b,
+			  guint        flags_b)
+{
+  if (flags_a != flags_b)
+    return FALSE;
+
+  if ((flags_a & GDK_HINT_MIN_SIZE) &&
+      (geometry_a->min_width != geometry_b->min_width ||
+       geometry_a->min_height != geometry_b->min_height))
+    return FALSE;
+
+  if ((flags_a & GDK_HINT_MAX_SIZE) &&
+      (geometry_a->max_width != geometry_b->max_width ||
+       geometry_a->max_height != geometry_b->max_height))
+    return FALSE;
+
+  if ((flags_a & GDK_HINT_BASE_SIZE) &&
+      (geometry_a->base_width != geometry_b->base_width ||
+       geometry_a->base_height != geometry_b->base_height))
+    return FALSE;
+
+  if ((flags_a & GDK_HINT_ASPECT) &&
+      (geometry_a->min_aspect != geometry_b->min_aspect ||
+       geometry_a->max_aspect != geometry_b->max_aspect))
+    return FALSE;
+
+  if ((flags_a & GDK_HINT_RESIZE_INC) &&
+      (geometry_a->width_inc != geometry_b->width_inc ||
+       geometry_a->height_inc != geometry_b->height_inc))
+    return FALSE;
+
+  return TRUE;
+}
+
+/* Compute the default_size for a window. The result will
+ * be stored in *width and *height. The default size is
+ * the size the window should have when initially mapped.
+ * This routine does not attempt to constrain the size
+ * to obey the geometry hints - that must be done elsewhere.
+ */
+static void 
+gtk_window_compute_default_size (GtkWindow       *window,
+				 guint           *width,
+				 guint           *height)
+{
+  GtkRequisition requisition;
+  GtkWindowGeometryInfo *info;
+  
+  gtk_widget_get_child_requisition (GTK_WIDGET (window), &requisition);
+  *width = requisition.width;
+  *height = requisition.height;
+
+  info = gtk_window_get_geometry_info (window, FALSE);
+  
+  if (*width == 0 && *height == 0)
+    {
+      /* empty window */
+      *width = 200;
+      *height = 200;
+    }
+  
+  if (info)
+    {
+      *width = info->width > 0 ? info->width : *width;
+      *height = info->height > 0 ? info->height : *height;
+    }
+}
+
+/* Constrain a window size to obey the hints passed in geometry
+ * and flags. The result will be stored in *new_width and *new_height
+ *
+ * This routine is partially borrowed from fvwm.
+ *
+ * Copyright 1993, Robert Nation
+ *     You may use this code for any purpose, as long as the original
+ *     copyright remains in the source code and all documentation
+ *
+ * which in turn borrows parts of the algorithm from uwm
+ */
+static void 
+gtk_window_constrain_size (GtkWindow   *window,
+			   GdkGeometry *geometry,
+			   guint        flags,
+			   gint         width,
+			   gint         height,
+			   gint        *new_width,
+			   gint        *new_height)
+{
+#define makemult(a,b) ((b==1) ? (a) : (((int)((a)/(b))) * (b)) )
+    int minWidth, minHeight, maxWidth, maxHeight, xinc, yinc, delta;
+    int baseWidth, baseHeight;
+
+    int dwidth = width;
+    int dheight = height;
+
+    if (!(flags & GDK_HINT_BASE_SIZE))
+      {
+	if (flags & GDK_HINT_MIN_SIZE)
+	  {
+	    baseWidth = geometry->min_width;
+	    baseHeight = geometry->min_height;
+	  }
+	else
+	  {
+	    baseWidth = 0;
+	    baseHeight = 0;
+	  }
+      }
+    else
+      {
+      	baseWidth = geometry->min_width;
+	baseHeight = geometry->min_height;
+      }
+
+    if (!(flags & GDK_HINT_MIN_SIZE))
+      {
+	if (flags & GDK_HINT_BASE_SIZE)
+	  {
+	    minWidth = geometry->base_width;
+	    minHeight = geometry->base_height;
+	  }
+	else
+	  {
+	    minWidth = 0;
+	    minHeight = 0;
+	  }
+      }
+    else
+      {
+      	minWidth = geometry->min_width;
+	minHeight = geometry->min_height;
+      }
+    
+    maxWidth = (flags & GDK_HINT_MAX_SIZE) ? geometry->max_width : G_MAXINT;
+    maxHeight =  (flags & GDK_HINT_MAX_SIZE) ? geometry->max_height : G_MAXINT;
+
+    xinc = (flags & GDK_HINT_RESIZE_INC && geometry->width_inc > 0) ?
+      geometry->width_inc : 1;
+    yinc = (flags & GDK_HINT_RESIZE_INC && geometry->height_inc > 0) ?
+      geometry->height_inc : 1;
+    
+    /*
+     * First, clamp to min and max values
+     */
+    dwidth = MAX (dwidth, minWidth);
+    dheight = MAX (dheight, minHeight);
+    dwidth = MIN (dwidth, maxWidth);
+    dheight = MIN (dheight, maxHeight);
+    
+    /*
+     * Second, fit to base + N * inc
+     */
+    dwidth = ((dwidth - baseWidth) / xinc * xinc) + baseWidth;
+    dheight = ((dheight - baseHeight) / yinc * yinc) + baseHeight;
+    
+    /*
+     * The math looks like this:
+     *
+     *               dwidth     
+     * min_aspect <= -------- <= max_aspect
+     *               dheight    
+     */
+    
+    if (flags & GDK_HINT_ASPECT &&
+	geometry->min_aspect > 0 &&
+	geometry->max_aspect > 0)
+      {
+        if (geometry->min_aspect * dheight > dwidth)
+          {
+            delta = makemult(dheight - dwidth * geometry->min_aspect,
+			     yinc);
+            if (dheight - delta >= minHeight)
+              dheight -= delta;
+            else
+              { 
+                delta = makemult(dheight * geometry->min_aspect - dwidth,
+                                 xinc);
+                if (dwidth + delta <= maxWidth) 
+                  dwidth += delta;
+              }
+          }
+        
+        if (geometry->max_aspect * dheight < dwidth)
+          {
+            delta = makemult(dwidth - dheight * geometry->max_aspect,
+                             xinc);
+            if (dwidth - delta >= minWidth) 
+                dwidth -= delta;
+            else
+              {
+                delta = makemult(dwidth / geometry->max_aspect - dheight,
+                                 yinc);
+                if (dheight + delta <= maxHeight)
+                  dheight += delta;
+              }
+          }
+      }
+    
+    *new_width = dwidth;
+    *new_height = dheight;
+}
+
+/* Compute the set of geometry hints and flags for a window
+ * based on the application set geometry, and requisiition
+ * of the window. gtk_widget_size_request() must have been
+ * called first.
+ */
+static void
+gtk_window_compute_hints (GtkWindow   *window,
+			  GdkGeometry *new_geometry,
+			  guint       *new_flags)
+{
+  GtkWidget *widget;
+  GtkWidgetAuxInfo *aux_info;
   gint ux, uy;
   gint extra_width = 0;
   gint extra_height = 0;
 
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_WINDOW (widget));
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (GTK_IS_WINDOW (window));
 
-  window = GTK_WINDOW (widget);
+  widget = GTK_WIDGET (window);
 
   if (GTK_WIDGET_REALIZED (window))
     {
@@ -1701,8 +1867,8 @@ gtk_window_set_hints (GtkWidget *widget)
 
       if (geometry_info)
 	{
-	  flags = geometry_info->mask;
-	  new_geometry = geometry_info->geometry;
+	  *new_flags = geometry_info->mask;
+	  *new_geometry = geometry_info->geometry;
 
 	  if (geometry_info->widget)
 	    {
@@ -1711,7 +1877,7 @@ gtk_window_set_hints (GtkWidget *widget)
 	    }
 	}
       else
-	flags = 0;
+	*new_flags = 0;
       
       ux = 0;
       uy = 0;
@@ -1721,67 +1887,135 @@ gtk_window_set_hints (GtkWidget *widget)
 	{
 	  ux = aux_info->x;
 	  uy = aux_info->y;
-	  flags |= GDK_HINT_POS;
+	  *new_flags |= GDK_HINT_POS;
 	}
       
-      if (flags & GDK_HINT_BASE_SIZE)
+      if (*new_flags & GDK_HINT_BASE_SIZE)
 	{
-	  new_geometry.base_width += extra_width;
-	  new_geometry.base_height += extra_height;
+	  new_geometry->base_width += extra_width;
+	  new_geometry->base_height += extra_height;
 	}
-      else if (!(flags & GDK_HINT_MIN_SIZE) &&
-	       (flags & GDK_HINT_RESIZE_INC) &&
+      else if (!(*new_flags & GDK_HINT_MIN_SIZE) &&
+	       (*new_flags & GDK_HINT_RESIZE_INC) &&
 	       ((extra_width != 0) || (extra_height != 0)))
 	{
-	  flags |= GDK_HINT_BASE_SIZE;
+	  *new_flags |= GDK_HINT_BASE_SIZE;
 
-	  new_geometry.base_width = extra_width;
-	  new_geometry.base_height = extra_height;
+	  new_geometry->base_width = extra_width;
+	  new_geometry->base_height = extra_height;
 	}
 
-      if (flags & GDK_HINT_MIN_SIZE)
+      if (*new_flags & GDK_HINT_MIN_SIZE)
 	{
-	  new_geometry.min_width += extra_width;
-	  new_geometry.min_height += extra_height;
+	  new_geometry->min_width += extra_width;
+	  new_geometry->min_height += extra_height;
 	}
       else if (!window->allow_shrink)
 	{
-	  flags |= GDK_HINT_MIN_SIZE;
+	  *new_flags |= GDK_HINT_MIN_SIZE;
 
-	  new_geometry.min_width = requisition.width;
-	  new_geometry.min_height = requisition.height;
+	  new_geometry->min_width = requisition.width;
+	  new_geometry->min_height = requisition.height;
 	}
 
-      if (flags & GDK_HINT_MAX_SIZE)
+      if (*new_flags & GDK_HINT_MAX_SIZE)
 	{
-	  new_geometry.max_width += extra_width;
-	  new_geometry.max_height += extra_height;
+	  new_geometry->max_width += extra_width;
+	  new_geometry->max_height += extra_height;
 	}
       else if (!window->allow_grow)
 	{
-	  flags |= GDK_HINT_MAX_SIZE;
+	  *new_flags |= GDK_HINT_MAX_SIZE;
 
-	  new_geometry.max_width = requisition.width;
-	  new_geometry.max_height = requisition.height;
-	}
-
-      gdk_window_set_geometry_hints (widget->window, &new_geometry, flags);
-
-      if (geometry_info)
-	{
-	  if (flags & GDK_HINT_BASE_SIZE)
-	    {
-	      geometry_info->last_width = new_geometry.base_width;
-	      geometry_info->last_height = new_geometry.base_height;
-	    }
-	  else
-	    {
-	      geometry_info->last_width = -1;
-	      geometry_info->last_height = -1;
-	    }
+	  new_geometry->max_width = requisition.width;
+	  new_geometry->max_height = requisition.height;
 	}
     }
 }
+
+/* Compute a new position for the window based on a new
+ * size. *x and *y will be set to the new coordinates, or to -1 if the
+ * window does not need to be moved
+ */
+static void 
+gtk_window_compute_reposition (GtkWindow  *window,
+			       gint        new_width,
+			       gint        new_height,
+			       gint       *x,
+			       gint       *y)
+{
+  GtkWidget *widget;
+
+  widget = GTK_WIDGET (window);
+
+  *x = -1;
+  *y = -1;
+  
+  switch (window->position)
+    {
+    case GTK_WIN_POS_CENTER:
+      if (window->use_uposition)
+	{
+	  gint screen_width = gdk_screen_width ();
+	  gint screen_height = gdk_screen_height ();
+	  
+	  *x = (screen_width - new_width) / 2;
+	  *y = (screen_height - new_height) / 2;
+	}
+      break;
+    case GTK_WIN_POS_MOUSE:
+      if (window->use_uposition)
+	{
+	  gint screen_width = gdk_screen_width ();
+	  gint screen_height = gdk_screen_height ();
+	  
+	  gdk_window_get_pointer (NULL, x, y, NULL);
+	  *x -= new_width / 2;
+	  *y -= new_height / 2;
+	  *x = CLAMP (*x, 0, screen_width - new_width);
+	  *y = CLAMP (*y, 0, screen_height - new_height);
+	}
+      break;
+    default:
+      if (window->use_uposition)
+	{
+	  GtkWidgetAuxInfo *aux_info;
+	  
+	  aux_info = gtk_object_get_data (GTK_OBJECT (window), "gtk-aux-info");
+	  if (aux_info &&
+	      aux_info->x != -1 && aux_info->y != -1 &&
+	      aux_info->x != -2 && aux_info->y != -2)
+	    {
+	      *x = aux_info->x;
+	      *y = aux_info->y;
+	    }
+	}
+      break;
+    }
+
+  if (*x != -1 && *y != -1)
+    {
+      GtkWidgetAuxInfo *aux_info;
+      
+      /* we handle necessary window positioning by hand here,
+       * so we can coalesce the window movement with possible
+       * resizes to get only one configure event.
+       * keep this in sync with gtk_widget_set_uposition().
+       */
+      gtk_widget_set_uposition (widget, -1, -1); /* ensure we have aux_info */
+      
+      aux_info = gtk_object_get_data (GTK_OBJECT (widget), "gtk-aux-info");
+      aux_info->x = *x;
+      aux_info->y = *y;
+      gdk_window_set_hints (widget->window, aux_info->x, aux_info->y, 0, 0, 0, 0, GDK_HINT_POS);
+      gdk_window_move (widget->window, aux_info->x, aux_info->y);
+      window->use_uposition = FALSE;
+    }
+}
+
+/***********************
+ * Redrawing functions *
+ ***********************/
 
 static void
 gtk_window_paint (GtkWidget     *widget,
