@@ -1,3 +1,8 @@
+2003-11-03  Federico Mena Quintero  <federico@ximian.com>
+
+	* POTFILES.in: Added gtkfilechooser.c, gtkfilechooserdefault.c,
+	gtkfilesystemmodel.c, gtkfilesystemunix.c.
+
 2003-11-02  Kostas Papadimas <pkst@gnome.org>
 
 	* el.po: Updated  Greek translation.

@@ -50,7 +50,11 @@ gtk/gtkentry.c
 gtk/gtkentrycompletion.c
 gtk/gtkeventbox.c
 gtk/gtkexpander.c
+gtk/gtkfilechooser.c
+gtk/gtkfilechooserdefault.c
 gtk/gtkfilesel.c
+gtk/gtkfilesystemmodel.c
+gtk/gtkfilesystemunix.c
 gtk/gtkfixed.c
 gtk/gtkfontbutton.c
 gtk/gtkfontsel.c
