@@ -379,7 +379,7 @@ windows of that window.
 Sets whether copying non-visible portions of a drawable
 using this graphics context generate exposure events
 for the corresponding regions of the destination
-drawable. (See gdk_draw_pixmap()).
+drawable. (See gdk_draw_drawable()).
 </para>
 
 @gc: a #GdkGC.

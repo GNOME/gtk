@@ -1,4 +1,19 @@
+2001-12-28  Matthias Clasen  <matthiasc@poet.de>
+
+	* gdk/tmpl/properties.sgml, gdk/tmpl/selections.sgml: Additions.
+
+2001-12-23  Matthias Clasen  <matthiasc@poet.de>
+
+	* gdk-pixbuf/porting-from-imlib.sgml: GDK instead of Gdk.
+
+	* gdk-pixbuf/tmpl/gdk-pixbuf-xlib-init.sgml: Replace references to
+	deprecated functions.
+
+	* gdk/tmpl/event_structs.sgml, gdk/tmpl/gcs.sgml,
+	gdk/tmpl/images.sgml: Replace references to deprecated functions.
+
 2001-12-28	Vitaly Tishkov <tvv@sparc.spb.su>
+
 	* gtkwindow.sgml: additional fix for #59314 ('<programlisting>' is
 	changed to '<literal>' in docs for gtk_window_set_policy ())
 

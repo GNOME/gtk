@@ -13,7 +13,7 @@ It has now been superceded to a large extent by the much more flexible
 <para>
 To create an empty #GdkImage use gdk_image_new().
 To create a #GdkImage from bitmap data use gdk_image_new_bitmap().
-To create an image from part of a #GdkWindow use gdk_image_get().
+To create an image from part of a #GdkWindow use gdk_drawable_get_image().
 </para>
 <para>
 The image can be manipulated with gdk_image_get_pixel() and

@@ -408,7 +408,7 @@ make_list (const gchar  *text,
  * @list:     location to store the list of strings or %NULL. The
  *            list should be freed with g_strfreev().
  * 
- * Convert a text property in the giving encoding to
+ * Converts a text property in the giving encoding to
  * a list of UTF-8 strings. 
  * 
  * Return value: the number of strings in the resulting
@@ -570,12 +570,12 @@ sanitize_utf8 (const gchar *src)
  * gdk_utf8_to_string_target:
  * @str: a UTF-8 string
  * 
- * Convert an UTF-8 string into the best possible representation
+ * Converts an UTF-8 string into the best possible representation
  * as a STRING. The representation of characters not in STRING
  * is not specified; it may be as pseudo-escape sequences
  * \x{ABCD}, or it may be in some other form of approximation.
  * 
- * Return value: the newly allocated string, or %NULL if the
+ * Return value: the newly-allocated string, or %NULL if the
  *               conversion failed. (It should not fail for
  *               any properly formed UTF-8 string.)
  **/
@@ -608,10 +608,10 @@ gdk_utf8_to_string_target (const gchar *str)
  * @length:   location to store the length of the data
  *            stored in @ctext
  * 
- * Convert from UTF-8 to compound text. 
+ * Converts from UTF-8 to compound text. 
  * 
  * Return value: %TRUE if the conversion succeeded, otherwise
- *               false.
+ *               %FALSE.
  **/
 gboolean
 gdk_utf8_to_compound_text (const gchar *str,

@@ -139,8 +139,8 @@ insert_atom_pair (GdkAtom     virtual_atom,
  * gdk_x11_atom_to_xatom:
  * @atom: A #GdkAtom 
  * 
- * Convert from a #GdkAtom to the X atom for the default GDK display
- * with the same string value.x
+ * Converts from a #GdkAtom to the X atom for the default GDK display
+ * with the same string value.
  * 
  * Return value: the X atom corresponding to @atom.
  **/
@@ -174,10 +174,10 @@ gdk_x11_atom_to_xatom (GdkAtom atom)
  * gdk_x11_xatom_to_atom:
  * @xatom: an X atom for the default GDK display
  * 
- * Convert from an X atom for the default display to the corresponding
+ * Converts from an X atom for the default display to the corresponding
  * #GdkAtom.
  * 
- * Return value: the corresponding G#dkAtom.
+ * Return value: the corresponding #GdkAtom.
  **/
 GdkAtom
 gdk_x11_xatom_to_atom (Atom xatom)
@@ -280,7 +280,8 @@ gdk_atom_name (GdkAtom atom)
  * 
  * Returns the X atom for GDK's default display corresponding to @atom_name.
  * This function caches the result, so if called repeatedly it is much
- * faster than XInternAtom, which is a round trip to the server each time.
+ * faster than <function>XInternAtom()</function>, which is a round trip to 
+ * the server each time.
  * 
  * Return value: a X atom for GDK's default display.
  **/
@@ -296,9 +297,9 @@ gdk_x11_get_xatom_by_name (const gchar *atom_name)
  * 
  * Returns the name of an X atom for GDK's default display. This
  * function is meant mainly for debugging, so for convenience, unlike
- * XAtomName() and gdk_atom_name(), the result doesn't need to
- * be freed. Also, this function will never return %NULL, even
- * if @xatom is invalid.
+ * <function>XAtomName()</function> and gdk_atom_name(), the result 
+ * doesn't need to be freed. Also, this function will never return %NULL, 
+ * even if @xatom is invalid.
  * 
  * Return value: name of the X atom; this string is owned by GTK+,
  *   so it shouldn't be modifed or freed. 

@@ -20,7 +20,7 @@ using an atom.
 A property has an associated <firstterm>format</firstterm>,
 an integer describing how many bits are in each unit
 of data inside the property. It must be 8, 16, or 32.
-When data is transfered between the server and client,
+When data is transferred between the server and client,
 if they are of different endianesses it will be byteswapped
 as necessary according to the format of the property.
 Note that on the client side, properties of format 32
@@ -44,25 +44,26 @@ data commonly stored in X window properties.
 
 <!-- ##### STRUCT GdkAtom ##### -->
 <para>
-A numeric type representing a string as an index into a table
+An opaque type representing a string as an index into a table
 of strings on the X server.
 </para>
 
 
 <!-- ##### MACRO GDK_ATOM_TO_POINTER ##### -->
 <para>
-
+Converts a #GdkAtom into a pointer type. 
 </para>
 
-@atom: 
+@atom: a #GdkAtom.
 
 
 <!-- ##### MACRO GDK_POINTER_TO_ATOM ##### -->
 <para>
-
+Extracts a #GdkAtom from a pointer. The #GdkAtom must have been
+stored in the pointer with GDK_ATOM_TO_POINTER().
 </para>
 
-@ptr: 
+@ptr: a pointer containing a #GdkAtom.
 
 
 <!-- ##### MACRO GDK_NONE ##### -->
@@ -75,10 +76,10 @@ in the Xlib API.
 
 <!-- ##### FUNCTION gdk_text_property_to_text_list ##### -->
 <para>
-Convert a text string from the encoding as it is stored in
+Converts a text string from the encoding as it is stored in
 a property into an array of strings in the encoding of
 the current local. (The elements of the array represent
-the null-separated elements of the original text string.)
+the nul-separated elements of the original text string.)
 </para>
 
 @encoding: an atom representing the encoding. The most common
@@ -87,7 +88,7 @@ the null-separated elements of the original text string.)
            value used as the type for the property.
 @format: the format of the property.
 @text: the text data.
-@length: the length of the property, in item.s
+@length: the length of the property, in items.
 @list: location to store a terminated array of strings
        in the encoding of the current locale. This
        array should be freed using gdk_free_text_list().
@@ -97,7 +98,7 @@ the null-separated elements of the original text string.)
 
 <!-- ##### FUNCTION gdk_free_text_list ##### -->
 <para>
-Free the array of strings created by
+Frees the array of strings created by
 gdk_text_property_to_text_list().
 </para>
 
@@ -120,11 +121,11 @@ gdk_text_property_to_text_list().
 
 <!-- ##### FUNCTION gdk_string_to_compound_text ##### -->
 <para>
-Convert a string from the encoding of the current locale 
+Converts a string from the encoding of the current locale 
 into a form suitable for storing in a window property.
 </para>
 
-@str: a null-terminated string.
+@str: a nul-terminated string.
 @encoding: location to store the encoding atom (to be used as the type for the property).
 @format: location to store the format for the property.
 @ctext: location to store newly allocated data for the property.
@@ -134,7 +135,7 @@ into a form suitable for storing in a window property.
 
 <!-- ##### FUNCTION gdk_free_compound_text ##### -->
 <para>
-Free the data returned from gdk_string_to_compound_text().
+Frees the data returned from gdk_string_to_compound_text().
 </para>
 
 @ctext: The pointer stored in @ctext from a call to gdk_string_to_compound_text().
@@ -164,24 +165,24 @@ Free the data returned from gdk_string_to_compound_text().
 
 <!-- ##### FUNCTION gdk_atom_intern ##### -->
 <para>
-Find or create an atom corresponding to a given string.
+Finds or creates an atom corresponding to a given string.
 </para>
 
 @atom_name: a string.
 @only_if_exists: if %TRUE, do not create a new atom, but
                  just return the atom if it already exists.
 @Returns: the atom corresponding to @atom_name, or, if
-          @only_if_exists is TRUE, and an atom does not
+          @only_if_exists is %TRUE, and an atom does not
           already exists for the string, %GDK_NONE.
 
 
 <!-- ##### FUNCTION gdk_atom_name ##### -->
 <para>
-Determine the string corresponding to an atom.
+Determines the string corresponding to an atom.
 </para>
 
 @atom: a #GdkAtom.
-@Returns: a newly allocated string containing the string
+@Returns: a newly-allocated string containing the string
           corresponding to @atom. When you are done
           with the return value, you should free it 
           using g_free().
@@ -190,10 +191,12 @@ Determine the string corresponding to an atom.
 <!-- ##### FUNCTION gdk_property_get ##### -->
 <para>
 Retrieves a portion of the contents of a property. If the
-property does not exist, then the function returns FALSE,
+property does not exist, then the function returns %FALSE,
 and %GDK_NONE will be stored in @actual_property_type.
-
-Note: the <function>XGetWindowProperty()</function>
+</para>
+<note>
+<para>
+The <function>XGetWindowProperty()</function>
 function that gdk_property_get()
 uses has a very confusing and complicated set of semantics.
 Unfortunately, gdk_property_get() makes the situation
@@ -204,6 +207,7 @@ should return a useful error to the program. You are advised to use
 directly until a replacement function for gdk_property_get()
 is provided. 
 </para>
+</note>
 
 @window: a #GdkWindow.
 @property: the property to retrieve.
@@ -234,7 +238,7 @@ is provided.
 
 <!-- ##### FUNCTION gdk_property_change ##### -->
 <para>
-Change the contents of a property on a window.
+Changes the contents of a property on a window.
 </para>
 
 @window: a #GdkWindow.
@@ -268,7 +272,7 @@ using gdk_property_change().
 
 <!-- ##### FUNCTION gdk_property_delete ##### -->
 <para>
-Delete a property from a window.
+Deletes a property from a window.
 </para>
 
 @window: a #GdkWindow.

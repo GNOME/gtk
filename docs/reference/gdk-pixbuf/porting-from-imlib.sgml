@@ -139,7 +139,7 @@
 
 	<para>
 	  The &gdk-pixbuf; library has the policy of always rendering
-	  pixbufs to Gdk drawables you provide; it will not create
+	  pixbufs to GDK drawables you provide; it will not create
 	  them for you.  This is in general more flexible than
 	  &Imlib;'s policy of always creating a pixmap and making you
 	  use that instead.

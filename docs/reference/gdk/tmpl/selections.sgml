@@ -79,122 +79,122 @@ compatibility with older programs.
 
 <!-- ##### MACRO GDK_SELECTION_PRIMARY ##### -->
 <para>
-
+A #GdkAtom representing the <literal>PRIMARY</literal> selection.
 </para>
 
 
 
 <!-- ##### MACRO GDK_SELECTION_SECONDARY ##### -->
 <para>
-
+A #GdkAtom representing the <literal>SECONDARY</literal> selection.
 </para>
 
 
 
 <!-- ##### MACRO GDK_SELECTION_CLIPBOARD ##### -->
 <para>
-
+A #GdkAtom representing the <literal>CLIPBOARD</literal> selection.
 </para>
 
 
 
 <!-- ##### MACRO GDK_TARGET_BITMAP ##### -->
 <para>
-
+A #GdkAtom representing the <literal>BITMAP</literal> selection target.
 </para>
 
 
 
 <!-- ##### MACRO GDK_TARGET_COLORMAP ##### -->
 <para>
-
+A #GdkAtom representing the <literal>COLORMAP</literal> selection target.
 </para>
 
 
 
 <!-- ##### MACRO GDK_TARGET_DRAWABLE ##### -->
 <para>
-
+A #GdkAtom representing the <literal>DRAWABLE</literal> selection target.
 </para>
 
 
 
 <!-- ##### MACRO GDK_TARGET_PIXMAP ##### -->
 <para>
-
+A #GdkAtom representing the <literal>PIXMAP</literal> selection target.
 </para>
 
 
 
 <!-- ##### MACRO GDK_TARGET_STRING ##### -->
 <para>
-
+A #GdkAtom representing the <literal>STRING</literal> selection target.
 </para>
 
 
 
 <!-- ##### MACRO GDK_SELECTION_TYPE_ATOM ##### -->
 <para>
-
+A #GdkAtom representing the <literal>ATOM</literal> selection type.
 </para>
 
 
 
 <!-- ##### MACRO GDK_SELECTION_TYPE_BITMAP ##### -->
 <para>
-
+A #GdkAtom representing the <literal>BITMAP</literal> selection type.
 </para>
 
 
 
 <!-- ##### MACRO GDK_SELECTION_TYPE_COLORMAP ##### -->
 <para>
-
+A #GdkAtom representing the <literal>COLORMAP</literal> selection type.
 </para>
 
 
 
 <!-- ##### MACRO GDK_SELECTION_TYPE_DRAWABLE ##### -->
 <para>
-
+A #GdkAtom representing the <literal>DRAWABLE</literal> selection type.
 </para>
 
 
 
 <!-- ##### MACRO GDK_SELECTION_TYPE_INTEGER ##### -->
 <para>
-
+A #GdkAtom representing the <literal>INTEGER</literal> selection type.
 </para>
 
 
 
 <!-- ##### MACRO GDK_SELECTION_TYPE_PIXMAP ##### -->
 <para>
-
+A #GdkAtom representing the <literal>PIXMAP</literal> selection type.
 </para>
 
 
 
 <!-- ##### MACRO GDK_SELECTION_TYPE_WINDOW ##### -->
 <para>
-
+A #GdkAtom representing the <literal>WINDOW</literal> selection type.
 </para>
 
 
 
 <!-- ##### MACRO GDK_SELECTION_TYPE_STRING ##### -->
 <para>
-
+A #GdkAtom representing the <literal>STRING</literal> selection type.
 </para>
 
 
 
 <!-- ##### FUNCTION gdk_selection_owner_set ##### -->
 <para>
-Set the owner of the given selection.
+Sets the owner of the given selection.
 </para>
 
-@owner: a #GdkWindow or NULL to indicate that the
+@owner: a #GdkWindow or %NULL to indicate that the
         the owner for the given should be unset.
 @selection: an atom identifying a selection.
 @time: timestamp to use when setting the selection.
@@ -210,14 +210,14 @@ Set the owner of the given selection.
 
 <!-- ##### FUNCTION gdk_selection_owner_get ##### -->
 <para>
-Determine the owner of the given selection.
+Determines the owner of the given selection.
 </para>
 
 @selection: an atom indentifying a selection.
 @Returns: if there is a selection owner for this window,
           and it is a window known to the current process,
           the #GdkWindow that owns the selection, otherwise
-          NULL. Note that the return value may be owned
+          %NULL. Note that the return value may be owned
           by a different process if a foreign window
           was previously created for that window, but
           a new foreign window will never be created by
@@ -226,7 +226,7 @@ Determine the owner of the given selection.
 
 <!-- ##### FUNCTION gdk_selection_convert ##### -->
 <para>
-Retrieve the contents of a selection in a given
+Retrieves the contents of a selection in a given
 form.
 </para>
 
@@ -242,18 +242,18 @@ form.
 
 <!-- ##### FUNCTION gdk_selection_property_get ##### -->
 <para>
-Retrieve selection data that was stored by the selection
-data in response to a call to gdk_selection_convert()
+Retrieves selection data that was stored by the selection
+data in response to a call to gdk_selection_convert().
 </para>
 
 @requestor: the window on which the data is stored
 @data: location to store a pointer to the retrieved data.
-       If the retrieval failed, NULL we be stored here, otherwise, it
-       will be non-NULL and the returned data should be freed with g_free()
+       If the retrieval failed, %NULL we be stored here, otherwise, it
+       will be non-%NULL and the returned data should be freed with g_free()
        when you are finished using it. The length of the
        allocated memory is one more than the the length
        of the returned data, and the final byte will always
-       be zero, to ensure null-termination of strings.
+       be zero, to ensure nul-termination of strings.
 @prop_type: location to store the type of the property.
 @prop_format: location to store the format of the property.
 @Returns: the length of the retrieved data.
@@ -261,7 +261,7 @@ data in response to a call to gdk_selection_convert()
 
 <!-- ##### FUNCTION gdk_selection_send_notify ##### -->
 <para>
-Send a response to SelectionRequest event.
+Sends a response to SelectionRequest event.
 </para>
 
 @requestor: window to which to deliver response.

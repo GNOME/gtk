@@ -364,7 +364,7 @@ union, 16-bit data uses the s array, and 32-bit data uses the l array.
 
 <!-- ##### STRUCT GdkEventNoExpose ##### -->
 <para>
-Generated when the area of a #GdkDrawable being copied, with gdk_draw_pixmap()
+Generated when the area of a #GdkDrawable being copied, with gdk_draw_drawable()
 or gdk_window_copy_area(), was completely available.
 </para>
 <para>
