@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.14\n"
 "POT-Creation-Date: 2002-03-05 22:16-0500\n"
-"PO-Revision-Date: 2002-03-03 09:44+0100\n"
+"PO-Revision-Date: 2002-03-06 07:45+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian (bokmål) <no@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -4225,15 +4225,14 @@ msgid "Color with which to draw insertion cursor"
 msgstr "Farge som markøren skal tegnes med"
 
 #: gtk/gtkwidget.c:1083
-#, fuzzy
 msgid "Secondary cursor color"
-msgstr "Markørfarge"
+msgstr "Sekundær markørfarge"
 
 #: gtk/gtkwidget.c:1084
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text."
-msgstr ""
+msgstr "Farge for sekundær innsettingsmarkør ved redigering av blandet høyre-til-venstre og venstre-til-høyre tekst."
 
 #: gtk/gtkwidget.c:1089
 msgid "Cursor line aspect ratio"
@@ -4393,115 +4392,3 @@ msgstr "Vietnamesisk (VIQR)"
 #: modules/input/imxim.c:27
 msgid "X Input Method"
 msgstr "X-inndatametode"
-
-#~ msgid "Cancel"
-#~ msgstr "Avbryt"
-
-#~ msgid "Delete"
-#~ msgstr "Slett"
-
-#~ msgid "OK"
-#~ msgstr "OK"
-
-#~ msgid "Save"
-#~ msgstr "Lagre"
-
-#~ msgid "Close"
-#~ msgstr "Lukk"
-
-#~ msgid "Directories"
-#~ msgstr "Kataloger"
-
-#~ msgid ""
-#~ "The directory name \"%s\" contains symbols that are not allowed in "
-#~ "filenames"
-#~ msgstr ""
-#~ "Katalognavnet «%s» inneholder symboler som ikke er tillatt i filnavn"
-
-#~ msgid ""
-#~ "Error creating directory \"%s\": %s\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Feil under oppretting av katalog «%s»: %s\n"
-#~ "%s"
-
-#~ msgid "Create Directory"
-#~ msgstr "Lag katalog"
-
-#~ msgid "_Directory name:"
-#~ msgstr "_Katalognavn:"
-
-#~ msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-#~ msgstr "Kunne ikke finne bildefilen i pixmap_patg: «%s» linje %d"
-
-#~ msgid "Insufficient memory to save PNG file"
-#~ msgstr "Ikke nok minne til å lagre PNG-fil"
-
-#~ msgid "Value between 0.0 and 1.0 to indicate X alignment"
-#~ msgstr "Verdi mellom 0.0 og 1.0 som skal indikere X-justering"
-
-#~ msgid "Value between 0.0 and 1.0 to indicate Y alignment"
-#~ msgstr "Verdi mellom 0.0 og 1.0 som indikerer Y-justering"
-
-#~ msgid "Value between 0.0 and 1.0 to indicate X scale"
-#~ msgstr "Verdi mellom 0.0 og 1.0 som indikerer X-skalering"
-
-#~ msgid "Value between 0.0 and 1.0 to indicate Y scale"
-#~ msgstr "Verdi mellom 0.0 og 1.0 som indikerer Y-skalering"
-
-#~ msgid "Text Position"
-#~ msgstr "Tekstplassering"
-
-#~ msgid "Cut"
-#~ msgstr "Klipp ut"
-
-#~ msgid "Copy"
-#~ msgstr "Kopier"
-
-#~ msgid "Paste"
-#~ msgstr "Lim inn"
-
-#~ msgid "Line Height"
-#~ msgstr "Linjehøyde"
-
-#~ msgid "The height of a line"
-#~ msgstr "Høyden på en linje"
-
-#~ msgid "Column Width"
-#~ msgstr "Kolonnebredde"
-
-#~ msgid "The width of a column"
-#~ msgstr "Bredde på en kolonne"
-
-#~ msgid "Pixbuf location"
-#~ msgstr "Pixbuf lokasjon"
-
-#~ msgid "The relative location of the pixbuf to the text."
-#~ msgstr "Relativ lokasjon for pixbuf i forhold til tekst."
-
-#~ msgid "pixbuf xalign"
-#~ msgstr "pixbuf xalign"
-
-#~ msgid "The x-align of the pixbuf."
-#~ msgstr "X-justering for pixbuf."
-
-#~ msgid "pixbuf yalign"
-#~ msgstr "pixbuf yalign"
-
-#~ msgid "The y-align of the pixbuf."
-#~ msgstr "Y-justering for pixbuf."
-
-#~ msgid "The xpad of the pixbuf."
-#~ msgstr "X-fyll for pixbuf."
-
-#~ msgid "pixbuf ypad"
-#~ msgstr "pixbuf yfyll"
-
-#~ msgid "The ypad of the pixbuf."
-#~ msgstr "Y-fyll for pixbuf."
-
-#~ msgid "Width between child elements"
-#~ msgstr "Bredde mellom underelementer"
-
-#~ msgid "Default Border"
-#~ msgstr "Standard kant"
