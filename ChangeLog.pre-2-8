@@ -1,3 +1,7 @@
+Thu May 27 00:11:01 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkmenuitem.c (gtk_menu_item_size_request): Fix a typo.
+
 Thu May 27 00:07:47 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_list_destroy): only remove the
