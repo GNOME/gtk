@@ -1,3 +1,9 @@
+Wed Jun  6 21:18:54 2001  Jonathan Blandford  <jrb@webwynk.net>
+
+	* gtk/gtktreeview.c (gtk_tree_view_real_collapse_row): centralize
+	expansion/collapsing so it only happens in one place.
+	(gtk_tree_view_real_expand_row): ditto.
+
 2001-06-07  Havoc Pennington  <hp@redhat.com>
 
 	* tests/Makefile.am: add missing -I flag

@@ -325,6 +325,15 @@ static void gtk_tree_view_move_cursor_left_right   (GtkTreeView *tree_view,
 static void gtk_tree_view_move_cursor_start_end    (GtkTreeView *tree_view,
 						    gint         count,
 						    gboolean     extend_selection);
+static gboolean gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
+						 GtkTreePath *path,
+						 GtkRBTree   *tree,
+						 GtkRBNode   *node);
+static gboolean gtk_tree_view_real_expand_row (GtkTreeView *tree_view,
+					       GtkTreePath *path,
+					       GtkRBTree   *tree,
+					       GtkRBNode   *node,
+					       gboolean     open_all);
 
 
 static GtkContainerClass *parent_class = NULL;
@@ -1628,69 +1637,24 @@ gtk_tree_view_button_release (GtkWidget      *widget,
           GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_ARROW_PRELIT))
 	{
 	  GtkTreePath *path = NULL;
-	  GtkTreeIter iter;
 
+	  path = _gtk_tree_view_find_path (tree_view,
+					   tree_view->priv->button_pressed_tree,
+					   tree_view->priv->button_pressed_node);
 	  /* Actually activate the node */
 	  if (tree_view->priv->button_pressed_node->children == NULL)
-	    {
-	      GtkTreeIter child;
-	      path = _gtk_tree_view_find_path (tree_view,
-					       tree_view->priv->button_pressed_tree,
-					       tree_view->priv->button_pressed_node);
-	      gtk_tree_model_get_iter (tree_view->priv->model, &iter, path);
-
-	      if (gtk_tree_model_iter_children (tree_view->priv->model, &child, &iter))
-		{
-		  gboolean expand;
-		  g_signal_emit (G_OBJECT (tree_view), tree_view_signals[EXPAND_ROW], 0, &iter, path, &expand);
-		  if (! expand)
-		    {
-		      tree_view->priv->button_pressed_node->children = _gtk_rbtree_new ();
-		      tree_view->priv->button_pressed_node->children->parent_tree = tree_view->priv->button_pressed_tree;
-		      tree_view->priv->button_pressed_node->children->parent_node = tree_view->priv->button_pressed_node;
-		      gtk_tree_view_build_tree (tree_view,
-						tree_view->priv->button_pressed_node->children,
-						&child,
-						gtk_tree_path_get_depth (path) + 1,
-						FALSE,
-						GTK_WIDGET_REALIZED (widget));
-		    }
-		}
-	    }
+	    gtk_tree_view_real_expand_row (tree_view, path,
+					   tree_view->priv->button_pressed_tree,
+					   tree_view->priv->button_pressed_node,
+					   FALSE);
 	  else
-	    {
-	      gboolean collapse;
-
-	      path = _gtk_tree_view_find_path (GTK_TREE_VIEW (widget),
-					       tree_view->priv->button_pressed_tree,
-					       tree_view->priv->button_pressed_node);
-	      gtk_tree_model_get_iter (tree_view->priv->model,
-				       &iter,
-				       path);
-	      g_signal_emit (G_OBJECT (tree_view), tree_view_signals[COLLAPSE_ROW], 0, &iter, path, &collapse);
-
-	      if (! collapse)
-		{
-		  GtkTreeIter child_iter;
-		  gtk_tree_path_append_index (path, 0);
-		  gtk_tree_model_iter_children (tree_view->priv->model,
-						&child_iter,
-						&iter);
-		  gtk_tree_view_discover_dirty (GTK_TREE_VIEW (widget),
-						tree_view->priv->button_pressed_node->children,
-						&child_iter,
-						gtk_tree_path_get_depth (path));
-		  gtk_tree_view_unref_tree (GTK_TREE_VIEW (widget),
-					    tree_view->priv->button_pressed_node->children);
-		  _gtk_rbtree_remove (tree_view->priv->button_pressed_node->children);
-		}
-	    }
-	  if (path)
-	    gtk_tree_path_free (path);
-
-	  _gtk_tree_view_update_size (GTK_TREE_VIEW (widget));
+	    gtk_tree_view_real_collapse_row (GTK_TREE_VIEW (widget), path,
+					     tree_view->priv->button_pressed_tree,
+					     tree_view->priv->button_pressed_node);
+	  gtk_tree_path_free (path);
 	}
 
+      tree_view->priv->button_pressed_tree = NULL;
       tree_view->priv->button_pressed_node = NULL;
     }
 
@@ -6935,36 +6899,17 @@ gtk_tree_view_collapse_all (GtkTreeView *tree_view)
  * was not already in the requested state.
  */
 
-/**
- * gtk_tree_view_expand_row:
- * @tree_view: a #GtkTreeView
- * @path: path to a row
- * @open_all: whether to recursively expand, or just expand immediate children
- *
- * Opens the row so its children are visible
- *
- * Return value: %TRUE if the row existed and had children
- **/
-gboolean
-gtk_tree_view_expand_row (GtkTreeView *tree_view,
-			  GtkTreePath *path,
-			  gboolean     open_all)
+
+static gboolean
+gtk_tree_view_real_expand_row (GtkTreeView *tree_view,
+			       GtkTreePath *path,
+			       GtkRBTree   *tree,
+			       GtkRBNode   *node,
+			       gboolean     open_all)
 {
   GtkTreeIter iter;
   GtkTreeIter child;
-  GtkRBTree *tree;
-  GtkRBNode *node;
   gboolean expand;
-
-  g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), FALSE);
-  g_return_val_if_fail (tree_view->priv->model != NULL, FALSE);
-  g_return_val_if_fail (path != NULL, FALSE);
-
-  if (_gtk_tree_view_find_node (tree_view,
-				path,
-				&tree,
-				&node))
-    return FALSE;
 
   if (node->children)
     return TRUE;
@@ -6991,31 +6936,33 @@ gtk_tree_view_expand_row (GtkTreeView *tree_view,
 			    GTK_WIDGET_REALIZED (tree_view));
 
   if (GTK_WIDGET_MAPPED (tree_view))
-    gtk_widget_queue_draw (GTK_WIDGET (tree_view));
-
+    {
+      gtk_widget_queue_draw (GTK_WIDGET (tree_view));
+      _gtk_tree_view_update_size (tree_view);
+    }
   return TRUE;
 }
 
 /**
- * gtk_tree_view_collapse_row:
+ * gtk_tree_view_expand_row:
  * @tree_view: a #GtkTreeView
- * @path: path to a row in the @tree_view
+ * @path: path to a row
+ * @open_all: whether to recursively expand, or just expand immediate children
  *
- * Collapses a row (hides its child rows, if they exist.)
+ * Opens the row so its children are visible
  *
- * Return value: %TRUE if the row was collapsed.
+ * Return value: %TRUE if the row existed and had children
  **/
 gboolean
-gtk_tree_view_collapse_row (GtkTreeView *tree_view,
-			    GtkTreePath *path)
+gtk_tree_view_expand_row (GtkTreeView *tree_view,
+			  GtkTreePath *path,
+			  gboolean     open_all)
 {
   GtkRBTree *tree;
   GtkRBNode *node;
-  GtkTreeIter iter;
-  gboolean collapse;
 
   g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), FALSE);
-  g_return_val_if_fail (tree_view->priv->tree != NULL, FALSE);
+  g_return_val_if_fail (tree_view->priv->model != NULL, FALSE);
   g_return_val_if_fail (path != NULL, FALSE);
 
   if (_gtk_tree_view_find_node (tree_view,
@@ -7024,8 +6971,17 @@ gtk_tree_view_collapse_row (GtkTreeView *tree_view,
 				&node))
     return FALSE;
 
-  if (node->children == NULL)
-    return FALSE;
+  return gtk_tree_view_real_expand_row (tree_view, path, tree, node, open_all);
+}
+
+static gboolean
+gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
+				 GtkTreePath *path,
+				 GtkRBTree   *tree,
+				 GtkRBNode   *node)
+{
+  GtkTreeIter iter;
+  gboolean collapse;
 
   gtk_tree_model_get_iter (tree_view->priv->model, &iter, path);
 
@@ -7048,12 +7004,47 @@ gtk_tree_view_collapse_row (GtkTreeView *tree_view,
 
   g_assert (tree_view->priv->prelight_node == NULL);
 
+  gtk_tree_view_unref_tree (tree_view, node->children);
   _gtk_rbtree_remove (node->children);
 
   if (GTK_WIDGET_MAPPED (tree_view))
-    gtk_widget_queue_draw (GTK_WIDGET (tree_view));
-
+    {
+      gtk_widget_queue_draw (GTK_WIDGET (tree_view));
+      _gtk_tree_view_update_size (tree_view);
+    }
   return TRUE;
+}
+
+/**
+ * gtk_tree_view_collapse_row:
+ * @tree_view: a #GtkTreeView
+ * @path: path to a row in the @tree_view
+ *
+ * Collapses a row (hides its child rows, if they exist.)
+ *
+ * Return value: %TRUE if the row was collapsed.
+ **/
+gboolean
+gtk_tree_view_collapse_row (GtkTreeView *tree_view,
+			    GtkTreePath *path)
+{
+  GtkRBTree *tree;
+  GtkRBNode *node;
+
+  g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), FALSE);
+  g_return_val_if_fail (tree_view->priv->tree != NULL, FALSE);
+  g_return_val_if_fail (path != NULL, FALSE);
+
+  if (_gtk_tree_view_find_node (tree_view,
+				path,
+				&tree,
+				&node))
+    return FALSE;
+
+  if (node->children == NULL)
+    return FALSE;
+
+  return gtk_tree_view_real_collapse_row (tree_view, path, tree, node);
 }
 
 static void
