@@ -105,7 +105,7 @@ static void
 gtk_tooltips_init (GtkTooltips *tooltips)
 {
   static gboolean have_rc = FALSE;
-  if (have_rc)
+  if (!have_rc)
     {
       have_rc = TRUE;
       

@@ -1881,7 +1881,7 @@ _gdk_windowing_window_get_pointer (GdkWindow       *window,
 	    hwnd = hwndc;
 	}
       
-      return_val = gdk_window_lookup (hwnd);
+      return_val = gdk_window_lookup ((GdkNativeWindow) hwnd);
     }
   else
     return_val = NULL;

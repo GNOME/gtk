@@ -203,7 +203,7 @@ gdk_selection_owner_get (GdkAtom selection)
   if (selection == GDK_SELECTION_CLIPBOARD)
     return NULL;
 
-  window = gdk_window_lookup (g_hash_table_lookup (sel_owner_table, selection));
+  window = gdk_window_lookup ((GdkNativeWindow) g_hash_table_lookup (sel_owner_table, selection));
 
   GDK_NOTE (DND,
 	    (sel_name = gdk_atom_name (selection),
@@ -279,7 +279,7 @@ gdk_selection_convert (GdkWindow *requestor,
 	  GdkAtom *data = g_new (GdkAtom, 1);
 	  *data = GDK_TARGET_STRING;
 	  _gdk_selection_property_store (requestor, GDK_SELECTION_TYPE_ATOM,
-					 32, data, 1 * sizeof (GdkAtom));
+					 32, (guchar *) data, 1 * sizeof (GdkAtom));
 	}
       else
 	property = GDK_NONE;
@@ -566,7 +566,7 @@ gdk_text_property_to_text_list (GdkAtom       encoding,
   if (!list)
     return 0;
 
-  *list = g_new (gchar **, 1);
+  *list = g_new (gchar *, 1);
   **list = g_strdup (text);
   
   return 1;

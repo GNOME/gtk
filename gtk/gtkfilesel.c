@@ -2308,6 +2308,7 @@ cmpl_free_state (CompletionState* cmpl_state)
 static void
 free_dir (CompletionDir* dir)
 {
+  g_free (dir->cmpl_text);
   g_free (dir->fullname);
   g_free (dir);
 }
@@ -2407,7 +2408,7 @@ cmpl_completion_matches (gchar           *text_to_complete,
 
   cmpl_state->completion_dir->cmpl_index = -1;
   cmpl_state->completion_dir->cmpl_parent = NULL;
-  cmpl_state->completion_dir->cmpl_text = *remaining_text;
+  cmpl_state->completion_dir->cmpl_text = g_strdup (*remaining_text);
 
   cmpl_state->active_completion_dir = cmpl_state->completion_dir;
 
@@ -2856,6 +2857,7 @@ attach_dir (CompletionDirSent *sent,
   new_dir->sent = sent;
   new_dir->fullname = g_strdup (dir_name);
   new_dir->fullname_len = strlen (dir_name);
+  new_dir->cmpl_text = NULL;
 
   return new_dir;
 }
@@ -3399,7 +3401,7 @@ attempt_file_completion (CompletionState *cmpl_state)
 	      new_dir->cmpl_parent = dir;
 
 	      new_dir->cmpl_index = -1;
-	      new_dir->cmpl_text = first_slash + 1;
+	      new_dir->cmpl_text = g_strdup (first_slash + 1);
 
 	      cmpl_state->active_completion_dir = new_dir;
 

@@ -1,3 +1,28 @@
+2002-02-10  Hans Breuer  <hans@breuer.org>
+
+	* gdk/win32/gdkgeometry-win32.c : don't reduce the scroll
+	rect size by the scroll amount
+
+	* gdk/win32/gdkwindow-win32.c
+	* gdk/win32/gdkselection-win32.c : added some casts to
+	make it compile with msvc's strict type checking
+
+	* gtk/fnmatch.c : #include <ctype.h> again for tolower
+	prototype. The fnmatch() code assumes to be in the crt 
+	locale though it is feeded by utf8 strings from gtkfilesel.c
+
+	* gtk/gtkfilesel.c : let ->cmpl_text be a strdup managed by
+	_CompletionDir instead of referencing already freed memory
+
+	* gtk/gtktooltips.c (gtk_tooltips_init) : fix typo to
+	gtk_rc_parse_string (theDefaultTooltipColor) once as it
+	was intended
+
+	* tests/makefile.msc : added more tests
+
+	* tests/testgtk.c (create_list) : don't try to load gtkenums.h
+	from the current directory use ../gtk/gtkenums.h instead
+
 2002-02-10  Kjartan Maraas  <kmaraas@gnome.org>
 
 	* gtk/gtksizegroup.c: Fix a double «The» typo in a string.

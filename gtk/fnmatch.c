@@ -28,6 +28,7 @@
 #endif
 
 #include <errno.h>
+#include <ctype.h> /* tolower */
 
 /* Added for GTK. We need to make sure that all constants are defined
  * to properly compile this file */
