@@ -1057,6 +1057,8 @@ build_keyrelease_event (GdkEvent *event,
   event->key.length = 0;
 }
 
+#ifdef G_ENABLE_DEBUG
+
 static void
 print_event_state (gint state)
 {
@@ -1203,6 +1205,8 @@ print_event (GdkEvent *event)
     }  
   g_print ("\n");
 }
+
+#endif
 
 static gboolean
 gdk_window_is_child (GdkWindow *parent,
