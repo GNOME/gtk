@@ -65,13 +65,13 @@ This macro:
    is later than MINIMUM-VERSION. (A default version will be used
    if not specified)
 
- * If the required version was found, sets the GDK_CFLAGS variable to
-   the output of `gtk-config --cflags` and the GDK_LIBS variable to
+ * If the required version was found, sets the GTK_CFLAGS variable to
+   the output of `gtk-config --cflags` and the GTK_LIBS variable to
    the output of `gtk-config --libs`, and calls AC_SUBST() for these
    variables so they can be used in generated makefiles, and then
    executes ACTION-IF-FOUND.
 
- * If the required version was not found, sets GDK_CFLAGS and GDK_LIBS
+ * If the required version was not found, sets GTK_CFLAGS and GTK_LIBS
    to empty strings, and executes ACTION-IF-NOT-FOUND.
 
 This macro is in file 'gtk.m4' which is installed in $datadir/aclocal.

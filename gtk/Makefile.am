@@ -263,7 +263,7 @@ testinput_DEPENDENCIES = $(DEPS)
 testselection_DEPENDENCIES = $(DEPS)
 simple_DEPENDENCIES = $(DEPS)
 
-.PHONY: files
+.PHONY: files test test-debug
 
 files:
 	@files=`ls $(DISTFILES) 2> /dev/null `; for p in $$files; do \
@@ -271,7 +271,11 @@ files:
 	done
 
 test: testgtk
-	( CWD=`pwd` ; cd $(srcdir) ; $$CWD/testgtk )
+	builddir=`pwd`; cd $(top_builddir); top_builddir=`pwd`; \
+	cd $$builddir; cd $(srcdir); \
+	$(SHELL) $$top_builddir/libtool --mode=execute $$builddir/testgtk
 
 test-debug: testgtk
-	( CWD=`pwd` ; cd $(srcdir) ; gdb $$CWD/testgtk )
+	builddir=`pwd`; cd $(top_builddir); top_builddir=`pwd`; \
+	cd $$builddir; cd $(srcdir); \
+	$(SHELL) $$top_builddir/libtool --mode=execute gdb $$builddir/testgtk

@@ -1,3 +1,19 @@
+Mon Mar 16 01:33:36 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk-config.in: Added trailing newline, hopefully will
+	  fix the problem with esac disappearing.
+
+	* gtk/Makefile.am (test-debug): Improved test targets
+	  will work with --enable-shared
+    	    [From:  Raja R Harinath  <harinath@cs.umn.edu>]
+
+  	* gtk.m4: Not all shells understand $(...).  Use `...` instead.
+    	    [From:  Raja R Harinath  <harinath@cs.umn.edu>]
+	- use AM_PATH_PROG instead of AM_CHECK_PROG, so the user
+	  can specify programs not in their path.
+  
+	* Makefile.am: added gtk.m4 to EXTRA_DIST
+
 Sun Mar 15 23:44:10 1998  Tim Janik  <timj@gimp.org>
 
 	* gtk/gtkwidget.h:

@@ -8,6 +8,7 @@ EXTRA_DIST =	\
 	Makefile.sgml		\
 	gtkdocs_fix		\
 	gtkfaq.sgml		\
+        gtk-config.txt          \
 	gtk_tut.sgml		\
 	gtk_tut_it.sgml		\
 	debugging.txt		\
