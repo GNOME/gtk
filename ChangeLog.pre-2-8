@@ -1,5 +1,10 @@
 2004-08-24  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/gdkimage.c (allocate_scratch_images): Use the correct 
+	index variable.  (#150941, Tommi Komulainen)
+
+2004-08-24  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtktreeview.c (gtk_tree_view_node_queue_redraw): Take header
 	height and adjustment into account.  (#136496, Pawek Salek)
 
