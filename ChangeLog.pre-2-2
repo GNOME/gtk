@@ -1,5 +1,12 @@
 Fri Jul 17 05:30:47 1998  Tim Janik  <timj@gtk.org>
 
+	* gtk/gtksignal.c (gtk_handlers_run) (gtk_signal_real_emit):
+	sropped the approach of copying all signal specific data into a
+ 	GtkHandlerInfo structure. we rather keep the signal data on the stack
+	in gtk_signal_real_emit and pass that over to gtk_handlers_run. this
+	avoids multiple lookups of the signal pointer and works savely together
+	with destroy notifiers of handlers.
+
 	* gtk/gtkentry.c (gtk_entry_key_press): care for the posssibility that
 	someone destroys the entry on the ::activate signal.
 
