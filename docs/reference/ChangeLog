@@ -1,3 +1,10 @@
+2002-01-01  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/tmpl/gtktexttag.sgml: docs updates, mention that invisible 
+	property isn't implemented
+
+	* gtk/text_widget.sgml: small tweaks
+
 2001-12-30  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/tmpl/gtkbbox.sgml: Remove references to nonexisting functions.

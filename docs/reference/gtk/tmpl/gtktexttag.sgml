@@ -13,7 +13,18 @@ types related to the text widget and how they work together.
 </para>
 
 <para>
+Tags should be in the #GtkTextTagTable for a given #GtkTextBuffer
+before using them with that buffer.
+</para>
 
+<para>
+gtk_text_buffer_create_tag() is the best way to create tags.
+See <application>gtk-demo</application> for numerous examples.
+</para>
+
+<para>
+The "invisible" property was not implemented for GTK+ 2.0; it's
+planned to be implemented in future releases.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
@@ -32,17 +43,23 @@ types related to the text widget and how they work together.
 Describes a type of line wrapping.
 </para>
 
-@GTK_WRAP_NONE: 
-@GTK_WRAP_CHAR: 
-@GTK_WRAP_WORD: 
+@GTK_WRAP_NONE: do not wrap lines; just make the text area wider
+@GTK_WRAP_CHAR: wrap text, breaking lines anywhere the cursor can
+                appear (between characters, usually - if you want to
+                be technical, between graphemes, see
+                pango_get_log_attrs())
+@GTK_WRAP_WORD: wrap text, breaking lines in between words
 
 <!-- ##### STRUCT GtkTextAttributes ##### -->
 <para>
-
+Using #GtkTextAttributes directly should rarely be necessary. It's
+primarily useful with gtk_text_iter_get_attributes(). As with most
+GTK+ structs, the fields in this struct should only be read, never
+modified directly.
 </para>
 
-@refcount: 
-@appearance: 
+@refcount: private field, ignore
+@appearance: pointer to sub-struct containing certain attributes
 @justification: 
 @direction: 
 @font: 
@@ -183,7 +200,7 @@ Describes a type of line wrapping.
 
 <!-- ##### ARG GtkTextTag:name ##### -->
 <para>
-Name of the tag, or NULL for anonymous tags. Can only be set
+Name of the tag, or %NULL for anonymous tags. Can only be set
 when the tag is created.
 </para>
 
@@ -199,12 +216,12 @@ Foreground color as a string such as "red" or "#FFFFFF".
 
 <!-- ##### ARG GtkTextTag:background-gdk ##### -->
 <para>
-Background color, as a #GdkColor.
+Background color, as a #GdkColor. The color need not be allocated.
 </para>
 
 <!-- ##### ARG GtkTextTag:foreground-gdk ##### -->
 <para>
-Foreground color as a #GdkColor.
+Foreground color as a #GdkColor. The color need not be allocated.
 </para>
 
 <!-- ##### ARG GtkTextTag:background-stipple ##### -->
@@ -229,42 +246,48 @@ Font as a #PangoFontDescription.
 
 <!-- ##### ARG GtkTextTag:family ##### -->
 <para>
-
+Font family as a string.
 </para>
 
 <!-- ##### ARG GtkTextTag:style ##### -->
 <para>
-
+Font style as a #PangoStyle, e.g. #PANGO_STYLE_ITALIC.
 </para>
 
 <!-- ##### ARG GtkTextTag:variant ##### -->
 <para>
-
+Font variant as a #PangoVariant, e.g. #PANGO_VARIANT_SMALL_CAPS.
 </para>
 
 <!-- ##### ARG GtkTextTag:weight ##### -->
 <para>
-
+Font weight as an integer, see predefined values in #PangoWeight; 
+for example, #PANGO_WEIGHT_BOLD.
 </para>
 
 <!-- ##### ARG GtkTextTag:stretch ##### -->
 <para>
-
+Font stretch as a #PangoStretch, e.g. #PANGO_STRETCH_CONDENSED.
 </para>
 
 <!-- ##### ARG GtkTextTag:size ##### -->
 <para>
-
+Font size as an integer in Pango units, as for
+pango_font_description_set_size(). Using the "scale" property is
+usually better.
 </para>
 
 <!-- ##### ARG GtkTextTag:size-points ##### -->
 <para>
-
+Font size as a double, in points. Using the "scale" property is
+usually better.
 </para>
 
 <!-- ##### ARG GtkTextTag:scale ##### -->
 <para>
-
+Font size as a scale factor relative to the default font size.
+This properly adapts to theme changes etc. so is recommended. 
+Pango predefines some scales such as #PANGO_SCALE_X_LARGE.
 </para>
 
 <!-- ##### ARG GtkTextTag:pixels-above-lines ##### -->
@@ -311,7 +334,7 @@ Pixel width of left margin of the text.
 
 <!-- ##### ARG GtkTextTag:indent ##### -->
 <para>
-
+Pixel size of paragraph indentation; may be negative.
 </para>
 
 <!-- ##### ARG GtkTextTag:strikethrough ##### -->
@@ -331,7 +354,8 @@ A #PangoUnderline value.
 
 <!-- ##### ARG GtkTextTag:rise ##### -->
 <para>
-
+Used for superscript or subscript; value is given in pixels.
+Negative rise means subscript.
 </para>
 
 <!-- ##### ARG GtkTextTag:background-full-height ##### -->
@@ -356,17 +380,19 @@ applies to the first character in a paragraph.
 
 <!-- ##### ARG GtkTextTag:invisible ##### -->
 <para>
-
+Not implemented in GTK 2.0. Would make text disappear.
 </para>
 
 <!-- ##### ARG GtkTextTag:background-set ##### -->
 <para>
-
+If %TRUE, honor the background property. Automatically toggled
+on when setting the background property.
 </para>
 
 <!-- ##### ARG GtkTextTag:foreground-set ##### -->
 <para>
-
+If %TRUE, honor the foreground property. Automatically toggled
+on when setting the foreground property.
 </para>
 
 <!-- ##### ARG GtkTextTag:background-stipple-set ##### -->
