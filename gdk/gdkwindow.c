@@ -354,6 +354,7 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 	    }
 	  
 	  _gdk_windowing_window_destroy (window, recursing, foreign_destroy);
+	  private->parent = NULL;
 	  private->destroyed = TRUE;
 
 	  if (private->filters)
@@ -780,17 +781,20 @@ gboolean
 gdk_window_is_viewable (GdkWindow *window)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
-  GdkScreen *screen = gdk_drawable_get_screen (window);
-  GdkWindow *root_window = gdk_screen_get_root_window (screen);
+  GdkScreen *screen;
+  GdkWindow *root_window;
   
   g_return_val_if_fail (window != NULL, FALSE);
   g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
+
+  screen = gdk_drawable_get_screen (window);
+  root_window = gdk_screen_get_root_window (screen);
   
   while (private && 
 	 (private != (GdkWindowObject *)root_window) &&
 	 (GDK_WINDOW_TYPE (private) != GDK_WINDOW_FOREIGN))
     {
-      if (!GDK_WINDOW_IS_MAPPED (window))
+      if (GDK_WINDOW_DESTROYED (window) || !GDK_WINDOW_IS_MAPPED (window))
 	return FALSE;
       
       private = (GdkWindowObject *)private->parent;
