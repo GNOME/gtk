@@ -763,38 +763,96 @@ gtk_statusbar_size_request   (GtkWidget      *widget,
   GTK_WIDGET_CLASS (parent_class)->size_request (widget, requisition);
 }
 
+/* look for extra children between the frame containing
+ * the label and where we want to draw the resize grip 
+ */
+static gboolean
+has_extra_children (GtkStatusbar *statusbar)
+{
+  GList *l;
+  GtkBoxChild *child, *frame;
+
+  frame = NULL;
+  for (l = GTK_BOX (statusbar)->children; l; l = l->next)
+    {
+      frame = l->data;
+
+      if (frame->widget == statusbar->frame)
+	break;
+    }
+  
+  for (l = l->next; l; l = l->next)
+    {
+      child = l->data;
+
+      if (!GTK_WIDGET_VISIBLE (child->widget))
+	continue;
+
+      if (frame->pack == GTK_PACK_START || child->pack == GTK_PACK_END)
+	return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 gtk_statusbar_size_allocate  (GtkWidget     *widget,
                               GtkAllocation *allocation)
 {
-  GtkStatusbar *statusbar;
-  
-  statusbar = GTK_STATUSBAR (widget);
+  GtkStatusbar *statusbar = GTK_STATUSBAR (widget);
+  gboolean extra_children;
+  GdkRectangle rect, overlap;
 
+  if (statusbar->has_resize_grip && statusbar->grip_window)
+    {
+      widget->allocation = *allocation;
+      get_grip_rect (statusbar, &rect);    
+      
+      extra_children = has_extra_children (statusbar);
+      
+      /* If there are extra children, we don't want them to occupy
+       * the space where we draw the resize grip, so we temporarily
+       * shrink the allocation.
+       * If there are no extra children, we want the frame to get
+       * the full allocation, and we fix up the allocation of the
+       * label afterwards to make room for the grip.
+       */
+      if (extra_children)
+	{
+	  allocation->width -= rect.width;
+	  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL) 
+	    allocation->x += rect.width;
+	}
+    }
+      
   /* chain up normally */
   GTK_WIDGET_CLASS (parent_class)->size_allocate (widget, allocation);
 
   if (statusbar->has_resize_grip && statusbar->grip_window)
     {
-      GdkRectangle rect, overlap;
-      GtkAllocation allocation;
-      
-      get_grip_rect (statusbar, &rect);
-      
       gdk_window_raise (statusbar->grip_window);
       gdk_window_move_resize (statusbar->grip_window,
 			      rect.x, rect.y,
 			      rect.width, rect.height);
-      
-      allocation = statusbar->label->allocation;
-      if (gdk_rectangle_intersect (&rect, &allocation, &overlap))
-      {
-	allocation.width -= rect.width;
-	if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL) 
-	  allocation.x += rect.width;
-	
-	gtk_widget_size_allocate (statusbar->label, &allocation);
-      }
+
+      if (extra_children) 
+	{
+	  allocation->width += rect.width;
+	  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL) 
+	    allocation->x -= rect.width;
+	  
+	  widget->allocation = *allocation;
+	}
+      else
+	{
+	  /* shrink the label to make room for the grip */
+	  *allocation = statusbar->label->allocation;
+	  allocation->width -= rect.width;
+	  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL) 
+	    allocation->x += rect.width;
+	  
+	  gtk_widget_size_allocate (statusbar->label, allocation);
+	}
     }
 }
 
