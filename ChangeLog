@@ -1,3 +1,14 @@
+2004-11-29  Federico Mena Quintero  <federico@ximian.com>
+
+	Merged from gtk-2-4:
+
+	* gtk/gtkfilechooserdefault.c (trap_activate_cb): Don't handle
+	Enter if we are in SELECT_FOLDER or CREATE_FOLDER actions.  This
+	lets us navigate thei file system more easily.
+	(gtk_file_chooser_default_should_respond): If we are in
+	SELECT_FOLDER or CREATE_FOLDER modes, return TRUE if something is
+	selected.
+
 Mon Nov 29 17:51:51 2004  Søren Sandmann  <sandmann@redhat.com>
 
 	* gtk/gtksequence.c (_gtk_sequence_sort_changed): If the item is
