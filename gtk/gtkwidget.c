@@ -2596,7 +2596,7 @@ widget_new_accel_closure (GtkWidget *widget,
 /**
  * gtk_widget_add_accelerator
  * @widget:       widget to install an accelerator on
- * @accel_signal: widget signal to emit on accelerator actiavtion
+ * @accel_signal: widget signal to emit on accelerator activation
  * @accel_group:  accel group for this widget, added to its toplevel
  * @accel_key:    GDK keyval of the accelerator
  * @accel_mods:   modifier key combination of the accelerator
@@ -2606,7 +2606,7 @@ widget_new_accel_closure (GtkWidget *widget,
  * @accel_signal to be emitted if the accelerator is activated.
  * The @accel_group needs to be added to the widget's toplevel via
  * gtk_window_add_accel_group(), and the signal must be of type %G_RUN_ACTION.
- * Accelerators added through this function are not user changable during
+ * Accelerators added through this function are not user changeable during
  * runtime. If you want to support accelerators that can be changed by the
  * user, use gtk_accel_map_add_entry() and gtk_menu_item_set_accel_path()
  * instead.

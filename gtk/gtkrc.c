@@ -311,6 +311,15 @@ gtk_rc_make_default_dir (const gchar *type)
   return path;
 }
 
+/**
+ * gtk_rc_get_im_module_path:
+ * @returns: a newly-allocated string containing the path in which to 
+ *    look for IM modules.
+ *
+ * Obtains the path in which to look for IM modules. See the documentation
+ * of the <link linkend="im-module-path"><envar>GTK_IM_MODULE_PATH</envar></link>
+ * environment variable for more details.
+ */
 gchar *
 gtk_rc_get_im_module_path (void)
 {
@@ -327,6 +336,15 @@ gtk_rc_get_im_module_path (void)
   return g_strdup (result);
 }
 
+/**
+ * gtk_rc_get_im_module_file:
+ * @returns: a newly-allocated string containing the name of the file
+ * listing the IM modules to load
+ *
+ * Obtains the path to the IM modules file. See the documentation
+ * of the <link linkend="im-module-file"><envar>GTK_IM_MODULE_FILE</envar></link>
+ * environment variable for more details.
+ * 
 gchar *
 gtk_rc_get_im_module_file (void)
 {

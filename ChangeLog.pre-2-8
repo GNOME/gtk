@@ -1,3 +1,16 @@
+2002-01-14  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/gtkoldeditable.c, gtk/gtkrc.c, 
+	gtk/gtkstyle.c: Documentation additions.
+
+	* gtk/gtkmenu.c (gtk_menu_set_accel_path),
+	gtk/gtkmenuitem.c (gtk_menu_item_set_accel_path), 
+	gtk/gtkwidget.c (gtk_widget_add_accelerator): Typo and markup fixes.
+
+	* gtk/gtkitemfactory.c (gtk_item_factory_add_foreign): Document.
+
+	* gtk/gtkaccelmap.c (gtk_accel_map_add_filter): Explain intended use.
+
 Mon Jan 14 17:14:13 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkselection-x11.c (sanitize_utf8): Don't

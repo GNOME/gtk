@@ -876,9 +876,10 @@ gtk_menu_get_accel_group (GtkMenu *menu)
  * Instead, by just calling gtk_menu_set_accel_path() on their parent,
  * each menu item of this menu, that contains a label describing its purpose,
  * automatically gets an accel path assigned. For example, a menu containing
- * menu items "New" and "Exit", will, after gtk_menu_set_accel_path (menu,
- * "&lt;Gnumeric-Sheet&gt;/File"); has been called, assign its items the accel paths:
- * "&lt;Gnumeric-Sheet&gt;/File/New" and "&lt;Gnumeric-Sheet&gt;/File/Exit".
+ * menu items "New" and "Exit", will, after 
+ * <literal>gtk_menu_set_accel_path (menu, "&lt;Gnumeric-Sheet&gt;/File");</literal>
+ * has been called, assign its items the accel paths:
+ * <literal>"&lt;Gnumeric-Sheet&gt;/File/New"</literal> and <literal>"&lt;Gnumeric-Sheet&gt;/File/Exit"</literal>.
  * Assigning accel paths to menu items then enables the user to change
  * their accelerators at runtime. More details about accelerator paths
  * and their default setups can be found at gtk_accel_map_add_entry().

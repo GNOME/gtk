@@ -200,7 +200,8 @@ gtk_item_factory_init (GtkItemFactory	    *ifactory)
  * gtk_item_factory_new:
  * @container_type: the kind of menu to create; can be
  *    #GTK_TYPE_MENU_BAR, #GTK_TYPE_MENU or #GTK_TYPE_OPTION_MENU
- * @path: the path of the menu, a string of the form "<name>"
+ * @path: the factory path of the new item factory, a string of the form 
+ *    <literal>"&lt;name&gt;"</literal>
  * @accel_group: a #GtkAccelGroup to which the accelerators for the
  *    menu items will be added, or %NULL to create a new one
  * @returns: a new #GtkItemFactory
@@ -251,6 +252,22 @@ gtk_item_factory_item_remove_widget (GtkWidget		*widget,
   gtk_object_remove_data_by_id (GTK_OBJECT (widget), quark_item_path);
 }
 
+/**
+ * gtk_item_factory_add_foreign:
+ * @accel_widget:     widget to install an accelerator on 
+ * @full_path:	      the full path for the @accel_widget 
+ * @accel_group:      the accelerator group to install the accelerator in
+ * @accel_key:        key value of the accelerator
+ * @accel_mods:       modifier combination of the accelerator
+ *
+ * Installs an accelerator for @accel_widget in @accel_group, that causes
+ * the ::activate signal to be emitted if the accelerator is activated.
+ * 
+ * This function can be used to make widgets participate in the accel
+ * saving/restoring functionality provided by gtk_accel_map_save() and
+ * gtk_accel_map_load(), even if they haven't been created by an item
+ * factory. 
+ */
 void
 gtk_item_factory_add_foreign (GtkWidget      *accel_widget,
 			      const gchar    *full_path,
@@ -393,7 +410,8 @@ gtk_item_factory_add_item (GtkItemFactory		*ifactory,
  * @ifactory: a #GtkItemFactory
  * @container_type: the kind of menu to create; can be
  *    #GTK_TYPE_MENU_BAR, #GTK_TYPE_MENU or #GTK_TYPE_OPTION_MENU
- * @path: the path of the menu, a string of the form "<name>"
+ * @path: the factory path of @ifactory, a string of the form 
+ *    <literal>"&lt;name&gt;"</literal>
  * @accel_group: a #GtkAccelGroup to which the accelerators for the
  *    menu items will be added, or %NULL to create a new one
  * 
@@ -445,10 +463,13 @@ gtk_item_factory_construct (GtkItemFactory	*ifactory,
 
 /**
  * gtk_item_factory_from_path:
- * @path: a string starting with a factory path of the form <literal>"&lt;name&gt;"</literal>
+ * @path: a string starting with a factory path of the form 
+ *   <literal>"&lt;name&gt;"</literal>
  * @returns: the #GtkItemFactory created for the given factory path, or %NULL 
  *
- * Finds an item factory which has been constructed using the <literal>"&lt;name&gt;"</literal> prefix of @path as the @path argument for gtk_item_factory_new().
+ * Finds an item factory which has been constructed using the 
+ * <literal>"&lt;name&gt;"</literal> prefix of @path as the @path argument 
+ * for gtk_item_factory_new().
  */
 GtkItemFactory*
 gtk_item_factory_from_path (const gchar      *path)
@@ -1486,10 +1507,10 @@ gtk_item_factory_popup_with_data (GtkItemFactory	*ifactory,
  * @ifactory: a #GtkItemFactory
  * @func: the #GtkTranslateFunc function to be used to translate path elements 
  * @data: data to pass to @func and @notify
- * @notify: a #GtkDestroyNotify function to be called @ifactory is destroyed 
- *   and when the translation function is changed again
+ * @notify: a #GtkDestroyNotify function to be called when @ifactory is 
+ *   destroyed and when the translation function is changed again
  * 
- * Sets a function to be use for translating the path elements before they
+ * Sets a function to be used for translating the path elements before they
  * are displayed. 
  */ 
 void

@@ -749,6 +749,10 @@ gtk_accel_map_foreach_unfiltered (gpointer           data,
  *
  * Accel map entries whose accel path matches one of the filters
  * are skipped by gtk_accel_map_foreach().
+ *
+ * This function is intended for GTK+ modules that create their own
+ * menus, but don't want them to be saved into the applications accelerator
+ * map dump.
  */
 void
 gtk_accel_map_add_filter (const gchar *filter_pattern)

@@ -708,6 +708,15 @@ old_editable_text_received_cb (GtkClipboard *clipboard,
   g_object_unref (G_OBJECT (old_editable));
 }
 
+/**
+ * gtk_old_editable_claim_selection:
+ * @old_editable: a #GtkOldEditable
+ * @claim: if %TRUE, claim ownership of the selection, if %FALSE, give
+ *   up ownership
+ * @time: timestamp for this operation
+ * 
+ * Claims or gives up ownership of the selection.
+ */
 void
 gtk_old_editable_claim_selection (GtkOldEditable *old_editable, 
 				  gboolean        claim, 
@@ -807,6 +816,12 @@ gtk_old_editable_real_paste_clipboard (GtkOldEditable *old_editable)
 			      old_editable_text_received_cb, old_editable);
 }
 
+/**
+ * gtk_old_editable_changed:
+ * @old_editable: a #GtkOldEditable
+ *
+ * Emits the ::changed signal on @old_editable.
+ */
 void
 gtk_old_editable_changed (GtkOldEditable *old_editable)
 {

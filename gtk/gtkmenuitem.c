@@ -1078,7 +1078,7 @@ _gtk_menu_item_refresh_accel_path (GtkMenuItem   *menu_item,
 /**
  * gtk_menu_item_set_accel_path
  * @menu_item:  a valid #GtkMenuItem
- * @accel_path: accelerator path, corresponding to this menu item's funcitonality
+ * @accel_path: accelerator path, corresponding to this menu item's functionality
  *
  * Set the accelerator path on @menu_item, through which runtime changes of the
  * menu item's accelerator caused by the user can be identified and saved to
