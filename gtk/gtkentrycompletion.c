@@ -52,6 +52,7 @@ enum
   PROP_MINIMUM_KEY_LENGTH
 };
 
+#define GTK_ENTRY_COMPLETION_GET_PRIVATE(obj)(G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_ENTRY_COMPLETION, GtkEntryCompletionPrivate))
 
 static void     gtk_entry_completion_class_init          (GtkEntryCompletionClass *klass);
 static void     gtk_entry_completion_cell_layout_init    (GtkCellLayoutIface      *iface);
@@ -989,7 +990,7 @@ gtk_entry_completion_delete_action (GtkEntryCompletion *completion,
  * @completion: A #GtkEntryCompletion.
  * @column: The column in the model of @completion to get strings from.
  *
- * Conviencefunction for setting up the most used case of this code: a
+ * Convience function for setting up the most used case of this code: a
  * completion list with just strings. This function will set up @completion
  * to have a list displaying all (and just) strings in the completion list,
  * and to get those strings from @column in the model of @completion.

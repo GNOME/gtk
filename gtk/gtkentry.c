@@ -4716,6 +4716,9 @@ gtk_entry_set_completion (GtkEntry           *entry,
 
   old = gtk_entry_get_completion (entry);
 
+  if (old == completion)
+    return;
+  
   if (old)
     {
       if (old->priv->completion_timeout)
