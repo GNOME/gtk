@@ -1,3 +1,13 @@
+Sun Jan 23 22:12:36 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkviewport.c (gtk_viewport_size_allocate): Don't
+	  realize the widget when it is size allocated!
+	  (old, old bug)
+
+	* gtk/gtkviewport.c (gtk_viewport_adjustment_value_changed):
+	  Removed unused call to gdk_window_get_size() that
+	  showed up when the above was fixed.
+
 Sun Jan 23 20:52:40 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* INSTALL: Added short note about setting LDFLAGS
