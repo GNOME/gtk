@@ -146,6 +146,8 @@ static void
 gtk_message_dialog_init (GtkMessageDialog *dialog)
 {
   GtkWidget *hbox;
+
+  gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
   
   dialog->label = gtk_label_new (NULL);
   dialog->image = gtk_image_new_from_stock (NULL, GTK_ICON_SIZE_DIALOG);

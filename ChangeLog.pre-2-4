@@ -1,5 +1,10 @@
 2004-02-03  Federico Mena Quintero  <federico@ximian.com>
 
+	* gtk/gtkmessagedialog.c (gtk_message_dialog_init): Make the
+	window not resizable.  Fixes #114032.
+
+2004-02-03  Federico Mena Quintero  <federico@ximian.com>
+
 	* gtk/gtkmessagedialog.c (gtk_message_dialog_class_init): Add
 	documentation for the use_separator style property.
 
