@@ -42,6 +42,12 @@ struct _GtkSettingsPropertyValue
   GtkSettingsSource source;
 };
 
+#ifdef GDK_WINDOWING_X11
+#include <X11/Xft/Xft.h>
+#include <pango/pangoxft.h>
+#include <gdk/x11/gdkx.h>
+#endif
+
 enum {
   PROP_0,
   PROP_DOUBLE_CLICK_TIME,
@@ -55,7 +61,12 @@ enum {
   PROP_MENU_BAR_ACCEL,
   PROP_DND_DRAG_THRESHOLD,
   PROP_FONT_NAME,
-  PROP_ICON_SIZES
+  PROP_ICON_SIZES,
+  PROP_XFT_ANTIALIAS,
+  PROP_XFT_HINTING,
+  PROP_XFT_HINTSTYLE,
+  PROP_XFT_RGBA,
+  PROP_XFT_DPI
 };
 
 
@@ -113,6 +124,85 @@ gtk_settings_get_type (void)
   
   return settings_type;
 }
+
+#ifdef GDK_WINDOWING_X11
+static void
+gtk_default_substitute (FcPattern *pattern,
+			gpointer   data)
+{
+  GtkSettings *settings = data;
+  gint antialias;
+  gint hinting;
+  char *rgba;
+  char *hintstyle;
+  gint dpi;
+  FcValue v;
+  
+  g_object_get (G_OBJECT (settings),
+		"gtk-xft-antialias", &antialias,
+		"gtk-xft-hinting", &hinting,
+		"gtk-xft-hintstyle", &hintstyle,
+		"gtk-xft-rgba", &rgba,
+		"gtk-xft-dpi", &dpi,
+		NULL);
+  
+  if (antialias >= 0 &&
+      FcPatternGet (pattern, FC_ANTIALIAS, 0, &v) == FcResultNoMatch)
+    FcPatternAddBool (pattern, FC_ANTIALIAS, antialias != 0);
+  
+  if (hinting >= 0 &&
+      FcPatternGet (pattern, FC_HINTING, 0, &v) == FcResultNoMatch)
+    FcPatternAddBool (pattern, FC_HINTING, hinting != 0);
+  
+  if (hintstyle && FcPatternGet (pattern, FC_HINT_STYLE, 0, &v) == FcResultNoMatch)
+    {
+      int val = FC_HINT_FULL;	/* Quiet GCC */
+      gboolean found = TRUE;
+
+      if (strcmp (hintstyle, "hintnone") == 0)
+	val = FC_HINT_NONE;
+      else if (strcmp (hintstyle, "hintslight") == 0)
+	val = FC_HINT_SLIGHT;
+      else if (strcmp (hintstyle, "hintmedium") == 0)
+	val = FC_HINT_MEDIUM;
+      else if (strcmp (hintstyle, "hintfull") == 0)
+	val = FC_HINT_FULL;
+      else
+	found = FALSE;
+
+      if (found)
+	FcPatternAddInteger (pattern, FC_HINT_STYLE, val);
+    }
+
+  if (rgba && FcPatternGet (pattern, FC_RGBA, 0, &v) == FcResultNoMatch)
+    {
+      int val = FC_RGBA_NONE;	/* Quiet GCC */
+      gboolean found = TRUE;
+
+      if (strcmp (rgba, "none") == 0)
+	val = FC_RGBA_NONE;
+      else if (strcmp (rgba, "rgb") == 0)
+	val = FC_RGBA_RGB;
+      else if (strcmp (rgba, "bgr") == 0)
+	val = FC_RGBA_BGR;
+      else if (strcmp (rgba, "vrgb") == 0)
+	val = FC_RGBA_VRGB;
+      else if (strcmp (rgba, "vbgr") == 0)
+	val = FC_RGBA_VBGR;
+      else
+	found = FALSE;
+
+      if (found)
+	FcPatternAddInteger (pattern, FC_RGBA, val);
+    }
+
+  if (dpi >= 0 && FcPatternGet (pattern, FC_DPI, 0, &v) == FcResultNoMatch)
+    FcPatternAddDouble (pattern, FC_DPI, dpi / 1024.);
+
+  g_free (hintstyle);
+  g_free (rgba);
+}
+#endif /* GDK_WINDOWING_X11 */
 
 static void
 gtk_settings_init (GtkSettings *settings)
@@ -265,6 +355,58 @@ gtk_settings_class_init (GtkSettingsClass *class)
 								  G_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_ICON_SIZES);
+
+#ifdef GDK_WINDOWING_X11
+  result = settings_install_property_parser (class,
+					     g_param_spec_int ("gtk-xft-antialias",
+ 							       _("Xft Antialias"),
+ 							       _("Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"),
+ 							       -1, 1, -1,
+ 							       G_PARAM_READWRITE),
+					     NULL);
+ 
+  g_assert (result == PROP_XFT_ANTIALIAS);
+  
+  result = settings_install_property_parser (class,
+					     g_param_spec_int ("gtk-xft-hinting",
+ 							       _("Xft Hinting"),
+ 							       _("Whether to hint Xft fonts; 0=no, 1=yes, -1=default"),
+ 							       -1, 1, -1,
+ 							       G_PARAM_READWRITE),
+					     NULL);
+  
+  g_assert (result == PROP_XFT_HINTING);
+  
+  result = settings_install_property_parser (class,
+					     g_param_spec_string ("gtk-xft-hintstyle",
+ 								  _("Xft Hint Style"),
+ 								  _("What degree of hinting to use; none, slight, medium, or full"),
+ 								  NULL,
+ 								  G_PARAM_READWRITE),
+                                              NULL);
+  
+  g_assert (result == PROP_XFT_HINTSTYLE);
+  
+  result = settings_install_property_parser (class,
+					     g_param_spec_string ("gtk-xft-rgba",
+ 								  _("Xft RGBA"),
+ 								  _("Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"),
+ 								  NULL,
+ 								  G_PARAM_READWRITE),
+					     NULL);
+  
+  g_assert (result == PROP_XFT_RGBA);
+  
+  result = settings_install_property_parser (class,
+					     g_param_spec_int ("gtk-xft-dpi",
+ 							       _("Xft DPI"),
+ 							       _("Resolution for Xft, in 1024 * dots/inch. -1 to use default value"),
+ 							       -1, 1024*1024, -1,
+ 							       G_PARAM_READWRITE),
+					     NULL);
+  
+  g_assert (result == PROP_XFT_DPI);
+#endif  /* GDK_WINDOWING_X11 */
 }
 
 static void
@@ -306,7 +448,17 @@ gtk_settings_get_for_screen (GdkScreen *screen)
     {
       settings = g_object_new (GTK_TYPE_SETTINGS, NULL);
       settings->screen = screen;
-      g_object_set_data (G_OBJECT (screen), "gtk-settings", settings); 
+      g_object_set_data (G_OBJECT (screen), "gtk-settings", settings);
+
+#ifdef GDK_WINDOWING_X11  
+      /* Set the default substitution function for the Pango fontmap.
+       */
+      pango_xft_set_default_substitute (GDK_SCREEN_XDISPLAY (screen),
+					GDK_SCREEN_XNUMBER (screen),
+					gtk_default_substitute,
+					settings, NULL);
+#endif /* GDK_WINDOWING_X11 */
+      
       gtk_rc_reparse_all_for_settings (settings, TRUE);
       settings_update_double_click (settings);
     }
@@ -432,6 +584,19 @@ gtk_settings_notify (GObject    *object,
     case PROP_DOUBLE_CLICK_DISTANCE:
       settings_update_double_click (settings);
       break;
+#ifdef GDK_WINDOWING_X11      
+    case PROP_XFT_ANTIALIAS:
+    case PROP_XFT_HINTING:
+    case PROP_XFT_HINTSTYLE:
+    case PROP_XFT_RGBA:
+    case PROP_XFT_DPI:
+      pango_xft_substitute_changed (GDK_SCREEN_XDISPLAY (settings->screen),
+ 				    GDK_SCREEN_XNUMBER (settings->screen));
+      /* See comments with _gtk_rc_reset_styles for why this is a hack
+       */
+      _gtk_rc_reset_styles (GTK_SETTINGS (object));
+      break;
+#endif /* GDK_WINDOWING_X11 */
     }
 }
 

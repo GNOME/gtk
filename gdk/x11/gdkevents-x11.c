@@ -2629,6 +2629,11 @@ static struct
   { "Net/IconThemeName", "gtk-icon-theme-name" },
   { "Gtk/ButtonImages", "gtk-button-images" },
   { "Gtk/MenuImages", "gtk-menu-images" },
+  { "Xft/Antialias", "gtk-xft-antialias" },
+  { "Xft/Hinting", "gtk-xft-hinting" },
+  { "Xft/HintStyle", "gtk-xft-hintstyle" },
+  { "Xft/RGBA", "gtk-xft-rgba" },
+  { "Xft/DPI", "gtk-xft-dpi" },
 };
 
 static void
