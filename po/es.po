@@ -1,22 +1,23 @@
 # GTK+'s Spanish translation.
 # Copyright © 1999-2002 Free Software Foundation, Inc.
+# This file is distributed under the same license as the gtk+ package.
 # Pablo Saratxaga <srtxg@chanae.alphanet.ch>, 1998-2000.
-# José Antonio Salgueiro A. <joseantsa@eresmas.net>, 2001
-# Carlos Perelló Marín <carlos@gnome-db.org>, 2002
-# Germán Poo-Caamaño <gpoo@ubiobio.cl>, 2002
-# Pablo Gonzalo del Campo <pablodc@bigfoot.com>, 2002-2003
+# José Antonio Salgueiro A. <joseantsa@eresmas.net>, 2001.
+# Carlos Perelló Marín <carlos@gnome-db.org>, 2002.
+# Germán Poo-Caamaño <gpoo@ubiobio.cl>, 2002.
+# Pablo Gonzalo del Campo <pablodc@bigfoot.com>, 2002-2003.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.15\n"
-"POT-Creation-Date: 2003-02-08 20:44+0100\n"
-"PO-Revision-Date: 2003-02-08 23:05-0300\n"
+"POT-Creation-Date: 2003-02-19 04:54+0100\n"
+"PO-Revision-Date: 2003-02-19 15:09-0300\n"
 "Last-Translator: Pablo Gonzalo del Campo <pablodc@bigfoot.com>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 0.9.6\n"
+"X-Generator: KBabel 1.1\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:736
 #, c-format
@@ -493,118 +494,118 @@ msgstr "No hay memoria suficiente para cargar la imagen RAS"
 msgid "The Sun raster image format"
 msgstr "El formato de imagen Sun raster"
 
-#: gdk-pixbuf/io-tga.c:159
+#: gdk-pixbuf/io-tga.c:157
 msgid "Can't allocate memory for IOBuffer struct"
 msgstr "No se puede asignar memoria para la estructura IOBuffer"
 
-#: gdk-pixbuf/io-tga.c:178
+#: gdk-pixbuf/io-tga.c:176
 msgid "Can't allocate memory for IOBuffer data"
 msgstr "No se puede asignar memoria para los datos de IOBuffer"
 
-#: gdk-pixbuf/io-tga.c:189
+#: gdk-pixbuf/io-tga.c:187
 msgid "Can't realloc IOBuffer data"
 msgstr "No se puede volver a reservar memoria para los datos de IOBuffer"
 
-#: gdk-pixbuf/io-tga.c:219
+#: gdk-pixbuf/io-tga.c:217
 msgid "Can't allocate temporary IOBuffer data"
 msgstr "No se pueden asignar los datos temporales de IOBuffer"
 
-#: gdk-pixbuf/io-tga.c:283
+#: gdk-pixbuf/io-tga.c:281
 msgid "fread() failed -- premature end-of-file probably encountered"
 msgstr ""
 "Ha fallado fread() -- seguramente se encontró un final de archivo antes de "
 "tiempo"
 
-#: gdk-pixbuf/io-tga.c:293
+#: gdk-pixbuf/io-tga.c:291
 msgid "fseek() failed -- premature end-of-file probably encountered"
 msgstr ""
 "Ha fallado fseek() -- seguramente se encontró un final de archivo antes de "
 "tiempo"
 
-#: gdk-pixbuf/io-tga.c:326
+#: gdk-pixbuf/io-tga.c:324
 msgid "Can't allocate new pixbuf"
 msgstr "No se puede asignar un nuevo pixbuf"
 
-#: gdk-pixbuf/io-tga.c:639
+#: gdk-pixbuf/io-tga.c:637
 msgid "Can't allocate colormap structure"
 msgstr "No se puede asignar la estructura del mapa de colores"
 
-#: gdk-pixbuf/io-tga.c:646
+#: gdk-pixbuf/io-tga.c:644
 msgid "Can't allocate colormap entries"
 msgstr "No se puede asignar las entradas del mapa de colores"
 
-#: gdk-pixbuf/io-tga.c:668
+#: gdk-pixbuf/io-tga.c:666
 msgid "Unexpected bitdepth for colormap entries"
 msgstr "Profundidad de color inesperada para las entradas del mapa de color"
 
-#: gdk-pixbuf/io-tga.c:686
+#: gdk-pixbuf/io-tga.c:684
 msgid "Can't allocate TGA header memory"
 msgstr "No se puede asignar memoria para la cabecera TGA"
 
-#: gdk-pixbuf/io-tga.c:719
+#: gdk-pixbuf/io-tga.c:717
 msgid "TGA image has invalid dimensions"
 msgstr "La imagen TGA tiene dimensiones no válidas"
 
-#: gdk-pixbuf/io-tga.c:725
+#: gdk-pixbuf/io-tga.c:723
 msgid "TGA image comment length is too long"
 msgstr "La longitud del comentario de la imagen TGA es demasiado largo"
 
-#: gdk-pixbuf/io-tga.c:734 gdk-pixbuf/io-tga.c:743 gdk-pixbuf/io-tga.c:753
-#: gdk-pixbuf/io-tga.c:763 gdk-pixbuf/io-tga.c:770
+#: gdk-pixbuf/io-tga.c:732 gdk-pixbuf/io-tga.c:741 gdk-pixbuf/io-tga.c:751
+#: gdk-pixbuf/io-tga.c:761 gdk-pixbuf/io-tga.c:768
 msgid "TGA image type not supported"
 msgstr "El tipo de imagen TGA no está implementado"
 
-#: gdk-pixbuf/io-tga.c:816
+#: gdk-pixbuf/io-tga.c:814
 msgid "Can't allocate memory for TGA context struct"
 msgstr "No se puede asignar memoria para la estructura context de TGA"
 
-#: gdk-pixbuf/io-tga.c:880
+#: gdk-pixbuf/io-tga.c:878
 msgid "Excess data in file"
 msgstr "Exceso de datos en el archivo"
 
-#: gdk-pixbuf/io-tga.c:926
+#: gdk-pixbuf/io-tga.c:924
 msgid "Can't allocate memory for TGA header"
 msgstr "No se puede asignar memoria para la cabecera TGA"
 
-#: gdk-pixbuf/io-tga.c:936
+#: gdk-pixbuf/io-tga.c:934
 msgid "Too big value in the infolen field of TGA header."
 msgstr "El valor del campo infolen de la cabecera TGA es muy alto."
 
-#: gdk-pixbuf/io-tga.c:960
+#: gdk-pixbuf/io-tga.c:958
 msgid "Can't allocate memory for TGA cmap temporary buffer"
 msgstr "No se puede asignar memoria para el buffer temporal cmap de TGA"
 
-#: gdk-pixbuf/io-tga.c:972
+#: gdk-pixbuf/io-tga.c:970
 msgid "Can't allocate memory for TGA colormap struct"
 msgstr "No se puede asignar memoria para la estructura del mapa de color de TGA"
 
-#: gdk-pixbuf/io-tga.c:981
+#: gdk-pixbuf/io-tga.c:979
 msgid "Can't allocate memory for TGA colormap entries"
 msgstr "No se puede asignar memoria para las entradas del mapa de color de TGA"
 
-#: gdk-pixbuf/io-tga.c:991
+#: gdk-pixbuf/io-tga.c:989
 msgid "Unexpected bitdepth for TGA colormap"
 msgstr "Profundidad de color inesperada para las entradas del mapa de color de TGA"
 
-#: gdk-pixbuf/io-tga.c:1032
+#: gdk-pixbuf/io-tga.c:1030
 msgid "Pseudo-Color image without colormap"
 msgstr "Imagen de pseudo-color sin mapa de colores"
 
-#: gdk-pixbuf/io-tga.c:1039
+#: gdk-pixbuf/io-tga.c:1037
 msgid "Can't seek to image offset -- end-of-file probably encountered"
 msgstr ""
 "No se puede mover al desplazamiento de la imagen -- seguramente hemos "
 "encontrado el final de archivo"
 
-#: gdk-pixbuf/io-tga.c:1053 gdk-pixbuf/io-tga.c:1155 gdk-pixbuf/io-tga.c:1225
+#: gdk-pixbuf/io-tga.c:1051 gdk-pixbuf/io-tga.c:1153 gdk-pixbuf/io-tga.c:1223
 msgid "Can't allocate pixbuf"
 msgstr "No se puede asignar el pixbuf"
 
-#: gdk-pixbuf/io-tga.c:1295 gdk-pixbuf/io-tga.c:1324
+#: gdk-pixbuf/io-tga.c:1293 gdk-pixbuf/io-tga.c:1322
 msgid "Unsupported TGA image type"
 msgstr "Tipo de imagen TGA no implementada"
 
-#: gdk-pixbuf/io-tga.c:1370
+#: gdk-pixbuf/io-tga.c:1368
 msgid "The Targa image format"
 msgstr "El formato de imagen Targa"
 
@@ -1949,15 +1950,15 @@ msgstr ""
 "Indica si se deben seleccionar los contenidos de una entrada cuando obtiene "
 "el foco"
 
-#: gtk/gtkentry.c:3957 gtk/gtklabel.c:3222
+#: gtk/gtkentry.c:3980 gtk/gtklabel.c:3222 gtk/gtktextview.c:6568
 msgid "Select All"
 msgstr "Seleccionar todo"
 
-#: gtk/gtkentry.c:3967 gtk/gtklabel.c:3232
+#: gtk/gtkentry.c:3990 gtk/gtklabel.c:3232
 msgid "Input Methods"
 msgstr "Métodos de entrada"
 
-#: gtk/gtkentry.c:3977 gtk/gtktextview.c:6543
+#: gtk/gtkentry.c:4000 gtk/gtktextview.c:6587
 msgid "_Insert Unicode control character"
 msgstr "_Insertar caracter de control unicode"
 
@@ -3588,7 +3589,7 @@ msgstr "_Inicio"
 
 #: gtk/gtkstock.c:300
 msgid "_Index"
-msgstr "Índ_ice"
+msgstr "Ín_dice"
 
 #: gtk/gtkstock.c:301
 msgid "_Italic"
@@ -4266,7 +4267,7 @@ msgstr "Cursor visible"
 msgid "If the insertion cursor is shown"
 msgstr "Si se muestra el cursor de inserción"
 
-#: gtk/gtktextview.c:6534
+#: gtk/gtktextview.c:6578
 msgid "Input _Methods"
 msgstr "Métodos de entrada"
 
