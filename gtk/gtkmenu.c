@@ -2078,7 +2078,7 @@ gtk_menu_size_request (GtkWidget      *widget,
        part = child_requisition.width / (r - l);
        requisition->width = MAX (requisition->width, part);
 
-       part = child_requisition.height / (b - t);
+       part = MAX (child_requisition.height, toggle_size) / (b - t);
        priv->heights[t] = MAX (priv->heights[t], part);
     }
 

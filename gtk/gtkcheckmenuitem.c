@@ -29,8 +29,6 @@
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 
-#define CHECK_TOGGLE_SIZE 12
-
 enum {
   TOGGLED,
   LAST_SIGNAL
@@ -136,6 +134,16 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
                                                          FALSE,
                                                          G_PARAM_READWRITE));
   
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_int ("indicator_size",
+                                                             P_("Indicator Size")
+,
+                                                             P_("Size of check or radio indicator"),
+                                                             0,
+                                                             G_MAXINT,
+                                                             12,
+                                                             G_PARAM_READABLE));
+
   widget_class->expose_event = gtk_check_menu_item_expose;
   
   menu_item_class->activate = gtk_check_menu_item_activate;
@@ -241,14 +249,16 @@ gtk_check_menu_item_toggle_size_request (GtkMenuItem *menu_item,
 					 gint        *requisition)
 {
   guint toggle_spacing;
+  guint indicator_size;
   
   g_return_if_fail (GTK_IS_CHECK_MENU_ITEM (menu_item));
   
   gtk_widget_style_get (GTK_WIDGET (menu_item),
 			"toggle_spacing", &toggle_spacing,
+			"indicator_size", &indicator_size,
 			NULL);
-  
-  *requisition = CHECK_TOGGLE_SIZE + toggle_spacing;
+
+  *requisition = indicator_size + toggle_spacing;
 }
 
 void
@@ -406,7 +416,6 @@ gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
   GtkWidget *widget;
   GtkStateType state_type;
   GtkShadowType shadow_type;
-  gint width, height;
   gint x, y;
 
   if (GTK_WIDGET_DRAWABLE (check_menu_item))
@@ -415,16 +424,15 @@ gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
       guint toggle_size;
       guint toggle_spacing;
       guint horizontal_padding;
+      guint indicator_size;
       
       widget = GTK_WIDGET (check_menu_item);
 
       gtk_widget_style_get (GTK_WIDGET (check_menu_item),
  			    "toggle_spacing", &toggle_spacing,
  			    "horizontal_padding", &horizontal_padding,
+			    "indicator_size", &indicator_size,
  			    NULL);
-
-      width = 8;
-      height = 8;
 
       toggle_size = GTK_MENU_ITEM (check_menu_item)->toggle_size;
       offset = GTK_CONTAINER (check_menu_item)->border_width + widget->style->xthickness;
@@ -435,16 +443,16 @@ gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
 	{
 	  x = widget->allocation.x + offset + horizontal_padding +
-	    (toggle_size - toggle_spacing - width) / 2;
+	    (toggle_size - toggle_spacing - indicator_size) / 2;
 	}
       else 
 	{
 	  x = widget->allocation.x + widget->allocation.width -
 	    offset - horizontal_padding - toggle_size + toggle_spacing +
-	    (toggle_size - toggle_spacing - width) / 2;
+	    (toggle_size - toggle_spacing - indicator_size) / 2;
 	}
       
-      y = widget->allocation.y + (widget->allocation.height - height) / 2;
+      y = widget->allocation.y + (widget->allocation.height - indicator_size) / 2;
 
       if (check_menu_item->active ||
 	  check_menu_item->always_show_toggle ||
@@ -467,14 +475,14 @@ gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
 	      gtk_paint_option (widget->style, widget->window,
 				state_type, shadow_type,
 				area, widget, "option",
-				x, y, width, height);
+				x, y, indicator_size, indicator_size);
 	    }
 	  else
 	    {
 	      gtk_paint_check (widget->style, widget->window,
 			       state_type, shadow_type,
 			       area, widget, "check",
-			       x, y, width, height);
+			       x, y, indicator_size, indicator_size);
 	    }
 	}
     }

@@ -1,3 +1,13 @@
+Sun Feb 22 00:23:40 2004  Matthias Clasen  <maclas@gmx.de>
+
+	Bug 112647 (Bill Haneman, patch by Narayana Pattipati):
+	
+	* gtk/gtkcheckmenuitem.c: Introduce a new style property 
+	indicator_size and use it instead of the hardcoded value.
+	
+	* gtk/gtkmenu.c (gtk_menu_size_request): Make sure each menu 
+	item gets enough vertical space for the label and the indicator.
+
 Sat Feb 21 20:20:11 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtksettings.c (gtk_settings_class_init): Use P_ instead of
