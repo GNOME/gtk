@@ -3019,6 +3019,9 @@ gtk_toolbar_finalize (GObject *object)
   if (toolbar->tooltips)
     g_object_unref (toolbar->tooltips);
   
+  if (priv->arrow_button)
+    gtk_widget_unparent (priv->arrow_button);
+
   for (list = priv->content; list != NULL; list = list->next)
     {
       ToolbarContent *content = list->data;
