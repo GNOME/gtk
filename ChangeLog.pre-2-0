@@ -1,3 +1,11 @@
+2001-02-20  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtkaspectframe.c: Convert to new property API, patch from 
+	Lee Mallabone
+
+	* gtk/gtkarrow.c: Convert to new property API, patch from 
+	Lee Mallabone
+
 Tue Feb 20 12:16:12 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkiconfactory.c (gtk_icon_set_new_from_pixbuf): New

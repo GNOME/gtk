@@ -23,30 +23,35 @@
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-2001.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
 #include "gtkaspectframe.h"
+#include "gtkintl.h"
 
 enum {
-  ARG_0,
-  ARG_XALIGN,
-  ARG_YALIGN,
-  ARG_RATIO,
-  ARG_OBEY_CHILD
+  PROP_0,
+  PROP_XALIGN,
+  PROP_YALIGN,
+  PROP_RATIO,
+  PROP_OBEY_CHILD
 };
 
 static void gtk_aspect_frame_class_init               (GtkAspectFrameClass *klass);
 static void gtk_aspect_frame_init                     (GtkAspectFrame      *aspect_frame);
-static void gtk_aspect_frame_set_arg                  (GtkObject           *object,
-						       GtkArg              *arg,
-						       guint                arg_id);
-static void gtk_aspect_frame_get_arg                  (GtkObject           *object,
-						       GtkArg              *arg,
-						       guint                arg_id);
+static void gtk_aspect_frame_set_property (GObject         *object,
+					   guint            prop_id,
+					   const GValue    *value,
+					   GParamSpec      *pspec,
+					   const gchar     *trailer);
+static void gtk_aspect_frame_get_property (GObject         *object,
+					   guint            prop_id,
+					   GValue          *value,
+					   GParamSpec      *pspec,
+					   const gchar     *trailer);
 static void gtk_aspect_frame_compute_child_allocation (GtkFrame            *frame,
 						       GtkAllocation       *child_allocation);
 
@@ -83,27 +88,49 @@ gtk_aspect_frame_get_type (void)
 static void
 gtk_aspect_frame_class_init (GtkAspectFrameClass *class)
 {
+  GObjectClass *gobject_class;
   GtkObjectClass *object_class;
   GtkFrameClass *frame_class;
   
   parent_class = gtk_type_class (GTK_TYPE_FRAME);
 
-  object_class = GTK_OBJECT_CLASS (class);
-  frame_class = GTK_FRAME_CLASS (class);
+  gobject_class = (GObjectClass*) class;
+  object_class = (GtkObjectClass*) class;
+  frame_class = (GtkFrameClass*) class;
   
-  object_class->set_arg = gtk_aspect_frame_set_arg;
-  object_class->get_arg = gtk_aspect_frame_get_arg;
+  gobject_class->set_property = gtk_aspect_frame_set_property;
+  gobject_class->get_property = gtk_aspect_frame_get_property;
 
   frame_class->compute_child_allocation = gtk_aspect_frame_compute_child_allocation;
 
-  gtk_object_add_arg_type ("GtkAspectFrame::xalign", GTK_TYPE_FLOAT,
-			   GTK_ARG_READWRITE, ARG_XALIGN);
-  gtk_object_add_arg_type ("GtkAspectFrame::yalign", GTK_TYPE_FLOAT,
-			   GTK_ARG_READWRITE, ARG_YALIGN);
-  gtk_object_add_arg_type ("GtkAspectFrame::ratio", GTK_TYPE_FLOAT,
-			   GTK_ARG_READWRITE, ARG_RATIO);
-  gtk_object_add_arg_type ("GtkAspectFrame::obey_child", GTK_TYPE_BOOL,
-			   GTK_ARG_READWRITE, ARG_OBEY_CHILD);  
+  g_object_class_install_property (gobject_class,
+                                   PROP_XALIGN,
+                                   g_param_spec_float ("xalign",
+                                                       _("Horizontal Alignment"),
+                                                       _("X alignment of the child"),
+                                                       0.0, 1.0, 0.5,
+                                                       G_PARAM_READABLE | G_PARAM_WRITABLE ));
+  g_object_class_install_property (gobject_class,
+                                   PROP_YALIGN,
+                                   g_param_spec_float ("yalign",
+                                                       _("Vertical Alignment"),
+                                                       _("Y alignment of the child"),
+                                                       0.0, 1.0, 0.5,
+                                                       G_PARAM_READABLE | G_PARAM_WRITABLE ));
+  g_object_class_install_property (gobject_class,
+                                   PROP_RATIO,
+                                   g_param_spec_float ("ratio",
+                                                       _("Ratio"),
+                                                       _("Aspect ratio if obey_child is FALSE"),
+                                                       0.0, 1.0, 0.5,
+                                                       G_PARAM_READABLE | G_PARAM_WRITABLE ));
+  g_object_class_install_property (gobject_class,
+                                   PROP_OBEY_CHILD,
+                                   g_param_spec_boolean ("obey_child",
+                                                         _("Obey child"),
+                                                         _("Force aspect ratio to match that of the frame's child"),
+                                                         TRUE,
+                                                         G_PARAM_READABLE | G_PARAM_WRITABLE));
 }
 
 static void
@@ -115,69 +142,75 @@ gtk_aspect_frame_init (GtkAspectFrame *aspect_frame)
   aspect_frame->obey_child = TRUE;
 }
 
-static void
-gtk_aspect_frame_set_arg (GtkObject *object,
-			  GtkArg    *arg,
-			  guint      arg_id)
+static void gtk_aspect_frame_set_property (GObject         *object,
+					   guint            prop_id,
+					   const GValue    *value,
+					   GParamSpec      *pspec,
+					   const gchar     *trailer)
 {
   GtkAspectFrame *aspect_frame = GTK_ASPECT_FRAME (object);
   
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_XALIGN:
+      /* g_object_notify is handled by the _frame_set function */
+    case PROP_XALIGN:
       gtk_aspect_frame_set (aspect_frame,
-			    GTK_VALUE_FLOAT (*arg),
+			    g_value_get_float (value),
 			    aspect_frame->yalign,
 			    aspect_frame->ratio,
 			    aspect_frame->obey_child);
       break;
-    case ARG_YALIGN:
+    case PROP_YALIGN:
       gtk_aspect_frame_set (aspect_frame,
 			    aspect_frame->xalign,
-			    GTK_VALUE_FLOAT (*arg),
+			    g_value_get_float (value),
 			    aspect_frame->ratio,
 			    aspect_frame->obey_child);
       break;
-    case ARG_RATIO:
+    case PROP_RATIO:
       gtk_aspect_frame_set (aspect_frame,
 			    aspect_frame->xalign,
 			    aspect_frame->yalign,
-			    GTK_VALUE_FLOAT (*arg),
+			    g_value_get_float (value),
 			    aspect_frame->obey_child);
       break;
-    case ARG_OBEY_CHILD:
+    case PROP_OBEY_CHILD:
       gtk_aspect_frame_set (aspect_frame,
 			    aspect_frame->xalign,
 			    aspect_frame->yalign,
 			    aspect_frame->ratio,
-			    GTK_VALUE_BOOL (*arg));
+			    g_value_get_boolean (value));
+      break;
+    default:
+       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
 
-static void
-gtk_aspect_frame_get_arg (GtkObject *object,
-			  GtkArg    *arg,
-			  guint      arg_id)
+static void gtk_aspect_frame_get_property (GObject         *object,
+					   guint            prop_id,
+					   GValue          *value,
+					   GParamSpec      *pspec,
+					   const gchar     *trailer)
 {
   GtkAspectFrame *aspect_frame = GTK_ASPECT_FRAME (object);
   
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_XALIGN:
-      GTK_VALUE_FLOAT (*arg) = aspect_frame->xalign;
+    case PROP_XALIGN:
+      g_value_set_float (value, aspect_frame->xalign);
       break;
-    case ARG_YALIGN:
-      GTK_VALUE_FLOAT (*arg) = aspect_frame->yalign;
+    case PROP_YALIGN:
+      g_value_set_float (value, aspect_frame->yalign);
       break;
-    case ARG_RATIO:
-      GTK_VALUE_FLOAT (*arg) = aspect_frame->ratio;
+    case PROP_RATIO:
+      g_value_set_float (value, aspect_frame->ratio);
       break;
-    case ARG_OBEY_CHILD:
-      GTK_VALUE_BOOL (*arg) = aspect_frame->obey_child;
+    case PROP_OBEY_CHILD:
+      g_value_set_boolean (value, aspect_frame->obey_child);
       break;
     default:
-      arg->type = GTK_TYPE_INVALID;
+       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
@@ -210,6 +243,8 @@ gtk_aspect_frame_set (GtkAspectFrame *aspect_frame,
 		      gfloat          ratio,
 		      gboolean        obey_child)
 {
+  gboolean needs_resize = FALSE;
+   
   g_return_if_fail (aspect_frame != NULL);
   g_return_if_fail (GTK_IS_ASPECT_FRAME (aspect_frame));
   
@@ -218,20 +253,33 @@ gtk_aspect_frame_set (GtkAspectFrame *aspect_frame,
   ratio = CLAMP (ratio, MIN_RATIO, MAX_RATIO);
   obey_child = obey_child != FALSE;
   
-  if ((aspect_frame->xalign != xalign) ||
-      (aspect_frame->yalign != yalign) ||
-      (aspect_frame->ratio != ratio) ||
-      (aspect_frame->obey_child != obey_child))
+  if (aspect_frame->xalign != xalign)
     {
-      GtkWidget *widget = GTK_WIDGET(aspect_frame);
-      
       aspect_frame->xalign = xalign;
-      aspect_frame->yalign = yalign;
-      aspect_frame->ratio = ratio;
-      aspect_frame->obey_child = obey_child;
-      
-      gtk_widget_queue_resize (widget);
+      g_object_notify (G_OBJECT (aspect_frame), "xalign");
+      needs_resize = TRUE;
     }
+   if (aspect_frame->yalign != yalign)
+    {
+      aspect_frame->yalign = yalign;
+      g_object_notify (G_OBJECT (aspect_frame), "yalign");
+      needs_resize = TRUE;
+    }
+   if (aspect_frame->ratio != ratio)
+    {
+      aspect_frame->ratio = ratio;
+      g_object_notify (G_OBJECT (aspect_frame), "ratio");
+      needs_resize = TRUE;
+    }
+   if (aspect_frame->obey_child != obey_child)
+    {
+      aspect_frame->obey_child = obey_child;
+      g_object_notify (G_OBJECT (aspect_frame), "obey_child");
+      needs_resize = TRUE;
+    }
+   
+   if (needs_resize == TRUE)
+      gtk_widget_queue_resize (GTK_WIDGET(aspect_frame));
 }
 
 static void
