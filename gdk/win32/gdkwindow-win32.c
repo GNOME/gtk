@@ -510,7 +510,7 @@ gdk_window_new (GdkWindow     *parent,
   else
     {
       dwExStyle = WS_EX_TRANSPARENT;
-      private->depth = 0;
+      private->depth = visual->depth;
       private->input_only = TRUE;
       draw_impl->colormap = gdk_colormap_get_system ();
       gdk_colormap_ref (draw_impl->colormap);

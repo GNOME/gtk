@@ -1,3 +1,14 @@
+2002-11-19  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_new): Yes, my change on
+	2002-11-14 to gdkpixmap-win32.c:gdk_pixmap_new() broke palettized
+	(256-colour) display slightly: For some reason
+	GdkWindowObject::depth of GDK_INPUT_ONLY windows now needs to be
+	set to the visual's depth, even if the X11 backend sets it to
+	zero. Otherwise, on a palettized display, gdk_pixmap_new() when
+	called from gdk_window_begin_paint_region() would get zero from
+	gdk_drawable_get_depth(), and fail.
+
 2002-11-15  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkprivate-win32.h
