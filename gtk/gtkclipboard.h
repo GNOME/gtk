@@ -28,6 +28,9 @@ extern "C" {
 
 #include <gtk/gtkselection.h>
 
+#define GTK_TYPE_CLIPBOARD            (gtk_clipboard_get_type ())
+#define GTK_CLIPBOARD(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_CLIPBOARD, GtkClipboard))
+#define GTK_IS_CLIPBOARD(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_CLIPBOARD))
 
 typedef void (* GtkClipboardReceivedFunc)        (GtkClipboard     *clipboard,
 					          GtkSelectionData *selection_data,
@@ -46,6 +49,8 @@ typedef void (* GtkClipboardGetFunc)          (GtkClipboard     *clipboard,
 					       gpointer          user_data_or_owner);
 typedef void (* GtkClipboardClearFunc)        (GtkClipboard     *clipboard,
 					       gpointer          user_data_or_owner);
+
+GType         gtk_clipboard_get_type (void);
 
 GtkClipboard *gtk_clipboard_get_for_display (GdkDisplay   *display,
 					     GdkAtom       selection);

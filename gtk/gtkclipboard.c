@@ -34,11 +34,15 @@
 #include "win32/gdkwin32.h"
 #endif
 
+typedef struct _GtkClipboardClass GtkClipboardClass;
+
 typedef struct _RequestContentsInfo RequestContentsInfo;
 typedef struct _RequestTextInfo RequestTextInfo;
 
 struct _GtkClipboard 
 {
+  GObjectClass parent_instance;
+
   GdkAtom selection;
 
   GtkClipboardGetFunc get_func;
@@ -52,6 +56,11 @@ struct _GtkClipboard
   GdkDisplay *display;
 };
 
+struct _GtkClipboardClass
+{
+  GObjectClass parent_class;
+};
+
 struct _RequestContentsInfo
 {
   GtkClipboardReceivedFunc callback;
@@ -63,6 +72,9 @@ struct _RequestTextInfo
   GtkClipboardTextReceivedFunc callback;
   gpointer user_data;
 };
+
+static void gtk_clipboard_class_init (GtkClipboardClass *class);
+static void gtk_clipboard_finalize   (GObject           *object);
 
 static void clipboard_unset    (GtkClipboard     *clipboard);
 static void selection_received (GtkWidget        *widget,
@@ -81,7 +93,66 @@ static GQuark request_contents_key_id = 0;
 
 static const gchar *clipboards_owned_key = "gtk-clipboards-owned";
 static GQuark clipboards_owned_key_id = 0;
+
+GObjectClass *parent_class;
+
+GType
+gtk_clipboard_get_type (void)
+{
+  static GType clipboard_type = 0;
   
+  if (!clipboard_type)
+    {
+      static const GTypeInfo clipboard_info =
+      {
+	sizeof (GtkClipboardClass),
+	NULL,           /* base_init */
+	NULL,           /* base_finalize */
+	(GClassInitFunc) gtk_clipboard_class_init,
+	NULL,           /* class_finalize */
+	NULL,           /* class_data */
+	sizeof (GtkClipboard),
+	0,              /* n_preallocs */
+	(GInstanceInitFunc) NULL,
+      };
+      
+      clipboard_type = g_type_register_static (G_TYPE_OBJECT, "GtkClipboard", &clipboard_info, 0);
+    }
+  
+  return clipboard_type;
+}
+
+static void
+gtk_clipboard_class_init (GtkClipboardClass *class)
+{
+  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
+
+  parent_class = g_type_class_peek_parent (class);
+  
+  gobject_class->finalize = gtk_clipboard_finalize;
+}
+
+static void
+gtk_clipboard_finalize   (GObject *object)
+{
+  clipboard_unset (GTK_CLIPBOARD (object));
+}
+
+static void
+clipboard_display_closed (GdkDisplay   *display,
+			  gboolean      is_error,
+			  GtkClipboard *clipboard)
+{
+  GSList *clipboards;
+
+  clipboards = g_object_get_data (G_OBJECT (display), "gtk-clipboard-list");
+  g_object_run_dispose (G_OBJECT (clipboard));
+  g_object_unref (clipboard);
+  clipboards = g_slist_remove (clipboards, clipboard);
+  
+  g_object_set_data (G_OBJECT (display), "gtk-clipboard-list", clipboards);
+}
+
 /**
  * gtk_clipboard_get_for_display:
  * @display: the display for which the clipboard is to be retrieved or created
@@ -128,6 +199,7 @@ gtk_clipboard_get_for_display (GdkDisplay *display, GdkAtom selection)
   GSList *tmp_list;
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+  g_return_val_if_fail (!display->closed, NULL);
 
   if (selection == GDK_NONE)
     selection = GDK_SELECTION_CLIPBOARD;
@@ -146,11 +218,13 @@ gtk_clipboard_get_for_display (GdkDisplay *display, GdkAtom selection)
 
   if (!tmp_list)
     {
-      clipboard = g_new0 (GtkClipboard, 1);
+      clipboard = g_object_new (GTK_TYPE_CLIPBOARD, NULL);
       clipboard->selection = selection;
       clipboard->display = display;
       clipboards = g_slist_prepend (clipboards, clipboard);
       g_object_set_data (G_OBJECT (display), "gtk-clipboard-list", clipboards);
+      g_signal_connect (display, "closed",
+			G_CALLBACK (clipboard_display_closed), clipboard);
     }
   
   return clipboard;

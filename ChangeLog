@@ -1,3 +1,8 @@
+Tue Sep 24 18:18:36 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkclipboard.[ch]: Make a GObject (#75970, James
+	Henstridge)
+
 Tue Sep 24 19:45:55 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkwindow-x11.c (gdk_window_impl_x11_get_colormap): 
