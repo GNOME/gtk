@@ -43,7 +43,7 @@ typedef void	(*GtkPrintFunc)		   (gpointer		 func_data,
 					    const gchar		*str);
 typedef gchar * (*GtkTranslateFunc)	   (const gchar		*path,
 					    gpointer             func_data);
-typedef	void	(*GtkItemFactoryCallback)  ();
+typedef	void	(*GtkItemFactoryCallback)  (void);
 typedef	void	(*GtkItemFactoryCallback1) (gpointer		 callback_data,
 					    guint		 callback_action,
 					    GtkWidget		*widget);
