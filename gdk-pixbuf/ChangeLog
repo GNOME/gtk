@@ -1,3 +1,13 @@
+1999-10-07  Cody Russell  <bratsche@dfw.net>
+	* src/gdk-pixbuf-drawable.[ch]: Added. (Actually, Miguel committed
+	them, but I wrote them).
+
+	* src/gdk-pixbuf-drawable.h: Added a missing ; so things will now
+	compile.
+
+	* src/Makefile.am: Added gdk-pixbuf-drawable.[ch] to
+	libgdk_pixbuf_la_SOURCES and libgdk_pixbufinclude_HEADERS.
+
 1999-09-22  Michael Meeks  <michael@nuclecu.unam.mx>
 
 	* src/gdk-pixbuf.c (gdk_pixbuf_new): created.
