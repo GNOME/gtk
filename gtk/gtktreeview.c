@@ -8955,6 +8955,9 @@ gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view,
   gboolean found_focus = FALSE;
   GtkWidgetClass *entry_parent_class;
   
+  if (!tree_view->priv->enable_search)
+    return FALSE;
+
   if (GTK_WIDGET_VISIBLE (tree_view->priv->search_window))
     return TRUE;
 
@@ -8976,11 +8979,10 @@ gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view,
   if (GTK_WIDGET_HAS_FOCUS (tree_view))
     found_focus = TRUE;
 
-  if (! found_focus)
+  if (!found_focus)
     return FALSE;
 
-  if (tree_view->priv->enable_search == FALSE ||
-      tree_view->priv->search_column < 0)
+  if (tree_view->priv->search_column < 0)
     return FALSE;
 
   gtk_tree_view_ensure_interactive_directory (tree_view);

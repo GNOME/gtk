@@ -1008,7 +1008,18 @@ gtk_file_chooser_button_mnemonic_activate (GtkWidget *widget,
   GtkFileChooserButtonPrivate *priv;
 
   priv = GTK_FILE_CHOOSER_BUTTON_GET_PRIVATE (widget);
-  gtk_widget_grab_focus (priv->button);
+  switch (gtk_file_chooser_get_action (GTK_FILE_CHOOSER (priv->dialog)))
+    {
+    case GTK_FILE_CHOOSER_ACTION_OPEN:
+      gtk_widget_grab_focus (priv->button);
+      break;
+    case GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER:
+      return gtk_widget_mnemonic_activate (priv->combo_box, group_cycling);
+      break;
+    default:
+      g_assert_not_reached ();
+      break;
+    }
 
   return TRUE;
 }

@@ -1,3 +1,11 @@
+2004-12-16  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_real_start_interactive_search): Don't
+	crash if enable_search is FALSE.  (#161267, Jorn Baayen)
+
+	* gtk/gtkfilechooserbutton.c (gtk_file_chooser_button_mnemonic_activate): 
+	Re-fix #152925, reported by Dennis Cranston.
+
 2004-12-15  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilechooserbutton.c: Add missing includes.
@@ -16,6 +24,8 @@
 	Use g_filename_display_basename to calculate display name.
 
 2004-12-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/abicheck.sh: Strip out PRIVATE
 
 	* NEWS: Updates
 
