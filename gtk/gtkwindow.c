@@ -3471,8 +3471,8 @@ gtk_window_get_size (GtkWindow *window,
  * gdk_screen_height () - window_height)</literal>.
  *
  * The Extended Window Manager Hints specification at <ulink 
- * url="http://www.freedesktop.org/standards/wm-spec">
- * http://www.freedesktop.org/standards/wm-spec</ulink> has a 
+ * url="http://www.freedesktop.org/Standards/wm-spec">
+ * http://www.freedesktop.org/Standards/wm-spec</ulink> has a 
  * nice table of gravities in the "implementation notes" section.
  *
  * The gtk_window_get_position() documentation may also be relevant.
@@ -6278,9 +6278,10 @@ gtk_window_unfullscreen (GtkWindow *window)
  * on #GtkWidget.
  *
  * Note that, according to the <ulink 
- * url="http://www.freedesktop.org/standards/wm-spec">Extended Window Manager Hints</ulink>
- * specification, the above state is mainly meant for user preferences and should not be used 
- * by applications e.g. for drawing attention to their dialogs.
+ * url="http://www.freedesktop.org/Standards/wm-spec">Extended Window 
+ * Manager Hints</ulink> specification, the above state is mainly meant 
+ * for user preferences and should not be used by applications e.g. for 
+ * drawing attention to their dialogs.
  *
  * Since: 2.4
  **/
@@ -6331,9 +6332,10 @@ gtk_window_set_keep_above (GtkWindow *window,
  * on #GtkWidget.
  *
  * Note that, according to the <ulink 
- * url="http://www.freedesktop.org/standards/wm-spec">Extended Window Manager Hints</ulink>
- * specification, the above state is mainly meant for user preferences and should not be used 
- * by applications e.g. for drawing attention to their dialogs.
+ * url="http://www.freedesktop.org/Standards/wm-spec">Extended Window 
+ * Manager Hints</ulink> specification, the above state is mainly meant 
+ * for user preferences and should not be used by applications e.g. for 
+ * drawing attention to their dialogs.
  *
  * Since: 2.4
  **/

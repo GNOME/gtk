@@ -1,5 +1,9 @@
 2005-02-20  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkwindow.c: 
+	* gtk/gtkclipboard.c: Fix links to freedesktop.org specs
+	in the documentation.
+
 	* gdk/x11/gdkdrawable-x11.c (_gdk_x11_have_render_with_trapezoids): 
 	Set have_render_with_trapezoids to GDK_YES when we have 
 	a new enough Render extension.  (#167965,Billy Biggs) 
