@@ -1,3 +1,11 @@
+2000-11-27  Federico Mena Quintero  <federico@helixcode.com>
+
+	* gtk/gtkspinbutton.c (gtk_spin_button_set_adjustment): Connect to
+	the "changed" callback of the adjustment.  We need to redraw the
+	spin button's arrows when the adjustment's range changes.
+	(adjustment_changed_cb): Draw the arrows.
+	(gtk_spin_button_value_changed): Draw the arrows.
+
 2000-11-23  Alexander Larsson  <alexl@redhat.com>
 
 	* gdk/linux-fb/gdkselection-fb.c:
