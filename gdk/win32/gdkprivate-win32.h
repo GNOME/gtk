@@ -500,6 +500,9 @@ extern gint		 _gdk_max_colors;
 /* TRUE while a user-initiated window move or resize operation is in progress */
 extern gboolean		 _sizemove_in_progress;
 
+/* TRUE when we are emptying the clipboard ourselves */
+extern gboolean		_ignore_destroy_clipboard;
+
 /* Initialization */
 void _gdk_windowing_window_init (void);
 void _gdk_root_window_size_init (void);

@@ -3353,7 +3353,19 @@ gdk_event_translate (GdkDisplay *display,
       handle_display_change ();
       break;
       
-
+    case WM_DESTROYCLIPBOARD:
+      if (!_ignore_destroy_clipboard)
+	{
+	  event = gdk_event_new (GDK_SELECTION_CLEAR);
+	  event->selection.window = window;
+	  event->selection.selection = GDK_SELECTION_CLIPBOARD;
+	  event->selection.time = _gdk_win32_get_next_tick (msg->time);
+          append_event (display, event);
+	}
+      else
+	return_val = TRUE;
+      break;
+ 
 #ifdef HAVE_WINTAB
       /* Handle WINTAB events here, as we know that gdkinput.c will
        * use the fixed WT_DEFBASE as lcMsgBase, and we thus can use the
