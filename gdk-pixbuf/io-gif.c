@@ -410,8 +410,8 @@ gif_get_extension (GifContext *context)
                                 if (!strncmp (context->block_buf, "NETSCAPE2.0", 11) ||
                                     !strncmp (context->block_buf, "ANIMEXTS1.0", 11)) {
                                         context->in_loop_extension = TRUE;
-                                        context->block_count = 0;
                                 }
+                                context->block_count = 0;
                         }
                         if (context->in_loop_extension) {
                                 do {
