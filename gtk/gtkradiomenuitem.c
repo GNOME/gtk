@@ -169,6 +169,85 @@ gtk_radio_menu_item_new_with_mnemonic (GSList *group,
   return radio_menu_item;
 }
 
+/**
+ * gtk_radio_menu_item_new_from_widget:
+ * @group: An existing #GtkRadioMenuItem
+ * 
+ * Creates a new #GtkRadioMenuItem adding it to the same group as @group.
+ * 
+ * Return value: The new #GtkRadioMenuItem
+ * 
+ * Since: 2.4
+ **/
+GtkWidget *
+gtk_radio_menu_item_new_from_widget (GtkRadioMenuItem *group)
+{
+  GSList *list = NULL;
+  
+  g_return_val_if_fail (GTK_IS_RADIO_MENU_ITEM (group), NULL);
+
+  if (group)
+    list = gtk_radio_menu_item_get_group (group);
+  
+  return gtk_radio_menu_item_new (list);
+}
+
+/**
+ * gtk_radio_menu_item_new_with_mnemonic_from_widget:
+ * @group: An existing #GtkRadioMenuItem
+ * @label: the text of the button, with an underscore in front of the
+ *         mnemonic character
+ *
+ * Creates a new GtkRadioMenuItem containing a label. The label will be
+ * created using gtk_label_new_with_mnemonic(), so underscores in label
+ * indicate the mnemonic for the menu item.
+ *
+ * The new #GtkRadioMenuItem is added to the same group as @group.
+ *
+ * Return value: The new #GtkRadioMenuItem
+ * 
+ * Since: 2.4
+ **/
+GtkWidget *
+gtk_radio_menu_item_new_with_mnemonic_from_widget (GtkRadioMenuItem *group,
+						   const gchar *label)
+{
+  GSList *list = NULL;
+
+  g_return_val_if_fail (GTK_IS_RADIO_MENU_ITEM (group), NULL);
+
+  if (group)
+    list = gtk_radio_menu_item_get_group (group);
+
+  return gtk_radio_menu_item_new_with_mnemonic (list, label);
+}
+
+/**
+ * gtk_radio_menu_item_new_with_label_from_widget:
+ * @group: an existing #GtkRadioMenuItem 
+ * @label: the text for the label
+ *
+ * Creates a new GtkRadioMenuItem whose child is a simple GtkLabel.
+ * The new #GtkRadioMenuItem is added to the same group as @group.
+ *
+ * Return value: The new #GtkRadioMenuItem
+ * 
+ * Since: 2.4
+ **/
+GtkWidget *
+gtk_radio_menu_item_new_with_label_from_widget (GtkRadioMenuItem *group,
+						const gchar *label)
+{
+  GSList *list = NULL;
+
+  g_return_val_if_fail (GTK_IS_RADIO_MENU_ITEM (group), NULL);
+
+  if (group)
+    list = gtk_radio_menu_item_get_group (group);
+
+  return gtk_radio_menu_item_new_with_label (list, label);
+}
+
 GSList*
 gtk_radio_menu_item_get_group (GtkRadioMenuItem *radio_menu_item)
 {

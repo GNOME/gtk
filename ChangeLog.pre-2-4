@@ -1,3 +1,12 @@
+Thu Feb 19 00:09:35 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkradiomenuitem.h:
+	* gtk/gtkradiomenuitem.c (gtk_radio_menu_item_new_from_widget): 
+	(gtk_radio_menu_item_new_with_label_from_widget): 
+	(gtk_radio_menu_item_new_with_mnemonic_from_widget): New
+	convenience functions analogous to similar API on GtkRadioButton.
+	(#51700, Vitaly Tishkov, patch by Soeren Sandmann)
+
 Wed Feb 18 17:53:27 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gdk/gdkwindow.c (gdk_window_get_bg_gc): Use a scratch GC in the

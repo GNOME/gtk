@@ -31,11 +31,7 @@
 #include <gdk/gdk.h>
 #include <gtk/gtkcheckmenuitem.h>
 
-
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 #define GTK_TYPE_RADIO_MENU_ITEM	      (gtk_radio_menu_item_get_type ())
 #define GTK_RADIO_MENU_ITEM(obj)	      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_RADIO_MENU_ITEM, GtkRadioMenuItem))
@@ -58,7 +54,7 @@ struct _GtkRadioMenuItem
 struct _GtkRadioMenuItemClass
 {
   GtkCheckMenuItemClass parent_class;
-
+  
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
@@ -68,22 +64,25 @@ struct _GtkRadioMenuItemClass
 
 
 GType      gtk_radio_menu_item_get_type	         (void) G_GNUC_CONST;
-GtkWidget* gtk_radio_menu_item_new               (GSList           *group);
-GtkWidget* gtk_radio_menu_item_new_with_label    (GSList           *group,
-                                                  const gchar      *label);
-GtkWidget* gtk_radio_menu_item_new_with_mnemonic (GSList           *group,
-                                                  const gchar      *label);
-GSList*    gtk_radio_menu_item_get_group         (GtkRadioMenuItem *radio_menu_item);
-void       gtk_radio_menu_item_set_group         (GtkRadioMenuItem *radio_menu_item,
-                                                  GSList           *group);
+							
+GtkWidget* gtk_radio_menu_item_new                           (GSList           *group);
+GtkWidget* gtk_radio_menu_item_new_with_label                (GSList           *group,
+							      const gchar      *label);
+GtkWidget* gtk_radio_menu_item_new_with_mnemonic             (GSList           *group,
+							      const gchar      *label);
+GtkWidget* gtk_radio_menu_item_new_from_widget               (GtkRadioMenuItem *group);
+GtkWidget *gtk_radio_menu_item_new_with_mnemonic_from_widget (GtkRadioMenuItem *group,
+							      const gchar      *label);
+GtkWidget *gtk_radio_menu_item_new_with_label_from_widget    (GtkRadioMenuItem *group,
+							      const gchar      *label);
+GSList*    gtk_radio_menu_item_get_group                     (GtkRadioMenuItem *radio_menu_item);
+void       gtk_radio_menu_item_set_group                     (GtkRadioMenuItem *radio_menu_item,
+							      GSList           *group);
 
 #ifndef GTK_DISABLE_DEPRECATED
 #define gtk_radio_menu_item_group gtk_radio_menu_item_get_group
 #endif
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_RADIO_MENU_ITEM_H__ */
