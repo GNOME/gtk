@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+ 1.3.x\n"
-"POT-Creation-Date: 2002-12-16 22:22-0500\n"
-"PO-Revision-Date: 2002-04-06 02:30+0800\n"
+"POT-Creation-Date: 2002-12-17 13:52+0800\n"
+"PO-Revision-Date: 2002-12-17 13:19+0800\n"
 "Last-Translator: Hasbullah Bin Pit <sebol@ikhlas.com>\n"
 "Language-Team: Projek Gabai <gabai-penyumbang@list.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -163,7 +163,7 @@ msgstr "Imej BMP mempunyai data pengepala bogus"
 
 #: gdk-pixbuf/io-bmp.c:1076
 msgid "The BMP image format"
-msgstr ""
+msgstr "Format imej BMP"
 
 #: gdk-pixbuf/io-gif.c:219
 #, c-format
@@ -181,7 +181,7 @@ msgstr "Ralat dalaman pada pemuat GIF (%s)"
 
 #: gdk-pixbuf/io-gif.c:574
 msgid "Stack overflow"
-msgstr ""
+msgstr "tindanan melimpah"
 
 #: gdk-pixbuf/io-gif.c:634
 msgid "GIF image loader can't understand this image."
@@ -313,11 +313,11 @@ msgstr ""
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
-"Kualiti JPEG mestilah diantara nilai 0 dan 100; nilai '%s' tak diizinkan."
+"Kualiti JPEG mestilah diantara nilai 0 dan 100; nilai '%d' tak diizinkan."
 
 #: gdk-pixbuf/io-jpeg.c:940
 msgid "The JPEG image format"
-msgstr ""
+msgstr "Format imej JPEG"
 
 #: gdk-pixbuf/io-png.c:55
 msgid "Bits per channel of PNG image is invalid."
@@ -637,7 +637,7 @@ msgstr "Gagal memuatkan imej TIFF"
 
 #: gdk-pixbuf/io-tiff.c:591
 msgid "The TIFF image format"
-msgstr ""
+msgstr "Format imej TIFF"
 
 #: gdk-pixbuf/io-wbmp.c:246
 msgid "Image has zero width"
@@ -657,7 +657,7 @@ msgstr "Tak dapat menyimpang yang selebihnya"
 
 #: gdk-pixbuf/io-wbmp.c:368
 msgid "The WBMP image format"
-msgstr ""
+msgstr "Format imej WBMP"
 
 #: gdk-pixbuf/io-xbm.c:285
 msgid "Invalid XBM file"
@@ -673,7 +673,7 @@ msgstr "Gagal menulis ke fail sementara bila memuatkan imej XBM"
 
 #: gdk-pixbuf/io-xbm.c:474
 msgid "The XBM image format"
-msgstr ""
+msgstr "Format imej XBM"
 
 #: gdk-pixbuf/io-xpm.c:1229
 msgid "No XPM header found"
@@ -719,7 +719,7 @@ msgstr "Jarak Ruang Default"
 
 #: gdk/gdkdisplaymanager.c:118
 msgid "The default display for GDK"
-msgstr ""
+msgstr "Paparan default bagi GDK"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
@@ -758,11 +758,11 @@ msgstr "Penutupan untuk monitor perubahan pemecut"
 
 #: gtk/gtkaccellabel.c:144
 msgid "Accelerator Widget"
-msgstr "Widget Pemecut"
+msgstr "Wiget Pemecut"
 
 #: gtk/gtkaccellabel.c:145
 msgid "The widget to be monitored for accelerator changes"
-msgstr "Widget akan diperhati untuk perubahan pemecut"
+msgstr "Wiget akan diperhati untuk perubahan pemecut"
 
 #: gtk/gtkalignment.c:102
 msgid "Horizontal alignment"
@@ -964,7 +964,7 @@ msgstr "Padding fokus"
 
 #: gtk/gtkbox.c:161
 msgid "Extra space to put between the child and its neighbors, in pixels"
-msgstr ""
+msgstr "Runga ekstra untuk diletakkan diantara anak dan jirannya, dalam piksel"
 
 #: gtk/gtkbox.c:167
 #, fuzzy
@@ -976,6 +976,8 @@ msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
 msgstr ""
+"GtkPackType menunjukkan samada anak dipek dengan rujukan ke permulaan atau "
+"akhir bagi ibubapa"
 
 #: gtk/gtkbox.c:174 gtk/gtknotebook.c:466 gtk/gtkpaned.c:218
 #: gtk/gtkruler.c:138
@@ -992,12 +994,10 @@ msgid "Label"
 msgstr "Label"
 
 #: gtk/gtkbutton.c:190
-#, fuzzy
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
-msgstr ""
-"Teks widget label didalam butang, jika butang mengandungi widget label."
+msgstr "Teks wiget label didalam butang, jika butang mengandungi widget label"
 
 #: gtk/gtkbutton.c:197 gtk/gtklabel.c:311
 msgid "Use underline"
@@ -1226,11 +1226,11 @@ msgstr "Tajuk kepada tetingkap"
 
 #: gtk/gtkcellrendererpixbuf.c:176
 msgid "Detail"
-msgstr ""
+msgstr "Terperinci"
 
 #: gtk/gtkcellrendererpixbuf.c:177
 msgid "Render detail to pass to the theme engine"
-msgstr ""
+msgstr "Render perincian untuk dihantar ke enjin tema"
 
 #: gtk/gtkcellrenderertext.c:175 gtk/gtkentry.c:524 gtk/gtkprogressbar.c:218
 msgid "Text"
@@ -1492,20 +1492,21 @@ msgstr "Samada tag ini mempengaruhi garisbawah"
 
 #: gtk/gtkcellrenderertoggle.c:132
 msgid "Toggle state"
-msgstr ""
+msgstr "Togol keadaan"
 
 #: gtk/gtkcellrenderertoggle.c:133
 msgid "The toggle state of the button"
-msgstr ""
+msgstr "Togol keadaan bagi butang"
 
 #: gtk/gtkcellrenderertoggle.c:141
+#, fuzzy
 msgid "Inconsistent state"
-msgstr ""
+msgstr "Tak konsisten"
 
 #: gtk/gtkcellrenderertoggle.c:142
 #, fuzzy
 msgid "The inconsistent state of the button"
-msgstr "Kandungan kemasukan"
+msgstr "Togol keadaan bagi butang"
 
 #: gtk/gtkcellrenderertoggle.c:150
 msgid "Activatable"
@@ -1513,7 +1514,7 @@ msgstr "Boleh diaktifkan"
 
 #: gtk/gtkcellrenderertoggle.c:151
 msgid "The toggle button can be activated"
-msgstr ""
+msgstr "Butang togol boleh diaktifkan"
 
 #: gtk/gtkcellrenderertoggle.c:159
 msgid "Radio state"
@@ -1521,7 +1522,7 @@ msgstr "Keadaan Radio"
 
 #: gtk/gtkcellrenderertoggle.c:160
 msgid "Draw the toggle button as a radio button"
-msgstr ""
+msgstr "Lukis butang togol sebagai butang radio"
 
 #: gtk/gtkcheckbutton.c:98 gtk/gtkoptionmenu.c:197
 msgid "Indicator Size"
@@ -1550,7 +1551,7 @@ msgstr "Samada item menu dicheck."
 
 #: gtk/gtkcheckmenuitem.c:125 gtk/gtktogglebutton.c:140
 msgid "Inconsistent"
-msgstr ""
+msgstr "Tak konsisten"
 
 #: gtk/gtkcheckmenuitem.c:126
 #, fuzzy
@@ -1727,7 +1728,7 @@ msgstr "Sentiasa hidupkan panah"
 
 #: gtk/gtkcombo.c:151
 msgid "Obsolete property, ignored"
-msgstr ""
+msgstr "Ciri-ciri luput, diabaikan"
 
 #: gtk/gtkcombo.c:157
 msgid "Case sensitive"
@@ -1735,7 +1736,7 @@ msgstr "Case sensitive"
 
 #: gtk/gtkcombo.c:158
 msgid "Whether list item matching is case sensitive"
-msgstr ""
+msgstr "Samada item senarai memadan huruf kecil/besar"
 
 #: gtk/gtkcombo.c:165
 msgid "Allow empty"
@@ -1920,13 +1921,12 @@ msgid "Activates default"
 msgstr "Aktifkan default"
 
 #: gtk/gtkentry.c:498
-#, fuzzy
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
 msgstr ""
-"Samada mengaktifkan widget default (seperti butang default pada dialog) bila "
-"Enter ditekan."
+"Samada mengaktifkan wiget default (seperti butang default pada dialog) bila "
+"Enter ditekan"
 
 #: gtk/gtkentry.c:504
 msgid "Width in chars"
@@ -2075,9 +2075,8 @@ msgid "_Folder name:"
 msgstr "Nama _folder:"
 
 #: gtk/gtkfilesel.c:1472
-#, fuzzy
 msgid "C_reate"
-msgstr "Cipta"
+msgstr "_Cipta"
 
 #: gtk/gtkfilesel.c:1518
 #, c-format
@@ -2149,14 +2148,12 @@ msgid "Rename file \"%s\" to:"
 msgstr "Tukarnama fail \"%s\" ke:"
 
 #: gtk/gtkfilesel.c:1745
-#, fuzzy
 msgid "_Rename"
-msgstr "Tukarnama"
+msgstr "_Tukarnama"
 
 #: gtk/gtkfilesel.c:2184
-#, fuzzy
 msgid "_Selection: "
-msgstr "Pilihan:"
+msgstr "_Pilihan"
 
 #: gtk/gtkfilesel.c:3077
 #, c-format
@@ -2185,7 +2182,7 @@ msgstr "Posisi X"
 
 #: gtk/gtkfixed.c:121 gtk/gtklayout.c:612
 msgid "X position of child widget"
-msgstr "Posisi X wigdet anak"
+msgstr "Posisi X wiget anak"
 
 #: gtk/gtkfixed.c:130 gtk/gtklayout.c:621
 msgid "Y position"
@@ -2193,7 +2190,7 @@ msgstr "Posisi Y"
 
 #: gtk/gtkfixed.c:131 gtk/gtklayout.c:622
 msgid "Y position of child widget"
-msgstr "Posisi Y widget anak"
+msgstr "Posisi Y wiget anak"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
@@ -2239,7 +2236,7 @@ msgstr "Sai_z:"
 #. create the text entry widget
 #: gtk/gtkfontsel.c:469
 msgid "_Preview:"
-msgstr "_Pralihat:"
+msgstr "_Prebiu:"
 
 #: gtk/gtkfontsel.c:1285
 msgid "Font Selection"
@@ -2278,18 +2275,17 @@ msgid "Frame shadow"
 msgstr "Bayang kerangka"
 
 #: gtk/gtkframe.c:161
-#, fuzzy
 msgid "Appearance of the frame border"
-msgstr "Penampilan sempadan kerangka."
+msgstr "Penampilan sempadan kerangka"
 
 #: gtk/gtkframe.c:169
 msgid "Label widget"
-msgstr "Widget label"
+msgstr "Wiget label"
 
 #: gtk/gtkframe.c:170
 #, fuzzy
 msgid "A widget to display in place of the usual frame label"
-msgstr "Widget untuk memaparkan label kerangka biasa."
+msgstr "Wiget untuk memaparkan label kerangka biasa"
 
 #: gtk/gtkgamma.c:399
 msgid "Gamma"
@@ -2314,9 +2310,8 @@ msgid "Handle position"
 msgstr "Posisi Handle"
 
 #: gtk/gtkhandlebox.c:212
-#, fuzzy
 msgid "Position of the handle relative to the child widget"
-msgstr "Posisi handle relatif kepada widget anak."
+msgstr "Posisi pengendali relatif kepada wiget anak"
 
 #: gtk/gtkhandlebox.c:220
 msgid "Snap edge"
@@ -2424,17 +2419,16 @@ msgid "Storage type"
 msgstr "Jenis storan"
 
 #: gtk/gtkimage.c:210
-#, fuzzy
 msgid "The representation being used for image data"
-msgstr "Penyampaian digunakan oleh data imej."
+msgstr "Perwakilan digunakan oleh data imej"
 
 #: gtk/gtkimagemenuitem.c:124
 msgid "Image widget"
-msgstr "Widget imej"
+msgstr "Wiget imej"
 
 #: gtk/gtkimagemenuitem.c:125
 msgid "Child widget to appear next to the menu text"
-msgstr "Widget anak suapay muncul disebelah teks menu"
+msgstr "Wiget anak supaya muncul disebelah teks menu"
 
 #: gtk/gtkinputdialog.c:230
 msgid "Input"
@@ -2517,7 +2511,7 @@ msgstr "bersihkan"
 
 #: gtk/gtkinvisible.c:115 gtk/gtkwindow.c:553
 msgid "The screen where this window will be displayed"
-msgstr ""
+msgstr "Skrin dimana tetingkap akan dipaparkan"
 
 #: gtk/gtklabel.c:291
 #, fuzzy
@@ -2562,6 +2556,8 @@ msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline"
 msgstr ""
+"Rentetan dengan _aksara pada posisi bergantung kepada aksara pada teks untuk "
+"digarisbawahkan"
 
 #: gtk/gtklabel.c:336
 msgid "Line wrap"
@@ -2583,21 +2579,19 @@ msgstr "Samada teks label boleh dipilih dengan menggunakan tetikus."
 
 #: gtk/gtklabel.c:350
 msgid "Mnemonic key"
-msgstr "Kekunci Mnemonic"
+msgstr "Kekunci Mnemonik"
 
 #: gtk/gtklabel.c:351
-#, fuzzy
 msgid "The mnemonic accelerator key for this label"
-msgstr "Kekunci pemecut mnemonic untuk label ini."
+msgstr "Kekunci pemecut mnemonik untuk label ini"
 
 #: gtk/gtklabel.c:359
 msgid "Mnemonic widget"
-msgstr "Widget Mnemonic"
+msgstr "Wiget Mnemonik"
 
 #: gtk/gtklabel.c:360
-#, fuzzy
 msgid "The widget to be activated when the label's mnemonic key is pressed"
-msgstr "Widget untuk diaktifkan bila kekunci mnemonic label ditekan."
+msgstr "Wiget untuk diaktifkan bila kekunci mnemonik label ditekan"
 
 #: gtk/gtklayout.c:631 gtk/gtkviewport.c:134
 msgid "Horizontal adjustment"
@@ -2646,13 +2640,14 @@ msgstr "default:LTR"
 
 #: gtk/gtkmenu.c:263
 msgid "Tearoff Title"
-msgstr ""
+msgstr "Tajuk Pengoyak"
 
 #: gtk/gtkmenu.c:264
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr ""
+"Tajuk yang mungkin dipaparkan oleh pengurus tetingkap bila meni dikoyakkan"
 
 #: gtk/gtkmenu.c:379
 msgid "Can change accelerators"
@@ -2667,22 +2662,24 @@ msgstr ""
 
 #: gtk/gtkmenu.c:385
 msgid "Delay before submenus appear"
-msgstr ""
+msgstr "Selangmasa sebelum submenu muncul"
 
 #: gtk/gtkmenu.c:386
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
+"Masa minimum pentuding mesti kekal sebagai item menu sebelum submenu muncul"
 
 #: gtk/gtkmenu.c:393
 msgid "Delay before hiding a submenu"
-msgstr ""
+msgstr "Selangmasa sebelum menyorok submenu"
 
 #: gtk/gtkmenu.c:394
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
 msgstr ""
+"Masa sebelum menyorok submenu bila pentuding digerakkan ke arah submenu"
 
 #: gtk/gtkmenubar.c:157
 msgid "Style of bevel around the menubar"
@@ -2698,11 +2695,11 @@ msgstr "Jumpah ruang sempadan di antara bayang menubar dan item menu"
 
 #: gtk/gtkmenubar.c:172
 msgid "Delay before drop down menus appear"
-msgstr ""
+msgstr "Selangmasa sebelum menu jatuh bawah muncul"
 
 #: gtk/gtkmenubar.c:173
 msgid "Delay before the submenus of a menu bar appear"
-msgstr ""
+msgstr "Selangmasa sebelum submenu bagi bar menu muncul"
 
 #: gtk/gtkmessagedialog.c:106
 msgid "Image/label border"
@@ -2751,7 +2748,7 @@ msgstr "Pad X"
 #: gtk/gtkmisc.c:119
 msgid ""
 "The amount of space to add on the left and right of the widget, in pixels"
-msgstr "Jumlah ruang untuk ditambah pada kiri dan kanan widget, dalam piksel"
+msgstr "Jumlah ruang untuk ditambah pada kiri dan kanan wiget, dalam piksel"
 
 #: gtk/gtkmisc.c:128
 msgid "Y pad"
@@ -2760,7 +2757,7 @@ msgstr "Pad Y"
 #: gtk/gtkmisc.c:129
 msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
-msgstr "Jumlah ruang untuk ditambah pada atas dan bawah widget, dalam piksel"
+msgstr "Jumlah ruang untuk ditambah pada atas dan bawah wiget, dalam piksel"
 
 #: gtk/gtknotebook.c:372
 msgid "Page"
@@ -2845,33 +2842,31 @@ msgstr "Samada tab patut mempunyai saiz sama"
 
 #: gtk/gtknotebook.c:452
 msgid "Tab label"
-msgstr ""
+msgstr "Label tab"
 
 #: gtk/gtknotebook.c:453
 msgid "The string displayed on the childs tab label"
-msgstr ""
+msgstr "Rentetan dipaparkan pada label tab anak"
 
 #: gtk/gtknotebook.c:459
 msgid "Menu label"
-msgstr ""
+msgstr "Label menu"
 
 #: gtk/gtknotebook.c:460
 msgid "The string displayed in the childs menu entry"
-msgstr ""
+msgstr "Rentetan dipaparkan pada kemasukan menu anak"
 
 #: gtk/gtknotebook.c:473
-#, fuzzy
 msgid "Tab expand"
-msgstr "xpad"
+msgstr "Pengembang tab"
 
 #: gtk/gtknotebook.c:474
-#, fuzzy
 msgid "Whether to expand the childs tab or not"
-msgstr "Samada sempadan patut dipapar atau sebaliknya"
+msgstr "Samada untuk mengembangkan tab anak atau sebaliknya"
 
 #: gtk/gtknotebook.c:480
 msgid "Tab fill"
-msgstr ""
+msgstr "Isi tab"
 
 #: gtk/gtknotebook.c:481
 #, fuzzy
@@ -2880,7 +2875,7 @@ msgstr "Samada anak patut semuanya pada saiz sama."
 
 #: gtk/gtknotebook.c:487
 msgid "Tab pack type"
-msgstr ""
+msgstr "Jenis pek tab"
 
 #: gtk/gtknotebook.c:2438 gtk/gtknotebook.c:4766
 #, c-format
@@ -2927,8 +2922,7 @@ msgstr "Lebar handle"
 #: gtk/gtkpreview.c:133
 msgid ""
 "Whether the preview widget should take up the entire space it is allocated"
-msgstr ""
-"Samada widget pralihat patut mengambil seluruh ruang yang diperuntukkan"
+msgstr "Samada wiget prebiu patut mengambil seluruh ruang yang diperuntukkan"
 
 #: gtk/gtkprogress.c:127
 msgid "Activity mode"
@@ -2959,12 +2953,11 @@ msgid "Text x alignment"
 msgstr "Jajaran x Teks"
 
 #: gtk/gtkprogress.c:144
-#, fuzzy
 msgid ""
 "A number between 0.0 and 1.0 specifying the horizontal alignment of the text "
 "in the progress widget"
 msgstr ""
-"Nombor di antara 0.0 dan 1.0 menyatakan jajaran mengufuk teks pada widget "
+"Nombor di antara 0.0 dan 1.0 menyatakan jajaran mengufuk teks pada wiget "
 "progres"
 
 #: gtk/gtkprogress.c:152
@@ -2976,7 +2969,7 @@ msgid ""
 "A number between 0.0 and 1.0 specifying the vertical alignment of the text "
 "in the progress widget"
 msgstr ""
-"Nombor di antara 0.0 dan 1.0 menyatakan jajaran menegak teks pada widget "
+"Nombor di antara 0.0 dan 1.0 menyatakan jajaran menegak teks pada wiget "
 "progres"
 
 #: gtk/gtkprogressbar.c:142 gtk/gtkrange.c:284 gtk/gtkspinbutton.c:240
@@ -3057,11 +3050,11 @@ msgstr "teks untuk dipaparkan pada bar progres"
 
 #: gtk/gtkradiobutton.c:109
 msgid "Group"
-msgstr ""
+msgstr "Kumpulan"
 
 #: gtk/gtkradiobutton.c:110
 msgid "The radio button whose group this widget belongs."
-msgstr ""
+msgstr "Butang radio milik kumpulan mana wiget ini."
 
 #: gtk/gtkrange.c:275
 msgid "Update policy"
@@ -3308,9 +3301,8 @@ msgid "Style of bevel around the contents"
 msgstr "Gaya bevel sekeliling kandungannya"
 
 #: gtk/gtkscrolledwindow.c:282
-#, fuzzy
 msgid "Scrollbar spacing"
-msgstr "Jarak ruang kolum"
+msgstr "Ruangjarak bar skrol"
 
 #: gtk/gtkscrolledwindow.c:283
 #, fuzzy
@@ -3398,9 +3390,8 @@ msgid "Name of default font to use"
 msgstr "Nama bagi font default untuk digunakan"
 
 #: gtk/gtksettings.c:243
-#, fuzzy
 msgid "Icon Sizes"
-msgstr "Saiz ikon"
+msgstr "Saiz Ikon"
 
 #: gtk/gtksettings.c:244
 msgid "List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."
@@ -3531,14 +3522,13 @@ msgstr "_Tutup"
 
 #: gtk/gtkstock.c:282
 msgid "_Convert"
-msgstr ""
+msgstr "_Tukar"
 
 #: gtk/gtkstock.c:283
 msgid "_Copy"
 msgstr "_Salin"
 
 #: gtk/gtkstock.c:284
-#, fuzzy
 msgid "Cu_t"
 msgstr "Po_tong"
 
@@ -3739,6 +3729,7 @@ msgid "_Yes"
 msgstr "_Ya"
 
 #: gtk/gtkstock.c:334
+#, c-format
 msgid "Zoom _100%"
 msgstr "Zoom _100%"
 
@@ -3796,27 +3787,27 @@ msgstr "Jika BENAR, ini bermaksud sel jadual mempunyai tinggi/lebar yang sama"
 
 #: gtk/gtktable.c:202
 msgid "Left attachment"
-msgstr ""
+msgstr "Lampiran kiri"
 
 #: gtk/gtktable.c:203
 msgid "The column number to attach the left side of the child to"
-msgstr ""
+msgstr "Bilangan kolum untuk dilampirkan ke sebelah kiri wiget anak"
 
 #: gtk/gtktable.c:209
 msgid "Right attachment"
-msgstr ""
+msgstr "Lampiran kanan"
 
 #: gtk/gtktable.c:210
 msgid "the column number to attach the right side of a child widget to"
-msgstr ""
+msgstr "Bilangan kolum untuk dilampirkan ke sebelah kanan wiget anak"
 
 #: gtk/gtktable.c:216
 msgid "Top attachment"
-msgstr ""
+msgstr "Lampiran atas"
 
 #: gtk/gtktable.c:217
 msgid "The row number to attach the top of a child widget to"
-msgstr ""
+msgstr "Bilangan kolum untuk dilampirkan ke sebelah atas wiget anak"
 
 #: gtk/gtktable.c:223
 msgid "Bottom attachment"
@@ -3827,18 +3818,16 @@ msgid "The row number to attach the bottom of the child to"
 msgstr ""
 
 #: gtk/gtktable.c:230
-#, fuzzy
 msgid "Horizontal options"
-msgstr "Skala mengufuk"
+msgstr "Opsyen mengufuk"
 
 #: gtk/gtktable.c:231
 msgid "Options specifying the horizontal behaviour of the child"
 msgstr ""
 
 #: gtk/gtktable.c:237
-#, fuzzy
 msgid "Vertical options"
-msgstr "Skala menegak"
+msgstr "Opsyen menegak"
 
 #: gtk/gtktable.c:238
 msgid "Options specifying the vertical behaviour of the child"
@@ -3850,16 +3839,16 @@ msgid "Horizontal padding"
 msgstr "Jajaran mengufuk"
 
 #: gtk/gtktable.c:245
-#, fuzzy
 msgid ""
 "Extra space to put between the child and its left and right neighbors, in "
 "pixels"
-msgstr "Jumlah ruang untuk ditambah pada kiri dan kanan widget, dalam piksel"
+msgstr ""
+"Jumlah ruang ekstra untuk diletakkan diantara anak dgn jiran kiri dan kanan, "
+"dalam piksel"
 
 #: gtk/gtktable.c:251
-#, fuzzy
 msgid "Vertical padding"
-msgstr "Padding dalaman"
+msgstr "Padding Menegak"
 
 #: gtk/gtktable.c:252
 msgid ""
@@ -3869,7 +3858,7 @@ msgstr ""
 
 #: gtk/gtktext.c:602
 msgid "Horizontal adjustment for the text widget"
-msgstr "Pengubahsuaian Mengufuk bagi widget teks"
+msgstr "Pengubahsuaian Mengufuk bagi wiget teks"
 
 #: gtk/gtktext.c:610
 msgid "Vertical adjustment for the text widget"
@@ -3881,7 +3870,7 @@ msgstr "Balut Baris"
 
 #: gtk/gtktext.c:618
 msgid "Whether lines are wrapped at widget edges"
-msgstr "Samada baris dibalut pada pinggir widget"
+msgstr "Samada baris dibalut pada pinggir wiget"
 
 #: gtk/gtktext.c:625
 msgid "Word Wrap"
@@ -3889,7 +3878,7 @@ msgstr "Balut perkataan"
 
 #: gtk/gtktext.c:626
 msgid "Whether words are wrapped at widget edges"
-msgstr ""
+msgstr "Samada perkataan dibalut pada pinggir wiget"
 
 #: gtk/gtktextbuffer.c:180
 #, fuzzy
@@ -4374,15 +4363,15 @@ msgstr "Model pagi paparan pepohon"
 
 #: gtk/gtktreeview.c:526
 msgid "Horizontal Adjustment for the widget"
-msgstr "Penyesuaian menegak bagi widget"
+msgstr "Penyesuaian menegak bagi wiget"
 
 #: gtk/gtktreeview.c:534
 msgid "Vertical Adjustment for the widget"
-msgstr "Penyesuaian menegak bagi widget"
+msgstr "Penyesuaian menegak bagi wiget"
 
 #: gtk/gtktreeview.c:541 gtk/gtktreeviewcolumn.c:185 gtk/gtkwidget.c:433
 msgid "Visible"
-msgstr "Boleh nampak"
+msgstr "Tampak"
 
 #: gtk/gtktreeview.c:542
 msgid "Show the column header buttons"
@@ -4560,11 +4549,11 @@ msgstr "Samada pengepala boleh diklik"
 
 #: gtk/gtktreeviewcolumn.c:266
 msgid "Widget"
-msgstr "Widget"
+msgstr "Wiget"
 
 #: gtk/gtktreeviewcolumn.c:267
 msgid "Widget to put in column header button instead of column title"
-msgstr "Widget untuk diletakkan oleh pengepala kolum selain dari tajuk kolum"
+msgstr "Wiget untuk diletakkan oleh pengepala kolum selain dari tajuk kolum"
 
 #: gtk/gtktreeviewcolumn.c:274
 msgid "Alignment"
@@ -4572,7 +4561,7 @@ msgstr "Jajaran"
 
 #: gtk/gtktreeviewcolumn.c:275
 msgid "X Alignment of the column header text or widget"
-msgstr "Jajaran X bagi teks pengepala kolum atau widget"
+msgstr "Jajaran X bagi teks pengepala kolum atau wiget"
 
 #: gtk/gtktreeviewcolumn.c:285
 msgid "Whether the column can be reordered around the headers"
@@ -4614,20 +4603,19 @@ msgstr ""
 
 #: gtk/gtkwidget.c:400
 msgid "Widget name"
-msgstr "Nama widget"
+msgstr "Nama wiget"
 
 #: gtk/gtkwidget.c:401
 msgid "The name of the widget"
-msgstr "Nama widget"
+msgstr "Nama bagi wiget"
 
 #: gtk/gtkwidget.c:407
 msgid "Parent widget"
-msgstr "Widget Ibu"
+msgstr "Wiget Ibubapa"
 
 #: gtk/gtkwidget.c:408
-#, fuzzy
 msgid "The parent widget of this widget. Must be a Container widget"
-msgstr "Widget ibu kepada widget ini. Mesti mengandungi widget."
+msgstr "Wiget ibubapa kepada wiget ini. Mesti mengandungi wiget"
 
 #: gtk/gtkwidget.c:415
 msgid "Width request"
@@ -4657,7 +4645,7 @@ msgstr ""
 
 #: gtk/gtkwidget.c:434
 msgid "Whether the widget is visible"
-msgstr "Samada widget boleh dilihat"
+msgstr "Samada wiget boleh dilihat"
 
 #: gtk/gtkwidget.c:440
 msgid "Sensitive"
@@ -4673,7 +4661,7 @@ msgstr "Aplikasi boleh dicat"
 
 #: gtk/gtkwidget.c:448
 msgid "Whether the application will paint directly on the widget"
-msgstr "Samada aplikasi akan cat terus pada widget"
+msgstr "Samada aplikasi akan cat terus pada wiget"
 
 #: gtk/gtkwidget.c:454
 msgid "Can focus"
@@ -4681,7 +4669,7 @@ msgstr "Boleh fokus"
 
 #: gtk/gtkwidget.c:455
 msgid "Whether the widget can accept the input focus"
-msgstr "Samada widget boleh menerima fokus input"
+msgstr "Samada wiget boleh menerima fokus input"
 
 #: gtk/gtkwidget.c:461
 msgid "Has focus"
@@ -4689,17 +4677,16 @@ msgstr "Mempunyai fokus"
 
 #: gtk/gtkwidget.c:462
 msgid "Whether the widget has the input focus"
-msgstr "Samada widget mempunyai fokus input"
+msgstr "Samada wiget mempunyai fokus input"
 
 #: gtk/gtkwidget.c:468
-#, fuzzy
 msgid "Is focus"
-msgstr "Mempunyai fokus"
+msgstr "Adalah fokus"
 
 #: gtk/gtkwidget.c:469
 #, fuzzy
 msgid "Whether the widget is the focus widget within the toplevel"
-msgstr "Samada widget adalah widget default"
+msgstr "Samada wiget adalah wiget default"
 
 #: gtk/gtkwidget.c:475
 msgid "Can default"
@@ -4707,7 +4694,7 @@ msgstr "Boleh default"
 
 #: gtk/gtkwidget.c:476
 msgid "Whether the widget can be the default widget"
-msgstr "Samada widget boleh dijadikan widget default"
+msgstr "Samada wiget boleh dijadikan wiget default"
 
 #: gtk/gtkwidget.c:482
 msgid "Has default"
@@ -4715,25 +4702,23 @@ msgstr "Mempunyai default"
 
 #: gtk/gtkwidget.c:483
 msgid "Whether the widget is the default widget"
-msgstr "Samada widget adalah widget default"
+msgstr "Samada wiget adalah wiget default"
 
 #: gtk/gtkwidget.c:489
 msgid "Receives default"
-msgstr "menerima default"
+msgstr "Menerima default"
 
 #: gtk/gtkwidget.c:490
-#, fuzzy
 msgid "If TRUE, the widget will receive the default action when it is focused"
-msgstr "Jika BENAR, semua widget akan menerima aksi default bila ianya difokus"
+msgstr "Jika BENAR, wiget akan menerima aksi default bila ianya difokus"
 
 #: gtk/gtkwidget.c:496
 msgid "Composite child"
 msgstr "Anak Gubahan"
 
 #: gtk/gtkwidget.c:497
-#, fuzzy
 msgid "Whether the widget is part of a composite widget"
-msgstr "Samada widget digubah oleh widget lain"
+msgstr "Samada wiget adalah sebahagian drpd wiget gubahan"
 
 #: gtk/gtkwidget.c:503
 msgid "Style"
@@ -4752,56 +4737,50 @@ msgid "Events"
 msgstr "Acara"
 
 #: gtk/gtkwidget.c:511
-#, fuzzy
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr ""
-"Topengan acara yang menentukan jenis apa GdkEvents yang widget ini perolehi."
+"Topengan acara yang menentukan jenis apa GdkEvents yang wiget ini perolehi"
 
 #: gtk/gtkwidget.c:518
 msgid "Extension events"
 msgstr "Acara peluasan"
 
 #: gtk/gtkwidget.c:519
-#, fuzzy
 msgid "The mask that decides what kind of extension events this widget gets"
 msgstr ""
-"Topengan yang menentukan jenis acara perluasan iapa yang widget perolehi."
+"Topengan yang menentukan jenis acara perluasan iapa yang wiget perolehi"
 
 #: gtk/gtkwidget.c:1098
 msgid "Interior Focus"
-msgstr "Fokus dalaman"
+msgstr "Fokus Dalaman"
 
 #: gtk/gtkwidget.c:1099
-#, fuzzy
 msgid "Whether to draw the focus indicator inside widgets"
-msgstr "Samada melukis penunjuk fokus di dlaam widget."
+msgstr "Samada melukis penunjuk fokus di dalam widet"
 
 #: gtk/gtkwidget.c:1105
 msgid "Focus linewidth"
 msgstr "Fokus lebar garisan"
 
 #: gtk/gtkwidget.c:1106
-#, fuzzy
 msgid "Width, in pixels, of the focus indicator line"
-msgstr "Lebar, dalam piksel penunjuk garisan"
+msgstr "Lebar, dalam piksel, bagi garisan penunjuk fokus"
 
 #: gtk/gtkwidget.c:1112
 msgid "Focus line dash pattern"
 msgstr "Corak dash garisan fokus"
 
 #: gtk/gtkwidget.c:1113
-#, fuzzy
 msgid "Dash pattern used to draw the focus indicator"
-msgstr "Corak dash yang digunakan untuk melukis penunjuk fokus."
+msgstr "Corak dash yang digunakan untuk melukis penunjuk fokus"
 
 #: gtk/gtkwidget.c:1118
 msgid "Focus padding"
 msgstr "Padding fokus"
 
 #: gtk/gtkwidget.c:1119
-#, fuzzy
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
-msgstr "Lebar, dalam piksel, di antara penunjuk fokus dan kekotak widget."
+msgstr "Lebar, dalam piksel, di antara penunjuk fokus dan kekotak wiget"
 
 #: gtk/gtkwidget.c:1124
 msgid "Cursor color"
@@ -4931,17 +4910,15 @@ msgstr "Ikon"
 
 #: gtk/gtkwindow.c:545
 msgid "Icon for this window"
-msgstr "Ikon untuk tetingkap ini"
+msgstr "Ikon bagi tetingkap ini"
 
 #: gtk/gtkwindow.c:560
-#, fuzzy
 msgid "Is Active"
-msgstr "Aktif"
+msgstr "Adalah Aktif"
 
 #: gtk/gtkwindow.c:561
-#, fuzzy
 msgid "Whether the toplevel is the current active window"
-msgstr "Samada widget adalah widget default"
+msgstr "Samada aras atas adalah tetingkap aktif semasa"
 
 #: gtk/gtkwindow.c:568
 msgid "Focus in Toplevel"
@@ -5040,41 +5017,3 @@ msgstr "Gaya ruang"
 #, fuzzy
 msgid "How to draw the input method statusbar"
 msgstr "Bagaimana hendak melukis toolbar"
-
-#~ msgid ""
-#~ "Whether the arrow keys work, even if the entry contents are not in the "
-#~ "list"
-#~ msgstr ""
-#~ "Samada kekunci panah berkerja, walaupun jika kandungan kemasukan tidak "
-#~ "tersenarai"
-
-#, fuzzy
-#~ msgid "The leftmost column of the child"
-#~ msgstr "Tajuk kepada tetingkap"
-
-#, fuzzy
-#~ msgid "The rightmost column of the child"
-#~ msgstr "Jajaran Y anak"
-
-#, fuzzy
-#~ msgid "The uppermost row of the child"
-#~ msgstr "Bilangan baris pada jadual"
-
-#, fuzzy
-#~ msgid "The lowest row of the child"
-#~ msgstr "Jajaran Y anak"
-
-#~ msgid "Don't know how to load the animation in file '%s'"
-#~ msgstr "Tak tahu bagaimana untuk memuatkan animasi pada fail '%s'"
-
-#~ msgid "Don't know how to load the image in file '%s'"
-#~ msgstr "Tak tahu bagaimana untuk memuatkan imej pada fail '%s'"
-
-#~ msgid "Failure reading ICO: %s"
-#~ msgstr "Gagal membaca ICO: %s"
-
-#~ msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
-#~ msgstr "Fail ICO kehilangan sebahagian data (mungkin ianya dikerat?)"
-
-#~ msgid "Insufficient memory to load TGA image"
-#~ msgstr "Tak cukup memori untuk memuatkan imej TGA"
