@@ -1,3 +1,10 @@
+1999-11-02  Larry Ewing  <lewing@gimp.org>
+
+	* src/gnome-canvas-pixbuf.c (gnome_canvas_pixbuf_render): add aa
+	render function.
+	(gnome_canvas_pixbuf_class_init): add gnome_canvas_pixbuf_render
+	to class.
+	
 1999-11-02  Federico Mena Quintero  <federico@redhat.com>
 
 	* src/gnome-canvas-pixbuf.c (compute_render_affine): Moved the

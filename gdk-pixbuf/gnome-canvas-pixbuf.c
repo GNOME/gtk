@@ -24,6 +24,7 @@
 #include <math.h>
 #include "gdk-pixbuf.h"
 #include "gnome-canvas-pixbuf.h"
+#include "libart_lgpl/art_rgb_pixbuf_affine.h"
 
 
 
@@ -79,6 +80,7 @@ static double gnome_canvas_pixbuf_point (GnomeCanvasItem *item, double x, double
 					 GnomeCanvasItem **actual_item);
 static void gnome_canvas_pixbuf_bounds (GnomeCanvasItem *item,
 					double *x1, double *y1, double *x2, double *y2);
+static void gnome_canvas_pixbuf_render (GnomeCanvasItem *item, GnomeCanvasBuf *buf);
 
 static GnomeCanvasItemClass *parent_class;
 
@@ -152,6 +154,7 @@ gnome_canvas_pixbuf_class_init (GnomeCanvasPixbufClass *class)
 	item_class->draw = gnome_canvas_pixbuf_draw;
 	item_class->point = gnome_canvas_pixbuf_point;
 	item_class->bounds = gnome_canvas_pixbuf_bounds;
+	item_class->render = gnome_canvas_pixbuf_render;
 }
 
 /* Object initialization function for the pixbuf canvas item */
@@ -669,6 +672,34 @@ transform_pixbuf (guchar *dest, int x, int y, int width, int height, int rowstri
 				*d++ = 255; /* opaque */
 		}
 	}
+}
+
+/* Render for the pixbuf canvas item */
+static void
+gnome_canvas_pixbuf_render (GnomeCanvasItem *item, GnomeCanvasBuf *buf)
+{
+	GnomeCanvasPixbuf *gcp;
+	PixbufPrivate *priv;
+	double i2c[6], render_affine[6];
+
+	gcp = GNOME_CANVAS_PIXBUF (item);
+	priv = gcp->priv;
+
+	if (!priv->pixbuf)
+		return;
+
+	gnome_canvas_item_i2c_affine (item, i2c);
+	compute_render_affine (gcp, render_affine, i2c);
+        gnome_canvas_buf_ensure_buf (buf);
+
+	art_rgb_pixbuf_affine (buf->buf,
+			buf->rect.x0, buf->rect.y0, buf->rect.x1, buf->rect.y1,
+			buf->buf_rowstride,
+			priv->pixbuf->art_pixbuf,
+			render_affine,
+			ART_FILTER_NEAREST, NULL);
+
+	buf->is_bg = 0;
 }
 
 /* Draw handler for the pixbuf canvas item */
