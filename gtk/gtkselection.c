@@ -58,6 +58,10 @@
 #include "gtkmain.h"
 #include "gtkselection.h"
 
+#ifdef GDK_WINDOWING_X11
+#include "x11/gdkx.h"
+#endif
+
 /* #define DEBUG_SELECTION */
 
 /* Maximum size of a sent chunk, in bytes. Also the default size of
@@ -1085,9 +1089,9 @@ gboolean
 _gtk_selection_request (GtkWidget *widget,
 			GdkEventSelection *event)
 {
+  GdkDisplay *display = gtk_widget_get_display (widget);
   GtkIncrInfo *info;
   GList *tmp_list;
-  guchar *mult_atoms;
   int i;
   
   if (initialize)
@@ -1119,10 +1123,10 @@ _gtk_selection_request (GtkWidget *widget,
   
   /* Create GdkWindow structure for the requestor */
   
-  info->requestor = gdk_window_lookup_for_display (gtk_widget_get_display (widget),
+  info->requestor = gdk_window_lookup_for_display (display,
 						   event->requestor);
   if (!info->requestor)
-    info->requestor = gdk_window_foreign_new_for_display (gtk_widget_get_display (widget),
+    info->requestor = gdk_window_foreign_new_for_display (display,
 							  event->requestor);
   
   /* Determine conversions we need to perform */
@@ -1130,6 +1134,7 @@ _gtk_selection_request (GtkWidget *widget,
   if (event->target == gtk_selection_atoms[MULTIPLE])
     {
       GdkAtom  type;
+      guchar  *mult_atoms;
       gint     format;
       gint     length;
       
@@ -1140,7 +1145,7 @@ _gtk_selection_request (GtkWidget *widget,
 			     0, GTK_SELECTION_MAX_SIZE, FALSE,
 			     &type, &format, &length, &mult_atoms))
 	{
-	  gdk_selection_send_notify_for_display (gtk_widget_get_display (widget),
+	  gdk_selection_send_notify_for_display (display,
 						 event->requestor, 
 						 event->selection,
 						 event->target, 
@@ -1151,14 +1156,37 @@ _gtk_selection_request (GtkWidget *widget,
 	  return TRUE;
 	}
       gdk_error_trap_pop ();
-      
-      info->num_conversions = length / (2*sizeof (GdkAtom));
-      info->conversions = g_new (GtkIncrConversion, info->num_conversions);
-      
-      for (i=0; i<info->num_conversions; i++)
+
+      /* This is annoying; the ICCCM doesn't specify the property type
+       * used for the property contents, so the autoconversion for
+       * ATOM / ATOM_PAIR in GDK doesn't work properly.
+       */
+#ifdef GDK_WINDOWING_X11
+      if (type != GDK_SELECTION_TYPE_ATOM &&
+	  type != gdk_atom_intern ("ATOM_PAIR", FALSE))
 	{
-	  info->conversions[i].target = ((GdkAtom *)mult_atoms)[2*i];
-	  info->conversions[i].property = ((GdkAtom *)mult_atoms)[2*i+1];
+	  info->num_conversions = length / (2*sizeof (glong));
+	  info->conversions = g_new (GtkIncrConversion, info->num_conversions);
+	  
+	  for (i=0; i<info->num_conversions; i++)
+	    {
+	      info->conversions[i].target = gdk_x11_xatom_to_atom_for_display (display,
+									       ((glong *)mult_atoms)[2*i]);
+	      info->conversions[i].property = gdk_x11_xatom_to_atom_for_display (display,
+										 ((glong *)mult_atoms)[2*i + 1]);
+	    }
+	}
+      else
+#endif
+	{
+	  info->num_conversions = length / (2*sizeof (GdkAtom));
+	  info->conversions = g_new (GtkIncrConversion, info->num_conversions);
+	  
+	  for (i=0; i<info->num_conversions; i++)
+	    {
+	      info->conversions[i].target = ((GdkAtom *)mult_atoms)[2*i];
+	      info->conversions[i].property = ((GdkAtom *)mult_atoms)[2*i+1];
+	    }
 	}
     }
   else				/* only a single conversion */
@@ -1167,7 +1195,6 @@ _gtk_selection_request (GtkWidget *widget,
       info->num_conversions = 1;
       info->conversions[0].target = event->target;
       info->conversions[0].property = event->property;
-      mult_atoms = (guchar *)info->conversions;
     }
   
   /* Loop through conversions and determine which of these are big
@@ -1194,7 +1221,6 @@ _gtk_selection_request (GtkWidget *widget,
       
       if (data.length < 0)
 	{
-	  ((GdkAtom *)mult_atoms)[2*i+1] = GDK_NONE;
 	  info->conversions[i].property = GDK_NONE;
 	  continue;
 	}
@@ -1256,10 +1282,17 @@ _gtk_selection_request (GtkWidget *widget,
      conversions succeeded */
   if (event->target == gtk_selection_atoms[MULTIPLE])
     {
+      GdkAtom *mult_atoms = g_new (GdkAtom, 2 * info->num_conversions);
+      for (i = 0; i < info->num_conversions; i++)
+	{
+	  mult_atoms[2*i] = info->conversions[i].target;
+	  mult_atoms[2*i+1] = info->conversions[i].property;
+	}
+      
       gdk_property_change (info->requestor, event->property,
 			   gdk_atom_intern ("ATOM_PAIR", FALSE), 32, 
 			   GDK_PROP_MODE_REPLACE,
-			   mult_atoms, 2*info->num_conversions);
+			   (guchar *)mult_atoms, 2*info->num_conversions);
       g_free (mult_atoms);
     }
 

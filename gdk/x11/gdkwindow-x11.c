@@ -899,6 +899,9 @@ _gdk_windowing_window_destroy (GdkWindow *window,
 	  xevent.data.l[0] = gdk_x11_get_xatom_by_name_for_display (GDK_WINDOW_DISPLAY (window),
 								    "WM_DELETE_WINDOW");
 	  xevent.data.l[1] = CurrentTime;
+	  xevent.data.l[2] = 0;
+	  xevent.data.l[3] = 0;
+	  xevent.data.l[4] = 0;
 	  
 	  XSendEvent (GDK_WINDOW_XDISPLAY (window),
 		      GDK_WINDOW_XID (window),
@@ -1565,6 +1568,10 @@ gdk_window_focus (GdkWindow *window,
 									"_NET_ACTIVE_WINDOW");
       xev.xclient.format = 32;
       xev.xclient.data.l[0] = 0;
+      xev.xclient.data.l[1] = 0;
+      xev.xclient.data.l[2] = 0;
+      xev.xclient.data.l[3] = 0;
+      xev.xclient.data.l[4] = 0;
       
       XSendEvent (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XROOTWIN (window), False,
                   SubstructureRedirectMask | SubstructureNotifyMask,
@@ -1742,6 +1749,8 @@ gdk_wmspec_change_state (gboolean   add,
   xev.xclient.data.l[0] = add ? _NET_WM_STATE_ADD : _NET_WM_STATE_REMOVE;
   xev.xclient.data.l[1] = gdk_x11_atom_to_xatom_for_display (display, state1);
   xev.xclient.data.l[2] = gdk_x11_atom_to_xatom_for_display (display, state2);
+  xev.xclient.data.l[3] = 0;
+  xev.xclient.data.l[4] = 0;
   
   XSendEvent (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XROOTWIN (window), False,
 	      SubstructureRedirectMask | SubstructureNotifyMask,
@@ -3473,6 +3482,10 @@ gdk_window_stick (GdkWindow *window)
       xev.xclient.format = 32;
 
       xev.xclient.data.l[0] = 0xFFFFFFFF;
+      xev.xclient.data.l[1] = 0;
+      xev.xclient.data.l[2] = 0;
+      xev.xclient.data.l[3] = 0;
+      xev.xclient.data.l[4] = 0;
 
       XSendEvent (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XROOTWIN (window), False,
                   SubstructureRedirectMask | SubstructureNotifyMask,
@@ -3537,6 +3550,10 @@ gdk_window_unstick (GdkWindow *window)
           xev.xclient.format = 32;
 
           xev.xclient.data.l[0] = *current_desktop;
+          xev.xclient.data.l[1] = 0;
+          xev.xclient.data.l[2] = 0;
+          xev.xclient.data.l[3] = 0;
+          xev.xclient.data.l[4] = 0;
       
           XSendEvent (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XROOTWIN (window), False,
                       SubstructureRedirectMask | SubstructureNotifyMask,

@@ -1,7 +1,19 @@
+Tue May 20 15:48:45 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkdnd-x11.c gdk/x11/gdkwindow-x11.c: Comprehensively
+	zero all unused parts of client messages (Mainly Motif DND
+	and EWMH). Also, fix a couple places where we were putting
+	contents into Motif DND messages that didn't belong.
+	(#113361, EWMH problem reported by Lubos Lunak)
+
+	* gtk/gtkselection.c (_gtk_selection_request): Handle the
+	case where the property type for the multiple atoms is
+	ATOM_PAIR by doing the conversions ourselve. This is
+	needed for Xt inter-operation.
+
 2003-05-19 Arafat Medini <lumina@silverpen.de>
 
-	* ar.po: Added Arabic translation.
-
+	* configure.in: Added ar to ALL_LINGUAS
 
 2003-05-19  Matthias Clasen  <maclas@gmx.de>
 

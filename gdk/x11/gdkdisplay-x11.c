@@ -823,6 +823,12 @@ broadcast_xmessage   (GdkDisplay   *display,
             ++dest;
             ++src;
           }
+
+	while (dest != dest_end)
+	  {
+	    *dest = 0;
+	    ++dest;
+	  }
         
         XSendEvent (xdisplay,
                     xroot_window,
