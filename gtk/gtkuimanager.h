@@ -63,8 +63,6 @@ struct _GtkUIManagerClass {
 
   void (* add_widget)    (GtkUIManager *merge, 
                           GtkWidget    *widget);
-  void (* remove_widget) (GtkUIManager *merge, 
-                          GtkWidget    *widget);
   void (* changed)       (GtkUIManager *merge);
 
   /* Padding for future expansion */

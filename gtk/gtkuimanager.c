@@ -139,7 +139,6 @@ static void  gtk_ui_manager_ensure_update  (GtkUIManager *self);
 enum 
 {
   ADD_WIDGET,
-  REMOVE_WIDGET,
   CHANGED,
   LAST_SIGNAL
 };
@@ -235,14 +234,6 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
 		  G_TYPE_NONE, 1, 
 		  GTK_TYPE_WIDGET);
 
-  merge_signals[REMOVE_WIDGET] =
-    g_signal_new ("remove_widget",
-		  G_OBJECT_CLASS_TYPE (klass),
-		  G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE,
-		  G_STRUCT_OFFSET (GtkUIManagerClass, remove_widget), NULL, NULL,
-		  g_cclosure_marshal_VOID__OBJECT,
-		  G_TYPE_NONE, 1, 
-		  GTK_TYPE_WIDGET);  
   /**
    * GtkUIManager::changed:
    * @merge: a #GtkUIManager

@@ -400,7 +400,6 @@ gtk_action_group_add_actions_full (GtkActionGroup *action_group,
  * radio action to create.
  * 
  * Since: 2.4
- * 
  **/
 void            
 gtk_action_group_add_radio_actions (GtkActionGroup      *action_group,
@@ -414,6 +413,20 @@ gtk_action_group_add_radio_actions (GtkActionGroup      *action_group,
 					   on_change, user_data, NULL);
 }
 
+/**
+ * gtk_action_group_add_radio_actions_full:
+ * @action_group: the action group
+ * @entries: an array of radio action descriptions
+ * @n_entries: the number of entries
+ * @on_change: the callback to connect to the changed signal
+ * @user_data: data to pass to the action callbacks
+ * @destroy: destroy notification callback for @user_data
+ *
+ * This variant of gtk_action_group_add_radio_actions() adds a 
+ * #GDestroyNotify callback for @user_data. 
+ * 
+ * Since: 2.4
+ **/
 void            
 gtk_action_group_add_radio_actions_full (GtkActionGroup      *action_group,
 					 GtkRadioActionEntry *entries,
