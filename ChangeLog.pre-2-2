@@ -1,3 +1,7 @@
+Mon Feb 15 22:55:50 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* NEWS: Updated for 1.1.16.
+
 Mon Feb 15 19:36:57 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtklabel.c (gtk_label_finalize): Free

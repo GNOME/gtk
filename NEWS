@@ -1,3 +1,22 @@
+Overview of Changes in GTK+ 1.1.16:
+
+* Major fixes and improvements for handlebox
+* A change to the way widget->requisition works. Now,
+  widget->requisition is always what the widget requested,
+  unmodified by the usize. See Changes-1.2.txt for details.
+  This correct various bugs with gtk_widget_set_usize().
+* Fixes for XIM on X11R5 systems
+* Don't allow cut-and-paste of text in password-style entries
+* --enable-debug is now on by default for the development releaes.
+  (When compiling for "production", use --enable-debug=minimum)
+* Handle systems where Helvetica is not present more gracefully
+* Fixes for memory leaks
+* CList and CTree fixes
+* Bug fixes for drawing problems. 
+* Miscellaneous bug fixes to GtkLabel, GtkCList, GtkCTree,
+  GtkColorsel, Focusing, DND
+* Tutorial improvements
+
 Overview of Changes in GTK+ 1.1.15:
 
 * Tutorial Updates
