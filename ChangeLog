@@ -1,3 +1,7 @@
+2004-08-24  Matthias Clasen  <mclasen@redhat.com>
+
+	* NEWS: Updates for 2.5.2
+
 Wed Aug 25 00:22:48 2004  Søren Sandmann  <sandmann@redhat.com>
 
 	* gtk/gtksequence.c: Remove debug spew
@@ -119,7 +123,7 @@ Sun Aug 22 15:46:56 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 Sun Aug 22 13:44:53 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkpaned.c (gtk_paned_class_init): Use PROP_MAX_POSITION,
-	not PROP_MIN_POSITION for the max_position property. Fix pointet
+	not PROP_MIN_POSITION for the max_position property. Fix pointed
 	out by Tommi Komulainen.
 
 Sun Aug 22 13:32:33 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
@@ -432,7 +436,7 @@ Thu Aug 12 21:02:57 2004  Matthias Clasen  <maclas@gmx.de>
 Thu Aug 12 01:35:46 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkiconview.c: Make the icon view accessible by
-	implementing the necesssary ATK interfaces.  (#149728,
+	implementing the necessary ATK interfaces.  (#149728,
 	Padraig O'Briain)
 
 Thu Aug 12 00:02:29 2004  Matthias Clasen  <maclas@gmx.de

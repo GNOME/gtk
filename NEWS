@@ -1,3 +1,72 @@
+Overview of Changes from GTK+ 2.5.1 to GTK+ 2.5.2
+=================================================
+* GtkFileChooserButton
+ - New widget to go along with GtkFontButton and GtkColorButton
+   for use in preference dialogs.  [James M. Cape]
+* GtkFileChooser
+ - Add getter and setter for the ::show-hidden property [Jeff Franks]
+ - Allow paths to be entered as part of the filename. [Federico Mena Quintero]
+ - Make separator in bookmarks pane unselectable [Matthias Clasen]
+ - Improve activation on focus [Federico]
+ - Avoid warnings when opened on non-default screens [Abel Daniel]
+ - Fix some memory leaks [Federico]
+* GtkEntryCompletion
+ - Warn if text column has wrong type [Fernando San Martin Woerner,
+   Gustavo Carneiro]
+* GtkTextView
+ - Obey the Pango backspace_deletes_character 
+   attribute [Noah Levitt, Teppitak Karoonboonyanan]
+* GtkTreeView
+ - Add hover-expand mode [Matthias]
+ - Fix fixed height mode [Michael Vogt, Tim-Philipp Müller, Pawel Salek]
+ - Reimplement GtkListStore on top of a splay tree [Soeren Sandmann]
+* GtkEntry
+ - Track the selection more accurately when dragging and
+   selecting [Soeren]
+* GtkComboBox
+ - Support trees in combo boxes [Matt Walton, Matthias]
+ - Optimize non-spanning gridded layouts [Lorenzo Gil Sanchez, Matthias]
+ - Handle sensitivity changes properly [Matthias]
+ - Add a ::focus-on-click property [Matthias]
+* GtkIconView
+ - Fix BROWSE selection mode [Matthias]
+ - Make accessible [Padraig O'Briain]
+* GtkAboutDialog 
+ - Change the API to be more binding-friendly [Oliver Andrieu]
+* GtkUIManager
+ - Accept paths with leading '/' everywhere. [David Malcolm]
+ - Make GtkActionEntry* arguments const [Mariano Suarez-Alvarez]
+ - Add a way to suppress overflow menu items [Christian Persch]
+* GtkPlug/GtkSocket
+ - Use the sync counter mechanism to speed up resizes  [Soeren]
+* GDK
+ - Support XDND v5 [Owen Taylor, Matthias]
+ - Complete the _NEW_WM_USER_TIME implementation [Elijah Newren]
+ - Update the _NET_ACTIVE_WINDOW implementation [Elijah]
+* gdk-pixbuf
+ - Avoid infinite loops for bad BMPs [Chris Evans, Manish Singh]
+ - Fix a problem with GDK_INTERP_NEAREST scaling which caused
+   Nautilus thumbnails to be misdrawn [Christoph Fergeau]
+ - Avoid segfaults in gdk-pixbuf-csource [Matthias]
+ - Fix progressive loading of 8bit pcx files [Magnus Bergman]
+ - Handle edge pixels consistently [Brian Cameron, Matthias]
+ - Handle OS/2 BMPs [Jon-Kare Hellan]
+* Performance 
+ - Get rid of many PLT entries for internally used exported symbols,
+   and clean up the ABI at the same time and make make check check the
+   list of exported symbols.  [Arjan van de Ven, Matthias]
+* Look up icon themes in the directories specified in the
+  icon theme spec  [Matthias]
+* Win32 bug fixes [Robert Ögren, Hans Breuer, Tor Lillqvist, Tim Evans]
+* Other bug fixes [Matthias, Soeren, Pawel, David, Tor, Gustavo,
+  Olivier, Manish, Robert, Christian Biere, Markku Vire, Markus Lausser, 
+  Thomas Leonard, Morten Welinder, Torsten Schoenfeld, Tim Janik, 
+  Tomislav Jonjic, Tommi Komulainen, Philip Langdale, Rich Wareham,
+  Christian Persch, Vincent Noel, Christophe Fergeau]
+* Documentation improvements [Matthias, Mariano, Axel Simon, 
+  Jonathan Blandford]
+* New and updated translations (ang,br,bs,eu,lt,wa,zh_CN)
+
 Overview of Changes from GTK+ 2.5.0 to GTK+ 2.5.1
 =================================================
 * GtkTreeView
