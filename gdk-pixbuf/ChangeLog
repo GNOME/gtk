@@ -1,3 +1,10 @@
+Sat Jan 19 20:49:20 2002  Manish Singh  <yosh@gimp.org>
+
+	* io-jpeg.c, io-png.c: Made sure all the error cases involving
+	jpeg or png load/saves clean themselves up properly. Marked some
+	variables needed for cleanup volatile so they aren't clobbered by
+	setjmp.
+
 Fri Jan 11 18:05:07 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* pixops/pixops.c: Fix integer overflow for the values

@@ -211,8 +211,8 @@ gdk_pixbuf__png_image_load (FILE *f, GError **error)
         gboolean failed = FALSE;
 	gint i, ctype, bpp;
 	png_uint_32 w, h;
-	png_bytepp rows;
-	guchar *pixels;
+	png_bytepp volatile rows = NULL;
+	guchar * volatile pixels = NULL;
         gint    num_texts;
         gchar **options = NULL;
 
@@ -236,6 +236,12 @@ gdk_pixbuf__png_image_load (FILE *f, GError **error)
 	}
 
 	if (setjmp (png_ptr->jmpbuf)) {
+	    	if (rows)
+		  	g_free (rows);
+
+		if (pixels)
+			g_free (pixels);
+
 		png_destroy_read_struct (&png_ptr, &info_ptr, &end_info);
 		return NULL;
 	}
@@ -728,6 +734,7 @@ gdk_pixbuf__png_image_save (FILE          *f,
        int has_alpha;
        int bpc;
        int num_keys;
+       gboolean success = TRUE;
 
        num_keys = 0;
 
@@ -802,12 +809,12 @@ gdk_pixbuf__png_image_save (FILE          *f,
 
        info_ptr = png_create_info_struct (png_ptr);
        if (info_ptr == NULL) {
-               png_destroy_write_struct (&png_ptr, (png_infopp) NULL);
-               return FALSE;
+	       success = FALSE;
+	       goto cleanup;
        }
        if (setjmp (png_ptr->jmpbuf)) {
-               png_destroy_write_struct (&png_ptr, (png_infopp) NULL);
-               return FALSE;
+	       success = FALSE;
+	       goto cleanup;
        }
 
        if (num_keys > 0) {
@@ -842,6 +849,8 @@ gdk_pixbuf__png_image_save (FILE          *f,
        }
 
        png_write_end (png_ptr, info_ptr);
+
+cleanup:
        png_destroy_write_struct (&png_ptr, (png_infopp) NULL);
 
        if (num_keys > 0) {
@@ -850,7 +859,7 @@ gdk_pixbuf__png_image_save (FILE          *f,
                g_free (text_ptr);
        }
 
-       return TRUE;
+       return success;
 }
 
 

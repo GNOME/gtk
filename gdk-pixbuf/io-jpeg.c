@@ -182,7 +182,7 @@ static GdkPixbuf *
 gdk_pixbuf__jpeg_image_load (FILE *f, GError **error)
 {
 	gint w, h, i;
-	guchar *pixels = NULL;
+	guchar * volatile pixels = NULL;
 	guchar *dptr;
 	guchar *lines[4]; /* Used to expand rows, via rec_outbuf_height, 
                            * from the header file: 
@@ -203,7 +203,7 @@ gdk_pixbuf__jpeg_image_load (FILE *f, GError **error)
 	if (sigsetjmp (jerr.setjmp_buffer, 1)) {
 		/* Whoops there was a jpeg error */
 		if (pixels)
-			free (pixels);
+			g_free (pixels);
 
 		jpeg_destroy_decompress (&cinfo);
 		return NULL;
@@ -719,7 +719,7 @@ gdk_pixbuf__jpeg_image_save (FILE          *f,
        cinfo.err = jpeg_std_error (&(jerr.pub));
        if (sigsetjmp (jerr.setjmp_buffer, 1)) {
                jpeg_destroy_compress (&cinfo);
-               free (buf);
+               g_free (buf);
                return FALSE;
        }
 
@@ -754,7 +754,7 @@ gdk_pixbuf__jpeg_image_save (FILE          *f,
        
        /* finish off */
        jpeg_finish_compress (&cinfo);   
-       free (buf);
+       g_free (buf);
        return TRUE;
 }
 
