@@ -909,3 +909,14 @@ g_parse_debug_string  (const gchar *string,
   return result;
 }
 
+guint
+g_direct_hash(gpointer key)
+{
+	return (guint)key;
+}
+
+gint
+g_direct_compare(gpointer a, gpointer b)
+{
+	return (gint)b - (gint)a;
+}
