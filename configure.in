@@ -102,6 +102,12 @@ AM_CONFIG_HEADER(config.h)
 dnl Initialize libtool
 AM_PROG_LIBTOOL
 
+dnl Set AS and ASFLAGS so that automake 1.5 will be happy
+AS="\${CC}"
+ASFLAGS="\${CFLAGS}"
+AC_SUBST(AS)
+AC_SUBST(ASFLAGS)
+
 dnl Initialize maintainer mode
 AM_MAINTAINER_MODE
 
