@@ -77,7 +77,6 @@ struct _GdkDisplayX11
 
   gboolean use_xshm;
   gboolean have_shm_pixmaps;
-  GdkTristate have_shape;
   GdkTristate gravity_works;
   GdkTristate have_render;
   

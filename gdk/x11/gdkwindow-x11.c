@@ -3033,22 +3033,14 @@ gdk_window_add_colormap_windows (GdkWindow *window)
 static gboolean
 gdk_window_have_shape_ext (GdkDisplay *display)
 {
-  GdkDisplayX11 *display_x11;
-  
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
+#ifdef HAVE_SHAPE_EXT
+  int ignore;
 
-  display_x11 = GDK_DISPLAY_X11 (display);
-  
-  if (display_x11->have_shape == GDK_UNKNOWN)
-    {
-      int ignore;
-      if (XQueryExtension (display_x11->xdisplay, "SHAPE", &ignore, &ignore, &ignore))
-	display_x11->have_shape = GDK_YES;
-      else
-	display_x11->have_shape = GDK_NO;
-    }
-  
-  return (display_x11->have_shape == GDK_YES);
+  return XShapeQueryExtension (GDK_DISPLAY_XDISPLAY (display),
+			       &ignore, &ignore);
+#else
+  return 0;
+#endif  
 }
 
 #define WARN_SHAPE_TOO_BIG() g_warning ("GdkWindow is too large to allow the use of shape masks or shape regions.")

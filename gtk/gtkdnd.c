@@ -1077,7 +1077,7 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
 	      }
 	  }
 
-	gdk_window_get_origin (toplevel->window, &tx, &ty);
+	gdk_window_get_position (toplevel->window, &tx, &ty);
 
 	data.x = event->dnd.x_root - tx;
 	data.y = event->dnd.y_root - ty;
@@ -1838,14 +1838,42 @@ gtk_drag_begin (GtkWidget         *widget,
   GdkDragAction possible_actions, suggested_action;
   GdkDragContext *context;
   GtkWidget *ipc_widget;
-
+  GdkCursor *cursor;
+ 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   g_return_val_if_fail (GTK_WIDGET_REALIZED (widget), NULL);
   g_return_val_if_fail (target_list != NULL, NULL);
 
+  ipc_widget = gtk_drag_get_ipc_widget (gtk_widget_get_screen (widget));
+  
+  gtk_drag_get_event_actions (event, button, actions,
+			      &suggested_action, &possible_actions);
+  
+  cursor = gtk_drag_get_cursor (gtk_widget_get_display (widget), suggested_action);
+  
   if (event)
     time = gdk_event_get_time (event);
 
+  if (gdk_pointer_grab (ipc_widget->window, FALSE,
+			GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK |
+			GDK_BUTTON_RELEASE_MASK, NULL,
+			cursor, time) != 0)
+    {
+      gtk_drag_release_ipc_widget (ipc_widget);
+      return NULL;
+    }
+
+  if (gdk_keyboard_grab (ipc_widget->window, FALSE, time) != 0)
+    {
+      gtk_drag_release_ipc_widget (ipc_widget);
+      return NULL;
+    }
+
+  /* We use a GTK grab here to override any grabs that the widget
+   * we are dragging from might have held
+   */
+  gtk_grab_add (ipc_widget);
+  
   tmp_list = g_list_last (target_list->list);
   while (tmp_list)
     {
@@ -1855,7 +1883,6 @@ gtk_drag_begin (GtkWidget         *widget,
       tmp_list = tmp_list->prev;
     }
 
-  ipc_widget = gtk_drag_get_ipc_widget (gtk_widget_get_screen (widget));
   source_widgets = g_slist_prepend (source_widgets, ipc_widget);
 
   context = gdk_drag_begin (ipc_widget->window, targets);
@@ -1869,22 +1896,17 @@ gtk_drag_begin (GtkWidget         *widget,
   info->widget = gtk_widget_ref (widget);
   
   info->button = button;
+  info->cursor = cursor;
   info->target_list = target_list;
   gtk_target_list_ref (target_list);
 
   info->possible_actions = actions;
 
-  info->cursor = NULL;
   info->status = GTK_DRAG_STATUS_DRAG;
   info->last_event = NULL;
   info->selections = NULL;
   info->icon_window = NULL;
   info->destroy_icon = FALSE;
-
-  gtk_drag_get_event_actions (event, info->button, actions,
-			      &suggested_action, &possible_actions);
-
-  info->cursor = gtk_drag_get_cursor (gtk_widget_get_display (widget), suggested_action);
 
   /* Set cur_x, cur_y here so if the "drag_begin" signal shows
    * the drag icon, it will be in the right place
@@ -1920,22 +1942,6 @@ gtk_drag_begin (GtkWidget         *widget,
 		    G_CALLBACK (gtk_drag_key_cb), info);
   g_signal_connect (info->ipc_widget, "selection_get",
 		    G_CALLBACK (gtk_drag_selection_get), info);
-
-  /* We use a GTK grab here to override any grabs that the widget
-   * we are dragging from might have held
-   */
-  gtk_grab_add (info->ipc_widget);
-  if (gdk_pointer_grab (info->ipc_widget->window, FALSE,
-			GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK |
-			GDK_BUTTON_RELEASE_MASK, NULL,
-			info->cursor, time) == 0)
-    {
-      if (gdk_keyboard_grab (info->ipc_widget->window, FALSE, time) != 0)
-	{
-	  gtk_drag_cancel (info, time);
-	  return NULL;
-	}
-    }
 
   info->have_grab = TRUE;
   info->grab_time = time;
@@ -2242,6 +2248,8 @@ gtk_drag_update_icon (GtkDragSourceInfo *info)
 	gdk_window_raise (icon_window->window);
       else
 	gtk_widget_show (icon_window);
+
+      gdk_window_process_all_updates ();      
     }
 }
 
