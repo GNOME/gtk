@@ -229,7 +229,7 @@ int main (int argc, char *argv[])
 			GTK_SIGNAL_FUNC (hello), NULL);
     
     /* This will cause the window to be destroyed by calling
-     * gtk_widget_destroy(window) when "clicked.  Again, the destroy
+     * gtk_widget_destroy(window) when "clicked".  Again, the destroy
      * signal could come from here, or the window manager. */
     gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
 			       GTK_SIGNAL_FUNC (gtk_widget_destroy),

@@ -1,3 +1,7 @@
+1998-03-12  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* docs/gtk_tut.sgml: fix one missing quote.
+
 Thu Mar 12 18:01:03 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk.m4 gtk-config.in Makefile.am configure.in: 
@@ -79,7 +83,6 @@ Thu Mar 12 06:58:17 1998  Tim Janik  <timj@gimp.org>
 	to leak memory, for dynamically allocated keys (problem pinpointed by
 	Mattias Gronlund).
 
->>>>>>> 1.218
 Tue Mar 10 23:02:42 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gdk/gdkdnd.c gtk/gtkclist.c gtk/gtksignal.c gtk/testgtk.c:
