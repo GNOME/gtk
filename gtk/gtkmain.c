@@ -928,7 +928,7 @@ gtk_input_add_interp (gint source,
 		      gpointer data,
 		      GtkDestroyNotify destroy)
 {
-  gdk_input_add_full (source, condition, NULL, callback, data);
+  return gdk_input_add_full (source, condition, NULL, callback, data);
 }
 
 void

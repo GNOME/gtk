@@ -47,7 +47,7 @@ struct _GtkWindow
   GtkWidget *focus_widget;
   GtkWidget *default_widget;
 
-  gshort resize_count;
+  gushort resize_count;
   guint need_resize : 1;
   guint allow_shrink : 1;
   guint allow_grow : 1;

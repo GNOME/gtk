@@ -715,25 +715,27 @@ gtk_window_configure_event (GtkWidget         *widget,
       !GTK_WIDGET_MAPPED (window->bin.child))
     gtk_widget_map (window->bin.child);
 
-  window->resize_count -= 1;
-  if (window->resize_count == 0)
+  if (window->resize_count > 1)
+    window->resize_count -= 1;
+  else
     {
-      if ((event->width != widget->requisition.width) ||
-	  (event->height != widget->requisition.height))
+      if ((window->auto_shrink &&
+	   ((event->width != widget->requisition.width) ||
+	    (event->height != widget->requisition.height))) ||
+	  (event->width < widget->requisition.width) ||
+	  (event->height < widget->requisition.height))
 	{
-	  window->resize_count += 1;
+	  window->resize_count = 1;
 	  gdk_window_resize (widget->window,
 			     widget->requisition.width,
 			     widget->requisition.height);
 	}
+      else
+	window->resize_count = 0;
     }
-  else if (window->resize_count < 0)
-    {
-      window->resize_count = 0;
-    }
-
+  
   window->handling_resize = FALSE;
-
+  
   return FALSE;
 }
 
@@ -1057,7 +1059,7 @@ gtk_real_window_move_resize (GtkWindow *window,
     {
       if (window->resize_count == 0)
 	{
-	  window->resize_count += 1;
+	  window->resize_count = 1;
 	  gdk_window_resize (widget->window,
 			     widget->requisition.width,
 			     widget->requisition.height);
