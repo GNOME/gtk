@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
 "POT-Creation-Date: 2003-02-04 10:14+0200\n"
-"PO-Revision-Date: 2003-02-04 13:22--500\n"
+"PO-Revision-Date: 2003-02-04 13:41--500\n"
 "Last-Translator: Yuriy Syrota <yuri@renome.rovno.ua>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -890,9 +890,8 @@ msgid "Spacing"
 msgstr "Проміжок"
 
 #: gtk/gtkbox.c:129
-#, fuzzy
 msgid "The amount of space between children"
-msgstr "Розмір проміжка між нащадками."
+msgstr "Розмір проміжка між нащадками"
 
 #: gtk/gtkbox.c:138
 #: gtk/gtknotebook.c:444
@@ -900,9 +899,8 @@ msgid "Homogeneous"
 msgstr ""
 
 #: gtk/gtkbox.c:139
-#, fuzzy
 msgid "Whether the children should all be the same size"
-msgstr "Чи всі нащадки мають мати однаковий розмір."
+msgstr "Чи всі нащадки мають мати однаковий розмір"
 
 #: gtk/gtkbox.c:146
 #: gtk/gtkpreview.c:132
@@ -910,9 +908,8 @@ msgid "Expand"
 msgstr ""
 
 #: gtk/gtkbox.c:147
-#, fuzzy
 msgid "Whether the child should receive extra space when the parent grows"
-msgstr "Чи всі нащадки мають мати однаковий розмір."
+msgstr "Чи всі нащадки мають отримувати додатковий простір, під нас збільшення батьківсьгоко віджета"
 
 #: gtk/gtkbox.c:153
 #, fuzzy
@@ -961,9 +958,8 @@ msgid "Label"
 msgstr "Позначка"
 
 #: gtk/gtkbutton.c:190
-#, fuzzy
 msgid "Text of the label widget inside the button, if the button contains a label widget"
-msgstr "Текст віджета позначки в кнопці, якщо кнопка містить віджет позначки."
+msgstr "Текст віджета позначки в кнопці, якщо кнопка містить віджет позначки"
 
 #: gtk/gtkbutton.c:197
 #: gtk/gtklabel.c:311
@@ -1097,9 +1093,8 @@ msgid "Is Expander"
 msgstr ""
 
 #: gtk/gtkcellrenderer.c:202
-#, fuzzy
 msgid "Row has children"
-msgstr "Рядок має нащадків."
+msgstr "Рядок має нащадків"
 
 #: gtk/gtkcellrenderer.c:211
 msgid "Is Expanded"
@@ -1850,9 +1845,8 @@ msgstr "Поточна позиція точки вставляння"
 
 #: gtk/gtkentry.c:446
 #: gtk/gtklabel.c:378
-#, fuzzy
 msgid "Selection Bound"
-msgstr "Вибір: "
+msgstr ""
 
 #: gtk/gtkentry.c:447
 #: gtk/gtklabel.c:379
@@ -1924,9 +1918,8 @@ msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr ""
 
 #: gtk/gtkentry.c:525
-#, fuzzy
 msgid "The contents of the entry"
-msgstr "Поточна позиція точки вставляння"
+msgstr "Вміст поля"
 
 #: gtk/gtkentry.c:756
 #, fuzzy
@@ -1959,27 +1952,24 @@ msgid "Filename"
 msgstr "Назва файлу"
 
 #: gtk/gtkfilesel.c:552
-#, fuzzy
 msgid "The currently selected filename"
-msgstr "Поточна вибрана назва файлу."
+msgstr "Поточна вибрана назва файлу"
 
 #: gtk/gtkfilesel.c:558
 msgid "Show file operations"
 msgstr "Показувати файлові операції"
 
 #: gtk/gtkfilesel.c:559
-#, fuzzy
 msgid "Whether buttons for creating/manipulating files should be displayed"
-msgstr "Чи показувати кнопки створення і маніпулювання файлами."
+msgstr "Чи показувати кнопки створення і маніпулювання файлами"
 
 #: gtk/gtkfilesel.c:566
 msgid "Select multiple"
 msgstr "Вибрати декілька"
 
 #: gtk/gtkfilesel.c:567
-#, fuzzy
 msgid "Whether to allow multiple files to be selected"
-msgstr "Чи показувати кнопки створення і маніпулювання файлами."
+msgstr "Чи дозволяти вибір багатьох файлів"
 
 #: gtk/gtkfilesel.c:722
 msgid "Folders"
@@ -2875,18 +2865,16 @@ msgid "Show text"
 msgstr "Показати текст"
 
 #: gtk/gtkprogress.c:136
-#, fuzzy
 msgid "Whether the progress is shown as text"
-msgstr "Стан відображення індикатора сортування"
+msgstr "Чи відобажати поступ у вигляді тексту"
 
 #: gtk/gtkprogress.c:143
 msgid "Text x alignment"
 msgstr "Вирівнювання тексту по X"
 
 #: gtk/gtkprogress.c:144
-#, fuzzy
 msgid "A number between 0.0 and 1.0 specifying the horizontal alignment of the text in the progress widget"
-msgstr "Горизонтальне вирівнювання, від 0 (ліворуч) до 1 (праворуч)"
+msgstr "Число між 0.0 і 1.0, що визначає горизонтальне вирівнювання тексту у віджеті поступу"
 
 #: gtk/gtkprogress.c:152
 msgid "Text y alignment"
@@ -4815,7 +4803,7 @@ msgstr ""
 #. ID
 #: modules/input/imam-et.c:453
 msgid "Amharic (EZ+)"
-msgstr ""
+msgstr "Амгарське (EZ+)"
 
 #. ID
 #: modules/input/imcyrillic-translit.c:216
@@ -4825,7 +4813,7 @@ msgstr "Кирилиця (транслітерація)"
 #. ID
 #: modules/input/iminuktitut.c:126
 msgid "Inukitut (Transliterated)"
-msgstr ""
+msgstr "Інукітут (Транслітерація)"
 
 #. ID
 #: modules/input/imipa.c:144
@@ -4840,12 +4828,12 @@ msgstr ""
 #. ID
 #: modules/input/imti-er.c:452
 msgid "Tigrigna-Eritrean (EZ+)"
-msgstr ""
+msgstr "Тигринья (Еритрея, EZ+)"
 
 #. ID
 #: modules/input/imti-et.c:452
 msgid "Tigrigna-Ethiopian (EZ+)"
-msgstr ""
+msgstr "Тигринья (Ефіопія, EZ+)"
 
 #. ID
 #: modules/input/imviqr.c:243
@@ -4866,12 +4854,10 @@ msgid "How to draw the input method preedit string"
 msgstr ""
 
 #: modules/input/gtkimcontextxim.c:274
-#, fuzzy
 msgid "IM Status style"
-msgstr "Стиль проміжку"
+msgstr ""
 
 #: modules/input/gtkimcontextxim.c:275
-#, fuzzy
 msgid "How to draw the input method statusbar"
-msgstr "Як малювати пенал"
+msgstr ""
 
