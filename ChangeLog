@@ -1,3 +1,8 @@
+1998-12-07  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gtk/gtkpaned.h (struct _GtkPaned): Removed the unused cursor
+	field in the structure.
+
 Mon Dec  7 15:15:06 GMT 1998  Tony Gale <gale@gtk.org>
 
 	* docs/gtk_tut.sgml: Start mass update for GTK 1.1
