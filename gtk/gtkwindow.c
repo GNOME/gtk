@@ -4426,7 +4426,7 @@ get_center_monitor_of_window (GtkWindow *window)
    * stuff, or we could just be losers and assume you have a row
    * or column of monitors.
    */
-  return gdk_screen_get_n_monitors (window->screen)) / 2;
+  return gdk_screen_get_n_monitors (window->screen) / 2;
 }
 
 static int
