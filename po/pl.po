@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2000-02-16 05:29-0600\n"
+"POT-Creation-Date: 2000-05-19 07:11+0200\n"
 "PO-Revision-Date: 1999-07-23 14:45+CET\n"
 "Last-Translator: GNOME PL Team\n"
 "Language-Team: Polish <gnomepl@pandora.info.bielsko.pl>\n"
@@ -38,14 +38,14 @@ msgid "Opacity:"
 msgstr "Prze¼roczysto¶æ:"
 
 #. The OK button
-#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:469 gtk/gtkfontsel.c:3490
+#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:469 gtk/gtkfontsel.c:3492
 #: gtk/gtkgamma.c:416
 msgid "OK"
 msgstr "OK"
 
 #. The Cancel button
 #: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:476 gtk/gtkfilesel.c:856
-#: gtk/gtkfilesel.c:956 gtk/gtkfilesel.c:1071 gtk/gtkfontsel.c:3503
+#: gtk/gtkfilesel.c:956 gtk/gtkfilesel.c:1071 gtk/gtkfontsel.c:3505
 #: gtk/gtkgamma.c:424
 msgid "Cancel"
 msgstr "Anuluj"
@@ -343,11 +343,11 @@ msgstr "Czcionka: (z zastosowaniem filtra)"
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
 msgstr "Przekroczono warto¶æ MAX_FONTS. Mo¿e brakowaæ pewnych czcionek."
 
-#: gtk/gtkfontsel.c:3497
+#: gtk/gtkfontsel.c:3499
 msgid "Apply"
 msgstr "Zastosuj"
 
-#: gtk/gtkfontsel.c:3519
+#: gtk/gtkfontsel.c:3521
 msgid "Font Selection"
 msgstr "Wybór czcionki"
 

@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.5\n"
-"POT-Creation-Date: 2000-02-16 05:29-0600\n"
+"POT-Creation-Date: 2000-05-19 07:11+0200\n"
 "PO-Revision-Date: 1999-09-25 15:10+0300\n"
 "Last-Translator: Dan Damian <dand@dnttm.ro>\n"
 "Language-Team: Romanian <ro@li.org>\n"
@@ -44,14 +44,14 @@ msgid "Opacity:"
 msgstr "Opacitate:"
 
 #. The OK button
-#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:469 gtk/gtkfontsel.c:3490
+#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:469 gtk/gtkfontsel.c:3492
 #: gtk/gtkgamma.c:416
 msgid "OK"
 msgstr "OK"
 
 #. The Cancel button
 #: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:476 gtk/gtkfilesel.c:856
-#: gtk/gtkfilesel.c:956 gtk/gtkfilesel.c:1071 gtk/gtkfontsel.c:3503
+#: gtk/gtkfilesel.c:956 gtk/gtkfilesel.c:1071 gtk/gtkfontsel.c:3505
 #: gtk/gtkgamma.c:424
 msgid "Cancel"
 msgstr "Renunþã"
@@ -349,11 +349,11 @@ msgstr "Font: (filtru aplicat)"
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
 msgstr "S-a depãºit MAX_FONTS. Unele fonturi s-ar putea sã lipseascã."
 
-#: gtk/gtkfontsel.c:3497
+#: gtk/gtkfontsel.c:3499
 msgid "Apply"
 msgstr "Aplicã"
 
-#: gtk/gtkfontsel.c:3519
+#: gtk/gtkfontsel.c:3521
 msgid "Font Selection"
 msgstr "Selecþie font"
 

@@ -1,3 +1,7 @@
+Thu May 25 03:54:30 2000  Tim Janik  <timj@gtk.org>
+
+	* released Gtk+-1.2.8.
+
 Thu May 25 02:30:57 2000  Tim Janik  <timj@gtk.org>
 
 	* configure.in: gtk version 1.2.8, interface age 3, binary age 8.

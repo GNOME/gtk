@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.5\n"
-"POT-Creation-Date: 2000-02-16 05:29-0600\n"
+"POT-Creation-Date: 2000-05-19 07:11+0200\n"
 "PO-Revision-Date: 1998-12-18 20:32+0100\n"
 "Last-Translator: Vincent Renardias <vincent@debian.org>\n"
 "Language-Team: Vincent Renardias <vincent@debian.org>\n"
@@ -42,14 +42,14 @@ msgid "Opacity:"
 msgstr "Opacité:"
 
 #. The OK button
-#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:469 gtk/gtkfontsel.c:3490
+#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:469 gtk/gtkfontsel.c:3492
 #: gtk/gtkgamma.c:416
 msgid "OK"
 msgstr "OK"
 
 #. The Cancel button
 #: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:476 gtk/gtkfilesel.c:856
-#: gtk/gtkfilesel.c:956 gtk/gtkfilesel.c:1071 gtk/gtkfontsel.c:3503
+#: gtk/gtkfilesel.c:956 gtk/gtkfilesel.c:1071 gtk/gtkfontsel.c:3505
 #: gtk/gtkgamma.c:424
 msgid "Cancel"
 msgstr "Annuler"
@@ -349,11 +349,11 @@ msgstr "Police: (Filtre appliqué)"
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
 msgstr "Valeur de MAX_FONTS dépassée. Des polices peuvent manquer."
 
-#: gtk/gtkfontsel.c:3497
+#: gtk/gtkfontsel.c:3499
 msgid "Apply"
 msgstr "Appliquer"
 
-#: gtk/gtkfontsel.c:3519
+#: gtk/gtkfontsel.c:3521
 msgid "Font Selection"
 msgstr "Sélection de police"
 
