@@ -1,3 +1,8 @@
+Wed Jul 21 22:17:06 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* tests/testcombo.c (main): Don't leak models.  (#148128,
+	Tommi Komulainen)
+
 Wed Jul 21 21:26:08 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkviewport.c (viewport_set_adjustment): Don't leak
