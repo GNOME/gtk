@@ -1368,7 +1368,8 @@ gdk_event_translate (GdkDisplay *display,
                                      0,
                                      GDK_WINDOW_STATE_ICONIFIED);
 
-      _gdk_xgrab_check_unmap (window, xevent->xany.serial);
+      if (window)
+	_gdk_xgrab_check_unmap (window, xevent->xany.serial);
       
       break;
       
