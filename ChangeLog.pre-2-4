@@ -1,5 +1,11 @@
 2001-10-24  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtktextbuffer.c (clipboard_clipboard_buffer_received):
+	remove hack to strip off the bogus newline, since we killed the
+	bogus newline; fixes #61779
+
+2001-10-24  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtktextview.c (gtk_text_view_update_adjustments): don't
 	create layout if we didn't have one
 	(gtk_text_view_set_buffer): invalidate so we get the idle handlers

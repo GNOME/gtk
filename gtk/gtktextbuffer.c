@@ -2899,8 +2899,6 @@ clipboard_clipboard_buffer_received (GtkClipboard     *clipboard,
       if (g_object_get_data (G_OBJECT (src_buffer), "gtk-text-buffer-clipboard"))
 	{
 	  gtk_text_buffer_get_bounds (src_buffer, &start, &end);
-	  /* There's an extra newline on clipboard_contents */
-	  gtk_text_iter_backward_char (&end);
       
 	  paste_from_buffer (request_data, src_buffer,
 			     &start, &end);
