@@ -1,3 +1,8 @@
+2003-06-01  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkwindow.c (gtk_window_parse_geometry): Add some hints and
+	an example to the docs.  (#98427)
+
 Fri May 30 15:58:33 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in: Rework debug_default handling to work
