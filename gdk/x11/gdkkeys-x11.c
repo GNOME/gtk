@@ -218,6 +218,21 @@ update_keymaps (void)
             {
               gint j = 0;
               KeySym *syms = keymap + (keycode - min_keycode) * keysyms_per_keycode;
+	  
+	      /* GDK_MOD1_MASK is 1 << 3 for example, i.e. the
+	       * fourth modifier, i / keyspermod is the modifier
+	       * index
+	       */
+	      guint mask = 1 << ( i / keymap_x11->mod_keymap->max_keypermod);
+	      
+	      /* Some keyboard maps are known to map Mode_Switch as an extra
+	       * Mod1 key. In circumstances like that, it won't be used to
+	       * switch groups.
+	       */
+	      if (mask == GDK_CONTROL_MASK || mask == GDK_SHIFT_MASK ||
+		  mask == GDK_LOCK_MASK || mask == GDK_MOD1_MASK)
+		continue;
+	      
               while (j < keysyms_per_keycode)
                 {
                   if (syms[j] == GDK_Mode_switch)
@@ -229,7 +244,7 @@ update_keymaps (void)
                        * index
                        */
                   
-                      group_switch_mask |= (1 << ( i / mod_keymap->max_keypermod));
+                      group_switch_mask |= mask;
                       break;
                     }
               

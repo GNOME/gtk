@@ -1,3 +1,10 @@
+Mon Oct  7 11:45:17 2002  Owen Taylor  <otaylor@redhat.com>
+ 
+ 	* gdk/x11/gdkkeys-x11.c (update_keymaps): If Mode_switch
+ 	is used for a known modifier like Mod1, assume it won't
+ 	be used to switch group. (#94841, problem reported by
+ 	Szekeres Istvan)
+	
 Fri Oct  4 14:49:04 2002  Owen Taylor  <otaylor@redhat.com>
 
 	Patch from Shivram U <shivaram.upadhyayula@wipro.com>
