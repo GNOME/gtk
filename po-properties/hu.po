@@ -1,16 +1,16 @@
 # Hungarian translation of gtk+-properties.
-# Copyright (C) 1999-2004 Free Software Foundation, Inc.
-# Szabolcs Ban <shooby@gnome.hu>, 1999.
-# Andras Timar <timar@gnome.hu>, 2002.
+# Copyright (C) 2004 Free Software Foundation, Inc.
+# This file is distributed under the same license as the gtk+-properties package.
 # Laszlo Dvornik <dvornik@gnome.hu>, 2004.
+# Gabor Kelemen <kelemeng@gnome.hu>, 2004.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-25 13:27-0400\n"
-"PO-Revision-Date: 2004-07-13 17:18+0200\n"
-"Last-Translator: Laszlo Dvornik <dvornik@gnome.hu>\n"
+"POT-Creation-Date: 2004-09-09 12:39+0200\n"
+"PO-Revision-Date: 2004-09-09 16:05+0200\n"
+"Last-Translator: Gabor Kelemen <kelemeng@gnome.hu>\n"
 "Language-Team: Hungarian <gnome@gnome.hu>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -480,7 +480,7 @@ msgstr ""
 
 #: gtk/gtkbox.c:161
 msgid "Padding"
-msgstr "Helykihagyás"
+msgstr "Kitöltés"
 
 #: gtk/gtkbox.c:162
 msgid "Extra space to put between the child and its neighbors, in pixels"
@@ -521,6 +521,8 @@ msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
 msgstr ""
+"Ha be van állítva, egy aláhúzás a szövegben a következő karakter "
+"gyorsítóbillentyűként való használatát jelzi"
 
 #: gtk/gtkbutton.c:228
 msgid "Use stock"
@@ -763,7 +765,7 @@ msgstr ""
 
 #: gtk/gtkcellrendererpixbuf.c:134
 msgid "Pixbuf Object"
-msgstr ""
+msgstr "Pixbuf objektum"
 
 #: gtk/gtkcellrendererpixbuf.c:135
 msgid "The pixbuf to render"
@@ -787,7 +789,7 @@ msgstr ""
 
 #: gtk/gtkcellrendererpixbuf.c:161 gtk/gtkimage.c:177
 msgid "Stock ID"
-msgstr ""
+msgstr "Alap azonosító"
 
 #: gtk/gtkcellrendererpixbuf.c:162
 msgid "The stock ID of the stock icon to render"
@@ -815,7 +817,7 @@ msgstr "Szöveg"
 
 #: gtk/gtkcellrenderertext.c:194
 msgid "Text to render"
-msgstr ""
+msgstr "Megjelenítendő szöveg"
 
 #: gtk/gtkcellrenderertext.c:201
 msgid "Markup"
@@ -823,7 +825,7 @@ msgstr "Jelölés"
 
 #: gtk/gtkcellrenderertext.c:202
 msgid "Marked up text to render"
-msgstr ""
+msgstr "Megjelenítendő formázott szöveg"
 
 #: gtk/gtkcellrenderertext.c:209 gtk/gtklabel.c:299
 msgid "Attributes"
@@ -889,19 +891,20 @@ msgstr "Betűkészlet"
 
 #: gtk/gtkcellrenderertext.c:268
 msgid "Font description as a string"
-msgstr ""
+msgstr "Betűkészlet leírása szövegként"
 
 #: gtk/gtkcellrenderertext.c:276 gtk/gtktexttag.c:291
 msgid "Font description as a PangoFontDescription struct"
-msgstr ""
+msgstr "Betűkészlet leírása PangoFontDescription struktúraként"
 
 #: gtk/gtkcellrenderertext.c:284 gtk/gtktexttag.c:299
 msgid "Font family"
-msgstr "Betűcsalád"
+msgstr "Betűkészlet-család"
 
 #: gtk/gtkcellrenderertext.c:285 gtk/gtktexttag.c:300
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
 msgstr ""
+"A betűkészlet-család megnevezése, pl. Sans, Helvetica, Times, Monospace"
 
 #: gtk/gtkcellrenderertext.c:292 gtk/gtkcellrenderertext.c:293
 #: gtk/gtktexttag.c:307
@@ -942,7 +945,7 @@ msgstr "Betűkészlet méretezése"
 
 #: gtk/gtkcellrenderertext.c:350
 msgid "Font scaling factor"
-msgstr ""
+msgstr "Betű méretezésének együtthatója"
 
 #: gtk/gtkcellrenderertext.c:359 gtk/gtktexttag.c:424
 msgid "Rise"
@@ -952,6 +955,7 @@ msgstr "Elhelyezés"
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative)"
 msgstr ""
+"Szöveg eltolása az alapvonal fölé (ha az eltolás negatív, az alapvonal alá)"
 
 #: gtk/gtkcellrenderertext.c:370 gtk/gtktexttag.c:464
 msgid "Strikethrough"
@@ -959,7 +963,7 @@ msgstr "Áthúzott"
 
 #: gtk/gtkcellrenderertext.c:371 gtk/gtktexttag.c:465
 msgid "Whether to strike through the text"
-msgstr ""
+msgstr "Áthúzza-e a szöveget"
 
 #: gtk/gtkcellrenderertext.c:378 gtk/gtktexttag.c:472
 msgid "Underline"
@@ -967,7 +971,7 @@ msgstr "Aláhúzott"
 
 #: gtk/gtkcellrenderertext.c:379 gtk/gtktexttag.c:473
 msgid "Style of underline for this text"
-msgstr ""
+msgstr "Ezen szöveg aláhúzásának stílusa"
 
 #: gtk/gtkcellrenderertext.c:387 gtk/gtktexttag.c:384
 msgid "Language"
@@ -1006,83 +1010,83 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:410 gtk/gtktexttag.c:533
 msgid "Font family set"
-msgstr ""
+msgstr "Betűcsalád beállítása"
 
 #: gtk/gtkcellrenderertext.c:411 gtk/gtktexttag.c:534
 msgid "Whether this tag affects the font family"
-msgstr ""
+msgstr "Ez az elem befolyásolja-e a betűcsaládot"
 
 #: gtk/gtkcellrenderertext.c:414 gtk/gtktexttag.c:537
 msgid "Font style set"
-msgstr ""
+msgstr "Betűstílus beállítása"
 
 #: gtk/gtkcellrenderertext.c:415 gtk/gtktexttag.c:538
 msgid "Whether this tag affects the font style"
-msgstr ""
+msgstr "Ez az elem befolyásolja-e a betű stílusát"
 
 #: gtk/gtkcellrenderertext.c:418 gtk/gtktexttag.c:541
 msgid "Font variant set"
-msgstr ""
+msgstr "Betűváltozat beállítása"
 
 #: gtk/gtkcellrenderertext.c:419 gtk/gtktexttag.c:542
 msgid "Whether this tag affects the font variant"
-msgstr ""
+msgstr "Ez az elem befolyásolja-e a betű változatát"
 
 #: gtk/gtkcellrenderertext.c:422 gtk/gtktexttag.c:545
 msgid "Font weight set"
-msgstr ""
+msgstr "Betű vastagságának beállítása"
 
 #: gtk/gtkcellrenderertext.c:423 gtk/gtktexttag.c:546
 msgid "Whether this tag affects the font weight"
-msgstr ""
+msgstr "Ez az elem befolyásolja-e a betű vastagságát"
 
 #: gtk/gtkcellrenderertext.c:426 gtk/gtktexttag.c:549
 msgid "Font stretch set"
-msgstr ""
+msgstr "Betűszélesség beállítása"
 
 #: gtk/gtkcellrenderertext.c:427 gtk/gtktexttag.c:550
 msgid "Whether this tag affects the font stretch"
-msgstr ""
+msgstr "Ez az elem befolyásolja-e a betű szélességét"
 
 #: gtk/gtkcellrenderertext.c:430 gtk/gtktexttag.c:553
 msgid "Font size set"
-msgstr ""
+msgstr "Betűméret beállítása"
 
 #: gtk/gtkcellrenderertext.c:431 gtk/gtktexttag.c:554
 msgid "Whether this tag affects the font size"
-msgstr ""
+msgstr "Ez az elem befolyásolja-e a betű méretét"
 
 #: gtk/gtkcellrenderertext.c:434 gtk/gtktexttag.c:557
 msgid "Font scale set"
-msgstr ""
+msgstr "Betű méretezése"
 
 #: gtk/gtkcellrenderertext.c:435 gtk/gtktexttag.c:558
 msgid "Whether this tag scales the font size by a factor"
-msgstr ""
+msgstr "Ez az elem átméretezi-e a betűt az adott együtthatóval"
 
 #: gtk/gtkcellrenderertext.c:438 gtk/gtktexttag.c:577
 msgid "Rise set"
-msgstr ""
+msgstr "Elhelyezés beállítása"
 
 #: gtk/gtkcellrenderertext.c:439 gtk/gtktexttag.c:578
 msgid "Whether this tag affects the rise"
-msgstr ""
+msgstr "Ez az elem befolyásolja-e a betű elhelyezését"
 
 #: gtk/gtkcellrenderertext.c:442 gtk/gtktexttag.c:593
 msgid "Strikethrough set"
-msgstr ""
+msgstr "Áthúzás beállítása"
 
 #: gtk/gtkcellrenderertext.c:443 gtk/gtktexttag.c:594
 msgid "Whether this tag affects strikethrough"
-msgstr ""
+msgstr "Ez az elem befolyásolja-e a betű áthúzását"
 
 #: gtk/gtkcellrenderertext.c:446 gtk/gtktexttag.c:601
 msgid "Underline set"
-msgstr ""
+msgstr "Aláhúzás beállítása"
 
 #: gtk/gtkcellrenderertext.c:447 gtk/gtktexttag.c:602
 msgid "Whether this tag affects underlining"
-msgstr ""
+msgstr "Ez az elem befolyásolja-e az aláhúzást"
 
 #: gtk/gtkcellrenderertext.c:450 gtk/gtktexttag.c:565
 msgid "Language set"
@@ -1134,7 +1138,7 @@ msgstr ""
 
 #: gtk/gtkcheckbutton.c:107 gtk/gtkexpander.c:255 gtk/gtkoptionmenu.c:206
 msgid "Indicator Spacing"
-msgstr ""
+msgstr "Jelző térköze"
 
 #: gtk/gtkcheckbutton.c:108
 msgid "Spacing around check or radio indicator"
@@ -1179,7 +1183,7 @@ msgstr "Cím"
 
 #: gtk/gtkcolorbutton.c:218
 msgid "The title of the color selection dialog"
-msgstr ""
+msgstr "A színkiválasztó ablak címkéje"
 
 #: gtk/gtkcolorbutton.c:232 gtk/gtkcolorsel.c:1781
 msgid "Current Color"
@@ -1251,7 +1255,7 @@ msgstr ""
 
 #: gtk/gtkcombo.c:158
 msgid "Case sensitive"
-msgstr ""
+msgstr "Kis- és nagybetű"
 
 #: gtk/gtkcombo.c:159
 msgid "Whether list item matching is case sensitive"
@@ -1566,7 +1570,7 @@ msgstr ""
 
 #: gtk/gtkexpander.c:197
 msgid "Expanded"
-msgstr ""
+msgstr "Kiterjesztett"
 
 #: gtk/gtkexpander.c:198
 msgid "Whether the expander has been opened to reveal the child widget"
@@ -1574,7 +1578,7 @@ msgstr ""
 
 #: gtk/gtkexpander.c:206
 msgid "Text of the expander's label"
-msgstr ""
+msgstr "A kiterjesztő címkéjének szövege"
 
 #: gtk/gtkexpander.c:221 gtk/gtklabel.c:306
 msgid "Use markup"
@@ -1586,27 +1590,27 @@ msgstr ""
 
 #: gtk/gtkexpander.c:230
 msgid "Space to put between the label and the child"
-msgstr ""
+msgstr "A címke és a gyermek közötti szóközök"
 
 #: gtk/gtkexpander.c:239 gtk/gtkframe.c:170 gtk/gtktoolbutton.c:194
 msgid "Label widget"
-msgstr "Címke widget"
+msgstr "Címke grafikai elem"
 
 #: gtk/gtkexpander.c:240
 msgid "A widget to display in place of the usual expander label"
-msgstr ""
+msgstr "A szokásos kiterjesztő címke helyén megjelenítendő grafikai elem"
 
 #: gtk/gtkexpander.c:246 gtk/gtktreeview.c:642
 msgid "Expander Size"
-msgstr ""
+msgstr "Kiterjesztő mérete"
 
 #: gtk/gtkexpander.c:247 gtk/gtktreeview.c:643
 msgid "Size of the expander arrow"
-msgstr ""
+msgstr "A kiterjesztő nyíl mérete"
 
 #: gtk/gtkexpander.c:256
 msgid "Spacing around expander arrow"
-msgstr ""
+msgstr "Térköz a kiterjesztő nyíl körül"
 
 #: gtk/gtkfilechooser.c:175
 msgid "Action"
@@ -1642,7 +1646,7 @@ msgstr ""
 
 #: gtk/gtkfilechooser.c:200
 msgid "Preview widget"
-msgstr "Előnézet widget"
+msgstr "Előnézet grafikai elem"
 
 #: gtk/gtkfilechooser.c:201
 msgid "Application supplied widget for custom previews."
@@ -1667,7 +1671,7 @@ msgstr ""
 
 #: gtk/gtkfilechooser.c:218
 msgid "Extra widget"
-msgstr "Extra widget"
+msgstr "Extra grafikai elem"
 
 #: gtk/gtkfilechooser.c:219
 msgid "Application supplied widget for extra options."
@@ -1739,7 +1743,7 @@ msgstr "A betűkészlet-választó párbeszédablak címe"
 
 #: gtk/gtkfontbutton.c:191 gtk/gtkfontsel.c:214
 msgid "Font name"
-msgstr "Betűtípus"
+msgstr "Betűkészlet neve"
 
 #: gtk/gtkfontbutton.c:192
 msgid "The name of the selected font"
@@ -1751,11 +1755,11 @@ msgstr "Sans 12"
 
 #: gtk/gtkfontbutton.c:207
 msgid "Use font in label"
-msgstr ""
+msgstr "Címke betűkészlete"
 
 #: gtk/gtkfontbutton.c:208
 msgid "Whether the label is drawn in the selected font"
-msgstr ""
+msgstr "A címke a kiválasztott betűtípussal legyen-e rajzolva"
 
 #: gtk/gtkfontbutton.c:223
 msgid "Use size in label"
@@ -1876,11 +1880,11 @@ msgstr "Pixbuf"
 
 #: gtk/gtkimage.c:137
 msgid "A GdkPixbuf to display"
-msgstr ""
+msgstr "A megjelenítendő GdkPixbuf"
 
 #: gtk/gtkimage.c:144
 msgid "Pixmap"
-msgstr ""
+msgstr "Kép"
 
 #: gtk/gtkimage.c:145
 msgid "A GdkPixmap to display"
@@ -1904,11 +1908,11 @@ msgstr ""
 
 #: gtk/gtkimage.c:169
 msgid "Filename to load and display"
-msgstr ""
+msgstr "A betöltendő és megjelenítendő fájl neve"
 
 #: gtk/gtkimage.c:178
 msgid "Stock ID for a stock image to display"
-msgstr ""
+msgstr "A megjelenítendő alapértelmezett kép alap azonosítója"
 
 #: gtk/gtkimage.c:185
 msgid "Icon set"
@@ -1932,7 +1936,7 @@ msgstr "Animáció"
 
 #: gtk/gtkimage.c:203
 msgid "GdkPixbufAnimation to display"
-msgstr ""
+msgstr "A megjelenítendő GdkPixbuf animáció"
 
 #: gtk/gtkimage.c:210
 msgid "Storage type"
@@ -1940,11 +1944,11 @@ msgstr "Tárolótípus"
 
 #: gtk/gtkimage.c:211
 msgid "The representation being used for image data"
-msgstr ""
+msgstr "A képadatokhoz használt ábrázolás"
 
 #: gtk/gtkimagemenuitem.c:138
 msgid "Image widget"
-msgstr "Kép widget"
+msgstr "Kép grafikai elem"
 
 #: gtk/gtkimagemenuitem.c:139
 msgid "Child widget to appear next to the menu text"
@@ -2063,7 +2067,7 @@ msgstr ""
 
 #: gtk/gtkmenu.c:525
 msgid "Vertical Padding"
-msgstr "Függőleges helykihagyás"
+msgstr "Függőleges kitöltés"
 
 #: gtk/gtkmenu.c:526
 msgid "Extra space at the top and bottom of the menu"
@@ -2171,7 +2175,7 @@ msgstr ""
 
 #: gtk/gtkmessagedialog.c:107
 msgid "Image/label border"
-msgstr ""
+msgstr "Kép/felirat szegélye"
 
 #: gtk/gtkmessagedialog.c:108
 msgid "Width of border around the label and image in the message dialog"
@@ -2407,7 +2411,7 @@ msgstr ""
 
 #: gtk/gtkpaned.c:255
 msgid "Handle Size"
-msgstr ""
+msgstr "Fogantyúméret"
 
 #: gtk/gtkpaned.c:256
 msgid "Width of handle"
@@ -2491,7 +2495,7 @@ msgstr ""
 
 #: gtk/gtkprogressbar.c:142 gtk/gtkrange.c:293 gtk/gtkspinbutton.c:241
 msgid "Adjustment"
-msgstr ""
+msgstr "Igazítás"
 
 #: gtk/gtkprogressbar.c:143
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
@@ -2543,7 +2547,7 @@ msgstr ""
 
 #: gtk/gtkprogressbar.c:198
 msgid "Fraction"
-msgstr ""
+msgstr "Tört"
 
 #: gtk/gtkprogressbar.c:199
 msgid "The fraction of total work that has been completed"
@@ -2797,7 +2801,7 @@ msgstr ""
 
 #: gtk/gtkseparatortoolitem.c:135
 msgid "Draw"
-msgstr ""
+msgstr "Rajzolás"
 
 #: gtk/gtkseparatortoolitem.c:136
 msgid "Whether the separator is drawn, or just blank"
@@ -2829,7 +2833,7 @@ msgstr "Villogó kurzor"
 
 #: gtk/gtksettings.c:279
 msgid "Whether the cursor should blink"
-msgstr ""
+msgstr "A kurzor villogjon-e"
 
 #: gtk/gtksettings.c:286
 msgid "Cursor Blink Time"
@@ -2891,7 +2895,7 @@ msgstr ""
 
 #: gtk/gtksettings.c:346
 msgid "Font Name"
-msgstr "Betűtípus"
+msgstr "Betűkészlet neve"
 
 #: gtk/gtksettings.c:347
 msgid "Name of default font to use"
@@ -3024,7 +3028,7 @@ msgstr ""
 
 #: gtk/gtkstatusbar.c:201
 msgid "Style of bevel around the statusbar text"
-msgstr ""
+msgstr "Az állapotsor szövege körüli fazetta stílusa"
 
 #: gtk/gtktable.c:159
 msgid "Rows"
@@ -3032,7 +3036,7 @@ msgstr "Sorok"
 
 #: gtk/gtktable.c:160
 msgid "The number of rows in the table"
-msgstr ""
+msgstr "A táblázat sorainak száma"
 
 #: gtk/gtktable.c:168
 msgid "Columns"
@@ -3040,7 +3044,7 @@ msgstr "Oszlopok"
 
 #: gtk/gtktable.c:169
 msgid "The number of columns in the table"
-msgstr ""
+msgstr "A táblázat oszlopainak száma"
 
 #: gtk/gtktable.c:177
 msgid "Row spacing"
@@ -3108,7 +3112,7 @@ msgstr "A gyermek függőleges viselkedését meghatározó beállítások"
 
 #: gtk/gtktable.c:245
 msgid "Horizontal padding"
-msgstr "Vízszintes helykitöltés"
+msgstr "Vízszintes kitöltés"
 
 #: gtk/gtktable.c:246
 msgid ""
@@ -3118,7 +3122,7 @@ msgstr ""
 
 #: gtk/gtktable.c:252
 msgid "Vertical padding"
-msgstr "Függőleges helykihagyás"
+msgstr "Függőleges kitöltés"
 
 #: gtk/gtktable.c:253
 msgid ""
@@ -3310,7 +3314,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:491 gtk/gtktextview.c:643
 msgid "Tabs"
-msgstr ""
+msgstr "Lapok"
 
 #: gtk/gtktexttag.c:492 gtk/gtktextview.c:644
 msgid "Custom tabs for this text"
@@ -3426,15 +3430,15 @@ msgstr ""
 
 #: gtk/gtktextview.c:557
 msgid "Pixels Above Lines"
-msgstr ""
+msgstr "Sorok feletti képpontok"
 
 #: gtk/gtktextview.c:567
 msgid "Pixels Below Lines"
-msgstr ""
+msgstr "Sorok alatti képpontok"
 
 #: gtk/gtktextview.c:577
 msgid "Pixels Inside Wrap"
-msgstr ""
+msgstr "Törésen belüli képpontok"
 
 #: gtk/gtktextview.c:595
 msgid "Wrap Mode"
@@ -3570,7 +3574,7 @@ msgstr ""
 
 #: gtk/gtktoolbar.c:575
 msgid "Style of bevel around the toolbar"
-msgstr ""
+msgstr "Az eszköztár körüli fazetta stílusa"
 
 #: gtk/gtktoolbar.c:581
 msgid "Toolbar style"
@@ -3613,7 +3617,7 @@ msgstr ""
 
 #: gtk/gtktoolbutton.c:208
 msgid "Icon widget"
-msgstr "Ikon widget"
+msgstr "Ikon grafikai elem"
 
 #: gtk/gtktoolbutton.c:209
 msgid "Icon widget to display in the item"
@@ -3823,7 +3827,7 @@ msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:312
 msgid "Widget"
-msgstr "Widget"
+msgstr "Grafikai elem"
 
 #: gtk/gtktreeviewcolumn.c:313
 msgid "Widget to put in column header button instead of column title"
@@ -3851,7 +3855,7 @@ msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:346
 msgid "Sort order"
-msgstr ""
+msgstr "Rendezési sorrend"
 
 #: gtk/gtktreeviewcolumn.c:347
 msgid "Sort direction the sort indicator should indicate"
@@ -3891,15 +3895,15 @@ msgstr ""
 
 #: gtk/gtkwidget.c:409
 msgid "Widget name"
-msgstr "Widget neve"
+msgstr "Grafikai elem neve"
 
 #: gtk/gtkwidget.c:410
 msgid "The name of the widget"
-msgstr "A widget neve"
+msgstr "A grafikai elem neve"
 
 #: gtk/gtkwidget.c:416
 msgid "Parent widget"
-msgstr "Szülő widget"
+msgstr "Szülő grafikai elem"
 
 #: gtk/gtkwidget.c:417
 msgid "The parent widget of this widget. Must be a Container widget"
@@ -4152,7 +4156,7 @@ msgstr "Ablakpozíció"
 
 #: gtk/gtkwindow.c:499
 msgid "The initial position of the window"
-msgstr ""
+msgstr "Az ablak kezdeti helye"
 
 #: gtk/gtkwindow.c:507
 msgid "Default Width"
