@@ -1,3 +1,8 @@
+Sun May  2 15:29:45 PDT 1999 Manish Singh <yosh@gimp.org>
+
+	* gdk/gdkdraw.c (gdk_draw_lines): check private->destroyed before
+	making the call
+
 Sat May  1 11:04:12 PDT 1999 Manish Singh <yosh@gimp.org>
 
 	* acinclude.m4
