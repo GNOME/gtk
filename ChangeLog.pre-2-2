@@ -1,3 +1,16 @@
+Thu Jan 17 16:34:55 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_real_select_cursor_row): For
+	some reason, I was activating a row while just selecting it.
+	Reported by andersca.
+	(gtk_tree_view_size_request): add a
+	validate_rows_handler to give us a rough width of the widget.
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_update_button):
+	Queue a resize here just in case.  It's needed in over half the
+	cases, and I don't want to do a diff to figure out exactly when
+	it's needed.
+
 2002-01-17  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/gtkinputdialog.c,

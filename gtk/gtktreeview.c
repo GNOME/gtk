@@ -1448,6 +1448,9 @@ gtk_tree_view_size_request (GtkWidget      *widget,
 
   tree_view = GTK_TREE_VIEW (widget);
 
+  /* we validate 50 rows initially just to make sure we have some size */
+  /* in practice, with a lot of static lists, this should get a good width */
+  validate_rows_handler (tree_view);
   gtk_tree_view_size_request_columns (tree_view);
   gtk_tree_view_update_size (GTK_TREE_VIEW (widget));
 
@@ -2348,17 +2351,21 @@ gtk_tree_view_motion_resize_column (GtkWidget      *widget,
   gint x;
   gint new_width;
   GtkTreeViewColumn *column;
+  GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
 
-  column = gtk_tree_view_get_column (GTK_TREE_VIEW (widget), GTK_TREE_VIEW (widget)->priv->drag_pos);
+  column = gtk_tree_view_get_column (tree_view, tree_view->priv->drag_pos);
 
   if (event->is_hint || event->window != widget->window)
     gtk_widget_get_pointer (widget, &x, NULL);
   else
     x = event->x;
 
-  new_width = gtk_tree_view_new_column_width (GTK_TREE_VIEW (widget),
-					      GTK_TREE_VIEW (widget)->priv->drag_pos, &x);
-  if (x != GTK_TREE_VIEW (widget)->priv->x_drag &&
+  if (tree_view->priv->hadjustment)
+    x += tree_view->priv->hadjustment->value;
+
+  new_width = gtk_tree_view_new_column_width (tree_view,
+					      tree_view->priv->drag_pos, &x);
+  if (x != tree_view->priv->x_drag &&
       (new_width != column->fixed_width));
     {
       column->resized_width = new_width;
@@ -6278,7 +6285,6 @@ gtk_tree_view_real_select_cursor_row (GtkTreeView *tree_view,
 
   gtk_widget_grab_focus (GTK_WIDGET (tree_view));
   _gtk_tree_view_queue_draw_node (tree_view, cursor_tree, cursor_node, NULL);
-  gtk_tree_view_row_activated (tree_view, cursor_path, tree_view->priv->focus_column);
 
   gtk_tree_path_free (cursor_path);
 }

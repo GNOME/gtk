@@ -723,6 +723,12 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
 	    }
 	}
     }
+  /* Queue a resize on the assumption that we always want to catch all changes
+   * and columns don't change all that often.
+   */
+  if (GTK_WIDGET_REALIZED (tree_column->tree_view))
+     gtk_widget_queue_resize (tree_column->tree_view);
+
 }
 
 /* Button signal handlers
