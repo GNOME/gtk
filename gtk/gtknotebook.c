@@ -188,8 +188,6 @@ static void gtk_notebook_forall              (GtkContainer     *container,
 /*** GtkNotebook Private Functions ***/
 static void gtk_notebook_redraw_tabs         (GtkNotebook      *notebook);
 static void gtk_notebook_redraw_arrows       (GtkNotebook      *notebook);
-static void gtk_notebook_focus_changed       (GtkNotebook      *notebook,
-					      GtkNotebookPage  *old_page);
 static void gtk_notebook_real_remove         (GtkNotebook      *notebook,
 					      GList            *list);
 static void gtk_notebook_update_labels       (GtkNotebook      *notebook);
@@ -576,7 +574,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 static void
 gtk_notebook_init (GtkNotebook *notebook)
 {
-  GTK_WIDGET_SET_FLAGS (notebook, GTK_CAN_FOCUS | GTK_RECEIVES_DEFAULT);
+  GTK_WIDGET_SET_FLAGS (notebook, GTK_CAN_FOCUS);
   GTK_WIDGET_SET_FLAGS (notebook, GTK_NO_WINDOW);
 
   notebook->cur_page = NULL;
@@ -1611,24 +1609,15 @@ gtk_notebook_button_press (GtkWidget      *widget,
 	  (x <= (page->allocation.x + page->allocation.width)) &&
 	  (y <= (page->allocation.y + page->allocation.height)))
 	{
-	  if (page == notebook->cur_page && notebook->focus_tab &&
-	      notebook->focus_tab != children &&
-	      GTK_WIDGET_HAS_FOCUS (notebook))
-	    {
-	      GtkNotebookPage *old_page;
-	      
-	      notebook->child_has_focus = FALSE;
-	      old_page = (GtkNotebookPage *)
-		(notebook->focus_tab->data);
-	      gtk_notebook_switch_focus_tab (notebook, children);
-	      gtk_notebook_focus_changed (notebook, old_page);
-	    }
-	  else
-	    {
-	      gtk_notebook_switch_focus_tab (notebook, children);
-	      gtk_widget_grab_focus (widget);
-	      gtk_notebook_switch_page (notebook, page, num);
-	    }
+	  gboolean page_changed = page != notebook->cur_page;
+	  gboolean was_focus = gtk_widget_is_focus (notebook);
+	  
+	  gtk_notebook_switch_focus_tab (notebook, children);
+	  gtk_widget_grab_focus (widget);
+	  
+	  if (page_changed && !was_focus)
+	    gtk_widget_child_focus (page->child, GTK_DIR_TAB_FORWARD);
+	  
 	  break;
 	}
       children = children->next;
@@ -2207,7 +2196,6 @@ gtk_notebook_child_type (GtkContainer     *container)
 /* Private GtkNotebook Functions:
  *
  * gtk_notebook_redraw_tabs
- * gtk_notebook_focus_changed
  * gtk_notebook_real_remove
  * gtk_notebook_update_labels
  * gtk_notebook_timer
@@ -2281,45 +2269,6 @@ gtk_notebook_redraw_arrows (GtkNotebook *notebook)
 
       gtk_notebook_get_arrow_rect (notebook, &rect);
       gdk_window_invalidate_rect (GTK_WIDGET (notebook)->window, &rect, FALSE);
-    }
-}
-
-static void
-gtk_notebook_focus_changed (GtkNotebook     *notebook,
-                            GtkNotebookPage *old_page)
-{
-  g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
-
-  if (GTK_WIDGET_DRAWABLE (notebook) && notebook->show_tabs) 
-    {
-      GdkRectangle area;
-      gint focus_width;
-
-      gtk_widget_style_get (GTK_WIDGET (notebook), "focus-line-width", &focus_width, NULL);
-
-      if (notebook->focus_tab)
-	{
-	  GtkNotebookPage *page;
-
-	  page = notebook->focus_tab->data;
-
-	  area.x = page->tab_label->allocation.x - focus_width;
-	  area.y = page->tab_label->allocation.y - focus_width;
-	  area.width = page->tab_label->allocation.width + 2 * focus_width;
-	  area.height = page->tab_label->allocation.height + 2 * focus_width;
-
-	  gtk_notebook_draw_tab (notebook, page, &area);
-	}
-
-      if (old_page)
-	{
-	  area.x = old_page->tab_label->allocation.x - focus_width;
-	  area.y = old_page->tab_label->allocation.y - focus_width;
-	  area.width = old_page->tab_label->allocation.width + 2 * focus_width;
-	  area.height = old_page->tab_label->allocation.height + 2 * focus_width;
-
-	  gtk_notebook_draw_tab (notebook, old_page, &area);
-	}
     }
 }
 
@@ -3678,7 +3627,7 @@ gtk_notebook_switch_focus_tab (GtkNotebook *notebook,
 
   page = notebook->focus_tab->data;
   if (GTK_WIDGET_MAPPED (page->tab_label))
-    gtk_notebook_focus_changed (notebook, old_page);
+    gtk_notebook_redraw_tabs (notebook);
   else
     gtk_notebook_pages_allocate (notebook);
   
