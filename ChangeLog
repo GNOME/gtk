@@ -1,3 +1,9 @@
+Thu Aug 15 22:46:02 BST 2002  Tony Gale <gale@gtk.org>
+
+	* docs/tutorial/gtk-tut.sgml, examples/menu/menu.c:
+	  minor menu example comment fix
+	  (feeling my way back in after a long absence)
+
 Wed Aug 14 08:07:53 2002  HideToshi Tajima  <hidetoshi.tajima@sun.com>
 
 	* gtk/gtkselection.c (gtk_selection_init): initialize

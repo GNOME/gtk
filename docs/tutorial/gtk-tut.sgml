@@ -5,7 +5,7 @@
 <book id="gtk-tut">
 
 <bookinfo>
-    <date>February 25, 2002</date>
+    <date>August 15, 2002</date>
     <title>GTK+ 2.0 Tutorial</title>
     <authorgroup>
       <author>
@@ -8475,7 +8475,7 @@ int main( int   argc,
     menu = gtk_menu_new ();
 
     /* Next we make a little loop that makes three menu-entries for "test-menu".
-     * Notice the call to gtk_menu_append.  Here we are adding a list of
+     * Notice the call to gtk_menu_shell_append.  Here we are adding a list of
      * menu items to our menu.  Normally, we'd also catch the "clicked"
      * signal on each of the menu items and setup a callback for it,
      * but it's omitted here to save space. */
@@ -13087,7 +13087,7 @@ The GLib text was in turn based on material developed by Damon Chaplin
 
 <para>The GTK Tutorial is Copyright (C) 1997 Ian Main. </para>
 
-<para>Copyright (C) 1998-1999 Tony Gale.</para>
+<para>Copyright (C) 1998-2002 Tony Gale.</para>
 
 <para>Permission is granted to make and distribute verbatim copies of this 
 manual provided the copyright notice and this permission notice are 

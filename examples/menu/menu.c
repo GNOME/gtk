@@ -35,7 +35,7 @@ int main( int   argc,
     menu = gtk_menu_new ();
 
     /* Next we make a little loop that makes three menu-entries for "test-menu".
-     * Notice the call to gtk_menu_append.  Here we are adding a list of
+     * Notice the call to gtk_menu_shell_append.  Here we are adding a list of
      * menu items to our menu.  Normally, we'd also catch the "clicked"
      * signal on each of the menu items and setup a callback for it,
      * but it's omitted here to save space. */
