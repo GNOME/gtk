@@ -75,19 +75,19 @@ static gint gtk_entry_position            (GtkEntry          *entry,
 					   gint               x);
        void gtk_entry_adjust_scroll       (GtkEntry          *entry);
 static void gtk_entry_grow_text           (GtkEntry          *entry);
-static void gtk_entry_insert_text    (GtkEditable       *editable,
+static void gtk_entry_insert_text         (GtkEditable       *editable,
 					   const gchar       *new_text,
-					   guint              new_text_length,
-					   guint              *position);
-static void gtk_entry_delete_text    (GtkEditable       *editable,
-					   guint              start_pos,
-					   guint              end_pos);
+					   gint               new_text_length,
+					   gint              *position);
+static void gtk_entry_delete_text         (GtkEditable       *editable,
+					   gint               start_pos,
+					   gint               end_pos);
 static void gtk_entry_update_text         (GtkEditable       *editable,
-					   guint              start_pos,
-					   guint              end_pos);
+					   gint               start_pos,
+					   gint               end_pos);
 static gchar *gtk_entry_get_chars         (GtkEditable       *editable,
-					   guint              start,
-					   guint              end);
+					   gint               start_pos,
+					   gint               end_pos);
 
 static gint move_backward_character	  (gchar *str, gint index);
 static void gtk_move_forward_character    (GtkEntry          *entry);
@@ -107,8 +107,8 @@ static void gtk_select_line               (GtkEntry          *entry);
 
 
 static void gtk_entry_set_selection       (GtkEditable       *editable,
-					   guint              start,
-					   guint              end);
+					   gint               start,
+					   gint               end);
 
 static GtkWidgetClass *parent_class = NULL;
 static gint entry_signals[LAST_SIGNAL] = { 0 };
@@ -1383,9 +1383,9 @@ gtk_entry_grow_text (GtkEntry *entry)
 
 static void
 gtk_entry_insert_text (GtkEditable *editable,
-			    const gchar *new_text,
-			    guint      new_text_length,
-			    guint     *position)
+		       const gchar *new_text,
+		       gint         new_text_length,
+		       gint        *position)
 {
   gchar *text;
   gint start_pos;
@@ -1435,8 +1435,8 @@ gtk_entry_insert_text (GtkEditable *editable,
 
 static void
 gtk_entry_delete_text (GtkEditable *editable,
-			    guint      start_pos,
-			    guint      end_pos)
+		       gint         start_pos,
+		       gint         end_pos)
 {
   gchar *text;
   gint deletion_length;
@@ -1453,6 +1453,9 @@ gtk_entry_delete_text (GtkEditable *editable,
     editable->selection_start_pos -= MIN(end_pos, editable->selection_start_pos) - start_pos;
   if (editable->selection_end_pos > start_pos)
     editable->selection_end_pos -= MIN(end_pos, editable->selection_end_pos) - start_pos;
+
+  if (end_pos < 0)
+    end_pos = entry->text_length;
 
   if ((start_pos < end_pos) &&
       (start_pos >= 0) &&
@@ -1476,16 +1479,16 @@ gtk_entry_delete_text (GtkEditable *editable,
 
 static void
 gtk_entry_update_text (GtkEditable *editable,
-		       guint      start_pos,
-		       guint      end_pos)
+		       gint         start_pos,
+		       gint         end_pos)
 {
   gtk_entry_queue_draw (GTK_ENTRY(editable));
 }
 
 gchar *    
 gtk_entry_get_chars      (GtkEditable   *editable,
-			  guint          start,
-			  guint          end)
+			  gint           start_pos,
+			  gint           end_pos)
 {
   gchar *retval;
   GtkEntry *entry;
@@ -1496,15 +1499,18 @@ gtk_entry_get_chars      (GtkEditable   *editable,
 
   entry = GTK_ENTRY (editable);
 
-  start = MIN(entry->text_length, start);
-  end = MIN(entry->text_length, end);
+  if (end_pos < 0)
+    end_pos = entry->text_length;
 
-  c = entry->text[end];
-  entry->text[end] = '\0';
+  start_pos = MIN(entry->text_length, start_pos);
+  end_pos = MIN(entry->text_length, end_pos);
 
-  retval = g_strdup (&entry->text[start]);
+  c = entry->text[end_pos];
+  entry->text[end_pos] = '\0';
 
-  entry->text[end] = c;
+  retval = g_strdup (&entry->text[start_pos]);
+
+  entry->text[end_pos] = c;
 
   return retval;
 }
@@ -1772,11 +1778,14 @@ gtk_select_line (GtkEntry *entry)
 
 static void 
 gtk_entry_set_selection       (GtkEditable       *editable,
-			       guint              start,
-			       guint              end)
+			       gint               start,
+			       gint               end)
 {
   g_return_if_fail (GTK_IS_ENTRY (editable));
 
+  if (end < 0)
+    end = GTK_ENTRY (editable)->text_length;
+  
   editable->selection_start_pos = start;
   editable->selection_end_pos = end;
 
@@ -1785,8 +1794,8 @@ gtk_entry_set_selection       (GtkEditable       *editable,
 
 void       
 gtk_entry_select_region  (GtkEntry       *entry,
-			  guint           start,
-			  guint           end)
+			  gint            start,
+			  gint            end)
 {
   gtk_editable_select_region (GTK_EDITABLE(entry), start, end);
 }

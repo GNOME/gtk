@@ -1620,16 +1620,15 @@ create_entry ()
 
       entry = gtk_entry_new ();
       gtk_entry_set_text (GTK_ENTRY (entry), "hello world");
-      gtk_entry_select_region (GTK_ENTRY (entry), 
-			       0, GTK_ENTRY(entry)->text_length);
+      gtk_editable_select_region (GTK_EDITABLE (entry), 0, -1);
       gtk_box_pack_start (GTK_BOX (box2), entry, TRUE, TRUE, 0);
       gtk_widget_show (entry);
 
       cb = gtk_combo_new ();
       gtk_combo_set_popdown_strings (GTK_COMBO (cb), cbitems);
       gtk_entry_set_text (GTK_ENTRY (GTK_COMBO(cb)->entry), "hello world");
-      gtk_entry_select_region (GTK_ENTRY (GTK_COMBO(cb)->entry),
-			       0, GTK_ENTRY(entry)->text_length);
+      gtk_editable_select_region (GTK_EDITABLE (GTK_COMBO(cb)->entry),
+				  0, -1);
       gtk_box_pack_start (GTK_BOX (box2), cb, TRUE, TRUE, 0);
       gtk_widget_show (cb);
 
@@ -2782,7 +2781,7 @@ create_text ()
 		       "spencer blah blah blah\n", -1);
       gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
 		       "kimball\n", -1);
-      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->white, NULL, 
+      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->bg[GTK_STATE_NORMAL], NULL, 
 		       "is\n", -1);
       gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
 		       "a\n", -1);

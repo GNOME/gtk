@@ -59,37 +59,37 @@ struct _GtkEditableClass
 
   void (* insert_text)  (GtkEditable    *editable,
 			 const gchar    *text,
-			 guint           length,
-			 guint           *position);
+			 gint            length,
+			 gint           *position);
   void (* delete_text)  (GtkEditable    *editable,
-			 guint           start_pos,
-			 guint           end_pos);
+			 gint            start_pos,
+			 gint            end_pos);
   void (* update_text)  (GtkEditable    *editable,
-			 guint           start_pos,
-			 guint           end_pos);
+			 gint            start_pos,
+			 gint            end_pos);
   gchar* (* get_chars)  (GtkEditable    *editable,
-			 guint           start_pos,
-			 guint           end_pos);
+			 gint            start_pos,
+			 gint            end_pos);
   void (* set_selection)(GtkEditable    *editable,
-			 guint           start_pos,
-			 guint           end_pos);
+			 gint            start_pos,
+			 gint            end_pos);
   void (* changed)      (GtkEditable    *editable);
 };
 
 guint      gtk_editable_get_type       (void);
 void       gtk_editable_select_region  (GtkEditable      *editable,
-					guint             start,
-					guint             end);
+					gint              start,
+					gint              end);
 void       gtk_editable_insert_text   (GtkEditable       *editable,
 					const gchar      *new_text,
-					guint             new_text_length,
-					guint            *position);
+					gint              new_text_length,
+					gint             *position);
 void       gtk_editable_delete_text    (GtkEditable      *editable,
-					guint             start_pos,
-					guint             end_pos);
+					gint              start_pos,
+					gint              end_pos);
 gchar *    gtk_editable_get_chars      (GtkEditable      *editable,
-					guint             start,
-					guint             end);
+					gint              start_pos,
+					gint              end_pos);
 void       gtk_editable_cut_clipboard  (GtkEditable      *editable, 
 					GdkEventKey      *event);
 void       gtk_editable_copy_clipboard (GtkEditable      *editable, 

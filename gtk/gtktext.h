@@ -177,10 +177,6 @@ gint       gtk_text_backward_delete (GtkText       *text,
 gint       gtk_text_forward_delete  (GtkText       *text,
 				     guint          nchars);
 
-void       gtk_text_select_region  (GtkText        *entry,
-				    guint           start,
-				    guint           end);
-
 #define GTK_TEXT_INDEX(t, index)  \
       ((index) < (t)->gap_position ? (t)->text[index] : \
                                      (t)->text[(index) + (t)->gap_size])

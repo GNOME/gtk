@@ -1,6 +1,20 @@
+Sun Mar  1 03:20:39 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkentry.[ch] gtk/gtktext.[ch] gtkeditable.[ch]
+
+	Turned off debugging in gtktext.c
+
+	Bug fixes for cutting, pasting, deleting, etc. 
+
+	Some of the bugs that were there before have definitely
+	been fixed. 
+	
+	* gtk/testgtk.c gtk/testgtkrc: Removed my ugly orange backgrounds,
+	to make things look nicer. 
+	
 Sat Feb 28 23:58:54 1998  Owen Taylor  <owt1@cornell.edu>
 
-	* gtk/gtkentry.[ch] gtktext.c gtkeditable.[ch]
+	* gtk/gtkentry.[ch] gtktext.[ch] gtkeditable.[ch]
 
 	Created a new base widget type Editable for the entry and
 	text widgets, which encapsulates most of the selection and
@@ -17,8 +31,15 @@ Sat Feb 28 23:58:54 1998  Owen Taylor  <owt1@cornell.edu>
 	- Clipboard style cut and paste
 	- Emacs style key bindings (~same as Entry)
 	- Word motion
+	- "changed" signal
 
 	There are definitely still some bugs in the new stuff.
+
+	Use style->base for the background and style->text for
+	the foreground.
+	
+	* gtkfilesel.c gtkspinbutton.c testgtk.c: small changes
+	to fit the new interface more exactly.
 	
 Sat Feb 28 19:29:09 1998  Tim Janik  <timj@gimp.org>
 

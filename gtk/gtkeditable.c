@@ -53,9 +53,9 @@ typedef void (*GtkEditableSignal2) (GtkObject *object,
 				    gpointer   data);
 
 typedef gpointer (*GtkEditableSignal3) (GtkObject *object,
-				      gint       arg1,
-				      gint       arg2,
-				      gpointer   data);
+					gint       arg1,
+					gint       arg2,
+					gpointer   data);
 
 
 static void gtk_editable_marshal_signal_1     (GtkObject         *object,
@@ -312,8 +312,8 @@ gtk_editable_finalize (GtkObject *object)
 void
 gtk_editable_insert_text (GtkEditable *editable,
 			  const gchar *new_text,
-			  guint        new_text_length,
-			  guint       *position)
+			  gint         new_text_length,
+			  gint        *position)
 {
   gchar buf[64];
   gchar *text;
@@ -338,8 +338,8 @@ gtk_editable_insert_text (GtkEditable *editable,
 
 void
 gtk_editable_delete_text (GtkEditable *editable,
-			  guint        start_pos,
-			  guint        end_pos)
+			  gint         start_pos,
+			  gint         end_pos)
 {
   g_return_if_fail (editable != NULL);
   g_return_if_fail (GTK_IS_EDITABLE (editable));
@@ -363,8 +363,8 @@ gtk_editable_update_text (GtkEditable *editable,
 
 gchar *    
 gtk_editable_get_chars      (GtkEditable      *editable,
-			     guint             start,
-			     guint             end)
+			     gint              start,
+			     gint              end)
 {
   gchar *retval = NULL;
   
@@ -444,7 +444,8 @@ gtk_editable_selection_handler (GtkWidget        *widget,
     {
       selection_start_pos = MIN (editable->selection_start_pos, editable->selection_end_pos);
       selection_end_pos = MAX (editable->selection_start_pos, editable->selection_end_pos);
-      str = gtk_editable_get_chars(editable, selection_start_pos,
+      str = gtk_editable_get_chars(editable, 
+				   selection_start_pos, 
 				   selection_end_pos);
       length = selection_end_pos - selection_start_pos;
     }
@@ -576,13 +577,14 @@ gtk_editable_selection_received  (GtkWidget         *widget,
 void
 gtk_editable_delete_selection (GtkEditable *editable)
 {
-  if (editable->selection_start_pos != editable->selection_end_pos)
-    gtk_editable_delete_text (editable,
-			   MIN (editable->selection_start_pos, editable->selection_end_pos),
-			   MAX (editable->selection_start_pos, editable->selection_end_pos));
+  guint start = editable->selection_start_pos;
+  guint end = editable->selection_end_pos;
 
   editable->selection_start_pos = 0;
   editable->selection_end_pos = 0;
+
+  if (start != end)
+    gtk_editable_delete_text (editable, MIN (start, end), MAX (start,end));
 
   if (editable->has_selection)
     {
@@ -614,8 +616,8 @@ gtk_editable_claim_selection (GtkEditable *editable,
 
 void
 gtk_editable_select_region (GtkEditable *editable,
-			    guint        start,
-			    guint        end)
+			    gint         start,
+			    gint         end)
 {
   if (GTK_WIDGET_REALIZED (editable))
     gtk_editable_claim_selection (editable, start != end, GDK_CURRENT_TIME);
@@ -645,8 +647,8 @@ gtk_editable_copy_clipboard (GtkEditable *editable, GdkEventKey *event)
 				   clipboard_atom,
 				   event->time))
 	editable->clipboard_text = gtk_editable_get_chars (editable,
-			     editable->selection_start_pos,
-			     editable->selection_end_pos);
+							   selection_start_pos,
+							   selection_end_pos);
     }
 }
 

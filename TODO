@@ -142,3 +142,63 @@ TODO AFTER GTK 1.0
     ( You'd have to extend gdk_window_set_hints to accept the
       window gravity option to get it right. )
 
+ * Text/Edit widget: (some of these might be bugs that should be fixed now)
+
+  Bugs:
+
+  - In Entry and Text widget, you can ungrab while still
+    dragging by pressing button-1, pressing button 3, releaseing 3,
+    then releasing 1.
+
+  - When selecting on a Text or Entry widget, the selection isn't
+    claimed until you release the button, and that shows by the
+    color of the selection. (Which is the real problem - it probably
+    is OK/better to delay claiming the selection)
+
+  - Related to the above, when you Shift/arrow to select text, the
+    selected text doesn't show that you have the selection immediately.
+
+  - Selecting an entire line with triple-click doesn't work write - 
+    it should select the wrapped portion too.
+
+  - Selecting an entire line should probably select the newline as
+    well, so when the selection is cut/deleted, the newline goes
+    along.
+
+  - Do something about the bg pixmap situation. (It will produce
+    garbage when editing is enabled)
+
+  Improvements:
+
+  - Finish making the key bindings consistent between the Entry
+    and Text widgets
+
+  - Unify the key binding support in some fashion between the
+    two widgets (???)
+
+  - When inserting or deleting large chunks of text, do a freeze/thaw
+    automatically, to avoid scrolling around for ever on screen.
+
+  - Jump scroll on large insertions/deletions
+
+  - Prune the line start cache. But since it is only 68 bytes
+    per line, and it is a lot faster when lines are in the cache,
+    it may be better not to, at least for now.
+
+  - Show the non-editable state by changing colors. (Use the
+    style entries for insensitive?)
+
+  - Multibyte support for the Text widget.
+
+  - Unicode support to do the multi-byte right.
+
+  - Support an .inputrc. (The readline one doesn't really work,
+    unless it is extended because it can't represent X keysyms,
+    just terminal type input)
+
+  - A vi mode
+
+  - Word wrap, instead of line folding. (Should the continuation
+    characters be shown?)
+
+  - Horizontal scrolling

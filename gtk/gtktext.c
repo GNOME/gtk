@@ -169,20 +169,20 @@ static void  gtk_text_disconnect     (GtkAdjustment  *adjustment,
 
 static void gtk_text_insert_text    (GtkEditable       *editable,
 				     const gchar       *new_text,
-				     guint              new_text_length,
-				     guint              *position);
-static void gtk_text_delete_text    (GtkEditable       *editable,
-				     guint              start_pos,
-				     guint              end_pos);
+				     gint               new_text_length,
+				     gint               *position);
+static void gtk_text_delete_text    (GtkEditable        *editable,
+				     gint               start_pos,
+				     gint               end_pos);
 static void gtk_text_update_text    (GtkEditable       *editable,
-				     guint              start_pos,
-				     guint              end_pos);
+				     gint               start_pos,
+				     gint               end_pos);
 static gchar *gtk_text_get_chars    (GtkEditable       *editable,
-				     guint              start,
-				     guint              end);
+				     gint               start,
+				     gint               end);
 static void gtk_text_set_selection  (GtkEditable       *editable,
-				     guint              start,
-				     guint              end);
+				     gint               start,
+				     gint               end);
 
 /* Event handlers */
 static void  gtk_text_draw              (GtkWidget         *widget,
@@ -289,7 +289,7 @@ static void gtk_text_delete_to_line_end        (GtkText          *text);
 static void gtk_text_select_word               (GtkText          *text);
 static void gtk_text_select_line               (GtkText          *text);
 
-#define DEBUG_GTK_TEXT
+/* #define DEBUG_GTK_TEXT */
 
 #if defined(DEBUG_GTK_TEXT) && defined(__GNUC__)
 /* Debugging utilities. */
@@ -636,6 +636,7 @@ gtk_text_insert (GtkText    *text,
 		 gint        length)
 {
   gint i;
+  GtkEditable *editable = GTK_EDITABLE (text);
 
   gint new_line_count = 1;
   guint old_height = 0;
@@ -670,6 +671,11 @@ gtk_text_insert (GtkText    *text,
 
   if (text->point.index < text->first_line_start_index)
     text->first_line_start_index += length;
+
+  if (text->point.index < editable->selection_start_pos)
+    editable->selection_start_pos += length;
+  if (text->point.index < editable->selection_end_pos)
+    editable->selection_end_pos += length;
 
   move_gap_to_point (text);
 
@@ -708,9 +714,10 @@ gtk_text_backward_delete (GtkText *text,
 
 gint
 gtk_text_forward_delete (GtkText *text,
-			  guint    nchars)
+			 guint    nchars)
 {
   guint old_lines, old_height;
+  GtkEditable *editable = GTK_EDITABLE (text); 
 
   g_return_val_if_fail (text != NULL, 0);
   g_return_val_if_fail (GTK_IS_TEXT (text), 0);
@@ -738,6 +745,11 @@ gtk_text_forward_delete (GtkText *text,
 	text->first_line_start_index -= nchars;
     }
 
+  if (text->point.index < editable->selection_start_pos)
+    editable->selection_start_pos -= nchars;
+  if (text->point.index < editable->selection_end_pos)
+    editable->selection_end_pos -= nchars;
+
   move_gap_to_point (text);
 
   text->gap_size += nchars;
@@ -752,42 +764,44 @@ gtk_text_forward_delete (GtkText *text,
 
 static gchar *    
 gtk_text_get_chars       (GtkEditable   *editable,
-			  guint          index,
-			  guint          nchars)
+			  gint           start_pos,
+			  gint           end_pos)
 {
   GtkText *text;
   
   gchar *retval;
   gchar *p;
-  guint n;
+  guint n, nchars;
 
+  if (end_pos < 0)
+    end_pos = TEXT_LENGTH (text);
+  
   g_return_val_if_fail (editable != NULL, NULL);
   g_return_val_if_fail (GTK_IS_TEXT (editable), NULL);
   text = GTK_TEXT (editable);
   
-  if (index+nchars > TEXT_LENGTH (text))
+  if (end_pos > TEXT_LENGTH (text))
     return NULL;
-  
-  if (nchars < 0) 
-    nchars = TEXT_LENGTH (text) - index;
 
+  nchars = end_pos - start_pos;
+  
   retval = g_new (gchar, nchars+1);
   p = retval;
 
-  if (index < text->gap_position) 
+  if (start_pos < text->gap_position) 
     {
-      n = MIN (text->gap_position - index, nchars);
-      memcpy (p, &text->text[index], n);
+      n = MIN (text->gap_position - start_pos, nchars);
+      memcpy (p, &text->text[start_pos], n);
       p += n;
-      index += n;
+      start_pos += n;
       nchars -= n;
     }
 
-  if (index+nchars >= text->gap_position)
+  if (start_pos+nchars >= text->gap_position)
     {
       memcpy (p, 
 	      text->text + MAX (text->gap_position + text->gap_size, 
-				index + text->gap_size),
+				start_pos + text->gap_size),
 	      nchars);
       p += nchars;
     }
@@ -1276,9 +1290,8 @@ gtk_text_button_press (GtkWidget      *widget,
 	      find_mouse_cursor (text, event->x, event->y);
 	      draw_cursor (text, FALSE);
 
-	      editable->current_pos = text->cursor_mark.index;
 	    }
-
+	  
 	  gtk_selection_convert (widget, GDK_SELECTION_PRIMARY,
 				 ctext_atom, event->time);
 	}
@@ -1385,8 +1398,8 @@ gtk_text_insert_1_at_point (GtkText* text, gchar key)
 static void 
 gtk_text_insert_text    (GtkEditable       *editable,
 			 const gchar       *new_text,
-			 guint              new_text_length,
-			 guint              *position)
+			 gint               new_text_length,
+			 gint              *position)
 {
   GtkText *text = GTK_TEXT (editable);
   
@@ -1398,12 +1411,15 @@ gtk_text_insert_text    (GtkEditable       *editable,
 
 static void 
 gtk_text_delete_text    (GtkEditable       *editable,
-			 guint              start_pos,
-			 guint              end_pos)
+			 gint               start_pos,
+			 gint               end_pos)
 {
   GtkText *text = GTK_TEXT (editable);
   
   gtk_text_set_point (text, start_pos);
+  if (end_pos < 0)
+    end_pos = TEXT_LENGTH (text);
+  
   gtk_text_forward_delete (text, end_pos - start_pos);
 }
 
@@ -1554,14 +1570,20 @@ gtk_text_key_press (GtkWidget   *widget,
 	    }
 	  else if (event->length > 0)
 	    {
+	      extend_selection = FALSE;
+
 	      if (event->length == 1)
-		gtk_text_insert_1_at_point (text, event->string[0]);
+		{
+		  gtk_editable_delete_selection (editable);
+		  gtk_text_insert_1_at_point (text, event->string[0]);
+		  gtk_editable_changed (editable);
+		}
+
 	      return_val = TRUE;
 	    }
 	  else
 	    return_val = FALSE;
 	}
-      editable->current_pos = text->cursor_mark.index;
 
       if (return_val)
 	{
@@ -1869,7 +1891,7 @@ compute_lines_pixels (GtkText* text, gint char_count,
       if (line == text->current_line)
 	char_count -= CACHE_DATA(line).end.index - text->point.index + 1;
       else
-	char_count -= CACHE_DATA(line).end.index -CACHE_DATA(line).end.index + 1;
+	char_count -= CACHE_DATA(line).end.index -CACHE_DATA(line).start.index + 1;
 
       if (!text->line_wrap || !CACHE_DATA(line).wraps)
 	*lines += 1;
@@ -2761,6 +2783,7 @@ find_cursor (GtkText* text)
 			 &CACHE_DATA(text->current_line),
 			 pixel_height_of(text, text->current_line));
 
+  GTK_EDITABLE (text)->current_pos = text->cursor_mark.index;
 }
 
 static void
@@ -3007,11 +3030,11 @@ gtk_text_move_backward_word (GtkText *text)
   undraw_cursor (text, FALSE);
   
   while ((text->cursor_mark.index > 0) &&
-	 !isalnum (GTK_TEXT_INDEX(text, text->cursor_mark.index)))
+	 !isalnum (GTK_TEXT_INDEX(text, text->cursor_mark.index-1)))
     decrement_mark (&text->cursor_mark);
 
   while ((text->cursor_mark.index > 0) &&
-	 isalnum (GTK_TEXT_INDEX(text, text->cursor_mark.index)))
+	 isalnum (GTK_TEXT_INDEX(text, text->cursor_mark.index-1)))
     decrement_mark (&text->cursor_mark);
 
   find_cursor (text);
@@ -4052,8 +4075,8 @@ expose_text (GtkText* text, GdkRectangle *area, gboolean cursor)
 
 static void 
 gtk_text_update_text    (GtkEditable       *editable,
-			 guint              start_pos,
-			 guint              end_pos)
+			 gint               start_pos,
+			 gint               end_pos)
 {
   GtkText *text = GTK_TEXT (editable);
 
@@ -4062,7 +4085,10 @@ gtk_text_update_text    (GtkEditable       *editable,
   GdkRectangle area;
   gint width;
   gint height;
-  
+ 
+  if (end_pos < 0)
+    end_pos = TEXT_LENGTH (text);
+
   gdk_window_get_size (text->text_area, &width, &height);
   area.x = 0;
   area.y = -1;
@@ -4128,15 +4154,20 @@ recompute_geometry (GtkText* text)
 
 void 
 gtk_text_set_selection  (GtkEditable   *editable,
-			 guint          start,
-			 guint          end)
+			 gint           start,
+			 gint           end)
 {
   GtkText *text = GTK_TEXT (editable);
 
-  guint start1 = MIN(start,end);
-  guint end1 = MAX(start,end);
-  guint start2 = MIN(editable->selection_start_pos, editable->selection_end_pos);
-  guint end2 = MAX(editable->selection_start_pos, editable->selection_end_pos);
+  guint start1, end1, start2, end2;
+
+  if (end < 0)
+    end = TEXT_LENGTH (text);
+  
+  start1 = MIN(start,end);
+  end1 = MAX(start,end);
+  start2 = MIN(editable->selection_start_pos, editable->selection_end_pos);
+  end2 = MAX(editable->selection_start_pos, editable->selection_end_pos);
 
   if (start2 < start1)
     {

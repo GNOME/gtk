@@ -73,8 +73,8 @@ void       gtk_entry_set_position   (GtkEntry      *entry,
 				     gint           position);
 gchar*     gtk_entry_get_text       (GtkEntry      *entry);
 void       gtk_entry_select_region  (GtkEntry      *entry,
-				     guint          start,
-				     guint          end);
+				     gint           start,
+				     gint           end);
 void       gtk_entry_set_visibility (GtkEntry      *entry,
 				     gboolean       visible);
 void       gtk_entry_set_editable   (GtkEntry      *entry,
