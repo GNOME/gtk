@@ -1,3 +1,8 @@
+2004-07-01  J. Ali Harlow  <ali@juiblex.co.uk>
+
+	* gdk/win32/gdkinput-win32.c (_gdk_input_ungrab_pointer): Fix
+	win32 build problem w/o wintab.  Fixed #145242
+
 2004-06-30  Anders Carlsson  <andersca@gnome.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_set_model): Use
