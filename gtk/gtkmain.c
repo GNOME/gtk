@@ -324,7 +324,10 @@ gtk_init (int	 *argc,
 		      modinit_func)
 		    {
 		      if (!g_slist_find (gtk_modinit_funcs, modinit_func))
-			gtk_modinit_funcs = g_slist_prepend (gtk_modinit_funcs, modinit_func);
+			{
+			  g_module_make_resident (module);
+			  gtk_modinit_funcs = g_slist_prepend (gtk_modinit_funcs, modinit_func);
+			}
 		      else
 			{
 			  g_module_close (module);

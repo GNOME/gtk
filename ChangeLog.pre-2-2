@@ -1,3 +1,10 @@
+Mon Sep 21 02:30:06 1998  Tim Janik  <timj@gtk.org>
+
+        * NEWS file update for upcoming release of Gtk+ version 1.1.2,
+        binary age 0, interface age 0.
+
+       	* gtk/gtkmain.c (gtk_init): enforce gtk-modules to always be resident.
+
 Sun Sep 20 18:21:46 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* ltconfig.sh: Patch to libtool-1.2b to make --disable-static

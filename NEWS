@@ -1,12 +1,35 @@
 What is new in GTK+ 1.1.2:
 
-* New runtime loading and initialization of modules
-* Tutorial updates
-* Changes to menus including tearoff menus and accelerators
-* Better support for modal dialogs
-* Removed CAN_FOCUS by default from scrollbars and button children of toolbar
-* Fix for clist resize bug
-* New sorting for clist, removed duplicate sorting from ctree
+* Gtk+ is now featuring runtime loading of dynamic modules via the
+  --gtk-modules= command line switch. such modules have to export a
+  G_MODULE_EXPORT void gtk_module_init (gint *argc, gchar ***argv);
+  function which will be invoked to initialize the module. since such
+  modules may create new widget types, they are always resident.
+* The tutorial has been updated again.
+* Changes to menus including tearoff menus and accelerators.
+* Better support for modal dialogs.
+* Removed CAN_FOCUS by default from scrollbars and button children of toolbar.
+* More improvements and fixes for GtkCList and GtkCTree (i.e. row sorting).
+* GtkCTree rows can be unselectable now.
+* The GtkCTree API has undergone major renames (see ChangeLog entry from Lars
+  Hamann on Tue Aug 18 00:29:13 1998).
+* A bunch of varargs functions changed to get va_lists working on systems that
+  implement va_lists as arrays.
+* Improvements to the gdkrgb code.
+* Improvements to Gdk color handling so we greatly reduce server traffic and
+  don't leak colors anymore.
+* Improved internal widget tree iterators (the GtkContainer::foreach signal
+  vanished because of this).
+* Option menus can have the keyboard focus now.
+* More fixups to the text widget.
+* GtkFileSelection should behave much more nicely in combination with AFS now.
+* Support for label underlining.
+* Support for GLib 1.1.3 log domains.
+* Documentation improvements.
+* Fix for a major bug in the type systems memory allocation code that could
+  cause random crashes.
+* Libtool update to version 1.2b.
+* Lots of bugfixes and cleanups again ;)
 
 
 What is new in GTK+ 1.1.1:
