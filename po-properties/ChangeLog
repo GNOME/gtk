@@ -1,3 +1,7 @@
+2004-02-05  Laurent Dhima  <laurenti@alblinux.net>
+
+	* sq.po: Updated Albanian translation.
+
 2004-02-05  Christian Rose  <menthos@menthos.com>
 
 	* POTFILES.in: Removed modules/input/imhangul.c; it's not present
