@@ -48,6 +48,10 @@ Bugs:
  * Expose events aren't being generated correctly for DND demo
 
 Additions:
+ * implement keyboard navigation in menus
+
+ * focus handling for GtkOptionMenu (needs the previous)
+
  * GScanner: it might be good to ues stdio and getch() instead of 1-character
    reads. so one can take advantage of buffering. Currently each read() takes
    a separate syscall.
