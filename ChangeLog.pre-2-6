@@ -1,3 +1,16 @@
+Sat Mar  3 15:39:49 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_button_press): Add shift-clicking
+	to extend the selection. (Roughly based on patch
+	from Jay Cox, #50939)
+
+	* gtk/gtkentry.c (gtk_entry_button_press): Fix triple-clicking
+	to properly handle previous GDK_BUTTON_PRESS. 
+	(Patch from Jay Cox, #50938)
+
+	* gtk/gtkentry.c (gtk_entry_real_delete_text): Move the
+	'\0' back along with the deleted text. (#51148)
+
 Mon Jan 22 14:31:29 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkevents-x11.c (gdk_event_translate): Unshift

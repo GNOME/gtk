@@ -1162,11 +1162,72 @@ gtk_entry_button_press (GtkWidget      *widget,
     
   if (event->button == 1)
     {
-      switch (event->type)
+      gboolean have_selection = gtk_editable_get_selection_bounds (editable, &sel_start, &sel_end);
+      
+      if (event->state & GDK_SHIFT_MASK)
+	{
+	  if (!have_selection) /* select from the current position to the clicked position */
+	    sel_start = sel_end = entry->current_pos;
+	  
+	  if (tmp_pos > sel_start && tmp_pos < sel_end)
+	    {
+	      /* Truncate current selection */
+	      entry->current_pos = tmp_pos;
+	    }
+	  else
+	    {
+	      gboolean extend_to_left;
+	      gint start, end;
+
+	      /* Figure out what click selects and extend current selection */
+	      switch (event->type)
+		{
+		case GDK_BUTTON_PRESS:
+		  entry->current_pos = entry->selection_bound = tmp_pos;
+		  break;
+		  
+		case GDK_2BUTTON_PRESS:
+		  gtk_entry_select_word (entry);
+		  break;
+		  
+		case GDK_3BUTTON_PRESS:
+		  gtk_entry_select_line (entry);
+		  break;
+
+		default:
+		  break;
+		}
+
+	      start = MIN (entry->current_pos, entry->selection_bound);
+	      start = MIN (sel_start, start);
+	      
+	      end = MAX (entry->current_pos, entry->selection_bound);
+	      end = MAX (sel_end, end);
+
+	      if (tmp_pos == sel_start || tmp_pos == sel_end)
+		extend_to_left = (tmp_pos == start);
+	      else
+		extend_to_left = (end == sel_end);
+	      
+	      if (extend_to_left)
+		{
+		  entry->selection_bound = end;
+		  entry->current_pos = start;
+		}
+	      else
+		{
+		  entry->selection_bound = start;
+		  entry->current_pos = end;
+		}
+	    }
+	  
+	  gtk_entry_recompute (entry);
+	}
+      else /* no shift key */
+	switch (event->type)
 	{
 	case GDK_BUTTON_PRESS:
-	  if (gtk_editable_get_selection_bounds (editable, &sel_start, &sel_end) &&
-	      tmp_pos >= sel_start && tmp_pos <= sel_end)
+	  if (have_selection && tmp_pos >= sel_start && tmp_pos <= sel_end)
 	    {
 	      /* Click inside the selection - we'll either start a drag, or
 	       * clear the selection
@@ -1188,11 +1249,22 @@ gtk_entry_button_press (GtkWidget      *widget,
 	  
 	  break;
 
+ 
 	case GDK_2BUTTON_PRESS:
+	  /* We ALWAYS receive a GDK_BUTTON_PRESS immediately before 
+	   * receiving a GDK_2BUTTON_PRESS so we need to reset
+ 	   * entry->in_drag which may have been set above
+           */
+	  entry->in_drag = FALSE;
 	  gtk_entry_select_word (entry);
 	  break;
-
+	
 	case GDK_3BUTTON_PRESS:
+	  /* We ALWAYS receive a GDK_BUTTON_PRESS immediately before
+	   * receiving a GDK_3BUTTON_PRESS so we need to reset
+	   * entry->in_drag which may have been set above
+	   */
+	  entry->in_drag = FALSE;
 	  gtk_entry_select_line (entry);
 	  break;
 
@@ -1678,7 +1750,7 @@ gtk_entry_real_delete_text (GtkEntry *entry,
       gint start_index = g_utf8_offset_to_pointer (entry->text, start_pos) - entry->text;
       gint end_index = g_utf8_offset_to_pointer (entry->text, end_pos) - entry->text;
 
-      g_memmove (entry->text + start_index, entry->text + end_index, entry->n_bytes - end_index);
+      g_memmove (entry->text + start_index, entry->text + end_index, entry->n_bytes + 1 - end_index);
       entry->text_length -= (end_pos - start_pos);
       entry->n_bytes -= (end_index - start_index);
       
@@ -2974,7 +3046,7 @@ append_action_signal (GtkEntry     *entry,
 
   gtk_object_set_data (GTK_OBJECT (menuitem), "gtk-signal", (char *)signal);
   gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
-		      activate_cb, entry);
+		      GTK_SIGNAL_FUNC (activate_cb), entry);
 
   gtk_widget_show (menuitem);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
