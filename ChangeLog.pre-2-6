@@ -1,3 +1,8 @@
+Thu Jul  8 00:31:34 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktreeview.c (gtk_tree_view_set_model): Stop editing
+	when a new model is set.  (#145566, Dmitry M. Shatrov)
+
 Wed Jul  7 23:44:32 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkimage.c (gtk_image_expose): Make sure that subpixbufs
