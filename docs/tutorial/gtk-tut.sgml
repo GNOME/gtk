@@ -5602,8 +5602,8 @@ static void calendar_date_to_string( CalendarData *data,
 
   gtk_calendar_get_date (GTK_CALENDAR (data-&gt;window),
 			 &amp;year, &amp;month, &amp;day);
-  g_date_set_dmy (&date, day, month + 1, year);
-  g_date_strftime (buffer, buff_len - 1, "%x", &date);
+  g_date_set_dmy (&amp;date, day, month + 1, year);
+  g_date_strftime (buffer, buff_len - 1, "%x", &amp;date);
 
 }
 

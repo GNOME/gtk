@@ -1,5 +1,7 @@
 2005-01-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* docs/tutorial/gtk-tut.sgml: Make it build.
+
 	* gtk/gtkdialog.c (gtk_dialog_run): Some clarification
 	regarding modality.  (#112903, Dave Bordoley)
 
