@@ -29,7 +29,7 @@
 
 #include "gdkgc.h"
 #include "gdkprivate.h"
-
+#include "gdkx.h"
 
 GdkGC*
 gdk_gc_new (GdkWindow *window)
@@ -42,7 +42,6 @@ gdk_gc_new_with_values (GdkWindow	*window,
 			GdkGCValues	*values,
 			GdkGCValuesMask	 values_mask)
 {
-  GdkWindowPrivate *window_private;
   GdkGC *gc;
   GdkGCPrivate *private;
   Window xwindow;
@@ -51,15 +50,14 @@ gdk_gc_new_with_values (GdkWindow	*window,
 
   g_return_val_if_fail (window != NULL, NULL);
 
-  window_private = (GdkWindowPrivate*) window;
-  if (window_private->destroyed)
+  if (GDK_DRAWABLE_DESTROYED (window))
     return NULL;
 
   private = g_new (GdkGCPrivate, 1);
   gc = (GdkGC*) private;
 
-  xwindow = window_private->xwindow;
-  private->xdisplay = window_private->xdisplay;
+  xwindow = GDK_DRAWABLE_XID (window);
+  private->xdisplay = GDK_DRAWABLE_XDISPLAY (window);
   private->ref_count = 1;
 
   xvalues.function = GXcopy;
@@ -157,17 +155,17 @@ gdk_gc_new_with_values (GdkWindow	*window,
     }
   if (values_mask & GDK_GC_TILE)
     {
-      xvalues.tile = ((GdkPixmapPrivate*) values->tile)->xwindow;
+      xvalues.tile = GDK_DRAWABLE_XID (values->tile);
       xvalues_mask |= GCTile;
     }
   if (values_mask & GDK_GC_STIPPLE)
     {
-      xvalues.stipple = ((GdkPixmapPrivate*) values->stipple)->xwindow;
+      xvalues.stipple = GDK_DRAWABLE_XID (values->stipple);
       xvalues_mask |= GCStipple;
     }
   if (values_mask & GDK_GC_CLIP_MASK)
     {
-      xvalues.clip_mask = ((GdkPixmapPrivate*) values->clip_mask)->xwindow;
+      xvalues.clip_mask = GDK_DRAWABLE_XID (values->clip_mask);
       xvalues_mask |= GCClipMask;
     }
   if (values_mask & GDK_GC_SUBWINDOW)
@@ -586,7 +584,6 @@ gdk_gc_set_tile (GdkGC	   *gc,
 		 GdkPixmap *tile)
 {
   GdkGCPrivate *private;
-  GdkPixmapPrivate *pixmap_private;
   Pixmap pixmap;
 
   g_return_if_fail (gc != NULL);
@@ -595,10 +592,7 @@ gdk_gc_set_tile (GdkGC	   *gc,
 
   pixmap = None;
   if (tile)
-    {
-      pixmap_private = (GdkPixmapPrivate*) tile;
-      pixmap = pixmap_private->xwindow;
-    }
+    pixmap = GDK_DRAWABLE_XID (tile);
 
   XSetTile (private->xdisplay, private->xgc, pixmap);
 }
@@ -608,7 +602,6 @@ gdk_gc_set_stipple (GdkGC     *gc,
 		    GdkPixmap *stipple)
 {
   GdkGCPrivate *private;
-  GdkPixmapPrivate *pixmap_private;
   Pixmap pixmap;
 
   g_return_if_fail (gc != NULL);
@@ -617,10 +610,7 @@ gdk_gc_set_stipple (GdkGC     *gc,
 
   pixmap = None;
   if (stipple)
-    {
-      pixmap_private = (GdkPixmapPrivate*) stipple;
-      pixmap = pixmap_private->xwindow;
-    }
+    pixmap = GDK_DRAWABLE_XID (stipple);
 
   XSetStipple (private->xdisplay, private->xgc, pixmap);
 }
@@ -663,14 +653,7 @@ gdk_gc_set_clip_mask (GdkGC	*gc,
   g_return_if_fail (gc != NULL);
   
   if (mask)
-    {
-      GdkWindowPrivate *mask_private;
-      
-      mask_private = (GdkWindowPrivate*) mask;
-      if (mask_private->destroyed)
-	return;
-      xmask = mask_private->xwindow;
-    }
+    xmask = GDK_DRAWABLE_XID (mask);
   else
     xmask = None;
   

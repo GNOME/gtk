@@ -45,14 +45,11 @@ gdk_selection_owner_set (GdkWindow *owner,
 
   if (owner)
     {
-      GdkWindowPrivate *private;
-
-      private = (GdkWindowPrivate*) owner;
-      if (private->destroyed)
+      if (GDK_DRAWABLE_DESTROYED (owner))
 	return FALSE;
 
-      xdisplay = private->xdisplay;
-      xwindow = private->xwindow;
+      xdisplay = GDK_DRAWABLE_XDISPLAY (owner);
+      xwindow = GDK_DRAWABLE_XID (owner);
     }
   else
     {
@@ -83,16 +80,11 @@ gdk_selection_convert (GdkWindow *requestor,
 		       GdkAtom    target,
 		       guint32    time)
 {
-  GdkWindowPrivate *private;
-
-  g_return_if_fail (requestor != NULL);
-
-  private = (GdkWindowPrivate*) requestor;
-  if (private->destroyed)
+  if (GDK_DRAWABLE_DESTROYED (requestor))
     return;
 
-  XConvertSelection (private->xdisplay, selection, target,
-		     gdk_selection_property, private->xwindow, time);
+  XConvertSelection (GDK_DRAWABLE_XDISPLAY (requestor), selection, target,
+		     gdk_selection_property, GDK_DRAWABLE_XID (requestor), time);
 }
 
 gint
@@ -101,7 +93,6 @@ gdk_selection_property_get (GdkWindow  *requestor,
 			    GdkAtom    *ret_type,
 			    gint       *ret_format)
 {
-  GdkWindowPrivate *private;
   gulong nitems;
   gulong nbytes;
   gulong length;
@@ -110,17 +101,18 @@ gdk_selection_property_get (GdkWindow  *requestor,
   guchar *t = NULL;
 
   g_return_val_if_fail (requestor != NULL, 0);
+  g_return_val_if_fail (GDK_IS_WINDOW (requestor), 0);
 
   /* If retrieved chunks are typically small, (and the ICCCM says the
      should be) it would be a win to try first with a buffer of
      moderate length, to avoid two round trips to the server */
 
-  private = (GdkWindowPrivate*) requestor;
-  if (private->destroyed)
+  if (GDK_DRAWABLE_DESTROYED (requestor))
     return 0;
 
   t = NULL;
-  XGetWindowProperty (private->xdisplay, private->xwindow,
+  XGetWindowProperty (GDK_DRAWABLE_XDISPLAY (requestor),
+		      GDK_DRAWABLE_XID (requestor),
 		      gdk_selection_property, 0, 0, False,
 		      AnyPropertyType, &prop_type, &prop_format,
 		      &nitems, &nbytes, &t);
@@ -150,7 +142,8 @@ gdk_selection_property_get (GdkWindow  *requestor,
      protocol, in which case the client has to make sure they'll be
      notified of PropertyChange events _before_ the property is deleted.
      Otherwise there's no guarantee we'll win the race ... */
-  XGetWindowProperty (private->xdisplay, private->xwindow,
+  XGetWindowProperty (GDK_DRAWABLE_XDISPLAY (requestor),
+		      GDK_DRAWABLE_XID (requestor),
 		      gdk_selection_property, 0, (nbytes + 3) / 4, False,
 		      AnyPropertyType, &prop_type, &prop_format,
 		      &nitems, &nbytes, &t);

@@ -34,14 +34,33 @@ typedef enum
   GDK_WINDOW_CHILD,
   GDK_WINDOW_DIALOG,
   GDK_WINDOW_TEMP,
-  GDK_WINDOW_PIXMAP,
+  GDK_DRAWABLE_PIXMAP,
   GDK_WINDOW_FOREIGN
-} GdkWindowType;
+} GdkDrawableType;
 
-struct _GdkWindow
+struct _GdkDrawable
 {
   gpointer user_data;
 };
+
+/* Manipulation of drawables
+ */
+GdkDrawableType gdk_drawable_get_type     (GdkDrawable	  *window);
+
+void            gdk_drawable_set_data     (GdkDrawable    *drawable,
+					   const gchar    *key,
+					   gpointer	  data,
+					   GDestroyNotify  destroy_func);
+void            gdk_drawable_get_data     (GdkDrawable    *drawable,
+					   const gchar    *key);
+
+void            gdk_drawable_get_size     (GdkWindow	  *drawable,
+					   gint	          *width,
+					   gint  	  *height);
+void	        gdk_drawable_set_colormap (GdkDrawable	  *drawable,
+					   GdkColormap	  *colormap);
+GdkColormap*    gdk_drawable_get_colormap (GdkDrawable	  *drawable);
+GdkVisual*      gdk_drawable_get_visual   (GdkDrawable	  *drawable);
 
 /* Drawing
  */

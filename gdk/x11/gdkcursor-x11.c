@@ -27,6 +27,7 @@
 #include <X11/Xlib.h>
 #include <X11/cursorfont.h>
 
+#include "gdkx.h"
 #include "gdkcursor.h"
 #include "gdkprivate.h"
 
@@ -57,8 +58,8 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source, GdkPixmap *mask, GdkColor *fg, Gd
   Cursor xcursor;
   XColor xfg, xbg;
   
-  source_pixmap = ((GdkPixmapPrivate *) source)->xwindow;
-  mask_pixmap   = ((GdkPixmapPrivate *) mask)->xwindow;
+  source_pixmap = GDK_DRAWABLE_XID (source);
+  mask_pixmap   = GDK_DRAWABLE_XID (mask);
 
   xfg.pixel = fg->pixel;
   xfg.red = fg->red;

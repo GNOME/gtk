@@ -33,8 +33,10 @@
 #define GDK_ROOT_WINDOW()             gdk_root_window
 #define GDK_ROOT_PARENT()             ((GdkWindow *)&gdk_root_parent)
 #define GDK_DISPLAY()                 gdk_display
-#define GDK_WINDOW_XDISPLAY(win)      (((GdkWindowPrivate*) win)->xdisplay)
-#define GDK_WINDOW_XWINDOW(win)       (((GdkWindowPrivate*) win)->xwindow)
+#define GDK_DRAWABLE_XDISPLAY(win)    (((GdkDrawablePrivate*) win)->xdisplay)
+#define GDK_DRAWABLE_XID(win)         (((GdkDrawablePrivate*) win)->xwindow)
+#define GDK_WINDOW_XDISPLAY           GDK_DRAWABLE_XDISPLAY
+#define GDK_WINDOW_XWINDOW            GDK_DRAWABLE_XID
 #define GDK_IMAGE_XDISPLAY(image)     (((GdkImagePrivate*) image)->xdisplay)
 #define GDK_IMAGE_XIMAGE(image)       (((GdkImagePrivate*) image)->ximage)
 #define GDK_GC_XDISPLAY(gc)           (((GdkGCPrivate*) gc)->xdisplay)

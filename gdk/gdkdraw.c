@@ -27,27 +27,145 @@
 #include <X11/Xlib.h>
 #include <X11/Xos.h>
 
+#include "gdkx.h"
 #include "gdkdrawable.h"
 #include "gdkprivate.h"
+#include "gdkwindow.h"
 
+/* Manipulation of drawables
+ */
+void          
+gdk_drawable_set_data (GdkDrawable   *drawable,
+		       const gchar   *key,
+		       gpointer	      data,
+		       GDestroyNotify destroy_func)
+{
+  g_dataset_set_data_full (drawable, key, data, destroy_func);
+}
+
+void          
+gdk_drawable_get_data (GdkDrawable   *drawable,
+		       const gchar   *key)
+{
+  g_dataset_get_data (drawable, key);
+}
+
+GdkDrawableType
+gdk_drawable_get_type (GdkDrawable *drawable)
+{
+  g_return_val_if_fail (drawable != NULL, (GdkDrawableType) -1);
+  
+  return GDK_DRAWABLE_TYPE (drawable);
+}
+
+void
+gdk_drawable_get_size (GdkDrawable *drawable,
+		       gint        *width,
+		       gint        *height)
+{
+  GdkDrawablePrivate *drawable_private;
+  
+  g_return_if_fail (drawable != NULL);
+  
+  drawable_private = (GdkDrawablePrivate*) drawable;
+  
+  if (width)
+    *width = drawable_private->width;
+  if (height)
+    *height = drawable_private->height;
+}
+
+void
+gdk_drawable_set_colormap (GdkDrawable *drawable,
+			   GdkColormap *colormap)
+{
+  GdkDrawablePrivate *drawable_private;
+  GdkColormapPrivate *colormap_private;
+  
+  g_return_if_fail (drawable != NULL);
+  g_return_if_fail (colormap != NULL);
+  
+  drawable_private = (GdkDrawablePrivate*) drawable;
+  colormap_private = (GdkColormapPrivate*) colormap;
+  
+  if (!GDK_DRAWABLE_DESTROYED (drawable))
+    {
+      if (GDK_IS_WINDOW (drawable))
+	{
+	  g_return_if_fail (colormap_private->visual !=
+			    ((GdkColormapPrivate *)(drawable_private->colormap))->visual);
+
+	  XSetWindowColormap (GDK_DRAWABLE_XDISPLAY (drawable),
+			      GDK_DRAWABLE_XID (drawable),
+			      colormap_private->xcolormap);
+	}
+
+      if (drawable_private->colormap)
+	gdk_colormap_unref (drawable_private->colormap);
+      drawable_private->colormap = colormap;
+      gdk_colormap_ref (drawable_private->colormap);
+
+      if (GDK_IS_WINDOW (drawable) &&
+	  drawable_private->window_type != GDK_WINDOW_TOPLEVEL)
+	gdk_window_add_colormap_windows (drawable);
+    }
+}
+
+GdkColormap*
+gdk_drawable_get_colormap (GdkDrawable *drawable)
+{
+  GdkDrawablePrivate *drawable_private;
+  XWindowAttributes window_attributes;
+  
+  g_return_val_if_fail (drawable != NULL, NULL);
+  drawable_private = (GdkDrawablePrivate*) drawable;
+  
+  if (!GDK_DRAWABLE_DESTROYED (drawable))
+    {
+      if (drawable_private->colormap == NULL &&
+	  GDK_IS_WINDOW (drawable))
+	{
+	  XGetWindowAttributes (GDK_DRAWABLE_XDISPLAY (drawable),
+				GDK_DRAWABLE_XID (drawable),
+				&window_attributes);
+	  drawable_private->colormap =  gdk_colormap_lookup (window_attributes.colormap);
+	}
+
+      return drawable_private->colormap;
+    }
+  
+  return NULL;
+}
+
+GdkVisual*
+gdk_drawable_get_visual (GdkDrawable *drawable)
+{
+  GdkColormap *colormap;
+
+  g_return_val_if_fail (drawable != NULL, NULL);
+
+  colormap = gdk_drawable_get_colormap (drawable);
+  return colormap ? gdk_colormap_get_visual (colormap) : NULL;
+}
+
+/* Drawing
+ */
 void
 gdk_draw_point (GdkDrawable *drawable,
                 GdkGC       *gc,
                 gint         x,
                 gint         y)
 {
-  GdkWindowPrivate *drawable_private;
   GdkGCPrivate *gc_private;
 
   g_return_if_fail (drawable != NULL);
   g_return_if_fail (gc != NULL);
 
-  drawable_private = (GdkWindowPrivate*) drawable;
-  if (drawable_private->destroyed)
+  if (GDK_DRAWABLE_DESTROYED (drawable))
     return;
   gc_private = (GdkGCPrivate*) gc;
 
-  XDrawPoint (drawable_private->xdisplay, drawable_private->xwindow,
+  XDrawPoint (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
               gc_private->xgc, x, y);
 }
 
@@ -59,18 +177,16 @@ gdk_draw_line (GdkDrawable *drawable,
 	       gint         x2,
 	       gint         y2)
 {
-  GdkWindowPrivate *drawable_private;
   GdkGCPrivate *gc_private;
 
   g_return_if_fail (drawable != NULL);
   g_return_if_fail (gc != NULL);
 
-  drawable_private = (GdkWindowPrivate*) drawable;
-  if (drawable_private->destroyed)
+  if (GDK_DRAWABLE_DESTROYED (drawable))
     return;
   gc_private = (GdkGCPrivate*) gc;
 
-  XDrawLine (drawable_private->xdisplay, drawable_private->xwindow,
+  XDrawLine (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
 	     gc_private->xgc, x1, y1, x2, y2);
 }
 
@@ -83,14 +199,14 @@ gdk_draw_rectangle (GdkDrawable *drawable,
 		    gint         width,
 		    gint         height)
 {
-  GdkWindowPrivate *drawable_private;
+  GdkDrawablePrivate *drawable_private;
   GdkGCPrivate *gc_private;
 
   g_return_if_fail (drawable != NULL);
   g_return_if_fail (gc != NULL);
 
-  drawable_private = (GdkWindowPrivate*) drawable;
-  if (drawable_private->destroyed)
+  drawable_private = (GdkDrawablePrivate*) drawable;
+  if (GDK_DRAWABLE_DESTROYED (drawable))
     return;
   gc_private = (GdkGCPrivate*) gc;
 
@@ -100,10 +216,10 @@ gdk_draw_rectangle (GdkDrawable *drawable,
     height = drawable_private->height;
 
   if (filled)
-    XFillRectangle (drawable_private->xdisplay, drawable_private->xwindow,
+    XFillRectangle (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
 		    gc_private->xgc, x, y, width, height);
   else
-    XDrawRectangle (drawable_private->xdisplay, drawable_private->xwindow,
+    XDrawRectangle (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
 		    gc_private->xgc, x, y, width, height);
 }
 
@@ -118,14 +234,14 @@ gdk_draw_arc (GdkDrawable *drawable,
 	      gint         angle1,
 	      gint         angle2)
 {
-  GdkWindowPrivate *drawable_private;
+  GdkDrawablePrivate *drawable_private;
   GdkGCPrivate *gc_private;
 
   g_return_if_fail (drawable != NULL);
   g_return_if_fail (gc != NULL);
 
-  drawable_private = (GdkWindowPrivate*) drawable;
-  if (drawable_private->destroyed)
+  drawable_private = (GdkDrawablePrivate*) drawable;
+  if (GDK_DRAWABLE_DESTROYED (drawable))
     return;
   gc_private = (GdkGCPrivate*) gc;
 
@@ -135,10 +251,10 @@ gdk_draw_arc (GdkDrawable *drawable,
     height = drawable_private->height;
 
   if (filled)
-    XFillArc (drawable_private->xdisplay, drawable_private->xwindow,
+    XFillArc (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
 	      gc_private->xgc, x, y, width, height, angle1, angle2);
   else
-    XDrawArc (drawable_private->xdisplay, drawable_private->xwindow,
+    XDrawArc (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
 	      gc_private->xgc, x, y, width, height, angle1, angle2);
 }
 
@@ -149,7 +265,6 @@ gdk_draw_polygon (GdkDrawable *drawable,
 		  GdkPoint    *points,
 		  gint         npoints)
 {
-  GdkWindowPrivate *drawable_private;
   GdkGCPrivate *gc_private;
   GdkPoint *local_points = points;
   gint local_npoints = npoints;
@@ -158,14 +273,13 @@ gdk_draw_polygon (GdkDrawable *drawable,
   g_return_if_fail (drawable != NULL);
   g_return_if_fail (gc != NULL);
 
-  drawable_private = (GdkWindowPrivate*) drawable;
-  if (drawable_private->destroyed)
+  if (GDK_DRAWABLE_DESTROYED (drawable))
     return;
   gc_private = (GdkGCPrivate*) gc;
 
   if (filled)
     {
-      XFillPolygon (drawable_private->xdisplay, drawable_private->xwindow,
+      XFillPolygon (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
 		    gc_private->xgc, (XPoint*) points, npoints, Complex, CoordModeOrigin);
     }
   else
@@ -181,7 +295,7 @@ gdk_draw_polygon (GdkDrawable *drawable,
           local_points[npoints].y = points[0].y;
       }
 
-      XDrawLines (drawable_private->xdisplay, drawable_private->xwindow,
+      XDrawLines (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
                  gc_private->xgc,
                  (XPoint*) local_points, local_npoints,
                  CoordModeOrigin);
@@ -205,7 +319,6 @@ gdk_draw_string (GdkDrawable *drawable,
 		 gint         y,
 		 const gchar *string)
 {
-  GdkWindowPrivate *drawable_private;
   GdkFontPrivate *font_private;
   GdkGCPrivate *gc_private;
 
@@ -214,8 +327,7 @@ gdk_draw_string (GdkDrawable *drawable,
   g_return_if_fail (gc != NULL);
   g_return_if_fail (string != NULL);
 
-  drawable_private = (GdkWindowPrivate*) drawable;
-  if (drawable_private->destroyed)
+  if (GDK_DRAWABLE_DESTROYED (drawable))
     return;
   gc_private = (GdkGCPrivate*) gc;
   font_private = (GdkFontPrivate*) font;
@@ -223,15 +335,15 @@ gdk_draw_string (GdkDrawable *drawable,
   if (font->type == GDK_FONT_FONT)
     {
       XFontStruct *xfont = (XFontStruct *) font_private->xfont;
-      XSetFont(drawable_private->xdisplay, gc_private->xgc, xfont->fid);
+      XSetFont(GDK_DRAWABLE_XDISPLAY (drawable), gc_private->xgc, xfont->fid);
       if ((xfont->min_byte1 == 0) && (xfont->max_byte1 == 0))
 	{
-	  XDrawString (drawable_private->xdisplay, drawable_private->xwindow,
+	  XDrawString (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
 		       gc_private->xgc, x, y, string, strlen (string));
 	}
       else
 	{
-	  XDrawString16 (drawable_private->xdisplay, drawable_private->xwindow,
+	  XDrawString16 (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
 			 gc_private->xgc, x, y, (XChar2b *) string,
 			 strlen (string) / 2);
 	}
@@ -239,7 +351,7 @@ gdk_draw_string (GdkDrawable *drawable,
   else if (font->type == GDK_FONT_FONTSET)
     {
       XFontSet fontset = (XFontSet) font_private->xfont;
-      XmbDrawString (drawable_private->xdisplay, drawable_private->xwindow,
+      XmbDrawString (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
 		     fontset, gc_private->xgc, x, y, string, strlen (string));
     }
   else
@@ -261,7 +373,6 @@ gdk_draw_text (GdkDrawable *drawable,
 	       const gchar *text,
 	       gint         text_length)
 {
-  GdkWindowPrivate *drawable_private;
   GdkFontPrivate *font_private;
   GdkGCPrivate *gc_private;
 
@@ -270,8 +381,7 @@ gdk_draw_text (GdkDrawable *drawable,
   g_return_if_fail (gc != NULL);
   g_return_if_fail (text != NULL);
 
-  drawable_private = (GdkWindowPrivate*) drawable;
-  if (drawable_private->destroyed)
+  if (GDK_DRAWABLE_DESTROYED (drawable))
     return;
   gc_private = (GdkGCPrivate*) gc;
   font_private = (GdkFontPrivate*) font;
@@ -279,22 +389,22 @@ gdk_draw_text (GdkDrawable *drawable,
   if (font->type == GDK_FONT_FONT)
     {
       XFontStruct *xfont = (XFontStruct *) font_private->xfont;
-      XSetFont(drawable_private->xdisplay, gc_private->xgc, xfont->fid);
+      XSetFont(GDK_DRAWABLE_XDISPLAY (drawable), gc_private->xgc, xfont->fid);
       if ((xfont->min_byte1 == 0) && (xfont->max_byte1 == 0))
 	{
-	  XDrawString (drawable_private->xdisplay, drawable_private->xwindow,
+	  XDrawString (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
 		       gc_private->xgc, x, y, text, text_length);
 	}
       else
 	{
-	  XDrawString16 (drawable_private->xdisplay, drawable_private->xwindow,
+	  XDrawString16 (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
 			 gc_private->xgc, x, y, (XChar2b *) text, text_length / 2);
 	}
     }
   else if (font->type == GDK_FONT_FONTSET)
     {
       XFontSet fontset = (XFontSet) font_private->xfont;
-      XmbDrawString (drawable_private->xdisplay, drawable_private->xwindow,
+      XmbDrawString (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
 		     fontset, gc_private->xgc, x, y, text, text_length);
     }
   else
@@ -310,7 +420,6 @@ gdk_draw_text_wc (GdkDrawable	 *drawable,
 		  const GdkWChar *text,
 		  gint		  text_length)
 {
-  GdkWindowPrivate *drawable_private;
   GdkFontPrivate *font_private;
   GdkGCPrivate *gc_private;
 
@@ -319,8 +428,7 @@ gdk_draw_text_wc (GdkDrawable	 *drawable,
   g_return_if_fail (gc != NULL);
   g_return_if_fail (text != NULL);
 
-  drawable_private = (GdkWindowPrivate*) drawable;
-  if (drawable_private->destroyed)
+  if (GDK_DRAWABLE_DESTROYED (drawable))
     return;
   gc_private = (GdkGCPrivate*) gc;
   font_private = (GdkFontPrivate*) font;
@@ -330,10 +438,10 @@ gdk_draw_text_wc (GdkDrawable	 *drawable,
       XFontStruct *xfont = (XFontStruct *) font_private->xfont;
       gchar *text_8bit;
       gint i;
-      XSetFont(drawable_private->xdisplay, gc_private->xgc, xfont->fid);
+      XSetFont(GDK_DRAWABLE_XDISPLAY (drawable), gc_private->xgc, xfont->fid);
       text_8bit = g_new (gchar, text_length);
       for (i=0; i<text_length; i++) text_8bit[i] = text[i];
-      XDrawString (drawable_private->xdisplay, drawable_private->xwindow,
+      XDrawString (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
                    gc_private->xgc, x, y, text_8bit, text_length);
       g_free (text_8bit);
     }
@@ -341,7 +449,7 @@ gdk_draw_text_wc (GdkDrawable	 *drawable,
     {
       if (sizeof(GdkWChar) == sizeof(wchar_t))
 	{
-	  XwcDrawString (drawable_private->xdisplay, drawable_private->xwindow,
+	  XwcDrawString (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
 			 (XFontSet) font_private->xfont,
 			 gc_private->xgc, x, y, (wchar_t *)text, text_length);
 	}
@@ -351,7 +459,7 @@ gdk_draw_text_wc (GdkDrawable	 *drawable,
 	  gint i;
 	  text_wchar = g_new (wchar_t, text_length);
 	  for (i=0; i<text_length; i++) text_wchar[i] = text[i];
-	  XwcDrawString (drawable_private->xdisplay, drawable_private->xwindow,
+	  XwcDrawString (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
 			 (XFontSet) font_private->xfont,
 			 gc_private->xgc, x, y, text_wchar, text_length);
 	  g_free (text_wchar);
@@ -372,28 +480,24 @@ gdk_draw_pixmap (GdkDrawable *drawable,
 		 gint         width,
 		 gint         height)
 {
-  GdkWindowPrivate *drawable_private;
-  GdkWindowPrivate *src_private;
   GdkGCPrivate *gc_private;
 
   g_return_if_fail (drawable != NULL);
   g_return_if_fail (src != NULL);
   g_return_if_fail (gc != NULL);
 
-  drawable_private = (GdkWindowPrivate*) drawable;
-  src_private = (GdkWindowPrivate*) src;
-  if (drawable_private->destroyed || src_private->destroyed)
+  if (GDK_DRAWABLE_DESTROYED (drawable) || GDK_DRAWABLE_DESTROYED (src))
     return;
   gc_private = (GdkGCPrivate*) gc;
 
   if (width == -1)
-    width = src_private->width;
+    width = ((GdkDrawablePrivate *)src)->width;
   if (height == -1)
-    height = src_private->height;
+    height = ((GdkDrawablePrivate *)src)->height;
 
-  XCopyArea (drawable_private->xdisplay,
-	     src_private->xwindow,
-	     drawable_private->xwindow,
+  XCopyArea (GDK_DRAWABLE_XDISPLAY (drawable),
+	     GDK_DRAWABLE_XID (src),
+	     GDK_DRAWABLE_XID (drawable),
 	     gc_private->xgc,
 	     xsrc, ysrc,
 	     width, height,
@@ -436,20 +540,18 @@ gdk_draw_points (GdkDrawable *drawable,
 		 GdkPoint    *points,
 		 gint         npoints)
 {
-  GdkWindowPrivate *drawable_private;
   GdkGCPrivate *gc_private;
 
   g_return_if_fail (drawable != NULL);
   g_return_if_fail ((points != NULL) && (npoints > 0));
   g_return_if_fail (gc != NULL);
 
-  drawable_private = (GdkWindowPrivate*) drawable;
-  if (drawable_private->destroyed)
+  if (GDK_DRAWABLE_DESTROYED (drawable))
     return;
   gc_private = (GdkGCPrivate*) gc;
 
-  XDrawPoints (drawable_private->xdisplay,
-	       drawable_private->xwindow,
+  XDrawPoints (GDK_DRAWABLE_XDISPLAY (drawable),
+	       GDK_DRAWABLE_XID (drawable),
 	       gc_private->xgc,
 	       (XPoint *) points,
 	       npoints,
@@ -462,7 +564,6 @@ gdk_draw_segments (GdkDrawable *drawable,
 		   GdkSegment  *segs,
 		   gint         nsegs)
 {
-  GdkWindowPrivate *drawable_private;
   GdkGCPrivate *gc_private;
 
   if (nsegs <= 0)
@@ -472,13 +573,12 @@ gdk_draw_segments (GdkDrawable *drawable,
   g_return_if_fail (segs != NULL);
   g_return_if_fail (gc != NULL);
 
-  drawable_private = (GdkWindowPrivate*) drawable;
-  if (drawable_private->destroyed)
+  if (GDK_DRAWABLE_DESTROYED (drawable))
     return;
   gc_private = (GdkGCPrivate*) gc;
 
-  XDrawSegments (drawable_private->xdisplay,
-		 drawable_private->xwindow,
+  XDrawSegments (GDK_DRAWABLE_XDISPLAY (drawable),
+		 GDK_DRAWABLE_XID (drawable),
 		 gc_private->xgc,
 		 (XSegment *) segs,
 		 nsegs);
@@ -490,7 +590,6 @@ gdk_draw_lines (GdkDrawable *drawable,
               GdkPoint    *points,
               gint         npoints)
 {
-  GdkWindowPrivate *drawable_private;
   GdkGCPrivate *gc_private;
 
   if (npoints <= 0)
@@ -500,13 +599,12 @@ gdk_draw_lines (GdkDrawable *drawable,
   g_return_if_fail (points != NULL);
   g_return_if_fail (gc != NULL);
 
-  drawable_private = (GdkWindowPrivate*) drawable;
-  if (drawable_private->destroyed)
+  if (GDK_DRAWABLE_DESTROYED (drawable))
     return;
   gc_private = (GdkGCPrivate*) gc;
 
-  XDrawLines (drawable_private->xdisplay,
-	      drawable_private->xwindow,
+  XDrawLines (GDK_DRAWABLE_XDISPLAY (drawable),
+	      GDK_DRAWABLE_XID (drawable),
 	      gc_private->xgc,
 	      (XPoint *) points,
 	      npoints,

@@ -472,14 +472,14 @@ gdk_input_translate_coordinates (GdkDevicePrivate *gdkdev,
 				 gdouble *x, gdouble *y, gdouble *pressure,
 				 gdouble *xtilt, gdouble *ytilt)
 {
-  GdkWindowPrivate *win_priv;
+  GdkDrawablePrivate *drawable_priv;
 
   int x_axis, y_axis, pressure_axis, xtilt_axis, ytilt_axis;
 
   double device_width, device_height;
   double x_offset, y_offset, x_scale, y_scale;
 
-  win_priv = (GdkWindowPrivate *) input_window->window;
+  drawable_priv = (GdkDrawablePrivate *) input_window->window;
 
   x_axis = gdkdev->axis_for_use[GDK_AXIS_X];
   y_axis = gdkdev->axis_for_use[GDK_AXIS_Y];
@@ -505,26 +505,26 @@ gdk_input_translate_coordinates (GdkDevicePrivate *gdkdev,
       double device_aspect = (device_height*gdkdev->axes[y_axis].resolution) /
 	(device_width*gdkdev->axes[x_axis].resolution);
 
-      if (device_aspect * win_priv->width >= win_priv->height)
+      if (device_aspect * drawable_priv->width >= drawable_priv->height)
 	{
 	  /* device taller than window */
-	  x_scale = win_priv->width / device_width;
+	  x_scale = drawable_priv->width / device_width;
 	  y_scale = (x_scale * gdkdev->axes[x_axis].resolution)
 	    / gdkdev->axes[y_axis].resolution;
 
 	  x_offset = 0;
 	  y_offset = -(device_height * y_scale - 
-			       win_priv->height)/2;
+			       drawable_priv->height)/2;
 	}
       else
 	{
 	  /* window taller than device */
-	  y_scale = win_priv->height / device_height;
+	  y_scale = drawable_priv->height / device_height;
 	  x_scale = (y_scale * gdkdev->axes[y_axis].resolution)
 	    / gdkdev->axes[x_axis].resolution;
 
 	  y_offset = 0;
-	  x_offset = - (device_width * x_scale - win_priv->width)/2;
+	  x_offset = - (device_width * x_scale - drawable_priv->width)/2;
 	}
     }
   

@@ -47,6 +47,8 @@
 #include <gdk/gdkvisual.h>
 #include <gdk/gdkwindow.h>
 
+#include <gdk/gdkcompat.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */

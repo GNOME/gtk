@@ -625,7 +625,7 @@ gdk_ic_new (GdkICAttr *attr, GdkICAttributesType mask)
     }
 
   if (attr->client_window == NULL ||
-      ((GdkWindowPrivate *)attr->client_window)->destroyed)
+      GDK_DRAWABLE_DESTROYED (attr->client_window))
     {
       g_warning ("Client_window is null or already destroyed.\n");
       return NULL;
@@ -1084,7 +1084,7 @@ gdk_ic_set_attr (GdkIC *ic,
   if (mask & GDK_IC_PREEDIT_PIXMAP)
     {
       if (attr->preedit_pixmap != NULL &&
-	  ((GdkPixmapPrivate *)attr->preedit_pixmap)->destroyed)
+	  GDK_DRAWABLE_DESTROYED (attr->preedit_pixmap))
 	{
 	  g_warning ("Preedit pixmap is already destroyed.\n");
 	  error |= GDK_IC_PREEDIT_PIXMAP;
@@ -1171,7 +1171,7 @@ gdk_ic_set_attr (GdkIC *ic,
   if (mask & GDK_IC_STATUS_PIXMAP)
     {
       if (attr->status_pixmap != NULL &&
-	  ((GdkPixmapPrivate *)attr->status_pixmap)->destroyed)
+	  GDK_DRAWABLE_DESTROYED (attr->status_pixmap))
 	{
 	  g_warning ("Preedit pixmap is already destroyed.\n");
 	  error |= GDK_IC_STATUS_PIXMAP;

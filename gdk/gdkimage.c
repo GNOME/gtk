@@ -56,6 +56,7 @@
 #include "gdk.h"		/* For gdk_error_trap_* / gdk_flush_* */
 #include "gdkimage.h"
 #include "gdkprivate.h"
+#include "gdkx.h"
 
 
 static void gdk_image_put_normal (GdkDrawable *drawable,
@@ -331,12 +332,10 @@ gdk_image_get (GdkWindow *window,
 {
   GdkImage *image;
   GdkImagePrivate *private;
-  GdkWindowPrivate *win_private;
 
   g_return_val_if_fail (window != NULL, NULL);
 
-  win_private = (GdkWindowPrivate *) window;
-  if (win_private->destroyed)
+  if (GDK_DRAWABLE_DESTROYED (window))
     return NULL;
 
   private = g_new (GdkImagePrivate, 1);
@@ -345,7 +344,7 @@ gdk_image_get (GdkWindow *window,
   private->xdisplay = gdk_display;
   private->image_put = gdk_image_put_normal;
   private->ximage = XGetImage (private->xdisplay,
-			       win_private->xwindow,
+			       GDK_DRAWABLE_XID (window),
 			       x, y, width, height,
 			       AllPlanes, ZPixmap);
 
@@ -455,7 +454,6 @@ gdk_image_put_normal (GdkDrawable *drawable,
 		      gint         width,
 		      gint         height)
 {
-  GdkWindowPrivate *drawable_private;
   GdkImagePrivate *image_private;
   GdkGCPrivate *gc_private;
 
@@ -463,15 +461,14 @@ gdk_image_put_normal (GdkDrawable *drawable,
   g_return_if_fail (image != NULL);
   g_return_if_fail (gc != NULL);
 
-  drawable_private = (GdkWindowPrivate*) drawable;
-  if (drawable_private->destroyed)
+  if (GDK_DRAWABLE_DESTROYED (drawable))
     return;
   image_private = (GdkImagePrivate*) image;
   gc_private = (GdkGCPrivate*) gc;
 
   g_return_if_fail (image->type == GDK_IMAGE_NORMAL);
 
-  XPutImage (drawable_private->xdisplay, drawable_private->xwindow,
+  XPutImage (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable), 
 	     gc_private->xgc, image_private->ximage,
 	     xsrc, ysrc, xdest, ydest, width, height);
 }
@@ -488,7 +485,6 @@ gdk_image_put_shared (GdkDrawable *drawable,
 		      gint         height)
 {
 #ifdef USE_SHM
-  GdkWindowPrivate *drawable_private;
   GdkImagePrivate *image_private;
   GdkGCPrivate *gc_private;
 
@@ -496,15 +492,14 @@ gdk_image_put_shared (GdkDrawable *drawable,
   g_return_if_fail (image != NULL);
   g_return_if_fail (gc != NULL);
 
-  drawable_private = (GdkWindowPrivate*) drawable;
-  if (drawable_private->destroyed)
+  if (GDK_DRAWABLE_DESTROYED (drawable))
     return;
   image_private = (GdkImagePrivate*) image;
   gc_private = (GdkGCPrivate*) gc;
 
   g_return_if_fail (image->type == GDK_IMAGE_SHARED);
 
-  XShmPutImage (drawable_private->xdisplay, drawable_private->xwindow,
+  XShmPutImage (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable), 
 		gc_private->xgc, image_private->ximage,
 		xsrc, ysrc, xdest, ydest, width, height, False);
 #else /* USE_SHM */

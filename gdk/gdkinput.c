@@ -127,20 +127,20 @@ gdk_input_motion_events (GdkWindow *window,
 			 guint32 stop,
 			 gint *nevents_return)
 {
-  GdkWindowPrivate *window_private;
   XTimeCoord *xcoords;
   GdkTimeCoord *coords;
   int i;
 
   g_return_val_if_fail (window != NULL, NULL);
-  window_private = (GdkWindowPrivate *) window;
-  if (window_private->destroyed)
+  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+  
+  if (GDK_DRAWABLE_DESTROYED (window))
     return NULL;
 
   if (deviceid == GDK_CORE_POINTER)
     {
-      xcoords = XGetMotionEvents (gdk_display,
-				  window_private->xwindow,
+      xcoords = XGetMotionEvents (GDK_DRAWABLE_XDISPLAY (window),
+				  GDK_DRAWABLE_XID (window),
 				  start, stop, nevents_return);
       if (xcoords)
 	{
@@ -224,8 +224,10 @@ gdk_input_set_extension_events (GdkWindow *window, gint mask,
   GdkInputWindow *iw;
 
   g_return_if_fail (window != NULL);
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
   window_private = (GdkWindowPrivate*) window;
-  if (window_private->destroyed)
+  if (GDK_DRAWABLE_DESTROYED (window))
     return;
 
   if (mode == GDK_EXTENSION_EVENTS_NONE)

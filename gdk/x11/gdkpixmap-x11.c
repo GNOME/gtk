@@ -34,6 +34,7 @@
 
 #include "gdkpixmap.h"
 #include "gdkprivate.h"
+#include "gdkx.h"
 
 typedef struct
 {
@@ -56,36 +57,32 @@ gdk_pixmap_new (GdkWindow *window,
 		gint       depth)
 {
   GdkPixmap *pixmap;
-  GdkWindowPrivate *private;
-  GdkWindowPrivate *window_private;
+  GdkDrawablePrivate *private;
 
+  g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), NULL);
   g_return_val_if_fail ((window != NULL) || (depth != -1), NULL);
   g_return_val_if_fail ((width != 0) && (height != 0), NULL);
 
   if (!window)
     window = (GdkWindow*) &gdk_root_parent;
 
-  window_private = (GdkWindowPrivate*) window;
-  if (window_private->destroyed)
+  if (GDK_DRAWABLE_DESTROYED (window))
     return NULL;
 
   if (depth == -1)
-    depth = gdk_window_get_visual (window)->depth;
+    depth = gdk_drawable_get_visual (window)->depth;
 
-  private = g_new0 (GdkWindowPrivate, 1);
+  private = g_new0 (GdkDrawablePrivate, 1);
   pixmap = (GdkPixmap*) private;
 
-  private->xdisplay = window_private->xdisplay;
-  private->window_type = GDK_WINDOW_PIXMAP;
-  private->xwindow = XCreatePixmap (private->xdisplay, window_private->xwindow,
+  private->xdisplay = GDK_DRAWABLE_XDISPLAY (window);
+  private->window_type = GDK_DRAWABLE_PIXMAP;
+  private->xwindow = XCreatePixmap (private->xdisplay,
+				    GDK_DRAWABLE_XID (window),
 				    width, height, depth);
   private->colormap = NULL;
-  private->parent = NULL;
-  private->x = 0;
-  private->y = 0;
   private->width = width;
   private->height = height;
-  private->resize_count = 0;
   private->ref_count = 1;
   private->destroyed = 0;
 
@@ -101,35 +98,30 @@ gdk_bitmap_create_from_data (GdkWindow   *window,
 			     gint         height)
 {
   GdkPixmap *pixmap;
-  GdkWindowPrivate *private;
-  GdkWindowPrivate *window_private;
+  GdkDrawablePrivate *private;
 
   g_return_val_if_fail (data != NULL, NULL);
   g_return_val_if_fail ((width != 0) && (height != 0), NULL);
+  g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), NULL);
 
   if (!window)
     window = (GdkWindow*) &gdk_root_parent;
 
-  window_private = (GdkWindowPrivate*) window;
-  if (window_private->destroyed)
+  if (GDK_DRAWABLE_DESTROYED (window))
     return NULL;
 
-  private = g_new0 (GdkWindowPrivate, 1);
+  private = g_new0 (GdkDrawablePrivate, 1);
   pixmap = (GdkPixmap*) private;
 
-  private->parent = NULL;
-  private->xdisplay = window_private->xdisplay;
-  private->window_type = GDK_WINDOW_PIXMAP;
-  private->x = 0;
-  private->y = 0;
+  private->xdisplay = GDK_DRAWABLE_XDISPLAY (window);
+  private->window_type = GDK_DRAWABLE_PIXMAP;
   private->width = width;
   private->height = height;
-  private->resize_count = 0;
   private->ref_count = 1;
   private->destroyed = FALSE;
 
   private->xwindow = XCreateBitmapFromData (private->xdisplay,
-					    window_private->xwindow,
+					    GDK_DRAWABLE_XID (window),
 					    (char *)data, width, height);
 
   gdk_xid_table_insert (&private->xwindow, pixmap);
@@ -147,9 +139,9 @@ gdk_pixmap_create_from_data (GdkWindow   *window,
 			     GdkColor    *bg)
 {
   GdkPixmap *pixmap;
-  GdkWindowPrivate *private;
-  GdkWindowPrivate *window_private;
+  GdkDrawablePrivate *private;
 
+  g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), NULL);
   g_return_val_if_fail (data != NULL, NULL);
   g_return_val_if_fail (fg != NULL, NULL);
   g_return_val_if_fail (bg != NULL, NULL);
@@ -159,29 +151,24 @@ gdk_pixmap_create_from_data (GdkWindow   *window,
   if (!window)
     window = (GdkWindow*) &gdk_root_parent;
 
-  window_private = (GdkWindowPrivate*) window;
-  if (window_private->destroyed)
+  if (GDK_DRAWABLE_DESTROYED (window))
     return NULL;
 
   if (depth == -1)
-    depth = gdk_window_get_visual (window)->depth;
+    depth = gdk_drawable_get_visual (window)->depth;
 
-  private = g_new0 (GdkWindowPrivate, 1);
+  private = g_new0 (GdkDrawablePrivate, 1);
   pixmap = (GdkPixmap*) private;
 
-  private->parent = NULL;
-  private->xdisplay = window_private->xdisplay;
-  private->window_type = GDK_WINDOW_PIXMAP;
-  private->x = 0;
-  private->y = 0;
+  private->xdisplay = GDK_DRAWABLE_XDISPLAY (window);
+  private->window_type = GDK_DRAWABLE_PIXMAP;
   private->width = width;
   private->height = height;
-  private->resize_count = 0;
   private->ref_count = 1;
   private->destroyed = FALSE;
 
   private->xwindow = XCreatePixmapFromBitmapData (private->xdisplay,
-						  window_private->xwindow,
+						  GDK_DRAWABLE_XID (window),
 						  (char *)data, width, height,
 						  fg->pixel, bg->pixel, depth);
 
@@ -460,8 +447,8 @@ _gdk_pixmap_create_from_xpm (GdkWindow  *window,
   
   if (colormap == NULL)
     {
-      colormap = gdk_window_get_colormap (window);
-      visual = gdk_window_get_visual (window);
+      colormap = gdk_drawable_get_colormap (window);
+      visual = gdk_drawable_get_visual (window);
     }
   else
     visual = ((GdkColormapPrivate *)colormap)->visual;
@@ -760,8 +747,7 @@ GdkPixmap*
 gdk_pixmap_foreign_new (guint32 anid)
 {
   GdkPixmap *pixmap;
-  GdkWindowPrivate *window_private;
-  GdkWindowPrivate *private;
+  GdkDrawablePrivate *private;
   Pixmap xpixmap;
   Window root_return;
   unsigned int x_ret, y_ret, w_ret, h_ret, bw_ret, depth_ret;
@@ -772,29 +758,24 @@ gdk_pixmap_foreign_new (guint32 anid)
   
   /* set the pixmap to the passed in value */
   xpixmap = anid;
-  /* get the root window */
-  window_private = &gdk_root_parent;
 
   /* get information about the Pixmap to fill in the structure for
      the gdk window */
-  if (!XGetGeometry(window_private->xdisplay, xpixmap, &root_return,
+  if (!XGetGeometry(GDK_DISPLAY(),
+		    xpixmap, &root_return,
 		    &x_ret, &y_ret, &w_ret, &h_ret, &bw_ret, &depth_ret))
       return NULL;
       
   /* allocate a new gdk pixmap */
-  private = g_new(GdkWindowPrivate, 1);
+  private = g_new(GdkDrawablePrivate, 1);
   pixmap = (GdkPixmap *)private;
 
-  private->xdisplay = window_private->xdisplay;
-  private->window_type = GDK_WINDOW_PIXMAP;
+  private->xdisplay = GDK_DISPLAY();
+  private->window_type = GDK_DRAWABLE_PIXMAP;
   private->xwindow = xpixmap;
   private->colormap = NULL;
-  private->parent = NULL;
-  private->x = 0;
-  private->y = 0;
   private->width = w_ret;
   private->height = h_ret;
-  private->resize_count = 0;
   private->ref_count = 1;
   private->destroyed = 0;
   
@@ -806,8 +787,9 @@ gdk_pixmap_foreign_new (guint32 anid)
 GdkPixmap*
 gdk_pixmap_ref (GdkPixmap *pixmap)
 {
-  GdkWindowPrivate *private = (GdkWindowPrivate *)pixmap;
+  GdkDrawablePrivate *private = (GdkDrawablePrivate *)pixmap;
   g_return_val_if_fail (pixmap != NULL, NULL);
+  g_return_val_if_fail (GDK_IS_PIXMAP (private), NULL);
 
   private->ref_count += 1;
   return pixmap;
@@ -816,8 +798,9 @@ gdk_pixmap_ref (GdkPixmap *pixmap)
 void
 gdk_pixmap_unref (GdkPixmap *pixmap)
 {
-  GdkWindowPrivate *private = (GdkWindowPrivate *)pixmap;
+  GdkDrawablePrivate *private = (GdkDrawablePrivate *)pixmap;
   g_return_if_fail (pixmap != NULL);
+  g_return_if_fail (GDK_IS_PIXMAP (private));
   g_return_if_fail (private->ref_count > 0);
 
   private->ref_count -= 1;

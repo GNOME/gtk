@@ -2416,9 +2416,8 @@ xdnd_manage_source_filter (GdkDragContext *context,
 			   gboolean        add_filter)
 {
   gint old_warnings = 0;	/* quiet gcc */
-  GdkWindowPrivate *private = (GdkWindowPrivate *)window;
 			       
-  gboolean is_foreign = (private->window_type == GDK_WINDOW_FOREIGN);
+  gboolean is_foreign = GDK_DRAWABLE_TYPE (window);
 
   if (is_foreign)
     {
@@ -2426,7 +2425,7 @@ xdnd_manage_source_filter (GdkDragContext *context,
       gdk_error_warnings = 0;
     }
 
-  if (!private->destroyed)
+  if (!GDK_DRAWABLE_DESTROYED (window))
     {
       if (add_filter)
 	{

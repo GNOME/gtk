@@ -28,6 +28,7 @@
 #include <X11/Xatom.h>
 #include <string.h>
 
+#include "gdkx.h"
 #include "gdkproperty.h"
 #include "gdkprivate.h"
 
@@ -111,14 +112,11 @@ gdk_property_get (GdkWindow   *window,
 
   if (window)
     {
-      GdkWindowPrivate *private;
-
-      private = (GdkWindowPrivate*) window;
-      if (private->destroyed)
+      if (GDK_DRAWABLE_DESTROYED (window))
 	return FALSE;
 
-      xdisplay = private->xdisplay;
-      xwindow = private->xwindow;
+      xdisplay = GDK_WINDOW_XDISPLAY (window);
+      xwindow = GDK_WINDOW_XWINDOW (window);
     }
   else
     {
@@ -200,14 +198,11 @@ gdk_property_change (GdkWindow   *window,
 
   if (window)
     {
-      GdkWindowPrivate *private;
-
-      private = (GdkWindowPrivate*) window;
-      if (private->destroyed)
+      if (GDK_DRAWABLE_DESTROYED (window))
 	return;
 
-      xdisplay = private->xdisplay;
-      xwindow = private->xwindow;
+      xdisplay = GDK_WINDOW_XDISPLAY (window);
+      xwindow = GDK_WINDOW_XWINDOW (window);
     }
   else
     {
@@ -228,14 +223,11 @@ gdk_property_delete (GdkWindow *window,
 
   if (window)
     {
-      GdkWindowPrivate *private;
-
-      private = (GdkWindowPrivate*) window;
-      if (private->destroyed)
+      if (GDK_DRAWABLE_DESTROYED (window))
 	return;
 
-      xdisplay = private->xdisplay;
-      xwindow = private->xwindow;
+      xdisplay = GDK_WINDOW_XDISPLAY (window);
+      xwindow = GDK_WINDOW_XWINDOW (window);
     }
   else
     {

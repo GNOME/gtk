@@ -1,3 +1,9 @@
+General
+=======
+
+- gdk_pointer_grab() and gdk_keyboard_grab() are logically member
+  functions of GdkWindow.
+
 Dir structure for ports
 =======================
 

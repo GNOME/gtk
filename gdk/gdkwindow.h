@@ -95,7 +95,7 @@ struct _GdkWindowAttr
   GdkWindowClass wclass;
   GdkVisual *visual;
   GdkColormap *colormap;
-  GdkWindowType window_type;
+  GdkDrawableType window_type;
   GdkCursor *cursor;
   gchar *wmclass_name;
   gchar *wmclass_class;
@@ -155,15 +155,6 @@ void	      gdk_window_clear_area  (GdkWindow	   *window,
 void	      gdk_window_clear_area_e(GdkWindow	   *window,
 				      gint	    x,
 				      gint	    y,
-				      gint	    width,
-				      gint	    height);
-void	      gdk_window_copy_area   (GdkWindow	   *window,
-				      GdkGC	   *gc,
-				      gint	    x,
-				      gint	    y,
-				      GdkWindow	   *source_window,
-				      gint	    source_x,
-				      gint	    source_y,
 				      gint	    width,
 				      gint	    height);
 void	      gdk_window_raise	     (GdkWindow	   *window);
@@ -253,8 +244,6 @@ void	      gdk_window_set_back_pixmap (GdkWindow	  *window,
 					  gint		   parent_relative);
 void	      gdk_window_set_cursor	 (GdkWindow	  *window,
 					  GdkCursor	  *cursor);
-void	      gdk_window_set_colormap	 (GdkWindow	  *window,
-					  GdkColormap	  *colormap);
 void	      gdk_window_get_user_data	 (GdkWindow	  *window,
 					  gpointer	  *data);
 void	      gdk_window_get_geometry	 (GdkWindow	  *window,
@@ -269,9 +258,6 @@ void	      gdk_window_get_position	 (GdkWindow	  *window,
 void	      gdk_window_get_size	 (GdkWindow	  *window,
 					  gint		  *width,
 					  gint		  *height);
-GdkVisual*    gdk_window_get_visual	 (GdkWindow	  *window);
-GdkColormap*  gdk_window_get_colormap	 (GdkWindow	  *window);
-GdkWindowType gdk_window_get_type	 (GdkWindow	  *window);
 gint	      gdk_window_get_origin	 (GdkWindow	  *window,
 					  gint		  *x,
 					  gint		  *y);
@@ -307,11 +293,6 @@ void	      gdk_window_set_functions	 (GdkWindow	  *window,
 GList *       gdk_window_get_toplevels   (void);
 
 void          gdk_window_register_dnd    (GdkWindow       *window);
-
-void          gdk_drawable_set_data      (GdkDrawable     *drawable,
-					  const gchar     *key,
-					  gpointer	   data,
-					  GDestroyNotify   destroy_func);
 
 #ifdef __cplusplus
 }

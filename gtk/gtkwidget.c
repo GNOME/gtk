@@ -4784,7 +4784,8 @@ gtk_reset_shapes_recurse (GtkWidget *widget,
 
   private = (GdkWindowPrivate*) window;
 
-  if (private->destroyed)
+  /* FIXME: We do we need this check? */
+  if (GDK_DRAWABLE_DESTROYED (window))
     return;
   gdk_window_get_user_data (window, &data);
   if (data != widget)

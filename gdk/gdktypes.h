@@ -82,10 +82,10 @@ typedef struct _GdkImage              GdkImage;
 typedef struct _GdkRegion             GdkRegion;
 typedef struct _GdkVisual             GdkVisual;
 
-typedef struct _GdkWindow             GdkBitmap;
-typedef struct _GdkWindow             GdkDrawable;
-typedef struct _GdkWindow             GdkPixmap;
-typedef struct _GdkWindow             GdkWindow;
+typedef struct _GdkDrawable           GdkDrawable;
+typedef struct _GdkDrawable           GdkBitmap;
+typedef struct _GdkDrawable           GdkPixmap;
+typedef struct _GdkDrawable           GdkWindow;
 
 typedef enum
 {

@@ -43,18 +43,23 @@
 #include <gdk/gdkvisual.h>
 #include <gdk/gdkwindow.h>
 
-#define gdk_window_lookup(xid)	   ((GdkWindow*) gdk_xid_table_lookup (xid))
-#define gdk_pixmap_lookup(xid)	   ((GdkPixmap*) gdk_xid_table_lookup (xid))
-#define gdk_font_lookup(xid)	   ((GdkFont*) gdk_xid_table_lookup (xid))
-
-
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
+#define GDK_DRAWABLE_TYPE(d) (((GdkDrawablePrivate *)d)->window_type)
+#define GDK_IS_WINDOW(d) (GDK_DRAWABLE_TYPE(d) <= GDK_WINDOW_TEMP || \
+                          GDK_DRAWABLE_TYPE(d) == GDK_WINDOW_FOREIGN)
+#define GDK_IS_PIXMAP(d) (GDK_DRAWABLE_TYPE(d) == GDK_DRAWABLE_PIXMAP)
+#define GDK_DRAWABLE_DESTROYED(d) (((GdkDrawablePrivate *)d)->destroyed)
 
+#define gdk_window_lookup(xid)	   ((GdkWindow*) gdk_xid_table_lookup (xid))
+#define gdk_pixmap_lookup(xid)	   ((GdkPixmap*) gdk_xid_table_lookup (xid))
+#define gdk_font_lookup(xid)	   ((GdkFont*) gdk_xid_table_lookup (xid))
+
+typedef struct _GdkDrawablePrivate     GdkDrawablePrivate;
+/* typedef struct _GdkDrawablePrivate     GdkPixmapPrivate; */
 typedef struct _GdkWindowPrivate       GdkWindowPrivate;
-typedef struct _GdkWindowPrivate       GdkPixmapPrivate;
 typedef struct _GdkImagePrivate	       GdkImagePrivate;
 typedef struct _GdkGCPrivate	       GdkGCPrivate;
 typedef struct _GdkColormapPrivate     GdkColormapPrivate;
@@ -66,21 +71,32 @@ typedef struct _GdkEventFilter	       GdkEventFilter;
 typedef struct _GdkClientFilter	       GdkClientFilter;
 typedef struct _GdkRegionPrivate       GdkRegionPrivate;
 
+struct _GdkDrawablePrivate
+{
+  GdkDrawable drawable;
+
+  guint8 window_type;
+  guint ref_count;
+
+  guint16 width;
+  guint16 height;
+
+  Window xwindow;
+  Display *xdisplay;
+  GdkColormap *colormap;
+
+  guint destroyed : 2;
+};
 
 struct _GdkWindowPrivate
 {
+  GdkDrawablePrivate drawable;
+  
   GdkWindow window;
   GdkWindow *parent;
-  Window xwindow;
-  Display *xdisplay;
   gint16 x;
   gint16 y;
-  guint16 width;
-  guint16 height;
   guint8 resize_count;
-  guint8 window_type;
-  guint ref_count;
-  guint destroyed : 2;
   guint mapped : 1;
   guint guffaw_gravity : 1;
 

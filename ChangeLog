@@ -1,3 +1,28 @@
+Sun Oct  3 18:13:44 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_reset_shapes_recurse): 
+	Fix a reference to window_private->destroyed.	
+
+	* gtk/gtkplug.c (gtk_plug_realize): Fix up a direct
+	(ugly) setting of an internal GdkWindow member to use
+	a _slightly_ cleaner macro.
+
+	* gdk/gdkprivate.h: Split GdkWindowPrivate into
+	GdkDrawablePrivate and GdkWindowPrivate.
+	Add extra macros for accessing GDK_DRAWABLE_ components.
+
+	* *.[ch]: Massive adjustments for the above, use the
+	new macros in a lot of places.
+
+Sun Oct  3 15:16:24 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdktypes.h: Make GdkDrawable the base type,
+	not GdkWindow.
+
+Sun Oct  3 15:08:44 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkdraw.c (gdk_drawable_get_data): Added new function.
+
 Sun Oct  3 14:26:15 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gxid* gdk/x11/gxid*: Move files into x11 subdirectory.

@@ -47,6 +47,7 @@
 
 #include "gdk.h"
 
+#include "gdkx.h"
 #include "gdkprivate.h"
 #include "gdkinputprivate.h"
 
@@ -493,10 +494,7 @@ gdk_pointer_grab (GdkWindow *	  window,
 		  GdkCursor *	  cursor,
 		  guint32	  time)
 {
-  /*  From gdkwindow.c	*/
   gint return_val;
-  GdkWindowPrivate *window_private;
-  GdkWindowPrivate *confine_to_private;
   GdkCursorPrivate *cursor_private;
   guint xevent_mask;
   Window xwindow;
@@ -505,17 +503,17 @@ gdk_pointer_grab (GdkWindow *	  window,
   int i;
   
   g_return_val_if_fail (window != NULL, 0);
+  g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
+  g_return_val_if_fail (confine_to == NULL || GDK_IS_WINDOW (confine_to), 0);
   
-  window_private = (GdkWindowPrivate*) window;
-  confine_to_private = (GdkWindowPrivate*) confine_to;
   cursor_private = (GdkCursorPrivate*) cursor;
   
-  xwindow = window_private->xwindow;
+  xwindow = GDK_DRAWABLE_XID (window);
   
-  if (!confine_to || confine_to_private->destroyed)
+  if (!confine_to || GDK_DRAWABLE_DESTROYED (confine_to))
     xconfine_to = None;
   else
-    xconfine_to = confine_to_private->xwindow;
+    xconfine_to = GDK_DRAWABLE_XID (confine_to);
   
   if (!cursor)
     xcursor = None;
@@ -541,8 +539,8 @@ gdk_pointer_grab (GdkWindow *	  window,
   
   if (return_val == Success)
     {
-      if (!window_private->destroyed)
-	return_val = XGrabPointer (window_private->xdisplay,
+      if (!GDK_DRAWABLE_DESTROYED (window))
+	return_val = XGrabPointer (GDK_DRAWABLE_XDISPLAY (window),
 				   xwindow,
 				   owner_events,
 				   xevent_mask,
@@ -555,7 +553,7 @@ gdk_pointer_grab (GdkWindow *	  window,
     }
   
   if (return_val == GrabSuccess)
-    gdk_xgrab_window = window_private;
+    gdk_xgrab_window = (GdkWindowPrivate *)window;
   
   return return_val;
 }
@@ -631,17 +629,12 @@ gdk_keyboard_grab (GdkWindow *	   window,
 		   gint		   owner_events,
 		   guint32	   time)
 {
-  GdkWindowPrivate *window_private;
-  Window xwindow;
-  
   g_return_val_if_fail (window != NULL, 0);
+  g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
   
-  window_private = (GdkWindowPrivate*) window;
-  xwindow = window_private->xwindow;
-  
-  if (!window_private->destroyed)
-    return XGrabKeyboard (window_private->xdisplay,
-			  xwindow,
+  if (!GDK_DRAWABLE_DESTROYED (window))
+    return XGrabKeyboard (GDK_DRAWABLE_XDISPLAY (window),
+			  GDK_DRAWABLE_XID (window),
 			  owner_events,
 			  GrabModeAsync, GrabModeAsync,
 			  time);
