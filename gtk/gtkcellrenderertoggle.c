@@ -306,11 +306,11 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer *cell,
     }
   if (celltoggle->activatable)
     {
-      state = GTK_STATE_NORMAL;
+      state |= GTK_STATE_NORMAL;
     }
   else
     {
-      state = GTK_STATE_INSENSITIVE;
+      state |= GTK_STATE_INSENSITIVE;
     }
 
   if (celltoggle->radio)

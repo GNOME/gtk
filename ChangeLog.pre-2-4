@@ -1,3 +1,9 @@
+Sat Jun  1 10:43:28 2002  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtkcellrenderertoggle.c (gtk_cell_renderer_toggle_render): 
+	add missing flag, #83796
+
+
 2002-05-30  Michael Meeks  <michael@ximian.com>
 
 	* gtk/gtkmenu.c (gtk_menu_popup): destroy the transfer
