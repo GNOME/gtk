@@ -1,3 +1,8 @@
+2002-07-07  Matthias Clasen  <maclas@gmx.de>
+
+	* io-ico.c (DecodeHeader): Correct computation of image height.
+	(OneLine): Correct update notification.
+
 2002-07-06  Matthias Clasen  <maclas@gmx.de>
 
 	* io-tiff.c (tiff_set_error): Handle global_error == NULL
