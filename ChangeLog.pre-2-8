@@ -1,3 +1,8 @@
+Fri Oct 12 11:39:20 2001  Joshua N Pritikin  <vishnu@pobox.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_get_path_at_pos): Fix to work
+	on empty models.
+
 2001-10-11  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/gtkcolorsel.c, gtk/gtkwidget.c, gtk/gtktreeview.c:

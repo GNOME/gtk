@@ -8036,7 +8036,6 @@ gtk_tree_view_get_path_at_pos (GtkTreeView        *tree_view,
   gint y_offset;
 
   g_return_val_if_fail (tree_view != NULL, FALSE);
-  g_return_val_if_fail (tree_view->priv->tree != NULL, FALSE);
   g_return_val_if_fail (tree_view->priv->bin_window != NULL, FALSE);
 
   if (window)
@@ -8046,6 +8045,9 @@ gtk_tree_view_get_path_at_pos (GtkTreeView        *tree_view,
     *path = NULL;
   if (column)
     *column = NULL;
+
+  if (tree_view->priv->tree == NULL)
+    return FALSE;
 
   if (x > tree_view->priv->hadjustment->upper)
     return FALSE;
