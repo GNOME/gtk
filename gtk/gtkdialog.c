@@ -368,16 +368,22 @@ typedef struct {
 } RunInfo;
 
 static void
-run_destroy_handler (GtkDialog *dialog, gpointer data)
+shutdown_loop (RunInfo *ri)
 {
-  RunInfo *ri = data;
-
   if (ri->loop != NULL)
     {
       g_main_quit (ri->loop);
       g_main_destroy (ri->loop);
       ri->loop = NULL;
     }
+}
+
+static void
+run_destroy_handler (GtkDialog *dialog, gpointer data)
+{
+  RunInfo *ri = data;
+
+  shutdown_loop (ri);
 }
 
 static void
@@ -391,7 +397,7 @@ run_response_handler (GtkDialog *dialog,
 
   ri->response_id = response_id;
 
-  run_destroy_handler (dialog, data);
+  shutdown_loop (ri);
 }
 
 static gint
@@ -399,8 +405,15 @@ run_delete_handler (GtkDialog *dialog,
                     GdkEventAny *event,
                     gpointer data)
 {
-  run_destroy_handler (dialog, data);
+  RunInfo *ri;
+    
+  ri = data;
 
+  shutdown_loop (ri);
+
+  /* emit response signal */
+  gtk_dialog_response (dialog, GTK_RESPONSE_NONE);
+  
   return TRUE; /* Do not destroy */
 }
 
@@ -438,16 +451,16 @@ gtk_dialog_run (GtkDialog *dialog)
                         GTK_SIGNAL_FUNC (run_delete_handler),
                         &ri);
   
-  ri.loop = g_main_new(FALSE);
+  ri.loop = g_main_new (FALSE);
 
-  g_main_run(ri.loop);
+  g_main_run (ri.loop);
   
-  g_assert(ri.loop == NULL);
+  g_assert (ri.loop == NULL);
   
   if (!GTK_OBJECT_DESTROYED (dialog))
     {
       if (!was_modal)
-        gtk_window_set_modal(GTK_WINDOW(dialog), FALSE);
+        gtk_window_set_modal (GTK_WINDOW(dialog), FALSE);
       
       gtk_signal_disconnect (GTK_OBJECT (dialog), ri.destroy_handler);
       gtk_signal_disconnect (GTK_OBJECT (dialog), ri.response_handler);
@@ -458,6 +471,4 @@ gtk_dialog_run (GtkDialog *dialog)
 
   return ri.response_id;
 }
-
-
 

@@ -96,7 +96,7 @@ struct _GtkImage
 {
   GtkMisc misc;
 
-  GtkImageType representation_type;
+  GtkImageType storage_type;
   
   union
   {
@@ -143,6 +143,8 @@ void gtk_image_set_from_stock    (GtkImage        *image,
 void gtk_image_set_from_icon_set (GtkImage        *image,
                                   GtkIconSet      *icon_set,
                                   GtkIconSizeType  size);
+
+GtkImageType gtk_image_get_storage_type (GtkImage   *image);
 
 void       gtk_image_get_pixmap   (GtkImage         *image,
                                    GdkPixmap       **pixmap,
