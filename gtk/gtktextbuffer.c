@@ -72,7 +72,10 @@ enum {
   PROP_0,
 
   /* Construct */
-  PROP_TAG_TABLE
+  PROP_TAG_TABLE,
+  
+  /* Normal */
+  PROP_TEXT
 };
 
 enum {
@@ -186,6 +189,24 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                                                         P_("Text Tag Table"),
                                                         GTK_TYPE_TEXT_TAG_TABLE,
                                                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
+  /* Normal properties*/
+  
+  /**
+   * GtkTextBuffer:text:
+   *
+   * The text content of the buffer. Without child widgets and images,
+   * see gtk_text_buffer_get_text () for more information.
+   *
+   * Since: 2.8
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_TEXT,
+                                   g_param_spec_string ("text",
+                                                        P_("Text"),
+                                                        P_("Current text of the buffer"),
+							"",
+                                                        GTK_PARAM_READWRITE));
 
   signals[INSERT_TEXT] =
     g_signal_new ("insert_text",
@@ -386,6 +407,11 @@ gtk_text_buffer_set_property (GObject         *object,
     case PROP_TAG_TABLE:
       set_table (text_buffer, g_value_get_object (value));
       break;
+      
+    case PROP_TEXT:
+      gtk_text_buffer_set_text (text_buffer, 
+				g_value_get_string (value), -1);
+      break;
 
     default:
       break;
@@ -407,6 +433,18 @@ gtk_text_buffer_get_property (GObject         *object,
     case PROP_TAG_TABLE:
       g_value_set_object (value, get_table (text_buffer));
       break;
+      
+    case PROP_TEXT:
+    {
+      GtkTextIter start, end;
+      
+      gtk_text_buffer_get_start_iter (text_buffer, &start);
+      gtk_text_buffer_get_end_iter (text_buffer, &end);
+	    
+      g_value_set_string (value,
+			  gtk_text_buffer_get_text (text_buffer, &start, &end, FALSE));
+      break;
+    }
 
     default:
       break;
@@ -524,7 +562,11 @@ gtk_text_buffer_set_text (GtkTextBuffer *buffer,
       gtk_text_buffer_get_iter_at_offset (buffer, &start, 0);
       gtk_text_buffer_insert (buffer, &start, text, len);
     }
+  
+  g_object_notify (G_OBJECT (buffer), "text");
 }
+
+ 
 
 /*
  * Insertion

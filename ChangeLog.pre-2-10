@@ -1,3 +1,9 @@
+2005-04-04  Johan Dahlin  <johan@gnome.org>
+
+	* gtk/gtktextbuffer.c: (gtk_text_buffer_class_init),
+	(gtk_text_buffer_set_property), (gtk_text_buffer_get_property),
+	(gtk_text_buffer_set_text): Add GtkTextBuffer::text (#172631)
+
 Mon Apr  4 14:33:55 2005  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkcomboboxentry.c (gtk_combo_box_entry_get_active_text):
