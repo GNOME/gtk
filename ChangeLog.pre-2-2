@@ -1,3 +1,9 @@
+Tue Feb 13 13:56:58 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktext.c (find_char_width): Fix problems with
+	characters < 256 in wide character locales. (Patch
+	from Yoichi Imai.)
+
 Tue Feb 13 00:58:49 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkclist.c: Properly handle passive buttons at

@@ -3700,7 +3700,7 @@ find_char_width (GtkText* text, const GtkPropertyMark *mark, const TabStopMark *
     {
       return tab_mark->to_next_tab * char_widths[' '];
     }
-  else if (ch < 256)
+  else if (!text->use_wchar)
     {
       return char_widths[ch];
     }
