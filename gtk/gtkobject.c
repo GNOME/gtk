@@ -134,6 +134,7 @@ gtk_object_class_init (GtkObjectClass *class)
 {
   class->signals = NULL;
   class->nsignals = 0;
+  class->n_args = 0;
 
   gtk_object_add_arg_type ("GtkObject::user_data", GTK_TYPE_POINTER, ARG_USER_DATA);
   gtk_object_add_arg_type ("GtkObject::signal", GTK_TYPE_SIGNAL, ARG_SIGNAL);

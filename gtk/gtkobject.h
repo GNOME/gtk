@@ -154,6 +154,10 @@ struct _GtkObjectClass
    *  an example of how to do this).
    */
   void (* destroy) (GtkObject *object);
+
+  /* The number of arguments per class.
+   */
+  guint n_args;
 };
 
 
