@@ -548,6 +548,7 @@ gtk_file_system_unix_add_bookmark (GtkFileSystem     *file_system,
 				   const GtkFilePath *path,
 				   GError           **error)
 {
+  /* FIXME: Implement as a really simple ~/.gtk-bookmarks */
   g_set_error (error,
 	       GTK_FILE_SYSTEM_ERROR,
 	       GTK_FILE_SYSTEM_ERROR_FAILED,
@@ -560,6 +561,7 @@ gtk_file_system_unix_remove_bookmark (GtkFileSystem     *file_system,
 				      const GtkFilePath *path,
 				      GError           **error)
 {
+  /* FIXME: Implement as a really simple ~/.gtk-bookmarks */
   g_set_error (error,
 	       GTK_FILE_SYSTEM_ERROR,
 	       GTK_FILE_SYSTEM_ERROR_FAILED,
@@ -570,6 +572,7 @@ gtk_file_system_unix_remove_bookmark (GtkFileSystem     *file_system,
 static GSList *
 gtk_file_system_unix_list_bookmarks (GtkFileSystem *file_system)
 {
+  /* FIXME: Implement as a really simple ~/.gtk-bookmarks */
   return NULL;
 }
 
