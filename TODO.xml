@@ -375,6 +375,17 @@
     </entry>
 
 
+    <entry size="medium" status="0%" target="1.4">
+      <title>GUI-editable means of user configuration</title>
+      <description>
+	<p>
+          Need to be able to set double click time, whether cursors
+          blink, etc., from a control panel type of deal.
+	</p>
+      </description>
+      <contact>gtk-devel-list@redhat.com</contact>
+    </entry>
+
   </section> <!-- Core -->
 
   <section>
@@ -620,6 +631,49 @@
       <description>
 	<p>
           Figure out how to get GnomeCanvas or a derived work into GTK+ itself.
+	</p>
+      </description>
+      <contact>gtk-devel-list@redhat.com</contact>
+    </entry>
+
+    <entry size="medium" status="0%" target="1.4">
+      <title>Menu scroll</title>
+      <description>
+	<p>
+          When menus are bigger than the screen, allow scrolling
+          as on the Mac.
+	</p>
+      </description>
+      <contact>gtk-devel-list@redhat.com</contact>
+    </entry>
+
+    <entry size="medium" status="0%" target="1.4">
+      <title>Toolbar/menubar wrap</title>
+      <description>
+	<p>
+          When toolbars and menubars are too wide, do some sort of 
+          wrapping or drop-down deal. (See Windows/Mac apps for examples.)
+	</p>
+      </description>
+      <contact>gtk-devel-list@redhat.com</contact>
+    </entry>
+
+    <entry size="small" status="0%" target="1.4">
+      <title>Blink cursor in GtkEntry</title>
+      <description>
+	<p>
+          Make the cursor optionally blink in GtkEntry. Beware, the entry code
+          is somewhat in flux; mail Owen and ask.
+	</p>
+      </description>
+      <contact>otaylor@redhat.com</contact>
+    </entry>
+
+    <entry size="small" status="0%" target="1.4">
+      <title>Don't highlight first menu item when menus come up</title>
+      <description>
+	<p>
+          Keep GtkMenu from prelighting the first menu item.
 	</p>
       </description>
       <contact>gtk-devel-list@redhat.com</contact>
