@@ -23,6 +23,9 @@ By default, the user can step through the items in the list using the
 arrow (cursor) keys, though this behaviour can be turned off with
 gtk_combo_set_use_arrows().
 </para>
+<para>
+As of GTK+ 2.4, #GtkCombo has been deprecated in favor of #GtkComboBox.
+</para>
 
 <example id="gtkcombo-simple-example">
 <title>Creating a <structname>GtkCombo</structname> widget with simple text 
@@ -85,26 +88,10 @@ items.</title>
 The #GtkFixedChild-struct struct contains the following fields.
 (These fields should be considered read-only. They should never be set by
 an application.)
-
-<informaltable pgwide="1" frame="none" role="struct">
-<tgroup cols="2"><colspec colwidth="2*"/><colspec colwidth="8*"/>
-<tbody>
-
-<row>
-<entry>#GtkWidget *entry;</entry>
-<entry>the text entry field.</entry>
-</row>
-
-<row>
-<entry>#GtkWidget *list;</entry>
-<entry>the list shown in the drop-down window.</entry>
-</row>
-
-</tbody></tgroup></informaltable>
 </para>
 
-@entry: 
-@list: 
+@entry: the text entry field.
+@list: the list shown in the drop-down window.
 
 <!-- ##### ARG GtkCombo:allow-empty ##### -->
 <para>
@@ -137,6 +124,7 @@ Creates a new #GtkCombo.
 </para>
 
 @Returns: a new #GtkCombo.
+@Deprecated: Use #GtkComboBox instead.
 
 
 <!-- ##### FUNCTION gtk_combo_set_popdown_strings ##### -->
@@ -147,6 +135,7 @@ Convenience function to set all of the items in the popup list.
 
 @combo: a #GtkCombo.
 @strings: a list of strings, or %NULL to clear the popup list
+@Deprecated: Use #GtkComboBox instead.
 
 
 <!-- ##### FUNCTION gtk_combo_set_value_in_list ##### -->
@@ -162,6 +151,7 @@ If an empty field is acceptable, the @ok_if_empty parameter should be %TRUE.
 @combo: a #GtkCombo.
 @val: %TRUE if the value entered must match one of the values in the list.
 @ok_if_empty: %TRUE if an empty value is considered valid.
+@Deprecated: Use #GtkComboBox instead.
 
 
 <!-- ##### FUNCTION gtk_combo_set_use_arrows ##### -->
@@ -171,7 +161,9 @@ the list. This is on by default.
 </para>
 
 @combo: a #GtkCombo.
-@val: %TRUE if the arrow keys can be used to step through the items in the list.
+@val: %TRUE if the arrow keys can be used to step through the items in 
+     the list.
+@Deprecated: Use #GtkComboBox instead.
 
 
 <!-- ##### FUNCTION gtk_combo_set_use_arrows_always ##### -->
@@ -181,6 +173,7 @@ Obsolete function, does nothing.
 
 @combo: a #GtkCombo.
 @val: unused
+@Deprecated: Use #GtkComboBox instead.
 
 
 <!-- ##### FUNCTION gtk_combo_set_case_sensitive ##### -->
@@ -196,6 +189,7 @@ worried about differences in case.
 
 @combo: a #GtkCombo.
 @val: %TRUE if the text in the list items is case sensitive.
+@Deprecated: Use #GtkComboBox instead.
 
 
 <!-- ##### FUNCTION gtk_combo_set_item_string ##### -->
@@ -207,6 +201,7 @@ selected. This is needed if the list item is not a simple label.
 @combo: a #GtkCombo.
 @item: a #GtkItem.
 @item_value: the string to place in the #GtkEntry when @item is selected.
+@Deprecated: Use #GtkComboBox instead.
 
 
 <!-- ##### FUNCTION gtk_combo_disable_activate ##### -->
@@ -218,5 +213,6 @@ instead.
 </para>
 
 @combo: a #GtkCombo.
+@Deprecated: Use #GtkComboBox instead.
 
 

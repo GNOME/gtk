@@ -1,3 +1,9 @@
+Sun Feb 15 22:09:53 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtkcombo.sgml: 
+	* gtk/tmpl/gtkoptionmenu.sgml: Add deprecation notes pointing
+	people to GtkComboBox.
+
 Sun Feb 15 02:46:53 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtktreednd.sgml: Add docs.

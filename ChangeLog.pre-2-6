@@ -1,3 +1,8 @@
+Sun Feb 15 22:08:53 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkoptionmenu.c (gtk_option_menu_get_history): Add 
+	deprecation note pointing people to GtkComboBox.
+
 Sun Feb 15 02:49:45 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktreednd.c: 
