@@ -1,3 +1,8 @@
+2004-10-29  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkliststore.c (gtk_list_store_reorder): Don't
+	loop over the sentinel node.  (#156298, Torsten Schoenfeld)
+
 2004-10-28  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_start_editing): Use

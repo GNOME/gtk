@@ -1408,7 +1408,7 @@ gtk_list_store_reorder (GtkListStore *store,
 
   ptr = _gtk_sequence_get_begin_ptr (store->seq);
   i = 0;
-  while (ptr)
+  while (!_gtk_sequence_ptr_is_end (ptr))
     {
       g_hash_table_insert (new_positions, ptr, GINT_TO_POINTER (new_order[i++]));
 
