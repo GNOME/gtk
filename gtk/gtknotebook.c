@@ -2206,6 +2206,7 @@ gtk_notebook_remove_tab_label (GtkNotebook     *notebook,
       if (page->mnemonic_activate_signal)
 	gtk_signal_disconnect (page->tab_label,
 			       page->mnemonic_activate_signal);
+      page->mnemonic_activate_signal = 0;
 
       gtk_widget_unparent (page->tab_label);
     }
