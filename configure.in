@@ -1208,6 +1208,12 @@ if test "x$gdktarget" = "xx11"; then
     GDK_EXTRA_LIBS="`$PKG_CONFIG --libs xcursor` $GDK_EXTRA_LIBS"
   fi
 
+  # X SYNC check
+  AC_CHECK_LIB(Xext, XSyncQueryExtension,
+  		[GTK_ADD_LIB(x_extra_libs,Xext)
+		AC_DEFINE([HAVE_XSYNC], [], [Have SYNC extension])],
+		,$x_libs_for_checks)
+
   # Checks for XFixes extension
   
   have_xfixes=false

@@ -83,6 +83,8 @@ static const char *const precache_atoms[] = {
   "_NET_WM_STATE_MAXIMIZED_VERT",
   "_NET_WM_STATE_MAXIMIZED_HORZ",
   "_NET_WM_STATE_FULLSCREEN",
+  "_NET_WM_SYNC_REQUEST",
+  "_NET_WM_SYNC_REQUEST_COUNTER",
   "_NET_WM_WINDOW_TYPE",
   "_NET_WM_WINDOW_TYPE_NORMAL",
   "_NET_WM_USER_TIME",
@@ -280,6 +282,20 @@ gdk_display_open (const gchar *display_name)
   }
 #endif
 
+  display_x11->use_sync = FALSE;
+#ifdef HAVE_XSYNC
+  {
+    int major, minor;
+    int error_base, event_base;
+    
+    if (XSyncQueryExtension (display_x11->xdisplay,
+			     &event_base, &error_base) &&
+        XSyncInitialize (display_x11->xdisplay,
+                         &major, &minor))
+      display_x11->use_sync = TRUE;
+  }
+#endif
+  
   _gdk_windowing_image_init (display);
   _gdk_events_init (display);
   _gdk_input_init (display);

@@ -564,6 +564,9 @@ void gdk_window_get_internal_paint_info (GdkWindow    *window,
 					 gint         *x_offset,
 					 gint         *y_offset);
 
+void gdk_window_enable_synchronized_configure (GdkWindow *window);
+void gdk_window_configure_finished            (GdkWindow *window);
+
 #ifndef GDK_MULTIHEAD_SAFE
 GdkPointerHooks *gdk_set_pointer_hooks (const GdkPointerHooks *new_hooks);   
 #endif /* GDK_MULTIHEAD_SAFE */

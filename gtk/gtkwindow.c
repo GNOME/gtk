@@ -3965,6 +3965,8 @@ gtk_window_realize (GtkWidget *widget)
   attributes_mask |= (window->wmclass_name ? GDK_WA_WMCLASS : 0);
   
   widget->window = gdk_window_new (parent_window, &attributes, attributes_mask);
+
+  gdk_window_enable_synchronized_configure (widget->window);
     
   gdk_window_set_user_data (widget->window, window);
       
@@ -4201,7 +4203,10 @@ gtk_window_configure_event (GtkWidget         *widget,
   if (!expected_reply &&
       (widget->allocation.width == event->width &&
        widget->allocation.height == event->height))
-    return TRUE;
+    {
+      gdk_window_configure_finished (widget->window);
+      return TRUE;
+    }
 
   /*
    * If we do need to resize, we do that by:
@@ -5295,6 +5300,10 @@ gtk_window_move_resize (GtkWindow *window)
       /* gtk_window_configure_event() filled in widget->allocation */
       allocation = widget->allocation;
       gtk_widget_size_allocate (widget, &allocation);
+
+      gdk_window_process_all_updates ();
+      
+      gdk_window_configure_finished (widget->window);
 
       /* If the configure request changed, it means that
        * we either:

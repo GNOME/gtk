@@ -147,6 +147,7 @@ struct _GdkDisplayX11
   guint base_dnd_atoms_precached : 1;
   guint xdnd_atoms_precached : 1;
   guint motif_atoms_precached : 1;
+  guint use_sync : 1;
 };
 
 struct _GdkDisplayX11Class

@@ -29,6 +29,10 @@
 
 #include <gdk/x11/gdkdrawable-x11.h>
 
+#ifdef HAVE_XSYNC
+#include <X11/extensions/sync.h>
+#endif
+
 G_BEGIN_DECLS
 
 typedef struct _GdkToplevelX11 GdkToplevelX11;
@@ -120,13 +124,23 @@ struct _GdkToplevelX11
    * that might not even be part of this app
    */
   Window focus_window;
+ 
+#ifdef HAVE_XSYNC
+  XID update_counter;
+  XSyncValue pending_counter_value; /* latest _NET_WM_SYNC_REQUEST value received */
+  XSyncValue current_counter_value; /* Latest _NET_WM_SYNC_REQUEST value received
+				     * where we have also seen the corresponding
+				     * ConfigureNotify
+				     */
+#endif
 };
 
 GType gdk_window_impl_x11_get_type (void);
 
-GdkToplevelX11 *_gdk_x11_window_get_toplevel  (GdkWindow *window);
 void             gdk_x11_window_set_user_time (GdkWindow *window,
                                                guint32    timestamp);
+
+GdkToplevelX11 *_gdk_x11_window_get_toplevel  (GdkWindow *window);
 void		_gdk_x11_window_tmp_unset_bg  (GdkWindow *window,
 					       gboolean   recurse);
 void            _gdk_x11_window_tmp_reset_bg  (GdkWindow *window,

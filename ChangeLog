@@ -1,3 +1,42 @@
+Sun Jul 11 15:24:03 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	Bug 143330, support update counter spec.
+	
+	* configure.in: Add check for the Sync extension
+
+	* gdk/gdkwindow.h: gdk_window_enable_synchronized_configure() and
+	gdk_window_configure_finished()
+
+	* gtk/gtkwindow.c (gtk_window_move_resize): Call gdk_window_finish_configure().
+	* gtk/gtkwindow.c (gtk_window_realize): Automatically enable
+	synchronized configures.
+
+	* gdk/x11/gdkwindow-x11.h (struct _GdkToplevelX11): Store current
+	and pending counter values. 
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_configure_finished): New function.
+	* gdk/x11/gdkwindow-x11.c
+	(gdk_window_enable_synchronized_configure): New function.
+	* gdk/x11/gdkwindow-x11.c (gdk_toplevel_x11_free_contents):
+	Delete update counter.
+	* gdk/x11/gdkwindow-x11.c (set_wm_protocols): Advertise
+	_NET_WM_SYNC_REQUEST when Sync is available
+
+	* gdk/x11/gdkevents-x11.c (gdk_wm_protocols_filter): Handle
+	_NET_WM_SYNC_REQUEST messages
+	* gdk/x11/gdkevents-x11.c (gdk_event_translate): Save counter
+	value for use by gdk_window_configure_finished() when receiving
+	ConfigureNotifies.
+
+	* gdk/x11/gdkdisplay-x11.h (struct _GdkDisplayX11): Add use_sync flag
+	* gdk/x11/gdkdisplay-x11.c (gdk_display_open): Check if the XSync
+	extension is available
+	* gdk/x11/gdkdisplay-x11.c: Add _NET_WM_SYNC_REQUEST and
+	_NET_WM_SYNC_REQUEST_COUNTER to list of supported atoms.
+
+	* gdk/linux-fb/gdkwindow-fb.c, gdk/win32/gdkwindow-win32.c: Add
+	stubs for enable_synchronized_configure() and configure_finished()
+
 Sat Jul 10 23:35:13 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkentry.c (paste_received): Make middle-button pasting

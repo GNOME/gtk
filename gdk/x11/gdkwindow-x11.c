@@ -470,13 +470,19 @@ static void
 set_wm_protocols (GdkWindow *window)
 {
   GdkDisplay *display = gdk_drawable_get_display (window);
-  Atom protocols[3];
+  Atom protocols[4];
+  int n = 0;
   
-  protocols[0] = gdk_x11_get_xatom_by_name_for_display (display, "WM_DELETE_WINDOW");
-  protocols[1] = gdk_x11_get_xatom_by_name_for_display (display, "WM_TAKE_FOCUS");
-  protocols[2] = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_PING");
+  protocols[n++] = gdk_x11_get_xatom_by_name_for_display (display, "WM_DELETE_WINDOW");
+  protocols[n++] = gdk_x11_get_xatom_by_name_for_display (display, "WM_TAKE_FOCUS");
+  protocols[n++] = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_PING");
 
-  XSetWMProtocols (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XID (window), protocols, 3);
+#ifdef HAVE_XSYNC
+  if (GDK_DISPLAY_X11 (display)->use_sync)
+    protocols[n++] = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_SYNC_REQUEST");
+#endif
+  
+  XSetWMProtocols (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XID (window), protocols, n);
 }
 
 static const gchar *
@@ -525,7 +531,8 @@ create_focus_window (Display *xdisplay,
 }
 
 static void
-setup_toplevel_window (GdkWindow *window, GdkWindow *parent)
+setup_toplevel_window (GdkWindow *window, 
+		       GdkWindow *parent)
 {
   GdkWindowObject *obj = (GdkWindowObject *)window;
   GdkToplevelX11 *toplevel = _gdk_x11_window_get_toplevel (window);
@@ -1020,7 +1027,8 @@ gdk_window_lookup (GdkNativeWindow anid)
 }
 
 static void
-gdk_toplevel_x11_free_contents (GdkToplevelX11 *toplevel)
+gdk_toplevel_x11_free_contents (GdkDisplay *display,
+				GdkToplevelX11 *toplevel)
 {
   if (toplevel->icon_window)
     {
@@ -1042,6 +1050,17 @@ gdk_toplevel_x11_free_contents (GdkToplevelX11 *toplevel)
       g_object_unref (toplevel->group_leader);
       toplevel->group_leader = NULL;
     }
+  if (toplevel->update_counter != None)
+    {
+#ifdef HAVE_XSYNC
+      XSyncDestroyCounter (GDK_DISPLAY_XDISPLAY (display), 
+			   toplevel->update_counter);
+      toplevel->update_counter = None;
+
+      XSyncIntToValue (&toplevel->current_counter_value, 0);
+      XSyncIntToValue (&toplevel->pending_counter_value, 0);
+#endif
+    }
 }
 
 void
@@ -1062,7 +1081,7 @@ _gdk_windowing_window_destroy (GdkWindow *window,
 
   toplevel = _gdk_x11_window_get_toplevel (window);
   if (toplevel)
-    gdk_toplevel_x11_free_contents (toplevel);
+    gdk_toplevel_x11_free_contents (GDK_WINDOW_DISPLAY (window), toplevel);
 
   draw_impl = GDK_DRAWABLE_IMPL_X11 (private->impl);
     
@@ -1825,7 +1844,8 @@ gdk_window_reparent (GdkWindow *window,
 		  _gdk_xid_table_remove (GDK_WINDOW_DISPLAY (window), impl->toplevel->focus_window);
 		}
 		
-	      gdk_toplevel_x11_free_contents (impl->toplevel);
+	      gdk_toplevel_x11_free_contents (GDK_WINDOW_DISPLAY (window), 
+					      impl->toplevel);
 	      g_free (impl->toplevel);
 	      impl->toplevel = NULL;
 	    }
@@ -5607,4 +5627,101 @@ gdk_window_begin_move_drag (GdkWindow *window,
 		       timestamp);
   else
     emulate_move_drag (window, button, root_x, root_y, timestamp);
+}
+
+/**
+ * gdk_window_enable_synchronized_configure:
+ * @window: a toplevel #GdkWindow
+ * 
+ * Indicates that the application will cooperate with the window
+ * system in synchronizing the window repaint with the window
+ * manager during resizing operations. After an application calls
+ * this function, it must call gdk_window_configure_finished() every
+ * time it has finished all processing associated with a set of
+ * Configure events. Toplevel GTK+ windows automatically use this
+ * protocol.
+ * 
+ * On X, calling this function makes @window participate in the
+ * _NET_WM_SYNC_REQUEST window manager protocol.
+ * 
+ * Since: 2.6
+ **/
+void
+gdk_window_enable_synchronized_configure (GdkWindow *window)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  
+#ifdef HAVE_XSYNC
+  if (!GDK_WINDOW_DESTROYED (window))
+    {
+      GdkToplevelX11 *toplevel = _gdk_x11_window_get_toplevel (window);
+      GdkDisplay *display = GDK_WINDOW_DISPLAY (window);
+
+      if (toplevel && toplevel->update_counter == None &&
+	  GDK_DISPLAY_X11 (display)->use_sync)
+	{
+	  Display *xdisplay = GDK_DISPLAY_XDISPLAY (display);
+	  XSyncValue value;
+	  Atom atom;
+	  
+	  if (toplevel->update_counter != None)
+	    return;
+	  
+	  XSyncIntToValue (&value, 0);
+	  
+	  toplevel->update_counter = XSyncCreateCounter (xdisplay, value);
+	  
+	  atom = gdk_x11_get_xatom_by_name_for_display (display,
+							"_NET_WM_SYNC_REQUEST_COUNTER");
+	  
+	  XChangeProperty (xdisplay, GDK_WINDOW_XID (window),
+			   atom, XA_CARDINAL,
+			   32, PropModeReplace,
+			   (guchar *)&toplevel->update_counter, 1);
+	  
+	  XSyncIntToValue (&toplevel->current_counter_value, 0);
+	}
+    }
+#endif /* HAVE_XSYNC */
+}
+
+/**
+ * gdk_window_configure_finished:
+ * @window: a toplevel #GdkWindow
+ * 
+ * Signal to the window system that the application has finished
+ * handling Configure events it has received. Window Managers can
+ * use this to better synchronize the frame repaint with the
+ * application. GTK+ applications will automatically call this
+ * function when appropriate.
+ *
+ * This function can only be called if gdk_window_use_configure()
+ * was called previously.
+ *
+ * Since: 2.6
+ **/
+void
+gdk_window_configure_finished (GdkWindow *window)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+#ifdef HAVE_XSYNC
+  if (!GDK_WINDOW_DESTROYED (window))
+    {
+      GdkDisplay *display = GDK_WINDOW_DISPLAY (window);
+      GdkToplevelX11 *toplevel = _gdk_x11_window_get_toplevel (window);
+
+      g_return_if_fail (toplevel->update_counter != None);
+      
+      if (toplevel && GDK_DISPLAY_X11 (display)->use_sync &&
+	  !XSyncValueIsZero (toplevel->current_counter_value))
+	{
+	  XSyncSetCounter (GDK_WINDOW_XDISPLAY (window), 
+			   toplevel->update_counter,
+			   toplevel->current_counter_value);
+	  
+	  XSyncIntToValue (&toplevel->current_counter_value, 0);
+	}
+    }
+#endif
 }

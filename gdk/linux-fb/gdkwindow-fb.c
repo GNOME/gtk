@@ -2359,3 +2359,13 @@ gdk_window_lookup_for_display (GdkDisplay *display, GdkNativeWindow anid)
 
   return (GdkWindow*) (anid);
 }
+
+void
+gdk_window_enable_synchronized_configure (GdkWindow *window)
+{
+}
+
+void
+gdk_window_configure_finished (GdkWindow *window)
+{
+}

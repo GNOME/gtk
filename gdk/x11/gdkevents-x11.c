@@ -46,6 +46,10 @@
 #include <X11/XKBlib.h>
 #endif
 
+#ifdef HAVE_XSYNC
+#include <X11/extensions/sync.h>
+#endif
+
 #ifdef HAVE_XFIXES
 #include <X11/extensions/Xfixes.h>
 #endif
@@ -215,11 +219,10 @@ _gdk_events_init (GdkDisplay *display)
 
   display_sources = g_list_prepend (display_sources,display_source);
 
-  gdk_display_add_client_message_filter (
-	display,
-	gdk_atom_intern ("WM_PROTOCOLS", FALSE), 
-	gdk_wm_protocols_filter,   
-	NULL);
+  gdk_display_add_client_message_filter (display,
+					 gdk_atom_intern ("WM_PROTOCOLS", FALSE), 
+					 gdk_wm_protocols_filter,   
+					 NULL);
 }
 
 
@@ -1723,8 +1726,16 @@ gdk_event_translate (GdkDisplay *display,
 	  !GDK_WINDOW_DESTROYED (window) &&
 	  (window_private->extension_events != 0))
 	_gdk_input_configure_event (&xevent->xconfigure, window);
+      
+#ifdef HAVE_XSYNC
+      if (toplevel && display_x11->use_sync && !XSyncValueIsZero (toplevel->pending_counter_value))
+	{
+	  toplevel->current_counter_value = toplevel->pending_counter_value;
+	  XSyncIntToValue (&toplevel->pending_counter_value, 0);
+	}
+#endif
 
-      if (!window ||
+    if (!window ||
 	  xevent->xconfigure.event != xevent->xconfigure.window ||
           GDK_WINDOW_TYPE (window) == GDK_WINDOW_CHILD ||
           GDK_WINDOW_TYPE (window) == GDK_WINDOW_ROOT)
@@ -2022,8 +2033,9 @@ gdk_wm_protocols_filter (GdkXEvent *xev,
   XEvent *xevent = (XEvent *)xev;
   GdkWindow *win = event->any.window;
   GdkDisplay *display = GDK_WINDOW_DISPLAY (win);
+  Atom atom = (Atom)xevent->xclient.data.l[0];
 
-  if ((Atom) xevent->xclient.data.l[0] == gdk_x11_get_xatom_by_name_for_display (display, "WM_DELETE_WINDOW"))
+  if (atom == gdk_x11_get_xatom_by_name_for_display (display, "WM_DELETE_WINDOW"))
     {
   /* The delete window request specifies a window
    *  to delete. We don't actually destroy the
@@ -2041,7 +2053,7 @@ gdk_wm_protocols_filter (GdkXEvent *xev,
 
       return GDK_FILTER_TRANSLATE;
     }
-  else if ((Atom) xevent->xclient.data.l[0] == gdk_x11_get_xatom_by_name_for_display (display, "WM_TAKE_FOCUS"))
+  else if (atom == gdk_x11_get_xatom_by_name_for_display (display, "WM_TAKE_FOCUS"))
     {
       GdkToplevelX11 *toplevel = _gdk_x11_window_get_toplevel (event->any.window);
       GdkWindowObject *private = (GdkWindowObject *)win;
@@ -2056,7 +2068,7 @@ gdk_wm_protocols_filter (GdkXEvent *xev,
 
       return GDK_FILTER_REMOVE;
     }
-  else if ((Atom) xevent->xclient.data.l[0] == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_PING") &&
+  else if (atom == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_PING") &&
 	   !_gdk_x11_display_is_root_window (display,
 					     xevent->xclient.window))
     {
@@ -2070,7 +2082,21 @@ gdk_wm_protocols_filter (GdkXEvent *xev,
 
       return GDK_FILTER_REMOVE;
     }
-
+  else if (atom == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_SYNC_REQUEST") &&
+	   GDK_DISPLAY_X11 (display)->use_sync)
+    {
+      GdkToplevelX11 *toplevel = _gdk_x11_window_get_toplevel (event->any.window);
+      if (toplevel)
+	{
+#ifdef HAVE_XSYNC
+	  XSyncIntsToValue (&toplevel->pending_counter_value, 
+			    xevent->xclient.data.l[2], 
+			    xevent->xclient.data.l[3]);
+#endif
+	}
+      return GDK_FILTER_REMOVE;
+    }
+  
   return GDK_FILTER_CONTINUE;
 }
 
