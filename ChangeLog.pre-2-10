@@ -1,5 +1,7 @@
 Sat Aug 21 23:29:54 2004  Matthias Clasen  <maclas@gmx.de>
 
+	Fix #150738, Tomislav Jonjic.
+	
 	* gtk/gtktoolitem.h (GTK_IS_TOOL_ITEM_CLASS): 
 	* gtk/gtktoolbutton.h (GTK_IS_TOOL_BUTTON_CLASS): 
 	* gtk/gtktoggleaction.h (GTK_IS_TOGGLE_ACTION_CLASS): 
