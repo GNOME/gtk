@@ -29,14 +29,14 @@ Overview of Changes in GTK+ 2.1.4
   [Garry Osgood, Owen]
 * Another attempt at fixing X focus tracking [Owen]
 * linux-fb VT switch improvements [Eric Warmenhoven]
-* Win32 [Tor Lillquist]
+* Win32 [Tor Lillqvist]
   - Bug and win98 portability fixes for new tile/stipple code [Hans Breuer]
   - Improve maximized/minimized tracking
   - Bug fixes
 * Fix problem with gtk_combo_set_popdown_strings() not changing
   the entry text [Owen]
 * Support RTL flipping for statusbars [Matthias]
-* GtkTreeView bug fixes [Kristen Rietveld, Juri Pakaste, Erik Simonsen,
+* GtkTreeView bug fixes [Kristian Rietveld, Juri Pakaste, Erik Simonsen,
   Richard Hult, Carlos Garnacho Parro]
 * Use octal escapes rather than literal UTF-8 in strings [Owen]
 * Make a lot of read-only data const. [Matthias, Morten Welinder]
@@ -44,7 +44,7 @@ Overview of Changes in GTK+ 2.1.4
 * New and updated translations (cs,es,el,he,hu,lv,no,ro)
 
 Other contributors: Anders Carlsson, Chris Blizzard, Stephen Brown, 
-   Erwann Chenede, John-Kare Hellan, John Finlay, Jarred Keuch, 
+   Erwann Chenede, Jon-Kare Hellan, John Finlay, Jarred Keuch, 
    Kjartan Maraas, Christian Neumair
 
 Overview of Changes in GTK+ 2.1.3
@@ -131,7 +131,7 @@ Overview of Changes in GTK+ 2.1.2
 * Win32 fixes [Tor Lillqvist]
 * Misc cleanups and bug fixes
 
-Other contributors: Phil Blundell, Erwanne Chenede, Jeremy Katz, 
+Other contributors: Phil Blundell, Erwann Chenede, Jeremy Katz, 
    Padraig O'Briain, Havoc Pennington, Timo Sirainen, Nam SungHyun,
    Matt Wilson,
 
@@ -272,7 +272,7 @@ Overview of Changes in GTK+ 2.0.7
 * Pixbuf loader fixes  [Federico Mena Quintero, Elliot Lee]
 * Support depth 8 StaticColor in GdkRGB [Matthias Clasen]
 * Win32 fixes and improvements [Tor Lillqvist]
- - Keyboard handling fixes [Florian Dugent]
+ - Keyboard handling fixes [Florent Duguet]
  - Fixes for building and running on Cygwin [Masahiro Sakai]
  - Fix gdk_window_scroll(), other GdkWindow fixes
  - Misc bug and build fixes [Soren Andersen, Florent, Tim Evans,
@@ -296,7 +296,7 @@ Overview of Changes in GTK+ 2.0.7
   ja,ko,lv,ms,nl,no,pl,pt,pt_BR,ru,sk,sv,vi,zh_TW)
 * Many miscellaneous bug fixes
 
-Other contributors: Jacob Berkman, Alvert Chin, Chema Celorio,
+Other contributors: Jacob Berkman, Albert Chin, Chema Celorio,
    David L. Cooper II, Brent Fox, Tim Janik, Marco Pesenti Gritti, 
    Alex Larsson, Zenith Lau, Thomas Leonard, Gaute Lindkvist, 
    Paolo Maggi, Andy Wingo, Jami Pekannen, Joshua N Pritikin, 
@@ -338,7 +338,7 @@ Overview of Changes in GTK+ 2.0.4
   Owen Taylor]
 * Calculate screen size on win32 from the "logical DPI" 
   [Joaquin Cuenca Abela, Tor Lillqvist]
-* Misc Win32 bug fixes. [Florent Duguet, Torn]
+* Misc Win32 bug fixes. [Florent Duguet, Tor]
 * Fix theme changes for GtkMenu [Soeren Sandmann]
 * Fix gdk_pixbuf_from_drawable() for big endian. [Federico Mena Quintero]
 * Fix encoding handling for gtk_file_selection_set_filename()
@@ -350,7 +350,7 @@ Overview of Changes in GTK+ 2.0.4
 * Updated translations (ca,cs,da,es,et,fr,ms,nl,pl,pt,pt_BR,ru,sv)
 
 Other contributors: Nicholas Allen, Jacob Berkman, Remus Draica, 
-  Nano Golveia, Tim Janik, Sergey Kuzminov, George Lebl, Garrett Lesage, 
+  Nano Golveia, Tim Janik, Sergey Kuzminov, George Lebl, Garrett LeSage, 
   Robin Lu, Timo Meinen, Michel Selten, Boris Shingarov, Jeff Waugh
 
 Overview of Changes in GTK+ 2.0.3
@@ -398,14 +398,14 @@ Overview of Changes in GTK+ 2.0.1
   [Owen Taylor, with help from Tuomas Kuosmanen]
 * Win32 fixes, especially dashed line drawing 
   [Tor Lillqvist, Hans Breuer]
-* Compile with -D_REENTRANT when appropriate [Sven Numann]
+* Compile with -D_REENTRANT when appropriate [Sven Neumann]
 * Compiler warning cleanups [Erwann Chenede]
 * Fix handling of font-name XSETTING [Richard Hestilow]
 * Make linux-fb backend compile again [Carlo E. Prelz, Alex Larsson]
 * Fix problems with inappropriate menu scroll arrows [Owen]
 * Stock icon improvements [Jakub Steiner, Tuomas]
 * Much work on pixbuf loader robustness [Matthias Clasen]
-* Documentation improvements [Matthias, Vitaly Tiskkov]
+* Documentation improvements [Matthias, Vitaly Tishkov]
 * Fix some crashes in GtkWindow accelerator handling code 
   [Dave Camp, Matt Wilson]
 * Misc bug fixes
