@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "POT-Creation-Date: 2002-06-04 20:15+0300\n"
-"PO-Revision-Date: 2002-06-04 20:26+0300\n"
+"PO-Revision-Date: 2002-06-06 22:20+0300\n"
 "Last-Translator: Tõivo Leedjärv <toivo@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -1940,7 +1940,7 @@ msgstr "_Suurus:"
 #. create the text entry widget
 #: gtk/gtkfontsel.c:468
 msgid "_Preview:"
-msgstr "_Eelvaade:"
+msgstr "_Näidis:"
 
 #: gtk/gtkfontsel.c:1269
 msgid "Font Selection"

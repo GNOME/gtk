@@ -1,3 +1,7 @@
+2002-06-06  Tõivo Leedjärv  <toivo@linux.ee>
+
+	* et.po: Fixed previous error.
+
 2002-06-06  jacob berkman  <jacob@ximian.com>
 
 	* et.po: revert previous commit as it yields "invalid multibyte
