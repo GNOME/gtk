@@ -2,6 +2,9 @@
 
 	* gtk/gtkfilechooserdefault.c: Don't construct errors from 
 	the GTK_FILE_SYSTEM_ERROR domain. Partial fix for #162911.
+	(get_file_info, check_is_folder): Translate errors from
+	the filesystem into the GTK_FILE_CHOOSER_ERROR domain. Rest
+	of the fix for #162911, noticed by Murray Cumming.
 
 Wed Jan  5 11:42:49 2005  Søren Sandmann  <sandmann@redhat.com>
 

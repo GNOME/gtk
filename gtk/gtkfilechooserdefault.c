@@ -1080,36 +1080,55 @@ shortcuts_find_current_folder (GtkFileChooserDefault *impl)
 
 /* Convenience function to get the display name and icon info for a path */
 static GtkFileInfo *
-get_file_info (GtkFileSystem *file_system, const GtkFilePath *path, gboolean name_only, GError **error)
+get_file_info (GtkFileSystem      *file_system, 
+	       const GtkFilePath  *path, 
+	       gboolean            name_only, 
+	       GError            **error)
 {
   GtkFilePath *parent_path;
   GtkFileFolder *parent_folder;
   GtkFileInfo *info;
+  GError *tmp = NULL;
 
+  parent_path = NULL;
   info = NULL;
 
-  if (!gtk_file_system_get_parent (file_system, path, &parent_path, error))
-    return NULL;
+  if (!gtk_file_system_get_parent (file_system, path, &parent_path, &tmp))
+    goto out;
 
   parent_folder = gtk_file_system_get_folder (file_system, parent_path ? parent_path : path,
 					      GTK_FILE_INFO_DISPLAY_NAME
 					      | (name_only ? 0 : GTK_FILE_INFO_IS_FOLDER),
-					      error);
+					      &tmp);
   if (!parent_folder)
     goto out;
 
-  info = gtk_file_folder_get_info (parent_folder, parent_path ? path : NULL, error);
+  info = gtk_file_folder_get_info (parent_folder, parent_path ? path : NULL, &tmp);
   g_object_unref (parent_folder);
 
  out:
+  if (parent_path)
+    gtk_file_path_free (parent_path);
 
-  gtk_file_path_free (parent_path);
+  if (tmp)
+    {
+      g_set_error (error,
+		   GTK_FILE_CHOOSER_ERROR,
+		   GTK_FILE_CHOOSER_ERROR_BAD_FILENAME,
+		   _("Could not get information about '%s': %s"), 
+		   gtk_file_path_get_string (path),
+		   tmp->message);
+      g_error_free (tmp);
+    }
+
   return info;
 }
 
 /* Returns whether a path is a folder */
 static gboolean
-check_is_folder (GtkFileSystem *file_system, const GtkFilePath *path, GError **error)
+check_is_folder (GtkFileSystem      *file_system, 
+		 const GtkFilePath  *path, 
+		 GError            **error)
 {
   GtkFileInfo *info;
   gboolean is_folder;
@@ -1129,7 +1148,7 @@ check_is_folder (GtkFileSystem *file_system, const GtkFilePath *path, GError **e
   if (!is_folder)
     g_set_error (error,
 		 GTK_FILE_CHOOSER_ERROR,
-		 GTK_FILE_COOSER_ERROR_BAD_FILENAME,
+		 GTK_FILE_CHOOSER_ERROR_BAD_FILENAME,
 		 "%s: %s", 
 		 gtk_file_info_get_display_name (info),
 		 g_strerror (ENOTDIR));
