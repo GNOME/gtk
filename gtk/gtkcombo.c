@@ -664,7 +664,7 @@ gtk_combo_button_release (GtkWidget *widget,
       if (GTK_WIDGET_HAS_GRAB (combo->popwin))
 	{
 	  gtk_grab_remove (combo->popwin);
-	  gdk_display_pointer_ungrab (gtk_widget_get_display (combo),
+	  gdk_display_pointer_ungrab (gtk_widget_get_display (widget),
 				      event->button.time);
 	}
     }

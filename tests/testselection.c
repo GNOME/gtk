@@ -150,7 +150,8 @@ selection_toggled (GtkWidget *widget)
     {
       if (have_selection)
 	{
-	  if (gdk_selection_owner_get (GDK_SELECTION_PRIMARY) == widget->window)
+	  if (gdk_selection_owner_get_for_display (gtk_widget_get_display (widget),
+				    GDK_SELECTION_PRIMARY) == widget->window)
 	    gtk_selection_owner_set (NULL, GDK_SELECTION_PRIMARY,
 				     GDK_CURRENT_TIME);
 	  have_selection = FALSE;

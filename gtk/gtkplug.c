@@ -306,7 +306,7 @@ gtk_plug_construct (GtkPlug         *plug,
 	gdk_window_get_user_data (plug->socket_window, &user_data);
       else
 	plug->socket_window = 
-	  gdk_window_foreign_new_for_screen (gdk_drawable_get_screen (plug->socket_window),
+	  gdk_window_foreign_new_for_display (gdk_drawable_get_display (plug->socket_window),
 					     socket_id);
 
       if (user_data)
@@ -902,7 +902,7 @@ handle_modality_on (GtkPlug *plug)
   if (!plug->modality_window)
     {
       plug->modality_window = gtk_window_new (GTK_WINDOW_POPUP);
-      gtk_window_set_screen (GTK_WIDGET (plug->modality_window),
+      gtk_window_set_screen (GTK_WINDOW (plug->modality_window),
 			     gtk_widget_get_screen (GTK_WIDGET (plug)));
       gtk_window_group_add_window (plug->modality_group, GTK_WINDOW (plug->modality_window));
       gtk_grab_add (plug->modality_window);
@@ -1121,7 +1121,7 @@ gtk_plug_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 	      }
 	    else
 	      {
-		plug->socket_window = gdk_window_foreign_new_for_screen (gdk_drawable_get_screen (plug->socket_window),xre->parent);
+		plug->socket_window = gdk_window_foreign_new_for_display (gdk_drawable_get_display (plug->socket_window),xre->parent);
 		if (!plug->socket_window) /* Already gone */
 		  break;
 	      }

@@ -516,7 +516,8 @@ main (int argc, char **argv)
 
 	gdk_rgb_set_verbose (TRUE);
 
-	gtk_widget_set_default_colormap (gdk_rgb_get_colormap ());
+	gtk_widget_set_default_colormap (
+	      gdk_rgb_get_colormap_for_screen (gdk_get_default_screen ()));
 
 	{
 		char *tbf_readlen = getenv("TBF_READLEN");

@@ -1258,7 +1258,6 @@ static void
 gtk_style_real_init_from_rc (GtkStyle   *style,
 			     GtkRcStyle *rc_style)
 {
-  GdkFont *old_font;
   gint i;
 
   /* cache _should_ be still empty */

@@ -84,7 +84,7 @@ testrgb_rgb_test (GtkWidget *drawing_area)
 			  buf + offset, WIDTH * 3);
     }
 
-  if (gdk_rgb_ditherable ())
+  if (gdk_rgb_colormap_ditherable (gdk_rgb_get_colormap_for_screen (gdk_get_default_screen ())))
     dith_max = 2;
   else
     dith_max = 1;
@@ -283,7 +283,7 @@ main (int argc, char **argv)
 
   gdk_rgb_init ();
 
-  gtk_widget_set_default_colormap (gdk_rgb_get_cmap ());
+  gtk_widget_set_default_colormap (gdk_rgb_get_colormap_for_screen (gdk_get_default_screen ()));
   new_testrgb_window ();
 
   gtk_main ();
