@@ -1,3 +1,8 @@
+Sat Nov  4 10:12:27 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* autogen.sh: When doing sanity checking on ACLOCAL_FLAGS,
+	look for glib-2.0.m4 not glib.m4. (Ali Abdin)
+
 2000-11-03  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktexttagtable.c: Docs

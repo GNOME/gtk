@@ -49,7 +49,7 @@ esac
 if test -z "$ACLOCAL_FLAGS"; then
 
 	acdir=`aclocal --print-ac-dir`
-        m4list="glib.m4 gettext.m4"
+        m4list="glib-2.0.m4 gettext.m4"
 
 	for file in $m4list
 	do
