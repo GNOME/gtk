@@ -770,13 +770,6 @@ gif_fill_in_lines (GifContext *context, guchar *dest, guchar v)
 	}
 }
 
-static void
-set_need_recomposite (gpointer data, gpointer user_data)
-{
-        GdkPixbufFrame *frame = (GdkPixbufFrame *)data;
-        frame->need_recomposite = TRUE;
-}
-
 /* Clips a rectancle to the base dimensions. Returns TRUE if the clipped rectangle is non-empty. */
 static gboolean
 clip_frame (GifContext *context, 
