@@ -4,21 +4,13 @@
 GtkObject *model;
 
 static void
-row_selected (GtkTreeView  *tree_view,
-	      GtkTreeModel *tree_model,
-	      GtkTreeNode  *node,
-	      GtkWidget    *button)
+selection_changed (GtkTreeSelection *selection,
+		   GtkWidget         *button)
 {
-  gtk_widget_set_sensitive (button, TRUE);
-}
-
-static void
-row_unselected (GtkTreeView  *tree_view,
-		GtkTreeModel *tree_model,
-		GtkTreeNode  *node,
-		GtkWidget    *button)
-{
-  gtk_widget_set_sensitive (button, FALSE);
+  if (gtk_tree_selection_get_selected (selection))
+    gtk_widget_set_sensitive (button, TRUE);
+  else
+    gtk_widget_set_sensitive (button, FALSE);
 }
 
 static GtkTreeNode *
@@ -134,9 +126,9 @@ make_window ()
   button = gtk_button_new_with_label ("gtk_tree_store_node_remove");
   gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
   gtk_signal_connect (GTK_OBJECT (selection),
-		      "row_selected", row_selected, button);
-  gtk_signal_connect (GTK_OBJECT (selection),
-		      "row_unselected", row_unselected, button);
+		      "selection_changed",
+		      selection_changed,
+		      button);
   gtk_signal_connect (GTK_OBJECT (button), "clicked", node_remove, tree_view);
   gtk_widget_set_sensitive (button, FALSE);
 
@@ -152,20 +144,20 @@ make_window ()
   
   button = gtk_button_new_with_label ("gtk_tree_store_node_insert_before");
   gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
-  gtk_signal_connect (GTK_OBJECT (selection),
-		      "row_selected", row_selected, button);
-  gtk_signal_connect (GTK_OBJECT (selection),
-		      "row_unselected", row_unselected, button);
   gtk_signal_connect (GTK_OBJECT (button), "clicked", node_insert_before, tree_view);
+  gtk_signal_connect (GTK_OBJECT (selection),
+		      "selection_changed",
+		      selection_changed,
+		      button);
   gtk_widget_set_sensitive (button, FALSE);
 
   button = gtk_button_new_with_label ("gtk_tree_store_node_insert_after");
   gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
-  gtk_signal_connect (GTK_OBJECT (selection),
-		      "row_selected", row_selected, button);
-  gtk_signal_connect (GTK_OBJECT (selection),
-		      "row_unselected", row_unselected, button);
   gtk_signal_connect (GTK_OBJECT (button), "clicked", node_insert_after, tree_view);
+  gtk_signal_connect (GTK_OBJECT (selection),
+		      "selection_changed",
+		      selection_changed,
+		      button);
   gtk_widget_set_sensitive (button, FALSE);
 
   button = gtk_button_new_with_label ("gtk_tree_store_node_prepend");
