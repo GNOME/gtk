@@ -26,6 +26,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 #include <unistd.h>
 
 #include <glib.h>
@@ -842,10 +843,30 @@ _gdk_windowing_set_default_display (GdkDisplay *display)
   startup_id = g_getenv ("DESKTOP_STARTUP_ID");
   if (startup_id && *startup_id != '\0')
     {
+      gchar *time_str;
+
       if (!g_utf8_validate (startup_id, -1, NULL))
 	g_warning ("DESKTOP_STARTUP_ID contains invalid UTF-8");
       else
 	display_x11->startup_notification_id = g_strdup (startup_id);
+
+      /* Find the launch time from the startup_id, if it's there.  Newer spec
+       * states that the startup_id is of the form <unique>_TIME<timestamp>
+       */
+      time_str = g_strrstr (startup_id, "_TIME");
+      if (time_str != NULL)
+        {
+	  gulong retval;
+          gchar *end;
+          errno = 0;
+
+          /* Skip past the "_TIME" part */
+          time_str += 5;
+
+          retval = strtoul (time_str, &end, 0);
+          if (end != time_str && errno == 0)
+            display_x11->user_time = retval;
+        }
       
       /* Clear the environment variable so it won't be inherited by
        * child processes and confuse things.  
