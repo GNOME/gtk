@@ -287,7 +287,7 @@ setup_tree (void)
    populate_tree_model (store);
 
    /* Create a view */
-   view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (store));
+   tree = gtk_tree_view_new_with_model (GTK_TREE_MODEL (store));
 
    /* The view now holds a reference.  We can get rid of our own
     * reference */

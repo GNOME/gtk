@@ -1,3 +1,7 @@
+2002-04-22  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tree_widget.sgml: Fix typo in "Simple Example".  (#78661)
+
 2002-04-21  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtktreemodel.sgml: 
@@ -10,7 +14,7 @@
 
 	* gdk/tmpl/properties.sgml: Fix gdk_property_change docs. (#72312)
 
-	* gtk/text_widget.sgml: Fix misleading example.  (
+	* gtk/text_widget.sgml: Fix misleading example.  (#79080)
 	
 	* gtk/tmpl/gtkdialog.sgml: Fix stock id in example.  (#74439)
 
