@@ -1,3 +1,8 @@
+2004-07-28  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/linux-fb/gdkwindow-fb.c (gdk_window_set_background): Fix
+	prototype mismatch.  (#148589, Nicolas Deves)
+
 2004-07-28  Anders Carlsson  <andersca@gnome.org>
 
 	* gdk/x11/gdkdrawable-x11.c (gdk_draw_rectangle_alpha_libgtk_only): 
