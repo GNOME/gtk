@@ -828,7 +828,7 @@ gtk_im_context_simple_commit_char (GtkIMContext *context,
       context_simple->tentative_match = 0;
       context_simple->tentative_match_len = 0;
       gtk_signal_emit_by_name (GTK_OBJECT (context_simple),
-			       "preedit-changed");
+			       "preedit_changed");
     }
 
   gtk_signal_emit_by_name (GTK_OBJECT (context), "commit", &buf);
@@ -900,7 +900,7 @@ check_table (GtkIMContextSimple    *context_simple,
 		  context_simple->tentative_match_len = n_compose;
 
 		  gtk_signal_emit_by_name (GTK_OBJECT (context_simple),
-					   "preedit-changed");
+					   "preedit_changed");
 
 		  return TRUE;
 		}
