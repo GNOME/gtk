@@ -2426,13 +2426,13 @@ gtk_combo_box_menu_row_inserted (GtkTreeModel *model,
   menu = combo_box->priv->popup_widget;
   g_return_if_fail (GTK_IS_MENU (menu));
 
-  cell_view = gtk_cell_view_new ();
+  cell_view = GTK_CELL_VIEW (gtk_cell_view_new ());
   gtk_cell_view_set_model (cell_view, model);
   gtk_cell_view_set_displayed_row (cell_view, path);
   gtk_widget_show (GTK_WIDGET (cell_view));
   
   item = gtk_menu_item_new ();
-  gtk_container_add (GTK_CONTAINER (item), cell_view);
+  gtk_container_add (GTK_CONTAINER (item), GTK_WIDGET (cell_view));
 
   g_signal_connect (item, "activate",
                     G_CALLBACK (gtk_combo_box_menu_item_activate),
