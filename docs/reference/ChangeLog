@@ -1,3 +1,16 @@
+2002-12-11  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/tmpl/pixmaps.sgml: Make "GdkPixmap" a valid id to reduce
+	dangling links.
+
+	* gdk/tmpl/windows.sgml: Make "GdkWindow" a valid id to reduce
+	dangling links.
+
+	* gdk/tmpl/drawing.sgml: Make "GdkDrawable" a valid id to reduce
+	dangling links.
+
+	* gdk/tmpl/gcs.sgml: Make "GdkGC" a valid id to reduce dangling links.
+
 2002-12-10  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtktextview.sgml: Add docs.

@@ -19,7 +19,7 @@ For example, each #GtkButton has a #GdkWindow associated with it.
 </para>
 
 <!-- ##### STRUCT GdkWindow ##### -->
-<para>
+<para><anchor id="GdkWindow"/>
 An opaque structure representing an onscreen drawable.
 Pointers to structures of type #GdkPixmap, #GdkBitmap,
 and #GdkWindow, can often be used interchangeably.

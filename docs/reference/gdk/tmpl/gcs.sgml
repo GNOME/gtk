@@ -31,7 +31,7 @@ be set by the latter method.
 </para>
 
 <!-- ##### STRUCT GdkGC ##### -->
-<para>
+<para><anchor id="GdkGC"/>
 The #GdkGC structure represents a graphics context.
 It is an opaque structure with no user-visible
 elements.
