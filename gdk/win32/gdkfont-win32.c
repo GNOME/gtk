@@ -31,7 +31,6 @@
 #include <pango/pangowin32.h>
 
 #include "gdkfont.h"
-#include "gdkinternals.h"
 #include "gdkprivate-win32.h"
 
 static GHashTable *font_name_hash = NULL;
@@ -1520,7 +1519,6 @@ gdk_font_load (const gchar *font_name)
   GdkFontPrivateWin32 *private;
   GdkWin32SingleFont *singlefont;
   HGDIOBJ oldfont;
-  HANDLE *f;
   TEXTMETRIC textmetric;
 
   g_return_val_if_fail (font_name != NULL, NULL);

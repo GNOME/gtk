@@ -31,10 +31,7 @@
 #include "gdk.h"		/* For gdk_rectangle_intersect */
 #include "gdkregion.h"
 #include "gdkregion-generic.h"
-#include "gdkinternals.h"
 #include "gdkprivate-win32.h"
-#include "gdkdrawable-win32.h"
-#include "gdkwindow-win32.h"
 
 #define SIZE_LIMIT 32000
 
@@ -271,7 +268,6 @@ _gdk_window_move_resize_child (GdkWindow *window,
   GdkWindowObject *obj;
   GdkWin32PositionInfo new_info;
   GdkWindowParentPos parent_pos;
-  RECT rect;
   GList *tmp_list;
   gint d_xoffset, d_yoffset;
   gint dx, dy;

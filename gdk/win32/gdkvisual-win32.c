@@ -24,13 +24,10 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#include "config.h"
+#include <stdlib.h>
 
 #include "gdkvisual.h"
 #include "gdkprivate-win32.h"
-//#include "gdkinternals.h"
-
-#include <stdlib.h>
 
 static void  gdk_visual_decompose_mask (gulong     mask,
 					gint      *shift,

@@ -29,7 +29,6 @@
 
 #include <pango/pangowin32.h>
 
-#include "gdkinternals.h"
 #include "gdkprivate-win32.h"
 
 static void gdk_win32_draw_rectangle (GdkDrawable    *drawable,

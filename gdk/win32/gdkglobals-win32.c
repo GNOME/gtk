@@ -31,13 +31,13 @@ HWND              gdk_root_window = NULL;
 gint              gdk_event_func_from_window_proc = FALSE;
 HDC		  gdk_display_hdc;
 HINSTANCE	  gdk_dll_hinstance;
-HINSTANCE	  gdk_app_hmodule; /* Works as a HMODULE, too? */
+HINSTANCE	  gdk_app_hmodule;
 UINT		  gdk_selection_notify_msg;
 UINT		  gdk_selection_request_msg;
 UINT		  gdk_selection_clear_msg;
 GdkAtom		  gdk_clipboard_atom;
 GdkAtom		  gdk_win32_dropfiles_atom;
 GdkAtom		  gdk_ole2_dnd_atom;
-GdkAtom             _gdk_selection_property;
+GdkAtom           _gdk_selection_property;
 DWORD		  windows_version = 0;
 gint		  gdk_input_ignore_wintab = FALSE;

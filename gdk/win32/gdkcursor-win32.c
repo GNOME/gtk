@@ -17,12 +17,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include "config.h"
-
-#include "gdkwin32.h"
 #include "gdkcursor.h"
-#include "gdkinternals.h"
-#include "gdkpixmap-win32.h"
 #include "gdkprivate-win32.h"
 
 #include "xcursors.h"

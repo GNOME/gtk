@@ -31,7 +31,6 @@
 #include "gdkevents.h"
 #include "gdkpixmap.h"
 #include "gdkwindow.h"
-#include "gdkinternals.h"
 #include "gdkprivate-win32.h"
 #include "gdkinput-win32.h"
 
@@ -314,15 +313,12 @@ RegisterGdkClass (GdkWindowType wtype)
 	  hAppIcon = ExtractIcon (gdk_app_hmodule, sLoc, 0);
 	  if (0 == hAppIcon)
 	    {
-	      char *gdklibname = g_strdup_printf ("gdk-%s.dll", GDK_VERSION);
-
-	      hAppIcon = ExtractIcon (gdk_app_hmodule, gdklibname, 0);
-	      g_free (gdklibname);
+	      if (0 != GetModuleFileName (gdk_dll_hinstance, sLoc, _MAX_PATH))
+		hAppIcon = ExtractIcon (gdk_dll_hinstance, sLoc, 0);
 	    }
-	  
-	  if (0 == hAppIcon) 
-	    hAppIcon = LoadIcon (NULL, IDI_APPLICATION);
 	}
+      if (0 == hAppIcon) 
+	hAppIcon = LoadIcon (NULL, IDI_APPLICATION);
     }
 
   wcl.lpszMenuName = NULL;

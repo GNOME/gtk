@@ -25,14 +25,11 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#include "config.h"
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
 #include "gdkpixmap.h"
-#include "gdkinternals.h"
 #include "gdkprivate-win32.h"
 
 static void gdk_pixmap_impl_win32_get_size   (GdkDrawable        *drawable,

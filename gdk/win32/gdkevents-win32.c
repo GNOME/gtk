@@ -25,8 +25,6 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#include "config.h"
-
 /* Cannot use TrackMouseEvent, as the stupid WM_MOUSELEAVE message
  * doesn't tell us where the mouse has gone. Thus we cannot use it to
  * generate a correct GdkNotifyType. Pity, as using TrackMouseEvent
@@ -41,7 +39,10 @@
 
 #include <stdio.h>
 
+#include "gdk.h"
 #include "gdkprivate-win32.h"
+#include "gdkinput-win32.h"
+#include "gdkkeysyms.h"
 
 #include <objbase.h>
 #include <imm.h>
@@ -52,13 +53,6 @@
 #include "surrogate-dimm.h"
 #endif
 
-#include "gdk.h"
-#include "gdkinternals.h"
-#include "gdkinput-win32.h"
-
-#include "gdkkeysyms.h"
-
-#define PING() printf("%s: %d\n",__FILE__,__LINE__),fflush(stdout)
 
 typedef struct _GdkIOClosure GdkIOClosure;
 typedef struct _GdkEventPrivate GdkEventPrivate;
@@ -1065,6 +1059,7 @@ print_event (GdkEvent *event)
     CASE (GDK_NO_EXPOSE);
     CASE (GDK_SCROLL);
     CASE (GDK_WINDOW_STATE);
+    CASE (GDK_SETTING);
 #undef CASE
     }
   g_print ("%#lx ", (gulong) GDK_WINDOW_HWND (event->any.window));

@@ -24,16 +24,11 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#include "config.h"
-
 #include <string.h>
 
 #include "gdkproperty.h"
 #include "gdkselection.h"
-#include "gdkinternals.h"
 #include "gdkprivate-win32.h"
-#include "gdkdrawable-win32.h"
-#include "gdkwindow-win32.h"
 
 GdkAtom
 gdk_atom_intern (const gchar *atom_name,
@@ -78,11 +73,12 @@ gdk_atom_intern (const gchar *atom_name,
 	    win32_atom = 0;
 	  else
 	    win32_atom = GlobalAddAtom (atom_name);
-	  retval = GUINT_TO_POINTER (win32_atom);
+	  retval = GUINT_TO_POINTER ((guint) win32_atom);
 	}
-      g_hash_table_insert (atom_hash, 
-			   g_strdup (atom_name), 
-			   retval);
+      if (retval != GDK_NONE)
+	g_hash_table_insert (atom_hash, 
+			     g_strdup (atom_name), 
+			     retval);
     }
 
   return retval;
@@ -109,7 +105,7 @@ gdk_atom_name (GdkAtom atom)
   win32_atom = GPOINTER_TO_UINT (atom);
   
   if (win32_atom < 0xC000)
-    return g_strdup_printf ("#%x", atom);
+    return g_strdup_printf ("#%p", atom);
   else if (GlobalGetAtomName (win32_atom, name, sizeof (name)) == 0)
     return NULL;
   return g_strdup (name);

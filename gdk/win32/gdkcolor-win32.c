@@ -24,14 +24,13 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#include "config.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
 
 #include "gdkcolor.h"
+#include "gdkinternals.h"
 #include "gdkprivate-win32.h"
 
 static void     free_colormap            (Colormap          colormap);

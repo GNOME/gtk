@@ -24,16 +24,11 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#include "config.h"
-
 #include <string.h>
 
 #include "gdkproperty.h"
 #include "gdkselection.h"
-#include "gdkinternals.h"
-#include "gdkprivate.h"
 #include "gdkprivate-win32.h"
-#include "gdkwindow-win32.h"
 
 /* We emulate the GDK_SELECTION window properties by storing
  * it's data in a per-window hashtable.

@@ -24,15 +24,12 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#include "config.h"
-
 #include <string.h>
 
 #include "gdkgc.h"
 #include "gdkfont.h"
 #include "gdkpixmap.h"
 #include "gdkregion-generic.h"
-#include "gdkinternals.h"
 #include "gdkprivate-win32.h"
 
 static void gdk_win32_gc_get_values (GdkGC           *gc,
