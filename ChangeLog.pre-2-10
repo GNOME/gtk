@@ -1,3 +1,9 @@
+Wed Mar 13 17:17:40 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkobject.h: Remove left-over GTK_OBJECT_CONNECTED
+	macro that was defined in terms of the now-gone GTK_CONNECTED
+	flag. (Seth Burgess, #74028)
+
 Wed Mar 13 17:11:10 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkaccelgroup.c (accel_group_weak_ref_detach): Unset 

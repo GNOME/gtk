@@ -67,7 +67,6 @@ typedef enum
  */
 #define GTK_OBJECT_FLAGS(obj)		  (GTK_OBJECT (obj)->flags)
 #define GTK_OBJECT_FLOATING(obj)	  ((GTK_OBJECT_FLAGS (obj) & GTK_FLOATING) != 0)
-#define GTK_OBJECT_CONNECTED(obj)	  ((GTK_OBJECT_FLAGS (obj) & GTK_CONNECTED) != 0)
 
 /* Macros for setting and clearing bits in the object_flags field of GtkObject.
  */
