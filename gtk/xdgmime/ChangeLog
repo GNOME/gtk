@@ -1,3 +1,7 @@
+Tue Jan 20 13:07:04 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* xdgmime.c: resync with upstream sources.
+
 Fri Oct 24 16:54:57 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* Makefile.am (libxdgmime_la_SOURCES): Add .h files to 

@@ -1,14 +1,14 @@
 /* -*- mode: C; c-file-style: "gnu" -*- */
-/* xdgmime.h: Private file.  Datastructure for storing the globs.
+/* xdgmimeglob.h: Private file.  Datastructure for storing the globs.
  *
  * More info can be found at http://www.freedesktop.org/standards/
- * 
+ *
  * Copyright (C) 2003  Red Hat, Inc.
  * Copyright (C) 2003  Jonathan Blandford <jrb@alum.mit.edu>
  *
  * Licensed under the Academic Free License version 2.0
  * Or under the following terms:
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -28,6 +28,7 @@
 #ifndef __XDG_MIME_GLOB_H__
 #define __XDG_MIME_GLOB_H__
 
+#include "xdgmime.h"
 
 typedef struct XdgGlobHash XdgGlobHash;
 
@@ -38,6 +39,16 @@ typedef enum
   XDG_GLOB_FULL,    /* x*.[ch] */
 } XdgGlobType;
 
+  
+#ifdef XDG_PREFIX
+#define _xdg_mime_glob_read_from_file         XDG_ENTRY(glob_read_from_file)
+#define _xdg_glob_hash_new                    XDG_ENTRY(hash_new)
+#define _xdg_glob_hash_free                   XDG_ENTRY(hash_free)
+#define _xdg_glob_hash_lookup_file_name       XDG_ENTRY(hash_lookup_file_name)
+#define _xdg_glob_hash_append_glob            XDG_ENTRY(hash_append_glob)
+#define _xdg_glob_determine_type              XDG_ENTRY(determine_type)
+#define _xdg_glob_hash_dump                   XDG_ENTRY(hash_dump)
+#endif
 
 void         _xdg_mime_glob_read_from_file   (XdgGlobHash *glob_hash,
 					      const char  *file_name);

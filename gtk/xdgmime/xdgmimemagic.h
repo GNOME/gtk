@@ -1,14 +1,14 @@
 /* -*- mode: C; c-file-style: "gnu" -*- */
-/* xdgmimemagic.h: Private file.  Datastructure for storing the globs.
+/* xdgmimemagic.h: Private file.  Datastructure for storing the magic files.
  *
  * More info can be found at http://www.freedesktop.org/standards/
- * 
+ *
  * Copyright (C) 2003  Red Hat, Inc.
  * Copyright (C) 2003  Jonathan Blandford <jrb@alum.mit.edu>
  *
  * Licensed under the Academic Free License version 2.0
  * Or under the following terms:
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -29,8 +29,18 @@
 #define __XDG_MIME_MAGIC_H__
 
 #include <unistd.h>
-
+#include "xdgmime.h"
 typedef struct XdgMimeMagic XdgMimeMagic;
+
+#ifdef XDG_PREFIX
+#define _xdg_mime_glob_read_from_file             XDG_ENTRY(glob_read_from_file)
+#define _xdg_mime_magic_new                       XDG_ENTRY(magic_new)
+#define _xdg_mime_magic_read_from_file            XDG_ENTRY(magic_read_from_file)
+#define _xdg_mime_magic_free                      XDG_ENTRY(magic_free)
+#define _xdg_mime_magic_get_buffer_extents        XDG_ENTRY(magic_get_buffer_extents)
+#define _xdg_mime_magic_lookup_data               XDG_ENTRY(magic_lookup_data)
+#endif
+
 
 XdgMimeMagic *_xdg_mime_magic_new                (void);
 void          _xdg_mime_magic_read_from_file     (XdgMimeMagic *mime_magic,

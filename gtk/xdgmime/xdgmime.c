@@ -35,9 +35,10 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-XdgGlobHash *global_hash = NULL;
-XdgMimeMagic *global_magic = NULL;
-
+static int initted = 0;
+static XdgGlobHash *global_hash = NULL;
+static XdgMimeMagic *global_magic = NULL;
+const char *xdg_mime_type_unknown = "application/octet-stream";
 
 static void
 _xdg_mime_init_from_directory (const char *directory)
@@ -60,8 +61,6 @@ _xdg_mime_init_from_directory (const char *directory)
 static void
 xdg_mime_init (void)
 {
-  static int initted = 0;
-
   if (initted == 0)
     {
       const char *xdg_data_home;
@@ -122,8 +121,9 @@ xdg_mime_init (void)
 	    len = end_ptr - ptr;
 	  else
 	    len = end_ptr - ptr + 1;
-	  dir = malloc (len);
+	  dir = malloc (len + 1);
 	  strncpy (dir, ptr, len);
+	  dir[len] = '\0';
 	  _xdg_mime_init_from_directory (dir);
 	  free (dir);
 
@@ -233,4 +233,20 @@ xdg_mime_is_valid_mime_type (const char *mime_type)
   /* FIXME: We should make this a better test
    */
   return _xdg_utf8_validate (mime_type);
+}
+
+void
+xdg_mime_shutdown (void)
+{
+  /* FIXME: Need to make this (and the whole library) thread safe */
+  if (initted)
+    {
+      _xdg_glob_hash_free (global_hash);
+      global_hash = NULL;
+
+      _xdg_mime_magic_free (global_magic);
+      global_magic = NULL;
+
+      initted = 0;
+    }
 }
