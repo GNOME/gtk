@@ -30,6 +30,7 @@
 
 #include "gdkproperty.h"
 #include "gdkselection.h"
+#include "gdkdisplay.h"
 #include "gdkprivate-win32.h"
 
 /* We emulate the GDK_SELECTION window properties of windows (as used
@@ -108,14 +109,17 @@ _gdk_dropfiles_store (gchar *data)
 }
 
 gboolean
-gdk_selection_owner_set (GdkWindow *owner,
-			 GdkAtom    selection,
-			 guint32    time,
-			 gboolean   send_event)
+gdk_selection_owner_set_for_display (GdkDisplay *display,
+                                     GdkWindow  *owner,
+                                     GdkAtom     selection,
+                                     guint32     time,
+                                     gboolean    send_event)
 {
   HWND xwindow;
   GdkEvent tmp_event;
   gchar *sel_name;
+
+  g_return_val_if_fail (display == gdk_get_default_display (), FALSE);
 
   GDK_NOTE (DND,
 	    (sel_name = gdk_atom_name (selection),
@@ -189,10 +193,13 @@ gdk_selection_owner_set (GdkWindow *owner,
 }
 
 GdkWindow*
-gdk_selection_owner_get (GdkAtom selection)
+gdk_selection_owner_get_for_display (GdkDisplay *display,
+                                     GdkAtom     selection)
 {
   GdkWindow *window;
   gchar *sel_name;
+
+  g_return_val_if_fail (display == gdk_get_default_display (), NULL);
 
   /* Return NULL for CLIPBOARD, because otherwise cut&paste
    * inside the same application doesn't work. We must pretend to gtk
@@ -499,14 +506,17 @@ _gdk_selection_property_delete (GdkWindow *window)
 }
 
 void
-gdk_selection_send_notify (guint32  requestor,
-			   GdkAtom  selection,
-			   GdkAtom  target,
-			   GdkAtom  property,
-			   guint32  time)
+gdk_selection_send_notify_for_display (GdkDisplay *display,
+                                       guint32  requestor,
+                                       GdkAtom  selection,
+                                       GdkAtom  target,
+                                       GdkAtom  property,
+                                       guint32  time)
 {
   GdkEvent tmp_event;
   gchar *sel_name, *tgt_name, *prop_name;
+
+  g_return_if_fail (display == gdk_get_default_display ());
 
   GDK_NOTE (DND,
 	    (sel_name = gdk_atom_name (selection),
@@ -687,7 +697,8 @@ make_list (const gchar  *text,
 }
 
 /**
- * gdk_text_property_to_utf8_list:
+ * gdk_text_property_to_utf8_list_for_display:
+ * @display:  currently ignored
  * @encoding: an atom representing the encoding of the text
  * @format:   the format of the property
  * @text:     the text to convert
@@ -702,15 +713,17 @@ make_list (const gchar  *text,
  *               list.
  **/
 gint 
-gdk_text_property_to_utf8_list (GdkAtom        encoding,
-				gint           format,
-				const guchar  *text,
-				gint           length,
-				gchar       ***list)
+gdk_text_property_to_utf8_list_for_display (GdkDisplay    *display,
+                                            GdkAtom        encoding,
+                                            gint           format,
+                                            const guchar  *text,
+                                            gint           length,
+                                            gchar       ***list)
 {
   g_return_val_if_fail (text != NULL, 0);
   g_return_val_if_fail (length >= 0, 0);
-  
+  g_return_val_if_fail (display == gdk_get_default_display (), 0);
+
   if (encoding == GDK_TARGET_STRING)
     {
       return make_list ((gchar *)text, length, TRUE, list);
@@ -840,7 +853,8 @@ gdk_utf8_to_string_target (const gchar *str)
 }
 
 /**
- * gdk_utf8_to_compound_text:
+ * gdk_utf8_to_compound_text_for_display :
+ * @display: currently not used on win32
  * @str:      a UTF-8 string
  * @encoding: location to store resulting encoding
  * @format:   location to store format of the result
@@ -854,11 +868,12 @@ gdk_utf8_to_string_target (const gchar *str)
  *               %FALSE.
  **/
 gboolean
-gdk_utf8_to_compound_text (const gchar *str,
-			   GdkAtom     *encoding,
-			   gint        *format,
-			   guchar     **ctext,
-			   gint        *length)
+gdk_utf8_to_compound_text_for_display (GdkDisplay *display,
+                                       const gchar *str,
+                                       GdkAtom     *encoding,
+                                       gint        *format,
+                                       guchar     **ctext,
+                                       gint        *length)
 {
   gboolean need_conversion;
   const gchar *charset;
@@ -867,6 +882,7 @@ gdk_utf8_to_compound_text (const gchar *str,
   gboolean result;
 
   g_return_val_if_fail (str != NULL, FALSE);
+  g_return_val_if_fail (display == gdk_get_default_display (), FALSE);
 
   need_conversion = !g_get_charset (&charset);
 

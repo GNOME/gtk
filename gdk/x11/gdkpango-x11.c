@@ -72,22 +72,3 @@ gdk_pango_context_get_for_screen (GdkScreen *screen)
   
   return context;
 }
-
-/**
- * gdk_pango_context_get:
- * 
- * Creates a #PangoContext for the default GDK screen.
- *
- * The context must be freed when you're finished with it.
- * 
- * When using GTK+, normally you should use gtk_widget_get_pango_context()
- * instead of this function, to get the appropriate context for
- * the widget you intend to render text onto.
- * 
- * Return value: a new #PangoContext for the default display
- **/
-PangoContext *
-gdk_pango_context_get (void)
-{
-  return gdk_pango_context_get_for_screen (gdk_get_default_screen ());
-}

@@ -774,7 +774,7 @@ gtk_style_attach (GtkStyle  *style,
   if (!new_style)
     {
       new_style = gtk_style_duplicate (style);
-      if (style->colormap->screen != colormap->screen &&
+      if (gdk_colormap_get_screen (style->colormap) != gdk_colormap_get_screen (colormap) &&
 	  new_style->private_font)
 	{
 	  gdk_font_unref (new_style->private_font);

@@ -121,24 +121,6 @@ gdk_cursor_new_for_screen (GdkScreen    *screen,
   return cursor;
 }
 
-/**
- * gdk_cursor_new:
- * @cursor_type: cursor to create
- * 
- * Creates a new cursor from the set of builtin cursors for the default screen.
- * See gdk_cursor_new_for_screen().
- *
- * To make the cursor invisible, use gdk_cursor_new_from_pixmap() to create
- * a cursor with no pixels in it.
- * 
- * Return value: a new #GdkCursor
- **/
-GdkCursor*
-gdk_cursor_new (GdkCursorType cursor_type)
-{
-  return gdk_cursor_new_for_screen (gdk_get_default_screen(), cursor_type);
-}
-
 GdkCursor*
 gdk_cursor_new_from_pixmap (GdkPixmap *source,
 			    GdkPixmap *mask,

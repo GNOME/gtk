@@ -22,8 +22,10 @@
  */
 
 #include <glib.h>
+#include "gdk.h"		/* gdk_event_send_client_message() */
 #include "gdkdisplay.h"
 #include "gdkinternals.h"
+#include "gdkscreen.h"
 
 static void gdk_display_class_init (GdkDisplayClass *class);
 static void gdk_display_init       (GdkDisplay      *display);
@@ -92,70 +94,6 @@ gdk_display_finalize (GObject *object)
     default_display = NULL;
   
   parent_class->finalize (object);
-}
-
-/**
- * gdk_display_get_name:
- * @display: a #GdkDisplay
- *
- * Gets the name of the display.
- * 
- * Returns: a string representing the display name.
- */
-G_CONST_RETURN gchar *
-gdk_display_get_name (GdkDisplay * display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-  return GDK_DISPLAY_GET_CLASS (display)->get_display_name (display);
-}
-
-/**
- * gdk_display_get_n_screens:
- * @display: a #GdkDisplay
- *
- * Gets the number of screen managed by the @display.
- * 
- * Returns: number of screens.
- */
-
-gint
-gdk_display_get_n_screens (GdkDisplay * display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), 0);
-  return GDK_DISPLAY_GET_CLASS (display)->get_n_screens (display);
-}
-
-/**
- * gdk_display_get_screen:
- * @display: a #GdkDisplay
- * @screen_num: the screen number
- *
- * Returns a screen object for one of the screens of the display.
- * 
- * Returns: the #GdkScreen object
- */
-
-GdkScreen *
-gdk_display_get_screen (GdkDisplay * display, gint screen_num)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-  return GDK_DISPLAY_GET_CLASS (display)->get_screen (display, screen_num);
-}
-
-/**
- * gdk_display_get_default_screen:
- * @display: a #GdkDisplay
- *
- * Get the default #GdkScreen for @display.
- * 
- * Returns: the default #GdkScreen object for @display
- */
-
-GdkScreen *
-gdk_display_get_default_screen (GdkDisplay * display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-  return GDK_DISPLAY_GET_CLASS (display)->get_default_screen (display);
 }
 
 /**
@@ -291,3 +229,97 @@ gdk_display_put_event (GdkDisplay *display,
 
   _gdk_event_queue_append (display, gdk_event_copy (event));
 }
+
+/**
+ * gdk_pointer_ungrab:
+ * @time: a timestamp from a #GdkEvent, or %GDK_CURRENT_TIME if no timestamp is
+ *        available.
+ * Ungrabs the pointer, if it is grabbed by this application.
+ **/
+void
+gdk_pointer_ungrab (guint32 time)
+{
+  gdk_display_pointer_ungrab (gdk_get_default_display (), time);
+}
+
+/**
+ * gdk_pointer_is_grabbed:
+ * 
+ * Returns %TRUE if the pointer is currently grabbed by this application.
+ *
+ * Note that this does not take the inmplicit pointer grab on button
+ * presses into account.
+
+ * Return value: %TRUE if the pointer is currently grabbed by this application.* 
+ **/
+gboolean
+gdk_pointer_is_grabbed (void)
+{
+  return gdk_display_pointer_is_grabbed (gdk_get_default_display ());
+}
+
+/**
+ * gdk_keyboard_ungrab:
+ * @time: a timestamp from a #GdkEvent, or %GDK_CURRENT_TIME if no
+ *        timestamp is available.
+ * 
+ * Ungrabs the keyboard, if it is grabbed by this application.
+ **/
+void
+gdk_keyboard_ungrab (guint32 time)
+{
+  gdk_display_keyboard_ungrab (gdk_get_default_display (), time);
+}
+
+/**
+ * gdk_beep:
+ * 
+ * Emits a short beep.
+ **/
+void
+gdk_beep (void)
+{
+  gdk_display_beep (gdk_get_default_display ());
+}
+
+/**
+ * gdk_event_send_client_message:
+ * @event: the #GdkEvent to send, which should be a #GdkEventClient.
+ * @xid:  the window to send the X ClientMessage event to.
+ * 
+ * Sends an X ClientMessage event to a given window (which must be
+ * on the default #GdkDisplay.)
+ * This could be used for communicating between different applications,
+ * though the amount of data is limited to 20 bytes.
+ * 
+ * Return value: non-zero on success.
+ **/
+gboolean
+gdk_event_send_client_message (GdkEvent *event, guint32 xid)
+{
+  g_return_val_if_fail (event != NULL, FALSE);
+
+  return gdk_event_send_client_message_for_display (gdk_get_default_display (),
+						    event, xid);
+}
+
+/**
+ * gdk_event_send_clientmessage_toall:
+ * @event: the #GdkEvent to send, which should be a #GdkEventClient.
+ *
+ * Sends an X ClientMessage event to all toplevel windows on the default
+ * #GdkScreen.
+ *
+ * Toplevel windows are determined by checking for the WM_STATE property, as
+ * described in the Inter-Client Communication Conventions Manual (ICCCM).
+ * If no windows are found with the WM_STATE property set, the message is sent
+ * to all children of the root window.
+ **/
+void
+gdk_event_send_clientmessage_toall (GdkEvent *event)
+{
+  g_return_if_fail (event != NULL);
+
+  gdk_screen_broadcast_client_message (gdk_get_default_screen (), event);
+}
+

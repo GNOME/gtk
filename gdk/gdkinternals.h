@@ -27,6 +27,7 @@
 /* Uninstalled header defining types and functions internal to GDK */
 
 #include <gdk/gdktypes.h>
+#include <gdk/gdkwindow.h>
 #include <gdk/gdkprivate.h>
 
 #ifndef __GDK_INTERNALS_H__
@@ -150,6 +151,8 @@ extern GdkDevice *_gdk_core_pointer;
 
 extern GSList    *_gdk_displays;
 extern gchar     *_gdk_display_name;
+
+extern const GdkPointerHooks *_gdk_current_pointer_hooks;
 
 GdkEvent* _gdk_event_new (void);
 

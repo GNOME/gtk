@@ -194,18 +194,6 @@ gdk_keymap_get_for_display (GdkDisplay *display)
   return display_x11->keymap;
 }
 
-/** 
- * gdk_keymap_get_default:
- * @returns: the #GdkKeymap attached to the default display.
- *
- * Returns the #GdkKeymap attached to the default display.
- **/
-GdkKeymap*
-gdk_keymap_get_default (void)
-{
-  return gdk_keymap_get_for_display (gdk_get_default_display ());
-}
-
 /* Find the index of the group/level pair within the keysyms for a key.
  */
 #define KEYSYM_INDEX(keymap_impl, group, level) \

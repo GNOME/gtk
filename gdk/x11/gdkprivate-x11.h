@@ -88,6 +88,7 @@ struct _GdkVisualPrivate
 {
   GdkVisual visual;
   Visual *xvisual;
+  GdkScreen *screen;
 };
 
 void _gdk_xid_table_insert (GdkDisplay *display,

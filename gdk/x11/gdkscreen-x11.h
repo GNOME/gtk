@@ -36,7 +36,7 @@ G_BEGIN_DECLS
 typedef struct _GdkScreenX11 GdkScreenX11;
 typedef struct _GdkScreenX11Class GdkScreenX11Class;
 
-#define GDK_TYPE_SCREEN_X11              (gdk_screen_x11_get_type ())
+#define GDK_TYPE_SCREEN_X11              (_gdk_screen_x11_get_type ())
 #define GDK_SCREEN_X11(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_SCREEN_X11, GdkScreenX11))
 #define GDK_SCREEN_X11_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_SCREEN_X11, GdkScreenX11Class))
 #define GDK_IS_SCREEN_X11(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_SCREEN_X11))
@@ -82,9 +82,9 @@ struct _GdkScreenX11Class
   GdkScreenClass parent_class;
 };
 
-GType gdk_screen_x11_get_type ();
-GdkScreen * _gdk_x11_screen_new (GdkDisplay *display,
-				 gint	     screen_number);
+GType       _gdk_screen_x11_get_type (void);
+GdkScreen * _gdk_x11_screen_new      (GdkDisplay *display,
+				      gint	  screen_number);
 G_END_DECLS
 
 #endif /* __GDK_SCREEN_X11_H__ */

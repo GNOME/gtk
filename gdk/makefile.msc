@@ -83,6 +83,8 @@ gdk_OBJECTS = \
 	gdkrectangle.obj \
 	gdkregion-generic.obj \
 	gdkrgb.obj \
+	gdkselection.obj \
+	gdkvisual.obj \
 	gdkwindow.obj
 
 gdk_public_h_sources = \

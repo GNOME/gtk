@@ -1,3 +1,70 @@
+Wed Jun  5 18:34:47 2002  Owen Taylor  <otaylor@redhat.com>
+
+	Changes multihead reorganizing code for win32 support,
+	mostly from a patch by Hans Breuer.
+
+	* gdk/gdkcolor.c gdk/x11/gdkcolor-x11.c gdk/gdkcursor.c
+	  gdk/x11/gdkcursor-x11.c gdk/gdkevents.c gdk/x11/gdkevents-x11.c
+	  gdk/gdkfont.c gdk/x11/gdkfont-x11.c gdk/gdkkeys.c
+	  gdk/x11/gdkkeys-x11.c gdk/gdkimage.c gdk/x11/gdkimage-x11.c
+	  gdk/gdkscreen.c gdk/x11/gdkmain-x11.c
+	  gdk/gdkdisplay.c gdk/gdkevents-x11.c gdk/gdkpango.c
+	  gdk/x11/gdkpango-x11.c gdk/gdkselection.c
+	  gdk/x11/gdkselection-x11.c gdk/gdkwindow.c
+	  gdk/x11/gdkwindow-x11.c gdk/gdkvisual.c gdk/x11/gdkvisual-x11.c:
+	  Move port-independent singlehead wrapper functions into
+	  port-independent part of GDK. (#80009)
+
+	* gdk/win32/gdkcolor-win32.c gdk/win32/gdkcursor-win32.c
+	  gdk/win32/gdkevents-win32.c gdk/win32/gdkfont-win32.c
+	  gdk/win32/gdkimage-win32.c gdk/win32/gdkkeys-win32.c
+	  gdk/win32/gdkmain-win32.c gdk/win32/gdkproperty-win32.c
+	  gdk/win32/gdkselection-win32.c gdk/win32/gkwindow-win32.c: 
+	Turn singlehead functions into "multihead" functions that ignore 
+	their GdkDisplay or GdkScreen arguments.
+
+	* gdk/win32/gdkdrawable-win32.c gdk/win32/gdkevents-win32.c
+	gdk/win32/gdkinput-win32.c gdk/win32/gdkprivate-win32.h: 
+	Misc multihead-compatibility changes.
+
+	* gtk/gtk.def gdk/gdk.def: Update for multihead functions.
+
+	* gdk/gdkcolormap.h gdk/gdkvisual.h gdk/x11/gdkcolormap-x11.c 
+	gdk/x11/gdkvisual-x11.c: Remove the screen fields
+	from the public parts of the colormap/visual structures, add accessors
+	instead.
+
+	* gdk/gdkpixbuf-render.c gdk/gdkpixmap.c gdk/gdkrgb.c
+	  gdk/x11/gdkcolormap-x11.c gdk/x11/gdkimage-x11.c
+	  gdk/x11/gdkimage-x11.c gdk/x11/gdkprivate-x11.h gtk/gtkgc.c
+	  gtk/gtkstyle.c gtk/gtkwidget.c: Use accessors to get the screen
+	for colormaps, visuals; move the fields into the private
+	structures for the x11 backend.
+
+	* gdk/gdkdisplay.[ch] gdk/x11/gdkdisplay-x11.[ch]
+	  gdk/gdkscreen.[ch] gdk/x11/gdkscreen-x11.c: 
+	Remove virtualization of screen and display functions.
+	(#79990, patch from Erwann Chenede)
+
+	* gdk/win32/gdkdisplay-x11.c gdk/win32/gdkscreen-win32.c
+	gdk/win32/{Makefile.am, makefile.msc, makefile.mingw}:
+	New files containing stub implementations of Display,
+	Screen functions.
+
+	* gdk/x11/gdkscreen-x11.[ch] gdk/x11/gdkdisplay-x11.[ch]
+	gdk/x11/gdkx.h: Clean up function exports and what 
+	headers they are in. (#79954)
+
+	* gdk/x11/gdkx.h: Fix macro that was referring to a non-existant
+	screen->screen_num. (In the patch for #79972, Erwann Chenede)
+
+	* gdk/gdkscreen.c gdk/gdkwindow.c gdk/x11/gdkinternals.h
+	 gdk/x11/gdkscreen-x11.c: Fix gdk_screen_get_window_at_pointer()
+	to use window hooks. (#79972, patch partly from Erwann Chenede)
+
+	* gdk/x11/gdkdisplay-x11.c gdk/x11/gdkevents-x11.c: Fix
+	some warnings.
+
 Wed Jun  5 23:29:41 2002  Kristian Rietveld  <kris@gtk.org>
 
 	Related bugs: #76252, #76396, #80866.

@@ -696,6 +696,7 @@ _gdk_input_other_event (GdkEvent  *event,
 #if !USE_SYSCONTEXT
   GdkWindow *current_window;
 #endif
+  GdkDisplay *display;
   GdkWindowObject *obj;
   GdkWindowImplWin32 *impl;
   GdkInputWindow *input_window;
@@ -719,6 +720,7 @@ _gdk_input_other_event (GdkEvent  *event,
     window = _gdk_parent_root;
 
   gdk_drawable_ref (window);
+  display = gdk_drawable_get_display (window);
 
   GDK_NOTE (EVENTS_OR_INPUT,
 	    g_print ("gdk_input_win32_other_event: window=%p (%d,%d)\n",
@@ -928,7 +930,7 @@ _gdk_input_other_event (GdkEvent  *event,
 				 event2->button.button,
 				 event2->button.x,
 				 event2->button.y));
-	      _gdk_event_queue_append (event2);
+	      _gdk_event_queue_append (display, event2);
 	    }
 	}
       return TRUE;

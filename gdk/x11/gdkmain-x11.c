@@ -251,48 +251,6 @@ gdk_pointer_grab (GdkWindow *	  window,
   return gdk_x11_convert_grab_status (return_val);
 }
 
-/*
- *--------------------------------------------------------------
- * gdk_pointer_ungrab
- *
- *   Releases any pointer grab
- *
- * Arguments:
- *
- * Results:
- *
- * Side effects:
- *
- *--------------------------------------------------------------
- */
-
-void
-gdk_pointer_ungrab (guint32 time)
-{
-  gdk_display_pointer_ungrab (gdk_get_default_display (), time);
-}
-
-/*
- *--------------------------------------------------------------
- * gdk_pointer_is_grabbed
- *
- *   Tell wether there is an active x pointer grab in effect
- *
- * Arguments:
- *
- * Results:
- *
- * Side effects:
- *
- *--------------------------------------------------------------
- */
-
-gboolean
-gdk_pointer_is_grabbed (void)
-{
-  return gdk_display_pointer_is_grabbed (gdk_get_default_display ());
-}
-
 /**
  * gdk_pointer_grab_info_libgtk_only:
  * @display: the #GdkDisplay for which to get the grab information
@@ -388,27 +346,6 @@ gdk_keyboard_grab (GdkWindow *	   window,
     }
 
   return gdk_x11_convert_grab_status (return_val);
-}
-
-/*
- *--------------------------------------------------------------
- * gdk_keyboard_ungrab
- *
- *   Releases any keyboard grab
- *
- * Arguments:
- *
- * Results:
- *
- * Side effects:
- *
- *--------------------------------------------------------------
- */
-
-void
-gdk_keyboard_ungrab (guint32 time)
-{
-  gdk_display_keyboard_ungrab (gdk_get_default_display (), time);
 }
 
 /**
@@ -511,90 +448,6 @@ _gdk_xgrab_check_destroy (GdkWindow *window)
      display_x11->keyboard_xgrab_window = NULL;
 }
 
-/*
- *--------------------------------------------------------------
- * gdk_screen_width
- *
- *   Return the width of the screen.
- *
- * Arguments:
- *
- * Results:
- *
- * Side effects:
- *
- *--------------------------------------------------------------
- */
-
-gint
-gdk_screen_width (void)
-{
-  return gdk_screen_get_width (gdk_get_default_screen());
-}
-
-/*
- *--------------------------------------------------------------
- * gdk_screen_height
- *
- *   Return the height of the screen.
- *
- * Arguments:
- *
- * Results:
- *
- * Side effects:
- *
- *--------------------------------------------------------------
- */
-
-gint
-gdk_screen_height (void)
-{
-  return gdk_screen_get_height (gdk_get_default_screen());
-}
-
-/*
- *--------------------------------------------------------------
- * gdk_screen_width_mm
- *
- *   Return the width of the screen in millimeters.
- *
- * Arguments:
- *
- * Results:
- *
- * Side effects:
- *
- *--------------------------------------------------------------
- */
-
-gint
-gdk_screen_width_mm (void)
-{
-  return gdk_screen_get_width_mm (gdk_get_default_screen());
-}
-
-/*
- *--------------------------------------------------------------
- * gdk_screen_height
- *
- *   Return the height of the screen in millimeters.
- *
- * Arguments:
- *
- * Results:
- *
- * Side effects:
- *
- *--------------------------------------------------------------
- */
-
-gint
-gdk_screen_height_mm (void)
-{
-  return gdk_screen_get_height_mm (gdk_get_default_screen ());
-}
-
 /**
  * gdk_set_sm_client_id:
  * @sm_client_id: the client id assigned by the session manager when the
@@ -646,12 +499,6 @@ gdk_display_set_sm_client_id (GdkDisplay  *display,
   else
     XDeleteProperty (display_x11->xdisplay, display_x11->leader_window,
 		     gdk_x11_get_xatom_by_name_for_display (display, "SM_CLIENT_ID"));
-}
-
-void
-gdk_beep (void)
-{
-  gdk_display_beep (gdk_get_default_display ());
 }
 
 /* Close all open displays

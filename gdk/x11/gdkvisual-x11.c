@@ -141,7 +141,7 @@ _gdk_visual_init (GdkScreen *screen)
   nvisuals = 0;
   for (i = 0; i < nxvisuals; i++)
     {
-      visuals[nvisuals]->visual.screen = screen;
+      visuals[nvisuals]->screen = screen;
       
       if (visual_list[i].depth >= 1)
 	{
@@ -358,21 +358,6 @@ gdk_screen_get_system_visual (GdkScreen * screen)
 }
 
 /**
- * gdk_visual_get_system:
- * 
- * Get the system'sdefault visual for the default GDK screen.
- * This is the visual for the root window of the display.
- * The return value should not be freed.
- * 
- * Return value: system visual
- **/
-GdkVisual*
-gdk_visual_get_system (void)
-{
-  return gdk_screen_get_system_visual (gdk_get_default_screen());
-}
-
-/**
  * gdk_visual_get_best:
  *
  * Get the visual with the most available colors for the default
@@ -551,25 +536,6 @@ gdk_screen_list_visuals (GdkScreen *screen)
   return list;
 }
 
-/**
- * gdk_list_visuals:
- * 
- * Lists the available visuals for the default screen.
- * (See gdk_screen_list_visuals())
- * A visual describes a hardware image data format.
- * For example, a visual might support 24-bit color, or 8-bit color,
- * and might expect pixels to be in a certain format.
- *
- * Call g_list_free() on the return value when you're finished with it.
- * 
- * Return value: a list of visuals; the list must be freed, but not its contents
- **/
-GList*
-gdk_list_visuals (void)
-{
-  return gdk_screen_list_visuals (gdk_get_default_screen ());
-}
-
 GdkVisual*
 gdk_visual_lookup (Visual    *xvisual)
 {
@@ -615,14 +581,13 @@ gdkx_visual_get (VisualID xvisualid)
 static void
 gdk_visual_add (GdkVisual *visual)
 {
-  GdkVisualPrivate *private;
-  GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (visual->screen);
+  GdkVisualPrivate *private = (GdkVisualPrivate *) visual;
+  GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (private->screen);
   
   if (!screen_x11->visual_hash)
     screen_x11->visual_hash = g_hash_table_new ((GHashFunc) gdk_visual_hash,
 						 (GEqualFunc) gdk_visual_equal);
 
-  private = (GdkVisualPrivate *) visual;
   g_hash_table_insert (screen_x11->visual_hash, private->xvisual, visual);
 }
 
@@ -666,4 +631,20 @@ gdk_x11_visual_get_xvisual (GdkVisual *visual)
   g_return_val_if_fail (visual != NULL, NULL);
 
   return  ((GdkVisualPrivate*) visual)->xvisual;
+}
+
+/**
+ * gdk_visual_get_screen:
+ * @visual: a #GdkVisual
+ * 
+ * Gets the screen to which this visual belongs
+ * 
+ * Return value: the screen to which this visual belongs.
+ **/
+GdkScreen *
+gdk_visual_get_screen (GdkVisual *visual)
+{
+  g_return_val_if_fail (GDK_IS_VISUAL (visual), NULL);
+
+  return  ((GdkVisualPrivate*) visual)->screen;
 }

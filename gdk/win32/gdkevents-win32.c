@@ -88,7 +88,8 @@ static GdkFilterReturn
 		 gdk_event_apply_filters(MSG      *msg,
 					 GdkEvent *event,
 					 GList    *filters);
-static gboolean  gdk_event_translate	(GdkEvent *event, 
+static gboolean  gdk_event_translate	(GdkDisplay *display,
+					 GdkEvent *event, 
 					 MSG      *msg,
 					 gboolean *ret_val_flagp,
 					 gint     *ret_valp,
@@ -152,6 +153,8 @@ real_window_procedure (HWND   hwnd,
 		       WPARAM wparam,
 		       LPARAM lparam)
 {
+  /* any way to have more than one display on win32 ? */
+  GdkDisplay *display = gdk_get_default_display ();
   GdkEventPrivate event;
   GdkEvent *eventp;
   MSG msg;
@@ -172,14 +175,14 @@ real_window_procedure (HWND   hwnd,
   msg.pt.y = HIWORD (pos);
 
   event.flags = GDK_EVENT_PENDING;
-  if (gdk_event_translate (&event.event, &msg, &ret_val_flag, &ret_val, FALSE))
+  if (gdk_event_translate (display, &event.event, &msg, &ret_val_flag, &ret_val, FALSE))
     {
       event.flags &= ~GDK_EVENT_PENDING;
 #if 1
       if (event.event.any.type == GDK_CONFIGURE)
 	{
 	  /* Compress configure events */
-	  GList *list = _gdk_queued_events;
+	  GList *list = display->queued_events;
 
 	  while (list != NULL
 		 && (((GdkEvent *)list->data)->any.type != GDK_CONFIGURE
@@ -199,7 +202,7 @@ real_window_procedure (HWND   hwnd,
       else if (event.event.any.type == GDK_EXPOSE)
 	{
 	  /* Compress expose events */
-	  GList *list = _gdk_queued_events;
+	  GList *list = display->queued_events;
 
 	  while (list != NULL
 		 && (((GdkEvent *)list->data)->any.type != GDK_EXPOSE
@@ -243,7 +246,7 @@ real_window_procedure (HWND   hwnd,
 	}
       else
 	{
-	  _gdk_event_queue_append (eventp);
+	  _gdk_event_queue_append (display, eventp);
 #if 1
 	  /* Wake up WaitMessage */
 	  PostMessage (NULL, gdk_ping_msg, 0, 0);
@@ -386,8 +389,9 @@ gboolean
 gdk_events_pending (void)
 {
   MSG msg;
+  GdkDisplay *display = gdk_get_default_display ();
 
-  return (_gdk_event_queue_find_first() ||
+  return (_gdk_event_queue_find_first (display) ||
 	  PeekMessage (&msg, NULL, 0, 0, PM_NOREMOVE));
 }
 
@@ -425,7 +429,8 @@ gdk_event_get_graphics_expose (GdkWindow *window)
     {
       event = _gdk_event_new ();
       
-      if (gdk_event_translate (event, &msg, NULL, NULL, TRUE))
+      if (gdk_event_translate (gdk_drawable_get_display (window), 
+                               event, &msg, NULL, NULL, TRUE))
 	return event;
       else
 	gdk_event_free (event);
@@ -560,25 +565,13 @@ gdk_pointer_grab (GdkWindow    *window,
   return return_val;
 }
 
-/*
- *--------------------------------------------------------------
- * gdk_pointer_ungrab
- *
- *   Releases any pointer grab
- *
- * Arguments:
- *
- * Results:
- *
- * Side effects:
- *
- *--------------------------------------------------------------
- */
-
 void
-gdk_pointer_ungrab (guint32 time)
+gdk_display_pointer_ungrab (GdkDisplay *display,
+                            guint32     time)
 {
   GDK_NOTE (EVENTS, g_print ("gdk_pointer_ungrab\n"));
+  g_return_if_fail (display == gdk_get_default_display ());
+
 #if 0
   _gdk_input_ungrab_pointer (time);
 #endif
@@ -648,45 +641,22 @@ find_window_for_pointer_event (GdkWindow*  reported_window,
   return other_window;
 }
 
-/*
- *--------------------------------------------------------------
- * gdk_pointer_is_grabbed
- *
- *   Tell wether there is an active x pointer grab in effect
- *
- * Arguments:
- *
- * Results:
- *
- * Side effects:
- *
- *--------------------------------------------------------------
- */
-
 gboolean
-gdk_pointer_is_grabbed (void)
+gdk_display_pointer_is_grabbed (GdkDisplay *display)
 {
+  g_return_val_if_fail (display == gdk_get_default_display (), FALSE);
   GDK_NOTE (EVENTS, g_print ("gdk_pointer_is_grabbed: %s\n",
 			     p_grab_window != NULL ? "TRUE" : "FALSE"));
   return p_grab_window != NULL;
 }
 
-/**
- * gdk_pointer_grab_info_libgtk_only:
- * @grab_window: location to store current grab window
- * @owner_events: location to store boolean indicating whether
- *   the @owner_events flag to gdk_pointer_grab() was %TRUE.
- * 
- * Determines information about the current pointer grab.
- * This is not public API and must not be used by applications.
- * 
- * Return value: %TRUE if this application currently has the
- *  pointer grabbed.
- **/
 gboolean
-gdk_pointer_grab_info_libgtk_only (GdkWindow **grab_window,
+gdk_pointer_grab_info_libgtk_only (GdkDisplay *display,
+				   GdkWindow **grab_window,
 				   gboolean   *owner_events)
 {
+  g_return_val_if_fail (display == gdk_get_default_display (), FALSE);
+
   if (p_grab_window != NULL)
     {
       if (grab_window)
@@ -747,24 +717,12 @@ gdk_keyboard_grab (GdkWindow *window,
   return return_val;
 }
 
-/*
- *--------------------------------------------------------------
- * gdk_keyboard_ungrab
- *
- *   Releases any keyboard grab
- *
- * Arguments:
- *
- * Results:
- *
- * Side effects:
- *
- *--------------------------------------------------------------
- */
-
 void
-gdk_keyboard_ungrab (guint32 time)
+gdk_display_keyboard_ungrab (GdkDisplay *display,
+                             guint32 time)
 {
+  g_return_if_fail (display == gdk_get_default_display ());
+
   GDK_NOTE (EVENTS, g_print ("gdk_keyboard_ungrab\n"));
 
   k_grab_window = NULL;
@@ -783,9 +741,12 @@ gdk_keyboard_ungrab (guint32 time)
  *  keyboard grabbed.
  **/
 gboolean
-gdk_keyboard_grab_info_libgtk_only (GdkWindow **grab_window,
+gdk_keyboard_grab_info_libgtk_only (GdkDisplay *display,
+				    GdkWindow **grab_window,
 				    gboolean   *owner_events)
 {
+  g_return_val_if_fail (display == gdk_get_default_display (), FALSE);
+
   if (k_grab_window)
     {
       if (grab_window)
@@ -1212,7 +1173,7 @@ synthesize_enter_or_leave_event (GdkWindow    *window,
   event->crossing.focus = TRUE; /* ??? */
   event->crossing.state = 0; /* ??? */
   
-  _gdk_event_queue_append (event);
+  _gdk_event_queue_append (gdk_drawable_get_display (window), event);
   
   if (type == GDK_ENTER_NOTIFY
       && GDK_WINDOW_OBJECT (window)->extension_events != 0)
@@ -1428,7 +1389,7 @@ synthesize_expose_events (GdkWindow *window)
 	  event->expose.region = gdk_region_rectangle (&(event->expose.area));
 	  event->expose.count = 0;
   
-	  _gdk_event_queue_append (event);
+	  _gdk_event_queue_append (gdk_drawable_get_display (window), event);
   
 	  GDK_NOTE (EVENTS_OR_COLORMAP, print_event (event));
 	}
@@ -1860,7 +1821,8 @@ _gdk_win32_hrgn_to_region (HRGN hrgn)
 }
 
 static gboolean
-gdk_event_translate (GdkEvent *event,
+gdk_event_translate (GdkDisplay *display,
+		     GdkEvent *event,
 		     MSG      *msg,
 		     gboolean *ret_val_flagp,
 		     gint     *ret_valp,
@@ -2472,7 +2434,7 @@ gdk_event_translate (GdkEvent *event,
 	      build_keypress_event (event2, msg);
 	      event2->key.window = window;
 	      gdk_drawable_ref (window);
-	      _gdk_event_queue_append (event2);
+	      _gdk_event_queue_append (display, event2);
 	      GDK_NOTE (EVENTS, print_event (event2));
 	    }
 	  /* Return the key release event.  */
@@ -2560,7 +2522,7 @@ gdk_event_translate (GdkEvent *event,
       event->button.button = button;
       event->button.device = _gdk_core_pointer;
 
-      _gdk_event_button_generate (event);
+      _gdk_event_button_generate (display, event);
       
       return_val = !GDK_WINDOW_DESTROYED (window);
       break;
@@ -2947,7 +2909,7 @@ gdk_event_translate (GdkEvent *event,
           return_val = !GDK_WINDOW_DESTROYED (window);
           if (return_val)
             {
-              GList *list = _gdk_queued_events;
+              GList *list = display->queued_events;
               while (list != NULL )
                 {
                   if ((((GdkEvent *)list->data)->any.type == GDK_EXPOSE) &&
@@ -3367,13 +3329,13 @@ done:
 }
 
 void
-_gdk_events_queue (void)
+_gdk_events_queue (GdkDisplay *display)
 {
   MSG msg;
   GdkEvent *event;
   GList *node;
 
-  while (!_gdk_event_queue_find_first ()
+  while (!_gdk_event_queue_find_first (display)
 	 && PeekMessage (&msg, NULL, 0, 0, PM_REMOVE))
     {
 #ifndef HAVE_DIMM_H
@@ -3395,16 +3357,16 @@ _gdk_events_queue (void)
 
       ((GdkEventPrivate *)event)->flags |= GDK_EVENT_PENDING;
 
-      _gdk_event_queue_append (event);
+      _gdk_event_queue_append (display, event);
       node = _gdk_queued_tail;
 
-      if (gdk_event_translate (event, &msg, NULL, NULL, FALSE))
+      if (gdk_event_translate (display, event, &msg, NULL, NULL, FALSE))
 	{
 	  ((GdkEventPrivate *)event)->flags &= ~GDK_EVENT_PENDING;
 	}
       else
 	{
-	  _gdk_event_queue_remove_link (node);
+	  _gdk_event_queue_remove_link (display, node);
 	  g_list_free_1 (node);
 	  gdk_event_free (event);
         DispatchMessage (&msg);
@@ -3420,12 +3382,13 @@ gdk_event_prepare (GSource *source,
 {
   MSG msg;
   gboolean retval;
+  GdkDisplay *display = gdk_get_default_display ();
   
   GDK_THREADS_ENTER ();
 
   *timeout = -1;
 
-  retval = (_gdk_event_queue_find_first () != NULL)
+  retval = (_gdk_event_queue_find_first (display) != NULL)
 	      || PeekMessage (&msg, NULL, 0, 0, PM_NOREMOVE);
 
   GDK_THREADS_LEAVE ();
@@ -3438,11 +3401,12 @@ gdk_event_check (GSource *source)
 {
   MSG msg;
   gboolean retval;
+  GdkDisplay *display = gdk_get_default_display ();
   
   GDK_THREADS_ENTER ();
 
   if (event_poll_fd.revents & G_IO_IN)
-    retval = (_gdk_event_queue_find_first () != NULL)
+    retval = (_gdk_event_queue_find_first (display) != NULL)
 	      || PeekMessage (&msg, NULL, 0, 0, PM_NOREMOVE);
   else
     retval = FALSE;
@@ -3458,11 +3422,12 @@ gdk_event_dispatch (GSource     *source,
 		    gpointer     user_data)
 {
   GdkEvent *event;
+  GdkDisplay *display = gdk_get_default_display ();
  
   GDK_THREADS_ENTER ();
 
-  _gdk_events_queue();
-  event = _gdk_event_unqueue();
+  _gdk_events_queue (display);
+  event = _gdk_event_unqueue (display);
 
   if (event)
     {
@@ -3479,14 +3444,17 @@ gdk_event_dispatch (GSource     *source,
 
 /* Sends a ClientMessage to all toplevel client windows */
 gboolean
-gdk_event_send_client_message (GdkEvent *event, guint32 xid)
+gdk_event_send_client_message_for_display (GdkDisplay *display,
+                                           GdkEvent   *event, 
+                                           guint32     xid)
 {
   /* XXX */
   return FALSE;
 }
 
 void
-gdk_event_send_clientmessage_toall (GdkEvent *event)
+gdk_screen_broadcast_client_message (GdkScreen *screen, 
+				     GdkEvent  *event)
 {
   /* XXX */
 }
@@ -3506,6 +3474,21 @@ gdk_flush (void)
 #endif
 
   GdiFlush ();
+}
+
+void
+gdk_display_sync (GdkDisplay * display)
+{
+  MSG msg;
+
+  g_return_if_fail (display == gdk_get_default_display ());
+
+  /* Process all messages currently available */
+  while (PeekMessage (&msg, NULL, 0, 0, PM_REMOVE))
+    {
+      TranslateMessage (&msg);
+      DispatchMessage (&msg);
+    }
 }
 
 #ifdef G_ENABLE_DEBUG

@@ -143,6 +143,8 @@ gdk_c_sources = @STRIP_BEGIN@ 	\
 	gdkrectangle.c		\
 	gdkregion-generic.c	\
 	gdkregion-generic.h	\
+	gdkselection.c		\
+	gdkvisual.c		\
 	gdkwindow.c		\
 	gdkdisplay.c		\
 	gdkscreen.c		\

@@ -153,7 +153,7 @@ gdk_image_new_bitmap(GdkVisual *visual, gpointer data, gint w, gint h)
   GdkImagePrivateX11 *private;
   image = g_object_new (gdk_image_get_type (), NULL);
   private = PRIVATE_DATA (image);
-  private->screen = visual->screen;
+  private->screen = gdk_visual_get_screen (visual);
   image->type = GDK_IMAGE_NORMAL;
   image->visual = visual;
   image->width = w;
@@ -161,7 +161,7 @@ gdk_image_new_bitmap(GdkVisual *visual, gpointer data, gint w, gint h)
   image->depth = 1;
   image->bits_per_pixel = 1;
   xvisual = ((GdkVisualPrivate*) visual)->xvisual;
-  private->ximage = XCreateImage (GDK_SCREEN_XDISPLAY (visual->screen),
+  private->ximage = XCreateImage (GDK_SCREEN_XDISPLAY (private->screen),
 				  xvisual, 1, XYBitmap,
 				  0, 0, w ,h, 8, 0);
   private->ximage->data = data;
@@ -426,16 +426,6 @@ _gdk_x11_image_get_shm_pixmap (GdkImage *image)
 #else
   return None;
 #endif    
-}
-
-GdkImage*
-gdk_image_new (GdkImageType  type,
-	       GdkVisual    *visual,
-	       gint          width,
-	       gint          height)
-{
-  return _gdk_image_new_for_depth (visual->screen, type,
-				   visual, width, height, -1);
 }
 
 static GdkImage*

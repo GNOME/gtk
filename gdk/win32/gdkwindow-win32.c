@@ -31,6 +31,7 @@
 #include "gdkevents.h"
 #include "gdkpixmap.h"
 #include "gdkwindow.h"
+#include "gdkdisplay.h"
 #include "gdkprivate-win32.h"
 #include "gdkinput-win32.h"
 
@@ -50,6 +51,8 @@ static void gdk_window_impl_win32_class_init (GdkWindowImplWin32Class *klass);
 static void gdk_window_impl_win32_finalize   (GObject                 *object);
 
 static gpointer parent_class = NULL;
+
+GdkWindow *_gdk_parent_root = NULL;
 
 GType
 _gdk_window_impl_win32_get_type (void)
@@ -668,7 +671,8 @@ gdk_window_new (GdkWindow     *parent,
 }
 
 GdkWindow *
-gdk_window_foreign_new (GdkNativeWindow anid)
+gdk_window_foreign_new_for_display (GdkDisplay      *display,
+                                    GdkNativeWindow  anid)
 {
   GdkWindow *window;
   GdkWindowObject *private;
@@ -678,6 +682,8 @@ gdk_window_foreign_new (GdkNativeWindow anid)
   HANDLE parent;
   RECT rect;
   POINT point;
+
+  g_return_val_if_fail (display == gdk_get_default_display (), NULL);
 
   window = g_object_new (GDK_TYPE_WINDOW, NULL);
   private = (GdkWindowObject *)window;
@@ -2587,4 +2593,12 @@ gdk_window_begin_move_drag (GdkWindow *window,
     return;
 
   /* XXX: isn't all this default on win32 ... */  
+}
+
+GdkWindow *
+gdk_window_lookup_for_display (GdkDisplay *display, GdkNativeWindow anid)
+{
+  g_return_val_if_fail (display == gdk_get_default_display(), NULL);
+
+  return gdk_window_lookup (anid);
 }

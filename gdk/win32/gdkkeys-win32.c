@@ -287,8 +287,10 @@ update_keymap (void)
 } 
 
 GdkKeymap*
-gdk_keymap_get_default (void)
+gdk_keymap_get_for_display (GdkDisplay *display)
 {
+  g_return_val_if_fail (display == gdk_get_default_display (), NULL);
+
   if (default_keymap == NULL)
     default_keymap = g_object_new (gdk_keymap_get_type (), NULL);
 

@@ -222,12 +222,6 @@ gdk_font_load_for_display (GdkDisplay  *display,
   return font;
 }
 
-GdkFont*
-gdk_font_load (const gchar *font_name)
-{  
-   return gdk_font_load_for_display (gdk_get_default_display(), font_name);
-}
-
 static char *
 gdk_font_charset_for_locale (void)
 {
@@ -319,25 +313,6 @@ gdk_font_from_description_for_display (GdkDisplay           *display,
     }
 
   return result;
-}
-
-/**
- * gdk_font_from_description:
- * @font_desc: a #PangoFontDescription.
- * 
- * Load a #GdkFont based on a Pango font description. This font will
- * only be an approximation of the Pango font, and
- * internationalization will not be handled correctly. This function
- * should only be used for legacy code that cannot be easily converted
- * to use Pango. Using Pango directly will produce better results.
- * 
- * Return value: the newly loaded font, or %NULL if the font
- * cannot be loaded.
- **/
-GdkFont*
-gdk_font_from_description (PangoFontDescription *font_desc)
-{
-  return gdk_font_from_description_for_display (gdk_get_default_display (),font_desc);
 }
 
 /**

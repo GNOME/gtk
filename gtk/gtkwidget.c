@@ -5558,14 +5558,14 @@ gtk_widget_pop_colormap (void)
  * Sets the default colormap to use when creating widgets.
  * gtk_widget_push_colormap() is a better function to use if
  * you only want to affect a few widgets, rather than all widgets.
- * 
  **/
 void
 gtk_widget_set_default_colormap (GdkColormap *colormap)
 {
   g_return_if_fail (GDK_IS_COLORMAP (colormap));
-
-  gdk_screen_set_default_colormap (colormap->screen, colormap);
+  
+  gdk_screen_set_default_colormap (gdk_colormap_get_screen (colormap),
+				   colormap);
 }
 
 /**

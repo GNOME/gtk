@@ -441,6 +441,7 @@ void    gdk_win32_gdi_failed        (const gchar *where,
 extern LRESULT CALLBACK _gdk_win32_window_procedure (HWND, UINT, WPARAM, LPARAM);
 
 extern HWND		 gdk_root_window;
+extern GdkWindow        *_gdk_parent_root;
 
 extern HDC		 gdk_display_hdc;
 extern HINSTANCE	 gdk_dll_hinstance;
@@ -479,5 +480,13 @@ extern gboolean		 gdk_event_func_from_window_proc;
 extern gint		 gdk_max_colors;
 
 #define GDK_WIN32_COLORMAP_DATA(cmap) ((GdkColormapPrivateWin32 *) GDK_COLORMAP (cmap)->windowing_data)
+
+/* Initialization */
+void _gdk_windowing_window_init (void);
+void _gdk_visual_init (void);
+void _gdk_dnd_init    (void);
+void _gdk_windowing_image_init  (void);
+void _gdk_events_init (void);
+void _gdk_input_init (void);
 
 #endif /* __GDK_PRIVATE_WIN32_H__ */

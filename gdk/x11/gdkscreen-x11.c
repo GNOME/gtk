@@ -35,35 +35,15 @@
 #include <X11/extensions/Xinerama.h>
 #endif
 
-static void         gdk_screen_x11_class_init       (GdkScreenX11Class *klass);
-static GdkDisplay * gdk_screen_x11_get_display           (GdkScreen             *screen);
-static gint         gdk_screen_x11_get_width             (GdkScreen             *screen);
-static gint         gdk_screen_x11_get_height            (GdkScreen             *screen);
-static gint         gdk_screen_x11_get_width_mm          (GdkScreen             *screen);
-static gint         gdk_screen_x11_get_height_mm         (GdkScreen             *screen);
-static gint         gdk_screen_x11_get_default_depth     (GdkScreen             *screen);
-static GdkWindow *  gdk_screen_x11_get_root_window       (GdkScreen             *screen);
-static gint         gdk_screen_x11_get_screen_num        (GdkScreen             *screen);
-static GdkColormap *gdk_screen_x11_get_default_colormap  (GdkScreen             *screen);
-static void         gdk_screen_x11_set_default_colormap  (GdkScreen             *screen,
-							  GdkColormap           *colormap);
-static GdkWindow *  gdk_screen_x11_get_window_at_pointer (GdkScreen             *screen,
-							  gint                  *win_x,
-							  gint                  *win_y);
-static void         gdk_screen_x11_finalize		 (GObject		*object);
-
-static gint          gdk_screen_x11_get_n_monitors        (GdkScreen       *screen);
-static void          gdk_screen_x11_get_monitor_geometry  (GdkScreen       *screen,
-							   gint             num_monitor,
-							   GdkRectangle    *dest);
-static void	     init_xinerama_support		  (GdkScreen * screen);
+static void         gdk_screen_x11_class_init  (GdkScreenX11Class *klass);
+static void         gdk_screen_x11_finalize    (GObject		  *object);
+static void	    init_xinerama_support      (GdkScreen	  *screen);
 
 
-GType gdk_screen_x11_get_type ();
 static gpointer parent_class = NULL;
 
 GType
-gdk_screen_x11_get_type ()
+_gdk_screen_x11_get_type ()
 {
   static GType object_type = 0;
 
@@ -91,141 +71,155 @@ gdk_screen_x11_get_type ()
 void
 gdk_screen_x11_class_init (GdkScreenX11Class * klass)
 {
-  GdkScreenClass *screen_class = GDK_SCREEN_CLASS (klass);
-  
-  screen_class->get_display = gdk_screen_x11_get_display;
-  screen_class->get_width = gdk_screen_x11_get_width;
-  screen_class->get_height = gdk_screen_x11_get_height;
-  screen_class->get_width_mm = gdk_screen_x11_get_width_mm;
-  screen_class->get_height_mm = gdk_screen_x11_get_height_mm;
-  screen_class->get_root_depth = gdk_screen_x11_get_default_depth;
-  screen_class->get_screen_num = gdk_screen_x11_get_screen_num;
-  screen_class->get_root_window = gdk_screen_x11_get_root_window;
-  screen_class->get_default_colormap = gdk_screen_x11_get_default_colormap;
-  screen_class->set_default_colormap = gdk_screen_x11_set_default_colormap;
-  screen_class->get_window_at_pointer = gdk_screen_x11_get_window_at_pointer;
-  screen_class->get_n_monitors = gdk_screen_x11_get_n_monitors;
-  screen_class->get_monitor_geometry = gdk_screen_x11_get_monitor_geometry;
-  
   G_OBJECT_CLASS (klass)->finalize = gdk_screen_x11_finalize;
   parent_class = g_type_class_peek_parent (klass);
 }
 
-static GdkDisplay *
-gdk_screen_x11_get_display (GdkScreen *screen)
+/**
+ * gdk_screen_get_display:
+ * @screen: a #GdkScreen
+ *
+ * Gets the display to which the @screen belongs.
+ * 
+ * Returns: the display to which @screen belongs
+ **/
+GdkDisplay *
+gdk_screen_get_display (GdkScreen *screen)
 {
-  GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
 
-  return screen_x11->display;
+  return GDK_SCREEN_X11 (screen)->display;
+}
+/**
+ * gdk_screen_get_width:
+ * @screen: a #GdkScreen
+ *
+ * Gets the width of @screen in pixels
+ * 
+ * Returns: the width of @screen in pixels.
+ **/
+gint
+gdk_screen_get_width (GdkScreen *screen)
+{
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
+
+  return WidthOfScreen (GDK_SCREEN_X11 (screen)->xscreen);
 }
 
-static gint
-gdk_screen_x11_get_width (GdkScreen *screen)
+/**
+ * gdk_screen_get_height:
+ * @screen: a #GdkScreen
+ *
+ * Gets the height of @screen in pixels
+ * 
+ * Returns: the height of @screen in pixels.
+ **/
+gint
+gdk_screen_get_height (GdkScreen *screen)
 {
-  GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
 
-  return WidthOfScreen (screen_x11->xscreen);
+  return HeightOfScreen (GDK_SCREEN_X11 (screen)->xscreen);
 }
 
-static gint
-gdk_screen_x11_get_height (GdkScreen *screen)
+/**
+ * gdk_screen_get_width_mm:
+ * @screen: a #GdkScreen
+ *
+ * Gets the width of @screen in millimeters. 
+ * Note that on some X servers this value will not be correct.
+ * 
+ * Returns: the width of @screen in pixels.
+ **/
+gint
+gdk_screen_get_width_mm (GdkScreen *screen)
 {
-  GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);  
 
-  return HeightOfScreen (screen_x11->xscreen);
+  return WidthMMOfScreen (GDK_SCREEN_X11 (screen)->xscreen);
 }
 
-static gint
-gdk_screen_x11_get_width_mm (GdkScreen *screen)
+/**
+ * gdk_screen_get_height_mm:
+ * @screen: a #GdkScreen
+ *
+ * Returns the height of @screen in millimeters. 
+ * Note that on some X servers this value will not be correct.
+ * 
+ * Returns: the heigth of @screen in pixels.
+ **/
+gint
+gdk_screen_get_height_mm (GdkScreen *screen)
 {
-  GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
 
-  return WidthMMOfScreen (screen_x11->xscreen);
+  return HeightMMOfScreen (GDK_SCREEN_X11 (screen)->xscreen);
 }
 
-static gint
-gdk_screen_x11_get_height_mm (GdkScreen *screen)
+/**
+ * gdk_screen_get_number:
+ * @screen: a #GdkScreen
+ *
+ * Gets the index of @screen among the screens in the display
+ * to which it belongs. (See gdk_screen_get_display())
+ * 
+ * Returns: the index
+ **/
+gint
+gdk_screen_get_number (GdkScreen *screen)
 {
-  GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
-
-  return HeightMMOfScreen (screen_x11->xscreen);
-}
-
-static gint
-gdk_screen_x11_get_default_depth (GdkScreen *screen)
-{
-  GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
-
-  return DefaultDepthOfScreen (screen_x11->xscreen);
-}
-
-static gint
-gdk_screen_x11_get_screen_num (GdkScreen *screen)
-{
-  GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);  
   
-  return screen_x11->screen_num;
+  return GDK_SCREEN_X11 (screen)->screen_num;
 }
 
-static GdkWindow *
-gdk_screen_x11_get_root_window (GdkScreen *screen)
+/**
+ * gdk_screen_get_root_window:
+ * @screen: a #GdkScreen
+ *
+ * Gets the root window of @screen. 
+ * 
+ * Returns: the root window
+ **/
+GdkWindow *
+gdk_screen_get_root_window (GdkScreen *screen)
 {
-  GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
 
-  return screen_x11->root_window;
+  return GDK_SCREEN_X11 (screen)->root_window;
 }
 
-static GdkColormap *
-gdk_screen_x11_get_default_colormap (GdkScreen *screen)
+/**
+ * gdk_screen_get_default_colormap:
+ * @screen: a #GdkScreen
+ *
+ * Gets the default colormap for @screen.
+ * 
+ * Returns: the default #GdkColormap.
+ **/
+GdkColormap *
+gdk_screen_get_default_colormap (GdkScreen *screen)
 {
-  GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
 
-  return screen_x11->default_colormap;
+  return GDK_SCREEN_X11 (screen)->default_colormap;
 }
 
-static void
-gdk_screen_x11_set_default_colormap (GdkScreen *screen,
-				     GdkColormap * colormap)
+/**
+ * gdk_screen_set_default_colormap:
+ * @screen: a #GdkScreen
+ * @colormap: a #GdkColormap
+ *
+ * Sets the default @colormap for @screen.
+ **/
+void
+gdk_screen_set_default_colormap (GdkScreen   *screen,
+				 GdkColormap *colormap)
 {
-  GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
+  g_return_if_fail (GDK_IS_SCREEN (screen));
+  g_return_if_fail (GDK_IS_COLORMAP (colormap));
   
-  screen_x11->default_colormap = colormap;
-}
-
-static GdkWindow *
-gdk_screen_x11_get_window_at_pointer (GdkScreen *screen,
-				      gint      *win_x,
-				      gint      *win_y)
-{
-  GdkWindow *window;
-  Window root;
-  Window xwindow;
-  Window xwindow_last = 0;
-  Display *xdisplay;
-  int rootx = -1, rooty = -1;
-  int winx, winy;
-  unsigned int xmask;
-
-  xwindow = GDK_SCREEN_XROOTWIN (screen);
-  xdisplay = GDK_SCREEN_XDISPLAY (screen);
-
-  XGrabServer (xdisplay);
-  while (xwindow)
-    {
-      xwindow_last = xwindow;
-      XQueryPointer (xdisplay, xwindow,
-		     &root, &xwindow, &rootx, &rooty, &winx, &winy, &xmask);
-    }
-  XUngrabServer (xdisplay);
-
-  window = gdk_window_lookup_for_display (GDK_SCREEN_DISPLAY(screen),
-					  xwindow_last);
-  if (win_x)
-    *win_x = window ? winx : -1;
-  if (win_y)
-    *win_y = window ? winy : -1;
-
-  return window;
+  GDK_SCREEN_X11 (screen)->default_colormap = colormap;
 }
 
 static void
@@ -246,22 +240,46 @@ gdk_screen_x11_finalize (GObject *object)
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
-static gint 
-gdk_screen_x11_get_n_monitors (GdkScreen *screen)
+/**
+ * gdk_screen_get_n_monitors:
+ * @screen : a #GdkScreen.
+ *
+ * Returns the number of monitors being part of the virtual screen
+ *
+ * Returns: number of monitors part of the virtual screen or
+ *          0 if @screen is not in virtual screen mode.
+ **/
+gint 
+gdk_screen_get_n_monitors (GdkScreen *screen)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), 1);
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
+  
   return GDK_SCREEN_X11 (screen)->num_monitors;
 }
 
-static void
-gdk_screen_x11_get_monitor_geometry (GdkScreen    *screen, 
-				     gint          num_monitor,
-				     GdkRectangle *dest)
+/**
+ * gdk_screen_get_monitor_geometry:
+ * @screen : a #GdkScreen.
+ * @monitor_num: the monitor number. 
+ * @dest : a #GdkRectangle to be filled with the monitor geometry
+ *
+ * Retrieves the #GdkRectangle representing the size and start
+ * coordinates of the individual monitor within the the entire virtual
+ * screen.
+ * 
+ * Note that the virtual screen coordinates can be retrieved via 
+ * gdk_screen_get_width() and gdk_screen_get_height().
+ *
+ **/
+void 
+gdk_screen_get_monitor_geometry (GdkScreen    *screen,
+				 gint          monitor_num,
+				 GdkRectangle *dest)
 {
-  GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
-  g_return_if_fail (num_monitor < GDK_SCREEN_X11 (screen)->num_monitors);
+  g_return_if_fail (GDK_IS_SCREEN (screen));
+  g_return_if_fail (monitor_num < GDK_SCREEN_X11 (screen)->num_monitors);
 
-  *dest = screen_x11->monitors[num_monitor];
+  *dest = GDK_SCREEN_X11 (screen)->monitors[monitor_num];
 }
 
 /**
@@ -329,7 +347,7 @@ check_solaris_xinerama (GdkScreen *screen)
 			gdk_screen_get_number (screen)))
     {
       XRectangle monitors[MAXFRAMEBUFFERS];
-      char hints[16];
+      unsigned char hints[16];
       gint result;
       GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
 

@@ -1024,3 +1024,21 @@ gdk_device_get_core_pointer (void)
 {
   return _gdk_core_pointer;
 }
+
+/**
+ * gdk_setting_get:
+ * @name: the name of the setting.
+ * @value: location to store the value of the setting.
+ *
+ * Obtains a desktop-wide setting, such as the double-click time,
+ * for the default screen. See gdk_screen_get_setting().
+ *
+ * Returns : %TRUE if the setting existed and a value was stored
+ *   in @value, %FALSE otherwise.
+ **/
+gboolean
+gdk_setting_get (const gchar *name,
+		 GValue      *value)
+{
+  return gdk_screen_get_setting (gdk_get_default_screen (), name, value);
+}

@@ -156,38 +156,30 @@ trapping X errors with gdk_error_trap_push() and gdk_error_trap_pop().
 
 <!-- ##### FUNCTION gdk_screen_width ##### -->
 <para>
-Returns the width of the default screen in pixels.
 </para>
 
-@Returns: the width of the default screen in pixels.
+@Returns:
 
 
 <!-- ##### FUNCTION gdk_screen_height ##### -->
 <para>
-Returns the height of the default screen in pixels.
 </para>
 
-@Returns: the height of the default screen in pixels.
+@Returns:
 
 
 <!-- ##### FUNCTION gdk_screen_width_mm ##### -->
 <para>
-Returns the width of the default screen in millimeters.
-Note that on many X servers this value will not be correct.
 </para>
 
-@Returns: the width of the default screen in millimeters, though it is not always
-correct.
+@Returns:
 
 
 <!-- ##### FUNCTION gdk_screen_height_mm ##### -->
 <para>
-Returns the height of the default screen in millimeters.
-Note that on many X servers this value will not be correct.
 </para>
 
-@Returns: the height of the default screen in millimeters, though it is not always
-correct.
+@Returns:
 
 
 <!-- ##### FUNCTION gdk_pointer_grab ##### -->
@@ -251,26 +243,19 @@ success or the reason for the failure of the grab attempt.
 
 <!-- ##### FUNCTION gdk_pointer_ungrab ##### -->
 <para>
-Ungrabs the pointer, if it is grabbed by this application.
+
 </para>
 
-@time: a timestamp from a #GdkEvent, or %GDK_CURRENT_TIME if no timestamp is
-available.
+@time: 
 
 
 <!-- ##### FUNCTION gdk_pointer_is_grabbed ##### -->
 <para>
-Returns %TRUE if the pointer is currently grabbed by this application.
 </para>
 <para>
-Note that the return value is not completely reliable since the X server may
-automatically ungrab the pointer, without informing the application, if the
-grab window becomes unviewable. It also does not take passive pointer grabs
-into account.
 </para>
 
-@Returns: %TRUE if the pointer is currently grabbed by this application.
-Though this value is not always correct.
+@Returns:
 
 
 <!-- ##### FUNCTION gdk_set_double_click_time ##### -->
@@ -301,16 +286,13 @@ available.
 
 <!-- ##### FUNCTION gdk_keyboard_ungrab ##### -->
 <para>
-Ungrabs the keyboard, if it is grabbed by this application.
 </para>
 
-@time: a timestamp from a #GdkEvent, or %GDK_CURRENT_TIME if no timestamp is
-available.
+@time:
 
 
 <!-- ##### FUNCTION gdk_beep ##### -->
 <para>
-Emits a short beep.
 </para>
 
 

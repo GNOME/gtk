@@ -49,6 +49,7 @@ libgdk_win32_la_SOURCES = \
 	xcursors.h \
 	gdkcolor-win32.c \
 	gdkcursor-win32.c \
+	gdkdisplay-win32.c \
 	gdkdnd-win32.c \
 	gdkdrawable-win32.c \
 	gdkdrawable-win32.h \
@@ -69,6 +70,7 @@ libgdk_win32_la_SOURCES = \
 	gdkpixmap-win32.h \
 	gdkprivate-win32.h \
 	gdkproperty-win32.c \
+	gdkscreen-win32.c \
 	gdkselection-win32.c \
 	gdkvisual-win32.c \
 	gdkwin32.h \

@@ -18,11 +18,14 @@
  */
 
 #include "gdkprivate-win32.h"
+#include "gdkscreen.h"
 #include "gdkpango.h"
 #include <pango/pangowin32.h>
 
 PangoContext *
-gdk_pango_context_get (void)
+gdk_pango_context_get_for_screen (GdkScreen *screen)
 {
+  g_return_val_if_fail (screen == gdk_get_default_screen (), NULL);
+
   return pango_win32_get_context ();
 }

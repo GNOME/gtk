@@ -33,6 +33,7 @@
 
 #include "gdkfont.h"
 #include "gdkpango.h" /* gdk_pango_context_get() */
+#include "gdkdisplay.h"
 #include "gdkprivate-win32.h"
 
 static GHashTable *font_name_hash = NULL;
@@ -1515,7 +1516,8 @@ gdk_font_from_one_singlefont (GdkWin32SingleFont *singlefont)
 }
 
 GdkFont*
-gdk_font_load (const gchar *font_name)
+gdk_font_load_for_display (GdkDisplay  *display,
+                           const gchar *font_name)
 {
   GdkFont *font;
   GdkFontPrivateWin32 *private;
@@ -1524,6 +1526,7 @@ gdk_font_load (const gchar *font_name)
   TEXTMETRIC textmetric;
 
   g_return_val_if_fail (font_name != NULL, NULL);
+  g_return_val_if_fail (display == gdk_get_default_display (), NULL);
 
   font = gdk_font_hash_lookup (GDK_FONT_FONTSET, font_name);
   if (font)
@@ -1571,13 +1574,15 @@ gdk_font_load (const gchar *font_name)
  * cannot be loaded.
  **/
 GdkFont*
-gdk_font_from_description (PangoFontDescription *font_desc)
+gdk_font_from_description_for_display (GdkDisplay           *display,
+                                       PangoFontDescription *font_desc)
 {
   PangoFontMap *font_map;
   PangoFont *font;
   GdkFont *result = NULL;
 
   g_return_val_if_fail (font_desc != NULL, NULL);
+  g_return_val_if_fail (display == gdk_get_default_display (), NULL);
 
   font_map = pango_win32_font_map_for_display ();
   font = pango_font_map_load_font (font_map, gdk_pango_context_get (), font_desc);

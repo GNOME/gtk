@@ -304,15 +304,19 @@ gdk_pixbuf_render_pixmap_and_mask_for_colormap (GdkPixbuf   *pixbuf,
 						GdkBitmap  **mask_return,
 						int          alpha_threshold)
 {
-  g_return_if_fail (pixbuf != NULL);
+  GdkScreen *screen;
+
+  g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
+  g_return_if_fail (GDK_IS_COLORMAP (colormap));
+
+  screen = gdk_colormap_get_screen (colormap);
   
   if (pixmap_return)
     {
       GdkGC *gc;
-      
-      *pixmap_return = gdk_pixmap_new (gdk_screen_get_root_window (colormap->screen),
+      *pixmap_return = gdk_pixmap_new (gdk_screen_get_root_window (screen),
 				       gdk_pixbuf_get_width (pixbuf), gdk_pixbuf_get_height (pixbuf),
-				       gdk_screen_get_rgb_visual (colormap->screen)->depth);
+				       gdk_screen_get_rgb_visual (screen)->depth);
 
       gdk_drawable_set_colormap (GDK_DRAWABLE (*pixmap_return), colormap);
       gc = gdk_gc_new (*pixmap_return);
@@ -328,7 +332,9 @@ gdk_pixbuf_render_pixmap_and_mask_for_colormap (GdkPixbuf   *pixbuf,
     {
       if (gdk_pixbuf_get_has_alpha (pixbuf))
 	{
-	  *mask_return = gdk_pixmap_new (gdk_screen_get_root_window (colormap->screen),
+	  GdkScreen *screen = gdk_colormap_get_screen (colormap);
+
+	  *mask_return = gdk_pixmap_new (gdk_screen_get_root_window (screen),
 					 gdk_pixbuf_get_width (pixbuf), gdk_pixbuf_get_height (pixbuf), 1);
 
 	  gdk_pixbuf_render_threshold_alpha (pixbuf, *mask_return,

@@ -26,6 +26,7 @@
 
 #include <config.h>
 
+#include "gdkdisplay.h"
 #include "gdkkeys.h"
 
 enum {
@@ -270,4 +271,16 @@ gdk_keyval_is_lower (guint keyval)
       return lower_val == keyval;
     }
   return FALSE;
+}
+
+/** 
+ * gdk_keymap_get_default:
+ * @returns: the #GdkKeymap attached to the default display.
+ *
+ * Returns the #GdkKeymap attached to the default display.
+ **/
+GdkKeymap*
+gdk_keymap_get_default (void)
+{
+  return gdk_keymap_get_for_display (gdk_get_default_display ());
 }

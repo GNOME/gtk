@@ -164,15 +164,18 @@ gtk_gc_new (gpointer key)
   GtkGCDrawable *drawable;
   GdkGC *gc;
   GHashTable *ht;
+  GdkScreen *screen;
 
   keyval = key;
-  ht = gtk_gc_get_drawable_ht (keyval->colormap->screen);
+  screen = gdk_colormap_get_screen (keyval->colormap);
+  
+  ht = gtk_gc_get_drawable_ht (screen);
   drawable = g_hash_table_lookup (ht, &keyval->depth);
   if (!drawable)
     {
       drawable = g_new (GtkGCDrawable, 1);
       drawable->depth = keyval->depth;
-      drawable->drawable = gdk_pixmap_new (gdk_screen_get_root_window (keyval->colormap->screen), 
+      drawable->drawable = gdk_pixmap_new (gdk_screen_get_root_window (screen), 
 					   1, 1, drawable->depth);
       g_hash_table_insert (ht, &drawable->depth, drawable);
     }

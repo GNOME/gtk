@@ -66,9 +66,8 @@ DllMain(HINSTANCE hinstDLL,
   return TRUE;
 }
 
-gboolean
-_gdk_windowing_init_check (int    argc,
-			   char **argv)
+void
+_gdk_windowing_init (void)
 {
   gchar buf[10];
 
@@ -111,8 +110,6 @@ _gdk_windowing_init_check (int    argc,
   _gdk_selection_property = gdk_atom_intern ("GDK_SELECTION", FALSE);
 
   _gdk_win32_selection_init ();
-
-  return TRUE;
 }
 
 void
@@ -159,86 +156,25 @@ gdk_get_use_xshm (void)
   return TRUE;
 }
 
-/*
- *--------------------------------------------------------------
- * gdk_screen_width
- *
- *   Return the width of the screen.
- *
- * Arguments:
- *
- * Results:
- *
- * Side effects:
- *
- *--------------------------------------------------------------
- */
-
 gint
-gdk_screen_width (void)
+gdk_screen_get_width (GdkScreen *screen)
 {
   return GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (_gdk_parent_root)->impl)->width;
 }
 
-/*
- *--------------------------------------------------------------
- * gdk_screen_height
- *
- *   Return the height of the screen.
- *
- * Arguments:
- *
- * Results:
- *
- * Side effects:
- *
- *--------------------------------------------------------------
- */
-
 gint
-gdk_screen_height (void)
+gdk_screen_get_height (GdkScreen *screen)
 {
   return GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (_gdk_parent_root)->impl)->height;
 }
-
-/*
- *--------------------------------------------------------------
- * gdk_screen_width_mm
- *
- *   Return the width of the screen in millimetres.
- *
- * Arguments:
- *
- * Results:
- *
- * Side effects:
- *
- *--------------------------------------------------------------
- */
-
 gint
-gdk_screen_width_mm (void)
+gdk_screen_get_width_mm (GdkScreen *screen)
 {
   return GetDeviceCaps (gdk_display_hdc, HORZSIZE);
 }
 
-/*
- *--------------------------------------------------------------
- * gdk_screen_height
- *
- *   Return the height of the screen in millimetres.
- *
- * Arguments:
- *
- * Results:
- *
- * Side effects:
- *
- *--------------------------------------------------------------
- */
-
 gint
-gdk_screen_height_mm (void)
+gdk_screen_get_height_mm (GdkScreen *screen)
 {
   return GetDeviceCaps (gdk_display_hdc, VERTSIZE);
 }
@@ -250,8 +186,9 @@ gdk_set_sm_client_id (const gchar* sm_client_id)
 }
 
 void
-gdk_beep (void)
+gdk_display_beep (GdkDisplay *display)
 {
+  g_return_if_fail (display == gdk_get_default_display());
   Beep(1000, 50);
 }
 
@@ -262,12 +199,6 @@ _gdk_windowing_exit (void)
   CoUninitialize ();
   DeleteDC (gdk_display_hdc);
   gdk_display_hdc = NULL;
-}
-
-gchar *
-gdk_get_display (void)
-{
-  return "Win32";
 }
 
 void

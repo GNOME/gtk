@@ -507,8 +507,9 @@ gdk_pixmap_colormap_new_from_pixbuf (GdkColormap *colormap,
   GdkPixmap *pixmap;
   GdkPixbuf *render_pixbuf;
   GdkGC *tmp_gc;
+  GdkScreen *screen = gdk_colormap_get_screen (colormap);
   
-  pixmap = gdk_pixmap_new (gdk_screen_get_root_window (colormap->screen),
+  pixmap = gdk_pixmap_new (gdk_screen_get_root_window (screen),
 			   gdk_pixbuf_get_width (pixbuf),
 			   gdk_pixbuf_get_height (pixbuf),
 			   gdk_colormap_get_visual (colormap)->depth);
@@ -540,7 +541,7 @@ gdk_pixmap_colormap_new_from_pixbuf (GdkColormap *colormap,
     gdk_pixbuf_render_pixmap_and_mask_for_colormap (pixbuf, colormap, NULL, mask, 128);
 
   if (mask && !*mask)
-    *mask = make_solid_mask (colormap->screen,
+    *mask = make_solid_mask (screen,
 			     gdk_pixbuf_get_width (pixbuf),
 			     gdk_pixbuf_get_height (pixbuf));
 

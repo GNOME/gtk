@@ -1824,27 +1824,6 @@ gdk_event_dispatch (GSource    *source,
 }
 
 /**
- * gdk_event_send_client_message:
- * @event: the #GdkEvent to send, which should be a #GdkEventClient.
- * @xid:  the window to send the X ClientMessage event to.
- * 
- * Sends an X ClientMessage event to a given window (which must be
- * on the default #GdkDisplay.)
- * This could be used for communicating between different applications,
- * though the amount of data is limited to 20 bytes.
- * 
- * Return value: non-zero on success.
- **/
-gboolean
-gdk_event_send_client_message (GdkEvent *event, guint32 xid)
-{
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  return gdk_event_send_client_message_for_display (gdk_get_default_display (),
-						    event, xid);
-}
-
-/**
  * gdk_event_send_client_message_for_display :
  * @display : the #GdkDisplay for the window where the message is to be sent.
  * @event : the #GdkEvent to send, which should be a #GdkEventClient.
@@ -1937,26 +1916,6 @@ gdk_event_send_client_message_to_all_recurse (GdkDisplay *display,
   gdk_error_trap_pop ();
 
   return result;
-}
-
-/**
- * gdk_event_send_clientmessage_toall:
- * @event: the #GdkEvent to send, which should be a #GdkEventClient.
- *
- * Sends an X ClientMessage event to all toplevel windows on the default
- * #GdkScreen.
- *
- * Toplevel windows are determined by checking for the WM_STATE property, as
- * described in the Inter-Client Communication Conventions Manual (ICCCM).
- * If no windows are found with the WM_STATE property set, the message is sent
- * to all children of the root window.
- **/
-void
-gdk_event_send_clientmessage_toall (GdkEvent *event)
-{
-  g_return_if_fail (event != NULL);
-
-  gdk_screen_broadcast_client_message (gdk_get_default_screen (), event);
 }
 
 /**
@@ -2257,7 +2216,7 @@ gdk_xsettings_notify_cb (const char       *name,
   for (i = 0; i < G_N_ELEMENTS (settings_map) ; i++)
     if (strcmp (settings_map[i].xsettings_name, name) == 0)
       {
-	new_event.setting.name = settings_map[i].gdk_name;
+	new_event.setting.name = (char *)settings_map[i].gdk_name;
 	break;
       }
 
@@ -2295,24 +2254,6 @@ check_transform (const gchar *xsettings_name,
     }
   else
     return TRUE;
-}
-
-/**
- * gdk_setting_get:
- * @name: the name of the setting.
- * @value: location to store the value of the setting.
- *
- * Obtains a desktop-wide setting, such as the double-click time,
- * for the default screen. See gdk_screen_get_setting().
- *
- * Returns : %TRUE if the setting existed and a value was stored
- *   in @value, %FALSE otherwise.
- **/
-gboolean
-gdk_setting_get (const gchar *name,
-		 GValue      *value)
-{
-  return gdk_screen_get_setting (gdk_get_default_screen (), name, value);
 }
 
 /**

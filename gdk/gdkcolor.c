@@ -26,6 +26,7 @@
 
 #include <time.h>
 
+#include "gdkscreen.h"
 #include "gdkcolor.h"
 #include "gdkinternals.h"
 
@@ -260,3 +261,18 @@ gdk_color_parse (const gchar *spec,
   else
     return FALSE;
 }
+
+/**
+ * gdk_colormap_get_system:
+ * 
+ * Gets the system's default colormap for the default screen. (See
+ * gdk_colormap_get_system_for_screen ())
+ * 
+ * Return value: the default colormap.
+ **/
+GdkColormap*
+gdk_colormap_get_system (void)
+{
+  return gdk_screen_get_system_colormap (gdk_get_default_screen ());
+}
+

@@ -222,14 +222,17 @@ gdk_rgb_try_colormap (GdkRgbInfo *image_info, gboolean force,
   gint colors_needed;
   gint idx;
   gint best[256];
+  GdkScreen *screen;
 
   if (!force && nr * ng * nb < gdk_rgb_min_colors)
     return FALSE;
 
+  screen = gdk_visual_get_screen (image_info->visual);
+
   if (image_info->cmap)
     cmap = image_info->cmap;
   else
-    cmap = gdk_screen_get_system_colormap (image_info->visual->screen);
+    cmap = gdk_screen_get_system_colormap (screen);
 
   colors_needed = nr * ng * nb;
   for (i = 0; i < 256; i++)
@@ -239,7 +242,7 @@ gdk_rgb_try_colormap (GdkRgbInfo *image_info, gboolean force,
     }
 
 #ifndef GAMMA
-  if (cmap == gdk_screen_get_system_colormap (image_info->visual->screen))
+  if (cmap == gdk_screen_get_system_colormap (screen))
     /* find color cube colors that are already present */
     for (i = 0; i < MIN (256, cmap->size); i++)
       {
@@ -458,7 +461,7 @@ gdk_rgb_score_visual (GdkVisual *visual)
   if (quality == 0)
     return 0;
 
-  sys = (visual == gdk_screen_get_system_visual (visual->screen));
+  sys = (visual == gdk_screen_get_system_visual (gdk_visual_get_screen (visual)));
 
   pseudo = (visual->type == GDK_VISUAL_PSEUDO_COLOR || visual->type == GDK_VISUAL_TRUE_COLOR);
 
@@ -590,6 +593,7 @@ static GdkRgbInfo *
 gdk_rgb_create_info (GdkVisual *visual, GdkColormap *colormap)
 {
   GdkRgbInfo *image_info;
+  GdkScreen *screen = gdk_visual_get_screen (visual);
 
   image_info = g_new0 (GdkRgbInfo, 1);
 
@@ -634,14 +638,14 @@ gdk_rgb_create_info (GdkVisual *visual, GdkColormap *colormap)
        image_info->visual->depth >= 3))
     {
       if (!image_info->cmap)
-	image_info->cmap = gdk_colormap_ref (gdk_screen_get_system_colormap (visual->screen));
+	image_info->cmap = gdk_colormap_ref (gdk_screen_get_system_colormap (screen));
       
       gdk_rgb_colorcube_222 (image_info);
     }
   else if (image_info->visual->type == GDK_VISUAL_PSEUDO_COLOR)
     {
       if (!image_info->cmap &&
-	  (gdk_rgb_install_cmap || image_info->visual != gdk_screen_get_system_visual (visual->screen)))
+	  (gdk_rgb_install_cmap || image_info->visual != gdk_screen_get_system_visual (screen)))
 	{
 	  image_info->cmap = gdk_colormap_new (image_info->visual, FALSE);
 	  image_info->cmap_alloced = TRUE;
@@ -659,7 +663,7 @@ gdk_rgb_create_info (GdkVisual *visual, GdkColormap *colormap)
 		 image_info->nblue_shades);
 
       if (!image_info->cmap)
-	image_info->cmap = gdk_colormap_ref (gdk_screen_get_system_colormap (visual->screen));
+	image_info->cmap = gdk_colormap_ref (gdk_screen_get_system_colormap (screen));
     }
 #ifdef ENABLE_GRAYSCALE
   else if (image_info->visual->type == GDK_VISUAL_GRAYSCALE)
@@ -679,8 +683,8 @@ gdk_rgb_create_info (GdkVisual *visual, GdkColormap *colormap)
 	{
 	  /* Always install colormap in direct color. */
 	  if (image_info->visual->type != GDK_VISUAL_DIRECT_COLOR &&
-	      image_info->visual == gdk_screen_get_system_visual (visual->screen))
-	    image_info->cmap = gdk_colormap_ref (gdk_screen_get_system_colormap (visual->screen));
+	      image_info->visual == gdk_screen_get_system_visual (screen))
+	    image_info->cmap = gdk_colormap_ref (gdk_screen_get_system_colormap (screen));
 	  else
 	    {
 	      image_info->cmap = gdk_colormap_new (image_info->visual, FALSE);
@@ -691,7 +695,7 @@ gdk_rgb_create_info (GdkVisual *visual, GdkColormap *colormap)
 
   image_info->bitmap = (image_info->visual->depth == 1);
 
-  image_info->bpp = (_gdk_windowing_get_bits_for_depth (gdk_screen_get_display (visual->screen), image_info->visual->depth) + 7) / 8;
+  image_info->bpp = (_gdk_windowing_get_bits_for_depth (gdk_screen_get_display (screen), image_info->visual->depth) + 7) / 8;
   gdk_rgb_select_conv (image_info);
 
   if (!gdk_rgb_quark)
@@ -2881,10 +2885,11 @@ gdk_rgb_select_conv (GdkRgbInfo *image_info)
   GdkRgbConvFunc conv_gray, conv_gray_d;
   GdkRgbConvFunc conv_indexed, conv_indexed_d;
   gboolean mask_rgb, mask_bgr;
+  GdkScreen *screen = gdk_visual_get_screen (image_info->visual);
 
   depth = image_info->visual->depth;
 
-  bpp = _gdk_windowing_get_bits_for_depth (gdk_screen_get_display (image_info->visual->screen),
+  bpp = _gdk_windowing_get_bits_for_depth (gdk_screen_get_display (screen),
 					   image_info->visual->depth);
 
   byte_order = image_info->visual->byte_order;

@@ -906,6 +906,7 @@ EXPORTS
 	gtk_menu_set_accel_group
 	gtk_menu_set_accel_path
 	gtk_menu_set_active
+	gtk_menu_set_screen
 	gtk_menu_set_tearoff_state
 	gtk_menu_set_title
 	gtk_menu_shell_activate_item
@@ -1997,6 +1998,7 @@ EXPORTS
 	gtk_widget_get_default_direction
 	gtk_widget_get_default_style
 	gtk_widget_get_default_visual
+	gtk_widget_get_display
 	gtk_widget_get_direction
 	gtk_widget_get_events
 	gtk_widget_get_extension_events
@@ -2066,6 +2068,7 @@ EXPORTS
 	gtk_widget_set_parent
 	gtk_widget_set_parent_window
 	gtk_widget_set_redraw_on_allocate
+	gtk_widget_get_screen
 	gtk_widget_set_scroll_adjustments
 	gtk_widget_set_sensitive
 	gtk_widget_set_size_request
@@ -2111,6 +2114,7 @@ EXPORTS
 	gtk_window_get_position
 	gtk_window_get_resizable
 	gtk_window_get_role
+	gtk_window_get_screen
 	gtk_window_get_size
 	gtk_window_get_title
 	gtk_window_get_transient_for
@@ -2152,6 +2156,7 @@ EXPORTS
 	gtk_window_set_position
 	gtk_window_set_resizable
 	gtk_window_set_role
+	gtk_window_set_screen
 	gtk_window_set_title
 	gtk_window_set_transient_for
 	gtk_window_set_type_hint

@@ -411,3 +411,13 @@ _gdk_image_get_scratch (GdkScreen   *screen,
 #endif
   return image;
 }
+
+GdkImage*
+gdk_image_new (GdkImageType  type,
+	       GdkVisual    *visual,
+	       gint          width,
+	       gint          height)
+{
+  return _gdk_image_new_for_depth (gdk_visual_get_screen (visual), type,
+				   visual, width, height, -1);
+}

@@ -42,11 +42,6 @@
 #endif
 
 static void                 gdk_display_x11_class_init         (GdkDisplayX11Class *class);
-static gint                 gdk_display_x11_get_n_screens      (GdkDisplay         *display);
-static GdkScreen *          gdk_display_x11_get_screen         (GdkDisplay         *display,
-						                gint                screen_num);
-G_CONST_RETURN static char *gdk_display_x11_get_display_name   (GdkDisplay         *display);
-static GdkScreen *          gdk_display_x11_get_default_screen (GdkDisplay         *display);
 static void                 gdk_display_x11_finalize           (GObject            *object);
 
 static void gdk_internal_connection_watch (Display  *display,
@@ -58,7 +53,7 @@ static void gdk_internal_connection_watch (Display  *display,
 static gpointer parent_class = NULL;
 
 GType
-gdk_display_x11_get_type ()
+_gdk_display_x11_get_type (void)
 {
   static GType object_type = 0;
 
@@ -88,13 +83,6 @@ gdk_display_x11_get_type ()
 static void
 gdk_display_x11_class_init (GdkDisplayX11Class * class)
 {
-  GdkDisplayClass *display_class = GDK_DISPLAY_CLASS (class);
-
-  display_class->get_display_name = gdk_display_x11_get_display_name;
-  display_class->get_n_screens = gdk_display_x11_get_n_screens;
-  display_class->get_screen = gdk_display_x11_get_screen;
-  display_class->get_default_screen = gdk_display_x11_get_default_screen;
-  
   G_OBJECT_CLASS (class)->finalize = gdk_display_x11_finalize;
   
   parent_class = g_type_class_peek_parent (class);
@@ -285,39 +273,70 @@ gdk_internal_connection_watch (Display  *display,
     gdk_remove_connection_handler ((GdkInternalConnection *)*watch_data);
 }
 
-static G_CONST_RETURN gchar*
-gdk_display_x11_get_display_name (GdkDisplay * display)
+/**
+ * gdk_display_get_name:
+ * @display: a #GdkDisplay
+ *
+ * Gets the name of the display.
+ * 
+ * Returns: a string representing the display name.
+ */
+G_CONST_RETURN gchar *
+gdk_display_get_name (GdkDisplay * display)
 {
-  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   
-  return (gchar *) DisplayString (display_x11->xdisplay);
+  return (gchar *) DisplayString (GDK_DISPLAY_X11 (display)->xdisplay);
 }
 
-static gint
-gdk_display_x11_get_n_screens (GdkDisplay * display)
+/**
+ * gdk_display_get_n_screens:
+ * @display: a #GdkDisplay
+ *
+ * Gets the number of screen managed by the @display.
+ * 
+ * Returns: number of screens.
+ */
+gint
+gdk_display_get_n_screens (GdkDisplay * display)
 {
-  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), 0);
   
-  return ScreenCount (display_x11->xdisplay);
+  return ScreenCount (GDK_DISPLAY_X11 (display)->xdisplay);
 }
 
-static GdkScreen *
-gdk_display_x11_get_screen (GdkDisplay *display,
-			    gint        screen_num)
+/**
+ * gdk_display_get_screen:
+ * @display: a #GdkDisplay
+ * @screen_num: the screen number
+ *
+ * Returns a screen object for one of the screens of the display.
+ * 
+ * Returns: the #GdkScreen object
+ */
+GdkScreen *
+gdk_display_get_screen (GdkDisplay * display, gint screen_num)
 {
-  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
-
-  g_return_val_if_fail (ScreenCount (display_x11->xdisplay) > screen_num, NULL);
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+  g_return_val_if_fail (ScreenCount (GDK_DISPLAY_X11 (display)->xdisplay) > screen_num, NULL);
   
-  return display_x11->screens[screen_num];
+  return GDK_DISPLAY_X11 (display)->screens[screen_num];
 }
 
-static GdkScreen *
-gdk_display_x11_get_default_screen (GdkDisplay * display)
+/**
+ * gdk_display_get_default_screen:
+ * @display: a #GdkDisplay
+ *
+ * Get the default #GdkScreen for @display.
+ * 
+ * Returns: the default #GdkScreen object for @display
+ */
+GdkScreen *
+gdk_display_get_default_screen (GdkDisplay * display)
 {
-  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   
-  return display_x11->default_screen;
+  return GDK_DISPLAY_X11 (display)->default_screen;
 }
 
 gboolean
@@ -325,7 +344,6 @@ _gdk_x11_display_is_root_window (GdkDisplay *display,
 				 Window      xroot_window)
 {
   GdkDisplayX11 *display_x11;
-  GSList *tmp_list;
   gint i;
   
   g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
@@ -462,7 +480,6 @@ gdk_display_x11_finalize (GObject *object)
   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (object);
   int i;
   GList *tmp;
-  GSList *stmp;
   /* FIXME need to write GdkKeymap finalize fct 
      g_object_unref (display_x11->keymap);
    */

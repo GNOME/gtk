@@ -48,7 +48,6 @@ struct _GdkColormap
   GdkVisual *visual;
   
   gpointer windowing_data;
-  GdkScreen *screen;
 };
 
 struct _GdkColormapClass
@@ -70,6 +69,8 @@ void	     gdk_colormap_unref	  (GdkColormap *cmap);
 #ifndef GDK_MULTIHEAD_SAFE
 GdkColormap* gdk_colormap_get_system	        (void);
 #endif
+
+GdkScreen *gdk_colormap_get_screen (GdkColormap *cmap);
 
 #ifndef GDK_DISABLE_DEPRECATED
 gint gdk_colormap_get_system_size  (void);

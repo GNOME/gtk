@@ -21,8 +21,11 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include "gdkscreen.h"
+#include "gdk.h"		/* For gdk_rectangle_intersect() */
 #include "gdkcolor.h"
+#include "gdkinternals.h"
+#include "gdkwindow.h"
+#include "gdkscreen.h"
 
 GType
 gdk_screen_get_type (void)
@@ -51,176 +54,6 @@ gdk_screen_get_type (void)
   return object_type;
 }
 
-/**
- * gdk_screen_get_default_colormap:
- * @screen: a #GdkScreen
- *
- * Gets the default colormap for @screen.
- * 
- * Returns: the default #GdkColormap.
- **/
-GdkColormap *
-gdk_screen_get_default_colormap (GdkScreen *screen)
-{
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-  
-  return GDK_SCREEN_GET_CLASS (screen)->get_default_colormap (screen);
-}
-
-/**
- * gdk_screen_set_default_colormap:
- * @screen: a #GdkScreen
- * @colormap: a #GdkColormap
- *
- * Sets the default @colormap for @screen.
- **/
-void
-gdk_screen_set_default_colormap (GdkScreen   *screen,
-				 GdkColormap *colormap)
-{
-  g_return_if_fail (GDK_IS_SCREEN (screen));
-  g_return_if_fail (GDK_IS_COLORMAP (colormap));
-  
-  GDK_SCREEN_GET_CLASS (screen)->set_default_colormap (screen, colormap);
-}
-
-/**
- * gdk_screen_get_root_window:
- * @screen: a #GdkScreen
- *
- * Gets the root window of @screen. 
- * 
- * Returns: the root window
- **/
-GdkWindow *
-gdk_screen_get_root_window (GdkScreen *screen)
-{
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-  
-  return GDK_SCREEN_GET_CLASS (screen)->get_root_window (screen);
-}
-
-/**
- * gdk_screen_get_display:
- * @screen: a #GdkScreen
- *
- * Gets the display to which the @screen belongs.
- * 
- * Returns: the display to which @screen belongs
- **/
-GdkDisplay *
-gdk_screen_get_display (GdkScreen *screen)
-{
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-  
-  return GDK_SCREEN_GET_CLASS (screen)->get_display (screen);
-}
-
-/**
- * gdk_screen_get_number:
- * @screen: a #GdkScreen
- *
- * Gets the index of @screen among the screens in the display
- * to which it belongs. (See gdk_screen_get_display())
- * 
- * Returns: the index
- **/
-gint
-gdk_screen_get_number (GdkScreen *screen)
-{
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
-  
-  return GDK_SCREEN_GET_CLASS (screen)->get_screen_num (screen);
-}
-
-/**
- * gdk_screen_get_window_at_pointer:
- * @screen: a #GdkScreen
- * @win_x: return location for origin of the window under the pointer
- * @win_y: return location for origin of the window under the pointer
- * 
- * Obtains the window underneath the mouse pointer, returning the location
- * of that window in @win_x, @win_y for @screen. Returns %NULL if the window 
- * under the mouse pointer is not known to GDK (for example, belongs to
- * another application).
- * 
- * Returns: the window under the mouse pointer, or %NULL
- **/
-GdkWindow *
-gdk_screen_get_window_at_pointer (GdkScreen *screen,
-				  gint      *win_x,
-				  gint      *win_y)
-{
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-  
-  return GDK_SCREEN_GET_CLASS (screen)->get_window_at_pointer (screen, win_x, win_y);
-}
-
-/**
- * gdk_screen_get_width:
- * @screen: a #GdkScreen
- *
- * Gets the width of @screen in pixels
- * 
- * Returns: the width of @screen in pixels.
- **/
-gint
-gdk_screen_get_width (GdkScreen *screen)
-{
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
-  
-  return GDK_SCREEN_GET_CLASS (screen)->get_width (screen);
-}
-
-/**
- * gdk_screen_get_height:
- * @screen: a #GdkScreen
- *
- * Gets the height of @screen in pixels
- * 
- * Returns: the height of @screen in pixels.
- **/
-gint
-gdk_screen_get_height (GdkScreen *screen)
-{
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
-  
-  return GDK_SCREEN_GET_CLASS (screen)->get_height (screen);
-}
-
-/**
- * gdk_screen_get_width_mm:
- * @screen: a #GdkScreen
- *
- * Gets the width of @screen in millimeters. 
- * Note that on some X servers this value will not be correct.
- * 
- * Returns: the width of @screen in pixels.
- **/
-gint
-gdk_screen_get_width_mm (GdkScreen *screen)
-{
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
-  
-  return GDK_SCREEN_GET_CLASS (screen)->get_width_mm (screen);
-}
-
-/**
- * gdk_screen_get_height_mm:
- * @screen: a #GdkScreen
- *
- * Returns the height of @screen in millimeters. 
- * Note that on some X servers this value will not be correct.
- * 
- * Returns: the heigth of @screen in pixels.
- **/
-gint
-gdk_screen_get_height_mm (GdkScreen *screen)
-{
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
-  
-  return GDK_SCREEN_GET_CLASS (screen)->get_height_mm (screen);
-}
 
 /**
  * gdk_screen_close:
@@ -235,47 +68,6 @@ gdk_screen_close (GdkScreen *screen)
   g_return_if_fail (GDK_IS_SCREEN (screen));
   
   g_object_run_dispose (G_OBJECT (screen));
-}
-
-/**
- * gdk_screen_get_n_monitors:
- * @screen : a #GdkScreen.
- *
- * Returns the number of monitors being part of the virtual screen
- *
- * Returns: number of monitors part of the virtual screen or
- *          0 if @screen is not in virtual screen mode.
- **/
-gint 
-gdk_screen_get_n_monitors (GdkScreen *screen)
-{
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
-  
-  return GDK_SCREEN_GET_CLASS (screen)->get_n_monitors (screen);
-}
-
-/**
- * gdk_screen_get_monitor_geometry:
- * @screen : a #GdkScreen.
- * @monitor_num: the monitor number. 
- * @dest : a #GdkRectangle to be filled with the monitor geometry
- *
- * Retrieves the #GdkRectangle representing the size and start
- * coordinates of the individual monitor within the the entire virtual
- * screen.
- * 
- * Note that the virtual screen coordinates can be retrieved via 
- * gdk_screen_get_width() and gdk_screen_get_height().
- *
- **/
-void 
-gdk_screen_get_monitor_geometry (GdkScreen    *screen,
-				 gint          monitor_num,
-				 GdkRectangle *dest)
-{
-  g_return_if_fail (GDK_IS_SCREEN (screen));
-  
-  GDK_SCREEN_GET_CLASS (screen)->get_monitor_geometry (screen, monitor_num, dest);
 }
 
 /**
@@ -352,4 +144,81 @@ gdk_screen_get_monitor_at_window (GdkScreen      *screen,
 	}
     }
   return screen_num;
+}
+
+/**
+ * gdk_screen_width:
+ * 
+ * Returns the width of the default screen in pixels.
+ * 
+ * Return value:  the width of the default screen in pixels.
+ **/
+gint
+gdk_screen_width (void)
+{
+  return gdk_screen_get_width (gdk_get_default_screen());
+}
+
+/**
+ * gdk_screen_height:
+ * 
+ * Returns the height of the default screen in pixels.
+ * 
+ * Return value: the height of the default screen in pixels.
+ **/
+gint
+gdk_screen_height (void)
+{
+  return gdk_screen_get_height (gdk_get_default_screen());
+}
+
+/**
+ * gdk_screen_width_mm:
+ * 
+ * Returns the width of the default screen in millimeters.
+ * Note that on many X servers this value will not be correct.
+ * 
+ * Return value: the width of the default screen in millimeters,
+ * though it is not always correct.
+ **/
+gint
+gdk_screen_width_mm (void)
+{
+  return gdk_screen_get_width_mm (gdk_get_default_screen());
+}
+
+/**
+ * gdk_screen_height_mm:
+ * 
+ * Returns the height of the default screen in millimeters.
+ * Note that on many X servers this value will not be correct.
+ * 
+ * Return value: the height of the default screen in millimeters,
+ * though it is not always correct.
+ **/
+gint
+gdk_screen_height_mm (void)
+{
+  return gdk_screen_get_height_mm (gdk_get_default_screen ());
+}
+
+/**
+ * gdk_screen_get_window_at_pointer:
+ * @screen: a #GdkScreen
+ * @win_x: return location for origin of the window under the pointer
+ * @win_y: return location for origin of the window under the pointer
+ * 
+ * Obtains the window underneath the mouse pointer, returning the location
+ * of that window in @win_x, @win_y for @screen. Returns %NULL if the window 
+ * under the mouse pointer is not known to GDK (for example, belongs to
+ * another application).
+ * 
+ * Returns: the window under the mouse pointer, or %NULL
+ **/
+GdkWindow *
+gdk_screen_get_window_at_pointer (GdkScreen *screen,
+				  gint      *win_x,
+				  gint      *win_y)
+{
+  return _gdk_current_pointer_hooks->window_at_pointer (screen, win_x, win_y);
 }

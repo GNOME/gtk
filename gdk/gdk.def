@@ -25,6 +25,7 @@ EXPORTS
 	gdk_colormap_alloc_colors
 	gdk_colormap_change
 	gdk_colormap_free_colors
+	gdk_colormap_get_screen
 	gdk_colormap_get_system
 	gdk_colormap_get_system_size
 	gdk_colormap_get_type
@@ -37,8 +38,10 @@ EXPORTS
 	gdk_colors_free
 	gdk_colors_store
 	gdk_crossing_mode_get_type
+	gdk_cursor_get_screen
 	gdk_cursor_get_type
 	gdk_cursor_new
+	gdk_cursor_new_for_screen
 	gdk_cursor_new_from_pixmap
 	gdk_cursor_ref
 	gdk_cursor_type_get_type
@@ -54,6 +57,15 @@ EXPORTS
 	gdk_device_set_mode
 	gdk_device_set_source
 	gdk_devices_list
+	gdk_display_beep
+	gdk_display_get_default_screen
+	gdk_display_get_n_screens
+	gdk_display_get_screen
+	gdk_display_get_type
+	gdk_display_keyboard_ungrab
+	gdk_display_pointer_is_grabbed
+	gdk_display_pointer_ungrab
+	gdk_display_sync
 	gdk_drag_abort
 	gdk_drag_action_get_type
 	gdk_drag_begin
@@ -96,7 +108,9 @@ EXPORTS
 	gdk_drawable_get_colormap
 	gdk_drawable_get_data
 	gdk_drawable_get_depth
+	gdk_drawable_get_display
 	gdk_drawable_get_image
+	gdk_drawable_get_screen
 	gdk_drawable_get_size
 	gdk_drawable_get_type
 	gdk_drawable_get_visible_region
@@ -125,6 +139,7 @@ EXPORTS
 	gdk_event_peek
 	gdk_event_put
 	gdk_event_send_client_message
+	gdk_event_send_client_message_for_display
 	gdk_event_send_clientmessage_toall
 	gdk_event_type_get_type
 	gdk_events_pending
@@ -136,11 +151,13 @@ EXPORTS
 	gdk_flush
 	gdk_font_equal
 	gdk_font_from_description
+	gdk_font_from_description_for_display
 	gdk_font_full_name_free
 	gdk_font_full_name_get
 	gdk_font_get_type
 	gdk_font_id
 	gdk_font_load
+	gdk_font_load_for_display
 	gdk_font_ref
 	gdk_font_type_get_type
 	gdk_font_unref
@@ -178,8 +195,11 @@ EXPORTS
 	gdk_gc_set_values
 	gdk_gc_unref
 	gdk_gc_values_mask_get_type
+	gdk_get_default_display
 	gdk_get_default_root_window
-	gdk_get_display
+	gdk_get_default_screen
+;	gdk_get_display
+	gdk_get_display_arg_name
 	gdk_get_program_class
 	gdk_get_show_events
 	gdk_get_use_xshm
@@ -215,6 +235,7 @@ EXPORTS
 	gdk_keymap_get_direction
 	gdk_keymap_get_entries_for_keycode
 	gdk_keymap_get_entries_for_keyval
+	gdk_keymap_get_for_display
 	gdk_keymap_get_type
 	gdk_keymap_lookup_key
 	gdk_keymap_translate_keyboard_state
@@ -231,10 +252,12 @@ EXPORTS
 	gdk_mbstowcs
 	gdk_modifier_type_get_type
 	gdk_notify_type_get_type
+	gdk_open_display
 	gdk_overlap_type_get_type
 	gdk_pango_attr_embossed_new
 	gdk_pango_attr_stipple_new
 	gdk_pango_context_get
+	gdk_pango_context_get_for_screen
 	gdk_pango_context_set_colormap
 	gdk_pango_layout_get_clip_region
 	gdk_pango_layout_line_get_clip_region
@@ -301,16 +324,34 @@ EXPORTS
 	gdk_rgb_set_min_colors
 	gdk_rgb_set_verbose
 	gdk_rgb_xpixel_from_rgb
+	gdk_screen_get_default_colormap
+	gdk_screen_get_display
+	gdk_screen_get_height
+	gdk_screen_get_monitor_at_point
+	gdk_screen_get_monitor_geometry
+	gdk_screen_get_number
+	gdk_screen_get_rgb_colormap
+	gdk_screen_get_rgb_visual
+	gdk_screen_get_root_window
+	gdk_screen_get_setting
+	gdk_screen_get_system_colormap
+	gdk_screen_get_type
+	gdk_screen_get_width
+	gdk_screen_get_window_at_pointer
 	gdk_screen_height
 	gdk_screen_height_mm
+	gdk_screen_set_default_colormap
 	gdk_screen_width
 	gdk_screen_width_mm
 	gdk_scroll_direction_get_type
 	gdk_selection_convert
 	gdk_selection_owner_get
+	gdk_selection_owner_get_for_display
 	gdk_selection_owner_set
+	gdk_selection_owner_set_for_display
 	gdk_selection_property_get
 	gdk_selection_send_notify
+	gdk_selection_send_notify_for_display
 	gdk_set_double_click_time
 	gdk_set_locale
 	gdk_set_pointer_hooks
@@ -334,6 +375,7 @@ EXPORTS
 	gdk_text_measure
 	gdk_text_property_to_text_list
 	gdk_text_property_to_utf8_list
+	gdk_text_property_to_utf8_list_for_display
 	gdk_text_width
 	gdk_text_width_wc
 	gdk_threads_enter
@@ -342,6 +384,7 @@ EXPORTS
 	gdk_threads_mutex
 	gdk_unicode_to_keyval
 	gdk_utf8_to_compound_text
+	gdk_utf8_to_compound_text_for_display
 	gdk_utf8_to_string_target
 	gdk_visibility_state_get_type
 	gdk_visual_get_best
@@ -350,6 +393,7 @@ EXPORTS
 	gdk_visual_get_best_with_both
 	gdk_visual_get_best_with_depth
 	gdk_visual_get_best_with_type
+	gdk_visual_get_screen
 	gdk_visual_get_system
 	gdk_visual_get_type
 	gdk_visual_type_get_type
@@ -377,6 +421,7 @@ EXPORTS
 	gdk_window_end_paint
 	gdk_window_focus
 	gdk_window_foreign_new
+	gdk_window_foreign_new_for_display
 	gdk_window_freeze_updates
 	gdk_window_get_children
 	gdk_window_get_deskrelative_origin
@@ -404,6 +449,7 @@ EXPORTS
 	gdk_window_is_viewable
 	gdk_window_is_visible
 	gdk_window_lookup
+	gdk_window_lookup_for_display
 	gdk_window_lower
 	gdk_window_maximize
 	gdk_window_merge_child_shapes

@@ -65,8 +65,6 @@ struct _GdkVisual
   guint32 blue_mask;
   gint blue_shift;
   gint blue_prec;
-
-  GdkScreen *screen;
 };
 
 GType         gdk_visual_get_type            (void);
@@ -88,6 +86,8 @@ void gdk_query_visual_types (GdkVisualType  **visual_types,
 
 GList* gdk_list_visuals (void);
 #endif
+
+GdkScreen *gdk_visual_get_screen (GdkVisual *visual);
 
 #ifndef GDK_DISABLE_DEPRECATED
 #define gdk_visual_ref(v) g_object_ref(v)

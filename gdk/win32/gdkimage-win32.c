@@ -27,6 +27,7 @@
 
 #include "gdkimage.h"
 #include "gdkpixmap.h"
+#include "gdkscreen.h" /* gdk_get_default_screen() */
 #include "gdkprivate-win32.h"
 
 static GList *image_list = NULL;
@@ -196,7 +197,8 @@ _gdk_windowing_image_init (void)
 }
 
 GdkImage*
-_gdk_image_new_for_depth (GdkImageType  type,
+_gdk_image_new_for_depth (GdkScreen    *screen,
+			  GdkImageType  type,
 			  GdkVisual    *visual,
 			  gint          width,
 			  gint          height,
@@ -206,6 +208,7 @@ _gdk_image_new_for_depth (GdkImageType  type,
 
   g_return_val_if_fail (!visual || GDK_IS_VISUAL (visual), NULL);
   g_return_val_if_fail (visual || depth != -1, NULL);
+  g_return_val_if_fail (screen == gdk_get_default_screen (), NULL);
  
   if (visual)
     depth = visual->depth;
@@ -222,15 +225,6 @@ _gdk_image_new_for_depth (GdkImageType  type,
 }
 
 GdkImage*
-gdk_image_new (GdkImageType  type,
-	       GdkVisual    *visual,
-	       gint          width,
-	       gint          height)
-{
-  return _gdk_image_new_for_depth (type, visual, width, height, -1);
-}
-
-GdkImage*
 _gdk_win32_copy_to_image (GdkDrawable    *drawable,
 			  GdkImage       *image,
 			  gint            src_x,
@@ -241,6 +235,7 @@ _gdk_win32_copy_to_image (GdkDrawable    *drawable,
 			  gint            height)
 {
   GdkGC *gc;
+  GdkScreen *screen = gdk_drawable_get_screen (drawable);
   
   g_return_val_if_fail (GDK_IS_DRAWABLE_IMPL_WIN32 (drawable), NULL);
   g_return_val_if_fail (image != NULL || (dest_x == 0 && dest_y == 0), NULL);
@@ -249,7 +244,7 @@ _gdk_win32_copy_to_image (GdkDrawable    *drawable,
 			    GDK_DRAWABLE_HANDLE (drawable)));
 
   if (!image)
-    image = _gdk_image_new_for_depth (GDK_IMAGE_FASTEST, NULL, width, height,
+    image = _gdk_image_new_for_depth (screen, GDK_IMAGE_FASTEST, NULL, width, height,
 				      gdk_drawable_get_depth (drawable));
 
   gc = gdk_gc_new ((GdkDrawable *) image->windowing_data);
@@ -384,8 +379,11 @@ gdk_win32_image_destroy (GdkImage *image)
 }
 
 gint
-_gdk_windowing_get_bits_for_depth (gint depth)
+_gdk_windowing_get_bits_for_depth (GdkDisplay *display,
+                                   gint        depth)
 {
+  g_return_val_if_fail (display == gdk_get_default_display (), 0);
+
   switch (depth)
     {
     case 1:

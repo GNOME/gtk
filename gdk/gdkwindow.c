@@ -49,7 +49,7 @@ static const GdkPointerHooks default_pointer_hooks = {
   _gdk_windowing_window_at_pointer
 };
 
-static const GdkPointerHooks *current_pointer_hooks = &default_pointer_hooks;
+const GdkPointerHooks *_gdk_current_pointer_hooks = &default_pointer_hooks;
 
 static GdkGC *gdk_window_create_gc      (GdkDrawable     *drawable,
                                          GdkGCValues     *values,
@@ -2713,12 +2713,12 @@ gdk_window_constrain_size (GdkGeometry *geometry,
 GdkPointerHooks *
 gdk_set_pointer_hooks (const GdkPointerHooks *new_hooks)
 {
-  const GdkPointerHooks *result = current_pointer_hooks;
+  const GdkPointerHooks *result = _gdk_current_pointer_hooks;
 
   if (new_hooks)
-    current_pointer_hooks = new_hooks;
+    _gdk_current_pointer_hooks = new_hooks;
   else
-    current_pointer_hooks = &default_pointer_hooks;
+    _gdk_current_pointer_hooks = &default_pointer_hooks;
 
   return (GdkPointerHooks *)result;
 }
@@ -2745,7 +2745,7 @@ gdk_window_get_pointer (GdkWindow	  *window,
 {
   g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), NULL);
   
-  return current_pointer_hooks->get_pointer (window, x, y, mask); 
+  return _gdk_current_pointer_hooks->get_pointer (window, x, y, mask); 
 }
 
 /**
@@ -2767,7 +2767,7 @@ GdkWindow*
 gdk_window_at_pointer (gint *win_x,
 		       gint *win_y)
 {
-  return current_pointer_hooks->window_at_pointer (gdk_get_default_screen (), win_x, win_y);
+  return gdk_screen_get_window_at_pointer (gdk_get_default_screen (), win_x, win_y);
 }
 
 /**
@@ -2782,5 +2782,24 @@ GdkWindow *
 gdk_get_default_root_window (void)
 {
   return gdk_screen_get_root_window (gdk_get_default_screen ());
+}
+
+/**
+ * gdk_window_foreign_new:
+ * @anid: a native window handle.
+ * 
+ * Wraps a native window for the default display in a #GdkWindow.
+ * This may fail if the window has been destroyed.
+ *
+ * For example in the X backend, a native window handle is an Xlib
+ * <type>XID</type>.
+ * 
+ * Return value: the newly-created #GdkWindow wrapper for the 
+ *    native window or %NULL if the window has been destroyed.
+ **/
+GdkWindow *
+gdk_window_foreign_new (GdkNativeWindow anid)
+{
+  return gdk_window_foreign_new_for_display (gdk_get_default_display (), anid);
 }
 

@@ -112,6 +112,8 @@ static GdkColormap* gdk_win32_get_colormap   (GdkDrawable    *drawable);
 
 static gint         gdk_win32_get_depth      (GdkDrawable    *drawable);
 
+static GdkScreen *  gdk_win32_get_screen     (GdkDrawable    *drawable);
+
 static GdkVisual*   gdk_win32_get_visual     (GdkDrawable    *drawable);
 
 static void gdk_drawable_impl_win32_class_init (GdkDrawableImplWin32Class *klass);
@@ -208,6 +210,7 @@ gdk_drawable_impl_win32_class_init (GdkDrawableImplWin32Class *klass)
   drawable_class->get_colormap = gdk_win32_get_colormap;
 
   drawable_class->get_depth = gdk_win32_get_depth;
+  drawable_class->get_screen = gdk_win32_get_screen;
   drawable_class->get_visual = gdk_win32_get_visual;
 
   drawable_class->_copy_to_image = _gdk_win32_copy_to_image;
@@ -1444,6 +1447,12 @@ gdk_win32_get_depth (GdkDrawable *drawable)
   return gdk_drawable_get_depth (GDK_DRAWABLE_IMPL_WIN32 (drawable)->wrapper);
 }
 
+static GdkScreen*
+gdk_win32_get_screen (GdkDrawable *drawable)
+{
+  return gdk_get_default_screen ();
+}
+ 
 static GdkVisual*
 gdk_win32_get_visual (GdkDrawable *drawable)
 {

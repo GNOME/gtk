@@ -22,6 +22,7 @@
 #include "gdkpango.h"
 #include "gdkrgb.h"
 #include "gdkprivate.h"
+#include "gdkscreen.h"
 
 #define GDK_INFO_KEY "gdk-info"
 
@@ -822,4 +823,23 @@ gdk_pango_layout_get_clip_region (PangoLayout *layout,
   pango_layout_iter_free (iter);
 
   return clip_region;
+}
+
+/**
+ * gdk_pango_context_get:
+ * 
+ * Creates a #PangoContext for the default GDK screen.
+ *
+ * The context must be freed when you're finished with it.
+ * 
+ * When using GTK+, normally you should use gtk_widget_get_pango_context()
+ * instead of this function, to get the appropriate context for
+ * the widget you intend to render text onto.
+ * 
+ * Return value: a new #PangoContext for the default display
+ **/
+PangoContext *
+gdk_pango_context_get (void)
+{
+  return gdk_pango_context_get_for_screen (gdk_get_default_screen ());
 }

@@ -763,25 +763,6 @@ gdk_window_foreign_new_for_display (GdkDisplay     *display,
 }
 
 /**
- * gdk_window_foreign_new:
- * @anid: a native window handle.
- * 
- * Wraps a native window for the default display in a #GdkWindow.
- * This may fail if the window has been destroyed.
- *
- * For example in the X backend, a native window handle is an Xlib
- * <type>XID</type>.
- * 
- * Return value: the newly-created #GdkWindow wrapper for the 
- *    native window or %NULL if the window has been destroyed.
- **/
-GdkWindow *
-gdk_window_foreign_new (GdkNativeWindow anid)
-{
-  return gdk_window_foreign_new_for_display (gdk_get_default_display (), anid);
-}
-
-/**
  * gdk_window_lookup_for_display:
  * @display: the #GdkDisplay corresponding to the window handle
  * @anid: a native window handle.
@@ -2537,7 +2518,35 @@ _gdk_windowing_window_at_pointer (GdkScreen *screen,
                                   gint      *win_x,
 				  gint      *win_y)
 {
-  return gdk_screen_get_window_at_pointer (screen, win_x, win_y);
+  GdkWindow *window;
+  Window root;
+  Window xwindow;
+  Window xwindow_last = 0;
+  Display *xdisplay;
+  int rootx = -1, rooty = -1;
+  int winx, winy;
+  unsigned int xmask;
+
+  xwindow = GDK_SCREEN_XROOTWIN (screen);
+  xdisplay = GDK_SCREEN_XDISPLAY (screen);
+
+  XGrabServer (xdisplay);
+  while (xwindow)
+    {
+      xwindow_last = xwindow;
+      XQueryPointer (xdisplay, xwindow,
+		     &root, &xwindow, &rootx, &rooty, &winx, &winy, &xmask);
+    }
+  XUngrabServer (xdisplay);
+
+  window = gdk_window_lookup_for_display (GDK_SCREEN_DISPLAY(screen),
+					  xwindow_last);
+  if (win_x)
+    *win_x = window ? winx : -1;
+  if (win_y)
+    *win_y = window ? winy : -1;
+
+  return window;
 }
 
 /**
