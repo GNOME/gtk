@@ -84,7 +84,8 @@ when parts of a drawable were copied. This is not very useful.
 @GDK_SCROLL: 
 @GDK_WINDOW_STATE: 
 @GDK_SETTING: 
-@GDK_OWNER_CHANGE: 
+@GDK_OWNER_CHANGE: the owner of a selection has changed. This event type
+  was added in 2.6
 
 <!-- ##### ENUM GdkEventMask ##### -->
 <para>

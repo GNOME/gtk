@@ -419,6 +419,7 @@ only available if the X server supports the XFIXES extension.
 @selection: the atom identifying the selection
 @time: the timestamp of the event
 @selection_time: the time at which the selection ownership was taken over
+@Since: 2.6
 
 <!-- ##### ENUM GdkScrollDirection ##### -->
 <para>
