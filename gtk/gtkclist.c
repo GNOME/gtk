@@ -2430,7 +2430,10 @@ set_cell_contents (GtkCList    *clist,
 		   GdkBitmap   *mask)
 {
   GtkRequisition requisition;
-
+  gchar *old_text = NULL;
+  GdkPixmap *old_pixmap = NULL;
+  GdkBitmap *old_mask = NULL;
+  
   g_return_if_fail (clist != NULL);
   g_return_if_fail (GTK_IS_CLIST (clist));
   g_return_if_fail (clist_row != NULL);
@@ -2445,18 +2448,17 @@ set_cell_contents (GtkCList    *clist,
     case GTK_CELL_EMPTY:
       break;
     case GTK_CELL_TEXT:
-      g_free (GTK_CELL_TEXT (clist_row->cell[column])->text);
+      old_text = GTK_CELL_TEXT (clist_row->cell[column])->text;
       break;
     case GTK_CELL_PIXMAP:
-      gdk_pixmap_unref (GTK_CELL_PIXMAP (clist_row->cell[column])->pixmap);
+      old_pixmap = GTK_CELL_PIXMAP (clist_row->cell[column])->pixmap;
       if (GTK_CELL_PIXMAP (clist_row->cell[column])->mask)
-	gdk_bitmap_unref (GTK_CELL_PIXMAP (clist_row->cell[column])->mask);
+	old_mask = GTK_CELL_PIXMAP (clist_row->cell[column])->mask;
       break;
     case GTK_CELL_PIXTEXT:
-      g_free (GTK_CELL_PIXTEXT (clist_row->cell[column])->text);
-      gdk_pixmap_unref (GTK_CELL_PIXTEXT (clist_row->cell[column])->pixmap);
-      if (GTK_CELL_PIXTEXT (clist_row->cell[column])->mask)
-	gdk_bitmap_unref (GTK_CELL_PIXTEXT (clist_row->cell[column])->mask);
+      old_text = GTK_CELL_PIXTEXT (clist_row->cell[column])->text;
+      old_pixmap = GTK_CELL_PIXTEXT (clist_row->cell[column])->pixmap;
+      old_mask = GTK_CELL_PIXTEXT (clist_row->cell[column])->mask;
       break;
     case GTK_CELL_WIDGET:
       /* unimplimented */
@@ -2467,6 +2469,9 @@ set_cell_contents (GtkCList    *clist,
 
   clist_row->cell[column].type = GTK_CELL_EMPTY;
 
+  /* Note that pixmap and mask were already 'reffed by the caller
+   */
+  
   switch (type)
     {
     case GTK_CELL_TEXT:
@@ -2502,6 +2507,13 @@ set_cell_contents (GtkCList    *clist,
   if (clist->column[column].auto_resize &&
       !GTK_CLIST_AUTO_RESIZE_BLOCKED(clist))
     column_auto_resize (clist, clist_row, column, requisition.width);
+
+  if (old_text)
+    g_free (old_text);
+  if (old_pixmap)
+    gdk_pixmap_unref (old_pixmap);
+  if (old_mask)
+    gdk_pixmap_unref (old_mask);
 }
 
 static void
