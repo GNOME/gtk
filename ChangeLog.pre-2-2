@@ -1,3 +1,14 @@
+Mon Dec  3 10:23:07 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcalendar.c (gtk_calendar_size_request): Fix
+	some bugs with size requisition. (From Bill Haneman)
+
+	* gtk/gtkcalendar.c: Draw headers and selection in 
+	base/text[SELECTED] instead of fg/bg[SELECTED].
+
+	* gtk/gtkcalendar.c: Miscellaneous cleanups to drawing
+	code and formatting.
+
 2001-12-03  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtktextview.c (set_window_height): 
