@@ -1,3 +1,8 @@
+2002-01-15            Vitaly Tishkov       <tvv@sparc.spb.su>
+
+        * gtk/gtkstyle.c
+	a misprint in documentation for gtk_style_render_icon () is fixed
+
 Mon Jan 14 23:21:47 2002  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkmenuitem.c (gtk_menu_item_map): map event_window after

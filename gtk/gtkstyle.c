@@ -1766,7 +1766,7 @@ gtk_style_real_set_background (GtkStyle    *style,
  * @returns: a newly-created #GdkPixbuf containing the rendered icon
  *
  * Renders the icon specified by @source at the given @size 
- * according to the given parameterss and returns the result in a 
+ * according to the given parameters and returns the result in a 
  * pixbuf.
  */
 GdkPixbuf *
