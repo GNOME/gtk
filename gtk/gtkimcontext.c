@@ -269,7 +269,7 @@ gtk_im_context_set_client_window (GtkIMContext *context,
  * @attrs:      location to store the retrieved attribute list.
  *              When you are done with this list, you must
  *              unreference it with pango_attr_list_unref().
- * @cursor_pos: location to store position of cursor (in bytes)
+ * @cursor_pos: location to store position of cursor (in characters)
  *              within the preedit string.  
  * 
  * Retrieve the current preedit string for the input context,
@@ -522,7 +522,7 @@ gtk_im_context_get_surrounding (GtkIMContext *context,
  * Asks the widget that the input context is attached to to delete
  * characters around the cursor position by emitting the
  * GtkIMContext::delete_surrounding signal. Note that @offset and @n_chars
- * are in characters not in bytes, which differs from the usage other
+ * are in characters not in bytes which differs from the usage other
  * places in #GtkIMContext.
  *
  * In order to use this function, you should first call
