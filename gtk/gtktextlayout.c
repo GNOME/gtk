@@ -545,7 +545,6 @@ gtk_text_layout_get_lines (GtkTextLayout *layout,
                                    layout, top_y, first_line_y);
   if (first_btree_line == NULL)
     {
-      g_assert (top_y > 0);
       /* off the bottom */
       return NULL;
     }

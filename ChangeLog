@@ -1,3 +1,8 @@
+2001-05-21  Joe Shaw  <joe@ximian.com>
+
+	* gtk/gtklayout.c (gtk_text_layout_get_lines): Remove the assertion
+	that top_y needs to be >= 0.
+
 2001-05-11  Havoc Pennington  <hp@pobox.com>
 	
 	* gdk/x11/gdkmain-x11.c: Improve error messages for X errors and
