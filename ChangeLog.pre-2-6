@@ -1,3 +1,11 @@
+2005-01-01  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkbutton.c (gtk_button_set_image): Allow unsetting the
+	custom image by passing NULL.
+	(gtk_button_init): Initialize image_is_stock to TRUE, fixing
+	a problem with changing stock labels.  (#162273, Marcin 
+	Krzyzanowski)
+
 2005-01-01  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk/gtkmodules.c (get_module_path)

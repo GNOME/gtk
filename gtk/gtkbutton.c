@@ -445,6 +445,7 @@ gtk_button_init (GtkButton *button)
   priv->xalign = 0.5;
   priv->yalign = 0.5;
   priv->align_set = 0;
+  priv->image_is_stock = TRUE;
 }
 
 static void
@@ -1757,7 +1758,7 @@ gtk_button_set_image (GtkButton *button,
   GtkButtonPrivate *priv = GTK_BUTTON_GET_PRIVATE (button);
 
   priv->image = image;
-  priv->image_is_stock = FALSE;
+  priv->image_is_stock = (image == NULL);
 
   gtk_button_construct_child (button);
 
