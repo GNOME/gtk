@@ -1,3 +1,9 @@
+Tue Jul 30 16:36:53 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* tests/testgtk.c: Fix bug in the selection mode option
+	menus which were setting the wrong values. 
+	(#85763, Manuel Op de Coul)
+
 Tue Jul 30 15:39:06 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* demos/Makefile.am: Honor GDK_PIXBUF_CSOURCE from
