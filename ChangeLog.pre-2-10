@@ -1,3 +1,7 @@
+Thu Apr  2 13:04:37 BST 1998 Tony Gale <gale@gtk.org>
+
+	* docs/gtkfaq.sgml: add question on failing GIMP configure
+
 Tue Mar 31 15:41:57 PST 1998 Shawn T. Amundson
 
 	* Makefile.am:

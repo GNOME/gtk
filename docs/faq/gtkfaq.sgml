@@ -233,6 +233,27 @@ the libraries libgtk, libgdk, libglib, or libgck.  If they do exist, remove them
 and reinstall gtk+.
 </itemize>
 
+<!-- ----------------------------------------------------------------- -->
+<sect1>When installing The GIMP, configure reports that it can't find GTK.
+<p>
+There are two common reasons for this:
+<itemize>
+<item>You have an old version of GTK installed somewhere. RedHat 5.0, for 
+example, installs an older copy of GTK that will not work with the latest 
+versions of GIMP. You should remove this old copy, but note that in the case
+of RedHat 5.0 this will break the <tt/control-panel/ applications.
+<P>
+<item><tt/gtk-config/ (or another component of GTK) isn't in your path, or
+there is an old version on your system. Type:
+<verb>
+gtk-config --version
+</verb>
+to check for both of these. This should return a value of at least 0.99.8
+for things to work properly with GIMP 0.99.23. If it returns a value
+different from what you expect, then you have an old version of GTK on
+your system.
+</itemize>
+
 <!-- ***************************************************************** -->
 <sect>Development of GTK+
 <!-- ***************************************************************** -->
@@ -737,10 +758,10 @@ After you create your window, do gtk_grab_add(my_window). And after
 closing the window do gtk_grab_remove(my_window).
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>Why doesn't my progressbar update?
+<sect1>Why doesn't my widget (e.g. progressbar) update?
 <p>
 
-You are probably doing all the progressbar changes within a function 
+You are probably doing all the changes within a function 
 without returning control to gtk_main. Most drawing updates are only 
 placed on a queue, which is processed within gtk_main. You can
 force the drawing queue to be processed using something like:
@@ -750,7 +771,7 @@ while (gtk_events_pending())
         gtk_main_iteration();
 </verb></tscreen>
 
-inside you're function that changes the progress bar.
+inside you're function that changes the widget.
 
 What the above snippet does is run all pending events and high priority 
 idle functions, then return immediately (the drawing is done in a 
