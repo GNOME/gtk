@@ -255,12 +255,14 @@ gtk_decorated_window_realize (GtkWindow   *window)
 {
   GtkWindowDecoration *deco = get_decoration (window);
   GtkWidget *widget = GTK_WIDGET (window);
+  PangoFontDescription *font_desc;
 
   deco->title_layout = gtk_widget_create_pango_layout (widget,
 						       (window->title)?window->title:"");
-  
-  pango_layout_set_font_description (deco->title_layout,
-				     pango_font_description_from_string(DECORATION_TITLE_FONT));
+
+  font_desc = pango_font_description_from_string(DECORATION_TITLE_FONT);
+  pango_layout_set_font_description (deco->title_layout, font_desc);
+  pango_font_description_free (font_desc);
   
   gdk_fb_window_set_child_handler (window->frame,
 				   gtk_decorated_window_inner_change,
@@ -674,7 +676,7 @@ gtk_decorated_window_move_resize_window (GtkWindow   *window,
   GtkWindowDecoration *deco = get_decoration (window);
   
   deco->real_inner_move = TRUE;
-  gdk_window_move_resize (GTK_WIDGET (window)->window,
+  gdk_window_move_resize (widget->window,
 			  x, y, width, height);
 }
 #else

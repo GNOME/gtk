@@ -1,3 +1,8 @@
+2001-01-22    <alexl@redhat.com>
+
+	* gtk/gtkwindow-decorate.c (gtk_decorated_window_realize):
+	Don't leak the PangoFontDescriptor.
+
 Sun Jan 21 09:58:00 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_scroll_to_point): Make fail
