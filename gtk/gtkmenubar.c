@@ -532,13 +532,13 @@ _gtk_menu_bar_cycle_focus (GtkMenuBar       *menubar,
 			   GtkDirectionType  dir)
 {
   GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (menubar));
+  GtkMenuItem *to_activate = NULL;
 
   if (GTK_WIDGET_TOPLEVEL (toplevel))
     {
       GList *tmp_menubars = get_viewable_menu_bars (GTK_WINDOW (toplevel));
       GList *menubars;
       GList *current;
-      GtkMenuBar *new;
 
       menubars = _gtk_container_focus_sort (GTK_CONTAINER (toplevel), tmp_menubars,
 					    dir, GTK_WIDGET (menubar));
@@ -547,26 +547,22 @@ _gtk_menu_bar_cycle_focus (GtkMenuBar       *menubar,
       if (menubars)
 	{
 	  current = g_list_find (menubars, menubar);
-	  if (current && current->next)
-	    new = current->next->data;
-	  else
-	    new = menubars->data;
-	  
-	  if (new != menubar)
-	    {
-	      GtkMenuShell *new_menushell = GTK_MENU_SHELL (new);
 
+	  if (current && current->next)
+	    {
+	      GtkMenuShell *new_menushell = GTK_MENU_SHELL (current->next->data);
 	      if (new_menushell->children)
-		{
-		  g_signal_emit_by_name (menubar, "cancel", 0);
-		  gtk_signal_emit_by_name (GTK_OBJECT (new_menushell->children->data),
-					   "activate_item");
-		}
+		to_activate = new_menushell->children->data;
 	    }
 	}
 	  
       g_list_free (menubars);
     }
+
+  g_signal_emit_by_name (menubar, "cancel", 0);
+
+  if (to_activate)
+    g_signal_emit_by_name (to_activate, "activate_item");
 }
 
 static GtkShadowType

@@ -1,3 +1,12 @@
+Thu Jul 25 14:14:46 2002  Owen Taylor  <otaylor@redhat.com>
+
+        * gtk/gtkmenushell.c: When a menubar is up, use F10 to cycle
+	menubars, not Control-Tab (#87159, Calum Benson. Patch from
+	Padraig O'Briain.)
+	
+	* gtk/gtkmenubar.c: When cycling menu bars, cancel
+	after the last instead of wrapping around.
+
 Thu Jul 25 11:57:57 2002  Owen Taylor  <otaylor@redhat.com>
 
 	[ Patch from Padraig O'Briain, #87904 ]

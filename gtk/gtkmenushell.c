@@ -320,19 +320,11 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
 				GTK_TYPE_BOOL,
 				FALSE);
   gtk_binding_entry_add_signal (binding_set,
-				GDK_Tab, GDK_CONTROL_MASK,
+				GDK_F10, 0,
 				"cycle_focus", 1,
                                 GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_FORWARD);
   gtk_binding_entry_add_signal (binding_set,
-				GDK_KP_Tab, GDK_CONTROL_MASK,
-				"cycle_focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_FORWARD);
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_Tab, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
-				"cycle_focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_BACKWARD);
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KP_Tab, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
+				GDK_F10, GDK_SHIFT_MASK,
 				"cycle_focus", 1,
                                 GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_BACKWARD);
 }
