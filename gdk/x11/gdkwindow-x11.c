@@ -3349,6 +3349,7 @@ _gdk_x11_window_set_user_time (GdkWindow *window,
 {
   GdkDisplay *display;
   GdkDisplayX11 *display_x11;
+  glong timestamp_long = (glong)timestamp;
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -3362,10 +3363,10 @@ _gdk_x11_window_set_user_time (GdkWindow *window,
   XChangeProperty (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XID (window),
                    gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_USER_TIME"),
                    XA_CARDINAL, 32, PropModeReplace,
-                   (guchar *)&timestamp, 1);
+                   (guchar *)&timestamp_long, 1);
 
-  if (timestamp != GDK_CURRENT_TIME)
-    display_x11->user_time = timestamp;
+  if (timestamp_long != GDK_CURRENT_TIME)
+    display_x11->user_time = timestamp_long;
 }
 
 /**
