@@ -1,3 +1,17 @@
+2002-04-18  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk-pixbuf/Makefile.am (uninstall-libtool-import-lib)
+	* gdk/Makefile.am (uninstall-libtool-import-lib): Fix typo,
+	thanks to David Sterba for noticing.
+
+	* gtk/gtkmain.h
+	* gtk/gtkmain.c (gtk_init_abi_check, gtk_init_check_abi_check): In
+	GTK+ 2.0 the GtkWindow struct actually is the same size in gcc on
+	Win32 whether compiled with -fnative-struct or not. Unfortunately
+	this wan't noticed until now. So, from now on, check some other
+	struct, too, for which the use of -fnative-struct still
+	matters. GtkBox is one such.
+
 Thu Apr 18 00:23:31 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreemodelsort.c

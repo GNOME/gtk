@@ -42,7 +42,7 @@ gdk_win32_symbols = -export-symbols gdk.def
 install-libtool-import-lib:
 	$(INSTALL) .libs/libgdk-win32-$(GTK_API_VERSION).dll.a $(DESTDIR)$(libdir)
 uninstall-libtool-import-lib:
-	-rm $(DESTDIR)$(libdir)/libdk-win32-$(GTK_API_VERSION).dll.a
+	-rm $(DESTDIR)$(libdir)/libgdk-win32-$(GTK_API_VERSION).dll.a
 else
 install-libtool-import-lib:
 uninstall-libtool-import-lib:

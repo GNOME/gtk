@@ -17,7 +17,7 @@ gdk_pixbuf-win32res.lo : gdk_pixbuf.rc
 install-libtool-import-lib:
 	$(INSTALL) .libs/libgdk_pixbuf-$(GTK_API_VERSION).dll.a $(DESTDIR)$(libdir)
 uninstall-libtool-import-lib:
-	-rm $(DESTDIR)$(libdir)/libdk_pixbuf-$(GTK_API_VERSION).dll.a
+	-rm $(DESTDIR)$(libdir)/libgdk_pixbuf-$(GTK_API_VERSION).dll.a
 else
 install-libtool-import-lib:
 uninstall-libtool-import-lib:
