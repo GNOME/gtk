@@ -1,3 +1,7 @@
+1999-11-02 Elliot Lee <sopwith@redhat.com>
+	* src/gdk-pixbuf-loader.[ch], src/gdk-pixbuf-io.h: Make the arguments to the
+	write/load_increment operations const-correct.
+
 1999-11-02  Federico Mena Quintero  <federico@redhat.com>
 
 	* src/gnome-canvas-pixbuf.c (gnome_canvas_pixbuf_point):

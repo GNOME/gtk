@@ -273,7 +273,7 @@ gdk_pixbuf_loader_load_module(GdkPixbufLoader *loader)
 }
 
 static int
-gdk_pixbuf_loader_eat_header_write (GdkPixbufLoader *loader, guchar *buf, size_t count)
+gdk_pixbuf_loader_eat_header_write (GdkPixbufLoader *loader, const gchar *buf, size_t count)
 {
 	int nbytes;
 	GdkPixbufLoaderPrivate *priv = loader->private;
@@ -303,7 +303,7 @@ gdk_pixbuf_loader_eat_header_write (GdkPixbufLoader *loader, guchar *buf, size_t
  * cannot parse the buf.
  **/
 gboolean
-gdk_pixbuf_loader_write (GdkPixbufLoader *loader, guchar *buf, size_t count)
+gdk_pixbuf_loader_write (GdkPixbufLoader *loader, const gchar *buf, size_t count)
 {
 	GdkPixbufLoaderPrivate *priv;
 

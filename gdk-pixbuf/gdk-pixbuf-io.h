@@ -51,7 +51,7 @@ struct _GdkPixbufModule {
         /* Incremental loading */
         gpointer   (* begin_load)    (ModulePreparedNotifyFunc func, gpointer user_data);
         void       (* stop_load)     (gpointer context);
-        gboolean   (* load_increment)(gpointer context, guchar *buf, guint size);
+        gboolean   (* load_increment)(gpointer context, const gchar *buf, guint size);
 };
 
 
