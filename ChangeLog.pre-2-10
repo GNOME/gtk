@@ -1,5 +1,7 @@
 2004-07-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkuimanager.c: Warning fixes.
+
 	* gdk/linux-fb/gdkwindow-fb.c (gdk_window_set_background): Fix
 	prototype mismatch.  (#148589, Nicolas Deves)
 
