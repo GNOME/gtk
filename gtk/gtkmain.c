@@ -254,8 +254,10 @@ void
 gtk_init (int	 *argc,
 	  char ***argv)
 {
-  GSList *gtk_modinit_funcs = NULL;
+  GSList *gtk_modules = NULL;
+  GSList *slist;
   gchar *current_locale;
+  gchar *env_string = NULL;
 
   if (gtk_initialized)
     return;
@@ -273,14 +275,32 @@ gtk_init (int	 *argc,
   gdk_init (argc, argv);
   
 #ifdef G_ENABLE_DEBUG
-  {
-    gchar *debug_string = getenv("GTK_DEBUG");
-    if (debug_string != NULL)
-      gtk_debug_flags = g_parse_debug_string (debug_string,
+  env_string = getenv ("GTK_DEBUG");
+  if (env_string != NULL)
+    {
+      gtk_debug_flags = g_parse_debug_string (env_string,
 					      gtk_debug_keys,
 					      gtk_ndebug_keys);
-  }
+      env_string = NULL;
+    }
 #endif	/* G_ENABLE_DEBUG */
+
+  env_string = getenv ("GTK_MODULES");
+  if (env_string)
+    {
+      gchar **modules, **as;
+
+      modules = g_strsplit (env_string, ":", -1);
+      for (as = modules; *as; as++)
+	{
+	  if (**as)
+	    gtk_modules = g_slist_prepend (gtk_modules, *as);
+	  else
+	    g_free (*as);
+	}
+      g_free (modules);
+      env_string = NULL;
+    }
 
   if (argc && argv)
     {
@@ -291,8 +311,6 @@ gtk_init (int	 *argc,
 	  if (strcmp ("--gtk-module", (*argv)[i]) == 0 ||
 	      strncmp ("--gtk-module=", (*argv)[i], 13) == 0)
 	    {
-	      GModule *module = NULL;
-	      GtkModuleInitFunc modinit_func = NULL;
 	      gchar *module_name = (*argv)[i] + 12;
 	      
 	      if (*module_name == '=')
@@ -303,43 +321,9 @@ gtk_init (int	 *argc,
 		  i += 1;
 		  module_name = (*argv)[i];
 		}
-	      if (module_name[0] == '/' ||
-		  (module_name[0] == 'l' &&
-		   module_name[1] == 'i' &&
-		   module_name[2] == 'b'))
-		module_name = g_strdup (module_name);
-	      else
-		module_name = g_strconcat ("lib", module_name, ".so", NULL);
 	      (*argv)[i] = NULL;
-	      
-	      if (g_module_supported ())
-		{
-		  module = g_module_open (module_name, G_MODULE_BIND_LAZY);
-		  if (module &&
-		      g_module_symbol (module, "gtk_module_init", (gpointer*) &modinit_func) &&
-		      modinit_func)
-		    {
-		      if (!g_slist_find (gtk_modinit_funcs, modinit_func))
-			{
-			  g_module_make_resident (module);
-			  gtk_modinit_funcs = g_slist_prepend (gtk_modinit_funcs, modinit_func);
-			}
-		      else
-			{
-			  g_module_close (module);
-			  module = NULL;
-			}
-		    }
-		}
-	      if (!modinit_func)
-		{
-		  g_warning ("Failed to load module \"%s\": %s",
-			     module ? g_module_name (module) : module_name,
-			     g_module_error ());
-		  if (module)
-		    g_module_close (module);
-		}
-	      g_free (module_name);
+
+	      gtk_modules = g_slist_prepend (gtk_modules, g_strdup (module_name));
 	    }
 	  else if (strcmp ("--g-fatal-warnings", (*argv)[i]) == 0)
 	    {
@@ -436,7 +420,58 @@ gtk_init (int	 *argc,
   GTK_NOTE (MISC,
 	    g_message ("%s multi-byte string functions.", 
 		       gtk_use_mb ? "Using" : "Not using"));
-  
+
+
+  /* load gtk modules */
+  gtk_modules = g_slist_reverse (gtk_modules);
+  for (slist = gtk_modules; slist; slist = slist->next)
+    {
+      gchar *module_name;
+      GModule *module = NULL;
+      GtkModuleInitFunc modinit_func = NULL;
+      
+      module_name = slist->data;
+      slist->data = NULL;
+      if (!(module_name[0] == '/' ||
+	    (module_name[0] == 'l' &&
+	     module_name[1] == 'i' &&
+	     module_name[2] == 'b')))
+	{
+	  gchar *old = module_name;
+	  
+	  module_name = g_strconcat ("lib", module_name, ".so", NULL);
+	  g_free (old);
+	}
+      if (g_module_supported ())
+	{
+	  module = g_module_open (module_name, G_MODULE_BIND_LAZY);
+	  if (module &&
+	      g_module_symbol (module, "gtk_module_init", (gpointer*) &modinit_func) &&
+	      modinit_func)
+	    {
+	      if (!g_slist_find (gtk_modules, modinit_func))
+		{
+		  g_module_make_resident (module);
+		  slist->data = modinit_func;
+		}
+	      else
+		{
+		  g_module_close (module);
+		  module = NULL;
+		}
+	    }
+	}
+      if (!modinit_func)
+	{
+	  g_warning ("Failed to load module \"%s\": %s",
+		     module ? g_module_name (module) : module_name,
+		     g_module_error ());
+	  if (module)
+	    g_module_close (module);
+	}
+      g_free (module_name);
+    }
+
   /* Initialize the default visual and colormap to be
    *  used in creating widgets. (We want to use the system
    *  defaults so as to be nice to the colormap).
@@ -457,24 +492,19 @@ gtk_init (int	 *argc,
    */
   gtk_initialized = TRUE;
 
-  /* initialize modules
+  /* initialize gtk modules
    */
-  if (gtk_modinit_funcs)
+  for (slist = gtk_modules; slist; slist = slist->next)
     {
-      GSList *slist;
-
-      slist = gtk_modinit_funcs;
-      while (slist)
+      if (slist->data)
 	{
 	  GtkModuleInitFunc modinit;
-
+	  
 	  modinit = slist->data;
 	  modinit (argc, argv);
-	  slist = slist->next;
 	}
-      
-      g_slist_free (gtk_modinit_funcs);
     }
+  g_slist_free (gtk_modules);
 }
 
 void

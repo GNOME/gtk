@@ -1,3 +1,9 @@
+Sun Oct 25 20:27:02 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkmain.c (gtk_init): support an environment variable
+	GTK_MODULES= which takes a colon sperated list of module names
+	automatically loaded at gtk_init() startup.
+
 Sun Oct 25 08:04:33 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwidget.c: added more g_return_if_fail() statements.
