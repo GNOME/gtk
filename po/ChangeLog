@@ -1,3 +1,7 @@
+2000-12-18  Christopher R. Gabriel  <cgabriel@softwarelibero.org>
+
+	* it.po: Updated italian translation
+
 2000-12-14  Tor Lillqvist  <tml@iki.fi>
 
 	* makefile.mingw: Simplify, now that the .po files are already in
