@@ -182,6 +182,9 @@ PangoLayout* gtk_entry_get_layout               (GtkEntry      *entry);
 void         gtk_entry_get_layout_offsets       (GtkEntry      *entry,
                                                  gint          *x,
                                                  gint          *y);
+void       gtk_entry_set_alignment              (GtkEntry      *entry,
+                                                 gfloat         xalign);
+gfloat     gtk_entry_get_alignment              (GtkEntry      *entry);
 
 void                gtk_entry_set_completion (GtkEntry           *entry,
                                               GtkEntryCompletion *completion);

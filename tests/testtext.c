@@ -502,10 +502,12 @@ fill_example_buffer (GtkTextBuffer *buffer)
                 "underline", PANGO_UNDERLINE_SINGLE,
                 NULL);
 
+  tag = gtk_text_buffer_create_tag (buffer, "underline_error", NULL);
+
   setup_tag (tag);
       
   g_object_set (tag,
-                "underline", PANGO_UNDERLINE_SINGLE,
+                "underline", PANGO_UNDERLINE_ERROR,
                 NULL);
 
   tag = gtk_text_buffer_create_tag (buffer, "centered", NULL);
@@ -579,6 +581,11 @@ fill_example_buffer (GtkTextBuffer *buffer)
       gtk_text_buffer_get_iter_at_line_offset (buffer, &iter2, 1, 16);
 
       gtk_text_buffer_apply_tag_by_name (buffer, "underline", &iter, &iter2);
+
+      gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, 1, 4);
+      gtk_text_buffer_get_iter_at_line_offset (buffer, &iter2, 1, 7);
+
+      gtk_text_buffer_apply_tag_by_name (buffer, "underline_error", &iter, &iter2);
 
       gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, 1, 14);
       gtk_text_buffer_get_iter_at_line_offset (buffer, &iter2, 1, 24);

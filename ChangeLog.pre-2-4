@@ -1,3 +1,16 @@
+Sun Feb 29 22:01:49 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.[ch]: Add gtk_entry_set_alignment() 
+	to allow right-aligned entries and a "xalign" 
+	property. (#59799, patch from Egon Andersen and 
+	Steffen Gutmann)
+
+	* gtk/gtkmisc.c (gtk_misc_class_init): Use improved
+	xalign property description here too.
+
+	* tests/testtext.c: UNDERLINE_ERROR test addition
+	from Nicolas Settons' patch.
+
 Sun Feb 29 20:34:06 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwindow.[ch] gtk/gtkmenushellx.c: export

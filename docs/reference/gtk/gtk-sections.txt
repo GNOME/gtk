@@ -1006,6 +1006,8 @@ gtk_entry_set_activates_default
 gtk_entry_set_has_frame
 gtk_entry_set_width_chars
 gtk_entry_get_invisible_char
+gtk_entry_set_alignment
+gtk_entry_get_alignment
 gtk_entry_get_layout
 gtk_entry_get_layout_offsets
 gtk_entry_get_max_length

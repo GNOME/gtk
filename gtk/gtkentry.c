@@ -65,6 +65,15 @@
 /* Maximum size of text buffer, in bytes */
 #define MAX_SIZE G_MAXUSHORT
 
+typedef struct _GtkEntryPrivate GtkEntryPrivate;
+
+#define GTK_ENTRY_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_ENTRY, GtkEntryPrivate))
+
+struct _GtkEntryPrivate 
+{
+  gfloat xalign;
+};
+
 enum {
   ACTIVATE,
   POPULATE_POPUP,
@@ -90,7 +99,8 @@ enum {
   PROP_ACTIVATES_DEFAULT,
   PROP_WIDTH_CHARS,
   PROP_SCROLL_OFFSET,
-  PROP_TEXT
+  PROP_TEXT,
+  PROP_XALIGN
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -535,6 +545,16 @@ gtk_entry_class_init (GtkEntryClass *class)
 							P_("The contents of the entry"),
 							"",
 							G_PARAM_READABLE | G_PARAM_WRITABLE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_XALIGN,
+                                   g_param_spec_float ("xalign",
+						       P_("X align"),
+						       P_("The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL layouts"),
+						       0.0,
+						       1.0,
+						       0.0,
+						       G_PARAM_READABLE | G_PARAM_WRITABLE));
   
   signals[POPULATE_POPUP] =
     g_signal_new ("populate_popup",
@@ -767,6 +787,8 @@ gtk_entry_class_init (GtkEntryClass *class)
 						       P_("Whether to select the contents of an entry when it is focused"),
 						       TRUE,
 						       G_PARAM_READWRITE));
+
+  g_type_class_add_private (gobject_class, sizeof (GtkEntryPrivate));
 }
 
 static void
@@ -842,6 +864,10 @@ gtk_entry_set_property (GObject         *object,
       gtk_entry_set_text (entry, g_value_get_string (value));
       break;
 
+    case PROP_XALIGN:
+      gtk_entry_set_alignment (entry, g_value_get_float (value));
+      break;
+
     case PROP_SCROLL_OFFSET:
     case PROP_CURSOR_POSITION:
     default:
@@ -893,6 +919,9 @@ gtk_entry_get_property (GObject         *object,
     case PROP_TEXT:
       g_value_set_string (value, gtk_entry_get_text (entry));
       break;
+    case PROP_XALIGN:
+      g_value_set_float (value, gtk_entry_get_alignment (entry));
+      break;
       
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -903,6 +932,8 @@ gtk_entry_get_property (GObject         *object,
 static void
 gtk_entry_init (GtkEntry *entry)
 {
+  GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (entry);
+  
   GTK_WIDGET_SET_FLAGS (entry, GTK_CAN_FOCUS);
 
   entry->text_size = MIN_SIZE;
@@ -917,6 +948,7 @@ gtk_entry_init (GtkEntry *entry)
   entry->is_cell_renderer = FALSE;
   entry->editing_canceled = FALSE;
   entry->has_frame = TRUE;
+  priv->xalign = 0.0;
 
   gtk_drag_dest_set (GTK_WIDGET (entry),
                      GTK_DEST_DEFAULT_HIGHLIGHT,
@@ -3016,10 +3048,12 @@ gtk_entry_get_cursor_locations (GtkEntry   *entry,
 static void
 gtk_entry_adjust_scroll (GtkEntry *entry)
 {
+  GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (entry);
   gint min_offset, max_offset;
-  gint text_area_width;
+  gint text_area_width, text_width;
   gint strong_x, weak_x;
   gint strong_xoffset, weak_xoffset;
+  gfloat xalign;
   PangoLayout *layout;
   PangoLayoutLine *line;
   PangoRectangle logical_rect;
@@ -3038,14 +3072,21 @@ gtk_entry_adjust_scroll (GtkEntry *entry)
   /* Display as much text as we can */
 
   if (gtk_widget_get_direction (GTK_WIDGET (entry)) == GTK_TEXT_DIR_LTR)
+      xalign = priv->xalign;
+  else
+      xalign = 1.0 - priv->xalign;
+
+  text_width = PANGO_PIXELS(logical_rect.width);
+
+  if (text_width > text_area_width)
     {
       min_offset = 0;
-      max_offset = MAX (min_offset, logical_rect.width / PANGO_SCALE - text_area_width);
+      max_offset = text_width - text_area_width;
     }
   else
     {
-      max_offset = logical_rect.width / PANGO_SCALE - text_area_width;
-      min_offset = MIN (0, max_offset);
+      min_offset = (text_width - text_area_width) * xalign;
+      max_offset = min_offset;
     }
 
   entry->scroll_offset = CLAMP (entry->scroll_offset, min_offset, max_offset);
@@ -3940,6 +3981,61 @@ gtk_entry_get_layout_offsets (GtkEntry *entry,
 
   if (y)
     *y += text_area_y;
+}
+
+
+/**
+ * gtk_entry_set_alignment:
+ * @entry: a #GtkEntry
+ * @xalign: The horizontal alignment, from 0 (left) to 1 (right).
+ *          Reversed for RTL layouts
+ * 
+ * Sets the alignment for the contents of the entry. This controls
+ * the horizontal positioning of the contents when the displayed
+ * text is shorter than the width of the entry.
+ **/
+void
+gtk_entry_set_alignment (GtkEntry *entry, gfloat xalign)
+{
+  GtkEntryPrivate *priv;
+  
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+
+  priv = GTK_ENTRY_GET_PRIVATE (entry);
+
+  if (xalign < 0.0)
+    xalign = 0.0;
+  else if (xalign > 1.0)
+    xalign = 1.0;
+
+  if (xalign != priv->xalign)
+    {
+      priv->xalign = xalign;
+
+      gtk_entry_recompute (entry);
+
+      g_object_notify (G_OBJECT (entry), "xalign");
+    }
+}
+
+/**
+ * gtk_entry_get_alignment:
+ * @entry: a #GtkEntry
+ * 
+ * Gets the value set by gtk_entry_set_alignment().
+ * 
+ * Return value: the alignment
+ **/
+gfloat
+gtk_entry_get_alignment (GtkEntry *entry)
+{
+  GtkEntryPrivate *priv;
+  
+  g_return_val_if_fail (GTK_IS_ENTRY (entry), 0.0);
+
+  priv = GTK_ENTRY_GET_PRIVATE (entry);
+
+  return priv->xalign;
 }
 
 /* Quick hack of a popup menu
