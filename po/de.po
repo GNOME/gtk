@@ -861,7 +861,7 @@ msgstr "_Lizenz"
 #: gtk/gtkaboutdialog.c:681
 #, c-format
 msgid "About %s"
-msgstr "Über %s"
+msgstr "Info zu %s"
 
 #: gtk/gtkaboutdialog.c:1875
 msgid "Credits"
@@ -1838,7 +1838,7 @@ msgstr "Frage"
 #.
 #: gtk/gtkstock.c:294
 msgid "_About"
-msgstr "_Über"
+msgstr "_Info"
 
 #: gtk/gtkstock.c:296
 msgid "_Apply"
@@ -2259,7 +2259,7 @@ msgid "Could not get information for file '%s': %s"
 msgstr "Es konnten keine Informationen zur Datei »%s« abgerufen werden: %s"
 
 #~ msgid "progress bar label|%d %%"
-#~ msgstr "Beschriftung der Fortschrittsanzeige|%d %%"
+#~ msgstr "Titel des Fortschrittsbalkens|%d %%"
 
 #~ msgid "Input Methods"
 #~ msgstr "Eingabemethoden"
