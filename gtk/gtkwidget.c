@@ -5509,25 +5509,28 @@ gtk_widget_set_usize_internal (GtkWidget *widget,
 			       gint       height)
 {
   GtkWidgetAuxInfo *aux_info;
+  gboolean changed = FALSE;
   
   g_return_if_fail (GTK_IS_WIDGET (widget));
   
   g_object_freeze_notify (G_OBJECT (widget));
 
-  aux_info =_gtk_widget_get_aux_info (widget, TRUE);
+  aux_info = _gtk_widget_get_aux_info (widget, TRUE);
   
-  if (width > -2)
+  if (width > -2 && aux_info->width != width)
     {
       g_object_notify (G_OBJECT (widget), "width_request");
       aux_info->width = width;
+      changed = TRUE;
     }
-  if (height > -2)
+  if (height > -2 && aux_info->height != height)
     {
       g_object_notify (G_OBJECT (widget), "height_request");  
       aux_info->height = height;
+      changed = TRUE;
     }
   
-  if (GTK_WIDGET_VISIBLE (widget))
+  if (GTK_WIDGET_VISIBLE (widget) && changed)
     gtk_widget_queue_resize (widget);
 
   g_object_thaw_notify (G_OBJECT (widget));
