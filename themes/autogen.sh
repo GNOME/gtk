@@ -28,6 +28,7 @@ if test -z "$*"; then
 fi
 
 aclocal $ACLOCAL_FLAGS
+automake --add-missing
 autoconf
 ./configure "$@"
 

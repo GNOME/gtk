@@ -1,6 +1,7 @@
 pixmapdir = $(datadir)/gtk/themes/pixmap
 dummy =
 pixmap_DATA = \
+	ICON.png \
 	arrow_down1.png \
 	arrow_down2.png \
 	arrow_down3.png \
@@ -68,6 +69,7 @@ pixmap_DATA = \
 	shadow2.png \
 	trough.png \
 	vline.png \
+	README \
 	gtkrc \
 	$(dummy)
 EXTRA_DIST = $(pixmap_DATA)

@@ -44,4 +44,7 @@ AC_FUNC_MMAP
 AC_OUTPUT([
 Makefile
 pixmap_data/Makefile
+motif_data/Makefile
+win95_data/Makefile
+metal_data/Makefile
 ])
