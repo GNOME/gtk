@@ -1,3 +1,8 @@
+Wed Jun  2 01:56:02 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkmenu.c: Fix the stay up algorithm for combo boxes to
+	better handle the "click" case. bug  Better fix for #141169.
+
 2004-06-02  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_search_init): Bail out if the
@@ -58,6 +63,8 @@ Tue Jun  1 22:19:55 2004  Matthias Clasen  <maclas@gmx.de>
 	Mark McLoughlin)
 
 Wed Jun  2 00:39:58 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	Bug #141169.
 
 	* gtk/gtkmenushell.c (gtk_menu_shell_button_release): Make menus
 	only stay up if you release within 500 milliseconds.

@@ -73,11 +73,16 @@ struct _GtkMenuAttachData
   GtkMenuDetachFunc detacher;
 };
 
+typedef enum {
+  NONE,
+  SEEN_MOTION,
+  SEEN_MOTION_ENTER,
+  SEEN_MOTION_ENTER_MOTION
+} SelectState;
+
 struct _GtkMenuPrivate 
 {
-  gboolean seen_motion;
-  gboolean seen_enter;
-    
+  SelectState select_state;
   gboolean have_position;
   gint x;
   gint y;
@@ -1280,8 +1285,7 @@ gtk_menu_popup (GtkMenu		    *menu,
   
   menu_shell->parent_menu_shell = parent_menu_shell;
 
-  priv->seen_motion = FALSE;
-  priv->seen_enter = FALSE;
+  priv->select_state = NONE;
   
   /* Find the last viewable ancestor, and make an X grab on it
    */
@@ -2728,11 +2732,18 @@ gtk_menu_motion_notify  (GtkWidget	   *widget,
       GtkMenuPrivate *priv = gtk_menu_get_private (GTK_MENU (widget));
       
       gtk_menu_handle_scrolling (GTK_MENU (widget), TRUE);
-      priv->seen_motion = TRUE;
-      if (priv->seen_enter)
+
+      if (priv->select_state == NONE)
 	{
-	  /* After having seen both a motion event and an enter event,
-	   * button releases should be interpreted to mean "activate"
+	  priv->select_state = SEEN_MOTION;
+	}
+      else if (priv->select_state == SEEN_MOTION_ENTER)
+	{
+	  priv->select_state = SEEN_MOTION_ENTER_MOTION;
+	  
+	  /* After having seen both a motion, an enter, and a motion
+	   * in that order, button releases should be interpreted
+	   * as "activate".
 	   */
 	  
 	  GTK_MENU_SHELL (widget)->activate_time = 0;
@@ -2965,6 +2976,7 @@ gtk_menu_enter_notify (GtkWidget        *widget,
 {
   GtkWidget *menu_item;
 
+  menu_item = gtk_get_event_widget ((GdkEvent*) event);
   if (widget && GTK_IS_MENU (widget))
     {
       GtkMenuShell *menu_shell = GTK_MENU_SHELL (widget);
@@ -2973,21 +2985,14 @@ gtk_menu_enter_notify (GtkWidget        *widget,
       if (!menu_shell->ignore_enter)
 	gtk_menu_handle_scrolling (GTK_MENU (widget), TRUE);
 
-      priv->seen_enter = TRUE;
-      if (priv->seen_motion)
-	{
-	  /* After having seen both a motion event and an enter event,
-	   * button releases should be interpreted to mean "activate"
-	   */
-	  menu_shell->activate_time = 0;
-	}
+      if (priv->select_state == SEEN_MOTION)
+	priv->select_state = SEEN_MOTION_ENTER;
     }
   
   /* If this is a faked enter (see gtk_menu_motion_notify), 'widget'
    * will not correspond to the event widget's parent.  Check to see
    * if we are in the parent's navigation region.
    */
-  menu_item = gtk_get_event_widget ((GdkEvent*) event);
   if (menu_item && GTK_IS_MENU_ITEM (menu_item) && GTK_IS_MENU (menu_item->parent) &&
       gtk_menu_navigating_submenu (GTK_MENU (menu_item->parent), event->x_root, event->y_root))
     return TRUE;
