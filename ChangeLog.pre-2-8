@@ -1,3 +1,8 @@
+2003-01-20  Pablo Saratxaga  <pablo@mandrakesoft.com>
+
+	* configure.in: Added Amharic (am), Macedonian (mk)
+	and Tamil (ta) to ALL_LINGUAS
+
 2003-01-19  Tor Lillqvist  <tml@iki.fi>
 
 	Fix for #103614 and some other problems with GtkFileSelection on

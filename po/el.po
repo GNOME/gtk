@@ -51,7 +51,7 @@ msgstr ""
 "για κατεστραμμένοαρχείο κινούμενης εικόνας"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:377
-#, c-format
+#, fuzzy, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr "Αποτυχία φόρτωσης λειτουργικής μονάδας φόρτωσης εικόνας"
 
@@ -325,7 +325,7 @@ msgstr ""
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
-"Η ποιότητα JPEG  πρέπει να έχει τιμή μεταξύ 0 and 100; Η τιμή  '%s' δεν "
+"Η ποιότητα JPEG  πρέπει να έχει τιμή μεταξύ 0 and 100; Η τιμή  '%d' δεν "
 "επιτρέπεται"
 
 #: gdk-pixbuf/io-jpeg.c:940

@@ -457,7 +457,7 @@ msgstr ""
 
 # gdk-pixbuf/io-png.c:829
 #: gdk-pixbuf/io-png.c:812
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
 msgstr ""
