@@ -1,3 +1,7 @@
+2003-04-09  Matthias Clasen  <maclas@gmx.de>
+
+	* INSTALL: Typo fix.
+
 Mon Apr  7 19:43:15 2003  Owen Taylor  <otaylor@redhat.com>
 
  	* gdk/x11/gdkdisplay-x11.c (gdk_x11_display_ungrab): Flush
