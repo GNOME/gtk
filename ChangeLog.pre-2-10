@@ -1,5 +1,8 @@
 2005-04-05  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_build_level): 
+	Fix a typo in a warning.
+
 	* gtk/gtkaboutdialog.c (gtk_about_dialog_init): Protect
 	the license and credits buttons from being affected by 
 	gtk_widget_show_all().  (#172724)

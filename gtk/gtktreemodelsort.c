@@ -2314,7 +2314,7 @@ gtk_tree_model_sort_build_level (GtkTreeModelSort *tree_model_sort,
 	  if (gtk_tree_model_iter_next (tree_model_sort->child_model, &iter) == FALSE &&
 	      i < length - 1)
 	    {
-	      g_warning ("There is a discrepency between the sort model and the child model.");
+	      g_warning ("There is a discrepancy between the sort model and the child model.");
 	      return;
 	    }
 	}
