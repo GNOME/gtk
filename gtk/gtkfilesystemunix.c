@@ -412,7 +412,7 @@ gtk_file_system_unix_get_folder (GtkFileSystem     *file_system,
 	  g_set_error (error,
 		       GTK_FILE_SYSTEM_ERROR,
 		       GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
-		       _("error getting information for '%s': %s"),
+		       _("Error getting information for '%s': %s"),
 		       display_name,
 		       g_strerror (ENOENT));
 
@@ -426,7 +426,7 @@ gtk_file_system_unix_get_folder (GtkFileSystem     *file_system,
 	  g_set_error (error,
 		       GTK_FILE_SYSTEM_ERROR,
 		       GTK_FILE_SYSTEM_ERROR_NOT_FOLDER,
-		       _("%s: %s"),
+		       _("Error getting information for '%s': %s"),
 		       display_name,
 		       g_strerror (ENOTDIR));
 
@@ -492,7 +492,7 @@ gtk_file_system_unix_create_folder (GtkFileSystem     *file_system,
       g_set_error (error,
 		   GTK_FILE_SYSTEM_ERROR,
 		   GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
-		   _("error creating directory '%s': %s"),
+		   _("Error creating directory '%s': %s"),
 		   display_name,
 		   g_strerror (save_errno));
       g_free (display_name);
@@ -623,7 +623,7 @@ get_icon_type (const char *filename,
 	  g_set_error (error,
 		       GTK_FILE_SYSTEM_ERROR,
 		       GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
-		       _("error getting information for '%s': %s"),
+		       _("Error getting information for '%s': %s"),
 		       display_name,
 		       g_strerror (save_errno));
 	  g_free (display_name);
@@ -1440,7 +1440,7 @@ bookmark_list_write (GSList *bookmarks, GError **error)
   g_set_error (error,
 	       GTK_FILE_SYSTEM_ERROR,
 	       GTK_FILE_SYSTEM_ERROR_FAILED,
-	       _("Bookmark saving failed (%s)"),
+	       _("Bookmark saving failed: %s"),
 	       g_strerror (saved_errno));
   result = FALSE;
 
@@ -1492,7 +1492,7 @@ gtk_file_system_unix_insert_bookmark (GtkFileSystem     *file_system,
 	  g_set_error (error,
 		       GTK_FILE_SYSTEM_ERROR,
 		       GTK_FILE_SYSTEM_ERROR_ALREADY_EXISTS,
-		       "%s already exists in the bookmarks list",
+		       _("'%s' already exists in the bookmarks list"),
 		       uri);
 	  goto out;
 	}
@@ -1554,7 +1554,7 @@ gtk_file_system_unix_remove_bookmark (GtkFileSystem     *file_system,
   g_set_error (error,
 	       GTK_FILE_SYSTEM_ERROR,
 	       GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
-	       "%s does not exist in the bookmarks list",
+	       _("'%s' does not exist in the bookmarks list"),
 	       uri);
 
  out:
@@ -1736,7 +1736,7 @@ gtk_file_folder_unix_get_info (GtkFileFolder      *folder,
       g_set_error (error,
 		   GTK_FILE_SYSTEM_ERROR,
 		   GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
-		   _("error getting information for '%s'"),
+		   _("Error getting information for '%s'"),
 		   display_name);
       g_free (display_name);
       info = NULL;
