@@ -1,3 +1,18 @@
+Fri Sep  8 14:28:00 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextview.c: Fix up visibility so that focus,
+	cursor_visible and blink interact properly.  Reenable cursor blink
+	which had been roughly disabled. Make blink and focus
+	properly per-view.
+
+	* gtk/gtktextlayout.[ch] (gtk_text_layout_set_cursor_visible):
+	Add a flag for whether to display insertion cursor and
+	a function to set the flag.
+
+	* gtk/gtktextlayout.c (gtk_text_layout_get_line_yrange): Change
+	get_line_y() to get_line_yrange(), to be a bit more generally
+	useful.
+
 Thu Sep 07 20:54:33 2000  George Lebl <jirka@5z.com>
 
 	* gtk/gtkmenu.c:  in gtk_menu_set_submenu_navigation_region

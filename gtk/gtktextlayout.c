@@ -75,6 +75,8 @@ static void gtk_text_layout_invalidated     (GtkTextLayout     *layout);
 static void gtk_text_layout_real_invalidate     (GtkTextLayout     *layout,
 						 const GtkTextIter *start,
 						 const GtkTextIter *end);
+static void gtk_text_layout_invalidate_cache    (GtkTextLayout     *layout,
+						 GtkTextLine       *line);
 static void gtk_text_layout_real_free_line_data (GtkTextLayout     *layout,
 						 GtkTextLine       *line,
 						 GtkTextLineData   *line_data);
@@ -177,6 +179,7 @@ gtk_text_layout_class_init (GtkTextLayoutClass *klass)
 void
 gtk_text_layout_init (GtkTextLayout *text_layout)
 {
+  text_layout->cursor_visible = TRUE;
 }
 
 GtkTextLayout*
@@ -327,6 +330,56 @@ gtk_text_layout_set_screen_width (GtkTextLayout *layout, gint width)
   layout->screen_width = width;
   
   gtk_text_layout_invalidate_all (layout);
+}
+
+/**
+ * gtk_text_layout_set_cursor_visible:
+ * @layout: a #GtkTextLayout
+ * @cursor_visible: If %FALSE, then the insertion cursor will not
+ *   be shown, even if the text is editable. 
+ * 
+ * Sets whether the insertion cursor should be shown. Generally,
+ * widgets using #GtkTextLayout will hide the cursor when the
+ * widget does not have the input focus.
+ **/
+void
+gtk_text_layout_set_cursor_visible (GtkTextLayout *layout,
+				    gboolean       cursor_visible)
+{
+  cursor_visible = (cursor_visible != FALSE);
+
+  if (layout->cursor_visible != cursor_visible)
+    {
+      GtkTextIter iter;
+      gint y, height;
+      
+      layout->cursor_visible = cursor_visible;
+
+      /* Now queue a redraw on the paragraph containing the cursor
+       */
+      gtk_text_buffer_get_iter_at_mark (layout->buffer, &iter,
+					gtk_text_buffer_get_mark (layout->buffer, "insert"));
+
+      gtk_text_layout_get_line_yrange (layout, &iter, &y, &height);
+      gtk_text_layout_changed (layout, y, height, height);
+
+      gtk_text_layout_invalidate_cache (layout, gtk_text_iter_get_text_line (&iter));
+    }
+}
+
+/**
+ * gtk_text_layout_get_cursor_visible:
+ * @layout: a #GtkTextLayout
+ * 
+ * Returns whether the insertion cursor will be shown.
+ * 
+ * Return value: if %FALSE, the insertion cursor will not be
+    shown, even if the text is editable.
+ **/
+gboolean
+gtk_text_layout_get_cursor_visible (GtkTextLayout *layout)
+{
+  return layout->cursor_visible;
 }
 
 void
@@ -517,9 +570,18 @@ gtk_text_layout_invalidate_all (GtkTextLayout *layout)
   gtk_text_layout_invalidate (layout, &start, &end);
 }
 
-/* FIXME: This is now completely generic, and we could probably be
- * moved into gtktextbtree.c.
- */
+static void
+gtk_text_layout_invalidate_cache (GtkTextLayout *layout,
+				  GtkTextLine   *line)
+{
+  if (layout->one_display_cache && line == layout->one_display_cache->line)
+    {
+      GtkTextLineDisplay *tmp_display = layout->one_display_cache;
+      layout->one_display_cache = NULL;
+      gtk_text_layout_free_line_display (layout, tmp_display);
+    }
+}
+
 static void
 gtk_text_layout_real_invalidate (GtkTextLayout *layout,
                                  const GtkTextIter *start,
@@ -546,13 +608,7 @@ gtk_text_layout_real_invalidate (GtkTextLayout *layout,
       if (line_data &&
 	  (line != last_line || !gtk_text_iter_starts_line (end)))
 	{
-	  if (layout->one_display_cache &&
-	      line == layout->one_display_cache->line)
-	    {
-	      GtkTextLineDisplay *tmp_display = layout->one_display_cache;
-	      layout->one_display_cache = NULL;
-	      gtk_text_layout_free_line_display (layout, tmp_display);
-	    }
+	  gtk_text_layout_invalidate_cache (layout, line);
 	  gtk_text_line_invalidate_wrap (line, line_data);
 	}
       
@@ -1148,11 +1204,12 @@ add_cursor (GtkTextLayout      *layout,
   PangoRectangle strong_pos, weak_pos;
   GtkTextCursorDisplay *cursor;
 
-  /* Hide insertion cursor when we have a selection
+  /* Hide insertion cursor when we have a selection or the layout
+   * user has hidden the cursor.
    */
   if (gtk_text_btree_mark_is_insert (_gtk_text_buffer_get_btree (layout->buffer),
                                      (GtkTextMark*)seg) &&
-      gtk_text_buffer_get_selection_bounds (layout->buffer, &selection_start, &selection_end))
+      (!layout->cursor_visible || gtk_text_buffer_get_selection_bounds (layout->buffer, &selection_start, &selection_end)))
     return;
   
   pango_layout_get_cursor_pos (display->layout, start, &strong_pos, &weak_pos);
@@ -1589,27 +1646,41 @@ gtk_text_layout_get_cursor_locations (GtkTextLayout  *layout,
 }
 
 /**
- * gtk_text_layout_get_line_y:
+ * gtk_text_layout_get_line_yrange:
  * @layout: a #GtkTextLayout
  * @iter:   a #GtkTextIter
+ * @y:      location to store the top of the paragraph in pixels,
+ *          or %NULL.
+ * @height  location to store the height of the paragraph in pixels,
+ *          or %NULL.
  * 
- * Find the y coordinate of the top of the paragraph containing
+ * Find the range of y coordinates for the paragraph containing
  * the given iter.
- * 
- * Return value: the y coordinate, in pixels.
  **/
-gint
-gtk_text_layout_get_line_y (GtkTextLayout     *layout,
-			    const GtkTextIter *iter)
+void
+gtk_text_layout_get_line_yrange (GtkTextLayout     *layout,
+				 const GtkTextIter *iter,
+				 gint              *y,
+				 gint              *height)
 {
   GtkTextLine *line;
   
-  g_return_val_if_fail (GTK_IS_TEXT_LAYOUT (layout), 0);
-  g_return_val_if_fail (gtk_text_iter_get_btree (iter) == _gtk_text_buffer_get_btree (layout->buffer), 0);
+  g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
+  g_return_if_fail (gtk_text_iter_get_btree (iter) == _gtk_text_buffer_get_btree (layout->buffer));
   
   line = gtk_text_iter_get_text_line (iter);
-  return gtk_text_btree_find_line_top (_gtk_text_buffer_get_btree (layout->buffer),
+
+  if (y)
+    *y = gtk_text_btree_find_line_top (_gtk_text_buffer_get_btree (layout->buffer),
                                        line, layout);
+  if (height)
+    {
+      GtkTextLineData *line_data = gtk_text_line_get_data (line, layout);
+      if (line_data)
+	*height = line_data->height;
+      else
+	*height = 0;
+    }
 }
 
 void

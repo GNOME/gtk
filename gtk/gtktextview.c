@@ -986,18 +986,24 @@ gtk_text_view_set_cursor_visible    (GtkTextView   *text_view,
 {
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
 
+  setting = (setting != FALSE);
+
   if (text_view->cursor_visible != setting)
     {
       text_view->cursor_visible = setting;
 
       if (GTK_WIDGET_HAS_FOCUS (text_view))
-        {
-          GtkTextMark *insert;
-  
-          insert = gtk_text_buffer_get_mark (text_view->buffer,
-                                             "insert");
-          gtk_text_mark_set_visible (insert, text_view->cursor_visible);
-        }
+	{
+	  if (text_view->layout)
+	    {
+	      gtk_text_layout_set_cursor_visible (text_view->layout, setting);
+	  
+	      if (setting)
+		gtk_text_view_start_cursor_blink (text_view);
+	      else
+		gtk_text_view_stop_cursor_blink (text_view);
+	    }
+	}
     }
 }
 
@@ -1039,7 +1045,7 @@ gtk_text_view_destroy (GtkObject *object)
 
   gtk_text_view_destroy_layout (text_view);
   gtk_text_view_set_buffer (text_view, NULL);
-  
+
   (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
 
@@ -1177,7 +1183,9 @@ gtk_text_view_size_allocate (GtkWidget *widget,
    * the buffer 
   */
   gtk_text_view_get_first_para_iter (text_view, &first_para);
-  y = gtk_text_layout_get_line_y (text_view->layout, &first_para) + text_view->first_para_pixels;
+  gtk_text_layout_get_line_yrange (text_view->layout, &first_para, &y, NULL);
+
+  y += text_view->first_para_pixels;
 
   /* Ensure h/v adj exist */
   get_hadjustment (text_view);
@@ -1693,15 +1701,15 @@ gtk_text_view_button_release_event (GtkWidget *widget, GdkEventButton *event)
 static gint
 gtk_text_view_focus_in_event (GtkWidget *widget, GdkEventFocus *event)
 {
-  GtkTextMark *insert;
+  GtkTextView *text_view = GTK_TEXT_VIEW (widget);
   
   GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_FOCUS);
 
-  insert = gtk_text_buffer_get_mark (GTK_TEXT_VIEW (widget)->buffer,
-                                     "insert");
-  gtk_text_mark_set_visible (insert, GTK_TEXT_VIEW (widget)->cursor_visible);
-
-  gtk_text_view_start_cursor_blink (GTK_TEXT_VIEW (widget));
+  if (text_view->cursor_visible && text_view->layout)
+    {
+      gtk_text_layout_set_cursor_visible (text_view->layout, TRUE);
+      gtk_text_view_start_cursor_blink (text_view);
+    }
 
   gtk_im_context_focus_in (GTK_TEXT_VIEW (widget)->im_context);
   
@@ -1711,15 +1719,15 @@ gtk_text_view_focus_in_event (GtkWidget *widget, GdkEventFocus *event)
 static gint
 gtk_text_view_focus_out_event (GtkWidget *widget, GdkEventFocus *event)
 {
-  GtkTextMark *insert;
+  GtkTextView *text_view = GTK_TEXT_VIEW (widget);
   
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_FOCUS);
 
-  insert = gtk_text_buffer_get_mark (GTK_TEXT_VIEW (widget)->buffer,
-                                     "insert");
-  gtk_text_mark_set_visible (insert, FALSE);
-
-  gtk_text_view_stop_cursor_blink (GTK_TEXT_VIEW (widget));
+  if (text_view->cursor_visible && text_view->layout)
+    {
+      gtk_text_layout_set_cursor_visible (text_view->layout, FALSE);
+      gtk_text_view_stop_cursor_blink (text_view);
+    }
 
   gtk_im_context_focus_out (GTK_TEXT_VIEW (widget)->im_context);
   
@@ -1783,33 +1791,19 @@ static gint
 blink_cb (gpointer data)
 {
   GtkTextView *text_view;
-  GtkTextMark *insert;
   
   text_view = GTK_TEXT_VIEW (data);
 
-  insert = gtk_text_buffer_get_mark (text_view->buffer,
-                                     "insert");
-  
-  if (!GTK_WIDGET_HAS_FOCUS (text_view))
-    {
-      /* paranoia, in case the user somehow mangles our
-         focus_in/focus_out pairing. */
-      gtk_text_mark_set_visible (insert, FALSE);
-      text_view->blink_timeout = 0;
-      return FALSE;
-    }
-  else
-    {
-      gtk_text_mark_set_visible (insert,
-                                 !gtk_text_mark_is_visible (insert));
-      return TRUE;
-    }
+  g_assert (text_view->layout && GTK_WIDGET_HAS_FOCUS (text_view) && text_view->cursor_visible);
+
+  gtk_text_layout_set_cursor_visible (text_view->layout,
+				      !gtk_text_layout_get_cursor_visible (text_view->layout));
+  return TRUE;
 }
 
 static void
 gtk_text_view_start_cursor_blink (GtkTextView *text_view)
 {
-  return;
   if (text_view->blink_timeout != 0)
     return;
 
@@ -1819,7 +1813,6 @@ gtk_text_view_start_cursor_blink (GtkTextView *text_view)
 static void
 gtk_text_view_stop_cursor_blink (GtkTextView *text_view)
 {
-  return;
   if (text_view->blink_timeout == 0)
     return;
 
@@ -2510,6 +2503,11 @@ gtk_text_view_ensure_layout (GtkTextView *text_view)
       if (text_view->buffer)
         gtk_text_layout_set_buffer (text_view->layout, text_view->buffer);
 
+      if ((GTK_WIDGET_HAS_FOCUS (text_view) && text_view->cursor_visible))
+	gtk_text_view_start_cursor_blink (text_view);
+      else
+	gtk_text_layout_set_cursor_visible (text_view->layout, FALSE);
+      
       ltr_context = gtk_widget_create_pango_context (GTK_WIDGET (text_view));
       pango_context_set_base_dir (ltr_context, PANGO_DIRECTION_LTR);
       rtl_context = gtk_widget_create_pango_context (GTK_WIDGET (text_view));
@@ -2544,6 +2542,7 @@ gtk_text_view_destroy_layout (GtkTextView *text_view)
 {
   if (text_view->layout)
     {
+      gtk_text_view_stop_cursor_blink (text_view);
       gtk_text_view_end_selection_drag (text_view, NULL);
       
       gtk_signal_disconnect_by_func (GTK_OBJECT (text_view->layout),

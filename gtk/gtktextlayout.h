@@ -67,6 +67,9 @@ struct _GtkTextLayout
   
   /* Whether we are allowed to wrap right now */
   gint wrap_loop_count;
+
+  /* Whether to show the insertion cursor */
+  guint cursor_visible : 1;
 };
 
 struct _GtkTextLayoutClass
@@ -143,16 +146,20 @@ extern PangoAttrType gtk_text_attr_appearance_type;
 GtkType        gtk_text_layout_get_type (void) G_GNUC_CONST;
 GtkTextLayout *gtk_text_layout_new      (void);
 
-void gtk_text_layout_set_buffer            (GtkTextLayout      *layout,
-					    GtkTextBuffer      *buffer);
-void gtk_text_layout_set_default_style     (GtkTextLayout      *layout,
-					    GtkTextAttributes  *values);
-void gtk_text_layout_set_contexts          (GtkTextLayout      *layout,
-					    PangoContext       *ltr_context,
-					    PangoContext       *rtl_context);
-void gtk_text_layout_default_style_changed (GtkTextLayout      *layout);
-void gtk_text_layout_set_screen_width      (GtkTextLayout      *layout,
-					    gint                width);
+void gtk_text_layout_set_buffer             (GtkTextLayout     *layout,
+					     GtkTextBuffer     *buffer);
+void gtk_text_layout_set_default_style      (GtkTextLayout     *layout,
+					     GtkTextAttributes *values);
+void gtk_text_layout_set_contexts           (GtkTextLayout     *layout,
+					     PangoContext      *ltr_context,
+					     PangoContext      *rtl_context);
+void gtk_text_layout_default_style_changed  (GtkTextLayout     *layout);
+void gtk_text_layout_set_screen_width       (GtkTextLayout     *layout,
+					     gint               width);
+
+void     gtk_text_layout_set_cursor_visible (GtkTextLayout *layout,
+					     gboolean       cursor_visible);
+gboolean gtk_text_layout_get_cursor_visible (GtkTextLayout *layout);
 
 /* Getting the size or the lines potentially results in a call to
  * recompute, which is pretty massively expensive. Thus it should
@@ -225,8 +232,10 @@ void     gtk_text_layout_changed              (GtkTextLayout     *layout,
 void     gtk_text_layout_get_iter_location    (GtkTextLayout     *layout,
 					       const GtkTextIter *iter,
 					       GdkRectangle      *rect);
-gint     gtk_text_layout_get_line_y           (GtkTextLayout     *layout,
-					       const GtkTextIter *iter);
+void     gtk_text_layout_get_line_yrange      (GtkTextLayout     *layout,
+					       const GtkTextIter *iter,
+					       gint              *y,
+					       gint              *height);
 void     gtk_text_layout_get_cursor_locations (GtkTextLayout     *layout,
 					       GtkTextIter       *iter,
 					       GdkRectangle      *strong_pos,
