@@ -2,9 +2,44 @@
 
 	Merge from gtk-2-0:
 
-	* gdk/win32/gdkdrawable-win32.c (render_line_horizontal,
-	render_line_vertical): Some spacing cleanup. Return TRUE.
+	* gdk/win32/gdkdrawable-win32.c
+	* gdk/win32/gdkevents-win32.c: Some spacing and indentation cleanup.
 	
+	* gdk/win32/gdkdrawable-win32.c (render_line_horizontal,
+	render_line_vertical): Return TRUE.
+	
+	* gdk/win32/gdkevents-win32.c (_gdk_events_init): Search if the
+	system has some input locale identifier that uses a Latin
+	keyboard. This is needed to be able to get the virtual-key code
+	for the latin characters corresponding to ASCII control
+	characters. If no such keyboard is present, try to load one
+	then. Will this upset users with no wish to ever use a Latin-based
+	keyboard layout?
+
+	(vk_from_char): Convert all ASCII control chars to the
+	corresponding uppercase char before calling VkKeyScanEx(). Idea by
+	Florent Duguet. Makes Control-C work again. To make it hopefully
+	work like I think it should on non-Latin keyboards, too, use
+	latin_locale when looking for the corresponding keycode.
+
+	Fix for #81831 by Tim Evans:
+	
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate): Don't call
+	_gdk_event_button_generate() here, it would append the double- or
+	triple-click events too early, before the single-click event.
+
+	(real_window_procedure): If we got a single-click event, call
+	_gdk_event_button_generate() to perhaps append the double- or
+	triple-click event after that.
+
+	Merge from gtk-1-3-win32-production branch:
+
+	* gdk/win32/gdkevents-win32.c (propagate): Check for parent being
+	NULL before trying to propagate to it, and return FALSE in that
+	case. (If parent is NULL, we are handling gdk_parent_root, and
+	probably should have noticed that and bailed out earlier. But
+	better late than never.)
+
 Wed Sep 11 15:48:38 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreemodel.c (gtk_tree_row_reference_get_type): Make
