@@ -1,3 +1,13 @@
+Tue Apr 13 02:49:33 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkwindow.c: removed some silly #ifdef HAVE_CONFIG
+	that we don't do in many other places. (Fixing duplicate 
+	#include of config.h)
+
+	* gdk/gdkevents.c: include gdkinput.h _after_ config.h.
+	Otherwise, #ifndef XINPUT_NONE check in the latter
+	doesn't work. (Bug #546)
+
 Sun Apr 11 15:08:27 1999  Tim Janik  <timj@gtk.org>
 
 	* configure.in: bumped version number to Gtk+ 1.2.2, interface 0,
