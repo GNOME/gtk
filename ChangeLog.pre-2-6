@@ -1,3 +1,10 @@
+1999-09-03  Raja R Harinath  <harinath@cs.umn.edu>
+
+	* gtk/Makefile.am (gen_sources): Improve VPATH builds.
+	`$@' is valid only in the build dir, not after we've done 
+	`cd $srcdir'.  Also use `test -f' instead of less portable
+	`test -e'.
+
 Fri Sep  3 17:20:57 CDT 1999 Shawn T. Amundson <amundson@gtk.org>
 
 	* Released GTK+ 1.2.5-pre1  (test release)
