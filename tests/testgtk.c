@@ -1360,9 +1360,10 @@ create_entry ()
       gtk_box_pack_start (GTK_BOX (box2), entry, TRUE, TRUE, 0);
       gtk_widget_show (entry);
 
-      cb = gtk_combo_box_new (cbitems);
-      gtk_entry_set_text (GTK_ENTRY (cb), "hello world");
-      gtk_entry_select_region (GTK_ENTRY (cb),
+      cb = gtk_combo_new ();
+      gtk_combo_set_popdown_strings (GTK_COMBO (cb), cbitems);
+      gtk_entry_set_text (GTK_ENTRY (GTK_COMBO(cb)->entry), "hello world");
+      gtk_entry_select_region (GTK_ENTRY (GTK_COMBO(cb)->entry),
 			       0, GTK_ENTRY(entry)->text_length);
       gtk_box_pack_start (GTK_BOX (box2), cb, TRUE, TRUE, 0);
       gtk_widget_show (cb);
@@ -2277,7 +2278,7 @@ create_text ()
       gtk_widget_show (table);
 
       text = gtk_text_new (NULL, NULL);
-      gtk_text_set_editable (text, TRUE);
+      gtk_text_set_editable (GTK_TEXT (text), TRUE);
       gtk_table_attach_defaults (GTK_TABLE (table), text, 0, 1, 0, 1);
       gtk_widget_show (text);
 

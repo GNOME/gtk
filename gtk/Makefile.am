@@ -18,7 +18,7 @@ libgtk_la_SOURCES = \
 	gtkcheckmenuitem.c	\
 	gtkclist.c		\
 	gtkcolorsel.c		\
-	gtkcombobox.c		\
+	gtkcombo.c		\
 	gtkcontainer.c		\
 	gtkcurve.c		\
 	gtkdata.c		\
@@ -108,7 +108,7 @@ gtkinclude_HEADERS = \
 	gtkcheckmenuitem.h	\
 	gtkclist.h		\
 	gtkcolorsel.h		\
-	gtkcombobox.h		\
+	gtkcombo.h		\
 	gtkcontainer.h		\
 	gtkcurve.h		\
 	gtkdata.h		\
