@@ -334,7 +334,7 @@ gtk_file_chooser_dialog_style_set (GtkWidget *widget,
    */
 
   gtk_container_set_border_width (GTK_CONTAINER (dialog->vbox), 12);
-  gtk_box_set_spacing (GTK_BOX (dialog->vbox), 12);
+  gtk_box_set_spacing (GTK_BOX (dialog->vbox), 24);
 
   gtk_container_set_border_width (GTK_CONTAINER (dialog->action_area), 0);
   gtk_box_set_spacing (GTK_BOX (dialog->action_area), 6);
