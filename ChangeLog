@@ -1,3 +1,17 @@
+2004-03-02  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c
+	(gtk_file_chooser_default_set_current_folder): Don't update the
+	save folder combo if we are already switching folders; based on a
+	patch by Jonathan Blandford.
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_add_current_folder):
+	Handle failure to insert the path.  Based on a patch by Morten
+	Welinder attached to bug #135380.
+
+	* tests/testfilechooser.c (extra_widget_create): Add a bunch of
+	buttons to test various things.
+
 Tue Mar  2 20:59:23 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* tests/Makefile.am: Add testentrycompletion.

@@ -958,7 +958,7 @@ shortcuts_remove_rows (GtkFileChooserDefault *impl,
   gtk_tree_path_free (path);
 }
 
-/* Used from shortcuts_remove_rows() */
+/* Used from shortcuts_remove_rows() in shortcuts_add_volumes() */
 static void
 volume_remove_cb (GtkFileChooserDefault *impl, gpointer data)
 {
@@ -1058,8 +1058,11 @@ static void
 shortcuts_add_current_folder (GtkFileChooserDefault *impl)
 {
   int pos;
+  gboolean success;
 
   g_assert (!impl->shortcuts_current_folder_active);
+
+  success = TRUE;
 
   pos = shortcut_find_position (impl, impl->current_folder);
   if (pos == -1)
@@ -1080,22 +1083,26 @@ shortcuts_add_current_folder (GtkFileChooserDefault *impl)
 
       if (strcmp (gtk_file_path_get_string (base_path), gtk_file_path_get_string (impl->current_folder)) == 0)
 	{
-	  shortcuts_insert_path (impl, pos, TRUE, volume, NULL, NULL, FALSE, NULL);
+	  success = shortcuts_insert_path (impl, pos, TRUE, volume, NULL, NULL, FALSE, NULL);
 	  impl->shortcuts_current_folder_is_volume = TRUE;
 	}
       else
 	{
 	  gtk_file_system_volume_free (impl->file_system, volume);
-	  shortcuts_insert_path (impl, pos, FALSE, NULL, impl->current_folder, NULL, FALSE, NULL);
+	  success = shortcuts_insert_path (impl, pos, FALSE, NULL, impl->current_folder, NULL, FALSE, NULL);
 	  impl->shortcuts_current_folder_is_volume = FALSE;
 	}
 
       gtk_file_path_free (base_path);
 
-      impl->shortcuts_current_folder_active = TRUE;
+      if (!success)
+	shortcuts_remove_rows (impl, pos - 1, 1, NULL); /* remove the separator */
+
+      impl->shortcuts_current_folder_active = success;
     }
 
-  gtk_combo_box_set_active (GTK_COMBO_BOX (impl->save_folder_combo), pos);
+  if (success)
+    gtk_combo_box_set_active (GTK_COMBO_BOX (impl->save_folder_combo), pos);
 }
 
 /* Used from shortcuts_remove_rows() in shortcuts_update_current_folder() */
@@ -2838,14 +2845,18 @@ gtk_file_chooser_default_set_current_folder (GtkFileChooser    *chooser,
   /* Change the current folder label */
   gtk_path_bar_set_path (GTK_PATH_BAR (impl->browse_path_bar), path, impl->file_system, NULL);
 
-  /* Update the folder tree */
+  /* Update the widgets that may trigger a folder chnage themselves */
 
   if (!impl->changing_folder)
     {
       impl->changing_folder = TRUE;
+
       set_tree_model (impl, impl->current_folder);
       _gtk_file_system_model_path_do (GTK_FILE_SYSTEM_MODEL (impl->browse_directories_model),
 				      path, expand_and_select_func, impl);
+
+      shortcuts_update_current_folder (impl);
+
       impl->changing_folder = FALSE;
     }
 
@@ -2855,7 +2866,6 @@ gtk_file_chooser_default_set_current_folder (GtkFileChooser    *chooser,
   /* Refresh controls */
 
   shortcuts_unselect_all (impl);
-  shortcuts_update_current_folder (impl);
 
   g_signal_emit_by_name (impl, "current-folder-changed", 0);
 

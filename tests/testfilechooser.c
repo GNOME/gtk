@@ -296,6 +296,66 @@ update_preview_cb (GtkFileChooser *chooser)
   gtk_file_chooser_set_preview_widget_active (chooser, have_preview);
 }
 
+static void
+set_folder_nonexistent_cb (GtkButton *button,
+			   GtkFileChooser *chooser)
+{
+  gtk_file_chooser_set_current_folder (chooser, "/nonexistent");
+}
+
+static void
+set_folder_existing_nonexistent_cb (GtkButton *button,
+				    GtkFileChooser *chooser)
+{
+  gtk_file_chooser_set_current_folder (chooser, "/usr/nonexistent");
+}
+
+static void
+set_filename_nonexistent_cb (GtkButton *button,
+			     GtkFileChooser *chooser)
+{
+  gtk_file_chooser_set_filename (chooser, "/nonexistent");
+}
+
+static void
+set_filename_existing_nonexistent_cb (GtkButton *button,
+				      GtkFileChooser *chooser)
+{
+  gtk_file_chooser_set_filename (chooser, "/usr/nonexistent");
+}
+
+static GtkWidget *
+extra_widget_create (GtkFileChooser *chooser)
+{
+  GtkWidget *box;
+  GtkWidget *widget;
+
+  box = gtk_vbox_new (FALSE, 6);
+
+  widget = gtk_button_new_with_label ("set_current_folder (\"/nonexistent\")");
+  g_signal_connect (widget, "clicked",
+		    G_CALLBACK (set_folder_nonexistent_cb), chooser);
+  gtk_box_pack_start (GTK_BOX (box), widget, FALSE, FALSE, 0);
+
+  widget = gtk_button_new_with_label ("set_current_folder (\"/usr/nonexistent\"");
+  g_signal_connect (widget, "clicked",
+		    G_CALLBACK (set_folder_existing_nonexistent_cb), chooser);
+  gtk_box_pack_start (GTK_BOX (box), widget, FALSE, FALSE, 0);
+
+  widget = gtk_button_new_with_label ("set_filename (\"/nonexistent\"");
+  g_signal_connect (widget, "clicked",
+		    G_CALLBACK (set_filename_nonexistent_cb), chooser);
+  gtk_box_pack_start (GTK_BOX (box), widget, FALSE, FALSE, 0);
+
+  widget = gtk_button_new_with_label ("set_filename (\"/usr/nonexistent\"");
+  g_signal_connect (widget, "clicked",
+		    G_CALLBACK (set_filename_existing_nonexistent_cb), chooser);
+  gtk_box_pack_start (GTK_BOX (box), widget, FALSE, FALSE, 0);
+
+  gtk_widget_show_all (box);
+  return box;
+}
+
 int
 main (int argc, char **argv)
 {
@@ -306,7 +366,6 @@ main (int argc, char **argv)
   GtkWidget *prop_editor;
   GtkFileFilter *filter;
   GtkWidget *preview_vbox;
-  GtkWidget *extra;
   int i;
   
   gtk_init (&argc, &argv);
@@ -397,9 +456,8 @@ main (int argc, char **argv)
 		    G_CALLBACK (update_preview_cb), NULL);
 
   /* Extra widget */
-  extra = gtk_check_button_new_with_mnemonic ("Lar_t whoever asks about this button");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (extra), TRUE);
-  //  gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER (dialog), extra);
+
+  gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER (dialog), extra_widget_create (GTK_FILE_CHOOSER (dialog)));
 
   /* Shortcuts */
 
