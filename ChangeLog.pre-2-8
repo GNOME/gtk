@@ -1,3 +1,10 @@
+2001-09-12  Jakub Steiner <jimmac@ximian.com>
+
+	* gtk/stock-icons/dialog_question.png: replacing the shaky
+	  question mark with a sans-serif one.
+	* gtk/stock-icons/stock_top.png, stock_bottom.png,
+     stock_first.png, stock_last.png: using the new style arrows
+
 Sat Sep  8 16:19:02 2001  Owen Taylor  <otaylor@redhat.com>
  
  	* gtk/gtkmain.c: Implement a search path for GTK+ modules.
