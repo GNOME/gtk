@@ -1,3 +1,11 @@
+2002-06-09  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktextbtree.c (_gtk_text_btree_unref): Don't leak
+	child_anchor_table.  (#84425)
+
+	* gtk/gtktextlayout.c (gtk_text_layout_finalize): Don't leak
+	one_display_cache.  (#84424)
+
 Fri Jun  7 23:11:42 2002  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_real_expand_row): Fix sizing
