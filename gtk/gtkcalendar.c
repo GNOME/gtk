@@ -3389,7 +3389,7 @@ gtk_calendar_drag_data_get (GtkWidget        *widget,
   gchar str[128];
   gsize len;
 
-  date = g_date_new_dmy (calendar->selected_day, calendar->month, calendar->year);
+  date = g_date_new_dmy (calendar->selected_day, calendar->month + 1, calendar->year);
   len = g_date_strftime (str, 127, "%x", date);
   gtk_selection_data_set_text (selection_data, str, len);
   
@@ -3550,7 +3550,7 @@ gtk_calendar_drag_data_received (GtkWidget        *widget,
   g_object_freeze_notify (G_OBJECT (calendar));
   if (!(calendar->display_flags & GTK_CALENDAR_NO_MONTH_CHANGE)
       && (calendar->display_flags & GTK_CALENDAR_SHOW_HEADING))
-    gtk_calendar_select_month (calendar, month, year);
+    gtk_calendar_select_month (calendar, month - 1, year);
   gtk_calendar_select_day (calendar, day);
   g_object_thaw_notify (G_OBJECT (calendar));  
 }
