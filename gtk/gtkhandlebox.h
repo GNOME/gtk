@@ -27,7 +27,7 @@
 
 
 #include <gdk/gdk.h>
-#include <gtk/gtkeventbox.h>
+#include <gtk/gtkbin.h>
 
 
 #ifdef __cplusplus
@@ -45,27 +45,27 @@ typedef struct _GtkHandleBoxClass  GtkHandleBoxClass;
 
 struct _GtkHandleBox
 {
-  GtkEventBox     event_box;
+  GtkBin bin;
+
   GtkWidget      *real_parent;
+  GdkWindow      *steady_window; /* the window that stays in the parent container */
   GtkRequisition  real_requisition;
   gboolean        is_being_dragged;
   gboolean        is_onroot;
+  GdkCursor      *fleur_cursor;
+
+  gint dragoff_x, dragoff_y; /* start drag position (wrt widget->window) */
+  gint steady_x, steady_y; /* origin of stedy_window (wrt the root window) */
 };
 
 struct _GtkHandleBoxClass
 {
-  GtkEventBoxClass parent_class;
+  GtkBinClass parent_class;
 };
 
 
 guint          gtk_handle_box_get_type        (void);
 GtkWidget*     gtk_handle_box_new             (void);
-/* the x and y coordinates (relative to root window, of course)
-   are only needed if you pass in_root = TRUE */
-void           gtk_handle_box_set_location    (GtkWidget *widget,
-					       gboolean   in_root,
-					       gint       x,
-					       gint       y);
 
 
 #ifdef __cplusplus

@@ -1,3 +1,21 @@
+Fri Jan 16 00:36:31 1998  Federico Mena  <federico@bananoid.nuclecu.unam.mx>
+
+	* gtk/gtkhandlebox.c: Lots of changes all over the place.  Now the
+	widget has two windows.  The steady_window stays put in the parent
+	container, and the widget->window is the one that gets
+	reparented.  Now that window is transient, in compliance with the
+	ICCCM, instead of an OverrideRedirect window.
+
+	We have two windows so that we can properly receive Expose events
+	for the thin 3D line that marks the place where the handlebox is
+	docked.
+
+	* gtk/gtkhandlebox.h (struct _GtkHandleBox): Added fields for
+	dragging (mouse position information).  Added fleur_cursor so that
+	we look pretty.  Added steady_window field; it is the window that
+	actually stays on the parent (widget->window is the one that gets
+	reparented).
+
 Thu Jan 15 19:03:19 1998  Miguel de Icaza  <miguel@nuclecu.unam.mx>
 
 	* gtk/gtkclist.c (gtk_clist_set_column_width): Call
