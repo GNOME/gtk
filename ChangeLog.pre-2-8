@@ -1,3 +1,7 @@
+Thu Mar  8 19:40:28 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_destroy): Add destroy function.
+
 Thu Mar  8 19:18:27 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_unref_tree_helper): Actually
