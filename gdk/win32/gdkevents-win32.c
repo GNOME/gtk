@@ -1761,7 +1761,7 @@ gdk_event_translate (GdkEvent *event,
 	    /* All these VK_OEM keycodes happen to be the corresponding ASCII
 	     * char + 0x90
 	     */
-	    event->key.keyval = '+' - 0x90;
+	    event->key.keyval = msg->wParam - 0x90;
 	  else
 	    ignore_wm_char = FALSE;
 	  break;
