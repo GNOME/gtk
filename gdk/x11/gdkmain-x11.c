@@ -1911,6 +1911,7 @@ gdk_event_translate (GdkEvent *event,
       if(window_private
 	 && window_private->dnd_drag_enabled
 	 && !gdk_dnd.drag_perhaps
+	 && event->button.button == 1
 	 && !gdk_dnd.drag_really)
 	{
 	  gdk_dnd.drag_perhaps = 1;
