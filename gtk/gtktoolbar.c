@@ -69,7 +69,7 @@ typedef struct _ToolbarContent ToolbarContent;
 				    * in the homogeneous game. In units of
 				    * pango_font_get_estimated_char_width().
 				    */
-#define SLIDE_SPEED 600		   /* How fast the items slide, in pixels per second */
+#define SLIDE_SPEED 800	   /* How fast the items slide, in pixels per second */
 
 /* Properties */
 enum {
@@ -859,7 +859,7 @@ gtk_toolbar_size_request (GtkWidget      *widget,
 	continue;
       
       toolbar_content_size_request (content, toolbar, &requisition);
-      
+
       max_child_width = MAX (max_child_width, requisition.width);
       max_child_height = MAX (max_child_height, requisition.height);
       
@@ -883,7 +883,7 @@ gtk_toolbar_size_request (GtkWidget      *widget,
       
       if (!toolbar_content_visible (content, toolbar))
 	continue;
-      
+
       if (toolbar_content_is_homogeneous (content, toolbar))
 	{
 	  size = homogeneous_size;
@@ -899,7 +899,7 @@ gtk_toolbar_size_request (GtkWidget      *widget,
 	  else
 	    size = requisition.height;
 	}
-      
+
       pack_front_size += size;
     }
   
@@ -1007,12 +1007,7 @@ get_item_size (GtkToolbar     *toolbar,
   
   toolbar_content_size_request (content, toolbar, &requisition);
   
-  if (toolbar_content_is_placeholder (content) &&
-      toolbar_content_disappearing (content))
-    {
-      return 0;
-    }
-  else if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
+  if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       if (toolbar_content_is_homogeneous (content, toolbar))
 	return toolbar->button_maxw;
@@ -1052,6 +1047,7 @@ slide_idle_handler (gpointer data)
       GtkAllocation goal_allocation;
       GtkAllocation allocation;
       gboolean cont;
+      gboolean disappearing_placeholder;
 
       state = toolbar_content_get_state (content);
       toolbar_content_get_goal_allocation (content, &goal_allocation);
@@ -1067,8 +1063,17 @@ slide_idle_handler (gpointer data)
 	  cont = TRUE;
 	}
 
-      if ((state == NORMAL && toolbar_content_child_visible (content)) ||
-	  state == OVERFLOWN)
+      disappearing_placeholder =
+	toolbar_content_is_placeholder (content) &&
+	toolbar_content_disappearing (content);
+      
+      /* An invisible item with a goal allocation of
+       * 0 is already at its goal.
+       */
+      if ((state == NORMAL || state == OVERFLOWN) &&
+	  ((goal_allocation.width != 0 &&
+	    goal_allocation.height != 0) ||
+	   toolbar_content_child_visible (content)))
 	{
 	  if ((goal_allocation.x != allocation.x ||
 	       goal_allocation.y != allocation.y ||
@@ -1084,16 +1089,8 @@ slide_idle_handler (gpointer data)
 	    }
 	}
 
-      if ((toolbar_content_is_placeholder (content) &&
-	   toolbar_content_disappearing (content) &&
-	   (state == OVERFLOWN || toolbar_content_child_visible (content))))
-	{
-	  /* A placeholder is disappearing, and it either hasn't disappeared
-	   * yet, or is outside the toolbar.
-	   */
-
-	  cont = TRUE;
-	}
+      if (disappearing_placeholder && toolbar_content_child_visible (content))
+	cont = TRUE;
 
       if (cont)
 	{
@@ -1106,7 +1103,7 @@ slide_idle_handler (gpointer data)
   
   priv->is_sliding = FALSE;
   priv->idle_id = 0;
-  
+
   GDK_THREADS_LEAVE();
   return FALSE;
 }
@@ -1204,7 +1201,13 @@ gtk_toolbar_begin_sliding (GtkToolbar *toolbar)
       
       toolbar_content_set_start_allocation (content, &new_start_allocation);
     }
-  
+
+  /* This resize will run before the first idle handler. This
+   * will make sure that items get the right goal allocatiuon
+   * so that the idle handler will not immediately return
+   * FALSE
+   */
+  gtk_widget_queue_resize_no_redraw (GTK_WIDGET (toolbar));
   g_timer_reset (priv->timer);
 }
 
@@ -1230,7 +1233,7 @@ gtk_toolbar_stop_sliding (GtkToolbar *toolbar)
 	{
 	  ToolbarContent *content = list->data;
 	  list = list->next;
-	  
+
 	  if (toolbar_content_is_placeholder (content))
 	    {
 	      toolbar_content_remove (content, toolbar);
@@ -1265,7 +1268,8 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
   gboolean overflowing;
   gboolean size_changed;
   gdouble elapsed;
-
+  GtkAllocation item_area;
+  
   size_changed = FALSE;
   if (widget->allocation.x != allocation->x		||
       widget->allocation.y != allocation->y		||
@@ -1437,6 +1441,11 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
       arrow_allocation.y = border_width;
     }
   
+  item_area.x = 0;
+  item_area.y = 0;
+  item_area.width = available_size - (need_arrow? arrow_size : 0);
+  item_area.height = short_size;
+
   /* fix up allocations in the vertical or RTL cases */
   if (toolbar->orientation == GTK_ORIENTATION_VERTICAL)
     {
@@ -1445,6 +1454,8 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
       
       if (need_arrow)
 	fixup_allocation_for_vertical (&arrow_allocation);
+
+      fixup_allocation_for_vertical (&item_area);
     }
   else if (gtk_widget_get_direction (GTK_WIDGET (toolbar)) == GTK_TEXT_DIR_RTL)
     {
@@ -1453,6 +1464,8 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
       
       if (need_arrow)
 	fixup_allocation_for_rtl (available_size, &arrow_allocation);
+
+      fixup_allocation_for_rtl (allocation->width, &item_area);
     }
   
   /* translate the items by allocation->(x,y) */
@@ -1479,7 +1492,15 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
 	  arrow_allocation.y += widget->style->ythickness;
 	}
     }
-  
+
+  item_area.x += allocation->x;
+  item_area.y += allocation->y;
+  if (get_shadow_type (toolbar) != GTK_SHADOW_NONE)
+    {
+      item_area.x += widget->style->xthickness;
+      item_area.y += widget->style->ythickness;
+    }
+
   /* did anything change? */
   for (list = priv->content, i = 0; list != NULL; list = list->next, i++)
     {
@@ -1510,13 +1531,8 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
     {
       ToolbarContent *content = list->data;
 
-      if (new_states[i] != NORMAL)
-	{
-	  toolbar_content_set_child_visible (content, toolbar, FALSE);
-	  if (new_states[i] == OVERFLOWN)
-	    toolbar_content_size_allocate (content, &allocations[i]);
-	}
-      else
+      if (new_states[i] == OVERFLOWN ||
+	  new_states[i] == NORMAL)
 	{
 	  GtkAllocation alloc;
 	  GtkAllocation start_allocation;
@@ -1531,7 +1547,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
 					       &start_allocation,
 					       &goal_allocation,
 					       &alloc);
-	      
+
 	      priv->need_sync = TRUE;
 	    }
 	  else
@@ -1545,9 +1561,21 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
 	    }
 	  else
 	    {
-	      toolbar_content_set_child_visible (content, toolbar, TRUE);
-	      toolbar_content_size_allocate (content, &alloc);
+	      if (!rect_within (&alloc, &item_area))
+		{
+		  toolbar_content_set_child_visible (content, toolbar, FALSE);
+		  toolbar_content_size_allocate (content, &alloc);
+		}
+	      else
+		{
+		  toolbar_content_set_child_visible (content, toolbar, TRUE);
+		  toolbar_content_size_allocate (content, &alloc);
+		}
 	    }
+	}
+      else
+	{
+	  toolbar_content_set_child_visible (content, toolbar, FALSE);
 	}
 	  
       toolbar_content_set_state (content, new_states[i]);
@@ -2406,7 +2434,8 @@ show_menu (GtkToolbar     *toolbar,
     {
       ToolbarContent *content = list->data;
       
-      if (toolbar_content_get_state (content) == OVERFLOWN)
+      if (toolbar_content_get_state (content) == OVERFLOWN &&
+	  !toolbar_content_is_placeholder (content))
 	{
 	  GtkWidget *menu_item = toolbar_content_retrieve_menu_item (content);
 	  
@@ -3925,6 +3954,12 @@ toolbar_content_size_request (ToolbarContent *content,
     case TOOL_ITEM:
       gtk_widget_size_request (GTK_WIDGET (content->u.tool_item.item),
 			       requisition);
+      if (content->u.tool_item.is_placeholder &&
+	  content->u.tool_item.disappearing)
+	{
+	  requisition->width = 0;
+	  requisition->height = 0;
+	}
       break;
       
     case COMPATIBILITY:

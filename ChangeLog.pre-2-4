@@ -1,3 +1,21 @@
+Sun Jan 25 15:14:46 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktoolbar.c (gtk_toolbar_size_allocate): Base the decision
+	to map/unmap items on whether they are actually allocated outside
+	the toolbar, not on whether that will eventually happen. Improves
+	animation in the presence of overflown items.
+
+	* gtk/gtktoolbar.c (gtk_toolbar_begin_sliding): Add a
+	queue_resize() to so that the items will get their new goal
+	values and the idle handler will not immediately return FALSE.
+
+	* gtk/gtktoolbar.c (slide_idle_handler): simplify the logic and
+	make sure that a placeholder becoming invisible doesn't cause a
+	return TRUE.
+
+	* gtk/gtktoolbar.c (get_item_size): Don't special case
+	placeholders here.
+
 Sat Jan 24 23:17:27 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktoolbutton.c (gtk_tool_button_construct_contents): Only
