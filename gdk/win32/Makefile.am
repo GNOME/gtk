@@ -16,12 +16,24 @@ LDADDS = @STRIP_BEGIN@ 		\
 	@GLIB_LIBS@		\
 @STRIP_END@
 
+# This is really ugly, is there a better way to get a .lib format
+# library linked in with libtool?
+
 if HAVE_WINTAB
-noinst_DATA = .libs/libwntab32x.a
+libwntab32x_a = .libs/libwntab32x.a
 
 .libs/libwntab32x.a: @WINTAB_LIB@
 	cp $< $@
 endif
+
+if HAVE_IE55
+libie55uuid_a = .libs/libie55uuid.a
+
+.libs/libie55uuid.a: @IE55_UUID_LIB@
+	cp $< $@
+endif
+
+noinst_DATA = $(libwntab32x_a) $(libie55uuid_a)
 
 noinst_LTLIBRARIES = libgdk-win32.la
 

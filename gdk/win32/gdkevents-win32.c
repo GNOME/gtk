@@ -47,12 +47,20 @@
 #include "gdkinputprivate.h"
 
 #include <objbase.h>
+
+#if defined (__GNUC__) && defined (HAVE_DIMM_H)
+/* The w32api imm.h clashes a bit with the IE5.5 dimm.h */
+# define IMEMENUITEMINFOA hidden_IMEMENUITEMINFOA
+# define IMEMENUITEMINFOW hidden_IMEMENUITEMINFOW
+#endif
 #include <imm.h>
+#if defined (__GNUC__) && defined (HAVE_DIMM_H)
+# undef IMEMENUITEMINFOA
+# undef IMEMENUITEMINFOW
+#endif
 
 #ifdef HAVE_DIMM_H
 #include <dimm.h>
-#else
-#include "surrogate-dimm.h"
 #endif
 
 #ifdef HAVE_WINTAB_H
@@ -149,8 +157,10 @@ static UINT msh_mousewheel_msg;
 static gboolean ignore_WM_CHAR = FALSE;
 static gboolean is_AltGr_key = FALSE;
 
+#ifdef HAVE_DIMM_H
 static IActiveIMMApp *paimmapp = NULL;
 static IActiveIMMMessagePumpOwner *paimmmpo = NULL;
+#endif
 
 typedef BOOL (WINAPI *PFN_TrackMouseEvent) (LPTRACKMOUSEEVENT);
 static PFN_TrackMouseEvent p_TrackMouseEvent = NULL;
@@ -269,11 +279,15 @@ inner_window_proc (HWND hWnd,
     return ret_val;
   else
     {
+#ifndef HAVE_DIMM_H
+      return DefWindowProc (hWnd, message, wParam, lParam);
+#else      
       if (paimmapp == NULL
 	  || (*paimmapp->lpVtbl->OnDefWindowProc) (paimmapp, hWnd, message, wParam, lParam, &lres) == S_FALSE)
 	return DefWindowProc (hWnd, message, wParam, lParam);
       else
 	return lres;
+#endif
     }
 }
 
@@ -329,6 +343,7 @@ gdk_events_init (void)
   g_source_set_can_recurse (source, TRUE);
   g_source_attach (source, NULL);
 
+#ifdef HAVE_DIMM_H
   hres = CoCreateInstance (&CLSID_CActiveIMM,
 			   NULL,
 			   CLSCTX_ALL,
@@ -346,6 +361,7 @@ gdk_events_init (void)
 				 paimmmpo));
       (paimmmpo->lpVtbl->Start) (paimmmpo);
     }
+#endif
 
 #ifdef USE_TRACKMOUSEEVENT
   user32 = GetModuleHandle ("user32.dll");
@@ -2833,6 +2849,8 @@ print_event (GdkEvent *event)
 		   "???")))));
       print_event_state (event->scroll.state);
       break;
+    default:
+      break;
     }  
   g_print ("\n");
 }
@@ -3922,7 +3940,7 @@ gdk_event_translate (GdkEvent *event,
     case WM_CHAR:
     case WM_SYSCHAR:
       GDK_NOTE (EVENTS, 
-		g_print ("WM_%sCHAR: %#x  %#x %#s %s\n",
+		g_print ("WM_%sCHAR: %#x  %#x %s %s\n",
 			 (xevent->message == WM_CHAR ? "" : "SYS"),
 			 (guint) xevent->hwnd, xevent->wParam,
 			 decode_key_lparam (xevent->lParam),
@@ -4738,10 +4756,13 @@ gdk_events_queue (void)
       GDK_NOTE (EVENTS, g_print ("PeekMessage: %#x %#x\n",
 				 (guint) msg.hwnd,
 				 gdk_win32_message_name (msg.message)));
-
+#ifndef HAVE_DIMM_H
+      TranslateMessage (&msg);
+#else
       if (paimmmpo == NULL
 	  || (paimmmpo->lpVtbl->OnTranslateMessage) (paimmmpo, &msg) != S_OK)
 	TranslateMessage (&msg);
+#endif
 
       DispatchMessage (&msg);
     }

@@ -121,6 +121,7 @@ AC_ARG_WITH(locale, [  --with-locale=LOCALE    locale name you want to use ])
 AC_ARG_WITH(xinput, [  --with-xinput=[no/gxi/xfree] support XInput ])
 
 AC_ARG_WITH(wintab, [  --with-wintab=DIRECTORY use Wintab API])
+AC_ARG_WITH(ie55, [  --with-ie55=DIRECTORY IE5.5 libs and headers (for Active IMM)])
 
 if test "x$enable_debug" = "xyes"; then
   test "$cflags_set" = set || CFLAGS="$CFLAGS -g"
@@ -271,17 +272,54 @@ AC_TRY_COMPILE([#include <dirent.h>], [DIR *dir;],
     CFLAGS=$gtk_save_CFLAGS
     AC_MSG_WARN([Could not determine POSIX flag. (-posix didn't work.)])))
 
-AM_PATH_GLIB_2_0(1.3.0,,
+AM_PATH_GLIB_2_0(1.3.10,,
   AC_MSG_ERROR([
-*** GLIB 1.3.0 or better is required. The latest version of GLIB
+*** GLIB 1.3.10 or better is required. The latest version of GLIB
 *** is always available from ftp://ftp.gtk.org/.]),
   gmodule gthread)
 
 AC_CHECK_HEADERS(dirent.h, AC_DEFINE(HAVE_DIRENT_H))
 AC_CHECK_HEADERS(pwd.h, AC_DEFINE(HAVE_PWD_H))
 AC_CHECK_HEADERS(sys/time.h, AC_DEFINE(HAVE_SYS_TIME_H))
-AC_CHECK_HEADERS(dimm.h, AC_DEFINE(HAVE_DIMM_H))
-if test ${with_wintab+set} = set && test $with_wintab != no; then
+
+if test "${with_ie55+set}" = set && test $with_ie55 != no; then
+  AC_MSG_CHECKING([for dimm.h])
+  saved_CFLAGS="$CFLAGS"
+  CFLAGS="$CFLAGS -idirafter $with_ie55/Include"
+  AC_TRY_COMPILE([#include <windows.h>
+#include <objbase.h>
+#ifdef __GNUC__
+/* The w32api imm.h clashes a bit with the IE5.5 dimm.h */
+#define IMEMENUITEMINFOA hidden_IMEMENUITEMINFOA
+#define IMEMENUITEMINFOW hidden_IMEMENUITEMINFOW
+#include <imm.h>
+#undef IMEMENUITEMINFOA
+#undef IMEMENUITEMINFOW
+#endif
+#include <dimm.h>
+],
+   [],
+   [AC_MSG_RESULT(yes)
+    AC_MSG_CHECKING([for IE55 uuid.lib])
+    if test -f $with_ie55/Lib/uuid.lib ; then
+      AC_MSG_RESULT(yes)
+      have_ie55=yes
+      AC_DEFINE(HAVE_DIMM_H)
+      IE55_UUID_LIB="$with_ie55/Lib/uuid.lib"
+      AC_SUBST(IE55_UUID_LIB)
+    else
+      AC_MSG_RESULT(no)
+      CFLAGS="$saved_CFLAGS"
+      have_ie55=no
+    fi
+    ],
+   [AC_MSG_RESULT(no)
+    CFLAGS="$saved_CFLAGS"
+    have_ie55=no])
+fi
+AM_CONDITIONAL(HAVE_IE55, test x$have_ie55 = xyes)
+
+if test "${with_wintab+set}" = set && test $with_wintab != no; then
   AC_MSG_CHECKING([for wintab.h])
   saved_CFLAGS="$CFLAGS"
   CFLAGS="$CFLAGS -I$with_wintab/include"
@@ -289,16 +327,22 @@ if test ${with_wintab+set} = set && test $with_wintab != no; then
 #include <wintab.h>], 
    [],
    [AC_MSG_RESULT(yes)
-    AC_CHECK_FILE([$with_wintab/lib/i386/wntab32x.lib],
-      [have_wintab=yes
-       AC_DEFINE(HAVE_WINTAB_H)
-       WINTAB_LIB="$with_wintab/lib/i386/wntab32x.lib"
-       AC_SUBST(WINTAB_LIB)],
-      [have_wintab=no])
+    AC_MSG_CHECKING([for wntab32x.lib])
+    if test -f $with_wintab/lib/i386/wntab32x.lib ; then
+      AC_MSG_RESULT(yes)
+      have_wintab=yes
+      AC_DEFINE(HAVE_WINTAB_H)
+      WINTAB_LIB="$with_wintab/lib/i386/wntab32x.lib"
+      AC_SUBST(WINTAB_LIB)
+    else
+      AC_MSG_RESULT(no)
+      CFLAGS="$saved_cflags"
+      have_wintab=no
+    fi
     ],
    [AC_MSG_RESULT(no)
+    CFLAGS="$saved_cflags"
     have_wintab=no])
-  CFLAGS="$saved_cflags"
 fi
 AM_CONDITIONAL(HAVE_WINTAB, test x$have_wintab = xyes)
 

@@ -4,7 +4,7 @@ port, see http://www.gimp.org/tml/gimp/win32/ or
 http://www.iki.fi/tml/gimp/win32/ .
 
 The current (CVS HEAD) version of the Win32 backend does not
-necessarily even compile properly. The code here is the
+necessarily work properly. The code here is the
 gtk-1-3-win32-production branch that was branched off from before the
 addition of the no-flicker and other recent functionality. This is
 what should be used by "production" code until the CVS HEAD version is
@@ -12,11 +12,18 @@ useable. (But note, the Win32 backend has never been claimed to be
 "production quality", although it works surprisingly well for the
 GIMP.)
 
+Building GTK+ on Win32
+======================
+
 There are three ways to build gtk for win32:
 
 1) Use the autoconf-generated configure script, and the resulting
 Makefiles (which use libtool and gcc to do the compilation). I use
 this myself, but it might be hell to setup correctly. 
+
+Personally I run configure like this:
+
+CC='gcc -mpentium -fnative-struct' CPPFLAGS='-I/target/include' CFLAGS=-O2 LDFLAGS='-L/target/lib' ./configure --disable-static --prefix=/target --with-wintab=/src/wtkit126 --with-ie55=/src/workshop/ie55_lib --host=i386-pc-mingw32 --enable-maintainer-mode
 
 2) Use gcc from mingw, or gcc -mno-cygwin from Cygwin. Say make -f
 makefile.mingw in gdk and gtk.
@@ -35,15 +42,24 @@ taking care of them. At times, I and he disagree a bit, and the gcc
 and msc makefiles might not produce compatible or identically named
 DLLs and import libraries.
 
+Using GTK+ on Win32
+===================
+
 To use GTK on Win32, you also need either gcc or MSVC. Other compilers
 might work, but don't count on it. Note that if you use gcc, in order
 to use the prebuilt DLLs, you *must* compile your code with gcc
 -mno-cygwin -fnative-struct.
 
+Wintab
+======
+
 The tablet support uses the Wintab API. The Wintab development kit can
 be downloaded from http://www.pointing.com. If you don't care for
 that, undefine HAVE_WINTAB_H in config.h.win32 and remove references to
 the wntab32x library from the makefile before building.
+
+Libintl
+=======
 
 GTK wants to be built with the GNU "intl" library for
 internationalisation (i18n). Get the version ported to Win32 (not a
@@ -56,3 +72,15 @@ the makefiles.
 Note that while the GNU gettext package is under the GPL, the "intl"
 part of it is under the LGPL (like GTK or GLib), as of
 gettext-0.10.40.
+
+ActiveIMM
+=========
+
+If you want to build a GTK+ that supports ActiveIMM (the Input Method
+Manager for non-EastAsia locales that can be used on Win9x/NT4), you
+need the dimm.h header file. That is somewhat difficult to find, but
+http://msdn.microsoft.com/downloads/samples/internet/wizard/ seems to
+be a good place to look nowadays. If you use autoconfiscated build,
+pass the --with-ie55 flag to configure specifyin the location of the
+ie55_lib directory created by downloading the IE5.5 headers and libs
+from the above URL.

@@ -176,6 +176,6 @@
 #define HAVE_WINTAB_H 1
 
 /* Define if you have the <dimm.h> header file
- * (available in the Platform SDK)
+ * (available from http://msdn.microsoft.com/downloads/samples/internet/wizard/)
 */
 /* #define HAVE_DIMM_H 1 */

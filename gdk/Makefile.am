@@ -30,6 +30,10 @@ no_undefined = -no-undefined
 if HAVE_WINTAB
 wintab_lib = -Lwin32 -lwntab32x
 endif
+
+if HAVE_IE55
+ie55uuid_lib = -Lwin32 -lie55uuid
+endif
 endif
 
 if OS_WIN32
@@ -50,6 +54,7 @@ libgdk_la_LDFLAGS = @STRIP_BEGIN@ \
 	$(gdk_symbols)	\
 	@GLIB_LIBS@	\
 	@x_ldflags@	\
+	$(ie55uuid_lib)	\
 	@x_libs@	\
 	-lm		\
 @STRIP_END@
