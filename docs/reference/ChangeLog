@@ -1,3 +1,8 @@
+Wed May 19 23:42:40 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/gdk-sections.txt: Add the right include for the "X interaction"
+	section.
+
 2004-05-18  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/gdk-sections.txt: Add gdk_display_supports_selection_notification

@@ -1159,6 +1159,7 @@ gdk_drag_context_get_type
 </SECTION>
 
 <SECTION>
+<INCLUDE>gdk/gdkx.h</INCLUDE>
 <TITLE>X Window System Interaction</TITLE>
 <FILE>x_interaction</FILE>
 GDK_ROOT_WINDOW
