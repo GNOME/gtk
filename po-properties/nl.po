@@ -2,7 +2,7 @@
 # Copyright © 2002 Free Software Foundation, Inc.
 # Dirk-Jan C. Binnema <djcb@djcbsoftware.nl>, 2002.
 # Ronald Hummelink <ronald@hummelink.xs4all.nl>, 2002.
-# Tino Meinen <a.t.meinen@chelo.nl>, 2002, 2003, 2004.
+# Tino Meinen <a.t.meinen@chelo.nl>, 2002, 2003, 2004, 2005
 # Vincent van Adrighem <adrighem@gnome.org>, 2004.
 # --------------
 # Discussiepunten:
@@ -19,10 +19,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-17 20:42+0100\n"
-"PO-Revision-Date: 2004-12-22 19:46+0100\n"
+"POT-Creation-Date: 2005-01-01 12:33+0100\n"
+"PO-Revision-Date: 2005-01-01 16:16+0100\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
-"Language-Team: Dutch <vertaling@nl.linux.org>\n"
+"Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -316,7 +316,9 @@ msgstr "Zichtbaar bij overloop"
 msgid ""
 "When TRUE, toolitem proxies for this action are represented in the toolbar "
 "overflow menu."
-msgstr "Indien WAAR, worden voor deze actie werkitem proxies in overloopmenu van de werkbalk gezet."
+msgstr ""
+"Indien WAAR, worden voor deze actie werkitem proxies in overloopmenu van de "
+"werkbalk gezet."
 
 #: gtk/gtkaction.c:258 gtk/gtktoolitem.c:166
 msgid "Visible when vertical"
@@ -393,54 +395,54 @@ msgstr "Of de actiegroep wordt gebruikt."
 msgid "Whether the action group is visible."
 msgstr "Of de actiegroep zichtbaar is."
 
-#: gtk/gtkadjustment.c:108 gtk/gtkcellrendererprogress.c:115
+#: gtk/gtkadjustment.c:115 gtk/gtkcellrendererprogress.c:115
 #: gtk/gtkspinbutton.c:303
 msgid "Value"
 msgstr "Waarde"
 
 # beter? de hoeveelheid verandering/aanpassing
-#: gtk/gtkadjustment.c:109
+#: gtk/gtkadjustment.c:116
 msgid "The value of the adjustment"
 msgstr "De waarde van de aanpassing"
 
-#: gtk/gtkadjustment.c:118
+#: gtk/gtkadjustment.c:132
 msgid "Minimum Value"
 msgstr "Minimumwaarde"
 
-#: gtk/gtkadjustment.c:119
+#: gtk/gtkadjustment.c:133
 msgid "The minimum value of the adjustment"
 msgstr "De minimumwaarde van de aanpassing"
 
-#: gtk/gtkadjustment.c:128
+#: gtk/gtkadjustment.c:152
 msgid "Maximum Value"
 msgstr "Maximumwaarde"
 
-#: gtk/gtkadjustment.c:129
+#: gtk/gtkadjustment.c:153
 msgid "The maximum value of the adjustment"
 msgstr "De maximumwaarde van de aanpassing"
 
-#: gtk/gtkadjustment.c:138
+#: gtk/gtkadjustment.c:169
 msgid "Step Increment"
 msgstr "Stapgrootte"
 
-#: gtk/gtkadjustment.c:139
+#: gtk/gtkadjustment.c:170
 msgid "The step increment of the adjustment"
 msgstr "De stapgrootte van de aanpassing"
 
 # Dit is waarschijnlijk de stapgrootte als je op page-up of page-down drukt
-#: gtk/gtkadjustment.c:148
+#: gtk/gtkadjustment.c:186
 msgid "Page Increment"
 msgstr "De paginagrootte"
 
-#: gtk/gtkadjustment.c:149
+#: gtk/gtkadjustment.c:187
 msgid "The page increment of the adjustment"
 msgstr "De paginagrootte van de aanpassing"
 
-#: gtk/gtkadjustment.c:158
+#: gtk/gtkadjustment.c:206
 msgid "Page Size"
 msgstr "Pagina-afmeting"
 
-#: gtk/gtkadjustment.c:159
+#: gtk/gtkadjustment.c:207
 msgid "The page size of the adjustment"
 msgstr "De pagina-afmeting van de aanpassing"
 
@@ -728,7 +730,7 @@ msgstr ""
 "Indien aangevinkt wordt het label gebruikt om een voorraad-item te kiezen in "
 "plaats van weergegeven te worden"
 
-#: gtk/gtkbutton.c:244 gtk/gtkcombobox.c:675
+#: gtk/gtkbutton.c:244 gtk/gtkcombobox.c:678
 msgid "Focus on click"
 msgstr "Aandacht bij klikken"
 
@@ -772,13 +774,12 @@ msgstr "Extra spatiëring toe te voegen voor CAN_DEFAULT knoppen"
 msgid "Default Outside Spacing"
 msgstr "Normale randspatiëring"
 
+# de extra ruimte wordt afgebeeld buiten de rand
 #: gtk/gtkbutton.c:381
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
-msgstr ""
-"Extra spatiëring toe te voegen voor CAN_DEFAULT knoppen die altijd buiten de "
-"rand getekend worden"
+msgstr "Extra spatiëring toe te voegen voor CAN_DEFAULT knoppen, welke altijd buiten de rand afgebeeld wordt"
 
 #: gtk/gtkbutton.c:386
 msgid "Child X Displacement"
@@ -1015,7 +1016,9 @@ msgstr "Heeft invoer"
 
 #: gtk/gtkcellrenderercombo.c:128
 msgid "If FALSE, don't allow to enter strings other than the chosen ones"
-msgstr "Indien ONWAAR, kunnen geen andere tekenreeksen worden ingevoerd dan de voorgekozen tekenreeksen"
+msgstr ""
+"Indien ONWAAR, kunnen geen andere tekenreeksen worden ingevoerd dan de "
+"voorgekozen tekenreeksen"
 
 #: gtk/gtkcellrendererpixbuf.c:136
 msgid "Pixbuf Object"
@@ -1580,45 +1583,45 @@ msgstr "Waarde in lijst"
 msgid "Whether entered values must already be present in the list"
 msgstr "Of ingegeven waardes altijd in de lijst aanwezig moeten zijn"
 
-#: gtk/gtkcombobox.c:548
+#: gtk/gtkcombobox.c:551
 msgid "ComboBox model"
 msgstr "ComboBox model"
 
-#: gtk/gtkcombobox.c:549
+#: gtk/gtkcombobox.c:552
 msgid "The model for the combo box"
 msgstr "Het model voor de combo-box"
 
-#: gtk/gtkcombobox.c:565
+#: gtk/gtkcombobox.c:568
 msgid "Wrap width"
 msgstr "Breedte laten doorlopen"
 
 # grid: netwerk, rooster, raster
 # layouting: indeling
-#: gtk/gtkcombobox.c:566
+#: gtk/gtkcombobox.c:569
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Breedte laten doorlopen om de items in te delen op een rooster"
 
-#: gtk/gtkcombobox.c:588
+#: gtk/gtkcombobox.c:591
 msgid "Row span column"
 msgstr "'Row span' kolom"
 
-#: gtk/gtkcombobox.c:589
+#: gtk/gtkcombobox.c:592
 msgid "TreeModel column containing the row span values"
 msgstr "TreeModel-kolom die de 'row span' waarden bevat"
 
-#: gtk/gtkcombobox.c:610
+#: gtk/gtkcombobox.c:613
 msgid "Column span column"
 msgstr "'Column span' kolom"
 
-#: gtk/gtkcombobox.c:611
+#: gtk/gtkcombobox.c:614
 msgid "TreeModel column containing the column span values"
 msgstr "TreeModel-kolom die de 'colomn span' waarden bevat"
 
-#: gtk/gtkcombobox.c:631
+#: gtk/gtkcombobox.c:634
 msgid "Active item"
 msgstr "Actieve item"
 
-#: gtk/gtkcombobox.c:632
+#: gtk/gtkcombobox.c:635
 msgid "The item which is currently active"
 msgstr "Het item dat momenteel actief is"
 
@@ -1626,31 +1629,31 @@ msgstr "Het item dat momenteel actief is"
 # afscheurlijn/afscheurmogelijkheid
 # afscheurlijn aan menus toevoegen
 # Menus hebben afscheurlijn<
-#: gtk/gtkcombobox.c:651 gtk/gtkuimanager.c:228
+#: gtk/gtkcombobox.c:654 gtk/gtkuimanager.c:228
 msgid "Add tearoffs to menus"
 msgstr "Afscheurlijn aan menus toevoegen"
 
-#: gtk/gtkcombobox.c:652
+#: gtk/gtkcombobox.c:655
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Of dropdowns een afscheurlijn moeten hebben"
 
-#: gtk/gtkcombobox.c:667 gtk/gtkentry.c:530
+#: gtk/gtkcombobox.c:670 gtk/gtkentry.c:530
 msgid "Has Frame"
 msgstr "Heeft kader"
 
-#: gtk/gtkcombobox.c:668
+#: gtk/gtkcombobox.c:671
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Of de combobox een kader rond de dochter tekent"
 
-#: gtk/gtkcombobox.c:676
+#: gtk/gtkcombobox.c:679
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Of de combobox de aandacht krijgt als het met de muis wordt aangeklikt"
 
-#: gtk/gtkcombobox.c:682
+#: gtk/gtkcombobox.c:685
 msgid "Appears as list"
 msgstr "Verschijnt als lijst"
 
-#: gtk/gtkcombobox.c:683
+#: gtk/gtkcombobox.c:686
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "Of dropdowns als lijsten getoond worden in plaats van als menus"
 
@@ -2293,7 +2296,9 @@ msgstr "Opmaakkolom"
 
 #: gtk/gtkiconview.c:389
 msgid "Model column used to retrieve the text if using Pango markup"
-msgstr "Modelkolom die gebruikt wordt voor het ophalen van de tekst bij gebruik van de Pango-opmaakt."
+msgstr ""
+"Modelkolom die gebruikt wordt voor het ophalen van de tekst bij gebruik van "
+"de Pango-opmaakt."
 
 #: gtk/gtkiconview.c:396
 msgid "Icon View Model"
@@ -2554,7 +2559,9 @@ msgstr ""
 msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string, if at all"
-msgstr "De voorkeursplaats waar de tekenreeks een ellipsis krijgt wanneer het label niet voldoende ruimte heeft om de gehele tekenreeks weer te geven"
+msgstr ""
+"De voorkeursplaats waar de tekenreeks een ellipsis krijgt wanneer het label "
+"niet voldoende ruimte heeft om de gehele tekenreeks weer te geven"
 
 #: gtk/gtklabel.c:474
 msgid "Single Line Mode"
@@ -2604,11 +2611,11 @@ msgstr "De breedte van de opmaak"
 msgid "The height of the layout"
 msgstr "De hoogte van de opmaak"
 
-#: gtk/gtkmenu.c:524
+#: gtk/gtkmenu.c:526
 msgid "Tearoff Title"
 msgstr "Afscheur-titel"
 
-#: gtk/gtkmenu.c:525
+#: gtk/gtkmenu.c:527
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
@@ -2616,27 +2623,27 @@ msgstr ""
 "Een titel die weergegeven kan worden door de windowmanager als dit menu "
 "losgescheurd wordt"
 
-#: gtk/gtkmenu.c:539
+#: gtk/gtkmenu.c:541
 msgid "Tearoff State"
 msgstr "Afscheur-status"
 
-#: gtk/gtkmenu.c:540
+#: gtk/gtkmenu.c:542
 msgid "A boolean that indicates whether the menu is torn-off"
 msgstr "Een boolese die aangeeft of het menu losgescheurd is"
 
-#: gtk/gtkmenu.c:546
+#: gtk/gtkmenu.c:548
 msgid "Vertical Padding"
 msgstr "Verticale opvulling"
 
-#: gtk/gtkmenu.c:547
+#: gtk/gtkmenu.c:549
 msgid "Extra space at the top and bottom of the menu"
 msgstr "Extra ruimte aan de boven en onderkant van het menu"
 
-#: gtk/gtkmenu.c:555
+#: gtk/gtkmenu.c:557
 msgid "Vertical Offset"
 msgstr "Verticale verschuiving"
 
-#: gtk/gtkmenu.c:556
+#: gtk/gtkmenu.c:558
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
@@ -2644,11 +2651,11 @@ msgstr ""
 "Wanneer het menu een submenu is, verschuif het verticaal over zoveel "
 "beeldpunten"
 
-#: gtk/gtkmenu.c:564
+#: gtk/gtkmenu.c:566
 msgid "Horizontal Offset"
 msgstr "Horizontale verschuiving"
 
-#: gtk/gtkmenu.c:565
+#: gtk/gtkmenu.c:567
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
@@ -2656,65 +2663,65 @@ msgstr ""
 "Wanneer het menu een submenu is, verschuif het horizontaal over zoveel "
 "beeldpunten"
 
-#: gtk/gtkmenu.c:575
+#: gtk/gtkmenu.c:577
 msgid "Left Attach"
 msgstr "Linker verbinding"
 
-#: gtk/gtkmenu.c:576 gtk/gtktable.c:205
+#: gtk/gtkmenu.c:578 gtk/gtktable.c:205
 msgid "The column number to attach the left side of the child to"
 msgstr "Het kolomnummer waarmee de linkerkant van de dochter wordt verbonden"
 
-#: gtk/gtkmenu.c:583
+#: gtk/gtkmenu.c:585
 msgid "Right Attach"
 msgstr "Rechter verbinding"
 
-#: gtk/gtkmenu.c:584
+#: gtk/gtkmenu.c:586
 msgid "The column number to attach the right side of the child to"
 msgstr "Het kolomnummer waarmee de rechterkant van de dochter wordt verbonden"
 
-#: gtk/gtkmenu.c:591
+#: gtk/gtkmenu.c:593
 msgid "Top Attach"
 msgstr "Bovenverbinding"
 
-#: gtk/gtkmenu.c:592
+#: gtk/gtkmenu.c:594
 msgid "The row number to attach the top of the child to"
 msgstr "Het rijnummer waarmee de bovenkant van de dochter wordt verbonden"
 
-#: gtk/gtkmenu.c:599
+#: gtk/gtkmenu.c:601
 msgid "Bottom Attach"
 msgstr "Onderverbinding"
 
-#: gtk/gtkmenu.c:600 gtk/gtktable.c:226
+#: gtk/gtkmenu.c:602 gtk/gtktable.c:226
 msgid "The row number to attach the bottom of the child to"
 msgstr "Het rijnummer waarmee de onderkant van de dochter wordt verbonden"
 
-#: gtk/gtkmenu.c:687
+#: gtk/gtkmenu.c:689
 msgid "Can change accelerators"
 msgstr "Kan sneltoetsen wijzigen"
 
-#: gtk/gtkmenu.c:688
+#: gtk/gtkmenu.c:690
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Of sneltoetsen veranderd kunnen worden door het drukken van een toets over "
 "het menu-item"
 
-#: gtk/gtkmenu.c:693
+#: gtk/gtkmenu.c:695
 msgid "Delay before submenus appear"
 msgstr "Vertraging voordat submenus verschijnen"
 
-#: gtk/gtkmenu.c:694
+#: gtk/gtkmenu.c:696
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Minimumtijd die de muisaanwijzer boven een menu-item moet staan voordat het "
 "submenu verschijnt"
 
-#: gtk/gtkmenu.c:701
+#: gtk/gtkmenu.c:703
 msgid "Delay before hiding a submenu"
 msgstr "Vertraging voordat een submenu verdwijnt"
 
-#: gtk/gtkmenu.c:702
+#: gtk/gtkmenu.c:704
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -3166,7 +3173,10 @@ msgstr "Tekst die weergegeven wordt in de voortgangsbalk"
 msgid ""
 "The preferred place to ellipsize the string, if the progressbar does not "
 "have enough room to display the entire string, if at all"
-msgstr "De voorkeursplaats waar de tekenreeks een ellipsis krijgt wanneer de voortgangsbalk niet voldoende ruimte heeft om de gehele tekenreeks weer te geven."
+msgstr ""
+"De voorkeursplaats waar de tekenreeks een ellipsis krijgt wanneer de "
+"voortgangsbalk niet voldoende ruimte heeft om de gehele tekenreeks weer te "
+"geven."
 
 #: gtk/gtkradioaction.c:139
 msgid "The value"
@@ -3184,17 +3194,16 @@ msgstr ""
 msgid "Group"
 msgstr "Groep"
 
+# keuzerondje/radioknop
 #: gtk/gtkradioaction.c:157
-#, fuzzy
 msgid "The radio action whose group this action belongs to."
-msgstr "De radioknop wiens groep deze actie toebehoort."
+msgstr "De keuzeactie wiens groep deze actie toebehoort."
 
 # de widget is eigendom van de groep van het keuzerondje
 # de radioknop van de groep waartoe dit widget behoort.
 #: gtk/gtkradiobutton.c:114
-#, fuzzy
 msgid "The radio button whose group this widget belongs to."
-msgstr "De radioknop wiens groep dit widget toebehoort."
+msgstr "Het keuzerondje wiens groep dit widget toebehoort."
 
 #: gtk/gtkrange.c:325
 msgid "Update policy"
@@ -3595,7 +3604,8 @@ msgstr "Alternatieve knoppenvolgorde"
 
 #: gtk/gtksettings.c:433
 msgid "Whether buttons in dialogs should use the alternative button order"
-msgstr "Of knoppen in dialoogvensters in de alternatieve knopvolgorde moeten staan"
+msgstr ""
+"Of knoppen in dialoogvensters in de alternatieve knopvolgorde moeten staan"
 
 #: gtk/gtksizegroup.c:243
 msgid "Mode"
@@ -4430,8 +4440,8 @@ msgstr "Al zwevend uitklappen"
 # engels taalfout: collaped
 #: gtk/gtktreeview.c:693
 msgid ""
-"Whether rows should be expanded/collaped when the pointer moves over them"
-msgstr "Of rijen worden uitgeklapt/ingeklapt wanneer de muisaanwijzer er over beweegt"
+"Whether rows should be expanded/collapsed when the pointer moves over them"
+msgstr "Of rijen worden uitgeklapt/ingeklapt wanneer de muisaanwijzer erover beweegt"
 
 #: gtk/gtktreeview.c:713
 msgid "Vertical Separator Width"
@@ -4617,7 +4627,7 @@ msgstr ""
 
 #: gtk/gtkviewport.c:153
 msgid "Determines how the shadowed box around the viewport is drawn"
-msgstr "Bepaalt hoe het schaduwkader rondom de viewport wordt getekent"
+msgstr "Bepaalt hoe het schaduwkader rondom de viewport wordt afgebeeld"
 
 #: gtk/gtkwidget.c:410
 msgid "Widget name"
@@ -4776,7 +4786,7 @@ msgstr "Interne aandacht"
 
 #: gtk/gtkwidget.c:1408
 msgid "Whether to draw the focus indicator inside widgets"
-msgstr "Of de aandacht-indicator in widgets moet worden getekend"
+msgstr "Of de aandacht-indicator in widgets moet worden afgebeeld"
 
 #: gtk/gtkwidget.c:1414
 msgid "Focus linewidth"
@@ -5003,7 +5013,8 @@ msgstr "Aandacht bij realisering"
 
 #: gtk/gtkwindow.c:605
 msgid "TRUE if the window should receive the input focus when mapped."
-msgstr "WAAR (TRUE) als het venster de invoeraandacht moet krijgen bij realisering."
+msgstr ""
+"WAAR (TRUE) als het venster de invoeraandacht moet krijgen bij realisering."
 
 # versiering beter dan decoratie(=onderscheiding)
 #: gtk/gtkwindow.c:619
@@ -5030,16 +5041,15 @@ msgstr "IM voorbewerkings-stijl"
 
 #: modules/input/gtkimcontextxim.c:331
 msgid "How to draw the input method preedit string"
-msgstr ""
-"Hoe de voorbewerkingstekenreeks voor de invoermethode moet worden getekend"
+msgstr "Hoe de voorbewerkingstekenreeks voor de invoermethode moet worden afgebeeld"
 
 #: modules/input/gtkimcontextxim.c:339
 msgid "IM Status style"
-msgstr "IM statusstijl"
+msgstr "IM-statusstijl"
 
 #: modules/input/gtkimcontextxim.c:340
 msgid "How to draw the input method statusbar"
-msgstr "Hoe de statusbalk voor invoermethode moet worden getekend"
+msgstr "Hoe de statusbalk voor invoermethode moet worden afgebeeld"
 
 #, fuzzy
 #~ msgid "Width In Chararacters"
