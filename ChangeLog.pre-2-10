@@ -1,5 +1,12 @@
 2003-12-10  Mark McLoughlin  <mark@skynet.ie>
 
+	* gdk/linux-fb/gdkspawn-fb.c,
+	  gdk/win32/gdkspawn-win32.c,
+	  gdk/x11/gdkspawn-x11.c: (gdk_spawn_command_line_on_screen):
+	s/gdk_spawn/gdk_spawn_on_screen/.
+
+2003-12-10  Mark McLoughlin  <mark@skynet.ie>
+
 	Utility functions for multi-screen applications which need
 	to ensure launched applications appear on a certain screen.
 	See bug #95897.

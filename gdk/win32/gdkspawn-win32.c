@@ -93,11 +93,11 @@ gdk_spawn_command_line_on_screen (GdkScreen    *screen,
 			   error))
     return FALSE;
 
-  retval = gdk_spawn (screen,
-		      NULL, argv, NULL,
-		      G_SPAWN_SEARCH_PATH,
-		      NULL, NULL, NULL,
-		      error);
+  retval = gdk_spawn_on_screen (screen,
+				NULL, argv, NULL,
+				G_SPAWN_SEARCH_PATH,
+				NULL, NULL, NULL,
+				error);
   g_strfreev (argv);
 
   return retval;
