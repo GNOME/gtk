@@ -245,12 +245,15 @@ gtk_window_set_arg (GtkWindow  *window,
       break;
     case ARG_AUTO_SHRINK:
       window->auto_shrink = (GTK_VALUE_BOOL (*arg) != FALSE);
+      gtk_window_set_hints (GTK_WIDGET (window), &GTK_WIDGET (window)->requisition);
       break;
     case ARG_ALLOW_SHRINK:
       window->allow_shrink = (GTK_VALUE_BOOL (*arg) != FALSE);
+      gtk_window_set_hints (GTK_WIDGET (window), &GTK_WIDGET (window)->requisition);
       break;
     case ARG_ALLOW_GROW:
       window->allow_grow = (GTK_VALUE_BOOL (*arg) != FALSE);
+      gtk_window_set_hints (GTK_WIDGET (window), &GTK_WIDGET (window)->requisition);
       break;
     case ARG_WIN_POS:
       gtk_window_position (window, GTK_VALUE_ENUM (*arg));
@@ -382,6 +385,8 @@ gtk_window_set_policy (GtkWindow *window,
   window->allow_shrink = (allow_shrink != FALSE);
   window->allow_grow = (allow_grow != FALSE);
   window->auto_shrink = (auto_shrink != FALSE);
+
+  gtk_window_set_hints (GTK_WIDGET (window), &GTK_WIDGET (window)->requisition);
 }
 
 void

@@ -5,10 +5,8 @@ Bugs:
  * pasting into a GtkEntry that already has a very long string,
    causes the app to hang.
  
- * signal parameters don't seem to get refreshed on recursive invokations
-   of GTK_NO_RECURSE signals, which causes the restarted emissions to loose
-   their actual point, i.e. parameter changes on the restarted emission,
-   needs further investigation.
+ * scrolled windows get cought in an endless reallocation loop under
+   certain (rare) circumstances.
 
  * Widget redrawing when the window resizes sometimes messes up.
    GtkLabels sometimes redraw without clearing up the underlying background on

@@ -299,8 +299,8 @@ gtk_container_border_width (GtkContainer *container,
     {
       container->border_width = border_width;
 
-      if (container->widget.parent && GTK_WIDGET_VISIBLE (container))
-	gtk_container_need_resize (GTK_CONTAINER (container->widget.parent));
+      if (GTK_WIDGET_REALIZED (container))
+	gtk_widget_queue_resize (GTK_WIDGET (container));
     }
 }
 
