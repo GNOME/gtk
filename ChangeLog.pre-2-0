@@ -1,3 +1,8 @@
+2001-08-15  Matthias Clasen  <matthiasc@waldgeist.poet.de>
+
+	* docs/debugging.txt: Add a warning about --enable-debug=no,
+	some editorial changes.
+
 2001-08-13  Matthias Clasen  <matthiasc@waldgeist.poet.de>
 
 	* gtk/docs/debugging.txt, gdk/gdk.c, gdk/gdkinternals.h, 

@@ -38,8 +38,14 @@ time by the --enable-debug option.
   Disable all debugging support (fastest)
     sets G_DISABLE_ASSERT, G_DISABLE_CHECKS, and GTK_NO_CHECK_CASTS
 
+Note that !G_DISABLE_CHECKS and --enable-debug=no are to be considered
+not only fast, but dangerous as they tend to destabilize even mostly
+bug-free software by changing the effect of many bugs from simple warnings 
+into fatal crashes. Thus --enable-debug=no should *not* be used for
+stable releases of gtk+.
 
-RUN TIME OPTIONS
+
+RUNTIME OPTIONS
 ----------------
 
 At run time, if GTK+ was compiled with debugging enabled, different
@@ -96,5 +102,5 @@ and the object system.
  'updates'       - Visual feedback about window updates
 
 
-                                    - Owen Taylor <owt1@cornell.edu>
-                                      98/02/19
+                                    - 2001-08-13 Matthias Clasen
+                                    - 98/02/19 Owen Taylor
