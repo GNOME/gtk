@@ -1,5 +1,12 @@
 1999-10-20  Federico Mena Quintero  <federico@redhat.com>
 
+	* configure.in: Bumped version number to 0.3.
+
+	* src/Makefile.am (lbgdk_pixbuf_la_LDFLAGS): Added a libtool
+	version number for the library.
+
+1999-10-20  Federico Mena Quintero  <federico@redhat.com>
+
 	* src/gdk-pixbuf.h (GdkPixbuf): Removed the unref_fn field.  Now
 	all memory management of the buffer is done by libart.
 

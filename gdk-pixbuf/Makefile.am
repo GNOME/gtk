@@ -47,6 +47,8 @@ libgdk_pixbuf_la_SOURCES = 	\
 	gdk-pixbuf-io.c		\
 	gdk-pixbuf-data.c
 
+libgdk_pixbuf_la_LDFLAGS = -version-info 1:0:0
+
 libgdk_pixbufinclude_HEADERS =	\
 	gdk-pixbuf.h
 
