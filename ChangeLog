@@ -1,3 +1,16 @@
+2004-08-11  Federico Mena Quintero  <federico@ximian.com>
+
+	Merged from HEAD:
+
+	Fix #149422, #143457:
+
+	* gtk/gtkfilechooserdefault.c
+	(gtk_file_chooser_default_should_respond): Rewrite to take the
+	current focus into account, the contents of the save entry, and
+	the last focus for the shortcuts list.
+	(switch_to_selected_folder): We don't need an assertion on the
+	action here.
+
 Wed Aug 11 19:17:28 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktreeview.c (gtk_tree_view_maybe_begin_dragging_row): 
