@@ -59,9 +59,25 @@ void          gtk_stock_item_free (GtkStockItem       *item);
 
 
 /* Stock IDs */
-#define GTK_STOCK_OK "OK"
-#define GTK_STOCK_CANCEL "Cancel"
-#define GTK_STOCK_EXIT "Exit"
+#define GTK_STOCK_DIALOG_GENERIC   "Gtk_Message_Dialog"
+#define GTK_STOCK_DIALOG_INFO      "Gtk_Info_Dialog"
+#define GTK_STOCK_DIALOG_WARNING   "Gtk_Warning_Dialog"
+#define GTK_STOCK_DIALOG_ERROR     "Gtk_Error_Dialog"
+#define GTK_STOCK_DIALOG_QUESTION  "Gtk_Question_Dialog"
+
+#define GTK_STOCK_BUTTON_APPLY     "Gtk_Apply_Button"
+#define GTK_STOCK_BUTTON_OK        "Gtk_OK_Button"
+#define GTK_STOCK_BUTTON_CANCEL    "Gtk_Cancel_Button"
+#define GTK_STOCK_BUTTON_CLOSE     "Gtk_Close_Button"
+#define GTK_STOCK_BUTTON_YES       "Gtk_Yes_Button"
+#define GTK_STOCK_BUTTON_NO        "Gtk_No_Button"
+
+#define GTK_STOCK_CLOSE            "Gtk_Close"
+#define GTK_STOCK_QUIT             "Gtk_Quit"
+#define GTK_STOCK_HELP             "Gtk_Help"
+#define GTK_STOCK_NEW              "Gtk_New"
+#define GTK_STOCK_OPEN             "Gtk_Open"
+#define GTK_STOCK_SAVE             "Gtk_Save"
 
 #ifdef __cplusplus
 }

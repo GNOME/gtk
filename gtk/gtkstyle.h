@@ -59,7 +59,8 @@ typedef enum
   GTK_ICON_MENU,
   GTK_ICON_BUTTON,
   GTK_ICON_SMALL_TOOLBAR,
-  GTK_ICON_LARGE_TOOLBAR
+  GTK_ICON_LARGE_TOOLBAR,
+  GTK_ICON_DIALOG
 } GtkIconSizeType;
 
 /* We make this forward declaration here, since we pass

@@ -21,7 +21,7 @@
  * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #include "gtkstock.h"
@@ -37,22 +37,22 @@ real_add (const GtkStockItem *items,
           gboolean            copy)
 {
   int i;
-  
+
   init_stock_hash ();
 
   if (n_items == 0)
     return;
-  
+
   i = 0;
   while (i < n_items)
     {
       const GtkStockItem * item = &items[i];
       if (copy)
         item = gtk_stock_item_copy (item);
-      
+
       g_hash_table_insert (stock_hash,
                            (gchar*)item->stock_id, (GtkStockItem*)item);
-      
+
       ++i;
     }
 }
@@ -71,7 +71,7 @@ gtk_stock_add_static (const GtkStockItem *items,
                       guint               n_items)
 {
   g_return_if_fail (items != NULL);
-  
+
   real_add (items, n_items, FALSE);
 }
 
@@ -83,9 +83,9 @@ gtk_stock_lookup (const gchar  *stock_id,
 
   g_return_val_if_fail (stock_id != NULL, FALSE);
   g_return_val_if_fail (item != NULL, FALSE);
-  
+
   init_stock_hash ();
-  
+
   found = g_hash_table_lookup (stock_hash, stock_id);
 
   if (found)
@@ -100,11 +100,11 @@ gtk_stock_item_copy (const GtkStockItem *item)
   GtkStockItem *copy;
 
   g_return_val_if_fail (item != NULL, NULL);
-  
+
   copy = g_new (GtkStockItem, 1);
 
   *copy = *item;
-  
+
   copy->stock_id = g_strdup (item->stock_id);
   copy->label = g_strdup (item->label);
   copy->translation_domain = g_strdup (item->translation_domain);
@@ -124,22 +124,40 @@ gtk_stock_item_free (GtkStockItem *item)
   g_free (item);
 }
 
+#define GTK_DOMAIN "gtk+"
+
 static GtkStockItem builtin_items [] =
 {
-  /* FIXME these are just examples */
-  /* and the OK accelerator is wrong, Return means default button,
-     OK should have its own accelerator */
-  { GTK_STOCK_OK, N_("OK"), 0, GDK_Return, "gtk+" }, 
-  { GTK_STOCK_EXIT, N_("Exit"), GDK_CONTROL_MASK, GDK_x, "gtk+" }
-};
+  /* KEEP IN SYNC with gtkiconfactory.c stock icons */
   
+  { GTK_STOCK_DIALOG_GENERIC, N_("Message"), 0, 0, GTK_DOMAIN },
+  { GTK_STOCK_DIALOG_INFO, N_("Information"), 0, 0, GTK_DOMAIN },
+  { GTK_STOCK_DIALOG_WARNING, N_("Warning"), 0, 0, GTK_DOMAIN },
+  { GTK_STOCK_DIALOG_ERROR, N_("Error"), 0, 0, GTK_DOMAIN },
+  { GTK_STOCK_DIALOG_QUESTION, N_("Question"), 0, 0, GTK_DOMAIN },
+
+  { GTK_STOCK_BUTTON_APPLY, N_("Apply"), GDK_CONTROL_MASK, 'a', GTK_DOMAIN },
+  { GTK_STOCK_BUTTON_OK, N_("OK"), GDK_CONTROL_MASK, 'o', GTK_DOMAIN },
+  { GTK_STOCK_BUTTON_CANCEL, N_("Cancel"), GDK_CONTROL_MASK, 'c', GTK_DOMAIN },
+  { GTK_STOCK_BUTTON_CLOSE, N_("Close"), GDK_CONTROL_MASK, 'c', GTK_DOMAIN },
+  { GTK_STOCK_BUTTON_YES, N_("Yes"), GDK_CONTROL_MASK, 'y', GTK_DOMAIN },
+  { GTK_STOCK_BUTTON_NO, N_("No"), GDK_CONTROL_MASK, 'n', GTK_DOMAIN },
+
+  { GTK_STOCK_CLOSE, N_("Close"), GDK_CONTROL_MASK, 'w', GTK_DOMAIN },
+  { GTK_STOCK_QUIT, N_("Quit"), GDK_CONTROL_MASK, 'q', GTK_DOMAIN },
+  { GTK_STOCK_HELP, N_("Help"), GDK_CONTROL_MASK, 'h', GTK_DOMAIN },
+  { GTK_STOCK_NEW, N_("New"), GDK_CONTROL_MASK, 'n', GTK_DOMAIN },
+  { GTK_STOCK_OPEN, N_("Open"), GDK_CONTROL_MASK, 'o', GTK_DOMAIN },
+  { GTK_STOCK_SAVE, N_("Save"), GDK_CONTROL_MASK, 's', GTK_DOMAIN }
+};
+
 static void
 init_stock_hash (void)
 {
   if (stock_hash == NULL)
     {
       stock_hash = g_hash_table_new (g_str_hash, g_str_equal);
-      
+
       gtk_stock_add_static (builtin_items, G_N_ELEMENTS (builtin_items));
     }
 }

@@ -98,13 +98,45 @@ read_bool (const guchar **p)
         return val;
 }
 
-/* sync with image-to-inline.c */
-#define MAGIC_NUMBER 1804289383
-
 static void
 free_buffer (guchar *pixels, gpointer data)
 {
 	free (pixels);
+}
+
+static GdkPixbuf*
+read_raw_inline (const guchar *data, gboolean copy_pixels)
+{
+        GdkPixbuf *pixbuf;
+        const guchar *p = data;
+        
+        pixbuf = GDK_PIXBUF (g_type_create_instance (GDK_TYPE_PIXBUF));
+
+        pixbuf->rowstride = read_int (&p);
+        pixbuf->width = read_int (&p);
+        pixbuf->height = read_int (&p);
+        pixbuf->has_alpha = read_bool (&p);
+        pixbuf->colorspace = read_int (&p);
+        pixbuf->n_channels = read_int (&p);
+        pixbuf->bits_per_sample = read_int (&p);
+  
+        if (copy_pixels) {
+                pixbuf->pixels = malloc (pixbuf->height * pixbuf->rowstride);
+
+                if (pixbuf->pixels == NULL) {                        
+                        g_object_unref (G_OBJECT (pixbuf));
+                        return NULL;
+                }
+
+                pixbuf->destroy_fn = free_buffer;
+                pixbuf->destroy_fn_data = NULL;
+
+                memcpy (pixbuf->pixels, p, pixbuf->height * pixbuf->rowstride);
+        } else {
+                pixbuf->pixels = (guchar *) p;
+        }
+
+        return pixbuf;
 }
 
 /**
@@ -132,40 +164,26 @@ gdk_pixbuf_new_from_inline   (const guchar *inline_pixbuf,
 {
         const guchar *p;
         GdkPixbuf *pixbuf;
-  
+        GdkPixbufInlineFormat format;
+        
         p = inline_pixbuf;
 
-        if (read_int (&p) != MAGIC_NUMBER) {
+        if (read_int (&p) != GDK_PIXBUF_INLINE_MAGIC_NUMBER) {
                 g_warning ("Bad inline data; wrong magic number");
                 return NULL;
         }
 
-        pixbuf = GDK_PIXBUF (g_type_create_instance (GDK_TYPE_PIXBUF));
+        format = read_int (&p);
 
-        pixbuf->rowstride = read_int (&p);
-        pixbuf->width = read_int (&p);
-        pixbuf->height = read_int (&p);
-        pixbuf->has_alpha = read_bool (&p);
-        pixbuf->colorspace = read_int (&p);
-        pixbuf->n_channels = read_int (&p);
-        pixbuf->bits_per_sample = read_int (&p);
-  
-        if (copy_pixels) {
-                pixbuf->pixels = malloc (pixbuf->height * pixbuf->rowstride);
+        switch (format)
+        {
+        case GDK_PIXBUF_INLINE_RAW:
+                pixbuf = read_raw_inline (p, copy_pixels);
+                break;
 
-                if (pixbuf->pixels == NULL) {                        
-                        g_object_unref (G_OBJECT (pixbuf));
-                        return NULL;
-                }
-
-                pixbuf->destroy_fn = free_buffer;
-                pixbuf->destroy_fn_data = NULL;
-
-                memcpy (pixbuf->pixels, p, pixbuf->height * pixbuf->rowstride);
-        } else {
-                pixbuf->pixels = (guchar *) p;
+        default:
+                return NULL;
         }
-        
 
         return pixbuf;
 }

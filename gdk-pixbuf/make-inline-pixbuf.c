@@ -21,13 +21,10 @@
  */
 
 #include <config.h>
-#include "gdk-pixbuf.h"
+#include "gdk-pixbuf-private.h"
 #include <stdio.h>
 #include <errno.h>
 #include <string.h>
-
-/* sync with gdk-pixbuf-data.c */
-#define MAGIC_NUMBER 1804289383
 
 void
 output_int (FILE *outfile, int number, const char *comment)
@@ -81,7 +78,8 @@ output_pixbuf (FILE *outfile, gboolean ext_symbols,
   /* Sync the order of writing with the order of reading in
    * gdk-pixbuf-data.c
    */
-  output_int (outfile, MAGIC_NUMBER, "File magic");
+  output_int (outfile, GDK_PIXBUF_INLINE_MAGIC_NUMBER, "File magic");
+  output_int (outfile, GDK_PIXBUF_INLINE_RAW, "Format of following stuff");
   output_int (outfile, gdk_pixbuf_get_rowstride (pixbuf), "Rowstride");
   output_int (outfile, gdk_pixbuf_get_width (pixbuf), "Width");
   output_int (outfile, gdk_pixbuf_get_height (pixbuf), "Height");

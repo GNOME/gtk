@@ -1,3 +1,9 @@
+2000-06-26  Havoc Pennington  <hp@redhat.com>
+
+	* gdk-pixbuf-private.h (GdkPixbufInlineFormat): include an 
+	enum here for the known formats of inlined pixbufs.
+	Also, #define our file magic here.
+
 2000-06-23  Havoc Pennington  <hp@redhat.com>
 
 	* image-to-inline.c: Small program that creates C variable

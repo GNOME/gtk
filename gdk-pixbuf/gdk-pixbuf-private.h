@@ -117,4 +117,14 @@ struct _GdkPixbufAnimationClass {
 
 
 
+#define GDK_PIXBUF_INLINE_MAGIC_NUMBER 1804289383
+
+typedef enum
+{
+  GDK_PIXBUF_INLINE_RAW = 0,
+  GDK_PIXBUF_INLINE_RLE = 1
+} GdkPixbufInlineFormat;
+
+
+
 #endif

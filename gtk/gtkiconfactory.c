@@ -25,12 +25,15 @@
  */
 
 #include "gtkiconfactory.h"
+#include "stock-icons/gtkstockpixbufs.h"
+#include "gtkstock.h"
 
 static gpointer parent_class = NULL;
 
 static void gtk_icon_factory_init       (GtkIconFactory      *icon_factory);
 static void gtk_icon_factory_class_init (GtkIconFactoryClass *klass);
 static void gtk_icon_factory_finalize   (GObject             *object);
+static void get_default_icons           (GtkIconFactory      *icon_factory);
 
 GType
 gtk_icon_factory_get_type (void)
@@ -175,14 +178,107 @@ gtk_default_icon_lookup (const gchar *stock_id)
 
   if (gtk_default_icons == NULL)
     {
-      /* FIXME create our default icons, should be kept
-       * in sync with the default stock items.
-       */
       gtk_default_icons = gtk_icon_factory_new ();
-      
+
+      get_default_icons (gtk_default_icons);
     }
   
   return gtk_icon_factory_lookup (gtk_default_icons, stock_id);
+}
+
+static GtkIconSet *
+sized_icon_set_from_inline (const guchar *inline_data,
+                            GtkIconSizeType size)
+{
+  GtkIconSet *set;
+
+  GtkIconSource source = { NULL, NULL, 0, 0, size,
+                           TRUE, TRUE, FALSE };
+
+  set = gtk_icon_set_new ();
+
+  source.pixbuf = gdk_pixbuf_new_from_inline (inline_data, FALSE);
+
+  g_assert (source.pixbuf);
+
+  gtk_icon_set_add_source (set, &source);
+
+  return set;
+}
+
+static GtkIconSet *
+unsized_icon_set_from_inline (const guchar *inline_data)
+{
+  GtkIconSet *set;
+
+  /* This icon can be used for any direction/state/size */
+  GtkIconSource source = { NULL, NULL, 0, 0, 0,
+                           TRUE, TRUE, TRUE };
+
+  set = gtk_icon_set_new ();
+
+  source.pixbuf = gdk_pixbuf_new_from_inline (inline_data, FALSE);
+
+  g_assert (source.pixbuf);
+
+  gtk_icon_set_add_source (set, &source);
+
+  return set;
+}
+
+static void
+add_sized (GtkIconFactory *factory,
+           const guchar *inline_data,
+           GtkIconSizeType size,
+           const gchar *stock_id)
+{
+  GtkIconSet *set;
+  
+  set = sized_icon_set_from_inline (inline_data, size);
+  
+  gtk_icon_factory_add (factory, stock_id, set);
+
+  g_object_unref (G_OBJECT (set));
+}
+
+static void
+add_unsized (GtkIconFactory *factory,
+             const guchar *inline_data,
+             const gchar *stock_id)
+{
+  GtkIconSet *set;
+  
+  set = unsized_icon_set_from_inline (inline_data);
+  
+  gtk_icon_factory_add (factory, stock_id, set);
+
+  g_object_unref (G_OBJECT (set));
+}
+
+static void
+get_default_icons (GtkIconFactory *factory)
+{
+  /* KEEP IN SYNC with gtkstock.c */
+
+  add_sized (factory, dialog_default, GTK_ICON_DIALOG, GTK_STOCK_DIALOG_GENERIC);
+  add_sized (factory, dialog_error, GTK_ICON_DIALOG, GTK_STOCK_DIALOG_ERROR);
+  add_sized (factory, dialog_info, GTK_ICON_DIALOG, GTK_STOCK_DIALOG_INFO);
+  add_sized (factory, dialog_question, GTK_ICON_DIALOG, GTK_STOCK_DIALOG_QUESTION);
+  add_sized (factory, dialog_warning, GTK_ICON_DIALOG, GTK_STOCK_DIALOG_WARNING);
+
+  add_sized (factory, stock_button_apply, GTK_ICON_BUTTON, GTK_STOCK_BUTTON_APPLY);
+  add_sized (factory, stock_button_ok, GTK_ICON_BUTTON, GTK_STOCK_BUTTON_OK);
+  add_sized (factory, stock_button_cancel, GTK_ICON_BUTTON, GTK_STOCK_BUTTON_CANCEL);
+  add_sized (factory, stock_button_close, GTK_ICON_BUTTON, GTK_STOCK_BUTTON_CLOSE);
+  add_sized (factory, stock_button_yes, GTK_ICON_BUTTON, GTK_STOCK_BUTTON_YES);
+  add_sized (factory, stock_button_no, GTK_ICON_BUTTON, GTK_STOCK_BUTTON_NO);
+    
+  add_unsized (factory, stock_close, GTK_STOCK_CLOSE);
+  add_unsized (factory, stock_exit, GTK_STOCK_QUIT);
+  add_unsized (factory, stock_help, GTK_STOCK_HELP);
+  add_unsized (factory, stock_new, GTK_STOCK_NEW);
+  add_unsized (factory, stock_open, GTK_STOCK_OPEN);
+  add_unsized (factory, stock_save, GTK_STOCK_SAVE);
 }
 
 /* Sizes */
@@ -197,7 +293,8 @@ static gint widths[] =
   16, /* menu */
   24, /* button */
   18, /* small toolbar */
-  24  /* large toolbar */
+  24, /* large toolbar */
+  48  /* dialog */
 };
 
 static gint heights[] =
@@ -205,7 +302,8 @@ static gint heights[] =
   16, /* menu */
   24, /* button */
   18, /* small toolbar */
-  24  /* large toolbar */
+  24, /* large toolbar */
+  48  /* dialog */
 };
 
 void
