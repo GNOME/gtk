@@ -1,3 +1,8 @@
+2004-11-08  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkaction.c (_gtk_action_sync_menu_visible): Use 
+	gtk_widget_{hide,show} instead of g_object_set (..."visible"...).
+
 2004-11-06  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_cell_layout_pack_end): 
