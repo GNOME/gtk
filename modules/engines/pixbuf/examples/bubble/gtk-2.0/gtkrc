@@ -1,0 +1,65 @@
+style "default"
+{
+  fg[NORMAL] = "#ffffff"
+  fg[PRELIGHT] = "#ffffff"
+  bg_pixmap[NORMAL]      = "triangle_background.png"
+#  bg_pixmap[NORMAL]    = "bc.xpm"
+  bg_pixmap[PRELIGHT]    = "bc-light.xpm"
+  bg_pixmap[ACTIVE]      = "bc-dark.xpm"  bg_pixmap[INSENSITIVE] = "bc.xpm"
+}
+
+class "GtkWidget" style "default"
+
+style "bubble-button"
+{
+  engine "pixmap" 
+    {
+    image 
+      {
+        function        = BOX
+	file            = "bubble-blue.png"
+	border          = { 8, 8, 8, 8 }
+	stretch         = TRUE
+      }
+    }
+}
+
+# common default
+class "GtkButton" style "bubble-button"
+
+style "bubble-range"
+{
+  GtkRange::slider_width = 16
+  GtkRange::stepper_size = 16
+
+  engine "pixmap" 
+    {
+    image 
+      {
+        function        = BOX
+	file            = "bubble-blue.png"
+	border          = { 8, 8, 8, 8 }
+	stretch         = TRUE
+      }
+    }
+}
+
+# common default
+class "GtkRange" style "bubble-range"
+
+style "bubble-menuitem"
+{
+  engine "pixmap" 
+    {
+    image 
+      {
+        function        = BOX
+	file            = "bubble-blue.png"
+	border          = { 8, 8, 8, 8 }
+	stretch         = TRUE
+      }
+    }
+}
+
+# common default
+class "GtkMenuItem" style "bubble-menuitem"
