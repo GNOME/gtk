@@ -2218,7 +2218,7 @@ real_undo_selection (GtkCList *clist)
     return;
 
   if (clist->anchor >= 0)
-    resync_selection (clist, NULL);
+    GTK_CLIST_CLASS_FW (clist)->resync_selection (clist, NULL);
 
   if (!(clist->undo_selection || clist->undo_unselection))
     {
@@ -2704,13 +2704,20 @@ gtk_clist_button_press (GtkWidget * widget,
 	      no_focus_row = TRUE;
 	    }
 
-	  GTK_CLIST_SET_FLAG (clist, CLIST_DRAG_SELECTION);
-	  gdk_pointer_grab (clist->clist_window, FALSE,
-			    GDK_POINTER_MOTION_HINT_MASK |
-			    GDK_BUTTON1_MOTION_MASK |
-			    GDK_BUTTON_RELEASE_MASK,
-			    NULL, NULL, event->time);
-
+	  if (event->type == GDK_BUTTON_PRESS)
+	    {
+	      GTK_CLIST_SET_FLAG (clist, CLIST_DRAG_SELECTION);
+	      gdk_pointer_grab (clist->clist_window, FALSE,
+				GDK_POINTER_MOTION_HINT_MASK |
+				GDK_BUTTON1_MOTION_MASK |
+				GDK_BUTTON_RELEASE_MASK,
+				NULL, NULL, event->time);
+	    }
+	  else if (gdk_pointer_is_grabbed ())
+	    {
+	      GTK_CLIST_UNSET_FLAG (clist, CLIST_DRAG_SELECTION);
+	      gdk_pointer_ungrab (event->time);
+	    }
 
 	  if (GTK_CLIST_ADD_MODE (clist))
 	    {
@@ -2749,15 +2756,29 @@ gtk_clist_button_press (GtkWidget * widget,
 	    {
 	    case GTK_SELECTION_SINGLE:
 	    case GTK_SELECTION_MULTIPLE:
-	      clist->anchor = row;
+	      if (event->type != GDK_BUTTON_PRESS)
+		select_row (clist, row, column, (GdkEvent *) event);
+	      else
+		clist->anchor = row;
 	      break;
 
 	    case GTK_SELECTION_BROWSE:
-	      if (row != old_row || no_focus_row)
-		select_row (clist, row, column, (GdkEvent *) event);
+	      select_row (clist, row, column, (GdkEvent *) event);
 	      break;
 
 	    case GTK_SELECTION_EXTENDED:
+	      if (event->type != GDK_BUTTON_PRESS)
+		{
+		  if (clist->anchor != -1)
+		    {
+		      update_extended_selection (clist, clist->focus_row);
+		      GTK_CLIST_CLASS_FW (clist)->resync_selection
+			(clist, (GdkEvent *) event);
+		    }
+		  select_row (clist, row, column, (GdkEvent *) event);
+		  break;
+		}
+	      
 	      if (event->state & GDK_CONTROL_MASK)
 		{
 		  if (event->state & GDK_SHIFT_MASK)
@@ -2772,24 +2793,27 @@ gtk_clist_button_press (GtkWidget * widget,
 		      else
 			update_extended_selection (clist, clist->focus_row);
 		    }
-		  return TRUE;
+		  break;
 		}
+
 	      if (event->state & GDK_SHIFT_MASK)
 		{
 		  set_anchor (clist, FALSE, old_row, old_row);
 		  update_extended_selection (clist, clist->focus_row);
-		  return TRUE;
+		  break;
 		}
+
 	      if (clist->anchor == -1)
 		set_anchor (clist, FALSE, row, old_row);
 	      else
 		update_extended_selection (clist, clist->focus_row);
-	      return TRUE;
+	      break;
 
 	    default:
 	      break;
 	    }
 	}
+
       return FALSE;
     }
 
@@ -3056,7 +3080,7 @@ gtk_clist_motion (GtkWidget * widget,
 		}
 	    }
 	  else
-	    return TRUE;
+	    return FALSE;
 	}
 
       row = ROW_FROM_YPIXEL (clist, y);
@@ -3064,7 +3088,7 @@ gtk_clist_motion (GtkWidget * widget,
       /* don't scroll on last pixel row if it's a cell spacing */
       if (y == clist->clist_window_height-1 &&
 	  y == ROW_TOP_YPIXEL (clist, row-1) + clist->row_height)
-	return TRUE;
+	return FALSE;
 
       /* vertical autoscrolling */
       if (LIST_HEIGHT (clist) > clist->clist_window_height &&
@@ -3079,7 +3103,7 @@ gtk_clist_motion (GtkWidget * widget,
 	      if ((y < 0 && clist->focus_row == 0) || 
 		  (y >= clist->clist_window_height && 
 		   clist->focus_row == clist->rows-1))
-		return TRUE;
+		return FALSE;
 
 	      if (row < 0 && clist->focus_row > 0)
 		{
@@ -3101,7 +3125,7 @@ gtk_clist_motion (GtkWidget * widget,
 		  gtk_clist_draw_focus (widget);
 		}
 	      else
-		return TRUE;
+		return FALSE;
 
 	      switch (clist->selection_mode)
 		{
@@ -3123,11 +3147,11 @@ gtk_clist_motion (GtkWidget * widget,
 		move_vertical (clist, row, 1);
 	    }
 	  else
-	    return TRUE;
+	    return FALSE;
 	}
 
       if (row == clist->focus_row)
-	return TRUE;
+	return FALSE;
       
       /* dragging inside clist_window */
       if (row < 0 && clist->focus_row > 0)
@@ -3149,13 +3173,13 @@ gtk_clist_motion (GtkWidget * widget,
 	  gtk_clist_draw_focus (widget);
 	}
       else
-	return TRUE;
+	return FALSE;
       
       switch (clist->selection_mode)
 	{
 	case GTK_SELECTION_EXTENDED:
 	  update_extended_selection (clist, clist->focus_row);
-	  return TRUE;
+	  return FALSE;
 	  
 	case  GTK_SELECTION_BROWSE:
 	  select_row (clist, clist->focus_row, -1, (GdkEvent *) event);
@@ -3176,7 +3200,7 @@ gtk_clist_motion (GtkWidget * widget,
 	       clist->clist_window_height)
 	gtk_clist_moveto (clist, clist->focus_row, -1, 1, 0);
     }
-  return TRUE;
+  return FALSE;
 }
 
 static void
@@ -4984,16 +5008,19 @@ static gint
 gtk_clist_focus_out (GtkWidget     *widget,
 		     GdkEventFocus *event)
 {
+  GtkCList *clist;
+
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_CLIST (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_FOCUS);
   gtk_widget_draw_focus (widget);
+  
+  clist = GTK_CLIST (widget);
 
-  if (GTK_CLIST (widget)->anchor != -1)
-    GTK_CLIST_CLASS_FW (widget)->resync_selection
-      (GTK_CLIST (widget), (GdkEvent *) event);
+  if (clist->anchor != -1 && clist->selection_mode == GTK_SELECTION_EXTENDED)
+    GTK_CLIST_CLASS_FW (widget)->resync_selection (clist, (GdkEvent *) event);
 
   return FALSE;
 }
@@ -5397,6 +5424,9 @@ update_extended_selection (GtkCList *clist,
   gint h1 = 0;
   gint h2 = 0;
   gint top;
+
+  if (clist->selection_mode != GTK_SELECTION_EXTENDED || clist->anchor == -1)
+    return;
 
   if (row < 0)
     row = 0;

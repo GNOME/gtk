@@ -1172,25 +1172,24 @@ gtk_file_selection_file_button (GtkWidget *widget,
   gtk_clist_get_text (GTK_CLIST (fs->file_list), row, 0, &temp);
   filename = g_strdup (temp);
 
-  if (bevent && filename)
-    {
-      switch (bevent->type)
-	{
-	case GDK_BUTTON_PRESS:
-	  gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), filename);
-	  break;
-	  
-	case GDK_2BUTTON_PRESS:
-	  gtk_button_clicked (GTK_BUTTON (fs->ok_button));
-	  break;
-	  
-	default:
-	  break;
-	}
-    }
-
   if (filename)
-    g_free (filename);
+    {
+      if (bevent)
+	switch (bevent->type)
+	  {
+	  case GDK_2BUTTON_PRESS:
+	    gtk_button_clicked (GTK_BUTTON (fs->ok_button));
+	    break;
+	    
+	  default:
+	    gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), filename);
+	    break;
+	  }
+      else
+	gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), filename);
+
+      g_free (filename);
+    }
 }
 
 static void
@@ -1212,25 +1211,24 @@ gtk_file_selection_dir_button (GtkWidget *widget,
   gtk_clist_get_text (GTK_CLIST (fs->dir_list), row, 0, &temp);
   filename = g_strdup (temp);
 
-  if (bevent && filename)
-    {
-      switch (bevent->type)
-	{
-	case GDK_BUTTON_PRESS:
-	  gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), filename);
-	  break;
-	  
-	case GDK_2BUTTON_PRESS:
-	  gtk_file_selection_populate (fs, filename, FALSE);
-	  break;
-	  
-	default:
-	  break;
-	}
-    }
-  
   if (filename)
-    g_free (filename);
+    {
+      if (bevent)
+	switch (bevent->type)
+	  {
+	  case GDK_2BUTTON_PRESS:
+	    gtk_file_selection_populate (fs, filename, FALSE);
+	    break;
+	  
+	  default:
+	    gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), filename);
+	    break;
+	  }
+      else
+	gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), filename);
+
+      g_free (filename);
+    }
 }
 
 static void

@@ -865,7 +865,8 @@ gtk_ctree_button_release (GtkWidget      *widget,
       if (event->x < 0 || event->y < -3 ||
 	  event->x > clist->clist_window_width ||
 	  event->y > clist->clist_window_height + 3 ||
-	  ctree->drag_target == ctree->drag_source)
+	  ctree->drag_target == ctree->drag_source ||
+	  !ctree->drag_target)
 	return GTK_WIDGET_CLASS (parent_class)->button_release_event
 	  (widget, event);
 

@@ -1,3 +1,13 @@
+Thu Jul 16 14:42:11 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkctree.c (gtk_ctree_button_release): fix for sigsegv in
+	case of drag_target == NULL
+	* gtk/gtkclist.c (gtk_clist_button_press): fix for GTK_2/3BUTTON_PRESS.
+	Clist did not emit an select_row signal in case of GTK_2/3BUTTON_PRESS.
+	* gtk/gtkfilesel.c (gtk_file_selection_file_button,
+	gtk_dir_selection_file_button): fix due to changes in clist's
+	select_row signal.
+
 Thu Jul 16 01:27:15 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwidget.h:
