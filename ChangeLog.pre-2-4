@@ -1,3 +1,8 @@
+Sun Mar 14 00:03:18 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcellview.c (gtk_cell_view_expose): Support the
+	model-less use of GtkCellView shown in testcombo.c.
+
 2004-03-13  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkdisplay-win32.c: Don't undefine HAVE_MONITOR_INFO

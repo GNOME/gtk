@@ -437,7 +437,7 @@ gtk_cell_view_expose (GtkWidget      *widget,
       g_object_unref (G_OBJECT (gc));
     }
 
-  if (!cellview->priv->displayed_row)
+  if (cellview->priv->model && !cellview->priv->displayed_row)
     return FALSE;
     
   /* set cell data */
