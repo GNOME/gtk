@@ -444,12 +444,15 @@ GENERATED = \
 generated : $(GENERATED)
 	$(TOUCH) generated
 
-gtk.def: gtk.symbols
+gtk.def: gtk.symbols makefile.msc
 	echo EXPORTS > gtk.def
-	cl /EP -DINCLUDE_VARIABLES -DG_OS_WIN32 gtk.symbols >> gtk.def
+	cl /EP -DINCLUDE_VARIABLES -DG_OS_WIN32 -DALL_FILES gtk.symbols >> gtk.def
 
 gtkalias.h: gtk.symbols
 	cl /EP -DG_OS_WIN32 -DGTK_WINDOWING_WIN32 -DINCLUDE_INTERNAL_SYMBOLS gtk.symbols | $(PERL) makegtkalias.pl > gtkalias.h
+
+gtkaliasdef.c : gtk.symbols
+	 perl makegtkalias.pl -def < gtk.symbols > gtkaliasdef.c
 
 # generate type identifier header (GTK_TYPE_WIDGET_FLAGS)
 # use 'echo' to work around 'command line too long'

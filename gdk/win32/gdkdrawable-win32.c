@@ -1,7 +1,7 @@
 /* GDK - The GIMP Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  * Copyright (C) 1998-2004 Tor Lillqvist
- * Copyright (C) 2001-2004 Hans Breuer
+ * Copyright (C) 2001-2005 Hans Breuer
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -241,6 +241,28 @@ gdk_win32_set_colormap (GdkDrawable *drawable,
 
 static DWORD default_double_dashes[] = { 3, 3 };
 
+static inline int
+align_with_dash_offset (int a, DWORD *dashes, int num_dashes, GdkGCWin32 *gcwin32)
+{
+  int	   n = 0;
+  int    len_sum = 0;
+  /* 
+   * We can't simply add the dashoffset, it can be an arbitrary larger
+   * or smaller value not even between x1 and x2. It just says use the
+   * dash pattern aligned to the offset. So ensure x1 is smaller _x1
+   * and we start with the appropriate dash.
+   */
+  for (n = 0; n < num_dashes; n++)
+    len_sum += dashes[n];
+  if (   len_sum > 0 /* pathological api usage? */
+      && gcwin32->pen_dash_offset > a)
+    a -= (((gcwin32->pen_dash_offset/len_sum - a/len_sum) + 1) * len_sum);
+  else
+    a = gcwin32->pen_dash_offset;
+
+  return a;
+}
+ 
 /* Render a dashed line 'by hand'. Used for all dashes on Win9x (where
  * GDI is way too limited), and for double dashes on all Windowses.
  */
@@ -250,7 +272,7 @@ render_line_horizontal (GdkGCWin32 *gcwin32,
                         int    x2,
                         int    y)
 {
-  int	  n;
+  int	  n = 0;
   HDC	  hdc = gcwin32->hdc;
   int	  pen_width = gcwin32->pen_width;
   DWORD	  *dashes;
@@ -261,7 +283,7 @@ render_line_horizontal (GdkGCWin32 *gcwin32,
     {
       dashes = gcwin32->pen_dashes;
       num_dashes = gcwin32->pen_num_dashes;
-      x1 += gcwin32->pen_dash_offset;
+      x1 = align_with_dash_offset (x1, dashes, num_dashes, gcwin32);
     }
   else
     {
@@ -275,8 +297,10 @@ render_line_horizontal (GdkGCWin32 *gcwin32,
       if (x1 + len > x2)
         len = x2 - x1;
 
-      if (n % 2 == 0)
-        if (!GDI_CALL (PatBlt, (hdc, x1, y - pen_width / 2, 
+      if (n % 2 == 0 && x1 + len > _x1)
+        if (!GDI_CALL (PatBlt, (hdc, 
+				x1 < _x1 ? _x1 : x1, 
+				y - pen_width / 2, 
 				len, pen_width, 
 				PATCOPY)))
 	  return FALSE;
@@ -331,7 +355,7 @@ render_line_vertical (GdkGCWin32 *gcwin32,
     {
       dashes = gcwin32->pen_dashes;
       num_dashes = gcwin32->pen_num_dashes;
-      y1 += gcwin32->pen_dash_offset;
+      y1 = align_with_dash_offset (y1, dashes, num_dashes, gcwin32);
     }
   else
     {
@@ -344,8 +368,9 @@ render_line_vertical (GdkGCWin32 *gcwin32,
       int len = dashes[n % num_dashes];
       if (y1 + len > y2)
         len = y2 - y1;
-      if (n % 2 == 0)
-        if (!GDI_CALL (PatBlt, (hdc, x - pen_width / 2, y1, 
+      if (n % 2 == 0 && y1 + len > _y1)
+        if (!GDI_CALL (PatBlt, (hdc, x - pen_width / 2, 
+				y1 < _y1 ? _y1 : y1, 
 				pen_width, len, 
 				PATCOPY)))
 	  return FALSE;

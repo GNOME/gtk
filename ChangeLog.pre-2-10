@@ -1,3 +1,10 @@
+2005-04-03  Hans Breuer  <hans@breuer.org>
+
+	* gdk/win32/gdkdrawable-win32.c : let dash_offset shift the start of
+	the line pattern not the start of the line. Fixes bug #171641.
+
+	* gtk/makefile.msc.in : follow .symbols changes
+
 2005-04-01  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkselection.c: Move documentation inline, document
