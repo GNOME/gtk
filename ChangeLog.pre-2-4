@@ -1,3 +1,8 @@
+Fri Jun 29 03:14:16 2001  Jonathan Blandford  <jrb@webwynk.net>
+
+	* gtk/gtktreeselection.c (gtk_tree_selection_selected_foreach):
+	add path argument to selection callbacks.
+
 Fri Jun 29 00:13:34 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreemodel.c (gtk_tree_model_foreach): New function to

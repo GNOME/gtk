@@ -45,6 +45,7 @@ typedef gboolean (* GtkTreeSelectionFunc)    (GtkTreeSelection  *selection,
 					      GtkTreePath       *path,
 					      gpointer           data);
 typedef void (* GtkTreeSelectionForeachFunc) (GtkTreeModel      *model,
+					      GtkTreePath       *path,
 					      GtkTreeIter       *iter,
 					      gpointer           data);
 
