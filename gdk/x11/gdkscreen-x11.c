@@ -21,12 +21,18 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include <config.h>
 #include <glib.h>
 #include "gdkscreen.h"
 #include "gdkscreen-x11.h"
 #include "gdkdisplay.h"
 #include "gdkdisplay-x11.h"
 #include "gdkx.h"
+
+#ifdef HAVE_XFT
+#include <pango/pangoxft.h>
+#endif
+#include <pango/pangox.h>
 
 #ifdef HAVE_SOLARIS_XINERAMA
 #include <X11/extensions/xinerama.h>
@@ -232,6 +238,10 @@ gdk_screen_x11_dispose (GObject *object)
 {
   GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (object);
 
+  pango_x_shutdown_display (screen_x11->xdisplay, screen_x11->xscreen);
+#ifdef HAVE_XFT  
+  pango_xft_shutdown_display (screen_x11->xdisplay, screen_x11->xscreen);
+#endif  
   _gdk_x11_events_uninit_screen (GDK_SCREEN (object));
   
   screen_x11->root_window = NULL;

@@ -1,3 +1,8 @@
+Fri Aug  2 12:21:41 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkscreen-x11.c (gdk_screen_x11_dispose):
+	Call pango_x[ft]_shutdown_display().
+
 2002-08-02  jacob berkman  <jacob@ximian.com>
 
 	* gdk/x11/gdkscreen-x11.c (check_xfree_xinerama): declare
