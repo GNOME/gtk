@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2.0\n"
 "POT-Creation-Date: 2003-09-04 18:34+0200\n"
-"PO-Revision-Date: 2003-08-16 01:00+0200\n"
+"PO-Revision-Date: 2003-09-18 00:38+0200\n"
 "Last-Translator: Данило Шеган <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -3648,11 +3648,11 @@ msgstr "_Врати"
 
 #: gtk/gtkstock.c:321
 msgid "_Save"
-msgstr "_Запамти"
+msgstr "_Сачувај"
 
 #: gtk/gtkstock.c:322
 msgid "Save _As"
-msgstr "Запамти _Као"
+msgstr "Сачувај _као"
 
 #: gtk/gtkstock.c:323
 msgid "_Color"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2.0\n"
 "POT-Creation-Date: 2003-09-04 18:34+0200\n"
-"PO-Revision-Date: 2003-08-16 01:00+0200\n"
+"PO-Revision-Date: 2003-09-18 00:38+0200\n"
 "Last-Translator: Danilo Šegan <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -107,8 +107,8 @@ msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
 "but didn't give a reason for the failure"
 msgstr ""
-"Unutrašnja greška: Deo za učitavanje slika „%s“ nije uspeo da počne "
-"učitavanje slike, a nije naveo razlog neuspeha"
+"Unutrašnja greška: Deo za učitavanje slika „%s“ nije uspeo da počne učitavanje "
+"slike, a nije naveo razlog neuspeha"
 
 #: gdk-pixbuf/gdk-pixdata.c:145
 msgid "Image header corrupt"
@@ -231,8 +231,7 @@ msgstr "GIF slika sadrži kadar izvan granica slike."
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
-msgstr ""
-"GIF slika nema opštu mapu boja, a kadar u njemu nema zasebnu mapu boja."
+msgstr "GIF slika nema opštu mapu boja, a kadar u njemu nema zasebnu mapu boja."
 
 #: gdk-pixbuf/io-gif.c:1487
 msgid "GIF image was truncated or incomplete."
@@ -785,8 +784,8 @@ msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
 msgstr ""
-"Vodoravna pozicija deteta u dostupnom prostoru. 0.0 označava levo "
-"poravnanje, 1.0 desno poravnanje."
+"Vodoravna pozicija deteta u dostupnom prostoru. 0.0 označava levo poravnanje, "
+"1.0 desno poravnanje."
 
 #: gtk/gtkalignment.c:112
 msgid "Vertical alignment"
@@ -928,8 +927,8 @@ msgid ""
 "If TRUE, the child appears in a secondary group of children, suitable for, e."
 "g., help buttons"
 msgstr ""
-"Ukoliko je postavljeno, sadržani element se pojavljuje među drugim "
-"elementima, što je odgovarajuće za npr. dugmiće za pomoć."
+"Ukoliko je postavljeno, sadržani element se pojavljuje među drugim elementima, "
+"što je odgovarajuće za npr. dugmiće za pomoć."
 
 #: gtk/gtkbox.c:128
 msgid "Spacing"
@@ -964,8 +963,8 @@ msgid ""
 "Whether extra space given to the child should be allocated to the child or "
 "used as padding"
 msgstr ""
-"Da li se dodatni prostor namenjen sadržanom elementu treba njemu dodeliti "
-"ili koristiti za popunu"
+"Da li se dodatni prostor namenjen sadržanom elementu treba njemu dodeliti ili "
+"koristiti za popunu"
 
 #: gtk/gtkbox.c:160
 msgid "Padding"
@@ -974,8 +973,8 @@ msgstr "Popuna"
 #: gtk/gtkbox.c:161
 msgid "Extra space to put between the child and its neighbors, in pixels"
 msgstr ""
-"Dodatni razmak koji se postavlja između sadržanog elementa i njegovih "
-"komšija, u tačkama"
+"Dodatni razmak koji se postavlja između sadržanog elementa i njegovih komšija, "
+"u tačkama"
 
 #: gtk/gtkbox.c:167
 msgid "Pack type"
@@ -1877,8 +1876,7 @@ msgstr "Najveća dužina"
 
 #: gtk/gtkentry.c:468
 msgid "Maximum number of characters for this entry. Zero if no maximum"
-msgstr ""
-"Najviše dozvoljenih znakova za ovo polje. Nula ukoliko nema ograničenja"
+msgstr "Najviše dozvoljenih znakova za ovo polje. Nula ukoliko nema ograničenja"
 
 #: gtk/gtkentry.c:476
 msgid "Visibility"
@@ -1889,8 +1887,8 @@ msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
 msgstr ""
-"Ukoliko nije postavljeno, prikazuje se „nevidljivi znak“ umesto pravog "
-"teksta (unos lozinke)"
+"Ukoliko nije postavljeno, prikazuje se „nevidljivi znak“ umesto pravog teksta "
+"(unos lozinke)"
 
 #: gtk/gtkentry.c:484
 msgid "Has Frame"
@@ -2630,8 +2628,8 @@ msgstr "Vreme pre pojave podmenija"
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
-"Najmanje vreme koje se pokazivač miša mora zadržati preko stavke menija da "
-"bi se pojavio podmeni"
+"Najmanje vreme koje se pokazivač miša mora zadržati preko stavke menija da bi "
+"se pojavio podmeni"
 
 #: gtk/gtkmenu.c:393
 msgid "Delay before hiding a submenu"
@@ -2965,8 +2963,7 @@ msgstr "Korak delovanja"
 #: gtk/gtkprogressbar.c:169
 msgid "The increment used for each iteration in activity mode (Deprecated)"
 msgstr ""
-"Korak koji se koristi pri svakom uvećanju dok je delovanje u toku "
-"(prevaziđeno)"
+"Korak koji se koristi pri svakom uvećanju dok je delovanje u toku (prevaziđeno)"
 
 #: gtk/gtkprogressbar.c:178
 msgid "Activity Blocks"
@@ -3193,8 +3190,8 @@ msgstr "Utvrđena veličina klizača"
 #: gtk/gtkscrollbar.c:90
 msgid "Don't change slider size, just lock it to the minimum length"
 msgstr ""
-"Ne dozvoljava promenu veličine klizača, već je utvrđuje na najmanju "
-"dozvoljenu dužinu"
+"Ne dozvoljava promenu veličine klizača, već je utvrđuje na najmanju dozvoljenu "
+"dužinu"
 
 #: gtk/gtkscrollbar.c:97
 msgid "Backward stepper"
@@ -3651,11 +3648,11 @@ msgstr "_Vrati"
 
 #: gtk/gtkstock.c:321
 msgid "_Save"
-msgstr "_Zapamti"
+msgstr "_Sačuvaj"
 
 #: gtk/gtkstock.c:322
 msgid "Save _As"
-msgstr "Zapamti _Kao"
+msgstr "Sačuvaj _kao"
 
 #: gtk/gtkstock.c:323
 msgid "_Color"
@@ -3756,8 +3753,7 @@ msgstr "Jednoobrazno"
 
 #: gtk/gtktable.c:195
 msgid "If TRUE this means the table cells are all the same width/height"
-msgstr ""
-"Ukoliko je postavljeno, onda su sva polja tabele jednake širine i visine"
+msgstr "Ukoliko je postavljeno, onda su sva polja tabele jednake širine i visine"
 
 #: gtk/gtktable.c:202
 msgid "Left attachment"
@@ -3828,8 +3824,8 @@ msgid ""
 "Extra space to put between the child and its upper and lower neighbors, in "
 "pixels"
 msgstr ""
-"Dodatni razmak između sadržanog elementa i njegovog gornjeg i donjeg suseda, "
-"u tačkama"
+"Dodatni razmak između sadržanog elementa i njegovog gornjeg i donjeg suseda, u "
+"tačkama"
 
 #: gtk/gtktext.c:602
 msgid "Horizontal adjustment for the text widget"
@@ -4813,8 +4809,8 @@ msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
 "time a bad idea"
 msgstr ""
-"Ukoliko je postavljeno, prozor nema najmanju dopuštenu veličinu. "
-"Uključivanje ovoga je u 99 odsto slučajeva neprikladno"
+"Ukoliko je postavljeno, prozor nema najmanju dopuštenu veličinu. Uključivanje "
+"ovoga je u 99 odsto slučajeva neprikladno"
 
 #: gtk/gtkwindow.c:483
 msgid "Allow Grow"
@@ -4823,8 +4819,8 @@ msgstr "Dopusti povećanje"
 #: gtk/gtkwindow.c:484
 msgid "If TRUE, users can expand the window beyond its minimum size"
 msgstr ""
-"Ukoliko je postavljeno, korisnici mogu povećati prozor preko njegove "
-"najmanje veličine"
+"Ukoliko je postavljeno, korisnici mogu povećati prozor preko njegove najmanje "
+"veličine"
 
 #: gtk/gtkwindow.c:492
 msgid "If TRUE, users can resize the window"
