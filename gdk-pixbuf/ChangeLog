@@ -1,5 +1,12 @@
 1999-11-04  Havoc Pennington  <hp@pobox.com>
 
+	* src/gdk-pixbuf-render.c (gdk_pixbuf_render_to_drawable): In
+	docs, explain what a dither offset is for.
+	(gdk_pixbuf_render_to_drawable_alpha): Explain why you would use 
+	this function vs. gdk_pixbuf_render_to_drawable().
+
+1999-11-04  Havoc Pennington  <hp@pobox.com>
+
 	* configure.in: Use libart-config correctly; find gnome-config
 	separately. Fix GNOME_LIBS to be correct in "no gnome installed
 	yet" case.

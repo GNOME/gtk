@@ -43,6 +43,7 @@
  * Takes the opacity values in a rectangular portion of a pixbuf and thresholds
  * them to produce a bi-level alpha mask that can be used as a clipping mask for
  * a drawable.
+ *
  **/
 void
 gdk_pixbuf_render_threshold_alpha (GdkPixbuf *pixbuf, GdkBitmap *bitmap,
@@ -174,6 +175,11 @@ remove_alpha (ArtPixBuf *apb, int x, int y, int width, int height, int *rowstrid
  * the GdkRGB visual and colormap.  Note that this function will ignore the
  * opacity information for images with an alpha channel; the GC must already
  * have the clipping mask set if you want transparent regions to show through.
+ *
+ * For an explanation of dither offsets, see the GdkRGB documentation. In brief, the
+ * dither offset is important when scrolling (so you can redraw half an image but keep the
+ * dithering "lined up" between the part you drew first and the part you drew previously).
+ * For unscrolled images, the offset can always be 0.
  **/
 void
 gdk_pixbuf_render_to_drawable (GdkPixbuf *pixbuf,
@@ -247,6 +253,13 @@ gdk_pixbuf_render_to_drawable (GdkPixbuf *pixbuf,
  *
  * Renders a rectangular portion of a pixbuf to a drawable.  This is done using
  * GdkRGB, so the specified drawable must have the GdkRGB visual and colormap.
+ *
+ * This function has a performance penalty; it makes two synchronous
+ * round trips to the X server (creating a bitmask and a GC), and it
+ * draws the contents of the bitmask. If performance is crucial,
+ * consider handling alpha yourself and using
+ * gdk_pixbuf_render_to_drawable(). On the other hand it's more convenient
+ * than gdk_pixbuf_render_to_drawable() because it handles the alpha channel.
  **/
 void
 gdk_pixbuf_render_to_drawable_alpha (GdkPixbuf *pixbuf, GdkDrawable *drawable,
