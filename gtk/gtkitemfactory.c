@@ -1076,15 +1076,22 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
     gtk_check_menu_item_set_show_toggle (GTK_CHECK_MENU_ITEM (widget), TRUE);
   if (type_id == quark_type_image_item)
     {
+      GError *error = NULL;
       GdkPixbuf *pixbuf = NULL;
 
       image = NULL;
       pixbuf = gdk_pixbuf_new_from_inline (-1,
 					   entry->extra_data,
 					   FALSE,
-					   NULL);
+					   &error);
       if (pixbuf)
 	image = gtk_image_new_from_pixbuf (pixbuf);
+      else
+	{
+	  g_warning ("Error loading menu image: %s", error->message);
+	  g_error_free (error);
+	}
+	    
       if (image)
 	{
 	  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (widget), image);

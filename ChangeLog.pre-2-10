@@ -1,16 +1,22 @@
-Fri Oct 25 18:17:39 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+Fri Oct 25 14:51:34 2002  Owen Taylor  <otaylor@redhat.com>
 
-	* gtk/gtkpaned.[ch]: New GtkPaned keyboard navigation. (Shift-)F8
-	now cycles the available handles instead of toggling focus on and
-	off. Fixes #87160, reported by Calum Benson.
-
-Fri Oct 25 10:50:37 2002  Owen Taylor  <otaylor@redhat.com>
+	* gtk/gtkfilesel.c: Fix sensitivity of file operation
+	buttons and buttons inside fileop dialogs to update
+	properly based on the contents of the entries.
+	(#74267, based on part of a patch from Muktha 
+	Narayan)
 
 	* gtk/gtkitemfactory.c (gtk_item_factory_create_item):
 	Warn if loading <ImageItem> image fails.
 
 	* tests/testgtk.c: Fix data for "apple" inline pixbuf
 	to be valid.
+
+Fri Oct 25 18:17:39 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkpaned.[ch]: New GtkPaned keyboard navigation. (Shift-)F8
+	now cycles the available handles instead of toggling focus on and
+	off. Fixes #87160, reported by Calum Benson.
 
 2002-10-25  Matthias Clasen  <maclas@gmx.de>
 
