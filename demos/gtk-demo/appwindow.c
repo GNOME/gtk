@@ -62,6 +62,99 @@ activate_radio_action (GtkAction *action, GtkRadioAction *current)
     }
 }
 
+static void 
+activate_email (GtkAboutDialog *about,
+		const gchar    *link)
+{
+  g_print ("send mail to %s\n", link);
+}
+
+static void 
+activate_url (GtkAboutDialog *about,
+	      const gchar    *link)
+{
+  g_print ("show url %s\n", link);
+}
+
+static void
+about_cb (GtkAction *action,
+	  GtkWidget *window)
+{
+  GdkPixbuf *pixbuf, *transparent;
+  gchar *filename;
+
+  const gchar *authors[] = {
+    "Peter Mattis",
+    "Spencer Kimball",
+    "Josh MacDonald",
+    "and many more...",
+    NULL
+  };
+
+  const gchar *documentors[] = {
+    "Owen Taylor",
+    "Tony Gale",
+    "Matthias Clasen <mclasen@redhat.com>",
+    "nn",
+    "nn",
+    "nn",
+    "nn",
+    "nn",
+    "nn",
+    "nn",
+    "nn",
+    "nn",
+    "nn",
+    "nn",
+    "nn",
+    "and many more...",
+    NULL
+  };
+
+  const gchar *license =
+    "This library is free software; you can redistribute it and/or\n"
+    "modify it under the terms of the GNU Library General Public License as\n"
+    "published by the Free Software Foundation; either version 2 of the\n"
+    "License, or (at your option) any later version.\n"
+    "\n"
+    "This library is distributed in the hope that it will be useful,\n"
+    "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+    "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n"
+    "Library General Public License for more details.\n"
+    "\n"
+    "You should have received a copy of the GNU Library General Public\n"
+    "License along with the Gnome Library; see the file COPYING.LIB.  If not,\n"
+    "write to the Free Software Foundation, Inc., 59 Temple Place - Suite 330,\n"
+    "Boston, MA 02111-1307, USA.\n";
+
+  pixbuf = NULL;
+  transparent = NULL;
+  filename = demo_find_file ("gtk-logo-rgb.gif", NULL);
+  if (filename)
+    {
+      pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
+      g_free (filename);
+      transparent = gdk_pixbuf_add_alpha (pixbuf, TRUE, 0xff, 0xff, 0xff);
+      g_object_unref (pixbuf);
+    }
+
+  gtk_about_dialog_set_email_hook (activate_email);
+  gtk_about_dialog_set_url_hook (activate_url);
+  gtk_show_about_dialog (GTK_WINDOW (window),
+			 "name", "GTK+ Code Demos",
+			 "version", "2.4.3",
+			 "copyright", "(C) 1997-2004 The GTK+ Team",
+			 "license", license,
+			 "website", "http://www.gtk.org",
+			 "comments", "Program to demonstrate GTK+ functions.",
+			 "authors", authors,
+			 "documenters", documentors,
+			 "logo", transparent,
+			 NULL);
+
+  g_object_unref (transparent);
+}
+
 
 static GtkActionEntry entries[] = {
   { "FileMenu", NULL, "_File" },               /* name, stock id, label */
@@ -92,7 +185,7 @@ static GtkActionEntry entries[] = {
   { "About", NULL,                             /* name, stock id */
     "_About", "<control>A",                    /* label, accelerator */     
     "About",                                   /* tooltip */  
-    G_CALLBACK (activate_action) },
+    G_CALLBACK (about_cb) },
   { "Logo", "demo-gtk-logo",                   /* name, stock id */
      NULL, NULL,                               /* label, accelerator */     
     "GTK+",                                    /* tooltip */
@@ -340,7 +433,7 @@ do_appwindow (GtkWidget *do_widget)
       action_group = gtk_action_group_new ("AppWindowActions");
       gtk_action_group_add_actions (action_group, 
 				    entries, n_entries, 
-				    NULL);
+				    window);
       gtk_action_group_add_toggle_actions (action_group, 
 					   toggle_entries, n_toggle_entries, 
 					   NULL);

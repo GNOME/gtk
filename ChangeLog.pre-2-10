@@ -1,5 +1,7 @@
 2004-07-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* demos/gtk-demo/appwindow.c: Use a GtkAboutDialog.
+
 	* gtk/gtkaboutdialog.h: 
 	* gtk/gtkaboutdialog.c: New widget: GtkAboutDialog.
 
