@@ -1,3 +1,9 @@
+Tue Mar 10 02:03:12 1998  Tim Janik  <timj@gimp.org>
+
+	* gscanner.c (g_scanner_destroy_symbol_table_entry): new function to
+	free symbol table entries upon destruction
+ 	(gtk-gronlund-980309-0.patch.gz).
+
 Mon Mar  9 15:02:21 1998  Tim Janik  <timj@gimp.org>
 
 	* glib.h: changed *_length functions to return guint.

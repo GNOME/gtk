@@ -200,11 +200,22 @@ g_scanner_new (GScannerConfig	*config_templ)
   return scanner;
 }
 
+static void
+g_scanner_destroy_symbol_table_entry (gpointer key,
+				      gpointer value,
+				      gpointer user_data)
+{
+  g_free (key);
+  g_free (value);
+}
+
 void
 g_scanner_destroy (GScanner	*scanner)
 {
   g_return_if_fail (scanner != NULL);
   
+  g_hash_table_foreach (scanner->symbol_table, 
+                        g_scanner_destroy_symbol_table_entry, NULL);
   g_hash_table_destroy (scanner->symbol_table);
   g_scanner_free_value (&scanner->token, &scanner->value);
   g_scanner_free_value (&scanner->next_token, &scanner->next_value);
