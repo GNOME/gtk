@@ -33,6 +33,8 @@
 #include "gdk-pixbuf-private.h"
 #include "gdk-pixbuf-io.h"
 
+#define DUMPBIH 1
+
 
 
 #if 0
@@ -295,16 +297,23 @@ static gboolean DecodeHeader(unsigned char *BFH, unsigned char *BIH,
 		State->Header.height = -State->Header.height;
 		State->Header.Negative = 1;
 	}
-	if (State->Header.width < 0) {
-		State->Header.width = -State->Header.width;
-		State->Header.Negative = 0;
+
+	if (State->Header.Negative && 
+	    (State->Compressed != BI_RGB && State->Compressed != BI_BITFIELDS))
+	{
+		g_set_error (error,
+			     GDK_PIXBUF_ERROR,
+			     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+			     _("Topdown BMP images cannot be compressed"));
+		State->read_state = READ_STATE_ERROR;
+		return FALSE;
 	}
 
-	if (State->Header.width == 0 || State->Header.height == 0 ||
+	if (State->Header.width <= 0 || State->Header.height == 0 ||
 	    (State->Compressed == BI_RLE4 && State->Type != 4)    ||
 	    (State->Compressed == BI_RLE8 && State->Type != 8)	  ||
 	    (State->Compressed == BI_BITFIELDS && !(State->Type == 16 || State->Type == 32)) ||
-	    State->Compressed > BI_BITFIELDS) {
+	    (State->Compressed > BI_BITFIELDS)) {
 		g_set_error (error,
 			     GDK_PIXBUF_ERROR,
 			     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
@@ -388,13 +397,28 @@ static gboolean DecodeHeader(unsigned char *BFH, unsigned char *BIH,
 		}
 	}
 	
+	g_print ("header size %d data offset %d compression %d\n", 
+		 14 + State->Header.size, 
+		 lsb_32 (&BFH[10]),
+		 State->Compressed);
+
 	State->BufferDone = 0;
 	if (State->Type <= 8) {
 		State->read_state = READ_STATE_PALETTE;
 		State->BufferSize = lsb_32 (&BFH[10]) - 14 - State->Header.size; 
 	} else if (State->Compressed == BI_RGB) {
-		State->read_state = READ_STATE_DATA;
-		State->BufferSize = State->LineWidth;
+		if (State->BufferSize < lsb_32 (&BFH[10]))
+		{
+			/* skip over padding between headers and image data */
+			State->read_state = READ_STATE_HEADERS;
+			State->BufferDone = State->BufferSize;
+			State->BufferSize = lsb_32 (&BFH[10]);
+		}
+		else
+		{
+			State->read_state = READ_STATE_DATA;
+			State->BufferSize = State->LineWidth;
+		}
 	} else if (State->Compressed == BI_BITFIELDS) {
 		State->read_state = READ_STATE_BITMASKS;
 		State->BufferSize = 12;
@@ -844,6 +868,8 @@ static void OneLine(struct bmp_progressive_state *context)
 	context->Lines++;
 
 	if (context->updated_func != NULL) {
+		g_print ("OneLine negative %d lines %d\n", 
+			 context->Header.Negative, context->Lines);
 		(*context->updated_func) (context->pixbuf,
 					  0,
 					  (context->Header.Negative ?
@@ -1008,12 +1034,15 @@ DoCompressed(struct bmp_progressive_state *context, GError **error)
 	}
 	if (context->updated_func != NULL) {
 		if (context->compr.y > y)
+		{
+			gint new_y = MIN (context->compr.y, context->Header.height);
 			(*context->updated_func) (context->pixbuf,
 						  0,
 						  y,
 						  context->Header.width,
-						  context->compr.y - y,
+						  new_y - y,
 						  context->user_data);
+		}
 
 	}
 

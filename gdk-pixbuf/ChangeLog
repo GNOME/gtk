@@ -1,3 +1,9 @@
+2005-01-04  Matthias Clasen  <mclasen@redhat.com>
+
+	* io-bmp.c (DecodeHeader): Error on compressed images with 
+	negative height. Also make uncompressed images with data_offset
+	!= header_size work.  (#150664, Owen Taylor)
+
 2005-01-02  Matthias Clasen  <mclasen@redhat.com>
 
 	* pixops/pixops.c (bilinear_box_make_weights): Really fix the
