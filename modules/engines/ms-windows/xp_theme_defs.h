@@ -75,6 +75,10 @@ typedef HANDLE HTHEME;
 #define RP_CHEVRON 4
 
 #define TP_BUTTON 1
+#define TS_NORMAL 1
+#define TS_HOT 2
+#define TS_PRESSED 3
+#define TS_DISABLED 4
 
 #define TTSS_NORMAL 1
 

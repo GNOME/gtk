@@ -556,7 +556,7 @@ setup_wimp_rc_style(void)
 	     (font_ptr ? "font_name" : "#"),
 	     (font_ptr ? font_ptr : " font name should go here"));
   gtk_rc_parse_string(buf);
-  
+
   /* Enable coloring for menu bars. */
   font_ptr = sys_font_to_pango_font (XP_THEME_CLASS_MENU, XP_THEME_FONT_MENU,font_buf, sizeof (font_buf));
   g_snprintf(buf, sizeof (buf),
@@ -568,7 +568,7 @@ setup_wimp_rc_style(void)
 	     btn_face.green,
 	     btn_face.blue);
   gtk_rc_parse_string(buf);
-  
+
   /* enable tooltip fonts */
   font_ptr = sys_font_to_pango_font (XP_THEME_CLASS_STATUS, XP_THEME_FONT_STATUS,font_buf, sizeof (font_buf));
   g_snprintf(buf, sizeof (buf),
@@ -582,7 +582,7 @@ setup_wimp_rc_style(void)
 	     (font_ptr ? "font_name" : "#"),
 	     (font_ptr ? font_ptr : " font name should go here"));
   gtk_rc_parse_string(buf);
-  
+
   g_snprintf(buf, sizeof (buf),
 	     "style \"wimp-tooltips\" = \"wimp-default\"\n"
 	     "{bg[NORMAL] = { %d, %d, %d }\n"
@@ -591,7 +591,7 @@ setup_wimp_rc_style(void)
 	     tooltip_back.green,
 	     tooltip_back.blue);
   gtk_rc_parse_string(buf);
-  
+
   /* enable font theming for status bars */
   font_ptr = sys_font_to_pango_font (XP_THEME_CLASS_STATUS, XP_THEME_FONT_STATUS,font_buf, sizeof (font_buf));
   g_snprintf(buf, sizeof (buf),
@@ -603,7 +603,7 @@ setup_wimp_rc_style(void)
 	     (font_ptr ? font_ptr : " font name should go here"),
 	     btn_face.red, btn_face.green, btn_face.blue);
   gtk_rc_parse_string(buf);
-  
+
   /* enable coloring for text on buttons
      TODO: use GetThemeMetric for the border and outside border */
   g_snprintf(buf, sizeof (buf),
@@ -636,7 +636,7 @@ setup_wimp_rc_style(void)
 	     progress_back.blue,
 	     btn_face.red, btn_face.green, btn_face.blue);
   gtk_rc_parse_string(buf);
-  
+
   /* scrollbar thumb width and height */
   g_snprintf(buf, sizeof (buf),
 	     "style \"wimp-vscrollbar\" = \"wimp-default\"\n"
@@ -648,7 +648,7 @@ setup_wimp_rc_style(void)
 	     GetSystemMetrics(SM_CYVTHUMB),
 	     get_system_metric(XP_THEME_CLASS_SCROLLBAR, SM_CXVSCROLL));
   gtk_rc_parse_string(buf);
-  
+
   g_snprintf(buf, sizeof (buf),
 	     "style \"wimp-hscrollbar\" = \"wimp-default\"\n"
 	     "{GtkRange::slider-width = %d\n"
@@ -659,7 +659,7 @@ setup_wimp_rc_style(void)
 	     GetSystemMetrics(SM_CXHTHUMB),
 	     get_system_metric(XP_THEME_CLASS_SCROLLBAR, SM_CYHSCROLL));
   gtk_rc_parse_string(buf);
-  
+
   /* radio/check button sizes */
   g_snprintf(buf, sizeof (buf),
 	     "style \"wimp-checkbutton\" = \"wimp-button\"\n"
@@ -1284,6 +1284,12 @@ draw_box (GtkStyle      *style,
                             width, height, state_type, area))
             return;
         }
+      else if (GTK_IS_TOOLBAR (widget->parent))
+      {
+		    if (xp_theme_draw(window, XP_THEME_ELEMENT_TOOLBAR_BUTTON, style, x, y,
+		                              width, height, state_type, area))
+            	return;
+	  }
       else
         {
           gboolean is_default = !strcmp (detail, "buttondefault");
@@ -1433,15 +1439,15 @@ draw_box (GtkStyle      *style,
       else if (widget && GTK_IS_SCALE(widget))
 	{
 	  gboolean is_vertical = GTK_IS_VSCALE(widget);
-	  
+
 	  parent_class->draw_box (style, window, state_type, GTK_SHADOW_NONE, area,
 				  widget, detail, x, y, width, height);
-	  
+
 	  if(is_vertical)
 	    parent_class->draw_box(style, window, state_type, GTK_SHADOW_ETCHED_IN, area, NULL, NULL, (2 * x + width)/2, y, 1, height);
 	  else
 	    parent_class->draw_box(style, window, state_type, GTK_SHADOW_ETCHED_IN, area, NULL, NULL, x, (2 * y + height)/2, width, 1);
-	  
+
 	  return;
 	}
     }

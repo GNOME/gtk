@@ -1,5 +1,12 @@
 2003-12-30  Dom Lachowicz <cinamod@hotmail.com>
 
+	* src/wimp_style.c
+	* src/xp_theme.c
+	* src/xp_theme.h
+	* src/xp_theme_defs.h: Toward 853775, get toolbar button borders correct
+	
+2003-12-30  Dom Lachowicz <cinamod@hotmail.com>
+
 	* src/wimp_style.c: Fix bug 852354 to my liking
 	
 2003-12-01  Dom Lachowicz <cinamod@hotmail.com>
