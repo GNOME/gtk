@@ -439,11 +439,13 @@ progressive_prepared_callback(GdkPixbufLoader* loader, gpointer data)
         return;
 }
 
+static int readlen = 1;
+
 int
 main (int argc, char **argv)
 {
 	int i;
-	int found_valid = FALSE; 
+	int found_valid = FALSE;
 
 	GdkPixbuf *pixbuf;
 	GdkPixbufLoader *pixbuf_loader;
@@ -459,6 +461,11 @@ main (int argc, char **argv)
 
 	gtk_widget_set_default_colormap (gdk_rgb_get_cmap ());
 	gtk_widget_set_default_visual (gdk_rgb_get_visual ());
+
+	{
+		char *tbf_readlen = getenv("TBF_READLEN");
+		if(tbf_readlen) readlen = atoi(tbf_readlen);
+	}
 
 	i = 1;
 	if (argc == 1) {
@@ -494,6 +501,7 @@ main (int argc, char **argv)
                 {
                         GtkWidget* rgb_window = NULL;
                         guint timeout;
+			char *buf;
 
                         pixbuf_loader = gdk_pixbuf_loader_new ();
 
@@ -506,25 +514,22 @@ main (int argc, char **argv)
                         
                         file = fopen (argv[1], "r");
                         g_assert (file != NULL);
+			buf = g_malloc(readlen);
 
-                        while (TRUE) {
-                                val = fgetc (file);
-                                if (val == EOF)
-                                        break;
-                                buf = (guint) val;
-
-                                fflush(stdout);
+                        while (!feof(file)) {
+				int nbytes;
+				nbytes = fread(buf, 1, readlen, file);
 
                                 printf(".");
                                 fflush(stdout);
                                 
-                                if (gdk_pixbuf_loader_write (GDK_PIXBUF_LOADER (pixbuf_loader), &buf, 1) == FALSE)
+                                if (gdk_pixbuf_loader_write (GDK_PIXBUF_LOADER (pixbuf_loader), buf, nbytes) == FALSE)
                                         break;
 
-                                while (gtk_events_pending())
-                                        gtk_main_iteration();
-
+	                        while (gtk_events_pending())
+	                        	gtk_main_iteration();
                         }
+			printf("\n");
 			gtk_timeout_remove (timeout);
                         gdk_pixbuf_loader_close (GDK_PIXBUF_LOADER (pixbuf_loader));
 			gtk_object_destroy (GTK_OBJECT(pixbuf_loader));
