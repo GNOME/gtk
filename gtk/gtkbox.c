@@ -125,6 +125,9 @@ gtk_box_set_arg (GtkBox       *box,
     case ARG_HOMOGENEOUS:
       gtk_box_set_homogeneous (box, GTK_VALUE_BOOL (*arg));
       break;
+    default:
+      arg->type = GTK_TYPE_INVALID;
+      break;
     }
 }
 

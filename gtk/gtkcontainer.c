@@ -229,6 +229,9 @@ gtk_container_set_arg (GtkContainer *container,
     case ARG_CHILD:
       gtk_container_add (container, GTK_WIDGET (GTK_VALUE_OBJECT (*arg)));
       break;
+    default:
+      arg->type = GTK_TYPE_INVALID;
+      break;
     }
 }
 
@@ -250,6 +253,7 @@ gtk_container_get_arg (GtkContainer *container,
       break;
     default:
       arg->type = GTK_TYPE_INVALID;
+      break;
     }
 }
 

@@ -206,6 +206,9 @@ gtk_object_set_arg (GtkObject *object,
 				 (GtkSignalFunc) GTK_VALUE_SIGNAL (*arg).f,
 				 (GtkObject*) GTK_VALUE_SIGNAL (*arg).d);
       break;
+    default:
+      arg->type = GTK_TYPE_INVALID;
+      break;
     }
 }
 

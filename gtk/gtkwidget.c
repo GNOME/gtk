@@ -762,6 +762,9 @@ gtk_widget_set_arg (GtkWidget	*widget,
     case ARG_PARENT:
       gtk_container_add (GTK_CONTAINER (GTK_VALUE_OBJECT (*arg)), widget);
       break;
+    default:
+      arg->type = GTK_TYPE_INVALID;
+      break;
     }
 }
 
@@ -858,6 +861,7 @@ gtk_widget_get_arg (GtkWidget	*widget,
       break;
     default:
       arg->type = GTK_TYPE_INVALID;
+      break;
     }
 }
 
