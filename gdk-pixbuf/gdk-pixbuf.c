@@ -104,7 +104,7 @@ gdk_pixbuf_class_init (GdkPixbufClass *klass)
          */
         g_object_class_install_property (object_class,
                                          PROP_N_CHANNELS,
-                                         g_param_spec_int ("n_channels",
+                                         g_param_spec_int ("n-channels",
                                                            P_("Number of Channels"),
                                                            P_("The number of samples per pixel"),
                                                            0,
@@ -126,7 +126,7 @@ gdk_pixbuf_class_init (GdkPixbufClass *klass)
 
         g_object_class_install_property (object_class,
                                          PROP_HAS_ALPHA,
-                                         g_param_spec_boolean ("has_alpha",
+                                         g_param_spec_boolean ("has-alpha",
                                                                P_("Has Alpha"),
                                                                P_("Whether the pixbuf has an alpha channel"),
                                                                FALSE,
@@ -141,7 +141,7 @@ gdk_pixbuf_class_init (GdkPixbufClass *klass)
          */
         g_object_class_install_property (object_class,
                                          PROP_BITS_PER_SAMPLE,
-                                         g_param_spec_int ("bits_per_sample",
+                                         g_param_spec_int ("bits-per-sample",
                                                            P_("Bits per Sample"),
                                                            P_("The number of bits per sample"),
                                                            1,
