@@ -30,7 +30,7 @@
 static void pixbuf_style_init       (PixbufStyle      *style);
 static void pixbuf_style_class_init (PixbufStyleClass *klass);
 
-GtkStyleClass *parent_class;
+static GtkStyleClass *parent_class = NULL;
 
 static ThemeImage *
 match_theme_image (GtkStyle       *style,
@@ -581,7 +581,7 @@ draw_diamond (GtkStyle     *style,
     parent_class->draw_diamond (style, window, state, shadow, area, widget, detail,
 				x, y, width, height);
 }
-
+/*
 static void
 draw_oval (GtkStyle     *style,
 	   GdkWindow    *window,
@@ -611,7 +611,7 @@ draw_oval (GtkStyle     *style,
     parent_class->draw_oval (style, window, state, shadow, area, widget, detail,
 			     x, y, width, height);
 }
-
+*/
 static void
 draw_string (GtkStyle * style,
 	     GdkWindow * window,
@@ -770,6 +770,7 @@ draw_option (GtkStyle      *style,
 			       x, y, width, height);
 }
 
+/*
 static void
 draw_cross (GtkStyle     *style,
 	    GdkWindow    *window,
@@ -830,6 +831,7 @@ draw_ramp (GtkStyle     *style,
     parent_class->draw_ramp (style, window, state, shadow, area, widget, detail,
 			     arrow_direction, x, y, width, height);
 }
+*/
 
 static void
 draw_tab (GtkStyle     *style,
@@ -1108,14 +1110,14 @@ pixbuf_style_class_init (PixbufStyleClass *klass)
   style_class->draw_polygon = draw_polygon;
   style_class->draw_arrow = draw_arrow;
   style_class->draw_diamond = draw_diamond;
-  style_class->draw_oval = draw_oval;
+  /*style_class->draw_oval = draw_oval;*/
   style_class->draw_string = draw_string;
   style_class->draw_box = draw_box;
   style_class->draw_flat_box = draw_flat_box;
   style_class->draw_check = draw_check;
   style_class->draw_option = draw_option;
-  style_class->draw_cross = draw_cross;
-  style_class->draw_ramp = draw_ramp;
+  /*style_class->draw_cross = draw_cross;*/
+  /*style_class->draw_ramp = draw_ramp;*/
   style_class->draw_tab = draw_tab;
   style_class->draw_shadow_gap = draw_shadow_gap;
   style_class->draw_box_gap = draw_box_gap;

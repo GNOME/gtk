@@ -1,3 +1,10 @@
+2001-03-05  Michael Natterer  <mitch@gimp.org>
+
+	* src/pixbuf-draw.c: made the "parent_class" pointer static.
+
+	(Owen, I just commented out the draw methods which don't exist any
+	more to make it compile).
+
 2001-02-20  Sven Neumann  <sven@convergence.de>
 
 	* src/pixbuf-draw.c (draw_vline): use draw_vline method of 
