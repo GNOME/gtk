@@ -494,9 +494,6 @@ EXTRA_LTLIBRARIES = libgtk-x11-1.3.la libgtk-nanox-1.3.la libgtk-linux-fb-1.3.la
 install-data-local:
 	$(mkinstalldirs) $(DESTDIR)$(datadir)/themes/Default/gtk-2.0
 	echo "# Empty gtkrc for default theme" > $(DESTDIR)$(datadir)/themes/Default/gtk-2.0/gtkrc
-	$(mkinstalldirs) $(DESTDIR)$(sysconfdir)/gtk-2.0
-	$(top_builddir)/gtk/gtk-query-immodules-2.0 > $(DESTDIR)$(sysconfdir)/gtk-2.0/gtk.immodules
-uninstall-local:
 	rm -f $(DESTDIR)$(datadir)/themes/Default/gtk-2.0/gtkrc
 
 DEPS = @gtktargetlib@ $(top_builddir)/gdk-pixbuf/libgdk_pixbuf-1.3.la $(top_builddir)/gdk/@gdktargetlib@
@@ -525,38 +522,6 @@ gtk_query_immodules_2_0_LDADD = $(LDADDS)
 
 gtk_query_immodules_2_0_SOURCES = queryimmodules.c
 
-gtk.immodules: gtk-query-immodules-2.0 ../modules/input/Makefile.am
-	./gtk-query-immodules-2.0 ../modules/input/.libs/*.so > gtk.immodules
-
-#
-# test programs, not to be installed
-#
-noinst_PROGRAMS = testgtk testcalendar testinput testselection testrgb testdnd testtext simple treestoretest testtextbuffer # testthreads
-
-testcalendar_DEPENDENCIES = $(TEST_DEPS)
-testgtk_DEPENDENCIES = $(TEST_DEPS)
-testinput_DEPENDENCIES = $(TEST_DEPS)
-testrgb_DEPENDENCIES = $(TEST_DEPS)
-testselection_DEPENDENCIES = $(TEST_DEPS)
-testtext_DEPENDENCIES = $(TEST_DEPS)
-testtextbuffer_DEPENDENCIES = $(TEST_DEPS)
-treestoretest_DEPENDENCIES = $(TEST_DEPS)
-testdnd_DEPENDENCIES = $(TEST_DEPS)
-simple_DEPENDENCIES = $(TEST_DEPS)
-#testthreads_DEPENDENCIES = $(TEST_DEPS)
-
-testcalendar_LDADD = $(LDADDS)
-testgtk_LDADD = $(LDADDS)
-testinput_LDADD = $(LDADDS)
-testrgb_LDADD = $(LDADDS)
-testselection_LDADD = $(LDADDS)
-testtext_LDADD = $(LDADDS)
-testtextbuffer_LDADD = $(LDADDS)
-treestoretest_LDADD = $(LDADDS)
-testdnd_LDADD = $(LDADDS)
-simple_LDADD = $(LDADDS)
-#testthreads_LDADD = $(LDADDS)
-
 .PHONY: files test test-debug
 
 files:
@@ -564,38 +529,14 @@ files:
 	  echo $$p; \
 	done
 
-test: testgtk
-	builddir=`pwd`; cd $(top_builddir); top_builddir=`pwd`; \
-	cd $$builddir; cd $(srcdir); \
-	$(SHELL) $$top_builddir/libtool --mode=execute $$builddir/testgtk
-
-test-debug: testgtk
-	builddir=`pwd`; cd $(top_builddir); top_builddir=`pwd`; \
-	cd $$builddir; cd $(srcdir); \
-	$(SHELL) $$top_builddir/libtool --mode=execute gdb $$builddir/testgtk
-
 EXTRA_DIST += @STRIP_BEGIN@ 	\
 	oldest-source-stamp	\
-	testgtk.1 		\
-	testgtkrc 		\
-	testgtkrc2 		\
-	circles.xbm		\
 	line-arrow.xbm 		\
 	line-wrap.xbm 		\
 	tree_plus.xbm		\
 	tree_minus.xbm          \
-	3DRings.xpm		\
-	FilesQueue.xpm		\
-	Modeller.xpm		\
-	check-y.xpm		\
-	check-n.xpm		\
-	marble.xpm		\
 	tree_minus.xpm		\
 	tree_plus.xpm		\
-	test.xpm		\
-	check-y.xpm		\
-	check-n.xpm		\
-	test.xpm		\
 	gtk.def			\
 	gtk-win32.rc		\
 	gtk-win32.rc.in		\

@@ -1,3 +1,28 @@
+Overview of Changes in GTK+ 1.3.3
+=================================
+
+[ 5600 lines of ChangeLog ]
+
+* API cleanups
+* Win32 work (Tor, Hans Breuer)
+* Focus improvements (Owen)
+* Frame buffer improvements (Alex)
+* Work on GtkTextView (Havoc)
+* Much work on GtkTreeView (Jonathan)
+* Selectable labels (Havoc)
+* Converted many arguments to properties (Lee Mallabone, John Margaglione)
+* Add exact regions to GdkExposeEvent, propagate it. (Alex)
+* Added ability to have resize grips in status bars (etc.) using
+  _NET_WM_MOVERESIZE protocol. (Havoc)
+* Added mnemnonic mechanism to make setting underline accelerators
+  much easier. (Alex)
+* Add per-style property mechanism to allow themes to change 
+  geometry parameters. (Tim)
+* Added global settings mechanisms for settings such as double-click
+  time. (Tim, Owen)
+* Various support functions for new and old WM properties (Havoc, Alex)
+* Add TRUE-stops-returns for boolean-returning signals (Ron Steinke)
+
 Overview of Changes in GTK+ 1.3.2
 =================================
 

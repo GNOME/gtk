@@ -4,8 +4,16 @@ makefile.mingw
 makefile.msc
 .deps
 .libs
+simple
+testcalendar
+testgtk
+testinput
+testrgb
+testselection
+testtext
 testtreeview
 testtreecolumns
 testsocket
 testsocket_child
 testtreefocus
+treestoretest

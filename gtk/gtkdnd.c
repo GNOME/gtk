@@ -782,7 +782,7 @@ gtk_drag_highlight_expose (GtkWidget      *widget,
 			  x, y, width - 1, height - 1);
     }
 
-  return TRUE;
+  return FALSE;
 }
 
 /*************************************************************

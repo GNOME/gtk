@@ -1,6 +1,6 @@
 ## Makefile.am for GTK+
 
-SRC_SUBDIRS = gdk-pixbuf gdk modules gtk demos contrib
+SRC_SUBDIRS = gdk-pixbuf gdk gtk modules demos tests contrib
 SUBDIRS = po $(SRC_SUBDIRS) docs build
 
 # require automake 1.4

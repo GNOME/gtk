@@ -1,3 +1,22 @@
+Tue Apr  3 13:55:37 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* NEWS: Updated.
+
+	* configure.in: Remove support for uninstalled glib.
+
+	* gtk/gtkdnd.c (gtk_drag_highlight_expose): Return FALSE as
+	so as not to stop emission.
+
+	* gtk-config-2.0.in: Exit with an error message that gtk-config-2.0
+	is no longer supported.
+
+	* Makefile.am gtk/Makefile.am tests/*: Moved all tests
+	into tests, change build order to build modules before
+	gtk/.
+
+	* modules/input/Makefile.am: Move gtk-query-immodules-2.0 invocation
+	to here.
+
 Tue Apr  3 13:52:57 2001  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkitemfactory.[hc]: changed gtk_item_factory_dump_items()

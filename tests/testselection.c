@@ -27,7 +27,7 @@
 #include <stdio.h>
 #include <string.h>
 #define GTK_ENABLE_BROKEN
-#include "gtk.h"
+#include "gtk/gtk.h"
 
 typedef enum {
   SEL_TYPE_NONE,

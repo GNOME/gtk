@@ -38,7 +38,7 @@
 #endif
 #include <string.h>
 
-#include "gtk.h"
+#include "gtk/gtk.h"
 
 static void
 quit_func (GtkWidget *widget, gpointer dummy)

@@ -31,24 +31,72 @@ LDADDS = @STRIP_BEGIN@ 					\
 @STRIP_END@
 
 noinst_PROGRAMS = 		\
+	simple			\
+	testcalendar		\
+	testdnd			\
+	testgtk 		\
+	testinput		\
+	testrgb			\
+	testselection 		\
 ##	testsocket		\
 ##	testsocket_child	\
+	testtext		\
+        testtextbuffer		\
 	testtreeview		\
 	testtreefocus		\
 	testtreecolumns		\
-	testtreesort
+	testtreesort		\
+	treestoretest
 
 #testsocket_DEPENDENCIES = $(DEPS)
 #testsocket_child_DEPENDENCIES = $(DEPS)
+simple_DEPENDENCIES = $(TEST_DEPS)
+testcalendar_DEPENDENCIES = $(TEST_DEPS)
+testdnd_DEPENDENCIES = $(TEST_DEPS)
+testgtk_DEPENDENCIES = $(TEST_DEPS)
+testinput_DEPENDENCIES = $(TEST_DEPS)
+testrgb_DEPENDENCIES = $(TEST_DEPS)
+testselection_DEPENDENCIES = $(TEST_DEPS)
+testtext_DEPENDENCIES = $(TEST_DEPS)
+testtextbuffer_DEPENDENCIES = $(TEST_DEPS)
 testtreeview_DEPENDENCIES = $(DEPS)
 testtreefocus_DEPENDENCIES = $(DEPS)
 testtreecolumns_DEPENDENCIES = $(DEPS)
 testtreesort_DEPENDENCIES = $(DEPS)
+treestoretest_DEPENDENCIES = $(TEST_DEPS)
 
 #testsocket_LDADD = $(LDADDS)
 #testsocket_child_LDADD = $(LDADDS)
+simple_LDADD = $(LDADDS)
+testcalendar_LDADD = $(LDADDS)
+testdnd_LDADD = $(LDADDS)
+testgtk_LDADD = $(LDADDS)
+testinput_LDADD = $(LDADDS)
+testrgb_LDADD = $(LDADDS)
+testselection_LDADD = $(LDADDS)
+testtextbuffer_LDADD = $(LDADDS)
 testtreeview_LDADD = $(LDADDS)
 testtreefocus_LDADD = $(LDADDS)
 testtreecolumns_LDADD = $(LDADDS)
 testtreesort_LDADD = $(LDADDS)
+testtext_LDADD = $(LDADDS)
+treestoretest_LDADD = $(LDADDS)
+
+EXTRA_DIST += @STRIP_BEGIN@ 	\
+	testgtk.1 		\
+	testgtkrc 		\
+	testgtkrc2 		\
+	circles.xbm		\
+	3DRings.xpm		\
+	FilesQueue.xpm		\
+	Modeller.xpm		\
+	check-y.xpm		\
+	check-n.xpm		\
+	marble.xpm		\
+	test.xpm		\
+	check-y.xpm		\
+	check-n.xpm		\
+	test.xpm		\
+@STRIP_END@
+
 

@@ -1,9 +1,10 @@
 /* Simplistic test suite */
 
+
 #include <stdio.h>
 
 #include <gtk/gtk.h>
-#include "gtktextbtree.h"
+#include "../gtk/gtktexttypes.h" /* Private header, for UNKNOWN_CHAR */
 
 static void fill_buffer (GtkTextBuffer *buffer);
 

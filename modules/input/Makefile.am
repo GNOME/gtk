@@ -58,5 +58,15 @@ im_inuktitut_la_SOURCES = iminuktitut.c
 im_ipa_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module
 im_ipa_la_SOURCES = imipa.c
 
+# We create a dummy theme for the default GTK+ theme
+install-data-local:
+	$(mkinstalldirs) $(DESTDIR)$(sysconfdir)/gtk-2.0
+	$(top_builddir)/gtk/gtk-query-immodules-2.0 > $(DESTDIR)$(sysconfdir)/gtk-2.0/gtk.immodules
+
 module_LTLIBRARIES = im-cyrillic-translit.la $(IM_XIM_MODULE) im-viqr.la im-thai-broken.la \
                      im-inuktitut.la im-ipa.la
+
+gtk.immodules: Makefile.am $(module_LTLIBRARIES)
+	$(top_builddir)/gtk/gtk-query-immodules-2.0 .libs/*.so > gtk.immodules
+
+all-local: gtk.immodules

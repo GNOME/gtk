@@ -25,7 +25,7 @@
  */
 
 #include <stdio.h>
-#include "gtk.h"
+#include "gtk/gtk.h"
 
 /* Backing pixmap for drawing area */
 
