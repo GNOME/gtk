@@ -26,6 +26,9 @@ What is new in GTK+ 1.1.2:
 * Support for label underlining.
 * Support for GLib 1.1.3 log domains.
 * Documentation improvements.
+* Configuration fixes on various platforms.
+* Miscellaneous fixes to XInput support.
+* Build with shared library dependencies on Linux
 * Fix for a major bug in the type systems memory allocation code that could
   cause random crashes.
 * Libtool update to version 1.2b.
