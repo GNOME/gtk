@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-09 05:22+0100\n"
+"POT-Creation-Date: 2004-03-09 11:16-0500\n"
 "PO-Revision-Date: 2004-03-09 05:22+0100\n"
 "Last-Translator: Danilo Šegan <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
@@ -253,7 +253,8 @@ msgstr "Izdanje %s GIF načina zapisa nije podržano"
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
-msgstr "GIF slika nema opštu mapu boja, a kadar u njemu nema zasebnu mapu boja."
+msgstr ""
+"GIF slika nema opštu mapu boja, a kadar u njemu nema zasebnu mapu boja."
 
 #: gdk-pixbuf/io-gif.c:1498
 msgid "GIF image was truncated or incomplete."
@@ -323,8 +324,8 @@ msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
 msgstr ""
-"Nedovoljno memorije za učitavanje slike, zatvorite neke programe da oslobodite "
-"memoriju"
+"Nedovoljno memorije za učitavanje slike, zatvorite neke programe da "
+"oslobodite memoriju"
 
 # grafički dizajneri, kako se ovo prevodi?
 #: gdk-pixbuf/io-jpeg.c:383 gdk-pixbuf/io-jpeg.c:749
@@ -457,7 +458,8 @@ msgstr "Kobna greška pri čitanju PNG slike: %s"
 msgid ""
 "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
-"Ključevi za tekstualne odeljke PNG-a moraju imati bar 1, a najviše 79 znakova."
+"Ključevi za tekstualne odeljke PNG-a moraju imati bar 1, a najviše 79 "
+"znakova."
 
 #: gdk-pixbuf/io-png.c:821
 msgid "Keys for PNG text chunks must be ASCII characters."
@@ -1023,7 +1025,8 @@ msgstr ""
 #, c-format
 msgid "Could not add a bookmark for %s because it is an invalid path name."
 msgstr ""
-"Ne mogu da dodam obeleživač za %s zato što predstavlja neispravno ime putanje."
+"Ne mogu da dodam obeleživač za %s zato što predstavlja neispravno ime "
+"putanje."
 
 #: gtk/gtkfilechooserdefault.c:1788
 msgid "Folder"

@@ -13,14 +13,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-09 04:14+0100\n"
+"POT-Creation-Date: 2004-03-09 11:16-0500\n"
 "PO-Revision-Date: 2004-03-09 12:13+0100\n"
 "Last-Translator: Sanlig Badral <badral@openmn.org>\n"
 "Language-Team: Mongolian <openmn-core@lists.sf.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: gdk-pixbuf/gdk-pixbuf.c:100
 msgid "Number of Channels"
@@ -1784,7 +1784,9 @@ msgstr "X-зэрэгцүүлэлт"
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts"
-msgstr "Хэвтээ зэрэгцүүлэлт 0 ( зүүн ) -ээс 1 ( баруун ) хүртэл.·RTL·- хэлбэрт нөөцлөгдсөн"
+msgstr ""
+"Хэвтээ зэрэгцүүлэлт 0 ( зүүн ) -ээс 1 ( баруун ) хүртэл.·RTL·- хэлбэрт "
+"нөөцлөгдсөн"
 
 # gtk/gtkentry.c:728
 #: gtk/gtkentry.c:787
@@ -2402,105 +2404,105 @@ msgstr "Байрлалын өргөн"
 msgid "The height of the layout"
 msgstr "Байрлалын өндөр"
 
-#: gtk/gtkmenu.c:353
+#: gtk/gtkmenu.c:355
 msgid "Tearoff Title"
 msgstr "Буулгах гарчиг"
 
-#: gtk/gtkmenu.c:354
+#: gtk/gtkmenu.c:356
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr "Энэ цэс буусан үед цонхны удирдагчаар харуулагдах боломтой гарчиг"
 
-#: gtk/gtkmenu.c:360
+#: gtk/gtkmenu.c:362
 msgid "Vertical Padding"
 msgstr "Босоо доторлогоо"
 
-#: gtk/gtkmenu.c:361
+#: gtk/gtkmenu.c:363
 msgid "Extra space at the top and bottom of the menu"
 msgstr "Цэсийн дээд ба доод зайн тусгай хэмжээ"
 
 # gtk/gtkalignment.c:130
-#: gtk/gtkmenu.c:369
+#: gtk/gtkmenu.c:371
 msgid "Vertical Offset"
 msgstr "Босоо оффсет"
 
-#: gtk/gtkmenu.c:370
+#: gtk/gtkmenu.c:372
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr "Хэрэв цэс дэд цэс бол, босоогоор энэ тооны цэг байрлуулна."
 
 # gtk/gtkalignment.c:121
-#: gtk/gtkmenu.c:378
+#: gtk/gtkmenu.c:380
 msgid "Horizontal Offset"
 msgstr "Хэвтээ оффсет"
 
-#: gtk/gtkmenu.c:379
+#: gtk/gtkmenu.c:381
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 msgstr "Хэрэв цэс дэд цэс бол, хэвтээгээр энэ тооны цэг байрлуулна."
 
-#: gtk/gtkmenu.c:389
+#: gtk/gtkmenu.c:391
 msgid "Left Attach"
 msgstr "Зүүн хавсралт"
 
-#: gtk/gtkmenu.c:390 gtk/gtktable.c:204
+#: gtk/gtkmenu.c:392 gtk/gtktable.c:204
 msgid "The column number to attach the left side of the child to"
 msgstr "Элементийн харьяалагдах зүүн талын баганы дугаар"
 
-#: gtk/gtkmenu.c:397
+#: gtk/gtkmenu.c:399
 msgid "Right Attach"
 msgstr "баруун хавсралт"
 
-#: gtk/gtkmenu.c:398
+#: gtk/gtkmenu.c:400
 msgid "The column number to attach the right side of the child to"
 msgstr "Хүүгийн баруун талд харьяалагдах зүүн талын баганы дугаар"
 
-#: gtk/gtkmenu.c:405
+#: gtk/gtkmenu.c:407
 msgid "Top Attach"
 msgstr "Дээд хавсралт"
 
-#: gtk/gtkmenu.c:406
+#: gtk/gtkmenu.c:408
 msgid "The row number to attach the top of the child to"
 msgstr "Хүүгийн дээр харъяалагдах мөрийн дугаар"
 
-#: gtk/gtkmenu.c:413
+#: gtk/gtkmenu.c:415
 msgid "Bottom Attach"
 msgstr "Доод хавсралт"
 
-#: gtk/gtkmenu.c:414 gtk/gtktable.c:225
+#: gtk/gtkmenu.c:416 gtk/gtktable.c:225
 msgid "The row number to attach the bottom of the child to"
 msgstr "Хүүгийн доор харъяалагдах мөрийн дугаар"
 
 # gtk/gtkmenu.c:260
-#: gtk/gtkmenu.c:501
+#: gtk/gtkmenu.c:503
 msgid "Can change accelerators"
 msgstr "Товчлууруудын комбинацийг өөрчилж болно."
 
-#: gtk/gtkmenu.c:502
+#: gtk/gtkmenu.c:504
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Цэсийн элемент дээр товч дарагдсан үед цэсийн хурдасгагч товчлууруудыг "
 "өөрчилж болох эсэх"
 
-#: gtk/gtkmenu.c:507
+#: gtk/gtkmenu.c:509
 msgid "Delay before submenus appear"
 msgstr "Дэд цэс харагдахаас өмнө түр завсарлах"
 
-#: gtk/gtkmenu.c:508
+#: gtk/gtkmenu.c:510
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Дэд цэс харагдахаас өмнө хулганын заагч цэс дээр байх хамгийн бага хугацаа."
 
-#: gtk/gtkmenu.c:515
+#: gtk/gtkmenu.c:517
 msgid "Delay before hiding a submenu"
 msgstr "Дэд цэс хаагдахаас өмнө түр завсарлах"
 
-#: gtk/gtkmenu.c:516
+#: gtk/gtkmenu.c:518
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -3392,7 +3394,9 @@ msgstr "Xft Hint хэлбэр"
 
 #: gtk/gtksettings.c:386
 msgid "What degree of hinting to use; none, slight, medium, or full"
-msgstr "Ямар зэргийн hinting хэрэглэх эсэх; none (үгүй), slight (сул), medium (дунд), эсвэл full(хүчтэй)"
+msgstr ""
+"Ямар зэргийн hinting хэрэглэх эсэх; none (үгүй), slight (сул), medium "
+"(дунд), эсвэл full(хүчтэй)"
 
 #: gtk/gtksettings.c:395
 msgid "Xft RGBA"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-07 22:51-0500\n"
+"POT-Creation-Date: 2004-03-09 11:16-0500\n"
 "PO-Revision-Date: 2004-03-07 22:53-0500\n"
 "Last-Translator: Alexander Winston <alexander.winston@comcast.net>\n"
 "Language-Team: English/Canada <adamw@FreeBSD.org>\n"
@@ -1308,51 +1308,51 @@ msgstr "Value in list"
 msgid "Whether entered values must already be present in the list"
 msgstr "Whether entered values must already be present in the list"
 
-#: gtk/gtkcombobox.c:452
+#: gtk/gtkcombobox.c:451
 msgid "ComboBox model"
 msgstr "ComboBox model"
 
-#: gtk/gtkcombobox.c:453
+#: gtk/gtkcombobox.c:452
 msgid "The model for the combo box"
 msgstr "The model for the combo box"
 
-#: gtk/gtkcombobox.c:460
+#: gtk/gtkcombobox.c:459
 msgid "Wrap width"
 msgstr "Wrap width"
 
-#: gtk/gtkcombobox.c:461
+#: gtk/gtkcombobox.c:460
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Wrap width for layouting the items in a grid"
 
-#: gtk/gtkcombobox.c:470
+#: gtk/gtkcombobox.c:469
 msgid "Row span column"
 msgstr "Row span column"
 
-#: gtk/gtkcombobox.c:471
+#: gtk/gtkcombobox.c:470
 msgid "TreeModel column containing the row span values"
 msgstr "TreeModel column containing the row span values"
 
-#: gtk/gtkcombobox.c:480
+#: gtk/gtkcombobox.c:479
 msgid "Column span column"
 msgstr "Column span column"
 
-#: gtk/gtkcombobox.c:481
+#: gtk/gtkcombobox.c:480
 msgid "TreeModel column containing the column span values"
 msgstr "TreeModel column containing the column span values"
 
-#: gtk/gtkcombobox.c:490
+#: gtk/gtkcombobox.c:489
 msgid "Active item"
 msgstr "Active item"
 
-#: gtk/gtkcombobox.c:491
+#: gtk/gtkcombobox.c:490
 msgid "The item which is currently active"
 msgstr "The item which is currently active"
 
-#: gtk/gtkcombobox.c:499
+#: gtk/gtkcombobox.c:498
 msgid "Appears as list"
 msgstr "Appears as list"
 
-#: gtk/gtkcombobox.c:500
+#: gtk/gtkcombobox.c:499
 msgid "Whether combobox dropdowns should look like lists rather than menus"
 msgstr "Whether combobox dropdowns should look like lists rather than menus"
 
@@ -1559,7 +1559,9 @@ msgstr "X align"
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts"
-msgstr "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL layouts"
+msgstr ""
+"The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
+"layouts"
 
 #: gtk/gtkentry.c:787
 msgid "Select on focus"
@@ -1735,11 +1737,11 @@ msgstr "Show Hidden"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Whether the hidden files and folders should be displayed"
 
-#: gtk/gtkfilechooserdefault.c:466
+#: gtk/gtkfilechooserdefault.c:467
 msgid "Default file chooser backend"
 msgstr "Default file chooser backend"
 
-#: gtk/gtkfilechooserdefault.c:467
+#: gtk/gtkfilechooserdefault.c:468
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Name of the GtkFileChooser backend to use by default"
 
@@ -2106,11 +2108,11 @@ msgstr "The width of the layout"
 msgid "The height of the layout"
 msgstr "The height of the layout"
 
-#: gtk/gtkmenu.c:353
+#: gtk/gtkmenu.c:355
 msgid "Tearoff Title"
 msgstr "Tearoff Title"
 
-#: gtk/gtkmenu.c:354
+#: gtk/gtkmenu.c:356
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
@@ -2118,19 +2120,19 @@ msgstr ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 
-#: gtk/gtkmenu.c:360
+#: gtk/gtkmenu.c:362
 msgid "Vertical Padding"
 msgstr "Vertical Padding"
 
-#: gtk/gtkmenu.c:361
+#: gtk/gtkmenu.c:363
 msgid "Extra space at the top and bottom of the menu"
 msgstr "Extra space at the top and bottom of the menu"
 
-#: gtk/gtkmenu.c:369
+#: gtk/gtkmenu.c:371
 msgid "Vertical Offset"
 msgstr "Vertical Offset"
 
-#: gtk/gtkmenu.c:370
+#: gtk/gtkmenu.c:372
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
@@ -2138,11 +2140,11 @@ msgstr ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 
-#: gtk/gtkmenu.c:378
+#: gtk/gtkmenu.c:380
 msgid "Horizontal Offset"
 msgstr "Horizontal Offset"
 
-#: gtk/gtkmenu.c:379
+#: gtk/gtkmenu.c:381
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
@@ -2150,63 +2152,63 @@ msgstr ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 
-#: gtk/gtkmenu.c:389
+#: gtk/gtkmenu.c:391
 msgid "Left Attach"
 msgstr "Left Attach"
 
-#: gtk/gtkmenu.c:390 gtk/gtktable.c:204
+#: gtk/gtkmenu.c:392 gtk/gtktable.c:204
 msgid "The column number to attach the left side of the child to"
 msgstr "The column number to attach the left side of the child to"
 
-#: gtk/gtkmenu.c:397
+#: gtk/gtkmenu.c:399
 msgid "Right Attach"
 msgstr "Right Attach"
 
-#: gtk/gtkmenu.c:398
+#: gtk/gtkmenu.c:400
 msgid "The column number to attach the right side of the child to"
 msgstr "The column number to attach the right side of the child to"
 
-#: gtk/gtkmenu.c:405
+#: gtk/gtkmenu.c:407
 msgid "Top Attach"
 msgstr "Top Attach"
 
-#: gtk/gtkmenu.c:406
+#: gtk/gtkmenu.c:408
 msgid "The row number to attach the top of the child to"
 msgstr "The row number to attach the top of the child to"
 
-#: gtk/gtkmenu.c:413
+#: gtk/gtkmenu.c:415
 msgid "Bottom Attach"
 msgstr "Bottom Attach"
 
-#: gtk/gtkmenu.c:414 gtk/gtktable.c:225
+#: gtk/gtkmenu.c:416 gtk/gtktable.c:225
 msgid "The row number to attach the bottom of the child to"
 msgstr "The row number to attach the bottom of the child to"
 
-#: gtk/gtkmenu.c:501
+#: gtk/gtkmenu.c:503
 msgid "Can change accelerators"
 msgstr "Can change accelerators"
 
-#: gtk/gtkmenu.c:502
+#: gtk/gtkmenu.c:504
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 
-#: gtk/gtkmenu.c:507
+#: gtk/gtkmenu.c:509
 msgid "Delay before submenus appear"
 msgstr "Delay before submenus appear"
 
-#: gtk/gtkmenu.c:508
+#: gtk/gtkmenu.c:510
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 
-#: gtk/gtkmenu.c:515
+#: gtk/gtkmenu.c:517
 msgid "Delay before hiding a submenu"
 msgstr "Delay before hiding a submenu"
 
-#: gtk/gtkmenu.c:516
+#: gtk/gtkmenu.c:518
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"

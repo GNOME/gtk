@@ -1,3 +1,7 @@
+Tue Mar  9 09:33:54 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* === Released 2.3.6 ===
+
 Wed Mar  3 15:50:28 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* Makefile.am (libgdk_pixbuf_xlib_2_0_la_LIBADD): Add 

@@ -31,10 +31,12 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
-"POT-Creation-Date: 2004-03-07 04:12+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-03-09 11:16-0500\n"
 "PO-Revision-Date: 2004-03-07 18:05+0200\n"
 "Last-Translator: Mətin Əmirov <metin@karegen.com>\n"
-"Language-Team: Azerbaijani Turkish <translation-team-az@lists.sourceforge.net>\n"
+"Language-Team: Azerbaijani Turkish <translation-team-az@lists.sourceforge."
+"net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -72,9 +74,7 @@ msgstr "Şablon başına bit"
 msgid "The number of bits per sample"
 msgstr "Şablon başına bit ədədi"
 
-#: gdk-pixbuf/gdk-pixbuf.c:142
-#: gtk/gtklayout.c:648
-#: gtk/gtktreeviewcolumn.c:239
+#: gdk-pixbuf/gdk-pixbuf.c:142 gtk/gtklayout.c:648 gtk/gtktreeviewcolumn.c:239
 msgid "Width"
 msgstr "En"
 
@@ -82,8 +82,7 @@ msgstr "En"
 msgid "The number of columns of the pixbuf"
 msgstr "Piksbufdakı sütunların miqdarı"
 
-#: gdk-pixbuf/gdk-pixbuf.c:153
-#: gtk/gtklayout.c:657
+#: gdk-pixbuf/gdk-pixbuf.c:153 gtk/gtklayout.c:657
 msgid "Height"
 msgstr "Hündürlük"
 
@@ -96,7 +95,8 @@ msgid "Rowstride"
 msgstr "Rowstride"
 
 #: gdk-pixbuf/gdk-pixbuf.c:165
-msgid "The number of bytes between the start of a row and the start of the next row"
+msgid ""
+"The number of bytes between the start of a row and the start of the next row"
 msgstr "İki sətirin başlanğıcı arasındakı piksel miqdarı"
 
 #: gdk-pixbuf/gdk-pixbuf.c:175
@@ -131,8 +131,7 @@ msgstr "Sürə'tləndirici Widget-i"
 msgid "The widget to be monitored for accelerator changes"
 msgstr "Sürə'tləndirici dəyişiklikləri izlənəcək widget"
 
-#: gtk/gtkaction.c:193
-#: gtk/gtkactiongroup.c:133
+#: gtk/gtkaction.c:193 gtk/gtkactiongroup.c:133
 msgid "Name"
 msgstr "Ad"
 
@@ -140,12 +139,8 @@ msgstr "Ad"
 msgid "A unique name for the action."
 msgstr "Gedişat üçün xüsusi ad."
 
-#: gtk/gtkaction.c:201
-#: gtk/gtkbutton.c:210
-#: gtk/gtkexpander.c:202
-#: gtk/gtkframe.c:126
-#: gtk/gtklabel.c:289
-#: gtk/gtktoolbutton.c:180
+#: gtk/gtkaction.c:201 gtk/gtkbutton.c:211 gtk/gtkexpander.c:202
+#: gtk/gtkframe.c:126 gtk/gtklabel.c:289 gtk/gtktoolbutton.c:180
 msgid "Label"
 msgstr "Etiket"
 
@@ -177,34 +172,41 @@ msgstr "Stok Timsalı"
 msgid "The stock icon displayed in widgets representing this action."
 msgstr "Bu gedişatı təmsil edən widget-lərdə göstəriləcək stok timsalı."
 
-#: gtk/gtkaction.c:229
-#: gtk/gtktoolitem.c:158
+#: gtk/gtkaction.c:229 gtk/gtktoolitem.c:158
 msgid "Visible when horizontal"
 msgstr "Üfüqi ikən görünən"
 
-#: gtk/gtkaction.c:230
-#: gtk/gtktoolitem.c:159
-msgid "Whether the toolbar item is visible when the toolbar is in a horizontal orientation."
-msgstr "Vasitə çubuğunun üfüqi istiqamətdə olduğu zaman vasitə çubuğu üzvünün göstərilməsi."
+#: gtk/gtkaction.c:230 gtk/gtktoolitem.c:159
+msgid ""
+"Whether the toolbar item is visible when the toolbar is in a horizontal "
+"orientation."
+msgstr ""
+"Vasitə çubuğunun üfüqi istiqamətdə olduğu zaman vasitə çubuğu üzvünün "
+"göstərilməsi."
 
-#: gtk/gtkaction.c:236
-#: gtk/gtktoolitem.c:165
+#: gtk/gtkaction.c:236 gtk/gtktoolitem.c:165
 msgid "Visible when vertical"
 msgstr "Şaquli ikən görünən"
 
-#: gtk/gtkaction.c:237
-#: gtk/gtktoolitem.c:166
-msgid "Whether the toolbar item is visible when the toolbar is in a vertical orientation."
-msgstr "Vasitə çubuğunun şaquli istiqamətdə olduğu zaman vasitə çubuğu üzvünün göstərilməsi."
+#: gtk/gtkaction.c:237 gtk/gtktoolitem.c:166
+msgid ""
+"Whether the toolbar item is visible when the toolbar is in a vertical "
+"orientation."
+msgstr ""
+"Vasitə çubuğunun şaquli istiqamətdə olduğu zaman vasitə çubuğu üzvünün "
+"göstərilməsi."
 
-#: gtk/gtkaction.c:243
-#: gtk/gtktoolitem.c:172
+#: gtk/gtkaction.c:243 gtk/gtktoolitem.c:172
 msgid "Is important"
 msgstr "Vacibdir"
 
 #: gtk/gtkaction.c:244
-msgid "Whether the action is considered important. When TRUE, toolitem proxies for this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
-msgstr "Gedişatın vacim sayılması. TRUE isə, bu gedişatın toolitem vəkilləri mətni GTK_TOOLBAR_BOTH_HORIZ modunda göstərəcəkdir."
+msgid ""
+"Whether the action is considered important. When TRUE, toolitem proxies for "
+"this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
+msgstr ""
+"Gedişatın vacim sayılması. TRUE isə, bu gedişatın toolitem vəkilləri mətni "
+"GTK_TOOLBAR_BOTH_HORIZ modunda göstərəcəkdir."
 
 #: gtk/gtkaction.c:250
 msgid "Hide if empty"
@@ -214,9 +216,7 @@ msgstr "Boş isə gizlə"
 msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr "TRUE olanda, bu gedişat üçün boş menyu vəkilləri gizli olacaqdır."
 
-#: gtk/gtkaction.c:257
-#: gtk/gtkactiongroup.c:141
-#: gtk/gtkwidget.c:449
+#: gtk/gtkaction.c:257 gtk/gtkactiongroup.c:141 gtk/gtkwidget.c:449
 msgid "Sensitive"
 msgstr "Həssas"
 
@@ -224,11 +224,8 @@ msgstr "Həssas"
 msgid "Whether the action is enabled."
 msgstr "Gedişatın fəal olması."
 
-#: gtk/gtkaction.c:264
-#: gtk/gtkactiongroup.c:148
-#: gtk/gtktreeview.c:552
-#: gtk/gtktreeviewcolumn.c:223
-#: gtk/gtkwidget.c:442
+#: gtk/gtkaction.c:264 gtk/gtkactiongroup.c:148 gtk/gtktreeview.c:552
+#: gtk/gtktreeviewcolumn.c:223 gtk/gtkwidget.c:442
 msgid "Visible"
 msgstr "Görünən"
 
@@ -241,8 +238,12 @@ msgid "Action Group"
 msgstr "Gedişat Qrupu"
 
 #: gtk/gtkaction.c:272
-msgid "The GtkActionGroup this GtkAction is associated with, or NULL (for internal use)."
-msgstr "Bu GtkAction-ın əlaqələndirildiyi GtkActionGroup, ya da daxili istifadə üçün NULL."
+msgid ""
+"The GtkActionGroup this GtkAction is associated with, or NULL (for internal "
+"use)."
+msgstr ""
+"Bu GtkAction-ın əlaqələndirildiyi GtkActionGroup, ya da daxili istifadə üçün "
+"NULL."
 
 #: gtk/gtkactiongroup.c:134
 msgid "A name for the action group."
@@ -256,8 +257,7 @@ msgstr "Gedişat qrupunun fəal olması."
 msgid "Whether the action group is visible."
 msgstr "Gedişat qrupunun görünən olması."
 
-#: gtk/gtkadjustment.c:107
-#: gtk/gtkspinbutton.c:302
+#: gtk/gtkadjustment.c:107 gtk/gtkspinbutton.c:302
 msgid "Value"
 msgstr "Qiymət"
 
@@ -309,18 +309,21 @@ msgstr "Qurğunun səhifə böyüklüyü"
 msgid "Horizontal alignment"
 msgstr "Üfüqi səviyyələmə"
 
-#: gtk/gtkalignment.c:118
-#: gtk/gtkbutton.c:261
-msgid "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is right aligned"
-msgstr "Mövcud sahədə törəmənin üfüqi yeri. 0.0 sola, 1.0 sağa tərəfləndirmədir"
+#: gtk/gtkalignment.c:118 gtk/gtkbutton.c:262
+msgid ""
+"Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
+"right aligned"
+msgstr ""
+"Mövcud sahədə törəmənin üfüqi yeri. 0.0 sola, 1.0 sağa tərəfləndirmədir"
 
 #: gtk/gtkalignment.c:127
 msgid "Vertical alignment"
 msgstr "Şaquli səviyyələmə"
 
-#: gtk/gtkalignment.c:128
-#: gtk/gtkbutton.c:280
-msgid "Vertical position of child in available space. 0.0 is top aligned, 1.0 is bottom aligned"
+#: gtk/gtkalignment.c:128 gtk/gtkbutton.c:281
+msgid ""
+"Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
+"bottom aligned"
 msgstr "Mövcud sahədə törəmənin şaquli. 0.0 üstə, 1.0 aşağı tərəfləndirmədir"
 
 #: gtk/gtkalignment.c:136
@@ -328,16 +331,24 @@ msgid "Horizontal scale"
 msgstr "Üfüqi miqyas"
 
 #: gtk/gtkalignment.c:137
-msgid "If available horizontal space is bigger than needed for the child, how much of it to use for the child. 0.0 means none, 1.0 means all"
-msgstr "Mövcud üfüqi sahə törəmədən daha böyükdürsə, törəmə üçün işlədiləcək miqdar. 0.0 heç biri, 1.0 hamısı deməkdir"
+msgid ""
+"If available horizontal space is bigger than needed for the child, how much "
+"of it to use for the child. 0.0 means none, 1.0 means all"
+msgstr ""
+"Mövcud üfüqi sahə törəmədən daha böyükdürsə, törəmə üçün işlədiləcək miqdar. "
+"0.0 heç biri, 1.0 hamısı deməkdir"
 
 #: gtk/gtkalignment.c:145
 msgid "Vertical scale"
 msgstr "Şaquli miqyas"
 
 #: gtk/gtkalignment.c:146
-msgid "If available vertical space is bigger than needed for the child, how much of it to use for the child. 0.0 means none, 1.0 means all"
-msgstr "Mövcud şaquli sahə törəmədən daha böyükdürsə, törəmə üçün işlədiləcək miqdar. 0.0 heç biri, 1.0 hamısı deməkdir"
+msgid ""
+"If available vertical space is bigger than needed for the child, how much of "
+"it to use for the child. 0.0 means none, 1.0 means all"
+msgstr ""
+"Mövcud şaquli sahə törəmədən daha böyükdürsə, törəmə üçün işlədiləcək "
+"miqdar. 0.0 heç biri, 1.0 hamısı deməkdir"
 
 #: gtk/gtkalignment.c:163
 msgid "Top Padding"
@@ -456,19 +467,26 @@ msgid "Layout style"
 msgstr "Düzülüş tərzi"
 
 #: gtk/gtkbbox.c:157
-msgid "How to layout the buttons in the box. Possible values are default, spread, edge, start and end"
-msgstr "Qutu düymələri düzülüş. Mümkün qiymətlər əsas, yayğın, kənar, başlanğıc və sondur"
+msgid ""
+"How to layout the buttons in the box. Possible values are default, spread, "
+"edge, start and end"
+msgstr ""
+"Qutu düymələri düzülüş. Mümkün qiymətlər əsas, yayğın, kənar, başlanğıc və "
+"sondur"
 
 #: gtk/gtkbbox.c:165
 msgid "Secondary"
 msgstr "İkincil"
 
 #: gtk/gtkbbox.c:166
-msgid "If TRUE, the child appears in a secondary group of children, suitable for, e.g., help buttons"
-msgstr "DOĞRU isə, törəmə ikinci törəmə qrupunda ortaya çıxır, məs. yardım düymələri üçün uyğundur"
+msgid ""
+"If TRUE, the child appears in a secondary group of children, suitable for, e."
+"g., help buttons"
+msgstr ""
+"DOĞRU isə, törəmə ikinci törəmə qrupunda ortaya çıxır, məs. yardım düymələri "
+"üçün uyğundur"
 
-#: gtk/gtkbox.c:129
-#: gtk/gtkexpander.c:226
+#: gtk/gtkbox.c:129 gtk/gtkexpander.c:226
 msgid "Spacing"
 msgstr "Boşluq"
 
@@ -476,9 +494,7 @@ msgstr "Boşluq"
 msgid "The amount of space between children"
 msgstr "Törəmələr arasındakı boşluq miqdarı"
 
-#: gtk/gtkbox.c:139
-#: gtk/gtknotebook.c:469
-#: gtk/gtktoolbar.c:534
+#: gtk/gtkbox.c:139 gtk/gtknotebook.c:469 gtk/gtktoolbar.c:534
 msgid "Homogeneous"
 msgstr "Homojen"
 
@@ -486,9 +502,7 @@ msgstr "Homojen"
 msgid "Whether the children should all be the same size"
 msgstr "Törəmənin eyni böyüklükdə olub olmayacağı"
 
-#: gtk/gtkbox.c:147
-#: gtk/gtkpreview.c:132
-#: gtk/gtktoolbar.c:526
+#: gtk/gtkbox.c:147 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:526
 #: gtk/gtktreeviewcolumn.c:295
 msgid "Expand"
 msgstr "Genişlət"
@@ -502,8 +516,12 @@ msgid "Fill"
 msgstr "Doldur"
 
 #: gtk/gtkbox.c:155
-msgid "Whether extra space given to the child should be allocated to the child or used as padding"
-msgstr "Törəməyə verilən əlavə boşluğun törəməyə mi ait olması ya da törəmənin çətrməsi olaraq işlədiləcəyi"
+msgid ""
+"Whether extra space given to the child should be allocated to the child or "
+"used as padding"
+msgstr ""
+"Törəməyə verilən əlavə boşluğun törəməyə mi ait olması ya da törəmənin "
+"çətrməsi olaraq işlədiləcəyi"
 
 #: gtk/gtkbox.c:161
 msgid "Padding"
@@ -517,109 +535,121 @@ msgstr "Törəmə ilə qonşuları arasına qoyulacaq əlavə boşluq, piksel ol
 msgid "Pack type"
 msgstr "Paket tərzi"
 
-#: gtk/gtkbox.c:169
-#: gtk/gtknotebook.c:513
-msgid "A GtkPackType indicating whether the child is packed with reference to the start or end of the parent"
-msgstr "Törəmənin valideynən başlanğıcına yoxsa sonuna nəzələn paketlənəcəyini müəyyən edən GtkPackType"
+#: gtk/gtkbox.c:169 gtk/gtknotebook.c:513
+msgid ""
+"A GtkPackType indicating whether the child is packed with reference to the "
+"start or end of the parent"
+msgstr ""
+"Törəmənin valideynən başlanğıcına yoxsa sonuna nəzələn paketlənəcəyini "
+"müəyyən edən GtkPackType"
 
-#: gtk/gtkbox.c:175
-#: gtk/gtknotebook.c:491
-#: gtk/gtkpaned.c:239
+#: gtk/gtkbox.c:175 gtk/gtknotebook.c:491 gtk/gtkpaned.c:239
 #: gtk/gtkruler.c:139
 msgid "Position"
 msgstr "Yer"
 
-#: gtk/gtkbox.c:176
-#: gtk/gtknotebook.c:492
+#: gtk/gtkbox.c:176 gtk/gtknotebook.c:492
 msgid "The index of the child in the parent"
 msgstr "Qohumdakı törəmənin məzmunu (indeksi)"
 
-#: gtk/gtkbutton.c:211
-msgid "Text of the label widget inside the button, if the button contains a label widget"
-msgstr "Düymə daxilindəki etiket pəncərəciyinin mətni, əgər etiket pəncərəciyinə malikdirsə"
+#: gtk/gtkbutton.c:212
+msgid ""
+"Text of the label widget inside the button, if the button contains a label "
+"widget"
+msgstr ""
+"Düymə daxilindəki etiket pəncərəciyinin mətni, əgər etiket pəncərəciyinə "
+"malikdirsə"
 
-#: gtk/gtkbutton.c:218
-#: gtk/gtkexpander.c:210
-#: gtk/gtklabel.c:310
+#: gtk/gtkbutton.c:219 gtk/gtkexpander.c:210 gtk/gtklabel.c:310
 #: gtk/gtktoolbutton.c:187
 msgid "Use underline"
 msgstr "Alt cızıq işlət"
 
-#: gtk/gtkbutton.c:219
-#: gtk/gtkexpander.c:211
-#: gtk/gtklabel.c:311
-msgid "If set, an underline in the text indicates the next character should be used for the mnemonic accelerator key"
-msgstr "Seçili isə, altı cızılı xarakterdən sonrakının mnemonik yüksəldici açarı olaraq qəbul edilməsi gərəkdiyini göstərir"
+#: gtk/gtkbutton.c:220 gtk/gtkexpander.c:211 gtk/gtklabel.c:311
+msgid ""
+"If set, an underline in the text indicates the next character should be used "
+"for the mnemonic accelerator key"
+msgstr ""
+"Seçili isə, altı cızılı xarakterdən sonrakının mnemonik yüksəldici açarı "
+"olaraq qəbul edilməsi gərəkdiyini göstərir"
 
-#: gtk/gtkbutton.c:226
+#: gtk/gtkbutton.c:227
 msgid "Use stock"
 msgstr "Depo işlət"
 
-#: gtk/gtkbutton.c:227
-msgid "If set, the label is used to pick a stock item instead of being displayed"
-msgstr "Seçili isə, etiket göstərilmək yerinə ambar vahidi almaq üçün işlədilir"
+#: gtk/gtkbutton.c:228
+msgid ""
+"If set, the label is used to pick a stock item instead of being displayed"
+msgstr ""
+"Seçili isə, etiket göstərilmək yerinə ambar vahidi almaq üçün işlədilir"
 
-#: gtk/gtkbutton.c:234
+#: gtk/gtkbutton.c:235
 msgid "Focus on click"
 msgstr "Tıqlamada fokusa al"
 
-#: gtk/gtkbutton.c:235
+#: gtk/gtkbutton.c:236
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr "Mətnin siçanla tıqlandığında fokusu alması"
 
-#: gtk/gtkbutton.c:242
+#: gtk/gtkbutton.c:243
 msgid "Border relief"
 msgstr "Kənarlıq relyefi"
 
-#: gtk/gtkbutton.c:243
+#: gtk/gtkbutton.c:244
 msgid "The border relief style"
 msgstr "Kənar relyef tərzi"
 
-#: gtk/gtkbutton.c:260
+#: gtk/gtkbutton.c:261
 msgid "Horizontal alignment for child"
 msgstr "Törəmənin üfüqi səviyyələməsi"
 
-#: gtk/gtkbutton.c:279
+#: gtk/gtkbutton.c:280
 msgid "Vertical alignment for child"
 msgstr "Törəmənin şaquli səviyyələməsi"
 
-#: gtk/gtkbutton.c:347
+#: gtk/gtkbutton.c:348
 msgid "Default Spacing"
 msgstr "Ön Qurğulu Boşluq"
 
-#: gtk/gtkbutton.c:348
+#: gtk/gtkbutton.c:349
 msgid "Extra space to add for CAN_DEFAULT buttons"
 msgstr "CAN_DEFAULT düymələrinə əlavə ediləcək əlavə sahə"
 
-#: gtk/gtkbutton.c:354
+#: gtk/gtkbutton.c:355
 msgid "Default Outside Spacing"
 msgstr "Ön Qurğulu Xarici Boşluq"
 
-#: gtk/gtkbutton.c:355
-msgid "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the border"
-msgstr "Kənarı həmişə xaricində göstərilən CAN_DEFAULT düymələri üçün əlavə ediləcək sahə"
+#: gtk/gtkbutton.c:356
+msgid ""
+"Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
+"border"
+msgstr ""
+"Kənarı həmişə xaricində göstərilən CAN_DEFAULT düymələri üçün əlavə ediləcək "
+"sahə"
 
-#: gtk/gtkbutton.c:360
+#: gtk/gtkbutton.c:361
 msgid "Child X Displacement"
 msgstr "Törəmənin X Yerdəyişdirməsi"
 
-#: gtk/gtkbutton.c:361
-msgid "How far in the x direction to move the child when the button is depressed"
+#: gtk/gtkbutton.c:362
+msgid ""
+"How far in the x direction to move the child when the button is depressed"
 msgstr "Düyməyə basılanda törəmənin x istiqamətində nə qədər hərəkət edəcəyi"
 
-#: gtk/gtkbutton.c:368
+#: gtk/gtkbutton.c:369
 msgid "Child Y Displacement"
 msgstr "Törəmənin Y Yerdəyişdirməsi"
 
-#: gtk/gtkbutton.c:369
-msgid "How far in the y direction to move the child when the button is depressed"
+#: gtk/gtkbutton.c:370
+msgid ""
+"How far in the y direction to move the child when the button is depressed"
 msgstr "Düyməyə basılanda törəmənin y istiqamətində nə qədər hərəkət edəcəyi"
 
-#: gtk/gtkbutton.c:376
+#: gtk/gtkbutton.c:377
 msgid "Show button images"
 msgstr "Düymə rəsmlərini göstər"
 
-#: gtk/gtkbutton.c:377
+#: gtk/gtkbutton.c:378
 msgid "Whether stock icons should be shown in buttons"
 msgstr "Düymələrdə stik timsalların göstəriləcəyi"
 
@@ -644,7 +674,9 @@ msgid "Day"
 msgstr "Gün"
 
 #: gtk/gtkcalendar.c:479
-msgid "The selected day (as a number between 1 and 31, or 0 to unselect the currently selected day)"
+msgid ""
+"The selected day (as a number between 1 and 31, or 0 to unselect the "
+"currently selected day)"
 msgstr "Seçili gün"
 
 #: gtk/gtkcalendar.c:493
@@ -807,8 +839,7 @@ msgstr "Pixbuf Genişləndirici Bağlı"
 msgid "Pixbuf for closed expander"
 msgstr "Bağlı genişləndirici üçün Pixbuf"
 
-#: gtk/gtkcellrendererpixbuf.c:161
-#: gtk/gtkimage.c:177
+#: gtk/gtkcellrendererpixbuf.c:161 gtk/gtkimage.c:177
 msgid "Stock ID"
 msgstr "Stock ID"
 
@@ -832,9 +863,7 @@ msgstr "Təfsilat"
 msgid "Render detail to pass to the theme engine"
 msgstr "Örtük motoruna ötürüləcək render təfərruatı"
 
-#: gtk/gtkcellrenderertext.c:193
-#: gtk/gtkentry.c:545
-#: gtk/gtkprogressbar.c:218
+#: gtk/gtkcellrenderertext.c:193 gtk/gtkentry.c:545 gtk/gtkprogressbar.c:218
 msgid "Text"
 msgstr "Mətn"
 
@@ -850,8 +879,7 @@ msgstr "İşarət"
 msgid "Marked up text to render"
 msgstr "Render ediləcək işarət"
 
-#: gtk/gtkcellrenderertext.c:209
-#: gtk/gtklabel.c:296
+#: gtk/gtkcellrenderertext.c:209 gtk/gtklabel.c:296
 msgid "Attributes"
 msgstr "Atributlar"
 
@@ -867,41 +895,31 @@ msgstr "Tək Paraqraf Modu"
 msgid "Whether or not to keep all text in a single paragraph"
 msgstr "Bütün mətnin tək paraqrafda saxlanması"
 
-#: gtk/gtkcellrenderertext.c:226
-#: gtk/gtkcellview.c:180
-#: gtk/gtktexttag.c:206
+#: gtk/gtkcellrenderertext.c:226 gtk/gtkcellview.c:180 gtk/gtktexttag.c:206
 msgid "Background color name"
 msgstr "Arxa plan rəng adı"
 
-#: gtk/gtkcellrenderertext.c:227
-#: gtk/gtkcellview.c:181
-#: gtk/gtktexttag.c:207
+#: gtk/gtkcellrenderertext.c:227 gtk/gtkcellview.c:181 gtk/gtktexttag.c:207
 msgid "Background color as a string"
 msgstr "Arxa plan rəngi mətni"
 
-#: gtk/gtkcellrenderertext.c:234
-#: gtk/gtkcellview.c:187
-#: gtk/gtktexttag.c:214
+#: gtk/gtkcellrenderertext.c:234 gtk/gtkcellview.c:187 gtk/gtktexttag.c:214
 msgid "Background color"
 msgstr "Arxa plan rəngi"
 
-#: gtk/gtkcellrenderertext.c:235
-#: gtk/gtkcellview.c:188
+#: gtk/gtkcellrenderertext.c:235 gtk/gtkcellview.c:188
 msgid "Background color as a GdkColor"
 msgstr "Arxa plan rəngi GdkColor olaraq"
 
-#: gtk/gtkcellrenderertext.c:242
-#: gtk/gtktexttag.c:240
+#: gtk/gtkcellrenderertext.c:242 gtk/gtktexttag.c:240
 msgid "Foreground color name"
 msgstr "Ön plan rəng adı"
 
-#: gtk/gtkcellrenderertext.c:243
-#: gtk/gtktexttag.c:241
+#: gtk/gtkcellrenderertext.c:243 gtk/gtktexttag.c:241
 msgid "Foreground color as a string"
 msgstr "Ön plan rəngi kəlmə olaraq"
 
-#: gtk/gtkcellrenderertext.c:250
-#: gtk/gtktexttag.c:248
+#: gtk/gtkcellrenderertext.c:250 gtk/gtktexttag.c:248
 msgid "Foreground color"
 msgstr "Ön plan rəngi"
 
@@ -909,24 +927,17 @@ msgstr "Ön plan rəngi"
 msgid "Foreground color as a GdkColor"
 msgstr "Ön plan rəng GdkColor olaraq"
 
-#: gtk/gtkcellrenderertext.c:259
-#: gtk/gtkentry.c:477
-#: gtk/gtktexttag.c:274
+#: gtk/gtkcellrenderertext.c:259 gtk/gtkentry.c:477 gtk/gtktexttag.c:274
 #: gtk/gtktextview.c:586
 msgid "Editable"
 msgstr "Dəyişdirilə bilən"
 
-#: gtk/gtkcellrenderertext.c:260
-#: gtk/gtktexttag.c:275
-#: gtk/gtktextview.c:587
+#: gtk/gtkcellrenderertext.c:260 gtk/gtktexttag.c:275 gtk/gtktextview.c:587
 msgid "Whether the text can be modified by the user"
 msgstr "Mətn harada istifadəçi tərəfindən dəyişdirilə bilər"
 
-#: gtk/gtkcellrenderertext.c:267
-#: gtk/gtkcellrenderertext.c:275
-#: gtk/gtkfontsel.c:218
-#: gtk/gtktexttag.c:282
-#: gtk/gtktexttag.c:290
+#: gtk/gtkcellrenderertext.c:267 gtk/gtkcellrenderertext.c:275
+#: gtk/gtkfontsel.c:218 gtk/gtktexttag.c:282 gtk/gtktexttag.c:290
 msgid "Font"
 msgstr "YazıTipi"
 
@@ -934,63 +945,52 @@ msgstr "YazıTipi"
 msgid "Font description as a string"
 msgstr "Yazı Növü izahat kəlmə olaraq"
 
-#: gtk/gtkcellrenderertext.c:276
-#: gtk/gtktexttag.c:291
+#: gtk/gtkcellrenderertext.c:276 gtk/gtktexttag.c:291
 msgid "Font description as a PangoFontDescription struct"
 msgstr "Yazı Növü izahatı PangoFontDescription olaraq"
 
-#: gtk/gtkcellrenderertext.c:284
-#: gtk/gtktexttag.c:299
+#: gtk/gtkcellrenderertext.c:284 gtk/gtktexttag.c:299
 msgid "Font family"
 msgstr "Yazı növü ailəsi"
 
-#: gtk/gtkcellrenderertext.c:285
-#: gtk/gtktexttag.c:300
+#: gtk/gtkcellrenderertext.c:285 gtk/gtktexttag.c:300
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
 msgstr "Yazı növü ailəsi adı, Helvetika, Tayms vs kimi"
 
-#: gtk/gtkcellrenderertext.c:292
-#: gtk/gtkcellrenderertext.c:293
+#: gtk/gtkcellrenderertext.c:292 gtk/gtkcellrenderertext.c:293
 #: gtk/gtktexttag.c:307
 msgid "Font style"
 msgstr "Yazı Növü tərzi"
 
-#: gtk/gtkcellrenderertext.c:301
-#: gtk/gtkcellrenderertext.c:302
+#: gtk/gtkcellrenderertext.c:301 gtk/gtkcellrenderertext.c:302
 #: gtk/gtktexttag.c:316
 msgid "Font variant"
 msgstr "Yazı Növü variantı"
 
-#: gtk/gtkcellrenderertext.c:310
-#: gtk/gtkcellrenderertext.c:311
+#: gtk/gtkcellrenderertext.c:310 gtk/gtkcellrenderertext.c:311
 #: gtk/gtktexttag.c:325
 msgid "Font weight"
 msgstr "Yazı Növü qalınlığı"
 
-#: gtk/gtkcellrenderertext.c:320
-#: gtk/gtkcellrenderertext.c:321
+#: gtk/gtkcellrenderertext.c:320 gtk/gtkcellrenderertext.c:321
 #: gtk/gtktexttag.c:336
 msgid "Font stretch"
 msgstr "Yazı Növü genişliyi"
 
-#: gtk/gtkcellrenderertext.c:329
-#: gtk/gtkcellrenderertext.c:330
+#: gtk/gtkcellrenderertext.c:329 gtk/gtkcellrenderertext.c:330
 #: gtk/gtktexttag.c:345
 msgid "Font size"
 msgstr "Yazı növü böyüklüyü"
 
-#: gtk/gtkcellrenderertext.c:339
-#: gtk/gtktexttag.c:365
+#: gtk/gtkcellrenderertext.c:339 gtk/gtktexttag.c:365
 msgid "Font points"
 msgstr "Yazı Növü nöqtələri"
 
-#: gtk/gtkcellrenderertext.c:340
-#: gtk/gtktexttag.c:366
+#: gtk/gtkcellrenderertext.c:340 gtk/gtktexttag.c:366
 msgid "Font size in points"
 msgstr "Yazı Növü böyüklüyü nöqtə olaraq"
 
-#: gtk/gtkcellrenderertext.c:349
-#: gtk/gtktexttag.c:355
+#: gtk/gtkcellrenderertext.c:349 gtk/gtktexttag.c:355
 msgid "Font scale"
 msgstr "Yazı növü miqyası"
 
@@ -998,184 +998,154 @@ msgstr "Yazı növü miqyası"
 msgid "Font scaling factor"
 msgstr "Yazı növü miqyasılama faktoru"
 
-#: gtk/gtkcellrenderertext.c:359
-#: gtk/gtktexttag.c:424
+#: gtk/gtkcellrenderertext.c:359 gtk/gtktexttag.c:424
 msgid "Rise"
 msgstr "Yüksəlmə"
 
 #: gtk/gtkcellrenderertext.c:360
-msgid "Offset of text above the baseline (below the baseline if rise is negative)"
-msgstr "Mətnin Offseti ana xəttin üstündə olsun (yüksəlmə mənfi isə altında olsun)"
+msgid ""
+"Offset of text above the baseline (below the baseline if rise is negative)"
+msgstr ""
+"Mətnin Offseti ana xəttin üstündə olsun (yüksəlmə mənfi isə altında olsun)"
 
-#: gtk/gtkcellrenderertext.c:370
-#: gtk/gtktexttag.c:464
+#: gtk/gtkcellrenderertext.c:370 gtk/gtktexttag.c:464
 msgid "Strikethrough"
 msgstr "Qaralanmış"
 
-#: gtk/gtkcellrenderertext.c:371
-#: gtk/gtktexttag.c:465
+#: gtk/gtkcellrenderertext.c:371 gtk/gtktexttag.c:465
 msgid "Whether to strike through the text"
 msgstr "Mətni harada qaralayacağıq"
 
-#: gtk/gtkcellrenderertext.c:378
-#: gtk/gtktexttag.c:472
+#: gtk/gtkcellrenderertext.c:378 gtk/gtktexttag.c:472
 msgid "Underline"
 msgstr "Alt cızıqlı"
 
-#: gtk/gtkcellrenderertext.c:379
-#: gtk/gtktexttag.c:473
+#: gtk/gtkcellrenderertext.c:379 gtk/gtktexttag.c:473
 msgid "Style of underline for this text"
 msgstr "Bu mətn üçün alt cızıq tərzi"
 
-#: gtk/gtkcellrenderertext.c:387
-#: gtk/gtktexttag.c:384
+#: gtk/gtkcellrenderertext.c:387 gtk/gtktexttag.c:384
 msgid "Language"
 msgstr "Dil"
 
-#: gtk/gtkcellrenderertext.c:388
-#: gtk/gtktexttag.c:385
-msgid "The language this text is in, as an ISO code. Pango can use this as a hint when rendering the text. If you don't understand this parameter, you probably don't need it"
-msgstr "ISO kodu olaraq bu mətnin dili. Pango mətni render edərkən bu mə'lumatı istifadə edə bilər."
+#: gtk/gtkcellrenderertext.c:388 gtk/gtktexttag.c:385
+msgid ""
+"The language this text is in, as an ISO code. Pango can use this as a hint "
+"when rendering the text. If you don't understand this parameter, you "
+"probably don't need it"
+msgstr ""
+"ISO kodu olaraq bu mətnin dili. Pango mətni render edərkən bu mə'lumatı "
+"istifadə edə bilər."
 
-#: gtk/gtkcellrenderertext.c:398
-#: gtk/gtkcellview.c:195
-#: gtk/gtktexttag.c:509
+#: gtk/gtkcellrenderertext.c:398 gtk/gtkcellview.c:195 gtk/gtktexttag.c:509
 msgid "Background set"
 msgstr "Arxa plan dəstəsi"
 
-#: gtk/gtkcellrenderertext.c:399
-#: gtk/gtkcellview.c:196
-#: gtk/gtktexttag.c:510
+#: gtk/gtkcellrenderertext.c:399 gtk/gtkcellview.c:196 gtk/gtktexttag.c:510
 msgid "Whether this tag affects the background color"
 msgstr "Bu təqin arxa plana harda tə'sir edəcəyi"
 
-#: gtk/gtkcellrenderertext.c:402
-#: gtk/gtktexttag.c:521
+#: gtk/gtkcellrenderertext.c:402 gtk/gtktexttag.c:521
 msgid "Foreground set"
 msgstr "Ön plan dəstəsi"
 
-#: gtk/gtkcellrenderertext.c:403
-#: gtk/gtktexttag.c:522
+#: gtk/gtkcellrenderertext.c:403 gtk/gtktexttag.c:522
 msgid "Whether this tag affects the foreground color"
 msgstr "Bu təqin ön plana harda tə'sir edəcəyi"
 
-#: gtk/gtkcellrenderertext.c:406
-#: gtk/gtktexttag.c:529
+#: gtk/gtkcellrenderertext.c:406 gtk/gtktexttag.c:529
 msgid "Editability set"
 msgstr "Düzəldilə bilən dəstə"
 
-#: gtk/gtkcellrenderertext.c:407
-#: gtk/gtktexttag.c:530
+#: gtk/gtkcellrenderertext.c:407 gtk/gtktexttag.c:530
 msgid "Whether this tag affects text editability"
 msgstr "Bu təqin mətnin harda düzəldilə biləcəyinə tə'sir edəcəyi"
 
-#: gtk/gtkcellrenderertext.c:410
-#: gtk/gtktexttag.c:533
+#: gtk/gtkcellrenderertext.c:410 gtk/gtktexttag.c:533
 msgid "Font family set"
 msgstr "Yazı Növü dəstəsi"
 
-#: gtk/gtkcellrenderertext.c:411
-#: gtk/gtktexttag.c:534
+#: gtk/gtkcellrenderertext.c:411 gtk/gtktexttag.c:534
 msgid "Whether this tag affects the font family"
 msgstr "Bu təqin yazı növü ailəsinə harda tə'sir edəcəyi"
 
-#: gtk/gtkcellrenderertext.c:414
-#: gtk/gtktexttag.c:537
+#: gtk/gtkcellrenderertext.c:414 gtk/gtktexttag.c:537
 msgid "Font style set"
 msgstr "Yazı Növü dəstəsi"
 
-#: gtk/gtkcellrenderertext.c:415
-#: gtk/gtktexttag.c:538
+#: gtk/gtkcellrenderertext.c:415 gtk/gtktexttag.c:538
 msgid "Whether this tag affects the font style"
 msgstr "Bu təqin yazı növü tərzinə  harda tə'sir edəcəyi"
 
-#: gtk/gtkcellrenderertext.c:418
-#: gtk/gtktexttag.c:541
+#: gtk/gtkcellrenderertext.c:418 gtk/gtktexttag.c:541
 msgid "Font variant set"
 msgstr "Yazı Növü variantı dəstəsi"
 
-#: gtk/gtkcellrenderertext.c:419
-#: gtk/gtktexttag.c:542
+#: gtk/gtkcellrenderertext.c:419 gtk/gtktexttag.c:542
 msgid "Whether this tag affects the font variant"
 msgstr "Bu təqin yazı növü variantına harda tə'sir edəcəyi"
 
-#: gtk/gtkcellrenderertext.c:422
-#: gtk/gtktexttag.c:545
+#: gtk/gtkcellrenderertext.c:422 gtk/gtktexttag.c:545
 msgid "Font weight set"
 msgstr "Yazı Növü qalınlığı dəstəsi"
 
-#: gtk/gtkcellrenderertext.c:423
-#: gtk/gtktexttag.c:546
+#: gtk/gtkcellrenderertext.c:423 gtk/gtktexttag.c:546
 msgid "Whether this tag affects the font weight"
 msgstr "Bu təqin yazı növü qalınlığına harda tə'sir edəcəyi"
 
-#: gtk/gtkcellrenderertext.c:426
-#: gtk/gtktexttag.c:549
+#: gtk/gtkcellrenderertext.c:426 gtk/gtktexttag.c:549
 msgid "Font stretch set"
 msgstr "Yazı Növü genişliyi dəstəsi"
 
-#: gtk/gtkcellrenderertext.c:427
-#: gtk/gtktexttag.c:550
+#: gtk/gtkcellrenderertext.c:427 gtk/gtktexttag.c:550
 msgid "Whether this tag affects the font stretch"
 msgstr "Bu təqin yazı növü genişliyinə harda tə'sir edəcəyi"
 
-#: gtk/gtkcellrenderertext.c:430
-#: gtk/gtktexttag.c:553
+#: gtk/gtkcellrenderertext.c:430 gtk/gtktexttag.c:553
 msgid "Font size set"
 msgstr "Yazı Növü böyüklüyü dəstəsi"
 
-#: gtk/gtkcellrenderertext.c:431
-#: gtk/gtktexttag.c:554
+#: gtk/gtkcellrenderertext.c:431 gtk/gtktexttag.c:554
 msgid "Whether this tag affects the font size"
 msgstr "Bu təqin yazı növü böyüklüyünə harda tə'sir edəcəyi"
 
-#: gtk/gtkcellrenderertext.c:434
-#: gtk/gtktexttag.c:557
+#: gtk/gtkcellrenderertext.c:434 gtk/gtktexttag.c:557
 msgid "Font scale set"
 msgstr "Yazı növü miqyası dəstəsi"
 
-#: gtk/gtkcellrenderertext.c:435
-#: gtk/gtktexttag.c:558
+#: gtk/gtkcellrenderertext.c:435 gtk/gtktexttag.c:558
 msgid "Whether this tag scales the font size by a factor"
 msgstr "Bu təqin yazı növü böyüklüyünü neşə qat artıracağı"
 
-#: gtk/gtkcellrenderertext.c:438
-#: gtk/gtktexttag.c:577
+#: gtk/gtkcellrenderertext.c:438 gtk/gtktexttag.c:577
 msgid "Rise set"
 msgstr "Yüksəklik dəstəsi"
 
-#: gtk/gtkcellrenderertext.c:439
-#: gtk/gtktexttag.c:578
+#: gtk/gtkcellrenderertext.c:439 gtk/gtktexttag.c:578
 msgid "Whether this tag affects the rise"
 msgstr "Bu təqin yüksəkliyə harda tə'sir edəcəyi"
 
-#: gtk/gtkcellrenderertext.c:442
-#: gtk/gtktexttag.c:593
+#: gtk/gtkcellrenderertext.c:442 gtk/gtktexttag.c:593
 msgid "Strikethrough set"
 msgstr "Qaralanmış dəstəsi"
 
-#: gtk/gtkcellrenderertext.c:443
-#: gtk/gtktexttag.c:594
+#: gtk/gtkcellrenderertext.c:443 gtk/gtktexttag.c:594
 msgid "Whether this tag affects strikethrough"
 msgstr "Bu təqin qaralanmağa harda tə'sir edəcəyi"
 
-#: gtk/gtkcellrenderertext.c:446
-#: gtk/gtktexttag.c:601
+#: gtk/gtkcellrenderertext.c:446 gtk/gtktexttag.c:601
 msgid "Underline set"
 msgstr "Altı cızıqlı dəstəsi"
 
-#: gtk/gtkcellrenderertext.c:447
-#: gtk/gtktexttag.c:602
+#: gtk/gtkcellrenderertext.c:447 gtk/gtktexttag.c:602
 msgid "Whether this tag affects underlining"
 msgstr "Bu təqin alt cızıqlara harda tə'sir edəcəyi"
 
-#: gtk/gtkcellrenderertext.c:450
-#: gtk/gtktexttag.c:565
+#: gtk/gtkcellrenderertext.c:450 gtk/gtktexttag.c:565
 msgid "Language set"
 msgstr "Dil dəstəsi"
 
-#: gtk/gtkcellrenderertext.c:451
-#: gtk/gtktexttag.c:566
+#: gtk/gtkcellrenderertext.c:451 gtk/gtktexttag.c:566
 msgid "Whether this tag affects the language the text is rendered as"
 msgstr "Bu təqin mətnin dilinə harda tə'sir edəcəyi"
 
@@ -1211,20 +1181,15 @@ msgstr "Radio halı"
 msgid "Draw the toggle button as a radio button"
 msgstr "Açma/Qapama düyməsini radio düyməsi kimi göstər"
 
-#: gtk/gtkcheckbutton.c:99
-#: gtk/gtkcheckmenuitem.c:140
-#: gtk/gtkoptionmenu.c:200
+#: gtk/gtkcheckbutton.c:99 gtk/gtkcheckmenuitem.c:140 gtk/gtkoptionmenu.c:200
 msgid "Indicator Size"
 msgstr "İndikator Böyüklüyü"
 
-#: gtk/gtkcheckbutton.c:100
-#: gtk/gtkcheckmenuitem.c:142
+#: gtk/gtkcheckbutton.c:100 gtk/gtkcheckmenuitem.c:142
 msgid "Size of check or radio indicator"
 msgstr "İşarət və ya radio indikatoru böyüklüyü"
 
-#: gtk/gtkcheckbutton.c:107
-#: gtk/gtkexpander.c:252
-#: gtk/gtkoptionmenu.c:206
+#: gtk/gtkcheckbutton.c:107 gtk/gtkexpander.c:252 gtk/gtkoptionmenu.c:206
 msgid "Indicator Spacing"
 msgstr "İndikator Boşluğu"
 
@@ -1232,8 +1197,7 @@ msgstr "İndikator Boşluğu"
 msgid "Spacing around check or radio indicator"
 msgstr "İşarət və ya radio indikatoru ətrafındakı boşluq"
 
-#: gtk/gtkcheckmenuitem.c:117
-#: gtk/gtktogglebutton.c:133
+#: gtk/gtkcheckmenuitem.c:117 gtk/gtktogglebutton.c:133
 msgid "Active"
 msgstr "Fəal"
 
@@ -1241,8 +1205,7 @@ msgstr "Fəal"
 msgid "Whether the menu item is checked"
 msgstr "Menyu üzvünün işarətli olub olmaması"
 
-#: gtk/gtkcheckmenuitem.c:125
-#: gtk/gtktogglebutton.c:141
+#: gtk/gtkcheckmenuitem.c:125 gtk/gtktogglebutton.c:141
 msgid "Inconsistent"
 msgstr "Qərarsız"
 
@@ -1266,8 +1229,7 @@ msgstr "Alfa işlət"
 msgid "Whether or not to give the color an alpha value"
 msgstr "Rəngə alfa qiymətinin verilməsi"
 
-#: gtk/gtkcolorbutton.c:217
-#: gtk/gtkfontbutton.c:175
+#: gtk/gtkcolorbutton.c:217 gtk/gtkfontbutton.c:175
 #: gtk/gtktreeviewcolumn.c:287
 msgid "Title"
 msgstr "Başlıq"
@@ -1276,8 +1238,7 @@ msgstr "Başlıq"
 msgid "The title of the color selection dialog"
 msgstr "Rəng seçkisi dialoqunun başlığı"
 
-#: gtk/gtkcolorbutton.c:232
-#: gtk/gtkcolorsel.c:1776
+#: gtk/gtkcolorbutton.c:232 gtk/gtkcolorsel.c:1776
 msgid "Current Color"
 msgstr "Hazırkı Rəng"
 
@@ -1285,8 +1246,7 @@ msgstr "Hazırkı Rəng"
 msgid "The selected color"
 msgstr "Seçili rəng"
 
-#: gtk/gtkcolorbutton.c:247
-#: gtk/gtkcolorsel.c:1783
+#: gtk/gtkcolorbutton.c:247 gtk/gtkcolorsel.c:1783
 msgid "Current Alpha"
 msgstr "Hazırkı Alfa"
 
@@ -1366,51 +1326,51 @@ msgstr "Siyahıdakı qiymət"
 msgid "Whether entered values must already be present in the list"
 msgstr "Girilən qiymətin hazırda da siyahıda olması lazımdırsa"
 
-#: gtk/gtkcombobox.c:452
+#: gtk/gtkcombobox.c:451
 msgid "ComboBox model"
 msgstr "ComboBox modeli"
 
-#: gtk/gtkcombobox.c:453
+#: gtk/gtkcombobox.c:452
 msgid "The model for the combo box"
 msgstr "Kombo qutusunun modeli"
 
-#: gtk/gtkcombobox.c:460
+#: gtk/gtkcombobox.c:459
 msgid "Wrap width"
 msgstr "Qırma eni"
 
-#: gtk/gtkcombobox.c:461
+#: gtk/gtkcombobox.c:460
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Üzvlərin qəfəsdə düzülüşü üçün qırma eni"
 
-#: gtk/gtkcombobox.c:470
+#: gtk/gtkcombobox.c:469
 msgid "Row span column"
 msgstr "Sətir span sütunu"
 
-#: gtk/gtkcombobox.c:471
+#: gtk/gtkcombobox.c:470
 msgid "TreeModel column containing the row span values"
 msgstr "Sətir span qiymətlərini daxil edən TreeModel sütünu"
 
-#: gtk/gtkcombobox.c:480
+#: gtk/gtkcombobox.c:479
 msgid "Column span column"
 msgstr "Sütun span sütunu"
 
-#: gtk/gtkcombobox.c:481
+#: gtk/gtkcombobox.c:480
 msgid "TreeModel column containing the column span values"
 msgstr "Sütun span qiymətlərini daxil edən TreeModel sütünu"
 
-#: gtk/gtkcombobox.c:490
+#: gtk/gtkcombobox.c:489
 msgid "Active item"
 msgstr "Fəal üzv"
 
-#: gtk/gtkcombobox.c:491
+#: gtk/gtkcombobox.c:490
 msgid "The item which is currently active"
 msgstr "Hazırda fəal olan üzv"
 
-#: gtk/gtkcombobox.c:499
+#: gtk/gtkcombobox.c:498
 msgid "Appears as list"
 msgstr "Siyahı olaraq görünür"
 
-#: gtk/gtkcombobox.c:500
+#: gtk/gtkcombobox.c:499
 msgid "Whether combobox dropdowns should look like lists rather than menus"
 msgstr "Combobox açılışlarının menyu yerinə siyahı olaraq göstərilməsi"
 
@@ -1518,24 +1478,21 @@ msgstr "Gediş sahəsi kənarı"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Dialoq təpəsindəki düymə sahəsi ətrafındakı kənar eni"
 
-#: gtk/gtkentry.c:457
-#: gtk/gtklabel.c:367
+#: gtk/gtkentry.c:457 gtk/gtklabel.c:367
 msgid "Cursor Position"
 msgstr "Ox Yeri"
 
-#: gtk/gtkentry.c:458
-#: gtk/gtklabel.c:368
+#: gtk/gtkentry.c:458 gtk/gtklabel.c:368
 msgid "The current position of the insertion cursor in chars"
 msgstr "Xarakterlərdəki daxiletmə oxunun hazırkı yeri"
 
-#: gtk/gtkentry.c:467
-#: gtk/gtklabel.c:377
+#: gtk/gtkentry.c:467 gtk/gtklabel.c:377
 msgid "Selection Bound"
 msgstr "Seçim Sahəsi"
 
-#: gtk/gtkentry.c:468
-#: gtk/gtklabel.c:378
-msgid "The position of the opposite end of the selection from the cursor in chars"
+#: gtk/gtkentry.c:468 gtk/gtklabel.c:378
+msgid ""
+"The position of the opposite end of the selection from the cursor in chars"
 msgstr "Seçimin tərs tərəfinin kursordan hərf miqdarı qədər olan mövqeyi"
 
 #: gtk/gtkentry.c:478
@@ -1555,7 +1512,9 @@ msgid "Visibility"
 msgstr "Görünmə Qabiliyyəti"
 
 #: gtk/gtkentry.c:495
-msgid "FALSE displays the \"invisible char\" instead of the actual text (password mode)"
+msgid ""
+"FALSE displays the \"invisible char\" instead of the actual text (password "
+"mode)"
 msgstr "SƏHV \"görünməz xarakter\"i həqiqi mətn yerinə göstərər (parol modu)"
 
 #: gtk/gtkentry.c:502
@@ -1579,8 +1538,11 @@ msgid "Activates default"
 msgstr "Əsasları fəallaşdırar"
 
 #: gtk/gtkentry.c:519
-msgid "Whether to activate the default widget (such as the default button in a dialog) when Enter is pressed"
-msgstr "Enter basıldığında əsas pəncərəciyi fəallaşdırma (dialoqdakı əsas düymə kimi)"
+msgid ""
+"Whether to activate the default widget (such as the default button in a "
+"dialog) when Enter is pressed"
+msgstr ""
+"Enter basıldığında əsas pəncərəciyi fəallaşdırma (dialoqdakı əsas düymə kimi)"
 
 #: gtk/gtkentry.c:525
 msgid "Width in chars"
@@ -1602,15 +1564,16 @@ msgstr "Giriçin bənəkləri ekrandan sola sürüşüb"
 msgid "The contents of the entry"
 msgstr "Girişin məzmunu"
 
-#: gtk/gtkentry.c:553
-#: gtk/gtkmisc.c:99
+#: gtk/gtkentry.c:553 gtk/gtkmisc.c:99
 msgid "X align"
 msgstr "X tərəfləməsi"
 
-#: gtk/gtkentry.c:554
-#: gtk/gtkmisc.c:100
-msgid "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL layouts"
-msgstr "Üfqi yerləşdirmə, 0-dan (sol) 1-ə dək (sağ). RTL düzülüşlər üçün tərsinədir"
+#: gtk/gtkentry.c:554 gtk/gtkmisc.c:100
+msgid ""
+"The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
+"layouts"
+msgstr ""
+"Üfqi yerləşdirmə, 0-dan (sol) 1-ə dək (sağ). RTL düzülüşlər üçün tərsinədir"
 
 #: gtk/gtkentry.c:787
 msgid "Select on focus"
@@ -1641,7 +1604,9 @@ msgid "Visible Window"
 msgstr "Görünən Pəncərə"
 
 #: gtk/gtkeventbox.c:121
-msgid "Whether the event box is visible, as opposed to invisible and only used to trap events."
+msgid ""
+"Whether the event box is visible, as opposed to invisible and only used to "
+"trap events."
 msgstr "Hadisə qutusunu görünməsi."
 
 #: gtk/gtkeventbox.c:127
@@ -1649,8 +1614,12 @@ msgid "Above child"
 msgstr "Üst törəmə"
 
 #: gtk/gtkeventbox.c:128
-msgid "Whether the event-trapping window of the eventbox is above the window of the child widget as opposed to below it."
-msgstr "Hadisə qutusunun hadisə-aşkar pəncərəsi törəmə widget pəncərəsinin üstündə ya da altında olması."
+msgid ""
+"Whether the event-trapping window of the eventbox is above the window of the "
+"child widget as opposed to below it."
+msgstr ""
+"Hadisə qutusunun hadisə-aşkar pəncərəsi törəmə widget pəncərəsinin üstündə "
+"ya da altında olması."
 
 #: gtk/gtkexpander.c:194
 msgid "Expanded"
@@ -1664,13 +1633,11 @@ msgstr "Genişlədicinin törəmə widget-i aşkar etmək üçün açıq oluşu"
 msgid "Text of the expander's label"
 msgstr "Genişlədicinin etiket mətni"
 
-#: gtk/gtkexpander.c:218
-#: gtk/gtklabel.c:303
+#: gtk/gtkexpander.c:218 gtk/gtklabel.c:303
 msgid "Use markup"
 msgstr "İşarə işlət"
 
-#: gtk/gtkexpander.c:219
-#: gtk/gtklabel.c:304
+#: gtk/gtkexpander.c:219 gtk/gtklabel.c:304
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "Etiketin mətni XML işarələrini daxil edir. Baxın: pango_parse_markup()"
 
@@ -1678,9 +1645,7 @@ msgstr "Etiketin mətni XML işarələrini daxil edir. Baxın: pango_parse_marku
 msgid "Space to put between the label and the child"
 msgstr "Etiket ilə törəmə arasındakı yer"
 
-#: gtk/gtkexpander.c:236
-#: gtk/gtkframe.c:170
-#: gtk/gtktoolbutton.c:194
+#: gtk/gtkexpander.c:236 gtk/gtkframe.c:170 gtk/gtktoolbutton.c:194
 msgid "Label widget"
 msgstr "Etiket widgeti"
 
@@ -1688,13 +1653,11 @@ msgstr "Etiket widgeti"
 msgid "A widget to display in place of the usual expander label"
 msgstr "Həmişəki genişləndirici etiketin yerində göstəriləvək widget"
 
-#: gtk/gtkexpander.c:243
-#: gtk/gtktreeview.c:622
+#: gtk/gtkexpander.c:243 gtk/gtktreeview.c:622
 msgid "Expander Size"
 msgstr "Genişləndirici Böyüklüyü"
 
-#: gtk/gtkexpander.c:244
-#: gtk/gtktreeview.c:623
+#: gtk/gtkexpander.c:244 gtk/gtktreeview.c:623
 msgid "Size of the expander arrow"
 msgstr "Genişlədici oxun böyüklüyü"
 
@@ -1747,8 +1710,10 @@ msgid "Preview Widget Active"
 msgstr "Nümayiş Widgeti Fəal"
 
 #: gtk/gtkfilechooser.c:125
-msgid "Whether the application supplied widget for custom previews should be shown."
-msgstr "Xüsusi ön nümayişlər üçün proqram tərəfindən verilən widget-in göstərilməsi."
+msgid ""
+"Whether the application supplied widget for custom previews should be shown."
+msgstr ""
+"Xüsusi ön nümayişlər üçün proqram tərəfindən verilən widget-in göstərilməsi."
 
 #: gtk/gtkfilechooser.c:130
 msgid "Use Preview Label"
@@ -1756,7 +1721,8 @@ msgstr "Ön Nümayiş Etiketini İşlət"
 
 #: gtk/gtkfilechooser.c:131
 msgid "Whether to display a stock label with the name of the previewed file."
-msgstr "Ön nümayiş edilən faylın adı ilə bərabər stik etiketin də göstərilməsi."
+msgstr ""
+"Ön nümayiş edilən faylın adı ilə bərabər stik etiketin də göstərilməsi."
 
 #: gtk/gtkfilechooser.c:136
 msgid "Extra widget"
@@ -1770,8 +1736,7 @@ msgstr "Əlavə seçimlər üçün proqram tərəfindən verilən widget."
 msgid "Select Multiple"
 msgstr "Birdən Çoxunu Seç"
 
-#: gtk/gtkfilechooser.c:143
-#: gtk/gtkfilesel.c:575
+#: gtk/gtkfilechooser.c:143 gtk/gtkfilesel.c:575
 msgid "Whether to allow multiple files to be selected"
 msgstr "Birdən çox faylın seçilə bilməsinə icazə verilməsi"
 
@@ -1783,16 +1748,15 @@ msgstr "Gizliləri Göstər"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Gizli fayl ya da qovluqların göstərilməsi"
 
-#: gtk/gtkfilechooserdefault.c:478
+#: gtk/gtkfilechooserdefault.c:467
 msgid "Default file chooser backend"
 msgstr "Ön qurğulu fayl seçici backend-i"
 
-#: gtk/gtkfilechooserdefault.c:479
+#: gtk/gtkfilechooserdefault.c:468
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Ön qurğulu olarq işlədiləcək GtkFileChooser backend-inin adı"
 
-#: gtk/gtkfilesel.c:559
-#: gtk/gtkimage.c:168
+#: gtk/gtkfilesel.c:559 gtk/gtkimage.c:168
 msgid "Filename"
 msgstr "Fayl adı"
 
@@ -1812,23 +1776,19 @@ msgstr "Fayl yaradılması/manipulyasiyası üçün düymələrinin göstərilm�
 msgid "Select multiple"
 msgstr "Birdən çoxunu seç"
 
-#: gtk/gtkfixed.c:121
-#: gtk/gtklayout.c:612
+#: gtk/gtkfixed.c:121 gtk/gtklayout.c:612
 msgid "X position"
 msgstr "X yeri"
 
-#: gtk/gtkfixed.c:122
-#: gtk/gtklayout.c:613
+#: gtk/gtkfixed.c:122 gtk/gtklayout.c:613
 msgid "X position of child widget"
 msgstr "Törəmə pəncərəciyin X yeri"
 
-#: gtk/gtkfixed.c:131
-#: gtk/gtklayout.c:622
+#: gtk/gtkfixed.c:131 gtk/gtklayout.c:622
 msgid "Y position"
 msgstr "Y yeri"
 
-#: gtk/gtkfixed.c:132
-#: gtk/gtklayout.c:623
+#: gtk/gtkfixed.c:132 gtk/gtklayout.c:623
 msgid "Y position of child widget"
 msgstr "Törəmə pəncərəciyin Y yeri"
 
@@ -1836,8 +1796,7 @@ msgstr "Törəmə pəncərəciyin Y yeri"
 msgid "The title of the font selection dialog"
 msgstr "Yazı növü seçmə dialoqunun etiketi"
 
-#: gtk/gtkfontbutton.c:191
-#: gtk/gtkfontsel.c:211
+#: gtk/gtkfontbutton.c:191 gtk/gtkfontsel.c:211
 msgid "Font name"
 msgstr "Yazı növü adı"
 
@@ -1917,8 +1876,7 @@ msgstr "Etiket y tərəfləməsi."
 msgid "The vertical alignment of the label"
 msgstr "Etiketin şaquli tərəfləməsi"
 
-#: gtk/gtkframe.c:154
-#: gtk/gtkhandlebox.c:196
+#: gtk/gtkframe.c:154 gtk/gtkhandlebox.c:196
 msgid "Deprecated property, use shadow_type instead"
 msgstr "Artıq istifadə edilməyən giriş, onun yerinə shadow_type işlədin"
 
@@ -1934,11 +1892,8 @@ msgstr "Çərçivə kənarının görünüşü"
 msgid "A widget to display in place of the usual frame label"
 msgstr "Çərçivənin etiketinin həmişəki yerində göstəriləcək pəncərəcik"
 
-#: gtk/gtkhandlebox.c:203
-#: gtk/gtkmenubar.c:156
-#: gtk/gtkstatusbar.c:200
-#: gtk/gtktoolbar.c:575
-#: gtk/gtkviewport.c:151
+#: gtk/gtkhandlebox.c:203 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:200
+#: gtk/gtktoolbar.c:575 gtk/gtkviewport.c:151
 msgid "Shadow type"
 msgstr "Kölgələmə növü"
 
@@ -1959,16 +1914,23 @@ msgid "Snap edge"
 msgstr "Kənarı çaxnaşdır"
 
 #: gtk/gtkhandlebox.c:222
-msgid "Side of the handlebox that's lined up with the docking point to dock the handlebox"
-msgstr "Qulp qutusunu yapışdırmaq üçün yapışma nöqtəsi ilə sıralanmış qulp qutusunun böyüklüyü"
+msgid ""
+"Side of the handlebox that's lined up with the docking point to dock the "
+"handlebox"
+msgstr ""
+"Qulp qutusunu yapışdırmaq üçün yapışma nöqtəsi ilə sıralanmış qulp qutusunun "
+"böyüklüyü"
 
 #: gtk/gtkhandlebox.c:230
 msgid "Snap edge set"
 msgstr "Kənarı çaxnaşdır"
 
 #: gtk/gtkhandlebox.c:231
-msgid "Whether to use the value from the snap_edge property or a value derived from handle_position"
-msgstr "snap_edge yoxsa handle_position xassələrindən alınan dəyərlərin işlədiləcəyi"
+msgid ""
+"Whether to use the value from the snap_edge property or a value derived from "
+"handle_position"
+msgstr ""
+"snap_edge yoxsa handle_position xassələrindən alınan dəyərlərin işlədiləcəyi"
 
 #: gtk/gtkimage.c:136
 msgid "Pixbuf"
@@ -2058,13 +2020,11 @@ msgstr "Menyu rəsmlərini göstər"
 msgid "Whether images should be shown in menus"
 msgstr "Menyularda rəsmlərin göstərilməsi"
 
-#: gtk/gtkinvisible.c:115
-#: gtk/gtkwindow.c:543
+#: gtk/gtkinvisible.c:115 gtk/gtkwindow.c:543
 msgid "Screen"
 msgstr "Ekran"
 
-#: gtk/gtkinvisible.c:116
-#: gtk/gtkwindow.c:544
+#: gtk/gtkinvisible.c:116 gtk/gtkwindow.c:544
 msgid "The screen where this window will be displayed"
 msgstr "Bu pəncərənin göstəriləcəyi ekran"
 
@@ -2076,23 +2036,29 @@ msgstr "Etiketin mətni"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Etiketin mətninə əlavə ediləcək tərz atributları siyahısı"
 
-#: gtk/gtklabel.c:318
-#: gtk/gtktexttag.c:375
-#: gtk/gtktextview.c:603
+#: gtk/gtklabel.c:318 gtk/gtktexttag.c:375 gtk/gtktextview.c:603
 msgid "Justification"
 msgstr "Sütunlaşdırma"
 
 #: gtk/gtklabel.c:319
-msgid "The alignment of the lines in the text of the label relative to each other. This does NOT affect the alignment of the label within its allocation. See GtkMisc::xalign for that"
-msgstr "Etiketdəki mətnlərin birbirinə olan uyğunlaşması. Bu etiketin öz sahəsindəki yerinə tə'sir etmir. Bunun üçün baxın: GtkMisc::xalign "
+msgid ""
+"The alignment of the lines in the text of the label relative to each other. "
+"This does NOT affect the alignment of the label within its allocation. See "
+"GtkMisc::xalign for that"
+msgstr ""
+"Etiketdəki mətnlərin birbirinə olan uyğunlaşması. Bu etiketin öz sahəsindəki "
+"yerinə tə'sir etmir. Bunun üçün baxın: GtkMisc::xalign "
 
 #: gtk/gtklabel.c:327
 msgid "Pattern"
 msgstr "Naxış"
 
 #: gtk/gtklabel.c:328
-msgid "A string with _ characters in positions correspond to characters in the text to underline"
-msgstr "_ hərfini daxil edən qatarlar mətndəki altı cızıxlı hərflərə uyğun gəlir"
+msgid ""
+"A string with _ characters in positions correspond to characters in the text "
+"to underline"
+msgstr ""
+"_ hərfini daxil edən qatarlar mətndəki altı cızıxlı hərflərə uyğun gəlir"
 
 #: gtk/gtklabel.c:335
 msgid "Line wrap"
@@ -2126,23 +2092,19 @@ msgstr "Mnemonik pəncərəcik"
 msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr "Pəncərəcik etiketin mnemonic düyməsi basılanda fəallaşdırılacaq"
 
-#: gtk/gtklayout.c:632
-#: gtk/gtkviewport.c:135
+#: gtk/gtklayout.c:632 gtk/gtkviewport.c:135
 msgid "Horizontal adjustment"
 msgstr "Üfüqi yayma"
 
-#: gtk/gtklayout.c:633
-#: gtk/gtkscrolledwindow.c:238
+#: gtk/gtklayout.c:633 gtk/gtkscrolledwindow.c:238
 msgid "The GtkAdjustment for the horizontal position"
 msgstr "Üfqi yerləşdirmə üçün GtkSazlanması"
 
-#: gtk/gtklayout.c:640
-#: gtk/gtkviewport.c:143
+#: gtk/gtklayout.c:640 gtk/gtkviewport.c:143
 msgid "Vertical adjustment"
 msgstr "Şaquli yayma"
 
-#: gtk/gtklayout.c:641
-#: gtk/gtkscrolledwindow.c:245
+#: gtk/gtklayout.c:641 gtk/gtkscrolledwindow.c:245
 msgid "The GtkAdjustment for the vertical position"
 msgstr "Şaquli yerləşdirmə üçün GtkSazlanması"
 
@@ -2154,102 +2116,117 @@ msgstr "Düzülüş eni"
 msgid "The height of the layout"
 msgstr "Düzülüş hündürlüyü"
 
-#: gtk/gtkmenu.c:353
+#: gtk/gtkmenu.c:355
 msgid "Tearoff Title"
 msgstr "Etiketi Qopart"
 
-#: gtk/gtkmenu.c:354
-msgid "A title that may be displayed by the window manager when this menu is torn-off"
-msgstr "Bu menyu qoparılmış vəziyyətdə olanda pəncərə idarəçisinin göstərəcəyi etiket"
+#: gtk/gtkmenu.c:356
+msgid ""
+"A title that may be displayed by the window manager when this menu is torn-"
+"off"
+msgstr ""
+"Bu menyu qoparılmış vəziyyətdə olanda pəncərə idarəçisinin göstərəcəyi etiket"
 
-#: gtk/gtkmenu.c:360
+#: gtk/gtkmenu.c:362
 msgid "Vertical Padding"
 msgstr "Şaquli Səviyyələmə"
 
-#: gtk/gtkmenu.c:361
+#: gtk/gtkmenu.c:363
 msgid "Extra space at the top and bottom of the menu"
 msgstr "Menyunun üst və alt tərəflərinə əlavə ediləcək sahə miqdarı"
 
-#: gtk/gtkmenu.c:369
+#: gtk/gtkmenu.c:371
 msgid "Vertical Offset"
 msgstr "Şaquli Offset"
 
-#: gtk/gtkmenu.c:370
-msgid "When the menu is a submenu, position it this number of pixels offset vertically"
-msgstr "Menyu alt menyu isə, onu bu qədər piksel offset şaquli olaraq yerləşdir"
+#: gtk/gtkmenu.c:372
+msgid ""
+"When the menu is a submenu, position it this number of pixels offset "
+"vertically"
+msgstr ""
+"Menyu alt menyu isə, onu bu qədər piksel offset şaquli olaraq yerləşdir"
 
-#: gtk/gtkmenu.c:378
+#: gtk/gtkmenu.c:380
 msgid "Horizontal Offset"
 msgstr "Üfüqi Offset"
 
-#: gtk/gtkmenu.c:379
-msgid "When the menu is a submenu, position it this number of pixels offset horizontally"
+#: gtk/gtkmenu.c:381
+msgid ""
+"When the menu is a submenu, position it this number of pixels offset "
+"horizontally"
 msgstr "Menyu alt menyu isə, onu bu qədər piksel offset üfüqi olaraq yerləşdir"
 
-#: gtk/gtkmenu.c:389
+#: gtk/gtkmenu.c:391
 msgid "Left Attach"
 msgstr "Sol Əlavə"
 
-#: gtk/gtkmenu.c:390
-#: gtk/gtktable.c:204
+#: gtk/gtkmenu.c:392 gtk/gtktable.c:204
 msgid "The column number to attach the left side of the child to"
 msgstr "Törəmənin sol tərəfinin ilişdiriləcəyi sütun nömrəsi"
 
-#: gtk/gtkmenu.c:397
+#: gtk/gtkmenu.c:399
 msgid "Right Attach"
 msgstr "Sağ Əlavə"
 
-#: gtk/gtkmenu.c:398
+#: gtk/gtkmenu.c:400
 msgid "The column number to attach the right side of the child to"
 msgstr "Törəmənin sağ tərəfinin ilişdiriləcəyi sütun nömrəsi"
 
-#: gtk/gtkmenu.c:405
+#: gtk/gtkmenu.c:407
 msgid "Top Attach"
 msgstr "Üst Əlavə"
 
-#: gtk/gtkmenu.c:406
+#: gtk/gtkmenu.c:408
 msgid "The row number to attach the top of the child to"
 msgstr "Törəmənin üst tərəfinin ilişdiriləcəyi sütun nömrəsi"
 
-#: gtk/gtkmenu.c:413
+#: gtk/gtkmenu.c:415
 msgid "Bottom Attach"
 msgstr "Alt Əlavə"
 
-#: gtk/gtkmenu.c:414
-#: gtk/gtktable.c:225
+#: gtk/gtkmenu.c:416 gtk/gtktable.c:225
 msgid "The row number to attach the bottom of the child to"
 msgstr "Törəmənin alt tərəfinin ilişdiriləcəyi sütun nömrəsi"
 
-#: gtk/gtkmenu.c:501
+#: gtk/gtkmenu.c:503
 msgid "Can change accelerators"
 msgstr "Sürə'tləndiricilər dəyişdirilə bilsin"
 
-#: gtk/gtkmenu.c:502
-msgid "Whether menu accelerators can be changed by pressing a key over the menu item"
-msgstr "Menyu sürətləndiricilərin münyu üzvünün üstündə ikən düyməyə basılaraq dəyişdirilə bilməsi"
+#: gtk/gtkmenu.c:504
+msgid ""
+"Whether menu accelerators can be changed by pressing a key over the menu item"
+msgstr ""
+"Menyu sürətləndiricilərin münyu üzvünün üstündə ikən düyməyə basılaraq "
+"dəyişdirilə bilməsi"
 
-#: gtk/gtkmenu.c:507
+#: gtk/gtkmenu.c:509
 msgid "Delay before submenus appear"
 msgstr "Alt menyuları göstərilmə gecikməsi"
 
-#: gtk/gtkmenu.c:508
-msgid "Minimum time the pointer must stay over a menu item before the submenu appear"
-msgstr "Alt menyunun görünməsi üçün oxun menyunun üstündə dayanması məcbur olan minimal vaxt"
+#: gtk/gtkmenu.c:510
+msgid ""
+"Minimum time the pointer must stay over a menu item before the submenu appear"
+msgstr ""
+"Alt menyunun görünməsi üçün oxun menyunun üstündə dayanması məcbur olan "
+"minimal vaxt"
 
-#: gtk/gtkmenu.c:515
+#: gtk/gtkmenu.c:517
 msgid "Delay before hiding a submenu"
 msgstr "Alt menyuları gizlədilmə gecikməsi"
 
-#: gtk/gtkmenu.c:516
-msgid "The time before hiding a submenu when the pointer is moving towards the submenu"
-msgstr "Oxun alt menyu istiqamətində hərəkət etdiyi vaxt alt menyunun gizlədilməsi üçün vaxt"
+#: gtk/gtkmenu.c:518
+msgid ""
+"The time before hiding a submenu when the pointer is moving towards the "
+"submenu"
+msgstr ""
+"Oxun alt menyu istiqamətində hərəkət etdiyi vaxt alt menyunun gizlədilməsi "
+"üçün vaxt"
 
 #: gtk/gtkmenubar.c:157
 msgid "Style of bevel around the menubar"
 msgstr "Menyu çubuğunun ətrafındakı qabartmanın tərzi"
 
-#: gtk/gtkmenubar.c:164
-#: gtk/gtktoolbar.c:551
+#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:551
 msgid "Internal padding"
 msgstr "Daxili fasilələndirmə"
 
@@ -2278,8 +2255,10 @@ msgid "Use separator"
 msgstr "Ayırıcısı işlət"
 
 #: gtk/gtkmessagedialog.c:127
-msgid "Whether to put a separator between the message dialog's text and the buttons"
-msgstr "İsmarış pəncərəsinin mətni ilə düyməsi arasında ayırıcının göstərilməsi"
+msgid ""
+"Whether to put a separator between the message dialog's text and the buttons"
+msgstr ""
+"İsmarış pəncərəsinin mətni ilə düyməsi arasında ayırıcının göstərilməsi"
 
 #: gtk/gtkmessagedialog.c:133
 msgid "Message Type"
@@ -2310,16 +2289,22 @@ msgid "X pad"
 msgstr "X səkməsi"
 
 #: gtk/gtkmisc.c:120
-msgid "The amount of space to add on the left and right of the widget, in pixels"
-msgstr "Pəncərəciklərin sol və sağ tərəflərinə əlavə ediləcək sahə miqdarı, piksel olaraq"
+msgid ""
+"The amount of space to add on the left and right of the widget, in pixels"
+msgstr ""
+"Pəncərəciklərin sol və sağ tərəflərinə əlavə ediləcək sahə miqdarı, piksel "
+"olaraq"
 
 #: gtk/gtkmisc.c:129
 msgid "Y pad"
 msgstr "Y səkməsi"
 
 #: gtk/gtkmisc.c:130
-msgid "The amount of space to add on the top and bottom of the widget, in pixels"
-msgstr "Pəncərəciklərin üst və alt tərəflərinə əlavə ediləcək sahə miqdarı, piksel olaraq"
+msgid ""
+"The amount of space to add on the top and bottom of the widget, in pixels"
+msgstr ""
+"Pəncərəciklərin üst və alt tərəflərinə əlavə ediləcək sahə miqdarı, piksel "
+"olaraq"
 
 #: gtk/gtknotebook.c:397
 msgid "Page"
@@ -2390,8 +2375,12 @@ msgid "Enable Popup"
 msgstr "Popapı Fəallaşdır"
 
 #: gtk/gtknotebook.c:463
-msgid "If TRUE, pressing the right mouse button on the notebook pops up a menu that you can use to go to a page"
-msgstr "Əgər DÜZdürsə, siçan düyməsinin Qeyd Dəftərçəsində tıqlanması gediləcək səhifə menyusunu açar"
+msgid ""
+"If TRUE, pressing the right mouse button on the notebook pops up a menu that "
+"you can use to go to a page"
+msgstr ""
+"Əgər DÜZdürsə, siçan düyməsinin Qeyd Dəftərçəsində tıqlanması gediləcək "
+"səhifə menyusunu açar"
 
 #: gtk/gtknotebook.c:470
 msgid "Whether tabs should have homogeneous sizes"
@@ -2433,41 +2422,37 @@ msgstr "Törəmə tabının ayrılmış yerin hamısını doldurub doldurması"
 msgid "Tab pack type"
 msgstr "Tab paket növü"
 
-#: gtk/gtknotebook.c:528
-#: gtk/gtkscrollbar.c:114
+#: gtk/gtknotebook.c:528 gtk/gtkscrollbar.c:114
 msgid "Secondary backward stepper"
 msgstr "İkinci arxa stepper"
 
 #: gtk/gtknotebook.c:529
-msgid "Display a second backward arrow button on the opposite end of the tab area"
+msgid ""
+"Display a second backward arrow button on the opposite end of the tab area"
 msgstr "Səkmə sahəsinin tərəfində ikinci geri ox düyməsini göstər"
 
-#: gtk/gtknotebook.c:545
-#: gtk/gtkscrollbar.c:122
+#: gtk/gtknotebook.c:545 gtk/gtkscrollbar.c:122
 msgid "Secondary forward stepper"
 msgstr "İkinci iləri stepper"
 
 #: gtk/gtknotebook.c:546
-msgid "Display a second forward arrow button on the opposite end of the tab area"
+msgid ""
+"Display a second forward arrow button on the opposite end of the tab area"
 msgstr "Səkmə sahəsinin qarşı tərəfində ikinci irəli ox düyməsini göstər"
 
-#: gtk/gtknotebook.c:561
-#: gtk/gtkscrollbar.c:98
+#: gtk/gtknotebook.c:561 gtk/gtkscrollbar.c:98
 msgid "Backward stepper"
 msgstr "Arxa plan addımlayıcısı"
 
-#: gtk/gtknotebook.c:562
-#: gtk/gtkscrollbar.c:99
+#: gtk/gtknotebook.c:562 gtk/gtkscrollbar.c:99
 msgid "Display the standard backward arrow button"
 msgstr "Standart geri ox düyməsini göstər"
 
-#: gtk/gtknotebook.c:577
-#: gtk/gtkscrollbar.c:106
+#: gtk/gtknotebook.c:577 gtk/gtkscrollbar.c:106
 msgid "Forward stepper"
 msgstr "Çatdırma addımlayıcısı"
 
-#: gtk/gtknotebook.c:578
-#: gtk/gtkscrollbar.c:107
+#: gtk/gtknotebook.c:578 gtk/gtkscrollbar.c:107
 msgid "Display the standard forward arrow button"
 msgstr "Standart irəli ox düyməsini göstər"
 
@@ -2488,8 +2473,11 @@ msgid "Spacing around indicator"
 msgstr "İndikator ətrafındakı boşluq"
 
 #: gtk/gtkpaned.c:240
-msgid "Position of paned separator in pixels (0 means all the way to the left/top)"
-msgstr "Pəncərə ayırıcısının piksel olaraq yeri (0 dəyəri sol/üst tərəfə doğru bütün sahə deməkdir)"
+msgid ""
+"Position of paned separator in pixels (0 means all the way to the left/top)"
+msgstr ""
+"Pəncərə ayırıcısının piksel olaraq yeri (0 dəyəri sol/üst tərəfə doğru bütün "
+"sahə deməkdir)"
 
 #: gtk/gtkpaned.c:248
 msgid "Position Set"
@@ -2529,7 +2517,9 @@ msgstr "Ölçüləndir"
 
 #: gtk/gtkpaned.c:309
 msgid "If TRUE, the child expands and shrinks along with the paned widget"
-msgstr "TRUE isə, ölçüləndirilən widget ilə bərabər törəmə də böyüyəcək/genişləyəcəkdir"
+msgstr ""
+"TRUE isə, ölçüləndirilən widget ilə bərabər törəmə də böyüyəcək/"
+"genişləyəcəkdir"
 
 #: gtk/gtkpaned.c:324
 msgid "Shrink"
@@ -2540,7 +2530,8 @@ msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr "TRUE isə, törəmə məcbu qiymətdən daha kiçik ola bilər"
 
 #: gtk/gtkpreview.c:133
-msgid "Whether the preview widget should take up the entire space it is allocated"
+msgid ""
+"Whether the preview widget should take up the entire space it is allocated"
 msgstr "Nümayiş pəncərəciyinin ona verilən bütün sahəni doldurması"
 
 #: gtk/gtkprogress.c:130
@@ -2548,8 +2539,15 @@ msgid "Activity mode"
 msgstr "Fəallıq modu"
 
 #: gtk/gtkprogress.c:131
-msgid "If TRUE the GtkProgress is in activity mode, meaning that it signals something is happening, but not how much of the activity is finished. This is used when you're doing something that you don't know how long it will take"
-msgstr "TRUE isə, GtkProgress fəal moddadır. Bunun mə'nası onun nəyinsə baş verdiyinə işarə edir ancaq fəaliyyətin nə qədərlik hissəsinin bitdiyini bildirə bilmir. Bu nə qədər vaxt dəvam edəcəyini bilmədiyiniz bir şeyi həyata keçirəndə işlədilir"
+msgid ""
+"If TRUE the GtkProgress is in activity mode, meaning that it signals "
+"something is happening, but not how much of the activity is finished. This "
+"is used when you're doing something that you don't know how long it will take"
+msgstr ""
+"TRUE isə, GtkProgress fəal moddadır. Bunun mə'nası onun nəyinsə baş "
+"verdiyinə işarə edir ancaq fəaliyyətin nə qədərlik hissəsinin bitdiyini "
+"bildirə bilmir. Bu nə qədər vaxt dəvam edəcəyini bilmədiyiniz bir şeyi "
+"həyata keçirəndə işlədilir"
 
 #: gtk/gtkprogress.c:138
 msgid "Show text"
@@ -2564,20 +2562,26 @@ msgid "Text x alignment"
 msgstr "Mətnin x tərəfləməsi"
 
 #: gtk/gtkprogress.c:147
-msgid "A number between 0.0 and 1.0 specifying the horizontal alignment of the text in the progress widget"
-msgstr "Mətnin irəliləmə pəncərəciyindəki üfqi mövqeyini tə'yin edən 0.0 və 1.0 arasında rəqəm"
+msgid ""
+"A number between 0.0 and 1.0 specifying the horizontal alignment of the text "
+"in the progress widget"
+msgstr ""
+"Mətnin irəliləmə pəncərəciyindəki üfqi mövqeyini tə'yin edən 0.0 və 1.0 "
+"arasında rəqəm"
 
 #: gtk/gtkprogress.c:155
 msgid "Text y alignment"
 msgstr "Mətnin y tərəfləməsi"
 
 #: gtk/gtkprogress.c:156
-msgid "A number between 0.0 and 1.0 specifying the vertical alignment of the text in the progress widget"
-msgstr "Mətnin irəliləmə pəncərəciyindəki şaquli mövqeyini tə'yin edən 0.0 və 1.0 arasında rəqəm"
+msgid ""
+"A number between 0.0 and 1.0 specifying the vertical alignment of the text "
+"in the progress widget"
+msgstr ""
+"Mətnin irəliləmə pəncərəciyindəki şaquli mövqeyini tə'yin edən 0.0 və 1.0 "
+"arasında rəqəm"
 
-#: gtk/gtkprogressbar.c:142
-#: gtk/gtkrange.c:293
-#: gtk/gtkspinbutton.c:241
+#: gtk/gtkprogressbar.c:142 gtk/gtkrange.c:293 gtk/gtkspinbutton.c:241
 msgid "Adjustment"
 msgstr "Yaxşılaşdırma"
 
@@ -2585,8 +2589,7 @@ msgstr "Yaxşılaşdırma"
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
 msgstr "İrəliləmə çubuğuna bağlanmış GtkAdjustment (artıq işlədilmir)"
 
-#: gtk/gtkprogressbar.c:150
-#: gtk/gtktoolbar.c:500
+#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:500
 msgid "Orientation"
 msgstr "İstiqamət"
 
@@ -2608,23 +2611,30 @@ msgstr "Fəallıq Addımı"
 
 #: gtk/gtkprogressbar.c:169
 msgid "The increment used for each iteration in activity mode (Deprecated)"
-msgstr "Aktiv modda ikən hər təkrarlanma üçün işlədiləcək çoxalma (artıq işlədilmir)"
+msgstr ""
+"Aktiv modda ikən hər təkrarlanma üçün işlədiləcək çoxalma (artıq işlədilmir)"
 
 #: gtk/gtkprogressbar.c:178
 msgid "Activity Blocks"
 msgstr "Fəallıq Blokları"
 
 #: gtk/gtkprogressbar.c:179
-msgid "The number of blocks which can fit in the progress bar area in activity mode (Deprecated)"
-msgstr "Aktiv modda ikən irəliləmə çubuğuna sığışan blok miqdarı (artıq işlədilmir)"
+msgid ""
+"The number of blocks which can fit in the progress bar area in activity mode "
+"(Deprecated)"
+msgstr ""
+"Aktiv modda ikən irəliləmə çubuğuna sığışan blok miqdarı (artıq işlədilmir)"
 
 #: gtk/gtkprogressbar.c:188
 msgid "Discrete Blocks"
 msgstr "Discrete Blokları"
 
 #: gtk/gtkprogressbar.c:189
-msgid "The number of discrete blocks in a progress bar (when shown in the discrete style)"
-msgstr "İrəliləmə çubuğundakı ayrılmış blok miqdarı (ayrılmış şəkildə göstəriləndə)"
+msgid ""
+"The number of discrete blocks in a progress bar (when shown in the discrete "
+"style)"
+msgstr ""
+"İrəliləmə çubuğundakı ayrılmış blok miqdarı (ayrılmış şəkildə göstəriləndə)"
 
 #: gtk/gtkprogressbar.c:198
 msgid "Fraction"
@@ -2640,7 +2650,9 @@ msgstr "Pulse Addımı"
 
 #: gtk/gtkprogressbar.c:209
 msgid "The fraction of total progress to move the bouncing block when pulsed"
-msgstr "Nəbz əmələ gələndə ilərləyən blokun daşınması lazım olan vəziyyət çubuğu uzunluğunun hissəsi "
+msgstr ""
+"Nəbz əmələ gələndə ilərləyən blokun daşınması lazım olan vəziyyət çubuğu "
+"uzunluğunun hissəsi "
 
 #: gtk/gtkprogressbar.c:219
 msgid "Text to be displayed in the progress bar"
@@ -2651,11 +2663,14 @@ msgid "The value"
 msgstr "Qiymət"
 
 #: gtk/gtkradioaction.c:139
-msgid "The value returned by gtk_radio_action_get_current_value() when this action is the current action of its group."
-msgstr "Bu gedişatın onun qrupunun hazırkı gedişatı olduğunda gtk_radio_action_get_current_value() tərəfindən qaytarılan qiymət."
+msgid ""
+"The value returned by gtk_radio_action_get_current_value() when this action "
+"is the current action of its group."
+msgstr ""
+"Bu gedişatın onun qrupunun hazırkı gedişatı olduğunda "
+"gtk_radio_action_get_current_value() tərəfindən qaytarılan qiymət."
 
-#: gtk/gtkradioaction.c:155
-#: gtk/gtkradiobutton.c:112
+#: gtk/gtkradioaction.c:155 gtk/gtkradiobutton.c:112
 msgid "Group"
 msgstr "Qrup"
 
@@ -2685,7 +2700,9 @@ msgstr "Tərs"
 
 #: gtk/gtkrange.c:302
 msgid "Invert direction slider moves to increase range value"
-msgstr "İstiqaməti tərs çevirmə sürüşdürücüsü silsilə dəyərini artırmaq üçün hərəkət edir"
+msgstr ""
+"İstiqaməti tərs çevirmə sürüşdürücüsü silsilə dəyərini artırmaq üçün hərəkət "
+"edir"
 
 #: gtk/gtkrange.c:308
 msgid "Slider Width"
@@ -2724,7 +2741,8 @@ msgid "Arrow X Displacement"
 msgstr "Oxun X Yerdəyişdirməsi"
 
 #: gtk/gtkrange.c:341
-msgid "How far in the x direction to move the arrow when the button is depressed"
+msgid ""
+"How far in the x direction to move the arrow when the button is depressed"
 msgstr "Düymə basılanda oxun x istiqamətində nə qədər hərəkət edəcəyi"
 
 #: gtk/gtkrange.c:348
@@ -2732,7 +2750,8 @@ msgid "Arrow Y Displacement"
 msgstr "Oxun Y Yerdəyişdirməsi"
 
 #: gtk/gtkrange.c:349
-msgid "How far in the y direction to move the arrow when the button is depressed"
+msgid ""
+"How far in the y direction to move the arrow when the button is depressed"
 msgstr "Düymə basılanda oxun y istiqamətində nə qədər hərəkət edəcəyi"
 
 #: gtk/gtkruler.c:119
@@ -2763,8 +2782,7 @@ msgstr "Maksimal Böyüklük"
 msgid "Maximum size of the ruler"
 msgstr "Sürüşdürücünün maksimal böyüklüyü"
 
-#: gtk/gtkscale.c:171
-#: gtk/gtkspinbutton.c:259
+#: gtk/gtkscale.c:171 gtk/gtkspinbutton.c:259
 msgid "Digits"
 msgstr "Digitlər"
 
@@ -2821,22 +2839,20 @@ msgid "Don't change slider size, just lock it to the minimum length"
 msgstr "Sürüşdürücünün böyüklüyünü dəyişdirmə, minimal uzunluğa qıfılla"
 
 #: gtk/gtkscrollbar.c:115
-msgid "Display a second backward arrow button on the opposite end of the scrollbar"
+msgid ""
+"Display a second backward arrow button on the opposite end of the scrollbar"
 msgstr "Sürüşdürmə çubuğunun qarşı tərəfində ikinci geri ox düyməsini göstər"
 
 #: gtk/gtkscrollbar.c:123
-msgid "Display a secondary forward arrow button on the opposite end of the scrollbar"
+msgid ""
+"Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr "Sürüşdürmə çubuğunun qarşı tərəfində ikinci irəli ox düyməsini göstər"
 
-#: gtk/gtkscrolledwindow.c:237
-#: gtk/gtktext.c:602
-#: gtk/gtktreeview.c:536
+#: gtk/gtkscrolledwindow.c:237 gtk/gtktext.c:602 gtk/gtktreeview.c:536
 msgid "Horizontal Adjustment"
 msgstr "Üfüqi Yayma"
 
-#: gtk/gtkscrolledwindow.c:244
-#: gtk/gtktext.c:610
-#: gtk/gtktreeview.c:544
+#: gtk/gtkscrolledwindow.c:244 gtk/gtktext.c:610 gtk/gtktreeview.c:544
 msgid "Vertical Adjustment"
 msgstr "Şaquli Yayılma"
 
@@ -2893,16 +2909,23 @@ msgid "Double Click Time"
 msgstr "Cüt Tıglama Zamanı"
 
 #: gtk/gtksettings.c:263
-msgid "Maximum time allowed between two clicks for them to be considered a double click (in milliseconds)"
-msgstr "Cüt kliq sayıla bilməsi üçün iki kliq arasındakı maksimal vaxt (millisaniyə)"
+msgid ""
+"Maximum time allowed between two clicks for them to be considered a double "
+"click (in milliseconds)"
+msgstr ""
+"Cüt kliq sayıla bilməsi üçün iki kliq arasındakı maksimal vaxt (millisaniyə)"
 
 #: gtk/gtksettings.c:270
 msgid "Double Click Distance"
 msgstr "Cüt Tıqlanma Məsafəsi"
 
 #: gtk/gtksettings.c:271
-msgid "Maximum distance allowed between two clicks for them to be considered a double click (in pixels)"
-msgstr "İki tıqlamanın cüt tıqlama qəbul edilməsi üçün iki tıq arasında icazə verilən maksimal piksel olaraq uzaqlıq."
+msgid ""
+"Maximum distance allowed between two clicks for them to be considered a "
+"double click (in pixels)"
+msgstr ""
+"İki tıqlamanın cüt tıqlama qəbul edilməsi üçün iki tıq arasında icazə "
+"verilən maksimal piksel olaraq uzaqlıq."
 
 #: gtk/gtksettings.c:278
 msgid "Cursor Blink"
@@ -2925,7 +2948,9 @@ msgid "Split Cursor"
 msgstr "Kursoru Böl"
 
 #: gtk/gtksettings.c:295
-msgid "Whether two cursors should be displayed for mixed left-to-right and right-to-left text"
+msgid ""
+"Whether two cursors should be displayed for mixed left-to-right and right-to-"
+"left text"
 msgstr "Qarışıq sağdan sola və soldan sağa mətni üçün iki kursorun olması"
 
 #: gtk/gtksettings.c:302
@@ -2990,7 +3015,8 @@ msgstr "Xft Kənar Yumuşaltması"
 
 #: gtk/gtksettings.c:366
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
-msgstr "Xft yazı növləri üçün kənar yumuşaltması; 0=xeyir, 1=bəli, -1=ön qurğulu"
+msgstr ""
+"Xft yazı növləri üçün kənar yumuşaltması; 0=xeyir, 1=bəli, -1=ön qurğulu"
 
 #: gtk/gtksettings.c:375
 msgid "Xft Hinting"
@@ -3022,15 +3048,20 @@ msgstr "Xft DPI"
 
 #: gtk/gtksettings.c:406
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
-msgstr "Xft üçün həlledilirlik, 1024 * nöqtə/inç olaraq. -1 ön qurğulu qiymət üçün"
+msgstr ""
+"Xft üçün həlledilirlik, 1024 * nöqtə/inç olaraq. -1 ön qurğulu qiymət üçün"
 
 #: gtk/gtksizegroup.c:242
 msgid "Mode"
 msgstr "Mod"
 
 #: gtk/gtksizegroup.c:243
-msgid "The directions in which the size group effects the requested sizes of its component widgets"
-msgstr "Böyüklük qrupunun onun əlavə pəncərəciklərinin istənilən böyüklüklərinə tə'sir edəcəyi istiqamət"
+msgid ""
+"The directions in which the size group effects the requested sizes of its "
+"component widgets"
+msgstr ""
+"Böyüklük qrupunun onun əlavə pəncərəciklərinin istənilən böyüklüklərinə "
+"tə'sir edəcəyi istiqamət"
 
 #: gtk/gtkspinbutton.c:242
 msgid "The adjustment that holds the value of the spinbutton"
@@ -3053,8 +3084,12 @@ msgid "Snap to Ticks"
 msgstr "Hilə"
 
 #: gtk/gtkspinbutton.c:270
-msgid "Whether erroneous values are automatically changed to a spin button's nearest step increment"
-msgstr "Səhv dəyərlərin döndərmə düyməsinin ən yaxın addım artımına avtomatik dəyişdirilməsi"
+msgid ""
+"Whether erroneous values are automatically changed to a spin button's "
+"nearest step increment"
+msgstr ""
+"Səhv dəyərlərin döndərmə düyməsinin ən yaxın addım artımına avtomatik "
+"dəyişdirilməsi"
 
 #: gtk/gtkspinbutton.c:277
 msgid "Numeric"
@@ -3077,7 +3112,8 @@ msgid "Update Policy"
 msgstr "Güncəlləmə Siyasəti"
 
 #: gtk/gtkspinbutton.c:294
-msgid "Whether the spin button should update always, or only when the value is legal"
+msgid ""
+"Whether the spin button should update always, or only when the value is legal"
 msgstr "Döndərmə düyməsinin həmişə güncəlləməsi, ya da ancaq dəyər düzgündürsə"
 
 #: gtk/gtkspinbutton.c:303
@@ -3138,7 +3174,9 @@ msgstr "Homogen"
 
 #: gtk/gtktable.c:196
 msgid "If TRUE this means the table cells are all the same width/height"
-msgstr "TRUE isə, cədvəl hüceyrələrinin hamısının eyni en/hündürlüyə malik olmaları deməkdir"
+msgstr ""
+"TRUE isə, cədvəl hüceyrələrinin hamısının eyni en/hündürlüyə malik olmaları "
+"deməkdir"
 
 #: gtk/gtktable.c:203
 msgid "Left attachment"
@@ -3185,16 +3223,24 @@ msgid "Horizontal padding"
 msgstr "Üfüqi səviyyələmə"
 
 #: gtk/gtktable.c:246
-msgid "Extra space to put between the child and its left and right neighbors, in pixels"
-msgstr "Törəmə ilə onun sol və sağ qonşuları arasına qoyulacaq əlavə sahə, piksel olaraq"
+msgid ""
+"Extra space to put between the child and its left and right neighbors, in "
+"pixels"
+msgstr ""
+"Törəmə ilə onun sol və sağ qonşuları arasına qoyulacaq əlavə sahə, piksel "
+"olaraq"
 
 #: gtk/gtktable.c:252
 msgid "Vertical padding"
 msgstr "Şaquli səviyyələmə"
 
 #: gtk/gtktable.c:253
-msgid "Extra space to put between the child and its upper and lower neighbors, in pixels"
-msgstr "Törəmə ilə onun üst və alt qonşuları arasına qoyulacaq əlavə sahə, piksel olaraq"
+msgid ""
+"Extra space to put between the child and its upper and lower neighbors, in "
+"pixels"
+msgstr ""
+"Törəmə ilə onun üst və alt qonşuları arasına qoyulacaq əlavə sahə, piksel "
+"olaraq"
 
 #: gtk/gtktext.c:603
 msgid "Horizontal adjustment for the text widget"
@@ -3245,8 +3291,12 @@ msgid "Background full height"
 msgstr "Arxa planın tam hündürlüyü"
 
 #: gtk/gtktexttag.c:223
-msgid "Whether the background color fills the entire line height or only the height of the tagged characters"
-msgstr "Arxa plan rəngi bütün hündürlüyü mü yoxsa müəyyənləşdirilmiş təqli xarakterlərini mi dolduracaq"
+msgid ""
+"Whether the background color fills the entire line height or only the height "
+"of the tagged characters"
+msgstr ""
+"Arxa plan rəngi bütün hündürlüyü mü yoxsa müəyyənləşdirilmiş təqli "
+"xarakterlərini mi dolduracaq"
 
 #: gtk/gtktexttag.c:231
 msgid "Background stipple mask"
@@ -3286,11 +3336,16 @@ msgstr "PangoStyle olaraq yazı növü tərzi, nümunə: PANGO_STYLE_ITALIC"
 
 #: gtk/gtktexttag.c:317
 msgid "Font variant as a PangoVariant, e.g. PANGO_VARIANT_SMALL_CAPS"
-msgstr "PangoVariant olaraq yazı növü variantı, nümunə:  PANGO_VARIANT_SMALL_CAPS"
+msgstr ""
+"PangoVariant olaraq yazı növü variantı, nümunə:  PANGO_VARIANT_SMALL_CAPS"
 
 #: gtk/gtktexttag.c:326
-msgid "Font weight as an integer, see predefined values in PangoWeight; for example, PANGO_WEIGHT_BOLD"
-msgstr "Integer olaraq yazı növü böyüklüyü, PangoWeight-dakı öncədən tə'yin edilmiş dəyərlərə baxın, nümunə: PANGO_WEIGHT_BOLD"
+msgid ""
+"Font weight as an integer, see predefined values in PangoWeight; for "
+"example, PANGO_WEIGHT_BOLD"
+msgstr ""
+"Integer olaraq yazı növü böyüklüyü, PangoWeight-dakı öncədən tə'yin edilmiş "
+"dəyərlərə baxın, nümunə: PANGO_WEIGHT_BOLD"
 
 #: gtk/gtktexttag.c:337
 msgid "Font stretch as a PangoStretch, e.g. PANGO_STRETCH_CONDENSED"
@@ -3301,11 +3356,16 @@ msgid "Font size in Pango units"
 msgstr "Pango ölçülərilə yazı növü böyüklüyü"
 
 #: gtk/gtktexttag.c:356
-msgid "Font size as a scale factor relative to the default font size. This properly adapts to theme changes etc. so is recommended. Pango predefines some scales such as PANGO_SCALE_X_LARGE"
-msgstr "Əsas yazı növünə əsasən böyüdmə faktoru olaraq yazı növü böyüklüyü. Bu xassə örtük dəyişikliklərinə görə uyğunlaşdırılır ona görə də məsləhət edilir. Pango bəzi böyütmələri PANGO_SCALE_X_LARGE şəklində tə'yin edir."
+msgid ""
+"Font size as a scale factor relative to the default font size. This properly "
+"adapts to theme changes etc. so is recommended. Pango predefines some scales "
+"such as PANGO_SCALE_X_LARGE"
+msgstr ""
+"Əsas yazı növünə əsasən böyüdmə faktoru olaraq yazı növü böyüklüyü. Bu xassə "
+"örtük dəyişikliklərinə görə uyğunlaşdırılır ona görə də məsləhət edilir. "
+"Pango bəzi böyütmələri PANGO_SCALE_X_LARGE şəklində tə'yin edir."
 
-#: gtk/gtktexttag.c:376
-#: gtk/gtktextview.c:604
+#: gtk/gtktexttag.c:376 gtk/gtktextview.c:604
 msgid "Left, right, or center justification"
 msgstr "Sol, sağ ya da ortaya sütunlaşdırma"
 
@@ -3313,8 +3373,7 @@ msgstr "Sol, sağ ya da ortaya sütunlaşdırma"
 msgid "Left margin"
 msgstr "Sol kənar"
 
-#: gtk/gtktexttag.c:393
-#: gtk/gtktextview.c:613
+#: gtk/gtktexttag.c:393 gtk/gtktextview.c:613
 msgid "Width of the left margin in pixels"
 msgstr "Piksel olaraq sol kənar"
 
@@ -3322,31 +3381,30 @@ msgstr "Piksel olaraq sol kənar"
 msgid "Right margin"
 msgstr "Sağ kənar"
 
-#: gtk/gtktexttag.c:403
-#: gtk/gtktextview.c:623
+#: gtk/gtktexttag.c:403 gtk/gtktextview.c:623
 msgid "Width of the right margin in pixels"
 msgstr "Piksel olaraq sağ kənar"
 
-#: gtk/gtktexttag.c:413
-#: gtk/gtktextview.c:632
+#: gtk/gtktexttag.c:413 gtk/gtktextview.c:632
 msgid "Indent"
 msgstr "İçəridən Başlama"
 
-#: gtk/gtktexttag.c:414
-#: gtk/gtktextview.c:633
+#: gtk/gtktexttag.c:414 gtk/gtktextview.c:633
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Paraqrafın piksel olaraq içəridən başlama"
 
 #: gtk/gtktexttag.c:425
-msgid "Offset of text above the baseline (below the baseline if rise is negative) in pixels"
-msgstr "Mətnin offseti ana xəttin üstündə olsun (yüksəlmə mənfi isə altında olsun)"
+msgid ""
+"Offset of text above the baseline (below the baseline if rise is negative) "
+"in pixels"
+msgstr ""
+"Mətnin offseti ana xəttin üstündə olsun (yüksəlmə mənfi isə altında olsun)"
 
 #: gtk/gtktexttag.c:434
 msgid "Pixels above lines"
 msgstr "Sətirlərin üstündəki piksel"
 
-#: gtk/gtktexttag.c:435
-#: gtk/gtktextview.c:557
+#: gtk/gtktexttag.c:435 gtk/gtktextview.c:557
 msgid "Pixels of blank space above paragraphs"
 msgstr "Parqraf üstündəki boşluğun pikseli"
 
@@ -3354,8 +3412,7 @@ msgstr "Parqraf üstündəki boşluğun pikseli"
 msgid "Pixels below lines"
 msgstr "Sətirlərin altındakı piksel"
 
-#: gtk/gtktexttag.c:445
-#: gtk/gtktextview.c:567
+#: gtk/gtktexttag.c:445 gtk/gtktextview.c:567
 msgid "Pixels of blank space below paragraphs"
 msgstr "Parqraf altındakı boşluğun pikseli"
 
@@ -3363,8 +3420,7 @@ msgstr "Parqraf altındakı boşluğun pikseli"
 msgid "Pixels inside wrap"
 msgstr "Qırma içindəki piksel"
 
-#: gtk/gtktexttag.c:455
-#: gtk/gtktextview.c:577
+#: gtk/gtktexttag.c:455 gtk/gtktextview.c:577
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Parqraf və sətir arasındakı boşluğun pikseli"
 
@@ -3372,18 +3428,16 @@ msgstr "Parqraf və sətir arasındakı boşluğun pikseli"
 msgid "Wrap mode"
 msgstr "Qırma modu"
 
-#: gtk/gtktexttag.c:482
-#: gtk/gtktextview.c:595
-msgid "Whether to wrap lines never, at word boundaries, or at character boundaries"
+#: gtk/gtktexttag.c:482 gtk/gtktextview.c:595
+msgid ""
+"Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "Sətirlər kənarlarda mı, yoxsa xarakter kənarlarında mı qırılsın"
 
-#: gtk/gtktexttag.c:491
-#: gtk/gtktextview.c:642
+#: gtk/gtktexttag.c:491 gtk/gtktextview.c:642
 msgid "Tabs"
 msgstr "Səkmələr"
 
-#: gtk/gtktexttag.c:492
-#: gtk/gtktextview.c:643
+#: gtk/gtktexttag.c:492 gtk/gtktextview.c:643
 msgid "Custom tabs for this text"
 msgstr "Bu mətnə xüsuso səkmələr"
 
@@ -3447,8 +3501,7 @@ msgstr "Bu təqin içəridən başlamağa harda tə'sir edəcəyi"
 msgid "Pixels above lines set"
 msgstr "Sətir üstündəki piksellər"
 
-#: gtk/gtktexttag.c:582
-#: gtk/gtktexttag.c:586
+#: gtk/gtktexttag.c:582 gtk/gtktexttag.c:586
 msgid "Whether this tag affects the number of pixels above lines"
 msgstr "Bu təqin sətir üstündəki piksellərə harda tə'sir edəcəyi"
 
@@ -3649,8 +3702,11 @@ msgid "Toolbar style"
 msgstr "Vasitə çubuğu tərzi"
 
 #: gtk/gtktoolbar.c:583
-msgid "Whether default toolbars have text only, text and icons, icons only, etc."
-msgstr "Əsas vasitə çubuqlarında ancaq mətn, mətn və timsallar, ancaq timsallar və s. göstəriləcəyi"
+msgid ""
+"Whether default toolbars have text only, text and icons, icons only, etc."
+msgstr ""
+"Əsas vasitə çubuqlarında ancaq mətn, mətn və timsallar, ancaq timsallar və "
+"s. göstəriləcəyi"
 
 #: gtk/gtktoolbar.c:589
 msgid "Toolbar icon size"
@@ -3665,8 +3721,12 @@ msgid "Text to show in the item."
 msgstr "Üzvdə göstəriləcək mətn."
 
 #: gtk/gtktoolbutton.c:188
-msgid "If set, an underline in the label property indicates that the next character should be used for the mnemonic accelerator key in the overflow menu"
-msgstr "If set, an underline in the label property indicates that the next character should be used for the mnemonic accelerator key in the overflow menu"
+msgid ""
+"If set, an underline in the label property indicates that the next character "
+"should be used for the mnemonic accelerator key in the overflow menu"
+msgstr ""
+"If set, an underline in the label property indicates that the next character "
+"should be used for the mnemonic accelerator key in the overflow menu"
 
 #: gtk/gtktoolbutton.c:195
 msgid "Widget to use as the item label"
@@ -3689,8 +3749,12 @@ msgid "Icon widget to display in the item"
 msgstr "Üzvdə göstəriləcək timsal widget-i"
 
 #: gtk/gtktoolitem.c:173
-msgid "Whether the toolbar item is considered important. When TRUE, toolbar buttons show text in GTK_TOOLBAR_BOTH_HORIZ mode"
-msgstr "Vasitə çubuğu üzvünün vacib sayılması. TRUE isə, vasitə çubuğu düymələri mətni GTK_TOOLBAR_BOTH_HORIZ modunda göstərəcəkdir"
+msgid ""
+"Whether the toolbar item is considered important. When TRUE, toolbar buttons "
+"show text in GTK_TOOLBAR_BOTH_HORIZ mode"
+msgstr ""
+"Vasitə çubuğu üzvünün vacib sayılması. TRUE isə, vasitə çubuğu düymələri "
+"mətni GTK_TOOLBAR_BOTH_HORIZ modunda göstərəcəkdir"
 
 #: gtk/gtktreemodelsort.c:329
 msgid "TreeModelSort Model"
@@ -3736,8 +3800,7 @@ msgstr "Açıcı Sütunu"
 msgid "Set the column for the expander column"
 msgstr "Genişlədici sütun olacaq sütunu seç"
 
-#: gtk/gtktreeview.c:576
-#: gtk/gtktreeviewcolumn.c:330
+#: gtk/gtktreeview.c:576 gtk/gtktreeviewcolumn.c:330
 msgid "Reorderable"
 msgstr "Yenidən sıraya qoyula bilən"
 
@@ -3775,7 +3838,9 @@ msgstr "Sabit Hündürlük Modu"
 
 #: gtk/gtktreeview.c:611
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
-msgstr "Bütün sətirlərin eyni hündürlüyə malik olduğunu qəbul edərək GtkTreeView-nu sürətləndirir"
+msgstr ""
+"Bütün sətirlərin eyni hündürlüyə malik olduğunu qəbul edərək GtkTreeView-nu "
+"sürətləndirir"
 
 #: gtk/gtktreeview.c:631
 msgid "Vertical Separator Width"
@@ -3829,8 +3894,7 @@ msgstr "Tək sətirlər üçün işlədiləcək rəng"
 msgid "Whether to display the column"
 msgstr "Sütunu harda göstərək"
 
-#: gtk/gtktreeviewcolumn.c:231
-#: gtk/gtkwindow.c:482
+#: gtk/gtktreeviewcolumn.c:231 gtk/gtkwindow.c:482
 msgid "Resizable"
 msgstr "Böyüklüyü dəyişdirilə bilən"
 
@@ -3943,11 +4007,15 @@ msgid "An XML string describing the merged UI"
 msgstr "Birləşdirilən İAÜ-zü izah edən XML qatarı"
 
 #: gtk/gtkviewport.c:136
-msgid "The GtkAdjustment that determines the values of the horizontal position for this viewport"
+msgid ""
+"The GtkAdjustment that determines the values of the horizontal position for "
+"this viewport"
 msgstr "Bu görünən sahənin üfqi yerinin qiymətini tə'yin edən GtkSazlaması"
 
 #: gtk/gtkviewport.c:144
-msgid "The GtkAdjustment that determines the values of the vertical position for this viewport"
+msgid ""
+"The GtkAdjustment that determines the values of the vertical position for "
+"this viewport"
 msgstr "Bu görünən sahənin şaquli yerinin qiymətini tə'yin edən GtkSazlaması"
 
 #: gtk/gtkviewport.c:152
@@ -3975,16 +4043,24 @@ msgid "Width request"
 msgstr "En sorğusu"
 
 #: gtk/gtkwidget.c:425
-msgid "Override for width request of the widget, or -1 if natural request should be used"
-msgstr "Pəncərəciyin en istə'yinin yerinə işlədiləcək dəyər, istə'yin olduğu kimi istifadə edilməsi üçün isə -1 dəyərini işlədin"
+msgid ""
+"Override for width request of the widget, or -1 if natural request should be "
+"used"
+msgstr ""
+"Pəncərəciyin en istə'yinin yerinə işlədiləcək dəyər, istə'yin olduğu kimi "
+"istifadə edilməsi üçün isə -1 dəyərini işlədin"
 
 #: gtk/gtkwidget.c:433
 msgid "Height request"
 msgstr "Hündürlük sorğusu"
 
 #: gtk/gtkwidget.c:434
-msgid "Override for height request of the widget, or -1 if natural request should be used"
-msgstr "Pəncərəciyin hündürlük istə'yinin yerinə işlədiləcək dəyər, istə'yin olduğu kimi istifadə edilməsi üçün isə -1 dəyərini işlədin"
+msgid ""
+"Override for height request of the widget, or -1 if natural request should "
+"be used"
+msgstr ""
+"Pəncərəciyin hündürlük istə'yinin yerinə işlədiləcək dəyər, istə'yin olduğu "
+"kimi istifadə edilməsi üçün isə -1 dəyərini işlədin"
 
 #: gtk/gtkwidget.c:443
 msgid "Whether the widget is visible"
@@ -4063,8 +4139,11 @@ msgid "Style"
 msgstr "Tərz"
 
 #: gtk/gtkwidget.c:513
-msgid "The style of the widget, which contains information about how it will look (colors etc)"
-msgstr "Pəncərəciyin necə görsənəcəyi (rəng və s.) haqqında mə'lumatı daxil edən tərz"
+msgid ""
+"The style of the widget, which contains information about how it will look "
+"(colors etc)"
+msgstr ""
+"Pəncərəciyin necə görsənəcəyi (rəng və s.) haqqında mə'lumatı daxil edən tərz"
 
 #: gtk/gtkwidget.c:519
 msgid "Events"
@@ -4072,7 +4151,9 @@ msgstr "Hadisələr"
 
 #: gtk/gtkwidget.c:520
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
-msgstr "Bu pəncərəciyin nə cür genişləmə GdkHadisələrini alacağına qərar verən hadisə maskası"
+msgstr ""
+"Bu pəncərəciyin nə cür genişləmə GdkHadisələrini alacağına qərar verən "
+"hadisə maskası"
 
 #: gtk/gtkwidget.c:527
 msgid "Extension events"
@@ -4080,7 +4161,8 @@ msgstr "Uzantı hadisələri"
 
 #: gtk/gtkwidget.c:528
 msgid "The mask that decides what kind of extension events this widget gets"
-msgstr "Bu pəncərəciyin nə cür genişləmə hadisələrini alacağına qərar verən maska"
+msgstr ""
+"Bu pəncərəciyin nə cür genişləmə hadisələrini alacağına qərar verən maska"
 
 #: gtk/gtkwidget.c:535
 msgid "No show all"
@@ -4120,7 +4202,8 @@ msgstr "Fokus aralanması"
 
 #: gtk/gtkwidget.c:1398
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
-msgstr "Piksel olaraq fokus indikatoru ilə pəncərəcik 'qutusu' arasındakı məsafə"
+msgstr ""
+"Piksel olaraq fokus indikatoru ilə pəncərəcik 'qutusu' arasındakı məsafə"
 
 #: gtk/gtkwidget.c:1403
 msgid "Cursor color"
@@ -4135,8 +4218,12 @@ msgid "Secondary cursor color"
 msgstr "İkinci ox rəngi"
 
 #: gtk/gtkwidget.c:1410
-msgid "Color with which to draw the secondary insertion cursor when editing mixed right-to-left and left-to-right text"
-msgstr "Qarışıq sağdan sola və soldan sağa mətni redaktə edərkən ikinci giriş kursorunun göstəriləcəyi rəng"
+msgid ""
+"Color with which to draw the secondary insertion cursor when editing mixed "
+"right-to-left and left-to-right text"
+msgstr ""
+"Qarışıq sağdan sola və soldan sağa mətni redaktə edərkən ikinci giriş "
+"kursorunun göstəriləcəyi rəng"
 
 #: gtk/gtkwidget.c:1415
 msgid "Cursor line aspect ratio"
@@ -4176,8 +4263,12 @@ msgstr "Daralmanı Qəbul Et"
 
 #: gtk/gtkwindow.c:467
 #, no-c-format
-msgid "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the time a bad idea"
-msgstr "TRUE isə pəncərənin minimal böyüklüyü olmayacaq. Bunu TRUE olaraq seçmək o qədər də yaxşı fikir deyil"
+msgid ""
+"If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
+"time a bad idea"
+msgstr ""
+"TRUE isə pəncərənin minimal böyüklüyü olmayacaq. Bunu TRUE olaraq seçmək o "
+"qədər də yaxşı fikir deyil"
 
 #: gtk/gtkwindow.c:474
 msgid "Allow Grow"
@@ -4185,7 +4276,9 @@ msgstr "Böyüməni Qəbul Et"
 
 #: gtk/gtkwindow.c:475
 msgid "If TRUE, users can expand the window beyond its minimum size"
-msgstr "Əgər TRUE isə, istifadəçilər pəncərənin minimim ölçüsü xaicinə də kiçildə bilərlər"
+msgstr ""
+"Əgər TRUE isə, istifadəçilər pəncərənin minimim ölçüsü xaicinə də kiçildə "
+"bilərlər"
 
 #: gtk/gtkwindow.c:483
 msgid "If TRUE, users can resize the window"
@@ -4196,8 +4289,12 @@ msgid "Modal"
 msgstr "Modal"
 
 #: gtk/gtkwindow.c:491
-msgid "If TRUE, the window is modal (other windows are not usable while this one is up)"
-msgstr "TRUE isə pəncərə modal olacaq (bu pəncərə açıq ikən digər pəncərələr işlədilə bilməyəcək və fəal olmayacaq)"
+msgid ""
+"If TRUE, the window is modal (other windows are not usable while this one is "
+"up)"
+msgstr ""
+"TRUE isə pəncərə modal olacaq (bu pəncərə açıq ikən digər pəncərələr "
+"işlədilə bilməyəcək və fəal olmayacaq)"
 
 #: gtk/gtkwindow.c:498
 msgid "Window Position"
@@ -4220,7 +4317,8 @@ msgid "Default Height"
 msgstr "Əsas Hündürlük"
 
 #: gtk/gtkwindow.c:518
-msgid "The default height of the window, used when initially showing the window"
+msgid ""
+"The default height of the window, used when initially showing the window"
 msgstr "Pəncərənin ilk açılışdakı əsas hündürlüyü"
 
 #: gtk/gtkwindow.c:527
@@ -4260,8 +4358,12 @@ msgid "Type hint"
 msgstr "İpucunu yaz"
 
 #: gtk/gtkwindow.c:568
-msgid "Hint to help the desktop environment understand what kind of window this is and how to treat it."
-msgstr "Masa üstü mühidinə pəncərənin hansı növdə olduğunu və onunla necə rəftar ediləcəyini başa düşməsinə yardım et."
+msgid ""
+"Hint to help the desktop environment understand what kind of window this is "
+"and how to treat it."
+msgstr ""
+"Masa üstü mühidinə pəncərənin hansı növdə olduğunu və onunla necə rəftar "
+"ediləcəyini başa düşməsinə yardım et."
 
 #: gtk/gtkwindow.c:576
 msgid "Skip taskbar"
@@ -4318,4 +4420,3 @@ msgstr "IM Vəziyyət tərzi"
 #: modules/input/gtkimcontextxim.c:336
 msgid "How to draw the input method statusbar"
 msgstr "Vasitə çubuğunun göstərilmə şəkli"
-

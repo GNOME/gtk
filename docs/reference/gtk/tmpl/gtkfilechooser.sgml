@@ -328,6 +328,7 @@ update_preview_cb (GtkFileChooser *file_chooser, gpointer data)
 
 @chooser: 
 @filename: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_file_chooser_select_filename ##### -->
@@ -337,6 +338,7 @@ update_preview_cb (GtkFileChooser *file_chooser, gpointer data)
 
 @chooser: 
 @filename: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_file_chooser_unselect_filename ##### -->
@@ -380,6 +382,7 @@ update_preview_cb (GtkFileChooser *file_chooser, gpointer data)
 
 @chooser: 
 @filename: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_file_chooser_get_current_folder ##### -->
@@ -407,6 +410,7 @@ update_preview_cb (GtkFileChooser *file_chooser, gpointer data)
 
 @chooser: 
 @uri: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_file_chooser_select_uri ##### -->
@@ -416,6 +420,7 @@ update_preview_cb (GtkFileChooser *file_chooser, gpointer data)
 
 @chooser: 
 @uri: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_file_chooser_unselect_uri ##### -->
@@ -443,6 +448,7 @@ update_preview_cb (GtkFileChooser *file_chooser, gpointer data)
 
 @chooser: 
 @uri: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_file_chooser_get_current_folder_uri ##### -->

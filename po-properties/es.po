@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-06 17:34+0100\n"
+"POT-Creation-Date: 2004-03-09 11:16-0500\n"
 "PO-Revision-Date: 2004-03-06 17:37+0100\n"
 "Last-Translator: Francisco Javier F. Serrador <serrador@cvs.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
@@ -123,7 +123,7 @@ msgstr "Nombre"
 msgid "A unique name for the action."
 msgstr "Un nombre único para la acción."
 
-#: gtk/gtkaction.c:201 gtk/gtkbutton.c:210 gtk/gtkexpander.c:202
+#: gtk/gtkaction.c:201 gtk/gtkbutton.c:211 gtk/gtkexpander.c:202
 #: gtk/gtkframe.c:126 gtk/gtklabel.c:289 gtk/gtktoolbutton.c:180
 msgid "Label"
 msgstr "Etiqueta"
@@ -301,7 +301,7 @@ msgstr "El tamaño de página del ajuste"
 msgid "Horizontal alignment"
 msgstr "Alineación horizontal"
 
-#: gtk/gtkalignment.c:118 gtk/gtkbutton.c:261
+#: gtk/gtkalignment.c:118 gtk/gtkbutton.c:262
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
@@ -313,7 +313,7 @@ msgstr ""
 msgid "Vertical alignment"
 msgstr "Alineación vertical"
 
-#: gtk/gtkalignment.c:128 gtk/gtkbutton.c:280
+#: gtk/gtkalignment.c:128 gtk/gtkbutton.c:281
 msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
@@ -548,7 +548,7 @@ msgstr "Posición"
 msgid "The index of the child in the parent"
 msgstr "La posición del hijo en el padre"
 
-#: gtk/gtkbutton.c:211
+#: gtk/gtkbutton.c:212
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
@@ -556,12 +556,12 @@ msgstr ""
 "Texto del widget etiqueta dentro del botón, si el botón contiene un widget "
 "etiqueta"
 
-#: gtk/gtkbutton.c:218 gtk/gtkexpander.c:210 gtk/gtklabel.c:310
+#: gtk/gtkbutton.c:219 gtk/gtkexpander.c:210 gtk/gtklabel.c:310
 #: gtk/gtktoolbutton.c:187
 msgid "Use underline"
 msgstr "Utilizar subrayado"
 
-#: gtk/gtkbutton.c:219 gtk/gtkexpander.c:211 gtk/gtklabel.c:311
+#: gtk/gtkbutton.c:220 gtk/gtkexpander.c:211 gtk/gtklabel.c:311
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -569,54 +569,54 @@ msgstr ""
 "Si se selecciona, un subrayado en el texto indica que el siguiente carácter "
 "debe utilizarse como el nemotécnico de la combinación de teclas"
 
-#: gtk/gtkbutton.c:226
+#: gtk/gtkbutton.c:227
 msgid "Use stock"
 msgstr "Usar inventario"
 
-#: gtk/gtkbutton.c:227
+#: gtk/gtkbutton.c:228
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
 "Si se selecciona, la etiqueta se utiliza para tomar un elemento del "
 "inventario en vez de ser mostrada"
 
-#: gtk/gtkbutton.c:234
+#: gtk/gtkbutton.c:235
 msgid "Focus on click"
 msgstr "Enfocar al pulsar"
 
-#: gtk/gtkbutton.c:235
+#: gtk/gtkbutton.c:236
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr "Indica si el botón obtiene el foco cuando es pulsado con el ratón"
 
-#: gtk/gtkbutton.c:242
+#: gtk/gtkbutton.c:243
 msgid "Border relief"
 msgstr "Relieve del borde"
 
-#: gtk/gtkbutton.c:243
+#: gtk/gtkbutton.c:244
 msgid "The border relief style"
 msgstr "Estilo del relieve del borde"
 
-#: gtk/gtkbutton.c:260
+#: gtk/gtkbutton.c:261
 msgid "Horizontal alignment for child"
 msgstr "Alineación horizontal para el descendiente"
 
-#: gtk/gtkbutton.c:279
+#: gtk/gtkbutton.c:280
 msgid "Vertical alignment for child"
 msgstr "Alineación vertical para el descendiente"
 
-#: gtk/gtkbutton.c:347
+#: gtk/gtkbutton.c:348
 msgid "Default Spacing"
 msgstr "Espaciado predeterminado"
 
-#: gtk/gtkbutton.c:348
+#: gtk/gtkbutton.c:349
 msgid "Extra space to add for CAN_DEFAULT buttons"
 msgstr "Espacio extra a añadir para los botones CAN_DEFAULT"
 
-#: gtk/gtkbutton.c:354
+#: gtk/gtkbutton.c:355
 msgid "Default Outside Spacing"
 msgstr "Espaciado Exterior por Omisión"
 
-#: gtk/gtkbutton.c:355
+#: gtk/gtkbutton.c:356
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
@@ -624,32 +624,32 @@ msgstr ""
 "Espacio extra a agregar para los botones CAN_DEFAULT que están siempre "
 "dibujados fuera del borde"
 
-#: gtk/gtkbutton.c:360
+#: gtk/gtkbutton.c:361
 msgid "Child X Displacement"
 msgstr "Desplazamiento X del hijo"
 
-#: gtk/gtkbutton.c:361
+#: gtk/gtkbutton.c:362
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
 msgstr ""
 "Cuan lejos en la dirección x debe moverse el hijo cuando es soltado el botón"
 
-#: gtk/gtkbutton.c:368
+#: gtk/gtkbutton.c:369
 msgid "Child Y Displacement"
 msgstr "Desplazamiento Y del hijo"
 
-#: gtk/gtkbutton.c:369
+#: gtk/gtkbutton.c:370
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr ""
 "Distancia en la dirección y que debe moverse el hijo cuando se suelta el "
 "botón"
 
-#: gtk/gtkbutton.c:376
+#: gtk/gtkbutton.c:377
 msgid "Show button images"
 msgstr "Mostrar imágenes en los botones"
 
-#: gtk/gtkbutton.c:377
+#: gtk/gtkbutton.c:378
 msgid "Whether stock icons should be shown in buttons"
 msgstr ""
 "Indica si deben mostrarse o no los iconos predeterminados en los botones"
@@ -1345,53 +1345,55 @@ msgstr "Valor en la lista"
 msgid "Whether entered values must already be present in the list"
 msgstr "Indica si los valores ingresados ya deben estar presentes en la lista"
 
-#: gtk/gtkcombobox.c:452
+#: gtk/gtkcombobox.c:451
 msgid "ComboBox model"
 msgstr "Modelo de CajaCombo"
 
-#: gtk/gtkcombobox.c:453
+#: gtk/gtkcombobox.c:452
 msgid "The model for the combo box"
 msgstr "El modelo para la caja combo"
 
-#: gtk/gtkcombobox.c:460
+#: gtk/gtkcombobox.c:459
 msgid "Wrap width"
 msgstr "Ajustar anchura"
 
-#: gtk/gtkcombobox.c:461
+#: gtk/gtkcombobox.c:460
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Ajusta la anchura para distribuir los elementos en una rejilla"
 
-#: gtk/gtkcombobox.c:470
+#: gtk/gtkcombobox.c:469
 msgid "Row span column"
 msgstr "Expandir filas a columnas"
 
-#: gtk/gtkcombobox.c:471
+#: gtk/gtkcombobox.c:470
 msgid "TreeModel column containing the row span values"
 msgstr "Columna TreeModel que contiene los valores de expansión de la fila"
 
-#: gtk/gtkcombobox.c:480
+#: gtk/gtkcombobox.c:479
 msgid "Column span column"
 msgstr "Columna expande columna"
 
-#: gtk/gtkcombobox.c:481
+#: gtk/gtkcombobox.c:480
 msgid "TreeModel column containing the column span values"
 msgstr "Columna TreeModel que contiene los valores de expansión de columna"
 
-#: gtk/gtkcombobox.c:490
+#: gtk/gtkcombobox.c:489
 msgid "Active item"
 msgstr "Elemento activo"
 
-#: gtk/gtkcombobox.c:491
+#: gtk/gtkcombobox.c:490
 msgid "The item which is currently active"
 msgstr "El elemento que esta activo actualmente"
 
-#: gtk/gtkcombobox.c:499
+#: gtk/gtkcombobox.c:498
 msgid "Appears as list"
 msgstr "Aparece como una lista"
 
-#: gtk/gtkcombobox.c:500
+#: gtk/gtkcombobox.c:499
 msgid "Whether combobox dropdowns should look like lists rather than menus"
-msgstr "Indica si la caja combo desplegable debe parecerse a una lista en vez de a menús"
+msgstr ""
+"Indica si la caja combo desplegable debe parecerse a una lista en vez de a "
+"menús"
 
 #: gtk/gtkcomboboxentry.c:110
 msgid "Text Column"
@@ -1602,7 +1604,9 @@ msgstr "X alineación"
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts"
-msgstr "La alineación horizontal, desde 0 (izquierda) hasta 1 (derecha). Al revés para distribuciones D-->I"
+msgstr ""
+"La alineación horizontal, desde 0 (izquierda) hasta 1 (derecha). Al revés "
+"para distribuciones D-->I"
 
 #: gtk/gtkentry.c:787
 msgid "Select on focus"
@@ -1758,7 +1762,9 @@ msgstr "Usar etiqueta de vista previa"
 
 #: gtk/gtkfilechooser.c:131
 msgid "Whether to display a stock label with the name of the previewed file."
-msgstr "Indica si se debe mostrar una etiqueta con el nombre del archivo previsualizado."
+msgstr ""
+"Indica si se debe mostrar una etiqueta con el nombre del archivo "
+"previsualizado."
 
 #: gtk/gtkfilechooser.c:136
 msgid "Extra widget"
@@ -1784,11 +1790,11 @@ msgstr "Mostrar ocultos"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Indica si los archivos y carpetas ocultas deben ser mostrados"
 
-#: gtk/gtkfilechooserdefault.c:478
+#: gtk/gtkfilechooserdefault.c:467
 msgid "Default file chooser backend"
 msgstr "Backend predeterminado del selector de archivos"
 
-#: gtk/gtkfilechooserdefault.c:479
+#: gtk/gtkfilechooserdefault.c:468
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Nombre del backend del GtkFilechooser a usar por omisión"
 
@@ -2162,11 +2168,11 @@ msgstr "La anchura de la disposición"
 msgid "The height of the layout"
 msgstr "La altura de la disposición"
 
-#: gtk/gtkmenu.c:353
+#: gtk/gtkmenu.c:355
 msgid "Tearoff Title"
 msgstr "Título del separador"
 
-#: gtk/gtkmenu.c:354
+#: gtk/gtkmenu.c:356
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
@@ -2174,19 +2180,19 @@ msgstr ""
 "Un título que debe mostrarse por el administrador de ventanas cuando este "
 "menú se encuentre cerrado"
 
-#: gtk/gtkmenu.c:360
+#: gtk/gtkmenu.c:362
 msgid "Vertical Padding"
 msgstr "Relleno vertical"
 
-#: gtk/gtkmenu.c:361
+#: gtk/gtkmenu.c:363
 msgid "Extra space at the top and bottom of the menu"
 msgstr "El espacio adicional por encima y por debajo del menú"
 
-#: gtk/gtkmenu.c:369
+#: gtk/gtkmenu.c:371
 msgid "Vertical Offset"
 msgstr "Desplazamiento vertical"
 
-#: gtk/gtkmenu.c:370
+#: gtk/gtkmenu.c:372
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
@@ -2194,11 +2200,11 @@ msgstr ""
 "Cuando el menú es un submenú, colocarlo este número de píxeles desplazado "
 "verticalmente"
 
-#: gtk/gtkmenu.c:378
+#: gtk/gtkmenu.c:380
 msgid "Horizontal Offset"
 msgstr "Desplazamiento horizontal"
 
-#: gtk/gtkmenu.c:379
+#: gtk/gtkmenu.c:381
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
@@ -2206,65 +2212,65 @@ msgstr ""
 "Cuando el menú es un submenú, colocarlo este número de píxeles desplazado "
 "horizontalmente"
 
-#: gtk/gtkmenu.c:389
+#: gtk/gtkmenu.c:391
 msgid "Left Attach"
 msgstr "Adjunto izquierdo"
 
-#: gtk/gtkmenu.c:390 gtk/gtktable.c:204
+#: gtk/gtkmenu.c:392 gtk/gtktable.c:204
 msgid "The column number to attach the left side of the child to"
 msgstr "La cantidad de columnas a añadirse hacia el lado izquierdo del hijo"
 
-#: gtk/gtkmenu.c:397
+#: gtk/gtkmenu.c:399
 msgid "Right Attach"
 msgstr "Adjunto derecho"
 
-#: gtk/gtkmenu.c:398
+#: gtk/gtkmenu.c:400
 msgid "The column number to attach the right side of the child to"
 msgstr "La cantidad de columnas a añadirse hacia el lado derecho del hijo"
 
-#: gtk/gtkmenu.c:405
+#: gtk/gtkmenu.c:407
 msgid "Top Attach"
 msgstr "Adjunto superior"
 
-#: gtk/gtkmenu.c:406
+#: gtk/gtkmenu.c:408
 msgid "The row number to attach the top of the child to"
 msgstr "El número de filas a añadirse hacia arriba del hijo"
 
-#: gtk/gtkmenu.c:413
+#: gtk/gtkmenu.c:415
 msgid "Bottom Attach"
 msgstr "Añadido inferior"
 
-#: gtk/gtkmenu.c:414 gtk/gtktable.c:225
+#: gtk/gtkmenu.c:416 gtk/gtktable.c:225
 msgid "The row number to attach the bottom of the child to"
 msgstr "El número de filas a añadirse hacia abajo del hijo"
 
-#: gtk/gtkmenu.c:501
+#: gtk/gtkmenu.c:503
 msgid "Can change accelerators"
 msgstr "Puede cambiar combinaciones"
 
-#: gtk/gtkmenu.c:502
+#: gtk/gtkmenu.c:504
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Indica si las combinaciones de teclas del menú pueden ser cambiadas "
 "presionando una tecla sobre el elemento de menú"
 
-#: gtk/gtkmenu.c:507
+#: gtk/gtkmenu.c:509
 msgid "Delay before submenus appear"
 msgstr "Retraso antes de que el submenú aparezca"
 
-#: gtk/gtkmenu.c:508
+#: gtk/gtkmenu.c:510
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Tiempo mínimo en que el puntero debe permanecer sobre un elemento de menú "
 "antes de que el submenú aparezca"
 
-#: gtk/gtkmenu.c:515
+#: gtk/gtkmenu.c:517
 msgid "Delay before hiding a submenu"
 msgstr "Retraso antes de ocultar un submenú"
 
-#: gtk/gtkmenu.c:516
+#: gtk/gtkmenu.c:518
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"

@@ -1,3 +1,37 @@
+Overview of Changes from GTK+ 2.3.5 to GTK+ 2.3.6
+=================================================
+* GtkComboBox
+ - Make menu positioning more like GtkOptionMenu [Matthias Clasen]
+ - Improve keybindings [Matthias]
+ - Bug fixes [Matthias, Owen, Damon Chaplin]
+* GtkFileChooser
+ - Keep child directories in pathbar when changing to a parent
+ - Reroot pathbar inside home directory, use icons [Jonathan]
+ - Make the user actually select a file before hitting OK [Federico]
+ - Fix folder mode to not have tree [Jonathan]
+ - Add gboolean return values to operations that can fail [Federico]
+ - Improve internal error handling [Morten Welinder, Federico]
+ - Bug fixes [Federico, Jonathan, Morten, Anders Carlsson, Damon,
+   Alex Larsson]
+* GtkTextView bug fixes [Paolo Borelli]
+* Win32 
+ - Implement/stub missing GDK functions [Tor]
+ - .defs file updates [Tor, J Ali Harlow]
+ - Misc fixes [Hans Breuer]
+* Fix problem with excess symbol exports on Linux [James Henstridge]
+* Fix problem with 32-bit BMPs [Matthias]
+* Include config.h first everywhere [Morten]
+* Fix performance problem destroying menus [Soeren, Marco Pesenti Gritti]
+* Doc fixes and improvements [Matthias, Murray Cumming, Henning Nielsen Lund, 
+  Vitaly Tishkov]
+* Updated translations (az,cs,cy,da,de,el,en_CA,es,fi,fr,ga,hu,ja,ko,lt,mn,
+  nl,no,pl,pt,sq,sr,sr@ije,sr@Latn,sv,th,zh_CN)
+* Misc bug fixes
+
+Other contributors: Crispin Flowerday, Mark McLoughlin, Michael Meeks, 
+  Michael Natterer,Christian Neumair, Padraig O'Briain, Geoff Reedy, 
+  Olivier Ripoll
+
 Overview of Changes from GTK+ 2.3.4 to GTK+ 2.3.5
 =================================================
 * GtkFileChooser [Federico Mena Quintero]:

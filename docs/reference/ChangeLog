@@ -1,3 +1,7 @@
+Tue Mar  9 09:34:10 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* === Released 2.3.6 ===
+
 Tue Mar  9 00:52:56 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/migrating-GtkAction.sgml: Fix the example XML ui

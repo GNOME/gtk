@@ -1,7 +1,15 @@
+Tue Mar  9 09:57:25 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* === Released 2.3.6 ===
+
+	* configure.in: Version 2.3.6, interface age 0.
+
+	* NEWS: Updates
+
 Tue Mar  9 11:01:45 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtkpathbar.c (gtk_path_bar_finalize): unref the correct
-	icon.  Reported by Michael Natterer <mitch@gimp.org>
+	icon.  Reported by Michael Natterer <mitch@gimp.org>.
 
 2004-03-09  Morten Welinder  <terra@gnome.org>
 
@@ -9,7 +17,7 @@ Tue Mar  9 11:01:45 2004  Jonathan Blandford  <jrb@gnome.org>
 
 Tue Mar  9 02:11:50 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
-	* gtk/gtkmenu.c Fix bug 136446.
+	* gtk/gtkmenu.c Fix bug 136446. [Marco Pesenti Gritti]
 	(struct _GtkMenuPrivate): Add boolean destroying
 	(gtk_menu_destroy): Set priv->destroying
 	(gtk_menu_remove): don't update the table information when the
