@@ -1,3 +1,11 @@
+Tue Feb  8 09:38:29 2000  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwidget.c:
+	(gtk_widget_unrealize): guard widget access with ref/unref
+	around signal emission.
+	(gtk_widget_hide): same here, but also check its destroyed
+	state before queueing a resize.
+
 Tue Feb  8 03:05:55 2000  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkstyle.c (gtk_style_new): use gtk_default_prelight_bg instead

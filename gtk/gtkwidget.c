@@ -1509,9 +1509,11 @@ gtk_widget_hide (GtkWidget *widget)
   
   if (GTK_WIDGET_VISIBLE (widget))
     {
+      gtk_widget_ref (widget);
       gtk_signal_emit (GTK_OBJECT (widget), widget_signals[HIDE]);
-      if (!GTK_WIDGET_TOPLEVEL (widget))
+      if (!GTK_WIDGET_TOPLEVEL (widget) && !GTK_OBJECT_DESTROYED (widget))
 	gtk_widget_queue_resize (widget);
+      gtk_widget_unref (widget);
     }
 }
 
@@ -1694,8 +1696,10 @@ gtk_widget_unrealize (GtkWidget *widget)
 
   if (GTK_WIDGET_REALIZED (widget))
     {
+      gtk_widget_ref (widget);
       gtk_signal_emit (GTK_OBJECT (widget), widget_signals[UNREALIZE]);
       GTK_WIDGET_UNSET_FLAGS (widget, GTK_REALIZED | GTK_MAPPED);
+      gtk_widget_unref (widget);
     }
 }
 
