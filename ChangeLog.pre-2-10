@@ -1,5 +1,8 @@
 2004-10-06  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeselection.c (gtk_tree_selection_get_selected): Clear
+	the iter instead of returning it unmodified. (#154186, Jonathan Blandford)
+
 	* gtk/gtkfilechooserentry.c (gtk_file_chooser_entry_focus): Pop up
 	the completions again after tab.  (#147700, Jens Bech Madsen)
 
