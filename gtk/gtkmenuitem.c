@@ -196,14 +196,25 @@ gtk_menu_item_destroy (GtkObject *object)
   menu_item = GTK_MENU_ITEM (object);
 
   if (menu_item->submenu)
-    {
-      gtk_widget_destroy (menu_item->submenu);
-      gtk_widget_unref (menu_item->submenu);
-      menu_item->submenu = NULL;
-    }
+    gtk_widget_destroy (menu_item->submenu);
 
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+}
+
+static void
+gtk_menu_item_detacher (GtkWidget     *widget,
+			GtkMenu       *menu)
+{
+  GtkMenuItem *menu_item;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_MENU_ITEM (widget));
+
+  menu_item = GTK_MENU_ITEM (widget);
+  g_return_if_fail (menu_item->submenu == (GtkWidget*) menu);
+
+  menu_item->submenu = NULL;
 }
 
 void
@@ -212,21 +223,29 @@ gtk_menu_item_set_submenu (GtkMenuItem *menu_item,
 {
   g_return_if_fail (menu_item != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
-
+  
   if (menu_item->submenu != submenu)
     {
-      if (menu_item->submenu)
-	{
-	  g_return_if_fail (!GTK_WIDGET_VISIBLE (menu_item->submenu));
-	  gtk_widget_unref (menu_item->submenu);
-	}
+      gtk_menu_item_remove_submenu (menu_item);
+      
       menu_item->submenu = submenu;
-      if (menu_item->submenu)
-	gtk_widget_ref (menu_item->submenu);
-
+      gtk_menu_attach_to_widget (GTK_MENU (submenu),
+				 GTK_WIDGET (menu_item),
+				 gtk_menu_item_detacher);
+      
       if (GTK_WIDGET (menu_item)->parent)
 	gtk_widget_queue_resize (GTK_WIDGET (menu_item));
     }
+}
+
+void
+gtk_menu_item_remove_submenu (GtkMenuItem         *menu_item)
+{
+  g_return_if_fail (menu_item != NULL);
+  g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
+      
+  if (menu_item->submenu)
+    gtk_menu_detach (GTK_MENU (menu_item->submenu));
 }
 
 void

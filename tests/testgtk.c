@@ -1111,7 +1111,6 @@ GtkWidget*
 create_menu (int depth)
 {
   GtkWidget *menu;
-  GtkWidget *submenu;
   GtkWidget *menuitem;
   GSList *group;
   char buf[32];
@@ -1121,7 +1120,6 @@ create_menu (int depth)
     return NULL;
 
   menu = gtk_menu_new ();
-  submenu = NULL;
   group = NULL;
 
   for (i = 0, j = 1; i < 5; i++, j++)
@@ -1134,12 +1132,7 @@ create_menu (int depth)
       gtk_menu_append (GTK_MENU (menu), menuitem);
       gtk_widget_show (menuitem);
 
-      if (depth > 0)
-	{
-	  if (!submenu)
-	    submenu = create_menu (depth - 1);
-	  gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), submenu);
-	}
+      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (depth - 1));
     }
 
   return menu;
@@ -1190,12 +1183,12 @@ create_menus ()
       gtk_widget_show (menuitem);
 
       menuitem = gtk_menu_item_new_with_label ("foo");
-      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
+      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (3));
       gtk_menu_bar_append (GTK_MENU_BAR (menubar), menuitem);
       gtk_widget_show (menuitem);
 
       menuitem = gtk_menu_item_new_with_label ("bar");
-      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
+      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (4));
       gtk_menu_item_right_justify (GTK_MENU_ITEM (menuitem));
       gtk_menu_bar_append (GTK_MENU_BAR (menubar), menuitem);
       gtk_widget_show (menuitem);

@@ -42,9 +42,6 @@ BUGS
    the deactivation, but not the destruction of it's submenu.
    this is not a bug in the fileselection code but in the optionmenu
    code.
-                        
- * Look also at ./BUGS (i added it, because it describes some bugs in
-   a more specific way -timj).
    
 
 NEW FEATURES

@@ -1,7 +1,20 @@
 Tue Feb  3 15:09:55 1998  Tim Janik  <timj@gimp.org>
 
+	* gtk/testgtk.c: don't add the same menu to different menuitems/
+	  optionmenus.
+
+	* gtk/gtkmenuitem.h:
+	* gtk/gtkmenuitem.c: new function gtk_menu_item_remove_submenu ro
+	  be consistent with optionmenu. use gtk_menu_attach_to_widget/
+	  gtk_menu_detach for setting/removing the submenu.
+	  invoke gtk_widget_destroy(submenu) in destructor to be consistent
+	  with other destructors.
+
 	* gtk/gtkoptionmenu.h: 
 	* gtk/gtkoptionmenu.c: attach/detach to menu widget via
+	  gtk_menu_attach_to_widget/gtk_menu_detach.
+	  invoke gtk_widget_destroy(menu) in destructor to be consistent
+	  with other destructors.
 
 	* gtk/gtkmenu.h: 
 	* gtk/gtkmenu.c: new functions gtk_menu_attach_to_widget

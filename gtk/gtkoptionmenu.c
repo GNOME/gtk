@@ -230,7 +230,7 @@ gtk_option_menu_destroy (GtkObject *object)
   option_menu = GTK_OPTION_MENU (object);
 
   if (option_menu->menu)
-    gtk_menu_detach (GTK_MENU (option_menu->menu));
+    gtk_widget_destroy (option_menu->menu);
 
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
@@ -487,7 +487,6 @@ gtk_option_menu_remove_contents (GtkOptionMenu *option_menu)
       if (GTK_WIDGET (option_menu->menu_item)->state != GTK_BUTTON (option_menu)->child->state)
 	gtk_widget_set_state (GTK_BUTTON (option_menu)->child,
 			      GTK_WIDGET (option_menu->menu_item)->state);
-      /* GTK_WIDGET_UNSET_FLAGS (GTK_BUTTON (option_menu)->child, GTK_MAPPED | GTK_REALIZED); */
       gtk_widget_unrealize (GTK_BUTTON (option_menu)->child);
       gtk_widget_reparent (GTK_BUTTON (option_menu)->child, option_menu->menu_item);
       gtk_widget_unref (option_menu->menu_item);
