@@ -383,10 +383,14 @@ viewport_set_hadjustment_values (GtkViewport *viewport,
   GtkAllocation view_allocation;
   GtkAdjustment *hadjustment = gtk_viewport_get_hadjustment (viewport);
   gdouble old_page_size;
+  gdouble old_upper;
+  gdouble old_value;
   
   viewport_get_view_allocation (viewport, &view_allocation);  
 
   old_page_size = hadjustment->page_size;
+  old_upper = hadjustment->upper;
+  old_value = hadjustment->value;
   hadjustment->page_size = view_allocation.width;
   hadjustment->step_increment = view_allocation.width * 0.1;
   hadjustment->page_increment = view_allocation.width * 0.9;
@@ -405,8 +409,8 @@ viewport_set_hadjustment_values (GtkViewport *viewport,
 
   if (gtk_widget_get_direction (GTK_WIDGET (viewport)) == GTK_TEXT_DIR_RTL) 
     {
-      gdouble old_value = hadjustment->value;
-      hadjustment->value = hadjustment->value + old_page_size - hadjustment->page_size;
+      gdouble dist = old_upper - (old_value + old_page_size);
+      hadjustment->value = hadjustment->upper - dist - hadjustment->page_size;
       viewport_reclamp_adjustment (hadjustment, value_changed);
       *value_changed = (old_value != hadjustment->value);
     }
