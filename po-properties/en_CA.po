@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-03-31 16:49-0500\n"
-"PO-Revision-Date: 2005-03-31 22:53-0400\n"
+"POT-Creation-Date: 2005-04-03 14:11-0400\n"
+"PO-Revision-Date: 2005-04-03 22:53-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: Canadian English <adamw@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -664,7 +664,7 @@ msgstr ""
 "start or end of the parent"
 
 #: ../gtk/gtkbox.c:177 ../gtk/gtknotebook.c:499 ../gtk/gtkpaned.c:241
-#: ../gtk/gtkruler.c:141
+#: ../gtk/gtkruler.c:142
 msgid "Position"
 msgstr "Position"
 
@@ -703,7 +703,7 @@ msgid ""
 msgstr ""
 "If set, the label is used to pick a stock item instead of being displayed"
 
-#: ../gtk/gtkbutton.c:245 ../gtk/gtkcombobox.c:679
+#: ../gtk/gtkbutton.c:245 ../gtk/gtkcombobox.c:682
 msgid "Focus on click"
 msgstr "Focus on click"
 
@@ -971,11 +971,11 @@ msgstr "Model"
 msgid "The model containing the possible values for the combo box"
 msgstr "The model containing the possible values for the combo box"
 
-#: ../gtk/gtkcellrenderercombo.c:110 ../gtk/gtkcomboboxentry.c:115
+#: ../gtk/gtkcellrenderercombo.c:110 ../gtk/gtkcomboboxentry.c:120
 msgid "Text Column"
 msgstr "Text Column"
 
-#: ../gtk/gtkcellrenderercombo.c:111 ../gtk/gtkcomboboxentry.c:116
+#: ../gtk/gtkcellrenderercombo.c:111 ../gtk/gtkcomboboxentry.c:121
 msgid "A column in the data source model to get the strings from"
 msgstr "A column in the data source model to get the strings from"
 
@@ -1266,7 +1266,7 @@ msgstr ""
 "How to break the string into multiple lines, if the cell renderer does not "
 "have enough room to display the entire string"
 
-#: ../gtk/gtkcellrenderertext.c:494 ../gtk/gtkcombobox.c:569
+#: ../gtk/gtkcellrenderertext.c:494 ../gtk/gtkcombobox.c:572
 msgid "Wrap width"
 msgstr "Wrap width"
 
@@ -1575,67 +1575,67 @@ msgstr "Value in list"
 msgid "Whether entered values must already be present in the list"
 msgstr "Whether entered values must already be present in the list"
 
-#: ../gtk/gtkcombobox.c:552
+#: ../gtk/gtkcombobox.c:555
 msgid "ComboBox model"
 msgstr "ComboBox model"
 
-#: ../gtk/gtkcombobox.c:553
+#: ../gtk/gtkcombobox.c:556
 msgid "The model for the combo box"
 msgstr "The model for the combo box"
 
-#: ../gtk/gtkcombobox.c:570
+#: ../gtk/gtkcombobox.c:573
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Wrap width for layouting the items in a grid"
 
-#: ../gtk/gtkcombobox.c:592
+#: ../gtk/gtkcombobox.c:595
 msgid "Row span column"
 msgstr "Row span column"
 
-#: ../gtk/gtkcombobox.c:593
+#: ../gtk/gtkcombobox.c:596
 msgid "TreeModel column containing the row span values"
 msgstr "TreeModel column containing the row span values"
 
-#: ../gtk/gtkcombobox.c:614
+#: ../gtk/gtkcombobox.c:617
 msgid "Column span column"
 msgstr "Column span column"
 
-#: ../gtk/gtkcombobox.c:615
+#: ../gtk/gtkcombobox.c:618
 msgid "TreeModel column containing the column span values"
 msgstr "TreeModel column containing the column span values"
 
-#: ../gtk/gtkcombobox.c:635
+#: ../gtk/gtkcombobox.c:638
 msgid "Active item"
 msgstr "Active item"
 
-#: ../gtk/gtkcombobox.c:636
+#: ../gtk/gtkcombobox.c:639
 msgid "The item which is currently active"
 msgstr "The item which is currently active"
 
-#: ../gtk/gtkcombobox.c:655 ../gtk/gtkuimanager.c:230
+#: ../gtk/gtkcombobox.c:658 ../gtk/gtkuimanager.c:230
 msgid "Add tearoffs to menus"
 msgstr "Add tearoffs to menus"
 
-#: ../gtk/gtkcombobox.c:656
+#: ../gtk/gtkcombobox.c:659
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Whether dropdowns should have a tearoff menu item"
 
-#: ../gtk/gtkcombobox.c:671 ../gtk/gtkentry.c:531
+#: ../gtk/gtkcombobox.c:674 ../gtk/gtkentry.c:531
 msgid "Has Frame"
 msgstr "Has Frame"
 
-#: ../gtk/gtkcombobox.c:672
+#: ../gtk/gtkcombobox.c:675
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Whether the combo box draws a frame around the child"
 
-#: ../gtk/gtkcombobox.c:680
+#: ../gtk/gtkcombobox.c:683
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Whether the combo box grabs focus when it is clicked with the mouse"
 
-#: ../gtk/gtkcombobox.c:686
+#: ../gtk/gtkcombobox.c:689
 msgid "Appears as list"
 msgstr "Appears as list"
 
-#: ../gtk/gtkcombobox.c:687
+#: ../gtk/gtkcombobox.c:690
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "Whether dropdowns should look like lists rather than menus"
 
@@ -3244,33 +3244,41 @@ msgid ""
 msgstr ""
 "How far in the y direction to move the arrow when the button is depressed"
 
-#: ../gtk/gtkruler.c:121
+#: ../gtk/gtkruler.c:122
 msgid "Lower"
 msgstr "Lower"
 
-#: ../gtk/gtkruler.c:122
+#: ../gtk/gtkruler.c:123
 msgid "Lower limit of ruler"
 msgstr "Lower limit of ruler"
 
-#: ../gtk/gtkruler.c:131
+#: ../gtk/gtkruler.c:132
 msgid "Upper"
 msgstr "Upper"
 
-#: ../gtk/gtkruler.c:132
+#: ../gtk/gtkruler.c:133
 msgid "Upper limit of ruler"
 msgstr "Upper limit of ruler"
 
-#: ../gtk/gtkruler.c:142
+#: ../gtk/gtkruler.c:143
 msgid "Position of mark on the ruler"
 msgstr "Position of mark on the ruler"
 
-#: ../gtk/gtkruler.c:151
+#: ../gtk/gtkruler.c:152
 msgid "Max Size"
 msgstr "Max Size"
 
-#: ../gtk/gtkruler.c:152
+#: ../gtk/gtkruler.c:153
 msgid "Maximum size of the ruler"
 msgstr "Maximum size of the ruler"
+
+#: ../gtk/gtkruler.c:161
+msgid "Metric"
+msgstr "Metric"
+
+#: ../gtk/gtkruler.c:162
+msgid "The metric used for the ruler"
+msgstr "The metric used for the ruler"
 
 #: ../gtk/gtkscale.c:173 ../gtk/gtkspinbutton.c:261
 msgid "Digits"
