@@ -1,3 +1,9 @@
+Sat Jun 27 22:42:28 PDT 1998 Manish Singh <yosh@gimp.org>
+
+	* configure.in
+	* acconfig.h
+	* gdk/gdk.c: use native Xlib XConvertCase if it's available
+
 Sat Jun 27 15:44:46 1998  Tim Janik  <timj@gtk.org>
 
 	* gdk/gdk.c (gdkx_XConvertCase): compatibility function to provide

@@ -33,7 +33,6 @@ AC_SUBST(LT_CURRENT)
 AC_SUBST(LT_REVISION)
 AC_SUBST(LT_AGE)
 
-
 # For automake.
 VERSION=$GTK_VERSION
 PACKAGE=gtk+
@@ -223,6 +222,13 @@ AC_CHECK_LIB(Xext, XShapeCombineMask,
            x_libs="-lXext $x_libs"
       fi
       AC_DEFINE(HAVE_SHAPE_EXT),
+      ,
+      $x_libs)
+
+# Check for XConvertCase (X11R6 specific)
+
+AC_CHECK_LIB(X11, XConvertCase,
+      AC_DEFINE(HAVE_XCONVERTCASE),
       ,
       $x_libs)
 

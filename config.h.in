@@ -23,6 +23,7 @@
 #undef HAVE_XSHM_H
 #undef HAVE_SHAPE_EXT
 #undef HAVE_SYS_SELECT_H
+#undef HAVE_XCONVERTCASE
 
 /* some systems do not allow to ipcrm pages prior to
  * actual usage, namely: OSF1 V3.2, SunOS 4.1.1, 5.5, 5.5.1, 5.6,

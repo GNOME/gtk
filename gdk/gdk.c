@@ -127,6 +127,13 @@ static GdkAtom   gdk_dnd_check_types    (GdkWindow    *window,
 static void      gdk_print_atom         (GdkAtom       anatom);
 #endif
 
+#ifndef HAVE_XCONVERTCASE
+static void      gdkx_XConvertCase      (KeySym        symbol,
+					 KeySym       *lower,
+					 KeySym       *upper);
+#define XConvertCase gdkx_XConvertCase
+#endif
+
 /* 
  * old junk from offix, we might use it though so leave it 
  */
@@ -4343,6 +4350,7 @@ gdk_send_xevent (Window window, gboolean propagate, glong event_mask,
   return result && (gdk_error_code != -1);
 }
 
+#ifndef HAVE_XCONVERTCASE
 /* compatibility function from X11R6.3, since XConvertCase is not
  * supplied by X11R5.
  */
@@ -4472,6 +4480,7 @@ gdkx_XConvertCase (KeySym symbol,
 #endif	/* GREEK */
     }
 }
+#endif
 
 gchar*
 gdk_keyval_name (guint        keyval)
@@ -4495,7 +4504,7 @@ gdk_keyval_to_upper (guint        keyval)
       KeySym lower_val = 0;
       KeySym upper_val = 0;
 
-      gdkx_XConvertCase (keyval, &lower_val, &upper_val);
+      XConvertCase (keyval, &lower_val, &upper_val);
       return upper_val;
     }
   return 0;
@@ -4509,7 +4518,7 @@ gdk_keyval_to_lower (guint        keyval)
       KeySym lower_val = 0;
       KeySym upper_val = 0;
 
-      gdkx_XConvertCase (keyval, &lower_val, &upper_val);
+      XConvertCase (keyval, &lower_val, &upper_val);
       return lower_val;
     }
   return 0;
@@ -4523,7 +4532,7 @@ gdk_keyval_is_upper (guint        keyval)
       KeySym lower_val = 0;
       KeySym upper_val = 0;
 
-      gdkx_XConvertCase (keyval, &lower_val, &upper_val);
+      XConvertCase (keyval, &lower_val, &upper_val);
       return upper_val == keyval;
     }
   return TRUE;
@@ -4537,7 +4546,7 @@ gdk_keyval_is_lower (guint        keyval)
       KeySym lower_val = 0;
       KeySym upper_val = 0;
 
-      gdkx_XConvertCase (keyval, &lower_val, &upper_val);
+      XConvertCase (keyval, &lower_val, &upper_val);
       return lower_val == keyval;
     }
   return TRUE;
