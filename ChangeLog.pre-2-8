@@ -1,5 +1,10 @@
 2004-11-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtklabel.c (draw_insertion_cursor, gtk_label_expose): 
+	Clip when drawing the cursor. This prevents bits of a
+	selectable label leaking out from underneath the resize
+	grip in a statusbar.  (#73359)
+
 	* gtk/gtkstatusbar.c: Apply a patch by Owen Taylor to
 	get reasonable allocations for the statusbar and its
 	children.  (#73359)

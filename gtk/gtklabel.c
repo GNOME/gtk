@@ -1987,7 +1987,7 @@ draw_insertion_cursor (GtkLabel      *label,
   else
     text_dir = GTK_TEXT_DIR_RTL;
 
-  gtk_draw_insertion_cursor (widget, widget->window, NULL,
+  gtk_draw_insertion_cursor (widget, widget->window, &(widget->allocation),
 			     cursor_location,
 			     is_primary, text_dir, draw_arrow);
 }
@@ -2147,8 +2147,9 @@ gtk_label_expose (GtkWidget      *widget,
                                                    x, y,
                                                    range,
                                                    1);
-
-          /* FIXME should use gtk_paint, but it can't use a clip
+	  gdk_region_intersect (clip, event->region);
+ 
+         /* FIXME should use gtk_paint, but it can't use a clip
            * region
            */
 
