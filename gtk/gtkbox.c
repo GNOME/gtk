@@ -52,8 +52,6 @@ static void gtk_box_get_property (GObject         *object,
 				  guint            prop_id,
 				  GValue          *value,
 				  GParamSpec      *pspec);
-static void gtk_box_map        (GtkWidget      *widget);
-static void gtk_box_unmap      (GtkWidget      *widget);
 static void gtk_box_add        (GtkContainer   *container,
 			        GtkWidget      *widget);
 static void gtk_box_remove     (GtkContainer   *container,
@@ -115,9 +113,6 @@ gtk_box_class_init (GtkBoxClass *class)
   gobject_class->set_property = gtk_box_set_property;
   gobject_class->get_property = gtk_box_get_property;
    
-  widget_class->map = gtk_box_map;
-  widget_class->unmap = gtk_box_unmap;
-
   container_class->add = gtk_box_add;
   container_class->remove = gtk_box_remove;
   container_class->forall = gtk_box_forall;
@@ -378,16 +373,6 @@ gtk_box_pack_start (GtkBox    *box,
 
   gtk_widget_set_parent (child, GTK_WIDGET (box));
   
-  if (GTK_WIDGET_REALIZED (box))
-    gtk_widget_realize (child);
-
-  if (GTK_WIDGET_VISIBLE (box) && GTK_WIDGET_VISIBLE (child))
-    {
-      if (GTK_WIDGET_MAPPED (box))
-	gtk_widget_map (child);
-
-      gtk_widget_queue_resize (child);
-    }
   gtk_widget_child_notify (child, "expand");
   gtk_widget_child_notify (child, "fill");
   gtk_widget_child_notify (child, "padding");
@@ -423,16 +408,6 @@ gtk_box_pack_end (GtkBox    *box,
 
   gtk_widget_set_parent (child, GTK_WIDGET (box));
 
-  if (GTK_WIDGET_REALIZED (box))
-    gtk_widget_realize (child);
-
-  if (GTK_WIDGET_VISIBLE (box) && GTK_WIDGET_VISIBLE (child))
-    {
-      if (GTK_WIDGET_MAPPED (box))
-	gtk_widget_map (child);
-
-      gtk_widget_queue_resize (child);
-    }
   gtk_widget_child_notify (child, "expand");
   gtk_widget_child_notify (child, "fill");
   gtk_widget_child_notify (child, "padding");
@@ -665,54 +640,6 @@ gtk_box_set_child_packing (GtkBox               *box,
 	gtk_widget_queue_resize (child);
     }
   gtk_widget_thaw_child_notify (child);
-}
-
-static void
-gtk_box_map (GtkWidget *widget)
-{
-  GtkBox *box;
-  GtkBoxChild *child;
-  GList *children;
-
-  g_return_if_fail (GTK_IS_BOX (widget));
-
-  box = GTK_BOX (widget);
-  GTK_WIDGET_SET_FLAGS (box, GTK_MAPPED);
-
-  children = box->children;
-  while (children)
-    {
-      child = children->data;
-      children = children->next;
-
-      if (GTK_WIDGET_VISIBLE (child->widget) &&
-	  !GTK_WIDGET_MAPPED (child->widget))
-	gtk_widget_map (child->widget);
-    }
-}
-
-static void
-gtk_box_unmap (GtkWidget *widget)
-{
-  GtkBox *box;
-  GtkBoxChild *child;
-  GList *children;
-
-  g_return_if_fail (GTK_IS_BOX (widget));
-
-  box = GTK_BOX (widget);
-  GTK_WIDGET_UNSET_FLAGS (box, GTK_MAPPED);
-
-  children = box->children;
-  while (children)
-    {
-      child = children->data;
-      children = children->next;
-
-      if (GTK_WIDGET_VISIBLE (child->widget) &&
-	  GTK_WIDGET_MAPPED (child->widget))
-	gtk_widget_unmap (child->widget);
-    }
 }
 
 static void

@@ -109,7 +109,6 @@ typedef void (*GtkMenuShellSignal2) (GtkObject *object,
 
 static void gtk_menu_shell_class_init        (GtkMenuShellClass *klass);
 static void gtk_menu_shell_init              (GtkMenuShell      *menu_shell);
-static void gtk_menu_shell_map               (GtkWidget         *widget);
 static void gtk_menu_shell_realize           (GtkWidget         *widget);
 static gint gtk_menu_shell_button_press      (GtkWidget         *widget,
 					      GdkEventButton    *event);
@@ -192,7 +191,6 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
 
   parent_class = gtk_type_class (gtk_container_get_type ());
 
-  widget_class->map = gtk_menu_shell_map;
   widget_class->realize = gtk_menu_shell_realize;
   widget_class->button_press_event = gtk_menu_shell_button_press;
   widget_class->button_release_event = gtk_menu_shell_button_release;
@@ -337,17 +335,6 @@ gtk_menu_shell_real_insert (GtkMenuShell *menu_shell,
   menu_shell->children = g_list_insert (menu_shell->children, child, position);
 
   gtk_widget_set_parent (child, GTK_WIDGET (menu_shell));
-
-  if (GTK_WIDGET_REALIZED (child->parent))
-    gtk_widget_realize (child);
-
-  if (GTK_WIDGET_VISIBLE (child->parent) && GTK_WIDGET_VISIBLE (child))
-    {
-      if (GTK_WIDGET_MAPPED (child->parent))
-	gtk_widget_map (child);
-
-      gtk_widget_queue_resize (child);
-    }
 }
 
 void
@@ -356,31 +343,6 @@ gtk_menu_shell_deactivate (GtkMenuShell *menu_shell)
   g_return_if_fail (GTK_IS_MENU_SHELL (menu_shell));
 
   gtk_signal_emit (GTK_OBJECT (menu_shell), menu_shell_signals[DEACTIVATE]);
-}
-
-static void
-gtk_menu_shell_map (GtkWidget *widget)
-{
-  GtkMenuShell *menu_shell;
-  GtkWidget *child;
-  GList *children;
-
-  g_return_if_fail (GTK_IS_MENU_SHELL (widget));
-
-  menu_shell = GTK_MENU_SHELL (widget);
-  GTK_WIDGET_SET_FLAGS (menu_shell, GTK_MAPPED);
-
-  children = menu_shell->children;
-  while (children)
-    {
-      child = children->data;
-      children = children->next;
-
-      if (GTK_WIDGET_VISIBLE (child) && !GTK_WIDGET_MAPPED (child))
-	gtk_widget_map (child);
-    }
-
-  gdk_window_show (widget->window);
 }
 
 static void

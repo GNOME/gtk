@@ -217,20 +217,10 @@ _gtk_plug_add_to_socket (GtkPlug   *plug,
   plug->same_app = TRUE;
   socket->plug_widget = widget;
 
-  gtk_widget_set_parent (widget, GTK_WIDGET (socket));
-
   if (GTK_WIDGET_REALIZED (widget))
     gdk_window_reparent (widget->window, plug->socket_window, 0, 0);
-  else
-    gtk_widget_realize (widget);
 
-  if (GTK_WIDGET_VISIBLE (socket) && GTK_WIDGET_VISIBLE (widget))
-    {
-      if (GTK_WIDGET_MAPPED (socket))
-	gtk_widget_map (widget);
-
-      gtk_widget_queue_resize (widget);
-    }
+  gtk_widget_set_parent (widget, GTK_WIDGET (socket));
 
   g_signal_emit_by_name (G_OBJECT (socket), "plug_added", 0);
 }

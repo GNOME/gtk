@@ -125,8 +125,6 @@ enum {
 
 static void gtk_packer_class_init    (GtkPackerClass   *klass);
 static void gtk_packer_init          (GtkPacker        *packer);
-static void gtk_packer_map           (GtkWidget        *widget);
-static void gtk_packer_unmap         (GtkWidget        *widget);
 static void gtk_packer_size_request  (GtkWidget      *widget,
                                       GtkRequisition *requisition);
 static void gtk_packer_size_allocate (GtkWidget      *widget,
@@ -215,9 +213,6 @@ gtk_packer_class_init (GtkPackerClass *klass)
   gobject_class->set_property = gtk_packer_set_property;
   gobject_class->get_property = gtk_packer_get_property;
 
-  widget_class->map = gtk_packer_map;
-  widget_class->unmap = gtk_packer_unmap;
-  
   widget_class->size_request = gtk_packer_size_request;
   widget_class->size_allocate = gtk_packer_size_allocate;
   
@@ -697,17 +692,6 @@ gtk_packer_add_defaults (GtkPacker       *packer,
   packer->children = g_list_append(packer->children, (gpointer) pchild);
   
   gtk_widget_set_parent (child, GTK_WIDGET (packer));
-  
-  if (GTK_WIDGET_REALIZED (child->parent))
-    gtk_widget_realize (child);
-
-  if (GTK_WIDGET_VISIBLE (child->parent) && GTK_WIDGET_VISIBLE (child))
-    {
-      if (GTK_WIDGET_MAPPED (child->parent))
-	gtk_widget_map (child);
-
-      gtk_widget_queue_resize (child);
-    }
 }
 
 void 
@@ -745,17 +729,6 @@ gtk_packer_add (GtkPacker       *packer,
   packer->children = g_list_append(packer->children, (gpointer) pchild);
   
   gtk_widget_set_parent (child, GTK_WIDGET (packer));
-  
-  if (GTK_WIDGET_REALIZED (child->parent))
-    gtk_widget_realize (child);
-
-  if (GTK_WIDGET_VISIBLE (child->parent) && GTK_WIDGET_VISIBLE (child))
-    {
-      if (GTK_WIDGET_MAPPED (child->parent))
-	gtk_widget_map (child);
-
-      gtk_widget_queue_resize (child);
-    }
 }
 
 void
@@ -901,54 +874,6 @@ gtk_packer_remove (GtkContainer *container,
         }
       
       children = g_list_next(children);
-    }
-}
-
-static void 
-gtk_packer_map (GtkWidget *widget)
-{
-  GtkPacker *packer;
-  GtkPackerChild *child;
-  GList *children;
-  
-  g_return_if_fail (GTK_IS_PACKER (widget));
-  
-  packer = GTK_PACKER (widget);
-  GTK_WIDGET_SET_FLAGS (packer, GTK_MAPPED);
-  
-  children = g_list_first(packer->children);
-  while (children != NULL) 
-    {
-      child = children->data;
-      children = g_list_next(children);
-      
-      if (GTK_WIDGET_VISIBLE (child->widget) &&
-	  !GTK_WIDGET_MAPPED (child->widget))
-	gtk_widget_map (child->widget);
-    }
-}
-
-static void 
-gtk_packer_unmap (GtkWidget *widget)
-{
-  GtkPacker *packer;
-  GtkPackerChild *child;
-  GList *children;
-  
-  g_return_if_fail (GTK_IS_PACKER (widget));
-  
-  packer = GTK_PACKER (widget);
-  GTK_WIDGET_UNSET_FLAGS (packer, GTK_MAPPED);
-  
-  children = g_list_first(packer->children);
-  while (children) 
-    {
-      child = children->data;
-      children = g_list_next(children);
-      
-      if (GTK_WIDGET_VISIBLE (child->widget) &&
-	  GTK_WIDGET_MAPPED (child->widget))
-	gtk_widget_unmap (child->widget);
     }
 }
 
@@ -1262,7 +1187,7 @@ gtk_packer_size_allocate (GtkWidget      *widget,
  
         if (width <= 0 || height <= 0) 
 	  {
-            gtk_widget_unmap(child->widget);
+	    gtk_widget_set_child_visible (child->widget, FALSE);
 	  } 
 	else 
 	  {
@@ -1272,9 +1197,7 @@ gtk_packer_size_allocate (GtkWidget      *widget,
 	    child_allocation.height = height;
 	    gtk_widget_size_allocate (child->widget, &child_allocation);
 	    
-	    if (GTK_WIDGET_MAPPED (widget) &&
-		!(GTK_WIDGET_MAPPED (child->widget)))
-	      gtk_widget_map(child->widget); 
+	    gtk_widget_set_child_visible (child->widget, TRUE);
 	  }
 	
         list = g_list_next(list);

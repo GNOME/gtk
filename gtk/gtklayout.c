@@ -233,20 +233,10 @@ gtk_layout_put (GtkLayout     *layout,
 
   layout->children = g_list_append (layout->children, child);
   
-  gtk_widget_set_parent (child_widget, GTK_WIDGET (layout));
   if (GTK_WIDGET_REALIZED (layout))
     gtk_widget_set_parent_window (child->widget, layout->bin_window);
-
-  if (GTK_WIDGET_REALIZED (layout))
-    gtk_widget_realize (child_widget);
-    
-  if (GTK_WIDGET_VISIBLE (layout) && GTK_WIDGET_VISIBLE (child_widget))
-    {
-      if (GTK_WIDGET_MAPPED (layout))
-	gtk_widget_map (child_widget);
-
-      gtk_widget_queue_resize (child_widget);
-    }
+  
+  gtk_widget_set_parent (child_widget, GTK_WIDGET (layout));
 }
 
 void           

@@ -60,8 +60,6 @@ static void gtk_frame_size_request  (GtkWidget      *widget,
 				     GtkRequisition *requisition);
 static void gtk_frame_size_allocate (GtkWidget      *widget,
 				     GtkAllocation  *allocation);
-static void gtk_frame_map           (GtkWidget      *widget);
-static void gtk_frame_unmap         (GtkWidget      *widget);
 static void gtk_frame_remove        (GtkContainer   *container,
 				     GtkWidget      *child);
 static void gtk_frame_forall        (GtkContainer   *container,
@@ -168,8 +166,6 @@ gtk_frame_class_init (GtkFrameClass *class)
   widget_class->expose_event = gtk_frame_expose;
   widget_class->size_request = gtk_frame_size_request;
   widget_class->size_allocate = gtk_frame_size_allocate;
-  widget_class->map = gtk_frame_map;
-  widget_class->unmap = gtk_frame_unmap;
 
   container_class->remove = gtk_frame_remove;
   container_class->forall = gtk_frame_forall;
@@ -636,32 +632,6 @@ gtk_frame_size_allocate (GtkWidget     *widget,
 
       gtk_widget_size_allocate (frame->label_widget, &child_allocation);
     }
-}
-
-static void
-gtk_frame_map (GtkWidget *widget)
-{
-  GtkFrame *frame = GTK_FRAME (widget);
-  
-  if (frame->label_widget &&
-      GTK_WIDGET_VISIBLE (frame->label_widget) &&
-      !GTK_WIDGET_MAPPED (frame->label_widget))
-    gtk_widget_map (frame->label_widget);
-
-  if (GTK_WIDGET_CLASS (parent_class)->map)
-    (* GTK_WIDGET_CLASS (parent_class)->map) (widget);
-}
-
-static void
-gtk_frame_unmap (GtkWidget *widget)
-{
-  GtkFrame *frame = GTK_FRAME (widget);
-
-  if (GTK_WIDGET_CLASS (parent_class)->unmap)
-    (* GTK_WIDGET_CLASS (parent_class)->unmap) (widget);
-
-  if (frame->label_widget && GTK_WIDGET_MAPPED (frame->label_widget))
-    gtk_widget_unmap (frame->label_widget);
 }
 
 static void

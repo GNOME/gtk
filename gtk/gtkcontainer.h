@@ -191,7 +191,6 @@ void	     gtk_container_child_get_property		(GtkContainer	   *container,
 							 GtkWidget	   *child,
 							 const gchar	   *property_name,
 							 GValue		   *value);
-     
 
 #define GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID(object, property_id, pspec) \
     G_OBJECT_WARN_INVALID_PSPEC ((object), "child property id", (property_id), (pspec))

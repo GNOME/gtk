@@ -396,3 +396,33 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
   undefined contents for the offscreen areas. In most cases, code
   using gdk_image_get() should really be ported to
   gdk_pixbuf_get_from_drawable().
+
+* The core GTK+ now takes care of handling mapping, unmapping and
+  realizing the child widgets of containers in
+  gtk_widget_set_parent(). In most cases, this allows container
+  implementations to be simplifid by removing the code in add()
+  methods to map and realize children. However, there are 
+  a couple of things to watch out for here:
+
+   - If the parent is realized before the add() happens, 
+     gtk_widget_set_parent_window() must be called before
+     gtk_widget_set_parent(), since gtk_widget_set_parent()
+     will realize the child.
+
+   - If a container depended on its children not being mapped
+     unless it did so itself (for example, GtkNotebook only
+     mapped the current page), then the new function
+     gtk_widget_set_child_visible() must be called to keep
+     widgets that should not be mapped not mapped.
+
+  As part of this change, most containers also will no longer need
+  custom implementations of the map() and unmap() virtual
+  functions. The only cases where this is necessary are:
+
+   - For !NO_WINDOW widgets, if you create children of widget->window 
+     and don't map them in realize() then you must map them
+     in map(). [ In almost all cases, you can simply map the
+     windows in realize() ]
+
+   - For NO_WINDOW widgets, if you create windows in your realize()
+     method, you must map then in map() and unmap them in unmap().

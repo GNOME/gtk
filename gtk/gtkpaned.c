@@ -44,8 +44,6 @@ static void    gtk_paned_get_property (GObject        *object,
 				       GValue         *value,
 				       GParamSpec     *pspec);
 static void    gtk_paned_realize      (GtkWidget      *widget);
-static void    gtk_paned_map          (GtkWidget      *widget);
-static void    gtk_paned_unmap        (GtkWidget      *widget);
 static void    gtk_paned_unrealize    (GtkWidget      *widget);
 static gint    gtk_paned_expose       (GtkWidget      *widget,
 				       GdkEventExpose *event);
@@ -104,8 +102,6 @@ gtk_paned_class_init (GtkPanedClass *class)
   object_class->get_property = gtk_paned_get_property;
 
   widget_class->realize = gtk_paned_realize;
-  widget_class->map = gtk_paned_map;
-  widget_class->unmap = gtk_paned_unmap;
   widget_class->unrealize = gtk_paned_unrealize;
   widget_class->expose_event = gtk_paned_expose;
   
@@ -272,38 +268,6 @@ gtk_paned_realize (GtkWidget *widget)
 }
 
 static void
-gtk_paned_map (GtkWidget *widget)
-{
-  GtkPaned *paned;
-
-  g_return_if_fail (GTK_IS_PANED (widget));
-
-  GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
-  paned = GTK_PANED (widget);
-
-  if (paned->child1 &&
-      GTK_WIDGET_VISIBLE (paned->child1) &&
-      !GTK_WIDGET_MAPPED (paned->child1))
-    gtk_widget_map (paned->child1);
-  if (paned->child2 &&
-      GTK_WIDGET_VISIBLE (paned->child2) &&
-      !GTK_WIDGET_MAPPED (paned->child2))
-    gtk_widget_map (paned->child2);
-
-  gdk_window_show (widget->window);
-}
-
-static void
-gtk_paned_unmap (GtkWidget *widget)
-{
-  g_return_if_fail (GTK_IS_PANED (widget));
-
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
-
-  gdk_window_hide (widget->window);
-}
-
-static void
 gtk_paned_unrealize (GtkWidget *widget)
 {
   GtkPaned *paned;
@@ -381,17 +345,6 @@ gtk_paned_pack1 (GtkPaned  *paned,
       paned->child1_shrink = shrink;
 
       gtk_widget_set_parent (child, GTK_WIDGET (paned));
-
-      if (GTK_WIDGET_REALIZED (child->parent))
-	gtk_widget_realize (child);
-
-      if (GTK_WIDGET_VISIBLE (child->parent) && GTK_WIDGET_VISIBLE (child))
-	{
-	  if (GTK_WIDGET_MAPPED (child->parent))
-	    gtk_widget_map (child);
-
-	  gtk_widget_queue_resize (child);
-	}
     }
 }
 
@@ -411,17 +364,6 @@ gtk_paned_pack2 (GtkPaned  *paned,
       paned->child2_shrink = shrink;
 
       gtk_widget_set_parent (child, GTK_WIDGET (paned));
-
-      if (GTK_WIDGET_REALIZED (child->parent))
-	gtk_widget_realize (child);
-
-      if (GTK_WIDGET_VISIBLE (child->parent) && GTK_WIDGET_VISIBLE (child))
-	{
-	  if (GTK_WIDGET_MAPPED (child->parent))
-	    gtk_widget_map (child);
-
-	  gtk_widget_queue_resize (child);
-	}
     }
 }
 

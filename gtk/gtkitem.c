@@ -38,8 +38,6 @@ enum {
 
 static void gtk_item_class_init (GtkItemClass     *klass);
 static void gtk_item_init       (GtkItem          *item);
-static void gtk_item_map        (GtkWidget        *widget);
-static void gtk_item_unmap      (GtkWidget        *widget);
 static void gtk_item_realize    (GtkWidget        *widget);
 static gint gtk_item_enter      (GtkWidget        *widget,
 				 GdkEventCrossing *event);
@@ -85,8 +83,6 @@ gtk_item_class_init (GtkItemClass *class)
   widget_class = (GtkWidgetClass*) class;
 
 
-  widget_class->map = gtk_item_map;
-  widget_class->unmap = gtk_item_unmap;
   widget_class->realize = gtk_item_realize;
   widget_class->enter_notify_event = gtk_item_enter;
   widget_class->leave_notify_event = gtk_item_leave;
@@ -143,35 +139,6 @@ gtk_item_toggle (GtkItem *item)
   gtk_signal_emit (GTK_OBJECT (item), item_signals[TOGGLE]);
 }
 
-
-static void
-gtk_item_map (GtkWidget *widget)
-{
-  GtkBin *bin;
-
-  g_return_if_fail (GTK_IS_ITEM (widget));
-
-  GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
-
-  bin = GTK_BIN (widget);
-
-  if (bin->child &&
-      GTK_WIDGET_VISIBLE (bin->child) &&
-      !GTK_WIDGET_MAPPED (bin->child))
-    gtk_widget_map (bin->child);
-
-  gdk_window_show (widget->window);
-}
-
-static void
-gtk_item_unmap (GtkWidget *widget)
-{
-  g_return_if_fail (GTK_IS_ITEM (widget));
-
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
-
-  gdk_window_hide (widget->window);
-}
 
 static void
 gtk_item_realize (GtkWidget *widget)

@@ -319,17 +319,16 @@ struct _GtkTextViewChild
   gint y;
 };
 
-static GtkTextViewChild* text_view_child_new_anchored (GtkWidget          *child,
-                                                       GtkTextChildAnchor *anchor,
-                                                       GtkTextLayout      *layout);
-static GtkTextViewChild* text_view_child_new_window   (GtkWidget          *child,
-                                                       GtkTextWindowType   type,
-                                                       gint                x,
-                                                       gint                y);
-static void              text_view_child_free         (GtkTextViewChild   *child);
-
-static void              text_view_child_realize      (GtkTextView      *text_view,
-                                                       GtkTextViewChild *child);
+static GtkTextViewChild* text_view_child_new_anchored      (GtkWidget          *child,
+							    GtkTextChildAnchor *anchor,
+							    GtkTextLayout      *layout);
+static GtkTextViewChild* text_view_child_new_window        (GtkWidget          *child,
+							    GtkTextWindowType   type,
+							    gint                x,
+							    gint                y);
+static void              text_view_child_free              (GtkTextViewChild   *child);
+static void              text_view_child_set_parent_window (GtkTextView        *text_view,
+							    GtkTextViewChild   *child);
 
 struct _GtkTextWindow
 {
@@ -6233,8 +6232,8 @@ text_view_child_free (GtkTextViewChild *child)
 }
 
 static void
-text_view_child_realize (GtkTextView      *text_view,
-                         GtkTextViewChild *vc)
+text_view_child_set_parent_window (GtkTextView      *text_view,
+				   GtkTextViewChild *vc)
 {
   if (vc->anchor)
     gtk_widget_set_parent_window (vc->widget,
@@ -6246,8 +6245,6 @@ text_view_child_realize (GtkTextView      *text_view,
                                          vc->type);
       gtk_widget_set_parent_window (vc->widget, window);
     }
-
-  gtk_widget_realize (vc->widget);
 }
 
 static void
@@ -6257,18 +6254,10 @@ add_child (GtkTextView      *text_view,
   text_view->children = g_slist_prepend (text_view->children,
                                          vc);
 
-  gtk_widget_set_parent (vc->widget, GTK_WIDGET (text_view));
-
   if (GTK_WIDGET_REALIZED (text_view))
-    text_view_child_realize (text_view, vc);
-
-  if (GTK_WIDGET_VISIBLE (text_view) && GTK_WIDGET_VISIBLE (vc->widget))
-    {
-      if (GTK_WIDGET_MAPPED (text_view))
-        gtk_widget_map (vc->widget);
-
-      gtk_widget_queue_resize (vc->widget);
-    }
+    text_view_child_set_parent_window (text_view, vc);
+  
+  gtk_widget_set_parent (vc->widget, GTK_WIDGET (text_view));
 }
 
 void

@@ -1,7 +1,30 @@
+Sat Jul  7 02:50:14 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_set_parent): Enforce
+	the widget/child realization/mapping invariants.
+
+	* gtk/gtkwidget.[ch] gtk/gtkprivate.h: Add functions 
+	gtk_widget_[get/set]_child_visible() to control
+	whether visible children of a mapped window are
+	mapped.
+
+	* docs/widget_system.txt: Updated for changes in
+	container contract, and addition of GTK_CHILD_VISIBLE.
+
+	* gtk/gtkcontainer.c: Add generic map()/unmap()
+	functions that work for almost all containers.
+
+	* gtk/gtknotebook.c gtk/gtkpacker.c: Use 
+	gtk_widget_set_child_visible() where necessary.
+
+	* gtk/*.c: Remove excess map(), unmap(), and 
+	realization/mapping invariant enforcing code
+	from many containers.
+
 Wed Jul 18 19:51:45 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktextview.c (gtk_text_view_set_attributes_from_style): 
-	Get the foreground color from 'text', nor 'base'. (#57568)
+	Get the foreground color from 'text', nor 'fg'. (#57568)
 
 Wed Jul 18 19:28:46 2001  Owen Taylor  <otaylor@redhat.com>
 

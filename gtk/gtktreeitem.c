@@ -312,17 +312,6 @@ gtk_tree_item_set_subtree (GtkTreeItem *tree_item,
     gtk_widget_hide (subtree);
 
   gtk_widget_set_parent (subtree, GTK_WIDGET (tree_item)->parent);
-
-  if (GTK_WIDGET_REALIZED (subtree->parent))
-    gtk_widget_realize (subtree);
-
-  if (GTK_WIDGET_VISIBLE (subtree->parent) && GTK_WIDGET_VISIBLE (subtree))
-    {
-      if (GTK_WIDGET_MAPPED (subtree->parent))
-	gtk_widget_map (subtree);
-
-      gtk_widget_queue_resize (subtree);
-    }
 }
 
 void

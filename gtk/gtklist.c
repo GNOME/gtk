@@ -64,7 +64,6 @@ static void gtk_list_size_request    (GtkWidget	     *widget,
 static void gtk_list_size_allocate   (GtkWidget	     *widget,
 				      GtkAllocation  *allocation);
 static void gtk_list_realize	     (GtkWidget	     *widget);
-static void gtk_list_map	     (GtkWidget	     *widget);
 static void gtk_list_unmap	     (GtkWidget	     *widget);
 static void gtk_list_style_set	     (GtkWidget      *widget,
 				      GtkStyle       *previous_style);
@@ -219,7 +218,6 @@ gtk_list_class_init (GtkListClass *class)
   object_class->set_arg = gtk_list_set_arg;
   object_class->get_arg = gtk_list_get_arg;
 
-  widget_class->map = gtk_list_map;
   widget_class->unmap = gtk_list_unmap;
   widget_class->style_set = gtk_list_style_set;
   widget_class->realize = gtk_list_realize;
@@ -352,7 +350,6 @@ gtk_list_dispose (GObject *object)
  * gtk_list_size_request
  * gtk_list_size_allocate
  * gtk_list_realize
- * gtk_list_map
  * gtk_list_unmap
  * gtk_list_motion_notify
  * gtk_list_button_press
@@ -476,32 +473,6 @@ gtk_list_realize (GtkWidget *widget)
   widget->style = gtk_style_attach (widget->style, widget->window);
   gdk_window_set_background (widget->window, 
 			     &widget->style->base[GTK_STATE_NORMAL]);
-}
-
-static void
-gtk_list_map (GtkWidget *widget)
-{
-  GtkList *list;
-  GtkWidget *child;
-  GList *children;
-
-  g_return_if_fail (GTK_IS_LIST (widget));
-
-  GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
-  list = GTK_LIST (widget);
-
-  children = list->children;
-  while (children)
-    {
-      child = children->data;
-      children = children->next;
-
-      if (GTK_WIDGET_VISIBLE (child) &&
-	  !GTK_WIDGET_MAPPED (child))
-	gtk_widget_map (child);
-    }
-
-  gdk_window_show (widget->window);
 }
 
 static void
@@ -1077,17 +1048,6 @@ gtk_list_insert_items (GtkList *list,
       gtk_signal_connect (GTK_OBJECT (widget), "toggle",
 			  GTK_SIGNAL_FUNC (gtk_list_signal_item_toggle),
 			  list);
-
-      if (GTK_WIDGET_REALIZED (widget->parent))
-	gtk_widget_realize (widget);
-
-      if (GTK_WIDGET_VISIBLE (widget->parent) && GTK_WIDGET_VISIBLE (widget))
-	{
-	  if (GTK_WIDGET_MAPPED (widget->parent))
-	    gtk_widget_map (widget);
-
-	  gtk_widget_queue_resize (widget);
-	}
     }
 
 

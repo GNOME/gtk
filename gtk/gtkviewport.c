@@ -50,8 +50,6 @@ static void gtk_viewport_get_property             (GObject         *object,
 static void gtk_viewport_set_scroll_adjustments	  (GtkViewport	    *viewport,
 						   GtkAdjustment    *hadjustment,
 						   GtkAdjustment    *vadjustment);
-static void gtk_viewport_map                      (GtkWidget        *widget);
-static void gtk_viewport_unmap                    (GtkWidget        *widget);
 static void gtk_viewport_realize                  (GtkWidget        *widget);
 static void gtk_viewport_unrealize                (GtkWidget        *widget);
 static void gtk_viewport_paint                    (GtkWidget        *widget,
@@ -116,8 +114,6 @@ gtk_viewport_class_init (GtkViewportClass *class)
   gobject_class->get_property = gtk_viewport_get_property;
   object_class->destroy = gtk_viewport_destroy;
   
-  widget_class->map = gtk_viewport_map;
-  widget_class->unmap = gtk_viewport_unmap;
   widget_class->realize = gtk_viewport_realize;
   widget_class->unrealize = gtk_viewport_unrealize;
   widget_class->expose_event = gtk_viewport_expose;
@@ -410,34 +406,6 @@ gtk_viewport_get_shadow_type (GtkViewport *viewport)
   g_return_val_if_fail (GTK_IS_VIEWPORT (viewport), GTK_SHADOW_NONE);
 
   return viewport->shadow_type;
-}
-
-static void
-gtk_viewport_map (GtkWidget *widget)
-{
-  GtkBin *bin;
-
-  g_return_if_fail (GTK_IS_VIEWPORT (widget));
-
-  GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
-  bin = GTK_BIN (widget);
-
-  if (bin->child &&
-      GTK_WIDGET_VISIBLE (bin->child) &&
-      !GTK_WIDGET_MAPPED (bin->child))
-    gtk_widget_map (bin->child);
-
-  gdk_window_show (widget->window);
-}
-
-static void
-gtk_viewport_unmap (GtkWidget *widget)
-{
-  g_return_if_fail (GTK_IS_VIEWPORT (widget));
-
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
-  
-  gdk_window_hide (widget->window);
 }
 
 static void

@@ -81,8 +81,6 @@ static void gtk_toolbar_get_property             (GObject         *object,
 						  GValue          *value,
 						  GParamSpec      *pspec);
 static void gtk_toolbar_destroy                  (GtkObject       *object);
-static void gtk_toolbar_map                      (GtkWidget       *widget);
-static void gtk_toolbar_unmap                    (GtkWidget       *widget);
 static gint gtk_toolbar_expose                   (GtkWidget       *widget,
 						  GdkEventExpose  *event);
 static void gtk_toolbar_size_request             (GtkWidget       *widget,
@@ -188,8 +186,6 @@ gtk_toolbar_class_init (GtkToolbarClass *class)
   gobject_class->set_property = gtk_toolbar_set_property;
   gobject_class->get_property = gtk_toolbar_get_property;
 
-  widget_class->map = gtk_toolbar_map;
-  widget_class->unmap = gtk_toolbar_unmap;
   widget_class->expose_event = gtk_toolbar_expose;
   widget_class->size_request = gtk_toolbar_size_request;
   widget_class->size_allocate = gtk_toolbar_size_allocate;
@@ -470,50 +466,6 @@ gtk_toolbar_destroy (GtkObject *object)
   toolbar->children = NULL;
   
   GTK_OBJECT_CLASS (parent_class)->destroy (object);
-}
-
-static void
-gtk_toolbar_map (GtkWidget *widget)
-{
-  GtkToolbar *toolbar;
-  GList *children;
-  GtkToolbarChild *child;
-
-  g_return_if_fail (GTK_IS_TOOLBAR (widget));
-
-  toolbar = GTK_TOOLBAR (widget);
-  GTK_WIDGET_SET_FLAGS (toolbar, GTK_MAPPED);
-
-  for (children = toolbar->children; children; children = children->next)
-    {
-      child = children->data;
-
-      if ((child->type != GTK_TOOLBAR_CHILD_SPACE)
-	  && GTK_WIDGET_VISIBLE (child->widget) && !GTK_WIDGET_MAPPED (child->widget))
-	gtk_widget_map (child->widget);
-    }
-}
-
-static void
-gtk_toolbar_unmap (GtkWidget *widget)
-{
-  GtkToolbar *toolbar;
-  GList *children;
-  GtkToolbarChild *child;
-
-  g_return_if_fail (GTK_IS_TOOLBAR (widget));
-
-  toolbar = GTK_TOOLBAR (widget);
-  GTK_WIDGET_UNSET_FLAGS (toolbar, GTK_MAPPED);
-
-  for (children = toolbar->children; children; children = children->next)
-    {
-      child = children->data;
-
-      if ((child->type != GTK_TOOLBAR_CHILD_SPACE)
-	  && GTK_WIDGET_VISIBLE (child->widget) && GTK_WIDGET_MAPPED (child->widget))
-	gtk_widget_unmap (child->widget);
-    }
 }
 
 static void
@@ -1436,20 +1388,7 @@ gtk_toolbar_internal_insert_element (GtkToolbar          *toolbar,
   toolbar->num_children++;
 
   if (type != GTK_TOOLBAR_CHILD_SPACE)
-    {
-      gtk_widget_set_parent (child->widget, GTK_WIDGET (toolbar));
-
-      if (GTK_WIDGET_REALIZED (child->widget->parent))
-	gtk_widget_realize (child->widget);
-
-      if (GTK_WIDGET_VISIBLE (child->widget->parent) && GTK_WIDGET_VISIBLE (child->widget))
-	{
-	  if (GTK_WIDGET_MAPPED (child->widget->parent))
-	    gtk_widget_map (child->widget);
-
-	  gtk_widget_queue_resize (child->widget);
-	}
-    }
+    gtk_widget_set_parent (child->widget, GTK_WIDGET (toolbar));
   else
     gtk_widget_queue_resize (GTK_WIDGET (toolbar));
 

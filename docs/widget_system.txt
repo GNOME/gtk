@@ -88,6 +88,14 @@ GTK_VISIBLE:
 	Set by gtk_widget_hide.
 	Implies that a widget is not onscreen, therefore !GTK_MAPPED.
 
+GTK_CHILD_VISIBLE
+        Set by gtk_widget_set_child_visible, and if FALSE indicates that 
+        the widget should not be mapped even if the parent is mapped
+        and visible. Containers like GtkNotebook use this flag.
+        A private flag, not a public flag, so if you need to check
+        this flag, you should call gtk_widget_get_child_visible().
+        (Should be very rarely necesary.)
+
 GTK_SENSITIVE:
 	Set and unset by gtk_widget_set_sensitive.
 	The sensitivity of a widget determines whether it will receive
@@ -228,10 +236,12 @@ In the following
 5) if !GTK_WIDGET_TOPLEVEL (widget):
 
    GTK_WIDGET_MAPPED (widget) => GTK_WIDGET_VISIBLE (widget)
+                              => GTK_WIDGET_CHILD_VISIBLE (widget)
                               => GTK_WIDGET_REALIZED (widget)
 
    widget->parent && GTK_WIDGET_MAPPED (widget->parent) && 
-     GTK_WIDGET_VISIBLE (widget) => GTK_WIDGET_MAPPED (widget)
+     GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_CHILD_VISIBLE 
+       => GTK_WIDGET_MAPPED (widget)
 
 Note:, the definition
 
@@ -305,18 +315,9 @@ Adding to a container
 
 When a widget is added to a container, the container:
 
-  1) calls gtk_widget_set_parent (widget, container)
-  2) calls gtk_widget_set_parent_window (widget, window) if 
+  1) calls gtk_widget_set_parent_window (widget, window) if 
      the widget is being added to something other than container->window
-  3) if container is realized, and not widget, realizes widget
-  4) if container is mapped, and not widget and widget is GTK_VISIBLE,
-     maps widget
-  5) Queues a resize if the widget is mapped
-
-Note: It would be nice to remove 3) and 4) out of widget specific code
-  since they are of the invariant-enforcing nature, but it is
-  a bit hard, since they can't be done until after 2)
-
+  2) calls gtk_widget_set_parent (widget, container)
 
 Removing from a container
 -------------------------
@@ -369,7 +370,9 @@ The Map signal
   1) Set the MAPPED flag
   2) If the widget has any windows, gdk_window_show those windows
   3) call gtk_widget_map for all child widgets that are 
-     VISIBLE and !MAPPED.
+     VISIBLE, CHILD_VISIBLE and !MAPPED. (A widget will only
+     be !CHILD_VISIBLE if the container set it that way, so
+     most containers will not have to check this.)
   3) Do any other functions related to putting the widget onscreen.
      (for instance, showing extra popup windows...)
 

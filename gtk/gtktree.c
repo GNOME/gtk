@@ -228,17 +228,6 @@ gtk_tree_insert (GtkTree   *tree,
     tree->children = g_list_insert (tree->children, tree_item, position);
   
   gtk_widget_set_parent (tree_item, GTK_WIDGET (tree));
-  
-  if (GTK_WIDGET_REALIZED (tree_item->parent))
-    gtk_widget_realize (tree_item);
-
-  if (GTK_WIDGET_VISIBLE (tree_item->parent) && GTK_WIDGET_VISIBLE (tree_item))
-    {
-      if (GTK_WIDGET_MAPPED (tree_item->parent))
-	gtk_widget_map (tree_item);
-
-      gtk_widget_queue_resize (tree_item);
-    }
 }
 
 static void
@@ -255,17 +244,6 @@ gtk_tree_add (GtkContainer *container,
   tree->children = g_list_append (tree->children, child);
   
   gtk_widget_set_parent (child, GTK_WIDGET (container));
-  
-  if (GTK_WIDGET_REALIZED (child->parent))
-    gtk_widget_realize (child);
-
-  if (GTK_WIDGET_VISIBLE (child->parent) && GTK_WIDGET_VISIBLE (child))
-    {
-      if (GTK_WIDGET_MAPPED (child->parent))
-	gtk_widget_map (child);
-
-      gtk_widget_queue_resize (child);
-    }
   
   if (!tree->selection && (tree->selection_mode == GTK_SELECTION_BROWSE))
     gtk_tree_select_child (tree, child);

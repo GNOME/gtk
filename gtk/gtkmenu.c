@@ -452,9 +452,10 @@ gtk_menu_insert (GtkMenuShell     *menu_shell,
 		 GtkWidget        *child,
 		 gint              position)
 {
-  GTK_MENU_SHELL_CLASS (parent_class)->insert (menu_shell, child, position);
+  if (GTK_WIDGET_REALIZED (menu_shell))
+    gtk_widget_set_parent_window (child, GTK_MENU (menu_shell)->bin_window);
   
-  gtk_widget_set_parent_window (child, GTK_MENU (menu_shell)->bin_window);
+  GTK_MENU_SHELL_CLASS (parent_class)->insert (menu_shell, child, position);
 }
 
 static void

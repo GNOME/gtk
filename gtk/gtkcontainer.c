@@ -98,6 +98,9 @@ static void     gtk_container_show_all             (GtkWidget         *widget);
 static void     gtk_container_hide_all             (GtkWidget         *widget);
 static gint     gtk_container_expose               (GtkWidget         *widget,
 						    GdkEventExpose    *event);
+static void     gtk_container_map                  (GtkWidget         *widget);
+static void     gtk_container_unmap                (GtkWidget         *widget);
+
 static gchar* gtk_container_child_default_composite_name (GtkContainer *container,
 							  GtkWidget    *child);
 
@@ -186,6 +189,8 @@ gtk_container_class_init (GtkContainerClass *class)
   widget_class->show_all = gtk_container_show_all;
   widget_class->hide_all = gtk_container_hide_all;
   widget_class->expose_event = gtk_container_expose;
+  widget_class->map = gtk_container_map;
+  widget_class->unmap = gtk_container_unmap;
   widget_class->focus = gtk_container_focus;
   
   class->add = gtk_container_add_unimplemented;
@@ -2314,6 +2319,41 @@ gtk_container_expose (GtkWidget      *widget,
   return TRUE;
 }
 
+static void
+gtk_container_map_child (GtkWidget *child,
+			 gpointer   client_data)
+{
+  if (GTK_WIDGET_VISIBLE (child) &&
+      GTK_WIDGET_CHILD_VISIBLE (child) &&
+      !GTK_WIDGET_MAPPED (child))
+    gtk_widget_map (child);
+}
+
+static void
+gtk_container_map (GtkWidget *widget)
+{
+  GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
+
+  gtk_container_forall (GTK_CONTAINER (widget),
+			gtk_container_map_child,
+			NULL);
+
+  if (!GTK_WIDGET_NO_WINDOW (widget))
+    gdk_window_show (widget->window);
+}
+
+static void
+gtk_container_unmap (GtkWidget *widget)
+{
+  GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
+
+  if (!GTK_WIDGET_NO_WINDOW (widget))
+    gdk_window_hide (widget->window);
+  else
+    gtk_container_forall (GTK_CONTAINER (widget),
+			  (GtkCallback)gtk_widget_unmap,
+			  NULL);
+}
 
 /**
  * gtk_container_propagate_expose:

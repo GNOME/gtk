@@ -499,9 +499,9 @@ gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
   gtk_widget_pop_composite_child ();
 
   /* make sure we own a reference to it as well. */
-  gtk_widget_set_parent (tree_column->button, GTK_WIDGET (tree_view));
   if (tree_view->priv->header_window)
     gtk_widget_set_parent_window (tree_column->button, tree_view->priv->header_window);
+  gtk_widget_set_parent (tree_column->button, GTK_WIDGET (tree_view));
   
   gtk_signal_connect (GTK_OBJECT (tree_column->button), "realize",
 		      (GtkSignalFunc) gtk_tree_view_column_button_realize,

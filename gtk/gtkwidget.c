@@ -1290,7 +1290,7 @@ gtk_widget_init (GtkWidget *widget)
 {
   GdkColormap *colormap;
   
-  GTK_PRIVATE_FLAGS (widget) = 0;
+  GTK_PRIVATE_FLAGS (widget) = PRIVATE_GTK_CHILD_VISIBLE;
   widget->state = GTK_STATE_NORMAL;
   widget->saved_state = GTK_STATE_NORMAL;
   widget->name = NULL;
@@ -1606,6 +1606,12 @@ gtk_widget_unparent (GtkWidget *widget)
   if (GTK_WIDGET_REALIZED (widget) && !GTK_WIDGET_IN_REPARENT (widget))
     gtk_widget_unrealize (widget);
 
+  /* Removing a widget from a container restores the child visible
+   * flag to the default state, so it doesn't affect the child
+   * in the next parent.
+   */
+  GTK_PRIVATE_SET_FLAG (widget, GTK_CHILD_VISIBLE);
+    
   old_parent = widget->parent;
   widget->parent = NULL;
   gtk_widget_set_parent_window (widget, NULL);
@@ -1722,6 +1728,7 @@ gtk_widget_real_show (GtkWidget *widget)
 
       if (widget->parent &&
 	  GTK_WIDGET_MAPPED (widget->parent) &&
+	  GTK_WIDGET_CHILD_VISIBLE (widget) &&
 	  !GTK_WIDGET_MAPPED (widget))
 	gtk_widget_map (widget);
     }
@@ -1879,7 +1886,8 @@ void
 gtk_widget_map (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (GTK_WIDGET_VISIBLE (widget) == TRUE);
+  g_return_if_fail (GTK_WIDGET_VISIBLE (widget));
+  g_return_if_fail (GTK_WIDGET_CHILD_VISIBLE (widget));
   
   if (!GTK_WIDGET_MAPPED (widget))
     {
@@ -3425,6 +3433,21 @@ gtk_widget_set_parent (GtkWidget *widget,
   if (GTK_WIDGET_ANCHORED (widget->parent))
     _gtk_widget_propagate_hierarchy_changed (widget, NULL);
   g_object_notify (G_OBJECT (widget), "parent");
+
+  /* Enforce realized/mapped invariants
+   */
+  if (GTK_WIDGET_REALIZED (widget->parent))
+    gtk_widget_realize (widget);
+
+  if (GTK_WIDGET_VISIBLE (widget->parent) &&
+      GTK_WIDGET_VISIBLE (widget))
+    {
+      if (GTK_WIDGET_CHILD_VISIBLE (widget) &&
+	  GTK_WIDGET_MAPPED (widget->parent))
+	gtk_widget_map (widget);
+
+      gtk_widget_queue_resize (widget);
+    }
 }
 
 /**
@@ -4129,6 +4152,86 @@ gtk_widget_set_parent_window   (GtkWidget           *widget,
       if (parent_window)
 	gdk_window_ref (parent_window);
     }
+}
+
+
+/**
+ * gtk_widget_set_child_visible:
+ * @widget: a #GtkWidget
+ * @is_visible: if %TRUE, @widget should be mapped along with its parent.
+ *
+ * Sets whether @widget should be mapped along with its when its parent
+ * is mapped and @widget has been shown with gtk_widget_show(). 
+ *
+ * The child visibility can be set for widget before it is added to
+ * a container with gtk_widget_set_parent(), to avoid mapping
+ * children unnecessary before immediately unmapping them. However
+ * it will be reset to its default state of %TRUE when the widget
+ * is removed from a container.
+ * 
+ * Note that changing the child visibility of a widget does not
+ * queue a resize on the widget. Most of the time, the size of
+ * a widget is computed from all visible children, whether or
+ * not they are mapped. If this is not the case, the container
+ * can queue a resize itself.
+ *
+ * This function is only useful for container implementations and
+ * never should be called by an application.
+ **/
+void
+gtk_widget_set_child_visible (GtkWidget *widget,
+			      gboolean   is_visible)
+{
+  gboolean was_visible;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  was_visible = GTK_WIDGET_CHILD_VISIBLE (widget);
+  is_visible = is_visible != FALSE;
+
+  if (is_visible != was_visible)
+    {
+      if (is_visible)
+	{
+	  GTK_PRIVATE_SET_FLAG (widget, GTK_CHILD_VISIBLE);
+
+	  if (widget->parent &&
+	      GTK_WIDGET_VISIBLE (widget->parent) &&
+	      GTK_WIDGET_VISIBLE (widget))
+	    {
+	      if (GTK_WIDGET_MAPPED (widget->parent))
+		gtk_widget_map (widget);
+	    }
+	}
+      else
+	{
+	  GTK_PRIVATE_UNSET_FLAG (widget, GTK_CHILD_VISIBLE);
+	  
+	  if (GTK_WIDGET_MAPPED (widget))
+	    gtk_widget_unmap (widget);
+	}
+    }
+}
+
+/**
+ * gtk_widget_get_child_visible:
+ * @widget: a #GtkWidget
+ * 
+ * Gets the value set with gtk_widget_set_child_visible().
+ * If you feel a need to use this function, your code probably
+ * needs reorganization. 
+ *
+ * This function is only useful for container implementations and
+ * never should be called by an application.
+ *
+ * Return value: %TRUE if the widget is mapped with the parent.
+ **/
+gboolean
+gtk_widget_get_child_visible (GtkWidget *widget)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  
+  return GTK_WIDGET_CHILD_VISIBLE (widget);
 }
 
 /*************************************************************
@@ -5869,3 +5972,4 @@ gtk_widget_ref_accessible (AtkImplementor *implementor)
     g_object_ref (G_OBJECT (accessible));
   return accessible;
 }
+

@@ -54,8 +54,6 @@ enum
 static void gtk_table_class_init    (GtkTableClass  *klass);
 static void gtk_table_init	    (GtkTable	    *table);
 static void gtk_table_finalize	    (GObject	    *object);
-static void gtk_table_map	    (GtkWidget	    *widget);
-static void gtk_table_unmap	    (GtkWidget	    *widget);
 static void gtk_table_size_request  (GtkWidget	    *widget,
 				     GtkRequisition *requisition);
 static void gtk_table_size_allocate (GtkWidget	    *widget,
@@ -141,8 +139,6 @@ gtk_table_class_init (GtkTableClass *class)
   gobject_class->get_property = gtk_table_get_property;
   gobject_class->set_property = gtk_table_set_property;
   
-  widget_class->map = gtk_table_map;
-  widget_class->unmap = gtk_table_unmap;
   widget_class->size_request = gtk_table_size_request;
   widget_class->size_allocate = gtk_table_size_allocate;
   
@@ -610,17 +606,6 @@ gtk_table_attach (GtkTable	  *table,
   table->children = g_list_prepend (table->children, table_child);
   
   gtk_widget_set_parent (child, GTK_WIDGET (table));
-  
-  if (GTK_WIDGET_REALIZED (child->parent))
-    gtk_widget_realize (child);
-
-  if (GTK_WIDGET_VISIBLE (child->parent) && GTK_WIDGET_VISIBLE (child))
-    {
-      if (GTK_WIDGET_MAPPED (child->parent))
-	gtk_widget_map (child);
-
-      gtk_widget_queue_resize (child);
-    }
 }
 
 void
@@ -831,54 +816,6 @@ gtk_table_finalize (GObject *object)
   g_free (table->cols);
   
   G_OBJECT_CLASS (parent_class)->finalize (object);
-}
-
-static void
-gtk_table_map (GtkWidget *widget)
-{
-  GtkTable *table;
-  GtkTableChild *child;
-  GList *children;
-  
-  g_return_if_fail (GTK_IS_TABLE (widget));
-  
-  table = GTK_TABLE (widget);
-  GTK_WIDGET_SET_FLAGS (table, GTK_MAPPED);
-  
-  children = table->children;
-  while (children)
-    {
-      child = children->data;
-      children = children->next;
-      
-      if (GTK_WIDGET_VISIBLE (child->widget) &&
-	  !GTK_WIDGET_MAPPED (child->widget))
-	gtk_widget_map (child->widget);
-    }
-}
-
-static void
-gtk_table_unmap (GtkWidget *widget)
-{
-  GtkTable *table;
-  GtkTableChild *child;
-  GList *children;
-  
-  g_return_if_fail (GTK_IS_TABLE (widget));
-  
-  table = GTK_TABLE (widget);
-  GTK_WIDGET_UNSET_FLAGS (table, GTK_MAPPED);
-  
-  children = table->children;
-  while (children)
-    {
-      child = children->data;
-      children = children->next;
-      
-      if (GTK_WIDGET_VISIBLE (child->widget) &&
-	  GTK_WIDGET_MAPPED (child->widget))
-	gtk_widget_unmap (child->widget);
-    }
 }
 
 static void

@@ -43,8 +43,6 @@ static void gtk_image_menu_item_remove               (GtkContainer          *con
 static void gtk_image_menu_item_toggle_size_request  (GtkMenuItem           *menu_item,
 						      gint                  *requisition);
 
-static void gtk_image_menu_item_map        (GtkWidget      *widget);
-static void gtk_image_menu_item_unmap      (GtkWidget      *widget);
 static void gtk_image_menu_item_forall     (GtkContainer   *container,
                                             gboolean	    include_internals,
                                             GtkCallback     callback,
@@ -111,8 +109,6 @@ gtk_image_menu_item_class_init (GtkImageMenuItemClass *klass)
   
   widget_class->size_request = gtk_image_menu_item_size_request;
   widget_class->size_allocate = gtk_image_menu_item_size_allocate;
-  widget_class->map = gtk_image_menu_item_map;
-  widget_class->unmap = gtk_image_menu_item_unmap;
 
   container_class->forall = gtk_image_menu_item_forall;
   container_class->remove = gtk_image_menu_item_remove;
@@ -268,44 +264,6 @@ gtk_image_menu_item_size_allocate (GtkWidget     *widget,
 }
 
 static void
-gtk_image_menu_item_map (GtkWidget *widget)
-{
-  GtkImageMenuItem *image_menu_item;
-
-  g_return_if_fail (GTK_IS_IMAGE_MENU_ITEM (widget));
-
-  image_menu_item = GTK_IMAGE_MENU_ITEM (widget);
-  
-  (* GTK_WIDGET_CLASS (parent_class)->map) (widget);
-
-  if (image_menu_item->image &&
-      GTK_WIDGET_VISIBLE (image_menu_item->image) &&
-      !GTK_WIDGET_MAPPED (image_menu_item->image))
-    gtk_widget_map (image_menu_item->image);
-
-  if (!GTK_WIDGET_NO_WINDOW (widget))
-    gdk_window_show (widget->window);  
-}
-
-static void
-gtk_image_menu_item_unmap (GtkWidget *widget)
-{
-  GtkImageMenuItem *image_menu_item;
-
-  g_return_if_fail (GTK_IS_IMAGE_MENU_ITEM (widget));
-
-  image_menu_item = GTK_IMAGE_MENU_ITEM (widget);
-  
-  (* GTK_WIDGET_CLASS (parent_class)->unmap) (widget);
-  
-  if (!GTK_WIDGET_NO_WINDOW (widget))
-    gdk_window_hide (widget->window);
-  
-  if (image_menu_item->image && GTK_WIDGET_MAPPED (image_menu_item->image))
-    gtk_widget_unmap (image_menu_item->image);  
-}
-
-static void
 gtk_image_menu_item_forall (GtkContainer   *container,
                             gboolean	    include_internals,
                             GtkCallback     callback,
@@ -442,17 +400,6 @@ gtk_image_menu_item_set_image (GtkImageMenuItem *image_menu_item,
   gtk_widget_set_parent (image, GTK_WIDGET (image_menu_item));
 
   g_object_notify (G_OBJECT (image_menu_item), "image");
-  
-  if (GTK_WIDGET_REALIZED (image->parent))
-    gtk_widget_realize (image);
-  
-  if (GTK_WIDGET_VISIBLE (image->parent) && GTK_WIDGET_VISIBLE (image))
-    {
-      if (GTK_WIDGET_MAPPED (image->parent))
-	gtk_widget_map (image);
-
-      gtk_widget_queue_resize (image);
-    }
 }
 
 GtkWidget*

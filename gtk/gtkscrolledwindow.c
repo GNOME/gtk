@@ -88,8 +88,6 @@ static void gtk_scrolled_window_get_arg		   (GtkObject              *object,
 						    guint                   arg_id);
 static void gtk_scrolled_window_destroy            (GtkObject              *object);
 static void gtk_scrolled_window_finalize           (GObject                *object);
-static void gtk_scrolled_window_map                (GtkWidget              *widget);
-static void gtk_scrolled_window_unmap              (GtkWidget              *widget);
 static gint gtk_scrolled_window_expose             (GtkWidget              *widget,
 						    GdkEventExpose         *event);
 static void gtk_scrolled_window_size_request       (GtkWidget              *widget,
@@ -158,8 +156,6 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   object_class->get_arg = gtk_scrolled_window_get_arg;
   object_class->destroy = gtk_scrolled_window_destroy;
 
-  widget_class->map = gtk_scrolled_window_map;
-  widget_class->unmap = gtk_scrolled_window_unmap;
   widget_class->expose_event = gtk_scrolled_window_expose;
   widget_class->size_request = gtk_scrolled_window_size_request;
   widget_class->size_allocate = gtk_scrolled_window_size_allocate;
@@ -573,46 +569,6 @@ gtk_scrolled_window_finalize (GObject *object)
   gtk_widget_unref (scrolled_window->vscrollbar);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
-}
-
-static void
-gtk_scrolled_window_map (GtkWidget *widget)
-{
-  GtkScrolledWindow *scrolled_window;
-
-  g_return_if_fail (GTK_IS_SCROLLED_WINDOW (widget));
-
-  scrolled_window = GTK_SCROLLED_WINDOW (widget);
-
-  /* chain parent class handler to map self and child */
-  GTK_WIDGET_CLASS (parent_class)->map (widget);
-  
-  if (GTK_WIDGET_VISIBLE (scrolled_window->hscrollbar) &&
-      !GTK_WIDGET_MAPPED (scrolled_window->hscrollbar))
-    gtk_widget_map (scrolled_window->hscrollbar);
-  
-  if (GTK_WIDGET_VISIBLE (scrolled_window->vscrollbar) &&
-      !GTK_WIDGET_MAPPED (scrolled_window->vscrollbar))
-    gtk_widget_map (scrolled_window->vscrollbar);
-}
-
-static void
-gtk_scrolled_window_unmap (GtkWidget *widget)
-{
-  GtkScrolledWindow *scrolled_window;
-
-  g_return_if_fail (GTK_IS_SCROLLED_WINDOW (widget));
-
-  scrolled_window = GTK_SCROLLED_WINDOW (widget);
-
-  /* chain parent class handler to unmap self and child */
-  GTK_WIDGET_CLASS (parent_class)->unmap (widget);
-  
-  if (GTK_WIDGET_MAPPED (scrolled_window->hscrollbar))
-    gtk_widget_unmap (scrolled_window->hscrollbar);
-  
-  if (GTK_WIDGET_MAPPED (scrolled_window->vscrollbar))
-    gtk_widget_unmap (scrolled_window->vscrollbar);
 }
 
 static void
@@ -1063,17 +1019,6 @@ gtk_scrolled_window_add (GtkContainer *container,
 					  gtk_range_get_adjustment (GTK_RANGE (scrolled_window->vscrollbar))))
     g_warning ("gtk_scrolled_window_add(): cannot add non scrollable widget "
 	       "use gtk_scrolled_window_add_with_viewport() instead");
-
-  if (GTK_WIDGET_REALIZED (child->parent))
-    gtk_widget_realize (child);
-
-  if (GTK_WIDGET_VISIBLE (child->parent) && GTK_WIDGET_VISIBLE (child))
-    {
-      if (GTK_WIDGET_MAPPED (child->parent))
-	gtk_widget_map (child);
-
-      gtk_widget_queue_resize (child);
-    }
 }
 
 static void
