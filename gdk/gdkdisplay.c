@@ -145,7 +145,7 @@ gdk_display_close (GdkDisplay *display)
       g_signal_emit (display, signals[CLOSED], 0, FALSE);
       g_object_run_dispose (G_OBJECT (display));
       
-      g_object_unref (G_OBJECT (display));
+      g_object_unref (display);
     }
 }
 

@@ -309,7 +309,7 @@ gdk_font_from_description_for_display (GdkDisplay           *display,
       g_free (subfont_charsets);
 
       g_free (charset);
-      g_object_unref (G_OBJECT (font));
+      g_object_unref (font);
     }
 
   return result;

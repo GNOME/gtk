@@ -54,7 +54,7 @@ static void
 gdk_pango_context_destroy (GdkPangoContextInfo *info)
 {
   if (info->colormap)
-    gdk_colormap_unref (info->colormap);
+    g_object_unref (info->colormap);
   g_free (info);
 }
 
@@ -125,7 +125,7 @@ static void
 gdk_pango_free_gc (PangoContext *context,
 		   GdkGC        *gc)
 {
-  gdk_gc_unref (gc);
+  g_object_unref (gc);
 }
 
 /**
@@ -154,12 +154,12 @@ gdk_pango_context_set_colormap (PangoContext *context,
   if (info->colormap != colormap)
     {
       if (info->colormap)
-	gdk_colormap_unref (info->colormap);
+	g_object_unref (info->colormap);
 
       info->colormap = colormap;
       
       if (info->colormap)
-   	gdk_colormap_ref (info->colormap);
+   	g_object_ref (info->colormap);
     }
 }
 
@@ -570,7 +570,7 @@ gdk_pango_attr_stipple_destroy (PangoAttribute *attr)
   GdkPangoAttrStipple *st = (GdkPangoAttrStipple*) attr;
 
   if (st->stipple)
-    g_object_unref (G_OBJECT (st->stipple));
+    g_object_unref (st->stipple);
   
   g_free (attr);
 }

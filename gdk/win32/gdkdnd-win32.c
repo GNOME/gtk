@@ -193,7 +193,7 @@ gdk_drag_context_ref (GdkDragContext *context)
 
   GDK_NOTE (DND, g_print ("gdk_drag_context_ref: %p %d\n", context, G_OBJECT(context)->ref_count));
 
-  g_object_ref (G_OBJECT (context));
+  g_object_ref (context);
 }
 
 void
@@ -202,7 +202,7 @@ gdk_drag_context_unref (GdkDragContext *context)
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
 
   GDK_NOTE (DND, g_print ("gdk_drag_context_unref: %p %d\n", context, G_OBJECT(context)->ref_count));
-  g_object_unref (G_OBJECT (context));
+  g_object_unref (context);
 }
 
 static GdkDragContext *

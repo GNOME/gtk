@@ -537,15 +537,15 @@ gdk_display_x11_finalize (GObject *object)
   /* input GdkDevice list */
   /* FIXME need to write finalize fct */
   for (tmp = display_x11->input_devices; tmp; tmp = tmp->next)
-    g_object_unref (G_OBJECT (tmp->data));
+    g_object_unref (tmp->data);
   g_list_free (display_x11->input_devices);
   /* input GdkWindow list */
   for (tmp = display_x11->input_windows; tmp; tmp = tmp->next)
-    g_object_unref (G_OBJECT (tmp->data));
+    g_object_unref (tmp->data);
   g_list_free (display_x11->input_windows);
   /* Free all GdkScreens */
   for (i = 0; i < ScreenCount (display_x11->xdisplay); i++)
-    g_object_unref (G_OBJECT (display_x11->screens[i]));
+    g_object_unref (display_x11->screens[i]);
   g_free (display_x11->screens);
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }

@@ -197,11 +197,11 @@ gdk_drag_context_finalize (GObject *object)
           !context->is_source)
         xdnd_manage_source_filter (context, context->source_window, FALSE);
       
-      gdk_window_unref (context->source_window);
+      g_object_unref (context->source_window);
     }
   
   if (context->dest_window)
-    gdk_window_unref (context->dest_window);
+    g_object_unref (context->dest_window);
   
   if (private->window_cache)
     gdk_window_cache_destroy (private->window_cache);
@@ -226,7 +226,7 @@ gdk_drag_context_ref (GdkDragContext *context)
 {
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
 
-  g_object_ref (G_OBJECT (context));
+  g_object_ref (context);
 }
 
 void            
@@ -234,7 +234,7 @@ gdk_drag_context_unref (GdkDragContext *context)
 {
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
 
-  g_object_unref (G_OBJECT (context));
+  g_object_unref (context);
 }
 
 static GdkDragContext *
@@ -1488,7 +1488,7 @@ motif_drag_context_new (GdkWindow *dest_window,
     {
       if (timestamp >= display_x11->current_dest_drag->start_time)
 	{
-	  gdk_drag_context_unref (display_x11->current_dest_drag);
+	  g_object_unref (display_x11->current_dest_drag);
 	  display_x11->current_dest_drag = NULL;
 	}
       else
@@ -1503,19 +1503,19 @@ motif_drag_context_new (GdkWindow *dest_window,
 
   new_context->source_window = gdk_window_lookup_for_display (display, source_window);
   if (new_context->source_window)
-    gdk_window_ref (new_context->source_window);
+    g_object_ref (new_context->source_window);
   else
     {
       new_context->source_window = gdk_window_foreign_new_for_display (display, source_window);
       if (!new_context->source_window)
 	{
-	  gdk_drag_context_unref (new_context);
+	  g_object_unref (new_context);
 	  return NULL;
 	}
     }
 
   new_context->dest_window = dest_window;
-  gdk_window_ref (dest_window);
+  g_object_ref (dest_window);
   new_context->start_time = timestamp;
 
   if (!motif_read_initiator_info (GDK_WINDOW_DISPLAY (dest_window),
@@ -1524,7 +1524,7 @@ motif_drag_context_new (GdkWindow *dest_window,
 				  &new_context->targets,
 				  &private->motif_selection))
     {
-      gdk_drag_context_unref (new_context);
+      g_object_unref (new_context);
       return NULL;
     }
 
@@ -1557,7 +1557,7 @@ motif_top_level_enter (GdkEvent *event,
 
   event->dnd.type = GDK_DRAG_ENTER;
   event->dnd.context = new_context;
-  gdk_drag_context_ref (new_context);
+  g_object_ref (new_context);
 
   display_x11->current_dest_drag = new_context;
 
@@ -1611,7 +1611,7 @@ motif_motion (GdkEvent *event,
 
       event->dnd.type = GDK_DRAG_MOTION;
       event->dnd.context = display_x11->current_dest_drag;
-      gdk_drag_context_ref (display_x11->current_dest_drag);
+      g_object_ref (display_x11->current_dest_drag);
 
       event->dnd.time = timestamp;
 
@@ -1648,7 +1648,7 @@ motif_operation_changed (GdkEvent *event,
       event->dnd.type = GDK_DRAG_MOTION;
       event->dnd.send_event = FALSE;
       event->dnd.context = display_x11->current_dest_drag;
-      gdk_drag_context_ref (display_x11->current_dest_drag);
+      g_object_ref (display_x11->current_dest_drag);
 
       event->dnd.time = timestamp;
       private = PRIVATE_DATA (display_x11->current_dest_drag);
@@ -1693,7 +1693,7 @@ motif_drop_start (GdkEvent *event,
   event->dnd.x_root = x_root;
   event->dnd.y_root = y_root;
 
-  gdk_drag_context_ref (new_context);
+  g_object_ref (new_context);
   display_x11->current_dest_drag = new_context;
 
   return GDK_FILTER_TRANSLATE;
@@ -1726,7 +1726,7 @@ motif_drag_status (GdkEvent *event,
       event->dnd.type = GDK_DRAG_STATUS;
       event->dnd.send_event = FALSE;
       event->dnd.context = context;
-      gdk_drag_context_ref (context);
+      g_object_ref (context);
 
       event->dnd.time = timestamp;
 
@@ -1935,7 +1935,7 @@ xdnd_status_filter (GdkXEvent *xev,
       event->dnd.send_event = FALSE;
       event->dnd.type = GDK_DRAG_STATUS;
       event->dnd.context = context;
-      gdk_drag_context_ref (context);
+      g_object_ref (context);
 
       event->dnd.time = GDK_CURRENT_TIME; /* FIXME? */
       if (!(action != 0) != !(flags & 1))
@@ -1977,7 +1977,7 @@ xdnd_finished_filter (GdkXEvent *xev,
     {
       event->dnd.type = GDK_DROP_FINISHED;
       event->dnd.context = context;
-      gdk_drag_context_ref (context);
+      g_object_ref (context);
 
       return GDK_FILTER_TRANSLATE;
     }
@@ -2136,7 +2136,7 @@ xdnd_send_enter (GdkDragContext *context)
       GDK_NOTE (DND, 
 		g_message ("Send event to %lx failed",
 			   GDK_DRAWABLE_XID (context->dest_window)));
-      gdk_window_unref (context->dest_window);
+      g_object_unref (context->dest_window);
       context->dest_window = NULL;
     }
 }
@@ -2168,7 +2168,7 @@ xdnd_send_leave (GdkDragContext *context)
       GDK_NOTE (DND, 
 		g_message ("Send event to %lx failed",
 			   GDK_DRAWABLE_XID (context->dest_window)));
-      gdk_window_unref (context->dest_window);
+      g_object_unref (context->dest_window);
       context->dest_window = NULL;
     }
 }
@@ -2199,7 +2199,7 @@ xdnd_send_drop (GdkDragContext *context, guint32 time)
       GDK_NOTE (DND, 
 		g_message ("Send event to %lx failed",
 			   GDK_DRAWABLE_XID (context->dest_window)));
-      gdk_window_unref (context->dest_window);
+      g_object_unref (context->dest_window);
       context->dest_window = NULL;
     }
 }
@@ -2234,7 +2234,7 @@ xdnd_send_motion (GdkDragContext *context,
       GDK_NOTE (DND, 
 		g_message ("Send event to %lx failed",
 			   GDK_DRAWABLE_XID (context->dest_window)));
-      gdk_window_unref (context->dest_window);
+      g_object_unref (context->dest_window);
       context->dest_window = NULL;
     }
   private->drag_status = GDK_DRAG_STATUS_MOTION_WAIT;
@@ -2462,7 +2462,7 @@ xdnd_enter_filter (GdkXEvent *xev,
   
   if (display_x11->current_dest_drag != NULL)
     {
-      gdk_drag_context_unref (display_x11->current_dest_drag);
+      g_object_unref (display_x11->current_dest_drag);
       display_x11->current_dest_drag = NULL;
     }
 
@@ -2472,18 +2472,18 @@ xdnd_enter_filter (GdkXEvent *xev,
 
   new_context->source_window = gdk_window_lookup_for_display (display, source_window);
   if (new_context->source_window)
-    gdk_window_ref (new_context->source_window);
+    g_object_ref (new_context->source_window);
   else
     {
       new_context->source_window = gdk_window_foreign_new_for_display (display, source_window);
       if (!new_context->source_window)
 	{
-	  gdk_drag_context_unref (new_context);
+	  g_object_unref (new_context);
 	  return GDK_FILTER_REMOVE;
 	}
     }
   new_context->dest_window = event->any.window;
-  gdk_window_ref (new_context->dest_window);
+  g_object_ref (new_context->dest_window);
 
   new_context->targets = NULL;
   if (get_types)
@@ -2498,7 +2498,7 @@ xdnd_enter_filter (GdkXEvent *xev,
 
       if (gdk_error_trap_pop () || (format != 32) || (type != XA_ATOM))
 	{
-	  gdk_drag_context_unref (new_context);
+	  g_object_unref (new_context);
 	  return GDK_FILTER_REMOVE;
 	}
 
@@ -2530,7 +2530,7 @@ xdnd_enter_filter (GdkXEvent *xev,
 
   event->dnd.type = GDK_DRAG_ENTER;
   event->dnd.context = new_context;
-  gdk_drag_context_ref (new_context);
+  g_object_ref (new_context);
 
   display_x11->current_dest_drag = new_context;
 
@@ -2606,7 +2606,7 @@ xdnd_position_filter (GdkXEvent *xev,
     {
       event->dnd.type = GDK_DRAG_MOTION;
       event->dnd.context = display_x11->current_dest_drag;
-      gdk_drag_context_ref (display_x11->current_dest_drag);
+      g_object_ref (display_x11->current_dest_drag);
 
       event->dnd.time = time;
 
@@ -2657,7 +2657,7 @@ xdnd_drop_filter (GdkXEvent *xev,
       event->dnd.type = GDK_DROP_START;
 
       event->dnd.context = display_x11->current_dest_drag;
-      gdk_drag_context_ref (display_x11->current_dest_drag);
+      g_object_ref (display_x11->current_dest_drag);
 
       event->dnd.time = time;
       event->dnd.x_root = private->last_x;
@@ -2728,7 +2728,7 @@ gdk_drag_do_leave (GdkDragContext *context, guint32 time)
 	  break;
 	}
 
-      gdk_window_unref (context->dest_window);
+      g_object_unref (context->dest_window);
       context->dest_window = NULL;
     }
 }
@@ -2744,7 +2744,7 @@ gdk_drag_begin (GdkWindow     *window,
   new_context = gdk_drag_context_new ();
   new_context->is_source = TRUE;
   new_context->source_window = window;
-  gdk_window_ref (window);
+  g_object_ref (window);
 
   new_context->targets = g_list_copy (targets);
   new_context->actions = 0;
@@ -2888,7 +2888,7 @@ gdk_drag_find_window (GdkDragContext  *context,
 	{
 	  *dest_window = gdk_window_lookup_for_display (display, recipient);
 	  if (*dest_window)
-	    gdk_window_ref (*dest_window);
+	    g_object_ref (*dest_window);
 	  else
 	    *dest_window = gdk_window_foreign_new_for_display (display, recipient);
 	}
@@ -2899,7 +2899,7 @@ gdk_drag_find_window (GdkDragContext  *context,
     {
       *dest_window = context->dest_window;
       if (*dest_window)
-	gdk_window_ref (*dest_window);
+	g_object_ref (*dest_window);
       *protocol = context->protocol;
     }
 }
@@ -2943,7 +2943,7 @@ gdk_drag_motion (GdkDragContext *context,
 	{
 	  context->dest_window = dest_window;
 	  private->drop_xid = private->dest_xid;
-	  gdk_window_ref (context->dest_window);
+	  g_object_ref (context->dest_window);
 	  context->protocol = protocol;
 
 	  switch (protocol)
@@ -3272,10 +3272,10 @@ gdk_window_register_dnd (GdkWindow      *window)
 
   g_return_if_fail (window != NULL);
 
-  if (GPOINTER_TO_INT (gdk_drawable_get_data (window, "gdk-dnd-registered")))
+  if (GPOINTER_TO_INT (g_object_get_data (G_OBJECT (window), "gdk-dnd-registered")))
     return;
   else
-    gdk_drawable_set_data (window, "gdk-dnd-registered", GINT_TO_POINTER(TRUE), NULL);
+    g_object_set_data (G_OBJECT (window), "gdk-dnd-registered", GINT_TO_POINTER (TRUE));
   
   /* Set Motif drag receiver information property */
 

@@ -575,7 +575,7 @@ gdk_event_translate (GdkDisplay *display,
             }
         }
 
-      g_object_ref (G_OBJECT (window));
+      g_object_ref (window);
     }
 
   event->any.window = window;
@@ -1649,11 +1649,11 @@ gdk_event_translate (GdkDisplay *display,
   if (return_val)
     {
       if (event->any.window)
-	gdk_window_ref (event->any.window);
+	g_object_ref (event->any.window);
       if (((event->any.type == GDK_ENTER_NOTIFY) ||
 	   (event->any.type == GDK_LEAVE_NOTIFY)) &&
 	  (event->crossing.subwindow != NULL))
-	gdk_window_ref (event->crossing.subwindow);
+	g_object_ref (event->crossing.subwindow);
     }
   else
     {
@@ -1663,7 +1663,7 @@ gdk_event_translate (GdkDisplay *display,
     }
   
   if (window)
-    gdk_window_unref (window);
+    g_object_unref (window);
   
   return return_val;
 }

@@ -1,3 +1,19 @@
+Wed Sep 25 00:16:53 2002  Manish Singh  <yosh@gimp.org>
+
+	* gdk/Makefile.am gdk/x11/Makefile.am: add -DG_DISABLE_DEPRECATED
+	and -DGDK_PIXBUF_DISABLE_DEPRECATED to compile flags
+
+	* gdk/gdkcolor.c gdk/gdkdisplay.c gdk/gdkdraw.c gdk/gdkevents.c
+	gdk/gdkgc.c gdk/gdkimage.c gdk/gdkpango.c gdk/gdkpixbuf-render.c
+	gdk/gdkpixmap.c gdk/gdkrgb.c gdk/gdkwindow.c gdk/linux-fb/gdkdnd-fb.c 
+	gdk/linux-fb/gdkfont-fb.c gdk/win32/gdkdnd-win32.c
+	gdk/win32/gdkfont-win32.c gdk/x11/gdkdisplay-x11.c gdk/x11/gdkdnd-x11.c
+	gdk/x11/gdkdrawable-x11.c gdk/x11/gdkevents-x11.c gdk/x11/gdkfont-x11.c
+	gdk/x11/gdkgc-x11.c gdk/x11/gdkgeometry-x11.c gdk/x11/gdkim-x11.c
+	gdk/x11/gdkinput-x11.c gdk/x11/gdkkeys-x11.c gdk/x11/gdkscreen-x11.c
+	gdk/x11/gdkwindow-x11.c: Deprecation cleanup, mostly changing
+	gdk_foo_{ref,unref} to g_object equivalents.
+
 Tue Sep 24 23:54:20 2002  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkfilesel.c: check if last_selected is valid before doing

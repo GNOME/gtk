@@ -118,8 +118,7 @@ gdk_input_device_new (GdkDisplay  *display,
      could invite a very, very, long list... Lowercase name
      for comparison purposes */
 
-  tmp_name = g_strdup (gdkdev->info.name);
-  g_strdown (tmp_name);
+  tmp_name = g_ascii_strdown (gdkdev->info.name, -1);
   
   if (!strcmp (tmp_name, "pointer"))
     gdkdev->info.source = GDK_SOURCE_MOUSE;

@@ -351,10 +351,10 @@ gdk_x11_set_colormap (GdkDrawable *drawable,
     return;
   
   if (impl->colormap)
-    gdk_colormap_unref (impl->colormap);
+    g_object_unref (impl->colormap);
   impl->colormap = colormap;
   if (impl->colormap)
-    gdk_colormap_ref (impl->colormap);
+    g_object_ref (impl->colormap);
 }
 
 /* Drawing

@@ -716,10 +716,10 @@ gdk_gc_copy (GdkGC *dst_gc, GdkGC *src_gc)
   dst_gc->ts_y_origin = src_gc->ts_y_origin;
 
   if (src_gc->colormap)
-    g_object_ref (G_OBJECT (src_gc->colormap));
+    g_object_ref (src_gc->colormap);
 
   if (dst_gc->colormap)
-    g_object_unref (G_OBJECT (dst_gc->colormap));
+    g_object_unref (dst_gc->colormap);
 
   dst_gc->colormap = src_gc->colormap;
 

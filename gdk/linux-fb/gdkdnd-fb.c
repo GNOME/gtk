@@ -143,13 +143,13 @@ gdk_drag_context_new        (void)
 void            
 gdk_drag_context_ref (GdkDragContext *context)
 {
-  g_object_ref (G_OBJECT (context));
+  g_object_ref (context);
 }
 
 void            
 gdk_drag_context_unref (GdkDragContext *context)
 {
-  g_object_unref (G_OBJECT (context));
+  g_object_unref (context);
 }
 
 static GdkDragContext *

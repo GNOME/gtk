@@ -511,14 +511,14 @@ gdk_window_new (GdkWindow     *parent,
       if (attributes_mask & GDK_WA_COLORMAP)
         {
           draw_impl->colormap = attributes->colormap;
-          gdk_colormap_ref (attributes->colormap);
+          g_object_ref (attributes->colormap);
         }
       else
 	{
 	  if ((((GdkVisualPrivate *)gdk_screen_get_system_visual (screen))->xvisual) ==  xvisual)
             {
 	      draw_impl->colormap = gdk_screen_get_system_colormap (screen);
-              gdk_colormap_ref (draw_impl->colormap);
+              g_object_ref (draw_impl->colormap);
             }
 	  else
             {
@@ -559,7 +559,7 @@ gdk_window_new (GdkWindow     *parent,
       class = InputOnly;
       private->input_only = TRUE;
       draw_impl->colormap = gdk_screen_get_system_colormap (screen);
-      gdk_colormap_ref (draw_impl->colormap);
+      g_object_ref (draw_impl->colormap);
     }
 
   xid = draw_impl->xid = XCreateWindow (xdisplay, xparent,
@@ -568,7 +568,7 @@ gdk_window_new (GdkWindow     *parent,
 					0, depth, class, xvisual,
 					xattributes_mask, &xattributes);
 
-  gdk_drawable_ref (window);
+  g_object_ref (window);
   _gdk_xid_table_insert (screen_x11->display, &draw_impl->xid, window);
   
   gdk_window_set_cursor (window, ((attributes_mask & GDK_WA_CURSOR) ?
@@ -589,7 +589,7 @@ gdk_window_new (GdkWindow     *parent,
     case GDK_WINDOW_CHILD:
       if ((attributes->wclass == GDK_INPUT_OUTPUT) &&
 	  (draw_impl->colormap != gdk_screen_get_system_colormap (screen)) &&
-	  (draw_impl->colormap != gdk_window_get_colormap (gdk_window_get_toplevel (window))))
+	  (draw_impl->colormap != gdk_drawable_get_colormap (gdk_window_get_toplevel (window))))
 	{
 	  GDK_NOTE (MISC, g_message ("adding colormap window\n"));
 	  gdk_window_add_colormap_windows (window);
@@ -767,7 +767,7 @@ gdk_window_foreign_new_for_display (GdkDisplay     *display,
   
   _gdk_window_init_position (GDK_WINDOW (private));
 
-  gdk_drawable_ref (window);
+  g_object_ref (window);
   _gdk_xid_table_insert (display, &GDK_WINDOW_XID (window), window);
   return window;
 }
@@ -893,7 +893,7 @@ gdk_window_destroy_notify (GdkWindow *window)
 
   _gdk_xgrab_check_destroy (window);
   
-  gdk_drawable_unref (window);
+  g_object_unref (window);
 }
 
 static void
@@ -2080,7 +2080,7 @@ gdk_window_set_background (GdkWindow *window,
   if (private->bg_pixmap &&
       private->bg_pixmap != GDK_PARENT_RELATIVE_BG &&
       private->bg_pixmap != GDK_NO_BG)
-    gdk_pixmap_unref (private->bg_pixmap);
+    g_object_unref (private->bg_pixmap);
   
   private->bg_pixmap = NULL;
 }
@@ -2125,7 +2125,7 @@ gdk_window_set_back_pixmap (GdkWindow *window,
   if (private->bg_pixmap &&
       private->bg_pixmap != GDK_PARENT_RELATIVE_BG &&
       private->bg_pixmap != GDK_NO_BG)
-    gdk_pixmap_unref (private->bg_pixmap);
+    g_object_unref (private->bg_pixmap);
 
   if (parent_relative)
     {
@@ -2136,7 +2136,7 @@ gdk_window_set_back_pixmap (GdkWindow *window,
     {
       if (pixmap)
 	{
-	  gdk_pixmap_ref (pixmap);
+	  g_object_ref (pixmap);
 	  private->bg_pixmap = pixmap;
 	  xpixmap = GDK_PIXMAP_XID (pixmap);
 	}
@@ -4492,11 +4492,11 @@ emulate_resize_drag (GdkWindow     *window,
   mv_resize->resize_edge = edge;
   mv_resize->moveresize_x = root_x;
   mv_resize->moveresize_y = root_y;
-  mv_resize->moveresize_window = GDK_WINDOW (g_object_ref (G_OBJECT (window)));
+  mv_resize->moveresize_window = g_object_ref (window);
 
-  gdk_window_get_size (window,
-		       &mv_resize->moveresize_orig_width,
-		       &mv_resize->moveresize_orig_height);
+  gdk_drawable_get_size (window,
+			 &mv_resize->moveresize_orig_width,
+			 &mv_resize->moveresize_orig_height);
 
   mv_resize->moveresize_geom_mask = 0;
   gdk_window_get_geometry_hints (window,
@@ -4520,8 +4520,7 @@ emulate_move_drag (GdkWindow     *window,
   mv_resize->moveresize_x = root_x;
   mv_resize->moveresize_y = root_y;
 
-  mv_resize->moveresize_window = 
-    GDK_WINDOW (g_object_ref (G_OBJECT (window)));
+  mv_resize->moveresize_window = g_object_ref (window);
 
   gdk_window_get_deskrelative_origin (mv_resize->moveresize_window,
 				      &mv_resize->moveresize_orig_x,

@@ -565,7 +565,7 @@ gdk_rgb_free_info (GdkRgbInfo *image_info)
     gdk_rgb_cmap_free (image_info->gray_cmap);
 
   if (image_info->own_gc)
-    gdk_gc_unref (image_info->own_gc);
+    g_object_unref (image_info->own_gc);
 
   if (image_info->colorcube)
     g_free (image_info->colorcube);
@@ -639,7 +639,7 @@ gdk_rgb_create_info (GdkVisual *visual, GdkColormap *colormap)
        image_info->visual->depth >= 3))
     {
       if (!image_info->cmap)
-	image_info->cmap = gdk_colormap_ref (gdk_screen_get_system_colormap (screen));
+	image_info->cmap = g_object_ref (gdk_screen_get_system_colormap (screen));
       
       gdk_rgb_colorcube_222 (image_info);
     }
@@ -665,7 +665,7 @@ gdk_rgb_create_info (GdkVisual *visual, GdkColormap *colormap)
 		 image_info->nblue_shades);
 
       if (!image_info->cmap)
-	image_info->cmap = gdk_colormap_ref (gdk_screen_get_system_colormap (screen));
+	image_info->cmap = g_object_ref (gdk_screen_get_system_colormap (screen));
     }
 #ifdef ENABLE_GRAYSCALE
   else if (image_info->visual->type == GDK_VISUAL_GRAYSCALE)
@@ -686,7 +686,7 @@ gdk_rgb_create_info (GdkVisual *visual, GdkColormap *colormap)
 	  /* Always install colormap in direct color. */
 	  if (image_info->visual->type != GDK_VISUAL_DIRECT_COLOR &&
 	      image_info->visual == gdk_screen_get_system_visual (screen))
-	    image_info->cmap = gdk_colormap_ref (gdk_screen_get_system_colormap (screen));
+	    image_info->cmap = g_object_ref (gdk_screen_get_system_colormap (screen));
 	  else
 	    {
 	      image_info->cmap = gdk_colormap_new (image_info->visual, FALSE);

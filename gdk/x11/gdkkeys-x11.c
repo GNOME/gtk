@@ -343,9 +343,9 @@ get_direction (GdkKeymapX11 *keymap_x11)
     {
       name = gdk_x11_get_xatom_name_for_display (display, xkb->names->groups[state_rec.locked_group]);
 
-      if (g_strcasecmp (name, "arabic") == 0 ||
-	  g_strcasecmp (name, "hebrew") == 0 ||
-	  g_strcasecmp (name, "israelian") == 0)
+      if (g_ascii_strcasecmp (name, "arabic") == 0 ||
+	  g_ascii_strcasecmp (name, "hebrew") == 0 ||
+	  g_ascii_strcasecmp (name, "israelian") == 0)
 	result = PANGO_DIRECTION_RTL;
       else
 	result = PANGO_DIRECTION_LTR;
@@ -369,7 +369,7 @@ _gdk_keymap_state_changed (GdkDisplay *display)
 	{
 	  keymap_x11->have_direction = TRUE;
 	  keymap_x11->current_direction = new_direction;
-	  g_signal_emit_by_name (G_OBJECT (keymap_x11), "direction_changed");
+	  g_signal_emit_by_name (keymap_x11, "direction_changed");
 	}
     }
 }

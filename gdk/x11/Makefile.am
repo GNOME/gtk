@@ -2,14 +2,16 @@
 
 libgdkincludedir = $(includedir)/gtk-2.0/gdk
 
-INCLUDES = @STRIP_BEGIN@ 	\
-	-DG_LOG_DOMAIN=\"Gdk\"	\
-	-DINSIDE_GDK_X11	\
-	-I$(top_srcdir)		\
-	-I$(top_srcdir)/gdk	\
-	-I$(top_builddir)/gdk	\
-	@GTK_DEBUG_FLAGS@ 	\
-	@GDK_DEP_CFLAGS@	\
+INCLUDES = @STRIP_BEGIN@ 		\
+	-DG_LOG_DOMAIN=\"Gdk\"		\
+	-DINSIDE_GDK_X11		\
+	-I$(top_srcdir)			\
+	-I$(top_srcdir)/gdk		\
+	-I$(top_builddir)/gdk		\
+	-DG_DISABLE_DEPRECATED		\
+	-DGDK_PIXBUF_DISABLE_DEPRECATED	\
+	@GTK_DEBUG_FLAGS@ 		\
+	@GDK_DEP_CFLAGS@		\
 @STRIP_END@
 
 LDADDS = @STRIP_BEGIN@ 		\

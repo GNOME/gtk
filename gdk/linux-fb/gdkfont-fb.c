@@ -141,7 +141,7 @@ gdk_font_from_description_for_display (GdkDisplay           *display,
   private->pango_font = pango_font;
   
   g_free (lang);
-  g_object_unref (G_OBJECT (context));
+  g_object_unref (context);
 
   font->ascent = PANGO_PIXELS (pango_font_metrics_get_ascent (metrics));
   font->descent = PANGO_PIXELS (pango_font_metrics_get_descent (metrics));
@@ -245,7 +245,7 @@ _gdk_font_destroy (GdkFont *font)
   GdkFontPrivateFB *private = (GdkFontPrivateFB *)font;
   gdk_font_hash_remove (font->type, font);
 
-  g_object_unref (G_OBJECT (private->pango_font));
+  g_object_unref (private->pango_font);
   g_free (private->name);
   g_free (font);
 }

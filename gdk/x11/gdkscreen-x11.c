@@ -256,12 +256,12 @@ gdk_screen_x11_finalize (GObject *object)
 {
   GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (object);
   /* int i; */
-  g_object_unref (G_OBJECT (screen_x11->root_window));
+  g_object_unref (screen_x11->root_window);
   
   /* Visual Part (Need to implement finalize for Visuals for a clean
    * finalize) */
   /* for (i=0;i<screen_x11->nvisuals;i++)
-    g_object_unref (G_OBJECT (screen_x11->visuals[i]));*/
+    g_object_unref (screen_x11->visuals[i]);*/
   g_free (screen_x11->visuals);
   g_hash_table_destroy (screen_x11->visual_hash);
   g_hash_table_destroy (screen_x11->colormap_hash);

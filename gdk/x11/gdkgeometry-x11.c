@@ -903,7 +903,7 @@ queue_delete_link (GQueue *queue,
 static void
 queue_item_free (GdkWindowQueueItem *item)
 {
-  gdk_drawable_unref (item->window);
+  g_object_unref (item->window);
   
   if (item->type == GDK_WINDOW_QUEUE_ANTIEXPOSE)
     gdk_region_destroy (item->u.antiexpose.area);
@@ -969,7 +969,7 @@ gdk_window_queue (GdkWindow          *window,
 	}
     }
       
-  gdk_drawable_ref (window);
+  g_object_ref (window);
 
   item->window = window;
   item->serial = NextRequest (GDK_WINDOW_XDISPLAY (window));

@@ -295,7 +295,7 @@ gdk_event_copy (GdkEvent *event)
   
   *new_event = *event;
   if (new_event->any.window)
-    gdk_window_ref (new_event->any.window);
+    g_object_ref (new_event->any.window);
   
   switch (event->any.type)
     {
@@ -307,7 +307,7 @@ gdk_event_copy (GdkEvent *event)
     case GDK_ENTER_NOTIFY:
     case GDK_LEAVE_NOTIFY:
       if (event->crossing.subwindow != NULL)
-	gdk_window_ref (event->crossing.subwindow);
+	g_object_ref (event->crossing.subwindow);
       break;
       
     case GDK_DRAG_ENTER:
@@ -316,7 +316,7 @@ gdk_event_copy (GdkEvent *event)
     case GDK_DRAG_STATUS:
     case GDK_DROP_START:
     case GDK_DROP_FINISHED:
-      gdk_drag_context_ref (event->dnd.context);
+      g_object_ref (event->dnd.context);
       break;
       
     case GDK_EXPOSE:
@@ -352,7 +352,7 @@ gdk_event_free (GdkEvent *event)
   g_assert (event_chunk != NULL); /* paranoid */
   
   if (event->any.window)
-    gdk_window_unref (event->any.window);
+    g_object_unref (event->any.window);
   
   switch (event->any.type)
     {
@@ -364,7 +364,7 @@ gdk_event_free (GdkEvent *event)
     case GDK_ENTER_NOTIFY:
     case GDK_LEAVE_NOTIFY:
       if (event->crossing.subwindow != NULL)
-	gdk_window_unref (event->crossing.subwindow);
+	g_object_unref (event->crossing.subwindow);
       break;
       
     case GDK_DRAG_ENTER:
@@ -373,7 +373,7 @@ gdk_event_free (GdkEvent *event)
     case GDK_DRAG_STATUS:
     case GDK_DROP_START:
     case GDK_DROP_FINISHED:
-      gdk_drag_context_unref (event->dnd.context);
+      g_object_unref (event->dnd.context);
       break;
 
     case GDK_BUTTON_PRESS:

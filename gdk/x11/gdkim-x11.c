@@ -86,7 +86,8 @@ _gdk_x11_initialize_locale (void)
 	  result == 0x765)
 	{
 	  if ((strlen (current_locale) < 4) ||
-	      g_ascii_strcasecmp (current_locale + strlen(current_locale) - 4, "utf8"))
+	      g_ascii_strcasecmp (current_locale + strlen(current_locale) - 4,
+				  "utf8"))
 	    gdk_use_mb = FALSE;
 	}
 #endif /* X_LOCALE */

@@ -89,7 +89,7 @@ gdk_pixbuf_render_threshold_alpha (GdkPixbuf *pixbuf,
       color.pixel = (alpha_threshold == 255) ? 0 : 1;
       gdk_gc_set_foreground (gc, &color);
       gdk_draw_rectangle (bitmap, gc, TRUE, dest_x, dest_y, width, height);
-      gdk_gc_unref (gc);
+      g_object_unref (gc);
       return;
     }
 
@@ -132,7 +132,7 @@ gdk_pixbuf_render_threshold_alpha (GdkPixbuf *pixbuf,
 		       x - 1 + dest_x, y + dest_y);
     }
 	
-  gdk_gc_unref (gc);
+  g_object_unref (gc);
 }
 
 
@@ -329,7 +329,7 @@ gdk_pixbuf_render_pixmap_and_mask_for_colormap (GdkPixbuf   *pixbuf,
 				     gdk_pixbuf_get_width (pixbuf), gdk_pixbuf_get_height (pixbuf),
 				     GDK_RGB_DITHER_NORMAL,
 				     0, 0);
-      gdk_gc_unref (gc);
+      g_object_unref (gc);
     }
   
   if (mask_return)

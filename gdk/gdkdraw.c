@@ -291,7 +291,7 @@ gdk_drawable_get_colormap (GdkDrawable *drawable)
 GdkDrawable*
 gdk_drawable_ref (GdkDrawable *drawable)
 {
-  return (GdkDrawable *) g_object_ref (G_OBJECT (drawable));
+  return (GdkDrawable *) g_object_ref (drawable);
 }
 
 /**
@@ -306,7 +306,7 @@ gdk_drawable_unref (GdkDrawable *drawable)
 {
   g_return_if_fail (GDK_IS_DRAWABLE (drawable));
 
-  g_object_unref (G_OBJECT (drawable));
+  g_object_unref (drawable);
 }
 
 /* Drawing
@@ -556,7 +556,7 @@ gdk_draw_drawable (GdkDrawable *drawable,
                                                     xdest, ydest,
                                                     width, height);
   
-  g_object_unref (G_OBJECT (composite));
+  g_object_unref (composite);
 }
 
 void
@@ -783,7 +783,7 @@ _gdk_drawable_copy_to_image (GdkDrawable *drawable,
 							       dest_x, dest_y,
 							       width, height);
 
-  g_object_unref (G_OBJECT (composite));
+  g_object_unref (composite);
 
   if (!image && retval)
     {
@@ -874,7 +874,7 @@ gdk_drawable_get_image (GdkDrawable *drawable,
                                                           y - composite_y_offset,
                                                           width, height);
 
-  g_object_unref (G_OBJECT (composite));
+  g_object_unref (composite);
 
   cmap = gdk_drawable_get_colormap (drawable);
   
@@ -908,7 +908,7 @@ gdk_drawable_real_get_composite_drawable (GdkDrawable *drawable,
   *composite_x_offset = 0;
   *composite_y_offset = 0;
   
-  return GDK_DRAWABLE (g_object_ref (G_OBJECT (drawable)));
+  return g_object_ref (drawable);
 }
 
 /**
@@ -1355,8 +1355,8 @@ gdk_drawable_real_draw_pixbuf (GdkDrawable  *drawable,
 
  out:
   if (composited)
-    g_object_unref (G_OBJECT (composited));
+    g_object_unref (composited);
 
   if (free_gc)
-    gdk_gc_unref (gc);
+    g_object_unref (gc);
 }

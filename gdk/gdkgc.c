@@ -112,7 +112,7 @@ gdk_gc_new_with_values (GdkDrawable	*drawable,
     {
       gc->colormap = gdk_drawable_get_colormap (drawable);
       if (gc->colormap)
-	g_object_ref (G_OBJECT (gc->colormap));
+	g_object_ref (gc->colormap);
     }
   
   return gc;
@@ -124,7 +124,7 @@ gdk_gc_finalize (GObject *object)
   GdkGC *gc = GDK_GC (object);
   
   if (gc->colormap)
-    g_object_unref (G_OBJECT (gc->colormap));
+    g_object_unref (gc->colormap);
 
   parent_class->finalize (object);
 }
@@ -140,7 +140,7 @@ gdk_gc_finalize (GObject *object)
 GdkGC *
 gdk_gc_ref (GdkGC *gc)
 {
-  return (GdkGC *) g_object_ref (G_OBJECT (gc));
+  return (GdkGC *) g_object_ref (gc);
 }
 
 /**
@@ -152,7 +152,7 @@ gdk_gc_ref (GdkGC *gc)
 void
 gdk_gc_unref (GdkGC *gc)
 {
-  g_object_unref (G_OBJECT (gc));
+  g_object_unref (gc);
 }
 
 void
@@ -439,10 +439,10 @@ gdk_gc_set_colormap (GdkGC       *gc,
   if (gc->colormap != colormap)
     {
       if (gc->colormap)
-	g_object_unref (G_OBJECT (gc->colormap));
+	g_object_unref (gc->colormap);
 
       gc->colormap = colormap;
-      g_object_ref (G_OBJECT (gc->colormap));
+      g_object_ref (gc->colormap);
     }
     
 }

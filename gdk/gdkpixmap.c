@@ -215,7 +215,7 @@ gdk_pixmap_finalize (GObject *object)
 {
   GdkPixmapObject *obj = (GdkPixmapObject *) object;
 
-  g_object_unref (G_OBJECT (obj->impl));
+  g_object_unref (obj->impl);
   obj->impl = NULL;
   
   G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -491,7 +491,7 @@ make_solid_mask (GdkScreen *screen, gint width, gint height)
   
   gdk_draw_rectangle (bitmap, gc, TRUE, 0, 0, width, height);
   
-  gdk_gc_unref (gc);
+  g_object_unref (gc);
   
   return bitmap;
 }
@@ -532,10 +532,10 @@ gdk_pixmap_colormap_new_from_pixbuf (GdkColormap *colormap,
 				 gdk_pixbuf_get_width (render_pixbuf),
 				 gdk_pixbuf_get_height (render_pixbuf),
 				 GDK_RGB_DITHER_NORMAL, 0, 0);
-  gdk_gc_unref (tmp_gc);
+  g_object_unref (tmp_gc);
 
   if (render_pixbuf != pixbuf)
-    gdk_pixbuf_unref (render_pixbuf);
+    g_object_unref (render_pixbuf);
 
   if (mask)
     gdk_pixbuf_render_pixmap_and_mask_for_colormap (pixbuf, colormap, NULL, mask, 128);
@@ -571,7 +571,7 @@ gdk_pixmap_colormap_create_from_xpm (GdkWindow   *window,
 
   pixmap = gdk_pixmap_colormap_new_from_pixbuf (colormap, mask, transparent_color, pixbuf);
 
-  gdk_pixbuf_unref (pixbuf);
+  g_object_unref (pixbuf);
   
   return pixmap;
 }
@@ -609,7 +609,7 @@ gdk_pixmap_colormap_create_from_xpm_d (GdkWindow  *window,
 
   pixmap = gdk_pixmap_colormap_new_from_pixbuf (colormap, mask, transparent_color, pixbuf);
 
-  gdk_pixbuf_unref (pixbuf);
+  g_object_unref (pixbuf);
 
   return pixmap;
 }

@@ -43,7 +43,7 @@
 GdkImage *
 gdk_image_ref (GdkImage *image)
 {
-  return (GdkImage *) g_object_ref (G_OBJECT (image));
+  return (GdkImage *) g_object_ref (image);
 }
 
 /**
@@ -58,7 +58,7 @@ gdk_image_unref (GdkImage *image)
 {
   g_return_if_fail (GDK_IS_IMAGE (image));
 
-  g_object_unref (G_OBJECT (image));
+  g_object_unref (image);
 }
 
 /**
@@ -113,10 +113,10 @@ gdk_image_set_colormap (GdkImage       *image,
   if (image->colormap != colormap)
     {
       if (image->colormap)
-	g_object_unref (G_OBJECT (image->colormap));
+	g_object_unref (image->colormap);
 
       image->colormap = colormap;
-      g_object_ref (G_OBJECT (image->colormap));
+      g_object_ref (image->colormap);
     }
     
 }
@@ -215,7 +215,7 @@ allocate_scratch_images (GdkScratchImageInfo *info,
 	  gint j;
 	  
 	  for (j = 0; j < i; j++)
-	    gdk_image_unref (info->static_image[i]);
+	    g_object_unref (info->static_image[i]);
 	  
 	  return FALSE;
 	}

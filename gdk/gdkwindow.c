@@ -273,7 +273,7 @@ gdk_window_finalize (GObject *object)
 	_gdk_window_destroy (window, TRUE);
     }
 
-  g_object_unref (G_OBJECT (obj->impl));
+  g_object_unref (obj->impl);
   obj->impl = NULL;
   
   G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -335,7 +335,7 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
               private->bg_pixmap != GDK_PARENT_RELATIVE_BG &&
               private->bg_pixmap != GDK_NO_BG)
 	    {
-	      gdk_pixmap_unref (private->bg_pixmap);
+	      g_object_unref (private->bg_pixmap);
 	      private->bg_pixmap = NULL;
 	    }
 	  
@@ -422,7 +422,7 @@ void
 gdk_window_destroy (GdkWindow *window)
 {
   _gdk_window_destroy_hierarchy (window, FALSE, FALSE);
-  gdk_drawable_unref (window);
+  g_object_unref (window);
 }
 
 /**
@@ -900,7 +900,7 @@ gdk_window_paint_init_bg (GdkWindow      *window,
   gdk_gc_set_clip_region (tmp_gc, init_region);
 
   gdk_draw_rectangle (paint->pixmap, tmp_gc, TRUE, 0, 0, -1, -1);
-  gdk_gc_unref (tmp_gc);
+  g_object_unref (tmp_gc);
 }
 
 #ifdef GDK_WINDOWING_X11
@@ -1000,8 +1000,8 @@ gdk_window_begin_paint_region (GdkWindow *window,
 			     0, 0,
 			     old_rect.x - new_rect.x, old_rect.y - new_rect.y,
                              old_rect.width, old_rect.height);
-          gdk_gc_unref (tmp_gc);
-	  gdk_drawable_unref (tmp_paint->pixmap);
+          g_object_unref (tmp_gc);
+	  g_object_unref (tmp_paint->pixmap);
 
 	  paint->x_offset = new_rect.x;
 	  paint->y_offset = new_rect.y;
@@ -1105,7 +1105,7 @@ gdk_window_end_paint (GdkWindow *window)
                      clip_box.y - paint->y_offset,
                      clip_box.x - x_offset, clip_box.y - y_offset,
                      clip_box.width, clip_box.height);
-  gdk_gc_unref (tmp_gc);
+  g_object_unref (tmp_gc);
 
   if (private->paint_stack)
     {
@@ -1119,7 +1119,7 @@ gdk_window_end_paint (GdkWindow *window)
 	}
     }
   else
-    gdk_drawable_unref (paint->pixmap);
+    g_object_unref (paint->pixmap);
 
   gdk_region_destroy (paint->region);
   g_free (paint);
@@ -1140,7 +1140,7 @@ gdk_window_free_paint_stack (GdkWindow *window)
 	  GdkWindowPaint *paint = tmp_list->data;
 
 	  if (tmp_list == private->paint_stack)
-	    gdk_drawable_unref (paint->pixmap);
+	    g_object_unref (paint->pixmap);
 		  
 	  gdk_region_destroy (paint->region);
 	  g_free (paint);
@@ -1450,7 +1450,7 @@ gdk_window_get_composite_drawable (GdkDrawable *window,
                                          composite_x_offset,
                                          composite_y_offset);
       
-      return GDK_DRAWABLE (g_object_ref (G_OBJECT (window)));
+      return g_object_ref (window);
     }
   
   buffered_region = NULL;
@@ -1500,7 +1500,7 @@ gdk_window_get_composite_drawable (GdkDrawable *window,
                                          composite_x_offset,
                                          composite_y_offset);
 
-      return GDK_DRAWABLE (g_object_ref (G_OBJECT (window)));
+      return g_object_ref (window);
     }
   
   tmp_pixmap = gdk_pixmap_new (window,
@@ -1549,7 +1549,7 @@ gdk_window_get_composite_drawable (GdkDrawable *window,
   *composite_x_offset = x;
   *composite_y_offset = y;
 
-  g_object_unref (G_OBJECT (tmp_gc));
+  g_object_unref (tmp_gc);
   
   return tmp_pixmap;
 }
@@ -1800,7 +1800,7 @@ gdk_window_clear_backing_rect (GdkWindow *window,
   tmp_gc = gdk_window_get_bg_gc (window, paint);
   gdk_draw_rectangle (paint->pixmap, tmp_gc, TRUE,
 		      x - paint->x_offset, y - paint->y_offset, width, height);
-  gdk_gc_unref (tmp_gc);
+  g_object_unref (tmp_gc);
 }
 
 /**
@@ -2117,7 +2117,7 @@ gdk_window_process_updates_internal (GdkWindow *window)
 	  save_region = _gdk_windowing_window_queue_antiexpose (window, update_area);
       
 	  event.expose.type = GDK_EXPOSE;
-	  event.expose.window = gdk_window_ref (window);
+	  event.expose.window = g_object_ref (window);
 	  event.expose.count = 0;
 
 	  if (save_region)
@@ -2139,7 +2139,7 @@ gdk_window_process_updates_internal (GdkWindow *window)
 
 	  if (expose_region != update_area)
 	    gdk_region_destroy (expose_region);
-	  gdk_window_unref (window);
+	  g_object_unref (window);
 	}
       if (!save_region)
 	gdk_region_destroy (update_area);
@@ -2290,12 +2290,12 @@ draw_ugly_color (GdkWindow *window,
   gdk_region_get_clipbox (region, &clipbox);
   
   gdk_draw_rectangle (window,
-                     ugly_gc,
-                     TRUE,
-                     clipbox.x, clipbox.y,
-                     clipbox.width, clipbox.height);
+		      ugly_gc,
+		      TRUE,
+		      clipbox.x, clipbox.y,
+		      clipbox.width, clipbox.height);
   
-  g_object_unref (G_OBJECT (ugly_gc));
+  g_object_unref (ugly_gc);
 }
 
 /**

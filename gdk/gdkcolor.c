@@ -41,7 +41,7 @@
 GdkColormap*
 gdk_colormap_ref (GdkColormap *cmap)
 {
-  return (GdkColormap *) g_object_ref (G_OBJECT (cmap));
+  return (GdkColormap *) g_object_ref (cmap);
 }
 
 /**
@@ -53,7 +53,7 @@ gdk_colormap_ref (GdkColormap *cmap)
 void
 gdk_colormap_unref (GdkColormap *cmap)
 {
-  g_object_unref (G_OBJECT (cmap));
+  g_object_unref (cmap);
 }
 
 GdkVisual *
