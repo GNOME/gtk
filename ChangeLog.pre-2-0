@@ -1,3 +1,8 @@
+Sun Mar 29 22:25:22 BST 1998 Tony Gale  <gale@gimp.org>
+
+        * docs/gtk_tut.sgml: more on the Text widget,
+          update the tictactoe example to the current code
+ 
 Sun Mar 29 22:29:00 1998  Tim Janik  <timj@gtk.org>
 
         * gtk/gtkspinbutton.[ch] gtk/testgtk.c (gtk_spin_button_set_wrap):
