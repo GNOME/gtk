@@ -881,22 +881,22 @@ gtk_widget_get_arg (GtkWidget	*widget,
 	GTK_VALUE_INT (*arg) = aux_info->height;
       break;
     case ARG_VISIBLE:
-      GTK_VALUE_BOOL (*arg) = GTK_WIDGET_VISIBLE (widget);
+      GTK_VALUE_BOOL (*arg) = (GTK_WIDGET_VISIBLE (widget) != FALSE);
       break;
     case ARG_SENSITIVE:
-      GTK_VALUE_BOOL (*arg) = GTK_WIDGET_SENSITIVE (widget);
+      GTK_VALUE_BOOL (*arg) = (GTK_WIDGET_SENSITIVE (widget) != FALSE);
       break;
     case ARG_CAN_FOCUS:
-      GTK_VALUE_BOOL (*arg) = GTK_WIDGET_CAN_FOCUS (widget);
+      GTK_VALUE_BOOL (*arg) = (GTK_WIDGET_CAN_FOCUS (widget) != FALSE);
       break;
     case ARG_HAS_FOCUS:
-      GTK_VALUE_BOOL (*arg) = GTK_WIDGET_HAS_FOCUS (widget);
+      GTK_VALUE_BOOL (*arg) = (GTK_WIDGET_HAS_FOCUS (widget) != FALSE);
       break;
     case ARG_CAN_DEFAULT:
-      GTK_VALUE_BOOL (*arg) = GTK_WIDGET_CAN_DEFAULT (widget);
+      GTK_VALUE_BOOL (*arg) = (GTK_WIDGET_CAN_DEFAULT (widget) != FALSE);
       break;
     case ARG_HAS_DEFAULT:
-      GTK_VALUE_BOOL (*arg) = GTK_WIDGET_HAS_DEFAULT (widget);
+      GTK_VALUE_BOOL (*arg) = (GTK_WIDGET_HAS_DEFAULT (widget) != FALSE);
       break;
     case ARG_STYLE:
       GTK_VALUE_BOXED (*arg) = (gpointer) gtk_widget_get_style (widget);

@@ -158,7 +158,7 @@ gtk_toggle_button_set_state (GtkToggleButton *toggle_button,
   g_return_if_fail (toggle_button != NULL);
   g_return_if_fail (GTK_IS_TOGGLE_BUTTON (toggle_button));
 
-  if (toggle_button->active != state)
+  if (toggle_button->active != (state != FALSE))
     gtk_button_clicked (GTK_BUTTON (toggle_button));
 }
 

@@ -1,3 +1,11 @@
+Tue Mar 17 22:45:39 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwidget.c (gtk_widget_get_arg): return real boolean values
+	not just numbers.
+
+	* gtk/gtktogglebutton.c (gtk_toggle_button_set_state): check
+	state for != 0, otherwise we get strange results.
+
 Tue Mar 17 01:55:00 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtkmain.c gtk/gtkentry.c: Try to guess if we can
