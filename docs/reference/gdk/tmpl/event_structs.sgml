@@ -88,7 +88,8 @@ Describes a key press or key release event.
 @time: the time of the event in milliseconds.
 @state: a bit-mask representing the state of the modifier keys (e.g. Control,
 Shift and Alt) and the pointer buttons. See #GdkModifierType.
-@keyval: the key that was pressed or released. See the <filename>&lt;gdk/gdkkeysym.h&gt;</filename>
+@keyval: the key that was pressed or released. See the 
+<filename>&lt;gdk/gdkkeysyms.h&gt;</filename>
 header file for a complete list of GDK key codes.
 @length: the length of @string.
 @string: a string containing the an approximation of the text that

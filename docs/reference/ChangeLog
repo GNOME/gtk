@@ -1,3 +1,8 @@
+Wed Jan 28 21:46:55 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/tmpl/event_structs.sgml: Fix a header name misspelling.  
+	(#123589, Jan Huelsbergen)
+
 2004-01-23  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/migrating-checklist.sgml: Note that a widget must be
