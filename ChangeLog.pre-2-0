@@ -1,3 +1,12 @@
+Sun Mar  3 10:28:32 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/Makefile.am: add missing dependency of objects on
+	gtkmarshalers.h.
+
+	* gtk/Makefile.am gtk/gtk-boxed.defs: Remove completely
+	out of date and unused gtk-boxed.defs and the accompanying
+	Makefile rule to generate the complete gtk.defs.
+
 2002-03-03  Hans Breuer  <hans@breuer.org>
 
 	* gtk/gtkmain.c : make rewrite_event_for_window() static

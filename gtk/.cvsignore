@@ -16,8 +16,6 @@ gtkmarshalers.h
 gtkmarshalers.c
 gtktypebuiltins.c
 gtktypebuiltins.h
-gtktypebuiltinss.c
-gtk.defs
 gtk-win32.rc
 testdnd
 stamp-gtktypebuiltins.h
