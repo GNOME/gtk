@@ -16,19 +16,20 @@
 # kostas:22Nov2003,1342 messages
 # kostas:29Jan2004, move to properties, updated translation
 # kostas:03Mar2004, one more update
+# nikos:10Sep2004, review
 # ta panta rei <ta_panta_rei@flashmail.con>
 # Spiros Papadimitriou <spapadim+@cs.cmu.edu>, 1999.
 # Simos Xenitellis <simos@hellug.gr>, 1999, 2001, 2002.
-# Nikos Charonitakis <frolix68@yahoo.gr>, 2003.
+# Nikos Charonitakis <frolix68@yahoo.gr>, 2003, 2004.
 # Nikos Kannelopoulos <nkan@panafonet.gr>, 2003.
 # Kostas Papadimas <pkst@gnome.org>, 2002,2003, 2004.
 msgid ""
 msgstr ""
 "Project-Id-Version: el\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-25 13:27-0400\n"
-"PO-Revision-Date: 2004-03-04 18:03+0200\n"
-"Last-Translator: Kostas Papadimas <pkst@gnome.org>\n"
+"POT-Creation-Date: 2004-09-10 11:26-0300\n"
+"PO-Revision-Date: 2004-09-10 11:44-0300\n"
+"Last-Translator: Nikos Charonitakis <frolix68@yahoo.gr>\n"
 "Language-Team: Greek <nls@tux.hellug.gr>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -128,7 +129,7 @@ msgstr "Το γραφικό συστατικό που θα παρακολουθ�
 
 #: gtk/gtkaction.c:193 gtk/gtkactiongroup.c:133
 msgid "Name"
-msgstr "'Όνομα"
+msgstr "Όνομα"
 
 #: gtk/gtkaction.c:194
 msgid "A unique name for the action."
@@ -835,7 +836,7 @@ msgstr "Ορισμός παρασκηνίου κελιού"
 
 #: gtk/gtkcellrenderer.c:274
 msgid "Whether this tag affects the cell background color"
-msgstr "Αν αυτή αναγνωριστική ετικέτα επηρεάζει το χρώμα παρασκηνίου κελιού"
+msgstr "Αν αυτή η αναγνωριστική ετικέτα επηρεάζει το χρώμα παρασκηνίου κελιού"
 
 #: gtk/gtkcellrendererpixbuf.c:134
 msgid "Pixbuf Object"
@@ -953,7 +954,7 @@ msgstr "Χρώμα προσκηνίου ως GdkColor"
 #: gtk/gtkcellrenderertext.c:259 gtk/gtkentry.c:483 gtk/gtktexttag.c:274
 #: gtk/gtktextview.c:587
 msgid "Editable"
-msgstr "Παραμετροποιήσιμο"
+msgstr "Επεξεργάσιμο"
 
 #: gtk/gtkcellrenderertext.c:260 gtk/gtktexttag.c:275 gtk/gtktextview.c:588
 msgid "Whether the text can be modified by the user"
@@ -966,11 +967,11 @@ msgstr "Γραμματοσειρά"
 
 #: gtk/gtkcellrenderertext.c:268
 msgid "Font description as a string"
-msgstr "Περιγραφή γραμματοσειράς ως string"
+msgstr "Περιγραφή γραμματοσειράς ως αλφαριθμητικό"
 
 #: gtk/gtkcellrenderertext.c:276 gtk/gtktexttag.c:291
 msgid "Font description as a PangoFontDescription struct"
-msgstr "Περιγραφή γραμματοσειράς ως PangoFontDescription struct "
+msgstr "Περιγραφή γραμματοσειράς ως δομή PangoFontDescription"
 
 #: gtk/gtkcellrenderertext.c:284 gtk/gtktexttag.c:299
 msgid "Font family"
@@ -979,7 +980,7 @@ msgstr "Οικόγενεια γραμματοσειράς"
 #: gtk/gtkcellrenderertext.c:285 gtk/gtktexttag.c:300
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
 msgstr ""
-"Όνομα της οικογένειας της γραμματοσειράς, π.χ. Sans, Helvetica, Times, "
+"Όνομα της οικογένειας γραμματοσειράς, π.χ. Sans, Helvetica, Times, "
 "Monospace"
 
 #: gtk/gtkcellrenderertext.c:292 gtk/gtkcellrenderertext.c:293
@@ -1048,7 +1049,7 @@ msgstr "Υπογράμμιση"
 
 #: gtk/gtkcellrenderertext.c:379 gtk/gtktexttag.c:473
 msgid "Style of underline for this text"
-msgstr "Τύπος υπογράμμισης για αυτό το κείμενο"
+msgstr "Στυλ υπογράμμισης για αυτό το κείμενο"
 
 #: gtk/gtkcellrenderertext.c:387 gtk/gtktexttag.c:384
 msgid "Language"
@@ -1070,7 +1071,7 @@ msgstr "Ορισμός παρασκηνίου"
 
 #: gtk/gtkcellrenderertext.c:399 gtk/gtkcellview.c:196 gtk/gtktexttag.c:510
 msgid "Whether this tag affects the background color"
-msgstr "Αν αυτή αναγνωριστική ετικέτα επηρεάζει το χρώμα παρασκηνίου"
+msgstr "Αν αυτή η αναγνωριστική ετικέτα επηρεάζει το χρώμα παρασκηνίου"
 
 #: gtk/gtkcellrenderertext.c:402 gtk/gtktexttag.c:521
 msgid "Foreground set"
@@ -1078,7 +1079,7 @@ msgstr "Ορισμός προσκηνίου"
 
 #: gtk/gtkcellrenderertext.c:403 gtk/gtktexttag.c:522
 msgid "Whether this tag affects the foreground color"
-msgstr "Αν αυτή αναγνωριστική ετικέτα επηρεάζει το χρώμα προσκηνίου"
+msgstr "Αν αυτή η αναγνωριστική ετικέτα επηρεάζει το χρώμα προσκηνίου"
 
 #: gtk/gtkcellrenderertext.c:406 gtk/gtktexttag.c:529
 msgid "Editability set"
@@ -1087,7 +1088,7 @@ msgstr "Ορισμός παραμετροποίησης"
 #: gtk/gtkcellrenderertext.c:407 gtk/gtktexttag.c:530
 msgid "Whether this tag affects text editability"
 msgstr ""
-"Αν αυτή αναγνωριστική ετικέτα επηρεάζει την παραμετροποίηση του κειμένου"
+"Αν αυτή η αναγνωριστική ετικέτα επηρεάζει την παραμετροποίηση του κειμένου"
 
 #: gtk/gtkcellrenderertext.c:410 gtk/gtktexttag.c:533
 msgid "Font family set"
@@ -1095,7 +1096,7 @@ msgstr "Ορισμός οικογένειας γραμματοσειράς"
 
 #: gtk/gtkcellrenderertext.c:411 gtk/gtktexttag.c:534
 msgid "Whether this tag affects the font family"
-msgstr "Αν αυτή αναγνωριστική ετικέτα επηρεάζει την οικογένεια γραμματοσειράς"
+msgstr "Αν αυτή η αναγνωριστική ετικέτα επηρεάζει την οικογένεια γραμματοσειράς"
 
 #: gtk/gtkcellrenderertext.c:414 gtk/gtktexttag.c:537
 msgid "Font style set"
@@ -1103,7 +1104,7 @@ msgstr "Ορισμός στυλ γραμματοσειράς"
 
 #: gtk/gtkcellrenderertext.c:415 gtk/gtktexttag.c:538
 msgid "Whether this tag affects the font style"
-msgstr "Αν αυτή αναγνωριστική ετικέτα επηρεάζει το στυλ γραμματοσειράς "
+msgstr "Αν αυτή η αναγνωριστική ετικέτα επηρεάζει το στυλ γραμματοσειράς "
 
 #: gtk/gtkcellrenderertext.c:418 gtk/gtktexttag.c:541
 msgid "Font variant set"
@@ -1112,7 +1113,7 @@ msgstr "Ορισμός παραλλαγής γραμματοσειράς"
 #: gtk/gtkcellrenderertext.c:419 gtk/gtktexttag.c:542
 msgid "Whether this tag affects the font variant"
 msgstr ""
-"Αν αυτή αναγνωριστική ετικέτα επηρεάζει την παραλλαγή της γραμματοσειράς"
+"Αν αυτή η αναγνωριστική ετικέτα επηρεάζει την παραλλαγή της γραμματοσειράς"
 
 #: gtk/gtkcellrenderertext.c:422 gtk/gtktexttag.c:545
 msgid "Font weight set"
@@ -1120,7 +1121,7 @@ msgstr "Ορισμός βάρους γραμματοσειράς"
 
 #: gtk/gtkcellrenderertext.c:423 gtk/gtktexttag.c:546
 msgid "Whether this tag affects the font weight"
-msgstr "Αν αυτή αναγνωριστική ετικέτα επηρεάζει το βάρος της γραμματοσειράς"
+msgstr "Αν αυτή η αναγνωριστική ετικέτα επηρεάζει το βάρος της γραμματοσειράς"
 
 #: gtk/gtkcellrenderertext.c:426 gtk/gtktexttag.c:549
 msgid "Font stretch set"
@@ -1128,7 +1129,7 @@ msgstr "Ορισμός τεντώματος γραμματοσειράς"
 
 #: gtk/gtkcellrenderertext.c:427 gtk/gtktexttag.c:550
 msgid "Whether this tag affects the font stretch"
-msgstr "Αν αυτή αναγνωριστική ετικέτα επηρεάζει το τέντωμα της γραμματοσειράς"
+msgstr "Αν αυτή η αναγνωριστική ετικέτα επηρεάζει το τέντωμα της γραμματοσειράς"
 
 #: gtk/gtkcellrenderertext.c:430 gtk/gtktexttag.c:553
 msgid "Font size set"
@@ -1136,7 +1137,7 @@ msgstr "Ορισμός μεγέθους γραμματοσειράς"
 
 #: gtk/gtkcellrenderertext.c:431 gtk/gtktexttag.c:554
 msgid "Whether this tag affects the font size"
-msgstr "Αν αυτή αναγνωριστική ετικέτα επηρεάζει το μέγεθος της γραμματοσειράς"
+msgstr "Αν αυτή η αναγνωριστική ετικέτα επηρεάζει το μέγεθος της γραμματοσειράς"
 
 #: gtk/gtkcellrenderertext.c:434 gtk/gtktexttag.c:557
 msgid "Font scale set"
@@ -1144,7 +1145,7 @@ msgstr "Ορισμός κλίμακας γραμματοσειράς"
 
 #: gtk/gtkcellrenderertext.c:435 gtk/gtktexttag.c:558
 msgid "Whether this tag scales the font size by a factor"
-msgstr "Αν αυτή αναγνωριστική ετικέτα επηρεάζει την κλίμακα της γραμματοσειράς"
+msgstr "Αν αυτή η αναγνωριστική ετικέτα επηρεάζει την κλίμακα της γραμματοσειράς"
 
 #: gtk/gtkcellrenderertext.c:438 gtk/gtktexttag.c:577
 msgid "Rise set"
@@ -1152,7 +1153,7 @@ msgstr "Ορισμός ανάδυσης"
 
 #: gtk/gtkcellrenderertext.c:439 gtk/gtktexttag.c:578
 msgid "Whether this tag affects the rise"
-msgstr "Αν αυτή αναγνωριστική ετικέτα επηρεάζει την ανάδυση"
+msgstr "Αν αυτή η αναγνωριστική ετικέτα επηρεάζει την ανάδυση"
 
 #: gtk/gtkcellrenderertext.c:442 gtk/gtktexttag.c:593
 msgid "Strikethrough set"
@@ -1160,7 +1161,7 @@ msgstr "Ορισμός διακριτής γραφής"
 
 #: gtk/gtkcellrenderertext.c:443 gtk/gtktexttag.c:594
 msgid "Whether this tag affects strikethrough"
-msgstr "Αν αυτή αναγνωριστική ετικέτα επηρεάζει τη διακριτή γραφής"
+msgstr "Αν αυτή η αναγνωριστική ετικέτα επηρεάζει τη διακριτή γραφή"
 
 #: gtk/gtkcellrenderertext.c:446 gtk/gtktexttag.c:601
 msgid "Underline set"
@@ -1168,7 +1169,7 @@ msgstr "Ορισμός υπογράμμισης"
 
 #: gtk/gtkcellrenderertext.c:447 gtk/gtktexttag.c:602
 msgid "Whether this tag affects underlining"
-msgstr "Αν αυτή αναγνωριστική ετικέτα επηρεάζει την υπογράμμιση"
+msgstr "Αν αυτή η αναγνωριστική ετικέτα επηρεάζει την υπογράμμιση"
 
 #: gtk/gtkcellrenderertext.c:450 gtk/gtktexttag.c:565
 msgid "Language set"
@@ -1675,7 +1676,7 @@ msgstr ""
 
 #: gtk/gtkexpander.c:206
 msgid "Text of the expander's label"
-msgstr "Κείμενο της ετικέτας του σε ανάτυξη παραθύρου"
+msgstr "Κείμενοι της ετικέτας του expander"
 
 #: gtk/gtkexpander.c:221 gtk/gtklabel.c:306
 msgid "Use markup"
@@ -1698,11 +1699,11 @@ msgstr "Γραφικό συστατικό ετικέτας"
 
 #: gtk/gtkexpander.c:240
 msgid "A widget to display in place of the usual expander label"
-msgstr "Ένα  γραφικό συστατικό στη θέση της σύνηθους ετικέττας αναπτυσόμμενου"
+msgstr "Ένα γραφικό συστατικό που θα εμφανίζεται στην θέση της σύνηθους ετικέτας expander"
 
 #: gtk/gtkexpander.c:246 gtk/gtktreeview.c:642
 msgid "Expander Size"
-msgstr "Μέγεθος αναπτυσσόμενου"
+msgstr "Μέγεθος Expander"
 
 #: gtk/gtkexpander.c:247 gtk/gtktreeview.c:643
 msgid "Size of the expander arrow"
@@ -1710,7 +1711,7 @@ msgstr "Μέγεθος του βέλους ανάπτυξης"
 
 #: gtk/gtkexpander.c:256
 msgid "Spacing around expander arrow"
-msgstr "Διάστημα γύρω από το βέλος ανάπτυξης"
+msgstr "Διάστημα γύρω από το βέλος expander"
 
 #: gtk/gtkfilechooser.c:175
 msgid "Action"
@@ -2992,7 +2993,7 @@ msgstr "Αν το διαχωριστικό θα σχεδιάζεται ή θα �
 
 #: gtk/gtksettings.c:262
 msgid "Double Click Time"
-msgstr "Χρόνος διπλού κλικ"
+msgstr "Χρόνος Διπλού Κλικ"
 
 #: gtk/gtksettings.c:263
 msgid ""
@@ -3085,7 +3086,7 @@ msgstr ""
 
 #: gtk/gtksettings.c:346
 msgid "Font Name"
-msgstr "'Όνομα Γραμματοσειράς"
+msgstr "Όνομα Γραμματοσειράς"
 
 #: gtk/gtksettings.c:347
 msgid "Name of default font to use"
@@ -3424,7 +3425,7 @@ msgstr "Κατεύθυνση κειμένου π.χ αριστερά-προς-δ
 
 #: gtk/gtktexttag.c:283
 msgid "Font description as a string, e.g. \"Sans Italic 12\""
-msgstr "Περιγραφή γραμματοσειράς ως string, π.χ. \"Sans Italic 12\""
+msgstr "Περιγραφή γραμματοσειράς ως αλφαριθμητικό, π.χ. \"Sans Italic 12\""
 
 #: gtk/gtktexttag.c:308
 msgid "Font style as a PangoStyle, e.g. PANGO_STYLE_ITALIC"
@@ -3523,7 +3524,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:481
 msgid "Wrap mode"
-msgstr "Κατάσταση αναδίπλωσης"
+msgstr "Λειτουργία αναδίπλωσης"
 
 #: gtk/gtktexttag.c:482 gtk/gtktextview.c:596
 msgid ""
