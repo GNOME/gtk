@@ -1,3 +1,21 @@
+2002-06-03  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtkprogress.sgml: 
+	* gtk/tmpl/gtkscale.sgml: 
+	* gtk/tmpl/gtktreemodel.sgml: 
+	* gtk/tmpl/gtkimage.sgml: 
+	* gtk/tmpl/gtksignal.sgml: 
+	* gtk/tmpl/gtkrc.sgml: 
+	* gtk/gtk-docs.sgml: 
+	* gdk/gdk-docs.sgml: 
+	* gdk/tmpl/threads.sgml: 
+	* gdk/tmpl/cursors.sgml: 
+	* gdk/tmpl/rgb.sgml: Replace homegrown "nbsp", "hash" and
+	"percent" entities by standard ISO entities "nbsp", "num" and
+	"percnt".
+
+	* gtk/text_widget.sgml: Fix a link.
+
 2002-05-30  Matthias Clasen  <maclas@gmx.de>
 
 	Make stock icons appear again (patch by Gediminas Paulauskas):

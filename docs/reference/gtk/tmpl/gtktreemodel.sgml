@@ -177,7 +177,7 @@ enum
                           -1);
 
       /* Do something with the data */
-      g_print ("Row &percent;d: (&percent;s,&percent;d)\n", row_count, str_data, int_data);
+      g_print ("Row &percnt;d: (&percnt;s,&percnt;d)\n", row_count, str_data, int_data);
       g_free (str_data);
 
       row_count ++;

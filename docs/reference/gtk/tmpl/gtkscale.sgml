@@ -121,7 +121,7 @@ static gchar*
 format_value_callback (GtkScale *scale,
                        gdouble   value)
 {
-  return g_strdup_printf ("--&gt;&percent;0.*g&lt;--",
+  return g_strdup_printf ("--&gt;&percnt;0.*g&lt;--",
                           gtk_scale_get_digits (scale), value);
 }
 </programlisting></informalexample>

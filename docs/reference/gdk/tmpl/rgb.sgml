@@ -37,10 +37,10 @@ in cases where a "better" visual than the default is available.
 <example>
 <title>A simple example program using GdkRGB.</title>
 <programlisting>
-&hash;include &lt;gtk/gtk.h&gt;
+&num;include &lt;gtk/gtk.h&gt;
 
-&hash;define IMAGE_WIDTH	256
-&hash;define IMAGE_HEIGHT	256
+&num;define IMAGE_WIDTH	256
+&num;define IMAGE_HEIGHT	256
 
 guchar rgbbuf[IMAGE_WIDTH * IMAGE_HEIGHT * 3];
 

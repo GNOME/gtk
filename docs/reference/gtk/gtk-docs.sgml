@@ -1,8 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
                "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
-<!ENTITY hash "#">
-<!ENTITY percent "&#37;">
 <!ENTITY GtkAccelLabel SYSTEM "xml/gtkaccellabel.xml">
 <!ENTITY GtkAdjustment SYSTEM "xml/gtkadjustment.xml">
 <!ENTITY GtkAlignment SYSTEM "xml/gtkalignment.xml">

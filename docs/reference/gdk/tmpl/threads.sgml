@@ -104,16 +104,16 @@ illustrate how to use threads within GTK+ programs.
  *
  */
 
-&hash;include &lt;stdio.h&gt;
-&hash;include &lt;stdlib.h&gt;
-&hash;include &lt;unistd.h&gt;
-&hash;include &lt;time.h&gt;
-&hash;include &lt;gtk/gtk.h&gt;
-&hash;include &lt;glib.h&gt;
-&hash;include &lt;pthread.h&gt;
+&num;include &lt;stdio.h&gt;
+&num;include &lt;stdlib.h&gt;
+&num;include &lt;unistd.h&gt;
+&num;include &lt;time.h&gt;
+&num;include &lt;gtk/gtk.h&gt;
+&num;include &lt;glib.h&gt;
+&num;include &lt;pthread.h&gt;
 
-&hash;define YES_IT_IS    (1)
-&hash;define NO_IT_IS_NOT (0)
+&num;define YES_IT_IS    (1)
+&num;define NO_IT_IS_NOT (0)
 
 typedef struct 
 {

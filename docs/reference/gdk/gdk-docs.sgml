@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
                "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
-<!ENTITY hash "#">
 <!ENTITY gdk-General SYSTEM "xml/general.xml">
 <!ENTITY gdk-Bitmaps-and-Pixmaps SYSTEM "xml/pixmaps.xml">
 <!ENTITY gdk-Images SYSTEM "xml/images.xml">

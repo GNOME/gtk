@@ -371,9 +371,9 @@ state of the widget. The states are:
 Colors can be specified as a string containing a color name (GTK+ knows
 all names from the X color database 
 <filename>/usr/lib/X11/rgb.txt</filename>),  
-in one of the hexadecimal forms <literal>&hash;rrrrggggbbbb</literal>,
-<literal>&hash;rrrgggbbb</literal>, <literal>&hash;rrggbb</literal>,
-or <literal>&hash;rgb</literal>, where <literal>r</literal>,
+in one of the hexadecimal forms <literal>&num;rrrrggggbbbb</literal>,
+<literal>&num;rrrgggbbb</literal>, <literal>&num;rrggbb</literal>,
+or <literal>&num;rgb</literal>, where <literal>r</literal>,
 <literal>g</literal> and <literal>b</literal> are
 hex digits, or they can be specified as a triplet 
 <literal>{ <replaceable>r</replaceable>, <replaceable>g</replaceable>,
