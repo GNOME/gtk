@@ -3266,14 +3266,20 @@ gtk_entry_new_with_max_length (gint max)
 }
 
 void
-gtk_entry_set_text (GtkEntry *entry,
+gtk_entry_set_text (GtkEntry    *entry,
 		    const gchar *text)
 {
   gint tmp_pos;
 
   g_return_if_fail (GTK_IS_ENTRY (entry));
   g_return_if_fail (text != NULL);
-  
+
+  /* Actually setting the text will affect the cursor and selection;
+   * if the contents don't actually change, this will look odd to the user.
+   */
+  if (strcmp (entry->text, text) == 0)
+    return;
+
   gtk_editable_delete_text (GTK_EDITABLE (entry), 0, -1);
 
   tmp_pos = 0;
