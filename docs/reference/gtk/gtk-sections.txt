@@ -4743,6 +4743,7 @@ gtk_selection_data_get_type
 GtkClipboard
 GtkClipboardReceivedFunc
 GtkClipboardTextReceivedFunc
+GtkClipboardTargetsReceivedFunc
 GtkClipboardGetFunc
 GtkClipboardClearFunc
 gtk_clipboard_get
@@ -4755,9 +4756,11 @@ gtk_clipboard_clear
 gtk_clipboard_set_text
 gtk_clipboard_request_contents
 gtk_clipboard_request_text
+gtk_clipboard_request_targets
 gtk_clipboard_wait_for_contents
 gtk_clipboard_wait_for_text
 gtk_clipboard_wait_is_text_available
+gtk_clipboard_wait_for_targets
 <SUBSECTION Standard>
 GTK_CLIPBOARD
 GTK_TYPE_CLIPBOARD

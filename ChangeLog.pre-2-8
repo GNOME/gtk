@@ -1,3 +1,9 @@
+Wed Dec 24 01:12:53 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkclipboard.[hc]: Add GtkClipboardTargetReceivedFunc,
+	gtk_clipboard_request_targets() and 
+	gtk_clipboard_wait_for_targets().  (#101774, Dom Lachowicz)
+
 Mon Dec 22 00:40:39 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcalendar.c (gtk_calendar_paint_arrow): Use 

@@ -1,3 +1,12 @@
+Wed Dec 24 01:12:12 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-sections.txt: Add GtkClipboardTargetReceivedFunc,
+	gtk_clipboard_request_targets, gtk_clipboard_wait_for_targets.
+
+Wed Dec 24 01:11:36 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtkclipboard.sgml: Document GtkClipboardTargetReceivedFunc.
+
 Sun Dec 21 01:58:33 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk-sections.txt: Add gtk_menu_shell_cancel.

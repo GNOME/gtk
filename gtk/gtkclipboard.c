@@ -37,6 +37,7 @@ typedef struct _GtkClipboardClass GtkClipboardClass;
 
 typedef struct _RequestContentsInfo RequestContentsInfo;
 typedef struct _RequestTextInfo RequestTextInfo;
+typedef struct _RequestTargetsInfo RequestTargetsInfo;
 
 struct _GtkClipboard 
 {
@@ -69,6 +70,12 @@ struct _RequestContentsInfo
 struct _RequestTextInfo
 {
   GtkClipboardTextReceivedFunc callback;
+  gpointer user_data;
+};
+
+struct _RequestTargetsInfo
+{
+  GtkClipboardTargetsReceivedFunc callback;
   gpointer user_data;
 };
 
@@ -833,6 +840,57 @@ gtk_clipboard_request_text (GtkClipboard                *clipboard,
 				  info);
 }
 
+static void 
+request_targets_received_func (GtkClipboard     *clipboard,
+			       GtkSelectionData *selection_data,
+			       gpointer          data)
+{
+  RequestTargetsInfo *info = data;
+  GdkAtom *targets = NULL;
+  gint n_targets = 0;
+
+  gtk_selection_data_get_targets (selection_data, &targets, &n_targets);
+
+  info->callback (clipboard, targets, n_targets, info->user_data);
+
+  g_free (info);
+  g_free (targets);
+}
+
+/**
+ * gtk_clipboard_request_targets:
+ * @clipboard: a #GtkClipboard
+ * @callback:  a function to call when the targets are received,
+ *             or the retrieval fails. (It will always be called
+ *             one way or the other.)
+ * @user_data: user data to pass to @callback.
+ * 
+ * Requests the contents of the clipboard as list of supported targets. 
+ * When the list is later received, @callback will be called. 
+ *
+ * The @targets parameter to @callback will contain the resulting targets if
+ * the request succeeded, or %NULL if it failed.
+ *
+ * Since: 2.4
+ **/
+void 
+gtk_clipboard_request_targets (GtkClipboard                *clipboard,
+			       GtkClipboardTargetsReceivedFunc callback,
+			       gpointer                     user_data)
+{
+  RequestTargetsInfo *info;
+  
+  g_return_if_fail (clipboard != NULL);
+  g_return_if_fail (callback != NULL);
+  
+  info = g_new (RequestTargetsInfo, 1);
+  info->callback = callback;
+  info->user_data = user_data;
+
+  gtk_clipboard_request_contents (clipboard, gdk_atom_intern ("TARGETS", FALSE),
+				  request_targets_received_func,
+				  info);
+}
 
 typedef struct
 {
@@ -995,6 +1053,52 @@ gtk_clipboard_wait_is_text_available (GtkClipboard *clipboard)
   if (data)
     {
       result = gtk_selection_data_targets_include_text (data);
+      gtk_selection_data_free (data);
+    }
+
+  return result;
+}
+
+/**
+ * gtk_clipboard_wait_for_targets
+ * @clipboard: a #GtkClipboard
+ * @targets: location to store an array of targets. The result
+ *           stored here must be freed with g_free().
+ * @n_targets: location to store number of items in @targets.
+ *
+ * Returns a list of targets that are present on the clipboard, or %NULL
+ * if there aren't any targets available. The returned list must be 
+ * freed with g_free().
+ * This function waits for the data to be received using the main 
+ * loop, so events, timeouts, etc, may be dispatched during the wait.
+ *
+ * Return value: %TRUE if any targets are present on the clipboard,
+ *               otherwise %FALSE.
+ *
+ * Since: 2.4
+ */
+gboolean
+gtk_clipboard_wait_for_targets (GtkClipboard  *clipboard, 
+				GdkAtom      **targets,
+				gint          *n_targets)
+{
+  GtkSelectionData *data;
+  gboolean result = FALSE;
+  
+  g_return_val_if_fail (clipboard != NULL, FALSE);
+
+  /* TODO: see http://bugzilla.gnome.org/show_bug.cgi?id=101774 with regard to XFIXES */
+
+  if (n_targets)
+    *n_targets = 0;
+      
+  targets = NULL;      
+
+  data = gtk_clipboard_wait_for_contents (clipboard, gdk_atom_intern ("TARGETS", FALSE));
+
+  if (data)
+    {
+      result = gtk_selection_data_get_targets (data, targets, n_targets);
       gtk_selection_data_free (data);
     }
 

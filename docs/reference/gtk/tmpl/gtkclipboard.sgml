@@ -115,6 +115,20 @@ Storing data on clipboards
 @data: the @user_data supplied to gtk_clipboard_request_text().
 
 
+<!-- ##### USER_FUNCTION GtkClipboardTargetsReceivedFunc ##### -->
+<para>
+    A function to be called when the results of gtk_clipboard_request_targets()
+    are received, or when the request fails.
+</para>
+
+@clipboard: the #GtkClipboard
+@atoms: the supported targets, as array of #GdkAtom, or %NULL 
+            if retrieving the data failed.
+@n_atoms: the length of the @atoms array.
+@data: the @user_data supplied to gtk_clipboard_request_targets().
+@Since: 2.4
+
+
 <!-- ##### USER_FUNCTION GtkClipboardGetFunc ##### -->
 <para>
 A function that will be called to provide the contents of the selection.
@@ -253,6 +267,16 @@ will not be used again.
 @user_data: 
 
 
+<!-- ##### FUNCTION gtk_clipboard_request_targets ##### -->
+<para>
+
+</para>
+
+@clipboard: 
+@callback: 
+@user_data: 
+
+
 <!-- ##### FUNCTION gtk_clipboard_wait_for_contents ##### -->
 <para>
 
@@ -269,12 +293,7 @@ will not be used again.
 </para>
 
 @clipboard: 
-@Returns: <!--
-Local variables:
-mode: sgml
-sgml-parent-document: ("../gtk-docs.sgml" "book" "refsect2" "")
-End:
--->
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_clipboard_wait_is_text_available ##### -->
@@ -285,4 +304,21 @@ End:
 @clipboard: 
 @Returns: 
 
+
+<!-- ##### FUNCTION gtk_clipboard_wait_for_targets ##### -->
+<para>
+
+</para>
+
+@clipboard: 
+@targets: 
+@n_targets: 
+@Returns: 
+
+<!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("../gtk-docs.sgml" "book" "refsect2" "")
+End:
+-->
 

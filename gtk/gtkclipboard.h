@@ -38,6 +38,10 @@ typedef void (* GtkClipboardReceivedFunc)        (GtkClipboard     *clipboard,
 typedef void (* GtkClipboardTextReceivedFunc)    (GtkClipboard     *clipboard,
 					          const gchar      *text,
 					          gpointer          data);
+typedef void (* GtkClipboardTargetsReceivedFunc) (GtkClipboard     *clipboard,
+					          GdkAtom          *atoms,
+						  gint              n_atoms,
+					          gpointer          data);
 
 /* Should these functions have GtkClipboard *clipboard as the first argument?
  * right now for ClearFunc, you may have trouble determining _which_ clipboard
@@ -86,12 +90,19 @@ void gtk_clipboard_request_contents (GtkClipboard                    *clipboard,
 void gtk_clipboard_request_text     (GtkClipboard                    *clipboard,
 				     GtkClipboardTextReceivedFunc     callback,
 				     gpointer                         user_data);
+void gtk_clipboard_request_targets  (GtkClipboard                    *clipboard,
+				     GtkClipboardTargetsReceivedFunc  callback,
+				     gpointer                         user_data);
 
 GtkSelectionData *gtk_clipboard_wait_for_contents (GtkClipboard *clipboard,
 						   GdkAtom       target);
 gchar *           gtk_clipboard_wait_for_text     (GtkClipboard *clipboard);
 
 gboolean gtk_clipboard_wait_is_text_available   (GtkClipboard         *clipboard);
+
+gboolean gtk_clipboard_wait_for_targets (GtkClipboard  *clipboard, 
+					 GdkAtom      **targets,
+					 gint          *n_targets);
 
 #ifdef __cplusplus
 }
