@@ -157,6 +157,13 @@ gdk_pixdata_serialize (const GdkPixdata *pixdata,
   return FALSE; \
 }
 
+static inline const guint8 *
+get_uint32 (const guint8 *stream, guint *result)
+{
+  *result = (stream[0] << 24) + (stream[1] << 16) + (stream[2] << 8) + stream[3];
+  return stream + 4;
+}
+
 /**
  * gdk_pixdata_deserialize:
  * @pixdata: a #GdkPixdata structure to be filled in.
@@ -181,7 +188,6 @@ gdk_pixdata_deserialize (GdkPixdata   *pixdata,
 			 const guint8 *stream,
 			 GError	     **error)
 {
-  guint32 *istream;
   guint color_type, sample_width, encoding;
 
   g_return_val_if_fail (pixdata != NULL, FALSE);
@@ -191,21 +197,14 @@ gdk_pixdata_deserialize (GdkPixdata   *pixdata,
 
 
   /* deserialize header */
-  istream = (guint32*) stream;
-  /*
-   * the deserialization of GdkPixdata will fail (at least on win32 with msvc 5.0) 
-   * with 'g_ntohl(*istream++)' because the guint32 istream pointer is only 
-   * incremented by 1 byte, if it is done within the g_ntohl() macro.
-   * Probably working around just another compiler bug ... --HB
-   */
-  pixdata->magic = g_ntohl (*istream); istream++;
-  pixdata->length = g_ntohl (*istream); istream++;
+  stream = get_uint32 (stream, &pixdata->magic);
+  stream = get_uint32 (stream, &pixdata->length);
   if (pixdata->magic != GDK_PIXBUF_MAGIC_NUMBER || pixdata->length < GDK_PIXDATA_HEADER_LENGTH)
     return_header_corrupt (error);
-  pixdata->pixdata_type = g_ntohl (*istream); istream++;
-  pixdata->rowstride = g_ntohl (*istream); istream++;
-  pixdata->width = g_ntohl (*istream); istream++;
-  pixdata->height = g_ntohl (*istream);  istream++;
+  stream = get_uint32 (stream, &pixdata->pixdata_type);
+  stream = get_uint32 (stream, &pixdata->rowstride);
+  stream = get_uint32 (stream, &pixdata->width);
+  stream = get_uint32 (stream, &pixdata->height);
   if (pixdata->width < 1 || pixdata->height < 1 ||
       pixdata->rowstride < pixdata->width)
     return_header_corrupt (error);
@@ -222,7 +221,7 @@ gdk_pixdata_deserialize (GdkPixdata   *pixdata,
   /* deserialize pixel data */
   if (stream_length < pixdata->length - GDK_PIXDATA_HEADER_LENGTH)
     return_pixel_corrupt (error);
-  pixdata->pixel_data = (guint8*) istream;
+  pixdata->pixel_data = (guint8 *)stream;
 
   return TRUE;
 }
