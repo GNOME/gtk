@@ -1,3 +1,15 @@
+1999-11-04  Havoc Pennington  <hp@pobox.com>
+
+	* configure.in: Use libart-config correctly; find gnome-config
+	separately. Fix GNOME_LIBS to be correct in "no gnome installed
+	yet" case.
+
+	* src/Makefile.am: Link to GNOME_LIBS instead of a hardcoded
+	library list.
+
+	Patch untested in the inside-gnome-libs case, I need to commit
+	then check out to the gnome-libs I'm using.	
+	
 1999-11-04  Michael Fulbright  <drmike@redhat.com>
 
 	* src/io-jpeg.c (image_begin_load): Add update_func callback.
