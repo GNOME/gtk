@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0.5\n"
-"POT-Creation-Date: 2002-09-27 13:06+0200\n"
-"PO-Revision-Date: 2002-09-27 13:07+0200\n"
+"POT-Creation-Date: 2002-09-28 01:17+0200\n"
+"PO-Revision-Date: 2002-09-28 01:19+0200\n"
 "Last-Translator: Jordi Mallach <jordi@sindominio.net>\n"
 "Language-Team: Catalan <gnome@softcatala.net>\n"
 "MIME-Version: 1.0\n"
@@ -28,7 +28,7 @@ msgstr "El fitxer gràfic «%s» no conté dades"
 #: gdk-pixbuf/gdk-pixbuf-animation.c:183
 #, c-format
 msgid "Don't know how to load the animation in file '%s'"
-msgstr "No se com carregar l'animació del fitxer «%s»"
+msgstr "No es sap com carregar l'animació del fitxer «%s»"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:205 gdk-pixbuf/gdk-pixbuf-io.c:640
 #, c-format
@@ -57,9 +57,7 @@ msgstr "No és possible carregar el mòdul per a la càrrega d'imatges: %s: %s"
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
-msgstr ""
-"El mòdul de càrrega d'imatges %s no exporta la interfície correcta; "
-"podriatractar-se d'una versió de GTK diferent?"
+msgstr "El mòdul de càrrega d'imatges %s no exporta la interfície correcta; podria tractar-se d'una versió de GTK diferent?"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:494 gdk-pixbuf/gdk-pixbuf-io.c:520
 #, c-format
@@ -257,7 +255,7 @@ msgstr "Les icones comprimides no estan suportades"
 msgid "Unsupported icon type"
 msgstr "Tipus d'icona no implementada"
 
-#: gdk-pixbuf/io-ico.c:499
+#: gdk-pixbuf/io-ico.c:500
 msgid "Not enough memory to load ICO file"
 msgstr "Sense memòria per carregar del fitxer ICO"
 
@@ -1773,11 +1771,11 @@ msgstr "Seleccioneu en el focus"
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr "Com seleccionar els continguts des d'una entrada quan són enfocats"
 
-#: gtk/gtkentry.c:3877 gtk/gtklabel.c:3177
+#: gtk/gtkentry.c:3877 gtk/gtklabel.c:3179
 msgid "Select All"
 msgstr "Seleccioneu tot"
 
-#: gtk/gtkentry.c:3887 gtk/gtklabel.c:3187
+#: gtk/gtkentry.c:3887 gtk/gtklabel.c:3189
 msgid "Input Methods"
 msgstr "Mètodes d'entrada"
 
@@ -1785,7 +1783,7 @@ msgstr "Mètodes d'entrada"
 msgid "_Insert Unicode control character"
 msgstr "_Inserta caràcters de control Unicode"
 
-#: gtk/gtkfilesel.c:513 gtk/gtkimage.c:161
+#: gtk/gtkfilesel.c:513 gtk/gtkimage.c:163
 msgid "Filename"
 msgstr "Nom del fitxer"
 
@@ -2141,79 +2139,79 @@ msgstr ""
 msgid "Error loading icon: %s"
 msgstr "Error carregant la icona: %s"
 
-#: gtk/gtkimage.c:129
+#: gtk/gtkimage.c:131
 msgid "Pixbuf"
 msgstr "Pixbuf"
 
-#: gtk/gtkimage.c:130
+#: gtk/gtkimage.c:132
 msgid "A GdkPixbuf to display."
 msgstr "Un GdkPixbuf a visualitzar"
 
-#: gtk/gtkimage.c:137
+#: gtk/gtkimage.c:139
 msgid "Pixmap"
 msgstr "Mapa de pixels"
 
-#: gtk/gtkimage.c:138
+#: gtk/gtkimage.c:140
 msgid "A GdkPixmap to display."
 msgstr "Un GdkPixmap a visualitzar"
 
-#: gtk/gtkimage.c:145
+#: gtk/gtkimage.c:147
 msgid "Image"
 msgstr "Imatge"
 
-#: gtk/gtkimage.c:146
+#: gtk/gtkimage.c:148
 msgid "A GdkImage to display."
 msgstr "Un GdkImage a visualitzar"
 
-#: gtk/gtkimage.c:153
+#: gtk/gtkimage.c:155
 msgid "Mask"
 msgstr "Màscara"
 
-#: gtk/gtkimage.c:154
+#: gtk/gtkimage.c:156
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr "Màscara de mapa de bits per utilitzar amb GdkImage o GdkPixmap"
 
-#: gtk/gtkimage.c:162
+#: gtk/gtkimage.c:164
 msgid "Filename to load and display."
 msgstr "Nom de fitxer a carregar i visualitzar."
 
-#: gtk/gtkimage.c:170
+#: gtk/gtkimage.c:172
 msgid "Stock ID"
 msgstr "Identificació de l'acció"
 
-#: gtk/gtkimage.c:171
+#: gtk/gtkimage.c:173
 msgid "Stock ID for a stock image to display."
 msgstr "Identificació de l'acción per a que una imatge comuna a visualitzar."
 
-#: gtk/gtkimage.c:178
+#: gtk/gtkimage.c:180
 msgid "Icon set"
 msgstr "Definiu icona"
 
-#: gtk/gtkimage.c:179
+#: gtk/gtkimage.c:181
 msgid "Icon set to display."
 msgstr "Definiu icona a visualitzar"
 
-#: gtk/gtkimage.c:186
+#: gtk/gtkimage.c:188
 msgid "Icon size"
 msgstr "Mida d'icona"
 
-#: gtk/gtkimage.c:187
+#: gtk/gtkimage.c:189
 msgid "Size to use for stock icon or icon set."
 msgstr "Mida a utilitzar per a la icona o el sistema comú de la icona."
 
-#: gtk/gtkimage.c:195
+#: gtk/gtkimage.c:197
 msgid "Animation"
 msgstr "Animació"
 
-#: gtk/gtkimage.c:196
+#: gtk/gtkimage.c:198
 msgid "GdkPixbufAnimation to display."
 msgstr "GdkPixbufAnimation a visualitzar."
 
-#: gtk/gtkimage.c:203
+#: gtk/gtkimage.c:205
 msgid "Storage type"
 msgstr "Tipus d'enmagatzemament"
 
-#: gtk/gtkimage.c:204
+#: gtk/gtkimage.c:206
 msgid "The representation being used for image data."
 msgstr "La representació utilitzada per les dades de la imatge."
 
@@ -2603,7 +2601,7 @@ msgstr ""
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Com els tabuladors tindrien mides homogenis"
 
-#: gtk/gtknotebook.c:2440 gtk/gtknotebook.c:4696
+#: gtk/gtknotebook.c:2450 gtk/gtknotebook.c:4706
 #, c-format
 msgid "Page %u"
 msgstr "Pàgina %u"
@@ -3254,8 +3252,8 @@ msgid "_Copy"
 msgstr "_Copia"
 
 #: gtk/gtkstock.c:284
-msgid "C_ut"
-msgstr "T_alla"
+msgid "Cu_t"
+msgstr "_Talla"
 
 #: gtk/gtkstock.c:285
 msgid "_Delete"
