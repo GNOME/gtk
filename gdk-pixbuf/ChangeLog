@@ -1,3 +1,7 @@
+2001-06-07  Havoc Pennington  <hp@redhat.com>
+
+	* Makefile.am (gdk-pixbuf-marshal.c): fix up the glib-genmarshal path
+
 2001-06-05  Havoc Pennington  <hp@redhat.com>
 
 	* test-loaders.c (main): use putenv not setenv, reported by 

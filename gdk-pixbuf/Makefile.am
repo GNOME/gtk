@@ -241,15 +241,21 @@ EXTRA_DIST =			\
 
 
 gdk-pixbuf-marshal.h: @REBUILD@ $(srcdir)/gdk-pixbuf-marshal.list
-	cwd=`pwd` \
-	&& cd $(srcdir) \
-	&& $$cwd/@GLIB_GENMARSHAL@ --prefix=gdk_pixbuf_marshal gdk-pixbuf-marshal.list --header >> xgen-gmh \
+        case @GLIB_GENMARSHAL@ in							\
+           /*) glib_genmarshal=@GLIB_GENMARSHAL@ ;;					\
+            *) glib_genmarshal=`cd $(top_builddir) && pwd`/@GLIB_GENMARSHAL@ ;;		\
+        esac;										\
+	cd $(srcdir) \
+	&& $$glib_genmarshal --prefix=gdk_pixbuf_marshal gdk-pixbuf-marshal.list --header >> xgen-gmh \
 	&& (cmp -s xgen-gmh gdk-pixbuf-marshal.h || cp xgen-gmh gdk-pixbuf-marshal.h) \
 	&& rm -f xgen-gmh xgen-gmh~
 
 gdk-pixbuf-marshal.c: @REBUILD@ $(srcdir)/gdk-pixbuf-marshal.list
-	cwd=`pwd` \
+        case @GLIB_GENMARSHAL@ in							\
+           /*) glib_genmarshal=@GLIB_GENMARSHAL@ ;;					\
+            *) glib_genmarshal=`cd $(top_builddir) && pwd`/@GLIB_GENMARSHAL@ ;;		\
+        esac;										\
 	&& cd $(srcdir) \
-	&& $$cwd/@GLIB_GENMARSHAL@ --prefix=gdk_pixbuf_marshal gdk-pixbuf-marshal.list --body >> xgen-gmc \
+	&& $$glib-genmarshal --prefix=gdk_pixbuf_marshal gdk-pixbuf-marshal.list --body >> xgen-gmc \
 	&& (cmp -s xgen-gmc gdk-pixbuf-marshal.c || cp xgen-gmc gdk-pixbuf-marshal.c) \
 	&& rm -f xgen-gmc xgen-gmc~
