@@ -94,6 +94,7 @@ static void    gtk_font_selection_get_property       (GObject         *object,
 						      GParamSpec      *pspec);
 static void    gtk_font_selection_init		     (GtkFontSelection      *fontsel);
 static void    gtk_font_selection_finalize	     (GObject               *object);
+static void    gtk_font_selection_realize	     (GtkWidget		    *widget);
 
 /* These are the callbacks & related functions. */
 static void     gtk_font_selection_select_font           (GtkWidget        *w,
@@ -173,11 +174,14 @@ static void
 gtk_font_selection_class_init (GtkFontSelectionClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   
   font_selection_parent_class = gtk_type_class (GTK_TYPE_VBOX);
   
   gobject_class->set_property = gtk_font_selection_set_property;
   gobject_class->get_property = gtk_font_selection_get_property;
+
+  widget_class->realize = gtk_font_selection_realize;
    
   g_object_class_install_property (gobject_class,
                                    PROP_FONT_NAME,
@@ -360,10 +364,6 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   gtk_table_attach (GTK_TABLE (table), scrolled_win, 2, 3, 2, 3,
 		    GTK_FILL, GTK_FILL, 0, 0);
   
-  /* Insert the fonts. If there exist fonts with the same family but
-     different foundries, then the foundry name is appended in brackets. */
-  gtk_font_selection_show_available_fonts (fontsel);
-  
   gtk_signal_connect (GTK_OBJECT (fontsel->font_clist), "select_row",
 		      GTK_SIGNAL_FUNC (gtk_font_selection_select_font),
 		      fontsel);
@@ -373,14 +373,11 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
 			    GTK_SIGNAL_FUNC (gtk_font_selection_scroll_on_map),
 			    fontsel);
   
-  gtk_font_selection_show_available_styles (fontsel);
-  
   gtk_signal_connect (GTK_OBJECT (fontsel->font_style_clist), "select_row",
 		      GTK_SIGNAL_FUNC (gtk_font_selection_select_style),
 		      fontsel);
   GTK_WIDGET_SET_FLAGS (fontsel->font_style_clist, GTK_CAN_FOCUS);
 
-  gtk_font_selection_show_available_sizes (fontsel);
   
   gtk_signal_connect (GTK_OBJECT (fontsel->size_clist), "select_row",
 		      GTK_SIGNAL_FUNC (gtk_font_selection_select_size),
@@ -409,7 +406,22 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   gtk_box_pack_start (GTK_BOX (text_box), fontsel->preview_entry,
 		      TRUE, TRUE, 0);
 
-  gtk_font_selection_update_preview (fontsel);
+/*  gtk_font_selection_update_preview (fontsel);*/
+}
+
+
+static void   
+gtk_font_selection_realize (GtkWidget *widget)
+{
+  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+  widget->window = gtk_widget_get_parent_window (widget);
+  gdk_window_ref (widget->window);
+    /* Insert the fonts. If there exist fonts with the same family but
+     different foundries, then the foundry name is appended in brackets. */
+  gtk_font_selection_show_available_fonts (GTK_FONT_SELECTION (widget)); 
+  gtk_font_selection_show_available_styles (GTK_FONT_SELECTION (widget)); 
+  gtk_font_selection_show_available_sizes (GTK_FONT_SELECTION (widget));
+
 }
 
 GtkWidget *

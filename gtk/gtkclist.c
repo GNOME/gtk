@@ -5952,7 +5952,8 @@ clist_refresh (GtkCList *clist)
 {
   g_return_if_fail (GTK_IS_CLIST (clist));
   
-  if (CLIST_UNFROZEN (clist))
+  if (CLIST_UNFROZEN (clist) && 
+      GTK_WIDGET_REALIZED (GTK_WIDGET (clist)))
     { 
       adjust_adjustments (clist, FALSE);
       draw_rows (clist, NULL);
