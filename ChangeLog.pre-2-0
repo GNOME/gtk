@@ -1,3 +1,8 @@
+2002-01-29  Sven Neumann  <sven@gimp.org>
+
+	* gdk/x11/gdkimage-x11.c (_gdk_x11_copy_to_image): fixed a segfault
+	that showed up when using the color picker.
+
 Tue Jan 29 11:51:14 2002  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkscale.[hc]: fix default value for ::digits property,
