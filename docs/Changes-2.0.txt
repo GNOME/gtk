@@ -491,3 +491,6 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
       ancestor with a colormap set on it explicitely, or if that
       fails, the default colormap.
 
+* The default selected day for GtkCalendar is now the current day in the
+  month, not the first day in the month. The current month and year
+  were already used.

@@ -447,7 +447,7 @@ gtk_calendar_init (GtkCalendar *calendar)
   for (i=0;i<31;i++)
     calendar->marked_date[i] = FALSE;
   calendar->num_marked_dates = 0;
-  calendar->selected_day = 1;
+  calendar->selected_day = tm->tm_mday;
   
   calendar->display_flags = ( GTK_CALENDAR_SHOW_HEADING | 
 			      GTK_CALENDAR_SHOW_DAY_NAMES );

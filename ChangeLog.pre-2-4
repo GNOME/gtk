@@ -1,3 +1,8 @@
+Thu Sep 20 15:31:35 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcalendar.c (gtk_calendar_init): Use the current
+	day, as well as the current month and year.
+
 Thu Sep 20 15:10:30 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkdialog.c (gtk_dialog_init): Automatically set
