@@ -1,18 +1,18 @@
 # gtk+ ja.po.
-# Copyright (C) 1998,2000-2003 Free Software Foundation, Inc.
+# Copyright (C) 1998,2000-2004 Free Software Foundation, Inc.
 # Yasuhiro SHIRASAKI <yasuhiro@awa.tohoku.ac.jp>, 1998.
 # Yukihiro Nakai <nakai@gnome.gr.jp>, 2000-2001.
 # Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>, 2002.
 # Akira TAGOH <tagoh@gnome.gr.jp>, 2002.
-# Takeshi AIHANA <aihana@gnome.gr.jp>, 2003.
+# Takeshi AIHANA <aihana@gnome.gr.jp>, 2003-2004.
 # KAMAGASAKO Masatoshi <emerald@gnome.gr.jp>, 2003.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-22 18:01-0500\n"
-"PO-Revision-Date: 2003-12-14 17:44+0900\n"
+"POT-Creation-Date: 2004-01-25 22:37+0900\n"
+"PO-Revision-Date: 2004-01-25 22:03+0900\n"
 "Last-Translator: Takeshi AIHANA <aihana@gnome.gr.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -82,9 +82,9 @@ msgid "Failed to load image '%s': %s"
 msgstr "画像 '%s' の読み込みに失敗しました: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1095
-#, fuzzy, c-format
+#, c-format
 msgid "Error writing to image file: %s"
-msgstr "JPEG 画像ファイル (%s) の解釈でエラー"
+msgstr "画像ファイルの書き込みでエラー: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1139 gdk-pixbuf/gdk-pixbuf-io.c:1255
 #, c-format
@@ -93,19 +93,16 @@ msgstr ""
 "お使いの gdk-pixbuf は画像ファイルの形式 %s の保存をサポートしていません"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1168
-#, fuzzy
 msgid "Insufficient memory to save image to callback"
-msgstr "XBM 画像を読み込むためのメモリが足りません"
+msgstr "画像をコールバックへ保存するためのメモリが足りません"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1180
-#, fuzzy
 msgid "Failed to open temporary file"
-msgstr "TIFF 画像を開くのを失敗しました"
+msgstr "作業用ファイルのオープンに失敗しました"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1199
-#, fuzzy
 msgid "Failed to read from temporary file"
-msgstr "XBM 画像を読み込む際に一時ファイルへの書き込みに失敗しました"
+msgstr "作業用ファイルからの読み込みに失敗しました"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1379
 #, c-format
@@ -122,9 +119,8 @@ msgstr ""
 "れていないかもしれません: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1586 gdk-pixbuf/gdk-pixbuf-io.c:1636
-#, fuzzy
 msgid "Insufficient memory to save image into a buffer"
-msgstr "XBM 画像を読み込むためのメモリが足りません"
+msgstr "画像をバッファへ保存するためのメモリが足りません"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:377
 #, c-format
@@ -153,7 +149,7 @@ msgid "Image pixel data corrupt"
 msgstr "画像のピクセルデータが壊れています"
 
 #: gdk-pixbuf/gdk-pixdata.c:402
-#, fuzzy, c-format
+#, c-format
 msgid "failed to allocate image buffer of %u byte"
 msgid_plural "failed to allocate image buffer of %u bytes"
 msgstr[0] "%u バイトの画像バッファの確保に失敗しました"
@@ -374,7 +370,7 @@ msgstr "サポートしていない bpp を保持しています"
 #: gdk-pixbuf/io-pcx.c:623 gdk-pixbuf/io-pcx.c:631
 #, c-format
 msgid "Image has unsupported number of %d-bit planes"
-msgstr "サポートしていない数の %d-bit プレーンを保持しています"
+msgstr "サポートしていない数の %d ビット・プレーンを保持しています"
 
 #: gdk-pixbuf/io-pcx.c:647
 msgid "Couldn't create new pixbuf"
@@ -390,7 +386,7 @@ msgstr "パレット・データ用のメモリを確保できませんでした
 
 #: gdk-pixbuf/io-pcx.c:709
 msgid "Didn't get all lines of PCX image"
-msgstr "PCX 画像のすべての行を取得できません"
+msgstr "PCX 画像の全ての行を取得できません"
 
 #: gdk-pixbuf/io-pcx.c:716
 msgid "No palette found at end of PCX data"
@@ -637,7 +633,7 @@ msgstr "TIFF 画像の次元が大きすぎます"
 
 #: gdk-pixbuf/io-tiff.c:244 gdk-pixbuf/io-tiff.c:256 gdk-pixbuf/io-tiff.c:564
 msgid "Insufficient memory to open TIFF file"
-msgstr "TIFF ファイルを開くためのメモリが足りません"
+msgstr "TIFF ファイルをオープンするためのメモリが足りません"
 
 #: gdk-pixbuf/io-tiff.c:268
 msgid "Failed to load RGB data from TIFF file"
@@ -649,7 +645,7 @@ msgstr "サポートされていない TIFF の一種です"
 
 #: gdk-pixbuf/io-tiff.c:346
 msgid "Failed to open TIFF image"
-msgstr "TIFF 画像を開くのを失敗しました"
+msgstr "TIFF 画像のオープンに失敗しました"
 
 #: gdk-pixbuf/io-tiff.c:359
 msgid "TIFFClose operation failed"
@@ -843,7 +839,7 @@ msgstr "色相(_H):"
 
 #: gtk/gtkcolorsel.c:1874
 msgid "Position on the color wheel."
-msgstr "色の輪での位置です"
+msgstr "色の輪における位置です"
 
 #: gtk/gtkcolorsel.c:1876
 msgid "_Saturation:"
@@ -915,7 +911,7 @@ msgstr "色の選択"
 
 #: gtk/gtkentry.c:4079 gtk/gtktextview.c:6875
 msgid "Select _All"
-msgstr "すべて選択(_A)"
+msgstr "全て選択(_A)"
 
 #: gtk/gtkentry.c:4089 gtk/gtktextview.c:6885
 msgid "Input _Methods"
@@ -949,7 +945,7 @@ msgstr ""
 "%s のブックマークに追加できませんでした:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:465 gtk/gtkfilechooserdefault.c:2917
+#: gtk/gtkfilechooserdefault.c:465 gtk/gtkfilechooserdefault.c:2937
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -977,28 +973,25 @@ msgstr ""
 "%s"
 
 #: gtk/gtkfilechooserdefault.c:925
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not create folder %s:\n"
 "%s"
 msgstr ""
-"%s の親フォルダに移動できませんでした:\n"
+"フォルダ %s を生成できません:\n"
 "%s"
 
 #: gtk/gtkfilechooserdefault.c:1001
-#, fuzzy
 msgid "Add"
-msgstr "追加(_A)"
+msgstr "追加"
 
 #: gtk/gtkfilechooserdefault.c:1011
-#, fuzzy
 msgid "Remove"
-msgstr "削除(_R)"
+msgstr "削除"
 
 #: gtk/gtkfilechooserdefault.c:1021
-#, fuzzy
 msgid "Up"
-msgstr "上る(_U)"
+msgstr "上げる"
 
 #: gtk/gtkfilechooserdefault.c:1101 gtk/gtkfilechooserdefault.c:1456
 msgid "File name"
@@ -1037,9 +1030,8 @@ msgstr "最終変更日"
 
 #. Label and entry
 #: gtk/gtkfilechooserdefault.c:1513
-#, fuzzy
 msgid "_Filename:"
-msgstr "ファイル名"
+msgstr "ファイル名(_F):"
 
 #. Preview
 #: gtk/gtkfilechooserdefault.c:1598
@@ -1047,55 +1039,55 @@ msgid "Preview"
 msgstr "プレビュー"
 
 #. Change the current folder label
-#: gtk/gtkfilechooserdefault.c:2118
+#: gtk/gtkfilechooserdefault.c:2130
 #, c-format
 msgid "Current folder: %s"
 msgstr "現在のフォルダ: %s"
 
-#: gtk/gtkfilechooserdefault.c:2521
+#: gtk/gtkfilechooserdefault.c:2533
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "ショートカット %s は存在しません"
 
-#: gtk/gtkfilechooserdefault.c:3063
+#: gtk/gtkfilechooserdefault.c:3083
 msgid "Type name of new folder"
-msgstr ""
+msgstr "新しいフォルダの種類"
 
-#: gtk/gtkfilechooserdefault.c:3090
-#, fuzzy, c-format
+#: gtk/gtkfilechooserdefault.c:3110
+#, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d バイト"
 msgstr[1] "%d バイト"
 
-#: gtk/gtkfilechooserdefault.c:3092
+#: gtk/gtkfilechooserdefault.c:3112
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f Kバイト"
 
-#: gtk/gtkfilechooserdefault.c:3094
+#: gtk/gtkfilechooserdefault.c:3114
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f Mバイト"
 
-#: gtk/gtkfilechooserdefault.c:3096
+#: gtk/gtkfilechooserdefault.c:3116
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f Gバイト"
 
-#: gtk/gtkfilechooserdefault.c:3141
+#: gtk/gtkfilechooserdefault.c:3161
 msgid "Today"
 msgstr "今日"
 
-#: gtk/gtkfilechooserdefault.c:3143
+#: gtk/gtkfilechooserdefault.c:3163
 msgid "Yesterday"
 msgstr "昨日"
 
-#: gtk/gtkfilechooserdefault.c:3151
+#: gtk/gtkfilechooserdefault.c:3171
 msgid "%d/%b/%Y"
 msgstr "%Y/%m/%d"
 
-#: gtk/gtkfilechooserdefault.c:3154
+#: gtk/gtkfilechooserdefault.c:3174
 msgid "Unknown"
 msgstr "不明"
 
@@ -1203,13 +1195,13 @@ msgid "Error deleting file \"%s\": %s"
 msgstr "ファイル \"%s\" の削除中にエラー: %s"
 
 #: gtk/gtkfilesel.c:1623
-#, fuzzy, c-format
+#, c-format
 msgid "Really delete file \"%s\"?"
-msgstr "本当にファイル \"%s\" を削除してもよろしいですか？"
+msgstr "本当にファイル \"%s\" を削除しますか？"
 
 #: gtk/gtkfilesel.c:1628
 msgid "Delete File"
-msgstr "ファイル削除"
+msgstr "ファイルの削除"
 
 #: gtk/gtkfilesel.c:1674 gtk/gtkfilesel.c:1688
 #, c-format
@@ -1287,14 +1279,12 @@ msgid "error creating directory '%s': %s"
 msgstr "フォルダ '%s' の作成中にエラー: %s"
 
 #: gtk/gtkfilesystemunix.c:378 gtk/gtkfilesystemwin32.c:458
-#, fuzzy
 msgid "This file system does not support mounting"
-msgstr "このファイル・システムではアイコンをサポートしていません"
+msgstr "このファイル・システムでは mount をサポートしていません"
 
 #: gtk/gtkfilesystemunix.c:386
-#, fuzzy
 msgid "Filesystem"
-msgstr "ファイル・システム"
+msgstr "ファイルシステム"
 
 #: gtk/gtkfilesystemunix.c:648
 msgid "This file system does not support icons"
@@ -1315,9 +1305,8 @@ msgid "Bookmark saving failed (%s)"
 msgstr "ブックマークの保存に失敗 (%s)"
 
 #: gtk/gtkfilesystemwin32.c:976
-#, fuzzy
 msgid "This file system does not support icons for everything"
-msgstr "このファイル・システムではアイコンをサポートしていません"
+msgstr "このファイル・システムでは全てのアイコンをサポートしていません"
 
 #: gtk/gtkfontbutton.c:177 gtk/gtkfontbutton.c:294
 msgid "Pick a Font"
@@ -1383,11 +1372,15 @@ msgid ""
 "You can get a copy from:\n"
 "\t%s"
 msgstr ""
+"アイコン '%s' が見つかりませんでした。テーマ '%s' も\n"
+"見つからないので、インストールする必要があります。\n"
+"次からコピーを取得できます:\n"
+"\t%s"
 
 #: gtk/gtkicontheme.c:1247
 #, c-format
 msgid "Icon '%s' not present in theme"
-msgstr "アイコン '%s' はテーマに存在しません"
+msgstr "テーマの中にアイコン '%s' はありません"
 
 #: gtk/gtkimmodule.c:419
 msgid "Default"
@@ -1623,7 +1616,7 @@ msgstr "上る(_U)"
 
 #: gtk/gtkstock.c:298
 msgid "_Harddisk"
-msgstr ""
+msgstr "ハードディスク(_H)"
 
 #: gtk/gtkstock.c:299
 msgid "_Help"
@@ -1635,11 +1628,11 @@ msgstr "ホーム(_H)"
 
 #: gtk/gtkstock.c:301
 msgid "Increase Indent"
-msgstr ""
+msgstr "インデントを増やす"
 
 #: gtk/gtkstock.c:302
 msgid "Decrease Indent"
-msgstr ""
+msgstr "インデントを減らす"
 
 #: gtk/gtkstock.c:303
 msgid "_Index"
@@ -1836,7 +1829,7 @@ msgstr "ZWNJ Zero Width Non-Joiner(_N)"
 #: gtk/gtkthemes.c:69
 #, c-format
 msgid "Unable to locate theme engine in module_path: \"%s\","
-msgstr "module_path にテーマ・エンジンが見つかりません: \"%s\","
+msgstr "module_path にはテーマ・エンジンがありません: \"%s\","
 
 #: gtk/gtktipsquery.c:184
 msgid "--- No Tip ---"

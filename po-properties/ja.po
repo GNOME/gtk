@@ -1,18 +1,18 @@
-# gtk+ ja.po.
-# Copyright (C) 1998,2000-2003 Free Software Foundation, Inc.
+# gtk+-properties ja.po.
+# Copyright (C) 1998,2000-2004 Free Software Foundation, Inc.
 # Yasuhiro SHIRASAKI <yasuhiro@awa.tohoku.ac.jp>, 1998.
 # Yukihiro Nakai <nakai@gnome.gr.jp>, 2000-2001.
 # Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>, 2002.
 # Akira TAGOH <tagoh@gnome.gr.jp>, 2002.
-# Takeshi AIHANA <aihana@gnome.gr.jp>, 2003.
+# Takeshi AIHANA <aihana@gnome.gr.jp>, 2003-2004.
 # KAMAGASAKO Masatoshi <emerald@gnome.gr.jp>, 2003.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ HEAD\n"
+"Project-Id-Version: gtk+-properties HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-01-22 18:01-0500\n"
-"PO-Revision-Date: 2003-12-14 17:44+0900\n"
+"PO-Revision-Date: 2004-01-25 22:27+0900\n"
 "Last-Translator: Takeshi AIHANA <aihana@gnome.gr.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -21,77 +21,68 @@ msgstr ""
 
 #: gdk-pixbuf/gdk-pixbuf.c:100
 msgid "Number of Channels"
-msgstr ""
+msgstr "チャンネルの数"
 
 #: gdk-pixbuf/gdk-pixbuf.c:101
-#, fuzzy
 msgid "The number of samples per pixel"
-msgstr "XPM のピクセル当たりの文字数がおかしいです"
+msgstr "ピクセル辺りのサンプル数です"
 
 #: gdk-pixbuf/gdk-pixbuf.c:111
-#, fuzzy
 msgid "Colorspace"
-msgstr "色の名称:(_N)"
+msgstr "カラースペース"
 
 #: gdk-pixbuf/gdk-pixbuf.c:112
 msgid "The colorspace in which the samples are interpreted"
-msgstr ""
+msgstr "サンプルを処理する位置のカラースペースです"
 
 #: gdk-pixbuf/gdk-pixbuf.c:122
-#, fuzzy
 msgid "Has Alpha"
-msgstr "アルファ値を使う"
+msgstr "αの所有可否"
 
 #: gdk-pixbuf/gdk-pixbuf.c:123
 msgid "Whether the pixbuf has an alpha channel"
-msgstr ""
+msgstr "pixbuf がαチャンネルを持つかどうか"
 
 #: gdk-pixbuf/gdk-pixbuf.c:131
 msgid "Bits per Sample"
-msgstr ""
+msgstr "ビット数/サンプル"
 
 #: gdk-pixbuf/gdk-pixbuf.c:132
-#, fuzzy
 msgid "The number of bits per sample"
-msgstr "テーブル中の行の数"
+msgstr "サンプル辺りのビット数です"
 
 #: gdk-pixbuf/gdk-pixbuf.c:142 gtk/gtklayout.c:647 gtk/gtktreeviewcolumn.c:238
 msgid "Width"
 msgstr "幅"
 
 #: gdk-pixbuf/gdk-pixbuf.c:143
-#, fuzzy
 msgid "The number of columns of the pixbuf"
-msgstr "テーブル中の列の数"
+msgstr "pixbuf の桁の幅です"
 
 #: gdk-pixbuf/gdk-pixbuf.c:153 gtk/gtklayout.c:656
 msgid "Height"
 msgstr "高さ"
 
 #: gdk-pixbuf/gdk-pixbuf.c:154
-#, fuzzy
 msgid "The number of rows of the pixbuf"
-msgstr "テーブル中の行の数"
+msgstr "pixbuf の行の高さです"
 
 #: gdk-pixbuf/gdk-pixbuf.c:164
-#, fuzzy
 msgid "Rowstride"
-msgstr "行"
+msgstr "Rowstride"
 
 #: gdk-pixbuf/gdk-pixbuf.c:165
-#, fuzzy
 msgid ""
 "The number of bytes between the start of a row and the start of the next row"
-msgstr ""
-"スクロールバーとスクロール・ウィンドウとの間の間隔を指定します (ピクセル単位)"
+msgstr "ある行の始点と次の行の始点の間のバイト数です"
 
 #: gdk-pixbuf/gdk-pixbuf.c:175
 msgid "Pixels"
-msgstr ""
+msgstr "ピクセル"
 
 #: gdk-pixbuf/gdk-pixbuf.c:176
 msgid "A pointer to the pixel data of the pixbuf"
-msgstr ""
+msgstr "pixbuf のピクセル・データを指すポインタです"
 
 #: gdk/gdkdisplaymanager.c:126
 msgid "Default Display"
@@ -99,7 +90,7 @@ msgstr "デフォルトのディスプレイ"
 
 #: gdk/gdkdisplaymanager.c:127
 msgid "The default display for GDK"
-msgstr "GDK のデフォルトのディスプレイ"
+msgstr "GDK が使用するデフォルトのディスプレイです"
 
 #: gtk/gtkaccellabel.c:137
 msgid "Accelerator Closure"
@@ -107,7 +98,7 @@ msgstr "アクセラレータ・クロージャ"
 
 #: gtk/gtkaccellabel.c:138
 msgid "The closure to be monitored for accelerator changes"
-msgstr "アクセラレータの変化を監視するためのクロージャ"
+msgstr "アクセラレータの変化を監視するためのクロージャです"
 
 #: gtk/gtkaccellabel.c:144
 msgid "Accelerator Widget"
@@ -119,11 +110,11 @@ msgstr "アクセラレータの変化を監視するためのウィジェット
 
 #: gtk/gtkaction.c:193 gtk/gtkactiongroup.c:133
 msgid "Name"
-msgstr "名称"
+msgstr "名前"
 
 #: gtk/gtkaction.c:194
 msgid "A unique name for the action."
-msgstr "アクションに固有の名称です。"
+msgstr "アクションに固有の名称です"
 
 #: gtk/gtkaction.c:201 gtk/gtkbutton.c:203 gtk/gtkexpander.c:202
 #: gtk/gtkframe.c:125 gtk/gtklabel.c:290 gtk/gtktoolbutton.c:179
@@ -132,7 +123,7 @@ msgstr "ラベル"
 
 #: gtk/gtkaction.c:202
 msgid "The label used for menu items and buttons that activate this action."
-msgstr "このアクションを有効にするメニュー項目とボタンに使われるラベルです。"
+msgstr "このアクションを有効にするメニュー項目とボタンに使われるラベルです"
 
 #: gtk/gtkaction.c:208
 msgid "Short label"
@@ -140,7 +131,7 @@ msgstr "短いラベル"
 
 #: gtk/gtkaction.c:209
 msgid "A shorter label that may be used on toolbar buttons."
-msgstr "ツール・バー上のボタンに使用される短いラベルです。"
+msgstr "ツール・バー上のボタンに使用される短いラベルです"
 
 #: gtk/gtkaction.c:215
 msgid "Tooltip"
@@ -148,7 +139,7 @@ msgstr "ツールチップ"
 
 #: gtk/gtkaction.c:216
 msgid "A tooltip for this action."
-msgstr "このアクションのツールチップです。"
+msgstr "このアクションのツールチップです"
 
 #: gtk/gtkaction.c:222
 msgid "Stock Icon"
@@ -156,7 +147,7 @@ msgstr "ストック・アイコン"
 
 #: gtk/gtkaction.c:223
 msgid "The stock icon displayed in widgets representing this action."
-msgstr "このアクションを表すウィジェットに表示されるストック・アイコンです。"
+msgstr "このアクションを表すウィジェットに表示されるストック・アイコンです"
 
 #: gtk/gtkaction.c:229 gtk/gtktoolitem.c:154
 msgid "Visible when horizontal"
@@ -217,29 +208,27 @@ msgid "Whether the action is visible."
 msgstr "ウィジェットが可視かどうか"
 
 #: gtk/gtkaction.c:271
-#, fuzzy
 msgid "Action Group"
-msgstr "アクション"
+msgstr "アクション・グループ"
 
 #: gtk/gtkaction.c:272
 msgid ""
 "The GtkActionGroup this GtkAction is associated with, or NULL (for internal "
 "use)."
 msgstr ""
+"この GtkAction と連携する GtkActionGroup、または NULL (GTK+ 内部で使用) です"
 
 #: gtk/gtkactiongroup.c:134
 msgid "A name for the action group."
 msgstr "アクション・グループの名前です"
 
 #: gtk/gtkactiongroup.c:142
-#, fuzzy
 msgid "Whether the action group is enabled."
-msgstr "ウィジェットが有効かどうか"
+msgstr "アクション・グループが有効かどうかです"
 
 #: gtk/gtkactiongroup.c:149
-#, fuzzy
 msgid "Whether the action group is visible."
-msgstr "ウィジェットが可視かどうか"
+msgstr "アクション・グループが表示されるかどうかです"
 
 #: gtk/gtkalignment.c:116
 msgid "Horizontal alignment"
@@ -542,14 +531,12 @@ msgid "The border relief style"
 msgstr "枠の縁の外観"
 
 #: gtk/gtkbutton.c:253
-#, fuzzy
 msgid "Horizontal alignment for child"
-msgstr "水平位置"
+msgstr "子ウィジットの水平位置"
 
 #: gtk/gtkbutton.c:272
-#, fuzzy
 msgid "Vertical alignment for child"
-msgstr "垂直位置"
+msgstr "子ウィジットの垂直位置"
 
 #: gtk/gtkbutton.c:340
 msgid "Default Spacing"
@@ -823,20 +810,19 @@ msgstr "テキスト描画に適用するスタイル属性の一覧"
 
 #: gtk/gtkcellrenderertext.c:216
 msgid "Single Paragraph Mode"
-msgstr ""
+msgstr "単一の段落モード"
 
 #: gtk/gtkcellrenderertext.c:217
-#, fuzzy
 msgid "Whether or not to keep all text in a single paragraph"
-msgstr "色にアルファ値を設定するかどうか"
+msgstr "単一の段落にある全てのテキストを保持するかどうかです"
 
 #: gtk/gtkcellrenderertext.c:225 gtk/gtkcellview.c:179 gtk/gtktexttag.c:205
 msgid "Background color name"
-msgstr "背景色名"
+msgstr "背景色の名前"
 
 #: gtk/gtkcellrenderertext.c:226 gtk/gtkcellview.c:180 gtk/gtktexttag.c:206
 msgid "Background color as a string"
-msgstr "背景色の文字表現"
+msgstr "背景色を示す文字列です"
 
 #: gtk/gtkcellrenderertext.c:233 gtk/gtkcellview.c:186 gtk/gtktexttag.c:213
 msgid "Background color"
@@ -844,15 +830,15 @@ msgstr "背景色"
 
 #: gtk/gtkcellrenderertext.c:234 gtk/gtkcellview.c:187
 msgid "Background color as a GdkColor"
-msgstr "背景色の GdkColor 表現"
+msgstr "背景色を示す GdkColor 形式の文字列です"
 
 #: gtk/gtkcellrenderertext.c:241 gtk/gtktexttag.c:239
 msgid "Foreground color name"
-msgstr "前景色名"
+msgstr "前景色の名前"
 
 #: gtk/gtkcellrenderertext.c:242 gtk/gtktexttag.c:240
 msgid "Foreground color as a string"
-msgstr "前景色の文字表現"
+msgstr "前景色を示す文字列です"
 
 #: gtk/gtkcellrenderertext.c:249 gtk/gtktexttag.c:247
 msgid "Foreground color"
@@ -860,7 +846,7 @@ msgstr "前景色"
 
 #: gtk/gtkcellrenderertext.c:250
 msgid "Foreground color as a GdkColor"
-msgstr "前景色の GdkColor 表現"
+msgstr "前景色を示す GdkColor 形式の文字列です"
 
 #: gtk/gtkcellrenderertext.c:258 gtk/gtkentry.c:466 gtk/gtktexttag.c:273
 #: gtk/gtktextview.c:585
@@ -869,7 +855,7 @@ msgstr "編集可能"
 
 #: gtk/gtkcellrenderertext.c:259 gtk/gtktexttag.c:274 gtk/gtktextview.c:586
 msgid "Whether the text can be modified by the user"
-msgstr "ユーザがテキストを変更できるかどうか"
+msgstr "ユーザがテキストを変更できるかどうかです"
 
 #: gtk/gtkcellrenderertext.c:266 gtk/gtkcellrenderertext.c:274
 #: gtk/gtkfontsel.c:217 gtk/gtktexttag.c:281 gtk/gtktexttag.c:289
@@ -2578,9 +2564,8 @@ msgid "Group"
 msgstr "グループ"
 
 #: gtk/gtkradioaction.c:156
-#, fuzzy
 msgid "The radio action whose group this action belongs."
-msgstr "このウィジェットが属するグループとなるラジオ・ボタン"
+msgstr "このアクションが属するグループとなるラジオ・アクションです"
 
 #: gtk/gtkradiobutton.c:110
 msgid "The radio button whose group this widget belongs."
@@ -2819,17 +2804,16 @@ msgstr ""
 "ダブル・クリックとして認識するために二回クリックする間の最大時間 (ミリ秒)"
 
 #: gtk/gtksettings.c:178
-#, fuzzy
 msgid "Double Click Distance"
-msgstr "ダブル・クリックの時間"
+msgstr "ダブル・クリックの距離"
 
 #: gtk/gtksettings.c:179
-#, fuzzy
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
 msgstr ""
-"ダブル・クリックとして認識するために二回クリックする間の最大時間 (ミリ秒)"
+"ダブル・クリックとして認識するために二回クリックする間の最大距離 (ピクセル単"
+"位) です"
 
 #: gtk/gtksettings.c:186
 msgid "Cursor Blink"
@@ -2837,7 +2821,7 @@ msgstr "カーソルの点滅"
 
 #: gtk/gtksettings.c:187
 msgid "Whether the cursor should blink"
-msgstr "カーソルを点滅させるかどうか"
+msgstr "カーソルを点滅させるかどうかです"
 
 #: gtk/gtksettings.c:194
 msgid "Cursor Blink Time"
@@ -2845,7 +2829,7 @@ msgstr "カーソルの点滅間隔"
 
 #: gtk/gtksettings.c:195
 msgid "Length of the cursor blink cycle, in milleseconds"
-msgstr "カーソルを点滅させる周期の長さ (ミリ秒)"
+msgstr "カーソルを点滅させる周期の長さ (ミリ秒) です"
 
 #: gtk/gtksettings.c:202
 msgid "Split Cursor"
@@ -3688,13 +3672,12 @@ msgid "Model column to search through when searching through code"
 msgstr "コードを介して検索する際に検索する列のモデル"
 
 #: gtk/gtktreeview.c:609
-#, fuzzy
 msgid "Fixed Height Mode"
-msgstr "サイズ固定の高さ"
+msgstr "高さが固定のモード"
 
 #: gtk/gtktreeview.c:610
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
-msgstr ""
+msgstr "全ての行が同じ高さであると仮定することで GtkTreeView を高速にします"
 
 #: gtk/gtktreeview.c:630
 msgid "Vertical Separator Width"
