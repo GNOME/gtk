@@ -2522,6 +2522,9 @@ cached_icon_free (CachedIcon *icon)
 {
   g_object_unref (icon->pixbuf);
 
+  if (icon->style)
+    g_object_unref (icon->style);
+
   g_free (icon);
 }
 

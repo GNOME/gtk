@@ -1,3 +1,10 @@
+Wed Sep  3 21:58:03 2003  Kristian Rietveld  <kris@gtk.org>
+
+	Merge from stable.
+
+	* gtk/gtkiconfactory.c (cached_icon_free): if icon->style != NULL,
+	unref it. (Fixes memleak, patch from Kjartan Maraas).
+
 Wed Sep  3 21:38:26 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gdk/Makefile.am, gdk/linux-fb/gdkfbmanager.c, gdk/x11/gdkcolor-x11.c,
