@@ -1,3 +1,9 @@
+Mon Jul 19 23:51:50 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktreeview.c (gtk_tree_view_button_press): Set drag_pos
+	before grabbing the focus, since we may reenter into 
+	gtk_tree_view_motion_resize_column() which requires drag_pos
+	to be set.  (#147913, Guilherme Salgado, patch by John Finlay) 
 
 Mon Jul 19 23:51:50 2004  Matthias Clasen  <maclas@gmx.de>
 
