@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
@@ -17,7 +17,9 @@
  */
 #include <stdarg.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <locale.h>
 #include "glib.h"
 
 
@@ -32,22 +34,97 @@ gchar*
 g_strdup (const gchar *str)
 {
   gchar *new_str;
-
+  
   new_str = NULL;
   if (str)
     {
       new_str = g_new (char, strlen (str) + 1);
       strcpy (new_str, str);
     }
-
+  
   return new_str;
+}
+
+gchar*
+g_strconcat (const gchar *string1, ...)
+{
+  guint	  l;
+  va_list args;
+  gchar	  *s;
+  gchar	  *concat;
+  
+  g_return_val_if_fail (string1 != NULL, NULL);
+  
+  l = 1 + strlen (string1);
+  va_start (args, string1);
+  s = va_arg (args, gchar*);
+  while (s)
+    {
+      l += strlen (s);
+      s = va_arg (args, gchar*);
+    }
+  va_end (args);
+  
+  concat = g_new (gchar, l);
+  concat[0] = 0;
+  
+  strcat (concat, string1);
+  va_start (args, string1);
+  s = va_arg (args, gchar*);
+  while (s)
+    {
+      strcat (concat, s);
+      s = va_arg (args, gchar*);
+    }
+  va_end (args);
+  
+  return concat;
+}
+
+gdouble
+g_strtod (const gchar *nptr,
+	  gchar **endptr)
+{
+  gchar *fail_pos_1;
+  gchar *fail_pos_2;
+  gdouble val_1;
+  gdouble val_2 = 0;
+
+  g_return_val_if_fail (nptr != NULL, 0);
+
+  fail_pos_1 = NULL;
+  fail_pos_2 = NULL;
+
+  val_1 = strtod (nptr, &fail_pos_1);
+
+  if (fail_pos_1 && fail_pos_1[0] != 0)
+    {
+      gchar *old_locale;
+
+      old_locale = setlocale (LC_NUMERIC, "C");
+      val_2 = strtod (nptr, &fail_pos_2);
+      setlocale (LC_NUMERIC, old_locale);
+    }
+
+  if (!fail_pos_1 || fail_pos_1[0] == 0 || fail_pos_1 >= fail_pos_2)
+    {
+      if (endptr)
+	*endptr = fail_pos_1;
+      return val_1;
+    }
+  else
+    {
+      if (endptr)
+	*endptr = fail_pos_2;
+      return val_2;
+    }
 }
 
 gchar*
 g_strerror (gint errnum)
 {
   static char msg[64];
-
+  
 #ifdef HAVE_STRERROR
   return strerror (errnum);
 #elif NO_SYS_ERRLIST

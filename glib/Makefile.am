@@ -13,8 +13,9 @@ libglib_la_SOURCES = \
 		gslist.c	\
 		gtimer.c	\
 		gtree.c		\
-		gutils.c        \
-		gstring.c
+		gstring.c	\
+		gscanner.c	\
+		gutils.c
 
 include_HEADERS = \
 		glib.h

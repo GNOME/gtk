@@ -1,3 +1,13 @@
+Tue Dec 23 02:49:51 1997  Tim Janik  <timj@psynet.net>
+
+	* gscanner.c: new file for GScanner: Flexible lexical scanner for
+ 	general purpose.
+	* glib_pre2.h: added GScanner includes. added g_strconcat and g_strtod.
+	gutils.c (g_strconcat): new function for string concatenation of NULL
+ 	terminated parameter list.
+	(g_strtod): new function to perform best string to double conversion
+	with or without consideration of the current locale.
+
 Mon Dec 15 19:33:58 1997  Tim Janik  <timj@psynet.net>
 
 	* glist.c: minor optimizations:
