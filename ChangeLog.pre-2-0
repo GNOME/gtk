@@ -1,3 +1,9 @@
+2002-02-05  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtkimage.c (gtk_image_expose): offset area being gotten from
+	pixmap by the align/padding offsets, so we don't get warnings
+	in gdk_pixbuf_get_from_drawable (and so it works, of course)
+
 2002-02-05  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/gtkrc.c (gtk_rc_parse_file): Remove a (now) misleading comment.
