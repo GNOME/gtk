@@ -27,7 +27,7 @@
 #include "config.h"
 
 #include <string.h>
-#include "gdk.h"
+#include <gdk/gdk.h>
 #include "gdkprivate.h"
 
 GdkAtom

@@ -26,9 +26,9 @@
 
 #include "config.h"
 
-#include "gdk.h"
-#include "gdkprivate.h"
 #include <stdio.h>
+#include <gdk/gdk.h>
+#include "gdkprivate.h"
 
 static guint gdk_xid_hash    (XID *xid);
 static gint  gdk_xid_compare (XID *a,

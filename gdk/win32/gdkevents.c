@@ -28,11 +28,10 @@
 #include "config.h"
 
 #include <stdio.h>
-#include "gdk.h"
+#include <gdk/gdk.h>
+#include <gdk/gdkkeysyms.h>
 #include "gdkx.h"
-#include "gdkprivate.h"
 #include "gdkinput.h"
-#include "gdkkeysyms.h"
 
 #define PING() printf("%s: %d\n",__FILE__,__LINE__),fflush(stdout)
 

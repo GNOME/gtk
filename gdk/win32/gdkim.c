@@ -31,9 +31,8 @@
 #  endif
 #endif
 
-#include "gdk.h"
-#include "gdkprivate.h"
-#include "gdki18n.h"
+#include <gdk/gdk.h>
+#include <gdk/gdki18n.h>
 #include "gdkx.h"
 
 /* If this variable is FALSE, it indicates that we should

@@ -64,8 +64,7 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include "gdk.h"
-#include "gdkprivate.h"
+
 #include "gdkx.h"
 
 #define MAX_IMAGE_COLORS 256

@@ -27,7 +27,7 @@
 #include "config.h"
 
 #include <math.h>
-#include "gdk.h"
+#include <gdk/gdk.h>
 #include "gdkprivate.h"
 
 #ifndef M_TWOPI

@@ -25,7 +25,7 @@
  */
 
 #include <stdio.h>
-#include "gdk.h"
+#include <gdk/gdk.h>
 #include "gdkprivate.h"
 
 guint             gdk_debug_flags = 0;

@@ -31,10 +31,8 @@
 #include <stdio.h>
 #include <math.h>
 
-#include "gdk.h"
+#include <gdk/gdk.h>
 #include "gdkx.h"
-#include "gdkprivate.h"
-
 #include "gdkinput.h"
 
 #ifndef M_PI

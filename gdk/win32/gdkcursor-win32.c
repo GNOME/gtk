@@ -19,7 +19,7 @@
 
 #include "config.h"
 
-#include "gdk.h"
+#include <gdk/gdk.h>
 #include "gdkprivate.h"
 
 static const struct { const char *name; int type; } cursors[] = {

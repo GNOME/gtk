@@ -26,8 +26,7 @@
 
 #include "config.h"
 
-#include "gdk.h"
-#include "gdkprivate.h"
+#include <gdk/gdk.h>
 #include "gdkx.h"
 
 static void  gdk_visual_add            (GdkVisual *visual);

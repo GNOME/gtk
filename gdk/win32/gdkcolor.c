@@ -31,8 +31,6 @@
 #include <string.h>
 #include <time.h>
 
-#include "gdk.h"
-#include "gdkprivate.h"
 #include "gdkx.h"
 
 #ifdef _MSC_VER

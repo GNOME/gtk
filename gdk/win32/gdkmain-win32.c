@@ -33,12 +33,11 @@
 #include <limits.h>
 #include <io.h>
 
-#include "gdk.h"
-#include "gdkprivate.h"
-#include "gdkinput.h"
+#include <gdk/gdk.h>
+#include <gdk/gdkkeysyms.h>
+#include <gdk/gdki18n.h>
 #include "gdkx.h"
-#include "gdkkeysyms.h"
-#include "gdki18n.h"
+#include "gdkinput.h"
 
 static void	 gdkx_XConvertCase	(KeySym	       symbol,
 					 KeySym	      *lower,
@@ -2090,7 +2089,7 @@ gdk_keys_keyval_compare (const void *pkey, const void *pbase)
   return (*(int *) pkey) - ((struct gdk_key *) pbase)->keyval;
 }
 
-const gchar*
+gchar*
 gdk_keyval_name (guint	      keyval)
 {
   struct gdk_key *found =

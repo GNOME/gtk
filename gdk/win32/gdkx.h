@@ -28,7 +28,7 @@
 #define __GDK_X_H__
 
 #include <gdk/gdk.h>
-#include <gdk/gdkprivate.h>
+#include <gdkprivate.h>
 
 #include <time.h>
 #include <locale.h>

@@ -75,6 +75,13 @@ gdk-$(GTK_VER).dll : $(gdk_OBJECTS) gdk.def gdk.res
 .c.obj :
 	$(CC) $(CFLAGS) -GD -c -DGDK_COMPILATION -DG_LOG_DOMAIN=\"Gdk\" $<
 
+gdkrgb.c : ..\gdkrgb.c
+	copy ..\gdkrgb.c .
+
+gdkrectangle.c : ..\gdkrectangle.c
+	copy ..\gdkrectangle.c .
+
+
 testgdk.exe : testgdk.obj gdk-$(GTK_VER).dll
 	$(CC) $(CFLAGS) testgdk.obj gdk-$(GTK_VER).lib $(GLIB)\glib-$(GLIB_VER).lib $(LDFLAGS)
 

@@ -26,7 +26,7 @@
 
 #include "config.h"
 
-#include "gdk.h"
+#include <gdk/gdk.h>
 #include "gdkprivate.h"
 
 static void gdk_image_put_normal (GdkDrawable *drawable,

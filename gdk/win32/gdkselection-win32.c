@@ -28,9 +28,8 @@
 
 #include <string.h>
 
-#include "gdk.h"
+#include <gdk/gdk.h>
 #include "gdkx.h"
-#include "gdkprivate.h"
 
 /* We emulate the GDK_SELECTION window properties by storing
  * it's data in a per-window hashtable.

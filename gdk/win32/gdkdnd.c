@@ -30,12 +30,13 @@
 #define INITGUID
 
 #include <string.h>
-#include "gdk.h"
-#include "gdkx.h"
-#include "gdk/gdkprivate.h"
+
 #include <ole2.h>
 #include <shlobj.h>
 #include <shlguid.h>
+
+#include <gdk/gdk.h>
+#include "gdkx.h"
 
 typedef struct _GdkDragContextPrivate GdkDragContextPrivate;
 
