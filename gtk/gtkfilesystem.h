@@ -345,8 +345,16 @@ GType   gtk_file_path_get_type (void) G_GNUC_CONST;
 #endif/* __GNUC__ */
 
 #define gtk_file_path_copy(path)       gtk_file_path_new_dup (gtk_file_path_get_string(path))
+#ifdef G_OS_WIN32
+int _gtk_file_system_win32_path_compare (const gchar *path1,
+					 const gchar *path2);
+#define gtk_file_path_compare(path1,path2) \
+  _gtk_file_system_win32_path_compare (gtk_file_path_get_string (path1), \
+	                               gtk_file_path_get_string (path2))
+#else
 #define gtk_file_path_compare(path1,path2) strcmp (gtk_file_path_get_string (path1), \
 						   gtk_file_path_get_string (path2))
+#endif
 
 GSList *gtk_file_paths_sort (GSList *paths);
 GSList *gtk_file_paths_copy (GSList *paths);

@@ -1,3 +1,87 @@
+2005-01-02  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk/Makefile.am (libgtk_target_ldflags): Add -lole32, needed for
+	CoTaskMemFree in get_special_folder() below.
+
+	* gtk/gtkfilesystem.h: Implement case-insensitive path compare on
+	Win32 using _gtk_file_system_win32_path_compare().
+
+	* gtk/gtk.symbols: Add _gtk_file_system_win32_path_compare.
+
+	* gtk/gtkfilechooserbutton.c (model_add_special)
+	* gtk/gtkfilechooserdefault.c (shortcuts_append_desktop): Use
+	_gtk_file_system_win32_get_desktop() to get correct Desktop folder
+	on Win32. (#144003)
+
+	* gtk/gtkfilesystemwin32.c: Remove unnecessary includes. Do
+	consider all drives "mounted", including floppies. Trying to
+	inspect the contents of a nonexistent floppy will cause errors
+	later that are handled normally, no need to avoid them
+	completely. Keep the drive type in the GtkFileSystemVolume.
+	Support UNC paths. (#161797) Fix error message capitalizations
+	as in gtkfilesystemunix.c.
+
+	(gtk_file_system_win32_init): Start one timeout per
+	GtkFileSystemWin32.
+
+	(gtk_file_system_win32_finalize): Remove the timeout.
+
+	(get_special_folder): Copied from GLib.
+
+	(_gtk_file_system_win32_get_desktop): New function, uses
+	get_special_folder().
+
+	(gtk_file_system_win32_list_volumes): Don't start a timeout at
+	each call to this function. Don't assume A: and B: are floppies.
+
+	(gtk_file_system_win32_get_volume_for_path): Don't assume all
+	volumes are drive roots, i.e. support share roots of UNC paths
+	(\\server\share).
+
+	(gtk_file_system_win32_get_folder): Don't assume errno is set
+	after g_file_test() returns FALSE. It isn't on Win32 (and even on
+	Unix I don't think one should assume anything about errno after
+	g_file_test()).
+
+	(gtk_file_system_win32_volume_get_is_mounted): Always return TRUE.
+
+	(gtk_file_system_win32_volume_get_display_name): Don't call
+	GetVolumeInformation() on drives A: or B: if they are removable,
+	as they might then be floppies, causing an unnecessary
+	delay. (#157820)
+
+	(gtk_file_system_win32_volume_render_icon): Use network icon for
+	unrecognized drive types.
+
+	(canonicalize_filename, gtk_file_system_win32_parse): Don't get
+	confused by UNC paths.
+
+	(bookmarks_serialize): Use _gtk_file_system_win32_path_compare()
+	for case-insensitive UTF-8 path comparison.
+
+	(extract_icon): Use SHGetFileInfo() which is faster than
+	ExtractAssociatedIcon(). Icon extraction is still slow, though,
+	needs work.
+
+	(win32_pseudo_mime_lookup): Don't use the same icon for all
+	shortcuts or executables. Cache only other file type icons.
+
+	(gtk_file_system_win32_render_icon): Use network stock icon for
+	remote drives and UNC server share roots. Compare home directory
+	case-insensitively. Do lookup icons also for executable files,
+	after all, it's these files that can have individual icons in the
+	first place. Yes, it can be slow. Needs work.
+
+	(filename_is_drive_root): Require also the slash after the colon.
+
+	(filename_is_server_share): New function.
+
+	(_gtk_file_system_win32_path_compare): New function, does
+	case-folded UTF-8 comparison.
+
+	* gtk/gtkfilesystemwin32.h: Declare
+	_gtk_file_system_win32_path_compare().
+
 2005-01-01  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkbutton.c (gtk_button_set_image): Allow unsetting the

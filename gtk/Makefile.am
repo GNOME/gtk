@@ -665,7 +665,7 @@ libgtk_win32_2_0_la_LIBADD = $(libadd) $(gtk_win32res_lo)
 libgtk_win32_2_0_la_DEPENDENCIES = $(gtk_def) $(gtk_win32res_lo)
 
 if USE_WIN32
-libgtk_target_ldflags = $(gtk_win32_symbols) -lwsock32
+libgtk_target_ldflags = $(gtk_win32_symbols) -lole32 -lwsock32
 endif
 EXTRA_LTLIBRARIES = libgtk-x11-2.0.la libgtk-linux-fb-2.0.la libgtk-win32-2.0.la
 

@@ -3009,3 +3009,6 @@ gtk_window_unfullscreen
 gtk_window_unmaximize
 gtk_window_unstick
 gtk_wrap_mode_get_type G_GNUC_CONST
+#ifdef G_OS_WIN32
+_gtk_file_system_win32_path_compare
+#endif

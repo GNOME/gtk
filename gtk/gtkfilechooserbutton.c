@@ -52,6 +52,9 @@
 
 #include "gtkfilechooserbutton.h"
 
+#ifdef G_OS_WIN32
+#include "gtkfilesystemwin32.h"
+#endif
 
 /* **************** *
  *  Private Macros  *
@@ -1273,27 +1276,26 @@ static inline void
 model_add_special (GtkFileChooserButton *button)
 {
   const gchar *homedir;
+  gchar *desktopdir = NULL;
+  GtkListStore *store;
+  GtkTreeIter iter;
+  GtkFilePath *path;
+  GdkPixbuf *pixbuf;
+  gint pos;
+
+  store = GTK_LIST_STORE (button->priv->model);
+  pos = model_get_type_position (button, ROW_TYPE_SPECIAL);
 
   homedir = g_get_home_dir ();
 
   if (homedir)
     {
-      GtkListStore *store;
-      GtkTreeIter iter;
-      GtkFilePath *path;
-      GdkPixbuf *pixbuf;
-      gchar *desktopdir;
-      gint pos;
-
-      store = GTK_LIST_STORE (button->priv->model);
-
-      pos = model_get_type_position (button, ROW_TYPE_SPECIAL);
-
       path = gtk_file_system_filename_to_path (button->priv->fs, homedir);
       pixbuf = gtk_file_system_render_icon (button->priv->fs, path,
 					    GTK_WIDGET (button),
 					    button->priv->icon_size, NULL);
       gtk_list_store_insert (store, &iter, pos);
+      pos++;
       gtk_list_store_set (store, &iter,
 			  ICON_COLUMN, pixbuf,
 			  DISPLAY_NAME_COLUMN, _(HOME_DISPLAY_NAME),
@@ -1304,15 +1306,24 @@ model_add_special (GtkFileChooserButton *button)
       g_object_unref (pixbuf);
       button->priv->n_special++;
 
+#ifndef G_OS_WIN32
       desktopdir = g_build_filename (homedir, DESKTOP_DISPLAY_NAME, NULL);
-      pos++;
+#endif
+    }
 
+#ifdef G_OS_WIN32
+  desktopdir = _gtk_file_system_win32_get_desktop ();
+#endif
+
+  if (desktopdir)
+    {
       path = gtk_file_system_filename_to_path (button->priv->fs, desktopdir);
       g_free (desktopdir);
       pixbuf = gtk_file_system_render_icon (button->priv->fs, path,
 					    GTK_WIDGET (button),
 					    button->priv->icon_size, NULL);
       gtk_list_store_insert (store, &iter, pos);
+      pos++;
       gtk_list_store_set (store, &iter,
 			  TYPE_COLUMN, ROW_TYPE_SPECIAL,
 			  ICON_COLUMN, pixbuf,

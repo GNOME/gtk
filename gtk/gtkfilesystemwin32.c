@@ -37,18 +37,14 @@
 
 #ifdef G_OS_WIN32
 #define WIN32_LEAN_AND_MEAN
+#define STRICT
 #include <windows.h>
-#include <shellapi.h> /* ExtractAssociatedIcon */
-#include <direct.h>
-#include <io.h>
-#include <gdk/win32/gdkwin32.h> /* gdk_win32_hdc_get */
+#undef STRICT
+#include <shlobj.h>
+#include <shellapi.h>
 #else
 #error "The implementation is win32 only."
 #endif /* G_OS_WIN32 */
-
-#ifndef G_IS_DIR_SEPARATOR
-#define G_IS_DIR_SEPARATOR(c) ((c) == G_DIR_SEPARATOR || (c) == '/')
-#endif
 
 typedef struct _GtkFileSystemWin32Class GtkFileSystemWin32Class;
 
@@ -65,8 +61,9 @@ struct _GtkFileSystemWin32
 {
   GObject parent_instance;
 
-  guint32     drives; /* bitmask as returned by GetLogicalDrives() */
+  guint32 drives;		/* bitmask as returned by GetLogicalDrives() */
   GHashTable *folder_hash;
+  guint timeout;
 };
 
 #define GTK_TYPE_FILE_FOLDER_WIN32             (gtk_file_folder_win32_get_type ())
@@ -182,6 +179,7 @@ static gchar *        filename_from_path                     (const GtkFilePath 
 static GtkFilePath *  filename_to_path                       (const gchar              *filename);
 
 static gboolean       filename_is_drive_root                 (const char               *filename);
+static gboolean       filename_is_server_share               (const char               *filename);
 static gboolean       filename_is_some_root                  (const char               *filename);
 static GtkFileInfo *  filename_get_info                      (const gchar              *filename,
 							      GtkFileInfoType           types,
@@ -190,8 +188,8 @@ static GtkFileInfo *  filename_get_info                      (const gchar       
 /* some info kept together for volumes */
 struct _GtkFileSystemVolume
 {
-  gchar    *drive;
-  gboolean  is_mounted;
+  gchar *drive;
+  int drive_type;
 };
 
 /*
@@ -286,9 +284,32 @@ gtk_file_system_win32_iface_init (GtkFileSystemIface *iface)
   iface->list_bookmarks = gtk_file_system_win32_list_bookmarks;
 }
 
+static gboolean
+check_volumes (gpointer data)
+{
+  GtkFileSystemWin32 *system_win32 = GTK_FILE_SYSTEM_WIN32 (data);
+
+  g_return_val_if_fail (system_win32, FALSE);
+
+#if 0
+  printf("check_volumes: system_win32=%p\n", system_win32);
+#endif
+  if (system_win32->drives != GetLogicalDrives())
+    g_signal_emit_by_name (system_win32, "volumes-changed", 0);
+
+  return TRUE;
+}
+
 static void
 gtk_file_system_win32_init (GtkFileSystemWin32 *system_win32)
 {
+#if 0
+  printf("gtk_file_system_win32_init: %p\n", system_win32);
+#endif
+
+  /* set up an idle handler for volume changes, every second should be enough */
+  system_win32->timeout = g_timeout_add_full (0, 1000, check_volumes, system_win32, NULL);
+
   system_win32->folder_hash = g_hash_table_new (g_str_hash, g_str_equal);
 }
 
@@ -299,23 +320,56 @@ gtk_file_system_win32_finalize (GObject *object)
 
   system_win32 = GTK_FILE_SYSTEM_WIN32 (object);
 
+#if 0
+  printf("gtk_file_system_win32_finalize: %p\n", system_win32);
+#endif
+
+  g_source_remove (system_win32->timeout);
+
   /* FIXME: assert that the hash is empty? */
   g_hash_table_destroy (system_win32->folder_hash);
 
   system_parent_class->finalize (object);
 }
 
-static gboolean
-check_volumes (gpointer data)
+/* Lifted from GLib */
+
+static gchar *
+get_special_folder (int csidl)
 {
-  GtkFileSystemWin32 *fs_win32 = GTK_FILE_SYSTEM_WIN32 (data);
+  union {
+    char c[MAX_PATH+1];
+    wchar_t wc[MAX_PATH+1];
+  } path;
+  HRESULT hr;
+  LPITEMIDLIST pidl = NULL;
+  BOOL b;
+  gchar *retval = NULL;
 
-  g_return_val_if_fail (fs_win32, FALSE);
+  hr = SHGetSpecialFolderLocation (NULL, csidl, &pidl);
+  if (hr == S_OK)
+    {
+      if (G_WIN32_HAVE_WIDECHAR_API ())
+	{
+	  b = SHGetPathFromIDListW (pidl, path.wc);
+	  if (b)
+	    retval = g_utf16_to_utf8 (path.wc, -1, NULL, NULL, NULL);
+	}
+      else
+	{
+	  b = SHGetPathFromIDListA (pidl, path.c);
+	  if (b)
+	    retval = g_locale_to_utf8 (path.c, -1, NULL, NULL, NULL);
+	}
+      CoTaskMemFree (pidl);
+    }
+  return retval;
+}
 
-  if (fs_win32->drives != GetLogicalDrives())
-    g_signal_emit_by_name (fs_win32, "volumes-changed", 0);
-
-  return TRUE;
+gchar *
+_gtk_file_system_win32_get_desktop (void)
+{
+  return get_special_folder (CSIDL_DESKTOPDIRECTORY);
 }
 
 static GSList *
@@ -324,14 +378,11 @@ gtk_file_system_win32_list_volumes (GtkFileSystem *file_system)
   DWORD   drives;
   gchar   drive[4] = "A:\\";
   GSList *list = NULL;
-  GtkFileSystemWin32 *fs_win32 = (GtkFileSystemWin32 *)file_system;
+  GtkFileSystemWin32 *system_win32 = (GtkFileSystemWin32 *)file_system;
 
   drives = GetLogicalDrives();
 
-  fs_win32->drives = drives;
-  /* set up an idle handler for volume changes, every second should be enough */
-  g_timeout_add_full (0, 1000, check_volumes, fs_win32, NULL);
-
+  system_win32->drives = drives;
   if (!drives)
     g_warning ("GetLogicalDrives failed.");
 
@@ -340,12 +391,8 @@ gtk_file_system_win32_list_volumes (GtkFileSystem *file_system)
       if (drives & 1)
       {
 	GtkFileSystemVolume *vol = g_new0 (GtkFileSystemVolume, 1);
-	if (drive[0] == 'A' || drive[0] == 'B')
-	  vol->is_mounted = FALSE; /* skip floppy */
-	else
-	  vol->is_mounted = TRUE; /* handle other removable drives special, too? */
-
 	vol->drive = g_strdup (drive);
+	vol->drive_type = GetDriveType (drive);
 	list = g_slist_append (list, vol);
       }
       drives >>= 1;
@@ -359,15 +406,50 @@ gtk_file_system_win32_get_volume_for_path (GtkFileSystem     *file_system,
                                            const GtkFilePath *path)
 {
   GtkFileSystemVolume *vol = g_new0 (GtkFileSystemVolume, 1);
-  gchar* p = g_strndup (gtk_file_path_get_string (path), 3);
+  const gchar *p;
 
-  g_return_val_if_fail (p != NULL, NULL);
+  g_return_val_if_fail (path != NULL, NULL);
 
-  /*FIXME: gtk_file_path_compare() is case sensitive, we are not*/
-  p[0] = g_ascii_toupper (p[0]);
-  vol->drive = p;
-  vol->is_mounted = (p[0] != 'A' && p[0] != 'B');
+  p = gtk_file_path_get_string (path);
 
+  if (!g_path_is_absolute (p))
+    {
+      if (g_ascii_isalpha (p[0]) && p[1] == ':')
+	vol->drive = g_strdup_printf ("%c:\\", p[0]);
+      else
+	vol->drive = g_strdup ("\\");
+      vol->drive_type = GetDriveType (vol->drive);
+    }
+  else
+    {
+      const gchar *q = g_path_skip_root (p);
+      vol->drive = g_strndup (p, q - p);
+      if (!G_IS_DIR_SEPARATOR (q[-1]))
+	{
+	  /* Make sure "drive" always ends in a slash */
+	  gchar *tem = vol->drive;
+	  vol->drive = g_strconcat (vol->drive, "\\", NULL);
+	  g_free (tem);
+	}
+      
+      if (filename_is_drive_root (vol->drive))
+	{
+	  vol->drive[0] = g_ascii_toupper (vol->drive[0]);
+	  vol->drive_type = GetDriveType (vol->drive);
+	}
+      else if (G_WIN32_HAVE_WIDECHAR_API ())
+	{
+	  wchar_t *wdrive = g_utf8_to_utf16 (vol->drive, -1, NULL, NULL, NULL);
+	  vol->drive_type = GetDriveTypeW (wdrive);
+	  g_free (wdrive);
+	}
+      else
+	{
+	  gchar *cpdrive = g_locale_from_utf8 (vol->drive, -1, NULL, NULL, NULL);
+	  vol->drive_type = GetDriveTypeA (cpdrive);
+	  g_free (cpdrive);
+	}
+    }
   return vol;
 }
 
@@ -391,30 +473,28 @@ gtk_file_system_win32_get_folder (GtkFileSystem     *file_system,
   if (folder_win32)
     return g_object_ref (folder_win32);
 
+  if (!g_file_test (filename, G_FILE_TEST_EXISTS))
+    {
+      gchar *display_filename = g_filename_display_name (filename);
+      g_set_error (error,
+		   GTK_FILE_SYSTEM_ERROR,
+		   GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
+		   _("Error getting information for '%s': %s"),
+		   display_filename,
+		   g_strerror (ENOENT));
+      g_free (display_filename);
+      return NULL;
+    }
   if (!g_file_test (filename, G_FILE_TEST_IS_DIR))
     {
-      int save_errno = errno;
       gchar *display_filename = g_filename_display_name (filename);
 
-      /* If g_file_test() returned FALSE but not due to an error, it means
-       * that the filename is not a directory.
-       */
-      if (save_errno == 0)
-	/* ENOTDIR */
-	g_set_error (error,
-		     GTK_FILE_SYSTEM_ERROR,
-		     GTK_FILE_SYSTEM_ERROR_NOT_FOLDER,
-		     _("%s: %s"),
-		     display_filename,
-		     g_strerror (ENOTDIR));
-      else
-	g_set_error (error,
-		     GTK_FILE_SYSTEM_ERROR,
-		     GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
-		     _("error getting information for '%s': %s"),
-		     display_filename,
-		     g_strerror (save_errno));
-
+      g_set_error (error,
+		   GTK_FILE_SYSTEM_ERROR,
+		   GTK_FILE_SYSTEM_ERROR_NOT_FOLDER,
+		   _("Error getting information for '%s': %s"),
+		   display_filename,
+		   g_strerror (ENOTDIR));
       g_free (display_filename);
       return NULL;
     }
@@ -443,21 +523,23 @@ gtk_file_system_win32_create_folder (GtkFileSystem     *file_system,
 
   filename = filename_from_path (path);
   g_return_val_if_fail (filename != NULL, FALSE);
+  g_return_val_if_fail (g_path_is_absolute (filename), FALSE);
 
   result = g_mkdir (filename, 0777) == 0;
 
   if (!result)
     {
+      int save_errno = errno;
       gchar *display_filename = g_filename_display_name (filename);
       g_set_error (error,
 		   GTK_FILE_SYSTEM_ERROR,
 		   GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
-		   _("error creating directory '%s': %s"),
+		   _("Error creating directory '%s': %s"),
 		   display_filename,
-		   g_strerror (errno));
+		   g_strerror (save_errno));
       g_free (display_filename);
     }
-  else if (!filename_is_drive_root (filename))
+  else if (!filename_is_some_root (filename))
     {
       parent = g_path_get_dirname (filename);
       if (parent)
@@ -501,7 +583,7 @@ static gboolean
 gtk_file_system_win32_volume_get_is_mounted (GtkFileSystem        *file_system,
 					     GtkFileSystemVolume  *volume)
 {
-  return volume->is_mounted;
+  return TRUE;
 }
 
 static gboolean
@@ -521,27 +603,32 @@ gtk_file_system_win32_volume_get_display_name (GtkFileSystem       *file_system,
 					       GtkFileSystemVolume *volume)
 {
   gchar *real_display_name;
-  gunichar2 *wdrive = g_utf8_to_utf16 (volume->drive, -1, NULL, NULL, NULL);
-  gunichar2  wname[80];
 
-  g_return_val_if_fail (wdrive != NULL, NULL);
+  g_return_val_if_fail (volume->drive != NULL, NULL);
 
-  if (GetVolumeInformationW (wdrive,
-			     wname, G_N_ELEMENTS(wname), 
-			     NULL, /* serial number */
-			     NULL, /* max. component length */
-			     NULL, /* fs flags */
-			     NULL, 0) /* fs type like FAT, NTFS */
-      && wname[0])
+  if ((filename_is_drive_root (volume->drive) && volume->drive[0] >= 'C') ||
+      volume->drive_type != DRIVE_REMOVABLE)
     {
-      gchar *name = g_utf16_to_utf8 (wname, -1, NULL, NULL, NULL);
-      real_display_name = g_strconcat (name, " (", volume->drive, ")", NULL);
-      g_free (name);
+      gunichar2 *wdrive = g_utf8_to_utf16 (volume->drive, -1, NULL, NULL, NULL);
+      gunichar2 wname[80];
+      if (GetVolumeInformationW (wdrive,
+				 wname, G_N_ELEMENTS(wname), 
+				 NULL, /* serial number */
+				 NULL, /* max. component length */
+				 NULL, /* fs flags */
+				 NULL, 0) /* fs type like FAT, NTFS */ &&
+	  wname[0])
+	{
+	  gchar *name = g_utf16_to_utf8 (wname, -1, NULL, NULL, NULL);
+	  real_display_name = g_strconcat (name, " (", volume->drive, ")", NULL);
+	  g_free (name);
+	}
+      else
+	real_display_name = g_strdup (volume->drive);
+      g_free (wdrive);
     }
   else
     real_display_name = g_strdup (volume->drive);
-
-  g_free (wdrive);
 
   return real_display_name;
 }
@@ -554,28 +641,31 @@ gtk_file_system_win32_volume_render_icon (GtkFileSystem        *file_system,
 					  GError              **error)
 {
   GtkIconSet *icon_set = NULL;
-  DWORD dt = GetDriveType (volume->drive);
 
-  switch (dt)
+  switch (volume->drive_type)
     {
-    case DRIVE_REMOVABLE :
+    case DRIVE_REMOVABLE:
       icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_FLOPPY);
       break;
-    case DRIVE_CDROM :
+    case DRIVE_CDROM:
       icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_CDROM);
       break;
-    case DRIVE_REMOTE :
+    case DRIVE_REMOTE:
       icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_NETWORK);
       break;
-    case DRIVE_FIXED :
+    case DRIVE_FIXED:
       icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_HARDDISK);
       break;
-    case DRIVE_RAMDISK :
-      /*FIXME: need a ram stock icon
-      gtk_file_info_set_icon_type (info, GTK_STOCK_OPEN);*/
+    case DRIVE_RAMDISK:
+#if 0
+      /*FIXME: need a ram stock icon?? */
+      gtk_file_info_set_icon_type (info, GTK_STOCK_RAMDISK);
       break;
+#endif
     default :
-      g_assert_not_reached ();
+      /* Use network icon as a guess */ 
+      icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_NETWORK);
+      break;
     }
 
   return gtk_icon_set_render_icon (icon_set, 
@@ -648,16 +738,9 @@ canonicalize_filename (gchar *filename)
   printf("canonicalize_filename: %s ", filename);
 #endif
 
-  p = filename;
-  q = filename;
+  past_root = g_path_skip_root (filename);
 
-  if (g_ascii_isalpha (*filename) &&
-      filename[1] == ':' &&
-      G_IS_DIR_SEPARATOR (filename[2]))
-    past_root = filename + 3;
-  else
-    past_root = filename + 1;
-  
+  q = p = past_root;
 
   while (*p)
     {
@@ -758,7 +841,6 @@ gtk_file_system_win32_parse (GtkFileSystem     *file_system,
     {
       gchar *folder_part;
       gchar *folder_path;
-      GError *tmp_error = NULL;
 
       if (last_slash == str)
 	{
@@ -772,37 +854,31 @@ gtk_file_system_win32_parse (GtkFileSystem     *file_system,
 	       str[1] == ':' &&
 	       G_IS_DIR_SEPARATOR (str[2]))
 	folder_part = g_strndup (str, last_slash - str + 1);
+      else if (G_IS_DIR_SEPARATOR (str[0]) &&
+	       G_IS_DIR_SEPARATOR (str[1]) &&
+	       (!str[2] || !G_IS_DIR_SEPARATOR (str[2])))
+	folder_part = g_strdup (str);
       else
 	folder_part = g_strndup (str, last_slash - str);
 
-      if (!folder_part)
-	{
-	  g_set_error (error,
-		       GTK_FILE_SYSTEM_ERROR,
-		       GTK_FILE_SYSTEM_ERROR_BAD_FILENAME,
-		       "%s",
-		       tmp_error->message);
-	  g_error_free (tmp_error);
-	}
+      g_assert (folder_part);
+
+      if (g_path_is_absolute (folder_part))
+	folder_path = folder_part;
       else
 	{
-	  if (g_path_is_absolute (folder_part))
-	    folder_path = folder_part;
-	  else
-	    {
-	      folder_path = g_build_filename (base_filename, folder_part, NULL);
-	      g_free (folder_part);
-	    }
-
-	  canonicalize_filename (folder_path);
-	  
-	  *folder = filename_to_path (folder_path);
-	  *file_part = g_strdup (last_slash + 1);
-
-	  g_free (folder_path);
-
-	  result = TRUE;
+	  folder_path = g_build_filename (base_filename, folder_part, NULL);
+	  g_free (folder_part);
 	}
+      
+      canonicalize_filename (folder_path);
+      
+      *folder = filename_to_path (folder_path);
+      *file_part = g_strdup (last_slash + 1);
+      
+      g_free (folder_path);
+      
+      result = TRUE;
     }
 
 #if 0
@@ -877,7 +953,7 @@ bookmarks_serialize (GSList  **bookmarks,
 
 	      for (i = 0; lines[i] != NULL; i++)
 		{
-		  if (lines[i][0] && !g_slist_find_custom (list, lines[i], (GCompareFunc) strcmp))
+		  if (lines[i][0] && !g_slist_find_custom (list, lines[i], (GCompareFunc) _gtk_file_system_win32_path_compare))
 		    list = g_slist_append (list, g_strdup (lines[i]));
 		}
 	      g_strfreev (lines);
@@ -887,7 +963,7 @@ bookmarks_serialize (GSList  **bookmarks,
 	}
       if (ok && (f = g_fopen (filename, "wb")) != NULL)
         {
-	  entry = g_slist_find_custom (list, uri, (GCompareFunc) strcmp);
+	  entry = g_slist_find_custom (list, uri, (GCompareFunc) _gtk_file_system_win32_path_compare);
 	  if (add)
 	    {
 	      /* g_slist_insert() and our insert semantics are 
@@ -902,7 +978,7 @@ bookmarks_serialize (GSList  **bookmarks,
 		  g_set_error (error,
 			       GTK_FILE_SYSTEM_ERROR,
 			       GTK_FILE_SYSTEM_ERROR_ALREADY_EXISTS,
-			       "%s already exists in the bookmarks list",
+			       "'%s' already exists in the bookmarks list",
 			       uri);
 		  ok = FALSE;
 		}
@@ -925,7 +1001,7 @@ bookmarks_serialize (GSList  **bookmarks,
 	  g_set_error (error,
 		       GTK_FILE_SYSTEM_ERROR,
 		       GTK_FILE_SYSTEM_ERROR_FAILED,
-		       _("Bookmark saving failed (%s)"),
+		       _("Bookmark saving failed: %s"),
 		       g_strerror (errno));
 	}
     }
@@ -937,99 +1013,166 @@ static GdkPixbuf*
 extract_icon (const char* filename)
 {
   GdkPixbuf *pixbuf = NULL;
-  WORD iicon;
   HICON hicon;
-  char filename_copy[MAX_PATH];
+  ICONINFO ii;
   
   if (!filename || !filename[0])
     return NULL;
 
-  /* the ugly ExtractAssociatedIcon modifies filename in place - at least on win98 */
-  strcpy(filename_copy, filename);
-  hicon = ExtractAssociatedIcon (GetModuleHandle (NULL), filename_copy, &iicon);
-  if (hicon > (HICON)1)
+#if 0
+  /* ExtractAssociatedIconW() is about twice as slow as SHGetFileInfoW() */
+
+  /* The ugly ExtractAssociatedIcon modifies filename in place. It
+   * doesn't even take any argument saying how large the buffer is?
+   * Let's hope MAX_PATH will be large enough. What dork designed that
+   * API?
+   */
+  if (G_WIN32_HAVE_WIDECHAR_API ())
     {
-      ICONINFO ii;
+      WORD iicon;
+      wchar_t *wfn;
+      wchar_t filename_copy[MAX_PATH];
 
-      if (GetIconInfo (hicon, &ii))
-        {
-	  struct
-	  {
-	    BITMAPINFOHEADER bi;
-	    RGBQUAD colors[2];
-	  } bmi;
-	  HDC hdc;
-
-	  memset (&bmi, 0, sizeof (bmi));
-	  bmi.bi.biSize = sizeof (bmi.bi);
-	  hdc = CreateCompatibleDC (NULL);
-
-          if (GetDIBits (hdc, ii.hbmColor, 0, 1, NULL, (BITMAPINFO *)&bmi, DIB_RGB_COLORS))
-	    {
-		gchar *pixels, *bits;
-		gint rowstride, x, y, w = bmi.bi.biWidth, h = bmi.bi.biHeight;
-		gboolean no_alpha;
-
-		bmi.bi.biBitCount = 32;
-		bmi.bi.biCompression = BI_RGB;
-		bmi.bi.biHeight = -h;
-		pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8, w, h);
-		bits = g_malloc0 (4 * w * h);
-
-		/* color data */
-		if (!GetDIBits (hdc, ii.hbmColor, 0, h, bits, (BITMAPINFO *)&bmi, DIB_RGB_COLORS))
-		  g_warning(G_STRLOC ": Failed to get dibits");
-
-		pixels = gdk_pixbuf_get_pixels (pixbuf);
-		rowstride = gdk_pixbuf_get_rowstride (pixbuf);
-		no_alpha = TRUE;
-		for (y = 0; y < h; y++)
-		  {
-		    for (x = 0; x < w; x++)
-		      {
-			  pixels[2] = bits[(x+y*w) * 4];
-			  pixels[1] = bits[(x+y*w) * 4 + 1];
-			  pixels[0] = bits[(x+y*w) * 4 + 2];
-			  pixels[3] = bits[(x+y*w) * 4 + 3];
-			  if (no_alpha && pixels[3] > 0) no_alpha = FALSE;
-			  pixels += 4;
-		      }
-		    pixels += (w * 4 - rowstride);
-		  }
-		/* mask */
-		if (no_alpha) {
-		  if (!GetDIBits (hdc, ii.hbmMask, 0, h, bits, (BITMAPINFO *)&bmi, DIB_RGB_COLORS))
-		    g_warning(G_STRLOC ": Failed to get dibits");
-		  pixels = gdk_pixbuf_get_pixels (pixbuf);
-		  for (y = 0; y < h; y++)
-		    {
-		      for (x = 0; x < w; x++)
-			{
-			  pixels[3] = 255 - bits[(x + y * w) * 4];
-			  pixels += 4;
-			}
-		      pixels += (w * 4 - rowstride);
-		    }
-		
-		  /* release temporary resources */
-		  g_free (bits);
-		  if (!DeleteObject (ii.hbmColor) || !DeleteObject (ii.hbmMask))
-		    g_warning(G_STRLOC ": Leaking Icon Bitmaps ?");
-		}
-	    }
-	  else
-	    g_warning(G_STRLOC ": GetDIBits () failed, %s", g_win32_error_message (GetLastError ()));
-
-	  DeleteDC (hdc);
-        }
-      else
-        g_warning(G_STRLOC ": GetIconInfo failed: %s\n", g_win32_error_message (GetLastError ())); 
-
-      if (!DestroyIcon (hicon))
-        g_warning(G_STRLOC ": DestroyIcon failed");
+      wfn = g_utf8_to_utf16 (filename, -1, NULL, NULL, NULL);
+      if (wcslen (wfn) >= MAX_PATH)
+	{
+	  g_free (wfn);
+	  return NULL;
+	}
+      wcscpy (filename_copy, wfn);
+      g_free (wfn);
+      hicon = ExtractAssociatedIconW (GetModuleHandle (NULL), filename_copy, &iicon);
     }
   else
-    g_warning (G_STRLOC ":ExtractAssociatedIcon(%s) failed: %s", filename, g_win32_error_message (GetLastError ()));
+    {
+      WORD iicon;
+      char *cpfn;
+      char filename_copy[MAX_PATH];
+
+      cpfn = g_locale_from_utf8 (filename, -1, NULL, NULL, NULL);
+      if (cpfn == NULL)
+	return NULL;
+      if (strlen (cpfn) >= MAX_PATH)
+	{
+	  g_free (cpfn);
+	  return NULL;
+	}
+      strcpy (filename_copy, cpfn);
+      g_free (cpfn);
+      hicon = ExtractAssociatedIconA (GetModuleHandle (NULL), filename_copy, &iicon);
+    }
+
+  if (!hicon)
+    {
+      g_warning (G_STRLOC ":ExtractAssociatedIcon(%s) failed: %s", filename, g_win32_error_message (GetLastError ()));
+      return NULL;
+    }
+
+#else
+  if (G_WIN32_HAVE_WIDECHAR_API ())
+    {
+      SHFILEINFOW shfi;
+      wchar_t *wfn = g_utf8_to_utf16 (filename, -1, NULL, NULL, NULL);
+      int rc;
+
+      rc = (int) SHGetFileInfoW (wfn, 0, &shfi, sizeof (shfi),
+				 SHGFI_ICON|SHGFI_LARGEICON);
+      g_free (wfn);
+      if (!rc)
+	return NULL;
+      hicon = shfi.hIcon;
+    }
+  else
+    {
+      SHFILEINFOA shfi;
+      char *cpfn = g_locale_from_utf8 (filename, -1, NULL, NULL, NULL);
+      int rc;
+
+      rc = (int) SHGetFileInfoA (cpfn, 0, &shfi, sizeof (shfi),
+				 SHGFI_ICON|SHGFI_LARGEICON);
+      g_free (cpfn);
+      if (!rc)
+	return NULL;
+      hicon = shfi.hIcon;
+    }
+#endif
+  
+  if (GetIconInfo (hicon, &ii))
+    {
+      struct
+      {
+	BITMAPINFOHEADER bi;
+	RGBQUAD colors[2];
+      } bmi;
+      HDC hdc;
+      
+      memset (&bmi, 0, sizeof (bmi));
+      bmi.bi.biSize = sizeof (bmi.bi);
+      hdc = CreateCompatibleDC (NULL);
+      
+      if (GetDIBits (hdc, ii.hbmColor, 0, 1, NULL, (BITMAPINFO *)&bmi, DIB_RGB_COLORS))
+	{
+	  gchar *pixels, *bits;
+	  gint rowstride, x, y, w = bmi.bi.biWidth, h = bmi.bi.biHeight;
+	  gboolean no_alpha;
+	  
+	  bmi.bi.biBitCount = 32;
+	  bmi.bi.biCompression = BI_RGB;
+	  bmi.bi.biHeight = -h;
+	  pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8, w, h);
+	  bits = g_malloc0 (4 * w * h);
+	  
+	  /* color data */
+	  if (!GetDIBits (hdc, ii.hbmColor, 0, h, bits, (BITMAPINFO *)&bmi, DIB_RGB_COLORS))
+	    g_warning (G_STRLOC ": Failed to get dibits");
+	  
+	  pixels = gdk_pixbuf_get_pixels (pixbuf);
+	  rowstride = gdk_pixbuf_get_rowstride (pixbuf);
+	  no_alpha = TRUE;
+	  for (y = 0; y < h; y++)
+	    {
+	      for (x = 0; x < w; x++)
+		{
+		  pixels[2] = bits[(x+y*w) * 4];
+		  pixels[1] = bits[(x+y*w) * 4 + 1];
+		  pixels[0] = bits[(x+y*w) * 4 + 2];
+		  pixels[3] = bits[(x+y*w) * 4 + 3];
+		  if (no_alpha && pixels[3] > 0) no_alpha = FALSE;
+		  pixels += 4;
+		}
+	      pixels += (w * 4 - rowstride);
+	    }
+	  /* mask */
+	  if (no_alpha) {
+	    if (!GetDIBits (hdc, ii.hbmMask, 0, h, bits, (BITMAPINFO *)&bmi, DIB_RGB_COLORS))
+	      g_warning (G_STRLOC ": Failed to get dibits");
+	    pixels = gdk_pixbuf_get_pixels (pixbuf);
+	    for (y = 0; y < h; y++)
+	      {
+		for (x = 0; x < w; x++)
+		  {
+		    pixels[3] = 255 - bits[(x + y * w) * 4];
+		    pixels += 4;
+		  }
+		pixels += (w * 4 - rowstride);
+	      }
+	    
+	    /* release temporary resources */
+	    g_free (bits);
+	    if (!DeleteObject (ii.hbmColor) || !DeleteObject (ii.hbmMask))
+	      g_warning (G_STRLOC ": Leaking Icon Bitmaps ?");
+	  }
+	}
+      else
+	g_warning (G_STRLOC ": GetDIBits () failed, %s", g_win32_error_message (GetLastError ()));
+      
+      DeleteDC (hdc);
+    }
+  else
+    g_warning (G_STRLOC ": GetIconInfo failed: %s\n", g_win32_error_message (GetLastError ())); 
+  
+  if (!DestroyIcon (hicon))
+    g_warning (G_STRLOC ": DestroyIcon failed: %s\n", g_win32_error_message (GetLastError ()));
 
   return pixbuf;
 }
@@ -1037,38 +1180,52 @@ extract_icon (const char* filename)
 static GtkIconSet *
 win32_pseudo_mime_lookup (const char* name)
 {
+  gboolean use_cache = TRUE;
   static GHashTable *mime_hash = NULL;
   GtkIconSet *is = NULL;
   char *p = strrchr(name, '.');
-  char *extension = p ? g_ascii_strdown (p, -1) : g_strdup ("");
+  char *extension = p ? g_utf8_casefold (p, -1) : g_strdup ("");
+  GdkPixbuf *pixbuf;
 
-  if (!mime_hash)
-    mime_hash = g_hash_table_new (g_str_hash, g_str_equal);
-
-  /* do we already have it ? */
-  is = g_hash_table_lookup (mime_hash, extension);
-  if (is)
+  /* Don't cache icons for files that might have embedded icons */
+  if (strcmp (extension, ".lnk") == 0 ||
+      strcmp (extension, ".exe") == 0 ||
+      strcmp (extension, ".dll") == 0)
     {
+      use_cache = FALSE;
       g_free (extension);
-      return is;
     }
+  else
+    {
+      if (!mime_hash)
+	mime_hash = g_hash_table_new (g_str_hash, g_str_equal);
+
+      /* do we already have it ? */
+      is = g_hash_table_lookup (mime_hash, extension);
+      if (is)
+	{
+	  g_free (extension);
+	  return is;
+	}
+    }
+
   /* create icon and set */
-  {
-    GdkPixbuf *pixbuf = extract_icon (name);
-    if (pixbuf)
-      {
-        GtkIconSource* source = gtk_icon_source_new ();
-
-        is = gtk_icon_set_new_from_pixbuf (pixbuf);
-	gtk_icon_source_set_pixbuf (source, pixbuf);
-	gtk_icon_set_add_source (is, source);
-
-	gtk_icon_source_free (source);
-      }
-
+  pixbuf = extract_icon (name);
+  if (pixbuf)
+    {
+      GtkIconSource* source = gtk_icon_source_new ();
+      
+      is = gtk_icon_set_new_from_pixbuf (pixbuf);
+      gtk_icon_source_set_pixbuf (source, pixbuf);
+      gtk_icon_set_add_source (is, source);
+      
+      gtk_icon_source_free (source);
+    }
+  
+  if (use_cache)
     g_hash_table_insert (mime_hash, extension, is);
-    return is;
-  }
+
+  return is;
 }
 
 static GdkPixbuf *
@@ -1098,6 +1255,9 @@ gtk_file_system_win32_render_icon (GtkFileSystem     *file_system,
         case DRIVE_CDROM :
           icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_CDROM);
           break;
+	case DRIVE_REMOTE :
+	  icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_NETWORK);
+	  break;
         case DRIVE_FIXED :
           icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_HARDDISK);
           break;
@@ -1105,18 +1265,18 @@ gtk_file_system_win32_render_icon (GtkFileSystem     *file_system,
           break;
         }
     }
+  else if (filename_is_server_share (filename))
+    {
+      icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_NETWORK);
+    }
   else if (g_file_test (filename, G_FILE_TEST_IS_DIR))
     {
       const gchar *home = g_get_home_dir ();
-      if (home != NULL && 0 == strcmp (home, filename))
+
+      if (home != NULL && 0 == _gtk_file_system_win32_path_compare (home, filename))
         icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_HOME);
       else
         icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_DIRECTORY);
-    }
-  else if (g_file_test (filename, G_FILE_TEST_IS_EXECUTABLE))
-    {
-      /* don't lookup all executable icons */
-      icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_EXECUTE);
     }
   else if (g_file_test (filename, G_FILE_TEST_EXISTS))
     {
@@ -1124,13 +1284,10 @@ gtk_file_system_win32_render_icon (GtkFileSystem     *file_system,
     }
 
   if (!icon_set)
-    {
-       g_set_error (error,
-     	          GTK_FILE_SYSTEM_ERROR,
-     	          GTK_FILE_SYSTEM_ERROR_FAILED,
-     	          _("This file system does not support icons for everything"));
-       return NULL;
-    }
+    if (g_file_test (filename, G_FILE_TEST_IS_EXECUTABLE))
+	icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_EXECUTE);
+    else
+      icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_FILE);
 
   // FIXME : I'd like to get from pixel_size (=20) back to
   // icon size, which is an index, but there appears to be no way ?
@@ -1146,9 +1303,9 @@ static GSList *_bookmarks = NULL;
 
 static gboolean
 gtk_file_system_win32_insert_bookmark (GtkFileSystem     *file_system,
-				    const GtkFilePath *path,
-				    gint               position,
-				    GError           **error)
+				       const GtkFilePath *path,
+				       gint               position,
+				       GError            **error)
 {
   gchar *uri = gtk_file_system_win32_path_to_uri (file_system, path);
   gboolean ret = bookmarks_serialize (&_bookmarks, uri, TRUE, position, error);
@@ -1303,24 +1460,13 @@ gtk_file_folder_win32_list_children (GtkFileFolder  *folder,
 				     GError        **error)
 {
   GtkFileFolderWin32 *folder_win32 = GTK_FILE_FOLDER_WIN32 (folder);
-  GError *tmp_error = NULL;
   GDir *dir;
 
   *children = NULL;
 
-  dir = g_dir_open (folder_win32->filename, 0, &tmp_error);
+  dir = g_dir_open (folder_win32->filename, 0, error);
   if (!dir)
-    {
-      g_set_error (error,
-		   GTK_FILE_SYSTEM_ERROR,
-		   GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
-		   "%s",
-		   tmp_error->message);
-      
-      g_error_free (tmp_error);
-
-      return FALSE;
-    }
+    return FALSE;
 
   while (TRUE)
     {
@@ -1348,7 +1494,7 @@ filename_get_info (const gchar     *filename,
 		   GError         **error)
 {
   GtkFileInfo *info;
-#if 0 /* it's dead in GtkFileSystemUnix.c, too */
+#if 0 /* it's dead in gtkfilesystemunix.c, too */
   GtkFileIconType icon_type = GTK_FILE_ICON_REGULAR;
 #endif
   WIN32_FILE_ATTRIBUTE_DATA wfad;
@@ -1381,7 +1527,7 @@ filename_get_info (const gchar     *filename,
       g_set_error (error,
 		   GTK_FILE_SYSTEM_ERROR,
 		   GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
-		   _("error getting information for '%s': %s"),
+		   _("Error getting information for '%s': %s"),
 		   display_filename,
 		   g_win32_error_message (GetLastError ()));
       g_free (display_filename);
@@ -1427,7 +1573,7 @@ filename_get_info (const gchar     *filename,
       gtk_file_info_set_is_folder (info, !!(wfad.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY));
    }
 
-#if 0 /* it's dead in GtkFileSystemUnix.c, too */
+#if 0 /* it's dead in gtkfilesystemunix.c, too */
   if (types & GTK_FILE_INFO_ICON)
     {
       if (wfad.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
@@ -1438,7 +1584,7 @@ filename_get_info (const gchar     *filename,
 #endif
 
   if ((types & GTK_FILE_INFO_MIME_TYPE)
-#if 0 /* it's dead in GtkFileSystemUnix.c, too */
+#if 0 /* it's dead in gtkfilesystemunix.c, too */
       || ((types & GTK_FILE_INFO_ICON) && icon_type == GTK_FILE_ICON_REGULAR)
 #endif
      )
@@ -1492,12 +1638,73 @@ filename_is_drive_root (const char *filename)
 {
   guint len = strlen (filename);
 
-  return (len == 3 && filename[1] == ':' && G_IS_DIR_SEPARATOR (filename[2]));
+  return (len == 3 &&
+	  g_ascii_isalpha (filename[0]) &&
+	  filename[1] == ':' &&
+	  G_IS_DIR_SEPARATOR (filename[2]));
+}
+
+static gboolean
+filename_is_server_share (const char *filename)
+{
+  /* Check if filename is of the form \\server\share or \\server\share\ */
+
+  const char *p, *q, *r;
+
+  if (!(G_IS_DIR_SEPARATOR (filename[0]) &&
+	filename[1] == filename[0]))
+    return FALSE;
+
+  p = strchr (filename + 2, '\\');
+  q = strchr (filename + 2, '/');
+
+  if (p == NULL || (q != NULL && q < p))
+    p = q;
+
+  if (p == NULL)
+    return FALSE;
+
+  if (!p[1] || G_IS_DIR_SEPARATOR (p[1]))
+    return FALSE;
+
+  q = strchr (p + 1, '\\');
+  r = strchr (p + 1, '/');
+
+  if (q == NULL || (r != NULL && r < q))
+    q = r;
+
+  if (q == NULL ||
+      q[1] == '\0')
+    return TRUE;
+
+  return FALSE;
 }
 
 static gboolean
 filename_is_some_root (const char *filename)
 {
-  return (G_IS_DIR_SEPARATOR (filename[0]) && filename[1] == '\0') ||
-         filename_is_drive_root (filename);
+#if 0
+  return ((G_IS_DIR_SEPARATOR (filename[0]) && filename[1] == '\0') ||
+	  filename_is_server_share (filename) ||
+	  filename_is_drive_root (filename));
+#else
+  return (g_path_is_absolute (filename) &&
+	  *(g_path_skip_root (filename)) == '\0');
+#endif
 }    
+
+int
+_gtk_file_system_win32_path_compare (const gchar *path1,
+				     const gchar *path2)
+{
+  int retval;
+  gchar *folded_path1 = g_utf8_casefold (path1, -1);
+  gchar *folded_path2 = g_utf8_casefold (path2, -1);
+
+  retval = strcmp (folded_path1, folded_path2);
+
+  g_free (folded_path1);
+  g_free (folded_path2);
+
+  return retval;
+}

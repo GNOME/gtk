@@ -35,6 +35,8 @@ typedef struct _GtkFileSystemWin32      GtkFileSystemWin32;
 GtkFileSystem *gtk_file_system_win32_new      (void);
 GType          gtk_file_system_win32_get_type (void) G_GNUC_CONST;
      
+gchar         *_gtk_file_system_win32_get_desktop (void);
+
 G_END_DECLS
 
 #endif /* __GTK_FILE_SYSTEM_WIN32_H__ */
