@@ -114,6 +114,8 @@
     &gdk-pixbuf-gdk-pixbuf-xlib-rgb;
   </reference>
 
+  <index/>
+
   &Porting-From-Imlib;
 
   <!-- License -->
