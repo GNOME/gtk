@@ -6,6 +6,19 @@
 
 	* gtk/tmpl/gtklabel.sgml: do the intro section
 
+2002-01-10  Matthias Clasen  <matthiasc@poet.de>
+
+	* gdk/tmpl/general.sgml (gdk_set_program_class): Expand.
+
+	* gtk/running.sgml: New file.
+
+	* gtk/building.sgml: Document a few more configure options.
+
+	* gtk/Makefile.am (content_files): Add running.sgml.
+
+	* gtk/gtk-docs.sgml: Include running.sgml, sort H and V 
+	variants of widgets to be next to each other.
+
 2002-01-09  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/tmpl/gtkaccellabel.sgml: Remove duplicate docs.
