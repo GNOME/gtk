@@ -4265,6 +4265,31 @@ browse_files_select_first_row (GtkFileChooserDefault *impl)
   gtk_tree_path_free (path);
 }
 
+/* Callback used from gtk_tree_selection_selected_foreach(); centers the
+ * selected row in the tree view.
+ */
+static void
+center_selected_row_foreach_cb (GtkTreeModel      *model,
+				GtkTreePath       *path,
+				GtkTreeIter       *iter,
+				gpointer           data)
+{
+  GtkFileChooserDefault *impl;
+
+  impl = GTK_FILE_CHOOSER_DEFAULT (data);
+  gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (impl->browse_files_tree_view), path, NULL, TRUE, 0.5, 0.0);
+}
+
+/* Centers the selected row in the tree view */
+static void
+browse_files_center_selected_row (GtkFileChooserDefault *impl)
+{
+  GtkTreeSelection *selection;
+
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
+  gtk_tree_selection_selected_foreach (selection, center_selected_row_foreach_cb, impl);
+}
+
 /* Processes the pending operation when a folder is finished loading */
 static void
 pending_op_process (GtkFileChooserDefault *impl)
@@ -4281,6 +4306,7 @@ pending_op_process (GtkFileChooserDefault *impl)
       gtk_file_path_free (impl->pending_select_path);
       impl->pending_select_path = NULL;
       impl->pending_op = PENDING_OP_NONE;
+      browse_files_center_selected_row (impl);
       break;
 
     case PENDING_OP_SELECT_FIRST:
