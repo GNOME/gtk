@@ -1,3 +1,10 @@
+Fri Apr 18 17:42:45 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkwindow-x11.c (set_initial_hints): Add
+	SKIP_TASKBAR/SKIP_PAGER to set of properties we
+	might set on map. (#110019, problem reported
+	by Loban Rahman)
+
 Fri Apr 18 17:14:33 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkevents.c (gdk_event_copy): Fix for the

@@ -948,10 +948,12 @@ set_initial_hints (GdkWindow *window)
   Display *xdisplay = GDK_DISPLAY_XDISPLAY (display);
   Window xwindow = GDK_WINDOW_XID (window);  
   GdkWindowObject *private;
-  Atom atoms[6];
+  GdkWindowImplX11 *impl;
+  Atom atoms[7];
   gint i;
 
   private = (GdkWindowObject*) window;
+  impl = GDK_WINDOW_IMPL_X11 (private->impl);
   
   if (private->state & GDK_WINDOW_STATE_ICONIFIED)
     {
@@ -998,11 +1000,25 @@ set_initial_hints (GdkWindow *window)
 							"_NET_WM_STATE_FULLSCREEN");
       ++i;
     }
-  
+
   if (private->modal_hint)
     {
       atoms[i] = gdk_x11_get_xatom_by_name_for_display (display,
 							"_NET_WM_STATE_MODAL");
+      ++i;
+    }
+
+  if (impl->skip_taskbar_hint)
+    {
+      atoms[i] = gdk_x11_get_xatom_by_name_for_display (display,
+							"_NET_WM_STATE_SKIP_TASKBAR");
+      ++i;
+    }
+
+  if (impl->skip_pager_hint)
+    {
+      atoms[i] = gdk_x11_get_xatom_by_name_for_display (display,
+							"_NET_WM_STATE_SKIP_PAGER");
       ++i;
     }
 
