@@ -1,3 +1,8 @@
+Thu Apr 29 01:09:50 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/gdkdraw.c (_gdk_drawable_get_scratch_gc): Use depth - 1
+	to index the cached gcs, not depth.  (#139494)
+
 2004-04-28  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/gdkdraw.c (_gdk_drawable_get_scratch_gc): Docs typo fix.

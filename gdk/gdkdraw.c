@@ -1562,7 +1562,7 @@ _gdk_drawable_get_scratch_gc (GdkDrawable *drawable,
 
   g_return_val_if_fail (!screen->closed, NULL);
 
-  depth = gdk_drawable_get_depth (drawable);
+  depth = gdk_drawable_get_depth (drawable) - 1;
 
   if (graphics_exposures)
     {
@@ -1572,7 +1572,8 @@ _gdk_drawable_get_scratch_gc (GdkDrawable *drawable,
 	  GdkGCValuesMask mask;
 
 	  values.graphics_exposures = TRUE;
-	  mask = GDK_GC_EXPOSURES;
+	  mask = GDK_GC_EXPOSURES;  
+
 	  screen->exposure_gcs[depth] =
 	    gdk_gc_new_with_values (drawable, &values, mask);
 	}
