@@ -1,3 +1,8 @@
+2001-01-03  Alexander Larsson  <alla@lysator.liu.se>
+
+	* configure.in:
+	Change GTK_NO_CHECK_CASTS to G_DISABLE_CAST_CHECKS.
+
 Tue Jan  2 16:23:05 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktextlayout.c
