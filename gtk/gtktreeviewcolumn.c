@@ -770,7 +770,7 @@ gtk_tree_view_column_set_visible (GtkTreeViewColumn *tree_column,
     }
 
   if (GTK_WIDGET_REALIZED (tree_column->tree_view))
-    _gtk_tree_view_set_size (GTK_TREE_VIEW (tree_column->tree_view), -1, -1);
+    _gtk_tree_view_update_size (GTK_TREE_VIEW (tree_column->tree_view));
 
   g_object_notify (G_OBJECT (tree_column), "visible");
 }
@@ -886,7 +886,7 @@ gtk_tree_view_column_set_width (GtkTreeViewColumn *tree_column,
   g_return_if_fail (size > 0);
   
   if (tree_column->min_width != -1 &&
-      size < tree_column->min_width)
+      size <= tree_column->min_width)
     size = tree_column->min_width;
   else if (tree_column->max_width != -1 &&
            size > tree_column->max_width)

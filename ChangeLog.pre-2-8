@@ -1,3 +1,12 @@
+Fri Feb 23 17:50:13 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_bin_expose): Only draw the
+	column that is exposed.
+
+	(_gtk_tree_view_update_size): Changed name from set_size, and
+	changed function to do more work, and not force people calling it
+	to figure out the size.  Simplifies a lot of code elsewhere.
+
 2001-02-23  Alexander Larsson  <alexl@redhat.com>
 
 	* gdk/gdkpixmap.c (gdk_pixmap_colormap_new_from_pixbuf):

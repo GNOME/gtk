@@ -199,9 +199,7 @@ gboolean     _gtk_tree_view_find_node                 (GtkTreeView       *tree_v
 GtkTreePath *_gtk_tree_view_find_path                 (GtkTreeView       *tree_view,
 						       GtkRBTree         *tree,
 						       GtkRBNode         *node);
-void         _gtk_tree_view_set_size                  (GtkTreeView       *tree_view,
-						       gint               width,
-						       gint               height);
+void         _gtk_tree_view_update_size               (GtkTreeView       *tree_view);
 
 
 GtkTreeSelection* _gtk_tree_selection_new                (void);

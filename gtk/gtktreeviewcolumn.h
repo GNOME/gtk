@@ -69,7 +69,7 @@ struct _GtkTreeViewColumn
   gint width;
   gint min_width;
   gint max_width;
-  gint allocated_width;
+  gint displayed_width;
 
   CellDataFunc func;
   gpointer func_data;
