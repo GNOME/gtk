@@ -156,6 +156,10 @@ gdk_drag_context_unref (GdkDragContext *context)
 	gdk_window_unref (context->dest_window);
 
       contexts = g_list_remove (contexts, private);
+
+      if (context == current_dest_drag)
+	current_dest_drag = NULL;
+
       g_free (private);
     }
 }
@@ -503,7 +507,6 @@ static IDataObjectVtbl ido_vtbl = {
   m_enum_d_advise
 };
 
-#endif /* OLE2_DND */
 
 static target_drag_context *
 target_context_new (void)
@@ -512,14 +515,14 @@ target_context_new (void)
 
   result = g_new0 (target_drag_context, 1);
 
-#ifdef OLE2_DND
   result->idt.lpVtbl = &idt_vtbl;
-#endif
 
   result->context = gdk_drag_context_new ();
 
   return result;
 }
+
+#endif /* OLE2_DND */
 
 static source_drag_context *
 source_context_new (void)
@@ -869,6 +872,8 @@ local_send_drop (GdkDragContext *context, guint32 time)
       
       tmp_event.dnd.x_root = private->last_x;
       tmp_event.dnd.y_root = private->last_y;
+
+      current_dest_drag = NULL;
       
       gdk_event_put (&tmp_event);
     }
@@ -1205,12 +1210,13 @@ gdk_drop_finish (GdkDragContext *context,
     }
 }
 
+#ifdef OLE2_DND
+
 static GdkFilterReturn
 gdk_destroy_filter (GdkXEvent *xev,
 		    GdkEvent  *event,
 		    gpointer   data)
 {
-#ifdef OLE2_DND
   MSG *msg = (MSG *) xev;
 
   if (msg->message == WM_DESTROY)
@@ -1221,9 +1227,10 @@ gdk_destroy_filter (GdkXEvent *xev,
       RevokeDragDrop (msg->hwnd);
       CoLockObjectExternal (idtp, FALSE, TRUE);
     }
-#endif
   return GDK_FILTER_CONTINUE;
 }
+
+#endif
 
 void
 gdk_window_register_dnd (GdkWindow *window)

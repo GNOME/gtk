@@ -1,3 +1,15 @@
+2004-03-15  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkdnd-win32.c: Move two functions used only with
+	OLE2_DND inside its ifdef.
+
+	Merge from HEAD:
+	
+	* gdk/win32/gdkdnd-win32.c (gdk_drag_context_unref,
+	local_send_drop): Set current_dest_drag to NULL when destroying
+	the context, or when dropping. Fixes #120007. Thanks to Hans
+	Breuer for fix.
+
 2003-07-17  Tor Lillqvist  <tml@iki.fi>
 
 	Thanks to Gabriele Greco:
