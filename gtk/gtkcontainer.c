@@ -971,7 +971,10 @@ gtk_container_add (GtkContainer *container,
  * may be the last reference held; so removing a widget from its
  * container can destroy that widget. If you want to use @widget
  * again, you need to add a reference to it while it's not inside
- * a container, using g_object_ref().
+ * a container, using g_object_ref(). If you don't want to use @widget
+ * again it's usually more efficient to simply destroy it directly
+ * using gtk_widget_destroy() since this will remove it from the
+ * container and help break any circular reference count cycles.
  **/
 void
 gtk_container_remove (GtkContainer *container,
