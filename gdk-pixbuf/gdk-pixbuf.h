@@ -31,6 +31,7 @@
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif
 
 
@@ -66,6 +67,7 @@ GdkPixbuf *gdk_pixbuf_new_from_data (guchar *data, ArtPixFormat format, gboolean
 				     ArtDestroyNotify dfunc, gpointer dfunc_data);
 GdkPixbuf *gdk_pixbuf_new_from_xpm_data (const gchar **data);
 
+	
 /* Transformations */
 #if 0
 GdkPixbuf *gdk_pixbuf_scale (const GdkPixbuf *pixbuf, gint w, gint h);
