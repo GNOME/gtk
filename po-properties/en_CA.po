@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-31 15:32-0500\n"
-"PO-Revision-Date: 2004-10-31 22:53-0400\n"
+"POT-Creation-Date: 2004-11-04 16:39-0500\n"
+"PO-Revision-Date: 2004-11-04 22:53-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: English/Canada <adamw@FreeBSD.org>\n"
 "MIME-Version: 1.0\n"
@@ -90,11 +90,11 @@ msgstr "Default Display"
 msgid "The default display for GDK"
 msgstr "The default display for GDK"
 
-#: gtk/gtkaboutdialog.c:187
+#: gtk/gtkaboutdialog.c:195
 msgid "Program name"
 msgstr "Program name"
 
-#: gtk/gtkaboutdialog.c:188
+#: gtk/gtkaboutdialog.c:196
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
@@ -102,43 +102,43 @@ msgstr ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
 
-#: gtk/gtkaboutdialog.c:195
+#: gtk/gtkaboutdialog.c:210
 msgid "Program version"
 msgstr "Program version"
 
-#: gtk/gtkaboutdialog.c:196
+#: gtk/gtkaboutdialog.c:211
 msgid "The version of the program"
 msgstr "The version of the program"
 
-#: gtk/gtkaboutdialog.c:202
+#: gtk/gtkaboutdialog.c:225
 msgid "Copyright string"
 msgstr "Copyright string"
 
-#: gtk/gtkaboutdialog.c:203
+#: gtk/gtkaboutdialog.c:226
 msgid "Copyright information for the program"
 msgstr "Copyright information for the program"
 
-#: gtk/gtkaboutdialog.c:210
+#: gtk/gtkaboutdialog.c:243
 msgid "Comments string"
 msgstr "Comments string"
 
-#: gtk/gtkaboutdialog.c:211
+#: gtk/gtkaboutdialog.c:244
 msgid "Comments about the program"
 msgstr "Comments about the program"
 
-#: gtk/gtkaboutdialog.c:225
+#: gtk/gtkaboutdialog.c:276
 msgid "Website URL"
 msgstr "Website URL"
 
-#: gtk/gtkaboutdialog.c:226
+#: gtk/gtkaboutdialog.c:277
 msgid "The URL for the link to the website of the program"
 msgstr "The URL for the link to the website of the program"
 
-#: gtk/gtkaboutdialog.c:233
+#: gtk/gtkaboutdialog.c:293
 msgid "Website label"
 msgstr "Website label"
 
-#: gtk/gtkaboutdialog.c:234
+#: gtk/gtkaboutdialog.c:294
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
@@ -146,45 +146,45 @@ msgstr ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
 
-#: gtk/gtkaboutdialog.c:241
+#: gtk/gtkaboutdialog.c:310
 msgid "Authors"
 msgstr "Authors"
 
-#: gtk/gtkaboutdialog.c:242
-msgid "List of authors of the programs"
-msgstr "List of authors of the programs"
+#: gtk/gtkaboutdialog.c:311
+msgid "List of authors of the program"
+msgstr "List of authors of the program"
 
-#: gtk/gtkaboutdialog.c:248
+#: gtk/gtkaboutdialog.c:327
 msgid "Documenters"
 msgstr "Documenters"
 
-#: gtk/gtkaboutdialog.c:249
+#: gtk/gtkaboutdialog.c:328
 msgid "List of people documenting the program"
 msgstr "List of people documenting the program"
 
-#: gtk/gtkaboutdialog.c:256
+#: gtk/gtkaboutdialog.c:344
 msgid "Artists"
 msgstr "Artists"
 
-#: gtk/gtkaboutdialog.c:257
+#: gtk/gtkaboutdialog.c:345
 msgid "List of people who have contributed artwork to the program"
 msgstr "List of people who have contributed artwork to the program"
 
-#: gtk/gtkaboutdialog.c:264
+#: gtk/gtkaboutdialog.c:362
 msgid "Translator credits"
 msgstr "Translator credits"
 
-#: gtk/gtkaboutdialog.c:265
+#: gtk/gtkaboutdialog.c:363
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr ""
 "Credits to the translators. This string should be marked as translatable"
 
-#: gtk/gtkaboutdialog.c:272
+#: gtk/gtkaboutdialog.c:378
 msgid "Logo"
 msgstr "Logo"
 
-#: gtk/gtkaboutdialog.c:273
+#: gtk/gtkaboutdialog.c:379
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -192,19 +192,19 @@ msgstr ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
 
-#: gtk/gtkaboutdialog.c:280
+#: gtk/gtkaboutdialog.c:394
 msgid "Logo Icon Name"
 msgstr "Logo Icon Name"
 
-#: gtk/gtkaboutdialog.c:281
+#: gtk/gtkaboutdialog.c:395
 msgid "A named icon to use as the logo for the about box."
 msgstr "A named icon to use as the logo for the about box."
 
-#: gtk/gtkaboutdialog.c:288
+#: gtk/gtkaboutdialog.c:402
 msgid "Link Color"
 msgstr "Link Colour"
 
-#: gtk/gtkaboutdialog.c:289
+#: gtk/gtkaboutdialog.c:403
 msgid "Color of hyperlinks"
 msgstr "Colour of hyperlinks"
 
@@ -693,7 +693,7 @@ msgid ""
 msgstr ""
 "If set, the label is used to pick a stock item instead of being displayed"
 
-#: gtk/gtkbutton.c:244 gtk/gtkcombobox.c:612
+#: gtk/gtkbutton.c:244 gtk/gtkcombobox.c:615
 msgid "Focus on click"
 msgstr "Focus on click"
 
@@ -953,19 +953,19 @@ msgstr "Model"
 msgid "The model containing the possible values for the combo box"
 msgstr "The model containing the possible values for the combo box"
 
-#: gtk/gtkcellrenderercombo.c:106 gtk/gtkcomboboxentry.c:114
+#: gtk/gtkcellrenderercombo.c:109 gtk/gtkcomboboxentry.c:114
 msgid "Text Column"
 msgstr "Text Column"
 
-#: gtk/gtkcellrenderercombo.c:107 gtk/gtkcomboboxentry.c:115
+#: gtk/gtkcellrenderercombo.c:110 gtk/gtkcomboboxentry.c:115
 msgid "A column in the data source model to get the strings from"
 msgstr "A column in the data source model to get the strings from"
 
-#: gtk/gtkcellrenderercombo.c:124
+#: gtk/gtkcellrenderercombo.c:127
 msgid "Has Entry"
 msgstr "Has Entry"
 
-#: gtk/gtkcellrenderercombo.c:125
+#: gtk/gtkcellrenderercombo.c:128
 msgid "If FALSE, don't allow to enter strings other than the chosen ones"
 msgstr "If FALSE, don't allow strings other than the chosen ones to be entered"
 
@@ -1381,7 +1381,7 @@ msgstr "Indicator Spacing"
 msgid "Spacing around check or radio indicator"
 msgstr "Spacing around check or radio indicator"
 
-#: gtk/gtkcheckmenuitem.c:118 gtk/gtkfilechooserbutton.c:257
+#: gtk/gtkcheckmenuitem.c:118 gtk/gtkfilechooserbutton.c:282
 #: gtk/gtktogglebutton.c:134
 msgid "Active"
 msgstr "Active"
@@ -1414,7 +1414,7 @@ msgstr "Use alpha"
 msgid "Whether or not to give the color an alpha value"
 msgstr "Whether or not to give the colour an alpha value"
 
-#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:251
+#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:266
 #: gtk/gtkfontbutton.c:176 gtk/gtktreeviewcolumn.c:298
 msgid "Title"
 msgstr "Title"
@@ -1511,71 +1511,71 @@ msgstr "Value in list"
 msgid "Whether entered values must already be present in the list"
 msgstr "Whether entered values must already be present in the list"
 
-#: gtk/gtkcombobox.c:529
+#: gtk/gtkcombobox.c:532
 msgid "ComboBox model"
 msgstr "ComboBox model"
 
-#: gtk/gtkcombobox.c:530
+#: gtk/gtkcombobox.c:533
 msgid "The model for the combo box"
 msgstr "The model for the combo box"
 
-#: gtk/gtkcombobox.c:537
+#: gtk/gtkcombobox.c:540
 msgid "Wrap width"
 msgstr "Wrap width"
 
-#: gtk/gtkcombobox.c:538
+#: gtk/gtkcombobox.c:541
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Wrap width for layouting the items in a grid"
 
-#: gtk/gtkcombobox.c:547
+#: gtk/gtkcombobox.c:550
 msgid "Row span column"
 msgstr "Row span column"
 
-#: gtk/gtkcombobox.c:548
+#: gtk/gtkcombobox.c:551
 msgid "TreeModel column containing the row span values"
 msgstr "TreeModel column containing the row span values"
 
-#: gtk/gtkcombobox.c:557
+#: gtk/gtkcombobox.c:560
 msgid "Column span column"
 msgstr "Column span column"
 
-#: gtk/gtkcombobox.c:558
+#: gtk/gtkcombobox.c:561
 msgid "TreeModel column containing the column span values"
 msgstr "TreeModel column containing the column span values"
 
-#: gtk/gtkcombobox.c:568
+#: gtk/gtkcombobox.c:571
 msgid "Active item"
 msgstr "Active item"
 
-#: gtk/gtkcombobox.c:569
+#: gtk/gtkcombobox.c:572
 msgid "The item which is currently active"
 msgstr "The item which is currently active"
 
-#: gtk/gtkcombobox.c:588 gtk/gtkuimanager.c:221
+#: gtk/gtkcombobox.c:591 gtk/gtkuimanager.c:221
 msgid "Add tearoffs to menus"
 msgstr "Add tearoffs to menus"
 
-#: gtk/gtkcombobox.c:589
+#: gtk/gtkcombobox.c:592
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Whether dropdowns should have a tearoff menu item"
 
-#: gtk/gtkcombobox.c:604 gtk/gtkentry.c:530
+#: gtk/gtkcombobox.c:607 gtk/gtkentry.c:530
 msgid "Has Frame"
 msgstr "Has Frame"
 
-#: gtk/gtkcombobox.c:605
+#: gtk/gtkcombobox.c:608
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Whether the combo box draws a frame around the child"
 
-#: gtk/gtkcombobox.c:613
+#: gtk/gtkcombobox.c:616
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Whether the combo box grabs focus when it is clicked with the mouse"
 
-#: gtk/gtkcombobox.c:619
+#: gtk/gtkcombobox.c:622
 msgid "Appears as list"
 msgstr "Appears as list"
 
-#: gtk/gtkcombobox.c:620
+#: gtk/gtkcombobox.c:623
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "Whether dropdowns should look like lists rather than menus"
 
@@ -1972,27 +1972,27 @@ msgstr "Show Hidden"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Whether the hidden files and folders should be displayed"
 
-#: gtk/gtkfilechooserbutton.c:244
+#: gtk/gtkfilechooserbutton.c:251
 msgid "Dialog"
 msgstr "Dialogue"
 
-#: gtk/gtkfilechooserbutton.c:245
+#: gtk/gtkfilechooserbutton.c:252
 msgid "The file chooser dialog to use."
 msgstr "The file chooser dialogue to use."
 
-#: gtk/gtkfilechooserbutton.c:252
+#: gtk/gtkfilechooserbutton.c:267
 msgid "The title of the file chooser dialog."
 msgstr "The title of the file chooser dialogue."
 
-#: gtk/gtkfilechooserbutton.c:258
+#: gtk/gtkfilechooserbutton.c:283
 msgid "Whether the browse dialog is visible or not."
 msgstr "Whether the browse dialogue is visible or not."
 
-#: gtk/gtkfilechooserbutton.c:262
+#: gtk/gtkfilechooserbutton.c:295
 msgid "Width In Characters"
 msgstr "Width In Characters"
 
-#: gtk/gtkfilechooserbutton.c:263
+#: gtk/gtkfilechooserbutton.c:296
 msgid "The desired width of the button widget, in characters."
 msgstr "The desired width of the button widget, in characters."
 
@@ -2315,7 +2315,7 @@ msgstr "Animation"
 msgid "GdkPixbufAnimation to display"
 msgstr "GdkPixbufAnimation to display"
 
-#: gtk/gtkimage.c:257 gtk/gtkwindow.c:563
+#: gtk/gtkimage.c:257 gtk/gtkwindow.c:566
 msgid "Icon Name"
 msgstr "Icon Name"
 
@@ -2347,11 +2347,11 @@ msgstr "Show menu images"
 msgid "Whether images should be shown in menus"
 msgstr "Whether images should be shown in menus"
 
-#: gtk/gtkinvisible.c:116 gtk/gtkwindow.c:571
+#: gtk/gtkinvisible.c:116 gtk/gtkwindow.c:574
 msgid "Screen"
 msgstr "Screen"
 
-#: gtk/gtkinvisible.c:117 gtk/gtkwindow.c:572
+#: gtk/gtkinvisible.c:117 gtk/gtkwindow.c:575
 msgid "The screen where this window will be displayed"
 msgstr "The screen where this window will be displayed"
 
@@ -4296,7 +4296,7 @@ msgstr "Colour to use for odd rows"
 msgid "Whether to display the column"
 msgstr "Whether to display the column"
 
-#: gtk/gtktreeviewcolumn.c:233 gtk/gtkwindow.c:494
+#: gtk/gtktreeviewcolumn.c:233 gtk/gtkwindow.c:497
 msgid "Resizable"
 msgstr "Resizable"
 
@@ -4636,35 +4636,35 @@ msgstr "Cursor line aspect ratio"
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Aspect ratio with which to draw insertion cursor"
 
-#: gtk/gtkwindow.c:452
+#: gtk/gtkwindow.c:455
 msgid "Window Type"
 msgstr "Window Type"
 
-#: gtk/gtkwindow.c:453
+#: gtk/gtkwindow.c:456
 msgid "The type of the window"
 msgstr "The type of the window"
 
-#: gtk/gtkwindow.c:461
+#: gtk/gtkwindow.c:464
 msgid "Window Title"
 msgstr "Window Title"
 
-#: gtk/gtkwindow.c:462
+#: gtk/gtkwindow.c:465
 msgid "The title of the window"
 msgstr "The title of the window"
 
-#: gtk/gtkwindow.c:469
+#: gtk/gtkwindow.c:472
 msgid "Window Role"
 msgstr "Window Role"
 
-#: gtk/gtkwindow.c:470
+#: gtk/gtkwindow.c:473
 msgid "Unique identifier for the window to be used when restoring a session"
 msgstr "Unique identifier for the window to be used when restoring a session"
 
-#: gtk/gtkwindow.c:477
+#: gtk/gtkwindow.c:480
 msgid "Allow Shrink"
 msgstr "Allow Shrink"
 
-#: gtk/gtkwindow.c:479
+#: gtk/gtkwindow.c:482
 #, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
@@ -4673,23 +4673,23 @@ msgstr ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
 "time a bad idea"
 
-#: gtk/gtkwindow.c:486
+#: gtk/gtkwindow.c:489
 msgid "Allow Grow"
 msgstr "Allow Grow"
 
-#: gtk/gtkwindow.c:487
+#: gtk/gtkwindow.c:490
 msgid "If TRUE, users can expand the window beyond its minimum size"
 msgstr "If TRUE, users can expand the window beyond its minimum size"
 
-#: gtk/gtkwindow.c:495
+#: gtk/gtkwindow.c:498
 msgid "If TRUE, users can resize the window"
 msgstr "If TRUE, users can resize the window"
 
-#: gtk/gtkwindow.c:502
+#: gtk/gtkwindow.c:505
 msgid "Modal"
 msgstr "Modal"
 
-#: gtk/gtkwindow.c:503
+#: gtk/gtkwindow.c:506
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
@@ -4697,74 +4697,74 @@ msgstr ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
 
-#: gtk/gtkwindow.c:510
+#: gtk/gtkwindow.c:513
 msgid "Window Position"
 msgstr "Window Position"
 
-#: gtk/gtkwindow.c:511
+#: gtk/gtkwindow.c:514
 msgid "The initial position of the window"
 msgstr "The initial position of the window"
 
-#: gtk/gtkwindow.c:519
+#: gtk/gtkwindow.c:522
 msgid "Default Width"
 msgstr "Default Width"
 
-#: gtk/gtkwindow.c:520
+#: gtk/gtkwindow.c:523
 msgid "The default width of the window, used when initially showing the window"
 msgstr ""
 "The default width of the window, used when initially showing the window"
 
-#: gtk/gtkwindow.c:529
+#: gtk/gtkwindow.c:532
 msgid "Default Height"
 msgstr "Default Height"
 
-#: gtk/gtkwindow.c:530
+#: gtk/gtkwindow.c:533
 msgid ""
 "The default height of the window, used when initially showing the window"
 msgstr ""
 "The default height of the window, used when initially showing the window"
 
-#: gtk/gtkwindow.c:539
+#: gtk/gtkwindow.c:542
 msgid "Destroy with Parent"
 msgstr "Destroy with Parent"
 
-#: gtk/gtkwindow.c:540
+#: gtk/gtkwindow.c:543
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "If this window should be destroyed when the parent is destroyed"
 
-#: gtk/gtkwindow.c:547
+#: gtk/gtkwindow.c:550
 msgid "Icon"
 msgstr "Icon"
 
-#: gtk/gtkwindow.c:548
+#: gtk/gtkwindow.c:551
 msgid "Icon for this window"
 msgstr "Icon for this window"
 
-#: gtk/gtkwindow.c:564
+#: gtk/gtkwindow.c:567
 msgid "Name of the themed icon for this window"
 msgstr "Name of the themed icon for this window"
 
-#: gtk/gtkwindow.c:579
+#: gtk/gtkwindow.c:582
 msgid "Is Active"
 msgstr "Is Active"
 
-#: gtk/gtkwindow.c:580
+#: gtk/gtkwindow.c:583
 msgid "Whether the toplevel is the current active window"
 msgstr "Whether the toplevel is the current active window"
 
-#: gtk/gtkwindow.c:587
+#: gtk/gtkwindow.c:590
 msgid "Focus in Toplevel"
 msgstr "Focus in Toplevel"
 
-#: gtk/gtkwindow.c:588
+#: gtk/gtkwindow.c:591
 msgid "Whether the input focus is within this GtkWindow"
 msgstr "Whether the input focus is within this GtkWindow"
 
-#: gtk/gtkwindow.c:595
+#: gtk/gtkwindow.c:598
 msgid "Type hint"
 msgstr "Type hint"
 
-#: gtk/gtkwindow.c:596
+#: gtk/gtkwindow.c:599
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
@@ -4772,51 +4772,51 @@ msgstr ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
 
-#: gtk/gtkwindow.c:604
+#: gtk/gtkwindow.c:607
 msgid "Skip taskbar"
 msgstr "Skip taskbar"
 
-#: gtk/gtkwindow.c:605
+#: gtk/gtkwindow.c:608
 msgid "TRUE if the window should not be in the task bar."
 msgstr "TRUE if the window should not be in the task bar."
 
-#: gtk/gtkwindow.c:612
+#: gtk/gtkwindow.c:615
 msgid "Skip pager"
 msgstr "Skip pager"
 
-#: gtk/gtkwindow.c:613
+#: gtk/gtkwindow.c:616
 msgid "TRUE if the window should not be in the pager."
 msgstr "TRUE if the window should not be in the pager."
 
-#: gtk/gtkwindow.c:627
+#: gtk/gtkwindow.c:630
 msgid "Accept focus"
 msgstr "Accept focus"
 
-#: gtk/gtkwindow.c:628
+#: gtk/gtkwindow.c:631
 msgid "TRUE if the window should receive the input focus."
 msgstr "TRUE if the window should receive the input focus."
 
-#: gtk/gtkwindow.c:642
+#: gtk/gtkwindow.c:645
 msgid "Focus on map"
 msgstr "Focus on map"
 
-#: gtk/gtkwindow.c:643
+#: gtk/gtkwindow.c:646
 msgid "TRUE if the window should receive the input focus when mapped."
 msgstr "TRUE if the window should receive the input focus when mapped."
 
-#: gtk/gtkwindow.c:657
+#: gtk/gtkwindow.c:660
 msgid "Decorated"
 msgstr "Decorated"
 
-#: gtk/gtkwindow.c:658
+#: gtk/gtkwindow.c:661
 msgid "Whether the window should be decorated by the window manager"
 msgstr "Whether the window should be decorated by the window manager"
 
-#: gtk/gtkwindow.c:673
+#: gtk/gtkwindow.c:676
 msgid "Gravity"
 msgstr "Gravity"
 
-#: gtk/gtkwindow.c:674
+#: gtk/gtkwindow.c:677
 msgid "The window gravity of the window"
 msgstr "The window gravity of the window"
 
