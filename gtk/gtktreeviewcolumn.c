@@ -657,7 +657,6 @@ gtk_tree_view_column_cell_layout_pack_end (GtkCellLayout   *cell_layout,
 static void
 gtk_tree_view_column_cell_layout_clear (GtkCellLayout *cell_layout)
 {
-  GList *list;
   GtkTreeViewColumn *column;
 
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (cell_layout));

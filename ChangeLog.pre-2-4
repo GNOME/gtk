@@ -1,3 +1,26 @@
+Sun Apr 11 15:08:45 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtktreeprivate.h: Moved search entries into priv data.
+
+	* gtk/gtktreeview.c: Prep for type-ahead support.
+
+	(gtk_tree_view_destroy): Destroy the search window explicitly.
+	(gtk_tree_view_key_press): Minor change; prep for type-ahead
+	(gtk_tree_view_ensure_interactive_directory): New function
+	(gtk_tree_view_focus_out): Rework to handle new entry life-cycle.
+	(gtk_tree_view_real_start_interactive_search): rework
+	(gtk_tree_view_search_dialog_hide): ditto
+	(gtk_tree_view_search_delete_event): ditto
+	(gtk_tree_view_search_button_press_event): ditto
+	(gtk_tree_view_search_key_press_event): ditto
+	(gtk_tree_view_search_move): ditto
+	(gtk_tree_view_search_init): ditto
+
+	* gtk/gtktreeviewcolumn.c:
+	(gtk_tree_view_column_cell_layout_clear): remove unused variable.
+
+	* tests/testfilechooser.c: (main): change
+
 2004-04-11  Hans Breuer  <hans@breuer.org>
 
 	* gdk/win32/gdkspawn-win32.c : workaround for bug #137496,

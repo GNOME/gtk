@@ -28,7 +28,7 @@ extern "C" {
 #include <gtk/gtktreeview.h>
 #include <gtk/gtktreeselection.h>
 #include <gtk/gtkrbtree.h>
-  
+
 #define TREE_VIEW_DRAG_WIDTH 6
 
 typedef enum
@@ -58,7 +58,7 @@ enum
   DRAG_COLUMN_WINDOW_STATE_ARROW_LEFT = 3,
   DRAG_COLUMN_WINDOW_STATE_ARROW_RIGHT = 4
 };
-  
+
 #define GTK_TREE_VIEW_SET_FLAG(tree_view, flag)   G_STMT_START{ (tree_view->priv->flags|=flag); }G_STMT_END
 #define GTK_TREE_VIEW_UNSET_FLAG(tree_view, flag) G_STMT_START{ (tree_view->priv->flags&=~(flag)); }G_STMT_END
 #define GTK_TREE_VIEW_FLAG_SET(tree_view, flag)   ((tree_view->priv->flags&flag)==flag)
@@ -201,17 +201,24 @@ struct _GtkTreeViewPrivate
 
   guint ctrl_pressed : 1;
   guint shift_pressed : 1;
-  
+
+
+  guint init_hadjust_value : 1;
+
   /* interactive search */
   guint enable_search : 1;
   guint disable_popdown : 1;
+
+  gint selected_iter;
   gint search_column;
   GtkTreeViewSearchDialogPositionFunc search_dialog_position_func;
   GtkTreeViewSearchEqualFunc search_equal_func;
   gpointer search_user_data;
   GtkDestroyNotify search_destroy;
-  guint init_hadjust_value :1;              
-  gint prev_width;                          
+  GtkWidget *search_window;
+  GtkWidget *search_entry;
+
+  gint prev_width;
 };
 
 #ifdef __GNUC__
