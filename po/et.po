@@ -1940,7 +1940,7 @@ msgstr "_Suurus:"
 #. create the text entry widget
 #: gtk/gtkfontsel.c:468
 msgid "_Preview:"
-msgstr "_Näidis:"
+msgstr "_Eelvaade:"
 
 #: gtk/gtkfontsel.c:1269
 msgid "Font Selection"
