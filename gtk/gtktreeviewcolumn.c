@@ -2109,7 +2109,7 @@ gtk_tree_view_column_set_sort_column_id (GtkTreeViewColumn *tree_column,
 					 gint               sort_column_id)
 {
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
-  g_return_if_fail (sort_column_id >= 0);
+  g_return_if_fail (sort_column_id >= -1);
 
   if (tree_column->sort_column_id == sort_column_id)
     return;
@@ -2119,6 +2119,8 @@ gtk_tree_view_column_set_sort_column_id (GtkTreeViewColumn *tree_column,
   /* Handle unsetting the id */
   if (sort_column_id == -1)
     {
+      GtkTreeModel *model = gtk_tree_view_get_model (GTK_TREE_VIEW (tree_column->tree_view));
+
       if (tree_column->sort_clicked_signal)
 	{
 	  g_signal_handler_disconnect (tree_column, tree_column->sort_clicked_signal);
@@ -2127,12 +2129,13 @@ gtk_tree_view_column_set_sort_column_id (GtkTreeViewColumn *tree_column,
 
       if (tree_column->sort_column_changed_signal)
 	{
-	  g_signal_handler_disconnect (tree_column, tree_column->sort_column_changed_signal);
+	  g_signal_handler_disconnect (model, tree_column->sort_column_changed_signal);
 	  tree_column->sort_column_changed_signal = 0;
 	}
 
       gtk_tree_view_column_set_sort_order (tree_column, GTK_SORT_ASCENDING);
       gtk_tree_view_column_set_sort_indicator (tree_column, FALSE);
+      gtk_tree_view_column_set_clickable (tree_column, FALSE);
       return;
     }
 
