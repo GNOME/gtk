@@ -1084,7 +1084,10 @@ range_grab_remove (GtkRange *range)
 
 static GtkScrollType
 range_get_scroll_for_grab (GtkRange      *range)
-{  
+{ 
+  gboolean invert;
+
+  invert = should_invert (range);
   switch (range->layout->grab_location)
     {
       /* Backward stepper */
@@ -1093,13 +1096,13 @@ range_get_scroll_for_grab (GtkRange      *range)
       switch (range->layout->grab_button)
         {
         case 1:
-          return GTK_SCROLL_STEP_BACKWARD;
+          return invert ? GTK_SCROLL_STEP_FORWARD : GTK_SCROLL_STEP_BACKWARD;
           break;
         case 2:
-          return GTK_SCROLL_PAGE_BACKWARD;
+          return invert ? GTK_SCROLL_PAGE_FORWARD : GTK_SCROLL_PAGE_BACKWARD;
           break;
         case 3:
-          return GTK_SCROLL_START;
+          return invert ? GTK_SCROLL_END : GTK_SCROLL_START;
           break;
         }
       break;
@@ -1110,13 +1113,13 @@ range_get_scroll_for_grab (GtkRange      *range)
       switch (range->layout->grab_button)
         {
         case 1:
-          return GTK_SCROLL_STEP_FORWARD;
+          return invert ? GTK_SCROLL_STEP_BACKWARD : GTK_SCROLL_STEP_FORWARD;
           break;
         case 2:
-          return GTK_SCROLL_PAGE_FORWARD;
+          return invert ? GTK_SCROLL_PAGE_BACKWARD : GTK_SCROLL_PAGE_FORWARD;
           break;
         case 3:
-          return GTK_SCROLL_END;
+          return invert ? GTK_SCROLL_START : GTK_SCROLL_END;
           break;
        }
       break;
@@ -1601,17 +1604,11 @@ gtk_range_scroll (GtkRange     *range,
       break;
                   
     case GTK_SCROLL_STEP_BACKWARD:
-      if (should_invert (range))
-        step_forward (range);
-      else
-        step_back (range);
+      step_back (range);
       break;
                   
     case GTK_SCROLL_STEP_FORWARD:
-      if (should_invert (range))
-        step_back (range);
-      else
-        step_forward (range);
+      step_forward (range);
       break;
 
     case GTK_SCROLL_PAGE_LEFT:
@@ -1643,31 +1640,19 @@ gtk_range_scroll (GtkRange     *range,
       break;
                   
     case GTK_SCROLL_PAGE_BACKWARD:
-      if (should_invert (range))
-        page_forward (range);
-      else
-        page_back (range);
+      page_back (range);
       break;
                   
     case GTK_SCROLL_PAGE_FORWARD:
-      if (should_invert (range))
-        page_back (range);
-      else
-        page_forward (range);
+      page_forward (range);
       break;
 
     case GTK_SCROLL_START:
-      if (should_invert (range))
-	scroll_end (range);
-      else
-        scroll_begin (range);
+      scroll_begin (range);
       break;
 
     case GTK_SCROLL_END:
-      if (should_invert (range))
-        scroll_begin (range);
-      else
-	scroll_end (range);
+      scroll_end (range);
       break;
 
     case GTK_SCROLL_JUMP:

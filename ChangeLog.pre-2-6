@@ -1,3 +1,10 @@
+Sat Dec 13 02:33:17 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkrange.c (gtk_range_scroll): Undo the last change, 
+	since it broke logical keynav. 
+	* gtk/gtkrange.c (range_get_scroll_for_grab): Fix stepper
+	direction in inverted scrollbars here instead.
+
 Sat Dec 13 00:39:24 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkviewport.c (viewport_set_hadjustment_values): Implement
