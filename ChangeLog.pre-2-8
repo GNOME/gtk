@@ -567,7 +567,6 @@ Fri Oct  5 19:06:07 2001  Kristian Rietveld  <kristian@planet.nl>
 	it instead of "search-dialog" (when getting/setting the search dialog
 	widget).
 
->>>>>>> 1.2409
 2001-10-05  Jakub Steiner <jimmac@ximian.com>
 
 	* gtk/stock-icons/stock_broken_image.png: broken images icon
