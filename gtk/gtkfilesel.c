@@ -2362,6 +2362,7 @@ gtk_file_selection_get_selections (GtkFileSelection *filesel)
   gchar *filename, *dirname;
   gchar *current, *buf;
   gint i, count;
+  gboolean unselected_entry;
 
   g_return_val_if_fail (GTK_IS_FILE_SELECTION (filesel), NULL);
 
@@ -2381,7 +2382,7 @@ gtk_file_selection_get_selections (GtkFileSelection *filesel)
     selections = g_new (gchar *, 2);
 
   count = 0;
-  selections[count++] = filename;
+  unselected_entry = TRUE;
 
   if (names != NULL)
     {
@@ -2394,14 +2395,19 @@ gtk_file_selection_get_selections (GtkFileSelection *filesel)
 	  current = g_build_filename (dirname, buf, NULL);
 	  g_free (buf);
 
-	  if (compare_filenames (current, filename) != 0)
-	    selections[count++] = current;
-	  else
-	    g_free (current);
+	  selections[count++] = current;
+
+	  if (unselected_entry && compare_filenames (current, filename) == 0)
+	    unselected_entry = FALSE;
 	}
 
       g_free (dirname);
     }
+
+  if (unselected_entry)
+    selections[count++] = filename;
+  else
+    g_free (filename);
 
   selections[count] = NULL;
 

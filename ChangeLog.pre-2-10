@@ -1,3 +1,9 @@
+Tue Sep 24 23:09:19 2002  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtkfilesel.c: preserve ordering from gtk_tree_selection_foreach
+	when returning filenames for gtk_file_selection_get_selections
+	(#86567)
+
 Tue Sep 24 06:39:36 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/Makefile.am: Add the gxid_* files to
