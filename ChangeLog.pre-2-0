@@ -1,3 +1,8 @@
+Thu Nov 30 23:03:04 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkgc-x11.c (gdk_gc_copy): Properly handle
+	gc->clip_region == NULL>
+
 2000-11-30  Tor Lillqvist  <tml@iki.fi>
 
 	Changes by Hans Breuer:
@@ -6157,7 +6162,7 @@ Wed Jan 26 19:01:56 2000  Owen Taylor  <otaylor@redhat.com>
 	 - completion on files in home directory didn't work
 	 - completion on an empty string caused  segfault
 
-	 (Bug #3768, reported by Steve Ratcliffe)
+	 (Bug #3678, reported by Steve Ratcliffe)
 
 	* gtk/gtkscale.c (gtk_scale_get_value_width): Fix
 	cut and paste error that was causing scales to

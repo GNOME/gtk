@@ -711,7 +711,10 @@ gdk_gc_copy (GdkGC *dst_gc, GdkGC *src_gc)
   if (x11_dst_gc->clip_region)
     gdk_region_destroy (x11_dst_gc->clip_region);
 
-  x11_dst_gc->clip_region = gdk_region_copy (x11_src_gc->clip_region);
+  if (x11_src_gc->clip_region)
+    x11_dst_gc->clip_region = gdk_region_copy (x11_src_gc->clip_region);
+  else
+    x11_dst_gc->clip_region = NULL;
 
   x11_dst_gc->dirty_mask = x11_src_gc->dirty_mask;
 }
