@@ -4439,16 +4439,21 @@ gtk_window_real_set_focus (GtkWindow *window,
 	    GTK_WIDGET_SET_FLAGS (window->default_widget, GTK_HAS_DEFAULT);
         }
 
-      if (window->has_focus)
-	do_focus_change (window->focus_widget, FALSE);
+      window->focus_widget = NULL;
 
-      g_object_notify (G_OBJECT (window->focus_widget), "is_focus");
+      if (window->has_focus)
+	do_focus_change (old_focus, FALSE);
+
+      g_object_notify (G_OBJECT (old_focus), "is_focus");
     }
-  
-  window->focus_widget = focus;
-  
-  if (window->focus_widget)
+
+  /* The above notifications may have set a new focus widget,
+   * if so, we don't want to override it.
+   */
+  if (focus && !window->focus_widget)
     {
+      window->focus_widget = focus;
+  
       if (GTK_WIDGET_RECEIVES_DEFAULT (window->focus_widget) &&
 	  (window->focus_widget != window->default_widget))
 	{
@@ -4464,7 +4469,13 @@ gtk_window_real_set_focus (GtkWindow *window,
 
       g_object_notify (G_OBJECT (window->focus_widget), "is_focus");
     }
-  
+
+  /* If the default widget changed, a redraw will have been queued
+   * on the old and new default widgets by gtk_window_set_default(), so
+   * we only have to worry about the case where it didn't change.
+   * We'll sometimes queue a draw twice on the new widget but that
+   * is harmless.
+   */
   if (window->default_widget &&
       (def_flags != GTK_WIDGET_FLAGS (window->default_widget)))
     gtk_widget_queue_draw (window->default_widget);
