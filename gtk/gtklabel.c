@@ -874,7 +874,8 @@ gtk_label_set_attributes_internal (GtkLabel      *label,
 
   if (!label->use_markup && !label->use_underline)
     {
-      pango_attr_list_ref (attrs);
+      if (attrs)
+	pango_attr_list_ref (attrs);
       if (label->effective_attrs)
 	pango_attr_list_unref (label->effective_attrs);
       label->effective_attrs = attrs;

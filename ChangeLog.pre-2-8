@@ -1,3 +1,8 @@
+2003-12-04  Mark McLoughlin  <mark@skynet.ie>
+
+	* gtk/gtklabel.c: (gtk_label_set_attributes_internal): Allow
+	gtk_label_set_attributes() take NULL. See bug #128517.
+
 2003-12-03  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserentry.c (struct _GtkFileChooserEntry): Removed
