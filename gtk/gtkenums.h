@@ -191,6 +191,21 @@ typedef enum
   GTK_SELECTION_EXTENDED
 } GtkSelectionMode;
 
+/* Orientation for toolbars, etc. */
+typedef enum
+{
+  GTK_ORIENTATION_HORIZONTAL,
+  GTK_ORIENTATION_VERTICAL
+} GtkOrientation;
+
+/* Style for toolbars */
+typedef enum
+{
+  GTK_TOOLBAR_ICONS,
+  GTK_TOOLBAR_TEXT,
+  GTK_TOOLBAR_BOTH
+} GtkToolbarStyle;
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
