@@ -1,3 +1,8 @@
+2004-12-15  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkfilesystemunix.c (gtk_file_folder_unix_get_info):
+	Use g_filename_display_basename to calculate display name.
+
 2004-12-15  Matthias Clasen  <mclasen@redhat.com>
 
 	* NEWS: Updates

@@ -1743,9 +1743,7 @@ gtk_file_folder_unix_get_info (GtkFileFolder      *folder,
 
   if (types & GTK_FILE_INFO_DISPLAY_NAME)
     {
-      gchar *display_name = g_filename_to_utf8 (basename, -1, NULL, NULL, NULL);
-      if (!display_name)
-	display_name = g_strescape (basename, NULL);
+      gchar *display_name = g_filename_display_basename (filename);
 
       gtk_file_info_set_display_name (info, display_name);
 
