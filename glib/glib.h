@@ -752,7 +752,7 @@ void	 g_string_sprintfa  (GString *string,
  */                                                                           
 #define g_array_index(array,index) (array->data)[index]
 
-GArray* g_array_new	     (gboolean zero_terminated);
+GArray* g_array_new	     (void);
 void	g_array_free	     (GArray   *array,
 			      gboolean free_seg);
 void    g_array_set_size     (GArray   *array,
