@@ -109,11 +109,13 @@ dnl NeXTStep cc seems to need this
 AC_MSG_CHECKING([for extra flags for POSIX compliance])
 AC_TRY_COMPILE([#include <dirent.h>], [DIR *dir;],
   AC_MSG_RESULT(none needed),
+  gtk_save_CFLAGS=$CFLAGS
   CFLAGS="$CFLAGS -posix"
   AC_TRY_COMPILE([#include <dirent.h>], [DIR *dir;],
     AC_MSG_RESULT(-posix),
     AC_MSG_RESULT()
-    AC_MSG_ERROR([Could not determine POSIX flag. (-posix didn't work.)])))
+    CFLAGS=$gtk_save_CFLAGS
+    AC_MSG_WARN([Could not determine POSIX flag. (-posix didn't work.)])))
 
 if test "x$enable_xim" = "xyes"; then
   CFLAGS="$CFLAGS -DUSE_XIM"
