@@ -1,3 +1,8 @@
+Thu May 23 15:44:30 2002  Owen Taylor  <otaylor@redhat.com>
+ 
+ 	* gtk/gtktextview.c (changed_handler): Don't redraw
+ 	when the area is completely above the visible area.
+ 
 Thu Jun  6 17:34:00 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkrbtree.c (_gtk_rbtree_reorder): don't leak the GArray
