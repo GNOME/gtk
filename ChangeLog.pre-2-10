@@ -1,3 +1,11 @@
+2001-05-22  Joe Shaw  <joe@ximian.com>
+
+	* gtk/gtktextiter.c (_gtk_text_btree_get_iter_at_last_toggle): 
+	Simplify as suggested by Havoc. Just get the last iter and work
+	backward to the tag instead of getting a line and working back from
+	there. Fixes passing in an invalid offset to
+	iter_init_from_byte_offset().
+
 Tue May 22 16:25:27 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview*.h: 
