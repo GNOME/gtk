@@ -1,3 +1,8 @@
+Wed May 14 16:00:51 2003  Owen Taylor  <otaylor@redhat.com>
+ 
+ 	* gdk/x11/gdkgc-x11.c: Remove unecessary g_return_if_fail().
+ 	(#105500, Morten Welinder.)
+ 
 Wed May 14 09:05:11 2003   Hidetoshi Tajima <hidetoshi.tajima@sun.com>
 
 	* modules/input/gtkimcontextxim.c (get_ic_real): use type of guint32
