@@ -827,7 +827,7 @@ gtk_entry_completion_set_model (GtkEntryCompletion *completion,
                                 GtkTreeModel       *model)
 {
   g_return_if_fail (GTK_IS_ENTRY_COMPLETION (completion));
-  g_return_if_fail (GTK_IS_TREE_MODEL (model));
+  g_return_if_fail (model == NULL || GTK_IS_TREE_MODEL (model));
 
   /* code will unref the old filter model (if any) */
   completion->priv->filter_model =

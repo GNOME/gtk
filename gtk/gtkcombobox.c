@@ -985,12 +985,16 @@ gtk_combo_box_menu_position_below (GtkMenu  *menu,
   else if (*x + req.width > monitor.x + monitor.width)
     *x = monitor.x + monitor.width - req.width;
   
-  if (*y + child->allocation.height + req.height <= monitor.y + monitor.height)
+  if (monitor.y + monitor.height - *y - child->allocation.height >= req.height)
+    *y += child->allocation.height;
+  else if (*y - monitor.y >= req.height)
+    *y -= req.height;
+  else if (monitor.y + monitor.height - *y - child->allocation.height > *y - monitor.y) 
     *y += child->allocation.height;
   else
     *y -= req.height;
 
-   *push_in = TRUE;
+   *push_in = FALSE;
 }
 
 static void
@@ -3523,6 +3527,13 @@ gtk_combo_box_set_model (GtkComboBox  *combo_box,
                          GtkTreeModel *model)
 {
   g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
+
+  if (!model)
+    {
+      gtk_combo_box_unset_model (combo_box);
+      return;
+    }
+
   g_return_if_fail (GTK_IS_TREE_MODEL (model));
 
   if (model == combo_box->priv->model)
