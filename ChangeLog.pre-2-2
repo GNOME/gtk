@@ -1,3 +1,23 @@
+Tue May 12 16:56:35 1998  Owen Taylor  <otaylor@gtk.org>
+	(James A <jamesa@demon.net> : gtk-jamesa-980511-4.patch)
+	
+	* gtk/gtkbbox.h gtk/gtkcolorsel.h gtk/gtkvbbox.h:
+	Changed #include "gtkfoo.h" to #include <gtk/gtkfoo.h>
+
+	* gtk/gtkwindow.[ch]: Added const to gtk_window_set_wmclass
+
+Tue May 12 15:16:10 1998  Owen Taylor  <otaylor@gtk.org>
+	(From: Christopher James Lahey <clahey@umich.edu>)
+	
+	* gtk/gtkbutton.[ch] gtk/gtkenums.h gtk/gtktoolbar.[ch]
+	  gtk/testgtk.c:
+
+	Added 'relief' for buttons - they can be either GTK_RELIEF_NORMAL
+	(old style), or GTK_RELIEF_NONE - no relief in the NORMAL
+	state. Added gtk_toolbar_{set,get}_button_relief, which set/get
+	the default relief for the toolbars buttons. Added an
+	toggle for the toolbar test in testgtk.c.
+
 Tue May 12 00:24:59 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* docs/gtk-config.1: Rewritten and hopefully improved.

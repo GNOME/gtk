@@ -329,8 +329,8 @@ gtk_window_set_title (GtkWindow   *window,
 
 void
 gtk_window_set_wmclass (GtkWindow *window,
-			gchar     *wmclass_name,
-			gchar     *wmclass_class)
+			const gchar *wmclass_name,
+			const gchar *wmclass_class)
 {
   g_return_if_fail (window != NULL);
   g_return_if_fail (GTK_IS_WINDOW (window));

@@ -209,6 +209,13 @@ typedef enum
   GTK_TOOLBAR_BOTH
 } GtkToolbarStyle;
 
+/* Style for buttons */
+typedef enum
+{
+  GTK_RELIEF_NORMAL,
+  GTK_RELIEF_NONE
+} GtkReliefStyle;
+
 /* Generic visibility flags */
 typedef enum
 {

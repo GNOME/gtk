@@ -75,6 +75,7 @@ struct _GtkToolbar
 
   gint             button_maxw;
   gint             button_maxh;
+  GtkReliefStyle   relief;
 };
 
 struct _GtkToolbarClass
@@ -178,6 +179,9 @@ void       gtk_toolbar_set_space_size  (GtkToolbar      *toolbar,
 					gint             space_size);
 void       gtk_toolbar_set_tooltips    (GtkToolbar      *toolbar,
 					gint             enable);
+void       gtk_toolbar_set_button_relief      (GtkToolbar      *toolbar,
+					GtkReliefStyle   relief);
+GtkReliefStyle gtk_toolbar_get_button_relief  (GtkToolbar      *toolbar);
 
 
 #ifdef __cplusplus

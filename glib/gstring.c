@@ -124,7 +124,7 @@ g_string_chunk_free (GStringChunk *fchunk)
 
 gchar*
 g_string_chunk_insert (GStringChunk *fchunk,
-		       gchar*        string)
+		       const gchar  *string)
 {
   GRealStringChunk *chunk = (GRealStringChunk*) fchunk;
   gint len = strlen (string);
@@ -160,7 +160,7 @@ g_string_chunk_insert (GStringChunk *fchunk,
 
 gchar*
 g_string_chunk_insert_const (GStringChunk *fchunk,
-			     gchar*        string)
+			     const gchar  *string)
 {
   GRealStringChunk *chunk = (GRealStringChunk*) fchunk;
   char* lookup;

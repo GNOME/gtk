@@ -1,3 +1,12 @@
+Tue May 12 16:54:15 1998  Owen Taylor  <otaylor@gtk.org>
+
+	( James A <jamesa@demon.net> : gtk-jamesa-980511-4.patch)
+	
+	* glib.h gstring.c gmessages.c: Added some missing
+	const to arguments.
+
+	* gutils.c (g_strsignal.c): Added missing return statements.
+
 Mon May 11 21:11:54 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gutils.c gmessages.c: Moved g_error, g_warning, g_message and

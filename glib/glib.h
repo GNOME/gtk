@@ -684,10 +684,10 @@ gdouble g_timer_elapsed (GTimer	 *timer,
 
 /* Output
  */
-void g_error   (gchar *format, ...) G_GNUC_PRINTF (1, 2);
-void g_warning (gchar *format, ...) G_GNUC_PRINTF (1, 2);
-void g_message (gchar *format, ...) G_GNUC_PRINTF (1, 2);
-void g_print   (gchar *format, ...) G_GNUC_PRINTF (1, 2);
+void g_error   (const gchar *format, ...) G_GNUC_PRINTF (1, 2);
+void g_warning (const gchar *format, ...) G_GNUC_PRINTF (1, 2);
+void g_message (const gchar *format, ...) G_GNUC_PRINTF (1, 2);
+void g_print   (const gchar *format, ...) G_GNUC_PRINTF (1, 2);
 
 /* Utility functions
  */
@@ -742,9 +742,9 @@ void g_stack_trace    (const gchar *progname,
 GStringChunk* g_string_chunk_new	   (gint size);
 void	      g_string_chunk_free	   (GStringChunk *chunk);
 gchar*	      g_string_chunk_insert	   (GStringChunk *chunk,
-					    gchar*	  string);
+					    const gchar	 *string);
 gchar*	      g_string_chunk_insert_const  (GStringChunk *chunk,
-					    gchar*	  string);
+					    const gchar	 *string);
 
 /* Strings
  */

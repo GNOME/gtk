@@ -127,7 +127,7 @@ gdk_region_polygon (GdkPoint    *points,
   GdkRegionPrivate *private;
   GdkRegion *region;
   Region xregion;
-  gint xfill_rule = 0;
+  gint xfill_rule = EvenOddRule;
 
   g_return_val_if_fail (points != NULL, NULL);
   g_return_val_if_fail (npoints != 0, NULL); /* maybe we should check for at least three points */

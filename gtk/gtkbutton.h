@@ -22,6 +22,7 @@
 
 #include <gdk/gdk.h>
 #include <gtk/gtkcontainer.h>
+#include <gtk/gtkenums.h>
 
 
 #ifdef __cplusplus
@@ -47,12 +48,13 @@ struct _GtkButton
 
   guint in_button : 1;
   guint button_down : 1;
+  guint relief : 2;
 };
 
 struct _GtkButtonClass
 {
   GtkContainerClass parent_class;
-
+  
   void (* pressed)  (GtkButton *button);
   void (* released) (GtkButton *button);
   void (* clicked)  (GtkButton *button);
@@ -61,14 +63,17 @@ struct _GtkButtonClass
 };
 
 
-GtkType    gtk_button_get_type       (void);
-GtkWidget* gtk_button_new            (void);
-GtkWidget* gtk_button_new_with_label (const gchar *label);
-void       gtk_button_pressed        (GtkButton *button);
-void       gtk_button_released       (GtkButton *button);
-void       gtk_button_clicked        (GtkButton *button);
-void       gtk_button_enter          (GtkButton *button);
-void       gtk_button_leave          (GtkButton *button);
+GtkType        gtk_button_get_type       (void);
+GtkWidget*     gtk_button_new            (void);
+GtkWidget*     gtk_button_new_with_label (const gchar *label);
+void           gtk_button_pressed        (GtkButton *button);
+void           gtk_button_released       (GtkButton *button);
+void           gtk_button_clicked        (GtkButton *button);
+void           gtk_button_enter          (GtkButton *button);
+void           gtk_button_leave          (GtkButton *button);
+void           gtk_button_set_relief     (GtkButton *button,
+					  GtkReliefStyle newstyle);
+GtkReliefStyle gtk_button_get_relief      (GtkButton *button);
 
 
 #ifdef __cplusplus

@@ -649,6 +649,20 @@ set_toolbar_disable (GtkWidget *widget,
 }
 
 static void
+set_toolbar_borders (GtkWidget *widget,
+		     gpointer   data)
+{
+  gtk_toolbar_set_button_relief (GTK_TOOLBAR (data), GTK_RELIEF_NORMAL);
+}
+
+static void
+set_toolbar_borderless (GtkWidget *widget,
+			gpointer   data)
+{
+  gtk_toolbar_set_button_relief (GTK_TOOLBAR (data), GTK_RELIEF_NONE);
+}
+
+static void
 create_toolbar (void)
 {
   static GtkWidget *window = NULL;
@@ -669,6 +683,7 @@ create_toolbar (void)
       gtk_widget_realize (window);
 
       toolbar = gtk_toolbar_new (GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH);
+      gtk_toolbar_set_button_relief (GTK_TOOLBAR (toolbar), GTK_RELIEF_NONE);
 
       gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
 			       "Horizontal", "Horizontal toolbar layout", "Toolbar/Horizontal",
@@ -722,6 +737,17 @@ create_toolbar (void)
 			       new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
 			       (GtkSignalFunc) set_toolbar_disable, toolbar);
 
+      gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
+
+      gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
+			       "Borders", "Show Borders", NULL,
+			       new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
+			       (GtkSignalFunc) set_toolbar_borders, toolbar);
+      gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
+			       "Borderless", "Hide Borders", NULL,
+			       new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
+			       (GtkSignalFunc) set_toolbar_borderless, toolbar);
+
       gtk_container_add (GTK_CONTAINER (window), toolbar);
       gtk_widget_show (toolbar);
     }
@@ -741,6 +767,7 @@ make_toolbar (GtkWidget *window)
     gtk_widget_realize (window);
 
   toolbar = gtk_toolbar_new (GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH);
+  gtk_toolbar_set_button_relief (GTK_TOOLBAR (toolbar), GTK_RELIEF_NONE);
 
   gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
 			   "Horizontal", "Horizontal toolbar layout", NULL,
@@ -787,6 +814,17 @@ make_toolbar (GtkWidget *window)
 			   "Disable", "Disable tooltips", NULL,
 			   new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
 			   (GtkSignalFunc) set_toolbar_disable, toolbar);
+
+  gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
+  
+  gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
+			   "Borders", "Show Borders", NULL,
+			   new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
+			   (GtkSignalFunc) set_toolbar_borders, toolbar);
+  gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
+			   "Borderless", "Hide Borders", NULL,
+			   new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
+			   (GtkSignalFunc) set_toolbar_borderless, toolbar);
 
   return toolbar;
 }
@@ -1553,6 +1591,7 @@ create_handle_box (void)
     gtk_widget_show (handle_box);
 
     toolbar = make_toolbar (window);
+    gtk_toolbar_set_button_relief (GTK_TOOLBAR (toolbar), GTK_RELIEF_NORMAL);
     gtk_container_add (GTK_CONTAINER (handle_box), toolbar);
     gtk_widget_show (toolbar);
 

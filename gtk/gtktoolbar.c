@@ -160,6 +160,7 @@ gtk_toolbar_init (GtkToolbar *toolbar)
   toolbar->children     = NULL;
   toolbar->orientation  = GTK_ORIENTATION_HORIZONTAL;
   toolbar->style        = GTK_TOOLBAR_ICONS;
+  toolbar->relief       = GTK_RELIEF_NORMAL;
   toolbar->space_size   = DEFAULT_SPACE_SIZE;
   toolbar->tooltips     = gtk_tooltips_new ();
   toolbar->button_maxw  = 0;
@@ -765,7 +766,10 @@ gtk_toolbar_insert_element (GtkToolbar          *toolbar,
     case GTK_TOOLBAR_CHILD_TOGGLEBUTTON:
     case GTK_TOOLBAR_CHILD_RADIOBUTTON:
       if (type == GTK_TOOLBAR_CHILD_BUTTON)
-	child->widget = gtk_button_new ();
+	{
+	  child->widget = gtk_button_new ();
+	  gtk_button_set_relief (GTK_BUTTON (child->widget), toolbar->relief);
+	}
       else if (type == GTK_TOOLBAR_CHILD_TOGGLEBUTTON)
 	{
 	  child->widget = gtk_toggle_button_new ();
@@ -879,6 +883,40 @@ gtk_toolbar_set_tooltips (GtkToolbar *toolbar,
     gtk_tooltips_enable (toolbar->tooltips);
   else
     gtk_tooltips_disable (toolbar->tooltips);
+}
+
+void
+gtk_toolbar_set_button_relief (GtkToolbar *toolbar,
+			       GtkReliefStyle relief)
+{
+  GList *children;
+  GtkToolbarChild *child;
+  
+  g_return_if_fail (toolbar != NULL);
+  g_return_if_fail (GTK_IS_TOOLBAR (toolbar));
+
+  if (toolbar->relief != relief)
+    {
+      toolbar->relief = relief;
+      
+      for (children = toolbar->children; children; children = children->next)
+	{
+	  child = children->data;
+	  if (child->type == GTK_TOOLBAR_CHILD_BUTTON)
+	    gtk_button_set_relief (GTK_BUTTON (child->widget), relief);
+	}
+      
+      gtk_widget_queue_resize (GTK_WIDGET (toolbar));
+    }
+}
+
+GtkReliefStyle
+gtk_toolbar_get_button_relief (GtkToolbar      *toolbar)
+{
+  g_return_val_if_fail (toolbar != NULL, GTK_RELIEF_NORMAL);
+  g_return_val_if_fail (GTK_IS_TOOLBAR (toolbar), GTK_RELIEF_NORMAL);
+
+  return toolbar->relief;
 }
 
 static void
