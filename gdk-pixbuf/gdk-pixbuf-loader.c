@@ -165,35 +165,40 @@ gdk_pixbuf_loader_init (GdkPixbufLoader *loader)
 }
 
 static void
-gdk_pixbuf_loader_destroy (GtkObject *loader)
+gdk_pixbuf_loader_destroy (GtkObject *object)
 {
+	GdkPixbufLoader *loader;
 	GdkPixbufLoaderPrivate *priv = NULL;
 
-	g_return_if_fail (loader != NULL);
-	g_return_if_fail (GDK_IS_PIXBUF_LOADER (loader));
+	g_return_if_fail (object != NULL);
+	g_return_if_fail (GDK_IS_PIXBUF_LOADER (object));
 
-	priv = GDK_PIXBUF_LOADER (loader)->private;
+	loader = GDK_PIXBUF_LOADER (object);
+	priv = loader->private;
 
 	if (!priv->closed)
-		gdk_pixbuf_loader_close (GDK_PIXBUF_LOADER (loader));
+		gdk_pixbuf_loader_close (loader);
 
 	if (priv->pixbuf)
 		gdk_pixbuf_unref (priv->pixbuf);
 
 	if (GTK_OBJECT_CLASS (parent_class)->destroy)
-		(* GTK_OBJECT_CLASS (parent_class)->destroy) (loader);
+		(* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
 
 static void
-gdk_pixbuf_loader_finalize (GtkObject *loader)
+gdk_pixbuf_loader_finalize (GtkObject *object)
 {
+	GdkPixbufLoader *loader;
 	GdkPixbufLoaderPrivate *priv = NULL;
 
-	priv = GDK_PIXBUF_LOADER (loader)->private;
+	loader = GDK_PIXBUF_LOADER (object);
+	priv = loader->private;
+
 	g_free (priv);
 
 	if (GTK_OBJECT_CLASS (parent_class)->finalize)
-		(* GTK_OBJECT_CLASS (parent_class)->finalize) (loader);
+		(* GTK_OBJECT_CLASS (parent_class)->finalize) (object);
 }
 
 static void

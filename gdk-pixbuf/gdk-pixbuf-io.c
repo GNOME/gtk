@@ -136,15 +136,15 @@ pixbuf_check_ppm (guchar *buffer, int size)
 #endif
 
 ModuleType file_formats [] = {
-	{ "png",  NULL, pixbuf_check_png,  NULL, NULL, NULL, NULL, NULL },
-	{ "jpeg", NULL, pixbuf_check_jpeg, NULL, NULL, NULL, NULL, NULL },
-	{ "tiff", NULL, pixbuf_check_tiff, NULL, NULL, NULL, NULL, NULL },
-	{ "gif",  NULL, pixbuf_check_gif,  NULL, NULL, NULL, NULL, NULL },
+	{ "png",  pixbuf_check_png, NULL,  NULL, NULL, NULL, NULL, NULL },
+	{ "jpeg", pixbuf_check_jpeg, NULL, NULL, NULL, NULL, NULL, NULL },
+	{ "tiff", pixbuf_check_tiff, NULL, NULL, NULL, NULL, NULL, NULL },
+	{ "gif",  pixbuf_check_gif, NULL,  NULL, NULL, NULL, NULL, NULL },
 #define XPM_FILE_FORMAT_INDEX 4
-	{ "xpm",  NULL, pixbuf_check_xpm,  NULL, NULL, NULL, NULL, NULL },
+	{ "xpm",  pixbuf_check_xpm, NULL,  NULL, NULL, NULL, NULL, NULL },
 #if 0
-	{ "bmp",  NULL, pixbuf_check_bmp,  NULL, NULL, NULL, NULL, NULL },
-	{ "ppm",  NULL, pixbuf_check_ppm,  NULL, NULL, NULL, NULL, NULL },
+	{ "bmp",  pixbuf_check_bmp, NULL,  NULL, NULL, NULL, NULL, NULL },
+	{ "ppm",  pixbuf_check_ppm, NULL,  NULL, NULL, NULL, NULL, NULL },
 #endif
 	{ NULL, NULL, NULL, NULL, NULL, NULL, NULL }
 };
