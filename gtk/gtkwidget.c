@@ -2593,14 +2593,14 @@ widget_new_accel_closure (GtkWidget *widget,
  * @accel_mods:   modifier key combination of the accelerator
  * @accel_flags:  flag accelerators, e.g. %GTK_ACCEL_VISIBLE
  *
- * Installs an accelerator for this @widget in @accel_group, that causes
+ * Installs an accelerator for this @widget in @accel_group that causes
  * @accel_signal to be emitted if the accelerator is activated.
  * The @accel_group needs to be added to the widget's toplevel via
  * gtk_window_add_accel_group(), and the signal must be of type %G_RUN_ACTION.
  * Accelerators added through this function are not user changeable during
  * runtime. If you want to support accelerators that can be changed by the
- * user, use gtk_accel_map_add_entry() and gtk_menu_item_set_accel_path()
- * instead.
+ * user, use gtk_accel_map_add_entry() and gtk_widget_set_accel_path() or
+ * gtk_menu_item_set_accel_path() instead.
  */
 void
 gtk_widget_add_accelerator (GtkWidget      *widget,
@@ -2743,15 +2743,35 @@ destroy_accel_path (gpointer data)
   g_free (apath);
 }
 
-/* accel_group: the accel group used to activate this widget
- * accel_path:  the accel path, associating the accelerator
- *              to activate this widget
- * set accel path through which this widget can be actiavated.
- */
+
+/**
+ * gtk_widget_set_accel_path:
+ * @widget: a #GtkWidget
+ * @accel_path: path used to look up the the accelerator
+ * @accel_group: a #GtkAccelGroup.
+ * 
+ * Given an accelerator group, @accel_group, and an accelerator path,
+ * @accel_path, sets up an accelerator in @accel_group so whenever the
+ * key binding that is defined for @accel_path is pressed, @widget
+ * will be activated.  This removes any accelerators (for any
+ * accelerator group) installed by previous calls to
+ * gtk_widget_set_accel_path(). Associating accelerators with
+ * paths allows them to be modified by the user and the modifications
+ * to be saved for future use. (See gtk_accel_map_save().)
+ *
+ * This function is a low level function that would most likely
+ * be used by a menu creation system like #GtkItemFactory. If you
+ * use #GtkItemFactory, setting up accelerator paths will be done
+ * automatically.
+ *
+ * Even when you you aren't using #GtkItemFactory, if you only want to
+ * set up accelerators on menu items gtk_menu_item_set_accel_path()
+ * provides a somewhat more convenient interface.
+ **/
 void
-_gtk_widget_set_accel_path (GtkWidget     *widget,
-			    const gchar   *accel_path,
-			    GtkAccelGroup *accel_group)
+gtk_widget_set_accel_path (GtkWidget     *widget,
+			   const gchar   *accel_path,
+			   GtkAccelGroup *accel_group)
 {
   AccelPath *apath;
 

@@ -1054,7 +1054,7 @@ _gtk_menu_item_refresh_accel_path (GtkMenuItem   *menu_item,
 
   if (!accel_group)
     {
-      _gtk_widget_set_accel_path (widget, NULL, NULL);
+      gtk_widget_set_accel_path (widget, NULL, NULL);
       return;
     }
 
@@ -1074,10 +1074,10 @@ _gtk_menu_item_refresh_accel_path (GtkMenuItem   *menu_item,
 	  path = menu_item->accel_path;
 	}
       if (path)
-	_gtk_widget_set_accel_path (widget, path, accel_group);
+	gtk_widget_set_accel_path (widget, path, accel_group);
     }
   else if (group_changed)			/* reinstall accelerators */
-    _gtk_widget_set_accel_path (widget, path, accel_group);
+    gtk_widget_set_accel_path (widget, path, accel_group);
 }
 
 /**
@@ -1092,6 +1092,10 @@ _gtk_menu_item_refresh_accel_path (GtkMenuItem   *menu_item,
  * gtk_accel_map_add_entry() with the same @accel_path.
  * See also gtk_accel_map_add_entry() on the specifics of accelerator paths,
  * and gtk_menu_set_accel_path() for a more convenient variant of this function.
+ *
+ * This function is basically a convenience wrapper that handles calling
+ * gtk_widget_set_accel_path() with the appropriate accelerator group for
+ * the menu item.
  */
 void
 gtk_menu_item_set_accel_path (GtkMenuItem *menu_item,
@@ -1109,7 +1113,7 @@ gtk_menu_item_set_accel_path (GtkMenuItem *menu_item,
   menu_item->accel_path = g_strdup (accel_path);
 
   /* forget accelerators associated with old path */
-  _gtk_widget_set_accel_path (widget, NULL, NULL);
+  gtk_widget_set_accel_path (widget, NULL, NULL);
 
   /* install accelerators associated with new path */
   if (widget->parent)

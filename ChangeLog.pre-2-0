@@ -1,3 +1,10 @@
+Tue Jan 29 22:31:07 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.[ch] gtkmenuitem.c gtkitemfactory.c: Export 
+	gtk_widget_set_accel_path().
+
+	* gtk/gtk.def: Add gtk_widget_set_accel_path.
+
 Tue Jan 29 21:50:28 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkaccelmap.[ch] gtk/gtkbindings.[ch] gtk/gtkwidget.[ch]:
