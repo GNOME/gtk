@@ -38,6 +38,7 @@
 #include <sys/vt.h>
 #include <sys/kd.h>
 #include <errno.h>
+#include <signal.h>
 
 #include <sys/socket.h>
 #include <sys/un.h>
@@ -1252,6 +1253,13 @@ extern void keyboard_shutdown(void);
 void
 _gdk_windowing_exit (void)
 {
+  struct sigaction action;
+
+  /* don't get interrupted while exiting
+   * (cf. gdkrender-fb.c:gdk_shadow_fb_init) */
+  action.sa_handler = SIG_IGN;
+  sigemptyset (&action.sa_mask);
+  action.sa_flags = 0;
 
   gdk_fb_mouse_close ();
   /*leak  g_free (gdk_fb_mouse);*/

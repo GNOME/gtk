@@ -1,3 +1,9 @@
+Thu Nov  7 16:13:41 2002  Eric Warmenhoven <eric@warmenhoven.org>
+
+	* gdk/linux-fb/gdkscreen-fb.c: fix compilation
+
+	* gdk/linux-fb/gdkmain-fb.c: prevent segfaults on shutdown
+
 Thu Nov  7 18:50:38 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_get_pango_context): Note
