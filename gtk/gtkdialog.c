@@ -35,6 +35,13 @@
 #include "gtkintl.h"
 #include "gtkbindings.h"
 
+typedef struct _ResponseData ResponseData;
+
+struct _ResponseData
+{
+  gint response_id;
+};
+
 static void gtk_dialog_class_init (GtkDialogClass *klass);
 static void gtk_dialog_init       (GtkDialog      *dialog);
 
@@ -59,6 +66,8 @@ static void gtk_dialog_style_set         (GtkWidget        *widget,
 static void gtk_dialog_map               (GtkWidget        *widget);
 
 static void gtk_dialog_close             (GtkDialog        *dialog);
+
+static ResponseData* get_response_data   (GtkWidget        *widget);
 
 enum {
   PROP_0,
@@ -345,15 +354,42 @@ gtk_dialog_style_set (GtkWidget *widget,
   update_spacings (GTK_DIALOG (widget));
 }
 
+static gboolean
+dialog_has_cancel (GtkDialog *dialog)
+{
+  GList *children, *tmp_list;
+  gboolean ret = FALSE;
+      
+  children = gtk_container_get_children (GTK_CONTAINER (dialog->action_area));
+
+  for (tmp_list = children; tmp_list; tmp_list = tmp_list->next)
+    {
+      ResponseData *rd = get_response_data (tmp_list->data);
+      
+      if (rd && rd->response_id == GTK_RESPONSE_CANCEL)
+	{
+	  ret = TRUE;
+	  break;
+	}
+    }
+
+  g_list_free (children);
+
+  return ret;
+}
+
 static void
 gtk_dialog_close (GtkDialog *dialog)
 {
   /* Synthesize delete_event to close dialog. */
   
-  GdkEvent *event = gdk_event_new (GDK_DELETE);
-  GtkWidget *widget;
+  GtkWidget *widget = GTK_WIDGET (dialog);
+  GdkEvent *event;
 
-  widget = GTK_WIDGET (dialog);
+  if (!dialog_has_cancel (dialog))
+    return;
+
+  event = gdk_event_new (GDK_DELETE);
   
   event->any.window = g_object_ref (widget->window);
   event->any.send_event = TRUE;
@@ -458,13 +494,6 @@ gtk_dialog_new_with_buttons (const gchar    *title,
 
   return GTK_WIDGET (dialog);
 }
-
-typedef struct _ResponseData ResponseData;
-
-struct _ResponseData
-{
-  gint response_id;
-};
 
 static ResponseData*
 get_response_data (GtkWidget *widget)
