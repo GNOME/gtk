@@ -1,3 +1,8 @@
+2002-05-26  Carlos Perello Marin <carlos@gnome-db.org>
+
+	* pt_BR.po: Updated by Gustavo Noronha Silva <kov@debian.org> &&
+	converted into UTF-8
+
 Tue May 21 10:13:27 2002  George Lebl <jirka@5z.com>
 
 	* cs.po: update a few strings, that is at least the ones I see
