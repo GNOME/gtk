@@ -1,3 +1,22 @@
+2004-04-24  Theppitak Karoonboonyanan  <thep@linux.thainet>
+
+	Patch to add support for string conversion callbacks to
+	GtkIMContextXIM (#101814)
+
+	* modules/input/gtkimcontextxim.c: Set the string conversion callback
+	if supported by the XIC.
+
+	(struct _GtkIMContextXIM): Add string_conversion_callback member.
+
+	(struct _GtkXIMInfo, setup_im): Check and keep flag inidicating
+	whether string conversion callback is supported.
+
+	(gtk_im_context_get_ic, +set_string_conversion_callback,
+	+string_conversion_callback): Also initialize string conversion
+	callback, if supported, along with the IC initialization.
+
+	* modules/input/imxim.c: Make "xim" module default for Thai as well.
+
 2004-04-23  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkclipboard.c (gtk_clipboard_wait_for_targets): Correctly

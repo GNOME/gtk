@@ -20,6 +20,7 @@
 #include <config.h>
 #include "locale.h"
 #include <string.h>
+#include <stdlib.h>
 
 #include "gtk/gtkintl.h"
 #include "gtk/gtklabel.h"
@@ -63,6 +64,8 @@ struct _GtkIMContextXIM
   XIMCallback status_done_callback;
   XIMCallback status_draw_callback;
 
+  XICCallback string_conversion_callback;
+
   XIC ic;
 
   guint filter_key_release : 1;
@@ -87,6 +90,7 @@ struct _GtkXIMInfo
   GSList *ics;
 
   guint reconnecting :1;
+  guint supports_string_conversion;
 };
 
 /* A context status window; these are kept in the status_windows list. */
@@ -347,21 +351,31 @@ setup_im (GtkXIMInfo *info)
 						G_CALLBACK (preedit_style_change),
 						info);
 
-  status_style_change (info);
-  preedit_style_change (info);
-
-#if 0
+  info->supports_string_conversion = FALSE;
   if (ic_values)
     {
+      int i;
+      
+      for (i = 0; i < ic_values->count_values; i++)
+	if (strcmp (ic_values->supported_values[i],
+		    XNStringConversionCallback) == 0)
+	  {
+	    info->supports_string_conversion = TRUE;
+	    break;
+	  }
+
+#if 0
       for (i = 0; i < ic_values->count_values; i++)
 	g_print ("%s\n", ic_values->supported_values[i]);
       for (i = 0; i < xim_styles->count_styles; i++)
 	g_print ("%#x\n", xim_styles->supported_styles[i]);
-    }
 #endif
+      
+      XFree (ic_values);
+    }
 
-  if (ic_values)
-    XFree (ic_values);
+  status_style_change (info);
+  preedit_style_change (info);
 }
 
 static void
@@ -1186,6 +1200,120 @@ status_draw_callback (XIC      xic,
     }
 }
 
+static void
+string_conversion_callback (XIC xic, XPointer client_data, XPointer call_data)
+{
+  GtkIMContextXIM *context_xim;
+  XIMStringConversionCallbackStruct *conv_data;
+  gchar *surrounding;
+  gint  cursor_index;
+
+  context_xim = (GtkIMContextXIM *)client_data;
+  conv_data = (XIMStringConversionCallbackStruct *)call_data;
+
+  if (gtk_im_context_get_surrounding ((GtkIMContext *)context_xim,
+                                      &surrounding, &cursor_index))
+    {
+      gchar *text = NULL;
+      gsize text_len = 0;
+      gint  subst_offset = 0, subst_nchars = 0;
+      gint  i;
+      gchar *p = surrounding + cursor_index, *q;
+      gshort position = (gshort)conv_data->position;
+
+      if (position > 0)
+        {
+          for (i = position; i > 0 && *p; --i)
+            p = g_utf8_next_char (p);
+          if (i > 0)
+            return;
+        }
+      /* According to X11R6.4 Xlib - C Library Reference Manual
+       * section 13.5.7.3 String Conversion Callback,
+       * XIMStringConversionPosition is starting position _relative_
+       * to current client's cursor position. So it should be able
+       * to be negative, or referring to a position before the cursor
+       * would be impossible. But current X protocol defines this as
+       * unsigned short. So, compiler may warn about the value range
+       * here. We hope the X protocol is fixed soon.
+       */
+      else if (position < 0)
+        {
+          for (i = position; i < 0 && p > surrounding; ++i)
+            p = g_utf8_prev_char (p);
+          if (i < 0)
+            return;
+        }
+
+      switch (conv_data->direction)
+        {
+        case XIMForwardChar:
+          for (i = conv_data->factor, q = p; i > 0 && *q; --i)
+            q = g_utf8_next_char (q);
+          if (i > 0)
+            break;
+          text = g_locale_from_utf8 (p, q - p, NULL, &text_len, NULL);
+          subst_offset = position;
+          subst_nchars = conv_data->factor;
+          break;
+
+        case XIMBackwardChar:
+          for (i = conv_data->factor, q = p; i > 0 && q > surrounding; --i)
+            q = g_utf8_prev_char (q);
+          if (i > 0)
+            break;
+          text = g_locale_from_utf8 (q, p - q, NULL, &text_len, NULL);
+          subst_offset = position - conv_data->factor;
+          subst_nchars = conv_data->factor;
+          break;
+
+        case XIMForwardWord:
+        case XIMBackwardWord:
+        case XIMCaretUp:
+        case XIMCaretDown:
+        case XIMNextLine:
+        case XIMPreviousLine:
+        case XIMLineStart:
+        case XIMLineEnd:
+        case XIMAbsolutePosition:
+        case XIMDontChange:
+        default:
+          break;
+        }
+      /* block out any failure happenning to "text", including conversion */
+      if (text)
+        {
+          conv_data->text = (XIMStringConversionText *)
+                              malloc (sizeof (XIMStringConversionText));
+          if (conv_data->text)
+            {
+              conv_data->text->length = text_len;
+              conv_data->text->feedback = NULL;
+              conv_data->text->encoding_is_wchar = False;
+              conv_data->text->string.mbs = (char *)malloc (text_len);
+              if (conv_data->text->string.mbs)
+                memcpy (conv_data->text->string.mbs, text, text_len);
+              else
+                {
+                  free (conv_data->text);
+                  conv_data->text = NULL;
+                }
+            }
+
+          g_free (text);
+        }
+      if (conv_data->operation == XIMStringConversionSubstitution
+          && subst_nchars > 0)
+        {
+          gtk_im_context_delete_surrounding ((GtkIMContext *)context_xim,
+                                            subst_offset, subst_nchars);
+        }
+
+      g_free (surrounding);
+    }
+}
+
+
 static XVaNestedList
 set_preedit_callback (GtkIMContextXIM *context_xim)
 {
@@ -1222,6 +1350,21 @@ set_status_callback (GtkIMContextXIM *context_xim)
 			      NULL);
 }
 
+
+static void
+set_string_conversion_callback (GtkIMContextXIM *context_xim, XIC xic)
+{
+  if (!context_xim->im_info->supports_string_conversion)
+    return;
+  
+  context_xim->string_conversion_callback.client_data = (XPointer)context_xim;
+  context_xim->string_conversion_callback.callback = (XICProc)string_conversion_callback;
+  
+  XSetICValues (xic,
+		XNStringConversionCallback,
+		(XPointer)&context_xim->string_conversion_callback,
+		NULL);
+}
 
 static XIC
 gtk_im_context_xim_get_ic (GtkIMContextXIM *context_xim)
@@ -1293,6 +1436,7 @@ gtk_im_context_xim_get_ic (GtkIMContextXIM *context_xim)
 			XNFilterEvents, &mask,
 			NULL);
 	  context_xim->filter_key_release = (mask & KeyReleaseMask) != 0;
+	  set_string_conversion_callback (context_xim, xic);
 	}
       
       context_xim->ic = xic;
