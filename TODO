@@ -12,20 +12,13 @@ Outstanding items:
  * Make all widget attributes configurable after the widget is created (timj).
  
  * Radio buttons need to display CAN/HAS_DEFAULT correctly, if draw_inidicator
-   is TRUE.
+   is TRUE. (Radio buttons do not need to CAN_DEFAULT! OWT)
 
- * gdk_expose_compress: ala-Xt, this would really help for opaque moves and
-   such
-
- * More dialogs: Print, GtkFontSelector, maybe others...
+ * More dialogs: Print, maybe others...
 
  * make the gtk_main callbacks consistent in their add/remove behaviour.
  
  * Check return values on all calls to XIC[Get/Set]Values
-
- * Rewrite the interface to the i18n stuff so GTK widgets don't need to
-   retrieve X values, and so they don't have to know the value of the
-   XNxxx character constants.
 
  * The "--geometry" option should be supported
 
@@ -69,6 +62,11 @@ Outstanding items:
  * Should all the default handlers really return FALSE? This can
    cause confusing presses to be sent to containers that actually
    want to get events on themselves.
+
+ * The menu code should skip separators during keyboard navigation,
+   whether they are sensitive or insensitive.
+
+ * OwnerButtonPressGrab needs to go!
 
 Text/Edit widget:
 

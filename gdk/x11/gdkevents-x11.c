@@ -27,7 +27,6 @@
 #include "gdk.h"
 #include "gdkx.h"
 #include "gdkprivate.h"
-#include "gdkinput.h"
 #include "gdkkeysyms.h"
 
 #if HAVE_CONFIG_H
@@ -37,6 +36,7 @@
 #  endif
 #endif
 
+#include "gdkinput.h"
 
 typedef struct _GdkIOClosure GdkIOClosure;
 typedef struct _GdkEventPrivate GdkEventPrivate;
@@ -88,9 +88,11 @@ static GdkEvent* gdk_event_unqueue      (void);
 
 static gboolean  gdk_event_prepare      (gpointer   source_data, 
 				 	 GTimeVal  *current_time,
-					 gint      *timeout);
+					 gint      *timeout,
+					 gpointer   user_data);
 static gboolean  gdk_event_check        (gpointer   source_data,
-				 	 GTimeVal  *current_time);
+				 	 GTimeVal  *current_time,
+					 gpointer   user_data);
 static gboolean  gdk_event_dispatch     (gpointer   source_data,
 					 GTimeVal  *current_time,
 					 gpointer   user_data);
@@ -434,6 +436,10 @@ gdk_compress_exposures (XEvent    *xevent,
   rect1.width = xevent->xexpose.width;
   rect1.height = xevent->xexpose.height;
 
+  event.any.type = GDK_EXPOSE;
+  event.any.window = None;
+  event.any.send_event = FALSE;
+  
   while (1)
     {
       if (count == 0)
@@ -449,6 +455,8 @@ gdk_compress_exposures (XEvent    *xevent,
 		  &tmp_event, 
 		  expose_predicate, 
 		  (XPointer)&info);
+
+      event.any.window = window;
       
       /* We apply filters here, and if it was filtered, completely
        * ignore the return
@@ -849,6 +857,12 @@ gdk_io_destroy (gpointer data)
   g_free (closure);
 }
 
+/* What do we do with G_IO_NVAL?
+ */
+#define READ_CONDITION (G_IO_IN | G_IO_HUP | G_IO_ERR)
+#define WRITE_CONDITION (G_IO_OUT | G_IO_ERR)
+#define EXCEPTION_CONDITION (G_IO_PRI)
+
 static gboolean  
 gdk_io_invoke (GIOChannel   *source,
 	       GIOCondition  condition,
@@ -857,11 +871,11 @@ gdk_io_invoke (GIOChannel   *source,
   GdkIOClosure *closure = data;
   GdkInputCondition gdk_cond = 0;
 
-  if (condition & (G_IO_IN | G_IO_PRI))
+  if (condition & READ_CONDITION)
     gdk_cond |= GDK_INPUT_READ;
-  if (condition & G_IO_OUT)
+  if (condition & WRITE_CONDITION)
     gdk_cond |= GDK_INPUT_WRITE;
-  if (condition & (G_IO_ERR | G_IO_HUP | G_IO_NVAL))
+  if (condition & EXCEPTION_CONDITION)
     gdk_cond |= GDK_INPUT_EXCEPTION;
 
   if (closure->condition & gdk_cond)
@@ -888,11 +902,11 @@ gdk_input_add_full (gint	      source,
   closure->data = data;
 
   if (condition & GDK_INPUT_READ)
-    cond |= (G_IO_IN | G_IO_PRI);
+    cond |= READ_CONDITION;
   if (condition & GDK_INPUT_WRITE)
-    cond |= G_IO_OUT;
+    cond |= WRITE_CONDITION;
   if (condition & GDK_INPUT_EXCEPTION)
-    cond |= G_IO_ERR|G_IO_HUP|G_IO_NVAL;
+    cond |= EXCEPTION_CONDITION;
 
   channel = g_io_channel_unix_new (source);
   result = g_io_add_watch_full (channel, G_PRIORITY_DEFAULT, cond, 
@@ -923,7 +937,6 @@ gdk_event_apply_filters (XEvent *xevent,
 			 GdkEvent *event,
 			 GList *filters)
 {
-  GdkEventFilter *filter;
   GList *tmp_list;
   GdkFilterReturn result;
   
@@ -931,13 +944,12 @@ gdk_event_apply_filters (XEvent *xevent,
   
   while (tmp_list)
     {
-      filter = (GdkEventFilter*) tmp_list->data;
-      
-      result = (*filter->function) (xevent, event, filter->data);
-      if (result !=  GDK_FILTER_CONTINUE)
-	return result;
+      GdkEventFilter *filter = (GdkEventFilter*) tmp_list->data;
       
       tmp_list = tmp_list->next;
+      result = filter->function (xevent, event, filter->data);
+      if (result !=  GDK_FILTER_CONTINUE)
+	return result;
     }
   
   return GDK_FILTER_CONTINUE;
@@ -1002,7 +1014,7 @@ gdk_event_translate (GdkEvent *event,
     gdk_window_ref (window);
   
   event->any.window = window;
-  event->any.send_event = xevent->xany.send_event;
+  event->any.send_event = xevent->xany.send_event ? TRUE : FALSE;
   
   if (window_private && window_private->destroyed)
     {
@@ -1056,9 +1068,6 @@ gdk_event_translate (GdkEvent *event,
 	return (result == GDK_FILTER_TRANSLATE) ? TRUE : FALSE;
     }
 #endif
-
-  if (window == NULL)
-    g_message ("Got event for unknown window: %#lx\n", xevent->xany.window);
 
   /* We do a "manual" conversion of the XEvent to a
    *  GdkEvent. The structures are mostly the same so
@@ -1513,10 +1522,11 @@ gdk_event_translate (GdkEvent *event,
       /* Print debugging info.
        */
       GDK_NOTE (EVENTS,
-		g_message ("expose:\t\twindow: %ld  %d	x,y: %d %d  w,h: %d %d",
+		g_message ("expose:\t\twindow: %ld  %d	x,y: %d %d  w,h: %d %d%s",
 			   xevent->xexpose.window, xevent->xexpose.count,
 			   xevent->xexpose.x, xevent->xexpose.y,
-			   xevent->xexpose.width, xevent->xexpose.height));
+			   xevent->xexpose.width, xevent->xexpose.height,
+			   event->any.send_event ? " (send)" : ""));
       gdk_compress_exposures (xevent, window);
       
       event->expose.type = GDK_EXPOSE;
@@ -1601,7 +1611,17 @@ gdk_event_translate (GdkEvent *event,
       break;
       
     case CreateNotify:
-      /* Not currently handled */
+      GDK_NOTE (EVENTS,
+		g_message ("create notify:\twindow: %ld  x,y: %d %d	w,h: %d %d  b-w: %d  parent: %ld	 ovr: %d",
+			   xevent->xcreatewindow.window,
+			   xevent->xcreatewindow.x,
+			   xevent->xcreatewindow.y,
+			   xevent->xcreatewindow.width,
+			   xevent->xcreatewindow.height,
+			   xevent->xcreatewindow.border_width,
+			   xevent->xcreatewindow.parent,
+			   xevent->xcreatewindow.override_redirect));
+      /* not really handled */
       break;
       
     case DestroyNotify:
@@ -1616,7 +1636,7 @@ gdk_event_translate (GdkEvent *event,
       
       return_val = window_private && !window_private->destroyed;
       
-      if(window && window_private->xwindow != GDK_ROOT_WINDOW())
+      if (window && window_private->xwindow != GDK_ROOT_WINDOW())
 	gdk_window_destroy_notify (window);
       break;
       
@@ -1651,8 +1671,12 @@ gdk_event_translate (GdkEvent *event,
       /* Print debugging info.
        */
       GDK_NOTE (EVENTS,
-		g_message ("reparent notify:\twindow: %ld",
-			   xevent->xreparent.window));
+		g_message ("reparent notify:\twindow: %ld  x,y: %d %d  parent: %ld	ovr: %d",
+			   xevent->xreparent.window,
+			   xevent->xreparent.x,
+			   xevent->xreparent.y,
+			   xevent->xreparent.parent,
+			   xevent->xreparent.override_redirect));
 
       /* Not currently handled */
       return_val = FALSE;
@@ -1661,36 +1685,8 @@ gdk_event_translate (GdkEvent *event,
     case ConfigureNotify:
       /* Print debugging info.
        */
-      while ((XPending (gdk_display) > 0) &&
-	     XCheckTypedWindowEvent(gdk_display, xevent->xany.window,
-				    ConfigureNotify, xevent))
-	{
-	  GdkFilterReturn result;
-	  
-	  GDK_NOTE (EVENTS, 
-		    g_message ("configure notify discarded:\twindow: %ld",
-			       xevent->xconfigure.window));
-	  
-	  result = gdk_event_apply_filters (xevent, event,
-					    window_private
-					    ?window_private->filters
-					    :gdk_default_filters);
-	  
-	  /* If the result is GDK_FILTER_REMOVE, there will be
-	   * trouble, but anybody who filtering the Configure events
-	   * better know what they are doing
-	   */
-	  if (result != GDK_FILTER_CONTINUE)
-	    {
-	      return (result == GDK_FILTER_TRANSLATE) ? TRUE : FALSE;
-	    }
-	  
-	  /*XSync (gdk_display, 0);*/
-	}
-      
-      
       GDK_NOTE (EVENTS,
-		g_message ("configure notify:\twindow: %ld  x,y: %d %d	w,h: %d %d  b-w: %d  above: %ld	 ovr: %d",
+		g_message ("configure notify:\twindow: %ld  x,y: %d %d	w,h: %d %d  b-w: %d  above: %ld	 ovr: %d%s",
 			   xevent->xconfigure.window,
 			   xevent->xconfigure.x,
 			   xevent->xconfigure.y,
@@ -1698,14 +1694,19 @@ gdk_event_translate (GdkEvent *event,
 			   xevent->xconfigure.height,
 			   xevent->xconfigure.border_width,
 			   xevent->xconfigure.above,
-			   xevent->xconfigure.override_redirect));
-      
-      if (!window_private->destroyed &&
+			   xevent->xconfigure.override_redirect,
+			   !window
+			   ? " (discarding)"
+			   : window_private->window_type == GDK_WINDOW_CHILD
+			   ? " (discarding child)"
+			   : ""));
+      if (window &&
+	  !window_private->destroyed &&
 	  (window_private->extension_events != 0) &&
 	  gdk_input_vtable.configure_event)
 	gdk_input_vtable.configure_event (&xevent->xconfigure, window);
 
-      if (window_private->window_type == GDK_WINDOW_CHILD)
+      if (!window || window_private->window_type == GDK_WINDOW_CHILD)
 	return_val = FALSE;
       else
 	{
@@ -1721,17 +1722,23 @@ gdk_event_translate (GdkEvent *event,
 	      gint tx = 0;
 	      gint ty = 0;
 	      Window child_window = 0;
-	      
-	      if (!XTranslateCoordinates (window_private->xdisplay,
-					  window_private->xwindow,
-					  gdk_root_window,
-					  0, 0,
-					  &tx, &ty,
-					  &child_window))
-		g_warning ("GdkWindow %ld doesn't share root windows display?",
-			   window_private->xwindow);
-	      event->configure.x = tx;
-	      event->configure.y = ty;
+
+	      gdk_error_trap_push ();
+	      if (XTranslateCoordinates (window_private->xdisplay,
+					 window_private->xwindow,
+					 gdk_root_window,
+					 0, 0,
+					 &tx, &ty,
+					 &child_window))
+		{
+		  if (!gdk_error_trap_pop ())
+		    {
+		      event->configure.x = tx;
+		      event->configure.y = ty;
+		    }
+		}
+	      else
+		gdk_error_trap_pop ();
 	    }
 	  else
 	    {
@@ -1751,8 +1758,15 @@ gdk_event_translate (GdkEvent *event,
       /* Print debugging info.
        */
       GDK_NOTE (EVENTS,
-		g_message ("property notify:\twindow: %ld",
-			   xevent->xproperty.window));
+		gchar *atom = gdk_atom_name (xevent->xproperty.atom);
+		g_message ("property notify:\twindow: %ld, atom(%ld): %s%s%s",
+			   xevent->xproperty.window,
+			   xevent->xproperty.atom,
+			   atom ? "\"" : "",
+			   atom ? atom : "unknown",
+			   atom ? "\"" : "");
+		g_free (atom);
+		);
       
       event->property.type = GDK_PROPERTY_NOTIFY;
       event->property.window = window;
@@ -1910,8 +1924,8 @@ gdk_event_translate (GdkEvent *event,
 
 GdkFilterReturn
 gdk_wm_protocols_filter (GdkXEvent *xev,
-		     GdkEvent  *event,
-		     gpointer data)
+			 GdkEvent  *event,
+			 gpointer data)
 {
   XEvent *xevent = (XEvent *)xev;
 
@@ -1993,8 +2007,7 @@ gdk_events_queue (void)
       
       event->any.type = GDK_NOTHING;
       event->any.window = NULL;
-      event->any.send_event = FALSE;
-      event->any.send_event = xevent.xany.send_event;
+      event->any.send_event = xevent.xany.send_event ? TRUE : FALSE;
 
       ((GdkEventPrivate *)event)->flags |= GDK_EVENT_PENDING;
 
@@ -2017,7 +2030,8 @@ gdk_events_queue (void)
 static gboolean  
 gdk_event_prepare (gpointer  source_data, 
 		   GTimeVal *current_time,
-		   gint     *timeout)
+		   gint     *timeout,
+		   gpointer  user_data)
 {
   gboolean retval;
   
@@ -2034,7 +2048,8 @@ gdk_event_prepare (gpointer  source_data,
 
 static gboolean  
 gdk_event_check (gpointer  source_data,
-		 GTimeVal *current_time)
+		 GTimeVal *current_time,
+		 gpointer  user_data)
 {
   gboolean retval;
   
@@ -2133,29 +2148,29 @@ gdk_event_send_client_message_to_all_recurse (XEvent  *xev,
 					      guint    level)
 {
   static GdkAtom wm_state_atom = GDK_NONE;
-
   Atom type = None;
   int format;
   unsigned long nitems, after;
   unsigned char *data;
-  
   Window *ret_children, ret_root, ret_parent;
   unsigned int ret_nchildren;
-  int i;
-  
+  gint old_warnings = gdk_error_warnings;
   gboolean send = FALSE;
   gboolean found = FALSE;
+  int i;
 
   if (!wm_state_atom)
     wm_state_atom = gdk_atom_intern ("WM_STATE", FALSE);
 
+  gdk_error_warnings = FALSE;
   gdk_error_code = 0;
   XGetWindowProperty (gdk_display, xid, wm_state_atom, 0, 0, False, AnyPropertyType,
 		      &type, &format, &nitems, &after, &data);
 
   if (gdk_error_code)
     {
-      gdk_error_code = 0;
+      gdk_error_warnings = old_warnings;
+
       return FALSE;
     }
 
@@ -2167,18 +2182,20 @@ gdk_event_send_client_message_to_all_recurse (XEvent  *xev,
   else
     {
       /* OK, we're all set, now let's find some windows to send this to */
-      if (XQueryTree(gdk_display, xid, &ret_root, &ret_parent,
-		     &ret_children, &ret_nchildren) != True)
-	return FALSE;
-      
-      if (gdk_error_code)
-	return FALSE;
+      if (XQueryTree (gdk_display, xid, &ret_root, &ret_parent,
+		      &ret_children, &ret_nchildren) != True ||
+	  gdk_error_code)
+	{
+	  gdk_error_warnings = old_warnings;
+
+	  return FALSE;
+	}
 
       for(i = 0; i < ret_nchildren; i++)
-	if (gdk_event_send_client_message_to_all_recurse(xev, ret_children[i], level + 1))
+	if (gdk_event_send_client_message_to_all_recurse (xev, ret_children[i], level + 1))
 	  found = TRUE;
 
-      XFree(ret_children);
+      XFree (ret_children);
     }
 
   if (send || (!found && (level == 1)))
@@ -2186,6 +2203,8 @@ gdk_event_send_client_message_to_all_recurse (XEvent  *xev,
       xev->xclient.window = xid;
       gdk_send_xevent (xid, False, NoEventMask, xev);
     }
+
+  gdk_error_warnings = old_warnings;
 
   return (send || found);
 }

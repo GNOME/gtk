@@ -101,36 +101,7 @@ FAQ_FILES=html/gtkfaq.html		\
 	html/gtkfaq-7.html		\
 	text/gtkfaq.txt
 
-EXTRA_DIST =	\
-	gtk-config.1		\
-	texinfo.tex 		\
-	macros.texi		\
-	gtkdocs_fix		\
-	gtkfaq.sgml		\
-        gtk-config.txt          \
-	gtk_tut.sgml		\
-	gtk_tut_it.sgml		\
-	gtk_tut_fr.sgml		\
-	debugging.txt		\
-	developers.txt		\
-	refcounting.txt		\
-	styles.txt		\
-	text_widget.txt 	\
-	widget_system.txt 	\
-	gtk_tut_packbox1.gif 	\
-	gtk_tut_packbox2.gif 	\
-	html/gtk_tut_table.gif	\
-	html/gtk_tut_packbox1.gif 	\
-	html/gtk_tut_packbox2.gif 	\
-	gtk_tut_table.gif	\
-	html/gdk.html            	\
-	html/gdk_toc.html        	\
-	html/gtk.html            	\
-	html/gtk_toc.html        	\
-	$(TUTORIAL_FILES)		\
-	$(TUTORIAL_FR_FILES)		\
-	$(TUTORIAL_IT_FILES)		\
-	$(FAQ_FILES)
+html/gtk_tut_table.gif: gdk.html gtk.html
 
 .PHONY: html htmldir faq tutorial tutorial_it tutorial_fr files
 
@@ -195,3 +166,36 @@ files:
 	@files=`ls $(DISTFILES) 2> /dev/null `; for p in $$files; do \
 	  echo $$p; \
 	done
+
+EXTRA_DIST += \
+	Changes-1.2.txt			\
+	debugging.txt			\
+	developers.txt			\
+	refcounting.txt			\
+	styles.txt			\
+	text_widget.txt 		\
+	widget_system.txt 		\
+	generation.txt			\
+        gtk-config.txt  	        \
+	gtk-config.1.in			\
+	texinfo.tex 			\
+	macros.texi			\
+	gtkdocs_fix			\
+	gtkfaq.sgml			\
+	gtk_tut.sgml			\
+	gtk_tut_it.sgml			\
+	gtk_tut_fr.sgml			\
+	gtk_tut_packbox1.gif 		\
+	gtk_tut_packbox2.gif 		\
+	html/gtk_tut_table.gif		\
+	html/gtk_tut_packbox1.gif 	\
+	html/gtk_tut_packbox2.gif 	\
+	gtk_tut_table.gif		\
+	html/gdk.html            	\
+	html/gdk_toc.html        	\
+	html/gtk.html            	\
+	html/gtk_toc.html        	\
+	$(TUTORIAL_FILES)		\
+	$(TUTORIAL_FR_FILES)		\
+	$(TUTORIAL_IT_FILES)		\
+	$(FAQ_FILES)

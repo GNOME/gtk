@@ -473,22 +473,22 @@ AC_DEFUN(AM_GTK_WITH_NLS,
 	CATOBJEXT=NONE
 
 	AC_CHECK_HEADER(libintl.h,
-	  [AC_CACHE_CHECK([for gettext in libc], gt_cv_func_gettext_libc,
-	    [AC_TRY_LINK([#include <libintl.h>], [return (int) gettext ("")],
-	       gt_cv_func_gettext_libc=yes, gt_cv_func_gettext_libc=no)])
+	  [AC_CACHE_CHECK([for dgettext in libc], gt_cv_func_dgettext_libc,
+	    [AC_TRY_LINK([#include <libintl.h>], [return (int) dgettext ("","")],
+	       gt_cv_func_dgettext_libc=yes, gt_cv_func_dgettext_libc=no)])
 
-	   if test "$gt_cv_func_gettext_libc" != "yes"; then
+	   if test "$gt_cv_func_dgettext_libc" != "yes"; then
 	     AC_CHECK_LIB(intl, bindtextdomain,
-	       [AC_CACHE_CHECK([for gettext in libintl],
-		 gt_cv_func_gettext_libintl,
-		 [AC_CHECK_LIB(intl, gettext,
-		  gt_cv_func_gettext_libintl=yes,
-		  gt_cv_func_gettext_libintl=no)],
-		 gt_cv_func_gettext_libintl=no)])
+	       [AC_CACHE_CHECK([for dgettext in libintl],
+		 gt_cv_func_dgettext_libintl,
+		 [AC_CHECK_LIB(intl, dgettext,
+		  gt_cv_func_dgettext_libintl=yes,
+		  gt_cv_func_dgettext_libintl=no)],
+		 gt_cv_func_dgettext_libintl=no)])
 	   fi
 
-	   if test "$gt_cv_func_gettext_libc" = "yes" \
-	      || test "$gt_cv_func_gettext_libintl" = "yes"; then
+	   if test "$gt_cv_func_dgettext_libc" = "yes" \
+	      || test "$gt_cv_func_dgettext_libintl" = "yes"; then
 	      AC_DEFINE(HAVE_GETTEXT)
 	      AM_PATH_PROG_WITH_TEST(MSGFMT, msgfmt,
 		[test -z "`$ac_dir/$ac_word -h 2>&1 | grep 'dv '`"], no)dnl
@@ -508,8 +508,8 @@ AC_DEFUN(AM_GTK_WITH_NLS,
 	    fi
 
 	    # Added by Martin Baulig 12/15/98 for libc5 systems
-	    if test "$gt_cv_func_gettext_libc" != "yes" \
-	       && test "$gt_cv_func_gettext_libintl" = "yes"; then
+	    if test "$gt_cv_func_dgettext_libc" != "yes" \
+	       && test "$gt_cv_func_dgettext_libintl" = "yes"; then
 	       INTLLIBS=-lintl
 	       LIBS=`echo $LIBS | sed -e 's/-lintl//'`
 	    fi

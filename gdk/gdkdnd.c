@@ -31,8 +31,6 @@
 #include "gdk/gdkprivate.h"
 #include "gdk.h"
 
-#define NEW_DRAGS
-
 typedef struct _GdkDragContextPrivate GdkDragContextPrivate;
 
 typedef enum {
@@ -70,7 +68,8 @@ struct _GdkDragContextPrivate {
   GdkDragAction old_actions;	  /* The last actions we sent to the source */
   GdkDragAction xdnd_actions;     /* What is currently set in XdndActionList */
 
-  Window  dest_xid;
+  Window dest_xid;              /* The last window we looked up */
+  Window drop_xid;            /* The (non-proxied) window that is receiving drops */
   guint xdnd_targets_set : 1;   /* Whether we've already set XdndTypeList */
   guint xdnd_actions_set : 1;   /* Whether we've already set XdndActionList */
   guint xdnd_have_actions : 1; /* Whether an XdndActionList was provided */
@@ -151,6 +150,7 @@ gdk_drag_context_unref (GdkDragContext *context)
   GdkDragContextPrivate *private = (GdkDragContextPrivate *)context;
 
   g_return_if_fail (context != NULL);
+  g_return_if_fail (private->ref_count > 0);
 
   private->ref_count--;
   
@@ -196,8 +196,8 @@ gdk_drag_context_find (gboolean is_source,
       private = (GdkDragContextPrivate *)context;
 
       context_dest_xid = context->dest_window ? 
-	                   (private->dest_xid ?
-			      private->dest_xid :
+	                   (private->drop_xid ?
+			      private->drop_xid :
 			      GDK_WINDOW_XWINDOW (context->dest_window)) :
 	                   None;
 
@@ -387,7 +387,7 @@ gdk_window_cache_new (void)
 			    xwa.x, xwa.y, xwa.width, xwa.height,
 			    xwa.map_state != IsUnmapped);
 
-      if (gdk_error_code != 0)
+      if (gdk_error_code)
 	gdk_error_code = 0;
       else
 	{
@@ -441,9 +441,10 @@ get_client_window_at_coords_recurse (Window  win,
 		      wm_state_atom, 0, 0, False, AnyPropertyType,
 		      &type, &format, &nitems, &after, &data);
   
-  if (gdk_error_code != 0)
+  if (gdk_error_code)
     {
       gdk_error_code = 0;
+
       return None;
     }
 
@@ -458,9 +459,10 @@ get_client_window_at_coords_recurse (Window  win,
   XTranslateCoordinates (gdk_display, gdk_root_window, win,
 			 x_root, y_root, &dest_x, &dest_y, &child);
 
-  if (gdk_error_code != 0)
+  if (gdk_error_code)
     {
       gdk_error_code = 0;
+
       return None;
     }
   
@@ -469,7 +471,7 @@ get_client_window_at_coords_recurse (Window  win,
 		 &root, &tmp_parent, &children, &nchildren) == 0)
     return 0;
 
-  if (gdk_error_code == 0)
+  if (!gdk_error_code)
     {
       for (i = nchildren - 1; (i >= 0) && (child == None); i--)
 	{
@@ -477,7 +479,7 @@ get_client_window_at_coords_recurse (Window  win,
 	  
 	  XGetWindowAttributes (gdk_display, children[i], &xwa);
 	  
-	  if (gdk_error_code != 0)
+	  if (gdk_error_code)
 	    gdk_error_code = 0;
 	  else if ((xwa.map_state == IsViewable) && (xwa.class == InputOutput) &&
 		   (x >= xwa.x) && (x < xwa.x + (gint)xwa.width) &&
@@ -566,9 +568,10 @@ get_client_window_at_coords_recurse (Window  win,
 		      wm_state_atom, 0, 0, False, AnyPropertyType,
 		      &type, &format, &nitems, &after, &data);
   
-  if (gdk_error_code != 0)
+  if (gdk_error_code)
     {
       gdk_error_code = 0;
+
       return None;
     }
 
@@ -581,9 +584,10 @@ get_client_window_at_coords_recurse (Window  win,
   XTranslateCoordinates (gdk_display, gdk_root_window, win,
 			 x_root, y_root, &dest_x, &dest_y, &child);
 
-  if (gdk_error_code != 0)
+  if (gdk_error_code)
     {
       gdk_error_code = 0;
+
       return None;
     }
 
@@ -620,7 +624,7 @@ get_client_window_at_coords (Window  ignore,
 
 	  XGetWindowAttributes (gdk_display, children[i], &xwa);
 
-	  if (gdk_error_code != 0)
+	  if (gdk_error_code)
 	    gdk_error_code = 0;
 	  else if ((xwa.map_state == IsViewable) &&
 		   (x_root >= xwa.x) && (x_root < xwa.x + (gint)xwa.width) &&
@@ -869,7 +873,7 @@ motif_find_drag_window (gboolean create)
 	  
 	  Display *display;
 	  XSetWindowAttributes attr;
-	  display = XOpenDisplay (NULL);
+	  display = XOpenDisplay (gdk_display_name);
 	  XSetCloseDownMode (display, RetainPermanent);
 
 	  XGrabServer (display);
@@ -2027,6 +2031,8 @@ xdnd_set_targets (GdkDragContext *context)
 		   XA_ATOM, 32, PropModeReplace,
 		   (guchar *)atomlist, n_atoms);
 
+  g_free (atomlist);
+
   private->xdnd_targets_set = 1;
 }
 
@@ -2073,6 +2079,8 @@ xdnd_set_actions (GdkDragContext *context)
 		   XA_ATOM, 32, PropModeReplace,
 		   (guchar *)atomlist, n_atoms);
 
+  g_free (atomlist);
+
   private->xdnd_actions_set = 1;
   private->xdnd_actions = context->actions;
 }
@@ -2106,13 +2114,9 @@ xdnd_send_enter (GdkDragContext *context)
   xev.xclient.type = ClientMessage;
   xev.xclient.message_type = gdk_atom_intern ("XdndEnter", FALSE);
   xev.xclient.format = 32;
-#ifdef NEW_DRAGS
-  xev.xclient.window = private->dest_xid ? 
-                           private->dest_xid : 
+  xev.xclient.window = private->drop_xid ? 
+                           private->drop_xid : 
                            GDK_WINDOW_XWINDOW (context->dest_window);
-#else
-  xev.xclient.window = GDK_WINDOW_XWINDOW (context->dest_window);
-#endif
   xev.xclient.data.l[0] = GDK_WINDOW_XWINDOW (context->source_window);
   xev.xclient.data.l[1] = (3 << 24); /* version */
   xev.xclient.data.l[2] = 0;
@@ -2162,13 +2166,9 @@ xdnd_send_leave (GdkDragContext *context)
   xev.xclient.type = ClientMessage;
   xev.xclient.message_type = gdk_atom_intern ("XdndLeave", FALSE);
   xev.xclient.format = 32;
-#ifdef NEW_DRAGS
-  xev.xclient.window = private->dest_xid ? 
-                           private->dest_xid : 
+  xev.xclient.window = private->drop_xid ? 
+                           private->drop_xid : 
                            GDK_WINDOW_XWINDOW (context->dest_window);
-#else
-  xev.xclient.window = GDK_WINDOW_XWINDOW (context->dest_window);
-#endif
   xev.xclient.data.l[0] = GDK_WINDOW_XWINDOW (context->source_window);
   xev.xclient.data.l[1] = 0;
   xev.xclient.data.l[2] = 0;
@@ -2195,13 +2195,9 @@ xdnd_send_drop (GdkDragContext *context, guint32 time)
   xev.xclient.type = ClientMessage;
   xev.xclient.message_type = gdk_atom_intern ("XdndDrop", FALSE);
   xev.xclient.format = 32;
-#ifdef NEW_DRAGS  
-  xev.xclient.window = private->dest_xid ? 
-                           private->dest_xid : 
+  xev.xclient.window = private->drop_xid ? 
+                           private->drop_xid : 
                            GDK_WINDOW_XWINDOW (context->dest_window);
-#else
-  xev.xclient.window = GDK_WINDOW_XWINDOW (context->dest_window);
-#endif
   xev.xclient.data.l[0] = GDK_WINDOW_XWINDOW (context->source_window);
   xev.xclient.data.l[1] = 0;
   xev.xclient.data.l[2] = time;
@@ -2232,13 +2228,9 @@ xdnd_send_motion (GdkDragContext *context,
   xev.xclient.type = ClientMessage;
   xev.xclient.message_type = gdk_atom_intern ("XdndPosition", FALSE);
   xev.xclient.format = 32;
-#ifdef NEW_DRAGS
-  xev.xclient.window = private->dest_xid ? 
-                           private->dest_xid : 
+  xev.xclient.window = private->drop_xid ? 
+                           private->drop_xid : 
                            GDK_WINDOW_XWINDOW (context->dest_window);
-#else
-  xev.xclient.window = GDK_WINDOW_XWINDOW (context->dest_window);
-#endif  
   xev.xclient.data.l[0] = GDK_WINDOW_XWINDOW (context->source_window);
   xev.xclient.data.l[1] = 0;
   xev.xclient.data.l[2] = (x_root << 16) | y_root;
@@ -2859,6 +2851,12 @@ gdk_drag_find_window (GdkDragContext  *context,
 
       /* Check if new destination accepts drags, and which protocol */
 
+      /* There is some ugliness here. We actually need to pass
+       * _three_ pieces of information to drag_motion - dest_window,
+       * protocol, and the XID of the unproxied window. The first
+       * two are passed explicitely, the third implicitly through
+       * protocol->dest_xid.
+       */
       if ((recipient = gdk_drag_get_protocol (dest, protocol)))
 	{
 	  *dest_window = gdk_window_lookup (recipient);
@@ -2917,6 +2915,7 @@ gdk_drag_motion (GdkDragContext *context,
       if (dest_window)
 	{
 	  context->dest_window = dest_window;
+	  private->drop_xid = private->dest_xid;
 	  gdk_window_ref (context->dest_window);
 	  context->protocol = protocol;
 
@@ -2941,6 +2940,7 @@ gdk_drag_motion (GdkDragContext *context,
       else
 	{
 	  context->dest_window = NULL;
+	  private->drop_xid = None;
 	  context->action = 0;
 	}
 

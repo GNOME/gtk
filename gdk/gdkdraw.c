@@ -501,12 +501,14 @@ gdk_draw_lines (GdkDrawable *drawable,
   g_return_if_fail (gc != NULL);
 
   drawable_private = (GdkWindowPrivate*) drawable;
+  if (drawable_private->destroyed)
+    return;
   gc_private = (GdkGCPrivate*) gc;
 
   XDrawLines (drawable_private->xdisplay,
-            drawable_private->xwindow,
-            gc_private->xgc,
-            (XPoint *) points,
-            npoints,
-            CoordModeOrigin);
+	      drawable_private->xwindow,
+	      gc_private->xgc,
+	      (XPoint *) points,
+	      npoints,
+	      CoordModeOrigin);
 }

@@ -251,14 +251,12 @@ gdk_image_new (GdkImageType  type,
 		  return NULL;
 		}
 
-	      gdk_error_code = 0;
-	      gdk_error_warnings = 0;
+	      gdk_error_trap_push ();
 
 	      XShmAttach (private->xdisplay, x_shm_info);
 	      XSync (private->xdisplay, False);
 
-	      gdk_error_warnings = 1;
-	      if (gdk_error_code == -1)
+	      if (gdk_error_trap_pop ())
 		{
 		  /* this is the common failure case so omit warning */
 		  XDestroyImage (private->ximage);
@@ -269,6 +267,7 @@ gdk_image_new (GdkImageType  type,
 		  g_free (image);
 
 		  gdk_use_xshm = False;
+
 		  return NULL;
 		}
 	      
@@ -315,22 +314,7 @@ gdk_image_new (GdkImageType  type,
 	  image->byte_order = private->ximage->byte_order;
 	  image->mem = private->ximage->data;
 	  image->bpl = private->ximage->bytes_per_line;
-
-	  switch (private->ximage->bits_per_pixel)
-	    {
-	    case 8:
-	      image->bpp = 1;
-	      break;
-	    case 16:
-	      image->bpp = 2;
-	      break;
-	    case 24:
-	      image->bpp = 3;
-	      break;
-	    case 32:
-	      image->bpp = 4;
-	      break;
-	    }
+	  image->bpp = (private->ximage->bits_per_pixel + 7) / 8;
 	}
     }
 

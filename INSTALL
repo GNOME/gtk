@@ -7,12 +7,12 @@ you got this package.
 Simple install procedure
 ========================
 
-  % gzip -cd gtk+-1.2.0.tar.gz | tar xvf -  # unpack the sources
-  % cd gtk+-1.2.0                           # change to the toplevel directory
-  % ./configure                             # run the `configure' script
-  % make                                    # build GTK
+  % gzip -cd gtk+-1.2.5.tar.gz | tar xvf - # unpack the sources
+  % cd gtk+-1.2.5			   # change to the toplevel directory
+  % ./configure				   # run the `configure' script
+  % make				   # build GTK
   [ Become root if necessary ]
-  % make install                            # install GTK
+  % make install			   # install GTK
 
 The Nitty-Gritty
 ================
@@ -43,6 +43,13 @@ which form of support to use:
 
 For more information, follow the link from http://www.gtk.org
 
+*  --disable-nls           do not use Native Language Support
+
+If this flag is not specified, GTK+ will try to find
+and use the gettext() set of functions to provide translations
+of the strings in the standard dialogs into the
+user's native language.
+
 *  --enable-xim            support XIM [default=yes]
 
 Specifying --disable-xim will disable support for entering
@@ -50,7 +57,7 @@ internationalized text using X Input Methods. This will give some
 slight savings in speed and memory use and might be necessary
 with older versions of X.
 
-*  --with-locale=LOCALE   locale name you want to use
+*  --with-locale=LOCALE    locale name you want to use
 
 The --with-locale options is used to determine if your operating
 system has support for the locale you will be using. If not, X's
@@ -84,19 +91,43 @@ or,
 
  setenv CFLAGS -O2 ; ./configure  # csh and variants
 
+Native-Language Support and gettext()
+=====================================
 
-Using an uninstalled copy of GLIB
-=================================
+To provide native-language support (NLS) GTK+ uses the
+gettext() set of functions. These functions are found
+in the C library on many systems, such as the Solaris
+C library and the GNU C Library, version 2.
+
+If your C library does not provide the necessary functionality,
+you may wish to install the GNU gettext package. You'll
+need version 0.10.35 or better. Version 0.10.35 is
+available from ftp://alpha.gnu.org/pub/gnu
+
+Generally, GTK+ will properly detect what is installed
+on your system and enable or disable NLS as appropriate.
+However, in rare cases, it may be necessary to disable
+NLS manually to get GTK+ to compile. You can do this
+by specifying the --disable-nls flag when configuring
+GTK+.
+
+Using an uninstalled copy of GLIB [ Unsupported ]
+=================================================
 
 You can compile GTK+ against a copy of GLIB that you have not
 yet installed. To do this, give the --with-glib=DIR options
 to ./configure. For instance:
 
- ./configure --with-glib=../glib-1.2.0
+ ./configure --with-glib=../glib-1.2.5
 
 This, however, will not work if you built GLIB with different
 source and build directories.
 
+It is recommended that you install GLIB before compiling
+GTK+. The --with-glib option is not regularly tested
+and may not function correctly. In addition, 
+inter-library dependencies won't be generated when
+using --with-glib=.
 
 Installation directories
 ========================
@@ -126,7 +157,7 @@ For complete details, see the file docs/gtk-config.txt
 Notes for using XIM support for Japanese input
 ==============================================
 
-* There is a bug in older versions of kinput2 that will cause GTK
+* There is a bug in older versions of kinput2 that will cause GTK+
 to hang when destroying a text entry. The latest versions of
 kinput is available from:
 

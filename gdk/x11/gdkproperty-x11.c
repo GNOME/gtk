@@ -45,15 +45,16 @@ gdk_atom_intern (const gchar *atom_name,
     {
       retval = XInternAtom (gdk_display, atom_name, only_if_exists);
 
-      g_hash_table_insert (atom_hash, 
-			   g_strdup (atom_name), 
-			   GUINT_TO_POINTER (retval));
+      if (retval != None)
+	g_hash_table_insert (atom_hash, 
+			     g_strdup (atom_name), 
+			     GUINT_TO_POINTER (retval));
     }
 
   return retval;
 }
 
-gchar *
+gchar*
 gdk_atom_name (GdkAtom atom)
 {
   gchar *t;
@@ -69,7 +70,7 @@ gdk_atom_name (GdkAtom atom)
   t = XGetAtomName (gdk_display, atom);
   gdk_error_warnings = old_error_warnings;
 
-  if (gdk_error_code == -1)
+  if (gdk_error_code)
     {
       if (t)
 	XFree (t);
@@ -162,10 +163,10 @@ gdk_property_get (GdkWindow   *window,
 	  ret_length = ret_nitems;
 	  break;
 	case 16:
-	  ret_length = 2 * ret_nitems;
+	  ret_length = sizeof(short) * ret_nitems;
 	  break;
 	case 32:
-	  ret_length = 4 * ret_nitems;
+	  ret_length = sizeof(long) * ret_nitems;
 	  break;
 	default:
 	  g_warning ("unknown property return format: %d", ret_format);

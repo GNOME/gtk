@@ -488,8 +488,8 @@ GdkPixmap* gdk_pixmap_create_from_xpm	(GdkWindow  *window,
 					 GdkBitmap **mask,
 					 GdkColor   *transparent_color,
 					 const gchar *filename);
-GdkPixmap* gdk_pixmap_colormap_create_from_xpm 
-                                        (GdkWindow   *window,
+GdkPixmap* gdk_pixmap_colormap_create_from_xpm (
+					 GdkWindow   *window,
 					 GdkColormap *colormap,
 					 GdkBitmap  **mask,
 					 GdkColor    *transparent_color,
@@ -498,8 +498,8 @@ GdkPixmap* gdk_pixmap_create_from_xpm_d (GdkWindow  *window,
 					 GdkBitmap **mask,
 					 GdkColor   *transparent_color,
 					 gchar	   **data);
-GdkPixmap* gdk_pixmap_colormap_create_from_xpm_d 
-                                        (GdkWindow   *window,
+GdkPixmap* gdk_pixmap_colormap_create_from_xpm_d (
+					 GdkWindow   *window,
 					 GdkColormap *colormap,
 					 GdkBitmap  **mask,
 					 GdkColor    *transparent_color,
@@ -544,66 +544,65 @@ void	   gdk_image_destroy   (GdkImage     *image);
 
 /* Color
  */
-GdkColormap* gdk_colormap_new	  (GdkVisual   *visual,
-				   gint		allocate);
-GdkColormap* gdk_colormap_ref	  (GdkColormap *cmap);
-void	     gdk_colormap_unref	  (GdkColormap *cmap);
+GdkColormap* gdk_colormap_new	          (GdkVisual      *visual,
+					   gint		   allocate);
+GdkColormap* gdk_colormap_ref	          (GdkColormap    *cmap);
+void	     gdk_colormap_unref	          (GdkColormap    *cmap);
 
-GdkColormap* gdk_colormap_get_system	   (void);
-gint	     gdk_colormap_get_system_size  (void);
+GdkColormap* gdk_colormap_get_system	  (void);
+gint	     gdk_colormap_get_system_size (void);
 
-void gdk_colormap_change (GdkColormap	*colormap,
-			  gint		 ncolors);
+void         gdk_colormap_change          (GdkColormap    *colormap,
+					   gint		   ncolors);
 
+gint         gdk_colormap_alloc_colors    (GdkColormap    *colormap,
+					   GdkColor       *colors,
+					   gint            ncolors,
+					   gboolean        writeable,
+					   gboolean        best_match,
+					   gboolean       *success);
+gboolean     gdk_colormap_alloc_color     (GdkColormap    *colormap,
+					   GdkColor       *color,
+					   gboolean        writeable,
+					   gboolean        best_match);
+void         gdk_colormap_free_colors     (GdkColormap    *colormap,
+					   GdkColor       *colors,
+					   gint            ncolors);
 
-gint  gdk_colormap_alloc_colors   (GdkColormap *colormap,
-				   GdkColor    *colors,
-				   gint         ncolors,
-				   gboolean     writeable,
-				   gboolean     best_match,
-				   gboolean    *success);
-gboolean gdk_colormap_alloc_color (GdkColormap *colormap,
-				   GdkColor    *color,
-				   gboolean     writeable,
-				   gboolean     best_match);
-void     gdk_colormap_free_colors (GdkColormap *colormap,
-				   GdkColor    *colors,
-				   gint         ncolors);
+GdkVisual*   gdk_colormap_get_visual      (GdkColormap    *colormap);
 
-GdkVisual *gdk_colormap_get_visual (GdkColormap *colormap);
-     
-GdkColor *gdk_color_copy (GdkColor *color);
-void      gdk_color_free (GdkColor *color);
+GdkColor*    gdk_color_copy               (GdkColor       *color);
+void         gdk_color_free               (GdkColor       *color);
 
-gint gdk_color_parse	 (const gchar	*spec,
-			  GdkColor	*color);
-guint gdk_color_hash     (const GdkColor *colora);
-gint gdk_color_equal	 (const GdkColor *colora,
-			  const GdkColor *colorb);
+gboolean     gdk_color_parse	          (const gchar    *spec,
+					   GdkColor       *color);
+guint        gdk_color_hash               (const GdkColor *colora);
+gint         gdk_color_equal	          (const GdkColor *colora,
+					   const GdkColor *colorb);
 
 
 /* The following functions are deprecated */
-void gdk_colors_store	 (GdkColormap	*colormap,
-			  GdkColor	*colors,
-			  gint		 ncolors);
-gint gdk_colors_alloc	 (GdkColormap	*colormap,
-			  gint		 contiguous,
-			  gulong	*planes,
-			  gint		 nplanes,
-			  gulong	*pixels,
-			  gint		 npixels);
-void gdk_colors_free	 (GdkColormap	*colormap,
-			  gulong	*pixels,
-			  gint		 npixels,
-			  gulong	 planes);
-gint gdk_color_white	 (GdkColormap	*colormap,
-			  GdkColor	*color);
-gint gdk_color_black	 (GdkColormap	*colormap,
-			  GdkColor	*color);
-gint gdk_color_alloc	 (GdkColormap	*colormap,
-			  GdkColor	*color);
-gint gdk_color_change	 (GdkColormap	*colormap,
-			  GdkColor	*color);
+void     gdk_colors_store (GdkColormap	*colormap,
+			   GdkColor	*colors,
+			   gint		 ncolors);
+gboolean gdk_colors_alloc (GdkColormap	*colormap,
+			   gint		 contiguous,
+			   gulong	*planes,
+			   gint		 nplanes,
+			   gulong	*pixels,
+			   gint		 npixels);
+void     gdk_colors_free  (GdkColormap	*colormap,
+			   gulong	*pixels,
+			   gint		 npixels,
+			   gulong	 planes);
+gboolean gdk_color_white  (GdkColormap	*colormap,
+			   GdkColor	*color);
+gboolean gdk_color_black  (GdkColormap	*colormap,
+			   GdkColor	*color);
+gboolean gdk_color_alloc  (GdkColormap	*colormap,
+			   GdkColor	*color);
+gboolean gdk_color_change (GdkColormap	*colormap,
+			   GdkColor	*color);
 
 
 /* Fonts

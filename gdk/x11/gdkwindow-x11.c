@@ -34,17 +34,9 @@
 #include "gdkprivate.h"
 #include "MwmUtil.h"
 
-#if HAVE_CONFIG_H
-#  include <config.h>
-#  if STDC_HEADERS
-#    include <stdlib.h>
-#    include <stdio.h>
-#    include <string.h>
-#  endif
-#else
-#  include <stdlib.h>
-#  include <stdio.h>
-#endif
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
 
 #ifdef HAVE_SHAPE_EXT
@@ -707,10 +699,10 @@ gdk_window_destroy_notify (GdkWindow *window)
   
   if (!private->destroyed)
     {
-      if (private->window_type == GDK_WINDOW_FOREIGN)
-	gdk_window_internal_destroy (window, FALSE, FALSE);
-      else
+      if (private->window_type != GDK_WINDOW_FOREIGN)
 	g_warning ("GdkWindow %#lx unexpectedly destroyed", private->xwindow);
+
+      gdk_window_internal_destroy (window, FALSE, FALSE);
     }
   
   gdk_xid_table_remove (private->xwindow);
@@ -732,6 +724,7 @@ gdk_window_unref (GdkWindow *window)
 {
   GdkWindowPrivate *private = (GdkWindowPrivate *)window;
   g_return_if_fail (window != NULL);
+  g_return_if_fail (private->ref_count > 0);
   
   private->ref_count -= 1;
   if (private->ref_count == 0)
@@ -1089,8 +1082,10 @@ gdk_window_set_hints (GdkWindow *window,
       size_hints.max_height = max_height;
     }
   
-  if (flags)
-    XSetWMNormalHints (private->xdisplay, private->xwindow, &size_hints);
+  /* FIXME: Would it be better to delete this property of
+   *        flags == 0? It would save space on the server
+   */
+  XSetWMNormalHints (private->xdisplay, private->xwindow, &size_hints);
 }
 
 void 
@@ -1110,7 +1105,15 @@ gdk_window_set_geometry_hints (GdkWindow      *window,
   size_hints.flags = 0;
   
   if (geom_mask & GDK_HINT_POS)
-    size_hints.flags |= PPosition;
+    {
+      size_hints.flags |= PPosition;
+      /* We need to initialize the following obsolete fields because KWM 
+       * apparently uses these fields if they are non-zero.
+       * #@#!#!$!.
+       */
+      size_hints.x = 0;
+      size_hints.y = 0;
+    }
   
   if (geom_mask & GDK_HINT_MIN_SIZE)
     {
@@ -1145,28 +1148,30 @@ gdk_window_set_geometry_hints (GdkWindow      *window,
       size_hints.flags |= PAspect;
       if (geometry->min_aspect <= 1)
 	{
-	  size_hints.min_aspect.x = G_MAXINT * geometry->min_aspect;
-	  size_hints.min_aspect.y = G_MAXINT;
+	  size_hints.min_aspect.x = 65536 * geometry->min_aspect;
+	  size_hints.min_aspect.y = 65536;
 	}
       else
 	{
-	  size_hints.min_aspect.x = G_MAXINT;
-	  size_hints.min_aspect.y = G_MAXINT / geometry->min_aspect;;
+	  size_hints.min_aspect.x = 65536;
+	  size_hints.min_aspect.y = 65536 / geometry->min_aspect;;
 	}
       if (geometry->max_aspect <= 1)
 	{
-	  size_hints.max_aspect.x = G_MAXINT * geometry->max_aspect;
-	  size_hints.max_aspect.y = G_MAXINT;
+	  size_hints.max_aspect.x = 65536 * geometry->max_aspect;
+	  size_hints.max_aspect.y = 65536;
 	}
       else
 	{
-	  size_hints.max_aspect.x = G_MAXINT;
-	  size_hints.max_aspect.y = G_MAXINT / geometry->max_aspect;;
+	  size_hints.max_aspect.x = 65536;
+	  size_hints.max_aspect.y = 65536 / geometry->max_aspect;;
 	}
     }
-  
-  if (geom_mask)
-    XSetWMNormalHints (private->xdisplay, private->xwindow, &size_hints);
+
+  /* FIXME: Would it be better to delete this property of
+   *        geom_mask == 0? It would save space on the server
+   */
+  XSetWMNormalHints (private->xdisplay, private->xwindow, &size_hints);
 }
 
 void

@@ -518,7 +518,7 @@ _gdk_pixmap_create_from_xpm (GdkWindow  *window,
       
       color_name = gdk_pixmap_extract_color (buffer);
       
-      if (color_name == NULL ||
+      if (color_name == NULL || g_strcasecmp (color_name, "None") == 0 ||
 	  gdk_color_parse (color_name, &color->color) == FALSE)
 	{
 	  color->color = *transparent_color;
@@ -817,7 +817,8 @@ void
 gdk_pixmap_unref (GdkPixmap *pixmap)
 {
   GdkWindowPrivate *private = (GdkWindowPrivate *)pixmap;
-  g_return_if_fail(pixmap != NULL);
+  g_return_if_fail (pixmap != NULL);
+  g_return_if_fail (private->ref_count > 0);
 
   private->ref_count -= 1;
   if (private->ref_count == 0)

@@ -386,7 +386,7 @@ gdk_im_real_open (void)
 
       destroy_cb.callback = gdk_im_destroy_cb;
       destroy_cb.client_data = NULL;
-      if (NULL != XSetIMValues (xim_im, XNDestroyCallback, &destroy_cb, NULL))
+      if (NULL != (void *) XSetIMValues (xim_im, XNDestroyCallback, &destroy_cb, NULL))
 	GDK_NOTE (XIM, g_warning ("Could not set destroy callback to IM. Be careful to not destroy your input method."));
 #endif
 
@@ -469,7 +469,7 @@ gdk_ic_real_new (GdkIC *ic)
       mask |= GDK_IC_PREEDIT_AREA_REQ;
 
       preedit_area.x = attr->preedit_area.x;
-      preedit_area.y = attr->preedit_area.x;
+      preedit_area.y = attr->preedit_area.y;
       preedit_area.width = attr->preedit_area.width;
       preedit_area.height = attr->preedit_area.height;
 
@@ -484,7 +484,7 @@ gdk_ic_real_new (GdkIC *ic)
       mask |= GDK_IC_PREEDIT_POSITION_REQ;
 
       preedit_area.x = attr->preedit_area.x;
-      preedit_area.y = attr->preedit_area.x;
+      preedit_area.y = attr->preedit_area.y;
       preedit_area.width = attr->preedit_area.width;
       preedit_area.height = attr->preedit_area.height;
 
@@ -506,7 +506,7 @@ gdk_ic_real_new (GdkIC *ic)
       mask |= GDK_IC_STATUS_AREA_REQ;
 
       status_area.x = attr->status_area.x;
-      status_area.y = attr->status_area.x;
+      status_area.y = attr->status_area.y;
       status_area.width = attr->status_area.width;
       status_area.height = attr->status_area.height;
 
@@ -518,6 +518,12 @@ gdk_ic_real_new (GdkIC *ic)
       break;
     }
 
+  /* We have to ensure that the client window is actually created on
+   * the X server, or XCreateIC fails because the XIM server can't get
+   * information about the client window.
+   */
+  gdk_flush();
+  
   if (preedit_attr != NULL && status_attr != NULL)
     private->xic = XCreateIC (xim_im,
 			      XNInputStyle,
@@ -871,7 +877,7 @@ gdk_ic_real_set_attr (GdkIC *ic,
       arg->name = XNFontSet;
       arg->value = (gpointer) GDK_FONT_XFONT(attr->status_fontset);
 
-      if (XSetICValues (xic, XNPreeditAttributes, arg, NULL))
+      if (XSetICValues (xic, XNStatusAttributes, arg, NULL))
 	error |= GDK_IC_STATUS_FONTSET;
     }
 
@@ -887,7 +893,7 @@ gdk_ic_real_set_attr (GdkIC *ic,
       arg->name = XNArea;
       arg->value = (gpointer) &rect;
 
-      if (XSetICValues (xic, XNPreeditAttributes, arg, NULL))
+      if (XSetICValues (xic, XNStatusAttributes, arg, NULL))
 	error |= GDK_IC_STATUS_AREA;
     }
 
@@ -903,7 +909,7 @@ gdk_ic_real_set_attr (GdkIC *ic,
       arg->name = XNArea;
       arg->value = (gpointer) &rect;
 
-      if (XSetICValues (xic, XNPreeditAttributes, arg, NULL))
+      if (XSetICValues (xic, XNStatusAttributes, arg, NULL))
 	error |= GDK_IC_STATUS_AREA_NEEDED;
       else
 	private->mask &= ~GDK_IC_STATUS_AREA_NEEDED;
@@ -914,7 +920,7 @@ gdk_ic_real_set_attr (GdkIC *ic,
       arg->name = XNForeground;
       arg->value = (gpointer) attr->status_foreground.pixel;
 
-      if (XSetICValues (xic, XNPreeditAttributes, arg, NULL))
+      if (XSetICValues (xic, XNStatusAttributes, arg, NULL))
 	error |= GDK_IC_STATUS_FOREGROUND;
     }
 
@@ -923,7 +929,7 @@ gdk_ic_real_set_attr (GdkIC *ic,
       arg->name = XNBackground;
       arg->value = (gpointer) attr->status_background.pixel;
 
-      if (XSetICValues (xic, XNPreeditAttributes, arg, NULL))
+      if (XSetICValues (xic, XNStatusAttributes, arg, NULL))
 	error |= GDK_IC_STATUS_BACKGROUND;
     }
 
@@ -932,7 +938,7 @@ gdk_ic_real_set_attr (GdkIC *ic,
       arg->name = XNBackgroundPixmap;
       arg->value = (gpointer) GDK_WINDOW_XWINDOW(attr->status_pixmap);
 
-      if (XSetICValues (xic, XNPreeditAttributes, arg, NULL))
+      if (XSetICValues (xic, XNStatusAttributes, arg, NULL))
 	error |= GDK_IC_STATUS_PIXMAP;
     }
 
@@ -941,7 +947,7 @@ gdk_ic_real_set_attr (GdkIC *ic,
       arg->name = XNColormap;
       arg->value = (gpointer) GDK_COLORMAP_XCOLORMAP(attr->status_colormap);
 
-      if (XSetICValues (xic, XNPreeditAttributes, arg, NULL))
+      if (XSetICValues (xic, XNStatusAttributes, arg, NULL))
 	error |= GDK_IC_STATUS_COLORMAP;
     }
 
@@ -1565,8 +1571,10 @@ gdk_mbstowcs (GdkWChar *dest, const gchar *src, gint dest_max)
 	  != Success)
 	{
 	  /* InvalidChar */
+	  XFree(tpr.value);
 	  return -1;
 	}
+      XFree(tpr.value);
       if (num_wstrs == 0)
 	return 0;
       wstr_src = wstrs[0];

@@ -80,7 +80,7 @@ automake -a $am_opt
 autoconf
 cd $ORIGDIR
 
-$srcdir/configure "$@"
+$srcdir/configure --enable-maintainer-mode "$@"
 
 echo 
 echo "Now type 'make' to compile $PROJECT."

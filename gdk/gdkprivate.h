@@ -146,6 +146,8 @@ struct _GdkFontPrivate
   gpointer xfont;
   Display *xdisplay;
   guint ref_count;
+
+  GSList *names;
 };
 
 struct _GdkCursorPrivate
