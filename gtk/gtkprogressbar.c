@@ -175,7 +175,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
                                    PROP_DISCRETE_BLOCKS,
                                    g_param_spec_uint ("discrete_blocks",
 						      _("Discrete Blocks"),
-						      _("The number of discrete blocks in a progress bar (when shown in the discrete style"),
+						      _("The number of discrete blocks in a progress bar (when shown in the discrete style)"),
 						      2,
 						      G_MAXUINT,
 						      10,

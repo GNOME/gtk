@@ -118,7 +118,7 @@ gtk_paned_class_init (GtkPanedClass *class)
 				   PROP_POSITION,
 				   g_param_spec_int ("position",
 						     _("Position"),
-						     _("Position of paned separator in pixels(0 means all the way to the left/top)"),
+						     _("Position of paned separator in pixels (0 means all the way to the left/top)"),
 						     0,
 						     G_MAXINT,
 						     0,
