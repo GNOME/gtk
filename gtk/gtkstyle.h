@@ -51,6 +51,8 @@ typedef struct _GtkWidget      GtkWidget;
 
 struct _GtkStyle
 {
+  GtkStyleClass *klass;
+
   GdkColor fg[5];
   GdkColor bg[5];
   GdkColor light[5];
@@ -83,7 +85,6 @@ struct _GtkStyle
   gint depth;
   GdkColormap *colormap;
   
-  GtkStyleClass	 *klass;	/* Not private - reorder me */
   GtkThemeEngine *engine;
   
   gpointer	  engine_data;
@@ -762,16 +763,6 @@ void gtk_paint_handle  (GtkStyle      *style,
 			gint	       height,
 			GtkOrientation orientation);
 
-/* Deprecated
- */
-void gtk_style_apply_default_pixmap (GtkStyle	  *style,
-				     GdkWindow	  *window,
-				     GtkStateType  state_type, 
-				     GdkRectangle *area, 
-				     gint	   x, 
-				     gint	   y, 
-				     gint	   width, 
-				     gint	   height);
 
 #ifdef __cplusplus
 }

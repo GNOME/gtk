@@ -1060,7 +1060,8 @@ gtk_idle_remove (guint tag)
 void
 gtk_idle_remove_by_data (gpointer data)
 {
-  g_source_remove_by_user_data (data);
+  if (!g_idle_remove_by_data (data))
+    g_warning ("gtk_idle_remove_by_data(%p): no such idle", data);
 }
 
 guint

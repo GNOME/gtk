@@ -1162,21 +1162,6 @@ gtk_style_apply_default_background (GtkStyle     *style,
     }
 }
 
-/* deprecated */
-void 
-gtk_style_apply_default_pixmap (GtkStyle     *style,
-                                GdkWindow    *window,
-                                GtkStateType  state_type, 
-                                GdkRectangle *area, 
-                                gint          x, 
-                                gint          y, 
-                                gint          width, 
-                                gint          height)
-{
-  gtk_style_apply_default_background (style, window, TRUE, state_type,
-                                      area, x, y, width, height);
-}
-
 static void
 gtk_default_draw_hline (GtkStyle     *style,
                         GdkWindow    *window,

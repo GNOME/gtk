@@ -1,3 +1,16 @@
+Sun Jan 17 05:19:14 1999  Tim Janik  <timj@gtk.org>
+
+        * configure.in: incremented version number to 1.1.13, bin age 0,
+	interface age 0.
+
+	* gtk/gtkmain.c (gtk_idle_remove_by_data): use g_idle_remove_by_data to
+	remove idles, so `data' cannot conflict with other sources.
+
+	* gtk/gtkcompat.h: define gtk_style_apply_default_pixmap here.
+
+	* gtk/gtkstyle.[hc]: removed gtk_style_apply_default_pixmap.
+	(struct _GtkStyle): reordered GtkStyleClass*klass; member.
+
 Sat Jan 16 19:42:48 1999  George Lebl  <jirka@5z.com>
 
 	* gtk/gtktooltips.c: for NO_WINDOW widgets, add their allocation.y
