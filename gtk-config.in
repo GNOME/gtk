@@ -50,16 +50,21 @@ while test $# -gt 0; do
           fi
         done
       fi
-      echo -I@libdir@/glib/include $includes @x_cflags@ $glib_cflags
+      echo $includes @x_cflags@ $glib_cflags
       ;;
     --libs)
+      my_glib_libs=
       libdirs=-L@libdir@
       for i in $glib_libs ; do
-        if test $i = -I@libdir@ ; then
-          libdirs=""
+        if test $i != -L@libdir@ ; then
+          if test -z "$my_glib_lib" ; then
+            my_glib_libs="$i"
+          else
+            my_glib_libs="$my_glib_libs $i"
+          fi
         fi
       done
-      echo $libdirs @x_ldflags@ -lgtk-@LT_RELEASE@ -lgdk-@LT_RELEASE@ $glib_libs @x_libs@ -lm
+      echo $libdirs @x_ldflags@ -lgtk-@LT_RELEASE@ -lgdk-@LT_RELEASE@ $my_glib_libs @x_libs@ -lm
       ;;
     *)
       echo "${usage}" 1>&2
