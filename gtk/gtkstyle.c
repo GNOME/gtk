@@ -6114,7 +6114,7 @@ style_unrealize_cursor_gcs (GtkStyle *style)
 static GdkGC *
 make_cursor_gc (GtkWidget   *widget,
 		const gchar *property_name,
-		GdkColor    *fallback)
+		const GdkColor    *fallback)
 {
   GdkGCValues gc_values;
   GdkGCValuesMask gc_values_mask;

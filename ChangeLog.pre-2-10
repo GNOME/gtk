@@ -1,3 +1,8 @@
+Wed Nov 12 21:05:30 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkstyle.c (make_cursor_gc): Add a const to get rid of 
+	a compiler warning.  (#122712, Kjartan Maraas)
+
 Wed Nov 12 20:54:02 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/gdkkeyuni.c: Map KP_Separator to ','.
