@@ -181,6 +181,14 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
 
   object_class->finalize = gtk_about_dialog_finalize;
 
+  /**
+   * GtkAboutDialog:name:
+   *
+   * The name of the program. 
+   * If this is not set, it defaults to g_get_application_name().
+   *
+   * Since: 2.6
+   */  
   g_object_class_install_property (object_class,
 				   PROP_NAME,
 				   g_param_spec_string ("name",
@@ -189,6 +197,13 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
 							NULL,
 							G_PARAM_READWRITE));
 
+  /**
+   * GtkAboutDialog:version:
+   *
+   * The version of the program. 
+   *
+   * Since: 2.6
+   */  
   g_object_class_install_property (object_class,
 				   PROP_VERSION,
 				   g_param_spec_string ("version",
@@ -196,6 +211,14 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
 							P_("The version of the program"),
 							NULL,
 							G_PARAM_READWRITE));
+
+  /**
+   * GtkAboutDialog:copyright:
+   *
+   * Copyright information for the program. 
+   *
+   * Since: 2.6
+   */  
   g_object_class_install_property (object_class,
 				   PROP_COPYRIGHT,
 				   g_param_spec_string ("copyright",
@@ -204,6 +227,16 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
 							NULL,
 							G_PARAM_READWRITE));
 	
+
+  /**
+   * GtkAboutDialog:comments:
+   *
+   * Comments about the program. This string is displayed in a label 
+   * in the main dialog, thus it should be a short explanation of
+   * the main purpose of the program, not a detailed list of features.
+   *
+   * Since: 2.6
+   */  
   g_object_class_install_property (object_class,
 				   PROP_COMMENTS,
 				   g_param_spec_string ("comments",
@@ -211,6 +244,16 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
 							P_("Comments about the program"),
 							NULL,
 							G_PARAM_READWRITE));
+
+  /**
+   * GtkAboutDialog:license:
+   *
+   * The license of the program. This string is displayed in a 
+   * text view in a secondary dialog, therefore it is fine to use
+   * a long multi-paragraph text.
+   *
+   * Since: 2.6
+   */  
   g_object_class_install_property (object_class,
 				   PROP_LICENSE,
 				   g_param_spec_string ("license",
@@ -219,6 +262,14 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
 							NULL,
 							G_PARAM_READWRITE));
 
+  /**
+   * GtkAboutDialog:website:
+   *
+   * The URL for the link to the website of the program. 
+   * This should be a string starting with "http://.
+   *
+   * Since: 2.6
+   */  
   g_object_class_install_property (object_class,
 				   PROP_WEBSITE,
 				   g_param_spec_string ("website",
@@ -227,6 +278,15 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
 							NULL,
 							G_PARAM_READWRITE));
 
+  /**
+   * GtkAboutDialog:website-label:
+   *
+   * The label for the link to the website of the program. If this is not set, 
+   * it defaults to the URL specified in the 
+   * <link linkend="GtkAboutDialog--website">website</link> property.
+   *
+   * Since: 2.6
+   */  
   g_object_class_install_property (object_class,
 				   PROP_WEBSITE_LABEL,
 				   g_param_spec_string ("website_label",
@@ -235,13 +295,32 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
 							NULL,
 							G_PARAM_READWRITE));
 
+  /**
+   * GtkAboutDialog:authors:
+   *
+   * The authors of the program, as a %NULL-terminated array of strings.
+   * Each string may contain email addresses and URLs, which will be displayed
+   * as links, see the introduction for more details.
+   *
+   * Since: 2.6
+   */  
   g_object_class_install_property (object_class,
 				   PROP_AUTHORS,
 				   g_param_spec_boxed ("authors",
 						       P_("Authors"),
-						       P_("List of authors of the programs"),
+						       P_("List of authors of the program"),
 						       G_TYPE_STRV,
 						       G_PARAM_READWRITE));
+
+  /**
+   * GtkAboutDialog:documenters:
+   *
+   * The people documenting the program, as a %NULL-terminated array of strings.
+   * Each string may contain email addresses and URLs, which will be displayed
+   * as links, see the introduction for more details.
+   *
+   * Since: 2.6
+   */  
   g_object_class_install_property (object_class,
 				   PROP_DOCUMENTERS,
 				   g_param_spec_boxed ("documenters",
@@ -250,6 +329,15 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
 						       G_TYPE_STRV,
 						       G_PARAM_READWRITE));
 
+  /**
+   * GtkAboutDialog:artists:
+   *
+   * The people who contributed artwork to the program, as a %NULL-terminated array of strings.
+   * Each string may contain email addresses and URLs, which will be displayed
+   * as links, see the introduction for more details.
+   *
+   * Since: 2.6
+   */  
   g_object_class_install_property (object_class,
 				   PROP_ARTISTS,
 				   g_param_spec_boxed ("artists",
@@ -258,6 +346,16 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
 						       G_TYPE_STRV,
 						       G_PARAM_READWRITE));
 
+
+  /**
+   * GtkAboutDialog:translator-credits:
+   *
+   * Credits to the translators. This string should be marked as translatable.
+   * The string may contain email addresses and URLs, which will be displayed
+   * as links, see the introduction for more details.
+   *
+   * Since: 2.6
+   */  
   g_object_class_install_property (object_class,
 				   PROP_TRANSLATOR_CREDITS,
 				   g_param_spec_string ("translator_credits",
@@ -266,6 +364,14 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
 							NULL,
 							G_PARAM_READWRITE));
 	
+  /**
+   * GtkAboutDialog:logo:
+   *
+   * A logo for the about box. If this is not set, it defaults to 
+   * gtk_window_get_default_icon_list().
+   *
+   * Since: 2.6
+   */  
   g_object_class_install_property (object_class,
 				   PROP_LOGO,
 				   g_param_spec_object ("logo",
@@ -274,6 +380,14 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
 							GDK_TYPE_PIXBUF,
 							G_PARAM_READWRITE));
 
+  /**
+   * GtkAboutDialog:logo-icon-name:
+   *
+   * A named icon to use as the logo for the about box. This property
+   * overrides the <link linkend="GtkAboutDialog--logo">logo</link> property.
+   *
+   * Since: 2.6
+   */  
   g_object_class_install_property (object_class,
 				   PROP_LOGO_ICON_NAME,
 				   g_param_spec_string ("logo_icon_name",
