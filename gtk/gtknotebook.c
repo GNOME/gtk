@@ -89,6 +89,7 @@ struct _GtkNotebookPage
   GtkWidget *child;
   GtkWidget *tab_label;
   GtkWidget *menu_label;
+  GtkWidget *last_focus_child;	/* Last descendant of the page that had focus */
 
   guint default_menu : 1;	/* If true, we create the menu label ourself */
   guint default_tab  : 1;	/* If true, we create the tab label ourself */
@@ -1804,7 +1805,7 @@ gtk_notebook_remove (GtkContainer *container,
 static gboolean
 focus_tabs_in (GtkNotebook *notebook)
 {
-  if (notebook->cur_page)
+  if (notebook->show_tabs && notebook->cur_page)
     {
       gtk_widget_grab_focus (GTK_WIDGET (notebook));
 
@@ -1892,10 +1893,7 @@ gtk_notebook_focus (GtkWidget        *widget,
 	case GTK_DIR_TAB_BACKWARD:
 	case GTK_DIR_UP:
 	  /* Focus onto the tabs */
-	  if (notebook->show_tabs)
-	    return focus_tabs_in (notebook);
-	  else
-	    return FALSE;
+	  return focus_tabs_in (notebook);
 	case GTK_DIR_DOWN:
 	case GTK_DIR_TAB_FORWARD:
 	case GTK_DIR_LEFT:
@@ -1951,15 +1949,42 @@ static void
 gtk_notebook_set_focus_child (GtkContainer *container,
 			      GtkWidget    *child)
 {
-  GtkNotebook *notebook;
+  GtkNotebook *notebook = GTK_NOTEBOOK (container);
+  GtkWidget *page_child;
+  GtkWidget *toplevel;
 
-  g_return_if_fail (GTK_IS_NOTEBOOK (container));
+  /* If the old focus widget was within a page of the notebook,
+   * (child may either be NULL or not in this case), record it
+   * for future use if we switch to the page with a mnemonic.
+   */
+
+  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (container));
+  if (toplevel && GTK_WIDGET_TOPLEVEL (toplevel))
+    {
+      page_child = GTK_WINDOW (toplevel)->focus_widget; 
+      while (page_child)
+	{
+	  if (page_child->parent == GTK_WIDGET (container))
+	    {
+	      GList *list = gtk_notebook_find_child (notebook, page_child, NULL);
+	      GtkNotebookPage *page = list->data;
+
+	      if (page->last_focus_child)
+		g_object_remove_weak_pointer (G_OBJECT (page->last_focus_child), (gpointer *)&page->last_focus_child);
+		
+	      page->last_focus_child = GTK_WINDOW (toplevel)->focus_widget;
+	      g_object_add_weak_pointer (G_OBJECT (page->last_focus_child), (gpointer *)&page->last_focus_child);
+	      
+	      break;
+	    }
+
+	  page_child = page_child->parent;
+	}
+    }
   
   if (child)
     {
       g_return_if_fail (GTK_IS_WIDGET (child));
-
-      notebook = GTK_NOTEBOOK (container);
 
       notebook->child_has_focus = TRUE;
       if (!notebook->focus_tab)
@@ -1977,6 +2002,7 @@ gtk_notebook_set_focus_child (GtkContainer *container,
 	    }
 	}
     }
+
   parent_class->set_focus_child (container, child);
 }
 
@@ -2238,6 +2264,9 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
 
   page = list->data;
 
+  if (page->last_focus_child)
+    g_object_remove_weak_pointer (G_OBJECT (page->last_focus_child), (gpointer *)&page->last_focus_child);
+  
   if (GTK_WIDGET_VISIBLE (page->child) && GTK_WIDGET_VISIBLE (notebook))
     need_resize = TRUE;
 
@@ -3383,6 +3412,20 @@ gtk_notebook_real_switch_page (GtkNotebook     *notebook,
 
   gtk_widget_set_child_visible (notebook->cur_page->child, TRUE);
 
+  /* If the focus was on the previous page, move it to the first
+   * element on the new page, if possible, or if not, to the
+   * notebook itself.
+   */
+  if (notebook->child_has_focus)
+    {
+      if (notebook->cur_page->last_focus_child &&
+	  gtk_widget_is_ancestor (notebook->cur_page->last_focus_child, notebook->cur_page->child))
+	gtk_widget_grab_focus (notebook->cur_page->last_focus_child);
+      else
+	if (!gtk_widget_child_focus (notebook->cur_page->child, GTK_DIR_TAB_FORWARD))
+	  gtk_widget_grab_focus (GTK_WIDGET (notebook));
+    }
+  
   gtk_widget_queue_resize (GTK_WIDGET (notebook));
   g_object_notify (G_OBJECT (notebook), "page");
 }
@@ -3730,7 +3773,9 @@ gtk_notebook_mnemonic_activate_switch_page (GtkWidget *child,
     {
       GtkNotebookPage *page = list->data;
 
+      gtk_widget_grab_focus (notebook);	/* Do this first to avoid focusing new page */
       gtk_notebook_switch_page (notebook, page,  -1);
+      focus_tabs_in (notebook);
     }
 
   return TRUE;
@@ -3773,6 +3818,7 @@ gtk_notebook_insert_page_menu (GtkNotebook *notebook,
   
   page = g_new (GtkNotebookPage, 1);
   page->child = child;
+  page->last_focus_child = NULL;
   page->requisition.width = 0;
   page->requisition.height = 0;
   page->allocation.x = 0;

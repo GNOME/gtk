@@ -1,3 +1,20 @@
+Tue Jan 15 12:23:33 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtknotebook.c (gtk_notebook_mnemonic_activate_switch_page): 
+	focus the activated tab, not the page. (#53612)
+
+	* gtk/gtknotebook.c (gtk_notebook_set_focus_child): Track
+	the last focus descendant of the page.
+
+	* gtk/gtknotebook.c (gtk_notebook_real_switch_page): If the focus
+	was on the previous page, move it to the last focused widget /
+	first element on the new page, if possible, or if not, to the 
+	notebook itself. (#68224, reported by Jonathan Blandford)
+
+	* gtk/gtknotebook.c (focus_tabs_in): Don't focus tabs
+	tabs aren't visible. (#65462, Damon Chaplin, fixed based 
+	on patch from Anders Carlsson)
+
 2002-01-15            Vitaly Tishkov       <tvv@sparc.spb.su>
 
         * gtk/gtkstyle.c
