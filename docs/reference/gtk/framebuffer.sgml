@@ -25,11 +25,14 @@ without any changes to the source.
 <refsect2><title>Build requirements</title>
 <para>
 You need GTK+ 2.0; the 1.2.x series does not have framebuffer support.
-To compile GTK+ with framebuffer support you will need FreeType 2, we
+To compile GTK+ with framebuffer support you will need FreeType 2; we
 recommend FreeType 2.0.1 or later, as there was some problems with
 <command>freetype-config</command> in 2.0.  Make sure that you install 
 FreeType before Pango, since Pango also needs it. FreeType can be found at
-<ulink url="ftp://ftp.freetype.org">ftp://ftp.freetype.org</ulink>.
+<ulink url="ftp://ftp.freetype.org">ftp://ftp.freetype.org</ulink>.  You also
+need fontconfig in order to properly use the FreeType 2 backend in Pango.
+Fontconfig depends on FreeType as well. Fontconfig can be found at
+<ulink url="http://fontconfig.org">http://fontconfig.org</ulink>.
 </para>
 </refsect2>
 
@@ -45,7 +48,7 @@ be simple to add.
 
 <refsect2><title>Building and installing</title>
 <para>
-First build and install GLib and Pango as usual, in that order.
+First build and install GLib, ATK and Pango as usual, in that order.
 
 Then configure GTK+ by running <command>configure</command> (or 
 <command>autogen.sh</command> if running from
@@ -61,46 +64,11 @@ Since GtkFB uses FreeType 2 to render fonts it can render TrueType and
 Postscript type 1 antialiased fonts.
 </para>
 
-<para>At startup it scans some directories looking for fonts. By default
-it looks in <filename>$prefix/lib/ft2fonts</filename>, and if you want to
-change this you must add something like:
-
-<programlisting>
-[PangoFT2]
-FontPath = /usr/share/fonts/default/Type1:/usr/share/fonts/default/TrueType
-</programlisting>
-
-To your <filename>$prefix/etc/pango/pangorc</filename> or <filename>~/.pangorc</filename>.
-</para>
-
 <para>
-You must also set up font aliases for the fonts Sans, Serif and
-Monotype.  This is done by creating a
-<filename>$prefix/etc/pango/pangoft2.aliases</filename> or
-<filename>~/.pangoft2_aliases</filename> file. You can also set the name of this file using
-the key <literal>AliasFiles</literal> in the <literal>PangoFT2</literal> section in <filename>pangorc</filename>.
-</para>
-
-<para>
-An example of a font alias file for the urw fontset is:
-<informalexample><programlisting>
-sans normal normal normal normal "urw gothic l"
-serif normal normal normal normal "urw palladio l"
-monospace normal normal normal normal "nimbus mono l"
-</programlisting></informalexample>
-</para>
-
-<para>
-And one using the Windows TrueType fonts is:
-<informalexample><programlisting>
-sans normal normal normal normal "arial"
-serif normal normal normal normal "times new roman"
-monospace normal normal normal normal "courier new"
-</programlisting></informalexample>
-
-A more detailed example can be found in 
-<filename>examples/pangoft2.aliases</filename> in the
-Pango distribution.
+GtkFB uses fontconfig for configuration of font information, including
+directories and aliases. Make sure that you have your fonts.conf file
+configured with where your TrueType and Type1 fonts are. Please refer to the
+fontconfig documentation for more information.
 </para>
 </refsect2>
 
@@ -181,8 +149,8 @@ driver, so instead you can use shift-F1 instead when using this
 driver.
 </para>
 
-<para>Pressing Ctrl-Alt-BackSpace kills the GtkFB program. (Can't be pressed
-in the xlate driver.)</para>
+<para>Pressing Ctrl-Alt-BackSpace kills the GtkFB program. (This can't be
+pressed in the xlate driver, so instead you can use shift-F8.)</para>
 </refsect2>
 
 </refsect1>
