@@ -1412,11 +1412,13 @@ gtk_cell_renderer_text_get_size (GtkCellRenderer *cell,
     {
       if (x_offset)
 	{
-	  *x_offset = ((gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL) ?
-		       (1.0 - cell->xalign) : cell->xalign) * (cell_area->width - rect.width - (2 * cell->xpad));
 	  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-	    *x_offset -= rect.width;
-	  *x_offset = MAX (*x_offset, 0);
+	    *x_offset = (1.0 - cell->xalign) * (cell_area->width - rect.width - (2 * cell->xpad));
+	  else 
+	    *x_offset = cell->xalign * (cell_area->width - rect.width - (2 * cell->xpad));
+
+	  if (priv->ellipsize)
+	    *x_offset = MAX(*x_offset, 0);
 	}
       if (y_offset)
 	{
@@ -1503,7 +1505,8 @@ gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
     }
 
   if (priv->ellipsize)
-    pango_layout_set_width (layout, cell_area->width * PANGO_SCALE);
+    pango_layout_set_width (layout, 
+			    (cell_area->width - x_offset - 2 * cell->xpad) * PANGO_SCALE);
   else
     pango_layout_set_width (layout, -1);
   
