@@ -1,3 +1,8 @@
+Thu Sep 20 17:45:54 2001  Joshua N Pritikin  <vishnu@pobox.com>
+
+	* gtk/gtktextbuffer.c (gtk_text_buffer_create_tag): Fix
+	ref count on new tag to be 1.  Update doc.  (#60836)
+
 Thu Sep 20 16:20:47 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkrgb.c (gdk_rgb_allocate_images): Remove unnecessary
