@@ -1094,7 +1094,7 @@ cb_add_new_item(GtkWidget* w, GtkTree* tree)
 
   tree_buttons = gtk_object_get_user_data(GTK_OBJECT(tree));
 
-  selected_list = GTK_TREE_SELECTION(tree);
+  selected_list = GTK_TREE_SELECTION_OLD(tree);
 
   if(selected_list == NULL)
     {
@@ -1133,7 +1133,7 @@ cb_remove_item(GtkWidget*w, GtkTree* tree)
   GList* selected_list;
   GList* clear_list;
   
-  selected_list = GTK_TREE_SELECTION(tree);
+  selected_list = GTK_TREE_SELECTION_OLD(tree);
 
   clear_list = NULL;
     
@@ -1155,7 +1155,7 @@ cb_remove_subtree(GtkWidget*w, GtkTree* tree)
   GList* selected_list;
   GtkTreeItem *item;
   
-  selected_list = GTK_TREE_SELECTION(tree);
+  selected_list = GTK_TREE_SELECTION_OLD(tree);
 
   if (selected_list)
     {
@@ -1174,7 +1174,7 @@ cb_tree_changed(GtkTree* tree)
 
   tree_buttons = gtk_object_get_user_data(GTK_OBJECT(tree));
 
-  selected_list = GTK_TREE_SELECTION(tree);
+  selected_list = GTK_TREE_SELECTION_OLD(tree);
   nb_selected = g_list_length(selected_list);
 
   if(nb_selected == 0) 

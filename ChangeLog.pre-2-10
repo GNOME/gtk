@@ -1,4 +1,13 @@
-2000-10-04    <jrb@redhat.com>
+2000-10-05  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktree.h (GTK_TREE_SELECTION): Replaced with
+	GTK_TREE_SELECTION_OLD to prevent conflict with gtktreeselection.c
+	* gtk/testgtk.c: s/GTK_TREE_SELECTION/GTK_TREE_SELECTION_OLD/
+	* gtk/gtktreeselection.[ch]: Replaced
+	"node_selected"/"node_unselected" signal with "selection_changed"
+	signal.
+
+2000-10-04  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtk{tree,cell}?*.[ch]: Checked in initial draft of the new
 	tree widget.

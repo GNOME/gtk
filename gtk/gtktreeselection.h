@@ -28,9 +28,6 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#warning "Die GTK_TREE_SELECTION, DIE"
-#undef GTK_TREE_SELECTION
-
 #define GTK_TYPE_TREE_SELECTION			(gtk_tree_selection_get_type ())
 #define GTK_TREE_SELECTION(obj)			(GTK_CHECK_CAST ((obj), GTK_TYPE_TREE_SELECTION, GtkTreeSelection))
 #define GTK_TREE_SELECTION_CLASS(klass)		(GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_TREE_SELECTION, GtkTreeSelectionClass))
@@ -65,12 +62,7 @@ struct _GtkTreeSelectionClass
 {
   GtkObjectClass parent_class;
 
-  void (* row_selected)   (GtkTreeView  *tree_view,
-			   GtkTreeModel *tree_model,
-			   GtkTreeNode  *node);
-  void (* row_unselected) (GtkTreeView  *tree_view,
-			   GtkTreeModel *tree_model,
-			   GtkTreeNode  *node);
+  void (* selection_changed) (GtkTreeView *tree_view);
 };
 
 

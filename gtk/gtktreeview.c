@@ -2114,16 +2114,20 @@ gtk_tree_view_node_deleted (GtkTreeModel *model,
     return;
 
   /* next, update the selection */
-#if 0
   if (tree_view->priv->anchor)
     {
       gint i;
-      gint *select_indices = gtk_tree_path_get_indices (tree_view->priv->anchor);
+      gint depth = gtk_tree_path_get_indices (path);
+      gint *indices = gtk_tree_path_get_depth (path);
       gint select_depth = gtk_tree_path_get_depth (tree_view->priv->anchor);
+      gint *select_indices = gtk_tree_path_get_indices (tree_view->priv->anchor);
 
       if (gtk_tree_path_compare (path, tree_view->priv->anchor) == 0)
 	{
-
+	  if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED) &&
+	      tree_view->priv->selection)
+	    gtk_signal_emit_by_name (GTK_OBJECT (tree_view->priv->selection),
+				     "selection_changed");
 	}
       else
 	{
@@ -2144,7 +2148,6 @@ gtk_tree_view_node_deleted (GtkTreeModel *model,
 	    }
 	}
     }
-#endif
 
   for (list = tree_view->priv->column; list; list = list->next)
     if (((GtkTreeViewColumn *)list->data)->visible &&

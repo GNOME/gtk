@@ -22,48 +22,22 @@
 #include "gtkrbtree.h"
 #include "gtksignal.h"
 
-static void     gtk_tree_selection_init           (GtkTreeSelection       *selection);
-static void     gtk_tree_selection_class_init     (GtkTreeSelectionClass  *class);
+static void gtk_tree_selection_init              (GtkTreeSelection      *selection);
+static void gtk_tree_selection_class_init        (GtkTreeSelectionClass *class);
+static gint gtk_tree_selection_real_select_all   (GtkTreeSelection      *selection);
+static gint gtk_tree_selection_real_unselect_all (GtkTreeSelection      *selection);
+static gint gtk_tree_selection_real_select_node  (GtkTreeSelection      *selection,
+						  GtkRBTree             *tree,
+						  GtkRBNode             *node,
+						  gboolean               select);
 
 enum {
-  ROW_SELECTED,
-  ROW_UNSELECTED,
+  SELECTION_CHANGED,
   LAST_SIGNAL
 };
 
 static GtkObjectClass *parent_class = NULL;
 static guint tree_selection_signals[LAST_SIGNAL] = { 0 };
-
-static void
-gtk_tree_selection_real_select_node (GtkTreeSelection *selection, GtkRBTree *tree, GtkRBNode *node, gboolean select)
-{
-  gboolean selected = FALSE;
-  GtkTreePath *path = NULL;
-
-  if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED) != select)
-    {
-      path = _gtk_tree_view_find_path (selection->tree_view, tree, node);
-      if (selection->user_func)
-	{
-	  if ((*selection->user_func) (selection, selection->tree_view->priv->model, path, selection->user_data))
-	    selected = TRUE;
-	}
-      else
-	selected = TRUE;
-    }
-  if (selected == TRUE)
-    {
-      GtkTreeNode tree_node;
-      tree_node = gtk_tree_model_get_node (selection->tree_view->priv->model, path);
-
-      node->flags ^= GTK_RBNODE_IS_SELECTED;
-      if (select)
-	gtk_signal_emit (GTK_OBJECT (selection), tree_selection_signals[ROW_SELECTED], selection->tree_view->priv->model, tree_node);
-      else
-	gtk_signal_emit (GTK_OBJECT (selection), tree_selection_signals[ROW_UNSELECTED], selection->tree_view->priv->model, tree_node);
-      gtk_widget_queue_draw (GTK_WIDGET (selection->tree_view));
-    }
-}
 
 GtkType
 gtk_tree_selection_get_type (void)
@@ -99,40 +73,23 @@ gtk_tree_selection_class_init (GtkTreeSelectionClass *class)
   object_class = (GtkObjectClass*) class;
   parent_class = g_type_class_peek_parent (class);
 
-  tree_selection_signals[ROW_SELECTED] =
-    gtk_signal_new ("row_selected",
+  tree_selection_signals[SELECTION_CHANGED] =
+    gtk_signal_new ("selection_changed",
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkTreeSelectionClass, row_selected),
-		    gtk_marshal_NONE__POINTER_POINTER,
-		    GTK_TYPE_NONE, 2,
-		    GTK_TYPE_POINTER,
-		    GTK_TYPE_POINTER);
-
-  tree_selection_signals[ROW_UNSELECTED] =
-    gtk_signal_new ("row_unselected",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkTreeSelectionClass, row_unselected),
-		    gtk_marshal_NONE__POINTER_POINTER,
-		    GTK_TYPE_NONE, 2,
-		    GTK_TYPE_POINTER,
-		    GTK_TYPE_POINTER);
+		    GTK_SIGNAL_OFFSET (GtkTreeSelectionClass, selection_changed),
+		    gtk_marshal_NONE__NONE,
+		    GTK_TYPE_NONE, 0);
 
   gtk_object_class_add_signals (object_class, tree_selection_signals, LAST_SIGNAL);
 
-  class->row_selected = NULL;
-  class->row_unselected = NULL;
+  class->selection_changed = NULL;
 }
 
 static void
 gtk_tree_selection_init (GtkTreeSelection *selection)
 {
-  selection->type = GTK_TREE_SELECTION_MULTI;
-  selection->user_func = NULL;
-  selection->user_data = NULL;
-  selection->user_func = NULL;
-  selection->tree_view = NULL;
+  selection->type = GTK_TREE_SELECTION_SINGLE;
 }
 
 GtkObject *
@@ -459,29 +416,48 @@ select_all_helper (GtkRBTree  *tree,
 			  data);
   if (!GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED))
     {
-      gtk_tree_selection_real_select_node (tuple->selection, tree, node, TRUE);
-      tuple->dirty = TRUE;
+      tuple->dirty = gtk_tree_selection_real_select_node (tuple->selection, tree, node, TRUE) || tuple->dirty;
     }
 }
 
-void
-gtk_tree_selection_select_all (GtkTreeSelection *selection)
+
+/* We have a real_{un,}select_all function that doesn't emit the signal, so we
+ * can use it in other places without fear of the signal being emitted.
+ */
+static gint
+gtk_tree_selection_real_select_all (GtkTreeSelection *selection)
 {
   struct _TempTuple *tuple;
-
-  g_return_if_fail (selection != NULL);
-  g_return_if_fail (GTK_IS_TREE_SELECTION (selection));
-  g_return_if_fail (selection->tree_view != NULL);
-  g_return_if_fail (selection->tree_view->priv->tree != NULL);
+  if (selection->tree_view->priv->tree == NULL)
+    return FALSE;
 
   if (selection->type == GTK_TREE_SELECTION_SINGLE)
     {
+      GtkRBTree *tree;
       GtkRBNode *node;
-      node = selection->tree_view->priv->tree->root;
+      gint dirty;
+      
+      dirty = gtk_tree_selection_real_unselect_all (selection);
 
-      while (node->right != selection->tree_view->priv->tree->nil)
-	node = node->right;
-      return;
+      tree = selection->tree_view->priv->tree;
+      node = tree->root;
+      do
+	{
+	  while (node->right != selection->tree_view->priv->tree->nil)
+	    node = node->right;
+
+	  if (node->children)
+	    {
+	      tree = node->children;
+	      node = tree->root;
+	    }
+	  else
+	    break;
+	} while (TRUE);
+
+      dirty |= gtk_tree_selection_real_select_node (selection, tree, node, TRUE);
+
+      return dirty;
     }
 
   tuple = g_new (struct _TempTuple, 1);
@@ -494,8 +470,24 @@ gtk_tree_selection_select_all (GtkTreeSelection *selection)
 			select_all_helper,
 			tuple);
   if (tuple->dirty)
-    gtk_widget_queue_draw (GTK_WIDGET (selection->tree_view));
+    {
+      g_free (tuple);
+      return TRUE;
+    }
   g_free (tuple);
+  return FALSE;
+}
+
+void
+gtk_tree_selection_select_all (GtkTreeSelection *selection)
+{
+  g_return_if_fail (selection != NULL);
+  g_return_if_fail (GTK_IS_TREE_SELECTION (selection));
+  g_return_if_fail (selection->tree_view != NULL);
+  g_return_if_fail (selection->tree_view->priv->tree != NULL);
+
+  if (gtk_tree_selection_real_select_all (selection))
+    gtk_signal_emit (GTK_OBJECT (selection), tree_selection_signals[SELECTION_CHANGED]);
 }
 
 static void
@@ -513,36 +505,32 @@ unselect_all_helper (GtkRBTree  *tree,
 			  data);
   if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED))
     {
-      gtk_tree_selection_real_select_node (tuple->selection, tree, node, FALSE);
-      tuple->dirty = TRUE;
+      tuple->dirty = gtk_tree_selection_real_select_node (tuple->selection, tree, node, FALSE) || tuple->dirty;
     }
 }
 
-void
-gtk_tree_selection_unselect_all (GtkTreeSelection *selection)
+static gint
+gtk_tree_selection_real_unselect_all (GtkTreeSelection *selection)
 {
   struct _TempTuple *tuple;
-
-  g_return_if_fail (selection != NULL);
-  g_return_if_fail (GTK_IS_TREE_SELECTION (selection));
-  g_return_if_fail (selection->tree_view != NULL);
-  if (selection->tree_view->priv->tree == NULL)
-    return;
 
   if (selection->type == GTK_TREE_SELECTION_SINGLE)
     {
       GtkRBTree *tree = NULL;
       GtkRBNode *node = NULL;
       if (selection->tree_view->priv->anchor == NULL)
-	return;
+	return FALSE;
 
       _gtk_tree_view_find_node (selection->tree_view,
 				selection->tree_view->priv->anchor,
 				&tree,
 				&node);
       if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED))
-	gtk_tree_selection_real_select_node (selection, tree, node, FALSE);
-      return;
+	{
+	  gtk_tree_selection_real_select_node (selection, tree, node, FALSE);
+	  return TRUE;
+	}
+      return FALSE;
     }
 
   tuple = g_new (struct _TempTuple, 1);
@@ -554,22 +542,38 @@ gtk_tree_selection_unselect_all (GtkTreeSelection *selection)
 			G_PRE_ORDER,
 			unselect_all_helper,
 			tuple);
+
   if (tuple->dirty)
-    gtk_widget_queue_draw (GTK_WIDGET (selection->tree_view));
+    {
+      g_free (tuple);
+      return TRUE;
+    }
   g_free (tuple);
+  return FALSE;
 }
 
 void
-gtk_tree_selection_select_range (GtkTreeSelection *selection,
-				 GtkTreePath      *start_path,
-				 GtkTreePath      *end_path)
+gtk_tree_selection_unselect_all (GtkTreeSelection *selection)
 {
-  GtkRBNode *start_node, *end_node;
-  GtkRBTree *start_tree, *end_tree;
-
   g_return_if_fail (selection != NULL);
   g_return_if_fail (GTK_IS_TREE_SELECTION (selection));
   g_return_if_fail (selection->tree_view != NULL);
+  g_return_if_fail (selection->tree_view->priv->tree != NULL);
+  if (selection->tree_view->priv->tree == NULL)
+    return;
+
+  if (gtk_tree_selection_real_unselect_all (selection))
+    gtk_signal_emit (GTK_OBJECT (selection), tree_selection_signals[SELECTION_CHANGED]);
+}
+
+static gint
+gtk_tree_selection_real_select_range (GtkTreeSelection *selection,
+				      GtkTreePath      *start_path,
+				      GtkTreePath      *end_path)
+{
+  GtkRBNode *start_node, *end_node;
+  GtkRBTree *start_tree, *end_tree;
+  gboolean dirty = FALSE;
 
   switch (gtk_tree_path_compare (start_path, end_path))
     {
@@ -603,15 +607,18 @@ gtk_tree_selection_select_range (GtkTreeSelection *selection,
       break;
     }
 
-  g_return_if_fail (start_node != NULL);
-  g_return_if_fail (end_node != NULL);
+  g_return_val_if_fail (start_node != NULL, FALSE);
+  g_return_val_if_fail (end_node != NULL, FALSE);
 
   do
     {
-      gtk_tree_selection_real_select_node (selection, start_tree, start_node, TRUE);
+      if (GTK_RBNODE_FLAG_SET (start_node, GTK_RBNODE_IS_SELECTED))
+	{
+	  dirty = gtk_tree_selection_real_select_node (selection, start_tree, start_node, FALSE);
+	}
 
       if (start_node == end_node)
-	return;
+	break;
 
       if (start_node->children)
 	{
@@ -637,19 +644,32 @@ gtk_tree_selection_select_range (GtkTreeSelection *selection,
 		  if (start_tree == NULL)
 		    /* we've run out of tree */
 		    /* This means we never found end node!! */
-		    return;
+		    break;
 		}
 	    }
 	  while (!done);
 	}
     }
   while (TRUE);
+
+  return dirty;
 }
 
+void
+gtk_tree_selection_select_range (GtkTreeSelection *selection,
+				 GtkTreePath      *start_path,
+				 GtkTreePath      *end_path)
+{
+  g_return_if_fail (selection != NULL);
+  g_return_if_fail (GTK_IS_TREE_SELECTION (selection));
+  g_return_if_fail (selection->tree_view != NULL);
 
-/* Called internally by gtktree_view.  It handles actually selecting
- * the tree.  This should almost certainly ever be called by
- * anywhere else */
+  if (gtk_tree_selection_real_select_range (selection, start_path, end_path))
+    gtk_signal_emit (GTK_OBJECT (selection), tree_selection_signals[SELECTION_CHANGED]);
+}
+/* Called internally by gtktreeview.c It handles actually selecting the tree.
+ * This should almost certainly ever be called by anywhere else.
+ */
 void
 _gtk_tree_selection_internal_select_node (GtkTreeSelection *selection,
 					  GtkRBNode        *node,
@@ -658,11 +678,12 @@ _gtk_tree_selection_internal_select_node (GtkTreeSelection *selection,
 					  GdkModifierType   state)
 {
   gint flags;
+  gint dirty = FALSE;
 
   if (((state & GDK_SHIFT_MASK) == GDK_SHIFT_MASK) && (selection->tree_view->priv->anchor == NULL))
     {
       selection->tree_view->priv->anchor = gtk_tree_path_copy (path);
-      gtk_tree_selection_real_select_node (selection, tree, node, TRUE);
+      dirty = gtk_tree_selection_real_select_node (selection, tree, node, TRUE);
     }
   else if ((state & (GDK_CONTROL_MASK|GDK_SHIFT_MASK)) == (GDK_SHIFT_MASK|GDK_CONTROL_MASK))
     {
@@ -674,29 +695,69 @@ _gtk_tree_selection_internal_select_node (GtkTreeSelection *selection,
     {
       flags = node->flags;
       if (selection->type == GTK_TREE_SELECTION_SINGLE)
-	gtk_tree_selection_unselect_all (selection);
+	dirty = gtk_tree_selection_real_unselect_all (selection);
+
       if (selection->tree_view->priv->anchor)
 	gtk_tree_path_free (selection->tree_view->priv->anchor);
       selection->tree_view->priv->anchor = gtk_tree_path_copy (path);
+
       if ((flags & GTK_RBNODE_IS_SELECTED) == GTK_RBNODE_IS_SELECTED)
-	gtk_tree_selection_real_select_node (selection, tree, node, FALSE);
+	dirty |= gtk_tree_selection_real_select_node (selection, tree, node, FALSE);
       else
-	gtk_tree_selection_real_select_node (selection, tree, node, TRUE);
+	dirty |= gtk_tree_selection_real_select_node (selection, tree, node, TRUE);
     }
   else if ((state & GDK_SHIFT_MASK) == GDK_SHIFT_MASK)
     {
-      gtk_tree_selection_unselect_all (selection);
-      gtk_tree_selection_select_range (selection,
-				       selection->tree_view->priv->anchor,
-				       path);
+      dirty = gtk_tree_selection_real_unselect_all (selection);
+      dirty |= gtk_tree_selection_real_select_range (selection,
+						     selection->tree_view->priv->anchor,
+						     path);
     }
   else
     {
-      gtk_tree_selection_unselect_all (selection);
+      dirty = gtk_tree_selection_real_unselect_all (selection);
       if (selection->tree_view->priv->anchor)
 	gtk_tree_path_free (selection->tree_view->priv->anchor);
       selection->tree_view->priv->anchor = gtk_tree_path_copy (path);
-      gtk_tree_selection_real_select_node (selection, tree, node, TRUE);
+      dirty |= gtk_tree_selection_real_select_node (selection, tree, node, TRUE);
     }
+
+  if (dirty)
+    gtk_signal_emit (GTK_OBJECT (selection), tree_selection_signals[SELECTION_CHANGED]);
+}
+
+static gint
+gtk_tree_selection_real_select_node (GtkTreeSelection *selection,
+				     GtkRBTree        *tree,
+				     GtkRBNode        *node,
+				     gboolean          select)
+{
+  gboolean selected = FALSE;
+  GtkTreePath *path = NULL;
+
+  if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED) != select)
+    {
+      path = _gtk_tree_view_find_path (selection->tree_view, tree, node);
+      if (selection->user_func)
+	{
+	  if ((*selection->user_func) (selection, selection->tree_view->priv->model, path, selection->user_data))
+	    selected = TRUE;
+	}
+      else
+	selected = TRUE;
+    }
+  if (selected == TRUE)
+    {
+      GtkTreeNode tree_node;
+      tree_node = gtk_tree_model_get_node (selection->tree_view->priv->model, path);
+
+      node->flags ^= GTK_RBNODE_IS_SELECTED;
+
+      /* FIXME: just draw the one node*/
+      gtk_widget_queue_draw (GTK_WIDGET (selection->tree_view));
+      return TRUE;
+    }
+
+  return FALSE;
 }
 

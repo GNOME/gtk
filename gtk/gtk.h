@@ -42,6 +42,11 @@
 #include <gtk/gtkbbox.h>
 #include <gtk/gtkbutton.h>
 #include <gtk/gtkcalendar.h>
+#include <gtk/gtkcellrenderer.h>
+#include <gtk/gtkcellrenderertext.h>
+#include <gtk/gtkcellrenderertextpixbuf.h>
+#include <gtk/gtkcellrenderertoggle.h>
+#include <gtk/gtkcellrendererpixbuf.h>
 #include <gtk/gtkcheckbutton.h>
 #include <gtk/gtkcheckmenuitem.h>
 #include <gtk/gtkclipboard.h>
@@ -87,6 +92,7 @@
 #include <gtk/gtklayout.h>
 #include <gtk/gtklist.h>
 #include <gtk/gtklistitem.h>
+#include <gtk/gtkliststore.h>
 #include <gtk/gtkmain.h>
 #include <gtk/gtkmenu.h>
 #include <gtk/gtkmenubar.h>
@@ -94,6 +100,7 @@
 #include <gtk/gtkmenuitem.h>
 #include <gtk/gtkmenushell.h>
 #include <gtk/gtkmisc.h>
+#include <gtk/gtkmodelsimple.h>
 #include <gtk/gtknotebook.h>
 #include <gtk/gtkobject.h>
 #include <gtk/gtkoptionmenu.h>
@@ -132,6 +139,12 @@
 #include <gtk/gtktooltips.h>
 #include <gtk/gtktree.h>
 #include <gtk/gtktreeitem.h>
+#include <gtk/gtktreedatalist.h>
+#include <gtk/gtktreemodel.h>
+#include <gtk/gtktreeselection.h>
+#include <gtk/gtktreestore.h>
+#include <gtk/gtktreeview.h>
+#include <gtk/gtktreeviewcolumn.h>
 #include <gtk/gtktypeutils.h>
 #include <gtk/gtkvbox.h>
 #include <gtk/gtkvbbox.h>

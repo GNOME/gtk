@@ -74,6 +74,11 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtkcontainer.h		\
 	gtkctree.h		\
 	gtkcurve.h		\
+	gtkcellrenderer.h	\
+	gtkcellrenderertext.h	\
+	gtkcellrenderertextpixbuf.h	\
+	gtkcellrenderertoggle.h	\
+	gtkcellrendererpixbuf.h	\
 	gtkdata.h		\
 	gtkdebug.h              \
 	gtkdialog.h		\
@@ -110,6 +115,7 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtklayout.h             \
 	gtklist.h		\
 	gtklistitem.h		\
+	gtkliststore.h		\
 	gtkmain.h		\
 	gtkmenu.h		\
 	gtkmenubar.h		\
@@ -117,6 +123,7 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtkmenuitem.h		\
 	gtkmenushell.h		\
 	gtkmisc.h		\
+	gtkmodelsimple.h	\
 	gtknotebook.h		\
 	gtkobject.h		\
 	gtkoptionmenu.h		\
@@ -162,6 +169,11 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtktooltips.h		\
 	gtktree.h		\
 	gtktreeitem.h		\
+	gtktreemodel.h		\
+	gtktreeselection.h	\
+	gtktreestore.h		\
+	gtktreeview.h		\
+	gtktreeviewcolumn.h	\
 	gtktypeutils.h		\
 	gtkvbbox.h		\
 	gtkvbox.h		\
@@ -189,6 +201,7 @@ gtk_semipublic_h_sources = @STRIP_BEGIN@ \
 
 # GTK+ header files that don't get installed
 gtk_private_h_sources = @STRIP_BEGIN@ \
+	gtkrbtree.h 		\
 	gtktextbtree.h		\
 	gtktextchildprivate.h   \
 	gtktextsegment.h	\
@@ -196,7 +209,11 @@ gtk_private_h_sources = @STRIP_BEGIN@ \
 	gtktextiterprivate.h	\
 	gtktextmarkprivate.h	\
 	gtktexttagprivate.h	\
+	gtktreeprivate.h	\
 @STRIP_END@
+
+
+
 
 # GTK+ C sources to build the library from
 gtk_c_sources = @STRIP_BEGIN@ \
@@ -213,6 +230,11 @@ gtk_c_sources = @STRIP_BEGIN@ \
 	gtkbox.c		\
 	gtkbutton.c		\
 	gtkcalendar.c		\
+	gtkcellrenderer.c	\
+	gtkcellrenderertext.c	\
+	gtkcellrenderertextpixbuf.c	\
+	gtkcellrenderertoggle.c	\
+	gtkcellrendererpixbuf.c	\
 	gtkcheckbutton.c	\
 	gtkcheckmenuitem.c	\
 	gtkclipboard.c		\
@@ -260,6 +282,7 @@ gtk_c_sources = @STRIP_BEGIN@ \
 	gtklayout.c		\
 	gtklist.c		\
 	gtklistitem.c		\
+	gtkliststore.c		\
 	gtkmain.c		\
 	gtkmarshal.c		\
 	gtkmenu.c		\
@@ -268,6 +291,7 @@ gtk_c_sources = @STRIP_BEGIN@ \
 	gtkmenuitem.c		\
 	gtkmenushell.c		\
 	gtkmisc.c		\
+	gtkmodelsimple.c	\
 	gtknotebook.c		\
 	gtkobject.c		\
 	gtkoptionmenu.c		\
@@ -281,6 +305,7 @@ gtk_c_sources = @STRIP_BEGIN@ \
 	gtkradiobutton.c	\
 	gtkradiomenuitem.c	\
 	gtkrange.c		\
+	gtkrbtree.c 		\
 	gtkrc.c			\
 	gtkruler.c		\
 	gtkscale.c		\
@@ -318,6 +343,12 @@ gtk_c_sources = @STRIP_BEGIN@ \
 	gtktooltips.c		\
 	gtktree.c		\
 	gtktreeitem.c		\
+	gtktreedatalist.c	\
+	gtktreemodel.c		\
+	gtktreeselection.c	\
+	gtktreestore.c		\
+	gtktreeview.c		\
+	gtktreeviewcolumn.c	\
 	gtktypeutils.c		\
 	gtkvbbox.c		\
 	gtkvbox.c		\
@@ -530,7 +561,7 @@ uninstall-local:
 #
 # test programs, not to be installed
 #
-noinst_PROGRAMS = testgtk testcalendar testinput testselection testrgb testdnd testtext simple testtextbuffer # testthreads
+noinst_PROGRAMS = testgtk testcalendar testinput testselection testrgb testdnd testtext simple treestoretest testtextbuffer # testthreads
 DEPS = @gtktargetlib@ $(top_builddir)/gdk-pixbuf/libgdk_pixbuf-1.3.la  $(top_builddir)/gdk/@gdktargetlib@
 LDADDS = @STRIP_BEGIN@ \
 	@gtktargetlib@					\
@@ -550,6 +581,7 @@ testinput_DEPENDENCIES = $(DEPS)
 testselection_DEPENDENCIES = $(DEPS)
 testrgb_DEPENDENCIES = $(DEPS)
 testtext_DEPENDENCIES = $(DEPS)
+treestoretest_DEPENDENCIES = $(DEPS)
 testdnd_DEPENDENCIES = $(DEPS)
 simple_DEPENDENCIES = $(DEPS)
 #testthreads_DEPENDENCIES = $(DEPS)
@@ -558,6 +590,7 @@ testgtk_LDADD = $(LDADDS)
 testinput_LDADD = $(LDADDS)
 testselection_LDADD = $(LDADDS)
 testtext_LDADD = $(LDADDS)
+treestoretest_LDADD = $(LDADDS)
 testtextbuffer_LDADD = $(LDADDS)
 testrgb_LDADD = $(LDADDS)
 testdnd_LDADD = $(LDADDS)

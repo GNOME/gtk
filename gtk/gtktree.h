@@ -49,7 +49,7 @@ extern "C" {
 
 #define GTK_IS_ROOT_TREE(obj)   ((GtkObject*) GTK_TREE(obj)->root_tree == (GtkObject*)obj)
 #define GTK_TREE_ROOT_TREE(obj) (GTK_TREE(obj)->root_tree ? GTK_TREE(obj)->root_tree : GTK_TREE(obj))
-#define GTK_TREE_SELECTION(obj) (GTK_TREE_ROOT_TREE(obj)->selection)
+#define GTK_TREE_SELECTION_OLD(obj) (GTK_TREE_ROOT_TREE(obj)->selection)
 
 typedef enum 
 {
