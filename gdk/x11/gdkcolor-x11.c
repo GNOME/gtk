@@ -300,6 +300,13 @@ gdk_colormap_get_system_for_screen (GdkScreen * screen)
 {
   GdkColormap *colormap = NULL;
   GdkColormapPrivateX11 *private;
+  GdkScreenImplX11 *screen_impl;
+
+  g_return_if_fail (GDK_IS_SCREEN (screen));
+  screen_impl = GDK_SCREEN_IMPL_X11 (screen);
+
+  if (screen_impl->system_colormap)
+    return screen_impl->system_colormap;
 
   colormap = g_object_new (gdk_colormap_get_type (), NULL);
   private = GDK_COLORMAP_PRIVATE_DATA (colormap);
@@ -338,6 +345,7 @@ gdk_colormap_get_system_for_screen (GdkScreen * screen)
     }
   
   gdk_colormap_add (colormap);
+  screen_impl->system_colormap = colormap;
   return colormap;
 }
 

@@ -353,6 +353,7 @@ static void gtk_file_selection_get_property  (GObject         *object,
 					      GValue          *value,
 					      GParamSpec      *pspec);
 static void gtk_file_selection_init          (GtkFileSelection      *filesel);
+static void gtk_file_selection_realize	     (GtkWidget		    *widget);
 static void gtk_file_selection_destroy       (GtkObject             *object);
 static gint gtk_file_selection_key_press     (GtkWidget             *widget,
 					      GdkEventKey           *event,
@@ -487,14 +488,18 @@ gtk_file_selection_class_init (GtkFileSelectionClass *class)
 {
   GObjectClass *gobject_class;
   GtkObjectClass *object_class;
+  GtkWidgetClass *widget_class;
 
   gobject_class = (GObjectClass*) class;
   object_class = (GtkObjectClass*) class;
+  widget_class = GTK_WIDGET_CLASS (class);
 
   parent_class = gtk_type_class (GTK_TYPE_DIALOG);
 
   gobject_class->set_property = gtk_file_selection_set_property;
   gobject_class->get_property = gtk_file_selection_get_property;
+  
+  widget_class->realize = gtk_file_selection_realize;
    
   g_object_class_install_property (gobject_class,
                                    PROP_FILENAME,
@@ -712,6 +717,14 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   gtk_box_pack_start (GTK_BOX (entry_vbox), filesel->selection_entry, TRUE, TRUE, 0);
   gtk_widget_show (filesel->selection_entry);
 
+}
+
+static void 
+gtk_file_selection_realize (GtkWidget *widget)
+{
+  GtkFileSelection *filesel = GTK_FILE_SELECTION (widget);
+  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+
   if (!cmpl_state_okay (filesel->cmpl_state))
     {
       gchar err_buf[256];
@@ -726,6 +739,9 @@ gtk_file_selection_init (GtkFileSelection *filesel)
     }
 
   gtk_widget_grab_focus (filesel->selection_entry);
+  
+  if (GTK_WIDGET_CLASS( parent_class )->realize)
+      (*GTK_WIDGET_CLASS( parent_class )->realize) (widget);
 }
 
 GtkWidget*
@@ -1483,6 +1499,9 @@ gtk_file_selection_update_history_menu (GtkFileSelection *fs,
     }
   
   fs->history_menu = gtk_menu_new ();
+  gtk_window_set_screen (GTK_MENU (fs->history_menu)->toplevel, 
+			 gtk_widget_get_screen (GTK_WIDGET (fs)));
+  
 
   current_dir = g_strdup (current_directory);
 

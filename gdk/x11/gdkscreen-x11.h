@@ -70,6 +70,7 @@ struct _GdkScreenImplX11
   /* Colormap Part */
   gboolean colormap_initialised;
   GdkColormap *default_colormap;
+  GdkColormap *system_colormap;
 };
   
 struct _GdkScreenImplX11Class
