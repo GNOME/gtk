@@ -101,7 +101,6 @@ struct _GtkFileChooserDefault
   /* The file browsing widgets */
   GtkWidget *browse_widgets;
   GtkWidget *browse_shortcuts_tree_view;
-  GtkWidget *browse_shortcuts_swin;
   GtkWidget *browse_shortcuts_add_button;
   GtkWidget *browse_shortcuts_remove_button;
   GtkWidget *browse_files_tree_view;
@@ -1803,18 +1802,19 @@ shortcuts_selection_changed_cb (GtkTreeSelection      *selection,
 static GtkWidget *
 shortcuts_list_create (GtkFileChooserDefault *impl)
 {
+  GtkWidget *swin;
   GtkTreeSelection *selection;
   GtkTreeViewColumn *column;
   GtkCellRenderer *renderer;
 
   /* Scrolled window */
 
-  impl->browse_shortcuts_swin = gtk_scrolled_window_new (NULL, NULL);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (impl->browse_shortcuts_swin),
+  swin = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (swin),
 				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (impl->browse_shortcuts_swin),
+  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (swin),
 				       GTK_SHADOW_IN);
-  gtk_widget_show (impl->browse_shortcuts_swin);
+  gtk_widget_show (swin);
 
   /* Tree */
 
@@ -1844,7 +1844,7 @@ shortcuts_list_create (GtkFileChooserDefault *impl)
   g_signal_connect (impl->browse_shortcuts_tree_view, "drag-data-received",
 		    G_CALLBACK (shortcuts_drag_data_received_cb), impl);
 
-  gtk_container_add (GTK_CONTAINER (impl->browse_shortcuts_swin), impl->browse_shortcuts_tree_view);
+  gtk_container_add (GTK_CONTAINER (swin), impl->browse_shortcuts_tree_view);
   gtk_widget_show (impl->browse_shortcuts_tree_view);
 
   /* Column */
@@ -1867,7 +1867,7 @@ shortcuts_list_create (GtkFileChooserDefault *impl)
 
   gtk_tree_view_append_column (GTK_TREE_VIEW (impl->browse_shortcuts_tree_view), column);
 
-  return impl->browse_shortcuts_swin;
+  return swin;
 }
 
 /* Creates the widgets for the shortcuts/bookmarks pane */
