@@ -1,3 +1,15 @@
+Wed Dec 26 23:41:41 2001  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_rows_reordered): ensure
+	we are unprelighted before reordering
+
+	* gtk/gtktreemodel.c (gtk_tree_row_ref_reordered_callback): we
+	need to break out of the for loop, not return
+
+	* gtk/gtktreemodelsort.c: more fixage and cleanups. It seems to
+	be pretty stable now, though it still needs some more code
+	cleanups.
+
 Wed Dec 26 12:32:31 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* docs/Changes-2.0.txt: Document the fact that

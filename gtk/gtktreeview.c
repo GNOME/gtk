@@ -5112,7 +5112,9 @@ gtk_tree_view_rows_reordered (GtkTreeModel *model,
   if (tree == NULL)
     return;
 
-  /* FIXME: we need to unprelight our tree, if it's prelit. */
+  /* we need to be unprelighted */
+  ensure_unprelighted (tree_view);
+  
   _gtk_rbtree_reorder (tree, new_order, len);
 
   gtk_widget_queue_draw (GTK_WIDGET (tree_view));

@@ -1391,7 +1391,7 @@ gtk_tree_row_ref_reordered_callback (GObject     *object,
 		  if (new_order[i] == indices[depth])
 		    {
 		      indices[depth] = i;
-		      return;
+		      break;
 		    }
 		}
 	    }
