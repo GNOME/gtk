@@ -3882,12 +3882,10 @@ gtk_combo_box_destroy (GtkObject *object)
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (object);
 
+  gtk_combo_box_popdown (combo_box);
   combo_box->priv->destroying = 1;
-
   GTK_OBJECT_CLASS (parent_class)->destroy (object);
-
   combo_box->priv->cell_view = NULL;
-
   combo_box->priv->destroying = 0;
 }
 
