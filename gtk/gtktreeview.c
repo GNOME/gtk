@@ -1902,6 +1902,13 @@ gtk_tree_view_button_release_drag_column (GtkWidget      *widget,
   gtk_widget_set_parent (tree_view->priv->drag_column->button, GTK_WIDGET (tree_view));
   g_object_unref (tree_view->priv->drag_column->button);
   gtk_widget_queue_resize (widget);
+  if (tree_view->priv->drag_column->resizable)
+    {
+      gdk_window_raise (tree_view->priv->drag_column->window);
+      gdk_window_show (tree_view->priv->drag_column->window);
+    }
+  else
+    gdk_window_hide (tree_view->priv->drag_column->window);
 
   gtk_widget_grab_focus (tree_view->priv->drag_column->button);
 
