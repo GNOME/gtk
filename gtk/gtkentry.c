@@ -2701,6 +2701,8 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
 		    "gtk-split-cursor", &split_cursor,
 		    NULL);
 
+      dir1 = widget_direction;
+      
       if (split_cursor)
 	{
 	  gc1 = entry->cursor_gc;
@@ -2708,7 +2710,6 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
 
 	  if (weak_x != strong_x)
 	    {
-	      dir1 = widget_direction;
 	      dir2 = (widget_direction == GTK_TEXT_DIR_LTR) ? GTK_TEXT_DIR_RTL : GTK_TEXT_DIR_LTR;
 	      
 	      gc2 = widget->style->text_gc[GTK_STATE_NORMAL];
@@ -2731,13 +2732,15 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
       cursor_location.height = text_area_height - 2 * INNER_BORDER ;
       
       _gtk_draw_insertion_cursor (widget, entry->text_area, gc1,
-				  &cursor_location, dir1);
+				  &cursor_location, dir1,
+                                  dir2 != GTK_TEXT_DIR_NONE);
       
-      if (gc2)
+      if (dir2 != GTK_TEXT_DIR_NONE)
 	{
 	  cursor_location.x = xoffset + x2;
 	  _gtk_draw_insertion_cursor (widget, entry->text_area, gc2,
-				      &cursor_location, dir2);
+				      &cursor_location, dir2,
+                                      TRUE);
 	}
     }
 }

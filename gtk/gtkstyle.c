@@ -5668,9 +5668,10 @@ gtk_style_set_font (GtkStyle *style,
  * @drawable: a #GdkDrawable
  * @gc: a #GdkGC
  * @location: location where to draw the cursor (@location->width is ignored)
- * @dir: text direction for the cursor, used to decide whether to draw a
- *       directional arrow on the cursor and in what direction. Unless both
- *       strong and weak cursors are displayed, this should be %GTK_TEXT_DIR_NONE.
+ * @direction: whether the cursor is left-to-right or
+ *             right-to-left. Should never be #GTK_TEXT_DIR_NONE
+ * @draw_arrow: %TRUE to draw a directional arrow on the
+ *        cursor. Should be %FALSE unless the cursor is split.
  * 
  * Draws a text caret on @drawable at @location. This is not a style function
  * but merely a convenience function for drawing the standard cursor shape.
@@ -5680,48 +5681,61 @@ _gtk_draw_insertion_cursor (GtkWidget        *widget,
 			    GdkDrawable      *drawable,
 			    GdkGC            *gc,
 			    GdkRectangle     *location,
-			    GtkTextDirection  dir)
+                            GtkTextDirection  direction,
+                            gboolean          draw_arrow)
 {
   gint stem_width;
   gint arrow_width;
   gint x, y;
   gint i;
   gfloat cursor_aspect_ratio;
-
+  gint offset;
+  
+  g_return_if_fail (direction != GTK_TEXT_DIR_NONE);
+  
   gtk_widget_style_get (widget, "cursor-aspect-ratio", &cursor_aspect_ratio, NULL);
   
   stem_width = location->height * cursor_aspect_ratio + 1;
   arrow_width = stem_width + 1;
- 
+
+  /* put (stem_width % 2) on the proper side of the cursor */
+  if (direction == GTK_TEXT_DIR_LTR)
+    offset = stem_width / 2;
+  else
+    offset = stem_width - stem_width / 2;
+  
   for (i = 0; i < stem_width; i++)
     gdk_draw_line (drawable, gc,
-		   location->x + i - stem_width / 2, location->y,
-		   location->x + i - stem_width / 2, location->y + location->height - 1);
+		   location->x + i - offset, location->y,
+		   location->x + i - offset, location->y + location->height - 1);
 
-  if (dir == GTK_TEXT_DIR_RTL)
+  if (draw_arrow)
     {
-      x = location->x - stem_width / 2 - 1;
-      y = location->y + location->height - arrow_width * 2 - arrow_width + 1;
+      if (direction == GTK_TEXT_DIR_RTL)
+        {
+          x = location->x - offset - 1;
+          y = location->y + location->height - arrow_width * 2 - arrow_width + 1;
   
-      for (i = 0; i < arrow_width; i++)
-	{
-	  gdk_draw_line (drawable, gc,
-			 x, y + i + 1,
-			 x, y + 2 * arrow_width - i - 1);
-	  x --;
-	}
-    }
-  else if (dir == GTK_TEXT_DIR_LTR)
-    {
-      x = location->x + stem_width - stem_width / 2;
-      y = location->y + location->height - arrow_width * 2 - arrow_width + 1;
+          for (i = 0; i < arrow_width; i++)
+            {
+              gdk_draw_line (drawable, gc,
+                             x, y + i + 1,
+                             x, y + 2 * arrow_width - i - 1);
+              x --;
+            }
+        }
+      else if (direction == GTK_TEXT_DIR_LTR)
+        {
+          x = location->x + stem_width - offset;
+          y = location->y + location->height - arrow_width * 2 - arrow_width + 1;
   
-      for (i = 0; i < arrow_width; i++) 
-	{
-	  gdk_draw_line (drawable, gc,
-			 x, y + i + 1,
-			 x, y + 2 * arrow_width - i - 1);
-	  x++;
-	}
+          for (i = 0; i < arrow_width; i++) 
+            {
+              gdk_draw_line (drawable, gc,
+                             x, y + i + 1,
+                             x, y + 2 * arrow_width - i - 1);
+              x++;
+            }
+        }
     }
 }

@@ -1694,6 +1694,8 @@ gtk_label_draw_cursor (GtkLabel  *label, gint xoffset, gint yoffset)
 		    "gtk-split-cursor", &split_cursor,
 		    NULL);
 
+      dir1 = widget_direction;
+      
       if (split_cursor)
 	{
 	  gc1 = label->select_info->cursor_gc;
@@ -1702,7 +1704,6 @@ gtk_label_draw_cursor (GtkLabel  *label, gint xoffset, gint yoffset)
 	  if (strong_pos.x != weak_pos.x ||
 	      strong_pos.y != weak_pos.y)
 	    {
-	      dir1 = widget_direction;
 	      dir2 = (widget_direction == GTK_TEXT_DIR_LTR) ? GTK_TEXT_DIR_RTL : GTK_TEXT_DIR_LTR;
 	      
 	      gc2 = widget->style->black_gc;
@@ -1725,9 +1726,10 @@ gtk_label_draw_cursor (GtkLabel  *label, gint xoffset, gint yoffset)
       cursor_location.height = PANGO_PIXELS (cursor1->height);
       
       _gtk_draw_insertion_cursor (widget, widget->window, gc1,
-				  &cursor_location, dir1);
+				  &cursor_location, dir1,
+                                  dir2 != GTK_TEXT_DIR_NONE);
       
-      if (gc2)
+      if (dir2 != GTK_TEXT_DIR_NONE)
 	{
 	  cursor_location.x = xoffset + PANGO_PIXELS (cursor2->x);
 	  cursor_location.y = yoffset + PANGO_PIXELS (cursor2->y);
@@ -1735,7 +1737,7 @@ gtk_label_draw_cursor (GtkLabel  *label, gint xoffset, gint yoffset)
 	  cursor_location.height = PANGO_PIXELS (cursor2->height);
 	  
 	  _gtk_draw_insertion_cursor (widget, widget->window, gc2,
-				      &cursor_location, dir2);
+				      &cursor_location, dir2, TRUE);
 	}
     }
 }

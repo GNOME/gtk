@@ -1,3 +1,16 @@
+2002-02-24  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtkstyle.c (_gtk_draw_insertion_cursor): change to pass in
+	the cursor direction always, not just when we need an arrow, so we
+	can flip the cursor around its axis for RTL. Resolves #72372
+
+	* gtk/gtkentry.c (gtk_entry_draw_cursor): update for
+	draw_insertion_cursor change
+	
+	* gtk/gtklabel.c (gtk_label_draw_cursor): ditto
+
+	* gtk/gtktextdisplay.c (gtk_text_layout_draw): ditto
+	
 2002-02-24  Alexander Larsson  <alla@lysator.liu.se>
 
 	* gdk/x11/gdkwindow-x11.c (gdk_window_set_background):

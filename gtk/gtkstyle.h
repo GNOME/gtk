@@ -883,7 +883,8 @@ void _gtk_draw_insertion_cursor (GtkWidget        *widget,
 				 GdkDrawable      *drawable,
 				 GdkGC            *gc,
 				 GdkRectangle     *location,
-				 GtkTextDirection  dir);
+                                 GtkTextDirection  direction,
+                                 gboolean          draw_arrow);
 
 #ifdef __cplusplus
 }
