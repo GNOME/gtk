@@ -1,7 +1,11 @@
+Fri Mar 13 17:33:56 GMT 1998 Tony Gale <gale@gimp.org>
+
+	docs/gtkfaq.sgml: fix the spelling of Helge Hess's name
+
 Fri Mar 13 09:40:17 GMT 199 Tony Gale  <gale@gimp.org>
 
 	* docs/gtkfaq.sgml: update links to documentation and
-	  remove question on whats needs to be done before 1.0
+	  remove question on what needs to be done before 1.0
 
 Fri Mar 13 01:17:44 1998  George Lebl  <jirka@5z.com>
 

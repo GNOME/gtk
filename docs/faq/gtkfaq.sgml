@@ -353,7 +353,7 @@ ftp://ftp.gimp.org/pub/gtk/gtk--/
  <item>If you are more inclined towards the 
  <htmlurl url="http://www.gnustep.org/" name="GNUstep project">,
  you may want to check out GTKKit by 
- <htmlurl url="mailto:helge@mdlink.de" name="Helge Heszlig">.
+ <htmlurl url="mailto:helge@mdlink.de" name="Helge He&szlig;">.
  The intention is to setup a GTK+ binding using the FoundationKit. 
  GTKKit includes nicities like writing a XML-type template file to 
  construct a GTK+ interface.
