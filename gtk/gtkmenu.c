@@ -748,8 +748,12 @@ gtk_menu_popup (GtkMenu		    *menu,
    */
   gtk_widget_show (GTK_WIDGET (menu));
 
+  /* Position the menu, possibly changing the size request
+   */
+  gtk_menu_position (menu);
+
   /* Compute the size of the toplevel and realize it so we
-   * can position and scroll correctly.
+   * can scroll correctly.
    */
   {
     GtkRequisition tmp_request;
@@ -764,8 +768,6 @@ gtk_menu_popup (GtkMenu		    *menu,
     
     gtk_widget_realize (GTK_WIDGET (menu));
   }
-
-  gtk_menu_position (menu);
 
   gtk_menu_scroll_to (menu, menu->scroll_offset);
 

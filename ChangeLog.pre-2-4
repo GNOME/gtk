@@ -1,3 +1,10 @@
+Tue Mar 26 14:46:50 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenu.c (gtk_menu_popup): Shuffle the ordering around
+	some more (position before realizing) fixing problems with 
+	arrows popping up at the wrong time (#73386), hopefully not
+	introducing other problems. (Reported by Ettore Perrazoli, others)
+
 2002-03-26  Dave Camp  <dave@ximian.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_button_press): Free the path
