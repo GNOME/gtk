@@ -1,3 +1,8 @@
+Fri May 30 15:58:33 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in: Rework debug_default handling to work
+	with autoconf-2.5x. (#106348)
+
 Fri May 30 20:24:11 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* configure.in: added "li" to ALL_LINGUAS
