@@ -1,3 +1,7 @@
+Sun Nov 17 15:42:08 2002  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/tmpl/gtkliststore.sgml: add more to the docs.
+
 2002-11-10  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/gdk-sections.txt: gdk_display_open_default_libgtk_only

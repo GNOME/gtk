@@ -17,7 +17,7 @@ drop</link> interfaces.
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
-
+#GtkTreeModel, #GtkTreeStore
 </para>
 
 <!-- ##### STRUCT GtkTreeStore ##### -->

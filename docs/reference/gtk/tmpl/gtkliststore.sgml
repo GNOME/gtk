@@ -14,6 +14,18 @@ Finally, it also implements the tree <link linkend="gtktreednd">drag and
 drop</link> interfaces.
 </para>
 
+<para>
+The #GtkListStore can accept most GObject types as a column type, though
+it can't accept all custom types.  Internally, it will keep a copy of
+data passed in (such as a string or a boxed pointer).  Columns that
+accept #GObject<!-- -->s are handled a little differently.  The
+#GtkListStore will keep a reference to the object instead of copying the
+value.  As a result, if the object is modified, it is up to the
+application writer to call @gtk_tree_model_row_changed to emit the
+"row_changed" signal.  This most commonly effects lists with
+#GdkPixbuf<!-- -->s stored.
+</para>
+
 <example>
 <title>Creating a simple list store.</title>
 <programlisting>
@@ -22,7 +34,7 @@ enum {
   COLUMN_INT,
   COLUMN_BOOLEAN,
   N_COLUMNS
-}
+};
 
 {
   GtkListStore *list_store;
@@ -49,6 +61,9 @@ enum {
                           COLUMN_BOOLEAN,  FALSE,
                           -1);
 
+      /* As the store will keep a copy of the string internally, we
+       * free some_data.
+       */
       g_free (some_data);
     }
 
@@ -65,9 +80,21 @@ enum {
 </programlisting>
 </example>
 
+<refsect2>
+<title>Performance Considerations</title>
+<para>
+Internally, the #GtkListStore is implemented with a linked list with a
+tail pointer.  As a result, it is fast at data insertion and deletion,
+and not as fast at random data access.  The #GtkListStore sets the
+#GTK_TREE_MODEL_ITERS_PERSIST flag, which means that #GtkTreeIter<!--
+-->s can be cached while the row exists.  Thus, if access to a
+particular row is needed often, it is worth keeping the iter around.
+</para>
+</refsect>
+
 <!-- ##### SECTION See_Also ##### -->
 <para>
-
+#GtkTreeModel, #GtkTreeStore
 </para>
 
 <!-- ##### STRUCT GtkListStore ##### -->
