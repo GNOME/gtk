@@ -664,6 +664,7 @@ gtk_clist_set_column_width (GtkCList * clist,
   clist->column[column].width = width;
 
   gtk_clist_size_allocate_title_buttons (clist);
+  gtk_clist_size_allocate_columns (clist);
 
   if (!GTK_CLIST_FROZEN (clist))
     {
