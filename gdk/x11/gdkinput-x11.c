@@ -27,6 +27,7 @@
 #include "gdkinputprivate.h"
 #include "gdkinternals.h"
 #include "gdkx.h"
+#include "gdk.h"		/* For gdk_error_trap_push()/pop() */
 
 #include <string.h>
 
@@ -34,56 +35,49 @@
 static GdkDevicePrivate *gdk_input_device_new(XDeviceInfo *device, 
 					      gint include_core);
 static void gdk_input_translate_coordinates(GdkDevicePrivate *gdkdev,
-					    GdkInputWindow *input_window,
-					    gint *axis_data,
-					    gdouble *x, gdouble *y,
-					    gdouble *pressure,
-					    gdouble *xtilt, gdouble *ytilt);
+					    GdkInputWindow   *input_window,
+					    gint             *axis_data,
+					    gdouble          *axis_out,
+					    gdouble          *x_out,
+					    gdouble          *y_out);
 static guint gdk_input_translate_state(guint state, guint device_state);
-void  gdk_input_common_get_pointer     (GdkWindow       *window,
-					guint32	   deviceid,
-					gdouble         *x,
-					gdouble         *y,
-					gdouble         *pressure,
-					gdouble         *xtilt,
-					gdouble         *ytilt,
-					GdkModifierType *mask);
 
 /* Global variables */
 
-static gint gdk_input_root_width;
-static gint gdk_input_root_height;
+GdkDevicePrivate *
+gdk_input_find_device (guint32 id)
+{
+  GList *tmp_list = gdk_input_devices;
+  GdkDevicePrivate *gdkdev;
+  while (tmp_list)
+    {
+      gdkdev = (GdkDevicePrivate *)(tmp_list->data);
+      if (gdkdev->deviceid == id)
+	return gdkdev;
+      tmp_list = tmp_list->next;
+    }
+  return NULL;
+}
 
 void
 gdk_input_get_root_relative_geometry(Display *dpy, Window w, int *x_ret, int *y_ret,
-			       int *width_ret, int *height_ret)
+				     int *width_ret, int *height_ret)
 {
-  Window root,parent;
+  Window root, parent, child;
   Window *children;
   guint nchildren;
   gint x,y;
   guint width, height;
-  gint xc,yc;
-  guint widthc,heightc,border_widthc,depthc;
+  guint border_widthc, depthc;
+   
+  XQueryTree (dpy, w, &root, &parent, &children, &nchildren);
+  if (children)
+    XFree(children);
   
-  XQueryTree(dpy,w,&root,&parent,&children,&nchildren);
-  if (children) XFree(children);
-  XGetGeometry(dpy,w,&root,&x,&y,&width,&height,&border_widthc,
-	       &depthc);
-  x += border_widthc;
-  y += border_widthc;
+  XGetGeometry (dpy, w, &root, &x, &y, &width, &height, &border_widthc, &depthc);
 
-  while (root != parent)
-    {
-      w = parent;
-      XQueryTree(dpy,w,&root,&parent,&children,&nchildren);
-      if (children) XFree(children);
-      XGetGeometry(dpy,w,&root,&xc,&yc,&widthc,&heightc,
-		   &border_widthc,&depthc);
-      x += xc + border_widthc;
-      y += yc + border_widthc;
-    }
-
+  XTranslateCoordinates (dpy, w, root, 0, 0, &x, &y, &child);
+ 
   if (x_ret)
     *x_ret = x;
   if (y_ret)
@@ -95,26 +89,22 @@ gdk_input_get_root_relative_geometry(Display *dpy, Window w, int *x_ret, int *y_
 }
 
 static GdkDevicePrivate *
-gdk_input_device_new(XDeviceInfo *device, gint include_core)
+gdk_input_device_new (XDeviceInfo *device, gint include_core)
 {
   GdkDevicePrivate *gdkdev;
-  gchar *tmp_name, *p;
+  gchar *tmp_name;
   XAnyClassPtr class;
   gint i,j;
 
   gdkdev = g_new(GdkDevicePrivate,1);
 
-  gdkdev->info.deviceid = device->id;
-  if (device->name[0]) {
-    gdkdev->info.name = g_new(char, strlen(device->name)+1);
-    strcpy(gdkdev->info.name,device->name);
-  } else {
-    /* XFree86 3.2 gives an empty name to the default core devices,
-       (fixed in 3.2A) */
-    gdkdev->info.name = g_strdup("pointer");
-    strcpy(gdkdev->info.name,"pointer");
-    gdkdev->info.source = GDK_SOURCE_MOUSE;
-  }
+  gdkdev->deviceid = device->id;
+  if (device->name[0])
+    gdkdev->info.name = g_strdup (device->name);
+ else
+   /* XFree86 3.2 gives an empty name to the default core devices,
+      (fixed in 3.2A) */
+   gdkdev->info.name = g_strdup ("pointer");
 
   gdkdev->info.mode = GDK_MODE_DISABLED;
 
@@ -122,12 +112,8 @@ gdk_input_device_new(XDeviceInfo *device, gint include_core)
      could invite a very, very, long list... Lowercase name
      for comparison purposes */
 
-  tmp_name = g_strdup(gdkdev->info.name);
-  for (p = tmp_name; *p; p++)
-    {
-      if (*p >= 'A' && *p <= 'Z')
-	*p += 'a' - 'A';
-    }
+  tmp_name = g_strdup (gdkdev->info.name);
+  g_strdown (tmp_name);
   
   if (!strcmp (tmp_name, "pointer"))
     gdkdev->info.source = GDK_SOURCE_MOUSE;
@@ -162,9 +148,7 @@ gdk_input_device_new(XDeviceInfo *device, gint include_core)
     {
       switch (class->class) {
       case ButtonClass:
-	{
-	  break;
-	}
+	break;
       case KeyClass:
 	{
 	  XKeyInfo *xki = (XKeyInfo *)class;
@@ -195,8 +179,8 @@ gdk_input_device_new(XDeviceInfo *device, gint include_core)
 	{
 	  XValuatorInfo *xvi = (XValuatorInfo *)class;
 	  gdkdev->info.num_axes = xvi->num_axes;
-	  gdkdev->axes = g_new(GdkAxisInfo, xvi->num_axes);
-	  gdkdev->info.axes = g_new(GdkAxisUse, xvi->num_axes);
+	  gdkdev->axes = g_new (GdkAxisInfo, xvi->num_axes);
+	  gdkdev->info.axes = g_new0 (GdkDeviceAxis, xvi->num_axes);
 	  for (j=0;j<xvi->num_axes;j++)
 	    {
 	      gdkdev->axes[j].resolution = 
@@ -205,27 +189,21 @@ gdk_input_device_new(XDeviceInfo *device, gint include_core)
 		gdkdev->axes[j].xmin_value = xvi->axes[j].min_value;
 	      gdkdev->axes[j].max_value =
 		gdkdev->axes[j].xmax_value = xvi->axes[j].max_value;
-	      gdkdev->info.axes[j] = GDK_AXIS_IGNORE;
+	      gdkdev->info.axes[j].use = GDK_AXIS_IGNORE;
 	    }
 	  j=0;
 	  if (j<xvi->num_axes)
-	    gdkdev->info.axes[j++] = GDK_AXIS_X;
+	    gdk_device_set_axis_use (&gdkdev->info, j++, GDK_AXIS_X);
 	  if (j<xvi->num_axes)
-	    gdkdev->info.axes[j++] = GDK_AXIS_Y;
+	    gdk_device_set_axis_use (&gdkdev->info, j++, GDK_AXIS_Y);
 	  if (j<xvi->num_axes)
-	    gdkdev->info.axes[j++] = GDK_AXIS_PRESSURE;
+	    gdk_device_set_axis_use (&gdkdev->info, j++, GDK_AXIS_PRESSURE);
 	  if (j<xvi->num_axes)
-	    gdkdev->info.axes[j++] = GDK_AXIS_XTILT;
+	    gdk_device_set_axis_use (&gdkdev->info, j++, GDK_AXIS_XTILT);
 	  if (j<xvi->num_axes)
-	    gdkdev->info.axes[j++] = GDK_AXIS_YTILT;
-	  
-	  /* set up reverse lookup on axis use */
-	  for (j=GDK_AXIS_IGNORE;j<GDK_AXIS_LAST;j++)
-	    gdkdev->axis_for_use[j] = -1;
-	  
-	  for (j=0;j<xvi->num_axes;j++)
-	    if (gdkdev->info.axes[j] != GDK_AXIS_IGNORE)
-	      gdkdev->axis_for_use[gdkdev->info.axes[j]] = j;
+	    gdk_device_set_axis_use (&gdkdev->info, j++, GDK_AXIS_YTILT);
+	  if (j<xvi->num_axes)
+	    gdk_device_set_axis_use (&gdkdev->info, j++, GDK_AXIS_WHEEL);
 		       
 	  break;
 	}
@@ -235,41 +213,16 @@ gdk_input_device_new(XDeviceInfo *device, gint include_core)
   /* return NULL if no axes */
   if (!gdkdev->info.num_axes || !gdkdev->axes ||
       (!include_core && device->use == IsXPointer))
-    {
-      g_free(gdkdev->info.name);
-      if (gdkdev->axes)
-	g_free(gdkdev->axes);
-      if (gdkdev->info.keys)
-	g_free(gdkdev->info.keys);
-      if (gdkdev->info.axes)
-	g_free (gdkdev->info.axes);
-      g_free(gdkdev);
-      return NULL;
-    }
+    goto error;
 
   if (device->use != IsXPointer)
     {
-      int error_warn = gdk_error_warnings;
-
-      gdk_error_warnings = 0;
-      gdk_error_code = 0;
-      gdkdev->xdevice = XOpenDevice(gdk_display, gdkdev->info.deviceid);
-      gdk_error_warnings = error_warn;
+      gdk_error_trap_push ();
+      gdkdev->xdevice = XOpenDevice(gdk_display, gdkdev->deviceid);
 
       /* return NULL if device is not ready */
-      if (gdk_error_code)
-	{
-	  g_free (gdkdev->info.name);
-	  if (gdkdev->axes)
-	    g_free (gdkdev->axes);
-	  if (gdkdev->info.keys)
-	    g_free (gdkdev->info.keys);
-	  if (gdkdev->info.axes)
-	    g_free (gdkdev->info.axes);
-	  g_free (gdkdev);
-
-	  return NULL;
-	}
+      if (gdk_error_trap_pop ())
+	goto error;
     }
 
   gdkdev->buttonpress_type = 0;
@@ -282,6 +235,19 @@ gdk_input_device_new(XDeviceInfo *device, gint include_core)
   gdkdev->changenotify_type = 0;
 
   return gdkdev;
+
+ error:
+
+  g_free (gdkdev->info.name);
+  if (gdkdev->axes)
+    g_free (gdkdev->axes);
+  if (gdkdev->info.keys)
+    g_free (gdkdev->info.keys);
+  if (gdkdev->info.axes)
+    g_free (gdkdev->info.axes);
+  g_free (gdkdev);
+  
+  return NULL;
 }
 
 void
@@ -414,12 +380,6 @@ gdk_input_common_init(gint include_core)
   int num_extensions, loop;
   Display *display = gdk_display;
 
-  /* Init global vars */
-  gdk_window_get_geometry(NULL,	/* use root window */
-			  NULL,NULL,
-			  &gdk_input_root_width,&gdk_input_root_height, 
-			  NULL);
-
   /* Init XInput extension */
   
   extensions = XListExtensions(display, &num_extensions);
@@ -443,33 +403,44 @@ gdk_input_common_init(gint include_core)
       XFreeDeviceList(devices);
     }
 
-  gdk_input_devices = g_list_append (gdk_input_devices, (gpointer)&gdk_input_core_info);
+  gdk_input_devices = g_list_append (gdk_input_devices, gdk_core_pointer);
 
   return TRUE;
 }
 
 static void
 gdk_input_translate_coordinates (GdkDevicePrivate *gdkdev,
-				 GdkInputWindow *input_window,
-				 gint *axis_data,
-				 gdouble *x, gdouble *y, gdouble *pressure,
-				 gdouble *xtilt, gdouble *ytilt)
+				 GdkInputWindow   *input_window,
+				 gint             *axis_data,
+				 gdouble          *axis_out,
+				 gdouble          *x_out,
+				 gdouble          *y_out)
 {
   GdkWindowImplX11 *impl;
-
-  int x_axis, y_axis, pressure_axis, xtilt_axis, ytilt_axis;
+  int i;
+  int x_axis = 0;
+  int y_axis = 0;
 
   double device_width, device_height;
   double x_offset, y_offset, x_scale, y_scale;
 
   impl = GDK_WINDOW_IMPL_X11 (((GdkWindowObject *) input_window->window)->impl);
 
-  x_axis = gdkdev->axis_for_use[GDK_AXIS_X];
-  y_axis = gdkdev->axis_for_use[GDK_AXIS_Y];
-  pressure_axis = gdkdev->axis_for_use[GDK_AXIS_PRESSURE];
-  xtilt_axis = gdkdev->axis_for_use[GDK_AXIS_XTILT];
-  ytilt_axis = gdkdev->axis_for_use[GDK_AXIS_YTILT];
-
+  for (i=0; i<gdkdev->info.num_axes; i++)
+    {
+      switch (gdkdev->info.axes[i].use)
+	{
+	case GDK_AXIS_X:
+	  x_axis = i;
+	  break;
+	case GDK_AXIS_Y:
+	  y_axis = i;
+	  break;
+	default:
+	  break;
+	}
+    }
+  
   device_width = gdkdev->axes[x_axis].max_value - 
 		   gdkdev->axes[x_axis].min_value;
   device_height = gdkdev->axes[y_axis].max_value - 
@@ -477,8 +448,8 @@ gdk_input_translate_coordinates (GdkDevicePrivate *gdkdev,
 
   if (gdkdev->info.mode == GDK_MODE_SCREEN) 
     {
-      x_scale = gdk_input_root_width / device_width;
-      y_scale = gdk_input_root_height / device_height;
+      x_scale = gdk_screen_width() / device_width;
+      y_scale = gdk_screen_height() / device_height;
 
       x_offset = - input_window->root_x;
       y_offset = - input_window->root_y;
@@ -510,54 +481,37 @@ gdk_input_translate_coordinates (GdkDevicePrivate *gdkdev,
 	  x_offset = - (device_width * x_scale - impl->width)/2;
 	}
     }
-  
-  if (x) *x = x_offset + x_scale*axis_data[x_axis];
-  if (y) *y = y_offset + y_scale*axis_data[y_axis];
 
-  if (pressure)
+  for (i=0; i<gdkdev->info.num_axes; i++)
     {
-      if (pressure_axis != -1)
-	*pressure = ((double)axis_data[pressure_axis] 
-		     - gdkdev->axes[pressure_axis].min_value) 
-	  / (gdkdev->axes[pressure_axis].max_value 
-	     - gdkdev->axes[pressure_axis].min_value);
-      else
-	*pressure = 0.5;
-    }
-
-  if (xtilt)
-    {
-      if (xtilt_axis != -1)
+      switch (gdkdev->info.axes[i].use)
 	{
-	  *xtilt = 2. * (double)(axis_data[xtilt_axis] - 
-				 (gdkdev->axes[xtilt_axis].min_value +
-				  gdkdev->axes[xtilt_axis].max_value)/2) /
-	    (gdkdev->axes[xtilt_axis].max_value -
-	     gdkdev->axes[xtilt_axis].min_value);
+	case GDK_AXIS_X:
+	  axis_out[i] = x_offset + x_scale*axis_data[x_axis];
+	  if (x_out)
+	    *x_out = axis_out[i];
+	  break;
+	case GDK_AXIS_Y:
+	  axis_out[i] = y_offset + y_scale*axis_data[y_axis];
+	  if (y_out)
+	    *y_out = axis_out[i];
+	  break;
+	default:
+	  axis_out[i] =
+	    (gdkdev->info.axes[i].max * (axis_data[i] - gdkdev->axes[i].min_value) +
+	     gdkdev->info.axes[i].min * (gdkdev->axes[i].max_value - axis_data[i])) /
+	    (gdkdev->axes[i].max_value - gdkdev->axes[i].min_value);
+	  break;
 	}
-      else *xtilt = 0;
-    }
-  
-  if (ytilt)
-    {
-      if (ytilt_axis != -1)
-	{
-	  *ytilt = 2. * (double)(axis_data[ytilt_axis] - 
-				 (gdkdev->axes[ytilt_axis].min_value +
-				  gdkdev->axes[ytilt_axis].max_value)/2) /
-	    (gdkdev->axes[ytilt_axis].max_value -
-	     gdkdev->axes[ytilt_axis].min_value);
-	}
-      else
-	*ytilt = 0;
     }
 }
 
 /* combine the state of the core device and the device state
-   into one - for now we do this in a simple-minded manner -
-   we just take the keyboard portion of the core device and
-   the button portion (all of?) the device state.
-   Any button remapping should go on here. */
+ * into one - for now we do this in a simple-minded manner -
+ * we just take the keyboard portion of the core device and
+ * the button portion (all of?) the device state.
+ * Any button remapping should go on here.
+ */
 static guint
 gdk_input_translate_state(guint state, guint device_state)
 {
@@ -586,16 +540,14 @@ gdk_input_common_other_event (GdkEvent         *event,
 	  event->button.type = GDK_BUTTON_RELEASE;
 	  gdkdev->button_state &= ~(1 << xdbe->button);
 	}
+      event->button.device = &gdkdev->info;
       event->button.window = input_window->window;
       event->button.time = xdbe->time;
-      event->button.source = gdkdev->info.source;
-      event->button.deviceid = xdbe->deviceid;
 
+      event->button.axes = g_new (gdouble, gdkdev->info.num_axes);
       gdk_input_translate_coordinates (gdkdev,input_window, xdbe->axis_data,
-				       &event->button.x,&event->button.y,
-				       &event->button.pressure,
-				       &event->button.xtilt, 
-				       &event->button.ytilt);
+				       event->button.axes, 
+				       &event->button.x,&event->button.y);
       event->button.state = gdk_input_translate_state(xdbe->state,xdbe->device_state);
       event->button.button = xdbe->button;
 
@@ -674,21 +626,19 @@ gdk_input_common_other_event (GdkEvent         *event,
     {
       XDeviceMotionEvent *xdme = (XDeviceMotionEvent *)(xevent);
 
+      event->motion.device = &gdkdev->info;
+      
+      event->motion.axes = g_new (gdouble, gdkdev->info.num_axes);
       gdk_input_translate_coordinates(gdkdev,input_window,xdme->axis_data,
-				      &event->motion.x,&event->motion.y,
-				      &event->motion.pressure,
-				      &event->motion.xtilt, 
-				      &event->motion.ytilt);
+				      event->motion.axes,
+				      &event->motion.x,&event->motion.y);
 
       event->motion.type = GDK_MOTION_NOTIFY;
       event->motion.window = input_window->window;
       event->motion.time = xdme->time;
-      event->motion.deviceid = xdme->deviceid;
       event->motion.state = gdk_input_translate_state(xdme->state,
 						      xdme->device_state);
       event->motion.is_hint = xdme->is_hint;
-      event->motion.source = gdkdev->info.source;
-      event->motion.deviceid = xdme->deviceid;
 
       GDK_NOTE (EVENTS,
 	g_print ("motion notify:\t\twindow: %ld  device: %ld  x,y: %f %f  state %#4x  hint: %s\n",
@@ -707,12 +657,11 @@ gdk_input_common_other_event (GdkEvent         *event,
     {
       XProximityNotifyEvent *xpne = (XProximityNotifyEvent *)(xevent);
 
+      event->proximity.device = &gdkdev->info;
       event->proximity.type = (xevent->type == gdkdev->proximityin_type)?
   	GDK_PROXIMITY_IN:GDK_PROXIMITY_OUT;
       event->proximity.window = input_window->window;
       event->proximity.time = xpne->time;
-      event->proximity.source = gdkdev->info.source;
-      event->proximity.deviceid = xpne->deviceid;
       
       return TRUE;
   }
@@ -720,128 +669,91 @@ gdk_input_common_other_event (GdkEvent         *event,
   return -1;			/* wasn't one of our event types */
 }
 
-void
-gdk_input_common_set_axes (guint32 deviceid, GdkAxisUse *axes)
+gboolean
+_gdk_device_get_history (GdkDevice         *device,
+			 GdkWindow         *window,
+			 guint32            start,
+			 guint32            stop,
+			 GdkTimeCoord    ***events,
+			 gint              *n_events)
 {
-  int i;
-  GdkDevicePrivate *gdkdev = gdk_input_find_device(deviceid);
-  g_return_if_fail (gdkdev != NULL);
-
-  for (i=GDK_AXIS_IGNORE;i<GDK_AXIS_LAST;i++)
-    {
-      gdkdev->axis_for_use[i] = -1;
-    }
-
-  for (i=0;i<gdkdev->info.num_axes;i++)
-    {
-      gdkdev->info.axes[i] = axes[i];
-      gdkdev->axis_for_use[axes[i]] = i;
-    }
-}
-
-void 
-gdk_input_common_set_key (guint32 deviceid,
-			  guint   index,
-			  guint   keyval,
-			  GdkModifierType modifiers)
-{
-  GdkDevicePrivate *gdkdev = gdk_input_find_device(deviceid);
-  
-  gdkdev = gdk_input_find_device (deviceid);
-  g_return_if_fail (gdkdev != NULL);
-  g_return_if_fail (index < gdkdev->info.num_keys);
-
-  gdkdev->info.keys[index].keyval = keyval;
-  gdkdev->info.keys[index].modifiers = modifiers;
-}
-
-GdkTimeCoord *
-gdk_input_common_motion_events (GdkWindow *window,
-				guint32 deviceid,
-				guint32 start,
-				guint32 stop,
-				gint *nevents_return)
-{
-  GdkTimeCoord *coords;
+  GdkTimeCoord **coords;
   XDeviceTimeCoord *device_coords;
   GdkInputWindow *input_window;
   GdkDevicePrivate *gdkdev;
+  gint mode_return;
+  gint axis_count_return;
+  gint i;
 
-  int mode_return;
-  int axis_count_return;
-  int i;
-
-  gdkdev = gdk_input_find_device (deviceid);
+  gdkdev = (GdkDevicePrivate *)device;
   input_window = gdk_input_window_find (window);
 
-  g_return_val_if_fail (gdkdev != NULL, NULL);
-  g_return_val_if_fail (gdkdev->xdevice != NULL, NULL);
-  g_return_val_if_fail (input_window != NULL, NULL);
+  g_return_val_if_fail (input_window != NULL, FALSE);
 
   device_coords = XGetDeviceMotionEvents (gdk_display,
 					  gdkdev->xdevice,
 					  start, stop,
-					  nevents_return, &mode_return,
+					  n_events, &mode_return,
 					  &axis_count_return);
 
   if (device_coords)
     {
-      coords = g_new (GdkTimeCoord, *nevents_return);
+      coords = _gdk_device_allocate_history (device, *n_events);
       
-      for (i=0; i<*nevents_return; i++)
-	{
-	  gdk_input_translate_coordinates (gdkdev, input_window,
-					   device_coords[i].data,
-					   &coords[i].x, &coords[i].y,
-					   &coords[i].pressure,
-					   &coords[i].xtilt, &coords[i].ytilt);
-	}
+      for (i=0; i<*n_events; i++)
+	gdk_input_translate_coordinates (gdkdev, input_window,
+					 device_coords[i].data,
+					 coords[i]->axes, NULL, NULL);
       XFreeDeviceMotionEvents (device_coords);
 
-      return coords;
+      *events = coords;
+
+      return TRUE;
     }
   else
-    return NULL;
+    {
+      *events = NULL;
+      *n_events = 0;
+
+      return FALSE;
+    }
 }
 
 void 
-gdk_input_common_get_pointer     (GdkWindow       *window,
-				  guint32	   deviceid,
-				  gdouble         *x,
-				  gdouble         *y,
-				  gdouble         *pressure,
-				  gdouble         *xtilt,
-				  gdouble         *ytilt,
-				  GdkModifierType *mask)
+gdk_device_get_state (GdkDevice       *device,
+		      GdkWindow       *window,
+		      gdouble         *axes,
+		      GdkModifierType *mask)
 {
-  GdkDevicePrivate *gdkdev;
-  GdkInputWindow *input_window;
-  XDeviceState *state;
-  XInputClass *input_class;
-  gint x_int, y_int;
   gint i;
 
-  /* we probably need to get the mask in any case */
+  g_return_if_fail (device != NULL);
+  g_return_if_fail (GDK_IS_WINDOW (window));
 
-  if (deviceid == GDK_CORE_POINTER)
+  if (GDK_IS_CORE (device))
     {
+      gint x_int, y_int;
+      
       gdk_window_get_pointer (window, &x_int, &y_int, mask);
-      if (x) *x = x_int;
-      if (y) *y = y_int;
-      if (pressure) *pressure = 0.5;
-      if (xtilt) *xtilt = 0;
-      if (ytilt) *ytilt = 0;
+
+      if (axes)
+	{
+	  axes[0] = x_int;
+	  axes[1] = y_int;
+	}
     }
   else
     {
+      GdkDevicePrivate *gdkdev;
+      GdkInputWindow *input_window;
+      XDeviceState *state;
+      XInputClass *input_class;
+      
       if (mask)
 	gdk_window_get_pointer (window, NULL, NULL, mask);
       
-      gdkdev = gdk_input_find_device (deviceid);
+      gdkdev = (GdkDevicePrivate *)device;
       input_window = gdk_input_window_find (window);
-
-      g_return_if_fail (gdkdev != NULL);
-      g_return_if_fail (gdkdev->xdevice != NULL);
       g_return_if_fail (input_window != NULL);
 
       state = XQueryDeviceState (gdk_display, gdkdev->xdevice);
@@ -851,13 +763,12 @@ gdk_input_common_get_pointer     (GdkWindow       *window,
 	  switch (input_class->class)
 	    {
 	    case ValuatorClass:
-	      gdk_input_translate_coordinates (gdkdev, input_window,
-					       ((XValuatorState *)input_class)->valuators,
-					       x, y, pressure,
-					       xtilt, ytilt);
-						       
-						       
-		break;
+	      if (axes)
+		gdk_input_translate_coordinates (gdkdev, input_window,
+						 ((XValuatorState *)input_class)->valuators,
+						 axes, NULL, NULL);
+	      break;
+	      
 	    case ButtonClass:
 	      if (mask)
 		{

@@ -1848,7 +1848,12 @@ gtk_widget_draw (GtkWidget    *widget,
 
   if (GTK_WIDGET_DRAWABLE (widget))
     {
-      if (!area)
+      if (area)
+	{
+	  if (area->width <= 0 || area->height <= 0)
+	    return;
+	}
+      else
 	{
 	  if (GTK_WIDGET_NO_WINDOW (widget))
 	    {

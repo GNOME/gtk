@@ -26,54 +26,104 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-static void gdk_input_none_get_pointer (GdkWindow       *window,
-					guint32	  deviceid,
-					gdouble         *x,
-					gdouble         *y,
-					gdouble         *pressure,
-					gdouble         *xtilt,
-					gdouble         *ytilt,
-					GdkModifierType *mask);
-
 void
 gdk_input_init (void)
 {
-  gdk_input_vtable.set_mode           = NULL;
-  gdk_input_vtable.set_axes           = NULL;
-  gdk_input_vtable.set_key            = NULL;
-  gdk_input_vtable.motion_events      = NULL;
-  gdk_input_vtable.get_pointer        = gdk_input_none_get_pointer;
-  gdk_input_vtable.grab_pointer       = NULL;
-  gdk_input_vtable.ungrab_pointer     = NULL;
-  gdk_input_vtable.configure_event    = NULL;
-  gdk_input_vtable.enter_event        = NULL;
-  gdk_input_vtable.other_event        = NULL;
-  gdk_input_vtable.window_none_event  = NULL;
-  gdk_input_vtable.enable_window      = NULL;
-  gdk_input_vtable.disable_window     = NULL;
-
-  gdk_input_devices = g_list_append (NULL, (GdkDeviceInfo *) &gdk_input_core_info);
+  gdk_input_devices = g_list_append (NULL, gdk_core_pointer);
 
   gdk_input_ignore_core = FALSE;
 }
 
-static void
-gdk_input_none_get_pointer (GdkWindow       *window,
-			    guint32          deviceid,
-			    gdouble         *x,
-			    gdouble         *y,
-			    gdouble         *pressure,
-			    gdouble         *xtilt,
-			    gdouble         *ytilt,
-			    GdkModifierType *mask)
+void 
+gdk_device_get_state (GdkDevice       *device,
+		      GdkWindow       *window,
+		      gdouble         *axes,
+		      GdkModifierType *mask)
 {
   gint x_int, y_int;
 
+  g_return_if_fail (device != NULL);
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
   gdk_window_get_pointer (window, &x_int, &y_int, mask);
 
-  if (x) *x = x_int;
-  if (y) *y = y_int;
-  if (pressure) *pressure = 0.5;
-  if (xtilt) *xtilt = 0;
-  if (ytilt) *ytilt = 0;
+  if (axes)
+    {
+      axes[0] = x_int;
+      axes[1] = y_int;
+    }
 }
+
+gboolean
+_gdk_device_get_history (GdkDevice         *device,
+			 GdkWindow         *window,
+			 guint32            start,
+			 guint32            stop,
+			 GdkTimeCoord    ***events,
+			 gint              *n_events)
+{
+  g_warning ("gdk_device_get_history() called for invalid device");
+  return FALSE;
+}
+
+gboolean
+_gdk_input_enable_window(GdkWindow *window, GdkDevicePrivate *gdkdev)
+{
+  return TRUE;
+}
+
+gboolean
+_gdk_input_disable_window(GdkWindow *window, GdkDevicePrivate *gdkdev)
+{
+  return TRUE;
+}
+
+gint 
+_gdk_input_window_none_event (GdkEvent         *event,
+			     XEvent           *xevent)
+{
+  return -1;
+}
+
+gint 
+_gdk_input_other_event (GdkEvent *event, 
+			XEvent *xevent, 
+			GdkWindow *window)
+{
+  return -1;
+}
+
+void
+_gdk_input_configure_event (XConfigureEvent *xevent,
+			    GdkWindow       *window)
+{
+}
+
+void 
+_gdk_input_enter_event (XCrossingEvent *xevent, 
+			GdkWindow      *window)
+{
+}
+
+gint 
+_gdk_input_grab_pointer (GdkWindow *     window,
+			 gint            owner_events,
+			 GdkEventMask    event_mask,
+			 GdkWindow *     confine_to,
+			 guint32         time)
+{
+  return Success;
+}
+
+void
+_gdk_input_ungrab_pointer (guint32         time)
+{
+}
+
+gboolean
+gdk_device_set_mode (GdkDevice   *device,
+		     GdkInputMode mode)
+{
+  return FALSE;
+}
+

@@ -60,7 +60,7 @@ struct _GtkInputDialog
   GtkWidget *save_button;
   
   GtkWidget *axis_items[GDK_AXIS_LAST];
-  guint32    current_device;
+  GdkDevice *current_device;
 
   GtkWidget *keys_list;
   GtkWidget *keys_listbox;
@@ -71,9 +71,9 @@ struct _GtkInputDialogClass
   GtkDialogClass parent_class;
 
   void (* enable_device)               (GtkInputDialog    *inputd,
-					guint32            devid);
+					GdkDevice         *device);
   void (* disable_device)              (GtkInputDialog    *inputd,
-					guint32            devid);
+					GdkDevice         *device);
 };
 
 

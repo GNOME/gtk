@@ -283,10 +283,9 @@ gdk_event_translate (GdkEvent *event,
    *  some circumstances.
    */
   
-  if ((xevent->xany.window == None) &&
-      gdk_input_vtable.window_none_event)
+  if (xevent->xany.window == None)
     {
-      return_val = gdk_input_vtable.window_none_event (event,xevent);
+      return_val = _gdk_input_window_none_event (event, xevent);
       
       if (return_val >= 0)	/* was handled */
 	return return_val;
@@ -517,12 +516,8 @@ gdk_event_translate (GdkEvent *event,
 	  event->scroll.y = xevent->xbutton.y + yoffset;
 	  event->scroll.x_root = (gfloat)xevent->xbutton.x_root;
 	  event->scroll.y_root = (gfloat)xevent->xbutton.y_root;
-	  event->scroll.pressure = 0.5;
-	  event->scroll.xtilt = 0;
-	  event->scroll.ytilt = 0;
 	  event->scroll.state = (GdkModifierType) xevent->xbutton.state;
-	  event->scroll.source = GDK_SOURCE_MOUSE;
-	  event->scroll.deviceid = GDK_CORE_POINTER;
+	  event->scroll.device = gdk_core_pointer;
 	}
       else
 	{
@@ -533,13 +528,10 @@ gdk_event_translate (GdkEvent *event,
 	  event->button.y = xevent->xbutton.y + yoffset;
 	  event->button.x_root = (gfloat)xevent->xbutton.x_root;
 	  event->button.y_root = (gfloat)xevent->xbutton.y_root;
-	  event->button.pressure = 0.5;
-	  event->button.xtilt = 0;
-	  event->button.ytilt = 0;
+	  event->button.axes = NULL;
 	  event->button.state = (GdkModifierType) xevent->xbutton.state;
 	  event->button.button = xevent->xbutton.button;
-	  event->button.source = GDK_SOURCE_MOUSE;
-	  event->button.deviceid = GDK_CORE_POINTER;
+	  event->button.device = gdk_core_pointer;
 	  
 	  gdk_event_button_generate (event);
 	}
@@ -575,13 +567,10 @@ gdk_event_translate (GdkEvent *event,
       event->button.y = xevent->xbutton.y + yoffset;
       event->button.x_root = (gfloat)xevent->xbutton.x_root;
       event->button.y_root = (gfloat)xevent->xbutton.y_root;
-      event->button.pressure = 0.5;
-      event->button.xtilt = 0;
-      event->button.ytilt = 0;
+      event->button.axes = NULL;
       event->button.state = (GdkModifierType) xevent->xbutton.state;
       event->button.button = xevent->xbutton.button;
-      event->button.source = GDK_SOURCE_MOUSE;
-      event->button.deviceid = GDK_CORE_POINTER;
+      event->button.device = gdk_core_pointer;
       
       break;
       
@@ -607,13 +596,10 @@ gdk_event_translate (GdkEvent *event,
       event->motion.y = xevent->xmotion.y + yoffset;
       event->motion.x_root = (gfloat)xevent->xmotion.x_root;
       event->motion.y_root = (gfloat)xevent->xmotion.y_root;
-      event->motion.pressure = 0.5;
-      event->motion.xtilt = 0;
-      event->motion.ytilt = 0;
+      event->motion.axes = NULL;
       event->motion.state = (GdkModifierType) xevent->xmotion.state;
       event->motion.is_hint = xevent->xmotion.is_hint;
-      event->motion.source = GDK_SOURCE_MOUSE;
-      event->motion.deviceid = GDK_CORE_POINTER;
+      event->motion.device = gdk_core_pointer;
       
       break;
       
@@ -627,9 +613,8 @@ gdk_event_translate (GdkEvent *event,
       /* Tell XInput stuff about it if appropriate */
       if (window_private &&
 	  !GDK_WINDOW_DESTROYED (window) &&
-	  (window_private->extension_events != 0) &&
-	  gdk_input_vtable.enter_event)
-	gdk_input_vtable.enter_event (&xevent->xcrossing, window);
+	  window_private->extension_events != 0)
+	_gdk_input_enter_event (&xevent->xcrossing, window);
       
       event->crossing.type = GDK_ENTER_NOTIFY;
       event->crossing.window = window;
@@ -999,9 +984,8 @@ gdk_event_translate (GdkEvent *event,
 			   : ""));
       if (window &&
 	  !GDK_WINDOW_DESTROYED (window) &&
-	  (window_private->extension_events != 0) &&
-	  gdk_input_vtable.configure_event)
-	gdk_input_vtable.configure_event (&xevent->xconfigure, window);
+	  (window_private->extension_events != 0))
+	_gdk_input_configure_event (&xevent->xconfigure, window);
 
       if (!window || GDK_WINDOW_TYPE (window) == GDK_WINDOW_CHILD)
 	return_val = FALSE;
@@ -1180,9 +1164,8 @@ gdk_event_translate (GdkEvent *event,
       
       if (window_private &&
 	  !GDK_WINDOW_DESTROYED (window_private) &&
-	  (window_private->extension_events != 0) &&
-	  gdk_input_vtable.other_event)
-	return_val = gdk_input_vtable.other_event(event, xevent, window);
+	  (window_private->extension_events != 0))
+	return_val = _gdk_input_other_event(event, xevent, window);
       else
 	return_val = FALSE;
       

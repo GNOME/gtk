@@ -33,44 +33,19 @@ static GdkPixmap *pixmap = NULL;
 
 /* Information about cursor */
 
-static gint need_cursor = FALSE;
 static gint cursor_proximity = TRUE;
 static gdouble cursor_x;
 static gdouble cursor_y;
 
 /* Unique ID of current device */
-static guint32 current_device = GDK_CORE_POINTER;
-
-/* Check to see if we need to draw a cursor for current device */
-static void
-check_cursor (void)
-{
-  GList *tmp_list;
-
-  /* gdk_input_list_devices returns an internal list, so we shouldn't
-     free it afterwards */
-  tmp_list = gdk_input_list_devices();
-
-  while (tmp_list)
-    {
-      GdkDeviceInfo *info = (GdkDeviceInfo *)tmp_list->data;
-
-      if (info->deviceid == current_device)
-	{
-	  need_cursor = !info->has_cursor;
-	  break;
-	}
-
-      tmp_list = tmp_list->next;
-    }
-}
+static GdkDevice *current_device;
 
 /* Erase the old cursor, and/or draw a new one, if necessary */
 static void
 update_cursor (GtkWidget *widget,  gdouble x, gdouble y)
 {
   static gint cursor_present = 0;
-  gint state = need_cursor && cursor_proximity;
+  gint state = !current_device->has_cursor && cursor_proximity;
 
   if (pixmap != NULL)
     {
@@ -170,21 +145,36 @@ draw_brush (GtkWidget *widget, GdkInputSource source,
 
 static guint32 motion_time;
 
+static void
+print_axes (GdkDevice *device, gdouble *axes)
+{
+  int i;
+  
+  if (axes)
+    {
+      g_print ("%s ", device->name);
+      
+      for (i=0; i<device->num_axes; i++)
+	g_print ("%g ", axes[i]);
+
+      g_print ("\n");
+    }
+}
+
 static gint
 button_press_event (GtkWidget *widget, GdkEventButton *event)
 {
-  if (event->deviceid != current_device)
-    {
-      current_device = event->deviceid;
-      check_cursor ();
-    }
-
+  current_device = event->device;
   cursor_proximity = TRUE;
 
   if (event->button == 1 && pixmap != NULL)
     {
-      draw_brush (widget, event->source, event->x, event->y,
-		  event->pressure);
+      gdouble pressure = 0.5;
+
+      print_axes (event->device, event->axes);
+      gdk_event_get_axis ((GdkEvent *)event, GDK_AXIS_PRESSURE, &pressure);
+      draw_brush (widget, event->device->source, event->x, event->y, pressure);
+      
       motion_time = event->time;
     }
 
@@ -207,47 +197,47 @@ key_press_event (GtkWidget *widget, GdkEventKey *event)
 static gint
 motion_notify_event (GtkWidget *widget, GdkEventMotion *event)
 {
-  GdkTimeCoord *coords;
-  int nevents;
+  GdkTimeCoord **events;
+  int n_events;
   int i;
 
-  if (event->deviceid != current_device)
-    {
-      current_device = event->deviceid;
-      check_cursor ();
-    }
-
+  current_device = event->device;
   cursor_proximity = TRUE;
 
   if (event->state & GDK_BUTTON1_MASK && pixmap != NULL)
     {
-      coords = gdk_input_motion_events (event->window, event->deviceid,
-					motion_time, event->time,
-					&nevents);
-      motion_time = event->time;
-      if (coords)
+      if (gdk_device_get_history (event->device, event->window, 
+				  motion_time, event->time,
+				  &events, &n_events))
 	{
-	  for (i=0; i<nevents; i++)
-	    draw_brush (widget,  event->source, coords[i].x, coords[i].y,
-			coords[i].pressure);
-	  g_free (coords);
+	  for (i=0; i<n_events; i++)
+	    {
+	      double x = 0, y = 0, pressure = 0.5;
+
+	      gdk_device_get_axis (event->device, events[i]->axes, GDK_AXIS_X, &x);
+	      gdk_device_get_axis (event->device, events[i]->axes, GDK_AXIS_Y, &y);
+	      gdk_device_get_axis (event->device, events[i]->axes, GDK_AXIS_PRESSURE, &pressure);
+	      draw_brush (widget,  event->device->source, x, y, pressure);
+
+	      print_axes (event->device, events[i]->axes);
+	    }
+	  gdk_device_free_history (events, n_events);
 	}
       else
 	{
-	  if (event->is_hint)
-	    gdk_input_window_get_pointer (event->window, event->deviceid,
-					  NULL, NULL, NULL, NULL, NULL, NULL);
-	  draw_brush (widget,  event->source, event->x, event->y,
-		      event->pressure);
+	  double pressure = 0.5;
+
+	  gdk_event_get_axis ((GdkEvent *)event, GDK_AXIS_PRESSURE, &pressure);
+
+	  draw_brush (widget,  event->device->source, event->x, event->y, pressure);
 	}
-    }
-  else
-    {
-      gdk_input_window_get_pointer (event->window, event->deviceid,
-				    &event->x, &event->y,
-				    NULL, NULL, NULL, NULL);
+      motion_time = event->time;
     }
 
+  if (event->is_hint)
+    gdk_device_get_state (event->device, event->window, NULL, NULL);
+
+  print_axes (event->device, event->axes);
   update_cursor (widget, event->x, event->y);
 
   return TRUE;
@@ -293,10 +283,8 @@ create_input_dialog (void)
 			  "clicked",
 			  (GtkSignalFunc)gtk_widget_hide,
 			  GTK_OBJECT(inputd));
-      gtk_widget_hide ( GTK_INPUT_DIALOG(inputd)->save_button);
+      gtk_widget_hide (GTK_INPUT_DIALOG(inputd)->save_button);
 
-      gtk_signal_connect (GTK_OBJECT(inputd), "enable_device",
-			  (GtkSignalFunc)check_cursor, NULL);
       gtk_widget_show (inputd);
     }
   else
@@ -324,6 +312,8 @@ main (int argc, char *argv[])
   GtkWidget *button;
 
   gtk_init (&argc, &argv);
+
+  current_device = gdk_core_pointer;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_widget_set_name (window, "Test Input");

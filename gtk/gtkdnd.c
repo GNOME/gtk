@@ -2716,13 +2716,10 @@ gtk_drag_end (GtkDragSourceInfo *info, guint32 time)
   send_event.button.time = time;
   send_event.button.x = 0;
   send_event.button.y = 0;
-  send_event.button.pressure = 0.;
-  send_event.button.xtilt = 0.;
-  send_event.button.ytilt = 0.;
+  send_event.button.axes = NULL;
   send_event.button.state = 0;
   send_event.button.button = info->button;
-  send_event.button.source = GDK_SOURCE_PEN;
-  send_event.button.deviceid = GDK_CORE_POINTER;
+  send_event.button.device = gdk_core_pointer;
   send_event.button.x_root = 0;
   send_event.button.y_root = 0;
 

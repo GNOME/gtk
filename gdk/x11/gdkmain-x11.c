@@ -267,15 +267,12 @@ gdk_pointer_grab (GdkWindow *	  window,
 	xevent_mask |= gdk_event_mask_table[i];
     }
   
-  if (gdk_input_vtable.grab_pointer)
-    return_val = gdk_input_vtable.grab_pointer (window,
-						owner_events,
-						event_mask,
-						confine_to,
-						time);
-  else
-    return_val = Success;
-  
+  return_val = _gdk_input_grab_pointer (window,
+					owner_events,
+					event_mask,
+					confine_to,
+					time);
+
   if (return_val == Success)
     {
       if (!GDK_WINDOW_DESTROYED (window))
@@ -315,8 +312,7 @@ gdk_pointer_grab (GdkWindow *	  window,
 void
 gdk_pointer_ungrab (guint32 time)
 {
-  if (gdk_input_vtable.ungrab_pointer)
-    gdk_input_vtable.ungrab_pointer (time);
+  _gdk_input_ungrab_pointer (time);
   
   XUngrabPointer (gdk_display, time);
   gdk_xgrab_window = NULL;

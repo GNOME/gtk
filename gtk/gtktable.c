@@ -538,19 +538,16 @@ gtk_table_attach (GtkTable	  *table,
   
   gtk_widget_set_parent (child, GTK_WIDGET (table));
   
-  if (GTK_WIDGET_VISIBLE (GTK_WIDGET (table)))
+  if (GTK_WIDGET_REALIZED (child->parent))
+    gtk_widget_realize (child);
+
+  if (GTK_WIDGET_VISIBLE (child->parent) && GTK_WIDGET_VISIBLE (child))
     {
-      if (GTK_WIDGET_REALIZED (GTK_WIDGET (table)) &&
-	  !GTK_WIDGET_REALIZED (child))
-	gtk_widget_realize (child);
-      
-      if (GTK_WIDGET_MAPPED (GTK_WIDGET (table)) &&
-	  !GTK_WIDGET_MAPPED (child))
+      if (GTK_WIDGET_MAPPED (child->parent))
 	gtk_widget_map (child);
+
+      gtk_widget_queue_resize (child);
     }
-  
-  if (GTK_WIDGET_VISIBLE (child) && GTK_WIDGET_VISIBLE (table))
-    gtk_widget_queue_resize (child);
 }
 
 void

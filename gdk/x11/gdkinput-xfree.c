@@ -28,83 +28,54 @@
 
 /* forward declarations */
 
-static gint gdk_input_xfree_set_mode (guint32 deviceid, GdkInputMode mode);
 static void gdk_input_check_proximity (void);
-static void gdk_input_xfree_configure_event (XConfigureEvent *xevent, 
-					     GdkWindow *window);
-static void gdk_input_xfree_enter_event (XCrossingEvent *xevent, 
-				       GdkWindow *window);
-static gint gdk_input_xfree_other_event (GdkEvent *event, 
-					 XEvent *xevent, 
-					 GdkWindow *window);
-static gint gdk_input_xfree_enable_window(GdkWindow *window, 
-					  GdkDevicePrivate *gdkdev);
-static gint gdk_input_xfree_disable_window(GdkWindow *window,
-					   GdkDevicePrivate *gdkdev);
-static gint gdk_input_xfree_grab_pointer (GdkWindow *     window,
-					  gint            owner_events,
-					  GdkEventMask    event_mask,
-					  GdkWindow *     confine_to,
-					  guint32         time);
-static void gdk_input_xfree_ungrab_pointer (guint32 time);
 
 void 
 gdk_input_init(void)
 {
-  gdk_input_vtable.set_mode           = gdk_input_xfree_set_mode;
-  gdk_input_vtable.set_axes           = gdk_input_common_set_axes;
-  gdk_input_vtable.set_key            = gdk_input_common_set_key;
-  gdk_input_vtable.motion_events      = gdk_input_common_motion_events;
-  gdk_input_vtable.get_pointer	      = gdk_input_common_get_pointer;
-  gdk_input_vtable.grab_pointer	      = gdk_input_xfree_grab_pointer;
-  gdk_input_vtable.ungrab_pointer     = gdk_input_xfree_ungrab_pointer;
-  gdk_input_vtable.configure_event    = gdk_input_xfree_configure_event;
-  gdk_input_vtable.enter_event        = gdk_input_xfree_enter_event;
-  gdk_input_vtable.other_event        = gdk_input_xfree_other_event;
-  gdk_input_vtable.window_none_event  = NULL;
-  gdk_input_vtable.enable_window      = gdk_input_xfree_enable_window;
-  gdk_input_vtable.disable_window     = gdk_input_xfree_disable_window;
-
   gdk_input_ignore_core = FALSE;
   gdk_input_common_init(FALSE);
 }
 
-static gint
-gdk_input_xfree_set_mode (guint32 deviceid, GdkInputMode mode)
+gboolean
+gdk_device_set_mode (GdkDevice      *device,
+		     GdkInputMode    mode)
 {
   GList *tmp_list;
   GdkDevicePrivate *gdkdev;
   GdkInputMode old_mode;
   GdkInputWindow *input_window;
 
-  gdkdev = gdk_input_find_device(deviceid);
-  g_return_val_if_fail (gdkdev != NULL,FALSE);
-  old_mode = gdkdev->info.mode;
+  if (GDK_IS_CORE (device))
+    return FALSE;
 
-  if (gdkdev->info.mode == mode)
+  gdkdev = (GdkDevicePrivate *)device;
+
+  if (device->mode == mode)
     return TRUE;
 
-  gdkdev->info.mode = mode;
+  old_mode = device->mode;
+  device->mode = mode;
 
   if (mode == GDK_MODE_WINDOW)
     {
-      gdkdev->info.has_cursor = FALSE;
+      device->has_cursor = FALSE;
       for (tmp_list = gdk_input_windows; tmp_list; tmp_list = tmp_list->next)
 	{
 	  input_window = (GdkInputWindow *)tmp_list->data;
 	  if (input_window->mode != GDK_EXTENSION_EVENTS_CURSOR)
-	    gdk_input_enable_window (input_window->window, gdkdev);
+	    _gdk_input_enable_window (input_window->window, gdkdev);
 	  else
 	    if (old_mode != GDK_MODE_DISABLED)
-	      gdk_input_disable_window (input_window->window, gdkdev);
+	      _gdk_input_disable_window (input_window->window, gdkdev);
 	}
     }
   else if (mode == GDK_MODE_SCREEN)
     {
-      gdkdev->info.has_cursor = TRUE;
+      device->has_cursor = TRUE;
       for (tmp_list = gdk_input_windows; tmp_list; tmp_list = tmp_list->next)
-	gdk_input_enable_window (((GdkInputWindow *)tmp_list->data)->window,
-				 gdkdev);
+	_gdk_input_enable_window (((GdkInputWindow *)tmp_list->data)->window,
+				  gdkdev);
     }
   else  /* mode == GDK_MODE_DISABLED */
     {
@@ -113,7 +84,7 @@ gdk_input_xfree_set_mode (guint32 deviceid, GdkInputMode mode)
 	  input_window = (GdkInputWindow *)tmp_list->data;
 	  if (old_mode != GDK_MODE_WINDOW ||
 	      input_window->mode != GDK_EXTENSION_EVENTS_CURSOR)
-	    gdk_input_disable_window (input_window->window, gdkdev);
+	    _gdk_input_disable_window (input_window->window, gdkdev);
 	}
     }
 
@@ -132,7 +103,7 @@ gdk_input_check_proximity (void)
       GdkDevicePrivate *gdkdev = (GdkDevicePrivate *)(tmp_list->data);
 
       if (gdkdev->info.mode != GDK_MODE_DISABLED 
-	  && gdkdev->info.deviceid != GDK_CORE_POINTER
+	  && !GDK_IS_CORE (gdkdev)
 	  && gdkdev->xdevice)
 	{
 	  XDeviceState *state = XQueryDeviceState(GDK_DISPLAY(),
@@ -163,8 +134,9 @@ gdk_input_check_proximity (void)
   gdk_input_ignore_core = new_proximity;
 }
 
-static void
-gdk_input_xfree_configure_event (XConfigureEvent *xevent, GdkWindow *window)
+void
+_gdk_input_configure_event (XConfigureEvent *xevent,
+			    GdkWindow       *window)
 {
   GdkInputWindow *input_window;
   gint root_x, root_y;
@@ -180,9 +152,9 @@ gdk_input_xfree_configure_event (XConfigureEvent *xevent, GdkWindow *window)
   input_window->root_y = root_y;
 }
 
-static void 
-gdk_input_xfree_enter_event (XCrossingEvent *xevent, 
-			     GdkWindow      *window)
+void 
+_gdk_input_enter_event (XCrossingEvent *xevent, 
+			GdkWindow      *window)
 {
   GdkInputWindow *input_window;
   gint root_x, root_y;
@@ -200,13 +172,13 @@ gdk_input_xfree_enter_event (XCrossingEvent *xevent,
   input_window->root_y = root_y;
 }
 
-static gint 
-gdk_input_xfree_other_event (GdkEvent *event, 
-			     XEvent *xevent, 
-			     GdkWindow *window)
+gint 
+_gdk_input_other_event (GdkEvent *event, 
+			XEvent *xevent, 
+			GdkWindow *window)
 {
   GdkInputWindow *input_window;
-
+  
   GdkDevicePrivate *gdkdev;
   gint return_val;
 
@@ -217,11 +189,10 @@ gdk_input_xfree_other_event (GdkEvent *event,
      but it's potentially faster than scanning through the types of
      every device. If we were deceived, then it won't match any of
      the types for the device anyways */
-  gdkdev = gdk_input_find_device(((XDeviceButtonEvent *)xevent)->deviceid);
+  gdkdev = gdk_input_find_device (((XDeviceButtonEvent *)xevent)->deviceid);
 
-  if (!gdkdev) {
+  if (!gdkdev)
     return -1;			/* we don't handle it - not an XInput event */
-  }
 
   /* FIXME: It would be nice if we could just get rid of the events 
      entirely, instead of having to ignore them */
@@ -243,27 +214,27 @@ gdk_input_xfree_other_event (GdkEvent *event,
   return return_val;
 }
 
-static gint
-gdk_input_xfree_enable_window(GdkWindow *window, GdkDevicePrivate *gdkdev)
+gboolean
+_gdk_input_enable_window(GdkWindow *window, GdkDevicePrivate *gdkdev)
 {
   /* FIXME: watchout, gdkdev might be core pointer, never opened */
   gdk_input_common_select_events (window, gdkdev);
   return TRUE;
 }
 
-static gint
-gdk_input_xfree_disable_window(GdkWindow *window, GdkDevicePrivate *gdkdev)
+gboolean
+_gdk_input_disable_window(GdkWindow *window, GdkDevicePrivate *gdkdev)
 {
   gdk_input_common_select_events (window, gdkdev);
   return TRUE;
 }
 
-static gint 
-gdk_input_xfree_grab_pointer (GdkWindow *     window,
-			      gint            owner_events,
-			      GdkEventMask    event_mask,
-			      GdkWindow *     confine_to,
-			      guint32         time)
+gint 
+_gdk_input_grab_pointer (GdkWindow *     window,
+			 gint            owner_events,
+			 GdkEventMask    event_mask,
+			 GdkWindow *     confine_to,
+			 guint32         time)
 {
   GdkInputWindow *input_window, *new_window;
   gboolean need_ungrab;
@@ -300,8 +271,7 @@ gdk_input_xfree_grab_pointer (GdkWindow *     window,
       while (tmp_list)
 	{
 	  gdkdev = (GdkDevicePrivate *)tmp_list->data;
-	  if (gdkdev->info.deviceid != GDK_CORE_POINTER &&
-	      gdkdev->xdevice)
+	  if (!GDK_IS_CORE (gdkdev) && gdkdev->xdevice)
 	    {
 	      gdk_input_common_find_events (window, gdkdev,
 					    event_mask,
@@ -326,7 +296,7 @@ gdk_input_xfree_grab_pointer (GdkWindow *     window,
       while (tmp_list)
 	{
 	  gdkdev = (GdkDevicePrivate *)tmp_list->data;
-	  if (gdkdev->info.deviceid != GDK_CORE_POINTER && gdkdev->xdevice &&
+	  if (!GDK_IS_CORE (gdkdev) && gdkdev->xdevice &&
 	      ((gdkdev->button_state != 0) || need_ungrab))
 	    {
 	      XUngrabDevice( gdk_display, gdkdev->xdevice, time);
@@ -341,8 +311,8 @@ gdk_input_xfree_grab_pointer (GdkWindow *     window,
       
 }
 
-static void 
-gdk_input_xfree_ungrab_pointer (guint32 time)
+void 
+_gdk_input_ungrab_pointer (guint32 time)
 {
   GdkInputWindow *input_window;
   GdkDevicePrivate *gdkdev;
@@ -365,10 +335,17 @@ gdk_input_xfree_ungrab_pointer (guint32 time)
       while (tmp_list)
 	{
 	  gdkdev = (GdkDevicePrivate *)tmp_list->data;
-	  if (gdkdev->info.deviceid != GDK_CORE_POINTER && gdkdev->xdevice)
+	  if (!GDK_IS_CORE (gdkdev) && gdkdev->xdevice)
 	    XUngrabDevice( gdk_display, gdkdev->xdevice, time);
 
 	  tmp_list = tmp_list->next;
 	}
     }
+}
+
+gint 
+_gdk_input_window_none_event (GdkEvent         *event,
+			     XEvent           *xevent)
+{
+  return -1;
 }

@@ -77,44 +77,31 @@ enum
 
 /* Forward declarations */
 
-static void gtk_input_dialog_class_init (GtkInputDialogClass *klass);
-static void gtk_input_dialog_init (GtkInputDialog *inputd);
-static GdkDeviceInfo *gtk_input_dialog_get_device_info(guint32 deviceid);
-static void gtk_input_dialog_set_device(GtkWidget *widget, gpointer data);
-static void gtk_input_dialog_set_mapping_mode(GtkWidget *w,
-					      gpointer data);
-static void gtk_input_dialog_set_axis(GtkWidget *widget, gpointer data);
-static void gtk_input_dialog_fill_axes (GtkInputDialog *inputd,
-					GdkDeviceInfo *info);
-static void gtk_input_dialog_set_key (GtkInputKeyInfo *key,
-				      guint keyval, 
-				      GdkModifierType modifiers);
-static gint gtk_input_dialog_key_press (GtkWidget *widget, 
-					GdkEventKey *event,
-					GtkInputKeyInfo *key);
-static void gtk_input_dialog_clear_key (GtkWidget *widget, 
-					GtkInputKeyInfo *key);
-static void gtk_input_dialog_destroy_key (GtkWidget *widget, 
-					  GtkInputKeyInfo *key);
-static void gtk_input_dialog_fill_keys (GtkInputDialog *inputd,
-					GdkDeviceInfo *info);
+static void gtk_input_dialog_class_init       (GtkInputDialogClass *klass);
+static void gtk_input_dialog_init             (GtkInputDialog      *inputd);
+static void gtk_input_dialog_set_device       (GtkWidget           *widget,
+					       gpointer             data);
+static void gtk_input_dialog_set_mapping_mode (GtkWidget           *w,
+					       gpointer             data);
+static void gtk_input_dialog_set_axis         (GtkWidget           *widget,
+					       gpointer             data);
+static void gtk_input_dialog_fill_axes        (GtkInputDialog      *inputd,
+					       GdkDevice           *info);
+static void gtk_input_dialog_set_key          (GtkInputKeyInfo     *key,
+					       guint                keyval,
+					       GdkModifierType      modifiers);
+static gint gtk_input_dialog_key_press        (GtkWidget           *widget,
+					       GdkEventKey         *event,
+					       GtkInputKeyInfo     *key);
+static void gtk_input_dialog_clear_key        (GtkWidget           *widget,
+					       GtkInputKeyInfo     *key);
+static void gtk_input_dialog_destroy_key      (GtkWidget           *widget,
+					       GtkInputKeyInfo     *key);
+static void gtk_input_dialog_fill_keys        (GtkInputDialog      *inputd,
+					       GdkDevice           *info);
 
 static GtkObjectClass *parent_class = NULL;
 static guint input_dialog_signals[LAST_SIGNAL] = { 0 };
-
-static GdkDeviceInfo *
-gtk_input_dialog_get_device_info(guint32 deviceid)
-{
-  GList *tmp_list = gdk_input_list_devices();
-  while (tmp_list)
-    {
-      if (((GdkDeviceInfo *)tmp_list->data)->deviceid == deviceid)
-	return (GdkDeviceInfo *)tmp_list->data;
-      tmp_list = tmp_list->next;
-    }
-
-  return NULL;
-}
 
 GtkType
 gtk_input_dialog_get_type (void)
@@ -156,16 +143,16 @@ gtk_input_dialog_class_init (GtkInputDialogClass *klass)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkInputDialogClass, enable_device),
-		    gtk_marshal_NONE__INT,
-		    GTK_TYPE_NONE, 1, GTK_TYPE_INT);
+		    gtk_marshal_NONE__POINTER,
+		    GTK_TYPE_NONE, 1, GTK_TYPE_POINTER);
 
   input_dialog_signals[DISABLE_DEVICE] =
     gtk_signal_new ("disable_device",
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkInputDialogClass, disable_device),
-		    gtk_marshal_NONE__INT,
-		    GTK_TYPE_NONE, 1, GTK_TYPE_INT);
+		    gtk_marshal_NONE__POINTER,
+		    GTK_TYPE_NONE, 1, GTK_TYPE_POINTER);
 
   gtk_object_class_add_signals (object_class, input_dialog_signals,
 				LAST_SIGNAL);
@@ -191,7 +178,7 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
   GList *tmp_list;
   GList *device_info;
 
-  device_info = gdk_input_list_devices();
+  device_info = gdk_devices_list ();
 
   /* shell and main vbox */
 
@@ -215,8 +202,8 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
       device_menu = gtk_menu_new ();
 
       for (tmp_list = device_info; tmp_list; tmp_list = tmp_list->next) {
-	GdkDeviceInfo *info = (GdkDeviceInfo *)(tmp_list->data);
-	if (info->deviceid != GDK_CORE_POINTER)
+	GdkDevice *info = (GdkDevice *)(tmp_list->data);
+	if (info != gdk_core_pointer)
 	  {
 	    menuitem = gtk_menu_item_new_with_label(info->name);
 
@@ -225,7 +212,7 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
 	    gtk_object_set_user_data (GTK_OBJECT (menuitem), inputd);
 	    gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
 				(GtkSignalFunc) gtk_input_dialog_set_device,
-				GUINT_TO_POINTER(info->deviceid));
+				info);
 	  }
       }
 
@@ -333,8 +320,7 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
 
       /* ...set_device expects to get input dialog from widget user data */
       gtk_object_set_user_data (GTK_OBJECT (inputd), inputd);
-      gtk_input_dialog_set_device(GTK_WIDGET(inputd), 
-          GUINT_TO_POINTER (((GdkDeviceInfo *)device_info->data)->deviceid));
+      gtk_input_dialog_set_device (GTK_WIDGET(inputd), device_info->data);
 
     }
 
@@ -374,44 +360,42 @@ gtk_input_dialog_new (void)
 static void
 gtk_input_dialog_set_device(GtkWidget *widget, gpointer data)
 {
-  guint32 deviceid = GPOINTER_TO_UINT(data);
-  GdkDeviceInfo *info;
+  GdkDevice *device = data;
 
   GtkInputDialog *inputd = GTK_INPUT_DIALOG(
                 gtk_object_get_user_data(GTK_OBJECT(widget)));
 
-  inputd->current_device = deviceid;
-  info = gtk_input_dialog_get_device_info (deviceid);
+  inputd->current_device = device;
 
-  gtk_input_dialog_fill_axes(inputd, info);
-  gtk_input_dialog_fill_keys(inputd, info);
+  gtk_input_dialog_fill_axes(inputd, device);
+  gtk_input_dialog_fill_keys(inputd, device);
 
   gtk_option_menu_set_history(GTK_OPTION_MENU(inputd->mode_optionmenu),
-			      info->mode);
+			      device->mode);
 }
 
 static void
-gtk_input_dialog_set_mapping_mode(GtkWidget *w,
-				  gpointer data)
+gtk_input_dialog_set_mapping_mode (GtkWidget *w,
+				   gpointer   data)
 {
   GtkInputDialog *inputd = GTK_INPUT_DIALOG(
                 gtk_object_get_user_data(GTK_OBJECT(w)));
-  GdkDeviceInfo *info = gtk_input_dialog_get_device_info (inputd->current_device);
+  GdkDevice *info = inputd->current_device;
   GdkInputMode old_mode = info->mode;
   GdkInputMode mode = GPOINTER_TO_INT (data);
 
   if (mode != old_mode)
     {
-      if (gdk_input_set_mode(inputd->current_device, mode))
+      if (gdk_device_set_mode (inputd->current_device, mode))
 	{
 	  if (mode == GDK_MODE_DISABLED)
 	    gtk_signal_emit (GTK_OBJECT (inputd),
 			     input_dialog_signals[DISABLE_DEVICE],
-			     info->deviceid);
+			     info);
 	  else
 	    gtk_signal_emit (GTK_OBJECT (inputd),
 			     input_dialog_signals[ENABLE_DEVICE],
-			     info->deviceid);
+			     info);
 	}
       else
 	gtk_option_menu_set_history (GTK_OPTION_MENU (inputd->mode_optionmenu),
@@ -428,7 +412,7 @@ gtk_input_dialog_set_axis(GtkWidget *widget, gpointer data)
   GdkAxisUse old_use;
   GdkAxisUse *new_axes;
   GtkInputDialog *inputd = GTK_INPUT_DIALOG (gtk_object_get_user_data (GTK_OBJECT (widget)));
-  GdkDeviceInfo *info = gtk_input_dialog_get_device_info (inputd->current_device);
+  GdkDevice *info = inputd->current_device;
 
   gint axis = (GPOINTER_TO_INT(data) >> 16) - 1;
   gint old_axis;
@@ -438,13 +422,13 @@ gtk_input_dialog_set_axis(GtkWidget *widget, gpointer data)
   old_axis = -1;
   for (i=0;i<info->num_axes;i++)
     {
-      new_axes[i] = info->axes[i];
-      if (info->axes[i] == use)
+      new_axes[i] = info->axes[i].use;
+      if (info->axes[i].use == use)
 	old_axis = i;
     }
 
   if (axis != -1)
-    old_use = info->axes[axis];
+    old_use = info->axes[axis].use;
   else
     old_use = GDK_AXIS_IGNORE;
 
@@ -462,10 +446,10 @@ gtk_input_dialog_set_axis(GtkWidget *widget, gpointer data)
   else
     {
       if (axis != -1)
-	new_axes[axis] = use;
+	gdk_device_set_axis_use (info, axis, use);
 
       if (old_axis != -1)
-	new_axes[old_axis] = old_use;
+	gdk_device_set_axis_use (info, old_axis, old_use);
 
       if (old_use != GDK_AXIS_IGNORE)
 	{
@@ -473,14 +457,13 @@ gtk_input_dialog_set_axis(GtkWidget *widget, gpointer data)
 		GTK_OPTION_MENU (inputd->axis_items[old_use]),
 		old_axis + 1);
 	}
-      gdk_input_set_axes (info->deviceid, new_axes);
     }
 
   g_free (new_axes);
 }
 
 static void
-gtk_input_dialog_fill_axes(GtkInputDialog *inputd, GdkDeviceInfo *info)
+gtk_input_dialog_fill_axes(GtkInputDialog *inputd, GdkDevice *info)
 {
   static const char *axis_use_strings[GDK_AXIS_LAST] =
   {
@@ -489,7 +472,8 @@ gtk_input_dialog_fill_axes(GtkInputDialog *inputd, GdkDeviceInfo *info)
     N_("Y"),
     N_("Pressure"),
     N_("X Tilt"),
-    N_("Y Tilt")
+    N_("Y Tilt"),
+    N_("Wheel")
   };
 
   int i,j;
@@ -550,7 +534,7 @@ gtk_input_dialog_fill_axes(GtkInputDialog *inputd, GdkDeviceInfo *info)
       gtk_widget_show (option_menu);
       gtk_option_menu_set_menu (GTK_OPTION_MENU (option_menu), menu);
       for (j = 0; j < info->num_axes; j++)
-	if (info->axes[j] == (GdkAxisUse) i)
+	if (info->axes[j].use == (GdkAxisUse) i)
 	  {
 	    gtk_option_menu_set_history (GTK_OPTION_MENU (option_menu), j+1);
 	    break;
@@ -564,7 +548,7 @@ static void
 gtk_input_dialog_clear_key (GtkWidget *widget, GtkInputKeyInfo *key)
 {
   gtk_entry_set_text (GTK_ENTRY(key->entry), _("(disabled)"));
-  gdk_input_set_key (key->inputd->current_device, key->index, 0, 0);
+  gdk_device_set_key (key->inputd->current_device, key->index, 0, 0);
 }
 
 static void 
@@ -609,8 +593,8 @@ gtk_input_dialog_key_press (GtkWidget *widget,
 			    GtkInputKeyInfo *key)
 {
   gtk_input_dialog_set_key (key, event->keyval, event->state & 0xFF);
-  gdk_input_set_key (key->inputd->current_device, key->index, 
-		     event->keyval, event->state & 0xFF);
+  gdk_device_set_key (key->inputd->current_device, key->index, 
+		      event->keyval, event->state & 0xFF);
 
   gtk_signal_emit_stop_by_name (GTK_OBJECT(widget), "key_press_event");
   
@@ -624,7 +608,7 @@ gtk_input_dialog_destroy_key (GtkWidget *widget, GtkInputKeyInfo *key)
 }
 
 static void
-gtk_input_dialog_fill_keys(GtkInputDialog *inputd, GdkDeviceInfo *info)
+gtk_input_dialog_fill_keys(GtkInputDialog *inputd, GdkDevice *info)
 {
   int i;
   GtkWidget *label;

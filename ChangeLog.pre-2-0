@@ -1,3 +1,39 @@
+Mon Jul  3 14:24:16 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_draw): Ignore calls with
+	<= width or height.
+
+	* gtk/gtktable.c (gtk_table_attach): Fix missed merge
+	from 1.2 for parent/child states.
+
+	* gdk/gdkgc.c (gdk_gc_set_rgb_fg/bg_color): Fix a couple
+	of typos.
+
+	* gdk/gdkevents.[ch]: Remove press/xtilt/ytilt fields of
+	event structures, replace with a generic axes field. Replace 
+	deviceid/sourec with GdkDevice *device.
+
+	* gdk/gdkevents.[ch] (gdk_event_get_axis): Add function
+	to extract particular axis use value from event. (Also
+	can be used for normal X/Y.)
+
+	* gdk/gdkinput.h gdk/x11/gdkinput*: Major revision;
+	allow for arbitrary number of axes, namespace everything
+	as gdk_device_*. Replace guint32 deviceid with GdkDevice *
+	everywhere.
+
+	* gdk/x11/{gdkmain-x11.c,gdkevent-x11.c,gdkinput*}: 
+	Get rid of the gdk_input_vtable setup if favor of simply
+	defining the functions in gdkinput-none/gxi/xfree.c in
+	a similar fashion to the way that the port structure is 
+	done.
+
+	* gtk/gtkdnd.c: Fix fields of synthesized button press event
+	for new event structures. 
+
+	* gtk/gtkinputdialog.c gtk/testinput.c: Revise to match
+	new device interfaces.
+
 Sun Jul  2 18:19:50 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.[ch] (gtk_widget_create_pango_layout): Add a 'text' argument to

@@ -231,13 +231,10 @@ struct _GdkEventMotion
   guint32 time;
   gdouble x;
   gdouble y;
-  gdouble pressure;
-  gdouble xtilt;
-  gdouble ytilt;
+  gdouble *axes;
   guint state;
   gint16 is_hint;
-  GdkInputSource source;
-  guint32 deviceid;
+  GdkDevice *device;
   gdouble x_root, y_root;
 };
 
@@ -249,13 +246,10 @@ struct _GdkEventButton
   guint32 time;
   gdouble x;
   gdouble y;
-  gdouble pressure;
-  gdouble xtilt;
-  gdouble ytilt;
+  gdouble *axes;
   guint state;
   guint button;
-  GdkInputSource source;
-  guint32 deviceid;
+  GdkDevice *device;
   gdouble x_root, y_root;
 };
 
@@ -267,13 +261,9 @@ struct _GdkEventScroll
   guint32 time;
   gdouble x;
   gdouble y;
-  gdouble pressure;
-  gdouble xtilt;
-  gdouble ytilt;
   guint state;
   GdkScrollDirection direction;
-  GdkInputSource source;
-  guint32 deviceid;
+  GdkDevice *device;
   gdouble x_root, y_root;
 };
 
@@ -355,8 +345,7 @@ struct _GdkEventProximity
   GdkWindow *window;
   gint8 send_event;
   guint32 time;
-  GdkInputSource source;
-  guint32 deviceid;
+  GdkDevice *device;
 };
 
 struct _GdkEventClient
@@ -416,6 +405,9 @@ void      gdk_event_put	 		(GdkEvent  	*event);
 GdkEvent* gdk_event_copy     		(GdkEvent 	*event);
 void	  gdk_event_free     		(GdkEvent 	*event);
 guint32   gdk_event_get_time 		(GdkEvent 	*event);
+gboolean  gdk_event_get_axis            (GdkEvent       *event,
+					 GdkAxisUse      axis_use,
+					 gdouble        *value);
 
 void	  gdk_event_handler_set 	(GdkEventFunc    func,
 					 gpointer        data,

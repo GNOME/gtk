@@ -377,6 +377,17 @@ gdk_event_free (GdkEvent *event)
     case GDK_DROP_FINISHED:
       gdk_drag_context_unref (event->dnd.context);
       break;
+
+    case GDK_BUTTON_PRESS:
+    case GDK_BUTTON_RELEASE:
+      if (event->button.axes)
+	g_free (event->button.axes);
+      break;
+
+    case GDK_MOTION_NOTIFY:
+      if (event->motion.axes)
+	g_free (event->motion.axes);
+      break;
       
     default:
       break;
@@ -438,6 +449,80 @@ gdk_event_get_time (GdkEvent *event)
       }
   
   return GDK_CURRENT_TIME;
+}
+
+/**
+ * gdk_event_get_axis:
+ * @event: a #GdkEvent
+ * @axis_use: the axis use to look for
+ * @value: location to store the value found
+ * 
+ * Extract the axis value for a particular axis use from
+ * an event structure.
+ * 
+ * Return value: %TRUE if the specified axis was found, otherwise %FALSE
+ **/
+gboolean
+gdk_event_get_axis (GdkEvent   *event,
+		    GdkAxisUse  axis_use,
+		    gdouble    *value)
+{
+  gdouble *axes;
+  GdkDevice *device;
+  
+  g_return_val_if_fail (event != NULL, FALSE);
+  
+  if (axis_use == GDK_AXIS_X || axis_use == GDK_AXIS_Y)
+    {
+      gdouble x, y;
+      
+      switch (event->type)
+	{
+	case GDK_MOTION_NOTIFY:
+	  x = event->motion.x;
+	  y = event->motion.y;
+	  break;
+	case GDK_SCROLL:
+	  x = event->scroll.x;
+	  y = event->scroll.y;
+	  break;
+	case GDK_BUTTON_PRESS:
+	case GDK_BUTTON_RELEASE:
+	  x = event->button.x;
+	  y = event->button.y;
+	  break;
+	case GDK_ENTER_NOTIFY:
+	case GDK_LEAVE_NOTIFY:
+	  x = event->crossing.x;
+	  y = event->crossing.y;
+	  break;
+	  
+	default:
+	  return FALSE;
+	}
+
+      if (axis_use == GDK_AXIS_X && value)
+	*value = x;
+      if (axis_use == GDK_AXIS_Y && value)
+	*value = y;
+
+      return TRUE;
+    }
+  else if (event->type == GDK_BUTTON_PRESS ||
+	   event->type == GDK_BUTTON_RELEASE)
+    {
+      device = event->button.device;
+      axes = event->button.axes;
+    }
+  else if (event->type == GDK_MOTION_NOTIFY)
+    {
+      device = event->motion.device;
+      axes = event->motion.axes;
+    }
+  else
+    return FALSE;
+
+  return gdk_device_get_axis (device, axes, axis_use, value);
 }
 
 /*
