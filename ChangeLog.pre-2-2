@@ -1,3 +1,15 @@
+Wed Nov 14 17:40:23 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_get_expander_column): Return
+	the currently selected column when we get the column, #64380
+
+	* gtk/gtkentry.c (gtk_cell_editable_key_press_event): Handle Esc
+	to cancel CellRendererText editting, #63613
+
+	* gtk/gtkcellrenderertext.c: ditto
+
+	* gtk/gtkcellrenderertext.h: formatting changes
+
 2001-11-14  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/gtkbutton.c (gtk_button_get_label): Rearrange docs (#64566)

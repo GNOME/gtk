@@ -910,8 +910,9 @@ gtk_entry_init (GtkEntry *entry)
   entry->dnd_position = -1;
   entry->width_chars = -1;
   entry->is_cell_renderer = FALSE;
+  entry->editing_canceled = FALSE;
   entry->has_frame = TRUE;
-  
+
   gtk_drag_dest_set (GTK_WIDGET (entry),
                      GTK_DEST_DEFAULT_HIGHLIGHT,
                      target_table, G_N_ELEMENTS (target_table),
@@ -1838,6 +1839,7 @@ gtk_cell_editable_key_press_event (GtkEntry    *entry,
 {
     if (key_event->keyval == GDK_Escape)
       {
+	entry->editing_canceled = TRUE;
 	gtk_cell_editable_editing_done (GTK_CELL_EDITABLE (entry));
 	gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE (entry));
 

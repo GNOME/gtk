@@ -1322,6 +1322,9 @@ gtk_cell_renderer_text_editing_done (GtkCellEditable *entry,
   const gchar *path;
   const gchar *new_text;
 
+  if (GTK_ENTRY (entry)->editing_canceled)
+    return;
+
   path = g_object_get_data (G_OBJECT (entry), GTK_CELL_RENDERER_TEXT_PATH);
   new_text = gtk_entry_get_text (GTK_ENTRY (entry));
 

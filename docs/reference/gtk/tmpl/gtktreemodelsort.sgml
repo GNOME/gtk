@@ -36,3 +36,8 @@ GtkTreeModelSort
 @Returns: 
 
 
+<!-- ##### ARG GtkTreeModelSort:model ##### -->
+<para>
+
+</para>
+

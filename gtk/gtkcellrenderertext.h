@@ -58,7 +58,6 @@ struct _GtkCellRendererText
 
   guint strikethrough : 1;
 
-  /* editable feature doesn't work */
   guint editable  : 1;
 
   guint scale_set : 1;
@@ -81,8 +80,8 @@ struct _GtkCellRendererTextClass
   GtkCellRendererClass parent_class;
 
   void (* edited) (GtkCellRendererText *cell_renderer_text,
-		   const gchar               *path,
-		   const gchar               *new_text);
+		   const gchar         *path,
+		   const gchar         *new_text);
 };
 
 GtkType          gtk_cell_renderer_text_get_type (void);
