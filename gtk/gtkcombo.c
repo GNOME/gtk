@@ -1109,13 +1109,13 @@ gtk_combo_set_use_arrows_always (GtkCombo * combo, gboolean val)
 }
 
 void
-gtk_combo_set_popdown_strings (GtkCombo * combo, GList * strings)
+gtk_combo_set_popdown_strings (GtkCombo *combo, 
+			       GList    *strings)
 {
   GList *list;
   GtkWidget *li;
 
   g_return_if_fail (GTK_IS_COMBO (combo));
-  g_return_if_fail (strings != NULL);
 
   gtk_combo_popdown_list (combo);
 

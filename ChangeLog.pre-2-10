@@ -1,3 +1,8 @@
+Fri Jan 30 00:13:46 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombo.c (gtk_combo_set_popdown_strings): Allow NULL
+	for strings to clear the list.  (#105386, Marco Pesenti Gritti)
+	
 2004-01-28  Richard Hult  <richard@imendio.com>
 
 	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_get_size):

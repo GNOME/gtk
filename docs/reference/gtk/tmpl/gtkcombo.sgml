@@ -146,7 +146,7 @@ Convenience function to set all of the items in the popup list.
 </para>
 
 @combo: a #GtkCombo.
-@strings: a list of strings.
+@strings: a list of strings, or %NULL to clear the popup list
 
 
 <!-- ##### FUNCTION gtk_combo_set_value_in_list ##### -->
