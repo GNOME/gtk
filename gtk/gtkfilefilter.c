@@ -36,6 +36,7 @@ typedef struct _FilterRule FilterRule;
 typedef enum {
   FILTER_RULE_PATTERN,
   FILTER_RULE_MIME_TYPE,
+  FILTER_RULE_PIXBUF_FORMATS,
   FILTER_RULE_CUSTOM
 } FilterRuleType;
 
@@ -62,6 +63,7 @@ struct _FilterRule
   union {
     gchar *pattern;
     gchar *mime_type;
+    GSList *pixbuf_formats;
     struct {
       GtkFileFilterFunc func;
       gpointer data;
@@ -126,6 +128,9 @@ filter_rule_free (FilterRule *rule)
     case FILTER_RULE_CUSTOM:
       if (rule->u.custom.notify)
 	rule->u.custom.notify (rule->u.custom.data);
+      break;
+    case FILTER_RULE_PIXBUF_FORMATS:
+      g_slist_free (rule->u.pixbuf_formats);
       break;
     default:
       g_assert_not_reached ();
@@ -278,6 +283,30 @@ gtk_file_filter_add_pattern (GtkFileFilter *filter,
 }
 
 /**
+ * gtk_file_filter_add_pixbuf_formats:
+ * @filter: a #GtkFileFilter
+ * 
+ * Adds a rule allowing image files in the formats supported
+ * by GdkPixbuf.
+ * 
+ * Since: 2.6
+ **/
+void
+gtk_file_filter_add_pixbuf_formats (GtkFileFilter *filter)
+{
+  FilterRule *rule;
+  
+  g_return_if_fail (GTK_IS_FILE_FILTER (filter));
+
+  rule = g_new (FilterRule, 1);
+  rule->type = FILTER_RULE_PIXBUF_FORMATS;
+  rule->needed = GTK_FILE_FILTER_MIME_TYPE;
+  rule->u.pixbuf_formats = gdk_pixbuf_get_formats ();
+  file_filter_add_rule (filter, rule);
+}
+
+
+/**
  * gtk_file_filter_add_custom:
  * @filter: a #GtkFileFilter
  * @needed: bitfield of flags indicating the information that the custom
@@ -382,6 +411,30 @@ gtk_file_filter_filter (GtkFileFilter           *filter,
 	      _gtk_fnmatch (rule->u.pattern, filter_info->display_name, FALSE))
 	    return TRUE;
 	  break;
+	case FILTER_RULE_PIXBUF_FORMATS:
+	  {
+	    GSList *list;
+
+	    for (list = rule->u.pixbuf_formats; list; list = list->next)
+	      {
+		int i;
+		gchar **mime_types;
+
+		mime_types = gdk_pixbuf_format_get_mime_types (list->data);
+
+		for (i = 0; mime_types[i] != NULL; i++)
+		  {
+		    if (strcmp (mime_types[i], filter_info->mime_type) == 0)
+		      {
+			g_strfreev (mime_types);
+			return TRUE;
+		      }
+		  }
+
+		g_strfreev (mime_types);
+	      }
+	    break;
+	  }
 	case FILTER_RULE_CUSTOM:
 	  if (rule->u.custom.func (filter_info, rule->u.custom.data))
 	    return TRUE;

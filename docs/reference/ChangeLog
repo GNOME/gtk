@@ -1,3 +1,7 @@
+2004-11-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-sections.txt: Add gtk_file_filter_add_pixbuf_formats.
+
 2004-11-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkaboutdialog.sgml: 

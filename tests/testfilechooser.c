@@ -95,6 +95,13 @@ no_backup_files_filter (const GtkFileFilterInfo *filter_info,
     return 1;
 }
 
+static void
+filter_changed (GtkFileChooserDialog *dialog,
+		gpointer              data)
+{
+  g_print ("file filter changed\n");
+}
+
 static char *
 format_time (time_t t)
 {
@@ -403,6 +410,10 @@ main (int argc, char **argv)
   
   gtk_init (&argc, &argv);
 
+  /* to test rtl layout, set RTL=1 in the environment */
+  if (g_getenv ("RTL"))
+    gtk_widget_set_default_direction (GTK_TEXT_DIR_RTL);
+  
   action = GTK_FILE_CHOOSER_ACTION_OPEN;
 
   /* lame-o arg parsing */
@@ -466,6 +477,9 @@ main (int argc, char **argv)
   gtk_file_filter_add_mime_type (filter, "image/png");
   gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
 
+  g_signal_connect (dialog, "notify::filter", 
+		    G_CALLBACK (filter_changed), NULL);
+
   /* Make this filter the default */
   gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), filter);
   
@@ -475,11 +489,16 @@ main (int argc, char **argv)
   gtk_file_filter_add_mime_type (filter, "image/png");
   gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
 
+  filter = gtk_file_filter_new ();
+  gtk_file_filter_set_name (filter, "Images");
+  gtk_file_filter_add_pixbuf_formats (filter);
+  gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
+  
   /* Preview widget */
   /* THIS IS A TERRIBLE PREVIEW WIDGET, AND SHOULD NOT BE COPIED AT ALL.
    */
   preview_vbox = gtk_vbox_new (0, FALSE);
-  /*  gtk_file_chooser_set_preview_widget (GTK_FILE_CHOOSER (dialog), preview_vbox);*/
+  /*gtk_file_chooser_set_preview_widget (GTK_FILE_CHOOSER (dialog), preview_vbox);*/
   
   preview_label = gtk_label_new (NULL);
   gtk_box_pack_start (GTK_BOX (preview_vbox), preview_label, TRUE, TRUE, 0);

@@ -1311,6 +1311,7 @@ gtk_file_filter_set_name
 gtk_file_filter_get_name
 gtk_file_filter_add_mime_type
 gtk_file_filter_add_pattern
+gtk_file_filter_add_pixbuf_formats
 gtk_file_filter_add_custom
 gtk_file_filter_get_needed
 gtk_file_filter_filter

@@ -1,5 +1,12 @@
 2004-11-07  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilefilter.h:
+	* gtk/gtkfilefilter.c (gtk_file_filter_add_pixbuf_formats): 
+	New convenience function to add a filter for image files
+	which can be loaded by GdkPixbuf. (#145388, Anders Carlsson)
+
+	* tests/testfilechooser.c: Test the image filter.
+	
 	* gtk/gtkmenu.c (menu_change_screen): Remove some warnings.
 
 	Show files in folder modes. (#157013, Nickolay V. Shmyrev)
