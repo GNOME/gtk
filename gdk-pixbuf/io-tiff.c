@@ -145,34 +145,14 @@ static void free_buffer (guchar *pixels, gpointer data)
 	g_free (pixels);
 }
 
-static tileContigRoutine tiff_put_contig;
-static tileSeparateRoutine tiff_put_separate;
-
-/* We're lucky that TIFFRGBAImage uses the same RGBA packing
-   as gdk-pixbuf, thus we can simple reuse the default libtiff
-   put routines, only adjusting the coordinate system.
- */ 
-static void
-put_contig (TIFFRGBAImage *img, uint32 *raster,
-            uint32 x, uint32 y, uint32 w, uint32 h,
-            int32 fromskew, int32 toskew, unsigned char *cp) 
+static gboolean tifflibversion (int *major, int *minor, int *revision)
 {
-        uint32 *data = raster - y * img->width - x;
+        if (sscanf (TIFFGetVersion(), 
+                    "LIBTIFF, Version %d.%d.%d", 
+                    major, minor, revision) < 3)
+                return FALSE;
 
-        tiff_put_contig (img, data + img->width * (img->height - 1 - y) + x, 
-                         x, y, w, h, fromskew, -toskew - 2*(int32)w, cp);
-}
-
-static void
-put_separate (TIFFRGBAImage *img, uint32 *raster,
-              uint32 x, uint32 y, uint32 w, uint32 h,
-              int32 fromskew, int32 toskew, 
-              unsigned char* r, unsigned char* g, unsigned char* b, unsigned char* a)
-{
-        uint32 *data = raster - y * img->width - x;
-
-        tiff_put_separate (img, data + img->width * (img->height - 1 - y) + x, 
-                           x, y, w, h, fromskew, -toskew - 2*w, r, g, b, a);
+        return TRUE;
 }
 
 static GdkPixbuf *
@@ -181,8 +161,9 @@ tiff_image_parse (TIFF *tiff, TiffContext *context, GError **error)
 	guchar *pixels = NULL;
 	gint width, height, rowstride, bytes;
 	GdkPixbuf *pixbuf;
-        TIFFRGBAImage img;
-        gchar emsg[1024];
+#if TIFFLIB_VERSION >= 20031226
+        gint major, minor, revision;
+#endif
 
         /* We're called with the lock held. */
         
@@ -263,49 +244,89 @@ tiff_image_parse (TIFF *tiff, TiffContext *context, GError **error)
 	if (context)
 		(* context->prepare_func) (pixbuf, NULL, context->user_data);
         G_LOCK (tiff_loader);
-                
-        if (!TIFFRGBAImageBegin (&img, tiff, 1, emsg) || global_error) {
-                tiff_set_error (error,
-                                GDK_PIXBUF_ERROR_FAILED,
-                                _("Failed to load RGB data from TIFF file"));
-                g_object_unref (pixbuf);
-                return NULL;
-        }
 
-        if (img.put.any == NULL) {
-                tiff_set_error (error,
-                                GDK_PIXBUF_ERROR_FAILED,
-                                _("Unsupported TIFF variant"));
-                g_object_unref (pixbuf);
-                return NULL;                
-        }
-        
-        if (img.isContig) {
-                tiff_put_contig = img.put.contig;
-                img.put.contig = put_contig;
-        }
-        else {
-                tiff_put_separate = img.put.separate;
-                img.put.separate = put_separate;
-        }
-
-        TIFFRGBAImageGet (&img, (uint32 *)pixels, width, height);
-        TIFFRGBAImageEnd (&img);
+#if TIFFLIB_VERSION >= 20031226
+        if (tifflibversion(&major, &minor, &revision) && major == 3 &&
+            (minor > 6 || (minor == 6 && revision > 0))) {                
+                if (!TIFFReadRGBAImageOriented (tiff, width, height, (uint32 *)pixels, ORIENTATION_TOPLEFT, 1) || global_error) 
+                {
+                        tiff_set_error (error,
+                                        GDK_PIXBUF_ERROR_FAILED,
+                                        _("Failed to load RGB data from TIFF file"));
+                        g_object_unref (pixbuf);
+                        return NULL;
+                }
 
 #if G_BYTE_ORDER == G_BIG_ENDIAN
-/* Turns out that the packing used by TIFFRGBAImage depends on the host byte order... */ 
-        while (pixels < pixbuf->pixels + bytes) {
-                uint32 pixel = *(uint32 *)pixels;
-                int r = TIFFGetR(pixel);
-                int g = TIFFGetG(pixel);
-                int b = TIFFGetB(pixel);
-                int a = TIFFGetA(pixel);
-                *pixels++ = r;
-                *pixels++ = g;
-                *pixels++ = b;
-                *pixels++ = a;
-        }
+                /* Turns out that the packing used by TIFFRGBAImage depends on 
+                 * the host byte order... 
+                 */ 
+                while (pixels < pixbuf->pixels + bytes) {
+                        uint32 pixel = *(uint32 *)pixels;
+                        int r = TIFFGetR(pixel);
+                        int g = TIFFGetG(pixel);
+                        int b = TIFFGetB(pixel);
+                        int a = TIFFGetA(pixel);
+                        *pixels++ = r;
+                        *pixels++ = g;
+                        *pixels++ = b;
+                        *pixels++ = a;
+                }
 #endif
+        }
+        else 
+#endif
+              {
+                uint32 *rast, *tmp_rast;
+                gint x, y;
+                guchar *tmppix;
+
+                /* Yes, it needs to be _TIFFMalloc... */
+                rast = (uint32 *) _TIFFmalloc (width * height * sizeof (uint32));
+                if (!rast) {
+                        g_set_error (error,
+                                     GDK_PIXBUF_ERROR,
+                                     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                     _("Insufficient memory to open TIFF file"));
+                        g_object_unref (pixbuf);
+                        
+                        return NULL;
+                }
+                if (!TIFFReadRGBAImage (tiff, width, height, rast, 1) || global_error) {
+                        tiff_set_error (error,
+                                        GDK_PIXBUF_ERROR_FAILED,
+                                        _("Failed to load RGB data from TIFF file"));
+                        g_object_unref (pixbuf);
+                        _TIFFfree (rast);
+                        
+                        return NULL;
+                }
+                
+                pixels = gdk_pixbuf_get_pixels (pixbuf);
+                
+                g_assert (pixels);
+                
+                tmppix = pixels;
+                
+                for (y = 0; y < height; y++) {
+                        /* Unexplainable...are tiffs backwards? */
+                        /* Also looking at the GIMP plugin, this
+                         * whole reading thing can be a bit more
+                         * robust.
+                         */
+                        tmp_rast = rast + ((height - y - 1) * width);
+                        for (x = 0; x < width; x++) {
+                                tmppix[0] = TIFFGetR (*tmp_rast);
+                                tmppix[1] = TIFFGetG (*tmp_rast);
+                                tmppix[2] = TIFFGetB (*tmp_rast);
+                                tmppix[3] = TIFFGetA (*tmp_rast);
+                                tmp_rast++;
+                                tmppix += 4;
+                        }
+                }
+                
+                _TIFFfree (rast);
+             }
 
         G_UNLOCK (tiff_loader);
 	if (context)
