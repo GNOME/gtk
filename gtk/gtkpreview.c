@@ -312,13 +312,13 @@ gtk_preview_put (GtkPreview   *preview,
 
   widget = GTK_WIDGET (preview);
 
-  r1.x = srcx;
-  r1.y = srcy;
+  r1.x = 0;
+  r1.y = 0;
   r1.width = preview->buffer_width;
   r1.height = preview->buffer_height;
 
-  r2.x = destx;
-  r2.y = desty;
+  r2.x = srcx;
+  r2.y = srcy;
   r2.width = width;
   r2.height = height;
 
@@ -418,7 +418,9 @@ gtk_preview_put (GtkPreview   *preview,
 	    }
 
 	  gdk_draw_image (window, gc,
-			  image, 0, 0, x, y,
+			  image, 0, 0,
+			  destx + (r3.x - srcx) + (x - r3.x),
+			  desty + (r3.y - srcy) + (y - r3.y),
 			  xe - x, ye - y);
 	  gdk_flush ();
 	}
@@ -693,15 +695,17 @@ gtk_preview_expose (GtkWidget      *widget,
   if (GTK_WIDGET_DRAWABLE (widget))
     {
       preview = GTK_PREVIEW (widget);
-
+      
       gtk_preview_put (GTK_PREVIEW (widget),
 		       widget->window, widget->style->black_gc,
-		       (widget->allocation.width - preview->buffer_width) / 2,
-		       (widget->allocation.height - preview->buffer_height) / 2,
+		       event->area.x -
+		       (widget->allocation.width - preview->buffer_width)/2,
+		       event->area.y -
+		       (widget->allocation.height - preview->buffer_height)/2,
 		       event->area.x, event->area.y,
 		       event->area.width, event->area.height);
     }
-
+  
   return FALSE;
 }
 

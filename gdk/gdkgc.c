@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
@@ -28,9 +28,9 @@ gdk_gc_new (GdkWindow *window)
 }
 
 GdkGC*
-gdk_gc_new_with_values (GdkWindow       *window,
-			GdkGCValues     *values,
-			GdkGCValuesMask  values_mask)
+gdk_gc_new_with_values (GdkWindow	*window,
+			GdkGCValues	*values,
+			GdkGCValuesMask	 values_mask)
 {
   GdkWindowPrivate *window_private;
   GdkGC *gc;
@@ -366,7 +366,7 @@ gdk_gc_get_values (GdkGC       *gc,
 }
 
 void
-gdk_gc_set_foreground (GdkGC    *gc,
+gdk_gc_set_foreground (GdkGC	*gc,
 		       GdkColor *color)
 {
   GdkGCPrivate *private;
@@ -379,7 +379,7 @@ gdk_gc_set_foreground (GdkGC    *gc,
 }
 
 void
-gdk_gc_set_background (GdkGC    *gc,
+gdk_gc_set_background (GdkGC	*gc,
 		       GdkColor *color)
 {
   GdkGCPrivate *private;
@@ -392,7 +392,7 @@ gdk_gc_set_background (GdkGC    *gc,
 }
 
 void
-gdk_gc_set_font (GdkGC   *gc,
+gdk_gc_set_font (GdkGC	 *gc,
 		 GdkFont *font)
 {
   GdkGCPrivate *gc_private;
@@ -412,7 +412,7 @@ gdk_gc_set_font (GdkGC   *gc,
 }
 
 void
-gdk_gc_set_function (GdkGC       *gc,
+gdk_gc_set_function (GdkGC	 *gc,
 		     GdkFunction  function)
 {
   GdkGCPrivate *private;
@@ -436,7 +436,7 @@ gdk_gc_set_function (GdkGC       *gc,
 }
 
 void
-gdk_gc_set_fill (GdkGC   *gc,
+gdk_gc_set_fill (GdkGC	 *gc,
 		 GdkFill  fill)
 {
   GdkGCPrivate *private;
@@ -463,7 +463,7 @@ gdk_gc_set_fill (GdkGC   *gc,
 }
 
 void
-gdk_gc_set_tile (GdkGC     *gc,
+gdk_gc_set_tile (GdkGC	   *gc,
 		 GdkPixmap *tile)
 {
   GdkGCPrivate *private;
@@ -535,7 +535,7 @@ gdk_gc_set_clip_origin (GdkGC *gc,
 }
 
 void
-gdk_gc_set_clip_mask (GdkGC     *gc,
+gdk_gc_set_clip_mask (GdkGC	*gc,
 		      GdkBitmap *mask)
 {
   GdkGCPrivate *private;
@@ -562,8 +562,8 @@ gdk_gc_set_clip_mask (GdkGC     *gc,
 
 
 void
-gdk_gc_set_clip_rectangle (GdkGC        *gc,
-                           GdkRectangle *rectangle)
+gdk_gc_set_clip_rectangle (GdkGC	*gc,
+			   GdkRectangle *rectangle)
 {
   GdkGCPrivate *private;
   XRectangle xrectangle;
@@ -587,8 +587,29 @@ gdk_gc_set_clip_rectangle (GdkGC        *gc,
 } 
 
 void
-gdk_gc_set_subwindow (GdkGC            *gc,
-		      GdkSubwindowMode  mode)
+gdk_gc_set_clip_region (GdkGC		 *gc,
+			GdkRegion	 *region)
+{
+  GdkGCPrivate *private;
+
+  g_return_if_fail (gc != NULL);
+
+  private = (GdkGCPrivate*) gc;
+
+  if (region)
+    {
+      GdkRegionPrivate *region_private;
+
+      region_private = (GdkRegionPrivate*) region;
+      XSetRegion (private->xdisplay, private->xgc, region_private->xregion);
+    }
+  else
+    XSetClipMask (private->xdisplay, private->xgc, None);
+}
+
+void
+gdk_gc_set_subwindow (GdkGC	       *gc,
+		      GdkSubwindowMode	mode)
 {
   GdkGCPrivate *private;
 
@@ -613,10 +634,10 @@ gdk_gc_set_exposures (GdkGC *gc,
 }
 
 void
-gdk_gc_set_line_attributes (GdkGC       *gc,
-			    gint         line_width,
+gdk_gc_set_line_attributes (GdkGC	*gc,
+			    gint	 line_width,
 			    GdkLineStyle line_style,
-			    GdkCapStyle  cap_style,
+			    GdkCapStyle	 cap_style,
 			    GdkJoinStyle join_style)
 {
   GdkGCPrivate *private;

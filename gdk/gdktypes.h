@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
@@ -24,7 +24,7 @@
 #include <glib.h>
 
 
-#define GDK_NONE             0L
+#define GDK_NONE	     0L
 #define GDK_CURRENT_TIME     0L
 #define GDK_PARENT_RELATIVE  1L
 
@@ -40,52 +40,53 @@ extern "C" {
 /* Type definitions for the basic structures.
  */
 
-typedef gulong                        GdkAtom;
-typedef struct _GdkColor              GdkColor;
-typedef struct _GdkColormap           GdkColormap;
-typedef struct _GdkVisual             GdkVisual;
-typedef struct _GdkWindowAttr         GdkWindowAttr;
-typedef struct _GdkWindow             GdkWindow;
-typedef struct _GdkWindow             GdkPixmap;
-typedef struct _GdkWindow             GdkBitmap;
-typedef struct _GdkWindow             GdkDrawable;
-typedef struct _GdkImage              GdkImage;
-typedef struct _GdkGCValues           GdkGCValues;
-typedef struct _GdkGC                 GdkGC;
-typedef struct _GdkPoint              GdkPoint;
-typedef struct _GdkRectangle          GdkRectangle;
-typedef struct _GdkSegment            GdkSegment;
-typedef struct _GdkFont               GdkFont;
-typedef struct _GdkCursor             GdkCursor;
+typedef gulong			      GdkAtom;
+typedef struct _GdkColor	      GdkColor;
+typedef struct _GdkColormap	      GdkColormap;
+typedef struct _GdkVisual	      GdkVisual;
+typedef struct _GdkWindowAttr	      GdkWindowAttr;
+typedef struct _GdkWindow	      GdkWindow;
+typedef struct _GdkWindow	      GdkPixmap;
+typedef struct _GdkWindow	      GdkBitmap;
+typedef struct _GdkWindow	      GdkDrawable;
+typedef struct _GdkImage	      GdkImage;
+typedef struct _GdkGCValues	      GdkGCValues;
+typedef struct _GdkGC		      GdkGC;
+typedef struct _GdkPoint	      GdkPoint;
+typedef struct _GdkRectangle	      GdkRectangle;
+typedef struct _GdkSegment	      GdkSegment;
+typedef struct _GdkFont		      GdkFont;
+typedef struct _GdkCursor	      GdkCursor;
 typedef struct _GdkColorContextDither GdkColorContextDither;
-typedef struct _GdkColorContext       GdkColorContext;
+typedef struct _GdkColorContext	      GdkColorContext;
 
-typedef struct _GdkEventAny         GdkEventAny;
-typedef struct _GdkEventExpose      GdkEventExpose;
+typedef struct _GdkEventAny	    GdkEventAny;
+typedef struct _GdkEventExpose	    GdkEventExpose;
 typedef struct _GdkEventNoExpose    GdkEventNoExpose;
 typedef struct _GdkEventVisibility  GdkEventVisibility;
-typedef struct _GdkEventMotion      GdkEventMotion;
-typedef struct _GdkEventButton      GdkEventButton;
-typedef struct _GdkEventKey         GdkEventKey;
-typedef struct _GdkEventFocus       GdkEventFocus;
+typedef struct _GdkEventMotion	    GdkEventMotion;
+typedef struct _GdkEventButton	    GdkEventButton;
+typedef struct _GdkEventKey	    GdkEventKey;
+typedef struct _GdkEventFocus	    GdkEventFocus;
 typedef struct _GdkEventCrossing    GdkEventCrossing;
 typedef struct _GdkEventConfigure   GdkEventConfigure;
 typedef struct _GdkEventProperty    GdkEventProperty;
 typedef struct _GdkEventSelection   GdkEventSelection;
 typedef struct _GdkEventProximity   GdkEventProximity;
-typedef struct _GdkEventOther       GdkEventOther;
+typedef struct _GdkEventOther	    GdkEventOther;
 typedef struct _GdkEventDragBegin   GdkEventDragBegin;
 typedef struct _GdkEventDragRequest GdkEventDragRequest;
 typedef struct _GdkEventDropEnter   GdkEventDropEnter;
 typedef struct _GdkEventDropDataAvailable GdkEventDropDataAvailable;
 typedef struct _GdkEventDropLeave   GdkEventDropLeave;
-typedef struct _GdkEventClient      GdkEventClient;
-typedef union  _GdkEvent            GdkEvent;
-typedef struct _GdkDeviceKey        GdkDeviceKey;
-typedef struct _GdkDeviceInfo       GdkDeviceInfo;
-typedef struct _GdkTimeCoord        GdkTimeCoord;
+typedef struct _GdkEventClient	    GdkEventClient;
+typedef union  _GdkEvent	    GdkEvent;
+typedef struct _GdkDeviceKey	    GdkDeviceKey;
+typedef struct _GdkDeviceInfo	    GdkDeviceInfo;
+typedef struct _GdkTimeCoord	    GdkTimeCoord;
+typedef struct _GdkRegion	    GdkRegion;
 typedef gint (*GdkEventFunc) (GdkEvent *event,
-			      gpointer  data);
+			      gpointer	data);
 
 typedef void*			  GdkIC;
 typedef void*			  GdkIM;
@@ -93,22 +94,22 @@ typedef void*			  GdkIM;
 
 /* Types of windows.
  *   Root: There is only 1 root window and it is initialized
- *         at startup. Creating a window of type GDK_WINDOW_ROOT
- *         is an error.
+ *	   at startup. Creating a window of type GDK_WINDOW_ROOT
+ *	   is an error.
  *   Toplevel: Windows which interact with the window manager.
  *   Child: Windows which are children of some other type of window.
- *          (Any other type of window). Most windows are child windows.
+ *	    (Any other type of window). Most windows are child windows.
  *   Dialog: A special kind of toplevel window which interacts with
- *           the window manager slightly differently than a regular
- *           toplevel window. Dialog windows should be used for any
- *           transient window.
+ *	     the window manager slightly differently than a regular
+ *	     toplevel window. Dialog windows should be used for any
+ *	     transient window.
  *   Pixmap: Pixmaps are really just another kind of window which
- *           doesn't actually appear on the screen. It can't have
- *           children, either and is really just a convenience so
- *           that the drawing functions can work on both windows
- *           and pixmaps transparently. (ie. You shouldn't pass a
- *           pixmap to any procedure which accepts a window with the
- *           exception of the drawing functions).
+ *	     doesn't actually appear on the screen. It can't have
+ *	     children, either and is really just a convenience so
+ *	     that the drawing functions can work on both windows
+ *	     and pixmaps transparently. (ie. You shouldn't pass a
+ *	     pixmap to any procedure which accepts a window with the
+ *	     exception of the drawing functions).
  */
 typedef enum
 {
@@ -122,12 +123,12 @@ typedef enum
 
 /* Classes of windows.
  *   InputOutput: Almost every window should be of this type. Such windows
- *                receive events and are also displayed on screen.
+ *		  receive events and are also displayed on screen.
  *   InputOnly: Used only in special circumstances when events need to be
- *              stolen from another window or windows. Input only windows
- *              have no visible output, so they are handy for placing over
- *              top of a group of windows in order to grab the events (or
- *              filter the events) from those windows.
+ *		stolen from another window or windows. Input only windows
+ *		have no visible output, so they are handy for placing over
+ *		top of a group of windows in order to grab the events (or
+ *		filter the events) from those windows.
  */
 typedef enum
 {
@@ -137,13 +138,13 @@ typedef enum
 
 /* Types of images.
  *   Normal: Normal X image type. These are slow as they involve passing
- *           the entire image through the X connection each time a draw
- *           request is required.
+ *	     the entire image through the X connection each time a draw
+ *	     request is required.
  *   Shared: Shared memory X image type. These are fast as the X server
- *           and the program actually use the same piece of memory. They
- *           should be used with care though as there is the possibility
- *           for both the X server and the program to be reading/writing
- *           the image simultaneously and producing undesired results.
+ *	     and the program actually use the same piece of memory. They
+ *	     should be used with care though as there is the possibility
+ *	     for both the X server and the program to be reading/writing
+ *	     the image simultaneously and producing undesired results.
  */
 typedef enum
 {
@@ -190,12 +191,12 @@ typedef enum
  */
 typedef enum
 {
-  GDK_WA_TITLE    = 1 << 1,
-  GDK_WA_X        = 1 << 2,
-  GDK_WA_Y        = 1 << 3,
-  GDK_WA_CURSOR   = 1 << 4,
+  GDK_WA_TITLE	  = 1 << 1,
+  GDK_WA_X	  = 1 << 2,
+  GDK_WA_Y	  = 1 << 3,
+  GDK_WA_CURSOR	  = 1 << 4,
   GDK_WA_COLORMAP = 1 << 5,
-  GDK_WA_VISUAL   = 1 << 6,
+  GDK_WA_VISUAL	  = 1 << 6,
   GDK_WA_WMCLASS  = 1 << 7,
   GDK_WA_NOREDIR  = 1 << 8
 } GdkWindowAttributesType;
@@ -204,7 +205,7 @@ typedef enum
  */
 typedef enum
 {
-  GDK_HINT_POS       = 1 << 0,
+  GDK_HINT_POS	     = 1 << 0,
   GDK_HINT_MIN_SIZE  = 1 << 1,
   GDK_HINT_MAX_SIZE  = 1 << 2
 } GdkWindowHints;
@@ -283,9 +284,9 @@ typedef enum
 } GdkCursorType;
 
 typedef enum {
-  GDK_FILTER_CONTINUE,    /* Event not handled, continue processesing */
-  GDK_FILTER_TRANSLATE,   /* Translated event stored */
-  GDK_FILTER_REMOVE       /* Terminate processing, removing event */
+  GDK_FILTER_CONTINUE,	  /* Event not handled, continue processesing */
+  GDK_FILTER_TRANSLATE,	  /* Translated event stored */
+  GDK_FILTER_REMOVE	  /* Terminate processing, removing event */
 } GdkFilterReturn;
 
 typedef enum {
@@ -297,7 +298,7 @@ typedef enum {
 /* Event types.
  *   Nothing: No event occurred.
  *   Delete: A window delete event was sent by the window manager.
- *           The specified window should be deleted.
+ *	     The specified window should be deleted.
  *   Destroy: A window has been destroyed.
  *   Expose: Part of a window has been uncovered.
  *   NoExpose: Same as expose, but no expose event was generated.
@@ -310,46 +311,46 @@ typedef enum {
  *   EnterNotify: A window was entered.
  *   LeaveNotify: A window was exited.
  *   FocusChange: The focus window has changed. (The focus window gets
- *                keyboard events).
+ *		  keyboard events).
  *   Resize: A window has been resized.
  *   Map: A window has been mapped. (It is now visible on the screen).
  *   Unmap: A window has been unmapped. (It is no longer visible on
- *          the screen).
+ *	    the screen).
  */
 typedef enum
 {
-  GDK_NOTHING           = -1,
-  GDK_DELETE            = 0,
-  GDK_DESTROY           = 1,
-  GDK_EXPOSE            = 2,
-  GDK_MOTION_NOTIFY     = 3,
-  GDK_BUTTON_PRESS      = 4,
-  GDK_2BUTTON_PRESS     = 5,
-  GDK_3BUTTON_PRESS     = 6,
-  GDK_BUTTON_RELEASE    = 7,
-  GDK_KEY_PRESS         = 8,
-  GDK_KEY_RELEASE       = 9,
-  GDK_ENTER_NOTIFY      = 10,
-  GDK_LEAVE_NOTIFY      = 11,
-  GDK_FOCUS_CHANGE      = 12,
-  GDK_CONFIGURE         = 13,
-  GDK_MAP               = 14,
-  GDK_UNMAP             = 15,
-  GDK_PROPERTY_NOTIFY   = 16,
-  GDK_SELECTION_CLEAR   = 17,
+  GDK_NOTHING		= -1,
+  GDK_DELETE		= 0,
+  GDK_DESTROY		= 1,
+  GDK_EXPOSE		= 2,
+  GDK_MOTION_NOTIFY	= 3,
+  GDK_BUTTON_PRESS	= 4,
+  GDK_2BUTTON_PRESS	= 5,
+  GDK_3BUTTON_PRESS	= 6,
+  GDK_BUTTON_RELEASE	= 7,
+  GDK_KEY_PRESS		= 8,
+  GDK_KEY_RELEASE	= 9,
+  GDK_ENTER_NOTIFY	= 10,
+  GDK_LEAVE_NOTIFY	= 11,
+  GDK_FOCUS_CHANGE	= 12,
+  GDK_CONFIGURE		= 13,
+  GDK_MAP		= 14,
+  GDK_UNMAP		= 15,
+  GDK_PROPERTY_NOTIFY	= 16,
+  GDK_SELECTION_CLEAR	= 17,
   GDK_SELECTION_REQUEST = 18,
-  GDK_SELECTION_NOTIFY  = 19,
-  GDK_PROXIMITY_IN      = 20,
-  GDK_PROXIMITY_OUT     = 21,
+  GDK_SELECTION_NOTIFY	= 19,
+  GDK_PROXIMITY_IN	= 20,
+  GDK_PROXIMITY_OUT	= 21,
   GDK_DRAG_BEGIN	= 22,
-  GDK_DRAG_REQUEST      = 23,
-  GDK_DROP_ENTER        = 24,
-  GDK_DROP_LEAVE        = 25,
-  GDK_DROP_DATA_AVAIL   = 26,
-  GDK_CLIENT_EVENT      = 27,
+  GDK_DRAG_REQUEST	= 23,
+  GDK_DROP_ENTER	= 24,
+  GDK_DROP_LEAVE	= 25,
+  GDK_DROP_DATA_AVAIL	= 26,
+  GDK_CLIENT_EVENT	= 27,
   GDK_VISIBILITY_NOTIFY = 28,
-  GDK_NO_EXPOSE         = 29,
-  GDK_OTHER_EVENT       = 9999	/* Deprecated, use filters instead */
+  GDK_NO_EXPOSE		= 29,
+  GDK_OTHER_EVENT	= 9999	/* Deprecated, use filters instead */
 } GdkEventType;
 
 /* Event masks. (Used to select what types of events a window
@@ -357,26 +358,26 @@ typedef enum
  */
 typedef enum
 {
-  GDK_EXPOSURE_MASK             = 1 << 1,
-  GDK_POINTER_MOTION_MASK       = 1 << 2,
-  GDK_POINTER_MOTION_HINT_MASK  = 1 << 3,
-  GDK_BUTTON_MOTION_MASK        = 1 << 4,
-  GDK_BUTTON1_MOTION_MASK       = 1 << 5,
-  GDK_BUTTON2_MOTION_MASK       = 1 << 6,
-  GDK_BUTTON3_MOTION_MASK       = 1 << 7,
-  GDK_BUTTON_PRESS_MASK         = 1 << 8,
-  GDK_BUTTON_RELEASE_MASK       = 1 << 9,
-  GDK_KEY_PRESS_MASK            = 1 << 10,
-  GDK_KEY_RELEASE_MASK          = 1 << 11,
-  GDK_ENTER_NOTIFY_MASK         = 1 << 12,
-  GDK_LEAVE_NOTIFY_MASK         = 1 << 13,
-  GDK_FOCUS_CHANGE_MASK         = 1 << 14,
-  GDK_STRUCTURE_MASK            = 1 << 15,
-  GDK_PROPERTY_CHANGE_MASK      = 1 << 16,
-  GDK_VISIBILITY_NOTIFY_MASK    = 1 << 17,
-  GDK_PROXIMITY_IN_MASK         = 1 << 18,
-  GDK_PROXIMITY_OUT_MASK        = 1 << 19,
-  GDK_ALL_EVENTS_MASK           = 0x07FFFF
+  GDK_EXPOSURE_MASK		= 1 << 1,
+  GDK_POINTER_MOTION_MASK	= 1 << 2,
+  GDK_POINTER_MOTION_HINT_MASK	= 1 << 3,
+  GDK_BUTTON_MOTION_MASK	= 1 << 4,
+  GDK_BUTTON1_MOTION_MASK	= 1 << 5,
+  GDK_BUTTON2_MOTION_MASK	= 1 << 6,
+  GDK_BUTTON3_MOTION_MASK	= 1 << 7,
+  GDK_BUTTON_PRESS_MASK		= 1 << 8,
+  GDK_BUTTON_RELEASE_MASK	= 1 << 9,
+  GDK_KEY_PRESS_MASK		= 1 << 10,
+  GDK_KEY_RELEASE_MASK		= 1 << 11,
+  GDK_ENTER_NOTIFY_MASK		= 1 << 12,
+  GDK_LEAVE_NOTIFY_MASK		= 1 << 13,
+  GDK_FOCUS_CHANGE_MASK		= 1 << 14,
+  GDK_STRUCTURE_MASK		= 1 << 15,
+  GDK_PROPERTY_CHANGE_MASK	= 1 << 16,
+  GDK_VISIBILITY_NOTIFY_MASK	= 1 << 17,
+  GDK_PROXIMITY_IN_MASK		= 1 << 18,
+  GDK_PROXIMITY_OUT_MASK	= 1 << 19,
+  GDK_ALL_EVENTS_MASK		= 0x07FFFF
 } GdkEventMask;
 
 /* Types of enter/leave notifications.
@@ -389,12 +390,12 @@ typedef enum
  */
 typedef enum
 {
-  GDK_NOTIFY_ANCESTOR           = 0,
-  GDK_NOTIFY_VIRTUAL            = 1,
-  GDK_NOTIFY_INFERIOR           = 2,
-  GDK_NOTIFY_NONLINEAR          = 3,
-  GDK_NOTIFY_NONLINEAR_VIRTUAL  = 4,
-  GDK_NOTIFY_UNKNOWN            = 5
+  GDK_NOTIFY_ANCESTOR		= 0,
+  GDK_NOTIFY_VIRTUAL		= 1,
+  GDK_NOTIFY_INFERIOR		= 2,
+  GDK_NOTIFY_NONLINEAR		= 3,
+  GDK_NOTIFY_NONLINEAR_VIRTUAL	= 4,
+  GDK_NOTIFY_UNKNOWN		= 5
 } GdkNotifyType;
 
 /* Types of modifiers.
@@ -402,13 +403,13 @@ typedef enum
 typedef enum
 {
   GDK_SHIFT_MASK    = 1 << 0,
-  GDK_LOCK_MASK     = 1 << 1,
+  GDK_LOCK_MASK	    = 1 << 1,
   GDK_CONTROL_MASK  = 1 << 2,
-  GDK_MOD1_MASK     = 1 << 3,
-  GDK_MOD2_MASK     = 1 << 4,
-  GDK_MOD3_MASK     = 1 << 5,
-  GDK_MOD4_MASK     = 1 << 6,
-  GDK_MOD5_MASK     = 1 << 7,
+  GDK_MOD1_MASK	    = 1 << 3,
+  GDK_MOD2_MASK	    = 1 << 4,
+  GDK_MOD3_MASK	    = 1 << 5,
+  GDK_MOD4_MASK	    = 1 << 6,
+  GDK_MOD5_MASK	    = 1 << 7,
   GDK_BUTTON1_MASK  = 1 << 8,
   GDK_BUTTON2_MASK  = 1 << 9,
   GDK_BUTTON3_MASK  = 1 << 10,
@@ -418,7 +419,7 @@ typedef enum
 
 typedef enum
 {
-  GDK_CLIP_BY_CHILDREN  = 0,
+  GDK_CLIP_BY_CHILDREN	= 0,
   GDK_INCLUDE_INFERIORS = 1
 } GdkSubwindowMode;
 
@@ -431,11 +432,11 @@ typedef enum
 
 typedef enum
 {
-  GDK_OK          = 0,
-  GDK_ERROR       = -1,
+  GDK_OK	  = 0,
+  GDK_ERROR	  = -1,
   GDK_ERROR_PARAM = -2,
   GDK_ERROR_FILE  = -3,
-  GDK_ERROR_MEM   = -4
+  GDK_ERROR_MEM	  = -4
 } GdkStatus;
 
 typedef enum
@@ -448,10 +449,10 @@ typedef enum
 {
   GDK_GC_FOREGROUND    = 1 << 0,
   GDK_GC_BACKGROUND    = 1 << 1,
-  GDK_GC_FONT          = 1 << 2,
+  GDK_GC_FONT	       = 1 << 2,
   GDK_GC_FUNCTION      = 1 << 3,
-  GDK_GC_FILL          = 1 << 4,
-  GDK_GC_TILE          = 1 << 5,
+  GDK_GC_FILL	       = 1 << 4,
+  GDK_GC_TILE	       = 1 << 5,
   GDK_GC_STIPPLE       = 1 << 6,
   GDK_GC_CLIP_MASK     = 1 << 7,
   GDK_GC_SUBWINDOW     = 1 << 8,
@@ -564,15 +565,15 @@ typedef enum
 
 typedef enum
 {
-  GdkIMPreeditArea      = 0x0001L,
+  GdkIMPreeditArea	= 0x0001L,
   GdkIMPreeditCallbacks = 0x0002L,
-  GdkIMPreeditPosition  = 0x0004L,
-  GdkIMPreeditNothing   = 0x0008L,
-  GdkIMPreeditNone      = 0x0010L,
-  GdkIMStatusArea       = 0x0100L,
-  GdkIMStatusCallbacks  = 0x0200L,
-  GdkIMStatusNothing    = 0x0400L,
-  GdkIMStatusNone       = 0x0800L
+  GdkIMPreeditPosition	= 0x0004L,
+  GdkIMPreeditNothing	= 0x0008L,
+  GdkIMPreeditNone	= 0x0010L,
+  GdkIMStatusArea	= 0x0100L,
+  GdkIMStatusCallbacks	= 0x0200L,
+  GdkIMStatusNothing	= 0x0400L,
+  GdkIMStatusNone	= 0x0800L
 } GdkIMStyle;
 
 /* The next two enumeration values current match the
@@ -582,23 +583,23 @@ typedef enum
  */
 typedef enum
 {
-  GDK_DECOR_ALL         = 1 << 0,
-  GDK_DECOR_BORDER      = 1 << 1,
-  GDK_DECOR_RESIZEH     = 1 << 2,
-  GDK_DECOR_TITLE       = 1 << 3,
-  GDK_DECOR_MENU        = 1 << 4,
-  GDK_DECOR_MINIMIZE    = 1 << 5,
-  GDK_DECOR_MAXIMIZE    = 1 << 6
+  GDK_DECOR_ALL		= 1 << 0,
+  GDK_DECOR_BORDER	= 1 << 1,
+  GDK_DECOR_RESIZEH	= 1 << 2,
+  GDK_DECOR_TITLE	= 1 << 3,
+  GDK_DECOR_MENU	= 1 << 4,
+  GDK_DECOR_MINIMIZE	= 1 << 5,
+  GDK_DECOR_MAXIMIZE	= 1 << 6
 } GdkWMDecoration;
 
 typedef enum
 {
-  GDK_FUNC_ALL          = 1 << 0,
-  GDK_FUNC_RESIZE       = 1 << 1,
-  GDK_FUNC_MOVE         = 1 << 2,
-  GDK_FUNC_MINIMIZE     = 1 << 3,
-  GDK_FUNC_MAXIMIZE     = 1 << 4,
-  GDK_FUNC_CLOSE        = 1 << 5
+  GDK_FUNC_ALL		= 1 << 0,
+  GDK_FUNC_RESIZE	= 1 << 1,
+  GDK_FUNC_MOVE		= 1 << 2,
+  GDK_FUNC_MINIMIZE	= 1 << 3,
+  GDK_FUNC_MAXIMIZE	= 1 << 4,
+  GDK_FUNC_CLOSE	= 1 << 5
 } GdkWMFunction;
 
 #define GdkIMPreeditMask \
@@ -610,8 +611,8 @@ typedef enum
 	( GdkIMStatusArea | GdkIMStatusCallbacks | \
 	  GdkIMStatusNothing | GdkIMStatusNone )
 
-typedef void (*GdkInputFunction) (gpointer          data,
-				  gint              source,
+typedef void (*GdkInputFunction) (gpointer	    data,
+				  gint		    source,
 				  GdkInputCondition condition);
 
 typedef void (*GdkDestroyNotify) (gpointer data);
@@ -619,11 +620,11 @@ typedef void (*GdkDestroyNotify) (gpointer data);
 /* Color Context modes.
  *
  * GDK_CC_MODE_UNDEFINED - unknown
- * GDK_CC_MODE_BW        - default B/W
- * GDK_CC_MODE_STD_CMAP  - has a standard colormap
- * GDK_CC_MODE_TRUE      - is a TrueColor/DirectColor visual
- * GDK_CC_MODE_MY_GRAY   - my grayramp
- * GDK_CC_MODE_PALETTE   - has a pre-allocated palette
+ * GDK_CC_MODE_BW	 - default B/W
+ * GDK_CC_MODE_STD_CMAP	 - has a standard colormap
+ * GDK_CC_MODE_TRUE	 - is a TrueColor/DirectColor visual
+ * GDK_CC_MODE_MY_GRAY	 - my grayramp
+ * GDK_CC_MODE_PALETTE	 - has a pre-allocated palette
  */ 
 
 typedef enum
@@ -635,6 +636,19 @@ typedef enum
   GDK_CC_MODE_MY_GRAY,
   GDK_CC_MODE_PALETTE
 } GdkColorContextMode;
+
+/* Types of overlapping between a rectangle and a region
+ * GDK_OVERLAP_RECTANGLE_IN: rectangle is in region
+ * GDK_OVERLAP_RECTANGLE_OUT: rectangle in not in region
+ * GDK_OVERLAP_RECTANGLE_PART: rectangle in partially in region
+ */
+
+typedef enum
+{
+  GDK_OVERLAP_RECTANGLE_IN,
+  GDK_OVERLAP_RECTANGLE_OUT,
+  GDK_OVERLAP_RECTANGLE_PART
+} GdkOverlapType;
 
 /* The color type.
  *   A color consists of red, green and blue values in the
@@ -716,37 +730,37 @@ struct _GdkWindow
 
 struct _GdkImage
 {
-  GdkImageType  type;
-  GdkVisual    *visual;     /* visual used to create the image */
-  GdkByteOrder  byte_order;
-  guint16       width;
-  guint16       height;
-  guint16       depth;
-  guint16       bpp;        /* bytes per pixel */
-  guint16       bpl;        /* bytes per line */
-  gpointer      mem;
+  GdkImageType	type;
+  GdkVisual    *visual;	    /* visual used to create the image */
+  GdkByteOrder	byte_order;
+  guint16	width;
+  guint16	height;
+  guint16	depth;
+  guint16	bpp;	    /* bytes per pixel */
+  guint16	bpl;	    /* bytes per line */
+  gpointer	mem;
 };
 
 struct _GdkGCValues
 {
-  GdkColor          foreground;
-  GdkColor          background;
-  GdkFont          *font;
-  GdkFunction       function;
-  GdkFill           fill;
-  GdkPixmap        *tile;
-  GdkPixmap        *stipple;
-  GdkPixmap        *clip_mask;
+  GdkColor	    foreground;
+  GdkColor	    background;
+  GdkFont	   *font;
+  GdkFunction	    function;
+  GdkFill	    fill;
+  GdkPixmap	   *tile;
+  GdkPixmap	   *stipple;
+  GdkPixmap	   *clip_mask;
   GdkSubwindowMode  subwindow_mode;
-  gint              ts_x_origin;
-  gint              ts_y_origin;
-  gint              clip_x_origin;
-  gint              clip_y_origin;
-  gint              graphics_exposures;
-  gint              line_width;
-  GdkLineStyle      line_style;
-  GdkCapStyle       cap_style;
-  GdkJoinStyle      join_style;
+  gint		    ts_x_origin;
+  gint		    ts_y_origin;
+  gint		    clip_x_origin;
+  gint		    clip_y_origin;
+  gint		    graphics_exposures;
+  gint		    line_width;
+  GdkLineStyle	    line_style;
+  GdkCapStyle	    cap_style;
+  GdkJoinStyle	    join_style;
 };
 
 struct _GdkGC
@@ -878,7 +892,7 @@ struct _GdkTimeCoord
 
 /* Event filtering */
 
-typedef void GdkXEvent;   /* Can be cast to XEvent */
+typedef void GdkXEvent;	  /* Can be cast to XEvent */
 
 typedef GdkFilterReturn (*GdkFilterFunc) (GdkXEvent *xevent,
 					  GdkEvent *event,
@@ -1141,28 +1155,34 @@ struct _GdkEventOther
 
 union _GdkEvent
 {
-  GdkEventType              type;
-  GdkEventAny               any;
-  GdkEventExpose            expose;
-  GdkEventNoExpose          no_expose;
-  GdkEventVisibility        visibility;
-  GdkEventMotion            motion;
-  GdkEventButton            button;
-  GdkEventKey               key;
-  GdkEventCrossing          crossing;
-  GdkEventFocus             focus_change;
-  GdkEventConfigure         configure;
-  GdkEventProperty          property;
-  GdkEventSelection         selection;
-  GdkEventProximity         proximity;
-  GdkEventDragBegin         dragbegin;
-  GdkEventDragRequest       dragrequest;
-  GdkEventDropEnter         dropenter;
-  GdkEventDropLeave         dropleave;
+  GdkEventType		    type;
+  GdkEventAny		    any;
+  GdkEventExpose	    expose;
+  GdkEventNoExpose	    no_expose;
+  GdkEventVisibility	    visibility;
+  GdkEventMotion	    motion;
+  GdkEventButton	    button;
+  GdkEventKey		    key;
+  GdkEventCrossing	    crossing;
+  GdkEventFocus		    focus_change;
+  GdkEventConfigure	    configure;
+  GdkEventProperty	    property;
+  GdkEventSelection	    selection;
+  GdkEventProximity	    proximity;
+  GdkEventDragBegin	    dragbegin;
+  GdkEventDragRequest	    dragrequest;
+  GdkEventDropEnter	    dropenter;
+  GdkEventDropLeave	    dropleave;
   GdkEventDropDataAvailable dropdataavailable;
-  GdkEventClient            client;
-  GdkEventOther             other;
+  GdkEventClient	    client;
+  GdkEventOther		    other;
 };
+
+struct _GdkRegion
+{
+  gpointer user_data;
+};
+
 
 
 #ifdef __cplusplus

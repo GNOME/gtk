@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
@@ -25,9 +25,9 @@
 
 #define DND_PROTOCOL_VERSION 0
 
-#define gdk_window_lookup(xid)     ((GdkWindow*) gdk_xid_table_lookup (xid))
-#define gdk_pixmap_lookup(xid)     ((GdkPixmap*) gdk_xid_table_lookup (xid))
-#define gdk_font_lookup(xid)       ((GdkFont*) gdk_xid_table_lookup (xid))
+#define gdk_window_lookup(xid)	   ((GdkWindow*) gdk_xid_table_lookup (xid))
+#define gdk_pixmap_lookup(xid)	   ((GdkPixmap*) gdk_xid_table_lookup (xid))
+#define gdk_font_lookup(xid)	   ((GdkFont*) gdk_xid_table_lookup (xid))
 
 
 #ifdef __cplusplus
@@ -37,14 +37,15 @@ extern "C" {
 
 typedef struct _GdkWindowPrivate       GdkWindowPrivate;
 typedef struct _GdkWindowPrivate       GdkPixmapPrivate;
-typedef struct _GdkImagePrivate        GdkImagePrivate;
-typedef struct _GdkGCPrivate           GdkGCPrivate;
+typedef struct _GdkImagePrivate	       GdkImagePrivate;
+typedef struct _GdkGCPrivate	       GdkGCPrivate;
 typedef struct _GdkColormapPrivate     GdkColormapPrivate;
 typedef struct _GdkVisualPrivate       GdkVisualPrivate;
-typedef struct _GdkFontPrivate         GdkFontPrivate;
+typedef struct _GdkFontPrivate	       GdkFontPrivate;
 typedef struct _GdkCursorPrivate       GdkCursorPrivate;
-typedef struct _GdkEventFilter         GdkEventFilter;
+typedef struct _GdkEventFilter	       GdkEventFilter;
 typedef struct _GdkColorContextPrivate GdkColorContextPrivate;
+typedef struct _GdkRegionPrivate       GdkRegionPrivate;
 
 
 struct _GdkWindowPrivate
@@ -89,14 +90,14 @@ struct _GdkImagePrivate
   gpointer x_shm_info;
 
   void (*image_put) (GdkDrawable *window,
-		     GdkGC       *gc,
-		     GdkImage    *image,
-		     gint         xsrc,
-		     gint         ysrc,
-		     gint         xdest,
-		     gint         ydest,
-		     gint         width,
-		     gint         height);
+		     GdkGC	 *gc,
+		     GdkImage	 *image,
+		     gint	  xsrc,
+		     gint	  ysrc,
+		     gint	  xdest,
+		     gint	  ydest,
+		     gint	  width,
+		     gint	  height);
 };
 
 struct _GdkGCPrivate
@@ -142,23 +143,23 @@ struct _GdkCursorPrivate
 };
 
 struct _GdkDndCursorInfo {
-  Cursor          gdk_cursor_dragdefault, gdk_cursor_dragok;
-  GdkWindow      *drag_pm_default, *drag_pm_ok;
-  GdkPoint        default_hotspot, ok_hotspot;
+  Cursor	  gdk_cursor_dragdefault, gdk_cursor_dragok;
+  GdkWindow	 *drag_pm_default, *drag_pm_ok;
+  GdkPoint	  default_hotspot, ok_hotspot;
 };
 typedef struct _GdkDndCursorInfo GdkDndCursorInfo;
 
 struct _GdkDndGlobals {
-  GdkAtom            gdk_XdeEnter, gdk_XdeLeave, gdk_XdeRequest;
-  GdkAtom            gdk_XdeDataAvailable, gdk_XdeDataShow, gdk_XdeCancel;
-  GdkAtom            gdk_XdeTypelist;
+  GdkAtom	     gdk_XdeEnter, gdk_XdeLeave, gdk_XdeRequest;
+  GdkAtom	     gdk_XdeDataAvailable, gdk_XdeDataShow, gdk_XdeCancel;
+  GdkAtom	     gdk_XdeTypelist;
 
   GdkDndCursorInfo  *c;
-  GdkWindow     **drag_startwindows;
-  guint           drag_numwindows;
-  gboolean        drag_really, drag_perhaps, dnd_grabbed;
-  Window          dnd_drag_target;
-  GdkPoint        drag_dropcoords;
+  GdkWindow	**drag_startwindows;
+  guint		  drag_numwindows;
+  gboolean	  drag_really, drag_perhaps, dnd_grabbed;
+  Window	  dnd_drag_target;
+  GdkPoint	  drag_dropcoords;
 };
 typedef struct _GdkDndGlobals GdkDndGlobals;
 
@@ -186,6 +187,12 @@ struct _GdkColorContextPrivate
   XStandardColormap std_cmap;
 };
 
+struct _GdkRegionPrivate
+{
+  GdkRegion region;
+  Region xregion;
+};
+
 typedef enum {
   GDK_DEBUG_MISC = 1<<0,
   GDK_DEBUG_EVENTS = 1 << 1,
@@ -201,15 +208,15 @@ void gdk_image_init  (void);
 void gdk_image_exit (void);
 
 GdkColormap* gdk_colormap_lookup (Colormap  xcolormap);
-GdkVisual*   gdk_visual_lookup   (Visual   *xvisual);
+GdkVisual*   gdk_visual_lookup	 (Visual   *xvisual);
 
 void gdk_window_add_colormap_windows (GdkWindow *window);
-void gdk_window_destroy_notify       (GdkWindow *window);
+void gdk_window_destroy_notify	     (GdkWindow *window);
 
-void     gdk_xid_table_insert (XID      *xid,
-			       gpointer  data);
-void     gdk_xid_table_remove (XID       xid);
-gpointer gdk_xid_table_lookup (XID       xid);
+void	 gdk_xid_table_insert (XID	*xid,
+			       gpointer	 data);
+void	 gdk_xid_table_remove (XID	 xid);
+gpointer gdk_xid_table_lookup (XID	 xid);
 
 /* If you pass x = y = -1, it queries the pointer
    to find out where it currently is.
@@ -222,35 +229,35 @@ void gdk_dnd_display_drag_cursor(gint x,
 				 gboolean change_made);
 
 
-extern gint              gdk_debug_level;
-extern gint              gdk_show_events;
-extern gint              gdk_use_xshm;
-extern gint              gdk_stack_trace;
-extern gchar            *gdk_display_name;
-extern Display          *gdk_display;
-extern gint              gdk_screen;
-extern Window            gdk_root_window;
-extern Window            gdk_leader_window;
-extern GdkWindowPrivate  gdk_root_parent;
-extern Atom              gdk_wm_delete_window;
-extern Atom              gdk_wm_take_focus;
-extern Atom              gdk_wm_protocols;
-extern Atom              gdk_wm_window_protocols[];
-extern Atom              gdk_selection_property;
-extern GdkDndGlobals     gdk_dnd;
-extern GdkWindow        *selection_owner[];
-extern gchar            *gdk_progname;
-extern gchar            *gdk_progclass;
-extern gint              gdk_error_code;
-extern gint              gdk_error_warnings;
+extern gint		 gdk_debug_level;
+extern gint		 gdk_show_events;
+extern gint		 gdk_use_xshm;
+extern gint		 gdk_stack_trace;
+extern gchar		*gdk_display_name;
+extern Display		*gdk_display;
+extern gint		 gdk_screen;
+extern Window		 gdk_root_window;
+extern Window		 gdk_leader_window;
+extern GdkWindowPrivate	 gdk_root_parent;
+extern Atom		 gdk_wm_delete_window;
+extern Atom		 gdk_wm_take_focus;
+extern Atom		 gdk_wm_protocols;
+extern Atom		 gdk_wm_window_protocols[];
+extern Atom		 gdk_selection_property;
+extern GdkDndGlobals	 gdk_dnd;
+extern GdkWindow	*selection_owner[];
+extern gchar		*gdk_progname;
+extern gchar		*gdk_progclass;
+extern gint		 gdk_error_code;
+extern gint		 gdk_error_warnings;
 
 /* Debugging support */
 
 #ifdef G_ENABLE_DEBUG
 
-#define GDK_NOTE(type,action)                G_STMT_START { \
-    if (gdk_debug_flags & GDK_DEBUG_##type)                 \
-       { action; };                          } G_STMT_END
+#define GDK_NOTE(type,action)		     G_STMT_START { \
+    if (gdk_debug_flags & GDK_DEBUG_##type)		    \
+       { action; };			     } G_STMT_END
 
 #else /* !G_ENABLE_DEBUG */
 

@@ -1,3 +1,12 @@
+Sat Feb 28 15:18:36 1998  Tim Janik  <timj@gimp.org>
+	
+	* gtk/gtkpreview.c: fix behavior of gtk_preview_put() with
+	srcx/srcy != 0, gtk-shige-980127-0.patch.gz by
+	AOSASA Shigeru <aozasa@sakuranet.or.jp>.
+
+	* gdk: applied gtk-roebling-980121-0.patch.gz, patch for region
+	support in Gdk, by Robert Roebling <roebling@ruf.uni-freiburg.de>.
+
 Fri Feb 27 15:31:55 1998  Tim Janik  <timj@gimp.org>
 
 	* gtk/gtktipsquery.c: we make an active server grab now, this way we

@@ -133,7 +133,14 @@ GTK_BASIC:
 	disallow to act as a container for another GtkButton. Now the
 	gnit is, one can add a GtkHBox (which is a `basic' widget) to
 	the first button, and put the second into the box.
-	
+
+GTK_RESERVED_3:
+
+GTK_RC_STYLE:
+	This flag indicates that its style has been looked up through
+	the rc mechanism. It does not imply that the widget actually
+	had a style defined through the rc mechanism.
+
 
 GtkWidget, private flags:
 

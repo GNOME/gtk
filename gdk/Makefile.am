@@ -24,6 +24,7 @@ libgdk_la_SOURCES = \
 	gdkpixmap.c	\
 	gdkproperty.c	\
 	gdkrectangle.c	\
+	gdkregion.c	\
 	gdkselection.c	\
 	gdkvisual.c	\
 	gdkwindow.c	\
