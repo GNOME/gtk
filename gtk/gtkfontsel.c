@@ -1560,10 +1560,14 @@ gtk_font_selection_select_best_size(GtkFontSelection *fontsel)
   gchar buffer[32];
   GList *selection;
   gint type_filter;
-  
+
 #ifdef FONTSEL_DEBUG
   g_message("In select_best_size\n");
 #endif
+
+  if (fontsel->font_index == -1)
+    return;
+  
   font = &fontsel_info->font_info[fontsel->font_index];
   styles = &fontsel_info->font_styles[font->style_index];
   style = &styles[fontsel->style];

@@ -1,3 +1,9 @@
+Mon Jan 29 16:34:28 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfontsel.c (gtk_font_selection_select_best_size): Return
+	if fontsel->font_index == -1 - that is, if no font is selected.
+	(Should fix #50290)
+
 Mon Jan 29 15:22:51 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmenu.c (gtk_menu_remove): When removing an
