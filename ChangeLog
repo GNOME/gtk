@@ -1,3 +1,8 @@
+Sun Oct  5 22:38:22 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkeventbox.c (gtk_event_box_class_init): Trim whitespace in
+	"visible-window" blurb.  (#123910, Christian Rose)
+
 Sun Oct  5 00:53:15 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktoolbar.c (gtk_toolbar_list_children_in_focus_order):
