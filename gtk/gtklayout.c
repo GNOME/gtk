@@ -81,6 +81,8 @@ static void gtk_layout_size_allocate      (GtkWidget      *widget,
                                            GtkAllocation  *allocation);
 static gint gtk_layout_expose             (GtkWidget      *widget,
                                            GdkEventExpose *event);
+static void gtk_layout_add                (GtkContainer   *container,
+					   GtkWidget      *widget);
 static void gtk_layout_remove             (GtkContainer   *container,
                                            GtkWidget      *widget);
 static void gtk_layout_forall             (GtkContainer   *container,
@@ -468,7 +470,7 @@ gtk_layout_set_size (GtkLayout     *layout,
   GtkWidget *widget;
   
   g_return_if_fail (GTK_IS_LAYOUT (layout));
-
+  
   widget = GTK_WIDGET (layout);
   
   g_object_freeze_notify (G_OBJECT (layout));
@@ -668,6 +670,7 @@ gtk_layout_class_init (GtkLayoutClass *class)
   widget_class->expose_event = gtk_layout_expose;
   widget_class->style_set = gtk_layout_style_set;
 
+  container_class->add = gtk_layout_add;
   container_class->remove = gtk_layout_remove;
   container_class->forall = gtk_layout_forall;
 
@@ -1047,8 +1050,15 @@ gtk_layout_expose (GtkWidget *widget, GdkEventExpose *event)
   return FALSE;
 }
 
-/* Container method
+/* Container methods
  */
+static void
+gtk_layout_add (GtkContainer *container,
+		GtkWidget    *widget)
+{
+  gtk_layout_put (GTK_LAYOUT (container), widget, 0, 0);
+}
+
 static void
 gtk_layout_remove (GtkContainer *container, 
 		   GtkWidget    *widget)

@@ -1,3 +1,10 @@
+2004-07-05  Lorenzo Gil Sanchez  <lgs@sicem.biz>
+
+	* gtk/gtklayout.c (gtk_layout_add): added a default method for the add
+	virtual method of GtkContainer.
+	(gtk_layout_class_init): assign gtk_layout_add to the 'add' virtual
+	method slot of the container class.
+
 2004-07-05  Anders Carlsson  <andersca@gnome.org>
 
 	* gtk/gtkiconview.c: (gtk_icon_view_set_markup_column):
