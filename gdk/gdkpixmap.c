@@ -43,6 +43,8 @@ gdk_pixmap_new (GdkWindow *window,
   GdkWindowPrivate *private;
   GdkWindowPrivate *window_private;
 
+  g_return_val_if_fail ((window != NULL) || (depth != -1), NULL);
+
   if (!window)
     window = (GdkWindow*) &gdk_root_parent;
 
@@ -132,6 +134,7 @@ gdk_pixmap_create_from_data (GdkWindow *window,
   g_return_val_if_fail (data != NULL, NULL);
   g_return_val_if_fail (fg != NULL, NULL);
   g_return_val_if_fail (bg != NULL, NULL);
+  g_return_val_if_fail ((window != NULL) || (depth != -1), NULL);
 
   if (!window)
     window = (GdkWindow*) &gdk_root_parent;
@@ -368,8 +371,7 @@ gdk_pixmap_create_from_xpm (GdkWindow  *window,
   _GdkPixmapColor *colors = NULL, *color = NULL;
   gulong index;
 
-  if (!window)
-    window = (GdkWindow*) &gdk_root_parent;
+  g_return_val_if_fail (window != NULL, NULL);
 
   infile = fopen (filename, "rb");
   if (infile != NULL)
@@ -529,8 +531,7 @@ gdk_pixmap_create_from_xpm_d (GdkWindow  *window,
   _GdkPixmapColor *colors = NULL, *color = NULL;
   gulong index;
 
-  if (!window)
-    window = (GdkWindow*) &gdk_root_parent;
+  g_return_val_if_fail (window != NULL, NULL);
 
   i = 0;
   buffer = data[i++];

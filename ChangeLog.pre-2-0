@@ -1,3 +1,8 @@
+Sun Mar  1 17:40:58 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gdk/gdkpixmap.c: Make sure either the window or
+	the depth is given when creating a pixmap.
+
 Sun Mar  1 22:59:09 1998  Tim Janik  <timj@gimp.org>
 
 	* gtk/gtkstatusbar.h: 
