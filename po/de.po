@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0.0\n"
-"POT-Creation-Date: 2002-03-05 22:16-0500\n"
+"POT-Creation-Date: 2002-03-08 13:08+0100\n"
 "PO-Revision-Date: 2002-03-02 14:40+0100\n"
 "Last-Translator: Sven Neumann <sven@gimp.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
@@ -1655,9 +1655,8 @@ msgid "Maximum length"
 msgstr "Maximale Länge"
 
 #: gtk/gtkentry.c:464
-#, fuzzy
 msgid "Maximum number of characters for this entry. Zero if no maximum."
-msgstr "Maximale Anzahl Zeichen für diesen Eintrag"
+msgstr "Maximale Anzahl Zeichen für diesen Eintrag. Null, wenn unbegrenzt."
 
 #: gtk/gtkentry.c:472
 msgid "Visibility"
@@ -1729,16 +1728,16 @@ msgid "Whether to select the contents of an entry when it is focused."
 msgstr ""
 "Soll der Inhalt eines Eintrages angewählt werden, wenn er fokussiert ist?"
 
-#: gtk/gtkentry.c:3838 gtk/gtklabel.c:3164
+#: gtk/gtkentry.c:3843 gtk/gtklabel.c:3164
 msgid "Select All"
 msgstr "Alles auswählen"
 
 # gtk/gtkentry.c:3567 gtk/gtktextview
-#: gtk/gtkentry.c:3848 gtk/gtklabel.c:3174
+#: gtk/gtkentry.c:3853 gtk/gtklabel.c:3174
 msgid "Input Methods"
 msgstr "Eingabemethoden"
 
-#: gtk/gtkentry.c:3858 gtk/gtktextview.c:6344
+#: gtk/gtkentry.c:3863 gtk/gtktextview.c:6344
 msgid "_Insert Unicode control character"
 msgstr "Unicode-Steuerzeichen _einfügen"
 
@@ -2091,7 +2090,7 @@ msgstr ""
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1303
+#: gtk/gtkiconfactory.c:1308
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Fehler beim Laden des Icons: %s"
@@ -2556,7 +2555,7 @@ msgstr ""
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Sollen die Reiter alle gleich groß sein?"
 
-#: gtk/gtknotebook.c:2439 gtk/gtknotebook.c:4695
+#: gtk/gtknotebook.c:2436 gtk/gtknotebook.c:4692
 #, c-format
 msgid "Page %u"
 msgstr "Seite %u"
@@ -4306,15 +4305,14 @@ msgid "Color with which to draw insertion cursor"
 msgstr "Farbe, mit der der Einfügecursor gezeichnet wird"
 
 #: gtk/gtkwidget.c:1083
-#, fuzzy
 msgid "Secondary cursor color"
-msgstr "Cursorfarbe"
+msgstr "Sekundäre Cursorfarbe"
 
 #: gtk/gtkwidget.c:1084
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text."
-msgstr ""
+msgstr "Farbe der sekundären Einfügemarke, wenn rechts- und linksläufiger Text gemischt bearbeitet werden."
 
 #: gtk/gtkwidget.c:1089
 msgid "Cursor line aspect ratio"
