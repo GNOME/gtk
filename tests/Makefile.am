@@ -51,6 +51,7 @@ noinst_PROGRAMS =			\
 	testtoolbar			\
 	stresstest-toolbar		\
 	testtreeedit			\
+	testtreemodel			\
 	testtreeview			\
 	testtreefocus			\
 	testtreeflow			\
@@ -88,6 +89,7 @@ testspinbutton_DEPENDENCIES = $(TEST_DEPS)
 testtext_DEPENDENCIES = $(TEST_DEPS)
 testtextbuffer_DEPENDENCIES = $(TEST_DEPS)
 testtreeedit_DEPENDENCIES = $(DEPS)
+testtreemodel_DEPENDENCIES = $(DEPS)
 testtreeview_DEPENDENCIES = $(DEPS)
 testtreefocus_DEPENDENCIES = $(DEPS)
 testtreeflow_DEPENDENCIES = $(DEPS)
@@ -122,6 +124,7 @@ testtextbuffer_LDADD = $(LDADDS)
 testtoolbar_LDADD = $(LDADDS)
 stresstest_toolbar_LDADD = $(LDADDS)
 testtreeedit_LDADD = $(LDADDS)
+testtreemodel_LDADD = $(LDADDS)
 testtreeview_LDADD = $(LDADDS)
 testtreefocus_LDADD = $(LDADDS)
 testtreeflow_LDADD = $(LDADDS)
@@ -147,6 +150,9 @@ testgtk_SOURCES =	\
 
 testtreeedit_SOURCES = 	\
 	testtreeedit.c
+
+testtreemodel_SOURCES = \
+	testtreemodel.c
 
 testtreeview_SOURCES =	\
 	prop-editor.c	\

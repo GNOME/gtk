@@ -1400,6 +1400,70 @@ gtk_entry_expose (GtkWidget      *widget,
   return FALSE;
 }
 
+static void
+gtk_entry_get_pixel_ranges (GtkEntry  *entry,
+			    gint     **ranges,
+			    gint      *n_ranges)
+{
+  gint start_char, end_char;
+
+  if (gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &start_char, &end_char))
+    {
+      PangoLayout *layout = gtk_entry_ensure_layout (entry, TRUE);
+      PangoLayoutLine *line = pango_layout_get_lines (layout)->data;
+      const char *text = pango_layout_get_text (layout);
+      gint start_index = g_utf8_offset_to_pointer (text, start_char) - text;
+      gint end_index = g_utf8_offset_to_pointer (text, end_char) - text;
+      gint real_n_ranges, i;
+
+      pango_layout_line_get_x_ranges (line, start_index, end_index, ranges, &real_n_ranges);
+
+      if (ranges)
+	{
+	  gint *r = *ranges;
+	  
+	  for (i = 0; i < real_n_ranges; ++i)
+	    {
+	      r[2 * i + 1] = (r[2 * i + 1] - r[2 * i]) / PANGO_SCALE;
+	      r[2 * i] = r[2 * i] / PANGO_SCALE;
+	    }
+	}
+      
+      if (n_ranges)
+	*n_ranges = real_n_ranges;
+    }
+  else
+    {
+      if (n_ranges)
+	*n_ranges = 0;
+      if (ranges)
+	*ranges = NULL;
+    }
+}
+
+static gboolean
+in_selection (GtkEntry *entry,
+	      gint	x)
+{
+  gint *ranges;
+  gint n_ranges, i;
+  gint retval = FALSE;
+
+  gtk_entry_get_pixel_ranges (entry, &ranges, &n_ranges);
+
+  for (i = 0; i < n_ranges; ++i)
+    {
+      if (x >= ranges[2 * i] && x < ranges[2 * i] + ranges[2 * i + 1])
+	{
+	  retval = TRUE;
+	  break;
+	}
+    }
+
+  g_free (ranges);
+  return retval;
+}
+	      
 static gint
 gtk_entry_button_press (GtkWidget      *widget,
 			GdkEventButton *event)
@@ -1491,21 +1555,18 @@ gtk_entry_button_press (GtkWidget      *widget,
 	switch (event->type)
 	{
 	case GDK_BUTTON_PRESS:
-	  if (have_selection && tmp_pos >= sel_start && tmp_pos <= sel_end)
+	  if (in_selection (entry, event->x + entry->scroll_offset))
 	    {
 	      /* Click inside the selection - we'll either start a drag, or
 	       * clear the selection
 	       */
-
 	      entry->in_drag = TRUE;
 	      entry->drag_start_x = event->x + entry->scroll_offset;
 	      entry->drag_start_y = event->y + entry->scroll_offset;
 	    }
 	  else
 	    gtk_editable_set_position (editable, tmp_pos);
-	  
 	  break;
-
  
 	case GDK_2BUTTON_PRESS:
 	  /* We ALWAYS receive a GDK_BUTTON_PRESS immediately before 
@@ -2997,7 +3058,6 @@ static void
 gtk_entry_draw_text (GtkEntry *entry)
 {
   GtkWidget *widget;
-  PangoLayoutLine *line;
   
   if (!entry->visible && entry->invisible_char == 0)
     return;
@@ -3021,19 +3081,12 @@ gtk_entry_draw_text (GtkEntry *entry)
 	  gint *ranges;
 	  gint n_ranges, i;
           PangoRectangle logical_rect;
-	  const gchar *text = pango_layout_get_text (layout);
-	  gint start_index = g_utf8_offset_to_pointer (text, start_pos) - text;
-	  gint end_index = g_utf8_offset_to_pointer (text, end_pos) - text;
-	  GdkRegion *clip_region = gdk_region_new ();
-	  GdkGC *text_gc;
-	  GdkGC *selection_gc;
+	  GdkGC *selection_gc, *text_gc;
+	  GdkRegion *clip_region;
 
-          line = pango_layout_get_lines (layout)->data;
-          
-	  pango_layout_line_get_x_ranges (line, start_index, end_index, &ranges, &n_ranges);
+	  pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
+	  gtk_entry_get_pixel_ranges (entry, &ranges, &n_ranges);
 
-          pango_layout_get_extents (layout, NULL, &logical_rect);
-          
 	  if (GTK_WIDGET_HAS_FOCUS (entry))
 	    {
 	      selection_gc = widget->style->base_gc [GTK_STATE_SELECTED];
@@ -3045,21 +3098,22 @@ gtk_entry_draw_text (GtkEntry *entry)
 	      text_gc = widget->style->text_gc [GTK_STATE_ACTIVE];
 	    }
 	  
-	  for (i=0; i < n_ranges; i++)
+	  clip_region = gdk_region_new ();
+	  for (i = 0; i < n_ranges; ++i)
 	    {
 	      GdkRectangle rect;
 
-	      rect.x = INNER_BORDER - entry->scroll_offset + ranges[2*i] / PANGO_SCALE;
+	      rect.x = INNER_BORDER - entry->scroll_offset + ranges[2 * i];
 	      rect.y = y;
-	      rect.width = (ranges[2*i + 1] - ranges[2*i]) / PANGO_SCALE;
-	      rect.height = logical_rect.height / PANGO_SCALE;
+	      rect.width = ranges[2 * i + 1];
+	      rect.height = logical_rect.height;
 		
 	      gdk_draw_rectangle (entry->text_area, selection_gc, TRUE,
 				  rect.x, rect.y, rect.width, rect.height);
 
 	      gdk_region_union_with_rect (clip_region, &rect);
 	    }
-
+	  
 	  gdk_gc_set_clip_region (text_gc, clip_region);
 	  gdk_draw_layout (entry->text_area, text_gc, 
 			   x, y,

@@ -285,7 +285,7 @@ gtk_semi_private_h_sources =    \
 	gtkfilesystem.h
 
 # GTK+ header files that don't get installed
-gtk_private_h_sources =         \
+gtk_private_h_sources =		\
 	gtkentryprivate.h	\
 	gtkfilechooserembed.h	\
 	gtkfilechooserentry.h	\
@@ -296,9 +296,10 @@ gtk_private_h_sources =         \
 	gtkfilesystemmodel.h	\
 	gtkinternals.h		\
 	gtkpathbar.h		\
-	gtkrbtree.h 		\
+	gtkrbtree.h		\
+	gtksequence.h		\
 	gtktextbtree.h		\
-	gtktextchildprivate.h   \
+	gtktextchildprivate.h	\
 	gtktextsegment.h	\
 	gtktexttypes.h		\
 	gtktextutil.h		\
@@ -441,6 +442,7 @@ gtk_c_sources =                 \
 	gtkscale.c		\
 	gtkscrollbar.c		\
 	gtkscrolledwindow.c	\
+	gtksequence.c		\
 	gtkselection.c		\
 	gtkseparator.c		\
 	gtkseparatormenuitem.c	\

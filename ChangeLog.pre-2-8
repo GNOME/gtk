@@ -1,3 +1,24 @@
+Sat Aug 14 17:56:33 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkentry.c (gtk_entry_get_pixel_ranges): New function. 
+
+	* gtk/gtkentry.c (in_selection): New function using
+	gtk_entry_get_pixel_ranges() to determine whether a click is in
+	the selection. Improve entry behavior wrt. dragging and
+	selecting. Bug #143249.
+
+Sat Aug 14 17:53:46 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* configure.in: Require glib 2.5.2
+	
+	* gtk/gtksequence.[ch]: New internal data structure.
+
+	* gtk/gtkliststore.[hc]: Reimplement in terms of new data
+	structure
+	
+	* tests/Makefile.am (testtreemodel_SOURCES):
+	* tests/testtreemodel.c: New test program written by Matthias.
+
 2004-08-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_style_set): 

@@ -43,14 +43,14 @@ struct _GtkListStore
 
   /*< private >*/
   gint stamp;
-  gpointer root;
-  gpointer tail;
-  GList *sort_list;
+  gpointer seq;		/* head of the list */
+  gpointer _gtk_reserved1;
+  GList *sort_list;	
   gint n_columns;
   gint sort_column_id;
   GtkSortType order;
   GType *column_headers;
-  gint length;
+  gint _gtk_reserved2;
   GtkTreeIterCompareFunc default_sort_func;
   gpointer default_sort_data;
   GtkDestroyNotify default_sort_destroy;
