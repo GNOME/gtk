@@ -1,3 +1,7 @@
+2002-12-04  Marius Andreiana <marius galuna.ro>
+
+        * ro.po: updated
+
 Tue Dec  3 20:40:56 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* Makefile.in.in: Use datadir, not $(prefix)/share. (#89339)
