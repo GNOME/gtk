@@ -19,6 +19,7 @@
 #include <string.h>
 #include "gtkobject.h"
 #include "gtktypeutils.h"
+#include "gtkcontainer.h"
 
 
 #define	TYPE_NODES_BLOCK_SIZE	(200)
@@ -523,7 +524,7 @@ gtk_arg_copy (GtkArg         *src_arg,
   dest_arg->d = src_arg->d;
 
   if (src_arg->type == GTK_TYPE_STRING)
-    dest_arg->d.pointer_data = g_strdup (src_arg->d.pointer_data);
+    dest_arg->d.string_data = g_strdup (src_arg->d.string_data);
 
   return dest_arg;
 }
@@ -534,23 +535,23 @@ gtk_type_class_init (GtkTypeNode *node)
   if (!node->klass && node->type_info.class_size)
     {
       node->klass = g_malloc0 (node->type_info.class_size);
-
+      
       if (node->parent_type)
 	{
 	  GtkTypeNode *parent;
-
+	  
 	  LOOKUP_TYPE_NODE (parent, node->parent_type);
 	  if (!parent->klass)
 	    gtk_type_class_init (parent);
-
+	  
 	  if (parent->klass)
 	    memcpy (node->klass, parent->klass, parent->type_info.class_size);
 	}
-
+      
       if (gtk_type_is_a (node->type, GTK_TYPE_OBJECT))
 	{
 	  GtkObjectClass *object_class;
-
+	  
 	  /* FIXME: this initialization needs to be done through
 	   * a function pointer someday.
 	   */
@@ -561,8 +562,19 @@ gtk_type_class_init (GtkTypeNode *node)
 	  object_class->signals = NULL;
 	  object_class->nsignals = 0;
 	  object_class->n_args = 0;
-	}
+	  
+	  if (gtk_type_is_a (node->type, GTK_TYPE_CONTAINER))
+	    {
+	      GtkContainerClass *container_class;
 
+	      container_class = (GtkContainerClass*) object_class;
+	      
+	      g_assert (node->type_info.class_size >= sizeof (GtkContainerClass));
+	      
+	      container_class->n_args = 0;
+	    }
+	}
+      
       /* class_init_func is used as data pointer for
        * class_size==0 types
        */

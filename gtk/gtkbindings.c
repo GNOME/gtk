@@ -62,7 +62,7 @@ binding_signal_free (GtkBindingSignal *sig)
   for (i = 0; i < sig->n_args; i++)
     {
       if (sig->args[i].arg_type == GTK_BINDING_ARG_STRING)
-	g_free (sig->args[i].d.pointer_data);
+	g_free (sig->args[i].d.string_data);
     }
   g_free (sig->args);
   g_free (sig->signal_name);
@@ -268,7 +268,7 @@ binding_compose_params (GtkBindingArg	*args,
 	{
 	case  GTK_BINDING_ARG_STRING:
 	  if (params->type == GTK_TYPE_STRING)
-	    GTK_VALUE_STRING (*params) = args->d.pointer_data;
+	    GTK_VALUE_STRING (*params) = args->d.string_data;
 	  else
 	    valid = FALSE;
 	  break;
@@ -569,14 +569,14 @@ gtk_binding_entry_add_signall (GtkBindingSet  *binding_set,
 	  arg->d.double_data = tmp_arg->d.double_data;
 	  break;
 	case  GTK_BINDING_ARG_STRING:
-	  if (!tmp_arg->d.pointer_data)
+	  if (!tmp_arg->d.string_data)
 	    {
 	      g_warning ("gtk_binding_entry_add_signall(): value of `string' arg[%u] is `NULL'", n);
-	      arg->d.pointer_data = NULL;
+	      arg->d.string_data = NULL;
 	      binding_signal_free (signal);
 	      return;
 	    }
-	  arg->d.pointer_data = g_strdup (tmp_arg->d.pointer_data);
+	  arg->d.string_data = g_strdup (tmp_arg->d.string_data);
 	  break;
 	default:
 	  g_warning ("gtk_binding_entry_add_signall(): unsupported type `%s' for arg[%u]",
@@ -643,8 +643,8 @@ gtk_binding_entry_add_signal (GtkBindingSet  *binding_set,
 	  arg->d.double_data = va_arg (args, gdouble);
 	  break;
 	case  GTK_BINDING_ARG_STRING:
-	  arg->d.pointer_data = va_arg (args, gchar*);
-	  if (!arg->d.pointer_data)
+	  arg->d.string_data = va_arg (args, gchar*);
+	  if (!arg->d.string_data)
 	    {
 	      g_warning ("gtk_binding_entry_add_signal(): value of `string' arg[%u] is `NULL'", i);
 	      i = n_args + 2;
