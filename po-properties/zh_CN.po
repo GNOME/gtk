@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-16 13:24-0500\n"
-"PO-Revision-Date: 2004-11-22 08:53+0800\n"
+"POT-Creation-Date: 2004-12-19 12:40+0100\n"
+"PO-Revision-Date: 2004-12-20 00:04+0800\n"
 "Last-Translator: Funda Wang <fundawang@linux.net.cn>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
 "MIME-Version: 1.0\n"
@@ -97,9 +97,8 @@ msgid "Screen"
 msgstr "屏幕"
 
 #: gdk/gdkpango.c:575
-#, fuzzy
 msgid "the GdkScreen for the renderer"
-msgstr "树形视图的模型"
+msgstr "渲染器的 GdkScreen"
 
 #: gtk/gtkaboutdialog.c:195
 msgid "Program name"
@@ -281,16 +280,14 @@ msgid ""
 msgstr "当工具栏处于水平方向时，工具栏项目是否可见。"
 
 #: gtk/gtkaction.c:250
-#, fuzzy
 msgid "Visible when overflown"
-msgstr "垂直时可见"
+msgstr "溢出时可见"
 
 #: gtk/gtkaction.c:251
-#, fuzzy
 msgid ""
 "When TRUE, toolitem proxies for this action are represented in the toolbar "
 "overflow menu."
-msgstr "为 TRUE 时，此动作对应的空菜单将被隐藏。"
+msgstr "为 TRUE 时，此动作对应的工具项代理将显示在工具栏的溢出菜单中。"
 
 #: gtk/gtkaction.c:258 gtk/gtktoolitem.c:166
 msgid "Visible when vertical"
@@ -753,6 +750,7 @@ msgid ""
 "Whether the child_displacement_x/_y properties should also affect the focus "
 "rectangle"
 msgstr ""
+"child_displacement_x/_y 属性是否也影响焦点矩形"
 
 #: gtk/gtkbutton.c:417
 msgid "Show button images"
@@ -837,9 +835,8 @@ msgid "Display the cell"
 msgstr "显示单元格"
 
 #: gtk/gtkcellrenderer.c:223
-#, fuzzy
 msgid "Display the cell sensitive"
-msgstr "显示单元格"
+msgstr "敏感显示单元格"
 
 #: gtk/gtkcellrenderer.c:230
 msgid "xalign"
@@ -947,11 +944,11 @@ msgstr "用于获取字符串的数据源模型中的一列"
 
 #: gtk/gtkcellrenderercombo.c:127
 msgid "Has Entry"
-msgstr ""
+msgstr "有项"
 
 #: gtk/gtkcellrenderercombo.c:128
 msgid "If FALSE, don't allow to enter strings other than the chosen ones"
-msgstr ""
+msgstr "若为 FALSE，不允许在所选项外输入字符串"
 
 #: gtk/gtkcellrendererpixbuf.c:136
 msgid "Pixbuf Object"
@@ -1185,13 +1182,14 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:416 gtk/gtklabel.c:433 gtk/gtkprogressbar.c:242
 msgid "Ellipsize"
-msgstr ""
+msgstr "省略化"
 
 #: gtk/gtkcellrenderertext.c:417
 msgid ""
 "The preferred place to ellipsize the string, if the cell renderer does not "
 "have enough room to display the entire string, if at all"
 msgstr ""
+"如果单元格渲染器根本没有足够的空间显示整个字符串，这里给出了省略化字符串的首选位置"
 
 #: gtk/gtkcellrenderertext.c:434 gtk/gtkfilechooserbutton.c:361
 #: gtk/gtklabel.c:453
@@ -1200,7 +1198,7 @@ msgstr "以字符数计宽度"
 
 #: gtk/gtkcellrenderertext.c:435 gtk/gtklabel.c:454
 msgid "The desired width of the label, in characters"
-msgstr ""
+msgstr "标签的目标宽度，以字符数计"
 
 #: gtk/gtkcellrenderertext.c:447 gtk/gtkcellview.c:197 gtk/gtktexttag.c:510
 msgid "Background set"
@@ -1315,14 +1313,12 @@ msgid "Whether this tag affects the language the text is rendered as"
 msgstr "此标记是否影响绘制文字时使用的语言"
 
 #: gtk/gtkcellrenderertext.c:503
-#, fuzzy
 msgid "Ellipsize set"
-msgstr "字体提升设置"
+msgstr "省略化设置"
 
 #: gtk/gtkcellrenderertext.c:504
-#, fuzzy
 msgid "Whether this tag affects the ellipsize mode"
-msgstr "此标记是否会影响字体提升"
+msgstr "此标记是否会影响省略化模式"
 
 #: gtk/gtkcellrenderertoggle.c:142
 msgid "Toggle state"
@@ -1546,23 +1542,20 @@ msgid "Add tearoffs to menus"
 msgstr "在菜单上添加撕下标志"
 
 #: gtk/gtkcombobox.c:652
-#, fuzzy
 msgid "Whether dropdowns should have a tearoff menu item"
-msgstr "标签是否应统一大小"
+msgstr "下拉框是否应有撕下菜单项"
 
 #: gtk/gtkcombobox.c:667 gtk/gtkentry.c:530
 msgid "Has Frame"
 msgstr "有边框"
 
 #: gtk/gtkcombobox.c:668
-#, fuzzy
 msgid "Whether the combo box draws a frame around the child"
-msgstr "列是否可根据列首重新排序"
+msgstr "组合框是否在子项目周围绘制边框"
 
 #: gtk/gtkcombobox.c:676
-#, fuzzy
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
-msgstr "用鼠标点击该按钮时是否要获得焦点"
+msgstr "用鼠标点击复选框时复选框是否要获得焦点"
 
 #: gtk/gtkcombobox.c:682
 msgid "Appears as list"
@@ -1788,18 +1781,16 @@ msgid "Text column"
 msgstr "文字列"
 
 #: gtk/gtkentrycompletion.c:296
-#, fuzzy
 msgid "The column of the model containing the strings."
-msgstr "用于获取字符串的数据源模型中的一列"
+msgstr "包含字符串的模型那一列。"
 
 #: gtk/gtkentrycompletion.c:313
 msgid "Inline completion"
-msgstr ""
+msgstr "嵌入补全"
 
 #: gtk/gtkentrycompletion.c:314
-#, fuzzy
 msgid "Whether the common prefix should be inserted automatically"
-msgstr "是否应显示边框"
+msgstr "是否自动插入公共前缀"
 
 #: gtk/gtkentrycompletion.c:328
 msgid "Popup completion"
@@ -1968,7 +1959,7 @@ msgstr "文件选择器对话框的标题。"
 
 #: gtk/gtkfilechooserbutton.c:362
 msgid "The desired width of the button widget, in characters."
-msgstr ""
+msgstr "按钮部件的目标宽度，以字符数计。"
 
 #: gtk/gtkfilechooserdefault.c:625
 msgid "Default file chooser backend"
@@ -2160,26 +2151,24 @@ msgid "The selection mode"
 msgstr "选中模式"
 
 #: gtk/gtkiconview.c:350
-#, fuzzy
 msgid "Pixbuf column"
-msgstr "文字列"
+msgstr "像素缓冲列"
 
 #: gtk/gtkiconview.c:351
 msgid "Model column used to retrieve the icon pixbuf from"
-msgstr ""
+msgstr "用于获取图标像素缓冲列的模型列"
 
 #: gtk/gtkiconview.c:369
 msgid "Model column used to retrieve the text from"
-msgstr ""
+msgstr "用于获取文字的模型列"
 
 #: gtk/gtkiconview.c:388
-#, fuzzy
 msgid "Markup column"
-msgstr "标记语言"
+msgstr "标记列"
 
 #: gtk/gtkiconview.c:389
 msgid "Model column used to retrieve the text if using Pango markup"
-msgstr ""
+msgstr "在使用 Pango 标记的情况下获取文字的模型列"
 
 #: gtk/gtkiconview.c:396
 msgid "Icon View Model"
@@ -2190,58 +2179,48 @@ msgid "The model for the icon view"
 msgstr "图标视图的模型"
 
 #: gtk/gtkiconview.c:413
-#, fuzzy
 msgid "Number of columns"
-msgstr "频道数"
+msgstr "列数"
 
 #: gtk/gtkiconview.c:414
-#, fuzzy
 msgid "Number of columns to display"
-msgstr "显示的小数点后位数"
+msgstr "要显示的列数"
 
 #: gtk/gtkiconview.c:431
-#, fuzzy
 msgid "Width for each item"
-msgstr "项目标签要使用的部件"
+msgstr "每项的宽度"
 
 #: gtk/gtkiconview.c:432
 msgid "The width used for each item"
-msgstr ""
+msgstr "每项所使用的宽度"
 
 #: gtk/gtkiconview.c:448
-#, fuzzy
 msgid "Space which is inserted between cells of an item"
-msgstr "单元格之间插入的间隔"
+msgstr "每项单元格之间插入的间隔"
 
 #: gtk/gtkiconview.c:463
-#, fuzzy
 msgid "Row Spacing"
 msgstr "行距"
 
 #: gtk/gtkiconview.c:464
-#, fuzzy
 msgid "Space which is inserted between grid rows"
-msgstr "单元格之间插入的间隔"
+msgstr "网格行之间插入的间隔"
 
 #: gtk/gtkiconview.c:479
-#, fuzzy
 msgid "Column Spacing"
 msgstr "列距"
 
 #: gtk/gtkiconview.c:480
-#, fuzzy
 msgid "Space which is inserted between grid column"
-msgstr "单元格之间插入的间隔"
+msgstr "网格列之间插入的间隔"
 
 #: gtk/gtkiconview.c:495
-#, fuzzy
 msgid "Margin"
-msgstr "左边距"
+msgstr "边距"
 
 #: gtk/gtkiconview.c:496
-#, fuzzy
 msgid "Space which is inserted at the edges of the icon view"
-msgstr "单元格之间插入的间隔"
+msgstr "图标视图边缘插入的间隔"
 
 #: gtk/gtkiconview.c:512 gtk/gtkprogressbar.c:152 gtk/gtktoolbar.c:507
 msgid "Orientation"
@@ -2250,27 +2229,23 @@ msgstr "方向"
 #: gtk/gtkiconview.c:513
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
-msgstr ""
+msgstr "每项的文字和图标的相对位置"
 
 #: gtk/gtkiconview.c:521
-#, fuzzy
 msgid "Selection Box Color"
-msgstr "选中内容的边界"
+msgstr "选中框颜色"
 
 #: gtk/gtkiconview.c:522
-#, fuzzy
 msgid "Color of the selection box"
-msgstr "字体选择对话框的标题"
+msgstr "选中框的颜色"
 
 #: gtk/gtkiconview.c:528
-#, fuzzy
 msgid "Selection Box Alpha"
-msgstr "选中内容的边界"
+msgstr "选中框的 Alpha"
 
 #: gtk/gtkiconview.c:529
-#, fuzzy
 msgid "Opacity of the selection box"
-msgstr "字体选择对话框的标题"
+msgstr "选中框的不透明度"
 
 #: gtk/gtkimage.c:158
 msgid "Pixbuf"
@@ -2325,18 +2300,16 @@ msgid "Icon size"
 msgstr "图标大小"
 
 #: gtk/gtkimage.c:216
-#, fuzzy
 msgid "Symbolic size to use for stock icon, icon set or named icon"
-msgstr "后备图标或图标集使用的大小"
+msgstr "后备图标、图标集或命名图标所使用的符号大小"
 
 #: gtk/gtkimage.c:232
 msgid "Pixel size"
 msgstr "像素大小"
 
 #: gtk/gtkimage.c:233
-#, fuzzy
 msgid "Pixel size to use for named icon"
-msgstr "后备图标或图标集使用的大小"
+msgstr "命名图标所使用的像素大小"
 
 #: gtk/gtkimage.c:241
 msgid "Animation"
@@ -2351,9 +2324,8 @@ msgid "Icon Name"
 msgstr "图标名称"
 
 #: gtk/gtkimage.c:258
-#, fuzzy
 msgid "The name of the icon from the icon theme"
-msgstr "选中字体的名称"
+msgstr "图标主题的图标名称"
 
 #: gtk/gtkimage.c:265
 msgid "Storage type"
@@ -2447,15 +2419,15 @@ msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string, if at all"
 msgstr ""
+"如果标签根本没有足够的空间显示整个字符串，这里给出了省略化字符串的首选位置"
 
 #: gtk/gtklabel.c:474
 msgid "Single Line Mode"
 msgstr "单行模式"
 
 #: gtk/gtklabel.c:475
-#, fuzzy
 msgid "Whether the label is in single line mode"
-msgstr "标签是否以选中字体绘制"
+msgstr "标签是否是单行模式"
 
 #: gtk/gtklabel.c:492
 msgid "Angle"
@@ -2463,16 +2435,15 @@ msgstr "角度"
 
 #: gtk/gtklabel.c:493
 msgid "Angle at which the label is rotated"
-msgstr ""
+msgstr "标签旋转的角度"
 
 #: gtk/gtklabel.c:513
-#, fuzzy
 msgid "Maximum Width In Characters"
-msgstr "以字符数计宽度"
+msgstr "最大宽度，以字符数计"
 
 #: gtk/gtklabel.c:514
 msgid "The desired maximum width of the label, in characters"
-msgstr ""
+msgstr "标签的目标最大宽度，以字符数计"
 
 #: gtk/gtklayout.c:635 gtk/gtkviewport.c:136
 msgid "Horizontal adjustment"
@@ -2509,14 +2480,12 @@ msgid ""
 msgstr "当此菜单被折叠可供窗口管理器显示的标题"
 
 #: gtk/gtkmenu.c:539
-#, fuzzy
 msgid "Tearoff State"
-msgstr "折叠标题"
+msgstr "撕下状态"
 
 #: gtk/gtkmenu.c:540
-#, fuzzy
 msgid "A boolean that indicates whether the menu is torn-off"
-msgstr "当此菜单被折叠可供窗口管理器显示的标题"
+msgstr "表明菜单是否被撕下的布尔值"
 
 #: gtk/gtkmenu.c:546
 msgid "Vertical Padding"
@@ -2632,7 +2601,7 @@ msgstr "菜单"
 
 #: gtk/gtkmenutoolbutton.c:248
 msgid "The dropdown menu"
-msgstr ""
+msgstr "下拉菜单"
 
 #: gtk/gtkmessagedialog.c:124
 msgid "Image/label border"
@@ -2776,7 +2745,6 @@ msgid "Tab label"
 msgstr "标签文字"
 
 #: gtk/gtknotebook.c:482
-#, fuzzy
 msgid "The string displayed on the child's tab label"
 msgstr "子标签上要显示的字符串"
 
@@ -2785,7 +2753,6 @@ msgid "Menu label"
 msgstr "菜单标签"
 
 #: gtk/gtknotebook.c:489
-#, fuzzy
 msgid "The string displayed in the child's menu entry"
 msgstr "子菜单项中要显示的字符串"
 
@@ -2794,7 +2761,6 @@ msgid "Tab expand"
 msgstr "标签展开"
 
 #: gtk/gtknotebook.c:503
-#, fuzzy
 msgid "Whether to expand the child's tab or not"
 msgstr "是否展开子标签"
 
@@ -2803,7 +2769,6 @@ msgid "Tab fill"
 msgstr "标签填充"
 
 #: gtk/gtknotebook.c:510
-#, fuzzy
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr "子标签是否要占满整个分配区域"
 
@@ -3029,6 +2994,7 @@ msgid ""
 "The preferred place to ellipsize the string, if the progressbar does not "
 "have enough room to display the entire string, if at all"
 msgstr ""
+"如果进度栏根本没有足够的空间显示整个字符串，这里给出了省略化字符串的首选位置"
 
 #: gtk/gtkradioaction.c:139
 msgid "The value"
@@ -3047,14 +3013,12 @@ msgid "Group"
 msgstr "组"
 
 #: gtk/gtkradioaction.c:157
-#, fuzzy
 msgid "The radio action whose group this action belongs to."
-msgstr "此动作所属组的单选按钮。"
+msgstr "此动作所属组的单选钮动作组。"
 
 #: gtk/gtkradiobutton.c:114
-#, fuzzy
 msgid "The radio button whose group this widget belongs to."
-msgstr "此部件所属组的单选按钮"
+msgstr "此部件所属组的单选钮动作组"
 
 #: gtk/gtkrange.c:325
 msgid "Update policy"
@@ -3380,11 +3344,11 @@ msgstr "图标大小的列表(gtk-menu=16,16;gtk-button=20,20..."
 
 #: gtk/gtksettings.c:372
 msgid "GTK Modules"
-msgstr ""
+msgstr "GTK 模块"
 
 #: gtk/gtksettings.c:373
 msgid "List of currently active GTK modules"
-msgstr ""
+msgstr "列出目前激活的 GTK 模块"
 
 #: gtk/gtksettings.c:382
 msgid "Xft Antialias"
@@ -3428,12 +3392,11 @@ msgstr "Xft 的解析度，以 1024*每英寸点数为单位。-1 代表使用�
 
 #: gtk/gtksettings.c:432
 msgid "Alternative button order"
-msgstr ""
+msgstr "备选按钮次序"
 
 #: gtk/gtksettings.c:433
-#, fuzzy
 msgid "Whether buttons in dialogs should use the alternative button order"
-msgstr "是否要在按钮中显示备选图标"
+msgstr "对话框中的按钮是否要使用备选按钮次序"
 
 #: gtk/gtksizegroup.c:243
 msgid "Mode"
@@ -3739,13 +3702,12 @@ msgid "Left, right, or center justification"
 msgstr "左对齐、右对齐或是居中对齐"
 
 #: gtk/gtktexttag.c:386
-#, fuzzy
 msgid ""
 "The language this text is in, as an ISO code. Pango can use this as a hint "
 "when rendering the text. If not set, an appropriate default will be used."
 msgstr ""
 "此文字所用的语言，用 ISO 编码表示。Pango 可以使用此设置作为渲染文字时的提示。"
-"如果您不理解这一参数也没什么关系"
+"如果不设定，则会使用相应的默认值。"
 
 #: gtk/gtktexttag.c:393
 msgid "Left margin"
@@ -4763,14 +4725,12 @@ msgid "TRUE if the window should receive the input focus."
 msgstr "窗口是否要接受输入焦点。"
 
 #: gtk/gtkwindow.c:604
-#, fuzzy
 msgid "Focus on map"
-msgstr "点击获得焦点"
+msgstr "映射时获得焦点"
 
 #: gtk/gtkwindow.c:605
-#, fuzzy
 msgid "TRUE if the window should receive the input focus when mapped."
-msgstr "窗口是否要接受输入焦点。"
+msgstr "窗口是否要在映射时接受输入焦点。"
 
 #: gtk/gtkwindow.c:619
 msgid "Decorated"
@@ -4804,8 +4764,3 @@ msgstr "输入法状态样式"
 msgid "How to draw the input method statusbar"
 msgstr "如何绘制输入法状态栏"
 
-#~ msgid "Width In Chararacters"
-#~ msgstr "以字符数计宽度"
-
-#~ msgid "Whether the browse dialog is visible or not."
-#~ msgstr "浏览对话框是否可见。"
