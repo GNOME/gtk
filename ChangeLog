@@ -1,3 +1,11 @@
+Sat Jul 12 16:16:04 2003  Kristian Rietveld  <kris@gtk.org>
+
+	Merged from stable.
+
+	* gtk/gtktreeview.c (gtk_tree_view_drag_data_received): special
+	case drags to "0", scroll to the top after dropping. (Fixes #94968,
+	reported by Alp Toker).
+
 Sat Jul 12 16:08:32 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merged from stable.

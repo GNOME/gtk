@@ -4976,7 +4976,7 @@ set_destination_row (GtkTreeView    *tree_view,
 
   di = get_info (tree_view);
 
-  if (di == NULL)
+  if (di == NULL || y - TREE_VIEW_HEADER_HEIGHT (tree_view) < 0)
     {
       /* someone unset us as a drag dest, note that if
        * we return FALSE drag_leave isn't called
@@ -5546,6 +5546,14 @@ gtk_tree_view_drag_data_received (GtkWidget        *widget,
                    accepted,
                    (context->action == GDK_ACTION_MOVE),
                    time);
+
+  if (gtk_tree_path_get_depth (dest_row) == 1
+      && gtk_tree_path_get_indices (dest_row)[0] == 0)
+    {
+      /* special special case drag to "0", scroll to first item */
+      if (!tree_view->priv->scroll_to_path)
+        gtk_tree_view_scroll_to_cell (tree_view, dest_row, NULL, FALSE, 0.0, 0.0);
+    }
 
   gtk_tree_path_free (dest_row);
 
