@@ -6,7 +6,10 @@ A widget displaying a single row of a GtkTreeModel
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+A #GtkCellView displays a single row of a #GtkTreeModel, using
+cell renderers just like #GtkTreeView. #GtkCellView doesn't support
+some of the more complex features of #GtkTreeView, like cell editing
+and drag and drop.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
@@ -70,27 +73,6 @@ A widget displaying a single row of a GtkTreeModel
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_cell_view_set_value ##### -->
-<para>
-
-</para>
-
-@cell_view: 
-@renderer: 
-@property: 
-@value: 
-
-
-<!-- ##### FUNCTION gtk_cell_view_set_values ##### -->
-<para>
-
-</para>
-
-@cell_view: 
-@renderer: 
-@Varargs: 
-
-
 <!-- ##### FUNCTION gtk_cell_view_set_model ##### -->
 <para>
 
@@ -136,16 +118,6 @@ A widget displaying a single row of a GtkTreeModel
 
 @cell_view: 
 @color: 
-
-
-<!-- ##### FUNCTION gtk_cell_view_set_cell_data ##### -->
-<para>
-
-</para>
-
-@cell_view: 
-<!-- # Unused Parameters # -->
-@cellview: 
 
 
 <!-- ##### FUNCTION gtk_cell_view_get_cell_renderers ##### -->

@@ -10,6 +10,12 @@ Widget that displays any object that implements the <link
 linkend="GtkTreeModel">GtkTreeModel</link> interface.
 </para>
 
+<para>
+Please refer to the <link linkend="TreeWidget">tree widget conceptual overview</link> 
+for an overview of all the objects and data types related to the tree widget and how 
+they work together.
+</para>
+
 <!-- ##### SECTION See_Also ##### -->
 <para>
 #GtkTreeViewColumn, #GtkTreeSelection, #GtkTreeDnd, #GtkTreeMode, #GtkTreeSortable, #GtkTreeModelSort, #GtkListStore, #GtkTreeStore, #GtkCellRenderer, #GtkCellEditable, #GtkCellRendererPixbuf, #GtkCellRendererText, #GtkCellRendererToggle

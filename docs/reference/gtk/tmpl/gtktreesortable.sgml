@@ -6,12 +6,14 @@ The interface for sortable models used by GtkTreeView
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+#GtkTreeSortable is an interface to be implemented by tree models which
+support sorting. The #GtkTreeView uses the methods provided by this interface
+to sort the model.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
-
+#GtkTreeModel, #GtkTreeView
 </para>
 
 <!-- ##### STRUCT GtkTreeSortable ##### -->

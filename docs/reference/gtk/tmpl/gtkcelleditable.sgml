@@ -6,7 +6,8 @@ Interface for widgets which can are used for editing cells
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+The #GtkCellEditable interface must be implemented for widgets
+to be usable when editing the contents of a #GtkTreeView cell.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
