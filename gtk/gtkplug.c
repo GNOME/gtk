@@ -934,7 +934,7 @@ xembed_set_info (GdkWindow     *window,
 
   Atom xembed_info_atom = gdk_x11_get_xatom_by_name_for_display (display, "_XEMBED_INFO");
 
-  buffer[1] = GTK_XEMBED_PROTOCOL_VERSION;
+  buffer[0] = GTK_XEMBED_PROTOCOL_VERSION;
   buffer[1] = flags;
 
   XChangeProperty (GDK_DISPLAY_XDISPLAY (display),

@@ -1,3 +1,9 @@
+Tue Oct  7 23:23:05 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkplug.c (xembed_set_info): Put the supported protocol
+	version in in the right field of the _XEMBED_INFO property.  
+	(#123885, Denis Mikhalkin)
+
 Mon Oct  6 14:18:47 2003  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkexpander.c (gtk_expander_animation_timeout): only show
