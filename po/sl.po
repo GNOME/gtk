@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ 1.4.0\n"
-"POT-Creation-Date: 2002-02-27 23:52+0100\n"
+"POT-Creation-Date: 2002-03-03 20:02+0100\n"
 "PO-Revision-Date: 2002-02-26 00:23+0100\n"
 "Last-Translator: Andra¾ Tori <andraz.tori1@guest.arnes.si>\n"
 "Language-Team: slovenian <sl@li.org>\n"
@@ -12,12 +12,12 @@ msgstr ""
 "Content-Type: text/plain; charset=ISO-8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:144 gdk-pixbuf/gdk-pixbuf-io.c:551
+#: gdk-pixbuf/gdk-pixbuf-animation.c:144 gdk-pixbuf/gdk-pixbuf-io.c:581
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Nisem uspel odpreti datoteke '%s': %s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:155 gdk-pixbuf/gdk-pixbuf-io.c:561
+#: gdk-pixbuf/gdk-pixbuf-animation.c:155 gdk-pixbuf/gdk-pixbuf-io.c:591
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "Slikovna datoteka '%s' ne vsebuje podatkov"
@@ -27,7 +27,7 @@ msgstr "Slikovna datoteka '%s' ne vsebuje podatkov"
 msgid "Don't know how to load the animation in file '%s'"
 msgstr "Ne znam nalo¾iti animacije iz datoteke '%s'"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:205 gdk-pixbuf/gdk-pixbuf-io.c:606
+#: gdk-pixbuf/gdk-pixbuf-animation.c:205 gdk-pixbuf/gdk-pixbuf-io.c:636
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -43,12 +43,12 @@ msgstr ""
 "Nisem uspel nalo¾iti animacije '%s': razlog ni znan, verjetno pokvarjena "
 "datoteka"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:324
+#: gdk-pixbuf/gdk-pixbuf-io.c:354
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr "Ne morem nalo¾iti modula za nalaganje slik: %s: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:343
+#: gdk-pixbuf/gdk-pixbuf-io.c:373
 #, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
@@ -57,41 +57,41 @@ msgstr ""
 "Modul za nalaganje slik %s ne izva¾a zahtevanega vmesnika; morda je iz druge "
 "razlièice GTK?"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:460 gdk-pixbuf/gdk-pixbuf-io.c:486
+#: gdk-pixbuf/gdk-pixbuf-io.c:490 gdk-pixbuf/gdk-pixbuf-io.c:516
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "Vrsta slike '%s' ni podprta"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:508
+#: gdk-pixbuf/gdk-pixbuf-io.c:538
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "Nisem uspel prepoznati oblike zapisa slike v datoteki '%s'"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:514
+#: gdk-pixbuf/gdk-pixbuf-io.c:544
 msgid "Unrecognized image file format"
 msgstr "Nepoznana oblika zapisa slikovne datoteke"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:584
+#: gdk-pixbuf/gdk-pixbuf-io.c:614
 #, c-format
 msgid "Don't know how to load the image in file '%s'"
 msgstr "Ne znam nalo¾iti slike v datoteki '%s'"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:617
+#: gdk-pixbuf/gdk-pixbuf-io.c:647
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "Nisem uspel nalo¾iti slike '%s': %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:722
+#: gdk-pixbuf/gdk-pixbuf-io.c:752
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "Ta izgradnja gdk-pixbuf ne podpira shranjevanja v obliki zapisa: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:829
+#: gdk-pixbuf/gdk-pixbuf-io.c:859
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "Nisem uspel odpreti '%s' za pisanje: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:850
+#: gdk-pixbuf/gdk-pixbuf-io.c:880
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -1498,27 +1498,27 @@ msgstr "Vrednost v seznamu"
 msgid "Whether entered values must already be present in the list"
 msgstr "Ali morajo biti vne¹ene vrednosti ¾e prisotne v seznamu"
 
-#: gtk/gtkcontainer.c:203
+#: gtk/gtkcontainer.c:200
 msgid "Resize mode"
 msgstr "Naèin spremembe velikosti"
 
-#: gtk/gtkcontainer.c:204
+#: gtk/gtkcontainer.c:201
 msgid "Specify how resize events are handled"
 msgstr "Navedi kako se obravnava dogodke sprememb velikosti"
 
-#: gtk/gtkcontainer.c:211
+#: gtk/gtkcontainer.c:208
 msgid "Border width"
 msgstr "©irina robu"
 
-#: gtk/gtkcontainer.c:212
+#: gtk/gtkcontainer.c:209
 msgid "The width of the empty border outside the containers children."
 msgstr "©irina praznega robu zunaj vsebovalnika otrok"
 
-#: gtk/gtkcontainer.c:220
+#: gtk/gtkcontainer.c:217
 msgid "Child"
 msgstr "Otrok"
 
-#: gtk/gtkcontainer.c:221
+#: gtk/gtkcontainer.c:218
 msgid "Can be used to add a new child to the container."
 msgstr "Je lahko uporabljen za dodajanje novega otroka vsebovalniku"
 
@@ -1620,8 +1620,8 @@ msgid "Maximum length"
 msgstr "Najveèja dol¾ina"
 
 #: gtk/gtkentry.c:464
-msgid "Maximum number of characters for this entry"
-msgstr "Najveèje ¹tevilo znakov v tem vnosu"
+msgid "Maximum number of characters for this entry. Zero if no maximum."
+msgstr "Najveèje ¹tevilo znakov v tem vnosu. Niè, èe ni omejitve."
 
 #: gtk/gtkentry.c:472
 msgid "Visibility"
@@ -1692,64 +1692,64 @@ msgstr "Izbira fokusa"
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr "Ali naj se izbere vsebina vnosa, ko je fokusiran"
 
-#: gtk/gtkentry.c:3834 gtk/gtklabel.c:3211
+#: gtk/gtkentry.c:3866 gtk/gtklabel.c:3211
 msgid "Select All"
 msgstr "Izberi vse"
 
-#: gtk/gtkentry.c:3844 gtk/gtklabel.c:3221
+#: gtk/gtkentry.c:3876 gtk/gtklabel.c:3221
 msgid "Input Methods"
 msgstr "Naèini vnosa"
 
-#: gtk/gtkentry.c:3854 gtk/gtktextview.c:6360
+#: gtk/gtkentry.c:3886 gtk/gtktextview.c:6372
 msgid "_Insert Unicode control character"
 msgstr "_Vstavi kontrolni znak Unicode"
 
-#: gtk/gtkfilesel.c:534 gtk/gtkimage.c:161
+#: gtk/gtkfilesel.c:536 gtk/gtkimage.c:161
 msgid "Filename"
 msgstr "Ime datoteke"
 
-#: gtk/gtkfilesel.c:535
+#: gtk/gtkfilesel.c:537
 msgid "The currently selected filename."
 msgstr "Ime trenutno izbrane datoteke"
 
-#: gtk/gtkfilesel.c:541
+#: gtk/gtkfilesel.c:543
 msgid "Show file operations"
 msgstr "Ka¾i operacije datotek"
 
-#: gtk/gtkfilesel.c:542
+#: gtk/gtkfilesel.c:544
 msgid "Whether buttons for creating/manipulating files should be displayed."
 msgstr "Ali naj bodo prikazani gumbi za ustvarjanje/urejanje datotek."
 
-#: gtk/gtkfilesel.c:549
+#: gtk/gtkfilesel.c:551
 msgid "Select multiple"
 msgstr "Izbira veè datotek"
 
-#: gtk/gtkfilesel.c:550
+#: gtk/gtkfilesel.c:552
 msgid "Whether to allow multiple files to be selected."
 msgstr "Ali naj bo mo¾no izbrati veè datotek hrkrati."
 
-#: gtk/gtkfilesel.c:685
+#: gtk/gtkfilesel.c:694
 msgid "Folders"
 msgstr "Mape"
 
-#: gtk/gtkfilesel.c:689
+#: gtk/gtkfilesel.c:698
 msgid "Fol_ders"
 msgstr "_Mape"
 
-#: gtk/gtkfilesel.c:717
+#: gtk/gtkfilesel.c:729
 msgid "Files"
 msgstr "Datoteke"
 
-#: gtk/gtkfilesel.c:721
+#: gtk/gtkfilesel.c:733
 msgid "_Files"
 msgstr "_Datoteke"
 
-#: gtk/gtkfilesel.c:797 gtk/gtkfilesel.c:2099
+#: gtk/gtkfilesel.c:809 gtk/gtkfilesel.c:2111
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Neberljiv imenik: %s"
 
-#: gtk/gtkfilesel.c:921
+#: gtk/gtkfilesel.c:933
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -1760,25 +1760,25 @@ msgstr ""
 "voljo temu programu.\n"
 "Ste preprièani, da jo ¾elite izbrati."
 
-#: gtk/gtkfilesel.c:1051
+#: gtk/gtkfilesel.c:1063
 msgid "_New Folder"
 msgstr "_Nova mapa"
 
-#: gtk/gtkfilesel.c:1062
+#: gtk/gtkfilesel.c:1074
 msgid "De_lete File"
 msgstr "_Zbri¹i datoteko"
 
-#: gtk/gtkfilesel.c:1073
+#: gtk/gtkfilesel.c:1085
 msgid "_Rename File"
 msgstr "P_reimenuj datoteko"
 
-#: gtk/gtkfilesel.c:1333
+#: gtk/gtkfilesel.c:1345
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Ime mape \"%s\" vsebuje simbole, ki v imenih map niso dovoljeni"
 
-#: gtk/gtkfilesel.c:1335
+#: gtk/gtkfilesel.c:1347
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -1787,34 +1787,34 @@ msgstr ""
 "Napaka ob ustvarjanju mape \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1336 gtk/gtkfilesel.c:1572
+#: gtk/gtkfilesel.c:1348 gtk/gtkfilesel.c:1584
 msgid "You probably used symbols not allowed in filenames."
 msgstr "Verjetno ste uporabili simbole, ki niso dovoljeni v imenih datotek"
 
-#: gtk/gtkfilesel.c:1344
+#: gtk/gtkfilesel.c:1356
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "Napaka ob ustvarjanju mape: \"%s\": %s\n"
 
-#: gtk/gtkfilesel.c:1378
+#: gtk/gtkfilesel.c:1390
 msgid "New Folder"
 msgstr "Nova mapa"
 
-#: gtk/gtkfilesel.c:1393
+#: gtk/gtkfilesel.c:1405
 msgid "_Folder name:"
 msgstr "Ime _mape:"
 
-#: gtk/gtkfilesel.c:1419
+#: gtk/gtkfilesel.c:1431
 msgid "Create"
 msgstr "Ustvari"
 
-#: gtk/gtkfilesel.c:1460
+#: gtk/gtkfilesel.c:1472
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "Ime datoteke \"%s\" vsebuje simbole, ki v imenih datotek niso dovoljeni"
 
-#: gtk/gtkfilesel.c:1463
+#: gtk/gtkfilesel.c:1475
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -1823,31 +1823,31 @@ msgstr ""
 "Napaka ob brisanju datoteke \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1465 gtk/gtkfilesel.c:1586
+#: gtk/gtkfilesel.c:1477 gtk/gtkfilesel.c:1598
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "Verjetno vsebuje simbole, ki v imenih datotek niso dovoljeni"
 
-#: gtk/gtkfilesel.c:1474
+#: gtk/gtkfilesel.c:1486
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "Napaka ob brisanju datoteke \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1517
+#: gtk/gtkfilesel.c:1529
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "Resnièno zbri¹i datoteko \"%s\" ?"
 
-#: gtk/gtkfilesel.c:1522
+#: gtk/gtkfilesel.c:1534
 msgid "Delete File"
 msgstr "Zbri¹i datoteko"
 
-#: gtk/gtkfilesel.c:1568 gtk/gtkfilesel.c:1582
+#: gtk/gtkfilesel.c:1580 gtk/gtkfilesel.c:1594
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "Ime datoteke \"%s\" vsebuje simbole, ki v imenih datotek niso dovoljeni"
 
-#: gtk/gtkfilesel.c:1570
+#: gtk/gtkfilesel.c:1582
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -1856,7 +1856,7 @@ msgstr ""
 "Napaka ob preimenovanju datoteke v \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1584
+#: gtk/gtkfilesel.c:1596
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -1865,29 +1865,29 @@ msgstr ""
 "Napaka ob preimenovanju datoteke \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1594
+#: gtk/gtkfilesel.c:1606
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Napaka ob preimenovanju datoteke \"%s\" v \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1641
+#: gtk/gtkfilesel.c:1653
 msgid "Rename File"
 msgstr "Preimenuj datoteko"
 
-#: gtk/gtkfilesel.c:1656
+#: gtk/gtkfilesel.c:1668
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Preimenuj datoteko \"%s\" v:"
 
-#: gtk/gtkfilesel.c:1687
+#: gtk/gtkfilesel.c:1699
 msgid "Rename"
 msgstr "Preimenuj"
 
-#: gtk/gtkfilesel.c:2078
+#: gtk/gtkfilesel.c:2090
 msgid "Selection: "
 msgstr "Izbira: "
 
-#: gtk/gtkfilesel.c:2953
+#: gtk/gtkfilesel.c:2966
 #, c-format
 msgid ""
 "The filename %s couldn't be converted to UTF-8. Try setting the environment "
@@ -1896,11 +1896,11 @@ msgstr ""
 "Imena datoteke %s ni bilo moè pretvoriti v UTF-8. Poskusite nastaviti "
 "okoljsko spremenljivko G_BROKEN__FILENAMES."
 
-#: gtk/gtkfilesel.c:3817
+#: gtk/gtkfilesel.c:3830
 msgid "Name too long"
 msgstr "Ime je predolgo"
 
-#: gtk/gtkfilesel.c:3819
+#: gtk/gtkfilesel.c:3832
 msgid "Couldn't convert filename"
 msgstr "Nisem mogel pretvoriti imena datoteke"
 
@@ -2015,7 +2015,7 @@ msgstr "Gama"
 msgid "_Gamma value"
 msgstr "Vrednost _gama"
 
-#: gtk/gtkhandlebox.c:192 gtk/gtkmenubar.c:150 gtk/gtkstatusbar.c:158
+#: gtk/gtkhandlebox.c:192 gtk/gtkmenubar.c:215 gtk/gtkstatusbar.c:158
 #: gtk/gtktoolbar.c:277 gtk/gtkviewport.c:148
 msgid "Shadow type"
 msgstr "Vrsta sence"
@@ -2045,7 +2045,7 @@ msgstr "Stran ¹katle z roèico, ki je poravnana z toèko doka."
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1290
+#: gtk/gtkiconfactory.c:1303
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Napaka ob nalaganju ikone: %s"
@@ -2291,7 +2291,7 @@ msgstr "Gradnik, ki naj se aktivira, ko je pritisnjena tipka za oznako."
 msgid "Horizontal adjustment"
 msgstr "Vodoravna poravnava"
 
-#: gtk/gtklayout.c:618 gtk/gtkscrolledwindow.c:235
+#: gtk/gtklayout.c:618 gtk/gtkscrolledwindow.c:237
 msgid "The GtkAdjustment for the horizontal position."
 msgstr "GtkAdjustment za vodoravno poravnavo."
 
@@ -2299,7 +2299,7 @@ msgstr "GtkAdjustment za vodoravno poravnavo."
 msgid "Vertical adjustment"
 msgstr "Navpièna poravnava"
 
-#: gtk/gtklayout.c:626 gtk/gtkscrolledwindow.c:242
+#: gtk/gtklayout.c:626 gtk/gtkscrolledwindow.c:244
 msgid "The GtkAdjustment for the vertical position."
 msgstr "GtkAdjustment za navpièno poravnavo."
 
@@ -2324,7 +2324,7 @@ msgstr "Vi¹ina postavitve."
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:701
+#: gtk/gtkmain.c:734
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -2350,15 +2350,15 @@ msgstr ""
 "Ali se lahko pospe¹evalniki  menujev spremenijo z pritiskom tipke nad "
 "predmetom menuja."
 
-#: gtk/gtkmenubar.c:151
+#: gtk/gtkmenubar.c:216
 msgid "Style of bevel around the menubar"
 msgstr "Slog obrobe okoli menuja"
 
-#: gtk/gtkmenubar.c:158 gtk/gtktoolbar.c:251
+#: gtk/gtkmenubar.c:223 gtk/gtktoolbar.c:251
 msgid "Internal padding"
 msgstr "Notranje polnjenje"
 
-#: gtk/gtkmenubar.c:159
+#: gtk/gtkmenubar.c:224
 msgid "Amount of border space between the menubar shadow and the menu items"
 msgstr "Kolièina robnega prostora med senco menuja in premeti menuja"
 
@@ -2886,43 +2886,43 @@ msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr "Ka¾i gumb za drugotni korak naprej na drugem koncu drsnika"
 
-#: gtk/gtkscrolledwindow.c:234 gtk/gtktext.c:598 gtk/gtktreeview.c:522
+#: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:522
 msgid "Horizontal Adjustment"
 msgstr "Vodoravna prilagoditev"
 
-#: gtk/gtkscrolledwindow.c:241 gtk/gtktext.c:606 gtk/gtktreeview.c:530
+#: gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:606 gtk/gtktreeview.c:530
 msgid "Vertical Adjustment"
 msgstr "Navpièna prilagoditev"
 
-#: gtk/gtkscrolledwindow.c:248
+#: gtk/gtkscrolledwindow.c:250
 msgid "Horizontal Scrollbar Policy"
 msgstr "Obna¹anje vodoravnega drsnika"
 
-#: gtk/gtkscrolledwindow.c:249
+#: gtk/gtkscrolledwindow.c:251
 msgid "When the horizontal scrollbar is displayed"
 msgstr "Kdaj je prikazan vodoravni drsnik"
 
-#: gtk/gtkscrolledwindow.c:256
+#: gtk/gtkscrolledwindow.c:258
 msgid "Vertical Scrollbar Policy"
 msgstr "Obna¹anje navpiènega drsnika"
 
-#: gtk/gtkscrolledwindow.c:257
+#: gtk/gtkscrolledwindow.c:259
 msgid "When the vertical scrollbar is displayed"
 msgstr "Kdaj je prikazan navpièni drsnik"
 
-#: gtk/gtkscrolledwindow.c:265
+#: gtk/gtkscrolledwindow.c:267
 msgid "Window Placement"
 msgstr "Postavitev okna"
 
-#: gtk/gtkscrolledwindow.c:266
+#: gtk/gtkscrolledwindow.c:268
 msgid "Where the contents are located with respect to the scrollbars"
 msgstr "Kje le¾i vsebina glede na drsnike"
 
-#: gtk/gtkscrolledwindow.c:273
+#: gtk/gtkscrolledwindow.c:275
 msgid "Shadow Type"
 msgstr "Vrsta sence"
 
-#: gtk/gtkscrolledwindow.c:274
+#: gtk/gtkscrolledwindow.c:276
 msgid "Style of bevel around the contents"
 msgstr "Vrsta obrobe okoli vsebine"
 
@@ -3722,11 +3722,11 @@ msgstr "Viden kazalec"
 msgid "If the insertion cursor is shown"
 msgstr "Ali je vstavitveni kazalec viden"
 
-#: gtk/gtktextview.c:6351
+#: gtk/gtktextview.c:6363
 msgid "Input _Methods"
 msgstr "_Naèini vnosa"
 
-#: gtk/gtkthemes.c:71
+#: gtk/gtkthemes.c:69
 #, c-format
 msgid "Unable to locate theme engine in module_path: \"%s\","
 msgstr "Ne najdem stroja tem v poti module_path: \"%s\","
@@ -3837,7 +3837,7 @@ msgstr "Vodoravna prilagoditev za gradnik"
 msgid "Vertical Adjustment for the widget"
 msgstr "Navpièna prilagoditev za gradnik"
 
-#: gtk/gtktreeview.c:538 gtk/gtktreeviewcolumn.c:174 gtk/gtkwidget.c:425
+#: gtk/gtktreeview.c:538 gtk/gtktreeviewcolumn.c:174 gtk/gtkwidget.c:423
 msgid "Visible"
 msgstr "Viden"
 
@@ -4049,29 +4049,29 @@ msgstr "GtkAdjustment, ki doloèi vrednost navpiène lege tega pogleda"
 msgid "Determines how the shadowed box around the viewport is drawn."
 msgstr "Doloèi kako je narisana senèena ¹katla okoli pogleda."
 
-#: gtk/gtkwidget.c:392
+#: gtk/gtkwidget.c:390
 msgid "Widget name"
 msgstr "Ime gradnika"
 
-#: gtk/gtkwidget.c:393
+#: gtk/gtkwidget.c:391
 msgid "The name of the widget"
 msgstr "Ime gradnika"
 
-#: gtk/gtkwidget.c:399
+#: gtk/gtkwidget.c:397
 msgid "Parent widget"
 msgstr "Gradnik star¹"
 
-#: gtk/gtkwidget.c:400
+#: gtk/gtkwidget.c:398
 msgid "The parent widget of this widget. Must be a Container widget."
 msgstr ""
 "Star¹evski gradnik tega gradnika. Mora biti Vsebovalna (Container) vrsta "
 "gradnika."
 
-#: gtk/gtkwidget.c:407
+#: gtk/gtkwidget.c:405
 msgid "Width request"
 msgstr "Zahtevek po ¹irini"
 
-#: gtk/gtkwidget.c:408
+#: gtk/gtkwidget.c:406
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used."
@@ -4079,11 +4079,11 @@ msgstr ""
 "Prezri gradnikov zahtevek po ¹irini, ali -1, èe naj bo uporabljen obièajni "
 "zahtevek."
 
-#: gtk/gtkwidget.c:416
+#: gtk/gtkwidget.c:414
 msgid "Height request"
 msgstr "Zahtevek po ¹irini"
 
-#: gtk/gtkwidget.c:417
+#: gtk/gtkwidget.c:415
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used."
@@ -4091,148 +4091,148 @@ msgstr ""
 "Prezri gradnikov zahtevek po ¹irini, ali -1, èe naj bo uprabljen normalen "
 "zahtevek -1."
 
-#: gtk/gtkwidget.c:426
+#: gtk/gtkwidget.c:424
 msgid "Whether the widget is visible"
 msgstr "Ali je gradnik viden"
 
-#: gtk/gtkwidget.c:432
+#: gtk/gtkwidget.c:430
 msgid "Sensitive"
 msgstr "Obèutljiv"
 
-#: gtk/gtkwidget.c:433
+#: gtk/gtkwidget.c:431
 msgid "Whether the widget responds to input"
 msgstr "Ali se gradnik odziva na vnose"
 
-#: gtk/gtkwidget.c:439
+#: gtk/gtkwidget.c:437
 msgid "Application paintable"
 msgstr "Program izrisljiv"
 
-#: gtk/gtkwidget.c:440
+#: gtk/gtkwidget.c:438
 msgid "Whether the application will paint directly on the widget"
 msgstr "Ali se bo program risal neposredno na gradnik"
 
-#: gtk/gtkwidget.c:446
+#: gtk/gtkwidget.c:444
 msgid "Can focus"
 msgstr "Lahko fokusira"
 
-#: gtk/gtkwidget.c:447
+#: gtk/gtkwidget.c:445
 msgid "Whether the widget can accept the input focus"
 msgstr "Ali lahko gradnik sprejme vnosni fokus"
 
-#: gtk/gtkwidget.c:453
+#: gtk/gtkwidget.c:451
 msgid "Has focus"
 msgstr "Ima fokus"
 
-#: gtk/gtkwidget.c:454
+#: gtk/gtkwidget.c:452
 msgid "Whether the widget has the input focus"
 msgstr "Ali ima gradnik vnosni fokus"
 
-#: gtk/gtkwidget.c:460
+#: gtk/gtkwidget.c:458
 msgid "Can default"
 msgstr "Je lahko privzet"
 
-#: gtk/gtkwidget.c:461
+#: gtk/gtkwidget.c:459
 msgid "Whether the widget can be the default widget"
 msgstr "Ali je gradnik lahko privzet gradnik"
 
-#: gtk/gtkwidget.c:467
+#: gtk/gtkwidget.c:465
 msgid "Has default"
 msgstr "Je privzet"
 
-#: gtk/gtkwidget.c:468
+#: gtk/gtkwidget.c:466
 msgid "Whether the widget is the default widget"
 msgstr "Ali je gradnik privzet gradnik"
 
-#: gtk/gtkwidget.c:474
+#: gtk/gtkwidget.c:472
 msgid "Receives default"
 msgstr "Sprejema privzeto"
 
-#: gtk/gtkwidget.c:475
+#: gtk/gtkwidget.c:473
 msgid "If TRUE, the widget will receive the default action when it is focused."
 msgstr "Èe je RESNIÈNO, bo gradnik sprejel privzeta dejanja, ko bo fokusiran."
 
-#: gtk/gtkwidget.c:481
+#: gtk/gtkwidget.c:479
 msgid "Composite child"
 msgstr "Sestavljen otrok"
 
-#: gtk/gtkwidget.c:482
+#: gtk/gtkwidget.c:480
 msgid "Whether the widget is composed of other widgets"
 msgstr "Ali je gradnik sestavljen iz drugih gradnikov"
 
-#: gtk/gtkwidget.c:488
+#: gtk/gtkwidget.c:486
 msgid "Style"
 msgstr "Slog"
 
-#: gtk/gtkwidget.c:489
+#: gtk/gtkwidget.c:487
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)."
 msgstr ""
 "Slog gradnika, ki vsebuje podatke o tem kako bo izgledal (barve, itd.)."
 
-#: gtk/gtkwidget.c:495
+#: gtk/gtkwidget.c:493
 msgid "Events"
 msgstr "Dogodki"
 
-#: gtk/gtkwidget.c:496
+#: gtk/gtkwidget.c:494
 msgid "The event mask that decides what kind of GdkEvents this widget gets."
 msgstr "Maska dogodkov, ki doloèa katere vrste GdkEvents bo dobival ta gradnik"
 
-#: gtk/gtkwidget.c:503
+#: gtk/gtkwidget.c:501
 msgid "Extension events"
 msgstr "Raz¹irjeni dogodki"
 
-#: gtk/gtkwidget.c:504
+#: gtk/gtkwidget.c:502
 msgid "The mask that decides what kind of extension events this widget gets."
 msgstr ""
 "Maska dogodkov, ki doloèa katere vrste raz¹irjenih dogodkov bo dobival ta "
 "gradnik"
 
-#: gtk/gtkwidget.c:1053
+#: gtk/gtkwidget.c:1051
 msgid "Interior Focus"
 msgstr "Notranji fokus"
 
-#: gtk/gtkwidget.c:1054
+#: gtk/gtkwidget.c:1052
 msgid "Whether to draw the focus indicator inside widgets."
 msgstr "Ali naj se nari¹e pokazatelj fokusa znotraj gradnika."
 
-#: gtk/gtkwidget.c:1060
+#: gtk/gtkwidget.c:1058
 msgid "Focus linewidth"
 msgstr "©irina èrte fokusa"
 
-#: gtk/gtkwidget.c:1061
+#: gtk/gtkwidget.c:1059
 msgid "Width, in pixels, of the focus indicator line."
 msgstr "©irina (v pikslih) fokusove pokazateljske èrte."
 
-#: gtk/gtkwidget.c:1067
+#: gtk/gtkwidget.c:1065
 msgid "Focus line dash pattern"
 msgstr "Vzorec èrtkane èrte fokusa"
 
-#: gtk/gtkwidget.c:1068
+#: gtk/gtkwidget.c:1066
 msgid "Dash pattern used to draw the focus indicator."
 msgstr "Èrtkan vzorec, ki se uporabi za risanje pokazatelja fokusa"
 
-#: gtk/gtkwidget.c:1073
+#: gtk/gtkwidget.c:1071
 msgid "Focus padding"
 msgstr "Polnenje fokusa"
 
-#: gtk/gtkwidget.c:1074
+#: gtk/gtkwidget.c:1072
 msgid "Width, in pixels, between focus indicator and the widget 'box'."
 msgstr "©irina (v pikslih) med pokazateljem fokusa in gradnikovo '¹katlo'."
 
-#: gtk/gtkwidget.c:1079
+#: gtk/gtkwidget.c:1077
 msgid "Cursor color"
 msgstr "Barva kazalca"
 
-#: gtk/gtkwidget.c:1080
+#: gtk/gtkwidget.c:1078
 msgid "Color with which to draw insertion cursor"
 msgstr "Barva s katero naj se ri¹e vnosni kazalec"
 
-#: gtk/gtkwidget.c:1085
+#: gtk/gtkwidget.c:1083
 msgid "Cursor line aspect ratio"
 msgstr "Razmerje èrte kazalca"
 
-#: gtk/gtkwidget.c:1086
+#: gtk/gtkwidget.c:1084
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Razmerje v katerem naj se ri¹e vnosni kazalec"
 
