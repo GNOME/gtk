@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
-"POT-Creation-Date: 1999-06-09 11:43+0200\n"
+"POT-Creation-Date: 1999-07-21 19:27+0200\n"
 "PO-Revision-Date: 1998-12-18 20:32+0100\n"
 "Last-Translator: Vincent Renardias <vincent@debian.org>\n"
 "Language-Team: Vincent Renardias <vincent@debian.org>\n"
@@ -15,31 +15,31 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:213
 msgid "Hue:"
-msgstr "Teinte:"
+msgstr "Teinte :"
 
 #: gtk/gtkcolorsel.c:214
 msgid "Saturation:"
-msgstr "Saturation:"
+msgstr "Saturation :"
 
 #: gtk/gtkcolorsel.c:215
 msgid "Value:"
-msgstr "Valeur:"
+msgstr "Valeur :"
 
 #: gtk/gtkcolorsel.c:216
 msgid "Red:"
-msgstr "Rouge:"
+msgstr "Rouge :"
 
 #: gtk/gtkcolorsel.c:217
 msgid "Green:"
-msgstr "Vert:"
+msgstr "Vert :"
 
 #: gtk/gtkcolorsel.c:218
 msgid "Blue:"
-msgstr "Bleu:"
+msgstr "Bleu :"
 
 #: gtk/gtkcolorsel.c:219
 msgid "Opacity:"
-msgstr "Opacité:"
+msgstr "Opacité :"
 
 #. The OK button
 #: gtk/gtkcolorsel.c:1668 gtk/gtkfilesel.c:571 gtk/gtkfontsel.c:3718
@@ -71,19 +71,19 @@ msgstr "Fichiers"
 #: gtk/gtkfilesel.c:609 gtk/gtkfilesel.c:1639
 #, c-format
 msgid "Directory unreadable: %s"
-msgstr "Répertoire illisible: %s"
+msgstr "Répertoire illisible : %s"
 
 #: gtk/gtkfilesel.c:641
 msgid "Create Dir"
-msgstr "Créer Rép."
+msgstr "Créer répertoire"
 
 #: gtk/gtkfilesel.c:652 gtk/gtkfilesel.c:1029
 msgid "Delete File"
-msgstr "Effacer Fichier"
+msgstr "Effacer fichier"
 
 #: gtk/gtkfilesel.c:663 gtk/gtkfilesel.c:1133
 msgid "Rename File"
-msgstr "Renommer Fichier"
+msgstr "Renommer fichier"
 
 #.
 #. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
@@ -101,11 +101,11 @@ msgstr "Fermer"
 
 #: gtk/gtkfilesel.c:920
 msgid "Create Directory"
-msgstr "Créer Répertoire"
+msgstr "Créer répertoire"
 
 #: gtk/gtkfilesel.c:934
 msgid "Directory name:"
-msgstr "Nom du répertoire:"
+msgstr "Nom du répertoire :"
 
 #. buttons
 #: gtk/gtkfilesel.c:947
@@ -124,59 +124,59 @@ msgstr "Renommer"
 
 #: gtk/gtkfilesel.c:1618
 msgid "Selection: "
-msgstr "Sélection:"
+msgstr "Sélection :"
 
 #: gtk/gtkfontsel.c:216
 msgid "Foundry:"
-msgstr "Fonderie:"
+msgstr "Fonderie :"
 
 #: gtk/gtkfontsel.c:217
 msgid "Family:"
-msgstr "Famille:"
+msgstr "Famille :"
 
 #: gtk/gtkfontsel.c:218
 msgid "Weight:"
-msgstr "Poids:"
+msgstr "Poids :"
 
 #: gtk/gtkfontsel.c:219
 msgid "Slant:"
-msgstr "Inclinaison:"
+msgstr "Inclinaison :"
 
 #: gtk/gtkfontsel.c:220
 msgid "Set Width:"
-msgstr "Définir largeur:"
+msgstr "Définir largeur :"
 
 #: gtk/gtkfontsel.c:221
 msgid "Add Style:"
-msgstr "Ajouter style:"
+msgstr "Ajouter style :"
 
 #: gtk/gtkfontsel.c:222
 msgid "Pixel Size:"
-msgstr "Taille en Pixels:"
+msgstr "Taille en pixels :"
 
 #: gtk/gtkfontsel.c:223
 msgid "Point Size:"
-msgstr "Taille en points:"
+msgstr "Taille en points :"
 
 #: gtk/gtkfontsel.c:224
 msgid "Resolution X:"
-msgstr "Résolution X:"
+msgstr "Résolution X :"
 
 #: gtk/gtkfontsel.c:225
 msgid "Resolution Y:"
-msgstr "Résolution Y:"
+msgstr "Résolution Y :"
 
 #: gtk/gtkfontsel.c:226
 msgid "Spacing:"
-msgstr "Espacement:"
+msgstr "Espacement :"
 
 #: gtk/gtkfontsel.c:227
 msgid "Average Width:"
-msgstr "Largeur moyenne:"
+msgstr "Largeur moyenne :"
 
 #: gtk/gtkfontsel.c:228
 msgid "Charset:"
-msgstr "Jeu de caractères:"
+msgstr "Jeu de caractères :"
 
 #. Number of internationalized titles here must match number
 #. of NULL initializers above
@@ -198,15 +198,15 @@ msgstr "Police"
 
 #: gtk/gtkfontsel.c:517 gtk/gtkfontsel.c:2202 gtk/gtkfontsel.c:2432
 msgid "Font:"
-msgstr "Police:"
+msgstr "Police :"
 
 #: gtk/gtkfontsel.c:522
 msgid "Font Style:"
-msgstr "Style de Police:"
+msgstr "Style de police :"
 
 #: gtk/gtkfontsel.c:527
 msgid "Size:"
-msgstr "Taille:"
+msgstr "Taille :"
 
 #: gtk/gtkfontsel.c:659 gtk/gtkfontsel.c:881
 msgid "Reset Filter"
@@ -214,7 +214,7 @@ msgstr "RAZ du filtre"
 
 #: gtk/gtkfontsel.c:673
 msgid "Metric:"
-msgstr "Métrique:"
+msgstr "Métrique :"
 
 #: gtk/gtkfontsel.c:677
 msgid "Points"
@@ -227,7 +227,7 @@ msgstr "Pixels"
 #. create the text entry widget
 #: gtk/gtkfontsel.c:700
 msgid "Preview:"
-msgstr "Aperçu:"
+msgstr "Aperçu :"
 
 #: gtk/gtkfontsel.c:729
 msgid "Font Information"
@@ -235,16 +235,16 @@ msgstr "Information sur la police"
 
 #: gtk/gtkfontsel.c:762
 msgid "Requested Font Name:"
-msgstr "Nom de police demandée:"
+msgstr "Nom de la police demandée :"
 
 #: gtk/gtkfontsel.c:773
 msgid "Actual Font Name:"
-msgstr "Nom de police obtenue:"
+msgstr "Nom de la police en cours :"
 
 #: gtk/gtkfontsel.c:784
 #, c-format
 msgid "%i fonts available with a total of %i styles."
-msgstr "%i polices obtenus avec un total de %i styles."
+msgstr "%i polices disponibles avec un total de %i styles."
 
 #: gtk/gtkfontsel.c:799
 msgid "Filter"
@@ -252,7 +252,7 @@ msgstr "Filtre"
 
 #: gtk/gtkfontsel.c:812
 msgid "Font Types:"
-msgstr "Types de Polices:"
+msgstr "Types de polices :"
 
 #: gtk/gtkfontsel.c:820
 msgid "Bitmap"
@@ -273,7 +273,7 @@ msgstr "*"
 #. Convert '(nil)' weights to 'regular', since it looks nicer.
 #: gtk/gtkfontsel.c:1228
 msgid "(nil)"
-msgstr "(nil)"
+msgstr "(vide)"
 
 #: gtk/gtkfontsel.c:1228 gtk/gtkfontsel.c:2698
 msgid "regular"
@@ -318,7 +318,7 @@ msgstr "La police sélectionnée n'est pas valide."
 #: gtk/gtkfontsel.c:1860
 msgid "This is a 2-byte font and may not be displayed correctly."
 msgstr ""
-"Ceci est une police codée sur 2 octets et peux ne pas être affichée "
+"Ceci est une police codée sur 2 octets et peut ne pas être affichée "
 "correctement."
 
 #: gtk/gtkfontsel.c:1982 gtk/gtkinputdialog.c:607
@@ -331,19 +331,19 @@ msgstr "roman"
 
 #: gtk/gtkfontsel.c:2005
 msgid "proportional"
-msgstr "proportionnelle"
+msgstr "proportionnel"
 
 #: gtk/gtkfontsel.c:2006
 msgid "monospaced"
-msgstr "monospace"
+msgstr "fixe"
 
 #: gtk/gtkfontsel.c:2007
 msgid "char cell"
-msgstr "char cell"
+msgstr "cellule caractère"
 
 #: gtk/gtkfontsel.c:2207
 msgid "Font: (Filter Applied)"
-msgstr "Police: (Filtre appliqué)"
+msgstr "Police : (filtre appliqué)"
 
 #: gtk/gtkfontsel.c:2680
 msgid "heavy"
@@ -383,7 +383,7 @@ msgstr "fin"
 
 #: gtk/gtkfontsel.c:2871
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
-msgstr "Valeur de MAX_FONTS dépassée. Des polices peuvent manquer."
+msgstr "Valeur MAX_FONTS dépassée. Des polices peuvent manquer."
 
 #: gtk/gtkfontsel.c:3725
 msgid "Apply"
@@ -412,7 +412,7 @@ msgstr "Pas de périphérique d'entrée"
 
 #: gtk/gtkinputdialog.c:237
 msgid "Device:"
-msgstr "Périphérique:"
+msgstr "Périphérique :"
 
 #: gtk/gtkinputdialog.c:253
 msgid "Disabled"
@@ -428,7 +428,7 @@ msgstr "Fenêtre"
 
 #: gtk/gtkinputdialog.c:277
 msgid "Mode: "
-msgstr "Mode: "
+msgstr "Mode : "
 
 #. The axis listbox
 #: gtk/gtkinputdialog.c:307
@@ -484,21 +484,25 @@ msgstr "effacer"
 msgid "Page %u"
 msgstr "Page %u"
 
-#: gtk/gtkrc.c:1609
+#: gtk/gtkrc.c:1611
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr ""
-"Impossible de localiser le fichier image dans pixmap_path: \"%s\" ligne %d"
+"Impossible de localiser le fichier image dans le chemin des  pixmaps : "
+"\"%s\" ligne %d"
 
-#: gtk/gtkrc.c:1612
+#: gtk/gtkrc.c:1614
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Impossible de localiser le fichier image dans pixmap_path: \"%s\""
+msgstr ""
+"Impossible de localiser le fichier image dans le chemin des pixmaps : \"%s\""
 
-#: gtk/gtkthemes.c:103
+#: gtk/gtkthemes.c:115
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
-msgstr "Impossible de localiser le module chargeable dans module_path: \"%s\","
+msgstr ""
+"Impossible de localiser le module chargeable dans le chemin des modules : "
+"\"%s\","
 
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
