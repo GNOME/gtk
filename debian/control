@@ -26,6 +26,8 @@ Architecture: any
 Section: devel
 Depends: libgtk-cvs-1.1 (=${Source-Version}), libglib-cvs-dev
 Suggests: libgtk-cvs-doc
+Provides: libgtk1.1-dev
+Replaces: libgtk1.1-dev
 Conflicts: libgtk-dev, libgtk1 (<< 1:1.0.4), libgtk1.1-dev
 Description: CVS build of development files for the GIMP Toolkit
  **THIS IS NOT AN OFFICIAL DEBIAN PACKAGE! THIS IS AN AUTOMATED CVS
