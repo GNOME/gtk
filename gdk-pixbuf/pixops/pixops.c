@@ -1078,22 +1078,29 @@ pixops_process (guchar         *dest_buf,
 
 static void 
 correct_total (int    *weights, 
-	       int    n_x, 
-	       int    n_y,
-	       int    total, 
-	       double overall_alpha)
+               int    n_x, 
+               int    n_y,
+               int    total, 
+               double overall_alpha)
 {
   int correction = (int)(0.5 + 65536 * overall_alpha) - total;
-  int i;
-  for (i = n_x * n_y - 1; i >= 0; i--) 
+  int remaining, c, d, i;
+  
+  if (correction != 0)
     {
-      if (*(weights + i) + correction >= 0) 
-	{
-	  *(weights + i) += correction;
-	  break;
-	}
+      remaining = correction;
+      for (d = 1, c = correction; c != 0 && remaining != 0; d++, c = correction / d) 
+	for (i = n_x * n_y - 1; i >= 0 && c != 0 && remaining != 0; i--) 
+	  if (*(weights + i) + c >= 0) 
+	    {
+	      *(weights + i) += c;
+	      remaining -= c;
+	      if ((0 < remaining && remaining < c) ||
+		  (0 > remaining && remaining > c))
+		c = remaining;
+	    }
     }
-}  
+}
 
 static void
 tile_make_weights (PixopsFilter *filter, double x_scale, double y_scale, double overall_alpha)
