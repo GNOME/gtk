@@ -148,9 +148,11 @@ image_handler_load (int idx)
 	g_free (module_name);
 
 	module = g_module_open (path, G_MODULE_BIND_LAZY);
-	if (!module)
+	if (!module) {
+		g_warning ("Unable to load module: %s", path);
 		return;
-	
+	}
+
 	file_formats [idx].module = module;
 
 	if (g_module_symbol (module, "image_load", &load_sym))
@@ -196,6 +198,12 @@ gdk_pixbuf_load_image (const char *file)
 	}
 
 	fclose (f);
+	g_warning ("Unable to find handler for file: %s", file);
 	return NULL;
 }
 
+/*
+ * Local variables:
+ * c-basic-offset: 8
+ * End:
+ */

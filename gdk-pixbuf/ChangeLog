@@ -1,3 +1,18 @@
+1999-07-16  Larry Ewing  <lewing@gimp.org>
+
+	* src/testpixbuf.c (expose_func): reverted the expose everything
+	changes, I'm not sure why these went in.
+	(config_func): bring this up to date with the new pixbuf_scale
+	semantics.
+
+	* src/gdk-pixbuf-io.c: added a couple of warnings to the module
+	loading code so that poeple can diagnose problems better. 
+
+	* src/gdk-pixbuf.c (gdk_pixbux_scale): fix the borkedness, also it
+	no longer allocates a new pixbuf, which make things nicer for the
+	rest of the code.  Unfortunately there is still a problem with
+	scaling rgba images.
+
 1999-07-16  Mark Crichton  <crichton@gimp.org>
 
 	* src/testpixbuf.c (config_func): ConfigureEvent handler.  This

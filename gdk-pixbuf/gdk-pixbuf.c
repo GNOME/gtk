@@ -51,42 +51,38 @@ gdk_pixbuf_scale (GdkPixBuf *pixbuf, gint w, gint h)
 {
     GdkPixBuf *spb;
     art_u8 *pixels;
+    gint rowstride;
     double affine[6];
     ArtAlphaGamma *alphagamma;
+    ArtPixBuf *art_pixbuf = NULL;
 
     alphagamma = NULL;
 
     affine[1] = affine[2] = affine[4] = affine[5] = 0;
     
-    affine[0] = w / (pixbuf->art_pixbuf->width);
-    affine[3] = h / (pixbuf->art_pixbuf->height);
+    
+    affine[0] = w / (double)(pixbuf->art_pixbuf->width);
+    affine[3] = h / (double)(pixbuf->art_pixbuf->height);
 
-    spb = g_new (GdkPixBuf, 1);
+    //    rowstride = w * pixbuf->art_pixbuf->n_channels;
+    rowstride = w * 3;
 
-    if (pixbuf->art_pixbuf->has_alpha) {
-	 /* Following code is WRONG....of course, the code for this
-	  * transform isn't in libart yet.
-	  */
-#if 0
-	 pixels = art_alloc (h * w * 4);
-	 art_rgb_affine( pixels, 0, 0, w, h, (w * 4),
-			 pixbuf->art_pixbuf->pixels,
-			 pixbuf->art_pixbuf->width,
-			 pixbuf->art_pixbuf->height,
-			 pixbuf->art_pixbuf->rowstride,
-			 affine, ART_FILTER_NEAREST, alphagamma);
-	 spb->art_pixbuf = art_pixbuf_new_rgba(pixels, w, h, (w * 4));
-#endif
-    } else {
-	 pixels = art_alloc (h * w * 3);
-	 art_rgb_affine( pixels, 0, 0, w, h, (w * 3),
-			 pixbuf->art_pixbuf->pixels,
-			 pixbuf->art_pixbuf->width,
-			 pixbuf->art_pixbuf->height,
-			 pixbuf->art_pixbuf->rowstride,
-			 affine, ART_FILTER_NEAREST, alphagamma);
-	 spb->art_pixbuf = art_pixbuf_new_rgb(pixels, w, h, (w * 3)); 
-	 spb->ref_count = 0;
-	 spb->unref_func = NULL;
-    }
+    pixels = art_alloc (h * rowstride);
+    art_rgb_pixbuf_affine( pixels, 0, 0, w, h, rowstride,
+			   pixbuf->art_pixbuf,
+			   affine, ART_FILTER_NEAREST, alphagamma);
+
+    if (pixbuf->art_pixbuf->has_alpha)
+      // should be rgba
+      art_pixbuf = art_pixbuf_new_rgb(pixels, w, h, rowstride); 
+    else 
+      art_pixbuf = art_pixbuf_new_rgb(pixels, w, h, rowstride); 
+
+    art_pixbuf_free (pixbuf->art_pixbuf);
+    pixbuf->art_pixbuf = art_pixbuf;
+
+    return pixbuf;
 }
+
+
+
