@@ -187,9 +187,6 @@ static gboolean      gtk_drag_highlight_expose   (GtkWidget      *widget,
 					  	  GdkEventExpose *event,
 						  gpointer        data);
 
-static GdkAtom  gtk_drag_dest_find_target   (GtkWidget        *widget,
-					     GtkDragDestSite  *site,
-					     GdkDragContext   *context);
 static void     gtk_drag_selection_received (GtkWidget        *widget,
 					     GtkSelectionData *selection_data,
 					     guint32           time,
@@ -943,6 +940,58 @@ gtk_drag_dest_unset (GtkWidget *widget)
   gtk_object_set_data (GTK_OBJECT (widget), "gtk-drag-dest", NULL);
 }
 
+/**
+ * gtk_drag_dest_get_target_list:
+ * @widget: a #GtkWidget
+ * 
+ * Returns the list of targets this widget can accept from
+ * drag-and-drop.
+ * 
+ * Return value: the #GtkTargetList, or %NULL if none
+ **/
+GtkTargetList*
+gtk_drag_dest_get_target_list (GtkWidget *widget)
+{
+  GtkDragDestSite *site;
+  
+  site = gtk_object_get_data (GTK_OBJECT (widget), "gtk-drag-dest");
+
+  return site ? site->target_list : NULL;  
+}
+
+/**
+ * gtk_drag_dest_set_target_list:
+ * @widget: a #GtkWidget that's a drag destination
+ * @target_list: list of droppable targets, or %NULL for none
+ * 
+ * Sets the target types that this widget can accept from drag-and-drop.
+ * The widget must first be made into a drag destination with
+ * gtk_drag_dest_set().
+ **/
+void
+gtk_drag_dest_set_target_list (GtkWidget      *widget,
+                               GtkTargetList  *target_list)
+{
+  GtkDragDestSite *site;
+  
+  site = gtk_object_get_data (GTK_OBJECT (widget), "gtk-drag-dest");
+  
+  if (site == NULL)
+    {
+      g_warning ("can't set a target list on a widget until you've called gtk_drag_dest_set() to make the widget into a drag destination");
+      return;
+    }
+
+  if (target_list)
+    gtk_target_list_ref (site->target_list);
+  
+  if (site->target_list)
+    gtk_target_list_unref (site->target_list);
+
+  site->target_list = target_list;
+}
+
+
 /*************************************************************
  * gtk_drag_dest_handle_event:
  *     Called from widget event handling code on Drag events
@@ -1042,25 +1091,35 @@ gtk_drag_dest_handle_event (GtkWidget *toplevel,
     }
 }
 
-/*************************************************************
+/**
  * gtk_drag_dest_find_target:
- *     Decide on a target for the drag.
- *   arguments:
- *     site:
- *     context:
- *   results:
- *************************************************************/
-
-static GdkAtom
-gtk_drag_dest_find_target (GtkWidget       *widget,
-			   GtkDragDestSite *site,
-			   GdkDragContext  *context)
+ * @widget: drag destination widget
+ * @context: drag context
+ * @dest_target_list: list of droppable targets
+ * 
+ * Looks for a match between @context->targets and the
+ * @dest_target_list, returning the first matching target, otherwise
+ * returning %GDK_NONE. @dest_target_list should usually be the return
+ * value from gtk_drag_dest_get_target_list(), but some widgets may
+ * have different valid targets for different parts of the widget; in
+ * that case, they will have to implement a drag_motion handler that
+ * passes the correct target list to this function.
+ * 
+ * Return value: first target that the source offers and the dest can accept, or %GDK_NONE
+ **/
+GdkAtom
+gtk_drag_dest_find_target (GtkWidget      *widget,
+                           GdkDragContext *context,
+                           GtkTargetList  *dest_target_list)
 {
   GList *tmp_target;
   GList *tmp_source = NULL;
   GtkWidget *source_widget = gtk_drag_get_source_widget (context);
 
-  tmp_target = site->target_list->list;
+  if (dest_target_list == NULL)
+    return GDK_NONE;
+  
+  tmp_target = dest_target_list->list;
   while (tmp_target)
     {
       GtkTargetPair *pair = tmp_target->data;
@@ -1532,7 +1591,7 @@ gtk_drag_dest_motion (GtkWidget	     *widget,
 	    }
 	}
       
-      if (action && gtk_drag_dest_find_target (widget, site, context))
+      if (action && gtk_drag_dest_find_target (widget, context, site->target_list))
 	{
 	  if (!site->have_drag)
 	    {
@@ -1639,7 +1698,7 @@ gtk_drag_dest_drop (GtkWidget	     *widget,
 
       if (site->flags & GTK_DEST_DEFAULT_DROP)
 	{
-	  GdkAtom target = gtk_drag_dest_find_target (widget, site, context);
+	  GdkAtom target = gtk_drag_dest_find_target (widget, context, site->target_list);
       
 	  if (target == GDK_NONE)
 	    return FALSE;
@@ -2453,6 +2512,7 @@ gtk_drag_source_event_cb (GtkWidget      *widget,
 					i, event);
 
 	      info = gtk_drag_get_source_info (context, FALSE);
+
 	      if (!info->icon_window)
 		{
 		  if (site->pixmap)

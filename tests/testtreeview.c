@@ -248,7 +248,9 @@ set_columns_type (GtkTreeView *tree_view, ColumnsType type)
 {
   GtkTreeViewColumn *col;
   GtkCellRenderer *rend;
-
+  GdkPixbuf *pixbuf;
+  GtkWidget *image;
+  
   current_column_type = type;
   
   col = gtk_tree_view_get_column (tree_view, 0);
@@ -307,6 +309,16 @@ set_columns_type (GtkTreeView *tree_view, ColumnsType type)
       setup_column (col);
       
       gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), col);
+
+      pixbuf = gdk_pixbuf_new_from_xpm_data (book_closed_xpm);
+
+      image = gtk_image_new_from_pixbuf (pixbuf);
+
+      gtk_widget_show (image);
+      
+      gtk_tree_view_column_set_widget (col, image);
+
+      g_object_unref (G_OBJECT (pixbuf));
       
       g_object_unref (G_OBJECT (rend));
       g_object_unref (G_OBJECT (col));
@@ -333,6 +345,8 @@ set_columns_type (GtkTreeView *tree_view, ColumnsType type)
       
       g_object_unref (G_OBJECT (rend));
       g_object_unref (G_OBJECT (col));
+
+      gtk_tree_view_set_expander_column (tree_view, 1);
       
       /* FALL THRU */
       
@@ -527,6 +541,17 @@ columns_selected (GtkOptionMenu *om, gpointer data)
     }
 }
 
+
+enum
+{
+  TARGET_GTK_TREE_VIEW_ROW
+};
+
+static GtkTargetEntry row_targets[] = {
+  { "GTK_TREE_VIEW_ROW", GTK_TARGET_SAME_APP,
+    TARGET_GTK_TREE_VIEW_ROW }
+};
+
 int
 main (int    argc,
       char **argv)
@@ -574,6 +599,19 @@ main (int    argc,
   gtk_container_add (GTK_CONTAINER (window), table);
 
   tv = gtk_tree_view_new_with_model (models[0]);
+
+  gtk_tree_view_set_rows_drag_source (GTK_TREE_VIEW (tv),
+                                      GDK_BUTTON1_MASK,
+                                      row_targets,
+                                      G_N_ELEMENTS (row_targets),
+                                      GDK_ACTION_MOVE | GDK_ACTION_COPY,
+                                      NULL, NULL);
+
+  gtk_tree_view_set_rows_drag_dest (GTK_TREE_VIEW (tv),
+                                    row_targets,
+                                    G_N_ELEMENTS (row_targets),
+                                    GDK_ACTION_MOVE | GDK_ACTION_COPY,
+                                    NULL, NULL);
   
   /* Model menu */
 

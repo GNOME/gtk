@@ -4235,19 +4235,13 @@ gtk_text_view_start_selection_dnd (GtkTextView       *text_view,
   gtk_target_list_unref (target_list);
 
   gtk_drag_set_icon_default (context);
-
-  /* We're inside the selection, so start without being able
-   * to accept the drag.
-   */
-  gdk_drag_status (context, 0, event->time);
-  gtk_text_mark_set_visible (text_view->dnd_mark, FALSE);
 }
 
 static void
 gtk_text_view_drag_begin (GtkWidget        *widget,
                           GdkDragContext   *context)
 {
-
+  /* do nothing */
 }
 
 static void
@@ -4257,14 +4251,6 @@ gtk_text_view_drag_end (GtkWidget        *widget,
   GtkTextView *text_view;
 
   text_view = GTK_TEXT_VIEW (widget);
-  
-  gtk_text_mark_set_visible (text_view->dnd_mark, FALSE);
-
-  if (text_view->scroll_timeout != 0)
-    {
-      gtk_timeout_remove (text_view->scroll_timeout);
-      text_view->scroll_timeout = 0;
-    }
 }
 
 static void
@@ -4353,6 +4339,7 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
   GtkTextIter end;
   GdkRectangle target_rect;
   gint bx, by;
+  GdkDragAction suggested_action = 0;
   
   text_view = GTK_TEXT_VIEW (widget);
 
@@ -4362,7 +4349,7 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
       y < target_rect.y ||
       x > (target_rect.x + target_rect.width) ||
       y > (target_rect.y + target_rect.height))
-    return FALSE; /* outside the text window */
+    return FALSE; /* outside the text window, allow parent widgets to handle event */
 
   gtk_text_view_window_to_buffer_coords (text_view,
                                          GTK_TEXT_WINDOW_WIDGET,
@@ -4372,21 +4359,23 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
   gtk_text_layout_get_iter_at_pixel (text_view->layout,
                                      &newplace,
                                      bx, by);  
-  
-  if (gtk_text_buffer_get_selection_bounds (get_buffer (text_view),
+
+  if (gtk_drag_dest_find_target (widget, context,
+                                 gtk_drag_dest_get_target_list (widget)) == GDK_NONE)
+    {
+      /* can't accept any of the offered targets */
+    }                                 
+  else if (gtk_text_buffer_get_selection_bounds (get_buffer (text_view),
                                             &start, &end) &&
       gtk_text_iter_in_range (&newplace, &start, &end))
     {
       /* We're inside the selection. */
-      gdk_drag_status (context, 0, time);
-      gtk_text_mark_set_visible (text_view->dnd_mark, FALSE);
     }
   else
     {      
       if (gtk_text_iter_editable (&newplace, text_view->editable))
         {
           GtkWidget *source_widget;
-          GdkDragAction suggested_action;
           
           suggested_action = context->suggested_action;
           
@@ -4400,20 +4389,26 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
               if ((context->actions & GDK_ACTION_MOVE) != 0)
                 suggested_action = GDK_ACTION_MOVE;
             }
-          
-          gtk_text_mark_set_visible (text_view->dnd_mark,
-                                     text_view->cursor_visible);
-
-          gdk_drag_status (context, suggested_action, time);
         }
       else
         {
           /* Can't drop here. */
-          gdk_drag_status (context, 0, time);
-          gtk_text_mark_set_visible (text_view->dnd_mark, FALSE);
         }
     }
 
+  if (suggested_action != 0)
+    {
+      gtk_text_mark_set_visible (text_view->dnd_mark,
+                                 text_view->cursor_visible);
+      
+      gdk_drag_status (context, suggested_action, time);
+    }
+  else
+    {
+      gdk_drag_status (context, 0, time);
+      gtk_text_mark_set_visible (text_view->dnd_mark, FALSE);
+    }
+      
   gtk_text_buffer_move_mark (get_buffer (text_view),
                              text_view->dnd_mark,
                              &newplace);
@@ -4427,7 +4422,10 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
       
   text_view->scroll_timeout =
     gtk_timeout_add (50, drag_scan_timeout, text_view);
-  
+
+  /* TRUE return means don't propagate the drag motion to parent
+   * widgets that may also be drop sites.
+   */
   return TRUE;
 }
 
@@ -4438,18 +4436,17 @@ gtk_text_view_drag_drop (GtkWidget        *widget,
                          gint              y,
                          guint             time)
 {
-#if 0
-  /* called automatically. */
-  if (context->targets)
-    {
-      gtk_drag_get_data (widget, context,
-                         GPOINTER_TO_INT (context->targets->data),
-                         time);
-      return TRUE;
-    }
-  else
-    return FALSE;
-#endif
+  GtkTextView *text_view;
+  
+  text_view = GTK_TEXT_VIEW (widget);
+  
+  if (text_view->scroll_timeout != 0)
+    gtk_timeout_remove (text_view->scroll_timeout);
+
+  text_view->scroll_timeout = 0;
+
+  gtk_text_mark_set_visible (text_view->dnd_mark, FALSE);
+  
   return TRUE;
 }
 

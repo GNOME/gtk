@@ -77,11 +77,14 @@ void gtk_drag_dest_set_proxy (GtkWidget      *widget,
 			      GdkDragProtocol protocol,
 			      gboolean        use_coordinates);
 
-/* There probably should be functions for setting the targets
- * as a GtkTargetList
- */
-
 void gtk_drag_dest_unset (GtkWidget          *widget);
+
+GdkAtom        gtk_drag_dest_find_target     (GtkWidget      *widget,
+                                              GdkDragContext *context,
+                                              GtkTargetList  *target_list);
+GtkTargetList* gtk_drag_dest_get_target_list (GtkWidget      *widget);
+void           gtk_drag_dest_set_target_list (GtkWidget      *widget,
+                                              GtkTargetList  *target_list);
 
 /* Source side */
 

@@ -647,14 +647,19 @@ _gtk_rbtree_node_find_offset (GtkRBTree *tree,
     {
       last = node;
       node = node->parent;
+
+      /* Add left branch, plus children, iff we came from the right */
       if (node->right == last)
-	retval += node->left->offset + GTK_RBNODE_GET_HEIGHT (node);
+	retval += node->offset - node->right->offset;
+      
       if (node == tree->nil)
 	{
 	  node = tree->parent_node;
 	  tree = tree->parent_tree;
+
+          /* Add the parent node, plus the left branch. */
 	  if (node)
-	    retval += node->left->offset;
+	    retval += node->left->offset + GTK_RBNODE_GET_HEIGHT (node);
 	}
     }
   return retval;

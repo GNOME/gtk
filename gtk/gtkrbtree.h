@@ -57,14 +57,17 @@ struct _GtkRBNode
   GtkRBNode *left;
   GtkRBNode *right;
   GtkRBNode *parent;
-  gint count;  /* aggregate number of children we have */
-  gint offset; /* aggregate of the heights of all our children */
-  GtkRBTree *children;
-};
 
-struct _GtkRBNodeView
-{
-  GtkRBNode parent;
+  /* count is the number of nodes beneath us, plus 1 for ourselves.
+   * i.e. node->left->count + node->right->count + 1
+   */
+  gint count;
+
+  /* this is the total of sizes of
+   * node->left, node->right, our own height, and the height
+   * of all trees in ->children, iff children exists because
+   * the thing is expanded.
+   */
   gint offset;
   GtkRBTree *children;
 };

@@ -1187,4 +1187,4 @@ modules/input/Makefile
 contrib/Makefile
 contrib/gdk-pixbuf-xlib/Makefile
 contrib/gdk-pixbuf-xlib/gdk-pixbuf-xlib-2.0.pc
-], [chmod +x gtk-config-2.0])
+])

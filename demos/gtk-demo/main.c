@@ -245,6 +245,8 @@ button_press_event_cb (GtkTreeView    *tree_view,
 				     event->x,
 				     event->y,
 				     &path,
+                                     NULL,
+                                     NULL,
 				     NULL);
 
       if (path)

@@ -69,6 +69,8 @@ struct _GtkTreeViewPrivate
   GdkWindow *bin_window;
   GdkWindow *header_window;
 
+  gint expander_column;
+  
   /* Selection stuff */
   GtkTreePath *anchor;
   GtkTreePath *cursor;
@@ -82,7 +84,6 @@ struct _GtkTreeViewPrivate
   /* Prelight information */
   GtkRBNode *prelight_node;
   GtkRBTree *prelight_tree;
-  gint prelight_offset;
 
   /* Selection information */
   GtkTreeSelection *selection;
@@ -91,6 +92,18 @@ struct _GtkTreeViewPrivate
   gint n_columns;
   GList *columns;
   gint header_height;
+
+  /* Scroll timeout (e.g. during dnd) */
+  guint scroll_timeout;
+  
+  /* Row drag-and-drop */
+  GtkTreePath *drag_dest_row;
+  GtkTreeViewDropPosition drag_dest_pos;
+  guint open_dest_timeout;
+  
+  gint pressed_button;
+  gint press_start_x;
+  gint press_start_y;
 };
 
 #ifdef __GNUC__

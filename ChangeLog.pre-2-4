@@ -1,4 +1,49 @@
-2001-01-19    <alexl@redhat.com>
+2001-01-19  Havoc Pennington  <hp@redhat.com>
+
+	* demos/gtk-demo/main.c (button_press_event_cb): sync to tree changes
+
+	* gtk/gtkrbtree.c (_gtk_rbtree_node_find_offset): fix this
+	function
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_set_widget):
+	implement
+
+	* gtk/gtktreeview.c (gtk_tree_view_move_to): rename
+	scroll_to_cell, matches TextView scroll functions better
+	(gtk_tree_view_tree_to_widget_coords): new function
+	(gtk_tree_view_widget_to_tree_coords): new function
+	(gtk_tree_view_get_visible_rect): new function
+	(gtk_tree_view_get_path_at_pos): accept negative coordinates
+	(gtk_tree_view_draw_node_focus_rect): new function moved from
+	draw_focus, also, use width of bin_window as width of the focus
+	rect
+	(gtk_tree_view_expand_row): fix bug where it didn't recognize
+	already-expanded rows
+	(gtk_tree_view_get_cell_rect): new function
+	(gtk_tree_view_get_path_at_pos): return the click position
+	relative to the passed-in cell
+	(gtk_tree_view_set_expander_column): new function
+
+	* configure.in: remove gtk-config-2.0 chmod
+
+	* gtk/gtktextview.c (gtk_text_view_drag_motion): small cleanups,
+	and properly handle drags with targets we don't understand
+	(gtk_text_view_drag_end): don't stop scrolling, the source isn't
+	scrolling anyway
+	(gtk_text_view_drag_drop): stop scrolling here though, and set the
+	mark invisible
+
+	* gtk/gtkdnd.c (gtk_drag_dest_find_target): export as a public
+	function
+	(gtk_drag_dest_get_target_list): new function
+	(gtk_drag_dest_set_target_list): new function
+	
+	* gtk/gtktreeview.c: Add a bunch of drag-and-drop implementation
+
+	* gtk/gtktreeprivate.h (struct _GtkTreeViewPrivate): add fields
+	related to drag-and-drop
+
+2001-01-19  Alexander Larsson  <alexl@redhat.com>
 
 	* gdk/linux-fb/gdkprivate-fb.h:
 	Define EMULATE_GDKFONT.
@@ -67,7 +112,7 @@ Mon Jan  8 11:58:05 2001  Owen Taylor  <otaylor@redhat.com>
 	
 	* gtk/gtkobject.h: Remove trailing , from enum
 
-2001-01-17    <alexl@redhat.com>
+2001-01-17 Alexander Larsson <alexl@redhat.com>	
 
 	* gdk/linux-fb/gdkdrawable-fb2.c (gdk_shadow_fb_draw_arc):
 	Doh! Mixed up x and y.

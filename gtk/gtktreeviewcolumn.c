@@ -914,6 +914,48 @@ gtk_tree_view_column_clicked (GtkTreeViewColumn *tree_column)
   gtk_signal_emit (GTK_OBJECT (tree_column), tree_column_signals[CLICKED]);
 }
 
+static void 
+update_button_contents (GtkTreeViewColumn *tree_column)
+{
+  if (tree_column->button)
+    {
+      GtkWidget *current_child = GTK_BIN (GTK_BIN (tree_column->button)->child)->child;
+      
+      if (tree_column->child)
+        {
+          if (current_child != tree_column->child)
+            {
+              gtk_container_remove (GTK_CONTAINER (tree_column->button),
+                                    current_child);
+
+              gtk_container_add (GTK_CONTAINER (tree_column->button),
+                                                tree_column->child);
+            }
+        }
+      else 
+        {
+          if (current_child == NULL)
+            {
+              current_child = gtk_label_new (NULL);
+
+              gtk_widget_show (current_child);
+              
+              gtk_container_add (GTK_CONTAINER (tree_column->button),
+                                 current_child);
+            }
+
+          g_return_if_fail (GTK_IS_LABEL (current_child));
+
+          if (tree_column->title)
+            gtk_label_set_text (GTK_LABEL (current_child),
+                                tree_column->title);
+          else
+            gtk_label_set_text (GTK_LABEL (current_child),
+                                "");
+        }
+    }
+}
+
 /**
  * gtk_tree_view_column_set_title:
  * @tree_column: A #GtkTreeViewColumn.
@@ -924,7 +966,7 @@ gtk_tree_view_column_clicked (GtkTreeViewColumn *tree_column)
  **/
 void
 gtk_tree_view_column_set_title (GtkTreeViewColumn *tree_column,
-				gchar         *title)
+				gchar             *title)
 {
   g_return_if_fail (tree_column != NULL);
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
@@ -935,20 +977,7 @@ gtk_tree_view_column_set_title (GtkTreeViewColumn *tree_column,
   else
     tree_column->title = NULL;
 
-  /* Hmmm.  This is a little ugly... */
-  if (tree_column->button)
-    {
-      if (GTK_BIN (tree_column->button)->child &&
-	  GTK_IS_ALIGNMENT (GTK_BIN (tree_column->button)->child))
-	{
-	  if (GTK_BIN (GTK_BIN (tree_column->button)->child)->child &&
-	      GTK_IS_LABEL (GTK_BIN (GTK_BIN (tree_column->button)->child)->child))
-	    {
-	      gtk_label_set_text (GTK_LABEL (GTK_BIN (GTK_BIN (tree_column->button)->child)->child),
-                                  tree_column->title);
-	    }
-	}
-    }
+  update_button_contents (tree_column);
 
   g_object_notify (G_OBJECT (tree_column), "title");
 }
@@ -1047,45 +1076,21 @@ void
 gtk_tree_view_column_set_widget (GtkTreeViewColumn *tree_column,
 				 GtkWidget         *widget)
 {
-  /* FIXME: Implement this function. */
-#if 0
-  gint new_button = 0;
-  GtkWidget *old_widget;
+  g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
+  g_return_if_fail (widget == NULL || GTK_IS_WIDGET (widget));
 
-  g_return_if_fail (tree_view != NULL);
-  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
-
-  if (column < 0 || column >= tree_view->priv->columns)
-    return;
-
-  /* if the column button doesn't currently exist,
-   * it has to be created first */
-  if (!column->button)
-    {
-      column_button_create (tree_view, column);
-      new_button = 1;
-    }
-
-  column_title_new (clist, column, NULL);
-
-  /* remove and destroy the old widget */
-  old_widget = GTK_BIN (clist->column[column].button)->child;
-  if (old_widget)
-    gtk_container_remove (GTK_CONTAINER (clist->column[column].button),
-			  old_widget);
-
-  /* add and show the widget */
   if (widget)
     {
-      gtk_container_add (GTK_CONTAINER (clist->column[column].button), widget);
-      gtk_widget_show (widget);
+      gtk_object_ref (GTK_OBJECT (widget));
+      gtk_object_sink (GTK_OBJECT (widget));
     }
 
-  /* if this button didn't previously exist, then the
-   * column button positions have to be re-computed */
-  if (GTK_WIDGET_VISIBLE (clist) && new_button)
-    size_allocate_title_buttons (clist);
-#endif
+  if (tree_column->child)      
+    gtk_object_unref (GTK_OBJECT (tree_column->child));
+
+  tree_column->child = widget;
+  
+  update_button_contents (tree_column);
 
   g_object_notify (G_OBJECT (tree_column), "widget");
 }
@@ -1106,10 +1111,7 @@ gtk_tree_view_column_get_widget (GtkTreeViewColumn *tree_column)
   g_return_val_if_fail (tree_column != NULL, NULL);
   g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column), NULL);
 
-  if (tree_column->button)
-    return GTK_BUTTON (tree_column->button)->child;
-
-  return NULL;
+  return tree_column->child;
 }
 
 /**
@@ -1134,8 +1136,6 @@ gtk_tree_view_column_set_justification (GtkTreeViewColumn *tree_column,
 
   tree_column->justification = justification;
 
-  /* change the alignment of the button title if it's not a
-   * custom widget */
   alignment = GTK_BIN (tree_column->button)->child;
 
   if (GTK_IS_ALIGNMENT (alignment))
@@ -1165,3 +1165,4 @@ gtk_tree_view_column_set_justification (GtkTreeViewColumn *tree_column,
 
   g_object_notify (G_OBJECT (tree_column), "justification");
 }
+

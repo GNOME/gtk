@@ -55,6 +55,7 @@ struct _GtkTreeViewColumn
 
   GtkWidget *tree_view;
   GtkWidget *button;
+  GtkWidget *child;
   GdkWindow *window;
   GtkJustification justification;
 
