@@ -175,7 +175,7 @@ gtk_menu_get_private (GtkMenu *menu)
       private->have_position = FALSE;
       
       g_object_set_qdata_full (G_OBJECT (menu), private_quark,
-			       private, (GDestroyNotify) g_free);
+			       private, g_free);
     }
 
   return private;

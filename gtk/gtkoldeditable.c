@@ -142,9 +142,9 @@ gtk_old_editable_get_type (void)
 	NULL,		/* class_finalize */
 	NULL,		/* class_data */
 	sizeof (GtkOldEditable),
-	0,              /* n_preallocs */
+	0,		/* n_preallocs */
         (GInstanceInitFunc) gtk_old_editable_init,
-	NULL            /* value_table */
+	NULL,		/* value_table */
       };
 
       static const GInterfaceInfo editable_info =

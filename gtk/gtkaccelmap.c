@@ -515,7 +515,7 @@ gtk_accel_map_load_scanner (GScanner *scanner)
   scanner->config->symbol_2_token = FALSE;
   saved_symbol = g_scanner_lookup_symbol (scanner, "gtk_accel_path");
   g_scanner_scope_add_symbol (scanner, 0, "gtk_accel_path", 
-			      (gpointer) accel_map_parse_accel_path);
+			      accel_map_parse_accel_path);
 
   /* outer parsing loop
    */

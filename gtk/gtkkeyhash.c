@@ -168,7 +168,8 @@ void
 _gtk_key_hash_free (GtkKeyHash *key_hash)
 {
   g_signal_handlers_disconnect_by_func (key_hash->keymap,
-					G_CALLBACK (key_hash_keys_changed), key_hash);
+					key_hash_keys_changed,
+					key_hash);
 
   if (key_hash->keycode_hash)
     {

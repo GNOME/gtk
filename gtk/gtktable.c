@@ -84,7 +84,7 @@ static void gtk_table_get_child_property (GtkContainer    *container,
 					  guint            property_id,
 					  GValue          *value,
 					  GParamSpec      *pspec);
-static GtkType gtk_table_child_type (GtkContainer   *container);
+static GType gtk_table_child_type   (GtkContainer   *container);
 
 
 static void gtk_table_size_request_init	 (GtkTable *table);
@@ -100,26 +100,28 @@ static void gtk_table_size_allocate_pass2 (GtkTable *table);
 static GtkContainerClass *parent_class = NULL;
 
 
-GtkType
+GType
 gtk_table_get_type (void)
 {
-  static GtkType table_type = 0;
+  static GType table_type = 0;
   
   if (!table_type)
     {
-      static const GtkTypeInfo table_info =
+      static const GTypeInfo table_info =
       {
-	"GtkTable",
-	sizeof (GtkTable),
 	sizeof (GtkTableClass),
-	(GtkClassInitFunc) gtk_table_class_init,
-	(GtkObjectInitFunc) gtk_table_init,
-        /* reserved_1 */ NULL,
-	/* reserved_2 */ NULL,
-	(GtkClassInitFunc) NULL,
+	NULL,
+	NULL,
+	(GClassInitFunc) gtk_table_class_init,
+	NULL,
+	NULL,
+	sizeof (GtkTable),
+	0,
+	(GInstanceInitFunc) gtk_table_init,
       };
       
-      table_type = gtk_type_unique (gtk_container_get_type (), &table_info);
+      table_type = g_type_register_static (GTK_TYPE_CONTAINER, "GtkTable",
+					   &table_info, 0);
     }
   
   return table_type;
@@ -252,7 +254,7 @@ gtk_table_class_init (GtkTableClass *class)
 								 G_PARAM_READWRITE));
 }
 
-static GtkType
+static GType
 gtk_table_child_type (GtkContainer   *container)
 {
   return GTK_TYPE_WIDGET;
@@ -490,11 +492,11 @@ gtk_table_new (guint	rows,
   GtkTable *table;
 
   if (rows == 0)
-	  rows = 1;
+    rows = 1;
   if (columns == 0)
-	  columns = 1;
+    columns = 1;
   
-  table = gtk_type_new (gtk_table_get_type ());
+  table = g_object_new (GTK_TYPE_TABLE, NULL);
   
   table->homogeneous = (homogeneous ? TRUE : FALSE);
 

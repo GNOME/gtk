@@ -147,7 +147,9 @@ gtk_theme_engine_get_type (void)
         NULL,           /* instance_init */
       };
 
-      theme_engine_type = g_type_register_static (G_TYPE_TYPE_MODULE, "GtkThemeEngine", &theme_engine_info, 0);
+      theme_engine_type =
+	g_type_register_static (G_TYPE_TYPE_MODULE, "GtkThemeEngine",
+				&theme_engine_info, 0);
     }
   
   return theme_engine_type;
@@ -167,7 +169,7 @@ gtk_theme_engine_get (const gchar *name)
 
   if (!result)
     {
-      result = GTK_THEME_ENGINE (g_object_new (GTK_TYPE_THEME_ENGINE, NULL));
+      result = g_object_new (GTK_TYPE_THEME_ENGINE, NULL);
       g_type_module_set_name (G_TYPE_MODULE (result), name);
       result->name = g_strdup (name);
 

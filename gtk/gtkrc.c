@@ -885,11 +885,11 @@ gtk_rc_parse (const gchar *filename)
 GType
 gtk_rc_style_get_type (void)
 {
-  static GType object_type = 0;
+  static GType rc_style_type = 0;
 
-  if (!object_type)
+  if (!rc_style_type)
     {
-      static const GTypeInfo object_info =
+      static const GTypeInfo rc_style_info =
       {
         sizeof (GtkRcStyleClass),
         (GBaseInitFunc) NULL,
@@ -902,12 +902,11 @@ gtk_rc_style_get_type (void)
         (GInstanceInitFunc) gtk_rc_style_init,
       };
       
-      object_type = g_type_register_static (G_TYPE_OBJECT,
-                                            "GtkRcStyle",
-                                            &object_info, 0);
+      rc_style_type = g_type_register_static (G_TYPE_OBJECT, "GtkRcStyle",
+					      &rc_style_info, 0);
     }
   
-  return object_type;
+  return rc_style_type;
 }
 
 static void
@@ -978,7 +977,7 @@ gtk_rc_style_finalize (GObject *object)
     {
       GSList *rc_styles = tmp_list1->data;
       GtkStyle *style = g_hash_table_lookup (realized_style_ht, rc_styles);
-      gtk_style_unref (style);
+      g_object_unref (style);
 
       /* Remove the list of styles from the other rc_styles
        * in the list
@@ -1021,8 +1020,7 @@ gtk_rc_style_finalize (GObject *object)
   tmp_list1 = rc_style->icon_factories;
   while (tmp_list1)
     {
-      g_object_unref (G_OBJECT (tmp_list1->data));
-
+      g_object_unref (tmp_list1->data);
       tmp_list1 = tmp_list1->next;
     }
   g_slist_free (rc_style->icon_factories);
@@ -1064,19 +1062,19 @@ gtk_rc_style_copy (GtkRcStyle *orig)
 }
 
 void      
-gtk_rc_style_ref (GtkRcStyle  *rc_style)
+gtk_rc_style_ref (GtkRcStyle *rc_style)
 {
   g_return_if_fail (GTK_IS_RC_STYLE (rc_style));
 
-  g_object_ref (G_OBJECT (rc_style));
+  g_object_ref (rc_style);
 }
 
 void      
-gtk_rc_style_unref (GtkRcStyle  *rc_style)
+gtk_rc_style_unref (GtkRcStyle *rc_style)
 {
   g_return_if_fail (GTK_IS_RC_STYLE (rc_style));
 
-  g_object_unref (G_OBJECT (rc_style));
+  g_object_unref (rc_style);
 }
 
 static GtkRcStyle *
@@ -1283,7 +1281,7 @@ gtk_rc_reset_widgets (GtkSettings *settings)
       if (gtk_widget_get_screen (list->data) == settings->screen)
 	{
 	  gtk_widget_reset_rc_styles (list->data);
-	  gtk_widget_unref (list->data);
+	  g_object_unref (list->data);
 	}
     }
   g_list_free (toplevels);
@@ -1639,16 +1637,16 @@ gtk_rc_get_style (GtkWidget *widget)
 
   if (context->rc_sets_class)
     {
-      GtkType type;
+      GType type;
 
-      type = GTK_OBJECT_TYPE (widget);
+      type = G_TYPE_FROM_INSTANCE (widget);
       while (type)
 	{
 	  const gchar *path;
           gchar *path_reversed;
 	  guint path_length;
 
-	  path = gtk_type_name (type);
+	  path = g_type_name (type);
 	  path_length = strlen (path);
 	  path_reversed = g_strdup (path);
 	  g_strreverse (path_reversed);
@@ -1656,14 +1654,13 @@ gtk_rc_get_style (GtkWidget *widget)
 	  rc_styles = gtk_rc_styles_match (rc_styles, context->rc_sets_class, path_length, path, path_reversed);
 	  g_free (path_reversed);
       
-	  type = gtk_type_parent (type);
+	  type = g_type_parent (type);
 	}
     }
   
   rc_styles = sort_and_dereference_sets (rc_styles);
   
-  widget_rc_style = gtk_object_get_data_by_id (GTK_OBJECT (widget),
-					       rc_style_key_id);
+  widget_rc_style = g_object_get_qdata (G_OBJECT (widget), rc_style_key_id);
 
   if (widget_rc_style)
     rc_styles = g_slist_prepend (rc_styles, widget_rc_style);
@@ -2089,7 +2086,7 @@ gtk_rc_init_style (GtkRcContext *context,
               iter = factories;
               while (iter != NULL)
                 {
-                  g_object_ref (G_OBJECT (iter->data));
+                  g_object_ref (iter->data);
                   iter = g_slist_next (iter);
                 }
 
@@ -2586,7 +2583,7 @@ gtk_rc_parse_style (GtkRcContext *context,
               factories = parent_style->icon_factories;
               while (factories != NULL)
                 {
-                  g_object_ref (G_OBJECT (factories->data));
+                  g_object_ref (factories->data);
                   factories = factories->next;
                 }
             }
@@ -3166,7 +3163,7 @@ gtk_rc_parse_engine (GtkRcContext *context,
 	      
 	      if (result != G_TOKEN_NONE)
 		{
-		  g_object_unref (G_OBJECT (new_style));
+		  g_object_unref (new_style);
 		  new_style = NULL;
 		}
 	    }
@@ -3198,8 +3195,8 @@ gtk_rc_parse_engine (GtkRcContext *context,
   if (new_style)
     {
       new_style->engine_specified = TRUE;
-      
-      g_object_unref (G_OBJECT (*rc_style));
+
+      g_object_unref (*rc_style);
       *rc_style = new_style;
     }
 

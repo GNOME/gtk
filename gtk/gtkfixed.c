@@ -48,7 +48,7 @@ static void gtk_fixed_forall        (GtkContainer     *container,
 				     gboolean 	       include_internals,
 				     GtkCallback       callback,
 				     gpointer          callback_data);
-static GtkType gtk_fixed_child_type (GtkContainer     *container);
+static GType gtk_fixed_child_type   (GtkContainer     *container);
 
 static void gtk_fixed_set_child_property (GtkContainer *container,
                                           GtkWidget    *child,
@@ -64,26 +64,28 @@ static void gtk_fixed_get_child_property (GtkContainer *container,
 static GtkContainerClass *parent_class = NULL;
 
 
-GtkType
+GType
 gtk_fixed_get_type (void)
 {
-  static GtkType fixed_type = 0;
+  static GType fixed_type = 0;
 
   if (!fixed_type)
     {
-      static const GtkTypeInfo fixed_info =
+      static const GTypeInfo fixed_info =
       {
-	"GtkFixed",
-	sizeof (GtkFixed),
 	sizeof (GtkFixedClass),
-	(GtkClassInitFunc) gtk_fixed_class_init,
-	(GtkObjectInitFunc) gtk_fixed_init,
-	/* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_fixed_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkFixed),
+	0,		/* n_preallocs */
+	(GInstanceInitFunc) gtk_fixed_init,
       };
 
-      fixed_type = gtk_type_unique (GTK_TYPE_CONTAINER, &fixed_info);
+      fixed_type = g_type_register_static (GTK_TYPE_CONTAINER, "GtkFixed",
+					   &fixed_info, 0);
     }
 
   return fixed_type;
@@ -92,15 +94,13 @@ gtk_fixed_get_type (void)
 static void
 gtk_fixed_class_init (GtkFixedClass *class)
 {
-  GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
 
-  object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
   container_class = (GtkContainerClass*) class;
 
-  parent_class = gtk_type_class (GTK_TYPE_CONTAINER);
+  parent_class = g_type_class_peek_parent (class);
 
   widget_class->realize = gtk_fixed_realize;
   widget_class->size_request = gtk_fixed_size_request;
@@ -135,7 +135,7 @@ gtk_fixed_class_init (GtkFixedClass *class)
                                                                 G_PARAM_READWRITE));
 }
 
-static GtkType
+static GType
 gtk_fixed_child_type (GtkContainer     *container)
 {
   return GTK_TYPE_WIDGET;
@@ -152,10 +152,7 @@ gtk_fixed_init (GtkFixed *fixed)
 GtkWidget*
 gtk_fixed_new (void)
 {
-  GtkFixed *fixed;
-
-  fixed = gtk_type_new (GTK_TYPE_FIXED);
-  return GTK_WIDGET (fixed);
+  return g_object_new (GTK_TYPE_FIXED, NULL);
 }
 
 static GtkFixedChild*

@@ -1,3 +1,9 @@
+Wed Oct  9 17:40:13 2002  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtkaccelmap.c gtk/gtkfixed.[ch] gtk/gtkkeyhash.c gtk/gtkmenu.c
+	gtk/gtkobject.c gtk/gtkoldeditable.c gtk/gtkrc.c gtk/gtkspinbutton.[ch]
+	gtk/gtktable.[ch] gtk/gtkthemes.c: Deprecation cleanup
+
 Wed Oct  9 16:52:53 2002  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkclipboard.[ch] gtk/gtkeditable.[ch] gtk/gtkgc.c

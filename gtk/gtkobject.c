@@ -72,10 +72,10 @@ static GQuark      quark_weakrefs = 0;
  *
  ****************************************************/
 
-GtkType
+GType
 gtk_object_get_type (void)
 {
-  static GtkType object_type = 0;
+  static GType object_type = 0;
 
   if (!object_type)
     {
@@ -88,9 +88,9 @@ gtk_object_get_type (void)
 	NULL,		/* class_finalize */
 	NULL,		/* class_data */
 	sizeof (GtkObject),
-	16,			/* n_preallocs */
+	16,		/* n_preallocs */
 	(GInstanceInitFunc) gtk_object_init,
-	NULL,            /* value_table */
+	NULL,		/* value_table */
       };
       
       object_type = g_type_register_static (G_TYPE_OBJECT, "GtkObject", 
@@ -383,7 +383,7 @@ gtk_object_dispose (GObject *gobject)
 static void
 gtk_object_real_destroy (GtkObject *object)
 {
-  g_signal_handlers_destroy (G_OBJECT (object));
+  g_signal_handlers_destroy (object);
 }
 
 static void

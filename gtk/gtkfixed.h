@@ -38,11 +38,11 @@ extern "C" {
 
 
 #define GTK_TYPE_FIXED                  (gtk_fixed_get_type ())
-#define GTK_FIXED(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_FIXED, GtkFixed))
-#define GTK_FIXED_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_FIXED, GtkFixedClass))
-#define GTK_IS_FIXED(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_FIXED))
-#define GTK_IS_FIXED_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_FIXED))
-#define GTK_FIXED_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_FIXED, GtkFixedClass))
+#define GTK_FIXED(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_FIXED, GtkFixed))
+#define GTK_FIXED_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_FIXED, GtkFixedClass))
+#define GTK_IS_FIXED(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_FIXED))
+#define GTK_IS_FIXED_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_FIXED))
+#define GTK_FIXED_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_FIXED, GtkFixedClass))
 
 
 typedef struct _GtkFixed        GtkFixed;
@@ -69,7 +69,7 @@ struct _GtkFixedChild
 };
 
 
-GtkType    gtk_fixed_get_type          (void) G_GNUC_CONST;
+GType      gtk_fixed_get_type          (void) G_GNUC_CONST;
 GtkWidget* gtk_fixed_new               (void);
 void       gtk_fixed_put               (GtkFixed       *fixed,
                                         GtkWidget      *widget,

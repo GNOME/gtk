@@ -38,11 +38,11 @@ extern "C" {
 
 
 #define GTK_TYPE_TABLE			(gtk_table_get_type ())
-#define GTK_TABLE(obj)			(GTK_CHECK_CAST ((obj), GTK_TYPE_TABLE, GtkTable))
-#define GTK_TABLE_CLASS(klass)		(GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_TABLE, GtkTableClass))
-#define GTK_IS_TABLE(obj)		(GTK_CHECK_TYPE ((obj), GTK_TYPE_TABLE))
-#define GTK_IS_TABLE_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TABLE))
-#define GTK_TABLE_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_TABLE, GtkTableClass))
+#define GTK_TABLE(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TABLE, GtkTable))
+#define GTK_TABLE_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_TABLE, GtkTableClass))
+#define GTK_IS_TABLE(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_TABLE))
+#define GTK_IS_TABLE_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TABLE))
+#define GTK_TABLE_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_TABLE, GtkTableClass))
 
 
 typedef struct _GtkTable	GtkTable;
@@ -99,7 +99,7 @@ struct _GtkTableRowCol
 };
 
 
-GtkType	   gtk_table_get_type	      (void) G_GNUC_CONST;
+GType	   gtk_table_get_type	      (void) G_GNUC_CONST;
 GtkWidget* gtk_table_new	      (guint		rows,
 				       guint		columns,
 				       gboolean		homogeneous);
