@@ -1,3 +1,9 @@
+Fri Oct  8 02:32:47 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtklayout.c (gtk_layout_adjustment_changed): Fix bug
+	where when scrolling to the left or top double exposes
+	were done, causing major slowdowns.
+
 Thu Oct  7 18:31:55 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkrc.c (gtk_rc_init): Always normalize codeset

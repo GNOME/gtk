@@ -97,9 +97,6 @@ static void     gtk_layout_expose_area        (GtkLayout      *layout,
 					       gint            height);
 static void     gtk_layout_adjustment_changed (GtkAdjustment  *adjustment,
 					       GtkLayout      *layout);
-static GdkFilterReturn gtk_layout_filter      (GdkXEvent      *gdk_xevent,
-					       GdkEvent       *event,
-					       gpointer        data);
 static GdkFilterReturn gtk_layout_main_filter (GdkXEvent      *gdk_xevent,
 					       GdkEvent       *event,
 					       gpointer        data);
@@ -475,7 +472,7 @@ gtk_layout_realize (GtkWidget *widget)
   gtk_style_set_background (widget->style, layout->bin_window, GTK_STATE_NORMAL);
 
   gdk_window_add_filter (widget->window, gtk_layout_main_filter, layout);
-  gdk_window_add_filter (layout->bin_window, gtk_layout_filter, layout);
+  /*   gdk_window_add_filter (layout->bin_window, gtk_layout_filter, layout);*/
 
   /* XXX: If we ever get multiple displays for GTK+, then gravity_works
    *      will have to become a widget member. Right now we just
@@ -1068,15 +1065,39 @@ gtk_layout_adjustment_changed (GtkAdjustment *adjustment,
       GdkEvent event;
       GtkWidget *event_widget;
 
-      if ((xevent.xany.window == GDK_WINDOW_XWINDOW (layout->bin_window)) &&
-	  (gtk_layout_filter (&xevent, &event, layout) == GDK_FILTER_REMOVE))
-	continue;
-      
-      if (xevent.type == Expose)
+      switch (xevent.type)
 	{
-	  event.expose.window = gdk_window_lookup (xevent.xany.window);
-	  gdk_window_get_user_data (event.expose.window, 
-				    (gpointer *)&event_widget);
+	case Expose:
+
+	  if (xevent.xany.window == GDK_WINDOW_XWINDOW (layout->bin_window))
+	    {
+	      /* If the window is unobscured, then we've exposed the
+	       * regions with the following serials already, so we
+	       * can throw out the expose events.
+	       */
+	      if (layout->visibility == GDK_VISIBILITY_UNOBSCURED &&
+		  (((dx > 0 || dy > 0) && 
+		    xevent.xexpose.serial == layout->configure_serial) ||
+		   ((dx < 0 || dy < 0) && 
+		    xevent.xexpose.serial == layout->configure_serial + 1)))
+		continue;
+	      /* The following expose was generated while the origin was
+	       * different from the current origin, so we need to offset it.
+	       */
+	      else if (xevent.xexpose.serial == layout->configure_serial)
+		{
+		  xevent.xexpose.x += layout->scroll_x;
+		  xevent.xexpose.y += layout->scroll_y;
+		}
+	      event.expose.window = layout->bin_window;
+	      event_widget = widget;
+	    }
+	  else
+	    {
+	      event.expose.window = gdk_window_lookup (xevent.xany.window);
+	      gdk_window_get_user_data (event.expose.window, 
+					(gpointer *)&event_widget);
+	    }
 
 	  if (event_widget)
 	    {
@@ -1091,13 +1112,25 @@ gtk_layout_adjustment_changed (GtkAdjustment *adjustment,
 	      gtk_widget_event (event_widget, &event);
 	      gdk_window_unref (event.expose.window);
 	    }
+	  break;
+      
+	case ConfigureNotify:
+	  if (xevent.xany.window == GDK_WINDOW_XWINDOW (layout->bin_window) &&
+	      (xevent.xconfigure.x != 0 || xevent.xconfigure.y != 0))
+	    {
+	      layout->configure_serial = xevent.xconfigure.serial;
+	      layout->scroll_x = xevent.xconfigure.x;
+	      layout->scroll_y = xevent.xconfigure.y;
+	    }
+	  break;
 	}
     }
 }
 
+#if 0
 /* The main event filter. Actually, we probably don't really need
- * to install this as a filter at all, since we are calling it
- * directly above in the expose-handling hack. But in case scrollbars
+ * thisfilter at all, since we are calling it directly above in the
+ * expose-handling hack. But in case scrollbars
  * are fixed up in some manner...
  *
  * This routine identifies expose events that are generated when
@@ -1145,6 +1178,7 @@ gtk_layout_filter (GdkXEvent *gdk_xevent,
   
   return GDK_FILTER_CONTINUE;
 }
+#endif 0
 
 /* Although GDK does have a GDK_VISIBILITY_NOTIFY event,
  * there is no corresponding event in GTK, so we have
