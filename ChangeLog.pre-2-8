@@ -1,3 +1,8 @@
+2003-05-05  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkdnd.c (gtk_drag_source_set_icon_stock):  Actually set the
+	icon type to the stock icon type.  (#111735, Dave Bordoley)
+
 2003-05-05  Christian Rose  <menthos@menthos.com>
 
 	* configure.in: Added sr and sr@Latn to ALL_LINGUAS.
