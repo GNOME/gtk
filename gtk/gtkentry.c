@@ -4511,6 +4511,24 @@ gtk_entry_completion_timeout (gpointer data)
   return FALSE;
 }
 
+static inline gboolean
+keyval_is_cursor_move (guint keyval)
+{
+  if (keyval == GDK_Up || keyval == GDK_KP_Up)
+    return TRUE;
+
+  if (keyval == GDK_Down || keyval == GDK_KP_Down)
+    return TRUE;
+
+  if (keyval == GDK_Home || keyval == GDK_KP_Home)
+    return TRUE;
+
+  if (keyval == GDK_End || keyval == GDK_KP_End)
+    return TRUE;
+
+  return FALSE;
+}
+
 static gboolean
 gtk_entry_completion_key_press (GtkWidget   *widget,
                                 GdkEventKey *event,
@@ -4527,24 +4545,33 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
   if (completion->priv->actions)
     actions = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (completion->priv->actions), NULL);
 
-  if (event->keyval == GDK_Up || event->keyval == GDK_Down)
+  if (keyval_is_cursor_move (event->keyval))
     {
       GtkTreePath *path = NULL;
 
-      if (event->keyval == GDK_Up)
+      if (event->keyval == GDK_Up || event->keyval == GDK_KP_Up)
         {
           completion->priv->current_selected--;
-          if (completion->priv->current_selected < 0)
-            completion->priv->current_selected = 0;
+          if (completion->priv->current_selected < -1)
+            completion->priv->current_selected = -1;
         }
-      else
+      else if (event->keyval == GDK_Down || event->keyval == GDK_KP_Down)
         {
           completion->priv->current_selected++;
           if (completion->priv->current_selected >= matches + actions)
-            completion->priv->current_selected = 0;
+            completion->priv->current_selected = matches + actions;
         }
+      else if (event->keyval == GDK_Home || event->keyval == GDK_KP_Home)
+        completion->priv->current_selected = -1;
+      else if (event->keyval == GDK_End || event->keyval == GDK_KP_End)
+        completion->priv->current_selected = matches + actions - 1;
 
-      if (completion->priv->current_selected < matches)
+      if (completion->priv->current_selected < 0)
+        {
+          gtk_tree_selection_unselect_all (gtk_tree_view_get_selection (GTK_TREE_VIEW (completion->priv->tree_view)));
+          gtk_tree_selection_unselect_all (gtk_tree_view_get_selection (GTK_TREE_VIEW (completion->priv->action_view)));
+        }
+      else if (completion->priv->current_selected < matches)
         {
           gtk_tree_selection_unselect_all (gtk_tree_view_get_selection (GTK_TREE_VIEW (completion->priv->action_view)));
 

@@ -1040,8 +1040,6 @@ _gtk_entry_completion_popup (GtkEntryCompletion *completion)
   if (GTK_WIDGET_MAPPED (completion->priv->popup_window))
     return;
 
-  completion->priv->first_sel_changed = TRUE;
-
   gtk_widget_show_all (completion->priv->vbox);
 
   gdk_window_get_origin (completion->priv->entry->window, &x, &y);

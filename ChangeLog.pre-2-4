@@ -1,3 +1,19 @@
+Mon Oct 13 21:01:43 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkentrycompletion.c (gtk_entry_completion_popup): remove
+	the reset of first_sel_changed, as after the first popup the treeview
+	will always have a row selected and will thus not focus_to_cursor.
+
+	* gtk/gtkentry.c (keyval_is_cursor_move): new function to determine
+	whether the keyval should move the completion selection cursor (used
+	to avoid ending up with extreme cluttered code), also added
+	all KP_ equivalents of the keys here,
+	(gtk_entry_completion_key_press): Keynav tweaks based on comments
+	from Dave Bordoley and Marco Pesenti Gritti; add the -1 state
+	as possible current selection, implement Home/End keys, modified
+	the down key to stop cycling. Maybe page up/down should be implemented
+	at some later time.
+
 Mon Oct 13 20:58:07 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/x11/gdkwindow-x11.c (gdk_window_set_icon): Make it work 
