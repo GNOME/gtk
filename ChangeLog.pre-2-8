@@ -1,3 +1,7 @@
+Thu Dec 11 09:44:03 1997  Tim Janik  <timj@psynet.net>
+
+	* gdk.c: added gdk_progclass==NULL patch by Oliver Graf <ograf@fga.de>.
+
 Wed Dec 10 23:40:03 1997  Tim Janik  <timj@psynet.net>
 
 	* fixed some compiler errors, because g_return_if_fail() wasn't used

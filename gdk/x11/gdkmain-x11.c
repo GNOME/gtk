@@ -450,6 +450,11 @@ gdk_init (int    *argc,
 					  10, 10, 10, 10, 0, 0 , 0);
   class_hint = XAllocClassHint();
   class_hint->res_name = gdk_progname;
+  if (gdk_progclass == NULL)
+    {
+      gdk_progclass = strdup (gdk_progname);
+      gdk_progclass[0] = toupper (gdk_progclass[0]);
+    }
   class_hint->res_class = gdk_progclass;
   XSetClassHint(gdk_display, gdk_leader_window, class_hint);
   XSetCommand(gdk_display, gdk_leader_window, argv_orig, argc_orig);
