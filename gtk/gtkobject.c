@@ -68,11 +68,10 @@ static void           gtk_object_set_arg       (GtkObject      *object,
 static void           gtk_object_get_arg       (GtkObject      *object,
 						GtkArg         *arg,
 						guint		arg_id);
+static void           gtk_object_shutdown      (GtkObject      *object);
 static void           gtk_object_real_destroy  (GtkObject      *object);
 static void           gtk_object_finalize      (GtkObject      *object);
 static void           gtk_object_notify_weaks  (gpointer        data);
-static void           gtk_object_data_init     (void);
-static GtkObjectData* gtk_object_data_new      (void);
 static void           gtk_object_data_destroy  (GtkObjectData  *odata);
 static guint*         gtk_object_data_id_alloc (void);
 
@@ -82,7 +81,6 @@ GtkArg*               gtk_object_collect_args  (guint   *nargs,
 
 static guint object_signals[LAST_SIGNAL] = { 0 };
 
-static gint object_data_init = TRUE;
 static GHashTable *object_data_ht = NULL;
 static GMemChunk *object_data_mem_chunk = NULL;
 static GSList *object_data_id_list = NULL;
@@ -91,6 +89,7 @@ static guint object_data_id_index = 0;
 static GHashTable *arg_info_ht = NULL;
 
 static const gchar *user_data_key = "user_data";
+static guint user_data_key_id = 0;
 
 
 #ifdef G_ENABLE_DEBUG
@@ -127,13 +126,10 @@ gtk_object_pointer_hash (const gpointer v)
 }
 #endif	/* G_ENABLE_DEBUG */
 
-/*****************************************
- * gtk_object_init_type:
+/****************************************************
+ * GtkObject type, class and instance initialization
  *
- *   arguments:
- *
- *   results:
- *****************************************/
+ ****************************************************/
 
 void
 gtk_object_init_type ()
@@ -165,14 +161,6 @@ gtk_object_get_type ()
   return GTK_TYPE_OBJECT;
 }
 
-/*****************************************
- * gtk_object_class_init:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
 static void
 gtk_object_class_init (GtkObjectClass *class)
 {
@@ -203,34 +191,10 @@ gtk_object_class_init (GtkObjectClass *class)
 
   gtk_object_class_add_signals (class, object_signals, LAST_SIGNAL);
 
+  class->shutdown = gtk_object_shutdown;
   class->destroy = gtk_object_real_destroy;
   class->finalize = gtk_object_finalize;
 }
-
-/*****************************************
- * gtk_object_real_destroy:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
-static void
-gtk_object_real_destroy (GtkObject *object)
-{
-  g_return_if_fail (object != NULL);
-  g_return_if_fail (GTK_IS_OBJECT (object));
-
-  gtk_signal_handlers_destroy (object);
-}
-
-/*****************************************
- * gtk_object_init:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
 
 static void
 gtk_object_init (GtkObject *object)
@@ -253,12 +217,61 @@ gtk_object_init (GtkObject *object)
 #endif /* G_ENABLE_DEBUG */
 }
 
+/********************************************
+ * Functions to end a GtkObject's life time
+ *
+ ********************************************/
+
+void
+gtk_object_destroy (GtkObject *object)
+{
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (GTK_IS_OBJECT (object));
+  
+  if (!GTK_OBJECT_DESTROYED (object))
+    {
+      /* we will hold a reference on the object in this place, so
+       * to ease all classes shutdown and destroy implementations.
+       * i.e. they don't have to bother about referencing at all.
+       */
+      gtk_object_ref (object);
+      object->klass->shutdown (object);
+      gtk_object_unref (object);
+    }
+}
+
+static void
+gtk_object_shutdown (GtkObject *object)
+{
+  GTK_OBJECT_SET_FLAGS (object, GTK_DESTROYED);
+  gtk_signal_emit (object, object_signals[DESTROY]);
+}
+
+static void
+gtk_object_real_destroy (GtkObject *object)
+{
+  gtk_signal_handlers_destroy (object);
+}
+
+static void
+gtk_object_finalize (GtkObject *object)
+{
+  GtkObjectData *odata, *next;
+  
+  odata = object->object_data;
+  while (odata)
+    {
+      next = odata->next;
+      gtk_object_data_destroy (odata);
+      odata = next;
+    }
+  
+  g_free (object);
+}
+
 /*****************************************
- * gtk_object_set_arg:
+ * GtkObject argument handlers
  *
- *   arguments:
- *
- *   results:
  *****************************************/
 
 static void
@@ -298,14 +311,6 @@ gtk_object_set_arg (GtkObject *object,
       break;
     }
 }
-
-/*****************************************
- * gtk_object_get_arg:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
 
 static void
 gtk_object_get_arg (GtkObject *object,
@@ -409,30 +414,6 @@ gtk_object_class_add_user_signal (GtkObjectClass     *class,
 }
 
 /*****************************************
- * gtk_object_finalize:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
-static void
-gtk_object_finalize (GtkObject *object)
-{
-  GtkObjectData *odata, *next;
-  
-  odata = object->object_data;
-  while (odata)
-    {
-      next = odata->next;
-      gtk_object_data_destroy (odata);
-      odata = next;
-    }
-  
-  g_free (object);
-}
-
-/*****************************************
  * gtk_object_sink:
  *
  *   arguments:
@@ -450,27 +431,6 @@ gtk_object_sink (GtkObject *object)
     {
       GTK_OBJECT_UNSET_FLAGS (object, GTK_FLOATING);
       gtk_object_unref (object);
-    }
-}
-
-/*****************************************
- * gtk_object_destroy:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
-void
-gtk_object_destroy (GtkObject *object)
-{
-  g_return_if_fail (object != NULL);
-  g_return_if_fail (GTK_IS_OBJECT (object));
-
-  if (!GTK_OBJECT_DESTROYED (object))
-    {
-      GTK_OBJECT_SET_FLAGS (object, GTK_DESTROYED);
-      gtk_signal_emit (object, object_signals[DESTROY]);
     }
 }
 
@@ -988,28 +948,97 @@ gtk_object_get_arg_type (const gchar *arg_name)
 }
 
 /*****************************************
- * gtk_object_set_data:
+ * GtkObject object_data mechanism
  *
- *   arguments:
- *
- *   results:
  *****************************************/
+
+void
+gtk_object_set_data_by_id (GtkObject        *object,
+			   guint	     data_id,
+			   gpointer          data)
+{
+  g_return_if_fail (data_id > 0);
+  
+  gtk_object_set_data_by_id_full (object, data_id, data, NULL);
+}
 
 void
 gtk_object_set_data (GtkObject        *object,
 		     const gchar      *key,
 		     gpointer          data)
 {
-  gtk_object_set_data_full (object, key, data, NULL);
+  g_return_if_fail (key != NULL);
+  
+  gtk_object_set_data_by_id_full (object, gtk_object_data_force_id (key), data, NULL);
 }
 
-/*****************************************
- * gtk_object_set_data_full:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
+void
+gtk_object_set_data_by_id_full (GtkObject        *object,
+				guint		  data_id,
+				gpointer          data,
+				GtkDestroyNotify  destroy)
+{
+  GtkObjectData *odata;
+  GtkObjectData *prev;
+  
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (GTK_IS_OBJECT (object));
+  g_return_if_fail (data_id > 0);
+  
+  if (!data)
+    {
+      prev = NULL;
+      odata = object->object_data;
+      
+      while (odata)
+	{
+	  if (odata->id == data_id)
+	    {
+	      if (prev)
+		prev->next = odata->next;
+	      if (odata == object->object_data)
+		object->object_data = odata->next;
+	      
+	      gtk_object_data_destroy (odata);
+	      break;
+	    }
+	  
+	  prev = odata;
+	  odata = odata->next;
+	}
+    }
+  else
+    {
+      odata = object->object_data;
+      while (odata)
+	{
+	  if (odata->id == data_id)
+	    {
+	      if (odata->destroy)
+		odata->destroy (odata->data);
+	      
+	      odata->data = data;
+	      odata->destroy = destroy;
+	      return;
+	    }
+	  
+	  odata = odata->next;
+	}
+      
+      if (!object_data_mem_chunk)
+	object_data_mem_chunk = g_mem_chunk_new ("object data mem chunk",
+						 sizeof (GtkObjectData),
+						 1024, G_ALLOC_AND_FREE);
+      
+      odata = g_chunk_new (GtkObjectData, object_data_mem_chunk);
+      odata->id = data_id;
+      odata->data = data;
+      odata->destroy = destroy;
+      odata->next = object->object_data;
+      
+      object->object_data = odata;
+    }
+}
 
 void
 gtk_object_set_data_full (GtkObject        *object,
@@ -1017,129 +1046,138 @@ gtk_object_set_data_full (GtkObject        *object,
 			  gpointer          data,
 			  GtkDestroyNotify  destroy)
 {
-  GtkObjectData *odata;
-  GtkObjectData *prev;
-  guint *id;
-
-  g_return_if_fail (object != NULL);
-  g_return_if_fail (GTK_IS_OBJECT (object));
   g_return_if_fail (key != NULL);
 
-  if (object_data_init)
-    gtk_object_data_init ();
+  gtk_object_set_data_by_id_full (object, gtk_object_data_force_id (key), data, destroy);
+}
+
+guint
+gtk_object_data_force_id (const gchar     *key)
+{
+  guint *id;
+
+  g_return_val_if_fail (key != NULL, 0);
+
+  if (!object_data_ht)
+    object_data_ht = g_hash_table_new (g_str_hash, g_str_equal);
 
   id = g_hash_table_lookup (object_data_ht, (gpointer) key);
-
-  if (!data)
+  if (!id)
     {
-      if (id)
-	{
-	  prev = NULL;
-	  odata = object->object_data;
-
-	  while (odata)
-	    {
-	      if (odata->id == *id)
-		{
-		  if (prev)
-		    prev->next = odata->next;
-		  if (odata == object->object_data)
-		    object->object_data = odata->next;
-
-		  gtk_object_data_destroy (odata);
-		  break;
-		}
-
-	      prev = odata;
-	      odata = odata->next;
-	    }
-	}
+      id = gtk_object_data_id_alloc ();
+      g_hash_table_insert (object_data_ht, g_strdup (key), id);
     }
-  else
-    {
-      if (!id)
-	{
-	  id = gtk_object_data_id_alloc ();
-	  g_hash_table_insert (object_data_ht, (gpointer) g_strdup (key), id);
-	}
 
+  return *id;
+}
+
+gpointer
+gtk_object_get_data_by_id (GtkObject   *object,
+			   guint        data_id)
+{
+  GtkObjectData *odata;
+
+  g_return_val_if_fail (object != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_OBJECT (object), NULL);
+
+  if (data_id)
+    {
       odata = object->object_data;
       while (odata)
 	{
-	  if (odata->id == *id)
-	    {
-	      odata->data = data;
-	      odata->destroy = destroy;
-	      return;
-	    }
-
+	  if (odata->id == data_id)
+	    return odata->data;
 	  odata = odata->next;
 	}
-
-      odata = gtk_object_data_new ();
-      odata->id = *id;
-      odata->data = data;
-      odata->destroy = destroy;
-
-      odata->next = object->object_data;
-      object->object_data = odata;
     }
+  
+  return NULL;
 }
-
-/*****************************************
- * gtk_object_get_data:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
 
 gpointer
 gtk_object_get_data (GtkObject   *object,
 		     const gchar *key)
 {
-  GtkObjectData *odata;
-  guint *id;
+  guint id;
 
-  g_return_val_if_fail (object != NULL, NULL);
-  g_return_val_if_fail (GTK_IS_OBJECT (object), NULL);
   g_return_val_if_fail (key != NULL, NULL);
 
-  if (object_data_init)
-    gtk_object_data_init ();
-
-  id = g_hash_table_lookup (object_data_ht, (gpointer) key);
+  id = gtk_object_data_try_key (key);
   if (id)
-    {
-      odata = object->object_data;
-      while (odata)
-	{
-	  if (odata->id == *id)
-	    return odata->data;
-	  odata = odata->next;
-	}
-    }
+    return gtk_object_get_data_by_id (object, id);
 
   return NULL;
 }
 
-/*****************************************
- * gtk_object_remove_data:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
+guint
+gtk_object_data_try_key (const gchar     *key)
+{
+  g_return_val_if_fail (key != NULL, 0);
+
+  if (object_data_ht)
+    {
+      guint *id;
+
+      id = g_hash_table_lookup (object_data_ht, (gpointer) key);
+      if (id)
+	return *id;
+    }
+
+  return 0;
+}
+
+void
+gtk_object_remove_data_by_id (GtkObject   *object,
+			      guint        data_id)
+{
+  if (data_id)
+    gtk_object_set_data_by_id_full (object, data_id, NULL, NULL);
+}
 
 void
 gtk_object_remove_data (GtkObject   *object,
 			const gchar *key)
 {
-  g_return_if_fail (object != NULL);
-  g_return_if_fail (GTK_IS_OBJECT (object));
+  gint id;
+
   g_return_if_fail (key != NULL);
 
-  gtk_object_set_data_full (object, key, NULL, NULL);
+  id = gtk_object_data_try_key (key);
+  if (id)
+    gtk_object_set_data_by_id_full (object, id, NULL, NULL);
+}
+
+static void
+gtk_object_data_destroy (GtkObjectData *odata)
+{
+  g_return_if_fail (odata != NULL);
+
+  if (odata->destroy)
+    odata->destroy (odata->data);
+
+  g_mem_chunk_free (object_data_mem_chunk, odata);
+}
+
+static guint*
+gtk_object_data_id_alloc ()
+{
+  static guint next_id = 1;
+  guint *ids;
+
+  if (!object_data_id_list ||
+      (object_data_id_index == OBJECT_DATA_ID_CHUNK))
+    {
+      ids = g_new (guint, OBJECT_DATA_ID_CHUNK);
+      object_data_id_index = 0;
+      object_data_id_list = g_slist_prepend (object_data_id_list, ids);
+    }
+  else
+    {
+      ids = object_data_id_list->data;
+    }
+
+  ids[object_data_id_index] = next_id++;
+  return &ids[object_data_id_index++];
 }
 
 /*****************************************
@@ -1154,10 +1192,10 @@ void
 gtk_object_set_user_data (GtkObject *object,
 			  gpointer   data)
 {
-  g_return_if_fail (object != NULL);
-  g_return_if_fail (GTK_IS_OBJECT (object));
+  if (!user_data_key_id)
+    user_data_key_id = gtk_object_data_force_id (user_data_key);
 
-  gtk_object_set_data_full (object, user_data_key, data, NULL);
+  gtk_object_set_data_by_id_full (object, user_data_key_id, data, NULL);
 }
 
 /*****************************************
@@ -1171,10 +1209,10 @@ gtk_object_set_user_data (GtkObject *object,
 gpointer
 gtk_object_get_user_data (GtkObject *object)
 {
-  g_return_val_if_fail (object != NULL, NULL);
-  g_return_val_if_fail (GTK_IS_OBJECT (object), NULL);
+  if (user_data_key_id)
+    gtk_object_get_data_by_id (object, user_data_key_id);
 
-  return gtk_object_get_data (object, user_data_key);
+  return NULL;
 }
 
 /*****************************************
@@ -1265,102 +1303,6 @@ gtk_object_check_class_cast (GtkObjectClass *klass,
     }
 
   return klass;
-}
-
-/*****************************************
- * gtk_object_data_init:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
-static void
-gtk_object_data_init ()
-{
-  if (object_data_init)
-    {
-      object_data_init = FALSE;
-
-      object_data_ht = g_hash_table_new (g_str_hash, g_str_equal);
-    }
-}
-
-/*****************************************
- * gtk_object_data_new:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
-static GtkObjectData*
-gtk_object_data_new ()
-{
-  GtkObjectData *odata;
-
-  if (!object_data_mem_chunk)
-    object_data_mem_chunk = g_mem_chunk_new ("object data mem chunk",
-					     sizeof (GtkObjectData),
-					     1024, G_ALLOC_AND_FREE);
-
-  odata = g_chunk_new (GtkObjectData, object_data_mem_chunk);
-
-  odata->id = 0;
-  odata->data = NULL;
-  odata->destroy = NULL;
-  odata->next = NULL;
-
-  return odata;
-}
-
-/*****************************************
- * gtk_object_data_destroy:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
-static void
-gtk_object_data_destroy (GtkObjectData *odata)
-{
-  g_return_if_fail (odata != NULL);
-
-  if (odata->destroy)
-    odata->destroy (odata->data);
-
-  g_mem_chunk_free (object_data_mem_chunk, odata);
-}
-
-/*****************************************
- * gtk_object_data_id_alloc:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
-static guint*
-gtk_object_data_id_alloc ()
-{
-  static guint next_id = 1;
-  guint *ids;
-
-  if (!object_data_id_list ||
-      (object_data_id_index == OBJECT_DATA_ID_CHUNK))
-    {
-      ids = g_new (guint, OBJECT_DATA_ID_CHUNK);
-      object_data_id_index = 0;
-      object_data_id_list = g_slist_prepend (object_data_id_list, ids);
-    }
-  else
-    {
-      ids = object_data_id_list->data;
-    }
-
-  ids[object_data_id_index] = next_id++;
-  return &ids[object_data_id_index++];
 }
 
 /*****************************************

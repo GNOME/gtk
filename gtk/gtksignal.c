@@ -142,6 +142,7 @@ static guint next_signal = 1;
 static guint next_handler_id = 1;
 
 static const gchar *handler_key = "gtk-signal-handlers";
+static guint        handler_key_id = 0;
 
 static GMemChunk *handler_mem_chunk = NULL;
 static GMemChunk *emission_mem_chunk = NULL;
@@ -665,7 +666,7 @@ gtk_signal_disconnect (GtkObject *object,
   g_return_if_fail (object != NULL);
   g_return_if_fail (handler_id > 0);
   
-  handler = gtk_object_get_data (object, handler_key);
+  handler = gtk_object_get_data_by_id (object, handler_key_id);
   
   while (handler)
     {
@@ -692,7 +693,7 @@ gtk_signal_disconnect_by_data (GtkObject *object,
   g_return_if_fail (object != NULL);
   
   found_one = FALSE;
-  handler = gtk_object_get_data (object, handler_key);
+  handler = gtk_object_get_data_by_id (object, handler_key_id);
   
   while (handler)
     {
@@ -723,7 +724,7 @@ gtk_signal_handler_block (GtkObject *object,
   g_return_if_fail (object != NULL);
   g_return_if_fail (handler_id > 0);
   
-  tmp = gtk_object_get_data (object, handler_key);
+  tmp = gtk_object_get_data_by_id (object, handler_key_id);
   
   while (tmp)
     {
@@ -752,7 +753,7 @@ gtk_signal_handler_block_by_data (GtkObject *object,
     gtk_signal_init ();
   
   found_one = FALSE;
-  handler = gtk_object_get_data (object, handler_key);
+  handler = gtk_object_get_data_by_id (object, handler_key_id);
   
   while (handler)
     {
@@ -782,7 +783,7 @@ gtk_signal_handler_unblock (GtkObject *object,
   if (initialize)
     gtk_signal_init ();
   
-  handler = gtk_object_get_data (object, handler_key);
+  handler = gtk_object_get_data_by_id (object, handler_key_id);
   
   while (handler)
     {
@@ -811,7 +812,7 @@ gtk_signal_handler_unblock_by_data (GtkObject *object,
     gtk_signal_init ();
   
   found_one = FALSE;
-  handler = gtk_object_get_data (object, handler_key);
+  handler = gtk_object_get_data_by_id (object, handler_key_id);
   
   while (handler)
     {
@@ -839,7 +840,7 @@ gtk_signal_handlers_destroy (GtkObject *object)
    * handler_key data on each removal
    */
   
-  handler = gtk_object_get_data (object, handler_key);
+  handler = gtk_object_get_data_by_id (object, handler_key_id);
   if (handler)
     {
       handler = handler->next;
@@ -851,7 +852,7 @@ gtk_signal_handlers_destroy (GtkObject *object)
 	  gtk_signal_handler_unref (handler, object);
 	  handler = next;
 	}
-      handler = gtk_object_get_data (object, handler_key);
+      handler = gtk_object_get_data_by_id (object, handler_key_id);
       gtk_signal_handler_unref (handler, object);
     }
 }
@@ -974,7 +975,7 @@ gtk_signal_handler_unref (GtkHandler *handler,
       if (handler->prev)
 	handler->prev->next = handler->next;
       else
-	gtk_object_set_data (object, handler_key, handler->next);
+	gtk_object_set_data_by_id (object, handler_key_id, handler->next);
       if (handler->next)
 	handler->next->prev = handler->prev;
       
@@ -991,9 +992,13 @@ gtk_signal_handler_insert (GtkObject  *object,
   /* FIXME: remove */ g_assert (handler->next == NULL);
   /* FIXME: remove */ g_assert (handler->prev == NULL);
   
-  tmp = gtk_object_get_data (object, handler_key);
+  tmp = gtk_object_get_data_by_id (object, handler_key_id);
   if (!tmp)
-    gtk_object_set_data (object, handler_key, handler);
+    {
+      if (!handler_key_id)
+	handler_key_id = gtk_object_data_force_id (handler_key);
+      gtk_object_set_data_by_id (object, handler_key_id, handler);
+    }
   else
     while (tmp)
       {
@@ -1005,7 +1010,7 @@ gtk_signal_handler_insert (GtkObject  *object,
 		handler->prev = tmp->prev;
 	      }
 	    else
-	      gtk_object_set_data (object, handler_key, handler);
+	      gtk_object_set_data_by_id (object, handler_key_id, handler);
 	    tmp->prev = handler;
 	    handler->next = tmp;
 	    break;
@@ -1116,7 +1121,7 @@ gtk_signal_get_handlers (GtkObject *object,
   g_return_val_if_fail (object != NULL, NULL);
   g_return_val_if_fail (signal_type >= 1, NULL);
   
-  handlers = gtk_object_get_data (object, handler_key);
+  handlers = gtk_object_get_data_by_id (object, handler_key_id);
   
   while (handlers)
     {

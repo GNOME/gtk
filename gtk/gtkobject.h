@@ -67,15 +67,17 @@ extern "C" {
 #define GTK_OBJECT_NSIGNALS(obj)          (GTK_OBJECT (obj)->klass->nsignals)
     
 /* GtkObject only uses the first 4 bits of the flags field.
- * GtkWidget uses the remaining bits. Though this is a kinda nasty
- * break up, it does make the size of GtkWidget smaller.
+ * Derived objects may use the remaining bits. Though this
+ * is a kinda nasty break up, it does make the size of
+ * derived objects smaller.
  */
 enum
 {
   GTK_DESTROYED         = 1 << 0,
   GTK_FLOATING          = 1 << 1,
   GTK_RESERVED_1        = 1 << 2,
-  GTK_RESERVED_2        = 1 << 3
+  GTK_RESERVED_2        = 1 << 3,
+  GTK_OBJECT_FLAG_LAST  = GTK_RESERVED_2
 };
   
 /* GtkArg flag bits for gtk_object_add_arg_type
@@ -161,13 +163,15 @@ struct _GtkObjectClass
    */
   guint n_args;
 
-  /* The destroy function for objects. In one way ore another
-   *  this is defined for all objects. If an object class overrides
-   *  this method in order to perform class specific destruction
-   *  then it should still call it after it is finished with its
+  /* The functions that will end an objects life time. In one way ore
+   *  another all three of them are defined for all objects. If an
+   *  object class overrides one of the methods in order to perform class
+   *  specific destruction then it must still invoke its superclass'
+   *  implementation of the method after it is finished with its
    *  own cleanup. (See the destroy function for GtkWidget for
    *  an example of how to do this).
    */
+  void (* shutdown) (GtkObject *object);
   void (* destroy) (GtkObject *object);
 
   void (* finalize) (GtkObject *object);
@@ -270,28 +274,45 @@ GtkType	gtk_object_get_arg_type	(const gchar	*arg_name);
  *  If 'data' is NULL then this call is equivalent to
  *  'gtk_object_remove_data'.
  */
-void gtk_object_set_data (GtkObject   *object,
-			  const gchar *key,
-			  gpointer     data);
+void gtk_object_set_data       (GtkObject   *object,
+				const gchar *key,
+				gpointer     data);
 
 /* Like gtk_object_set_data, but takes an additional argument
- * which is a function to be called when the data is removed
+ * which is a function to be called when the data is removed.
  */
-void gtk_object_set_data_full (GtkObject   *object,
-			       const gchar *key,
-			       gpointer     data,
-			       GtkDestroyNotify destroy);
+void gtk_object_set_data_full       (GtkObject   *object,
+				     const gchar *key,
+				     gpointer     data,
+				     GtkDestroyNotify destroy);
 
 /* Get the data associated with "key".
  */
-gpointer gtk_object_get_data (GtkObject   *object,
-			      const gchar *key);
+gpointer gtk_object_get_data       (GtkObject   *object,
+				    const gchar *key);
 
 /* Remove the data associated with "key". This call is
  *  equivalent to 'gtk_object_set_data' where 'data' is NULL.
  */
-void gtk_object_remove_data (GtkObject   *object,
-			     const gchar *key);
+void gtk_object_remove_data       (GtkObject   *object,
+				   const gchar *key);
+
+/* Object data functions that operate on key ids.
+ *  These functions are meant for *internal* use only.
+ */
+void gtk_object_set_data_by_id      (GtkObject       *object,
+				     guint	      data_id,
+				     gpointer         data);
+void gtk_object_set_data_by_id_full (GtkObject       *object,
+				     guint            data_id,
+				     gpointer         data,
+				     GtkDestroyNotify destroy);
+gpointer gtk_object_get_data_by_id  (GtkObject       *object,
+				     guint            data_id);
+void  gtk_object_remove_data_by_id  (GtkObject       *object,
+				     guint	      data_id);
+guint gtk_object_data_try_key       (const gchar     *key);
+guint gtk_object_data_force_id      (const gchar     *key);
 
 /* Set the "user_data" object data field of "object". It should
  *  be noted that this is no different than calling 'gtk_object_set_data'

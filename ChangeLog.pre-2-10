@@ -1,3 +1,25 @@
+Sat Mar 14 02:03:13 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtksignal.c: make use of *_by_id() functions for handler key.
+
+	* gtk/gtkwidget.c: make use of *_by_id() functions for a bunch of keys.
+ 	(gtk_widget_shutdown): new function to perform pre-destruction shutdown
+ 	of the widget.
+	(gtk_widget_unparent): call gtk_widget_set_parent_window(widget,NULL)
+
+	* gtk/gtkobject.h: 
+	* gtk/gtkobject.c: GtkObject destruction is now split into an internally
+	used shutdown class method and the usual GtkObject::destroy signal
+ 	emission. this allowes for class based shutdown functionality prior
+	to actuall object destruction.
+	added *_by_id() counterparts for gtk_object_data_* functions, meant for
+	internal use only.
+
+	* gtk/gtkmain.c (gtk_quit_add_destroy): new function which will destroy
+	a GtkObject once gtk_main() of a certain level finishes. it is save to
+	destroy the object prior to that, gtk_quit_add_destroy will only destroy
+	objects that are still existing.
+
 1998-03-13  Federico Mena Quintero  <federico@nuclecu.unam.mx>
 
 	* gtk/gtkclist.c (gtk_clist_row_is_visible): Now we return a
