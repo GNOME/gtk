@@ -1,3 +1,7 @@
+2003-07-26  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkwidget.c: Document DND signals.
+
 2003-07-24  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktextview.c (popup_targets_received): Make the "Input Methods" insensitive
