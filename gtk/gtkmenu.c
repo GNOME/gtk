@@ -2166,6 +2166,7 @@ gtk_menu_position (GtkMenu *menu)
   gint scroll_offset;
   gint menu_height;
   gboolean push_in;
+  gint monitor_num;
   GdkRectangle *monitor;
 
   g_return_if_fail (GTK_IS_MENU (menu));
@@ -2175,8 +2176,10 @@ gtk_menu_position (GtkMenu *menu)
   gdk_window_get_pointer (gtk_widget_get_root_window (widget),
   			  &x, &y, NULL);
 
-  monitor = gdk_screen_get_monitor_num_at_point (gtk_widget_get_screen (widget),
-						 x, y);
+  monitor_num = gdk_screen_get_monitor_num_at_point 
+    (gtk_widget_get_screen (widget), x, y);
+  monitor = gdk_screen_get_monitor_geometry (gtk_widget_get_screen (widget),
+					     monitor_num);
 
   /* We need the requisition to figure out the right place to
    * popup the menu. In fact, we always need to ask here, since

@@ -4079,13 +4079,15 @@ gtk_window_compute_configure_request (GtkWindow    *window,
         case GTK_WIN_POS_CENTER_ALWAYS:
         case GTK_WIN_POS_CENTER:
           {
-	    gint px, py;
+	    gint px, py, monitor_num;
 	    GdkRectangle *monitor;
+	    GdkScreen *screen = gtk_widget_get_screen (widget);
+
 	    gdk_window_get_pointer (gtk_widget_get_root_window (widget),
 				    &px, &py, NULL);
 	    
-	    monitor = gdk_screen_get_monitor_num_at_point 
-	      (gtk_widget_get_screen (widget), px, py);
+	    monitor_num = gdk_screen_get_monitor_num_at_point (screen, px, py);
+	    monitor = gdk_screen_get_monitor_geometry (screen, monitor_num);
 	    
 	    x = (monitor->width - w) / 2 + monitor->x;
 	    y = (monitor->height - h) / 2 + monitor->y;
