@@ -56,14 +56,16 @@
  *                                            <jrb@redhat.com>
  */
 
+
+
 #include <config.h>
 #include <stdio.h>
 #include <glib.h>
 #include <string.h>
 #include "gdk-pixbuf.h"
 #include "gdk-pixbuf-io.h"
-
 
+
 
 #define MAXCOLORMAPSIZE  256
 #define MAX_LZW_BITS     12
@@ -72,6 +74,8 @@
 #define LOCALCOLORMAP      0x80
 #define BitSet(byte, bit)  (((byte) & (bit)) == (bit))
 #define LM_to_uint(a,b)         (((b)<<8)|(a))
+
+
 
 typedef unsigned char CMap[3][MAXCOLORMAPSIZE];
 
@@ -173,6 +177,8 @@ struct _GifContext
 
 static int GetDataBlock (GifContext *, unsigned char *);
 
+
+
 #ifdef IO_GIFDEBUG
 static int count = 0;
 #endif
@@ -225,8 +231,6 @@ gif_read (GifContext *context, guchar *buffer, size_t len)
 	}
 	return 0;
 }
-
-
 
 /* Changes the stage to be GIF_GET_COLORMAP */
 static void
@@ -641,8 +645,10 @@ static int
 gif_get_lzw (GifContext *context)
 {
 	guchar *dest, *temp;
+	gint lower_bound, upper_bound; /* bounds for emitting the area_updated signal */
+	gboolean bound_flag;
+	gint first_pass; /* bounds for emitting the area_updated signal */
 	gint v;
-
 
 	if (context->pixbuf == NULL) {
 		context->pixbuf = gdk_pixbuf_new (ART_PIX_RGB,
@@ -656,12 +662,17 @@ gif_get_lzw (GifContext *context)
 	}
 
 	dest = gdk_pixbuf_get_pixels (context->pixbuf);
+
+	bound_flag = FALSE;
+	lower_bound = upper_bound = context->draw_ypos;
+	first_pass = context->draw_pass;
+
 	while (TRUE) {
 		v = lzw_read_byte (context);
 		if (v < 0) {
-			return v;
+			goto finished_data;
 		}
-
+		bound_flag = TRUE;
 
 		if (context->gif89.transparent) {
 			temp = dest + context->draw_ypos * gdk_pixbuf_get_rowstride (context->pixbuf) + context->draw_xpos * 4;
@@ -680,6 +691,7 @@ gif_get_lzw (GifContext *context)
 			gif_fill_in_lines (context, dest, v);
 
 		context->draw_xpos++;
+
 		if (context->draw_xpos == context->frame_len) {
 			context->draw_xpos = 0;
 			if (context->frame_interlace) {
@@ -715,6 +727,15 @@ gif_get_lzw (GifContext *context)
 			} else {
 				context->draw_ypos++;
 			}
+			if (context->draw_pass != first_pass) {
+				if (context->draw_ypos > lower_bound) {
+					lower_bound = 0;
+					upper_bound = context->frame_height;
+				} else {
+
+				}
+			} else
+				upper_bound = context->draw_ypos;
 		}
 		if (context->draw_ypos >= context->frame_height)
 			break;
@@ -722,7 +743,42 @@ gif_get_lzw (GifContext *context)
  done:
 	/* we got enough data. there may be more (ie, newer layers) but we can quit now */
 	context->state = GIF_DONE;
-	return 0;
+	v = 0;
+ finished_data:
+	if (bound_flag && context->update_func) {
+		if (lower_bound <= upper_bound && first_pass == context->draw_pass) {
+			(* context->update_func)
+				(context->pixbuf,
+				 context->user_data,
+				 0, lower_bound,
+				 gdk_pixbuf_get_width (context->pixbuf),
+				 upper_bound - lower_bound);
+		} else {
+			if (lower_bound <= upper_bound) {
+				(* context->update_func)
+					(context->pixbuf,
+					 context->user_data,
+					 0, 0,
+					 gdk_pixbuf_get_width (context->pixbuf),
+					 gdk_pixbuf_get_height (context->pixbuf));
+			} else {
+				(* context->update_func)
+					(context->pixbuf,
+					 context->user_data,
+					 0, 0,
+					 gdk_pixbuf_get_width (context->pixbuf),
+					 upper_bound);
+				(* context->update_func)
+					(context->pixbuf,
+					 context->user_data,
+					 0, lower_bound,
+					 gdk_pixbuf_get_width (context->pixbuf),
+					 gdk_pixbuf_get_height (context->pixbuf));
+			}
+		}
+	}
+
+	return v;
 }
 
 static void
@@ -978,6 +1034,7 @@ image_begin_load (ModulePreparedNotifyFunc prepare_func,
 #endif
 	context = g_new (GifContext, 1);
 	context->prepare_func = prepare_func;
+	context->update_func = update_func;
 	context->user_data = user_data;
 	context->file = NULL;
 	context->pixbuf = NULL;

@@ -464,8 +464,6 @@ main (int argc, char **argv)
 	GdkPixbuf *pixbuf;
 	GdkPixbufLoader *pixbuf_loader;
 	FILE *file;
-	gint val;
-	guchar buf;
 
 	gtk_init (&argc, &argv);
 
