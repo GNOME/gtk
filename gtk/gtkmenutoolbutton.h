@@ -73,6 +73,6 @@ void          gtk_menu_tool_button_set_arrow_tooltip (GtkMenuToolButton *button,
                                                       const gchar       *tip_text,
                                                       const gchar       *tip_private);
 
-G_END_DECLS;
+G_END_DECLS
 
 #endif /* __GTK_MENU_TOOL_BUTTON_H__ */

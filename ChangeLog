@@ -1,3 +1,8 @@
+2004-09-29  Christopher Blizzard  <blizzard@redhat.com>
+
+	* gtk/gtkmenutoolbutton.h: Remove trailing semicolon on
+	G_END_DECLS
+
 2004-09-29  Paolo Borelli  <pborelli@katamail.com>
 
 	* tests/testtoolbar.c: add a GtkMenuToolButton.
