@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-24 00:31+0100\n"
-"PO-Revision-Date: 2004-01-24 00:36+0100\n"
+"POT-Creation-Date: 2004-01-30 18:29+0100\n"
+"PO-Revision-Date: 2004-01-30 18:29+0100\n"
 "Last-Translator: Francisco Javier F. Serrador <serrador@cvs.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "serrador@hispalinux.es>\n"
 "X-Generator: KBabel 1.0.2\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:736
 #: gdk-pixbuf/gdk-pixbuf-io.c:869 tests/testfilechooser.c:198
@@ -1306,38 +1306,35 @@ msgstr "No se ha podido convertir el nombre del archivo"
 msgid "(Empty)"
 msgstr "(vacío)"
 
-#: gtk/gtkfilesystemunix.c:335 gtk/gtkfilesystemwin32.c:417
+#: gtk/gtkfilesystemunix.c:346 gtk/gtkfilesystemwin32.c:373
 #, c-format
 msgid "error creating directory '%s': %s"
 msgstr "error al crear la carpeta «%s» : %s"
 
-#: gtk/gtkfilesystemunix.c:378 gtk/gtkfilesystemwin32.c:458
+#: gtk/gtkfilesystemunix.c:389 gtk/gtkfilesystemwin32.c:414
 msgid "This file system does not support mounting"
 msgstr "Este sistema de archivo no soporta montaje"
 
-#: gtk/gtkfilesystemunix.c:386
+#: gtk/gtkfilesystemunix.c:397
 msgid "Filesystem"
 msgstr "Sistema de archivos"
 
-#: gtk/gtkfilesystemunix.c:648
-msgid "This file system does not support icons"
-msgstr "Este sistema de archivo no soporta iconos"
-
-#: gtk/gtkfilesystemunix.c:661 gtk/gtkfilesystemunix.c:674
-msgid "This file system does not support bookmarks"
-msgstr "Este sistema de archivo no soporta marcadores"
-
-#: gtk/gtkfilesystemunix.c:847 gtk/gtkfilesystemwin32.c:1197
+#: gtk/gtkfilesystemunix.c:416 gtk/gtkfilesystemunix.c:1051
+#: gtk/gtkfilesystemwin32.c:1154
 #, c-format
 msgid "error getting information for '%s': %s"
 msgstr "Error al obtener información para «%s» : %s"
 
-#: gtk/gtkfilesystemwin32.c:820
+#: gtk/gtkfilesystemunix.c:868 gtk/gtkfilesystemunix.c:881
+msgid "This file system does not support bookmarks"
+msgstr "Este sistema de archivo no soporta marcadores"
+
+#: gtk/gtkfilesystemwin32.c:777
 #, c-format
 msgid "Bookmark saving failed (%s)"
 msgstr "Se ha producido un error al guardar el marcador (%s)"
 
-#: gtk/gtkfilesystemwin32.c:976
+#: gtk/gtkfilesystemwin32.c:933
 msgid "This file system does not support icons for everything"
 msgstr "Este sistema de archivos no soporta iconos para todo"
 
@@ -1392,7 +1389,7 @@ msgstr "Valor _gamma"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1559
+#: gtk/gtkiconfactory.c:1563
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Ocurrió un error al cargar el icono: %s"
@@ -1700,126 +1697,130 @@ msgid "_Right"
 msgstr "De_recha"
 
 #: gtk/gtkstock.c:310
+msgid "_Network"
+msgstr "_Red"
+
+#: gtk/gtkstock.c:311
 msgid "_New"
 msgstr "_Nuevo"
 
-#: gtk/gtkstock.c:311
+#: gtk/gtkstock.c:312
 msgid "_No"
 msgstr "_No"
 
-#: gtk/gtkstock.c:312
+#: gtk/gtkstock.c:313
 msgid "_OK"
 msgstr "_Aceptar"
 
-#: gtk/gtkstock.c:313
+#: gtk/gtkstock.c:314
 msgid "_Open"
 msgstr "_Abrir"
 
-#: gtk/gtkstock.c:314
+#: gtk/gtkstock.c:315
 msgid "_Paste"
 msgstr "_Pegar"
 
-#: gtk/gtkstock.c:315
+#: gtk/gtkstock.c:316
 msgid "_Preferences"
 msgstr "_Preferencias"
 
-#: gtk/gtkstock.c:316
+#: gtk/gtkstock.c:317
 msgid "_Print"
 msgstr "Im_primir"
 
-#: gtk/gtkstock.c:317
+#: gtk/gtkstock.c:318
 msgid "Print Pre_view"
 msgstr "Vista pre_via"
 
-#: gtk/gtkstock.c:318
+#: gtk/gtkstock.c:319
 msgid "_Properties"
 msgstr "_Propiedades"
 
-#: gtk/gtkstock.c:319
+#: gtk/gtkstock.c:320
 msgid "_Quit"
 msgstr "_Salir"
 
-#: gtk/gtkstock.c:320
+#: gtk/gtkstock.c:321
 msgid "_Redo"
 msgstr "_Rehacer"
 
-#: gtk/gtkstock.c:321
+#: gtk/gtkstock.c:322
 msgid "_Refresh"
 msgstr "_Actualizar"
 
-#: gtk/gtkstock.c:322
+#: gtk/gtkstock.c:323
 msgid "_Remove"
 msgstr "_Quitar"
 
-#: gtk/gtkstock.c:323
+#: gtk/gtkstock.c:324
 msgid "_Revert"
 msgstr "_Revertir"
 
-#: gtk/gtkstock.c:324
+#: gtk/gtkstock.c:325
 msgid "_Save"
 msgstr "_Guardar"
 
-#: gtk/gtkstock.c:325
+#: gtk/gtkstock.c:326
 msgid "Save _As"
 msgstr "Guardar _como"
 
-#: gtk/gtkstock.c:326
+#: gtk/gtkstock.c:327
 msgid "_Color"
 msgstr "_Color"
 
-#: gtk/gtkstock.c:327
+#: gtk/gtkstock.c:328
 msgid "_Font"
 msgstr "Tipogra_fía"
 
-#: gtk/gtkstock.c:328
+#: gtk/gtkstock.c:329
 msgid "_Ascending"
 msgstr "_Ascendente"
 
-#: gtk/gtkstock.c:329
+#: gtk/gtkstock.c:330
 msgid "_Descending"
 msgstr "_Descendente"
 
-#: gtk/gtkstock.c:330
+#: gtk/gtkstock.c:331
 msgid "_Spell Check"
 msgstr "C_omprobar ortografía"
 
-#: gtk/gtkstock.c:331
+#: gtk/gtkstock.c:332
 msgid "_Stop"
 msgstr "_Detener"
 
-#: gtk/gtkstock.c:332
+#: gtk/gtkstock.c:333
 msgid "_Strikethrough"
 msgstr "_Tachar"
 
-#: gtk/gtkstock.c:333
+#: gtk/gtkstock.c:334
 msgid "_Undelete"
 msgstr "_Recuperar"
 
-#: gtk/gtkstock.c:334
+#: gtk/gtkstock.c:335
 msgid "_Underline"
 msgstr "_Subrayar"
 
-#: gtk/gtkstock.c:335
+#: gtk/gtkstock.c:336
 msgid "_Undo"
 msgstr "_Deshacer"
 
-#: gtk/gtkstock.c:336
+#: gtk/gtkstock.c:337
 msgid "_Yes"
 msgstr "_Sí"
 
-#: gtk/gtkstock.c:337
+#: gtk/gtkstock.c:338
 msgid "Zoom _100%"
 msgstr "Ampliar al _100%"
 
-#: gtk/gtkstock.c:338
+#: gtk/gtkstock.c:339
 msgid "Zoom to _Fit"
 msgstr "Ampliar hasta a_justar"
 
-#: gtk/gtkstock.c:339
+#: gtk/gtkstock.c:340
 msgid "Zoom _In"
 msgstr "Ampl_iar"
 
-#: gtk/gtkstock.c:340
+#: gtk/gtkstock.c:341
 msgid "Zoom _Out"
 msgstr "Redu_cir"
 
@@ -1945,3 +1946,6 @@ msgstr "Método de la Entrada X"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "No se ha podido obtener información para el archivo «%s» : %s"
+
+#~ msgid "This file system does not support icons"
+#~ msgstr "Este sistema de archivo no soporta iconos"
