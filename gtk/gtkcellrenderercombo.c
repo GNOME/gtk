@@ -74,6 +74,8 @@ gtk_cell_renderer_combo_class_init (GtkCellRendererComboClass *klass)
 
   cell_class->start_editing = gtk_cell_renderer_combo_start_editing;
 
+#define STATIC_STRINGS G_PARAM_STATIC_NAME|G_PARAM_STATIC_NICK|G_PARAM_STATIC_BLURB
+
   /**
    * GtkCellRendererCombo:model:
    *
@@ -88,7 +90,7 @@ gtk_cell_renderer_combo_class_init (GtkCellRendererComboClass *klass)
 							P_("Model"),
 							P_("The model containing the possible values for the combo box"),
 							GTK_TYPE_TREE_MODEL,
-							G_PARAM_READWRITE));
+							G_PARAM_READWRITE | STATIC_STRINGS));
 
   /**
    * GtkCellRendererCombo:text-column:
@@ -111,7 +113,7 @@ gtk_cell_renderer_combo_class_init (GtkCellRendererComboClass *klass)
                                                      -1,
                                                      G_MAXINT,
                                                      -1,
-                                                     G_PARAM_READWRITE));
+                                                     G_PARAM_READWRITE | STATIC_STRINGS));
 
   /** 
    * GtkCellRendererCombo:has-entry:
@@ -127,7 +129,7 @@ gtk_cell_renderer_combo_class_init (GtkCellRendererComboClass *klass)
 							 P_("Has Entry"),
 							 P_("If FALSE, don't allow to enter strings other than the chosen ones"),
 							 TRUE,
-							 G_PARAM_READWRITE));
+							 G_PARAM_READWRITE | STATIC_STRINGS));
 
 }
 

@@ -128,6 +128,8 @@ gtk_action_group_class_init (GtkActionGroupClass *klass)
   gobject_class->get_property = gtk_action_group_get_property;
   klass->get_action = gtk_action_group_real_get_action;
 
+#define STATIC_STRINGS G_PARAM_STATIC_NAME|G_PARAM_STATIC_NICK|G_PARAM_STATIC_BLURB
+
   g_object_class_install_property (gobject_class,
 				   PROP_NAME,
 				   g_param_spec_string ("name",
@@ -135,21 +137,21 @@ gtk_action_group_class_init (GtkActionGroupClass *klass)
 							P_("A name for the action group."),
 							NULL,
 							G_PARAM_READWRITE |
-							G_PARAM_CONSTRUCT_ONLY));
+							G_PARAM_CONSTRUCT_ONLY | STATIC_STRINGS));
   g_object_class_install_property (gobject_class,
 				   PROP_SENSITIVE,
 				   g_param_spec_boolean ("sensitive",
 							 P_("Sensitive"),
 							 P_("Whether the action group is enabled."),
 							 TRUE,
-							 G_PARAM_READWRITE));
+							 G_PARAM_READWRITE | STATIC_STRINGS));
   g_object_class_install_property (gobject_class,
 				   PROP_VISIBLE,
 				   g_param_spec_boolean ("visible",
 							 P_("Visible"),
 							 P_("Whether the action group is visible."),
 							 TRUE,
-							 G_PARAM_READWRITE));
+							 G_PARAM_READWRITE | STATIC_STRINGS));
 
   /**
    * GtkActionGroup::connect-proxy:

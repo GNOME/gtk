@@ -124,6 +124,8 @@ gtk_box_class_init (GtkBoxClass *class)
   container_class->set_child_property = gtk_box_set_child_property;
   container_class->get_child_property = gtk_box_get_child_property;
 
+#define STATIC_STRINGS G_PARAM_STATIC_NAME|G_PARAM_STATIC_NICK|G_PARAM_STATIC_BLURB
+
   g_object_class_install_property (gobject_class,
                                    PROP_SPACING,
                                    g_param_spec_int ("spacing",
@@ -132,7 +134,7 @@ gtk_box_class_init (GtkBoxClass *class)
                                                      0,
                                                      G_MAXINT,
                                                      0,
-                                                     G_PARAM_READABLE | G_PARAM_WRITABLE));
+                                                     G_PARAM_READWRITE | STATIC_STRINGS));
   
   g_object_class_install_property (gobject_class,
                                    PROP_HOMOGENEOUS,
@@ -140,7 +142,7 @@ gtk_box_class_init (GtkBoxClass *class)
 							 P_("Homogeneous"),
 							 P_("Whether the children should all be the same size"),
 							 FALSE,
-							 G_PARAM_READABLE | G_PARAM_WRITABLE));
+							 G_PARAM_READWRITE | STATIC_STRINGS));
 
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_EXPAND,
@@ -148,35 +150,35 @@ gtk_box_class_init (GtkBoxClass *class)
 								    P_("Expand"), 
 								    P_("Whether the child should receive extra space when the parent grows"),
 								    TRUE,
-								    G_PARAM_READWRITE));
+								    G_PARAM_READWRITE | STATIC_STRINGS));
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_FILL,
 					      g_param_spec_boolean ("fill", 
 								    P_("Fill"), 
 								    P_("Whether extra space given to the child should be allocated to the child or used as padding"),
 								    TRUE,
-								    G_PARAM_READWRITE));
+								    G_PARAM_READWRITE | STATIC_STRINGS));
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_PADDING,
 					      g_param_spec_uint ("padding", 
 								 P_("Padding"), 
 								 P_("Extra space to put between the child and its neighbors, in pixels"),
 								 0, G_MAXINT, 0,
-								 G_PARAM_READWRITE));
+								 G_PARAM_READWRITE | STATIC_STRINGS));
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_PACK_TYPE,
 					      g_param_spec_enum ("pack-type", 
 								 P_("Pack type"), 
 								 P_("A GtkPackType indicating whether the child is packed with reference to the start or end of the parent"),
 								 GTK_TYPE_PACK_TYPE, GTK_PACK_START,
-								 G_PARAM_READWRITE));
+								 G_PARAM_READWRITE | STATIC_STRINGS));
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_POSITION,
 					      g_param_spec_int ("position", 
 								P_("Position"), 
 								P_("The index of the child in the parent"),
 								-1, G_MAXINT, 0,
-								G_PARAM_READWRITE));
+								G_PARAM_READWRITE | STATIC_STRINGS));
 }
 
 static void

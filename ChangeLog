@@ -1,5 +1,21 @@
 2005-03-21  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcellrendererprogress.c: 
+	* gtk/gtkcellrendererpixbuf.c: 
+	* gtk/gtkcellrenderercombo.c: 
+	* gtk/gtkcellrenderer.c: 
+	* gtk/gtkcalendar.c: 
+	* gtk/gtkbutton.c: 
+	* gtk/gtkbox.c: 
+	* gtk/gtkbbox.c: 
+	* gtk/gtkaspectframe.c: 
+	* gtk/gtkarrow.c: 
+	* gtk/gtkalignment.c: 
+	* gtk/gtkactiongroup.c: 
+	* gtk/gtkaction.c:
+	* gtk/gtkaccellabel.c: 
+	* gtk/gtkaboutdialog.c: Mark param spec strings as static.
+
 	* gdk/gdkpango.c (gdk_pango_renderer_class_init): 
 	* gdk/gdkdisplaymanager.c (gdk_display_manager_class_init): Mark
 	param spec strings as static.

@@ -102,6 +102,8 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
   class->changed = NULL;
   class->value_changed = NULL;
 
+#define STATIC_STRINGS G_PARAM_STATIC_NAME|G_PARAM_STATIC_NICK|G_PARAM_STATIC_BLURB
+
   /**
    * GtkAdjustment:value:
    * 
@@ -117,7 +119,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
 							-G_MAXDOUBLE, 
 							G_MAXDOUBLE, 
 							0.0, 
-							G_PARAM_READWRITE));
+							G_PARAM_READWRITE | STATIC_STRINGS));
   
   /**
    * GtkAdjustment:lower:
@@ -134,7 +136,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
 							-G_MAXDOUBLE, 
 							G_MAXDOUBLE, 
 							0.0,
-							G_PARAM_READWRITE));
+							G_PARAM_READWRITE | STATIC_STRINGS));
   
   /**
    * GtkAdjustment:upper:
@@ -154,7 +156,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
 							-G_MAXDOUBLE, 
 							G_MAXDOUBLE, 
 							0.0, 
-							G_PARAM_READWRITE));
+							G_PARAM_READWRITE | STATIC_STRINGS));
   
   /**
    * GtkAdjustment:step-increment:
@@ -171,7 +173,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
 							-G_MAXDOUBLE, 
 							G_MAXDOUBLE, 
 							0.0, 
-							G_PARAM_READWRITE));
+							G_PARAM_READWRITE | STATIC_STRINGS));
   
   /**
    * GtkAdjustment:page-increment:
@@ -188,7 +190,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
 							-G_MAXDOUBLE, 
 							G_MAXDOUBLE, 
 							0.0, 
-							G_PARAM_READWRITE));
+							G_PARAM_READWRITE | STATIC_STRINGS));
   
   /**
    * GtkAdjustment:page-size:
@@ -208,7 +210,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
 							-G_MAXDOUBLE, 
 							G_MAXDOUBLE, 
 							0.0, 
-							G_PARAM_READWRITE));
+							G_PARAM_READWRITE | STATIC_STRINGS));
   
 
   adjustment_signals[CHANGED] =

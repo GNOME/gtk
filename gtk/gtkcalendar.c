@@ -465,27 +465,29 @@ gtk_calendar_class_init (GtkCalendarClass *class)
   class->prev_year = NULL;
   class->next_year = NULL;
 
+#define STATIC_STRINGS G_PARAM_STATIC_NAME|G_PARAM_STATIC_NICK|G_PARAM_STATIC_BLURB
+
   g_object_class_install_property (gobject_class,
                                    PROP_YEAR,
                                    g_param_spec_int ("year",
 						     P_("Year"),
 						     P_("The selected year"),
 						     0, G_MAXINT, 0,
-						     G_PARAM_READWRITE));
+						     G_PARAM_READWRITE | STATIC_STRINGS));
   g_object_class_install_property (gobject_class,
                                    PROP_MONTH,
                                    g_param_spec_int ("month",
 						     P_("Month"),
 						     P_("The selected month (as a number between 0 and 11)"),
 						     0, 11, 0,
-						     G_PARAM_READWRITE));
+						     G_PARAM_READWRITE | STATIC_STRINGS));
   g_object_class_install_property (gobject_class,
                                    PROP_DAY,
                                    g_param_spec_int ("day",
 						     P_("Day"),
 						     P_("The selected day (as a number between 1 and 31, or 0 to unselect the currently selected day)"),
 						     0, 31, 0,
-						     G_PARAM_READWRITE));
+						     G_PARAM_READWRITE | STATIC_STRINGS));
 
 /**
  * GtkCalendar:show-heading:
@@ -500,7 +502,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
 							 P_("Show Heading"),
 							 P_("If TRUE, a heading is displayed"),
 							 TRUE,
-							 G_PARAM_READWRITE));
+							 G_PARAM_READWRITE | STATIC_STRINGS));
 
 /**
  * GtkCalendar:show-day-names:
@@ -515,7 +517,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
 							 P_("Show Day Names"),
 							 P_("If TRUE, day names are displayed"),
 							 TRUE,
-							 G_PARAM_READWRITE));
+							 G_PARAM_READWRITE | STATIC_STRINGS));
 /**
  * GtkCalendar:no-month-change:
  *
@@ -529,7 +531,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
 							 P_("No Month Change"),
 							 P_("If TRUE, the selected month cannot be changed"),
 							 FALSE,
-							 G_PARAM_READWRITE));
+							 G_PARAM_READWRITE | STATIC_STRINGS));
 
 /**
  * GtkCalendar:show-week-numbers:
@@ -544,7 +546,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
 							 P_("Show Week Numbers"),
 							 P_("If TRUE, week numbers are displayed"),
 							 FALSE,
-							 G_PARAM_READWRITE));
+							 G_PARAM_READWRITE | STATIC_STRINGS));
 
   gtk_calendar_signals[MONTH_CHANGED_SIGNAL] =
     g_signal_new ("month_changed",

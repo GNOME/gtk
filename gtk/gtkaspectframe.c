@@ -104,34 +104,36 @@ gtk_aspect_frame_class_init (GtkAspectFrameClass *class)
 
   frame_class->compute_child_allocation = gtk_aspect_frame_compute_child_allocation;
 
+#define STATIC_STRINGS G_PARAM_STATIC_NAME|G_PARAM_STATIC_NICK|G_PARAM_STATIC_BLURB
+
   g_object_class_install_property (gobject_class,
                                    PROP_XALIGN,
                                    g_param_spec_float ("xalign",
                                                        P_("Horizontal Alignment"),
                                                        P_("X alignment of the child"),
                                                        0.0, 1.0, 0.5,
-                                                       G_PARAM_READABLE | G_PARAM_WRITABLE ));
+                                                       G_PARAM_READWRITE | STATIC_STRINGS));
   g_object_class_install_property (gobject_class,
                                    PROP_YALIGN,
                                    g_param_spec_float ("yalign",
                                                        P_("Vertical Alignment"),
                                                        P_("Y alignment of the child"),
                                                        0.0, 1.0, 0.5,
-                                                       G_PARAM_READABLE | G_PARAM_WRITABLE ));
+                                                       G_PARAM_READWRITE | STATIC_STRINGS));
   g_object_class_install_property (gobject_class,
                                    PROP_RATIO,
                                    g_param_spec_float ("ratio",
                                                        P_("Ratio"),
                                                        P_("Aspect ratio if obey_child is FALSE"),
                                                        MIN_RATIO, MAX_RATIO, 0.5,
-                                                       G_PARAM_READABLE | G_PARAM_WRITABLE ));
+                                                       G_PARAM_READWRITE | STATIC_STRINGS));
   g_object_class_install_property (gobject_class,
                                    PROP_OBEY_CHILD,
                                    g_param_spec_boolean ("obey-child",
                                                          P_("Obey child"),
                                                          P_("Force aspect ratio to match that of the frame's child"),
                                                          TRUE,
-                                                         G_PARAM_READABLE | G_PARAM_WRITABLE));
+                                                         G_PARAM_READWRITE | STATIC_STRINGS));
 }
 
 static void

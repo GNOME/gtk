@@ -132,14 +132,15 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
   cell_class->get_size = gtk_cell_renderer_pixbuf_get_size;
   cell_class->render = gtk_cell_renderer_pixbuf_render;
 
+#define STATIC_STRINGS G_PARAM_STATIC_NAME|G_PARAM_STATIC_NICK|G_PARAM_STATIC_BLURB
+
   g_object_class_install_property (object_class,
 				   PROP_PIXBUF,
 				   g_param_spec_object ("pixbuf",
 							P_("Pixbuf Object"),
 							P_("The pixbuf to render"),
 							GDK_TYPE_PIXBUF,
-							G_PARAM_READABLE |
-							G_PARAM_WRITABLE));
+							G_PARAM_READWRITE | STATIC_STRINGS));
 
   g_object_class_install_property (object_class,
 				   PROP_PIXBUF_EXPANDER_OPEN,
@@ -147,8 +148,7 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
 							P_("Pixbuf Expander Open"),
 							P_("Pixbuf for open expander"),
 							GDK_TYPE_PIXBUF,
-							G_PARAM_READABLE |
-							G_PARAM_WRITABLE));
+							G_PARAM_READWRITE | STATIC_STRINGS));
 
   g_object_class_install_property (object_class,
 				   PROP_PIXBUF_EXPANDER_CLOSED,
@@ -156,8 +156,7 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
 							P_("Pixbuf Expander Closed"),
 							P_("Pixbuf for closed expander"),
 							GDK_TYPE_PIXBUF,
-							G_PARAM_READABLE |
-							G_PARAM_WRITABLE));
+							G_PARAM_READWRITE | STATIC_STRINGS));
 
   g_object_class_install_property (object_class,
 				   PROP_STOCK_ID,
@@ -165,7 +164,7 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
 							P_("Stock ID"),
 							P_("The stock ID of the stock icon to render"),
 							NULL,
-							G_PARAM_READWRITE));
+							G_PARAM_READWRITE | STATIC_STRINGS));
 
   g_object_class_install_property (object_class,
 				   PROP_STOCK_SIZE,
@@ -175,7 +174,7 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
 						      0,
 						      G_MAXUINT,
 						      GTK_ICON_SIZE_MENU,
-						      G_PARAM_READWRITE));
+						      G_PARAM_READWRITE | STATIC_STRINGS));
 
   g_object_class_install_property (object_class,
 				   PROP_STOCK_DETAIL,
@@ -183,7 +182,7 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
 							P_("Detail"),
 							P_("Render detail to pass to the theme engine"),
 							NULL,
-							G_PARAM_READWRITE));
+							G_PARAM_READWRITE | STATIC_STRINGS));
 
   /**
    * GtkCellRendererPixbuf:follow-state:
@@ -200,7 +199,7 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
  							 P_("Whether the rendered pixbuf should be "
 							    "colorized according to the state"),
  							 FALSE,
- 							 G_PARAM_READWRITE));
+ 							 G_PARAM_READWRITE | STATIC_STRIGNS));
 
 
   g_type_class_add_private (object_class, sizeof (GtkCellRendererPixbufPrivate));
