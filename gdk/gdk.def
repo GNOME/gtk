@@ -57,6 +57,7 @@ EXPORTS
 	gdk_device_set_mode
 	gdk_device_set_source
 	gdk_devices_list
+	gdk_display_add_client_message_filter
 	gdk_display_beep
 	gdk_display_get_core_pointer
 	gdk_display_get_default
@@ -179,6 +180,7 @@ EXPORTS
 	gdk_function_get_type
 	gdk_gc_copy
 	gdk_gc_get_colormap
+	gdk_gc_get_screen
 	gdk_gc_get_type
 	gdk_gc_get_values
 	gdk_gc_new

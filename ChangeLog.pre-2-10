@@ -16,6 +16,8 @@
 	* gdk/win32/gdkgc-win32.c (gdk_gc_get_screen): Implement by
 	returning the only screen so far, _gdk_screen.
 
+	* gdk/gdk.def: Add here, too.
+
 Mon Dec 16 16:18:15 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktexttag.c (gtk_text_tag_get_property): Get rid
