@@ -1,3 +1,13 @@
+2005-01-23  Tor Lillqvist  <tml@novell.com>
+
+	* gtk/gtkfilesystemwin32.c (gtk_file_system_win32_volume_get_display_name): 
+	Don't call GetVolumeInformation() for network drives. They might
+	be disconnected, and calling GetVolumeInformation() will then
+	cause long delays. (#164448) It seems to be very hard to reliably
+	find out whether a network drive is connected or not, so it's
+	easier to just not try getting the volume name for them. See the
+	bug report for discussion.
+
 2005-01-21  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_get_accessible): More details
