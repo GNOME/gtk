@@ -341,6 +341,14 @@ check_invariants(const GtkTextIter *iter)
 #define check_invariants(x)
 #endif
 
+/**
+ * gtk_text_iter_get_buffer:
+ * @iter: an iterator
+ * 
+ * Return the #GtkTextBuffer this iterator is associated with
+ * 
+ * Return value: the buffer
+ **/
 GtkTextBuffer*
 gtk_text_iter_get_buffer(const GtkTextIter *iter)
 {
@@ -358,6 +366,17 @@ gtk_text_iter_get_buffer(const GtkTextIter *iter)
   return gtk_text_btree_get_buffer(real->tree);
 }
 
+/**
+ * gtk_text_iter_copy:
+ * @iter: an iterator
+ * 
+ * Create a dynamically-allocated copy of an iterator. This function
+ * is not useful in applications, because iterators can be copied with a
+ * simple assignment (<literal>GtkTextIter i = j;</literal>). The
+ * function is used by language bindings.
+ * 
+ * Return value: a copy of the @iter, free with gtk_text_iter_free()
+ **/
 GtkTextIter*
 gtk_text_iter_copy(const GtkTextIter *iter)
 {
@@ -372,6 +391,16 @@ gtk_text_iter_copy(const GtkTextIter *iter)
   return new_iter;
 }
 
+/**
+ * gtk_text_iter_free:
+ * @iter: a dynamically-allocated iterator
+ *
+ * Free an iterator allocated on the heap. This function
+ * is intended for use in language bindings, and is not
+ * especially useful for applications, because iterators can
+ * simply be allocated on the stack.
+ * 
+ **/
 void
 gtk_text_iter_free(GtkTextIter *iter)
 {
@@ -488,6 +517,18 @@ gtk_text_iter_get_btree(const GtkTextIter *iter)
  * Conversions
  */
 
+/**
+ * gtk_text_iter_get_offset:
+ * @iter: an iterator
+ * 
+ * Returns the character offset of an iterator.
+ * Each character in a #GtkTextBuffer has an offset,
+ * starting with 0 for the first character in the buffer.
+ * Use gtk_text_buffer_get_iter_at_offset() to convert an
+ * offset back into an iterator.
+ * 
+ * Return value: a character offset
+ **/
 gint
 gtk_text_iter_get_offset(const GtkTextIter *iter)
 {
@@ -513,6 +554,16 @@ gtk_text_iter_get_offset(const GtkTextIter *iter)
   return real->cached_char_index;
 }
 
+/**
+ * gtk_text_iter_get_line:
+ * @iter: an iterator
+ * 
+ * Returns the line number containing the iterator. Lines in
+ * a #GtkTextBuffer are numbered beginning with 0 for the first
+ * line in the buffer.
+ * 
+ * Return value: a line number
+ **/
 gint
 gtk_text_iter_get_line(const GtkTextIter *iter)
 {
@@ -534,6 +585,16 @@ gtk_text_iter_get_line(const GtkTextIter *iter)
   return real->cached_line_number;
 }
 
+/**
+ * gtk_text_iter_get_line_offset:
+ * @iter: an iterator
+ * 
+ * Returns the character offset of the iterator,
+ * counting from the start of a newline-terminated line.
+ * The first character on the line has offset 0.
+ * 
+ * Return value: offset from start of line
+ **/
 gint
 gtk_text_iter_get_line_offset(const GtkTextIter *iter)
 {
@@ -554,6 +615,18 @@ gtk_text_iter_get_line_offset(const GtkTextIter *iter)
   return real->line_char_offset;
 }
 
+/**
+ * gtk_text_iter_get_line_index:
+ * @iter: an iterator
+ * 
+ * Returns the byte index of the iterator, counting
+ * from the start of a newline-terminated line.
+ * Remember that #GtkTextBuffer encodes text in
+ * UTF-8, and that characters can require a variable
+ * number of bytes to represent.
+ * 
+ * Return value: distance from start of line, in bytes
+ **/
 gint
 gtk_text_iter_get_line_index(const GtkTextIter *iter)
 {
@@ -577,6 +650,17 @@ gtk_text_iter_get_line_index(const GtkTextIter *iter)
  * Dereferencing
  */
 
+/**
+ * gtk_text_iter_get_char:
+ * @iter: an iterator
+ * 
+ * Returns the Unicode character at this iterator.  (Equivalent to
+ * operator* on a C++ iterator.)  If the iterator points at a
+ * non-character element, such as an image embedded in the buffer, the
+ * Unicode "unknown" character 0xFFFD is returned.
+ * 
+ * Return value: a Unicode character
+ **/
 gunichar
 gtk_text_iter_get_char(const GtkTextIter *iter)
 {
@@ -608,9 +692,23 @@ gtk_text_iter_get_char(const GtkTextIter *iter)
     }
 }
 
+/**
+ * gtk_text_iter_get_slice:
+ * @start: iterator at start of a range
+ * @end: iterator at end of a range
+ * 
+ * Returns the text in the given range. A "slice" is an array of
+ * characters encoded in UTF-8 format, including the Unicode "unknown"
+ * character 0xFFFD for iterable non-character elements in the buffer,
+ * such as images.  Because images are encoded in the slice, byte and
+ * character offsets in the returned array will correspond to byte
+ * offsets in the text buffer.
+ * 
+ * Return value: slice of text from the buffer
+ **/
 gchar*
 gtk_text_iter_get_slice       (const GtkTextIter *start,
-                                const GtkTextIter *end)
+                               const GtkTextIter *end)
 {
   g_return_val_if_fail(start != NULL, NULL);
   g_return_val_if_fail(end != NULL, NULL);
@@ -621,9 +719,22 @@ gtk_text_iter_get_slice       (const GtkTextIter *start,
   return gtk_text_btree_get_text(start, end, TRUE, TRUE);
 }
 
+/**
+ * gtk_text_iter_get_text:
+ * @start: iterator at start of a range
+ * @end: iterator at end of a range
+ * 
+ * Returns <emphasis>text</emphasis> in the given range.  If the range
+ * contains non-text elements such as images, the character and byte
+ * offsets in the returned string will not correspond to character and
+ * byte offsets in the buffer. If you want offsets to correspond, see
+ * gtk_text_iter_get_slice().
+ * 
+ * Return value: array of characters from the buffer
+ **/
 gchar*
 gtk_text_iter_get_text       (const GtkTextIter *start,
-                               const GtkTextIter *end)
+                              const GtkTextIter *end)
 {
   g_return_val_if_fail(start != NULL, NULL);
   g_return_val_if_fail(end != NULL, NULL);
@@ -634,9 +745,20 @@ gtk_text_iter_get_text       (const GtkTextIter *start,
   return gtk_text_btree_get_text(start, end, TRUE, FALSE);
 }
 
+/**
+ * gtk_text_iter_get_visible_slice:
+ * @start: iterator at start of range
+ * @end: iterator at end of range
+ * 
+ * Like gtk_text_iter_get_slice(), but invisible text is not included.
+ * Invisible text is usually invisible because a #GtkTextTag with the
+ * "invisible" attribute turned on has been applied to it.
+ * 
+ * Return value: slice of text from the buffer
+ **/
 gchar*
 gtk_text_iter_get_visible_slice (const GtkTextIter  *start,
-                                  const GtkTextIter  *end)
+                                 const GtkTextIter  *end)
 {
   g_return_val_if_fail(start != NULL, NULL);
   g_return_val_if_fail(end != NULL, NULL);
@@ -647,6 +769,17 @@ gtk_text_iter_get_visible_slice (const GtkTextIter  *start,
   return gtk_text_btree_get_text(start, end, FALSE, TRUE);
 }
 
+/**
+ * gtk_text_iter_get_visible_text:
+ * @start: iterator at start of range
+ * @end: iterator at end of range
+ * 
+ * Like gtk_text_iter_get_text(), but invisible text is not included.
+ * Invisible text is usually invisible because a #GtkTextTag with the
+ * "invisible" attribute turned on has been applied to it.
+ * 
+ * Return value: string containing visible text in the range
+ **/
 gchar*
 gtk_text_iter_get_visible_text (const GtkTextIter  *start,
                                  const GtkTextIter  *end)
@@ -660,10 +793,26 @@ gtk_text_iter_get_visible_text (const GtkTextIter  *start,
   return gtk_text_btree_get_text(start, end, FALSE, FALSE);
 }
 
+/**
+ * gtk_text_iter_get_pixmap:
+ * @iter: an iterator
+ * @pixmap: return location for the pixmap
+ * @mask: return location for the mask
+ * 
+ * If the location pointed to by @iter contains a pixmap, the pixmap
+ * is placed in @pixmap, the mask is placed in @mask, and
+ * gtk_text_iter_get_pixmap() returns TRUE.  If @iter points at
+ * something else, FALSE will be returned and @pixmap/@mask will
+ * remain unchanged. The pixmap and mask do not have their reference
+ * count incremented. If the pixmap has no mask, NULL is returned for
+ * the mask.
+ * 
+ * Return value: whether the iterator pointed at a pixmap
+ **/
 gboolean
 gtk_text_iter_get_pixmap      (const GtkTextIter *iter,
-                                GdkPixmap** pixmap,
-                                GdkBitmap** mask)
+                               GdkPixmap** pixmap,
+                               GdkBitmap** mask)
 {
   GtkTextRealIter *real;
 
@@ -685,13 +834,27 @@ gtk_text_iter_get_pixmap      (const GtkTextIter *iter,
     return FALSE;
   else
     {
-      *pixmap = real->segment->body.pixmap.pixmap;
-      *mask = real->segment->body.pixmap.pixmap;
+      if (pixmap)
+        *pixmap = real->segment->body.pixmap.pixmap;
+      if (mask)
+        *mask = real->segment->body.pixmap.pixmap;
 
       return TRUE;
     }
 }
 
+/**
+ * gtk_text_iter_get_marks:
+ * @iter: an iterator
+ * 
+ * Returns a list of all #GtkTextMark at this location. Because marks
+ * are not iterable (they don't take up any "space" in the buffer,
+ * they are just marks in between iterable locations), multiple marks
+ * can exist in the same place. The returned list is not in any
+ * meaningful order.
+ * 
+ * Return value: list of #GtkTextMark
+ **/
 GSList*
 gtk_text_iter_get_marks (const GtkTextIter *iter)
 {
@@ -724,9 +887,23 @@ gtk_text_iter_get_marks (const GtkTextIter *iter)
   return retval;
 }
 
+/**
+ * gtk_text_iter_get_toggled_tags:
+ * @iter: an iterator
+ * @toggled_on: TRUE to get toggled-on tags
+ * 
+ * Returns a list of #GtkTextTag that are toggled on or off at this
+ * point.  (If @toggled_on is TRUE, the list contains tags that are
+ * toggled on.) If a tag is toggled on at @iter, then some non-empty
+ * range of characters following @iter has that tag applied to it.  If
+ * a tag is toggled off, then some non-empty range following @iter
+ * does <emphasis>not</emphasis> have the tag applied to it.
+ * 
+ * Return value: tags toggled at this point
+ **/
 GSList*
 gtk_text_iter_get_toggled_tags  (const GtkTextIter  *iter,
-                                  gboolean             toggled_on)
+                                 gboolean            toggled_on)
 {
   GtkTextRealIter *real;
   GtkTextLineSegment *seg;
@@ -768,9 +945,23 @@ gtk_text_iter_get_toggled_tags  (const GtkTextIter  *iter,
   return retval;
 }
 
+/**
+ * gtk_text_iter_begins_tag:
+ * @iter: an iterator
+ * @tag: a #GtkTextTag, or NULL
+ * 
+ * Returns TRUE if @tag is toggled on at exactly this point. If @tag
+ * is NULL, returns TRUE if any tag is toggled on at this point. Note
+ * that the gtk_text_iter_begins_tag() returns TRUE if @iter is the
+ * <emphasis>start</emphasis> of the tagged range;
+ * gtk_text_iter_has_tag() tells you whether an iterator is
+ * <emphasis>within</emphasis> a tagged range.
+ * 
+ * Return value: whether @iter is the start of a range tagged with @tag
+ **/
 gboolean
 gtk_text_iter_begins_tag    (const GtkTextIter  *iter,
-                              GtkTextTag         *tag)
+                             GtkTextTag         *tag)
 {
   GtkTextRealIter *real;
   GtkTextLineSegment *seg;
@@ -800,6 +991,21 @@ gtk_text_iter_begins_tag    (const GtkTextIter  *iter,
   return FALSE;
 }
 
+/**
+ * gtk_text_iter_ends_tag:
+ * @iter: an iterator
+ * @tag: a #GtkTextTag, or NULL
+ *
+ * Returns TRUE if @tag is toggled off at exactly this point. If @tag
+ * is NULL, returns TRUE if any tag is toggled off at this point. Note
+ * that the gtk_text_iter_ends_tag() returns TRUE if @iter is the
+ * <emphasis>end</emphasis> of the tagged range;
+ * gtk_text_iter_has_tag() tells you whether an iterator is
+ * <emphasis>within</emphasis> a tagged range.
+ * 
+ * Return value: whether @iter is the end of a range tagged with @tag
+ * 
+ **/
 gboolean
 gtk_text_iter_ends_tag   (const GtkTextIter  *iter,
                            GtkTextTag         *tag)
@@ -832,6 +1038,17 @@ gtk_text_iter_ends_tag   (const GtkTextIter  *iter,
   return FALSE;
 }
 
+/**
+ * gtk_text_iter_toggles_tag:
+ * @iter: an iterator
+ * @tag: a #GtkTextTag, or NULL
+ * 
+ * This is equivalent to (gtk_text_iter_begins_tag() ||
+ * gtk_text_iter_ends_tag()), i.e. it tells you whether a range with
+ * @tag applied to it begins <emphasis>or</emphasis> ends at @iter.
+ * 
+ * Return value: whether @tag is toggled on or off at @iter
+ **/
 gboolean
 gtk_text_iter_toggles_tag       (const GtkTextIter  *iter,
                                   GtkTextTag         *tag)
@@ -863,9 +1080,18 @@ gtk_text_iter_toggles_tag       (const GtkTextIter  *iter,
   return FALSE;
 }
 
+/**
+ * gtk_text_iter_has_tag:
+ * @iter: an iterator
+ * @tag: a #GtkTextTag
+ * 
+ * Returns TRUE if @iter is within a range tagged with @tag.
+ * 
+ * Return value: whether @iter is tagged with @tag
+ **/
 gboolean
 gtk_text_iter_has_tag           (const GtkTextIter   *iter,
-                                  GtkTextTag          *tag)
+                                 GtkTextTag          *tag)
 {
   GtkTextRealIter *real;
   
@@ -892,6 +1118,19 @@ gtk_text_iter_has_tag           (const GtkTextIter   *iter,
     }
 }
 
+/**
+ * gtk_text_iter_editable:
+ * @iter: an iterator
+ * @default_setting: TRUE if text is editable by default
+ * 
+ * Returns whether @iter is within an editable region of text.
+ * Non-editable text is "locked" and can't be changed by the user via
+ * #GtkTextView. This function is simply a convenience wrapper around
+ * gtk_text_iter_get_style_values(). If no tags applied to this text
+ * affect editability, @default_setting will be returned.
+ * 
+ * Return value: whether @iter is inside an editable range
+ **/
 gboolean
 gtk_text_iter_editable (const GtkTextIter *iter,
                         gboolean           default_setting)
@@ -912,6 +1151,17 @@ gtk_text_iter_editable (const GtkTextIter *iter,
   return retval;
 }
 
+/**
+ * gtk_text_iter_get_language:
+ * @iter: an iterator
+ * 
+ * A convenience wrapper around gtk_text_iter_get_style_values(),
+ * which returns the language in effect at @iter. If no tags affecting
+ * language * apply to @iter, the return value is identical to that of
+ * gtk_get_default_language().
+ * 
+ * Return value: language in effect at @iter
+ **/
 static gchar*
 gtk_text_iter_get_language (const GtkTextIter *iter)
 {
@@ -929,6 +1179,18 @@ gtk_text_iter_get_language (const GtkTextIter *iter)
   return retval;
 }
 
+/**
+ * gtk_text_iter_starts_line:
+ * @iter: an iterator
+ * 
+ * Returns TRUE if @iter begins a newline-terminated line,
+ * i.e. gtk_text_iter_get_line_offset() would return 0.
+ * However this function is potentially more efficient than
+ * gtk_text_iter_get_line_offset() because it doesn't have to compute
+ * the offset, it just has to see whether it's 0.
+ * 
+ * Return value: whether @iter begins a line
+ **/
 gboolean
 gtk_text_iter_starts_line (const GtkTextIter   *iter)
 {
@@ -954,6 +1216,14 @@ gtk_text_iter_starts_line (const GtkTextIter   *iter)
     }
 }
 
+/**
+ * gtk_text_iter_ends_line:
+ * @iter: an iterator
+ * 
+ * Returns TRUE if @iter points to a newline character.
+ * 
+ * Return value: whether @iter is at the end of a line
+ **/
 gboolean
 gtk_text_iter_ends_line (const GtkTextIter   *iter)
 {
@@ -964,6 +1234,17 @@ gtk_text_iter_ends_line (const GtkTextIter   *iter)
   return gtk_text_iter_get_char(iter) == '\n';
 }
 
+/**
+ * gtk_text_iter_is_last:
+ * @iter: an iterator
+ * 
+ * Returns TRUE if @iter is the end iterator, i.e. one past the last
+ * dereferenceable iterator in the buffer. gtk_text_iter_is_last() is
+ * the second most efficient way to check whether an iterator is the
+ * end iterator.
+ * 
+ * Return value: whether @iter is the end iterator 
+ **/
 gboolean
 gtk_text_iter_is_last (const GtkTextIter *iter)
 {
@@ -981,12 +1262,30 @@ gtk_text_iter_is_last (const GtkTextIter *iter)
   return gtk_text_line_is_last(real->line);
 }
 
+/**
+ * gtk_text_iter_is_first:
+ * @iter: an iterator
+ * 
+ * Returns TRUE if @iter is the first iterator in the buffer, that is
+ * if @iter has a character offset of 0.
+ * 
+ * Return value: whether @iter is the first in the buffer
+ **/
 gboolean
 gtk_text_iter_is_first (const GtkTextIter *iter)
 {
   return gtk_text_iter_get_offset (iter) == 0;
 }
 
+/**
+ * gtk_text_iter_get_chars_in_line:
+ * @iter: an iterator
+ * 
+ * Returns the number of characters in the line containing @iter,
+ * including the terminating newline.
+ * 
+ * Return value: number of characters in the line
+ **/
 gint
 gtk_text_iter_get_chars_in_line (const GtkTextIter   *iter)
 {
@@ -1027,6 +1326,20 @@ gtk_text_iter_get_chars_in_line (const GtkTextIter   *iter)
   return count;
 }
 
+/**
+ * gtk_text_iter_get_style_values:
+ * @iter: an iterator
+ * @values: a #GtkTextStyleValues to be filled in
+ * 
+ * Computes the effect of any tags applied to this spot in the
+ * text. The @values parameter should be initialized to the default
+ * settings you wish to use if no tags are in effect.
+ * gtk_text_iter_get_style_values() will modify @values, applying the
+ * effects of any tags present at @iter. If any tags affected @values,
+ * the function returns TRUE.
+ * 
+ * Return value: TRUE if @values was modified
+ **/
 gboolean
 gtk_text_iter_get_style_values (const GtkTextIter  *iter,
                                 GtkTextStyleValues *values)
@@ -1165,6 +1478,10 @@ forward_char(GtkTextRealIter *real)
       real->any_segment = real->segment;
       
       check_invariants((GtkTextIter*)real);
+
+      /* FIXME we don't currently return FALSE if
+       * we moved onto the end iterator
+       */
       
       return TRUE;
     }
@@ -1281,6 +1598,20 @@ gtk_text_iter_backward_indexable_segment(GtkTextIter *iter)
   return FALSE;
 }
 
+/**
+ * gtk_text_iter_next_char:
+ * @iter: an iterator
+ * 
+ * Moves @iter forward by one character offset. Note that images
+ * embedded in the buffer occupy 1 character slot, so
+ * gtk_text_iter_next_char() may actually move onto an image instead
+ * of a character, if you have images in your buffer.  If @iter is the
+ * end iterator or one character before it, @iter will now point at
+ * the end iterator, and gtk_text_iter_next_char() returns FALSE for
+ * convenience when writing loops.
+ * 
+ * Return value: whether the new position is the end iterator
+ **/
 gboolean
 gtk_text_iter_next_char(GtkTextIter *iter)
 {
@@ -1299,6 +1630,17 @@ gtk_text_iter_next_char(GtkTextIter *iter)
     }
 }
 
+/**
+ * gtk_text_iter_prev_char:
+ * @iter: an iterator
+ * 
+ * Moves backward by one character offset. Returns TRUE if movement
+ * was possible; if @iter was the first in the buffer (character
+ * offset 0), gtk_text_iter_prev_char() returns FALSE for convenience when
+ * writing loops.
+ * 
+ * Return value: whether movement was possible
+ **/
 gboolean
 gtk_text_iter_prev_char(GtkTextIter *iter)
 {
@@ -1323,6 +1665,23 @@ gtk_text_iter_prev_char(GtkTextIter *iter)
 */
 #define MAX_LINEAR_SCAN 300
 
+
+/**
+ * gtk_text_iter_forward_chars:
+ * @iter: an iterator
+ * @count: number of characters to move, may be negative
+ * 
+ * Moves @count characters if possible (if @count would move past the
+ * start or end of the buffer, moves to the start or end of the
+ * buffer). If @count is positive, the return value indicates whether
+ * @iter was moved to a dereferenceable location (FALSE is returned if
+ * @iter was moved to the non-dereferenceable end iterator). If @count
+ * is negative, the return value indicates whether @iter was already
+ * at character offset 0. If @count is 0, the function does nothing
+ * and returns FALSE.
+ * 
+ * Return value: whether @iter moved or is dereferenceable
+ **/
 gboolean
 gtk_text_iter_forward_chars(GtkTextIter *iter, gint count)
 {
@@ -1378,6 +1737,23 @@ gtk_text_iter_forward_chars(GtkTextIter *iter, gint count)
     }
 }
 
+/**
+ * gtk_text_iter_backward_chars:
+ * @iter: an iterator
+ * @count: number of characters to move
+ *
+ * Moves @count characters backward, if possible (if @count would move
+ * past the start or end of the buffer, moves to the start or end of
+ * the buffer). If @count is negative, the return value indicates
+ * whether @iter was moved to a dereferenceable location (FALSE is
+ * returned if @iter was moved to the non-dereferenceable end
+ * iterator). If @count is positive, the return value indicates
+ * whether @iter was already at character offset 0. If @count is 0,
+ * the function does nothing and returns FALSE.
+ * 
+ * Return value: whether @iter moved or is dereferenceable
+ *  
+ **/
 gboolean
 gtk_text_iter_backward_chars(GtkTextIter *iter, gint count)
 {
@@ -1456,6 +1832,16 @@ gtk_text_iter_backward_chars(GtkTextIter *iter, gint count)
     }
 }
 
+/**
+ * gtk_text_iter_forward_line:
+ * @iter: an iterator
+ * 
+ * Moves @iter to the start of the next line. Returns TRUE if there
+ * was a next line to move to, and FALSE if @iter was simply moved to
+ * the end of the buffer and is now not dereferenceable.
+ * 
+ * Return value: whether @iter can be dereferenced
+ **/
 gboolean
 gtk_text_iter_forward_line(GtkTextIter *iter)
 {
@@ -1489,6 +1875,18 @@ gtk_text_iter_forward_line(GtkTextIter *iter)
     }
 }
 
+/**
+ * gtk_text_iter_backward_line:
+ * @iter: an iterator
+ * 
+ * Moves @iter to the start of the previous line. Returns TRUE if
+ * @iter could be moved; i.e. if @iter was at character offset 0, this
+ * function returns FALSE. Therefore if @iter was already on line 0,
+ * but not at the start of the line, @iter is snapped to the start of
+ * the line and the function returns TRUE.
+ * 
+ * Return value: whether @iter moved
+ **/
 gboolean
 gtk_text_iter_backward_line(GtkTextIter *iter)
 {
@@ -1571,7 +1969,10 @@ gtk_text_iter_forward_lines(GtkTextIter *iter, gint count)
       gtk_text_iter_set_line(iter, old_line + count);
 
       check_invariants(iter);
-      
+
+      /* FIXME this needs to return FALSE if we moved onto the
+       * end iterator.
+       */
       return (gtk_text_iter_get_line(iter) != old_line);
     }
 }

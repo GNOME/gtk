@@ -1,3 +1,11 @@
+2000-08-27  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtktextiter.c, gtk/gtktextiter.h: wrote lots of API docs,
+	minor indentation fixes, inserted some FIXME about stuff I
+	realized was broken while documenting it.
+	(gtk_text_iter_get_pixmap): allow out params to be NULL, following
+	GTK convention	
+
 Tue Aug 22 12:33:24 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/testgtk.c (create_styles): Fix double free of

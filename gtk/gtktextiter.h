@@ -61,16 +61,16 @@ gunichar gtk_text_iter_get_char          (const GtkTextIter  *iter);
 /* includes the 0xFFFD char for pixmaps/widgets, so char offsets
    into the returned string map properly into buffer char offsets */
 gchar   *gtk_text_iter_get_slice         (const GtkTextIter  *start,
-                                           const GtkTextIter  *end);
+                                          const GtkTextIter  *end);
 
 /* includes only text, no 0xFFFD */
 gchar   *gtk_text_iter_get_text          (const GtkTextIter  *start,
-                                           const GtkTextIter  *end);
+                                          const GtkTextIter  *end);
 /* exclude invisible chars */
 gchar   *gtk_text_iter_get_visible_slice (const GtkTextIter  *start,
-                                           const GtkTextIter  *end);
+                                          const GtkTextIter  *end);
 gchar   *gtk_text_iter_get_visible_text  (const GtkTextIter  *start,
-                                           const GtkTextIter  *end);
+                                          const GtkTextIter  *end);
 
 /* Returns TRUE if the iterator pointed at a pixmap */
 gboolean gtk_text_iter_get_pixmap        (const GtkTextIter  *iter,
@@ -91,10 +91,10 @@ gboolean gtk_text_iter_ends_tag          (const GtkTextIter  *iter,
                                           GtkTextTag         *tag);
 
 gboolean gtk_text_iter_toggles_tag       (const GtkTextIter  *iter,
-                                           GtkTextTag         *tag);
+                                          GtkTextTag         *tag);
 
 gboolean gtk_text_iter_has_tag           (const GtkTextIter   *iter,
-                                           GtkTextTag          *tag);
+                                          GtkTextTag          *tag);
 
 gboolean gtk_text_iter_editable          (const GtkTextIter   *iter,
                                           gboolean             default_setting);
@@ -184,11 +184,11 @@ gboolean gtk_text_iter_in_region       (const GtkTextIter *iter,
 
 /* Put these two in ascending order */
 void     gtk_text_iter_reorder         (GtkTextIter *first,
-                                         GtkTextIter *second);
+                                        GtkTextIter *second);
 
 /* Debug */
 void     gtk_text_iter_spew            (const GtkTextIter *iter,
-                                         const gchar *desc);
+                                        const gchar *desc);
 
 #ifdef __cplusplus
 }
