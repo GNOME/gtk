@@ -481,7 +481,7 @@ gtk_viewport_add (GtkContainer *container,
     {
       gtk_widget_set_parent (widget, GTK_WIDGET (container));
       gtk_widget_set_parent_window (widget, GTK_VIEWPORT (container)->bin_window);
-      if (GTK_WIDGET_VISIBLE (widget->parent))
+      if (GTK_WIDGET_VISIBLE (widget))
 	{
 	  if (GTK_WIDGET_MAPPED (widget->parent) &&
 	      !GTK_WIDGET_MAPPED (widget))

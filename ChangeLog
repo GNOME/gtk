@@ -1,3 +1,12 @@
+Sun Apr 12 22:43:22 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkmenuitem.c (gtk_menu_item_size_allocate):
+	An old allocation error.
+
+	* gtk/gtkviewport.c (gtk_viewport_add): Don't map
+	when adding a not-VISIBLE widget to a VISIBLE 
+	viewport.
+	
 Sun Apr 12 18:54:29 PDT 1998 Shawn T. Amundson <amundson@gtk.org>
 
 	* Changed LGPL address for FSF in all .h and .c files
