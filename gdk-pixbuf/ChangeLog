@@ -1,5 +1,11 @@
 2003-06-21  Matthias Clasen  <maclas@gmx.de>
 
+	* io-gif.c (gif_get_frame_info): Don't stop on empty frames.
+	(gif_get_lzw): Handle empty frames as 1x1 transparent 
+	pixbufs.  (#106962, Federico Mena Quintero)
+
+2003-06-21  Matthias Clasen  <maclas@gmx.de>
+
 	* io-gif.c (gif_get_lzw): Correct the calls to update_func() to
 	consistently specify animation-relative data.
 	(gif_get_frame_info): When debugging, also dump whether the
