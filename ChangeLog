@@ -1,5 +1,9 @@
 2003-01-21  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/gtktextview.c (gtk_text_view_size_allocate): Adjust the
+	vadjustment value after changing its bounds.  (fixes #101963 and 
+	#73562)
+
 	* gtk/gtkcolorsel.c (hex_changed): Fix clamping to [0,1] to avoid 
 	unnecessary roundtrip failures.  (#93500)
 

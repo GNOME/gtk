@@ -2850,8 +2850,6 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   GtkTextView *text_view;
   GtkTextIter first_para;
   gint y;
-  GtkAdjustment *vadj;
-  gboolean yoffset_changed = FALSE;
   gint width, height;
   GdkRectangle text_rect;
   GdkRectangle left_rect;
@@ -2977,6 +2975,29 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   /* Note that this will do some layout validation */
   gtk_text_view_allocate_children (text_view);
 
+  /* Ensure h/v adj exist */
+  get_hadjustment (text_view);
+  get_vadjustment (text_view);
+
+  text_view->hadjustment->page_size = SCREEN_WIDTH (text_view);
+  text_view->hadjustment->page_increment = SCREEN_WIDTH (text_view) * 0.9;
+  text_view->hadjustment->step_increment = SCREEN_WIDTH (text_view) * 0.1;
+  text_view->hadjustment->lower = 0;
+  text_view->hadjustment->upper = MAX (SCREEN_WIDTH (text_view),
+                                       text_view->width);
+
+  if (text_view->hadjustment->value > text_view->hadjustment->upper - text_view->hadjustment->page_size)
+    gtk_adjustment_set_value (text_view->hadjustment, MAX (0, text_view->hadjustment->upper - text_view->hadjustment->page_size));
+
+  gtk_adjustment_changed (text_view->hadjustment);
+
+  text_view->vadjustment->page_size = SCREEN_HEIGHT (text_view);
+  text_view->vadjustment->page_increment = SCREEN_HEIGHT (text_view) * 0.9;
+  text_view->vadjustment->step_increment = SCREEN_HEIGHT (text_view) * 0.1;
+  text_view->vadjustment->lower = 0;
+  text_view->vadjustment->upper = MAX (SCREEN_HEIGHT (text_view),
+                                       text_view->height);
+
   /* Now adjust the value of the adjustment to keep the cursor at the
    * same place in the buffer
    */
@@ -2985,41 +3006,13 @@ gtk_text_view_size_allocate (GtkWidget *widget,
 
   y += text_view->first_para_pixels;
 
-  /* Ensure h/v adj exist */
-  get_hadjustment (text_view);
-  get_vadjustment (text_view);
-
-  vadj = text_view->vadjustment;
-  if (y > vadj->upper - vadj->page_size)
-    y = MAX (0, vadj->upper - vadj->page_size);
+  if (y > text_view->vadjustment->upper - text_view->vadjustment->page_size)
+    y = MAX (0, text_view->vadjustment->upper - text_view->vadjustment->page_size);
 
   if (y != text_view->yoffset)
-    {
-      vadj->value = y;
-      yoffset_changed = TRUE;
-    }
+    gtk_adjustment_set_value (text_view->vadjustment, y);
 
-  text_view->hadjustment->page_size = SCREEN_WIDTH (text_view);
-  text_view->hadjustment->page_increment = SCREEN_WIDTH (text_view) * 0.9;
-  text_view->hadjustment->step_increment = SCREEN_WIDTH (text_view) * 0.1;
-  text_view->hadjustment->lower = 0;
-  text_view->hadjustment->upper = MAX (SCREEN_WIDTH (text_view),
-                                       text_view->width);
-  gtk_adjustment_changed (text_view->hadjustment);
-
-  if (text_view->hadjustment->value > text_view->hadjustment->upper - text_view->hadjustment->page_size)
-    gtk_adjustment_set_value (text_view->hadjustment, MAX (0, text_view->hadjustment->upper - text_view->hadjustment->page_size));
-
-  text_view->vadjustment->page_size = SCREEN_HEIGHT (text_view);
-  text_view->vadjustment->page_increment = SCREEN_HEIGHT (text_view) * 0.9;
-  text_view->vadjustment->step_increment = SCREEN_HEIGHT (text_view) * 0.1;
-  text_view->vadjustment->lower = 0;
-  text_view->vadjustment->upper = MAX (SCREEN_HEIGHT (text_view),
-                                       text_view->height);
   gtk_adjustment_changed (text_view->vadjustment);
-
-  if (yoffset_changed)
-    gtk_adjustment_value_changed (vadj);
 
   /* The GTK resize loop processes all the pending exposes right
    * after doing the resize stuff, so the idle sizer won't have a
