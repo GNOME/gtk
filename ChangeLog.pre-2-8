@@ -1,3 +1,13 @@
+2001-11-02  Sebastian Wilhelmi  <wilhelmi@ira.uka.de>
+
+	* tests/makefile.msc, gtk/makefile.msc.in: Removed
+	-DGTK_DISABLE_COMPAT_H.
+
+	* docs/Changes-2.0.txt:
+	s/GDK_DISABLE_COMPAT_H/GDK_DISABLE_DEPRECATED/
+
+	* gtk/gtkcompat.h.in, gdk/gdkcompat.h: Removed from CVS.
+
 Fri Nov  2 10:21:03 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* examples/**/Makefile.am: Convert to use pkg-config

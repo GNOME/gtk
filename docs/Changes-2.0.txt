@@ -191,7 +191,7 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
 
 * A number of functions in GDK have been renamed for consistency and
   clarity. #defines to provide backwards compatibility have been
-  included, but can be disabled by defineing GDK_DISABLE_COMPAT_H.
+  included, but can be disabled by defineing GDK_DISABLE_DEPRECATED.
 
   #define gdk_draw_pixmap                gdk_draw_drawable
   #define gdk_draw_bitmap                gdk_draw_drawable

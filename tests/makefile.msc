@@ -21,7 +21,7 @@ GDK_PIXBUF_LIBS = ../gdk-pixbuf/gdk_pixbuf-$(GDK_PIXBUF_VER).lib
 INCLUDES = -I . -I .. -I ../gdk -I ../gdk-pixbuf -I ../gtk
 DEPCFLAGS = $(PANGO_CFLAGS) $(GLIB_CFLAGS) $(LIBICONV_CFLAGS) $(INTL_CFLAGS) $(ATK_CFLAGS)
 LDFLAGS = /link /machine:ix86 $(LINKDEBUG)
-DEFINES = -DGTK_DISABLE_COMPAT_H -DG_LOG_DOMAIN=\"GtkTest\" -DGTK_VERSION=\"$(GTK_VER)\"
+DEFINES = -DG_LOG_DOMAIN=\"GtkTest\" -DGTK_VERSION=\"$(GTK_VER)\"
 
 TOUCH = copy makefile.msc+nul
 
