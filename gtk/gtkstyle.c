@@ -266,7 +266,7 @@ gtk_style_attach (GtkStyle  *style,
   g_return_val_if_fail (window != NULL, NULL);
 
   colormap = gdk_window_get_colormap (window);
-  gdk_window_get_geometry (window, NULL, NULL, NULL, NULL, &depth);
+  depth = gdk_window_get_visual (window)->depth;
 
   new_style = gtk_style_find (style, colormap, depth);
 

@@ -81,6 +81,8 @@ struct _GdkWindowPrivate
   gint extension_events;
 
   GList *filters;
+  GdkColormap *colormap;
+  GList *children;
 };
 
 struct _GdkImagePrivate

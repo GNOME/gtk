@@ -4497,7 +4497,14 @@ expose_text (GtkText* text, GdkRectangle *area, gboolean cursor)
 	{
 	  if (CACHE_DATA(cache).start.index <= text->cursor_mark.index &&
 	      CACHE_DATA(cache).end.index >= text->cursor_mark.index)
-	    draw_cursor (text, TRUE);
+	    {
+	      /* We undraw and draw the cursor here to get the drawn
+	       * level right ... FIXME - maybe the second parameter
+	       * of draw_cursor should work differently
+	       */
+	      undraw_cursor (text, FALSE);
+	      draw_cursor (text, FALSE);
+	    }
 	}
 
       pixels += LINE_HEIGHT(CACHE_DATA(cache));
