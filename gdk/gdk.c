@@ -17,7 +17,7 @@
  */
 #include "../config.h"
 
-#define DEBUG_DND 1 /* Shouldn't be needed much these days */
+/* #define DEBUG_DND 1 */ /* Shouldn't be needed much these days */
 
 #include <X11/Xlocale.h>
 #include <ctype.h>
