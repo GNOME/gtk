@@ -209,9 +209,9 @@ fb_modes_parse_mode (GScanner *scanner,
 		g_free (modename);
 		return -1;
 	      }
-	  if (g_strcasecmp (scanner->value.v_identifier, "true")==0)
+	  if (g_ascii_strcasecmp (scanner->value.v_identifier, "true")==0)
 	    laced = 1;
-	  else if (g_strcasecmp (scanner->value.v_identifier, "false")==0)
+	  else if (g_ascii_strcasecmp (scanner->value.v_identifier, "false")==0)
 	    laced = 0;
 	  else
 	    {
@@ -226,9 +226,9 @@ fb_modes_parse_mode (GScanner *scanner,
 		g_free (modename);
 		return -1;
 	      }
-	  if (g_strcasecmp (scanner->value.v_identifier, "true")==0)
+	  if (g_ascii_strcasecmp (scanner->value.v_identifier, "true")==0)
 	    extsync = 1;
-	  else if (g_strcasecmp (scanner->value.v_identifier, "false")==0)
+	  else if (g_ascii_strcasecmp (scanner->value.v_identifier, "false")==0)
 	    extsync = 0;
 	  else
 	    {
@@ -243,9 +243,9 @@ fb_modes_parse_mode (GScanner *scanner,
 		g_free (modename);
 		return -1;
 	      }
-	  if (g_strcasecmp (scanner->value.v_identifier, "true")==0)
+	  if (g_ascii_strcasecmp (scanner->value.v_identifier, "true")==0)
 	    doublescan = 1;
-	  else if (g_strcasecmp (scanner->value.v_identifier, "false")==0)
+	  else if (g_ascii_strcasecmp (scanner->value.v_identifier, "false")==0)
 	    doublescan = 0;
 	  else
 	    {
@@ -260,9 +260,9 @@ fb_modes_parse_mode (GScanner *scanner,
 		g_free (modename);
 		return -1;
 	      }
-	  if (g_strcasecmp (scanner->value.v_identifier, "high")==0)
+	  if (g_ascii_strcasecmp (scanner->value.v_identifier, "high")==0)
 	    vsync = 1;
-	  else if (g_strcasecmp (scanner->value.v_identifier, "low")==0)
+	  else if (g_ascii_strcasecmp (scanner->value.v_identifier, "low")==0)
 	    vsync = 0;
 	  else
 	    {
@@ -277,9 +277,9 @@ fb_modes_parse_mode (GScanner *scanner,
 	      g_free (modename);
 	      return -1;
 	    }
-	  if (g_strcasecmp (scanner->value.v_identifier, "high")==0)
+	  if (g_ascii_strcasecmp (scanner->value.v_identifier, "high")==0)
 	    hsync = 1;
-	  else if (g_strcasecmp (scanner->value.v_identifier, "low")==0)
+	  else if (g_ascii_strcasecmp (scanner->value.v_identifier, "low")==0)
 	    hsync = 0;
 	  else
 	    {
@@ -294,9 +294,9 @@ fb_modes_parse_mode (GScanner *scanner,
 	      g_free (modename);
 	      return -1;
 	    }
-	  if (g_strcasecmp (scanner->value.v_identifier, "high")==0)
+	  if (g_ascii_strcasecmp (scanner->value.v_identifier, "high")==0)
 	    csync = 1;
-	  else if (g_strcasecmp (scanner->value.v_identifier, "low")==0)
+	  else if (g_ascii_strcasecmp (scanner->value.v_identifier, "low")==0)
 	    csync = 0;
 	  else
 	    {
@@ -311,9 +311,9 @@ fb_modes_parse_mode (GScanner *scanner,
 	      g_free (modename);
 	      return -1;
 	    }
-	  if (g_strcasecmp (scanner->value.v_identifier, "false")==0)
+	  if (g_ascii_strcasecmp (scanner->value.v_identifier, "false")==0)
 	    accel = 0;
-	  else if (g_strcasecmp (scanner->value.v_identifier, "true")==0)
+	  else if (g_ascii_strcasecmp (scanner->value.v_identifier, "true")==0)
 	    accel = 1;
 	  else
 	    {
@@ -691,7 +691,7 @@ gdk_fb_display_new ()
   s = getenv("GDK_VT");
   if (s)
     {
-      if (g_strcasecmp ("new", s)==0)
+      if (g_ascii_strcasecmp ("new", s)==0)
 	{
 	  n = ioctl (display->console_fd, VT_OPENQRY, &vt);
 	  if (n < 0 || vt == -1)
@@ -1270,18 +1270,6 @@ _gdk_windowing_exit (void)
   gdk_fb_display_destroy (gdk_display);
   
   gdk_display = NULL;
-}
-
-gchar*
-gdk_keyval_name (guint	      keyval)
-{
-  return NULL;
-}
-
-guint
-gdk_keyval_from_name (const gchar *keyval_name)
-{
-  return 0;
 }
 
 gchar *

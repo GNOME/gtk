@@ -192,7 +192,7 @@ gdk_fb_keyboard_init (gboolean open_dev)
 
   for (i = 0; i < G_N_ELEMENTS(keyb_devs); i++)
     {
-      if (g_strcasecmp(keyb_type, keyb_devs[i].name)==0)
+      if (g_ascii_strcasecmp(keyb_type, keyb_devs[i].name)==0)
 	break;
     }
   
@@ -394,7 +394,8 @@ gdk_fb_handle_key (guint hw_keycode,
 
   /* handle some magic keys */
   if (key_up &&
-      (modifier_state & (GDK_CONTROL_MASK|GDK_MOD1_MASK)))
+      (modifier_state & GDK_CONTROL_MASK) &&
+      (modifier_state & GDK_MOD1_MASK))
     {
       if (keyval == GDK_BackSpace)
 	{
@@ -783,7 +784,7 @@ xlate_io (GIOChannel *gioc,
   if (n <= 0)
     g_error ("Nothing from keyboard!");
 
-  for (i = 0; i < n; i++)
+  for (i = 0; i < n; )
     {
       handled = FALSE;
       modifier = 0;

@@ -2184,6 +2184,22 @@ gdk_window_deiconify (GdkWindow *window)
 }
 
 void
+gdk_window_fullscreen (GdkWindow *window)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  g_warning ("gdk_window_fullscreen() not implemented.\n");
+}
+
+void
+gdk_window_unfullscreen (GdkWindow *window)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  /*  g_warning ("gdk_window_unfullscreen() not implemented.\n");*/
+}
+
+void
 gdk_window_focus (GdkWindow *window,
                   guint32    timestamp)
 {
@@ -2203,6 +2219,20 @@ gdk_window_set_type_hint (GdkWindow        *window,
 void
 gdk_window_set_modal_hint (GdkWindow *window,
 			   gboolean   modal)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+}
+
+void
+gdk_window_set_skip_taskbar_hint (GdkWindow *window,
+				  gboolean   skips_taskbar)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+}
+
+void
+gdk_window_set_skip_pager_hint (GdkWindow *window,
+				gboolean   skips_pager)
 {
   g_return_if_fail (GDK_IS_WINDOW (window));
 }

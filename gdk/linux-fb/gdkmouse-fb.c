@@ -324,7 +324,7 @@ gdk_fb_mouse_init (gboolean open_dev)
       
   for (i=0;i<G_N_ELEMENTS(mouse_devs);i++)
     {
-      if (g_strcasecmp(mouse_type, mouse_devs[i].name)==0)
+      if (g_ascii_strcasecmp(mouse_type, mouse_devs[i].name)==0)
 	break;
     }
   

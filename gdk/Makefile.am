@@ -163,10 +163,16 @@ gdk_c_sources = @STRIP_BEGIN@ 	\
 gdkincludedir = $(includedir)/gtk-2.0/gdk
 gdkinclude_HEADERS = $(gdk_headers)
 
-# gdkmarshalers.c is commented out becuase it is currently an empty file
-libgdk_x11_2_0_la_SOURCES = $(gdk_c_sources) gdkenumtypes.c gdkmarshalers.h # gdkmarshalers.c
-libgdk_linux_fb_2_0_la_SOURCES = $(gdk_c_sources) gdkenumtypes.c gdkmarshalers.h # gdkmarshalers.c
-libgdk_win32_2_0_la_SOURCES = $(gdk_c_sources) gdkenumtypes.c # gdkmarshalers.c
+# gdkmarshalers.c is not here becuase it is currently an empty file
+common_sources = @STRIP_BEGIN@	\
+	$(gdk_c_sources)	\
+	gdkenumtypes.c		\
+	gdkmarshalers.h		\
+@STRIP_END@
+
+libgdk_x11_2_0_la_SOURCES = $(common_sources)
+libgdk_linux_fb_2_0_la_SOURCES = $(common_sources) gdkkeynames.c
+libgdk_win32_2_0_la_SOURCES = $(common_sources) gdkkeynames.c
 
 libgdk_x11_2_0_la_LIBADD = x11/libgdk-x11.la @GDK_DEP_LIBS@
 libgdk_linux_fb_2_0_la_LIBADD = linux-fb/libgdk-linux-fb.la @GDK_DEP_LIBS@

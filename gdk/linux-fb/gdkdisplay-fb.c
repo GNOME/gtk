@@ -30,7 +30,7 @@
 GdkDisplay *
 gdk_display_open (const gchar *display_name)
 {
-  if (_gdk_display != NULL)
+  if (gdk_display == NULL || _gdk_display != NULL)
     return NULL; /* single display only */
 
   _gdk_display = g_object_new (GDK_TYPE_DISPLAY, NULL);

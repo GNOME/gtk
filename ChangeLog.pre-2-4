@@ -1,3 +1,22 @@
+Fri Sep 27 14:30:34 2002 Eric Warmenhoven <eric@warmenhoven.org>
+
+	* gdk/Makefile.am gdk/gdkkeynames.c gdk/linux-fb/gdkmain-fb.c
+	gdk/win32/gdkkeys-win32.c: Move gdk_keval_name and
+	gdk_keyval_from_name to new gdkkeynames.c, share implementation for
+	linux-fb and win32 (#94123)
+
+	* gdk/linux-fb/Makefile.am gdk/linux-fb/gdkkeyboard-fb.c
+	gdk/linux-fb/gdkmain-fb.c gdk/linux-fb/gdkmouse-fb.c: add
+	-DG_DISABLE_DEPRECATED and -DGDK_PIXBUF_DISABLE_DEPRECATED to compile
+	flags
+
+	* gdk/linux-fb/gdkdisplay-fb.c: prevent segfault if display can't
+	initialize
+
+	* gdk/linux-fb/gdkkeyboard-fb.c: better parsing of keycodes
+
+	* gdk/linux-fb/gdkwindow-fb.c: add stubs for new functions
+
 Fri Sep 27 17:23:31 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcolorsel.c: Fix some signed/unsigned warnings.
