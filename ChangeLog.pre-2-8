@@ -1,3 +1,7 @@
+2002-03-06  James Henstridge  <james@daa.com.au>
+
+	* configure.in: libpango is now called libpango-1.0
+
 Tue Mar  5 18:17:31 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_set_fixed_width):

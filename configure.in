@@ -1219,7 +1219,7 @@ CFLAGS="$CFLAGS $PANGO_CFLAGS"
 if $PKG_CONFIG --uninstalled $PANGO_PACKAGES; then
         :
 else
-        AC_CHECK_LIB(pango, pango_context_new, :, AC_MSG_ERROR([
+        AC_CHECK_LIB(pango-1.0, pango_context_new, :, AC_MSG_ERROR([
 *** Can't link to Pango. Pango is required to build
 *** GTK+. For more information see http://www.pango.org]), $PANGO_LIBS)
 fi
