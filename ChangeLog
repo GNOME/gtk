@@ -1,3 +1,11 @@
+Thu Feb 10 16:16:35 2000  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkspinbutton.c (gtk_spin_button_size_allocate): guard against
+	guint wrap arounds in allocation.width.
+
+	* gtk/gtktable.c (gtk_table_size_allocate_pass1): repeat shrinking
+	process untill we fit the allocation given.
+
 Tue Feb  8 09:38:29 2000  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwidget.c:
