@@ -593,9 +593,10 @@ gtk_object_getv (GtkObject           *object,
 		 guint		     nargs,
 		 GtkArg              *args)
 {
-  int i;
+  guint i;
   
   g_return_if_fail (object != NULL);
+  g_return_if_fail (GTK_IS_OBJECT (object));
   
   if (!arg_info_ht)
     return;
@@ -636,7 +637,7 @@ gtk_object_getv (GtkObject           *object,
 	  g_free (lookup_name);
 	  continue;
 	}
-      else if (!info->arg_flags & GTK_ARG_READABLE)
+      else if (! (info->arg_flags & GTK_ARG_READABLE))
 	{
 	  g_warning ("arg is not supplied for read-access: \"%s\"\n", lookup_name);
 	  args[i].type = GTK_TYPE_INVALID;
@@ -793,9 +794,10 @@ gtk_object_setv (GtkObject *object,
 		 guint      nargs,
 		 GtkArg    *args)
 {
-  int i;
+  guint i;
 
   g_return_if_fail (object != NULL);
+  g_return_if_fail (GTK_OBJECT (object));
 
   if (!arg_info_ht)
     return;
@@ -837,7 +839,7 @@ gtk_object_setv (GtkObject *object,
 	  g_warning ("invalid arg for %s: \"%s\"\n", gtk_type_name (object->klass->type), lookup_name);
 	  arg_ok = FALSE;
 	}
-      else if (!info->arg_flags & GTK_ARG_WRITABLE)
+      else if (! (info->arg_flags & GTK_ARG_WRITABLE))
 	{
 	  g_warning ("arg is not supplied for write-access: \"%s\"\n", lookup_name);
 	  arg_ok = FALSE;

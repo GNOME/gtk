@@ -86,6 +86,8 @@ enum {
 
 enum {
   ARG_0,
+  ARG_NAME,
+  ARG_PARENT,
   ARG_X,
   ARG_Y,
   ARG_WIDTH,
@@ -96,11 +98,9 @@ enum {
   ARG_HAS_FOCUS,
   ARG_CAN_DEFAULT,
   ARG_HAS_DEFAULT,
-  ARG_EVENTS,
-  ARG_EXTENSION_EVENTS,
-  ARG_NAME,
   ARG_STYLE,
-  ARG_PARENT
+  ARG_EVENTS,
+  ARG_EXTENSION_EVENTS
 };
 
 
@@ -295,6 +295,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   
   parent_class = gtk_type_class (gtk_object_get_type ());
   
+  gtk_object_add_arg_type ("GtkWidget::name", GTK_TYPE_STRING, GTK_ARG_READWRITE, ARG_NAME);
+  gtk_object_add_arg_type ("GtkWidget::parent", GTK_TYPE_CONTAINER, GTK_ARG_READWRITE, ARG_PARENT);
   gtk_object_add_arg_type ("GtkWidget::x", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_X);
   gtk_object_add_arg_type ("GtkWidget::y", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_Y);
   gtk_object_add_arg_type ("GtkWidget::width", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_WIDTH);
@@ -305,11 +307,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   gtk_object_add_arg_type ("GtkWidget::has_focus", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_HAS_FOCUS);
   gtk_object_add_arg_type ("GtkWidget::can_default", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_CAN_DEFAULT);
   gtk_object_add_arg_type ("GtkWidget::has_default", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_HAS_DEFAULT);
+  gtk_object_add_arg_type ("GtkWidget::style", GTK_TYPE_STYLE, GTK_ARG_READWRITE, ARG_STYLE);
   gtk_object_add_arg_type ("GtkWidget::events", GTK_TYPE_GDK_EVENT_MASK, GTK_ARG_READWRITE, ARG_EVENTS);
   gtk_object_add_arg_type ("GtkWidget::extension_events", GTK_TYPE_GDK_EVENT_MASK, GTK_ARG_READWRITE, ARG_EXTENSION_EVENTS);
-  gtk_object_add_arg_type ("GtkWidget::name", GTK_TYPE_STRING, GTK_ARG_READWRITE, ARG_NAME);
-  gtk_object_add_arg_type ("GtkWidget::style", GTK_TYPE_STYLE, GTK_ARG_READWRITE, ARG_STYLE);
-  gtk_object_add_arg_type ("GtkWidget::parent", GTK_TYPE_CONTAINER, GTK_ARG_READWRITE, ARG_PARENT);
   
   widget_signals[SHOW] =
     gtk_signal_new ("show",
@@ -762,6 +762,12 @@ gtk_widget_set_arg (GtkWidget	*widget,
 {
   switch (arg_id)
     {
+    case ARG_NAME:
+      gtk_widget_set_name (widget, GTK_VALUE_STRING (*arg));
+      break;
+    case ARG_PARENT:
+      gtk_container_add (GTK_CONTAINER (GTK_VALUE_OBJECT (*arg)), widget);
+      break;
     case ARG_X:
       gtk_widget_set_uposition (widget, GTK_VALUE_INT (*arg), -2);
       break;
@@ -803,20 +809,14 @@ gtk_widget_set_arg (GtkWidget	*widget,
       if (GTK_VALUE_BOOL (*arg))
 	gtk_widget_grab_default (widget);
       break;
+    case ARG_STYLE:
+      gtk_widget_set_style (widget, (GtkStyle*) GTK_VALUE_BOXED (*arg));
+      break;
     case ARG_EVENTS:
       gtk_widget_set_events (widget, GTK_VALUE_FLAGS (*arg));
       break;
     case ARG_EXTENSION_EVENTS:
       gtk_widget_set_extension_events (widget, GTK_VALUE_FLAGS (*arg));
-      break;
-    case ARG_NAME:
-      gtk_widget_set_name (widget, GTK_VALUE_STRING (*arg));
-      break;
-    case ARG_STYLE:
-      gtk_widget_set_style (widget, (GtkStyle*) GTK_VALUE_BOXED (*arg));
-      break;
-    case ARG_PARENT:
-      gtk_container_add (GTK_CONTAINER (GTK_VALUE_OBJECT (*arg)), widget);
       break;
     default:
       arg->type = GTK_TYPE_INVALID;
@@ -843,6 +843,15 @@ gtk_widget_get_arg (GtkWidget	*widget,
   
   switch (arg_id)
     {
+    case ARG_NAME:
+      if (widget->name)
+	GTK_VALUE_STRING (*arg) = g_strdup (widget->name);
+      else
+	GTK_VALUE_STRING (*arg) = g_strdup ("");
+      break;
+    case ARG_PARENT:
+      GTK_VALUE_OBJECT (*arg) = (GtkObject*) widget->parent;
+      break;
     case ARG_X:
       aux_info = gtk_object_get_data_by_id (GTK_OBJECT (widget), aux_info_key_id);
       if (!aux_info)
@@ -889,6 +898,9 @@ gtk_widget_get_arg (GtkWidget	*widget,
     case ARG_HAS_DEFAULT:
       GTK_VALUE_BOOL (*arg) = GTK_WIDGET_HAS_DEFAULT (widget);
       break;
+    case ARG_STYLE:
+      GTK_VALUE_BOXED (*arg) = (gpointer) gtk_widget_get_style (widget);
+      break;
     case ARG_EVENTS:
       eventp = gtk_object_get_data_by_id (GTK_OBJECT (widget), event_key_id);
       if (!eventp)
@@ -902,18 +914,6 @@ gtk_widget_get_arg (GtkWidget	*widget,
 	GTK_VALUE_FLAGS (*arg) = 0;
       else
 	GTK_VALUE_FLAGS (*arg) = *modep;
-      break;
-    case ARG_NAME:
-      if (widget->name)
-	GTK_VALUE_STRING (*arg) = g_strdup (widget->name);
-      else
-	GTK_VALUE_STRING (*arg) = g_strdup ("");
-      break;
-    case ARG_STYLE:
-      GTK_VALUE_BOXED (*arg) = (gpointer) gtk_widget_get_style (widget);
-      break;
-    case ARG_PARENT:
-      GTK_VALUE_OBJECT (*arg) = (GtkObject*) widget->parent;
       break;
     default:
       arg->type = GTK_TYPE_INVALID;
@@ -4009,12 +4009,18 @@ gtk_widget_dnd_data_set (GtkWidget   *widget,
 void
 gtk_widget_ref (GtkWidget *widget)
 {
-  gtk_object_ref (GTK_OBJECT (widget));
+  volatile GtkObject *object;
+
+  object = GTK_OBJECT (widget);
+  gtk_object_ref (object);
 }
 
 void
 gtk_widget_unref (GtkWidget *widget)
 {
-  gtk_object_unref (GTK_OBJECT (widget));
+  volatile GtkObject *object;
+
+  object = GTK_OBJECT (widget);
+  gtk_object_unref (object);
 }
 

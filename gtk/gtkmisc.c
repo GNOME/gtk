@@ -91,22 +91,21 @@ gtk_misc_set_alignment (GtkMisc *misc,
     {
       misc->xalign = xalign;
       misc->yalign = yalign;
-
+      
       /* clear the area that was allocated before the change
-      */
-      if (GTK_WIDGET_VISIBLE (misc))
+       */
+      if (GTK_WIDGET_DRAWABLE (misc))
         {
           GtkWidget *widget;
-
+	  
           widget = GTK_WIDGET (misc);
           gdk_window_clear_area (widget->window,
                                  widget->allocation.x,
                                  widget->allocation.y,
                                  widget->allocation.width,
                                  widget->allocation.height);
+	  gtk_widget_queue_draw (GTK_WIDGET (misc));
         }
-
-      gtk_widget_queue_draw (GTK_WIDGET (misc));
     }
 }
 
@@ -116,28 +115,28 @@ gtk_misc_set_padding (GtkMisc *misc,
 		      gint     ypad)
 {
   GtkRequisition *requisition;
-
+  
   g_return_if_fail (misc != NULL);
   g_return_if_fail (GTK_IS_MISC (misc));
-
+  
   if (xpad < 0)
     xpad = 0;
   if (ypad < 0)
     ypad = 0;
-
+  
   if ((xpad != misc->xpad) || (ypad != misc->ypad))
     {
       requisition = &(GTK_WIDGET (misc)->requisition);
       requisition->width -= misc->xpad * 2;
       requisition->height -= misc->ypad * 2;
-
+      
       misc->xpad = xpad;
       misc->ypad = ypad;
-
+      
       requisition->width += misc->xpad * 2;
       requisition->height += misc->ypad * 2;
-
-      if (GTK_WIDGET (misc)->parent && GTK_WIDGET_VISIBLE (misc))
+      
+      if (GTK_WIDGET_DRAWABLE (misc))
 	gtk_widget_queue_resize (GTK_WIDGET (misc));
     }
 }

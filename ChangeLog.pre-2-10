@@ -1,3 +1,19 @@
+Sun Mar 15 20:13:42 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkmain.c (gtk_quit_destructor): removed the ugly check whether
+	we need gtk_widget_destroy or gtk_object_destroy. these functions are
+	by no means allowed to act differently!
+
+	* gtk/gtkmisc.c (gtk_misc_set_alignment): check for _DRAWABLE instead
+	of _VISIBLE to operate on widget->window.
+	(gtk_misc_set_padding): likewise.
+
+	* gtk/gtkwidget.c: slightly reordered object arguments.
+
+	* gtk/gtkobject.c (gtk_object_setv):
+	* gtk/gtkobject.c (gtk_object_getv):
+ 	operator `!' has precedence over `&'.
+
 Sun Mar 15 14:38:34 1998  Tim Janik  <timj@gimp.org>
 
 	* gtk/gtknotebook.c (gtk_notebook_pages_allocate): applied a fix from

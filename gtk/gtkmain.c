@@ -949,12 +949,7 @@ static gint
 gtk_quit_destructor (GtkObject **object_p)
 {
   if (*object_p)
-    {
-      if (GTK_IS_WIDGET (*object_p))
-	gtk_widget_destroy ((GtkWidget*) *object_p);
-      else
-	gtk_object_destroy (*object_p);
-    }
+    gtk_object_destroy (*object_p);
   g_free (object_p);
 
   return FALSE;
