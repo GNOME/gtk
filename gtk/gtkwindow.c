@@ -2655,14 +2655,15 @@ gtk_window_set_icon_list (GtkWindow  *window,
   if (info->icon_list == list) /* check for NULL mostly */
     return;
 
+  g_list_foreach (list,
+                  (GFunc) g_object_ref, NULL);
+
   g_list_foreach (info->icon_list,
                   (GFunc) g_object_unref, NULL);
 
   g_list_free (info->icon_list);
 
   info->icon_list = g_list_copy (list);
-  g_list_foreach (info->icon_list,
-                  (GFunc) g_object_ref, NULL);
 
   g_object_notify (G_OBJECT (window), "icon");
   
