@@ -1,3 +1,7 @@
+2000-11-29  Martin Baulig  <baulig@suse.de>
+
+	* *.pc.in: Make the pkg-config scripts actually work.
+
 2000-11-27  Federico Mena Quintero  <federico@helixcode.com>
 
 	* gtk/gtkspinbutton.c (gtk_spin_button_set_adjustment): Connect to
