@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
 "POT-Creation-Date: 2003-02-10 11:47+0200\n"
-"PO-Revision-Date: 2003-02-10 06:20--500\n"
+"PO-Revision-Date: 2003-02-10 10:28--500\n"
 "Last-Translator: Yuriy Syrota <yuri@renome.rovno.ua>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1150,11 +1150,11 @@ msgstr ""
 #: gtk/gtkcellrendererpixbuf.c:159
 #: gtk/gtkimage.c:176
 msgid "Stock ID"
-msgstr ""
+msgstr "Влаштована піктограма"
 
 #: gtk/gtkcellrendererpixbuf.c:160
 msgid "The stock ID of the stock icon to render"
-msgstr ""
+msgstr "Ідентифікатор влаштованої піктограми, що відображатиметься"
 
 #: gtk/gtkcellrendererpixbuf.c:167
 msgid "Size"
@@ -1339,160 +1339,160 @@ msgstr ""
 #: gtk/gtkcellrenderertext.c:343
 #: gtk/gtktexttag.c:463
 msgid "Strikethrough"
-msgstr ""
+msgstr "Перекреслення"
 
 #: gtk/gtkcellrenderertext.c:344
 #: gtk/gtktexttag.c:464
 msgid "Whether to strike through the text"
-msgstr ""
+msgstr "Чи буде текст перекресленим"
 
 #: gtk/gtkcellrenderertext.c:351
 #: gtk/gtktexttag.c:471
 msgid "Underline"
-msgstr ""
+msgstr "Підклеслення"
 
 #: gtk/gtkcellrenderertext.c:352
 #: gtk/gtktexttag.c:472
 msgid "Style of underline for this text"
-msgstr ""
+msgstr "Стиль підкреслення цього тексту"
 
 #: gtk/gtkcellrenderertext.c:362
 #: gtk/gtktexttag.c:508
 msgid "Background set"
-msgstr ""
+msgstr "Встановлення тла"
 
 #: gtk/gtkcellrenderertext.c:363
 #: gtk/gtktexttag.c:509
 msgid "Whether this tag affects the background color"
-msgstr ""
+msgstr "Чи впливає цей тег на колір тла"
 
 #: gtk/gtkcellrenderertext.c:366
 #: gtk/gtktexttag.c:520
 msgid "Foreground set"
-msgstr ""
+msgstr "Встановлення переднього плану"
 
 #: gtk/gtkcellrenderertext.c:367
 #: gtk/gtktexttag.c:521
 msgid "Whether this tag affects the foreground color"
-msgstr ""
+msgstr "Чи впливатиме цей таг на колір переднього плану"
 
 #: gtk/gtkcellrenderertext.c:370
 #: gtk/gtktexttag.c:528
 msgid "Editability set"
-msgstr ""
+msgstr "Встановлення редагованості"
 
 #: gtk/gtkcellrenderertext.c:371
 #: gtk/gtktexttag.c:529
 msgid "Whether this tag affects text editability"
-msgstr ""
+msgstr "Чи впливає цей тег на редагованість тексту"
 
 #: gtk/gtkcellrenderertext.c:374
 #: gtk/gtktexttag.c:532
 msgid "Font family set"
-msgstr ""
+msgstr "Встановлення гарнітури шрифта"
 
 #: gtk/gtkcellrenderertext.c:375
 #: gtk/gtktexttag.c:533
 msgid "Whether this tag affects the font family"
-msgstr ""
+msgstr "Чи впливає цей тег на гарнітуру шрифта"
 
 #: gtk/gtkcellrenderertext.c:378
 #: gtk/gtktexttag.c:536
 msgid "Font style set"
-msgstr ""
+msgstr "Встановлення стилю шрифта"
 
 #: gtk/gtkcellrenderertext.c:379
 #: gtk/gtktexttag.c:537
 msgid "Whether this tag affects the font style"
-msgstr ""
+msgstr "Чи впливає цей тег на стиль шрифта"
 
 #: gtk/gtkcellrenderertext.c:382
 #: gtk/gtktexttag.c:540
 msgid "Font variant set"
-msgstr ""
+msgstr "Встановлення варіанту шрифта"
 
 #: gtk/gtkcellrenderertext.c:383
 #: gtk/gtktexttag.c:541
 msgid "Whether this tag affects the font variant"
-msgstr ""
+msgstr "Чи впливає цей тег на варіант шрифта"
 
 #: gtk/gtkcellrenderertext.c:386
 #: gtk/gtktexttag.c:544
 msgid "Font weight set"
-msgstr ""
+msgstr "Встановлення жирності шрифта"
 
 #: gtk/gtkcellrenderertext.c:387
 #: gtk/gtktexttag.c:545
 msgid "Whether this tag affects the font weight"
-msgstr ""
+msgstr "Чи впливає цей тег на жирність шрифта"
 
 #: gtk/gtkcellrenderertext.c:390
 #: gtk/gtktexttag.c:548
 msgid "Font stretch set"
-msgstr ""
+msgstr "Встановлення ширина шрифта"
 
 #: gtk/gtkcellrenderertext.c:391
 #: gtk/gtktexttag.c:549
 msgid "Whether this tag affects the font stretch"
-msgstr ""
+msgstr "Чи впливає цей тег на ширину шрифта"
 
 #: gtk/gtkcellrenderertext.c:394
 #: gtk/gtktexttag.c:552
 msgid "Font size set"
-msgstr ""
+msgstr "Встановлення розміру шрифта"
 
 #: gtk/gtkcellrenderertext.c:395
 #: gtk/gtktexttag.c:553
 msgid "Whether this tag affects the font size"
-msgstr ""
+msgstr "Чи впливає цей тег на розмір шрифта"
 
 #: gtk/gtkcellrenderertext.c:398
 #: gtk/gtktexttag.c:556
 msgid "Font scale set"
-msgstr ""
+msgstr "Встановлення масштабу шрифта"
 
 #: gtk/gtkcellrenderertext.c:399
 #: gtk/gtktexttag.c:557
 msgid "Whether this tag scales the font size by a factor"
-msgstr ""
+msgstr "Чи впливає масштабує цей тег розмір шрифта на кофіцієнт"
 
 #: gtk/gtkcellrenderertext.c:402
 #: gtk/gtktexttag.c:576
 msgid "Rise set"
-msgstr ""
+msgstr "Встановлення зміщення"
 
 #: gtk/gtkcellrenderertext.c:403
 #: gtk/gtktexttag.c:577
 msgid "Whether this tag affects the rise"
-msgstr ""
+msgstr "Чи впливає цей тег на зміщення"
 
 #: gtk/gtkcellrenderertext.c:406
 #: gtk/gtktexttag.c:592
 msgid "Strikethrough set"
-msgstr ""
+msgstr "Встановлення закреслення"
 
 #: gtk/gtkcellrenderertext.c:407
 #: gtk/gtktexttag.c:593
 msgid "Whether this tag affects strikethrough"
-msgstr ""
+msgstr "Чи впливає цей тег на закреслення"
 
 #: gtk/gtkcellrenderertext.c:410
 #: gtk/gtktexttag.c:600
 msgid "Underline set"
-msgstr ""
+msgstr "Встановлення підкреслення"
 
 #: gtk/gtkcellrenderertext.c:411
 #: gtk/gtktexttag.c:601
 msgid "Whether this tag affects underlining"
-msgstr ""
+msgstr "Чи впливає цей тег на підкреслення"
 
 #: gtk/gtkcellrenderertoggle.c:132
 msgid "Toggle state"
-msgstr ""
+msgstr "Перемикнути стан"
 
 #: gtk/gtkcellrenderertoggle.c:133
 msgid "The toggle state of the button"
-msgstr ""
+msgstr "Перемикнути стан кнопки"
 
 #: gtk/gtkcellrenderertoggle.c:141
 msgid "Inconsistent state"
@@ -1874,9 +1874,8 @@ msgid "Has Frame"
 msgstr "Має рамку"
 
 #: gtk/gtkentry.c:482
-#, fuzzy
 msgid "FALSE removes outside bevel from entry"
-msgstr "ХИБНІСТЬ вимикає зовнішню фаску поля."
+msgstr "ХИБНІСТЬ вилучає зовнішню фаску поля"
 
 #: gtk/gtkentry.c:489
 msgid "Invisible character"
