@@ -528,6 +528,19 @@ GtkWidget*   gtk_widget_get_ancestor	(GtkWidget	*widget,
 					 GtkType	widget_type);
 GdkColormap* gtk_widget_get_colormap	(GtkWidget	*widget);
 GdkVisual*   gtk_widget_get_visual	(GtkWidget	*widget);
+
+/* The following functions must not be called on an already
+ * realized widget. Because it is possible that somebody
+ * can call get_colormap() or get_visual() and save the
+ * result, these functions are probably only safe to
+ * call in a widget's init() function.
+ */
+void         gtk_widget_set_colormap    (GtkWidget      *widget,
+					 GdkColormap    *colormap);
+void         gtk_widget_set_visual      (GtkWidget      *widget, 
+					 GdkVisual      *visual);
+
+
 gint	     gtk_widget_get_events	(GtkWidget	*widget);
 void	     gtk_widget_get_pointer	(GtkWidget	*widget,
 					 gint		*x,
