@@ -118,7 +118,7 @@ gtk_event_box_class_init (GtkEventBoxClass *class)
                                    g_param_spec_boolean ("visible-window",
                                                         _("Visible Window"),
                                                         _("Whether the event box is visible, as opposed to invisible and only used to trap events."),
-                                                        FALSE,
+                                                        TRUE,
                                                         G_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
                                    PROP_ABOVE_CHILD,

@@ -1,3 +1,9 @@
+Sat Nov  8 21:59:30 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkeventbox.c (gtk_event_box_class_init): Let 
+	visible-window default to TRUE, as documented and 
+	implemented. (#126270 Damon Chaplin)
+
 Sat Nov  8 01:50:17 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkicontheme.c: 
