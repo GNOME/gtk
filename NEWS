@@ -23,10 +23,10 @@ Overview of Changes in GTK+ 2.0.1
 * Misc bug fixes
 
 Other contributors: Jacob Berkman, Dennis Björklund, Seth Burgess,
-  Murray Cumming, John Elliis, Kang Jeong-He, James Henstridge, 
-  Richard Hult, Thomas Leonard, LEE Sau Dan, Alexey A. Malyshev, 
-  Mark McLoughlin, Michael Meeks,Sven Neumann, Andras Salamon, 
-  Soeren Sandmann, Dan Winship, Yao Zhang
+  Murray Cumming, Johan Dahlin, John Ellis, Kang Jeong-He, 
+  James Henstridge, Richard Hult, Thomas Leonard, LEE Sau Dan, 
+  Alexey A. Malyshev, Mark McLoughlin, Michael Meeks, Sven Neumann, 
+  Andras Salamon, Soeren Sandmann, Dan Winship, Yao Zhang
 
 Overview of Changes in GTK+ 2.0.0
 =================================

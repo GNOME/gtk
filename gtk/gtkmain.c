@@ -453,8 +453,7 @@ _gtk_find_module (const gchar *name,
 }
 
 static GModule *
-find_module (gchar      **module_path,
-	     const gchar *name)
+find_module (const gchar *name)
 {
   GModule *module;
   gchar *module_name;
@@ -476,7 +475,6 @@ find_module (gchar      **module_path,
 
 static GSList *
 load_module (GSList      *gtk_modules,
-	     gchar      **module_path,
 	     const gchar *name)
 {
   GtkModuleInitFunc modinit_func = NULL;
@@ -484,7 +482,7 @@ load_module (GSList      *gtk_modules,
   
   if (g_module_supported ())
     {
-      module = find_module (module_path, name);
+      module = find_module (name);
       if (module &&
 	  g_module_symbol (module, "gtk_module_init", (gpointer *) &modinit_func) &&
 	  modinit_func)
@@ -517,18 +515,16 @@ load_module (GSList      *gtk_modules,
 static GSList *
 load_modules (const char *module_str)
 {
-  gchar **module_path = get_module_path ();
   gchar **module_names = pango_split_file_list (module_str);
   GSList *gtk_modules = NULL;
   gint i;
   
   for (i = 0; module_names[i]; i++)
-    gtk_modules = load_module (gtk_modules, module_path, module_names[i]);
+    gtk_modules = load_module (gtk_modules, module_names[i]);
   
   gtk_modules = g_slist_reverse (gtk_modules);
   
   g_strfreev (module_names);
-  g_strfreev (module_path);
 
   return gtk_modules;
 }

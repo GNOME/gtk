@@ -1,3 +1,10 @@
+Fri Mar 29 17:41:21 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmain.c (load_modules): Fix screwup in handling
+	of module path that was resulting in freed memory being
+	accessed when both GTK_MODULES and a theme were set.
+	(#76902, Johan Dahlin)
+
 Fri Mar 29 17:57:36 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkiconfactory.c (get_default_icons): Fix wrong
