@@ -64,6 +64,9 @@
 
 
 /* Missing messages */
+#ifndef WM_MOUSEWHEEL
+#define WM_MOUSEWHEEL 0X20A
+#endif
 #ifndef WM_GETOBJECT
 #define WM_GETOBJECT 0x3D
 #endif
@@ -138,6 +141,10 @@
 #endif
 #ifndef WM_AFXLAST
 #define WM_AFXLAST 0x37F
+#endif
+
+#ifndef CopyCursor
+#define CopyCursor(pcur) ((HCURSOR)CopyIcon((HICON)(pcur)))
 #endif
 
 #include <gdk/gdkprivate.h>

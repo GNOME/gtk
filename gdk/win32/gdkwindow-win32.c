@@ -91,6 +91,9 @@ gdk_win32_window_destroy (GdkDrawable *drawable)
       gdk_xid_table_remove (GDK_DRAWABLE_XID (drawable));
     }
 
+  if (GDK_WINDOW_WIN32DATA (drawable)->xcursor != NULL)
+    DestroyCursor (GDK_WINDOW_WIN32DATA (drawable)->xcursor);
+
   g_free (GDK_DRAWABLE_WIN32DATA (drawable));
 }
 
@@ -184,16 +187,15 @@ RegisterGdkClass (GdkDrawableType wtype)
   if (0 == hAppIcon)
     {
       gchar sLoc [_MAX_PATH+1];
-      HINSTANCE hInst = GetModuleHandle(NULL);
 
-      if (0 != GetModuleFileName(hInst, sLoc, _MAX_PATH))
+      if (0 != GetModuleFileName(gdk_ProgInstance, sLoc, _MAX_PATH))
 	{
-	  hAppIcon = ExtractIcon(hInst, sLoc, 0);
+	  hAppIcon = ExtractIcon(gdk_ProgInstance, sLoc, 0);
 	  if (0 == hAppIcon)
 	    {
 	      char *gdklibname = g_strdup_printf ("gdk-%s.dll", GDK_VERSION);
 
-	      hAppIcon = ExtractIcon(hInst, gdklibname, 0);
+	      hAppIcon = ExtractIcon(gdk_ProgInstance, gdklibname, 0);
 	      g_free (gdklibname);
 	    }
 	  
@@ -1384,17 +1386,37 @@ gdk_window_set_cursor (GdkWindow *window,
   if (!GDK_DRAWABLE_DESTROYED (window))
     {
       if (!cursor)
-	xcursor = LoadCursor (NULL, IDC_ARROW);
+	xcursor = NULL;
       else
 	xcursor = cursor_private->xcursor;
 
       GDK_NOTE (MISC, g_print ("gdk_window_set_cursor: %#x %#x\n",
 			       GDK_DRAWABLE_XID (window), xcursor));
-      GDK_WINDOW_WIN32DATA (window)->xcursor = xcursor;
+      if (GDK_WINDOW_WIN32DATA (window)->xcursor != NULL)
+	{
+	  GDK_NOTE (MISC, g_print ("...DestroyCursor (%#x)\n",
+				   GDK_WINDOW_WIN32DATA (window)->xcursor));
+	  
+	  DestroyCursor (GDK_WINDOW_WIN32DATA (window)->xcursor);
+	  GDK_WINDOW_WIN32DATA (window)->xcursor = NULL;
+	}
+      if (xcursor != NULL)
+	{
+	  /* We must copy the cursor as it is OK to destroy the GdkCursor
+	   * while still in use for some window. See for instance
+	   * gimp_change_win_cursor() which calls
+	   * gdk_window_set_cursor (win, cursor), and immediately
+	   * afterwards gdk_cursor_destroy (cursor).
+	   */
+	  GDK_WINDOW_WIN32DATA (window)->xcursor = CopyCursor (xcursor);
+	  GDK_NOTE (MISC, g_print ("...CopyCursor (%#x) = %#x\n",
+				   xcursor,
+				   GDK_WINDOW_WIN32DATA (window)->xcursor));
 
-      GetCursorPos (&pt);
-      if (ChildWindowFromPoint (GDK_DRAWABLE_XID (window), pt) == GDK_DRAWABLE_XID (window))
-	SetCursor (xcursor);
+	  GetCursorPos (&pt);
+	  if (ChildWindowFromPoint (GDK_DRAWABLE_XID (window), pt) == GDK_DRAWABLE_XID (window))
+	    SetCursor (GDK_WINDOW_WIN32DATA (window)->xcursor);
+	}
     }
 }
 

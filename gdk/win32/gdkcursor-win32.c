@@ -156,8 +156,10 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
   guchar residue;
   gint ix, iy;
   
-  g_return_val_if_fail (source != NULL, NULL);
-  g_return_val_if_fail (mask != NULL, NULL);
+  g_return_val_if_fail (GDK_IS_PIXMAP (source), NULL);
+  g_return_val_if_fail (GDK_IS_PIXMAP (mask), NULL);
+  g_return_val_if_fail (fg != NULL, NULL);
+  g_return_val_if_fail (bg != NULL, NULL);
 
   source_private = (GdkDrawablePrivate *) source;
   mask_private   = (GdkDrawablePrivate *) mask;
@@ -269,8 +271,8 @@ _gdk_cursor_destroy (GdkCursor *cursor)
 			   (cursor->type == GDK_CURSOR_IS_PIXMAP) ? private->xcursor : 0));
 
   if (cursor->type == GDK_CURSOR_IS_PIXMAP)
-    if (!DestroyIcon (private->xcursor))
-      WIN32_API_FAILED ("DestroyIcon");
+    if (!DestroyCursor (private->xcursor))
+      WIN32_API_FAILED ("DestroyCursor");
 
   g_free (private);
 }

@@ -1,3 +1,28 @@
+2000-07-04  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate): Handle also
+	WM_SYSCHAR, and other changes to get handling of Alt+nnn or
+	Alt+0nnn on the numpad (used to enter characters by numeric code
+	from current DOS or ANSI codepage) working correctly, as in other
+	Windows apps.
+
+	* gdk/win32/gdkcursor-win32.c (gdk_cursor_new_from_pixmap): Use
+	same argument validity tests as in X11 version.
+	(_gdk_cursor_destroy): Use DestroyCursor, not DestroyIcon.
+
+	* gdk/win32/gdkwin32.h: Add also WM_MOUSEWHEEL and CopyCursor
+	definitions in case missing from headers.
+
+	* gdk/win32/gdkwindow-win32.c (gdk_win32_window_destroy): ALso
+	destroy the window-specific cursor.
+	(RegisterGdkClass): Use the global gdk_ProgInstance instead of
+	calling GetModuleHandle(NULL).
+	(gdk_window_set_cursor): Reworked to always copy the passed cursor
+	with CopyCursor before setting it. It is OK for the caller to
+	destroy the GdkCursor (and thus also the Windows cursor) after
+	calling this function. Also, destroy any previous cursor for this
+	window.
+
 Mon Jul  3 17:54:49 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkfont-x11.c (gdk_font_charset_for_locale): 
@@ -897,6 +922,11 @@ Mon May 29 14:31:27 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkfont.h gdk/x11/gdkfont-x11.c (gdk_font_from_description):
 	Add function to load a GdkFont from a PangoFontDescription.
+
+2000-05-29  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkevents-win32.c (gdk_WindowProc): The local "event"
+	variable should be of type GdkEventPrivate.
 
 Fri May 26 17:16:40 2000  Owen Taylor  <otaylor@redhat.com>
 
