@@ -1,3 +1,9 @@
+Fri Mar 15 15:37:01 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkdrawable-x11.c (convert_to_format): 
+	Fix byte shift arithmetic for big-endian. (Tracked
+	down with help from Tuomas Kuosmanen)
+
 Fri Mar 15 11:28:41 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_insert_column_with_data_func):

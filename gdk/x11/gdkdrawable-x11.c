@@ -1033,8 +1033,8 @@ convert_to_format (guchar        *src_buf,
 		
 		while (p < end)
 		  {
-		    *q = (((*p & 0xff000000) >> 24) |
-			  ((*p & 0x00ffffff) << 8));
+		    *q = (((*p & 0xffffff00) >> 8) |
+			  ((*p & 0x000000ff) << 24));
 		    q++;
 		    p++;
 		  }
