@@ -1,5 +1,14 @@
 2002-08-01  Tor Lillqvist  <tml@iki.fi>
 
+	* Makefile.am: Remove gtk+.spec stuff, not needed in this (Win32
+	only) branch.
+
+	* gtk+-zip.sh: Use /tmp, not /g/tmp.
+
+	* gdk/win32/gdkdrawable-win32.c: (gdk_win32_draw_segments,
+	gdk_win32_draw_lines): Check for IS_WIN_NT before drawing end
+	pixel separately, as already done in another place.
+
 	Fix for problem reported by Mark Raine: When Windows is set up not
 	to have any Explorer desktop (icons), dragging the mouse from a
 	popped-down menu onto the "root" window causes a crash.

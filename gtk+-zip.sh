@@ -2,8 +2,8 @@
 
 # Build zipfiles for gtk+-1.3-win32-production on Win32
 
-ZIP=/g/tmp/gtk+-1.3.0-`date +%Y%m%d`.zip
-DEVZIP=/g/tmp/gtk+-dev-1.3.0-`date +%Y%m%d`.zip
+ZIP=/tmp/gtk+-1.3.0-`date +%Y%m%d`.zip
+DEVZIP=/tmp/gtk+-dev-1.3.0-`date +%Y%m%d`.zip
 cd /target
 
 rm $ZIP
