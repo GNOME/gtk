@@ -1,3 +1,8 @@
+Wed Apr 18 10:04:23 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktooltips.c (gtk_tooltips_paint_window): Return FALSE,
+	not TRUE. (Fixes #52925)
+
 Tue Apr 17 18:05:34 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* Released 1.3.4

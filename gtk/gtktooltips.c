@@ -304,7 +304,7 @@ gtk_tooltips_paint_window (GtkTooltips *tooltips)
 		     NULL, GTK_WIDGET(tooltips->tip_window), "tooltip",
 		     0, 0, -1, -1);
 
-  return TRUE;
+  return FALSE;
 }
 
 static void
