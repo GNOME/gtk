@@ -2,7 +2,7 @@
 <book id="gtk-tut">
 
 <bookinfo>
-    <date>July 18th 2000</date>
+    <date>July 21st 2000</date>
     <title>GTK+ 1.2 Tutorial</title>
     <authorgroup>
       <author>
@@ -233,7 +233,7 @@ When control reaches this point, GTK will sleep waiting for X events
 occur. In our simple example, however, events are ignored.</para>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-HelloWorld">
 <title>Hello World in GTK</title>
 
 <para>Now for a program with a widget (a button). It's the classic
@@ -402,7 +402,7 @@ purposes.</simpara>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-TheoryOfSignalsAndCallbacks">
 <title>Theory of Signals and Callbacks</title>
 
 <para>Before we look in detail at <emphasis>helloworld</emphasis>, we'll discuss signals
@@ -486,7 +486,7 @@ data supplied to the callbacks.</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-Events">
 <title>Events</title>
 
 <para>In addition to the signal mechanism described above, there is a set
@@ -646,7 +646,7 @@ propagation process.</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-SteppingThroughHelloWorld">
 <title>Stepping Through Hello World</title>
 
 <para>Now that we know the theory behind this, let's clarify by walking
@@ -869,7 +869,7 @@ callback, exiting GTK.</para>
 <title>Moving On</title>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-DataTypes">
 <title>Data Types</title>
 
 <para>There are a few things you probably noticed in the previous examples
@@ -890,7 +890,7 @@ is an object.</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-MoreOnSignalHandlers">
 <title>More on Signal Handlers</title>
 
 <para>Lets take another look at the gtk_signal_connect declaration.</para>
@@ -947,7 +947,7 @@ void gtk_signal_handler_unblock_by_data( GtkObject *object,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-AnUpgradedHelloWorld">
 <title>An Upgraded Hello World</title>
 
 <para>Let's take a look at a slightly improved <emphasis>helloworld</emphasis> with
@@ -1081,7 +1081,7 @@ into a window, how do you control where that widget is positioned?
 This is where packing comes in.</para>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-TheoryOfPackingBoxes">
 <title>Theory of Packing Boxes</title>
 
 <para>Most packing is done by creating boxes as in the example above. These
@@ -1115,7 +1115,7 @@ placing and creating widgets.</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-DetailsOfBoxes">
 <title>Details of Boxes</title>
 
 <para>Because of this flexibility, packing boxes in GTK can be confusing at
@@ -1126,7 +1126,7 @@ different styles.</para>
 <para>
 <inlinemediaobject>
 <imageobject>
-<imagedata fileref="gtk_tut_packbox1.gif">
+<imagedata fileref="gtk_tut_packbox1.jpg">
 </imageobject>
 <imageobject>
 <imagedata fileref="gtk_tut_packbox1.eps">
@@ -1188,7 +1188,7 @@ following figure should make it clearer:</para>
 <para>
 <inlinemediaobject>
 <imageobject>
-<imagedata fileref="gtk_tut_packbox2.gif">
+<imagedata fileref="gtk_tut_packbox2.jpg">
 </imageobject>
 <imageobject>
 <imagedata fileref="gtk_tut_packbox2.eps">
@@ -1203,7 +1203,7 @@ it. Compile it yourself and play with it.</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-PackingDemonstrationProgram">
 <title>Packing Demonstration Program</title>
 
 <programlisting role="C">
@@ -1505,7 +1505,7 @@ int main( int   argc,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-PackingUsingTables">
 <title>Packing Using Tables</title>
 
 <para>Let's take a look at another way of packing - Tables. These can be
@@ -1655,7 +1655,7 @@ any spacing.</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-TablePackingExamples">
 <title>Table Packing Example</title>
 
 <para>Here we make a window with three buttons in a 2x2 table.
@@ -1666,7 +1666,7 @@ Which means it should look something like this:</para>
 <para>
 <inlinemediaobject>
 <imageobject>
-<imagedata fileref="gtk_tut_table.gif">
+<imagedata fileref="gtk_tut_table.jpg">
 </imageobject>
 <imageobject>
 <imagedata fileref="gtk_tut_table.eps">
@@ -1816,8 +1816,8 @@ children of a widget (a window is a widget too) will not be displayed
 until the window itself is shown using the gtk_widget_show() function.</para>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
-<title> Casting</title>
+<sect1 id="sec-Casting">
+<title>Casting</title>
 
 <para>You'll notice as you go on that GTK uses a type casting system. This
 is always done using macros that both test the ability to cast the
@@ -1865,7 +1865,7 @@ learn how a widget works just by looking at the function declarations.</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-WidgetHierarchy">
 <title>Widget Hierarchy</title>
 
 <para>For your reference, here is the class hierarchy tree used to implement widgets.</para>
@@ -1969,7 +1969,7 @@ learn how a widget works just by looking at the function declarations.</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-WidgetsWithoutWindows">
 <title>Widgets Without Windows</title>
 
 <para>The following widgets do not have an associated window. If you want to
@@ -2009,7 +2009,7 @@ gtk/testgtk.c.</para>
 <title>The Button Widget</title>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-NormalButtons">
 <title>Normal Buttons</title>
 
 <para>We've almost seen all there is to see of the button widget. It's
@@ -2178,8 +2178,8 @@ released within Button widget</simpara>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
-<title> Toggle Buttons</title>
+<sect1 id="sec-ToggleButtons">
+<title>Toggle Buttons</title>
 
 <para>Toggle buttons are derived from normal buttons and are very similar,
 except they will always be in one of two states, alternated by a
@@ -2254,8 +2254,8 @@ void gtk_toggle_button_toggled (GtkToggleButton *toggle_button);
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
-<title> Check Buttons</title>
+<sect1 id="sec-CheckButtons">
+<title>Check Buttons</title>
 
 <para>Check buttons inherit many properties and functions from the the
 toggle buttons above, but look a little different. Rather than being
@@ -2474,7 +2474,7 @@ that incorporate them:
 <link linkend="sec-ScrolledWindows">Scrolled Windows</link>, and others.</para>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-CreatingAnAdjustment">
 <title>Creating an Adjustment</title>
 
 <para>Many of the widgets which use adjustment objects do so automatically,
@@ -2506,8 +2506,8 @@ usually non-zero.</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
-<title> Using Adjustments the Easy Way</title>
+<sect1 id="sec-UsingAdjustments">
+<title>Using Adjustments the Easy Way</title>
 
 <para>The adjustable widgets can be roughly divided into those which use and
 require specific units for these values and those which treat them as
@@ -2549,8 +2549,8 @@ widget?  Of course it will! Just like this:</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
-<title> Adjustment Internals</title>
+<sect1 id="sec-AdjustmentInternals">
+<title>Adjustment Internals</title>
 
 <para>Ok, you say, that's nice, but what if I want to create my own handlers
 to respond when the user adjusts a range widget or a spin button, and
@@ -2675,7 +2675,7 @@ trough. When the user manipulates the slider, the range widget will
 change the value of the adjustment.</para>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-ScrollbarWidgets">
 <title>Scrollbar Widgets</title>
 
 <para>These are your standard, run-of-the-mill scrollbars. These should be
@@ -2706,8 +2706,8 @@ widget.</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
-<title> Scale Widgets</title>
+<sect1 id="sec-ScaleWidgets">
+<title>Scale Widgets</title>
 
 <para>Scale widgets are used to allow the user to visually select and
 manipulate a value within a specific range. You might want to use a
@@ -2809,7 +2809,7 @@ of all widgets that interest you,</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-CommonRangeFunctions">
 <title>Common Range Functions</title>
 
 <para>The Range widget class is fairly complicated internally, but, like
@@ -2895,7 +2895,7 @@ gtk_signal_emit_by_name (GTK_OBJECT (adjustment), "changed");
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-KeyAndMouseBindings">
 <title>Key and Mouse bindings</title>
 
 <para>All of the GTK range widgets react to mouse clicks in more or less
@@ -2943,7 +2943,7 @@ and <literal>Control-Page Down</literal>.</para>
 
 <!-- ----------------------------------------------------------------- -->
 <sect2>
-<title> Horizontal Range Widgets</title>
+<title>Horizontal Range Widgets</title>
 
 <para>The left and right arrow keys work as you might expect in these
 widgets, moving the slider back and forth by <literal>step_increment</literal>. The
@@ -2957,7 +2957,7 @@ while for HScrollbar, it's done with <literal>Control-Home</literal> and
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-RangeWidgetsExample">
 <title>Example</title>
 
 <para>This example is a somewhat modified version of the "range controls"
@@ -3275,7 +3275,7 @@ window.</para>
 <title>Miscellaneous Widgets</title>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-Labels">
 <title>Labels</title>
 
 <para>Labels are used a lot in GTK, and are relatively simple. Labels emit
@@ -3465,7 +3465,7 @@ int main( int   argc,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-Arrows">
 <title>Arrows</title>
 
 <para>The Arrow widget draws an arrowhead, facing in a number of possible
@@ -3588,7 +3588,7 @@ int main( int   argc,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-TheTooltipsObject">
 <title>The Tooltips Object</title>
 
 <para>These are the little text strings that pop up when you leave your
@@ -4122,8 +4122,8 @@ int main( int   argc,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
-<title> Dialogs</title>
+<sect1 id="sec-Dialogs">
+<title>Dialogs</title>
 
 <para>The Dialog widget is very simple, and is actually just a window with a
 few things pre-packed into it for you. The structure for a Dialog is:</para>
@@ -4649,7 +4649,7 @@ makes the application terminate.</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-Rulers">
 <title>Rulers</title>
 
 <para>Ruler widgets are used to indicate the location of the mouse pointer
@@ -4821,7 +4821,7 @@ int main( int   argc,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-Statusbars">
 <title>Statusbars</title>
 
 <para>Statusbars are simple widgets used to display a text message. They
@@ -4959,7 +4959,7 @@ int main( int   argc,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-TextEntries">
 <title>Text Entries</title>
 
 <para>The Entry widget allows text to be typed and displayed in a single line
@@ -5152,7 +5152,7 @@ int main( int   argc,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-SpinButtons">
 <title>Spin Buttons</title>
 
 <para>The Spin Button widget is generally used to allow the user to select a
@@ -5623,7 +5623,7 @@ int main( int   argc,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-ComboBox">
 <title>Combo Box</title>
 
 <para>The combo box is another fairly simple widget that is really just a
@@ -5795,7 +5795,7 @@ appropriate Item. Frankly, I have no idea how to do that.
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-Calendar">
 <title>Calendar</title>
 
 <para>The Calendar widget is an effective way to display and retrieve
@@ -6383,8 +6383,8 @@ int main(int   argc,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
-<title> Color Selection</title>
+<sect1 id="sec-ColorSelection">
+<title>Color Selection</title>
 
 <para>The color selection widget is, not surprisingly, a widget for
 interactive selection of colors. This composite widget lets the user
@@ -6639,7 +6639,7 @@ gint main( gint   argc,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-FileSelections">
 <title>File Selections</title>
 
 <para>The file selection widget is a quick and simple way to display a File
@@ -6846,7 +6846,7 @@ int main( int argc,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->   
-<sect1>
+<sect1 id="sec-TheAlignmentWidget">
 <title>The Alignment widget</title>
 
 <para>The alignment widget allows you to place a widget within its window at
@@ -6891,7 +6891,7 @@ the <link linkend="sec-ProgressBars">Progress Bar</link> widget.</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-FixedContainer">
 <title>Fixed Container</title>
 
 <para>The Fixed container allows you to place widgets at a fixed position
@@ -7005,8 +7005,8 @@ int main( int   argc,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
-<title> Layout Container</title>
+<sect1 id="sec-LayoutContainer">
+<title>Layout Container</title>
 
 <para>The Layout container is similar to the Fixed container except that it
 implements an infinite (where infinity is less than 2^32) scrolling
@@ -7196,8 +7196,8 @@ int main( int   argc,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->   
-<sect1>
-<title> Aspect Frames</title>
+<sect1 id="sec-AspectFrames">
+<title>Aspect Frames</title>
 
 <para>The aspect frame widget is like a frame widget, except that it also
 enforces the aspect ratio (that is, the ratio of the width to the
@@ -7286,7 +7286,7 @@ int main( int argc,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->   
-<sect1>
+<sect1 id="sec-PanedWindowWidgets">
 <title>Paned Window Widgets</title>
 
 <para>The paned window widgets are useful when you want to divide an area
@@ -7702,7 +7702,7 @@ the default size of the window or other widgets.</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->   
-<sect1>
+<sect1 id="sec-ButtonBoxes">
 <title>Button Boxes</title>
 
 <para>Button Boxes are a convenient way to quickly layout a group of
@@ -7897,7 +7897,7 @@ int main( int   argc,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->   
-<sect1>
+<sect1 id="sec-Toolbar">
 <title>Toolbar</title>
 
 <para>Toolbars are usually used to group some number of widgets in order to
@@ -8338,8 +8338,8 @@ static char * gtk_xpm[] = {
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
-<title> Notebooks</title>
+<sect1 id="sec-Notebooks">
+<title>Notebooks</title>
 
 <para>The NoteBook Widget is a collection of "pages" that overlap each
 other, each page contains different information with only one page
@@ -8686,7 +8686,7 @@ optionally have a title, which itself is optionally active, allowing
 us to bind a function to its selection.</para>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-CreatingACListWidget">
 <title>Creating a CList widget</title>
 
 <para>Creating a CList is quite straightforward, once you have learned
@@ -8720,7 +8720,7 @@ functionality. This is a change from the GTK 1.0 implementation.</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-ModesOfOperating">
 <title>Modes of operation</title>
 
 <para>There are several attributes that can be used to alter the behaviour of
@@ -8780,7 +8780,7 @@ void gtk_clist_set_shadow_type( GtkCList      *clist,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-WorkingWithTitles">
 <title>Working with titles</title>
 
 <para>When you create a CList widget, you will also get a set of title
@@ -8846,7 +8846,7 @@ void gtk_clist_set_column_widget( GtkCList  *clist,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-ManipulatingTheListItself">
 <title>Manipulating the list itself</title>
 
 <para>It is possible to change the justification for a column, and it is
@@ -8966,7 +8966,7 @@ void gtk_clist_set_background( GtkCList *clist,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-AddingRowsToTheList">
 <title>Adding rows to the list</title>
 
 <para>We can add rows in three ways. They can be prepended or appended to
@@ -9029,7 +9029,7 @@ void gtk_clist_thaw( GtkCList * clist );
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-SettingTextAndPixmapsInTheCells">
 <title>Setting text and pixmaps in the cells</title>
 
 <para>A cell can contain a pixmap, text or both. To set them the following
@@ -9133,7 +9133,7 @@ void gtk_clist_set_shift( GtkCList *clist,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-StoringDataPointers">
 <title>Storing data pointers</title>
 
 <para>With a CList it is possible to set a data pointer for a row. This
@@ -9163,7 +9163,7 @@ gint gtk_clist_find_row_from_data( GtkCList *clist,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-WorkingWithSelections">
 <title>Working with selections</title>
 
 <para>There are also functions available that let us force the (un)selection
@@ -9199,7 +9199,7 @@ Luckily, there is a simpler way...</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-TheSignalsThatBringItTogether">
 <title>The signals that bring it together</title>
 
 <para>As with all other widgets, there are a few signals that can be used. The
@@ -9242,7 +9242,7 @@ gtk_signal_connect(GTK_OBJECT( clist),
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-ACListExample">
 <title>A CList example</title>
 
 <programlisting role="C">
@@ -9438,8 +9438,8 @@ required by the user.</para>
 <para>This section of the tutorial is under development.</para>
  
 <!-- ----------------------------------------------------------------- -->
-<sect1>
-<title> Creating a CTree</title>
+<sect1 id="sec-CreatingACTree">
+<title>Creating a CTree</title>
 
 <para>A CTree, being derived from CList, can have multiple columns. These
 columns optionally have titles that are displayed along the top of
@@ -9479,7 +9479,7 @@ and "Description", with the first column containing the tree.</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-AddingAndRemovingNodes">
 <title>Adding and Removing nodes</title>
 
 <para>The items in a CTree are termed <emphasis>nodes</emphasis>. Nodes are inserted
@@ -9575,8 +9575,8 @@ remove.</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
-<title> Setting CTree Attributes</title>
+<sect1 id="sec-SettingCTreeAttributes">
+<title>Setting CTree Attributes</title>
 
 <para>There are a number of functions that set options that pertain to a
 CTree instance as a whole (rather than to a particular node). The
@@ -9635,7 +9635,7 @@ can be one of:</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-UtilizingRowData">
 <title>Utilizing row data</title>
 
 <para>The CTree widget allows you to associate data with each node of the
@@ -9697,8 +9697,8 @@ the same way as the corresponding CList ones. However, Tree is
 not derived from CList, so you cannot use them interchangeably.</para>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
-<title> Creating a Tree</title>
+<sect1 id="sec-CreatingATree">
+<title>Creating a Tree</title>
 
 <para>A Tree is created in the usual way, using:</para>
 
@@ -9740,7 +9740,7 @@ equivalent to gtk_list_*_items().</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-AddingASubtree">
 <title>Adding a Subtree</title>
 
 <para>A subtree is created like any other Tree widget. A subtree is added
@@ -9768,8 +9768,8 @@ expects.</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
-<title> Handling the Selection List</title>
+<sect1 id="sec-HandlingTheSelectionList">
+<title>Handling the Selection List</title>
 
 <para>As with CList, the Tree type has a <literal>selection</literal> field, and
 it is possible to control the behaviour of the tree (somewhat) by
@@ -9814,7 +9814,7 @@ to call gtk_signal_connect() for every subtree.</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-TreeWidgetInternals">
 <title>Tree Widget Internals</title>
 
 <para>The Tree's struct definition looks like this:</para>
@@ -10321,7 +10321,7 @@ GtkWidget GTK_TREE_ITEM_SUBTREE (gpointer obj)
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-TreeExample">
 <title>Tree Example</title>
 
 <para>This is somewhat like the tree example in testgtk.c, but a lot less
@@ -10535,7 +10535,7 @@ Itemfactory, it is not possible to add images or the character '/' to
 the menus.</para>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-ManualMenuCreation">
 <title>Manual Menu Creation</title>
 
 <para>In the true tradition of teaching, we'll show you the hard way
@@ -10757,7 +10757,7 @@ by a menu bar, as shown in the sample code.</simpara>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-ManualMenuExample">
 <title>Manual Menu Example</title>
 
 <para>That should about do it. Let's take a look at an example to help clarify.</para>
@@ -10905,7 +10905,7 @@ table, bind keys to menu functions.</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-UsingItemFactory">
 <title>Using ItemFactory</title>
 
 <para>Now that we've shown you the hard way, here's how you do it using the
@@ -10914,7 +10914,7 @@ gtk_item_factory calls.</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-ItemFactoryExample">
 <title>Item Factory Example</title>
 
 <para>Here is an example using the GTK item factory.</para>
@@ -11056,7 +11056,7 @@ use of double- and triple-click to select a word and a whole line,
 respectively.</para>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-CreatingAndConfiguringATextBox">
 <title>Creating and Configuring a Text box</title>
 
 <para>There is only one function for creating a new Text widget.</para>
@@ -11133,7 +11133,7 @@ TRUE or FALSE value.</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-TextManipulation">
 <title>Text Manipulation</title>
 
 <para>The current insertion point of a Text widget can be set using</para>
@@ -11236,7 +11236,7 @@ with it.</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-KeyBoardShortcuts">
 <title>Keyboard Shortcuts</title>
 
 <para>The text widget has a number of pre-installed keyboard shortcuts for
@@ -11311,7 +11311,7 @@ extend the selection.</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-AGtkTextExample">
 <title>A GtkText Example</title>
 
 <programlisting role="C">
@@ -11524,7 +11524,7 @@ widget, please consider writing a tutorial on it so others may benefit
 from your time.</para>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-CTree">
 <title>CTree</title>
 
 <para></para>
@@ -11532,64 +11532,64 @@ from your time.</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
-<title> Curves</title>
+<sect1 id="sec-Curves">
+<title>Curves</title>
 
 <para></para>
 
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
-<title> Drawing Area</title>
+<sect1 id="sec-DrawingArea">
+<title>Drawing Area</title>
 
 <para></para>
 
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
-<title> Font Selection Dialog</title>
+<sect1 id="sec-FontSelectionDialog">
+<title>Font Selection Dialog</title>
 
 <para></para>
 
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
-<title> Gamma Curve</title>
+<sect1 id="sec-GammaCurve">
+<title>Gamma Curve</title>
 
 <para></para>
 
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
-<title> Image</title>
+<sect1 id="sec-Image">
+<title>Image</title>
 
 <para></para>
 
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
-<title> Packer</title>
+<sect1 id="sec-Packer">
+<title>Packer</title>
 
 <para></para>
 
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
-<title> Plugs and Sockets</title>
+<sect1 id="sec-PlugsAndSockets">
+<title>Plugs and Sockets</title>
 
 <para></para>
 
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
-<title> Preview</title>
+<sect1 id="sec-Preview">
+<title>Preview</title>
 
 <para></para>
 
@@ -12100,7 +12100,7 @@ void gtk_widget_hide( GtkWidget *widget );
 <title>Timeouts, IO and Idle Functions</title>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-Timeouts">
 <title>Timeouts</title>
 
 <para>You may be wondering how you make GTK do useful work when in gtk_main.
@@ -12138,7 +12138,7 @@ gint timeout_callback( gpointer data );
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-MonitoringIO">
 <title>Monitoring IO</title>
 
 <para>A nifty feature of GDK (the library that underlies GTK), is the
@@ -12191,7 +12191,7 @@ void input_callback( gpointer          data,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-IdleFunctions">
 <title>Idle Functions</title>
 
 <para><!-- TODO: Need to check on idle priorities - TRG -->
@@ -12224,7 +12224,7 @@ called.</para>
 <title>Advanced Event and Signal Handling</title>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-SignalFunctions">
 <title>Signal Functions</title>
 
 <!-- ----------------------------------------------------------------- -->
@@ -12355,7 +12355,7 @@ void gtk_signal_emit_stop_by_name( GtkObject   *object,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-SignalEmissionAndPropagation">
 <title>Signal Emission and Propagation</title>
 
 <para>Signal emission is the process whereby GTK runs all handlers for a
@@ -12411,7 +12411,7 @@ the signal is propagated, not the current emission.</simpara>
 <title>Managing Selections</title>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-SelectionsOverview">
 <title>Overview</title>
 
 <para>One type of interprocess communication supported by X and GTK is
@@ -12449,8 +12449,8 @@ selections and targets are identified by atoms.</para>
 
 </sect1>
 <!-- ----------------------------------------------------------------- -->
-<sect1>
-<title> Retrieving the selection</title>
+<sect1 id="sec-RetrievingTheSelection">
+<title>Retrieving the selection</title>
 
 <para>Retrieving the selection is an asynchronous process. To start the
 process, you call:</para>
@@ -12609,8 +12609,8 @@ int main( int   argc,
 
 </sect1>
 <!-- ----------------------------------------------------------------- -->
-<sect1>
-<title>Supplying the selection </title>
+<sect1 id="sec-SupplyingTheSelection">
+<title>Supplying the selection</title>
 
 <para>Supplying the selection is a bit more complicated. You must register 
 handlers that will be called when your selection is requested. For
@@ -12821,7 +12821,7 @@ have equivalent functionality built-in, while in other cases it may
 not.</para>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-Definitions">
 <title>Definitions</title>
 
 <para>Definitions for the extremes of many of the standard types are:</para>
@@ -12873,7 +12873,7 @@ guint32
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-DoublyLinkedLists">
 <title>Doubly Linked Lists</title>
 
 <para>The following functions are used to create, manage, and destroy
@@ -12969,7 +12969,7 @@ void g_list_foreach( GList    *list,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-SinglyLinkedLists">
 <title>Singly Linked Lists</title>
 
 <para>Many of the above functions for singly linked lists are identical to the
@@ -13013,7 +13013,7 @@ void g_slist_foreach( GSList   *list,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-MemoryManagement">
 <title>Memory Management</title>
 
 <programlisting role="C">
@@ -13061,7 +13061,7 @@ MEM_CHECK</literal> to the top of gmem.c and re-make and make install.</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-Timers">
 <title>Timers</title>
 
 <para>Timer functions can be used to time operations (e.g., to see how much
@@ -13088,7 +13088,7 @@ gdouble g_timer_elapsed( GTimer *timer,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-StringHandling">
 <title>String Handling</title>
 
 <para>GLib defines a new type called a GString, which is similar to a
@@ -13166,7 +13166,7 @@ void g_string_sprintfa ( GString *string,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-UtilityAndErrorFunctions">
 <title>Utility and Error Functions</title>
 
 <programlisting role="C">
@@ -13244,8 +13244,8 @@ files. These can be used to set the colors of just about any widget, and
 can also be used to tile pixmaps onto the background of some widgets.  </para>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
-<title>Functions For rc Files </title>
+<sect1 id="sec-FunctionsForRCFiles">
+<title>Functions For rc Files</title>
 
 <para>When your application starts, you should include a call to:</para>
 
@@ -13304,7 +13304,7 @@ imagination as to how best to take advantage of this.</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-GTKsRCFileFormat">
 <title>GTK's rc File Format</title>
 
 <para>The format of the GTK file is illustrated in the example below. This is
@@ -13408,7 +13408,7 @@ simple matter of common sense really. Anything that could apply, should.</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-ExampleRCFile">
 <title>Example rc file</title>
 
 <programlisting role="C">
@@ -13543,11 +13543,11 @@ widget "main window.*GtkButton*" style "main_button"
 
 <!-- ***************************************************************** -->
 <chapter id="ch-WritingYourOwnWidgets">
-<title>Writing Your Own Widgets </title>
+<title>Writing Your Own Widgets</title>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
-<title> Overview</title>
+<sect1 id="sec-WidgetsOverview">
+<title>Overview</title>
 
 <para>Although the GTK distribution comes with many types of widgets that
 should cover most basic needs, there may come a time when you need to
@@ -13572,8 +13572,8 @@ got this tutorial, or from:</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
-<title> The Anatomy Of A Widget</title>
+<sect1 id="sec-TheAnatomyOfAWidget">
+<title>The Anatomy Of A Widget</title>
 
 <para>In order to create a new widget, it is important to have an
 understanding of how GTK objects work. This section is just meant as a
@@ -13634,12 +13634,12 @@ cast to the parent class' object structure as needed.</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
-<title> Creating a Composite widget</title>
+<sect1 id="sec-CreatingACompositeWidget">
+<title>Creating a Composite widget</title>
 
 <!-- ----------------------------------------------------------------- -->
 <sect2>
-<title> Introduction</title>
+<title>Introduction</title>
 
 <para>One type of widget that you may be interested in creating is a
 widget that is merely an aggregate of other GTK widgets. This type of
@@ -13657,7 +13657,7 @@ depressed. </para>
 
 <!-- ----------------------------------------------------------------- -->
 <sect2>
-<title> Choosing a parent class</title>
+<title>Choosing a parent class</title>
 
 <para>The parent class for a composite widget is typically the container
 class that holds all of the elements of the composite widget. For
@@ -13681,7 +13681,7 @@ from VBox instead, and stick our table inside the VBox.</para>
 
 <!-- ----------------------------------------------------------------- -->
 <sect2>
-<title> The header file</title>
+<title>The header file</title>
 
 <para>Each widget class has a header file which declares the object and
 class structures for that widget, along with public functions. 
@@ -14138,8 +14138,8 @@ main (int argc, char *argv[])
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
-<title>Creating a widget from scratch.</title>
+<sect1 id="sec-CreatingAWidgetFromScratch">
+<title>Creating a widget from scratch</title>
 
 <!-- ----------------------------------------------------------------- -->
 <sect2>
@@ -14154,7 +14154,7 @@ set the value.</para>
 
 <!-- ----------------------------------------------------------------- -->
 <sect2>
-<title> Displaying a widget on the screen</title>
+<title>Displaying a widget on the screen</title>
 
 <para>There are several steps that are involved in displaying on the screen.
 After the widget is created with a call to <literal>WIDGETNAME_new()</literal>,
@@ -14212,7 +14212,7 @@ an <literal>expose()</literal> function.</para>
 
 <!-- ----------------------------------------------------------------- -->
 <sect2>
-<title> The origins of the Dial Widget</title>
+<title>The origins of the Dial Widget</title>
 
 <para>Just as all land animals are just variants on the first amphibian that
 crawled up out of the mud, GTK widgets tend to start off as variants
@@ -14231,7 +14231,7 @@ would be a good idea to look them over before continuing.</para>
 
 <!-- ----------------------------------------------------------------- -->
 <sect2>
-<title> The Basics</title>
+<title>The Basics</title>
 
 <para>Quite a bit of our widget should look pretty familiar from the
 Tictactoe widget. First, we have a header file:</para>
@@ -15039,7 +15039,7 @@ entry widget to display the current value of the dial.</simpara>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-LearningMore">
 <title>Learning More</title>
 
 <para>Only a small part of the many details involved in creating widgets
@@ -15058,7 +15058,7 @@ Good luck!</para>
 <title>Scribble, A Simple Example Drawing Program</title>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-ScribbleOverview">
 <title>Overview</title>
 
 <para>In this section, we will build a simple drawing program. In the
@@ -15072,7 +15072,7 @@ pressure and tilt, from such devices quite easy.</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-EventHandling">
 <title>Event Handling</title>
 
 <para>The GTK signals we have already discussed are for high-level actions,
@@ -15284,7 +15284,7 @@ motion_notify_event (GtkWidget *widget, GdkEventMotion *event)
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-TheDrawingAreaWidget">
 <title>The DrawingArea Widget, And Drawing</title>
 
 <para>We now turn to the process of drawing on the screen. The 
@@ -15497,8 +15497,8 @@ mundane details like creating the main window.</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
-<title> Adding XInput support</title>
+<sect1 id="sec-AddingXInputSupport">
+<title>Adding XInput support</title>
 
 <para>It is now possible to buy quite inexpensive input devices such 
 as drawing tablets, which allow drawing with a much greater
@@ -15966,7 +15966,7 @@ Notebook, Progress Bar, Dialogs, and File selection widgets.  Thanks a
 lot Mark!  You've been a great help.</simpara>
 </listitem>
 
-<listitem><simpara>Tim Janik <literal><ulink url="mailto:timj@gtk.org">timj@psynet.net</ulink></literal> for his great job on the Lists
+<listitem><simpara>Tim Janik <literal><ulink url="mailto:timj@gtk.org">timj@gtk.org</ulink></literal> for his great job on the Lists
 Widget. His excellent work on automatically extracting the widget tree
 and signal information from GTK. Thanks Tim :)</simpara>
 </listitem>
@@ -16049,7 +16049,7 @@ signals. Therefore, you should refer to the widget hierarchy tree when
 using the signals listed in this section.</para>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-GtkObject">
 <title>GtkObject</title>
 
 <programlisting role="C">
@@ -16060,7 +16060,7 @@ void GtkObject::destroy	(GtkObject *,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-GtkWidget">
 <title>GtkWidget</title>
 
 <programlisting role="C">
@@ -16240,7 +16240,7 @@ void GtkWidget::debug-msg	(GtkWidget *,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-GtkData">
 <title>GtkData</title>
 
 <programlisting role="C">
@@ -16251,7 +16251,7 @@ void GtkData::disconnect	(GtkData *,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-GtkContainer">
 <title>GtkContainer</title>
 
 <programlisting role="C">
@@ -16274,7 +16274,7 @@ void GtkContainer::set-focus-child	(GtkContainer *,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-GtkCalendar">
 <title>GtkCalendar</title>
 
 <programlisting role="C">
@@ -16297,7 +16297,7 @@ void GtkCalendar::next-year	(GtkCalendar *,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-GtkEditable">
 <title>GtkEditable</title>
 
 <programlisting role="C">
@@ -16354,7 +16354,7 @@ void GtkEditable::paste-clipboard	(GtkEditable *,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-GtkTipsQuery">
 <title>GtkTipsQuery</title>
 
 <programlisting role="C">
@@ -16378,7 +16378,7 @@ gboolean GtkTipsQuery::widget-selected	(GtkTipsQuery *,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-GtkCList">
 <title>GtkCList</title>
 
 <programlisting role="C">
@@ -16437,7 +16437,7 @@ void GtkCList::abort-column-resize	(GtkCList *,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-GtkNotebook">
 <title>GtkNotebook</title>
 
 <programlisting role="C">
@@ -16450,7 +16450,7 @@ void GtkNotebook::switch-page	(GtkNotebook *,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-GtkList">
 <title>GtkList</title>
 
 <programlisting role="C">
@@ -16467,7 +16467,7 @@ void GtkList::unselect-child	(GtkList *,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-GtkMenuShell">
 <title>GtkMenuShell</title>
 
 <programlisting role="C">
@@ -16488,7 +16488,7 @@ void GtkMenuShell::cancel	(GtkMenuShell *,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-GtkToolbar">
 <title>GtkToolbar</title>
 
 <programlisting role="C">
@@ -16503,7 +16503,7 @@ void GtkToolbar::style-changed	(GtkToolbar *,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-GtkTree">
 <title>GtkTree</title>
 
 <programlisting role="C">
@@ -16520,7 +16520,7 @@ void GtkTree::unselect-child	(GtkTree *,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-GtkButton">
 <title>GtkButton</title>
 
 <programlisting role="C">
@@ -16539,7 +16539,7 @@ void GtkButton::leave	(GtkButton *,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-GtkItem">
 <title>GtkItem</title>
 
 <programlisting role="C">
@@ -16554,7 +16554,7 @@ void GtkItem::toggle	(GtkItem *,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-GtkWindow">
 <title>GtkWindow</title>
 
 <programlisting role="C">
@@ -16566,7 +16566,7 @@ void GtkWindow::set-focus	(GtkWindow *,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-GtkHandleBox">
 <title>GtkHandleBox</title>
 
 <programlisting role="C">
@@ -16581,7 +16581,7 @@ void GtkHandleBox::child-detached	(GtkHandleBox *,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-GtkToggleButton">
 <title>GtkToggleButton</title>
 
 <programlisting role="C">
@@ -16592,7 +16592,7 @@ void GtkToggleButton::toggled	(GtkToggleButton *,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-GtkMenuItem">
 <title>GtkMenuItem</title>
 
 <programlisting role="C">
@@ -16605,7 +16605,7 @@ void GtkMenuItem::activate-item	(GtkMenuItem *,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-GtkListItem">
 <title>GtkListItem</title>
 
 <programlisting role="C">
@@ -16641,7 +16641,7 @@ void GtkListItem::scroll-horizontal	(GtkListItem *,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-GtkTreeItem">
 <title>GtkTreeItem</title>
 
 <programlisting role="C">
@@ -16654,7 +16654,7 @@ void GtkTreeItem::expand	(GtkTreeItem *,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-GtkCheckMenuItem">
 <title>GtkCheckMenuItem</title>
 
 <programlisting role="C">
@@ -16665,7 +16665,7 @@ void GtkCheckMenuItem::toggled	(GtkCheckMenuItem *,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-GtkInputDialog">
 <title>GtkInputDialog</title>
 
 <programlisting role="C">
@@ -16680,7 +16680,7 @@ void GtkInputDialog::disable-device	(GtkInputDialog *,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-GtkColorSelection">
 <title>GtkColorSelection</title>
 
 <programlisting role="C">
@@ -16691,7 +16691,7 @@ void GtkColorSelection::color-changed	(GtkColorSelection *,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-GtkStatusBar">
 <title>GtkStatusBar</title>
 
 <programlisting role="C">
@@ -16708,7 +16708,7 @@ void GtkStatusbar::text-popped	(GtkStatusbar *,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-GtkCTree">
 <title>GtkCTree</title>
 
 <programlisting role="C">
@@ -16739,7 +16739,7 @@ void GtkCTree::change-focus-row-expansion	(GtkCTree *,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-GtkCurve">
 <title>GtkCurve</title>
 
 <programlisting role="C">
@@ -16750,7 +16750,7 @@ void GtkCurve::curve-type-changed	(GtkCurve *,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-GtkAdjustment">
 <title>GtkAdjustment</title>
 
 <programlisting role="C">
@@ -17257,7 +17257,7 @@ struct _GdkEventOther
 which are not included in complete form elsewhere.</para>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-Tictactoe">
 <title>Tictactoe</title>
 <!-- ----------------------------------------------------------------- -->
 <sect2>
@@ -17560,12 +17560,12 @@ int main( int   argc,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
-<title> GtkDial</title>
+<sect1 id="sec-GtkDial">
+<title>GtkDial</title>
 
 <!-- ----------------------------------------------------------------- -->
 <sect2>
-<title> gtkdial.h</title>
+<title>gtkdial.h</title>
 
 <programlisting role="C">
 /* example-start gtkdial gtkdial.h */
@@ -17667,7 +17667,7 @@ void           gtk_dial_set_adjustment         (GtkDial      *dial,
 
 <!-- ----------------------------------------------------------------- -->
 <sect2>
-<title> gtkdial.c</title>
+<title>gtkdial.c</title>
 
 <programlisting role="C">
 /* example-start gtkdial gtkdial.c */
@@ -18331,7 +18331,7 @@ gtk_dial_adjustment_value_changed (GtkAdjustment *adjustment,
 
 <!-- ----------------------------------------------------------------- -->
 <sect2>
-<title> dial_test.c</title>
+<title>dial_test.c</title>
 
 <programlisting role="C">
 #include &lt;stdio.h&gt;
@@ -18405,12 +18405,12 @@ int main( int   argc,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
-<title> Scribble</title>
+<sect1 id="sec-Scribble">
+<title>Scribble</title>
 
 <!-- ----------------------------------------------------------------- -->
 <sect2>
-<title> scribble-simple.c</title>
+<title>scribble-simple.c</title>
 
 <programlisting role="C">
 /* example-start scribble-simple scribble-simple.c */
@@ -18599,7 +18599,7 @@ int main( int   argc,
 
 <!-- ----------------------------------------------------------------- -->
 <sect2>
-<title> scribble-xinput.c</title>
+<title>scribble-xinput.c</title>
 
 <programlisting role="C">
 /* example-start scribble-xinput scribble-xinput.c */
@@ -18946,7 +18946,7 @@ field. The selection_mode may be one of the following:</para>
 <para>The default is <literal>GTK_SELECTION_MULTIPLE</literal>.</para>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-SelectionSignals">
 <title>Signals</title>
 
 <programlisting role="C">
@@ -18982,8 +18982,8 @@ removed from the List.</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
-<title> Functions</title>
+<sect1 id="sec-GtkListFunctions">
+<title>Functions</title>
 
 <programlisting role="C">
 guint gtk_list_get_type( void );
@@ -19115,8 +19115,8 @@ gint GTK_IS_LIST( gpointer obj);
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
-<title> Example</title>
+<sect1 id="sec-GtkListExample">
+<title>Example</title>
 
 <para>Following is an example program that will print out the changes of the
 selection of a List, and lets you "arrest" list items into a prison
@@ -19406,8 +19406,8 @@ void sigh_print_selection( GtkWidget *gtklist,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
-<title> List Item Widget</title>
+<sect1 id="sec-ListItemWidget">
+<title>List Item Widget</title>
 
 <para>The ListItem widget is designed to act as a container holding up to
 one child, providing functions for selection/deselection just like the
@@ -19431,17 +19431,17 @@ also add a GtkVBox or a GtkArrow etc. to the GtkListItem.</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-GtkListItemSignals">
 <title>Signals</title>
 
-<para>AkListItem does not create new signals on its own, but inherits
+<para>A GtkListItem does not create new signals on its own, but inherits
 the signals of a Item.</para>
 
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
-<title> Functions</title>
+<sect1 id="sec-GtkListItemFunctions">
+<title>Functions</title>
 
 <programlisting role="C">
 guint gtk_list_item_get_type( void );
@@ -19503,7 +19503,7 @@ gint GTK_IS_LIST_ITEM( gpointer obj );
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-GtkListItemExample">
 <title>Example</title>
 
 <para>Please see the List example on this, which covers the usage of a
