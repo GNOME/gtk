@@ -790,7 +790,9 @@ create_handle_box ()
 {
   static GtkWidget* window = NULL;
   GtkWidget* hbox;
+#if 0
   GtkWidget* button;
+#endif
 	
   if (!window)
   {
@@ -2266,7 +2268,7 @@ dnd_drop (GtkWidget *button, GdkEvent *event)
 		 + strlen(event->dropdataavailable.data_type) + 100);
   sprintf(msg, "Drop data of type %s was:\n\n%s",
 	  event->dropdataavailable.data_type,
-	  event->dropdataavailable.data);
+	  (char *)event->dropdataavailable.data);
   lbl = gtk_label_new(msg);
   gtk_label_set_justify(GTK_LABEL(lbl), GTK_JUSTIFY_FILL);
   g_free(msg);
@@ -2305,7 +2307,6 @@ create_dnd ()
   GtkWidget *box1;
   GtkWidget *box2;
   GtkWidget *box3;
-  GtkWidget *entry;
   GtkWidget *frame;
   GtkWidget *button;
   GtkWidget *separator;
