@@ -1,3 +1,8 @@
+Tue Feb  9 19:49:46 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in (LDFLAGS): Removed extraneous line
+	  that crept in in previous commit.
+
 Tue Feb  9 19:39:32 1999  Owen Taylor  <otaylor@redhat.com>
 
         * gtk/gtkentry.[ch] gtk/gtkeditable.h: Moved
