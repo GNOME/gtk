@@ -1,3 +1,11 @@
+Tue Sep  2 21:01:19 2003  Kristian Rietveld  <kris@gtk.org>
+
+	Merge from stable.
+
+	* gtk/gtktreeview.c (gtk_tree_view_button_press): revert the change
+	to only select when button 1 is pressed introduced in the fix of
+	bug #120187.
+
 2003-09-02  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkactiongroup.c (gtk_action_group_new): Doc addition.

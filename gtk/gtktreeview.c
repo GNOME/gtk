@@ -2141,10 +2141,9 @@ gtk_tree_view_button_press (GtkWidget      *widget,
       /* select */
       pre_val = tree_view->priv->vadjustment->value;
 
-      /* we only handle selection modifications from the first button on
-       * the first button press
+      /* we only handle selection modifications on the first button press
        */
-      if (event->type == GDK_BUTTON_PRESS && event->button == 1)
+      if (event->type == GDK_BUTTON_PRESS)
         {
           if ((event->state & GDK_CONTROL_MASK) == GDK_CONTROL_MASK)
             tree_view->priv->ctrl_pressed = TRUE;
