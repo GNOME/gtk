@@ -793,11 +793,13 @@ gdk_x11_draw_image     (GdkDrawable     *drawable,
   
   impl = GDK_DRAWABLE_IMPL_X11 (drawable);
 
+#ifdef USE_SHM  
   if (image->type == GDK_IMAGE_SHARED)
     XShmPutImage (GDK_SCREEN_XDISPLAY (impl->screen), impl->xid,
                   GDK_GC_GET_XGC (gc), GDK_IMAGE_XIMAGE (image),
                   xsrc, ysrc, xdest, ydest, width, height, False);
   else
+#endif
     XPutImage (GDK_SCREEN_XDISPLAY (impl->screen), impl->xid,
                GDK_GC_GET_XGC (gc), GDK_IMAGE_XIMAGE (image),
                xsrc, ysrc, xdest, ydest, width, height);

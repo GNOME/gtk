@@ -31,10 +31,10 @@
 #include <unistd.h>
 #endif
 
-#ifdef G_OS_WIN32
-#define SOEXT ".dll"
+#if USE_LA_MODULES
+#define SOEXT ".la"
 #else
-#define SOEXT ".so"
+#define SOEXT ("." G_MODULE_SUFFIX)
 #endif
 
 #include <pango/pango-utils.h>
@@ -174,8 +174,7 @@ int main (int argc, char **argv)
 
 	      while ((dent = g_dir_read_name (dir)))
 		{
-		  int len = strlen (dent);
-		  if (len > 3 && strcmp (dent + len - strlen (SOEXT), SOEXT) == 0)
+		  if (g_str_has_suffix (dent, SOEXT))
 		    error |= query_module (dirs[i], dent);
 		}
 	      
