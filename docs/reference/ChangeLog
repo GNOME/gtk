@@ -1,3 +1,10 @@
+Thu Mar  7 02:58:16 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/tmpl/gtkliststore.sgml: start implementing
+
+	* gtk/question_index.sgml: "I can set with the tree, but not
+	get???!?!"
+
 Wed Mar  6 18:11:05 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/resources.sgml: Mention the need to subscribe

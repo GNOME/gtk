@@ -1653,7 +1653,8 @@ gtk_tree_store_drag_data_received (GtkTreeDragDest   *drag_dest,
           /* Get the parent, NULL if parent is the root */
           dest_parent_p = NULL;
           parent = gtk_tree_path_copy (dest);
-          if (gtk_tree_path_up (parent))
+          if (gtk_tree_path_up (parent) &&
+	      gtk_tree_path_get_depth (parent) > 0)
             {
               gtk_tree_model_get_iter (tree_model,
                                        &dest_parent,

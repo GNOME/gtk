@@ -503,6 +503,31 @@ column.
 </answer>
 </qandaentry>
 
+<qandaentry>
+<question><para>
+I can set data easily on my <link
+		linkend="GtkTreeStore">GtkTreeStore</link>/<link
+		linkend="GtkListStore">GtkListStore</link> models using  <link
+linkend="gtk-tree-model-get">gtk_list_store_set()</link> and <link
+linkend="gtk-tree-model-get">gtk_tree_store_set()</link>, but can't read
+	      it back?
+</para></question>
+
+<answer>
+<para>
+Both the <link
+		linkend="GtkTreeStore">GtkTreeStore</link> and the <link
+		linkend="GtkListStore">GtkListStore</link> implement the
+	      <link linkend="GtkTreeModel">GtkTreeModel</link>
+		interface.  Consequentially, the can use any function
+		this interface implements.  The easiest way to read a
+		set of data back is to use
+ <link
+linkend="gtk-tree-model-get">gtk_tree_model_get()</link>.
+</para>
+</answer>
+</qandaentry>
+
 </qandadiv>
 
 

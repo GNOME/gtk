@@ -1,3 +1,38 @@
+Wed Mar  6 23:20:51 2002  Jonathan Blandford  <jrb@redhat.com>
+and			  Kristian Rietveld  <kris@gtk.org>
+
+	Finishing touch for 2.0.0 release, fixes #70782, #72729, the
+	'stealth' bug and other last-minute minor issues.
+
+	* gtk/gtktreeview.c (gtk_tree_view_bin_expose): set dnd dest line
+	drawing right. We can't draw the line at the position of the next
+	row, because that one still has to be drawn. So draw everthing at
+	a -1 offset.
+	(validate_visible_area): add check for invalid descendants and
+	NULL scroll_to_path path, get scrolling right.  Also, fix the
+	area_above value.  Pretty amazing I got it wrong.
+	(get_logical_dest_row): add gtk-tree-model-drop-append magic, so
+	dragging a row to the end of the model works right.
+	(gtk_tree_view_get_dest_row_at_pos): minor floating point fix
+	(gtk_tree_view_start_editing): add call to validate_row
+	(gtk_tree_view_tree_to_widget_coords): Never subtract
+	HEADER_HEIGHT from y values anymore!!!
+	(gtk_tree_view_widget_coords_to_tree): ditto.
+	(gtk_tree_view_scroll_to_point): allow -1 as values for the
+	scroll_to coords
+	(gtk_tree_view_move_cursor_page_up_down): Don't need scroll_to_y
+	as clamp_node_visible will make it work.
+
+	* gtk/gtktreestore.c (gtk_tree_store_drag_data_received): also check
+	path depth, as we can't get iters from empty paths
+
+	* gtk/gtkliststore.c (gtk_list_store_drag_data_received): handle
+	gtk-tree-model-drop-append
+
+	* gtk/gtktreednd.c (gtk_tree_set_row_drag_data): free path_str
+
+	* tests/testtreeflow.c (main): select path where we are scrolling to
+
 2002-03-06  Darin Adler  <darin@bentspoon.com>
 
 	* gtk/gtktreemodelsort.c: (gtk_tree_model_sort_insert_value):

@@ -1437,12 +1437,19 @@ gtk_list_store_drag_data_received (GtkTreeDragDest   *drag_dest,
                                        prev))
             {
               GtkTreeIter tmp_iter = dest_iter;
-              gtk_list_store_insert_after (GTK_LIST_STORE (tree_model),
-                                           &dest_iter,
-                                           &tmp_iter);
+
+	      if (GPOINTER_TO_INT (g_object_get_data (G_OBJECT (tree_model), "gtk-tree-model-drop-append")))
+		gtk_list_store_append (GTK_LIST_STORE (tree_model), &dest_iter);
+	      else
+		gtk_list_store_insert_after (GTK_LIST_STORE (tree_model),
+					     &dest_iter, &tmp_iter);
+
               retval = TRUE;
             }
         }
+
+      g_object_set_data (G_OBJECT (tree_model), "gtk-tree-model-drop-append",
+			 NULL);
 
       gtk_tree_path_free (prev);
 

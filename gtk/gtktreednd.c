@@ -256,6 +256,8 @@ gtk_tree_set_row_drag_data (GtkSelectionData *selection_data,
   trd = g_malloc (struct_size); 
 
   strcpy (trd->path, path_str);
+
+  g_free (path_str);
   
   trd->model = tree_model;
   

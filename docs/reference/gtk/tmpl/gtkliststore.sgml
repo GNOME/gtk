@@ -6,7 +6,12 @@ GtkListStore
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+The #GtkListStore object is a list model for use with a #GtkTreeView
+widget.  It implements the #GtkTreeModel interface, and consequentialy,
+can use all of the methods available there.  It also implements the
+#GtkTreeSortable interface so you can sort the list using the view.
+Finally, it also implements the tree <link linkend="gtktreednd">drag and
+drop</link> interfaces.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
