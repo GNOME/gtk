@@ -34,7 +34,6 @@ Functions to perform reference counting on a #GdkPixbuf.
 </para>
 
 @pixbuf: 
-
 <!--
 Local variables:
 mode: sgml

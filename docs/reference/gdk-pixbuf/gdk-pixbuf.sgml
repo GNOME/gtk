@@ -6,7 +6,6 @@
 <!entity gdk-pixbuf-rendering SYSTEM "sgml/rendering.sgml">
 <!entity GnomeCanvasPixbuf SYSTEM "sgml/gnome-canvas-pixbuf.sgml">
 <!entity GdkPixbufLoader SYSTEM "sgml/gdk-pixbuf-loader.sgml">
-<!entity gdk-pixbuf-gdk-pixbuf-io SYSTEM "sgml/gdk-pixbuf-io.sgml">
 ]>
 
 <book>
@@ -49,6 +48,5 @@
     &gdk-pixbuf-rendering;
     &GnomeCanvasPixbuf;
     &GdkPixbufLoader;
-    &gdk-pixbuf-gdk-pixbuf-io;
   </reference>
 </book>

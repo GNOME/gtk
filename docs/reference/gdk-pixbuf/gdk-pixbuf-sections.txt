@@ -71,12 +71,3 @@ GDK_IS_PIXBUF_LOADER_CLASS
 <SUBSECTION Private>
 GdkPixbufLoader
 </SECTION>
-
-<SECTION>
-<FILE>gdk-pixbuf-io</FILE>
-ModulePreparedNotifyFunc
-ModuleUpdatedNotifyFunc
-GdkPixbufModule
-gdk_pixbuf_get_module
-gdk_pixbuf_load_module
-</SECTION>

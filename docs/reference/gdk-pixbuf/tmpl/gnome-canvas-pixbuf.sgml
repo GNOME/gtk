@@ -45,63 +45,113 @@ Canvas item to display #GdkPixbuf images.
 
 <!-- ##### ARG GnomeCanvasPixbuf:width_set ##### -->
   <para>
-    Determines whether the 
+    Determines whether the <link
+    linkend="GnomeCanvasPixbuf--width">width</link> argument is taken
+    into account when scaling the pixbuf item.  If this argument is
+    %FALSE, then the width value of the pixbuf's #ArtPixBuf will be
+    used instead.  This argument is %FALSE by default.
   </para>
 
 <!-- ##### ARG GnomeCanvasPixbuf:width_pixels ##### -->
-<para>
-
-</para>
+  <para>
+    If this argument is %TRUE, then the width of the pixbuf will be
+    considered to be in pixels, that is, it will not be visually
+    scaled even if the item's affine transformation changes.  If this
+    is %FALSE, then the width of the pixbuf will be considered to be
+    in canvas units, and so will be scaled normally by affine
+    transformations.  The default is %FALSE.
+  </para>
 
 <!-- ##### ARG GnomeCanvasPixbuf:width ##### -->
   <para>
-    Contains the width of the image in the pixbuf canvas item.  
+    Indicates the width the pixbuf will be scaled to.  This argument
+    will only be used if the <link
+    linkend="GnomeCanvasPixbuf--width-set">width_set</link> argument
+    is %TRUE.  If the <link
+    linkend="GnomeCanvasPixbuf--width-pixels">width_pixels</link>
+    argument is %FALSE, the width will be taken to be in canvas units,
+    and thus will be scaled along with the canvas item's affine
+    transformation.  If width_pixels is %TRUE, the width will be taken
+    to be in pixels, and will visually remain a constant size even if
+    the item's affine transformation changes.
+  </para>
+
+<!-- ##### ARG GnomeCanvasPixbuf:height_set ##### -->
+  <para>
+    Determines whether the <link
+    linkend="GnomeCanvasPixbuf--height">height</link> argument is
+    taken into account when scaling the pixbuf item.  Works in the
+    same way as the <link
+    linkend="GnomeCanvasPixbuf--width-set">width_set</link> argument.
+    The default is %FALSE.
+  </para>
+
+<!-- ##### ARG GnomeCanvasPixbuf:height_pixels ##### -->
+  <para>
+    Works in the same way as the <link
+    linkend="GnomeCanvasPixbuf--width-pixels">width_pixels</link>
+    argument.  The default is %FALSE.
   </para>
 
 <!-- ##### ARG GnomeCanvasPixbuf:height ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GnomeCanvasPixbuf:height_set ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GnomeCanvasPixbuf:height_pixels ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GnomeCanvasPixbuf:x ##### -->
-<para>
-
-</para>
+  <para>
+    Indicates the height the pixbuf will be scaled to.  This argument
+    will only be used if the <link
+    linkend="GnomeCanvasPixbuf--height-set">height_set</link> argument
+    is %TRUE.  Works in the same way as the <link
+    linkend="GnomeCanvasPixbuf--width">width</link> argument.
+  </para>
 
 <!-- ##### ARG GnomeCanvasPixbuf:x_set ##### -->
-<para>
-
-</para>
+  <para>
+    Determines whether the <link
+    linkend="GnomeCanvasPixbuf--x">x</link> argument is used to
+    translate the pixbuf from its logical origin in item-relative
+    coordinates.
+  </para>
 
 <!-- ##### ARG GnomeCanvasPixbuf:x_pixels ##### -->
-<para>
+  <para>
+    If this argument is %TRUE, the pixbuf's translation with respect
+    to its logical origin in item-relative coordinates will be in
+    pixels, that is, the visible offset will not change even if the
+    item's affine transformation changes.  If it is %FALSE, the
+    pixbuf's translation will be taken to be in canvas units, and thus
+    will change along with the item's affine transformation.
+  </para>
 
-</para>
-
-<!-- ##### ARG GnomeCanvasPixbuf:y ##### -->
-<para>
-
-</para>
+<!-- ##### ARG GnomeCanvasPixbuf:x ##### -->
+  <para>
+    Indicates the horizontal translation offset of the pixbuf item's
+    image.  This argument will only be used if the <link
+    linkend="GnomeCanvasPixbuf--x-set">x_set</link> argument is
+    %TRUE.  This &lsquo;horizontal&rsquo; offset will actually be
+    modified by the item's affine transformation.
+  </para>
 
 <!-- ##### ARG GnomeCanvasPixbuf:y_set ##### -->
-<para>
-
-</para>
+  <para>
+    Determines whether the <link
+    linkend="GnomeCanvasPixbuf--y">y</link> argument is used to
+    translate the pixbuf from its logical origin in item-relative
+    coordinates.  Works in the same way as the <link
+    linkend="GnomeCanvasPixbuf--x-set">x_set</link> argument.  The
+    default is %FALSE.
+  </para>
 
 <!-- ##### ARG GnomeCanvasPixbuf:y_pixels ##### -->
-<para>
+  <para>
+    Works in the same way as the <link
+    linkend="GnomeCanvasPixbuf--x-pixels">x_pixels</link> argument.
+    The default is %FALSE.
+  </para>
 
-</para>
+<!-- ##### ARG GnomeCanvasPixbuf:y ##### -->
+  <para>
+    Indicates the vertical translation offset of the pixbuf item's
+    image.  Works in the same way as the <link
+    linkend="GnomeCanvasPixbuf--x">x</link> argument.
+  </para>
 
 
 <!--
@@ -110,3 +160,4 @@ mode: sgml
 sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
 End:
 -->
+

@@ -1,3 +1,12 @@
+1999-11-05  Federico Mena Quintero  <federico@redhat.com>
+
+	* doc/gdk-pixbuf-sections.txt: Removed gdk-pixbuf-io, since it is
+	for internal use only.
+
+	* doc/gdk-pixbuf.sgml: Likewise.
+
+	* doc/tmpl/gnome-canvas-pixbuf.sgml: Finished docs.
+
 1999-11-05  Michael Fulbright  <drmike@redhat.com>
 
 	* src/io-pnm.c: Implemented support for reading raw PBM/PGM/PPM

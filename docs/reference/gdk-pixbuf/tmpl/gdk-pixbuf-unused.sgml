@@ -1,0 +1,70 @@
+<!-- ##### SECTION ./tmpl/gdk-pixbuf-io.sgml:See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gdk_pixbuf_load_module ##### -->
+<para>
+
+</para>
+
+@image_module: 
+
+<!-- ##### SECTION ./tmpl/gdk-pixbuf-io.sgml:Short_Description ##### -->
+
+
+
+<!-- ##### STRUCT GdkPixbufModule ##### -->
+<para>
+
+</para>
+
+@module_name: 
+@format_check: 
+@module: 
+@load: 
+@load_xpm_data: 
+@begin_load: 
+@stop_load: 
+@load_increment: 
+
+<!-- ##### SECTION ./tmpl/gdk-pixbuf-io.sgml:Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### USER_FUNCTION ModuleUpdatedNotifyFunc ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@user_data: 
+@x: 
+@y: 
+@width: 
+@height: 
+
+<!-- ##### SECTION ./tmpl/gdk-pixbuf-io.sgml:Title ##### -->
+gdk-pixbuf-io
+
+
+<!-- ##### USER_FUNCTION ModulePreparedNotifyFunc ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@user_data: 
+
+<!-- ##### FUNCTION gdk_pixbuf_get_module ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@size: 
+@Returns: 
+
