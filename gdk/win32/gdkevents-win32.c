@@ -3088,14 +3088,6 @@ gdk_event_translate (GdkEvent *event,
           expose_rect.height = paintstruct.rcPaint.bottom - paintstruct.rcPaint.top;
 
 	  _gdk_window_process_expose (window, msg->time, &expose_rect);
-          /* fduguet: Force a process_all_updates to refresh the
-	   * window when receiving a WM_PAINT message. Only do this if
-	   * window is visible.
-	   */
-          if (!GDK_WINDOW_DESTROYED (window))
-            if (gdk_window_is_visible (window))
-              gdk_window_process_updates (window, FALSE);
-
 	  return_val = FALSE;
         }
       break;
