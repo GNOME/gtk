@@ -2001,11 +2001,15 @@ gtk_text_key_press (GtkWidget   *widget,
 	{
 	case GDK_Home:      
 	  if (event->state & GDK_CONTROL_MASK)
-	    scroll_int (text, -text->vadj->value); 
+	    scroll_int (text, -text->vadj->value);
+	  else
+	    return_val = FALSE;
 	  break;
 	case GDK_End:
 	  if (event->state & GDK_CONTROL_MASK)
 	    scroll_int (text, +text->vadj->upper); 
+	  else
+	    return_val = FALSE;
 	  break;
 	case GDK_Page_Up:   scroll_int (text, -text->vadj->page_increment); break;
 	case GDK_Page_Down: scroll_int (text, +text->vadj->page_increment); break;
@@ -2014,6 +2018,8 @@ gtk_text_key_press (GtkWidget   *widget,
 	case GDK_Return:
 	  if (event->state & GDK_CONTROL_MASK)
 	    gtk_signal_emit_by_name (GTK_OBJECT (text), "activate");
+	  else
+	    return_val = FALSE;
 	  break;
 	default:
 	  return_val = FALSE;
