@@ -3172,7 +3172,7 @@ save_widgets_create (GtkFileChooserDefault *impl)
 		    0, 0);
   gtk_widget_show (widget);
 
-  impl->save_file_name_entry = _gtk_file_chooser_entry_new ();
+  impl->save_file_name_entry = _gtk_file_chooser_entry_new (TRUE);
   _gtk_file_chooser_entry_set_file_system (GTK_FILE_CHOOSER_ENTRY (impl->save_file_name_entry),
 					   impl->file_system);
   gtk_entry_set_width_chars (GTK_ENTRY (impl->save_file_name_entry), 45);
@@ -5467,7 +5467,7 @@ location_entry_create (GtkFileChooserDefault *impl)
 {
   GtkWidget *entry;
 
-  entry = _gtk_file_chooser_entry_new ();
+  entry = _gtk_file_chooser_entry_new (TRUE);
   /* Pick a good width for the entry */
   gtk_entry_set_width_chars (GTK_ENTRY (entry), 30);
   gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);

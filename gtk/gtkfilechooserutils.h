@@ -26,6 +26,8 @@
 
 G_BEGIN_DECLS
 
+#define GTK_FILE_CHOOSER_DELEGATE_QUARK	  (_gtk_file_chooser_delegate_get_quark ())
+
 typedef enum {
   GTK_FILE_CHOOSER_PROP_FIRST                  = 0x1000,
   GTK_FILE_CHOOSER_PROP_ACTION                 = GTK_FILE_CHOOSER_PROP_FIRST,
@@ -46,6 +48,8 @@ void _gtk_file_chooser_install_properties (GObjectClass *klass);
 void _gtk_file_chooser_delegate_iface_init (GtkFileChooserIface *iface);
 void _gtk_file_chooser_set_delegate        (GtkFileChooser *receiver,
 					    GtkFileChooser *delegate);
+
+GQuark _gtk_file_chooser_delegate_get_quark (void) G_GNUC_CONST;
 
 G_END_DECLS
 

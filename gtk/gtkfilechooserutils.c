@@ -175,10 +175,22 @@ _gtk_file_chooser_set_delegate (GtkFileChooser *receiver,
 		    G_CALLBACK (delegate_file_activated), receiver);
 }
 
+GQuark
+_gtk_file_chooser_delegate_get_quark (void)
+{
+  static GQuark quark = 0;
+
+  if (G_UNLIKELY (quark == 0))
+    quark = g_quark_from_static_string ("gtk-file-chooser-delegate");
+  
+  return quark;
+}
+
 static GtkFileChooser *
 get_delegate (GtkFileChooser *receiver)
 {
-  return g_object_get_data (G_OBJECT (receiver), "gtk-file-chooser-delegate");
+  return g_object_get_qdata (G_OBJECT (receiver),
+			     GTK_FILE_CHOOSER_DELEGATE_QUARK);
 }
 
 static gboolean

@@ -78,6 +78,7 @@
 #include <gtk/gtkexpander.h>
 #include <gtk/gtkfilesel.h>
 #include <gtk/gtkfixed.h>
+#include <gtk/gtkfilechooserbutton.h>
 #include <gtk/gtkfilechooserdialog.h>
 #include <gtk/gtkfilechooserwidget.h>
 #include <gtk/gtkfontbutton.h>

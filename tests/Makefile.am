@@ -35,6 +35,7 @@ noinst_PROGRAMS =			\
 	testellipsise			\
 	testentrycompletion 		\
 	testfilechooser			\
+	testfilechooserbutton		\
 	testgtk				\
 	testiconview			\
 	testicontheme			\
@@ -76,6 +77,7 @@ testdnd_DEPENDENCIES = $(TEST_DEPS)
 testellipsise_DEPENDENCIES = $(TEST_DEPS)
 testentrycompletion_DEPENDENCIES = $(TEST_DEPS)
 testfilechooser_DEPENDENCIES = $(TEST_DEPS)
+testfilechooserbutton_DEPENDENCIES = $(TEST_DEPS)
 testgtk_DEPENDENCIES = $(TEST_DEPS)
 testinput_DEPENDENCIES = $(TEST_DEPS)
 testmenus_DEPENDENCIES = $(TEST_DEPS)
@@ -108,6 +110,7 @@ testdnd_LDADD = $(LDADDS)
 testellipsise_LDADD = $(LDADDS)
 testentrycompletion_LDADD = $(LDADDS)
 testfilechooser_LDADD = $(LDADDS)
+testfilechooserbutton_LDADD = $(LDADDS)
 testgtk_LDADD = $(LDADDS)
 testicontheme_LDADD = $(LDADDS)
 testiconview_LDADD = $(LDADDS)
@@ -143,6 +146,10 @@ testactions_LDADD = $(LDADDS)
 testfilechooser_SOURCES = 	\
 	prop-editor.c		\
 	testfilechooser.c 	
+
+testfilechooserbutton_SOURCES =	\
+	prop-editor.c		\
+	testfilechooserbutton.c 	
 
 testgtk_SOURCES =	\
 	prop-editor.c   \

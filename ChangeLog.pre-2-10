@@ -1,3 +1,26 @@
+2004-08-17  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilechooserbutton.[hc]: New widget to go along with 
+	GtkFontButton and GtkColorButton for use in preference dialogs.
+	Replaces GnomeFileEntry.  (#148108, James M. Cape)
+
+	* gtk/gtk.h: Include gtkfilechooserbutton.h
+
+	* gtk/Makefile.am (gtk_public_h_sources): Add gtkfilechooserbutton.h
+	(gtk_c_sources): Add gtkfilechooserbutton.c
+
+	* gtk/gtk.symbols: Add the GtkFileChooserButton symbols.
+
+	* gtk/gtkfilechooserutils.[hc]: Make the delegate quark available. 
+
+	* gtk/gtkfilechooserentry.[hc] (_gtk_file_chooser_entry_new): Allow
+	to suppress tab-eating using the new eat_tabs argument. Adjust all
+	callers.
+
+	* tests/testfilechooserbutton.c: Test for GtkFileChooserButton.
+
+	* tests/Makefile.am (noinst_PROGRAMS): Add testfilechooserbutton
+
 2004-08-16  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_render_icon): Doc update.

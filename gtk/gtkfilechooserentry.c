@@ -57,6 +57,7 @@ struct _GtkFileChooserEntry
 
   guint has_completion : 1;
   guint in_change      : 1;
+  guint eat_tabs       : 1;
 };
 
 enum
@@ -633,6 +634,9 @@ gtk_file_chooser_entry_focus (GtkWidget        *widget,
   GdkModifierType state;
   gboolean control_pressed = FALSE;
 
+  if (!chooser_entry->eat_tabs)
+    return GTK_WIDGET_CLASS (parent_class)->focus (widget, direction);
+
   if (gtk_get_current_event_state (&state))
     {
       if ((state & GDK_CONTROL_MASK) == GDK_CONTROL_MASK)
@@ -789,6 +793,7 @@ clear_completion_callback (GtkFileChooserEntry *chooser_entry,
 
 /**
  * _gtk_file_chooser_entry_new:
+ * @eat_tabs: If %FALSE, allow focus navigation with the tab key.
  *
  * Creates a new #GtkFileChooserEntry object. #GtkFileChooserEntry
  * is an internal implementation widget for the GTK+ file chooser
@@ -798,9 +803,14 @@ clear_completion_callback (GtkFileChooserEntry *chooser_entry,
  * Return value: the newly created #GtkFileChooserEntry
  **/
 GtkWidget *
-_gtk_file_chooser_entry_new (void)
+_gtk_file_chooser_entry_new (gboolean eat_tabs)
 {
-  return g_object_new (GTK_TYPE_FILE_CHOOSER_ENTRY, NULL);
+  GtkFileChooserEntry *chooser_entry;
+
+  chooser_entry = g_object_new (GTK_TYPE_FILE_CHOOSER_ENTRY, NULL);
+  chooser_entry->eat_tabs = (eat_tabs != FALSE);
+
+  return GTK_WIDGET (chooser_entry);
 }
 
 /**

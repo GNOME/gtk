@@ -159,6 +159,7 @@ gtk_public_h_sources =          \
 	gtkeventbox.h		\
 	gtkexpander.h		\
 	gtkfilechooser.h        \
+	gtkfilechooserbutton.h  \
 	gtkfilechooserdialog.h  \
 	gtkfilechooserwidget.h  \
 	gtkfilefilter.h		\
@@ -363,6 +364,7 @@ gtk_c_sources =                 \
 	gtkeventbox.c		\
 	gtkexpander.c		\
 	gtkfilechooser.c	\
+	gtkfilechooserbutton.c	\
 	gtkfilechooserdialog.c	\
 	gtkfilechooserembed.c	\
 	gtkfilechooserentry.c	\
@@ -731,4 +733,3 @@ EXTRA_DIST +=                   \
 	abicheck.sh
 
 install-data-local:
-
