@@ -107,17 +107,6 @@ gchar        *gtk_combo_box_get_active_text  (GtkComboBox     *combo_box);
 void          gtk_combo_box_popup            (GtkComboBox     *combo_box);
 void          gtk_combo_box_popdown          (GtkComboBox     *combo_box);
 
-/* insensitive items */
-typedef gboolean (*GtkComboBoxSelectionFunc) (GtkTreeModel *model,
-					      GtkTreePath  *path,
-					      gboolean      currently_selected,
-					      gpointer      data);
-
-void gtk_combo_box_set_selection_func (GtkComboBox             *combo_box,
-				       GtkComboBoxSelectionFunc func,
-				       gpointer                 data,
-				       GtkDestroyNotify         destroy);
-
 G_END_DECLS
 
 #endif /* __GTK_COMBO_BOX_H__ */
