@@ -1,3 +1,13 @@
+2004-07-06  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/stock-icons/Makefile.am: Add stock_file_16.png, 
+	stock_file_24.png, stock_directory_16.png and stock_directory_24.png.
+
+	* gtk/gtkstock.h (GTK_STOCK_FILE, GTK_STOCK_DIRECTORY): 
+	* gtk/gtkiconfactory.c (get_default_icons): New stock icons as 
+	fallbacks for gtkfilechooser. Currently these are the same images
+	as the "new" and "open" items...
+
 Tue Jul  6 10:00:22 2004  Jonathan Blandford  <jrb@redhat.com>
 
 	Fix for #136496, Pawel Salek:

@@ -34,6 +34,8 @@ IMAGES = \
 	stock_dialog_info_48.png	\
 	stock_dialog_question_48.png	\
 	stock_dialog_warning_48.png	\
+	stock_directory_16.png		\
+	stock_directory_24.png 		\
 	stock_dnd_multiple_32.png	\
 	stock_down_arrow_16.png		\
 	stock_down_arrow_24.png 	\
@@ -41,12 +43,14 @@ IMAGES = \
 	stock_exec_24.png 		\
 	stock_exit_16.png		\
 	stock_exit_24.png		\
+	stock_file_16.png		\
+	stock_file_24.png 		\
 	stock_first_16.png		\
 	stock_first_24.png 		\
 	stock_font_16.png		\
 	stock_font_24.png 		\
-	stock_harddisk_16.png	\
-	stock_harddisk_24.png 	\
+	stock_harddisk_16.png		\
+	stock_harddisk_24.png 		\
 	stock_help_16.png		\
 	stock_help_24.png 		\
 	stock_home_16.png		\
@@ -175,6 +179,8 @@ VARIABLES2 = \
 	stock_dialog_info_48   	$(srcdir)/stock_dialog_info_48.png	\
 	stock_dialog_question_48  $(srcdir)/stock_dialog_question_48.png  \
 	stock_dialog_warning_48	$(srcdir)/stock_dialog_warning_48.png	\
+	stock_directory_16	$(srcdir)/stock_directory_16.png	\
+        stock_directory_24	$(srcdir)/stock_directory_24.png	\
 	stock_dnd_32		$(srcdir)/stock_dnd_32.png		\
 	stock_down_arrow_16	$(srcdir)/stock_down_arrow_16.png	\
         stock_down_arrow_24	$(srcdir)/stock_down_arrow_24.png	\
@@ -182,6 +188,8 @@ VARIABLES2 = \
         stock_exec_24		$(srcdir)/stock_exec_24.png            	\
 	stock_exit_16		$(srcdir)/stock_exit_16.png		\
 	stock_exit_24		$(srcdir)/stock_exit_24.png 		\
+	stock_file_16		$(srcdir)/stock_file_16.png		\
+        stock_file_24		$(srcdir)/stock_file_24.png		\
 	stock_first_16		$(srcdir)/stock_first_16.png		\
         stock_first_24		$(srcdir)/stock_first_24.png		\
         stock_font_16		$(srcdir)/stock_font_16.png

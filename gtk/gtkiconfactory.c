@@ -695,6 +695,14 @@ get_default_icons (GtkIconFactory *factory)
 	     16, stock_up_arrow_16,
 	     24, stock_up_arrow_24);
 
+  add_icon2 (factory, GTK_STOCK_FILE,
+	     16, stock_file_16,
+	     24, stock_file_24);
+
+  add_icon2 (factory, GTK_STOCK_DIRECTORY,
+	     16, stock_directory_16,
+	     24, stock_directory_24);
+
   /* Generic size only */
 
   add_icon (factory, GTK_STOCK_CLEAR, 24, stock_clear_24);
