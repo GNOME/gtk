@@ -2060,6 +2060,7 @@ gtk_widget_idle_draw (gpointer data)
 
 	  draw_data_list = draw_data_list->next;
 	next_rect:
+	  continue;
 	}
       widget_list = widget_list->next;
     }

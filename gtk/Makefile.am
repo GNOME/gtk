@@ -331,7 +331,7 @@ LDADDS = \
 	@x_ldflags@					\
 	@x_libs@					\
 	@GLIB_LIBS@                                     \
-	-lm -ldl
+	-lm
 
 testgtk_DEPENDENCIES = $(DEPS)
 testinput_DEPENDENCIES = $(DEPS)

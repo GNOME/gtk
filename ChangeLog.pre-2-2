@@ -1,3 +1,21 @@
+Tue Nov  3 13:16:36 PST 1998 Manish Singh <yosh@gimp.org>
+
+	* gtk/Makefile.am: remove explict -ldl, gmodule takes care of that
+
+	* gtk/gtkdnd.c: start TARGET_MOTIF_SUCCESS from 0x40000000 instead
+	of 0x80000000, so we stay within the bounds of a postive signed
+	int (it broke some compilers)
+
+	* gtk/gtkmenushell.c
+	* gtk/gtkoptionmenu.c: merges from HEAD to make option menus work
+	when some of the menuitems are hidden
+
+	* gtk/gtkthemes.h: don't include dlfcn.h explictly, gmodule takes
+	care of that
+
+	* gtk/gtkwidget.c: add a dummy continue after the line label
+	next_rect, since some compilers don't like label: }
+
 Sun Nov  1 20:05:55 PST 1998 Manish Singh <yosh@gimp.org>
 
 	* Okay, so we need the X11R6 keysyms so programs don't have to

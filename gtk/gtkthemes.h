@@ -24,7 +24,6 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <dlfcn.h>
 #include <gdk/gdk.h>
 #include <gtk/gtkstyle.h>
 #include <gtk/gtkwidget.h>

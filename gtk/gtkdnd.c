@@ -129,7 +129,7 @@ struct _GtkDragFindData {
 /* Enumeration for some targets we handle internally */
 
 enum {
-  TARGET_MOTIF_SUCCESS = 0x80000000,
+  TARGET_MOTIF_SUCCESS = 0x40000000,
   TARGET_MOTIF_FAILURE,
   TARGET_DELETE
 };
@@ -2100,6 +2100,7 @@ gtk_drag_source_event_cb (GtkWidget      *widget,
       break;
       
     default:			/* hit for 2/3BUTTON_PRESS */
+      break;
     }
   return FALSE;
 }
