@@ -1125,6 +1125,14 @@ gtk_window_remove_accel_group (GtkWindow     *window,
   _gtk_accel_group_detach (accel_group, G_OBJECT (window));
 }
 
+/**
+ * gtk_window_add_mnemonic:
+ * @window: a #GtkWindow
+ * @keyval: the mnemonic
+ * @target: the widget that gets activated by the mnemonic
+ *
+ * Adds a mnemonic to this window.
+ */
 void
 gtk_window_add_mnemonic (GtkWindow *window,
 			 guint      keyval,
@@ -1155,6 +1163,14 @@ gtk_window_add_mnemonic (GtkWindow *window,
   gtk_window_notify_keys_changed (window);
 }
 
+/**
+ * gtk_window_remove_mnemonic:
+ * @window: a #GtkWindow
+ * @keyval: the mnemonic
+ * @target: the widget that gets activated by the mnemonic
+ *
+ * Removes a mnemonic from this window.
+ */
 void
 gtk_window_remove_mnemonic (GtkWindow *window,
 			    guint      keyval,
@@ -1181,6 +1197,15 @@ gtk_window_remove_mnemonic (GtkWindow *window,
   gtk_window_notify_keys_changed (window);
 }
 
+/**
+ * gtk_window_mnemonic_activate:
+ * @window: a #GtkWindow
+ * @keyval: the mnemonic
+ * @modifier: the modifiers 
+ * @returns: %TRUE if the activation is done. 
+ * 
+ * Activates the targets associated with the mnemonic.
+ */
 gboolean
 gtk_window_mnemonic_activate (GtkWindow      *window,
 			      guint           keyval,

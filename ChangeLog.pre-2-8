@@ -1,3 +1,14 @@
+2002-03-05  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktreemodel.c (gtk_tree_row_reference_deleted): Fix docs.
+
+	* gtk/gtkwindow.c (gtk_window_remove_mnemonic): 
+	(gtk_window_add_mnemonic): 
+	(gtk_window_mnemonic_activate): Add docs.
+
+	* gtk/gtktreeview.c (gtk_tree_view_get_search_equal_func): Fix
+	typo in docs.
+
 Tue Mar  5 17:02:59 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* docs/tutorial/gtk-tut.sgml: s/menu_new/menu_item_new/.

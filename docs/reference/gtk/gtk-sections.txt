@@ -3803,7 +3803,6 @@ gtk_propagate_event
 <SUBSECTION Private>
 gtk_init_abi_check
 gtk_init_check_abi_check
-gtk_win32_get_installation_directory
 GTKMAIN_C_VAR
 </SECTION>
 

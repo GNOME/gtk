@@ -9903,7 +9903,7 @@ gtk_tree_view_set_search_column (GtkTreeView *tree_view,
 }
 
 /**
- * gtk_tree_view_search_get_search_equal_func:
+ * gtk_tree_view_get_search_equal_func:
  * @tree_view: A #GtkTreeView
  *
  * Returns the compare function currently in use.
