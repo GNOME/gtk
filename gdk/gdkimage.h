@@ -37,16 +37,18 @@ typedef struct _GdkImageClass GdkImageClass;
 struct _GdkImage
 {
   GObject parent_instance;
+
+  /*< public >*/
   
-  GdkImageType	type;
-  GdkVisual    *visual;	    /* visual used to create the image */
-  GdkByteOrder	byte_order;
-  gint		width;
-  gint		height;
-  guint16	depth;
-  guint16	bpp;	        /* bytes per pixel */
-  guint16	bpl;	        /* bytes per line */
-  guint16       bits_per_pixel; /* bits per pixel */
+  GdkImageType	type; /* read only. */
+  GdkVisual    *visual;	    /* read only. visual used to create the image */
+  GdkByteOrder	byte_order; /* read only. */
+  gint		width; /* read only. */
+  gint		height; /* read only. */
+  guint16	depth; /* read only. */
+  guint16	bpp;	        /* read only. bytes per pixel */
+  guint16	bpl;	        /* read only. bytes per line */
+  guint16       bits_per_pixel; /* read only. bits per pixel */
   gpointer	mem;
 
   GdkColormap  *colormap;
