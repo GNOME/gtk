@@ -2110,7 +2110,8 @@ gtk_tree_store_swap (GtkTreeStore *tree_store,
       order[i] = i;
 
   gtk_tree_model_rows_reordered (GTK_TREE_MODEL (tree_store), path_a,
-				 &parent, order);
+				 parent_node == tree_store->root 
+				 ? NULL : &parent, order);
   gtk_tree_path_free (path_a);
   g_free (order);
 }
