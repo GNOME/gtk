@@ -1386,6 +1386,9 @@ _gtk_entry_completion_popup (GtkEntryCompletion *completion)
 void
 _gtk_entry_completion_popdown (GtkEntryCompletion *completion)
 {
+  if (!GTK_WIDGET_MAPPED (completion->priv->popup_window))
+    return;
+
   completion->priv->ignore_enter = FALSE;
   
   gdk_pointer_ungrab (GDK_CURRENT_TIME);
