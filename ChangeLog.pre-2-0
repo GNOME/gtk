@@ -17,6 +17,9 @@
  	code. As we have just one visual on Win32, no sense to have it in a
  	table, and no need for the hash table.
 
+	* gdk/win32/rc/cursor*.cur: Edit some of the cursors a bit to look
+ 	better on white background.
+
 1999-07-21  Tor Lillqvist  <tml@iki.fi>
 
 	* README.win32: Update gcc build instructions. Mention gettext is
