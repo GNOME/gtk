@@ -461,7 +461,7 @@ gtk_option_menu_size_request (GtkWidget      *widget,
 			 MAX (child_requisition.height, option_menu->height) +
 			 CHILD_TOP_SPACING + CHILD_BOTTOM_SPACING + props.focus_width * 2);
 
-  tmp = (requisition->height - option_menu->height +
+  tmp = (requisition->height - MAX (child_requisition.height, option_menu->height) +
 	 props.indicator_size.height + props.indicator_spacing.top + props.indicator_spacing.bottom);
   requisition->height = MAX (requisition->height, tmp);
 }
