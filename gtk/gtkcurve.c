@@ -853,7 +853,7 @@ gtk_curve_set_vector (GtkCurve *c, int veclen, gfloat vector[])
   GtkCurveType old_type;
   gfloat rx, dx, ry;
   gint i, height;
-  GdkScreen *scr = gtk_widget_get_screen (gtk_widget_get_screen (GTK_WIDGET (c)));
+  GdkScreen *scr = gtk_widget_get_screen (GTK_WIDGET (c));
 
   old_type = c->curve_type;
   c->curve_type = GTK_CURVE_TYPE_FREE;
