@@ -1,5 +1,13 @@
 2004-03-08  Federico Mena Quintero  <federico@ximian.com>
 
+	Fixes #136080.
+
+	* gtk/gtkfilesystemunix.c: Only lstat() if stat() failed due to
+	ENOENT.
+	(filename_get_info): Likewise.
+
+2004-03-08  Federico Mena Quintero  <federico@ximian.com>
+
 	* gtk/gtkfilechooserdefault.c
 	(gtk_file_chooser_default_initial_focus): Use
 	gtk_tree_view_set_cursor().

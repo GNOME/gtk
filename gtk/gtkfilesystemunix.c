@@ -464,20 +464,22 @@ get_icon_type (const char *filename,
 
   /* If stat fails, try to fall back to lstat to catch broken links
    */
-  if (stat (filename, &statbuf) != 0 &&
-      lstat (filename, &statbuf) != 0)
+  if (stat (filename, &statbuf) != 0)
     {
-      int save_errno = errno;
-      gchar *filename_utf8 = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
-      g_set_error (error,
-		   GTK_FILE_SYSTEM_ERROR,
-		   GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
-		   _("error getting information for '%s': %s"),
-		   filename_utf8 ? filename_utf8 : "???",
-		   g_strerror (save_errno));
-      g_free (filename_utf8);
+      if (errno != ENOENT || lstat (filename, &statbuf) != 0)
+	{
+	  int save_errno = errno;
+	  gchar *filename_utf8 = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
+	  g_set_error (error,
+		       GTK_FILE_SYSTEM_ERROR,
+		       GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
+		       _("error getting information for '%s': %s"),
+		       filename_utf8 ? filename_utf8 : "???",
+		       g_strerror (save_errno));
+	  g_free (filename_utf8);
 
-      return ICON_NONE;
+	  return ICON_NONE;
+	}
     }
 
   if (S_ISBLK (statbuf.st_mode))
@@ -1387,21 +1389,22 @@ filename_get_info (const gchar     *filename,
 
   /* If stat fails, try to fall back to lstat to catch broken links
    */
-  if (do_stat &&
-      stat (filename, &statbuf) != 0 &&
-      lstat (filename, &statbuf) != 0)
+  if (do_stat && stat (filename, &statbuf) != 0)
     {
-      int save_errno = errno;
-      gchar *filename_utf8 = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
-      g_set_error (error,
-		   GTK_FILE_SYSTEM_ERROR,
-		   GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
-		   _("error getting information for '%s': %s"),
-		   filename_utf8 ? filename_utf8 : "???",
-		   g_strerror (save_errno));
-      g_free (filename_utf8);
+      if (errno != ENOENT || lstat (filename, &statbuf) != 0)
+	{
+	  int save_errno = errno;
+	  gchar *filename_utf8 = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
+	  g_set_error (error,
+		       GTK_FILE_SYSTEM_ERROR,
+		       GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
+		       _("error getting information for '%s': %s"),
+		       filename_utf8 ? filename_utf8 : "???",
+		       g_strerror (save_errno));
+	  g_free (filename_utf8);
 
-      return NULL;
+	  return NULL;
+	}
     }
 
   info = gtk_file_info_new ();
