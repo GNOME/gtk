@@ -1,3 +1,8 @@
+Thu Apr  6 19:25:39 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkimcontext.c: Move default implementations to real_* vfuncs,
+	so that we can derive from gtkimcontext in language bindings properly.
+
 Thu Apr  6 16:02:52 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkimcontextsimple.[ch]: Use gdk_keyval_to_unicode to gdk_unicode_to_keyval.

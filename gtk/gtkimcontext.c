@@ -33,6 +33,12 @@ static guint im_context_signals[LAST_SIGNAL] = { 0 };
 static void gtk_im_context_class_init (GtkIMContextClass *class);
 static void gtk_im_context_init (GtkIMContext *im_context);
 
+static void     gtk_im_context_real_get_preedit_string (GtkIMContext       *context,
+							gchar             **str,
+							PangoAttrList     **attrs);
+static gboolean gtk_im_context_real_filter_keypress    (GtkIMContext       *context,
+							GdkEventKey        *event);
+
 GtkType
 gtk_im_context_get_type (void)
 {
@@ -59,11 +65,11 @@ gtk_im_context_get_type (void)
 }
 
 static void
-gtk_im_context_class_init (GtkIMContextClass *class)
+gtk_im_context_class_init (GtkIMContextClass *klass)
 {
   GtkObjectClass *object_class;
   
-  object_class = (GtkObjectClass*) class;
+  object_class = (GtkObjectClass*) klass;
 
   im_context_signals[PREEDIT_START] =
     gtk_signal_new ("preedit_start",
@@ -97,6 +103,9 @@ gtk_im_context_class_init (GtkIMContextClass *class)
 		    gtk_marshal_NONE__STRING,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_STRING);
+
+  klass->get_preedit_string = gtk_im_context_real_get_preedit_string;
+  klass->filter_keypress = gtk_im_context_real_filter_keypress;
   
   gtk_object_class_add_signals (object_class, im_context_signals, LAST_SIGNAL);
 }
@@ -104,6 +113,24 @@ gtk_im_context_class_init (GtkIMContextClass *class)
 static void
 gtk_im_context_init (GtkIMContext *im_context)
 {
+}
+
+static void
+gtk_im_context_real_get_preedit_string (GtkIMContext       *context,
+					gchar             **str,
+					PangoAttrList     **attrs)
+{
+  if (str)
+    *str = g_strdup ("");
+  if (attrs)
+    *attrs = pango_attr_list_new ();
+}
+
+static gboolean
+gtk_im_context_real_filter_keypress (GtkIMContext       *context,
+				     GdkEventKey        *event)
+{
+  return FALSE;
 }
 
 /**
@@ -156,15 +183,7 @@ gtk_im_context_get_preedit_string (GtkIMContext   *context,
   g_return_if_fail (GTK_IS_IM_CONTEXT (context));
   
   klass = (GtkIMContextClass *)((GtkObject *)(context))->klass;
-  if (klass->get_preedit_string)
-    klass->get_preedit_string (context, str, attrs);
-  else
-    {
-      if (str)
-	*str = g_strdup ("");
-      if (attrs)
-	*attrs = pango_attr_list_new ();
-    }
+  klass->get_preedit_string (context, str, attrs);
 }
 
 /**
@@ -190,10 +209,7 @@ gtk_im_context_filter_keypress (GtkIMContext *context,
   g_return_val_if_fail (key != NULL, FALSE);
 
   klass = (GtkIMContextClass *)((GtkObject *)(context))->klass;
-  if (klass->filter_keypress)
-    return klass->filter_keypress (context, key);
-  else
-    return FALSE;
+  return klass->filter_keypress (context, key);
 }
 
 /**
