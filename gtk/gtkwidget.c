@@ -825,7 +825,8 @@ gtk_widget_set_arg (GtkWidget	*widget,
       gtk_widget_set_style (widget, (GtkStyle*) GTK_VALUE_BOXED (*arg));
       break;
     case ARG_EVENTS:
-      gtk_widget_set_events (widget, GTK_VALUE_FLAGS (*arg));
+      if (!GTK_WIDGET_REALIZED (widget) && !GTK_WIDGET_NO_WINDOW (widget))
+	gtk_widget_set_events (widget, GTK_VALUE_FLAGS (*arg));
       break;
     case ARG_EXTENSION_EVENTS:
       gtk_widget_set_extension_events (widget, GTK_VALUE_FLAGS (*arg));

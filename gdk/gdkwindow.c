@@ -1285,7 +1285,8 @@ gdk_window_get_origin (GdkWindow *window,
   GdkWindowPrivate *private;
   gint return_val;
   Window child;
-  gint tx, ty;
+  gint tx = 0;
+  gint ty = 0;
 
   g_return_val_if_fail (window != NULL, 0);
 
@@ -1299,13 +1300,14 @@ gdk_window_get_origin (GdkWindow *window,
 					  0, 0, &tx, &ty,
 					  &child);
       
-      if (x)
-	*x = tx;
-      if (y)
-	*y = ty;
     }
   else
     return_val = 0;
+  
+  if (x)
+    *x = tx;
+  if (y)
+    *y = ty;
   
   return return_val;
 }
@@ -1321,8 +1323,9 @@ gdk_window_get_pointer (GdkWindow       *window,
   Window root;
   Window child;
   int rootx, rooty;
-  int winx, winy;
-  unsigned int xmask;
+  int winx = 0;
+  int winy = 0;
+  unsigned int xmask = 0;
 
   if (!window)
     window = (GdkWindow*) &gdk_root_parent;
@@ -1334,13 +1337,16 @@ gdk_window_get_pointer (GdkWindow       *window,
       XQueryPointer (private->xdisplay, private->xwindow, &root, &child,
 		     &rootx, &rooty, &winx, &winy, &xmask))
     {
-      if (x) *x = winx;
-      if (y) *y = winy;
-      if (mask) *mask = xmask;
-      
       if (child)
 	return_val = gdk_window_lookup (child);
     }
+  
+  if (x)
+    *x = winx;
+  if (y)
+    *y = winy;
+  if (mask)
+    *mask = xmask;
   
   return return_val;
 }

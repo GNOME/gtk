@@ -1,3 +1,21 @@
+Wed Jun 24 16:38:02 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkbin.c (gtk_bin_remove): do not avoid to queue for a resize
+	if the container is not visible, we might be a toplevel! this holds
+	for all other base container implementations as well, that are
+ 	candidates to derive toplevels from. in general the resizing code will
+	care about visibility itself.
+	* gtk/gtkmenushell.c (gtk_menu_shell_remove): likewise.
+	* gtk/gtkbox.c (gtk_box_remove): likewise.
+
+	* gtk/gtkwindow.c (gtk_window_move_resize): save ->use_uposition around
+	gtk_window_set_hints(), since we haven't calculated the new position
+	yet.
+
+	* gdk/gdkwindow.c (gdk_window_get_pointer): take care that *x, *y and
+	*mask are alway initialized in a sane way, regardless of the return
+ 	value.
+
 Wed Jun 24 14:14:32 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkcontainer.c: new function gtk_container_child_arg_set, similar
@@ -351,7 +369,6 @@ Wed Jun 17 03:47:40 1998  Tim Janik  <timj@gtk.org>
 
 	* more GtkType and macro fixups.
 
->>>>>>> 1.476
 1998-06-16  Federico Mena Quintero  <federico@nuclecu.unam.mx>
 
 	* gtk/gtkhandlebox.c (draw_textured_frame): Now accepts an extra

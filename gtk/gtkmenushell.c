@@ -553,7 +553,10 @@ gtk_menu_shell_remove (GtkContainer *container,
   
   gtk_widget_unparent (widget);
   
-  if (was_visible && GTK_WIDGET_VISIBLE (container))
+  /* queue resize regardless of GTK_WIDGET_VISIBLE (container),
+   * since that's what is needed by toplevels.
+   */
+  if (was_visible)
     gtk_widget_queue_resize (GTK_WIDGET (container));
 }
 

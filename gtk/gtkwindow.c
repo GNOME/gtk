@@ -991,10 +991,16 @@ gtk_window_move_resize (GtkWindow *window)
   width = widget->requisition.width;
   height = widget->requisition.height;
   gtk_widget_size_request (widget, &widget->requisition);
-  
+
   if ((width != widget->requisition.width ||
        height != widget->requisition.height))
-    gtk_window_set_hints (widget, &widget->requisition);
+    {
+      gboolean saved_use_upos;
+
+      saved_use_upos = window->use_uposition;
+      gtk_window_set_hints (widget, &widget->requisition);
+      window->use_uposition = saved_use_upos;
+    }
   
   x = -1;
   y = -1;

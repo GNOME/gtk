@@ -251,7 +251,10 @@ gtk_bin_remove (GtkContainer *container,
       gtk_widget_unparent (widget);
       bin->child = NULL;
 
-      if (widget_was_visible && GTK_WIDGET_VISIBLE (container))
+      /* queue resize regardless of GTK_WIDGET_VISIBLE (container),
+       * since that's what is needed by toplevels, which derive from GtkBin.
+       */
+      if (widget_was_visible)
         gtk_widget_queue_resize (GTK_WIDGET (container));
     }
 }

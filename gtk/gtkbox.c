@@ -711,16 +711,19 @@ gtk_box_remove (GtkContainer *container,
 
       if (child->widget == widget)
 	{
-	  gint visible;
+	  gboolean was_visible;
 
-	  visible = GTK_WIDGET_VISIBLE (widget);
+	  was_visible = GTK_WIDGET_VISIBLE (widget);
 	  gtk_widget_unparent (widget);
 
 	  box->children = g_list_remove_link (box->children, children);
 	  g_list_free (children);
 	  g_free (child);
 
-	  if (visible && GTK_WIDGET_VISIBLE (container))
+	  /* queue resize regardless of GTK_WIDGET_VISIBLE (container),
+	   * since that's what is needed by toplevels.
+	   */
+	  if (was_visible)
 	    gtk_widget_queue_resize (GTK_WIDGET (container));
 
 	  break;
