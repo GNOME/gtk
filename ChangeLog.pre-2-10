@@ -1,3 +1,11 @@
+Wed Jun  4 19:42:17 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkpango.c (gdk_draw_layout_line_with_colors):
+	When drawing underlines, join up adjacent runs
+	where possible, so we don't get changes in 
+	shaper/font/etc. breaking underlines. (#103662,
+	Kang Jeong-Hee)
+
 Wed Jun  4 19:22:58 2003  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_level_find_insert):
