@@ -1,3 +1,8 @@
+Fri Jul 23 01:00:15 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtksocket.c (gtk_socket_size_request): asure that the requested
+	width and height are always >0 (owen).
+
 Fri Jul 23 00:00:47 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwidget.c (gtk_widget_size_allocate): backed out my recent
