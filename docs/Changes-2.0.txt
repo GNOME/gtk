@@ -293,3 +293,6 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
   broken widgets are not declared in the headers by default; to use
   them, define the symbol GTK_ENABLE_BROKEN during compilation.  In
   some future release, these widgets will be removed from GTK+.
+
+- GdkColorContext is gone; you probably weren't using it anyway.
+  Use GdkColormap and the gdk_rgb_* functions instead.

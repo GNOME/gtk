@@ -189,7 +189,18 @@ gtk_bin_add (GtkContainer *container,
   g_return_if_fail (GTK_IS_WIDGET (child));
 
   bin = GTK_BIN (container);
-  g_return_if_fail (bin->child == NULL);
+
+  if (bin->child != NULL)
+    {
+      g_warning ("Attempting to add a widget with type %s to a %s, "
+                 "but as a GtkBin subclass a %s can only contain one widget at a time; "
+                 "it already contains a widget of type %s",
+                 g_type_name (G_TYPE_FROM_INSTANCE (child)),
+                 g_type_name (G_TYPE_FROM_INSTANCE (bin)),
+                 g_type_name (G_TYPE_FROM_INSTANCE (bin)),
+                 g_type_name (G_TYPE_FROM_INSTANCE (bin->child)));
+      return;
+    }
 
   gtk_widget_set_parent (child, GTK_WIDGET (bin));
   bin->child = child;

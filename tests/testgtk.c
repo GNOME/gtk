@@ -1988,7 +1988,6 @@ static GtkWidget*
 create_sensitivity_control (GtkWidget *widget)
 {
   GtkWidget *button;
-  GtkWidget *toplevel;
 
   button = gtk_toggle_button_new_with_label ("Sensitive");  
 
@@ -2442,6 +2441,20 @@ create_pixmap (void)
       gtk_container_add (GTK_CONTAINER (box3), label);
       gtk_container_add (GTK_CONTAINER (button), box3);
 
+      button = gtk_button_new ();
+      gtk_box_pack_start (GTK_BOX (box2), button, FALSE, FALSE, 0);
+      
+      pixmapwid = new_pixmap ("test.xpm", window->window, NULL);
+
+      label = gtk_label_new ("Pixmap\ntest");
+      box3 = gtk_hbox_new (FALSE, 0);
+      gtk_container_set_border_width (GTK_CONTAINER (box3), 2);
+      gtk_container_add (GTK_CONTAINER (box3), pixmapwid);
+      gtk_container_add (GTK_CONTAINER (box3), label);
+      gtk_container_add (GTK_CONTAINER (button), box3);
+
+      gtk_widget_set_sensitive (button, FALSE);
+      
       separator = gtk_hseparator_new ();
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
 

@@ -51,7 +51,6 @@ LDFLAGS = @STRIP_BEGIN@ 					\
 #
 gdk_public_h_sources = @STRIP_BEGIN@ \
 	gdk.h		\
-	gdkcc.h		\
 	gdkcolor.h	\
 	gdkcompat.h	\
 	gdkcursor.h     \

@@ -43,7 +43,6 @@ endif
 
 libgdk_x11_la_SOURCES =    	\
 	MwmUtil.h	   	\
-	gdkcc-x11.c	   	\
 	gdkcolor-x11.c	   	\
 	gdkcursor-x11.c	   	\
 	gdkdnd-x11.c	   	\

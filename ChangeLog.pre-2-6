@@ -1,3 +1,24 @@
+2001-02-08  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtkbin.c (gtk_bin_add): better error message if you try to
+	add a widget to a bin that already has a child.
+
+	* gdk/gdkcc.h, gdk/gdkcc-x11.c: Remove GdkColorContext, #50512
+
+	* docs/Changes-2.0.txt: note that GdkColorContext is gone.
+	
+	* gdk/x11/Makefile.am (libgdk_x11_la_SOURCES): remove gdkcc-x11.c
+
+	* gdk/gdk.h: remove gdkcc.h
+
+	* gdk/Makefile.am (gdk_public_h_sources): remove gdkcc.h
+
+	* gtk/gtkpixmap.c (build_insensitive_pixmap): rewrite using
+	GdkPixbuf, since the previous implementation was GdkColorContext
+	dependent.
+
+	* gtk/testgtk.c (create_pixmap): add test for insensitive GtkPixmap
+	
 Thu Feb  8 19:00:00 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (TREE_VIEW_VERTICAL_SEPARATOR): moved back to

@@ -261,98 +261,43 @@ gtk_pixmap_set_build_insensitive (GtkPixmap *pixmap, guint build)
 static void
 build_insensitive_pixmap(GtkPixmap *gtkpixmap)
 {
-  GdkGC *gc;
   GdkPixmap *pixmap = gtkpixmap->pixmap;
   GdkPixmap *insensitive;
-  gint w, h, x, y;
-  GdkGCValues vals;
-  GdkVisual *visual;
-  GdkImage *image;
-  GdkColorContext *cc;
-  GdkColor color;
-  GdkColormap *cmap;
-  gint32 red, green, blue;
-  GtkStyle *style;
-  GtkWidget *window;
-  GdkColor c;
-  int failed;
+  gint w, h;
+  GdkPixbuf *pixbuf;
+  GdkPixbuf *stated;
+  
+  gdk_window_get_size (pixmap, &w, &h);
 
-  window = GTK_WIDGET (gtkpixmap);
+  pixbuf = gdk_pixbuf_get_from_drawable (NULL,
+                                         pixmap,
+                                         gtk_widget_get_colormap (GTK_WIDGET(gtkpixmap)),
+                                         0, 0,
+                                         0, 0,
+                                         w, h);
+  
+  stated = gdk_pixbuf_copy (pixbuf);
+  
+  gdk_pixbuf_saturate_and_pixelate (pixbuf, stated,
+                                    0.8, TRUE);
 
-  g_return_if_fail(window != NULL);
+  g_object_unref (G_OBJECT (pixbuf));
+  pixbuf = NULL;
+  
+  insensitive = gdk_pixmap_new (GTK_WIDGET (gtkpixmap)->window, w, h, -1);
 
-  gdk_window_get_size(pixmap, &w, &h);
-  image = gdk_image_get(pixmap, 0, 0, w, h);
-  insensitive = gdk_pixmap_new(GTK_WIDGET (gtkpixmap)->window, w, h, -1);
-  gc = gdk_gc_new (pixmap);
-
-  visual = gtk_widget_get_visual(GTK_WIDGET(gtkpixmap));
-  cmap = gtk_widget_get_colormap(GTK_WIDGET(gtkpixmap));
-  cc = gdk_color_context_new(visual, cmap);
-
-  if ((cc->mode != GDK_CC_MODE_TRUE) && (cc->mode != GDK_CC_MODE_MY_GRAY)) 
-    {
-      gdk_draw_image(insensitive, gc, image, 0, 0, 0, 0, w, h);
-
-      style = gtk_widget_get_style(window);
-      color = style->bg[0];
-      gdk_gc_set_foreground (gc, &color);
-      for (y = 0; y < h; y++) 
-        {
-          for (x = y % 2; x < w; x += 2) 
-	    {
-              gdk_draw_point(insensitive, gc, x, y);
-            }
-        }
-    }
-  else
-    {
-      gdk_gc_get_values(gc, &vals);
-      style = gtk_widget_get_style(window);
-
-      color = style->bg[0];
-      red = color.red;
-      green = color.green;
-      blue = color.blue;
-
-      for (y = 0; y < h; y++) 
-	{
-	  for (x = 0; x < w; x++) 
-	    {
-	      c.pixel = gdk_image_get_pixel(image, x, y);
-	      gdk_color_context_query_color(cc, &c);
-	      c.red = (((gint32)c.red - red) >> 1) + red;
-	      c.green = (((gint32)c.green - green) >> 1) + green;
-	      c.blue = (((gint32)c.blue - blue) >> 1) + blue;
-	      c.pixel = gdk_color_context_get_pixel(cc, c.red, c.green, c.blue,
-						    &failed);
-	      gdk_image_put_pixel(image, x, y, c.pixel);
-	    }
-	}
-
-      for (y = 0; y < h; y++) 
-	{
-	  for (x = y % 2; x < w; x += 2) 
-	    {
-	      c.pixel = gdk_image_get_pixel(image, x, y);
-	      gdk_color_context_query_color(cc, &c);
-	      c.red = (((gint32)c.red - red) >> 1) + red;
-	      c.green = (((gint32)c.green - green) >> 1) + green;
-	      c.blue = (((gint32)c.blue - blue) >> 1) + blue;
-	      c.pixel = gdk_color_context_get_pixel(cc, c.red, c.green, c.blue,
-						    &failed);
-	      gdk_image_put_pixel(image, x, y, c.pixel);
-	    }
-	}
-
-      gdk_draw_image(insensitive, gc, image, 0, 0, 0, 0, w, h);
-    }
+  gdk_pixbuf_render_to_drawable (stated,
+                                 insensitive,
+                                 GTK_WIDGET (gtkpixmap)->style->white_gc,
+                                 0, 0,
+                                 0, 0,
+                                 w, h,
+                                 GDK_RGB_DITHER_NORMAL,
+                                 0, 0);
 
   gtkpixmap->pixmap_insensitive = insensitive;
 
-  gdk_image_destroy(image);
-  gdk_color_context_free(cc);
-  gdk_gc_destroy(gc);
+  g_object_unref (G_OBJECT (stated));
 }
 
 
