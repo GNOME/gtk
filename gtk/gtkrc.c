@@ -42,6 +42,7 @@
 typedef struct _GtkRcSet    GtkRcSet;
 typedef struct _GtkRcNode   GtkRcNode;
 typedef struct _GtkRcFile   GtkRcFile;
+typedef struct _GtkRcStylePrivate  GtkRcStylePrivate;
 
 struct _GtkRcSet
 {
@@ -55,6 +56,15 @@ struct _GtkRcFile
   gchar *name;
   gchar *canonical_name;
   gboolean reload;
+};
+
+struct _GtkRcStylePrivate
+{
+  GtkRcStyle style;
+
+  guint ref_count;
+  /* list of RC style lists including this RC style */
+  GSList *rc_style_lists;
 };
 
 static guint	   gtk_rc_style_hash		   (const char   *name);
@@ -396,8 +406,6 @@ gtk_rc_init (void)
   guint length;
   char *p;
 
-  rc_style_ht = g_hash_table_new ((GHashFunc) gtk_rc_style_hash,
-				  (GCompareFunc) gtk_rc_style_compare);
   pixmap_path[0] = NULL;
   module_path[0] = NULL;
   gtk_rc_append_default_pixmap_path();
@@ -550,12 +558,12 @@ gtk_rc_parse (const gchar *filename)
 GtkRcStyle *
 gtk_rc_style_new              (void)
 {
-  GtkRcStyle *new_style;
+  GtkRcStylePrivate *new_style;
 
-  new_style = g_new0 (GtkRcStyle, 1);
+  new_style = g_new0 (GtkRcStylePrivate, 1);
   new_style->ref_count = 1;
 
-  return new_style;
+  return (GtkRcStyle *)new_style;
 }
 
 void      
@@ -563,21 +571,24 @@ gtk_rc_style_ref (GtkRcStyle  *rc_style)
 {
   g_return_if_fail (rc_style != NULL);
 
-  rc_style->ref_count++;
+  ((GtkRcStylePrivate *)rc_style)->ref_count++;
 }
 
 void      
 gtk_rc_style_unref (GtkRcStyle  *rc_style)
 {
+  GtkRcStylePrivate *private = (GtkRcStylePrivate *)rc_style;
   gint i;
 
   g_return_if_fail (rc_style != NULL);
-  g_return_if_fail (rc_style->ref_count > 0);
+  g_return_if_fail (private->ref_count > 0);
 
-  rc_style->ref_count--;
+  private->ref_count--;
 
-  if (rc_style->ref_count == 0)
+  if (private->ref_count == 0)
     {
+      GSList *tmp_list1, *tmp_list2;
+	
       if (rc_style->engine)
 	{
 	  rc_style->engine->destroy_rc_style (rc_style);
@@ -595,16 +606,41 @@ gtk_rc_style_unref (GtkRcStyle  *rc_style)
 	if (rc_style->bg_pixmap_name[i])
 	  g_free (rc_style->bg_pixmap_name[i]);
       
-      g_free (rc_style);
-    }
-}
+      /* Now remove all references to this rc_style from
+       * realized_style_ht
+       */
+      tmp_list1 = private->rc_style_lists;
+      while (tmp_list1)
+	{
+	  GSList *rc_styles = tmp_list1->data;
+	  GtkStyle *style = g_hash_table_lookup (realized_style_ht, rc_styles);
+	  gtk_style_unref (style);
 
-static void
-gtk_rc_clear_realized_node (gpointer key,
-			    gpointer data,
-			    gpointer user_data)
-{
-  gtk_style_unref (data);
+	  /* Remove the list of styles from the other rc_styles
+	   * in the list
+	   */
+	  tmp_list2 = rc_styles;
+	  while (tmp_list2)
+	    {
+	      GtkRcStylePrivate *other_style = tmp_list2->data;
+
+	      if (other_style != private)
+		other_style->rc_style_lists = g_slist_remove (other_style->rc_style_lists, rc_styles);
+
+	      tmp_list2 = tmp_list2->next;
+	    }
+
+	  /* And from the hash table itself
+	   */
+	  g_hash_table_remove (realized_style_ht, rc_styles);
+	  g_slist_free (rc_styles);
+
+	  tmp_list1 = tmp_list1->next;
+	}
+      g_slist_free (private->rc_style_lists);
+
+      g_free (private);
+    }
 }
 
 static void
@@ -642,13 +678,6 @@ gtk_rc_clear_styles (void)
       rc_style_ht = NULL;
     }
 
-  if (realized_style_ht)
-    {
-      g_hash_table_foreach (realized_style_ht, gtk_rc_clear_realized_node, NULL);
-      g_hash_table_destroy (realized_style_ht);
-      realized_style_ht = NULL;
-    }
-
   gtk_rc_free_rc_sets (gtk_rc_sets_widget);
   g_slist_free (gtk_rc_sets_widget);
   gtk_rc_sets_widget = NULL;
@@ -660,8 +689,6 @@ gtk_rc_clear_styles (void)
   gtk_rc_free_rc_sets (gtk_rc_sets_class);
   g_slist_free (gtk_rc_sets_class);
   gtk_rc_sets_class = NULL;
-
-  gtk_rc_init ();
 }
 
 gboolean
@@ -998,11 +1025,10 @@ gtk_rc_style_compare (const char *a,
 static GtkRcStyle*
 gtk_rc_style_find (const char *name)
 {
-  GtkRcStyle *rc_style;
-  
-  rc_style = g_hash_table_lookup (rc_style_ht, (gpointer) name);
-  
-  return rc_style;
+  if (rc_style_ht)
+    return g_hash_table_lookup (rc_style_ht, (gpointer) name);
+  else
+    return NULL;
 }
 
 /* Assumes ownership of rc_style */
@@ -1065,7 +1091,6 @@ gtk_rc_style_init (GSList *rc_styles)
   gint i;
 
   GtkStyle *style = NULL;
-  GtkRcStyle *proto_style;
 
   if (!realized_style_ht)
     realized_style_ht = g_hash_table_new ((GHashFunc)gtk_rc_styles_hash,
@@ -1075,13 +1100,16 @@ gtk_rc_style_init (GSList *rc_styles)
 
   if (!style)
     {
-      GSList *tmp_styles = rc_styles;
+      GtkRcStyle *proto_style;
+      GSList *tmp_styles;
       
       proto_style = gtk_rc_style_new ();
 
+      tmp_styles = rc_styles;
       while (tmp_styles)
 	{
 	  GtkRcStyle *rc_style = tmp_styles->data;
+	  GtkRcStylePrivate *rc_style_private;
 
 	  for (i=0; i<5; i++)
 	    {
@@ -1128,6 +1156,11 @@ gtk_rc_style_init (GSList *rc_styles)
 	  if (proto_style->engine &&
 	      (proto_style->engine == rc_style->engine))
 	    proto_style->engine->merge_rc_style (proto_style, rc_style);
+
+	  /* Point from each rc_style to the list of styles */
+
+	  rc_style_private = (GtkRcStylePrivate *)rc_style;
+	  rc_style_private->rc_style_lists = g_slist_prepend (rc_style_private->rc_style_lists, rc_styles);
 
 	  tmp_styles = tmp_styles->next;
 	}
@@ -1220,7 +1253,7 @@ gtk_rc_parse_style (GScanner *scanner)
     return G_TOKEN_STRING;
   
   insert = FALSE;
-  rc_style = g_hash_table_lookup (rc_style_ht, scanner->value.v_string);
+  rc_style = gtk_rc_style_find (scanner->value.v_string);
   
   if (!rc_style)
     {
@@ -1252,7 +1285,7 @@ gtk_rc_parse_style (GScanner *scanner)
 	  return G_TOKEN_STRING;
 	}
       
-      parent_style = g_hash_table_lookup (rc_style_ht, scanner->value.v_string);
+      parent_style = gtk_rc_style_find (scanner->value.v_string);
       if (parent_style)
 	{
 	  for (i = 0; i < 5; i++)
@@ -1368,7 +1401,13 @@ gtk_rc_parse_style (GScanner *scanner)
     }
   
   if (insert)
-    g_hash_table_insert (rc_style_ht, rc_style->name, rc_style);
+    {
+      if (!rc_style_ht)
+	rc_style_ht = g_hash_table_new ((GHashFunc) gtk_rc_style_hash,
+					(GCompareFunc) gtk_rc_style_compare);
+      
+      g_hash_table_insert (rc_style_ht, rc_style->name, rc_style);
+    }
   
   return G_TOKEN_NONE;
 }

@@ -1,3 +1,22 @@
+Tue Aug 31 13:05:03 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtkrc.h: Move the ref_count member out of the GtkRcStyle
+	structure into a new private structure.
+
+	* gtkrc.c: Split GtkRcStyle into public/private.
+	In the private part, add a list of pointers to the
+	RcStyle lists this RcStyle participates in.
+
+	* gtkrc.c: When a RcStyle is free, remove all
+	lists referencing it from the 
+	realized_style_ht hash, and free those lists.
+	
+	* gtk/gtkrc.c (gtk_rc_clear_styles): Don't call
+	gtk_rc_init(), since that adds the default styles
+	to the list of parsed RC files again.
+
+	* gtk/gtkrc.c: Use gtk_rc_style_find() consistently.
+	
 Mon Aug 30 19:00:00 1999 Pablo Saratxaga <srtxg@chanae.alphanet.ch>
 	* gtk/gtkfontsel.c: little i18n patch backported from gtk+ 1.3.0
 	( now all font properties showing in the font selector are 
