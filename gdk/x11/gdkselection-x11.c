@@ -271,7 +271,21 @@ gdk_selection_property_get (GdkWindow  *requestor,
   if (prop_type != None)
     {
       *data = g_new (guchar, length);
-      memcpy (*data, t, length);
+      
+      if (prop_type == GDK_SELECTION_TYPE_ATOM)
+      {
+         GdkAtom* atoms = (GdkAtom*) t;
+         GdkAtom* atoms_dest  = (GdkAtom*) *data;
+	 int num_atom, i; 
+	 num_atom = (length - 1) / sizeof (GdkAtom);
+	 for (i=0;i < num_atom;i++)
+	 {
+	   atoms_dest[i] = gdk_x11_get_virtual_atom (GDK_DRAWABLE_DISPLAY (requestor),
+					             atoms[i]);
+	 }
+      }else{
+	memcpy (*data, t, length);
+      }
       if (t)
 	XFree (t);
       return length-1;

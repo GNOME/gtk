@@ -2036,18 +2036,14 @@ gdk_window_get_pointer (GdkWindow       *window,
   unsigned int xmask = 0;
   gint xoffset, yoffset;
 
+  g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), NULL);
+
   if (!window)
   {
     GDK_NOTE (MULTIHEAD, 
 	     g_message("window arg is need for multihead safe operation\n"));
     window = GDK_SCREEN_IMPL_X11 (gdk_get_default_screen())->root_window;
   }
-  if (!GDK_IS_WINDOW (window))
-  {
-    g_print ("no a window\n");
-  }
-
-  g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), NULL);
 
   _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
 

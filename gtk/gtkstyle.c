@@ -624,7 +624,8 @@ gtk_style_finalize (GObject *object)
         }
     }
   
-  gdk_font_unref (style->font);
+  if (style->font)
+    gdk_font_unref (style->font);
   pango_font_description_free (style->font_desc);
   
   if (style->rc_style)
@@ -1273,12 +1274,8 @@ gtk_style_real_init_from_rc (GtkStyle   *style,
       pango_font_description_free (style->font_desc);
       style->font_desc = pango_font_description_copy (rc_style->font_desc);
 
-      old_font = style->font;
-      style->font = gdk_font_from_description (style->font_desc);
       if (style->font)
-	gdk_font_unref (old_font);
-      else
-	style->font = old_font;
+	gdk_font_unref (style->font);
     }
     
   for (i = 0; i < 5; i++)
