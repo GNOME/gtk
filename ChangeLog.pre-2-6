@@ -1,3 +1,8 @@
+Tue Sep 24 06:17:37 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkeventbox.c (gtk_event_box_paint): Honor
+	GTK_WIDGET_APP_PAINTABLE() (#92305, Jonathan Blandford.)
+
 Tue Sep 24 05:26:31 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdk.h gdk/gdkdisplay.c gdk/linux-fb/gdkevents-fb.c 

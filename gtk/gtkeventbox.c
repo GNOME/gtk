@@ -185,10 +185,11 @@ static void
 gtk_event_box_paint (GtkWidget    *widget,
 		     GdkRectangle *area)
 {
-  gtk_paint_flat_box (widget->style, widget->window,
-		      widget->state, GTK_SHADOW_NONE,
-		      area, widget, "eventbox",
-		      0, 0, -1, -1);
+  if (!GTK_WIDGET_APP_PAINTABLE (widget))
+    gtk_paint_flat_box (widget->style, widget->window,
+			widget->state, GTK_SHADOW_NONE,
+			area, widget, "eventbox",
+			0, 0, -1, -1);
 }
 
 static gint
