@@ -81,6 +81,7 @@ gtk_OBJECTS = \
 	gtkcheckmenuitem.obj \
 	gtkclist.obj	\
 	gtkcolorsel.obj	\
+	gtkcolorseldialog.obj \
 	gtkcombo.obj	\
 	gtkcontainer.obj \
 	gtkctree.obj	\
@@ -106,6 +107,7 @@ gtk_OBJECTS = \
 	gtkhscale.obj	\
 	gtkhscrollbar.obj \
 	gtkhseparator.obj \
+	gtkhsv.obj	\
 	gtkimage.obj	\
 	gtkinputdialog.obj \
 	gtkinvisible.obj \

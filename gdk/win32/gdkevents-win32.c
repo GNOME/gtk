@@ -2979,6 +2979,9 @@ gdk_event_translate (GdkEvent *event,
   window = gdk_window_lookup (xevent->hwnd);
   orig_window = window;
   
+  event->any.window = window;
+  event->any.send_event = FALSE;
+
   if (window != NULL)
     gdk_drawable_ref (window);
   else
@@ -3013,13 +3016,14 @@ gdk_event_translate (GdkEvent *event,
     {
       /* Check for filters for this window */
       GdkFilterReturn result;
-      event->any.window = window;
+
       result = gdk_event_apply_filters
 	(xevent, event, ((GdkWindowPrivate *) window)->filters);
       
       if (result != GDK_FILTER_CONTINUE)
 	{
-	  return (result == GDK_FILTER_TRANSLATE) ? TRUE : FALSE;
+	  return_val =  (result == GDK_FILTER_TRANSLATE) ? TRUE : FALSE;
+	  goto done;
 	}
     }
 
@@ -3104,7 +3108,7 @@ gdk_event_translate (GdkEvent *event,
 		  event->client.data.l[1] = xevent->lParam;
 		  break;
 		}
-	      goto bypass_switch; /* Ouch */
+	      goto done;
 	    }
 	  tmp_list = tmp_list->next;
 	}
@@ -3163,8 +3167,8 @@ gdk_event_translate (GdkEvent *event,
 			 xevent->lParam));
 
       ignore_WM_CHAR = TRUE;
-    keyup_or_down:
 
+    keyup_or_down:
       if (!propagate (&window, xevent,
 		      k_grab_window, k_grab_owner_events, GDK_ALL_EVENTS_MASK,
 		      doesnt_want_key))
@@ -4265,7 +4269,7 @@ gdk_event_translate (GdkEvent *event,
 				 xevent->wParam, xevent->lParam));
     }
 
-bypass_switch:
+done:
 
   if (return_val)
     {

@@ -519,14 +519,14 @@ compute_triangle (GtkHSV *hsv,
   center = priv->size / 2.0;
   outer = priv->size / 2.0;
   inner = outer - priv->ring_width;
-  angle = priv->h * 2.0 * M_PI;
+  angle = priv->h * 2.0 * G_PI;
   
   *hx = floor (center + cos (angle) * inner + 0.5);
   *hy = floor (center - sin (angle) * inner + 0.5);
-  *sx = floor (center + cos (angle + 2.0 * M_PI / 3.0) * inner + 0.5);
-  *sy = floor (center - sin (angle + 2.0 * M_PI / 3.0) * inner + 0.5);
-  *vx = floor (center + cos (angle + 4.0 * M_PI / 3.0) * inner + 0.5);
-  *vy = floor (center - sin (angle + 4.0 * M_PI / 3.0) * inner + 0.5);
+  *sx = floor (center + cos (angle + 2.0 * G_PI / 3.0) * inner + 0.5);
+  *sy = floor (center - sin (angle + 2.0 * G_PI / 3.0) * inner + 0.5);
+  *vx = floor (center + cos (angle + 4.0 * G_PI / 3.0) * inner + 0.5);
+  *vy = floor (center - sin (angle + 4.0 * G_PI / 3.0) * inner + 0.5);
 }
 
 /* Computes whether a point is inside the hue ring */
@@ -673,9 +673,9 @@ compute_v (GtkHSV *hsv,
   
   angle = atan2 (dy, dx);
   if (angle < 0.0)
-    angle += 2.0 * M_PI;
+    angle += 2.0 * G_PI;
   
-  return angle / (2.0 * M_PI);
+  return angle / (2.0 * G_PI);
 }
 
 /* Event handlers */
@@ -891,9 +891,9 @@ paint_ring (GtkHSV      *hsv,
 	  
 	  angle = atan2 (dy, dx);
 	  if (angle < 0.0)
-	    angle += 2.0 * M_PI;
+	    angle += 2.0 * G_PI;
 	  
-	  hue = angle / (2.0 * M_PI);
+	  hue = angle / (2.0 * G_PI);
 	  
 	  r = hue;
 	  g = 1.0;
@@ -958,8 +958,8 @@ paint_ring (GtkHSV      *hsv,
   
   gdk_draw_line (drawable, priv->gc,
 		 -x + center, -y + center,
-		 -x + center + cos (priv->h * 2.0 * M_PI) * center,
-		 -y + center - sin (priv->h * 2.0 * M_PI) * center);
+		 -x + center + cos (priv->h * 2.0 * G_PI) * center,
+		 -y + center - sin (priv->h * 2.0 * G_PI) * center);
   
   gdk_gc_set_clip_mask (priv->gc, NULL);
   gdk_bitmap_unref (mask);

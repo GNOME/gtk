@@ -1,3 +1,31 @@
+2000-05-17  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate): Plug same
+	refcount leaks as in the X11 backend.
+
+	* gdk/win32/gdkgc-win32.c (gdk_win32_gc_set_values): Logging
+	cosmetics.
+
+	* gdk/win32/gdkwindow-win32.c: Similar changes as in X11
+	backend. Add _gdk_windowing_window_destroy().
+
+	* gtk/gtkcolorsel.c: Include correct backend-specific header.
+	Don't use XColor unless on X11. (No GDK_VISUAL_STATIC_COLOR
+	either, but these probably do exist on nanox?)
+	
+	* gtk/gtkhsv.c: Use G_PI (fresh from <glib.h>) instead of M_PI
+	which isn't necessarily defined by <math.h>.
+
+	* gtk/gtkobject.c (gtk_object_init): Don't go up the class
+	ancestry past GtkObject.
+
+	* gtk/gtktypeutils.h: Mark GTK_TYPE_IDENTIFIER for export/import
+	from DLL on Win32.
+
+	* gtk/gtk.def: Update corresponding to recent changes.
+
+	* gtk/makefile.{cygwin,msc}: Updates.
+
 Fri May 12 18:46:51 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* docs/Changes-1.4.txt: A bit of editing.

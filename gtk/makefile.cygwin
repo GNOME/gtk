@@ -63,6 +63,7 @@ gtk_OBJECTS = \
 	gtkcheckmenuitem.o\
 	gtkclist.o	\
 	gtkcolorsel.o	\
+	gtkcolorseldialog.o \
 	gtkcombo.o	\
 	gtkcontainer.o	\
 	gtkctree.o	\
@@ -88,6 +89,7 @@ gtk_OBJECTS = \
 	gtkhscale.o	\
 	gtkhscrollbar.o \
 	gtkhseparator.o \
+	gtkhsv.o	\
 	gtkimage.o	\
 	gtkinputdialog.o\
 	gtkinvisible.o	\
@@ -172,6 +174,7 @@ source_headers = \
 	gtkcheckmenuitem.h	\
 	gtkclist.h		\
 	gtkcolorsel.h		\
+	gtkcolorseldialog.h	\
 	gtkcombo.h		\
 	gtkcontainer.h		\
 	gtkctree.h		\
@@ -199,6 +202,7 @@ source_headers = \
 	gtkhscale.h		\
 	gtkhscrollbar.h		\
 	gtkhseparator.h		\
+	gtkhsv.h		\
 	gtkimage.h		\
 	gtkinputdialog.h	\
 	gtkinvisible.h		\
@@ -291,10 +295,12 @@ gdk_headers = \
 gtkcompat.h : gtkcompat.h.win32
 	cp gtkcompat.h.win32 gtkcompat.h
 
+GENERATED = gtk.defs gtktypebuiltins.h gtktypebuiltins_vars.c gtktypebuiltins_ids.c gtktypebuiltins_evals.c gtkmarshal.h gtkmarshal.c
+
 #
 # Generated source files:
 #
-generated : gtk.defs gtktypebuiltins.h gtktypebuiltins_vars.c gtktypebuiltins_ids.c gtktypebuiltins_evals.c gtkmarshal.h gtkmarshal.c
+generated : $(GENERATED)
 
 gtk.defs : makeenums.pl gtk-boxed.defs $(source_headers) $(gdk_headers)
 	$(PERL) makeenums.pl defs $(source_headers) $(gdk_headers) >gd.tmp
@@ -327,85 +333,67 @@ gtkmarshal.h gtkmarshal.c : gtkmarshal.list genmarshal.pl
 #
 # Linking:
 #
-gtk-$(GTK_VER).dll : generated $(gtk_OBJECTS) gtk.def gtk-win32res.o
-	$(GLIB)/build-dll gtk $(GTK_VER) gtk.def $(gtk_OBJECTS) gtk-win32res.o -L ../gdk -lgdk-$(GTK_VER) -L$(INTL) -lgnu-intl -L $(GLIB) -lglib-$(GLIB_VER) -lgmodule-$(GLIB_VER) -lgdi32 -luser32
+gtk-$(GTK_VER).dll : generated $(gtk_OBJECTS) gtk.def 
+	$(GLIB)/build-dll gtk $(GTK_VER) gtk.def $(gtk_OBJECTS) -L ../gdk -lgdk-$(GTK_VER) -L$(INTL) -lgnu-intl -L $(GLIB) -lglib-$(GLIB_VER) -L $(GLIB)/gmodule -lgmodule-$(GLIB_VER) -L $(GLIB)/gobject -lgobject-$(GLIB_VER) -luser32
 
 .SUFFIXES: .c .o .i
-
-# Kludge to get the path to the win32 headers
-WIN32APIHEADERS = $(shell echo "\#include <winver.h>" | $(CC) -M -E - | tail -1 | sed -e 's![\\/]winver.h!!' | tr -d '\015')
-
-gtk-win32res.o : gtk.rc gtk-build.tmp
-	m4 -DBUILDNUMBER=`cat gtk-build.tmp` <gtk.rc >gtk-win32res.rc
-	windres --include-dir $(WIN32APIHEADERS) gtk-win32res.rc gtk-win32res.o
-	rm gtk-build.tmp gtk-win32res.rc
-
-# The *.stamp files aren't distributed. Thus, this takes care of only
-# tml building libraries with nonzero build number.
-
-ifeq ($(wildcard gtk-build.stamp),gtk-build.stamp)
-# Magic to bump the build number
-gtk-build.tmp :
-	bash -c "read number && echo $$[number+1]" <gtk-build.stamp >gtk-build.tmp
-	cp gtk-build.tmp gtk-build.stamp
-else
-# Use zero as build number.
-gtk-build.tmp :
-	echo 0 >gtk-build.tmp
-endif
 
 # General rule for compiling the objects into the DLL
 .c.o :
 	$(CC) $(CFLAGS) -c -DGTK_COMPILATION -DG_LOG_DOMAIN=\"Gtk\" $<
 
 .c.i :
-	$(CC) $(CFLAGS) -E -DGDK_COMPILATION -DG_LOG_DOMAIN=\"Gdk\" $< >$@
+	$(CC) $(CFLAGS) -E -DGTK_COMPILATION -DG_LOG_DOMAIN=\"Gtk\" $< >$@
 
 #
 # Test programs:
 #
 testdnd.exe : testdnd.o
-	$(CC) $(CFLAGS) -o $@ testdnd.o -L . -lgtk-$(GTK_VER) -L ../gdk -lgdk-$(GTK_VER) -L $(GLIB) -lglib-$(GLIB_VER) $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@ testdnd.o -L . -lgtk-$(GTK_VER) -L ../gdk -lgdk-$(GTK_VER) -L $(GLIB) -lglib-$(GLIB_VER) -L $(GLIB)/gobject -lgobject-$(GLIB_VER) $(LDFLAGS)
 
 # Must have separate rules for these objects that don't go in the DLL
 testdnd.o : testdnd.c
 	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"testdnd\" testdnd.c
 
 testgtk.exe : testgtk.o
-	$(CC) $(CFLAGS) -o $@  testgtk.o -L . -lgtk-$(GTK_VER) -L ../gdk -lgdk-$(GTK_VER) -L $(GLIB) -lglib-$(GLIB_VER) $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@  testgtk.o -L . -lgtk-$(GTK_VER) -L ../gdk -lgdk-$(GTK_VER) -L $(GLIB) -lglib-$(GLIB_VER) -L $(GLIB)/gobject -lgobject-$(GLIB_VER) $(LDFLAGS)
 
 testgtk.o : testgtk.c
 	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"testgtk\" testgtk.c
 
 testinput.exe : testinput.o
-	$(CC) $(CFLAGS) -o $@  testinput.o -L . -lgtk-$(GTK_VER) -L ../gdk -lgdk-$(GTK_VER) -L $(GLIB) -lglib-$(GLIB_VER) $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@  testinput.o -L . -lgtk-$(GTK_VER) -L ../gdk -lgdk-$(GTK_VER) -L $(GLIB) -lglib-$(GLIB_VER) -L $(GLIB)/gobject -lgobject-$(GLIB_VER) $(LDFLAGS)
 
 testinput.o : testinput.c
 	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"testinput\" testinput.c
 
 testrgb.exe : testrgb.o
-	$(CC) $(CFLAGS) -o $@  testrgb.o -L . -lgtk-$(GTK_VER) -L ../gdk -lgdk-$(GTK_VER) -L $(GLIB) -lglib-$(GLIB_VER) $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@  testrgb.o -L . -lgtk-$(GTK_VER) -L ../gdk -lgdk-$(GTK_VER) -L $(GLIB) -lglib-$(GLIB_VER) -L $(GLIB)/gobject -lgobject-$(GLIB_VER) $(LDFLAGS)
 
 testrgb.o : testrgb.c
 	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"testrgb\" testrgb.c
 
 testselection.exe : testselection.o
-	$(CC) $(CFLAGS) -o $@  testselection.o -L . -lgtk-$(GTK_VER) -L ../gdk -lgdk-$(GTK_VER) -L $(GLIB) -lglib-$(GLIB_VER) $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@  testselection.o -L . -lgtk-$(GTK_VER) -L ../gdk -lgdk-$(GTK_VER) -L $(GLIB) -lglib-$(GLIB_VER) -L $(GLIB)/gobject -lgobject-$(GLIB_VER)    $(LDFLAGS)
 
 testselection.o : testselection.c
 	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"testselection\" testselection.c
 
 testthreads.exe : testthreads.o
-	$(CC) $(CFLAGS) -o $@  testthreads.o -L . -lgtk-$(GTK_VER) -L ../gdk -lgdk-$(GTK_VER) -L $(GLIB) -lglib-$(GLIB_VER) -lgthread-$(GLIB_VER) $(PTHREAD_LIB) $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@  testthreads.o -L . -lgtk-$(GTK_VER) -L ../gdk -lgdk-$(GTK_VER) -L $(GLIB) -lglib-$(GLIB_VER) -L $(GLIB)/gthread -lgthread-$(GLIB_VER) -L $(GLIB)/gobject -lgobject-$(GLIB_VER) $(PTHREAD_LIB) $(LDFLAGS)
 
 testthreads.o : testthreads.c
 	$(CC) $(CFLAGS) -I$(PTHREAD_INC) -c -DG_LOG_DOMAIN=\"testthreads\" -DUSE_PTHREADS=1 testthreads.c
 
 simple.exe : simple.o
-	$(CC) $(CFLAGS) -o $@  simple.o -L . -lgtk-$(GTK_VER) -L ../gdk -lgdk-$(GTK_VER) -L $(GLIB) -lglib-$(GLIB_VER) $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@  simple.o -L . -lgtk-$(GTK_VER) -L ../gdk -lgdk-$(GTK_VER) -L $(GLIB) -lglib-$(GLIB_VER) -L $(GLIB)/gobject -lgobject-$(GLIB_VER) $(LDFLAGS)
 
 simple.o : simple.c
 	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"simple\" simple.c
+
+# The rmgen target removes just the generated source files
+rmgen:
+	-rm $(GENERATED)
 
 # The clean target doesn't remove the generated sources
 clean:

@@ -182,7 +182,7 @@ gtk_object_init (GtkObject      *object,
       needs_construction |= klass->construct_args != NULL;
       klass = g_type_class_peek_parent (klass);
     }
-  while (klass && !needs_construction);
+  while (klass && GTK_IS_OBJECT_CLASS (klass) && !needs_construction);
   if (!needs_construction)
     GTK_OBJECT_FLAGS (object) |= GTK_CONSTRUCTED;
 }

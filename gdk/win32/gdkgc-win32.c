@@ -566,7 +566,6 @@ gdk_win32_gc_set_values (GdkGC           *gc,
 {
   GDK_NOTE (MISC, g_print ("gdk_win32_gc_set_values: "));
   gdk_win32_gc_values_to_win32values (values, mask, gc);
-  GDK_NOTE (MISC, g_print ("\n"));
 }
 
 static void

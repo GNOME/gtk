@@ -242,8 +242,18 @@ GtkEnumValue*	gtk_type_enum_find_value	(GtkType	 enum_type,
 GtkFlagValue*	gtk_type_flags_find_value	(GtkType	 flags_type,
 						 const gchar	*value_name);
 
+#ifdef G_OS_WIN32
+#  ifdef GTK_COMPILATION
+#    define GTKTYPEUTILS_VAR __declspec(dllexport)
+#  else
+#    define GTKTYPEUTILS_VAR extern __declspec(dllimport)
+#  endif
+#else
+#  define GTKTYPEUTILS_VAR extern
+#endif
+
 /* urg */
-extern GType GTK_TYPE_IDENTIFIER;
+GTKTYPEUTILS_VAR GType GTK_TYPE_IDENTIFIER;
 
 
 #ifdef __cplusplus

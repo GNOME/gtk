@@ -77,15 +77,19 @@ gdk_win32_window_destroy (GdkDrawable *drawable)
 {
   if (!GDK_DRAWABLE_DESTROYED (drawable))
     {
-      if (GDK_DRAWABLE_TYPE (drawable) == GDK_WINDOW_FOREIGN)
-	gdk_xid_table_remove (GDK_DRAWABLE_XID (drawable));
+      if (GDK_DRAWABLE_TYPE (drawable) != GDK_WINDOW_FOREIGN)
+	{
+	  g_warning ("losing last reference to undestroyed window");
+	  _gdk_window_destroy (drawable, FALSE);
+	}
       else
-	g_warning ("losing last reference to undestroyed window\n");
+	/* We use TRUE here, to keep us from actually calling
+	 * DestroyWindow() on the window
+	 */
+	_gdk_window_destroy (drawable, TRUE);
+      
+      gdk_xid_table_remove (GDK_DRAWABLE_XID (drawable));
     }
-
-  if (GDK_WINDOW_WIN32DATA (drawable)->bg_type == GDK_WIN32_BG_PIXMAP
-      && GDK_WINDOW_WIN32DATA (drawable)->bg_pixmap != NULL)
-    gdk_drawable_unref (GDK_WINDOW_WIN32DATA (drawable)->bg_pixmap);
 
   g_free (GDK_DRAWABLE_WIN32DATA (drawable));
 }
@@ -529,140 +533,44 @@ gdk_window_foreign_new (guint32 anid)
   return window;
 }
 
-/* Call this function when you want a window and all its children to
- * disappear.  When xdestroy is true, a request to destroy the window
- * is sent out.  When it is false, it is assumed that the window has
- * been or will be destroyed by destroying some ancestor of this
- * window.
- */
-static void
-gdk_window_internal_destroy (GdkWindow *window,
-			     gboolean   xdestroy,
-			     gboolean   our_destroy)
+void
+_gdk_windowing_window_destroy (GdkWindow *window,
+			       gboolean   recursing,
+			       gboolean   foreign_destroy)
 {
-  GdkWindowPrivate *private;
-  GdkWindowPrivate *temp_private;
-  GdkWindow *temp_window;
-  GList *children;
-  GList *tmp;
+  GdkWindowPrivate *private = (GdkWindowPrivate *)window;
 
-  g_return_if_fail (window != NULL);
-
-  private = (GdkWindowPrivate *) window;
-
-  GDK_NOTE (MISC, g_print ("gdk_window_internal_destroy %#x\n",
+  GDK_NOTE (MISC, g_print ("_gdk_windowing_window_destroy %#x\n",
 			   GDK_DRAWABLE_XID (window)));
 
-  switch (GDK_DRAWABLE_TYPE (window))
+  if (private->extension_events != 0)
+    gdk_input_window_destroy (window);
+
+  if (private->drawable.window_type == GDK_WINDOW_FOREIGN)
     {
-    case GDK_WINDOW_TOPLEVEL:
-    case GDK_WINDOW_CHILD:
-    case GDK_WINDOW_DIALOG:
-    case GDK_WINDOW_TEMP:
-    case GDK_WINDOW_FOREIGN:
-      if (!private->drawable.destroyed)
+      if (!foreign_destroy && (private->parent != NULL))
 	{
-	  if (private->parent)
-	    {
-	      GdkWindowPrivate *parent_private = (GdkWindowPrivate *)private->parent;
-	      if (parent_private->children)
-		parent_private->children = g_list_remove (parent_private->children, window);
-	    }
-
-	  if (GDK_DRAWABLE_TYPE (window) != GDK_WINDOW_FOREIGN)
-	    {
-	      children = tmp = private->children;
-	      private->children = NULL;
-
-	      while (tmp)
-		{
-		  temp_window = tmp->data;
-		  tmp = tmp->next;
-		  
-		  temp_private = (GdkWindowPrivate*) temp_window;
-		  if (temp_private)
-		    gdk_window_internal_destroy (temp_window, FALSE,
-						 our_destroy);
-		}
-
-	      g_list_free (children);
-	    }
-
-	  if (private->extension_events != 0)
-	    gdk_input_window_destroy (window);
-
-	  if (private->filters)
-	    {
-	      tmp = private->filters;
-
-	      while (tmp)
-		{
-		  g_free (tmp->data);
-		  tmp = tmp->next;
-		}
-
-	      g_list_free (private->filters);
-	      private->filters = NULL;
-	    }
+	  /* It's somebody else's window, but in our heirarchy,
+	   * so reparent it to the root window, and then call
+	   * DestroyWindow() on it.
+	   */
+	  gdk_window_hide (window);
+	  gdk_window_reparent (window, NULL, 0, 0);
 	  
-	  if (private->drawable.window_type == GDK_WINDOW_FOREIGN)
-	    {
-	      if (our_destroy && (private->parent != NULL))
-		{
-		  /* It's somebody elses window, but in our hierarchy,
-		   * so reparent it to the root window, and then send
-		   * it a delete event, as if we were a WM
-		   */
-		  gdk_window_hide (window);
-		  gdk_window_reparent (window, NULL, 0, 0);
-		  
-		  /* Is this too drastic? Many (most?) applications
-		   * quit if any window receives WM_QUIT I think.
-		   * OTOH, I don't think foreign windows are much
-		   * used, so the question is maybe academic.
-		   */
-		  PostMessage (GDK_DRAWABLE_XID (window), WM_QUIT, 0, 0);
-		}
-	    }
-	  else
-	    {
-	      private->drawable.destroyed = TRUE;
-	      if (xdestroy)
-		{
-		  /* Calls gdk_WindowProc */
-		  DestroyWindow (GDK_DRAWABLE_XID (window));
-		}
-	    }
-
-	  if (private->drawable.colormap)
-	    gdk_colormap_unref (private->drawable.colormap);
-
-	  private->mapped = FALSE;
+	  /* Is this too drastic? Many (most?) applications
+	   * quit if any window receives WM_QUIT I think.
+	   * OTOH, I don't think foreign windows are much
+	   * used, so the question is maybe academic.
+	   */
+	  PostMessage (GDK_DRAWABLE_XID (window), WM_QUIT, 0, 0);
 	}
-      break;
-
-    case GDK_WINDOW_ROOT:
-      g_error ("attempted to destroy root window");
-      break;
-
-    case GDK_DRAWABLE_PIXMAP:
-      g_error ("called gdk_window_destroy on a pixmap (use gdk_drawable_unref)");
-      break;
     }
+  else if (!recursing && !foreign_destroy)
+    DestroyWindow (GDK_DRAWABLE_XID (window));
 }
 
-/* Like internal_destroy, but also destroys the reference created by
-   gdk_window_new. */
-
-void
-gdk_window_destroy (GdkWindow *window)
-{
-  gdk_window_internal_destroy (window, TRUE, TRUE);
-  gdk_drawable_unref (window);
-}
-
-/* This function is called when the window really gone.  */
-
+/* This function is called when the window really gone.
+ */
 void
 gdk_window_destroy_notify (GdkWindow *window)
 {
@@ -671,7 +579,7 @@ gdk_window_destroy_notify (GdkWindow *window)
   GDK_NOTE (EVENTS,
 	    g_print ("gdk_window_destroy_notify: %#x  %s\n",
 		     GDK_DRAWABLE_XID (window),
-		     (GDK_DRAWABLE_DESTROYED (window) ? "yes" : "no")));
+		     (GDK_DRAWABLE_DESTROYED (window) ? "(destroyed)" : "")));
 
   if (!GDK_DRAWABLE_DESTROYED (window))
     {
@@ -679,7 +587,7 @@ gdk_window_destroy_notify (GdkWindow *window)
 	g_warning ("window %#x unexpectedly destroyed",
 		   GDK_DRAWABLE_XID (window));
 
-      gdk_window_internal_destroy (window, FALSE, FALSE);
+      _gdk_window_destroy (window, TRUE);
     }
   
   gdk_xid_table_remove (GDK_DRAWABLE_XID (window));

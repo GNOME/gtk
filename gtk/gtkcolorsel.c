@@ -25,7 +25,15 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include "gdkconfig.h"
+
+#if defined (GDK_WINDOWING_X11)
 #include "x11/gdkx.h"
+#elif defined (GDK_WINDOWING_WIN32)
+#include "win32/gdkwin32.h"
+#elif defined (GDK_WINDOWING_NANOX)
+#include "nanox/gdkprivate-nanox.h"
+#endif
 #include "gdk/gdkkeysyms.h"
 #include "gtkcolorsel.h"
 #include "gtkhsv.h"
@@ -891,7 +899,9 @@ grab_color_at_mouse (GtkWidget *button,
   GtkColorSelection *colorsel = data;
   ColorSelectionPrivate *priv;
   GdkColormap *colormap = gdk_colormap_get_system ();
+#if defined (GDK_WINDOWING_X11)
   XColor xcolor;
+#endif
   
   priv = colorsel->private;
   
@@ -912,6 +922,7 @@ grab_color_at_mouse (GtkWidget *button,
     priv->color[COLORSEL_GREEN] = (double)pixel/((1<<visual->depth) - 1);
     priv->color[COLORSEL_BLUE] = (double)pixel/((1<<visual->depth) - 1);
     break;
+#if defined (GDK_WINDOWING_X11)
   case GDK_VISUAL_STATIC_COLOR:
     xcolor.pixel = pixel;
     XQueryColor (GDK_DISPLAY (), GDK_COLORMAP_XCOLORMAP (colormap), &xcolor);
@@ -919,6 +930,7 @@ grab_color_at_mouse (GtkWidget *button,
     priv->color[COLORSEL_GREEN] = xcolor.green/65535.0;
     priv->color[COLORSEL_BLUE] = xcolor.blue/65535.0;
     break;
+#endif
   case GDK_VISUAL_PSEUDO_COLOR:
     priv->color[COLORSEL_RED] = colormap->colors[pixel].red/(double)0xffffff;
     priv->color[COLORSEL_GREEN] = colormap->colors[pixel].green/(double)0xffffff;

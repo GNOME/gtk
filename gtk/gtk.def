@@ -75,6 +75,7 @@ EXPORTS
 	GTK_TYPE_GDK_WINDOW_HINTS
 	GTK_TYPE_GDK_WM_DECORATION
 	GTK_TYPE_GDK_WM_FUNCTION
+	GTK_TYPE_IDENTIFIER
 	GTK_TYPE_JUSTIFICATION
 	GTK_TYPE_MATCH_TYPE
 	GTK_TYPE_MENU_DIRECTION_TYPE
@@ -315,8 +316,9 @@ EXPORTS
 	gtk_color_selection_get_type
 	gtk_color_selection_new
 	gtk_color_selection_set_color
-	gtk_color_selection_set_opacity
 	gtk_color_selection_set_update_policy
+	gtk_color_selection_set_use_opacity
+	gtk_color_selection_set_use_palette
 	gtk_combo_disable_activate
 	gtk_combo_get_type
 	gtk_combo_new
@@ -345,11 +347,9 @@ EXPORTS
 	gtk_container_forall
 	gtk_container_foreach
 	gtk_container_foreach_full
-	gtk_container_get_toplevels
 	gtk_container_get_type
 	gtk_container_query_child_args
 	gtk_container_queue_resize
-	gtk_container_register_toplevel
 	gtk_container_remove
 	gtk_container_resize_children
 	gtk_container_set_border_width
@@ -358,7 +358,6 @@ EXPORTS
 	gtk_container_set_focus_vadjustment
 	gtk_container_set_reallocate_redraws
 	gtk_container_set_resize_mode
-	gtk_container_unregister_toplevel
 	gtk_ctree_collapse
 	gtk_ctree_collapse_recursive
 	gtk_ctree_collapse_to_depth
@@ -562,7 +561,6 @@ EXPORTS
 	gtk_hscrollbar_new
 	gtk_hseparator_get_type
 	gtk_hseparator_new
-	gtk_identifier_get_type
 	gtk_idle_add
 	gtk_idle_add_full
 	gtk_idle_add_priority
@@ -1164,7 +1162,6 @@ EXPORTS
 	gtk_tooltips_set_colors
 	gtk_tooltips_set_delay
 	gtk_tooltips_set_tip
-	gtk_trace_referencing
 	gtk_tree_append
 	gtk_tree_child_position
 	gtk_tree_clear_items
@@ -1191,30 +1188,13 @@ EXPORTS
 	gtk_tree_unselect_child
 	gtk_tree_unselect_item
 	gtk_true
-	gtk_type_check_class_cast
-	gtk_type_check_object_cast
-	gtk_type_children_types
 	gtk_type_class
-	gtk_type_describe_heritage
-	gtk_type_describe_tree
 	gtk_type_enum_find_value
 	gtk_type_enum_get_values
 	gtk_type_flags_find_value
 	gtk_type_flags_get_values
-	gtk_type_free
-	gtk_type_from_name
-	gtk_type_get_varargs_type
 	gtk_type_init
-	gtk_type_is_a
-	gtk_type_name
 	gtk_type_new
-	gtk_type_parent
-	gtk_type_parent_class
-	gtk_type_query
-	gtk_type_register_enum
-	gtk_type_register_flags
-	gtk_type_set_chunk_alloc
-	gtk_type_set_varargs_type
 	gtk_type_unique
 	gtk_vbox_get_type
 	gtk_vbox_new
