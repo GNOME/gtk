@@ -413,7 +413,7 @@ gtk_rc_reparse_all (void)
     {
       rc_file = tmp_list->data;
       
-      if (!stat (rc_file->name, &statbuf) && 
+      if (!lstat (rc_file->name, &statbuf) && 
 	  (statbuf.st_mtime > rc_file->mtime))
 	{
 	  mtime_modified = TRUE;
