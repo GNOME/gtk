@@ -1,3 +1,7 @@
+2004-07-28  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkuimanager.c: Warning fixes.
+
 Fri Jul 23 11:00:17 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktextbtree.c (_gtk_text_line_previous_could_contain_tag): 
