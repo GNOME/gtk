@@ -2987,7 +2987,7 @@ gtk_text_iter_forward_word_end (GtkTextIter *iter)
  * gtk_text_iter_backward_word_start:
  * @iter: a #GtkTextIter
  * 
- * Moves backward to the next word start. (If @iter is currently on a
+ * Moves backward to the previous word start. (If @iter is currently on a
  * word start, moves backward to the next one after that.) Word breaks
  * are determined by Pango and should be correct for nearly any
  * language (if not, the correct fix would be to the Pango word break
@@ -3201,7 +3201,7 @@ gtk_text_iter_forward_sentence_end (GtkTextIter *iter)
  * gtk_text_iter_backward_sentence_start:
  * @iter: a #GtkTextIter
  * 
- * Moves backward to the next sentence start; if @iter is already at
+ * Moves backward to the previous sentence start; if @iter is already at
  * the start of a sentence, moves backward to the next one.  Sentence
  * boundaries are determined by Pango and should be correct for nearly
  * any language (if not, the correct fix would be to the Pango text

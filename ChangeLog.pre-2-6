@@ -1,5 +1,10 @@
 2001-10-27  Anders Carlsson  <andersca@gnu.org>
 
+	* gtk/gtktextiter.c (gtk_text_iter_backward_sentence_start): 
+	Fix docs to say previous instead of next.
+	(gtk_text_iter_backward_word_start): Likewise.
+	This fixes bug #62980.
+
 	* gtk/gtkcontainer.c (gtk_container_set_border_width): Mention
 	that the valid width is in range 0-65535 pixels. Fixes bug 
 	#56754.
