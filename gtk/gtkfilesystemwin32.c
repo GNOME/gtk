@@ -967,13 +967,14 @@ extract_icon (const char* filename)
           if (GetDIBits (hdc, ii.hbmColor, 0, 1, NULL, (BITMAPINFO *)&bmi, DIB_RGB_COLORS))
 	    {
 		gchar *pixels, *bits;
-		gint    rowstride, x, y, w = bmi.bi.biWidth, h = bmi.bi.biHeight;
+		gint rowstride, x, y, w = bmi.bi.biWidth, h = bmi.bi.biHeight;
+		gboolean no_alpha;
 
-		bmi.bi.biBitCount = 24;
+		bmi.bi.biBitCount = 32;
 		bmi.bi.biCompression = BI_RGB;
 		bmi.bi.biHeight = -h;
 		pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8, w, h);
-		bits = g_malloc (4 * w * h);
+		bits = g_malloc0 (4 * w * h);
 
 		/* color data */
 		if (!GetDIBits (hdc, ii.hbmColor, 0, h, bits, (BITMAPINFO *)&bmi, DIB_RGB_COLORS))
@@ -981,35 +982,40 @@ extract_icon (const char* filename)
 
 		pixels = gdk_pixbuf_get_pixels (pixbuf);
 		rowstride = gdk_pixbuf_get_rowstride (pixbuf);
+		no_alpha = TRUE;
 		for (y = 0; y < h; y++)
 		  {
 		    for (x = 0; x < w; x++)
 		      {
-			  pixels[2] = bits[(x+y*w) * 3];
-			  pixels[1] = bits[(x+y*w) * 3 + 1];
-			  pixels[0] = bits[(x+y*w) * 3 + 2];
+			  pixels[2] = bits[(x+y*w) * 4];
+			  pixels[1] = bits[(x+y*w) * 4 + 1];
+			  pixels[0] = bits[(x+y*w) * 4 + 2];
+			  pixels[3] = bits[(x+y*w) * 4 + 3];
+			  if (no_alpha && pixels[3] > 0) no_alpha = FALSE;
 			  pixels += 4;
 		      }
 		    pixels += (w * 4 - rowstride);
 		  }
-		/* transparency */
-		if (!GetDIBits (hdc, ii.hbmMask, 0, h, bits, (BITMAPINFO *)&bmi, DIB_RGB_COLORS))
-		  g_warning(G_STRLOC ": Failed to get dibits");
-		pixels = gdk_pixbuf_get_pixels (pixbuf);
-		for (y = 0; y < h; y++)
-		  {
-		    for (x = 0; x < w; x++)
-		      {
-			  pixels[3] = 255 - bits[(x + y * w) * 3];
+		/* mask */
+		if (no_alpha) {
+		  if (!GetDIBits (hdc, ii.hbmMask, 0, h, bits, (BITMAPINFO *)&bmi, DIB_RGB_COLORS))
+		    g_warning(G_STRLOC ": Failed to get dibits");
+		  pixels = gdk_pixbuf_get_pixels (pixbuf);
+		  for (y = 0; y < h; y++)
+		    {
+		      for (x = 0; x < w; x++)
+			{
+			  pixels[3] = 255 - bits[(x + y * w) * 4];
 			  pixels += 4;
-		      }
-		    pixels += (w * 4 - rowstride);
-		  }
+			}
+		      pixels += (w * 4 - rowstride);
+		    }
 		
-		/* release temporary resources */
-		g_free (bits);
-		if (!DeleteObject (ii.hbmColor) || !DeleteObject (ii.hbmMask))
-		  g_warning(G_STRLOC ": Leaking Icon Bitmaps ?");
+		  /* release temporary resources */
+		  g_free (bits);
+		  if (!DeleteObject (ii.hbmColor) || !DeleteObject (ii.hbmMask))
+		    g_warning(G_STRLOC ": Leaking Icon Bitmaps ?");
+		}
 	    }
 	  else
 	    g_warning(G_STRLOC ": GetDIBits () failed, %s", g_win32_error_message (GetLastError ()));
@@ -1023,7 +1029,7 @@ extract_icon (const char* filename)
         g_warning(G_STRLOC ": DestroyIcon failed");
     }
   else
-    g_print ("ExtractAssociatedIcon(%s) failed: %s\n", filename, g_win32_error_message (GetLastError ()));
+    g_warning (G_STRLOC ":ExtractAssociatedIcon(%s) failed: %s", filename, g_win32_error_message (GetLastError ()));
 
   return pixbuf;
 }
