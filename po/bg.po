@@ -1,13 +1,13 @@
 # Bulgarian translation for gtk+-2.x.
 # Copyright (C) 2002 Free Software Foundation, Inc.
-# Borislav Aleksandrov <B.Aleksandrov@CNsys.bg>, 2002.
+# Borislav Aleksandrov <B.Aleksandrov@CNsfys.bg>, 2002.
 # small additions for completeness, Yanko Kaneti <yaneti@declera.com>, 2002.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+\n"
-"POT-Creation-Date: 2002-06-18 23:24+0200\n"
-"PO-Revision-Date: 2002-06-18 23:25+0200\n"
+"POT-Creation-Date: 2002-07-23 14:51+0300\n"
+"PO-Revision-Date: 2002-07-23 14:55+0300\n"
 "Last-Translator: Borislav Aleksandrov <B.Aleksandrov@cnsys.bg>\n"
 "Language-Team: Bulgarian <dict@linux.zonebg.com>\n"
 "MIME-Version: 1.0\n"
@@ -136,15 +136,15 @@ msgstr "Повредени данни за 'pixel' картинка"
 msgid "failed to allocate image buffer of %u bytes"
 msgstr "неуспех при заделяне на буфер за картинка от %u байта"
 
-#: gdk-pixbuf/io-bmp.c:266 gdk-pixbuf/io-bmp.c:366
+#: gdk-pixbuf/io-bmp.c:261 gdk-pixbuf/io-bmp.c:374
 msgid "Not enough memory to load bitmap image"
 msgstr "Няма достатъчно памет за да зареди 'bitmap' картинка"
 
-#: gdk-pixbuf/io-bmp.c:292
+#: gdk-pixbuf/io-bmp.c:300
 msgid "BMP image has unsupported header size"
 msgstr "BMP картинка има неподдържан размер на заглавната част"
 
-#: gdk-pixbuf/io-bmp.c:317 gdk-pixbuf/io-bmp.c:340 gdk-pixbuf/io-bmp.c:399
+#: gdk-pixbuf/io-bmp.c:325 gdk-pixbuf/io-bmp.c:348 gdk-pixbuf/io-bmp.c:409
 msgid "BMP image has bogus header data"
 msgstr "BMP картинка има 'фалшива' заглавна част"
 
@@ -424,7 +424,11 @@ msgstr "RAS картинка има 'фралшиви' заглавни данн
 msgid "RAS image has unknown type"
 msgstr "RAS картинка е неизвестен тип"
 
-#: gdk-pixbuf/io-ras.c:195 gdk-pixbuf/io-ras.c:215
+#: gdk-pixbuf/io-ras.c:188
+msgid "unsupported RAS image variation"
+msgstr "неподържан тип RAS вариация"
+
+#: gdk-pixbuf/io-ras.c:203 gdk-pixbuf/io-ras.c:223
 msgid "Not enough memory to load RAS image"
 msgstr "Няма достатъчно памет за да зареди RAS картинка"
 
@@ -536,39 +540,43 @@ msgstr "Не мога да разпределя 'pixbuf'"
 msgid "Unsupported TGA image type"
 msgstr "Неподържан тип TGA картинка"
 
-#: gdk-pixbuf/io-tiff.c:187
+#: gdk-pixbuf/io-tiff.c:191
 msgid "Could not get image width (bad TIFF file)"
 msgstr "Неможах да получа ширина на картинка (лош TIFF файл)"
 
-#: gdk-pixbuf/io-tiff.c:194
+#: gdk-pixbuf/io-tiff.c:198
 msgid "Could not get image height (bad TIFF file)"
 msgstr "Неможах да получа височина на картинка (лош TIFF файл)"
 
-#: gdk-pixbuf/io-tiff.c:202
+#: gdk-pixbuf/io-tiff.c:206
 msgid "Width or height of TIFF image is zero"
 msgstr "Височината или ширината на TIFF картинката е нулева"
 
-#: gdk-pixbuf/io-tiff.c:211 gdk-pixbuf/io-tiff.c:220
+#: gdk-pixbuf/io-tiff.c:215 gdk-pixbuf/io-tiff.c:224
 msgid "Dimensions of TIFF image too large"
 msgstr "Размерите на TIFF картинката са твърде големи"
 
-#: gdk-pixbuf/io-tiff.c:230 gdk-pixbuf/io-tiff.c:242 gdk-pixbuf/io-tiff.c:536
+#: gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:246 gdk-pixbuf/io-tiff.c:552
 msgid "Insufficient memory to open TIFF file"
 msgstr "Недостатъчно памет за отваряне на TIFF файл"
 
-#: gdk-pixbuf/io-tiff.c:254
+#: gdk-pixbuf/io-tiff.c:258
 msgid "Failed to load RGB data from TIFF file"
 msgstr "Неуспех при зареждане на RGB данно от TIFF файл"
 
-#: gdk-pixbuf/io-tiff.c:324
+#: gdk-pixbuf/io-tiff.c:266
+msgid "Unsupported TIFF variant"
+msgstr "Неподържан TIFF вариант"
+
+#: gdk-pixbuf/io-tiff.c:336
 msgid "Failed to open TIFF image"
 msgstr "Неуспех при отваряне на TIFF картинка"
 
-#: gdk-pixbuf/io-tiff.c:337
+#: gdk-pixbuf/io-tiff.c:349
 msgid "TIFFClose operation failed"
 msgstr "TIFFClose операцията пропадна"
 
-#: gdk-pixbuf/io-tiff.c:470 gdk-pixbuf/io-tiff.c:484
+#: gdk-pixbuf/io-tiff.c:482 gdk-pixbuf/io-tiff.c:495
 msgid "Failed to load TIFF image"
 msgstr "Неуспех при зареждане на TIFF картинка"
 
