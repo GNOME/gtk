@@ -1,3 +1,9 @@
+Mon Nov 19 12:07:20 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in (deps): Undef HAVE_STDLIB_H before
+	checking for jpeg, because jconfig.h has this
+	in it too (%#$@!). Fix from Matthias Clasen, #64500.
+
 Mon Nov 19 11:30:03 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkproperty-x11.c (get_atom_name): Fix a 

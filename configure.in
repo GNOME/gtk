@@ -621,6 +621,7 @@ dnl Test for libjpeg
 [#include <stdio.h>
 #undef PACKAGE
 #undef VERSION
+#undef HAVE_STDLIB_H
 #include <jpeglib.h>],
         jpeg_ok=yes,
         jpeg_ok=no)
