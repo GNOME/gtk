@@ -84,7 +84,7 @@ static guint		 tips_query_signals[SIGNAL_LAST] = { 0 };
 GtkType
 gtk_tips_query_get_type (void)
 {
-  static guint tips_query_type = 0;
+  static GtkType tips_query_type = 0;
 
   if (!tips_query_type)
     {

@@ -922,7 +922,7 @@ gtk_font_selection_set_preview_text  (GtkFontSelection *fontsel,
 GtkType
 gtk_font_selection_dialog_get_type (void)
 {
-  static guint font_selection_dialog_type = 0;
+  static GtkType font_selection_dialog_type = 0;
   
   if (!font_selection_dialog_type)
     {

@@ -134,7 +134,7 @@ static guint spinbutton_signals[LAST_SIGNAL] = {0};
 GtkType
 gtk_spin_button_get_type (void)
 {
-  static guint spin_button_type = 0;
+  static GtkType spin_button_type = 0;
 
   if (!spin_button_type)
     {

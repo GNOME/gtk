@@ -46,7 +46,7 @@ static GtkContainerClass *parent_class = NULL;
 GtkType
 gtk_bin_get_type (void)
 {
-  static guint bin_type = 0;
+  static GtkType bin_type = 0;
 
   if (!bin_type)
     {
