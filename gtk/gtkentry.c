@@ -425,7 +425,14 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                      
                                                      -1,
                                                      G_PARAM_READABLE | G_PARAM_WRITABLE));
-  
+
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_boxed ("cursor_color",
+							       _("Cursor color"),
+							       _("Color with which to draw insertion cursor"),
+							       GTK_TYPE_GDK_COLOR,
+							       G_PARAM_READABLE));
+
   signals[INSERT_TEXT] =
     gtk_signal_new ("insert_text",
 		    GTK_RUN_LAST,
@@ -825,6 +832,24 @@ gtk_entry_finalize (GObject *object)
 }
 
 static void
+gtk_entry_realize_cursor_gc (GtkEntry *entry)
+{
+  GdkColor *cursor_color;
+  
+  if (entry->cursor_gc)
+    gdk_gc_unref (entry->cursor_gc);
+
+  gtk_widget_style_get (GTK_WIDGET (entry), "cursor_color", &cursor_color, NULL);
+  if (cursor_color)
+    {
+      entry->cursor_gc = gdk_gc_new (entry->text_area);
+      gdk_gc_set_rgb_fg_color (entry->cursor_gc, cursor_color);
+    }
+  else
+    entry->cursor_gc = gdk_gc_ref (GTK_WIDGET (entry)->style->bg_gc[GTK_STATE_SELECTED]);
+}
+
+static void
 gtk_entry_realize (GtkWidget *widget)
 {
   GtkEntry *entry;
@@ -883,8 +908,10 @@ gtk_entry_realize (GtkWidget *widget)
   gdk_window_set_user_data (entry->text_area, entry);
 
   gdk_cursor_destroy (attributes.cursor);
-  
+
   widget->style = gtk_style_attach (widget->style, widget->window);
+
+  gtk_entry_realize_cursor_gc (entry);
 
   gdk_window_set_background (widget->window, &widget->style->base[GTK_WIDGET_STATE (widget)]);
   gdk_window_set_background (entry->text_area, &widget->style->base[GTK_WIDGET_STATE (widget)]);
@@ -915,8 +942,17 @@ gtk_entry_unrealize (GtkWidget *widget)
       entry->text_area = NULL;
     }
 
+  if (entry->cursor_gc)
+    {
+      gdk_gc_unref (entry->cursor_gc);
+      entry->cursor_gc = NULL;
+    }
+
   if (entry->popup_menu)
-    gtk_widget_destroy (entry->popup_menu);
+    {
+      gtk_widget_destroy (entry->popup_menu);
+      entry->popup_menu = NULL;
+    }
 
   if (GTK_WIDGET_CLASS (parent_class)->unrealize)
     (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
@@ -1653,6 +1689,8 @@ gtk_entry_style_set	(GtkWidget      *widget,
 
       gdk_window_set_background (widget->window, &widget->style->base[GTK_WIDGET_STATE (widget)]);
       gdk_window_set_background (entry->text_area, &widget->style->base[GTK_WIDGET_STATE (widget)]);
+
+      gtk_entry_realize_cursor_gc (entry);
     }
 }
 
@@ -2373,7 +2411,7 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
       
       gtk_entry_get_cursor_locations (entry, type, &strong_x, &weak_x);
       
-      gdk_draw_line (entry->text_area, widget->style->bg_gc[GTK_STATE_SELECTED], 
+      gdk_draw_line (entry->text_area, entry->cursor_gc,
 		     xoffset + strong_x, INNER_BORDER,
 		     xoffset + strong_x, text_area_height - INNER_BORDER);
       

@@ -102,6 +102,8 @@ struct _GtkEntry
   gunichar invisible_char;
 
   gint width_chars;
+
+  GdkGC *cursor_gc;
 };
 
 struct _GtkEntryClass

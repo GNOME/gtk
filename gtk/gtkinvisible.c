@@ -28,13 +28,15 @@
 #include "gtksignal.h"
 #include "gtkinvisible.h"
 
-static void gtk_invisible_class_init               (GtkInvisibleClass *klass);
-static void gtk_invisible_init                     (GtkInvisible      *invisible);
-static void gtk_invisible_destroy                  (GtkObject        *object);
-static void gtk_invisible_realize                  (GtkWidget        *widget);
-static void gtk_invisible_show                     (GtkWidget        *widget);
-static void gtk_invisible_size_allocate            (GtkWidget        *widget,
-						    GtkAllocation    *allocation);
+static void gtk_invisible_class_init    (GtkInvisibleClass *klass);
+static void gtk_invisible_init          (GtkInvisible      *invisible);
+static void gtk_invisible_destroy       (GtkObject         *object);
+static void gtk_invisible_realize       (GtkWidget         *widget);
+static void gtk_invisible_style_set     (GtkWidget         *widget,
+					 GtkStyle          *previous_style);
+static void gtk_invisible_show          (GtkWidget         *widget);
+static void gtk_invisible_size_allocate (GtkWidget         *widget,
+					 GtkAllocation     *allocation);
 
 GtkType
 gtk_invisible_get_type (void)
@@ -71,6 +73,7 @@ gtk_invisible_class_init (GtkInvisibleClass *class)
   object_class = (GtkObjectClass*) class;
 
   widget_class->realize = gtk_invisible_realize;
+  widget_class->style_set = gtk_invisible_style_set;
   widget_class->show = gtk_invisible_show;
   widget_class->size_allocate = gtk_invisible_size_allocate;
 
@@ -136,6 +139,13 @@ gtk_invisible_realize (GtkWidget *widget)
   gdk_window_set_user_data (widget->window, widget);
   
   widget->style = gtk_style_attach (widget->style, widget->window);
+}
+
+static void
+gtk_invisible_style_set (GtkWidget *widget,
+			 GtkStyle  *previous_style)
+{
+  /* Don't chain up to parent implementation */
 }
 
 static void
