@@ -560,6 +560,7 @@ gtk_menu_realize (GtkWidget *widget)
   
   widget->style = gtk_style_attach (widget->style, widget->window);
   gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
+   gtk_menu_paint(widget);
 }
 
 static void

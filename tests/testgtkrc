@@ -41,6 +41,10 @@ style "button"
 #  fg[PRELIGHT] = { 1.0, 1.0, 1.0 }
 #  bg[PRELIGHT] = { 0, 0, 0.75 }
 #  bg[PRELIGHT] = { 0.75, 0, 0x00 }
+
+#engine "th" { 
+#     name = "Sssaample"
+#   }
 }
 
 style "toggle_button" = "button"

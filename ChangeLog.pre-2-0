@@ -1,3 +1,10 @@
+Tue Jul 28 22:52:10 EDT 1998 The Rasterman <raster@redhat.com>
+	* Added all the theme drawing code to all widgets, fixed up minor
+          nigglies in some widgets when it comes to themes, seem to be
+          running into some funky behavior with clipping rects in GC's. Too
+          many files to list here. (all files that now use gtk_paint_* are
+	  affected).
+
 Tue Jul 28 22:49:16 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* themes/th_main.c themes/th_draw.c gtk/testgtkrc: 

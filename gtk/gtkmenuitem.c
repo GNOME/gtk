@@ -394,9 +394,7 @@ gtk_menu_item_paint (GtkWidget    *widget,
       if (!GTK_WIDGET_IS_SENSITIVE (widget))
 	state_type = GTK_STATE_INSENSITIVE;
 
-       gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
-       /*      gtk_style_set_background (widget->style, widget->window, state_type);*/
-      gdk_window_clear_area (widget->window, area->x, area->y, area->width, area->height);
+/*       gdk_window_set_back_pixmap (widget->window, NULL, TRUE);*/
 
       x = GTK_CONTAINER (menu_item)->border_width;
       y = GTK_CONTAINER (menu_item)->border_width;
@@ -411,7 +409,9 @@ gtk_menu_item_paint (GtkWidget    *widget,
 			GTK_SHADOW_OUT,
 			area, widget, "menuitem",
 			x, y, width, height);
-
+       else
+	 gdk_window_clear_area (widget->window, area->x, area->y, area->width, area->height);
+	 
       if (menu_item->submenu && menu_item->show_submenu_indicator)
 	{
 	  shadow_type = GTK_SHADOW_OUT;

@@ -1774,7 +1774,8 @@ gtk_notebook_expose (GtkWidget      *widget,
 {
   GtkNotebook *notebook;
   GdkEventExpose child_event;
-
+  GdkRectangle child_area;
+   
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_NOTEBOOK (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
@@ -1784,7 +1785,9 @@ gtk_notebook_expose (GtkWidget      *widget,
       notebook = GTK_NOTEBOOK (widget);
 
       gtk_notebook_paint (widget, &event->area);
-      gtk_widget_draw_focus (widget);
+       if (gtk_widget_intersect (notebook->cur_page->tab_label, 
+				 &event->area, &child_area))
+	 gtk_widget_draw_focus (widget);
 
       child_event = *event;
       if (notebook->cur_page && 
@@ -2225,24 +2228,23 @@ gtk_notebook_draw_tab (GtkNotebook     *notebook,
     {
       GtkWidget *widget;
 
+       widget = GTK_WIDGET(notebook);
        gap_side = 0;
       switch (notebook->tab_pos)
 	{
 	 case GTK_POS_TOP:
-	   gap_side = 0;
-	   break;
-	 case GTK_POS_BOTTOM:
 	   gap_side = 1;
 	   break;
-	 case GTK_POS_LEFT:
-	   gap_side = 2;
+	 case GTK_POS_BOTTOM:
+	   gap_side = 0;
 	   break;
-	 case GTK_POS_RIGHT:
+	 case GTK_POS_LEFT:
 	   gap_side = 3;
 	   break;
+	 case GTK_POS_RIGHT:
+	   gap_side = 2;
+	   break;
 	}
-       
-      widget = GTK_WIDGET(notebook);
 
       if (notebook->cur_page == page)
 	 state_type = GTK_STATE_NORMAL;
@@ -2363,53 +2365,10 @@ gtk_notebook_draw_focus (GtkWidget *widget)
 static void
 gtk_notebook_focus_changed (GtkNotebook *notebook, GtkNotebookPage *old_page)
 {
-  GtkWidget *widget;
-
   g_return_if_fail (notebook != NULL);
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
 
-  widget = GTK_WIDGET (notebook);
-
-  if (GTK_WIDGET_DRAWABLE (widget) && notebook->show_tabs)
-    {
-      GdkGC *gc;
-
-      if (notebook->focus_tab)
-	{
-	  GtkNotebookPage *page;
-
-	  page = notebook->focus_tab->data;
-
-	  if (GTK_WIDGET_HAS_FOCUS (widget))
-	    gc = widget->style->black_gc;
-	  else if (page == notebook->cur_page)
-	    gc = widget->style->bg_gc[GTK_STATE_NORMAL];
-	  else
-	    gc = widget->style->bg_gc[GTK_STATE_ACTIVE];
-	  
-	  gdk_draw_rectangle (widget->window, 
-			      gc, FALSE, 
-			      page->tab_label->allocation.x - 1, 
-			      page->tab_label->allocation.y - 1,
-			      page->tab_label->allocation.width + 1, 
-			      page->tab_label->allocation.height + 1);
-	}
-
-      if (old_page)
-	{
-	  if (old_page == notebook->cur_page)
-	    gc = widget->style->bg_gc[GTK_STATE_NORMAL];
-	  else
-	    gc = widget->style->bg_gc[GTK_STATE_ACTIVE];
-         
-	  gdk_draw_rectangle (widget->window, 
-			      gc, FALSE, 
-			      old_page->tab_label->allocation.x - 1, 
-			      old_page->tab_label->allocation.y - 1,
-			      old_page->tab_label->allocation.width + 1, 
-			      old_page->tab_label->allocation.height + 1);
-	}
-    }
+   gtk_notebook_expose_tabs(notebook);
 }
 
 static void 

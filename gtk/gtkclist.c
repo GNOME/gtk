@@ -2539,7 +2539,7 @@ gtk_clist_draw (GtkWidget * widget,
        if (widget->parent && widget->parent->window)
 	 gtk_paint_shadow (widget->style, widget->parent->window,
 			   GTK_STATE_NORMAL, clist->shadow_type,
-			   area, widget, "clist",
+			   NULL, widget, "clist",
 			   clist->internal_allocation.x + widget->allocation.x + 
 			   GTK_CONTAINER (widget)->border_width, 
 			   clist->internal_allocation.y + widget->allocation.y +
@@ -2551,7 +2551,7 @@ gtk_clist_draw (GtkWidget * widget,
        gdk_window_clear_area (clist->clist_window,
 			      0, 0, -1, -1);
 
-      draw_rows (clist, NULL);
+       draw_rows (clist, NULL);
     }
 }
 
