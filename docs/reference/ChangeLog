@@ -1,3 +1,7 @@
+Sun Nov 23 20:59:57 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tree_widget.sgml: Add a missing comma.
+
 Fri Nov 21 00:09:36 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkfontsel.sgml: 
