@@ -83,7 +83,14 @@
     <glossterm>display</glossterm>
     <glossdef>
       <para>
-	FIXME
+        GDK inherited the concept of display from the X window system,
+        which considers a display to be the combination
+        of a keyboard, a pointing device and one or more 
+        <glossterm linkend="screen">screens</glossterm>. 
+        Applications open a display to show <glossterm 
+        linkend="window">windows</glossterm> and interact with the user.
+        In GDK, a display is represented by a 
+        <link linkend="GdkDisplay">GdkDisplay</link>.
       </para>
     </glossdef>
   </glossentry>
@@ -228,8 +235,15 @@
     <glossterm>screen</glossterm>
     <glossdef>
       <para>
-	FIXME
-      </para>
+	GDK inherited the concept of screen from the X window system, 
+        which considers a screen to be a rectangular area, on which 
+        applications may place their windows. Each screen has a 
+        <glossterm linkend="rootwindow">root window</glossterm> which
+        defines the area of the screen. Screens under X may have quite
+        dissimilar <glossterm linkend="visual">visuals</visuals>.
+        Each screen can stretch across multiple physical monitors.
+        In GDK, screens are represented by 
+        <link linkend="GdkScreen">GdkScreen</link> objects.
     </glossdef>
   </glossentry>
 

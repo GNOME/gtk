@@ -1,5 +1,7 @@
 2004-10-11  Matthias Clasen  <matthias@localhost.localdomain>
 
+	* gtk/glossary.xml: Add some terms.
+
 	* gtk/tmpl/*.sgml: Make the short descriptions a bit more
 	consistent.
 
