@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0.3\n"
-"POT-Creation-Date: 2002-06-15 01:03+0900\n"
-"PO-Revision-Date: 2002-06-15 02:14+0900\n"
+"POT-Creation-Date: 2002-06-15 02:17+0900\n"
+"PO-Revision-Date: 2002-06-15 03:56+0900\n"
 "Last-Translator: Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>\n"
 "Language-Team: Japanese <translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -809,7 +809,7 @@ msgstr ""
 
 #: gtk/gtkbbox.c:160
 msgid "Secondary"
-msgstr ""
+msgstr "セカンダリ"
 
 #: gtk/gtkbbox.c:161
 msgid ""
@@ -835,7 +835,7 @@ msgstr ""
 
 #: gtk/gtkbutton.c:189 gtk/gtkframe.c:125 gtk/gtklabel.c:280
 msgid "Label"
-msgstr ""
+msgstr "ラベル"
 
 #: gtk/gtkbutton.c:190
 msgid ""
@@ -845,7 +845,7 @@ msgstr ""
 
 #: gtk/gtkbutton.c:197 gtk/gtklabel.c:301
 msgid "Use underline"
-msgstr ""
+msgstr "下線使用"
 
 #: gtk/gtkbutton.c:198 gtk/gtklabel.c:302
 msgid ""
@@ -855,7 +855,7 @@ msgstr ""
 
 #: gtk/gtkbutton.c:205
 msgid "Use stock"
-msgstr ""
+msgstr "ストック使用"
 
 #: gtk/gtkbutton.c:206
 msgid ""
@@ -864,11 +864,11 @@ msgstr ""
 
 #: gtk/gtkbutton.c:213
 msgid "Border relief"
-msgstr ""
+msgstr "枠縁"
 
 #: gtk/gtkbutton.c:214
 msgid "The border relief style."
-msgstr ""
+msgstr "枠の縁のスタイル"
 
 #: gtk/gtkbutton.c:265
 msgid "Default Spacing"
@@ -1012,7 +1012,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:173 gtk/gtkentry.c:523 gtk/gtkprogressbar.c:207
 msgid "Text"
-msgstr ""
+msgstr "テキスト"
 
 #: gtk/gtkcellrenderertext.c:174
 msgid "Text to render"
@@ -1020,7 +1020,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:181
 msgid "Markup"
-msgstr ""
+msgstr "マークアップ"
 
 #: gtk/gtkcellrenderertext.c:182
 msgid "Marked up text to render"
@@ -1028,7 +1028,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:189 gtk/gtklabel.c:287
 msgid "Attributes"
-msgstr ""
+msgstr "属性"
 
 #: gtk/gtkcellrenderertext.c:190
 msgid "A list of style attributes to apply to the text of the renderer."
@@ -1036,35 +1036,35 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:197 gtk/gtktexttag.c:209
 msgid "Background color name"
-msgstr ""
+msgstr "背景色名"
 
 #: gtk/gtkcellrenderertext.c:198 gtk/gtktexttag.c:210
 msgid "Background color as a string"
-msgstr ""
+msgstr "背景色の文字表現"
 
 #: gtk/gtkcellrenderertext.c:205 gtk/gtktexttag.c:217
 msgid "Background color"
-msgstr ""
+msgstr "背景色"
 
 #: gtk/gtkcellrenderertext.c:206 gtk/gtktexttag.c:218
 msgid "Background color as a GdkColor"
-msgstr ""
+msgstr "背景色の GdkColor 表現"
 
 #: gtk/gtkcellrenderertext.c:213 gtk/gtktexttag.c:243
 msgid "Foreground color name"
-msgstr ""
+msgstr "前景色名"
 
 #: gtk/gtkcellrenderertext.c:214 gtk/gtktexttag.c:244
 msgid "Foreground color as a string"
-msgstr ""
+msgstr "前景色の文字表現<"
 
 #: gtk/gtkcellrenderertext.c:221 gtk/gtktexttag.c:251
 msgid "Foreground color"
-msgstr ""
+msgstr "前景色"
 
 #: gtk/gtkcellrenderertext.c:222 gtk/gtktexttag.c:252
 msgid "Foreground color as a GdkColor"
-msgstr ""
+msgstr "前景色の GdkColor 表現"
 
 #: gtk/gtkcellrenderertext.c:230 gtk/gtkentry.c:455 gtk/gtktexttag.c:277
 #: gtk/gtktextview.c:568
@@ -1073,7 +1073,7 @@ msgstr "編集可能"
 
 #: gtk/gtkcellrenderertext.c:231 gtk/gtktexttag.c:278 gtk/gtktextview.c:569
 msgid "Whether the text can be modified by the user"
-msgstr ""
+msgstr "テキストがユーザで変更できるかどうか"
 
 #: gtk/gtkcellrenderertext.c:238 gtk/gtkcellrenderertext.c:246
 #: gtk/gtkfontsel.c:212 gtk/gtktexttag.c:285 gtk/gtktexttag.c:293
@@ -1715,23 +1715,23 @@ msgstr "ファイル名"
 
 #: gtk/gtkfilesel.c:537
 msgid "The currently selected filename."
-msgstr ""
+msgstr "現在選択されているファイル名。"
 
 #: gtk/gtkfilesel.c:543
 msgid "Show file operations"
-msgstr ""
+msgstr "ファイル操作を表示"
 
 #: gtk/gtkfilesel.c:544
 msgid "Whether buttons for creating/manipulating files should be displayed."
-msgstr ""
+msgstr "ファイルの作成、操作のボタンを表示すべきかどうか"
 
 #: gtk/gtkfilesel.c:551
 msgid "Select multiple"
-msgstr ""
+msgstr "複数選択"
 
 #: gtk/gtkfilesel.c:552
 msgid "Whether to allow multiple files to be selected."
-msgstr ""
+msgstr "複数のファイルを選択できるようにするかどうか"
 
 #: gtk/gtkfilesel.c:707
 msgid "Folders"
@@ -1761,10 +1761,13 @@ msgid ""
 "available to this program.\n"
 "Are you sure that you want to select it?"
 msgstr ""
+"ファイル \"%s\" は (%s と呼ばれる) 他のマシン にあって、このプログラムでは利"
+"用できません。\n"
+"ほんとうに選択したいのですか?"
 
 #: gtk/gtkfilesel.c:1086
 msgid "_New Folder"
-msgstr ""
+msgstr "新規フォルダ(_N)"
 
 #: gtk/gtkfilesel.c:1097
 msgid "De_lete File"
@@ -1778,7 +1781,7 @@ msgstr "ファイル名変更(_R)"
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
+msgstr "フォルダ名 \"%s\" にファイル名に使えない文字が含まれています"
 
 #: gtk/gtkfilesel.c:1388
 #, c-format
@@ -1786,19 +1789,21 @@ msgid ""
 "Error creating folder \"%s\": %s\n"
 "%s"
 msgstr ""
+"ファルダ \"%s\" の作成中にエラー: %s\n"
+"%s"
 
 #: gtk/gtkfilesel.c:1389 gtk/gtkfilesel.c:1625
 msgid "You probably used symbols not allowed in filenames."
-msgstr ""
+msgstr "ファイル名に使えない文字がおそらく使われています"
 
 #: gtk/gtkfilesel.c:1397
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
-msgstr ""
+msgstr "フォルダ \"%s\" の作成中にエラー: %s\n"
 
 #: gtk/gtkfilesel.c:1431
 msgid "New Folder"
-msgstr ""
+msgstr "新規フォルダ"
 
 #: gtk/gtkfilesel.c:1446
 msgid "_Folder name:"
@@ -1811,7 +1816,7 @@ msgstr "作成"
 #: gtk/gtkfilesel.c:1513
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
+msgstr "ファイル名 \"%s\" にはファイル名に使えない文字が含まれています。"
 
 #: gtk/gtkfilesel.c:1516
 #, c-format
@@ -1819,20 +1824,22 @@ msgid ""
 "Error deleting file \"%s\": %s\n"
 "%s"
 msgstr ""
+"\"%s\" の削除中にエラー: %s\n"
+"%s"
 
 #: gtk/gtkfilesel.c:1518 gtk/gtkfilesel.c:1639
 msgid "It probably contains symbols not allowed in filenames."
-msgstr ""
+msgstr "おそらくファイル名に使えない文字を含んでいます。"
 
 #: gtk/gtkfilesel.c:1527
 #, c-format
 msgid "Error deleting file \"%s\": %s"
-msgstr ""
+msgstr "\"%s\" の削除中にエラー: %s"
 
 #: gtk/gtkfilesel.c:1570
 #, c-format
 msgid "Really delete file \"%s\" ?"
-msgstr ""
+msgstr "ファイル \"%s\" を本当に削除しますか?"
 
 #: gtk/gtkfilesel.c:1575
 msgid "Delete File"
@@ -1841,7 +1848,7 @@ msgstr "ファイル削除"
 #: gtk/gtkfilesel.c:1621 gtk/gtkfilesel.c:1635
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
+msgstr "ファイル名 \"%s\" にはファイル名に使えない文字が含まれています"
 
 #: gtk/gtkfilesel.c:1623
 #, c-format
@@ -1849,6 +1856,8 @@ msgid ""
 "Error renaming file to \"%s\": %s\n"
 "%s"
 msgstr ""
+"ファイルを \"%s\" へ変更している時にエラー: %s\n"
+"%s"
 
 #: gtk/gtkfilesel.c:1637
 #, c-format
@@ -1856,11 +1865,13 @@ msgid ""
 "Error renaming file \"%s\": %s\n"
 "%s"
 msgstr ""
+"ファイル \"%s\" の名前を変更している時にエラー: %s\n"
+"%s"
 
 #: gtk/gtkfilesel.c:1647
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
-msgstr ""
+msgstr "ファイル \"%s\" を \"%s\" に改名している時にエラー: %s"
 
 #: gtk/gtkfilesel.c:1694
 msgid "Rename File"
@@ -1885,34 +1896,36 @@ msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
 "environment variable G_BROKEN_FILENAMES): %s"
 msgstr ""
+"ファイル名 \"%s\" hal UTF-8 に変換できませんでした (環境変数 "
+"G_BROKEN_FILENAMES の設定を試してください): %s"
 
 #: gtk/gtkfilesel.c:3014
 msgid "Invalid Utf-8"
-msgstr ""
+msgstr "UTF-8 としておかしいです"
 
 #: gtk/gtkfilesel.c:3880
 msgid "Name too long"
-msgstr ""
+msgstr "名前が長すぎます"
 
 #: gtk/gtkfilesel.c:3882
 msgid "Couldn't convert filename"
-msgstr ""
+msgstr "ファイル名を変換できませんでした"
 
 #: gtk/gtkfixed.c:120 gtk/gtklayout.c:603
 msgid "X position"
-msgstr ""
+msgstr "X 位置"
 
 #: gtk/gtkfixed.c:121 gtk/gtklayout.c:604
 msgid "X position of child widget"
-msgstr ""
+msgstr "子ウィジェットの X 位置"
 
 #: gtk/gtkfixed.c:130 gtk/gtklayout.c:613
 msgid "Y position"
-msgstr ""
+msgstr "Y 位置"
 
 #: gtk/gtkfixed.c:131 gtk/gtklayout.c:614
 msgid "Y position of child widget"
-msgstr ""
+msgstr "子ウィジェットの Y 位置"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
@@ -1926,11 +1939,11 @@ msgstr "フォント名"
 
 #: gtk/gtkfontsel.c:206
 msgid "The X string that represents this font."
-msgstr ""
+msgstr "このフォントを表わす X 文字列"
 
 #: gtk/gtkfontsel.c:213
 msgid "The GdkFont that is currently selected."
-msgstr ""
+msgstr "現在選択されている GdkFonf"
 
 #: gtk/gtkfontsel.c:219
 msgid "Preview text"
@@ -1938,7 +1951,7 @@ msgstr "テキストのプレビュー"
 
 #: gtk/gtkfontsel.c:220
 msgid "The text to display in order to demonstrate the selected font."
-msgstr ""
+msgstr "選択したフォンントのデモのために表示するテキスト"
 
 #: gtk/gtkfontsel.c:327
 msgid "_Family:"
@@ -1963,7 +1976,7 @@ msgstr "フォント選択"
 
 #: gtk/gtkframe.c:126
 msgid "Text of the frame's label."
-msgstr ""
+msgstr "フレームのラベルのテキスト"
 
 #: gtk/gtkframe.c:133
 msgid "Label xalign"
@@ -2066,7 +2079,7 @@ msgstr "画像"
 
 #: gtk/gtkimage.c:146
 msgid "A GdkImage to display."
-msgstr ""
+msgstr "表示したい GdkImage"
 
 #: gtk/gtkimage.c:153
 msgid "Mask"
@@ -2074,11 +2087,11 @@ msgstr "マスク"
 
 #: gtk/gtkimage.c:154
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
-msgstr ""
+msgstr "GdkImage や GdkPixmap で使用したいマスクのビットマップ"
 
 #: gtk/gtkimage.c:162
 msgid "Filename to load and display."
-msgstr ""
+msgstr "ロードして表示したいファイルの名前"
 
 #: gtk/gtkimage.c:170
 msgid "Stock ID"
@@ -2214,7 +2227,7 @@ msgstr "ラベルのテキスト"
 
 #: gtk/gtklabel.c:288
 msgid "A list of style attributes to apply to the text of the label."
-msgstr ""
+msgstr "ラベルのテキストに適用するスタイル属性の一覧"
 
 #: gtk/gtklabel.c:294
 msgid "Use markup"
@@ -2222,7 +2235,7 @@ msgstr "マークアップ使用"
 
 #: gtk/gtklabel.c:295
 msgid "The text of the label includes XML markup. See pango_parse_markup()."
-msgstr ""
+msgstr "XML マークアップを含むラベルのテキスト。pango_parse_markup() 参照"
 
 #: gtk/gtklabel.c:309 gtk/gtktexttag.c:378 gtk/gtktextview.c:585
 msgid "Justification"
