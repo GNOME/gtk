@@ -120,6 +120,7 @@ struct _GtkFileChooserDefault
   guint show_hidden : 1;
   guint list_sort_ascending : 1;
   guint bookmarks_set : 1;
+  guint changing_folder : 1;
 };
 
 /* Column numbers for the shortcuts tree.  Keep these in sync with create_shortcuts_model() */
@@ -1810,8 +1811,40 @@ gtk_file_chooser_default_set_current_folder (GtkFileChooser    *chooser,
 {
   GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (chooser);
 
-  _gtk_file_system_model_path_do (impl->tree_model, path,
-				  expand_and_select_func, impl);
+  if (impl->current_folder)
+    gtk_file_path_free (impl->current_folder);
+
+  impl->current_folder = gtk_file_path_copy (path);
+
+  /* Notify the folder tree */
+
+  if (!impl->changing_folder)
+    {
+      impl->changing_folder = TRUE;
+      _gtk_file_system_model_path_do (impl->tree_model, path,
+				      expand_and_select_func, impl);
+      impl->changing_folder = FALSE;
+    }
+
+  /* Notify the location entry */
+
+  _gtk_file_chooser_entry_set_base_folder (GTK_FILE_CHOOSER_ENTRY (impl->entry), impl->current_folder);
+
+  /* Create a new list model */
+  set_list_model (impl);
+
+  /* Refresh controls */
+
+  shortcuts_unselect_all (impl);
+  toolbar_check_sensitivity (impl);
+
+  g_signal_emit_by_name (impl, "current-folder-changed", 0);
+
+  update_chooser_entry (impl);
+  check_preview_change (impl);
+  bookmarks_check_add_sensitivity (impl);
+
+  g_signal_emit_by_name (impl, "selection-changed", 0);
 }
 
 static GtkFilePath *
@@ -2328,11 +2361,6 @@ tree_selection_changed (GtkTreeSelection      *selection,
   if (impl->current_folder && gtk_file_path_compare (file_path, impl->current_folder) == 0)
     return;
 
-  if (impl->current_folder)
-    gtk_file_path_free (impl->current_folder);
-  impl->current_folder = gtk_file_path_copy (file_path);
-  _gtk_file_chooser_entry_set_base_folder (GTK_FILE_CHOOSER_ENTRY (impl->entry), file_path);
-
   /* Close the tree up to only the parents of the newly selected
    * node and it's immediate children are visible.
    */
@@ -2340,19 +2368,8 @@ tree_selection_changed (GtkTreeSelection      *selection,
   open_and_close (GTK_TREE_VIEW (impl->tree), path);
   gtk_tree_path_free (path);
 
-  /* Create the new list model */
-  set_list_model (impl);
-
-  shortcuts_unselect_all (impl);
-  toolbar_check_sensitivity (impl);
-
-  g_signal_emit_by_name (impl, "current-folder-changed", 0);
-
-  update_chooser_entry (impl);
-  check_preview_change (impl);
-  bookmarks_check_add_sensitivity (impl);
-
-  g_signal_emit_by_name (impl, "selection-changed", 0);
+  if (!impl->changing_folder)
+    _gtk_file_chooser_set_current_folder_path (GTK_FILE_CHOOSER (impl), file_path);
 }
 
 /* Callback used when a row in the shortcuts list is activated */

@@ -1,3 +1,18 @@
+2003-12-01  Federico Mena Quintero  <federico@ximian.com>
+
+	Decouple impl->current_folder from the selection in the folder
+	tree.  This is so that going to /home/federico/.foo (e.g. from a
+	bookmark) will work even if show_hidden == FALSE.  The folder tree
+	needs to be fixed in this case to show such folders explicitly.
+
+	* gtk/gtkfilechooserdefault.c
+	(gtk_file_chooser_default_set_current_folder): When changing
+	folders, do the entry and list model work here, instead of
+	tree_selection_changed().
+	(struct _GtkFileChooserDefault): Added a changing_folder flag
+	again, dum de dum.
+	(tree_selection_changed): Use _gtk_file_chooser_set_current_folder_path().
+
 Tue Dec  2 01:01:54 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkiconfactory.h: Remove duplicate declaration of 
