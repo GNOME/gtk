@@ -1,3 +1,9 @@
+Fri Nov 12 22:24:14 MET 1999  Sven Neumann <sven@gimp.org>
+
+	* gdk/gdkinputcommon.h
+	* gdk/gdkinputxfree.h: Call XFreeDeviceState() on results of 
+	XQueryDeviceState(). (Ported from HEAD)
+
 Wed Nov 10 17:26:49 GMT 1999 Tony Gale  <gale@gtk.org>
 
         * gtk/gtkclist.c: Fix off-by-one bug in parameter

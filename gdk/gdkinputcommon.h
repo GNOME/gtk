@@ -889,6 +889,8 @@ gdk_input_common_get_pointer     (GdkWindow       *window,
 	    }
 	  input_class = (XInputClass *)(((char *)input_class)+input_class->length);
 	}
+
+      XFreeDeviceState (state); 
     }
 }
 
