@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 1999-01-28 00:37-0600\n"
+"POT-Creation-Date: 1999-01-29 01:04-0500\n"
 "PO-Revision-Date: 1999-01-21 21:51 EST\n"
 "Last-Translator: Sergey Panov <sipan@mit.edu>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -71,7 +71,7 @@ msgstr "Файлы"
 #: gtk/gtkfilesel.c:499 gtk/gtkfilesel.c:1453
 #, c-format
 msgid "Directory unreadable: %s"
-msgstr "Каталог нечитаем: %s"
+msgstr "Каталог не читаем: %s"
 
 #: gtk/gtkfilesel.c:531
 msgid "Create Dir"
@@ -168,7 +168,7 @@ msgstr "Разрешение по Y:"
 
 #: gtk/gtkfontsel.c:213
 msgid "Spacing:"
-msgstr "Пропорцинальность"
+msgstr "Пропорциональность"
 
 #: gtk/gtkfontsel.c:214
 msgid "Average Width:"
@@ -190,7 +190,7 @@ msgstr "Запрошенное значение"
 
 #: gtk/gtkfontsel.c:454
 msgid "Actual Value"
-msgstr "Настояшее значение"
+msgstr "Настоящее значение"
 
 #: gtk/gtkfontsel.c:487
 msgid "Font"
@@ -392,7 +392,7 @@ msgstr "Оси"
 #. Keys listbox
 #: gtk/gtkinputdialog.c:315
 msgid "Keys"
-msgstr "Клавишы"
+msgstr "Клавиши"
 
 #. We create the save button in any case, so that clients can
 #. connect to it, without paying attention to whether it exits
