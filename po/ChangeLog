@@ -1,3 +1,7 @@
+Fri Dec 18 09:52:28 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* de.po: Fixed transposition of \ and "
+
 1998-12-18  Yukihiro Nakai <Nakai@TokyoNet.AD.JP>
 
 	* Add Japanese translation.

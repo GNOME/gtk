@@ -437,12 +437,12 @@ msgstr "Seite %u"
 #: gtk/gtkrc.c:1533
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr "Kann Bilddatei in Pfad: \"%s\" nicht finden. Zeile %"
+msgstr "Kann Bilddatei in Pfad: \"%s\" nicht finden. Zeile %d"
 
 #: gtk/gtkrc.c:1536
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Kann Bilddatei in Pfad: "\%s\" nicht finden"
+msgstr "Kann Bilddatei in Pfad: \"%s\" nicht finden"
 
 #: gtk/gtkthemes.c:72
 #, c-format
