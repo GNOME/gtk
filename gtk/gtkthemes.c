@@ -68,7 +68,7 @@ gtk_theme_engine_load (GTypeModule *module)
   
   if (!engine_path)
     {
-      g_warning (_("Unable to locate loadable module in module_path: \"%s\","),
+      g_warning (_("Unable to locate theme engine in module_path: \"%s\","),
 		 fullname);
       
       g_free (fullname);

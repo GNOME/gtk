@@ -1,5 +1,10 @@
 2001-03-24  Havoc Pennington  <hp@pobox.com>
 
+	* gtk/gtkthemes.c (gtk_theme_engine_load): improve error message
+	to contain the word "theme"
+
+2001-03-24  Havoc Pennington  <hp@pobox.com>
+
 	* gtk/gtkhsv.c (gtk_hsv_move): make motion around the ring much
 	slower but finer-grained
 	(gtk_hsv_focus): get initial focus on the ring or triangle 
