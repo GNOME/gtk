@@ -793,6 +793,10 @@ gtk_tree_view_model_sort_column_changed (GtkTreeSortable   *sortable,
 	  gtk_tree_view_column_set_sort_indicator (column, FALSE);
 	}
     }
+  else
+    {
+      gtk_tree_view_column_set_sort_indicator (column, FALSE);
+    }
 }
 
 static void

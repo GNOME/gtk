@@ -1,3 +1,8 @@
+Tue Oct  9 14:50:51 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeviewcolumn.c
+	(gtk_tree_view_model_sort_column_changed): fix broken code.
+
 2001-10-08  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/gtkselection.c: s/succesfully/successfully/g
