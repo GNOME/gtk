@@ -546,7 +546,7 @@ gdk_event_translate (GdkDisplay *display,
 
   /* Find the GdkWindow that this event occurred in. */
   
-  window = gdk_window_lookup (xevent->xany.window);
+  window = gdk_window_lookup_for_display (display, xevent->xany.window);
   window_private = (GdkWindowObject *) window;
 
   if (window)
@@ -919,7 +919,9 @@ gdk_event_translate (GdkDisplay *display,
        *  lookup the corresponding GdkWindow.
        */
       if (xevent->xcrossing.subwindow != None)
-	event->crossing.subwindow = gdk_window_lookup (xevent->xcrossing.subwindow);
+	event->crossing.subwindow = 
+	  gdk_window_lookup_for_display (display, 
+					 xevent->xcrossing.subwindow);
       else
 	event->crossing.subwindow = NULL;
       
@@ -1006,7 +1008,8 @@ gdk_event_translate (GdkDisplay *display,
        *  lookup the corresponding GdkWindow.
        */
       if (xevent->xcrossing.subwindow != None)
-	event->crossing.subwindow = gdk_window_lookup (xevent->xcrossing.subwindow);
+	event->crossing.subwindow = 
+	  gdk_window_lookup_for_display (display, xevent->xcrossing.subwindow);
       else
 	event->crossing.subwindow = NULL;
       
@@ -2338,7 +2341,7 @@ gdk_xsettings_watch_cb (Window window,
 {
   GdkWindow *gdkwin;
 
-  gdkwin = gdk_window_lookup (window);
+  gdkwin = gdk_window_lookup_for_all_displays (window);
   if (is_start)
     gdk_window_add_filter (gdkwin, gdk_xsettings_client_event_filter, NULL);
   else

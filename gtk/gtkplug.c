@@ -298,12 +298,16 @@ gtk_plug_construct (GtkPlug         *plug,
     {
       gpointer user_data = NULL;
 
-      plug->socket_window = gdk_window_lookup (socket_id);
+      plug->socket_window = 
+	gdk_window_lookup_for_display (gdk_drawable_get_display (plug->socket_window), 
+				       socket_id);
 
       if (plug->socket_window)
 	gdk_window_get_user_data (plug->socket_window, &user_data);
       else
-	plug->socket_window = gdk_window_foreign_new (socket_id);
+	plug->socket_window = 
+	  gdk_window_foreign_new_for_screen (gdk_drawable_get_screen (plug->socket_window),
+					     socket_id);
 
       if (user_data)
 	{
@@ -1098,7 +1102,9 @@ gtk_plug_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 	  {
 	    /* Start of embedding protocol */
 
-	    plug->socket_window = gdk_window_lookup (xre->parent);
+	    plug->socket_window = 
+	      gdk_window_lookup_for_display (gdk_drawable_get_display (plug->socket_window),
+					     xre->parent);
 	    if (plug->socket_window)
 	      {
 		gpointer user_data = NULL;
@@ -1115,7 +1121,7 @@ gtk_plug_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 	      }
 	    else
 	      {
-		plug->socket_window = gdk_window_foreign_new (xre->parent);
+		plug->socket_window = gdk_window_foreign_new_for_screen (gdk_drawable_get_screen (plug->socket_window),xre->parent);
 		if (!plug->socket_window) /* Already gone */
 		  break;
 	      }

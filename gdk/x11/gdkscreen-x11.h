@@ -85,7 +85,7 @@ GType gdk_X11_screen_impl_get_type ();
 #define DEFAULT_GDK_SCREEN_IMPL_X11_FOR_DISPLAY(display)  GDK_SCREEN_IMPL_X11(GDK_DISPLAY_GET_CLASS(display)->get_default_screen(display))
 #define GDK_SCREEN_XDISPLAY(screen)  (GDK_SCREEN_IMPL_X11(screen)->xdisplay)
 #define GDK_SCREEN_XROOTWIN(screen)  (GDK_SCREEN_IMPL_X11(screen)->xroot_window)
-
+#define GDK_SCREEN_DISPLAY(screen)   (GDK_SCREEN_IMPL_X11(screen)->display)
 G_END_DECLS
 
 #endif				/* _GDK_SCREEN_X11_H__ */

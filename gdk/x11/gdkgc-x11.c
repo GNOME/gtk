@@ -236,7 +236,9 @@ gdk_x11_gc_get_values (GdkGC       *gc,
     {
       values->foreground.pixel = xvalues.foreground;
       values->background.pixel = xvalues.background;
-      values->font = gdk_font_lookup (xvalues.font);
+      values->font = 
+	gdk_font_lookup_for_display (GDK_GC_DISPLAY (gc),
+				     xvalues.font);
 
       switch (xvalues.function)
 	{
@@ -306,8 +308,12 @@ gdk_x11_gc_get_values (GdkGC       *gc,
 	  break;
 	}
 
-      values->tile = gdk_pixmap_lookup (xvalues.tile);
-      values->stipple = gdk_pixmap_lookup (xvalues.stipple);
+      values->tile = 
+	gdk_pixmap_lookup_for_display (GDK_GC_DISPLAY (gc),
+				       xvalues.tile);
+    values->stipple = 
+      gdk_pixmap_lookup_for_display (GDK_GC_DISPLAY (gc),
+				     xvalues.stipple);
       values->clip_mask = NULL;
       values->subwindow_mode = xvalues.subwindow_mode;
       values->ts_x_origin = xvalues.ts_x_origin;

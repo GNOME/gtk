@@ -195,8 +195,8 @@ gdk_X11_screen_get_window_at_pointer (GdkScreen *screen,
     }
   XUngrabServer (xdisplay);
 
-  window = gdk_window_lookup (xwindow_last);
-
+  window = gdk_window_lookup_for_display (GDK_SCREEN_DISPLAY(screen),
+					  xwindow_last);
   if (win_x)
     *win_x = window ? winx : -1;
   if (win_y)

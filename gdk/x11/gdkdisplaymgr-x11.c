@@ -160,13 +160,15 @@ gdk_x11_display_manager_get_display (GdkDisplayManager * display_mgr,
   return NULL;
 }
 
-/* Help functions & Macros */
-
-
 GdkDisplayImplX11 *
 gdk_lookup_xdisplay (Display * display)
 {
   return
     GDK_DISPLAY_IMPL_X11 (gdk_x11_display_manager_get_display (_gdk_display_manager, 
 							       display));
+}
+GSList *
+gdk_x11_display_manager_get_open_displays (GdkDisplayManager  *display_mgr)
+{
+  return _gdk_display_manager->open_displays;
 }

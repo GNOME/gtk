@@ -25,6 +25,8 @@
  */
 
 #include "gdkprivate-x11.h"
+#include "gdkdisplay-x11.h"
+#include "gdkdisplaymgr-x11.h"
 #include <stdio.h>
 
 static guint     gdk_xid_hash  (XID *xid);
@@ -32,9 +34,78 @@ static gboolean  gdk_xid_equal (XID *a,
 				XID *b);
 
 
-static GHashTable *xid_ht = NULL;
+void
+gdk_xid_table_insert_for_display (GdkDisplay  *display,
+				  XID	      *xid,
+				  gpointer    data)
+{
+  GdkDisplayImplX11 *display_impl;
+  
+  g_return_if_fail (xid != NULL);
+  g_return_if_fail (GDK_IS_DISPLAY (display));
+  
+  display_impl = GDK_DISPLAY_IMPL_X11 (display);
 
+  if (!display_impl->xid_ht)
+    display_impl->xid_ht = g_hash_table_new ((GHashFunc) gdk_xid_hash,
+					     (GEqualFunc) gdk_xid_equal);
 
+  g_hash_table_insert (display_impl->xid_ht, xid, data);
+}
+
+void
+gdk_xid_table_remove_for_display (GdkDisplay  *display,
+				  XID	       xid)
+{
+  GdkDisplayImplX11 *display_impl;
+  
+  g_return_if_fail (GDK_IS_DISPLAY (display));
+  
+  display_impl = GDK_DISPLAY_IMPL_X11 (display);
+  
+  if (!display_impl->xid_ht)
+    display_impl->xid_ht = g_hash_table_new ((GHashFunc) gdk_xid_hash,
+					     (GEqualFunc) gdk_xid_equal);
+
+  g_hash_table_remove (display_impl->xid_ht, &xid);
+}
+
+gpointer
+gdk_xid_table_lookup_for_display (GdkDisplay  *display,
+				  XID	       xid)
+{
+  GdkDisplayImplX11 *display_impl;
+  gpointer data = NULL;
+  
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+  
+  display_impl = GDK_DISPLAY_IMPL_X11 (display);
+
+  if (display_impl->xid_ht)
+    data = g_hash_table_lookup (display_impl->xid_ht, &xid);
+  
+  return data;
+}
+
+gpointer
+gdk_xid_table_lookup_for_all_displays (XID xid)
+{
+  GdkDisplay *tmp_display;
+  gpointer return_val = NULL;
+  GSList *tmp_iter = gdk_x11_display_manager_get_open_displays(gdk_get_display_manager ());
+  
+  while (tmp_iter)
+    {
+      tmp_display = GDK_DISPLAY (tmp_iter->data);
+      return_val = gdk_xid_table_lookup_for_display (tmp_display, xid);
+      if (return_val)
+	return return_val;
+      tmp_iter = tmp_iter->next;
+    }
+  return FALSE;
+}
+
+#ifndef GDK_MULTIHEAD_SAFE
 void
 gdk_xid_table_insert (XID      *xid,
 		      gpointer  data)
@@ -68,7 +139,7 @@ gdk_xid_table_lookup (XID xid)
   
   return data;
 }
-
+#endif
 
 static guint
 gdk_xid_hash (XID *xid)

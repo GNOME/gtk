@@ -128,7 +128,8 @@ gdk_pixmap_impl_x11_finalize (GObject *object)
   if (!impl->is_foreign)
     XFreePixmap (GDK_PIXMAP_XDISPLAY (wrapper), GDK_PIXMAP_XID (wrapper));
   
-  gdk_xid_table_remove (GDK_PIXMAP_XID (wrapper));
+  gdk_xid_table_remove_for_display (GDK_PIXMAP_DISPLAY (wrapper),
+				    GDK_PIXMAP_XID (wrapper));
   
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -196,8 +197,8 @@ gdk_pixmap_new (GdkWindow *window,
         gdk_drawable_set_colormap (pixmap, cmap);
     }
   
-  gdk_xid_table_insert (&GDK_PIXMAP_XID (pixmap), pixmap);
-  
+  gdk_xid_table_insert_for_display (GDK_WINDOW_DISPLAY (window), 
+				    &GDK_PIXMAP_XID (pixmap), pixmap);
   return pixmap;
 }
 
@@ -240,8 +241,8 @@ gdk_bitmap_create_from_data (GdkWindow   *window,
                                           GDK_WINDOW_XID (window),
                                           (char *)data, width, height);
 
-  gdk_xid_table_insert (&GDK_PIXMAP_XID (pixmap), pixmap);
-  
+  gdk_xid_table_insert_for_display (GDK_WINDOW_DISPLAY (window), 
+				    &GDK_PIXMAP_XID (pixmap), pixmap);
   return pixmap;
 }
 
@@ -294,8 +295,8 @@ gdk_pixmap_create_from_data (GdkWindow   *window,
                                                 (char *)data, width, height,
                                                 fg->pixel, bg->pixel, depth);
 
-  gdk_xid_table_insert (&GDK_PIXMAP_XID (pixmap), pixmap);
-
+  gdk_xid_table_insert_for_display (GDK_WINDOW_DISPLAY (window),
+				    &GDK_PIXMAP_XID (pixmap), pixmap);
   return pixmap;
 }
 
@@ -342,17 +343,19 @@ gdk_pixmap_foreign_new_for_screen (GdkScreen       *screen,
   pix_impl->height = h_ret;
   GDK_PIXMAP_OBJECT (pixmap)->depth = depth_ret;
   
-  gdk_xid_table_insert(&GDK_PIXMAP_XID (pixmap), pixmap);
+  gdk_xid_table_insert_for_display (GDK_SCREEN_DISPLAY (screen),
+				    &GDK_PIXMAP_XID (pixmap), pixmap);
 
   return pixmap;
 }
-
+#ifndef GDK_MULTIHEAD_SAFE
 GdkPixmap*
 gdk_pixmap_foreign_new (GdkNativeWindow anid)
 {
    GDK_NOTE (MULTIHEAD, g_message ("Use gdk_pixmap_foreign_new_for_screen instead\n"));
    return gdk_pixmap_foreign_new_for_screen (gdk_get_default_screen (),anid);
 }
+#endif
 
 GdkScreen*
 gdk_pixmap_get_screen (GdkDrawable *drawable)

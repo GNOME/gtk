@@ -145,6 +145,9 @@ void _gdk_cursor_destroy (GdkCursor *cursor);
 extern GdkArgDesc _gdk_windowing_args[];
 GdkDisplay *   _gdk_windowing_init_check        (int         argc,
 						 char      **argv);
+GdkDisplay * _gdk_windowing_init_check_for_display (int	     argc,
+						    char   **argv,
+						    char    *display_name);
 void	 _gdk_windowing_screen_init	        (GdkScreen  *screen);
 void     _gdk_windowing_window_get_offsets      (GdkWindow  *window,
 						 gint       *x_offset,

@@ -35,11 +35,15 @@
 #include "gdkx.h"
 
 #include <config.h>
-
+void gdk_xid_table_insert_for_display  (GdkDisplay	*display,
+				        XID		*xid,
+					gpointer	data);
+void gdk_xid_table_remove_for_display  (GdkDisplay	*display,
+					XID	         xid);
+#ifndef GDK_MULTIHEAD_SAFE
 void          gdk_xid_table_insert     (XID             *xid,
 					gpointer         data);
 void          gdk_xid_table_remove     (XID              xid);
-#ifndef GDK_MULTIHEAD_SAFE
 gint          gdk_send_xevent          (Window           window,
 					gboolean         propagate,
 					glong            event_mask,

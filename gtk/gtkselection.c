@@ -1012,10 +1012,13 @@ gtk_selection_request (GtkWidget *widget,
   /* Create GdkWindow structure for the requestor */
   
 #if defined(GDK_WINDOWING_WIN32) || defined(GDK_WINDOWING_X11) || defined(GDK_WINDOWING_FB) 
-  info->requestor = gdk_window_lookup (event->requestor);
+  info->requestor =
+    gdk_window_lookup_for_display (gtk_widget_get_display (widget),
+				   event->requestor);
   if (!info->requestor)
-    info->requestor = gdk_window_foreign_new_for_display (gtk_widget_get_display (widget),
-    							  event->requestor);
+    info->requestor = 
+      gdk_window_foreign_new_for_display (gtk_widget_get_display (widget),
+					  event->requestor);
 #else
   info->requestor = NULL;
 #endif

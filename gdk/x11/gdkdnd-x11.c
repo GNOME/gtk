@@ -29,6 +29,7 @@
 #include <string.h>
 
 #include "gdk.h"          /* For gdk_flush() */
+#include "gdkx.h"
 #include "gdkdnd.h"
 #include "gdkproperty.h"
 #include "gdkinternals.h"
@@ -1607,7 +1608,8 @@ motif_drag_context_new (GdkWindow *dest_window,
 {
   GdkDragContext *new_context;
   GdkDragContextPrivateX11 *private;
-  GdkDisplayImplX11 *display_impl = GDK_DISPLAY_IMPL_X11 (GDK_DRAWABLE_DISPLAY (dest_window));
+  GdkDisplay *display = GDK_DRAWABLE_DISPLAY (dest_window);
+  GdkDisplayImplX11 *display_impl = GDK_DISPLAY_IMPL_X11 (display);
 
   /* FIXME, current_dest_drag really shouldn't be NULL'd
    * if we error below.
@@ -1629,12 +1631,12 @@ motif_drag_context_new (GdkWindow *dest_window,
   new_context->protocol = GDK_DRAG_PROTO_MOTIF;
   new_context->is_source = FALSE;
 
-  new_context->source_window = gdk_window_lookup (source_window);
+  new_context->source_window = gdk_window_lookup_for_display (display, source_window);
   if (new_context->source_window)
     gdk_window_ref (new_context->source_window);
   else
     {
-      new_context->source_window = gdk_window_foreign_new_for_display (GDK_DRAWABLE_DISPLAY (dest_window),
+      new_context->source_window = gdk_window_foreign_new_for_display (display,
 								       source_window);
       if (!new_context->source_window)
 	{
@@ -2586,7 +2588,7 @@ xdnd_enter_filter (GdkXEvent *xev,
   new_context->protocol = GDK_DRAG_PROTO_XDND;
   new_context->is_source = FALSE;
 
-  new_context->source_window = gdk_window_lookup (source_window);
+  new_context->source_window = gdk_window_lookup_for_display (GDK_DRAWABLE_DISPLAY (event->any.window), source_window);
   if (new_context->source_window)
     gdk_window_ref (new_context->source_window);
   else
@@ -2977,7 +2979,8 @@ gdk_drag_find_window (GdkDragContext  *context,
        */
       if ((recipient = gdk_drag_get_protocol (display, dest, protocol)))
 	{
-	  *dest_window = gdk_window_lookup (recipient);
+	  *dest_window = gdk_window_lookup_for_display (display,
+							recipient);
 	  if (*dest_window)
 	    gdk_window_ref (*dest_window);
 	  else

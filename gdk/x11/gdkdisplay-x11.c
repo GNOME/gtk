@@ -288,3 +288,24 @@ gdk_x11_display_ungrab (GdkDisplay *display)
   if (display_impl->grab_count == 0)
     XUngrabServer (display_impl->xdisplay);
 }
+
+GdkDisplay *
+gdk_display_init_new (int argc, char **argv, char *display_name)
+{
+  GdkDisplay *display = NULL;
+  GdkScreen *screen = NULL;
+  
+  display = _gdk_windowing_init_check_for_display (argc,argv,display_name);
+  if (!display)
+    return NULL;
+  
+  screen = gdk_display_get_default_screen (display);
+  
+  _gdk_visual_init (screen);
+  _gdk_windowing_window_init (screen);
+  _gdk_windowing_image_init (display);
+  gdk_events_init (display);
+  gdk_dnd_init (display);
+  
+  return display;
+}

@@ -116,7 +116,9 @@ GdkArgDesc _gdk_windowing_args[] = {
 };
 
 GdkDisplay *
-_gdk_windowing_init_check_for_display (int argc, char **argv, char *display_name)
+_gdk_windowing_init_check_for_display (int argc,
+				       char **argv,
+				       char *display_name)
 {
   XClassHint *class_hint;
   guint pid;
@@ -203,27 +205,6 @@ _gdk_windowing_init_check (int argc, char **argv)
   /* This wrapper function is needed because of gdk_display_name exists only
    * in x11 implementation */
   return _gdk_windowing_init_check_for_display (argc, argv, gdk_display_name);
-}
-
-GdkDisplay *
-gdk_display_init_new (int argc, char **argv, char *display_name)
-{
-  GdkDisplay *display = NULL;
-  GdkScreen *screen = NULL;
-  
-  display = _gdk_windowing_init_check_for_display (argc,argv,display_name);
-  if (!display)
-    return NULL;
-  
-  screen = gdk_display_get_default_screen (display);
-  
-  _gdk_visual_init (screen);
-  _gdk_windowing_window_init (screen);
-  _gdk_windowing_image_init (display);
-  gdk_events_init (display);
-  gdk_dnd_init (display);
-  
-  return display;
 }
 
 #ifndef GDK_MULTIHEAD_SAFE

@@ -186,7 +186,7 @@ gdk_selection_owner_get_for_display (GdkDisplay *display,
   if (xwindow == None)
     return NULL;
 
-  return gdk_window_lookup (xwindow);
+  return gdk_window_lookup_for_display (display, xwindow);
 }
 #ifndef GDK_MULTIHEAD_SAFE
 GdkWindow*

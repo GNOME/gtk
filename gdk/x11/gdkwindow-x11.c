@@ -173,9 +173,11 @@ gdk_window_impl_x11_finalize (GObject *object)
 
   if (!GDK_WINDOW_DESTROYED (wrapper))
     {
-      gdk_xid_table_remove (draw_impl->xid);
+      gdk_xid_table_remove_for_display (GDK_WINDOW_DISPLAY (object),
+					draw_impl->xid);
       if (window_impl->focus_window)
-	gdk_xid_table_remove (window_impl->focus_window);
+	gdk_xid_table_remove_for_display (GDK_WINDOW_DISPLAY (object),
+					  window_impl->focus_window);
     }
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -305,7 +307,9 @@ _gdk_windowing_window_init (GdkScreen * screen)
   impl->height = height;
   screen_impl->colormap_initialised = TRUE;
   
-  gdk_xid_table_insert (&screen_impl->xroot_window, screen_impl->root_window);
+  gdk_xid_table_insert_for_display (screen_impl->display,
+				    &screen_impl->xroot_window,
+				    screen_impl->root_window);
 }
 
 GdkWindow *
@@ -530,7 +534,8 @@ gdk_window_new (GdkWindow     *parent,
 					xattributes_mask, &xattributes);
 
   gdk_drawable_ref (window);
-  gdk_xid_table_insert (&draw_impl->xid, window);
+  gdk_xid_table_insert_for_display  (screen_impl->display, 
+				     &draw_impl->xid, window);
   
   gdk_window_set_cursor (window, ((attributes_mask & GDK_WA_CURSOR) ?
 				  (attributes->cursor) :
@@ -586,7 +591,8 @@ gdk_window_new (GdkWindow     *parent,
 		    KeyPressMask | KeyReleaseMask | FocusChangeMask);
       
       XMapWindow (xdisplay, impl->focus_window);
-      gdk_xid_table_insert (&impl->focus_window, window);
+      gdk_xid_table_insert_for_display (screen_impl->display, 
+					&impl->focus_window, window);
     }
 
   size_hints.flags = PSize;
@@ -672,7 +678,8 @@ gdk_window_foreign_new_for_display (GdkDisplay     *display,
   draw_impl = GDK_DRAWABLE_IMPL_X11 (private->impl);
   draw_impl->wrapper = GDK_DRAWABLE (window);
   
-  private->parent = gdk_xid_table_lookup (parent);
+  private->parent = gdk_xid_table_lookup_for_display (display,
+						      parent);
   
   parent_private = (GdkWindowObject *)private->parent;
   
@@ -700,16 +707,17 @@ gdk_window_foreign_new_for_display (GdkDisplay     *display,
   _gdk_window_init_position (GDK_WINDOW (private));
 
   gdk_drawable_ref (window);
-  gdk_xid_table_insert (&GDK_WINDOW_XID (window), window);
-  
+  gdk_xid_table_insert_for_display (display, 
+				    &GDK_WINDOW_XID (window), window);
   return window;
 }
-
+#ifndef GDK_MULTIHEAD_SAFE
 GdkWindow *
 gdk_window_foreign_new (GdkNativeWindow anid)
 {
   return gdk_window_foreign_new_for_display (gdk_get_default_display (), anid);
 }
+#endif
 
 void
 _gdk_windowing_window_destroy (GdkWindow *window,
@@ -780,9 +788,11 @@ gdk_window_destroy_notify (GdkWindow *window)
       _gdk_window_destroy (window, TRUE);
     }
   
-  gdk_xid_table_remove (GDK_WINDOW_XID (window));
+  gdk_xid_table_remove_for_display (GDK_WINDOW_DISPLAY (window),
+				    GDK_WINDOW_XID (window));
   if (window_impl->focus_window)
-    gdk_xid_table_remove (window_impl->focus_window);
+    gdk_xid_table_remove_for_display (GDK_WINDOW_DISPLAY (window),
+				      window_impl->focus_window);
   
   gdk_drawable_unref (window);
 }
@@ -2132,7 +2142,8 @@ _gdk_windowing_window_get_pointer (GdkWindow       *window,
 		     &root, &child, &rootx, &rooty, &winx, &winy, &xmask))
     {
       if (child)
-	return_val = gdk_window_lookup (child);
+	return_val = gdk_window_lookup_for_display (GDK_WINDOW_DISPLAY (window),
+						    child);
     }
   
   if (x)
@@ -3887,10 +3898,10 @@ _gdk_moveresize_configure_done (GdkDisplay * display,
   XEvent *tmp_event;
   _MoveResizeData *mv_resize = g_object_get_data (G_OBJECT (display), "moveresize");
   
-  g_assert (mv_resize != NULL);
-
   if (window != g_object_get_data (G_OBJECT (display), "moveresize_window"))
     return FALSE;
+  
+  g_assert (mv_resize != NULL);
 
   if (mv_resize->moveresize_pending_event)
     {
@@ -3899,6 +3910,7 @@ _gdk_moveresize_configure_done (GdkDisplay * display,
       _gdk_moveresize_handle_event (tmp_event);
       g_free (tmp_event);
     }
+  return TRUE;
 }
 
 static void

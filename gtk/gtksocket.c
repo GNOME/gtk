@@ -958,7 +958,7 @@ gtk_socket_add_window (GtkSocket        *socket,
   GtkWidget *widget = GTK_WIDGET (socket);
   gpointer user_data = NULL;
   
-  socket->plug_window = gdk_window_lookup (xid);
+  socket->plug_window = gdk_window_lookup_for_display (GDK_WINDOW_DISPLAY(socket->plug_window), xid);
 
   if (socket->plug_window)
     {

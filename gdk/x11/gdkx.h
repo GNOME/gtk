@@ -138,6 +138,7 @@ GType gdk_gc_x11_get_type (void);
 #define GDK_IMAGE_XIMAGE(image)       (((GdkImagePrivateX11 *) GDK_IMAGE (image)->windowing_data)->ximage)
 #define GDK_IMAGE_PRIVATE_DATA(image) ((GdkImagePrivateX11 *) GDK_IMAGE (image)->windowing_data)
 #define GDK_GC_XDISPLAY(gc)           (GDK_SCREEN_XDISPLAY(GDK_GC_X11(gc)->screen))
+#define GDK_GC_DISPLAY(gc)            (GDK_SCREEN_DISPLAY(GDK_GC_X11(gc)->screen))
 #define GDK_COLORMAP_XDISPLAY(cmap)   (((GdkColormapPrivateX11 *)GDK_COLORMAP (cmap)->windowing_data)->xdisplay)
 #define GDK_COLORMAP_XCOLORMAP(cmap)  (((GdkColormapPrivateX11 *)GDK_COLORMAP (cmap)->windowing_data)->xcolormap)
 #define GDK_VISUAL_XVISUAL(vis)       (((GdkVisualPrivate *) vis)->xvisual)
@@ -165,13 +166,22 @@ Window        gdk_get_client_window      (Display  *display,
 GdkPixmap   *gdk_pixmap_foreign_new_for_screen (GdkScreen * screen,
 						GdkNativeWindow anid);
 
-GdkPixmap    *gdk_pixmap_foreign_new (GdkNativeWindow anid);
 GdkWindow    *gdk_window_foreign_new_for_display (GdkDisplay * display,
 						  GdkNativeWindow anid);
-GdkWindow    *gdk_window_foreign_new (GdkNativeWindow anid);
 
 /* Return the Gdk* for a particular XID */
-gpointer      gdk_xid_table_lookup     (XID              xid);
+gpointer      gdk_xid_table_lookup_for_display (GdkDisplay *display,
+						XID         xid);
+gpointer      gdk_xid_table_lookup_for_all_displays (XID xid);
+
+#define gdk_window_lookup_for_display(display, xid) \
+	((GdkWindow*) gdk_xid_table_lookup_for_display(display, xid))
+#define gdk_window_lookup_for_all_displays(xid) \
+	((GdkWindow*) gdk_xid_table_lookup_for_all_displays(xid))
+#define gdk_pixmap_lookup_for_display(display , xid)  \
+	((GdkPixmap*) gdk_xid_table_lookup_for_display(display, xid))
+#define gdk_pixmap_lookup_for_all_displays(xid)  \
+	((GdkPixmap*) gdk_xid_table_lookup_for_all_displays(xid))
 
 guint32       gdk_x11_get_server_time  (GdkWindow       *window);
 
@@ -180,13 +190,17 @@ gboolean gdk_net_wm_supports_for_screen (GdkScreen *screen,
 					 GdkAtom    property);
 
 #ifndef GDK_MULTIHEAD_SAFE
+GdkPixmap    *gdk_pixmap_foreign_new (GdkNativeWindow anid);
+GdkWindow    *gdk_window_foreign_new (GdkNativeWindow anid);
+gpointer      gdk_xid_table_lookup     (XID              xid);
 gboolean gdk_net_wm_supports           (GdkAtom    property);
 void          gdk_x11_grab_server      ();
 void          gdk_x11_ungrab_server    ();
-#endif
 
 #define gdk_window_lookup(xid)	   ((GdkWindow*) gdk_xid_table_lookup (xid))
 #define gdk_pixmap_lookup(xid)	   ((GdkPixmap*) gdk_xid_table_lookup (xid))
+
+#endif
 
 GC _gdk_x11_gc_flush (GdkGC *gc);
 GList *gdk_list_visuals_for_screen (GdkScreen *screen);
@@ -220,7 +234,12 @@ struct _GdkFontPrivateX
 #define GDK_FONT_XDISPLAY(font)       (((GdkFontPrivate *) font)->xdisplay)
 #define GDK_FONT_XFONT(font)          (((GdkFontPrivateX *)font)->xfont)
 
+#ifndef GDK_MULTIHEAD_SAFE
+
 #define gdk_font_lookup(xid)	   ((GdkFont*) gdk_xid_table_lookup (xid))
+
+#endif /* GDK_MULTIHEAD_SAFE */
+#define gdk_font_lookup_for_display(display, xid) ((GdkFont*) gdk_xid_table_lookup_for_display (display, xid))
 
 #endif /* GDK_DISABLE_DEPRECATED */
 

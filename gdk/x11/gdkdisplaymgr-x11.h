@@ -44,11 +44,12 @@ struct _GdkDisplayManagerClass
   GObjectClass parent_class;
 };
 
-GdkScreen *        gdk_x11_display_manager_get_screen_for_root (GdkDisplayManager      *display_mgr,
-								Window                  root);
-GdkDisplay *       gdk_x11_display_manager_get_display         (GdkDisplayManager      *display_mgr,
-								Display                *display);
-GdkDisplayImplX11 *gdk_lookup_xdisplay                         (Display                *display);
+GdkScreen *        gdk_x11_display_manager_get_screen_for_root (GdkDisplayManager  *display_mgr,
+								Window              root);
+GdkDisplay *       gdk_x11_display_manager_get_display         (GdkDisplayManager  *display_mgr,
+								Display            *display);
+GdkDisplayImplX11 *gdk_lookup_xdisplay                         (Display            *display);
+GSList *	   gdk_x11_display_manager_get_open_displays   (GdkDisplayManager  *display_mgr);
 
 #ifdef __cplusplus
 }

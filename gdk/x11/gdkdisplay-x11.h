@@ -93,6 +93,9 @@ struct _GdkDisplayImplX11
   
   /* list of filters for client messages */
   GList *client_filters;	            
+  
+  /* X ID hashtable */
+  GHashTable *xid_ht;
 };
 
 struct _GdkDisplayImplX11Class

@@ -160,7 +160,7 @@ gdk_font_load_for_display (GdkDisplay  *display,
   if (xfont == NULL)
     return NULL;
 
-  font = gdk_font_lookup (xfont->fid);
+  font = gdk_font_lookup_for_display (display, xfont->fid);
   if (font != NULL) 
     {
       private = (GdkFontPrivateX *) font;
@@ -182,7 +182,7 @@ gdk_font_load_for_display (GdkDisplay  *display,
       font->ascent =  xfont->ascent;
       font->descent = xfont->descent;
       
-      gdk_xid_table_insert (&xfont->fid, font);
+      gdk_xid_table_insert_for_display (display, &xfont->fid, font);
     }
 
   gdk_font_hash_insert (GDK_FONT_FONT, font, font_name);
@@ -387,7 +387,8 @@ _gdk_font_destroy (GdkFont *font)
   switch (font->type)
     {
     case GDK_FONT_FONT:
-      gdk_xid_table_remove (((XFontStruct *) private->xfont)->fid);
+      gdk_xid_table_remove_for_display (private->display,
+					((XFontStruct *) private->xfont)->fid);
       XFreeFont (GDK_DISPLAY_IMPL_X11(private->display)->xdisplay,
 		  (XFontStruct *) private->xfont);
       break;
