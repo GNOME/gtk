@@ -66,8 +66,8 @@ Additions:
    void gtk_rc_string_export (const gchar *rc_additions,
                               gboolean     override_rc_styles);
 
- * Configure events for windows that no longer exist fail in
-   XTranslateCoordinates
+ * Should release grab before activating menu item (and remove
+   menu from screen?)
  
 TODO AFTER GTK 1.0
 ------------------
@@ -210,6 +210,8 @@ TODO AFTER GTK 1.0
     mouse click, some function to get the word/line under the mouse pointer 
     [ From: Stefan Jeske <jeske@braunschweig.netsurf.de> ]
 
+  - Really big font (150 pt), plus lots of editing caused segfault
+
  ? Allow moving the separator for paned widgets by dragging 
    it directly instead of using the handle. 
 
@@ -242,3 +244,16 @@ TODO AFTER GTK 1.0
    windows??? This would mean keeping track of our window heirarchy
    ourselves, for one thing, and will never be safe, because of
    race conditions.
+
+ * --g-fatal-warnings flag that does 
+        g_set_warning_handler ((GWarningHandler)g_error);
+
+ * If a window spontaneously resizes itself N times before any
+   ConfigureNotify events are received, then due to the interaction
+   of the ConfigureNotify compression code in GDK and the resize
+   count used for the window, the window will be size_allocated
+   the next N-1 times it is moved.
+
+   Fix: Only send GDK_EVENT_CONFIGURE when the window is resized,
+   create a new event type for toplevel motion. (GDK_EVENT_REPOSITION?)
+   and eliminate the resize count in GtkWindow.

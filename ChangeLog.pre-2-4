@@ -1,3 +1,44 @@
+Fri Apr  3 17:14:55 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* glib/testglib.c: Removed literal german from strings
+	to appease SGI compiler.
+	
+	* gdk/gdk.c: More extensive debugging output
+
+	* gtk/gtkalignment.c gtk/gtkbutton.c gtk/gtkcheckbutton.c
+	  gtk/gtkclist.c gtk/gtkeventbox.c gtk/gtkhandlebox.c
+	  gtk/gtk[hv]box.c gtk/gtk[hv]paned.c gtk/gtklist.c
+	  gtk/gtkmenu.c gtk/gtkmenubar.c gtk/gtkmenuitem.c
+	  gtk/gtknotebook.c gtk/gtktable.c gtk/gtktree.c 
+	  gtk/gtktreeitem.c gtk/gtkviewport.c
+
+	Avoid assigning negative values to unsigned allocation.width and
+	height
+
+	* gtk/gtkwindow.c:
+
+	Instead of realizing the widget, then size allocating, (resulting
+	in XMoveResizeWindows for all children, do the size allocation
+	first, then realize. 
+
+	In gtk_real_window_move_resize, combine move and resize
+	into a single GDK/X call when possible.
+
+	* gtk/gtkclist.c gtk/gtkdrawingarea.c: 
+
+	Remove assumption that the widget will be size allocated _after_
+	it is realized.
+	
+	* gtk/gtklist.c (gtk_list_motion_notify): Removed useless
+	debugging message.
+
+Wed Apr  1 21:51:37 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkmain.c: return NULL for gtk_get_event_widget (NULL)
+
+	* gtk/gtkentry.c: New algorithm to get more normal behavior
+	with scroll_offset when changing fonts.
+	
 Thu Apr  2 17:30:04 BST 1998 Tony Gale <gale@gtk.org>
 
 	* examples/gtkdial/Makefile,
