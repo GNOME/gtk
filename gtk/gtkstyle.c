@@ -5043,3 +5043,60 @@ gtk_style_set_font (GtkStyle *style,
       style->private_font_desc = NULL;
     }
 }
+
+/**
+ * _gtk_draw_insertion_cursor:
+ * @drawable: a #GdkDrawable
+ * @gc: a #GdkGC
+ * @location: location where to draw the cursor (@location->width is ignored)
+ * @dir: text direction for the cursor, used to decide whether to draw a
+ *       directional arrow on the cursor and in what direction. Unless both
+ *       strong and weak cursors are displayed, this should be %GTK_TEXT_DIR_NONE.
+ * 
+ * Draws a text caret on @drawable at @location. This is not a style function
+ * but merely a convenience function for drawing the standard cursor shape.
+ **/
+void
+_gtk_draw_insertion_cursor (GdkDrawable      *drawable,
+			    GdkGC            *gc,
+			    GdkRectangle     *location,
+			    GtkTextDirection  dir)
+{
+  gint stem_width = location->height / 30 + 1;
+  gint arrow_width = stem_width + 1;
+  gint x, y;
+  gint i;
+
+  for (i = 0; i < stem_width; i++)
+    gdk_draw_line (drawable, gc,
+		   location->x + i - stem_width / 2, location->y,
+		   location->x + i - stem_width / 2, location->y + location->height);
+
+  if (dir == GTK_TEXT_DIR_RTL)
+    {
+      x = location->x - stem_width / 2 - 1;
+      y = location->y + location->height - arrow_width * 2 - arrow_width + 1;
+  
+      for (i = 0; i < arrow_width; i++)
+	{
+	  gdk_draw_line (drawable, gc,
+			 x, y + i + 1,
+			 x, y + 2 * arrow_width - i - 1);
+	  x --;
+	}
+    }
+  else if (dir == GTK_TEXT_DIR_LTR)
+    {
+      x = location->x + stem_width - stem_width / 2;
+      y = location->y + location->height - arrow_width * 2 - arrow_width + 1;
+  
+      for (i = 0; i < arrow_width; i++) 
+	{
+	  gdk_draw_line (drawable, gc,
+			 x, y + i + 1,
+			 x, y + 2 * arrow_width - i - 1);
+	  x++;
+	}
+    }
+}
+

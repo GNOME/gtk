@@ -90,6 +90,7 @@ extern "C" {
 /* The drawable should be pre-initialized to your preferred background.
  * widget            - Widget to grab some style info from
  * drawable          - Drawable to render to
+ * cursor_gc         - Graphics context to use for cursor
  * x_offset/y_offset - Position of the drawable in layout coordinates
  * x/y/width/height  - Region of the layout to render. x,y must be inside
  *                     the drawable.
@@ -97,6 +98,7 @@ extern "C" {
 void gtk_text_layout_draw (GtkTextLayout        *layout,
                            GtkWidget            *widget,
                            GdkDrawable          *drawable,
+			   GdkGC                *cursor_gc,
                            gint                  x_offset,
                            gint                  y_offset,
                            gint                  x,

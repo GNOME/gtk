@@ -716,6 +716,7 @@ void
 gtk_text_layout_draw (GtkTextLayout *layout,
                       GtkWidget *widget,
                       GdkDrawable *drawable,
+		      GdkGC       *cursor_gc,
                       /* Location of the drawable
                          in layout coordinates */
                       gint x_offset,
@@ -775,6 +776,8 @@ gtk_text_layout_draw (GtkTextLayout *layout,
       GtkTextLineDisplay *line_display;
       gint selection_start_index = -1;
       gint selection_end_index = -1;
+      gboolean have_strong;
+      gboolean have_weak;
 
       GtkTextLine *line = tmp_list->data;
 
@@ -823,23 +826,53 @@ gtk_text_layout_draw (GtkTextLayout *layout,
           /* We paint the cursors last, because they overlap another chunk
          and need to appear on top. */
 
+ 	  have_strong = FALSE;
+ 	  have_weak = FALSE;
+	  
+	  cursor_list = line_display->cursors;
+	  while (cursor_list)
+	    {
+	      GtkTextCursorDisplay *cursor = cursor_list->data;
+ 	      if (cursor->is_strong)
+ 		have_strong = TRUE;
+ 	      else
+ 		have_weak = TRUE;
+	      
+	      cursor_list = cursor_list->next;
+ 	    }
+	  
           cursor_list = line_display->cursors;
           while (cursor_list)
             {
               GtkTextCursorDisplay *cursor = cursor_list->data;
+	      GtkTextDirection dir;
+ 	      GdkRectangle cursor_location;
+
               GdkGC *gc;
 
               if (cursor->is_strong)
-                gc = widget->style->base_gc[GTK_STATE_SELECTED];
+                gc = cursor_gc;
               else
                 gc = widget->style->text_gc[GTK_STATE_NORMAL];
 
-              gdk_gc_set_clip_rectangle (gc, &clip);
-              gdk_draw_line (drawable, gc,
-                             line_display->x_offset + cursor->x - x_offset,
-                             current_y + line_display->top_margin + cursor->y,
-                             line_display->x_offset + cursor->x - x_offset,
-                             current_y + line_display->top_margin + cursor->y + cursor->height - 1);
+ 	      if (have_strong && have_weak)
+ 		{
+ 		  dir = line_display->direction;
+ 		  if (!cursor->is_strong)
+ 		    dir = (dir == GTK_TEXT_DIR_RTL) ? GTK_TEXT_DIR_LTR : GTK_TEXT_DIR_RTL;
+ 		}
+ 	      else
+ 		{
+ 		  dir = GTK_TEXT_DIR_NONE;
+ 		}
+ 
+ 	      cursor_location.x = line_display->x_offset + cursor->x - x_offset;
+ 	      cursor_location.y = current_y + line_display->top_margin + cursor->y;
+ 	      cursor_location.width = 0;
+ 	      cursor_location.height = cursor->height;
+ 
+	      gdk_gc_set_clip_rectangle(gc, &clip);
+ 	      _gtk_draw_insertion_cursor (drawable, gc, &cursor_location, dir);
               gdk_gc_set_clip_rectangle (gc, NULL);
 
               cursor_list = cursor_list->next;

@@ -1,3 +1,24 @@
+Overview of Changes in GTK+ 1.3.9
+=================================
+
+* Add editable text cells to GtkTreeView.
+  Keynav, drawing fixes in GtkTreeView [Jonathan Blandford]
+* Text widget no longer always has a \n in it. [Havoc Pennington]
+* Text widget bug fixes [Havoc, Dov Grobgeld, Hidetoshi Tajima]
+* Allow -1 for width/height in gdk_pixbuf_render_*(). [Matthias Clasen]
+* Minor fix for major resizing problems in recent releases [Owen Taylor]
+* Restore ability to set _set properties to TRUE for 
+  GtkCellRendererText, GtkTextTag [Owen]
+* Cursor drawing improvements [Owen]
+* Win32 fixes [Hans Breuer]
+* Mark various functions as deprecated or private.
+* Misc bug fixes, portability fixes, and cleanups.
+
+Other Contributors: 
+ Vitaly Tishkov, Christian Rose, Frank Belew, Jeff Franks, Sven Neumann,
+ Kristian Rietveld, Vitaly Tishkov, Joshua N. Pritikin, Matt Wilson, 
+ James Henstridge, Detlef Reichl
+
 Overview of Changes in GTK+ 1.3.8
 =================================
 

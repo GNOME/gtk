@@ -112,14 +112,7 @@ id_to_macro (const gchar *id)
   g_string_append (macro, "_STOCK");
   g_string_append (macro, cp);
 
-  p = macro->str;
-  while (*p)
-    {
-      *p = g_ascii_toupper (*p);
-      if (*p == '-')
-        *p = '_';
-      ++p;
-    }
+  g_string_ascii_up (macro);
 
   return g_string_free (macro, FALSE);
 }

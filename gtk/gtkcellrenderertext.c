@@ -668,6 +668,46 @@ set_fg_color (GtkCellRendererText *celltext,
     }
 }
 
+static PangoFontMask
+set_font_desc_fields (PangoFontDescription *desc,
+		      PangoFontMask         to_set)
+{
+  PangoFontMask changed_mask = 0;
+  
+  if (to_set & PANGO_FONT_MASK_FAMILY)
+    {
+      const char *family = pango_font_description_get_family (desc);
+      if (!family)
+	{
+	  family = "sans";
+	  changed_mask |= PANGO_FONT_MASK_FAMILY;
+	}
+
+      pango_font_description_set_family (desc, family);
+    }
+  if (to_set & PANGO_FONT_MASK_STYLE)
+    pango_font_description_set_style (desc, pango_font_description_get_style (desc));
+  if (to_set & PANGO_FONT_MASK_VARIANT)
+    pango_font_description_set_variant (desc, pango_font_description_get_variant (desc));
+  if (to_set & PANGO_FONT_MASK_WEIGHT)
+    pango_font_description_set_weight (desc, pango_font_description_get_weight (desc));
+  if (to_set & PANGO_FONT_MASK_STRETCH)
+    pango_font_description_set_stretch (desc, pango_font_description_get_stretch (desc));
+  if (to_set & PANGO_FONT_MASK_SIZE)
+    {
+      gint size = pango_font_description_get_size (desc);
+      if (size <= 0)
+	{
+	  size = 10 * PANGO_SCALE;
+	  changed_mask |= PANGO_FONT_MASK_SIZE;
+	}
+      
+      pango_font_description_set_size (desc, size);
+    }
+
+  return changed_mask;
+}
+
 static void
 notify_set_changed (GObject       *object,
 		    PangoFontMask  changed_mask)
@@ -684,6 +724,24 @@ notify_set_changed (GObject       *object,
     g_object_notify (object, "stretch_set");
   if (changed_mask & PANGO_FONT_MASK_SIZE)
     g_object_notify (object, "size_set");
+}
+
+static void
+notify_fields_changed (GObject       *object,
+		       PangoFontMask  changed_mask)
+{
+  if (changed_mask & PANGO_FONT_MASK_FAMILY)
+    g_object_notify (object, "family");
+  if (changed_mask & PANGO_FONT_MASK_STYLE)
+    g_object_notify (object, "style");
+  if (changed_mask & PANGO_FONT_MASK_VARIANT)
+    g_object_notify (object, "variant");
+  if (changed_mask & PANGO_FONT_MASK_WEIGHT)
+    g_object_notify (object, "weight");
+  if (changed_mask & PANGO_FONT_MASK_STRETCH)
+    g_object_notify (object, "stretch");
+  if (changed_mask & PANGO_FONT_MASK_SIZE)
+    g_object_notify (object, "size");
 }
 
 static void
@@ -960,8 +1018,18 @@ gtk_cell_renderer_text_set_property (GObject      *object,
     case PROP_STRETCH_SET:
     case PROP_SIZE_SET:
       if (!g_value_get_boolean (value))
-	pango_font_description_unset_fields (celltext->font,
-					     get_property_font_set_mask (param_id));
+	{
+	  pango_font_description_unset_fields (celltext->font,
+					       get_property_font_set_mask (param_id));
+	}
+      else
+	{
+	  PangoFontMask changed_mask;
+	  
+	  changed_mask = set_font_desc_fields (celltext->font,
+					       get_property_font_set_mask (param_id));
+	  notify_fields_changed (G_OBJECT (celltext), changed_mask);
+	}
       break;
 
     case PROP_SCALE_SET:

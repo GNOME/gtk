@@ -2653,6 +2653,7 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
   if (GTK_WIDGET_DRAWABLE (entry))
     {
       GtkWidget *widget = GTK_WIDGET (entry);
+      GdkRectangle cursor_location;
       gboolean split_cursor;
 
       gint xoffset = INNER_BORDER - entry->scroll_offset;
@@ -2660,6 +2661,8 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
       gint text_area_height;
       GdkGC *gc1 = NULL;
       GdkGC *gc2 = NULL;
+      GtkTextDirection dir1 = GTK_TEXT_DIR_NONE;
+      GtkTextDirection dir2 = GTK_TEXT_DIR_NONE;
       gint x1 = 0;
       gint x2 = 0;
 
@@ -2678,6 +2681,9 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
 
 	  if (weak_x != strong_x)
 	    {
+	      dir1 = widget_direction;
+	      dir2 = (widget_direction == GTK_TEXT_DIR_LTR) ? GTK_TEXT_DIR_RTL : GTK_TEXT_DIR_LTR;
+	      
 	      gc2 = widget->style->text_gc[GTK_STATE_NORMAL];
 	      x2 = weak_x;
 	    }
@@ -2691,15 +2697,21 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
 	  else
 	    x1 = weak_x;
 	}
+
+      cursor_location.x = xoffset + x1;
+      cursor_location.y = INNER_BORDER;
+      cursor_location.width = 0;
+      cursor_location.height = text_area_height - 2 * INNER_BORDER ;
       
-      gdk_draw_line (entry->text_area, gc1,
-		     xoffset + x1, INNER_BORDER,
-		     xoffset + x1, text_area_height - INNER_BORDER);
+      _gtk_draw_insertion_cursor (entry->text_area, gc1,
+				  &cursor_location, dir1);
       
       if (gc2)
-	gdk_draw_line (entry->text_area, gc2,
-		       xoffset + x2, INNER_BORDER,
-		       xoffset + x2, text_area_height - INNER_BORDER);
+	{
+	  cursor_location.x = xoffset + x2;
+	  _gtk_draw_insertion_cursor (entry->text_area, gc2,
+				      &cursor_location, dir2);
+	}
     }
 }
 

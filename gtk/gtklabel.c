@@ -1595,13 +1595,16 @@ gtk_label_draw_cursor (GtkLabel  *label, gint xoffset, gint yoffset)
   if (GTK_WIDGET_DRAWABLE (label))
     {
       GtkWidget *widget = GTK_WIDGET (label);
-      
+
       GtkTextDirection keymap_direction;
       GtkTextDirection widget_direction;
       PangoRectangle strong_pos, weak_pos;
       gboolean split_cursor;
       PangoRectangle *cursor1 = NULL;
       PangoRectangle *cursor2 = NULL;
+      GdkRectangle cursor_location;
+      GtkTextDirection dir1 = GTK_TEXT_DIR_NONE;
+      GtkTextDirection dir2 = GTK_TEXT_DIR_NONE;
       GdkGC *gc1 = NULL;
       GdkGC *gc2 = NULL;
 
@@ -1628,6 +1631,9 @@ gtk_label_draw_cursor (GtkLabel  *label, gint xoffset, gint yoffset)
 	  if (strong_pos.x != weak_pos.x ||
 	      strong_pos.y != weak_pos.y)
 	    {
+	      dir1 = widget_direction;
+	      dir2 = (widget_direction == GTK_TEXT_DIR_LTR) ? GTK_TEXT_DIR_RTL : GTK_TEXT_DIR_LTR;
+	      
 	      gc2 = widget->style->black_gc;
 	      cursor2 = &weak_pos;
 	    }
@@ -1642,14 +1648,24 @@ gtk_label_draw_cursor (GtkLabel  *label, gint xoffset, gint yoffset)
 	    cursor1 = &weak_pos;
 	}
       
-      gdk_draw_line (widget->window, gc1,
-		     xoffset + PANGO_PIXELS (cursor1->x), yoffset + PANGO_PIXELS (cursor1->y),
-		     xoffset + PANGO_PIXELS (cursor1->x), yoffset + PANGO_PIXELS (cursor1->y + cursor1->height));
+      cursor_location.x = xoffset + PANGO_PIXELS (cursor1->x);
+      cursor_location.y = yoffset + PANGO_PIXELS (cursor1->y);
+      cursor_location.width = 0;
+      cursor_location.height = PANGO_PIXELS (cursor1->height);
+      
+      _gtk_draw_insertion_cursor (widget->window, gc1,
+				  &cursor_location, dir1);
       
       if (gc2)
-	gdk_draw_line (widget->window, gc2,
-		       xoffset + PANGO_PIXELS (cursor2->x), yoffset + PANGO_PIXELS (cursor2->y),
-		       xoffset + PANGO_PIXELS (cursor2->x), yoffset + PANGO_PIXELS (cursor2->y + cursor2->height));
+	{
+	  cursor_location.x = xoffset + PANGO_PIXELS (cursor2->x);
+	  cursor_location.y = yoffset + PANGO_PIXELS (cursor2->y);
+	  cursor_location.width = 0;
+	  cursor_location.height = PANGO_PIXELS (cursor2->height);
+	  
+	  _gtk_draw_insertion_cursor (widget->window, gc2,
+				      &cursor_location, dir2);
+	}
     }
 }
 
