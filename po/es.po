@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 1999-08-30 19:01+0200\n"
+"POT-Creation-Date: 2000-01-28 15:19+0100\n"
 "PO-Revision-Date: 1999-02-07 17:37+0100\n"
 "Last-Translator: Pablo Saratxaga <srtxg@chanae.alphanet.ch>\n"
 "Language-Team: \n"
@@ -15,48 +15,48 @@ msgstr ""
 "Date: 1991-02-07 13:01:00+0100\n"
 "From: Pablo Saratxaga <srtxg@chanae.alphanet.ch>\n"
 
-#: gtk/gtkcolorsel.c:213
+#: gtk/gtkcolorsel.c:221
 msgid "Hue:"
 msgstr "Tinte:"
 
-#: gtk/gtkcolorsel.c:214
+#: gtk/gtkcolorsel.c:222
 msgid "Saturation:"
 msgstr "Saturación:"
 
-#: gtk/gtkcolorsel.c:215
+#: gtk/gtkcolorsel.c:223
 msgid "Value:"
 msgstr "Valor:"
 
-#: gtk/gtkcolorsel.c:216
+#: gtk/gtkcolorsel.c:224
 msgid "Red:"
 msgstr "Rojo:"
 
-#: gtk/gtkcolorsel.c:217
+#: gtk/gtkcolorsel.c:225
 msgid "Green:"
 msgstr "Verde:"
 
-#: gtk/gtkcolorsel.c:218
+#: gtk/gtkcolorsel.c:226
 msgid "Blue:"
 msgstr "Azul:"
 
-#: gtk/gtkcolorsel.c:219
+#: gtk/gtkcolorsel.c:227
 msgid "Opacity:"
 msgstr "Opacidad:"
 
 #. The OK button
-#: gtk/gtkcolorsel.c:1668 gtk/gtkfilesel.c:571 gtk/gtkfontsel.c:3722
+#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:571 gtk/gtkfontsel.c:3772
 #: gtk/gtkgamma.c:416
 msgid "OK"
 msgstr "Aceptar"
 
 #. The Cancel button
-#: gtk/gtkcolorsel.c:1674 gtk/gtkfilesel.c:578 gtk/gtkfilesel.c:956
-#: gtk/gtkfilesel.c:1060 gtk/gtkfilesel.c:1175 gtk/gtkfontsel.c:3735
+#: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:578 gtk/gtkfilesel.c:961
+#: gtk/gtkfilesel.c:1065 gtk/gtkfilesel.c:1180 gtk/gtkfontsel.c:3785
 #: gtk/gtkgamma.c:424
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: gtk/gtkcolorsel.c:1679
+#: gtk/gtkcolorsel.c:1738
 msgid "Help"
 msgstr "Ayuda"
 
@@ -70,7 +70,7 @@ msgstr "Directorios"
 msgid "Files"
 msgstr "Archivos"
 
-#: gtk/gtkfilesel.c:609 gtk/gtkfilesel.c:1639
+#: gtk/gtkfilesel.c:609 gtk/gtkfilesel.c:1644
 #, c-format
 msgid "Directory unreadable: %s"
 msgstr "Directorio ilegible: %s"
@@ -79,11 +79,11 @@ msgstr "Directorio ilegible: %s"
 msgid "Create Dir"
 msgstr "Crear Directorio"
 
-#: gtk/gtkfilesel.c:652 gtk/gtkfilesel.c:1029
+#: gtk/gtkfilesel.c:652 gtk/gtkfilesel.c:1034
 msgid "Delete File"
 msgstr "Borrar Archivo"
 
-#: gtk/gtkfilesel.c:663 gtk/gtkfilesel.c:1133
+#: gtk/gtkfilesel.c:663 gtk/gtkfilesel.c:1138
 msgid "Rename File"
 msgstr "Renombrar Archivo"
 
@@ -97,34 +97,34 @@ msgid "Error"
 msgstr "Error"
 
 #. close button
-#: gtk/gtkfilesel.c:845 gtk/gtkinputdialog.c:354
+#: gtk/gtkfilesel.c:850 gtk/gtkinputdialog.c:354
 msgid "Close"
 msgstr "Cerrar"
 
-#: gtk/gtkfilesel.c:920
+#: gtk/gtkfilesel.c:925
 msgid "Create Directory"
 msgstr "Crear Directorio"
 
-#: gtk/gtkfilesel.c:934
+#: gtk/gtkfilesel.c:939
 msgid "Directory name:"
 msgstr "Nombre del directorio:"
 
 #. buttons
-#: gtk/gtkfilesel.c:947
+#: gtk/gtkfilesel.c:952
 msgid "Create"
 msgstr "Crear"
 
 #. buttons
-#: gtk/gtkfilesel.c:1051
+#: gtk/gtkfilesel.c:1056
 msgid "Delete"
 msgstr "Borrar"
 
 #. buttons
-#: gtk/gtkfilesel.c:1166
+#: gtk/gtkfilesel.c:1171
 msgid "Rename"
 msgstr "Renombrar"
 
-#: gtk/gtkfilesel.c:1618
+#: gtk/gtkfilesel.c:1623
 msgid "Selection: "
 msgstr "Selección: "
 
@@ -198,7 +198,7 @@ msgstr "Valor real"
 msgid "Font"
 msgstr "Fuente"
 
-#: gtk/gtkfontsel.c:517 gtk/gtkfontsel.c:2202 gtk/gtkfontsel.c:2432
+#: gtk/gtkfontsel.c:517 gtk/gtkfontsel.c:2209 gtk/gtkfontsel.c:2439
 msgid "Font:"
 msgstr "Fuente:"
 
@@ -277,27 +277,27 @@ msgstr "*"
 msgid "(nil)"
 msgstr "(nulo)"
 
-#: gtk/gtkfontsel.c:1228 gtk/gtkfontsel.c:2700
+#: gtk/gtkfontsel.c:1228 gtk/gtkfontsel.c:2708
 msgid "regular"
 msgstr "regular"
 
-#: gtk/gtkfontsel.c:1233 gtk/gtkfontsel.c:1994
+#: gtk/gtkfontsel.c:1233 gtk/gtkfontsel.c:2001
 msgid "italic"
 msgstr "itálica"
 
-#: gtk/gtkfontsel.c:1234 gtk/gtkfontsel.c:1995
+#: gtk/gtkfontsel.c:1234 gtk/gtkfontsel.c:2002
 msgid "oblique"
 msgstr "oblicua"
 
-#: gtk/gtkfontsel.c:1235 gtk/gtkfontsel.c:1996
+#: gtk/gtkfontsel.c:1235 gtk/gtkfontsel.c:2003
 msgid "reverse italic"
 msgstr "itálica invertida"
 
-#: gtk/gtkfontsel.c:1236 gtk/gtkfontsel.c:1997
+#: gtk/gtkfontsel.c:1236 gtk/gtkfontsel.c:2004
 msgid "reverse oblique"
 msgstr "oblicua invertida"
 
-#: gtk/gtkfontsel.c:1237 gtk/gtkfontsel.c:1998
+#: gtk/gtkfontsel.c:1237 gtk/gtkfontsel.c:2005
 msgid "other"
 msgstr "otro"
 
@@ -309,88 +309,88 @@ msgstr "[M]"
 msgid "[C]"
 msgstr "[C]"
 
-#: gtk/gtkfontsel.c:1793
+#: gtk/gtkfontsel.c:1800
 msgid "The selected font is not available."
 msgstr "La fuente seleccionada no está disponible."
 
-#: gtk/gtkfontsel.c:1799
+#: gtk/gtkfontsel.c:1806
 msgid "The selected font is not a valid font."
 msgstr "La fuente seleccionada no es una fuente válida."
 
-#: gtk/gtkfontsel.c:1860
+#: gtk/gtkfontsel.c:1867
 msgid "This is a 2-byte font and may not be displayed correctly."
 msgstr ""
 "Esta es una fuente de 2-bytes y es posible que no se visualize correctamente."
 
-#: gtk/gtkfontsel.c:1982 gtk/gtkinputdialog.c:607
+#: gtk/gtkfontsel.c:1989 gtk/gtkinputdialog.c:607
 msgid "(unknown)"
 msgstr "(desconocido)"
 
-#: gtk/gtkfontsel.c:1993
+#: gtk/gtkfontsel.c:2000
 msgid "roman"
 msgstr "romana"
 
-#: gtk/gtkfontsel.c:2005
+#: gtk/gtkfontsel.c:2012
 msgid "proportional"
 msgstr "proporcional"
 
-#: gtk/gtkfontsel.c:2006
+#: gtk/gtkfontsel.c:2013
 msgid "monospaced"
 msgstr "espacio fijo"
 
-#: gtk/gtkfontsel.c:2007
+#: gtk/gtkfontsel.c:2014
 msgid "char cell"
 msgstr "tamaño constante"
 
-#: gtk/gtkfontsel.c:2207
+#: gtk/gtkfontsel.c:2214
 msgid "Font: (Filter Applied)"
 msgstr "Fuente: (Filtro aplicado)"
 
-#: gtk/gtkfontsel.c:2680
+#: gtk/gtkfontsel.c:2688
 msgid "heavy"
 msgstr ""
 
-#: gtk/gtkfontsel.c:2682
+#: gtk/gtkfontsel.c:2690
 msgid "extrabold"
 msgstr ""
 
-#: gtk/gtkfontsel.c:2684
+#: gtk/gtkfontsel.c:2692
 msgid "bold"
 msgstr "negritas"
 
-#: gtk/gtkfontsel.c:2687
+#: gtk/gtkfontsel.c:2695
 msgid "demibold"
 msgstr ""
 
-#: gtk/gtkfontsel.c:2690
+#: gtk/gtkfontsel.c:2698
 msgid "medium"
 msgstr ""
 
-#: gtk/gtkfontsel.c:2692
+#: gtk/gtkfontsel.c:2700
 msgid "normal"
 msgstr "normal"
 
-#: gtk/gtkfontsel.c:2694
+#: gtk/gtkfontsel.c:2702
 msgid "light"
 msgstr ""
 
-#: gtk/gtkfontsel.c:2696
+#: gtk/gtkfontsel.c:2704
 msgid "extralight"
 msgstr ""
 
-#: gtk/gtkfontsel.c:2698
+#: gtk/gtkfontsel.c:2706
 msgid "thin"
 msgstr ""
 
-#: gtk/gtkfontsel.c:2875
+#: gtk/gtkfontsel.c:2883
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
 msgstr "Se excede MAX_FONTS. Algunas fuentes no serán en la lista."
 
-#: gtk/gtkfontsel.c:3729
+#: gtk/gtkfontsel.c:3779
 msgid "Apply"
 msgstr "Aplicar"
 
-#: gtk/gtkfontsel.c:3751
+#: gtk/gtkfontsel.c:3801
 msgid "Font Selection"
 msgstr "Selección de Fuentes"
 
@@ -480,18 +480,18 @@ msgstr "(desactivado)"
 msgid "clear"
 msgstr "limpiar"
 
-#: gtk/gtknotebook.c:2017 gtk/gtknotebook.c:4092
+#: gtk/gtknotebook.c:2048 gtk/gtknotebook.c:4120
 #, c-format
 msgid "Page %u"
 msgstr "Página %u"
 
-#: gtk/gtkrc.c:1611
+#: gtk/gtkrc.c:1785
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr ""
 "Imposible de encontrar un archivo imagen en pixmap_path: \"%s\" línea %s"
 
-#: gtk/gtkrc.c:1614
+#: gtk/gtkrc.c:1788
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Imposible de encontrar un archivo imagen en pixmap_path: \"%s\""

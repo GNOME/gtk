@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
-"POT-Creation-Date: 1999-08-30 19:01+0200\n"
+"POT-Creation-Date: 2000-01-28 15:19+0100\n"
 "PO-Revision-Date: 1999-07-05 19:17+0200\n"
 "Last-Translator: Joseba Bidaurrazaga van Dierdonck <gcpbivaj@lg.ehu.es>\n"
 "Language-Team: euskare <linux-eu@chanae.alphanet.ch>\n"
@@ -13,48 +13,48 @@ msgstr ""
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bits\n"
 
-#: gtk/gtkcolorsel.c:213
+#: gtk/gtkcolorsel.c:221
 msgid "Hue:"
 msgstr "Kolorea:"
 
-#: gtk/gtkcolorsel.c:214
+#: gtk/gtkcolorsel.c:222
 msgid "Saturation:"
 msgstr "Saturazioa:"
 
-#: gtk/gtkcolorsel.c:215
+#: gtk/gtkcolorsel.c:223
 msgid "Value:"
 msgstr "Balioa:"
 
-#: gtk/gtkcolorsel.c:216
+#: gtk/gtkcolorsel.c:224
 msgid "Red:"
 msgstr "Gorria:"
 
-#: gtk/gtkcolorsel.c:217
+#: gtk/gtkcolorsel.c:225
 msgid "Green:"
 msgstr "Berdea:"
 
-#: gtk/gtkcolorsel.c:218
+#: gtk/gtkcolorsel.c:226
 msgid "Blue:"
 msgstr "Urdina"
 
-#: gtk/gtkcolorsel.c:219
+#: gtk/gtkcolorsel.c:227
 msgid "Opacity:"
 msgstr "Opazitatea"
 
 #. The OK button
-#: gtk/gtkcolorsel.c:1668 gtk/gtkfilesel.c:571 gtk/gtkfontsel.c:3722
+#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:571 gtk/gtkfontsel.c:3772
 #: gtk/gtkgamma.c:416
 msgid "OK"
 msgstr "Ados"
 
 #. The Cancel button
-#: gtk/gtkcolorsel.c:1674 gtk/gtkfilesel.c:578 gtk/gtkfilesel.c:956
-#: gtk/gtkfilesel.c:1060 gtk/gtkfilesel.c:1175 gtk/gtkfontsel.c:3735
+#: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:578 gtk/gtkfilesel.c:961
+#: gtk/gtkfilesel.c:1065 gtk/gtkfilesel.c:1180 gtk/gtkfontsel.c:3785
 #: gtk/gtkgamma.c:424
 msgid "Cancel"
 msgstr "Ezeztatu"
 
-#: gtk/gtkcolorsel.c:1679
+#: gtk/gtkcolorsel.c:1738
 msgid "Help"
 msgstr "Laguntza"
 
@@ -68,7 +68,7 @@ msgstr "Direktorioak"
 msgid "Files"
 msgstr "Fitxategiak"
 
-#: gtk/gtkfilesel.c:609 gtk/gtkfilesel.c:1639
+#: gtk/gtkfilesel.c:609 gtk/gtkfilesel.c:1644
 #, c-format
 msgid "Directory unreadable: %s"
 msgstr "Direktorio irakurtezina: %s"
@@ -77,11 +77,11 @@ msgstr "Direktorio irakurtezina: %s"
 msgid "Create Dir"
 msgstr "Sortu Dir"
 
-#: gtk/gtkfilesel.c:652 gtk/gtkfilesel.c:1029
+#: gtk/gtkfilesel.c:652 gtk/gtkfilesel.c:1034
 msgid "Delete File"
 msgstr "Ezabatu fitxategia"
 
-#: gtk/gtkfilesel.c:663 gtk/gtkfilesel.c:1133
+#: gtk/gtkfilesel.c:663 gtk/gtkfilesel.c:1138
 msgid "Rename File"
 msgstr "Berizendatu fitxategia"
 
@@ -95,34 +95,34 @@ msgid "Error"
 msgstr "Errorea"
 
 #. close button
-#: gtk/gtkfilesel.c:845 gtk/gtkinputdialog.c:354
+#: gtk/gtkfilesel.c:850 gtk/gtkinputdialog.c:354
 msgid "Close"
 msgstr "Itxi"
 
-#: gtk/gtkfilesel.c:920
+#: gtk/gtkfilesel.c:925
 msgid "Create Directory"
 msgstr "Sortu Direktorioa"
 
-#: gtk/gtkfilesel.c:934
+#: gtk/gtkfilesel.c:939
 msgid "Directory name:"
 msgstr "Direktorioaren izena"
 
 #. buttons
-#: gtk/gtkfilesel.c:947
+#: gtk/gtkfilesel.c:952
 msgid "Create"
 msgstr "Sortu"
 
 #. buttons
-#: gtk/gtkfilesel.c:1051
+#: gtk/gtkfilesel.c:1056
 msgid "Delete"
 msgstr "Ezabatu"
 
 #. buttons
-#: gtk/gtkfilesel.c:1166
+#: gtk/gtkfilesel.c:1171
 msgid "Rename"
 msgstr "Berizendatu"
 
-#: gtk/gtkfilesel.c:1618
+#: gtk/gtkfilesel.c:1623
 msgid "Selection: "
 msgstr "Aukera: "
 
@@ -196,7 +196,7 @@ msgstr "Oraingo balioa"
 msgid "Font"
 msgstr "Font"
 
-#: gtk/gtkfontsel.c:517 gtk/gtkfontsel.c:2202 gtk/gtkfontsel.c:2432
+#: gtk/gtkfontsel.c:517 gtk/gtkfontsel.c:2209 gtk/gtkfontsel.c:2439
 msgid "Font:"
 msgstr "Font"
 
@@ -275,27 +275,27 @@ msgstr "*"
 msgid "(nil)"
 msgstr "(nil)"
 
-#: gtk/gtkfontsel.c:1228 gtk/gtkfontsel.c:2700
+#: gtk/gtkfontsel.c:1228 gtk/gtkfontsel.c:2708
 msgid "regular"
 msgstr "arrunta"
 
-#: gtk/gtkfontsel.c:1233 gtk/gtkfontsel.c:1994
+#: gtk/gtkfontsel.c:1233 gtk/gtkfontsel.c:2001
 msgid "italic"
 msgstr "italikoa"
 
-#: gtk/gtkfontsel.c:1234 gtk/gtkfontsel.c:1995
+#: gtk/gtkfontsel.c:1234 gtk/gtkfontsel.c:2002
 msgid "oblique"
 msgstr "laprana"
 
-#: gtk/gtkfontsel.c:1235 gtk/gtkfontsel.c:1996
+#: gtk/gtkfontsel.c:1235 gtk/gtkfontsel.c:2003
 msgid "reverse italic"
 msgstr "atzerazko italikoa"
 
-#: gtk/gtkfontsel.c:1236 gtk/gtkfontsel.c:1997
+#: gtk/gtkfontsel.c:1236 gtk/gtkfontsel.c:2004
 msgid "reverse oblique"
 msgstr "atzerazko laprana"
 
-#: gtk/gtkfontsel.c:1237 gtk/gtkfontsel.c:1998
+#: gtk/gtkfontsel.c:1237 gtk/gtkfontsel.c:2005
 msgid "other"
 msgstr "bestelakoa"
 
@@ -307,87 +307,87 @@ msgstr "[M]"
 msgid "[C]"
 msgstr "[C]"
 
-#: gtk/gtkfontsel.c:1793
+#: gtk/gtkfontsel.c:1800
 msgid "The selected font is not available."
 msgstr "Aukeratutako Font-a ez dago"
 
-#: gtk/gtkfontsel.c:1799
+#: gtk/gtkfontsel.c:1806
 msgid "The selected font is not a valid font."
 msgstr "Aukeratutako Font-a ez da Font baliagarria."
 
-#: gtk/gtkfontsel.c:1860
+#: gtk/gtkfontsel.c:1867
 msgid "This is a 2-byte font and may not be displayed correctly."
 msgstr "Hau 2 byteko Font-a da eta agian ezin da modu egokian agertu."
 
-#: gtk/gtkfontsel.c:1982 gtk/gtkinputdialog.c:607
+#: gtk/gtkfontsel.c:1989 gtk/gtkinputdialog.c:607
 msgid "(unknown)"
 msgstr "(ezezaguna)"
 
-#: gtk/gtkfontsel.c:1993
+#: gtk/gtkfontsel.c:2000
 msgid "roman"
 msgstr "erromatarra"
 
-#: gtk/gtkfontsel.c:2005
+#: gtk/gtkfontsel.c:2012
 msgid "proportional"
 msgstr "proportziozkoa"
 
-#: gtk/gtkfontsel.c:2006
+#: gtk/gtkfontsel.c:2013
 msgid "monospaced"
 msgstr "tartebakarrekoa"
 
-#: gtk/gtkfontsel.c:2007
+#: gtk/gtkfontsel.c:2014
 msgid "char cell"
 msgstr "zelula ikuzia"
 
-#: gtk/gtkfontsel.c:2207
+#: gtk/gtkfontsel.c:2214
 msgid "Font: (Filter Applied)"
 msgstr "Font-a: (Iragazkiaz)"
 
-#: gtk/gtkfontsel.c:2680
+#: gtk/gtkfontsel.c:2688
 msgid "heavy"
 msgstr "astuna"
 
-#: gtk/gtkfontsel.c:2682
+#: gtk/gtkfontsel.c:2690
 msgid "extrabold"
 msgstr "extrailuna"
 
-#: gtk/gtkfontsel.c:2684
+#: gtk/gtkfontsel.c:2692
 msgid "bold"
 msgstr "iluna"
 
-#: gtk/gtkfontsel.c:2687
+#: gtk/gtkfontsel.c:2695
 msgid "demibold"
 msgstr "erdi iluna"
 
-#: gtk/gtkfontsel.c:2690
+#: gtk/gtkfontsel.c:2698
 msgid "medium"
 msgstr "ertaina"
 
-#: gtk/gtkfontsel.c:2692
+#: gtk/gtkfontsel.c:2700
 msgid "normal"
 msgstr "arrunta"
 
-#: gtk/gtkfontsel.c:2694
+#: gtk/gtkfontsel.c:2702
 msgid "light"
 msgstr "argia"
 
-#: gtk/gtkfontsel.c:2696
+#: gtk/gtkfontsel.c:2704
 msgid "extralight"
 msgstr "extra argia"
 
-#: gtk/gtkfontsel.c:2698
+#: gtk/gtkfontsel.c:2706
 msgid "thin"
 msgstr "mehea"
 
-#: gtk/gtkfontsel.c:2875
+#: gtk/gtkfontsel.c:2883
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
 msgstr "MAX_FONTS gehiegizkoa. Zenbait Font galduta daitezke."
 
-#: gtk/gtkfontsel.c:3729
+#: gtk/gtkfontsel.c:3779
 msgid "Apply"
 msgstr "Ezarri"
 
-#: gtk/gtkfontsel.c:3751
+#: gtk/gtkfontsel.c:3801
 msgid "Font Selection"
 msgstr "Font aukera"
 
@@ -477,17 +477,17 @@ msgstr "(ezindua)"
 msgid "clear"
 msgstr "garbitu"
 
-#: gtk/gtknotebook.c:2017 gtk/gtknotebook.c:4092
+#: gtk/gtknotebook.c:2048 gtk/gtknotebook.c:4120
 #, c-format
 msgid "Page %u"
 msgstr "Orria %u"
 
-#: gtk/gtkrc.c:1611
+#: gtk/gtkrc.c:1785
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Imaginaren fitxategia ezin aurkitu pixmap_path-en: \"%s\",%d lerroa"
 
-#: gtk/gtkrc.c:1614
+#: gtk/gtkrc.c:1788
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Imaginaren fitxategia ezin aurkitu pixmap_path-en: \"%s\""
