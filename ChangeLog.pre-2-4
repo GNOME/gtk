@@ -1,3 +1,12 @@
+Fri Aug 25 12:16:15 2000  Owen Taylor  <otaylor@redhat.com>
+
+        * gdk/x11/gdkimage-x11.c: remove GDK_IMAGE_SHARED_PIXMAP
+	from switch statements, since Tor removed the enumeration
+	value.
+	
+	* gdk/x11/gdkimage-x11.c (gdk_image_get): 
+	s/GDK_IS_WINDOW/GDK_IS_DRAWABLE/.
+
 2000-08-29 Elliot Lee <sopwith@redhat.com>
 	* */*.h: Use G_GNUC_CONST.
 

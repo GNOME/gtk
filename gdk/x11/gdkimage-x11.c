@@ -355,7 +355,6 @@ gdk_image_new (GdkImageType  type,
 	  break;
 
 	case GDK_IMAGE_FASTEST:
-	case GDK_IMAGE_SHARED_PIXMAP:
 	  g_assert_not_reached ();
 	}
 
@@ -381,9 +380,9 @@ gdk_image_get (GdkWindow *window,
   GdkImage *image;
   GdkImagePrivateX11 *private;
 
-  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (GDK_IS_DRAWABLE (window), NULL);
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_IS_WINDOW (window) && GDK_WINDOW_DESTROYED (window))
     return NULL;
 
   image = g_object_new (gdk_image_get_type (), NULL);
@@ -492,7 +491,6 @@ gdk_x11_image_destroy (GdkImage *image)
       break;
 
     case GDK_IMAGE_FASTEST:
-    case GDK_IMAGE_SHARED_PIXMAP:
       g_assert_not_reached ();
     }
 
