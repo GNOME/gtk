@@ -76,6 +76,8 @@ struct _GtkMenuAttachData
 
 struct _GtkMenuPrivate 
 {
+  gboolean seen_item_enter;
+
   gboolean have_position;
   gint x;
   gint y;
@@ -1278,6 +1280,7 @@ gtk_menu_popup (GtkMenu		    *menu,
   GtkWidget *parent;
   GdkEvent *current_event;
   GtkMenuShell *menu_shell;
+  GtkMenuPrivate *priv = gtk_menu_get_private (menu);
 
   g_return_if_fail (GTK_IS_MENU (menu));
   
@@ -1285,6 +1288,8 @@ gtk_menu_popup (GtkMenu		    *menu,
   menu_shell = GTK_MENU_SHELL (menu);
   
   menu_shell->parent_menu_shell = parent_menu_shell;
+
+  priv->seen_item_enter = FALSE;
   
   /* Find the last viewable ancestor, and make an X grab on it
    */
@@ -2718,12 +2723,42 @@ gtk_menu_key_press (GtkWidget	*widget,
 }
 
 static gboolean
+check_threshold (GtkWidget *widget,
+		 int start_x, int start_y,
+		 int x, int y)
+{
+#define THRESHOLD 8
+  
+  return
+    ABS (start_x - x) > THRESHOLD  ||
+    ABS (start_y - y) > THRESHOLD;
+}
+
+static gboolean
+definitely_within_item (GtkWidget *widget, 
+			int x,
+			int y)
+{
+  GdkWindow *window = GTK_MENU_ITEM (widget)->event_window;
+  int w, h;
+
+  gdk_drawable_get_size (window, &w, &h);
+  
+  return
+    check_threshold (widget, 0, 0, x, y) &&
+    check_threshold (widget, w - 1, 0, x, y) &&
+    check_threshold (widget, w - 1, h - 1, x, y) &&
+    check_threshold (widget, 0, h - 1, x, y);
+}
+
+static gboolean
 gtk_menu_motion_notify  (GtkWidget	   *widget,
 			 GdkEventMotion    *event)
 {
   GtkWidget *menu_item;
   GtkMenu *menu;
   GtkMenuShell *menu_shell;
+  GtkMenuPrivate *priv;
 
   gboolean need_enter;
 
@@ -2746,6 +2781,11 @@ gtk_menu_motion_notify  (GtkWidget	   *widget,
 
   menu_shell = GTK_MENU_SHELL (menu_item->parent);
   menu = GTK_MENU (menu_shell);
+
+  priv = gtk_menu_get_private (GTK_MENU (widget));
+
+  if (definitely_within_item (menu_item, event->x, event->y))
+    menu_shell->activate_time = 0;
   
   need_enter = (menu->navigation_region != NULL || menu_shell->ignore_enter);
 
@@ -2992,6 +3032,42 @@ gtk_menu_enter_notify (GtkWidget        *widget,
 
       if (!menu_shell->ignore_enter)
 	gtk_menu_handle_scrolling (GTK_MENU (widget), TRUE);
+    }
+
+  if (menu_item && GTK_IS_MENU_ITEM (menu_item))
+    {
+      GtkWidget *menu = menu_item->parent;
+      
+      if (menu && GTK_IS_MENU (menu))
+	{
+	  GtkMenuPrivate *priv = gtk_menu_get_private (GTK_MENU (menu));
+	  GtkMenuShell *menu_shell = GTK_MENU_SHELL (menu);
+
+	  if (priv->seen_item_enter)
+	    {
+	      /* This is the second enter we see for an item
+	       * on this menu. This means a release should always
+	       * mean activate.
+	       */
+	      menu_shell->activate_time = 0;
+	    }
+	  else if ((event->detail != GDK_NOTIFY_NONLINEAR &&
+		    event->detail != GDK_NOTIFY_NONLINEAR_VIRTUAL))
+	    {
+	      if (definitely_within_item (menu_item, event->x, event->y))
+		{
+		  /* This is an actual user-enter (ie. not a pop-under)
+		   * In this case, the user must either have entered
+		   * sufficiently far enough into the item, or he must move
+		   * far enough away from the enter point. (see
+		   * gtk_menu_motion_notify())
+		   */
+		  menu_shell->activate_time = 0;
+		}
+	    }
+	    
+	  priv->seen_item_enter = TRUE;
+	}
     }
   
   /* If this is a faked enter (see gtk_menu_motion_notify), 'widget'
