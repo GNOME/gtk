@@ -665,7 +665,7 @@ gdk_text_measure (GdkFont     *font,
     case GDK_FONT_FONTSET:
       fontset = (XFontSet) private->xfont;
       XmbTextExtents (fontset, text, text_length, &ink, &log);
-      width = log.width;
+      width = ink.x + ink.width;
       break;
     default:
       width = 0;

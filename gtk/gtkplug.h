@@ -43,7 +43,6 @@ extern "C" {
 
 typedef struct _GtkPlug        GtkPlug;
 typedef struct _GtkPlugClass   GtkPlugClass;
-typedef struct _GtkPlugButton  GtkPlugButton;
 
 
 struct _GtkPlug

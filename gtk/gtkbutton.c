@@ -646,7 +646,7 @@ static gint
 gtk_button_expose (GtkWidget      *widget,
 		   GdkEventExpose *event)
 {
-  GtkButton *bin;
+  GtkBin *bin;
   GdkEventExpose child_event;
 
   g_return_val_if_fail (widget != NULL, FALSE);

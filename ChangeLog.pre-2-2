@@ -1,3 +1,26 @@
+Wed May  5 22:51:06 1999  Owen Taylor  <otaylor@redhat.com>
+	
+        Patch from Sung-Hyun Nam <namsh@lgic.co.kr>
+	
+	* gdk/gdkim.c: Fix cut-and-paste errors for 
+	x/y and PreeditAttributes/StatusAttributes.
+
+Wed May  5 22:24:21 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkwindow.c (gdk_window_set_geometry_hints): Change
+	G_MAXINT to 2^16 to alleviate overflow problems in
+	various window managers.
+
+Wed Apr 21 00:42:08 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkplug.h: Removed stray GtkPlugButton declaration.
+
+	* gdk/gdkfont.c (gdk_text_measure): Fix the return value
+        for fontsets.
+
+	* gtk/gtkbutton.c (gtkbutton_expose): Fix warning
+	with bin/button confusion.
+
 Thu May  6 04:53:26 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/testgtk.c: in the ItemFactory test, link radio items together,
