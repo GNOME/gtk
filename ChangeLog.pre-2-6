@@ -1,3 +1,14 @@
+Sat Jul 12 15:51:33 2003  Kristian Rietveld  <kris@gtk.org>
+
+	Merged from stable.
+
+	Fixes #113904, testcase provided by Rene Seindal.
+
+	* gtk/gtktreeview.c (gtk_tree_view_button_press): set
+	pressed_button to -1 when a row has been activated,
+	(gtk_tree_view_motion_bin_window): only start a drag if there's
+	a button being pressed.
+
 Sat Jul 12 15:51:18 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merged from stable.

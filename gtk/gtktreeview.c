@@ -2151,6 +2151,9 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 	{
 	  gtk_grab_remove (widget);
 	  gtk_tree_view_row_activated (tree_view, path, column);
+
+          if (tree_view->priv->pressed_button == event->button)
+            tree_view->priv->pressed_button = -1;
 	}
 
       gtk_tree_path_free (path);
@@ -2903,7 +2906,9 @@ gtk_tree_view_motion_bin_window (GtkWidget      *widget,
   if (tree_view->priv->tree == NULL)
     return FALSE;
 
-  gtk_tree_view_maybe_begin_dragging_row (tree_view, event);
+  /* only check for an initiated drag when a button is pressed */
+  if (tree_view->priv->pressed_button >= 0)
+    gtk_tree_view_maybe_begin_dragging_row (tree_view, event);
 
   new_y = TREE_WINDOW_Y_TO_RBTREE_Y(tree_view, event->y);
   if (new_y < 0)
