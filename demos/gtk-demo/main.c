@@ -360,7 +360,7 @@ create_tree (void)
   tree_view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (model));
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view));
 
-  gtk_tree_selection_set_type (GTK_TREE_SELECTION (selection),
+  gtk_tree_selection_set_mode (GTK_TREE_SELECTION (selection),
 			       GTK_TREE_SELECTION_SINGLE);
   gtk_widget_set_usize (tree_view, 200, -1);
 
