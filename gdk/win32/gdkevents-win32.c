@@ -2325,9 +2325,12 @@ gdk_event_translate (GdkEvent *event,
       if (window_private->bg_type == GDK_WIN32_BG_PIXEL)
 	{
 	  COLORREF bg;
-	  GDK_NOTE (EVENTS, g_print ("...BG_PIXEL %s\n",
-				     gdk_color_to_string (&window_private->bg_pixel)));
 	  GetClipBox (hdc, &rect);
+	  GDK_NOTE (EVENTS, g_print ("...%dx%d@+%d+%d BG_PIXEL %s\n",
+				     rect.right - rect.left,
+				     rect.bottom - rect.top,
+				     rect.left, rect.top,
+				     gdk_color_to_string (&window_private->bg_pixel)));
 #ifdef MULTIPLE_WINDOW_CLASSES
 	  bg = PALETTEINDEX (window_private->bg_pixel.pixel);
 #else

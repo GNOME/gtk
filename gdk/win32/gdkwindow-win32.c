@@ -2346,7 +2346,7 @@ gdk_propagate_shapes (HANDLE   win,
        WINDOWPLACEMENT placement;
 
        placement.length = sizeof (WINDOWPLACEMENT);
-       /* go through all child windows and create/insert spans */
+       /* go through all child windows and combine regions */
        for (i = 0; i < num; i++)
 	 {
 	   GetWindowPlacement (list[i], &placement);
@@ -2355,10 +2355,13 @@ gdk_propagate_shapes (HANDLE   win,
 	       childRegion = CreateRectRgnIndirect (&emptyRect);
 	       GetWindowRgn (list[i], childRegion);
 	       CombineRgn (region, region, childRegion, RGN_OR);
+	       DeleteObject (childRegion);
 	     }
 	  }
        SetWindowRgn (win, region, TRUE);
      }
+   else
+     DeleteObject (region);
 }
 
 void

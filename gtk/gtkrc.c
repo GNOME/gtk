@@ -607,6 +607,8 @@ gtk_rc_parse_file (const gchar *filename, gboolean reload)
 	  dir = g_strdup(rc_file->canonical_name);
 	  for (i = strlen(dir) - 1; (i >= 0) && (dir[i] != G_DIR_SEPARATOR); i--)
 	    dir[i] = 0;
+	  if (i >= 0 && dir[i] == G_DIR_SEPARATOR)
+	    dir[i] = 0;
 	  gtk_rc_append_pixmap_path(dir);
 	  g_free(dir);
 	}

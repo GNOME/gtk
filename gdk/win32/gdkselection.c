@@ -103,11 +103,13 @@ gdk_selection_owner_set (GdkWindow *owner,
   else
     xwindow = NULL;
 
+  GDK_NOTE (SELECTION, g_print ("...OpenClipboard(%#x)\n", xwindow));
   if (!OpenClipboard (xwindow))
     {
       g_warning ("gdk_selection_owner_set: OpenClipboard failed");
       return FALSE;
     }
+  GDK_NOTE (SELECTION, g_print ("...EmptyClipboard()\n"));
   if (!EmptyClipboard ())
     {
       g_warning ("gdk_selection_owner_set: EmptyClipboard failed");
@@ -119,6 +121,7 @@ gdk_selection_owner_set (GdkWindow *owner,
   if (xwindow != NULL)
     SetClipboardData (CF_TEXT, NULL);
 #endif
+  GDK_NOTE (SELECTION, g_print ("...CloseClipboard()\n"));
   if (!CloseClipboard ())
     {
       g_warning ("gdk_selection_owner_set: CloseClipboard failed");
@@ -143,12 +146,20 @@ gdk_selection_owner_get (GdkAtom selection)
   GdkWindowPrivate *private;
   gchar *sel_name;
 
+#if 1
+  /* XXX Hmm, gtk selections seem to work best with this. This causes
+   * gtk to always get the clipboard contents from Windows, and not
+   * from the editable's own stashed-away copy.
+   */
+  return NULL;
+#else
   if (selection != gdk_clipboard_atom)
     window = NULL;
   else
     window = gdk_window_lookup (GetClipboardOwner ());
 
   private = (GdkWindowPrivate *) window;
+#endif
 
   GDK_NOTE (SELECTION,
 	    (sel_name = gdk_atom_name (selection),
@@ -191,12 +202,15 @@ gdk_selection_convert (GdkWindow *requestor,
        * contents of the clipboard. Get the clipboard data,
        * and store it for later.
        */
+      GDK_NOTE (SELECTION, g_print ("...OpenClipboard(%#x)\n",
+				    private->xwindow));
       if (!OpenClipboard (private->xwindow))
 	{
 	  g_warning ("gdk_selection_convert: OpenClipboard failed");
 	  return;
 	}
 
+      GDK_NOTE (SELECTION, g_print ("...GetClipboardData(CF_TEXT)\n"));
       if ((hdata = GetClipboardData (CF_TEXT)) != NULL)
 	{
 	  if ((ptr = GlobalLock (hdata)) != NULL)
@@ -234,6 +248,7 @@ gdk_selection_convert (GdkWindow *requestor,
 	      GlobalUnlock (hdata);
 	    }
 	}
+      GDK_NOTE (SELECTION, g_print ("...CloseClipboard()\n"));
       CloseClipboard ();
 
 
@@ -340,12 +355,18 @@ gdk_selection_send_notify (guint32  requestor,
 	     g_free (tgt_name),
 	     g_free (prop_name)));
 
-  /* Send ourselves a selection clear message sot that gtk thinks we doen't
+  /* Send ourselves a selection clear message so that gtk thinks we don't
    * have the selection, and will claim it anew when needed, and
    * we thus get a chance to store data in the Windows clipboard.
    * Otherwise, if a gtkeditable does a copy to clipboard several times
    * only the first one actually gets copied to the Windows clipboard,
    * as only he first one causes a call to gdk_property_change.
+   *
+   * Hmm, there is something fishy with this. Cut and paste inside the
+   * same app didn't work, the gtkeditable immediately forgot the
+   * clipboard contents in gtk_editable_selection_clear as a result of
+   * this message. OTOH, when I changed gdk_selection_owner_get to
+   * always return NULL, it works. Sigh.
    */
 
   SendMessage ((HWND) requestor, gdk_selection_clear_msg, selection, 0);

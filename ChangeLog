@@ -1,3 +1,37 @@
+1999-07-09  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkdraw.c (gdk_draw_arc): Don't draw anything if width
+ 	or height is zero. Don't print a warning if Pie or Arc fails, they
+	always fail (?) for very narrow ellipses.
+
+	* gdk/win32/gdkdraw.c (gdk_draw_pixmap): Call InvalidateRgn for
+ 	the part or the destination window corresponding to source area
+ 	outside of the source drawable's boundary.
+
+	* gdk/win32/gdkdraw.c (gdk_draw_lines, gdk_draw_polygon): Don't do
+ 	anything if less than two points.
+
+	* gdk/win32/gdkselection.c (gdk_selection_owner_get): Always
+ 	return NULL. Gtk cut-and-paste inside a single program works
+ 	better this way. (It always gets the clipboard contents from
+ 	Windows, not from its own copy, which is cleared anyway. I can't
+ 	say I fully understand what happens... Emulating the X selection
+ 	and property stuff is a bit of a mess.)
+
+	* gdk/win32/gdkevents.c
+	* gdk/win32/gdkproperty.c: A bít more verbose logging.
+
+	* gdk/win32/gdkregion.c: Fix some memory leaks (temporary regions
+ 	that never got deleted). Revamp gdk_region_shrink.
+
+	* gdk/win32/gdkregion.c: Fix memory leak, delete temporary regions
+ 	after use.
+
+	* gtk/gtk.def: Add some missing entry points.
+
+	* gtk/gtkrc.c: Strip trailing directory separator from pixmap path
+ 	component.
+
 1999-07-04  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkevents.c (gdk_event_translate): Handle

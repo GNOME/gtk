@@ -36,9 +36,11 @@ gdk_region_new (void)
   GdkRegionPrivate *private;
   GdkRegion *region;
   HRGN xregion;
+  RECT emptyRect;
 
   /* Create an empty region */
-  xregion = CreateRectRgn (1, 1, 0, 0);
+  SetRectEmpty (&emptyRect);
+  xregion = CreateRectRgnIndirect (&emptyRect);
   private = g_new (GdkRegionPrivate, 1);
   private->xregion = xregion;
   region = (GdkRegion*) private;
@@ -207,28 +209,40 @@ gdk_region_shrink (GdkRegion      *region,
 		   gint           dy)
 {
   GdkRegionPrivate *private;
+  HRGN shrunken_bbox;
   RECT r;
 
   g_return_if_fail (region != NULL);
 
   private = (GdkRegionPrivate *) region;
   
-  /* Is it correct just to intersect it with a smaller bounding box? */
-  GetRgnBox (private->xregion, &r);
+  if (dx > 0 || dy > 0)
+    {
+      /* We want to shrink it in one or both dimensions.
+       * Is it correct just to intersect it with a smaller bounding box?
+       * XXX
+       */
+      GetRgnBox (private->xregion, &r);
+      if (dx > 0)
+	{
+	  r.left += dx - dx/2;
+	  r.right -= dx/2;
+	}
+      if (dy > 0)
+	{
+	  r.top += dy - dy/2;
+	  r.bottom -= dy/2;
+	}
 
-  if (-dx > r.right - r.left)
-    {
-      r.left += dx/2;
-      r.right -= dx/2;
+      shrunken_bbox = CreateRectRgnIndirect (&r);
+      CombineRgn (private->xregion, private->xregion,
+		  shrunken_bbox, RGN_AND);
+      DeleteObject (shrunken_bbox);
     }
-  if (-dy > r.bottom - r.top)
+  else
     {
-      r.top += dy/2;
-      r.bottom -= dy/2;
+      /* Do nothing if the regions is expanded? XXX */
     }
-  
-  CombineRgn (private->xregion, private->xregion,
-	      CreateRectRgnIndirect (&r), RGN_AND);
 }
 
 GdkRegion*    
@@ -239,6 +253,7 @@ gdk_region_union_with_rect (GdkRegion      *region,
   GdkRegion *res;
   GdkRegionPrivate *res_private;
   RECT xrect;
+  HRGN rectangle;
 
   g_return_val_if_fail (region != NULL, NULL);
 
@@ -252,8 +267,10 @@ gdk_region_union_with_rect (GdkRegion      *region,
   res = gdk_region_new ();
   res_private = (GdkRegionPrivate *) res;
   
+  rectangle = CreateRectRgnIndirect (&xrect);
   CombineRgn (res_private->xregion, private->xregion,
-	      CreateRectRgnIndirect (&xrect), RGN_OR);
+	      rectangle, RGN_OR);
+  DeleteObject (rectangle);
   return res;
 }
 

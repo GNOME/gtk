@@ -691,6 +691,7 @@ EXPORTS
 	gtk_menu_bar_prepend
 	gtk_menu_bar_set_shadow_type
 	gtk_menu_detach
+	gtk_menu_ensure_uline_accel_group
 	gtk_menu_factory_add_entries
 	gtk_menu_factory_add_subfactory
 	gtk_menu_factory_destroy
@@ -699,9 +700,11 @@ EXPORTS
 	gtk_menu_factory_remove_entries
 	gtk_menu_factory_remove_paths
 	gtk_menu_factory_remove_subfactory
+	gtk_menu_get_accel_group
 	gtk_menu_get_active
 	gtk_menu_get_attach_widget
 	gtk_menu_get_type
+	gtk_menu_get_uline_accel_group
 	gtk_menu_insert
 	gtk_menu_item_activate
 	gtk_menu_item_configure

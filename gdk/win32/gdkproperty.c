@@ -165,6 +165,8 @@ gdk_property_change (GdkWindow   *window,
 	if (*ptr++ == '\n')
 	  length++;
 #if 1      
+      GDK_NOTE (SELECTION, g_print ("...OpenClipboard(%#x)\n",
+				    private->xwindow));
       if (!OpenClipboard (private->xwindow))
 	{
 	  g_warning ("gdk_property_change: OpenClipboard failed");
@@ -183,10 +185,13 @@ gdk_property_change (GdkWindow   *window,
 	}
       *ptr++ = '\0';
       GlobalUnlock (hdata);
+      GDK_NOTE (SELECTION, g_print ("...SetClipboardData(CF_TEXT, %#x)\n",
+				    hdata));
       if (!SetClipboardData(CF_TEXT, hdata))
 	g_warning ("gdk_property_change: SetClipboardData failed: %d",
 		   GetLastError ());
 #if 1
+      GDK_NOTE (SELECTION, g_print ("...CloseClipboard()\n"));
       if (!CloseClipboard ())
 	{
 	  g_warning ("gdk_property_change: CloseClipboard failed");

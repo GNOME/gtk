@@ -203,26 +203,27 @@ gdk_draw_arc (GdkDrawable *drawable,
   if (height == -1)
     height = drawable_private->height;
 
-  hdc = gdk_gc_predraw (drawable_private, gc_private);
-
-  nXStartArc = x + width/2 + (int) (sin(angle1/64.*M_TWOPI)*width);
-  nYStartArc = y + height/2 + (int) (cos(angle1/64.*M_TWOPI)*height);
-  nXEndArc = x + width/2 + (int) (sin(angle2/64.*M_TWOPI)*width);
-  nYEndArc = y + height/2 + (int) (cos(angle2/64.*M_TWOPI)*height);
-
-  if (filled)
+  if (width != 0 && height != 0)
     {
-      if (!Pie (hdc, x, y, x+width, y+height,
-		nXStartArc, nYStartArc, nXEndArc, nYEndArc))
-	g_warning ("gdk_draw_arc: Pie failed");
+      hdc = gdk_gc_predraw (drawable_private, gc_private);
+
+      nXStartArc = x + width/2 + (int) (sin(angle1/64.*M_TWOPI)*width);
+      nYStartArc = y + height/2 + (int) (cos(angle1/64.*M_TWOPI)*height);
+      nXEndArc = x + width/2 + (int) (sin(angle2/64.*M_TWOPI)*width);
+      nYEndArc = y + height/2 + (int) (cos(angle2/64.*M_TWOPI)*height);
+
+      if (filled)
+	{
+	  Pie (hdc, x, y, x+width, y+height,
+	       nXStartArc, nYStartArc, nXEndArc, nYEndArc);
+	}
+      else
+	{
+	  Arc (hdc, x, y, x+width, y+height,
+	       nXStartArc, nYStartArc, nXEndArc, nYEndArc);
+	}
+      gdk_gc_postdraw (drawable_private, gc_private);
     }
-  else
-    {
-      if (!Arc (hdc, x, y, x+width, y+height,
-		nXStartArc, nYStartArc, nXEndArc, nYEndArc))
-	g_warning ("gdk_draw_arc: Arc failed");
-    }
-  gdk_gc_postdraw (drawable_private, gc_private);
 }
 
 void
@@ -246,12 +247,15 @@ gdk_draw_polygon (GdkDrawable *drawable,
     return;
   gc_private = (GdkGCPrivate*) gc;
 
-  hdc = gdk_gc_predraw (drawable_private, gc_private);
-  pts = g_malloc ((npoints+1) * sizeof (POINT));
-
   GDK_NOTE (MISC, g_print ("gdk_draw_polygon: %#x (%d) %d\n",
 			   drawable_private->xwindow, gc_private,
 			   npoints));
+
+  if (npoints < 2)
+    return;
+
+  hdc = gdk_gc_predraw (drawable_private, gc_private);
+  pts = g_malloc ((npoints+1) * sizeof (POINT));
 
   for (i = 0; i < npoints; i++)
     {
@@ -424,6 +428,8 @@ gdk_draw_pixmap (GdkDrawable *drawable,
   HDC hdc;
   HDC srcdc;
   HGDIOBJ hgdiobj;
+  HRGN src_rgn, draw_rgn, outside_rgn;
+  RECT r;
 
   g_return_if_fail (drawable != NULL);
   g_return_if_fail (src != NULL);
@@ -436,17 +442,70 @@ gdk_draw_pixmap (GdkDrawable *drawable,
   gc_private = (GdkGCPrivate*) gc;
 
   if (width == -1)
-    width = src_private->width;
+    width = src_private->width;	/* Or should we subtract xsrc? */
   if (height == -1)
-    height = src_private->height;
+    height = src_private->height; /* Ditto? */
+
+  GDK_NOTE (MISC, g_print ("gdk_draw_pixmap: dest: %#x destdc: (%d) %#x "
+			   "src: %#x %dx%d@+%d+%d"
+			   " dest: %#x @+%d+%d\n",
+			   drawable_private->xwindow, gc_private, hdc,
+			   src_private->xwindow,
+			   width, height, xsrc, ysrc,
+			   drawable_private->xwindow, xdest, ydest));
 
   hdc = gdk_gc_predraw (drawable_private, gc_private);
 
-  GDK_NOTE (MISC, g_print ("gdk_draw_pixmap: dest: %#x destdc: (%d) %#x "
-			   "src: %#x %dx%d@+%d+%d\n",
-			   drawable_private->xwindow, gc_private, hdc,
-			   src_private->xwindow,
-			   width, height, xdest, ydest));
+  src_rgn = CreateRectRgn (0, 0, src_private->width + 1, src_private->height + 1);
+  draw_rgn = CreateRectRgn (xsrc, ysrc, xsrc + width + 1, ysrc + height + 1);
+  SetRectEmpty (&r);
+  outside_rgn = CreateRectRgnIndirect (&r);
+  
+  if (drawable_private->window_type != GDK_WINDOW_PIXMAP)
+    {
+      /* If we are drawing on a window, calculate the region that is
+       * outside the source pixmap, and invalidate that, causing it to
+       * be cleared. XXX
+       */
+      if (CombineRgn (outside_rgn, draw_rgn, src_rgn, RGN_DIFF) != NULLREGION)
+	{
+	  OffsetRgn (outside_rgn, xdest, ydest);
+	  GDK_NOTE (MISC, (GetRgnBox (outside_rgn, &r),
+			   g_print ("...calling InvalidateRgn, "
+				    "bbox: %dx%d@+%d+%d\n",
+				    r.right - r.left - 1, r.bottom - r.top - 1,
+				    r.left, r.top)));
+	  InvalidateRgn (drawable_private->xwindow, outside_rgn, TRUE);
+	}
+    }
+
+#if 1 /* Don't know if this is necessary  */
+  if (CombineRgn (draw_rgn, draw_rgn, src_rgn, RGN_AND) == COMPLEXREGION)
+    g_warning ("gdk_draw_pixmap: CombineRgn returned a COMPLEXREGION");
+
+  GetRgnBox (draw_rgn, &r);
+  if (r.left != xsrc
+      || r.top != ysrc
+      || r.right != xsrc + width + 1
+      || r.bottom != ysrc + height + 1)
+    {
+      xdest += r.left - xsrc;
+      xsrc = r.left;
+      ydest += r.top - ysrc;
+      ysrc = r.top;
+      width = r.right - xsrc - 1;
+      height = r.bottom - ysrc - 1;
+      
+      GDK_NOTE (MISC, g_print ("... restricted to src: %dx%d@+%d+%d, "
+			       "dest: @+%d+%d\n",
+			       width, height, xsrc, ysrc,
+			       xdest, ydest));
+    }
+#endif
+
+  DeleteObject (src_rgn);
+  DeleteObject (draw_rgn);
+  DeleteObject (outside_rgn);
 
   /* Strangely enough, this function is called also to bitblt
    * from a window.
@@ -602,7 +661,7 @@ gdk_draw_lines (GdkDrawable *drawable,
   POINT *pts;
   int i;
 
-  if (npoints <= 0)
+  if (npoints < 2)
     return;
 
   g_return_if_fail (drawable != NULL);
@@ -623,7 +682,7 @@ gdk_draw_lines (GdkDrawable *drawable,
     }
   
   if (!Polyline (hdc, pts, npoints))
-    g_warning ("gdk_draw_lines: Polyline failed");
+    g_warning ("gdk_draw_lines: Polyline(,,%d) failed", npoints);
   
   g_free (pts);
   
