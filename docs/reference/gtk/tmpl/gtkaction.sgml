@@ -45,7 +45,7 @@ activate its action.
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
-#GtkActionGroup, #GtkMenuMerge
+#GtkActionGroup, #GtkUIManager
 </para>
 
 <!-- ##### STRUCT GtkAction ##### -->

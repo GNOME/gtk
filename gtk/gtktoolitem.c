@@ -43,6 +43,8 @@ enum {
   PROP_IS_IMPORTANT
 };
 
+#define GTK_TOOL_ITEM_GET_PRIVATE(o)  (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_TOOL_ITEM, GtkToolItemPrivate))
+
 struct _GtkToolItemPrivate
 {
   gchar *tip_text;
@@ -779,7 +781,7 @@ gtk_tool_item_get_is_important (GtkToolItem *tool_item)
 /**
  * gtk_tool_item_set_is_important:
  * @tool_item: a #GtkToolItem
- * @is_imporatnt: whether the tool item should be considered important
+ * @is_important: whether the tool item should be considered important
  * 
  * Sets whether @tool_item should be considered important. The #GtkToolButton
  * class uses this property to determine whether to show or hide its label

@@ -1,3 +1,24 @@
+2003-10-01  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkmain.c: Doc formatting tweaks.
+
+	* gtk/gtktoolitem.c (gtk_tool_item_set_is_important): Fix a typo.
+
+	* gtk/gtkcheckmenuitem.h (gtk_check_menu_item_set_draw_as_radio): 
+	Use the same parameter names as in .c file, to pacify gtk-doc.
+
+	* gtk/gtktoggletoolbutton.[hc]: 
+	* gtk/gtktoolbutton.[hc]: 
+	* gtk/gtktoolitem.[hc]:
+	* gtk/gtktoolbar.[hc]: 
+	* gtk/gtkcolorbutton.[hc]: 
+	* gtk/gtkfontbutton.[hc]: 
+	* gtk/gtkalignment.[hc]: Define GET_PRIVATE macros in the 
+	source, not in the header.
+
+	* gtk/gtkcheckmenuitem.c (gtk_check_menu_item_[sg]et_draw_as_radio): 
+	Document these as 2.4 API additions.
+
 Tue Sep 30 23:42:56 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkentry.c (gtk_entry_set_completion),

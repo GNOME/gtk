@@ -201,6 +201,7 @@ GTK_IS_ALIGNMENT_CLASS
 GTK_ALIGNMENT_GET_CLASS
 <SUBSECTION Private>
 gtk_alignment_get_type
+GtkAlignmentPrivate
 </SECTION>
 
 <SECTION>
@@ -401,6 +402,8 @@ gtk_check_menu_item_set_show_toggle
 gtk_check_menu_item_toggled
 gtk_check_menu_item_get_inconsistent
 gtk_check_menu_item_set_inconsistent
+gtk_check_menu_item_set_draw_as_radio
+gtk_check_menu_item_get_draw_as_radio
 
 <SUBSECTION Standard>
 GTK_CHECK_MENU_ITEM
@@ -537,6 +540,7 @@ gtk_clist_get_type
 <TITLE>GtkColorButton</TITLE>
 GtkColorButton
 gtk_color_button_new
+gtk_color_button_new_with_color
 gtk_color_button_set_color
 gtk_color_button_get_color
 gtk_color_button_set_alpha
@@ -552,9 +556,9 @@ GTK_TYPE_COLOR_BUTTON
 GTK_COLOR_BUTTON_CLASS
 GTK_IS_COLOR_BUTTON_CLASS
 GTK_COLOR_BUTTON_GET_CLASS
-GTK_COLOR_BUTTON_GET_PRIVATE
 <SUBSECTION Private>
 gtk_color_button_get_type
+GtkColorButtonPrivate
 </SECTION>
 
 <SECTION>
@@ -940,6 +944,10 @@ gtk_entry_get_type
 <TITLE>GtkEventBox</TITLE>
 GtkEventBox
 gtk_event_box_new
+gtk_event_box_set_above_child
+gtk_event_box_get_above_child
+gtk_event_box_set_visible_window
+gtk_event_box_get_visible_window
 <SUBSECTION Standard>
 GTK_EVENT_BOX
 GTK_IS_EVENT_BOX
@@ -976,6 +984,7 @@ GTK_IS_EXPANDER_CLASS
 GTK_EXPANDER_GET_CLASS
 <SUBSECTION Private>
 gtk_expander_get_type
+GtkExpanderPrivate
 </SECTION>
 
 <SECTION>
@@ -1048,7 +1057,6 @@ GTK_TYPE_FONT_BUTTON
 GTK_FONT_BUTTON_CLASS
 GTK_IS_FONT_BUTTON_CLASS
 GTK_FONT_BUTTON_GET_CLASS
-GTK_FONT_BUTTON_GET_PRIVATE
 <SUBSECTION Private>
 gtk_font_button_get_type
 </SECTION>
@@ -1403,6 +1411,7 @@ GTK_IS_IM_MULTICONTEXT_CLASS
 GTK_IM_MULTICONTEXT_GET_CLASS
 <SUBSECTION Private>
 gtk_im_multicontext_get_type
+GtkIMMulticontextPrivate
 </SECTION>
 
 <SECTION>
@@ -1646,6 +1655,7 @@ gtk_menu_append
 gtk_menu_prepend
 gtk_menu_insert
 gtk_menu_reorder_child
+gtk_menu_attach
 gtk_menu_popup
 gtk_menu_set_accel_group
 gtk_menu_get_accel_group
@@ -2840,6 +2850,8 @@ gtk_text_view_set_indent
 gtk_text_view_get_indent
 gtk_text_view_set_tabs
 gtk_text_view_get_tabs
+gtk_text_view_set_accepts_tab
+gtk_text_view_get_accepts_tab
 gtk_text_view_get_default_attributes
 GTK_TEXT_VIEW_PRIORITY_VALIDATE
 <SUBSECTION Standard>
@@ -2987,6 +2999,7 @@ GTK_IS_TOOLBAR_CLASS
 GTK_TOOLBAR_GET_CLASS
 <SUBSECTION Private>
 gtk_toolbar_get_type
+GtkToolbarPrivate
 </SECTION>
 
 <SECTION>
@@ -3007,9 +3020,12 @@ gtk_tool_item_set_visible_horizontal
 gtk_tool_item_get_visible_horizontal
 gtk_tool_item_set_visible_vertical
 gtk_tool_item_get_visible_vertical
+gtk_tool_item_set_is_important
+gtk_tool_item_get_is_important
 gtk_tool_item_get_icon_size
 gtk_tool_item_get_orientation
 gtk_tool_item_get_toolbar_style
+gtk_tool_item_get_relief_style
 gtk_tool_item_retrieve_proxy_menu_item
 gtk_tool_item_get_proxy_menu_item
 gtk_tool_item_set_proxy_menu_item
@@ -3021,7 +3037,6 @@ GTK_TOOL_ITEM_CLASS
 GTK_IS_TOOL_ITEM
 GTK_IS_TOOL_ITEM_CLASS
 GTK_TOOL_ITEM_GET_CLASS
-GTK_TOOL_ITEM_GET_PRIVATE
 
 <SUBSECTION Private>
 gtk_tool_item_get_type
@@ -3070,7 +3085,6 @@ GTK_TOOL_BUTTON_CLASS
 GTK_IS_TOOL_BUTTON
 GTK_IS_TOOL_BUTTON_CLASS
 GTK_TOOL_BUTTON_GET_CLASS
-GTK_TOOL_BUTTON_GET_PRIVATE
 
 <SUBSECTION Private>
 gtk_tool_button_get_type
@@ -3121,7 +3135,6 @@ GTK_TOGGLE_TOOL_BUTTON_GET_CLASS
 <SUBSECTION Private>
 gtk_toggle_tool_button_get_type
 GtkToggleToolButtonPrivate
-GTK_TOGGLE_TOOL_BUTTON_GET_PRIVATE
 </SECTION>
 
 <SECTION>
@@ -3924,6 +3937,7 @@ gtk_widget_realize
 gtk_widget_unrealize
 gtk_widget_queue_draw
 gtk_widget_queue_resize
+gtk_widget_queue_resize_no_redraw
 gtk_widget_draw
 gtk_widget_size_request
 gtk_widget_get_child_requisition

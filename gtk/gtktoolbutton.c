@@ -76,6 +76,8 @@ static void gtk_tool_button_construct_contents (GtkToolItem *tool_item);
 static GObjectClass *parent_class = NULL;
 static guint         toolbutton_signals[LAST_SIGNAL] = { 0 };
 
+#define GTK_TOOL_BUTTON_GET_PRIVATE(obj)(G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_TOOL_BUTTON, GtkToolButtonPrivate))
+
 struct _GtkToolButtonPrivate
 {
   GtkWidget *button;

@@ -50,6 +50,8 @@
 #define CHECK_DARK  21845  /* 65535 / 3     */
 #define CHECK_LIGHT 43690 
 
+#define GTK_COLOR_BUTTON_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_COLOR_BUTTON, GtkColorButtonPrivate))
+
 struct _GtkColorButtonPrivate 
 {
   GdkPixbuf *pixbuf;    /* Pixbuf for rendering sample */

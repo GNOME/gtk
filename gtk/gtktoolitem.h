@@ -33,7 +33,6 @@
 #define GTK_IS_TOOL_ITEM(o)           (G_TYPE_CHECK_INSTANCE_TYPE ((o), GTK_TYPE_TOOL_ITEM))
 #define GTK_IS_TOOL_ITEM_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((o), GTK_TYPE_TOOL_ITEM))
 #define GTK_TOOL_ITEM_GET_CLASS(o)    (G_TYPE_INSTANCE_GET_CLASS((o), GTK_TYPE_TOOL_ITEM, GtkToolItemClass))
-#define GTK_TOOL_ITEM_GET_PRIVATE(o)  (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_TOOL_ITEM, GtkToolItemPrivate))
 
 typedef struct _GtkToolItem        GtkToolItem;
 typedef struct _GtkToolItemClass   GtkToolItemClass;

@@ -43,6 +43,8 @@ enum {
   PROP_LAST
 };
 
+#define GTK_ALIGNMENT_GET_PRIVATE(o)  (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_ALIGNMENT, GtkAlignmentPrivate))
+
 struct _GtkAlignmentPrivate
 {
   guint padding_top;

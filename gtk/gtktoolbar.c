@@ -191,6 +191,8 @@ typedef enum {
   NEW_API
 } ApiMode;
 
+#define GTK_TOOLBAR_GET_PRIVATE(o)  (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_TOOLBAR, GtkToolbarPrivate))
+
 struct _GtkToolbarPrivate
 {
   GList     *items;

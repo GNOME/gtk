@@ -44,6 +44,8 @@
 #include <string.h>
 #include <stdio.h>
 
+#define GTK_FONT_BUTTON_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_FONT_BUTTON, GtkFontButtonPrivate))
+
 struct _GtkFontButtonPrivate 
 {
   gchar         *title;

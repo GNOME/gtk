@@ -413,8 +413,8 @@ module_build_la_path (const gchar *directory,
  * @name: the name of the module
  * @type: the type of the module, for instance 'modules', 'engines', immodules'
  * 
- * Looks for a dynamically module named @name of type @type in the standard GTK+
- *  module search path.
+ * Looks for a dynamically loadable module named @name of type @type in the
+ * standard GTK+ module search path.
  * 
  * Return value: the pathname to the found module, or %NULL if it wasn't found.
  *  Free with g_free().
@@ -611,8 +611,8 @@ display_opened_cb (GdkDisplayManager *display_manager,
 
 /**
  * gdk_parse_args:
- * @argc: the number of command line arguments.
- * @argv: the array of command line arguments.
+ * @argc: a pointer to the number of command line arguments.
+ * @argv: a pointer to the array of command line arguments.
  * 
  * Parses command line arguments, and initializes global
  * attributes of GTK+, but does not actually open a connection
@@ -847,11 +847,9 @@ gtk_parse_args (int    *argc,
 /**
  * gtk_init_check:
  * @argc: Address of the <parameter>argc</parameter> parameter of your 
- *   <function>main()</function> function. Changed if any arguments were 
- *   handled.
- * @argv: Address of the <parameter>argv</parameter> parameter of 
- *   <function>main()</function>. Any parameters understood by gtk_init() 
- *   are stripped before return.
+ *   main() function. Changed if any arguments were handled.
+ * @argv: Address of the <parameter>argv</parameter> parameter of main(). 
+ *   Any parameters understood by gtk_init() are stripped before return.
  * 
  * This function does the same work as gtk_init() with only 
  * a single change: It does not terminate the program if the GUI can't be 
@@ -878,15 +876,13 @@ gtk_init_check (int	 *argc,
 /**
  * gtk_init:
  * @argc: Address of the <parameter>argc</parameter> parameter of your 
- *   <function>main()</function> function. Changed if any arguments were 
- *   handled.
- * @argv: Address of the <parameter>argv</parameter> parameter of 
- *   <function>main()</function>. Any parameters understood by gtk_init() 
- *   are stripped before return.
+ *   main() function. Changed if any arguments were handled.
+ * @argv: Address of the <parameter>argv</parameter> parameter of main(). 
+ *   Any parameters understood by gtk_init() are stripped before return.
  * 
  * Call this function before using any other GTK+ functions in your GUI
- * applications.  It will initialize everything needed to operate the toolkit and
- * parses some standard command line options. @argc and 
+ * applications.  It will initialize everything needed to operate the 
+ * toolkit and parses some standard command line options. @argc and 
  * @argv are adjusted accordingly so your own code will 
  * never see those standard arguments.
  *
@@ -989,13 +985,12 @@ gtk_exit (gint errorcode)
  * <literal>setlocale (LC_ALL, "")</literal> but also takes care of the 
  * locale specific setup of the windowing system used by GDK.
  * 
- * Return: a string corresponding to the locale set, typically in the
+ * Returns: a string corresponding to the locale set, typically in the
  * form lang_COUNTRY, where lang is an ISO-639 language code, and
  * COUNTRY is an ISO-3166 country code. On Unix, this form matches the
- * result of the <function>setlocale()</function>; it is also used on
- * other machines, such as Windows, where the C library returns a
- * different result. The string is owned by GTK+ and should not be
- * modified or freed.
+ * result of the setlocale(); it is also used on other machines, such as 
+ * Windows, where the C library returns a different result. The string is 
+ * owned by GTK+ and should not be modified or freed.
  **/
 gchar *
 gtk_set_locale (void)
@@ -1018,11 +1013,11 @@ gtk_set_locale (void)
  * 
  * On Windows, the C library doesn't use any such environment
  * variables, and setting them won't affect the behaviour of functions
- * like <function>ctime()</function>. The user sets the locale through
- * the Regional Options in the Control Panel. The C library (in the
- * <function>setlocale()</function> function) does not use country and
- * language codes, but country and language names spelled out in
- * English. However, this function does check the above environment
+ * like ctime(). The user sets the locale through the Regional Options 
+ * in the Control Panel. The C library (in the setlocale() function) 
+ * does not use country and language codes, but country and language 
+ * names spelled out in English. 
+ * However, this function does check the above environment
  * variables, and does return a Unix-style locale string based on
  * either said environment variables or the thread's current locale.
  *
@@ -1071,7 +1066,7 @@ _gtk_get_lc_ctype (void)
  * application.)  The default language is derived from the current
  * locale. It determines, for example, whether GTK+ uses the
  * right-to-left or left-to-right text direction. See
- * _gtk_get_lc_ctype for notes on behaviour on Windows.
+ * _gtk_get_lc_ctype() for notes on behaviour on Windows.
  * 
  * Return value: the default language as a #PangoLanguage, must not be
  * freed

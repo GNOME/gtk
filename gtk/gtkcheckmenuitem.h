@@ -87,7 +87,7 @@ void       gtk_check_menu_item_set_inconsistent  (GtkCheckMenuItem *check_menu_i
 						  gboolean          setting);
 gboolean   gtk_check_menu_item_get_inconsistent  (GtkCheckMenuItem *check_menu_item);
 void       gtk_check_menu_item_set_draw_as_radio (GtkCheckMenuItem *check_menu_item,
-						  gboolean          draw_radio_indicator);
+						  gboolean          draw_as_radio);
 gboolean   gtk_check_menu_item_get_draw_as_radio (GtkCheckMenuItem *check_menu_item);
     
 

@@ -33,7 +33,6 @@ G_BEGIN_DECLS
 #define GTK_IS_TOOL_BUTTON(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_TOOL_BUTTON))
 #define GTK_IS_TOOL_BUTTON_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((obj), GTK_TYPE_TOOL_BUTTON))
 #define GTK_TOOL_BUTTON_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), GTK_TYPE_TOOL_BUTTON, GtkToolButtonClass))
-#define GTK_TOOL_BUTTON_GET_PRIVATE(obj)(G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_TOOL_BUTTON, GtkToolButtonPrivate))
 
 typedef struct _GtkToolButton        GtkToolButton;
 typedef struct _GtkToolButtonClass   GtkToolButtonClass;

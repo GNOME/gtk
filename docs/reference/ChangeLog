@@ -1,6 +1,12 @@
-2003-09-30  Matthias Clasen  <maclas@gmx.de>
+2003-10-01  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtkaction.sgml: Fix cross reference to GtkMenuMerge.
+
+	* gtk/gtk-sections.txt: Additions.
 
 	* gtk/tmpl/gtkitemfactory.sgml: Add hint to use #GtkUIManager instead.
+
+2003-09-30  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkuimanager.sgml: Add a section about empty menus.
 
