@@ -397,11 +397,6 @@ static gboolean DecodeHeader(unsigned char *BFH, unsigned char *BIH,
 		}
 	}
 	
-	g_print ("header size %d data offset %d compression %d\n", 
-		 14 + State->Header.size, 
-		 lsb_32 (&BFH[10]),
-		 State->Compressed);
-
 	State->BufferDone = 0;
 	if (State->Type <= 8) {
 		State->read_state = READ_STATE_PALETTE;
