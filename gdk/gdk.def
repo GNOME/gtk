@@ -115,6 +115,7 @@ EXPORTS
 	gdk_event_get
 	gdk_event_get_axis
 	gdk_event_get_graphics_expose
+	gdk_event_get_state
 	gdk_event_get_time
 	gdk_event_handler_set
 	gdk_event_new

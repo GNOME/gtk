@@ -163,6 +163,7 @@ gdk_window_impl_win32_get_colormap (GdkDrawable *drawable)
       drawable_impl->colormap == NULL)
     {
       drawable_impl->colormap = gdk_colormap_get_system ();
+      gdk_colormap_ref (drawable_impl->colormap);
     }
   
   return drawable_impl->colormap;
@@ -593,7 +594,7 @@ gdk_window_new (GdkWindow     *parent,
       height = impl->height;
     }
 
-  mbtitle = g_locale_from_utf8 (title, NULL);
+  mbtitle = g_locale_from_utf8 (title, -1, NULL, NULL, NULL);
   
 #ifdef WITHOUT_WM_CREATE
   draw_impl->handle = CreateWindowEx (dwExStyle,
@@ -1412,7 +1413,7 @@ gdk_window_set_title (GdkWindow   *window,
       /* As the title is in UTF-8 we must translate it
        * to the system codepage.
        */
-      mbtitle = g_locale_from_utf8 (title, NULL);
+      mbtitle = g_locale_from_utf8 (title, -1, NULL, NULL, NULL);
       if (!SetWindowText (GDK_WINDOW_HWND (window), mbtitle))
 	WIN32_API_FAILED ("SetWindowText");
 

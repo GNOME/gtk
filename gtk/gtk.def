@@ -5,9 +5,11 @@ EXPORTS
 	GTK_TYPE_ARG_FLAGS
 	GTK_TYPE_ARROW_TYPE
 	GTK_TYPE_ATTACH_OPTIONS
+	GTK_TYPE_BUTTONS_TYPE
 	GTK_TYPE_BUTTON_ACTION
 	GTK_TYPE_BUTTON_BOX_STYLE
 	GTK_TYPE_CALENDAR_DISPLAY_OPTIONS
+	GTK_TYPE_CELL_RENDERER_STATE
 	GTK_TYPE_CELL_TYPE
 	GTK_TYPE_CLIST_DRAG_POS
 	GTK_TYPE_CORNER_TYPE
@@ -19,6 +21,7 @@ EXPORTS
 	GTK_TYPE_DEBUG_FLAG
 	GTK_TYPE_DELETE_TYPE
 	GTK_TYPE_DEST_DEFAULTS
+	GTK_TYPE_DIALOG_FLAGS
 	GTK_TYPE_DIRECTION_TYPE
 	GTK_TYPE_FUNDAMENTAL_TYPE
 	GTK_TYPE_GDK_AXIS_USE
@@ -42,6 +45,7 @@ EXPORTS
 	GTK_TYPE_GDK_FUNCTION
 	GTK_TYPE_GDK_GC_VALUES_MASK
 	GTK_TYPE_GDK_GRAB_STATUS
+	GTK_TYPE_GDK_GRAVITY
 	GTK_TYPE_GDK_IC_ATTRIBUTES_TYPE
 	GTK_TYPE_GDK_IMAGE_TYPE
 	GTK_TYPE_GDK_IM_STYLE
@@ -76,12 +80,15 @@ EXPORTS
 	GTK_TYPE_MATCH_TYPE
 	GTK_TYPE_MENU_DIRECTION_TYPE
 	GTK_TYPE_MENU_FACTORY_TYPE
+	GTK_TYPE_MESSAGE_TYPE
 	GTK_TYPE_METRIC_TYPE
 	GTK_TYPE_MOVEMENT_STEP
 	GTK_TYPE_OBJECT_FLAGS
 	GTK_TYPE_ORIENTATION
 	GTK_TYPE_PACKER_OPTIONS
 	GTK_TYPE_PACK_TYPE
+	GTK_TYPE_PANGO_FONT_DESCRIPTION
+	GTK_TYPE_PANGO_TAB_ARRAY
 	GTK_TYPE_PATH_PRIORITY_TYPE
 	GTK_TYPE_PATH_TYPE
 	GTK_TYPE_POLICY_TYPE
@@ -94,6 +101,7 @@ EXPORTS
 	GTK_TYPE_RC_TOKEN_TYPE
 	GTK_TYPE_RELIEF_STYLE
 	GTK_TYPE_RESIZE_MODE
+	GTK_TYPE_RESPONSE_TYPE
 	GTK_TYPE_SCROLL_TYPE
 	GTK_TYPE_SELECTION_DATA
 	GTK_TYPE_SELECTION_MODE
@@ -107,11 +115,18 @@ EXPORTS
 	GTK_TYPE_SUBMENU_DIRECTION
 	GTK_TYPE_SUBMENU_PLACEMENT
 	GTK_TYPE_TARGET_FLAGS
+	GTK_TYPE_TEXT_ATTRIBUTES
 	GTK_TYPE_TEXT_DIRECTION
+	GTK_TYPE_TEXT_ITER
 	GTK_TYPE_TEXT_WINDOW_TYPE
 	GTK_TYPE_TOOLBAR_CHILD_TYPE
 	GTK_TYPE_TOOLBAR_SPACE_STYLE
 	GTK_TYPE_TOOLBAR_STYLE
+	GTK_TYPE_TREE_ITER
+	GTK_TYPE_TREE_MODEL_FLAGS
+	GTK_TYPE_TREE_PATH
+	GTK_TYPE_TREE_SELECTION_MODE
+	GTK_TYPE_TREE_VIEW_COLUMN_SIZING
 	GTK_TYPE_TREE_VIEW_MODE
 	GTK_TYPE_TROUGH_TYPE
 	GTK_TYPE_UPDATE_TYPE
@@ -235,6 +250,8 @@ EXPORTS
 	gtk_cell_renderer_text_new
 	gtk_cell_renderer_text_pixbuf_get_type
 	gtk_cell_renderer_text_pixbuf_new
+	gtk_cell_renderer_toggle_get_active
+	gtk_cell_renderer_toggle_set_active
 	gtk_check_button_get_type
 	gtk_check_button_new
 	gtk_check_button_new_with_label
@@ -474,7 +491,6 @@ EXPORTS
 	gtk_draw_box
 	gtk_draw_diamond
 	gtk_draw_hline
-	gtk_draw_oval
 	gtk_draw_polygon
 	gtk_draw_shadow
 	gtk_draw_string
@@ -886,17 +902,15 @@ EXPORTS
 	gtk_paint_box
 	gtk_paint_box_gap
 	gtk_paint_check
-	gtk_paint_cross
 	gtk_paint_diamond
 	gtk_paint_extension
 	gtk_paint_flat_box
 	gtk_paint_focus
 	gtk_paint_handle
 	gtk_paint_hline
+	gtk_paint_layout
 	gtk_paint_option
-	gtk_paint_oval
 	gtk_paint_polygon
-	gtk_paint_ramp
 	gtk_paint_shadow
 	gtk_paint_shadow_gap
 	gtk_paint_slider
@@ -1298,17 +1312,108 @@ EXPORTS
 	gtk_tree_item_remove_subtree
 	gtk_tree_item_select
 	gtk_tree_item_set_subtree
+	gtk_tree_model_simple_changed
+	gtk_tree_model_simple_child_toggled
+	gtk_tree_model_simple_get_type
+	gtk_tree_model_simple_inserted
+	gtk_tree_model_simple_new
+	gtk_tree_model_sort_convert_path
+	gtk_tree_model_sort_get_type
+	gtk_tree_model_sort_new
+	gtk_tree_model_sort_new_with_model
+	gtk_tree_model_sort_set_model
 	gtk_tree_new
 	gtk_tree_prepend
 	gtk_tree_remove_item
 	gtk_tree_remove_items
 	gtk_tree_select_child
 	gtk_tree_select_item
+	gtk_tree_selection_get_selected
+	gtk_tree_selection_get_tree_view
+	gtk_tree_selection_get_type
+	gtk_tree_selection_get_user_data
+	gtk_tree_selection_select_all
+	gtk_tree_selection_select_iter
+	gtk_tree_selection_select_path
+	gtk_tree_selection_select_range
+	gtk_tree_selection_selected_foreach
+	gtk_tree_selection_set_mode
+	gtk_tree_selection_set_select_function
+	gtk_tree_selection_unselect_all
+	gtk_tree_selection_unselect_iter
+	gtk_tree_selection_unselect_path
 	gtk_tree_set_selection_mode
 	gtk_tree_set_view_lines
 	gtk_tree_set_view_mode
+	gtk_tree_store_append
+	gtk_tree_store_get
+	gtk_tree_store_get_root_iter
+	gtk_tree_store_get_type
+	gtk_tree_store_getv
+	gtk_tree_store_insert
+	gtk_tree_store_insert_after
+	gtk_tree_store_insert_before
+	gtk_tree_store_is_ancestor
+	gtk_tree_store_iter_depth
+	gtk_tree_store_new
+	gtk_tree_store_new_with_types
+	gtk_tree_store_prepend
+	gtk_tree_store_remove
+	gtk_tree_store_set
+	gtk_tree_store_set_cell
+	gtk_tree_store_set_column_type
+	gtk_tree_store_set_n_columns
+	gtk_tree_store_setv
 	gtk_tree_unselect_child
 	gtk_tree_unselect_item
+	gtk_tree_view_append_column
+	gtk_tree_view_collapse_all
+	gtk_tree_view_collapse_row
+	gtk_tree_view_column_add_attribute
+	gtk_tree_view_column_clicked
+	gtk_tree_view_column_get_col_type
+	gtk_tree_view_column_get_max_width
+	gtk_tree_view_column_get_min_width
+	gtk_tree_view_column_get_size
+	gtk_tree_view_column_get_title
+	gtk_tree_view_column_get_type
+	gtk_tree_view_column_get_visible
+	gtk_tree_view_column_get_widget
+	gtk_tree_view_column_new
+	gtk_tree_view_column_new_with_attributes
+	gtk_tree_view_column_set_attributes
+	gtk_tree_view_column_set_cell_data
+	gtk_tree_view_column_set_cell_renderer
+	gtk_tree_view_column_set_header_clickable
+	gtk_tree_view_column_set_justification
+	gtk_tree_view_column_set_max_width
+	gtk_tree_view_column_set_min_width
+	gtk_tree_view_column_set_sizing
+	gtk_tree_view_column_set_title
+	gtk_tree_view_column_set_visible
+	gtk_tree_view_column_set_widget
+	gtk_tree_view_column_set_width
+	gtk_tree_view_columns_autosize
+	gtk_tree_view_expand_all
+	gtk_tree_view_expand_row
+	gtk_tree_view_get_column
+	gtk_tree_view_get_hadjustment
+	gtk_tree_view_get_headers_visible
+	gtk_tree_view_get_model
+	gtk_tree_view_get_path_at_pos
+	gtk_tree_view_get_selection
+	gtk_tree_view_get_type
+	gtk_tree_view_get_vadjustment
+	gtk_tree_view_insert_column
+	gtk_tree_view_move_to
+	gtk_tree_view_new
+	gtk_tree_view_new_with_model
+	gtk_tree_view_remove_column
+	gtk_tree_view_set_hadjustment
+	gtk_tree_view_set_headers_clickable
+	gtk_tree_view_set_headers_visible
+	gtk_tree_view_set_model
+	gtk_tree_view_set_vadjustment
 	gtk_true
 	gtk_type_class
 	gtk_type_enum_find_value

@@ -1,3 +1,18 @@
+2001-01-07  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_set_title,
+	gdk_window_new): Adapt  calls to g_{locale,filename}_{to,from}_utf8
+	to match current API.
+
+	* gdk/win32/gdkvisual-win32.c (gdk_visual_init): If a secret
+	environment variable is set, don't call g_error when on a
+	palettized (PseudoColor) display. Some people want to use GTK+ 
+	in 256-colour mode even though works only partially.
+
+	* gdk/gdk.def
+	* gtk/gtk.def
+	* gtk/makefile.mingw.in: Update.
+
 2001-01-05  Havoc Pennington  <hp@redhat.com>
 
 	* tests/testtreeview.c: hack on this a bit
