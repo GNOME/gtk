@@ -1,3 +1,8 @@
+2000-10-04    <jrb@redhat.com>
+
+	* gtk/gtk{tree,cell}?*.[ch]: Checked in initial draft of the new
+	tree widget.
+
 2000-10-04  Jonathan Blandford  <jrb@redhat.com>
 
 	* gdk/gdkwindow.c (gdk_window_draw_arc): Fix obvious bug in circle
