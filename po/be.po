@@ -6,9 +6,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "POT-Creation-Date: 2002-10-19 05:05+0200\n"
-"PO-Revision-Date: 2002-10-29 10:41+0200\n"
-"Last-Translator: \n"
-"Language-Team:  <ru@li.org>\n"
+"PO-Revision-Date: 2002-11-05 14:05+0200\n"
+"Last-Translator: Ales Nyakhaychyk <i18n@infonet.by>\n"
+"Language-Team: Belarusian <i18n@mova.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -17,22 +17,22 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf-animation.c:144 gdk-pixbuf/gdk-pixbuf-io.c:585
 #, c-format
 msgid "Failed to open file '%s': %s"
-msgstr "Невыправімая памылка адчыненьня файлу '%s': %s"
+msgstr "РќРµРІС‹РїСЂР°РІС–РјР°СЏ РїР°РјС‹Р»РєР° Р°РґС‡С‹РЅРµРЅСЊРЅСЏ С„Р°Р№Р»Сѓ '%s': %s"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:155 gdk-pixbuf/gdk-pixbuf-io.c:595
 #, c-format
 msgid "Image file '%s' contains no data"
-msgstr "Файл з малюнкам '%s' не зьмяшчае дадзеных"
+msgstr "Р¤Р°Р№Р» Р· РјР°Р»СЋРЅРєР°Рј '%s' РЅРµ Р·СЊРјСЏС€С‡Р°Рµ РґР°РґР·РµРЅС‹С…"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:183
 #, c-format
 msgid "Don't know how to load the animation in file '%s'"
-msgstr "Невядома, як загрузіць анімацыю з файла %s'"
+msgstr "РќРµРІСЏРґРѕРјР°, СЏРє Р·Р°РіСЂСѓР·С–С†СЊ Р°РЅС–РјР°С†С‹СЋ Р· С„Р°Р№Р»Р° %s'"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:205 gdk-pixbuf/gdk-pixbuf-io.c:640
 #, c-format
 msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr "Памылка загрузкі малюнка %s': прычына невядома, хутчэй за ўсё файл пашкоджан"
+msgstr "РџР°РјС‹Р»РєР° Р·Р°РіСЂСѓР·РєС– РјР°Р»СЋРЅРєР° %s': РїСЂС‹С‡С‹РЅР° РЅРµРІСЏРґРѕРјР°, С…СѓС‚С‡СЌР№ Р·Р° СћСЃС‘ С„Р°Р№Р» РїР°С€РєРѕРґР¶Р°РЅ"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:233
 #, c-format
@@ -40,13 +40,13 @@ msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
 msgstr ""
-"Немагчыма загрузіць анімацыю '%s': зь невядомае прычыны, магчыма пашкоджан "
-"файл"
+"РќРµРјР°РіС‡С‹РјР° Р·Р°РіСЂСѓР·С–С†СЊ Р°РЅС–РјР°С†С‹СЋ '%s': Р·СЊ РЅРµРІСЏРґРѕРјР°Рµ РїСЂС‹С‡С‹РЅС‹, РјР°РіС‡С‹РјР° РїР°С€РєРѕРґР¶Р°РЅ "
+"С„Р°Р№Р»"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:358
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
-msgstr "Немагчыма загрузіць модуль загрузкі малюнкаў: %s: %s"
+msgstr "РќРµРјР°РіС‡С‹РјР° Р·Р°РіСЂСѓР·С–С†СЊ РјРѕРґСѓР»СЊ Р·Р°РіСЂСѓР·РєС– РјР°Р»СЋРЅРєР°Сћ: %s: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:377
 #, c-format
@@ -54,54 +54,54 @@ msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
 msgstr ""
-"Модуль загрузкі малюнкаў %s не экспартуе суадноснае спалучэньне; "
-"магчыма, гэты модуль ад іншае вэрсіі GTK?"
+"РњРѕРґСѓР»СЊ Р·Р°РіСЂСѓР·РєС– РјР°Р»СЋРЅРєР°Сћ %s РЅРµ СЌРєСЃРїР°СЂС‚СѓРµ СЃСѓР°РґРЅРѕСЃРЅР°Рµ СЃРїР°Р»СѓС‡СЌРЅСЊРЅРµ; "
+"РјР°РіС‡С‹РјР°, РіСЌС‚С‹ РјРѕРґСѓР»СЊ Р°Рґ С–РЅС€Р°Рµ РІСЌСЂСЃС–С– GTK?"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:494 gdk-pixbuf/gdk-pixbuf-io.c:520
 #, c-format
 msgid "Image type '%s' is not supported"
-msgstr "Тып малюнка '%s' - не падтрымліваецца"
+msgstr "РўС‹Рї РјР°Р»СЋРЅРєР° '%s' - РЅРµ РїР°РґС‚СЂС‹РјР»С–РІР°РµС†С†Р°"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:542
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "Немагчыма распазнаць фармат файла з малюнкам '%s'"
+msgstr "РќРµРјР°РіС‡С‹РјР° СЂР°СЃРїР°Р·РЅР°С†СЊ С„Р°СЂРјР°С‚ С„Р°Р№Р»Р° Р· РјР°Р»СЋРЅРєР°Рј '%s'"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:548
 msgid "Unrecognized image file format"
-msgstr "Нераспазнаваемы фармат файла з малюнкам."
+msgstr "РќРµСЂР°СЃРїР°Р·РЅР°РІР°РµРјС‹ С„Р°СЂРјР°С‚ С„Р°Р№Р»Р° Р· РјР°Р»СЋРЅРєР°Рј."
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:618
 #, c-format
 msgid "Don't know how to load the image in file '%s'"
-msgstr "Невядома, як загрузіць малюнак з файла '%s'"
+msgstr "РќРµРІСЏРґРѕРјР°, СЏРє Р·Р°РіСЂСѓР·С–С†СЊ РјР°Р»СЋРЅР°Рє Р· С„Р°Р№Р»Р° '%s'"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:651
 #, c-format
 msgid "Failed to load image '%s': %s"
-msgstr "Памылка загрузкі малюнка '%s': %s"
+msgstr "РџР°РјС‹Р»РєР° Р·Р°РіСЂСѓР·РєС– РјР°Р»СЋРЅРєР° '%s': %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:756
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr "Гэта пабудова gdk-pixbuf не падтрымлівае захаваньні малюнкаў у фармаце %s"
+msgstr "Р“СЌС‚Р° РїР°Р±СѓРґРѕРІР° gdk-pixbuf РЅРµ РїР°РґС‚СЂС‹РјР»С–РІР°Рµ Р·Р°С…Р°РІР°РЅСЊРЅС– РјР°Р»СЋРЅРєР°Сћ Сѓ С„Р°СЂРјР°С†Рµ %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:863
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
-msgstr "Памылка адчыненьня '%s' для запісу: %s"
+msgstr "РџР°РјС‹Р»РєР° Р°РґС‡С‹РЅРµРЅСЊРЅСЏ '%s' РґР»СЏ Р·Р°РїС–СЃСѓ: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:884
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
-msgstr "Невыправімая памылка пры зачыненьні '%s' пад час захаваньня малюнку; усе даньні могуць быць не захаваны: %s"
+msgstr "РќРµРІС‹РїСЂР°РІС–РјР°СЏ РїР°РјС‹Р»РєР° РїСЂС‹ Р·Р°С‡С‹РЅРµРЅСЊРЅС– '%s' РїР°Рґ С‡Р°СЃ Р·Р°С…Р°РІР°РЅСЊРЅСЏ РјР°Р»СЋРЅРєСѓ; СѓСЃРµ РґР°РЅСЊРЅС– РјРѕРіСѓС†СЊ Р±С‹С†СЊ РЅРµ Р·Р°С…Р°РІР°РЅС‹: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:250
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
-msgstr "Загрузка малюнку тыпу '%s' па частках не падтрымліваецца"
+msgstr "Р—Р°РіСЂСѓР·РєР° РјР°Р»СЋРЅРєСѓ С‚С‹РїСѓ '%s' РїР° С‡Р°СЃС‚РєР°С… РЅРµ РїР°РґС‚СЂС‹РјР»С–РІР°РµС†С†Р°"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:273 gdk-pixbuf/gdk-pixbuf-loader.c:374
 #, c-format
@@ -109,94 +109,94 @@ msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
 "but didn't give a reason for the failure"
 msgstr ""
-"Унутраная памылка. Невыправімая памылка на пачатку загрузкі ў "
-"модулі загрузкі малюнку '%s', але няма зьветак аб прычыне памылкі."
+"РЈРЅСѓС‚СЂР°РЅР°СЏ РїР°РјС‹Р»РєР°. РќРµРІС‹РїСЂР°РІС–РјР°СЏ РїР°РјС‹Р»РєР° РЅР° РїР°С‡Р°С‚РєСѓ Р·Р°РіСЂСѓР·РєС– Сћ "
+"РјРѕРґСѓР»С– Р·Р°РіСЂСѓР·РєС– РјР°Р»СЋРЅРєСѓ '%s', Р°Р»Рµ РЅСЏРјР° Р·СЊРІРµС‚Р°Рє Р°Р± РїСЂС‹С‡С‹РЅРµ РїР°РјС‹Р»РєС–."
 
 #: gdk-pixbuf/gdk-pixdata.c:146
 msgid "Image header corrupt"
-msgstr "Загаловак малюнка пашкоджан"
+msgstr "Р—Р°РіР°Р»РѕРІР°Рє РјР°Р»СЋРЅРєР° РїР°С€РєРѕРґР¶Р°РЅ"
 
 #: gdk-pixbuf/gdk-pixdata.c:151
 msgid "Image format unknown"
-msgstr "Невядомы фармат малюнка"
+msgstr "РќРµРІСЏРґРѕРјС‹ С„Р°СЂРјР°С‚ РјР°Р»СЋРЅРєР°"
 
 #: gdk-pixbuf/gdk-pixdata.c:156 gdk-pixbuf/gdk-pixdata.c:457
 msgid "Image pixel data corrupt"
-msgstr "Даньні малюнку пашкоджаны"
+msgstr "Р”Р°РЅСЊРЅС– РјР°Р»СЋРЅРєСѓ РїР°С€РєРѕРґР¶Р°РЅС‹"
 
 #: gdk-pixbuf/gdk-pixdata.c:403
 #, c-format
 msgid "failed to allocate image buffer of %u bytes"
-msgstr "немагчыма разьмеркаваць буфэр у %u байтаў"
+msgstr "РЅРµРјР°РіС‡С‹РјР° СЂР°Р·СЊРјРµСЂРєР°РІР°С†СЊ Р±СѓС„СЌСЂ Сѓ %u Р±Р°Р№С‚Р°Сћ"
 
 #: gdk-pixbuf/io-bmp.c:261 gdk-pixbuf/io-bmp.c:374
 msgid "Not enough memory to load bitmap image"
-msgstr "Нехапае памяці каб загрузіць растравы малюнак"
+msgstr "РќРµС…Р°РїР°Рµ РїР°РјСЏС†С– РєР°Р± Р·Р°РіСЂСѓР·С–С†СЊ СЂР°СЃС‚СЂР°РІС‹ РјР°Р»СЋРЅР°Рє"
 
 #: gdk-pixbuf/io-bmp.c:300
 msgid "BMP image has unsupported header size"
-msgstr "BMP малюнак мае непадтрымліваемы памер загалоўка"
+msgstr "BMP РјР°Р»СЋРЅР°Рє РјР°Рµ РЅРµРїР°РґС‚СЂС‹РјР»С–РІР°РµРјС‹ РїР°РјРµСЂ Р·Р°РіР°Р»РѕСћРєР°"
 
 #: gdk-pixbuf/io-bmp.c:325 gdk-pixbuf/io-bmp.c:348 gdk-pixbuf/io-bmp.c:409
 msgid "BMP image has bogus header data"
-msgstr "BMP малюнак мае падробленыя дадзеныя загалоўка"
+msgstr "BMP РјР°Р»СЋРЅР°Рє РјР°Рµ РїР°РґСЂРѕР±Р»РµРЅС‹СЏ РґР°РґР·РµРЅС‹СЏ Р·Р°РіР°Р»РѕСћРєР°"
 
 #: gdk-pixbuf/io-gif.c:218
 #, c-format
 msgid "Failure reading GIF: %s"
-msgstr "Памылка чытаньня GIF: %s"
+msgstr "РџР°РјС‹Р»РєР° С‡С‹С‚Р°РЅСЊРЅСЏ GIF: %s"
 
 #: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1382 gdk-pixbuf/io-gif.c:1542
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr "У GIF файле былі прапушчаны некаторыя дадзеныя (магчыма ён быў абрэзан?)"
+msgstr "РЈ GIF С„Р°Р№Р»Рµ Р±С‹Р»С– РїСЂР°РїСѓС€С‡Р°РЅС‹ РЅРµРєР°С‚РѕСЂС‹СЏ РґР°РґР·РµРЅС‹СЏ (РјР°РіС‡С‹РјР° С‘РЅ Р±С‹Сћ Р°Р±СЂСЌР·Р°РЅ?)"
 
 #: gdk-pixbuf/io-gif.c:469
 #, c-format
 msgid "Internal error in the GIF loader (%s)"
-msgstr "Унутраная памылка ў загрузчыку GIF (%s)"
+msgstr "РЈРЅСѓС‚СЂР°РЅР°СЏ РїР°РјС‹Р»РєР° Сћ Р·Р°РіСЂСѓР·С‡С‹РєСѓ GIF (%s)"
 
 #: gdk-pixbuf/io-gif.c:592
 msgid "GIF image loader can't understand this image."
-msgstr "Загрузчык GIF не можа зразумець гэты малюнак."
+msgstr "Р—Р°РіСЂСѓР·С‡С‹Рє GIF РЅРµ РјРѕР¶Р° Р·СЂР°Р·СѓРјРµС†СЊ РіСЌС‚С‹ РјР°Р»СЋРЅР°Рє."
 
 #: gdk-pixbuf/io-gif.c:621
 msgid "Bad code encountered"
-msgstr "Сустрэўся дрэнны код"
+msgstr "РЎСѓСЃС‚СЂСЌСћСЃСЏ РґСЂСЌРЅРЅС‹ РєРѕРґ"
 
 #: gdk-pixbuf/io-gif.c:630
 msgid "Circular table entry in GIF file"
-msgstr "Колавы заблічны запіс у GIF файле"
+msgstr "РљРѕР»Р°РІС‹ Р·Р°Р±Р»С–С‡РЅС‹ Р·Р°РїС–СЃ Сѓ GIF С„Р°Р№Р»Рµ"
 
 #: gdk-pixbuf/io-gif.c:762 gdk-pixbuf/io-gif.c:1370 gdk-pixbuf/io-gif.c:1415
 #: gdk-pixbuf/io-gif.c:1530
 msgid "Not enough memory to load GIF file"
-msgstr "Нехапае памяці для загрузкі GIF файла"
+msgstr "РќРµС…Р°РїР°Рµ РїР°РјСЏС†С– РґР»СЏ Р·Р°РіСЂСѓР·РєС– GIF С„Р°Р№Р»Р°"
 
 #: gdk-pixbuf/io-gif.c:1009
 msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr "GIF малюнак пашкожданы (недакладнае LZW-сьцісканьне)"
+msgstr "GIF РјР°Р»СЋРЅР°Рє РїР°С€РєРѕР¶РґР°РЅС‹ (РЅРµРґР°РєР»Р°РґРЅР°Рµ LZW-СЃСЊС†С–СЃРєР°РЅСЊРЅРµ)"
 
 #: gdk-pixbuf/io-gif.c:1059
 msgid "File does not appear to be a GIF file"
-msgstr "Файл не выглядае як GIF файл"
+msgstr "Р¤Р°Р№Р» РЅРµ РІС‹РіР»СЏРґР°Рµ СЏРє GIF С„Р°Р№Р»"
 
 #: gdk-pixbuf/io-gif.c:1071
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
-msgstr "Вэрсія %s фармата GIF не падтрымліваецца"
+msgstr "Р’СЌСЂСЃС–СЏ %s С„Р°СЂРјР°С‚Р° GIF РЅРµ РїР°РґС‚СЂС‹РјР»С–РІР°РµС†С†Р°"
 
 #: gdk-pixbuf/io-gif.c:1144
 msgid "GIF image contained a frame with height or width 0."
-msgstr "GIF малюнак зьмяшчае кадр з вышынёй (шырынёй) роўнай 0."
+msgstr "GIF РјР°Р»СЋРЅР°Рє Р·СЊРјСЏС€С‡Р°Рµ РєР°РґСЂ Р· РІС‹С€С‹РЅС‘Р№ (С€С‹СЂС‹РЅС‘Р№) СЂРѕСћРЅР°Р№ 0."
 
 #: gdk-pixbuf/io-gif.c:1157
 msgid "GIF image contained a frame appearing outside the image bounds."
-msgstr "GIF малюнак зьмяшчае кадр, які выходзіць па за межы малюнка."
+msgstr "GIF РјР°Р»СЋРЅР°Рє Р·СЊРјСЏС€С‡Р°Рµ РєР°РґСЂ, СЏРєС– РІС‹С…РѕРґР·С–С†СЊ РїР° Р·Р° РјРµР¶С‹ РјР°Р»СЋРЅРєР°."
 
 #: gdk-pixbuf/io-gif.c:1173
 msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
 msgstr ""
-"Першы кадр малюнка GIF меў рэжым 'вяртаньне да папярэдняга' ('revert to "
+"РџРµСЂС€С‹ РєР°РґСЂ РјР°Р»СЋРЅРєР° GIF РјРµСћ СЂСЌР¶С‹Рј 'РІСЏСЂС‚Р°РЅСЊРЅРµ РґР° РїР°РїСЏСЂСЌРґРЅСЏРіР°' ('revert to "
 "previous')"
 
 #: gdk-pixbuf/io-gif.c:1208
@@ -204,72 +204,72 @@ msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
 msgstr ""
-"GIF малюнак ня мае агульнае мапы колераў, а кадр у нутры яго "
-"ня мае мясцовай мапы колераў."
+"GIF РјР°Р»СЋРЅР°Рє РЅСЏ РјР°Рµ Р°РіСѓР»СЊРЅР°Рµ РјР°РїС‹ РєРѕР»РµСЂР°Сћ, Р° РєР°РґСЂ Сѓ РЅСѓС‚СЂС‹ СЏРіРѕ "
+"РЅСЏ РјР°Рµ РјСЏСЃС†РѕРІР°Р№ РјР°РїС‹ РєРѕР»РµСЂР°Сћ."
 
 #: gdk-pixbuf/io-gif.c:1437
 msgid "GIF image was truncated or incomplete."
-msgstr "GIF малюнак быў абрэзаны ці незавершаны."
+msgstr "GIF РјР°Р»СЋРЅР°Рє Р±С‹Сћ Р°Р±СЂСЌР·Р°РЅС‹ С†С– РЅРµР·Р°РІРµСЂС€Р°РЅС‹."
 
 #: gdk-pixbuf/io-ico.c:207
 #, c-format
 msgid "Failure reading ICO: %s"
-msgstr "Памылка чытаньня ICO: %s"
+msgstr "РџР°РјС‹Р»РєР° С‡С‹С‚Р°РЅСЊРЅСЏ ICO: %s"
 
 #: gdk-pixbuf/io-ico.c:224
 msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
-msgstr "У ICO файле былі прапушчаны некаторыя дадзеныя (магчыма ён быў абрэзан?)"
+msgstr "РЈ ICO С„Р°Р№Р»Рµ Р±С‹Р»С– РїСЂР°РїСѓС€С‡Р°РЅС‹ РЅРµРєР°С‚РѕСЂС‹СЏ РґР°РґР·РµРЅС‹СЏ (РјР°РіС‡С‹РјР° С‘РЅ Р±С‹Сћ Р°Р±СЂСЌР·Р°РЅ?)"
 
 #: gdk-pixbuf/io-ico.c:262 gdk-pixbuf/io-ico.c:318 gdk-pixbuf/io-ico.c:381
 #: gdk-pixbuf/io-ico.c:443 gdk-pixbuf/io-ico.c:460
 msgid "Not enough memory to load icon"
-msgstr "Нехапае памяці для загрузкі значкі"
+msgstr "РќРµС…Р°РїР°Рµ РїР°РјСЏС†С– РґР»СЏ Р·Р°РіСЂСѓР·РєС– Р·РЅР°С‡РєС–"
 
 #: gdk-pixbuf/io-ico.c:303
 msgid "Invalid header in icon"
-msgstr "Нерэчаісны загаловак значкі"
+msgstr "РќРµСЂСЌС‡Р°С–СЃРЅС‹ Р·Р°РіР°Р»РѕРІР°Рє Р·РЅР°С‡РєС–"
 
 #: gdk-pixbuf/io-ico.c:340
 msgid "Icon has zero width"
-msgstr "Значка мае нулявую шырыню"
+msgstr "Р—РЅР°С‡РєР° РјР°Рµ РЅСѓР»СЏРІСѓСЋ С€С‹СЂС‹РЅСЋ"
 
 #: gdk-pixbuf/io-ico.c:350
 msgid "Icon has zero height"
-msgstr "Значка мае нулявую вышыню"
+msgstr "Р—РЅР°С‡РєР° РјР°Рµ РЅСѓР»СЏРІСѓСЋ РІС‹С€С‹РЅСЋ"
 
 #: gdk-pixbuf/io-ico.c:395
 msgid "Compressed icons are not supported"
-msgstr "Ужатыя значкі не падтрымліваюцца"
+msgstr "РЈР¶Р°С‚С‹СЏ Р·РЅР°С‡РєС– РЅРµ РїР°РґС‚СЂС‹РјР»С–РІР°СЋС†С†Р°"
 
 #: gdk-pixbuf/io-ico.c:428
 msgid "Unsupported icon type"
-msgstr "Непадтрымліваемы тып значкі"
+msgstr "РќРµРїР°РґС‚СЂС‹РјР»С–РІР°РµРјС‹ С‚С‹Рї Р·РЅР°С‡РєС–"
 
 #: gdk-pixbuf/io-ico.c:500
 msgid "Not enough memory to load ICO file"
-msgstr "Нехапае памяці для загрузкі ICO файла"
+msgstr "РќРµС…Р°РїР°Рµ РїР°РјСЏС†С– РґР»СЏ Р·Р°РіСЂСѓР·РєС– ICO С„Р°Р№Р»Р°"
 
 #: gdk-pixbuf/io-jpeg.c:111
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
-msgstr "Памылка успрыняцьця файла з JPEG малюнкам (%s)"
+msgstr "РџР°РјС‹Р»РєР° СѓСЃРїСЂС‹РЅСЏС†СЊС†СЏ С„Р°Р№Р»Р° Р· JPEG РјР°Р»СЋРЅРєР°Рј (%s)"
 
 #: gdk-pixbuf/io-jpeg.c:346
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
 msgstr ""
-"Нехапае памяці для загрузкі малюнка, паспрабуйце завершыць некаторыя "
-"дадаткі, каб вызваліьц памяць"
+"РќРµС…Р°РїР°Рµ РїР°РјСЏС†С– РґР»СЏ Р·Р°РіСЂСѓР·РєС– РјР°Р»СЋРЅРєР°, РїР°СЃРїСЂР°Р±СѓР№С†Рµ Р·Р°РІРµСЂС€С‹С†СЊ РЅРµРєР°С‚РѕСЂС‹СЏ "
+"РґР°РґР°С‚РєС–, РєР°Р± РІС‹Р·РІР°Р»С–СЊС† РїР°РјСЏС†СЊ"
 
 #: gdk-pixbuf/io-jpeg.c:380 gdk-pixbuf/io-jpeg.c:730
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
-msgstr "Непадтрымліваемая колеравая прастора JPEG (%s)"
+msgstr "РќРµРїР°РґС‚СЂС‹РјР»С–РІР°РµРјР°СЏ РєРѕР»РµСЂР°РІР°СЏ РїСЂР°СЃС‚РѕСЂР° JPEG (%s)"
 
 #: gdk-pixbuf/io-jpeg.c:476 gdk-pixbuf/io-jpeg.c:668 gdk-pixbuf/io-jpeg.c:844
 msgid "Couldn't allocate memory for loading JPEG file"
-msgstr "Немагчыма разьмеркаваць памяць для загрузкі JPEG файла"
+msgstr "РќРµРјР°РіС‡С‹РјР° СЂР°Р·СЊРјРµСЂРєР°РІР°С†СЊ РїР°РјСЏС†СЊ РґР»СЏ Р·Р°РіСЂСѓР·РєС– JPEG С„Р°Р№Р»Р°"
 
 #: gdk-pixbuf/io-jpeg.c:798
 #, c-format
@@ -277,46 +277,46 @@ msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
 msgstr ""
-"Якасьць JPEG павінна мець значэньне паміж 0 і 100; значэньне '%s' не можа "
-"быць апрацавана."
+"РЇРєР°СЃСЊС†СЊ JPEG РїР°РІС–РЅРЅР° РјРµС†СЊ Р·РЅР°С‡СЌРЅСЊРЅРµ РїР°РјС–Р¶ 0 С– 100; Р·РЅР°С‡СЌРЅСЊРЅРµ '%s' РЅРµ РјРѕР¶Р° "
+"Р±С‹С†СЊ Р°РїСЂР°С†Р°РІР°РЅР°."
 
 #: gdk-pixbuf/io-jpeg.c:813
 #, c-format
 msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
-"Якасьць JPEG павінна мець значэньне паміж 0 і 100; значэньне '%d' "
-"недапушчальна"
+"РЇРєР°СЃСЊС†СЊ JPEG РїР°РІС–РЅРЅР° РјРµС†СЊ Р·РЅР°С‡СЌРЅСЊРЅРµ РїР°РјС–Р¶ 0 С– 100; Р·РЅР°С‡СЌРЅСЊРЅРµ '%d' "
+"РЅРµРґР°РїСѓС€С‡Р°Р»СЊРЅР°"
 
 #: gdk-pixbuf/io-png.c:55
 msgid "Bits per channel of PNG image is invalid."
-msgstr "Нерэчаіснае значэньне біт на канал для малюнка PNG."
+msgstr "РќРµСЂСЌС‡Р°С–СЃРЅР°Рµ Р·РЅР°С‡СЌРЅСЊРЅРµ Р±С–С‚ РЅР° РєР°РЅР°Р» РґР»СЏ РјР°Р»СЋРЅРєР° PNG."
 
 #: gdk-pixbuf/io-png.c:136
 msgid "Transformed PNG has zero width or height."
-msgstr "Пераўтвораны PNG малюнак мае нулявую вышыні ці шырыню."
+msgstr "РџРµСЂР°СћС‚РІРѕСЂР°РЅС‹ PNG РјР°Р»СЋРЅР°Рє РјР°Рµ РЅСѓР»СЏРІСѓСЋ РІС‹С€С‹РЅС– С†С– С€С‹СЂС‹РЅСЋ."
 
 #: gdk-pixbuf/io-png.c:144
 msgid "Bits per channel of transformed PNG is not 8."
-msgstr "Колькасьць біт на канал у пераўтвораным PNG малюнке не 8."
+msgstr "РљРѕР»СЊРєР°СЃСЊС†СЊ Р±С–С‚ РЅР° РєР°РЅР°Р» Сѓ РїРµСЂР°СћС‚РІРѕСЂР°РЅС‹Рј PNG РјР°Р»СЋРЅРєРµ РЅРµ 8."
 
 #: gdk-pixbuf/io-png.c:153
 msgid "Transformed PNG not RGB or RGBA."
-msgstr "Пераўтвораны PNG не з'яўляецца RGB ці RGBA."
+msgstr "РџРµСЂР°СћС‚РІРѕСЂР°РЅС‹ PNG РЅРµ Р·'СЏСћР»СЏРµС†С†Р° RGB С†С– RGBA."
 
 #: gdk-pixbuf/io-png.c:162
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
 msgstr ""
-"Пераўтвораны PNG мае непадтрымліваемую колькасьці каналаў, павінна быць 3 "
-"альбо 4."
+"РџРµСЂР°СћС‚РІРѕСЂР°РЅС‹ PNG РјР°Рµ РЅРµРїР°РґС‚СЂС‹РјР»С–РІР°РµРјСѓСЋ РєРѕР»СЊРєР°СЃСЊС†С– РєР°РЅР°Р»Р°Сћ, РїР°РІС–РЅРЅР° Р±С‹С†СЊ 3 "
+"Р°Р»СЊР±Рѕ 4."
 
 #: gdk-pixbuf/io-png.c:183
 #, c-format
 msgid "Fatal error in PNG image file: %s"
-msgstr "Невыправімая памылка ў PNG файле: %s"
+msgstr "РќРµРІС‹РїСЂР°РІС–РјР°СЏ РїР°РјС‹Р»РєР° Сћ PNG С„Р°Р№Р»Рµ: %s"
 
 #: gdk-pixbuf/io-png.c:296
 msgid "Insufficient memory to load PNG file"
-msgstr "Недастаткова памяці для загрузкі  PNG файла."
+msgstr "РќРµРґР°СЃС‚Р°С‚РєРѕРІР° РїР°РјСЏС†С– РґР»СЏ Р·Р°РіСЂСѓР·РєС–  PNG С„Р°Р№Р»Р°."
 
 #: gdk-pixbuf/io-png.c:599
 #, c-format
@@ -324,318 +324,318 @@ msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
 "applications to reduce memory usage"
 msgstr ""
-"Недастаткова памяці для захаваньня %ld з %ld малюнка(ў); паспрабйце "
-"завершыць некаторыя дадаткі, каб зьменьшыць выкарыстаньне памяці."
+"РќРµРґР°СЃС‚Р°С‚РєРѕРІР° РїР°РјСЏС†С– РґР»СЏ Р·Р°С…Р°РІР°РЅСЊРЅСЏ %ld Р· %ld РјР°Р»СЋРЅРєР°(Сћ); РїР°СЃРїСЂР°Р±Р№С†Рµ "
+"Р·Р°РІРµСЂС€С‹С†СЊ РЅРµРєР°С‚РѕСЂС‹СЏ РґР°РґР°С‚РєС–, РєР°Р± Р·СЊРјРµРЅСЊС€С‹С†СЊ РІС‹РєР°СЂС‹СЃС‚Р°РЅСЊРЅРµ РїР°РјСЏС†С–."
 
 #: gdk-pixbuf/io-png.c:650
 msgid "Fatal error reading PNG image file"
-msgstr "Невыправімая памылка чытаньня PNG файла"
+msgstr "РќРµРІС‹РїСЂР°РІС–РјР°СЏ РїР°РјС‹Р»РєР° С‡С‹С‚Р°РЅСЊРЅСЏ PNG С„Р°Р№Р»Р°"
 
 #: gdk-pixbuf/io-png.c:699
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
-msgstr "Невыправімая памылка чытаньня PNG файла: %s"
+msgstr "РќРµРІС‹РїСЂР°РІС–РјР°СЏ РїР°РјС‹Р»РєР° С‡С‹С‚Р°РЅСЊРЅСЏ PNG С„Р°Р№Р»Р°: %s"
 
 #: gdk-pixbuf/io-png.c:765
 msgid "Keys for PNG tEXt chunks must have at least 1 and at most 79 characters."
-msgstr "Ключы для PNG tEXt кавалкаў павінны быць ад 1 да 79 сымбаляў."
+msgstr "РљР»СЋС‡С‹ РґР»СЏ PNG tEXt РєР°РІР°Р»РєР°Сћ РїР°РІС–РЅРЅС‹ Р±С‹С†СЊ Р°Рґ 1 РґР° 79 СЃС‹РјР±Р°Р»СЏСћ."
 
 #: gdk-pixbuf/io-png.c:773
 msgid "Keys for PNG tEXt chunks must be ASCII characters."
-msgstr "Ключы для PNG tEXt кавалкаў павінны быць ASCII сымбалямі."
+msgstr "РљР»СЋС‡С‹ РґР»СЏ PNG tEXt РєР°РІР°Р»РєР°Сћ РїР°РІС–РЅРЅС‹ Р±С‹С†СЊ ASCII СЃС‹РјР±Р°Р»СЏРјС–."
 
 #: gdk-pixbuf/io-png.c:794
 msgid "Value for PNG tEXt chunk can not be converted to ISO-8859-1 encoding."
-msgstr "Значэньне для PNG tEXt chunk ня можа быць пераўтворана ў кадзіроўку ISO-8859-1"
+msgstr "Р—РЅР°С‡СЌРЅСЊРЅРµ РґР»СЏ PNG tEXt chunk РЅСЏ РјРѕР¶Р° Р±С‹С†СЊ РїРµСЂР°СћС‚РІРѕСЂР°РЅР° Сћ РєР°РґР·С–СЂРѕСћРєСѓ ISO-8859-1"
 
 #: gdk-pixbuf/io-pnm.c:247
 msgid "PNM loader expected to find an integer, but didn't"
-msgstr "загрузчык PNM спадзяваўся адшукаць цэлы лік, але не знайшоў"
+msgstr "Р·Р°РіСЂСѓР·С‡С‹Рє PNM СЃРїР°РґР·СЏРІР°СћСЃСЏ Р°РґС€СѓРєР°С†СЊ С†СЌР»С‹ Р»С–Рє, Р°Р»Рµ РЅРµ Р·РЅР°Р№С€РѕСћ"
 
 #: gdk-pixbuf/io-pnm.c:279
 msgid "PNM file has an incorrect initial byte"
-msgstr "PNM файл мае нерэчаісны першапачатковы байт"
+msgstr "PNM С„Р°Р№Р» РјР°Рµ РЅРµСЂСЌС‡Р°С–СЃРЅС‹ РїРµСЂС€Р°РїР°С‡Р°С‚РєРѕРІС‹ Р±Р°Р№С‚"
 
 #: gdk-pixbuf/io-pnm.c:309
 msgid "PNM file is not in a recognized PNM subformat"
-msgstr "Нераспазнаны PNM падфармат у файле PNM"
+msgstr "РќРµСЂР°СЃРїР°Р·РЅР°РЅС‹ PNM РїР°РґС„Р°СЂРјР°С‚ Сѓ С„Р°Р№Р»Рµ PNM"
 
 #: gdk-pixbuf/io-pnm.c:334
 msgid "PNM file has an image width of 0"
-msgstr "PNM файл мае нулявую шырыню малюнка"
+msgstr "PNM С„Р°Р№Р» РјР°Рµ РЅСѓР»СЏРІСѓСЋ С€С‹СЂС‹РЅСЋ РјР°Р»СЋРЅРєР°"
 
 #: gdk-pixbuf/io-pnm.c:355
 msgid "PNM file has an image height of 0"
-msgstr "PNM файл мае нулявую вышыню малюнка"
+msgstr "PNM С„Р°Р№Р» РјР°Рµ РЅСѓР»СЏРІСѓСЋ РІС‹С€С‹РЅСЋ РјР°Р»СЋРЅРєР°"
 
 #: gdk-pixbuf/io-pnm.c:378
 msgid "Maximum color value in PNM file is 0"
-msgstr "Найбольшае значэньне колеру ў PNM файле - 0"
+msgstr "РќР°Р№Р±РѕР»СЊС€Р°Рµ Р·РЅР°С‡СЌРЅСЊРЅРµ РєРѕР»РµСЂСѓ Сћ PNM С„Р°Р№Р»Рµ - 0"
 
 #: gdk-pixbuf/io-pnm.c:386
 msgid "Maximum color value in PNM file is too large"
-msgstr "Найбольшае значэньне колеру ў PNM файле вельмі вялікае"
+msgstr "РќР°Р№Р±РѕР»СЊС€Р°Рµ Р·РЅР°С‡СЌРЅСЊРЅРµ РєРѕР»РµСЂСѓ Сћ PNM С„Р°Р№Р»Рµ РІРµР»СЊРјС– РІСЏР»С–РєР°Рµ"
 
 #: gdk-pixbuf/io-pnm.c:394
 msgid "Can't handle PNM files with maximum color values greater than 255"
-msgstr "Немагчыма працаваць з PNM файламі ў якіх найбольшае значэньне колеру больш за 255"
+msgstr "РќРµРјР°РіС‡С‹РјР° РїСЂР°С†Р°РІР°С†СЊ Р· PNM С„Р°Р№Р»Р°РјС– Сћ СЏРєС–С… РЅР°Р№Р±РѕР»СЊС€Р°Рµ Р·РЅР°С‡СЌРЅСЊРЅРµ РєРѕР»РµСЂСѓ Р±РѕР»СЊС€ Р·Р° 255"
 
 #: gdk-pixbuf/io-pnm.c:433 gdk-pixbuf/io-pnm.c:461 gdk-pixbuf/io-pnm.c:493
 msgid "Raw PNM image type is invalid"
-msgstr "Нерэчаісны тып малюнку для Raw PNM"
+msgstr "РќРµСЂСЌС‡Р°С–СЃРЅС‹ С‚С‹Рї РјР°Р»СЋРЅРєСѓ РґР»СЏ Raw PNM"
 
 #: gdk-pixbuf/io-pnm.c:553 gdk-pixbuf/io-pnm.c:595
 msgid "PNM image format is invalid"
-msgstr "Нерэчаісны фармат малюнка PNM"
+msgstr "РќРµСЂСЌС‡Р°С–СЃРЅС‹ С„Р°СЂРјР°С‚ РјР°Р»СЋРЅРєР° PNM"
 
 #: gdk-pixbuf/io-pnm.c:654
 msgid "PNM image loader does not support this PNM subformat"
-msgstr "Загрузчык PNM малюнкаў не падтрымлівае гэты PNM падфармат"
+msgstr "Р—Р°РіСЂСѓР·С‡С‹Рє PNM РјР°Р»СЋРЅРєР°Сћ РЅРµ РїР°РґС‚СЂС‹РјР»С–РІР°Рµ РіСЌС‚С‹ PNM РїР°РґС„Р°СЂРјР°С‚"
 
 #: gdk-pixbuf/io-pnm.c:709
 msgid "Premature end-of-file encountered"
-msgstr "Сустрэўся датэрміновы EOF (канец файла) "
+msgstr "РЎСѓСЃС‚СЂСЌСћСЃСЏ РґР°С‚СЌСЂРјС–РЅРѕРІС‹ EOF (РєР°РЅРµС† С„Р°Р№Р»Р°) "
 
 #: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:960
 msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr ""
+msgstr "Р¤Р°СЂРјР°С‚ PNM РїР°С‚СЂР°Р±СѓРµ РґР°РєР»Р°РґРЅР° Р°РґР·С–РЅ РїСЂР°РіР°Р» РїРµСЂР°Рґ РґР°РЅСЊРЅСЏРјС– СћР·РѕСЂ"
 
 #: gdk-pixbuf/io-pnm.c:768
 msgid "Can't allocate memory for loading PNM image"
-msgstr "Немагыма атрымаць памяць для загрузкі PNM малюнка"
+msgstr "РќРµРјР°РіС‹РјР° Р°С‚СЂС‹РјР°С†СЊ РїР°РјСЏС†СЊ РґР»СЏ Р·Р°РіСЂСѓР·РєС– PNM РјР°Р»СЋРЅРєР°"
 
 #: gdk-pixbuf/io-pnm.c:817
 msgid "Insufficient memory to load PNM context struct"
-msgstr "Нехапае памяці для загрузкі структуры зьместу PNM"
+msgstr "РќРµС…Р°РїР°Рµ РїР°РјСЏС†С– РґР»СЏ Р·Р°РіСЂСѓР·РєС– СЃС‚СЂСѓРєС‚СѓСЂС‹ Р·СЊРјРµСЃС‚Сѓ PNM"
 
 #: gdk-pixbuf/io-pnm.c:867
 msgid "Unexpected end of PNM image data"
-msgstr "Нечаканае завяршэнне дадзеных PNM малюнка"
+msgstr "РќРµС‡Р°РєР°РЅР°Рµ Р·Р°РІСЏСЂС€СЌРЅРЅРµ РґР°РґР·РµРЅС‹С… PNM РјР°Р»СЋРЅРєР°"
 
 #: gdk-pixbuf/io-pnm.c:989
 msgid "Insufficient memory to load PNM file"
-msgstr "Недастаткова памяці для загрузкі PNM файла"
+msgstr "РќРµРґР°СЃС‚Р°С‚РєРѕРІР° РїР°РјСЏС†С– РґР»СЏ Р·Р°РіСЂСѓР·РєС– PNM С„Р°Р№Р»Р°"
 
 #: gdk-pixbuf/io-ras.c:158
 msgid "RAS image has bogus header data"
-msgstr "RAS малюнак мае падробленыя даньні ў загалоўку"
+msgstr "RAS РјР°Р»СЋРЅР°Рє РјР°Рµ РїР°РґСЂРѕР±Р»РµРЅС‹СЏ РґР°РЅСЊРЅС– Сћ Р·Р°РіР°Р»РѕСћРєСѓ"
 
 #: gdk-pixbuf/io-ras.c:180
 msgid "RAS image has unknown type"
-msgstr "RAS малюнак мае невядомы тып"
+msgstr "RAS РјР°Р»СЋРЅР°Рє РјР°Рµ РЅРµРІСЏРґРѕРјС‹ С‚С‹Рї"
 
 #: gdk-pixbuf/io-ras.c:188
 msgid "unsupported RAS image variation"
-msgstr "непадтрымліваемая разнастайнасьць RAS малюнку"
+msgstr "РЅРµРїР°РґС‚СЂС‹РјР»С–РІР°РµРјР°СЏ СЂР°Р·РЅР°СЃС‚Р°Р№РЅР°СЃСЊС†СЊ RAS РјР°Р»СЋРЅРєСѓ"
 
 #: gdk-pixbuf/io-ras.c:203 gdk-pixbuf/io-ras.c:223
 msgid "Not enough memory to load RAS image"
-msgstr "Нехапае памяці для загрузкі RAS малюнка"
+msgstr "РќРµС…Р°РїР°Рµ РїР°РјСЏС†С– РґР»СЏ Р·Р°РіСЂСѓР·РєС– RAS РјР°Р»СЋРЅРєР°"
 
 #: gdk-pixbuf/io-tga.c:159
 msgid "Can't allocate memory for IOBuffer struct"
-msgstr "Немагчыма разьмеркаваць памяць для структуры IOBuffer"
+msgstr "РќРµРјР°РіС‡С‹РјР° СЂР°Р·СЊРјРµСЂРєР°РІР°С†СЊ РїР°РјСЏС†СЊ РґР»СЏ СЃС‚СЂСѓРєС‚СѓСЂС‹ IOBuffer"
 
 #: gdk-pixbuf/io-tga.c:178
 msgid "Can't allocate memory for IOBuffer data"
-msgstr "Немагчыма разьмеркаваць памяць для дадзеных IOBuffer"
+msgstr "РќРµРјР°РіС‡С‹РјР° СЂР°Р·СЊРјРµСЂРєР°РІР°С†СЊ РїР°РјСЏС†СЊ РґР»СЏ РґР°РґР·РµРЅС‹С… IOBuffer"
 
 #: gdk-pixbuf/io-tga.c:189
 msgid "Can't realloc IOBuffer data"
-msgstr "Немагчыма пераразьмеркаваць даньні з IOBuffer"
+msgstr "РќРµРјР°РіС‡С‹РјР° РїРµСЂР°СЂР°Р·СЊРјРµСЂРєР°РІР°С†СЊ РґР°РЅСЊРЅС– Р· IOBuffer"
 
 #: gdk-pixbuf/io-tga.c:218
 msgid "Can't allocate temporary IOBuffer data"
-msgstr "Немагчыма разьмеркаваць часовыя дадзеныя IOBuffer"
+msgstr "РќРµРјР°РіС‡С‹РјР° СЂР°Р·СЊРјРµСЂРєР°РІР°С†СЊ С‡Р°СЃРѕРІС‹СЏ РґР°РґР·РµРЅС‹СЏ IOBuffer"
 
 #: gdk-pixbuf/io-tga.c:282
 msgid "fread() failed -- premature end-of-file probably encountered"
-msgstr "памылка fread() -- атрыманы нечаканы канец файлу"
+msgstr "РїР°РјС‹Р»РєР° fread() -- Р°С‚СЂС‹РјР°РЅС‹ РЅРµС‡Р°РєР°РЅС‹ РєР°РЅРµС† С„Р°Р№Р»Сѓ"
 
 #: gdk-pixbuf/io-tga.c:292
 msgid "fseek() failed -- premature end-of-file probably encountered"
-msgstr "памылка fseek() -- атрыманы нечаканы канец файлу"
+msgstr "РїР°РјС‹Р»РєР° fseek() -- Р°С‚СЂС‹РјР°РЅС‹ РЅРµС‡Р°РєР°РЅС‹ РєР°РЅРµС† С„Р°Р№Р»Сѓ"
 
 #: gdk-pixbuf/io-tga.c:325
 msgid "Can't allocate new pixbuf"
-msgstr "Немагчыма разьмеркаваць новы pixbuf"
+msgstr "РќРµРјР°РіС‡С‹РјР° СЂР°Р·СЊРјРµСЂРєР°РІР°С†СЊ РЅРѕРІС‹ pixbuf"
 
 #: gdk-pixbuf/io-tga.c:638
 msgid "Can't allocate colormap structure"
-msgstr "Немагчыма разьмеркаваць структуру colormap"
+msgstr "РќРµРјР°РіС‡С‹РјР° СЂР°Р·СЊРјРµСЂРєР°РІР°С†СЊ СЃС‚СЂСѓРєС‚СѓСЂСѓ colormap"
 
 #: gdk-pixbuf/io-tga.c:645
 msgid "Can't allocate colormap entries"
-msgstr "Немагчыма разьмеркаваць запісы colormap"
+msgstr "РќРµРјР°РіС‡С‹РјР° СЂР°Р·СЊРјРµСЂРєР°РІР°С†СЊ Р·Р°РїС–СЃС‹ colormap"
 
 #: gdk-pixbuf/io-tga.c:667
 msgid "Unexpected bitdepth for colormap entries"
-msgstr "Нечаканая глыбіня колеру для запісаў мапы колераў"
+msgstr "РќРµС‡Р°РєР°РЅР°СЏ РіР»С‹Р±С–РЅСЏ РєРѕР»РµСЂСѓ РґР»СЏ Р·Р°РїС–СЃР°Сћ РјР°РїС‹ РєРѕР»РµСЂР°Сћ"
 
 #: gdk-pixbuf/io-tga.c:685
 msgid "Can't allocate TGA header memory"
-msgstr "Немагчыма разьмеркаваць памяць для загалоўка TGA"
+msgstr "РќРµРјР°РіС‡С‹РјР° СЂР°Р·СЊРјРµСЂРєР°РІР°С†СЊ РїР°РјСЏС†СЊ РґР»СЏ Р·Р°РіР°Р»РѕСћРєР° TGA"
 
 #: gdk-pixbuf/io-tga.c:718
 msgid "TGA image has invalid dimensions"
-msgstr "TGA малюнак мае нерэчаісныя памеры"
+msgstr "TGA РјР°Р»СЋРЅР°Рє РјР°Рµ РЅРµСЂСЌС‡Р°С–СЃРЅС‹СЏ РїР°РјРµСЂС‹"
 
 #: gdk-pixbuf/io-tga.c:724
 msgid "TGA image comment length is too long"
-msgstr "Каментар TGA файла вельмі доўгі"
+msgstr "РљР°РјРµРЅС‚Р°СЂ TGA С„Р°Р№Р»Р° РІРµР»СЊРјС– РґРѕСћРіС–"
 
 #: gdk-pixbuf/io-tga.c:733 gdk-pixbuf/io-tga.c:742 gdk-pixbuf/io-tga.c:752
 #: gdk-pixbuf/io-tga.c:762 gdk-pixbuf/io-tga.c:769
 msgid "TGA image type not supported"
-msgstr "Непадтрымліваемы тып TGA файла"
+msgstr "РќРµРїР°РґС‚СЂС‹РјР»С–РІР°РµРјС‹ С‚С‹Рї TGA С„Р°Р№Р»Р°"
 
 #: gdk-pixbuf/io-tga.c:814
 msgid "Can't allocate memory for TGA context struct"
-msgstr "Немагчыма разьмеркаваць памяць для структуры TGA"
+msgstr "РќРµРјР°РіС‡С‹РјР° СЂР°Р·СЊРјРµСЂРєР°РІР°С†СЊ РїР°РјСЏС†СЊ РґР»СЏ СЃС‚СЂСѓРєС‚СѓСЂС‹ TGA"
 
 #: gdk-pixbuf/io-tga.c:878
 msgid "Excess data in file"
-msgstr "Лішак даньняў у файле"
+msgstr "Р›С–С€Р°Рє РґР°РЅСЊРЅСЏСћ Сѓ С„Р°Р№Р»Рµ"
 
 #: gdk-pixbuf/io-tga.c:924
 msgid "Can't allocate memory for TGA header"
-msgstr "Немагчыма разьмеркаваць запісы colormap"
+msgstr "РќРµРјР°РіС‡С‹РјР° СЂР°Р·СЊРјРµСЂРєР°РІР°С†СЊ Р·Р°РїС–СЃС‹ colormap"
 
 #: gdk-pixbuf/io-tga.c:934
 msgid "Too big value in the infolen field of TGA header."
-msgstr "Вельмі вялікае значэньне ў поле infolen у загалоўку TGA."
+msgstr "Р’РµР»СЊРјС– РІСЏР»С–РєР°Рµ Р·РЅР°С‡СЌРЅСЊРЅРµ Сћ РїРѕР»Рµ infolen Сѓ Р·Р°РіР°Р»РѕСћРєСѓ TGA."
 
 #: gdk-pixbuf/io-tga.c:958
 msgid "Can't allocate memory for TGA cmap temporary buffer"
-msgstr "Немагчыма разьмеркаваць памяць для часовага буфэру для мапы колераў TGA"
+msgstr "РќРµРјР°РіС‡С‹РјР° СЂР°Р·СЊРјРµСЂРєР°РІР°С†СЊ РїР°РјСЏС†СЊ РґР»СЏ С‡Р°СЃРѕРІР°РіР° Р±СѓС„СЌСЂСѓ РґР»СЏ РјР°РїС‹ РєРѕР»РµСЂР°Сћ TGA"
 
 #: gdk-pixbuf/io-tga.c:970
 msgid "Can't allocate memory for TGA colormap struct"
-msgstr "Немагчыма разьмеркаваць памяць для структуры мапы колераў TGA"
+msgstr "РќРµРјР°РіС‡С‹РјР° СЂР°Р·СЊРјРµСЂРєР°РІР°С†СЊ РїР°РјСЏС†СЊ РґР»СЏ СЃС‚СЂСѓРєС‚СѓСЂС‹ РјР°РїС‹ РєРѕР»РµСЂР°Сћ TGA"
 
 #: gdk-pixbuf/io-tga.c:979
 msgid "Can't allocate memory for TGA colormap entries"
-msgstr "Немагчыма разьмеркаваць памяць для запісаў мапы колераў TGA"
+msgstr "РќРµРјР°РіС‡С‹РјР° СЂР°Р·СЊРјРµСЂРєР°РІР°С†СЊ РїР°РјСЏС†СЊ РґР»СЏ Р·Р°РїС–СЃР°Сћ РјР°РїС‹ РєРѕР»РµСЂР°Сћ TGA"
 
 #: gdk-pixbuf/io-tga.c:989
 msgid "Unexpected bitdepth for TGA colormap"
-msgstr "Нечаканая глыбіня колеру для мапы колераў TGA"
+msgstr "РќРµС‡Р°РєР°РЅР°СЏ РіР»С‹Р±С–РЅСЏ РєРѕР»РµСЂСѓ РґР»СЏ РјР°РїС‹ РєРѕР»РµСЂР°Сћ TGA"
 
 #: gdk-pixbuf/io-tga.c:1030
 msgid "Pseudo-Color image without colormap"
-msgstr "Падманліва-каляровы малюнак бяз мапы колераў"
+msgstr "РџР°РґРјР°РЅР»С–РІР°-РєР°Р»СЏСЂРѕРІС‹ РјР°Р»СЋРЅР°Рє Р±СЏР· РјР°РїС‹ РєРѕР»РµСЂР°Сћ"
 
 #: gdk-pixbuf/io-tga.c:1037
 msgid "Can't seek to image offset -- end-of-file probably encountered"
-msgstr "Немагчыма пасунуцца на адлегласьць малюнку -- магчыма дайшлі да канца файлу"
+msgstr "РќРµРјР°РіС‡С‹РјР° РїР°СЃСѓРЅСѓС†С†Р° РЅР° Р°РґР»РµРіР»Р°СЃСЊС†СЊ РјР°Р»СЋРЅРєСѓ -- РјР°РіС‡С‹РјР° РґР°Р№С€Р»С– РґР° РєР°РЅС†Р° С„Р°Р№Р»Сѓ"
 
 #: gdk-pixbuf/io-tga.c:1051 gdk-pixbuf/io-tga.c:1153 gdk-pixbuf/io-tga.c:1223
 msgid "Can't allocate pixbuf"
-msgstr "Немагчыма разьмеркаваць pixbuf"
+msgstr "РќРµРјР°РіС‡С‹РјР° СЂР°Р·СЊРјРµСЂРєР°РІР°С†СЊ pixbuf"
 
 #: gdk-pixbuf/io-tga.c:1293 gdk-pixbuf/io-tga.c:1322
 msgid "Unsupported TGA image type"
-msgstr "Непадтрымліваемы тып TGA малюнка"
+msgstr "РќРµРїР°РґС‚СЂС‹РјР»С–РІР°РµРјС‹ С‚С‹Рї TGA РјР°Р»СЋРЅРєР°"
 
 #: gdk-pixbuf/io-tiff.c:191
 msgid "Could not get image width (bad TIFF file)"
-msgstr "Немагчыма атрымаць шырыню малюнка (дрэнны TIFF файл)"
+msgstr "РќРµРјР°РіС‡С‹РјР° Р°С‚СЂС‹РјР°С†СЊ С€С‹СЂС‹РЅСЋ РјР°Р»СЋРЅРєР° (РґСЂСЌРЅРЅС‹ TIFF С„Р°Р№Р»)"
 
 #: gdk-pixbuf/io-tiff.c:198
 msgid "Could not get image height (bad TIFF file)"
-msgstr "Немагчыма атрымаць вышыню малюнка (дрэнны TIFF файл)"
+msgstr "РќРµРјР°РіС‡С‹РјР° Р°С‚СЂС‹РјР°С†СЊ РІС‹С€С‹РЅСЋ РјР°Р»СЋРЅРєР° (РґСЂСЌРЅРЅС‹ TIFF С„Р°Р№Р»)"
 
 #: gdk-pixbuf/io-tiff.c:206
 msgid "Width or height of TIFF image is zero"
-msgstr "Шырыня ці вышыня TIFF файла - нуль"
+msgstr "РЁС‹СЂС‹РЅСЏ С†С– РІС‹С€С‹РЅСЏ TIFF С„Р°Р№Р»Р° - РЅСѓР»СЊ"
 
 #: gdk-pixbuf/io-tiff.c:215 gdk-pixbuf/io-tiff.c:224
 msgid "Dimensions of TIFF image too large"
-msgstr "Памеры TIFF малюнку вельмі вялікія"
+msgstr "РџР°РјРµСЂС‹ TIFF РјР°Р»СЋРЅРєСѓ РІРµР»СЊРјС– РІСЏР»С–РєС–СЏ"
 
 #: gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:246 gdk-pixbuf/io-tiff.c:552
 msgid "Insufficient memory to open TIFF file"
-msgstr "Недастаткова памяці для адчыненьня TIFF файла"
+msgstr "РќРµРґР°СЃС‚Р°С‚РєРѕРІР° РїР°РјСЏС†С– РґР»СЏ Р°РґС‡С‹РЅРµРЅСЊРЅСЏ TIFF С„Р°Р№Р»Р°"
 
 #: gdk-pixbuf/io-tiff.c:258
 msgid "Failed to load RGB data from TIFF file"
-msgstr "Памылка загрузкі RGB дадзеных з TIFF файла"
+msgstr "РџР°РјС‹Р»РєР° Р·Р°РіСЂСѓР·РєС– RGB РґР°РґР·РµРЅС‹С… Р· TIFF С„Р°Р№Р»Р°"
 
 #: gdk-pixbuf/io-tiff.c:266
 msgid "Unsupported TIFF variant"
-msgstr "Непадтрымліваемы від TIFF"
+msgstr "РќРµРїР°РґС‚СЂС‹РјР»С–РІР°РµРјС‹ РІС–Рґ TIFF"
 
 #: gdk-pixbuf/io-tiff.c:336
 msgid "Failed to open TIFF image"
-msgstr "Памылка адчыненьня TIFF малюнка"
+msgstr "РџР°РјС‹Р»РєР° Р°РґС‡С‹РЅРµРЅСЊРЅСЏ TIFF РјР°Р»СЋРЅРєР°"
 
 #: gdk-pixbuf/io-tiff.c:349
 msgid "TIFFClose operation failed"
-msgstr "Невыправімяа памылка пры зачыненьні TIFF"
+msgstr "РќРµРІС‹РїСЂР°РІС–РјСЏР° РїР°РјС‹Р»РєР° РїСЂС‹ Р·Р°С‡С‹РЅРµРЅСЊРЅС– TIFF"
 
 #: gdk-pixbuf/io-tiff.c:482 gdk-pixbuf/io-tiff.c:495
 msgid "Failed to load TIFF image"
-msgstr "Немагчыма загрузіць TIFF малюнак"
+msgstr "РќРµРјР°РіС‡С‹РјР° Р·Р°РіСЂСѓР·С–С†СЊ TIFF РјР°Р»СЋРЅР°Рє"
 
 #: gdk-pixbuf/io-wbmp.c:278
 msgid "Image has zero width"
-msgstr "Малюнак мае нулявую шырыню"
+msgstr "РњР°Р»СЋРЅР°Рє РјР°Рµ РЅСѓР»СЏРІСѓСЋ С€С‹СЂС‹РЅСЋ"
 
 #: gdk-pixbuf/io-wbmp.c:296
 msgid "Image has zero height"
-msgstr "Малюнак мае нулявую вышыню"
+msgstr "РњР°Р»СЋРЅР°Рє РјР°Рµ РЅСѓР»СЏРІСѓСЋ РІС‹С€С‹РЅСЋ"
 
 #: gdk-pixbuf/io-wbmp.c:307
 msgid "Not enough memory to load image"
-msgstr "Нехапае памяці для загрузкі малюнка"
+msgstr "РќРµС…Р°РїР°Рµ РїР°РјСЏС†С– РґР»СЏ Р·Р°РіСЂСѓР·РєС– РјР°Р»СЋРЅРєР°"
 
 #: gdk-pixbuf/io-wbmp.c:366
 msgid "Couldn't save the rest"
-msgstr "Не атрымалась захаваць астатняе"
+msgstr "РќРµ Р°С‚СЂС‹РјР°Р»Р°СЃСЊ Р·Р°С…Р°РІР°С†СЊ Р°СЃС‚Р°С‚РЅСЏРµ"
 
 #: gdk-pixbuf/io-xbm.c:284
 msgid "Invalid XBM file"
-msgstr "Нерэчаісны XBM файл"
+msgstr "РќРµСЂСЌС‡Р°С–СЃРЅС‹ XBM С„Р°Р№Р»"
 
 #: gdk-pixbuf/io-xbm.c:294
 msgid "Insufficient memory to load XBM image file"
-msgstr "Недастаткова памяці для загрузкі XBM файла з малюнкам"
+msgstr "РќРµРґР°СЃС‚Р°С‚РєРѕРІР° РїР°РјСЏС†С– РґР»СЏ Р·Р°РіСЂСѓР·РєС– XBM С„Р°Р№Р»Р° Р· РјР°Р»СЋРЅРєР°Рј"
 
 #: gdk-pixbuf/io-xbm.c:429
 msgid "Failed to write to temporary file when loading XBM image"
-msgstr "Памылка запісу ў часовы файл, пры загрузцы XBM малюнка"
+msgstr "РџР°РјС‹Р»РєР° Р·Р°РїС–СЃСѓ Сћ С‡Р°СЃРѕРІС‹ С„Р°Р№Р», РїСЂС‹ Р·Р°РіСЂСѓР·С†С‹ XBM РјР°Р»СЋРЅРєР°"
 
 #: gdk-pixbuf/io-xpm.c:1229
 msgid "No XPM header found"
-msgstr "XPM ня знойдзен"
+msgstr "XPM РЅСЏ Р·РЅРѕР№РґР·РµРЅ"
 
 #: gdk-pixbuf/io-xpm.c:1237
 msgid "XPM file has image width <= 0"
-msgstr "XPM файл мае шырыню малюнка <= 0"
+msgstr "XPM С„Р°Р№Р» РјР°Рµ С€С‹СЂС‹РЅСЋ РјР°Р»СЋРЅРєР° <= 0"
 
 #: gdk-pixbuf/io-xpm.c:1245
 msgid "XPM file has image height <= 0"
-msgstr "XPM файл мае вышыню малюнка <= 0"
+msgstr "XPM С„Р°Р№Р» РјР°Рµ РІС‹С€С‹РЅСЋ РјР°Р»СЋРЅРєР° <= 0"
 
 #: gdk-pixbuf/io-xpm.c:1253
 msgid "XPM file has invalid number of colors"
-msgstr "XPM файл мае нерэчаісную колькасьць колераў"
+msgstr "XPM С„Р°Р№Р» РјР°Рµ РЅРµСЂСЌС‡Р°С–СЃРЅСѓСЋ РєРѕР»СЊРєР°СЃСЊС†СЊ РєРѕР»РµСЂР°Сћ"
 
 #: gdk-pixbuf/io-xpm.c:1261
 msgid "XPM has invalid number of chars per pixel"
-msgstr "XPM мае нерэчаісную колькасьц сымбаляў на кропку"
+msgstr "XPM РјР°Рµ РЅРµСЂСЌС‡Р°С–СЃРЅСѓСЋ РєРѕР»СЊРєР°СЃСЊС† СЃС‹РјР±Р°Р»СЏСћ РЅР° РєСЂРѕРїРєСѓ"
 
 #: gdk-pixbuf/io-xpm.c:1279
 msgid "Can't read XPM colormap"
-msgstr "Немагчыма прачытаць карту колераў для XPM"
+msgstr "РќРµРјР°РіС‡С‹РјР° РїСЂР°С‡С‹С‚Р°С†СЊ РєР°СЂС‚Сѓ РєРѕР»РµСЂР°Сћ РґР»СЏ XPM"
 
 #: gdk-pixbuf/io-xpm.c:1317
 msgid "Can't allocate memory for loading XPM image"
-msgstr "Немагчыма разьмеркаваць памяць для загрузкі XPM малюнка"
+msgstr "РќРµРјР°РіС‡С‹РјР° СЂР°Р·СЊРјРµСЂРєР°РІР°С†СЊ РїР°РјСЏС†СЊ РґР»СЏ Р·Р°РіСЂСѓР·РєС– XPM РјР°Р»СЋРЅРєР°"
 
 #: gdk-pixbuf/io-xpm.c:1498
 msgid "Failed to write to temporary file when loading XPM image"
-msgstr "Невыправімая памылка запісу ў часовы файл пад час загрузкі малюнку XPM"
+msgstr "РќРµРІС‹РїСЂР°РІС–РјР°СЏ РїР°РјС‹Р»РєР° Р·Р°РїС–СЃСѓ Сћ С‡Р°СЃРѕРІС‹ С„Р°Р№Р» РїР°Рґ С‡Р°СЃ Р·Р°РіСЂСѓР·РєС– РјР°Р»СЋРЅРєСѓ XPM"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
@@ -666,678 +666,678 @@ msgstr "Alt"
 
 #: gtk/gtkaccellabel.c:136
 msgid "Accelerator Closure"
-msgstr "Пераменная для \"гарачай клявішы\""
+msgstr "РџРµСЂР°РјРµРЅРЅР°СЏ РґР»СЏ \"РіР°СЂР°С‡Р°Р№ РєР»СЏРІС–С€С‹\""
 
 #: gtk/gtkaccellabel.c:137
 msgid "The closure to be monitored for accelerator changes"
-msgstr "Пераменная, якая будзе сачыць за зьменамі \"гарачай клявішы\"."
+msgstr "РџРµСЂР°РјРµРЅРЅР°СЏ, СЏРєР°СЏ Р±СѓРґР·Рµ СЃР°С‡С‹С†СЊ Р·Р° Р·СЊРјРµРЅР°РјС– \"РіР°СЂР°С‡Р°Р№ РєР»СЏРІС–С€С‹\"."
 
 #: gtk/gtkaccellabel.c:143
 msgid "Accelerator Widget"
-msgstr "Віджэт паскаральнік"
+msgstr "Р’С–РґР¶СЌС‚ РїР°СЃРєР°СЂР°Р»СЊРЅС–Рє"
 
 #: gtk/gtkaccellabel.c:144
 msgid "The widget to be monitored for accelerator changes"
-msgstr "Віджэжт, які сочыць за зьменамі паскаральніку"
+msgstr "Р’С–РґР¶СЌР¶С‚, СЏРєС– СЃРѕС‡С‹С†СЊ Р·Р° Р·СЊРјРµРЅР°РјС– РїР°СЃРєР°СЂР°Р»СЊРЅС–РєСѓ"
 
 #: gtk/gtkalignment.c:102
 msgid "Horizontal alignment"
-msgstr "Гарызантальнае выроўніваньне"
+msgstr "Р“Р°СЂС‹Р·Р°РЅС‚Р°Р»СЊРЅР°Рµ РІС‹СЂРѕСћРЅС–РІР°РЅСЊРЅРµ"
 
 #: gtk/gtkalignment.c:103
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
 msgstr ""
-"Гарызантальная пазіцыя нашчадка ў даступным абшары. 0.0 - выроўніваньне па "
-"леваму,1.0 - выроўніваньне па праваму боку"
+"Р“Р°СЂС‹Р·Р°РЅС‚Р°Р»СЊРЅР°СЏ РїР°Р·С–С†С‹СЏ РЅР°С€С‡Р°РґРєР° Сћ РґР°СЃС‚СѓРїРЅС‹Рј Р°Р±С€Р°СЂС‹. 0.0 - РІС‹СЂРѕСћРЅС–РІР°РЅСЊРЅРµ РїР° "
+"Р»РµРІР°РјСѓ,1.0 - РІС‹СЂРѕСћРЅС–РІР°РЅСЊРЅРµ РїР° РїСЂР°РІР°РјСѓ Р±РѕРєСѓ"
 
 #: gtk/gtkalignment.c:112
 msgid "Vertical alignment"
-msgstr "Вэртыкальнае выроўніваньне"
+msgstr "Р’СЌСЂС‚С‹РєР°Р»СЊРЅР°Рµ РІС‹СЂРѕСћРЅС–РІР°РЅСЊРЅРµ"
 
 #: gtk/gtkalignment.c:113
 msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
 msgstr ""
-"Вэртыкальная пазіцыя нашчадка ў даступным абшары. 0.0 - выроўніваньне па "
-"верхняму,1.0 - выроўніваньне па ніжняму боку"
+"Р’СЌСЂС‚С‹РєР°Р»СЊРЅР°СЏ РїР°Р·С–С†С‹СЏ РЅР°С€С‡Р°РґРєР° Сћ РґР°СЃС‚СѓРїРЅС‹Рј Р°Р±С€Р°СЂС‹. 0.0 - РІС‹СЂРѕСћРЅС–РІР°РЅСЊРЅРµ РїР° "
+"РІРµСЂС…РЅСЏРјСѓ,1.0 - РІС‹СЂРѕСћРЅС–РІР°РЅСЊРЅРµ РїР° РЅС–Р¶РЅСЏРјСѓ Р±РѕРєСѓ"
 
 #: gtk/gtkalignment.c:121
 msgid "Horizontal scale"
-msgstr "Гарызантальнае маштабаваньне"
+msgstr "Р“Р°СЂС‹Р·Р°РЅС‚Р°Р»СЊРЅР°Рµ РјР°С€С‚Р°Р±Р°РІР°РЅСЊРЅРµ"
 
 #: gtk/gtkalignment.c:122
 msgid ""
 "If available horizontal space is bigger than needed for the child, how much "
 "of it to use for the child. 0.0 means none, 1.0 means all"
 msgstr ""
-"Калі даступная гарызантальная прастора больш чым патрэбна нашчаду, колькі зь "
-"яе будзе выкарыстоўвацца для нашчадка. 0.0 - ніколькі, 1.0 - уся."
+"РљР°Р»С– РґР°СЃС‚СѓРїРЅР°СЏ РіР°СЂС‹Р·Р°РЅС‚Р°Р»СЊРЅР°СЏ РїСЂР°СЃС‚РѕСЂР° Р±РѕР»СЊС€ С‡С‹Рј РїР°С‚СЂСЌР±РЅР° РЅР°С€С‡Р°РґСѓ, РєРѕР»СЊРєС– Р·СЊ "
+"СЏРµ Р±СѓРґР·Рµ РІС‹РєР°СЂС‹СЃС‚РѕСћРІР°С†С†Р° РґР»СЏ РЅР°С€С‡Р°РґРєР°. 0.0 - РЅС–РєРѕР»СЊРєС–, 1.0 - СѓСЃСЏ."
 
 #: gtk/gtkalignment.c:130
 msgid "Vertical scale"
-msgstr "Вэртыкальнае маштабаваньне"
+msgstr "Р’СЌСЂС‚С‹РєР°Р»СЊРЅР°Рµ РјР°С€С‚Р°Р±Р°РІР°РЅСЊРЅРµ"
 
 #: gtk/gtkalignment.c:131
 msgid ""
 "If available vertical space is bigger than needed for the child, how much of "
 "it to use for the child. 0.0 means none, 1.0 means all"
 msgstr ""
-"Калі даступная вертыкальная прастора больш чым патрэбна нашчаду, колькі зь "
-"яе будзе выкарыстоўвацца для нашчадка. 0.0 - ніколькі, 1.0 - уся."
+"РљР°Р»С– РґР°СЃС‚СѓРїРЅР°СЏ РІРµСЂС‚С‹РєР°Р»СЊРЅР°СЏ РїСЂР°СЃС‚РѕСЂР° Р±РѕР»СЊС€ С‡С‹Рј РїР°С‚СЂСЌР±РЅР° РЅР°С€С‡Р°РґСѓ, РєРѕР»СЊРєС– Р·СЊ "
+"СЏРµ Р±СѓРґР·Рµ РІС‹РєР°СЂС‹СЃС‚РѕСћРІР°С†С†Р° РґР»СЏ РЅР°С€С‡Р°РґРєР°. 0.0 - РЅС–РєРѕР»СЊРєС–, 1.0 - СѓСЃСЏ."
 
 #: gtk/gtkarrow.c:98
 msgid "Arrow direction"
-msgstr "Накірунак стрэлкі"
+msgstr "РќР°РєС–СЂСѓРЅР°Рє СЃС‚СЂСЌР»РєС–"
 
 #: gtk/gtkarrow.c:99
 msgid "The direction the arrow should point"
-msgstr "Накірунак, куды павінна спасылацца стрэлачка"
+msgstr "РќР°РєС–СЂСѓРЅР°Рє, РєСѓРґС‹ РїР°РІС–РЅРЅР° СЃРїР°СЃС‹Р»Р°С†С†Р° СЃС‚СЂСЌР»Р°С‡РєР°"
 
 #: gtk/gtkarrow.c:106
 msgid "Arrow shadow"
-msgstr "Цень стрэлачкі"
+msgstr "Р¦РµРЅСЊ СЃС‚СЂСЌР»Р°С‡РєС–"
 
 #: gtk/gtkarrow.c:107
 msgid "Appearance of the shadow surrounding the arrow"
-msgstr "Выгляд ценю, вакол стрэлкі"
+msgstr "Р’С‹РіР»СЏРґ С†РµРЅСЋ, РІР°РєРѕР» СЃС‚СЂСЌР»РєС–"
 
 #: gtk/gtkaspectframe.c:107
 msgid "Horizontal Alignment"
-msgstr "Гарызантальнае выроўніваньне"
+msgstr "Р“Р°СЂС‹Р·Р°РЅС‚Р°Р»СЊРЅР°Рµ РІС‹СЂРѕСћРЅС–РІР°РЅСЊРЅРµ"
 
 #: gtk/gtkaspectframe.c:108
 msgid "X alignment of the child"
-msgstr "X выроўніваньне нашчадка"
+msgstr "X РІС‹СЂРѕСћРЅС–РІР°РЅСЊРЅРµ РЅР°С€С‡Р°РґРєР°"
 
 #: gtk/gtkaspectframe.c:114
 msgid "Vertical Alignment"
-msgstr "Вэртыкальнае выроўніваньне"
+msgstr "Р’СЌСЂС‚С‹РєР°Р»СЊРЅР°Рµ РІС‹СЂРѕСћРЅС–РІР°РЅСЊРЅРµ"
 
 #: gtk/gtkaspectframe.c:115
 msgid "Y alignment of the child"
-msgstr "Y выроўніваньне нашчадка"
+msgstr "Y РІС‹СЂРѕСћРЅС–РІР°РЅСЊРЅРµ РЅР°С€С‡Р°РґРєР°"
 
 #: gtk/gtkaspectframe.c:121
 msgid "Ratio"
-msgstr "Множнік"
+msgstr "РњРЅРѕР¶РЅС–Рє"
 
 #: gtk/gtkaspectframe.c:122
 msgid "Aspect ratio if obey_child is FALSE"
-msgstr ""
+msgstr "РњРЅРѕР¶РЅС–Рє РїСЂР°РїР°СЂС†С‹СЏРЅР°Р»СЊРЅР°СЃСЊС†С–, РєР°Р»С– obey_child Р·СЊСЏСћР»СЏРµС†С†Р° FALSE"
 
 #: gtk/gtkaspectframe.c:128
 msgid "Obey child"
-msgstr "Падпарадкаваны нашчадак"
+msgstr "РџР°РґРїР°СЂР°РґРєР°РІР°РЅС‹ РЅР°С€С‡Р°РґР°Рє"
 
 #: gtk/gtkaspectframe.c:129
 msgid "Force aspect ratio to match that of the frame's child"
-msgstr "Дапасаваць значэньне прапарцыянальнасьці суадносна з межамі нашчадку"
+msgstr "Р”Р°РїР°СЃР°РІР°С†СЊ Р·РЅР°С‡СЌРЅСЊРЅРµ РїСЂР°РїР°СЂС†С‹СЏРЅР°Р»СЊРЅР°СЃСЊС†С– СЃСѓР°РґРЅРѕСЃРЅР° Р· РјРµР¶Р°РјС– РЅР°С€С‡Р°РґРєСѓ"
 
 #: gtk/gtkbbox.c:115
 msgid "Minimum child width"
-msgstr "Найменшая шырыня нашчадка"
+msgstr "РќР°Р№РјРµРЅС€Р°СЏ С€С‹СЂС‹РЅСЏ РЅР°С€С‡Р°РґРєР°"
 
 #: gtk/gtkbbox.c:116
 msgid "Minimum width of buttons inside the box"
-msgstr "Найменьшая шырыня кнопачак у нутры каробачкі"
+msgstr "РќР°Р№РјРµРЅСЊС€Р°СЏ С€С‹СЂС‹РЅСЏ РєРЅРѕРїР°С‡Р°Рє Сѓ РЅСѓС‚СЂС‹ РєР°СЂРѕР±Р°С‡РєС–"
 
 #: gtk/gtkbbox.c:124
 msgid "Minimum child height"
-msgstr "Найменьшая вышыня нашчадка"
+msgstr "РќР°Р№РјРµРЅСЊС€Р°СЏ РІС‹С€С‹РЅСЏ РЅР°С€С‡Р°РґРєР°"
 
 #: gtk/gtkbbox.c:125
 msgid "Minimum height of buttons inside the box"
-msgstr "Найменьшая вышыня кнопачак у нутры каробачкі"
+msgstr "РќР°Р№РјРµРЅСЊС€Р°СЏ РІС‹С€С‹РЅСЏ РєРЅРѕРїР°С‡Р°Рє Сѓ РЅСѓС‚СЂС‹ РєР°СЂРѕР±Р°С‡РєС–"
 
 #: gtk/gtkbbox.c:133
 msgid "Child internal width padding"
-msgstr "Унутранае запаўненьне нашчадку па шырыні"
+msgstr "РЈРЅСѓС‚СЂР°РЅР°Рµ Р·Р°РїР°СћРЅРµРЅСЊРЅРµ РЅР°С€С‡Р°РґРєСѓ РїР° С€С‹СЂС‹РЅС–"
 
 #: gtk/gtkbbox.c:134
 msgid "Amount to increase child's size on either side"
-msgstr "Ступень павелічэньня памераў нашчадку з абодвух бакоў"
+msgstr "РЎС‚СѓРїРµРЅСЊ РїР°РІРµР»С–С‡СЌРЅСЊРЅСЏ РїР°РјРµСЂР°Сћ РЅР°С€С‡Р°РґРєСѓ Р· Р°Р±РѕРґРІСѓС… Р±Р°РєРѕСћ"
 
 #: gtk/gtkbbox.c:142
 msgid "Child internal height padding"
-msgstr "Унутранае запаўненьне нашчадку па вышыні"
+msgstr "РЈРЅСѓС‚СЂР°РЅР°Рµ Р·Р°РїР°СћРЅРµРЅСЊРЅРµ РЅР°С€С‡Р°РґРєСѓ РїР° РІС‹С€С‹РЅС–"
 
 #: gtk/gtkbbox.c:143
 msgid "Amount to increase child's size on the top and bottom"
-msgstr "Ступень павелічэньня памераў нашчадку зь верху й зь нізу"
+msgstr "РЎС‚СѓРїРµРЅСЊ РїР°РІРµР»С–С‡СЌРЅСЊРЅСЏ РїР°РјРµСЂР°Сћ РЅР°С€С‡Р°РґРєСѓ Р·СЊ РІРµСЂС…Сѓ Р№ Р·СЊ РЅС–Р·Сѓ"
 
 #: gtk/gtkbbox.c:151
 msgid "Layout style"
-msgstr "Стыль пляну"
+msgstr "РЎС‚С‹Р»СЊ РїР»СЏРЅСѓ"
 
 #: gtk/gtkbbox.c:152
 msgid ""
 "How to layout the buttons in the box. Possible values are default, spread, "
 "edge, start and end"
 msgstr ""
-"Як разьмяркоўваюцца кнопачкі ў каробке. Магчымыя значэньні: як ёсьць, "
-"запоўняючы ўсю прастору, па баках, спачатку, напрыканцы."
+"РЇРє СЂР°Р·СЊРјСЏСЂРєРѕСћРІР°СЋС†С†Р° РєРЅРѕРїР°С‡РєС– Сћ РєР°СЂРѕР±РєРµ. РњР°РіС‡С‹РјС‹СЏ Р·РЅР°С‡СЌРЅСЊРЅС–: СЏРє С‘СЃСЊС†СЊ, "
+"Р·Р°РїРѕСћРЅСЏСЋС‡С‹ СћСЃСЋ РїСЂР°СЃС‚РѕСЂСѓ, РїР° Р±Р°РєР°С…, СЃРїР°С‡Р°С‚РєСѓ, РЅР°РїСЂС‹РєР°РЅС†С‹."
 
 #: gtk/gtkbbox.c:160
 msgid "Secondary"
-msgstr "Падпарадкаваны"
+msgstr "РџР°РґРїР°СЂР°РґРєР°РІР°РЅС‹"
 
 #: gtk/gtkbbox.c:161
 msgid ""
 "If TRUE, the child appears in a secondary group of children, suitable for, e."
 "g., help buttons."
 msgstr ""
-"Калі ІСЬЦІНА (TRUE), нашчадак зьяўляецца ў другой супоцы нашчадкаў; "
-"выкарыстоўвываецца, напрыклад, для кнопачак дапамогі."
+"РљР°Р»С– Р†РЎР¬Р¦Р†РќРђ (TRUE), РЅР°С€С‡Р°РґР°Рє Р·СЊСЏСћР»СЏРµС†С†Р° Сћ РґСЂСѓРіРѕР№ СЃСѓРїРѕС†С‹ РЅР°С€С‡Р°РґРєР°Сћ; "
+"РІС‹РєР°СЂС‹СЃС‚РѕСћРІС‹РІР°РµС†С†Р°, РЅР°РїСЂС‹РєР»Р°Рґ, РґР»СЏ РєРЅРѕРїР°С‡Р°Рє РґР°РїР°РјРѕРіС–."
 
 #: gtk/gtkbox.c:125
 msgid "Spacing"
-msgstr "Адлегласьць"
+msgstr "РђРґР»РµРіР»Р°СЃСЊС†СЊ"
 
 #: gtk/gtkbox.c:126
 msgid "The amount of space between children."
-msgstr "Адлегласьць паміж нашчадкамі"
+msgstr "РђРґР»РµРіР»Р°СЃСЊС†СЊ РїР°РјС–Р¶ РЅР°С€С‡Р°РґРєР°РјС–"
 
 #: gtk/gtkbox.c:135 gtk/gtknotebook.c:434
 msgid "Homogeneous"
-msgstr "Аднародны"
+msgstr "РђРґРЅР°СЂРѕРґРЅС‹"
 
 #: gtk/gtkbox.c:136
 msgid "Whether the children should all be the same size."
-msgstr "Ці павінны нашчадкі мець аднолькавыя памеры."
+msgstr "Р¦С– РїР°РІС–РЅРЅС‹ РЅР°С€С‡Р°РґРєС– РјРµС†СЊ Р°РґРЅРѕР»СЊРєР°РІС‹СЏ РїР°РјРµСЂС‹."
 
 #: gtk/gtkbutton.c:189 gtk/gtkframe.c:125 gtk/gtklabel.c:280
 msgid "Label"
-msgstr "Адмеціна"
+msgstr "РђРґРјРµС†С–РЅР°"
 
 #: gtk/gtkbutton.c:190
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget."
-msgstr "Тэкст адмеціны на кнопачцы, калі кнопачка зьмяшчае віджэт адмеціну."
+msgstr "РўСЌРєСЃС‚ Р°РґРјРµС†С–РЅС‹ РЅР° РєРЅРѕРїР°С‡С†С‹, РєР°Р»С– РєРЅРѕРїР°С‡РєР° Р·СЊРјСЏС€С‡Р°Рµ РІС–РґР¶СЌС‚ Р°РґРјРµС†С–РЅСѓ."
 
 #: gtk/gtkbutton.c:197 gtk/gtklabel.c:301
 msgid "Use underline"
-msgstr "Выкарыстоўвываць падкрэсьліваньне"
+msgstr "Р’С‹РєР°СЂС‹СЃС‚РѕСћРІС‹РІР°С†СЊ РїР°РґРєСЂСЌСЃСЊР»С–РІР°РЅСЊРЅРµ"
 
 #: gtk/gtkbutton.c:198 gtk/gtklabel.c:302
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
 msgstr ""
-"Калі ўключана, сымбаль падкрэсьліваньня ў тэксьце азначае, што "
-"наступны сымбаль павінен выкарыстоўвывацца як \"гарачая клявіша\"."
+"РљР°Р»С– СћРєР»СЋС‡Р°РЅР°, СЃС‹РјР±Р°Р»СЊ РїР°РґРєСЂСЌСЃСЊР»С–РІР°РЅСЊРЅСЏ Сћ С‚СЌРєСЃСЊС†Рµ Р°Р·РЅР°С‡Р°Рµ, С€С‚Рѕ "
+"РЅР°СЃС‚СѓРїРЅС‹ СЃС‹РјР±Р°Р»СЊ РїР°РІС–РЅРµРЅ РІС‹РєР°СЂС‹СЃС‚РѕСћРІС‹РІР°С†С†Р° СЏРє \"РіР°СЂР°С‡Р°СЏ РєР»СЏРІС–С€Р°\"."
 
 #: gtk/gtkbutton.c:205
 msgid "Use stock"
-msgstr "Выкарыстоўваць убудаванае"
+msgstr "Р’С‹РєР°СЂС‹СЃС‚РѕСћРІР°С†СЊ СѓР±СѓРґР°РІР°РЅР°Рµ"
 
 #: gtk/gtkbutton.c:206
 msgid "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
-"Калі ўключана, адмеціна будзе выкарыставана для выбару ўбудаваных "
-"кнопачак замест адлюстраваньня."
+"РљР°Р»С– СћРєР»СЋС‡Р°РЅР°, Р°РґРјРµС†С–РЅР° Р±СѓРґР·Рµ РІС‹РєР°СЂС‹СЃС‚Р°РІР°РЅР° РґР»СЏ РІС‹Р±Р°СЂСѓ СћР±СѓРґР°РІР°РЅС‹С… "
+"РєРЅРѕРїР°С‡Р°Рє Р·Р°РјРµСЃС‚ Р°РґР»СЋСЃС‚СЂР°РІР°РЅСЊРЅСЏ."
 
 #: gtk/gtkbutton.c:213
 msgid "Border relief"
-msgstr "Выпукласьць меж"
+msgstr "Р’С‹РїСѓРєР»Р°СЃСЊС†СЊ РјРµР¶"
 
 #: gtk/gtkbutton.c:214
 msgid "The border relief style."
-msgstr "Выгляд выпукласьці меж вокнаў."
+msgstr "Р’С‹РіР»СЏРґ РІС‹РїСѓРєР»Р°СЃСЊС†С– РјРµР¶ РІРѕРєРЅР°Сћ."
 
 #: gtk/gtkbutton.c:265
 msgid "Default Spacing"
-msgstr "Пачатковая адлегласьць"
+msgstr "РџР°С‡Р°С‚РєРѕРІР°СЏ Р°РґР»РµРіР»Р°СЃСЊС†СЊ"
 
 #: gtk/gtkbutton.c:266
 msgid "Extra space to add for CAN_DEFAULT buttons"
-msgstr "Дадатковая прастора для CAN_DEFAULT кнопачак"
+msgstr "Р”Р°РґР°С‚РєРѕРІР°СЏ РїСЂР°СЃС‚РѕСЂР° РґР»СЏ CAN_DEFAULT РєРЅРѕРїР°С‡Р°Рє"
 
 #: gtk/gtkbutton.c:272
 msgid "Default Outside Spacing"
-msgstr "Пачатковая зьнешняя прастора"
+msgstr "РџР°С‡Р°С‚РєРѕРІР°СЏ Р·СЊРЅРµС€РЅСЏСЏ РїСЂР°СЃС‚РѕСЂР°"
 
 #: gtk/gtkbutton.c:273
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
 msgstr ""
-"Дадатковая прастора для CAN_DEFAULT кнопачак, якая заўсёды дадаецца "
-"да зьнешніх межаў кнопачак"
+"Р”Р°РґР°С‚РєРѕРІР°СЏ РїСЂР°СЃС‚РѕСЂР° РґР»СЏ CAN_DEFAULT РєРЅРѕРїР°С‡Р°Рє, СЏРєР°СЏ Р·Р°СћСЃС‘РґС‹ РґР°РґР°РµС†С†Р° "
+"РґР° Р·СЊРЅРµС€РЅС–С… РјРµР¶Р°Сћ РєРЅРѕРїР°С‡Р°Рє"
 
 #: gtk/gtkbutton.c:278
 msgid "Child X Displacement"
-msgstr "Перамяшчэньне нашчадку па X"
+msgstr "РџРµСЂР°РјСЏС€С‡СЌРЅСЊРЅРµ РЅР°С€С‡Р°РґРєСѓ РїР° X"
 
 #: gtk/gtkbutton.c:279
 msgid "How far in the x direction to move the child when the button is depressed"
-msgstr "Як далёка перамясьціць нашчадак па X, калі націснута гэтая кнопачка"
+msgstr "РЇРє РґР°Р»С‘РєР° РїРµСЂР°РјСЏСЃСЊС†С–С†СЊ РЅР°С€С‡Р°РґР°Рє РїР° X, РєР°Р»С– РЅР°С†С–СЃРЅСѓС‚Р° РіСЌС‚Р°СЏ РєРЅРѕРїР°С‡РєР°"
 
 #: gtk/gtkbutton.c:286
 msgid "Child Y Displacement"
-msgstr "Перамяшчэньне нашчадку па Y"
+msgstr "РџРµСЂР°РјСЏС€С‡СЌРЅСЊРЅРµ РЅР°С€С‡Р°РґРєСѓ РїР° Y"
 
 #: gtk/gtkbutton.c:287
 msgid "How far in the y direction to move the child when the button is depressed"
-msgstr "Як далёка перамясьціць нашчадак па Y, калі націснута гэтая кнопачка"
+msgstr "РЇРє РґР°Р»С‘РєР° РїРµСЂР°РјСЏСЃСЊС†С–С†СЊ РЅР°С€С‡Р°РґР°Рє РїР° Y, РєР°Р»С– РЅР°С†С–СЃРЅСѓС‚Р° РіСЌС‚Р°СЏ РєРЅРѕРїР°С‡РєР°"
 
 #: gtk/gtkcellrenderer.c:103
 msgid "mode"
-msgstr "рэжым"
+msgstr "СЂСЌР¶С‹Рј"
 
 #: gtk/gtkcellrenderer.c:104
 msgid "Editable mode of the CellRenderer"
-msgstr "Рэжым рэдагаваньня для CellRenderer"
+msgstr "Р СЌР¶С‹Рј СЂСЌРґР°РіР°РІР°РЅСЊРЅСЏ РґР»СЏ CellRenderer"
 
 #: gtk/gtkcellrenderer.c:113
 msgid "visible"
-msgstr "бачный"
+msgstr "Р±Р°С‡РЅС‹Р№"
 
 #: gtk/gtkcellrenderer.c:114
 msgid "Display the cell"
-msgstr "Адлюстроўваць ячэйку"
+msgstr "РђРґР»СЋСЃС‚СЂРѕСћРІР°С†СЊ СЏС‡СЌР№РєСѓ"
 
 #: gtk/gtkcellrenderer.c:122
 msgid "xalign"
-msgstr "выроўніваньне па x"
+msgstr "РІС‹СЂРѕСћРЅС–РІР°РЅСЊРЅРµ РїР° x"
 
 #: gtk/gtkcellrenderer.c:123
 msgid "The x-align."
-msgstr "Гарызантальнае выроўніваньне."
+msgstr "Р“Р°СЂС‹Р·Р°РЅС‚Р°Р»СЊРЅР°Рµ РІС‹СЂРѕСћРЅС–РІР°РЅСЊРЅРµ."
 
 #: gtk/gtkcellrenderer.c:133
 msgid "yalign"
-msgstr "выроўніваньне па y"
+msgstr "РІС‹СЂРѕСћРЅС–РІР°РЅСЊРЅРµ РїР° y"
 
 #: gtk/gtkcellrenderer.c:134
 msgid "The y-align."
-msgstr "Вэртыкальнае выроўніваньне"
+msgstr "Р’СЌСЂС‚С‹РєР°Р»СЊРЅР°Рµ РІС‹СЂРѕСћРЅС–РІР°РЅСЊРЅРµ"
 
 #: gtk/gtkcellrenderer.c:144
 msgid "xpad"
-msgstr "запаўненьне па x"
+msgstr "Р·Р°РїР°СћРЅРµРЅСЊРЅРµ РїР° x"
 
 #: gtk/gtkcellrenderer.c:145
 msgid "The xpad."
-msgstr "Гарызантальнае запаўненьне."
+msgstr "Р“Р°СЂС‹Р·Р°РЅС‚Р°Р»СЊРЅР°Рµ Р·Р°РїР°СћРЅРµРЅСЊРЅРµ."
 
 #: gtk/gtkcellrenderer.c:155
 msgid "ypad"
-msgstr "запаўненьне па y"
+msgstr "Р·Р°РїР°СћРЅРµРЅСЊРЅРµ РїР° y"
 
 #: gtk/gtkcellrenderer.c:156
 msgid "The ypad."
-msgstr "Вэртыкальнае запаўненьне."
+msgstr "Р’СЌСЂС‚С‹РєР°Р»СЊРЅР°Рµ Р·Р°РїР°СћРЅРµРЅСЊРЅРµ."
 
 #: gtk/gtkcellrenderer.c:166
 msgid "width"
-msgstr "шырыня"
+msgstr "С€С‹СЂС‹РЅСЏ"
 
 #: gtk/gtkcellrenderer.c:167
 msgid "The fixed width."
-msgstr "Нязьменная шырыня."
+msgstr "РќСЏР·СЊРјРµРЅРЅР°СЏ С€С‹СЂС‹РЅСЏ."
 
 #: gtk/gtkcellrenderer.c:177
 msgid "height"
-msgstr "вышыня"
+msgstr "РІС‹С€С‹РЅСЏ"
 
 #: gtk/gtkcellrenderer.c:178
 msgid "The fixed height."
-msgstr "Нязьменная вышыня."
+msgstr "РќСЏР·СЊРјРµРЅРЅР°СЏ РІС‹С€С‹РЅСЏ."
 
 #: gtk/gtkcellrenderer.c:188
 msgid "Is Expander"
-msgstr "Пашыраемы"
+msgstr "РџР°С€С‹СЂР°РµРјС‹"
 
 #: gtk/gtkcellrenderer.c:189
 msgid "Row has children."
-msgstr "Радок мае нашчадка."
+msgstr "Р Р°РґРѕРє РјР°Рµ РЅР°С€С‡Р°РґРєР°."
 
 #: gtk/gtkcellrenderer.c:198
 msgid "Is Expanded"
-msgstr "Пашыраны"
+msgstr "РџР°С€С‹СЂР°РЅС‹"
 
 #: gtk/gtkcellrenderer.c:199
 msgid "Row is an expander row, and is expanded"
-msgstr "Радок зьяўляецца пашыраемым, і ен пашыраны."
+msgstr "Р Р°РґРѕРє Р·СЊСЏСћР»СЏРµС†С†Р° РїР°С€С‹СЂР°РµРјС‹Рј, С– РµРЅ РїР°С€С‹СЂР°РЅС‹."
 
 #: gtk/gtkcellrendererpixbuf.c:104
 msgid "Pixbuf Object"
-msgstr "Pixbuf-аб'ект"
+msgstr "Pixbuf-Р°Р±'РµРєС‚"
 
 #: gtk/gtkcellrendererpixbuf.c:105
 msgid "The pixbuf to render."
-msgstr "Аб'ект pixbuf для адлюстраваньня."
+msgstr "РђР±'РµРєС‚ pixbuf РґР»СЏ Р°РґР»СЋСЃС‚СЂР°РІР°РЅСЊРЅСЏ."
 
 #: gtk/gtkcellrendererpixbuf.c:113
 msgid "Pixbuf Expander Open"
-msgstr "Адчынены пашыраемы аб'ект pixbuf"
+msgstr "РђРґС‡С‹РЅРµРЅС‹ РїР°С€С‹СЂР°РµРјС‹ Р°Р±'РµРєС‚ pixbuf"
 
 #: gtk/gtkcellrendererpixbuf.c:114
 msgid "Pixbuf for open expander."
-msgstr "Pixbuf для адчыненага пашыральніка."
+msgstr "Pixbuf РґР»СЏ Р°РґС‡С‹РЅРµРЅР°РіР° РїР°С€С‹СЂР°Р»СЊРЅС–РєР°."
 
 #: gtk/gtkcellrendererpixbuf.c:122
 msgid "Pixbuf Expander Closed"
-msgstr ""
+msgstr "Р—Р°РїС‹РЅРµРЅС‹ РїР°С€С‹СЂР°Р»СЊРЅС–Рє Pixbuf"
 
 #: gtk/gtkcellrendererpixbuf.c:123
 msgid "Pixbuf for closed expander."
-msgstr ""
+msgstr "Pixbuf РґР»СЏ Р·Р°С‡С‹РЅРµРЅР°РіР° РїР°С€С‹СЂР°Р»СЊРЅС–РєСѓ."
 
 #: gtk/gtkcellrenderertext.c:173 gtk/gtkentry.c:523 gtk/gtkprogressbar.c:207
 msgid "Text"
-msgstr "Тэкст"
+msgstr "РўСЌРєСЃС‚"
 
 #: gtk/gtkcellrenderertext.c:174
 msgid "Text to render"
-msgstr "Тэкст для аднаўленьня"
+msgstr "РўСЌРєСЃС‚ РґР»СЏ Р°РґРЅР°СћР»РµРЅСЊРЅСЏ"
 
 #: gtk/gtkcellrenderertext.c:181
 msgid "Markup"
-msgstr "Разьзметка"
+msgstr "Р Р°Р·СЊР·РјРµС‚РєР°"
 
 #: gtk/gtkcellrenderertext.c:182
 msgid "Marked up text to render"
-msgstr ""
+msgstr "Р Р°Р·СЊРјРµСЂРєР°РІР°РЅС‹ С‚СЌРєСЃС‚ РґР»СЏ Р°РґР»СЋСЃС‚СЂР°РІР°РЅСЊРЅСЏ"
 
 #: gtk/gtkcellrenderertext.c:189 gtk/gtklabel.c:287
 msgid "Attributes"
-msgstr "Атрыбуты"
+msgstr "РђС‚СЂС‹Р±СѓС‚С‹"
 
 #: gtk/gtkcellrenderertext.c:190
 msgid "A list of style attributes to apply to the text of the renderer."
-msgstr ""
+msgstr "РЎСЊРїС–СЃ Р°С‚СЂС‹Р±СѓС‚Р°Сћ СЃС‚С‹Р»СЋ, РІС‹РєР°СЂС‹СЃС‚РѕСћРІС‹РІР°РµРјС‹С… РґР»СЏ Р°РґР»СЋСЃС‚СЂР°РІР°РЅСЊРЅСЏ С‚СЌРєСЃС‚Сѓ."
 
 #: gtk/gtkcellrenderertext.c:197 gtk/gtktexttag.c:209
 msgid "Background color name"
-msgstr "Назва колеру тла"
+msgstr "РќР°Р·РІР° РєРѕР»РµСЂСѓ С‚Р»Р°"
 
 #: gtk/gtkcellrenderertext.c:198 gtk/gtktexttag.c:210
 msgid "Background color as a string"
-msgstr "Колер тла як радок"
+msgstr "РљРѕР»РµСЂ С‚Р»Р° СЏРє СЂР°РґРѕРє"
 
 #: gtk/gtkcellrenderertext.c:205 gtk/gtktexttag.c:217
 msgid "Background color"
-msgstr "Колер тла"
+msgstr "РљРѕР»РµСЂ С‚Р»Р°"
 
 #: gtk/gtkcellrenderertext.c:206 gtk/gtktexttag.c:218
 msgid "Background color as a GdkColor"
-msgstr "Колер тла як GdkColor"
+msgstr "РљРѕР»РµСЂ С‚Р»Р° СЏРє GdkColor"
 
 #: gtk/gtkcellrenderertext.c:213 gtk/gtktexttag.c:243
 msgid "Foreground color name"
-msgstr "Назва асноўнага колеру"
+msgstr "РќР°Р·РІР° Р°СЃРЅРѕСћРЅР°РіР° РєРѕР»РµСЂСѓ"
 
 #: gtk/gtkcellrenderertext.c:214 gtk/gtktexttag.c:244
 msgid "Foreground color as a string"
-msgstr "Асноўны колер як радок"
+msgstr "РђСЃРЅРѕСћРЅС‹ РєРѕР»РµСЂ СЏРє СЂР°РґРѕРє"
 
 #: gtk/gtkcellrenderertext.c:221 gtk/gtktexttag.c:251
 msgid "Foreground color"
-msgstr "Асноўны колер"
+msgstr "РђСЃРЅРѕСћРЅС‹ РєРѕР»РµСЂ"
 
 #: gtk/gtkcellrenderertext.c:222 gtk/gtktexttag.c:252
 msgid "Foreground color as a GdkColor"
-msgstr "Асноўны колер як GdkColor"
+msgstr "РђСЃРЅРѕСћРЅС‹ РєРѕР»РµСЂ СЏРє GdkColor"
 
 #: gtk/gtkcellrenderertext.c:230 gtk/gtkentry.c:455 gtk/gtktexttag.c:277
 #: gtk/gtktextview.c:568
 msgid "Editable"
-msgstr "Рэдактыруемы"
+msgstr "Р СЌРґР°РєС‚С‹СЂСѓРµРјС‹"
 
 #: gtk/gtkcellrenderertext.c:231 gtk/gtktexttag.c:278 gtk/gtktextview.c:569
 msgid "Whether the text can be modified by the user"
-msgstr "Ці можа тэкст быць зьменены карыстальнікам"
+msgstr "Р¦С– РјРѕР¶Р° С‚СЌРєСЃС‚ Р±С‹С†СЊ Р·СЊРјРµРЅРµРЅС‹ РєР°СЂС‹СЃС‚Р°Р»СЊРЅС–РєР°Рј"
 
 #: gtk/gtkcellrenderertext.c:238 gtk/gtkcellrenderertext.c:246
 #: gtk/gtkfontsel.c:212 gtk/gtktexttag.c:285 gtk/gtktexttag.c:293
 msgid "Font"
-msgstr "Шрыфт"
+msgstr "РЁСЂС‹С„С‚"
 
 #: gtk/gtkcellrenderertext.c:239 gtk/gtktexttag.c:286
 msgid "Font description as a string"
-msgstr "Апісаньне шрыфту як радок"
+msgstr "РђРїС–СЃР°РЅСЊРЅРµ С€СЂС‹С„С‚Сѓ СЏРє СЂР°РґРѕРє"
 
 #: gtk/gtkcellrenderertext.c:247 gtk/gtktexttag.c:294
 msgid "Font description as a PangoFontDescription struct"
-msgstr "Апісаньне шрыфту як структура PangoFontDescription"
+msgstr "РђРїС–СЃР°РЅСЊРЅРµ С€СЂС‹С„С‚Сѓ СЏРє СЃС‚СЂСѓРєС‚СѓСЂР° PangoFontDescription"
 
 #: gtk/gtkcellrenderertext.c:255 gtk/gtktexttag.c:302
 msgid "Font family"
-msgstr "Сямейства шрыфту"
+msgstr "РЎСЏРјРµР№СЃС‚РІР° С€СЂС‹С„С‚Сѓ"
 
 #: gtk/gtkcellrenderertext.c:256 gtk/gtktexttag.c:303
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
-msgstr "Назоў сямейства шрыфту, як Sans, Helvetica, Times, Monospace"
+msgstr "РќР°Р·РѕСћ СЃСЏРјРµР№СЃС‚РІР° С€СЂС‹С„С‚Сѓ, СЏРє Sans, Helvetica, Times, Monospace"
 
 #: gtk/gtkcellrenderertext.c:263 gtk/gtkcellrenderertext.c:264
 #: gtk/gtktexttag.c:310 gtk/gtktexttag.c:311
 msgid "Font style"
-msgstr "Стыль шрыфту"
+msgstr "РЎС‚С‹Р»СЊ С€СЂС‹С„С‚Сѓ"
 
 #: gtk/gtkcellrenderertext.c:272 gtk/gtkcellrenderertext.c:273
 #: gtk/gtktexttag.c:319 gtk/gtktexttag.c:320
 msgid "Font variant"
-msgstr "Варыянт шрыфту"
+msgstr "Р’Р°СЂС‹СЏРЅС‚ С€СЂС‹С„С‚Сѓ"
 
 #: gtk/gtkcellrenderertext.c:281 gtk/gtkcellrenderertext.c:282
 #: gtk/gtktexttag.c:328 gtk/gtktexttag.c:329
 msgid "Font weight"
-msgstr "Шырыня шрыфту"
+msgstr "РЁС‹СЂС‹РЅСЏ С€СЂС‹С„С‚Сѓ"
 
 #: gtk/gtkcellrenderertext.c:291 gtk/gtkcellrenderertext.c:292
 #: gtk/gtktexttag.c:339 gtk/gtktexttag.c:340
 msgid "Font stretch"
-msgstr "Шырыня шрыфту"
+msgstr "РЁС‹СЂС‹РЅСЏ С€СЂС‹С„С‚Сѓ"
 
 #: gtk/gtkcellrenderertext.c:300 gtk/gtkcellrenderertext.c:301
 #: gtk/gtktexttag.c:348 gtk/gtktexttag.c:349
 msgid "Font size"
-msgstr "Памер шрыфта"
+msgstr "РџР°РјРµСЂ С€СЂС‹С„С‚Р°"
 
 #: gtk/gtkcellrenderertext.c:310 gtk/gtktexttag.c:368
 msgid "Font points"
-msgstr "Кропкі шрыфту"
+msgstr "РљСЂРѕРїРєС– С€СЂС‹С„С‚Сѓ"
 
 #: gtk/gtkcellrenderertext.c:311 gtk/gtktexttag.c:369
 msgid "Font size in points"
-msgstr "Памер шрыфта ў кропках"
+msgstr "РџР°РјРµСЂ С€СЂС‹С„С‚Р° Сћ РєСЂРѕРїРєР°С…"
 
 #: gtk/gtkcellrenderertext.c:320 gtk/gtktexttag.c:358 gtk/gtktexttag.c:359
 msgid "Font scale"
-msgstr "Маштаб шрыфту"
+msgstr "РњР°С€С‚Р°Р± С€СЂС‹С„С‚Сѓ"
 
 #: gtk/gtkcellrenderertext.c:321
 msgid "Font scaling factor"
-msgstr ""
+msgstr "РњРЅРѕР¶РЅС–Рє РјР°С€С‚Р°Р±Р°РІР°РЅСЊРЅСЏ С€СЂС‹С„С‚Сѓ"
 
 #: gtk/gtkcellrenderertext.c:330 gtk/gtktexttag.c:427
 msgid "Rise"
-msgstr "Узьняць"
+msgstr "РЈР·СЊРЅСЏС†СЊ"
 
 #: gtk/gtkcellrenderertext.c:331 gtk/gtktexttag.c:428
 msgid "Offset of text above the baseline (below the baseline if rise is negative)"
-msgstr "Зьмясьціць тэкст вышэй асноўнай ліні (ніжэй для адмоўных значэньняў)"
+msgstr "Р—СЊРјСЏСЃСЊС†С–С†СЊ С‚СЌРєСЃС‚ РІС‹С€СЌР№ Р°СЃРЅРѕСћРЅР°Р№ Р»С–РЅС– (РЅС–Р¶СЌР№ РґР»СЏ Р°РґРјРѕСћРЅС‹С… Р·РЅР°С‡СЌРЅСЊРЅСЏСћ)"
 
 #: gtk/gtkcellrenderertext.c:341 gtk/gtktexttag.c:467
 msgid "Strikethrough"
-msgstr "Закрэсьліваньне"
+msgstr "Р—Р°РєСЂСЌСЃСЊР»С–РІР°РЅСЊРЅРµ"
 
 #: gtk/gtkcellrenderertext.c:342 gtk/gtktexttag.c:468
 msgid "Whether to strike through the text"
-msgstr "Ці будзе гэты тэкст закрэсьлены"
+msgstr "Р¦С– Р±СѓРґР·Рµ РіСЌС‚С‹ С‚СЌРєСЃС‚ Р·Р°РєСЂСЌСЃСЊР»РµРЅС‹"
 
 #: gtk/gtkcellrenderertext.c:349 gtk/gtktexttag.c:475
 msgid "Underline"
-msgstr "Падкрэсьліваньне"
+msgstr "РџР°РґРєСЂСЌСЃСЊР»РµРЅСЊРЅРµ"
 
 #: gtk/gtkcellrenderertext.c:350 gtk/gtktexttag.c:476
 msgid "Style of underline for this text"
-msgstr "Падкрэсьлены стыль для гэтага тэксту"
+msgstr "РџР°РґРєСЂСЌСЃСЊР»РµРЅС‹ СЃС‚С‹Р»СЊ РґР»СЏ РіСЌС‚Р°РіР° С‚СЌРєСЃС‚Сѓ"
 
 #: gtk/gtkcellrenderertext.c:360 gtk/gtktexttag.c:512
 msgid "Background set"
-msgstr ""
+msgstr "РЈСЃС‚Р°Р»СЏРІР°РЅСЊРЅРµ С‚Р»Р°"
 
 #: gtk/gtkcellrenderertext.c:361 gtk/gtktexttag.c:513
 msgid "Whether this tag affects the background color"
-msgstr ""
+msgstr "Р¦С– СћР·СЊРґР·РµР№РЅС–С‡Р°Рµ РіСЌС‚Р°СЏ Р»С‹С‡РєР° РЅР° РєРѕР»РµСЂ С‚Р»Р°"
 
 #: gtk/gtkcellrenderertext.c:364 gtk/gtktexttag.c:524
 msgid "Foreground set"
-msgstr ""
+msgstr "РЈСЃС‚Р°Р»СЏРІР°РЅСЊРЅРµ Р°СЃРЅРѕСћРЅР°РіР° РєРѕР»РµСЂСѓ"
 
 #: gtk/gtkcellrenderertext.c:365 gtk/gtktexttag.c:525
 msgid "Whether this tag affects the foreground color"
-msgstr ""
+msgstr "Р¦С– СћР·СЊРґР·РµР№РЅС–С‡Р°Рµ РіСЌС‚С‹ С‚Р°Рі РЅР° Р°СЃРЅРѕСћРЅС‹ РєРѕР»РµСЂ"
 
 #: gtk/gtkcellrenderertext.c:368 gtk/gtktexttag.c:532
 msgid "Editability set"
-msgstr ""
+msgstr "РЈСЃС‚Р°Р»С‘СћРєР° СЂСЌРґР°РіСѓРµРјР°СЃСЊС†С–"
 
 #: gtk/gtkcellrenderertext.c:369 gtk/gtktexttag.c:533
 msgid "Whether this tag affects text editability"
-msgstr ""
+msgstr "Р¦С– СћР·СЊРґР·РµР№РЅС–С‡Р°Рµ РіСЌС‚С‹ С‚Р°Рі РЅР° СЂСЌРґР°РіР°РІР°РЅСЊРЅРµ С‚СЌРєСЃС‚Сѓ"
 
 #: gtk/gtkcellrenderertext.c:372 gtk/gtktexttag.c:536
 msgid "Font family set"
-msgstr ""
+msgstr "РЈСЃС‚Р°Р»С‘СћРєР° СЃСЏРјРµР№СЃС‚РІР° С€СЂС‹С„С‚Сѓ"
 
 #: gtk/gtkcellrenderertext.c:373 gtk/gtktexttag.c:537
 msgid "Whether this tag affects the font family"
-msgstr ""
+msgstr "Р¦С– СћР·СЊРґР·РµР№РЅС–С‡Р°Рµ РіСЌС‚С‹ С‚Р°Рі РЅР° СЃСЏРјРµР№СЃС‚РІР° С€СЂС‹С„С‚Сѓ"
 
 #: gtk/gtkcellrenderertext.c:376 gtk/gtktexttag.c:540
 msgid "Font style set"
-msgstr "Набор стылю шрыфта"
+msgstr "РЈСЃС‚Р°Р»С‘СћРєР° СЃС‚С‹Р»СЋ С€СЂС‹С„С‚Сѓ"
 
 #: gtk/gtkcellrenderertext.c:377 gtk/gtktexttag.c:541
 msgid "Whether this tag affects the font style"
-msgstr ""
+msgstr "Р¦С– СћР·СЊРґР·РµР№РЅС–С‡Р°Рµ РіСЌС‚С‹ С‚Р°Рі РЅР° СЃС‚С‹Р»СЊ С€СЂС‹С„С‚Сѓ"
 
 #: gtk/gtkcellrenderertext.c:380 gtk/gtktexttag.c:544
 msgid "Font variant set"
-msgstr ""
+msgstr "РЈСЃС‚Р°Р»С‘СћРєР° СЂР°Р·РЅР°РІС–РґРЅР°СЃСЊС†С– С€СЂС‹С„С‚Сѓ"
 
 #: gtk/gtkcellrenderertext.c:381 gtk/gtktexttag.c:545
 msgid "Whether this tag affects the font variant"
-msgstr ""
+msgstr "Р¦С– СћР·СЊРґР·РµР№РЅС–С‡Р°Рµ РіСЌС‚С‹ С‚Р°Рі РЅР° СЂР°Р·РЅР°РІС–РґРЅР°СЃСЊС†СЊ С€СЂС‹С„С‚Сѓ"
 
 #: gtk/gtkcellrenderertext.c:384 gtk/gtktexttag.c:548
 msgid "Font weight set"
-msgstr ""
+msgstr "РЈСЃС‚Р°Р»С‘СћРєР° С‚Р»СѓСЃС‚Р°СЃСЊС†С– С€СЂС‹С„С‚Сѓ"
 
 #: gtk/gtkcellrenderertext.c:385 gtk/gtktexttag.c:549
 msgid "Whether this tag affects the font weight"
-msgstr ""
+msgstr "Р¦С– СћР·СЊРґР·РµР№РЅС–С‡Р°Рµ РіСЌС‚С‹ С‚Р°Рі РЅР° С‚Р»СѓСЃС‚Р°СЃСЊС†СЊ С€СЂС‹С„С‚Сѓ"
 
 #: gtk/gtkcellrenderertext.c:388 gtk/gtktexttag.c:552
 msgid "Font stretch set"
-msgstr ""
+msgstr "РЈСЃС‚Р°Р»С‘СћРєР° С€С‹СЂС‹РЅС– С€СЂС‹С„С‚Сѓ"
 
 #: gtk/gtkcellrenderertext.c:389 gtk/gtktexttag.c:553
 msgid "Whether this tag affects the font stretch"
-msgstr ""
+msgstr "Р¦С– СћР·СЊРґР·РµР№РЅС–С‡Р°Рµ РіСЌС‚С‹ С‚Р°Рі РЅР° С€С‹СЂС‹РЅСЋ С€СЂС‹С„С‚Сѓ"
 
 #: gtk/gtkcellrenderertext.c:392 gtk/gtktexttag.c:556
 msgid "Font size set"
-msgstr ""
+msgstr "РЈСЃС‚Р°Р»С‘СћРєР° РїР°РјРµСЂСѓ С€СЂС‹С„С‚Сѓ"
 
 #: gtk/gtkcellrenderertext.c:393 gtk/gtktexttag.c:557
 msgid "Whether this tag affects the font size"
-msgstr ""
+msgstr "Р¦С– СћР·СЊРґР·РµР№РЅС–С‡Р°Рµ РіСЌС‚С‹ С‚Р°Рі РЅР° РїР°РјРµСЂ С€СЂС‹С„С‚Сѓ"
 
 #: gtk/gtkcellrenderertext.c:396 gtk/gtktexttag.c:560
 msgid "Font scale set"
-msgstr ""
+msgstr "РЈСЃС‚Р°Р»С‘РєР° РјР°С€С‚Р°Р±Сѓ С€СЂС‹С„С‚Сѓ"
 
 #: gtk/gtkcellrenderertext.c:397 gtk/gtktexttag.c:561
 msgid "Whether this tag scales the font size by a factor"
-msgstr ""
+msgstr "Р¦С– СћР·СЊРґР·РµР№РЅС–С‡Р°Рµ РіСЌС‚С‹ С‚Р°Рі РЅР° РјР°С€С‚Р°Р± С€СЂС‹С„С‚Сѓ"
 
 #: gtk/gtkcellrenderertext.c:400 gtk/gtktexttag.c:580
 msgid "Rise set"
-msgstr ""
+msgstr "Р—СЊРјСЏС€С‡СЌРЅСЊРЅРµ"
 
 #: gtk/gtkcellrenderertext.c:401 gtk/gtktexttag.c:581
 msgid "Whether this tag affects the rise"
-msgstr ""
+msgstr "Р¦С– СћР·СЊРґР·РµР№РЅС–С‡Р°Рµ РіСЌС‚С‹ С‚Р°Рі РЅР° Р·СЊРјСЏС€С‡СЌРЅСЊРЅРµ"
 
 #: gtk/gtkcellrenderertext.c:404 gtk/gtktexttag.c:596
 msgid "Strikethrough set"
-msgstr ""
+msgstr "Р—Р°РєСЂСЌСЃСЊР»С–РІР°РЅСЊРЅРµ"
 
 #: gtk/gtkcellrenderertext.c:405 gtk/gtktexttag.c:597
 msgid "Whether this tag affects strikethrough"
-msgstr ""
+msgstr "Р¦С– СћР·СЊРґР·РµР№РЅС–С‡Р°Рµ РіСЌС‚С‹ С‚Р°Рі РЅР° Р·Р°РєСЂСЌСЃСЊР»С–РІР°РЅСЊРЅРµ"
 
 #: gtk/gtkcellrenderertext.c:408 gtk/gtktexttag.c:604
 msgid "Underline set"
-msgstr ""
+msgstr "РџР°РґРєСЂСЌСЃСЊР»С–РІР°РЅСЊРЅРµ"
 
 #: gtk/gtkcellrenderertext.c:409 gtk/gtktexttag.c:605
 msgid "Whether this tag affects underlining"
-msgstr ""
+msgstr "Р¦С– СћР·СЊРґР·РµР№РЅС–С‡Р°Рµ РіСЌС‚С‹ С‚Р°Рі РЅР° РїР°РґРєСЂСЌСЃСЊР»С–РІР°РЅСЊРЅРµ"
 
 #: gtk/gtkcellrenderertoggle.c:130
 msgid "Toggle state"
-msgstr ""
+msgstr "РџРµСЂР°РєР»СЋС‡С‹С†СЊ СЃС‚Р°РЅ"
 
 #: gtk/gtkcellrenderertoggle.c:131
 msgid "The toggle state of the button"
-msgstr ""
+msgstr "РџРµСЂР°РєР»СЋС‡С‹С†СЊ СЃС‚Р°РЅ РєРЅРѕРїРєС–"
 
 #: gtk/gtkcellrenderertoggle.c:139
 msgid "Activatable"
-msgstr ""
+msgstr "РђРєС‚С‹СћРЅР°СЏ"
 
 #: gtk/gtkcellrenderertoggle.c:140
 msgid "The toggle button can be activated"
-msgstr ""
+msgstr "РљРЅРѕРїРєР°-РїРµСЂР°РєР»СЋС‡Р°Р»СЊРЅС–Рє РјРѕР¶Р° Р±С‹С†СЊ Р°РєС‚С‹РІС–СЂР°РІР°РЅР°"
 
 #: gtk/gtkcellrenderertoggle.c:148
 msgid "Radio state"
-msgstr ""
+msgstr "Р Р°РґС‹С‘ СЃС‚Р°РЅ"
 
 #: gtk/gtkcellrenderertoggle.c:149
 msgid "Draw the toggle button as a radio button"
-msgstr ""
+msgstr "РќР°РјР°Р»СЏРІР°С†СЊ РєРЅРѕРїРєСѓ-РїРµСЂР°РєР»СЋС‡Р°С†РµР»СЊ СЏРє СЂР°РґС‹С‘-РєРЅРѕРїРєСѓ"
 
 #: gtk/gtkcheckbutton.c:95 gtk/gtkoptionmenu.c:195
 msgid "Indicator Size"
-msgstr "Памер індыкатара"
+msgstr "РџР°РјРµСЂ С–РЅРґС‹РєР°С‚Р°СЂР°"
 
 #: gtk/gtkcheckbutton.c:96
 msgid "Size of check or radio indicator"
-msgstr ""
+msgstr "РџР°РјРµСЂ СЂС‹СЃР°С‡РєС– РЅР° СЂР°РґС‹С‘ С–РЅРґС‹РєР°С‚Р°СЂС‹"
 
 #: gtk/gtkcheckbutton.c:103 gtk/gtkoptionmenu.c:201
 msgid "Indicator Spacing"
-msgstr ""
+msgstr "РџСЂР°СЃС‚РѕСЂР° С–РЅРґС‹РєР°С‚Р°СЂСѓ"
 
 #: gtk/gtkcheckbutton.c:104
 msgid "Spacing around check or radio indicator"
-msgstr ""
+msgstr "РџСЂР°СЃС‚РѕСЂР° РІР°РєРѕР» СЂС‹СЃР°С‡РєС– С†С– СЂР°РґС‹С‘-С–РЅРґС‹РєР°С‚Р°СЂСѓ"
 
 #: gtk/gtkcheckmenuitem.c:115 gtk/gtktogglebutton.c:133
 msgid "Active"
-msgstr "Актыўны"
+msgstr "РђРєС‚С‹СћРЅС‹"
 
 #: gtk/gtkcheckmenuitem.c:116
 msgid "Whether the menu item is checked."
-msgstr ""
+msgstr "Р¦С– РјРѕР¶Р° РіСЌС‚С‹ СЌР»РµРјСЌРЅС‚ РјСЌРЅСЋ Р±С‹С†СЊ Р°РґР·РЅР°С‡Р°РЅ."
 
 #: gtk/gtkcheckmenuitem.c:123 gtk/gtktogglebutton.c:141
 msgid "Inconsistent"
-msgstr ""
+msgstr "РќРµР°РґС‡СѓРІР°Р»СЊРЅС‹"
 
 #: gtk/gtkcheckmenuitem.c:124
 msgid "Whether to display an \"inconsistent\" state."
-msgstr ""
+msgstr "Р¦С– Р°РґР»СЋСЃС‚СЂРѕСћРІС‹РІР°С†СЊ \"РЅРµР°РґС‡СѓРІР°Р»СЊРЅС‹\" СЃС‚Р°РЅ."
 
 #: gtk/gtkcolorsel.c:582
 msgid ""
@@ -1345,429 +1345,451 @@ msgid ""
 "now. You can drag this color to a palette entry, or select this color as "
 "current by dragging it to the other color swatch alongside."
 msgstr ""
+"Р Р°РЅРµР№ Р°Р±СЂР°РЅС‹ РєРѕР»РµСЂ РґР»СЏ РїР°СЂР°СћРЅР°РЅСЊРЅСЏ Р· Р°Р±СЂР°РЅС‹Рј Р·Р°СЂР°Р· РєРѕР»РµСЂР°Рј. Р’С‹ "
+"РјРѕР¶Р°С†Рµ РїРµСЂР°С†СЏРіРЅСѓС†СЊ РіСЌС‚С‹ РєРѕР»РµСЂ Сћ РїР°Р»С–С‚СЂСѓ, С†С– Р°Р±СЂР°С†СЊ РіСЌС‚С‹ РєРѕР»РµСЂ СЏРє "
+"Р±СЏРіСѓС‡С‹, РїРµСЂР°С†СЏРіРЅСѓСћС€С‹ СЏРіРѕ Сћ Р±Р°РєР°РІС‹ РїСЂС‹РєР»Р°Рґ."
 
 #: gtk/gtkcolorsel.c:587
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
 msgstr ""
+"РљРѕР»РµСЂ СЏРєС– РІС‹ Р°Р±СЂР°Р»С–. Р’С‹ РјРѕР¶Р°С†Рµ РїРµСЂР°С†СЏРіРЅСѓС†СЊ РіСЌС‚С‹ РєРѕР»РµСЂ Сѓ РїР°Р»С–С‚СЂСѓ, "
+"РєР°Р± Р·Р°С…Р°РІР°С†СЊ СЏРіРѕ РґР»СЏ РґР°Р»РµР№С€Р°РіР° РІС‹РєР°СЂС‹СЃС‚Р°РЅСЊРЅСЏ."
 
 #: gtk/gtkcolorsel.c:910
 msgid "_Save color here"
-msgstr ""
+msgstr "Р—Р°С…Р°РІР°С†СЊ С‚СѓС‚Р°РєР° РєРѕР»РµСЂ"
 
 #: gtk/gtkcolorsel.c:1079
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr ""
+"РќР°С†С–СЃСЊРЅС–С†Рµ РЅР° РєРѕР»РµСЂ Сѓ РїР°Р»С–С‚СЂС‹, РєР°Р± Р·СЂР°Р±С–С†СЊ СЏРіРѕ Р±СЏРіСѓС‡С‹Рј РєРѕР»РµСЂР°Рј. РљР°Р± "
+"Р·СЊРјСЏРЅС–С†СЊ РіСЌС‚С‹ РєРѕР»РµСЂ, РїРµСЂР°С†СЏРіРЅС–С†Рµ СЃСЋРґС‹ РїСЂС‹РєР»Р°Рґ РєРѕР»РµСЂСћ С†С– РЅР°С†С–СЃСЊРЅС–С†Рµ "
+"РїСЂР°РІСѓСЋ РєР»СЏРІС–С€Сѓ С– Р°Р±СЏСЂС‹С†Рµ \"Р—Р°С…Р°РІР°С†СЊ С‚СѓС‚Р°РєР° РєРѕР»РµСЂ.\""
 
 #: gtk/gtkcolorsel.c:1704
 msgid "Has Opacity Control"
-msgstr "Мае кіраваньне непразрыстаьцю"
+msgstr "РњР°Рµ РєС–СЂР°РІР°РЅСЊРЅРµ РЅРµРїСЂР°Р·СЂС‹СЃС‚Р°СЊС†СЋ"
 
 #: gtk/gtkcolorsel.c:1705
 msgid "Whether the color selector should allow setting opacity"
-msgstr ""
+msgstr "Р¦С– РїР°РІС–РЅР° РїСЂС‹ РІС‹Р±Р°СЂС‹ РєРѕР»РµСЂСѓ РІС‹РєР°СЂС‹СЃС‚РѕСћРІС‹РІР°С†С†Р° РЅРµРїСЂР°Р·СЂС‹СЃС‚Р°СЃСЊС†СЊ"
 
 #: gtk/gtkcolorsel.c:1711
 msgid "Has palette"
-msgstr ""
+msgstr "РњР°Рµ РїР°Р»С–С‚СЂСѓ"
 
 #: gtk/gtkcolorsel.c:1712
 msgid "Whether a palette should be used"
-msgstr ""
+msgstr "Р¦С– РїР°РІС–РЅРЅР° РІС‹РєР°СЂС‹СЃС‚РѕСћРІС‹РІР°С†С†Р° РїР°Р»С–С‚СЂР°"
 
 #: gtk/gtkcolorsel.c:1718
 msgid "Current Color"
-msgstr "Бягучы колер"
+msgstr "Р‘СЏРіСѓС‡С‹ РєРѕР»РµСЂ"
 
 #: gtk/gtkcolorsel.c:1719
 msgid "The current color"
-msgstr "Бягучы колер"
+msgstr "Р‘СЏРіСѓС‡С‹ РєРѕР»РµСЂ"
 
 #: gtk/gtkcolorsel.c:1725
 msgid "Current Alpha"
-msgstr ""
+msgstr "Р‘СЏРіСѓС‡С‹ Р°Р»СЊС„Р°-РєР°РЅР°Р»СЊ"
 
 #: gtk/gtkcolorsel.c:1726
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
+"Р‘СЏРіСѓС‡Р°Рµ Р·РЅР°С‡СЌРЅСЊРЅРµ РЅРµРїСЂР°Р·СЂС‹СЃС‚Р°СЃСЊС†С– (0 - РїРѕСћРЅР°СЃСЊС†СЋ РїСЂР°Р·СЂС‹СЃС‚Р°, "
+"65536 - РїРѕСћРЅР°СЃСЊС†СЋ РЅРµРїСЂР°Р·СЂС‹СЃС‚Р°)"
 
 #: gtk/gtkcolorsel.c:1739
 msgid "Custom palette"
-msgstr ""
+msgstr "РџР°Р¶Р°РґР°РЅР°СЏ РїР°Р»С–С‚СЂР°"
 
 #: gtk/gtkcolorsel.c:1740
 msgid "Palette to use in the color selector"
-msgstr ""
+msgstr "РџР°Р»С–С‚СЂР°, РґР»СЏ РІС‹РєР°СЂС‹СЃС‚Р°РЅСЊРЅСЏ РїСЂС‹ Р°Р±С–СЂР°РЅСЊРЅС– РєРѕР»РµСЂСѓ"
 
 #: gtk/gtkcolorsel.c:1784
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
-msgstr ""
+msgstr "РђР±СЏСЂС‹С†Рµ РїР°Р¶Р°РґР°РЅС‹ РєРѕР»РµСЂ РЅР° РєРѕР»Рµ, Р° РїР°Р¶Р°РґР°РЅР°Рµ Р°РґС†РµРЅСЊРЅРµ РЅР° С‚СЂРѕС…РєСѓС‚РЅС–РєСѓ. "
 
 #: gtk/gtkcolorsel.c:1812
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr ""
+"РќР°С†С–СЃСЊРЅС–С†Рµ РЅР° РІРѕРєР°РІС‹ РєСЂРѕРїРµР»СЊРЅС–Рє, Р·Р°С‚С‹Рј РЅР°С†С–СЃСЊРЅС–С†Рµ Сћ Р»СЋР±С‹Рј РјРµР№СЃС†С‹ "
+"СЌРєСЂР°РЅСѓ РєР°Р± Р°Р±СЂР°С†СЊ РїР°С‚СЂСЌР±РЅС‹ РІР°Рј РєРѕР»РµСЂ."
 
 #: gtk/gtkcolorsel.c:1821
 msgid "_Hue:"
-msgstr "_Тон:"
+msgstr "РўРѕРЅ:"
 
 #: gtk/gtkcolorsel.c:1822
 msgid "Position on the color wheel."
-msgstr ""
+msgstr "РЎС‚Р°РЅРѕРІС–С€С‡Р° РєР°Р»СЏСЂРѕРІР°РіР° РєРѕР»Р°."
 
 #: gtk/gtkcolorsel.c:1823
 msgid "_Saturation:"
-msgstr "_Насычанасьць:"
+msgstr "РќР°СЃС‹С‡Р°РЅР°СЃСЊС†СЊ:"
 
 #: gtk/gtkcolorsel.c:1824
 msgid "\"Deepness\" of the color."
-msgstr ""
+msgstr "\"Р“Р»С‹Р±С–РЅСЏ\" РєРѕР»РµСЂСѓ."
 
 #: gtk/gtkcolorsel.c:1825
 msgid "_Value:"
-msgstr "_Значэньне:"
+msgstr "Р—РЅР°С‡СЌРЅСЊРЅРµ:"
 
 #: gtk/gtkcolorsel.c:1826
 msgid "Brightness of the color."
-msgstr ""
+msgstr "РЇСЂРєР°СЃСЊС†СЊ РєРѕР»РµСЂСѓ."
 
 #: gtk/gtkcolorsel.c:1827
 msgid "_Red:"
-msgstr "_Чырвоны:"
+msgstr "Р§С‹СЂРІРѕРЅС‹:"
 
 #: gtk/gtkcolorsel.c:1828
 msgid "Amount of red light in the color."
-msgstr "Колькасьць чырвонага ў колеры."
+msgstr "РљРѕР»СЊРєР°СЃСЊС†СЊ С‡С‹СЂРІРѕРЅР°РіР° Сћ РєРѕР»РµСЂС‹."
 
 #: gtk/gtkcolorsel.c:1829
 msgid "_Green:"
-msgstr "_Зялёны:"
+msgstr "Р—СЏР»С‘РЅС‹:"
 
 #: gtk/gtkcolorsel.c:1830
 msgid "Amount of green light in the color."
-msgstr "Колькасьць зялёнага ў колеры."
+msgstr "РљРѕР»СЊРєР°СЃСЊС†СЊ Р·СЏР»С‘РЅР°РіР° Сћ РєРѕР»РµСЂС‹."
 
 #: gtk/gtkcolorsel.c:1831
 msgid "_Blue:"
-msgstr "_Сіні:"
+msgstr "РЎС–РЅС–:"
 
 #: gtk/gtkcolorsel.c:1832
 msgid "Amount of blue light in the color."
-msgstr "Колькасьць сіняга ў колеры."
+msgstr "РљРѕР»СЊРєР°СЃСЊС†СЊ СЃС–РЅСЏРіР° Сћ РєРѕР»РµСЂС‹."
 
 #: gtk/gtkcolorsel.c:1835
 msgid "_Opacity:"
-msgstr "_Шчыльнасьць:"
+msgstr "РЁС‡С‹Р»СЊРЅР°СЃСЊС†СЊ:"
 
 #: gtk/gtkcolorsel.c:1843
 msgid "Transparency of the currently-selected color."
-msgstr "Празрыстасьць абранага колеру."
+msgstr "РџСЂР°Р·СЂС‹СЃС‚Р°СЃСЊС†СЊ Р°Р±СЂР°РЅР°РіР° РєРѕР»РµСЂСѓ."
 
 #: gtk/gtkcolorsel.c:1858
 msgid "Color _Name:"
-msgstr "_Назва колеру:"
+msgstr "РќР°Р·РІР° РєРѕР»РµСЂСѓ:"
 
 #: gtk/gtkcolorsel.c:1870
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
 msgstr ""
+"Р’С‹ РјРѕР¶Р°С†Рµ С‚СѓС‚Р°РєР° СћРІРµСЃСЊС†С– Р·РЅР°С‡СЌРЅСЊРЅРµ РєРѕР»РµСЂСѓ Сћ HTML-СЃС‚С‹Р»С–, С†С– СћР»Р°СЃРЅС‹ "
+"РЅР°Р·РѕСћ РєРѕР»РµСЂСѓ, СЏРє РЅР°РїСЂС‹РєР»Р°Рґ 'orange'."
 
 #: gtk/gtkcolorsel.c:1889
 msgid "_Palette"
-msgstr ""
+msgstr "РџР°Р»С–С‚СЂР°"
 
 #: gtk/gtkcombo.c:139
 msgid "Enable arrow keys"
-msgstr ""
+msgstr "РЈРєР»СЋС‡С‹С†СЊ РєР»СЏРІС–С€С‹-СЃС‚СЂСЌР»РєС–"
 
 #: gtk/gtkcombo.c:140
 msgid "Whether the arrow keys move through the list of items"
 msgstr ""
+"Р¦С– РјРѕР¶РЅР° Р±СѓРґР·Рµ СЂСѓС…Р°С†С†Р° Сћ СЃСЊРїС–СЃРµ СЌР»РµРјСЌРЅС‚Р°Сћ Р· РґР°РїР°РјРѕРіР°Р№ РєР»СЏРІС–С€Р°Сћ "
+"РєС–СЂР°РІР°РЅСЊРЅСЏ РєСѓСЂСЃРѕСЂР°Рј (СЃС‚СЂСЌР»РєС–)"
 
 #: gtk/gtkcombo.c:146
 msgid "Always enable arrows"
-msgstr ""
+msgstr "Р—Р°СћСЃС‘РґС‹ СћРєР»СЋС‡Р°С†СЊ СЃС‚СЂСЌР»РєС–"
 
 #: gtk/gtkcombo.c:147
 msgid "Whether the arrow keys work, even if the entry contents are not in the list"
-msgstr ""
+msgstr "Р¦С– РїР°РІС–РЅРЅС‹ РїСЂР°С†Р°РІР°С†СЊ СЃС‚СЂСЌР»РєС–, РЅР°РІР°С‚ РєР°Р»С– Р·СЊРјРµСЃС‚ СѓРІРѕРґСѓ Р°РґСЃСѓС‚РЅС–С‡Р°Рµ Сћ СЃСЊРїС–СЃРµ"
 
 #: gtk/gtkcombo.c:153
 msgid "Case sensitive"
-msgstr "Адчувальнасьці да рэгістру"
+msgstr "РђРґС‡СѓРІР°Р»СЊРЅР°СЃСЊС†С– РґР° СЂСЌРіС–СЃС‚СЂСѓ"
 
 #: gtk/gtkcombo.c:154
 msgid "Whether list item matching is case sensitive"
-msgstr ""
+msgstr "Р¦С– СћР»С–С‡РІР°Рµ РїСЂС‹ РїРѕС€СѓРєСѓ СЌР»РµРјСЌРЅС‚Сѓ Сћ СЃСЊРїС–СЃРµ СЂСЌРіС–СЃС‚СЂ"
 
 #: gtk/gtkcombo.c:161
 msgid "Allow empty"
-msgstr ""
+msgstr "Р”Р°Р·РІР°Р»СЏС†СЊ РїР°СЂРѕР¶РЅСЏРµ Р·РЅР°С‡СЌРЅСЊРЅРµ"
 
 #: gtk/gtkcombo.c:162
 msgid "Whether an empty value may be entered in this field"
-msgstr ""
+msgstr "Р¦С– РјРѕР¶Р° РїР°СЂРѕР¶РЅСЏРµ Р·РЅР°С‡СЌРЅСЊРЅРµ Р±С‹С†СЊ СѓРІРµРґР·РµРЅР° Сћ РіСЌС‚Р°Рµ РІРѕ РїРѕР»Рµ"
 
 #: gtk/gtkcombo.c:169
 msgid "Value in list"
-msgstr "Значэньне ў сьпісе"
+msgstr "Р—РЅР°С‡СЌРЅСЊРЅРµ Сћ СЃСЊРїС–СЃРµ"
 
 #: gtk/gtkcombo.c:170
 msgid "Whether entered values must already be present in the list"
-msgstr ""
+msgstr "Р¦С– РїР°РІС–РЅРЅС‹ СћРІР°РґР·С–РјС‹СЏ Р·РЅР°С‡СЌРЅСЊРЅС– СћР¶Рѕ Р±С‹С†СЊ Сѓ СЃСЊРїС–СЃРµ"
 
 #: gtk/gtkcontainer.c:200
 msgid "Resize mode"
-msgstr ""
+msgstr "Р СЌР¶С‹Рј Р·СЊРјСЏРЅРµРЅСЊРЅСЏ РїР°РјРµСЂР°Сћ"
 
 #: gtk/gtkcontainer.c:201
 msgid "Specify how resize events are handled"
-msgstr ""
+msgstr "Р’С‹Р·РЅР°С‡С†Рµ СЏРє Р°РїСЂР°С†РѕСћРІР°С†СЊ Р·РґР°СЂСЌРЅСЊРЅС–, СѓР·СЊРЅС–РєР°СЋС‡С‹СЏ РїСЂС‹ Р·СЊРјСЏРЅРµРЅСЊРЅС– РїР°РјРµСЂР°Сћ"
 
 #: gtk/gtkcontainer.c:208
 msgid "Border width"
-msgstr "Шырыня мяжы"
+msgstr "РЁС‹СЂС‹РЅСЏ РјСЏР¶С‹"
 
 #: gtk/gtkcontainer.c:209
 msgid "The width of the empty border outside the containers children."
-msgstr ""
+msgstr "РЁС‹СЂС‹РЅСЏ РїР°СЂРѕР¶РЅСЏР№ РјСЏР¶С‹ РІР°РєРѕР» СѓРјСЏС€С‡Р°Р»СЊРЅС–РєР° РЅР°С€С‡Р°РґРєР°."
 
 #: gtk/gtkcontainer.c:217
 msgid "Child"
-msgstr "Дзіця"
+msgstr "РќР°С€С‡Р°РґР°Рє"
 
 #: gtk/gtkcontainer.c:218
 msgid "Can be used to add a new child to the container."
-msgstr ""
+msgstr "РњРѕР¶Р° Р±С‹С†СЊ РІС‹РєР°СЂС‹СЃС‚Р°РЅР° РґР»СЏ РґР°РґР°РЅСЊРЅСЏ РЅР°С€С‡Р°РґРєСѓ Сћ СѓРјСЏС€С‡Р°Р»СЊРЅС–Рє."
 
 #: gtk/gtkcurve.c:121
 msgid "Curve type"
-msgstr ""
+msgstr "Р Р°Р·РЅР°РІС–РґРЅР°СЃСЊС†СЊ РєСЂС‹РІРѕР№"
 
 #: gtk/gtkcurve.c:122
 msgid "Is this curve linear, spline interpolated, or free-form"
-msgstr ""
+msgstr "Р“СЌС‚Р°СЏ РєСЂС‹РІР°СЏ Р·СЊСЏСћР»СЏРµС†С†Р° Р»С–РЅРµР№РЅР°Р№, spline interpolated С†С– РІРѕР»СЊРЅР°Р№"
 
 #: gtk/gtkcurve.c:130
 msgid "Minimum X"
-msgstr "Мінімум X"
+msgstr "РќР°Р№РјРµРЅСЊС€С‹ X"
 
 #: gtk/gtkcurve.c:131
 msgid "Minimum possible value for X"
-msgstr "Мінімальнае магчымае значэньне для X"
+msgstr "РќР°Р№РјРµРЅСЊС€Р°Рµ РјР°РіС‡С‹РјР°Рµ Р·РЅР°С‡СЌРЅСЊРЅРµ РґР»СЏ X"
 
 #: gtk/gtkcurve.c:140
 msgid "Maximum X"
-msgstr "Максімум X"
+msgstr "РќР°Р№Р±РѕР»СЊС€С‹ X"
 
 #: gtk/gtkcurve.c:141
 msgid "Maximum possible X value."
-msgstr "Максімальнае магчымае значэньне для X"
+msgstr "РќР°Р№Р±РѕР»СЊС€Р°Рµ РјР°РіС‡С‹РјР°Рµ Р·РЅР°С‡СЌРЅСЊРЅРµ РґР»СЏ X"
 
 #: gtk/gtkcurve.c:150
 msgid "Minimum Y"
-msgstr "Мінімум Y"
+msgstr "РќР°Р№РјРµРЅСЊС€С‹ Y"
 
 #: gtk/gtkcurve.c:151
 msgid "Minimum possible value for Y"
-msgstr "Мінімальнае магчымае значэньне для Y"
+msgstr "РќР°Р№РјРµРЅСЊС€Р°Рµ РјР°РіС‡С‹РјР°Рµ Р·РЅР°С‡СЌРЅСЊРЅРµ РґР»СЏ Y"
 
 #: gtk/gtkcurve.c:160
 msgid "Maximum Y"
-msgstr "Максімум Y"
+msgstr "РќР°Р№Р±РѕР»СЊС€С‹ Y"
 
 #: gtk/gtkcurve.c:161
 msgid "Maximum possible value for Y"
-msgstr "Максімальнае магчымае значэньне для Y"
+msgstr "РќР°Р№Р±РѕР»СЊС€Р°Рµ РјР°РіС‡С‹РјР°Рµ Р·РЅР°С‡СЌРЅСЊРЅРµ РґР»СЏ Y"
 
 #: gtk/gtkdialog.c:128
 msgid "Has separator"
-msgstr "Мае падзяляльнік"
+msgstr "РњР°Рµ РїР°РґР·СЏР»СЏР»СЊРЅС–Рє"
 
 #: gtk/gtkdialog.c:129
 msgid "The dialog has a separator bar above its buttons"
-msgstr "Дыялог мае падзяляльную мяжу над яго кнопкамі"
+msgstr "Р”С‹СЏР»С‘Рі РјР°Рµ РїР°РґР·СЏР»СЏР»СЊРЅСѓСЋ РјСЏР¶Сѓ РЅР°Рґ СЏРіРѕ РєРЅРѕРїРєР°РјС–"
 
 #: gtk/gtkdialog.c:152
 msgid "Content area border"
-msgstr ""
+msgstr "РњСЏР¶Р° РІРѕР±Р»Р°СЃСЊС†С– Р·СЊРјРµСЃС‚Сѓ"
 
 #: gtk/gtkdialog.c:153
 msgid "Width of border around the main dialog area"
-msgstr "Шырыня мяжы вакол асноўнай плошчы дыялога"
+msgstr "РЁС‹СЂС‹РЅСЏ РјСЏР¶С‹ РІР°РєРѕР» Р°СЃРЅРѕСћРЅР°Р№ РїР»РѕС€С‡С‹ РґС‹СЏР»С‘РіСѓ"
 
 #: gtk/gtkdialog.c:160
 msgid "Button spacing"
-msgstr ""
+msgstr "РњС–Р¶РєРЅРѕРїР°С‡РЅР°СЏ РїСЂР°СЃС‚РѕСЂР°"
 
 #: gtk/gtkdialog.c:161
 msgid "Spacing between buttons"
-msgstr ""
+msgstr "РџСЂР°СЃС‚РѕСЂР° РјС–Р¶ РєРЅРѕРїР°С‡Р°Рє"
 
 #: gtk/gtkdialog.c:169
 msgid "Action area border"
-msgstr ""
+msgstr "РњСЏР¶С‹ РѕР±Р»Р°СЃСЊС†С– РґР·РµСЏРЅСЊРЅСЏ"
 
 #: gtk/gtkdialog.c:170
 msgid "Width of border around the button area at the bottom of the dialog"
-msgstr ""
+msgstr "РЁС‹СЂС‹РЅСЏ РјСЏР¶С‹ РІР°РєРѕР» РєРЅРѕРїРєС– СћРЅС–Р·Рµ РґС‹СЏР»С‘РіСѓ"
 
 #: gtk/gtkentry.c:435 gtk/gtklabel.c:358
 msgid "Cursor Position"
-msgstr "Пазіцыя курсора"
+msgstr "РЎС‚Р°РЅРѕРІС–С€С‡Р° РєСѓСЂСЃРѕСЂСѓ"
 
 #: gtk/gtkentry.c:436 gtk/gtklabel.c:359
 msgid "The current position of the insertion cursor in chars."
-msgstr ""
+msgstr "Р‘СЏРіСѓС‡Р°Рµ СЃС‚Р°РЅРѕРІС–С€С‡Р° РјРµР№СЃС†Р° СћСЃС‚Р°СћРєС– Р·РЅР°РєР°Сћ."
 
 #: gtk/gtkentry.c:445 gtk/gtklabel.c:368
 msgid "Selection Bound"
-msgstr ""
+msgstr "РњСЏР¶Р° РІС‹Р·РЅР°С‡СЌРЅСЊРЅСЏ"
 
 #: gtk/gtkentry.c:446 gtk/gtklabel.c:369
 msgid "The position of the opposite end of the selection from the cursor in chars."
-msgstr ""
+msgstr "РЎС‚Р°РЅРѕРІС–С€С‡Р° СЃСѓРїСЂР°С†СЊР»РµРіР»Р°РіР° РєР°РЅС‡Р°С‚РєСѓ РІС‹Р·РЅР°С‡СЌРЅСЊРЅСЏ Р°Рґ РєСѓСЂСЃРѕСЂСѓ Сћ Р·РЅР°РєР°С…."
 
 #: gtk/gtkentry.c:456
 msgid "Whether the entry contents can be edited"
-msgstr ""
+msgstr "Р¦С– РјРѕР¶РЅР° СЂСЌРґР°РіР°РІР°С†СЊ Р·СЊРјРµСЃС‚ Р·Р°РїС–СЃСѓ"
 
 #: gtk/gtkentry.c:463
 msgid "Maximum length"
-msgstr "Максімальная даўжыня"
+msgstr "РќР°Р№Р±РѕР»СЊС€Р°СЏ РґР°СћР¶С‹РЅСЏ"
 
 #: gtk/gtkentry.c:464
 msgid "Maximum number of characters for this entry. Zero if no maximum."
-msgstr ""
+msgstr "РќР°Р№Р±РѕР»СЊС€Р°СЏ РєРѕР»СЊРєР°СЃСЊС†СЊ Р·РЅР°РєР°Сћ РґР»СЏ РіСЌС‚Р°РіР° Р·Р°РїС–СЃСѓ. РќСѓР»СЊ, РєР°Р»С– РЅСЏРјР° Р°Р±РјРµР¶Р°РІР°РЅСЊРЅСЏСћ"
 
 #: gtk/gtkentry.c:472
 msgid "Visibility"
-msgstr "Бачнасьць"
+msgstr "Р‘Р°С‡РЅР°СЃСЊС†СЊ"
 
 #: gtk/gtkentry.c:473
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
 msgstr ""
+"FALSE Р°РґР»СЋСЃС‚СЂРѕСћРІР°Рµ \"РЅСЏР±Р°С‡РЅС‹СЏ Р·РЅР°РєС–\" Р·Р°РјРµСЃС‚ "
+"СЂСЌС‡Р°С–СЃРЅР°РіР° С‚СЌРєСЃС‚Сѓ (СЂСЌР¶С‹Рј СѓРІРѕРґСѓ РїР°СЂРѕР»СЋ)"
 
 #: gtk/gtkentry.c:480
 msgid "Has Frame"
-msgstr ""
+msgstr "РњР°Рµ СЂР°РјРєСѓ"
 
 #: gtk/gtkentry.c:481
 msgid "FALSE removes outside bevel from entry."
-msgstr ""
+msgstr "FALSE РїСЂС‹Р±С–СЂР°Рµ Р·СЊРЅРµС€РЅСЋСЋ СЂР°РјРєСѓ Р· Р·Р°РїС–СЃСѓ."
 
 #: gtk/gtkentry.c:488
 msgid "Invisible character"
-msgstr "Нябачны сімвал"
+msgstr "РќСЏР±Р°С‡РЅС‹ Р·РЅР°Рє"
 
 #: gtk/gtkentry.c:489
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
+"Р—РЅР°Рє, РІС‹РєР°СЂС‹СЃС‚РѕСћРІС‹РІР°РµРјС‹ РґР»СЏ С…Р°РІР°РЅСЊРЅСЏ Р·СЊРјРµСЃС‚Р° "
+"СћРІРѕРґСѓ (Сѓ \"СЂСЌР¶С‹РјРµ РїР°СЂРѕР»СЊ\")"
 
 #: gtk/gtkentry.c:496
 msgid "Activates default"
-msgstr ""
+msgstr "Р—Р°РґР·РµР№РЅС–С‡Р°С†СЊ РґР°РїРѕРјРЅС‹"
 
 #: gtk/gtkentry.c:497
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed."
 msgstr ""
+"Р¦С– Р·Р°РґР·РµР№РЅС–С‡Р°С†СЊ РґР°РїРѕРјРЅС‹ РІС–РґР¶СЌС‚  (С‚Р°РєС– СЏРє РґР°РїРѕРјРЅР°СЏ РєРЅРѕРїРєР° Сћ РґС‹СЏР»С‘Рі) РєР°Р»С– "
+"РЅР°С†С–СЃРЅСѓС†СЊ Enter."
 
 #: gtk/gtkentry.c:503
 msgid "Width in chars"
-msgstr "Шырыня ў сімвалах"
+msgstr "РЁС‹СЂС‹РЅСЏ Сћ Р·РЅР°РєР°С…"
 
 #: gtk/gtkentry.c:504
 msgid "Number of characters to leave space for in the entry."
-msgstr ""
+msgstr "РљРѕР»СЊРєР°СЃСЊС†СЊ Р·РЅР°РєР°Сћ РґР»СЏ СЏРєС–С… РїР°РєС–РЅСѓС‚Р° РїСЂР°СЃС‚РѕСЂР° Сћ Р·Р°РїС–СЃСѓ."
 
 #: gtk/gtkentry.c:513
 msgid "Scroll offset"
-msgstr ""
+msgstr "Р—СЊРјСЏС€С‡СЌРЅСЊРЅРµ РїСЂС‹ РїСЂР°РєСЂСѓС‡РІР°РЅСЊРЅС–"
 
 #: gtk/gtkentry.c:514
 msgid "Number of pixels of the entry scrolled off the screen to the left"
-msgstr ""
+msgstr "РљРѕР»СЊРєР°СЃСЊС†СЊ РїС–РєСЃСЌР»Р°Сћ Р·Р°РїС–СЃСѓ, РїР°Р№С€РѕСћС€С‹С… Р·Р° Р»РµРІСѓСЋ РјСЏР¶Сѓ СЌРєСЂР°РЅР° РїСЂС‹ РїСЂР°РєСЂСѓС‡РІР°РЅСЊРЅС–"
 
 #: gtk/gtkentry.c:524
 msgid "The contents of the entry"
-msgstr ""
+msgstr "Р—СЊРјРµСЃС‚ Р·Р°РїС–СЃСѓ"
 
 #: gtk/gtkentry.c:739
 msgid "Select on focus"
-msgstr ""
+msgstr "РђРґР·РЅР°С‡СЌРЅСЊРЅРµ РїСЂС‹ Р·Р°СЃСЏСЂРѕРґР¶РІР°РЅСЊРЅС–"
 
 #: gtk/gtkentry.c:740
 msgid "Whether to select the contents of an entry when it is focused."
-msgstr ""
+msgstr "Р¦С– Р±СѓРґР·Рµ Р·СЊРјРµСЃС‚ Р·Р°РїС–СЃСѓ Р°РґР·РЅР°С‡Р°С†С†Р° РїСЂС‹ Р·Р°СЃСЏСЂРѕРґР¶РІР°РЅСЊРЅС–"
 
 #: gtk/gtkentry.c:3877 gtk/gtklabel.c:3179
 msgid "Select All"
-msgstr "Абраць усе"
+msgstr "РђРґР·РЅР°С‡С‹С†СЊ СѓСЃС‘"
 
 #: gtk/gtkentry.c:3887 gtk/gtklabel.c:3189
 msgid "Input Methods"
-msgstr "Мэтады ўводу"
+msgstr "РњСЌС‚Р°РґС‹ СћРІРѕРґСѓ"
 
 #: gtk/gtkentry.c:3897 gtk/gtktextview.c:6426
 msgid "_Insert Unicode control character"
-msgstr ""
+msgstr "РЈСЃС‚Р°РІС–С†СЊ РєС–СЂСѓСЋС‡С‹ Р·РЅР°Рє Unicode"
 
 #: gtk/gtkfilesel.c:513 gtk/gtkimage.c:163
 msgid "Filename"
-msgstr "Назва файла"
+msgstr "РќР°Р·РѕСћ С„Р°Р№Р»Сѓ"
 
 #: gtk/gtkfilesel.c:514
 msgid "The currently selected filename."
-msgstr ""
+msgstr "РќР°Р·РѕСћ С„Р°Р№Р»Сѓ, Р°РґР·РЅР°С‡Р°РЅР°РіР° Р·Р°СЂР°Р·."
 
 #: gtk/gtkfilesel.c:520
 msgid "Show file operations"
-msgstr ""
+msgstr "РџР°РєР°Р·Р°С†СЊ РґР·РµСЏРЅСЊРЅС– Р· С„Р°Р№Р»Р°Рј"
 
 #: gtk/gtkfilesel.c:521
 msgid "Whether buttons for creating/manipulating files should be displayed."
-msgstr ""
+msgstr "Р¦С– РїР°РІС–РЅРЅС‹ Р°РґР»СЋСЃС‚СЂРѕСћРІР°С†С†Р° РєРЅРѕРїРєС– РґР»СЏ СЃС‚РІР°СЂСЌРЅСЊРЅСЏ/Р·СЊРјСЏРЅРµРЅСЊРЅСЏ С„Р°Р№Р»Сѓ."
 
 #: gtk/gtkfilesel.c:528
 msgid "Select multiple"
-msgstr ""
+msgstr "РђРґР·РЅР°С‡С‹С†СЊ РЅРµРєР°Р»СЊРєС–"
 
 #: gtk/gtkfilesel.c:529
 msgid "Whether to allow multiple files to be selected."
-msgstr ""
+msgstr "Р¦С– РјРѕРіСѓС†СЊ Р±С‹С†СЊ Р°РґР·РЅР°С‡Р°РЅС‹ РЅРµРєР°Р»СЊРєС– С„Р°Р№Р»Р°Сћ."
 
 #: gtk/gtkfilesel.c:684
 msgid "Folders"
-msgstr "Каталёгі"
+msgstr "РљР°С‚Р°Р»С‘РіС–"
 
 #: gtk/gtkfilesel.c:688
 msgid "Fol_ders"
-msgstr "Ката_лёгі"
+msgstr "РљР°С‚Р°Р»С‘РіС–"
 
 #: gtk/gtkfilesel.c:719
 msgid "Files"
-msgstr "Файлы"
+msgstr "Р¤Р°Р№Р»С‹"
 
 #: gtk/gtkfilesel.c:723
 msgid "_Files"
-msgstr "_Файлы"
+msgstr "Р¤Р°Р№Р»С‹"
 
 #: gtk/gtkfilesel.c:799 gtk/gtkfilesel.c:2138
 #, c-format
 msgid "Folder unreadable: %s"
-msgstr "Каталёг нячытаем: %s"
+msgstr "РљР°С‚Р°Р»С‘Рі РЅСЏС‡С‹С‚Р°РµРј: %s"
 
 #: gtk/gtkfilesel.c:930
 #, c-format
@@ -1776,23 +1798,26 @@ msgid ""
 "available to this program.\n"
 "Are you sure that you want to select it?"
 msgstr ""
+"Р¤Р°Р№Р» \"%s\" Р·РЅР°С…РѕРґР·С–С†С†Р° РЅР° С–РЅС€Р°Р№ РјР°С€С‹РЅРµ (%s) С– РјРѕР¶Р° Р±С‹С†СЊ РЅРµРґР°СЃСЏРіР°Р»СЊРЅС‹ "
+"РґР»СЏ РіСЌС‚Р°Рµ РїСЂР°РіСЂР°РјС‹\n"
+"Р’С‹ СЃР°РїСЂР°СћРґС‹ Р¶Р°РґР°РµС†Рµ Р°РґР·РЅР°С‡С‹С†СЊ СЏРіРѕ?"
 
 #: gtk/gtkfilesel.c:1063
 msgid "_New Folder"
-msgstr "_Новы каталёг"
+msgstr "РќРѕРІС‹ РєР°С‚Р°Р»С‘Рі"
 
 #: gtk/gtkfilesel.c:1074
 msgid "De_lete File"
-msgstr "Зь_нішчыць файл"
+msgstr "Р—СЊРЅС–С€С‡С‹С†СЊ С„Р°Р№Р»"
 
 #: gtk/gtkfilesel.c:1085
 msgid "_Rename File"
-msgstr "_Перайменаваць файл"
+msgstr "РџРµСЂР°Р№РјРµРЅР°РІР°С†СЊ С„Р°Р№Р»"
 
 #: gtk/gtkfilesel.c:1363
 #, c-format
 msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
+msgstr "РќР°Р·РѕСћ РєР°С‚Р°Р»С‘РіСѓ \"%s\" Р·СЊРјСЏС€С‡Р°Рµ Р·РЅР°РєС–, РЅРµРґР°Р·РІР°Р»СЏР»РЅС‹СЏ Сћ РЅР°Р·РѕРІР°С… С„Р°Р№Р»Р°Сћ"
 
 #: gtk/gtkfilesel.c:1365
 #, c-format
@@ -1800,34 +1825,34 @@ msgid ""
 "Error creating folder \"%s\": %s\n"
 "%s"
 msgstr ""
-"Памылка стварэньня каталёгу \"%s\": %s\n"
+"РџР°РјС‹Р»РєР° СЃС‚РІР°СЂСЌРЅСЊРЅСЏ РєР°С‚Р°Р»С‘РіСѓ \"%s\": %s\n"
 "%s"
 
 #: gtk/gtkfilesel.c:1366 gtk/gtkfilesel.c:1602
 msgid "You probably used symbols not allowed in filenames."
-msgstr ""
+msgstr "РњР°РіС‡С‹РјР° РІС‹ РІС‹РєР°СЂС‹СЃС‚РѕСћРІС‹РІР°РµС†Рµ Р·РЅР°РєС–, РЅРµРґР°Р·РІР°Р»СЏР»СЊРЅС‹СЏ Сћ РЅР°Р·РѕРІР°С… С„Р°Р№Р»Р°Сћ."
 
 #: gtk/gtkfilesel.c:1374
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
-msgstr "Памылка стварэньня каталёгу \"%s\": %s\n"
+msgstr "РџР°РјС‹Р»РєР° СЃС‚РІР°СЂСЌРЅСЊРЅСЏ РєР°С‚Р°Р»С‘РіСѓ \"%s\": %s\n"
 
 #: gtk/gtkfilesel.c:1408
 msgid "New Folder"
-msgstr "Новы каталёг"
+msgstr "РќРѕРІС‹ РєР°С‚Р°Р»С‘Рі"
 
 #: gtk/gtkfilesel.c:1423
 msgid "_Folder name:"
-msgstr "_Назва каталёгу:"
+msgstr "РќР°Р·РѕСћ РєР°С‚Р°Р»С‘РіСѓ:"
 
 #: gtk/gtkfilesel.c:1449
 msgid "Create"
-msgstr "Стварыць"
+msgstr "РЎС‚РІР°СЂС‹С†СЊ"
 
 #: gtk/gtkfilesel.c:1490
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr "Назва файла \"%s\" зьмяшчае нядапушчальныя сімвалы"
+msgstr "РќР°Р·РІР° С„Р°Р№Р»Р° \"%s\" Р·СЊРјСЏС€С‡Р°Рµ РЅСЏРґР°РїСѓС€С‡Р°Р»СЊРЅС‹СЏ СЃС‹РјР±Р°Р»С–"
 
 #: gtk/gtkfilesel.c:1493
 #, c-format
@@ -1835,31 +1860,31 @@ msgid ""
 "Error deleting file \"%s\": %s\n"
 "%s"
 msgstr ""
-"Памылка зьнішчэньня файла \"%s\": %s\n"
+"РџР°РјС‹Р»РєР° Р·СЊРЅС–С€С‡СЌРЅСЊРЅСЏ С„Р°Р№Р»Р° \"%s\": %s\n"
 "%s"
 
 #: gtk/gtkfilesel.c:1495 gtk/gtkfilesel.c:1616
 msgid "It probably contains symbols not allowed in filenames."
-msgstr "Магчыма зьмяшчае сімвалы, недапушчальныя ў назвах файлаў."
+msgstr "РњР°РіС‡С‹РјР° Р·СЊРјСЏС€С‡Р°Рµ СЃС‹РјР±Р°Р»С–, РЅРµРґР°РїСѓС€С‡Р°Р»СЊРЅС‹СЏ Сћ РЅР°Р·РІР°С… С„Р°Р№Р»Р°Сћ."
 
 #: gtk/gtkfilesel.c:1504
 #, c-format
 msgid "Error deleting file \"%s\": %s"
-msgstr "Памылка зьнішчэньня файла \"%s\": %s"
+msgstr "РџР°РјС‹Р»РєР° Р·СЊРЅС–С€С‡СЌРЅСЊРЅСЏ С„Р°Р№Р»Р° \"%s\": %s"
 
 #: gtk/gtkfilesel.c:1547
 #, c-format
 msgid "Really delete file \"%s\" ?"
-msgstr "Сапраўды зьнішчыць файл \"%s\" ?"
+msgstr "РЎР°РїСЂР°СћРґС‹ Р·СЊРЅС–С€С‡С‹С†СЊ С„Р°Р№Р» \"%s\" ?"
 
 #: gtk/gtkfilesel.c:1552
 msgid "Delete File"
-msgstr "Зьнішчыць файл"
+msgstr "Р—СЊРЅС–С€С‡С‹С†СЊ С„Р°Р№Р»"
 
 #: gtk/gtkfilesel.c:1598 gtk/gtkfilesel.c:1612
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
-msgstr "Назва файла \"%s\" зьмяшчае сімвалы, недапушчальныя ў назвах файлаў"
+msgstr "РќР°Р·РІР° С„Р°Р№Р»Р° \"%s\" Р·СЊРјСЏС€С‡Р°Рµ СЃС‹РјР±Р°Р»С–, РЅРµРґР°РїСѓС€С‡Р°Р»СЊРЅС‹СЏ Сћ РЅР°Р·РІР°С… С„Р°Р№Р»Р°Сћ"
 
 #: gtk/gtkfilesel.c:1600
 #, c-format
@@ -1867,7 +1892,7 @@ msgid ""
 "Error renaming file to \"%s\": %s\n"
 "%s"
 msgstr ""
-"Памылка перайменаваньня \"%s\": %s\n"
+"РџР°РјС‹Р»РєР° РїРµСЂР°Р№РјРµРЅР°РІР°РЅСЊРЅСЏ \"%s\": %s\n"
 "%s"
 
 #: gtk/gtkfilesel.c:1614
@@ -1876,30 +1901,30 @@ msgid ""
 "Error renaming file \"%s\": %s\n"
 "%s"
 msgstr ""
-"Памылка перайменаваньня \"%s\": %s\n"
+"РџР°РјС‹Р»РєР° РїРµСЂР°Р№РјРµРЅР°РІР°РЅСЊРЅСЏ \"%s\": %s\n"
 "%s"
 
 #: gtk/gtkfilesel.c:1624
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
-msgstr "Памылка перайменаваньня \"%s\" у \"%s\": %s"
+msgstr "РџР°РјС‹Р»РєР° РїРµСЂР°Р№РјРµРЅР°РІР°РЅСЊРЅСЏ \"%s\" Сѓ \"%s\": %s"
 
 #: gtk/gtkfilesel.c:1671
 msgid "Rename File"
-msgstr "Перайменаваць файл"
+msgstr "РџРµСЂР°Р№РјРµРЅР°РІР°С†СЊ С„Р°Р№Р»"
 
 #: gtk/gtkfilesel.c:1686
 #, c-format
 msgid "Rename file \"%s\" to:"
-msgstr "Перайменаваць файл \"%s\" у:"
+msgstr "РџРµСЂР°Р№РјРµРЅР°РІР°С†СЊ С„Р°Р№Р» \"%s\" Сѓ:"
 
 #: gtk/gtkfilesel.c:1717
 msgid "Rename"
-msgstr "Перайменаваць"
+msgstr "РџРµСЂР°Р№РјРµРЅР°РІР°С†СЊ"
 
 #: gtk/gtkfilesel.c:2117
 msgid "Selection: "
-msgstr "Выбар: "
+msgstr "Р’С‹Р±Р°СЂ: "
 
 #: gtk/gtkfilesel.c:3004
 #, c-format
@@ -1907,150 +1932,152 @@ msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
 "environment variable G_BROKEN_FILENAMES): %s"
 msgstr ""
+"РќР°Р·РѕСћ С„Р°Р№Р»Сѓ \"%s\" РЅСЏРјРѕР¶Р° Р±С‹С†СЊ РїРµСЂР°СћС‚РІРѕСЂР°РЅС‹ Сћ UTF-8 (РїР°СЃРїСЂР°Р±СѓР№С†Рµ"
+"СћСЃС‚Р°Р»СЏРІР°С†СЊ РїРµСЂР°РјРµРЅРЅСѓСЋ Р°СЃСЏСЂРѕРґР·СЊРґР·СЏ G_BROKEN_FILENAMES): %s"
 
 #: gtk/gtkfilesel.c:3007
 msgid "Invalid Utf-8"
-msgstr "Нерэчаісны UTF-8"
+msgstr "РќРµСЂСЌС‡Р°С–СЃРЅС‹ UTF-8"
 
 #: gtk/gtkfilesel.c:3873
 msgid "Name too long"
-msgstr "Назва вельмі доўгая"
+msgstr "РќР°Р·РІР° РІРµР»СЊРјС– РґРѕСћРіР°СЏ"
 
 #: gtk/gtkfilesel.c:3875
 msgid "Couldn't convert filename"
-msgstr "Немагчыма пераўтварыць назву файла"
+msgstr "РќРµРјР°РіС‡С‹РјР° РїРµСЂР°СћС‚РІР°СЂС‹С†СЊ РЅР°Р·РІСѓ С„Р°Р№Р»Р°"
 
 #: gtk/gtkfixed.c:120 gtk/gtklayout.c:603
 msgid "X position"
-msgstr "X пазіцыя"
+msgstr "X РїР°Р·С–С†С‹СЏ"
 
 #: gtk/gtkfixed.c:121 gtk/gtklayout.c:604
 msgid "X position of child widget"
-msgstr "X пазіцыя віджэта-нашчадка"
+msgstr "X РїР°Р·С–С†С‹СЏ РІС–РґР¶СЌС‚Р°-РЅР°С€С‡Р°РґРєР°"
 
 #: gtk/gtkfixed.c:130 gtk/gtklayout.c:613
 msgid "Y position"
-msgstr "Y пазіцыя"
+msgstr "Y РїР°Р·С–С†С‹СЏ"
 
 #: gtk/gtkfixed.c:131 gtk/gtklayout.c:614
 msgid "Y position of child widget"
-msgstr "Y пазіцыя віджэта-нашчадка"
+msgstr "Y РїР°Р·С–С†С‹СЏ РІС–РґР¶СЌС‚Р°-РЅР°С€С‡Р°РґРєР°"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
 #: gtk/gtkfontsel.c:69
 msgid "abcdefghijk ABCDEFGHIJK"
-msgstr "абвгдеёжзійклмнопрстуўфхцчшыьэюя АБВГДЕЁЖЗІЙКЛМНОПРСТУЎФХЦЧШЫЭЮЯ"
+msgstr "Р°Р±РІРіРґРµС‘Р¶Р·С–Р№РєР»РјРЅРѕРїСЂСЃС‚СѓСћС„С…С†С‡С€С‹СЊСЌСЋСЏ РђР‘Р’Р“Р”Р•РЃР–Р—Р†Р™РљР›РњРќРћРџР РЎРўРЈРЋР¤РҐР¦Р§РЁР«Р­Р®РЇ"
 
 #: gtk/gtkfontsel.c:205
 msgid "Font name"
-msgstr "Назва шрыфту"
+msgstr "РќР°Р·РІР° С€СЂС‹С„С‚Сѓ"
 
 #: gtk/gtkfontsel.c:206
 msgid "The X string that represents this font."
-msgstr ""
+msgstr "РќР°Р·РѕСћ С€СЂС‹С„С‚Сѓ Сћ С‚СЌСЂРјС–РЅР°С… X Window."
 
 #: gtk/gtkfontsel.c:213
 msgid "The GdkFont that is currently selected."
-msgstr ""
+msgstr "GdkFont Р°Р±СЂР°РЅС‹ Сћ Р±СЏРіСѓС‡С‹ РјРѕРјР°РЅС‚."
 
 #: gtk/gtkfontsel.c:219
 msgid "Preview text"
-msgstr "Прыкладны тэктс"
+msgstr "РџСЂС‹РєР»Р°Рґ С‚СЌРєСЃС‚Сѓ"
 
 #: gtk/gtkfontsel.c:220
 msgid "The text to display in order to demonstrate the selected font."
-msgstr ""
+msgstr "РўСЌРєСЃС‚, РІС‹РєР°СЂС‹СЃС‚РѕСћРІС‹РІР°РµРјС‹ РґР»СЏ Р°Р·РЅР°РєР°РјР»СЏР»СЊРЅР°РіР° РїР°РєР°Р·Сѓ Р°Р±СЂР°РЅР°РіР° С€СЂС‹С„С‚Сѓ."
 
 #: gtk/gtkfontsel.c:327
 msgid "_Family:"
-msgstr "_Сямейства:"
+msgstr "РЎСЏРјРµР№СЃС‚РІР°:"
 
 #: gtk/gtkfontsel.c:333
 msgid "_Style:"
-msgstr "_Стыль:"
+msgstr "РЎС‚С‹Р»СЊ:"
 
 #: gtk/gtkfontsel.c:339
 msgid "Si_ze:"
-msgstr "Па_мер:"
+msgstr "РџР°РјРµСЂ:"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:468
 msgid "_Preview:"
-msgstr "_Прыклад:"
+msgstr "РџСЂС‹РєР»Р°Рґ:"
 
 #: gtk/gtkfontsel.c:1269
 msgid "Font Selection"
-msgstr "Выбар шрыфта"
+msgstr "Р’С‹Р±Р°СЂ С€СЂС‹С„С‚Р°"
 
 #: gtk/gtkframe.c:126
 msgid "Text of the frame's label."
-msgstr ""
+msgstr "РўСЌРєСЃС‚ Р°РґРјРµС†С–РЅС‹ СЂР°РјРєС–."
 
 #: gtk/gtkframe.c:133
 msgid "Label xalign"
-msgstr "Выроўніваньне адмеціны па  X"
+msgstr "Р’С‹СЂРѕСћРЅС–РІР°РЅСЊРЅРµ Р°РґРјРµС†С–РЅС‹ РїР° X"
 
 #: gtk/gtkframe.c:134
 msgid "The horizontal alignment of the label."
-msgstr "Гарызантальнае выроўніваньне адмеціны."
+msgstr "Р“Р°СЂС‹Р·Р°РЅС‚Р°Р»СЊРЅР°Рµ РІС‹СЂРѕСћРЅС–РІР°РЅСЊРЅРµ Р°РґРјРµС†С–РЅС‹."
 
 #: gtk/gtkframe.c:143
 msgid "Label yalign"
-msgstr "Выроўніваньне адмеціны па Y"
+msgstr "Р’С‹СЂРѕСћРЅС–РІР°РЅСЊРЅРµ Р°РґРјРµС†С–РЅС‹ РїР° Y"
 
 #: gtk/gtkframe.c:144
 msgid "The vertical alignment of the label."
-msgstr "Вертыкальнае выроўніваньне адмеціны."
+msgstr "Р’СЌСЂС‚С‹РєР°Р»СЊРЅР°Рµ РІС‹СЂРѕСћРЅС–РІР°РЅСЊРЅРµ Р°РґРјРµС†С–РЅС‹."
 
 #: gtk/gtkframe.c:153 gtk/gtkhandlebox.c:185
 msgid "Deprecated property, use shadow_type instead."
-msgstr ""
+msgstr "Р—Р°Р±Р°СЂРѕРЅРµРЅР°СЏ СѓР»Р°СЃСЊС†С–РІР°СЃСЊС†СЊ; РІС‹РєР°СЂС‹СЃС‚Рѕ Р·Р°РјРµСЃС‚ СЏРіРѕ shadow_type."
 
 #: gtk/gtkframe.c:160
 msgid "Frame shadow"
-msgstr ""
+msgstr "РўРµРЅСЊ СЂР°РјРєС–"
 
 #: gtk/gtkframe.c:161
 msgid "Appearance of the frame border."
-msgstr ""
+msgstr "Р—СЊРЅРµС€РЅС– РІС‹РіР»СЏРґ РјСЏР¶С‹ СЂР°РјРєС–."
 
 #: gtk/gtkframe.c:169
 msgid "Label widget"
-msgstr "Віджэт \"Адмеціна\""
+msgstr "Р’С–РґР¶СЌС‚ \"РђРґРјРµС†С–РЅР°\""
 
 #: gtk/gtkframe.c:170
 msgid "A widget to display in place of the usual frame label."
-msgstr ""
+msgstr "Р’С–РґР¶СЌС‚, СЏРєС– Р±СѓРґР·Рµ Р°РґР»СЋСЃС‚СЂРѕСћРІР°С†С†Р° Р·Р°РјРµСЃС‚ Р·РІС‹С‡Р°Р№РЅР°Р№ Р°РґРјРµС†С–РЅС‹ СЂР°РјРєС–."
 
 #: gtk/gtkgamma.c:396
 msgid "Gamma"
-msgstr "Гама"
+msgstr "Р“Р°РјР°"
 
 #: gtk/gtkgamma.c:406
 msgid "_Gamma value"
-msgstr "_Гама значэньне"
+msgstr "Р“Р°РјР° Р·РЅР°С‡СЌРЅСЊРЅРµ"
 
 #: gtk/gtkhandlebox.c:192 gtk/gtkmenubar.c:151 gtk/gtkstatusbar.c:158
 #: gtk/gtktoolbar.c:277 gtk/gtkviewport.c:148
 msgid "Shadow type"
-msgstr "GdkPixmap"
+msgstr "РўС‹Рї С†РµРЅСЋ"
 
 #: gtk/gtkhandlebox.c:193
 msgid "Appearance of the shadow that surrounds the container."
-msgstr ""
+msgstr "Р—СЊРЅРµС€РЅС– РІС‹РіР»СЏРґ С†РµРЅСЋ, СЏРєС– Р°РєСЂСѓР¶Р°Рµ СћРјСЏС€С‡Р°Р»СЊРЅС–Рє."
 
 #: gtk/gtkhandlebox.c:201
 msgid "Handle position"
-msgstr ""
+msgstr "РЎС‚Р°РЅРѕРІС–С€С‡Р° СЂСЌРіСѓР»СЏС‚Р°СЂСѓ"
 
 #: gtk/gtkhandlebox.c:202
 msgid "Position of the handle relative to the child widget."
-msgstr ""
+msgstr "РЎС‚Р°РЅРѕРІС–С€С‡Р° СЂСЌРіСѓР»СЏС‚Р°СЂСѓ Р°РґРЅРѕСЃРЅР° РІС–РґР¶СЌС‚Сѓ-РЅР°С€С‡Р°РґРєСѓ."
 
 #: gtk/gtkhandlebox.c:210
 msgid "Snap edge"
-msgstr ""
+msgstr "Р’С‹СЂРѕСћРЅС–РІР°С†СЊ Р±Р°РєС–"
 
 #: gtk/gtkhandlebox.c:211
 msgid ""
@@ -2064,7 +2091,7 @@ msgstr ""
 #: gtk/gtkiconfactory.c:1318
 #, c-format
 msgid "Error loading icon: %s"
-msgstr "Памылка загрузкі значкі: %s"
+msgstr "РџР°РјС‹Р»РєР° Р·Р°РіСЂСѓР·РєС– Р·РЅР°С‡РєС–: %s"
 
 #: gtk/gtkimage.c:131
 msgid "Pixbuf"
@@ -2072,122 +2099,122 @@ msgstr "Pixbuf"
 
 #: gtk/gtkimage.c:132
 msgid "A GdkPixbuf to display."
-msgstr "GdkPixbuf для адлюстраваньня."
+msgstr "GdkPixbuf РґР»СЏ Р°РґР»СЋСЃС‚СЂР°РІР°РЅСЊРЅСЏ."
 
 #: gtk/gtkimage.c:139
 msgid "Pixmap"
-msgstr "Малюнак"
+msgstr "РњР°Р»СЋРЅР°Рє"
 
 #: gtk/gtkimage.c:140
 msgid "A GdkPixmap to display."
-msgstr "GdkPixmap для адлюстраваньня."
+msgstr "GdkPixmap РґР»СЏ Р°РґР»СЋСЃС‚СЂР°РІР°РЅСЊРЅСЏ."
 
 #: gtk/gtkimage.c:147
 msgid "Image"
-msgstr "Малюнак"
+msgstr "РњР°Р»СЋРЅР°Рє"
 
 #: gtk/gtkimage.c:148
 msgid "A GdkImage to display."
-msgstr "GdkImage для адлюстраваньня."
+msgstr "GdkImage РґР»СЏ Р°РґР»СЋСЃС‚СЂР°РІР°РЅСЊРЅСЏ."
 
 #: gtk/gtkimage.c:155
 msgid "Mask"
-msgstr ""
+msgstr "РњР°СЃРєР°"
 
 #: gtk/gtkimage.c:156
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
-msgstr ""
+msgstr "Р‘С–С‚Р°РІР°СЏ РјР°СЃРєР°, РІС‹РєР°СЂС‹СЃС‚РѕСћРІС‹РІР°РµРјР°СЏ СЂР°Р·Р°Рј Р· GdkImage С†С– GdkPixmap"
 
 #: gtk/gtkimage.c:164
 msgid "Filename to load and display."
-msgstr ""
+msgstr "РќР°Р·РѕСћ С„Р°Р»Сѓ РґР»СЏ Р·Р°РіСЂСѓР·РєС– Р№ Р°РґР»СЋСЃС‚СЂР°РІР°РЅСЊРЅСЏ."
 
 #: gtk/gtkimage.c:172
 msgid "Stock ID"
-msgstr ""
+msgstr "ID СѓР±СѓРґР°РІР°РЅР°Р№ Р·РЅР°С‡РєС–"
 
 #: gtk/gtkimage.c:173
 msgid "Stock ID for a stock image to display."
-msgstr ""
+msgstr "ID СѓР±СѓРґР°РІР°РЅР°РіР° РјР°Р»СЋРЅРєСѓ РґР»СЏ Р°РґР»СЋСЃС‚СЂР°РІР°РЅСЊРЅСЏ."
 
 #: gtk/gtkimage.c:180
 msgid "Icon set"
-msgstr "Набор значак"
+msgstr "РќР°Р±РѕСЂ Р·РЅР°С‡Р°Рє"
 
 #: gtk/gtkimage.c:181
 msgid "Icon set to display."
-msgstr "Набор значак для адлюстраваньня."
+msgstr "РќР°Р±РѕСЂ Р·РЅР°С‡Р°Рє РґР»СЏ Р°РґР»СЋСЃС‚СЂР°РІР°РЅСЊРЅСЏ."
 
 #: gtk/gtkimage.c:188
 msgid "Icon size"
-msgstr "Памер значкі"
+msgstr "РџР°РјРµСЂ Р·РЅР°С‡РєС–"
 
 #: gtk/gtkimage.c:189
 msgid "Size to use for stock icon or icon set."
-msgstr ""
+msgstr "РџР°РјРµСЂ РґР»СЏ СћР±СѓРґР°РІР°РЅР°Р№ Р·РЅР°С‡РєС– С†С– РЅР°Р±РѕСЂСѓ Р·РЅР°С‡Р°Рє."
 
 #: gtk/gtkimage.c:197
 msgid "Animation"
-msgstr "Ажыцьцяўленьне"
+msgstr "РђР¶С‹С†СЊС†СЏСћР»РµРЅСЊРЅРµ"
 
 #: gtk/gtkimage.c:198
 msgid "GdkPixbufAnimation to display."
-msgstr "GdkPixbufAnimation для адлюстраваньня"
+msgstr "GdkPixbufAnimation РґР»СЏ Р°РґР»СЋСЃС‚СЂР°РІР°РЅСЊРЅСЏ."
 
 #: gtk/gtkimage.c:205
 msgid "Storage type"
-msgstr ""
+msgstr "РўС‹Рї Р·Р°С…РѕСћРІР°РЅСЊРЅСЏ"
 
 #: gtk/gtkimage.c:206
 msgid "The representation being used for image data."
-msgstr ""
+msgstr "РЈСЏСћР»РµРЅСЊРЅРµ, РґР»СЏ Р°РґР»СЋСЃС‚СЂР°РІР°РЅСЊРЅСЏ РґР°РЅСЊРЅР°СЏСћ."
 
 #: gtk/gtkimagemenuitem.c:124
 msgid "Image widget"
-msgstr "Віджэт-малюнак"
+msgstr "Р’С–РґР¶СЌС‚-РјР°Р»СЋРЅР°Рє"
 
 #: gtk/gtkimagemenuitem.c:125
 msgid "Child widget to appear next to the menu text"
-msgstr ""
+msgstr "Р’С–РґР¶СЌС‚-РЅР°С€С‡Р°РґР°Рє, СЏРєС– Р·СЊСЏСћР»СЏРµС†С†Р° РїРѕР±Р°С‡ Р· С‚СЌРєСЃС‚Р°Рј Сѓ РјСЌРЅСЋ"
 
 #. shell and main vbox
 #: gtk/gtkinputdialog.c:184
 msgid "Input"
-msgstr "Увод"
+msgstr "РЈРІРѕРґ"
 
 #: gtk/gtkinputdialog.c:192
 msgid "No input devices"
-msgstr "Няма прылад уводу"
+msgstr "РќСЏРјР° РїСЂС‹Р»Р°Рґ СѓРІРѕРґСѓ"
 
 #: gtk/gtkinputdialog.c:221
 msgid "_Device:"
-msgstr "_Прылада:"
+msgstr "РџСЂС‹Р»Р°РґР°:"
 
 #: gtk/gtkinputdialog.c:238
 msgid "Disabled"
-msgstr "Выключана"
+msgstr "Р’С‹РєР»СЋС‡Р°РЅР°"
 
 #: gtk/gtkinputdialog.c:246
 msgid "Screen"
-msgstr "Экран"
+msgstr "Р­РєСЂР°РЅ"
 
 #: gtk/gtkinputdialog.c:254
 msgid "Window"
-msgstr "Акно"
+msgstr "РђРєРЅРѕ"
 
 #: gtk/gtkinputdialog.c:262
 msgid "_Mode: "
-msgstr "_Рэжым: "
+msgstr "Р СЌР¶С‹Рј: "
 
 #. The axis listbox
 #: gtk/gtkinputdialog.c:293
 msgid "_Axes"
-msgstr "_Восі"
+msgstr "Р’РѕСЃС–"
 
 #. Keys listbox
 #: gtk/gtkinputdialog.c:309
 msgid "_Keys"
-msgstr "_Ключы"
+msgstr "РљР»СЋС‡С‹"
 
 #: gtk/gtkinputdialog.c:474
 msgid "X"
@@ -2199,56 +2226,56 @@ msgstr "Y"
 
 #: gtk/gtkinputdialog.c:476
 msgid "Pressure"
-msgstr "Націск"
+msgstr "РќР°С†С–СЃРє"
 
 #: gtk/gtkinputdialog.c:477
 msgid "X Tilt"
-msgstr "Нахіл па X"
+msgstr "РќР°С…С–Р» РїР° X"
 
 #: gtk/gtkinputdialog.c:478
 msgid "Y Tilt"
-msgstr "Нахіл па Y"
+msgstr "РќР°С…С–Р» РїР° Y"
 
 #: gtk/gtkinputdialog.c:479
 msgid "Wheel"
-msgstr "Пракрутка"
+msgstr "РџСЂР°РєСЂСѓС‚РєР°"
 
 #: gtk/gtkinputdialog.c:519
 msgid "none"
-msgstr "няма"
+msgstr "РЅСЏРјР°"
 
 #: gtk/gtkinputdialog.c:553 gtk/gtkinputdialog.c:589
 msgid "(disabled)"
-msgstr "(выключана)"
+msgstr "(РІС‹РєР»СЋС‡Р°РЅР°)"
 
 #: gtk/gtkinputdialog.c:582
 msgid "(unknown)"
-msgstr "(невядомы)"
+msgstr "(РЅРµРІСЏРґРѕРјС‹)"
 
 #. and clear button
 #: gtk/gtkinputdialog.c:667
 msgid "clear"
-msgstr "ачысьціць"
+msgstr "Р°С‡С‹СЃСЊС†С–С†СЊ"
 
 #: gtk/gtklabel.c:281
 msgid "The text of the label."
-msgstr "Тэкст адмеціны."
+msgstr "РўСЌРєСЃС‚ Р°РґРјРµС†С–РЅС‹."
 
 #: gtk/gtklabel.c:288
 msgid "A list of style attributes to apply to the text of the label."
-msgstr ""
+msgstr "РЎСЊРїС–СЃ СѓР»Р°СЃСЊС†С–РІР°СЃСЊС†РµР№ СЃС‚С‹Р»СЋ, СЏРєС–СЏ РґР°С‚С‹С‡Р°С†С†Р° С‚СЌРєСЃС‚Сѓ Р°РґРјРµС†С–РЅС‹."
 
 #: gtk/gtklabel.c:294
 msgid "Use markup"
-msgstr ""
+msgstr "Р’С‹РєР°СЂС‹СЃС‚РѕСћРІР°С†СЊ СЂР°Р·СЊРјРµС‚РєСѓ"
 
 #: gtk/gtklabel.c:295
 msgid "The text of the label includes XML markup. See pango_parse_markup()."
-msgstr ""
+msgstr "РўСЌРєСЃС‚ Р°РґРјРµС†С–РЅС‹ СћРєР»СЋС‡Р°Рµ XML СЂР°Р·СЊРјРµС‚РєСѓ, РіР». pango_parse_markup()."
 
 #: gtk/gtklabel.c:309 gtk/gtktexttag.c:378 gtk/gtktextview.c:585
 msgid "Justification"
-msgstr "Выраўніваньне"
+msgstr "Р’С‹СЂРѕСћРЅС–РІР°РЅСЊРЅРµ"
 
 #: gtk/gtklabel.c:310
 msgid ""
@@ -2256,80 +2283,87 @@ msgid ""
 "This does NOT affect the alignment of the label within its allocation. See "
 "GtkMisc::xalign for that."
 msgstr ""
+"Р’С‹СЂРѕСћРЅС–РІР°РЅСЊРЅРµ СЂР°РґРєРѕСћ С‚СЌРєСЃС‚Сѓ Р°РґРјРµС†С–РЅС‹ Р°РґРЅРѕСЃРЅРѕ Р°РґР·С–РЅ Р°РґРЅР°РіРѕ. "
+"Р“СЌС‚Р° РќР• РЈР—Р¬Р”Р—Р•Р™РќР†Р§РђР• РЅР° РІС‹СЂРѕСћРЅС–РІР°РЅСЊРЅРµ СЃР°РјРѕРµ Р°РґРјРµС†С–РЅС‹. "
+"Р“Р»СЏРґР·С–С†Рµ GtkMisc::xalign РґР»СЏ РґР°РґР°С‚РєРѕРІС‹С… Р·СЊРІРµСЃС‚Р°Рє."
 
 #: gtk/gtklabel.c:318
 msgid "Pattern"
-msgstr "Шаблён"
+msgstr "РЁР°Р±Р»С‘РЅ"
 
 #: gtk/gtklabel.c:319
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline."
 msgstr ""
+"Р Р°РґРѕРє СЃР° Р·РЅР°РєР°РјС– _, СЏРєС–СЏ СЃСЊРІРµРґС‡Р°С†СЊ Р°Р± С‚С‹Рј, С€С‚Рѕ РЅР°СЃС‚СѓРїРЅС‹ Р·РЅР°Рє "
+"Р°РґР»СЋСЃС‚СЂРѕСћРІС‹РІР°РµРјР°РіР° С‚СЌРєСЃС‚Сѓ Р±СѓРґР·Рµ РїР°РґРєСЂСЌСЃСЊР»РµРЅС‹."
 
 #: gtk/gtklabel.c:326
 msgid "Line wrap"
-msgstr "Перанос радкоў"
+msgstr "РџРµСЂР°РЅРѕСЃ СЂР°РґРєРѕСћ"
 
 #: gtk/gtklabel.c:327
 msgid "If set, wrap lines if the text becomes too wide."
-msgstr ""
+msgstr "РљР°Р»С– СћСЃС‚Р°Р»СЏРІР°РЅР°, РїР°РґР·СЏР»СЏРµ РІРµР»СЊРјС– РґРѕСћРіС–СЏ СЂР°РґРєС– С‚СЌРєСЃС‚Сѓ РЅР° Р±РѕР»СЊС€ РєР°СЂРѕС‚РєС–СЏ."
 
 #: gtk/gtklabel.c:333
 msgid "Selectable"
-msgstr "Вызначаемы"
+msgstr "Р’С‹Р·РЅР°С‡Р°РµРјС‹"
 
 #: gtk/gtklabel.c:334
 msgid "Whether the label text can be selected with the mouse."
-msgstr ""
+msgstr "Р¦С– РјРѕР¶Р° С‚СЌРєСЃС‚ Р°РґРјРµС†С–РЅС‹ Р±С‹С†СЊ РІС‹Р·РЅР°С‡Р°РЅС‹Рј Р· РґР°РїР°РјРѕРіР°Р№ РјС‹С€С‹."
 
 #: gtk/gtklabel.c:340
 msgid "Mnemonic key"
-msgstr "Мнэманічны ключ"
+msgstr "\"Р“Р°СЂР°С‡Р°СЏ\" РєР»СЏРІС–С€Р°"
 
 #: gtk/gtklabel.c:341
 msgid "The mnemonic accelerator key for this label."
-msgstr ""
+msgstr "\"Р“Р°СЂР°С‡Р°СЏ\" РєР»СЏРІС–С€Р° РґР»СЏ РіСЌС‚Р°Рµ Р°РґРјРµС†С–РЅС‹."
 
 #: gtk/gtklabel.c:349
 msgid "Mnemonic widget"
-msgstr ""
+msgstr "\"Р“Р°СЂР°С‡С‹\" РІС–РґР¶СЌС‚"
 
 #: gtk/gtklabel.c:350
 msgid "The widget to be activated when the label's mnemonic key is pressed."
 msgstr ""
+"Р’С–РґР¶СЌС‚, СЏРєС– Р±СѓРґР·Рµ Р·Р°РґР·РµР№РЅС–С‡Р°РЅР°, РєР°Р»С– \"РіР°СЂР°С‡Р°СЏ\" РєР»СЏРІС–С€Р° "
+"Р°РґРјРµС†С–РЅС‹ Р±СѓРґР·Рµ РЅР°С†С–СЃРЅСѓС‚Р°."
 
 #: gtk/gtklayout.c:623 gtk/gtkviewport.c:132
 msgid "Horizontal adjustment"
-msgstr ""
+msgstr "Р“Р°СЂС‹Р·Р°РЅС‚Р°Р»СЊРЅР°Рµ РІС‹СЂРѕСћРЅС–РІР°РЅСЊРЅРµ"
 
 #: gtk/gtklayout.c:624 gtk/gtkscrolledwindow.c:233
 msgid "The GtkAdjustment for the horizontal position."
-msgstr ""
+msgstr "Р—РЅР°С‡СЌРЅСЊРЅРµ GtkAdjustment РґР»СЏ РіР°СЂС‹Р·Р°РЅС‚Р°Р»СЊРЅР°РіР° СЃС‚Р°РЅРѕРІС–С€С‡Р°."
 
 #: gtk/gtklayout.c:631 gtk/gtkviewport.c:140
 msgid "Vertical adjustment"
-msgstr ""
+msgstr "Р’СЌСЂС‚С‹РєР°Р»СЊРЅР°Рµ РІС‹СЂРѕСћРЅС–РІР°РЅСЊРЅРµ"
 
 #: gtk/gtklayout.c:632 gtk/gtkscrolledwindow.c:240
 msgid "The GtkAdjustment for the vertical position."
-msgstr ""
+msgstr "Р—РЅР°С‡СЌРЅСЊРЅРµ GtkAdjustment РґР»СЏ РІСЌСЂС‚С‹РєР°Р»СЊРЅР°РіР° СЃС‚Р°РЅРѕРІС–С€С‡Р°."
 
 #: gtk/gtklayout.c:639 gtk/gtktreeviewcolumn.c:192
 msgid "Width"
-msgstr "Шырыня"
+msgstr "РЁС‹СЂС‹РЅСЏ"
 
 #: gtk/gtklayout.c:640
 msgid "The width of the layout."
-msgstr "Шырыня разьмеркаваньня."
+msgstr "РЁС‹СЂС‹РЅСЏ СЂР°Р·СЊРјРµСЂРєР°РІР°РЅСЊРЅСЏ."
 
 #: gtk/gtklayout.c:648
 msgid "Height"
-msgstr "Вышыня"
+msgstr "Р’С‹С€С‹РЅСЏ"
 
 #: gtk/gtklayout.c:649
 msgid "The height of the layout."
-msgstr "Вышыня разьмеркаваньня."
+msgstr "Р’С‹С€С‹РЅСЏ СЂР°Р·СЊРјРµСЂРєР°РІР°РЅСЊРЅСЏ."
 
 #. Translate to default:RTL if you want your widgets
 #. * to be RTL, otherwise translate to default:LTR.
@@ -2338,155 +2372,159 @@ msgstr "Вышыня разьмеркаваньня."
 #.
 #: gtk/gtkmain.c:732
 msgid "default:LTR"
-msgstr ""
+msgstr "default:LTR"
 
 #: gtk/gtkmenu.c:194
 msgid "Tearoff Title"
-msgstr ""
+msgstr "Р—Р°РіР°Р»РѕРІР°Рє Р°РґРґР·РµР»РµРЅР°РіР° РјСЌРЅСЋ"
 
 #: gtk/gtkmenu.c:195
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off."
 msgstr ""
+"Р—Р°РіР°Р»РѕРІР°Рє, СЏРєС– РјРѕР¶Р° Р°РґР»СЋСЃС‚СЂРѕСћРІР°С†С†Р° Р°РєРѕРЅРЅС‹Рј РєС–СЂР°СћРЅС–РєРѕРј, "
+"РїР°СЃР»СЏ С‚Р°РіРѕ СЏРє РјСЌРЅСЋ Р±СѓРґР·Рµ Р°РґРґР·РµР»РµРЅР°."
 
 #: gtk/gtkmenu.c:264
 msgid "Can change accelerators"
-msgstr ""
+msgstr "РњРѕР¶Р° Р·СЊРјСЏРЅСЏС†СЊ \"РіР°СЂС‹С‡С‹СЏ\" РєР»СЏРІС–С€С‹"
 
 #: gtk/gtkmenu.c:265
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu "
 "item."
 msgstr ""
+"Р¦С– РјРѕРіСѓС†СЊ Р±С‹С†СЊ Р·СЊРјРµРЅРµРЅС‹ \"РіР°СЂР°С‡С‹СЏ\" РєР»СЏРІС–С€С‹ РјСЌРЅСЋ, РєР°Р»С– РЅР°С†С–СЃРЅСѓС†СЊ "
+"СЃРїР°Р»СѓС‡СЌРЅСЊРЅРµ РЅР° РїСѓРЅРєС‚Р°Рј РјСЌРЅСЋ."
 
 #: gtk/gtkmenubar.c:152
 msgid "Style of bevel around the menubar"
-msgstr ""
+msgstr "РЎС‚С‹Р»СЊ СЃРєРѕСЃСѓ РІР°РєРѕРј РїР°Р»РѕСЃРєС– РјСЌРЅСЋ"
 
 #: gtk/gtkmenubar.c:159 gtk/gtktoolbar.c:251
 msgid "Internal padding"
-msgstr ""
+msgstr "РЈРЅСѓС‚СЂР°РЅР°Рµ Р·Р°РїР°СћРЅРµРЅСЊРЅРµ"
 
 #: gtk/gtkmenubar.c:160
 msgid "Amount of border space between the menubar shadow and the menu items"
-msgstr ""
+msgstr "РџР°РјРµСЂ РїСЂР°СЃС‚РѕСЂС‹ РїР°РјС–Р¶ С†РµРЅСЏРј РїР°Р»РѕСЃРєС– РјСЌРЅСЋ С– СЌР»РµРјСЌРЅС‚Р°РјС– РјСЌРЅСЋ"
 
 #: gtk/gtkmessagedialog.c:104
 msgid "Image/label border"
-msgstr ""
+msgstr "РњСЏР¶Р° РјР°Р»СЋРЅРєР°/Р°РґРјРµС†С–РЅС‹"
 
 #: gtk/gtkmessagedialog.c:105
 msgid "Width of border around the label and image in the message dialog"
-msgstr ""
+msgstr "РЁС‹СЂС‹РЅСЏ РІРѕРґСЃС‚СѓРїСѓ РІР°РєРѕР» Р°РґРјРµС†С–РЅС‹ Р№ РјР°Р»СЋРЅРєСѓ Сћ РґС‹СЏР»С‘РіСѓ РїР°РІРµРґР°РјР»РµРЅСЊРЅСЏ"
 
 #: gtk/gtkmessagedialog.c:113
 msgid "Message Type"
-msgstr "Тып паведамленьня"
+msgstr "РўС‹Рї РїР°РІРµРґР°РјР»РµРЅСЊРЅСЏ"
 
 #: gtk/gtkmessagedialog.c:114
 msgid "The type of message"
-msgstr "Тып паведамленьня"
+msgstr "РўС‹Рї РїР°РІРµРґР°РјР»РµРЅСЊРЅСЏ"
 
 #: gtk/gtkmessagedialog.c:121
 msgid "Message Buttons"
-msgstr ""
+msgstr "РљРЅРѕРїРєС– РїР°РІРµРґР°РјР»РµРЅСЊРЅСЏ"
 
 #: gtk/gtkmessagedialog.c:122
 msgid "The buttons shown in the message dialog"
-msgstr ""
+msgstr "РљРЅРѕРїРєС–, СЏРєС–СЏ Р°РґР»СЋСЃС‚СЂРѕСћРІС‹РІР°СЋС†С†Р° Сћ РґС‹СЏР»С‘РіСѓ РїР°РІРµРґР°РјР»РµРЅСЊРЅСЏ"
 
 #: gtk/gtkmisc.c:97
 msgid "X align"
-msgstr ""
+msgstr "Р’С‹СЂРѕСћРЅС–РІР°РЅСЊРЅРµ РїР° X"
 
 #: gtk/gtkmisc.c:98
 msgid "The horizontal alignment, from 0 (left) to 1 (right)"
-msgstr ""
+msgstr "Р“Р°СЂС‹Р·Р°РЅС‚Р°Р»СЊРЅР°Рµ РІС‹СЂРѕСћРЅС–РІР°РЅСЊРЅРµ, Р°Рґ 0 (Р·СЊР»РµРІР°) РґР° 1 (Р·РїСЂР°РІР°)"
 
 #: gtk/gtkmisc.c:107
 msgid "Y align"
-msgstr ""
+msgstr "Р’С‹СЂРѕСћРЅС–РІР°РЅСЊРЅРµ РїР° Y"
 
 #: gtk/gtkmisc.c:108
 msgid "The vertical alignment, from 0 (top) to 1 (bottom)"
-msgstr ""
+msgstr "Р’СЌСЂС‚С‹РєР°Р»СЊРЅР°Рµ РІС‹СЂРѕСћРЅС–РІР°РЅСЊРЅРµ, Р°Рґ 0 (Р·СЊРІРµСЂС…Сѓ) РґР° 1 (Р·СЊРЅС–Р·Сѓ)"
 
 #: gtk/gtkmisc.c:117
 msgid "X pad"
-msgstr ""
+msgstr "Р—Р°РїР°СћРЅРµРЅСЊРЅРµ РїР° X"
 
 #: gtk/gtkmisc.c:118
 msgid "The amount of space to add on the left and right of the widget, in pixels"
-msgstr ""
+msgstr "РџР°РјРµСЂ РїСЂР°СЃС‚РѕСЂС‹ Р·СЊР»РµРІР° Р№ Р·РїСЂР°РІР° Р°Рґ РІС–РґР¶СЌС‚Сѓ Сћ РїС–РєСЃСЌР»СЏС…"
 
 #: gtk/gtkmisc.c:127
 msgid "Y pad"
-msgstr ""
+msgstr "Р—Р°РїР°СћРЅРµРЅСЊРЅРµ РїР° Y"
 
 #: gtk/gtkmisc.c:128
 msgid "The amount of space to add on the top and bottom of the widget, in pixels"
-msgstr ""
+msgstr "РџР°РјРµСЂ РїСЂР°СЃС‚РѕСЂС‹ Р·СЊРІРµСЂС…Сѓ Р№ Р·СЊРЅС–Р·Сѓ Р°Рґ РІС–РґР¶СЌС‚Сѓ Сћ РїС–РєСЃСЌР»СЏС…"
 
 #: gtk/gtknotebook.c:362
 msgid "Page"
-msgstr "Старонка"
+msgstr "РЎС‚Р°СЂРѕРЅРєР°"
 
 #: gtk/gtknotebook.c:363
 msgid "The index of the current page"
-msgstr ""
+msgstr "Р†РЅРґСЌРєСЃ Р±СЏРіСѓС‡Р°Рµ СЃС‚Р°СЂРѕРЅРєС–"
 
 #: gtk/gtknotebook.c:371
 msgid "Tab Position"
-msgstr ""
+msgstr "РЎС‚Р°РЅРѕРІС–С€С‡Р° Р»С‹С‡РєС–"
 
 #: gtk/gtknotebook.c:372
 msgid "Which side of the notebook holds the tabs"
-msgstr ""
+msgstr "РќР° СЏРєС–Рј Р±Р°РєСѓ РЅР°С‚Р°С‚РЅС–РєСѓ Р·СЊРјСЏС€С‡Р°СЋС†С†Р° Р»С‹С‡РєС–"
 
 #: gtk/gtknotebook.c:379
 msgid "Tab Border"
-msgstr ""
+msgstr "РњСЏР¶С‹ Р»С‹С‡РєС–"
 
 #: gtk/gtknotebook.c:380
 msgid "Width of the border around the tab labels"
-msgstr ""
+msgstr "РЁС‹СЂС‹РЅСЏ РјСЏР¶С‹ РІР°РєРѕР» Р°РґРјРµС†С–РЅ Р»С‹С‡РєС–"
 
 #: gtk/gtknotebook.c:388
 msgid "Horizontal Tab Border"
-msgstr ""
+msgstr "Р“Р°СЂС‹Р·Р°РЅС‚Р°Р»СЊРЅР°СЏ РјСЏР¶Р° Р»С‹С‡РєС–"
 
 #: gtk/gtknotebook.c:389
 msgid "Width of the horizontal border of tab labels"
-msgstr ""
+msgstr "РЁС‹СЂС‹РЅСЏ РіР°СЂС‹Р·Р°РЅС‚Р°Р»СЊРЅР°Рµ РјСЏР¶С‹ Р°РґРјРµС†С–РЅ Р»С‹С‡РєС–"
 
 #: gtk/gtknotebook.c:397
 msgid "Vertical Tab Border"
-msgstr ""
+msgstr "Р’СЌСЂС‚С‹РєР°Р»СЊРЅР°СЏ РјСЏР¶Р° Р»С‹С‡РєС–"
 
 #: gtk/gtknotebook.c:398
 msgid "Width of the vertical border of tab labels"
-msgstr ""
+msgstr "РЁС‹СЂС‹РЅСЏ РІСЌСЂС‚С‹РєР°Р»СЊРЅР°Рµ РјСЏР¶С‹ Р°РґРјРµС†С–РЅ Р»С‹С‡РєС–"
 
 #: gtk/gtknotebook.c:406
 msgid "Show Tabs"
-msgstr ""
+msgstr "РџР°РєР°Р·Р°С†СЊ Р»С‹С‡РєС–"
 
 #: gtk/gtknotebook.c:407
 msgid "Whether tabs should be shown or not"
-msgstr ""
+msgstr "Р¦С– РїР°РІС–РЅРЅС‹ Р°РґР»СЋСЃС‚СЂРѕСћРІР°С†С†Р° Р»С‹С‡РєС–"
 
 #: gtk/gtknotebook.c:413
 msgid "Show Border"
-msgstr "Адлюстроўваць мяжу"
+msgstr "РђРґР»СЋСЃС‚СЂРѕСћРІР°С†СЊ РјСЏР¶Сѓ"
 
 #: gtk/gtknotebook.c:414
 msgid "Whether the border should be shown or not"
-msgstr ""
+msgstr "Р¦С– РїР°РІС–РЅРЅР° Р°РґР»СЋСЃС‚СЂРѕСћРІР°С†С†Р° РјСЏР¶Р°"
 
 #: gtk/gtknotebook.c:420
 msgid "Scrollable"
-msgstr ""
+msgstr "РџСЂР°РєСЂСѓС‡РІР°РµРјР°Рµ"
 
 #: gtk/gtknotebook.c:421
 msgid "If TRUE, scroll arrows are added if there are to many tabs to fit"
@@ -2509,27 +2547,27 @@ msgstr ""
 #: gtk/gtknotebook.c:2450 gtk/gtknotebook.c:4706
 #, c-format
 msgid "Page %u"
-msgstr "Старонка %u"
+msgstr "РЎС‚Р°СЂРѕРЅРєР° %u"
 
 #: gtk/gtkoptionmenu.c:188
 msgid "Menu"
-msgstr "Мэню"
+msgstr "РњСЌРЅСЋ"
 
 #: gtk/gtkoptionmenu.c:189
 msgid "The menu of options"
-msgstr "Мэню выбараў"
+msgstr "РњСЌРЅСЋ РІС‹Р±Р°СЂР°Сћ"
 
 #: gtk/gtkoptionmenu.c:196
 msgid "Size of dropdown indicator"
-msgstr ""
+msgstr "РџР°РјРµСЂ РІС‹РїР°РґР°СЋС‡Р°РіР° РїР°РєР°Р·Р°Р»СЊРЅС–РєСѓ"
 
 #: gtk/gtkoptionmenu.c:202
 msgid "Spacing around indicator"
-msgstr ""
+msgstr "РџСЂР°СЃС‚РѕСЂР° РІР°РєРѕР» РїР°РєР°Р·Р°Р»СЊРЅС–РєСѓ"
 
 #: gtk/gtkpaned.c:208 gtk/gtkruler.c:138
 msgid "Position"
-msgstr "Пазіцыя"
+msgstr "РЎС‚Р°РЅРѕРІС–С€С‡Р°"
 
 #: gtk/gtkpaned.c:209
 msgid "Position of paned separator in pixels (0 means all the way to the left/top)"
@@ -2553,7 +2591,7 @@ msgstr ""
 
 #: gtk/gtkpreview.c:129
 msgid "Expand"
-msgstr ""
+msgstr "РџР°С€С‹СЂР°С†СЊ"
 
 #: gtk/gtkpreview.c:130
 msgid "Whether the preview widget should take up the entire space it is allocated"
@@ -2573,7 +2611,7 @@ msgstr ""
 
 #: gtk/gtkprogress.c:130
 msgid "Show text"
-msgstr "Адлюстроўваць тэкст"
+msgstr "РђРґР»СЋСЃС‚СЂРѕСћРІР°С†СЊ С‚СЌРєСЃС‚"
 
 #: gtk/gtkprogress.c:131
 msgid "Whether the progress is shown as text"
@@ -2581,7 +2619,7 @@ msgstr ""
 
 #: gtk/gtkprogress.c:138
 msgid "Text x alignment"
-msgstr "Выроўніваньне тэксту па X"
+msgstr "Р’С‹СЂРѕСћРЅС–РІР°РЅСЊРЅРµ С‚СЌРєСЃС‚Сѓ РїР° X"
 
 #: gtk/gtkprogress.c:139
 msgid ""
@@ -2591,7 +2629,7 @@ msgstr ""
 
 #: gtk/gtkprogress.c:147
 msgid "Text y alignment"
-msgstr "Выроўніваньне тэксту па Y"
+msgstr "Р’С‹СЂРѕСћРЅС–РІР°РЅСЊРЅРµ С‚СЌРєСЃС‚Сѓ РїР° Y"
 
 #: gtk/gtkprogress.c:148
 msgid ""
@@ -2747,7 +2785,7 @@ msgstr ""
 #: gtk/gtkrc.c:2924 gtk/gtkrc.c:2927
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Немагчыма знайсьці файл з малюнкам у pixmap_path: \"%s\""
+msgstr "РќРµРјР°РіС‡С‹РјР° Р·РЅР°Р№СЃСЊС†С– С„Р°Р№Р» Р· РјР°Р»СЋРЅРєР°Рј Сѓ pixmap_path: \"%s\""
 
 #: gtk/gtkrc.c:3362
 #, c-format
@@ -2756,7 +2794,7 @@ msgstr ""
 
 #: gtk/gtkruler.c:118
 msgid "Lower"
-msgstr "Ніжэй"
+msgstr "РќС–Р¶СЌР№"
 
 #: gtk/gtkruler.c:119
 msgid "Lower limit of ruler"
@@ -2776,7 +2814,7 @@ msgstr ""
 
 #: gtk/gtkruler.c:148
 msgid "Max Size"
-msgstr "Максімальны памер"
+msgstr "РќР°Р№Р±РѕР»СЊС€С‹ РїР°РјРµСЂ"
 
 #: gtk/gtkruler.c:149
 msgid "Maximum size of the ruler"
@@ -2784,7 +2822,7 @@ msgstr ""
 
 #: gtk/gtkscale.c:155 gtk/gtkspinbutton.c:255
 msgid "Digits"
-msgstr "Разрады"
+msgstr "Р Р°Р·СЂР°РґС‹"
 
 #: gtk/gtkscale.c:156
 msgid "The number of decimal places that are displayed in the value"
@@ -2872,11 +2910,11 @@ msgstr ""
 
 #: gtk/gtkscrolledwindow.c:232 gtk/gtktext.c:598 gtk/gtktreeview.c:523
 msgid "Horizontal Adjustment"
-msgstr "Гарызантальная настройка"
+msgstr "Р“Р°СЂС‹Р·Р°РЅС‚Р°Р»СЊРЅР°СЏ РЅР°СЃС‚СЂРѕР№РєР°"
 
 #: gtk/gtkscrolledwindow.c:239 gtk/gtktext.c:606 gtk/gtktreeview.c:531
 msgid "Vertical Adjustment"
-msgstr "Вертыкальнае настройка"
+msgstr "Р’РµСЂС‚С‹РєР°Р»СЊРЅР°Рµ РЅР°СЃС‚СЂРѕР№РєР°"
 
 #: gtk/gtkscrolledwindow.c:246
 msgid "Horizontal Scrollbar Policy"
@@ -2896,7 +2934,7 @@ msgstr ""
 
 #: gtk/gtkscrolledwindow.c:263
 msgid "Window Placement"
-msgstr "Разьмяшчэньне акна"
+msgstr "Р Р°Р·СЊРјСЏС€С‡СЌРЅСЊРЅРµ Р°РєРЅР°"
 
 #: gtk/gtkscrolledwindow.c:264
 msgid "Where the contents are located with respect to the scrollbars"
@@ -2904,7 +2942,7 @@ msgstr ""
 
 #: gtk/gtkscrolledwindow.c:271
 msgid "Shadow Type"
-msgstr "Тып ценю"
+msgstr "РўС‹Рї С†РµРЅСЋ"
 
 #: gtk/gtkscrolledwindow.c:272
 msgid "Style of bevel around the contents"
@@ -2922,7 +2960,7 @@ msgstr ""
 
 #: gtk/gtksettings.c:156
 msgid "Cursor Blink"
-msgstr "Міргаючы "
+msgstr "РњС–СЂРіР°СЋС‡С‹ "
 
 #: gtk/gtksettings.c:157
 msgid "Whether the cursor should blink"
@@ -2948,7 +2986,7 @@ msgstr ""
 
 #: gtk/gtksettings.c:180
 msgid "Theme Name"
-msgstr "Назва тэмы"
+msgstr "РќР°Р·РІР° С‚СЌРјС‹"
 
 #: gtk/gtksettings.c:181
 msgid "Name of theme RC file to load"
@@ -2980,15 +3018,15 @@ msgstr ""
 
 #: gtk/gtksettings.c:215
 msgid "Font Name"
-msgstr "Назва шрыфту"
+msgstr "РќР°Р·РІР° С€СЂС‹С„С‚Сѓ"
 
 #: gtk/gtksettings.c:216
 msgid "Name of default font to use"
-msgstr "Назва звычайнага шрыфту"
+msgstr "РќР°Р·РІР° Р·РІС‹С‡Р°Р№РЅР°РіР° С€СЂС‹С„С‚Сѓ"
 
 #: gtk/gtksizegroup.c:242
 msgid "Mode"
-msgstr "Рэжым"
+msgstr "Р СЌР¶С‹Рј"
 
 #: gtk/gtksizegroup.c:243
 msgid ""
@@ -3024,11 +3062,11 @@ msgstr ""
 
 #: gtk/gtkspinbutton.c:273
 msgid "Numeric"
-msgstr "Лікавы"
+msgstr "Р›С–РєР°РІС‹"
 
 #: gtk/gtkspinbutton.c:274
 msgid "Whether non-numeric characters should be ignored"
-msgstr "Ці незьвяртаць увагу на нелічбавыя сімвалы "
+msgstr "Р¦С– РЅРµР·СЊРІСЏСЂС‚Р°С†СЊ СѓРІР°РіСѓ РЅР° РЅРµР»С–С‡Р±Р°РІС‹СЏ СЃС‹РјР±Р°Р»С–"
 
 #: gtk/gtkspinbutton.c:281
 msgid "Wrap"
@@ -3048,11 +3086,11 @@ msgstr ""
 
 #: gtk/gtkspinbutton.c:298
 msgid "Value"
-msgstr "Значэньне"
+msgstr "Р—РЅР°С‡СЌРЅСЊРЅРµ"
 
 #: gtk/gtkspinbutton.c:299
 msgid "Reads the current value, or sets a new value"
-msgstr "Чытае бягучае значэньне, ці ўсталёўвае новае"
+msgstr "Р§С‹С‚Р°Рµ Р±СЏРіСѓС‡Р°Рµ Р·РЅР°С‡СЌРЅСЊРЅРµ, С†С– СћСЃС‚Р°Р»С‘СћРІР°Рµ РЅРѕРІР°Рµ"
 
 #: gtk/gtkstatusbar.c:159
 msgid "Style of bevel around the statusbar text"
@@ -3061,352 +3099,352 @@ msgstr ""
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: gtk/gtkstock.c:267
 msgid "Information"
-msgstr "Зьвесткі"
+msgstr "Р—СЊРІРµСЃС‚РєС–"
 
 #: gtk/gtkstock.c:268
 msgid "Warning"
-msgstr "Увага"
+msgstr "РЈРІР°РіР°"
 
 #: gtk/gtkstock.c:269
 msgid "Error"
-msgstr "Памылка"
+msgstr "РџР°РјС‹Р»РєР°"
 
 #: gtk/gtkstock.c:270
 msgid "Question"
-msgstr "Пытаньне"
+msgstr "РџС‹С‚Р°РЅСЊРЅРµ"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
 #: gtk/gtkstock.c:275
 msgid "_Add"
-msgstr "_Дадаць"
+msgstr "Р”Р°РґР°С†СЊ"
 
 #: gtk/gtkstock.c:276
 msgid "_Apply"
-msgstr "У_жыць"
+msgstr "РЈР¶С‹С†СЊ"
 
 #: gtk/gtkstock.c:277
 msgid "_Bold"
-msgstr "_Тлусты"
+msgstr "РўР»СѓСЃС‚С‹"
 
 #: gtk/gtkstock.c:278
 msgid "_Cancel"
-msgstr "_Адмена"
+msgstr "РђРґРјРµРЅР°"
 
 #: gtk/gtkstock.c:279
 msgid "_CD-Rom"
-msgstr "_CD-ROM"
+msgstr "CD-ROM"
 
 #: gtk/gtkstock.c:280
 msgid "_Clear"
-msgstr "А_чысьціць"
+msgstr "РђС‡С‹СЃСЊС†С–С†СЊ"
 
 #: gtk/gtkstock.c:281
 msgid "_Close"
-msgstr "_Зачыніць"
+msgstr "Р—Р°С‡С‹РЅС–С†СЊ"
 
 #: gtk/gtkstock.c:282
 msgid "_Convert"
-msgstr "_Пераўтварыць"
+msgstr "РџРµСЂР°СћС‚РІР°СЂС‹С†СЊ"
 
 #: gtk/gtkstock.c:283
 msgid "_Copy"
-msgstr "_Капіяваць"
+msgstr "РљР°РїС–СЏРІР°С†СЊ"
 
 #: gtk/gtkstock.c:284
 msgid "Cu_t"
-msgstr "В_ыразаць"
+msgstr "Р’С‹СЂР°Р·Р°С†СЊ"
 
 #: gtk/gtkstock.c:285
 msgid "_Delete"
-msgstr "Зьні_шчыць"
+msgstr "Р—СЊРЅС–С€С‡С‹С†СЊ"
 
 #: gtk/gtkstock.c:286
 msgid "_Execute"
-msgstr "_Выканаць"
+msgstr "Р’С‹РєР°РЅР°С†СЊ"
 
 #: gtk/gtkstock.c:287
 msgid "_Find"
-msgstr "_Шукаць"
+msgstr "РђРґС€СѓРєР°С†СЊ"
 
 #: gtk/gtkstock.c:288
 msgid "Find and _Replace"
-msgstr "Шукаць і за_мяняць"
+msgstr "РђРґС€СѓРєР°С†СЊ С– Р·Р°РјСЏРЅСЏС†СЊ"
 
 #: gtk/gtkstock.c:289
 msgid "_Floppy"
-msgstr "_Дыскэта"
+msgstr "Р”С‹СЃРєСЌС‚Р°"
 
 #: gtk/gtkstock.c:290
 msgid "_Bottom"
-msgstr "На н_із"
+msgstr "РќР°РЅС–Р·"
 
 #: gtk/gtkstock.c:291
 msgid "_First"
-msgstr "У па_чатак"
+msgstr "РќР°РїР°С‡Р°С‚Р°Рє"
 
 #: gtk/gtkstock.c:292
 msgid "_Last"
-msgstr "У _канец"
+msgstr "РЈРєР°РЅРµС†"
 
 #: gtk/gtkstock.c:293
 msgid "_Top"
-msgstr "На _верх"
+msgstr "РЈРіРѕСЂСѓ"
 
 #: gtk/gtkstock.c:294
 msgid "_Back"
-msgstr "На_зад"
+msgstr "РќР°Р·Р°Рґ"
 
 #: gtk/gtkstock.c:295
 msgid "_Down"
-msgstr "Ун_із"
+msgstr "РЈРЅС–Р·"
 
 #: gtk/gtkstock.c:296
 msgid "_Forward"
-msgstr "Напе_рад"
+msgstr "РќР°РїРµСЂР°Рґ"
 
 #: gtk/gtkstock.c:297
 msgid "_Up"
-msgstr "У_верх"
+msgstr "РЈРіРѕСЂСѓ"
 
 #: gtk/gtkstock.c:298
 msgid "_Help"
-msgstr "_Дапамога"
+msgstr "Р”Р°РїР°РјРѕРіР°"
 
 #: gtk/gtkstock.c:299
 msgid "_Home"
-msgstr "_Хата"
+msgstr "РҐР°С‚Р°"
 
 #: gtk/gtkstock.c:300
 msgid "_Index"
-msgstr "_Індэкс"
+msgstr "Р†РЅРґСЌРєСЃ"
 
 #: gtk/gtkstock.c:301
 msgid "_Italic"
-msgstr "На_хілены"
+msgstr "РќР°С…С–Р»РµРЅС‹"
 
 #: gtk/gtkstock.c:302
 msgid "_Jump to"
-msgstr "Ска_чок да"
+msgstr "РЎРєР°С‡РѕРє РґР°"
 
 #: gtk/gtkstock.c:303
 msgid "_Center"
-msgstr "_Цэнтр"
+msgstr "РЎСЏСЂСЌРґР·С–РЅР°"
 
 #: gtk/gtkstock.c:304
 msgid "_Fill"
-msgstr "Запоўніць"
+msgstr "Р—Р°РїРѕСћРЅС–С†СЊ"
 
 #: gtk/gtkstock.c:305
 msgid "_Left"
-msgstr "Налева"
+msgstr "РќР°Р»РµРІР°"
 
 #: gtk/gtkstock.c:306
 msgid "_Right"
-msgstr "Направа"
+msgstr "РќР°РїСЂР°РІР°"
 
 #: gtk/gtkstock.c:307
 msgid "_New"
-msgstr "_Ст_варыць"
+msgstr "РЎС‚РІР°СЂС‹С†СЊ"
 
 #: gtk/gtkstock.c:308
 msgid "_No"
-msgstr "_Не"
+msgstr "РќРµ"
 
 #: gtk/gtkstock.c:309
 msgid "_OK"
-msgstr "_Добра"
+msgstr "Р”РѕР±СЂР°"
 
 #: gtk/gtkstock.c:310
 msgid "_Open"
-msgstr "_Адчыніць"
+msgstr "РђРґС‡С‹РЅС–С†СЊ"
 
 #: gtk/gtkstock.c:311
 msgid "_Paste"
-msgstr "Ус_тавіць"
+msgstr "РЈСЃС‚Р°РІС–С†СЊ"
 
 #: gtk/gtkstock.c:312
 msgid "_Preferences"
-msgstr "_Перавагі"
+msgstr "РџРµСЂР°РІР°РіС–"
 
 #: gtk/gtkstock.c:313
 msgid "_Print"
-msgstr "_Друк"
+msgstr "Р”СЂСѓРє"
 
 #: gtk/gtkstock.c:314
 msgid "Print Pre_view"
-msgstr "П_рыклад друку"
+msgstr "РџСЂС‹РєР»Р°Рґ РґСЂСѓРєСѓ"
 
 #: gtk/gtkstock.c:315
 msgid "_Properties"
-msgstr "_Перавагі"
+msgstr "РџРµСЂР°РІР°РіС–"
 
 #: gtk/gtkstock.c:316
 msgid "_Quit"
-msgstr "_Выхад"
+msgstr "Р’С‹_Р№СЃСЊС†С–"
 
 #: gtk/gtkstock.c:317
 msgid "_Redo"
-msgstr "_Перарабіць"
+msgstr "РџРµСЂР°СЂР°Р±С–С†СЊ"
 
 #: gtk/gtkstock.c:318
 msgid "_Refresh"
-msgstr "_Аднавіць"
+msgstr "РђРґРЅР°РІС–С†СЊ"
 
 #: gtk/gtkstock.c:319
 msgid "_Remove"
-msgstr "_Прыбраць"
+msgstr "РџСЂС‹Р±СЂР°С†СЊ"
 
 #: gtk/gtkstock.c:320
 msgid "_Revert"
-msgstr "_Адкат"
+msgstr "РђРґРєР°С‚"
 
 #: gtk/gtkstock.c:321
 msgid "_Save"
-msgstr "_Запісаць"
+msgstr "Р—Р°РїС–СЃР°С†СЊ"
 
 #: gtk/gtkstock.c:322
 msgid "Save _As"
-msgstr "Запісаць _як"
+msgstr "Р—Р°РїС–СЃР°С†СЊ СЏРє"
 
 #: gtk/gtkstock.c:323
 msgid "_Color"
-msgstr "_Колер"
+msgstr "РљРѕР»РµСЂ"
 
 #: gtk/gtkstock.c:324
 msgid "_Font"
-msgstr "_Шрыфт"
+msgstr "РЁСЂС‹С„С‚"
 
 #: gtk/gtkstock.c:325
 msgid "_Ascending"
-msgstr "Па ў_зрастаньню"
+msgstr "Рђ-РЇ"
 
 #: gtk/gtkstock.c:326
 msgid "_Descending"
-msgstr "Па ўбы_ваньню"
+msgstr "РЇ-Рђ"
 
 #: gtk/gtkstock.c:327
 msgid "_Spell Check"
-msgstr "Праверка правапісу"
+msgstr "РџСЂР°РІРµСЂРєР° РїСЂР°РІР°РїС–СЃСѓ"
 
 #: gtk/gtkstock.c:328
 msgid "_Stop"
-msgstr "_Спыніць"
+msgstr "РЎРїС‹РЅС–С†СЊ"
 
 #: gtk/gtkstock.c:329
 msgid "_Strikethrough"
-msgstr "Перакр_эсьліваньне"
+msgstr "РџРµСЂР°РєСЂСЌСЃСЊР»РµРЅСЊРЅРµ"
 
 #: gtk/gtkstock.c:330
 msgid "_Undelete"
-msgstr "А_днавіць зьнішчанае"
+msgstr "РђРґРЅР°РІС–С†СЊ Р·СЊРЅС–С€С‡Р°РЅР°Рµ"
 
 #: gtk/gtkstock.c:331
 msgid "_Underline"
-msgstr "Пад_крэсьліваньне"
+msgstr "РџР°РґРєСЂСЌСЃСЊР»С–РІР°РЅСЊРЅРµ"
 
 #: gtk/gtkstock.c:332
 msgid "_Undo"
-msgstr "_Адмена"
+msgstr "РђРґРјРµРЅР°"
 
 #: gtk/gtkstock.c:333
 msgid "_Yes"
-msgstr "_Так"
+msgstr "РўР°Рє"
 
 #: gtk/gtkstock.c:334
 msgid "Zoom _100%"
-msgstr "Маштаб _1:1"
+msgstr "РњР°С€С‚Р°Р± 1:1"
 
 #: gtk/gtkstock.c:335
 msgid "Zoom to _Fit"
-msgstr "Машатб най_лепшы"
+msgstr "РњР°С€Р°С‚Р± РЅР°Р№Р»РµРїС€С‹"
 
 #: gtk/gtkstock.c:336
 msgid "Zoom _In"
-msgstr "Маштаб _+"
+msgstr "РњР°С€С‚Р°Р± +"
 
 #: gtk/gtkstock.c:337
 msgid "Zoom _Out"
-msgstr "Маштаб _-"
+msgstr "РњР°С€С‚Р°Р± -"
 
 #: gtk/gtktable.c:156
 msgid "Rows"
-msgstr "Радкі"
+msgstr "Р Р°РґРєС–"
 
 #: gtk/gtktable.c:157
 msgid "The number of rows in the table"
-msgstr "Колькасьць радкоў у табліцы"
+msgstr "РљРѕР»СЊРєР°СЃСЊС†СЊ СЂР°РґРєРѕСћ Сѓ С‚Р°Р±Р»С–С†С‹"
 
 #: gtk/gtktable.c:165
 msgid "Columns"
-msgstr "Стаўбцы\t"
+msgstr "РЎС‚Р°СћР±С†С‹\t"
 
 #: gtk/gtktable.c:166
 msgid "The number of columns in the table"
-msgstr "Колькасьць стаўбцоў у табліцы"
+msgstr "РљРѕР»СЊРєР°СЃСЊС†СЊ СЃС‚Р°СћР±С†РѕСћ Сѓ С‚Р°Р±Р»С–С†С‹"
 
 #: gtk/gtktable.c:174
 msgid "Row spacing"
-msgstr "Водступ між радкоў"
+msgstr "Р’РѕРґСЃС‚СѓРї РјС–Р¶ СЂР°РґРєРѕСћ"
 
 #: gtk/gtktable.c:175
 msgid "The amount of space between two consecutive rows"
-msgstr "Колькасьць месца паміж двума суседнімі радкамі"
+msgstr "РљРѕР»СЊРєР°СЃСЊС†СЊ РјРµСЃС†Р° РїР°РјС–Р¶ РґРІСѓРјР° СЃСѓСЃРµРґРЅС–РјС– СЂР°РґРєР°РјС–"
 
 #: gtk/gtktable.c:183
 msgid "Column spacing"
-msgstr "Водступ між стаўбцоў"
+msgstr "Р’РѕРґСЃС‚СѓРї РјС–Р¶ СЃС‚Р°СћР±С†РѕСћ"
 
 #: gtk/gtktable.c:184
 msgid "The amount of space between two consecutive columns"
-msgstr "Колькасьць месца паміж двума суседнімі стаўбцамі"
+msgstr "РљРѕР»СЊРєР°СЃСЊС†СЊ РјРµСЃС†Р° РїР°РјС–Р¶ РґРІСѓРјР° СЃСѓСЃРµРґРЅС–РјС– СЃС‚Р°СћР±С†Р°РјС–"
 
 #: gtk/gtktable.c:192
 msgid "Homogenous"
-msgstr "Аднародныя"
+msgstr "РђРґРЅР°СЂРѕРґРЅС‹СЏ"
 
 #: gtk/gtktable.c:193
 msgid "If TRUE this means the table cells are all the same width/height"
 msgstr ""
-"Калі TRUE (ісьціна) - гэта азначае, што ячэйкі табліцы будуць мець "
-"аднолькавую шырыню/вышыню"
+"РљР°Р»С– TRUE (С–СЃСЊС†С–РЅР°) - РіСЌС‚Р° Р°Р·РЅР°С‡Р°Рµ, С€С‚Рѕ СЏС‡СЌР№РєС– С‚Р°Р±Р»С–С†С‹ Р±СѓРґСѓС†СЊ РјРµС†СЊ "
+"Р°РґРЅРѕР»СЊРєР°РІСѓСЋ С€С‹СЂС‹РЅСЋ/РІС‹С€С‹РЅСЋ"
 
 #: gtk/gtktext.c:599
 msgid "Horizontal adjustment for the text widget"
-msgstr "Гарызантальны водступ для тэкставага віджэта"
+msgstr "Р“Р°СЂС‹Р·Р°РЅС‚Р°Р»СЊРЅС‹ РІРѕРґСЃС‚СѓРї РґР»СЏ С‚СЌРєСЃС‚Р°РІР°РіР° РІС–РґР¶СЌС‚Р°"
 
 #: gtk/gtktext.c:607
 msgid "Vertical adjustment for the text widget"
-msgstr "Вертыкальны водступ для тэкставага віджэта"
+msgstr "Р’РµСЂС‚С‹РєР°Р»СЊРЅС‹ РІРѕРґСЃС‚СѓРї РґР»СЏ С‚СЌРєСЃС‚Р°РІР°РіР° РІС–РґР¶СЌС‚Р°"
 
 #: gtk/gtktext.c:614
 msgid "Line Wrap"
-msgstr "Перанос радкоў"
+msgstr "РџРµСЂР°РЅРѕСЃ СЂР°РґРєРѕСћ"
 
 #: gtk/gtktext.c:615
 msgid "Whether lines are wrapped at widget edges"
-msgstr "Ці будуць пераносіцца радкі на мяжы віджэта"
+msgstr "Р¦С– Р±СѓРґСѓС†СЊ РїРµСЂР°РЅРѕСЃС–С†С†Р° СЂР°РґРєС– РЅР° РјСЏР¶С‹ РІС–РґР¶СЌС‚Р°"
 
 #: gtk/gtktext.c:622
 msgid "Word Wrap"
-msgstr "Перанос слоў"
+msgstr "РџРµСЂР°РЅРѕСЃ СЃР»РѕСћ"
 
 #: gtk/gtktext.c:623
 msgid "Whether words are wrapped at widget edges"
-msgstr "Ці будуць пераносіцца словы на мяжы віджэта"
+msgstr "Р¦С– Р±СѓРґСѓС†СЊ РїРµСЂР°РЅРѕСЃС–С†С†Р° СЃР»РѕРІС‹ РЅР° РјСЏР¶С‹ РІС–РґР¶СЌС‚Р°"
 
 #: gtk/gtktexttag.c:199
 msgid "Tag name"
-msgstr "Назоў ярлыку"
+msgstr "РќР°Р·РѕСћ СЏСЂР»С‹РєСѓ"
 
 #: gtk/gtktexttag.c:200
 msgid "Name used to refer to the text tag"
-msgstr "Назоў выкарыстоўвываецца для спасылкі на тэкставую лычку"
+msgstr "РќР°Р·РѕСћ РІС‹РєР°СЂС‹СЃС‚РѕСћРІС‹РІР°РµС†С†Р° РґР»СЏ СЃРїР°СЃС‹Р»РєС– РЅР° С‚СЌРєСЃС‚Р°РІСѓСЋ Р»С‹С‡РєСѓ"
 
 #: gtk/gtktexttag.c:225
 msgid "Background full height"
-msgstr "Поўная вышыня фону"
+msgstr "РџРѕСћРЅР°СЏ РІС‹С€С‹РЅСЏ С„РѕРЅСѓ"
 
 #: gtk/gtktexttag.c:226
 msgid ""
@@ -3432,51 +3470,51 @@ msgstr ""
 
 #: gtk/gtktexttag.c:268
 msgid "Text direction"
-msgstr "Накірунак тэксту"
+msgstr "РќР°РєС–СЂСѓРЅР°Рє С‚СЌРєСЃС‚Сѓ"
 
 #: gtk/gtktexttag.c:269
 msgid "Text direction, e.g. right-to-left or left-to-right"
-msgstr "Накірунак (зьлева направа ці зправа налева)"
+msgstr "РќР°РєС–СЂСѓРЅР°Рє (Р·СЊР»РµРІР° РЅР°РїСЂР°РІР° С†С– Р·РїСЂР°РІР° РЅР°Р»РµРІР°)"
 
 #: gtk/gtktexttag.c:379 gtk/gtktextview.c:586
 msgid "Left, right, or center justification"
-msgstr "Выроўніваньне, па-леваму, па-праваму боку ці па цэнтру"
+msgstr "Р’С‹СЂРѕСћРЅС–РІР°РЅСЊРЅРµ, РїР°-Р»РµРІР°РјСѓ, РїР°-РїСЂР°РІР°РјСѓ Р±РѕРєСѓ С†С– РїР° С†СЌРЅС‚СЂСѓ"
 
 #: gtk/gtktexttag.c:387
 msgid "Language"
-msgstr "Мова"
+msgstr "РњРѕРІР°"
 
 #: gtk/gtktexttag.c:388
 msgid "Language engine code to use for rendering the text"
-msgstr "Код мовы, выкарыстоўвываемы для адлюстраваньня гэтага тэксту"
+msgstr "РљРѕРґ РјРѕРІС‹, РІС‹РєР°СЂС‹СЃС‚РѕСћРІС‹РІР°РµРјС‹ РґР»СЏ Р°РґР»СЋСЃС‚СЂР°РІР°РЅСЊРЅСЏ РіСЌС‚Р°РіР° С‚СЌРєСЃС‚Сѓ"
 
 #: gtk/gtktexttag.c:395
 msgid "Left margin"
-msgstr "Левы водступ"
+msgstr "Р›РµРІС‹ РІРѕРґСЃС‚СѓРї"
 
 #: gtk/gtktexttag.c:396 gtk/gtktextview.c:595
 msgid "Width of the left margin in pixels"
-msgstr "Шырыня левага водступу ў піксэлях"
+msgstr "РЁС‹СЂС‹РЅСЏ Р»РµРІР°РіР° РІРѕРґСЃС‚СѓРїСѓ Сћ РїС–РєСЃСЌР»СЏС…"
 
 #: gtk/gtktexttag.c:405
 msgid "Right margin"
-msgstr "Правы водступ"
+msgstr "РџСЂР°РІС‹ РІРѕРґСЃС‚СѓРї"
 
 #: gtk/gtktexttag.c:406 gtk/gtktextview.c:605
 msgid "Width of the right margin in pixels"
-msgstr "Шырыня правага водступу ў піксэлях"
+msgstr "РЁС‹СЂС‹РЅСЏ РїСЂР°РІР°РіР° РІРѕРґСЃС‚СѓРїСѓ Сћ РїС–РєСЃСЌР»СЏС…"
 
 #: gtk/gtktexttag.c:416 gtk/gtktextview.c:614
 msgid "Indent"
-msgstr "Абзац"
+msgstr "РђР±Р·Р°С†"
 
 #: gtk/gtktexttag.c:417 gtk/gtktextview.c:615
 msgid "Amount to indent the paragraph, in pixels"
-msgstr "Значэньне водступу абзаца, у піксэлях"
+msgstr "Р—РЅР°С‡СЌРЅСЊРЅРµ РІРѕРґСЃС‚СѓРїСѓ Р°Р±Р·Р°С†Р°, Сѓ РїС–РєСЃСЌР»СЏС…"
 
 #: gtk/gtktexttag.c:437
 msgid "Pixels above lines"
-msgstr "Піксэлей над радкамі"
+msgstr "РџС–РєСЃСЌР»РµР№ РЅР°Рґ СЂР°РґРєР°РјС–"
 
 #: gtk/gtktexttag.c:438 gtk/gtktextview.c:539
 msgid "Pixels of blank space above paragraphs"
@@ -3484,7 +3522,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:447
 msgid "Pixels below lines"
-msgstr "Піксэлей пад радкамі"
+msgstr "РџС–РєСЃСЌР»РµР№ РїР°Рґ СЂР°РґРєР°РјС–"
 
 #: gtk/gtktexttag.c:448 gtk/gtktextview.c:549
 msgid "Pixels of blank space below paragraphs"
@@ -3500,103 +3538,103 @@ msgstr ""
 
 #: gtk/gtktexttag.c:484
 msgid "Wrap mode"
-msgstr "Рэжым пераносу"
+msgstr "Р СЌР¶С‹Рј Р·Р°РіРѕСЂС‚РІР°РЅСЊРЅСЏ"
 
 #: gtk/gtktexttag.c:485 gtk/gtktextview.c:577
 msgid "Whether to wrap lines never, at word boundaries, or at character boundaries"
-msgstr ""
+msgstr "Р¦С– РЅС–РєРѕР»С– РЅРµ Р·Р°РіРѕСЂС‚РІР°С†СЊ СЂР°РґРєС–, Р·Р°РіРѕСЂС‚РІР°С†СЊ РЅР° РјСЏР¶С‹ СЃР»РѕСћ, С†С– РЅР° РјСЏР¶С‹ Р·РЅР°РєР°Сћ"
 
 #: gtk/gtktexttag.c:494 gtk/gtktextview.c:624
 msgid "Tabs"
-msgstr "Укладкі"
+msgstr "РЈРєР»Р°РґРєС–"
 
 #: gtk/gtktexttag.c:495 gtk/gtktextview.c:625
 msgid "Custom tabs for this text"
-msgstr ""
+msgstr "РђР±СЂР°РЅС‹СЏ СћРєР»Р°РґРєС– РґР»СЏ РіСЌС‚Р°РіР° С‚СЌРєСЃС‚Сѓ"
 
 #: gtk/gtktexttag.c:502
 msgid "Invisible"
-msgstr "Нябачны"
+msgstr "РќСЏР±Р°С‡РЅС‹"
 
 #: gtk/gtktexttag.c:503
 msgid "Whether this text is hidden"
-msgstr ""
+msgstr "Р¦С– Р·СЊСЏСћР»СЏРµС†С†Р° РіСЌС‚С‹ С‚СЌРєСЃС‚ РЅСЏР±Р°С‡РЅС‹Рј"
 
 #: gtk/gtktexttag.c:516
 msgid "Background full height set"
-msgstr ""
+msgstr "РџРѕСћРЅР°СЏ РІС‹С€С‹РЅСЏ С‚Р»Р°"
 
 #: gtk/gtktexttag.c:517
 msgid "Whether this tag affects background height"
-msgstr ""
+msgstr "Р¦С– СћР·СЊРґР·РµР№РЅС–С‡Р°Рµ РіСЌС‚Р°СЏ Р»С‹С‡РєР° РЅР° РІС‹С€С‹РЅСЋ С‚Р»Р°"
 
 #: gtk/gtktexttag.c:520
 msgid "Background stipple set"
-msgstr ""
+msgstr "РЈР·РѕСЂ С‚Р»Р°"
 
 #: gtk/gtktexttag.c:521
 msgid "Whether this tag affects the background stipple"
-msgstr ""
+msgstr "Р¦С– СћР·СЊРґР·РµР№РЅС–С‡Р°Рµ РіСЌС‚Р°СЏ Р»С‹С‡РєР° РЅР° СћР·РѕСЂ С‚Р»Р°"
 
 #: gtk/gtktexttag.c:528
 msgid "Foreground stipple set"
-msgstr ""
+msgstr "РђСЃРЅРѕСћРЅС‹ СћР·РѕСЂ"
 
 #: gtk/gtktexttag.c:529
 msgid "Whether this tag affects the foreground stipple"
-msgstr ""
+msgstr "Р¦С– СћР·СЊРґР·РµР№РЅС–С‡Р°Рµ РіСЌС‚Р°СЏ Р»С‹С‡РєР° РЅР° Р°СЃРЅРѕСћРЅС‹ СћР·РѕСЂ"
 
 #: gtk/gtktexttag.c:564
 msgid "Justification set"
-msgstr ""
+msgstr "Р’С‹СЂРѕСћРЅС–РІР°РЅСЊРЅРµ"
 
 #: gtk/gtktexttag.c:565
 msgid "Whether this tag affects paragraph justification"
-msgstr ""
+msgstr "Р¦С– СћР·СЊРґР·РµР№РЅС–С‡Р°Рµ РіСЌС‚Р°СЏ Р»С‹С‡РєР° РЅР° РІС‹СЂРѕСћРЅС–РІР°РЅСЊРЅРµ С‚СЌРєСЃС‚Сѓ"
 
 #: gtk/gtktexttag.c:568
 msgid "Language set"
-msgstr ""
+msgstr "РњРѕРІР°"
 
 #: gtk/gtktexttag.c:569
 msgid "Whether this tag affects the language the text is rendered as"
-msgstr ""
+msgstr "Р¦С– СћР·СЊРґР·РµР№РЅС–С‡Р°Рµ РіСЌС‚Р°СЏ Р»С‹С‡РєР° РЅР° Р°РґР»СЋСЃС‚СЂРѕСћРІР°РЅСЊРЅРµ С‚СЌРєСЃС‚Сѓ"
 
 #: gtk/gtktexttag.c:572
 msgid "Left margin set"
-msgstr ""
+msgstr "Р›РµРІС‹ Р±РѕРє"
 
 #: gtk/gtktexttag.c:573
 msgid "Whether this tag affects the left margin"
-msgstr ""
+msgstr "Р¦С– СћР·СЊРґР·РµР№РЅС–С‡Р°Рµ РіСЌС‚Р°СЏ Р»С‹С‡РєР° РЅР° Р»РµРІС‹ Р±РѕРє"
 
 #: gtk/gtktexttag.c:576
 msgid "Indent set"
-msgstr ""
+msgstr "Р’РѕРґСЃС‚СѓРї"
 
 #: gtk/gtktexttag.c:577
 msgid "Whether this tag affects indentation"
-msgstr ""
+msgstr "Р¦С– СћР·СЊРґР·РµР№РЅС–С‡Р°Рµ РіСЌС‚Р°СЏ Р»С‹С‡РєР° РЅР° РІРѕРґСЃС‚СѓРї"
 
 #: gtk/gtktexttag.c:584
 msgid "Pixels above lines set"
-msgstr ""
+msgstr "РџС–РєСЃСЌР»С– РЅР° СЂР°РґРєР°РјС–"
 
 #: gtk/gtktexttag.c:585 gtk/gtktexttag.c:589
 msgid "Whether this tag affects the number of pixels above lines"
-msgstr ""
+msgstr "Р¦С– СћР·СЊРґР·РµР№РЅС–С‡Р°Рµ РіСЌС‚Р°СЏ Р»С‹С‡РєР° РЅР° РєРѕР»СЊРєР°СЃСЊС†СЊ РїС–РєСЃСЌР»Р°Сћ РЅР° СЂР°РґРєР°РјС–"
 
 #: gtk/gtktexttag.c:588
 msgid "Pixels below lines set"
-msgstr ""
+msgstr "РџС–РєСЃСЌР»С– РїР°Рґ СЂР°РґРєР°РјС–"
 
 #: gtk/gtktexttag.c:592
 msgid "Pixels inside wrap set"
-msgstr ""
+msgstr "РџС–РєСЃСЌР»СЏСћ РїР°РјС–Р¶ Р·Р°РіРѕСЂРЅСѓС‚С‹РјС–"
 
 #: gtk/gtktexttag.c:593
 msgid "Whether this tag affects the number of pixels between wrapped lines"
-msgstr ""
+msgstr "Р¦С– СћР·СЊРґР·РµР№РЅС–С‡Р°Рµ РіСЌС‚Р°СЏ Р»С‹С‡РєР° РЅР° РєРѕР»СЊРєР°СЃСЊС†СЊ РїС–РєСЃСЌР»СЏСћ РїР°РјС–Р¶ Р·Р°РіРѕСЂРЅСѓС‚С‹РјС– СЂР°РґРєР°РјС–"
 
 #: gtk/gtktexttag.c:600
 msgid "Right margin set"
@@ -3640,11 +3678,11 @@ msgstr ""
 
 #: gtk/gtktextutil.c:48
 msgid "LRE Left-to-right _embedding"
-msgstr ""
+msgstr "LRE СѓСЃС‚Р°СћРєР° Р·СЊР»РµРІР° РЅР°РїСЂР°РІР°"
 
 #: gtk/gtktextutil.c:49
 msgid "RLE Right-to-left e_mbedding"
-msgstr ""
+msgstr "RLE СѓСЃС‚Р°СћРєР° Р·РїСЂР°РІР° РЅР°Р»РµРІР°"
 
 #: gtk/gtktextutil.c:50
 msgid "LRO Left-to-right _override"
@@ -3660,11 +3698,11 @@ msgstr ""
 
 #: gtk/gtktextutil.c:53
 msgid "ZWS _Zero width space"
-msgstr ""
+msgstr "ZWS РќСѓР»СЏРІС‹ РїСЂР°РіР°Р»"
 
 #: gtk/gtktextutil.c:54
 msgid "ZWJ Zero width _joiner"
-msgstr ""
+msgstr "ZWJ РќСѓР»СЏРІС‹ Р°Р±'СЏРґРЅР°Р»СЊРЅС–Рє"
 
 #: gtk/gtktextutil.c:55
 msgid "ZWNJ Zero width _non-joiner"
@@ -3684,36 +3722,36 @@ msgstr ""
 
 #: gtk/gtktextview.c:576
 msgid "Wrap Mode"
-msgstr "Рэжым пераносу"
+msgstr "Р СЌР¶С‹Рј РїРµСЂР°РЅРѕСЃСѓ"
 
 #: gtk/gtktextview.c:594
 msgid "Left Margin"
-msgstr "Левы водступ"
+msgstr "Р›РµРІС‹ РІРѕРґСЃС‚СѓРї"
 
 #: gtk/gtktextview.c:604
 msgid "Right Margin"
-msgstr "Правы водступ"
+msgstr "РџСЂР°РІС‹ РІРѕРґСЃС‚СѓРї"
 
 #: gtk/gtktextview.c:632
 msgid "Cursor Visible"
-msgstr "Бачны курсор"
+msgstr "Р‘Р°С‡РЅС‹ РєСѓСЂСЃРѕСЂ"
 
 #: gtk/gtktextview.c:633
 msgid "If the insertion cursor is shown"
-msgstr ""
+msgstr "Р¦С– Р±СѓРґР·Рµ Р±Р°С‡РЅС‹ РєСѓСЂСЃРѕСЂ СѓСЃС‚Р°СћРєС–"
 
 #: gtk/gtktextview.c:6417
 msgid "Input _Methods"
-msgstr "_Мэтады ўводу"
+msgstr "РњСЌС‚Р°РґС‹ СћРІРѕРґСѓ"
 
 #: gtk/gtkthemes.c:69
 #, c-format
 msgid "Unable to locate theme engine in module_path: \"%s\","
-msgstr ""
+msgstr "РќРµРјР°РіС‡С‹РјР° Р°РґС€СѓРєР°С†СЊ СЂСѓС…Р°РІС–Рє С‚СЌРјС‹ Сћ module_path: \"%s\","
 
 #: gtk/gtktipsquery.c:182
 msgid "--- No Tip ---"
-msgstr "--- Няма парады ---"
+msgstr "--- РќСЏРјР° РїР°СЂР°РґС‹ ---"
 
 #: gtk/gtktogglebutton.c:134
 msgid "If the toggle button should be pressed in or not"
@@ -3725,11 +3763,11 @@ msgstr ""
 
 #: gtk/gtktogglebutton.c:149
 msgid "Draw Indicator"
-msgstr ""
+msgstr "РђРґР»СЋСЃС‚СЂРѕСћРІР°С†СЊ РїР°РєР°Р·Р°Р»СЊРЅС–Рє"
 
 #: gtk/gtktogglebutton.c:150
 msgid "If the toggle part of the button is displayed"
-msgstr ""
+msgstr "РљР°Р»С– Р°РґР»СЋСЃС‚СЂР°РІР°РЅР° РїРµСЂР°РєР»СЋС‡Р°РµРјР°СЏ С‡Р°СЃС‚РєР° РєРЅРѕРїР°С‡РєС–"
 
 #: gtk/gtktoolbar.c:225
 msgid "The orientation of the toolbar"
@@ -3737,11 +3775,11 @@ msgstr ""
 
 #: gtk/gtktoolbar.c:233
 msgid "Toolbar Style"
-msgstr ""
+msgstr "Р’С‹РіР»СЏРґ РїР°РЅСЌР»С– РїСЂС‹Р»Р°Рґ"
 
 #: gtk/gtktoolbar.c:234
 msgid "How to draw the toolbar"
-msgstr ""
+msgstr "РЇРє Р±СѓРґР·Рµ Р°РґР»СЋСЃС‚СЂРѕСћРІР°С†С†Р° РїР°РЅСЌР»СЊ РїСЂС‹Р»Р°Рґ"
 
 #: gtk/gtktoolbar.c:242
 msgid "Spacer size"
@@ -3757,487 +3795,501 @@ msgstr ""
 
 #: gtk/gtktoolbar.c:260
 msgid "Space style"
-msgstr ""
+msgstr "Р’С‹РіР»СЏРґ РїР°РґР·СЏР»СЏР»СЊРЅС–РєСѓ"
 
 #: gtk/gtktoolbar.c:261
 msgid "Whether spacers are vertical lines or just blank"
-msgstr ""
+msgstr "Р¦С– Р·СЊСЏСћР»СЏРµС†С†Р° РїР°РґР·СЏР»СЏР»СЊРЅС–Рє РІСЌСЂС‚С‹РєР°Р»СЊРЅР°Р№ Р»С–РЅС–СЏР№ С†С– С‚РѕР»СЊРєС– РїСЂР°РіР°Р»Р°Рј"
 
 #: gtk/gtktoolbar.c:269
 msgid "Button relief"
-msgstr "Выпукласьць кнопкі"
+msgstr "Р’С‹РїСѓРєР»Р°СЃСЊС†СЊ РєРЅРѕРїРєС–"
 
 #: gtk/gtktoolbar.c:270
 msgid "Type of bevel around toolbar buttons"
-msgstr ""
+msgstr "Р’С‹РіР»СЏРґ СЃРєРѕСЃСѓ РІР°РєРѕР» РєРЅРѕРїР°С‡Р°Рє РїР°РЅСЌР»С– РїСЂС‹Р»Р°Рґ"
 
 #: gtk/gtktoolbar.c:278
 msgid "Style of bevel around the toolbar"
-msgstr ""
+msgstr "Р’С‹РіР»СЏРґ СЃРєРѕСЃСѓ РІР°РєРѕР» РїР°РЅСЌР»С– РїСЂС‹Р»Р°Рґ"
 
 #: gtk/gtktoolbar.c:284
 msgid "Toolbar style"
-msgstr "Стыль панэлі прылад"
+msgstr "РЎС‚С‹Р»СЊ РїР°РЅСЌР»С– РїСЂС‹Р»Р°Рґ"
 
 #: gtk/gtktoolbar.c:285
 msgid "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
+"Р¦С– РјР°Рµ РЅРµР°Р±СѓРјРѕСћР»РµРЅР°СЏ РїР°РЅСЌР» РїСЂС‹Р»Р°Рґ С‚РѕР»СЊРєС– С‚СЌРєСЃС‚, "
+"С‚СЌРєСЃС‚ С– Р·РЅР°С‡РєС–, С‚РѕР»СЊРєС– Р·РЅР°С‡РєС– Р№ С–РЅС€."
 
 #: gtk/gtktoolbar.c:291
 msgid "Toolbar icon size"
-msgstr "Памер значак панэлі прылад"
+msgstr "РџР°РјРµСЂ Р·РЅР°С‡Р°Рє РїР°РЅСЌР»С– РїСЂС‹Р»Р°Рґ"
 
 #: gtk/gtktoolbar.c:292
 msgid "Size of icons in default toolbars"
-msgstr "Памер значак паэлі прылад пры адсутнасьці абумоўленасьці"
+msgstr "РџР°РјРµСЂ Р·РЅР°С‡Р°Рє РїР°СЌР»С– РїСЂС‹Р»Р°Рґ РїСЂС‹ Р°РґСЃСѓС‚РЅР°СЃСЊС†С– Р°Р±СѓРјРѕСћР»РµРЅР°СЃСЊС†С–"
 
 #: gtk/gtktreemodelsort.c:303
 msgid "TreeModelSort Model"
-msgstr ""
+msgstr "Р Р°Р·РЅР°РІС–Рґ РґР»СЏ TreeModelSort"
 
 #: gtk/gtktreemodelsort.c:304
 msgid "The model for the TreeModelSort to sort"
-msgstr ""
+msgstr "Р Р°Р·РЅР°РІС–Рґ РґР»СЏ СћРїР°СЂР°РґРєР°РІР°РЅСЊРЅСЏ TreeModelSort"
 
 #: gtk/gtktreeview.c:515
 msgid "TreeView Model"
-msgstr ""
+msgstr "Р Р°Р·РЅР°РІС–Рґ РґР»СЏ TreeView "
 
 #: gtk/gtktreeview.c:516
 msgid "The model for the tree view"
-msgstr ""
+msgstr "Р Р°Р·РЅР°РІС–Рґ РґР»СЏ Р°РґР»СЋСЃС‚СЂР°РІР°РЅСЊРЅСЏ РґСЂСЌРІР°"
 
 #: gtk/gtktreeview.c:524
 msgid "Horizontal Adjustment for the widget"
-msgstr "Гарызантальнае выроўніваньне віджэту"
+msgstr "Р“Р°СЂС‹Р·Р°РЅС‚Р°Р»СЊРЅР°Рµ РІС‹СЂРѕСћРЅС–РІР°РЅСЊРЅРµ РІС–РґР¶СЌС‚Сѓ"
 
 #: gtk/gtktreeview.c:532
 msgid "Vertical Adjustment for the widget"
-msgstr "Вэртыкальнае выроўніваньне віджэту"
+msgstr "Р’СЌСЂС‚С‹РєР°Р»СЊРЅР°Рµ РІС‹СЂРѕСћРЅС–РІР°РЅСЊРЅРµ РІС–РґР¶СЌС‚Сѓ"
 
 #: gtk/gtktreeview.c:539 gtk/gtktreeviewcolumn.c:176 gtk/gtkwidget.c:423
 msgid "Visible"
-msgstr "Бачны"
+msgstr "Р‘Р°С‡РЅС‹"
 
 #: gtk/gtktreeview.c:540
 msgid "Show the column header buttons"
-msgstr "Паказаць кнопкі загалоўку стаўбцоў"
+msgstr "РџР°РєР°Р·Р°С†СЊ РєРЅРѕРїРєС– Р·Р°РіР°Р»РѕСћРєСѓ СЃС‚Р°СћР±С†РѕСћ"
 
 #: gtk/gtktreeview.c:547
 msgid "Headers Clickable"
-msgstr "Націскальныя загалоўкі"
+msgstr "РќР°С†С–СЃРєР°Р»СЊРЅС‹СЏ Р·Р°РіР°Р»РѕСћРєС–"
 
 #: gtk/gtktreeview.c:548
 msgid "Column headers respond to click events"
-msgstr "Загалоўкі стаўбцоў рэагуюць на націск"
+msgstr "Р—Р°РіР°Р»РѕСћРєС– СЃС‚Р°СћР±С†РѕСћ СЂСЌР°РіСѓСЋС†СЊ РЅР° РЅР°С†С–СЃРє"
 
 #: gtk/gtktreeview.c:555
 msgid "Expander Column"
-msgstr ""
+msgstr "РџР°С€С‹СЂР°РµРјС‹ СЃС‚Р°СћР±РµС†"
 
 #: gtk/gtktreeview.c:556
 msgid "Set the column for the expander column"
-msgstr ""
+msgstr "РЈСЃС‚Р°Р»СЏРІР°С†СЊ СЃС‚Р°СћР±РµС† РґР»СЏ РїР°С€С‹СЂР°РµРјР°РіР° СЃС‚Р°СћР±С†Р°"
 
 #: gtk/gtktreeview.c:563 gtk/gtktreeviewcolumn.c:275
 msgid "Reorderable"
-msgstr ""
+msgstr "РџРµСЂР°СћРїР°СЂР°РґРєР°РІР°РЅС‹"
 
 #: gtk/gtktreeview.c:564
 msgid "View is reorderable"
-msgstr ""
+msgstr "РџРµСЂР°СћРїР°СЂР°РґРєР°РІР°РЅС‹ РІС‹РіР»СЏРґ"
 
 #: gtk/gtktreeview.c:571
 msgid "Rules Hint"
-msgstr ""
+msgstr "РџР°РґРєР°Р·РєС– РїСЂР°РІС–Р»Р°Сћ"
 
 #: gtk/gtktreeview.c:572
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
+"Р—Р°РґР°С†СЊ РїР°РґРєР°Р·РєСѓ РґР»СЏ СЂСѓС…Р°РІС–РєР° С‚СЌРј, РґР»СЏ "
+"Р°РґР»СЋСЃС‚СЂР°РІР°РЅСЊРЅСЏ СЂРѕР·РЅР°РєР°Р»СЏСЂРѕРІС‹С… СЂР°РґРєРѕСћ"
 
 #: gtk/gtktreeview.c:579
 msgid "Enable Search"
-msgstr "Уключыць пошук"
+msgstr "РЈРєР»СЋС‡С‹С†СЊ РїРѕС€СѓРє"
 
 #: gtk/gtktreeview.c:580
 msgid "View allows user to search through columns interactively"
-msgstr ""
+msgstr "РџСЂР°РіР»СЏРґ РґР°Р·РІР°Р»СЏРµ РєР°СЂС‹СЃС‚Р°Р»СЊРЅС–РєСѓ РјС–Р¶РґР·РµР№СЃРЅР° С€СѓРєР°С†СЊ РїР° СЃС‚Р°СћР±С†Р°С…"
 
 #: gtk/gtktreeview.c:587
 msgid "Search Column"
-msgstr ""
+msgstr "РЎС‚Р°СћР±РµС† РїРѕС€СѓРєСѓ"
 
 #: gtk/gtktreeview.c:588
 msgid "Model column to search through when searching through code"
-msgstr ""
+msgstr "РџСЂС‹РєР»Р°Рґ СЃС‚Р°СћР±С†Р° РґР»СЏ РїРѕС€СѓРєСѓ РїР° РєРѕРґСѓ"
 
 #: gtk/gtktreeview.c:601
 msgid "Expander Size"
-msgstr ""
+msgstr "РџР°С€С‹СЂР°РµРјС‹ РїР°РјРµСЂ"
 
 #: gtk/gtktreeview.c:602
 msgid "Size of the expander arrow."
-msgstr ""
+msgstr "РџР°РјРµСЂ РїР°С€С‹СЂР°СЋС‡Р°Рµ СЃСЂСЌР»РєС–."
 
 #: gtk/gtktreeview.c:610
 msgid "Vertical Separator Width"
-msgstr "Шырыня вэртыкальнага падзяляльніку"
+msgstr "РЁС‹СЂС‹РЅСЏ РІСЌСЂС‚С‹РєР°Р»СЊРЅР°РіР° РїР°РґР·СЏР»СЏР»СЊРЅС–РєСѓ"
 
 #: gtk/gtktreeview.c:611
 msgid "Vertical space between cells.  Must be an even number."
-msgstr "Вэртыкальная прастора паміж ячэйкамі.  Павінна быць лікам."
+msgstr "Р’СЌСЂС‚С‹РєР°Р»СЊРЅР°СЏ РїСЂР°СЃС‚РѕСЂР° РїР°РјС–Р¶ СЏС‡СЌР№РєР°РјС–.  РџР°РІС–РЅРЅР° Р±С‹С†СЊ Р»С–РєР°Рј."
 
 #: gtk/gtktreeview.c:619
 msgid "Horizontal Separator Width"
-msgstr "Шырыня гарызантальнага падзяляльніку"
+msgstr "РЁС‹СЂС‹РЅСЏ РіР°СЂС‹Р·Р°РЅС‚Р°Р»СЊРЅР°РіР° РїР°РґР·СЏР»СЏР»СЊРЅС–РєСѓ"
 
 #: gtk/gtktreeview.c:620
 msgid "Horizontal space between cells.  Must be an even number."
-msgstr "Гарызантальная прастора паміж ячэйкамі.  Павінна быць лікам."
+msgstr "Р“Р°СЂС‹Р·Р°РЅС‚Р°Р»СЊРЅР°СЏ РїСЂР°СЃС‚РѕСЂР° РїР°РјС–Р¶ СЏС‡СЌР№РєР°РјС–.  РџР°РІС–РЅРЅР° Р±С‹С†СЊ Р»С–РєР°Рј."
 
 #: gtk/gtktreeview.c:628
 msgid "Allow Rules"
-msgstr ""
+msgstr "Р”Р°Р·РІР°Р»СЏСЋС‡С‹СЏ РїСЂР°РІС–Р»С‹"
 
 #: gtk/gtktreeview.c:629
 msgid "Allow drawing of alternating color rows."
-msgstr ""
+msgstr "Р”Р°Р·РІР°Р»СЏС†СЊ Р°РґР»СЋСЃС‚СЂР°РІР°РЅСЊРЅРµ СЂРѕР·РЅР°РєР°Р»СЏСЂРѕРІС‹С… СЂР°РґРєРѕСћ"
 
 #: gtk/gtktreeview.c:635
 msgid "Indent Expanders"
-msgstr ""
+msgstr "Р’РѕРґСЃС‚СѓРї РїР°С€С‹СЂР°Р»СЊРЅС–РєР°Сћ"
 
 #: gtk/gtktreeview.c:636
 msgid "Make the expanders indented."
-msgstr ""
+msgstr "Р РѕР±С–С†СЊ РїР°С€С‹СЂР°Р»СЊРЅС–РєС– Р· РІРѕРґСЃС‚СѓРїР°РјС–."
 
 #: gtk/gtktreeviewcolumn.c:177
 msgid "Whether to display the column"
-msgstr ""
+msgstr "Р¦С– Р±СѓРґР·Рµ Р°РґР»СЋСЃС‚СЂРѕСћРІР°С†С†Р° СЃС‚Р°СћР±РµС†"
 
 #: gtk/gtktreeviewcolumn.c:184 gtk/gtkwindow.c:446
 msgid "Resizable"
-msgstr "Зьменная шырыня"
+msgstr "Р—СЊРјРµРЅРЅР°СЏ С€С‹СЂС‹РЅСЏ"
 
 #: gtk/gtktreeviewcolumn.c:185
 msgid "Column is user-resizable"
-msgstr "Стаўбцы могуць быць зьменены карыстальнікам"
+msgstr "РЎС‚Р°СћР±С†С‹ РјРѕРіСѓС†СЊ Р±С‹С†СЊ Р·СЊРјРµРЅРµРЅС‹ РєР°СЂС‹СЃС‚Р°Р»СЊРЅС–РєР°Рј"
 
 #: gtk/gtktreeviewcolumn.c:193
 msgid "Current width of the column"
-msgstr ""
+msgstr "Р‘СЏРіСѓС‡Р°СЏ С€С‹СЂС‹РЅСЏ СЃС‚Р°СћР±С†Р°"
 
 #: gtk/gtktreeviewcolumn.c:201
 msgid "Sizing"
-msgstr ""
+msgstr "Р—СЊРјСЏРЅРµРЅСЊРЅРµ РїР°РјРµСЂСѓ"
 
 #: gtk/gtktreeviewcolumn.c:202
 msgid "Resize mode of the column"
-msgstr ""
+msgstr "Р СЌР¶С‹Рј Р·СЊРјСЏРЅРµРЅСЊРЅСЏ РїР°РјРµСЂСѓ СЃС‚Р°СћР±С†Р°"
 
 #: gtk/gtktreeviewcolumn.c:210
 msgid "Fixed Width"
-msgstr "Нязьменная шырыня"
+msgstr "РќСЏР·СЊРјРµРЅРЅР°СЏ С€С‹СЂС‹РЅСЏ"
 
 #: gtk/gtktreeviewcolumn.c:211
 msgid "Current fixed width of the column"
-msgstr ""
+msgstr "Р‘СЏРіСѓС‡Р°СЏ РЅСЏР·СЊРјРµРЅРЅР°СЏ С€С‹СЂС‹РЅСЏ СЃС‚Р°СћР±С†Сѓ"
 
 #: gtk/gtktreeviewcolumn.c:220
 msgid "Minimum Width"
-msgstr "Найменшая шырыня"
+msgstr "РќР°Р№РјРµРЅС€Р°СЏ С€С‹СЂС‹РЅСЏ"
 
 #: gtk/gtktreeviewcolumn.c:221
 msgid "Minimum allowed width of the column"
-msgstr "Найменшая шырыня, дапушчальная для стаўбца"
+msgstr "РќР°Р№РјРµРЅС€Р°СЏ С€С‹СЂС‹РЅСЏ, РґР°РїСѓС€С‡Р°Р»СЊРЅР°СЏ РґР»СЏ СЃС‚Р°СћР±С†Р°"
 
 #: gtk/gtktreeviewcolumn.c:230
 msgid "Maximum Width"
-msgstr "Найбольшая шырыня"
+msgstr "РќР°Р№Р±РѕР»СЊС€Р°СЏ С€С‹СЂС‹РЅСЏ"
 
 #: gtk/gtktreeviewcolumn.c:231
 msgid "Maximum allowed width of the column"
-msgstr "Найбольшая шырыня, дапушчальная для стаўбца"
+msgstr "РќР°Р№Р±РѕР»СЊС€Р°СЏ С€С‹СЂС‹РЅСЏ, РґР°РїСѓС€С‡Р°Р»СЊРЅР°СЏ РґР»СЏ СЃС‚Р°СћР±С†Р°"
 
 #: gtk/gtktreeviewcolumn.c:240
 msgid "Title"
-msgstr "Назва"
+msgstr "РџРѕРґРїС–СЃ"
 
 #: gtk/gtktreeviewcolumn.c:241
 msgid "Title to appear in column header"
-msgstr ""
+msgstr "РџРѕРґРїС–СЃ, РґР»СЏ Р·Р°РіР°Р»РѕСћРєСѓ СЃС‚Р°СћР±С†Р°"
 
 #: gtk/gtktreeviewcolumn.c:248
 msgid "Clickable"
-msgstr "Націскальны"
+msgstr "РќР°С†С–СЃРєР°Р»СЊРЅС‹"
 
 #: gtk/gtktreeviewcolumn.c:249
 msgid "Whether the header can be clicked"
-msgstr "Ці зьяўляецца загаловак націскальным"
+msgstr "Р¦С– Р·СЊСЏСћР»СЏРµС†С†Р° Р·Р°РіР°Р»РѕРІР°Рє РЅР°С†С–СЃРєР°Р»СЊРЅС‹Рј"
 
 #: gtk/gtktreeviewcolumn.c:257
 msgid "Widget"
-msgstr "Віджэт"
+msgstr "Р’С–РґР¶СЌС‚"
 
 #: gtk/gtktreeviewcolumn.c:258
 msgid "Widget to put in column header button instead of column title"
-msgstr ""
+msgstr "Р’С–РґР¶СЌС‚ РґР»СЏ СЂР°Р·СЊРјСЏС€С‡СЌРЅСЊРЅСЏ Сћ Р·Р°РіР°Р»РѕСћРєСѓ СЃС‚Р°СћР±С†Р° Р·Р°РјРµСЃС‚ РЅР°Р·РѕРІСѓ Р·Р°РіР°Р»РѕСћРєСѓ"
 
 #: gtk/gtktreeviewcolumn.c:265
 msgid "Alignment"
-msgstr "Выроўніваньне"
+msgstr "Р’С‹СЂРѕСћРЅС–РІР°РЅСЊРЅРµ"
 
 #: gtk/gtktreeviewcolumn.c:266
 msgid "X Alignment of the column header text or widget"
-msgstr "Выроўніваньне па X загалоўка стаўбца ці віджэта"
+msgstr "Р’С‹СЂРѕСћРЅС–РІР°РЅСЊРЅРµ РїР° X Р·Р°РіР°Р»РѕСћРєР° СЃС‚Р°СћР±С†Р° С†С– РІС–РґР¶СЌС‚Р°"
 
 #: gtk/gtktreeviewcolumn.c:276
 msgid "Whether the column can be reordered around the headers"
-msgstr ""
+msgstr "Р¦С– РјРѕР¶Р° СЃС‚Р°СћР±РµС† Р±С‹С†СЊ РїР°СЃСѓРЅСѓС‚С‹ РІР°РєРѕР» Р·Р°РіР°Р»РѕСћРєР°Сћ"
 
 #: gtk/gtktreeviewcolumn.c:283
 msgid "Sort indicator"
-msgstr "Паказальнік упарадкаваньня"
+msgstr "РџР°РєР°Р·Р°Р»СЊРЅС–Рє СѓРїР°СЂР°РґРєР°РІР°РЅСЊРЅСЏ"
 
 #: gtk/gtktreeviewcolumn.c:284
 msgid "Whether to show a sort indicator"
-msgstr "Ці павінен адлюстроўвацца паказальнік упарадкаваньня"
+msgstr "Р¦С– РїР°РІС–РЅРµРЅ Р°РґР»СЋСЃС‚СЂРѕСћРІР°С†С†Р° РїР°РєР°Р·Р°Р»СЊРЅС–Рє СѓРїР°СЂР°РґРєР°РІР°РЅСЊРЅСЏ"
 
 #: gtk/gtktreeviewcolumn.c:291
 msgid "Sort order"
-msgstr "Парадак упарадкаваньня"
+msgstr "РџР°СЂР°РґР°Рє СѓРїР°СЂР°РґРєР°РІР°РЅСЊРЅСЏ"
 
 #: gtk/gtktreeviewcolumn.c:292
 msgid "Sort direction the sort indicator should indicate"
-msgstr "Ці павінен адлюстроўвацца парадак упарадкаваньня ў паказальніку"
+msgstr "Р¦С– РїР°РІС–РЅРµРЅ Р°РґР»СЋСЃС‚СЂРѕСћРІР°С†С†Р° РїР°СЂР°РґР°Рє СѓРїР°СЂР°РґРєР°РІР°РЅСЊРЅСЏ Сћ РїР°РєР°Р·Р°Р»СЊРЅС–РєСѓ"
 
 #: gtk/gtkviewport.c:133
 msgid ""
 "The GtkAdjustment that determines the values of the horizontal position for "
 "this viewport."
 msgstr ""
+"GtkAdjustment, СЏРєС– РІС‹Р·РЅР°С‡Р°Рµ Р·РЅР°С‡СЌРЅСЊРЅС– РіР°СЂС‹Р·Р°РЅС‚Р°Р»СЊРЅР°РіР° СЃС‚Р°РЅРѕРІС–С€С‡Р° "
+"РґР»СЏ РіСЌС‚Р°Р№ РєСЂРѕРїРєС– РіР»РµРґР¶Р°РЅСЊРЅСЏ."
 
 #: gtk/gtkviewport.c:141
 msgid ""
 "The GtkAdjustment that determines the values of the vertical position for "
 "this viewport."
 msgstr ""
+"GtkAdjustment, СЏРєС– РІС‹Р·РЅР°С‡Р°Рµ Р·РЅР°С‡СЌРЅСЊРЅС– РІСЌСЂС‚С‹РєР°Р»СЊРЅР°РіР° СЃС‚Р°РЅРѕРІС–С€С‡Р° "
+"РґР»СЏ РіСЌС‚Р°Р№ РєСЂРѕРїРєС– РіР»РµРґР¶Р°РЅСЊРЅСЏ."
 
 #: gtk/gtkviewport.c:149
 msgid "Determines how the shadowed box around the viewport is drawn."
-msgstr ""
+msgstr "Р’С‹Р·РЅР°С‡Р°Рµ, СЏРє Р±СѓРґР·Рµ Р°РґР»СЋСЃС‚СЂРѕСћРІР°С†С†Р° С†РµРЅСЊ РІР°РєРѕР» РєСЂРѕРїРєС– РіР»РµРґР¶Р°РЅСЊРЅСЏ."
 
 #: gtk/gtkwidget.c:390
 msgid "Widget name"
-msgstr "Назоў выіджэту"
+msgstr "РќР°Р·РѕСћ РІС–РґР¶СЌС‚Сѓ"
 
 #: gtk/gtkwidget.c:391
 msgid "The name of the widget"
-msgstr "Назоў віджэту"
+msgstr "РќР°Р·РѕСћ РіСЌС‚Р°РіР° РІС–РґР¶СЌС‚Сѓ"
 
 #: gtk/gtkwidget.c:397
 msgid "Parent widget"
-msgstr "Бацькоўскі віджэт"
+msgstr "Р‘Р°С†СЊРєРѕСћСЃРєС– РІС–РґР¶СЌС‚"
 
 #: gtk/gtkwidget.c:398
 msgid "The parent widget of this widget. Must be a Container widget."
 msgstr ""
-"Бацькоўскі віджэт гэтага віджэта. Павінен быць кантэйнерам (Container "
-"widget)."
+"Р‘Р°С†СЊРєРѕСћСЃРєС– РІС–РґР¶СЌС‚ РіСЌС‚Р°РіР° РІС–РґР¶СЌС‚Сѓ. РџР°РІС–РЅРµРЅ Р±С‹С†СЊ "
+"Р·СЊРјСЏС€С‡Р°Р»СЊРЅС–РєР°Рј (Container widget)."
 
 #: gtk/gtkwidget.c:405
 msgid "Width request"
-msgstr "Запыт шырыні"
+msgstr "Р—Р°РїС‹С‚ С€С‹СЂС‹РЅС–"
 
 #: gtk/gtkwidget.c:406
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used."
 msgstr ""
+"Р—СЊРјСЏРЅРµРЅСЊРЅРµ Р·Р°РїС‹С‚Сѓ РІС–РґР¶СЌС‚Сѓ РЅР° СћСЃС‚Р°Р»СЏРІР°РЅСЊРЅРµ С€С‹СЂС‹РЅС–, С†С– 1, РєР°Р»С– "
+"С‚СЂСЌР±Р° РІС‹РєР°СЂС‹СЃС‚РѕСћРІР°С†СЊ Р·С‹С…РѕРґРЅС‹ Р·Р°РїС‹С‚."
 
 #: gtk/gtkwidget.c:414
 msgid "Height request"
-msgstr "Запыт вышыні"
+msgstr "Р—Р°РїС‹С‚ РІС‹С€С‹РЅС–"
 
 #: gtk/gtkwidget.c:415
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used."
 msgstr ""
+"Р—СЊРјСЏРЅРµРЅСЊРЅРµ Р·Р°РїС‹С‚Сѓ РІС–РґР¶СЌС‚Сѓ РЅР° СћСЃС‚Р°Р»СЏРІР°РЅСЊРЅРµ РІС‹С€С‹РЅС–, С†С– 1, РєР°Р»С– "
+"С‚СЂСЌР±Р° РІС‹РєР°СЂС‹СЃС‚РѕСћРІР°С†СЊ Р·С‹С…РѕРґРЅС‹ Р·Р°РїС‹С‚."
 
 #: gtk/gtkwidget.c:424
 msgid "Whether the widget is visible"
-msgstr "Ці будзе віджэт бачны"
+msgstr "Р¦С– Р±СѓРґР·Рµ РІС–РґР¶СЌС‚ Р±Р°С‡РЅС‹"
 
 #: gtk/gtkwidget.c:430
 msgid "Sensitive"
-msgstr "Адчувальны"
+msgstr "РђРґС‡СѓРІР°Р»СЊРЅС‹"
 
 #: gtk/gtkwidget.c:431
 msgid "Whether the widget responds to input"
-msgstr "Ці будзе віджэт адказваць на ўвод"
+msgstr "Р¦С– Р±СѓРґР·Рµ РІС–РґР¶СЌС‚ Р°РґРєР°Р·РІР°С†СЊ РЅР° СћРІРѕРґ"
 
 #: gtk/gtkwidget.c:437
 msgid "Application paintable"
-msgstr "Адлюстроўвываемы дастасаваньнем"
+msgstr "РђРґР»СЋСЃС‚СЂРѕСћРІС‹РІР°РµРјС‹ РґР°СЃС‚Р°СЃР°РІР°РЅСЊРЅРµРј"
 
 #: gtk/gtkwidget.c:438
 msgid "Whether the application will paint directly on the widget"
-msgstr "Ці будзе дастасаваньне напрамую маляваць на віджэце"
+msgstr "Р¦С– Р±СѓРґР·Рµ РґР°СЃС‚Р°СЃР°РІР°РЅСЊРЅРµ РЅР°РїСЂР°РјСѓСЋ РјР°Р»СЏРІР°С†СЊ РЅР° РІС–РґР¶СЌС†Рµ"
 
 #: gtk/gtkwidget.c:444
 msgid "Can focus"
-msgstr "Можа засяроджвацца"
+msgstr "РњРѕР¶Р° Р·Р°СЃСЏСЂРѕРґР¶РІР°С†С†Р°"
 
 #: gtk/gtkwidget.c:445
 msgid "Whether the widget can accept the input focus"
-msgstr "Ці можа віджэт прымаць засяроджаньне для ўводу"
+msgstr "Р¦С– РјРѕР¶Р° РІС–РґР¶СЌС‚ РїСЂС‹РјР°С†СЊ Р·Р°СЃСЏСЂРѕРґР¶Р°РЅСЊРЅРµ РґР»СЏ СћРІРѕРґСѓ"
 
 #: gtk/gtkwidget.c:451
 msgid "Has focus"
-msgstr "Мае засяроджаньне"
+msgstr "РњР°Рµ Р·Р°СЃСЏСЂРѕРґР¶Р°РЅСЊРЅРµ"
 
 #: gtk/gtkwidget.c:452
 msgid "Whether the widget has the input focus"
-msgstr "Ці мае гэты віджэт засяроджаньне для ўводу"
+msgstr "Р¦С– РјР°Рµ РіСЌС‚С‹ РІС–РґР¶СЌС‚ Р·Р°СЃСЏСЂРѕРґР¶Р°РЅСЊРЅРµ РґР»СЏ СћРІРѕРґСѓ"
 
 #: gtk/gtkwidget.c:458
 msgid "Can default"
-msgstr "Можа быць неабумоўленым"
+msgstr "РњРѕР¶Р° Р±С‹С†СЊ РЅРµР°Р±СѓРјРѕСћР»РµРЅС‹Рј"
 
 #: gtk/gtkwidget.c:459
 msgid "Whether the widget can be the default widget"
-msgstr "Ці можа гэты віджэт быць неабумоўленым /"
+msgstr "Р¦С– РјРѕР¶Р° РіСЌС‚С‹ РІС–РґР¶СЌС‚ Р±С‹С†СЊ РЅРµР°Р±СѓРјРѕСћР»РµРЅС‹Рј"
 
 #: gtk/gtkwidget.c:465
 msgid "Has default"
-msgstr "Мае неабумоўленасьць"
+msgstr "РњР°Рµ РЅРµР°Р±СѓРјРѕСћР»РµРЅСЊРЅРµ"
 
 #: gtk/gtkwidget.c:466
 msgid "Whether the widget is the default widget"
-msgstr "Ці зьяўляецца гэты віджэт неабумоўленым"
+msgstr "Р¦С– Р·СЊСЏСћР»СЏРµС†С†Р° РіСЌС‚С‹ РІС–РґР¶СЌС‚ РЅРµР°Р±СѓРјРѕСћР»РµРЅС‹Рј"
 
 #: gtk/gtkwidget.c:472
 msgid "Receives default"
-msgstr "Прымае неабумоўленасьць"
+msgstr "РђС‚СЂС‹РјР»С–РІР°Рµ РЅРµР°Р±СѓРјРѕСћР»РµРЅР°Рµ"
 
 #: gtk/gtkwidget.c:473
 msgid "If TRUE, the widget will receive the default action when it is focused."
 msgstr ""
+"РљР°Р»С– Р†РЎР¬Р¦Р†РќРђ (TRUE), РІС–РґР¶СЌС‚ Р°С‚СЂС‹РјР»С–РІР°Рµ РЅРµР°Р±СѓРјРѕСћР»РµРЅР°Рµ РґР·РµСЏРЅСЊРЅРµ, "
+"РєР°Р»С– С‘РЅ РјР°Рµ Р·Р°СЃСЏСЂРѕРґР¶Р°РЅСЊРЅРµ."
 
 #: gtk/gtkwidget.c:479
 msgid "Composite child"
-msgstr "Складаны нашчадак"
+msgstr "РЎРєР»Р°РґР°РЅС‹ РЅР°С€С‡Р°РґР°Рє"
 
 #: gtk/gtkwidget.c:480
 msgid "Whether the widget is part of a composite widget"
-msgstr "Ці зьяўляецца гэты віджэт часткай складанага віджэту"
+msgstr "Р¦С– Р·СЊСЏСћР»СЏРµС†С†Р° РіСЌС‚С‹ РІС–РґР¶СЌС‚ С‡Р°СЃС‚РєР°Р№ СЃРєР»Р°РґР°РЅР°РіР° РІС–РґР¶СЌС‚Сѓ"
 
 #: gtk/gtkwidget.c:486
 msgid "Style"
-msgstr "Стыль"
+msgstr "РЎС‚С‹Р»СЊ"
 
 #: gtk/gtkwidget.c:487
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)."
-msgstr ""
+msgstr "РЎС‚С‹Р»СЊ РІС–РґР¶СЌС‚Сѓ, СЏРєС– Р·СЊРјСЏС€С‡Р°Рµ Р·СЊРІРµСЃС‚РєС– Р°Р± СѓР»Р°СЃРЅС‹Рј РІС‹РіР»СЏРґР·Рµ (РєРѕР»РµСЂС‹ Р№ С–РЅС€.)"
 
 #: gtk/gtkwidget.c:493
 msgid "Events"
-msgstr "Здарэньні"
+msgstr "Р—РґР°СЂСЌРЅСЊРЅС–"
 
 #: gtk/gtkwidget.c:494
 msgid "The event mask that decides what kind of GdkEvents this widget gets."
-msgstr ""
+msgstr "РњР°СЃРєР°, СЏРєР°СЏ РІС‹СЂР°С€Р°Рµ, СЏРєРѕРіР° СЂРѕРґСѓ Р·РґР°СЂСЌРЅСЊРЅС– GdkEvents Р°С‚СЂС‹РјР°Рµ РІС–РґР¶СЌС‚."
 
 #: gtk/gtkwidget.c:501
 msgid "Extension events"
-msgstr "Дадатковыя здарэньні"
+msgstr "Р”Р°РґР°С‚РєРѕРІС‹СЏ Р·РґР°СЂСЌРЅСЊРЅС–"
 
 #: gtk/gtkwidget.c:502
 msgid "The mask that decides what kind of extension events this widget gets."
-msgstr ""
+msgstr "РњР°СЃРєР°, СЏРєР°СЏ РІС‹СЂР°С€Р°Рµ, СЏРєС–Рµ РґР°РґР°С‚РєРѕРІС‹СЏ Р·РґР°СЂСЌРЅСЊРЅС– Р°С‚СЂС‹РјР°Рµ РіСЌС‚С‹ РІС–РґР¶СЌС‚."
 
 #: gtk/gtkwidget.c:1051
 msgid "Interior Focus"
-msgstr ""
+msgstr "РЈРЅСѓС‚СЂР°РЅР°Рµ Р·Р°СЃСЏСЂРѕРґР¶Р°РЅСЊРЅРµ"
 
 #: gtk/gtkwidget.c:1052
 msgid "Whether to draw the focus indicator inside widgets."
-msgstr ""
+msgstr "Р¦С– Р±СѓРґР·Рµ Р°РґР»СЋСЃС‚СЂРѕСћРІР°С†С†Р° РїР°РєР°Р·Р°Р»СЊРЅС–Рє Р·Р°СЃСЏСЂРѕРґР¶Р°РЅСЊРЅСЏ СћРЅСѓС‚СЂС‹ РІС–РґР¶СЌС‚Р°Сћ."
 
 #: gtk/gtkwidget.c:1058
 msgid "Focus linewidth"
-msgstr ""
+msgstr "РЁС‹СЂС‹РЅСЏ Р»С–РЅС–С– Р·Р°СЃСЏСЂРѕРґР¶Р°РЅСЊРЅСЏ"
 
 #: gtk/gtkwidget.c:1059
 msgid "Width, in pixels, of the focus indicator line."
-msgstr ""
+msgstr "РЁС‹СЂС‹РЅСЏ (Сѓ РїС–РєСЃСЌР»СЏС…) Р»С–РЅС–С– РїР°РєР°Р·Р°Р»СЊРЅС–РєР° Р·Р°СЃСЏСЂРѕРґР¶Р°РЅСЊРЅСЏ."
 
 #: gtk/gtkwidget.c:1065
 msgid "Focus line dash pattern"
-msgstr ""
+msgstr "РЁС‚СЂС‹С…С– Р»С–РЅС–С– Р·Р°СЃСЏСЂРѕРґР¶Р°РЅСЊРЅСЏ"
 
 #: gtk/gtkwidget.c:1066
 msgid "Dash pattern used to draw the focus indicator."
-msgstr ""
+msgstr "РџСЂС‹РєР»Р°Рґ С€С‚СЂС‹С…РѕСћ РґР»СЏ Р°РґР»СЋСЃС‚СЂР°РІР°РЅСЊРЅСЏ РїР°РєР°Р·Р°Р»СЊРЅС–РєСѓ Р·Р°СЃСЏСЂРѕРґР¶Р°РЅСЊРЅСЏ."
 
 #: gtk/gtkwidget.c:1071
 msgid "Focus padding"
-msgstr "Спад засяроджаньня"
+msgstr "РЎРїР°Рґ Р·Р°СЃСЏСЂРѕРґР¶Р°РЅСЊРЅСЏ"
 
 #: gtk/gtkwidget.c:1072
 msgid "Width, in pixels, between focus indicator and the widget 'box'."
-msgstr ""
+msgstr "РЁС‹СЂС‹РЅСЏ (Сѓ РїС–РєСЃСЌР»СЏС…) РїР°РјС–Р¶ РїР°РєР°Р·Р°Р»СЊРЅС–РєР°Рј Р·Р°СЃСЏСЂРѕРґР¶Р°РЅСЊРЅСЏ С– РІС–РґР¶СЌС‚Р°Рј 'box'."
 
 #: gtk/gtkwidget.c:1077
 msgid "Cursor color"
-msgstr "Колер курсору"
+msgstr "РљРѕР»РµСЂ РєСѓСЂСЃРѕСЂСѓ"
 
 #: gtk/gtkwidget.c:1078
 msgid "Color with which to draw insertion cursor"
-msgstr "Колер, выкарыстоўвываемы для адлюстраваньня курсору"
+msgstr "РљРѕР»РµСЂ, РІС‹РєР°СЂС‹СЃС‚РѕСћРІС‹РІР°РµРјС‹ РґР»СЏ Р°РґР»СЋСЃС‚СЂР°РІР°РЅСЊРЅСЏ РєСѓСЂСЃРѕСЂСѓ"
 
 #: gtk/gtkwidget.c:1083
 msgid "Secondary cursor color"
-msgstr "Колер другога курсору"
+msgstr "РљРѕР»РµСЂ РґСЂСѓРіРѕРіР° РєСѓСЂСЃРѕСЂСѓ"
 
 #: gtk/gtkwidget.c:1084
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text."
 msgstr ""
-"Колер для адлюстраваньня другога курсору, калі выкарыстоўвываецца "
-"зьмешаны (зьлева направа й справа налева) ўвод сэксту."
+"РљРѕР»РµСЂ РґР»СЏ Р°РґР»СЋСЃС‚СЂР°РІР°РЅСЊРЅСЏ РґСЂСѓРіРѕРіР° РєСѓСЂСЃРѕСЂСѓ, РєР°Р»С– РІС‹РєР°СЂС‹СЃС‚РѕСћРІС‹РІР°РµС†С†Р° "
+"Р·СЊРјРµС€Р°РЅС‹ (Р·СЊР»РµРІР° РЅР°РїСЂР°РІР° Р№ СЃРїСЂР°РІР° РЅР°Р»РµРІР°) СћРІРѕРґ СЃСЌРєСЃС‚Сѓ."
 
 #: gtk/gtkwidget.c:1089
 msgid "Cursor line aspect ratio"
-msgstr "Прапорцыі курсору"
+msgstr "РџСЂР°РїРѕСЂС†С‹С– РєСѓСЂСЃРѕСЂСѓ"
 
 #: gtk/gtkwidget.c:1090
 msgid "Aspect ratio with which to draw insertion cursor"
-msgstr "Прапорцыі курсору"
+msgstr "РџСЂР°РїРѕСЂС†С‹С– РєСѓСЂСЃРѕСЂСѓ"
 
 #: gtk/gtkwindow.c:411
 msgid "Window Type"
-msgstr "Тып акна"
+msgstr "РўС‹Рї Р°РєРЅР°"
 
 #: gtk/gtkwindow.c:412
 msgid "The type of the window"
-msgstr "Тып гэтага акна"
+msgstr "РўС‹Рї РіСЌС‚Р°РіР° Р°РєРЅР°"
 
 #: gtk/gtkwindow.c:421
 msgid "Window Title"
-msgstr "Назоў акна"
+msgstr "РќР°Р·РѕСћ Р°РєРЅР°"
 
 #: gtk/gtkwindow.c:422
 msgid "The title of the window"
-msgstr "Назоў гэтага акна"
+msgstr "РќР°Р·РѕСћ РіСЌС‚Р°РіР° Р°РєРЅР°"
 
 #: gtk/gtkwindow.c:429
 msgid "Allow Shrink"
-msgstr "Дазваляць сьцісканьне"
+msgstr "Р”Р°Р·РІР°Р»СЏС†СЊ СЃСЊС†С–СЃРєР°РЅСЊРЅРµ"
 
 #: gtk/gtkwindow.c:431
 #, no-c-format
@@ -4245,93 +4297,93 @@ msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
 "time a bad idea."
 msgstr ""
-"Калі ІСЬЦІНА (TRUE), акно ня мае найменьшага памеру. Усталяваньне "
-"гэтага значэньня ў ІСЬЦІНА ў 99% выпадках вельмі дрэнная ідэя."
+"РљР°Р»С– Р†РЎР¬Р¦Р†РќРђ (TRUE), Р°РєРЅРѕ РЅСЏ РјР°Рµ РЅР°Р№РјРµРЅСЊС€Р°РіР° РїР°РјРµСЂСѓ. РЈСЃС‚Р°Р»СЏРІР°РЅСЊРЅРµ "
+"РіСЌС‚Р°РіР° Р·РЅР°С‡СЌРЅСЊРЅСЏ Сћ Р†РЎР¬Р¦Р†РќРђ Сћ 99% РІС‹РїР°РґРєР°С… РІРµР»СЊРјС– РґСЂСЌРЅРЅР°СЏ С–РґСЌСЏ."
 
 #: gtk/gtkwindow.c:438
 msgid "Allow Grow"
-msgstr "Дазваляць рост"
+msgstr "Р”Р°Р·РІР°Р»СЏС†СЊ СЂРѕСЃС‚"
 
 #: gtk/gtkwindow.c:439
 msgid "If TRUE, users can expand the window beyond its minimum size."
 msgstr ""
-"Калі ІСЬЦІНА (TRUE), карыстальнікі могуць разьвярнуць акно "
-"замест яго найменьшага памеру."
+"РљР°Р»С– Р†РЎР¬Р¦Р†РќРђ (TRUE), РєР°СЂС‹СЃС‚Р°Р»СЊРЅС–РєС– РјРѕРіСѓС†СЊ СЂР°Р·СЊРІСЏСЂРЅСѓС†СЊ Р°РєРЅРѕ "
+"Р·Р°РјРµСЃС‚ СЏРіРѕ РЅР°Р№РјРµРЅСЊС€Р°РіР° РїР°РјРµСЂСѓ."
 
 #: gtk/gtkwindow.c:447
 msgid "If TRUE, users can resize the window."
-msgstr "Калі ІСЬЦІНА (TRUE), карыстальнікі могуць зьмяняць памер акна."
+msgstr "РљР°Р»С– Р†РЎР¬Р¦Р†РќРђ (TRUE), РєР°СЂС‹СЃС‚Р°Р»СЊРЅС–РєС– РјРѕРіСѓС†СЊ Р·СЊРјСЏРЅСЏС†СЊ РїР°РјРµСЂ Р°РєРЅР°."
 
 #: gtk/gtkwindow.c:454
 msgid "Modal"
-msgstr "Мадалнае"
+msgstr "РњР°РґР°Р»РЅР°Рµ"
 
 #: gtk/gtkwindow.c:455
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)."
 msgstr ""
-"Калі ІСЬЦІНА (TRUE) - акно зьяўляецца мадальным (іншыя вокны ня могуць "
-"быць выкарыстаны, покуль гэтае акно ня будзе зачынена)."
+"РљР°Р»С– Р†РЎР¬Р¦Р†РќРђ (TRUE) - Р°РєРЅРѕ Р·СЊСЏСћР»СЏРµС†С†Р° РјР°РґР°Р»СЊРЅС‹Рј (С–РЅС€С‹СЏ РІРѕРєРЅС‹ РЅСЏ РјРѕРіСѓС†СЊ "
+"Р±С‹С†СЊ РІС‹РєР°СЂС‹СЃС‚Р°РЅС‹, РїРѕРєСѓР»СЊ РіСЌС‚Р°Рµ Р°РєРЅРѕ РЅСЏ Р±СѓРґР·Рµ Р·Р°С‡С‹РЅРµРЅР°)."
 
 #: gtk/gtkwindow.c:462
 msgid "Window Position"
-msgstr "Становішча акна"
+msgstr "РЎС‚Р°РЅРѕРІС–С€С‡Р° Р°РєРЅР°"
 
 #: gtk/gtkwindow.c:463
 msgid "The initial position of the window."
-msgstr "Пачатковае становішча акна."
+msgstr "РџР°С‡Р°С‚РєРѕРІР°Рµ СЃС‚Р°РЅРѕРІС–С€С‡Р° Р°РєРЅР°."
 
 #: gtk/gtkwindow.c:471
 msgid "Default Width"
-msgstr "Першапачатковая шырыня"
+msgstr "РџРµСЂС€Р°РїР°С‡Р°С‚РєРѕРІР°СЏ С€С‹СЂС‹РЅСЏ"
 
 #: gtk/gtkwindow.c:472
 msgid "The default width of the window, used when initially showing the window."
 msgstr ""
-"Пачатковая шырыня акна; выкарыстоўвываецца пры "
-"першапачатковым адлюстраваньні акна."
+"РџР°С‡Р°С‚РєРѕРІР°СЏ С€С‹СЂС‹РЅСЏ Р°РєРЅР°; РІС‹РєР°СЂС‹СЃС‚РѕСћРІС‹РІР°РµС†С†Р° РїСЂС‹ "
+"РїРµСЂС€Р°РїР°С‡Р°С‚РєРѕРІС‹Рј Р°РґР»СЋСЃС‚СЂР°РІР°РЅСЊРЅС– Р°РєРЅР°."
 
 #: gtk/gtkwindow.c:481
 msgid "Default Height"
-msgstr "Першапачатковая вышыня"
+msgstr "РџРµСЂС€Р°РїР°С‡Р°С‚РєРѕРІР°СЏ РІС‹С€С‹РЅСЏ"
 
 #: gtk/gtkwindow.c:482
 msgid "The default height of the window, used when initially showing the window."
 msgstr ""
-"Пачатковая вышыня акна; выкарыстоўвываецца пры "
-"першапачатковым адлюстраваньні акна."
+"РџР°С‡Р°С‚РєРѕРІР°СЏ РІС‹С€С‹РЅСЏ Р°РєРЅР°; РІС‹РєР°СЂС‹СЃС‚РѕСћРІС‹РІР°РµС†С†Р° РїСЂС‹ "
+"РїРµСЂС€Р°РїР°С‡Р°С‚РєРѕРІС‹Рј Р°РґР»СЋСЃС‚СЂР°РІР°РЅСЊРЅС– Р°РєРЅР°."
 
 #: gtk/gtkwindow.c:491
 msgid "Destroy with Parent"
-msgstr "Зьнішчыць разам з бацькоўскім"
+msgstr "Р—СЊРЅС–С€С‡С‹С†СЊ СЂР°Р·Р°Рј Р· Р±Р°С†СЊРєРѕСћСЃРєС–Рј"
 
 #: gtk/gtkwindow.c:492
 msgid "If this window should be destroyed when the parent is destroyed"
-msgstr "Ці павінна гэта акно быць зьнішчына разам з бацькоўскім"
+msgstr "Р¦С– РїР°РІС–РЅРЅР° РіСЌС‚Р° Р°РєРЅРѕ Р±С‹С†СЊ Р·СЊРЅС–С€С‡С‹РЅР° СЂР°Р·Р°Рј Р· Р±Р°С†СЊРєРѕСћСЃРєС–Рј"
 
 #: gtk/gtkwindow.c:499
 msgid "Icon"
-msgstr "Значка"
+msgstr "Р—РЅР°С‡РєР°"
 
 #: gtk/gtkwindow.c:500
 msgid "Icon for this window"
-msgstr "Значка для гэтага акна"
+msgstr "Р—РЅР°С‡РєР° РґР»СЏ РіСЌС‚Р°РіР° Р°РєРЅР°"
 
 #. ID
 #: modules/input/imam-et.c:454
 msgid "Amharic (EZ+)"
-msgstr "Амхарская (EZ+)"
+msgstr "РђРјС…Р°СЂСЃРєР°СЏ (EZ+)"
 
 #. ID
 #: modules/input/imcyrillic-translit.c:216
 msgid "Cyrillic (Transliterated)"
-msgstr "Кірыліца (Транслітырацыя)"
+msgstr "РљС–СЂС‹Р»С–С†Р° (РўСЂР°РЅСЃР»С–С‚С‹СЂР°С†С‹СЏ)"
 
 #. ID
 #: modules/input/iminuktitut.c:126
 msgid "Inukitut (Transliterated)"
-msgstr "Інукітут (Транслітэрацыя)"
+msgstr "Р†РЅСѓРєС–С‚СѓС‚ (РўСЂР°РЅСЃР»С–С‚СЌСЂР°С†С‹СЏ)"
 
 #. ID
 #: modules/input/imipa.c:144
@@ -4341,28 +4393,28 @@ msgstr "IPA"
 #. ID
 #: modules/input/imthai-broken.c:177
 msgid "Thai (Broken)"
-msgstr "Тайскя (Зламаная)"
+msgstr "РўР°Р№СЃРєСЏ (Р—Р»Р°РјР°РЅР°СЏ)"
 
 #. ID
 #: modules/input/imti-er.c:453
 msgid "Tigrigna-Eritrean (EZ+)"
-msgstr "Тыгрынья (Эрытрэя EZ+)"
+msgstr "РўС‹РіСЂС‹РЅСЊСЏ (Р­СЂС‹С‚СЂСЌСЏ EZ+)"
 
 #. ID
 #: modules/input/imti-et.c:453
 msgid "Tigrigna-Ethiopian (EZ+)"
-msgstr "Тыгрынья (Эфіёпія EZ+)"
+msgstr "РўС‹РіСЂС‹РЅСЊСЏ (Р­С„С–С‘РїС–СЏ EZ+)"
 
 #. ID
 #: modules/input/imviqr.c:243
 msgid "Vietnamese (VIQR)"
-msgstr "Уэтнамская (VIQR)"
+msgstr "РЈСЌС‚РЅР°РјСЃРєР°СЏ (VIQR)"
 
 #. ID
 #: modules/input/imxim.c:27
 msgid "X Input Method"
-msgstr "X мэтад уводу (X Input Method)"
+msgstr "X РјСЌС‚Р°Рґ СѓРІРѕРґСѓ (X Input Method)"
 
 #~ msgid "Insufficient memory to load TGA image"
-#~ msgstr "Недастаткова памяці для загрузкі TGA малюнка"
+#~ msgstr "РќРµРґР°СЃС‚Р°С‚РєРѕРІР° РїР°РјСЏС†С– РґР»СЏ Р·Р°РіСЂСѓР·РєС– TGA РјР°Р»СЋРЅРєР°"
 
