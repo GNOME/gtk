@@ -1,3 +1,8 @@
+Fri Feb  6 00:45:16 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_finalize): Add a finalize 
+	function to plug a few memory leaks.  (#133544, Morten Welinder)
+
 Fri Feb  6 00:15:38 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcomboboxentry.c (gtk_combo_box_entry_mnemonic_activate): 

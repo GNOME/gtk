@@ -136,6 +136,7 @@ static void     gtk_combo_box_get_property         (GObject         *object,
                                                     guint            prop_id,
                                                     GValue          *value,
                                                     GParamSpec      *spec);
+static void     gtk_combo_box_finalize             (GObject          *object);
 
 static void     gtk_combo_box_style_set            (GtkWidget       *widget,
                                                     GtkStyle        *previous_style,
@@ -322,6 +323,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   widget_class->mnemonic_activate = gtk_combo_box_mnemonic_activate;
 
   object_class = (GObjectClass *)klass;
+  object_class->finalize = gtk_combo_box_finalize;
   object_class->set_property = gtk_combo_box_set_property;
   object_class->get_property = gtk_combo_box_get_property;
 
@@ -2376,7 +2378,7 @@ gtk_combo_box_cell_layout_reorder (GtkCellLayout   *layout,
 GtkWidget *
 gtk_combo_box_new (void)
 {
-  return GTK_WIDGET (g_object_new (gtk_combo_box_get_type (), NULL));
+  return GTK_WIDGET (g_object_new (GTK_TYPE_COMBO_BOX, NULL));
 }
 
 /**
@@ -2396,7 +2398,7 @@ gtk_combo_box_new_with_model (GtkTreeModel *model)
 
   g_return_val_if_fail (GTK_IS_TREE_MODEL (model), NULL);
 
-  combo_box = GTK_COMBO_BOX (g_object_new (gtk_combo_box_get_type (),
+  combo_box = GTK_COMBO_BOX (g_object_new (GTK_TYPE_COMBO_BOX,
                                            "model", model,
                                            NULL));
 
@@ -2839,3 +2841,26 @@ gtk_combo_box_mnemonic_activate (GtkWidget *widget,
   return TRUE;
 }
 
+
+static void
+gtk_combo_box_finalize (GObject *object)
+{
+  GtkComboBox *combo_box = GTK_COMBO_BOX (object);
+  
+  if (GTK_IS_MENU (combo_box->priv->popup_widget))
+    gtk_combo_box_menu_destroy (combo_box);
+  
+  if (GTK_IS_TREE_VIEW (combo_box->priv->tree_view))
+    gtk_combo_box_list_destroy (combo_box);
+
+  if (combo_box->priv->popup_window)
+    gtk_widget_destroy (combo_box->priv->popup_window);
+
+  if (combo_box->priv->model)
+      g_object_unref (combo_box->priv->model);
+
+  g_slist_foreach (combo_box->priv->cells, (GFunc)g_free, NULL);
+  g_slist_free (combo_box->priv->cells);
+
+  G_OBJECT_CLASS (parent_class)->finalize (object);
+}
