@@ -2487,19 +2487,19 @@ void create_labels (void)
       frame = gtk_frame_new ("Internationalized Label");
       label = gtk_label_new (NULL);
       gtk_label_set_markup (GTK_LABEL (label),
-			    "French (FranÃ§ais) Bonjour, Salut\n"
-			    "Korean (í•œê¸€)   ì•ˆë…•í•˜ì„¸ìš”, ì•ˆë…•í•˜ì‹­ë‹ˆê¹Œ\n"
-			    "Russian (Ğ ÑƒÑÑĞºĞ¸Ğ¹) Ğ—Ğ´Ñ€Ğ°Ğ²ÑÑ‚Ğ²ÑƒĞ¹Ñ‚Ğµ!\n"
-			    "Chinese (Simplified) <span lang=\"zh-cn\">å…ƒæ°”	å¼€å‘</span>\n"
-			    "Chinese (Traditional) <span lang=\"zh-tw\">å…ƒæ°£	é–‹ç™¼</span>\n"
-			    "Japanese <span lang=\"ja\">å…ƒæ°—	é–‹ç™º</span>");
+			    "French (FranÃ§ais) Bonjour, Salut\n"
+			    "Korean (í•œê¸€)   ì•ˆë…•í•˜ì„¸ìš”, ì•ˆë…•í•˜ì‹­ë‹ˆê¹Œ\n"
+			    "Russian (Ğ ÑƒÑÑĞºĞ¸Ğ¹) Ğ—Ğ´Ñ€Ğ°Ğ²ÑÑ‚Ğ²ÑƒĞ¹Ñ‚Ğµ!\n"
+			    "Chinese (Simplified) <span lang=\"zh-cn\">å…ƒæ°”	å¼€å‘</span>\n"
+			    "Chinese (Traditional) <span lang=\"zh-tw\">å…ƒæ°£	é–‹ç™¼</span>\n"
+			    "Japanese <span lang=\"ja\">å…ƒæ°—	é–‹ç™º</span>");
       gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
       gtk_container_add (GTK_CONTAINER (frame), label);
       gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
 
       frame = gtk_frame_new ("Bidirection Label");
-      label = gtk_label_new ("Arabic	Ø§Ù„Ø³Ù„Ø§Ù… Ø¹Ù„ÙŠÙƒÙ…\n"
-			     "Hebrew	×©×œ×•×");
+      label = gtk_label_new ("Arabic	Ø§Ù„Ø³Ù„Ø§Ù… Ø¹Ù„ÙŠÙƒÙ…\n"
+			     "Hebrew	×©×œ×•×");
       gtk_widget_set_direction (label, GTK_TEXT_DIR_RTL);
       gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_RIGHT);
       gtk_container_add (GTK_CONTAINER (frame), label);
@@ -2535,7 +2535,7 @@ void create_labels (void)
 
       frame = gtk_frame_new ("Underlined label");
       label = gtk_label_new ("This label is underlined!\n"
-			     "This one is underlined (ã“ã‚“ã«ã¡ã¯) in quite a funky fashion");
+			     "This one is underlined (ã“ã‚“ã«ã¡ã¯) in quite a funky fashion");
       gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
       gtk_label_set_pattern (GTK_LABEL (label), "_________________________ _ _________ _ _____ _ __ __  ___ ____ _____");
       gtk_container_add (GTK_CONTAINER (frame), label);
@@ -3489,7 +3489,7 @@ static GtkItemFactoryEntry menu_items[] =
   { "/File/_Save",             NULL,         gtk_ifactory_cb,       0, "<StockItem>", GTK_STOCK_SAVE },
   { "/File/Save _As...",       "<control>A", gtk_ifactory_cb,       0, "<StockItem>", GTK_STOCK_SAVE },
   { "/File/_Dump \"_Accels\"",  NULL,        dump_accels,           0 },
-  { "/File/\\/Test__Escaping/And\\/\n\tWei\\\\rdly",
+  { "/File/\\/Test__Escaping/And\\/\n\tWei\\\\rdly/and more",
                                 NULL,        gtk_ifactory_cb,       0 },
   { "/File/sep1",        NULL,               gtk_ifactory_cb,       0, "<Separator>" },
   { "/File/_Quit",       NULL,               gtk_ifactory_cb,       0, "<StockItem>", GTK_STOCK_QUIT },
@@ -3648,9 +3648,9 @@ create_key_lookup (void)
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), button, FALSE, FALSE, 0);
       button = gtk_button_new_with_mnemonic ("Button 2 (_A)");
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), button, FALSE, FALSE, 0);
-      button = gtk_button_new_with_mnemonic ("Button 3 (_Ñ„)");
+      button = gtk_button_new_with_mnemonic ("Button 3 (_Ñ„)");
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), button, FALSE, FALSE, 0);
-      button = gtk_button_new_with_mnemonic ("Button 4 (_Ğ¤)");
+      button = gtk_button_new_with_mnemonic ("Button 4 (_Ğ¤)");
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), button, FALSE, FALSE, 0);
       button = gtk_button_new_with_mnemonic ("Button 6 (_b)");
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), button, FALSE, FALSE, 0);
@@ -4073,7 +4073,7 @@ create_entry (void)
       gtk_box_pack_start (GTK_BOX (box2), hbox, TRUE, TRUE, 0);
       
       entry = gtk_entry_new ();
-      gtk_entry_set_text (GTK_ENTRY (entry), "hello world Ø§Ù„Ø³Ù„Ø§Ù… Ø¹Ù„ÙŠÙƒÙ…");
+      gtk_entry_set_text (GTK_ENTRY (entry), "hello world Ø§Ù„Ø³Ù„Ø§Ù… Ø¹Ù„ÙŠÙƒÙ…");
       gtk_editable_select_region (GTK_EDITABLE (entry), 0, 5);
       gtk_box_pack_start (GTK_BOX (hbox), entry, TRUE, TRUE, 0);
 

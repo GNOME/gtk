@@ -614,9 +614,16 @@ gtk_menu_item_paint (GtkWidget    *widget,
 
       if (menu_item->submenu && menu_item->show_submenu_indicator)
 	{
+	  GtkRequisition child_requisition;
 	  gint arrow_x, arrow_y;
-	  gint arrow_size = height - 2 * widget->style->ythickness;
-	  gint arrow_extent = arrow_size / 2;
+	  gint arrow_size;
+	  gint arrow_extent;
+
+	  gtk_widget_get_child_requisition (GTK_BIN (menu_item)->child,
+					    &child_requisition);
+
+	  arrow_size = child_requisition.height - 2 * widget->style->ythickness;
+	  arrow_extent = arrow_size * 0.6;
 	  
 	  shadow_type = GTK_SHADOW_OUT;
 	  if (state_type == GTK_STATE_PRELIGHT)

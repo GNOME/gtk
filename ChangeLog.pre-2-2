@@ -1,3 +1,8 @@
+Thu Apr  4 22:28:08 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkmenuitem.c (gtk_menu_item_paint): Fix problem with menu
+	titles being clipped (#75948)
+	
 2002-04-04  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/gdkrgb.c: Fix some bugs, and introduce a minor feature.
