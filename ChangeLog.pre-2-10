@@ -1,3 +1,18 @@
+2002-08-24  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate): Let the
+	system handle Alt-Space, too. Thanks to Tim Evans (#91477).
+
+	Fix for #81831 by Tim Evans:
+	
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate): Don't call
+	_gdk_event_button_generate() here, it would append the double- or
+	triple-click events too early, before the single-click event.
+
+	(inner_window_proc): If we got a single-click event, call
+	_gdk_event_button_generate() to perhaps append the double- or
+	triple-click event after that.
+
 2002-08-01  Tor Lillqvist  <tml@iki.fi>
 
 	* Makefile.am: Remove gtk+.spec stuff, not needed in this (Win32

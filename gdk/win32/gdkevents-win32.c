@@ -247,6 +247,9 @@ inner_window_proc (HWND hWnd,
       else
 	{
 	  gdk_event_queue_append (eventp);
+
+	  if (eventp->type == GDK_BUTTON_PRESS)
+	    gdk_event_button_generate (eventp);
 #if 1
 	  /* Wake up WaitMessage */
 	  PostMessage (NULL, gdk_ping_msg, 0, 0);
@@ -3559,6 +3562,14 @@ gdk_event_translate (GdkEvent *event,
 	  || xevent->wParam == VK_RETURN
 	  || xevent->wParam == VK_F4)
 	break;
+
+      /* Let the system handle Alt-Space, and ignore the WM_SYSCHAR too */
+      if (xevent->wParam == VK_SPACE)
+	{
+	  ignore_WM_CHAR = TRUE;
+	  break;
+	}
+
       /* If posted without us having keyboard focus, ignore */
       if (!(xevent->lParam & 0x20000000))
 	break;
@@ -3995,8 +4006,6 @@ gdk_event_translate (GdkEvent *event,
       event->button.source = GDK_SOURCE_MOUSE;
       event->button.deviceid = GDK_CORE_POINTER;
 
-      gdk_event_button_generate (event);
-      
       return_val = !GDK_DRAWABLE_DESTROYED (window);
       break;
 
