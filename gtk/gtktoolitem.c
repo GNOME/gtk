@@ -300,7 +300,7 @@ gtk_tool_item_set_property (GObject      *object,
       gtk_tool_item_set_visible_horizontal (toolitem, g_value_get_boolean (value));
       break;
     case PROP_VISIBLE_VERTICAL:
-      gtk_tool_item_set_visible_horizontal (toolitem, g_value_get_boolean (value));
+      gtk_tool_item_set_visible_vertical (toolitem, g_value_get_boolean (value));
       break;
     case PROP_IS_IMPORTANT:
       gtk_tool_item_set_is_important (toolitem, g_value_get_boolean (value));

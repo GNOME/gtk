@@ -12,6 +12,11 @@
 	* gtk/gtkfilesel.c: (gtk_file_selection_delete_file): Removed space
 	that proceeded the end-of-sentence punctuation. Fixes: #130353.
 
+2004-01-06  Jody Goldberg <jody@gnome.org>
+
+	* gtk/gtktoolitem.c (gtk_tool_item_set_property) : Call 
+	  gtk_tool_item_set_visible_vertical for PROP_VISIBLE_VERTICAL.
+
 2004-01-05  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserdefault.c (shortcuts_append_bookmarks): Oops,
