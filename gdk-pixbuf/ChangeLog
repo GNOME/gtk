@@ -1,3 +1,8 @@
+Thu Aug 12 22:19:12 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* io-bmp.c (DecodeHeader): Properly determine the number of 
+	colors in an OS/2 BMP file.  (#150003, Jon-Kare Hellan)
+
 2004-08-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* pixops/pixops.c: Remove C99-isms.  (#149967, Vincent Noel)
