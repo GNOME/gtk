@@ -922,15 +922,21 @@ gtk_range_button_press (GtkWidget      *widget,
        */
       if (event->button == 2)
         {
-          gdouble click_value;
+          gdouble slider_low_value, slider_high_value;
           
-          click_value = coord_to_value (range,
-                                        range->orientation == GTK_ORIENTATION_VERTICAL ?
-                                        event->y : event->x);
-          
+          slider_high_value =
+            coord_to_value (range,
+                            range->orientation == GTK_ORIENTATION_VERTICAL ?
+                            event->y : event->x);
+          slider_low_value =
+            coord_to_value (range,
+                            range->orientation == GTK_ORIENTATION_VERTICAL ?
+                            event->y - range->layout->slider.height :
+                            event->x - range->layout->slider.width);
           
           /* middle button jumps to point */
-          gtk_range_internal_set_value (range, click_value);
+          gtk_range_internal_set_value (range,
+                                        slider_low_value + (slider_high_value - slider_low_value) / 2);
 
           /* Calc layout so we can set slide_initial_slider_position
            * properly
