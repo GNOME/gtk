@@ -4477,7 +4477,9 @@ gtk_tree_view_node_queue_redraw (GtkTreeView *tree_view,
 {
   gint y;
 
-  y = _gtk_rbtree_node_find_offset (tree, node);
+  y = _gtk_rbtree_node_find_offset (tree, node)
+    - tree_view->priv->vadjustment->value
+    + TREE_VIEW_HEADER_HEIGHT (tree_view);
 
   gtk_widget_queue_draw_area (GTK_WIDGET (tree_view),
 			      0, y,
