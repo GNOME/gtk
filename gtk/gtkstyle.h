@@ -885,14 +885,13 @@ void gtk_paint_string     (GtkStyle        *style,
 			   const gchar     *string);
 #endif /* GTK_DISABLE_DEPRECATED */
 
-GdkGC *_gtk_get_insertion_cursor_gc (GtkWidget        *widget,
-				     gboolean          is_primary);
-void   _gtk_draw_insertion_cursor   (GtkWidget        *widget,
-				     GdkDrawable      *drawable,
-				     GdkGC            *gc,
-				     GdkRectangle     *location,
-				     GtkTextDirection  direction,
-				     gboolean          draw_arrow);
+void   gtk_draw_insertion_cursor (GtkWidget        *widget,
+				  GdkDrawable      *drawable,
+				  GdkRectangle     *area,
+				  GdkRectangle     *location,
+				  gboolean          is_primary,
+				  GtkTextDirection  direction,
+				  gboolean          draw_arrow);
 
 #ifdef __cplusplus
 }

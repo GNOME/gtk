@@ -821,7 +821,6 @@ gtk_text_layout_draw (GtkTextLayout *layout,
               GtkTextCursorDisplay *cursor = cursor_list->data;
 	      GtkTextDirection dir;
  	      GdkRectangle cursor_location;
-              GdkGC *gc;
 
               dir = line_display->direction;
  	      if (have_strong && have_weak)
@@ -834,14 +833,10 @@ gtk_text_layout_draw (GtkTextLayout *layout,
  	      cursor_location.y = current_y + line_display->top_margin + cursor->y;
  	      cursor_location.width = 0;
  	      cursor_location.height = cursor->height;
- 
-	      gc = _gtk_get_insertion_cursor_gc (widget, cursor->is_strong);
-	      gdk_gc_set_clip_rectangle(gc, &clip);
- 	      _gtk_draw_insertion_cursor (widget, drawable, gc, &cursor_location,
-                                          dir, have_strong && have_weak);
-              gdk_gc_set_clip_rectangle (gc, NULL);
 
-	      g_object_unref (gc);
+	      gtk_draw_insertion_cursor (widget, drawable, &clip, &cursor_location,
+					 cursor->is_strong,
+					 dir, have_strong && have_weak);
 
               cursor_list = cursor_list->next;
             }

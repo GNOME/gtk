@@ -4644,6 +4644,7 @@ gtk_paint_vline
 gtk_paint_expander
 gtk_paint_layout
 gtk_paint_resize_grip
+gtk_draw_insertion_cursor
 
 <SUBSECTION>
 GtkBorder

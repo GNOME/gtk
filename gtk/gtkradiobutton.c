@@ -132,6 +132,8 @@ gtk_radio_button_class_init (GtkRadioButtonClass *class)
    * vice-versa, and when a buttton is moved from one group of 2 or
    * more buttons to a different one, but not when the composition
    * of the group that a button belongs to changes.
+   *
+   * Since: 2.4
    */
   group_changed_signal = g_signal_new ("group-changed",
 				       G_OBJECT_CLASS_TYPE (object_class),

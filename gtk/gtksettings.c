@@ -594,9 +594,11 @@ gtk_settings_notify (GObject    *object,
     case PROP_XFT_DPI:
       pango_xft_substitute_changed (GDK_SCREEN_XDISPLAY (settings->screen),
  				    GDK_SCREEN_XNUMBER (settings->screen));
-      /* See comments with _gtk_rc_reset_styles for why this is a hack
+      /* This is a hack because with gtk_rc_reset_styles() doesn't get
+       * widgets with gtk_widget_style_set(), and also causes more
+       * recomputation than necessary.
        */
-      _gtk_rc_reset_styles (GTK_SETTINGS (object));
+      gtk_rc_reset_styles (GTK_SETTINGS (object));
       break;
 #endif /* GDK_WINDOWING_X11 */
     }

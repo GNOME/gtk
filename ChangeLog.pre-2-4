@@ -11,8 +11,6 @@ Thu Feb 26 15:43:43 2004  Owen Taylor  <otaylor@redhat.com>
 	gtk/gtkstyle.c (gtk_style_class_init): Add some missed
 	Since: 2.4.
 
-Thu Feb 26 15:43:19 2004  Owen Taylor  <otaylor@redhat.com>
-
 	* gtk/gtkiconfactory.c (icon_size_settings_changed)
 	  gtk/gtkicontheme.c (do_theme_change)
 	  gtk/gtkrc.c (_gtk_rc_context_get_default_font_name)
@@ -38,7 +36,6 @@ Thu Feb 26 14:47:22 2004  Dom Lachowicz <cinamod@hotmail.com>
 
 	* gtk/gtk.def: Export gtk_rc_reset_styles()
 
->>>>>>> 1.5027
 Thu Feb 26 14:47:22 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkrc.[ch]: Export gtk_rc_reset_styles(). 

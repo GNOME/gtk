@@ -1398,7 +1398,7 @@ _gtk_rc_context_get_default_font_name (GtkSettings *settings)
        g_free (context->font_name);
        context->font_name = g_strdup (new_font_name);
  
-       _gtk_rc_reset_styles (settings);
+       gtk_rc_reset_styles (settings);
     }
           
   g_free (new_font_name);

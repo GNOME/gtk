@@ -2861,7 +2861,6 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
       GtkTextDirection dir2 = GTK_TEXT_DIR_NONE;
       gint x1 = 0;
       gint x2 = 0;
-      GdkGC *gc;
 
       gdk_drawable_get_size (entry->text_area, NULL, &text_area_height);
       
@@ -2896,20 +2895,16 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
       cursor_location.width = 0;
       cursor_location.height = text_area_height - 2 * INNER_BORDER ;
 
-      gc = _gtk_get_insertion_cursor_gc (widget, TRUE);
-      _gtk_draw_insertion_cursor (widget, entry->text_area, gc,
-				  &cursor_location, dir1,
-                                  dir2 != GTK_TEXT_DIR_NONE);
-      g_object_unref (gc);
+      gtk_draw_insertion_cursor (widget, entry->text_area, NULL,
+				 &cursor_location, TRUE, dir1,
+				 dir2 != GTK_TEXT_DIR_NONE);
       
       if (dir2 != GTK_TEXT_DIR_NONE)
 	{
 	  cursor_location.x = xoffset + x2;
-	  gc = _gtk_get_insertion_cursor_gc (widget, FALSE);
-	  _gtk_draw_insertion_cursor (widget, entry->text_area, gc,
-				      &cursor_location, dir2,
-                                      TRUE);
-	  g_object_unref (gc);
+	  gtk_draw_insertion_cursor (widget, entry->text_area, NULL,
+				     &cursor_location, FALSE, dir2,
+				     TRUE);
 	}
     }
 }

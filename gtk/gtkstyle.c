@@ -654,6 +654,8 @@ gtk_style_class_init (GtkStyleClass *klass)
    * colormap and depth. Connecting to this signal is probably seldom
    * useful since most of the time applications and widgets only
    * deal with styles that have been already realized.
+   *
+   * Since: 2.4
    */
   realize_signal = g_signal_new ("realize",
 				 G_TYPE_FROM_CLASS (object_class),
@@ -670,6 +672,8 @@ gtk_style_class_init (GtkStyleClass *klass)
    * and depth are being cleaned up. A connection to this signal can be useful
    * if a widget wants to cache objects like a #GdkGC as object data on #GtkStyle.
    * This signal provides a convenient place to free such cached objects.
+   *
+   * Since: 2.4
    */
   unrealize_signal = g_signal_new ("unrealize",
 				   G_TYPE_FROM_CLASS (object_class),
@@ -6646,28 +6650,9 @@ make_cursor_gc (GtkWidget   *widget,
   return gtk_gc_get (widget->style->depth, widget->style->colormap, &gc_values, gc_values_mask);
 }
 
-/**
- * _gtk_get_insertion_cursor_gc:
- * @widget: a #GtkWidget
- * @is_primary: if the cursor should be the primary cursor color.
- * 
- * Get a GC suitable for drawing the primary or secondary text
- * cursor.
- *
- * Note: the return value is ref'ed because calls to this function
- *  on other widgets could result in this the GC being released
- *  which would be an unexpected side effect. If made public,
- *  this function should possibly be called create_insertion_cursor_gc().
- *
- * Return value: an appropriate #GdkGC. Call g_object_unref() on
- *   the gc when you are done with it; this GC may be shared with
- *   other users, so you must not modify the GC except for temporarily
- *   setting the clip before drawing with the GC, and then unsetting the clip
- *   again afterwards.
- **/
-GdkGC *
-_gtk_get_insertion_cursor_gc (GtkWidget *widget,
-			      gboolean   is_primary)
+static GdkGC *
+get_insertion_cursor_gc (GtkWidget *widget,
+			 gboolean   is_primary)
 {
   CursorInfo *cursor_info;
 
@@ -6709,7 +6694,7 @@ _gtk_get_insertion_cursor_gc (GtkWidget *widget,
 						  "cursor-color",
 						  &widget->style->black);
 	
-      return g_object_ref (cursor_info->primary_gc);
+      return cursor_info->primary_gc;
     }
   else
     {
@@ -6720,31 +6705,17 @@ _gtk_get_insertion_cursor_gc (GtkWidget *widget,
 						    "secondary-cursor-color",
 						    &gray);
 	
-      return g_object_ref (cursor_info->secondary_gc);
+      return cursor_info->secondary_gc;
     }
 }
 
-/**
- * _gtk_draw_insertion_cursor:
- * @widget: a #GtkWidget
- * @drawable: a #GdkDrawable
- * @gc: a #GdkGC
- * @location: location where to draw the cursor (@location->width is ignored)
- * @direction: whether the cursor is left-to-right or
- *             right-to-left. Should never be #GTK_TEXT_DIR_NONE
- * @draw_arrow: %TRUE to draw a directional arrow on the
- *        cursor. Should be %FALSE unless the cursor is split.
- * 
- * Draws a text caret on @drawable at @location. This is not a style function
- * but merely a convenience function for drawing the standard cursor shape.
- **/
-void
-_gtk_draw_insertion_cursor (GtkWidget        *widget,
-			    GdkDrawable      *drawable,
-			    GdkGC            *gc,
-			    GdkRectangle     *location,
-                            GtkTextDirection  direction,
-                            gboolean          draw_arrow)
+static void
+draw_insertion_cursor (GtkWidget        *widget,
+		       GdkDrawable      *drawable,
+		       GdkGC            *gc,
+		       GdkRectangle     *location,
+		       GtkTextDirection  direction,
+		       gboolean          draw_arrow)
 {
   gint stem_width;
   gint arrow_width;
@@ -6800,4 +6771,49 @@ _gtk_draw_insertion_cursor (GtkWidget        *widget,
             }
         }
     }
+}
+
+/**
+ * gtk_draw_insertion_cursor:
+ * @widget:  a #GtkWidget
+ * @drawable: a #GdkDrawable 
+ * @area: rectangle to which the output is clipped, or %NULL if the
+ *        output should not be clipped
+ * @location: location where to draw the cursor (@location->width is ignored)
+ * @is_primary: if the cursor should be the primary cursor color.
+ * @direction: whether the cursor is left-to-right or
+ *             right-to-left. Should never be #GTK_TEXT_DIR_NONE
+ * @draw_arrow: %TRUE to draw a directional arrow on the
+ *        cursor. Should be %FALSE unless the cursor is split.
+ * 
+ * Draws a text caret on @drawable at @location. This is not a style function
+ * but merely a convenience function for drawing the standard cursor shape.
+ *
+ * Since: 2.4
+ **/
+void
+gtk_draw_insertion_cursor (GtkWidget        *widget,
+			   GdkDrawable      *drawable,
+			   GdkRectangle     *area,
+			   GdkRectangle     *location,
+			   gboolean          is_primary,
+			   GtkTextDirection  direction,
+			   gboolean          draw_arrow)
+{
+  GdkGC *gc;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
+  g_return_if_fail (location != NULL);
+  g_return_if_fail (direction != GTK_TEXT_DIR_NONE);
+
+  gc = get_insertion_cursor_gc (widget, is_primary);
+  if (area)
+    gdk_gc_set_clip_rectangle (gc, area);
+  
+  draw_insertion_cursor (widget, drawable, gc,
+			 location, direction, draw_arrow);
+  
+  if (area)
+    gdk_gc_set_clip_rectangle (gc, NULL);
 }

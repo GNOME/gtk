@@ -565,7 +565,7 @@ do_theme_change (GtkIconTheme *icon_theme)
   if (priv->screen && priv->is_screen_singleton)
     {
       GtkSettings *settings = gtk_settings_get_for_screen (priv->screen);
-      _gtk_rc_reset_styles (settings);
+      gtk_rc_reset_styles (settings);
     }
 }
 
