@@ -1,3 +1,8 @@
+Sat Sep  4 22:45:49 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkentry.c (gtk_entry_backspace): Don't refuse to delete
+	text in passwords.  (#151723, Owen Taylor)
+
 Sat Sep  4 16:51:00 2004  Søren Sandmann  <sandmann@redhat.com>
 
 	* gdk/x11/gdkevents-x11.c (gdk_event_prepare): Revert accidental

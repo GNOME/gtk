@@ -2517,7 +2517,7 @@ gtk_entry_backspace (GtkEntry *entry)
 
   gtk_entry_reset_im_context (entry);
 
-  if (!entry->editable || !entry->visible || !entry->text)
+  if (!entry->editable || !entry->text)
     return;
 
   if (entry->selection_bound != entry->current_pos)
