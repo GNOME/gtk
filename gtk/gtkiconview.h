@@ -26,8 +26,8 @@ G_BEGIN_DECLS
 #define EGG_TYPE_ICON_LIST		(egg_icon_list_get_type ())
 #define EGG_ICON_LIST(obj)		(GTK_CHECK_CAST ((obj), EGG_TYPE_ICON_LIST, EggIconList))
 #define EGG_ICON_LIST_CLASS(klass)	(GTK_CHECK_CLASS_CAST ((klass), EGG_TYPE_ICON_LIST, EggIconListClass))
-#define GTK_IS_ICON_LIST(obj)		(GTK_CHECK_TYPE ((obj), EGG_TYPE_ICON_LIST))
-#define GTK_IS_ICON_LIST_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((klass), EGG_TYPE_ICON_LIST))
+#define EGG_IS_ICON_LIST(obj)		(GTK_CHECK_TYPE ((obj), EGG_TYPE_ICON_LIST))
+#define EGG_IS_ICON_LIST_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((klass), EGG_TYPE_ICON_LIST))
 #define EGG_ICON_LIST_GET_CLASS(obj)    (GTK_CHECK_GET_CLASS ((obj), EGG_TYPE_ICON_LIST, EggIconListClass))
 
 #define EGG_TYPE_ICON_LIST_ITEM         (egg_icon_list_item_get_type ())
