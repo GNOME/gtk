@@ -1,3 +1,8 @@
+Wed Mar 10 00:24:24 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtkfilechooserdefault.c (error_dialog): use uri instead of
+	the pathname for UTF-8 safety.
+
 Wed Mar 10 00:10:47 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtkfilechooserdefault.c (shortcuts_insert_path): Always

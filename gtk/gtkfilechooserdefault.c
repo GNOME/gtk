@@ -606,13 +606,16 @@ error_dialog (GtkFileChooserDefault *impl,
 	      const GtkFilePath     *path,
 	      GError                *error)
 {
+  char *uri;
   char *text;
 
+  uri = gtk_file_system_path_to_uri (impl->file_system, path);
   text = g_strdup_printf (msg,
-			  gtk_file_path_get_string (path),
-			  error->message);
+			 uri,
+			 error->message);
   error_message (impl, text);
   g_free (text);
+  g_free (uri);
   g_error_free (error);
 }
 
