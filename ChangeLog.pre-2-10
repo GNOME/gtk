@@ -1,3 +1,13 @@
+Wed Sep  3 21:38:26 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gdk/Makefile.am, gdk/linux-fb/gdkfbmanager.c, gdk/x11/gdkcolor-x11.c,
+	gdk-pixbuf/io-gif.c, gtk/Makefile.am, gtk/gtkcalendar.c,
+	gtk/gtkclist.c, gtk/gtkctree.c, gtk/gtkdnd.c, gtk/gtkentry.c,
+	gtk/gtkhandlebox.c, gtk/gtkitemfactory.c, gtk/gtkmenu.c,
+	gtk/gtknotebook.c, gtk/gtkrange.c, gtk/gtkrc.h, gtk/gtktree.c,
+	gtk/gtktypeutils.h: big patch from Kjartan Maraas
+	to fix numerous typos.
+
 Wed Sep  3 17:38:01 BST 2003  Tony Gale <gale@gtk.org>
 
 	* docs/faq/gtk-faq.sgml: Correct compile line for threads example.

@@ -241,7 +241,7 @@ read_client_data (Client *client)
 
   if (res != sizeof (fb_message))
     {
-      g_warning ("Packet with wrong size %d recieved", res);
+      g_warning ("Packet with wrong size %d received", res);
       return FALSE;
     }
 

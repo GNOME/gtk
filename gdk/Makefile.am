@@ -111,7 +111,7 @@ gdk_c_sources =                 \
 	gdkwindow.c
 
 #
-# setup GDK sources and their dependancies
+# setup GDK sources and their dependencies
 #
 
 gdkincludedir = $(includedir)/gtk-2.0/gdk

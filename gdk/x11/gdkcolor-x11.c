@@ -1074,11 +1074,11 @@ gdk_colormap_alloc_colors_pseudocolor (GdkColormap *colormap,
  *    existing colors if the colors cannot be allocated as requested.
  * @success: An array of length @ncolors. On return, this
  *   indicates whether the corresponding color in @colors was
- *   sucessfully allocated or not.
+ *   successfully allocated or not.
  * 
  * Allocates colors from a colormap.
  * 
- * Return value: The number of colors that were not sucessfully 
+ * Return value: The number of colors that were not successfully 
  * allocated.
  **/
 gint
