@@ -1,3 +1,8 @@
+Thu Jul 22 01:21:28 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkfontsel.c (gtk_font_selection_init): Add additional
+	accessability relations.  (#141804,  Padraig O'Briain)
+
 Wed Jul 21 22:54:33 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcomboboxentry.c (gtk_combo_box_entry_new_text): 
