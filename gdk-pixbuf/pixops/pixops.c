@@ -703,7 +703,7 @@ scale_line (int *weights, int n_x, int n_y,
 	  unsigned int r = 0, g = 0, b = 0, a = 0;
 	  for (i=0; i<n_y; i++)
 	    {
-	      art_u8 *q = src[i] + x_scaled * dest_channels;
+	      art_u8 *q = src[i] + x_scaled * src_channels;
 	      int *line_weights  = pixel_weights + n_x * i;
 	      
 	      for (j=0; j<n_x; j++)
@@ -740,7 +740,7 @@ scale_line (int *weights, int n_x, int n_y,
 	  unsigned int r = 0, g = 0, b = 0;
 	  for (i=0; i<n_y; i++)
 	    {
-	      art_u8 *q = src[i] + x_scaled * dest_channels;
+	      art_u8 *q = src[i] + x_scaled * src_channels;
 	      int *line_weights  = pixel_weights + n_x * i;
 	      
 	      for (j=0; j<n_x; j++)

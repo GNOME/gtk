@@ -1,3 +1,8 @@
+2000-01-05  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk-pixbuf/pixops/pixops.c: Fixed src_channels/dest_channels
+	confusion. (Again caught by Tomas Ogren's Purify)
+
 2000-01-07  Jonathan Blandford  <jrb@redhat.com>
 
 	* gdk-pixbuf/gdk-pixbuf-xform.c (gdk_pixbuf_rotate): comment out
