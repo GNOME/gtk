@@ -67,7 +67,7 @@ heap-allocated data. Iterators are not valid indefinitely; whenever the buffer
 is modified in a way that affects the number of characters in the buffer, all
 outstanding iterators become invalid. (Note that deleting 5 characters and then
 reinserting 5 still invalidates iterators, though you end up with the same
-number of characters).
+number of characters you pass through a state with a different number).
 </para>
 
 <para>
@@ -100,6 +100,14 @@ temporary selection (moving one then the other temporarily selects the range in
 between the old and new positions).
 </para>
 </footnote>
+</para>
+
+<para>
+Text buffers always contain at least one line, but may be empty (that is,
+buffers can contain zero characters). The last line in the text buffer never
+ends in a line separator (such as newline); the other lines in the buffer always
+end in a line separator. Line separators count as characters when computing
+character counts and character offsets.
 </para>
 
 </refsect1>

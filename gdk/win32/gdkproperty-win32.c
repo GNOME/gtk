@@ -167,7 +167,7 @@ gdk_property_change (GdkWindow    *window,
 	     g_free (prop_name),
 	     g_free (type_name)));
 
-  if (property == gdk_selection_property
+  if (property == _gdk_selection_property
       && type == GDK_TARGET_STRING
       && format == 8
       && mode == GDK_PROP_MODE_REPLACE)
@@ -228,7 +228,7 @@ gdk_property_delete (GdkWindow *window,
 		      (guint) property, prop_name),
 	     g_free (prop_name)));
 
-  if (property == gdk_selection_property)
+  if (property == _gdk_selection_property)
     gdk_selection_property_delete (window);
   else
     g_warning ("gdk_property_delete: General case not implemented");

@@ -30,9 +30,6 @@
 #include "gdkprivate-fb.h"
 #include "config.h"
 
-const gchar            *gdk_progclass = "none";
-gboolean          gdk_null_window_warnings = TRUE;
-
 GdkWindow *_gdk_fb_pointer_grab_window, *_gdk_fb_keyboard_grab_window, *_gdk_fb_pointer_grab_confine = NULL;
 gboolean _gdk_fb_pointer_grab_owner_events;
 gboolean _gdk_fb_keyboard_grab_owner_events;
@@ -42,5 +39,5 @@ GdkFBWindow *gdk_root_window = NULL;
 GdkFBDisplay *gdk_display = NULL;
 GdkCursor *_gdk_fb_pointer_grab_cursor;
 GdkGC *_gdk_fb_screen_gc = NULL;
-GdkAtom gdk_selection_property;
+GdkAtom _gdk_selection_property;
 GdkFBAngle _gdk_fb_screen_angle = GDK_FB_0_DEGREES;

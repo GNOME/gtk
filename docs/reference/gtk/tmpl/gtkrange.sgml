@@ -65,6 +65,53 @@ GtkRange
 @setting: 
 
 
+<!-- ##### FUNCTION gtk_range_get_update_policy ##### -->
+<para>
+
+</para>
+
+@range: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_range_get_value ##### -->
+<para>
+
+</para>
+
+@range: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_range_set_increments ##### -->
+<para>
+
+</para>
+
+@range: 
+@step: 
+@page: 
+
+
+<!-- ##### FUNCTION gtk_range_set_range ##### -->
+<para>
+
+</para>
+
+@range: 
+@min: 
+@max: 
+
+
+<!-- ##### FUNCTION gtk_range_set_value ##### -->
+<para>
+
+</para>
+
+@range: 
+@value: 
+
+
 <!-- ##### SIGNAL GtkRange::move-slider ##### -->
 <para>
 Virtual function that moves the slider. Used for keybindings.

@@ -228,14 +228,14 @@ _gdk_windowing_window_init (void)
   guint width;
   guint height;
 
-  g_assert (gdk_parent_root == NULL);
+  g_assert (_gdk_parent_root == NULL);
   
   SystemParametersInfo(SPI_GETWORKAREA, 0, &rect, 0);
   width  = rect.right - rect.left;
   height = rect.bottom - rect.top;
 
-  gdk_parent_root = g_object_new (GDK_TYPE_WINDOW, NULL);
-  private = (GdkWindowObject *)gdk_parent_root;
+  _gdk_parent_root = g_object_new (GDK_TYPE_WINDOW, NULL);
+  private = (GdkWindowObject *)_gdk_parent_root;
   impl = GDK_WINDOW_IMPL_WIN32 (private->impl);
   draw_impl = GDK_DRAWABLE_IMPL_WIN32 (private->impl);
   
@@ -247,7 +247,7 @@ _gdk_windowing_window_init (void)
   impl->width = width;
   impl->height = height;
 
-  gdk_win32_handle_table_insert (&gdk_root_window, gdk_parent_root);
+  gdk_win32_handle_table_insert (&gdk_root_window, _gdk_parent_root);
 }
 
 /* The Win API function AdjustWindowRect may return negative values
@@ -427,7 +427,7 @@ gdk_window_new (GdkWindow     *parent,
   g_return_val_if_fail (attributes != NULL, NULL);
 
   if (!parent)
-    parent = gdk_parent_root;
+    parent = _gdk_parent_root;
 
   g_return_val_if_fail (GDK_IS_WINDOW (parent), NULL);
   
@@ -560,7 +560,7 @@ gdk_window_new (GdkWindow     *parent,
     case GDK_WINDOW_TEMP:
       dwStyle = WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
       /* a temp window is not necessarily a top level window */
-      dwStyle |= (gdk_parent_root == parent ? WS_POPUP : WS_CHILDWINDOW);
+      dwStyle |= (_gdk_parent_root == parent ? WS_POPUP : WS_CHILDWINDOW);
       dwExStyle |= WS_EX_TOOLWINDOW;
       break;
 
@@ -610,8 +610,8 @@ gdk_window_new (GdkWindow     *parent,
 				      MAKEINTRESOURCE(klass),
 				      mbtitle,
 				      dwStyle,
-				      x, y, 
-				      width, height,
+				      impl->position_info.x, impl->position_info.y, 
+				      impl->position_info.width, impl->position_info.height,
 				      hparent,
 				      NULL,
 				      gdk_app_hmodule,
@@ -623,8 +623,8 @@ gdk_window_new (GdkWindow     *parent,
 		    MAKEINTRESOURCE(klass),
 		    mbtitle,
 		    dwStyle,
-		    x, y, 
-		    width, height,
+		    impl->position_info.x, impl->position_info.y, 
+		    impl->position_info.width, impl->position_info.height,
 		    hparent,
 		    NULL,
 		    gdk_app_hmodule,
@@ -850,7 +850,7 @@ show_window_internal (GdkWindow *window,
 	          ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNORMAL);
 	          ShowWindow (GDK_WINDOW_HWND (window), SW_RESTORE);
 	        }
-              if (parent == gdk_parent_root)
+              if (parent == _gdk_parent_root)
                 SetForegroundWindow (GDK_WINDOW_HWND (window));
 	      if (raise)
 	        BringWindowToTop (GDK_WINDOW_HWND (window));
@@ -1080,7 +1080,7 @@ gdk_window_reparent (GdkWindow *window,
   g_return_if_fail (window != NULL);
 
   if (!new_parent)
-    new_parent = gdk_parent_root;
+    new_parent = _gdk_parent_root;
 
   window_private = (GdkWindowObject*) window;
   old_parent_private = (GdkWindowObject *) window_private->parent;
@@ -1303,7 +1303,7 @@ gdk_window_set_hints (GdkWindow *window,
 	  impl->hint_min_width = rect.right - rect.left;
 	  impl->hint_min_height = rect.bottom - rect.top;
 
-	  /* Also chek if he current size of the window is in bounds. */
+	  /* Also check if he current size of the window is in bounds. */
 	  GetClientRect (GDK_WINDOW_HWND (window), &rect);
 	  if (rect.right < min_width && rect.bottom < min_height)
 	    gdk_window_resize (window, min_width, min_height);
@@ -1663,7 +1663,7 @@ gdk_window_get_geometry (GdkWindow *window,
   g_return_if_fail (window == NULL || GDK_IS_WINDOW (window));
   
   if (!window)
-    window = gdk_parent_root;
+    window = _gdk_parent_root;
   
   if (!GDK_WINDOW_DESTROYED (window))
     {
@@ -1822,7 +1822,7 @@ _gdk_windowing_window_get_pointer (GdkWindow       *window,
   g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), NULL);
   
   if (!window)
-    window = gdk_parent_root;
+    window = _gdk_parent_root;
 
   return_val = NULL;
   GetCursorPos (&pointc);
@@ -1886,7 +1886,7 @@ _gdk_windowing_window_at_pointer (gint *win_x,
 
   if (hwnd == NULL)
     {
-      window = gdk_parent_root;
+      window = _gdk_parent_root;
       if (win_x)
 	*win_x = pointc.x;
       if (win_y)
@@ -2003,6 +2003,22 @@ gdk_window_set_override_redirect (GdkWindow *window,
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   g_warning ("gdk_window_set_override_redirect not implemented");
+}
+
+void          
+gdk_window_set_icon_list (GdkWindow *window,
+			  GList     *pixbufs)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  /* We could convert it to a hIcon and DrawIcon () it when getting
+   * a WM_PAINT with IsIconic, but is it worth it ? Same probably
+   * goes for gdk_window_set_icon (). Patches accepted :-)  --hb
+   * Or do we only need to deliver the Icon on WM_GETICON ?
+   */
 }
 
 void          

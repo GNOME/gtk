@@ -255,9 +255,6 @@ gint gdk_screen_height_mm (void);
 
 void gdk_beep (void);
 
-void gdk_key_repeat_disable (void);
-void gdk_key_repeat_restore (void);
-
 gint	      gdk_visual_get_best_depth	     (void);
 GdkVisualType gdk_visual_get_best_type	     (void);
 GdkVisual*    gdk_visual_get_system	     (void);

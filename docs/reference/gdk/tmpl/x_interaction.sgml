@@ -14,29 +14,6 @@ X Window System Interaction
 
 </para>
 
-<!-- ##### MACRO GDK_GC_X11 ##### -->
-<para>
-
-</para>
-
-@object: 
-
-
-<!-- ##### MACRO GDK_GC_X11_GET_CLASS ##### -->
-<para>
-
-</para>
-
-@obj: 
-
-
-<!-- ##### MACRO GDK_ROOT_WINDOW ##### -->
-<para>
-
-</para>
-
-
-
 <!-- ##### MACRO GDK_ROOT_PARENT ##### -->
 <para>
 
@@ -49,6 +26,7 @@ X Window System Interaction
 
 </para>
 
+@object: 
 
 
 <!-- ##### MACRO GDK_WINDOW_XDISPLAY ##### -->
@@ -144,6 +122,8 @@ X Window System Interaction
 
 </para>
 
+@visual: 
+<!-- # Unused Parameters # -->
 @vis: 
 
 
@@ -186,36 +166,6 @@ X Window System Interaction
 
 
 
-<!-- ##### VARIABLE gdk_screen ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### VARIABLE gdk_display_name ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### VARIABLE gdk_leader_window ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### VARIABLE gdk_selection_property ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### VARIABLE gdk_progclass ##### -->
-<para>
-
-</para>
-
-
 <!-- ##### FUNCTION gdkx_visual_get ##### -->
 <para>
 
@@ -239,9 +189,11 @@ X Window System Interaction
 
 </para>
 
-@dpy: 
+@display: 
 @win: 
 @Returns: 
+<!-- # Unused Parameters # -->
+@dpy: 
 
 
 <!-- ##### FUNCTION gdk_pixmap_foreign_new ##### -->

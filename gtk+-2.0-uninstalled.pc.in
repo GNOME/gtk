@@ -1,5 +1,7 @@
 target=@gdktarget@
 
+gtk_binary_version=@GTK_BINARY_VERSION@
+
 Name: GTK+ Uninstalled
 Description: GIMP Tool Kit (${target} target), Not Installed
 Version: @VERSION@

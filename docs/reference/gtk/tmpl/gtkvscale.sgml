@@ -36,3 +36,14 @@ Creates a new #GtkVScale.
 @Returns: a new #GtkVScale.
 
 
+<!-- ##### FUNCTION gtk_vscale_new_with_range ##### -->
+<para>
+
+</para>
+
+@min: 
+@max: 
+@step: 
+@Returns: 
+
+

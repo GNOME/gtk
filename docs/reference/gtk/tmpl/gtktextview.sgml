@@ -242,6 +242,16 @@ types related to the text widget and how they work together.
 @size: 
 
 
+<!-- ##### FUNCTION gtk_text_view_get_border_window_size ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@type: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_text_view_forward_display_line ##### -->
 <para>
 
@@ -526,6 +536,15 @@ types related to the text widget and how they work together.
 
 
 <!-- ##### FUNCTION gtk_text_view_get_tabs ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_default_attributes ##### -->
 <para>
 
 </para>

@@ -117,6 +117,24 @@ never be set by an application.)
 @wid: 
 
 
+<!-- ##### FUNCTION gtk_socket_add_id ##### -->
+<para>
+
+</para>
+
+@socket: 
+@id: 
+
+
+<!-- ##### FUNCTION gtk_socket_get_id ##### -->
+<para>
+
+</para>
+
+@socket: 
+@Returns: 
+
+
 <!-- ##### SIGNAL GtkSocket::plug-added ##### -->
 <para>
 

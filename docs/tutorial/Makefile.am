@@ -123,7 +123,7 @@ tutorial_fr: htmldir textdir
 	mv gtk_tut_fr.txt text/)
 
 
-EXTRA_DIST += \
+EXTRA_DIST = \
 	gtk_tut.sgml			\
 	gtk_tut_12.es.sgml		\
 	gtk_tut_it.sgml			\

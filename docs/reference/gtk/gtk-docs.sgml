@@ -60,7 +60,6 @@
 <!entity GtkNotebook SYSTEM "sgml/gtknotebook.sgml">
 <!entity GtkObject SYSTEM "sgml/gtkobject.sgml">
 <!entity GtkOptionMenu SYSTEM "sgml/gtkoptionmenu.sgml">
-<!entity GtkPacker SYSTEM "sgml/gtkpacker.sgml">
 <!entity GtkPaned SYSTEM "sgml/gtkpaned.sgml">
 <!entity GtkPixmap SYSTEM "sgml/gtkpixmap.sgml">
 <!entity GtkPlug SYSTEM "sgml/gtkplug.sgml">
@@ -103,9 +102,9 @@
 <!entity gtk-GtkCellRenderer SYSTEM "sgml/gtkcellrenderer.sgml">
 <!entity gtk-GtkCellRendererPixbuf SYSTEM "sgml/gtkcellrendererpixbuf.sgml">
 <!entity gtk-GtkCellRendererText SYSTEM "sgml/gtkcellrenderertext.sgml">
-<!entity gtk-GtkCellRendererTextPixbuf SYSTEM "sgml/gtkcellrenderertextpixbuf.sgml">
 <!entity gtk-GtkCellRendererToggle SYSTEM "sgml/gtkcellrenderertoggle.sgml">
 <!entity gtk-GtkListStore SYSTEM "sgml/gtkliststore.sgml">
+<!entity gtk-GtkTreeDND SYSTEM "sgml/gtktreednd.sgml">
 <!entity GtkVButtonBox SYSTEM "sgml/gtkvbbox.sgml">
 <!entity GtkVBox SYSTEM "sgml/gtkvbox.sgml">
 <!entity GtkViewport SYSTEM "sgml/gtkviewport.sgml">
@@ -116,6 +115,7 @@
 <!entity GtkVSeparator SYSTEM "sgml/gtkvseparator.sgml">
 <!entity GtkWidget SYSTEM "sgml/gtkwidget.sgml">
 <!entity GtkWindow SYSTEM "sgml/gtkwindow.sgml">
+<!entity GtkWindowGroup SYSTEM "sgml/gtkwindowgroup.sgml">
 <!entity gtk-General SYSTEM "sgml/gtkmain.sgml">
 <!entity gtk-Feature-Test-Macros SYSTEM "sgml/gtkfeatures.sgml">
 <!entity gtk-Graphics-Contexts SYSTEM "sgml/gtkgc.sgml">
@@ -127,7 +127,6 @@
 <!entity gtk-Clipboards SYSTEM "sgml/gtkclipboard.sgml">
 <!entity gtk-Drag-and-Drop SYSTEM "sgml/gtkdnd.sgml">
 <!entity gtk-Signals SYSTEM "sgml/gtksignal.sgml">
-<!entity gtk-Object-Properties SYSTEM "sgml/gtkarg.sgml">
 <!entity gtk-Types SYSTEM "sgml/gtktypeutils.sgml">
 <!entity gtk-Bindings SYSTEM "sgml/gtkbindings.sgml">
 <!entity gtk-Standard-Enumerations SYSTEM "sgml/gtkenums.sgml">
@@ -140,6 +139,8 @@
 <!entity gtk-TextWidget SYSTEM "text_widget.sgml">
 <!entity gtk-TreeWidget SYSTEM "tree_widget.sgml">
 <!entity gtk-Compiling SYSTEM "compiling.sgml">
+<!entity gtk-Building SYSTEM "building.sgml">
+<!entity gtk-Resources SYSTEM "resources.sgml">
 <!entity gtk-Windows SYSTEM "windows.sgml">
 <!entity gtk-Framebuffer SYSTEM "framebuffer.sgml">
 ]>
@@ -149,18 +150,10 @@
   </bookinfo>
 
   <chapter id="gtk">
-    <title>GTK+ </title>
+    <title>GTK+ Overview</title>
     <para>
-GTK+ is a multi-platform open source GUI Toolkit. Everything about
-GTK+ from the object-oriented design to the Free Software LGPL
-licensing allows you to code your project with the most freedom
-possible. You can develop open software, free software, or even
-commercial non-free software without having to spend a dime for
-licenses or royalties.
-    </para>
-    <para>
-GTK+ is a set of libraries to create graphical user interfaces. It
-works on many Unix-like platforms, Windows, and on framebuffer
+GTK+ is a library for creating graphical user interfaces. It
+works on many UNIX-like platforms, Windows, and on framebuffer
 devices. GTK+ is released under the GNU Library General Public License
 (GNU LGPL), which allows for flexible licensing of client
 applications. GTK+ has a C-based object-oriented architecture that
@@ -169,53 +162,102 @@ been written, including C++, Objective-C, Guile/Scheme, Perl, Python,
 TOM, Ada95, Free Pascal, and Eiffel.
     </para>
     <para>
-GTK+ consists of the following component libraries:
+GTK+ depends on the following libraries:
 <variablelist>
 
 <varlistentry>
 <term>GLib</term>
 <listitem><para>
-Provides many useful data types, macros, type conversions,
-string utilities and a lexical scanner. Includes Win32 support.
+A general-purpose utility library, not specific to graphical user interfaces.
+GLib provides many useful data types, macros, type conversions,
+string utilities, file utilities, a main loop abstraction, and so on.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>Pango</term>
+<listitem><para>
+
+Pango is a library for internationalized text handling. It centers
+around the #PangoLayout object, representing a paragraph of text.
+Pango provides the engine for #GtkTextView, #GtkLabel, #GtkEntry, and
+other widgets that display text.
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>ATK</term>
+<listitem><para>
+
+ATK is the Accessibility Toolkit. It provides a set of generic
+interfaces allowing accessibility technologies to interact with a
+graphical user interface. For example, a screen reader uses ATK to
+discover the text in an interface and read it to blind users.  GTK+
+widgets have built-in support for accessibility using the ATK
+framework.
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>GdkPixbuf</term>
+<listitem><para>
+This is a small library which allows you to create #GdkPixbuf
+("pixel buffer") objects from image data or image files. 
+Use a #GdkPixbuf in combination with #GtkImage to display images.
 </para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term>GDK</term>
 <listitem><para>
-A wrapper for low-level windowing functions.
+GDK is the abstraction layer that allows GTK+ to support multiple
+windowing systems. GDK provides drawing and window system facilities
+on X11, Windows, and the Linux framebuffer device.
 </para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term>GTK+</term>
 <listitem><para>
-An advanced widget set.
+
+The GTK+ library itself contains <firstterm>widgets</firstterm>, 
+that is, GUI components such as #GtkButton or #GtkTextView.
+
 </para></listitem>
 </varlistentry>
 </variablelist>
     </para>
 
+    &gtk-Building;
     &gtk-Compiling;
+    &gtk-Resources;
     &gtk-Windows;
     &gtk-Framebuffer;
+
+  </chapter>
+
+
+  <chapter  id="gtkbase" role="no-toc">
+    <title>GTK+ Core Reference</title>
+
     &gtk-General;
-    &gtk-Feature-Test-Macros;
-    &gtk-Graphics-Contexts;
-    &gtk-Styles;
-<!--    &gtk-Themes; -->
-    &gtk-Resource-Files;
     &gtk-Keyboard-Accelerators;
-    &gtk-Selections;
     &gtk-Clipboards;
     &gtk-Drag-and-Drop;
-    &gtk-Signals;
-    &gtk-Object-Properties;
     &gtk-Stock-Items;
     &gtk-Themeable-Stock-Images;
-    &gtk-Types;
+    &gtk-Resource-Files;   
     &gtk-Bindings;
     &gtk-Standard-Enumerations;
+    &gtk-Graphics-Contexts;
+    &gtk-Styles;
+    &gtk-Selections;
+    &gtk-Feature-Test-Macros;
+    &gtk-Signals;
+    &gtk-Types;
+<!--    &gtk-Themes; -->
 
   </chapter>
 
@@ -234,6 +276,7 @@ An advanced widget set.
         &GtkMessageDialog;
         &GtkPlug;
         &GtkWindow;
+        &GtkWindowGroup;
     </sect1>
 
     <sect1 id="DisplayWidgets">
@@ -280,11 +323,11 @@ An advanced widget set.
         &gtk-GtkTreeStore;
         &gtk-GtkTreeViewColumn;
         &gtk-GtkTreeView;
+        &gtk-GtkTreeDND;
         &gtk-GtkTreeModelSort;
         &gtk-GtkCellRenderer;
         &gtk-GtkCellRendererPixbuf;
         &gtk-GtkCellRendererText;
-        &gtk-GtkCellRendererTextPixbuf;
         &gtk-GtkCellRendererToggle;
         &gtk-GtkListStore;
     </sect1>
@@ -397,7 +440,6 @@ An advanced widget set.
         &GtkCTree;
         &GtkList;
         &GtkListItem;
-        &GtkPacker;
         &GtkPixmap;
         &GtkProgress;
         &GtkPreview;

@@ -36,3 +36,14 @@ Creates a new #GtkHScale.
 @Returns: a new #GtkHScale.
 
 
+<!-- ##### FUNCTION gtk_hscale_new_with_range ##### -->
+<para>
+
+</para>
+
+@min: 
+@max: 
+@step: 
+@Returns: 
+
+

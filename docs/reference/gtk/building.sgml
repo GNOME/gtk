@@ -1,22 +1,28 @@
-  <appendix id="compiling">
-    <title>Compiling the &gdk-pixbuf; library</title>
+<refentry id="gtk-building" revision="6 Sept 2001">
+<refmeta>
+<refentrytitle>Compiling the GTK+ package</refentrytitle>
+<manvolnum>3</manvolnum>
+<refmiscinfo>GTK Library</refmiscinfo>
+</refmeta>
 
-    <para>
-      This appendix describes the special options you can use while
-      compiling the &gdk-pixbuf; library.
-    </para>
+<refnamediv>
+<refname>Compiling the GTK+ Package</refname>
+<refpurpose>
+How to compile GTK+ itself
+</refpurpose>
+</refnamediv>
 
-    <sect1 id="building">
-      <title>Building the Library</title>
+    <refsect1 id="building">
+      <title>Building the Library on UNIX</title>
       <para>
-	The &gdk-pixbuf; library uses the standard GNU build system,
+	On UNIX, GTK+ uses the standard GNU build system,
 	using <application>autoconf</application> for package
 	configuration and resolving portability issues,
 	<application>automake</application> for building makefiles
 	that comply with the GNU Coding Standards, and
 	<application>libtool</application> for building shared
 	libraries on multiple platforms.  The normal sequence for
-	compiling and installing the &gdk-pixbuf; library is thus:
+	compiling and installing the GTK+ library is thus:
 
 	<literallayout>
 	  <userinput>./configure</userinput>
@@ -33,14 +39,14 @@
 	<command>./configure --help</command> for information about
 	the standard options.
       </para>
-    </sect1>
+    </refsect1>
 
-    <sect1 id="extra-configuration-options">
+    <refsect1 id="extra-configuration-options">
       <title>Extra Configuration Options</title>
 
       <para>
 	In addition to the normal options, the
-	<command>configure</command> script in the &gdk-pixbuf;
+	<command>configure</command> script in the GTK+
 	library supports these additional arguments:
 
 	<cmdsynopsis>
@@ -50,10 +56,19 @@
 	    <arg>--disable-modules</arg>
 	    <arg>--enable-modules</arg>
 	  </group>
-
+	  <group>
+	    <arg>--with-included-loaders==LOADER1,LOADER2,...</arg>
+	  </group>
 	  <group>
 	    <arg>--disable-gtk-doc</arg>
 	    <arg>--enable-gtk-doc</arg>
+	  </group>
+	  <group>
+	    <arg>--with-gdktarget=[x11|linux-fb]</arg>
+	  </group>
+	  <group>
+	    <arg>--disable-shadowfb</arg>
+	    <arg>--enable-shadowfb</arg>
 	  </group>
 	</cmdsynopsis>
       </para>
@@ -63,16 +78,26 @@
 	  <systemitem>--enable-modules</systemitem></title>
 
 	<para>
-	  Normally &gdk-pixbuf; will try to build the image file
+	  Normally GTK+ will try to build the GdkPixbuf image file
 	  format loaders as little shared libraries that are loaded on
 	  demand.  The <systemitem>--disable-modules</systemitem>
 	  argument indicates that they should all be built statically
-	  into the &gdk-pixbuf; library instead.  This is useful for
+	  into the GTK+ library instead.  This is useful for
 	  people who need to produce statically-linked binaries.  If
 	  neither <systemitem>--disable-modules</systemitem> nor
 	  <systemitem>--enable-modules</systemitem> is specified, then
 	  the <command>configure</command> script will try to
 	  auto-detect whether shared modules work on your system.
+	</para>
+      </formalpara>
+
+      <formalpara>
+	<title><systemitem>--with-included-loaders</systemitem></title>
+
+	<para>
+         This option allows you to specify which image loaders you
+         want to include; for example, you might include only the PNG
+         loader to create a smaller GdkPixbuf binary.
 	</para>
       </formalpara>
 
@@ -85,19 +110,33 @@
 	  to auto-detect whether the
 	  <application>gtk-doc</application> package is installed.  If
 	  it is, then it will use it to extract and build the
-	  documentation for the &gdk-pixbuf; library.  These options
+	  documentation for the GTK+ library.  These options
 	  can be used to explicitly control whether gtk-doc should be
 	  used or not.  If it is not used, the distributed,
 	  pre-generated HTML files will be installed instead of
 	  building them on your machine.
 	</para>
       </formalpara>
-    </sect1>
-  </appendix>
 
-<!--
-Local variables:
-mode: sgml
-sgml-parent-document: ("gdk-pixbuf.sgml" "book" "book" "")
-End:
--->
+      <formalpara>
+	<title><systemitem>--with-gdktarget</systemitem></title>
+
+	<para>
+          Toggles between the x11 and linux-fb backends for GDK. 
+          The default is x11.
+	</para>
+      </formalpara>
+
+      <formalpara>
+	<title><systemitem>--disable-shadowfb</systemitem> and
+	  <systemitem>--enable-shadowfb</systemitem></title>
+
+	<para>
+         Toggles shadow framebuffer support for the linux-fb target, 
+         if selected.
+	</para>
+      </formalpara>
+
+    </refsect1>
+
+</refentry>

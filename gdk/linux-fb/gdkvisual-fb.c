@@ -73,7 +73,7 @@ gdk_visual_get_type (void)
 }
 
 void
-gdk_visual_init (void)
+_gdk_visual_init (void)
 {
   system_visual = g_object_new (GDK_TYPE_VISUAL, NULL);
 

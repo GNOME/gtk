@@ -37,8 +37,8 @@
  * @src_y: source Y coordinate.
  * @dest_x: Destination X coordinate.
  * @dest_y: Destination Y coordinate.
- * @width: Width of region to threshold.
- * @height: Height of region to threshold.
+ * @width: Width of region to threshold, or -1 to use pixbuf width
+ * @height: Height of region to threshold, or -1 to use pixbuf height
  * @alpha_threshold: Opacity values below this will be painted as zero; all
  * other values will be painted as one.
  *
@@ -62,10 +62,15 @@ gdk_pixbuf_render_threshold_alpha (GdkPixbuf *pixbuf,
   int start, start_status;
   int status;
 
-  g_return_if_fail (pixbuf != NULL);
+  g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
   g_return_if_fail (pixbuf->colorspace == GDK_COLORSPACE_RGB);
   g_return_if_fail (pixbuf->n_channels == 3 || pixbuf->n_channels == 4);
   g_return_if_fail (pixbuf->bits_per_sample == 8);
+
+  if (width == -1) 
+    width = pixbuf->width;
+  if (height == -1)
+    height = pixbuf->height;
 
   g_return_if_fail (bitmap != NULL);
   g_return_if_fail (width >= 0 && height >= 0);
@@ -141,8 +146,8 @@ gdk_pixbuf_render_threshold_alpha (GdkPixbuf *pixbuf,
  * @src_y: Source Y coordinate within pixbuf.
  * @dest_x: Destination X coordinate within drawable.
  * @dest_y: Destination Y coordinate within drawable.
- * @width: Width of region to render, in pixels.
- * @height: Height of region to render, in pixels.
+ * @width: Width of region to render, in pixels, or -1 to use pixbuf width
+ * @height: Height of region to render, in pixels, or -1 to use pixbuf height
  * @dither: Dithering mode for GdkRGB.
  * @x_dither: X offset for dither.
  * @y_dither: Y offset for dither.
@@ -173,13 +178,18 @@ gdk_pixbuf_render_to_drawable (GdkPixbuf   *pixbuf,
   int rowstride;
   guchar *buf;
 
-  g_return_if_fail (pixbuf != NULL);
+  g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
   g_return_if_fail (pixbuf->colorspace == GDK_COLORSPACE_RGB);
   g_return_if_fail (pixbuf->n_channels == 3 || pixbuf->n_channels == 4);
   g_return_if_fail (pixbuf->bits_per_sample == 8);
 
   g_return_if_fail (drawable != NULL);
   g_return_if_fail (gc != NULL);
+
+  if (width == -1) 
+    width = pixbuf->width;
+  if (height == -1)
+    height = pixbuf->height;
 
   g_return_if_fail (width >= 0 && height >= 0);
   g_return_if_fail (src_x >= 0 && src_x + width <= pixbuf->width);
@@ -227,8 +237,8 @@ gdk_pixbuf_render_to_drawable (GdkPixbuf   *pixbuf,
  * @src_y: Source Y coordinates within pixbuf.
  * @dest_x: Destination X coordinate within drawable.
  * @dest_y: Destination Y coordinate within drawable.
- * @width: Width of region to render, in pixels.
- * @height: Height of region to render, in pixels.
+ * @width: Width of region to render, in pixels, or -1 to use pixbuf width.
+ * @height: Height of region to render, in pixels, or -1 to use pixbuf height.
  * @alpha_mode: If the image does not have opacity information, this is ignored.
  * Otherwise, specifies how to handle transparency when rendering.
  * @alpha_threshold: If the image does have opacity information and @alpha_mode
@@ -273,12 +283,18 @@ gdk_pixbuf_render_to_drawable_alpha (GdkPixbuf   *pixbuf,
   GdkRegion *drect;
   GdkRectangle tmp_rect;
   
-  g_return_if_fail (pixbuf != NULL);
+  g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
   g_return_if_fail (pixbuf->colorspace == GDK_COLORSPACE_RGB);
   g_return_if_fail (pixbuf->n_channels == 3 || pixbuf->n_channels == 4);
   g_return_if_fail (pixbuf->bits_per_sample == 8);
 
   g_return_if_fail (drawable != NULL);
+
+  if (width == -1) 
+    width = pixbuf->width;
+  if (height == -1)
+    height = pixbuf->height;
+
   g_return_if_fail (width >= 0 && height >= 0);
   g_return_if_fail (src_x >= 0 && src_x + width <= pixbuf->width);
   g_return_if_fail (src_y >= 0 && src_y + height <= pixbuf->height);
@@ -429,57 +445,19 @@ gdk_pixbuf_render_to_drawable_alpha (GdkPixbuf   *pixbuf,
  *
  * Creates a pixmap and a mask bitmap which are returned in the @pixmap_return
  * and @mask_return arguments, respectively, and renders a pixbuf and its
- * corresponding tresholded alpha mask to them.  This is merely a convenience
+ * corresponding thresholded alpha mask to them.  This is merely a convenience
  * function; applications that need to render pixbufs with dither offsets or to
  * given drawables should use gdk_pixbuf_render_to_drawable_alpha() or
  * gdk_pixbuf_render_to_drawable(), and gdk_pixbuf_render_threshold_alpha().
  *
+ * The pixmap that is created is created for the colormap returned
+ * by gdk_rgb_get_colormap(). You normally will want to instead use
+ * the actual colormap for a widget, and use
+ * gdk_pixbuf_render_pixmap_and_mask_for_colormap.
+ *
  * If the pixbuf does not have an alpha channel, then *@mask_return will be set
  * to NULL.
  **/
-void
-gdk_pixbuf_render_pixmap_and_mask_for_screen (GdkPixbuf  *pixbuf,
-					      GdkScreen  *screen,
-					      GdkPixmap **pixmap_return,
-					      GdkBitmap **mask_return,
-					      int         alpha_threshold)
-{
-  g_return_if_fail (pixbuf != NULL);
-  g_return_if_fail (GDK_IS_SCREEN (screen));
-  
-  if (pixmap_return)
-    {
-      GdkGC *gc;
-      
-      *pixmap_return = gdk_pixmap_new (gdk_screen_get_root_window (screen),
-				       pixbuf->width, pixbuf->height,
-				       gdk_rgb_get_visual_for_screen (screen)->depth);
-
-      gc = gdk_gc_new (*pixmap_return);
-      gdk_pixbuf_render_to_drawable (pixbuf, *pixmap_return, gc,
-				     0, 0, 0, 0,
-				     pixbuf->width, pixbuf->height,
-				     GDK_RGB_DITHER_NORMAL,
-				     0, 0);
-      gdk_gc_unref (gc);
-    }
-  
-  if (mask_return)
-    {
-      if (pixbuf->has_alpha)
-	{
-	  *mask_return = gdk_pixmap_new (gdk_screen_get_root_window(screen),
-					 pixbuf->width, pixbuf->height, 1);
-
-	  gdk_pixbuf_render_threshold_alpha (pixbuf, *mask_return,
-					     0, 0, 0, 0,
-					     pixbuf->width, pixbuf->height,
-					     alpha_threshold);
-	}
-      else
-	*mask_return = NULL;
-    }
-}
 #ifndef GDK_MULTIHEAD_SAFE
 void
 gdk_pixbuf_render_pixmap_and_mask (GdkPixbuf  *pixbuf,
@@ -487,12 +465,76 @@ gdk_pixbuf_render_pixmap_and_mask (GdkPixbuf  *pixbuf,
 				   GdkBitmap **mask_return,
 				   int         alpha_threshold)
 {
-  GDK_NOTE (MULTIHEAD,g_message ("Use gdk_pixbuf_render_pixmap_and_mask_for_screen instead\n"));
-  gdk_pixbuf_render_pixmap_and_mask_for_screen (pixbuf,
-					       gdk_get_default_screen(),
-					       pixmap_return,
-					       mask_return,
-					       alpha_threshold);
+  gdk_pixbuf_render_pixmap_and_mask_for_colormap (pixbuf,
+						  gdk_rgb_get_colormap (),
+						  pixmap_return, mask_return,
+						  alpha_threshold);
 }
 #endif
 
+/**
+ * gdk_pixbuf_render_pixmap_and_mask_for_colormap:
+ * @pixbuf: A pixbuf.
+ * @colormap: A #GdkColormap
+ * @pixmap_return: Return value for the created pixmap.
+ * @mask_return: Return value for the created mask.
+ * @alpha_threshold: Threshold value for opacity values.
+ *
+ * Creates a pixmap and a mask bitmap which are returned in the @pixmap_return
+ * and @mask_return arguments, respectively, and renders a pixbuf and its
+ * corresponding tresholded alpha mask to them.  This is merely a convenience
+ * function; applications that need to render pixbufs with dither offsets or to
+ * given drawables should use gdk_pixbuf_render_to_drawable_alpha() or
+ * gdk_pixbuf_render_to_drawable(), and gdk_pixbuf_render_threshold_alpha().
+ *
+ * The pixmap that is created uses the #GdkColormap specified by @colormap.
+ * This colormap must match the colormap of the window where the pixmap
+ * will eventually be used or an error will result.
+ *
+ * If the pixbuf does not have an alpha channel, then *@mask_return will be set
+ * to NULL.
+ **/
+void
+gdk_pixbuf_render_pixmap_and_mask_for_colormap (GdkPixbuf   *pixbuf,
+						GdkColormap *colormap,
+						GdkPixmap  **pixmap_return,
+						GdkBitmap  **mask_return,
+						int          alpha_threshold)
+{
+  g_return_if_fail (pixbuf != NULL);
+  
+  if (pixmap_return)
+    {
+      GdkGC *gc;
+      
+      *pixmap_return = gdk_pixmap_new (gdk_screen_get_root_window (colormap->screen),
+				       pixbuf->width, pixbuf->height,
+				       gdk_rgb_get_visual_for_screen (colormap->screen)->depth);
+
+      gdk_drawable_set_colormap (GDK_DRAWABLE (*pixmap_return), colormap);
+      gc = gdk_gc_new (*pixmap_return);
+      gdk_pixbuf_render_to_drawable (pixbuf, *pixmap_return, gc,
+				     0, 0, 0, 0,
+				     gdk_pixbuf_get_width (pixbuf), gdk_pixbuf_get_height (pixbuf),
+				     GDK_RGB_DITHER_NORMAL,
+				     0, 0);
+      gdk_gc_unref (gc);
+    }
+  
+  if (mask_return)
+    {
+      if (gdk_pixbuf_get_has_alpha (pixbuf))
+	{
+	  *mask_return = gdk_pixmap_new (gdk_screen_get_root_window(colormap->screen),
+					 gdk_pixbuf_get_width (pixbuf),
+					 gdk_pixbuf_get_height (pixbuf), 1);
+
+	  gdk_pixbuf_render_threshold_alpha (pixbuf, *mask_return,
+					     0, 0, 0, 0,
+					     gdk_pixbuf_get_width (pixbuf), gdk_pixbuf_get_height (pixbuf),
+					     alpha_threshold);
+	}
+      else
+	*mask_return = NULL;
+    }
+}

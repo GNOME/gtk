@@ -55,6 +55,15 @@ by @socket_id.
 @Returns: the new #GtkPlug widget.
 
 
+<!-- ##### FUNCTION gtk_plug_get_id ##### -->
+<para>
+
+</para>
+
+@plug: 
+@Returns: 
+
+
 <!-- ##### SIGNAL GtkPlug::embedded ##### -->
 <para>
 

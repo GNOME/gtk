@@ -132,6 +132,7 @@ the GTK+ documentation for more information.
 
 </para>
 
+@display: 
 @xid: 
 @protocol: 
 @Returns: 

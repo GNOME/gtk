@@ -36,7 +36,7 @@ static void gdk_input_none_get_pointer (GdkWindow       *window,
 					GdkModifierType *mask);
 
 void
-gdk_input_init (void)
+_gdk_input_init (void)
 {
   _gdk_init_input_core ();
   gdk_input_vtable.set_mode           = NULL;
@@ -53,9 +53,9 @@ gdk_input_init (void)
   gdk_input_vtable.enable_window      = NULL;
   gdk_input_vtable.disable_window     = NULL;
 
-  gdk_input_devices = g_list_append (NULL, (GdkDeviceInfo *) &gdk_input_core_info);
+  _gdk_input_devices = g_list_append (NULL, (GdkDeviceInfo *) &gdk_input_core_info);
 
-  gdk_input_ignore_core = FALSE;
+  _gdk_input_ignore_core = FALSE;
 }
 
 static void

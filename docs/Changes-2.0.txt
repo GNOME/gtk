@@ -459,3 +459,38 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
   GtkList/GtkTree nor the GtkCList/GtkCTree support
   GTK_SELECTION_EXTENDED anymore.  However, the old extended behavior
   replaces MULTIPLE behavior.
+
+* The following variables are no longer exported from GDK. (Other variables
+  are also no longer exported; the following are the ones found used
+  externally in a large sample of GTK+ code.)
+
+   Variable                               Replacement
+   ========                               ===========
+   gdk_null_window_warnings               None - did nothing in GTK+-1.2.
+   gdk_leader_window                      None - private variable
+   gdk_screen                             gdk_x11_get_default_screen ()
+   gdk_root_window                        gdk_x11_get_default_root_xwindow ()
+   gdk_root_parent                        gdk_get_default_root_window ()
+   gdk_error_code/gdk_error_warnings      gdk_error_trap_push()/pop()
+   gdk_display_name                       gdk_get_display ()
+   gdk_wm_delete_window                   gdk_atom_intern ("WM_DELETE_WINDOW", FALSE)
+   gdk_wm_take_focus                      gdk_atom_intern ("WM_TAKE_FOCUS", FALSE)
+   gdk_wm_protocols                       gdk_atom_intern ("WM_PROTOCOLS", FALSE)
+   
+* The handling of Colormaps and widgets has been changed:
+
+    - The default colormap for widgets is now the GdkRGB colormap, not
+      the system default colormap. If you try to use resources created for  
+      a widget (e.g., widget->style) with a window using the system
+      colormap, errors will result on some machines.
+
+    - gtk_widget_push/pop_colormap() only cause the colormap to be
+      explicitely set on toplevel widgets not on all widgets. The
+      colormap for other widgets (when not set using 
+      gtk_widget_set_colormap()), is determined by finding the nearest
+      ancestor with a colormap set on it explicitely, or if that
+      fails, the default colormap.
+
+* The default selected day for GtkCalendar is now the current day in the
+  month, not the first day in the month. The current month and year
+  were already used.

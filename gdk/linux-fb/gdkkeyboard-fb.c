@@ -22,6 +22,7 @@
 #include "gdkkeysyms.h"
 #include "gdkprivate-fb.h"
 #include <stdlib.h>
+#include <unistd.h>
 #include <string.h>
 #include <ctype.h>
 #include <termios.h>

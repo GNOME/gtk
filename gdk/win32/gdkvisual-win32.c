@@ -84,7 +84,7 @@ gdk_visual_get_type (void)
 }
 
 void
-gdk_visual_init (void)
+_gdk_visual_init (void)
 {
   struct
   {
@@ -207,7 +207,7 @@ gdk_visual_init (void)
       system_visual->visual.blue_mask  = 0x000000FF;
     }
   else
-    g_error ("gdk_visual_init: unsupported BITSPIXEL: %d\n", bitspixel);
+    g_error ("_gdk_visual_init: unsupported BITSPIXEL: %d\n", bitspixel);
 
   system_visual->visual.depth = bitspixel;
   system_visual->visual.byte_order = GDK_LSB_FIRST;

@@ -33,14 +33,15 @@ GtkTreeViewColumn
 @arrow: 
 @alignment: 
 @window: 
+@editable_widget: 
 @xalign: 
 @property_changed_signal: 
 @spacing: 
+@fixed_width: 
 @width: 
 @requested_width: 
 @min_width: 
 @max_width: 
-@displayed_width: 
 @drag_x: 
 @drag_y: 
 @title: 
@@ -62,6 +63,7 @@ GtkTreeViewColumn
 
 </para>
 
+@GTK_TREE_VIEW_COLUMN_GROW_ONLY: 
 @GTK_TREE_VIEW_COLUMN_RESIZABLE: 
 @GTK_TREE_VIEW_COLUMN_AUTOSIZE: 
 @GTK_TREE_VIEW_COLUMN_FIXED: 
@@ -83,15 +85,6 @@ GtkTreeViewColumn
 @cell: 
 @Varargs: 
 @Returns: 
-
-
-<!-- ##### FUNCTION gtk_tree_view_column_set_cell_renderer ##### -->
-<para>
-
-</para>
-
-@tree_column: 
-@cell: 
 
 
 <!-- ##### FUNCTION gtk_tree_view_column_add_attribute ##### -->
@@ -158,17 +151,6 @@ GtkTreeViewColumn
 
 @tree_column: 
 @Returns: 
-
-
-<!-- ##### FUNCTION gtk_tree_view_column_set_width ##### -->
-<para>
-
-</para>
-
-@tree_column: 
-@width: 
-<!-- # Unused Parameters # -->
-@size: 
 
 
 <!-- ##### FUNCTION gtk_tree_view_column_set_min_width ##### -->

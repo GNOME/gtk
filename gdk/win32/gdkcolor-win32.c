@@ -1976,7 +1976,7 @@ gdk_colormap_alloc_colors_shared (GdkColormap *colormap,
       gchar *available = g_new (gchar, colormap->size);
       for (i = 0; i < colormap->size; i++)
 	available[i] = ((private->info[i].ref_count == 0) ||
-			!(private->info[i].flags && GDK_COLOR_WRITEABLE));
+			!(private->info[i].flags & GDK_COLOR_WRITEABLE));
       gdk_colormap_sync (colormap, FALSE);
       
       while (nremaining > 0)

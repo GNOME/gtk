@@ -493,7 +493,7 @@ gdk_pixmap_colormap_new_from_pixbuf (GdkColormap *colormap,
     gdk_pixbuf_unref (render_pixbuf);
 
   if (mask)
-    gdk_pixbuf_render_pixmap_and_mask_for_screen (pixbuf, colormap->screen, NULL, mask, 128);
+    gdk_pixbuf_render_pixmap_and_mask_for_colormap (pixbuf, colormap, NULL, mask, 128);
 
   if (mask && !*mask)
     *mask = make_solid_mask (colormap->screen,

@@ -964,7 +964,7 @@ gdk_dropfiles_filter (GdkXEvent *xev,
       private = GDK_DRAG_CONTEXT_PRIVATE_DATA (context);
       context->protocol = GDK_DRAG_PROTO_WIN32_DROPFILES;
       context->is_source = FALSE;
-      context->source_window = gdk_parent_root;
+      context->source_window = _gdk_parent_root;
       gdk_drawable_ref (context->source_window);
       context->dest_window = event->any.window;
       gdk_drawable_ref (context->dest_window);
@@ -1007,7 +1007,7 @@ gdk_dropfiles_filter (GdkXEvent *xev,
 	    }
 	  g_string_append (result, "\015\012");
 	}
-      gdk_sel_prop_store (gdk_parent_root, text_uri_list_atom, 8,
+      gdk_sel_prop_store (_gdk_parent_root, text_uri_list_atom, 8,
 			  result->str, result->len + 1);
 
       DragFinish (hdrop);
@@ -1023,7 +1023,7 @@ gdk_dropfiles_filter (GdkXEvent *xev,
  *************************************************************/
 
 void
-gdk_dnd_init (void)
+_gdk_dnd_init (void)
 {
 #ifdef OLE2_DND
   HRESULT hres;

@@ -204,6 +204,53 @@ changes the homogenous property of table cells. Ie. whether all cells are an equ
 to FALSE if this is not your desired behaviour.
 
 
+<!-- ##### FUNCTION gtk_table_get_default_row_spacing ##### -->
+<para>
+
+</para>
+
+@table: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_table_get_homogeneous ##### -->
+<para>
+
+</para>
+
+@table: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_table_get_row_spacing ##### -->
+<para>
+
+</para>
+
+@table: 
+@row: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_table_get_col_spacing ##### -->
+<para>
+
+</para>
+
+@table: 
+@column: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_table_get_default_col_spacing ##### -->
+<para>
+
+</para>
+
+@table: 
+@Returns: 
+
+
 <!-- ##### ARG GtkTable:n-rows ##### -->
 <para>
 set or retrieve the number of rows in a table.

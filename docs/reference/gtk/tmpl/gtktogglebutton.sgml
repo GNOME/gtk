@@ -96,6 +96,15 @@ Creates a new toggle button with a text label.
 @Returns: a new toggle button.
 
 
+<!-- ##### FUNCTION gtk_toggle_button_new_with_mnemonic ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_toggle_button_set_mode ##### -->
 <para>
 Determines whether or not the toggle button is drawn on screen. The default mode is FALSE, which results in the button being displayed. To make the button invisible, set <structfield>draw_indicator</structfield> to TRUE.
@@ -103,6 +112,15 @@ Determines whether or not the toggle button is drawn on screen. The default mode
 
 @toggle_button: a #GtkToggleButton.
 @draw_indicator: TRUE or FALSE.
+
+
+<!-- ##### FUNCTION gtk_toggle_button_get_mode ##### -->
+<para>
+
+</para>
+
+@toggle_button: 
+@Returns: 
 
 
 <!-- ##### MACRO gtk_toggle_button_set_state ##### -->

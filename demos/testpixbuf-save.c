@@ -5,15 +5,6 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkscreen.h>
 
-#ifdef GDK_WINDOWING_X11
-#include <gdk/x11/gdkx.h>
-#elif defined (GDK_WINDOWING_WIN32)
-#include <gdk/win32/gdkwin32.h>
-#elif defined (GDK_WINDOWING_FB)
-#include <gdk/linux-fb/gdkfb.h>
-#endif
-
-
 void
 keypress_check (GtkWidget *widget, GdkEventKey *evt, gpointer data)
 {

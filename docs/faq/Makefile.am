@@ -25,7 +25,7 @@ faq: htmldir textdir
 	sgml2txt gtkfaq.sgml;                            \
 	mv gtkfaq.txt text/)
 
-EXTRA_DIST += gtkfaq.sgml gtk-faq.sgml
+EXTRA_DIST = gtkfaq.sgml gtk-faq.sgml
 
 if HAVE_SGML2HTML
 dist-hook: faq

@@ -243,3 +243,12 @@ widget or not.
   in the widget.
 
 
+<!-- ##### FUNCTION gtk_editable_get_editable ##### -->
+<para>
+
+</para>
+
+@editable: 
+@Returns: 
+
+

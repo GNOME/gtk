@@ -33,3 +33,8 @@ Creates a new #GtkInvisible.
 @Returns: a new #GtkInvisible.
 
 
+<!-- ##### ARG GtkInvisible:screen ##### -->
+<para>
+
+</para>
+

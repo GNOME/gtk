@@ -134,11 +134,9 @@ Deprecated compatibility macro.
 
 <!-- ##### MACRO gtk_notebook_set_page ##### -->
 <para>
+
 </para>
 
-<!-- # Unused Parameters # -->
-@notebook: 
-@page_num: 
 
 
 <!-- ##### FUNCTION gtk_notebook_next_page ##### -->
@@ -335,6 +333,71 @@ Deprecated compatibility macro.
 
 @notebook: 
 @tab_vborder: 
+
+
+<!-- ##### FUNCTION gtk_notebook_get_menu_label_text ##### -->
+<para>
+
+</para>
+
+@notebook: 
+@child: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_notebook_get_scrollable ##### -->
+<para>
+
+</para>
+
+@notebook: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_notebook_get_show_border ##### -->
+<para>
+
+</para>
+
+@notebook: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_notebook_get_show_tabs ##### -->
+<para>
+
+</para>
+
+@notebook: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_notebook_get_tab_label_text ##### -->
+<para>
+
+</para>
+
+@notebook: 
+@child: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_notebook_get_tab_pos ##### -->
+<para>
+
+</para>
+
+@notebook: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_notebook_set_current_page ##### -->
+<para>
+
+</para>
+
+@notebook: 
+@page_num: 
 
 
 <!-- ##### SIGNAL GtkNotebook::focus-tab ##### -->

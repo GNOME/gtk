@@ -52,9 +52,11 @@ HTML_IMAGES =
 
 # Extra SGML files that are included by $(DOC_MAIN_SGML_FILE)
 content_files = 		\
+	building.sgml		\
 	compiling.sgml		\
 	framebuffer.sgml	\
 	objects_grouped.sgml	\
+	resources.sgml		\
 	text_widget.sgml	\
 	tree_widget.sgml
 

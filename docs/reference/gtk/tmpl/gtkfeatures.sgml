@@ -6,9 +6,9 @@ variables and functions to check the GTK+ version.
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-This section describes the variables and functions available to test the
-version of the GTK+ library in use.
-FIXME: probably merge with other general stuff.
+GTK+ provides version information, primarily useful in configure checks
+for builds that have a configure script. Applications will not
+typically use the features described here.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
@@ -18,8 +18,15 @@ FIXME: probably merge with other general stuff.
 
 <!-- ##### VARIABLE gtk_major_version ##### -->
 <para>
-The major version number of the GTK+ library.
-(e.g. in GTK+ version 1.2.5 this is 1.)
+The major version number of the GTK+ library.  (e.g. in GTK+ version
+1.2.5 this is 1.) 
+</para>
+
+<para>
+This variable is in the library, so represents the
+GTK+ library you have linked against. Contrast with the
+#GTK_MAJOR_VERSION macro, which represents the major version of the
+GTK+ headers you have included.
 </para>
 
 
@@ -27,6 +34,13 @@ The major version number of the GTK+ library.
 <para>
 The minor version number of the GTK+ library.
 (e.g. in GTK+ version 1.2.5 this is 2.)
+</para>
+
+<para>
+This variable is in the library, so represents the
+GTK+ library you have linked against. Contrast with the
+#GTK_MINOR_VERSION macro, which represents the minor version of the
+GTK+ headers you have included.
 </para>
 
 
@@ -37,72 +51,99 @@ The micro version number of the GTK+ library.
 </para>
 
 
+<para>
+This variable is in the library, so represents the GTK+ library you
+have linked against. Contrast with the #GTK_MICRO_VERSION macro, which
+represents the micro version of the GTK+ headers you have included.
+</para>
+
+
 <!-- ##### VARIABLE gtk_binary_age ##### -->
 <para>
-
+This is the binary age passed to libtool. If "libtool" means nothing
+to you, don't worry about it. ;-)
 </para>
 
 
 <!-- ##### VARIABLE gtk_interface_age ##### -->
 <para>
-
+This is the interface age passed to libtool. If "libtool" means nothing
+to you, don't worry about it. ;-)
 </para>
 
 
 <!-- ##### FUNCTION gtk_check_version ##### -->
 <para>
-Checks that the GTK+ library in use is compatable with the given version.
+Checks that the GTK+ library in use is equal to the given 
+version. Primarily useful to compare the header file version 
+(from #GTK_MAJOR_VERSION, #GTK_MINOR_VERSION, #GTK_MICRO_VERSION) 
+the the runtime library version. This should only be done 
+in the build for your application, to check that the user's libraries
+and header files are the same. Applications should not do this 
+when deployed, because it's OK for applications to use a different
+micro version of GTK+ than the one they were compiled against.
 </para>
 
 @required_major: the required major version.
 @required_minor: the required major version.
 @required_micro: the required major version.
-@Returns: NULL if the GTK+ library is compatable with the given version, or
+@Returns: NULL if the GTK+ library is compatible with the given version, or
 a string describing the version mismatch.
 
 
 <!-- ##### MACRO GTK_MAJOR_VERSION ##### -->
 <para>
-
+Like #gtk_major_version, but from the headers used at
+application compile time, rather than from the library linked against
+at application run time.
 </para>
 
 
 
 <!-- ##### MACRO GTK_MINOR_VERSION ##### -->
 <para>
-
+Like #gtk_minor_version, but from the headers used at
+application compile time, rather than from the library linked against
+at application run time.
 </para>
 
 
 
 <!-- ##### MACRO GTK_MICRO_VERSION ##### -->
 <para>
-
+Like #gtk_micro_version, but from the headers used at
+application compile time, rather than from the library linked against
+at application run time.
 </para>
 
 
 
 <!-- ##### MACRO GTK_BINARY_AGE ##### -->
 <para>
-
+Like #gtk_binary_age, but from the headers used at
+application compile time, rather than from the library linked against
+at application run time.
 </para>
 
 
 
 <!-- ##### MACRO GTK_INTERFACE_AGE ##### -->
 <para>
-
+Like #gtk_interface_age, but from the headers used at
+application compile time, rather than from the library linked against
+at application run time.
 </para>
 
 
 
 <!-- ##### MACRO GTK_CHECK_VERSION ##### -->
 <para>
-
+Returns %TRUE if the version of the GTK+ header files is the same
+as the passed-in version.
 </para>
 
-@major: 
-@minor: 
-@micro: 
+@major: major version (first number in 1.2.5)
+@minor: minor version (second number in 1.2.5)
+@micro: micro version (third number in 1.2.5)
 
 

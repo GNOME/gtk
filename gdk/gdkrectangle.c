@@ -98,10 +98,8 @@ gdk_rectangle_get_type (void)
   
   if (our_type == 0)
     our_type = g_boxed_type_register_static ("GdkRectangle",
-					     NULL,
 					     (GBoxedCopyFunc)gdk_rectangle_copy,
-					     (GBoxedFreeFunc)g_free,
-					     FALSE);
+					     (GBoxedFreeFunc)g_free);
   return our_type;
 }
 

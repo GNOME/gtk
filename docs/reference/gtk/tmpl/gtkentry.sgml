@@ -234,6 +234,52 @@ to fit.
 @n_chars: 
 
 
+<!-- ##### FUNCTION gtk_entry_get_invisible_char ##### -->
+<para>
+
+</para>
+
+@entry: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_get_layout ##### -->
+<para>
+
+</para>
+
+@entry: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_get_layout_offsets ##### -->
+<para>
+
+</para>
+
+@entry: 
+@x: 
+@y: 
+
+
+<!-- ##### FUNCTION gtk_entry_get_max_length ##### -->
+<para>
+
+</para>
+
+@entry: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_get_visibility ##### -->
+<para>
+
+</para>
+
+@entry: 
+@Returns: 
+
+
 <!-- ##### SIGNAL GtkEntry::activate ##### -->
 <para>
 
@@ -350,6 +396,11 @@ of the widget. See gtk_entry_set_max_length().
 <para>
 Determines whether the contents of the entry widget
 are visible or not. See gtk_entry_set_visibility().
+</para>
+
+<!-- ##### ARG GtkEntry:has-frame ##### -->
+<para>
+
 </para>
 
 <!-- ##### ARG GtkEntry:invisible-char ##### -->

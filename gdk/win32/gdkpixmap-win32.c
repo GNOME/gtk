@@ -170,7 +170,7 @@ gdk_pixmap_new (GdkWindow *window,
 #endif
 
   if (!window)
-    window = gdk_parent_root;
+    window = _gdk_parent_root;
 
   if (GDK_WINDOW_DESTROYED (window))
     return NULL;
@@ -330,7 +330,7 @@ gdk_bitmap_create_from_data (GdkWindow   *window,
   g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), NULL);
 
   if (!window)
-    window = gdk_parent_root;
+    window = _gdk_parent_root;
 
   if (GDK_WINDOW_DESTROYED (window))
     return NULL;

@@ -13,10 +13,40 @@ How to compile your GTK+ application
 </refnamediv>
 
 <refsect1>
-<title>Compiling GTK+ Applications</title>
+<title>Compiling GTK+ Applications on UNIX</title>
 
 <para>
+To compile a GTK+ application, you need to tell the compiler where to 
+find the GTK+ header files and libraries. This is done with the
+<literal>pkg-config</literal> utility.
+</para>
+<para>
+The following interactive shell session demonstrates how
+<literal>pkg-config</literal> is used:
+<programlisting>
+$ pkg-config --cflags gtk+-2.0
+ -I/usr/include/gtk-2.0 -I/usr/lib/gtk-2.0/include -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/usr/include/pango-1.0 -I/usr/X11R6/include -I/usr/include/freetype2 -I/usr/include/atk-1.0  
+$ pkg-config --libs gtk+-2.0
+ -L/usr/lib -L/usr/X11R6/lib -lgtk-x11-1.3 -lgdk-x11-1.3 -lXi -lgdk_pixbuf-1.3 -lm -lpangox -lpangoxft -lXft -lXrender -lXext -lX11 -lfreetype -lpango -latk -lgobject-1.3 -lgmodule-1.3 -ldl -lglib-1.3  
+</programlisting>
+</para>
+<para>
+The simplest way to compile a program is to use the "backticks"
+feature of the shell. If you enclose a command in backticks
+(<emphasis>not single quotes</emphasis>), then its output will be
+substituted into the command line before execution. So to compile 
+a GTK+ Hello, World, you would type the following:
+<programlisting>
+$ cc `pkg-config --cflags --libs gtk+-2.0` hello.c -o hello
+</programlisting>
+</para>
 
+<para>
+To compile a GTK+ program for the framebuffer, use the
+"gtk+-linux-fb-2.0" package name instead of "gtk+-2.0":
+<programlisting>
+$ cc `pkg-config --cflags --libs gtk+-linux-fb-2.0` hello.c -o hello
+</programlisting>
 </para>
 
 </refsect1>

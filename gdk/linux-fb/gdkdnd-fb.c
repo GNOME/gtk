@@ -184,7 +184,7 @@ gdk_drag_context_find (gboolean     is_source,
  *************************************************************/
 
 void
-gdk_dnd_init (void)
+_gdk_dnd_init (void)
 {
 }
 
@@ -406,7 +406,7 @@ get_toplevel_window_at (GdkWindow *ignore,
   GdkWindowObject *child;
   GList *ltmp, *ltmp2;
   
-  private = (GdkWindowObject *)gdk_parent_root;
+  private = (GdkWindowObject *)_gdk_parent_root;
 
   for (ltmp = private->children; ltmp; ltmp = ltmp->next)
     {
@@ -457,7 +457,7 @@ gdk_drag_find_window (GdkDragContext  *context,
 
   dest = get_toplevel_window_at (drag_window, x_root, y_root);
   if (dest == NULL)
-    dest = gdk_parent_root;
+    dest = _gdk_parent_root;
   
   if (context->dest_window != dest)
     {

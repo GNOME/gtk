@@ -81,6 +81,33 @@ Sets the position in which the current value is displayed.
 @pos: the position in which the current value is displayed.
 
 
+<!-- ##### FUNCTION gtk_scale_get_digits ##### -->
+<para>
+
+</para>
+
+@scale: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_scale_get_draw_value ##### -->
+<para>
+
+</para>
+
+@scale: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_scale_get_value_pos ##### -->
+<para>
+
+</para>
+
+@scale: 
+@Returns: 
+
+
 <!-- ##### SIGNAL GtkScale::format-value ##### -->
 <para>
 Signal which allows you to change how the scale value is displayed.  Connect a

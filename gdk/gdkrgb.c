@@ -618,15 +618,9 @@ gdk_rgb_allocate_images (GdkRgbInfo *image_info,
   
   for (i = 0; i < n_images; i++)
     {
-      if (image_info->bitmap)
-	/* Use malloc() instead of g_malloc since X will free() this mem */
-	image_info->static_image[i] = gdk_image_new_bitmap (image_info->visual,
-							    (gpointer) malloc (REGION_WIDTH * REGION_HEIGHT >> 3),
-							    REGION_WIDTH * (N_REGIONS / n_images), REGION_HEIGHT);
-      else
-	image_info->static_image[i] = gdk_image_new (shared ? GDK_IMAGE_SHARED : GDK_IMAGE_NORMAL,
-						     image_info->visual,
-						     REGION_WIDTH * (N_REGIONS / n_images), REGION_HEIGHT);
+      image_info->static_image[i] = gdk_image_new (shared ? GDK_IMAGE_SHARED : GDK_IMAGE_NORMAL,
+						   image_info->visual,
+						   REGION_WIDTH * (N_REGIONS / n_images), REGION_HEIGHT);
 
       if (!image_info->static_image[i])
 	{
@@ -3422,8 +3416,6 @@ gdk_draw_gray_image (GdkDrawable *drawable,
 			     buf, 1, rowstride,
 			     image_info->conv_gray_d, NULL, 0, 0);
 }
-
-guchar lut[256]; /* for 8-bit modes */
 
 static GdkRgbCmapInfo *
 gdk_rgb_cmap_get_info (GdkRgbCmap *cmap,

@@ -1087,3 +1087,9 @@ gdk_win32_get_visual (GdkDrawable *drawable)
 {
   return gdk_drawable_get_visual (GDK_DRAWABLE_IMPL_WIN32 (drawable)->wrapper);
 }
+
+HWND
+gdk_win32_drawable_get_handle (GdkDrawable *drawable)
+{
+  return GDK_DRAWABLE_HANDLE(drawable);
+}

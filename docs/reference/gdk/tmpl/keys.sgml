@@ -85,6 +85,7 @@ gdk_keymap_translate_keyboard_state() just to get the keyval.
 </para>
 
 @parent_instance: 
+@display: 
 
 <!-- ##### STRUCT GdkKeymapClass ##### -->
 <para>

@@ -294,6 +294,67 @@ sets if the tooltips of a toolbar should be active or not.
 @stock_size: 
 
 
+<!-- ##### FUNCTION gtk_toolbar_get_icon_size ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_get_orientation ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_get_style ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_get_tooltips ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_remove_space ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@position: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_unset_icon_size ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_unset_style ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+
+
 <!-- ##### SIGNAL GtkToolbar::orientation-changed ##### -->
 <para>
 should be used if you wish to perform an action when the orientation of a toolbar is changed.

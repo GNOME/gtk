@@ -31,8 +31,6 @@ noinst_PROGRAMS = 		\
 	testpixbuf-scale 	\
 	pixbuf-demo
 
-BUILT_SOURCES=test-inline-pixbufs.h
-
 test-inline-pixbufs.h: $(top_builddir)/gdk-pixbuf/gdk-pixbuf-csource apple-red.png gnome-foot.png
 	(topdir=`cd $(top_builddir) && pwd` ; curdir=`pwd` ; \
 	  cd $(srcdir) &&				     \
@@ -55,6 +53,7 @@ testanimation_LDADD = $(LDADDS)
 pixbuf_demo_LDADD = $(LDADDS)
 
 testpixbuf_SOURCES = testpixbuf.c pixbuf-init.c
+$(testpixbuf_OBJECTS): test-inline-pixbufs.h
 testpixbuf_drawable_SOURCES = testpixbuf-drawable.c pixbuf-init.c
 testpixbuf_save_SOURCES = testpixbuf-save.c
 testpixbuf_scale_SOURCES = testpixbuf-scale.c pixbuf-init.c

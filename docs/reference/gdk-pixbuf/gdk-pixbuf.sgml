@@ -14,7 +14,6 @@
 <!entity gdk-pixbuf-gdk-pixbuf-xlib-rgb SYSTEM "sgml/gdk-pixbuf-xlib-rgb.sgml">
 
 <!entity Porting-From-Imlib SYSTEM "porting-from-imlib.sgml">
-<!entity Compiling SYSTEM "compiling.sgml">
 
 <!entity gdk-pixbuf "<application>gdk-pixbuf</application>">
 <!entity Imlib "<application>Imlib</application>">
@@ -101,7 +100,6 @@
   </reference>
 
   &Porting-From-Imlib;
-  &Compiling;
 
   <!-- License -->
 

@@ -126,22 +126,22 @@ struct _GdkInputWindow
 /* Global data */
 
 extern const GdkDevice gdk_input_core_info;
-extern GList *gdk_input_devices;
-extern GList *gdk_input_windows;
+extern GList *_gdk_input_devices;
+extern GList *_gdk_input_windows;
 
 extern GdkInputVTable gdk_input_vtable;
 /* information about network port and host for gxid daemon */
-extern gchar           *gdk_input_gxid_host;
-extern gint             gdk_input_gxid_port;
-extern gint             gdk_input_ignore_core;
+extern gchar           *_gdk_input_gxid_host;
+extern gint             _gdk_input_gxid_port;
+extern gint             _gdk_input_ignore_core;
 
 /* Function declarations */
 
 GdkDevicePrivate * gdk_input_find_device    (guint32           id);
 GdkInputWindow *   gdk_input_window_find    (GdkWindow        *window);
 void               gdk_input_window_destroy (GdkWindow        *window);
-void               gdk_input_init           (void);
-void               gdk_input_exit           (void);
+void               _gdk_input_init           (void);
+void               _gdk_input_exit           (void);
 gint               gdk_input_enable_window  (GdkWindow        *window,
 					     GdkDevicePrivate *gdkdev);
 gint               gdk_input_disable_window (GdkWindow        *window,
@@ -151,6 +151,6 @@ void              _gdk_init_input_core      (void);
 GdkDevicePrivate *gdk_input_find_device (guint32 id);
 GdkInputWindow *gdk_input_window_find (GdkWindow *window);
 void gdk_input_window_destroy (GdkWindow *window);
-void gdk_input_exit           (void);
+void _gdk_input_exit           (void);
 
 #endif /* __GDK_INPUTPRIVATE_H__ */

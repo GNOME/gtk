@@ -201,15 +201,6 @@ gdk_colormap_new (GdkVisual *visual,
   return colormap;
 }
 
-#define MIN_SYNC_TIME 2
-
-static void
-gdk_colormap_sync (GdkColormap *colormap,
-		   gboolean     force)
-{
-  
-}		   
-
 GdkColormap*
 gdk_colormap_get_system (void)
 {
@@ -536,7 +527,7 @@ gdk_colormap_alloc1 (GdkColormap *colormap,
 
   for (i = 0; i<colormap->size; i++)
     {
-      if (!(private->info[i].flags && GDK_COLOR_WRITEABLE) &&
+      if (!(private->info[i].flags & GDK_COLOR_WRITEABLE) &&
 	  (ret->red == colormap->colors[i].red) &&
 	  (ret->green == colormap->colors[i].green) &&
 	  (ret->blue == colormap->colors[i].blue))
@@ -614,7 +605,7 @@ gdk_colormap_alloc_colors_shared (GdkColormap *colormap,
 
       for (i = 0; i < colormap->size; i++)
 	available[i] = ((private->info[i].ref_count == 0) ||
-			!(private->info[i].flags && GDK_COLOR_WRITEABLE));
+			!(private->info[i].flags & GDK_COLOR_WRITEABLE));
       
       while (nremaining > 0)
 	{

@@ -477,6 +477,15 @@ types related to the text widget and how they work together.
 @anchor: 
 
 
+<!-- ##### FUNCTION gtk_text_buffer_get_start_iter ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@iter: 
+
+
 <!-- ##### FUNCTION gtk_text_buffer_get_end_iter ##### -->
 <para>
 
@@ -531,6 +540,8 @@ types related to the text widget and how they work together.
 </para>
 
 @buffer: 
+@clipboard: 
+@override_location: 
 @default_editable: 
 <!-- # Unused Parameters # -->
 @time: 
@@ -543,6 +554,7 @@ types related to the text widget and how they work together.
 </para>
 
 @buffer: 
+@clipboard: 
 
 
 <!-- ##### FUNCTION gtk_text_buffer_cut_clipboard ##### -->
@@ -551,16 +563,7 @@ types related to the text widget and how they work together.
 </para>
 
 @buffer: 
-@default_editable: 
-
-
-<!-- ##### FUNCTION gtk_text_buffer_paste_primary ##### -->
-<para>
-
-</para>
-
-@buffer: 
-@override_location: 
+@clipboard: 
 @default_editable: 
 
 
@@ -589,6 +592,24 @@ types related to the text widget and how they work together.
 </para>
 
 @buffer: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_add_selection_clipboard ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@clipboard: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_remove_selection_clipboard ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@clipboard: 
 
 
 <!-- ##### SIGNAL GtkTextBuffer::apply-tag ##### -->

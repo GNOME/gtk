@@ -82,6 +82,26 @@ in pixels.
 in pixels.
 
 
+<!-- ##### FUNCTION gtk_misc_get_alignment ##### -->
+<para>
+
+</para>
+
+@misc: 
+@xalign: 
+@yalign: 
+
+
+<!-- ##### FUNCTION gtk_misc_get_padding ##### -->
+<para>
+
+</para>
+
+@misc: 
+@xpad: 
+@ypad: 
+
+
 <!-- ##### ARG GtkMisc:xalign ##### -->
 <para>
 the horizontal alignment, from 0 (left) to 1 (right).

@@ -90,7 +90,7 @@ _gdk_windowing_init_check (int    argc,
   gdk_selection_notify_msg = RegisterWindowMessage ("gdk-selection-notify");
   gdk_selection_clear_msg = RegisterWindowMessage ("gdk-selection-clear");
 
-  gdk_selection_property = gdk_atom_intern ("GDK_SELECTION", FALSE);
+  _gdk_selection_property = gdk_atom_intern ("GDK_SELECTION", FALSE);
   gdk_clipboard_atom = gdk_atom_intern ("CLIPBOARD", FALSE);
   gdk_win32_dropfiles_atom = gdk_atom_intern ("DROPFILES_DND", FALSE);
   gdk_ole2_dnd_atom = gdk_atom_intern ("OLE2_DND", FALSE);
@@ -162,7 +162,7 @@ gdk_get_use_xshm (void)
 gint
 gdk_screen_width (void)
 {
-  return GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (gdk_parent_root)->impl)->width;
+  return GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (_gdk_parent_root)->impl)->width;
 }
 
 /*
@@ -183,7 +183,7 @@ gdk_screen_width (void)
 gint
 gdk_screen_height (void)
 {
-  return GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (gdk_parent_root)->impl)->height;
+  return GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (_gdk_parent_root)->impl)->height;
 }
 
 /*
@@ -235,25 +235,13 @@ gdk_set_sm_client_id (const gchar* sm_client_id)
 }
 
 void
-gdk_key_repeat_disable (void)
-{
-  /* XXX */
-}
-
-void
-gdk_key_repeat_restore (void)
-{
-  /* XXX */
-}
-
-void
 gdk_beep (void)
 {
   Beep(1000, 50);
 }
 
 void
-gdk_windowing_exit (void)
+_gdk_windowing_exit (void)
 {
   gdk_win32_dnd_exit ();
   CoUninitialize ();

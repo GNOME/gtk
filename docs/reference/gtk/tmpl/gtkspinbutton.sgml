@@ -312,6 +312,80 @@ Creates a new #GtkSpinButton.
 @spin_button: 
 
 
+<!-- ##### FUNCTION gtk_spin_button_get_digits ##### -->
+<para>
+
+</para>
+
+@spin_button: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_spin_button_get_increments ##### -->
+<para>
+
+</para>
+
+@spin_button: 
+@step: 
+@page: 
+
+
+<!-- ##### FUNCTION gtk_spin_button_get_numeric ##### -->
+<para>
+
+</para>
+
+@spin_button: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_spin_button_get_range ##### -->
+<para>
+
+</para>
+
+@spin_button: 
+@min: 
+@max: 
+
+
+<!-- ##### FUNCTION gtk_spin_button_get_snap_to_ticks ##### -->
+<para>
+
+</para>
+
+@spin_button: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_spin_button_get_update_policy ##### -->
+<para>
+
+</para>
+
+@spin_button: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_spin_button_get_value ##### -->
+<para>
+
+</para>
+
+@spin_button: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_spin_button_get_wrap ##### -->
+<para>
+
+</para>
+
+@spin_button: 
+@Returns: 
+
+
 <!-- ##### MACRO GTK_INPUT_ERROR ##### -->
 <para>
 

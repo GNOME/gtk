@@ -28,6 +28,9 @@ GtkTreeStore
 @sort_list: 
 @order: 
 @column_headers: 
+@default_sort_func: 
+@default_sort_data: 
+@default_sort_destroy: 
 
 <!-- ##### FUNCTION gtk_tree_store_new ##### -->
 <para>

@@ -1,17 +1,47 @@
 <!-- ##### SECTION Title ##### -->
-General
+Main loop and Events
 
 <!-- ##### SECTION Short_Description ##### -->
-Mainloop and event handling
+Library initialization, main event loop, and events
 
 <!-- ##### SECTION Long_Description ##### -->
+
 <para>
-GTK uses an event oriented programming model. While conventional C programs
-have control over the program flow all the time this does not apply to 
-applications written using GTK. Instead you set up some objects and 
-register some functions (<quote>callbacks</quote>) to be called whenever 
-some event occurs and give control to the GTK mainloop (e.g. by calling 
-gtk_main).
+Before using GTK+, you need to initialize it; initialization connects
+to the window system display, and parses some standard command line
+arguments. The gtk_init() function initializes GTK+. gtk_init() exits
+the application if errors occur; to avoid this, use gtk_init_check(). 
+gtk_init_check() allows you to recover from a failed GTK+
+initialization - you might start up your application in text mode instead.
+</para>
+
+<para>
+If your application supports internationalization, gtk_set_locale() 
+should be called prior to gtk_init().
+</para>
+
+<para>
+Like all GUI toolkits, GTK+ uses an event-driven programming
+model. When the user is doing nothing, GTK+ sits in the
+<firstterm>main loop</firstterm> and waits for input. If the user
+performs some action - say, a mouse click - then the main loop "wakes
+up" and delivers an event to GTK+. GTK+ forwards the event to one or
+more widgets.
+</para>
+
+<para>
+When widgets receive an event, they frequently emit one or more 
+<firstterm>signals</firstterm>. Signals notify your program that
+"something interesting happened" by invoking functions you've
+connected to the signal with g_signal_connect(). Functions connected
+to a signal are often termed <firstterm>callbacks</firstterm>. 
+</para>
+
+<para>
+When your callbacks are invoked, you would typically take some action
+- for example, when an Open button is clicked you might display a 
+#GtkFileSelectionDialog. After a callback finishes, GTK+ will return
+to the main loop and await more user input.
 </para>
 
 <example>
@@ -33,34 +63,35 @@ main (int argc, char **argv)
   ...
 
   /* Show the application window */
-  gtk_widget_showall (mainwin);
+  gtk_widget_show_all (mainwin);
 
-  /* Let the user interact with our application */
+  /* Enter the main event loop, and wait for user interaction */
   gtk_main ();
 
   /* The user lost interest */
-  gtk_exit (0);
+  return 0;
 }
 </programlisting>
 </example>
 
+<para>
+It's OK to use the GLib main loop directly instead of gtk_main(),
+though it involves slightly more typing. See #GMainLoop in the GLib
+documentation.
+</para>
+
 <!-- ##### SECTION See_Also ##### -->
 <para>
+See the GLib manual, especially #GMainLoop and signal-related
+functions such as g_signal_connect().
 </para>
 
 <!-- ##### FUNCTION gtk_set_locale ##### -->
+
 <para>
-Sets the current locale according to the program environment. This is the 
-same as calling the libc function setlocale(LC_ALL, "") but also takes 
-care of the locale specific setup of the windowing system used by GDK.
 </para>
 
-<para> 
-You should call this function before <function>gtk_init</function> to 
-support internationalization of your GTK+ applications.
-</para>
-
-@Returns: A string corresponding to the locale set.
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_get_default_language ##### -->

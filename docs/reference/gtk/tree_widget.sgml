@@ -7,7 +7,9 @@
 
   <refnamediv>
     <refname>Tree and List Widget Overview</refname>
-    <refpurpose>Overview of <link linkend="GtkTreeModel">GtkTreeModel</link>, <link linkend="GtkTreeView">GtkTreeView</link>, and friends</refpurpose>
+    <refpurpose>Overview of <link
+    linkend="GtkTreeModel">GtkTreeModel</link>, <link
+    linkend="GtkTreeView">GtkTreeView</link>, and other assocoiated widgets</refpurpose>
   </refnamediv>
 
   <refsect1>
@@ -16,14 +18,27 @@
       To create a tree or list in GTK+, you need to use the <link
       linkend="GtkTreeModel">GtkTreeModel</link> interface, in
       conjunction with the <link
-      linkend="GtkTreeView">GtkTreeView</link>.
+      linkend="GtkTreeView">GtkTreeView</link> widget.
     </para>
     <para>
-      <emphasis>Write real docs here</emphasis>
+      This widget is designed around a
+      <firstterm>Model/View/Controller</firstterm> design and consists
+      of four major parts:
+      <simplelist>
+	<member>the tree view widget (GtkTreeView)</member>
+	<member>the view column (GtkTreeViewColumn)</member>
+	<member>the cell renderers (GtkCellRenderer etc.)</member>
+	<member>and the model interface (GtkTreeModel)</member>
+      </simplelist>
+      The <emphasis>View</empahsis> is composed of the first three,
+	while the last is the <empahsis>Model</empahsis>.  One of the
+	prime benefits of the MVC design is that multiple views can be
+	created of a single model.  For example, a model mapping the file
+	system could be created for a file manager.  Many views could be
+	created to display various parts of the file system, but only one
+	copy need be kept in memory.
     </para>
   </refsect1>
-  
-
   <refsect1>
     <title>Simple Example</title>
     <para>
@@ -31,7 +46,9 @@
       linkend="GtkTreeView">GtkTreeView</link> widget in context of the
       other widgets.  It simply creates a simple model and view, and
       puts them together.  Note that the model is never populated with
-      data &mdash; that is left as an exercise for the reader.
+      data &mdash; that is left as an exercise for the reader.  More
+      information can be found on this in the <link
+      linkend="GtkTreeStore">GtkTreeModel</link> section.
       <programlisting><![CDATA[
 {
   GtkTreeStore *model;
@@ -42,6 +59,7 @@
   /* Create a model.  We are using the store model for now, though we
    * could use any other GtkTreeModel */
   model = gtk_tree_store_new_with_values (1, G_TYPE_STRING);
+  populate_tree_model (model);
 
   /* Create a view */
   view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (model));
@@ -50,11 +68,10 @@
    * reference */
   g_object_unref (G_OBJECT (model));
 
-  /* Create a cell render and set an attribute */
+  /* Create a cell render and arbitrarily make it red for demonstartion
+   *purposes */
   cell_renderer = gtk_cell_renderer_text_new ();
-  g_object_set (G_OBJECT (cell_renderer),
-	        "foreground", "red",
-		NULL);
+  g_object_set (G_OBJECT (cell_renderer), "foreground", "red", NULL);
 
   /* Create a column, associating the "text" attribute of the
    * cell_renderer to the first column of the model */
@@ -70,5 +87,4 @@
       </programlisting>
     </para>
   </refsect1>
-
 </refentry>

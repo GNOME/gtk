@@ -21,16 +21,6 @@ GtkTreeModelSort
 
 @parent: 
 
-<!-- ##### USER_FUNCTION GValueCompareFunc ##### -->
-<para>
-
-</para>
-
-@a: 
-@b: 
-@Returns: 
-
-
 <!-- ##### FUNCTION gtk_tree_model_sort_new ##### -->
 <para>
 
