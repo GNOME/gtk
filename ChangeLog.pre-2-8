@@ -1,3 +1,9 @@
+2000-12-11  Alexander Larsson  <alexl@redhat.com>
+
+	* docs/README.linux-fb (GDK_KEYBOARD_TYPE):
+	Clearified the difference between the keyboard types. Wrote a note
+	about the magic sysrq key to get out of raw mode.
+
 2000-12-09  James Henstridge  <james@daa.com.au>
 
 	* gdk/linux-fb/gdkmouse-fb.c (GdkFBMouseDevice): add prot struct

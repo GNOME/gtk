@@ -109,11 +109,17 @@ GDK_MOUSE_TYPE:
 
 GDK_KEYBOARD_TYPE:
  Specify keyboard type. Currently suppored is
-  xlate - normal tty mode keyboard. Somewhat limited.
+  xlate - normal tty mode keyboard.
+    Quite limited, cannot detect key up/key down events. Doesn't
+    handle ctrl/alt/shift for all keys. This is the default driver,
+    but should not be used in "production" use.
   raw - read from the tty in RAW mode.
-      Warning, can cause problems if the GtkFB program crashes
-      and the mode is not restored. You must run as root to use
-      this.
+    Sets the keyboard in RAW mode and handles all the keycodes. This
+    gives correct handling of modifiers and key up/down events. You
+    must be root to use this. If you use this for development or
+    debugging it is recommended to enable magic sysrq handling in the
+    kernel. Then you can use ALT-SysRQ-r to turn the keyboard back to
+    normal mode.
  Default is xlate.
 
 HACKING:
