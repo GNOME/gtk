@@ -10180,6 +10180,9 @@ gtk_tree_view_real_set_cursor (GtkTreeView     *tree_view,
  * Fills in @path and @focus_column with the current path and focus column.  If
  * the cursor isn't currently set, then *@path will be %NULL.  If no column
  * currently has focus, then *@focus_column will be %NULL.
+ *
+ * The returned #GtkTreePath must be freed with gtk_tree_path_free() when
+ * you are done with it.
  **/
 void
 gtk_tree_view_get_cursor (GtkTreeView        *tree_view,

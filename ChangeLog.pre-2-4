@@ -1,3 +1,8 @@
+Fri Sep 19 13:24:54 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktreeview.c (gtk_tree_view_get_cursor): Improve
+	documentation. (#117306, Steve Chaplin)
+
 2003-09-19  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkkeys-win32.c (update_keymap): Handle dead keysyms
