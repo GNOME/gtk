@@ -136,7 +136,6 @@ pixbuf_check_sunras (guchar *buffer, int size)
 }
 
 
-#if 0
 static gboolean
 pixbuf_check_bmp (guchar *buffer, int size)
 {
@@ -149,7 +148,6 @@ pixbuf_check_bmp (guchar *buffer, int size)
 	return TRUE;
 }
 
-#endif
 
 GdkPixbufModule file_formats [] = {
 	{ "png",  pixbuf_check_png, NULL,  NULL, NULL, NULL, NULL, NULL },
@@ -160,9 +158,7 @@ GdkPixbufModule file_formats [] = {
 	{ "xpm",  pixbuf_check_xpm, NULL,  NULL, NULL, NULL, NULL, NULL },
 	{ "pnm",  pixbuf_check_pnm, NULL,  NULL, NULL, NULL, NULL, NULL },
 	{ "ras",  pixbuf_check_sunras, NULL,  NULL, NULL, NULL, NULL, NULL },
-#if 0
 	{ "bmp",  pixbuf_check_bmp, NULL,  NULL, NULL, NULL, NULL, NULL },
-#endif
 	{ NULL, NULL, NULL, NULL, NULL, NULL, NULL }
 };
 

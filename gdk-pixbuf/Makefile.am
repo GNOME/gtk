@@ -23,6 +23,8 @@ XPM_LIB =	libpixbuf-xpm.la
 
 PNM_LIB =	libpixbuf-pnm.la
 
+BMP_LIB =   	libpixbuf-bmp.la
+
 libexec_LTLIBRARIES =		\
 	$(PNG_LIB)	\
 	$(JPEG_LIB)	\
@@ -30,7 +32,8 @@ libexec_LTLIBRARIES =		\
 	$(RAS_LIB)	\
 	$(XPM_LIB)	\
 	$(TIFF_LIB)	\
-	$(PNM_LIB)
+	$(PNM_LIB)	\
+	$(BMP_LIB)
 
 noinst_PROGRAMS = testpixbuf testpixbuf-drawable
 
@@ -117,3 +120,10 @@ libpixbuf_tiff_la_LIBADD = $(LIBTIFF)
 libpixbuf_pnm_la_SOURCES = io-pnm.c
 libpixbuf_pnm_la_LDFLAGS = -avoid-version -module
 libpixbuf_pnm_la_LIBADD = 
+
+#
+# The BMP loader
+#
+libpixbuf_bmp_la_SOURCES = io-bmp.c
+libpixbuf_bmp_la_LDFLAGS = -avoid-version -module
+libpixbuf_bmp_la_LIBADD =

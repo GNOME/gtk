@@ -1,3 +1,8 @@
+1999-11-21  Jonathan Blandford  <jrb@redhat.com>
+
+	* src/gdk-pixbuf-io.c: added io-bmp from Arjan
+	<arjan@fenrus.demon.nl>
+
 1999-11-20  Michael Zucchi  <zucchi@zedzone.mmc.com.au>
 
 	* src/gdk-pixbuf-drawable.c (gdk_pixbuf_from_drawable_core):
