@@ -1,4 +1,4 @@
-2001-03-15    <alexl@redhat.com>
+2001-03-15 Alexander Larsson  <alexl@redhat.com>
 
 	* gtk/gtktoolbar.[ch]:
 	New functions gtk_toolbar_set_icon_size and gtk_toolbar_insert_stock
