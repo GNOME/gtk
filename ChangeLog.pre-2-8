@@ -1,4 +1,18 @@
 Mon Nov 24 1997 Jay Painter <jpaint@serv.net>
+	gtk-dairiki-971117-2.patch
+	gtk/gtkaspectframe.c (gtk_aspect_frame_size_allocate): When
+	computing new dimensions of the subwidget, round to nearest
+	integer rather than truncating.
+
+Mon Nov 24 1997 Jay Painter <jpaint@serv.net>
+	gtk-dairiki-971117-1.patch
+	* gtk/gtkvruler.c (gtk_vruler_draw_ticks):
+	* gtk/gtkhruler.c (gtk_hruler_draw_ticks): Ensure that subticks
+ 	always are drawn when they should be (sometimes they were getting
+ 	drawn with zero length --- invisible).  Also clear rectangle
+ 	behind text labels to ensure they don't touch or overlap ticks. 
+
+Mon Nov 24 1997 Jay Painter <jpaint@serv.net>
 	* gtk/gtkaspectframe.c (gtk_aspect_frame_set): 
 	gtk-dairiki-971117-0.patch
 	Clear window when aspect ratio or alignment is changed.
@@ -7,10 +21,10 @@ Mon Nov 24 1997 Jay Painter <jpaint@serv.net>
 	* gtk/gtkobject.h: fixed GTK_OBJECT_NSIGNALS macro
 
 Mon Nov 24 1997 Jay Painter <jpaint@serv.net>
-	* gtk/gtklabel.h: modified gtklabel to clip it's drawing to
-	it's given area, now it will allways draw in the area it's 
+	* gtk/gtklabel.h: modified gtklabel to clip its drawing to
+	its given area, now it will always draw in the area it's 
 	been given and clip accordingly.  Note: this may cause
-	the a label to dissappear on widgets which don't give their
+	the a label to disappear on widgets which don't give their
 	child labels proper area!
 
 Mon Nov 17 1997 Jay Painter <jpaint@serv.net>

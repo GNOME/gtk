@@ -319,14 +319,14 @@ gtk_aspect_frame_size_allocate (GtkWidget     *widget,
 				 GTK_CONTAINER (frame)->border_width -
 				 GTK_WIDGET (frame)->style->klass->ythickness);
 
-      if (ratio * height > width)
+      if (height > width / ratio)
 	{
 	  child_allocation.width = width;
-	  child_allocation.height = width/ratio;
+	  child_allocation.height = width/ratio + 0.5;
 	}
-      else
+      else if (width > height * ratio)
 	{
-	  child_allocation.width = ratio*height;
+	  child_allocation.width = ratio * height + 0.5;
 	  child_allocation.height = height;
 	}
 

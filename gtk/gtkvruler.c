@@ -123,12 +123,13 @@ static void
 gtk_vruler_draw_ticks (GtkRuler *ruler)
 {
   GtkWidget *widget;
-  GdkGC *gc;
+  GdkGC *gc, *bg_gc;
+  GdkFont * font;
   gint i, j;
   gint width, height;
   gint xthickness;
   gint ythickness;
-  gint length;
+  gint length, ideal_length;
   gfloat subd_incr;
   gfloat step_incr;
   gfloat increment;
@@ -148,9 +149,11 @@ gtk_vruler_draw_ticks (GtkRuler *ruler)
       widget = GTK_WIDGET (ruler);
 
       gc = widget->style->fg_gc[GTK_STATE_NORMAL];
+      bg_gc = widget->style->bg_gc[GTK_STATE_NORMAL];
+      font = widget->style->font;
       xthickness = widget->style->klass->xthickness;
       ythickness = widget->style->klass->ythickness;
-      digit_height = widget->style->font->ascent;
+      digit_height = font->ascent; /* Assume descent == 0 ? */
 
       width = widget->allocation.height;
       height = widget->allocation.width - ythickness * 2;
@@ -182,17 +185,20 @@ gtk_vruler_draw_ticks (GtkRuler *ruler)
       if (scale == MAXIMUM_SCALES)
 	scale = MAXIMUM_SCALES - 1;
 
-      for (i = 0; i < MAXIMUM_SUBDIVIDE; i++)
+      length = 0;
+      for (i = MAXIMUM_SUBDIVIDE - 1; i >= 0; i--)
 	{
 	  subd_incr = (gfloat) ruler->metric->ruler_scale[scale] / (gfloat) ruler->metric->subdivide[i];
 	  step_incr = subd_incr * increment;
 	  if (step_incr <= MINIMUM_INCR)
-	    break;
+	      continue;
 
 	  start = floor ((ruler->lower / ruler->metric->pixels_per_unit) / subd_incr) * subd_incr;
 	  end = ceil ((ruler->upper / ruler->metric->pixels_per_unit) / subd_incr) * subd_incr;
 
-	  length = height / (i + 1) - 1;
+	  ideal_length = height / (i + 1) - 1;
+	  if (ideal_length > ++length)
+	      length = ideal_length;
 
 	  cur = start;
 	  while (cur <= end)
@@ -211,7 +217,13 @@ gtk_vruler_draw_ticks (GtkRuler *ruler)
 		  for (j = 0; j < (int) strlen (unit_str); j++)
 		    {
 		      digit_str[0] = unit_str[j];
-		      gdk_draw_string (ruler->backing_store, widget->style->font, gc,
+		      gdk_draw_rectangle (ruler->backing_store,
+					  bg_gc, TRUE,
+					  xthickness + 1,
+					  pos + digit_height * j + 1,
+					  gdk_string_width(font, digit_str),
+					  digit_height);
+		      gdk_draw_string (ruler->backing_store, font, gc,
 				       xthickness + 1,
 				       pos + digit_height * (j + 1) + 1,
 				       digit_str);
