@@ -20,7 +20,6 @@
 #include <string.h>
 #include <sys/types.h>
 #include <sys/param.h>
-#include <netinet/in.h>
 #include "gdk/gdkx.h"
 #include "gtkpreview.h"
 #include "gtksignal.h"
@@ -304,14 +303,13 @@ gtk_preview_uninit ()
 			    0, sizeof (GtkPreviewProp), FALSE,
 			    NULL, NULL, NULL, (guchar**) &prop))
 	{
-	  prop->ref_count = ntohs (prop->ref_count) - 1;
+	  prop->ref_count = prop->ref_count - 1;
 	  if (prop->ref_count == 0)
 	    {
 	      gdk_property_delete (NULL, property);
 	    }
 	  else
 	    {
-	      prop->ref_count = htons (prop->ref_count);
 	      gdk_property_change (NULL, property, property, 16,
 				   GDK_PROP_MODE_REPLACE,
 				   (guchar*) prop, 5);
@@ -1508,12 +1506,12 @@ gtk_get_preview_prop (guint *nred,
 			0, sizeof (GtkPreviewProp), FALSE,
 			NULL, NULL, NULL, (guchar**) &prop))
     {
-      *nred = ntohs (prop->nred_shades);
-      *ngreen = ntohs (prop->ngreen_shades);
-      *nblue = ntohs (prop->nblue_shades);
-      *ngray = ntohs (prop->ngray_shades);
+      *nred = prop->nred_shades;
+      *ngreen = prop->ngreen_shades;
+      *nblue = prop->nblue_shades;
+      *ngray = prop->ngray_shades;
 
-      prop->ref_count = htons (ntohs (prop->ref_count) + 1);
+      prop->ref_count = prop->ref_count + 1;
       gdk_property_change (NULL, property, property, 16,
 			   GDK_PROP_MODE_REPLACE,
 			   (guchar*) prop, 5);
@@ -1535,11 +1533,11 @@ gtk_set_preview_prop (guint nred,
 
   property = gdk_atom_intern ("GTK_PREVIEW_INFO", FALSE);
 
-  prop.ref_count = htons (1);
-  prop.nred_shades = htons (nred);
-  prop.ngreen_shades = htons (ngreen);
-  prop.nblue_shades = htons (nblue);
-  prop.ngray_shades = htons (ngray);
+  prop.ref_count = 1;
+  prop.nred_shades = nred;
+  prop.ngreen_shades = ngreen;
+  prop.nblue_shades = nblue;
+  prop.ngray_shades = ngray;
 
   gdk_property_change (NULL, property, property, 16,
 		       GDK_PROP_MODE_REPLACE,

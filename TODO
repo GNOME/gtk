@@ -197,6 +197,11 @@ Additions:
  * Scrolled windows need to be smarter about when they size-request/allocate
    their children.
 
+ * Should all the default handlers really return FALSE? This can
+   cause confusing presses to be sent to containers that actually
+   want to get events on themselves.
+
+
 Text/Edit widget:
 
   Bugs:

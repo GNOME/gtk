@@ -1,3 +1,29 @@
+Sun Apr 12 20:09:40 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtklabel.[ch] (gtk_label_expose): Set a flag so
+	instead of clearing the area in advance. That looked
+	_really_ bad.
+
+	* gtk/gtkcontainer.c (gtk_container_class_init): Changed
+	"focus" to RUN_LAST.
+
+	* gtk/gtkentry.c (gtk_entry_realize): Fixed place
+	where allocation was used where requisition was meant.
+	(Found by David J N Begley <david@avarice.nepean.uws.edu.au>)
+
+	* gtk/gtkwindow.c (gtk_window_set_default): Fixed
+	assertion in when setting default to NULL> 
+	("Damon Chaplin" <DAChaplin@email.msn.com>)
+
+	* gtk/gtkwidget.c (gtk_widget_unparent): Unset the
+	default widget on the toplevel, if necessary.
+
+Sun Apr 12 02:04:21 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkpreview.c: Removed unecessary and harmful
+	htons/ntohs when storing properties. (X does the byte
+	swapping itself)
+
 Sat Apr 11 02:01:31 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtktext.c (scroll_down): Removed incorrect part of

@@ -1148,6 +1148,15 @@ gtk_widget_unparent (GtkWidget *widget)
       
       if (child == widget)
 	gtk_window_set_focus (GTK_WINDOW (toplevel), NULL);
+
+
+      child = GTK_WINDOW (toplevel)->default_widget;
+      
+      while (child && child != widget)
+	child = child->parent;
+      
+      if (child == widget)
+	gtk_window_set_default (GTK_WINDOW (toplevel), NULL);
     }
 
   /* Remove the widget and all its children from toplevel->resize_widgets 

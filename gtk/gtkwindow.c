@@ -353,7 +353,7 @@ gtk_window_set_default (GtkWindow *window,
 {
   g_return_if_fail (window != NULL);
   g_return_if_fail (GTK_IS_WINDOW (window));
-  g_return_if_fail (GTK_WIDGET_CAN_DEFAULT (defaultw));
+  g_return_if_fail ((defaultw == NULL) || GTK_WIDGET_CAN_DEFAULT (defaultw));
 
   if (window->default_widget != defaultw)
     {

@@ -181,7 +181,7 @@ gtk_container_class_init (GtkContainerClass *class)
                     GTK_TYPE_C_CALLBACK);
   container_signals[FOCUS] =
     gtk_signal_new ("focus",
-                    GTK_RUN_FIRST,
+                    GTK_RUN_LAST,
                     object_class->type,
                     GTK_SIGNAL_OFFSET (GtkContainerClass, focus),
                     gtk_container_marshal_signal_3,

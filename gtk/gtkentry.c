@@ -462,7 +462,7 @@ gtk_entry_realize (GtkWidget *widget)
   attributes.x = widget->style->klass->xthickness + INNER_BORDER;
   attributes.y = widget->style->klass->ythickness + INNER_BORDER;
   attributes.width = widget->allocation.width - attributes.x * 2;
-  attributes.height = widget->allocation.height - attributes.y * 2;
+  attributes.height = widget->requisition.height - attributes.y * 2;
   attributes.cursor = entry->cursor = gdk_cursor_new (GDK_XTERM);
   attributes_mask |= GDK_WA_CURSOR;
 

@@ -139,6 +139,7 @@ gtk_label_init (GtkLabel *label)
   label->label = NULL;
   label->row = NULL;
   label->jtype = GTK_JUSTIFY_CENTER;
+  label->needs_clear = 0;
 
   gtk_label_set (label, "");
 }
@@ -311,6 +312,23 @@ gtk_label_expose (GtkWidget      *widget,
       gdk_gc_set_clip_rectangle (widget->style->white_gc, &event->area);
       gdk_gc_set_clip_rectangle (widget->style->fg_gc[state], &event->area);
 
+      /* We clear the whole allocation here so that if a partial
+       * expose is triggered we don't just clear part and mess up
+       * when the queued redraw comes along. (There will always
+       * be a complete queued redraw when the needs_clear flag
+       * is set.)
+       */
+      if (label->needs_clear)
+	{
+	  gdk_window_clear_area (widget->window,
+				 widget->allocation.x,
+				 widget->allocation.y,
+				 widget->allocation.width,
+				 widget->allocation.height);
+
+	  label->needs_clear = FALSE;
+	}
+
       x = widget->allocation.x + misc->xpad +
 	(widget->allocation.width - widget->requisition.width) 
 	* misc->xalign + 0.5;
@@ -377,25 +395,13 @@ static void
 gtk_label_state_changed (GtkWidget      *widget,
 			 guint	         previous_state)
 {
-  if (GTK_WIDGET_NO_WINDOW (widget) &&
-      GTK_WIDGET_DRAWABLE (widget))
-    gdk_window_clear_area (widget->window,
-			   widget->allocation.x,
-			   widget->allocation.y,
-			   widget->allocation.width,
-			   widget->allocation.height);
+  GTK_LABEL (widget)->needs_clear = 1;
 }
 
 static void 
 gtk_label_style_set	(GtkWidget      *widget,
 			 GtkStyle       *previous_style)
 {
-  if (GTK_WIDGET_NO_WINDOW (widget) &&
-      GTK_WIDGET_DRAWABLE (widget))
-    gdk_window_clear_area (widget->window,
-			   widget->allocation.x,
-			   widget->allocation.y,
-			   widget->allocation.width,
-			   widget->allocation.height);
+  GTK_LABEL (widget)->needs_clear = 1;
 }
 

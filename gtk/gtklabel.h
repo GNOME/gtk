@@ -43,6 +43,7 @@ struct _GtkLabel
   char *label;
   GSList *row;
   guint jtype : 2;
+  gint  needs_clear : 1;
 };
 
 struct _GtkLabelClass
