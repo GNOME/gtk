@@ -81,7 +81,7 @@ enum
 #define GTK_OBJECT_DESTROY(obj)           (GTK_OBJECT (obj)->klass->destroy)
 #define GTK_OBJECT_TYPE(obj)              (GTK_OBJECT (obj)->klass->type)
 #define GTK_OBJECT_SIGNALS(obj)           (GTK_OBJECT (obj)->klass->signals)
-#define GTK_OBJECT_NSIGNALS(obj)          (GTK_OBJECT (obj)->klass->signals)
+#define GTK_OBJECT_NSIGNALS(obj)          (GTK_OBJECT (obj)->klass->nsignals)
 
 /* Macro for testing whether "obj" is of type GtkObject.
  */
