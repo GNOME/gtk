@@ -1,3 +1,10 @@
+Thu Sep 16 23:20:05 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkselection.c (selection_get_text_plain): 
+	* gdk/x11/gdkselection-x11.c (make_list): Warn if a UTF8_STRING
+	or text/plain;charset=utf-8 roperty contains invalid 
+	UTF-8.  (#152845, Owen Taylor)
+
 2004-09-16  Matthias Clasen  <mclasen@redhat.com>
 
 	Fix #152760, Christian Persch:

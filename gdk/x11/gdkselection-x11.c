@@ -516,7 +516,15 @@ make_list (const gchar  *text,
 	    }
 	}
       else
-	str = g_strndup (p, q - p);
+	{
+	  str = g_strndup (p, q - p);
+	  if (!g_utf8_validate (str, -1, NULL))
+	    {
+	      g_warning ("Error converting selection from UTF8_STRING");
+	      g_free (str);
+	      str = NULL;
+	    }
+	}
 
       if (str)
 	{

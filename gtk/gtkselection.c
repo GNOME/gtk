@@ -1032,20 +1032,25 @@ selection_get_text_plain (GtkSelectionData *selection_data)
 				     charset, "UTF-8", 
 				     NULL, NULL, &len, &error);
       g_free (tmp);
-    }
 
-  if (!str)
+      if (!str)
+	{
+	  g_warning ("Error converting from %s to UTF-8: %s",
+		      charset, error->message);
+	  g_error_free (error);
+
+	  return NULL;
+	}
+    }
+  else if (!g_utf8_validate (str, -1, NULL))
     {
-      g_warning ("Error converting from %s to UTF-8: %s",
-		 charset, error->message);
-      g_error_free (error);
-      
+      g_warning ("Error converting from text/plain;charset=utf-8 to UTF-8");
+      g_free (str);
+
       return NULL;
     }
 
-
   result = normalize_to_lf (str, len);
-
   g_free (str);
 
   return result;
