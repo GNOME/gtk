@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-02 17:21-0500\n"
-"PO-Revision-Date: 2004-03-01 17:11+0900\n"
+"POT-Creation-Date: 2004-03-04 01:51+0900\n"
+"PO-Revision-Date: 2004-03-04 01:53+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Gnome Korea <gnome-kr-hackers@lists.kldp.net>\n"
 "MIME-Version: 1.0\n"
@@ -932,7 +932,7 @@ msgstr ""
 "%s에 대한 책갈피를 더하지 못했습니다:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:638 gtk/gtkfilechooserdefault.c:4010
+#: gtk/gtkfilechooserdefault.c:638 gtk/gtkfilechooserdefault.c:4019
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -1023,66 +1023,71 @@ msgstr "폴더에 저장(_F):"
 msgid "_Browse for other folders"
 msgstr "다른 폴더 찾아보기(_B)"
 
-#: gtk/gtkfilechooserdefault.c:3262
+#: gtk/gtkfilechooserdefault.c:2845
+#, c-format
+msgid "Could not set current folder: %s"
+msgstr "현재 폴더 값이 올바르지 않습니다: %s"
+
+#: gtk/gtkfilechooserdefault.c:3271
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "%s 바로 가기가 없습니다"
 
-#: gtk/gtkfilechooserdefault.c:3834
+#: gtk/gtkfilechooserdefault.c:3843
 msgid "Type name of new folder"
 msgstr "새 폴더의 이름을 넣으십시오"
 
-#: gtk/gtkfilechooserdefault.c:3863
+#: gtk/gtkfilechooserdefault.c:3872
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d바이트"
 
-#: gtk/gtkfilechooserdefault.c:3865
+#: gtk/gtkfilechooserdefault.c:3874
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:3867
+#: gtk/gtkfilechooserdefault.c:3876
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:3869
+#: gtk/gtkfilechooserdefault.c:3878
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:3914
+#: gtk/gtkfilechooserdefault.c:3923
 msgid "Today"
 msgstr "오늘"
 
-#: gtk/gtkfilechooserdefault.c:3916
+#: gtk/gtkfilechooserdefault.c:3925
 msgid "Yesterday"
 msgstr "어제"
 
 #. FIXME: Get the right format for the locale
-#: gtk/gtkfilechooserdefault.c:3925
+#: gtk/gtkfilechooserdefault.c:3934
 msgid "%d/%b/%Y"
 msgstr "%Y/%b/%d"
 
-#: gtk/gtkfilechooserdefault.c:3928
+#: gtk/gtkfilechooserdefault.c:3937
 msgid "Unknown"
 msgstr "모름"
 
-#: gtk/gtkfilechooserdefault.c:3973
+#: gtk/gtkfilechooserdefault.c:3982
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr "지정한 폴더로 이동할 수 없ㅅ브니다 - 경로 이름이 잘못되었습니다."
 
-#: gtk/gtkfilechooserdefault.c:4065
+#: gtk/gtkfilechooserdefault.c:4074
 msgid "Open Location"
 msgstr "위치 열기"
 
-#: gtk/gtkfilechooserdefault.c:4080
+#: gtk/gtkfilechooserdefault.c:4089
 msgid "_Location:"
 msgstr "위치(_L):"
 
-#: gtk/gtkfilechooserdefault.c:4114
+#: gtk/gtkfilechooserdefault.c:4123
 #, c-format
 msgid ""
 "Could not go to the parent folder of %s:\n"
@@ -1289,7 +1294,7 @@ msgstr "이 파일 시스템은 마운트를 지원하지 않습니다"
 msgid "Filesystem"
 msgstr "파일시스템"
 
-#: gtk/gtkfilesystemunix.c:471 gtk/gtkfilesystemunix.c:1376
+#: gtk/gtkfilesystemunix.c:471 gtk/gtkfilesystemunix.c:1375
 #: gtk/gtkfilesystemwin32.c:1175
 #, c-format
 msgid "error getting information for '%s': %s"

@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: gtk+-properrties 2.3.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-03-02 17:21-0500\n"
-"PO-Revision-Date: 2004-03-03 00:56+0900\n"
+"PO-Revision-Date: 2004-03-04 01:54+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: GNOME Korea <gnome-kr-hackers@lists.kldp.net>\n"
 "MIME-Version: 1.0\n"
@@ -1336,11 +1336,11 @@ msgstr "현재 활성화된 항목"
 
 #: gtk/gtkcombobox.c:477
 msgid "Appears as list"
-msgstr ""
+msgstr "목록으로 표시"
 
 #: gtk/gtkcombobox.c:478
 msgid "Whether combobox dropdowns should look like lists rather than menus"
-msgstr ""
+msgstr "콤보 상자 드롭다운을 메뉴가 아니라 목록으로 표시할 지 여부"
 
 #: gtk/gtkcomboboxentry.c:109
 msgid "Text Column"
