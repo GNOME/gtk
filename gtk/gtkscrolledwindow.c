@@ -216,6 +216,8 @@ gtk_scrolled_window_finalize (GtkObject *object)
   gtk_widget_unref (scrolled_window->viewport);
   gtk_widget_unref (scrolled_window->hscrollbar);
   gtk_widget_unref (scrolled_window->vscrollbar);
+
+  GTK_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 static void
