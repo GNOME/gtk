@@ -3987,7 +3987,8 @@ gtk_widget_set_style_internal (GtkWidget *widget,
 	  GtkRequisition old_requisition;
 	  
 	  old_requisition = widget->requisition;
-	  gtk_widget_size_request (widget, NULL);
+	  if (gtk_widget_has_screen (widget))
+	    gtk_widget_size_request (widget, NULL);
 	  
 	  if ((old_requisition.width != widget->requisition.width) ||
 	      (old_requisition.height != widget->requisition.height))
@@ -4117,10 +4118,18 @@ PangoContext *
 gtk_widget_get_pango_context (GtkWidget *widget)
 {
   PangoContext *context;
+  GdkScreen *screen;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   
   context = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_pango_context);
+  if (context)
+    {
+      screen = g_object_get_data (G_OBJECT (context), "gdk-pango-screen");
+      if (screen && (screen != gtk_widget_get_screen (widget)))
+	  context = NULL;
+    }
+  
   if (!context)
     {
       context = gtk_widget_create_pango_context (GTK_WIDGET (widget));

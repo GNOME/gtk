@@ -923,11 +923,13 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
 	      GtkWidget *attach_widget;
 	      gchar *title;
 	      
-	      menu->tearoff_window = g_object_connect (gtk_widget_new (GTK_TYPE_WINDOW,
-								       "type", GTK_WINDOW_TOPLEVEL,
-								       NULL),
-						       "signal::destroy", gtk_widget_destroyed, &menu->tearoff_window,
-						       NULL);
+	      menu->tearoff_window = g_object_connect 
+		(gtk_widget_new (GTK_TYPE_WINDOW,
+				 "type", GTK_WINDOW_TOPLEVEL,
+				 "screen", 
+				 gtk_widget_get_screen (menu->toplevel),
+				 NULL),
+		 "signal::destroy", gtk_widget_destroyed, &menu->tearoff_window,						       NULL);
 	      gtk_window_set_type_hint (GTK_WINDOW (menu->tearoff_window),
 					GDK_WINDOW_TYPE_HINT_MENU);
 	      gtk_window_set_mnemonic_modifier (GTK_WINDOW (menu->tearoff_window), 0);

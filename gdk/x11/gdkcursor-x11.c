@@ -159,3 +159,11 @@ gdk_x11_cursor_get_xcursor (GdkCursor *cursor)
 
   return ((GdkCursorPrivate *)cursor)->xcursor;
 }
+
+GdkScreen *
+gdk_cursor_get_screen (GdkCursor *cursor)
+{
+  g_return_val_if_fail (cursor != NULL, NULL);
+
+  return ((GdkCursorPrivate *)cursor)->screen;
+}

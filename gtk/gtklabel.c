@@ -672,6 +672,9 @@ gtk_label_hierarchy_changed (GtkWidget *widget,
 			     GtkWidget *old_toplevel)
 {
   GtkLabel *label = GTK_LABEL (widget);
+
+  /* in case the label has been reparented to another screen */
+  gtk_label_clear_layout (label);
   
   gtk_label_setup_mnemonic (label, label->mnemonic_keyval);
 }

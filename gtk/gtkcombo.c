@@ -59,6 +59,8 @@ enum {
 
 static void         gtk_combo_class_init         (GtkComboClass    *klass);
 static void         gtk_combo_init               (GtkCombo         *combo);
+static void         gtk_combo_realize		 (GtkWidget	   *widget);
+static void         gtk_combo_unrealize		 (GtkWidget	   *widget);
 static void         gtk_combo_destroy            (GtkObject        *combo);
 static GtkListItem *gtk_combo_find               (GtkCombo         *combo);
 static gchar *      gtk_combo_func               (GtkListItem      *li);
@@ -172,6 +174,8 @@ gtk_combo_class_init (GtkComboClass * klass)
   oclass->destroy = gtk_combo_destroy;
   
   widget_class->size_allocate = gtk_combo_size_allocate;
+  widget_class->realize = gtk_combo_realize;
+  widget_class->unrealize = gtk_combo_unrealize;
 }
 
 static void
@@ -766,7 +770,6 @@ gtk_combo_init (GtkCombo * combo)
   GtkWidget *arrow;
   GtkWidget *frame;
   GtkWidget *event_box;
-  GdkCursor *cursor;
 
   combo->case_sensitive = FALSE;
   combo->value_in_list = FALSE;
@@ -814,11 +817,6 @@ gtk_combo_init (GtkCombo * combo)
   gtk_container_add (GTK_CONTAINER (combo->popwin), event_box);
   gtk_widget_show (event_box);
 
-  gtk_widget_realize (event_box);
-  cursor = gdk_cursor_new_for_screen (gdk_drawable_get_screen (event_box->window),
-				      GDK_TOP_LEFT_ARROW);
-  gdk_window_set_cursor (event_box->window, cursor);
-  gdk_cursor_destroy (cursor);
 
   frame = gtk_frame_new (NULL);
   gtk_container_add (GTK_CONTAINER (event_box), frame);
@@ -862,6 +860,37 @@ gtk_combo_init (GtkCombo * combo)
    */
   gtk_signal_connect (GTK_OBJECT (combo->button), "enter_notify_event",
 		      GTK_SIGNAL_FUNC (gtk_combo_list_enter), combo);
+}
+
+static void
+gtk_combo_realize (GtkWidget *widget)
+{
+  GdkCursor *cursor;
+  GtkCombo *combo = GTK_COMBO (widget);
+  GtkWidget *event_box = gtk_bin_get_child (GTK_BIN(combo->popwin));
+
+  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+  
+  gtk_window_set_screen (GTK_WINDOW (combo->popwin), 
+			 gtk_widget_get_screen (widget));
+  
+  gtk_widget_realize (event_box); 
+  cursor = gdk_cursor_new_for_screen (gtk_widget_get_screen (widget),
+				      GDK_TOP_LEFT_ARROW);
+  gdk_window_set_cursor (event_box->window, cursor);
+  gdk_cursor_destroy (cursor);
+
+  
+  if (GTK_WIDGET_CLASS( parent_class )->realize)
+      (*GTK_WIDGET_CLASS( parent_class )->realize) (widget);  
+}
+static void        
+gtk_combo_unrealize (GtkWidget *widget)
+{
+  GtkCombo *combo = GTK_COMBO (widget);
+  if (combo->popwin)
+    gtk_widget_unrealize (combo->popwin);
+  GTK_WIDGET_CLASS (parent_class)->unrealize (widget);
 }
 
 GtkType

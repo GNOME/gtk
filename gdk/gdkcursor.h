@@ -40,6 +40,7 @@ GdkCursor* gdk_cursor_new_from_pixmap	 (GdkPixmap	  *source,
 					  GdkColor	  *bg,
 					  gint		   x,
 					  gint		   y);
+GdkScreen* gdk_cursor_get_screen	 (GdkCursor	 *cursor);
 GdkCursor* gdk_cursor_ref                (GdkCursor      *cursor);
 void       gdk_cursor_unref              (GdkCursor      *cursor);
 

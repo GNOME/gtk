@@ -7689,7 +7689,9 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
   /* now that we've collapsed all rows, we want to try to set the prelight
    * again. To do this, we fake a motion event and send it to ourselves. */
 
-  if (gdk_window_at_pointer (&x, &y) == tree_view->priv->bin_window)
+  if (gdk_screen_get_window_at_pointer 
+      (gdk_drawable_get_screen (tree_view->priv->bin_window), &x, &y) ==
+      tree_view->priv->bin_window)
     {
       GdkEventMotion event;
       event.window = tree_view->priv->bin_window;

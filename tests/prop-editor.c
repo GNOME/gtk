@@ -451,7 +451,10 @@ window_destroy (gpointer data)
 }
 
 static GtkWidget *
-property_widget (GObject *object, GParamSpec *spec, gboolean can_modify)
+property_widget (GdkScreen  *screen,
+		 GObject    *object, 
+		 GParamSpec *spec, 
+		 gboolean   can_modify)
 {
   GtkWidget *prop_edit;
   GtkAdjustment *adj;
@@ -573,6 +576,7 @@ property_widget (GObject *object, GParamSpec *spec, gboolean can_modify)
 	prop_edit = gtk_option_menu_new ();
 	
 	menu = gtk_menu_new ();
+	gtk_menu_set_screen (GTK_MENU (menu), screen);
 	
 	eclass = G_ENUM_CLASS (g_type_class_ref (spec->value_type));
 	
@@ -646,7 +650,8 @@ property_widget (GObject *object, GParamSpec *spec, gboolean can_modify)
 }
 
 static GtkWidget *
-properties_from_type (GObject     *object,
+properties_from_type (GdkScreen   *screen,
+		      GObject     *object,
 		      GType        type,
 		      GtkTooltips *tips)
 {
@@ -699,7 +704,7 @@ properties_from_type (GObject     *object,
       gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
       gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, i, i + 1);
       
-      prop_edit = property_widget (object, spec, can_modify);
+      prop_edit = property_widget (screen, object, spec, can_modify);
       gtk_table_attach_defaults (GTK_TABLE (table), prop_edit, 1, 2, i, i + 1);
 
       if (prop_edit)
@@ -743,6 +748,7 @@ create_prop_editor (GObject *object, GType type)
   GtkWidget *properties;
   GtkWidget *label;
   gchar *title;
+  GdkScreen *screen;
 
   if ((win = g_object_get_data (G_OBJECT (object), "prop-editor-win")))
     {
@@ -751,6 +757,11 @@ create_prop_editor (GObject *object, GType type)
     }
 
   win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+
+  if ((screen = g_object_get_data (G_OBJECT (object), "prop-editor-screen")))
+    gtk_window_set_screen (GTK_WINDOW (win), screen);
+  else
+    screen = gdk_get_default_screen ();
 
   tips = gtk_tooltips_new ();
   gtk_signal_connect_object (GTK_OBJECT (win), "destroy",
@@ -775,7 +786,7 @@ create_prop_editor (GObject *object, GType type)
       
       while (type)
 	{
-	  properties = properties_from_type (object, type, tips);
+	  properties = properties_from_type (screen, object, type, tips);
 	  if (properties)
 	    {
 	      label = gtk_label_new (g_type_name (type));
@@ -788,7 +799,7 @@ create_prop_editor (GObject *object, GType type)
     }
   else
     {
-      properties = properties_from_type (object, type, tips);
+      properties = properties_from_type (screen, object, type, tips);
       gtk_container_add (GTK_CONTAINER (win), properties);
       title = g_strdup_printf ("Properties of %s", g_type_name (type));
       gtk_window_set_title (GTK_WINDOW (win), title);

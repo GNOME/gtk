@@ -36,7 +36,6 @@
 #include "gtkstock.h"
 #include "gtkwindow.h"
 
-static GSList *drag_widgets = NULL;
 static GSList *source_widgets = NULL;
 
 typedef struct _GtkDragSourceSite GtkDragSourceSite;
@@ -370,12 +369,16 @@ static GtkWidget *
 gtk_drag_get_ipc_widget (GdkDisplay *display)
 {
   GtkWidget *result;
+  GSList *drag_widgets = g_object_get_data (G_OBJECT (display), 
+					    "gtk-dnd-ipc-widgets");
   
   if (drag_widgets)
     {
       GSList *tmp = drag_widgets;
       result = drag_widgets->data;
       drag_widgets = drag_widgets->next;
+      g_object_set_data (G_OBJECT (display), "gtk-dnd-ipc-widgets",
+			 drag_widgets);
       g_slist_free_1 (tmp);
     }
   else
@@ -398,7 +401,12 @@ gtk_drag_get_ipc_widget (GdkDisplay *display)
 static void
 gtk_drag_release_ipc_widget (GtkWidget *widget)
 {
+  GdkDisplay *display = gtk_widget_get_display (widget);
+  GSList *drag_widgets = g_object_get_data (G_OBJECT (display),
+					    "gtk-dnd-ipc-widgets");
   drag_widgets = g_slist_prepend (drag_widgets, widget);
+  g_object_set_data (G_OBJECT (display), "gtk-dnd-ipc-widgets",
+		     drag_widgets);
 }
 
 static guint32
@@ -546,6 +554,14 @@ gtk_drag_get_cursor (GdkDragAction action, GdkScreen *screen)
   for (i = 0 ; i < n_drag_cursors - 1; i++)
     if (drag_cursors[i].action == action)
       break;
+  if (drag_cursors[i].cursor != NULL)
+    {
+      if (screen != gdk_cursor_get_screen (drag_cursors[i].cursor))
+	{
+	  gdk_cursor_unref (drag_cursors[i].cursor);
+	  drag_cursors[i].cursor = NULL;
+	}
+    }
 
   if (drag_cursors[i].cursor == NULL)
     {
