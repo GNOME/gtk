@@ -152,8 +152,8 @@ static GList *current_emissions = NULL;
 static GList *stop_emissions = NULL;
 static GList *restart_emissions = NULL;
 
-static GtkSignalMarshal marshal = NULL;
-static GtkSignalDestroy destroy = NULL;
+static GtkSignalMarshal global_marshaller = NULL;
+static GtkSignalDestroy global_destroy_notify = NULL;
 
 
 guint
@@ -423,6 +423,60 @@ gtk_signal_emit_stop_by_name (GtkObject       *object,
 }
 
 guint
+gtk_signal_n_emissions (GtkObject  *object,
+			guint       signal_id)
+{
+  GList *tmp;
+  guint n;
+  
+  g_return_val_if_fail (object != NULL, 0);
+  g_return_val_if_fail (GTK_IS_OBJECT (object), 0);
+  
+  tmp = current_emissions;
+  n = 0;
+  while (tmp)
+    {
+      GtkEmission *emission;
+      
+      emission = tmp->data;
+      tmp = tmp->next;
+      
+      if ((emission->object == object) &&
+	  (emission->signal_type == signal_id))
+	n++;
+    }
+  
+  return n;
+}
+
+guint
+gtk_signal_n_emissions_by_name (GtkObject       *object,
+				const gchar     *name)
+{
+  guint type;
+  guint n;
+  
+  g_return_val_if_fail (object != NULL, 0);
+  g_return_val_if_fail (GTK_IS_OBJECT (object), 0);
+  g_return_val_if_fail (name != NULL, 0);
+  
+  if (initialize)
+    gtk_signal_init ();
+  
+  type = gtk_signal_lookup (name, GTK_OBJECT_TYPE (object));
+  if (type)
+    n = gtk_signal_n_emissions (object, type);
+  else
+    {
+      g_warning ("gtk_signal_n_emissions_by_name(): could not find signal \"%s\" in the `%s' class ancestry",
+		 name, gtk_type_name (GTK_OBJECT_TYPE (object)));
+      n = 0;
+    }
+
+  return n;
+}
+
+guint
 gtk_signal_connect (GtkObject     *object,
 		    const gchar   *name,
 		    GtkSignalFunc  func,
@@ -431,6 +485,7 @@ gtk_signal_connect (GtkObject     *object,
   guint type;
   
   g_return_val_if_fail (object != NULL, 0);
+  g_return_val_if_fail (GTK_IS_OBJECT (object), 0);
   
   if (initialize)
     gtk_signal_init ();
@@ -965,8 +1020,8 @@ void
 gtk_signal_set_funcs (GtkSignalMarshal marshal_func,
 		      GtkSignalDestroy destroy_func)
 {
-  marshal = marshal_func;
-  destroy = destroy_func;
+  global_marshaller = marshal_func;
+  global_destroy_notify = destroy_func;
 }
 
 
@@ -1050,11 +1105,10 @@ gtk_signal_handler_unref (GtkHandler *handler,
   handler->ref_count -= 1;
   if (handler->ref_count == 0)
     {
-      if (!handler->func && destroy)
-	(* destroy) (handler->func_data);
-      else if (handler->destroy_func)
+      if (handler->destroy_func)
 	(* handler->destroy_func) (handler->func_data);
-      
+      else if (!handler->func && global_destroy_notify)
+	(* global_destroy_notify) (handler->func_data);
       
       if (handler->prev)
 	handler->prev->next = handler->next;
@@ -1421,10 +1475,10 @@ gtk_handlers_run (GtkHandler     *handlers,
 	  if (handlers->func)
 	    {
 	      if (handlers->no_marshal)
-		(* (GtkCallbackMarshal)handlers->func) (info->object,
-							handlers->func_data,
-							info->nparams,
-							info->params);
+		(* (GtkCallbackMarshal) handlers->func) (info->object,
+							 handlers->func_data,
+							 info->nparams,
+							 info->params);
 	      else if (handlers->object_signal)
 		(* info->marshaller) ((GtkObject*) handlers->func_data, /* don't GTK_OBJECT() cast */
 				      handlers->func,
@@ -1436,13 +1490,13 @@ gtk_handlers_run (GtkHandler     *handlers,
 				      handlers->func_data,
 				      info->params);
 	    }
-	  else if (marshal)
-	    (* marshal) (info->object,
-			 handlers->func_data,
-			 info->nparams,
-			 info->params,
-			 info->param_types,
-			 info->return_val);
+	  else if (global_marshaller)
+	    (* global_marshaller) (info->object,
+				   handlers->func_data,
+				   info->nparams,
+				   info->params,
+				   info->param_types,
+				   info->return_val);
 	  
           if (gtk_emission_check (stop_emissions, info->object,
 				  info->signal_type))

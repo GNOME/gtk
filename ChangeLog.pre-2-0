@@ -1,3 +1,14 @@
+Sun May  3 19:45:09 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkadjustment.c (gtk_adjustment_assimilate_value): new function
+	to set the adjustments value without causing a current emission of
+	"value_changed" to be restarted.
+
+	* gtk/gtksignal.c: added new functions to retrive the number of
+	existing emissions for a certain signal.
+ 	(gtk_signal_n_emissions): new function.
+	(gtk_signal_n_emissions_by_name): new function.
+
 Sun May  3 16:55:43 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkcontainer.c (gtk_container_set_focus_child): new function to

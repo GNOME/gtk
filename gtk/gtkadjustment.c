@@ -132,8 +132,22 @@ gtk_adjustment_set_value (GtkAdjustment        *adjustment,
     {
       adjustment->value = value;
 
-      gtk_signal_emit_by_name (GTK_OBJECT (adjustment), "value_changed");
+      gtk_adjustment_value_changed (adjustment);
     }
+}
+
+void
+gtk_adjustment_assimilate_value (GtkAdjustment        *adjustment,
+				 gfloat                value)
+{
+  g_return_if_fail (adjustment != NULL);
+  g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
+
+  if (gtk_signal_n_emissions (GTK_OBJECT (adjustment),
+			      adjustment_signals[VALUE_CHANGED]))
+    adjustment->value = CLAMP (value, adjustment->lower, adjustment->upper);
+  else
+    gtk_adjustment_set_value (adjustment, value);
 }
 
 void
@@ -142,7 +156,7 @@ gtk_adjustment_changed (GtkAdjustment        *adjustment)
   g_return_if_fail (adjustment != NULL);
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
 
-  gtk_signal_emit_by_name (GTK_OBJECT (adjustment), "changed");
+  gtk_signal_emit (GTK_OBJECT (adjustment), adjustment_signals[CHANGED]);
 }
 
 void
@@ -151,7 +165,7 @@ gtk_adjustment_value_changed (GtkAdjustment        *adjustment)
   g_return_if_fail (adjustment != NULL);
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
 
-  gtk_signal_emit_by_name (GTK_OBJECT (adjustment), "value_changed");
+  gtk_signal_emit (GTK_OBJECT (adjustment), adjustment_signals[VALUE_CHANGED]);
 }
 
 void
@@ -181,5 +195,5 @@ gtk_adjustment_clamp_page (GtkAdjustment *adjustment,
     }
 
   if (need_emission)
-    gtk_signal_emit_by_name (GTK_OBJECT (adjustment), "value_changed");
+    gtk_adjustment_value_changed (adjustment);
 }
