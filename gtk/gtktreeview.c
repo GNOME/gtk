@@ -798,6 +798,30 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 				GTK_TYPE_ENUM, GTK_MOVEMENT_VISUAL_POSITIONS,
 				GTK_TYPE_INT, -1);
 
+  gtk_binding_entry_add_signal (binding_set, GDK_Right, GDK_CONTROL_MASK, "move_cursor", 2,
+				GTK_TYPE_ENUM, GTK_MOVEMENT_VISUAL_POSITIONS,
+				GTK_TYPE_INT, 1);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_Left, GDK_CONTROL_MASK, "move_cursor", 2,
+				GTK_TYPE_ENUM, GTK_MOVEMENT_VISUAL_POSITIONS,
+				GTK_TYPE_INT, -1);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_Right, GDK_SHIFT_MASK, "move_cursor", 2,
+				GTK_TYPE_ENUM, GTK_MOVEMENT_VISUAL_POSITIONS,
+				GTK_TYPE_INT, 1);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_Left, GDK_SHIFT_MASK, "move_cursor", 2,
+				GTK_TYPE_ENUM, GTK_MOVEMENT_VISUAL_POSITIONS,
+				GTK_TYPE_INT, -1);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_Right, GDK_CONTROL_MASK|GDK_SHIFT_MASK, "move_cursor", 2,
+				GTK_TYPE_ENUM, GTK_MOVEMENT_VISUAL_POSITIONS,
+				GTK_TYPE_INT, 1);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_Left, GDK_CONTROL_MASK|GDK_SHIFT_MASK, "move_cursor", 2,
+				GTK_TYPE_ENUM, GTK_MOVEMENT_VISUAL_POSITIONS,
+				GTK_TYPE_INT, -1);
+
   gtk_binding_entry_add_signal (binding_set, GDK_f, GDK_CONTROL_MASK, "move_cursor", 2,
 				GTK_TYPE_ENUM, GTK_MOVEMENT_LOGICAL_POSITIONS,
 				GTK_TYPE_INT, 1);
