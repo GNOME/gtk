@@ -1,3 +1,18 @@
+2004-03-08  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c (update_from_entry): Return a
+	boolean success code.
+	(location_popup_handler): Refocus the file chooser if appropriate.
+	Fixes #135905.
+	(save_widgets_create): Don't set the text of the save_folder_label
+	here.
+	(update_appearance): Set the text here as appropriate for the save
+	mode.  Also fixes #136387.
+	(update_appearance): Don't show the Create Folder button in
+	SELECT_FOLDER mode.
+	(update_appearance): Show the extra widget in all Save modes
+	correctly.
+
 Mon Mar  8 11:57:27 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_unset_model): Don't
@@ -131,6 +146,8 @@ Sun Mar  7 22:24:28 2004  Matthias Clasen  <maclas@gmx.de>
 	height calculation.
 
 Sun Mar  7 14:34:04 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	Fixes #121500.
 
 	* gtk/gtkfilechooserdefault.c (trap_activate_cb): stop activate
 	from unselecting rows when pressed in multiple-selection mode.

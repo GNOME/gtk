@@ -1460,7 +1460,7 @@ add_bookmark_foreach_cb (GtkTreeModel *model,
   const GtkFilePath *file_path;
 
   impl = (GtkFileChooserDefault *) data;
-  
+
   fs_model = impl->browse_files_model;
   gtk_tree_model_sort_convert_iter_to_child_iter (impl->sort_model, &child_iter, iter);
 
@@ -1875,7 +1875,7 @@ trap_activate_cb (GtkWidget   *widget,
 	  GtkWindow *window;
 
 	  window = GTK_WINDOW (toplevel);
-      
+
 	  if (window &&
 	      widget != window->default_widget &&
 	      !(widget == window->focus_widget &&
@@ -2000,7 +2000,7 @@ create_path_bar (GtkFileChooserDefault *impl)
 
   path_bar = g_object_new (GTK_TYPE_PATH_BAR, NULL);
   _gtk_path_bar_set_file_system (GTK_PATH_BAR (path_bar), impl->file_system);
-  
+
   return path_bar;
 }
 
@@ -2151,7 +2151,7 @@ save_widgets_create (GtkFileChooserDefault *impl)
   gtk_label_set_mnemonic_widget (GTK_LABEL (widget), impl->save_file_name_entry);
 
   /* Folder combo */
-  impl->save_folder_label = gtk_label_new_with_mnemonic (_("Save in _Folder:"));
+  impl->save_folder_label = gtk_label_new (NULL);
   gtk_misc_set_alignment (GTK_MISC (impl->save_folder_label), 0.0, 0.5);
   gtk_table_attach (GTK_TABLE (table), impl->save_folder_label,
 		    0, 1, 1, 2,
@@ -2374,7 +2374,16 @@ update_appearance (GtkFileChooserDefault *impl)
   if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE ||
       impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
     {
+      const char *text;
+
       gtk_widget_show (impl->save_widgets);
+
+      if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
+	text = _("Save in _folder:");
+      else
+	text = _("Create in _folder:");
+
+      gtk_label_set_text_with_mnemonic (GTK_LABEL (impl->save_folder_label), text);
 
       if (gtk_expander_get_expanded (GTK_EXPANDER (impl->save_expander)))
 	{
@@ -2417,7 +2426,8 @@ update_appearance (GtkFileChooserDefault *impl)
 	_gtk_file_system_model_set_show_files (impl->browse_files_model, TRUE);
     }
 
-  if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN)
+  if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN
+      || impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
     gtk_widget_hide (impl->browse_new_folder_button);
   else
     gtk_widget_show (impl->browse_new_folder_button);
@@ -2427,7 +2437,8 @@ update_appearance (GtkFileChooserDefault *impl)
       GtkWidget *align;
       GtkWidget *unused_align;
 
-      if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
+      if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
+	  || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
 	{
 	  align = impl->save_extra_align;
 	  unused_align = impl->browse_extra_align;
@@ -4016,7 +4027,7 @@ location_entry_create (GtkFileChooserDefault *impl)
   return GTK_WIDGET (entry);
 }
 
-static void
+static gboolean
 update_from_entry (GtkFileChooserDefault *impl,
 		   GtkWindow             *parent,
 		   GtkFileChooserEntry   *chooser_entry)
@@ -4031,20 +4042,20 @@ update_from_entry (GtkFileChooserDefault *impl,
     {
       error_message_with_parent (parent,
 				 _("Cannot change to the folder you specified as it is an invalid path."));
-      return;
+      return FALSE;
     }
 
   if (file_part[0] == '\0')
-    {
-      change_folder_and_display_error (impl, folder_path);
-      return;
-    }
+    return change_folder_and_display_error (impl, folder_path);
   else
     {
       GtkFileFolder *folder = NULL;
       GtkFilePath *subfolder_path = NULL;
       GtkFileInfo *info = NULL;
       GError *error;
+      gboolean result;
+
+      result = FALSE;
 
       /* If the file part is non-empty, we need to figure out if it refers to a
        * folder within folder. We could optimize the case here where the folder
@@ -4057,7 +4068,7 @@ update_from_entry (GtkFileChooserDefault *impl,
       if (!folder)
 	{
 	  error_getting_info_dialog (impl, folder_path, error);
-	  return;
+	  goto out;
 	}
 
       error = NULL;
@@ -4075,8 +4086,7 @@ update_from_entry (GtkFileChooserDefault *impl,
 	  error_message (impl, msg);
 	  g_free (uri);
 	  g_free (msg);
-	  g_object_unref (folder);
-	  return;
+	  goto out;
 	}
 
       error = NULL;
@@ -4086,37 +4096,40 @@ update_from_entry (GtkFileChooserDefault *impl,
 	{
 #if 0
 	  if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
-	    {
-	      g_object_unref (folder);
-	      gtk_file_path_free (subfolder_path);
-	      return;
-	    }
+	    return;
 #endif
 	  error_getting_info_dialog (impl, subfolder_path, error);
-	  g_object_unref (folder);
-	  gtk_file_path_free (subfolder_path);
-	  return;
+	  goto out;
 	}
 
       if (gtk_file_info_get_is_folder (info))
-	change_folder_and_display_error (impl, subfolder_path);
+	result = change_folder_and_display_error (impl, subfolder_path);
       else
 	{
 	  GError *error;
 
 	  error = NULL;
-	  if (!_gtk_file_chooser_select_path (GTK_FILE_CHOOSER (impl), subfolder_path, &error))
-	    {
-	      error_dialog (impl,
-			    _("Could not select %s:\n%s"),
-			    subfolder_path, error);
-	    }
+	  result = _gtk_file_chooser_select_path (GTK_FILE_CHOOSER (impl), subfolder_path, &error);
+	  if (!result)
+	    error_dialog (impl,
+			  _("Could not select %s:\n%s"),
+			  subfolder_path, error);
 	}
 
-      g_object_unref (folder);
+    out:
+
+      if (folder)
+	g_object_unref (folder);
+
       gtk_file_path_free (subfolder_path);
-      gtk_file_info_free (info);
+
+      if (info)
+	gtk_file_info_free (info);
+
+      return result;
     }
+
+  g_assert_not_reached ();
 }
 
 static void
@@ -4127,6 +4140,7 @@ location_popup_handler (GtkFileChooserDefault *impl)
   GtkWidget *hbox;
   GtkWidget *label;
   GtkWidget *entry;
+  gboolean refocus;
 
   /* Create dialog */
 
@@ -4159,8 +4173,26 @@ location_popup_handler (GtkFileChooserDefault *impl)
   /* Run */
 
   gtk_widget_show_all (dialog);
+
+  refocus = TRUE;
+
   if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
-    update_from_entry (impl, GTK_WINDOW (dialog), GTK_FILE_CHOOSER_ENTRY (entry));
+    {
+      if (update_from_entry (impl, GTK_WINDOW (dialog), GTK_FILE_CHOOSER_ENTRY (entry)))
+	{
+	  gtk_widget_grab_focus (impl->browse_files_tree_view);
+	  refocus = FALSE;
+	}
+    }
+
+  if (refocus)
+    {
+      GtkWidget *toplevel;
+
+      toplevel = gtk_widget_get_toplevel (GTK_WIDGET (impl));
+      if (GTK_WIDGET_TOPLEVEL (toplevel) && GTK_WINDOW (toplevel)->focus_widget)
+	gtk_widget_grab_focus (GTK_WINDOW (toplevel)->focus_widget);
+    }
 
   gtk_widget_destroy (dialog);
 }
