@@ -23,7 +23,8 @@ linkend="gtk-Themeable-Stock-Images">GtkIconFactory</link> for
 more information on stock icons. The connection between a
 #GtkStockItem and stock icons is purely conventional (by virtue of
 using the same stock ID); it's possible to register a stock item but
-no icon, and vice versa.
+no icon, and vice versa. Stock icons may have a RTL variant which gets
+used for right-to-left locales. 
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
@@ -284,6 +285,8 @@ The "Bottom" item.
 <para>
 The "First" item.
 <inlinegraphic fileref="stock_first_24.png" format="PNG"></inlinegraphic>
+RTL variant
+<inlinegraphic fileref="stock_last_24.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -292,6 +295,8 @@ The "First" item.
 <para>
 The "Last" item.
 <inlinegraphic fileref="stock_last_24.png" format="PNG"></inlinegraphic>
+RTL variant
+<inlinegraphic fileref="stock_first_24.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -308,6 +313,8 @@ The "Top" item.
 <para>
 The "Back" item.
 <inlinegraphic fileref="stock_left_arrow_24.png" format="PNG"></inlinegraphic>
+RTL variant
+<inlinegraphic fileref="stock_right_arrow_24.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -324,6 +331,8 @@ The "Down" item.
 <para>
 The "Forward" item.
 <inlinegraphic fileref="stock_right_arrow_24.png" format="PNG"></inlinegraphic>
+RTL variant
+<inlinegraphic fileref="stock_left_arrow_24.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -372,6 +381,8 @@ The "Italic" item.
 <para>
 The "Jump to" item.
 <inlinegraphic fileref="stock_jump_to_24.png" format="PNG"></inlinegraphic>
+RTL-variant 
+<inlinegraphic fileref="stock_jump_to_rtl_24.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -500,6 +511,8 @@ The "Quit" item.
 <para>
 The "Redo" item.
 <inlinegraphic fileref="stock_redo_24.png" format="PNG"></inlinegraphic>
+RTL variant
+<inlinegraphic fileref="stock_redo_rtl_24.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -524,6 +537,8 @@ The "Remove" item.
 <para>
 The "Revert" item.
 <inlinegraphic fileref="stock_revert_24.png" format="PNG"></inlinegraphic>
+RTL variant
+<inlinegraphic fileref="stock_revert_rtl_24.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -604,6 +619,8 @@ The "Strikethrough" item.
 <para>
 The "Undelete" item.
 <inlinegraphic fileref="stock_undelete_24.png" format="PNG"></inlinegraphic>
+RTL variant
+<inlinegraphic fileref="stock_undelete_rtl_24.png" format="PNG"></inlinegraphic>
 </para>
 
 
@@ -620,6 +637,8 @@ The "Underline" item.
 <para>
 The "Undo" item.
 <inlinegraphic fileref="stock_undo_24.png" format="PNG"></inlinegraphic>
+RTL variant
+<inlinegraphic fileref="stock_undo_rtl_24.png" format="PNG"></inlinegraphic>
 </para>
 
 

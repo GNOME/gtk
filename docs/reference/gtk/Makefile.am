@@ -119,6 +119,7 @@ HTML_IMAGES = \
 	$(top_srcdir)/gtk/stock-icons/stock_index_24.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_text_italic_24.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_jump_to_24.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_jump_to_rtl_24.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_align_center_24.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_align_justify_24.png	\
 	$(top_srcdir)/gtk/stock-icons/stock_align_left_24.png		\
@@ -135,13 +136,15 @@ HTML_IMAGES = \
 	$(top_srcdir)/gtk/stock-icons/stock_properties_24.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_exit_24.png			\
 	$(top_srcdir)/gtk/stock-icons/stock_redo_24.png			\
+	$(top_srcdir)/gtk/stock-icons/stock_redo_rtl_24.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_refresh_24.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_remove_24.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_revert_24.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_revert_rtl_24.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_save_24.png			\
 	$(top_srcdir)/gtk/stock-icons/stock_save_as_24.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_colorselector_24.png	\
-	$(top_srcdir)/gtk/stock-icons/stock_color_picker_25.png	\
+	$(top_srcdir)/gtk/stock-icons/stock_color_picker_25.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_font_24.png			\
 	$(top_srcdir)/gtk/stock-icons/stock_sort_ascending_24.png	\
 	$(top_srcdir)/gtk/stock-icons/stock_sort_descending_24.png	\
@@ -149,8 +152,10 @@ HTML_IMAGES = \
 	$(top_srcdir)/gtk/stock-icons/stock_stop_24.png			\
 	$(top_srcdir)/gtk/stock-icons/stock_text_strikethrough_24.png	\
 	$(top_srcdir)/gtk/stock-icons/stock_undelete_24.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_undelete_rtl_24.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_text_underline_24.png	\
 	$(top_srcdir)/gtk/stock-icons/stock_undo_24.png			\
+	$(top_srcdir)/gtk/stock-icons/stock_undo_rtl_24.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_yes_20.png			\
 	$(top_srcdir)/gtk/stock-icons/stock_zoom_1_24.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_zoom_fit_24.png		\

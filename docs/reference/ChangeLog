@@ -1,3 +1,9 @@
+2003-06-23  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/Makefile.am (HTML_IMAGES): Add RTL variants of stock icons.
+
+	* gtk/tmpl/gtkstock.sgml: Document RTL variants of stock icons. 
+
 2003-06-22  Matthias Clasen  <matthias@localhost.localdomain>
 
 	* gdk-pixbuf/tmpl/gdk-pixbuf.sgml: Typo fix.
