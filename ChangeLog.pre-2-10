@@ -1,3 +1,9 @@
+Wed Nov 15 20:16:54 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextlayout.c (gtk_text_layout_move_iter_to_line_end): 
+	Don't move back one char when we are actually at the end of the 
+	paragraph.
+
 2000-11-15  Robert Brady  <robert@suse.co.uk>
 
 	* modules/input/iminuktitut.c (inuktitut_compose_seqs): 

@@ -2501,11 +2501,11 @@ gtk_text_layout_move_iter_to_line_end (GtkTextLayout *layout,
  				      direction < 0 ? byte_offset : byte_offset + layout_line->length,
  				      0);
 
-          /* FIXME: As a bad hack, we move back one position to avoid going
-	   * to next line on a forced break not at whitespace. Real fix
-	   * is to keep track of whether marks are at leading or trailing edge?
-           */
-          if (direction > 0 && layout_line->length > 0)
+          /* FIXME: As a bad hack, we move back one position when we
+	   * are inside a paragraph to avoid going to next line on a
+	   * forced break not at whitespace. Real fix is to keep track
+	   * of whether marks are at leading or trailing edge?  */
+          if (direction > 0 && layout_line->length > 0 && !gtk_text_iter_ends_line (iter))
             gtk_text_iter_prev_char (iter);
 
           break;
