@@ -425,6 +425,7 @@ gtk_action_group_add_radio_actions_full (GtkActionGroup      *action_group,
   guint i;
   GtkTranslateFunc translate_func;
   gpointer translate_data;
+  GSList *group = NULL;
 
   g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
 
@@ -464,11 +465,8 @@ gtk_action_group_add_radio_actions_full (GtkActionGroup      *action_group,
 				   on_change, user_data, 
 				   (GClosureNotify)destroy, 0);
 	}
-      else
-	{
-	  GSList *group = gtk_radio_action_get_group (GTK_RADIO_ACTION (action));
-	  gtk_radio_action_set_group (GTK_RADIO_ACTION (action), group);
-	}
+      gtk_radio_action_set_group (GTK_RADIO_ACTION (action), group);
+      group = gtk_radio_action_get_group (GTK_RADIO_ACTION (action));
 
       /* set the accel path for the menu item */
       accel_path = g_strconcat ("<Actions>/", action_group->private_data->name, "/",
