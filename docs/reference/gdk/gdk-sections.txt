@@ -380,6 +380,7 @@ GdkWindowClass
 GdkWindowAttributesType
 GdkWindowHints
 GdkGeometry
+GdkGravity
 
 gdk_window_new
 gdk_window_destroy
@@ -392,6 +393,7 @@ gdk_window_hide
 gdk_window_is_visible
 gdk_window_is_viewable
 gdk_window_withdraw
+gdk_window_iconify
 gdk_window_move
 gdk_window_resize
 gdk_window_move_resize

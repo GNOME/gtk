@@ -2,5 +2,6 @@ Makefile
 Makefile.in
 sgml
 html
+gdk-decl.txt
 gdk-decl-list.txt
 gdk-unused.txt

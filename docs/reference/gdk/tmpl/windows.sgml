@@ -105,6 +105,22 @@ Windows
 @max_aspect: 
 @win_gravity: 
 
+<!-- ##### ENUM GdkGravity ##### -->
+<para>
+
+</para>
+
+@GDK_GRAVITY_NORTH_WEST: 
+@GDK_GRAVITY_NORTH: 
+@GDK_GRAVITY_NORTH_EAST: 
+@GDK_GRAVITY_WEST: 
+@GDK_GRAVITY_CENTER: 
+@GDK_GRAVITY_EAST: 
+@GDK_GRAVITY_SOUTH_WEST: 
+@GDK_GRAVITY_SOUTH: 
+@GDK_GRAVITY_SOUTH_EAST: 
+@GDK_GRAVITY_STATIC: 
+
 <!-- ##### FUNCTION gdk_window_new ##### -->
 <para>
 
@@ -197,6 +213,14 @@ Windows
 
 
 <!-- ##### FUNCTION gdk_window_withdraw ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_iconify ##### -->
 <para>
 
 </para>
