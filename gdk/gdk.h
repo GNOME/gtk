@@ -648,6 +648,63 @@ GdkEventMask gdk_ic_get_events  (GdkIC ic);
 /* Miscellaneous */
 void gdk_event_send_clientmessage_toall(GdkEvent *event);
 
+/* Color Context */
+
+GdkColorContext *gdk_color_context_new          	  (GdkVisual   *visual,
+				                	   GdkColormap *colormap);
+
+GdkColorContext *gdk_color_context_new_mono     	  (GdkVisual   *visual,
+					        	   GdkColormap *colormap);
+
+void             gdk_color_context_free                   (GdkColorContext *cc);
+
+gulong           gdk_color_context_get_pixel    	  (GdkColorContext *cc,
+					        	   gushort          red,
+					        	   gushort          green,
+					        	   gushort          blue,
+					        	   gint            *failed);
+void             gdk_color_context_get_pixels   	  (GdkColorContext *cc,
+					        	   gushort         *reds,
+					        	   gushort         *greens,
+					        	   gushort         *blues,
+					        	   gint             ncolors,
+					        	   gulong          *colors,
+					        	   gint            *nallocated);
+void             gdk_color_context_get_pixels_incremental (GdkColorContext *cc,
+							   gushort         *reds,
+							   gushort         *greens,
+							   gushort         *blues,
+							   gint             ncolors,
+							   gint            *used,
+							   gulong          *colors,
+							   gint            *nallocated);
+
+gint             gdk_color_context_get_num_colors         (GdkColorContext *cc);
+gint             gdk_color_context_query_color            (GdkColorContext *cc,
+							   GdkColor        *color);
+gint             gdk_color_context_query_colors           (GdkColorContext *cc,
+							   GdkColor        *colors,
+							   gint             num_colors);
+
+gint             gdk_color_context_add_palette            (GdkColorContext *cc,
+							   GdkColor        *palette,
+							   gint             num_palette);
+
+void             gdk_color_context_init_dither            (GdkColorContext *cc);
+void             gdk_color_context_free_dither            (GdkColorContext *cc);
+
+gulong           gdk_color_context_get_pixel_from_palette (GdkColorContext *cc,
+							   gushort         *red,
+							   gushort         *green,
+							   gushort         *blue,
+							   gint            *failed);
+guchar           gdk_color_context_get_index_from_palette (GdkColorContext *cc,
+							   gint            *red,
+							   gint            *green,
+							   gint            *blue,
+							   gint            *failed);
+
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

@@ -40,23 +40,25 @@ extern "C" {
 /* Type definitions for the basic structures.
  */
 
-typedef gulong                    GdkAtom;
-typedef struct _GdkColor          GdkColor;
-typedef struct _GdkColormap       GdkColormap;
-typedef struct _GdkVisual         GdkVisual;
-typedef struct _GdkWindowAttr     GdkWindowAttr;
-typedef struct _GdkWindow         GdkWindow;
-typedef struct _GdkWindow         GdkPixmap;
-typedef struct _GdkWindow         GdkBitmap;
-typedef struct _GdkWindow         GdkDrawable;
-typedef struct _GdkImage          GdkImage;
-typedef struct _GdkGCValues       GdkGCValues;
-typedef struct _GdkGC             GdkGC;
-typedef struct _GdkPoint          GdkPoint;
-typedef struct _GdkRectangle      GdkRectangle;
-typedef struct _GdkSegment        GdkSegment;
-typedef struct _GdkFont           GdkFont;
-typedef struct _GdkCursor         GdkCursor;
+typedef gulong                        GdkAtom;
+typedef struct _GdkColor              GdkColor;
+typedef struct _GdkColormap           GdkColormap;
+typedef struct _GdkVisual             GdkVisual;
+typedef struct _GdkWindowAttr         GdkWindowAttr;
+typedef struct _GdkWindow             GdkWindow;
+typedef struct _GdkWindow             GdkPixmap;
+typedef struct _GdkWindow             GdkBitmap;
+typedef struct _GdkWindow             GdkDrawable;
+typedef struct _GdkImage              GdkImage;
+typedef struct _GdkGCValues           GdkGCValues;
+typedef struct _GdkGC                 GdkGC;
+typedef struct _GdkPoint              GdkPoint;
+typedef struct _GdkRectangle          GdkRectangle;
+typedef struct _GdkSegment            GdkSegment;
+typedef struct _GdkFont               GdkFont;
+typedef struct _GdkCursor             GdkCursor;
+typedef struct _GdkColorContextDither GdkColorContextDither;
+typedef struct _GdkColorContext       GdkColorContext;
 
 typedef struct _GdkEventAny       GdkEventAny;
 typedef struct _GdkEventExpose    GdkEventExpose;
@@ -566,6 +568,28 @@ typedef void (*GdkInputFunction) (gpointer          data,
 				  gint              source,
 				  GdkInputCondition condition);
 
+
+/* Color Context modes.
+ *
+ * GDK_CC_MODE_UNDEFINED - unknown
+ * GDK_CC_MODE_BW        - default B/W
+ * GDK_CC_MODE_STD_CMAP  - has a standard colormap
+ * GDK_CC_MODE_TRUE      - is a TrueColor/DirectColor visual
+ * GDK_CC_MODE_MY_GRAY   - my grayramp
+ * GDK_CC_MODE_PALETTE   - has a pre-allocated palette
+ */ 
+
+typedef enum
+{
+  GDK_CC_MODE_UNDEFINED,
+  GDK_CC_MODE_BW,
+  GDK_CC_MODE_STD_CMAP,
+  GDK_CC_MODE_TRUE,
+  GDK_CC_MODE_MY_GRAY,
+  GDK_CC_MODE_PALETTE
+} GdkColorContextMode;
+
+
 /* The color type.
  *   A color consists of red, green and blue values in the
  *    range 0-65535 and a pixel value. The pixel value is highly
@@ -716,6 +740,19 @@ struct _GdkFont
 struct _GdkCursor
 {
   GdkCursorType type;
+};
+
+struct _GdkColorContextDither
+{
+  gint fast_rgb[32][32][32]; /* quick look-up table for faster rendering */
+  gint fast_err[32][32][32]; /* internal RGB error information */
+  gint fast_erg[32][32][32];
+  gint fast_erb[32][32][32];
+};
+
+struct _GdkColorContext
+{
+  gint dummy;
 };
 
 /* Types for XInput support */

@@ -35,14 +35,15 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-typedef struct _GdkWindowPrivate    GdkWindowPrivate;
-typedef struct _GdkWindowPrivate    GdkPixmapPrivate;
-typedef struct _GdkImagePrivate     GdkImagePrivate;
-typedef struct _GdkGCPrivate        GdkGCPrivate;
-typedef struct _GdkColormapPrivate  GdkColormapPrivate;
-typedef struct _GdkVisualPrivate    GdkVisualPrivate;
-typedef struct _GdkFontPrivate      GdkFontPrivate;
-typedef struct _GdkCursorPrivate    GdkCursorPrivate;
+typedef struct _GdkWindowPrivate       GdkWindowPrivate;
+typedef struct _GdkWindowPrivate       GdkPixmapPrivate;
+typedef struct _GdkImagePrivate        GdkImagePrivate;
+typedef struct _GdkGCPrivate           GdkGCPrivate;
+typedef struct _GdkColormapPrivate     GdkColormapPrivate;
+typedef struct _GdkVisualPrivate       GdkVisualPrivate;
+typedef struct _GdkFontPrivate         GdkFontPrivate;
+typedef struct _GdkCursorPrivate       GdkCursorPrivate;
+typedef struct _GdkColorContextPrivate GdkColorContextPrivate;
 
 
 struct _GdkWindowPrivate
@@ -151,7 +152,7 @@ typedef struct _GdkDndGlobals GdkDndGlobals;
 
 #ifdef USE_XIM
 
-struct _GdkICPrivate 
+struct _GdkICPrivate
 {
   XIC xic;
   GdkIMStyle style;
@@ -159,6 +160,59 @@ struct _GdkICPrivate
 typedef struct _GdkICPrivate GdkICPrivate;
 
 #endif /* USE_XIM */
+
+
+struct _GdkColorContextPrivate
+{
+  GdkColorContext color_context;
+  Display *xdisplay;
+  GdkVisual *visual;
+  GdkColormap *colormap;
+
+  gint num_colors;		/* available no. of colors in colormap */
+  gint max_colors;		/* maximum no. of colors */
+  gint num_allocated;		/* no. of allocated colors */
+
+  GdkColorContextMode mode;
+  gint need_to_free_colormap;
+  GdkAtom std_cmap_atom;
+
+  XStandardColormap std_cmap;
+  gulong *clut;			/* color look-up table */
+  GdkColor *cmap;		/* colormap */
+
+  GHashTable *color_hash;	/* hash table of allocated colors */
+  GdkColor *palette;		/* preallocated palette */
+  gint num_palette;		/* size of palette */
+
+  GdkColorContextDither *fast_dither;	/* fast dither matrix */
+
+  struct
+  {
+    gint red;
+    gint green;
+    gint blue;
+  } shifts;
+
+  struct
+  {
+    gulong red;
+    gulong green;
+    gulong blue;
+  } masks;
+
+
+  struct {
+    gint red;
+    gint green;
+    gint blue;
+  } bits;
+
+  gulong max_entry;
+
+  gulong black_pixel;
+  gulong white_pixel;
+};
 
 
 void gdk_window_init (void);

@@ -6,6 +6,7 @@ lib_LTLIBRARIES = libgdk.la
 
 libgdk_la_SOURCES = \
 	gdk.c		\
+	gdkcc.c		\
 	gdkcolor.c	\
 	gdkcursor.c	\
 	gdkdraw.c	\
