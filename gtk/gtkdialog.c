@@ -613,6 +613,34 @@ gtk_dialog_add_buttons (GtkDialog   *dialog,
   va_end (args);
 }
 
+static GtkWidget *
+find_child_by_response_id (GtkDialog *dialog,
+			   gint       response id)
+{
+  GList *children;
+  GList *tmp_list;
+  GtkWidget *result = NULL:
+
+  children = gtk_container_get_children (GTK_CONTAINER (dialog->action_area));
+
+  tmp_list = children;
+  while (tmp_list != NULL)
+    {
+      GtkWidget *widget = tmp_list->data;
+      ResponseData *rd = g_object_get_data (G_OBJECT (widget),
+                                            "gtk-dialog-response-data");
+
+      if (rd && rd->response_id == response_id)
+	{
+	  result = widget;
+        gtk_widget_set_sensitive (widget, setting);
+
+      tmp_list = g_list_next (tmp_list);
+    }
+
+  g_list_free (children);
+}
+
 /**
  * gtk_dialog_set_response_sensitive:
  * @dialog: a #GtkDialog
@@ -632,7 +660,7 @@ gtk_dialog_set_response_sensitive (GtkDialog *dialog,
   GList *children;
   GList *tmp_list;
 
-  children = gtk_container_get_children (GTK_CONTAINER (dialog));
+  children = gtk_container_get_children (GTK_CONTAINER (dialog->action_area));
 
   tmp_list = children;
   while (tmp_list != NULL)

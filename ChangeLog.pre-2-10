@@ -1,3 +1,9 @@
+Fri Nov  2 08:17:06 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdialog.c (gtk_dialog_set_response_sensitive): 
+	Iterate through children of the action area, not of
+	the vbox. (#58278, Sergey Kuzminov)
+
 2001-11-01  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtktext.c (gtk_text_set_position): handle -1 argument in
@@ -100,6 +106,7 @@ Thu Nov  1 00:44:50 2001  Jonathan Blandford  <jrb@redhat.com>
 	* gtk/gtktreeview.c (gtk_tree_view_class_init): Support Shift,
 	Control, and Shift|Control L<->R, #63475
 
+>>>>>>> 1.2518
 Wed Oct 31 18:53:51 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreemodel.c (gtk_tree_row_ref_deleted_callback): fix
