@@ -1158,6 +1158,8 @@ gtk_accelerator_name (guint           accelerator_key,
  * accelerators. The default mod mask is #GDK_CONTROL_MASK |
  * #GDK_SHIFT_MASK | #GDK_MOD1_MASK, that is, Control, Shift, and Alt.
  * Other modifiers will by default be ignored by #GtkAccelGroup.
+ * You must include at least the three default modifiers in any
+ * value you pass to this function.
  *
  * The default mod mask should be changed on application startup,
  * before using any accelerator groups.
@@ -1165,7 +1167,8 @@ gtk_accelerator_name (guint           accelerator_key,
 void
 gtk_accelerator_set_default_mod_mask (GdkModifierType default_mod_mask)
 {
-  default_accel_mod_mask = default_mod_mask & GDK_MODIFIER_MASK;
+  default_accel_mod_mask = (default_mod_mask & GDK_MODIFIER_MASK) |
+    (GDK_CONTROL_MASK | GDK_SHIFT_MASK | GDK_MOD1_MASK);
 }
 
 /**

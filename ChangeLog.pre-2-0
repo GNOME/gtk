@@ -1,3 +1,11 @@
+Tue Feb 26 18:58:49 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkaccelgroup.c (gtk_accelerator_set_default_mod_mask):
+	OR in the three default modifiers to any value passed
+	in by the caller, so that the caller won't break the
+	the default bindings. (#70142, Jody Goldberg, though he
+	wasn't in favor of this particular way of solving it.)
+
 Tue Feb 26 18:47:44 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwindow.c (gtk_window_add_mnemonic): Append
