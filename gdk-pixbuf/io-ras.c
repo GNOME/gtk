@@ -1,5 +1,4 @@
-
-/* GdkPixbuf library - JPEG image loader
+/* GdkPixbuf library - SUNRAS image loader
  *
  * Copyright (C) 1999 The Free Software Foundation
  *
@@ -27,139 +26,132 @@
 #include <glib.h>
 #include "gdk-pixbuf.h"
 #include "gdk-pixbuf-io.h"
-
 
 
-/* Header structure for sunras files.
+
+/* 
+   Header structure for sunras files.
    All values are in big-endian order on disk
  */
- 
-struct rasterfile 
-{
-	guint  magic;
-	guint  width;
-	guint  height;
-	guint  depth;
-	guint  length;
-	guint  type;
-	guint  maptype;
-	guint  maplength;
+
+struct rasterfile {
+	guint magic;
+	guint width;
+	guint height;
+	guint depth;
+	guint length;
+	guint type;
+	guint maptype;
+	guint maplength;
 };
 
 /* 
-This does a byte-order swap. Does glib have something like
-be32_to_cpu() ??
+	This does a byte-order swap. Does glib have something like
+	be32_to_cpu() ??
 */
+
 unsigned int ByteOrder(unsigned int i)
 {
 	unsigned int i2;
-	i2 = ((i&255)<<24) | (((i>>8)&255)<<16) | (((i>>16)&255)<<8)|((i>>24)&255);
-	return i2; 
+	i2 =
+	    ((i & 255) << 24) | (((i >> 8) & 255) << 16) |
+	    (((i >> 16) & 255) << 8) | ((i >> 24) & 255);
+	return i2;
 }
 
-/* Destroy notification function for the libart pixbuf */
-static void
-free_buffer (gpointer user_data, gpointer data)
+/* 
+	Destroy notification function for the libart pixbuf 
+*/
+
+static void free_buffer(gpointer user_data, gpointer data)
 {
-	free (data);
+	free(data);
+}
+
+/*
+
+OneLineBGR does what it says: Reads one line from file.
+Note: It also changes BGR pixelorder to RGB as libart currently
+doesn't support ART_PIX_BGR.
+
+*/
+static OneLineBGR(FILE * f, guint Width, guchar * pixels, gint bpp)
+{
+	gint result, X;
+	guchar DummyByte;
+
+	result = fread(pixels, 1, Width * bpp, f);
+
+	g_assert(result == Width * bpp);
+	if (((Width * bpp) & 7) != 0)	/*  Not 16 bit aligned */
+		fread(&DummyByte, 1, 1, f);
+	X = 0;
+	while (X < Width) {
+		guchar Blue;
+		Blue = pixels[X * bpp];
+		pixels[X * bpp] = pixels[X * bpp + 2];
+		pixels[X * bpp + 2] = Blue;
+		X++;
+	}
 }
 
 /* Shared library entry point */
-GdkPixbuf *
-image_load (FILE *f)
+GdkPixbuf *image_load(FILE * f)
 {
-        gboolean failed = FALSE;
-	gint i, ctype, bpp;
+	gint i, bpp, Y;
 	guchar *pixels;
-	
 	struct rasterfile Header;
 
-	i=fread(&Header,1,sizeof(Header),f);
-	g_assert(i==32);
+	i = fread(&Header, 1, sizeof(Header), f);
+	g_assert(i == 32);
+
+	/* Correct the byteorder of the header here */
 	Header.width = ByteOrder(Header.width);
 	Header.height = ByteOrder(Header.height);
 	Header.depth = ByteOrder(Header.depth);
-	
-        
+	Header.length = ByteOrder(Header.length);
+	Header.type = ByteOrder(Header.type);
+	Header.maptype = ByteOrder(Header.maptype);
+	Header.maplength = ByteOrder(Header.maplength);
+
+
+	bpp = 0;
 	if (Header.depth == 32)
 		bpp = 4;
 	else
 		bpp = 3;
 
-	pixels = (guchar*)malloc (Header.width * Header.height * bpp);
+	g_assert(bpp != 0);	/* Only 24 and 32 bpp for now */
+
+	pixels = (guchar *) malloc(Header.width * Header.height * bpp);
 	if (!pixels) {
 		return NULL;
 	}
 
-	fread(pixels,Header.width*bpp,Header.height,f);
+	/* 
 
-	if (bpp==4)
-		return gdk_pixbuf_new_from_data (pixels, ART_PIX_RGB, TRUE,
-						 Header.width, Header.height, 
-						 Header.width * bpp,
-						 free_buffer, NULL);
+	   Loop through the file, one line at a time. 
+	   Only BGR-style files are handled right now.
+
+	 */
+	Y = 0;
+	while (Y < Header.height) {
+		OneLineBGR(f, Header.width,
+			   &pixels[Y * Header.width * bpp], bpp);
+		Y++;
+	}
+
+
+	if (bpp == 4)
+		return gdk_pixbuf_new_from_data(pixels, ART_PIX_RGB, TRUE,
+						Header.width,
+						Header.height,
+						Header.width * bpp,
+						free_buffer, NULL);
 	else
-		return gdk_pixbuf_new_from_data (pixels, ART_PIX_RGB, FALSE,
-						 Header.width, Header.height, Header.width * bpp,
-						 free_buffer, NULL);
+		return gdk_pixbuf_new_from_data(pixels, ART_PIX_RGB, FALSE,
+						Header.width,
+						Header.height,
+						Header.width * bpp,
+						free_buffer, NULL);
 }
-
-/* These avoid the setjmp()/longjmp() crap in libpng */
-
-typedef struct _LoadContext LoadContext;
-
-struct _LoadContext {
-
-        ModulePreparedNotifyFunc notify_func;
-        gpointer notify_user_data;
-
-        GdkPixbuf* pixbuf;
-        
-        guint fatal_error_occurred : 1;
-
-};
-
-gpointer
-image_begin_load (ModulePreparedNotifyFunc prepare_func,
-		  ModuleUpdatedNotifyFunc update_func,
-		  gpointer user_data)
-{
-        LoadContext* lc;
-        
-        lc = g_new0(LoadContext, 1);
-        
-        lc->fatal_error_occurred = FALSE;
-
-        lc->notify_func = prepare_func;
-        lc->notify_user_data = user_data;
-
-        return lc;
-}
-
-void
-image_stop_load (gpointer context)
-{
-        LoadContext* lc = context;
-
-        g_return_if_fail(lc != NULL);
-
-        gdk_pixbuf_unref(lc->pixbuf);
-        
-        g_free(lc);
-}
-
-gboolean
-image_load_increment(gpointer context, guchar *buf, guint size)
-{
-        LoadContext* lc = context;
-
-        g_return_val_if_fail(lc != NULL, FALSE);
-
-
-        if (lc->fatal_error_occurred)
-                return FALSE;
-        else
-                return TRUE;
-}
-
-
