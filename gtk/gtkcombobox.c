@@ -2499,9 +2499,14 @@ gtk_combo_box_set_wrap_width (GtkComboBox *combo_box,
   g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
   g_return_if_fail (width > 0);
 
-  combo_box->priv->wrap_width = width;
-
-  gtk_combo_box_relayout (combo_box);
+  if (width != combo_box->priv->wrap_width)
+    {
+      combo_box->priv->wrap_width = width;
+      
+      gtk_combo_box_relayout (combo_box);
+      
+      g_object_notify (G_OBJECT (combo_box), "wrap_width");
+    }
 }
 
 /**
@@ -2526,9 +2531,14 @@ gtk_combo_box_set_row_span_column (GtkComboBox *combo_box,
   col = gtk_tree_model_get_n_columns (combo_box->priv->model);
   g_return_if_fail (row_span >= 0 && row_span < col);
 
-  combo_box->priv->row_column = row_span;
-
-  gtk_combo_box_relayout (combo_box);
+  if (row_span != combo_box->priv->row_column)
+    {
+      combo_box->priv->row_column = row_span;
+      
+      gtk_combo_box_relayout (combo_box);
+ 
+      g_object_notify (G_OBJECT (combo_box), "row_span_column");
+    }
 }
 
 /**
@@ -2553,9 +2563,14 @@ gtk_combo_box_set_column_span_column (GtkComboBox *combo_box,
   col = gtk_tree_model_get_n_columns (combo_box->priv->model);
   g_return_if_fail (column_span >= 0 && column_span < col);
 
-  combo_box->priv->col_column = column_span;
+  if (column_span != combo_box->priv->col_column)
+    {
+      combo_box->priv->col_column = column_span;
+      
+      gtk_combo_box_relayout (combo_box);
 
-  gtk_combo_box_relayout (combo_box);
+      g_object_notify (G_OBJECT (combo_box), "column_span_column");
+    }
 }
 
 /**

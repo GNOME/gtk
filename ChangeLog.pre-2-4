@@ -1,3 +1,10 @@
+Mon Feb 23 01:56:09 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_set_column_span_column): 
+	* gtk/gtkcombobox.c (gtk_combo_box_set_row_span_column): 
+	* gtk/gtkcombobox.c (gtk_combo_box_set_wrap_width): Add
+	notification, and avoid excessive relayouting. 
+
 Mon Feb 23 00:38:21 2004  Matthias Clasen  <maclas@gmx.de>
 
 	Fix bug 134982, reported by Morten Welinder:
