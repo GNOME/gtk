@@ -1,3 +1,11 @@
+2000-03-01  Mark Crichton  <crichton@gimp.org>
+
+	* configure.in: Added BUILD_CANVAS_ITEM stuff to (finally)
+	fix the last auto* build bug (where we have libart, but no
+	gnome-libs)
+
+	* gdk-pixbuf/Makefile.am: Same.
+
 2000-02-28  Matt Wilson  <msw@redhat.com>
 
 	* gdk-pixbuf/gdk-pixbuf-drawable.c: s/unsigned long/guint32/g,

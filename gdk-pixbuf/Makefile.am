@@ -1,20 +1,20 @@
 SUBDIRS = pixops
 
-if INSIDE_GNOME_LIBS
+if BUILD_CANVAS_ITEM
+CANVAS_PIXBUF_LIB = libgnomecanvaspixbuf.la
+CANVAS_PIXBUF_HEADERFILES=gnome-canvas-pixbuf.h
+libgnomecanvaspixbuf_la_SOURCES = gnome-canvas-pixbuf.c
+EXTRA_GNOME_LIBS = $(GNOME_LIBS)
+else
 CANVAS_PIXBUF_LIB =
 CANVAS_PIXBUF_HEADERFILES =
 EXTRA_GNOME_LIBS =
-else
-CANVAS_PIXBUF_LIB = libgnomecanvaspixbuf.la
-CANVAS_PIXBUF_HEADERFILES=gnome-canvas-pixbuf.h
-EXTRA_GNOME_LIBS = $(GNOME_LIBS)
 endif
 
 lib_LTLIBRARIES = 		\
 	libgdk_pixbuf.la	\
 	$(CANVAS_PIXBUF_LIB)
 
-libgnomecanvaspixbuf_la_SOURCES = gnome-canvas-pixbuf.c
 libgnomecanvaspixbuf_la_LDFLAGS = $(EXTRA_GNOME_LIBS)
 
 libexecdir = $(libdir)/gdk-pixbuf/loaders
