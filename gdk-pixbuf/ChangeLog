@@ -1,3 +1,12 @@
+1999-10-28  Federico Mena Quintero  <federico@redhat.com>
+
+	* src/gdk-pixbuf-render.c (gdk_pixbuf_render_to_drawable): New
+	function to render a portion of a pixbuf to a drawable.  Ignores
+	alpha information and takes in a GC.
+	(gdk_pixbuf_render_to_drawable_alpha): New function to render a
+	portion of a pixbuf to a drawable.  It automatically creates a GC
+	and a clipping mask for alpha pixbufs.
+
 1999-10-28  Jonathan Blandford  <jrb@redhat.com>
 
 	* src/gdk-pixbuf.h: turned convenience macros into convenience

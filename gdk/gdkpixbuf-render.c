@@ -39,9 +39,10 @@
  * @height: Height of region to threshold.
  * @alpha_threshold: Opacity values below this will be painted as zero; all
  * other values will be painted as one.
- * 
- * Takes the opacity values in a pixbuf and thresholds them to produce a
- * bi-level alpha mask that can be used as a clipping mask for a drawable.
+ *
+ * Takes the opacity values in a rectangular portion of a pixbuf and thresholds
+ * them to produce a bi-level alpha mask that can be used as a clipping mask for
+ * a drawable.
  **/
 void
 gdk_pixbuf_render_threshold_alpha (GdkPixbuf *pixbuf, GdkBitmap *bitmap,
@@ -119,22 +120,147 @@ gdk_pixbuf_render_threshold_alpha (GdkPixbuf *pixbuf, GdkBitmap *bitmap,
 	gdk_gc_unref (gc);
 }
 
+
+
+/* Creates a buffer by stripping the alpha channel of a pixbuf */
+static guchar *
+remove_alpha (ArtPixBuf *apb, int x, int y, int width, int height, int *rowstride)
+{
+	guchar *buf;
+	int xx, yy;
+	guchar *src, *dest;
+
+	g_assert (apb->n_channels == 4);
+	g_assert (apb->has_alpha);
+	g_assert (x >= 0 && x + width <= apb->width);
+	g_assert (y >= 0 && y + height <= apb->height);
+
+	*rowstride = 4 * ((width * 3 + 3) / 4);
+
+	buf = g_new (guchar, *rowstride * height);
+
+	for (yy = 0; yy < height; yy++) {
+		src = apb->pixels + apb->rowstride * (yy + y) + x * apb->n_channels;
+		dest = buf + *rowstride * yy;
+
+		for (xx = 0; xx < width; xx++) {
+			*dest++ = *src++;
+			*dest++ = *src++;
+			*dest++ = *src++;
+			src++;
+		}
+	}
+
+	return buf;
+}
+
+/**
+ * gdk_pixbuf_render_to_drawable:
+ * @pixbuf: A pixbuf.
+ * @drawable: Destination drawable.
+ * @gc: GC used for rendering.
+ * @src_x: Source X coordinate within pixbuf.
+ * @src_y: Source Y coordinate within pixbuf.
+ * @dest_x: Destination X coordinate within drawable.
+ * @dest_y: Destination Y coordinate within drawable.
+ * @width: Width of region to render, in pixels.
+ * @height: Height of region to render, in pixels.
+ * @dither: Dithering mode for GdkRGB.
+ * @x_dither: X offset for dither.
+ * @y_dither: Y offset for dither.
+ * 
+ * Renders a rectangular portion of a pixbuf to a drawable while using the
+ * specified GC.  This is done using GdkRGB, so the specified drawable must have
+ * the GdkRGB visual and colormap.  Note that this function will ignore the
+ * opacity information for images with an alpha channel; the GC must already
+ * have the clipping mask set if you want transparent regions to show through.
+ **/
 void
-gdk_pixbuf_render_to_drawable (GdkPixbuf *pixbuf, GdkDrawable *drawable,
+gdk_pixbuf_render_to_drawable (GdkPixbuf *pixbuf,
+			       GdkDrawable *drawable, GdkGC *gc,
 			       int src_x, int src_y,
 			       int dest_x, int dest_y,
 			       int width, int height,
-			       GdkPixbufAlphaMode alpha_mode,
-			       int alpha_threshold,
 			       GdkRgbDither dither,
 			       int x_dither, int y_dither)
 {
 	ArtPixBuf *apb;
-	ArtIRect dest_rect, req_rect, area_rect;
-	GdkBitmap *bitmap;
-	GdkGC *gc;
 	guchar *buf;
 	int rowstride;
+
+	g_return_if_fail (pixbuf != NULL);
+	apb = pixbuf->art_pixbuf;
+	
+	g_return_if_fail (apb->format == ART_PIX_RGB);
+	g_return_if_fail (apb->n_channels == 3 || apb->n_channels == 4);
+	g_return_if_fail (apb->bits_per_sample == 8);
+
+	g_return_if_fail (drawable != NULL);
+	g_return_if_fail (gc != NULL);
+
+	g_return_if_fail (src_x >= 0 && src_x + width <= apb->width);
+	g_return_if_fail (src_y >= 0 && src_y + height <= apb->height);
+
+	/* This will have to be modified once libart supports other image types.
+	 * Also, GdkRGB does not have gdk_draw_rgb_32_image_dithalign(), so we
+	 * have to pack the buffer first.
+	 */
+
+	if (apb->has_alpha)
+		buf = remove_alpha (apb, src_x, src_y, width, height, &rowstride);
+	else {
+		buf = apb->pixels + src_y * apb->rowstride + src_x * 3;
+		rowstride = apb->rowstride;
+	}
+
+	gdk_draw_rgb_image_dithalign (drawable, gc,
+				      dest_x, dest_y,
+				      width, height,
+				      dither,
+				      buf, rowstride,
+				      x_dither, y_dither);
+
+	if (apb->has_alpha)
+		g_free (buf);
+}
+
+
+
+/**
+ * gdk_pixbuf_render_to_drawable_alpha:
+ * @pixbuf: A pixbuf.
+ * @drawable: Destination drawable.
+ * @src_x: Source X coordinate within pixbuf.
+ * @src_y: Source Y coordinates within pixbuf.
+ * @dest_x: Destination X coordinate within drawable.
+ * @dest_y: Destination Y coordinate within drawable.
+ * @width: Width of region to render, in pixels.
+ * @height: Height of region to render, in pixels.
+ * @alpha_mode: If the image does not have opacity information, this is ignored.
+ * Otherwise, specifies how to handle transparency when rendering.
+ * @alpha_threshold: If the image does have opacity information and @alpha_mode
+ * is GDK_PIXBUF_ALPHA_BILEVEL, specifies the threshold value for opacity
+ * values.
+ * @dither: Dithering mode for GdkRGB.
+ * @x_dither: X offset for dither.
+ * @y_dither: Y offset for dither.
+ *
+ * Renders a rectangular portion of a pixbuf to a drawable.  This is done using
+ * GdkRGB, so the specified drawable must have the GdkRGB visual and colormap.
+ **/
+void
+gdk_pixbuf_render_to_drawable_alpha (GdkPixbuf *pixbuf, GdkDrawable *drawable,
+				     int src_x, int src_y,
+				     int dest_x, int dest_y,
+				     int width, int height,
+				     GdkPixbufAlphaMode alpha_mode,
+				     int alpha_threshold,
+				     GdkRgbDither dither,
+				     int x_dither, int y_dither)
+{
+	ArtPixBuf *apb;
+	GdkBitmap *bitmap;
+	GdkGC *gc;
 
 	g_return_if_fail (pixbuf != NULL);
 	apb = pixbuf->art_pixbuf;
@@ -163,15 +289,15 @@ gdk_pixbuf_render_to_drawable (GdkPixbuf *pixbuf, GdkDrawable *drawable,
 
 		gdk_gc_set_clip_mask (gc, bitmap);
 		gdk_gc_set_clip_origin (gc, dest_x, dest_y);
+		gdk_bitmap_unref (bitmap);
 	}
 
-	/* Sigh, GdkRGB does not have gdk_draw_rgb_32_image_dithalign(), so we
-	 * have to pack the buffer first.
-	 */
-	if (apb->has_alpha) {
-//		buf = remove_alpha (apb, src_x, src_y, width, height, &rowstride);
-	} else {
-		buf = apb->pixels + src_y * apb->rowstride + src_x * 3;
-		rowstride = apb->rowstride;
-	}
+	gdk_pixbuf_render_to_drawable (pixbuf, drawable, gc,
+				       src_x, src_y,
+				       dest_x, dest_y,
+				       width, height,
+				       dither,
+				       x_dither, y_dither);
+
+	gdk_gc_unref (gc);
 }

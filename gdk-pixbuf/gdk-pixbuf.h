@@ -97,14 +97,22 @@ void gdk_pixbuf_render_threshold_alpha (GdkPixbuf *pixbuf, GdkBitmap *bitmap,
 					int width, int height,
 					int alpha_threshold);
 
-void gdk_pixbuf_render_to_drawable (GdkPixbuf *pixbuf, GdkDrawable *drawable,
+void gdk_pixbuf_render_to_drawable (GdkPixbuf *pixbuf,
+				    GdkDrawable *drawable, GdkGC *gc,
 				    int src_x, int src_y,
 				    int dest_x, int dest_y,
 				    int width, int height,
-				    GdkPixbufAlphaMode alpha_mode,
-				    int alpha_threshold,
 				    GdkRgbDither dither,
 				    int x_dither, int y_dither);
+
+void gdk_pixbuf_render_to_drawable_alpha (GdkPixbuf *pixbuf, GdkDrawable *drawable,
+					  int src_x, int src_y,
+					  int dest_x, int dest_y,
+					  int width, int height,
+					  GdkPixbufAlphaMode alpha_mode,
+					  int alpha_threshold,
+					  GdkRgbDither dither,
+					  int x_dither, int y_dither);
 
 /* Transformations */
 #if 0
