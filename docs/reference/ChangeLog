@@ -1,3 +1,8 @@
+Sun Feb 15 23:51:08 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtkcomboboxentry.sgml: 
+	* gtk/tmpl/gtkcombobox.sgml: Add short descriptions.
+
 Sun Feb 15 22:09:53 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkcombo.sgml: 

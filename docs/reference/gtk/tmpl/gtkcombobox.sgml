@@ -2,6 +2,7 @@
 GtkComboBox
 
 <!-- ##### SECTION Short_Description ##### -->
+a widget used to choose from a list of items.
 
 
 <!-- ##### SECTION Long_Description ##### -->
@@ -201,5 +202,21 @@ GtkComboBox
 
 @combo_box: 
 @position: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_popup ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_popdown ##### -->
+<para>
+
+</para>
+
+@combo_box: 
 
 

@@ -2,6 +2,7 @@
 GtkComboBoxEntry
 
 <!-- ##### SECTION Short_Description ##### -->
+a text entry field with a dropdown list
 
 
 <!-- ##### SECTION Long_Description ##### -->
