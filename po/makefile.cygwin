@@ -1,8 +1,9 @@
 ## Makefile for compiling UTF-8 message catalogs on Win32 with cygwin
 ##
 ## Use: make -f makefile.cygwin install
+##
 ## To convert the clear-text message catalogs to binary form (.gmo)
-## files in the UTF-8 encoding of Unicode that GIMP wants,
+## files in the UTF-8 encoding of Unicode that we want,
 ## you will need: - native2ascii from the JDK 
 ##		  - msgfmt from GNU gettext
 
