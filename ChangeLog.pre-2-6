@@ -1,3 +1,10 @@
+Wed Oct 29 15:01:32 2003  Owen Taylor  <otaylor@redhat.com>
+ 
+ 	* gdk/x11/gdkimage-x11.c (_gdk_x11_copy_to_image): Move
+ 	the call to gdk_error_trap_pop() to the right place,
+ 	fixing a problem where we'd pop() too many times 
+ 	when bailing out. (#123302, Thomas Leonard)
+	
 Wed Oct 29 12:50:02 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkfilechooserutils.c (delegate_set_current_folder): 
