@@ -62,7 +62,8 @@ struct _GtkSocket
   guint have_size : 1;
   guint need_map : 1;
   guint is_mapped : 1;
-
+  guint active : 1;
+  
   GtkAccelGroup *accel_group;
   GtkWidget *toplevel;
 };

@@ -131,6 +131,7 @@ enum {
   PROP_APP_PAINTABLE,
   PROP_CAN_FOCUS,
   PROP_HAS_FOCUS,
+  PROP_IS_FOCUS,
   PROP_CAN_DEFAULT,
   PROP_HAS_DEFAULT,
   PROP_RECEIVES_DEFAULT,
@@ -451,6 +452,13 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 				   g_param_spec_boolean ("has_focus",
  							 _("Has focus"),
  							 _("Whether the widget has the input focus"),
+ 							 FALSE,
+ 							 G_PARAM_READWRITE));
+  g_object_class_install_property (gobject_class,
+				   PROP_HAS_FOCUS,
+				   g_param_spec_boolean ("is_focus",
+ 							 _("Is focus"),
+ 							 _("Whether the widget is the focus widget within the toplevel"),
  							 FALSE,
  							 G_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
@@ -1142,6 +1150,10 @@ gtk_widget_set_property (GObject         *object,
       if (g_value_get_boolean (value))
 	gtk_widget_grab_focus (widget);
       break;
+    case PROP_IS_FOCUS:
+      if (g_value_get_boolean (value))
+	gtk_widget_grab_focus (widget);
+      break;
     case PROP_CAN_DEFAULT:
       saved_flags = GTK_WIDGET_FLAGS (widget);
       if (g_value_get_boolean (value))
@@ -1229,6 +1241,9 @@ gtk_widget_get_property (GObject         *object,
       break;
     case PROP_HAS_FOCUS:
       g_value_set_boolean (value, (GTK_WIDGET_HAS_FOCUS (widget) != FALSE));
+      break;
+    case PROP_IS_FOCUS:
+      g_value_set_boolean (value, (gtk_widget_is_focus (widget)));
       break;
     case PROP_CAN_DEFAULT:
       g_value_set_boolean (value, (GTK_WIDGET_CAN_DEFAULT (widget) != FALSE));

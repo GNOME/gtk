@@ -25,6 +25,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include <string.h>
+
 #include "gdk/gdkkeysyms.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
@@ -51,6 +53,8 @@ struct _GtkSocketPrivate
 static void     gtk_socket_class_init           (GtkSocketClass   *klass);
 static void     gtk_socket_init                 (GtkSocket        *socket);
 static void     gtk_socket_finalize             (GObject          *object);
+static void     gtk_socket_notify               (GObject          *object,
+						 GParamSpec       *pspec);
 static void     gtk_socket_realize              (GtkWidget        *widget);
 static void     gtk_socket_unrealize            (GtkWidget        *widget);
 static void     gtk_socket_size_request         (GtkWidget        *widget,
@@ -63,11 +67,8 @@ static void     gtk_socket_grab_notify          (GtkWidget        *widget,
 						 gboolean          was_grabbed);
 static gboolean gtk_socket_key_press_event      (GtkWidget        *widget,
 						 GdkEventKey      *event);
-static gboolean gtk_socket_focus_in_event       (GtkWidget        *widget,
-						 GdkEventFocus    *event);
-static void     gtk_socket_claim_focus          (GtkSocket        *socket);
-static gboolean gtk_socket_focus_out_event      (GtkWidget        *widget,
-						 GdkEventFocus    *event);
+static void     gtk_socket_claim_focus          (GtkSocket        *socket,
+						 gboolean          send_event);
 static void     gtk_socket_send_configure_event (GtkSocket        *socket);
 static gboolean gtk_socket_focus                (GtkWidget        *widget,
 						 GtkDirectionType  direction);
@@ -125,6 +126,8 @@ gtk_socket_get_private (GtkSocket *socket)
   if (!private)
     {
       private = g_new0 (GtkSocketPrivate, 1);
+      private->resize_count = 0;
+      
       g_object_set_qdata_full (G_OBJECT (socket), private_quark,
 			       private, (GDestroyNotify) g_free);
     }
@@ -183,6 +186,7 @@ gtk_socket_class_init (GtkSocketClass *class)
   parent_class = gtk_type_class (GTK_TYPE_CONTAINER);
 
   gobject_class->finalize = gtk_socket_finalize;
+  gobject_class->notify = gtk_socket_notify;
 
   widget_class->realize = gtk_socket_realize;
   widget_class->unrealize = gtk_socket_unrealize;
@@ -191,8 +195,6 @@ gtk_socket_class_init (GtkSocketClass *class)
   widget_class->hierarchy_changed = gtk_socket_hierarchy_changed;
   widget_class->grab_notify = gtk_socket_grab_notify;
   widget_class->key_press_event = gtk_socket_key_press_event;
-  widget_class->focus_in_event = gtk_socket_focus_in_event;
-  widget_class->focus_out_event = gtk_socket_focus_out_event;
   widget_class->focus = gtk_socket_focus;
   
   container_class->remove = gtk_socket_remove;
@@ -229,6 +231,7 @@ gtk_socket_init (GtkSocket *socket)
   socket->focus_in = FALSE;
   socket->have_size = FALSE;
   socket->need_map = FALSE;
+  socket->active = FALSE;
 
   socket->accel_group = gtk_accel_group_new ();
   g_object_set_data (G_OBJECT (socket->accel_group), "gtk-socket", socket);
@@ -660,32 +663,60 @@ remove_grabbed_key (GtkSocket      *socket,
 	     keyval, modifiers);
 }
 
-static gboolean
-toplevel_focus_in_handler (GtkWidget     *toplevel,
-			   GdkEventFocus *event,
-			   GtkSocket     *socket)
+static void
+socket_update_focus_in (GtkSocket *socket)
 {
-  /* It appears spurious focus in events can occur when
-   *  the window is hidden. So we'll just check to see if
-   *  the window is visible before actually handling the
-   *  event. (Comment from gtkwindow.c)
-   */
-  if (GTK_WIDGET_VISIBLE (toplevel))
-    send_xembed_message (socket, XEMBED_WINDOW_ACTIVATE, 0, 0, 0,
-			 gtk_get_current_event_time ()); /* Will be GDK_CURRENT_TIME */
+  gboolean focus_in = FALSE;
 
-  return FALSE;
+  if (socket->plug_window)
+    {
+      GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (socket));
+      if (GTK_WIDGET_TOPLEVEL (toplevel) &&
+	  GTK_WINDOW (toplevel)->has_toplevel_focus &&
+	  gtk_widget_is_focus (GTK_WIDGET (socket)))
+	focus_in = TRUE;
+    }
+
+  if (focus_in != socket->focus_in)
+    {
+      socket->focus_in = focus_in;
+
+      if (focus_in)
+	{
+	  send_xembed_message (socket, XEMBED_FOCUS_IN, XEMBED_FOCUS_CURRENT, 0, 0,
+			       gtk_get_current_event_time ());
+	}
+      else
+	{
+	  send_xembed_message (socket, XEMBED_FOCUS_OUT, 0, 0, 0,
+			       gtk_get_current_event_time ());
+      
+	}
+    }
 }
 
-static gboolean
-toplevel_focus_out_handler (GtkWidget     *toplevel,
-			    GdkEventFocus *event,
-			    GtkSocket     *socket)
+static void
+socket_update_active (GtkSocket *socket)
 {
-  send_xembed_message (socket, XEMBED_WINDOW_DEACTIVATE, 0, 0, 0,
-		       gtk_get_current_event_time ()); /* Will be GDK_CURRENT_TIME */
+  gboolean active = FALSE;
 
-  return FALSE;
+  if (socket->plug_window)
+    {
+      GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (socket));
+      if (GTK_WIDGET_TOPLEVEL (toplevel) &&
+	  GTK_WINDOW (toplevel)->is_active)
+	active = TRUE;
+    }
+
+  if (active != socket->active)
+    {
+      socket->active = active;
+
+      send_xembed_message (socket,
+			   active ? XEMBED_WINDOW_ACTIVATE : XEMBED_WINDOW_DEACTIVATE,
+			   0, 0, 0,
+			   gtk_get_current_event_time ());
+    }
 }
 
 static void
@@ -703,8 +734,10 @@ gtk_socket_hierarchy_changed (GtkWidget *widget,
       if (socket->toplevel)
 	{
 	  gtk_window_remove_accel_group (GTK_WINDOW (socket->toplevel), socket->accel_group);
-	  gtk_signal_disconnect_by_func (GTK_OBJECT (socket->toplevel), GTK_SIGNAL_FUNC (toplevel_focus_in_handler), socket);
-	  gtk_signal_disconnect_by_func (GTK_OBJECT (socket->toplevel), GTK_SIGNAL_FUNC (toplevel_focus_out_handler), socket);
+	  g_signal_handlers_disconnect_by_func (socket->toplevel,
+						(gpointer) socket_update_focus_in, socket);
+	  g_signal_handlers_disconnect_by_func (socket->toplevel,
+						(gpointer) socket_update_active, socket);
 	}
 
       socket->toplevel = toplevel;
@@ -712,11 +745,14 @@ gtk_socket_hierarchy_changed (GtkWidget *widget,
       if (toplevel)
 	{
 	  gtk_window_add_accel_group (GTK_WINDOW (socket->toplevel), socket->accel_group);
-	  gtk_signal_connect (GTK_OBJECT (socket->toplevel), "focus_in_event",
-			      GTK_SIGNAL_FUNC (toplevel_focus_in_handler), socket);
-	  gtk_signal_connect (GTK_OBJECT (socket->toplevel), "focus_out_event",
-			      GTK_SIGNAL_FUNC (toplevel_focus_out_handler), socket);
+	  g_signal_connect_swapped (socket->toplevel, "notify::has_toplevel_focus",
+				    G_CALLBACK (socket_update_focus_in), socket);
+	  g_signal_connect_swapped (socket->toplevel, "notify::is_active",
+				    G_CALLBACK (socket_update_active), socket);
 	}
+
+      socket_update_focus_in (socket);
+      socket_update_active (socket);
     }
 }
 
@@ -769,39 +805,23 @@ gtk_socket_key_press_event (GtkWidget   *widget,
     return FALSE;
 }
 
-static gboolean
-gtk_socket_focus_in_event (GtkWidget *widget, GdkEventFocus *event)
+static void
+gtk_socket_notify (GObject    *object,
+		   GParamSpec *pspec)
 {
-  GtkSocket *socket = GTK_SOCKET (widget);
+  if (!strcmp (pspec->name, "is_focus"))
+    return;
 
-  if (socket->plug_window)
-    send_xembed_message (socket, XEMBED_FOCUS_IN, XEMBED_FOCUS_CURRENT, 0, 0,
-			 gtk_get_current_event_time ());
-  
-  return TRUE;
-}
-
-static gboolean
-gtk_socket_focus_out_event (GtkWidget *widget, GdkEventFocus *event)
-{
-  GtkSocket *socket = GTK_SOCKET (widget);
-  if (socket->plug_window)
-    {
-      send_xembed_message (socket, XEMBED_FOCUS_OUT, 0, 0, 0,
-			   gtk_get_current_event_time ());
-    }
-
-  socket->focus_in = FALSE;
-  
-  return TRUE;
+  socket_update_focus_in (GTK_SOCKET (object));
 }
 
 static void
-gtk_socket_claim_focus (GtkSocket *socket)
+gtk_socket_claim_focus (GtkSocket *socket,
+			gboolean   send_event)
 {
+  if (!send_event)
+    socket->focus_in = TRUE;	/* Otherwise, our notify handler will send FOCUS_IN  */
       
-  socket->focus_in = TRUE;
-  
   /* Oh, the trickery... */
   
   GTK_WIDGET_SET_FLAGS (socket, GTK_CAN_FOCUS);
@@ -841,8 +861,7 @@ gtk_socket_focus (GtkWidget *widget, GtkDirectionType direction)
       send_xembed_message (socket, XEMBED_FOCUS_IN, detail, 0, 0,
 			   gtk_get_current_event_time ());
 
-      GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_FOCUS);
-      gtk_widget_grab_focus (widget);
+      gtk_socket_claim_focus (socket, FALSE);
  
       return TRUE;
     }
@@ -916,7 +935,6 @@ gtk_socket_add_window (GtkSocket        *socket,
 		       GdkNativeWindow   xid,
 		       gboolean          need_reparent)
 {
-
   GtkWidget *widget = GTK_WIDGET (socket);
   GdkDisplay *display = gtk_widget_get_display (widget);
   gpointer user_data = NULL;
@@ -996,7 +1014,7 @@ gtk_socket_add_window (GtkSocket        *socket,
 	{
 	  /* FIXME, we should probably actually check the state before we started */
 	  
-	  socket->is_mapped = need_reparent ? TRUE : FALSE;
+	  socket->is_mapped = TRUE;
 	}
       
       socket->need_map = socket->is_mapped;
@@ -1016,6 +1034,11 @@ gtk_socket_add_window (GtkSocket        *socket,
       toplevel = gtk_widget_get_toplevel (GTK_WIDGET (socket));
       if (toplevel && GTK_IS_WINDOW (toplevel))
 	gtk_window_add_embedded_xid (GTK_WINDOW (toplevel), xid);
+
+      send_xembed_message (socket, XEMBED_EMBEDDED_NOTIFY, 0, 0, 0,
+			   gtk_get_current_event_time ());
+      socket_update_active (socket);
+      socket_update_focus_in (socket);
 
       gtk_widget_queue_resize (GTK_WIDGET (socket));
     }
@@ -1120,6 +1143,9 @@ handle_xembed_message (GtkSocket *socket,
 		       glong      data2,
 		       guint32    time)
 {
+  GTK_NOTE (PLUGSOCKET,
+	    g_message ("GtkSocket: Message of type %ld received", message));
+  
   switch (message)
     {
     case XEMBED_EMBEDDED_NOTIFY:
@@ -1133,7 +1159,7 @@ handle_xembed_message (GtkSocket *socket,
       break;
       
     case XEMBED_REQUEST_FOCUS:
-      gtk_socket_claim_focus (socket);
+      gtk_socket_claim_focus (socket, TRUE);
       break;
 
     case XEMBED_FOCUS_NEXT:
@@ -1309,7 +1335,7 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
     case FocusIn:
       if (xevent->xfocus.mode == EMBEDDED_APP_WANTS_FOCUS)
 	{
-	  gtk_socket_claim_focus (socket);
+	  gtk_socket_claim_focus (socket, TRUE);
 	}
       return_val = GDK_FILTER_REMOVE;
       break;

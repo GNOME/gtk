@@ -504,7 +504,6 @@ gtk_plug_realize (GtkWidget *widget)
 			    GDK_KEY_RELEASE_MASK |
 			    GDK_ENTER_NOTIFY_MASK |
 			    GDK_LEAVE_NOTIFY_MASK |
-			    GDK_FOCUS_CHANGE_MASK |
 			    GDK_STRUCTURE_MASK);
 
   attributes_mask = GDK_WA_VISUAL | GDK_WA_COLORMAP;
@@ -681,7 +680,7 @@ gtk_plug_set_focus (GtkWindow *window,
   /* Ask for focus from embedder
    */
 
-  if (focus && !window->has_focus)
+  if (focus && !window->has_toplevel_focus)
     {
       send_xembed_message (plug, XEMBED_REQUEST_FOCUS, 0, 0, 0,
 			   gtk_get_current_event_time ());
@@ -885,6 +884,9 @@ send_xembed_message (GtkPlug *plug,
       GdkDisplay *display = gdk_drawable_get_display (plug->socket_window);
       XEvent xevent;
 
+      GTK_NOTE(PLUGSOCKET,
+	       g_message ("GtkPlug: Sending XEMBED message of type %ld", message));
+
       xevent.xclient.window = GDK_WINDOW_XWINDOW (plug->socket_window);
       xevent.xclient.type = ClientMessage;
       xevent.xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display, "_XEMBED");
@@ -977,20 +979,20 @@ handle_xembed_message (GtkPlug   *plug,
 		       glong      data2,
 		       guint32    time)
 {
+  GtkWindow *window = GTK_WINDOW (plug);
+  
   GTK_NOTE (PLUGSOCKET,
-	    g_message ("Message of type %ld received", message));
+	    g_message ("GtkPlug: Message of type %ld received", message));
   
   switch (message)
     {
     case XEMBED_EMBEDDED_NOTIFY:
       break;
     case XEMBED_WINDOW_ACTIVATE:
-      GTK_NOTE(PLUGSOCKET,
-	       g_message ("GtkPlug: ACTIVATE received"));
+      _gtk_window_set_is_active (window, TRUE);
       break;
     case XEMBED_WINDOW_DEACTIVATE:
-      GTK_NOTE(PLUGSOCKET,
-	       g_message ("GtkPlug: DEACTIVATE received"));
+      _gtk_window_set_is_active (window, FALSE);
       break;
       
     case XEMBED_MODALITY_ON:
@@ -1001,6 +1003,7 @@ handle_xembed_message (GtkPlug   *plug,
       break;
 
     case XEMBED_FOCUS_IN:
+      _gtk_window_set_has_toplevel_focus (window, TRUE);
       switch (detail)
 	{
 	case XEMBED_FOCUS_FIRST:
@@ -1010,31 +1013,13 @@ handle_xembed_message (GtkPlug   *plug,
 	  focus_first_last (plug, GTK_DIR_TAB_BACKWARD);
 	  break;
 	case XEMBED_FOCUS_CURRENT:
-	  /* fall through */;
+	  break;
 	}
-      
+      break;
+
     case XEMBED_FOCUS_OUT:
-      {
-	GtkWidget *widget = GTK_WIDGET (plug);
-	GdkEvent event;
-
-	event.focus_change.type = GDK_FOCUS_CHANGE;
-	event.focus_change.window = widget->window;
-	event.focus_change.send_event = TRUE;
-
-	if (message == XEMBED_FOCUS_IN)
-	  {
-	    event.focus_change.in = TRUE;
-	    GTK_WIDGET_CLASS (parent_class)->focus_in_event (widget, (GdkEventFocus *)&event);
-	  }
-	else
-	  {
-	    event.focus_change.in = FALSE;
-	    GTK_WIDGET_CLASS (parent_class)->focus_out_event (widget, (GdkEventFocus *)&event);
-	  }
-	
-	break;
-      }
+      _gtk_window_set_has_toplevel_focus (window, FALSE);
+      break;
       
     case XEMBED_GRAB_KEY:
     case XEMBED_UNGRAB_KEY:

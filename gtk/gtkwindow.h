@@ -98,7 +98,10 @@ struct _GtkWindow
   guint decorated : 1;
   
   guint type_hint : 3; /* GdkWindowTypeHint */ 
-  guint gravity : 5; /* GdkGravity */ 
+  guint gravity : 5; /* GdkGravity */
+
+  guint is_active : 1;
+  guint has_toplevel_focus : 1;
   
   guint frame_left;
   guint frame_top;
@@ -343,6 +346,11 @@ void            _gtk_window_constrain_size     (GtkWindow *window,
 GtkWindowGroup *_gtk_window_get_group          (GtkWindow *window);
 gboolean        _gtk_window_activate_key       (GtkWindow   *window,
 						GdkEventKey *event);
+
+void            _gtk_window_set_has_toplevel_focus (GtkWindow *window,
+						    gboolean   has_toplevel_focus);
+void            _gtk_window_set_is_active          (GtkWindow *window,
+						    gboolean   is_active);
 
 typedef void (*GtkWindowKeysForeachFunc) (GtkWindow      *window,
 					  guint           keyval,

@@ -1,3 +1,32 @@
+Fri May 17 17:27:21 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.c gtk/gtkwidget.c: Add a "is_focus"
+	property indicating whether a widget is the focus
+	widget within the toplevel.
+
+	* gtk/gtkwindow.[ch]: Add "is_active" "has_toplevel_focus"
+	properties to indicate (separately) the idea of
+	being the part of the toplevel with the input focus
+	and being the active widget. (Needed for full XEMBED
+	compliance.)
+
+	* gtk/gtkplug.c gtk/gtksocket.c: Update to work
+	in terms of is_active/has_toplevel_focus, and thus
+	handle the active/focused XEMBED distinction
+	correctly.
+
+	* gtk/gtkplug.c (gtk_plug_realize): Remove
+	FOCUS_CHANGE_MASK, since we don't need it.
+
+Fri May 17 18:07:34 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtksocket.c (gtk_socket_add_window): Send
+	XEMBED_EMBEDDED_NOTIFY.
+
+	* gtk/gtksocket.c: Assume windows without _XEMBED_INFO 
+	property want to be mapped, for better 
+	current-Qt compatibility.
+
 Thu Jun  6 17:27:01 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkrbtree.c (_gtk_rbtree_reorder): don't leak the GArray
