@@ -6,10 +6,10 @@ msgstr ""
 "Project-Id-Version: GTK+ 1.2.8\n"
 "POT-Creation-Date: 2000-05-19 07:11+0200\n"
 "PO-Revision-Date: 2000-06-21 19:45+0200\n"
-"Last-Translator: Miha Tom¹iè <miha.tomsic@guest.arnes.si>\n"
+"Last-Translator: Miha TomÅ¡iÄ <miha.tomsic@guest.arnes.si>\n"
 "Language-Team: slovenian <sl@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-2\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: gtk/gtkcolorsel.c:221
@@ -18,7 +18,7 @@ msgstr "Odtenek:"
 
 #: gtk/gtkcolorsel.c:222
 msgid "Saturation:"
-msgstr "Nasièenost:"
+msgstr "NasiÄenost:"
 
 #: gtk/gtkcolorsel.c:223
 msgid "Value:"
@@ -26,7 +26,7 @@ msgstr "Vrednost:"
 
 #: gtk/gtkcolorsel.c:224
 msgid "Red:"
-msgstr "Rdeèa:"
+msgstr "RdeÄa:"
 
 #: gtk/gtkcolorsel.c:225
 msgid "Green:"
@@ -51,11 +51,11 @@ msgstr "Potrdi"
 #: gtk/gtkfilesel.c:956 gtk/gtkfilesel.c:1071 gtk/gtkfontsel.c:3505
 #: gtk/gtkgamma.c:424
 msgid "Cancel"
-msgstr "Preklièi"
+msgstr "PrekliÄi"
 
 #: gtk/gtkcolorsel.c:1738
 msgid "Help"
-msgstr "Pomoè"
+msgstr "PomoÄ"
 
 #. The directories clist
 #: gtk/gtkfilesel.c:418
@@ -78,7 +78,7 @@ msgstr "Ustvari imenik"
 
 #: gtk/gtkfilesel.c:550 gtk/gtkfilesel.c:925
 msgid "Delete File"
-msgstr "Zbri¹i datoteko"
+msgstr "ZbriÅ¡i datoteko"
 
 #: gtk/gtkfilesel.c:561 gtk/gtkfilesel.c:1029
 msgid "Rename File"
@@ -114,7 +114,7 @@ msgstr "Ustvari"
 #. buttons
 #: gtk/gtkfilesel.c:947
 msgid "Delete"
-msgstr "Zbri¹i"
+msgstr "ZbriÅ¡i"
 
 #. buttons
 #: gtk/gtkfilesel.c:1062
@@ -127,23 +127,23 @@ msgstr "Izbira: "
 
 #: gtk/gtkfontsel.c:210
 msgid "Foundry:"
-msgstr "Èrkolivnica:"
+msgstr "ÄŒrkolivnica:"
 
 #: gtk/gtkfontsel.c:211
 msgid "Family:"
-msgstr "Dru¾ina:"
+msgstr "DruÅ¾ina:"
 
 #: gtk/gtkfontsel.c:212
 msgid "Weight:"
-msgstr "Te¾a:"
+msgstr "TeÅ¾a:"
 
 #: gtk/gtkfontsel.c:213
 msgid "Slant:"
-msgstr "Po¹evnost:"
+msgstr "PoÅ¡evnost:"
 
 #: gtk/gtkfontsel.c:214
 msgid "Set Width:"
-msgstr "Nastavljena ¹irina:"
+msgstr "Nastavljena Å¡irina:"
 
 #: gtk/gtkfontsel.c:215
 msgid "Add Style:"
@@ -155,15 +155,15 @@ msgstr "Velikost v pikah:"
 
 #: gtk/gtkfontsel.c:217
 msgid "Point Size:"
-msgstr "Velikost v toèkah:"
+msgstr "Velikost v toÄkah:"
 
 #: gtk/gtkfontsel.c:218
 msgid "Resolution X:"
-msgstr "Loèljivost po X:"
+msgstr "LoÄljivost po X:"
 
 #: gtk/gtkfontsel.c:219
 msgid "Resolution Y:"
-msgstr "Loèljivost po Y:"
+msgstr "LoÄljivost po Y:"
 
 #: gtk/gtkfontsel.c:220
 msgid "Spacing:"
@@ -171,7 +171,7 @@ msgstr "Razmik:"
 
 #: gtk/gtkfontsel.c:221
 msgid "Average Width:"
-msgstr "Povpreèna ¹irina:"
+msgstr "PovpreÄna Å¡irina:"
 
 #: gtk/gtkfontsel.c:222
 msgid "Charset:"
@@ -217,7 +217,7 @@ msgstr "Merilo:"
 
 #: gtk/gtkfontsel.c:664
 msgid "Points"
-msgstr "Toèke"
+msgstr "ToÄke"
 
 #: gtk/gtkfontsel.c:671
 msgid "Pixels"
@@ -272,7 +272,7 @@ msgstr "*"
 #. Convert '(nil)' weights to 'regular', since it looks nicer.
 #: gtk/gtkfontsel.c:1215
 msgid "(nil)"
-msgstr "(niè)"
+msgstr "(niÄ)"
 
 #: gtk/gtkfontsel.c:1215
 msgid "regular"
@@ -312,7 +312,7 @@ msgstr "Izbrana pisava ni dostopna."
 
 #: gtk/gtkfontsel.c:1799
 msgid "The selected font is not a valid font."
-msgstr "Izbrana pisava je popaèena."
+msgstr "Izbrana pisava je popaÄena."
 
 #: gtk/gtkfontsel.c:1857
 msgid "This is a 2-byte font and may not be displayed correctly."
@@ -324,7 +324,7 @@ msgstr "(neznano)"
 
 #: gtk/gtkfontsel.c:1972
 msgid "roman"
-msgstr "pokonèna"
+msgstr "pokonÄna"
 
 #: gtk/gtkfontsel.c:1984
 msgid "proportional"
@@ -332,7 +332,7 @@ msgstr "proporcionalen"
 
 #: gtk/gtkfontsel.c:1985
 msgid "monospaced"
-msgstr "enakokoraèen"
+msgstr "enakokoraÄen"
 
 #: gtk/gtkfontsel.c:1986
 msgid "char cell"
@@ -344,7 +344,7 @@ msgstr "Pisava: (z uporabo filtra)"
 
 #: gtk/gtkfontsel.c:2662
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
-msgstr "MAX_FONTS prese¾en. Nekatere pisave utegnejo manjkati."
+msgstr "MAX_FONTS preseÅ¾en. Nekatere pisave utegnejo manjkati."
 
 #: gtk/gtkfontsel.c:3499
 msgid "Apply"
@@ -377,7 +377,7 @@ msgstr "Naprava:"
 
 #: gtk/gtkinputdialog.c:253
 msgid "Disabled"
-msgstr "Onemogoèeno"
+msgstr "OnemogoÄeno"
 
 #: gtk/gtkinputdialog.c:261
 msgid "Screen"
@@ -389,7 +389,7 @@ msgstr "Okno"
 
 #: gtk/gtkinputdialog.c:277
 msgid "Mode: "
-msgstr "Naèin: "
+msgstr "NaÄin: "
 
 #. The axis listbox
 #: gtk/gtkinputdialog.c:307
@@ -429,11 +429,11 @@ msgstr "Nagib Y"
 
 #: gtk/gtkinputdialog.c:544
 msgid "none"
-msgstr "niè"
+msgstr "niÄ"
 
 #: gtk/gtkinputdialog.c:578 gtk/gtkinputdialog.c:614
 msgid "(disabled)"
-msgstr "(onemogoèeno)"
+msgstr "(onemogoÄeno)"
 
 #. and clear button
 #: gtk/gtkinputdialog.c:692
@@ -458,7 +458,7 @@ msgstr "Ne najdem datoteke s sliko v poti pixmap_path: \"%s\""
 #: gtk/gtkthemes.c:79
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
-msgstr "Ne najdem nalo¾ljivega modula v poti module_path: \"%s\","
+msgstr "Ne najdem naloÅ¾ljivega modula v poti module_path: \"%s\","
 
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
