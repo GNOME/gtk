@@ -1,3 +1,10 @@
+Wed May  5 12:42:01 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkwindow.c (gdk_window_set_geometry_hints):
+	Initialize size_hints.x and size_hints.y because kwm
+	brokenly pays attention to them.
+	(Bug #1181 -  Lars Heete <hel@admin.de>)
+
 Wed May  5 11:38:56 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkrgb.c (gdk_rgb_choose_visual): Free the 
