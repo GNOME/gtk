@@ -847,6 +847,7 @@ build_keypress_event (GdkWindowImplWin32 *impl,
   event->key.type = GDK_KEY_PRESS;
   event->key.time = msg->time;
   event->key.state = 0;
+  event->key.group = 0;		/* ??? */
   
   if (msg->message == WM_IME_COMPOSITION)
     {
@@ -887,6 +888,7 @@ build_keypress_event (GdkWindowImplWin32 *impl,
        * to Unicode. Then convert to UTF-8.
        * We don't handle the surrogate stuff. Should we?
        */
+      GDK_NOTE (EVENTS, g_print ("ciACP=%d\n", impl->charset_info.ciACP));
       ucount = MultiByteToWideChar (impl->charset_info.ciACP,
 				    0, buf, bytecount,
 				    wbuf, G_N_ELEMENTS (wbuf));
@@ -935,6 +937,7 @@ build_keyrelease_event (GdkWindowImplWin32 *impl,
   event->key.type = GDK_KEY_RELEASE;
   event->key.time = msg->time;
   event->key.state = 0;
+  event->key.group = 0;		/* ??? */
 
   if (msg->message == WM_CHAR || msg->message == WM_SYSCHAR)
     if (msg->wParam < ' ')
@@ -2327,6 +2330,7 @@ gdk_event_translate (GdkEvent *event,
 	event->key.state |= GDK_CONTROL_MASK;
       if (msg->wParam != VK_MENU && GetKeyState (VK_MENU) < 0)
 	event->key.state |= GDK_MOD1_MASK;
+      event->key.group = 0;	/* ??? */
       event->key.string = NULL;
       event->key.length = 0;
       return_val = !GDK_WINDOW_DESTROYED (window);
@@ -2393,8 +2397,7 @@ gdk_event_translate (GdkEvent *event,
 	  /* Return the key release event.  */
 	  build_keyrelease_event (window_impl, event, msg);
 	}
-      else if (return_val
-	       && (window_impl->event_mask & GDK_KEY_PRESS_MASK))
+      else if (return_val && (window_impl->event_mask & GDK_KEY_PRESS_MASK))
 	{
 	  /* Return just the key press event. */
 	  build_keypress_event (window_impl, event, msg);

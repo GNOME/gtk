@@ -1,3 +1,9 @@
+2002-02-24  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkevents-win32.c (build_keypress_event,
+	build_keyrelease_event, gdk_event_translate): Set also group in
+	the key press/release events, always to zero for now.
+
 2002-02-24  Anders Carlsson  <andersca@gnu.org>
 
 	* gtk/stock-icons/stock_dialog_error_48.png: 
