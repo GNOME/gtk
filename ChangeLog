@@ -1,3 +1,10 @@
+Mon Sep 13 02:22:47 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/Makefile.am: backed out Raja's recent VPATH build "improvements",
+	we are fine with using $@ the way we do (if we actually encounter
+	brokeness with $@ in VPATH builds because of additional path prefixes,
+	we need to use $(@F) actually).
+
 Mon Sep 13 01:34:53 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtksignal.c: renamed two variables, hopefully didn't introduce

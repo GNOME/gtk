@@ -325,10 +325,9 @@ gen_sources = xgen-gdef xgen-gtbh xgen-gtbvc xgen-gtbic xgen-gtbec xgen-gmh xgen
 CLEANFILES += $(gen_sources)
 COPYING: $(gtk_built_public_sources) $(gtk_built_sources)
 $(OBJECTS): COPYING 	# this is our oldest-source-stamp
-
 # initial creation of the real stamp-* files
 gtk.defs gtkmarshal.h gtktypebuiltins.h:          # never add deps here
-	-test -f $@ || test -f "$(srcdir)/$@" || touch $(srcdir)/$@
+	test -f "$(srcdir)/$@" || touch $(srcdir)/$@
 # normal autogeneration rules
 stamp-gtk.defs: @REBUILD@ makeenums.pl gtk.defs gtk-boxed.defs $(gtk_public_h_sources) $(gdk_headers)
 	cd $(srcdir) \
@@ -336,7 +335,7 @@ stamp-gtk.defs: @REBUILD@ makeenums.pl gtk.defs gtk-boxed.defs $(gtk_public_h_so
 	&& cat gtk-boxed.defs >> xgen-gdef \
 	&& (cmp -s xgen-gdef gtk.defs || cp xgen-gdef gtk.defs) \
 	&& rm -f xgen-gdef \
-	&& echo timestamp > stamp-gtk.defs
+	&& echo timestamp > $@
 gtkmarshal.c: stamp-gtkmarshal.h
 gtkmarshal.c stamp-gtkmarshal.h: @REBUILD@ genmarshal.pl gtkmarshal.list gtkmarshal.h
 	cd $(srcdir) \
@@ -352,21 +351,21 @@ stamp-gtktypebuiltins.h: @REBUILD@ maketypes.awk stamp-gtk.defs gtktypebuiltins.
 	&& $(AWK) -f maketypes.awk gtk.defs macros > xgen-gtbh \
 	&& (cmp -s xgen-gtbh gtktypebuiltins.h || cp xgen-gtbh gtktypebuiltins.h) \
 	&& rm -f xgen-gtbh \
-	&& echo timestamp > stamp-gtktypebuiltins.h
+	&& echo timestamp > $@
 gtktypebuiltins_vars.c: @REBUILD@ maketypes.awk stamp-gtk.defs
 	cd $(srcdir) \
 	&& $(AWK) -f maketypes.awk gtk.defs variables > xgen-gtbvc \
-	&& cp xgen-gtbvc gtktypebuiltins_vars.c \
+	&& cp xgen-gtbvc $@ \
 	&& rm -f xgen-gtbvc
 gtktypebuiltins_ids.c: @REBUILD@ maketypes.awk stamp-gtk.defs
 	cd $(srcdir) \
 	&& $(AWK) -f maketypes.awk gtk.defs entries > xgen-gtbic \
-	&& cp xgen-gtbic gtktypebuiltins_ids.c \
+	&& cp xgen-gtbic $@ \
 	&& rm -f xgen-gtbic
 gtktypebuiltins_evals.c: @REBUILD@ makeenums.pl $(gtk_public_h_sources) $(gdk_headers)
 	cd $(srcdir) \
 	&& $(PERL) makeenums.pl arrays $(gtk_public_h_sources) $(gdk_headers) > xgen-gtbec \
-	&& cp xgen-gtbec gtktypebuiltins_evals.c \
+	&& cp xgen-gtbec $@ \
 	&& rm -f xgen-gtbec
 
 
