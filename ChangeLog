@@ -1,3 +1,8 @@
+2005-01-10  Owen Taylor  <otaylor@redhat.com>
+
+	* Makefile.am (EXTRA_DIST): Adding missing ChangeLog.pre*
+	to EXTRA_DIST.
+
 2005-01-10  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkaccelgroup.c (gtk_accel_group_class_init): Document
