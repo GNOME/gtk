@@ -1,3 +1,8 @@
+2000-01-11  Jacob Berkman  <jacob@helixcode.com>
+
+	* gdk-pixbuf/pixops/Makefile.am (INCLUDES): added
+	$LIBART_CFLAGS to $INCLUDES
+
 2000-01-10  Elliot Lee  <sopwith@redhat.com>
 
 	* configure.in, gdk-pixbuf/Makefile.am: Build a libcanvas_pixbuf.
