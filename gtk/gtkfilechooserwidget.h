@@ -50,9 +50,11 @@ struct _GtkFileChooserWidget
   GtkFileChooserWidgetPrivate *priv;
 };
 
-GType      gtk_file_chooser_widget_get_type (void);
-GtkWidget *gtk_file_chooser_widget_new      (GtkFileChooserAction action);
-
+GType      gtk_file_chooser_widget_get_type         (void);
+GtkWidget *gtk_file_chooser_widget_new              (GtkFileChooserAction  action);
+GtkWidget *gtk_file_chooser_widget_new_with_backend (GtkFileChooserAction  action,
+						     const gchar          *backend);
 G_END_DECLS
 
 #endif /* __GTK_FILE_CHOOSER_WIDGET_H__ */
+1

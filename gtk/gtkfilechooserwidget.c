@@ -221,3 +221,28 @@ gtk_file_chooser_widget_new (GtkFileChooserAction action)
 		       "action", action,
 		       NULL);
 }
+
+/**
+ * gtk_file_chooser_widget_new:
+ * @action: Open or save mode for the widget
+ * @backend: The name of the specific filesystem backend to use.
+ * 
+ * Creates a new #GtkFileChooserWidget with a specified backend.  This is
+ * especially useful if you use gtk_file_chooser_set_local_only() to allow
+ * non-local files.  This is a file chooser widget that can be embedded in
+ * custom windows and it is the same widget that is used by
+ * #GtkFileChooserDialog.
+ * 
+ * Return value: a new #GtkFileChooserWidget
+ *
+ * Since: 2.4
+ **/
+GtkWidget *
+gtk_file_chooser_widget_new_with_backend (GtkFileChooserAction  action,
+					  const gchar          *backend)
+{
+  return g_object_new (GTK_TYPE_FILE_CHOOSER_WIDGET,
+		       "action", action,
+		       "file-system-backend", backend,
+		       NULL);
+}

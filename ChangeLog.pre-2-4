@@ -1,3 +1,9 @@
+Mon Mar  1 16:32:52 2004  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkfilechooserwidget.c
+	(gtk_file_chooser_widget_new_with_backend): new function.  Long
+	name.
+
 2004-03-01  Morten Welinder  <terra@gnome.org>
 
 	* gtk/gtkfilesystemunix.c (filename_get_info): Only stat when
