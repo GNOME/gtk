@@ -37,25 +37,13 @@ global_filter_func (void     *xevent,
 		    gpointer  data)
 {
   MSG *msg = (MSG *) xevent;
-  GList * toplevels, *iter;
-  GtkWidget * toplevel;
 
   switch (msg->message)
     {
     case WM_THEMECHANGED:
 	case WM_SYSCOLORCHANGE:
-		toplevels = gtk_window_list_toplevels ();
-		if (toplevels) {
-			xp_theme_exit();
-			for (iter = g_list_first(toplevels);
-				 iter;
-				 iter = g_list_next (iter)) {
-				toplevel = (GtkWidget*)iter->data;
-				if (toplevel)
-					gtk_widget_reset_rc_styles (toplevel);
-			}
-			g_list_free (toplevels);
-		}
+		xp_theme_exit();
+		gtk_rc_reparse_all_for_settings (gtk_settings_get_default(), TRUE);
 		return GDK_FILTER_REMOVE;
 	default:
 		return GDK_FILTER_CONTINUE;
