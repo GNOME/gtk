@@ -5,7 +5,7 @@
 <book id="gtk-tut">
 
 <bookinfo>
-    <date>December 7, 2002</date>
+    <date>January 24th, 2003</date>
     <title>GTK+ 2.0 Tutorial</title>
     <authorgroup>
       <author>
@@ -309,15 +309,15 @@ hello world a la GTK.</para>
 
 /* This is a callback function. The data arguments are ignored
  * in this example. More on callbacks below. */
-void hello( GtkWidget *widget,
-            gpointer   data )
+static void hello( GtkWidget *widget,
+                   gpointer   data )
 {
     g_print ("Hello World\n");
 }
 
-gint delete_event( GtkWidget *widget,
-                   GdkEvent  *event,
-		   gpointer   data )
+static gboolean delete_event( GtkWidget *widget,
+                              GdkEvent  *event,
+                              gpointer   data )
 {
     /* If you return FALSE in the "delete_event" signal handler,
      * GTK will emit the "destroy" signal. Returning TRUE means
@@ -334,8 +334,8 @@ gint delete_event( GtkWidget *widget,
 }
 
 /* Another callback */
-void destroy( GtkWidget *widget,
-              gpointer   data )
+static void destroy( GtkWidget *widget,
+                     gpointer   data )
 {
     gtk_main_quit ();
 }
@@ -705,9 +705,9 @@ mouse is over the button and a mouse button is pressed, the function
 button_press_callback() will be called. This function may be declared as:</para>
 
 <programlisting role="C">
-static gint button_press_callback( GtkWidget      *widget, 
-                                   GdkEventButton *event,
-                                   gpointer        data );
+static gboolean button_press_callback( GtkWidget      *widget, 
+                                       GdkEventButton *event,
+                                       gpointer        data );
 </programlisting>
 
 <para>Note that we can declare the second argument as type
@@ -767,8 +767,8 @@ it is not hard to do things with them. The next example will use the
 data argument to tell us which button was pressed.</para>
 
 <programlisting role="C">
-void hello( GtkWidget *widget,
-            gpointer   data )
+static void hello( GtkWidget *widget,
+                   gpointer   data )
 {
     g_print ("Hello World\n");
 }
@@ -787,9 +787,9 @@ call our "destroy" signal handler.</para>
 
 
 <programlisting role="C">
-gint delete_event( GtkWidget *widget,
-                   GdkEvent  *event,
-		   gpointer   data )
+static gboolean delete_event( GtkWidget *widget,
+                              GdkEvent  *event,
+                              gpointer   data )
 {
     g_print ("delete event occurred\n");
 
@@ -802,8 +802,8 @@ calling gtk_main_quit(). This function tells GTK that it is to exit
 from gtk_main when control is returned to it.</para>
 
 <programlisting role="C">
-void destroy( GtkWidget *widget,
-              gpointer   data )
+static void destroy( GtkWidget *widget,
+                     gpointer   data )
 {
     gtk_main_quit ();
 }
@@ -1072,16 +1072,16 @@ topic, packing widgets.</para>
 
 /* Our new improved callback.  The data passed to this function
  * is printed to stdout. */
-void callback( GtkWidget *widget,
-               gpointer   data )
+static void callback( GtkWidget *widget,
+                      gpointer   data )
 {
     g_print ("Hello again - %s was pressed\n", (gchar *) data);
 }
 
 /* another callback */
-gint delete_event( GtkWidget *widget,
-                   GdkEvent  *event,
-                   gpointer   data )
+static gboolean delete_event( GtkWidget *widget,
+                              GdkEvent  *event,
+                              gpointer   data )
 {
     gtk_main_quit ();
     return FALSE;
@@ -1313,9 +1313,9 @@ it. Compile it yourself and play with it.</para>
 #include &lt;stdlib.h&gt;
 #include "gtk/gtk.h"
 
-gint delete_event( GtkWidget *widget,
-                   GdkEvent  *event,
-                   gpointer   data )
+static gboolean delete_event( GtkWidget *widget,
+                              GdkEvent  *event,
+                              gpointer   data )
 {
     gtk_main_quit ();
     return FALSE;
@@ -1324,11 +1324,11 @@ gint delete_event( GtkWidget *widget,
 /* Make a new hbox filled with button-labels. Arguments for the 
  * variables we're interested are passed in to this function. 
  * We do not show the box, but do show everything inside. */
-GtkWidget *make_box( gboolean homogeneous,
-                     gint     spacing,
-		     gboolean expand,
-		     gboolean fill,
-		     guint    padding ) 
+static GtkWidget *make_box( gboolean homogeneous,
+                            gint     spacing,
+                            gboolean expand,
+                            gboolean fill,
+                            guint    padding ) 
 {
     GtkWidget *box;
     GtkWidget *button;
@@ -1790,16 +1790,16 @@ Which means it should look something like this:</para>
 
 /* Our callback.
  * The data passed to this function is printed to stdout */
-void callback( GtkWidget *widget,
-               gpointer   data )
+static void callback( GtkWidget *widget,
+                      gpointer   data )
 {
     g_print ("Hello again - %s was pressed\n", (char *) data);
 }
 
 /* This callback quits the program */
-gint delete_event( GtkWidget *widget,
-                   GdkEvent  *event,
-                   gpointer   data )
+static gboolean delete_event( GtkWidget *widget,
+                              GdkEvent  *event,
+                              gpointer   data )
 {
     gtk_main_quit ();
     return FALSE;
@@ -2161,8 +2161,8 @@ later in the tutorial.</para>
 /* Create a new hbox with an image and a label packed into it
  * and return the box. */
 
-GtkWidget *xpm_label_box( gchar     *xpm_filename,
-                          gchar     *label_text )
+static GtkWidget *xpm_label_box( gchar     *xpm_filename,
+                                 gchar     *label_text )
 {
     GtkWidget *box;
     GtkWidget *label;
@@ -2189,8 +2189,8 @@ GtkWidget *xpm_label_box( gchar     *xpm_filename,
 }
 
 /* Our usual callback function */
-void callback( GtkWidget *widget,
-               gpointer   data )
+static void callback( GtkWidget *widget,
+                      gpointer   data )
 {
     g_print ("Hello again - %s was pressed\n", (char *) data);
 }
@@ -2477,9 +2477,9 @@ the second will emit its "toggled" signal (to report becoming active).</para>
 #include &lt;glib.h&gt;
 #include &lt;gtk/gtk.h&gt;
 
-gint close_application( GtkWidget *widget,
-                        GdkEvent  *event,
-                        gpointer   data )
+static gboolean close_application( GtkWidget *widget,
+                                   GdkEvent  *event,
+                                   gpointer   data )
 {
   gtk_main_quit ();
   return FALSE;
@@ -3093,31 +3093,31 @@ these widgets work for the user.</para>
 
 GtkWidget *hscale, *vscale;
 
-void cb_pos_menu_select( GtkWidget       *item,
-                         GtkPositionType  pos )
+static void cb_pos_menu_select( GtkWidget       *item,
+                                GtkPositionType  pos )
 {
     /* Set the value position on both scale widgets */
     gtk_scale_set_value_pos (GTK_SCALE (hscale), pos);
     gtk_scale_set_value_pos (GTK_SCALE (vscale), pos);
 }
 
-void cb_update_menu_select( GtkWidget     *item,
-                            GtkUpdateType  policy )
+static void cb_update_menu_select( GtkWidget     *item,
+                                   GtkUpdateType  policy )
 {
     /* Set the update policy for both scale widgets */
     gtk_range_set_update_policy (GTK_RANGE (hscale), policy);
     gtk_range_set_update_policy (GTK_RANGE (vscale), policy);
 }
 
-void cb_digits_scale( GtkAdjustment *adj )
+static void cb_digits_scale( GtkAdjustment *adj )
 {
     /* Set the number of decimal places to which adj->value is rounded */
     gtk_scale_set_digits (GTK_SCALE (hscale), (gint) adj->value);
     gtk_scale_set_digits (GTK_SCALE (vscale), (gint) adj->value);
 }
 
-void cb_page_size( GtkAdjustment *get,
-                   GtkAdjustment *set )
+static void cb_page_size( GtkAdjustment *get,
+                          GtkAdjustment *set )
 {
     /* Set the page size and page increment size of the sample
      * adjustment to the value specified by the "Page Size" scale */
@@ -3129,9 +3129,10 @@ void cb_page_size( GtkAdjustment *get,
     gtk_adjustment_set_value (set, CLAMP (set->value,
 					  set->lower,
 					  (set->upper - set->page_size)));
+    g_signal_emit_by_name(G_OBJECT(set), "changed");
 }
 
-void cb_draw_value( GtkToggleButton *button )
+static void cb_draw_value( GtkToggleButton *button )
 {
     /* Turn the value display on the scale widgets off or on depending
      *  on the state of the checkbutton */
@@ -3141,9 +3142,9 @@ void cb_draw_value( GtkToggleButton *button )
 
 /* Convenience functions */
 
-GtkWidget *make_menu_item (gchar     *name,
-                           GCallback  callback,
-			   gpointer   data)
+static GtkWidget *make_menu_item ( gchar     *name,
+                                   GCallback  callback,
+                                   gpointer   data )
 {
     GtkWidget *item;
   
@@ -3155,7 +3156,7 @@ GtkWidget *make_menu_item (gchar     *name,
     return item;
 }
 
-void scale_set_default_values( GtkScale *scale )
+static void scale_set_default_values( GtkScale *scale )
 {
     gtk_range_set_update_policy (GTK_RANGE (scale),
                                  GTK_UPDATE_CONTINUOUS);
@@ -3166,7 +3167,7 @@ void scale_set_default_values( GtkScale *scale )
 
 /* makes the sample window */
 
-void create_range_controls( void )
+static void create_range_controls( void )
 {
     GtkWidget *window;
     GtkWidget *box1, *box2, *box3;
@@ -3664,8 +3665,8 @@ point. The <literal>shadow_type</literal> argument may take one of these values:
 
 /* Create an Arrow widget with the specified parameters
  * and pack it into a button */
-GtkWidget *create_arrow_button( GtkArrowType  arrow_type,
-				GtkShadowType shadow_type )
+static GtkWidget *create_arrow_button( GtkArrowType  arrow_type,
+                                       GtkShadowType shadow_type )
 {
   GtkWidget *button;
   GtkWidget *arrow;
@@ -3928,7 +3929,7 @@ typedef struct _ProgressData {
 
 /* Update the value of the progress bar so that we get
  * some movement */
-gint progress_timeout( gpointer data )
+static gboolean progress_timeout( gpointer data )
 {
   ProgressData *pdata = (ProgressData *)data;
   gdouble new_val;
@@ -3955,8 +3956,8 @@ gint progress_timeout( gpointer data )
 } 
 
 /* Callback that toggles the text display within the progress bar trough */
-void toggle_show_text( GtkWidget    *widget,
-		       ProgressData *pdata )
+static void toggle_show_text( GtkWidget    *widget,
+                              ProgressData *pdata )
 {
   const gchar *text;
   
@@ -3968,8 +3969,8 @@ void toggle_show_text( GtkWidget    *widget,
 }
 
 /* Callback that toggles the activity mode of the progress bar */
-void toggle_activity_mode( GtkWidget    *widget,
-			   ProgressData *pdata )
+static void toggle_activity_mode( GtkWidget    *widget,
+                                  ProgressData *pdata )
 {
   pdata-&gt;activity_mode = !pdata-&gt;activity_mode;
   if (pdata-&gt;activity_mode) 
@@ -3980,8 +3981,8 @@ void toggle_activity_mode( GtkWidget    *widget,
 
  
 /* Callback that toggles the orientation of the progress bar */
-void toggle_orientation( GtkWidget    *widget,
-			 ProgressData *pdata )
+static void toggle_orientation( GtkWidget    *widget,
+                                ProgressData *pdata )
 {
   switch (gtk_progress_bar_get_orientation (GTK_PROGRESS_BAR (pdata-&gt;pbar))) {
   case GTK_PROGRESS_LEFT_TO_RIGHT:
@@ -3999,8 +4000,8 @@ void toggle_orientation( GtkWidget    *widget,
 
  
 /* Clean up allocated memory and remove the timer */
-void destroy_progress( GtkWidget     *widget,
-		       ProgressData *pdata)
+static void destroy_progress( GtkWidget    *widget,
+                              ProgressData *pdata)
 {
     gtk_timeout_remove (pdata-&gt;timer);
     pdata-&gt;timer = 0;
@@ -4311,9 +4312,9 @@ Placement of the drawing area and the rulers is done using a table.</para>
 #define YSIZE  400
 
 /* This routine gets control when the close button is clicked */
-gint close_application( GtkWidget *widget,
-                        GdkEvent  *event,
-                        gpointer   data )
+static gboolean close_application( GtkWidget *widget,
+                                   GdkEvent  *event,
+                                   gpointer   data )
 {
     gtk_main_quit ();
     return FALSE;
@@ -4467,23 +4468,21 @@ back off.</para>
 
 GtkWidget *status_bar;
 
-void push_item( GtkWidget *widget,
-                gpointer   data )
+static void push_item( GtkWidget *widget,
+                       gpointer   data )
 {
   static int count = 1;
-  char buff[20];
+  gchar *buff;
 
-  g_snprintf (buff, 20, "Item %d", count++);
+  buff = g_strdup_printf ("Item %d", count++);
   gtk_statusbar_push (GTK_STATUSBAR (status_bar), GPOINTER_TO_INT (data), buff);
-
-  return;
+  g_free (buff);
 }
 
-void pop_item( GtkWidget *widget,
-               gpointer   data )
+static void pop_item( GtkWidget *widget,
+                      gpointer   data )
 {
   gtk_statusbar_pop (GTK_STATUSBAR (status_bar), GPOINTER_TO_INT (data));
-  return;
 }
 
 int main( int   argc,
@@ -4633,23 +4632,23 @@ removed.</para>
 #include &lt;stdlib.h&gt;
 #include &lt;gtk/gtk.h&gt;
 
-void enter_callback( GtkWidget *widget,
-                     GtkWidget *entry )
+static void enter_callback( GtkWidget *widget,
+                            GtkWidget *entry )
 {
   const gchar *entry_text;
   entry_text = gtk_entry_get_text (GTK_ENTRY (entry));
-  printf("Entry contents: %s\n", entry_text);
+  printf ("Entry contents: %s\n", entry_text);
 }
 
-void entry_toggle_editable( GtkWidget *checkbutton,
-                            GtkWidget *entry )
+static void entry_toggle_editable( GtkWidget *checkbutton,
+                                   GtkWidget *entry )
 {
   gtk_editable_set_editable (GTK_EDITABLE (entry),
                              GTK_TOGGLE_BUTTON (checkbutton)-&gt;active);
 }
 
-void entry_toggle_visibility( GtkWidget *checkbutton,
-                              GtkWidget *entry )
+static void entry_toggle_visibility( GtkWidget *checkbutton,
+                                     GtkWidget *entry )
 {
   gtk_entry_set_visibility (GTK_ENTRY (entry),
 			    GTK_TOGGLE_BUTTON (checkbutton)-&gt;active);
@@ -4927,7 +4926,7 @@ function:</para>
 
 <programlisting role="C">
 void gtk_spin_button_set_update_policy( GtkSpinButton  *spin_button,
-                                    GtkSpinButtonUpdatePolicy policy );
+                                        GtkSpinButtonUpdatePolicy policy );
 </programlisting>
 
 <para>The possible values of <literal>policy</literal> are either <literal>GTK_UPDATE_ALWAYS</literal> or
@@ -4969,40 +4968,41 @@ void gtk_spin_button_update( GtkSpinButton  *spin_button );
 
 static GtkWidget *spinner1;
 
-void toggle_snap( GtkWidget     *widget,
-		  GtkSpinButton *spin )
+static void toggle_snap( GtkWidget     *widget,
+                         GtkSpinButton *spin )
 {
   gtk_spin_button_set_snap_to_ticks (spin, GTK_TOGGLE_BUTTON (widget)-&gt;active);
 }
 
-void toggle_numeric( GtkWidget *widget,
-		     GtkSpinButton *spin )
+static void toggle_numeric( GtkWidget *widget,
+                            GtkSpinButton *spin )
 {
   gtk_spin_button_set_numeric (spin, GTK_TOGGLE_BUTTON (widget)-&gt;active);
 }
 
-void change_digits( GtkWidget *widget,
-	            GtkSpinButton *spin )
+static void change_digits( GtkWidget *widget,
+                           GtkSpinButton *spin )
 {
   gtk_spin_button_set_digits (GTK_SPIN_BUTTON (spinner1),
                               gtk_spin_button_get_value_as_int (spin));
 }
 
-void get_value( GtkWidget *widget,
-		gpointer data )
+static void get_value( GtkWidget *widget,
+                       gpointer data )
 {
-  gchar buf[32];
+  gchar *buf;
   GtkLabel *label;
   GtkSpinButton *spin;
 
   spin = GTK_SPIN_BUTTON (spinner1);
   label = GTK_LABEL (g_object_get_data (G_OBJECT (widget), "user_data"));
   if (GPOINTER_TO_INT (data) == 1)
-    sprintf (buf, "%d", gtk_spin_button_get_value_as_int (spin));
+    buf = g_strdup_printf ("%d", gtk_spin_button_get_value_as_int (spin));
   else
-    sprintf (buf, "%0.*f", spin-&gt;digits,
-             gtk_spin_button_get_value (spin));
+    buf = g_strdup_printf ("%0.*f", spin-&gt;digits,
+                           gtk_spin_button_get_value (spin));
   gtk_label_set_text (label, buf);
+  g_free (buf);
 }
 
 
@@ -5592,23 +5592,22 @@ enum {
  * GtkCalendar
  */
 
-void calendar_date_to_string (CalendarData *data,
-			      char         *buffer,
-			      gint          buff_len)
+static void calendar_date_to_string( CalendarData *data,
+                                     char         *buffer,
+                                     gint          buff_len )
 {
-  GDate *date;
+  GDate date;
   guint year, month, day;
 
   gtk_calendar_get_date (GTK_CALENDAR (data-&gt;window),
 			 &amp;year, &amp;month, &amp;day);
-  date = g_date_new_dmy (day, month + 1, year);
-  g_date_strftime (buffer, buff_len - 1, "%x", date);
+  g_date_set_dmy (&date, day, month + 1, year);
+  g_date_strftime (buffer, buff_len - 1, "%x", &date);
 
-  g_date_free (date);
 }
 
-void calendar_set_signal_strings (char         *sig_str,
-				  CalendarData *data)
+static void calendar_set_signal_strings( char         *sig_str,
+                                         CalendarData *data )
 {
   const gchar *prev_sig;
 
@@ -5620,8 +5619,8 @@ void calendar_set_signal_strings (char         *sig_str,
   gtk_label_set_text (GTK_LABEL (data-&gt;last_sig), sig_str);
 }
 
-void calendar_month_changed (GtkWidget    *widget,
-                             CalendarData *data)
+static void calendar_month_changed( GtkWidget    *widget,
+                                    CalendarData *data )
 {
   char buffer[256] = "month_changed: ";
 
@@ -5629,8 +5628,8 @@ void calendar_month_changed (GtkWidget    *widget,
   calendar_set_signal_strings (buffer, data);
 }
 
-void calendar_day_selected (GtkWidget    *widget,
-                            CalendarData *data)
+static void calendar_day_selected( GtkWidget    *widget,
+                                   CalendarData *data )
 {
   char buffer[256] = "day_selected: ";
 
@@ -5638,8 +5637,8 @@ void calendar_day_selected (GtkWidget    *widget,
   calendar_set_signal_strings (buffer, data);
 }
 
-void calendar_day_selected_double_click (GtkWidget    *widget,
-                                         CalendarData *data)
+static void calendar_day_selected_double_click ( GtkWidget    *widget,
+                                                 CalendarData *data )
 {
   char buffer[256] = "day_selected_double_click: ";
   guint day;
@@ -5657,8 +5656,8 @@ void calendar_day_selected_double_click (GtkWidget    *widget,
   }
 }
 
-void calendar_prev_month (GtkWidget    *widget,
-                          CalendarData *data)
+static void calendar_prev_month( GtkWidget    *widget,
+                                 CalendarData *data )
 {
   char buffer[256] = "prev_month: ";
 
@@ -5666,8 +5665,8 @@ void calendar_prev_month (GtkWidget    *widget,
   calendar_set_signal_strings (buffer, data);
 }
 
-void calendar_next_month (GtkWidget    *widget,
-                          CalendarData *data)
+static void calendar_next_month( GtkWidget    *widget,
+                                 CalendarData *data )
 {
   char buffer[256] = "next_month: ";
 
@@ -5675,8 +5674,8 @@ void calendar_next_month (GtkWidget    *widget,
   calendar_set_signal_strings (buffer, data);
 }
 
-void calendar_prev_year (GtkWidget    *widget,
-                         CalendarData *data)
+static void calendar_prev_year( GtkWidget    *widget,
+                                CalendarData *data )
 {
   char buffer[256] = "prev_year: ";
 
@@ -5684,8 +5683,8 @@ void calendar_prev_year (GtkWidget    *widget,
   calendar_set_signal_strings (buffer, data);
 }
 
-void calendar_next_year (GtkWidget    *widget,
-                         CalendarData *data)
+static void calendar_next_year( GtkWidget    *widget,
+                                CalendarData *data )
 {
   char buffer[256] = "next_year: ";
 
@@ -5694,7 +5693,7 @@ void calendar_next_year (GtkWidget    *widget,
 }
 
 
-void calendar_set_flags (CalendarData *calendar)
+static void calendar_set_flags( CalendarData *calendar )
 {
   gint i;
   gint options = 0;
@@ -5707,8 +5706,8 @@ void calendar_set_flags (CalendarData *calendar)
     gtk_calendar_display_options (GTK_CALENDAR (calendar-&gt;window), options);
 }
 
-void calendar_toggle_flag (GtkWidget    *toggle,
-                           CalendarData *calendar)
+static void calendar_toggle_flag( GtkWidget    *toggle,
+                                  CalendarData *calendar)
 {
   gint i;
   gint j;
@@ -5722,8 +5721,8 @@ void calendar_toggle_flag (GtkWidget    *toggle,
   
 }
 
-void calendar_font_selection_ok (GtkWidget    *button,
-                                 CalendarData *calendar)
+static void calendar_font_selection_ok( GtkWidget    *button,
+                                        CalendarData *calendar )
 {
   GtkRcStyle *style;
   char *font_name;
@@ -5744,8 +5743,8 @@ void calendar_font_selection_ok (GtkWidget    *button,
   gtk_widget_destroy (calendar-&gt;font_dialog);
 }
 
-void calendar_select_font (GtkWidget    *button,
-                           CalendarData *calendar)
+static void calendar_select_font( GtkWidget    *button,
+                                  CalendarData *calendar )
 {
   GtkWidget *window;
 
@@ -5775,7 +5774,7 @@ void calendar_select_font (GtkWidget    *button,
 
 }
 
-void create_calendar ()
+static void create_calendar( void )
 {
   GtkWidget *window;
   GtkWidget *vbox, *vbox2, *vbox3;
@@ -6078,8 +6077,8 @@ GdkColor color;
 
 /* Color changed handler */
 
-void color_changed_cb( GtkWidget         *widget,
-                       GtkColorSelection *colorsel )
+static void color_changed_cb( GtkWidget         *widget,
+                              GtkColorSelection *colorsel )
 {
   GdkColor ncolor;
 
@@ -6089,9 +6088,9 @@ void color_changed_cb( GtkWidget         *widget,
 
 /* Drawingarea event handler */
 
-gint area_event( GtkWidget *widget,
-                 GdkEvent  *event,
-                 gpointer   client_data )
+static gboolean area_event( GtkWidget *widget,
+                            GdkEvent  *event,
+                            gpointer   client_data )
 {
   gint handled = FALSE;
   gint response;
@@ -6135,9 +6134,9 @@ gint area_event( GtkWidget *widget,
 
 /* Close down and exit handler */
 
-gint destroy_window( GtkWidget *widget,
-                     GdkEvent  *event,
-                     gpointer   client_data )
+static gboolean destroy_window( GtkWidget *widget,
+                                GdkEvent  *event,
+                                gpointer   client_data )
 {
   gtk_main_quit ();
   return TRUE;
@@ -6266,8 +6265,8 @@ screen, it does nothing as there is not a signal attached to it.</para>
 #include &lt;gtk/gtk.h&gt;
 
 /* Get the selected filename and print it to the console */
-void file_ok_sel( GtkWidget        *w,
-                  GtkFileSelection *fs )
+static void file_ok_sel( GtkWidget        *w,
+                         GtkFileSelection *fs )
 {
     g_print ("%s\n", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
 }
@@ -6532,8 +6531,8 @@ gint y = 50;
 
 /* This callback function moves the button to a new position
  * in the Fixed container. */
-void move_button( GtkWidget *widget,
-                  GtkWidget *fixed )
+static void move_button( GtkWidget *widget,
+                         GtkWidget *fixed )
 {
   x = (x + 30) % 300;
   y = (y + 50) % 300;
@@ -6936,7 +6935,7 @@ window.</para>
 #include &lt;gtk/gtk.h&gt;
    
 /* Create the list of "messages" */
-GtkWidget *create_list( void )
+static GtkWidget *create_list( void )
 {
 
     GtkWidget *scrolled_window;
@@ -6990,7 +6989,7 @@ when our window is realized. We could also force our window to be
 realized with gtk_widget_realize, but it would have to be part of
 a hierarchy first */
 
-void insert_text (GtkTextBuffer *buffer)
+static void insert_text( GtkTextBuffer *buffer )
 {
    GtkTextIter iter;
  
@@ -7008,7 +7007,7 @@ void insert_text (GtkTextBuffer *buffer)
 }
    
 /* Create a scrolled text area that displays a "message" */
-GtkWidget *create_text( void )
+static GtkWidget *create_text( void )
 {
    GtkWidget *scrolled_window;
    GtkWidget *view;
@@ -7102,9 +7101,9 @@ its own if you pass NULL as the value of the arguments.</para>
 using the following four functions:</para>
 
 <programlisting role="C">
-GtkAdjustment *gtk_viewport_get_hadjustment (GtkViewport *viewport );
+GtkAdjustment *gtk_viewport_get_hadjustment( GtkViewport *viewport );
 
-GtkAdjustment *gtk_viewport_get_vadjustment (GtkViewport *viewport );
+GtkAdjustment *gtk_viewport_get_vadjustment( GtkViewport *viewport );
 
 void gtk_viewport_set_hadjustment( GtkViewport   *viewport,
                                    GtkAdjustment *adjustment );
@@ -7193,8 +7192,8 @@ new to you.</para>
 #include &lt;stdio.h&gt;
 #include &lt;gtk/gtk.h&gt;
 
-void destroy( GtkWidget *widget,
-              gpointer   data )
+static void destroy( GtkWidget *widget,
+                     gpointer   data )
 {
     gtk_main_quit ();
 }
@@ -7329,12 +7328,12 @@ for Button Boxes.</para>
 #include &lt;gtk/gtk.h&gt;
 
 /* Create a Button Box with the specified parameters */
-GtkWidget *create_bbox( gint  horizontal,
-                        char *title,
-                        gint  spacing,
-                        gint  child_w,
-                        gint  child_h,
-                        gint  layout )
+static GtkWidget *create_bbox( gint  horizontal,
+                               char *title,
+                               gint  spacing,
+                               gint  child_w,
+                               gint  child_h,
+                               gint  layout )
 {
   GtkWidget *frame;
   GtkWidget *bbox;
@@ -7549,7 +7548,9 @@ additional explanations):</para>
 
 /* This function is connected to the Close button or
  * closing the window from the WM */
-gint delete_event (GtkWidget *widget, GdkEvent *event, gpointer data)
+static gboolean delete_event( GtkWidget *widget,
+                              GdkEvent *event,
+                              gpointer data )
 {
   gtk_main_quit ();
   return FALSE;
@@ -7579,7 +7580,8 @@ clearer I put them all together.</para>
  * check which one is active and set the style of the toolbar
  * accordingly
  * ATTENTION: our toolbar is passed as data to callback ! */
-void radio_event (GtkWidget *widget, gpointer data)
+static void radio_event( GtkWidget *widget,
+                         gpointer data )
 {
   if (GTK_TOGGLE_BUTTON (text_button)->active) 
     gtk_toolbar_set_style (GTK_TOOLBAR (data), GTK_TOOLBAR_TEXT);
@@ -7591,7 +7593,8 @@ void radio_event (GtkWidget *widget, gpointer data)
 
 /* even easier, just check given toggle button and enable/disable 
  * tooltips */
-void toggle_event (GtkWidget *widget, gpointer data)
+static void toggle_event( GtkWidget *widget,
+                          gpointer   data )
 {
   gtk_toolbar_set_tooltips (GTK_TOOLBAR (data),
                             GTK_TOGGLE_BUTTON (widget)->active );
@@ -8017,15 +8020,15 @@ backward manner, and exit the program.</para>
 #include &lt;gtk/gtk.h&gt;
 
 /* This function rotates the position of the tabs */
-void rotate_book( GtkButton   *button,
-                  GtkNotebook *notebook )
+static void rotate_book( GtkButton   *button,
+                         GtkNotebook *notebook )
 {
     gtk_notebook_set_tab_pos (notebook, (notebook-&gt;tab_pos + 1) % 4);
 }
 
 /* Add/Remove the page tabs and the borders */
-void tabsborder_book( GtkButton   *button,
-                      GtkNotebook *notebook )
+static void tabsborder_book( GtkButton   *button,
+                             GtkNotebook *notebook )
 {
     gint tval = FALSE;
     gint bval = FALSE;
@@ -8039,8 +8042,8 @@ void tabsborder_book( GtkButton   *button,
 }
 
 /* Remove a page from the notebook */
-void remove_book( GtkButton   *button,
-                  GtkNotebook *notebook )
+static void remove_book( GtkButton   *button,
+                         GtkNotebook *notebook )
 {
     gint page;
     
@@ -8051,9 +8054,9 @@ void remove_book( GtkButton   *button,
     gtk_widget_queue_draw (GTK_WIDGET (notebook));
 }
 
-gint delete( GtkWidget *widget,
-             GtkWidget *event,
-             gpointer   data )
+static gboolean delete( GtkWidget *widget,
+                        GtkWidget *event,
+                        gpointer   data )
 {
     gtk_main_quit ();
     return FALSE;
@@ -8407,8 +8410,8 @@ example.  Take these steps:</para>
 <listitem><simpara>Create an event handling function. It needs to have the
 prototype</simpara>
 <programlisting role="C">
-static gint handler (GtkWidget *widget,
-                     GdkEvent  *event);
+static gboolean handler( GtkWidget *widget,
+                         GdkEvent  *event );
 </programlisting>
 <simpara>and it will use the event to find out where to pop up the menu.</simpara>
 </listitem>
@@ -8453,7 +8456,7 @@ by a menu bar, as shown in the sample code.</simpara>
 #include &lt;stdio.h&gt;
 #include &lt;gtk/gtk.h&gt;
 
-static gint button_press (GtkWidget *, GdkEvent *);
+static gboolean button_press (GtkWidget *, GdkEvent *);
 static void menuitem_response (gchar *);
 
 int main( int   argc,
@@ -8559,8 +8562,8 @@ int main( int   argc,
  * the button that was pressed.
  */
 
-static gint button_press( GtkWidget *widget,
-                          GdkEvent *event )
+static gboolean button_press( GtkWidget *widget,
+                              GdkEvent *event )
 {
 
     if (event-&gt;type == GDK_BUTTON_PRESS) {
@@ -8682,6 +8685,9 @@ NULL or "" or "&lt;Item&gt;" - create a simple item
 "&lt;Separator&gt;"          - create a separator
 "&lt;Branch&gt;"             - create an item to hold submenus (optional)
 "&lt;LastBranch&gt;"         - create a right justified branch
+"&lt;StockItem&gt;"          - create a simple item with a stock image. 
+                               see <filename>gtkstock.h</filename> for builtin stock items
+ 
 </programlisting>
 
 <para>Note that &lt;LastBranch&gt; is only useful for one submenu of
@@ -8697,15 +8703,15 @@ The callback for an ItemFactory entry can take two forms. If
 form:</para>
 
 <programlisting role="C">
-void callback(void)
+void callback( void )
 </programlisting>
 
 <para>otherwise it is of the form:</para>
 
 <programlisting role="C">
-void callback(gpointer    callback_data,
-              guint       callback_action,
-              GtkWidget  *widget)
+void callback( gpointer    callback_data,
+               guint       callback_action,
+               GtkWidget  *widget )
 </programlisting>
 
 <para>
@@ -8755,9 +8761,9 @@ Since <literal>callback_action</literal> is not zero print_state() is of the
 form:</para>
 
 <programlisting role="C">
-void print_state(gpointer    callback_data,
-                 guint       callback_action,
-                 GtkWidget  *widget)
+void print_state( gpointer    callback_data,
+                  guint       callback_action,
+                  GtkWidget  *widget )
 </programlisting>
 
 <para>with <literal>callback_action</literal> equal to 7.</para>
@@ -8807,7 +8813,7 @@ static GtkItemFactoryEntry entries[] = {
   { "/File/_New",     "&lt;CTRL&gt;N", new_file,     1, "&lt;Item&gt;" },
   { "/File/_Open...", "&lt;CTRL&gt;O", open_file,    1, "&lt;Item&gt;" },
   { "/File/sep1",     NULL,      NULL,         0, "&lt;Separator&gt;" },
-  { "/File/_Quit",    "&lt;CTRL&gt;Q", quit_program, 0, "&lt;Item&gt;"} };
+  { "/File/_Quit",    "&lt;CTRL&gt;Q", quit_program, 0, "&lt;StockItem&gt;", GTK_STOCK_QUIT } };
 </programlisting>
 </sect3>
 </sect2>
@@ -8939,47 +8945,47 @@ static void print_hello( GtkWidget *w,
 }
 
 /* For the check button */
-static void print_toggle(gpointer   callback_data,
-                         guint      callback_action,
-                         GtkWidget *menu_item)
+static void print_toggle( gpointer   callback_data,
+                          guint      callback_action,
+                          GtkWidget *menu_item )
 {
    g_message ("Check button state - %d\n",
-              GTK_CHECK_MENU_ITEM(menu_item)-&amp;gt;active);
+              GTK_CHECK_MENU_ITEM (menu_item)-&gt;active);
 }
 
 /* For the radio buttons */
-static void print_selected(gpointer   callback_data,
-                           guint      callback_action,
-                           GtkWidget *menu_item)
+static void print_selected( gpointer   callback_data,
+                            guint      callback_action,
+                            GtkWidget *menu_item )
 {
-   if(GTK_CHECK_MENU_ITEM(menu_item)-&amp;gt;active)
-     g_message("Radio button %d selected\n", callback_action);
+   if(GTK_CHECK_MENU_ITEM(menu_item)-&gt;active)
+     g_message ("Radio button %d selected\n", callback_action);
 }
 
 /* Our menu, an array of GtkItemFactoryEntry structures that defines each menu item */
 static GtkItemFactoryEntry menu_items[] = {
-  { "/_File",         NULL,         NULL,           0, "&amp;lt;Branch&amp;gt;" },
-  { "/File/_New",     "&amp;lt;control&amp;gt;N", print_hello,    0, "&lt;Item&gt;" },
-  { "/File/_Open",    "&amp;lt;control&amp;gt;O", print_hello,    0, "&lt;Item&gt;" },
-  { "/File/_Save",    "&amp;lt;control&amp;gt;S", print_hello,    0, "&lt;Item&gt;" },
+  { "/_File",         NULL,         NULL,           0, "&lt;Branch&gt;" },
+  { "/File/_New",     "&lt;control&gt;N", print_hello,    0, "&lt;StockItem&gt;", GTK_STOCK_NEW },
+  { "/File/_Open",    "&lt;control&gt;O", print_hello,    0, "&lt;StockItem&gt;", GTK_STOCK_OPEN },
+  { "/File/_Save",    "&lt;control&gt;S", print_hello,    0, "&lt;StockItem&gt;", GTK_STOCK_SAVE },
   { "/File/Save _As", NULL,         NULL,           0, "&lt;Item&gt;" },
-  { "/File/sep1",     NULL,         NULL,           0, "&amp;lt;Separator&amp;gt;" },
-  { "/File/Quit",     "&amp;lt;control&amp;gt;Q", gtk_main_quit,  0, "&lt;Item&gt;" },
-  { "/_Options",      NULL,         NULL,           0, "&amp;lt;Branch&amp;gt;" },
-  { "/Options/tear",  NULL,         NULL,           0, "&amp;lt;Tearoff&amp;gt;" },
-  { "/Options/Check", NULL,         print_toggle,   1, "&amp;lt;CheckItem&amp;gt;" },
-  { "/Options/sep",   NULL,         NULL,           0, "&amp;lt;Separator&amp;gt;" },
-  { "/Options/Rad1",  NULL,         print_selected, 1, "&amp;lt;RadioItem&amp;gt;" },
+  { "/File/sep1",     NULL,         NULL,           0, "&lt;Separator&gt;" },
+  { "/File/_Quit",    "&lt;CTRL&gt;Q", gtk_main_quit, 0, "&lt;StockItem&gt;", GTK_STOCK_QUIT },
+  { "/_Options",      NULL,         NULL,           0, "&lt;Branch&gt;" },
+  { "/Options/tear",  NULL,         NULL,           0, "&lt;Tearoff&gt;" },
+  { "/Options/Check", NULL,         print_toggle,   1, "&lt;CheckItem&gt;" },
+  { "/Options/sep",   NULL,         NULL,           0, "&lt;Separator&gt;" },
+  { "/Options/Rad1",  NULL,         print_selected, 1, "&lt;RadioItem&gt;" },
   { "/Options/Rad2",  NULL,         print_selected, 2, "/Options/Rad1" },
   { "/Options/Rad3",  NULL,         print_selected, 3, "/Options/Rad1" },
-  { "/_Help",         NULL,         NULL,           0, "&amp;lt;LastBranch&amp;gt;" },
+  { "/_Help",         NULL,         NULL,           0, "&lt;LastBranch&gt;" },
   { "/_Help/About",   NULL,         NULL,           0, "&lt;Item&gt;" },
 };
 
 static gint nmenu_items = sizeof (menu_items) / sizeof (menu_items[0]);
 
 /* Returns a menubar widget made from the above menu */
-GtkWidget *get_menubar_menu( GtkWidget  *window)
+static GtkWidget *get_menubar_menu( GtkWidget  *window )
 {
   GtkItemFactory *item_factory;
   GtkAccelGroup *accel_group;
@@ -8988,7 +8994,7 @@ GtkWidget *get_menubar_menu( GtkWidget  *window)
   accel_group = gtk_accel_group_new ();
 
   /* Make an ItemFactory (that makes a menubar) */
-  item_factory = gtk_item_factory_new (GTK_TYPE_MENU_BAR, "&amp;lt;main&amp;gt;",
+  item_factory = gtk_item_factory_new (GTK_TYPE_MENU_BAR, "&lt;main&gt;",
                                        accel_group);
 
   /* This function generates the menu items. Pass the item factory,
@@ -9000,60 +9006,62 @@ GtkWidget *get_menubar_menu( GtkWidget  *window)
   gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
 
   /* Finally, return the actual menu bar created by the item factory. */
-  return gtk_item_factory_get_widget (item_factory, "&amp;lt;main&amp;gt;");
+  return gtk_item_factory_get_widget (item_factory, "&lt;main&gt;");
 }
 
 /* Popup the menu when the popup button is pressed */
-static gint popup_cb(GtkWidget *widget, GdkEvent *event, GtkWidget *menu)
+static gboolean popup_cb( GtkWidget *widget,
+                          GdkEvent *event,
+                          GtkWidget *menu )
 {
    GdkEventButton *bevent = (GdkEventButton *)event;
   
    /* Only take button presses */
-   if(event-&amp;gt;type != GDK_BUTTON_PRESS)
+   if (event-&gt;type != GDK_BUTTON_PRESS)
      return FALSE;
   
    /* Show the menu */
-   gtk_menu_popup(GTK_MENU(menu), NULL, NULL,
-                  NULL, NULL, bevent-&amp;gt;button, bevent-&amp;gt;time);
+   gtk_menu_popup (GTK_MENU(menu), NULL, NULL,
+                   NULL, NULL, bevent-&gt;button, bevent-&gt;time);
   
    return TRUE;
 }
 
 /* Same as with get_menubar_menu() but just return a button with a signal to
    call a popup menu */
-GtkWidget *get_popup_menu(void)
+GtkWidget *get_popup_menu( void )
 {
    GtkItemFactory *item_factory;
    GtkWidget *button, *menu;
   
    /* Same as before but don't bother with the accelerators */
-   item_factory = gtk_item_factory_new (GTK_TYPE_MENU, "&amp;lt;main&amp;gt;",
+   item_factory = gtk_item_factory_new (GTK_TYPE_MENU, "&lt;main&gt;",
                                         NULL);
    gtk_item_factory_create_items (item_factory, nmenu_items, menu_items, NULL);
-   menu = gtk_item_factory_get_widget(item_factory, "&amp;lt;main&amp;gt;");
+   menu = gtk_item_factory_get_widget (item_factory, "&lt;main&gt;");
   
    /* Make a button to activate the popup menu */
-   button = gtk_button_new_with_label("Popup");
+   button = gtk_button_new_with_label ("Popup");
    /* Make the menu popup when clicked */
-   g_signal_connect(G_OBJECT(button),
-                    "event",
-                    G_CALLBACK(popup_cb),
-                    (gpointer) menu);
+   g_signal_connect (G_OBJECT(button),
+                     "event",
+                     G_CALLBACK(popup_cb),
+                     (gpointer) menu);
 
    return button;
 }
 
 /* Same again but return an option menu */
-GtkWidget *get_option_menu(void)
+GtkWidget *get_option_menu( void )
 {
    GtkItemFactory *item_factory;
    GtkWidget *option_menu;
   
    /* Same again, not bothering with the accelerators */
-   item_factory = gtk_item_factory_new (GTK_TYPE_OPTION_MENU, "&amp;lt;main&amp;gt;",
+   item_factory = gtk_item_factory_new (GTK_TYPE_OPTION_MENU, "&lt;main&gt;",
                                         NULL);
    gtk_item_factory_create_items (item_factory, nmenu_items, menu_items, NULL);
-   option_menu = gtk_item_factory_get_widget(item_factory, "&amp;lt;main&amp;gt;");
+   option_menu = gtk_item_factory_get_widget (item_factory, "&lt;main&gt;");
 
    return option_menu;
 }
@@ -9086,8 +9094,8 @@ int main( int argc,
   /* Note: all three menus are separately created, so they are not the
      same menu */
   menubar = get_menubar_menu (window);
-  popup_button = get_popup_menu();
-  option_menu = get_option_menu();
+  popup_button = get_popup_menu ();
+  option_menu = get_option_menu ();
   
   /* Pack it all together */
   gtk_box_pack_start (GTK_BOX (main_vbox), menubar, FALSE, TRUE, 0);
@@ -9100,9 +9108,9 @@ int main( int argc,
   /* Finished! */
   gtk_main ();
  
-  return(0);
+  return 0;
 }
-/* example-end */
+<!-- example-end -->
 </programlisting>
 
 </sect1>
@@ -9274,9 +9282,9 @@ GtkStyle *gtk_widget_get_style( GtkWidget *widget );
 
 GtkStyle *gtk_widget_get_default_style( void );
 
-void gtk_widget_set_size_request ( GtkWidget *widget,
-                                   gint       width,
-                                   gint       height );
+void gtk_widget_set_size_request( GtkWidget *widget,
+                                  gint       width,
+                                  gint       height );
 
 void gtk_widget_grab_focus( GtkWidget *widget );
 
@@ -9354,7 +9362,7 @@ may be one of:</para>
 ready for reading on your file descriptor.</simpara>
 </listitem>
 
-<listitem><simpara>><literal>GDK_INPUT_WRITE</literal> - Call your function when the file
+<listitem><simpara><literal>GDK_INPUT_WRITE</literal> - Call your function when the file
 descriptor is ready for writing.</simpara>
 </listitem>
 </itemizedlist>
@@ -9661,13 +9669,13 @@ converted.</para>
 #include &lt;stdlib.h&gt;
 #include &lt;gtk/gtk.h&gt;
 
-void selection_received( GtkWidget        *widget, 
-                         GtkSelectionData *selection_data, 
-                         gpointer          data );
+static void selection_received( GtkWidget        *widget, 
+                                GtkSelectionData *selection_data, 
+                                gpointer          data );
 
 /* Signal handler invoked when user clicks on the "Get Targets" button */
-void get_targets( GtkWidget *widget,
-                  gpointer data )
+static void get_targets( GtkWidget *widget,
+                         gpointer data )
 {
   static GdkAtom targets_atom = GDK_NONE;
   GtkWidget *window = (GtkWidget *)data;	
@@ -9682,9 +9690,9 @@ void get_targets( GtkWidget *widget,
 }
 
 /* Signal handler called when the selections owner returns the data */
-void selection_received( GtkWidget        *widget,
-                         GtkSelectionData *selection_data, 
-		         gpointer          data )
+static void selection_received( GtkWidget        *widget,
+                                GtkSelectionData *selection_data, 
+                                gpointer          data )
 {
   GdkAtom *atoms;
   GList *item_list;
@@ -9767,10 +9775,10 @@ handlers that will be called when your selection is requested. For
 each selection/target pair you will handle, you make a call to:</para>
 
 <programlisting role="C">
-void gtk_selection_add_target (GtkWidget           *widget, 
+void gtk_selection_add_target( GtkWidget           *widget, 
                                GdkAtom              selection,
                                GdkAtom              target,
-                               guint                info);
+                               guint                info );
 </programlisting>
 
 <para><literal>widget</literal>, <literal>selection</literal>, and <literal>target</literal> identify the requests
@@ -9781,10 +9789,10 @@ enumerator to identify the specific target within the callback function.</para>
 <para>The callback function has the signature:</para>
 
 <programlisting role="C">
-void  "selection_get" (GtkWidget          *widget,
+void  "selection_get"( GtkWidget          *widget,
                        GtkSelectionData   *selection_data,
                        guint               info,
-                       guint               time);
+                       guint               time );
 </programlisting>
 
 <para>The GtkSelectionData is the same as above, but this time, we're
@@ -9838,8 +9846,8 @@ GtkWidget *selection_button;
 GtkWidget *selection_widget;
 
 /* Callback when the user toggles the selection */
-void selection_toggled( GtkWidget *widget,
-                        gint      *have_selection )
+static void selection_toggled( GtkWidget *widget,
+                               gint      *have_selection )
 {
   if (GTK_TOGGLE_BUTTON (widget)-&gt;active)
     {
@@ -9866,9 +9874,9 @@ void selection_toggled( GtkWidget *widget,
 }
 
 /* Called when another application claims the selection */
-gint selection_clear( GtkWidget         *widget,
-                      GdkEventSelection *event,
-                      gint              *have_selection )
+static gboolean selection_clear( GtkWidget         *widget,
+                                 GdkEventSelection *event,
+                                 gint              *have_selection )
 {
   *have_selection = FALSE;
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (selection_button), FALSE);
@@ -9877,11 +9885,11 @@ gint selection_clear( GtkWidget         *widget,
 }
 
 /* Supplies the current time as the selection. */
-void selection_handle( GtkWidget        *widget, 
-                       GtkSelectionData *selection_data,
-                       guint             info,
-                       guint             time_stamp,
-                       gpointer          data )
+static void selection_handle( GtkWidget        *widget, 
+                              GtkSelectionData *selection_data,
+                              guint             info,
+                              guint             time_stamp,
+                              gpointer          data )
 {
   gchar *timestr;
   time_t current_time;
@@ -10254,10 +10262,16 @@ G_MINDOUBLE
 G_MAXDOUBLE
 G_MINSHORT
 G_MAXSHORT
+G_MAXUSHORT
 G_MININT
 G_MAXINT
+G_MAXUINT
 G_MINLONG
 G_MAXLONG
+G_MAXULONG
+G_MININT64
+G_MAXINT64
+G_MAXUINT64
 </programlisting>
 
 <para>Also, the following typedefs. The ones left unspecified are dynamically set
@@ -10270,7 +10284,7 @@ char   gchar;
 short  gshort;
 long   glong;
 int    gint;
-char   gboolean;
+int    gboolean;
 
 unsigned char   guchar;
 unsigned short  gushort;
@@ -10279,9 +10293,12 @@ unsigned int    guint;
 
 float   gfloat;
 double  gdouble;
-long double gldouble;
 
-void* gpointer;
+unsigned int  gsize;
+signed int    gssize;
+
+void*       gpointer;
+const void* gconstpointer;
 
 gint8
 guint8
@@ -10289,6 +10306,8 @@ gint16
 guint16
 gint32
 guint32
+gint64
+guint64
 </programlisting>
 
 </sect1>
@@ -11074,6 +11093,10 @@ widget, a 3x3 array of toggle buttons which triggers a signal when all
 three buttons in a row, column, or on one of the diagonals are
 depressed. </para>
 
+<para><emphasis>Note: the full source code for the Tictactoe example described
+below is in the <link linkend="sec-Tictactoe">Code Examples Appendix</link>
+</emphasis></para>
+
 <para>
 <inlinemediaobject>
 <imageobject>
@@ -11092,19 +11115,7 @@ depressed. </para>
 class that holds all of the elements of the composite widget. For
 example, the parent class of the FileSelection widget is the
 Dialog class. Since our buttons will be arranged in a table, it
-might seem natural to make our parent class the Table
-class. Unfortunately, this turns out not to work. The creation of a
-widget is divided among two functions - a <literal>WIDGETNAME_new()</literal>
-function that the user calls, and a <literal>WIDGETNAME_init()</literal> function
-which does the basic work of initializing the widget which is
-independent of the arguments passed to the <literal>_new()</literal>
-function. Descendant widgets only call the <literal>_init</literal> function of
-their parent widget. But this division of labor doesn't work well for
-tables, which when created need to know the number of rows and
-columns in the table. Unless we want to duplicate most of the
-functionality of <literal>gtk_table_new()</literal> in our Tictactoe widget, we had
-best avoid deriving it from Table. For that reason, we derive it
-from VBox instead, and stick our table inside the VBox.</para>
+is natural to make our parent class the Table class.</para>
 
 </sect2>
 
@@ -11112,8 +11123,8 @@ from VBox instead, and stick our table inside the VBox.</para>
 <sect2>
 <title>The header file</title>
 
-<para>Each widget class has a header file which declares the object and
-class structures for that widget, along with public functions. 
+<para>Each GObject class has a header file which declares the object and
+class structures for that object, along with public functions. 
 A couple of features are worth pointing out. To prevent duplicate
 definitions, we wrap the entire header file in:</para>
 
@@ -11129,92 +11140,23 @@ definitions, we wrap the entire header file in:</para>
 <para>And to keep C++ programs that include the header file happy, in:</para>
 
 <programlisting role="C">
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+#include &lt;glib.h&gt;
+
+G_BEGIN_DECLS
 .
 .
 .
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 </programlisting>
 
-<para>Along with the functions and structures, we declare three standard
-macros in our header file, <literal>TICTACTOE(obj)</literal>,
-<literal>TICTACTOE_CLASS(klass)</literal>, and <literal>IS_TICTACTOE(obj)</literal>, which cast a
+<para>Along with the functions and structures, we declare five standard
+macros in our header file, <literal>TICTACTOE_TYPE</literal>,
+<literal>TICTACTOE(obj)</literal>,
+<literal>TICTACTOE_CLASS(klass)</literal>,
+<literal>IS_TICTACTOE(obj)</literal>, and
+<literal>IS_TICTACTOE_CLASS(klass)</literal>, which cast a
 pointer into a pointer to the object or class structure, and check
 if an object is a Tictactoe widget respectively.</para>
-
-<para>Here is the complete header file:</para>
-
-<programlisting role="C">
-<!-- example-start tictactoe tictactoe.h -->
-
-/* GTK - The GIMP Toolkit
- * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public
- * License along with this library; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
- */
-#ifndef __TICTACTOE_H__
-#define __TICTACTOE_H__
-
-
-#include &lt;gdk/gdk.h&gt;
-#include &lt;gtk/gtkvbox.h&gt;
-
-
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
-#define TICTACTOE(obj)          GTK_CHECK_CAST (obj, tictactoe_get_type (), Tictactoe)
-#define TICTACTOE_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, tictactoe_get_type (), TictactoeClass)
-#define IS_TICTACTOE(obj)       GTK_CHECK_TYPE (obj, tictactoe_get_type ())
-
-
-typedef struct _Tictactoe       Tictactoe;
-typedef struct _TictactoeClass  TictactoeClass;
-
-struct _Tictactoe
-{
-  GtkVBox vbox;
-  
-  GtkWidget *buttons[3][3];
-};
-
-struct _TictactoeClass
-{
-  GtkVBoxClass parent_class;
-
-  void (* tictactoe) (Tictactoe *ttt);
-};
-
-GtkType        tictactoe_get_type        (void);
-GtkWidget*     tictactoe_new             (void);
-void	       tictactoe_clear           (Tictactoe *ttt);
-
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
-#endif /* __TICTACTOE_H__ */
-
-<!-- example-end -->
-</programlisting>
 
 </sect2>
 
@@ -11223,59 +11165,73 @@ void	       tictactoe_clear           (Tictactoe *ttt);
 <title>The <literal>_get_type()</literal> function</title>
 
 <para>We now continue on to the implementation of our widget. A core
-function for every widget is the function
+function for every object is the function
 <literal>WIDGETNAME_get_type()</literal>. This function, when first called, tells
-GTK about the widget class, and gets an ID that uniquely identifies
-the widget class. Upon subsequent calls, it just returns the ID.</para>
+Glib about the new class, and gets an ID that uniquely identifies
+the class. Upon subsequent calls, it just returns the ID.</para>
 
 <programlisting role="C">
-GtkType
-tictactoe_get_type ()
+GType
+tictactoe_get_type (void)
 {
-  static guint ttt_type = 0;
+  static GType ttt_type = 0;
 
   if (!ttt_type)
     {
-      GtkTypeInfo ttt_info =
+      static const GTypeInfo ttt_info =
       {
-	"Tictactoe",
-	sizeof (Tictactoe),
 	sizeof (TictactoeClass),
-	(GtkClassInitFunc) tictactoe_class_init,
-	(GtkObjectInitFunc) tictactoe_init,
-	(GtkArgSetFunc) NULL,
-        (GtkArgGetFunc) NULL
+	NULL, /* base_init */
+	NULL, /* base_finalize */
+	(GClassInitFunc) tictactoe_class_init,
+	NULL, /* class_finalize */
+	NULL, /* class_data */
+	sizeof (Tictactoe),
+	0,    /* n_preallocs */
+	(GInstanceInitFunc) tictactoe_init,
       };
 
-      ttt_type = gtk_type_unique (gtk_vbox_get_type (), &amp;ttt_info);
+      ttt_type = g_type_register_static (GTK_TYPE_TABLE,
+                                         "Tictactoe",
+                                         &amp;ttt_info,
+                                         0);
     }
 
   return ttt_type;
 }
 </programlisting>
 
-<para>The GtkTypeInfo structure has the following definition:</para>
+<para>The GTypeInfo structure has the following definition:</para>
 
 <programlisting role="C">
-struct _GtkTypeInfo
+struct _GTypeInfo
 {
-  gchar *type_name;
-  guint object_size;
-  guint class_size;
-  GtkClassInitFunc class_init_func;
-  GtkObjectInitFunc object_init_func;
-  GtkArgSetFunc arg_set_func;
-  GtkArgGetFunc arg_get_func;
+  /* interface types, classed types, instantiated types */
+  guint16                class_size;
+   
+  GBaseInitFunc          base_init;
+  GBaseFinalizeFunc      base_finalize;
+   
+  /* classed types, instantiated types */
+  GClassInitFunc         class_init;
+  GClassFinalizeFunc     class_finalize;
+  gconstpointer          class_data;
+   
+  /* instantiated types */
+  guint16                instance_size;
+  guint16                n_preallocs;
+  GInstanceInitFunc      instance_init;
+   
+  /* value handling */
+  const GTypeValueTable *value_table;
 };
 </programlisting>
 
-<para>The fields of this structure are pretty self-explanatory. We'll ignore
-the <literal>arg_set_func</literal> and <literal>arg_get_func</literal> fields here: they have an important, 
-but as yet largely
-unimplemented, role in allowing widget options to be conveniently set
-from interpreted languages. Once GTK has a correctly filled in copy of
-this structure, it knows how to create objects of a particular widget
-type. </para>
+<para>The important fields of this structure are pretty self-explanatory.
+We'll ignore the <literal>base_init</literal> and
+ <literal>base_finalize</literal> as well as the <literal>value_table</literal>
+fields here. Once Glib has a correctly filled in copy of
+this structure, it knows how to create objects of a particular type. </para>
 
 </sect2>
 
@@ -11294,25 +11250,18 @@ enum {
 };
 
 
-static gint tictactoe_signals[LAST_SIGNAL] = { 0 };
+static guint tictactoe_signals[LAST_SIGNAL] = { 0 };
 
 static void
-tictactoe_class_init (TictactoeClass *class)
+tictactoe_class_init (TictactoeClass *klass)
 {
-  GtkObjectClass *object_class;
-
-  object_class = (GtkObjectClass*) class;
-  
-  tictactoe_signals[TICTACTOE_SIGNAL] = gtk_signal_new ("tictactoe",
-					 GTK_RUN_FIRST,
-					 object_class->type,
-					 GTK_SIGNAL_OFFSET (TictactoeClass, tictactoe),
-					 gtk_signal_default_marshaller, GTK_TYPE_NONE, 0);
-
-
-  gtk_object_class_add_signals (object_class, tictactoe_signals, LAST_SIGNAL);
-
-  class->tictactoe = NULL;
+  tictactoe_signals[TICTACTOE_SIGNAL] =
+    g_signal_new ("tictactoe",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (TictactoeClass, tictactoe),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
 }
 </programlisting>
 
@@ -11325,45 +11274,57 @@ things are going to get a bit complicated.</para>
 <para>The function:</para>
 
 <programlisting role="C">
-gint gtk_signal_new( const gchar         *name,
-                     GtkSignalRunType     run_type,
-                     GtkType              object_type,
-                     gint                 function_offset,
-                     GtkSignalMarshaller  marshaller,
-                     GtkType              return_val,
-                     guint                nparams,
-                     ...);
+guint g_signal_new( const gchar         *signal_name,
+                    GType                itype,
+                    GSignalFlags         signal_flags,
+                    guint                class_offset,
+                    GSignalAccumulator  *accumulator,
+                    gpointer             accu_data,
+                    GSignalCMarshaller  *c_marshaller,
+                    GType                return_type,
+                    guint                n_params,
+                    ...);
 </programlisting>
 
 <para>Creates a new signal. The parameters are:</para>
 
 <itemizedlist>
-<listitem><simpara> <literal>name</literal>: The name of the signal.</simpara>
+<listitem><simpara> <literal>signal_name</literal>: The name of the signal.</simpara>
 </listitem>
 
-<listitem><simpara> <literal>run_type</literal>: Whether the default handler runs before or after
-user handlers. Usually this will be <literal>GTK_RUN_FIRST</literal>, or <literal>GTK_RUN_LAST</literal>,
-although there are other possibilities.</simpara>
-</listitem>
-
-<listitem><simpara> <literal>object_type</literal>: The ID of the object that this signal applies
+<listitem><simpara> <literal>itype</literal>: The ID of the object that this signal applies
 to. (It will also apply to that objects descendants.)</simpara>
 </listitem>
+                                                                                
+<listitem><simpara> <literal>signal_flags</literal>: Whether the default handler runs before or after
+user handlers and other flags. Usually this will be one of
+<literal>G_SIGNAL_RUN_FIRST</literal> or <literal>G_SIGNAL_RUN_LAST</literal>,
+although there are other possibilities. The flag
+<literal>G_SIGNAL_ACTION</literal> specifies that no extra code needs to
+run that performs special pre or post emission adjustments. This means that
+the signal can also be emitted from object external code.</simpara>
+</listitem>
 
-<listitem><simpara> <literal>function_offset</literal>: The offset within the class structure of
+<listitem><simpara> <literal>class_offset</literal>: The offset within the class structure of
 a pointer to the default handler.</simpara>
 </listitem>
 
-<listitem><simpara> <literal>marshaller</literal>: A function that is used to invoke the signal
+<listitem><simpara> <literal>accumulator</literal>: For most classes this can
+be set to NULL.</simpara></listitem>
+
+<listitem><simpara> <literal>accu_data</literal>: User data that will be handed
+to the accumulator function.</simpara></listitem>
+
+<listitem><simpara> <literal>c_marshaller</literal>: A function that is used to invoke the signal
 handler. For signal handlers that have no arguments other than the
 object that emitted the signal and user data, we can use the
-pre-supplied marshaller function <literal>gtk_signal_default_marshaller</literal>.</simpara>
+pre-supplied marshaller function <literal>g_cclosure_marshal_VOID__VOID</literal>.</simpara>
 </listitem>
 
-<listitem><simpara> <literal>return_val</literal>: The type of the return val.</simpara>
+<listitem><simpara> <literal>return_type</literal>: The type of the return value.</simpara>
 </listitem>
 
-<listitem><simpara> <literal>nparams</literal>: The number of parameters of the signal handler
+<listitem><simpara> <literal>n_params</literal>: The number of parameters of the signal handler
 (other than the two default ones mentioned above)</simpara>
 </listitem>
 
@@ -11371,52 +11332,38 @@ pre-supplied marshaller function <literal>gtk_signal_default_marshaller</literal
 </listitem>
 </itemizedlist>
 
-<para>When specifying types, the <literal>GtkType</literal> enumeration is used:</para>
+<para>When specifying types, the following standard types can be used:</para>
 
 <programlisting role="C">
-typedef enum
-{
-  GTK_TYPE_INVALID,
-  GTK_TYPE_NONE,
-  GTK_TYPE_CHAR,
-  GTK_TYPE_BOOL,
-  GTK_TYPE_INT,
-  GTK_TYPE_UINT,
-  GTK_TYPE_LONG,
-  GTK_TYPE_ULONG,
-  GTK_TYPE_FLOAT,
-  GTK_TYPE_DOUBLE,
-  GTK_TYPE_STRING,
-  GTK_TYPE_ENUM,
-  GTK_TYPE_FLAGS,
-  GTK_TYPE_BOXED,
-  GTK_TYPE_FOREIGN,
-  GTK_TYPE_CALLBACK,
-  GTK_TYPE_ARGS,
-
-  GTK_TYPE_POINTER,
-
-  /* it'd be great if the next two could be removed eventually */
-  GTK_TYPE_SIGNAL,
-  GTK_TYPE_C_CALLBACK,
-
-  GTK_TYPE_OBJECT
-
-} GtkFundamentalType;
+G_TYPE_INVALID
+G_TYPE_NONE
+G_TYPE_INTERFACE
+G_TYPE_CHAR
+G_TYPE_UCHAR
+G_TYPE_BOOLEAN
+G_TYPE_INT
+G_TYPE_UINT
+G_TYPE_LONG
+G_TYPE_ULONG
+G_TYPE_INT64
+G_TYPE_UINT64
+G_TYPE_ENUM
+G_TYPE_FLAGS
+G_TYPE_FLOAT
+G_TYPE_DOUBLE
+G_TYPE_STRING
+G_TYPE_POINTER
+G_TYPE_BOXED
+G_TYPE_PARAM
+G_TYPE_OBJECT
 </programlisting>
 
-<para><literal>gtk_signal_new()</literal> returns a unique integer identifier for the
+<para><literal>g_signal_new()</literal> returns a unique integer identifier for the
 signal, that we store in the <literal>tictactoe_signals</literal> array, which we
 index using an enumeration. (Conventionally, the enumeration elements
 are the signal name, uppercased, but here there would be a conflict
 with the <literal>TICTACTOE()</literal> macro, so we called it <literal>TICTACTOE_SIGNAL</literal>
 instead.</para>
-
-<para>After creating our signals, we need to tell GTK to associate our
-signals with the Tictactoe class. We do that by calling
-<literal>gtk_object_class_add_signals()</literal>. We then set the pointer which
-points to the default handler for the "tictactoe" signal to NULL,
-indicating that there is no default action.</para>
 
 </sect2>
 
@@ -11424,7 +11371,7 @@ indicating that there is no default action.</para>
 <sect2>
 <title>The <literal>_init()</literal> function</title>
 
-<para>Each widget class also needs a function to initialize the object
+<para>Each class also needs a function to initialize the object
 structure. Usually, this function has the fairly limited role of
 setting the fields of the structure to default values. For composite
 widgets, however, this function also creates the component widgets.</para>
@@ -11433,21 +11380,19 @@ widgets, however, this function also creates the component widgets.</para>
 static void
 tictactoe_init (Tictactoe *ttt)
 {
-  GtkWidget *table;
   gint i,j;
-  
-  table = gtk_table_new (3, 3, TRUE);
-  gtk_container_add (GTK_CONTAINER(ttt), table);
-  gtk_widget_show (table);
 
-  for (i=0;i<3; i++)
-    for (j=0;j<3; j++)
+  gtk_table_resize (GTK_TABLE (ttt), 3, 3);
+  gtk_table_set_homogeneous (GTK_TABLE (ttt), TRUE);
+
+  for (i=0;i&lt;3; i++)
+    for (j=0;j&lt;3; j++)
       {
 	ttt->buttons[i][j] = gtk_toggle_button_new ();
-	gtk_table_attach_defaults (GTK_TABLE(table), ttt->buttons[i][j], 
+	gtk_table_attach_defaults (GTK_TABLE (ttt), ttt->buttons[i][j], 
 				   i, i+1, j, j+1);
-	gtk_signal_connect (GTK_OBJECT (ttt->buttons[i][j]), "toggled",
-			    GTK_SIGNAL_FUNC (tictactoe_toggle), ttt);
+	g_signal_connect (G_OBJECT (ttt->buttons[i][j]), "toggled",
+			  G_CALLBACK (tictactoe_toggle), ttt);
 	gtk_widget_set_size_request (ttt->buttons[i][j], 20, 20);
 	gtk_widget_show (ttt->buttons[i][j]);
       }
@@ -11460,17 +11405,17 @@ tictactoe_init (Tictactoe *ttt)
 <sect2>
 <title>And the rest...</title>
 
-<para>There is one more function that every widget (except for base widget
-types like Bin that cannot be instantiated) needs to have - the
+<para>There is one more function that every object (except for abstract
+classes like Bin that cannot be instantiated) needs to have - the
 function that the user calls to create an object of that type. This is
-conventionally called <literal>WIDGETNAME_new()</literal>. In some
+conventionally called <literal>OBJECTNAME_new()</literal>. In some
 widgets, though not for the Tictactoe widgets, this function takes
 arguments, and does some setup based on the arguments. The other two
 functions are specific to the Tictactoe widget. </para>
 
 <para><literal>tictactoe_clear()</literal> is a public function that resets all the
 buttons in the widget to the up position. Note the use of
-<literal>gtk_signal_handler_block_by_data()</literal> to keep our signal handler for
+<literal>g_signal_handlers_block_matched()</literal> to keep our signal handler for
 button toggles from being triggered unnecessarily.</para>
 
 <para><literal>tictactoe_toggle()</literal> is the signal handler that is invoked when the
@@ -11480,9 +11425,9 @@ the "tictactoe" signal.</para>
 
 <programlisting role="C">
 GtkWidget*
-tictactoe_new ()
+tictactoe_new (void)
 {
-  return GTK_WIDGET ( gtk_type_new (tictactoe_get_type ()));
+  return GTK_WIDGET ( g_object_new (TICTACTOE_TYPE, NULL));
 }
 
 void	       
@@ -11490,13 +11435,17 @@ tictactoe_clear (Tictactoe *ttt)
 {
   int i,j;
 
-  for (i=0;i<3;i++)
-    for (j=0;j<3;j++)
+  for (i=0;i&lt;3;i++)
+    for (j=0;j&lt;3;j++)
       {
-	gtk_signal_handler_block_by_data (GTK_OBJECT(ttt->buttons[i][j]), ttt);
+	g_signal_handlers_block_matched (G_OBJECT (ttt->buttons[i][j]),
+                                         G_SIGNAL_MATCH_DATA,
+                                         0, 0, NULL, NULL, ttt);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ttt->buttons[i][j]),
 				     FALSE);
-	gtk_signal_handler_unblock_by_data (GTK_OBJECT(ttt->buttons[i][j]), ttt);
+	g_signal_handlers_unblock_matched (G_OBJECT (ttt->buttons[i][j]),
+                                           G_SIGNAL_MATCH_DATA,
+                                           0, 0, NULL, NULL, ttt);
       }
 }
 
@@ -11514,12 +11463,12 @@ tictactoe_toggle (GtkWidget *widget, Tictactoe *ttt)
 
   int success, found;
 
-  for (k=0; k<8; k++)
+  for (k=0; k&lt;8; k++)
     {
       success = TRUE;
       found = FALSE;
 
-      for (i=0;i<3;i++)
+      for (i=0;i&lt;3;i++)
 	{
 	  success = success &amp;&amp; 
 	    GTK_TOGGLE_BUTTON(ttt->buttons[rwins[k][i]][cwins[k][i]])->active;
@@ -11529,8 +11478,8 @@ tictactoe_toggle (GtkWidget *widget, Tictactoe *ttt)
       
       if (success &amp;&amp; found)
 	{
-	  gtk_signal_emit (GTK_OBJECT (ttt), 
-			   tictactoe_signals[TICTACTOE_SIGNAL]);
+	  g_signal_emit (G_OBJECT (ttt), 
+			 tictactoe_signals[TICTACTOE_SIGNAL], 0);
 	  break;
 	}
     }
@@ -11563,8 +11512,8 @@ main (int argc, char *argv[])
   
   gtk_window_set_title (GTK_WINDOW (window), "Aspect Frame");
   
-  gtk_signal_connect (GTK_OBJECT (window), "destroy",
-		      GTK_SIGNAL_FUNC (gtk_exit), NULL);
+  g_signal_connect (G_OBJECT (window), "destroy",
+                    G_CALLBACK (exit), NULL);
   
   gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 
@@ -11574,8 +11523,8 @@ main (int argc, char *argv[])
   gtk_widget_show (ttt);
 
   /* And attach to its "tictactoe" signal */
-  gtk_signal_connect (GTK_OBJECT (ttt), "tictactoe",
-		      GTK_SIGNAL_FUNC (win), NULL);
+  g_signal_connect (G_OBJECT (ttt), "tictactoe",
+                    G_CALLBACK (win), NULL);
 
   gtk_widget_show (window);
   
@@ -11626,7 +11575,7 @@ window for the widget if it has one.</simpara>
 <listitem><simpara> <literal>WIDGETNAME_map()</literal> is invoked after the user calls
 <literal>gtk_widget_show()</literal>. It is responsible for making sure the widget
 is actually drawn on the screen (<emphasis>mapped</emphasis>). For a container class,
-it must also make calls to <literal>map()</literal>> functions of any child widgets.</simpara>
+it must also make calls to <literal>map()</literal> functions of any child widgets.</simpara>
 </listitem>
 <listitem><simpara> <literal>WIDGETNAME_draw()</literal> is invoked when <literal>gtk_widget_draw()</literal>
 is called for the widget or one of its ancestors. It makes the actual
@@ -12099,9 +12048,9 @@ three dimensional shading according to the colors stored in the
 widget's style.</para>
 
 <programlisting role="C">
-static gint
-gtk_dial_expose (GtkWidget      *widget,
-		 GdkEventExpose *event)
+static gboolean
+gtk_dial_expose( GtkWidget      *widget,
+		 GdkEventExpose *event )
 {
   GtkDial *dial;
   GdkPoint points[3];
@@ -12196,9 +12145,9 @@ set, "value_changed" events are either generated instantly
 button is released (<literal>GTK_UPDATE_DISCONTINUOUS</literal>).</para>
 
 <programlisting role="C">
-static gint
-gtk_dial_button_press (GtkWidget      *widget,
-		       GdkEventButton *event)
+static gboolean
+gtk_dial_button_press( GtkWidget      *widget,
+		       GdkEventButton *event )
 {
   GtkDial *dial;
   gint dx, dy;
@@ -12240,9 +12189,9 @@ gtk_dial_button_press (GtkWidget      *widget,
   return FALSE;
 }
 
-static gint
-gtk_dial_button_release (GtkWidget      *widget,
-			  GdkEventButton *event)
+static gboolean
+gtk_dial_button_release( GtkWidget      *widget,
+			 GdkEventButton *event )
 {
   GtkDial *dial;
 
@@ -12269,9 +12218,9 @@ gtk_dial_button_release (GtkWidget      *widget,
   return FALSE;
 }
 
-static gint
-gtk_dial_motion_notify (GtkWidget      *widget,
-			 GdkEventMotion *event)
+static gboolean
+gtk_dial_motion_notify( GtkWidget      *widget,
+                        GdkEventMotion *event )
 {
   GtkDial *dial;
   GdkModifierType mods;
@@ -12314,8 +12263,8 @@ gtk_dial_motion_notify (GtkWidget      *widget,
   return FALSE;
 }
 
-static gint
-gtk_dial_timer (GtkDial *dial)
+static gboolean
+gtk_dial_timer( GtkDial *dial )
 {
   g_return_val_if_fail (dial != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_DIAL (dial), FALSE);
@@ -12718,8 +12667,8 @@ later. The "motion_notify_event" and "button_press_event" handlers
 are pretty simple:</para>
 
 <programlisting role="C">
-static gint
-button_press_event (GtkWidget *widget, GdkEventButton *event)
+static gboolean
+button_press_event( GtkWidget *widget, GdkEventButton *event )
 {
   if (event->button == 1 &amp;&amp; pixmap != NULL)
       draw_brush (widget, event->x, event->y);
@@ -12727,8 +12676,8 @@ button_press_event (GtkWidget *widget, GdkEventButton *event)
   return TRUE;
 }
 
-static gint
-motion_notify_event (GtkWidget *widget, GdkEventMotion *event)
+static gboolean
+motion_notify_event( GtkWidget *widget, GdkEventMotion *event )
 {
   int x, y;
   GdkModifierType state;
@@ -12818,8 +12767,8 @@ is originally created.</para>
 static GdkPixmap *pixmap = NULL;
 
 /* Create a new backing pixmap of the appropriate size */
-static gint
-configure_event (GtkWidget *widget, GdkEventConfigure *event)
+static gboolean
+configure_event( GtkWidget *widget, GdkEventConfigure *event )
 {
   if (pixmap)
     gdk_pixmap_unref(pixmap);
@@ -12848,8 +12797,8 @@ to redraw by using the event->area field of the exposure event):</para>
 
 <programlisting role="C">
 /* Redraw the screen from the backing pixmap */
-static gint
-expose_event (GtkWidget *widget, GdkEventExpose *event)
+static gboolean
+expose_event( GtkWidget *widget, GdkEventExpose *event )
 {
   gdk_draw_pixmap(widget->window,
 		  widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
@@ -13146,8 +13095,8 @@ doesn't change much - we just need to add code to deal with the
 extended information.</para>
 
 <programlisting role="C">
-static gint
-button_press_event (GtkWidget *widget, GdkEventButton *event)
+static gboolean
+button_press_event( GtkWidget *widget, GdkEventButton *event )
 {
   print_button_press (event->deviceid);
   
@@ -13157,8 +13106,8 @@ button_press_event (GtkWidget *widget, GdkEventButton *event)
   return TRUE;
 }
 
-static gint
-motion_notify_event (GtkWidget *widget, GdkEventMotion *event)
+static gboolean
+motion_notify_event( GtkWidget *widget, GdkEventMotion *event )
 {
   gdouble x, y;
   gdouble pressure;
@@ -14553,7 +14502,6 @@ which are not included in complete form elsewhere.</para>
 
 <programlisting role="C">
 <!-- example-start tictactoe tictactoe.h -->
-
 /* GTK - The GIMP Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
@@ -14576,17 +14524,18 @@ which are not included in complete form elsewhere.</para>
 #define __TICTACTOE_H__
 
 
-#include &lt;gdk/gdk.h&gt;
-#include &lt;gtk/gtkvbox.h&gt;
+#include &lt;glib.h&gt;
+#include &lt;glib-object.h&gt;
+#include &lt;gtk/gtktable.h&gt;
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
-#define TICTACTOE(obj)          GTK_CHECK_CAST (obj, tictactoe_get_type (), Tictactoe)
-#define TICTACTOE_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, tictactoe_get_type (), TictactoeClass)
-#define IS_TICTACTOE(obj)       GTK_CHECK_TYPE (obj, tictactoe_get_type ())
+#define TICTACTOE_TYPE            (tictactoe_get_type ())
+#define TICTACTOE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), TICTACTOE_TYPE, Tictactoe))
+#define TICTACTOE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), TICTACTOE_TYPE, TictactoeClass))
+#define IS_TICTACTOE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TICTACTOE_TYPE))
+#define IS_TICTACTOE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TICTACTOE_TYPE))
 
 
 typedef struct _Tictactoe       Tictactoe;
@@ -14594,25 +14543,23 @@ typedef struct _TictactoeClass  TictactoeClass;
 
 struct _Tictactoe
 {
-  GtkVBox vbox;
+  GtkTable table;
   
   GtkWidget *buttons[3][3];
 };
 
 struct _TictactoeClass
 {
-  GtkVBoxClass parent_class;
+  GtkTableClass parent_class;
 
   void (* tictactoe) (Tictactoe *ttt);
 };
 
-GtkType        tictactoe_get_type        (void);
+GType          tictactoe_get_type        (void);
 GtkWidget*     tictactoe_new             (void);
 void	       tictactoe_clear           (Tictactoe *ttt);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif /* __TICTACTOE_H__ */
 
@@ -14646,9 +14593,9 @@ void	       tictactoe_clear           (Tictactoe *ttt);
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
-#include "gtk/gtksignal.h"
-#include "gtk/gtktable.h"
-#include "gtk/gtktogglebutton.h"
+#include &lt;gtk/gtksignal.h&gt;
+#include &lt;gtk/gtktable.h&gt;
+#include &lt;gtk/gtktogglebutton.h&gt;
 #include "tictactoe.h"
 
 enum {
@@ -14660,10 +14607,10 @@ static void tictactoe_class_init          (TictactoeClass *klass);
 static void tictactoe_init                (Tictactoe      *ttt);
 static void tictactoe_toggle              (GtkWidget *widget, Tictactoe *ttt);
 
-static gint tictactoe_signals[LAST_SIGNAL] = { 0 };
+static guint tictactoe_signals[LAST_SIGNAL] = { 0 };
 
 GType
-tictactoe_get_type ()
+tictactoe_get_type (void)
 {
   static GType ttt_type = 0;
 
@@ -14672,57 +14619,50 @@ tictactoe_get_type ()
       static const GTypeInfo ttt_info =
       {
 	sizeof (TictactoeClass),
-	NULL,
-        NULL,
+	NULL, /* base_init */
+        NULL, /* base_finalize */
 	(GClassInitFunc) tictactoe_class_init,
-        NULL,
-	NULL,
+        NULL, /* class_finalize */
+	NULL, /* class_data */
         sizeof (Tictactoe),
 	0,
 	(GInstanceInitFunc) tictactoe_init,
       };
 
-      ttt_type = g_type_register_static (GTK_TYPE_VBOX, "Tictactoe", &amp;ttt_info, 0);
+      ttt_type = g_type_register_static (GTK_TYPE_TABLE, "Tictactoe", &amp;ttt_info, 0);
     }
 
   return ttt_type;
 }
 
 static void
-tictactoe_class_init (TictactoeClass *class)
+tictactoe_class_init (TictactoeClass *klass)
 {
-  GtkObjectClass *object_class;
-
-  object_class = (GtkObjectClass*) class;
   
   tictactoe_signals[TICTACTOE_SIGNAL] = g_signal_new ("tictactoe",
-					 G_TYPE_FROM_CLASS (object_class),
-	                                 G_SIGNAL_RUN_FIRST,
-	                                 0,
+					 G_TYPE_FROM_CLASS (klass),
+	                                 G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+	                                 G_STRUCT_OFFSET (TictactoeClass, tictactoe),
                                          NULL, 
                                          NULL,                
 					 g_cclosure_marshal_VOID__VOID,
-                                         G_TYPE_NONE, 0, NULL);
+                                         G_TYPE_NONE, 0);
 
 
-  class-&gt;tictactoe = NULL;
 }
 
 static void
 tictactoe_init (Tictactoe *ttt)
 {
-  GtkWidget *table;
   gint i,j;
   
-  table = gtk_table_new (3, 3, TRUE);
-  gtk_container_add (GTK_CONTAINER (ttt), table);
-  gtk_widget_show (table);
+  gtk_table_resize (GTK_TABLE (ttt), 3, 3);
+  gtk_table_set_homogeneous (GTK_TABLE (ttt), TRUE);
 
-  for (i = 0; i &lt; 3; i++)
-    for (j = 0; j &lt; 3; j++)
-      {
+  for (i=0;i&lt;3; i++)
+    for (j=0;j&lt;3; j++)      {
 	ttt-&gt;buttons[i][j] = gtk_toggle_button_new ();
-	gtk_table_attach_defaults (GTK_TABLE (table), ttt-&gt;buttons[i][j], 
+	gtk_table_attach_defaults (GTK_TABLE (ttt), ttt-&gt;buttons[i][j], 
 				   i, i+1, j, j+1);
 	g_signal_connect (G_OBJECT (ttt-&gt;buttons[i][j]), "toggled",
 			  G_CALLBACK (tictactoe_toggle), (gpointer) ttt);
@@ -14742,15 +14682,17 @@ tictactoe_clear (Tictactoe *ttt)
 {
   int i,j;
 
-  for (i = 0; i &lt; 3; i++)
-    for (j = 0; j &lt; 3; j++)
+  for (i = 0; i&lt;3; i++)
+    for (j = 0; j&lt;3; j++)
       {
-	g_signal_handlers_block_by_func (G_OBJECT (ttt-&gt;buttons[i][j]), 
-                                         NULL, ttt);
+	g_signal_handlers_block_matched (G_OBJECT (ttt-&gt;buttons[i][j]), 
+                                         G_SIGNAL_MATCH_DATA,
+                                         0, 0, NULL, NULL, ttt);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ttt-&gt;buttons[i][j]),
 				      FALSE);
-	g_signal_handlers_unblock_by_func (G_OBJECT (ttt-&gt;buttons[i][j]), 
-                                           NULL, ttt);
+	g_signal_handlers_unblock_matched (G_OBJECT (ttt->buttons[i][j]),
+                                           G_SIGNAL_MATCH_DATA,
+                                           0, 0, NULL, NULL, ttt);
       }
 }
 
@@ -14768,12 +14710,12 @@ tictactoe_toggle (GtkWidget *widget, Tictactoe *ttt)
 
   int success, found;
 
-  for (k = 0; k &lt; 8; k++)
+  for (k = 0; k&lt;8; k++)
     {
       success = TRUE;
       found = FALSE;
 
-      for (i = 0; i &lt; 3; i++)
+      for (i = 0; i&lt;3; i++)
 	{
 	  success = success &amp;&amp; 
 	    GTK_TOGGLE_BUTTON (ttt-&gt;buttons[rwins[k][i]][cwins[k][i]])-&gt;active;
@@ -14835,6 +14777,7 @@ int main( int   argc,
   gtk_container_add (GTK_CONTAINER (window), ttt);
   gtk_widget_show (ttt);
 
+  /* And attach to its "tictactoe" signal */
   g_signal_connect (G_OBJECT (ttt), "tictactoe",
 		    G_CALLBACK (win), NULL);
 
@@ -14994,23 +14937,23 @@ void           gtk_dial_set_adjustment         (GtkDial      *dial,
 
 /* Forward declarations */
 
-static void gtk_dial_class_init               (GtkDialClass    *klass);
-static void gtk_dial_init                     (GtkDial         *dial);
+static void gtk_dial_class_init               (GtkDialClass     *klass);
+static void gtk_dial_init                     (GtkDial          *dial);
 static void gtk_dial_destroy                  (GtkObject        *object);
 static void gtk_dial_realize                  (GtkWidget        *widget);
-static void gtk_dial_size_request             (GtkWidget      *widget,
-					       GtkRequisition *requisition);
-static void gtk_dial_size_allocate            (GtkWidget     *widget,
-					       GtkAllocation *allocation);
-static gint gtk_dial_expose                   (GtkWidget        *widget,
-						GdkEventExpose   *event);
-static gint gtk_dial_button_press             (GtkWidget        *widget,
-						GdkEventButton   *event);
-static gint gtk_dial_button_release           (GtkWidget        *widget,
-						GdkEventButton   *event);
-static gint gtk_dial_motion_notify            (GtkWidget        *widget,
-						GdkEventMotion   *event);
-static gint gtk_dial_timer                    (GtkDial         *dial);
+static void gtk_dial_size_request             (GtkWidget        *widget,
+                                               GtkRequisition   *requisition);
+static void gtk_dial_size_allocate            (GtkWidget        *widget,
+                                               GtkAllocation    *allocation);
+static gboolean gtk_dial_expose               (GtkWidget        *widget,
+                                               GdkEventExpose   *event);
+static gboolean gtk_dial_button_press         (GtkWidget        *widget,
+                                               GdkEventButton   *event);
+static gboolean gtk_dial_button_release       (GtkWidget        *widget,
+                                               GdkEventButton   *event);
+static gboolean gtk_dial_motion_notify        (GtkWidget        *widget,
+                                               GdkEventMotion   *event);
+static gboolean gtk_dial_timer                (GtkDial          *dial);
 
 static void gtk_dial_update_mouse             (GtkDial *dial, gint x, gint y);
 static void gtk_dial_update                   (GtkDial *dial);
@@ -15239,9 +15182,9 @@ gtk_dial_size_allocate (GtkWidget     *widget,
   dial-&gt;pointer_width = dial-&gt;radius / 5;
 }
 
-static gint
-gtk_dial_expose (GtkWidget      *widget,
-		 GdkEventExpose *event)
+static gboolean
+gtk_dial_expose( GtkWidget      *widget,
+		 GdkEventExpose *event )
 {
   GtkDial *dial;
   GdkPoint points[6];
@@ -15378,9 +15321,9 @@ gtk_dial_expose (GtkWidget      *widget,
   return FALSE;
 }
 
-static gint
-gtk_dial_button_press (GtkWidget      *widget,
-		       GdkEventButton *event)
+static gboolean
+gtk_dial_button_press( GtkWidget      *widget,
+		       GdkEventButton *event )
 {
   GtkDial *dial;
   gint dx, dy;
@@ -15422,9 +15365,9 @@ gtk_dial_button_press (GtkWidget      *widget,
   return FALSE;
 }
 
-static gint
-gtk_dial_button_release (GtkWidget      *widget,
-			  GdkEventButton *event)
+static gboolean
+gtk_dial_button_release( GtkWidget      *widget,
+                         GdkEventButton *event )
 {
   GtkDial *dial;
 
@@ -15451,9 +15394,9 @@ gtk_dial_button_release (GtkWidget      *widget,
   return FALSE;
 }
 
-static gint
-gtk_dial_motion_notify (GtkWidget      *widget,
-			 GdkEventMotion *event)
+static gboolean
+gtk_dial_motion_notify( GtkWidget      *widget,
+                        GdkEventMotion *event )
 {
   GtkDial *dial;
   GdkModifierType mods;
@@ -15496,8 +15439,8 @@ gtk_dial_motion_notify (GtkWidget      *widget,
   return FALSE;
 }
 
-static gint
-gtk_dial_timer (GtkDial *dial)
+static gboolean
+gtk_dial_timer( GtkDial *dial )
 {
   g_return_val_if_fail (dial != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_DIAL (dial), FALSE);
@@ -15509,7 +15452,7 @@ gtk_dial_timer (GtkDial *dial)
 }
 
 static void
-gtk_dial_update_mouse (GtkDial *dial, gint x, gint y)
+gtk_dial_update_mouse( GtkDial *dial, gint x, gint y )
 {
   gint xc, yc;
   gfloat old_value;
@@ -15748,8 +15691,8 @@ int main( int   argc,
 static GdkPixmap *pixmap = NULL;
 
 /* Create a new backing pixmap of the appropriate size */
-static gint configure_event( GtkWidget         *widget,
-                             GdkEventConfigure *event )
+static gboolean configure_event( GtkWidget         *widget,
+                                 GdkEventConfigure *event )
 {
   if (pixmap)
     g_object_unref (pixmap);
@@ -15769,8 +15712,8 @@ static gint configure_event( GtkWidget         *widget,
 }
 
 /* Redraw the screen from the backing pixmap */
-static gint expose_event( GtkWidget      *widget,
-                          GdkEventExpose *event )
+static gboolean expose_event( GtkWidget      *widget,
+                              GdkEventExpose *event )
 {
   gdk_draw_drawable (widget-&gt;window,
 		     widget-&gt;style-&gt;fg_gc[GTK_WIDGET_STATE (widget)],
@@ -15803,8 +15746,8 @@ static void draw_brush( GtkWidget *widget,
 		      update_rect.width, update_rect.height);
 }
 
-static gint button_press_event( GtkWidget      *widget,
-                                GdkEventButton *event )
+static gboolean button_press_event( GtkWidget      *widget,
+                                    GdkEventButton *event )
 {
   if (event-&gt;button == 1 &amp;&amp; pixmap != NULL)
     draw_brush (widget, event-&gt;x, event-&gt;y);
@@ -15812,8 +15755,8 @@ static gint button_press_event( GtkWidget      *widget,
   return TRUE;
 }
 
-static gint motion_notify_event( GtkWidget *widget,
-                                 GdkEventMotion *event )
+static gboolean motion_notify_event( GtkWidget *widget,
+                                     GdkEventMotion *event )
 {
   int x, y;
   GdkModifierType state;
@@ -15939,7 +15882,7 @@ int main( int   argc,
 static GdkPixmap *pixmap = NULL;
 
 /* Create a new backing pixmap of the appropriate size */
-static gint
+static gboolean
 configure_event (GtkWidget *widget, GdkEventConfigure *event)
 {
   if (pixmap)
@@ -15960,7 +15903,7 @@ configure_event (GtkWidget *widget, GdkEventConfigure *event)
 }
 
 /* Redraw the screen from the backing pixmap */
-static gint
+static gboolean
 expose_event (GtkWidget *widget, GdkEventExpose *event)
 {
   gdk_draw_drawable (widget-&gt;window,
@@ -16015,7 +15958,7 @@ print_button_press (GdkDevice *device)
   g_print ("Button press on device '%s'\n", device-&gt;name);
 }
 
-static gint
+static gboolean
 button_press_event (GtkWidget *widget, GdkEventButton *event)
 {
   print_button_press (event-&gt;device);
@@ -16029,7 +15972,7 @@ button_press_event (GtkWidget *widget, GdkEventButton *event)
   return TRUE;
 }
 
-static gint
+static gboolean
 motion_notify_event (GtkWidget *widget, GdkEventMotion *event)
 {
   gdouble x, y;
