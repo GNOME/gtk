@@ -405,6 +405,7 @@ gchar *gdk_win32_function_to_string   (GdkFunction  function);
 gchar *gdk_win32_join_style_to_string (GdkJoinStyle join_style);
 gchar *gdk_win32_line_style_to_string (GdkLineStyle line_style);
 gchar *gdk_win32_gcvalues_mask_to_string (GdkGCValuesMask mask);
+gchar *gdk_win32_window_state_to_string (GdkWindowState state);
 gchar *gdk_win32_drawable_description (GdkDrawable *d);
 
 gchar *gdk_win32_rop2_to_string       (int          rop2);

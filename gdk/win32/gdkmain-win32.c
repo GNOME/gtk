@@ -95,7 +95,7 @@ _gdk_windowing_init_check (int    argc,
     windows_version = 0x80000004;
 
   GDK_NOTE (MISC, g_print ("root window: %p Windows version: %08x\n",
-			   gdk_root_window, windows_version));
+			   gdk_root_window, (guint) windows_version));
 
   _gdk_input_locale = GetKeyboardLayout (0);
   GetLocaleInfo (MAKELCID (LOWORD (_gdk_input_locale), SORT_DEFAULT),
@@ -574,6 +574,32 @@ gdk_win32_gcvalues_mask_to_string (GdkGCValuesMask mask)
   BIT (LINE_STYLE);
   BIT (CAP_STYLE);
   BIT (JOIN_STYLE);
+#undef BIT
+
+  return static_printf ("%s", buf);  
+}
+
+gchar *
+gdk_win32_window_state_to_string (GdkWindowState state)
+{
+  gchar buf[100];
+  gchar *bufp = buf;
+  gchar *s = "";
+
+  buf[0] = '\0';
+
+#define BIT(x)						\
+  if (state & GDK_WINDOW_STATE_ ## x)			\
+    (bufp += sprintf (bufp, "%s" #x, s), s = "|")
+
+  /* For clarity, also show the complement of WITHDRAWN, i.e. "MAPPED" */
+  if (!(state & GDK_WINDOW_STATE_WITHDRAWN))
+    (bufp += sprintf (bufp, "MAPPED"), s = "|");
+
+  BIT (WITHDRAWN);
+  BIT (ICONIFIED);
+  BIT (MAXIMIZED);
+  BIT (STICKY);
 #undef BIT
 
   return static_printf ("%s", buf);  

@@ -1,3 +1,37 @@
+2002-12-08  Tor Lillqvist  <tml@iki.fi>
+
+	Fix bug #10557:
+	
+	* gdk/win32/gdkevents-win32.c: Minor debugging output changes.
+	(gdk_event_translate): Ignore the WM_SHOWWINDOW/SW_OTHERUNZOOM or
+	SW_OTHERZOOM messages. Do not generate a GDK_UNMAP event for
+	WM_SIZE/SIZE_MINIMIZED messages, they do not really corrspond to
+	unmapping on X11. Set window state correctly for all three of
+	SIZE_{MINIMIZED,MAXIMIZED,RESTORED}. A maximized and then iconified
+	("minimized" in Windows terminology) window still has the
+	"maximized" property, i.e. when deiconified, it will reappear as
+	maximized.
+
+	* gdk/win32/gdkprivate-win32.h
+	* gdk/win32/gdkmain-win32.c (gdk_win32_window_state_to_string):
+	New debugging output helper function.
+
+	* gdk/win32/gdkwindow-win32.c (show_window_internal): Handle more
+	situations. Add parameter to tell whether deiconifying. Code
+	reorg: Return early when appropriate instead of using nested if
+	statements. If just deiconifying without raising, restore active
+	window.
+
+	(gdk_window_hide, gdk_window_withdraw, gdk_window_iconify,
+	gdk_window_deiconify, gdk_window_maximize, gdk_window_unmaximize,
+	gdk_window_focus): Use gdk_win32_window_state_to_string() in
+	debugging output.
+
+	(gdk_window_iconify): Restore active window after calling
+	ShowWindow(). Otherwise the "next" window gets activated.
+
+	(gdk_window_stick, gdk_window_unstick): Don't output any warnings.
+
 2002-12-08  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcolorsel.c (gtk_color_selection_set_previous_color): 
