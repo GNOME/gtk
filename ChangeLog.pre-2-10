@@ -1,3 +1,8 @@
+2001-04-23  Sven Neumann  <sven@gimp.org>
+
+	* gtk/gtkplug.c: put into #ifdef GDK_WINDOWING_X11 to make GTK+
+	compile for non-X11 targets again
+
 2001-04-20  Alexander Larsson  <alexl@redhat.com>
 
 	* gtk/gtkcolorsel.[ch]:
