@@ -36,19 +36,6 @@
 #include "gdki18n.h"
 #include "gdkwin32.h"
 
-/*
- *--------------------------------------------------------------
- * gdk_set_locale
- *
- * Arguments:
- *
- * Results:
- *
- * Side effects:
- *
- *--------------------------------------------------------------
- */
-
 gchar*
 gdk_set_locale (void)
 {
@@ -61,12 +48,10 @@ gdk_set_locale (void)
 gchar *
 gdk_wcstombs (const GdkWChar *src)
 {
-  gchar *utf8;
-  gchar *retval;
   const gchar *charset;
 
   g_get_charset (&charset);
-  return g_convert (src, -1, charset, "UCS-4LE", NULL, NULL, NULL);
+  return g_convert ((char *) src, -1, charset, "UCS-4LE", NULL, NULL, NULL);
 }
 
 gint
@@ -81,7 +66,7 @@ gdk_mbstowcs (GdkWChar    *dest,
   const gchar *charset;
 
   g_get_charset (&charset);
-  ucs4 = g_convert (src, -1, "UCS-4LE", charset, NULL, &nwritten, NULL);
+  ucs4 = (gunichar *) g_convert (src, -1, "UCS-4LE", charset, NULL, &nwritten, NULL);
   n_ucs4 = nwritten * sizeof (GdkWChar);
 
   retval = MIN (dest_max, n_ucs4);

@@ -1,3 +1,13 @@
+2005-03-18  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate): On
+	WM_MOUSEMOVE, don't check if this process owns the active
+	window. This makes cross-application widget embedding work better.
+	On WM_MOVE, don't bother checking for window visibility.
+
+	* gdk/win32/gdkim-win32.c: Remove bogus empty doc comment. Remove
+	unused variables. Add some casts to silence gcc.
+
 2005-02-24  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkwindow.c: Use cairo_set_device_offset().
