@@ -250,14 +250,9 @@ lsb_16 (guchar *src)
 	return src[0] | (src[1] << 8);
 }
 
-static gboolean DecodeHeader(unsigned char *BFH, unsigned char *BIH,
-                             struct bmp_progressive_state *State,
+static gboolean grow_buffer (struct bmp_progressive_state *State,
                              GError **error)
 {
-        /* FIXME this is totally unrobust against bogus image data. */
-
-	if (State->BufferSize < lsb_32 (&BIH[0]) + 14) {
-		State->BufferSize = lsb_32 (&BIH[0]) + 14;
 		State->buff = g_try_realloc (State->buff, State->BufferSize);
 		if (State->buff == NULL) {
 			g_set_error (error,
@@ -267,6 +262,19 @@ static gboolean DecodeHeader(unsigned char *BFH, unsigned char *BIH,
 			State->read_state = READ_STATE_ERROR;
 			return FALSE;
 		}
+		return TRUE;
+}
+
+static gboolean DecodeHeader(unsigned char *BFH, unsigned char *BIH,
+                             struct bmp_progressive_state *State,
+                             GError **error)
+{
+        /* FIXME this is totally unrobust against bogus image data. */
+
+	if (State->BufferSize < lsb_32 (&BIH[0]) + 14) {
+		State->BufferSize = lsb_32 (&BIH[0]) + 14;
+		if (!grow_buffer (State, error))
+			return FALSE;
 		return TRUE;
 	}
 
@@ -384,6 +392,8 @@ static gboolean DecodeHeader(unsigned char *BFH, unsigned char *BIH,
 
 	State->BufferDone = 0;
 	if (State->Type <= 8) {
+		int biClrUsed = lsb_32 (&BIH[32]);
+		int n_colors = (biClrUsed ? biClrUsed : (1 << State->Header.depth)); 
 		State->read_state = READ_STATE_PALETTE;
 		State->BufferSize = lsb_32 (&BFH[10]) - 14 - State->Header.size;
 	} else if (State->Compressed == BI_RGB) {
@@ -401,12 +411,13 @@ static gboolean DecodeHeader(unsigned char *BFH, unsigned char *BIH,
 		return FALSE;
 	}
 
-	State->buff = g_realloc (State->buff, State->BufferSize);
+	if (!grow_buffer (State, error)) 
+		return FALSE;
 
         return TRUE;
 }
 
-static void DecodeColormap (guchar *buff,
+static gboolean DecodeColormap (guchar *buff,
 			    struct bmp_progressive_state *State,
 			    GError **error)
 {
@@ -421,6 +432,12 @@ static void DecodeColormap (guchar *buff,
 		State->Colormap[i][0] = buff[i * (State->Header.size == 12 ? 3 : 4)];
 		State->Colormap[i][1] = buff[i * (State->Header.size == 12 ? 3 : 4) + 1];
 		State->Colormap[i][2] = buff[i * (State->Header.size == 12 ? 3 : 4) + 2];
+#ifdef DUMPCMAP
+		g_print ("color %d %x %x %x\n", i,
+			 State->Colormap[i][0],
+			 State->Colormap[i][1],
+			 State->Colormap[i][2]);
+#endif
 	}
 
 	State->read_state = READ_STATE_DATA;
@@ -431,7 +448,10 @@ static void DecodeColormap (guchar *buff,
 	else
 		State->BufferSize = State->LineWidth;
 
-	State->buff = g_realloc (State->buff, State->BufferSize);
+	if (!grow_buffer (State, error))
+		return FALSE;
+
+	return TRUE;
 }
 
 /* Finds the lowest set bit and the number of set bits */
@@ -450,8 +470,10 @@ find_bits (int n, int *lowest, int *n_set)
 }
 
 /* Decodes the 3 shorts that follow for the bitmasks for BI_BITFIELDS coding */
-static void
-decode_bitmasks (struct bmp_progressive_state *State, guchar *buf)
+static gboolean
+decode_bitmasks (guchar *buf,
+		 struct bmp_progressive_state *State, 
+		 GError **error)
 {
 	State->r_mask = buf[0] | (buf[1] << 8) | (buf[2] << 16) | (buf[3] << 24);
 	buf += 4;
@@ -479,7 +501,10 @@ decode_bitmasks (struct bmp_progressive_state *State, guchar *buf)
 	State->read_state = READ_STATE_DATA;
 	State->BufferDone = 0;
 	State->BufferSize = State->LineWidth;
-	State->buff = g_realloc (State->buff, State->BufferSize);
+	if (!grow_buffer (State, error)) 
+		return FALSE;
+
+	return TRUE;
 }
 
 /*
@@ -694,6 +719,8 @@ static void OneLine16(struct bmp_progressive_state *context)
 			*pixels++ = (r << 3) | (r >> 2);
 			*pixels++ = (g << 3) | (g >> 2);
 			*pixels++ = (b << 3) | (b >> 2);
+
+			src += 2;
 		}
 }
 
@@ -818,14 +845,14 @@ static void OneLine(struct bmp_progressive_state *context)
 					  0,
 					  context->Lines,
 					  context->Header.width,
-					  1,
+					  2,
 					  context->user_data);
 
 	}
 }
 
-static void
-DoCompressed(struct bmp_progressive_state *context)
+static gboolean
+DoCompressed(struct bmp_progressive_state *context, GError **error)
 {
 	gint count, pos;
 	switch (context->compr.phase) {
@@ -898,7 +925,8 @@ DoCompressed(struct bmp_progressive_state *context)
 				if (context->Type == 8)
 					context->compr.RunCount *= 2;
 				context->BufferSize = (context->compr.RunCount + 3) / 4 * 2;
-				context->buff = g_realloc (context->buff, context->BufferSize);
+				if (!grow_buffer (context, error)) 
+					return FALSE;
 			}
 		}
 		context->BufferDone = 0;
@@ -944,13 +972,16 @@ DoCompressed(struct bmp_progressive_state *context)
 		}
 		context->compr.phase = 0;
 		context->BufferSize = 2;
-		context->buff = g_realloc (context->buff, context->BufferSize);
+		if (!grow_buffer (context, error)) 
+			return FALSE;
 		context->BufferDone = 0;
 		break;
 	case 2:
 		context->BufferDone = 0;
 		break;
 	}
+	
+	return TRUE;
 }
 
 /*
@@ -1005,18 +1036,20 @@ gdk_pixbuf__bmp_image_load_increment(gpointer data,
 			break;
 
 		case READ_STATE_PALETTE:
-			DecodeColormap (context->buff, context, error);
+			if (!DecodeColormap (context->buff, context, error))
+				return FALSE;
 			break;
 
 		case READ_STATE_BITMASKS:
-			decode_bitmasks (context, context->buff);
+			if (!decode_bitmasks (context->buff, context, error))
+				return FALSE;
 			break;
 
 		case READ_STATE_DATA:
 			if (context->Compressed == BI_RGB || context->Compressed == BI_BITFIELDS)
 				OneLine (context);
-			else
-				DoCompressed (context);
+			else if (!DoCompressed (context, error))
+				return FALSE;
 
 			break;
 

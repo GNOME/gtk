@@ -1,3 +1,13 @@
+2002-07-02  Matthias Clasen  <maclas@gmx.de>
+
+	* io-bmp.c (grow_buffer): New function to avoid crashes
+	on unchecked reallocs. 
+	(DecodeHeader, DecodeColormap, decode_bitmasks,
+	DoCompressed): Use grow_buffer instead of g_realloc 
+	throughout. Change signatures where necessary to pass the
+	errors up.  (#85448)
+	(OneLine16): Fix loading of 16bpp BI_RGB bmps.  (#86286)
+
 2002-06-28  Sven Neumann  <sven@gimp.org>
 
 	* gdk-pixbuf-csource.c (print_blurb): converted a Tab to spaces.
