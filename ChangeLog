@@ -1,3 +1,8 @@
+Sat Oct 11 19:09:05 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkentry.c (gtk_entry_set_text): Check if completion is
+	non-NULL before accessing it. Oops.
+
 Sat Oct 11 15:47:03 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkentrycompletion.[ch] (gtk_entry_completion_insert_action),

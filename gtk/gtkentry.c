@@ -3453,7 +3453,8 @@ gtk_entry_set_text (GtkEntry    *entry,
   g_return_if_fail (text != NULL);
 
   completion = gtk_entry_get_completion (entry);
-  g_signal_handler_block (entry, completion->priv->changed_id);
+  if (completion)
+    g_signal_handler_block (entry, completion->priv->changed_id);
 
   /* Actually setting the text will affect the cursor and selection;
    * if the contents don't actually change, this will look odd to the user.
@@ -3466,7 +3467,8 @@ gtk_entry_set_text (GtkEntry    *entry,
   tmp_pos = 0;
   gtk_editable_insert_text (GTK_EDITABLE (entry), text, strlen (text), &tmp_pos);
 
-  g_signal_handler_unblock (entry, completion->priv->changed_id);
+  if (completion)
+    g_signal_handler_unblock (entry, completion->priv->changed_id);
 }
 
 void
