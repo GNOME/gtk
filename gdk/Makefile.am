@@ -33,7 +33,7 @@ LDFLAGS = @STRIP_BEGIN@ 					\
 	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) 	\
 	-export-dynamic 					\
 	-rpath @prefix@/lib 					\
-	-L../gdk-pixbuf/.libs -lgdk_pixbuf			\
+	-L../gdk-pixbuf/.libs -lgdk_pixbuf-1.3			\
 	@PANGO_LIBS@						\
 	@GLIB_DEPLIBS@						\
 	@more_ldflags@						\

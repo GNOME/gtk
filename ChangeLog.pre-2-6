@@ -1,3 +1,11 @@
+2000-07-31  Stanislav Brabec  <utx@penguin.cz>
+
+	* gdk/gdk.c: #ifdef G_ENABLE_DEBUG around gdk_arg_debug_cb and
+	gdk_arg_no_debug_cb to fix compilation problem with --disable-debug.
+
+	* gdk/Makefile.am: Link gdk against actually compiled gdk_pixbuf-1.3,
+	not gdk_pixbuf.
+
 2000-07-30  Pablo Saratxaga <pablo@mandrakesoft.com>
 
 	* configure.in,po/{sp,sr}.po: Added Serbian files
