@@ -56,15 +56,9 @@ Canvas item to display #GdkPixbuf images.
     </para>
 
     <para>
-      The custom translation values are analogously controlled by the
-      <link linkend="GnomeCanvasPixbuf--x-set">x_set</link>, <link
-      linkend="GnomeCanvasPixbuf--y-set">y_set</link>, <link
-      linkend="GnomeCanvasPixbuf--x">x</link>, and <link
-      linkend="GnomeCanvasPixbuf--y">y</link> arguments.  The former
-      two control whether the custom translation offsets are used and
-      they are %FALSE by default, and the latter two control the
-      offsets themselves.  If a custom translation offset is not used,
-      it is taken to be 0.0 by default.  Otherwise, the logical
+      The custom translation offsets are controlled by the <link
+      linkend="GnomeCanvasPixbuf--x">x</link> and <link
+      linkend="GnomeCanvasPixbuf--y">y</link> arguments.  The logical
       upper-left vertex of the image will be translated by the
       specified distance, aligned with the item's local coordinate
       system.
@@ -115,14 +109,7 @@ Canvas item to display #GdkPixbuf images.
       Likewise, consider a pixbuf item whose (<link
       linkend="GnomeCanvasPixbuf--x">x</link>, <link
       linkend="GnomeCanvasPixbuf--y">y</link>) arguments are set to
-      (30, 40)<footnote>
-	<para>
-	  This of course assumes that the <link
-	  linkend="GnomeCanvasPixbuf--x-set">x_set</link> and <link
-	  linkend="GnomeCanvasPixbuf--y-set">y_set</link> arguments
-	  are set to %TRUE for the translation offsets to take effect.
-	</para>
-      </footnote>.  If the item is then modified by the same scaling
+      (30, 40).  If the item is then modified by the same scaling
       transformation of (0.5, 2.0) but the <link
       linkend="GnomeCanvasPixbuf--y-in-pixels">y_in_pixels</link>
       argument is set to %TRUE, then the image's upper-left corner
@@ -273,18 +260,9 @@ Canvas item to display #GdkPixbuf images.
 <!-- ##### ARG GnomeCanvasPixbuf:x ##### -->
   <para>
     Indicates the horizontal translation offset of the pixbuf item's
-    image.  This argument will only be used if the <link
-    linkend="GnomeCanvasPixbuf--x-set">x_set</link> argument is %TRUE.
-    This offset may not actually appear horizontal, since it will be
-    affected by the item's affine transformation.
-  </para>
-
-<!-- ##### ARG GnomeCanvasPixbuf:x_set ##### -->
-  <para>
-    Determines whether the <link
-    linkend="GnomeCanvasPixbuf--x">x</link> argument is used to
-    translate the pixbuf from its logical origin in item-relative
-    coordinates.
+    image.  This offset may not actually appear horizontal, since it
+    will be affected by the item's affine transformation.  The default
+    is 0.0.
   </para>
 
 <!-- ##### ARG GnomeCanvasPixbuf:x_in_pixels ##### -->
@@ -294,31 +272,25 @@ Canvas item to display #GdkPixbuf images.
     pixels, that is, the visible offset will not change even if the
     item's affine transformation changes.  If it is %FALSE, the
     pixbuf's translation will be taken to be in canvas units, and thus
-    will change along with the item's affine transformation.
+    will change along with the item's affine transformation.  The
+    default is %FALSE.
   </para>
 
 <!-- ##### ARG GnomeCanvasPixbuf:y ##### -->
   <para>
     Indicates the vertical translation offset of the pixbuf item's
     image.  Works in the same way as the <link
-    linkend="GnomeCanvasPixbuf--x">x</link> argument.
-  </para>
-
-<!-- ##### ARG GnomeCanvasPixbuf:y_set ##### -->
-  <para>
-    Determines whether the <link
-    linkend="GnomeCanvasPixbuf--y">y</link> argument is used to
-    translate the pixbuf from its logical origin in item-relative
-    coordinates.  Works in the same way as the <link
-    linkend="GnomeCanvasPixbuf--x-set">x_set</link> argument.  The
-    default is %FALSE.
+    linkend="GnomeCanvasPixbuf--x">x</link> argument.  The default is
+    0.0.
   </para>
 
 <!-- ##### ARG GnomeCanvasPixbuf:y_in_pixels ##### -->
   <para>
     Works in the same way as the <link
     linkend="GnomeCanvasPixbuf--x-in-pixels">x_in_pixels</link>
-    argument.  The default is %FALSE.
+    argument, but controls whether the <link
+    linkend="GnomeCanvasPixbuf--y">y</link> translation offset is
+    scaled or not.  The default is %FALSE.
   </para>
 
 <!--

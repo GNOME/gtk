@@ -52,9 +52,7 @@ typedef struct {
 	guint width_in_pixels : 1;
 	guint height_set : 1;
 	guint height_in_pixels : 1;
-	guint x_set : 1;
 	guint x_in_pixels : 1;
-	guint y_set : 1;
 	guint y_in_pixels : 1;
 
 	/* Whether the pixbuf has changed */
@@ -77,10 +75,8 @@ enum {
 	ARG_HEIGHT_SET,
 	ARG_HEIGHT_IN_PIXELS,
 	ARG_X,
-	ARG_X_SET,
 	ARG_X_IN_PIXELS,
 	ARG_Y,
-	ARG_Y_SET,
 	ARG_Y_IN_PIXELS
 };
 
@@ -165,14 +161,10 @@ gnome_canvas_pixbuf_class_init (GnomeCanvasPixbufClass *class)
 				 GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_HEIGHT_IN_PIXELS);
 	gtk_object_add_arg_type ("GnomeCanvasPixbuf::x",
 				 GTK_TYPE_DOUBLE, GTK_ARG_READWRITE, ARG_X);
-	gtk_object_add_arg_type ("GnomeCanvasPixbuf::x_set",
-				 GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_X_SET);
 	gtk_object_add_arg_type ("GnomeCanvasPixbuf::x_in_pixels",
 				 GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_X_IN_PIXELS);
 	gtk_object_add_arg_type ("GnomeCanvasPixbuf::y",
 				 GTK_TYPE_DOUBLE, GTK_ARG_READWRITE, ARG_Y);
-	gtk_object_add_arg_type ("GnomeCanvasPixbuf::y_set",
-				 GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_Y_SET);
 	gtk_object_add_arg_type ("GnomeCanvasPixbuf::y_in_pixels",
 				 GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_Y_IN_PIXELS);
 
@@ -314,12 +306,6 @@ gnome_canvas_pixbuf_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
 		gnome_canvas_item_request_update (item);
 		break;
 
-	case ARG_X_SET:
-		priv->x_set = GTK_VALUE_BOOL (*arg) ? TRUE : FALSE;
-		priv->need_xform_update = TRUE;
-		gnome_canvas_item_request_update (item);
-		break;
-
 	case ARG_X_IN_PIXELS:
 		priv->x_in_pixels = GTK_VALUE_BOOL (*arg) ? TRUE : FALSE;
 		priv->need_xform_update = TRUE;
@@ -328,12 +314,6 @@ gnome_canvas_pixbuf_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
 
 	case ARG_Y:
 		priv->y = GTK_VALUE_DOUBLE (*arg);
-		priv->need_xform_update = TRUE;
-		gnome_canvas_item_request_update (item);
-		break;
-
-	case ARG_Y_SET:
-		priv->y_set = GTK_VALUE_BOOL (*arg) ? TRUE : FALSE;
 		priv->need_xform_update = TRUE;
 		gnome_canvas_item_request_update (item);
 		break;
@@ -392,20 +372,12 @@ gnome_canvas_pixbuf_get_arg (GtkObject *object, GtkArg *arg, guint arg_id)
 		GTK_VALUE_DOUBLE (*arg) = priv->x;
 		break;
 
-	case ARG_X_SET:
-		GTK_VALUE_BOOL (*arg) = priv->x_set;
-		break;
-
 	case ARG_X_IN_PIXELS:
 		GTK_VALUE_BOOL (*arg) = priv->x_in_pixels;
 		break;
 
 	case ARG_Y:
 		GTK_VALUE_DOUBLE (*arg) = priv->y;
-		break;
-
-	case ARG_Y_SET:
-		GTK_VALUE_BOOL (*arg) = priv->y_set;
 		break;
 
 	case ARG_Y_IN_PIXELS:
@@ -466,7 +438,6 @@ compute_viewport_affine (GnomeCanvasPixbuf *gcp, double *viewport_affine, double
 	double ti_len, tj_len;
 	double scale[6], translate[6];
 	double w, h;
-	double x, y;
 
 	priv = gcp->priv;
 
@@ -486,16 +457,6 @@ compute_viewport_affine (GnomeCanvasPixbuf *gcp, double *viewport_affine, double
 		h = priv->height;
 	else
 		h = priv->pixbuf->art_pixbuf->height;
-
-	if (priv->x_set)
-		x = priv->x;
-	else
-		x = 0.0;
-
-	if (priv->y_set)
-		y = priv->y;
-	else
-		y = 0.0;
 
 	/* Convert i_len and j_len into scaling factors */
 
@@ -529,7 +490,7 @@ compute_viewport_affine (GnomeCanvasPixbuf *gcp, double *viewport_affine, double
 	} else
 		ti_len = 1.0;
 
-	ti_len *= x;
+	ti_len *= priv->x;
 
 	if (priv->y_in_pixels) {
 		if (j_len > GNOME_CANVAS_EPSILON)
@@ -539,7 +500,7 @@ compute_viewport_affine (GnomeCanvasPixbuf *gcp, double *viewport_affine, double
 	} else
 		tj_len = 1.0;
 
-	tj_len *= y;
+	tj_len *= priv->y;
 
 	/* Compute the final affine */
 

@@ -1,3 +1,17 @@
+2000-01-22  Federico Mena Quintero  <federico@helixcode.com>
+
+	* gdk-pixbuf/gnome-canvas-pixbuf.c (PixbufPrivate): Removed the
+	x_set and y_set arguments.  Now they are always on and start with
+	defaults of 0.0 in units.
+	(gnome_canvas_pixbuf_class_init): Likewise.
+	(gnome_canvas_pixbuf_set_arg): Likewise.
+	(gnome_canvas_pixbuf_get_arg): Likewise.
+	(compute_viewport_affine): Likewise; always use the priv->x and
+	priv->y fields.
+
+	* doc/tmpl/gnome-canvas-pixbuf.sgml: Modified to reflect the
+	removal of the x_set/y_set arguments.
+
 2000-01-21  Federico Mena Quintero  <federico@helixcode.com>
 
 	* gdk-pixbuf/gdk-pixbuf.c (gdk_pixbuf_ref): Return the same pixbuf

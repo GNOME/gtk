@@ -63,6 +63,26 @@
 gdk-pixbuf-io
 
 
+<!-- ##### ARG GnomeCanvasPixbuf:x_set ##### -->
+  <para>
+    Determines whether the <link
+    linkend="GnomeCanvasPixbuf--x">x</link> argument is used to
+    translate the pixbuf from its logical origin in item-relative
+    coordinates.
+  </para>
+
+
+<!-- ##### ARG GnomeCanvasPixbuf:y_set ##### -->
+  <para>
+    Determines whether the <link
+    linkend="GnomeCanvasPixbuf--y">y</link> argument is used to
+    translate the pixbuf from its logical origin in item-relative
+    coordinates.  Works in the same way as the <link
+    linkend="GnomeCanvasPixbuf--x-set">x_set</link> argument.  The
+    default is %FALSE.
+  </para>
+
+
 <!-- ##### USER_FUNCTION ModulePreparedNotifyFunc ##### -->
 <para>
 

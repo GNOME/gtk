@@ -47,12 +47,6 @@
 </ARG>
 
 <ARG>
-<NAME>GnomeCanvasPixbuf::x_set</NAME>
-<TYPE>gboolean</TYPE>
-<FLAGS>rw</FLAGS>
-</ARG>
-
-<ARG>
 <NAME>GnomeCanvasPixbuf::x_in_pixels</NAME>
 <TYPE>gboolean</TYPE>
 <FLAGS>rw</FLAGS>
@@ -61,12 +55,6 @@
 <ARG>
 <NAME>GnomeCanvasPixbuf::y</NAME>
 <TYPE>gdouble</TYPE>
-<FLAGS>rw</FLAGS>
-</ARG>
-
-<ARG>
-<NAME>GnomeCanvasPixbuf::y_set</NAME>
-<TYPE>gboolean</TYPE>
 <FLAGS>rw</FLAGS>
 </ARG>
 
