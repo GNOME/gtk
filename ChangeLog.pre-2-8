@@ -1,3 +1,9 @@
+Mon Nov 26 19:11:18 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkcellrendererpixbuf.c
+	(gtk_cell_renderer_pixbuf_class_init): add 2 properties
+	(PIXBUF_EXPANDER_OPEN and PIXBUF_EXPANDER_CLOSED)
+
 Sun Nov 25 21:19:02 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkgeometry-x11.c: Add long, but horribly sketchy

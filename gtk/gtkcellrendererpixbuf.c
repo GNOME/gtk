@@ -106,6 +106,24 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
 							      GDK_TYPE_PIXBUF,
 							      G_PARAM_READABLE |
 							      G_PARAM_WRITABLE));
+
+	g_object_class_install_property (object_class,
+					 PROP_PIXBUF_EXPANDER_OPEN,
+					 g_param_spec_object ("pixbuf_expander_open",
+							      _("Pixbuf Expander Open"),
+							      _("Pixbuf for open expander."),
+							      GDK_TYPE_PIXBUF,
+							      G_PARAM_READABLE |
+							      G_PARAM_WRITABLE));
+
+	g_object_class_install_property (object_class,
+					 PROP_PIXBUF_EXPANDER_CLOSED,
+					 g_param_spec_object ("pixbuf_expander_closed",
+							      _("Pixbuf Expander Closed"),
+							      _("Pixbuf for closed expander."),
+							      GDK_TYPE_PIXBUF,
+							      G_PARAM_READABLE |
+							      G_PARAM_WRITABLE));
 }
 
 static void
