@@ -1,3 +1,10 @@
+Mon Nov 25 12:34:44 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdialog.c (gtk_dialog_set_default_response): 
+	Remove code to grab the focus here, it is no longer
+	needed since we focus a widget on map, and can cause
+	harm. (#99048, Daniel Elstner)
+
 2002-11-24  Tor Lillqvist  <tml@iki.fi>
 
 	Merge from stable:

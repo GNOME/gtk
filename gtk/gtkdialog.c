@@ -717,12 +717,7 @@ gtk_dialog_set_default_response (GtkDialog *dialog,
                                             "gtk-dialog-response-data");
 
       if (rd && rd->response_id == response_id)
-	{
-	  gtk_widget_grab_default (widget);
-	  
-	  if (!GTK_WINDOW (dialog)->focus_widget)
-	    gtk_widget_grab_focus (widget);
-	}
+	gtk_widget_grab_default (widget);
 	    
       tmp_list = g_list_next (tmp_list);
     }
