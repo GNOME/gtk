@@ -27,7 +27,6 @@
 #include <gtk/gtkhscrollbar.h>
 #include <gtk/gtkvscrollbar.h>
 
-
 #ifdef __cplusplus
 extern "C"
 {
@@ -38,7 +37,8 @@ enum
 {
   CLIST_FROZEN          = 1 << 0,                                     
   CLIST_IN_DRAG         = 1 << 1,                                        
-  CLIST_ROW_HEIGHT_SET  = 1 << 2
+  CLIST_ROW_HEIGHT_SET  = 1 << 2,
+  CLIST_SHOW_TITLES     = 1 << 3
 }; 
 
 /* cell types */
@@ -62,6 +62,7 @@ typedef enum
 #define GTK_CLIST_FROZEN(clist)            (GTK_CLIST_FLAGS (clist) & CLIST_FROZEN)
 #define GTK_CLIST_IN_DRAG(clist)           (GTK_CLIST_FLAGS (clist) & CLIST_IN_DRAG)
 #define GTK_CLIST_ROW_HEIGHT_SET(clist)    (GTK_CLIST_FLAGS (clist) & CLIST_ROW_HEIGHT_SET)
+#define GTK_CLIST_SHOW_TITLES(clist)       (GTK_CLIST_FLAGS (clist) & CLIST_SHOW_TITLES)
 
 /* pointer casting for cells */
 #define GTK_CELL_TEXT(cell)     (((GtkCellText *) &(cell)))
@@ -172,6 +173,8 @@ struct _GtkCListColumn
   GdkRectangle area;
   
   GtkWidget *button;
+  GdkWindow *window;
+
   gint width;
   GtkJustification justification;
 };
@@ -261,8 +264,9 @@ struct _GtkCell
 guint gtk_clist_get_type (void);
 
 /* create a new GtkCList */
-GtkWidget *gtk_clist_new (int columns,
-			  gchar * titles[]);
+GtkWidget *gtk_clist_new (int columns);
+GtkWidget *gtk_clist_new_with_titles (int columns,
+				      gchar * titles[]);
 
 /* set the border style of the clist */
 void gtk_clist_set_border (GtkCList * clist,
@@ -284,6 +288,10 @@ void gtk_clist_set_policy (GtkCList * clist,
  * you made them on a unfrozen list */
 void gtk_clist_freeze (GtkCList * clist);
 void gtk_clist_thaw (GtkCList * clist);
+
+/* show and hide the column title buttons */
+void gtk_clist_column_titles_show (GtkCList * clist);
+void gtk_clist_column_titles_hide (GtkCList * clist);
 
 /* set the title in the column title button */
 void gtk_clist_set_column_title (GtkCList * clist,

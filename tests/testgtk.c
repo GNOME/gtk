@@ -1659,6 +1659,18 @@ remove_row_clist (GtkWidget *widget, gpointer data)
 }
 
 void
+show_titles_clist (GtkWidget *widget, gpointer data)
+{
+  gtk_clist_column_titles_show (GTK_CLIST (data));
+}
+
+void
+hide_titles_clist (GtkWidget *widget, gpointer data)
+{
+  gtk_clist_column_titles_hide (GTK_CLIST (data));
+}
+
+void
 select_clist (GtkWidget *widget,
 	      gint row, 
 	      gint column, 
@@ -1736,10 +1748,11 @@ create_clist ()
       gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, FALSE, 0);
       gtk_widget_show (box2);
 
-      /* create this here so we have a pointer to throw at the 
+      /* create GtkCList here so we have a pointer to throw at the 
        * button callbacks -- more is done with it later */
-      clist = gtk_clist_new (TESTGTK_CLIST_COLUMNS, titles);
+      clist = gtk_clist_new_with_titles (TESTGTK_CLIST_COLUMNS, titles);
 
+      /* control buttons */
       button = gtk_button_new_with_label ("Add 1,000 Rows");
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
 
@@ -1781,11 +1794,37 @@ create_clist ()
 
       gtk_widget_show (button);
 
+      /* second layer of buttons */
+      box2 = gtk_hbox_new (FALSE, 10);
+      gtk_container_border_width (GTK_CONTAINER (box2), 10);
+      gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, FALSE, 0);
+      gtk_widget_show (box2);
+
+      button = gtk_button_new_with_label ("Show Title Buttons");
+      gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
+
+      gtk_signal_connect (GTK_OBJECT (button),
+                          "clicked",
+                          (GtkSignalFunc) show_titles_clist,
+                          (gpointer) clist);
+
+      gtk_widget_show (button);
+
+      button = gtk_button_new_with_label ("Hide Title Buttons");
+      gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
+
+      gtk_signal_connect (GTK_OBJECT (button),
+                          "clicked",
+                          (GtkSignalFunc) hide_titles_clist,
+                          (gpointer) clist);
+
+      gtk_widget_show (button);
+
+      /* vbox for the list itself */
       box2 = gtk_vbox_new (FALSE, 10);
       gtk_container_border_width (GTK_CONTAINER (box2), 10);
       gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
       gtk_widget_show (box2);
-
 
       /* 
        * the rest of the clist configuration

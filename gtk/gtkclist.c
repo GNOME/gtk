@@ -1,6 +1,6 @@
 /* GTK - The GIMP Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball, Josh MacDonald, 
- * Copyright (C) 1997-1998 Jay Painter <jpaint@serv.net><jpaint@gimp.org>                     
+ * Copyright (C) 1997-1998 Jay Painter <jpaint@serv.net><jpaint@gimp.org>  
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,7 +21,7 @@
 #include "gtkclist.h"
 
 /* the width of the column resize windows */
-#define DRAG_WIDTH  5
+#define DRAG_WIDTH  6
 
 /* minimum allowed width of a column */
 #define COLUMN_MIN_WIDTH 5
@@ -48,7 +48,7 @@
 
 /* gives the left pixel of the given column in context of
  * the clist's hoffset */
-#define COLUMN_LEFT_YPIXEL(clist, column)  ((clist)->column[(column)].area.x + \
+#define COLUMN_LEFT_XPIXEL(clist, column)  ((clist)->column[(column)].area.x + \
 					    (clist)->hoffset)
 
 /* returns the column index from a x pixel location in the 
@@ -159,23 +159,35 @@ static gint gtk_clist_expose (GtkWidget * widget,
 			      GdkEventExpose * event);
 static gint gtk_clist_button_press (GtkWidget * widget,
 				    GdkEventButton * event);
+static gint gtk_clist_button_release (GtkWidget * widget,
+				      GdkEventButton * event);
+static gint gtk_clist_motion (GtkWidget * widget, 
+			      GdkEventMotion * event);
 
 static void gtk_clist_size_request (GtkWidget * widget,
 				    GtkRequisition * requisition);
 static void gtk_clist_size_allocate (GtkWidget * widget,
 				     GtkAllocation * allocation);
 
-
 /* GtkContainer Methods */
 static void gtk_clist_foreach (GtkContainer * container,
 			       GtkCallback callback,
 			       gpointer callback_data);
 
+/* Resize Column Windows */
+static void draw_xor_line (GtkCList * clist);
+static gint new_column_width (GtkCList * clist,
+			      gint column,
+			      gint * x);
+static void resize_column (GtkCList * clist,
+			   gint column,
+			   gint width);
 
 /* Buttons */
-static void gtk_clist_column_button_clicked (GtkWidget * widget,
-					     gpointer data);
-
+static void column_button_create (GtkCList * clist,
+				  gint column);
+static void column_button_clicked (GtkWidget * widget,
+				   gpointer data);
 
 /* Scrollbars */
 static void gtk_clist_adjust_scrollbars (GtkCList * clist);
@@ -305,6 +317,8 @@ gtk_clist_class_init (GtkCListClass * klass)
   widget_class->unmap = gtk_clist_unmap;
   widget_class->draw = gtk_clist_draw;
   widget_class->button_press_event = gtk_clist_button_press;
+  widget_class->button_release_event = gtk_clist_button_release;
+  widget_class->motion_notify_event = gtk_clist_motion;
   widget_class->expose_event = gtk_clist_expose;
   widget_class->size_request = gtk_clist_size_request;
   widget_class->size_allocate = gtk_clist_size_allocate;
@@ -366,6 +380,7 @@ gtk_clist_init (GtkCList * clist)
 
   clist->columns = 0;
 
+  clist->title_window = NULL;
   clist->column_title_area.x = 0;
   clist->column_title_area.y = 0;
   clist->column_title_area.width = 0;
@@ -393,18 +408,45 @@ gtk_clist_init (GtkCList * clist)
 }
 
 GtkWidget *
-gtk_clist_new (int columns,
-	       gchar * titles[])
+gtk_clist_new_with_titles (int columns,
+			   gchar * titles[])
 {
   int i;
+  GtkWidget *widget;
+  GtkCList *clist;
+
+  if (titles == NULL)
+    return NULL;
+
+  widget = gtk_clist_new (columns);
+  if (!widget)
+    return NULL;
+  else
+    clist = GTK_CLIST (widget);
+
+  /* set column titles */
+  GTK_CLIST_SET_FLAGS (clist, CLIST_SHOW_TITLES);
+  for (i = 0; i < columns; i++)
+    {
+      gtk_clist_set_column_title (clist, i, titles[i]);
+      clist->column[i].width = gdk_string_width (GTK_WIDGET (clist)->style->font, clist->column[i].title);
+    }
+
+  return widget;
+}
+
+GtkWidget *
+gtk_clist_new (int columns)
+{
   GtkCList *clist;
   GtkAdjustment *adjustment;
 
   /* sanity check */
-  if (columns < 1 || titles == NULL)
+  if (columns < 1)
     return NULL;
 
   clist = gtk_type_new (gtk_clist_get_type ());
+  GTK_CLIST_UNSET_FLAGS (clist, CLIST_SHOW_TITLES);
 
   /* initalize memory chunks */
   clist->row_mem_chunk = g_mem_chunk_new ("clist row mem chunk",
@@ -420,26 +462,10 @@ gtk_clist_new (int columns,
   clist->columns = columns;
   clist->column = gtk_clist_columns_new (clist);
 
-  /* create column button and connect signals */
-  for (i = 0; i < columns; i++)
-    {
-      clist->column[i].button = gtk_button_new ();
-      gtk_widget_set_parent (clist->column[i].button, GTK_WIDGET (clist));
-
-      gtk_signal_connect (GTK_OBJECT (clist->column[i].button),
-			  "clicked",
-			  (GtkSignalFunc) gtk_clist_column_button_clicked,
-			  (gpointer) clist);
-
-      /* set column title */
-      gtk_clist_set_column_title (clist, i, titles[i]);
-
-      clist->column[i].width = 
-	gdk_string_width (GTK_WIDGET (clist)->style->font, clist->column[i].title);
-
-      gtk_widget_show (clist->column[i].button);
-    }
-
+  /* there needs to be at least one column button 
+   * because there is alot of code that will break if it
+   * isn't there*/
+  column_button_create (clist, 0);
 
   /* create and connect scrollbars */
   clist->vscrollbar = gtk_vscrollbar_new (NULL);
@@ -513,12 +539,36 @@ gtk_clist_thaw (GtkCList * clist)
   gtk_clist_draw_rows (clist, NULL);
 }
 
+void
+gtk_clist_column_titles_show (GtkCList * clist)
+{
+  g_return_if_fail (clist != NULL);
+
+  if (!GTK_CLIST_SHOW_TITLES (clist))
+    {
+      GTK_CLIST_SET_FLAGS (clist, CLIST_SHOW_TITLES);
+      gdk_window_show (clist->title_window);
+      gtk_widget_queue_resize (GTK_WIDGET (clist));
+    }
+}
+
+void 
+gtk_clist_column_titles_hide (GtkCList * clist)
+{
+  if (GTK_CLIST_SHOW_TITLES (clist))
+    {
+      GTK_CLIST_UNSET_FLAGS (clist, CLIST_SHOW_TITLES);
+      gdk_window_hide (clist->title_window);
+      gtk_widget_queue_resize (GTK_WIDGET (clist));
+    }
+}
 
 void
 gtk_clist_set_column_title (GtkCList * clist,
 			    gint column,
 			    gchar * title)
 {
+  gint new_button = 0;
   GtkWidget *old_widget;
   GtkWidget *alignment = NULL;
   GtkWidget *label;
@@ -527,6 +577,14 @@ gtk_clist_set_column_title (GtkCList * clist,
 
   if (column < 0 || column >= clist->columns)
     return;
+
+  /* if the column button doesn't currently exhist,
+   * it has to be created first */
+  if (!clist->column[column].button)
+    {
+      column_button_create (clist, column);
+      new_button = 1;
+    }
 
   gtk_clist_column_title_new (clist, column, title);
 
@@ -538,6 +596,7 @@ gtk_clist_set_column_title (GtkCList * clist,
       gtk_widget_destroy (old_widget);
     }
 
+  /* create new alignment based no column justification */
   switch (clist->column[column].justification)
     {
     case GTK_JUSTIFY_LEFT:
@@ -557,14 +616,16 @@ gtk_clist_set_column_title (GtkCList * clist,
       break;
     }
 
-  if (alignment)
-    {
-      label = gtk_label_new (clist->column[column].title);
-      gtk_container_add (GTK_CONTAINER (alignment), label);
-      gtk_container_add (GTK_CONTAINER (clist->column[column].button), alignment);
-      gtk_widget_show (label);
-      gtk_widget_show (alignment);
-    }
+  label = gtk_label_new (clist->column[column].title);
+  gtk_container_add (GTK_CONTAINER (alignment), label);
+  gtk_container_add (GTK_CONTAINER (clist->column[column].button), alignment);
+  gtk_widget_show (label);
+  gtk_widget_show (alignment);
+
+  /* if this button didn't previously exhist, then the
+   * column button positions have to be re-computed */
+  if (GTK_WIDGET_VISIBLE (clist) && new_button)
+    gtk_clist_size_allocate_title_buttons (clist);
 }
 
 void
@@ -572,12 +633,21 @@ gtk_clist_set_column_widget (GtkCList * clist,
 			     gint column,
 			     GtkWidget * widget)
 {
+  gint new_button = 0;
   GtkWidget *old_widget;
 
   g_return_if_fail (clist != NULL);
 
   if (column < 0 || column >= clist->columns)
     return;
+
+  /* if the column button doesn't currently exhist,
+   * it has to be created first */
+  if (!clist->column[column].button)
+    {
+      column_button_create (clist, column);
+      new_button = 1;
+    }
 
   gtk_clist_column_title_new (clist, column, NULL);
 
@@ -595,6 +665,11 @@ gtk_clist_set_column_widget (GtkCList * clist,
       gtk_container_add (GTK_CONTAINER (clist->column[column].button), widget);
       gtk_widget_show (widget);
     }
+
+  /* if this button didn't previously exhist, then the
+   * column button positions have to be re-computed */
+  if (GTK_WIDGET_VISIBLE (clist) && new_button)
+    gtk_clist_size_allocate_title_buttons (clist);
 }
 
 void
@@ -1257,7 +1332,8 @@ gtk_clist_destroy (GtkObject * object)
 
   /* get rid of all the column buttons */
   for (i = 0; i < clist->columns; i++)
-    gtk_widget_destroy (clist->column[i].button);
+    if (clist->column[i].button)
+      gtk_widget_destroy (clist->column[i].button);
 
   gtk_clist_columns_delete (clist);
 
@@ -1272,11 +1348,11 @@ gtk_clist_destroy (GtkObject * object)
 static void
 gtk_clist_realize (GtkWidget * widget)
 {
+  gint i;
   GtkCList *clist;
   GdkWindowAttr attributes;
   gint attributes_mask;
   GdkGCValues values;
-  gint i;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_CLIST (widget));
@@ -1318,7 +1394,8 @@ gtk_clist_realize (GtkWidget * widget)
 
   /* set things up so column buttons are drawn in title window */
   for (i = 0; i < clist->columns; i++)
-    gtk_widget_set_parent_window (clist->column[i].button, clist->title_window);
+    if (clist->column[i].button)
+      gtk_widget_set_parent_window (clist->column[i].button, clist->title_window);
 
   /* clist-window */
   clist->clist_window = gdk_window_new (widget->window, &attributes, attributes_mask);
@@ -1329,9 +1406,23 @@ gtk_clist_realize (GtkWidget * widget)
   gdk_window_get_size (clist->clist_window, &clist->clist_window_width,
 		       &clist->clist_window_height);
 
-  /* cursor's and GC's */
-  clist->cursor_drag = gdk_cursor_new (GDK_SB_H_DOUBLE_ARROW);
+  /* create resize windows */
+  attributes.wclass = GDK_INPUT_ONLY;
+  attributes.event_mask = (GDK_BUTTON_PRESS_MASK |
+			   GDK_BUTTON_RELEASE_MASK |
+			   GDK_POINTER_MOTION_MASK |
+			   GDK_POINTER_MOTION_HINT_MASK);
+  attributes.cursor = clist->cursor_drag = gdk_cursor_new (GDK_SB_H_DOUBLE_ARROW);
+  attributes_mask = GDK_WA_CURSOR;
+  
+  for (i = 0; i < clist->columns; i++)
+    {
+      clist->column[i].window = gdk_window_new (clist->title_window, &attributes, attributes_mask);
+      gdk_window_set_user_data (clist->column[i].window, clist);
+      gdk_window_show (clist->column[i].window);
+    }
 
+  /* GCs */
   clist->fg_gc = gdk_gc_new (widget->window);
   clist->bg_gc = gdk_gc_new (widget->window);
 
@@ -1355,6 +1446,7 @@ gtk_clist_realize (GtkWidget * widget)
 static void
 gtk_clist_unrealize (GtkWidget * widget)
 {
+  gint i;
   GtkCList *clist;
 
   g_return_if_fail (widget != NULL);
@@ -1370,6 +1462,13 @@ gtk_clist_unrealize (GtkWidget * widget)
   gdk_gc_destroy (clist->bg_gc);
 
   gtk_style_detach (widget->style);
+
+  for (i = 0; i < clist->columns; i++)
+    if (clist->column[i].window)
+      {
+	gdk_window_destroy (clist->column[i].window);
+	clist->column[i].window = NULL;
+      }
 
   gdk_window_destroy (clist->clist_window);
   gdk_window_destroy (clist->title_window);
@@ -1404,12 +1503,18 @@ gtk_clist_map (GtkWidget * widget)
       gdk_window_show (clist->title_window);
       gdk_window_show (clist->clist_window);
 
-      /* map column buttons*/
+      /* map column buttons */
       for (i = 0; i < clist->columns; i++)
-	if (GTK_WIDGET_VISIBLE (clist->column[i].button) &&
+	if (clist->column[i].button &&
+	    GTK_WIDGET_VISIBLE (clist->column[i].button) &&
 	    !GTK_WIDGET_MAPPED (clist->column[i].button))
 	  gtk_widget_map (clist->column[i].button);
       
+      /* map resize windows AFTER column buttons (above) */
+      for (i = 0; i < clist->columns; i++)
+	if (clist->column[i].window && clist->column[i].button)
+	  gdk_window_show (clist->column[i].window);
+       
       /* map vscrollbars */
       if (GTK_WIDGET_VISIBLE (clist->vscrollbar) &&
 	  !GTK_WIDGET_MAPPED (clist->vscrollbar))
@@ -1439,6 +1544,10 @@ gtk_clist_unmap (GtkWidget * widget)
     {
       GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
 
+      for (i = 0; i < clist->columns; i++)
+	if (clist->column[i].window)
+	  gdk_window_hide (clist->column[i].window);
+
       gdk_window_hide (clist->clist_window);
       gdk_window_hide (clist->title_window);
       gdk_window_hide (widget->window);
@@ -1452,7 +1561,8 @@ gtk_clist_unmap (GtkWidget * widget)
 
       /* unmap column buttons */
       for (i = 0; i < clist->columns; i++)
-	if (GTK_WIDGET_MAPPED (clist->column[i].button))
+	if (clist->column[i].button &&
+	    GTK_WIDGET_MAPPED (clist->column[i].button))
 	  gtk_widget_unmap (clist->column[i].button);
 
       /* freeze the list */
@@ -2030,6 +2140,7 @@ static gint
 gtk_clist_button_press (GtkWidget * widget,
 			GdkEventButton * event)
 {
+  gint i;
   GtkCList *clist;
   gint x, y, row, column;
 
@@ -2048,9 +2159,91 @@ gtk_clist_button_press (GtkWidget * widget,
       if (gtk_clist_get_selection_info (clist, x, y, &row, &column))
 	gtk_signal_emit (GTK_OBJECT (clist), clist_signals[SELECT_ROW],
 			 row, column, event);
+
+      return FALSE;
     }
 
+  /* press on resize windows */
+  for (i = 0; i < clist->columns; i++)
+    if (clist->column[i].window && event->window == clist->column[i].window)
+      {
+	GTK_CLIST_SET_FLAGS (clist, CLIST_IN_DRAG);
+	gtk_widget_get_pointer (widget, &clist->x_drag, NULL);
+
+	gdk_pointer_grab (clist->column[i].window, FALSE,
+			  GDK_POINTER_MOTION_HINT_MASK |
+			  GDK_BUTTON1_MOTION_MASK |
+			  GDK_BUTTON_RELEASE_MASK,
+			  NULL, NULL, event->time);
+
+	draw_xor_line (clist);
+	return FALSE;
+      }
+
   return FALSE;
+}
+
+static gint
+gtk_clist_button_release (GtkWidget * widget,
+			  GdkEventButton * event)
+{
+  gint i, x;
+  GtkCList *clist;
+
+  g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_CLIST (widget), FALSE);
+  g_return_val_if_fail (event != NULL, FALSE);
+
+  clist = GTK_CLIST (widget);
+
+  /* release on resize windows */
+  if (GTK_CLIST_IN_DRAG (clist))
+    for (i = 0; i < clist->columns; i++)
+      if (clist->column[i].window && event->window == clist->column[i].window)
+	{
+	  GTK_CLIST_UNSET_FLAGS (clist, CLIST_IN_DRAG);
+	  gtk_widget_get_pointer (widget, &x, NULL);
+	  gdk_pointer_ungrab (event->time);
+	  draw_xor_line (clist);
+	  
+	  resize_column (clist, i, new_column_width (clist, i, &x));
+	  return FALSE;
+	}
+
+  return FALSE;
+}
+
+static gint
+gtk_clist_motion (GtkWidget * widget,
+		  GdkEventMotion * event)
+{
+  gint i, x;
+  GtkCList *clist;
+
+  g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_CLIST (widget), FALSE);
+
+  clist = GTK_CLIST (widget);
+
+  if (GTK_CLIST_IN_DRAG (clist))
+    for (i = 0; i < clist->columns; i++)
+      if (clist->column[i].window && event->window == clist->column[i].window)
+	{
+	  if (event->is_hint || event->window != widget->window)
+	    gtk_widget_get_pointer (widget, &x, NULL);
+	  else
+	    x = event->x;
+
+	  new_column_width (clist, i, &x);
+	  if (x != clist->x_drag)
+	    {
+	      draw_xor_line (clist);
+	      clist->x_drag = x;
+	      draw_xor_line (clist);
+	    }
+	}
+
+  return TRUE;
 }
 
 static void
@@ -2071,12 +2264,14 @@ gtk_clist_size_request (GtkWidget * widget,
 
   /* compute the size of the column title (title) area */
   clist->column_title_area.height = 0;
-  for (i = 0; i < clist->columns; i++)
-    {
-      gtk_widget_size_request (clist->column[i].button, &clist->column[i].button->requisition);
-      clist->column_title_area.height = MAX (clist->column_title_area.height,
-					     clist->column[i].button->requisition.height);
-    }
+  if (GTK_CLIST_SHOW_TITLES (clist))
+    for (i = 0; i < clist->columns; i++)
+      if (clist->column[i].button)
+	{
+	  gtk_widget_size_request (clist->column[i].button, &clist->column[i].button->requisition);
+	  clist->column_title_area.height = MAX (clist->column_title_area.height,
+						 clist->column[i].button->requisition.height);
+	}
   requisition->height += clist->column_title_area.height;
 
   /* add the vscrollbar space */
@@ -2228,8 +2423,7 @@ gtk_clist_size_allocate (GtkWidget * widget,
 	  child_allocation.y = clist->internal_allocation.y;
 	  child_allocation.width = clist->vscrollbar->requisition.width;
 	  child_allocation.height = clist->internal_allocation.height -
-	    SCROLLBAR_SPACING (clist) -
-	    (hscrollbar_vis ? clist->hscrollbar->requisition.height : 0);
+	    (hscrollbar_vis ? (clist->hscrollbar->requisition.height + SCROLLBAR_SPACING (clist)) : 0);
 
 	  gtk_widget_size_allocate (clist->vscrollbar, &child_allocation);
 	}
@@ -2248,9 +2442,8 @@ gtk_clist_size_allocate (GtkWidget * widget,
 	  child_allocation.y = clist->internal_allocation.y +
 	    clist->internal_allocation.height -
 	    clist->hscrollbar->requisition.height;
-	  child_allocation.width = clist->internal_allocation.width - 
-	    SCROLLBAR_SPACING (clist) -
-	    (vscrollbar_vis ? clist->vscrollbar->requisition.width : 0);
+	  child_allocation.width = clist->internal_allocation.width -
+	    (vscrollbar_vis ? (clist->vscrollbar->requisition.width + SCROLLBAR_SPACING (clist)) : 0);
 	  child_allocation.height = clist->hscrollbar->requisition.height;
 
 	  gtk_widget_size_allocate (clist->hscrollbar, &child_allocation);
@@ -2271,8 +2464,11 @@ gtk_clist_size_allocate (GtkWidget * widget,
 static void
 gtk_clist_size_allocate_title_buttons (GtkCList * clist)
 {
-  gint i;
+  gint i, last_button = 0;
   GtkAllocation button_allocation;
+
+  if (!GTK_WIDGET_REALIZED (clist))
+    return;
 
   button_allocation.x = clist->hoffset;
   button_allocation.y = 0;
@@ -2294,17 +2490,39 @@ gtk_clist_size_allocate_title_buttons (GtkCList * clist)
 	  button_allocation.width += CELL_SPACING + (2 * COLUMN_INSET);
 	}
 
-      gtk_widget_size_allocate (clist->column[i].button, &button_allocation);
-      button_allocation.x += button_allocation.width;
+      if (i == (clist->columns - 1) || clist->column[i + 1].button)
+	{
+	  gtk_widget_size_allocate (clist->column[last_button].button, &button_allocation);
+	  button_allocation.x += button_allocation.width;
+
+	  if (clist->column[i + 1].button && i != (clist->columns - 1))
+	    {
+	      gdk_window_show (clist->column[last_button].window);
+	      gdk_window_move_resize (clist->column[last_button].window,
+				      button_allocation.x - (DRAG_WIDTH / 2), 
+				      0, DRAG_WIDTH, clist->column_title_area.height);
+	    }
+	  else
+	    {
+	      gdk_window_hide (clist->column[i].window);
+	    }
+
+	  last_button = i + 1;
+	}
+      else
+	{
+	  gdk_window_hide (clist->column[i].window);
+	}
     }
 }
 
 static void
 gtk_clist_size_allocate_columns (GtkCList * clist)
 {
-  gint i, xoffset;
+  gint i, xoffset = 0;
 
-  xoffset = 0;
+  if (!GTK_WIDGET_REALIZED (clist))
+    return;
 
   for (i = 0; i < clist->columns; i++)
     {
@@ -2341,18 +2559,108 @@ gtk_clist_foreach (GtkContainer * container,
 
   /* callback for the column buttons */
   for (i = 0; i < clist->columns; i++)
-    (*callback) (clist->column[i].button, callback_data);
+    if (clist->column[i].button)
+      (*callback) (clist->column[i].button, callback_data);
 
   /* callbacks for the scrollbars */
   (*callback) (clist->vscrollbar, callback_data);
   (*callback) (clist->hscrollbar, callback_data);
 }
 
+/* COLUMN RESIZING */
+static void                          
+draw_xor_line (GtkCList * clist)
+{
+  GtkWidget *widget;
+  
+  g_return_if_fail (clist != NULL);
+  
+  widget = GTK_WIDGET (clist);
+
+  gdk_draw_line (widget->window, clist->xor_gc,  
+                 clist->x_drag,                                       
+                 widget->style->klass->ythickness,                               
+                 clist->x_drag,                                             
+                 clist->column_title_area.height + clist->clist_window_height);
+}
+
+/* this function returns the new width of the column being resized given
+ * the column and x position of the cursor; the x cursor position is passed
+ * in as a pointer and automagicly corrected if it's beyond min/max limits */
+static gint
+new_column_width (GtkCList * clist,
+		  gint column,
+		  gint * x)
+{
+  gint cx, rx, width;
+
+  cx = *x;
+
+  /* first translate the x position from widget->window
+   * to clist->clist_window */
+  cx -= GTK_WIDGET (clist)->style->klass->xthickness;
+
+  /* rx is x from the list beginning */
+  rx = cx - clist->hoffset;
+
+  /* you can't shrink a column to less than its minimum width */
+  if (cx < (COLUMN_LEFT_XPIXEL (clist, column) + CELL_SPACING + COLUMN_INSET + COLUMN_MIN_WIDTH))
+    {
+      *x = cx = COLUMN_LEFT_XPIXEL (clist, column) + CELL_SPACING + COLUMN_INSET + COLUMN_MIN_WIDTH +
+	GTK_WIDGET (clist)->style->klass->xthickness;
+      cx -= GTK_WIDGET (clist)->style->klass->xthickness;
+      rx = cx - clist->hoffset;
+    }
+
+  /* don't grow past the end of the window */
+  if (cx > clist->clist_window_width)
+    {
+      *x = cx = clist->clist_window_width + GTK_WIDGET (clist)->style->klass->xthickness;
+      cx -= GTK_WIDGET (clist)->style->klass->xthickness;
+      rx = cx - clist->hoffset;
+    }
+
+  /* calculate new column width making sure it doesn't end up
+   * less than the minimum width */
+  width = (rx - COLUMN_LEFT (clist, column)) - COLUMN_INSET;
+  if (width < COLUMN_MIN_WIDTH)
+    width = COLUMN_MIN_WIDTH;
+
+  return width;
+}
+
+/* this will do more later */
+static void
+resize_column (GtkCList * clist,
+	       gint column,
+	       gint width)
+{
+  gtk_clist_set_column_width (clist, column, width);
+}
+
 /* BUTTONS */
+static void
+column_button_create (GtkCList * clist,
+		      gint column)
+{
+  GtkWidget *button;
+
+  button = clist->column[column].button = gtk_button_new ();
+  gtk_widget_set_parent (button, GTK_WIDGET (clist));
+  if (GTK_WIDGET_REALIZED (clist) && clist->title_window)
+    gtk_widget_set_parent_window (clist->column[column].button, clist->title_window);
+  
+  gtk_signal_connect (GTK_OBJECT (button),
+		      "clicked",
+		      (GtkSignalFunc) column_button_clicked,
+		      (gpointer) clist);
+
+  gtk_widget_show (button);
+}
 
 static void
-gtk_clist_column_button_clicked (GtkWidget * widget,
-				 gpointer data)
+column_button_clicked (GtkWidget * widget,
+		       gpointer data)
 {
   gint i;
   GtkCList *clist;
@@ -2573,14 +2881,26 @@ gtk_clist_hadjustment_value_changed (GtkAdjustment * adjustment,
 
   if (adjustment == gtk_range_get_adjustment (GTK_RANGE (clist->hscrollbar)))
     {
+      /* move the column buttons and resize windows */
       for (i = 0; i < clist->columns; i++)
 	{
-	  clist->column[i].button->allocation.x -= value + clist->hoffset;
+	  if (clist->column[i].button)
+	    {
+	      clist->column[i].button->allocation.x -= value + clist->hoffset;
 
-	  if (clist->column[i].button->window)
-	    gdk_window_move (clist->column[i].button->window,
-			     clist->column[i].button->allocation.x,
-			     clist->column[i].button->allocation.y);
+	      if (clist->column[i].button->window)
+		{
+		  gdk_window_move (clist->column[i].button->window,
+				   clist->column[i].button->allocation.x,
+				   clist->column[i].button->allocation.y);
+
+		  if (clist->column[i].window)
+		    gdk_window_move (clist->column[i].window,
+				     clist->column[i].button->allocation.x +
+				     clist->column[i].button->allocation.width - 
+				     (DRAG_WIDTH / 2), 0); 
+		}
+	    }
 	}
 
       if (value > -clist->hoffset)
@@ -2673,6 +2993,7 @@ gtk_clist_columns_new (GtkCList * clist)
       column[i].area.height = 0;
       column[i].title = NULL;
       column[i].button = NULL;
+      column[i].window = NULL;
       column[i].width = 0;
       column[i].justification = GTK_JUSTIFY_LEFT;
     }
