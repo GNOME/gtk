@@ -1,3 +1,9 @@
+2005-02-02  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/tmpl/event_structs.sgml: 
+	* gdk/tmpl/events.sgml: Mark GdkEventOwnerChange and
+	GdkOwnerChange as 2.6 additions.  (#165823, Masao Mutoh)
+
 2005-02-01  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-update-icon-cache.xml:
