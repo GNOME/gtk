@@ -29,7 +29,7 @@ The set of these <firstterm>default</firstterm> files
 can be retrieved with gtk_rc_get_default_files()
 and modified with gtk_rc_add_default_file() and
 gtk_rc_set_default_files().
-Additionally, the <envar>GTK_RC_FILES</envar> environment variable
+Additionally, the <envar>GTK2_RC_FILES</envar> environment variable
 can be set to a #G_SEARCHPATH_SEPARATOR_S-separated list of files
 in order to overwrite the set of default files at runtime.
 </para>
