@@ -212,11 +212,23 @@ gtk_toggle_button_set_mode (GtkToggleButton *toggle_button,
 
   if (toggle_button->draw_indicator != draw_indicator)
     {
-      if (GTK_WIDGET_REALIZED(GTK_WIDGET(toggle_button)))
+      if (GTK_WIDGET_REALIZED(toggle_button))
 	{
-	  gtk_widget_unrealize(GTK_WIDGET(toggle_button));
-	  toggle_button->draw_indicator = draw_indicator;
-	  gtk_widget_realize(GTK_WIDGET(toggle_button));
+	  printf("realized\n");
+	  if (GTK_WIDGET_VISIBLE (toggle_button))
+	    {
+	      printf("visible\n");
+	      gtk_widget_unrealize(GTK_WIDGET(toggle_button));
+	      toggle_button->draw_indicator = draw_indicator;
+	      gtk_widget_realize(GTK_WIDGET(toggle_button));
+	      gtk_widget_show(GTK_WIDGET(toggle_button));
+	    }
+	  else
+	    {
+	      gtk_widget_unrealize(GTK_WIDGET(toggle_button));
+	      toggle_button->draw_indicator = draw_indicator;
+	      gtk_widget_realize(GTK_WIDGET(toggle_button));
+	    }
 	}
       else
 	toggle_button->draw_indicator = draw_indicator;
@@ -457,28 +469,19 @@ gtk_toggle_button_realize (GtkWidget *widget)
   attributes.y = widget->allocation.y + border_width;
   attributes.width = widget->allocation.width - border_width * 2;
   attributes.height = widget->allocation.height - border_width * 2;
-  if (toggle_button->draw_indicator)
-    attributes.wclass = GDK_INPUT_ONLY;
-  else
-    {
-      attributes.wclass = GDK_INPUT_OUTPUT;
-      attributes.visual = gtk_widget_get_visual (widget);
-      attributes.colormap = gtk_widget_get_colormap (widget);
-    }
   attributes.event_mask = gtk_widget_get_events (widget);
   attributes.event_mask |= (GDK_EXPOSURE_MASK |
 			    GDK_BUTTON_PRESS_MASK |
 			    GDK_BUTTON_RELEASE_MASK |
 			    GDK_ENTER_NOTIFY_MASK |
 			    GDK_LEAVE_NOTIFY_MASK);
-  
-  if (toggle_button->draw_indicator)
-    attributes_mask = GDK_WA_X | GDK_WA_Y;
-  else
-    attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
-  
+
   if (toggle_button->draw_indicator)
     {
+      GTK_WIDGET_SET_FLAGS (toggle_button, GTK_NO_WINDOW);
+      attributes.wclass = GDK_INPUT_ONLY;
+      attributes_mask = GDK_WA_X | GDK_WA_Y;
+
       widget->window = gtk_widget_get_parent_window(widget);
       gdk_window_ref(widget->window);
       
@@ -489,6 +492,11 @@ gtk_toggle_button_realize (GtkWidget *widget)
     }
   else
     {
+      GTK_WIDGET_UNSET_FLAGS (toggle_button, GTK_NO_WINDOW);
+      attributes.wclass = GDK_INPUT_OUTPUT;
+      attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
+      attributes.visual = gtk_widget_get_visual (widget);
+      attributes.colormap = gtk_widget_get_colormap (widget);
       widget->window = 
 	gdk_window_new (gtk_widget_get_parent_window (widget), &attributes, attributes_mask);
       gdk_window_set_user_data (widget->window, toggle_button);

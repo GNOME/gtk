@@ -478,7 +478,7 @@ gtk_tooltips_draw_tips (GtkTooltips * tooltips)
 			  tooltips->gc, 4, y, el->data);*/
 	  gtk_paint_string (tooltips->tip_window->style, tooltips->tip_window->window, 
 			    GTK_STATE_NORMAL, 
-			    NULL, GTK_WIDGET(tooltips->tip_window), "tooltip",
+			    NULL, GTK_WIDGET(tooltips), "tooltip",
 			    4, y, el->data);
          y += baseline_skip;
        }
