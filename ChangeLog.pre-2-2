@@ -1,3 +1,8 @@
+2002-06-03  Federico Mena Quintero  <federico@ximian.com>
+
+	* gdk/gdkpixbuf-drawable.c (rgb565msb): Fix the MSB -> MSB case.
+	Fixes #79190.
+
 Sat Jun  1 10:43:28 2002  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtkcellrenderertoggle.c (gtk_cell_renderer_toggle_render): 
