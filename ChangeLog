@@ -1,3 +1,10 @@
+Wed Dec 17 23:50:56 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkcellrendererpixbuf.c (gtk_cell_renderer_pixbuf_set_property):
+	if we set a new stock_id and there was a previous stock_id, unref
+	the pixbuf (since it was used to renderer the previous stock_id
+	and stock_id might have been set to NULL now). (Fixes #122966).
+
 2003-12-17  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* gtk/gtktreemodelsort.c: (gtk_tree_model_sort_get_iter):

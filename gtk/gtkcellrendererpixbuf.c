@@ -277,7 +277,14 @@ gtk_cell_renderer_pixbuf_set_property (GObject      *object,
       break;
     case PROP_STOCK_ID:
       if (cellinfo->stock_id)
-        g_free (cellinfo->stock_id);
+        {
+          if (cellpixbuf->pixbuf)
+            {
+              g_object_unref (cellpixbuf->pixbuf);
+              cellpixbuf->pixbuf = NULL;
+            }
+          g_free (cellinfo->stock_id);
+        }
       cellinfo->stock_id = g_strdup (g_value_get_string (value));
       break;
     case PROP_STOCK_SIZE:
