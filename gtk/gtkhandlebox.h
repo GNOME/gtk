@@ -50,8 +50,9 @@ struct _GtkHandleBox
   GdkWindow      *steady_window; /* the window that stays in the parent container */
   GtkWidget      *float_window;
   GtkRequisition  real_requisition;
-  gboolean        is_being_dragged;
-  gboolean        is_onroot;
+  gint		  is_being_dragged : 1;
+  gint		  is_onroot : 1;
+  gint		  overlap_attaches : 1;
   GdkCursor      *fleur_cursor;
 
   gint dragoff_x, dragoff_y; /* start drag position (wrt widget->window) */
@@ -61,6 +62,11 @@ struct _GtkHandleBox
 struct _GtkHandleBoxClass
 {
   GtkBinClass parent_class;
+
+  void	(*child_attached)	(GtkHandleBox	*handle_box,
+				 GtkWidget	*child);
+  void	(*child_detached)	(GtkHandleBox	*handle_box,
+				 GtkWidget	*child);
 };
 
 

@@ -18,8 +18,6 @@ Bugs:
    facilities, omit the background pixmap for now.
 
  * Widget redrawing when the window resizes sometimes messes up.
-   GtkWindows allow_shrink is buggy since we let all kinds of configure events
-   pass from Gdk to Gtk.
    GtkLabels sometimes redraw without clearing up the underlying background on
    window resizes.
  

@@ -31,6 +31,16 @@
 #define GHOST_HEIGHT 3
 #define SNAP_TOLERANCE 10
 
+enum
+{
+  SIGNAL_CHILD_ATTACHED,
+  SIGNAL_CHILD_DETACHED,
+  SIGNAL_LAST
+};
+
+typedef void    (*SignalChildAttached)          (GtkObject      *object,
+						 GtkWidget      *widget,
+						 gpointer        func_data);
 
 static void gtk_handle_box_class_init     (GtkHandleBoxClass *klass);
 static void gtk_handle_box_init           (GtkHandleBox      *handle_box);
@@ -111,6 +121,9 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
   widget_class->button_press_event = gtk_handle_box_button_changed;
   widget_class->button_release_event = gtk_handle_box_button_changed;
   widget_class->motion_notify_event = gtk_handle_box_motion;
+
+  class->child_attached = NULL;
+  class->child_detached = NULL;
 }
 
 static void
@@ -123,6 +136,7 @@ gtk_handle_box_init (GtkHandleBox *handle_box)
   handle_box->float_window = NULL;
   handle_box->is_being_dragged = FALSE;
   handle_box->is_onroot = FALSE;
+  handle_box->overlap_attaches = FALSE;
   handle_box->fleur_cursor = gdk_cursor_new (GDK_FLEUR);
   handle_box->dragoff_x = 0;
   handle_box->dragoff_y = 0;
