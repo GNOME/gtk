@@ -1,3 +1,52 @@
+2004-07-08  Federico Mena Quintero  <federico@ximian.com>
+
+	Fix #139290:
+
+	* gtk/gtkfilesystemmodel.c (_gtk_file_system_model_new): Add a
+	GError argument.  Do check for errors when getting the
+	GtkFileFolder:  get the folder and read the children before
+	actually creating the model.  Removed obsolete code that handled
+	roots-changed on the file system.
+	(file_model_node_get_info): Assert that we don't reach the old
+	case to display file system roots.
+	(roots_changed_callback): Removed.
+
+	* gtk/gtkfilechooserdefault.c (set_list_model): Add a GError
+	argument, and a boolean return value.  Return an error if we
+	cannot create the file system model.  On error, set a NULL model
+	on the tree.
+	(gtk_file_chooser_default_set_current_folder): Use the error value
+	from set_list_model().
+	(gtk_file_chooser_default_set_property): Set the show_hidden
+	property only if the browse_files_model exists.
+	(gtk_file_chooser_default_unselect_path): Only operate if the
+	browse_files_model exists.
+	(check_preview_change): Check whether we have the sort_model.
+	(change_folder_and_display_error): Copy the path we get passed
+	before using it.  There's a comment in there that explains why we
+	need to copy it; basically, if the passed path belongs to the
+	model, the model may go away in the middle of this function and
+	we'll be left with a dangling pointer.
+	(install_list_model_filter): Assert that the model is not NULL.
+	(set_current_filter): Check whether the model exists.
+
+	* gtk/gtktreeselection.c (gtk_tree_selection_get_selected): Don't
+	g_return_if_fail if the model is NULL.
+	(gtk_tree_selection_get_selected_rows): Likewise.
+	(gtk_tree_selection_count_selected_rows): Likewise.
+	(gtk_tree_selection_selected_foreach): Likewise.
+	(gtk_tree_selection_path_is_selected): Likewise; rather just
+	return FALSE.
+	(gtk_tree_selection_select_all): Likewise.
+	(gtk_tree_selection_unselect_all): Likewise.
+	(gtk_tree_selection_select_range): Do g_return_if_fail() if the
+	model is NULL.
+	(gtk_tree_selection_unselect_range): Likewise.
+
+	* gtk/gtkfilesystemunix.c (fill_in_names): Return immediately if
+	g_dir_open() fails:  there is no need to set the error ourselves,
+	as g_dir_open() already does it.
+
 2004-07-08  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_set_search_equal_func): Allow

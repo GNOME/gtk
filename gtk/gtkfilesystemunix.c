@@ -1732,18 +1732,7 @@ fill_in_names (GtkFileFolderUnix *folder_unix, GError **error)
 						  (GDestroyNotify)free_stat_info_entry);
   dir = g_dir_open (folder_unix->filename, 0, error);
   if (!dir)
-    {
-      int save_errno = errno;
-      gchar *filename_utf8 = g_filename_to_utf8 (folder_unix->filename, -1, NULL, NULL, NULL);
-      g_set_error (error,
-		   GTK_FILE_SYSTEM_ERROR,
-		   GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
-		   _("error getting information for '%s': %s"),
-		   filename_utf8 ? filename_utf8 : "???",
-		   g_strerror (save_errno));
-      g_free (filename_utf8);
-      return FALSE;
-    }
+    return FALSE;
 
   while (TRUE)
     {

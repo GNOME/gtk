@@ -785,12 +785,26 @@ change_folder_and_display_error (GtkFileChooserDefault *impl,
 {
   GError *error;
   gboolean result;
+  GtkFilePath *path_copy;
+
+  /* We copy the path because of this case:
+   *
+   * list_row_activated()
+   *   fetches path from model; path belongs to the model (*)
+   *   calls change_folder_and_display_error()
+   *     calls _gtk_file_chooser_set_current_folder_path()
+   *       changing folders fails, sets model to NULL, thus freeing the path in (*)
+   */
+
+  path_copy = gtk_file_path_copy (path);
 
   error = NULL;
-  result = _gtk_file_chooser_set_current_folder_path (GTK_FILE_CHOOSER (impl), path, &error);
+  result = _gtk_file_chooser_set_current_folder_path (GTK_FILE_CHOOSER (impl), path_copy, &error);
 
   if (!result)
-    error_changing_folder_dialog (impl, path, error);
+    error_changing_folder_dialog (impl, path_copy, error);
+
+  gtk_file_path_free (path_copy);
 
   return result;
 }
@@ -1473,6 +1487,9 @@ new_folder_button_clicked (GtkButton             *button,
   GtkTreeIter iter;
   GtkTreePath *path;
 
+  if (!impl->browse_files_model)
+    return; /* FIXME: this sucks.  Disable the New Folder button or something. */
+
   _gtk_file_system_model_add_editable (impl->browse_files_model, &iter);
 
   path = gtk_tree_model_get_path (GTK_TREE_MODEL (impl->browse_files_model), &iter);
@@ -1878,10 +1895,8 @@ selection_check (GtkFileChooserDefault *impl,
 static void
 bookmarks_check_add_sensitivity (GtkFileChooserDefault *impl)
 {
-  GtkTreeSelection *selection;
   gboolean active;
-
-  /* Check selection */
+  GtkTreeSelection *selection;
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
 
@@ -2725,13 +2740,13 @@ popup_position_func (GtkMenu   *menu,
   GtkRequisition req;
   gint monitor_num;
   GdkRectangle monitor;
-  
+
   g_return_if_fail (GTK_WIDGET_REALIZED (widget));
 
-  gdk_window_get_origin (widget->window, x, y);      
+  gdk_window_get_origin (widget->window, x, y);
 
   gtk_widget_size_request (GTK_WIDGET (menu), &req);
-  
+
   *x += (widget->allocation.width - req.width) / 2;
   *y += (widget->allocation.height - req.height) / 2;
 
@@ -2757,10 +2772,10 @@ file_list_popup_menu (GtkFileChooserDefault *impl,
   else
     {
       gtk_menu_popup (GTK_MENU (impl->browse_files_popup_menu),
-		      NULL, NULL, 
+		      NULL, NULL,
 		      popup_position_func, impl->browse_files_tree_view,
 		      0, GDK_CURRENT_TIME);
-      gtk_menu_shell_select_first (GTK_MENU_SHELL (impl->browse_files_popup_menu), 
+      gtk_menu_shell_select_first (GTK_MENU_SHELL (impl->browse_files_popup_menu),
 				   FALSE);
     }
 
@@ -3481,7 +3496,9 @@ gtk_file_chooser_default_set_property (GObject      *object,
 	if (show_hidden != impl->show_hidden)
 	  {
 	    impl->show_hidden = show_hidden;
-	    _gtk_file_system_model_set_show_hidden (impl->browse_files_model, show_hidden);
+
+	    if (impl->browse_files_model)
+	      _gtk_file_system_model_set_show_hidden (impl->browse_files_model, show_hidden);
 	  }
       }
       break;
@@ -3723,6 +3740,8 @@ list_model_filter_func (GtkFileSystemModel *model,
 static void
 install_list_model_filter (GtkFileChooserDefault *impl)
 {
+  g_assert (impl->browse_files_model != NULL);
+
   if (impl->current_filter)
     _gtk_file_system_model_set_filter (impl->browse_files_model,
 				       list_model_filter_func,
@@ -3842,20 +3861,32 @@ browse_files_model_finished_loading_cb (GtkFileSystemModel    *model,
 }
 
 /* Gets rid of the old list model and creates a new one for the current folder */
-static void
-set_list_model (GtkFileChooserDefault *impl)
+static gboolean
+set_list_model (GtkFileChooserDefault *impl,
+		GError               **error)
 {
   if (impl->browse_files_model)
     {
       g_object_unref (impl->browse_files_model);
+      impl->browse_files_model = NULL;
+
       g_object_unref (impl->sort_model);
+      impl->sort_model = NULL;
     }
 
   set_busy_cursor (impl, TRUE);
 
   impl->browse_files_model = _gtk_file_system_model_new (impl->file_system,
 							 impl->current_folder, 0,
-							 GTK_FILE_INFO_ALL);
+							 GTK_FILE_INFO_ALL,
+							 error);
+  if (!impl->browse_files_model)
+    {
+      set_busy_cursor (impl, FALSE);
+      gtk_tree_view_set_model (GTK_TREE_VIEW (impl->browse_files_tree_view), NULL);
+      return FALSE;
+    }
+
   g_signal_connect (impl->browse_files_model, "finished-loading",
 		    G_CALLBACK (browse_files_model_finished_loading_cb), impl);
 
@@ -3891,6 +3922,8 @@ set_list_model (GtkFileChooserDefault *impl)
   gtk_tree_view_columns_autosize (GTK_TREE_VIEW (impl->browse_files_tree_view));
   gtk_tree_view_set_search_column (GTK_TREE_VIEW (impl->browse_files_tree_view),
 				   GTK_FILE_SYSTEM_MODEL_DISPLAY_NAME);
+
+  return TRUE;
 }
 
 static void
@@ -3927,6 +3960,7 @@ gtk_file_chooser_default_set_current_folder (GtkFileChooser    *chooser,
 					     GError           **error)
 {
   GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (chooser);
+  gboolean result;
 
   if (impl->local_only &&
       !gtk_file_system_path_is_local (impl->file_system, path))
@@ -3965,8 +3999,11 @@ gtk_file_chooser_default_set_current_folder (GtkFileChooser    *chooser,
       impl->changing_folder = FALSE;
     }
 
-  /* Create a new list model */
-  set_list_model (impl);
+  /* Create a new list model.  This is slightly evil; we store the result value
+   * but perform more actions rather than returning immediately even if it
+   * generates an error.
+   */
+  result = set_list_model (impl, error);
 
   /* Refresh controls */
 
@@ -3979,7 +4016,7 @@ gtk_file_chooser_default_set_current_folder (GtkFileChooser    *chooser,
 
   g_signal_emit_by_name (impl, "selection-changed", 0);
 
-  return TRUE;
+  return result;
 }
 
 static GtkFilePath *
@@ -4099,6 +4136,9 @@ gtk_file_chooser_default_unselect_path (GtkFileChooser    *chooser,
 					const GtkFilePath *path)
 {
   GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (chooser);
+
+  if (!impl->browse_files_model)
+    return;
 
   _gtk_file_system_model_path_do (impl->browse_files_model, path,
 				  unselect_func, impl);
@@ -4719,7 +4759,8 @@ set_current_filter (GtkFileChooserDefault *impl,
 	gtk_combo_box_set_active (GTK_COMBO_BOX (impl->filter_combo),
 				  filter_index);
 
-      install_list_model_filter (impl);
+      if (impl->browse_files_model)
+	install_list_model_filter (impl);
 
       g_object_notify (G_OBJECT (impl), "filter");
     }
@@ -4743,7 +4784,7 @@ check_preview_change (GtkFileChooserDefault *impl)
   const GtkFileInfo *new_info;
 
   gtk_tree_view_get_cursor (GTK_TREE_VIEW (impl->browse_files_tree_view), &cursor_path, NULL);
-  if (cursor_path)
+  if (cursor_path && impl->sort_model)
     {
       GtkTreeIter iter;
       GtkTreeIter child_iter;

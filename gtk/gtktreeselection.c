@@ -362,7 +362,6 @@ gtk_tree_selection_get_selected (GtkTreeSelection  *selection,
   g_return_val_if_fail (GTK_IS_TREE_SELECTION (selection), FALSE);
   g_return_val_if_fail (selection->type != GTK_SELECTION_MULTIPLE, FALSE);
   g_return_val_if_fail (selection->tree_view != NULL, FALSE);
-  g_return_val_if_fail (selection->tree_view->priv->model != NULL, FALSE);
 
   if (model)
     *model = selection->tree_view->priv->model;
@@ -437,7 +436,6 @@ gtk_tree_selection_get_selected_rows (GtkTreeSelection   *selection,
 
   g_return_val_if_fail (GTK_IS_TREE_SELECTION (selection), NULL);
   g_return_val_if_fail (selection->tree_view != NULL, NULL);
-  g_return_val_if_fail (selection->tree_view->priv->model != NULL, NULL);
 
   if (selection->tree_view->priv->tree == NULL ||
       selection->tree_view->priv->tree->root == NULL)
@@ -560,7 +558,6 @@ gtk_tree_selection_count_selected_rows (GtkTreeSelection *selection)
 
   g_return_val_if_fail (GTK_IS_TREE_SELECTION (selection), 0);
   g_return_val_if_fail (selection->tree_view != NULL, 0);
-  g_return_val_if_fail (selection->tree_view->priv->model != NULL, 0);
 
   if (selection->tree_view->priv->tree == NULL ||
       selection->tree_view->priv->tree->root == NULL)
@@ -621,7 +618,6 @@ gtk_tree_selection_selected_foreach (GtkTreeSelection            *selection,
 
   g_return_if_fail (GTK_IS_TREE_SELECTION (selection));
   g_return_if_fail (selection->tree_view != NULL);
-  g_return_if_fail (selection->tree_view->priv->model != NULL);
 
   if (func == NULL ||
       selection->tree_view->priv->tree == NULL ||
@@ -915,7 +911,9 @@ gtk_tree_selection_path_is_selected (GtkTreeSelection *selection,
   g_return_val_if_fail (GTK_IS_TREE_SELECTION (selection), FALSE);
   g_return_val_if_fail (path != NULL, FALSE);
   g_return_val_if_fail (selection->tree_view != NULL, FALSE);
-  g_return_val_if_fail (selection->tree_view->priv->model != NULL, FALSE);
+
+  if (selection->tree_view->priv->model == NULL)
+    return FALSE;
 
   ret = _gtk_tree_view_find_node (selection->tree_view,
 				  path,
@@ -1029,8 +1027,10 @@ gtk_tree_selection_select_all (GtkTreeSelection *selection)
 {
   g_return_if_fail (GTK_IS_TREE_SELECTION (selection));
   g_return_if_fail (selection->tree_view != NULL);
-  if (selection->tree_view->priv->tree == NULL)
+
+  if (selection->tree_view->priv->tree == NULL || selection->tree_view->priv->model == NULL)
     return;
+
   g_return_if_fail (selection->type == GTK_SELECTION_MULTIPLE);
 
   if (gtk_tree_selection_real_select_all (selection))
@@ -1130,12 +1130,10 @@ gtk_tree_selection_unselect_all (GtkTreeSelection *selection)
 {
   g_return_if_fail (GTK_IS_TREE_SELECTION (selection));
   g_return_if_fail (selection->tree_view != NULL);
-  if (selection->tree_view->priv->tree == NULL)
+
+  if (selection->tree_view->priv->tree == NULL || selection->tree_view->priv->model == NULL)
     return;
   
-  if (selection->tree_view->priv->tree == NULL)
-    return;
-
   if (gtk_tree_selection_real_unselect_all (selection))
     g_signal_emit (selection, tree_selection_signals[CHANGED], 0);
 }
@@ -1253,6 +1251,7 @@ gtk_tree_selection_select_range (GtkTreeSelection *selection,
   g_return_if_fail (GTK_IS_TREE_SELECTION (selection));
   g_return_if_fail (selection->tree_view != NULL);
   g_return_if_fail (selection->type == GTK_SELECTION_MULTIPLE);
+  g_return_if_fail (selection->tree_view->priv->model != NULL);
 
   if (gtk_tree_selection_real_modify_range (selection, RANGE_SELECT, start_path, end_path))
     g_signal_emit (selection, tree_selection_signals[CHANGED], 0);
@@ -1276,6 +1275,7 @@ gtk_tree_selection_unselect_range (GtkTreeSelection *selection,
 {
   g_return_if_fail (GTK_IS_TREE_SELECTION (selection));
   g_return_if_fail (selection->tree_view != NULL);
+  g_return_if_fail (selection->tree_view->priv->model != NULL);
 
   if (gtk_tree_selection_real_modify_range (selection, RANGE_UNSELECT, start_path, end_path))
     g_signal_emit (selection, tree_selection_signals[CHANGED], 0);
@@ -1537,4 +1537,3 @@ gtk_tree_selection_real_select_node (GtkTreeSelection *selection,
 
   return FALSE;
 }
-
