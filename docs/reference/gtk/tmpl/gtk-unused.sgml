@@ -1272,6 +1272,13 @@ produce superscript and subscript.
 @GTK_TREE_SELECTION_SINGLE: 
 @GTK_TREE_SELECTION_MULTI: 
 
+<!-- ##### SIGNAL GtkTreeView::focus-column-header ##### -->
+<para>
+
+</para>
+
+@treeview: the object which received the signal.
+
 <!-- ##### USER_FUNCTION GtkTreeViewDraggableFunc ##### -->
 <para>
 
