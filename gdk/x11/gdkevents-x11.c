@@ -2051,12 +2051,13 @@ static struct
   { "Net/DndDragThreshold", "gtk-dnd-drag-threshold" },
   { "Gtk/CanChangeAccels", "gtk-can-change-accels" },
   { "Gtk/ColorPalette", "gtk-color-palette" },
+  { "Gtk/FontName", "gtk-font-name" },
+  { "Gtk/KeyThemeName", "gtk-key-theme-name" },
   { "Gtk/ToolbarStyle", "gtk-toolbar-style" },
   { "Gtk/ToolbarIconSize", "gtk-toolbar-icon-size" },
   { "Net/CursorBlink", "gtk-cursor-blink" },
   { "Net/CursorBlinkTime", "gtk-cursor-blink-time" },
-  { "Net/ThemeName", "gtk-theme-name" },
-  { "Gtk/KeyThemeName", "gtk-key-theme-name" }
+  { "Net/ThemeName", "gtk-theme-name" }
 };
 
 static void

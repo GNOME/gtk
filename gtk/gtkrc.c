@@ -96,6 +96,7 @@ struct _GtkRcContext
 
   gchar *theme_name;
   gchar *key_theme_name;
+  gchar *font_name;
   
   gchar *pixmap_path[GTK_RC_MAX_PIXMAP_PATHS];
 
@@ -512,6 +513,14 @@ gtk_rc_settings_changed (GtkSettings  *settings,
   g_free (new_key_theme_name);
 }
 
+static void
+gtk_rc_font_name_changed (GtkSettings  *settings,
+                          GParamSpec   *pspec,
+                          GtkRcContext *context)
+{
+  _gtk_rc_context_get_default_font_name (settings);
+}
+
 static GtkRcContext *
 gtk_rc_context_get (GtkSettings *settings)
 {
@@ -529,6 +538,7 @@ gtk_rc_context_get (GtkSettings *settings)
       g_object_get (settings,
 		    "gtk-theme-name", &context->theme_name,
 		    "gtk-key-theme-name", &context->key_theme_name,
+		    "gtk-font-name", &context->font_name,
 		    NULL);
 
       g_signal_connect (settings,
@@ -539,6 +549,11 @@ gtk_rc_context_get (GtkSettings *settings)
 			"notify::gtk-key-theme-name",
 			G_CALLBACK (gtk_rc_settings_changed),
 			context);
+      g_signal_connect (settings,
+			"notify::gtk-font-name",
+			G_CALLBACK (gtk_rc_font_name_changed),
+			context);
+
       
       context->pixmap_path[0] = NULL;
 
@@ -1234,6 +1249,62 @@ gtk_rc_reset_widgets (GtkRcContext *context)
   g_list_free (toplevels);
 }
 
+void
+gtk_rc_clear_realized_style (gpointer key,
+			     gpointer value,
+			     gpointer data)
+{
+  GSList *rc_styles = key;
+  GSList *tmp_list = rc_styles;
+
+  while (tmp_list)
+    {
+      GtkRcStyle *rc_style = tmp_list->data;
+      
+      rc_style->rc_style_lists = g_slist_remove_all (rc_style->rc_style_lists,
+						     rc_styles);
+      tmp_list = tmp_list->next;
+    }
+
+  g_slist_free (rc_styles);
+}
+
+const gchar*
+_gtk_rc_context_get_default_font_name (GtkSettings *settings)
+{
+  GtkRcContext *context;
+  gchar *new_font_name;
+  
+  g_return_val_if_fail (GTK_IS_SETTINGS (settings), NULL);
+
+  context = gtk_rc_context_get (settings);
+
+  g_object_get (context->settings,
+                "gtk-font-name", &new_font_name,
+                NULL);
+
+  if (new_font_name != context->font_name && !(new_font_name && strcmp (context->font_name, new_font_name) == 0))
+    {
+      g_free (context->font_name);
+      context->font_name = g_strdup (new_font_name);
+
+      /* Clear out styles that have been looked up already
+       */
+      if (realized_style_ht)
+	{
+	  g_hash_table_foreach (realized_style_ht, gtk_rc_clear_realized_style, NULL);
+	  g_hash_table_destroy (realized_style_ht);
+	  realized_style_ht = NULL;
+	  
+	  gtk_rc_reset_widgets (context);
+	}
+    }
+          
+  g_free (new_font_name);
+
+  return context->font_name;
+}
+
 /**
  * gtk_rc_reparse_all_for_settings:
  * @settings: a #GtkSettings
@@ -1321,6 +1392,7 @@ gtk_rc_reparse_all_for_settings (GtkSettings *settings,
 
       g_free (context->theme_name);
       g_free (context->key_theme_name);
+
       g_object_get (context->settings,
 		    "gtk-theme-name", &context->theme_name,
 		    "gtk-key-theme-name", &context->key_theme_name,
@@ -3278,7 +3350,7 @@ gtk_rc_parse_module_path (GScanner *scanner)
     return G_TOKEN_STRING;
 
   g_warning ("module_path directive is now ignored\n");
-  
+
   return G_TOKEN_NONE;
 }
 

@@ -30,7 +30,8 @@ enum {
   PROP_THEME_NAME,
   PROP_KEY_THEME_NAME,
   PROP_MENU_BAR_ACCEL,
-  PROP_DND_DRAG_THRESHOLD
+  PROP_DND_DRAG_THRESHOLD,
+  PROP_FONT_NAME
 };
 
 
@@ -208,7 +209,16 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                G_PARAM_READWRITE),
 					     NULL);
   g_assert (result == PROP_DND_DRAG_THRESHOLD);
-  
+
+  result = settings_install_property_parser (class,
+                                             g_param_spec_string ("gtk-font-name",
+								   _("Font Name"),
+								   _("Name of default font to use"),
+								  "Sans 10",
+								  G_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_FONT_NAME);
+ 
 }
 
 static void

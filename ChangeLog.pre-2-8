@@ -1,3 +1,10 @@
+Sat Feb 23 20:59:05 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkstyle.c gtk/gtkrc.[ch]: gtk/gtksettings.c gtk/gtkstyle.c:
+	Patch from Richard Hestilow to add a gtk-font-name GtkSetting.
+
+	* gdk/x11/gdkevents-x11.c: Add Gtk/FontName XSETTING.
+
 2002-02-24  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk/gtkfilesel.c: Move inclusion of <windows.h> before inclusion

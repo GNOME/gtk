@@ -485,8 +485,9 @@ static void
 gtk_style_init (GtkStyle *style)
 {
   gint i;
+  const gchar *font_name = _gtk_rc_context_get_default_font_name (gtk_settings_get_default ());
   
-  style->font_desc = pango_font_description_from_string ("Sans 10");
+  style->font_desc = pango_font_description_from_string (font_name);
 
   style->attach_count = 0;
   style->colormap = NULL;
@@ -2339,7 +2340,7 @@ gtk_default_draw_shadow (GtkStyle      *style,
 	  return;
 	}
       if (widget && GTK_IS_SPIN_BUTTON (widget) &&
-	  detail && strcmp (detail, "spinbutton") == 0)
+         detail && strcmp (detail, "spinbutton") == 0)
 	{
 	  draw_spinbutton_shadow (style, window, state_type,
 				  gtk_widget_get_direction (widget), area, x, y, width, height);

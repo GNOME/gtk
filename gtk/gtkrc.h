@@ -236,6 +236,7 @@ const GtkRcProperty* _gtk_rc_style_lookup_rc_property (GtkRcStyle *rc_style,
 gchar*  gtk_win32_get_installation_directory (void);
 #endif
 
+const gchar* _gtk_rc_context_get_default_font_name (GtkSettings *settings);
 
 #ifdef __cplusplus
 }

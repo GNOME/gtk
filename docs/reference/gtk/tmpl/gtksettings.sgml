@@ -201,6 +201,11 @@ GtkSettings
 
 </para>
 
+<!-- ##### ARG GtkSettings:gtk-font-name ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkSettings:gtk-color-palette ##### -->
 <para>
 
