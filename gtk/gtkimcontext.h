@@ -67,6 +67,8 @@ struct _GtkIMContextClass
   void     (*focus_in)           (GtkIMContext   *context);
   void     (*focus_out)          (GtkIMContext   *context);
   void     (*reset)              (GtkIMContext   *context);
+  void     (*set_cursor_pos)	 (GtkIMContext   *context,
+				  GdkRectangle	 *area);
 };
 
 GtkType       gtk_im_context_get_type           (void) G_GNUC_CONST;
@@ -82,6 +84,8 @@ gboolean      gtk_im_context_filter_keypress    (GtkIMContext   *context,
 void          gtk_im_context_focus_in           (GtkIMContext   *context);
 void          gtk_im_context_focus_out          (GtkIMContext   *context);
 void          gtk_im_context_reset              (GtkIMContext   *context);
+void          gtk_im_context_set_cursor_pos     (GtkIMContext   *context,
+						 GdkRectangle	*area);
 
 #ifdef __cplusplus
 }

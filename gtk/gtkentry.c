@@ -2029,6 +2029,35 @@ gtk_entry_reset_layout (GtkEntry *entry)
     }
 }
 
+static void
+update_im_cursor_position (GtkEntry *entry)
+{
+  GdkRectangle area;
+  gint strong_x;
+  gint strong_xoffset;
+  gint x, y, area_width, area_height;
+
+  gtk_entry_get_cursor_locations (entry, CURSOR_STANDARD, &strong_x, NULL)
+;
+  get_text_area_size (entry, &x, &y, &area_width, &area_height);
+
+  strong_xoffset = strong_x - entry->scroll_offset;
+  if (strong_xoffset < 0)
+    {
+      strong_xoffset = 0;
+    }
+  else if (strong_xoffset > area_width)
+    {
+      strong_xoffset = area_width;
+    }
+  area.x = x + strong_xoffset;
+  area.y = y + area_height;
+  area.width = area_width;
+  area.height = area_height;
+
+  gtk_im_context_set_cursor_pos (entry->im_context, &area);
+}
+
 static gboolean
 recompute_idle_func (gpointer data)
 {
@@ -2039,6 +2068,8 @@ recompute_idle_func (gpointer data)
 
   entry->recompute_idle = FALSE;
   
+  update_im_cursor_position (entry);
+
   return FALSE;
 }
 

@@ -1,3 +1,17 @@
+2001-03-14  HideToshi Tajima  <tajima@happy.sunsoft.eng.sun.com>
+
+	* gtk/gtkimmulticontext.c (gtk_im_multicontext_set_cursor_pos):
+	* gtk/gtkimcontext.c (gtk_im_context_set_cursor_pos):
+	* gtk/gtkimcontext.h (struct _GtkIMContextClass): add
+	set_cursor_pos() virtual method
+
+	* modules/input/gtkimcontextxim.c (gtk_im_context_xim_class_init):
+	(gtk_im_context_xim_set_cursor_pos): add implementation for
+	set_cursor_pos() method
+
+	* gtk/gtkentry.c (recompute_idle_func): set current cursor
+	position to input methods
+
 Mon Mar 12 21:02:08 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_header_focus): Fix up focus
@@ -203,6 +217,7 @@ Fri Mar  9 09:31:55 2001  Tim Janik  <timj@gtk.org>
 	* gtk/gtktext.c (process_exposes):
 	Use gtk_widget_send_expose instead of gtk_widget_event.
 
+>>>>>>> 1.1811
 Thu Mar  8 19:40:28 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_destroy): Add destroy function.
