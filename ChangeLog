@@ -1,5 +1,12 @@
 2004-02-11  Federico Mena Quintero  <federico@ximian.com>
 
+	Fixes #134051.
+
+	* gtk/gtkicontheme.c (struct _GtkIconInfo): Remove the ref_count field.
+	(icon_info_new): Don't initialize the ref_count field.
+
+2004-02-11  Federico Mena Quintero  <federico@ximian.com>
+
 	* gtk/gtkicontheme.c (gtk_icon_theme_prepend_search_path): Shift
 	the array correctly.  Fixes #134055, patch by Tosten Schoenfeld
 	<kaffeetisch@gmx.de>.

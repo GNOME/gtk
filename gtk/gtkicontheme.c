@@ -95,8 +95,6 @@ struct _GtkIconThemePrivate
 
 struct _GtkIconInfo
 {
-  guint ref_count;
-
   /* Information about the source
    */
   gchar *filename;
@@ -1967,7 +1965,6 @@ icon_info_new (void)
 {
   GtkIconInfo *icon_info = g_new0 (GtkIconInfo, 1);
 
-  icon_info->ref_count = 1;
   icon_info->scale = -1.;
 
   return icon_info;
