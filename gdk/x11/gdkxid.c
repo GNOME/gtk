@@ -53,10 +53,11 @@ gdk_xid_table_remove (XID xid)
 gpointer
 gdk_xid_table_lookup (XID xid)
 {
-  gpointer data;
+  gpointer data = NULL;
 
-  data = g_hash_table_lookup (xid_ht, &xid);
-
+  if (xid_ht)
+    data = g_hash_table_lookup (xid_ht, &xid);
+  
   return data;
 }
 
