@@ -5844,7 +5844,7 @@ gtk_tree_view_maybe_begin_dragging_row (GtkTreeView      *tree_view,
 
   di = get_info (tree_view);
 
-  if (di == NULL)
+  if (di == NULL || !di->source_set)
     goto out;
 
   if (tree_view->priv->pressed_button < 0)

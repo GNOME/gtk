@@ -1,3 +1,9 @@
+Wed Aug 11 19:20:34 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktreeview.c (gtk_tree_view_maybe_begin_dragging_row): 
+	Don't start a drag if the treeview is only a 
+	drag destination.  (#149836, Pawel Salek)
+
 2004-08-11  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktreedatalist.[hc]: 
