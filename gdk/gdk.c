@@ -1964,7 +1964,7 @@ gdk_event_translate (GdkEvent *event,
 	    window_private->dnd_drag_savedeventmask = dnd_winattr.your_event_mask;
 	    dnd_setwinattr.event_mask = 
 	      window_private->dnd_drag_eventmask = ButtonMotionMask | ButtonPressMask | ButtonReleaseMask |
-			EnterWindowMask | LeaveWindowMask;
+			EnterWindowMask | LeaveWindowMask | ExposureMask;
 	    XChangeWindowAttributes(gdk_display, window_private->xwindow,
 				    CWEventMask, &dnd_setwinattr);
 	}
@@ -2333,7 +2333,7 @@ gdk_event_translate (GdkEvent *event,
 		       ButtonMotionMask | PointerMotionMask |
 		       /* PointerMotionHintMask | */ /* HINTME */
 		       ButtonPressMask | ButtonReleaseMask,
-		       GrabModeAsync, GrabModeAsync, gdk_root_window,
+		       GrabModeAsync, GrabModeAsync, None,
 		       None, CurrentTime);
 #ifdef G_ENABLE_DEBUG
 	  GDK_NOTE(DND, g_print("xgpret = %d\n", xgpret));
