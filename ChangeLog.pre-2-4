@@ -1,3 +1,13 @@
+2000-01-02  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkevents-win32.c: Clean up some more leftovers from
+	before Owen's reorganization: Don't have queued_events and
+	queued_tail statics in this file, but use gdk_queued_events and
+	gdk_queued_tail. This makes exposure event compression work again.
+
+	(gdk_WindowProc): Comment out a posting of gdk_ping_msg, doesn't
+	seem to be needed?
+
 1999-12-30  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/gdk.c: If we don't HAVE_XCONVERTCASE we must #include

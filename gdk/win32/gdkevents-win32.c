@@ -133,12 +133,6 @@ static HCURSOR p_grab_cursor;
 
 static GList *client_filters;	            /* Filters for client messages */
 
-/* FIFO's for event queue, and for events put back using
- * gdk_event_put().
- */
-static GList *queued_events = NULL;
-static GList *queued_tail = NULL;
-
 static GSourceFuncs event_funcs = {
   gdk_event_prepare,
   gdk_event_check,
@@ -197,7 +191,7 @@ gdk_WindowProc (HWND hWnd,
       if (event.any.type == GDK_CONFIGURE)
 	{
 	  /* Compress configure events */
-	  GList *list = queued_events;
+	  GList *list = gdk_queued_events;
 
 	  while (list != NULL
 		 && (((GdkEvent *)list->data)->any.type != GDK_CONFIGURE
@@ -205,6 +199,8 @@ gdk_WindowProc (HWND hWnd,
 	    list = list->next;
 	  if (list != NULL)
 	    {
+	      GDK_NOTE (EVENTS, g_print ("... compressing an CONFIGURE event\n"));
+
 	      *((GdkEvent *)list->data) = event;
 	      gdk_window_unref (event.any.window);
 	      /* Wake up WaitMessage */
@@ -215,7 +211,7 @@ gdk_WindowProc (HWND hWnd,
       else if (event.any.type == GDK_EXPOSE)
 	{
 	  /* Compress expose events */
-	  GList *list = queued_events;
+	  GList *list = gdk_queued_events;
 
 	  while (list != NULL
 		 && (((GdkEvent *)list->data)->any.type != GDK_EXPOSE
@@ -225,13 +221,16 @@ gdk_WindowProc (HWND hWnd,
 	    {
 	      GdkRectangle u;
 
+	      GDK_NOTE (EVENTS, g_print ("... compressing an EXPOSE event\n"));
 	      gdk_rectangle_union (&event.expose.area,
 				   &((GdkEvent *)list->data)->expose.area,
 				   &u);
 	      ((GdkEvent *)list->data)->expose.area = u;
 	      gdk_window_unref (event.any.window);
+#if 0
 	      /* Wake up WaitMessage */
 	      PostMessage (NULL, gdk_ping_msg, 0, 0);
+#endif
 	      return FALSE;
 	    }
 	}
@@ -3845,7 +3844,7 @@ gdk_event_translate (GdkEvent *event,
       return_val = !GDK_DRAWABLE_DESTROYED (window);
       if (return_val)
 	{
-	  GList *list = queued_events;
+	  GList *list = gdk_queued_events;
 	  while (list != NULL )
 	    {
 	      if ((((GdkEvent *)list->data)->any.type == GDK_EXPOSE) &&
@@ -4197,7 +4196,7 @@ gdk_events_queue (void)
       ((GdkEventPrivate *)event)->flags |= GDK_EVENT_PENDING;
 
       gdk_event_queue_append (event);
-      node = queued_tail;
+      node = gdk_queued_tail;
 
       if (gdk_event_translate (event, &msg, NULL, NULL))
 	((GdkEventPrivate *)event)->flags &= ~GDK_EVENT_PENDING;
