@@ -65,7 +65,7 @@ create_pane_options (GtkPaned *paned,
   frame = gtk_frame_new (frame_label);
   gtk_container_set_border_width (GTK_CONTAINER (frame), 4);
   
-  table = gtk_table_new (3, 2, 4);
+  table = gtk_table_new (3, 2, TRUE);
   gtk_container_add (GTK_CONTAINER (frame), table);
   
   label = gtk_label_new (label1);

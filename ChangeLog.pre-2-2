@@ -1,3 +1,9 @@
+Tue Feb 13 13:16:09 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* demos/gtk-demo/panes.c (create_pane_options): If we're going to
+	have a demo, we might as well pass in real values.  Thanks to
+	clahey for pointing this out.
+
 2001-02-14  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtkimagemenuitem.c (gtk_image_menu_item_remove): add
