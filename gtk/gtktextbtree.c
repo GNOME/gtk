@@ -431,7 +431,7 @@ _gtk_text_btree_new (GtkTextTagTable *table,
     GtkTextIter start;
     GtkTextLineSegment *seg;
 
-    __gtk_text_btree_get_iter_at_line_char (tree, &start, 0, 0);
+    _gtk_text_btree_get_iter_at_line_char (tree, &start, 0, 0);
 
 
     tree->insert_mark = _gtk_text_btree_set_mark (tree,
@@ -1102,7 +1102,7 @@ insert_pixbuf_or_widget_segment (GtkTextIter        *iter,
 }
      
 void
-__gtk_text_btree_insert_pixbuf (GtkTextIter *iter,
+_gtk_text_btree_insert_pixbuf (GtkTextIter *iter,
                               GdkPixbuf   *pixbuf)
 {
   GtkTextLineSegment *seg;
@@ -1863,7 +1863,7 @@ _gtk_text_btree_get_line (GtkTextBTree *tree,
 }
 
 GtkTextLine*
-__gtk_text_btree_get_line_at_char (GtkTextBTree      *tree,
+_gtk_text_btree_get_line_at_char (GtkTextBTree      *tree,
                                  gint                char_index,
                                  gint               *line_start_index,
                                  gint               *real_char_index)
@@ -2621,7 +2621,7 @@ _gtk_text_btree_place_cursor (GtkTextBTree      *tree,
 }
 
 void
-__gtk_text_btree_remove_mark_by_name (GtkTextBTree *tree,
+_gtk_text_btree_remove_mark_by_name (GtkTextBTree *tree,
                                     const gchar *name)
 {
   GtkTextMark *mark;
@@ -3705,7 +3705,7 @@ _gtk_text_line_char_locate     (GtkTextLine     *line,
 }
 
 void
-__gtk_text_line_byte_to_char_offsets (GtkTextLine *line,
+_gtk_text_line_byte_to_char_offsets (GtkTextLine *line,
                                     gint byte_offset,
                                     gint *line_char_offset,
                                     gint *seg_char_offset)
@@ -3751,7 +3751,7 @@ __gtk_text_line_byte_to_char_offsets (GtkTextLine *line,
 }
 
 void
-__gtk_text_line_char_to_byte_offsets (GtkTextLine *line,
+_gtk_text_line_char_to_byte_offsets (GtkTextLine *line,
                                     gint char_offset,
                                     gint *line_byte_offset,
                                     gint *seg_byte_offset)
@@ -3901,7 +3901,7 @@ node_compare (GtkTextBTreeNode *lhs,
 
 /* remember that tag == NULL means "any tag" */
 GtkTextLine*
-__gtk_text_line_next_could_contain_tag (GtkTextLine *line,
+_gtk_text_line_next_could_contain_tag (GtkTextLine *line,
                                       GtkTextBTree *tree,
                                       GtkTextTag  *tag)
 {
@@ -4056,7 +4056,7 @@ prev_line_under_node (GtkTextBTreeNode *node,
 }
 
 GtkTextLine*
-__gtk_text_line_previous_could_contain_tag (GtkTextLine  *line,
+_gtk_text_line_previous_could_contain_tag (GtkTextLine  *line,
                                           GtkTextBTree *tree,
                                           GtkTextTag   *tag)
 {
@@ -4987,7 +4987,7 @@ gtk_text_btree_node_check_valid_downward (GtkTextBTreeNode *node,
 
 
 /**
- * __gtk_text_btree_validate_line:
+ * _gtk_text_btree_validate_line:
  * @tree: a #GtkTextBTree
  * @line: line to validate
  * @view_id: view ID for the view to validate
@@ -4996,7 +4996,7 @@ gtk_text_btree_node_check_valid_downward (GtkTextBTreeNode *node,
  * results up through the entire tree.
  **/
 void
-__gtk_text_btree_validate_line (GtkTextBTree     *tree,
+_gtk_text_btree_validate_line (GtkTextBTree     *tree,
                               GtkTextLine      *line,
                               gpointer          view_id)
 {
@@ -5225,7 +5225,7 @@ get_tree_bounds (GtkTextBTree *tree,
                  GtkTextIter *start,
                  GtkTextIter *end)
 {
-  __gtk_text_btree_get_iter_at_line_char (tree, start, 0, 0);
+  _gtk_text_btree_get_iter_at_line_char (tree, start, 0, 0);
   _gtk_text_btree_get_last_iter (tree, end);
 }
 

@@ -784,7 +784,7 @@ gtk_text_layout_validate_yrange (GtkTextLayout *layout,
         {
           gint old_height = line_data ? line_data->height : 0;
 
-          __gtk_text_btree_validate_line (_gtk_text_buffer_get_btree (layout->buffer),
+          _gtk_text_btree_validate_line (_gtk_text_buffer_get_btree (layout->buffer),
                                         line, layout);
           line_data = _gtk_text_line_get_data (line, layout);
 
@@ -813,7 +813,7 @@ gtk_text_layout_validate_yrange (GtkTextLayout *layout,
         {
           gint old_height = line_data ? line_data->height : 0;
 
-          __gtk_text_btree_validate_line (_gtk_text_buffer_get_btree (layout->buffer),
+          _gtk_text_btree_validate_line (_gtk_text_buffer_get_btree (layout->buffer),
                                         line, layout);
           line_data = _gtk_text_line_get_data (line, layout);
 

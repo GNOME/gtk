@@ -1,5 +1,11 @@
 2000-12-13  Havoc Pennington  <hp@pobox.com>
 
+	* gtk/gtktextbtree.h: Remove double _ in front of some functions
+
+	* gtk/gtktext*.[hc]: update accordingly
+	
+2000-12-13  Havoc Pennington  <hp@pobox.com>
+
 	* gtk/gtktextbtree.h: Put _ in front of every function in this 
 	header file
 

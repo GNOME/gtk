@@ -1330,7 +1330,7 @@ gtk_text_buffer_insert_pixbuf         (GtkTextBuffer      *buffer,
   g_return_if_fail (iter != NULL);
   g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
 
-  __gtk_text_btree_insert_pixbuf (iter, pixbuf);
+  _gtk_text_btree_insert_pixbuf (iter, pixbuf);
 
   /* FIXME pixbuf-specific signal like insert_text */
 
@@ -1909,7 +1909,7 @@ gtk_text_buffer_get_iter_at_line_offset (GtkTextBuffer      *buffer,
   g_return_if_fail (iter != NULL);
   g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
 
-  __gtk_text_btree_get_iter_at_line_char (get_btree (buffer),
+  _gtk_text_btree_get_iter_at_line_char (get_btree (buffer),
                                         iter, line_number, char_offset);
 }
 
@@ -1922,7 +1922,7 @@ gtk_text_buffer_get_iter_at_line_index  (GtkTextBuffer *buffer,
   g_return_if_fail (iter != NULL);
   g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
 
-  __gtk_text_btree_get_iter_at_line_byte (get_btree (buffer),
+  _gtk_text_btree_get_iter_at_line_byte (get_btree (buffer),
                                         iter, line_number, byte_index);
 }
 

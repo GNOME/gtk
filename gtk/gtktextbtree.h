@@ -31,8 +31,8 @@ void _gtk_text_btree_delete        (GtkTextIter *start,
 void _gtk_text_btree_insert        (GtkTextIter *iter,
                                     const gchar *text,
                                     gint         len);
-void __gtk_text_btree_insert_pixbuf (GtkTextIter *iter,
-                                     GdkPixbuf   *pixbuf);
+void _gtk_text_btree_insert_pixbuf (GtkTextIter *iter,
+                                    GdkPixbuf   *pixbuf);
 
 GtkTextChildAnchor* _gtk_text_btree_create_child_anchor (GtkTextIter *iter);
 
@@ -65,9 +65,9 @@ gboolean     _gtk_text_btree_validate          (GtkTextBTree      *tree,
                                                 gint              *y,
                                                 gint              *old_height,
                                                 gint              *new_height);
-void         __gtk_text_btree_validate_line     (GtkTextBTree      *tree,
-                                                 GtkTextLine       *line,
-                                                 gpointer           view_id);
+void         _gtk_text_btree_validate_line     (GtkTextBTree      *tree,
+                                                GtkTextLine       *line,
+                                                gpointer           view_id);
 
 /* Tag */
 
@@ -81,10 +81,10 @@ void _gtk_text_btree_tag (const GtkTextIter *start,
 GtkTextLine * _gtk_text_btree_get_line          (GtkTextBTree      *tree,
                                                  gint               line_number,
                                                  gint              *real_line_number);
-GtkTextLine * __gtk_text_btree_get_line_at_char  (GtkTextBTree      *tree,
-                                                  gint               char_index,
-                                                  gint              *line_start_index,
-                                                  gint              *real_char_index);
+GtkTextLine * _gtk_text_btree_get_line_at_char  (GtkTextBTree      *tree,
+                                                 gint               char_index,
+                                                 gint              *line_start_index,
+                                                 gint              *real_char_index);
 GtkTextTag**  _gtk_text_btree_get_tags          (const GtkTextIter *iter,
                                                  gint              *num_tags);
 gchar        *_gtk_text_btree_get_text          (const GtkTextIter *start,
@@ -101,20 +101,20 @@ gboolean      _gtk_text_btree_char_is_invisible (const GtkTextIter *iter);
 void     _gtk_text_btree_get_iter_at_char         (GtkTextBTree       *tree,
                                                    GtkTextIter        *iter,
                                                    gint                char_index);
-void     __gtk_text_btree_get_iter_at_line_char    (GtkTextBTree       *tree,
-                                                    GtkTextIter        *iter,
-                                                    gint                line_number,
-                                                    gint                char_index);
-void     __gtk_text_btree_get_iter_at_line_byte    (GtkTextBTree       *tree,
-                                                    GtkTextIter        *iter,
-                                                    gint                line_number,
-                                                    gint                byte_index);
+void     _gtk_text_btree_get_iter_at_line_char    (GtkTextBTree       *tree,
+                                                   GtkTextIter        *iter,
+                                                   gint                line_number,
+                                                   gint                char_index);
+void     _gtk_text_btree_get_iter_at_line_byte    (GtkTextBTree       *tree,
+                                                   GtkTextIter        *iter,
+                                                   gint                line_number,
+                                                   gint                byte_index);
 gboolean _gtk_text_btree_get_iter_from_string     (GtkTextBTree       *tree,
                                                    GtkTextIter        *iter,
                                                    const gchar        *string);
-gboolean __gtk_text_btree_get_iter_at_mark_name    (GtkTextBTree       *tree,
-                                                    GtkTextIter        *iter,
-                                                    const gchar        *mark_name);
+gboolean _gtk_text_btree_get_iter_at_mark_name    (GtkTextBTree       *tree,
+                                                   GtkTextIter        *iter,
+                                                   const gchar        *mark_name);
 void     _gtk_text_btree_get_iter_at_mark         (GtkTextBTree       *tree,
                                                    GtkTextIter        *iter,
                                                    GtkTextMark        *mark);
@@ -144,8 +144,8 @@ GtkTextMark        *_gtk_text_btree_set_mark                (GtkTextBTree       
                                                              gboolean            left_gravity,
                                                              const GtkTextIter  *index,
                                                              gboolean           should_exist);
-void                __gtk_text_btree_remove_mark_by_name     (GtkTextBTree       *tree,
-                                                              const gchar        *name);
+void                _gtk_text_btree_remove_mark_by_name     (GtkTextBTree       *tree,
+                                                             const gchar        *name);
 void                _gtk_text_btree_remove_mark             (GtkTextBTree       *tree,
                                                              GtkTextMark        *segment);
 gboolean            _gtk_text_btree_get_selection_bounds    (GtkTextBTree       *tree,
@@ -237,14 +237,14 @@ void                _gtk_text_line_char_locate                (GtkTextLine      
                                                                GtkTextLineSegment **any_segment,
                                                                gint                *seg_char_offset,
                                                                gint                *line_char_offset);
-void                __gtk_text_line_byte_to_char_offsets       (GtkTextLine         *line,
-                                                                gint                 byte_offset,
-                                                                gint                *line_char_offset,
-                                                                gint                *seg_char_offset);
-void                __gtk_text_line_char_to_byte_offsets       (GtkTextLine         *line,
-                                                                gint                 char_offset,
-                                                                gint                *line_byte_offset,
-                                                                gint                *seg_byte_offset);
+void                _gtk_text_line_byte_to_char_offsets       (GtkTextLine         *line,
+                                                               gint                 byte_offset,
+                                                               gint                *line_char_offset,
+                                                               gint                *seg_char_offset);
+void                _gtk_text_line_char_to_byte_offsets       (GtkTextLine         *line,
+                                                               gint                 char_offset,
+                                                               gint                *line_byte_offset,
+                                                               gint                *seg_byte_offset);
 GtkTextLineSegment *_gtk_text_line_byte_to_any_segment        (GtkTextLine         *line,
                                                                gint                 byte_offset,
                                                                gint                *seg_offset);
@@ -255,12 +255,12 @@ gint                _gtk_text_line_byte_to_char               (GtkTextLine      
                                                                gint                 byte_offset);
 gint                _gtk_text_line_char_to_byte               (GtkTextLine         *line,
                                                                gint                 char_offset);
-GtkTextLine    *    __gtk_text_line_next_could_contain_tag     (GtkTextLine         *line,
-                                                                GtkTextBTree        *tree,
-                                                                GtkTextTag          *tag);
-GtkTextLine    *    __gtk_text_line_previous_could_contain_tag (GtkTextLine         *line,
-                                                                GtkTextBTree        *tree,
-                                                                GtkTextTag          *tag);
+GtkTextLine    *    _gtk_text_line_next_could_contain_tag     (GtkTextLine         *line,
+                                                               GtkTextBTree        *tree,
+                                                               GtkTextTag          *tag);
+GtkTextLine    *    _gtk_text_line_previous_could_contain_tag (GtkTextLine         *line,
+                                                               GtkTextBTree        *tree,
+                                                               GtkTextTag          *tag);
 
 
 /* Debug */
