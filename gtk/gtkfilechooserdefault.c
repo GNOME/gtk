@@ -44,6 +44,7 @@
 #include <gtk/gtkvbox.h>
 
 #include <string.h>
+#include <time.h>
 
 typedef struct _GtkFileChooserImplDefaultClass GtkFileChooserImplDefaultClass;
 
@@ -158,11 +159,18 @@ static void list_name_data_func (GtkTreeViewColumn *tree_column,
 				 GtkTreeModel      *tree_model,
 				 GtkTreeIter       *iter,
 				 gpointer           data);
+#if 0
 static void list_size_data_func (GtkTreeViewColumn *tree_column,
 				 GtkCellRenderer   *cell,
 				 GtkTreeModel      *tree_model,
 				 GtkTreeIter       *iter,
 				 gpointer           data);
+#endif
+static void list_mtime_data_func (GtkTreeViewColumn *tree_column,
+				  GtkCellRenderer   *cell,
+				  GtkTreeModel      *tree_model,
+				  GtkTreeIter       *iter,
+				  gpointer           data);
 
 static GObjectClass *parent_class;
 
@@ -393,7 +401,6 @@ create_file_list (GtkFileChooserImplDefault *impl)
   /* Tree/list view */
 
   impl->list = gtk_tree_view_new ();
-  /* FIXME: hide the headers; look at create_directory_tree() */
   gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (impl->list), TRUE);
   gtk_container_add (GTK_CONTAINER (impl->list_scrollwin), impl->list);
   gtk_widget_show (impl->list);
@@ -420,7 +427,7 @@ create_file_list (GtkFileChooserImplDefault *impl)
   gtk_tree_view_column_set_sort_column_id (column, 0);
 
   gtk_tree_view_append_column (GTK_TREE_VIEW (impl->list), column);
-
+#if 0
   /* Size column */
 
   column = gtk_tree_view_column_new ();
@@ -431,6 +438,18 @@ create_file_list (GtkFileChooserImplDefault *impl)
   gtk_tree_view_column_set_cell_data_func (column, renderer,
 					   list_size_data_func, impl, NULL);
   gtk_tree_view_column_set_sort_column_id (column, 1);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (impl->list), column);
+#endif
+  /* Modification time column */
+
+  column = gtk_tree_view_column_new ();
+  gtk_tree_view_column_set_title (column, "Modified");
+
+  renderer = gtk_cell_renderer_text_new ();
+  gtk_tree_view_column_pack_start (column, renderer, TRUE);
+  gtk_tree_view_column_set_cell_data_func (column, renderer,
+					   list_mtime_data_func, impl, NULL);
+  gtk_tree_view_column_set_sort_column_id (column, 2);
   gtk_tree_view_append_column (GTK_TREE_VIEW (impl->list), column);
 
   return impl->list_scrollwin;
@@ -1141,6 +1160,22 @@ size_sort_func (GtkTreeModel *model,
   return size_a > size_b ? -1 : (size_a == size_b ? 0 : 1);
 }
 
+/* Sort callback for the mtime column */
+static gint
+mtime_sort_func (GtkTreeModel *model,
+		 GtkTreeIter  *a,
+		 GtkTreeIter  *b,
+		 gpointer      user_data)
+{
+  GtkFileChooserImplDefault *impl = user_data;
+  const GtkFileInfo *info_a = _gtk_file_system_model_get_info (impl->tree_model, a);
+  const GtkFileInfo *info_b = _gtk_file_system_model_get_info (impl->tree_model, b);
+  GtkFileTime ta = gtk_file_info_get_modification_time (info_a);
+  GtkFileTime tb = gtk_file_info_get_modification_time (info_b);
+
+  return ta > tb ? -1 : (ta == tb ? 0 : 1);
+}
+
 static void
 open_and_close (GtkTreeView *tree_view,
 		GtkTreePath *target_path)
@@ -1322,13 +1357,17 @@ tree_selection_changed (GtkTreeSelection          *selection,
 						 file_path, 0,
 						 GTK_FILE_INFO_ICON |
 						 GTK_FILE_INFO_DISPLAY_NAME |
-						 GTK_FILE_INFO_SIZE);
-  _gtk_file_system_model_set_show_folders (impl->list_model, FALSE);
+						 GTK_FILE_INFO_SIZE |
+						 GTK_FILE_INFO_MODIFICATION_TIME);
+#if 0
+  _gtk_file_system_model_set_show_folders (impl->list_model, TRUE);
+#endif
   install_list_model_filter (impl);
 
   impl->sort_model = (GtkTreeModelSort *)gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (impl->list_model));
   gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->sort_model), 0, name_sort_func, impl, NULL);
   gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->sort_model), 1, size_sort_func, impl, NULL);
+  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->sort_model), 2, mtime_sort_func, impl, NULL);
   gtk_tree_sortable_set_default_sort_func (GTK_TREE_SORTABLE (impl->sort_model),
 					   name_sort_func, impl, NULL);
 
@@ -1489,6 +1528,7 @@ list_name_data_func (GtkTreeViewColumn *tree_column,
     }
 }
 
+#if 0
 static void
 list_size_data_func (GtkTreeViewColumn *tree_column,
 		     GtkCellRenderer   *cell,
@@ -1519,7 +1559,78 @@ list_size_data_func (GtkTreeViewColumn *tree_column,
 
       g_free (str);
     }
+}
+#endif
 
+/* Tree column data callback for the file list; fetches the mtime of a file */
+static void
+list_mtime_data_func (GtkTreeViewColumn *tree_column,
+		      GtkCellRenderer   *cell,
+		      GtkTreeModel      *tree_model,
+		      GtkTreeIter       *iter,
+		      gpointer           data)
+{
+  GtkFileChooserImplDefault *impl;
+  const GtkFileInfo *info;
+  time_t mtime, now;
+  struct tm tm, now_tm;
+  char buf[256];
+
+  impl = data;
+
+  info = get_list_file_info (impl, iter);
+  if (!info)
+    return;
+
+  mtime = (time_t) gtk_file_info_get_modification_time (info);
+  tm = *localtime (&mtime);
+
+  now = time (NULL);
+  now_tm = *localtime (&now);
+
+  /* Today */
+  if (tm.tm_mday == now_tm.tm_mday
+      && tm.tm_mon == now_tm.tm_mon
+      && tm.tm_year == now_tm.tm_year)
+    strcpy (buf, "Today");
+  else
+    {
+      int i;
+
+      /* Days from last week */
+
+      for (i = 1; i < 7; i++)
+	{
+	  time_t then;
+	  struct tm then_tm;
+
+	  then = now - i * 60 * 60 * 24;
+	  then_tm = *localtime (&then);
+
+	  if (tm.tm_mday == then_tm.tm_mday
+	      && tm.tm_mon == then_tm.tm_mon
+	      && tm.tm_year == then_tm.tm_year)
+	    {
+	      if (i == 1)
+		strcpy (buf, "Yesterday");
+	      else
+		if (strftime (buf, sizeof (buf), "%A", &tm) == 0)
+		  strcpy (buf, "Unknown");
+
+	      break;
+	    }
+	}
+
+      /* Any other date */
+
+      if (i == 7)
+	{
+	  if (strftime (buf, sizeof (buf), "%d/%b/%Y", &tm) == 0)
+	    strcpy (buf, "Unknown");
+	}
+    }
+
+  g_object_set (cell, "text", buf, NULL);
 }
 
 GtkWidget *

@@ -99,6 +99,8 @@ gtk_file_info_free (GtkFileInfo *info)
     g_free (info->display_name);
   if (info->mime_type)
     g_free (info->mime_type);
+  if (info->display_key)
+    g_free (info->display_key);
 }
 
 G_CONST_RETURN gchar *

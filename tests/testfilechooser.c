@@ -136,6 +136,7 @@ my_new_from_file_at_size (const char *filename,
 		int width;
 		int height;
 	} info;
+	struct stat st;
 
 	guchar buffer [4096];
 	int length;
@@ -143,6 +144,18 @@ my_new_from_file_at_size (const char *filename,
 
 	g_return_val_if_fail (filename != NULL, NULL);
         g_return_val_if_fail (width > 0 && height > 0, NULL);
+
+	if (stat (filename, &st) != 0) {
+		g_set_error (error,
+			     G_FILE_ERROR,
+			     g_file_error_from_errno (errno),
+			     _("Could not get information for file '%s': %s"),
+			     filename, g_strerror (errno));
+		return NULL;
+	}
+
+	if (!S_ISREG (st.st_mode))
+		return NULL;
 
 	f = fopen (filename, "rb");
 	if (!f) {

@@ -1516,7 +1516,7 @@ do_files_removed (GtkFileSystemModel *model,
 	      dummy->is_visible = TRUE;
 	      dummy->parent = parent_node;
 	      dummy->is_dummy = TRUE;
-	      
+
 	      parent_node->children = dummy;
 	      parent_node->has_dummy = TRUE;
 
