@@ -690,7 +690,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
                                      PROP_HOVER_EXPAND,
                                      g_param_spec_boolean ("hover_expand",
                                                            P_("Hover Expand"),
-                                                           P_("Whether rows should be expanded/collaped when the pointer moves over them"),
+                                                           P_("Whether rows should be expanded/collapsed when the pointer moves over them"),
                                                            FALSE,
                                                            G_PARAM_READWRITE));
 

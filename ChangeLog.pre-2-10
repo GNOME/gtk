@@ -1,5 +1,8 @@
 2004-12-27  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeview.c (gtk_tree_view_class_init): Fix a 
+	typo.  (#162339, Alessio Dessi)
+
 	* gtk/gtkadjustment.c (gtk_adjustment_class_init): Document
 	properties as new since 2.4.  (#156101, Billy Biggs)
 
