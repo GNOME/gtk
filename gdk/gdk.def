@@ -169,6 +169,8 @@ EXPORTS
 	gdk_get_display
 	gdk_get_show_events
 	gdk_get_use_xshm
+	gdk_ic_attr_destroy
+	gdk_ic_attr_new
 	gdk_ic_destroy
 	gdk_ic_get_attr
 	gdk_ic_get_events

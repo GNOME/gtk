@@ -103,6 +103,17 @@ gdk_ic_get_style (GdkIC *ic)
   return GDK_IM_PREEDIT_NONE | GDK_IM_STATUS_NONE;
 }
 
+GdkICAttr*
+gdk_ic_attr_new (void)
+{
+  return NULL;
+}
+
+void
+gdk_ic_attr_destroy (GdkICAttr *attr)
+{
+}
+
 void 
 gdk_ic_set_values (GdkIC *ic, ...)
 {
