@@ -208,16 +208,40 @@ sanitize_ctext (const char *str,
   gchar *result = g_malloc (*length + 1);
   gint out_length = 0;
   gint i;
+  const guchar *ustr = (const guchar *)str;
 
   for (i=0; i < *length; i++)
     {
-      guchar c = ((guchar *)str)[i];
+      guchar c = ustr[i];
       
       if (c == '\r')
 	{
 	  result[out_length++] = '\n';
-	  if (i + 1 < *length && str[i + 1] == '\n')
+	  if (i + 1 < *length && ustr[i + 1] == '\n')
 	    i++;
+	}
+      else if (c == 27 /* ESC */)
+	{
+	  /* Check for "extended segments, which can contain arbitrary
+	   * octets. See CTEXT spec, section 6.
+	   */
+
+	  if (i + 5 < *length &&
+	      ustr[i + 1] == '%' &&
+	      ustr[i + 2] == '/' &&
+	      (ustr[i + 3] >= 48 && ustr[i + 3] <= 52) &&
+	      ustr[i + 4] >= 128 &&
+	      ustr[i + 5] >= 128)
+	    {
+	      int extra_len = 6 + (ustr[i + 4] - 128) * 128 + ustr[i + 5] - 128;
+	      extra_len = MAX (extra_len, *length - i);
+
+	      memcpy (result + out_length, ustr + i, extra_len);
+	      out_length += extra_len;
+	      i += extra_len - 1;
+	    }
+	  else
+	    result[out_length++] = c;	    
 	}
       else if (c == '\n' || c == '\t' || c == 27 /* ESC */ ||
 	       (c >= 32 && c <= 127) ||	/* GL */

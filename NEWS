@@ -1,3 +1,13 @@
+Overview of Changes in GTK+ 1.2.10:
+
+* Fix focus drawing with no window manager
+* Fix cut-and-paste with no current event
+* Fix compilation using --with-xinput=gxi  
+* Fix problem with cut-and-paste and KOI8-R
+* Fix rare problem with enter events and menus
+* Fix problem with --with-native-locale and GNU libc-2.1
+* Further fixes for using fonts, not fontsets, with non iso-8859-1.
+
 Overview of Changes in GTK+ 1.2.9:
 
 * Move include files into a gtk-1-2/ subdir to support parallel

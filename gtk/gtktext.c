@@ -5041,7 +5041,7 @@ draw_line (GtkText* text,
 	        pixel_width = gdk_text_width_wc (gc_values.font,
 						 buffer.wc, len);
 	      else
-	      pixel_width = gdk_text_width (gc_values.font,
+		pixel_width = gdk_text_width (gc_values.font,
 					      buffer.ch, len);
 	    }
 	  else
@@ -5205,15 +5205,26 @@ undraw_cursor (GtkText* text, gint absolute)
 	{
 	  if (font->type == GDK_FONT_FONT)
 	    gdk_gc_set_font (text->gc, font);
-
+	  
 	  gdk_gc_set_foreground (text->gc, MARK_CURRENT_FORE (text, &text->cursor_mark));
-
-	  gdk_draw_text_wc (text->text_area, font,
-			 text->gc,
-			 text->cursor_pos_x,
-			 text->cursor_pos_y - text->cursor_char_offset,
-			 &text->cursor_char,
-			 1);
+	  
+          if (text->use_wchar)
+	    gdk_draw_text_wc (text->text_area, font,
+			      text->gc,
+			      text->cursor_pos_x,
+			      text->cursor_pos_y - text->cursor_char_offset,
+			      &text->cursor_char,
+			      1);
+	  else
+	    {
+	      guchar ch = text->cursor_char;
+	      gdk_draw_text (text->text_area, font,
+			     text->gc,
+			     text->cursor_pos_x,
+			     text->cursor_pos_y - text->cursor_char_offset,
+			     (gchar *)&ch,
+			     1);         
+	    }
 	}
     }
 }

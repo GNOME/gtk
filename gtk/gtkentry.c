@@ -374,6 +374,48 @@ gtk_entry_new (void)
   return GTK_WIDGET (gtk_type_new (GTK_TYPE_ENTRY));
 }
 
+static GdkWChar
+gtk_entry_get_invisible_char (GtkEntry *entry)
+{
+  GdkWChar ch;
+
+  if (entry->use_wchar)
+    gdk_mbstowcs (&ch, "*", 1);
+  else
+    ch = '*';
+
+  return ch;
+}
+
+/*
+ * Draws the string, noting that if entry->use_wchar is false, then
+ * the text is not really wide characters, but narrow characters
+ * stored as wide characters.
+ */
+static void
+gtk_entry_draw_wchars (GtkEntry       *entry,
+		       GdkDrawable    *drawable,
+		       GdkFont	      *font,
+		       GdkGC	      *gc,
+		       gint	       x,
+		       gint	       y,
+		       const GdkWChar *text,
+		       gint	       text_length)
+{
+  if (entry->use_wchar)
+    gdk_draw_text_wc (drawable, font, gc, x, y, text, text_length);
+  else
+    {
+      gint i;
+      gchar *mbstr = g_new (gchar, text_length);
+      
+      for (i = 0; i < text_length; i++)
+        mbstr[i] = text[i];
+      gdk_draw_text (drawable, font, gc, x, y, mbstr, text_length);
+      g_free(mbstr);
+    }
+}
+
 GtkWidget*
 gtk_entry_new_with_max_length (guint16 max)
 {
@@ -1398,19 +1440,20 @@ gtk_entry_draw_text (GtkEntry *entry)
       else
 	{
 	  gint i;
+	  GdkWChar invisible_char = gtk_entry_get_invisible_char (entry);
 	  
 	  stars = g_new (GdkWChar, end_pos - start_pos);
 	  for (i = 0; i < end_pos - start_pos; i++)
-	    stars[i] = '*';
+	    stars[i] = invisible_char;
 	  toprint = stars;
 	}
       
       if (selection_start_pos > start_pos)
-	gdk_draw_text_wc (drawable, widget->style->font,
-			  widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
-			  INNER_BORDER + start_xoffset, y,
-			  toprint,
-			  selection_start_pos - start_pos);
+	gtk_entry_draw_wchars (entry, drawable, widget->style->font,
+			       widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+			       INNER_BORDER + start_xoffset, y,
+			       toprint,
+			       selection_start_pos - start_pos);
       
       if ((selection_end_pos >= start_pos) && 
 	  (selection_start_pos < end_pos) &&
@@ -1423,19 +1466,19 @@ gtk_entry_draw_text (GtkEntry *entry)
 				INNER_BORDER,
 				selection_end_xoffset - selection_start_xoffset,
 				height - 2*INNER_BORDER);
-	    gdk_draw_text_wc (drawable, widget->style->font,
-			      widget->style->fg_gc[selected_state],
-			      INNER_BORDER + selection_start_xoffset, y,
-			      toprint + selection_start_pos - start_pos,
-			      selection_end_pos - selection_start_pos);
+	    gtk_entry_draw_wchars (entry, drawable, widget->style->font,
+				   widget->style->fg_gc[selected_state],
+				   INNER_BORDER + selection_start_xoffset, y,
+				   toprint + selection_start_pos - start_pos,
+				   selection_end_pos - selection_start_pos);
 	 }	    
        
        if (selection_end_pos < end_pos)
-	 gdk_draw_text_wc (drawable, widget->style->font,
-			   widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
-			   INNER_BORDER + selection_end_xoffset, y,
-			   toprint + selection_end_pos - start_pos,
-			   end_pos - selection_end_pos);
+	 gtk_entry_draw_wchars (entry, drawable, widget->style->font,
+				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+				INNER_BORDER + selection_end_xoffset, y,
+				toprint + selection_end_pos - start_pos,
+				end_pos - selection_end_pos);
        /* free the space allocated for the stars if it's neccessary. */
       if (!editable->visible)
 	g_free (toprint);
@@ -1510,9 +1553,9 @@ gtk_entry_draw_cursor_on_drawable (GtkEntry *entry, GdkDrawable *drawable)
 		                 *(entry->text + editable->current_pos) :
 		                 '*';
 	      
-	      gdk_draw_text_wc (drawable, widget->style->font,
-				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
-				xoffset, yoffset, &c, 1);
+	      gtk_entry_draw_wchars (entry, drawable, widget->style->font,
+				     widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+				     xoffset, yoffset, &c, 1);
 	    }
 	}
 
@@ -1780,21 +1823,23 @@ gtk_entry_insert_text (GtkEditable *editable,
       gint offset = 0;
       
       for (i = last_pos; i >= end_pos; i--)
-	entry->char_offset[i] 
-	  = entry->char_offset[i - insertion_length];
+	entry->char_offset[i] = entry->char_offset[i - insertion_length];
       
       for (i=start_pos; i<end_pos; i++)
 	{
+	  GdkWChar ch;
+
 	  entry->char_offset[i] = entry->char_offset[start_pos] + offset;
+
 	  if (editable->visible)
-	    {
-	      offset += gdk_char_width_wc (GTK_WIDGET (entry)->style->font,
-					   entry->text[i]);
-	    }
+	    ch = entry->text[i];
+	  else 
+	    ch = gtk_entry_get_invisible_char (entry);
+
+	  if (entry->use_wchar)
+	    offset += gdk_char_width_wc (GTK_WIDGET (entry)->style->font, ch);
 	  else
-	    {
-	      offset += gdk_char_width (GTK_WIDGET (entry)->style->font, '*');
-	    }
+	    offset += gdk_char_width (GTK_WIDGET (entry)->style->font, ch);
 	}
       for (i = end_pos; i <= last_pos; i++)
 	entry->char_offset[i] += offset;
@@ -1813,21 +1858,25 @@ gtk_entry_recompute_offsets (GtkEntry *entry)
 {
   gint i;
   gint offset = 0;
+  GtkEditable *editable = GTK_EDITABLE (entry);
 
   for (i=0; i<entry->text_length; i++)
     {
-      entry->char_offset[i] = offset;
-      if (GTK_EDITABLE (entry)->visible)
-	{
-	  offset += gdk_char_width_wc (GTK_WIDGET (entry)->style->font,
-				       entry->text[i]);
-	}
-      else
-	{
-	  offset += gdk_char_width (GTK_WIDGET (entry)->style->font, '*');
-	}
-    }
+      GdkWChar ch;
 
+      entry->char_offset[i] = offset;
+
+      if (editable->visible)
+	ch = entry->text[i];
+      else
+	ch = gtk_entry_get_invisible_char (entry);
+
+      if (entry->use_wchar)
+	offset += gdk_char_width_wc (GTK_WIDGET (entry)->style->font, ch);
+      else
+	offset += gdk_char_width (GTK_WIDGET (entry)->style->font, ch);
+    }
+  
   entry->char_offset[i] = offset;
 }
 

@@ -7,8 +7,8 @@ you got this package.
 Simple install procedure
 ========================
 
-  % gzip -cd gtk+-1.2.9.tar.gz | tar xvf - # unpack the sources
-  % cd gtk+-1.2.9			   # change to the toplevel directory
+  % gzip -cd gtk+-1.2.10.tar.gz | tar xvf - # unpack the sources
+  % cd gtk+-1.2.10			   # change to the toplevel directory
   % ./configure				   # run the `configure' script
   % make				   # build GTK
 
@@ -52,11 +52,15 @@ for the XInput extension (mainly used for graphics tablets), and
 which form of support to use:
 
   no    : no support 
-  gxi   : Use generic XInput support
   xfree : Use special features in the Wacom drivers in XFree86 3.3.1
           and later.
+  gxi   : Use generic XInput support (not recommended)
 
-For more information, follow the link from http://www.gtk.org
+The XInput support is not known to work with any other XServer than
+XFree86. For more information about XInput, see:
+
+ http://www.gtk.org/~otaylor/xinput/howto/index.html
+ http://www.lepied.com/xfree86/
 
 *  --disable-nls           do not use Native Language Support
 
@@ -145,7 +149,7 @@ You can compile GTK+ against a copy of GLIB that you have not
 yet installed. To do this, give the --with-glib=DIR options
 to ./configure. For instance:
 
- ./configure --with-glib=../glib-1.2.9
+ ./configure --with-glib=../glib-1.2.10
 
 This, however, will not work if you built GLIB with different
 source and build directories.

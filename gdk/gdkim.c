@@ -1511,7 +1511,7 @@ _gdk_wcstombs_len (const GdkWChar *src,
   for (i=0; (src_len < 0 || i < src_len) && src[i]; i++)
     {
       int charlen = wctomb (p, src[i]);
-      g_return_if_fail (charlen < 0, NULL);
+      g_return_val_if_fail (charlen >= 0, NULL);
       
       len += charlen;
     }

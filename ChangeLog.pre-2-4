@@ -1,3 +1,28 @@
+Thu Mar 15 15:23:11 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* NEWS: Updated
+
+	* configure.in (GTK_BINARY_AGE): Up micro => 10,
+	binary => 10, interface => 1.
+
+	* INSTALL.in: Add some discouraging words about 
+	--with-xinput=gxi.
+
+	* configure.in (x_ldflags): Make --with-xinput be
+	--with-xinput=xfree, and warn for --with-xinput=gxi.
+
+Thu Mar 15 14:29:47 2001  Owen Taylor  <otaylor@redhat.com>
+
+        * gdk/gdkselection.c (sanitize_ctext): Handle 
+	extended segments, which can contain arbitrary octets,
+	properly. (Fixes problems with cut-and-paste and,
+	e.g., KOI8-R.)
+	
+	* gtk/gtktext.c gtk/gtkeditable.c: Patch from
+	Vlad Harchev to avoid using gdk_draw_text_wc() 
+	on text that is really chars, not wchars. (Cannot
+	convert between chars and wide chars with assignment!)
+
 Thu Mar 15 01:31:07 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkim.c (_gdk_wcstombs_len): Make somewhat more

@@ -29,9 +29,9 @@ AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl
 #
 GTK_MAJOR_VERSION=1
 GTK_MINOR_VERSION=2
-GTK_MICRO_VERSION=9
-GTK_INTERFACE_AGE=0
-GTK_BINARY_AGE=9
+GTK_MICRO_VERSION=10
+GTK_INTERFACE_AGE=1
+GTK_BINARY_AGE=10
 GTK_VERSION=$GTK_MAJOR_VERSION.$GTK_MINOR_VERSION.$GTK_MICRO_VERSION
 dnl
 AC_DIVERT_POP()dnl
@@ -379,11 +379,14 @@ x_ldflags="$X_LDFLAGS $X_LIBS"
 
 # set up things for XInput
 
-if test "x$with_xinput" = "xgxi" || test "x$with_xinput" = "xyes"; then
+if test "x$with_xinput" = "xgxi"; then
+  AC_MSG_WARN([
+*** The generic XInput support has not been tested for several years
+*** and is not known to work with any currently available X servers])
   AC_DEFINE(XINPUT_GXI)
   xinput_progs=gxid
   x_libs="-lXi $x_libs"
-elif test "x$with_xinput" = "xxfree"; then
+elif test "x$with_xinput" = "xxfree" || test "x$with_xinput" = "xyes"; then
   AC_DEFINE(XINPUT_XFREE)
   x_libs="-lXi $x_libs"
 else
