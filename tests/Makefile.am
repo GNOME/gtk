@@ -85,7 +85,16 @@ testtreesort_LDADD = $(LDADDS)
 testtext_LDADD = $(LDADDS)
 treestoretest_LDADD = $(LDADDS)
 
+testgtk_SOURCES =	\
+	prop-editor.c	\
+	testgtk.c 
+
+testtreeview_SOURCES =	\
+	prop-editor.c	\
+	testtreeview.c 
+
 EXTRA_DIST += @STRIP_BEGIN@ 	\
+	prop-editor.h		\
 	testgtk.1 		\
 	testgtkrc 		\
 	testgtkrc2 		\

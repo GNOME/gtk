@@ -47,6 +47,8 @@
 #define sleep(n) _sleep(n)
 #endif
 
+#include "prop-editor.h"
+
 #include "circles.xbm"
 #include "test.xpm"
 
@@ -3518,14 +3520,6 @@ entry_toggle_frame (GtkWidget *checkbutton,
 }
 
 static void
-entry_toggle_editable (GtkWidget *checkbutton,
-		       GtkWidget *entry)
-{
-   gtk_entry_set_editable(GTK_ENTRY(entry),
-			  GTK_TOGGLE_BUTTON(checkbutton)->active);
-}
-
-static void
 entry_toggle_sensitive (GtkWidget *checkbutton,
 			GtkWidget *entry)
 {
@@ -3533,30 +3527,12 @@ entry_toggle_sensitive (GtkWidget *checkbutton,
 }
 
 static void
-entry_toggle_visibility (GtkWidget *checkbutton,
-			GtkWidget *entry)
+entry_props_clicked (GtkWidget *button,
+		     GObject   *entry)
 {
-   gtk_entry_set_visibility (GTK_ENTRY (entry),
-                             GTK_TOGGLE_BUTTON (checkbutton)->active);
-}
+  GtkWidget *window = create_prop_editor (entry);
 
-static void
-entry_toggle_invisible_char (GtkWidget *checkbutton,
-                             GtkWidget *entry)
-{
-  if (GTK_TOGGLE_BUTTON (checkbutton)->active)
-    gtk_entry_set_invisible_char (GTK_ENTRY (entry), 0);
-  else
-    gtk_entry_set_invisible_char (GTK_ENTRY (entry), '*');
-}
-
-
-static void
-entry_toggle_activate_default (GtkWidget *checkbutton,
-                               GtkWidget *entry)
-{
-   gtk_entry_set_activates_default (GTK_ENTRY (entry),
-                                    GTK_TOGGLE_BUTTON (checkbutton)->active);
+  gtk_window_set_title (GTK_WINDOW (window), "Entry Properties");
 }
 
 static void
@@ -3565,10 +3541,9 @@ create_entry (void)
   static GtkWidget *window = NULL;
   GtkWidget *box1;
   GtkWidget *box2;
-  GtkWidget *editable_check;
+  GtkWidget *hbox;
+  GtkWidget *has_frame_check;
   GtkWidget *sensitive_check;
-  GtkWidget *invisible_char_check;
-  GtkWidget *activate_check;
   GtkWidget *entry, *cb;
   GtkWidget *button;
   GtkWidget *separator;
@@ -3599,19 +3574,25 @@ create_entry (void)
 
       box1 = gtk_vbox_new (FALSE, 0);
       gtk_container_add (GTK_CONTAINER (window), box1);
-      gtk_widget_show (box1);
 
 
       box2 = gtk_vbox_new (FALSE, 10);
       gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
       gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
-      gtk_widget_show (box2);
 
+      hbox = gtk_hbox_new (FALSE, 5);
+      gtk_box_pack_start (GTK_BOX (box2), hbox, TRUE, TRUE, 0);
+      
       entry = gtk_entry_new ();
       gtk_entry_set_text (GTK_ENTRY (entry), "hello world السلام عليكم");
       gtk_editable_select_region (GTK_EDITABLE (entry), 0, 5);
-      gtk_box_pack_start (GTK_BOX (box2), entry, TRUE, TRUE, 0);
-      gtk_widget_show (entry);
+      gtk_box_pack_start (GTK_BOX (hbox), entry, TRUE, TRUE, 0);
+
+      button = gtk_button_new_with_mnemonic ("_Props");
+      gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
+      gtk_signal_connect (GTK_OBJECT (button), "clicked",
+			  GTK_SIGNAL_FUNC (entry_props_clicked),
+			  entry);
 
       cb = gtk_combo_new ();
       gtk_combo_set_popdown_strings (GTK_COMBO (cb), cbitems);
@@ -3619,58 +3600,25 @@ create_entry (void)
       gtk_editable_select_region (GTK_EDITABLE (GTK_COMBO(cb)->entry),
 				  0, -1);
       gtk_box_pack_start (GTK_BOX (box2), cb, TRUE, TRUE, 0);
-      gtk_widget_show (cb);
-
-      editable_check = gtk_check_button_new_with_label("Editable");
-      gtk_box_pack_start (GTK_BOX (box2), editable_check, FALSE, TRUE, 0);
-      gtk_signal_connect (GTK_OBJECT(editable_check), "toggled",
-			  GTK_SIGNAL_FUNC(entry_toggle_editable), entry);
-      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(editable_check), TRUE);
-      gtk_widget_show (editable_check);
-
-      editable_check = gtk_check_button_new_with_label("Visible");
-      gtk_box_pack_start (GTK_BOX (box2), editable_check, FALSE, TRUE, 0);
-      gtk_signal_connect (GTK_OBJECT(editable_check), "toggled",
-			  GTK_SIGNAL_FUNC(entry_toggle_visibility), entry);
-      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(editable_check), TRUE);
-      gtk_widget_show (editable_check);
 
       sensitive_check = gtk_check_button_new_with_label("Sensitive");
       gtk_box_pack_start (GTK_BOX (box2), sensitive_check, FALSE, TRUE, 0);
       gtk_signal_connect (GTK_OBJECT(sensitive_check), "toggled",
 			  GTK_SIGNAL_FUNC(entry_toggle_sensitive), entry);
       gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(sensitive_check), TRUE);
-      gtk_widget_show (sensitive_check);
 
-      activate_check = gtk_check_button_new_with_label ("Activates default");
-      gtk_box_pack_start (GTK_BOX (box2), activate_check, FALSE, TRUE, 0);
-      gtk_signal_connect (GTK_OBJECT (activate_check), "toggled",
-			  GTK_SIGNAL_FUNC (entry_toggle_activate_default), entry);
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (activate_check), FALSE);
-      gtk_widget_show (activate_check);
-      
-      invisible_char_check = gtk_check_button_new_with_label("invisible_char = 0");
-      gtk_box_pack_start (GTK_BOX (box2), invisible_char_check, FALSE, TRUE, 0);
-      gtk_signal_connect (GTK_OBJECT(invisible_char_check), "toggled",
-			  GTK_SIGNAL_FUNC(entry_toggle_invisible_char), entry);
-      gtk_widget_show (invisible_char_check);
-
-      editable_check = gtk_check_button_new_with_label("Has Frame");
-      gtk_box_pack_start (GTK_BOX (box2), editable_check, FALSE, TRUE, 0);
-      gtk_signal_connect (GTK_OBJECT(editable_check), "toggled",
+      has_frame_check = gtk_check_button_new_with_label("Has Frame");
+      gtk_box_pack_start (GTK_BOX (box2), has_frame_check, FALSE, TRUE, 0);
+      gtk_signal_connect (GTK_OBJECT(has_frame_check), "toggled",
 			  GTK_SIGNAL_FUNC(entry_toggle_frame), entry);
-      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(editable_check), TRUE);
-      gtk_widget_show (editable_check);
+      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(has_frame_check), TRUE);
       
       separator = gtk_hseparator_new ();
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
-      gtk_widget_show (separator);
 
       box2 = gtk_vbox_new (FALSE, 10);
       gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
       gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
-      gtk_widget_show (box2);
-
 
       button = gtk_button_new_with_label ("close");
       gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
@@ -3679,11 +3627,10 @@ create_entry (void)
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
       gtk_widget_grab_default (button);
-      gtk_widget_show (button);
     }
 
   if (!GTK_WIDGET_VISIBLE (window))
-    gtk_widget_show (window);
+    gtk_widget_show_all (window);
   else
     gtk_widget_destroy (window);
 }
@@ -8381,35 +8328,35 @@ window_controls (GtkWidget *window)
   g_object_set_data (G_OBJECT (control_window), "spin2", spin);
 
   button = gtk_button_new_with_label ("Queue resize");
-  gtk_signal_connect_object (GTK_WIDGET (button),
+  gtk_signal_connect_object (GTK_OBJECT (button),
                              "clicked",
                              GTK_SIGNAL_FUNC (gtk_widget_queue_resize),
                              GTK_OBJECT (control_window));
   gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
   
   button = gtk_button_new_with_label ("Set size");
-  gtk_signal_connect (GTK_WIDGET (button),
+  gtk_signal_connect (GTK_OBJECT (button),
                       "clicked",
                       GTK_SIGNAL_FUNC (set_size_callback),
                       GTK_OBJECT (control_window));
   gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
   button = gtk_button_new_with_label ("Set default size");
-  gtk_signal_connect (GTK_WIDGET (button),
+  gtk_signal_connect (GTK_OBJECT (button),
                       "clicked",
                       GTK_SIGNAL_FUNC (set_default_size_callback),
                       GTK_OBJECT (control_window));
   gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
   button = gtk_button_new_with_label ("Set usize");
-  gtk_signal_connect (GTK_WIDGET (button),
+  gtk_signal_connect (GTK_OBJECT (button),
                       "clicked",
                       GTK_SIGNAL_FUNC (set_usize_callback),
                       GTK_OBJECT (control_window));
   gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
   button = gtk_button_new_with_label ("Set location");
-  gtk_signal_connect (GTK_WIDGET (button),
+  gtk_signal_connect (GTK_OBJECT (button),
                       "clicked",
                       GTK_SIGNAL_FUNC (set_location_callback),
                       GTK_OBJECT (control_window));
@@ -8417,7 +8364,7 @@ window_controls (GtkWidget *window)
 
   button = gtk_check_button_new_with_label ("Allow shrink");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), FALSE);
-  gtk_signal_connect (GTK_WIDGET (button),
+  gtk_signal_connect (GTK_OBJECT (button),
                       "toggled",
                       GTK_SIGNAL_FUNC (allow_shrink_callback),
                       GTK_OBJECT (control_window));
@@ -8425,7 +8372,7 @@ window_controls (GtkWidget *window)
 
   button = gtk_check_button_new_with_label ("Allow grow");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
-  gtk_signal_connect (GTK_WIDGET (button),
+  gtk_signal_connect (GTK_OBJECT (button),
                       "toggled",
                       GTK_SIGNAL_FUNC (allow_grow_callback),
                       GTK_OBJECT (control_window));
@@ -8433,7 +8380,7 @@ window_controls (GtkWidget *window)
   
   button = gtk_check_button_new_with_label ("Auto shrink");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), FALSE);
-  gtk_signal_connect (GTK_WIDGET (button),
+  gtk_signal_connect (GTK_OBJECT (button),
                       "toggled",
                       GTK_SIGNAL_FUNC (auto_shrink_callback),
                       GTK_OBJECT (control_window));

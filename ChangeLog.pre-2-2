@@ -1,3 +1,16 @@
+Wed May  2 20:36:38 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_real_insert_text): Reduce
+	new_text_length appropriately when we run into the 
+	size limit for the entry. (#53445, reported by Jeff Franks)
+
+	* tests/testgtk.c (create_entry): Remove most of the
+	property toggle buttons. Replace with a "Props" button
+	that brings up a property editor.
+
+	* tests/prop-editor.[ch] test/testtreeview.c tests/Makefile.am:
+	Split the property editor code out for reuse, improve.
+
 Wed May  2 17:26:22 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkevents-x11.c gdk/x11/gdkwindow-x11.c: Always

@@ -754,7 +754,7 @@ gtk_entry_set_property (GObject         *object,
       break;
 
     case PROP_INVISIBLE_CHAR:
-      gtk_entry_set_invisible_char (entry, g_value_get_int (value));
+      gtk_entry_set_invisible_char (entry, g_value_get_uint (value));
       break;
 
     case PROP_ACTIVATES_DEFAULT:
@@ -796,7 +796,7 @@ gtk_entry_get_property (GObject         *object,
       g_value_set_boolean (value, entry->visible);
       break;
     case PROP_INVISIBLE_CHAR:
-      g_value_set_int (value, entry->invisible_char);
+      g_value_set_uint (value, entry->invisible_char);
       break;
     case PROP_ACTIVATES_DEFAULT:
       g_value_set_boolean (value, entry->activates_default);
@@ -1752,6 +1752,7 @@ gtk_entry_real_insert_text (GtkEntry    *entry,
     {
       gdk_beep ();
       n_chars = entry->text_max_length - entry->text_length;
+      new_text_length = g_utf8_offset_to_pointer (new_text, n_chars) - new_text;
     }
 
   if (new_text_length + entry->n_bytes + 1 > entry->text_size)
