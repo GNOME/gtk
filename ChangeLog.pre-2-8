@@ -1,3 +1,8 @@
+Mon Jan 28 16:23:20 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_dy_to_top_row): no longer
+	g_assert.
+
 2002-01-28  Jon Trowbridge  <trow@gnu.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_set_model): When setting the
