@@ -100,6 +100,9 @@ gint	   gtk_window_activate_default	       (GtkWindow           *window);
 void       gtk_window_set_modal                (GtkWindow           *window,
                                                 gboolean modal);
 
+void gtk_window_remove_embedded_xid (GtkWindow *window, guint xid);
+void gtk_window_add_embedded_xid    (GtkWindow *window, guint xid);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

@@ -55,6 +55,7 @@ static_sources = \
 	gtkitem.c		\
 	gtkitemfactory.c	\
 	gtklabel.c		\
+	gtklayout.c		\
 	gtklist.c		\
 	gtklistitem.c		\
 	gtkmain.c		\
@@ -70,6 +71,7 @@ static_sources = \
 	gtkpacker.c		\
 	gtkpaned.c		\
 	gtkpixmap.c		\
+	gtkplug.c               \
 	gtkpreview.c		\
 	gtkprogress.c		\
 	gtkprogressbar.c	\
@@ -84,6 +86,7 @@ static_sources = \
 	gtkselection.c		\
 	gtkseparator.c		\
 	gtksignal.c		\
+	gtksocket.c             \
 	gtkspinbutton.c		\
 	gtkstyle.c		\
 	gtkstatusbar.c		\
@@ -169,6 +172,7 @@ source_headers = \
 	gtkitem.h		\
 	gtkitemfactory.h	\
 	gtklabel.h		\
+	gtklayout.h             \
 	gtklist.h		\
 	gtklistitem.h		\
 	gtkmain.h		\
@@ -184,6 +188,7 @@ source_headers = \
 	gtkpacker.h		\
 	gtkpaned.h		\
 	gtkpixmap.h		\
+	gtkplug.h		\
 	gtkpreview.h		\
 	gtkprivate.h		\
 	gtkprogress.h		\
@@ -199,6 +204,7 @@ source_headers = \
 	gtkselection.h		\
 	gtkseparator.h		\
 	gtksignal.h		\
+	gtksocket.h		\
 	gtkspinbutton.h		\
 	gtkstyle.h		\
 	gtkstatusbar.h		\

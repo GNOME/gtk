@@ -464,6 +464,58 @@ gtk_window_set_modal (GtkWindow *window, gboolean modal)
   window->modal = modal;
 }
 
+void
+gtk_window_add_embedded_xid (GtkWindow *window, guint xid)
+{
+  GList *embedded_windows;
+
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (GTK_IS_WINDOW (window));
+  
+  g_print ("add %#x\n", xid);
+
+  embedded_windows = gtk_object_get_data (GTK_OBJECT (window), "gtk-embedded");
+  if (embedded_windows)
+    gtk_object_remove_no_notify_by_id (GTK_OBJECT (window), 
+				       g_quark_from_static_string ("gtk-embedded"));
+  embedded_windows = g_list_prepend (embedded_windows,
+				     GUINT_TO_POINTER (xid));
+
+  gtk_object_set_data_full (GTK_OBJECT (window), "gtk-embedded", 
+			    embedded_windows,
+			    embedded_windows ?
+			      (GtkDestroyNotify) g_list_free : NULL);
+}
+
+void
+gtk_window_remove_embedded_xid (GtkWindow *window, guint xid)
+{
+  GList *embedded_windows;
+  GList *node;
+
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (GTK_IS_WINDOW (window));
+  
+  g_print ("remove %#x\n", xid);
+
+  embedded_windows = gtk_object_get_data (GTK_OBJECT (window), "gtk-embedded");
+  if (embedded_windows)
+    gtk_object_remove_no_notify_by_id (GTK_OBJECT (window), 
+				       g_quark_from_static_string ("gtk-embedded"));
+
+  node = g_list_find (embedded_windows, GUINT_TO_POINTER (xid));
+  if (node)
+    {
+      embedded_windows = g_list_remove_link (embedded_windows, node);
+      g_list_free_1 (node);
+    }
+  
+  gtk_object_set_data_full (GTK_OBJECT (window), 
+			    "gtk-embedded", embedded_windows,
+			    embedded_windows ?
+			      (GtkDestroyNotify) g_list_free : NULL);
+}
+
 static void
 gtk_window_shutdown (GtkObject *object)
 {

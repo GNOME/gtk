@@ -7940,6 +7940,94 @@ create_mainloop (void)
     gtk_widget_destroy (window);
 }
 
+gint
+layout_expose_handler (GtkWidget *widget, GdkEventExpose *event)
+{
+  GtkLayout *layout;
+
+  gint i,j;
+  gint imin, imax, jmin, jmax;
+  
+  layout = GTK_LAYOUT (widget);
+
+  imin = (layout->xoffset + event->area.x) / 10;
+  imax = (layout->xoffset + event->area.x + event->area.width + 9) / 10;
+
+  jmin = (layout->yoffset + event->area.y) / 10;
+  jmax = (layout->yoffset + event->area.y + event->area.height + 9) / 10;
+
+  gdk_window_clear_area (widget->window,
+			 event->area.x, event->area.y,
+			 event->area.width, event->area.height);
+
+  for (i=imin; i<imax; i++)
+    for (j=jmin; j<jmax; j++)
+      if ((i+j) % 2)
+	gdk_draw_rectangle (layout->bin_window,
+			    widget->style->black_gc,
+			    TRUE,
+			    10*i - layout->xoffset, 10*j - layout->yoffset, 
+			    1+i%10, 1+j%10);
+  
+  return TRUE;
+}
+
+void create_layout (void)
+{
+  static GtkWidget *window = NULL;
+  GtkWidget *layout;
+  GtkWidget *scrolledwindow;
+  GtkWidget *button;
+
+  if (!window)
+    {
+      gchar buf[16];
+
+      gint i, j;
+      
+      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      gtk_signal_connect (GTK_OBJECT (window), "destroy",
+			  GTK_SIGNAL_FUNC(gtk_widget_destroyed),
+			  &window);
+
+      gtk_window_set_title (GTK_WINDOW (window), "Layout");
+      gtk_widget_set_usize (window, 200, 200);
+
+      scrolledwindow = gtk_scrolled_window_new (NULL, NULL);
+      gtk_widget_show (scrolledwindow);
+
+      gtk_container_add (GTK_CONTAINER (window), scrolledwindow);
+      
+      layout = gtk_layout_new (NULL, NULL);
+      gtk_container_add (GTK_CONTAINER (scrolledwindow), layout);
+      
+      gtk_widget_set_events (layout, GDK_EXPOSURE_MASK);
+      gtk_signal_connect (GTK_OBJECT (layout), "expose_event",
+			  GTK_SIGNAL_FUNC (layout_expose_handler), NULL);
+      
+      gtk_layout_set_size (GTK_LAYOUT (layout), 1600, 1600);
+      gtk_widget_show (layout);
+      
+      for (i=0 ; i < 16 ; i++)
+	for (j=0 ; j < 16 ; j++)
+	  {
+	    sprintf(buf, "Button %d, %d", i, j);
+	    if ((i + j) % 2)
+	      button = gtk_button_new_with_label (buf);
+	    else
+	      button = gtk_label_new (buf);
+	    gtk_layout_put (GTK_LAYOUT (layout), button,
+			    j*100, i*100);
+	    gtk_widget_show (button);
+	  }
+    }
+
+  if (!GTK_WIDGET_VISIBLE (window))
+    gtk_widget_show (window);
+  else
+    gtk_widget_destroy (window);
+}
+
 /*
  * Main Window and Exit
  */
@@ -7974,6 +8062,7 @@ create_main_window (void)
       { "gamma curve", create_gamma_curve },
       { "handle box", create_handle_box },
       { "item factory", create_item_factory },
+      { "layout", create_layout },
       { "list", create_list },
       { "menus", create_menus },
       { "modal window", create_modal_window },

@@ -3,7 +3,7 @@
 SRC_SUBDIRS = gdk gtk
 SUBDIRS = $(SRC_SUBDIRS) docs
 
-bin_SCRIPTS = gtk-config
+bbin_SCRIPTS = gtk-config
 
 EXTRA_DIST =	\
 	HACKING		\

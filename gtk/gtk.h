@@ -71,6 +71,7 @@
 #include <gtk/gtkitem.h>
 #include <gtk/gtkitemfactory.h>
 #include <gtk/gtklabel.h>
+#include <gtk/gtklayout.h>
 #include <gtk/gtklist.h>
 #include <gtk/gtklistitem.h>
 #include <gtk/gtkmain.h>
@@ -86,6 +87,7 @@
 #include <gtk/gtkpacker.h>
 #include <gtk/gtkpaned.h>
 #include <gtk/gtkpixmap.h>
+#include <gtk/gtkplug.h>
 #include <gtk/gtkpreview.h>
 #include <gtk/gtkprogress.h>
 #include <gtk/gtkprogressbar.h>
@@ -100,6 +102,7 @@
 #include <gtk/gtkselection.h>
 #include <gtk/gtkseparator.h>
 #include <gtk/gtksignal.h>
+#include <gtk/gtksocket.h>
 #include <gtk/gtkspinbutton.h>
 #include <gtk/gtkstyle.h>
 #include <gtk/gtkstatusbar.h>

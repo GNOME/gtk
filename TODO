@@ -110,10 +110,6 @@ Additions:
     gtk_widget_dnd_data_set (should be guchar * with a copy?
                              shouldn't be there at all...)
  
- * gtk_rc_add_[name/class]_style are broken for bg pixmaps, because
-   styles are broken for bg pixmaps, and RC styles only hack around
-   that.
-
  * Try to rationally deal with someone else deleting one of our
    windows??? This would mean keeping track of our window heirarchy
    ourselves, for one thing, and will never be safe, because of

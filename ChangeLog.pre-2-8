@@ -1,3 +1,17 @@
+Mon Nov 23 22:10:09 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/Makefile.am gtk/gtk.h gtk/gtklayout.[ch]
+	gtk/gtkplug.[ch] gtk/gtksocket.[ch] gtk/gtk.h:
+
+	Added layout widget for scrolling arbitrarily big areas.
+	Added plug/socket widgets for interprocess embedding.
+
+	These widgets still, at some point, need to be
+	made more pure in their use of GDK, as opposed
+	to raw X.
+
+	* gtk/testgtk.c: Added test for layout widget.
+	
 1998-11-23  Jeff Garzik  <jgarzik@pobox.com>
 
 	* gtk/gtkclist.c: (gtk_clist_swap_rows):  Bugfix from
