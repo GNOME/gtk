@@ -396,7 +396,7 @@ gdk_pixbuf_animation_new_from_file (const gchar *filename)
 
 			frame->x_offset = 0;
 			frame->y_offset = 0;
-			frame->delaytime = -1;
+			frame->delay_time = -1;
 			frame->action = GDK_PIXBUF_FRAME_RETAIN;
 
 			fseek (f, 0, SEEK_SET);

@@ -1,3 +1,9 @@
+1999-12-20  Jonathan Blandford  <jrb@redhat.com>
+
+	* gdk-pixbuf/io-gif.c: finished work to make animated gifs load
+	correctly.  Progressive loading needs some work, but that all
+	needs doing from the gdk-pixbuf-loader end, not here.
+
 1999-12-17  Jonathan Blandford  <jrb@redhat.com>
 
 	* gdk-pixbuf/gdk-pixbuf-io.c (gdk_pixbuf_animation_new_from_file):

@@ -63,7 +63,7 @@ struct _GdkPixbufFrame
 
 	gushort x_offset;
 	gushort y_offset;
-	gint delaytime;
+	gint delay_time;
 	GdkPixbufFrameAction action;
 };
 
