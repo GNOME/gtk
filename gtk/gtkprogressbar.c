@@ -581,8 +581,8 @@ gtk_progress_bar_act_mode_enter (GtkProgress *progress)
 }
 
 static void
-gtk_progress_bar_paint_activity (GtkProgressBar *pbar,
-				 GtkProgressBarOrientation orientation)
+gtk_progress_bar_paint_activity (GtkProgressBar            *pbar,
+				 GtkProgressBarOrientation  orientation)
 {
   GtkWidget *widget = GTK_WIDGET (pbar);
   GtkProgress *progress = GTK_PROGRESS (pbar);
@@ -619,8 +619,8 @@ gtk_progress_bar_paint_activity (GtkProgressBar *pbar,
 }
 
 static void
-gtk_progress_bar_paint_continous (GtkProgressBar *pbar,
-				  GtkProgressBarOrientation orientation)
+gtk_progress_bar_paint_continous (GtkProgressBar            *pbar,
+				  GtkProgressBarOrientation  orientation)
 {
   GtkWidget *widget = GTK_WIDGET (pbar);
   gint space;
@@ -675,8 +675,8 @@ gtk_progress_bar_paint_continous (GtkProgressBar *pbar,
 }
 
 static void
-gtk_progress_bar_paint_discrete (GtkProgressBar *pbar,
-				 GtkProgressBarOrientation orientation)
+gtk_progress_bar_paint_discrete (GtkProgressBar            *pbar,
+				 GtkProgressBarOrientation  orientation)
 {
   GtkWidget *widget = GTK_WIDGET (pbar);
   gint i;
@@ -727,7 +727,7 @@ gtk_progress_bar_paint_discrete (GtkProgressBar *pbar,
 }
 
 static void
-gtk_progress_bar_paint_text (GtkProgressBar            *pbar)
+gtk_progress_bar_paint_text (GtkProgressBar *pbar)
 {
   GtkProgress *progress = GTK_PROGRESS (pbar);
   GtkWidget *widget = GTK_WIDGET (pbar);
