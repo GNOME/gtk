@@ -4653,7 +4653,7 @@ _gdk_moveresize_handle_event (XEvent *event)
   GdkDisplay *display= gdk_x11_lookup_xdisplay (event->xany.display);
   MoveResizeData *mv_resize = get_move_resize_data (display, FALSE);
 
-  if (!mv_resize || mv_resize->moveresize_window)
+  if (!mv_resize || !mv_resize->moveresize_window)
     return FALSE;
 
   window_private = (GdkWindowObject *) mv_resize->moveresize_window;
