@@ -1,3 +1,8 @@
+Thu Jan 30 16:30:54 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* Makefile.am (EXTRA_DIST): Remove gtk+.spec.in from
+	EXTRA_DIST, and from dist rules. (#102231)
+
 2003-01-30  Daniel Elstner  <daniel.elstner@gmx.net>
 
 	* gtk/gtktoolbar.c (set_child_packing_and_visibility): New helper

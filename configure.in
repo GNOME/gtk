@@ -1577,7 +1577,6 @@ AM_CONDITIONAL(HAVE_SGML2HTML, test x$SGML2HTML != xno)
 AC_OUTPUT([
 config.h.win32
 gtk-zip.sh
-gtk+.spec
 Makefile
 gdk-pixbuf-2.0.pc
 gdk-2.0.pc
