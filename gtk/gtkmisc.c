@@ -73,8 +73,8 @@ gtk_misc_class_init (GtkMiscClass *class)
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
 
-  gtk_object_add_arg_type ("GtkMisc::xalign", GTK_TYPE_DOUBLE, GTK_ARG_READWRITE, ARG_XALIGN);
-  gtk_object_add_arg_type ("GtkMisc::yalign", GTK_TYPE_DOUBLE, GTK_ARG_READWRITE, ARG_YALIGN);
+  gtk_object_add_arg_type ("GtkMisc::xalign", GTK_TYPE_FLOAT, GTK_ARG_READWRITE, ARG_XALIGN);
+  gtk_object_add_arg_type ("GtkMisc::yalign", GTK_TYPE_FLOAT, GTK_ARG_READWRITE, ARG_YALIGN);
   gtk_object_add_arg_type ("GtkMisc::xpad", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_XPAD);
   gtk_object_add_arg_type ("GtkMisc::ypad", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_YPAD);
 
@@ -107,10 +107,10 @@ gtk_misc_set_arg (GtkObject      *object,
   switch (arg_id)
     {
     case ARG_XALIGN:
-      gtk_misc_set_alignment (misc, GTK_VALUE_DOUBLE (*arg), misc->yalign);
+      gtk_misc_set_alignment (misc, GTK_VALUE_FLOAT (*arg), misc->yalign);
       break;
     case ARG_YALIGN:
-      gtk_misc_set_alignment (misc, misc->xalign, GTK_VALUE_DOUBLE (*arg));
+      gtk_misc_set_alignment (misc, misc->xalign, GTK_VALUE_FLOAT (*arg));
       break;
     case ARG_XPAD:
       gtk_misc_set_padding (misc, GTK_VALUE_INT (*arg), misc->ypad);
@@ -135,10 +135,10 @@ gtk_misc_get_arg (GtkObject	 *object,
   switch (arg_id)
     {
     case ARG_XALIGN:
-      GTK_VALUE_DOUBLE (*arg) = misc->xalign;
+      GTK_VALUE_FLOAT (*arg) = misc->xalign;
       break;
     case ARG_YALIGN:
-      GTK_VALUE_DOUBLE (*arg) = misc->yalign;
+      GTK_VALUE_FLOAT (*arg) = misc->yalign;
       break;
     case ARG_XPAD:
       GTK_VALUE_INT (*arg) = misc->xpad;

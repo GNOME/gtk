@@ -91,8 +91,8 @@ gtk_frame_class_init (GtkFrameClass *class)
   parent_class = gtk_type_class (gtk_bin_get_type ());
 
   gtk_object_add_arg_type ("GtkFrame::label", GTK_TYPE_STRING, GTK_ARG_READWRITE, ARG_LABEL);
-  gtk_object_add_arg_type ("GtkFrame::label_xalign", GTK_TYPE_DOUBLE, GTK_ARG_READWRITE, ARG_LABEL_XALIGN);
-  gtk_object_add_arg_type ("GtkFrame::label_yalign", GTK_TYPE_DOUBLE, GTK_ARG_READWRITE, ARG_LABEL_YALIGN);
+  gtk_object_add_arg_type ("GtkFrame::label_xalign", GTK_TYPE_FLOAT, GTK_ARG_READWRITE, ARG_LABEL_XALIGN);
+  gtk_object_add_arg_type ("GtkFrame::label_yalign", GTK_TYPE_FLOAT, GTK_ARG_READWRITE, ARG_LABEL_YALIGN);
   gtk_object_add_arg_type ("GtkFrame::shadow", GTK_TYPE_SHADOW_TYPE, GTK_ARG_READWRITE, ARG_SHADOW);
 
   object_class->set_arg = gtk_frame_set_arg;
@@ -134,10 +134,10 @@ gtk_frame_set_arg (GtkObject      *object,
       gtk_frame_set_label (frame, GTK_VALUE_STRING (*arg));
       break;
     case ARG_LABEL_XALIGN:
-      gtk_frame_set_label_align (frame, GTK_VALUE_DOUBLE (*arg), frame->label_yalign);
+      gtk_frame_set_label_align (frame, GTK_VALUE_FLOAT (*arg), frame->label_yalign);
       break;
     case ARG_LABEL_YALIGN:
-      gtk_frame_set_label_align (frame, frame->label_xalign, GTK_VALUE_DOUBLE (*arg));
+      gtk_frame_set_label_align (frame, frame->label_xalign, GTK_VALUE_FLOAT (*arg));
       break;
     case ARG_SHADOW:
       gtk_frame_set_shadow_type (frame, GTK_VALUE_ENUM (*arg));
@@ -162,10 +162,10 @@ gtk_frame_get_arg (GtkObject      *object,
       GTK_VALUE_STRING (*arg) = g_strdup (frame->label);
       break;
     case ARG_LABEL_XALIGN:
-      GTK_VALUE_DOUBLE (*arg) = frame->label_xalign;
+      GTK_VALUE_FLOAT (*arg) = frame->label_xalign;
       break;
     case ARG_LABEL_YALIGN:
-      GTK_VALUE_DOUBLE (*arg) = frame->label_yalign;
+      GTK_VALUE_FLOAT (*arg) = frame->label_yalign;
       break;
     case ARG_SHADOW:
       GTK_VALUE_ENUM (*arg) = frame->shadow_type;

@@ -1,3 +1,26 @@
+Sat Oct  3 17:54:48 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkargcollector.c (GTK_ARG_COLLECT_VALUE): for unknown foreign
+	fundamental types, collect an argument of the type returned from
+	gtk_type_get_varargs_type(). removed the first macro argument which
+	was just the same as the fundamental type of the *arg passed to
+	the macro.
+	* gtk/gtkarg.c (gtk_args_collect): 
+	* gtk/gtksignal.c (gtk_signal_collect_params): changed callers.
+
+	* gtk/gtktypeutils.h: 
+	* gtk/gtktypeutils.c: new functions gtk_type_set_varargs_type() and
+	gtk_type_get_varargs_type() to set and query the varargs collect
+	type used for a fundamental type, registered outside of Gtk.
+
+	* gtk/gtkmisc.c (gtk_misc_class_init): changed object arguments
+	GtkMisc::xalign and GtkMisc::yalign from GTK_TYPE_DOUBLE to
+	GTK_TYPE_FLOAT.
+
+	* gtk/gtkframe.c (gtk_frame_class_init): changed object arguments
+	GtkFrame::label_xalign and GtkFrame::label_yalign from GTK_TYPE_DOUBLE
+	to GTK_TYPE_FLOAT.
+
 Sat Oct  3 01:25:24 1998  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkctree.c (gtk_ctree_insert_gnode) (real_tree_collapse)

@@ -342,6 +342,14 @@ GtkEnumValue*	gtk_type_enum_find_value	(GtkType	 enum_type,
 						 const gchar	*value_name);
 GtkFlagValue*	gtk_type_flags_find_value	(GtkType	 flag_type,
 						 const gchar	*value_name);
+/* set the argument collector alias for foreign fundamentals */
+void		gtk_type_set_varargs_type	(GtkType	foreign_type,
+						 GtkType	varargs_type);
+GtkType		gtk_type_get_varargs_type	(GtkType	foreign_type);
+
+
+
+
 
 #ifdef __cplusplus
 }
