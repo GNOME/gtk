@@ -1,8 +1,16 @@
+# Copyright (C) 2001 Free Software Foundation, Inc.
+# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+# Aktualn± wersjê tego pliku mo¿esz odnale¼æ w repozytorium cvs.gnome.pl
+# (:pserver:anonymous@cvs.gnome.pl:/home/cvs, puste has³o)
+# Je¶li masz jakiekolwiek uwagi odnosz±ce siê do t³umaczenia lub chcesz
+# pomóc w jego rozwijaniu i pielêgnowaniu, napisz do nas na adres:
+# translators@gnome.pl
+# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2001-07-18 22:16+0200\n"
-"PO-Revision-Date: 2001-07-18 22:40+0200\n"
+"POT-Creation-Date: 2001-08-09 13:42+0200\n"
+"PO-Revision-Date: 2001-08-09 13:37+0200\n"
 "Last-Translator: GNOME PL Team <translators@gnome.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -10,133 +18,49 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: gtk/gtkcolorsel.c:1
-msgid ""
-"The previously-selected color, for comparison to the color you're selecting "
-"now. You can drag this color to a palette entry, or select this color as "
-"current by dragging it to the other color swatch alongside."
-msgstr ""
+msgid "Hue:"
+msgstr "Odcieñ:"
 
 #: gtk/gtkcolorsel.c:1
-msgid ""
-"The color you've chosen. You can drag this color to a palette entry to save "
-"it for use in the future."
-msgstr ""
+msgid "Saturation:"
+msgstr "Nasycenie:"
 
 #: gtk/gtkcolorsel.c:1
-msgid "_Save color here"
-msgstr ""
+msgid "Value:"
+msgstr "Warto¶æ:"
 
 #: gtk/gtkcolorsel.c:1
-msgid ""
-"Click this palette entry to make it the current color. To change this entry, "
-"drag a color swatch here or right-click it and select \"Save color here.\""
-msgstr ""
+msgid "Red:"
+msgstr "Czerwony:"
 
 #: gtk/gtkcolorsel.c:1
-msgid "Custom palette"
-msgstr "Paleta u¿ytkownika"
+msgid "Green:"
+msgstr "Zielony:"
 
 #: gtk/gtkcolorsel.c:1
-msgid "Palette to use in the color selector"
-msgstr ""
+msgid "Blue:"
+msgstr "Niebieski:"
 
 #: gtk/gtkcolorsel.c:1
-msgid ""
-"Select the color you want from the outer ring. Select the darkness or "
-"lightness of that color using the inner triangle."
-msgstr ""
+msgid "Opacity:"
+msgstr "Nieprzepuszczalno¶æ:"
+
+#. The OK button
+#: gtk/gtkcolorsel.c:1 gtk/gtkfilesel.c:1 gtk/gtkfontsel.c:1
+#: gtk/gtkgamma.c:1
+msgid "OK"
+msgstr "OK"
+
+#. The Cancel button
+#: gtk/gtkcolorsel.c:1 gtk/gtkfilesel.c:1 gtk/gtkfilesel.c:1
+#: gtk/gtkfilesel.c:1 gtk/gtkfilesel.c:1 gtk/gtkfontsel.c:1
+#: gtk/gtkgamma.c:1
+msgid "Cancel"
+msgstr "Anuluj"
 
 #: gtk/gtkcolorsel.c:1
-msgid ""
-"Click the eyedropper, then click a color anywhere on your screen to select "
-"that color."
-msgstr ""
-
-#: gtk/gtkcolorsel.c:1
-msgid "_Hue:"
-msgstr "_Odcieñ:"
-
-#: gtk/gtkcolorsel.c:1
-msgid "Position on the color wheel."
-msgstr "Po³o¿enie na kole kolorów."
-
-#: gtk/gtkcolorsel.c:1
-msgid "_Saturation:"
-msgstr "N_asycenie:"
-
-#: gtk/gtkcolorsel.c:1
-msgid "\"Deepness\" of the color."
-msgstr "\"G³êbia\" koloru."
-
-#: gtk/gtkcolorsel.c:1
-msgid "_Value:"
-msgstr "_Warto¶æ:"
-
-#: gtk/gtkcolorsel.c:1
-msgid "Brightness of the color."
-msgstr "Jasno¶æ koloru."
-
-#: gtk/gtkcolorsel.c:1
-msgid "_Red:"
-msgstr "_Czerwony:"
-
-#: gtk/gtkcolorsel.c:1
-msgid "Amount of red light in the color."
-msgstr "Ilo¶æ czerwonego ¶wiat³a w kolorze."
-
-#: gtk/gtkcolorsel.c:1
-msgid "_Green:"
-msgstr "_Zielony:"
-
-#: gtk/gtkcolorsel.c:1
-msgid "Amount of green light in the color."
-msgstr "Ilo¶æ zielonego ¶wiat³a w kolorze."
-
-#: gtk/gtkcolorsel.c:1
-msgid "_Blue:"
-msgstr "_Niebieski:"
-
-#: gtk/gtkcolorsel.c:1
-msgid "Amount of blue light in the color."
-msgstr "Ilo¶æ niebieskiego ¶wiat³a w kolorze."
-
-#: gtk/gtkcolorsel.c:1
-msgid "_Opacity:"
-msgstr "_Przepuszczalno¶æ:"
-
-#: gtk/gtkcolorsel.c:1
-msgid "Transparency of the currently-selected color."
-msgstr "Prze¼roczysto¶æ wybranego koloru."
-
-#: gtk/gtkcolorsel.c:1
-msgid "Color _Name:"
-msgstr "Naz_wa koloru:"
-
-#: gtk/gtkcolorsel.c:1
-msgid ""
-"You can enter an HTML-style hexadecimal color value, or simply a color name "
-"such as 'orange' in this entry."
-msgstr ""
-
-#: gtk/gtkcolorsel.c:1
-msgid "_Palette"
-msgstr "Pal_eta"
-
-#: gtk/gtkfilesel.c:1
-msgid "Filename"
-msgstr "Nazwa pliku"
-
-#: gtk/gtkfilesel.c:1
-msgid "The currently selected filename."
-msgstr "Aktualnie wybrana nazwa pliku."
-
-#: gtk/gtkfilesel.c:1
-msgid "Show file operations"
-msgstr ""
-
-#: gtk/gtkfilesel.c:1
-msgid "Whether buttons for creating/manipulating files should be displayed."
-msgstr ""
+msgid "Help"
+msgstr "Pomoc"
 
 #. The directories clist
 #: gtk/gtkfilesel.c:1
@@ -165,104 +89,37 @@ msgstr "Usuñ plik"
 msgid "Rename File"
 msgstr "Zmieñ nazwê"
 
+#.
+#. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
+#. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
+#. (gpointer) fs);
+#.
 #: gtk/gtkfilesel.c:1
-#, c-format
-msgid ""
-"The directory name \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"Nazwa katalogu \"%s\" zawiera symbole, które nie s± dopuszczalne w nazwach plików"
+msgid "Error"
+msgstr "B³±d"
 
-#: gtk/gtkfilesel.c:1
-#, c-format
-msgid ""
-"Error creating directory \"%s\": %s\n"
-"%s"
-msgstr ""
-"B³±d przy tworzeniu katalogu \"%s\": %s\n"
-"%s"
-
-#: gtk/gtkfilesel.c:1 gtk/gtkfilesel.c:1
-msgid "You probably used symbols not allowed in filenames."
-msgstr "Prawdopodobnie u¿yto symboli, które nie s± dopuszczalne w nazwach plików."
-
-#: gtk/gtkfilesel.c:1
-#, c-format
-msgid "Error creating directory \"%s\": %s\n"
-msgstr "B³±d przy tworzeniu katalogu \"%s\": %s\n"
+#. close button
+#: gtk/gtkfilesel.c:1 gtk/gtkinputdialog.c:1
+msgid "Close"
+msgstr "Zamknij"
 
 #: gtk/gtkfilesel.c:1
 msgid "Create Directory"
-msgstr "Stwórz katalog"
+msgstr "Nowy katalog"
 
 #: gtk/gtkfilesel.c:1
-msgid "_Directory name:"
-msgstr "Nazwa _katalogu:"
+msgid "Directory name:"
+msgstr "Nazwa katalogu:"
 
 #. buttons
 #: gtk/gtkfilesel.c:1
 msgid "Create"
-msgstr "Stwórz"
-
-#: gtk/gtkfilesel.c:1 gtk/gtkfilesel.c:1 gtk/gtkfilesel.c:1
-#: gtk/gtkgamma.c:1
-msgid "Cancel"
-msgstr "Anuluj"
-
-#: gtk/gtkfilesel.c:1
-#, c-format
-msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr "Nazwa \"%s\" zawiera symbole, które nie s± dopuszczalne w nazwach plików"
-
-#: gtk/gtkfilesel.c:1
-#, c-format
-msgid ""
-"Error deleting file \"%s\": %s\n"
-"%s"
-msgstr ""
-"B³±d przy usuwaniu pliku \"%s\": %s\n"
-"%s"
-
-#: gtk/gtkfilesel.c:1 gtk/gtkfilesel.c:1
-msgid "It probably contains symbols not allowed in filenames."
-msgstr "Prawdopodobnie zawiera symbole, które nie s± dopuszczalne w nazwach plików."
-
-#: gtk/gtkfilesel.c:1
-#, c-format
-msgid "Error deleting file \"%s\": %s"
-msgstr "B³±d przy usuwaniu pliku \"%s\": %s"
+msgstr "Utwórz"
 
 #. buttons
 #: gtk/gtkfilesel.c:1
 msgid "Delete"
 msgstr "Usuñ"
-
-#: gtk/gtkfilesel.c:1 gtk/gtkfilesel.c:1
-#, c-format
-msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
-msgstr "Nazwa \"%s\" zawiera symbole, które nie s± dopuszczalne w nazwach plików"
-
-#: gtk/gtkfilesel.c:1
-#, c-format
-msgid ""
-"Error renaming file to \"%s\": %s\n"
-"%s"
-msgstr ""
-"B³±d przy zmienianiu nazwy pliku na \"%s\": %s\n"
-"%s"
-
-#: gtk/gtkfilesel.c:1
-#, c-format
-msgid ""
-"Error renaming file \"%s\": %s\n"
-"%s"
-msgstr ""
-"B³±d przy zmienianiu nazwy pliku \"%s\": %s\n"
-"%s"
-
-#: gtk/gtkfilesel.c:1
-#, c-format
-msgid "Error renaming file \"%s\" to \"%s\": %s"
-msgstr "B³±d przy zmienianiu nazwy pliku \"%s\" na \"%s\": %s"
 
 #. buttons
 #: gtk/gtkfilesel.c:1
@@ -273,61 +130,230 @@ msgstr "Zmieñ nazwê"
 msgid "Selection: "
 msgstr "Wybór: "
 
-#: gtk/gtkfilesel.c:1
-#, c-format
-msgid ""
-"The filename %s couldn't be converted to UTF-8. Try setting the environment "
-"variable G_BROKEN_FILENAMES."
-msgstr ""
-
-#: gtk/gtkfilesel.c:1
-msgid "Name too long"
-msgstr "Zbyt d³uga nazwa"
-
-#: gtk/gtkfilesel.c:1
-msgid "Couldn't convert filename"
-msgstr "Nie mo¿na przekonwertowaæ nazwy pliku"
+#: gtk/gtkfontsel.c:1
+msgid "Foundry:"
+msgstr "Druk:"
 
 #: gtk/gtkfontsel.c:1
-msgid "Font name"
-msgstr "Nazwa czcionki"
+msgid "Family:"
+msgstr "Rodzina:"
 
 #: gtk/gtkfontsel.c:1
-msgid "The X string that represents this font."
-msgstr ""
+msgid "Weight:"
+msgstr "Pogrubienie:"
+
+#: gtk/gtkfontsel.c:1
+msgid "Slant:"
+msgstr "Nachylenie:"
+
+#: gtk/gtkfontsel.c:1
+msgid "Set Width:"
+msgstr "Ustaw szeroko¶æ:"
+
+#: gtk/gtkfontsel.c:1
+msgid "Add Style:"
+msgstr "Dodaj styl:"
+
+#: gtk/gtkfontsel.c:1
+msgid "Pixel Size:"
+msgstr "Rozmiar w pikselach:"
+
+#: gtk/gtkfontsel.c:1
+msgid "Point Size:"
+msgstr "Rozmiar w punktach:"
+
+#: gtk/gtkfontsel.c:1
+msgid "Resolution X:"
+msgstr "Rozdzielczo¶æ pozioma:"
+
+#: gtk/gtkfontsel.c:1
+msgid "Resolution Y:"
+msgstr "Rozdzielczo¶æ pionowa:"
+
+#: gtk/gtkfontsel.c:1
+msgid "Spacing:"
+msgstr "Odstêpy:"
+
+#: gtk/gtkfontsel.c:1
+msgid "Average Width:"
+msgstr "¦rednia szeroko¶æ:"
+
+#: gtk/gtkfontsel.c:1
+msgid "Charset:"
+msgstr "Kodowanie:"
+
+#. Number of internationalized titles here must match number
+#. of NULL initializers above
+#: gtk/gtkfontsel.c:1
+msgid "Font Property"
+msgstr "W³a¶ciwo¶æ czcionki"
+
+#: gtk/gtkfontsel.c:1
+msgid "Requested Value"
+msgstr "¯±dana warto¶æ"
+
+#: gtk/gtkfontsel.c:1
+msgid "Actual Value"
+msgstr "Rzeczywista warto¶æ"
 
 #: gtk/gtkfontsel.c:1
 msgid "Font"
 msgstr "Czcionka"
 
-#: gtk/gtkfontsel.c:1
-msgid "The GdkFont that is currently selected."
-msgstr ""
+#: gtk/gtkfontsel.c:1 gtk/gtkfontsel.c:1 gtk/gtkfontsel.c:1
+msgid "Font:"
+msgstr "Czcionka:"
 
 #: gtk/gtkfontsel.c:1
-msgid "Preview text"
-msgstr ""
+msgid "Font Style:"
+msgstr "Styl czcionki:"
 
 #: gtk/gtkfontsel.c:1
-msgid "The text to display in order to demonstrate the selected font."
-msgstr ""
+msgid "Size:"
+msgstr "Rozmiar:"
+
+#: gtk/gtkfontsel.c:1 gtk/gtkfontsel.c:1
+msgid "Reset Filter"
+msgstr "Wyczy¶æ filtr"
 
 #: gtk/gtkfontsel.c:1
-msgid "_Family:"
-msgstr "_Rodzina:"
+msgid "Metric:"
+msgstr "Jednostki:"
 
 #: gtk/gtkfontsel.c:1
-msgid "_Style:"
-msgstr "_Styl:"
+msgid "Points"
+msgstr "Punkty"
 
 #: gtk/gtkfontsel.c:1
-msgid "Si_ze:"
-msgstr "R_ozmiar:"
+msgid "Pixels"
+msgstr "Piksele"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:1
 msgid "Preview:"
-msgstr "Podgl±d:"
+msgstr "Podgl±d"
+
+#: gtk/gtkfontsel.c:1
+msgid "Font Information"
+msgstr "Informacje o czcionce"
+
+#: gtk/gtkfontsel.c:1
+msgid "Requested Font Name:"
+msgstr "¯±dana nazwa czcionki:"
+
+#: gtk/gtkfontsel.c:1
+msgid "Actual Font Name:"
+msgstr "Rzeczywista nazwa czcionki:"
+
+#: gtk/gtkfontsel.c:1
+#, c-format
+msgid "%i fonts available with a total of %i styles."
+msgstr "dostêpnych czcionek: %i, liczba stylów : %i."
+
+#: gtk/gtkfontsel.c:1
+msgid "Filter"
+msgstr "Filtr"
+
+#: gtk/gtkfontsel.c:1
+msgid "Font Types:"
+msgstr "Typy czcionek:"
+
+#: gtk/gtkfontsel.c:1
+msgid "Bitmap"
+msgstr "Bitmapowe"
+
+#: gtk/gtkfontsel.c:1
+msgid "Scalable"
+msgstr "Skalowalne"
+
+#: gtk/gtkfontsel.c:1
+msgid "Scaled Bitmap"
+msgstr "Skalowane bitmapy"
+
+#: gtk/gtkfontsel.c:1
+msgid "*"
+msgstr "*"
+
+#. Convert '(nil)' weights to 'regular', since it looks nicer.
+#: gtk/gtkfontsel.c:1
+msgid "(nil)"
+msgstr "(pusty)"
+
+#: gtk/gtkfontsel.c:1
+msgid "regular"
+msgstr "zwyk³e"
+
+#: gtk/gtkfontsel.c:1 gtk/gtkfontsel.c:1
+msgid "italic"
+msgstr "italic"
+
+#: gtk/gtkfontsel.c:1 gtk/gtkfontsel.c:1
+msgid "oblique"
+msgstr "pochylona"
+
+#: gtk/gtkfontsel.c:1 gtk/gtkfontsel.c:1
+msgid "reverse italic"
+msgstr "odwrócony italic"
+
+#: gtk/gtkfontsel.c:1 gtk/gtkfontsel.c:1
+msgid "reverse oblique"
+msgstr "odwrotnie pochylona"
+
+#: gtk/gtkfontsel.c:1 gtk/gtkfontsel.c:1
+msgid "other"
+msgstr "inne"
+
+#: gtk/gtkfontsel.c:1
+msgid "[M]"
+msgstr "[M]"
+
+#: gtk/gtkfontsel.c:1
+msgid "[C]"
+msgstr "[C]"
+
+#: gtk/gtkfontsel.c:1
+msgid "The selected font is not available."
+msgstr "Wybrana czcionka nie jest dostêpna."
+
+#: gtk/gtkfontsel.c:1
+msgid "The selected font is not a valid font."
+msgstr "Wybrana czcionka nie jest poprawna."
+
+#: gtk/gtkfontsel.c:1
+msgid "This is a 2-byte font and may not be displayed correctly."
+msgstr "Ta 2-bajtowa czcionka mo¿e nie byæ wy¶wietlana poprawnie."
+
+#: gtk/gtkfontsel.c:1 gtk/gtkinputdialog.c:1
+msgid "(unknown)"
+msgstr "(nieznane)"
+
+#: gtk/gtkfontsel.c:1
+msgid "roman"
+msgstr "roman"
+
+#: gtk/gtkfontsel.c:1
+msgid "proportional"
+msgstr "proporcjonalne"
+
+#: gtk/gtkfontsel.c:1
+msgid "monospaced"
+msgstr "równomierne"
+
+#: gtk/gtkfontsel.c:1
+msgid "char cell"
+msgstr "rozmiaru znaku"
+
+#: gtk/gtkfontsel.c:1
+msgid "Font: (Filter Applied)"
+msgstr "Czcionka: (z zastosowaniem filtra)"
+
+#: gtk/gtkfontsel.c:1
+msgid "MAX_FONTS exceeded. Some fonts may be missing."
+msgstr "Przekroczono warto¶æ MAX_FONTS. Mo¿e brakowaæ pewnych czcionek."
+
+#: gtk/gtkfontsel.c:1
+msgid "Apply"
+msgstr "Zastosuj"
 
 #: gtk/gtkfontsel.c:1
 msgid "Font Selection"
@@ -338,12 +364,8 @@ msgid "Gamma"
 msgstr "Gamma"
 
 #: gtk/gtkgamma.c:1
-msgid "_Gamma value"
-msgstr "Warto¶æ g_amma"
-
-#: gtk/gtkgamma.c:1
-msgid "OK"
-msgstr "OK"
+msgid "Gamma value"
+msgstr "Warto¶æ gamma"
 
 #. shell and main vbox
 #: gtk/gtkinputdialog.c:1
@@ -355,8 +377,8 @@ msgid "No input devices"
 msgstr "Brak urz±dzeñ wej¶ciowych"
 
 #: gtk/gtkinputdialog.c:1
-msgid "_Device:"
-msgstr "_Urz±dzenie:"
+msgid "Device:"
+msgstr "Urz±dzenie:"
 
 #: gtk/gtkinputdialog.c:1
 msgid "Disabled"
@@ -371,28 +393,24 @@ msgid "Window"
 msgstr "Okno"
 
 #: gtk/gtkinputdialog.c:1
-msgid "_Mode: "
-msgstr "_Tryb: "
+msgid "Mode: "
+msgstr "Tryb: "
 
 #. The axis listbox
 #: gtk/gtkinputdialog.c:1
-msgid "_Axes"
-msgstr "_Osie"
+msgid "Axes"
+msgstr "Osie"
 
 #. Keys listbox
 #: gtk/gtkinputdialog.c:1
-msgid "_Keys"
-msgstr "_Klawisze"
+msgid "Keys"
+msgstr "Klawisze"
 
 #. We create the save button in any case, so that clients can
 #. connect to it, without paying attention to whether it exits
 #: gtk/gtkinputdialog.c:1
 msgid "Save"
 msgstr "Zapisz"
-
-#: gtk/gtkinputdialog.c:1
-msgid "Close"
-msgstr "Zamknij"
 
 #: gtk/gtkinputdialog.c:1
 msgid "X"
@@ -415,107 +433,17 @@ msgid "Y Tilt"
 msgstr "Nachylenie pionowe"
 
 #: gtk/gtkinputdialog.c:1
-msgid "Wheel"
-msgstr "Ko³o"
-
-#: gtk/gtkinputdialog.c:1
 msgid "none"
 msgstr "brak"
 
 #: gtk/gtkinputdialog.c:1 gtk/gtkinputdialog.c:1
 msgid "(disabled)"
-msgstr "(wy³±czone)"
-
-#: gtk/gtkinputdialog.c:1
-msgid "(unknown)"
-msgstr "(nieznane)"
+msgstr "(nieaktywne)"
 
 #. and clear button
 #: gtk/gtkinputdialog.c:1
 msgid "clear"
 msgstr "wyczy¶æ"
-
-#: gtk/gtknotebook.c:1
-msgid "Page"
-msgstr "Strona"
-
-#: gtk/gtknotebook.c:1
-msgid "The index of the current page"
-msgstr "Indeks bie¿±cej strony"
-
-#: gtk/gtknotebook.c:1
-msgid "Tab Position"
-msgstr "Po³o¿enie zak³±dek"
-
-#: gtk/gtknotebook.c:1
-msgid "Which side of the notebook holds the tabs"
-msgstr "Strona, po której notatnik umieszcza zak³adki"
-
-#: gtk/gtknotebook.c:1
-msgid "Tab Border"
-msgstr ""
-
-#: gtk/gtknotebook.c:1
-msgid "Width of the border around the tab labels"
-msgstr ""
-
-#: gtk/gtknotebook.c:1
-msgid "Horizontal Tab Border"
-msgstr ""
-
-#: gtk/gtknotebook.c:1
-msgid "Width of the horizontal border of tab labels"
-msgstr ""
-
-#: gtk/gtknotebook.c:1
-msgid "Vertical Tab Border"
-msgstr ""
-
-#: gtk/gtknotebook.c:1
-msgid "Width of the vertical border of tab labels"
-msgstr ""
-
-#: gtk/gtknotebook.c:1
-msgid "Show Tabs"
-msgstr "Wy¶wietlanie zak³adek"
-
-#: gtk/gtknotebook.c:1
-msgid "Whether tabs should be shown or not"
-msgstr "Okre¶la, czy przy notatniku powinny byæ wy¶wietlane zak³adki"
-
-#: gtk/gtknotebook.c:1
-msgid "Show Border"
-msgstr ""
-
-#: gtk/gtknotebook.c:1
-msgid "Whether the border should be shown or not"
-msgstr ""
-
-#: gtk/gtknotebook.c:1
-msgid "Scrollable"
-msgstr ""
-
-#: gtk/gtknotebook.c:1
-msgid "If TRUE, scroll arrows are added if there are to many tabs to fit"
-msgstr ""
-
-#: gtk/gtknotebook.c:1
-msgid "Enable Popup"
-msgstr ""
-
-#: gtk/gtknotebook.c:1
-msgid ""
-"If TRUE, pressing the right mouse button on the notebook pops up a menu that "
-"you can use to go to a page"
-msgstr ""
-
-#: gtk/gtknotebook.c:1
-msgid "Homogeneous"
-msgstr ""
-
-#: gtk/gtknotebook.c:1
-msgid "Whether tabs should have homogeneous sizes"
-msgstr ""
 
 #: gtk/gtknotebook.c:1 gtk/gtknotebook.c:1
 #, c-format
@@ -525,22 +453,17 @@ msgstr "Strona %u"
 #: gtk/gtkrc.c:1
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr "Nie mo¿na odnale¼æ pliku z obrazem na ¶cie¿ce: \"%s\" wiersz %d"
+msgstr "Nie mo¿na odnale¼æ pliku z obrazem pod pixmap_path: \"%s\" wiersz %d"
 
 #: gtk/gtkrc.c:1
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Nie mo¿na odnale¼æ pliku z obrazem na ¶cie¿ce: \"%s\""
-
-#: gtk/gtkrc.c:1
-#, c-format
-msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
-msgstr ""
+msgstr "Nie mo¿na odnale¼æ pliku z obrazem pod pixmap_path: \"%s\""
 
 #: gtk/gtkthemes.c:1
 #, c-format
-msgid "Unable to locate theme engine in module_path: \"%s\","
-msgstr "Nie mo¿na odnale¼æ modu³u obs³uguj±cego motyw w module_path: \"%s\","
+msgid "Unable to locate loadable module in module_path: \"%s\","
+msgstr "Nie mo¿na odnale¼æ modu³u ³adowalnego pod module_path: \"%s\","
 
 #: gtk/gtktipsquery.c:1
 msgid "--- No Tip ---"
