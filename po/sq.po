@@ -1,0 +1,5380 @@
+# Albanian translation of Gtk+
+# Copyright (C) 1998-2003 Free Software Foundation, Inc.
+# This file is distributed under the same license as the gtk+ package.
+# Besnik Bleta <besnikbleta@hotmail.com>, 2003.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gtk+ 2.2.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2003-08-29 13:46+0200\n"
+"PO-Revision-Date: 2003-08-28 23:42--800\n"
+"Last-Translator: Besnik Bleta <besnikbleta@hotmail.com>\n"
+"Language-Team: Nuk ka një të tillë <besnikbleta@hotmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:712
+#: gdk-pixbuf/gdk-pixbuf-io.c:845
+#, c-format
+msgid "Failed to open file '%s': %s"
+msgstr "Dështova në hapjen e kartelës '%s': %s"
+
+#: gdk-pixbuf/gdk-pixbuf-animation.c:158 gdk-pixbuf/gdk-pixbuf-io.c:722
+#, c-format
+msgid "Image file '%s' contains no data"
+msgstr "Kartela Pamje '%s' nuk përmban të dhëna"
+
+#: gdk-pixbuf/gdk-pixbuf-animation.c:198 gdk-pixbuf/gdk-pixbuf-io.c:756
+#: gdk-pixbuf/gdk-pixbuf-io.c:882
+#, c-format
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr ""
+"Dështova na ngarkimin e pamjes '%s': arsye e panjohur, mundet kartelë e "
+"dëmtuar pamjeje"
+
+#: gdk-pixbuf/gdk-pixbuf-animation.c:226
+#, c-format
+msgid ""
+"Failed to load animation '%s': reason not known, probably a corrupt "
+"animation file"
+msgstr ""
+"Dështova në ngarkimin e animacionit '%s': arsye e panjohur, mundet një "
+"kartelë e dëmtuar animacioni"
+
+#: gdk-pixbuf/gdk-pixbuf-io.c:377
+#, c-format
+msgid "Unable to load image-loading module: %s: %s"
+msgstr "I pazoti të ngarkoj modulin pamje-ngarkues: %s: %s"
+
+#: gdk-pixbuf/gdk-pixbuf-io.c:392
+#, c-format
+msgid ""
+"Image-loading module %s does not export the proper interface; perhaps it's "
+"from a different GTK version?"
+msgstr ""
+"Moduli pamje-ngarkues %s nuk eksporton ndërfaqen e duhur; mbase është prej "
+"një versioni tjetër GTK-je ?"
+
+#: gdk-pixbuf/gdk-pixbuf-io.c:539 gdk-pixbuf/gdk-pixbuf-io.c:587
+#, c-format
+msgid "Image type '%s' is not supported"
+msgstr "Tipi '%s' i pamjeve nuk është i mbuluar"
+
+#: gdk-pixbuf/gdk-pixbuf-io.c:619
+#, c-format
+msgid "Couldn't recognize the image file format for file '%s'"
+msgstr "Nuk munda të njoh format kartele pamjeje për kartelën '%s'"
+
+#: gdk-pixbuf/gdk-pixbuf-io.c:625
+msgid "Unrecognized image file format"
+msgstr "Format kartele pamjeje i panjohur"
+
+#: gdk-pixbuf/gdk-pixbuf-io.c:767
+#, c-format
+msgid "Failed to load image '%s': %s"
+msgstr "Dështova në ngarkimin e pamjes '%s': %s"
+
+#: gdk-pixbuf/gdk-pixbuf-io.c:993
+#, c-format
+msgid "This build of gdk-pixbuf does not support saving the image format: %s"
+msgstr "Ky variant i gdk-pixbuf nuk mbulon ruajtjen e pamjes në format: %s"
+
+#: gdk-pixbuf/gdk-pixbuf-io.c:1104
+#, c-format
+msgid "Failed to open '%s' for writing: %s"
+msgstr "Dështova në hapjen e '%s' për të shkruajtur: %s"
+
+#: gdk-pixbuf/gdk-pixbuf-io.c:1125
+#, c-format
+msgid ""
+"Failed to close '%s' while writing image, all data may not have been saved: %"
+"s"
+msgstr ""
+"Dështova në mbylljen e '%s' ndërsa shkruaja pamje, tërë të dhënat mund të "
+"mos jenë ruajtur: %s"
+
+#: gdk-pixbuf/gdk-pixbuf-loader.c:332
+#, c-format
+msgid "Incremental loading of image type '%s' is not supported"
+msgstr "Të ngarkuarit shtues i tipi të '%s' nuk mbulohet"
+
+#: gdk-pixbuf/gdk-pixbuf-loader.c:356 gdk-pixbuf/gdk-pixbuf-loader.c:458
+#, c-format
+msgid ""
+"Internal error: Image loader module '%s' failed to begin loading an image, "
+"but didn't give a reason for the failure"
+msgstr ""
+"Gabim i brendshëm: Moduli ngarkues pamjesh '%s' dështoi të fillojë ngarkimin "
+"e një pamjeje, por nuk dha ndonjë arsye për dështimin"
+
+#: gdk-pixbuf/gdk-pixdata.c:145
+msgid "Image header corrupt"
+msgstr ""
+
+#: gdk-pixbuf/gdk-pixdata.c:150
+msgid "Image format unknown"
+msgstr "Format pamjeje i panjohur"
+
+#: gdk-pixbuf/gdk-pixdata.c:155 gdk-pixbuf/gdk-pixdata.c:456
+msgid "Image pixel data corrupt"
+msgstr "Të dhëna pikseli pamjeje të dëmtuara"
+
+#: gdk-pixbuf/gdk-pixdata.c:402
+#, c-format
+msgid "failed to allocate image buffer of %u bytes"
+msgstr ""
+
+#: gdk-pixbuf/io-ani.c:244
+msgid "Unexpected icon chunk in animation"
+msgstr ""
+
+#: gdk-pixbuf/io-ani.c:337
+msgid "Unsupported animation type"
+msgstr "Tip animacioni i pambuluar"
+
+#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:538
+msgid "Invalid header in animation"
+msgstr ""
+
+#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:382 gdk-pixbuf/io-ani.c:441
+#: gdk-pixbuf/io-ani.c:460 gdk-pixbuf/io-ani.c:511 gdk-pixbuf/io-ani.c:583
+msgid "Not enough memory to load animation"
+msgstr "Kujtesë e pamjaftueshme për ngarkim animacioni"
+
+#: gdk-pixbuf/io-ani.c:400 gdk-pixbuf/io-ani.c:417 gdk-pixbuf/io-ani.c:428
+msgid "Malformed chunk in animation"
+msgstr ""
+
+#: gdk-pixbuf/io-ani.c:676
+msgid "The ANI image format"
+msgstr "Formati i pamjeve ANI"
+
+#: gdk-pixbuf/io-bmp.c:223 gdk-pixbuf/io-bmp.c:339
+msgid "Not enough memory to load bitmap image"
+msgstr "Kujtesë e pamjaftueshme për ngarkim pamjeje bitmap"
+
+#: gdk-pixbuf/io-bmp.c:263
+msgid "BMP image has unsupported header size"
+msgstr ""
+
+#: gdk-pixbuf/io-bmp.c:288 gdk-pixbuf/io-bmp.c:311 gdk-pixbuf/io-bmp.c:371
+msgid "BMP image has bogus header data"
+msgstr ""
+
+#: gdk-pixbuf/io-bmp.c:1076
+msgid "The BMP image format"
+msgstr "Formati i pamjes BMP"
+
+#: gdk-pixbuf/io-gif.c:220
+#, c-format
+msgid "Failure reading GIF: %s"
+msgstr "Dështim leximi GIF: %s"
+
+#: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1442 gdk-pixbuf/io-gif.c:1603
+msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
+msgstr ""
+"Kartelës GIF i mungojnë të dhëna (mbase në një farë mënyre i janë hequr?)"
+
+#: gdk-pixbuf/io-gif.c:501
+#, c-format
+msgid "Internal error in the GIF loader (%s)"
+msgstr "Gabim i brendshëm në ngarkuesin GIF (%s)"
+
+#: gdk-pixbuf/io-gif.c:575
+msgid "Stack overflow"
+msgstr ""
+
+#: gdk-pixbuf/io-gif.c:635
+msgid "GIF image loader can't understand this image."
+msgstr "Ngarkuesi i pamjeve GIF nuk e kupton këtë pamje."
+
+#: gdk-pixbuf/io-gif.c:664
+msgid "Bad code encountered"
+msgstr "Ndeshur me kod të gabuar"
+
+#: gdk-pixbuf/io-gif.c:674
+msgid "Circular table entry in GIF file"
+msgstr ""
+
+#: gdk-pixbuf/io-gif.c:869 gdk-pixbuf/io-gif.c:1430 gdk-pixbuf/io-gif.c:1476
+#: gdk-pixbuf/io-gif.c:1591
+msgid "Not enough memory to load GIF file"
+msgstr "Kujtesë e pamjaftueshme për ngarkim kartele GIF"
+
+#: gdk-pixbuf/io-gif.c:1095
+msgid "GIF image is corrupt (incorrect LZW compression)"
+msgstr "Pamja GIF është e dëmtuar (ngjeshje LZW e pasaktë)"
+
+#: gdk-pixbuf/io-gif.c:1145
+msgid "File does not appear to be a GIF file"
+msgstr "Kartela nuk duket të jetë një kartelë GIF"
+
+#: gdk-pixbuf/io-gif.c:1157
+#, c-format
+msgid "Version %s of the GIF file format is not supported"
+msgstr "Versioni %s i formatit të kartelave GIF nuk është i mbuluar"
+
+#: gdk-pixbuf/io-gif.c:1266
+msgid ""
+"GIF image has no global colormap, and a frame inside it has no local "
+"colormap."
+msgstr ""
+
+#: gdk-pixbuf/io-gif.c:1498
+msgid "GIF image was truncated or incomplete."
+msgstr "Pamja GIF qe coptuar ose e paplotë"
+
+#: gdk-pixbuf/io-gif.c:1650
+msgid "The GIF image format"
+msgstr "Formati i pamjeve  GIF"
+
+#: gdk-pixbuf/io-ico.c:218 gdk-pixbuf/io-ico.c:270 gdk-pixbuf/io-ico.c:331
+#: gdk-pixbuf/io-ico.c:394 gdk-pixbuf/io-ico.c:411
+msgid "Not enough memory to load icon"
+msgstr "Kujtesë e pamjaftueshme për ngarkim ikone"
+
+#: gdk-pixbuf/io-ico.c:255
+msgid "Invalid header in icon"
+msgstr ""
+
+#: gdk-pixbuf/io-ico.c:292
+msgid "Icon has zero width"
+msgstr "Ikona ka gjerësi zero"
+
+#: gdk-pixbuf/io-ico.c:302
+msgid "Icon has zero height"
+msgstr "Ikona ka lartësi zero"
+
+#: gdk-pixbuf/io-ico.c:346
+msgid "Compressed icons are not supported"
+msgstr "Ikonat e ngjeshura nuk mbulohen "
+
+#: gdk-pixbuf/io-ico.c:379
+msgid "Unsupported icon type"
+msgstr "Tip i pambuluar ikone"
+
+#: gdk-pixbuf/io-ico.c:459
+msgid "Not enough memory to load ICO file"
+msgstr "Kujtesë e pamjaftueshme për ngarkim kartelash ICO"
+
+#: gdk-pixbuf/io-ico.c:921
+msgid "Image too large to be saved as ICO"
+msgstr ""
+
+#: gdk-pixbuf/io-ico.c:932
+msgid "Cursor hotspot outside image"
+msgstr ""
+
+#: gdk-pixbuf/io-ico.c:955
+#, c-format
+msgid "Unsupported depth for ICO file: %d"
+msgstr ""
+
+#: gdk-pixbuf/io-ico.c:1184
+msgid "The ICO image format"
+msgstr "Format pamjesh ICO"
+
+#: gdk-pixbuf/io-jpeg.c:114
+#, c-format
+msgid "Error interpreting JPEG image file (%s)"
+msgstr "Gabim interpretimi kartele pamjeje JPEG (%s)"
+
+#: gdk-pixbuf/io-jpeg.c:349
+msgid ""
+"Insufficient memory to load image, try exiting some applications to free "
+"memory"
+msgstr ""
+"Kujtesë e pamjaftueshme për ngarkim pamjeje, provoni të mbyllni disa "
+"programe për të liruar kujtesë"
+
+#: gdk-pixbuf/io-jpeg.c:383 gdk-pixbuf/io-jpeg.c:744
+#, c-format
+msgid "Unsupported JPEG color space (%s)"
+msgstr ""
+
+#: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:673 gdk-pixbuf/io-jpeg.c:858
+msgid "Couldn't allocate memory for loading JPEG file"
+msgstr "S'munda të siguroj kujtesë për ngarkim kartele JPEG"
+
+#: gdk-pixbuf/io-jpeg.c:812
+#, c-format
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%s' could not be "
+"parsed."
+msgstr ""
+"Cilësia JPEG duhet të jetë një vlerë midis 0 dhe 100; vlera '%s' nuk mund të "
+"përpunohej."
+
+#: gdk-pixbuf/io-jpeg.c:827
+#, c-format
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgstr ""
+"Cilësia JPEG duhet të jetë një vlerë midis 0 dhe 100; vlera '%d' nuk është e "
+"lejuar."
+
+#: gdk-pixbuf/io-jpeg.c:940
+msgid "The JPEG image format"
+msgstr "Formati i pamjeve JPEG"
+
+#: gdk-pixbuf/io-pcx.c:190
+#, fuzzy
+msgid "Couldn't allocate memory for header"
+msgstr "S'munda të siguroj kujtesë për ngarkim kartele JPEG"
+
+#: gdk-pixbuf/io-pcx.c:205 gdk-pixbuf/io-pcx.c:565
+#, fuzzy
+msgid "Couldn't allocate memory for context buffer"
+msgstr "S'munda të siguroj kujtesë për ngarkim kartele JPEG"
+
+#: gdk-pixbuf/io-pcx.c:606
+#, fuzzy
+msgid "Image has invalid width and/or height"
+msgstr "Pamja ka lartësi zero"
+
+#: gdk-pixbuf/io-pcx.c:614 gdk-pixbuf/io-pcx.c:675
+#, fuzzy
+msgid "Image has unsupported bpp"
+msgstr "Tipi '%s' i pamjeve nuk është i mbuluar"
+
+#: gdk-pixbuf/io-pcx.c:619
+msgid "Image has unsupported number of 1-bit planes"
+msgstr ""
+
+#: gdk-pixbuf/io-pcx.c:627
+#, c-format
+msgid "Image has unsupported number of %d-bit planes"
+msgstr ""
+
+#: gdk-pixbuf/io-pcx.c:643
+#, fuzzy
+msgid "Couldn't create new pixbuf"
+msgstr "S'mund të vendos pixbuf të ri"
+
+#: gdk-pixbuf/io-pcx.c:651
+#, fuzzy
+msgid "Couldn't allocate memory for line data"
+msgstr "S'mund të siguroj kujtesë për \"IOBuffer data\""
+
+#: gdk-pixbuf/io-pcx.c:658
+#, fuzzy
+msgid "Couldn't allocate memory for paletted data"
+msgstr "S'mund të siguroj kujtesë për \"IOBuffer data\""
+
+#: gdk-pixbuf/io-pcx.c:705
+msgid "Didn't get all lines of PCX image"
+msgstr ""
+
+#: gdk-pixbuf/io-pcx.c:712
+msgid "No palette found at end of PCX data"
+msgstr ""
+
+#: gdk-pixbuf/io-pcx.c:753
+#, fuzzy
+msgid "The PCX image format"
+msgstr "Formati i pamjes BMP"
+
+#: gdk-pixbuf/io-png.c:55
+msgid "Bits per channel of PNG image is invalid."
+msgstr "Bite për kanal të pamjes PNG është i mangët."
+
+#: gdk-pixbuf/io-png.c:136
+msgid "Transformed PNG has zero width or height."
+msgstr "PNG i transformuar ka gjerësi apo lartësi zero."
+
+#: gdk-pixbuf/io-png.c:144
+msgid "Bits per channel of transformed PNG is not 8."
+msgstr "Bite për kanal të PNG së shndërruar nuk është 8."
+
+#: gdk-pixbuf/io-png.c:153
+msgid "Transformed PNG not RGB or RGBA."
+msgstr "PNG e shndërruar jo si RGB apo RGBA"
+
+#: gdk-pixbuf/io-png.c:162
+msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
+msgstr ""
+"PNG e shndërruar ka numër kanalesh të pambuluar ende, duhet të jetë 3 ose 4."
+
+#: gdk-pixbuf/io-png.c:183
+#, c-format
+msgid "Fatal error in PNG image file: %s"
+msgstr "Gabim fatal në kartelë pamjeje PNG: %s"
+
+#: gdk-pixbuf/io-png.c:301
+msgid "Insufficient memory to load PNG file"
+msgstr "Kujtesë e pamjaftueshme për ngarkim kartele PNG"
+
+#: gdk-pixbuf/io-png.c:605
+#, c-format
+msgid ""
+"Insufficient memory to store a %ld by %ld image; try exiting some "
+"applications to reduce memory usage"
+msgstr ""
+"Kujtesë e pamjaftueshme për ruajtjen e një  pamjeje %ld me %ld image; "
+"provoni mbylljen e disa programeve për të zvogëluar përdorimin e kujtesës"
+
+#: gdk-pixbuf/io-png.c:656
+msgid "Fatal error reading PNG image file"
+msgstr "Gabim fatal gjatë leximit të kartelës pamje PNG"
+
+#: gdk-pixbuf/io-png.c:705
+#, c-format
+msgid "Fatal error reading PNG image file: %s"
+msgstr "Gabim fatal gjatë leximit të kartelës pamje PNG: %s"
+
+#: gdk-pixbuf/io-png.c:771
+msgid ""
+"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgstr ""
+"Kyçet për pjesë teksti PNG duhet të kenë e pakta 1 dhe e shumta 79 karaktere."
+
+#: gdk-pixbuf/io-png.c:779
+msgid "Keys for PNG text chunks must be ASCII characters."
+msgstr "Kyçet për pjesë teksti PNG duhet të jenë karaktere ASCII."
+
+#: gdk-pixbuf/io-png.c:812
+#, c-format
+msgid ""
+"Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
+msgstr ""
+"Vlera për pjesën tekst PNG %s nuk mund të kalohet në kodimin ISO-8859-1."
+
+#: gdk-pixbuf/io-png.c:919
+msgid "The PNG image format"
+msgstr "Formati PNG i pamjeve"
+
+#: gdk-pixbuf/io-pnm.c:248
+msgid "PNM loader expected to find an integer, but didn't"
+msgstr "Ngarkuesi PNM nuk gjeti një numër të plotë, siç priste"
+
+#: gdk-pixbuf/io-pnm.c:280
+msgid "PNM file has an incorrect initial byte"
+msgstr "Kartela PNM ka një bajt fillestar të pasaktë"
+
+#: gdk-pixbuf/io-pnm.c:310
+msgid "PNM file is not in a recognized PNM subformat"
+msgstr "Kartela PNM nuk është një nënformat PNM i pranuar"
+
+#: gdk-pixbuf/io-pnm.c:335
+msgid "PNM file has an image width of 0"
+msgstr "Kartela PNM ka një gjerësi pamjeje 0"
+
+#: gdk-pixbuf/io-pnm.c:356
+msgid "PNM file has an image height of 0"
+msgstr "Kartela PNM ka një lartësi pamjeje 0"
+
+#: gdk-pixbuf/io-pnm.c:379
+msgid "Maximum color value in PNM file is 0"
+msgstr "Vlera më e madhe e ngjyrës në kartelën PNM është 0"
+
+#: gdk-pixbuf/io-pnm.c:387
+msgid "Maximum color value in PNM file is too large"
+msgstr "Vlera më e madhe e ngjyrës në kartelën PNM është tejet e madhe"
+
+#: gdk-pixbuf/io-pnm.c:395
+msgid "Can't handle PNM files with maximum color values greater than 255"
+msgstr "S'mund të trajtoj kartela PNM me vlerë më të madhe për ngjyrat tej 255"
+
+#: gdk-pixbuf/io-pnm.c:434 gdk-pixbuf/io-pnm.c:462 gdk-pixbuf/io-pnm.c:494
+msgid "Raw PNM image type is invalid"
+msgstr "Tipi i papërpunuar i pamjes PNM është i mangët "
+
+#: gdk-pixbuf/io-pnm.c:554 gdk-pixbuf/io-pnm.c:596
+msgid "PNM image format is invalid"
+msgstr "Formati i pamjes PNM është i mangët"
+
+#: gdk-pixbuf/io-pnm.c:655
+msgid "PNM image loader does not support this PNM subformat"
+msgstr "Ngarkuesi i pamjeve PNM nuk mbulon këtë nënformat PNM "
+
+#: gdk-pixbuf/io-pnm.c:710
+msgid "Premature end-of-file encountered"
+msgstr "Hasur në eof të parakohshëm"
+
+#: gdk-pixbuf/io-pnm.c:742 gdk-pixbuf/io-pnm.c:962
+msgid "Raw PNM formats require exactly one whitespace before sample data"
+msgstr ""
+"Formate PNM të papërpunuar kanë nevojë për tamam një hapësirë bosh para të "
+"dhënash"
+
+#: gdk-pixbuf/io-pnm.c:769
+msgid "Can't allocate memory for loading PNM image"
+msgstr "S'mund të siguroj kujtesë për ngarkimin e pamjes PNM"
+
+#: gdk-pixbuf/io-pnm.c:819
+msgid "Insufficient memory to load PNM context struct"
+msgstr ""
+
+#: gdk-pixbuf/io-pnm.c:869
+msgid "Unexpected end of PNM image data"
+msgstr "Fund i papritur të dhënash pamjeje PNM"
+
+#: gdk-pixbuf/io-pnm.c:991
+msgid "Insufficient memory to load PNM file"
+msgstr "Kujteë e pamjaftueshme për ngarkim kartele PNM"
+
+#: gdk-pixbuf/io-pnm.c:1070
+msgid "The PNM/PBM/PGM/PPM image format family"
+msgstr "Familja PNM/PBM/PGM/PPM formatesh pamje"
+
+#: gdk-pixbuf/io-ras.c:125
+msgid "RAS image has bogus header data"
+msgstr ""
+
+#: gdk-pixbuf/io-ras.c:147
+msgid "RAS image has unknown type"
+msgstr "Pamja RAS ka tip të panjohur"
+
+#: gdk-pixbuf/io-ras.c:155
+msgid "unsupported RAS image variation"
+msgstr "Variacion i pambuluar pamjeje RAS"
+
+#: gdk-pixbuf/io-ras.c:170 gdk-pixbuf/io-ras.c:190
+msgid "Not enough memory to load RAS image"
+msgstr "Kujtesë e pamjaftueshme për ngarkim pamjeje RAS"
+
+#: gdk-pixbuf/io-ras.c:532
+msgid "The Sun raster image format"
+msgstr "Formati i pamjes Sun raster"
+
+#: gdk-pixbuf/io-tga.c:157
+msgid "Can't allocate memory for IOBuffer struct"
+msgstr "S'mund të siguroj kujtesë për \"IOBuffer struct\""
+
+#: gdk-pixbuf/io-tga.c:176
+msgid "Can't allocate memory for IOBuffer data"
+msgstr "S'mund të siguroj kujtesë për \"IOBuffer data\""
+
+#: gdk-pixbuf/io-tga.c:187
+msgid "Can't realloc IOBuffer data"
+msgstr "S'mund të risiguroj \"IOBuffer data\""
+
+#: gdk-pixbuf/io-tga.c:217
+msgid "Can't allocate temporary IOBuffer data"
+msgstr "S'mund të siguroj të dhëna të përkohshme IOBuffer"
+
+#: gdk-pixbuf/io-tga.c:341
+msgid "Can't allocate new pixbuf"
+msgstr "S'mund të vendos pixbuf të ri"
+
+#: gdk-pixbuf/io-tga.c:680
+msgid "Can't allocate colormap structure"
+msgstr "S'mund të vendos strukturë colormap"
+
+#: gdk-pixbuf/io-tga.c:687
+msgid "Can't allocate colormap entries"
+msgstr "S'mund të vendos zëra colormap"
+
+#: gdk-pixbuf/io-tga.c:709
+msgid "Unexpected bitdepth for colormap entries"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:727
+msgid "Can't allocate TGA header memory"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:760
+msgid "TGA image has invalid dimensions"
+msgstr "Pamja TGA ka përmasa të pavlefshme"
+
+#: gdk-pixbuf/io-tga.c:766
+msgid "TGA image comment length is too long"
+msgstr "Koment pamjeje TGA tejet i gjatë"
+
+#: gdk-pixbuf/io-tga.c:772 gdk-pixbuf/io-tga.c:781 gdk-pixbuf/io-tga.c:791
+#: gdk-pixbuf/io-tga.c:801 gdk-pixbuf/io-tga.c:808
+msgid "TGA image type not supported"
+msgstr "Tip pamjeje TGA i pambuluar"
+
+#: gdk-pixbuf/io-tga.c:855
+msgid "Can't allocate memory for TGA context struct"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:919
+msgid "Excess data in file"
+msgstr "Tepri të dhënash në kartelë"
+
+#: gdk-pixbuf/io-tga.c:988
+msgid "The Targa image format"
+msgstr "Formati i pamjes Targa"
+
+#: gdk-pixbuf/io-tiff.c:191
+msgid "Could not get image width (bad TIFF file)"
+msgstr "Could not get image width (bad TIFF file)"
+
+#: gdk-pixbuf/io-tiff.c:198
+msgid "Could not get image height (bad TIFF file)"
+msgstr "S'munda të kem lartësi pamjeje (kartelë TIFF e dëmtuar)"
+
+#: gdk-pixbuf/io-tiff.c:206
+msgid "Width or height of TIFF image is zero"
+msgstr "Gjerësia ose lartësia e pamjes TIFF është zero"
+
+#: gdk-pixbuf/io-tiff.c:215 gdk-pixbuf/io-tiff.c:224
+msgid "Dimensions of TIFF image too large"
+msgstr "Përmasa pamjeje TIFF tejet të mëdha"
+
+#: gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:246 gdk-pixbuf/io-tiff.c:553
+msgid "Insufficient memory to open TIFF file"
+msgstr "Kujtesë e pamjaftueshme për hapje kartele TIFF"
+
+#: gdk-pixbuf/io-tiff.c:258
+msgid "Failed to load RGB data from TIFF file"
+msgstr "Dështova në ngarkim të dhënash RGB prej kartelës TIFF"
+
+#: gdk-pixbuf/io-tiff.c:266
+msgid "Unsupported TIFF variant"
+msgstr "Variant TIFF i pambuluar"
+
+#: gdk-pixbuf/io-tiff.c:336
+msgid "Failed to open TIFF image"
+msgstr "Dështova në hapjen e pamjes TIFF"
+
+#: gdk-pixbuf/io-tiff.c:349
+msgid "TIFFClose operation failed"
+msgstr "Veprim TIFFClose i dështuar"
+
+#: gdk-pixbuf/io-tiff.c:483 gdk-pixbuf/io-tiff.c:496
+msgid "Failed to load TIFF image"
+msgstr "Dështova në ngarkimin e pamjes TIFF"
+
+#: gdk-pixbuf/io-tiff.c:591
+msgid "The TIFF image format"
+msgstr "Formati i pamjes TIFF"
+
+#: gdk-pixbuf/io-wbmp.c:246
+msgid "Image has zero width"
+msgstr "Pamja ka gjerësi zero"
+
+#: gdk-pixbuf/io-wbmp.c:264
+msgid "Image has zero height"
+msgstr "Pamja ka lartësi zero"
+
+#: gdk-pixbuf/io-wbmp.c:275
+msgid "Not enough memory to load image"
+msgstr "Kujtesë e pamjaftueshme për ngarkimin e pamjes"
+
+#: gdk-pixbuf/io-wbmp.c:334
+msgid "Couldn't save the rest"
+msgstr "S'munda të shpëtoj ç'mbetej"
+
+#: gdk-pixbuf/io-wbmp.c:368
+msgid "The WBMP image format"
+msgstr "Formati i pamjes WBMP"
+
+#: gdk-pixbuf/io-xbm.c:285
+msgid "Invalid XBM file"
+msgstr "Kartelë XBM e mangët"
+
+#: gdk-pixbuf/io-xbm.c:295
+msgid "Insufficient memory to load XBM image file"
+msgstr "Kujtesë e pamjaftueshme për ngarkimin e e kartelës pamje XBM"
+
+#: gdk-pixbuf/io-xbm.c:439
+msgid "Failed to write to temporary file when loading XBM image"
+msgstr ""
+"Dështova në shkrimin e kartelës së përkohshme gjatë ngarkimit të pamjes XBM"
+
+#: gdk-pixbuf/io-xbm.c:474
+msgid "The XBM image format"
+msgstr "Formati i pamjes XBM"
+
+#: gdk-pixbuf/io-xpm.c:1229
+msgid "No XPM header found"
+msgstr ""
+
+#: gdk-pixbuf/io-xpm.c:1237
+msgid "XPM file has image width <= 0"
+msgstr "Kartela XPM ka gjerësi pamjeje <= 0"
+
+#: gdk-pixbuf/io-xpm.c:1245
+msgid "XPM file has image height <= 0"
+msgstr "Kartela XPM ka lartësi pamjeje <= 0"
+
+#: gdk-pixbuf/io-xpm.c:1253
+msgid "XPM file has invalid number of colors"
+msgstr "Kartela XPM ka numër të pavlefshëm ngjyrash"
+
+#: gdk-pixbuf/io-xpm.c:1261
+msgid "XPM has invalid number of chars per pixel"
+msgstr "XPM ka numër të pavlefshëm \"chars per pixel\""
+
+#: gdk-pixbuf/io-xpm.c:1279
+msgid "Can't read XPM colormap"
+msgstr "S'mund të lexoj colormap XPM"
+
+#: gdk-pixbuf/io-xpm.c:1317
+msgid "Can't allocate memory for loading XPM image"
+msgstr "S'mund të siguroj kujtesë për ngarkimin e pamjes XPM"
+
+#: gdk-pixbuf/io-xpm.c:1508
+msgid "Failed to write to temporary file when loading XPM image"
+msgstr ""
+"Dështova në shkrimin e kartelës së përkohshme gjatë ngarkimit të pamjes XPM"
+
+#: gdk-pixbuf/io-xpm.c:1543
+msgid "The XPM image format"
+msgstr "Formati i pamjes XPM"
+
+#: gdk/gdkdisplaymanager.c:117
+msgid "Default Display"
+msgstr "Ekrani Parazgjedhje"
+
+#: gdk/gdkdisplaymanager.c:118
+msgid "The default display for GDK"
+msgstr "Ekrani parazgjedhje për GDK"
+
+#. This is the text that should appear next to menu accelerators
+#. * that use the shift key. If the text on this key isn't typically
+#. * translated on keyboards used for your language, don't translate
+#. * this.
+#.
+#: gtk/gtkaccellabel.c:117
+msgid "Shift"
+msgstr "Shift"
+
+#. This is the text that should appear next to menu accelerators
+#. * that use the control key. If the text on this key isn't typically
+#. * translated on keyboards used for your language, don't translate
+#. * this.
+#.
+#: gtk/gtkaccellabel.c:123
+msgid "Ctrl"
+msgstr "Ctrl"
+
+#. This is the text that should appear next to menu accelerators
+#. * that use the alt key. If the text on this key isn't typically
+#. * translated on keyboards used for your language, don't translate
+#. * this.
+#.
+#: gtk/gtkaccellabel.c:129
+msgid "Alt"
+msgstr "Alt"
+
+#: gtk/gtkaccellabel.c:137
+msgid "Accelerator Closure"
+msgstr "Mbyllje e Përshpejtuesit"
+
+#: gtk/gtkaccellabel.c:138
+msgid "The closure to be monitored for accelerator changes"
+msgstr ""
+
+#: gtk/gtkaccellabel.c:144
+msgid "Accelerator Widget"
+msgstr ""
+
+#: gtk/gtkaccellabel.c:145
+msgid "The widget to be monitored for accelerator changes"
+msgstr ""
+
+#: gtk/gtkalignment.c:114
+msgid "Horizontal alignment"
+msgstr "Horizontalisht"
+
+#: gtk/gtkalignment.c:115
+msgid ""
+"Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
+"right aligned"
+msgstr ""
+"Vendndodhje horizontale për bij në hapësirën e mundshme. 0.0 për drejtim "
+"majtas, 1.0 për drejtim djathtas"
+
+#: gtk/gtkalignment.c:124
+msgid "Vertical alignment"
+msgstr "Vertikalisht"
+
+#: gtk/gtkalignment.c:125
+msgid ""
+"Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
+"bottom aligned"
+msgstr ""
+"Vendndodhje vertikale për bij në hapësirën e mundshme. 0.0 për drejtim "
+"sipër, 1.0 për drejtim poshtë"
+
+#: gtk/gtkalignment.c:133
+msgid "Horizontal scale"
+msgstr "Shkallë horizontale"
+
+#: gtk/gtkalignment.c:134
+msgid ""
+"If available horizontal space is bigger than needed for the child, how much "
+"of it to use for the child. 0.0 means none, 1.0 means all"
+msgstr ""
+"Nëse hapësira horizontale e mundshme është më e madhe se sa nevojitet për "
+"birin, sa prej saj të përdoret për birin. 0.0 do të thotë aspak, 1.0 do të "
+"thotë tërë"
+
+#: gtk/gtkalignment.c:142
+msgid "Vertical scale"
+msgstr "Shkallë vertikale"
+
+#: gtk/gtkalignment.c:143
+msgid ""
+"If available vertical space is bigger than needed for the child, how much of "
+"it to use for the child. 0.0 means none, 1.0 means all"
+msgstr ""
+"Nëse hapësira vertikale e mundshme është më e madhe se sa nevojitet për "
+"birin, sa prej saj të përdoret për birin. 0.0 do të thotë aspak, 1.0 do të "
+"thotë tërë"
+
+#: gtk/gtkalignment.c:160
+msgid "Top Padding"
+msgstr ""
+
+#: gtk/gtkalignment.c:161
+msgid "The padding to insert at the top of the widget."
+msgstr ""
+
+#: gtk/gtkalignment.c:177
+#, fuzzy
+msgid "Bottom Padding"
+msgstr "Hapësirë butoni"
+
+#: gtk/gtkalignment.c:178
+msgid "The padding to insert at the bottom of the widget."
+msgstr ""
+
+#: gtk/gtkalignment.c:194
+#, fuzzy
+msgid "Left Padding"
+msgstr "Mënjanë Majtas"
+
+#: gtk/gtkalignment.c:195
+msgid "The padding to insert at the left of the widget."
+msgstr ""
+
+#: gtk/gtkalignment.c:211
+#, fuzzy
+msgid "Right Padding"
+msgstr "Mënjanë Djathtas"
+
+#: gtk/gtkalignment.c:212
+msgid "The padding to insert at the right of the widget."
+msgstr ""
+
+#: gtk/gtkarrow.c:98
+msgid "Arrow direction"
+msgstr "Drejtim shigjete"
+
+#: gtk/gtkarrow.c:99
+msgid "The direction the arrow should point"
+msgstr "Drejtimi nga duhet të tregojë shigjeta"
+
+#: gtk/gtkarrow.c:106
+msgid "Arrow shadow"
+msgstr "Hije shigjete"
+
+#: gtk/gtkarrow.c:107
+msgid "Appearance of the shadow surrounding the arrow"
+msgstr "Paraqitja e hijes rrethuese të shigjetës"
+
+#: gtk/gtkaspectframe.c:108
+msgid "Horizontal Alignment"
+msgstr "Drejtim Horizontal"
+
+#: gtk/gtkaspectframe.c:109
+msgid "X alignment of the child"
+msgstr "Drejtimi X i birit"
+
+#: gtk/gtkaspectframe.c:115
+msgid "Vertical Alignment"
+msgstr "Drejtim Vertikal"
+
+#: gtk/gtkaspectframe.c:116
+msgid "Y alignment of the child"
+msgstr "Drejtimi Y i birit"
+
+#: gtk/gtkaspectframe.c:122
+msgid "Ratio"
+msgstr "Përpjestim"
+
+#: gtk/gtkaspectframe.c:123
+msgid "Aspect ratio if obey_child is FALSE"
+msgstr ""
+
+#: gtk/gtkaspectframe.c:129
+msgid "Obey child"
+msgstr ""
+
+#: gtk/gtkaspectframe.c:130
+msgid "Force aspect ratio to match that of the frame's child"
+msgstr ""
+
+#: gtk/gtkbbox.c:119
+msgid "Minimum child width"
+msgstr "Gjerësia më e vogël për birin"
+
+#: gtk/gtkbbox.c:120
+msgid "Minimum width of buttons inside the box"
+msgstr "Gjerësia më e vogël e butonave brenda kutisë"
+
+#: gtk/gtkbbox.c:128
+msgid "Minimum child height"
+msgstr ""
+
+#: gtk/gtkbbox.c:129
+msgid "Minimum height of buttons inside the box"
+msgstr "Lartësia më e vogël e butonave brenda kutisë"
+
+#: gtk/gtkbbox.c:137
+msgid "Child internal width padding"
+msgstr ""
+
+#: gtk/gtkbbox.c:138
+msgid "Amount to increase child's size on either side"
+msgstr ""
+
+#: gtk/gtkbbox.c:146
+msgid "Child internal height padding"
+msgstr ""
+
+#: gtk/gtkbbox.c:147
+msgid "Amount to increase child's size on the top and bottom"
+msgstr ""
+
+#: gtk/gtkbbox.c:155
+msgid "Layout style"
+msgstr "Stil skeme"
+
+#: gtk/gtkbbox.c:156
+msgid ""
+"How to layout the buttons in the box. Possible values are default, spread, "
+"edge, start and end"
+msgstr ""
+"Si të vendosen butonat në kuti. Vlera të mundshme janë parazgjedhje, "
+"shpërndaj, skaj, fillim dhe fund"
+
+#: gtk/gtkbbox.c:164
+msgid "Secondary"
+msgstr "Dytësore"
+
+#: gtk/gtkbbox.c:165
+msgid ""
+"If TRUE, the child appears in a secondary group of children, suitable for, e."
+"g., help buttons"
+msgstr ""
+
+#: gtk/gtkbox.c:128
+msgid "Spacing"
+msgstr "Hapësirë"
+
+#: gtk/gtkbox.c:129
+msgid "The amount of space between children"
+msgstr "Sasia e hapësirës ndërmjet bijsh"
+
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:468 gtk/gtktoolbar.c:450
+msgid "Homogeneous"
+msgstr "Njëtrajtshëm"
+
+#: gtk/gtkbox.c:139
+msgid "Whether the children should all be the same size"
+msgstr "Nëse bijtë duhet të jenë të tërë të një madhësie"
+
+#: gtk/gtkbox.c:146 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:442
+#: gtk/gtktreeviewcolumn.c:291
+msgid "Expand"
+msgstr "Zgjero"
+
+#: gtk/gtkbox.c:147
+msgid "Whether the child should receive extra space when the parent grows"
+msgstr "Nëse biri duhet të marrë hapësirë shtesë kur prindi zmadhohet"
+
+#: gtk/gtkbox.c:153
+msgid "Fill"
+msgstr "Mbush"
+
+#: gtk/gtkbox.c:154
+msgid ""
+"Whether extra space given to the child should be allocated to the child or "
+"used as padding"
+msgstr ""
+
+#: gtk/gtkbox.c:160
+msgid "Padding"
+msgstr ""
+
+#: gtk/gtkbox.c:161
+msgid "Extra space to put between the child and its neighbors, in pixels"
+msgstr ""
+"Hapësirë shtesë për tu vendosur ndërmjet birit dhe fqinjëve të tij, në piksel"
+
+#: gtk/gtkbox.c:167
+msgid "Pack type"
+msgstr ""
+
+#: gtk/gtkbox.c:168 gtk/gtknotebook.c:512
+msgid ""
+"A GtkPackType indicating whether the child is packed with reference to the "
+"start or end of the parent"
+msgstr ""
+
+#: gtk/gtkbox.c:174 gtk/gtknotebook.c:490 gtk/gtkpaned.c:236
+#: gtk/gtkruler.c:138
+msgid "Position"
+msgstr "Vendndodhje"
+
+#: gtk/gtkbox.c:175 gtk/gtknotebook.c:491
+msgid "The index of the child in the parent"
+msgstr "Treguesi i birit tek prindi"
+
+#: gtk/gtkbutton.c:190 gtk/gtkframe.c:125 gtk/gtklabel.c:290
+msgid "Label"
+msgstr "Etiketë"
+
+#: gtk/gtkbutton.c:191
+msgid ""
+"Text of the label widget inside the button, if the button contains a label "
+"widget"
+msgstr ""
+
+#: gtk/gtkbutton.c:198 gtk/gtklabel.c:311
+msgid "Use underline"
+msgstr "Përdor nënvijë"
+
+#: gtk/gtkbutton.c:199 gtk/gtklabel.c:312
+msgid ""
+"If set, an underline in the text indicates the next character should be used "
+"for the mnemonic accelerator key"
+msgstr ""
+
+#: gtk/gtkbutton.c:206
+msgid "Use stock"
+msgstr ""
+
+#: gtk/gtkbutton.c:207
+msgid ""
+"If set, the label is used to pick a stock item instead of being displayed"
+msgstr ""
+
+#: gtk/gtkbutton.c:214
+msgid "Focus on click"
+msgstr ""
+
+#: gtk/gtkbutton.c:215
+#, fuzzy
+msgid "Whether the button grabs focus when it is clicked with the mouse"
+msgstr "Nëse teksti i etiketës mun dtë zgjidhet me miun"
+
+#: gtk/gtkbutton.c:222
+msgid "Border relief"
+msgstr ""
+
+#: gtk/gtkbutton.c:223
+msgid "The border relief style"
+msgstr ""
+
+#: gtk/gtkbutton.c:280
+msgid "Default Spacing"
+msgstr "Hapësira Parazgjedhje"
+
+#: gtk/gtkbutton.c:281
+msgid "Extra space to add for CAN_DEFAULT buttons"
+msgstr ""
+
+#: gtk/gtkbutton.c:287
+msgid "Default Outside Spacing"
+msgstr ""
+
+#: gtk/gtkbutton.c:288
+msgid ""
+"Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
+"border"
+msgstr ""
+
+#: gtk/gtkbutton.c:293
+msgid "Child X Displacement"
+msgstr "Zhvendosje X e Birit"
+
+#: gtk/gtkbutton.c:294
+msgid ""
+"How far in the x direction to move the child when the button is depressed"
+msgstr "Sa larg sipas x-it të zhvendoset biri kur shtypet butoni"
+
+#: gtk/gtkbutton.c:301
+msgid "Child Y Displacement"
+msgstr "Zhvendosje Y e birit"
+
+#: gtk/gtkbutton.c:302
+msgid ""
+"How far in the y direction to move the child when the button is depressed"
+msgstr "Sa larg sipas y-it të zhvendoset biri kur shtypet butoni"
+
+#: gtk/gtkcalendar.c:464
+#, fuzzy
+msgid "Year"
+msgstr "pastro"
+
+#: gtk/gtkcalendar.c:465
+#, fuzzy
+msgid "The selected year"
+msgstr "Emër kartele i zgjedhur për çastin"
+
+#: gtk/gtkcalendar.c:471
+#, fuzzy
+msgid "Month"
+msgstr "Gërma"
+
+#: gtk/gtkcalendar.c:472
+msgid "The selected month (as a number between 0 and 11)"
+msgstr ""
+
+#: gtk/gtkcalendar.c:478
+msgid "Day"
+msgstr ""
+
+#: gtk/gtkcalendar.c:479
+msgid ""
+"The selected day (as a number between 1 and 31, or 0 to unselect the "
+"currently selected day)"
+msgstr ""
+
+#: gtk/gtkcalendar.c:493
+#, fuzzy
+msgid "Show Heading"
+msgstr "Hapësirë rreshtash"
+
+#: gtk/gtkcalendar.c:494
+msgid "If TRUE, a heading is displayed"
+msgstr ""
+
+#: gtk/gtkcalendar.c:508
+msgid "Show Day Names"
+msgstr ""
+
+#: gtk/gtkcalendar.c:509
+msgid "If TRUE, day names are displayed"
+msgstr ""
+
+#: gtk/gtkcalendar.c:522
+msgid "No Month Change"
+msgstr ""
+
+#: gtk/gtkcalendar.c:523
+msgid "If TRUE, the selected month can not be changed"
+msgstr ""
+
+#: gtk/gtkcalendar.c:537
+msgid "Show Week Numbers"
+msgstr ""
+
+#: gtk/gtkcalendar.c:538
+msgid "If TRUE, week numbers are displayed"
+msgstr ""
+
+#. Translate to calendar:YM if you want years to be displayed
+#. * before months; otherwise translate to calendar:MY.
+#. * Do *not* translate it to anything else, if it
+#. * it isn't calendar:YM or calendar:MY it will not work.
+#. *
+#. * Note that this flipping is in top the text direction flipping,
+#. * so if you have a default text direction of RTL and YM, then
+#. * the year will appear on the right.
+#.
+#: gtk/gtkcalendar.c:709
+#, fuzzy
+msgid "calendar:MY"
+msgstr "pastro"
+
+#. Translate to calendar:week_start:1 if you want Monday to be the
+#. * first day of the week; otherwise translate to calendar:week_start:0.
+#. * Do *not* translate it to anything else, if it isn't calendar:week_start:1
+#. * or calendar:week_start:0 it will not work.
+#.
+#: gtk/gtkcalendar.c:720
+msgid "calendar:week_start:0"
+msgstr ""
+
+#: gtk/gtkcellrenderer.c:116
+msgid "mode"
+msgstr "mënyrë"
+
+#: gtk/gtkcellrenderer.c:117
+msgid "Editable mode of the CellRenderer"
+msgstr ""
+
+#: gtk/gtkcellrenderer.c:126
+msgid "visible"
+msgstr "i dukshëm"
+
+#: gtk/gtkcellrenderer.c:127
+msgid "Display the cell"
+msgstr "Shfaq kutinë"
+
+#: gtk/gtkcellrenderer.c:135
+msgid "xalign"
+msgstr "xdrejtim"
+
+#: gtk/gtkcellrenderer.c:136
+msgid "The x-align"
+msgstr "Xdrejtimi"
+
+#: gtk/gtkcellrenderer.c:146
+msgid "yalign"
+msgstr "ydrejtim"
+
+#: gtk/gtkcellrenderer.c:147
+msgid "The y-align"
+msgstr "Ydrejtimi"
+
+#: gtk/gtkcellrenderer.c:157
+msgid "xpad"
+msgstr ""
+
+#: gtk/gtkcellrenderer.c:158
+msgid "The xpad"
+msgstr ""
+
+#: gtk/gtkcellrenderer.c:168
+msgid "ypad"
+msgstr ""
+
+#: gtk/gtkcellrenderer.c:169
+msgid "The ypad"
+msgstr ""
+
+#: gtk/gtkcellrenderer.c:179
+msgid "width"
+msgstr "gjerësi"
+
+#: gtk/gtkcellrenderer.c:180
+msgid "The fixed width"
+msgstr "Gjerësia e caktuar"
+
+#: gtk/gtkcellrenderer.c:190
+msgid "height"
+msgstr "lartësi"
+
+#: gtk/gtkcellrenderer.c:191
+msgid "The fixed height"
+msgstr "Lartësia e caktuar"
+
+#: gtk/gtkcellrenderer.c:201
+msgid "Is Expander"
+msgstr ""
+
+#: gtk/gtkcellrenderer.c:202
+msgid "Row has children"
+msgstr "Rreshti ka bij"
+
+#: gtk/gtkcellrenderer.c:211
+msgid "Is Expanded"
+msgstr "Është Zgjeruar"
+
+#: gtk/gtkcellrenderer.c:212
+msgid "Row is an expander row, and is expanded"
+msgstr "Rreshti është një rresht zgjerues, dhe është zgjeruar"
+
+#: gtk/gtkcellrenderer.c:220
+msgid "Cell background color name"
+msgstr "Emër ngjyre i sfondit të kutisë"
+
+#: gtk/gtkcellrenderer.c:221
+msgid "Cell background color as a string"
+msgstr "Ngjyrë sfondi kutie si varg"
+
+#: gtk/gtkcellrenderer.c:228
+msgid "Cell background color"
+msgstr "Ngjyrë sfondi kutie"
+
+#: gtk/gtkcellrenderer.c:229
+msgid "Cell background color as a GdkColor"
+msgstr "Ngjyrë sfondi kutie si GdkColor"
+
+#: gtk/gtkcellrenderer.c:237
+msgid "Cell background set"
+msgstr "Sfond kuti i rregulluar"
+
+#: gtk/gtkcellrenderer.c:238
+msgid "Whether this tag affects the cell background color"
+msgstr "Nëse kjo etiketë prek apo jo ngjyra sfondi kutish"
+
+#: gtk/gtkcellrendererpixbuf.c:132
+msgid "Pixbuf Object"
+msgstr ""
+
+#: gtk/gtkcellrendererpixbuf.c:133
+msgid "The pixbuf to render"
+msgstr ""
+
+#: gtk/gtkcellrendererpixbuf.c:141
+msgid "Pixbuf Expander Open"
+msgstr ""
+
+#: gtk/gtkcellrendererpixbuf.c:142
+msgid "Pixbuf for open expander"
+msgstr ""
+
+#: gtk/gtkcellrendererpixbuf.c:150
+msgid "Pixbuf Expander Closed"
+msgstr ""
+
+#: gtk/gtkcellrendererpixbuf.c:151
+msgid "Pixbuf for closed expander"
+msgstr ""
+
+#: gtk/gtkcellrendererpixbuf.c:159 gtk/gtkimage.c:176
+msgid "Stock ID"
+msgstr ""
+
+#: gtk/gtkcellrendererpixbuf.c:160
+msgid "The stock ID of the stock icon to render"
+msgstr ""
+
+#: gtk/gtkcellrendererpixbuf.c:167
+msgid "Size"
+msgstr "Madhësi"
+
+#: gtk/gtkcellrendererpixbuf.c:168
+#, fuzzy
+msgid "The size of the rendered icon"
+msgstr "Madhësia e ikonës së vizatuar"
+
+#: gtk/gtkcellrendererpixbuf.c:176
+msgid "Detail"
+msgstr "Hollësi"
+
+#: gtk/gtkcellrendererpixbuf.c:177
+msgid "Render detail to pass to the theme engine"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:175 gtk/gtkentry.c:534 gtk/gtkprogressbar.c:218
+msgid "Text"
+msgstr "Tekst"
+
+#: gtk/gtkcellrenderertext.c:176
+msgid "Text to render"
+msgstr "Tekst për tu vizatuar"
+
+#: gtk/gtkcellrenderertext.c:183
+msgid "Markup"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:184
+msgid "Marked up text to render"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:191 gtk/gtklabel.c:297
+msgid "Attributes"
+msgstr "Veti"
+
+#: gtk/gtkcellrenderertext.c:192
+msgid "A list of style attributes to apply to the text of the renderer"
+msgstr "Një listë vetish stili për tu zbatuar tek teksti i vizatuesit"
+
+#: gtk/gtkcellrenderertext.c:199 gtk/gtktexttag.c:205
+msgid "Background color name"
+msgstr "Emër ngjyre sfondi"
+
+#: gtk/gtkcellrenderertext.c:200 gtk/gtktexttag.c:206
+msgid "Background color as a string"
+msgstr "Ngjyrë sfondi si varg"
+
+#: gtk/gtkcellrenderertext.c:207 gtk/gtktexttag.c:213
+msgid "Background color"
+msgstr "Ngjyrë sfondi"
+
+#: gtk/gtkcellrenderertext.c:208
+msgid "Background color as a GdkColor"
+msgstr "Ngjyrë sfondi si GdkColor"
+
+#: gtk/gtkcellrenderertext.c:215 gtk/gtktexttag.c:239
+msgid "Foreground color name"
+msgstr "Emër ngjyre të përparme"
+
+#: gtk/gtkcellrenderertext.c:216 gtk/gtktexttag.c:240
+msgid "Foreground color as a string"
+msgstr "Ngjyrë e përparme si varg"
+
+#: gtk/gtkcellrenderertext.c:223 gtk/gtktexttag.c:247
+msgid "Foreground color"
+msgstr "Ngjyrë e përparme"
+
+#: gtk/gtkcellrenderertext.c:224
+msgid "Foreground color as a GdkColor"
+msgstr "Ngjyrë e përparme si GdkColor"
+
+#: gtk/gtkcellrenderertext.c:232 gtk/gtkentry.c:466 gtk/gtktexttag.c:273
+#: gtk/gtktextview.c:584
+msgid "Editable"
+msgstr "E përpunueshme"
+
+#: gtk/gtkcellrenderertext.c:233 gtk/gtktexttag.c:274 gtk/gtktextview.c:585
+msgid "Whether the text can be modified by the user"
+msgstr "Nëse teksti mund të ndryshohet prej përdoruesit"
+
+#: gtk/gtkcellrenderertext.c:240 gtk/gtkcellrenderertext.c:248
+#: gtk/gtkfontbutton.c:804 gtk/gtkfontsel.c:217 gtk/gtktexttag.c:281
+#: gtk/gtktexttag.c:289
+msgid "Font"
+msgstr "Gërma"
+
+#: gtk/gtkcellrenderertext.c:241
+msgid "Font description as a string"
+msgstr "Përshkrim gërmash si varg"
+
+#: gtk/gtkcellrenderertext.c:249 gtk/gtktexttag.c:290
+msgid "Font description as a PangoFontDescription struct"
+msgstr "Përshkrim gërmash si \"PangoFontDescription struct\""
+
+#: gtk/gtkcellrenderertext.c:257 gtk/gtktexttag.c:298
+msgid "Font family"
+msgstr "Familje gërmash"
+
+#: gtk/gtkcellrenderertext.c:258 gtk/gtktexttag.c:299
+msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
+msgstr "Emër i familje së gërmave, p.sh. Sans, Helvetica, Times, Monospace"
+
+#: gtk/gtkcellrenderertext.c:265 gtk/gtkcellrenderertext.c:266
+#: gtk/gtktexttag.c:306
+msgid "Font style"
+msgstr "Stil gërmash"
+
+#: gtk/gtkcellrenderertext.c:274 gtk/gtkcellrenderertext.c:275
+#: gtk/gtktexttag.c:315
+msgid "Font variant"
+msgstr "variant gërmash"
+
+#: gtk/gtkcellrenderertext.c:283 gtk/gtkcellrenderertext.c:284
+#: gtk/gtktexttag.c:324
+msgid "Font weight"
+msgstr "Lartësi gërmash"
+
+#: gtk/gtkcellrenderertext.c:293 gtk/gtkcellrenderertext.c:294
+#: gtk/gtktexttag.c:335
+msgid "Font stretch"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:302 gtk/gtkcellrenderertext.c:303
+#: gtk/gtktexttag.c:344
+msgid "Font size"
+msgstr "Madhësi gërmash"
+
+#: gtk/gtkcellrenderertext.c:312 gtk/gtktexttag.c:364
+msgid "Font points"
+msgstr "Pikë gërmash"
+
+#: gtk/gtkcellrenderertext.c:313 gtk/gtktexttag.c:365
+msgid "Font size in points"
+msgstr "Madhësi gërmash në pikë"
+
+#: gtk/gtkcellrenderertext.c:322 gtk/gtktexttag.c:354
+msgid "Font scale"
+msgstr "Shkallë gërmash"
+
+#: gtk/gtkcellrenderertext.c:323
+msgid "Font scaling factor"
+msgstr "Koeficient shkalle gërmash"
+
+#: gtk/gtkcellrenderertext.c:332 gtk/gtktexttag.c:423
+msgid "Rise"
+msgstr "Ngrij"
+
+#: gtk/gtkcellrenderertext.c:333
+msgid ""
+"Offset of text above the baseline (below the baseline if rise is negative)"
+msgstr ""
+"Zhvendosje e tekstit mbi vijën bazë (nën vijën bazë nëse ngritja është "
+"negatie)"
+
+#: gtk/gtkcellrenderertext.c:343 gtk/gtktexttag.c:463
+msgid "Strikethrough"
+msgstr "Hequrvije"
+
+#: gtk/gtkcellrenderertext.c:344 gtk/gtktexttag.c:464
+msgid "Whether to strike through the text"
+msgstr "Nëse i hiqet apo jo vijë tekstit"
+
+#: gtk/gtkcellrenderertext.c:351 gtk/gtktexttag.c:471
+msgid "Underline"
+msgstr "Nënvijë"
+
+#: gtk/gtkcellrenderertext.c:352 gtk/gtktexttag.c:472
+msgid "Style of underline for this text"
+msgstr "Stil nënvije për këtë tekst"
+
+#: gtk/gtkcellrenderertext.c:362 gtk/gtktexttag.c:508
+msgid "Background set"
+msgstr "Sfond i rregulluar"
+
+#: gtk/gtkcellrenderertext.c:363 gtk/gtktexttag.c:509
+msgid "Whether this tag affects the background color"
+msgstr "Nëse kjo etiketë prek prek ngjyra sfondi"
+
+#: gtk/gtkcellrenderertext.c:366 gtk/gtktexttag.c:520
+msgid "Foreground set"
+msgstr "Set për të përparmen"
+
+#: gtk/gtkcellrenderertext.c:367 gtk/gtktexttag.c:521
+msgid "Whether this tag affects the foreground color"
+msgstr "Nëse kjo etiketë prek ngjyrën e përparme"
+
+#: gtk/gtkcellrenderertext.c:370 gtk/gtktexttag.c:528
+msgid "Editability set"
+msgstr "Set për përpunueshmërinë"
+
+#: gtk/gtkcellrenderertext.c:371 gtk/gtktexttag.c:529
+msgid "Whether this tag affects text editability"
+msgstr "Nëse kjo etiketë prek përpunueshmëri teksti"
+
+#: gtk/gtkcellrenderertext.c:374 gtk/gtktexttag.c:532
+msgid "Font family set"
+msgstr "Set grupi gëmash"
+
+#: gtk/gtkcellrenderertext.c:375 gtk/gtktexttag.c:533
+msgid "Whether this tag affects the font family"
+msgstr "Nëse kjo etiketë prek grupin e gërmave"
+
+#: gtk/gtkcellrenderertext.c:378 gtk/gtktexttag.c:536
+msgid "Font style set"
+msgstr "Set stili gërmash"
+
+#: gtk/gtkcellrenderertext.c:379 gtk/gtktexttag.c:537
+msgid "Whether this tag affects the font style"
+msgstr "Nëse kjo etiketë prek stil gëmash"
+
+#: gtk/gtkcellrenderertext.c:382 gtk/gtktexttag.c:540
+msgid "Font variant set"
+msgstr "Set varianti gërmash"
+
+#: gtk/gtkcellrenderertext.c:383 gtk/gtktexttag.c:541
+msgid "Whether this tag affects the font variant"
+msgstr "Nëse kjo etiketë prek variant gërmash"
+
+#: gtk/gtkcellrenderertext.c:386 gtk/gtktexttag.c:544
+msgid "Font weight set"
+msgstr "Set peshe gërmash"
+
+#: gtk/gtkcellrenderertext.c:387 gtk/gtktexttag.c:545
+msgid "Whether this tag affects the font weight"
+msgstr "Nëse kjo etiketë prek peshë gërmash"
+
+#: gtk/gtkcellrenderertext.c:390 gtk/gtktexttag.c:548
+msgid "Font stretch set"
+msgstr "Set tkurrje gërmash"
+
+#: gtk/gtkcellrenderertext.c:391 gtk/gtktexttag.c:549
+msgid "Whether this tag affects the font stretch"
+msgstr "Nëse kjo etiketë prek tkurrje gërmash"
+
+#: gtk/gtkcellrenderertext.c:394 gtk/gtktexttag.c:552
+msgid "Font size set"
+msgstr "Set madhësie gërmash"
+
+#: gtk/gtkcellrenderertext.c:395 gtk/gtktexttag.c:553
+msgid "Whether this tag affects the font size"
+msgstr "Nëse kjo etiketë prek madhësi gërmash"
+
+#: gtk/gtkcellrenderertext.c:398 gtk/gtktexttag.c:556
+msgid "Font scale set"
+msgstr "Set shkalle gërmash"
+
+#: gtk/gtkcellrenderertext.c:399 gtk/gtktexttag.c:557
+msgid "Whether this tag scales the font size by a factor"
+msgstr "Nëse kjo etiketë ndryshon madhësinë e gërmave sipas një faktori"
+
+#: gtk/gtkcellrenderertext.c:402 gtk/gtktexttag.c:576
+msgid "Rise set"
+msgstr "Set ngritjeje"
+
+#: gtk/gtkcellrenderertext.c:403 gtk/gtktexttag.c:577
+msgid "Whether this tag affects the rise"
+msgstr "Nëse kjo etiketë prek ngritjen"
+
+#: gtk/gtkcellrenderertext.c:406 gtk/gtktexttag.c:592
+msgid "Strikethrough set"
+msgstr "Set për hequrvije"
+
+#: gtk/gtkcellrenderertext.c:407 gtk/gtktexttag.c:593
+msgid "Whether this tag affects strikethrough"
+msgstr "Nëse kjo etiketë prek hequrvijën"
+
+#: gtk/gtkcellrenderertext.c:410 gtk/gtktexttag.c:600
+msgid "Underline set"
+msgstr "Set nënvije"
+
+#: gtk/gtkcellrenderertext.c:411 gtk/gtktexttag.c:601
+msgid "Whether this tag affects underlining"
+msgstr "Nëse kjo etiketë prek nënvijëzimin"
+
+#: gtk/gtkcellrenderertoggle.c:132
+msgid "Toggle state"
+msgstr "Gjendje Këmbimi"
+
+#: gtk/gtkcellrenderertoggle.c:133
+msgid "The toggle state of the button"
+msgstr "Gjendja e këmbimit për butonin"
+
+#: gtk/gtkcellrenderertoggle.c:141
+msgid "Inconsistent state"
+msgstr "Gjendje e paqëndrueshme"
+
+#: gtk/gtkcellrenderertoggle.c:142
+msgid "The inconsistent state of the button"
+msgstr "Gjendja e paqëndrueshme e butonit"
+
+#: gtk/gtkcellrenderertoggle.c:150
+msgid "Activatable"
+msgstr "I/e aktivizueshëm"
+
+#: gtk/gtkcellrenderertoggle.c:151
+msgid "The toggle button can be activated"
+msgstr "Butoni këmbim mund të aktivizohet"
+
+#: gtk/gtkcellrenderertoggle.c:159
+msgid "Radio state"
+msgstr "Gjendje radio"
+
+#: gtk/gtkcellrenderertoggle.c:160
+msgid "Draw the toggle button as a radio button"
+msgstr "Vizato butonin këmbim si buton radio"
+
+#: gtk/gtkcheckbutton.c:98 gtk/gtkoptionmenu.c:197
+msgid "Indicator Size"
+msgstr "Madhësi Treguesi"
+
+#: gtk/gtkcheckbutton.c:99
+msgid "Size of check or radio indicator"
+msgstr "Madhësi e treguesit kontroll ose radio"
+
+#: gtk/gtkcheckbutton.c:106 gtk/gtkoptionmenu.c:203
+msgid "Indicator Spacing"
+msgstr "Hapësirë Treguesi"
+
+#: gtk/gtkcheckbutton.c:107
+msgid "Spacing around check or radio indicator"
+msgstr "Hapësira përreth treguesit kontroll ose radio"
+
+#: gtk/gtkcheckmenuitem.c:117 gtk/gtktogglebutton.c:132
+msgid "Active"
+msgstr "Veprues"
+
+#: gtk/gtkcheckmenuitem.c:118
+msgid "Whether the menu item is checked"
+msgstr "Nëse zë menuje është shenjuar"
+
+#: gtk/gtkcheckmenuitem.c:125 gtk/gtktogglebutton.c:140
+#, fuzzy
+msgid "Inconsistent"
+msgstr "E paqëndrueshëm"
+
+#: gtk/gtkcheckmenuitem.c:126
+#, fuzzy
+msgid "Whether to display an \"inconsistent\" state"
+msgstr "Nëse të shfaqet një gjendje \"e paqëndrueshme\" "
+
+#: gtk/gtkcolorbutton.c:200
+#, fuzzy
+msgid "Use alpha"
+msgstr "Përdor \"markup\""
+
+#: gtk/gtkcolorbutton.c:201
+msgid "Whether or not to give the color an alpha value"
+msgstr ""
+
+#: gtk/gtkcolorbutton.c:215 gtk/gtkfontbutton.c:173
+#: gtk/gtktreeviewcolumn.c:283
+msgid "Title"
+msgstr "Titull"
+
+#: gtk/gtkcolorbutton.c:216
+#, fuzzy
+msgid "The title of the color selection dialog"
+msgstr "Titulli i dritares"
+
+#: gtk/gtkcolorbutton.c:217 gtk/gtkcolorbutton.c:571
+msgid "Pick a color"
+msgstr ""
+
+#: gtk/gtkcolorbutton.c:230 gtk/gtkcolorsel.c:1770
+msgid "Current Color"
+msgstr "Njgyrë e Çastit"
+
+#: gtk/gtkcolorbutton.c:231
+#, fuzzy
+msgid "The selected color"
+msgstr "Ngjyra e çastit"
+
+#: gtk/gtkcolorbutton.c:245 gtk/gtkcolorsel.c:1777
+msgid "Current Alpha"
+msgstr "Alfa e Çastit"
+
+#: gtk/gtkcolorbutton.c:246
+#, fuzzy
+msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
+msgstr ""
+"Vlera e çastit për patejdukshmërinë (0 krejt i tejdukshëm, 65535 krej opak)"
+
+#: gtk/gtkcolorbutton.c:463
+msgid "Received invalid color data\n"
+msgstr ""
+
+#: gtk/gtkcolorsel.c:561
+msgid ""
+"The previously-selected color, for comparison to the color you're selecting "
+"now. You can drag this color to a palette entry, or select this color as "
+"current by dragging it to the other color swatch alongside."
+msgstr ""
+"Ngjyra e zgjedhur më parë, për krahasim me ngjyrën që po zgjidhni tani.  "
+"Mund të tërhiqni këtë ngjyrë në një zë palete, ose zgjidhni këtë ngjyrë si "
+"të çastit duke e tërhequr tek ngjyrat e tjera krahas tyre."
+
+#: gtk/gtkcolorsel.c:566
+msgid ""
+"The color you've chosen. You can drag this color to a palette entry to save "
+"it for use in the future."
+msgstr ""
+"Ngjyra që keni zgjedhur. Mund të tërhiqni këtë ngjyrë te një zë palete për "
+"ta ruajtur për përdorim në të ardhmen."
+
+#: gtk/gtkcolorsel.c:927
+msgid "_Save color here"
+msgstr "_Ruaj ngjyrë këtu"
+
+#: gtk/gtkcolorsel.c:1132
+#, fuzzy
+msgid ""
+"Click this palette entry to make it the current color. To change this entry, "
+"drag a color swatch here or right-click it and select \"Save color here.\""
+msgstr ""
+"Klikoni këtë zë palete për ta bërë ngjyrën e çastit. Për të ndryshuar këtë "
+"zë, tërhiqni këtu një \"color swatch\" ose djathtas klikojeni dhe zgjidhni "
+"\"Ruaj ngjyrë këtu.\""
+
+#: gtk/gtkcolorsel.c:1756
+msgid "Has Opacity Control"
+msgstr "Ka Kontroll Opaciteti"
+
+#: gtk/gtkcolorsel.c:1757
+msgid "Whether the color selector should allow setting opacity"
+msgstr ""
+"Nëse zgjedhësi i ngjyrave duhet të lejojë apo jo rregullimin e opacitetit"
+
+#: gtk/gtkcolorsel.c:1763
+msgid "Has palette"
+msgstr "Ka paletë"
+
+#: gtk/gtkcolorsel.c:1764
+msgid "Whether a palette should be used"
+msgstr "Nëse duhet përdorur një paletë"
+
+#: gtk/gtkcolorsel.c:1771
+msgid "The current color"
+msgstr "Ngjyra e çastit"
+
+#: gtk/gtkcolorsel.c:1778
+msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
+msgstr ""
+"Vlera e çastit për patejdukshmërinë (0 krejt i tejdukshëm, 65535 krej opak)"
+
+#: gtk/gtkcolorsel.c:1792
+msgid "Custom palette"
+msgstr "Paletë e çastit"
+
+#: gtk/gtkcolorsel.c:1793
+msgid "Palette to use in the color selector"
+msgstr "Paletë për tu përdorur në zgjedhës ngjyre"
+
+#: gtk/gtkcolorsel.c:1834
+msgid ""
+"Select the color you want from the outer ring. Select the darkness or "
+"lightness of that color using the inner triangle."
+msgstr ""
+"Zgjidhni prej unazës së jashtme ngjyrën që doni. Zgjidhni errësimin ose "
+"ndriçimin e kësaj ngjyre duke përdorur trekëndëshin e brendshëm."
+
+#: gtk/gtkcolorsel.c:1859
+msgid ""
+"Click the eyedropper, then click a color anywhere on your screen to select "
+"that color."
+msgstr ""
+"Klikoni pikatoren, e mandej klikoni një ngjyrë kudoqoftë në ekranin tuaj për "
+"të zgjedhur atë ngjyrë."
+
+#: gtk/gtkcolorsel.c:1868
+msgid "_Hue:"
+msgstr ""
+
+#: gtk/gtkcolorsel.c:1869
+msgid "Position on the color wheel."
+msgstr "Vendndodhje në rrotën e ngjyrave."
+
+#: gtk/gtkcolorsel.c:1871
+msgid "_Saturation:"
+msgstr "_Ngopje:"
+
+#: gtk/gtkcolorsel.c:1872
+msgid "\"Deepness\" of the color."
+msgstr "\"Thellësi\" e ngjyrës."
+
+#: gtk/gtkcolorsel.c:1873
+msgid "_Value:"
+msgstr "_Vlerë:"
+
+#: gtk/gtkcolorsel.c:1874
+msgid "Brightness of the color."
+msgstr "Shkëlqim i ngjyrës."
+
+#: gtk/gtkcolorsel.c:1875
+msgid "_Red:"
+msgstr "E_kuqe:"
+
+#: gtk/gtkcolorsel.c:1876
+msgid "Amount of red light in the color."
+msgstr "Sasi e ndriçimit të kuq në ngjyrën."
+
+#: gtk/gtkcolorsel.c:1877
+msgid "_Green:"
+msgstr "E_gjelbër:"
+
+#: gtk/gtkcolorsel.c:1878
+msgid "Amount of green light in the color."
+msgstr "Sasi e ndriçimit të gjelbër në ngjyrën."
+
+#: gtk/gtkcolorsel.c:1879
+msgid "_Blue:"
+msgstr "_Blu:"
+
+#: gtk/gtkcolorsel.c:1880
+msgid "Amount of blue light in the color."
+msgstr "Sasi e ndriçimit blu në ngjyrën."
+
+#: gtk/gtkcolorsel.c:1883
+msgid "_Opacity:"
+msgstr "_Patejdukshmëri:"
+
+#: gtk/gtkcolorsel.c:1891
+msgid "Transparency of the currently-selected color."
+msgstr "Tejdukshmëri e ngjyrës së zgjedhur për çastin."
+
+#: gtk/gtkcolorsel.c:1906
+msgid "Color _Name:"
+msgstr "Emër_Ngjyre:"
+
+#: gtk/gtkcolorsel.c:1921
+msgid ""
+"You can enter an HTML-style hexadecimal color value, or simply a color name "
+"such as 'orange' in this entry."
+msgstr ""
+"Në këtë zë mund të jepni një vlerë ngjyre gjashtëmbëdhjetore në stil HTML, "
+"ose thjesht një emër ngjyre si bie fjala 'portokalli' ."
+
+#: gtk/gtkcolorsel.c:1940
+msgid "_Palette"
+msgstr "_Paletë"
+
+#: gtk/gtkcolorseldialog.c:115
+#, fuzzy
+msgid "Color Selection"
+msgstr "Zgjedhje gërmash"
+
+#: gtk/gtkcombo.c:143
+msgid "Enable arrow keys"
+msgstr "Aktivizo butonat shigjetë"
+
+#: gtk/gtkcombo.c:144
+msgid "Whether the arrow keys move through the list of items"
+msgstr "Nëse butonat shigjetë lëvizin përmes listash objektesh"
+
+#: gtk/gtkcombo.c:150
+msgid "Always enable arrows"
+msgstr "Mundëso shigjeta përherë"
+
+#: gtk/gtkcombo.c:151
+msgid "Obsolete property, ignored"
+msgstr "Veti e vjetëruar, shpërfillur"
+
+#: gtk/gtkcombo.c:157
+msgid "Case sensitive"
+msgstr ""
+
+#: gtk/gtkcombo.c:158
+msgid "Whether list item matching is case sensitive"
+msgstr ""
+
+#: gtk/gtkcombo.c:165
+msgid "Allow empty"
+msgstr "Lejo bosh"
+
+#: gtk/gtkcombo.c:166
+msgid "Whether an empty value may be entered in this field"
+msgstr "Nëse një vlerë bosh mund të vendoset në këtë fushë"
+
+#: gtk/gtkcombo.c:173
+msgid "Value in list"
+msgstr "Vlerë në listë"
+
+#: gtk/gtkcombo.c:174
+msgid "Whether entered values must already be present in the list"
+msgstr "Nëse vlera të dhëna duhet tashmë të jenë të pranishme në listën"
+
+#: gtk/gtkcontainer.c:203
+msgid "Resize mode"
+msgstr "Mënyrë ripërmaso"
+
+#: gtk/gtkcontainer.c:204
+msgid "Specify how resize events are handled"
+msgstr "Trego se si të trajtohen ngjarje ripërmaso"
+
+#: gtk/gtkcontainer.c:211
+msgid "Border width"
+msgstr "Gjerësi ane "
+
+#: gtk/gtkcontainer.c:212
+msgid "The width of the empty border outside the containers children"
+msgstr ""
+
+#: gtk/gtkcontainer.c:220
+msgid "Child"
+msgstr "Bir"
+
+#: gtk/gtkcontainer.c:221
+msgid "Can be used to add a new child to the container"
+msgstr "Mund të përdoret për të shtuar një bir të ri tek përmbajtësi"
+
+#: gtk/gtkcurve.c:121
+msgid "Curve type"
+msgstr "Tip lakoreje"
+
+#: gtk/gtkcurve.c:122
+msgid "Is this curve linear, spline interpolated, or free-form"
+msgstr ""
+
+#: gtk/gtkcurve.c:130
+msgid "Minimum X"
+msgstr "X më i vogël"
+
+#: gtk/gtkcurve.c:131
+msgid "Minimum possible value for X"
+msgstr "Vlera më e vogël e mundshme për X"
+
+#: gtk/gtkcurve.c:140
+msgid "Maximum X"
+msgstr "X më i madh"
+
+#: gtk/gtkcurve.c:141
+msgid "Maximum possible X value"
+msgstr "Vlera më e madhe e mundshme për X"
+
+#: gtk/gtkcurve.c:150
+msgid "Minimum Y"
+msgstr "Y më i vogël"
+
+#: gtk/gtkcurve.c:151
+msgid "Minimum possible value for Y"
+msgstr "Vlera më e vogël e mundshme për Y"
+
+#: gtk/gtkcurve.c:160
+msgid "Maximum Y"
+msgstr "Y më i madh"
+
+#: gtk/gtkcurve.c:161
+msgid "Maximum possible value for Y"
+msgstr "Vlera më e madhe e mundshme për Y"
+
+#: gtk/gtkdialog.c:136
+msgid "Has separator"
+msgstr "Ka ndarës"
+
+#: gtk/gtkdialog.c:137
+msgid "The dialog has a separator bar above its buttons"
+msgstr "Dialogu ka një shtyllë ndarëse sipër butonave të tij "
+
+#: gtk/gtkdialog.c:162
+msgid "Content area border"
+msgstr "Anë zone përmbajtjeje"
+
+#: gtk/gtkdialog.c:163
+msgid "Width of border around the main dialog area"
+msgstr "Gjerësi ane rreth zonës së dialogut kryesor"
+
+#: gtk/gtkdialog.c:170
+msgid "Button spacing"
+msgstr "Hapësirë butoni"
+
+#: gtk/gtkdialog.c:171
+msgid "Spacing between buttons"
+msgstr "Hapësirë ndërmjet butonash"
+
+#: gtk/gtkdialog.c:179
+msgid "Action area border"
+msgstr "Anë zone veprimi"
+
+#: gtk/gtkdialog.c:180
+msgid "Width of border around the button area at the bottom of the dialog"
+msgstr "Gjerësi ane rreth zonës së butonit në fund të dialogut"
+
+#: gtk/gtkentry.c:446 gtk/gtklabel.c:368
+msgid "Cursor Position"
+msgstr "Vendndodhje kursori"
+
+#: gtk/gtkentry.c:447 gtk/gtklabel.c:369
+msgid "The current position of the insertion cursor in chars"
+msgstr ""
+
+#: gtk/gtkentry.c:456 gtk/gtklabel.c:378
+msgid "Selection Bound"
+msgstr ""
+
+#: gtk/gtkentry.c:457 gtk/gtklabel.c:379
+msgid ""
+"The position of the opposite end of the selection from the cursor in chars"
+msgstr ""
+
+#: gtk/gtkentry.c:467
+msgid "Whether the entry contents can be edited"
+msgstr "Nëse përmbajtja e dhënë mund të përpunohet"
+
+#: gtk/gtkentry.c:474
+msgid "Maximum length"
+msgstr "Gjatësi më e madhe"
+
+#: gtk/gtkentry.c:475
+msgid "Maximum number of characters for this entry. Zero if no maximum"
+msgstr "Numri më i madh gërmash për këtë zë. Zero nëse jo më i madhi"
+
+#: gtk/gtkentry.c:483
+msgid "Visibility"
+msgstr "Dukshmëri"
+
+#: gtk/gtkentry.c:484
+msgid ""
+"FALSE displays the \"invisible char\" instead of the actual text (password "
+"mode)"
+msgstr ""
+
+#: gtk/gtkentry.c:491
+msgid "Has Frame"
+msgstr "Ka Kornizë"
+
+#: gtk/gtkentry.c:492
+msgid "FALSE removes outside bevel from entry"
+msgstr ""
+
+#: gtk/gtkentry.c:499
+msgid "Invisible character"
+msgstr "Gërmë e padukshme"
+
+#: gtk/gtkentry.c:500
+msgid "The character to use when masking entry contents (in \"password mode\")"
+msgstr ""
+"Gërma që do përdoret kur maskohet përmbajtja e futur (në \"mënyrën fjalëkalim"
+"\")"
+
+#: gtk/gtkentry.c:507
+msgid "Activates default"
+msgstr "Aktivizo parazgjedhje"
+
+#: gtk/gtkentry.c:508
+msgid ""
+"Whether to activate the default widget (such as the default button in a "
+"dialog) when Enter is pressed"
+msgstr ""
+
+#: gtk/gtkentry.c:514
+msgid "Width in chars"
+msgstr "Gjerësi në karaktere"
+
+#: gtk/gtkentry.c:515
+msgid "Number of characters to leave space for in the entry"
+msgstr "Numër karakteresh për tu lënë vend në futjen"
+
+#: gtk/gtkentry.c:524
+msgid "Scroll offset"
+msgstr ""
+
+#: gtk/gtkentry.c:525
+msgid "Number of pixels of the entry scrolled off the screen to the left"
+msgstr ""
+
+#: gtk/gtkentry.c:535
+msgid "The contents of the entry"
+msgstr "Përmbajtja e futjes"
+
+#: gtk/gtkentry.c:766
+msgid "Select on focus"
+msgstr ""
+
+#: gtk/gtkentry.c:767
+msgid "Whether to select the contents of an entry when it is focused"
+msgstr ""
+
+#: gtk/gtkentry.c:4059 gtk/gtktextview.c:6811
+#, fuzzy
+msgid "Select _All"
+msgstr "Zgjidh Tërë"
+
+#: gtk/gtkentry.c:4069 gtk/gtktextview.c:6821
+msgid "Input _Methods"
+msgstr ""
+
+#: gtk/gtkentry.c:4079 gtk/gtktextview.c:6832
+#, fuzzy
+msgid "_Insert Unicode Control Character"
+msgstr "_Fut karakter kontrolli Unicode"
+
+#: gtk/gtkentrycompletion.c:191
+msgid "Completion Model"
+msgstr ""
+
+#: gtk/gtkentrycompletion.c:192
+#, fuzzy
+msgid "The model to find matches in"
+msgstr "Tipi i dritares"
+
+#: gtk/gtkentrycompletion.c:198
+#, fuzzy
+msgid "Minimum Key Length"
+msgstr "Gjatësi më e madhe"
+
+#: gtk/gtkentrycompletion.c:199
+msgid "Minimum length of the search key in order to look up matches"
+msgstr ""
+
+#: gtk/gtkfilesel.c:556 gtk/gtkimage.c:167
+msgid "Filename"
+msgstr "Emër kartele"
+
+#: gtk/gtkfilesel.c:557
+msgid "The currently selected filename"
+msgstr "Emër kartele i zgjedhur për çastin"
+
+#: gtk/gtkfilesel.c:563
+msgid "Show file operations"
+msgstr "Trego veprime kartele"
+
+#: gtk/gtkfilesel.c:564
+msgid "Whether buttons for creating/manipulating files should be displayed"
+msgstr "Nëse butona për krijim/trajtim kartelash duhen shfaqur"
+
+#: gtk/gtkfilesel.c:571
+msgid "Select multiple"
+msgstr "Zgjidh shumëfishe"
+
+#: gtk/gtkfilesel.c:572
+msgid "Whether to allow multiple files to be selected"
+msgstr "Nëse të lejohen shumë kartela të zgjidhen "
+
+#: gtk/gtkfilesel.c:727
+msgid "Folders"
+msgstr "Dosje"
+
+#: gtk/gtkfilesel.c:731
+msgid "Fol_ders"
+msgstr "_Dosje"
+
+#: gtk/gtkfilesel.c:763
+msgid "Files"
+msgstr "Kartela"
+
+#: gtk/gtkfilesel.c:767
+msgid "_Files"
+msgstr "_kartela"
+
+#: gtk/gtkfilesel.c:850 gtk/gtkfilesel.c:2240
+#, c-format
+msgid "Folder unreadable: %s"
+msgstr "Dosje e palexueshme: %s"
+
+#: gtk/gtkfilesel.c:981
+#, c-format
+msgid ""
+"The file \"%s\" resides on another machine (called %s) and may not be "
+"available to this program.\n"
+"Are you sure that you want to select it?"
+msgstr ""
+"Kartela \"%s\" gjendet në një tjetër makinë (të quajtur %s) dhe mund të mos "
+"jetë e vlefshme për këtë program.\n"
+"Jeni i sigurt se doni të zgjidhet?"
+
+#: gtk/gtkfilesel.c:1112
+msgid "_New Folder"
+msgstr "Dosje e _Re"
+
+#: gtk/gtkfilesel.c:1123
+msgid "De_lete File"
+msgstr "_Fshij Kartelë"
+
+#: gtk/gtkfilesel.c:1134
+msgid "_Rename File"
+msgstr "_Riemërto Kartelë"
+
+#: gtk/gtkfilesel.c:1436
+#, c-format
+msgid ""
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgstr ""
+"Emri i dosjes \"%s\" përmban shenja të cilat nuk lejohen në emra kartelash"
+
+#: gtk/gtkfilesel.c:1438
+#, c-format
+msgid ""
+"Error creating folder \"%s\": %s\n"
+"%s"
+msgstr ""
+"Gabim në krijimin e dosjes \"%s\": %s\n"
+"%s"
+
+#: gtk/gtkfilesel.c:1439 gtk/gtkfilesel.c:1675
+msgid "You probably used symbols not allowed in filenames."
+msgstr "Mundet përdorët shenja të palejueshme në emra kartelash."
+
+#: gtk/gtkfilesel.c:1447
+#, c-format
+msgid "Error creating folder \"%s\": %s\n"
+msgstr "Gabim në krijimin e dosjes \"%s\": %s\n"
+
+#: gtk/gtkfilesel.c:1481
+msgid "New Folder"
+msgstr "Dosje e Re"
+
+#: gtk/gtkfilesel.c:1496
+msgid "_Folder name:"
+msgstr "Emër _Dosjeje:"
+
+#: gtk/gtkfilesel.c:1520
+msgid "C_reate"
+msgstr "_Krijo"
+
+#: gtk/gtkfilesel.c:1563
+#, c-format
+msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
+msgstr ""
+"Emri i kartelës \"%s\" përmban shenja të cilat janë të palejuara në emra "
+"kartelash"
+
+#: gtk/gtkfilesel.c:1566
+#, c-format
+msgid ""
+"Error deleting file \"%s\": %s\n"
+"%s"
+msgstr ""
+"Gabim në fshirjen e kartelës \"%s\": %s\n"
+"%s"
+
+#: gtk/gtkfilesel.c:1568 gtk/gtkfilesel.c:1689
+msgid "It probably contains symbols not allowed in filenames."
+msgstr "Mundet përmban shenja të palejuara në emra kartelash."
+
+#: gtk/gtkfilesel.c:1577
+#, c-format
+msgid "Error deleting file \"%s\": %s"
+msgstr "Gabim në fshirjen e kartelës \"%s\": %s"
+
+#: gtk/gtkfilesel.c:1620
+#, c-format
+msgid "Really delete file \"%s\" ?"
+msgstr "Të fshij vërtet kartelën \"%s\" ?"
+
+#: gtk/gtkfilesel.c:1625
+msgid "Delete File"
+msgstr "Fshij Kartelë"
+
+#: gtk/gtkfilesel.c:1671 gtk/gtkfilesel.c:1685
+#, c-format
+msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
+msgstr "Emri i kartelës \"%s\" përmban shenja të palejuara në emra kartelash"
+
+#: gtk/gtkfilesel.c:1673
+#, c-format
+msgid ""
+"Error renaming file to \"%s\": %s\n"
+"%s"
+msgstr ""
+"Gabim në riemërtimin e kartelës si \"%s\": %s\n"
+"%s"
+
+#: gtk/gtkfilesel.c:1687
+#, c-format
+msgid ""
+"Error renaming file \"%s\": %s\n"
+"%s"
+msgstr ""
+"Gabim në riemërtimin e kartelës \"%s\": %s\n"
+"%s"
+
+#: gtk/gtkfilesel.c:1697
+#, c-format
+msgid "Error renaming file \"%s\" to \"%s\": %s"
+msgstr "Gabim në riemërtimin e kartelës \"%s\" si \"%s\": %s"
+
+#: gtk/gtkfilesel.c:1744
+msgid "Rename File"
+msgstr "Riemërto Kartelë"
+
+#: gtk/gtkfilesel.c:1759
+#, c-format
+msgid "Rename file \"%s\" to:"
+msgstr "Po riemërtoj kartelën \"%s\" si:"
+
+#: gtk/gtkfilesel.c:1788
+msgid "_Rename"
+msgstr "_Riemërto"
+
+#: gtk/gtkfilesel.c:2220
+msgid "_Selection: "
+msgstr "_Zgjedhje:"
+
+#: gtk/gtkfilesel.c:3136
+#, c-format
+msgid ""
+"The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
+"environment variable G_BROKEN_FILENAMES): %s"
+msgstr ""
+"Emri i kartelës \"%s\" nuk mund të shndërrohej në UTF-8 (provo rregullimin e "
+"ndryshores së mjedisit G_BROKEN_FILENAMES): %s"
+
+#: gtk/gtkfilesel.c:3139
+#, fuzzy
+msgid "Invalid UTF-8"
+msgstr "Utf-8 i mangët"
+
+#: gtk/gtkfilesel.c:4016
+msgid "Name too long"
+msgstr "Emër tejet i gjatë"
+
+#: gtk/gtkfilesel.c:4018
+msgid "Couldn't convert filename"
+msgstr "S'munda të shndërroj emër kartele"
+
+#: gtk/gtkfixed.c:120 gtk/gtklayout.c:611
+msgid "X position"
+msgstr ""
+
+#: gtk/gtkfixed.c:121 gtk/gtklayout.c:612
+msgid "X position of child widget"
+msgstr ""
+
+#: gtk/gtkfixed.c:130 gtk/gtklayout.c:621
+msgid "Y position"
+msgstr ""
+
+#: gtk/gtkfixed.c:131 gtk/gtklayout.c:622
+msgid "Y position of child widget"
+msgstr ""
+
+#: gtk/gtkfontbutton.c:174
+#, fuzzy
+msgid "The title of the font selection dialog"
+msgstr "Titulli i dritares"
+
+#: gtk/gtkfontbutton.c:175
+msgid "Pick a font"
+msgstr ""
+
+#: gtk/gtkfontbutton.c:189 gtk/gtkfontsel.c:210
+msgid "Font name"
+msgstr "Emër gërmash"
+
+#: gtk/gtkfontbutton.c:190
+#, fuzzy
+msgid "The name of the selected font"
+msgstr "Madhësia e ikonës së vizatuar"
+
+#. Initialize fields
+#: gtk/gtkfontbutton.c:191 gtk/gtkfontbutton.c:286
+msgid "Sans 12"
+msgstr ""
+
+#: gtk/gtkfontbutton.c:205
+msgid "Use font in label"
+msgstr ""
+
+#: gtk/gtkfontbutton.c:206
+#, fuzzy
+msgid "Whether the label is drawn in the selected font"
+msgstr "Nëse teksti i etiketës mun dtë zgjidhet me miun"
+
+#: gtk/gtkfontbutton.c:221
+msgid "Use size in label"
+msgstr ""
+
+#: gtk/gtkfontbutton.c:222
+#, fuzzy
+msgid "Whether the label is drawn with the selected font size"
+msgstr "Nëse teksti i etiketës mun dtë zgjidhet me miun"
+
+#: gtk/gtkfontbutton.c:238
+#, fuzzy
+msgid "Show style"
+msgstr "Tip hijeje"
+
+#: gtk/gtkfontbutton.c:239
+#, fuzzy
+msgid "Whether the selected font style is shown in the label"
+msgstr "Nëse përparimi tregohet si tekst"
+
+#: gtk/gtkfontbutton.c:254
+#, fuzzy
+msgid "Show size"
+msgstr "Trego tekst"
+
+#: gtk/gtkfontbutton.c:255
+#, fuzzy
+msgid "Whether selected font size is shown in the label"
+msgstr "Nëse përparimi tregohet si tekst"
+
+#: gtk/gtkfontbutton.c:292
+msgid "Pick a Font"
+msgstr ""
+
+#. This is the default text shown in the preview entry, though the user
+#. can set it. Remember that some fonts only have capital letters.
+#: gtk/gtkfontsel.c:68
+msgid "abcdefghijk ABCDEFGHIJK"
+msgstr "abcdefghijk ABCDEFGHIJK"
+
+#: gtk/gtkfontsel.c:211
+msgid "The X string that represents this font"
+msgstr "Vargu X që përfaqëson këto gërma"
+
+#: gtk/gtkfontsel.c:218
+msgid "The GdkFont that is currently selected"
+msgstr "GdkFont që është për çastin e zgjedhur"
+
+#: gtk/gtkfontsel.c:224
+msgid "Preview text"
+msgstr "Parashih tekst"
+
+#: gtk/gtkfontsel.c:225
+msgid "The text to display in order to demonstrate the selected font"
+msgstr "Teksti që do shfaqet për të treguar gërmat e zgjedhura"
+
+#: gtk/gtkfontsel.c:332
+msgid "_Family:"
+msgstr "_Familje:"
+
+#: gtk/gtkfontsel.c:338
+msgid "_Style:"
+msgstr "_Stil:"
+
+#: gtk/gtkfontsel.c:344
+msgid "Si_ze:"
+msgstr "Ma_dhësi:"
+
+#. create the text entry widget
+#: gtk/gtkfontsel.c:469
+msgid "_Preview:"
+msgstr "_Paraparje:"
+
+#: gtk/gtkfontsel.c:1285
+msgid "Font Selection"
+msgstr "Zgjedhje gërmash"
+
+#: gtk/gtkframe.c:126
+msgid "Text of the frame's label"
+msgstr "Tekst i etiketës së kornizës"
+
+#: gtk/gtkframe.c:133
+msgid "Label xalign"
+msgstr "Xdrejtim i etiketës"
+
+#: gtk/gtkframe.c:134
+msgid "The horizontal alignment of the label"
+msgstr "Drejtimi horizontal i etiketës"
+
+#: gtk/gtkframe.c:143
+msgid "Label yalign"
+msgstr "Ydrejtim i etiketës"
+
+#: gtk/gtkframe.c:144
+msgid "The vertical alignment of the label"
+msgstr "Drejtimi vertikal i etiketës"
+
+#: gtk/gtkframe.c:153 gtk/gtkhandlebox.c:195
+msgid "Deprecated property, use shadow_type instead"
+msgstr ""
+
+#: gtk/gtkframe.c:160
+msgid "Frame shadow"
+msgstr "Hije kornize"
+
+#: gtk/gtkframe.c:161
+msgid "Appearance of the frame border"
+msgstr "Paraqitja e anës së kornizës"
+
+#: gtk/gtkframe.c:169
+msgid "Label widget"
+msgstr ""
+
+#: gtk/gtkframe.c:170
+msgid "A widget to display in place of the usual frame label"
+msgstr ""
+
+#: gtk/gtkgamma.c:399
+msgid "Gamma"
+msgstr "Gama"
+
+#: gtk/gtkgamma.c:409
+msgid "_Gamma value"
+msgstr "Vlerë _gama"
+
+#: gtk/gtkhandlebox.c:202 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:194
+#: gtk/gtktoolbar.c:499 gtk/gtkviewport.c:150
+msgid "Shadow type"
+msgstr "Tip hijeje"
+
+#: gtk/gtkhandlebox.c:203
+msgid "Appearance of the shadow that surrounds the container"
+msgstr ""
+
+#: gtk/gtkhandlebox.c:211
+msgid "Handle position"
+msgstr "Vendndodhje doreze"
+
+#: gtk/gtkhandlebox.c:212
+msgid "Position of the handle relative to the child widget"
+msgstr ""
+
+#: gtk/gtkhandlebox.c:220
+msgid "Snap edge"
+msgstr ""
+
+#: gtk/gtkhandlebox.c:221
+msgid ""
+"Side of the handlebox that's lined up with the docking point to dock the "
+"handlebox"
+msgstr ""
+
+#: gtk/gtkhandlebox.c:229
+msgid "Snap edge set"
+msgstr ""
+
+#: gtk/gtkhandlebox.c:230
+msgid ""
+"Whether to use the value from the snap_edge property or a value derived from "
+"handle_position"
+msgstr ""
+
+#. Remove this icon source so we don't keep trying to
+#. * load it.
+#.
+#: gtk/gtkiconfactory.c:1547
+#, c-format
+msgid "Error loading icon: %s"
+msgstr "Gabim në ngarkimin e ikonës: %S"
+
+#: gtk/gtkicontheme.c:1195
+#, c-format
+msgid "Icon '%s' not present in theme"
+msgstr ""
+
+#: gtk/gtkimage.c:135
+msgid "Pixbuf"
+msgstr ""
+
+#: gtk/gtkimage.c:136
+msgid "A GdkPixbuf to display"
+msgstr ""
+
+#: gtk/gtkimage.c:143
+msgid "Pixmap"
+msgstr ""
+
+#: gtk/gtkimage.c:144
+msgid "A GdkPixmap to display"
+msgstr ""
+
+#: gtk/gtkimage.c:151
+msgid "Image"
+msgstr "Pamje"
+
+#: gtk/gtkimage.c:152
+msgid "A GdkImage to display"
+msgstr ""
+
+#: gtk/gtkimage.c:159
+msgid "Mask"
+msgstr ""
+
+#: gtk/gtkimage.c:160
+msgid "Mask bitmap to use with GdkImage or GdkPixmap"
+msgstr ""
+
+#: gtk/gtkimage.c:168
+msgid "Filename to load and display"
+msgstr "Emër kartele për tu ngarkuar dhe shfaqur"
+
+#: gtk/gtkimage.c:177
+msgid "Stock ID for a stock image to display"
+msgstr ""
+
+#: gtk/gtkimage.c:184
+msgid "Icon set"
+msgstr "Set ikonash"
+
+#: gtk/gtkimage.c:185
+msgid "Icon set to display"
+msgstr "Set ikonash për t'u shfaqur"
+
+#: gtk/gtkimage.c:192
+msgid "Icon size"
+msgstr "Madhësi ikone"
+
+#: gtk/gtkimage.c:193
+msgid "Size to use for stock icon or icon set"
+msgstr ""
+
+#: gtk/gtkimage.c:201
+msgid "Animation"
+msgstr "Animacion"
+
+#: gtk/gtkimage.c:202
+msgid "GdkPixbufAnimation to display"
+msgstr ""
+
+#: gtk/gtkimage.c:209
+msgid "Storage type"
+msgstr "Tip ruajtjeje"
+
+#: gtk/gtkimage.c:210
+msgid "The representation being used for image data"
+msgstr "Paraqitja që po përdoret për të dhëna pamjeje"
+
+#: gtk/gtkimagemenuitem.c:124
+msgid "Image widget"
+msgstr ""
+
+#: gtk/gtkimagemenuitem.c:125
+msgid "Child widget to appear next to the menu text"
+msgstr ""
+
+#: gtk/gtkimmodule.c:419
+#, fuzzy
+msgid "Default"
+msgstr "Gjerësi Parazgjedhjje"
+
+#: gtk/gtkinputdialog.c:230
+msgid "Input"
+msgstr "Futje"
+
+#: gtk/gtkinputdialog.c:239
+msgid "No input devices"
+msgstr "S'ka paisje futjeje"
+
+#: gtk/gtkinputdialog.c:251
+msgid "_Device:"
+msgstr "_Paisje:"
+
+#: gtk/gtkinputdialog.c:268
+msgid "Disabled"
+msgstr "Çaktivizuar"
+
+#: gtk/gtkinputdialog.c:275 gtk/gtkinvisible.c:114 gtk/gtkwindow.c:562
+msgid "Screen"
+msgstr "Ekran"
+
+#: gtk/gtkinputdialog.c:282
+msgid "Window"
+msgstr "Dritare"
+
+#: gtk/gtkinputdialog.c:289
+msgid "_Mode: "
+msgstr "_Mënyrë:"
+
+#. The axis listbox
+#: gtk/gtkinputdialog.c:320
+msgid "_Axes"
+msgstr "_Boshte"
+
+#. Keys listbox
+#: gtk/gtkinputdialog.c:337
+msgid "_Keys"
+msgstr "Kyça"
+
+#: gtk/gtkinputdialog.c:557
+msgid "X"
+msgstr "X"
+
+#: gtk/gtkinputdialog.c:558
+msgid "Y"
+msgstr "Y"
+
+#: gtk/gtkinputdialog.c:559
+msgid "Pressure"
+msgstr "Trysni"
+
+#: gtk/gtkinputdialog.c:560
+msgid "X Tilt"
+msgstr "Pjerrësi X"
+
+#: gtk/gtkinputdialog.c:561
+msgid "Y Tilt"
+msgstr "Pjerrësi Y"
+
+#: gtk/gtkinputdialog.c:562
+msgid "Wheel"
+msgstr "Rrotë"
+
+#: gtk/gtkinputdialog.c:602
+msgid "none"
+msgstr "asnjë"
+
+#: gtk/gtkinputdialog.c:638 gtk/gtkinputdialog.c:674
+msgid "(disabled)"
+msgstr "(çaktivizuar)"
+
+#: gtk/gtkinputdialog.c:667
+msgid "(unknown)"
+msgstr "(i panjohur)"
+
+#. and clear button
+#: gtk/gtkinputdialog.c:754
+msgid "clear"
+msgstr "pastro"
+
+#: gtk/gtkinvisible.c:115 gtk/gtkwindow.c:563
+msgid "The screen where this window will be displayed"
+msgstr "Ekrani ku kjo dritare do të shfaqet"
+
+#: gtk/gtklabel.c:291
+msgid "The text of the label"
+msgstr "Teksti i etiketës"
+
+#: gtk/gtklabel.c:298
+msgid "A list of style attributes to apply to the text of the label"
+msgstr "NJë listë vetish stili për tu zbatuar tek teksti i etiketës"
+
+#: gtk/gtklabel.c:304
+msgid "Use markup"
+msgstr "Përdor \"markup\""
+
+#: gtk/gtklabel.c:305
+msgid "The text of the label includes XML markup. See pango_parse_markup()"
+msgstr ""
+"Teksti i etiketës përfshin \"XML markup\". Shih \" pango_parse_markup() \""
+
+#: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:601
+msgid "Justification"
+msgstr "Përligjje"
+
+#: gtk/gtklabel.c:320
+msgid ""
+"The alignment of the lines in the text of the label relative to each other. "
+"This does NOT affect the alignment of the label within its allocation. See "
+"GtkMisc::xalign for that"
+msgstr ""
+"Drejtimi i vijave në tekstin e etiketës në lidhje me njëra tjetrën. Kjo NUK "
+"prek drejtimin e etiketës brenda vendosjes së vet. Shih për këtë \" GtkMisc::"
+"xalign \""
+
+#: gtk/gtklabel.c:328
+msgid "Pattern"
+msgstr ""
+
+#: gtk/gtklabel.c:329
+msgid ""
+"A string with _ characters in positions correspond to characters in the text "
+"to underline"
+msgstr ""
+
+#: gtk/gtklabel.c:336
+msgid "Line wrap"
+msgstr "Mbështill rreshta"
+
+#: gtk/gtklabel.c:337
+msgid "If set, wrap lines if the text becomes too wide"
+msgstr "Nëse zgjedhur, mbështill rreshta po qe se teksti bëhet shumë i gjerë"
+
+#: gtk/gtklabel.c:343
+msgid "Selectable"
+msgstr "I zgjedhshëm"
+
+#: gtk/gtklabel.c:344
+msgid "Whether the label text can be selected with the mouse"
+msgstr "Nëse teksti i etiketës mun dtë zgjidhet me miun"
+
+#: gtk/gtklabel.c:350
+msgid "Mnemonic key"
+msgstr ""
+
+#: gtk/gtklabel.c:351
+msgid "The mnemonic accelerator key for this label"
+msgstr ""
+
+#: gtk/gtklabel.c:359
+msgid "Mnemonic widget"
+msgstr ""
+
+#: gtk/gtklabel.c:360
+msgid "The widget to be activated when the label's mnemonic key is pressed"
+msgstr ""
+
+#: gtk/gtklabel.c:3224
+msgid "Select All"
+msgstr "Zgjidh Tërë"
+
+#: gtk/gtklabel.c:3234
+msgid "Input Methods"
+msgstr "Metoda Futjeje"
+
+#: gtk/gtklayout.c:631 gtk/gtkviewport.c:134
+msgid "Horizontal adjustment"
+msgstr "Rregullim horizontal"
+
+#: gtk/gtklayout.c:632 gtk/gtkscrolledwindow.c:236
+msgid "The GtkAdjustment for the horizontal position"
+msgstr "GtkRregullimi për vendndodhjen horizontale"
+
+#: gtk/gtklayout.c:639 gtk/gtkviewport.c:142
+msgid "Vertical adjustment"
+msgstr "Rregullimi vertikal"
+
+#: gtk/gtklayout.c:640 gtk/gtkscrolledwindow.c:243
+msgid "The GtkAdjustment for the vertical position"
+msgstr "GtkRregullimi për vendndodhjen vertikale"
+
+#: gtk/gtklayout.c:647 gtk/gtktreeviewcolumn.c:235
+msgid "Width"
+msgstr "Gjerësi"
+
+#: gtk/gtklayout.c:648
+msgid "The width of the layout"
+msgstr "Gjerësia e skemës"
+
+#: gtk/gtklayout.c:656
+msgid "Height"
+msgstr "Lartësi"
+
+#: gtk/gtklayout.c:657
+msgid "The height of the layout"
+msgstr "Lartësia e skemës"
+
+#. Translate to default:RTL if you want your widgets
+#. * to be RTL, otherwise translate to default:LTR.
+#. * Do *not* translate it to "predefinito:LTR", if it
+#. * it isn't default:LTR or default:RTL it will not work
+#.
+#: gtk/gtkmain.c:806
+msgid "default:LTR"
+msgstr "parazgjedhje: MND"
+
+#: gtk/gtkmenu.c:263
+msgid "Tearoff Title"
+msgstr ""
+
+#: gtk/gtkmenu.c:264
+msgid ""
+"A title that may be displayed by the window manager when this menu is torn-"
+"off"
+msgstr ""
+
+#: gtk/gtkmenu.c:270
+#, fuzzy
+msgid "Vertical Padding"
+msgstr "Vertikalisht"
+
+#: gtk/gtkmenu.c:271
+msgid "Extra space at the top and bottom of the menu"
+msgstr ""
+
+#: gtk/gtkmenu.c:279
+#, fuzzy
+msgid "Vertical Offset"
+msgstr "Shkallë vertikale"
+
+#: gtk/gtkmenu.c:280
+msgid ""
+"When the menu is a submenu, position it this number of pixels offset "
+"vertically"
+msgstr ""
+
+#: gtk/gtkmenu.c:288
+#, fuzzy
+msgid "Horizontal Offset"
+msgstr "Shkallë horizontale"
+
+#: gtk/gtkmenu.c:289
+msgid ""
+"When the menu is a submenu, position it this number of pixels offset "
+"horizontally"
+msgstr ""
+
+#: gtk/gtkmenu.c:406
+msgid "Can change accelerators"
+msgstr "Mund të ndryshojë përshpejtuesa"
+
+#: gtk/gtkmenu.c:407
+msgid ""
+"Whether menu accelerators can be changed by pressing a key over the menu item"
+msgstr ""
+"Nëse përshpejtuesa menush mund të ndryshohen përmes shtypjes së një butoni "
+"tek elementi i menusë"
+
+#: gtk/gtkmenu.c:412
+msgid "Delay before submenus appear"
+msgstr "Vonesë para se nënmenutë shfaqen"
+
+#: gtk/gtkmenu.c:413
+msgid ""
+"Minimum time the pointer must stay over a menu item before the submenu appear"
+msgstr ""
+"Koha më e vogël që treguesi duhet të qëndrojë mbi një element menuje para se "
+"nënmenuja të shfaqet"
+
+#: gtk/gtkmenu.c:420
+msgid "Delay before hiding a submenu"
+msgstr "Vonesë para se një nënmenu të fshihet"
+
+#: gtk/gtkmenu.c:421
+msgid ""
+"The time before hiding a submenu when the pointer is moving towards the "
+"submenu"
+msgstr ""
+"Koha përpara se të fshihet një nënmenu kur treguesi është duke lëvizur drejt "
+"nënmenusë"
+
+#: gtk/gtkmenubar.c:157
+msgid "Style of bevel around the menubar"
+msgstr ""
+
+#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:475
+msgid "Internal padding"
+msgstr ""
+
+#: gtk/gtkmenubar.c:165
+msgid "Amount of border space between the menubar shadow and the menu items"
+msgstr "Sasi e anësores ndërmjet hijes së shtyllëmenusë dhe elementesh menuje"
+
+#: gtk/gtkmenubar.c:172
+msgid "Delay before drop down menus appear"
+msgstr "Vonesë para se menu që hapen poshtë shfaqen"
+
+#: gtk/gtkmenubar.c:173
+msgid "Delay before the submenus of a menu bar appear"
+msgstr "Vonesë para se nënmenutë e një shtylle menuje shfaqen"
+
+#: gtk/gtkmessagedialog.c:106
+msgid "Image/label border"
+msgstr "Anë Pamjeje/Etikete"
+
+#: gtk/gtkmessagedialog.c:107
+msgid "Width of border around the label and image in the message dialog"
+msgstr "Gjerësi e anës rreth etiketës dhe pamjes në një dialog mesazh"
+
+#: gtk/gtkmessagedialog.c:115
+msgid "Message Type"
+msgstr "Tip Mesazhi"
+
+#: gtk/gtkmessagedialog.c:116
+msgid "The type of message"
+msgstr "Tipi i mesazhit"
+
+#: gtk/gtkmessagedialog.c:123
+msgid "Message Buttons"
+msgstr "Butona Mesazhi"
+
+#: gtk/gtkmessagedialog.c:124
+msgid "The buttons shown in the message dialog"
+msgstr "Butonat e shfaqur në një dialog mesazhi"
+
+#: gtk/gtkmisc.c:98
+msgid "X align"
+msgstr "Drejtimi X"
+
+#: gtk/gtkmisc.c:99
+msgid "The horizontal alignment, from 0 (left) to 1 (right)"
+msgstr "Drejtimi horizontal, nga 0 (majtas) deri 1 (djathtas)"
+
+#: gtk/gtkmisc.c:108
+msgid "Y align"
+msgstr "Drejtimi Y"
+
+#: gtk/gtkmisc.c:109
+msgid "The vertical alignment, from 0 (top) to 1 (bottom)"
+msgstr "Drejtimi vertikal, nga 0 (kreu) deri 1 (fundi)"
+
+#: gtk/gtkmisc.c:118
+msgid "X pad"
+msgstr ""
+
+#: gtk/gtkmisc.c:119
+msgid ""
+"The amount of space to add on the left and right of the widget, in pixels"
+msgstr ""
+
+#: gtk/gtkmisc.c:128
+msgid "Y pad"
+msgstr ""
+
+#: gtk/gtkmisc.c:129
+msgid ""
+"The amount of space to add on the top and bottom of the widget, in pixels"
+msgstr ""
+
+#: gtk/gtknotebook.c:396
+msgid "Page"
+msgstr "Faqe"
+
+#: gtk/gtknotebook.c:397
+msgid "The index of the current page"
+msgstr "Treguesi i faqes së çastit"
+
+#: gtk/gtknotebook.c:405
+msgid "Tab Position"
+msgstr ""
+
+#: gtk/gtknotebook.c:406
+msgid "Which side of the notebook holds the tabs"
+msgstr ""
+
+#: gtk/gtknotebook.c:413
+msgid "Tab Border"
+msgstr ""
+
+#: gtk/gtknotebook.c:414
+msgid "Width of the border around the tab labels"
+msgstr ""
+
+#: gtk/gtknotebook.c:422
+msgid "Horizontal Tab Border"
+msgstr ""
+
+#: gtk/gtknotebook.c:423
+msgid "Width of the horizontal border of tab labels"
+msgstr ""
+
+#: gtk/gtknotebook.c:431
+msgid "Vertical Tab Border"
+msgstr ""
+
+#: gtk/gtknotebook.c:432
+msgid "Width of the vertical border of tab labels"
+msgstr ""
+
+#: gtk/gtknotebook.c:440
+msgid "Show Tabs"
+msgstr ""
+
+#: gtk/gtknotebook.c:441
+msgid "Whether tabs should be shown or not"
+msgstr ""
+
+#: gtk/gtknotebook.c:447
+msgid "Show Border"
+msgstr "Shfaq Anë"
+
+#: gtk/gtknotebook.c:448
+msgid "Whether the border should be shown or not"
+msgstr "Nëse ana duhet shfaqur ose jo"
+
+#: gtk/gtknotebook.c:454
+msgid "Scrollable"
+msgstr ""
+
+#: gtk/gtknotebook.c:455
+msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
+msgstr ""
+
+#: gtk/gtknotebook.c:461
+msgid "Enable Popup"
+msgstr ""
+
+#: gtk/gtknotebook.c:462
+msgid ""
+"If TRUE, pressing the right mouse button on the notebook pops up a menu that "
+"you can use to go to a page"
+msgstr ""
+
+#: gtk/gtknotebook.c:469
+msgid "Whether tabs should have homogeneous sizes"
+msgstr ""
+
+#: gtk/gtknotebook.c:476
+msgid "Tab label"
+msgstr ""
+
+#: gtk/gtknotebook.c:477
+msgid "The string displayed on the childs tab label"
+msgstr ""
+
+#: gtk/gtknotebook.c:483
+msgid "Menu label"
+msgstr "Etiketë menuje"
+
+#: gtk/gtknotebook.c:484
+msgid "The string displayed in the childs menu entry"
+msgstr ""
+
+#: gtk/gtknotebook.c:497
+msgid "Tab expand"
+msgstr ""
+
+#: gtk/gtknotebook.c:498
+msgid "Whether to expand the childs tab or not"
+msgstr ""
+
+#: gtk/gtknotebook.c:504
+msgid "Tab fill"
+msgstr ""
+
+#: gtk/gtknotebook.c:505
+msgid "Wheather the childs tab should fill the allocated area or not"
+msgstr ""
+
+#: gtk/gtknotebook.c:511
+msgid "Tab pack type"
+msgstr ""
+
+#: gtk/gtknotebook.c:527 gtk/gtkscrollbar.c:113
+msgid "Secondary backward stepper"
+msgstr ""
+
+#: gtk/gtknotebook.c:528
+msgid ""
+"Display a second backward arrow button on the opposite end of the tab area"
+msgstr ""
+
+#: gtk/gtknotebook.c:544 gtk/gtkscrollbar.c:121
+msgid "Secondary forward stepper"
+msgstr ""
+
+#: gtk/gtknotebook.c:545
+msgid ""
+"Display a second forward arrow button on the opposite end of the tab area"
+msgstr ""
+
+#: gtk/gtknotebook.c:560 gtk/gtkscrollbar.c:97
+msgid "Backward stepper"
+msgstr ""
+
+#: gtk/gtknotebook.c:561 gtk/gtkscrollbar.c:98
+msgid "Display the standard backward arrow button"
+msgstr ""
+
+#: gtk/gtknotebook.c:576 gtk/gtkscrollbar.c:105
+msgid "Forward stepper"
+msgstr ""
+
+#: gtk/gtknotebook.c:577 gtk/gtkscrollbar.c:106
+msgid "Display the standard forward arrow button"
+msgstr ""
+
+#: gtk/gtknotebook.c:2645 gtk/gtknotebook.c:4971
+#, c-format
+msgid "Page %u"
+msgstr "Faqe %u"
+
+#: gtk/gtkoptionmenu.c:190
+msgid "Menu"
+msgstr "Menu"
+
+#: gtk/gtkoptionmenu.c:191
+msgid "The menu of options"
+msgstr "Menujae mundësive"
+
+#: gtk/gtkoptionmenu.c:198
+msgid "Size of dropdown indicator"
+msgstr ""
+
+#: gtk/gtkoptionmenu.c:204
+msgid "Spacing around indicator"
+msgstr ""
+
+#: gtk/gtkpaned.c:237
+msgid ""
+"Position of paned separator in pixels (0 means all the way to the left/top)"
+msgstr ""
+
+#: gtk/gtkpaned.c:245
+msgid "Position Set"
+msgstr ""
+
+#: gtk/gtkpaned.c:246
+msgid "TRUE if the Position property should be used"
+msgstr "TRUE nëse vetia e Vendndodhjes duhet përdorur"
+
+#: gtk/gtkpaned.c:252
+msgid "Handle Size"
+msgstr ""
+
+#: gtk/gtkpaned.c:253
+msgid "Width of handle"
+msgstr ""
+
+#: gtk/gtkpaned.c:270
+#, fuzzy
+msgid "Resize"
+msgstr "E ripërmasueshëm"
+
+#: gtk/gtkpaned.c:271
+msgid "If TRUE, the child expands and shrinks along with the paned widget"
+msgstr ""
+
+#: gtk/gtkpaned.c:286
+#, fuzzy
+msgid "Shrink"
+msgstr "Lejo Tkurrje"
+
+#: gtk/gtkpaned.c:287
+msgid "If TRUE, the child can be made smaller than its requisition"
+msgstr ""
+
+#: gtk/gtkpreview.c:133
+msgid ""
+"Whether the preview widget should take up the entire space it is allocated"
+msgstr ""
+
+#: gtk/gtkprogress.c:129
+msgid "Activity mode"
+msgstr "Mënyra veprimtari"
+
+#: gtk/gtkprogress.c:130
+msgid ""
+"If TRUE the GtkProgress is in activity mode, meaning that it signals "
+"something is happening, but not how much of the activity is finished. This "
+"is used when you're doing something that you don't know how long it will take"
+msgstr ""
+"GtkProgress është në mënyrën veprimtari nëse TRUE, do të thotë që sinjalizon "
+"që diçka po ndodh, por jo sa prej veprimtarisë ka përfunduar. Përdoret kur "
+"jeni duke bërë diçka që nuk dini sa do zgjasë"
+
+#: gtk/gtkprogress.c:137
+msgid "Show text"
+msgstr "Trego tekst"
+
+#: gtk/gtkprogress.c:138
+msgid "Whether the progress is shown as text"
+msgstr "Nëse përparimi tregohet si tekst"
+
+#: gtk/gtkprogress.c:145
+msgid "Text x alignment"
+msgstr "Drejtimi x i tekstit"
+
+#: gtk/gtkprogress.c:146
+msgid ""
+"A number between 0.0 and 1.0 specifying the horizontal alignment of the text "
+"in the progress widget"
+msgstr ""
+
+#: gtk/gtkprogress.c:154
+msgid "Text y alignment"
+msgstr "Drejtimi y i tektit"
+
+#: gtk/gtkprogress.c:155
+msgid ""
+"A number between 0.0 and 1.0 specifying the vertical alignment of the text "
+"in the progress widget"
+msgstr ""
+
+#: gtk/gtkprogressbar.c:142 gtk/gtkrange.c:290 gtk/gtkspinbutton.c:240
+msgid "Adjustment"
+msgstr "Përshtatje"
+
+#: gtk/gtkprogressbar.c:143
+msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
+msgstr ""
+
+#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:416
+msgid "Orientation"
+msgstr "Orientim"
+
+#: gtk/gtkprogressbar.c:151
+msgid "Orientation and growth direction of the progress bar"
+msgstr "Orientim dhe drejtim rritjeje në shtyllën e përparimit"
+
+#: gtk/gtkprogressbar.c:159
+msgid "Bar style"
+msgstr "Stil shtylle"
+
+#: gtk/gtkprogressbar.c:160
+msgid "Specifies the visual style of the bar in percentage mode (Deprecated)"
+msgstr ""
+
+#: gtk/gtkprogressbar.c:168
+msgid "Activity Step"
+msgstr ""
+
+#: gtk/gtkprogressbar.c:169
+msgid "The increment used for each iteration in activity mode (Deprecated)"
+msgstr ""
+
+#: gtk/gtkprogressbar.c:178
+msgid "Activity Blocks"
+msgstr ""
+
+#: gtk/gtkprogressbar.c:179
+msgid ""
+"The number of blocks which can fit in the progress bar area in activity mode "
+"(Deprecated)"
+msgstr ""
+
+#: gtk/gtkprogressbar.c:188
+msgid "Discrete Blocks"
+msgstr "Blloqe të Dallueshëm"
+
+#: gtk/gtkprogressbar.c:189
+msgid ""
+"The number of discrete blocks in a progress bar (when shown in the discrete "
+"style)"
+msgstr ""
+"Numri i blloqeve të dallueshëm në një shtyllë përparimi (kur tregohen në "
+"stil dallueshëm)"
+
+#: gtk/gtkprogressbar.c:198
+msgid "Fraction"
+msgstr "Pjesë"
+
+#: gtk/gtkprogressbar.c:199
+msgid "The fraction of total work that has been completed"
+msgstr "Pjesa e punës së plotë që është përmbushur"
+
+#: gtk/gtkprogressbar.c:208
+msgid "Pulse Step"
+msgstr ""
+
+#: gtk/gtkprogressbar.c:209
+msgid "The fraction of total progress to move the bouncing block when pulsed"
+msgstr ""
+
+#: gtk/gtkprogressbar.c:219
+msgid "Text to be displayed in the progress bar"
+msgstr "Tekst për tu shfaqur në shtyllën e përparimit"
+
+#: gtk/gtkradiobutton.c:109
+msgid "Group"
+msgstr "Grup"
+
+#: gtk/gtkradiobutton.c:110
+msgid "The radio button whose group this widget belongs."
+msgstr ""
+
+#: gtk/gtkrange.c:281
+msgid "Update policy"
+msgstr "Përditëso rregull"
+
+#: gtk/gtkrange.c:282
+msgid "How the range should be updated on the screen"
+msgstr ""
+
+#: gtk/gtkrange.c:291
+msgid "The GtkAdjustment that contains the current value of this range object"
+msgstr ""
+
+#: gtk/gtkrange.c:298
+msgid "Inverted"
+msgstr "Përmbysur"
+
+#: gtk/gtkrange.c:299
+msgid "Invert direction slider moves to increase range value"
+msgstr ""
+
+#: gtk/gtkrange.c:305
+msgid "Slider Width"
+msgstr ""
+
+#: gtk/gtkrange.c:306
+msgid "Width of scrollbar or scale thumb"
+msgstr ""
+
+#: gtk/gtkrange.c:313
+msgid "Trough Border"
+msgstr ""
+
+#: gtk/gtkrange.c:314
+msgid "Spacing between thumb/steppers and outer trough bevel"
+msgstr ""
+
+#: gtk/gtkrange.c:321
+msgid "Stepper Size"
+msgstr ""
+
+#: gtk/gtkrange.c:322
+msgid "Length of step buttons at ends"
+msgstr ""
+
+#: gtk/gtkrange.c:329
+msgid "Stepper Spacing"
+msgstr ""
+
+#: gtk/gtkrange.c:330
+msgid "Spacing between step buttons and thumb"
+msgstr ""
+
+#: gtk/gtkrange.c:337
+msgid "Arrow X Displacement"
+msgstr "Zhvendosje X e Shigjetës"
+
+#: gtk/gtkrange.c:338
+msgid ""
+"How far in the x direction to move the arrow when the button is depressed"
+msgstr "Sa larg në drejtimin x të zhvendoset shigjeta kur shtypet butoni"
+
+#: gtk/gtkrange.c:345
+msgid "Arrow Y Displacement"
+msgstr "Zhvendosja Y e Shigjetës"
+
+#: gtk/gtkrange.c:346
+msgid ""
+"How far in the y direction to move the arrow when the button is depressed"
+msgstr "Sa larg në drejtimin y të zhvendoset shigjeta kur shtypet butoni"
+
+#: gtk/gtkrc.c:2382
+#, c-format
+msgid "Unable to find include file: \"%s\""
+msgstr ""
+
+#: gtk/gtkrc.c:3025 gtk/gtkrc.c:3028
+#, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\""
+msgstr ""
+
+#: gtk/gtkrc.c:3463
+#, c-format
+msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
+msgstr ""
+
+#: gtk/gtkruler.c:118
+msgid "Lower"
+msgstr "I poshtëm"
+
+#: gtk/gtkruler.c:119
+msgid "Lower limit of ruler"
+msgstr "Kufi i poshtëm i vizores"
+
+#: gtk/gtkruler.c:128
+msgid "Upper"
+msgstr "I sipërm"
+
+#: gtk/gtkruler.c:129
+msgid "Upper limit of ruler"
+msgstr "Kufi i sipërm i vizores"
+
+#: gtk/gtkruler.c:139
+msgid "Position of mark on the ruler"
+msgstr "Vendndodhje e shenjës në vizore"
+
+#: gtk/gtkruler.c:148
+msgid "Max Size"
+msgstr "Madhësia më e madhe"
+
+#: gtk/gtkruler.c:149
+msgid "Maximum size of the ruler"
+msgstr "Madhësia më e madhe e vizores"
+
+#: gtk/gtkscale.c:156 gtk/gtkspinbutton.c:258
+msgid "Digits"
+msgstr "Shifra"
+
+#: gtk/gtkscale.c:157
+msgid "The number of decimal places that are displayed in the value"
+msgstr "Numri i vendeve dhjetore që janë shfaqur tek vlera"
+
+#: gtk/gtkscale.c:166
+msgid "Draw Value"
+msgstr ""
+
+#: gtk/gtkscale.c:167
+msgid "Whether the current value is displayed as a string next to the slider"
+msgstr ""
+
+#: gtk/gtkscale.c:174
+msgid "Value Position"
+msgstr "Vendndodhje  Vlere"
+
+#: gtk/gtkscale.c:175
+msgid "The position in which the current value is displayed"
+msgstr "Vendndodhja në të cilën vlera e çastit shfaqet"
+
+#: gtk/gtkscale.c:182
+msgid "Slider Length"
+msgstr ""
+
+#: gtk/gtkscale.c:183
+msgid "Length of scale's slider"
+msgstr ""
+
+#: gtk/gtkscale.c:191
+msgid "Value spacing"
+msgstr "Hapësirë Vlere"
+
+#: gtk/gtkscale.c:192
+msgid "Space between value text and the slider/trough area"
+msgstr ""
+
+#: gtk/gtkscrollbar.c:80
+msgid "Minimum Slider Length"
+msgstr ""
+
+#: gtk/gtkscrollbar.c:81
+msgid "Minimum length of scrollbar slider"
+msgstr ""
+
+#: gtk/gtkscrollbar.c:89
+msgid "Fixed slider size"
+msgstr ""
+
+#: gtk/gtkscrollbar.c:90
+msgid "Don't change slider size, just lock it to the minimum length"
+msgstr ""
+
+#: gtk/gtkscrollbar.c:114
+msgid ""
+"Display a second backward arrow button on the opposite end of the scrollbar"
+msgstr ""
+
+#: gtk/gtkscrollbar.c:122
+msgid ""
+"Display a secondary forward arrow button on the opposite end of the scrollbar"
+msgstr ""
+
+#: gtk/gtkscrolledwindow.c:235 gtk/gtktext.c:601 gtk/gtktreeview.c:528
+msgid "Horizontal Adjustment"
+msgstr "Përshtatje Horizontale"
+
+#: gtk/gtkscrolledwindow.c:242 gtk/gtktext.c:609 gtk/gtktreeview.c:536
+msgid "Vertical Adjustment"
+msgstr "Përshtatje Vertikale"
+
+#: gtk/gtkscrolledwindow.c:249
+msgid "Horizontal Scrollbar Policy"
+msgstr ""
+
+#: gtk/gtkscrolledwindow.c:250
+msgid "When the horizontal scrollbar is displayed"
+msgstr ""
+
+#: gtk/gtkscrolledwindow.c:257
+msgid "Vertical Scrollbar Policy"
+msgstr ""
+
+#: gtk/gtkscrolledwindow.c:258
+msgid "When the vertical scrollbar is displayed"
+msgstr ""
+
+#: gtk/gtkscrolledwindow.c:266
+msgid "Window Placement"
+msgstr "Vendosje Dritareje"
+
+#: gtk/gtkscrolledwindow.c:267
+msgid "Where the contents are located with respect to the scrollbars"
+msgstr ""
+
+#: gtk/gtkscrolledwindow.c:274
+msgid "Shadow Type"
+msgstr "Tip Hijeje"
+
+#: gtk/gtkscrolledwindow.c:275
+msgid "Style of bevel around the contents"
+msgstr ""
+
+#: gtk/gtkscrolledwindow.c:282
+msgid "Scrollbar spacing"
+msgstr ""
+
+#: gtk/gtkscrolledwindow.c:283
+msgid "Number of pixels between the scrollbars and the scrolled window"
+msgstr ""
+
+#: gtk/gtksettings.c:169
+msgid "Double Click Time"
+msgstr "Kohë e Dopjo Klikimit "
+
+#: gtk/gtksettings.c:170
+msgid ""
+"Maximum time allowed between two clicks for them to be considered a double "
+"click (in milliseconds)"
+msgstr ""
+"Koha më e madhe e lejuar ndërmjet dy klikësh që këta të merren si klik i "
+"dyfishtë (në milisekonda)"
+
+#: gtk/gtksettings.c:177
+msgid "Cursor Blink"
+msgstr "Xixëllim Kursori"
+
+#: gtk/gtksettings.c:178
+msgid "Whether the cursor should blink"
+msgstr "Nëse kursori duhet të xixëllojë"
+
+#: gtk/gtksettings.c:185
+msgid "Cursor Blink Time"
+msgstr "Kohë e Xixëllimit të Kursorit"
+
+#: gtk/gtksettings.c:186
+msgid "Length of the cursor blink cycle, in milleseconds"
+msgstr "Gjatësi e ciklit të xixëllimit të kursorit, në milisekonda"
+
+#: gtk/gtksettings.c:193
+msgid "Split Cursor"
+msgstr "Nda Kursorin"
+
+#: gtk/gtksettings.c:194
+msgid ""
+"Whether two cursors should be displayed for mixed left-to-right and right-to-"
+"left text"
+msgstr ""
+"Nëse dy kursorë duhen shfaqur për teks të përzierë nga - e majta - në të "
+"djathtë dhe nga - e djathta - në të majtë "
+
+#: gtk/gtksettings.c:201
+msgid "Theme Name"
+msgstr "Emër Teme"
+
+#: gtk/gtksettings.c:202
+msgid "Name of theme RC file to load"
+msgstr ""
+
+#: gtk/gtksettings.c:209
+#, fuzzy
+msgid "Icon Theme Name"
+msgstr "Emër Teme"
+
+#: gtk/gtksettings.c:210
+#, fuzzy
+msgid "Name of icon theme to use"
+msgstr "Emër i gërmave parazgjedhje që të përdoren"
+
+#: gtk/gtksettings.c:217
+msgid "Key Theme Name"
+msgstr ""
+
+#: gtk/gtksettings.c:218
+msgid "Name of key theme RC file to load"
+msgstr ""
+
+#: gtk/gtksettings.c:226
+msgid "Menu bar accelerator"
+msgstr "Përshpejtues shtylle menuje"
+
+#: gtk/gtksettings.c:227
+msgid "Keybinding to activate the menu bar"
+msgstr ""
+
+#: gtk/gtksettings.c:235
+msgid "Drag threshold"
+msgstr ""
+
+#: gtk/gtksettings.c:236
+msgid "Number of pixels the cursor can move before dragging"
+msgstr ""
+
+#: gtk/gtksettings.c:244
+msgid "Font Name"
+msgstr "Emër Gërmash"
+
+#: gtk/gtksettings.c:245
+msgid "Name of default font to use"
+msgstr "Emër i gërmave parazgjedhje që të përdoren"
+
+#: gtk/gtksettings.c:253
+msgid "Icon Sizes"
+msgstr "Madhësi Ikonash"
+
+#: gtk/gtksettings.c:254
+msgid "List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."
+msgstr "Listë e madhësive të ikonave (gtk-menu=16,16;gtk-button=20,20..."
+
+#: gtk/gtksizegroup.c:241
+msgid "Mode"
+msgstr "Mënyrë"
+
+#: gtk/gtksizegroup.c:242
+msgid ""
+"The directions in which the size group effects the requested sizes of its "
+"component widgets"
+msgstr ""
+
+#: gtk/gtkspinbutton.c:241
+msgid "The adjustment that holds the value of the spinbutton"
+msgstr ""
+
+#: gtk/gtkspinbutton.c:248
+msgid "Climb Rate"
+msgstr ""
+
+#: gtk/gtkspinbutton.c:249
+msgid "The acceleration rate when you hold down a button"
+msgstr ""
+
+#: gtk/gtkspinbutton.c:259
+msgid "The number of decimal places to display"
+msgstr "Nurmi i vendeve dhjetore që të shfaqen"
+
+#: gtk/gtkspinbutton.c:268
+msgid "Snap to Ticks"
+msgstr ""
+
+#: gtk/gtkspinbutton.c:269
+msgid ""
+"Whether erroneous values are automatically changed to a spin button's "
+"nearest step increment"
+msgstr ""
+
+#: gtk/gtkspinbutton.c:276
+msgid "Numeric"
+msgstr "Numerike"
+
+#: gtk/gtkspinbutton.c:277
+msgid "Whether non-numeric characters should be ignored"
+msgstr "Nëse karaktere jo numerikë duhen shpërfillur"
+
+#: gtk/gtkspinbutton.c:284
+msgid "Wrap"
+msgstr ""
+
+#: gtk/gtkspinbutton.c:285
+msgid "Whether a spin button should wrap upon reaching its limits"
+msgstr ""
+
+#: gtk/gtkspinbutton.c:292
+msgid "Update Policy"
+msgstr "Rregull Përditësimi"
+
+#: gtk/gtkspinbutton.c:293
+msgid ""
+"Whether the spin button should update always, or only when the value is legal"
+msgstr ""
+
+#: gtk/gtkspinbutton.c:301
+msgid "Value"
+msgstr "Vlerë"
+
+#: gtk/gtkspinbutton.c:302
+msgid "Reads the current value, or sets a new value"
+msgstr "Lexon vlerën e çastit, ose cakton një vlerë të re"
+
+#: gtk/gtkspinbutton.c:311
+msgid "Style of bevel around the spin button"
+msgstr ""
+
+#: gtk/gtkstatusbar.c:167
+msgid "Has Resize Grip"
+msgstr ""
+
+#: gtk/gtkstatusbar.c:168
+msgid "Whether the statusbar has a grip for resizing the toplevel"
+msgstr ""
+
+#: gtk/gtkstatusbar.c:195
+msgid "Style of bevel around the statusbar text"
+msgstr ""
+
+#. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
+#: gtk/gtkstock.c:267
+msgid "Information"
+msgstr "Të dhëna"
+
+#: gtk/gtkstock.c:268
+msgid "Warning"
+msgstr "Sinjalizim"
+
+#: gtk/gtkstock.c:269
+msgid "Error"
+msgstr "Gabim"
+
+#: gtk/gtkstock.c:270
+msgid "Question"
+msgstr "Pyetje"
+
+#. FIXME these need accelerators when appropriate, and
+#. * need the mnemonics to be rationalized
+#.
+#: gtk/gtkstock.c:275
+msgid "_Add"
+msgstr "_Shto"
+
+#: gtk/gtkstock.c:276
+msgid "_Apply"
+msgstr "_Zbato"
+
+#: gtk/gtkstock.c:277
+msgid "_Bold"
+msgstr "të _Trasha"
+
+#: gtk/gtkstock.c:278
+msgid "_Cancel"
+msgstr "_Anulo"
+
+#: gtk/gtkstock.c:279
+msgid "_CD-Rom"
+msgstr "_CD-Rom"
+
+#: gtk/gtkstock.c:280
+msgid "_Clear"
+msgstr "_Pastro"
+
+#: gtk/gtkstock.c:281
+msgid "_Close"
+msgstr "-Mbyll"
+
+#: gtk/gtkstock.c:282
+msgid "_Convert"
+msgstr "_Shndërro"
+
+#: gtk/gtkstock.c:283
+msgid "_Copy"
+msgstr "_Kopjo"
+
+#: gtk/gtkstock.c:284
+msgid "Cu_t"
+msgstr "_Prij"
+
+#: gtk/gtkstock.c:285
+msgid "_Delete"
+msgstr "_Fshij"
+
+#: gtk/gtkstock.c:286
+msgid "_Execute"
+msgstr "_Kryej"
+
+#: gtk/gtkstock.c:287
+msgid "_Find"
+msgstr "_Gjej"
+
+#: gtk/gtkstock.c:288
+msgid "Find and _Replace"
+msgstr "Gjej dhe _Zëvendëso"
+
+#: gtk/gtkstock.c:289
+msgid "_Floppy"
+msgstr "_Disketë"
+
+#: gtk/gtkstock.c:290
+msgid "_Bottom"
+msgstr "_Fund"
+
+#: gtk/gtkstock.c:291
+msgid "_First"
+msgstr "I _pari"
+
+#: gtk/gtkstock.c:292
+msgid "_Last"
+msgstr "I _fundit"
+
+#: gtk/gtkstock.c:293
+msgid "_Top"
+msgstr "_Krye"
+
+#: gtk/gtkstock.c:294
+msgid "_Back"
+msgstr "_Prapa"
+
+#: gtk/gtkstock.c:295
+msgid "_Down"
+msgstr "_Poshtë"
+
+#: gtk/gtkstock.c:296
+msgid "_Forward"
+msgstr "_Përpara"
+
+#: gtk/gtkstock.c:297
+msgid "_Up"
+msgstr "_Sipër"
+
+#: gtk/gtkstock.c:298
+msgid "_Help"
+msgstr "_Ndihmë"
+
+#: gtk/gtkstock.c:299
+msgid "_Home"
+msgstr "_Hyrje"
+
+#: gtk/gtkstock.c:300
+msgid "_Index"
+msgstr "_Tregues"
+
+#: gtk/gtkstock.c:301
+msgid "_Italic"
+msgstr "të _Pjerrta"
+
+#: gtk/gtkstock.c:302
+msgid "_Jump to"
+msgstr "_Hidhu tek "
+
+#: gtk/gtkstock.c:303
+msgid "_Center"
+msgstr "_Qendër"
+
+#: gtk/gtkstock.c:304
+msgid "_Fill"
+msgstr "_Mbush"
+
+#: gtk/gtkstock.c:305
+msgid "_Left"
+msgstr "_Majtas"
+
+#: gtk/gtkstock.c:306
+msgid "_Right"
+msgstr "_Djathtas"
+
+#: gtk/gtkstock.c:307
+msgid "_New"
+msgstr "i _Ri"
+
+#: gtk/gtkstock.c:308
+msgid "_No"
+msgstr "_Jo"
+
+#: gtk/gtkstock.c:309
+msgid "_OK"
+msgstr "_OK"
+
+#: gtk/gtkstock.c:310
+msgid "_Open"
+msgstr "_Hap"
+
+#: gtk/gtkstock.c:311
+msgid "_Paste"
+msgstr "_Ngjit"
+
+#: gtk/gtkstock.c:312
+msgid "_Preferences"
+msgstr "_Parapëlqime"
+
+#: gtk/gtkstock.c:313
+msgid "_Print"
+msgstr "_Shtyp"
+
+#: gtk/gtkstock.c:314
+msgid "Print Pre_view"
+msgstr "_Paraparje e Shtypjes"
+
+#: gtk/gtkstock.c:315
+msgid "_Properties"
+msgstr "_Veti"
+
+#: gtk/gtkstock.c:316
+msgid "_Quit"
+msgstr "_Dil"
+
+#: gtk/gtkstock.c:317
+msgid "_Redo"
+msgstr "_Ribëj"
+
+#: gtk/gtkstock.c:318
+msgid "_Refresh"
+msgstr "_Fresko"
+
+#: gtk/gtkstock.c:319
+msgid "_Remove"
+msgstr "_Hiq"
+
+#: gtk/gtkstock.c:320
+msgid "_Revert"
+msgstr "_Rikthe"
+
+#: gtk/gtkstock.c:321
+msgid "_Save"
+msgstr "_Ruaj"
+
+#: gtk/gtkstock.c:322
+msgid "Save _As"
+msgstr "Ruaj _Si"
+
+#: gtk/gtkstock.c:323
+msgid "_Color"
+msgstr "_Ngjyrë"
+
+#: gtk/gtkstock.c:324
+msgid "_Font"
+msgstr "_Gërma"
+
+#: gtk/gtkstock.c:325
+msgid "_Ascending"
+msgstr "_Rritës"
+
+#: gtk/gtkstock.c:326
+msgid "_Descending"
+msgstr "_Zbritës"
+
+#: gtk/gtkstock.c:327
+msgid "_Spell Check"
+msgstr "_Kontroll Drejtshkrimi"
+
+#: gtk/gtkstock.c:328
+msgid "_Stop"
+msgstr "_Ndal"
+
+#: gtk/gtkstock.c:329
+msgid "_Strikethrough"
+msgstr ""
+
+#: gtk/gtkstock.c:330
+msgid "_Undelete"
+msgstr "_Risill"
+
+#: gtk/gtkstock.c:331
+msgid "_Underline"
+msgstr "_Nënvizuar"
+
+#: gtk/gtkstock.c:332
+msgid "_Undo"
+msgstr "_Zhbëj"
+
+#: gtk/gtkstock.c:333
+msgid "_Yes"
+msgstr "_Po"
+
+#: gtk/gtkstock.c:334
+msgid "Zoom _100%"
+msgstr "Rrit_100%"
+
+#: gtk/gtkstock.c:335
+msgid "Zoom to _Fit"
+msgstr ""
+
+#: gtk/gtkstock.c:336
+msgid "Zoom _In"
+msgstr "Z_madho"
+
+#: gtk/gtkstock.c:337
+msgid "Zoom _Out"
+msgstr "Z_vogëlo"
+
+#: gtk/gtktable.c:158
+msgid "Rows"
+msgstr "Rreshta"
+
+#: gtk/gtktable.c:159
+msgid "The number of rows in the table"
+msgstr "Numri i rreshtave në tabelë"
+
+#: gtk/gtktable.c:167
+msgid "Columns"
+msgstr "Shtylla"
+
+#: gtk/gtktable.c:168
+msgid "The number of columns in the table"
+msgstr "Numri i shtyllave në tabelë"
+
+#: gtk/gtktable.c:176
+msgid "Row spacing"
+msgstr "Hapësirë rreshtash"
+
+#: gtk/gtktable.c:177
+msgid "The amount of space between two consecutive rows"
+msgstr "Sasia e hapësirës ndërmjet dy rreshtash të njëpasnjëshëm"
+
+#: gtk/gtktable.c:185
+msgid "Column spacing"
+msgstr "Hapësirë shtyllash"
+
+#: gtk/gtktable.c:186
+msgid "The amount of space between two consecutive columns"
+msgstr "Sasia e hapësirës ndërmjet dy shtyllash të njëpasnjëshme"
+
+#: gtk/gtktable.c:194
+msgid "Homogenous"
+msgstr "Njëtrajtshëm"
+
+#: gtk/gtktable.c:195
+msgid "If TRUE this means the table cells are all the same width/height"
+msgstr ""
+"Nëse TRUE kjo do të thotë që kutitë e tabelës janë të tëra të të njëjtës "
+"gjerësi/lartësi"
+
+#: gtk/gtktable.c:202
+msgid "Left attachment"
+msgstr ""
+
+#: gtk/gtktable.c:203
+msgid "The column number to attach the left side of the child to"
+msgstr ""
+
+#: gtk/gtktable.c:209
+msgid "Right attachment"
+msgstr ""
+
+#: gtk/gtktable.c:210
+msgid "the column number to attach the right side of a child widget to"
+msgstr ""
+
+#: gtk/gtktable.c:216
+msgid "Top attachment"
+msgstr ""
+
+#: gtk/gtktable.c:217
+msgid "The row number to attach the top of a child widget to"
+msgstr ""
+
+#: gtk/gtktable.c:223
+msgid "Bottom attachment"
+msgstr ""
+
+#: gtk/gtktable.c:224
+msgid "The row number to attach the bottom of the child to"
+msgstr ""
+
+#: gtk/gtktable.c:230
+msgid "Horizontal options"
+msgstr "Mundësi horizontale"
+
+#: gtk/gtktable.c:231
+msgid "Options specifying the horizontal behaviour of the child"
+msgstr "Mundësi karakterizuese të sjelljes horizontale të birit"
+
+#: gtk/gtktable.c:237
+msgid "Vertical options"
+msgstr "Mundësi vertikale"
+
+#: gtk/gtktable.c:238
+msgid "Options specifying the vertical behaviour of the child"
+msgstr "Mundësi karakterizuese të sjelljes vertikale të birit"
+
+#: gtk/gtktable.c:244
+msgid "Horizontal padding"
+msgstr ""
+
+#: gtk/gtktable.c:245
+msgid ""
+"Extra space to put between the child and its left and right neighbors, in "
+"pixels"
+msgstr ""
+"Hapësirë shtesë për tu vendosur ndërmjet birit the fqinjëve të tij majtas "
+"dhe djathtas, në piksel"
+
+#: gtk/gtktable.c:251
+msgid "Vertical padding"
+msgstr ""
+
+#: gtk/gtktable.c:252
+msgid ""
+"Extra space to put between the child and its upper and lower neighbors, in "
+"pixels"
+msgstr ""
+"Hapësirë shtesë për tu vendosur ndërmjet birit the fqinjëve të tij sipër dhe "
+"poshtë, në piksel"
+
+#: gtk/gtktext.c:602
+msgid "Horizontal adjustment for the text widget"
+msgstr ""
+
+#: gtk/gtktext.c:610
+msgid "Vertical adjustment for the text widget"
+msgstr ""
+
+#: gtk/gtktext.c:617
+msgid "Line Wrap"
+msgstr ""
+
+#: gtk/gtktext.c:618
+msgid "Whether lines are wrapped at widget edges"
+msgstr ""
+
+#: gtk/gtktext.c:625
+msgid "Word Wrap"
+msgstr ""
+
+#: gtk/gtktext.c:626
+msgid "Whether words are wrapped at widget edges"
+msgstr ""
+
+#: gtk/gtktextbuffer.c:180
+msgid "Tag Table"
+msgstr ""
+
+#: gtk/gtktextbuffer.c:181
+msgid "Text Tag Table"
+msgstr ""
+
+#: gtk/gtktexttag.c:195
+msgid "Tag name"
+msgstr ""
+
+#: gtk/gtktexttag.c:196
+msgid "Name used to refer to the text tag. NULL for anonymous tags"
+msgstr ""
+
+#: gtk/gtktexttag.c:214
+msgid "Background color as a (possibly unallocated) GdkColor"
+msgstr "Ngjyrë sfondi si (mundësisht e papranishme) GdkColor"
+
+#: gtk/gtktexttag.c:221
+msgid "Background full height"
+msgstr "Lartësi e plotë e sfondit"
+
+#: gtk/gtktexttag.c:222
+msgid ""
+"Whether the background color fills the entire line height or only the height "
+"of the tagged characters"
+msgstr ""
+
+#: gtk/gtktexttag.c:230
+msgid "Background stipple mask"
+msgstr ""
+
+#: gtk/gtktexttag.c:231
+msgid "Bitmap to use as a mask when drawing the text background"
+msgstr "Bitmap për tu përdorur si maskë gjatë krijimit të sfondit të tekstit"
+
+#: gtk/gtktexttag.c:248
+msgid "Foreground color as a (possibly unallocated) GdkColor"
+msgstr ""
+
+#: gtk/gtktexttag.c:256
+msgid "Foreground stipple mask"
+msgstr ""
+
+#: gtk/gtktexttag.c:257
+msgid "Bitmap to use as a mask when drawing the text foreground"
+msgstr ""
+
+#: gtk/gtktexttag.c:264
+msgid "Text direction"
+msgstr "Drejtim teksti"
+
+#: gtk/gtktexttag.c:265
+msgid "Text direction, e.g. right-to-left or left-to-right"
+msgstr ""
+"Drejtim teksti, p.sh. nga e djathta-në-të majtë ose nga e majta-në-të djathtë"
+
+#: gtk/gtktexttag.c:282
+msgid "Font description as a string, e.g. \"Sans Italic 12\""
+msgstr "Përshkrim gërmash si një varg, p.sh. \"Sans Italic 12\""
+
+#: gtk/gtktexttag.c:307
+msgid "Font style as a PangoStyle, e.g. PANGO_STYLE_ITALIC"
+msgstr "Stil gërmash si një PangoStyle, p.sh. PANGO_STYLE_ITALIC"
+
+#: gtk/gtktexttag.c:316
+msgid "Font variant as a PangoVariant, e.g. PANGO_VARIANT_SMALL_CAPS"
+msgstr "Variant gërmash si një PangoVariant, p.sh. PANGO_VARIANT_SMALL_CAPS"
+
+#: gtk/gtktexttag.c:325
+msgid ""
+"Font weight as an integer, see predefined values in PangoWeight; for "
+"example, PANGO_WEIGHT_BOLD"
+msgstr ""
+
+#: gtk/gtktexttag.c:336
+msgid "Font stretch as a PangoStretch, e.g. PANGO_STRETCH_CONDENSED"
+msgstr ""
+
+#: gtk/gtktexttag.c:345
+msgid "Font size in Pango units"
+msgstr "Madhësi gërmash në njësi Pango"
+
+#: gtk/gtktexttag.c:355
+msgid ""
+"Font size as a scale factor relative to the default font size. This properly "
+"adapts to theme changes etc. so is recommended. Pango predefines some scales "
+"such as PANGO_SCALE_X_LARGE"
+msgstr ""
+"Madhësi gërmash si faktor shkalle në lidhje me madhësinë parazgjedhje për "
+"gërmat. Kjo veti përshtatet me ndryshime temash etj, ndaj këshillohet. Pango "
+"përcakton paraprakisht disa shkallë si fjala vjen PANGO_SCALE_X_LARGE"
+
+#: gtk/gtktexttag.c:375 gtk/gtktextview.c:602
+msgid "Left, right, or center justification"
+msgstr "Majtas, djathtas, ose qendër përligjur"
+
+#: gtk/gtktexttag.c:383
+msgid "Language"
+msgstr "Gjuhë"
+
+#: gtk/gtktexttag.c:384
+msgid ""
+"The language this text is in, as an ISO code. Pango can use this as a hint "
+"when rendering the text. If you don't understand this parameter, you "
+"probably don't need it"
+msgstr ""
+"Gjuha në të cilën është ky tekst, si kod ISO. Pango mund ta përdorë këtë si "
+"ndihmëz kur shfaq tekstin. Nëse nuk e kuptoni këtë parametër, ka mundësi të "
+"mos keni nevoj për të"
+
+#: gtk/gtktexttag.c:391
+msgid "Left margin"
+msgstr "Mënjanë majtas"
+
+#: gtk/gtktexttag.c:392 gtk/gtktextview.c:611
+msgid "Width of the left margin in pixels"
+msgstr "Gjerësi e mënjanës majtas në peksel"
+
+#: gtk/gtktexttag.c:401
+msgid "Right margin"
+msgstr "Mënjanë djathtas"
+
+#: gtk/gtktexttag.c:402 gtk/gtktextview.c:621
+msgid "Width of the right margin in pixels"
+msgstr "Gjerësi e mënjanës djathtas në piksel"
+
+#: gtk/gtktexttag.c:412 gtk/gtktextview.c:630
+msgid "Indent"
+msgstr "Kryeradhë"
+
+#: gtk/gtktexttag.c:413 gtk/gtktextview.c:631
+msgid "Amount to indent the paragraph, in pixels"
+msgstr "Madhlsi e kryeradhës së paragrafit, në piksel"
+
+#: gtk/gtktexttag.c:424
+msgid ""
+"Offset of text above the baseline (below the baseline if rise is negative) "
+"in pixels"
+msgstr ""
+"Zhvendosje e tekstit mbi vijën bazë (nën vijën bazë nëse ngritja është "
+"negative) në piksel"
+
+#: gtk/gtktexttag.c:433
+msgid "Pixels above lines"
+msgstr "Piksel mbi vijat"
+
+#: gtk/gtktexttag.c:434 gtk/gtktextview.c:555
+msgid "Pixels of blank space above paragraphs"
+msgstr "Piksel hapësire bosh mbi paragrafë"
+
+#: gtk/gtktexttag.c:443
+msgid "Pixels below lines"
+msgstr "Piksel nën vijë"
+
+#: gtk/gtktexttag.c:444 gtk/gtktextview.c:565
+msgid "Pixels of blank space below paragraphs"
+msgstr "Piksel hapësire bosh nën paragrafë"
+
+#: gtk/gtktexttag.c:453
+msgid "Pixels inside wrap"
+msgstr "Piksel brenda mbështjellëses"
+
+#: gtk/gtktexttag.c:454 gtk/gtktextview.c:575
+msgid "Pixels of blank space between wrapped lines in a paragraph"
+msgstr "Piksel hapësire bosh ndërmjet vijash të mbështjella në një paragraf"
+
+#: gtk/gtktexttag.c:480
+msgid "Wrap mode"
+msgstr "Mënyrë mbështjellje"
+
+#: gtk/gtktexttag.c:481 gtk/gtktextview.c:593
+msgid ""
+"Whether to wrap lines never, at word boundaries, or at character boundaries"
+msgstr ""
+
+#: gtk/gtktexttag.c:490 gtk/gtktextview.c:640
+msgid "Tabs"
+msgstr ""
+
+#: gtk/gtktexttag.c:491 gtk/gtktextview.c:641
+msgid "Custom tabs for this text"
+msgstr ""
+
+#: gtk/gtktexttag.c:498
+msgid "Invisible"
+msgstr "Padukshëm"
+
+#: gtk/gtktexttag.c:499
+msgid "Whether this text is hidden. Not implemented in GTK 2.0"
+msgstr "Nëse ky tekst është fshehur. I papranishëm në Gtk 2.0"
+
+#: gtk/gtktexttag.c:512
+msgid "Background full height set"
+msgstr ""
+
+#: gtk/gtktexttag.c:513
+msgid "Whether this tag affects background height"
+msgstr ""
+
+#: gtk/gtktexttag.c:516
+msgid "Background stipple set"
+msgstr ""
+
+#: gtk/gtktexttag.c:517
+msgid "Whether this tag affects the background stipple"
+msgstr ""
+
+#: gtk/gtktexttag.c:524
+msgid "Foreground stipple set"
+msgstr ""
+
+#: gtk/gtktexttag.c:525
+msgid "Whether this tag affects the foreground stipple"
+msgstr ""
+
+#: gtk/gtktexttag.c:560
+msgid "Justification set"
+msgstr ""
+
+#: gtk/gtktexttag.c:561
+msgid "Whether this tag affects paragraph justification"
+msgstr ""
+
+#: gtk/gtktexttag.c:564
+msgid "Language set"
+msgstr ""
+
+#: gtk/gtktexttag.c:565
+msgid "Whether this tag affects the language the text is rendered as"
+msgstr ""
+
+#: gtk/gtktexttag.c:568
+msgid "Left margin set"
+msgstr ""
+
+#: gtk/gtktexttag.c:569
+msgid "Whether this tag affects the left margin"
+msgstr ""
+
+#: gtk/gtktexttag.c:572
+msgid "Indent set"
+msgstr ""
+
+#: gtk/gtktexttag.c:573
+msgid "Whether this tag affects indentation"
+msgstr ""
+
+#: gtk/gtktexttag.c:580
+msgid "Pixels above lines set"
+msgstr ""
+
+#: gtk/gtktexttag.c:581 gtk/gtktexttag.c:585
+msgid "Whether this tag affects the number of pixels above lines"
+msgstr ""
+
+#: gtk/gtktexttag.c:584
+msgid "Pixels below lines set"
+msgstr ""
+
+#: gtk/gtktexttag.c:588
+msgid "Pixels inside wrap set"
+msgstr ""
+
+#: gtk/gtktexttag.c:589
+msgid "Whether this tag affects the number of pixels between wrapped lines"
+msgstr ""
+
+#: gtk/gtktexttag.c:596
+msgid "Right margin set"
+msgstr ""
+
+#: gtk/gtktexttag.c:597
+msgid "Whether this tag affects the right margin"
+msgstr ""
+
+#: gtk/gtktexttag.c:604
+msgid "Wrap mode set"
+msgstr ""
+
+#: gtk/gtktexttag.c:605
+msgid "Whether this tag affects line wrap mode"
+msgstr ""
+
+#: gtk/gtktexttag.c:608
+msgid "Tabs set"
+msgstr ""
+
+#: gtk/gtktexttag.c:609
+msgid "Whether this tag affects tabs"
+msgstr ""
+
+#: gtk/gtktexttag.c:612
+msgid "Invisible set"
+msgstr ""
+
+#: gtk/gtktexttag.c:613
+msgid "Whether this tag affects text visibility"
+msgstr ""
+
+#: gtk/gtktextutil.c:46
+msgid "LRM _Left-to-right mark"
+msgstr "Shenjë MDS nga e _Majta-në-të djathtë"
+
+#: gtk/gtktextutil.c:47
+msgid "RLM _Right-to-left mark"
+msgstr "Shenjë DMS nga e _Djathta-në-të majtë"
+
+#: gtk/gtktextutil.c:48
+msgid "LRE Left-to-right _embedding"
+msgstr "MDN nga e Majta-në-të djathtë  _ngulitje"
+
+#: gtk/gtktextutil.c:49
+msgid "RLE Right-to-left e_mbedding"
+msgstr "DMN nga e Djathta-në-të majtë  n_gulitje"
+
+#: gtk/gtktextutil.c:50
+msgid "LRO Left-to-right _override"
+msgstr "MDK nga e Majta-në-të djathtë  _kapërcim"
+
+#: gtk/gtktextutil.c:51
+msgid "RLO Right-to-left o_verride"
+msgstr "DMK nga e Djathta-në-të majtë  k_apërcim"
+
+#: gtk/gtktextutil.c:52
+msgid "PDF _Pop directional formatting"
+msgstr ""
+
+#: gtk/gtktextutil.c:53
+msgid "ZWS _Zero width space"
+msgstr "ZHG _Zero hapësirë gjerësie"
+
+#: gtk/gtktextutil.c:54
+msgid "ZWJ Zero width _joiner"
+msgstr ""
+
+#: gtk/gtktextutil.c:55
+msgid "ZWNJ Zero width _non-joiner"
+msgstr ""
+
+#: gtk/gtktextview.c:554
+msgid "Pixels Above Lines"
+msgstr "PIksel Mbi Rreshta"
+
+#: gtk/gtktextview.c:564
+msgid "Pixels Below Lines"
+msgstr "Piksel Nën Rreshta"
+
+#: gtk/gtktextview.c:574
+msgid "Pixels Inside Wrap"
+msgstr "Piksel Brenda Mbështjelljes"
+
+#: gtk/gtktextview.c:592
+msgid "Wrap Mode"
+msgstr "Mënyrë Mbështjellje"
+
+#: gtk/gtktextview.c:610
+msgid "Left Margin"
+msgstr "Mënjanë Majtas"
+
+#: gtk/gtktextview.c:620
+msgid "Right Margin"
+msgstr "Mënjanë Djathtas"
+
+#: gtk/gtktextview.c:648
+msgid "Cursor Visible"
+msgstr "Kursor i Dukshëm"
+
+#: gtk/gtktextview.c:649
+msgid "If the insertion cursor is shown"
+msgstr "Nëse kursori i futjes tregohet"
+
+#: gtk/gtktextview.c:656
+msgid "Buffer"
+msgstr ""
+
+#: gtk/gtktextview.c:657
+msgid "The buffer which is displayed"
+msgstr ""
+
+#: gtk/gtktextview.c:664
+#, fuzzy
+msgid "Overwrite mode"
+msgstr "Mënyrë ripërmaso"
+
+#: gtk/gtktextview.c:665
+msgid "Whether entered text overwrites existing contents"
+msgstr ""
+
+#: gtk/gtkthemes.c:69
+#, c-format
+msgid "Unable to locate theme engine in module_path: \"%s\","
+msgstr ""
+
+#: gtk/gtktipsquery.c:184
+msgid "--- No Tip ---"
+msgstr "-- Pa Këshillë --"
+
+#: gtk/gtktogglebutton.c:133
+msgid "If the toggle button should be pressed in or not"
+msgstr "Nëse butoni këmbe duhet shtypur apo jo"
+
+#: gtk/gtktogglebutton.c:141
+msgid "If the toggle button is in an \"in between\" state"
+msgstr "Nëse butoni këmbe është në një gjendje \"midis\" "
+
+#: gtk/gtktogglebutton.c:148
+msgid "Draw Indicator"
+msgstr "Vizato Tregues"
+
+#: gtk/gtktogglebutton.c:149
+msgid "If the toggle part of the button is displayed"
+msgstr "Nëse pjesa këmbe e butonit shfaqet"
+
+#: gtk/gtktoolbar.c:417
+msgid "The orientation of the toolbar"
+msgstr "Drejtimi i shtyllës së mjeteve"
+
+#: gtk/gtktoolbar.c:425
+msgid "Toolbar Style"
+msgstr ""
+
+#: gtk/gtktoolbar.c:426
+msgid "How to draw the toolbar"
+msgstr ""
+
+#: gtk/gtktoolbar.c:433
+#, fuzzy
+msgid "Show Arrow"
+msgstr "Shfaq Anë"
+
+#: gtk/gtktoolbar.c:434
+msgid "If an arrow should be shown if the toolbar doesn't fit"
+msgstr ""
+
+#: gtk/gtktoolbar.c:443
+#, fuzzy
+msgid "Whether the item should receive extra space when the toolbar grows"
+msgstr "Nëse biri duhet të marrë hapësirë shtesë kur prindi zmadhohet"
+
+#: gtk/gtktoolbar.c:451
+#, fuzzy
+msgid "Whether the item should be the same size as other homogeneous items"
+msgstr "Nëse bijtë duhet të jenë të tërë të një madhësie"
+
+#: gtk/gtktoolbar.c:458
+msgid "Pack End"
+msgstr ""
+
+#: gtk/gtktoolbar.c:459
+msgid "Whether the item is positioned at the end of the toolbar"
+msgstr ""
+
+#: gtk/gtktoolbar.c:466
+msgid "Spacer size"
+msgstr ""
+
+#: gtk/gtktoolbar.c:467
+msgid "Size of spacers"
+msgstr ""
+
+#: gtk/gtktoolbar.c:476
+msgid "Amount of border space between the toolbar shadow and the buttons"
+msgstr ""
+"Madhësi e hapësirës anësore ndërmjet hijes së shtyllës së mjeteve dhe "
+"butonave"
+
+#: gtk/gtktoolbar.c:484
+msgid "Space style"
+msgstr "Stil hapësire"
+
+#: gtk/gtktoolbar.c:485
+msgid "Whether spacers are vertical lines or just blank"
+msgstr ""
+
+#: gtk/gtktoolbar.c:492
+msgid "Button relief"
+msgstr ""
+
+#: gtk/gtktoolbar.c:493
+msgid "Type of bevel around toolbar buttons"
+msgstr ""
+
+#: gtk/gtktoolbar.c:500
+msgid "Style of bevel around the toolbar"
+msgstr ""
+
+#: gtk/gtktoolbar.c:506
+msgid "Toolbar style"
+msgstr "Stil shtylle mjetesh"
+
+#: gtk/gtktoolbar.c:507
+msgid ""
+"Whether default toolbars have text only, text and icons, icons only, etc."
+msgstr ""
+"Nëse shtylla mjetesh parazgjedhje kanë vetëm tekst, tekst dhe ikona, vetëm "
+"ikona, etj. "
+
+#: gtk/gtktoolbar.c:513
+msgid "Toolbar icon size"
+msgstr "Madhësi ikone shtylle mjetesh"
+
+#: gtk/gtktoolbar.c:514
+msgid "Size of icons in default toolbars"
+msgstr "Madhësi ikonash në shtylla mjetesh parazgjedhje "
+
+#: gtk/gtktreemodelsort.c:306
+msgid "TreeModelSort Model"
+msgstr ""
+
+#: gtk/gtktreemodelsort.c:307
+msgid "The model for the TreeModelSort to sort"
+msgstr ""
+
+#: gtk/gtktreeview.c:520
+msgid "TreeView Model"
+msgstr ""
+
+#: gtk/gtktreeview.c:521
+msgid "The model for the tree view"
+msgstr ""
+
+#: gtk/gtktreeview.c:529
+msgid "Horizontal Adjustment for the widget"
+msgstr ""
+
+#: gtk/gtktreeview.c:537
+msgid "Vertical Adjustment for the widget"
+msgstr ""
+
+#: gtk/gtktreeview.c:544 gtk/gtktreeviewcolumn.c:219 gtk/gtkwidget.c:434
+msgid "Visible"
+msgstr "I dukshëm"
+
+#: gtk/gtktreeview.c:545
+msgid "Show the column header buttons"
+msgstr ""
+
+#: gtk/gtktreeview.c:552
+msgid "Headers Clickable"
+msgstr ""
+
+#: gtk/gtktreeview.c:553
+msgid "Column headers respond to click events"
+msgstr ""
+
+#: gtk/gtktreeview.c:560
+msgid "Expander Column"
+msgstr ""
+
+#: gtk/gtktreeview.c:561
+msgid "Set the column for the expander column"
+msgstr ""
+
+#: gtk/gtktreeview.c:568 gtk/gtktreeviewcolumn.c:326
+msgid "Reorderable"
+msgstr ""
+
+#: gtk/gtktreeview.c:569
+msgid "View is reorderable"
+msgstr ""
+
+#: gtk/gtktreeview.c:576
+msgid "Rules Hint"
+msgstr ""
+
+#: gtk/gtktreeview.c:577
+msgid "Set a hint to the theme engine to draw rows in alternating colors"
+msgstr ""
+
+#: gtk/gtktreeview.c:584
+msgid "Enable Search"
+msgstr "Mundëso Kërkim"
+
+#: gtk/gtktreeview.c:585
+msgid "View allows user to search through columns interactively"
+msgstr ""
+"Shfaq i lejon përdoruesit të kërkoj nëpër shtylla në mënyrë ndërvepruese"
+
+#: gtk/gtktreeview.c:592
+msgid "Search Column"
+msgstr "Kërko Shtyllë"
+
+#: gtk/gtktreeview.c:593
+msgid "Model column to search through when searching through code"
+msgstr "Model shtylle për tu kërkuar kur kërkohet nëpër kod"
+
+#: gtk/gtktreeview.c:606
+msgid "Expander Size"
+msgstr ""
+
+#: gtk/gtktreeview.c:607
+msgid "Size of the expander arrow"
+msgstr ""
+
+#: gtk/gtktreeview.c:615
+msgid "Vertical Separator Width"
+msgstr ""
+
+#: gtk/gtktreeview.c:616
+msgid "Vertical space between cells.  Must be an even number"
+msgstr ""
+
+#: gtk/gtktreeview.c:624
+msgid "Horizontal Separator Width"
+msgstr ""
+
+#: gtk/gtktreeview.c:625
+msgid "Horizontal space between cells.  Must be an even number"
+msgstr ""
+
+#: gtk/gtktreeview.c:633
+#, fuzzy
+msgid "Allow Rules"
+msgstr "Lejo Vizore"
+
+#: gtk/gtktreeview.c:634
+msgid "Allow drawing of alternating color rows"
+msgstr "Lejo vizatim rreshtash ngjyrash pasuese"
+
+#: gtk/gtktreeview.c:640
+msgid "Indent Expanders"
+msgstr ""
+
+#: gtk/gtktreeview.c:641
+msgid "Make the expanders indented"
+msgstr ""
+
+#: gtk/gtktreeview.c:647
+msgid "Even Row Color"
+msgstr "Ngjyrë Rreshti Çift"
+
+#: gtk/gtktreeview.c:648
+msgid "Color to use for even rows"
+msgstr "Ngjyrë për tu përdorur për rreshta çift"
+
+#: gtk/gtktreeview.c:654
+msgid "Odd Row Color"
+msgstr "Ngjyrë Rreshti Tek"
+
+#: gtk/gtktreeview.c:655
+msgid "Color to use for odd rows"
+msgstr "Ngjyrë për tu përdorur për rreshta tek"
+
+#: gtk/gtktreeviewcolumn.c:220
+msgid "Whether to display the column"
+msgstr "Nëse të shfaqet shtylla"
+
+#: gtk/gtktreeviewcolumn.c:227 gtk/gtkwindow.c:501
+msgid "Resizable"
+msgstr "E ripërmasueshëm"
+
+#: gtk/gtktreeviewcolumn.c:228
+msgid "Column is user-resizable"
+msgstr "Shtylla mund të ripërmasohet prej përdoruesit"
+
+#: gtk/gtktreeviewcolumn.c:236
+msgid "Current width of the column"
+msgstr "Gjerësi e çastit e shtyllës"
+
+#: gtk/gtktreeviewcolumn.c:244
+msgid "Sizing"
+msgstr "Po përmasoj"
+
+#: gtk/gtktreeviewcolumn.c:245
+msgid "Resize mode of the column"
+msgstr "Mënyrë ripërmaso për shtyllën"
+
+#: gtk/gtktreeviewcolumn.c:253
+msgid "Fixed Width"
+msgstr "Gjerësi e Caktuar"
+
+#: gtk/gtktreeviewcolumn.c:254
+msgid "Current fixed width of the column"
+msgstr "Gjerësi e caktuar e çastit e shtylllës"
+
+#: gtk/gtktreeviewcolumn.c:263
+msgid "Minimum Width"
+msgstr "Gjerësia më e Vogël"
+
+#: gtk/gtktreeviewcolumn.c:264
+msgid "Minimum allowed width of the column"
+msgstr "Gjerësia më e vogël e lejuar e shtyllës"
+
+#: gtk/gtktreeviewcolumn.c:273
+msgid "Maximum Width"
+msgstr "Gjerësia më e Madhe"
+
+#: gtk/gtktreeviewcolumn.c:274
+msgid "Maximum allowed width of the column"
+msgstr "Gjerësia më e madhe e lejuar e shtyllës"
+
+#: gtk/gtktreeviewcolumn.c:284
+msgid "Title to appear in column header"
+msgstr ""
+
+#: gtk/gtktreeviewcolumn.c:292
+msgid "Column gets share of extra width allocated to the widget"
+msgstr ""
+
+#: gtk/gtktreeviewcolumn.c:299
+msgid "Clickable"
+msgstr "I klikueshëm"
+
+#: gtk/gtktreeviewcolumn.c:300
+msgid "Whether the header can be clicked"
+msgstr ""
+
+#: gtk/gtktreeviewcolumn.c:308
+msgid "Widget"
+msgstr ""
+
+#: gtk/gtktreeviewcolumn.c:309
+msgid "Widget to put in column header button instead of column title"
+msgstr ""
+
+#: gtk/gtktreeviewcolumn.c:316
+msgid "Alignment"
+msgstr ""
+
+#: gtk/gtktreeviewcolumn.c:317
+msgid "X Alignment of the column header text or widget"
+msgstr ""
+
+#: gtk/gtktreeviewcolumn.c:327
+msgid "Whether the column can be reordered around the headers"
+msgstr ""
+
+#: gtk/gtktreeviewcolumn.c:334
+msgid "Sort indicator"
+msgstr ""
+
+#: gtk/gtktreeviewcolumn.c:335
+msgid "Whether to show a sort indicator"
+msgstr ""
+
+#: gtk/gtktreeviewcolumn.c:342
+msgid "Sort order"
+msgstr ""
+
+#: gtk/gtktreeviewcolumn.c:343
+msgid "Sort direction the sort indicator should indicate"
+msgstr ""
+
+#: gtk/gtkviewport.c:135
+msgid ""
+"The GtkAdjustment that determines the values of the horizontal position for "
+"this viewport"
+msgstr ""
+
+#: gtk/gtkviewport.c:143
+msgid ""
+"The GtkAdjustment that determines the values of the vertical position for "
+"this viewport"
+msgstr ""
+
+#: gtk/gtkviewport.c:151
+msgid "Determines how the shadowed box around the viewport is drawn"
+msgstr ""
+
+#: gtk/gtkwidget.c:401
+msgid "Widget name"
+msgstr ""
+
+#: gtk/gtkwidget.c:402
+msgid "The name of the widget"
+msgstr ""
+
+#: gtk/gtkwidget.c:408
+msgid "Parent widget"
+msgstr ""
+
+#: gtk/gtkwidget.c:409
+msgid "The parent widget of this widget. Must be a Container widget"
+msgstr ""
+
+#: gtk/gtkwidget.c:416
+msgid "Width request"
+msgstr ""
+
+#: gtk/gtkwidget.c:417
+msgid ""
+"Override for width request of the widget, or -1 if natural request should be "
+"used"
+msgstr ""
+
+#: gtk/gtkwidget.c:425
+msgid "Height request"
+msgstr ""
+
+#: gtk/gtkwidget.c:426
+msgid ""
+"Override for height request of the widget, or -1 if natural request should "
+"be used"
+msgstr ""
+
+#: gtk/gtkwidget.c:435
+msgid "Whether the widget is visible"
+msgstr ""
+
+#: gtk/gtkwidget.c:441
+msgid "Sensitive"
+msgstr ""
+
+#: gtk/gtkwidget.c:442
+msgid "Whether the widget responds to input"
+msgstr ""
+
+#: gtk/gtkwidget.c:448
+msgid "Application paintable"
+msgstr ""
+
+#: gtk/gtkwidget.c:449
+msgid "Whether the application will paint directly on the widget"
+msgstr ""
+
+#: gtk/gtkwidget.c:455
+msgid "Can focus"
+msgstr ""
+
+#: gtk/gtkwidget.c:456
+msgid "Whether the widget can accept the input focus"
+msgstr ""
+
+#: gtk/gtkwidget.c:462
+msgid "Has focus"
+msgstr ""
+
+#: gtk/gtkwidget.c:463
+msgid "Whether the widget has the input focus"
+msgstr ""
+
+#: gtk/gtkwidget.c:469
+msgid "Is focus"
+msgstr ""
+
+#: gtk/gtkwidget.c:470
+msgid "Whether the widget is the focus widget within the toplevel"
+msgstr ""
+
+#: gtk/gtkwidget.c:476
+msgid "Can default"
+msgstr ""
+
+#: gtk/gtkwidget.c:477
+msgid "Whether the widget can be the default widget"
+msgstr ""
+
+#: gtk/gtkwidget.c:483
+msgid "Has default"
+msgstr ""
+
+#: gtk/gtkwidget.c:484
+msgid "Whether the widget is the default widget"
+msgstr ""
+
+#: gtk/gtkwidget.c:490
+msgid "Receives default"
+msgstr ""
+
+#: gtk/gtkwidget.c:491
+msgid "If TRUE, the widget will receive the default action when it is focused"
+msgstr ""
+
+#: gtk/gtkwidget.c:497
+msgid "Composite child"
+msgstr ""
+
+#: gtk/gtkwidget.c:498
+msgid "Whether the widget is part of a composite widget"
+msgstr ""
+
+#: gtk/gtkwidget.c:504
+msgid "Style"
+msgstr "Stil"
+
+#: gtk/gtkwidget.c:505
+msgid ""
+"The style of the widget, which contains information about how it will look "
+"(colors etc)"
+msgstr ""
+
+#: gtk/gtkwidget.c:511
+msgid "Events"
+msgstr "Ngjarje"
+
+#: gtk/gtkwidget.c:512
+msgid "The event mask that decides what kind of GdkEvents this widget gets"
+msgstr ""
+
+#: gtk/gtkwidget.c:519
+msgid "Extension events"
+msgstr ""
+
+#: gtk/gtkwidget.c:520
+msgid "The mask that decides what kind of extension events this widget gets"
+msgstr ""
+
+#: gtk/gtkwidget.c:1330
+msgid "Interior Focus"
+msgstr ""
+
+#: gtk/gtkwidget.c:1331
+msgid "Whether to draw the focus indicator inside widgets"
+msgstr ""
+
+#: gtk/gtkwidget.c:1337
+msgid "Focus linewidth"
+msgstr ""
+
+#: gtk/gtkwidget.c:1338
+msgid "Width, in pixels, of the focus indicator line"
+msgstr ""
+
+#: gtk/gtkwidget.c:1344
+msgid "Focus line dash pattern"
+msgstr ""
+
+#: gtk/gtkwidget.c:1345
+msgid "Dash pattern used to draw the focus indicator"
+msgstr ""
+
+#: gtk/gtkwidget.c:1350
+msgid "Focus padding"
+msgstr ""
+
+#: gtk/gtkwidget.c:1351
+msgid "Width, in pixels, between focus indicator and the widget 'box'"
+msgstr ""
+
+#: gtk/gtkwidget.c:1356
+msgid "Cursor color"
+msgstr "Njgjyrë kursori"
+
+#: gtk/gtkwidget.c:1357
+msgid "Color with which to draw insertion cursor"
+msgstr ""
+
+#: gtk/gtkwidget.c:1362
+msgid "Secondary cursor color"
+msgstr ""
+
+#: gtk/gtkwidget.c:1363
+msgid ""
+"Color with which to draw the secondary insertion cursor when editing mixed "
+"right-to-left and left-to-right text"
+msgstr ""
+
+#: gtk/gtkwidget.c:1368
+msgid "Cursor line aspect ratio"
+msgstr ""
+
+#: gtk/gtkwidget.c:1369
+msgid "Aspect ratio with which to draw insertion cursor"
+msgstr ""
+
+#: gtk/gtkwindow.c:459
+msgid "Window Type"
+msgstr "Tip Dritareje"
+
+#: gtk/gtkwindow.c:460
+msgid "The type of the window"
+msgstr "Tipi i dritares"
+
+#: gtk/gtkwindow.c:468
+msgid "Window Title"
+msgstr "Titull Dritareje"
+
+#: gtk/gtkwindow.c:469
+msgid "The title of the window"
+msgstr "Titulli i dritares"
+
+#: gtk/gtkwindow.c:476
+#, fuzzy
+msgid "Window Role"
+msgstr "Titull Dritareje"
+
+#: gtk/gtkwindow.c:477
+msgid "Unique identifier for the window to be used when restoring a session"
+msgstr ""
+
+#: gtk/gtkwindow.c:484
+msgid "Allow Shrink"
+msgstr "Lejo Tkurrje"
+
+#: gtk/gtkwindow.c:486
+#, no-c-format
+msgid ""
+"If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
+"time a bad idea"
+msgstr ""
+"Nëse E vërtetë, dritarja nuk ka madhësi më të vogël. Vendosja e kësaj si E "
+"vërtetë 99% të rasteve është ide e gabuar"
+
+#: gtk/gtkwindow.c:493
+msgid "Allow Grow"
+msgstr "Lejo Rritje"
+
+#: gtk/gtkwindow.c:494
+msgid "If TRUE, users can expand the window beyond its minimum size"
+msgstr ""
+"Nëse e vërtetë, përdoruesit mund të zgjerojnë dritaren tej madhësisë më të "
+"vogël të saj"
+
+#: gtk/gtkwindow.c:502
+msgid "If TRUE, users can resize the window"
+msgstr "Nëse E vërtetë, përdoruesit mund të ripërmasojnë dritaren"
+
+#: gtk/gtkwindow.c:509
+msgid "Modal"
+msgstr "Modale"
+
+#: gtk/gtkwindow.c:510
+msgid ""
+"If TRUE, the window is modal (other windows are not usable while this one is "
+"up)"
+msgstr ""
+"Nëse TRUE, dritarja është modale (dritare të tjera nuk janë të përdorshme "
+"ndërkohë që kjo është sipër)"
+
+#: gtk/gtkwindow.c:517
+msgid "Window Position"
+msgstr "Vendndodhje Dritareje"
+
+#: gtk/gtkwindow.c:518
+msgid "The initial position of the window"
+msgstr "Vendndodhje fillestare e dritares"
+
+#: gtk/gtkwindow.c:526
+msgid "Default Width"
+msgstr "Gjerësi Parazgjedhjje"
+
+#: gtk/gtkwindow.c:527
+msgid "The default width of the window, used when initially showing the window"
+msgstr ""
+"Gjerësia parazgjedhje e dritares, e përdorur kur shfaqet fillimisht dritarja"
+
+#: gtk/gtkwindow.c:536
+msgid "Default Height"
+msgstr "Lartësi Parazgjedhje"
+
+#: gtk/gtkwindow.c:537
+msgid ""
+"The default height of the window, used when initially showing the window"
+msgstr ""
+"Lartësia parazgjedhje e dritares, e përdorur kur shfaqet fillimisht dritarja"
+
+#: gtk/gtkwindow.c:546
+msgid "Destroy with Parent"
+msgstr "Prish me Prindin"
+
+#: gtk/gtkwindow.c:547
+msgid "If this window should be destroyed when the parent is destroyed"
+msgstr "Nëse kjo dritare duhet prishur kur prindi është prishur "
+
+#: gtk/gtkwindow.c:554
+msgid "Icon"
+msgstr "Ikonë"
+
+#: gtk/gtkwindow.c:555
+msgid "Icon for this window"
+msgstr "Ikonë për këtë dritare"
+
+#: gtk/gtkwindow.c:570
+msgid "Is Active"
+msgstr "Është Veprues"
+
+#: gtk/gtkwindow.c:571
+msgid "Whether the toplevel is the current active window"
+msgstr ""
+
+#: gtk/gtkwindow.c:578
+msgid "Focus in Toplevel"
+msgstr ""
+
+#: gtk/gtkwindow.c:579
+msgid "Whether the input focus is within this GtkWindow"
+msgstr ""
+
+#: gtk/gtkwindow.c:586
+msgid "Type hint"
+msgstr "Shtypni ndihmëz"
+
+#: gtk/gtkwindow.c:587
+msgid ""
+"Hint to help the desktop environment understand what kind of window this is "
+"and how to treat it."
+msgstr ""
+"Ndihmëz për të ndihmuar sistemin ç'lloj dritareje është kjo dhe si ta "
+"trajtojë."
+
+#: gtk/gtkwindow.c:595
+msgid "Skip taskbar"
+msgstr "Anashkalo shtyllën e veprimeve"
+
+#: gtk/gtkwindow.c:596
+msgid "TRUE if the window should not be in the task bar."
+msgstr "E vërtetë nëse dritarja nuk duhet të jetë shtyllën e veprimeve."
+
+#: gtk/gtkwindow.c:603
+msgid "Skip pager"
+msgstr "Anashkalo faques"
+
+#: gtk/gtkwindow.c:604
+msgid "TRUE if the window should not be in the pager."
+msgstr "E vërtetë nëse dritarja nuk duhet të jetë në faques."
+
+#: gtk/gtkwindow.c:618
+msgid "Decorated"
+msgstr ""
+
+#: gtk/gtkwindow.c:619
+#, fuzzy
+msgid "Whether the window should be decorated by the window manager"
+msgstr "E vërtetë nëse dritarja nuk duhet të jetë në faques."
+
+#: gtk/gtkwindow.c:634
+msgid "Gravity"
+msgstr ""
+
+#: gtk/gtkwindow.c:635
+#, fuzzy
+msgid "The window gravity of the window"
+msgstr "Tipi i dritares"
+
+#: modules/input/gtkimcontextxim.c:325
+msgid "IM Preedit style"
+msgstr ""
+
+#: modules/input/gtkimcontextxim.c:326
+msgid "How to draw the input method preedit string"
+msgstr ""
+
+#: modules/input/gtkimcontextxim.c:334
+msgid "IM Status style"
+msgstr ""
+
+#: modules/input/gtkimcontextxim.c:335
+msgid "How to draw the input method statusbar"
+msgstr ""
+
+#. ID
+#: modules/input/imam-et.c:453
+msgid "Amharic (EZ+)"
+msgstr "Amharike (EZ+)"
+
+#. ID
+#: modules/input/imcedilla.c:90
+msgid "Cedilla"
+msgstr ""
+
+#. ID
+#: modules/input/imcyrillic-translit.c:216
+msgid "Cyrillic (Transliterated)"
+msgstr "Cirilike (Tejshkronjëzuar)"
+
+#. ID
+#: modules/input/iminuktitut.c:126
+msgid "Inukitut (Transliterated)"
+msgstr "Inukitut (Tejshkronjëzuar)"
+
+#. ID
+#: modules/input/imipa.c:144
+msgid "IPA"
+msgstr ""
+
+#. ID
+#: modules/input/imthai-broken.c:177
+msgid "Thai (Broken)"
+msgstr "Tajlandeze (Broken)"
+
+#. ID
+#: modules/input/imti-er.c:452
+msgid "Tigrigna-Eritrean (EZ+)"
+msgstr "Tigrigna-Eritrean (EZ+)"
+
+#. ID
+#: modules/input/imti-et.c:452
+msgid "Tigrigna-Ethiopian (EZ+)"
+msgstr "Tigrigna-Ethiopian (EZ+)"
+
+#. ID
+#: modules/input/imviqr.c:243
+msgid "Vietnamese (VIQR)"
+msgstr "Vietnameze (VIQR)"
+
+#. ID
+#: modules/input/imxim.c:27
+msgid "X Input Method"
+msgstr ""
+
+#~ msgid "GIF image contained a frame appearing outside the image bounds."
+#~ msgstr ""
+#~ "Pamja GIF përmbante një kornizë të dukshme jashtë kufijve të pamjes."
+
+#~ msgid "fread() failed -- premature end-of-file probably encountered"
+#~ msgstr "dështim i fread() -- mundet hasi në një end-of-file të parakohshëm"
+
+#~ msgid "fseek() failed -- premature end-of-file probably encountered"
+#~ msgstr "dështim i fseekk()  -- mbase hasi në një end-of-file të parakohshëm"
+
+#~ msgid "Can't allocate memory for TGA colormap struct"
+#~ msgstr "S'mund të vendos kujtesë për strukturë colormap TGA"
+
+#~ msgid "Can't allocate memory for TGA colormap entries"
+#~ msgstr "S'mund të vendos kujtesë për zëra colormap TGA"
+
+#~ msgid "Can't allocate pixbuf"
+#~ msgstr "S'mund të vendos pixbuf"
+
+#~ msgid "Unsupported TGA image type"
+#~ msgstr "Tip pamjeje TGA i pambuluar"
+
+#~ msgid "GIF image contained a frame with height or width 0."
+#~ msgstr "Pamja GIF përmbante një kornizë me lartësi apo gjerësi 0."
