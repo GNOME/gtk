@@ -1,0 +1,53 @@
+2000-10-06  Havoc Pennington  <hp@redhat.com>
+
+	* gdk-pixbuf-xlib.c: Put display/screen here, instead of in 
+	the main gdk-pixbuf library as it was in 1.0; since the io-xpm 
+	loader doesn't use these variables anymore it should be OK
+
+2000-09-26  Federico Mena Quintero  <federico@helixcode.com>
+
+	* gdk-pixbuf/gdk-pixbuf-xlib-drawable.c
+	(gdk_pixbuf_xlib_get_from_drawable): Do not use
+	gdk_screen_{width,height}().  Thanks to John Harper for pointing
+	this out.
+
+2000-08-26  Federico Mena Quintero  <federico@helixcode.com>
+
+	* gdk-pixbuf/gdk-pixbuf-xlibrgb.c: Added API reference docs.
+
+2000-08-25  Federico Mena Quintero  <federico@helixcode.com>
+
+	* gdk-pixbuf/gdk-pixbuf-xlib-drawable.c (handle_x_error): Return
+	0.
+	(xlib_window_is_viewable): Return FALSE in the last case.
+
+	* gdk-pixbuf/gdk-pixbuf-xlib-render.c: Updated the inline docs.
+
+	* gdk-pixbuf/gdk-pixbuf-xlib.c: Added API docs.
+
+2000-08-25  John Harper  <john@dcs.warwick.ac.uk>
+
+	Work to create an Xlib version of gdk-pixbuf (with the Xlib
+	port of GdkRGB for rendering):
+
+	* configure.in: check for X libraries, set and substitute
+	GDK_PIXBUF_XLIB_{LIBDIR,INCLUDEDIR,LIBS} variables
+
+	* gdk_pixbuf_xlibConf.sh.in: new file -- gnome-config details
+	for the gdk-pixbuf-xlib library
+	* Makefile.am: build and install gdk_pixbuf_xlibConf.sh
+
+	* gdk-pixbuf/gdk-pixbuf-xlib-render.c,
+	gdk-pixbuf/gdk-pixbuf-xlib.c, gdk-pixbuf/gdk-pixbuf-xlib.h,
+	gdk-pixbuf/gdk-pixbuf-xlib-private.h,
+	gdk-pixbuf/gdk-pixbuf-xlib-drawable.c: new files, ported the
+	GDK dependent parts of gdk-pixbuf to use Xlib. Functions that
+	were called gdk_pixbuf_FOO are now gdk_pixbuf_xlib_FOO
+
+	* gdk-pixbuf/gdk-pixbuf-xlibrgb.c,
+	gdk-pixbuf/gdk-pixbuf-xlibrgb.h: added Chris Blizzard's Xlib
+	port of GdkRGB (from Mozilla CVS)
+
+	* gdk-pixbuf/Makefile.am: build a library libgdk_pixbuf_xlib.la
+	including the non-GDK dependent objects from libgdk_pixbuf.la
+	plus the Xlib ports and xlibrgb

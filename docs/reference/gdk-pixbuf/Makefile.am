@@ -8,12 +8,13 @@ DOC_MAIN_SGML_FILE=gdk-pixbuf.sgml
 
 # The directory containing the source code (if it contains documentation).
 DOC_SOURCE_DIR=$(GDK_PIXBUF_DIR)/gdk-pixbuf
+SECOND_DOC_SOURCE_DIR=$(top_srcdir)/contrib/gdk-pixbuf-xlib
 
 # Extra options to supply to gtkdoc-fixref
 FIXXREF_OPTIONS=
 
 # Header files to ignore when scanning
-IGNORE_HFILES=pixops.h pixops-internal.h
+IGNORE_HFILES=pixops.h pixops-internal.h gdk-pixbuf-xlib-private.h
 
 # Extra files to add when scanning
 EXTRA_HFILES=			\
@@ -34,12 +35,17 @@ tmpl_sources =					\
 	tmpl/module_interface.sgml		\
 	tmpl/refcounting.sgml			\
 	tmpl/scaling.sgml			\
-	tmpl/util.sgml
+	tmpl/util.sgml				\
+        tmpl/gdk-pixbuf-xlib-from-drawables.sgml        \
+        tmpl/gdk-pixbuf-xlib-init.sgml                  \
+        tmpl/gdk-pixbuf-xlib-rendering.sgml             \
+        tmpl/gdk-pixbuf-xlib-rgb.sgml
 
 # Extra SGML files that are included by DOC_MAIN_SGML_FILE
 content_files =				\
 	compiling.sgml			\
-	gdk-pixbuf.sgml
+	gdk-pixbuf.sgml			\
+	porting-from-imlib.sgml
 
 ####################################
 # Everything below here is generic #
@@ -71,14 +77,14 @@ endif
 
 scan:
 	-(cd $(srcdir) \
-	&& gtkdoc-scan --module=$(DOC_MODULE) --source-dir=$(DOC_SOURCE_DIR) --ignore-headers="$(IGNORE_HFILES)" $(EXTRA_HFILES))
+	&& gtkdoc-scan --module=$(DOC_MODULE) --source-dir=$(DOC_SOURCE_DIR) --source-dir=$(SECOND_DOC_SOURCE_DIR) --ignore-headers="$(IGNORE_HFILES)" $(EXTRA_HFILES))
 
 templates: 
 	cd $(srcdir) && gtkdoc-mktmpl --module=$(DOC_MODULE)
 
 sgml:
 	cd $(srcdir) \
-	&& gtkdoc-mkdb --module=$(DOC_MODULE) --source-dir=$(DOC_SOURCE_DIR)
+	&& gtkdoc-mkdb --module=$(DOC_MODULE) --source-dir=$(DOC_SOURCE_DIR) --source-dir=$(SECOND_DOC_SOURCE_DIR)
 
 html:
 	test -d $(srcdir)/html || mkdir $(srcdir)/html

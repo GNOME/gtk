@@ -825,6 +825,14 @@ AC_SUBST(GDK_PIXBUF_LIBDIR)
 AC_SUBST(GDK_PIXBUF_INCLUDEDIR)
 AC_SUBST(GDK_PIXBUF_LIBS)
 
+GDK_PIXBUF_XLIB_LIBDIR=$GDK_PIXBUF_LIBDIR
+GDK_PIXBUF_XLIB_INCLUDEDIR=$GDK_PIXBUF_INCLUDEDIR
+GDK_PIXBUF_XLIB_LIBS="$GLIB_LIBS -lgdk_pixbuf_xlib $deps $X11_LIBS"
+
+AC_SUBST(GDK_PIXBUF_XLIB_LIBDIR)
+AC_SUBST(GDK_PIXBUF_XLIB_INCLUDEDIR)
+AC_SUBST(GDK_PIXBUF_XLIB_LIBS)
+
 # Checks to see if we should compile in MMX support (there will be
 # a runtime test when the code is actually run to see if it should
 # be used - this just checks if we can compile it.)
@@ -1037,4 +1045,7 @@ gtk/gtkcompat.h
 gtk/stock-icons/Makefile
 modules/Makefile
 modules/linux-fb/Makefile
+contrib/Makefile
+contrib/gdk-pixbuf-xlib/Makefile
+contrib/gdk-pixbuf-xlib/gdk-pixbuf-xlib-2.0.pc
 ], [chmod +x gtk-config-2.0])

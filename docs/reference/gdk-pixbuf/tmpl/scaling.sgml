@@ -6,12 +6,11 @@ Scaling pixbufs and scaling and compositing pixbufs
 
 <!-- ##### SECTION Long_Description ##### -->
   <para>
-    The <application>gdk-pixbuf</application> contains functions to
-    scale pixbufs, to scale pixbufs and composite against an existing
-    image, and to scale pixbufs and composite against a solid color or
-    checkerboard.  Compositing a checkerboard is a common way to show
-    an image with an alpha channel in image-viewing and editing
-    software.
+    The &gdk-pixbuf; contains functions to scale pixbufs, to scale
+    pixbufs and composite against an existing image, and to scale
+    pixbufs and composite against a solid color or checkerboard.
+    Compositing a checkerboard is a common way to show an image with
+    an alpha channel in image-viewing and editing software.
   </para>
 
   <para>

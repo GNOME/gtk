@@ -3,7 +3,7 @@
  * Copyright (C) 1999 The Free Software Foundation
  *
  * Authors: Federico Mena-Quintero <federico@gimp.org>
- *          Cody Russell  <bratsche@dfw.net>
+ *          Cody Russell  <bratsche@gnome.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public

@@ -370,7 +370,8 @@ new_testrgb_window (GdkPixbuf *pixbuf, gchar *title)
 	GtkWidget *button;
 	GtkWidget *drawing_area;
 	gint w, h;
- 
+
+        g_return_val_if_fail (pixbuf != NULL, NULL);
 	w = gdk_pixbuf_get_width (pixbuf);
 	h = gdk_pixbuf_get_height (pixbuf);
 
@@ -427,18 +428,34 @@ static gint
 update_timeout(gpointer data)
 {
         ProgressFileStatus *status = data;
-	gboolean done;
-
-	done = TRUE;
+	gboolean done, error;
+        
+	done = FALSE;
+        error = FALSE;
 	if (!feof(status->imagefile)) {
 		gint nbytes;
 
 		nbytes = fread(status->buf, 1, status->readlen, 
 			       status->imagefile);
 
-		done = !gdk_pixbuf_loader_write (GDK_PIXBUF_LOADER (status->loader), status->buf, nbytes);
-			
-	}
+
+                error = !gdk_pixbuf_loader_write (GDK_PIXBUF_LOADER (status->loader), status->buf, nbytes);
+                if (error) {
+                        G_BREAKPOINT();
+                }
+
+        } else { /* Really done */ 
+
+                GdkPixbuf *pixbuf = gdk_pixbuf_loader_get_pixbuf (status->loader); 
+                new_testrgb_window (pixbuf, "After progressive load"); 
+                done = TRUE; 
+
+        }
+
+        if (error) { 
+                g_warning ("Serious error writing to loader"); 
+                done = TRUE; 
+        } 
 
 	if (done) {
                 gtk_widget_queue_draw(*status->rgbwin);

@@ -492,14 +492,17 @@ gdk_pixbuf_loader_new_with_type (const char *image_type)
  * gdk_pixbuf_loader_get_pixbuf:
  * @loader: A pixbuf loader.
  *
- * Queries the GdkPixbuf that a pixbuf loader is currently creating.  In general
- * it only makes sense to call this function afer the "area_prepared" signal has
- * been emitted by the loader; this means that enough data has been read to know
- * the size of the image that will be allocated.  If the loader has not received
- * enough data via gdk_pixbuf_loader_write(), then this function returns NULL.
- * The returned pixbuf will be the same in all future calls to the loader, so
- * simply calling gdk_pixbuf_ref() should be sufficient to continue using it.
- *
+ * Queries the GdkPixbuf that a pixbuf loader is currently creating.
+ * In general it only makes sense to call this function afer the
+ * "area_prepared" signal has been emitted by the loader; this means
+ * that enough data has been read to know the size of the image that
+ * will be allocated.  If the loader has not received enough data via
+ * gdk_pixbuf_loader_write(), then this function returns NULL.  The
+ * returned pixbuf will be the same in all future calls to the loader,
+ * so simply calling gdk_pixbuf_ref() should be sufficient to continue
+ * using it.  Additionally, if the loader is an animation, it will
+ * return the first frame of the animation.
+ * 
  * Return value: The GdkPixbuf that the loader is creating, or NULL if not
  * enough data has been read to determine how to create the image buffer.
  **/
@@ -512,6 +515,19 @@ gdk_pixbuf_loader_get_pixbuf (GdkPixbufLoader *loader)
   g_return_val_if_fail (GDK_IS_PIXBUF_LOADER (loader), NULL);
   
   priv = loader->private;
+
+  if (priv->animation)
+    {
+      GList *list;
+      
+      list = gdk_pixbuf_animation_get_frames (priv->animation);
+      if (list != NULL)
+        {
+          GdkPixbufFrame *frame = list->data;
+          
+          return gdk_pixbuf_frame_get_pixbuf (frame);
+        }
+    }
   
   return priv->pixbuf;
 }

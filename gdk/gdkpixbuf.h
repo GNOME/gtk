@@ -11,13 +11,6 @@ extern "C" {
 
 /* Rendering to a drawable */
 
-/* Alpha compositing mode */
-typedef enum
-{
-  GDK_PIXBUF_ALPHA_BILEVEL,
-  GDK_PIXBUF_ALPHA_FULL
-} GdkPixbufAlphaMode;
-
 void gdk_pixbuf_render_threshold_alpha   (GdkPixbuf           *pixbuf,
 					  GdkBitmap           *bitmap,
 					  int                  src_x,

@@ -1,3 +1,79 @@
+2000-10-06  Havoc Pennington  <hp@redhat.com>
+
+	* gdk-pixbuf.h: add GdkPixbufAlphaMode
+
+2000-10-06  Havoc Pennington  <hp@redhat.com>
+
+        This entry is a summary of the merged-in changes from 1.0. 
+	Relevant original ChangeLog entries are spliced in after 
+	this entry; the files they refer to are from the 1.0
+	gdk-pixbuf sources.
+	
+	* pixops/pixops.c (pixops_composite_nearest): sync a small fix
+	from 1.0
+
+	* io-xpm.c (xpm_seek_string): add fscanf error check from 1.0
+	Add progressive loader from 1.0
+
+	* io-tiff.c (gdk_pixbuf__tiff_image_begin_load): mem leak fixes
+	from 1.0 tree
+
+	* io-pnm.c: new version from 1.0 tree
+
+	* io-jpeg.c (gdk_pixbuf__jpeg_image_load): sync from 1.0, use 
+	malloc not g_malloc
+
+	* io-gif.c (lzw_read_byte): sync from 1.0, change a g_error to
+	g_warning
+	(gif_get_next_step): return 0 here, sync from 1.0
+
+	* gdk-pixbuf-util.c: sync email address change for Cody
+	Russell
+
+2000-09-11  Jeffrey Stedfast  <fejj@helixcode.com>
+
+	* gdk-pixbuf/io-pnm.c: Pretty much totally rewrote again because
+	last nights code was still "broken". Should now properly handle
+	all error conditions gracefully.
+
+2000-09-10  Jeffrey Stedfast  <fejj@helixcode.com>
+
+	* gdk-pixbuf/io-pnm.c: Rewrote.
+
+2000-09-09  Federico Mena Quintero  <federico@helixcode.com>
+
+	* gdk-pixbuf/pixops/pixops.c (pixops_composite_nearest): Compute
+	the correct dest offset.
+
+2000-08-25  Federico Mena Quintero  <federico@helixcode.com>
+
+	* gdk-pixbuf/io-xpm.c: #include <unistd.h>
+
+2000-08-05  Larry Ewing  <lewing@helixcode.com>
+
+	* gdk-pixbuf/io-tiff.c: stop leaking context->tempname.
+
+	* gdk-pixbuf/io-xpm.c: same as above.
+
+2000-07-26  Michael Meeks  <michael@helixcode.com>
+
+	* gdk-pixbuf/io-jpeg.c (gdk_pixbuf__jpeg_image_load): make
+	g_malloc a malloc.
+
+2000-07-21  Larry Ewing  <lewing@helixcode.com>
+
+	* gdk-pixbuf/io-xpm.c: add a fake progressive loader so that
+	xpm at least supports the progressive interface like the one in
+	io-tiff.c. This should be reimplemented as an actual progressive
+	loader.
+
+2000-07-19  Jonathan Blandford  <jrb@redhat.com>
+
+	* demo/pixbuf-demo.c (update_timeout): changed scaling level to
+	make it look better.
+	* gdk-pixbuf/testpixbuf.c (update_timeout): Patch from michael
+	meeks to handle errors better.
+	
 2000-10-07  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk_pixbuf.def

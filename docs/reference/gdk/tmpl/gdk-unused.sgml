@@ -110,6 +110,14 @@ configuration information.
 </para>
 
 
+<!-- ##### ENUM GdkPixbufAlphaMode ##### -->
+<para>
+
+</para>
+
+@GDK_PIXBUF_ALPHA_BILEVEL: 
+@GDK_PIXBUF_ALPHA_FULL: 
+
 <!-- ##### FUNCTION gdk_regions_subtract ##### -->
 <para>
 Subtracts one region from another.

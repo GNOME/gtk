@@ -68,6 +68,7 @@ Module Interface
 @stop_load: 
 @load_increment: 
 @load_animation: 
+@save: 
 
 <!-- ##### FUNCTION gdk_pixbuf_get_module ##### -->
 <para>

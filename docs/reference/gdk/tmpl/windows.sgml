@@ -86,6 +86,7 @@ Windows
 @GDK_HINT_BASE_SIZE: 
 @GDK_HINT_ASPECT: 
 @GDK_HINT_RESIZE_INC: 
+@GDK_HINT_WIN_GRAVITY: 
 
 <!-- ##### STRUCT GdkGeometry ##### -->
 <para>
@@ -102,6 +103,7 @@ Windows
 @height_inc: 
 @min_aspect: 
 @max_aspect: 
+@win_gravity: 
 
 <!-- ##### FUNCTION gdk_window_new ##### -->
 <para>

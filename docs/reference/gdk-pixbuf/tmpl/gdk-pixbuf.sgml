@@ -18,19 +18,17 @@ Information that describes an image.
 <!-- ##### ENUM GdkColorspace ##### -->
   <para>
     This enumeration defines the color spaces that are supported by
-    the <application>gdk-pixbuf</application> library.  Currently only
-    RGB is supported.
+    the &gdk-pixbuf; library.  Currently only RGB is supported.
   </para>
 
 @GDK_COLORSPACE_RGB: Indicates a red/green/blue additive color space.
 
 <!-- ##### STRUCT GdkPixbuf ##### -->
   <para>
-    This is the main structure in the
-    <application>gdk-pixbuf</application> library.  It is used to
-    represent images.  It contains information about the image's pixel
-    data, its color space, bits per sample, width and height, and the
-    rowstride or number of bytes between rows.
+    This is the main structure in the &gdk-pixbuf; library.  It is
+    used to represent images.  It contains information about the
+    image's pixel data, its color space, bits per sample, width and
+    height, and the rowstride or number of bytes between rows.
   </para>
 
 @parent_instance: 

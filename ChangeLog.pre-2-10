@@ -1,3 +1,22 @@
+2000-10-06  Havoc Pennington  <hp@redhat.com>
+
+	* Makefile.am (SRC_SUBDIRS): contrib subdir
+
+	* gdk/gdkpixbuf.h: Move GdkPixbufAlphaMode to gdk-pixbuf library,
+	so it can be used in Xlib version
+
+	* demos/testpixbuf.c (update_timeout): error checking from 1.0
+	tree
+
+	* gtk/gdk-pixbuf-loader.c (gdk_pixbuf_loader_get_pixbuf): Sync
+	change from 1.0 tree that returns first frame of animation
+	if the loaded file is an animation.
+
+        * contrib: add new directory to hold stuff that comes with GTK+
+	but isn't really part of GTK+ (for now, gdk-pixbuf-xlib)
+	
+	* configure.in: add contrib/*
+
 2000-10-05  Havoc Pennington  <hp@redhat.com>
 
         * demos/testpixbuf-save.c: add pixbuf save test

@@ -196,7 +196,7 @@ gdk_pixbuf__jpeg_image_load (FILE *f)
 	w = cinfo.output_width;
 	h = cinfo.output_height;
 
-	pixels = g_malloc (h * w * 3);
+	pixels = malloc (h * w * 3);
 	if (!pixels) {
 		jpeg_destroy_decompress (&cinfo);
 		return NULL;

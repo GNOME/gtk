@@ -1,0 +1,360 @@
+  <appendix>
+    <title>Porting applications from &Imlib; to &gdk-pixbuf;</title>
+
+    <para>
+      This appendix contains the basic steps needed to port an
+      application that uses the &Imlib; library to use &gdk-pixbuf;
+      instead.
+    </para>
+
+    <note>
+      <para>
+	This appendix refers to version 1 of the &Imlib; library; this
+	discussion is not relevant to Imlib 2.  Also, we discuss the
+	gdk_imlib API instead of the Xlib-based API.
+      </para>
+    </note>
+
+    <!-- Introduction -->
+
+    <sect1>
+      <title>Introduction</title>
+
+      <para>
+	Prior to the GNOME 1.2 platform, the &Imlib; library was the
+	preferred way of loading and rendering images in GNOME
+	applications.  Unfortunately, &Imlib; has important design
+	limitations that make it hard to write efficient and highly
+	modular applications.
+      </para>
+
+      <para>
+	The &gdk-pixbuf; library was designed as a solution to
+	&Imlib;'s shortcomings.  It provides a simple, orthogonal API
+	and convenience functions for the most common operations.  In
+	addition, it supports full transparency information for
+	images, or alpha channel.  More importantly, it has
+	well-defined semantics for memory management through the use
+	of reference counting; &Imlib; has an intractably complex
+	memory management mechanism and cache that will make your head
+	spin.
+      </para>
+    </sect1>
+
+    <!-- Differences between Imlib and gdk-pixbuf -->
+
+    <sect1>
+      <title>Differences between &Imlib; and &gdk-pixbuf;</title>
+
+      <para>
+	Generally, applications that use &Imlib; do not have to be
+	changed extensively to use &gdk-pixbuf;; its simple and
+	flexible API makes things easy.  This section describes the
+	differences between &Imlib; and &gdk-pixbuf;; you should take
+	these into account when modifying your applications to use
+	&gdk-pixbuf;.
+      </para>
+
+      <!-- Initialization -->
+
+      <sect2>
+	<title>Initialization</title>
+
+	<para>
+	  The &gdk-pixbuf; library does not need to be initialized.
+	  However, if you intend to use the rendering functions or
+	  anything else from the <application>GdkRGB</application>
+	  library, you should call <function>gdk_rgb_init()</function>
+	  after calling <function>gtk_init()</function> or
+	  <function>gnome_init()</function> in your program.
+	</para>
+
+	<note>
+	  <para>
+	    In GNOME applications you normally don't need to
+	    initialize &Imlib;, as <function>gnome_init()</function>
+	    calls <function>gdk_imlib_init()</function> automatically.
+	  </para>
+	</note>
+      </sect2>
+
+      <!-- Memory management -->
+
+      <sect2>
+	<title>Memory management</title>
+
+	<para>
+	  The &gdk-pixbuf; library provides a simple, well-defined
+	  memory management mechanism for images in the form of
+	  reference counting.  This makes it very convenient to use
+	  for large-scale applications that need to share images
+	  between different parts of the program.  In stark contrast,
+	  &Imlib; has a terribly complex mechanism of an image and
+	  pixmap cache which makes it very hard for applications to
+	  share image structures between different parts of the
+	  program.  Unfortunately this mechanism makes things very
+	  prone to memory leaks and tricky bugs.
+	</para>
+
+	<para>
+	  The basic principle in &gdk-pixbuf; is that when you obtain
+	  a new <link linkend="GdkPixbuf">GdkPixbuf</link> structure,
+	  it is created with an initial reference count of 1.  When
+	  another part of the program wants to keep a reference to the
+	  pixbuf, it should call <link
+	  linkend="gdk-pixbuf-ref">gdk_pixbuf_ref()</link>; this will
+	  increase the reference count by 1.  When some part of the
+	  program does not need to keep a reference to a pixbuf
+	  anymore and wants to release the pixbuf, it should call
+	  <link linkend="gdk-pixbuf-unref">gdk_pixbuf_unref()</link>;
+	  this will decrease the reference count by 1.  When the
+	  reference count drops to zero, the pixbuf gets destroyed or
+	  <emphasis>finalized</emphasis> and its memory is freed.
+	</para>
+
+	<para>
+	  For applications that need to implement a cache of loaded
+	  images, &gdk-pixbuf; provides a way to hook to the last
+	  unreference operation of a pixbuf; instead of finalizing the
+	  pixbuf, the user-installed hook can decide to keep it around
+	  in a cache instead.
+	</para>
+
+	<para>
+	  Finally, &gdk-pixbuf; does not provide a cache of rendered
+	  pixmaps.  This is unnecessary for most applications, since
+	  the scaling and rendering functions are quite fast and
+	  applications may need to use subtly different values each
+	  time they call these functions, for example, to take into
+	  account dithering and zooming offsets.
+	</para>
+
+	<para>
+	  Most applications will simply need to call
+	  <function>gdk_pixbuf_ref()</function> when they want to keep
+	  an extra reference to a pixbuf, and then
+	  <function>gdk_pixbuf_unref()</function> when they are done
+	  with it.
+	</para>
+      </sect2>
+
+      <!-- The Rendering Process -->
+
+      <sect2>
+	<title>The Rendering Process</title>
+
+	<para>
+	  The &gdk-pixbuf; library has the policy of always rendering
+	  pixbufs to Gdk drawables you provide; it will not create
+	  them for you.  This is in general more flexible than
+	  &Imlib;'s policy of always creating a pixmap and making you
+	  use that instead.
+	</para>
+
+	<para>
+	  The disadvantage of always having a pixmap created for you
+	  is that it wastes memory in the X server if you intend to
+	  copy that rendered data onto another drawable, for example,
+	  the final destination window or a temporary pixmap for
+	  drawing.  This is the most common case, unfortunately, so
+	  the &Imlib; policy introduces unnecessary copying.
+	</para>
+
+	<para>
+	  Also, &Imlib; can only render pixmaps that are the whole
+	  size of the source image; you cannot render just a subset
+	  region of the image.  This is inconvenient for applications
+	  that need to render small portions at a time, such as
+	  applications that do scrolling.  Since the whole image must
+	  be rendered at a time, this can lead to performance and
+	  memory usage problems.
+	</para>
+
+	<para>
+	  The &gdk-pixbuf; library lets you render any rectangular
+	  region from an image onto any drawable that you provide.
+	  This lets the application have fine control the way images
+	  are rendered.
+	</para>
+      </sect2>
+    </sect1>
+
+    <!-- Converting Applications to gdk-pixbuf -->
+
+    <sect1>
+      <title>Converting Applications to &gdk-pixbuf;</title>
+
+      <para>
+	This sections describes the actual changes you need to make in
+	an &Imlib; program to make it use &gdk-pixbuf; instead.
+      </para>
+
+      <!-- Image loading and creation -->
+
+      <sect2>
+	<title>Image loading and creation</title>
+
+	<para>
+	  The &gdk-pixbuf; library can load image files synchronously
+	  (i.e. with a single function call), create images from RGB
+	  data in memory, and as a convenience, it can also create
+	  images from inline XPM data.
+	</para>
+
+	<para>
+	  To load an image file in a single function call, simply use
+	  <function>gdk_pixbuf_new_from_file()</function>.  Note that
+	  this will make the program block until the whole file has
+	  been read.  This function effectively replaces
+	  <function>gdk_imlib_load_image()</function>.
+	</para>
+
+	<para>
+	  If you have RGB data in memory, you can use
+	  <function>gdk_pixbuf_new_from_data()</function> to create a
+	  pixbuf out of it; this is a replacement for
+	  <function>gdk_imlib_create_image_from_data()</function>.
+	  &gdk-pixbuf; does not copy the image data; it is up to you
+	  to define the ownership policy by providing a destroy
+	  notification function that will be called when the image
+	  data needs to be freed.  The function you provide can then
+	  free the data or do something else, as appropriate.
+	</para>
+
+	<para>
+	  As a convenience, you can use the
+	  <function>gdk_pixbuf_new_from_xpm_data()</function> function
+	  to create a pixbuf out of inline XPM data that was compiled
+	  into your C program.  This is a replacement for
+	  <function>gdk_imlib_create_image_from_xpm_data()</function>.
+	</para>
+
+	<para>
+	  After you have created a pixbuf, you can manipulate it in
+	  any way you please and then finally call
+	  <function>gdk_pixbuf_unref()</function> when you are done
+	  with it.  This can be thought of as a replacement for
+	  <function>gdk_imlib_destroy_image()</function> but with much
+	  cleaner semantics.
+	</para>
+      </sect2>
+
+      <!-- Rendering Images -->
+
+      <sect2>
+	<title>Rendering Images</title>
+
+	<para>
+	  Applications that use &Imlib; must first call
+	  <function>gdk_imlib_render()</function> to render the whole
+	  image data onto a pixmap that &Imlib; creates.  Then they
+	  must copy that pixmap's data into the final destination for
+	  the image.
+	</para>
+
+	<para>
+	  In contrast, &gdk-pixbuf; provides convenience functions to
+	  render arbitrary rectangular regions of an image onto a
+	  drawable that your application provides.  You can use
+	  <function>gdk_pixbuf_render_to_drawable()</function> or
+	  <function>gdk_pixbuf_render_to_drawable_alpha()</function>
+	  to do this; having your application provide the destination
+	  drawable and specify an arbitrary region means your
+	  application has complete control over the way images are
+	  rendered.
+	</para>
+
+	<para>
+	  As a convenience, &gdk-pixbuf; also provides the
+	  <function>gdk_pixbuf_render_pixmap_and_mask()</function>
+	  function; this will create new pixmap and mask drawables for
+	  a whole pixbuf and render the image data onto them.  Only
+	  trivially simple applications should find a use for this
+	  function, since usually you want finer control of how things
+	  are rendered.
+	</para>
+      </sect2>
+
+      <!-- Scaling Images -->
+
+      <sect2>
+	<title>Scaling Images</title>
+
+	<para>
+	  &Imlib; lets you render scaled image data at the time you
+	  call <function>gdk_imlib_render()</function>.  Again, this
+	  unfortunately scales and renders the whole image onto a new
+	  pixmap.
+	</para>
+
+	<para>
+	  &gdk-pixbuf; provides a number of functions that do scaling
+	  of arbitrary regions of a source pixbuf onto a destination
+	  one.  These functions can also perform compositing
+	  operations against the data in the destination pixbuf or
+	  against a solid color or a colored checkerboard.
+	  <footnote>
+	    <para>
+	      You can use a colored checkerboard as the background for
+	      compositing when you want to provide a visual indication
+	      that the image has partially opaque areas.  This is
+	      normally used in image editing and viewing programs.
+	    </para>
+
+	    <para>
+	      Compositing against a single solid color is actually a
+	      special case of a checkerboard; it simply uses checks of
+	      the same color.
+	    </para>
+	  </footnote>
+	</para>
+
+	<para>
+	  Very simple applications may find it sufficient to use
+	  <function>gdk_pixbuf_scale_simple()</function> or
+	  <function>gdk_pixbuf_composite_color_simple()</function>.
+	  These functions scale the whole source image at a time and
+	  create a new pixbuf with the result.
+	</para>
+
+	<para>
+	  More sophisticated applications will need to use
+	  <function>gdk_pixbuf_scale()</function>,
+	  <function>gdk_pixbuf_composite()</function>, or
+	  <function>gdk_pixbuf_composite_color()</function> instead.
+	  These functions let you scale and composite an arbitrary
+	  region of the source pixbuf onto a destination pixbuf that
+	  you provide.
+	</para>
+      </sect2>
+
+      <!-- Getting Image Data from a Drawable -->
+
+      <sect2>
+	<title>Getting Image Data from a Drawable</title>
+
+	<para>
+	  &Imlib; lets you create an image by fetching a drawable's
+	  contents from the X server and converting those into RGB
+	  data.  This is done with the
+	  <function>gdk_imlib_create_image_from_drawable()</function>
+	  function.
+	</para>
+
+	<para>
+	  &gdk-pixbuf; provides the
+	  <function>gdk_pixbuf_get_from_drawable()</function> function
+	  instead.  It lets you specify a destination pixbuf instead
+	  of always creating a new one for you.
+	</para>
+      </sect2>
+    </sect1>
+  </appendix>
+
+<!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("gdk-pixbuf.sgml" "book" "book" "")
+End:
+-->
+

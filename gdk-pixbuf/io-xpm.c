@@ -28,6 +28,7 @@
 #include <string.h>
 #include <glib.h>
 #include "gdk-pixbuf-private.h"
+#include "gdk-pixbuf-io.h"
 
 
 
@@ -977,7 +978,8 @@ xpm_seek_string (FILE *infile, const gchar *str, gint skip_comments)
 	char instr[1024];
 
 	while (!feof (infile)) {
-		fscanf (infile, "%1023s", instr);
+		if (fscanf (infile, "%1023s", instr) < 0)
+                        return FALSE;
 		if (skip_comments == TRUE && strcmp (instr, "/*") == 0) {
 			fscanf (infile, "%1023s", instr);
 			while (!feof (infile) && strcmp (instr, "*/") != 0)
@@ -1372,4 +1374,98 @@ gdk_pixbuf__xpm_image_load_xpm_data (const gchar **data)
 	pixbuf = pixbuf_create_from_xpm (mem_buffer, &h);
         
 	return pixbuf;
+}
+
+/* Progressive loader */
+typedef struct _XPMContext XPMContext;
+struct _XPMContext
+{
+       ModulePreparedNotifyFunc prepare_func;
+       ModuleUpdatedNotifyFunc update_func;
+       gpointer user_data;
+
+       gchar *tempname;
+       FILE *file;
+       gboolean all_okay;
+};
+
+/*
+ * FIXME xpm loading progressively is not properly implemented.
+ * Instead we will buffer to a file then load that file when done.
+ * This is very broken but it should be relayively simple to fix
+ * in the future.
+ */
+gpointer
+gdk_pixbuf__xpm_image_begin_load (ModulePreparedNotifyFunc prepare_func,
+                                  ModuleUpdatedNotifyFunc update_func,
+                                  ModuleFrameDoneNotifyFunc frame_done_func,
+                                  ModuleAnimationDoneNotifyFunc anim_done_func,
+                                  gpointer user_data)
+{
+       XPMContext *context;
+       gint fd;
+
+       g_warning ("load start");
+       context = g_new (XPMContext, 1);
+       context->prepare_func = prepare_func;
+       context->update_func = update_func;
+       context->user_data = user_data;
+       context->all_okay = TRUE;
+       context->tempname = g_strdup ("/tmp/gdkpixbuf-xpm-tmp.XXXXXX");
+       fd = mkstemp (context->tempname);
+       if (fd < 0) {
+               g_free (context->tempname);
+               g_free (context);
+               return NULL;
+       }
+
+       context->file = fdopen (fd, "w+");
+       if (context->file == NULL) {
+               g_free (context->tempname);
+               g_free (context);
+               return NULL;
+       }
+
+       return context;
+}
+
+void
+gdk_pixbuf__xpm_image_stop_load (gpointer data)
+{
+       XPMContext *context = (XPMContext*) data;
+       GdkPixbuf *pixbuf;
+
+       g_return_if_fail (data != NULL);
+       g_warning ("stopped loading");
+
+       fflush (context->file);
+       rewind (context->file);
+       if (context->all_okay) {
+               pixbuf = gdk_pixbuf__xpm_image_load (context->file);
+
+               (* context->prepare_func) (pixbuf, context->user_data);
+               (* context->update_func) (pixbuf, 0, 0, pixbuf->width, pixbuf->height, context->user_data);
+               gdk_pixbuf_unref (pixbuf);
+       }
+
+       fclose (context->file);
+       unlink (context->tempname);
+       g_free (context->tempname);
+       g_free ((XPMContext *) context);
+}
+
+gboolean
+gdk_pixbuf__xpm_image_load_increment (gpointer data, guchar *buf, guint size)
+{
+       XPMContext *context = (XPMContext *) data;
+
+       g_return_val_if_fail (data != NULL, FALSE);
+       g_warning ("load increment");
+
+       if (fwrite (buf, sizeof (guchar), size, context->file) != size) {
+               context->all_okay = FALSE;
+               return FALSE;
+       }
+
+       return TRUE;
 }

@@ -1,3 +1,14 @@
+2000-10-06  Havoc Pennington  <hp@redhat.com>
+
+        * gdk-pixbuf/*.sgml, gdk-pixbuf/tmpl/*.sgml: copy in from 1.0
+	
+	* gdk-pixbuf/gdk-pixbuf-sections.txt: add Xlib sections from 1.0
+	tree
+
+	* gdk-pixbuf/Makefile.am: add stuff from 1.0 tree
+
+	* gdk-pixbuf/compiling.sgml: copy from 1.0 tree
+
 2000-09-26  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/tmpl/gtkrc.sgml: Document stock icon stuff

@@ -1,23 +1,28 @@
-<!doctype book PUBLIC "-//Davenport//DTD DocBook V3.0//EN" [
-<!entity gdk-pixbuf-Initialization-and-Versions SYSTEM "sgml/initialization_versions.sgml">
+<!doctype book PUBLIC "-//Davenport//DTD DocBook V3.0//EN"[
+
 <!entity gdk-pixbuf-gdk-pixbuf SYSTEM "sgml/gdk-pixbuf.sgml">
 <!entity gdk-pixbuf-refcounting SYSTEM "sgml/refcounting.sgml">
 <!entity gdk-pixbuf-file-loading SYSTEM "sgml/file-loading.sgml">
 <!entity gdk-pixbuf-creating SYSTEM "sgml/creating.sgml">
-<!entity gdk-pixbuf-rendering SYSTEM "sgml/rendering.sgml">
 <!entity gdk-pixbuf-scaling SYSTEM "sgml/scaling.sgml">
-<!entity gdk-pixbuf-from-drawables SYSTEM "sgml/from-drawables.sgml">
 <!entity gdk-pixbuf-util SYSTEM "sgml/util.sgml">
 <!entity gdk-pixbuf-animation SYSTEM "sgml/animation.sgml">
-<!entity gdk-pixbuf-Module-Interface SYSTEM "sgml/module_interface.sgml">
 <!entity GdkPixbufLoader SYSTEM "sgml/gdk-pixbuf-loader.sgml">
-<!entity GnomeCanvasPixbuf SYSTEM "sgml/gnome-canvas-pixbuf.sgml">
+<!entity gdk-pixbuf-gdk-pixbuf-xlib-init SYSTEM "sgml/gdk-pixbuf-xlib-init.sgml">
+<!entity gdk-pixbuf-gdk-pixbuf-xlib-rendering SYSTEM "sgml/gdk-pixbuf-xlib-rendering.sgml">
+<!entity gdk-pixbuf-gdk-pixbuf-xlib-from-drawables SYSTEM "sgml/gdk-pixbuf-xlib-from-drawables.sgml">
+<!entity gdk-pixbuf-gdk-pixbuf-xlib-rgb SYSTEM "sgml/gdk-pixbuf-xlib-rgb.sgml">
+
+<!entity Porting-From-Imlib SYSTEM "porting-from-imlib.sgml">
 <!entity Compiling SYSTEM "compiling.sgml">
+
+<!entity gdk-pixbuf "<application>gdk-pixbuf</application>">
+<!entity Imlib "<application>Imlib</application>">
 ]>
 
 <book id="index">
   <bookinfo>
-    <title>The <application>gdk-pixbuf</application> Library</title>
+    <title>The &gdk-pixbuf; Library</title>
 
     <authorgroup>
       <author>
@@ -32,24 +37,53 @@
     </authorgroup>
 
     <copyright>
-      <year>1999</year>
+      <year>2000</year>
       <holder>The Free Software Foundation</holder>
     </copyright>
+
+    <legalnotice>
+      <para>
+	Permission is granted to copy, distribute and/or modify this
+	document under the terms of the <citetitle>GNU Free
+	Documentation License</citetitle>, Version 1.1 or any later
+	version published by the Free Software Foundation with no
+	Invariant Sections, no Front-Cover Texts, and no Back-Cover
+	Texts. You may obtain a copy of the <citetitle>GNU Free
+	Documentation License</citetitle> from the Free Software
+	Foundation by visiting <ulink type="http"
+	url="http://www.fsf.org">their Web site</ulink> or by writing
+	to:
+
+	<address>
+	  The Free Software Foundation, Inc.,
+	  <street>59 Temple Place</street> - Suite 330,
+	  <city>Boston</city>, <state>MA</state> <postcode>02111-1307</postcode>,
+	  <country>USA</country>
+	</address>
+      </para>
+
+      <para>
+	Many of the names used by companies to distinguish their
+	products and services are claimed as trademarks. Where those
+	names appear in any GNOME documentation, and those trademarks
+	are made aware to the members of the GNOME Documentation
+	Project, the names have been printed in caps or initial caps.
+      </para>
+    </legalnotice>
   </bookinfo>
 
-  <reference id="api">
+  <reference>
     <title>API Reference</title>
 
     <partintro>
       <para>
 	This part presents the class and function reference for the
-	<application>gdk-pixbuf</application> library.  Classes are
-	described together with their methods; individual functions
-	are grouped by functional group.
+	&gdk-pixbuf; library.  Classes are described together with
+	their methods; individual functions are grouped by functional
+	group.
       </para>
     </partintro>
 
-    &gdk-pixbuf-Initialization-and-Versions;
     &gdk-pixbuf-gdk-pixbuf;
     &gdk-pixbuf-refcounting;
     &gdk-pixbuf-file-loading;
@@ -57,15 +91,51 @@
     &gdk-pixbuf-scaling;
     &gdk-pixbuf-util;
     &gdk-pixbuf-animation;
+
     &GdkPixbufLoader;
-    &GnomeCanvasPixbuf;
+
+    &gdk-pixbuf-gdk-pixbuf-xlib-init;
+    &gdk-pixbuf-gdk-pixbuf-xlib-rendering;
+    &gdk-pixbuf-gdk-pixbuf-xlib-from-drawables;
+    &gdk-pixbuf-gdk-pixbuf-xlib-rgb;
   </reference>
 
-  <reference id="internals">
-    <title>Internals</title>
-    &gdk-pixbuf-Module-Interface;
-  </reference>
-
+  &Porting-From-Imlib;
   &Compiling;
 
+  <!-- License -->
+
+  <appendix id="license">
+    <title>License</title>
+	
+    <para>
+      This library is free software; you can redistribute it and/or
+      modify it under the terms of the <citetitle>GNU Library General
+      Public License</citetitle> as published by the Free Software
+      Foundation; either version 2 of the License, or (at your option)
+      any later version.
+    </para>
+
+    <para>
+      This library is distributed in the hope that it will be useful,
+      but WITHOUT ANY WARRANTY; without even the implied warranty of
+      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+      <citetitle>GNU Library General Public License</citetitle> for
+      more details.
+    </para>
+
+    <para>
+      You may obtain a copy of the <citetitle>GNU Library General
+      Public License</citetitle> from the Free Software Foundation by
+      visiting <ulink type="http" url="http://www.fsf.org">their Web
+      site</ulink> or by writing to:
+
+      <address>
+	Free Software Foundation, Inc.
+	<street>59 Temple Place</street> - Suite 330
+	<city>Boston</city>, <state>MA</state> <postcode>02111-1307</postcode>
+	<country>USA</country>
+      </address>
+    </para>
+  </appendix>
 </book>

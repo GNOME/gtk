@@ -25,9 +25,9 @@
 <!entity gdk-Cursors SYSTEM "sgml/cursors.sgml">
 <!entity gdk-Input SYSTEM "sgml/input.sgml">
 <!entity gdk-Drag-and-Drop SYSTEM "sgml/dnd.sgml">
-<!entity gdk-X-Window-System-Interaction SYSTEM
-"sgml/x_interaction.sgml">
+<!entity gdk-X-Window-System-Interaction SYSTEM "sgml/x_interaction.sgml">
 ]>
+
 <book id="index">
   <bookinfo>
     <title>GDK Reference Manual</title>

@@ -36,6 +36,13 @@ extern "C" {
 
 
 
+/* Alpha compositing mode */
+typedef enum
+{
+  GDK_PIXBUF_ALPHA_BILEVEL,
+  GDK_PIXBUF_ALPHA_FULL
+} GdkPixbufAlphaMode;
+
 /* Color spaces; right now only RGB is supported.
  * Note that these values are encoded in inline pixbufs
  * as ints, so don't reorder them

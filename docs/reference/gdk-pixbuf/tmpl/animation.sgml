@@ -6,12 +6,11 @@ Animations as multi-frame structures.
 
 <!-- ##### SECTION Long_Description ##### -->
   <para>
-    The <application>gdk-pixbuf</application> library provides a
-    simple mechanism to load and represent animations, primarily
-    animated GIF files.  Animations are represented as lists of
-    #GdkPixbufFrame structures.  Each frame structure contains a
-    #GdkPixbuf structure and information about the frame's overlay
-    mode and duration.
+    The &gdk-pixbuf; library provides a simple mechanism to load and
+    represent animations, primarily animated GIF files.  Animations
+    are represented as lists of #GdkPixbufFrame structures.  Each
+    frame structure contains a #GdkPixbuf structure and information
+    about the frame's overlay mode and duration.
   </para>
 
 <!-- ##### SECTION See_Also ##### -->

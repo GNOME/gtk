@@ -1,25 +1,22 @@
   <appendix id="compiling">
-    <title>Compiling the <application>gdk-pixbuf</application>
-    library</title>
+    <title>Compiling the &gdk-pixbuf; library</title>
 
     <para>
       This appendix describes the special options you can use while
-      compiling the <application>gdk-pixbuf</application> library.
+      compiling the &gdk-pixbuf; library.
     </para>
 
     <sect1 id="building">
       <title>Building the Library</title>
       <para>
-	The <application>gdk-pixbuf</application> library uses the
-	standard GNU build system, using
-	<application>autoconf</application> for package configuration
-	and resolving portability issues,
+	The &gdk-pixbuf; library uses the standard GNU build system,
+	using <application>autoconf</application> for package
+	configuration and resolving portability issues,
 	<application>automake</application> for building makefiles
 	that comply with the GNU Coding Standards, and
 	<application>libtool</application> for building shared
 	libraries on multiple platforms.  The normal sequence for
-	compiling and installing the
-	<application>gdk-pixbuf</application> library is thus:
+	compiling and installing the &gdk-pixbuf; library is thus:
 
 	<literallayout>
 	  <userinput>./configure</userinput>
@@ -43,9 +40,8 @@
 
       <para>
 	In addition to the normal options, the
-	<command>configure</command> script in the
-	<application>gdk-pixbuf</application> library supports these
-	additional arguments:
+	<command>configure</command> script in the &gdk-pixbuf;
+	library supports these additional arguments:
 
 	<cmdsynopsis>
 	  <command>configure</command>
@@ -67,15 +63,13 @@
 	  <systemitem>--enable-modules</systemitem></title>
 
 	<para>
-	  Normally <application>gdk-pixbuf</application> will try to
-	  build the image file format loaders as little shared
-	  libraries that are loaded on demand.  The
-	  <systemitem>--disable-modules</systemitem> argument
-	  indicates that they should all be built statically into the
-	  <application>gdk-pixbuf</application> library instead.  This
-	  is useful for people who need to produce statically-linked
-	  binaries.  If neither
-	  <systemitem>--disable-modules</systemitem> nor
+	  Normally &gdk-pixbuf; will try to build the image file
+	  format loaders as little shared libraries that are loaded on
+	  demand.  The <systemitem>--disable-modules</systemitem>
+	  argument indicates that they should all be built statically
+	  into the &gdk-pixbuf; library instead.  This is useful for
+	  people who need to produce statically-linked binaries.  If
+	  neither <systemitem>--disable-modules</systemitem> nor
 	  <systemitem>--enable-modules</systemitem> is specified, then
 	  the <command>configure</command> script will try to
 	  auto-detect whether shared modules work on your system.
@@ -91,11 +85,11 @@
 	  to auto-detect whether the
 	  <application>gtk-doc</application> package is installed.  If
 	  it is, then it will use it to extract and build the
-	  documentation for the <application>gdk-pixbuf</application>
-	  library.  These options can be used to explicitly control
-	  whether gtk-doc should be used or not.  If it is not used,
-	  the distributed, pre-generated HTML files will be installed
-	  instead of building them on your machine.
+	  documentation for the &gdk-pixbuf; library.  These options
+	  can be used to explicitly control whether gtk-doc should be
+	  used or not.  If it is not used, the distributed,
+	  pre-generated HTML files will be installed instead of
+	  building them on your machine.
 	</para>
       </formalpara>
     </sect1>

@@ -6,12 +6,11 @@ Loading a pixbuf from a file.
 
 <!-- ##### SECTION Long_Description ##### -->
   <para>
-    The <application>gdk-pixbuf</application> library provides a
-    simple mechanism for loading an image from a file in synchronous
-    fashion.  This means that the library takes control of the
-    application while the file is being loaded; from the user's point
-    of view, the application will block until the image is done
-    loading.
+    The &gdk-pixbuf; library provides a simple mechanism for loading
+    an image from a file in synchronous fashion.  This means that the
+    library takes control of the application while the file is being
+    loaded; from the user's point of view, the application will block
+    until the image is done loading.
   </para>
 
   <para>

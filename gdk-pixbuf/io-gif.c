@@ -537,7 +537,7 @@ lzw_read_byte (GifContext *context)
 			unsigned char buf[260];
 
 			/*g_error (" DID WE EVER EVER GET HERE\n");*/
-			g_error ("Unhandled Case.  If you have an image that causes this, let me <jrb@redhat.com> know.\n");
+			g_warning ("Unhandled Case.  If you have an image that causes this, let me <jrb@redhat.com> know.\n");
 
 			if (ZeroDataBlock) {
 				return -2;
@@ -982,7 +982,7 @@ gif_get_next_step (GifContext *context)
 			/* hmm.  Not 100% sure what to do about this.  Should
 			 * i try to return a blank image instead? */
 			context->state = GIF_DONE;
-			return -2;
+			return 0;
 		}
 
 		if (c == '!') {

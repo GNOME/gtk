@@ -14,14 +14,6 @@ Pixbufs
 
 </para>
 
-<!-- ##### ENUM GdkPixbufAlphaMode ##### -->
-<para>
-
-</para>
-
-@GDK_PIXBUF_ALPHA_BILEVEL: 
-@GDK_PIXBUF_ALPHA_FULL: 
-
 <!-- ##### FUNCTION gdk_pixbuf_render_threshold_alpha ##### -->
 <para>
 

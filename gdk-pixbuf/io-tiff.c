@@ -171,12 +171,14 @@ gdk_pixbuf__tiff_image_begin_load (ModulePreparedNotifyFunc prepare_func,
 	fd = open (context->tempname, O_RDWR);
 #endif
 	if (fd < 0) {
+                g_free (context->tempname);
 		g_free (context);
 		return NULL;
 	}
 
 	context->file = fdopen (fd, "w");
 	if (context->file == NULL) {
+                g_free (context->tempname);
 		g_free (context);
 		return NULL;
 	}
