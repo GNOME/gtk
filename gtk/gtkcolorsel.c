@@ -145,6 +145,7 @@ struct _ColorSelectionPrivate
 static void gtk_color_selection_init		(GtkColorSelection	 *colorsel);
 static void gtk_color_selection_class_init	(GtkColorSelectionClass	 *klass);
 static void gtk_color_selection_destroy		(GtkObject		 *object);
+static void gtk_color_selection_finalize        (GObject		 *object);
 static void update_color			(GtkColorSelection	 *colorsel);
 static void gtk_color_selection_set_property    (GObject                 *object,
 					         guint                    prop_id,
@@ -1711,7 +1712,8 @@ gtk_color_selection_class_init (GtkColorSelectionClass *klass)
   parent_class = gtk_type_class (GTK_TYPE_VBOX);
   
   object_class->destroy = gtk_color_selection_destroy;
-
+  gobject_class->finalize = gtk_color_selection_finalize;
+  
   gobject_class->set_property = gtk_color_selection_set_property;
   gobject_class->get_property = gtk_color_selection_get_property;
 
@@ -1952,6 +1954,20 @@ gtk_color_selection_destroy (GtkObject *object)
     }
   
   GTK_OBJECT_CLASS (parent_class)->destroy (object);
+}
+
+static void
+gtk_color_selection_finalize (GObject *object)
+{
+  GtkColorSelection *cselection = GTK_COLOR_SELECTION (object);
+  
+  if (cselection->private_data)
+    {
+      g_free (cselection->private_data);
+      cselection->private_data = NULL;
+    }
+  
+  G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 static void

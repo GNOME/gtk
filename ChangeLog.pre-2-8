@@ -1,3 +1,8 @@
+Mon Oct  7 18:50:46 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcolorsel.c (gtk_color_selection_finalize):
+	Free the private data. (#84903, Matthias Clasen)
+
 Mon Oct  7 18:21:39 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtk[hv]paned.c gtk/gtkpaned.c: Allow the slider
