@@ -5,23 +5,24 @@
 -->
 
 <article>
-<title>GTK Tutorial
-<author>Ian Main <tt><htmlurl url="mailto:imain@gtk.org"
-			      name="&lt;imain@gtk.org&gt;"></tt>,
+<title>GTK v1.1 Tutorial
+<author>
 Tony Gale <tt><htmlurl url="mailto:gale@gtk.org"
 			      name="&lt;gale@gtk.org&gt;"></tt>
-<date>September 2nd, 1998
+Ian Main <tt><htmlurl url="mailto:imain@gtk.org"
+			      name="&lt;imain@gtk.org&gt;"></tt>,
+<date>December 6th, 1998
 
 <!-- ***************************************************************** -->
 <sect>Introduction
 <!-- ***************************************************************** -->
 <p>
 GTK (GIMP Toolkit) was originally developed as a toolkit for the GIMP
-(General Image Manipulation Program).  GTK is built on top of GDK (GIMP
-Drawing Kit) which is basically a wrapper around the Xlib functions.  It's
-called the GIMP toolkit because it was originally written for developing
-the GIMP, but has now been used in several free software projects.  The
-authors are
+(General Image Manipulation Program).  GTK is built on top of GDK
+(GIMP Drawing Kit) which is basically a wrapper around the Xlib
+functions.  It's called the GIMP toolkit because it was originally
+written for developing the GIMP, but has now been used in several free
+software projects.  The authors are:
 <itemize>
 <item> Peter Mattis   <tt><htmlurl url="mailto:petm@xcf.berkeley.edu"
 			   name="petm@xcf.berkeley.edu"></tt>
@@ -31,73 +32,86 @@ authors are
 			   name="jmacd@xcf.berkeley.edu"></tt>
 </itemize>
 
-GTK is essentially an object oriented application programmers interface (API).  
-Although written completely in
-C, it is implemented using the idea of classes and callback functions
-(pointers to functions).
+GTK is essentially an object oriented application programmers
+interface (API).  Although written completely in C, it is implemented
+using the idea of classes and callback functions (pointers to
+functions).
 
 There is also a third component called glib which contains a few
-replacements for some standard calls, as well as some additional functions
-for handling linked lists etc.  The replacement functions are used to 
-increase GTK's portability, as some of the functions implemented 
-here are not available or are nonstandard on other unicies such as 
-g_strerror().   Some also contain enhancements to the libc versions, such as
-g_malloc that has enhanced debugging utilities.
+replacements for some standard calls, as well as some additional
+functions for handling linked lists etc.  The replacement functions
+are used to increase GTK's portability, as some of the functions
+implemented here are not available or are nonstandard on other unixes
+such as g_strerror().  Some also contain enhancements to the libc
+versions, such as g_malloc that has enhanced debugging utilities.
 
-This tutorial is an attempt to document as much as possible of GTK, it is by 
-no means complete.  This
-tutorial assumes a good understanding of C, and how to create C programs.
-It would be a great benefit for the reader to have previous X programming
-experience, but it shouldn't be necessary.  If you are learning GTK as your
-first widget set, please comment on how you found this tutorial, and what
-you had trouble with.
-Note that there is also a C++ API for GTK (GTK--) in the works, so if you
-prefer to use C++, you should look into this instead.  There's also an
-Objective C wrapper, and Guile bindings available, but I don't follow these.
+This tutorial is an attempt to document as much as possible of GTK, it
+is by no means complete.  This tutorial assumes a good understanding
+of C, and how to create C programs.  It would be a great benefit for
+the reader to have previous X programming experience, but it shouldn't
+be necessary.  If you are learning GTK as your first widget set,
+please comment on how you found this tutorial, and what you had
+trouble with.  Note that there is also a C++ API for GTK (GTK--) in
+the works, so if you prefer to use C++, you should look into this
+instead.  There's also an Objective C wrapper, and Guile bindings
+available, but I don't follow these.
 
-I would very much like to hear of any problems you have learning GTK from this
-document, and would appreciate input as to how it may be improved.
+I would very much like to hear of any problems you have learning GTK
+from this document, and would appreciate input as to how it may be
+improved. Please see the section on <ref id="sec_Contributing"
+name="Contributing"> for further information.
 
 <!-- ***************************************************************** -->
 <sect>Getting Started
 <!-- ***************************************************************** -->
 
 <p>
-The first thing to do of course, is download the GTK source and install
-it.  You can always get the latest version from ftp.gtk.org in /pub/gtk.
-You can also view other sources of GTK information on http://www.gtk.org/
-<htmlurl url="http://www.gtk.org/" name="http://www.gtk.org/">.
-GTK uses GNU autoconf for
-configuration.  Once untar'd, type ./configure --help to see a list of options.
+The first thing to do of course, is download the GTK source and
+install it. You can always get the latest version from ftp.gtk.org in
+/pub/gtk. You can also view other sources of GTK information on
+http://www.gtk.org/ <htmlurl url="http://www.gtk.org/"
+name="http://www.gtk.org/">. GTK uses GNU autoconf for configuration.
+Once untar'd, type ./configure --help to see a list of options.
 
-Th GTK source distribution also contains the complete source to all of the
-examples used in this tutorial, along with Makefiles to aid compilation.
+Th GTK source distribution also contains the complete source to all of
+the examples used in this tutorial, along with Makefiles to aid
+compilation.
 
-To begin our introduction to GTK, we'll start with the simplest program 
-possible.  This program will
-create a 200x200 pixel window and has no way of exiting except to be
-killed using the shell.
+To begin our introduction to GTK, we'll start with the simplest
+program possible. This program will create a 200x200 pixel window and
+has no way of exiting except to be killed using the shell.
 
 <tscreen><verb>
+/* example-start base base.c */
+
 #include <gtk/gtk.h>
 
-int main (int argc, char *argv[])
+int main( int   argc,
+          char *argv[] )
 {
     GtkWidget *window;
     
     gtk_init (&amp;argc, &amp;argv);
     
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    gtk_widget_show (window);
+    gtk_widget_show  (window);
     
     gtk_main ();
     
-    return 0;
+    return(0);
 }
+/* example-end */
 </verb></tscreen>
 
+You can compile the above program with gcc using:
+<tscreen><verb>
+gcc base.c -o base `gtk-config --cflags --libs`
+</verb></tscreen>
+
+The meaning of the unusual compilation options is explained below.
+
 All programs will of course include gtk/gtk.h which declares the
-variables, functions, structures etc. that will be used in your GTK 
+variables, functions, structures etc. that will be used in your GTK
 application.
 
 The next line:
@@ -107,26 +121,29 @@ gtk_init (&amp;argc, &amp;argv);
 </verb></tscreen>
 
 calls the function gtk_init(gint *argc, gchar ***argv) which will be
-called in all GTK applications.  This sets up a few things for us such
+called in all GTK applications. This sets up a few things for us such
 as the default visual and color map and then proceeds to call
-gdk_init(gint *argc, gchar ***argv).  This function initializes the
+gdk_init(gint *argc, gchar ***argv). This function initializes the
 library for use, sets up default signal handlers, and checks the
-arguments passed to your application on the command line, looking for one
-of the following:
+arguments passed to your application on the command line, looking for
+one of the following:
 
 <itemize>
+<item> <tt/--gtk-module/
+<item> <tt/--g-fatal-warnings/
+<item> <tt/--gtk-debug/
+<item> <tt/--gtk-no-debug/
+<item> <tt/--gdk-debug/
+<item> <tt/--gdk-no-debug/
 <item> <tt/--display/
-<item> <tt/--debug-level/
-<item> <tt/--no-xshm/
 <item> <tt/--sync/
-<item> <tt/--show-events/
-<item> <tt/--no-show-events/
+<item> <tt/--no-xshm/
 <item> <tt/--name/
 <item> <tt/--class/
 </itemize>
 
-It removes these from the argument list, leaving anything it does
-not recognize for your application to parse or ignore. This creates a set
+It removes these from the argument list, leaving anything it does not
+recognize for your application to parse or ignore. This creates a set
 of standard arguments accepted by all GTK applications.
 
 The next two lines of code create and display a window.
@@ -138,98 +155,104 @@ The next two lines of code create and display a window.
 
 The GTK_WINDOW_TOPLEVEL argument specifies that we want the window to
 undergo window manager decoration and placement. Rather than create a
-window of 0x0 size, a window without children is set to 200x200 by default
-so you can still manipulate it.
+window of 0x0 size, a window without children is set to 200x200 by
+default so you can still manipulate it.
 
-The gtk_widget_show() function lets GTK know that we are done setting the
-attributes of this widget, and that it can display it.
+The gtk_widget_show() function lets GTK know that we are done setting
+the attributes of this widget, and that it can display it.
 
 The last line enters the GTK main processing loop.
 
 <tscreen><verb>
-gtk_main ();
+  gtk_main ();
 </verb></tscreen>
 
-gtk_main() is another call you will see in every GTK application.  When
-control reaches this point, GTK will sleep waiting for X events (such as
-button or key presses), timeouts, or file IO notifications to occur.
-In our simple example however, events are ignored.
+gtk_main() is another call you will see in every GTK application.
+When control reaches this point, GTK will sleep waiting for X events
+(such as button or key presses), timeouts, or file IO notifications to
+occur. In our simple example however, events are ignored.
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>Hello World in GTK
 <p>
-OK, now for a program with a widget (a button).  It's the classic hello
-world ala GTK.
+Now for a program with a widget (a button).  It's the classic
+hello world a la GTK.
 
 <tscreen><verb>
 /* example-start helloworld helloworld.c */
 
 #include <gtk/gtk.h>
 
-/* this is a callback function. the data arguments are ignored in this example..
- * More on callbacks below. */
-void hello (GtkWidget *widget, gpointer data)
+/* This is a callback function. The data arguments are ignored
+ * in this example. More on callbacks below. */
+void hello( GtkWidget *widget,
+            gpointer   data )
 {
     g_print ("Hello World\n");
 }
 
-gint delete_event(GtkWidget *widget, GdkEvent *event, gpointer data)
+gint delete_event( GtkWidget *widget,
+                   GdkEvent  *event,
+		   gpointer   data )
 {
-    g_print ("delete event occurred\n");
-    /* if you return FALSE in the "delete_event" signal handler,
-     * GTK will emit the "destroy" signal.  Returning TRUE means
+    /* If you return FALSE in the "delete_event" signal handler,
+     * GTK will emit the "destroy" signal. Returning TRUE means
      * you don't want the window to be destroyed.
-     * This is useful for popping up 'are you sure you want to quit ?'
+     * This is useful for popping up 'are you sure you want to quit?'
      * type dialogs. */
+
+    g_print ("delete event occurred\n");
 
     /* Change TRUE to FALSE and the main window will be destroyed with
      * a "delete_event". */
 
-    return (TRUE);
+    return(TRUE);
 }
 
-/* another callback */
-void destroy (GtkWidget *widget, gpointer data)
+/* Another callback */
+void destroy( GtkWidget *widget,
+              gpointer   data )
 {
-    gtk_main_quit ();
+    gtk_main_quit();
 }
 
-int main (int argc, char *argv[])
+int main( int   argc,
+          char *argv[] )
 {
     /* GtkWidget is the storage type for widgets */
     GtkWidget *window;
     GtkWidget *button;
     
-    /* this is called in all GTK applications.  arguments are parsed from
-     * the command line and are returned to the application. */
-    gtk_init (&amp;argc, &amp;argv);
+    /* This is called in all GTK applications. Arguments are parsed
+     * from the command line and are returned to the application. */
+    gtk_init(&amp;argc, &amp;argv);
     
     /* create a new window */
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     
-    /* when the window is given the "delete_event" signal (this is given
-    * by the window manager, usually by the 'close' option, or on the
-    * titlebar), we ask it to call the delete_event () function
-    * as defined above.  The data passed to the callback
-    * function is NULL and is ignored in the callback function. */
+    /* When the window is given the "delete_event" signal (this is given
+     * by the window manager, usually by the 'close' option, or on the
+     * titlebar), we ask it to call the delete_event () function
+     * as defined above. The data passed to the callback
+     * function is NULL and is ignored in the callback function. */
     gtk_signal_connect (GTK_OBJECT (window), "delete_event",
 			GTK_SIGNAL_FUNC (delete_event), NULL);
     
-    /* here we connect the "destroy" event to a signal handler.  
+    /* Here we connect the "destroy" event to a signal handler.  
      * This event occurs when we call gtk_widget_destroy() on the window,
      * or if we return 'FALSE' in the "delete_event" callback. */
     gtk_signal_connect (GTK_OBJECT (window), "destroy",
 			GTK_SIGNAL_FUNC (destroy), NULL);
     
-    /* sets the border width of the window. */
+    /* Sets the border width of the window. */
     gtk_container_border_width (GTK_CONTAINER (window), 10);
     
-    /* creates a new button with the label "Hello World". */
+    /* Creates a new button with the label "Hello World". */
     button = gtk_button_new_with_label ("Hello World");
     
     /* When the button receives the "clicked" signal, it will call the
-     * function hello() passing it NULL as its argument.  The hello() function is
-     * defined above. */
+     * function hello() passing it NULL as its argument.  The hello()
+     * function is defined above. */
     gtk_signal_connect (GTK_OBJECT (button), "clicked",
 			GTK_SIGNAL_FUNC (hello), NULL);
     
@@ -240,20 +263,21 @@ int main (int argc, char *argv[])
 			       GTK_SIGNAL_FUNC (gtk_widget_destroy),
 			       GTK_OBJECT (window));
     
-    /* this packs the button into the window (a gtk container). */
+    /* This packs the button into the window (a gtk container). */
     gtk_container_add (GTK_CONTAINER (window), button);
     
-    /* the final step is to display this newly created widget... */
+    /* The final step is to display this newly created widget. */
     gtk_widget_show (button);
     
     /* and the window */
     gtk_widget_show (window);
     
-    /* all GTK applications must have a gtk_main().	Control ends here
-     * and waits for an event to occur (like a key press or mouse event). */
+    /* All GTK applications must have a gtk_main(). Control ends here
+     * and waits for an event to occur (like a key press or
+     * mouse event). */
     gtk_main ();
     
-    return 0;
+    return(0);
 }
 /* example-end */
 </verb></tscreen>
@@ -264,7 +288,7 @@ int main (int argc, char *argv[])
 To compile use:
 
 <tscreen><verb>
-gcc -Wall -g helloworld.c -o hello_world `gtk-config --cflags` \
+gcc -Wall -g helloworld.c -o helloworld `gtk-config --cflags` \
     `gtk-config --libs`
 </verb></tscreen>
 
@@ -273,7 +297,9 @@ program 'knows' what compiler switches are needed to compile programs
 that use gtk. <tt>gtk-config --cflags</> will output a list of include
 directories for the compiler to look in, and <tt>gtk-config --libs</>
 will output the list of libraries for the compiler to link with and
-the directories to find them in.
+the directories to find them in. In the aboce example they could have
+been combined into a single instance, such as
+`gtk-config --cflags --libs`.
 
 Note that the type of single quote used in the compile command above
 is significant.
@@ -282,34 +308,36 @@ The libraries that are usually linked in are:
 <itemize>
 <item>The GTK library (-lgtk), the widget library, based on top of GDK.
 <item>The GDK library (-lgdk), the Xlib wrapper.
+<item>The gmodule library (-lgmodule), which is used to load run time
+extensions.
 <item>The glib library (-lglib), containing miscellaneous functions, only
-g_print() is used in this particular example.  GTK is built on top
-of glib so you will always require this library.  See the section on 
-<ref id="sec_glib" name="glib"> for details.  
+g_print() is used in this particular example. GTK is built on top
+of glib so you will always require this library. See the section on 
+<ref id="sec_glib" name="glib"> for details.
 <item>The Xlib library (-lX11) which is used by GDK.
-<item>The Xext library (-lXext).  This contains code for shared memory
+<item>The Xext library (-lXext). This contains code for shared memory
 pixmaps and other X extensions.
-<item>The math library (-lm).  This is used by GTK for various purposes.
+<item>The math library (-lm). This is used by GTK for various purposes.
 </itemize>
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>Theory of Signals and Callbacks
 <p>
-Before we look in detail at hello world, we'll discuss signals and callbacks.
-GTK is an event driven toolkit, which means it will sleep in
-gtk_main until an event occurs and control is passed to the appropriate
-function.
+Before we look in detail at <em>helloworld</em>, we'll discuss signals
+and callbacks. GTK is an event driven toolkit, which means it will
+sleep in gtk_main until an event occurs and control is passed to the
+appropriate function.
 
-This passing of control is done using the idea of "signals".  When an 
-event occurs, such as the press of a mouse button, the
-appropriate signal will be "emitted" by the widget that was pressed.  
-This is how GTK does most of its useful work. There are a set of signals
-that all widgets inherit, such as "destroy", and there are signals that are
+This passing of control is done using the idea of "signals". When an
+event occurs, such as the press of a mouse button, the appropriate
+signal will be "emitted" by the widget that was pressed.  This is how
+GTK does most of its useful work. There are a set of signals that all
+widgets inherit, such as "destroy", and there are signals that are
 widget specific, such as "toggled" on a toggle button.
 
-To make a button perform an action, we set up a signal handler to catch these
-signals and call the appropriate function.  This is done by using a 
-function such as:
+To make a button perform an action, we set up a signal handler to
+catch these signals and call the appropriate function. This is done by
+using a function such as:
 
 <tscreen><verb>
 gint gtk_signal_connect( GtkObject     *object,
@@ -318,10 +346,10 @@ gint gtk_signal_connect( GtkObject     *object,
                          gpointer       func_data );
 </verb></tscreen>
 
-Where the first argument is the widget which will be emitting the signal, and
-the second, the name of the signal you wish to catch.  The third is the function
-you wish to be called when it is caught, and the fourth, the data you wish
-to have passed to this function.
+Where the first argument is the widget which will be emitting the
+signal, and the second, the name of the signal you wish to catch. The
+third is the function you wish to be called when it is caught, and the
+fourth, the data you wish to have passed to this function.
 
 The function specified in the third argument is called a "callback
 function", and should generally be of the form:
@@ -331,16 +359,16 @@ void callback_func( GtkWidget *widget,
                     gpointer   callback_data );
 </verb></tscreen>
 
-Where the first argument will be a pointer to the widget that emitted the 
-signal, and the second, a pointer to the data given as the last argument
-to the gtk_signal_connect() function as shown above.
+Where the first argument will be a pointer to the widget that emitted
+the signal, and the second, a pointer to the data given as the last
+argument to the gtk_signal_connect() function as shown above.
 
 Note that the above form for a signal callback function declaration is
-only a general guide, as some widget specific signals generate different
-calling parameters. For example, the GtkCList "select_row" signal provides
-both row and column parameters.
+only a general guide, as some widget specific signals generate
+different calling parameters. For example, the GtkCList "select_row"
+signal provides both row and column parameters.
 
-Another call used in the hello world example, is:
+Another call used in the <em>helloworld</em> example, is:
 
 <tscreen><verb>
 gint gtk_signal_connect_object( GtkObject     *object,
@@ -349,32 +377,33 @@ gint gtk_signal_connect_object( GtkObject     *object,
                                 GtkObject     *slot_object );
 </verb></tscreen>
 
-gtk_signal_connect_object() is the same as gtk_signal_connect() except that
-the callback function only uses one argument, a pointer to a GTK 
-object.  So when using this function to connect signals, the callback
+gtk_signal_connect_object() is the same as gtk_signal_connect() except
+that the callback function only uses one argument, a pointer to a GTK
+object. So when using this function to connect signals, the callback
 should be of the form:
 
 <tscreen><verb>
 void callback_func( GtkObject *object );
 </verb></tscreen>
 
-Where the object is usually a widget.  We usually don't setup callbacks for
-gtk_signal_connect_object however.  They are usually used 
-to call a GTK function that accepts a single widget or object as an
-argument, as is the case in our hello world example.
+Where the object is usually a widget. We usually don't setup callbacks
+for gtk_signal_connect_object however. They are usually used to call a
+GTK function that accepts a single widget or object as an argument, as
+is the case in our <em>helloworld</em> example.
 
-The purpose of having two functions to connect signals is simply to allow
-the callbacks to have a different number of arguments.  Many functions in
-the GTK library accept only a single GtkWidget pointer as an argument, so you
-want to use the gtk_signal_connect_object() for these, whereas for your 
-functions, you may need to have additional data supplied to the callbacks.
+The purpose of having two functions to connect signals is simply to
+allow the callbacks to have a different number of arguments. Many
+functions in the GTK library accept only a single GtkWidget pointer as
+an argument, so you want to use the gtk_signal_connect_object() for
+these, whereas for your functions, you may need to have additional
+data supplied to the callbacks.
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>Events
 <p>
-In addition to the signal mechanism described above, there are a set of
-<em>events</em> that reflect the X event mechanism. Callbacks may also be
-attached to these events. These events are:
+In addition to the signal mechanism described above, there are a set
+of <em>events</em> that reflect the X event mechanism. Callbacks may
+also be attached to these events. These events are:
 
 <itemize>
 <item> event
@@ -408,10 +437,11 @@ attached to these events. These events are:
 <item> other_event
 </itemize>
 
-In order to connect a callback function to one of these events, you use
-the function gtk_signal_connect, as described above, using one of the
-above event names as the <tt/name/ parameter. The callback function for
-events has a slightly different form than that for signals:
+In order to connect a callback function to one of these events, you
+use the function gtk_signal_connect, as described above, using one of
+the above event names as the <tt/name/ parameter. The callback
+function for events has a slightly different form than that for
+signals:
 
 <tscreen><verb>
 void callback_func( GtkWidget *widget,
@@ -419,11 +449,12 @@ void callback_func( GtkWidget *widget,
                     gpointer   callback_data );
 </verb></tscreen>
 
-GdkEvent is a C <tt/union/ structure whose type will depend upon which of the
-above events has occurred. In order for us to tell which event has been issued
-each of the possible alternatives has a <tt/type/ parameter which reflects the
-event being issued. The other components of the event structure will depend
-upon the type of the event. Possible values for the type are:
+GdkEvent is a C <tt/union/ structure whose type will depend upon which
+of the above events has occurred. In order for us to tell which event
+has been issued each of the possible alternatives has a <tt/type/
+parameter which reflects the event being issued. The other components
+of the event structure will depend upon the type of the
+event. Possible values for the type are:
 
 <tscreen><verb>
   GDK_NOTHING
@@ -461,7 +492,7 @@ upon the type of the event. Possible values for the type are:
 </verb></tscreen>
 
 So, to connect a callback function to one of these events we would use
-something like
+something like:
 
 <tscreen><verb>
 gtk_signal_connect( GTK_OBJECT(button), "button_press_event",
@@ -469,9 +500,10 @@ gtk_signal_connect( GTK_OBJECT(button), "button_press_event",
 		        NULL);
 </verb></tscreen>
 
-This assumes that <tt/button/ is a GtkButton widget. Now, when the mouse is
-over the button and a mouse button is pressed, the function 
-<tt/button_press_callback/ will be called. This function may be declared as:
+This assumes that <tt/button/ is a GtkButton widget. Now, when the
+mouse is over the button and a mouse button is pressed, the function
+<tt/button_press_callback/ will be called. This function may be
+declared as:
 
 <tscreen><verb>
 static gint button_press_event (GtkWidget      *widget, 
@@ -479,14 +511,15 @@ static gint button_press_event (GtkWidget      *widget,
                                 gpointer        data);
 </verb></tscreen>
 
-Note that we can declare the second argument as type <tt/GdkEventButton/
-as we know what type of event will occur for this function to be called.
+Note that we can declare the second argument as type
+<tt/GdkEventButton/ as we know what type of event will occur for this
+function to be called.
 
-The value returned from this function indicates whether the event should
-be propagated further by the GTK event handling mechanism. Returning
-TRUE indicates that the event has been handled, and that it should not
-propagate further. Returning FALSE continues the normal event handling.
-See the section on
+The value returned from this function indicates whether the event
+should be propagated further by the GTK event handling
+mechanism. Returning TRUE indicates that the event has been handled,
+and that it should not propagate further. Returning FALSE continues
+the normal event handling.  See the section on
 <ref id="sec_Adv_Events_and_Signals"
 name="Advanced Event and Signal Handling"> for more details on this
 propagation process.
@@ -498,33 +531,36 @@ For details on the GdkEvent data types, see the appendix entitled
 <sect1>Stepping Through Hello World
 <p>
 Now that we know the theory behind this, lets clarify by walking through 
-the example hello world program.
+the example <em>helloworld</em> program.
 
 Here is the callback function that will be called when the button is
-"clicked".  We ignore both the widget and the data in this example, but it 
-is not hard to do things with them.  The next example will use the data 
-argument to tell us which button was pressed.
+"clicked". We ignore both the widget and the data in this example, but
+it is not hard to do things with them. The next example will use the
+data argument to tell us which button was pressed.
 
 <tscreen><verb>
-void hello (GtkWidget *widget, gpointer data)
+void hello( GtkWidget *widget,
+            gpointer   data )
 {
     g_print ("Hello World\n");
 }
 </verb></tscreen>
 
-The next callback is a bit special.  The "delete_event" occurs when the
-window manager sends this event to the application.  We have a choice here
-as to what to do about these events.  We can ignore them, make some sort of
-response, or simply quit the application.
+The next callback is a bit special. The "delete_event" occurs when the
+window manager sends this event to the application. We have a choice
+here as to what to do about these events. We can ignore them, make
+some sort of response, or simply quit the application.
 
-The value you return in this callback lets GTK know what action to take.
-By returning TRUE, we let it know that we don't want to have the "destroy"
-signal emitted, keeping our application running.  By returning FALSE, we 
-ask that "destroy" is emitted, which in turn will call our "destroy" 
-signal handler.
+The value you return in this callback lets GTK know what action to
+take.  By returning TRUE, we let it know that we don't want to have
+the "destroy" signal emitted, keeping our application running. By
+returning FALSE, we ask that "destroy" is emitted, which in turn will
+call our "destroy" signal handler.
 
 <tscreen><verb>
-gint delete_event(GtkWidget *widget, GdkEvent *event, gpointer data)
+gint delete_event( GtkWidget *widget,
+                   GdkEvent  *event,
+		   gpointer   data )
 {
     g_print ("delete event occurred\n");
 
@@ -532,12 +568,13 @@ gint delete_event(GtkWidget *widget, GdkEvent *event, gpointer data)
 }
 </verb></tscreen>
 
-Here is another callback function which causes the program to quit by calling
-gtk_main_quit().  This function tells GTK that it is to exit from gtk_main
-when control is returned to it.
+Here is another callback function which causes the program to quit by
+calling gtk_main_quit(). This function tells GTK that it is to exit
+from gtk_main when control is returned to it.
 
 <tscreen><verb>
-void destroy (GtkWidget *widget, gpointer data)
+void destroy( GtkWidget *widget,
+              gpointer   data )
 {
     gtk_main_quit ();
 }
@@ -547,59 +584,60 @@ I assume you know about the main() function... yes, as with other
 applications, all GTK applications will also have one of these.
 
 <tscreen><verb>
-int main (int argc, char *argv[])
+int main( int   argc,
+          char *argv[] )
 {
 </verb></tscreen>
 
-This next part, declares a pointer to a structure of type GtkWidget.  These
-are used below to create a window and a button.
+This next part, declares a pointer to a structure of type
+GtkWidget. These are used below to create a window and a button.
 
 <tscreen><verb>
     GtkWidget *window;
     GtkWidget *button;
 </verb></tscreen>
 
-Here is our gtk_init again. As before, this initializes the toolkit, and
-parses the arguments found on the command line.  Any argument it
-recognizes from the command line, it removes from the list, and modifies
-argc and argv to make it look like they never existed, allowing your
-application to parse the remaining arguments.
+Here is our gtk_init again. As before, this initializes the toolkit,
+and parses the arguments found on the command line. Any argument it
+recognizes from the command line, it removes from the list, and
+modifies argc and argv to make it look like they never existed,
+allowing your application to parse the remaining arguments.
 
 <tscreen><verb>
     gtk_init (&amp;argc, &amp;argv);
 </verb></tscreen>
 
-Create a new window.  This is fairly straight forward.  Memory is allocated
-for the GtkWidget *window structure so it now points to a valid structure.
-It sets up a new window, but it is not displayed until we call
-gtk_widget_show(window) near the end of our program.
+Create a new window. This is fairly straight forward. Memory is
+allocated for the GtkWidget *window structure so it now points to a
+valid structure. It sets up a new window, but it is not displayed
+until we call gtk_widget_show(window) near the end of our program.
 
 <tscreen><verb>
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 </verb></tscreen>
 
 Here is an example of connecting a signal handler to an object, in
-this case, the window.  Here, the "destroy" signal is caught.  This is
-emitted when we use the window manager to kill the window (and we return
-TRUE in the "delete_event" handler), or when we use the
-gtk_widget_destroy() call passing in the window widget as the object to
-destroy. By setting this up, we handle both cases with a single call.
-Here, it just calls the destroy() function defined above with a NULL
-argument, which quits GTK for us.  
+this case, the window. Here, the "destroy" signal is caught. This is
+emitted when we use the window manager to kill the window (and we
+return TRUE in the "delete_event" handler), or when we use the
+gtk_widget_destroy() call passing in the window widget as the object
+to destroy. By setting this up, we handle both cases with a single
+call.  Here, it just calls the destroy() function defined above with a
+NULL argument, which quits GTK for us.
 
-The GTK_OBJECT and GTK_SIGNAL_FUNC are macros that perform type 
-casting and checking for us, as well as aid the readability of the code.
+The GTK_OBJECT and GTK_SIGNAL_FUNC are macros that perform type
+casting and checking for us, as well as aid the readability of the
+code.
 
 <tscreen><verb>
     gtk_signal_connect (GTK_OBJECT (window), "destroy",
                         GTK_SIGNAL_FUNC (destroy), NULL);
 </verb></tscreen>
 
-This next function is used to set an attribute of a container object.  
-This just sets the window
-so it has a blank area along the inside of it 10 pixels wide where no
-widgets will go.  There are other similar functions which we will look at 
-in the section on 
+This next function is used to set an attribute of a container object.
+This just sets the window so it has a blank area along the inside of
+it 10 pixels wide where no widgets will go. There are other similar
+functions which we will look at in the section on
 <ref id="sec_setting_widget_attributes" name="Setting Widget Attributes">
 
 And again, GTK_CONTAINER is a macro to perform type casting.
@@ -608,57 +646,60 @@ And again, GTK_CONTAINER is a macro to perform type casting.
     gtk_container_border_width (GTK_CONTAINER (window), 10);
 </verb></tscreen>
 
-This call creates a new button.  It allocates space for a new GtkWidget
-structure in memory, initializes it, and makes the button pointer point to
-it. It will have the label "Hello World" on it when displayed.
+This call creates a new button. It allocates space for a new GtkWidget
+structure in memory, initializes it, and makes the button pointer
+point to it. It will have the label "Hello World" on it when
+displayed.
 
 <tscreen><verb>
     button = gtk_button_new_with_label ("Hello World");
 </verb></tscreen>
 
-Here, we take this button, and make it do something useful.  We attach a
-signal handler to it so when it emits the "clicked" signal, our hello()
-function is called.  The data is ignored, so we simply pass in NULL to the
-hello() callback function.  Obviously, the "clicked" signal is emitted when
-we click the button with our mouse pointer.
+Here, we take this button, and make it do something useful. We attach
+a signal handler to it so when it emits the "clicked" signal, our
+hello() function is called. The data is ignored, so we simply pass in
+NULL to the hello() callback function. Obviously, the "clicked" signal
+is emitted when we click the button with our mouse pointer.
 
 <tscreen><verb>
     gtk_signal_connect (GTK_OBJECT (button), "clicked",
                         GTK_SIGNAL_FUNC (hello), NULL);
 </verb></tscreen>
 
-We are also going to use this button to exit our program.  This will
-illustrate how the "destroy"
-signal may come from either the window manager, or our program.  When the
-button is "clicked", same as above, it calls the first hello() callback function,
-and then this one in the order they are set up.  You may have as many
-callback functions as you need, and all will be executed in the order you
-connected them.  Because the gtk_widget_destroy() function accepts only a
-GtkWidget *widget as an argument, we use the gtk_signal_connect_object()
-function here instead of straight gtk_signal_connect().
+We are also going to use this button to exit our program. This will
+illustrate how the "destroy" signal may come from either the window
+manager, or our program. When the button is "clicked", same as above,
+it calls the first hello() callback function, and then this one in the
+order they are set up. You may have as many callback functions as you
+need, and all will be executed in the order you connected
+them. Because the gtk_widget_destroy() function accepts only a
+GtkWidget *widget as an argument, we use the
+gtk_signal_connect_object() function here instead of straight
+gtk_signal_connect().
 
 <tscreen><verb>
-gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-                           GTK_SIGNAL_FUNC (gtk_widget_destroy),
-                           GTK_OBJECT (window));
+    gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+                               GTK_SIGNAL_FUNC (gtk_widget_destroy),
+                               GTK_OBJECT (window));
 </verb></tscreen>
 
-This is a packing call, which will be explained in depth later on.  But it
-is fairly easy to understand.  It simply tells GTK that the button is to be 
-placed in the window where it will be displayed. Note that a GTK container
-can only contain one widget. There are other widgets, that are described later,
-which are designed to layout multiple widgets in various ways.
+This is a packing call, which will be explained in depth later on. But
+it is fairly easy to understand. It simply tells GTK that the button
+is to be placed in the window where it will be displayed. Note that a
+GTK container can only contain one widget. There are other widgets,
+that are described later, which are designed to layout multiple
+widgets in various ways.
  
 <tscreen><verb>
     gtk_container_add (GTK_CONTAINER (window), button);
 </verb></tscreen>
 
-Now we have everything set up the way we want it to be.  With all the
+Now we have everything set up the way we want it to be. With all the
 signal handlers in place, and the button placed in the window where it
-should be, we ask GTK to "show" the widgets on the screen.  The window
-widget is shown last so the whole window will pop up at once rather than
-seeing the window pop up, and then the button form inside of it.  Although
-with such a simple example, you'd never notice.
+should be, we ask GTK to "show" the widgets on the screen. The window
+widget is shown last so the whole window will pop up at once rather
+than seeing the window pop up, and then the button form inside of
+it. Although with such a simple example, you'd never notice.
 
 <tscreen><verb>
     gtk_widget_show (button);
@@ -666,39 +707,41 @@ with such a simple example, you'd never notice.
     gtk_widget_show (window);
 </verb></tscreen>
 
-And of course, we call gtk_main() which waits for events to come from the X
-server and will call on the widgets to emit signals when these events come.
+And of course, we call gtk_main() which waits for events to come from
+the X server and will call on the widgets to emit signals when these
+events come.
 
 <tscreen><verb>
     gtk_main ();
 </verb></tscreen>
 
-And the final return.  Control returns here after gtk_quit() is called.
+And the final return. Control returns here after gtk_quit() is called.
 
 <tscreen><verb>
     return 0;
 </verb></tscreen>
 
-Now, when we click the mouse button on a GTK button, the
-widget emits a "clicked" signal.  In order for us to use this
-information, our program sets up a signal handler to catch that signal, 
-which dispatches the function of our choice. In our example, when the 
-button we created is "clicked", the hello() function is called with a NULL
-argument, and then the next handler for this signal is called.  This calls
-the gtk_widget_destroy() function, passing it the window widget as its
-argument, destroying the window widget.  This causes the window to emit the 
-"destroy" signal, which is caught, and calls our destroy() callback 
-function, which simply exits GTK.
+Now, when we click the mouse button on a GTK button, the widget emits
+a "clicked" signal. In order for us to use this information, our
+program sets up a signal handler to catch that signal, which
+dispatches the function of our choice. In our example, when the button
+we created is "clicked", the hello() function is called with a NULL
+argument, and then the next handler for this signal is called. This
+calls the gtk_widget_destroy() function, passing it the window widget
+as its argument, destroying the window widget. This causes the window
+to emit the "destroy" signal, which is caught, and calls our destroy()
+callback function, which simply exits GTK.
 
-Another course of events, is to use the window manager to kill the window.
-This will cause the "delete_event" to be emitted.  This will call our
-"delete_event" handler.  If we return TRUE here, the window will be left as
-is and nothing will happen.  Returning FALSE will cause GTK to emit the
-"destroy" signal which of course, calls the "destroy" callback, exiting GTK.
+Another course of events, is to use the window manager to kill the
+window. This will cause the "delete_event" to be emitted. This will
+call our "delete_event" handler. If we return TRUE here, the window
+will be left as is and nothing will happen. Returning FALSE will cause
+GTK to emit the "destroy" signal which of course, calls the "destroy"
+callback, exiting GTK.
 
-Note that these signals are not the same as the Unix system
-signals, and are not implemented using them, although the terminology is
-almost identical.
+Note that these signals are not the same as the Unix system signals,
+and are not implemented using them, although the terminology is almost
+identical.
 
 <!-- ***************************************************************** -->
 <sect>Moving On
@@ -707,18 +750,19 @@ almost identical.
 <!-- ----------------------------------------------------------------- -->
 <sect1>Data Types
 <p>
-There are a few things you probably noticed in the previous examples that
-need explaining.  The gint, gchar etc. that you see are typedefs to int and 
-char respectively.  This is done to get around that nasty dependency on the 
-size of simple data types when doing calculations.
+There are a few things you probably noticed in the previous examples
+that need explaining. The gint, gchar etc. that you see are typedefs
+to int and char respectively. This is done to get around that nasty
+dependency on the size of simple data types when doing calculations.
 
-A good example is "gint32" which will be typedef'd to a 32 bit integer for
-any given platform, whether it be the 64 bit alpha, or the 32 bit i386.  The
-typedefs are very straight forward and intuitive.  They are all defined in
-glib/glib.h (which gets included from gtk.h).
+A good example is "gint32" which will be typedef'd to a 32 bit integer
+for any given platform, whether it be the 64 bit alpha, or the 32 bit
+i386. The typedefs are very straight forward and intuitive. They are
+all defined in glib/glib.h (which gets included from gtk.h).
 
-You'll also notice the ability to use GtkWidget when the function calls for 
-a GtkObject. GTK is an object oriented design, and a widget is an object.
+You'll also notice the ability to use GtkWidget when the function
+calls for a GtkObject. GTK is an object oriented design, and a widget
+is an object.
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>More on Signal Handlers
@@ -732,10 +776,10 @@ gint gtk_signal_connect( GtkObject *object,
                          gpointer func_data );
 </verb></tscreen>
 
-Notice the gint return value ?  This is a tag that identifies your callback
-function.  As said above, you may have as many callbacks per signal and per
-object as you need, and each will be executed in turn, in the order they 
-were attached.
+Notice the gint return value? This is a tag that identifies your
+callback function. As stated above, you may have as many callbacks per
+signal and per object as you need, and each will be executed in turn,
+in the order they were attached.
 
 This tag allows you to remove this callback from the list by using:
 
@@ -744,8 +788,8 @@ void gtk_signal_disconnect( GtkObject *object,
                             gint id );
 </verb></tscreen>
 
-So, by passing in the widget you wish to remove the handler from, and the
-tag or id returned by one of the signal_connect functions, you can
+So, by passing in the widget you wish to remove the handler from, and
+the tag returned by one of the signal_connect functions, you can
 disconnect a signal handler.
 
 Another function to remove all the signal handers from an object is:
@@ -754,49 +798,54 @@ Another function to remove all the signal handers from an object is:
 void gtk_signal_handlers_destroy( GtkObject *object );
 </verb></tscreen>
 
-This call is fairly self explanatory.  It simply removes all the current
-signal handlers from the object passed in as the first argument.
+This call is fairly self explanatory. It simply removes all the
+current signal handlers from the object passed in as the first
+argument.
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>An Upgraded Hello World
 <p>
-Let's take a look at a slightly improved hello world with better examples
-of callbacks.  This will also introduce us to our next topic, packing
-widgets.
+Let's take a look at a slightly improved <em>helloworld</em> with
+better examples of callbacks. This will also introduce us to our next
+topic, packing widgets.
 
 <tscreen><verb>
 /* example-start helloworld2 helloworld2.c */
 
 #include <gtk/gtk.h>
 
-/* Our new improved callback.  The data passed to this function is printed
- * to stdout. */
-void callback (GtkWidget *widget, gpointer data)
+/* Our new improved callback.  The data passed to this function
+ * is printed to stdout. */
+void callback( GtkWidget *widget,
+               gpointer   data )
 {
     g_print ("Hello again - %s was pressed\n", (char *) data);
 }
 
 /* another callback */
-void delete_event (GtkWidget *widget, GdkEvent *event, gpointer data)
+void delete_event( GtkWidget *widget,
+                   GdkEvent  *event,
+		   gpointer   data )
 {
     gtk_main_quit ();
 }
 
-int main (int argc, char *argv[])
+int main( int   argc,
+          char *argv[] )
 {
     /* GtkWidget is the storage type for widgets */
     GtkWidget *window;
     GtkWidget *button;
     GtkWidget *box1;
 
-    /* this is called in all GTK applications.	arguments are parsed from
-     * the command line and are returned to the application. */
+    /* This is called in all GTK applications. Arguments are parsed
+     * from the command line and are returned to the application. */
     gtk_init (&amp;argc, &amp;argv);
 
-    /* create a new window */
+    /* Create a new window */
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
-    /* this is a new call, this just sets the title of our
+    /* This is a new call, this just sets the title of our
      * new window to "Hello Buttons!" */
     gtk_window_set_title (GTK_WINDOW (window), "Hello Buttons!");
 
@@ -805,19 +854,18 @@ int main (int argc, char *argv[])
     gtk_signal_connect (GTK_OBJECT (window), "delete_event",
 			GTK_SIGNAL_FUNC (delete_event), NULL);
 
-
-    /* sets the border width of the window. */
+    /* Sets the border width of the window. */
     gtk_container_border_width (GTK_CONTAINER (window), 10);
 
-    /* we create a box to pack widgets into.  this is described in detail
-     * in the "packing" section below.  The box is not really visible, it
+    /* We create a box to pack widgets into.  This is described in detail
+     * in the "packing" section. The box is not really visible, it
      * is just used as a tool to arrange widgets. */
     box1 = gtk_hbox_new(FALSE, 0);
 
-    /* put the box into the main window. */
+    /* Put the box into the main window. */
     gtk_container_add (GTK_CONTAINER (window), box1);
 
-    /* creates a new button with the label "Button 1". */
+    /* Creates a new button with the label "Button 1". */
     button = gtk_button_new_with_label ("Button 1");
 
     /* Now when the button is clicked, we call the "callback" function
@@ -825,18 +873,18 @@ int main (int argc, char *argv[])
     gtk_signal_connect (GTK_OBJECT (button), "clicked",
 			GTK_SIGNAL_FUNC (callback), (gpointer) "button 1");
 
-    /* instead of gtk_container_add, we pack this button into the invisible
+    /* Instead of gtk_container_add, we pack this button into the invisible
      * box, which has been packed into the window. */
     gtk_box_pack_start(GTK_BOX(box1), button, TRUE, TRUE, 0);
 
-    /* always remember this step, this tells GTK that our preparation for
-     * this button is complete, and it can be displayed now. */
+    /* Always remember this step, this tells GTK that our preparation for
+     * this button is complete, and it can now be displayed. */
     gtk_widget_show(button);
 
-    /* do these same steps again to create a second button */
+    /* Do these same steps again to create a second button */
     button = gtk_button_new_with_label ("Button 2");
 
-    /* call the same callback function with a different argument,
+    /* Call the same callback function with a different argument,
      * passing a pointer to "button 2" instead. */
     gtk_signal_connect (GTK_OBJECT (button), "clicked",
 			GTK_SIGNAL_FUNC (callback), (gpointer) "button 2");
@@ -851,87 +899,87 @@ int main (int argc, char *argv[])
 
     gtk_widget_show (window);
 
-    /* rest in gtk_main and wait for the fun to begin! */
+    /* Rest in gtk_main and wait for the fun to begin! */
     gtk_main ();
 
-    return 0;
+    return(0);
 }
 /* example-end */
 </verb></tscreen>
 
-Compile this program using the same linking arguments as our first example.
-You'll notice this time there is no easy way to exit the program, you have 
-to use your window manager or command line to kill it.  A good exercise 
-for the reader would be to insert a third "Quit" button that will exit the
-program.  You may also wish to play with the options to
-gtk_box_pack_start() while reading the next section.  
-Try resizing the window, and observe the behavior.
+Compile this program using the same linking arguments as our first
+example.  You'll notice this time there is no easy way to exit the
+program, you have to use your window manager or command line to kill
+it. A good exercise for the reader would be to insert a third "Quit"
+button that will exit the program. You may also wish to play with the
+options to gtk_box_pack_start() while reading the next section.  Try
+resizing the window, and observe the behavior.
 
-Just as a side note, there is another useful define for gtk_window_new() -
-GTK_WINDOW_DIALOG.  This interacts with the window manager a little
-differently and should be used for transient windows.
+Just as a side note, there is another useful define for
+gtk_window_new() - GTK_WINDOW_DIALOG. This interacts with the window
+manager a little differently and should be used for transient windows.
 
 <!-- ***************************************************************** -->
 <sect>Packing Widgets
 <!-- ***************************************************************** -->
 <p>
 When creating an application, you'll want to put more than one widget
-inside a window.  Our first hello world example only used one widget so we
-could simply use a gtk_container_add call to "pack" the widget into the
-window.  But when you want to put more than one widget into a window, how
-do you control where that widget is positioned? This is where packing
-comes in.
+inside a window. Our first <em>helloworld</em> example only used one
+widget so we could simply use a gtk_container_add call to "pack" the
+widget into the window. But when you want to put more than one widget
+into a window, how do you control where that widget is positioned?
+This is where packing comes in.
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>Theory of Packing Boxes
 <p>
-Most packing is done by creating boxes as in the example above.  These are
-invisible widget containers that we can pack our widgets into which come in
-two forms, a horizontal box, and a vertical box.  When packing widgets
-into a horizontal box, the objects are inserted horizontally from left to
-right or right to left depending on the call used. In a vertical box,
-widgets are packed from top to bottom or vice versa.  You may use any
-combination of boxes inside or beside other boxes to create the desired
-effect.
+Most packing is done by creating boxes as in the example above. These
+are invisible widget containers that we can pack our widgets into
+which come in two forms, a horizontal box, and a vertical box. When
+packing widgets into a horizontal box, the objects are inserted
+horizontally from left to right or right to left depending on the call
+used. In a vertical box, widgets are packed from top to bottom or vice
+versa. You may use any combination of boxes inside or beside other
+boxes to create the desired effect.
 
-To create a new horizontal box, we use a call to gtk_hbox_new(), and for
-vertical boxes, gtk_vbox_new(). The gtk_box_pack_start() and
+To create a new horizontal box, we use a call to gtk_hbox_new(), and
+for vertical boxes, gtk_vbox_new().The gtk_box_pack_start() and
 gtk_box_pack_end() functions are used to place objects inside of these
-containers.  The gtk_box_pack_start() function will start at the top and
-work its way down in a vbox, and pack left to right in an hbox.
-gtk_box_pack_end() will do the opposite, packing from bottom to top in a
-vbox, and right to left in an hbox.  Using these functions allow us to
-right justify or left justify our widgets and may be mixed in any way to
-achieve the desired effect. We will use gtk_box_pack_start() in most of
-our examples.  An object may be another container or a widget. In
-fact, many widgets are actually containers themselves, including the
-button, but we usually only use a label inside a button.
+containers. The gtk_box_pack_start() function will start at the top
+and work its way down in a vbox, and pack left to right in an hbox.
+gtk_box_pack_end() will do the opposite, packing from bottom to top in
+a vbox, and right to left in an hbox. Using these functions allow us
+to right justify or left justify our widgets and may be mixed in any
+way to achieve the desired effect. We will use gtk_box_pack_start() in
+most of our examples. An object may be another container or a
+widget. In fact, many widgets are actually containers themselves,
+including the button, but we usually only use a label inside a button.
 
-By using these calls, GTK knows where you want to place your widgets so it
-can do automatic resizing and other nifty things. There's also a number
-of options as to how your widgets should be packed. As you can imagine,
-this method gives us a quite a bit of flexibility when placing and
-creating widgets.
+By using these calls, GTK knows where you want to place your widgets
+so it can do automatic resizing and other nifty things. There's also a
+number of options as to how your widgets should be packed. As you can
+imagine, this method gives us a quite a bit of flexibility when
+placing and creating widgets.
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>Details of Boxes
 <p>
 Because of this flexibility, packing boxes in GTK can be confusing at
 first. There are a lot of options, and it's not immediately obvious how
-they all fit together.	In the end however, there are basically five
+they all fit together. In the end however, there are basically five
 different styles.
 
 <? <CENTER> >
 <?
-<IMG SRC="gtk_tut_packbox1.gif" VSPACE="15" HSPACE="10" WIDTH="528" HEIGHT="235"
-ALT="Box Packing Example Image">
+<IMG SRC="gtk_tut_packbox1.gif" VSPACE="15" HSPACE="10" WIDTH="528"
+HEIGHT="235" ALT="Box Packing Example Image">
 >
 <? </CENTER> >
 
 Each line contains one horizontal box (hbox) with several buttons. The
-call to gtk_box_pack is shorthand for the call to pack each of the buttons
-into the hbox. Each of the buttons is packed into the hbox the same way
-(i.e. same arguments to the gtk_box_pack_start() function).
+call to gtk_box_pack is shorthand for the call to pack each of the
+buttons into the hbox. Each of the buttons is packed into the hbox the
+same way (i.e. same arguments to the gtk_box_pack_start() function).
 
 This is the declaration of the gtk_box_pack_start function.
 
@@ -943,22 +991,23 @@ void gtk_box_pack_start( GtkBox    *box,
                          gint       padding );
 </verb></tscreen>
 
-The first argument is the box you are packing the object into, the second
-is the object. The objects will all be buttons for now, so we'll be
-packing buttons into boxes.
+The first argument is the box you are packing the object into, the
+second is the object. The objects will all be buttons for now, so
+we'll be packing buttons into boxes.
 
-The expand argument to gtk_box_pack_start() and gtk_box_pack_end() controls
-whether the widgets are laid out in the box to fill in all the extra space
-in the box so the box is expanded to fill the area alloted to it (TRUE).
-Or the box is shrunk to just fit the widgets (FALSE). Setting expand to
-FALSE will allow you to do right and left justification of your widgets.
-Otherwise, they will all expand to fit into the box, and the same effect
-could be achieved by using only one of gtk_box_pack_start or pack_end functions.
+The expand argument to gtk_box_pack_start() and gtk_box_pack_end()
+controls whether the widgets are laid out in the box to fill in all
+the extra space in the box so the box is expanded to fill the area
+alloted to it (TRUE).  Or the box is shrunk to just fit the widgets
+(FALSE). Setting expand to FALSE will allow you to do right and left
+justification of your widgets.  Otherwise, they will all expand to fit
+into the box, and the same effect could be achieved by using only one
+of gtk_box_pack_start or gtk_box_pack_end.
 
-The fill argument to the gtk_box_pack functions control whether the extra
-space is allocated to the objects themselves (TRUE), or as extra padding
-in the box around these objects (FALSE). It only has an effect if the
-expand argument is also TRUE.
+The fill argument to the gtk_box_pack functions control whether the
+extra space is allocated to the objects themselves (TRUE), or as extra
+padding in the box around these objects (FALSE). It only has an effect
+if the expand argument is also TRUE.
 
 When creating a new box, the function looks like this:
 
@@ -967,26 +1016,28 @@ GtkWidget *gtk_hbox_new (gint homogeneous,
                          gint spacing);
 </verb></tscreen>
 
-The homogeneous argument to gtk_hbox_new (and the same for gtk_vbox_new)
-controls whether each object in the box has the same size (i.e. the same
-width in an hbox, or the same height in a vbox). If it is set, the expand
-argument to the gtk_box_pack routines is always turned on.
+The homogeneous argument to gtk_hbox_new (and the same for
+gtk_vbox_new) controls whether each object in the box has the same
+size (i.e. the same width in an hbox, or the same height in a
+vbox). If it is set, the expand argument to the gtk_box_pack routines
+is always turned on.
 
-What's the difference between spacing (set when the box is created) and
-padding (set when elements are packed)? Spacing is added between objects,
-and padding is added on either side of an object. The following figure
-should make it clearer:
+What's the difference between spacing (set when the box is created)
+and padding (set when elements are packed)? Spacing is added between
+objects, and padding is added on either side of an object. The
+following figure should make it clearer:
 
 <? <CENTER> >
 <?
-<IMG ALIGN="center" SRC="gtk_tut_packbox2.gif" WIDTH="509" HEIGHT="213"
-VSPACE="15" HSPACE="10" ALT="Box Packing Example Image">
+<IMG ALIGN="center" SRC="gtk_tut_packbox2.gif" WIDTH="509"
+HEIGHT="213" VSPACE="15" HSPACE="10"
+ALT="Box Packing Example Image">
 >
 <? </CENTER> >
 
-Here is the code used to create the above images.  I've commented it fairly
-heavily so hopefully you won't have any problems following it.  Compile it 
-yourself and play with it.
+Here is the code used to create the above images. I've commented it
+fairly heavily so hopefully you won't have any problems following
+it. Compile it yourself and play with it.
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>Packing Demonstration Program
@@ -997,8 +1048,9 @@ yourself and play with it.
 #include <stdio.h>
 #include "gtk/gtk.h"
 
-void
-delete_event (GtkWidget *widget, GdkEvent *event, gpointer data)
+void delete_event( GtkWidget *widget,
+                   GdkEvent  *event,
+		   gpointer   data )
 {
     gtk_main_quit ();
 }
@@ -1006,18 +1058,21 @@ delete_event (GtkWidget *widget, GdkEvent *event, gpointer data)
 /* Make a new hbox filled with button-labels. Arguments for the 
  * variables we're interested are passed in to this function. 
  * We do not show the box, but do show everything inside. */
-GtkWidget *make_box (gint homogeneous, gint spacing,
-		     gint expand, gint fill, gint padding) 
+GtkWidget *make_box( gint homogeneous,
+                     gint spacing,
+		     gint expand,
+		     gint fill,
+		     gint padding ) 
 {
     GtkWidget *box;
     GtkWidget *button;
     char padstr[80];
     
-    /* create a new hbox with the appropriate homogeneous and spacing
-     * settings */
+    /* Create a new hbox with the appropriate homogeneous
+     * and spacing settings */
     box = gtk_hbox_new (homogeneous, spacing);
     
-    /* create a series of buttons with the appropriate settings */
+    /* Create a series of buttons with the appropriate settings */
     button = gtk_button_new_with_label ("gtk_box_pack");
     gtk_box_pack_start (GTK_BOX (box), button, expand, fill, padding);
     gtk_widget_show (button);
@@ -1030,7 +1085,7 @@ GtkWidget *make_box (gint homogeneous, gint spacing,
     gtk_box_pack_start (GTK_BOX (box), button, expand, fill, padding);
     gtk_widget_show (button);
     
-    /* create a button with the label depending on the value of
+    /* Create a button with the label depending on the value of
      * expand. */
     if (expand == TRUE)
 	    button = gtk_button_new_with_label ("TRUE,");
@@ -1055,8 +1110,8 @@ GtkWidget *make_box (gint homogeneous, gint spacing,
     return box;
 }
 
-int
-main (int argc, char *argv[])
+int main( int   argc,
+          char *argv[]) 
 {
     GtkWidget *window;
     GtkWidget *button;
@@ -1082,7 +1137,7 @@ main (int argc, char *argv[])
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
     /* You should always remember to connect the destroy signal to the
-     * main window.  This is very important for proper intuitive
+     * main window. This is very important for proper intuitive
      * behavior */
     gtk_signal_connect (GTK_OBJECT (window), "delete_event",
 			GTK_SIGNAL_FUNC (delete_event), NULL);
@@ -1093,7 +1148,7 @@ main (int argc, char *argv[])
      * on top of the other in this vbox. */
     box1 = gtk_vbox_new (FALSE, 0);
     
-    /* which example to show.  These correspond to the pictures above. */
+    /* which example to show. These correspond to the pictures above. */
     switch (which) {
     case 1:
 	/* create a new label. */
@@ -1108,16 +1163,16 @@ main (int argc, char *argv[])
 	 * order. */
 	gtk_box_pack_start (GTK_BOX (box1), label, FALSE, FALSE, 0);
 	
-	/* show the label */
+	/* Show the label */
 	gtk_widget_show (label);
 	
-	/* call our make box function - homogeneous = FALSE, spacing = 0,
+	/* Call our make box function - homogeneous = FALSE, spacing = 0,
 	 * expand = FALSE, fill = FALSE, padding = 0 */
 	box2 = make_box (FALSE, 0, FALSE, FALSE, 0);
 	gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, FALSE, 0);
 	gtk_widget_show (box2);
 
-	/* call our make box function - homogeneous = FALSE, spacing = 0,
+	/* Call our make box function - homogeneous = FALSE, spacing = 0,
 	 * expand = FALSE, fill = FALSE, padding = 0 */
 	box2 = make_box (FALSE, 0, TRUE, FALSE, 0);
 	gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, FALSE, 0);
@@ -1128,17 +1183,17 @@ main (int argc, char *argv[])
 	gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, FALSE, 0);
 	gtk_widget_show (box2);
 	
-	/* creates a separator, we'll learn more about these later, 
+	/* Creates a separator, we'll learn more about these later, 
 	 * but they are quite simple. */
 	separator = gtk_hseparator_new ();
 	
-	/* pack the separator into the vbox.  Remember each of these
+	/* Cack the separator into the vbox. Remember each of these
 	 * widgets are being packed into a vbox, so they'll be stacked
 	 * vertically. */
 	gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 5);
 	gtk_widget_show (separator);
 	
-	/* create another new label, and show it. */
+	/* Create another new label, and show it. */
 	label = gtk_label_new ("gtk_hbox_new (TRUE, 0);");
 	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
 	gtk_box_pack_start (GTK_BOX (box1), label, FALSE, FALSE, 0);
@@ -1154,7 +1209,7 @@ main (int argc, char *argv[])
 	gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, FALSE, 0);
 	gtk_widget_show (box2);
 	
-	/* another new separator. */
+	/* Another new separator. */
 	separator = gtk_hseparator_new ();
 	/* The last 3 arguments to gtk_box_pack_start are: expand, fill, padding. */
 	gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 5);
@@ -1164,7 +1219,7 @@ main (int argc, char *argv[])
 
     case 2:
 
-	/* create a new label, remember box1 is a vbox as created 
+	/* Create a new label, remember box1 is a vbox as created 
 	 * near the beginning of main() */
 	label = gtk_label_new ("gtk_hbox_new (FALSE, 10);");
 	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
@@ -1209,27 +1264,28 @@ main (int argc, char *argv[])
     
     case 3:
 
-    /* This demonstrates the ability to use gtk_box_pack_end() to
-	 * right justify widgets.  First, we create a new box as before. */
+        /* This demonstrates the ability to use gtk_box_pack_end() to
+	 * right justify widgets. First, we create a new box as before. */
 	box2 = make_box (FALSE, 0, FALSE, FALSE, 0);
-	/* create the label that will be put at the end. */
+
+	/* Create the label that will be put at the end. */
 	label = gtk_label_new ("end");
-	/* pack it using gtk_box_pack_end(), so it is put on the right side
-	 * of the hbox created in the make_box() call. */
+	/* Pack it using gtk_box_pack_end(), so it is put on the right
+	 * side of the hbox created in the make_box() call. */
 	gtk_box_pack_end (GTK_BOX (box2), label, FALSE, FALSE, 0);
-	/* show the label. */
+	/* Show the label. */
 	gtk_widget_show (label);
 	
-	/* pack box2 into box1 (the vbox remember ? :) */
+	/* Pack box2 into box1 (the vbox remember ? :) */
 	gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, FALSE, 0);
 	gtk_widget_show (box2);
 	
-	/* a separator for the bottom. */
+	/* A separator for the bottom. */
 	separator = gtk_hseparator_new ();
-	/* this explicitly sets the separator to 400 pixels wide by 5 pixels
-	 * high.  This is so the hbox we created will also be 400 pixels wide,
+	/* This explicitly sets the separator to 400 pixels wide by 5 pixels
+	 * high. This is so the hbox we created will also be 400 pixels wide,
 	 * and the "end" label will be separated from the other labels in the
-	 * hbox.  Otherwise, all the widgets in the hbox would be packed as
+	 * hbox. Otherwise, all the widgets in the hbox would be packed as
 	 * close together as possible. */
 	gtk_widget_set_usize (separator, 400, 5);
 	/* pack the separator into the vbox (box1) created near the start 
@@ -1244,23 +1300,23 @@ main (int argc, char *argv[])
     /* Our quit button. */
     button = gtk_button_new_with_label ("Quit");
     
-    /* setup the signal to destroy the window.  Remember that this will send
+    /* Setup the signal to destroy the window. Remember that this will send
      * the "destroy" signal to the window which will be caught by our signal
      * handler as defined above. */
     gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
 			       GTK_SIGNAL_FUNC (gtk_main_quit),
 			       GTK_OBJECT (window));
-    /* pack the button into the quitbox.
+    /* Pack the button into the quitbox.
      * The last 3 arguments to gtk_box_pack_start are: expand, fill, padding. */
     gtk_box_pack_start (GTK_BOX (quitbox), button, TRUE, FALSE, 0);
     /* pack the quitbox into the vbox (box1) */
     gtk_box_pack_start (GTK_BOX (box1), quitbox, FALSE, FALSE, 0);
     
-    /* pack the vbox (box1) which now contains all our widgets, into the
+    /* Pack the vbox (box1) which now contains all our widgets, into the
      * main window. */
     gtk_container_add (GTK_CONTAINER (window), box1);
     
-    /* and show everything left */
+    /* And show everything left */
     gtk_widget_show (button);
     gtk_widget_show (quitbox);
     
@@ -1271,10 +1327,10 @@ main (int argc, char *argv[])
     /* And of course, our main function. */
     gtk_main ();
 
-    /* control returns here when gtk_main_quit() is called, but not when 
+    /* Control returns here when gtk_main_quit() is called, but not when 
      * gtk_exit is used. */
     
-    return 0;
+    return(0);
 }
 /* example-end */
 </verb></tscreen>
@@ -1282,11 +1338,11 @@ main (int argc, char *argv[])
 <!-- ----------------------------------------------------------------- -->
 <sect1>Packing Using Tables
 <p>
-Let's take a look at another way of packing - Tables.  These can be
+Let's take a look at another way of packing - Tables. These can be
 extremely useful in certain situations.
 
-Using tables, we create a grid that we can place widgets in. The widgets
-may take up as many spaces as we specify.
+Using tables, we create a grid that we can place widgets in. The
+widgets may take up as many spaces as we specify.
 
 The first thing to look at of course, is the gtk_table_new function:
 
@@ -1296,18 +1352,18 @@ GtkWidget *gtk_table_new( gint rows,
                           gint homogeneous );
 </verb></tscreen>
 
-The first argument is the number of rows to make in the table, while the
-second, obviously, is the number of columns.
+The first argument is the number of rows to make in the table, while
+the second, obviously, is the number of columns.
 
-The homogeneous argument has to do with how the table's boxes are sized. If
-homogeneous is TRUE, the table boxes are resized to the size of the largest
-widget in the table. If homogeneous is FALSE, the size of a table boxes is 
-dictated by the tallest widget in its same row, and the widest widget in its
-column.
+The homogeneous argument has to do with how the table's boxes are
+sized. If homogeneous is TRUE, the table boxes are resized to the size
+of the largest widget in the table. If homogeneous is FALSE, the size
+of a table boxes is dictated by the tallest widget in its same row,
+and the widest widget in its column.
 
-The rows and columns are laid out from 0 to n, where n was the
-number specified in the call to gtk_table_new.  So, if you specify rows = 2 and 
-columns = 2, the layout would look something like this:
+The rows and columns are laid out from 0 to n, where n was the number
+specified in the call to gtk_table_new. So, if you specify rows = 2
+and columns = 2, the layout would look something like this:
 
 <tscreen><verb>
  0          1          2
@@ -1318,8 +1374,8 @@ columns = 2, the layout would look something like this:
 2+----------+----------+
 </verb></tscreen>
 
-Note that the coordinate system starts in the upper left hand corner.  To place a 
-widget into a box, use the following function:
+Note that the coordinate system starts in the upper left hand corner.
+To place a widget into a box, use the following function:
 
 <tscreen><verb>
 void gtk_table_attach( GtkTable  *table,
@@ -1334,38 +1390,40 @@ void gtk_table_attach( GtkTable  *table,
                        gint       ypadding );
 </verb></tscreen>				       
 
-Where the first argument ("table") is the table you've created and the second
-("child") the widget you wish to place in the table.
+Where the first argument ("table") is the table you've created and the
+second ("child") the widget you wish to place in the table.
 
-The left and right attach arguments specify where to place the widget, and how
-many boxes to use. If you want a button in the lower right table entry 
-of our 2x2 table, and want it to fill that entry ONLY.  left_attach would be = 1, 
-right_attach = 2, top_attach = 1, bottom_attach = 2.
+The left and right attach arguments specify where to place the widget,
+and how many boxes to use. If you want a button in the lower right
+table entry of our 2x2 table, and want it to fill that entry ONLY,
+left_attach would be = 1, right_attach = 2, top_attach = 1,
+bottom_attach = 2.
 
-Now, if you wanted a widget to take up the whole 
-top row of our 2x2 table, you'd use left_attach = 0, right_attach = 2,
-top_attach = 0, bottom_attach = 1.
+Now, if you wanted a widget to take up the whole top row of our 2x2
+table, you'd use left_attach = 0, right_attach = 2, top_attach = 0,
+bottom_attach = 1.
 
-The xoptions and yoptions are used to specify packing options and may be OR'ed 
-together to allow multiple options.  
+The xoptions and yoptions are used to specify packing options and may
+be bitwise OR'ed together to allow multiple options.
 
 These options are:
 <itemize>
-<item>GTK_FILL - If the table box is larger than the widget, and GTK_FILL is
-specified, the widget will expand to use all the room available.
+<item>GTK_FILL - If the table box is larger than the widget, and
+GTK_FILL is specified, the widget will expand to use all the room
+available.
 
-<item>GTK_SHRINK - If the table widget was allocated less space then was
-requested (usually by the user resizing the window), then the widgets would 
-normally just be pushed off the bottom of
-the window and disappear.  If GTK_SHRINK is specified, the widgets will
-shrink with the table.
+<item>GTK_SHRINK - If the table widget was allocated less space then
+was requested (usually by the user resizing the window), then the
+widgets would normally just be pushed off the bottom of the window and
+disappear. If GTK_SHRINK is specified, the widgets will shrink with
+the table.
 
-<item>GTK_EXPAND - This will cause the table to expand to use up any remaining
-space in the window.
+<item>GTK_EXPAND - This will cause the table to expand to use up any
+remaining space in the window.
 </itemize>
 
 Padding is just like in boxes, creating a clear area around the widget
-specified in pixels.  
+specified in pixels.
 
 gtk_table_attach() has a LOT of options.  So, there's a shortcut:
 
@@ -1378,12 +1436,13 @@ void gtk_table_attach_defaults( GtkTable  *table,
                                 gint       bottom_attach );
 </verb></tscreen>
 
-The X and Y options default to GTK_FILL | GTK_EXPAND, and X and Y padding
-are set to 0. The rest of the arguments are identical to the previous
-function.
+The X and Y options default to GTK_FILL | GTK_EXPAND, and X and Y
+padding are set to 0. The rest of the arguments are identical to the
+previous function.
 
-We also have gtk_table_set_row_spacing() and gtk_table_set_col_spacing().
-This places spacing between the rows at the specified row or column.
+We also have gtk_table_set_row_spacing() and
+gtk_table_set_col_spacing().  This places spacing between the rows at
+the specified row or column.
 
 <tscreen><verb>
 void gtk_table_set_row_spacing( GtkTable *table,
@@ -1399,8 +1458,8 @@ void gtk_table_set_col_spacing ( GtkTable *table,
                                  gint      spacing );
 </verb></tscreen>
 
-Note that for columns, the space goes to the right of the column, and for 
-rows, the space goes below the row.
+Note that for columns, the space goes to the right of the column, and
+for rows, the space goes below the row.
 
 You can also set a consistent spacing of all rows and/or columns with:
 
@@ -1416,8 +1475,8 @@ void gtk_table_set_col_spacings( GtkTable *table,
                                  gint      spacing );
 </verb></tscreen>
 
-Note that with these calls, the last row and last column do not get any 
-spacing.
+Note that with these calls, the last row and last column do not get
+any spacing.
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>Table Packing Example
@@ -1441,20 +1500,24 @@ Here's the source code:
 
 #include <gtk/gtk.h>
 
-/* our callback.
- * the data passed to this function is printed to stdout */
-void callback (GtkWidget *widget, gpointer data)
+/* Our callback.
+ * The data passed to this function is printed to stdout */
+void callback( GtkWidget *widget,
+               gpointer   data )
 {
     g_print ("Hello again - %s was pressed\n", (char *) data);
 }
 
-/* this callback quits the program */
-void delete_event (GtkWidget *widget, GdkEvent *event, gpointer data)
+/* This callback quits the program */
+void delete_event( GtkWidget *widget,
+                   GdkEvent  *event,
+		   gpointer   data )
 {
     gtk_main_quit ();
 }
 
-int main (int argc, char *argv[])
+int main( int   argc,
+          char *argv[] )
 {
     GtkWidget *window;
     GtkWidget *button;
@@ -1462,62 +1525,62 @@ int main (int argc, char *argv[])
 
     gtk_init (&amp;argc, &amp;argv);
 
-    /* create a new window */
+    /* Create a new window */
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
-    /* set the window title */
+    /* Set the window title */
     gtk_window_set_title (GTK_WINDOW (window), "Table");
 
-    /* set a handler for delete_event that immediately
+    /* Set a handler for delete_event that immediately
      * exits GTK. */
     gtk_signal_connect (GTK_OBJECT (window), "delete_event",
                         GTK_SIGNAL_FUNC (delete_event), NULL);
 
-    /* sets the border width of the window. */
+    /* Sets the border width of the window. */
     gtk_container_border_width (GTK_CONTAINER (window), 20);
 
-    /* create a 2x2 table */
+    /* Create a 2x2 table */
     table = gtk_table_new (2, 2, TRUE);
 
-    /* put the table in the main window */
+    /* Put the table in the main window */
     gtk_container_add (GTK_CONTAINER (window), table);
 
-    /* create first button */
+    /* Create first button */
     button = gtk_button_new_with_label ("button 1");
 
-    /* when the button is clicked, we call the "callback" function
+    /* When the button is clicked, we call the "callback" function
      * with a pointer to "button 1" as its argument */
     gtk_signal_connect (GTK_OBJECT (button), "clicked",
               GTK_SIGNAL_FUNC (callback), (gpointer) "button 1");
 
 
-    /* insert button 1 into the upper left quadrant of the table */
+    /* Insert button 1 into the upper left quadrant of the table */
     gtk_table_attach_defaults (GTK_TABLE(table), button, 0, 1, 0, 1);
 
     gtk_widget_show (button);
 
-    /* create second button */
+    /* Create second button */
 
     button = gtk_button_new_with_label ("button 2");
 
-    /* when the button is clicked, we call the "callback" function
+    /* When the button is clicked, we call the "callback" function
      * with a pointer to "button 2" as its argument */
     gtk_signal_connect (GTK_OBJECT (button), "clicked",
               GTK_SIGNAL_FUNC (callback), (gpointer) "button 2");
-    /* insert button 2 into the upper right quadrant of the table */
+    /* Insert button 2 into the upper right quadrant of the table */
     gtk_table_attach_defaults (GTK_TABLE(table), button, 1, 2, 0, 1);
 
     gtk_widget_show (button);
 
-    /* create "Quit" button */
+    /* Create "Quit" button */
     button = gtk_button_new_with_label ("Quit");
 
-    /* when the button is clicked, we call the "delete_event" function
+    /* When the button is clicked, we call the "delete_event" function
      * and the program exits */
     gtk_signal_connect (GTK_OBJECT (button), "clicked",
                         GTK_SIGNAL_FUNC (delete_event), NULL);
 
-    /* insert the quit button into the both 
+    /* Insert the quit button into the both 
      * lower quadrants of the table */
     gtk_table_attach_defaults (GTK_TABLE(table), button, 0, 2, 1, 2);
 
@@ -1539,35 +1602,35 @@ int main (int argc, char *argv[])
 <p>
 The general steps to creating a widget in GTK are:
 <enum>
-<item> gtk_*_new - one of various functions to create a new widget.  These
-are all detailed in this section.
+<item> gtk_*_new - one of various functions to create a new widget.
+These are all detailed in this section.
 
 <item> Connect all signals and events we wish to use to the
 appropriate handlers.
 
 <item> Set the attributes of the widget.
 
-<item> Pack the widget into a container using the appropriate call such as 
-gtk_container_add() or gtk_box_pack_start().
+<item> Pack the widget into a container using the appropriate call
+such as gtk_container_add() or gtk_box_pack_start().
 
 <item> gtk_widget_show() the widget.
 </enum>
 
-gtk_widget_show() lets GTK know that we are done setting the attributes
-of the widget, and it is ready to be displayed.  You may also use
-gtk_widget_hide to make it disappear again.  The order in which you
-show the widgets is not important, but I suggest showing the window
-last so the whole window pops up at once rather than seeing the individual
-widgets come up on the screen as they're formed.  The children of a widget
-(a window is a widget too) will not be displayed until the window itself
-is shown using the gtk_widget_show() function.
+gtk_widget_show() lets GTK know that we are done setting the
+attributes of the widget, and it is ready to be displayed. You may
+also use gtk_widget_hide to make it disappear again. The order in
+which you show the widgets is not important, but I suggest showing the
+window last so the whole window pops up at once rather than seeing the
+individual widgets come up on the screen as they're formed. The
+children of a widget (a window is a widget too) will not be displayed
+until the window itself is shown using the gtk_widget_show() function.
 
 <!-- ----------------------------------------------------------------- -->
 <sect1> Casting
 <p>
-You'll notice as you go on, that GTK uses a type casting system.  This is
-always done using macros that both test the ability to cast the given item,
-and perform the cast.  Some common ones you will see are:
+You'll notice as you go on, that GTK uses a type casting system. This
+is always done using macros that both test the ability to cast the
+given item, and perform the cast. Some common ones you will see are:
 
 <itemize>
 <item> GTK_WIDGET(widget)
@@ -1578,13 +1641,14 @@ and perform the cast.  Some common ones you will see are:
 <item> GTK_BOX(box)
 </itemize>
 
-These are all used to cast arguments in functions.  You'll see them in the
+These are all used to cast arguments in functions. You'll see them in the
 examples, and can usually tell when to use them simply by looking at the
 function's declaration.
 
-As you can see below in the class hierarchy, all GtkWidgets are derived from
-the GtkObject base class.  This means you can use a widget in any place the 
-function asks for an object - simply use the GTK_OBJECT() macro.
+As you can see below in the class hierarchy, all GtkWidgets are
+derived from the GtkObject base class. This means you can use a widget
+in any place the function asks for an object - simply use the
+GTK_OBJECT() macro.
 
 For example:
 
@@ -1593,18 +1657,18 @@ gtk_signal_connect( GTK_OBJECT(button), "clicked",
                     GTK_SIGNAL_FUNC(callback_function), callback_data);
 </verb></tscreen> 
 
-This casts the button into an object, and provides a cast for the function
-pointer to the callback.
+This casts the button into an object, and provides a cast for the
+function pointer to the callback.
 
-Many widgets are also containers.  If you look in the class hierarchy below,
-you'll notice that many widgets derive from the GtkContainer class.  Any one
-of these widgets may be used with the GTK_CONTAINER macro to pass them to
-functions that ask for containers.
+Many widgets are also containers. If you look in the class hierarchy
+below, you'll notice that many widgets derive from the GtkContainer
+class. Any one of these widgets may be used with the GTK_CONTAINER
+macro to pass them to functions that ask for containers.
 
-Unfortunately, these macros are not extensively covered in the tutorial, but I
-recommend taking a look through the GTK header files.  It can be very
-educational.  In fact, it's not difficult to learn how a widget works just
-by looking at the function declarations.
+Unfortunately, these macros are not extensively covered in the
+tutorial, but I recommend taking a look through the GTK header
+files. It can be very educational. In fact, it's not difficult to
+learn how a widget works just by looking at the function declarations.
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>Widget Hierarchy
@@ -1612,94 +1676,106 @@ by looking at the function declarations.
 For your reference, here is the class hierarchy tree used to implement widgets.
 
 <tscreen><verb>
-  GtkObject
-   +GtkData
-   | +GtkAdjustment
-   | `GtkTooltips
-   `GtkWidget
-     +GtkContainer
-     | +GtkBin
-     | | +GtkAlignment
-     | | +GtkEventBox
-     | | +GtkFrame
-     | | | `GtkAspectFrame
-     | | +GtkHandleBox
-     | | +GtkItem
-     | | | +GtkListItem
-     | | | +GtkMenuItem
-     | | | | `GtkCheckMenuItem
-     | | | |   `GtkRadioMenuItem
-     | | | `GtkTreeItem
-     | | +GtkViewport
-     | | `GtkWindow
-     | |   +GtkColorSelectionDialog
-     | |   +GtkDialog
-     | |   | `GtkInputDialog
-     | |   `GtkFileSelection
-     | +GtkBox
-     | | +GtkButtonBox
-     | | | +GtkHButtonBox
-     | | | `GtkVButtonBox
-     | | +GtkHBox
-     | | | +GtkCombo
-     | | | `GtkStatusbar
-     | | `GtkVBox
-     | |   +GtkColorSelection
-     | |   `GtkGammaCurve
-     | +GtkButton
-     | | +GtkOptionMenu
-     | | `GtkToggleButton
-     | |   `GtkCheckButton
-     | |     `GtkRadioButton
-     | +GtkCList
-     |  `GtkCTree
-     | +GtkFixed
-     | +GtkList
-     | +GtkMenuShell
-     | | +GtkMenuBar
-     | | `GtkMenu
-     | +GtkNotebook
-     | +GtkPaned
-     | | +GtkHPaned
-     | | `GtkVPaned
-     | +GtkScrolledWindow
-     | +GtkTable
-     | +GtkToolbar
-     | `GtkTree
-     +GtkDrawingArea
-     | `GtkCurve
-     +GtkEditable
-     | +GtkEntry
-     | | `GtkSpinButton
-     | `GtkText
-     +GtkMisc
-     | +GtkArrow
-     | +GtkImage
-     | +GtkLabel
-     | | `GtkTipsQuery
-     | `GtkPixmap
-     +GtkPreview
-     +GtkProgressBar
-     +GtkRange
-     | +GtkScale
-     | | +GtkHScale
-     | | `GtkVScale
-     | `GtkScrollbar
-     |   +GtkHScrollbar
-     |   `GtkVScrollbar
-     +GtkRuler
-     | +GtkHRuler
-     | `GtkVRuler
-     `GtkSeparator
-       +GtkHSeparator
-       `GtkVSeparator
+ GtkObject
+  +GtkWidget
+  | +GtkMisc
+  | | +GtkLabel
+  | | | +GtkAccelLabel
+  | | | `GtkTipsQuery
+  | | +GtkArrow
+  | | +GtkImage
+  | | `GtkPixmap
+  | +GtkContainer
+  | | +GtkBin
+  | | | +GtkAlignment
+  | | | +GtkFrame
+  | | | | `GtkAspectFrame
+  | | | +GtkButton
+  | | | | +GtkToggleButton
+  | | | | | `GtkCheckButton
+  | | | | |   `GtkRadioButton
+  | | | | `GtkOptionMenu
+  | | | +GtkItem
+  | | | | +GtkMenuItem
+  | | | | | +GtkCheckMenuItem
+  | | | | | | `GtkRadioMenuItem
+  | | | | | `GtkTearoffMenuItem
+  | | | | +GtkListItem
+  | | | | `GtkTreeItem
+  | | | +GtkWindow
+  | | | | +GtkColorSelectionDialog
+  | | | | +GtkDialog
+  | | | | | `GtkInputDialog
+  | | | | +GtkDrawWindow
+  | | | | +GtkFileSelection
+  | | | | +GtkFontSelectionDialog
+  | | | | `GtkPlug
+  | | | +GtkEventBox
+  | | | +GtkHandleBox
+  | | | +GtkScrolledWindow
+  | | | `GtkViewport
+  | | +GtkBox
+  | | | +GtkButtonBox
+  | | | | +GtkHButtonBox
+  | | | | `GtkVButtonBox
+  | | | +GtkVBox
+  | | | | +GtkColorSelection
+  | | | | `GtkGammaCurve
+  | | | `GtkHBox
+  | | |   +GtkCombo
+  | | |   `GtkStatusbar
+  | | +GtkCList
+  | | | `GtkCTree
+  | | +GtkFixed
+  | | +GtkNotebook
+  | | | `GtkFontSelection
+  | | +GtkPaned
+  | | | +GtkHPaned
+  | | | `GtkVPaned
+  | | +GtkLayout
+  | | +GtkList
+  | | +GtkMenuShell
+  | | | +GtkMenuBar
+  | | | `GtkMenu
+  | | +GtkPacker
+  | | +GtkSocket
+  | | +GtkTable
+  | | +GtkToolbar
+  | | `GtkTree
+  | +GtkCalendar
+  | +GtkDrawingArea
+  | | `GtkCurve
+  | +GtkEditable
+  | | +GtkEntry
+  | | | `GtkSpinButton
+  | | `GtkText
+  | +GtkRuler
+  | | +GtkHRuler
+  | | `GtkVRuler
+  | +GtkRange
+  | | +GtkScale
+  | | | +GtkHScale
+  | | | `GtkVScale
+  | | `GtkScrollbar
+  | |   +GtkHScrollbar
+  | |   `GtkVScrollbar
+  | +GtkSeparator
+  | | +GtkHSeparator
+  | | `GtkVSeparator
+  | +GtkPreview
+  | `GtkProgress
+  |   `GtkProgressBar
+  +GtkData
+  | +GtkAdjustment
+  | `GtkTooltips
+  `GtkItemFactory
 </verb></tscreen>
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>Widgets Without Windows
 <p>
-The following widgets do not have an associated window.  If you want to
-capture events, you'll have to use the GtkEventBox.  See the section on   
+The following widgets do not have an associated window. If you want to
+capture events, you'll have to use the GtkEventBox. See the section on
 <ref id="sec_The_EventBox_Widget" name="The EventBox Widget">
 
 <tscreen><verb>
@@ -1723,8 +1799,8 @@ GtkHSeparator
 </verb></tscreen>
 
 We'll further our exploration of GTK by examining each widget in turn,
-creating a few simple functions to display them.  Another good source is
-the testgtk.c program that comes with GTK.  It can be found in
+creating a few simple functions to display them. Another good source
+is the testgtk.c program that comes with GTK. It can be found in
 gtk/testgtk.c.
 
 <!-- ***************************************************************** -->
@@ -1734,27 +1810,31 @@ gtk/testgtk.c.
 <!-- ----------------------------------------------------------------- -->
 <sect1>Normal Buttons
 <p>
-We've almost seen all there is to see of the button widget. It's pretty
-simple.  There are however two ways to create a button. You can use the
-gtk_button_new_with_label() to create a button with a label, or use
-gtk_button_new() to create a blank button. It's then up to you to pack a
-label or pixmap into this new button. To do this, create a new box, and
-then pack your objects into this box using the usual gtk_box_pack_start,
-and then use gtk_container_add to pack the box into the button.
+We've almost seen all there is to see of the button widget. It's
+pretty simple. There are however two ways to create a button. You can
+use the gtk_button_new_with_label() to create a button with a label,
+or use gtk_button_new() to create a blank button. It's then up to you
+to pack a label or pixmap into this new button. To do this, create a
+new box, and then pack your objects into this box using the usual
+gtk_box_pack_start, and then use gtk_container_add to pack the box
+into the button.
 
 Here's an example of using gtk_button_new to create a button with a
-picture and a label in it.  I've broken up the code to create a box from
-the rest so you can use it in your programs.
+picture and a label in it. I've broken up the code to create a box
+from the rest so you can use it in your programs. There are further
+examples of using pixmaps later in the tutorial.
 
 <tscreen><verb>
 /* example-start buttons buttons.c */
 
 #include <gtk/gtk.h>
 
-/* create a new hbox with an image and a label packed into it
- * and return the box.. */
+/* Create a new hbox with an image and a label packed into it
+ * and return the box. */
 
-GtkWidget *xpm_label_box (GtkWidget *parent, gchar *xpm_filename, gchar *label_text)
+GtkWidget *xpm_label_box( GtkWidget *parent,
+                          gchar     *xpm_filename,
+                          gchar     *label_text )
 {
     GtkWidget *box1;
     GtkWidget *label;
@@ -1763,24 +1843,24 @@ GtkWidget *xpm_label_box (GtkWidget *parent, gchar *xpm_filename, gchar *label_t
     GdkBitmap *mask;
     GtkStyle *style;
 
-    /* create box for xpm and label */
+    /* Create box for xpm and label */
     box1 = gtk_hbox_new (FALSE, 0);
     gtk_container_border_width (GTK_CONTAINER (box1), 2);
 
-    /* get style of button.. I assume it's to get the background color.
-     * if someone knows the real reason, please enlighten me. */
+    /* Get the style of the button to get the
+     * background color. */
     style = gtk_widget_get_style(parent);
 
-    /* now on to the xpm stuff.. load xpm */
+    /* Now on to the xpm stuff */
     pixmap = gdk_pixmap_create_from_xpm (parent->window, &amp;mask,
 					 &amp;style->bg[GTK_STATE_NORMAL],
 					 xpm_filename);
     pixmapwid = gtk_pixmap_new (pixmap, mask);
 
-    /* create label for button */
+    /* Create a label for the button */
     label = gtk_label_new (label_text);
 
-    /* pack the pixmap and label into the box */
+    /* Pack the pixmap and label into the box */
     gtk_box_pack_start (GTK_BOX (box1),
 			pixmapwid, FALSE, FALSE, 3);
 
@@ -1789,17 +1869,19 @@ GtkWidget *xpm_label_box (GtkWidget *parent, gchar *xpm_filename, gchar *label_t
     gtk_widget_show(pixmapwid);
     gtk_widget_show(label);
 
-    return (box1);
+    return(box1);
 }
 
-/* our usual callback function */
-void callback (GtkWidget *widget, gpointer data)
+/* Our usual callback function */
+void callback( GtkWidget *widget,
+               gpointer   data )
 {
     g_print ("Hello again - %s was pressed\n", (char *) data);
 }
 
 
-int main (int argc, char *argv[])
+int main( int   argc,
+          char *argv[] )
 {
     /* GtkWidget is the storage type for widgets */
     GtkWidget *window;
@@ -1808,7 +1890,7 @@ int main (int argc, char *argv[])
 
     gtk_init (&amp;argc, &amp;argv);
 
-    /* create a new window */
+    /* Create a new window */
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
     gtk_window_set_title (GTK_WINDOW (window), "Pixmap'd Buttons!");
@@ -1821,21 +1903,21 @@ int main (int argc, char *argv[])
 			GTK_SIGNAL_FUNC (gtk_exit), NULL);
 
 
-    /* sets the border width of the window. */
+    /* Sets the border width of the window. */
     gtk_container_border_width (GTK_CONTAINER (window), 10);
     gtk_widget_realize(window);
 
-    /* create a new button */
+    /* Create a new button */
     button = gtk_button_new ();
 
-    /* You should be getting used to seeing most of these functions by now */
+    /* Connect the "clicked" signal of the button to our callback */
     gtk_signal_connect (GTK_OBJECT (button), "clicked",
 			GTK_SIGNAL_FUNC (callback), (gpointer) "cool button");
 
-    /* this calls our box creating function */
+    /* This calls our box creating function */
     box1 = xpm_label_box(window, "info.xpm", "cool button");
 
-    /* pack and show all our widgets */
+    /* Pack and show all our widgets */
     gtk_widget_show(box1);
 
     gtk_container_add (GTK_CONTAINER (button), box1);
@@ -1846,16 +1928,16 @@ int main (int argc, char *argv[])
 
     gtk_widget_show (window);
 
-    /* rest in gtk_main and wait for the fun to begin! */
+    /* Rest in gtk_main and wait for the fun to begin! */
     gtk_main ();
 
-    return 0;
+    return(0);
 }
 /* example-end */
 </verb></tscreen>
 
-The xpm_label_box function could be used to pack xpm's and labels into any
-widget that can be a container.
+The xpm_label_box function could be used to pack xpm's and labels into
+any widget that can be a container.
 
 The Button widget has the following signals:
 
@@ -1870,14 +1952,14 @@ The Button widget has the following signals:
 <!-- ----------------------------------------------------------------- -->
 <sect1> Toggle Buttons
 <p>
-Toggle buttons are derived from normal buttons and are very similar, except
-they will always be in one of two states, alternated by a click.  They may
-be depressed, and when you click again, they will pop back up. Click again,
-and they will pop back down. 
+Toggle buttons are derived from normal buttons and are very similar,
+except they will always be in one of two states, alternated by a
+click. They may be depressed, and when you click again, they will pop
+back up. Click again, and they will pop back down.
 
-Toggle buttons are the basis for check buttons and radio buttons, as such,
-many of the calls used for toggle buttons are inherited by radio and check
-buttons. I will point these out when we come to them.
+Toggle buttons are the basis for check buttons and radio buttons, as
+such, many of the calls used for toggle buttons are inherited by radio
+and check buttons. I will point these out when we come to them.
 
 Creating a new toggle button:
 
@@ -1888,16 +1970,17 @@ GtkWidget *gtk_toggle_button_new_with_label( gchar *label );
 </verb></tscreen>
 
 As you can imagine, these work identically to the normal button widget
-calls. The first creates a blank toggle button, and the second, a button 
-with a label widget already packed into it.
+calls. The first creates a blank toggle button, and the second, a
+button with a label widget already packed into it.
 
 To retrieve the state of the toggle widget, including radio and check
-buttons, we use a macro as shown in our example below.  This tests the state
-of the toggle in a callback. The signal of interest emitted to us by toggle
-buttons (the toggle button, check button, and radio button widgets), is the
-"toggled" signal.  To check the state of these buttons, set up a signal
-handler to catch the toggled signal, and use the macro to determine its
-state. The callback will look something like:
+buttons, we use a GTK macro as shown in our example below. This tests
+the state of the toggle in a callback. The signal of interest emitted
+to us by toggle buttons (the toggle button, check button, and radio
+button widgets), is the "toggled" signal. To check the state of these
+buttons, set up a signal handler to catch the toggled signal, and use
+the macro to determine its state. The callback will look something
+like:
 
 <tscreen><verb>
 void toggle_button_callback (GtkWidget *widget, gpointer data)
@@ -1918,15 +2001,15 @@ void gtk_toggle_button_set_state( GtkToggleButton *toggle_button,
                                   gint             state );
 </verb></tscreen>
 
-The above call can be used to set the state of the toggle button, and its
-children the radio and check buttons. Passing in your created button as
-the first argument, and a TRUE or FALSE for the second state argument to
-specify whether it should be down (depressed) or up (released).  Default
-is up, or FALSE.
+The above call can be used to set the state of the toggle button, and
+its children the radio and check buttons. Passing in your created
+button as the first argument, and a TRUE or FALSE for the second state
+argument to specify whether it should be down (depressed) or up
+(released). Default is up, or FALSE.
 
-Note that when you use the gtk_toggle_button_set_state() function, and the
-state is actually changed, it causes the "clicked" signal to be emitted 
-from the button.
+Note that when you use the gtk_toggle_button_set_state() function, and
+the state is actually changed, it causes the "clicked" signal to be
+emitted from the button.
 
 <tscreen><verb>
 void gtk_toggle_button_toggled (GtkToggleButton *toggle_button);
@@ -1937,10 +2020,11 @@ This simply toggles the button, and emits the "toggled" signal.
 <!-- ----------------------------------------------------------------- -->
 <sect1> Check Buttons
 <p>
-Check buttons inherent many properties and functions from the the toggle
-buttons above, but look a little different. Rather than being buttons with
-text inside them, they are small squares with the text to the right of 
-them. These are often used for toggling options on and off in applications.
+Check buttons inherent many properties and functions from the the
+toggle buttons above, but look a little different. Rather than being
+buttons with text inside them, they are small squares with the text to
+the right of them. These are often used for toggling options on and
+off in applications.
 
 The two creation functions are similar to those of the normal button.
 
@@ -1950,17 +2034,19 @@ GtkWidget *gtk_check_button_new( void );
 GtkWidget *gtk_check_button_new_with_label ( gchar *label );
 </verb></tscreen>
 
-The new_with_label function creates a check button with a label beside it.
+The new_with_label function creates a check button with a label beside
+it.
 
-Checking the state of the check button is identical to that of the toggle
-button.
+Checking the state of the check button is identical to that of the
+toggle button.
 
 <!-- ----------------------------------------------------------------- -->
 <sect1> Radio Buttons <label id="sec_Radio_Buttons">
 <p>
-Radio buttons are similar to check buttons except they are grouped so that
-only one may be selected/depressed at a time. This is good for places in
-your application where you need to select from a short list of options.
+Radio buttons are similar to check buttons except they are grouped so
+that only one may be selected/depressed at a time. This is good for
+places in your application where you need to select from a short list
+of options.
 
 Creating a new radio button is done with one of these calls:
 
@@ -1971,24 +2057,33 @@ GtkWidget *gtk_radio_button_new_with_label( GSList *group,
                                             gchar  *label );
 </verb></tscreen>
 
-You'll notice the extra argument to these calls.  They require a group to
-perform their duty properly. The first call to
+You'll notice the extra argument to these calls. They require a group
+to perform their duty properly. The first call to
 gtk_radio_button_new_with_label or gtk_radio_button_new_with_label
-should pass NULL as the first
-argument. Then create a group using:
+should pass NULL as the first argument. Then create a group using:
 
 <tscreen><verb>
 GSList *gtk_radio_button_group( GtkRadioButton *radio_button );
 </verb></tscreen>
 
 The important thing to remember is that gtk_radio_button_group must be
-called for each new button added to the group, with the previous button
-passed in as an argument. The result is then passed into the call to
-gtk_radio_button_new or gtk_radio_button_new_with_label. This allows a
-chain of buttons to be established. The example below should make this
-clear.
+called for each new button added to the group, with the previous
+button passed in as an argument. The result is then passed into the
+call to gtk_radio_button_new or gtk_radio_button_new_with_label. This
+allows a chain of buttons to be established. The example below should
+make this clear.
 
-It is also a good idea to explicitly set which button should be the 
+You can shorten this slightly by using the following syntax, which
+removes the need for a variable to hold the list of buttons. This form
+is used in the example to create the third button:
+
+<tscreen><verb>
+     button2 = gtk_radio_button_new_with_label(
+                 gtk_radio_button_group (GTK_RADIO_BUTTON (button1)),
+                 "button2");
+</verb></tscreen>
+
+It is also a good idea to explicitly set which button should be the
 default depressed button with:
 
 <tscreen><verb>
@@ -1996,8 +2091,8 @@ void gtk_toggle_button_set_state( GtkToggleButton *toggle_button,
                                   gint             state );
 </verb></tscreen>
 
-This is described in the section on toggle buttons, and works in exactly the
-same way.
+This is described in the section on toggle buttons, and works in
+exactly the same way.
 
 The following example creates a radio button group with three buttons.
 
@@ -2007,85 +2102,83 @@ The following example creates a radio button group with three buttons.
 #include <gtk/gtk.h>
 #include <glib.h>
 
-void close_application( GtkWidget *widget, GdkEvent *event, gpointer data ) {
+void close_application( GtkWidget *widget,
+                        GdkEvent  *event,
+			gpointer   data )
+{
   gtk_main_quit();
 }
 
-main(int argc,char *argv[])
+int main( int   argc,
+          char *argv[] )
 {
-  static GtkWidget *window = NULL;
-  GtkWidget *box1;
-  GtkWidget *box2;
-  GtkWidget *button;
-  GtkWidget *separator;
-  GSList *group;
+    GtkWidget *window = NULL;
+    GtkWidget *box1;
+    GtkWidget *box2;
+    GtkWidget *button;
+    GtkWidget *separator;
+    GSList *group;
   
-  gtk_init(&amp;argc,&amp;argv);          
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    gtk_init(&amp;argc,&amp;argv);    
+      
+    window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   
-  gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-		      GTK_SIGNAL_FUNC(close_application),
-		      NULL);
+    gtk_signal_connect (GTK_OBJECT (window), "delete_event",
+		        GTK_SIGNAL_FUNC(close_application),
+                        NULL);
 
-  gtk_window_set_title (GTK_WINDOW (window), "radio buttons");
-  gtk_container_border_width (GTK_CONTAINER (window), 0);
+    gtk_window_set_title (GTK_WINDOW (window), "radio buttons");
+    gtk_container_border_width (GTK_CONTAINER (window), 0);
 
-  box1 = gtk_vbox_new (FALSE, 0);
-  gtk_container_add (GTK_CONTAINER (window), box1);
-  gtk_widget_show (box1);
+    box1 = gtk_vbox_new (FALSE, 0);
+    gtk_container_add (GTK_CONTAINER (window), box1);
+    gtk_widget_show (box1);
 
-  box2 = gtk_vbox_new (FALSE, 10);
-  gtk_container_border_width (GTK_CONTAINER (box2), 10);
-  gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
-  gtk_widget_show (box2);
+    box2 = gtk_vbox_new (FALSE, 10);
+    gtk_container_border_width (GTK_CONTAINER (box2), 10);
+    gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
+    gtk_widget_show (box2);
 
-  button = gtk_radio_button_new_with_label (NULL, "button1");
-  gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-  gtk_widget_show (button);
+    button = gtk_radio_button_new_with_label (NULL, "button1");
+    gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
+    gtk_widget_show (button);
 
-  group = gtk_radio_button_group (GTK_RADIO_BUTTON (button));
-  button = gtk_radio_button_new_with_label(group, "button2");
-  gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (button), TRUE);
-  gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-  gtk_widget_show (button);
+    group = gtk_radio_button_group (GTK_RADIO_BUTTON (button));
+    button = gtk_radio_button_new_with_label(group, "button2");
+    gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (button), TRUE);
+    gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
+    gtk_widget_show (button);
 
-  group = gtk_radio_button_group (GTK_RADIO_BUTTON (button));
-  button = gtk_radio_button_new_with_label(group, "button3");
-  gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-  gtk_widget_show (button);
+    button = gtk_radio_button_new_with_label(
+	         gtk_radio_button_group (GTK_RADIO_BUTTON (button)),
+                 "button3");
+    gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
+    gtk_widget_show (button);
 
-  separator = gtk_hseparator_new ();
-  gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
-  gtk_widget_show (separator);
+    separator = gtk_hseparator_new ();
+    gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
+    gtk_widget_show (separator);
 
-  box2 = gtk_vbox_new (FALSE, 10);
-  gtk_container_border_width (GTK_CONTAINER (box2), 10);
-  gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
-  gtk_widget_show (box2);
+    box2 = gtk_vbox_new (FALSE, 10);
+    gtk_container_border_width (GTK_CONTAINER (box2), 10);
+    gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
+    gtk_widget_show (box2);
 
-  button = gtk_button_new_with_label ("close");
-  gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-			     GTK_SIGNAL_FUNC(close_application),
-			     GTK_OBJECT (window));
-  gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-  GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
-  gtk_widget_grab_default (button);
-  gtk_widget_show (button);
-  gtk_widget_show (window);
+    button = gtk_button_new_with_label ("close");
+    gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+                               GTK_SIGNAL_FUNC(close_application),
+                               GTK_OBJECT (window));
+    gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
+    GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+    gtk_widget_grab_default (button);
+    gtk_widget_show (button);
+    gtk_widget_show (window);
      
-  gtk_main();
-  return(0);
+    gtk_main();
+
+    return(0);
 }
 /* example-end */
-</verb></tscreen>
-
-You can shorten this slightly by using the following syntax, which
-removes the need for a variable to hold the list of buttons:
-
-<tscreen><verb>
-     button2 = gtk_radio_button_new_with_label(
-                 gtk_radio_button_group (GTK_RADIO_BUTTON (button1)),
-                 "button2");
 </verb></tscreen>
 
 <!-- TODO: check out gtk_radio_button_new_from_widget function - TRG -->
@@ -2096,9 +2189,10 @@ removes the need for a variable to hold the list of buttons:
 <p>
 GTK+ has various widgets that can be visually adjusted by the user
 using the mouse or the keyboard, such as the range widgets, described
-in the <ref id="sec_Range_Widgets" name="Range Widgets"> section. There
-are also a few widgets that display some adjustable portion of a larger
-area of data, such as the text widget and the viewport widget.
+in the <ref id="sec_Range_Widgets" name="Range Widgets">
+section. There are also a few widgets that display some adjustable
+portion of a larger area of data, such as the text widget and the
+viewport widget.
 
 Obviously, an application needs to be able to react to changes the
 user makes in range widgets. One way to do this would be to have each
@@ -2140,13 +2234,13 @@ GtkObject *gtk_adjustment_new( gfloat value,
 
 The <tt/value/ argument is the initial value you want to give to the
 adjustment, usually corresponding to the topmost or leftmost position
-of an adjustable widget.  The <tt/lower/ argument specifies the lowest
-value which the adjustment can hold.  The <tt/step_increment/ argument
+of an adjustable widget. The <tt/lower/ argument specifies the lowest
+value which the adjustment can hold. The <tt/step_increment/ argument
 specifies the "smaller" of the two increments by which the user can
 change the value, while the <tt/page_increment/ is the "larger" one.
 The <tt/page_size/ argument usually corresponds somehow to the visible
-area of a panning widget.  The <tt/upper/ argument is used to
-represent the bottom most or right most coordinate in a panning widget's
+area of a panning widget. The <tt/upper/ argument is used to represent
+the bottom most or right most coordinate in a panning widget's
 child. Therefore it is <em/not/ always the largest number that
 <tt/value/ can take, since the <tt/page_size/ of such widgets is
 usually non-zero.
@@ -2156,14 +2250,14 @@ usually non-zero.
 <p>
 The adjustable widgets can be roughly divided into those which use and
 require specific units for these values and those which treat them as
-arbitrary numbers. The group which treats the values as arbitrary numbers
-includes the range widgets (scrollbars and scales, the progress bar
-widget, and the spin button widget). These widgets are all the widgets
-which are typically "adjusted" directly by the user with the mouse or
-keyboard. They will treat the <tt/lower/ and <tt/upper/ values of an
-adjustment as a range within which the user can manipulate the
-adjustment's <tt/value/.  By default, they will only modify the
-<tt/value/ of an adjustment.
+arbitrary numbers. The group which treats the values as arbitrary
+numbers includes the range widgets (scrollbars and scales, the
+progress bar widget, and the spin button widget). These widgets are
+all the widgets which are typically "adjusted" directly by the user
+with the mouse or keyboard. They will treat the <tt/lower/ and
+<tt/upper/ values of an adjustment as a range within which the user
+can manipulate the adjustment's <tt/value/. By default, they will only
+modify the <tt/value/ of an adjustment.
 
 The other group includes the text widget, the viewport widget, the
 compound list widget, and the scrolled window widget. All of these
@@ -2171,7 +2265,7 @@ widgets use pixel values for their adjustments. These are also all
 widgets which are typically "adjusted" indirectly using scrollbars.
 While all widgets which use adjustments can either create their own
 adjustments or use ones you supply, you'll generally want to let this
-particular category of widgets create its own adjustments.  Usually,
+particular category of widgets create its own adjustments. Usually,
 they will eventually override all the values except the <tt/value/
 itself in whatever adjustments you give them, but the results are, in
 general, undefined (meaning, you'll have to read the source code to
@@ -2179,10 +2273,10 @@ find out, and it may be different from widget to widget).
 
 Now, you're probably thinking, since text widgets and viewports insist
 on setting everything except the <tt/value/ of their adjustments,
-while scrollbars will <em/only/ touch the adjustment's <tt/value/, if you
-<em/share/ an adjustment object between a scrollbar and a text widget,
-will manipulating the scrollbar automagically adjust the text widget?
-Of course it will! Just like this:
+while scrollbars will <em/only/ touch the adjustment's <tt/value/, if
+you <em/share/ an adjustment object between a scrollbar and a text
+widget, manipulating the scrollbar will automagically adjust the text
+widget?  Of course it will! Just like this:
 
 <tscreen><verb>
   /* creates its own adjustments */
@@ -2195,7 +2289,7 @@ Of course it will! Just like this:
 <!-- ----------------------------------------------------------------- -->
 <sect1> Adjustment Internals
 <p>
-OK, you say, that's nice, but what if I want to create my own handlers
+Ok, you say, that's nice, but what if I want to create my own handlers
 to respond when the user adjusts a range widget or a spin button, and
 how do I get at the value of the adjustment in these handlers?  To
 answer these questions and more, let's start by taking a look at
@@ -2233,7 +2327,7 @@ void gtk_adjustment_set_value( GtkAdjustment *adjustment,
 
 As mentioned earlier, GtkAdjustment is a subclass of GtkObject just
 like all the various widgets, and thus it is able to emit signals.
-This is, of course, why updates hapen automagically when you share an
+This is, of course, why updates happen automagically when you share an
 adjustment object between a scrollbar and another adjustable widget;
 all adjustable widgets connect signal handlers to their adjustment's
 <tt/value_changed/ signal, as can your program. Here's the definition
@@ -2250,7 +2344,7 @@ well as when the program explicitly changes the value with
 <tt/gtk_adjustment_set_value()/. So, for example, if you have a scale
 widget, and you want to change the rotation of a picture whenever its
 value changes, you would create a callback like this:
-	  
+
 <tscreen><verb>
 void cb_rotate_picture (GtkAdjustment *adj, GtkWidget *picture)
 {
@@ -2300,12 +2394,12 @@ Now go forth and adjust!
 
 <p>
 The category of range widgets includes the ubiquitous scrollbar widget
-and the less common "scale" widget.  Though these two types of widgets
+and the less common "scale" widget. Though these two types of widgets
 are generally used for different purposes, they are quite similar in
 function and implementation. All range widgets share a set of common
 graphic elements, each of which has its own X window and receives
-events.  They all contain a "trough" and a "slider" (what is sometimes
-called a "thumbwheel" in other GUI environments).  Dragging the slider
+events. They all contain a "trough" and a "slider" (what is sometimes
+called a "thumbwheel" in other GUI environments). Dragging the slider
 with the pointer moves it back and forth within the trough, while
 clicking in the trough advances the slider towards the location of the
 click, either completely, or by a designated amount, depending on
@@ -2313,9 +2407,9 @@ which mouse button is used.
 
 As mentioned in <ref id="sec_Adjustment" name="Adjustments"> above,
 all range widgets are associated with an adjustment object, from which
-they calculate the length of the slider and it's position within the 
-trough.  When the user manipulates the slider, the range widget
-will change the value of the adjustment.
+they calculate the length of the slider and it's position within the
+trough. When the user manipulates the slider, the range widget will
+change the value of the adjustment.
 
 <!-- ----------------------------------------------------------------- -->
 <sect1> Scrollbar Widgets
@@ -2327,7 +2421,7 @@ widget in most cases).  For other purposes, you should use scale
 widgets, as they are friendlier and more featureful.
 
 There are separate types for horizontal and vertical scrollbars.
-There really isn't much to say about these.  You create them with the
+There really isn't much to say about these. You create them with the
 following functions, defined in <tt>&lt;gtk/gtkhscrollbar.h&gt;</tt>
 and <tt>&lt;gtk/gtkvscrollbar.h&gt;</tt>:
 
@@ -2350,7 +2444,7 @@ widget.
 <sect1> Scale Widgets
 <p>
 Scale widgets are used to allow the user to visually select and
-manipulate a value within a specific range.  You might want to use a
+manipulate a value within a specific range. You might want to use a
 scale widget, for example, to adjust the magnification level on a
 zoomed preview of a picture, or to control the brightness of a colour,
 or to specify the number of minutes of inactivity before a screensaver
@@ -2362,7 +2456,7 @@ takes over the screen.
 As with scrollbars, there are separate widget types for horizontal and
 vertical scale widgets. (Most programmers seem to favour horizontal
 scale widgets). Since they work essentially the same way, there's no
-need to treat them separately here.  The following functions, defined
+need to treat them separately here. The following functions, defined
 in <tt>&lt;gtk/gtkvscale.h&gt;</tt> and
 <tt>&lt;gtk/gtkhscale.h&gt;</tt>, create vertical and horizontal scale
 widgets, respectively:
@@ -2378,7 +2472,7 @@ GtkWidget *gtk_hscale_new( GtkAdjustment *adjustment );
 The <tt/adjustment/ argument can either be an adjustment which has
 already been created with <tt/gtk_adjustment_new()/, or <tt/NULL/, in
 which case, an anonymous GtkAdjustment is created with all of its
-values set to <tt/0.0/ (which isn't very useful in this case).  In
+values set to <tt/0.0/ (which isn't very useful in this case). In
 order to avoid confusing yourself, you probably want to create your
 adjustment with a <tt/page_size/ of <tt/0.0/ so that its <tt/upper/
 value actually corresponds to the highest value the user can select.
@@ -2390,8 +2484,8 @@ what exactly adjustments do and how to create and manipulate them).
 <sect2> Functions and Signals (well, functions, at least)
 <p>
 Scale widgets can display their current value as a number beside the
-trough.  The default behaviour is to show the value, but you can
-change this with this function:
+trough. The default behaviour is to show the value, but you can change
+this with this function:
 
 <tscreen><verb>
 void gtk_scale_set_draw_value( GtkScale *scale,
@@ -2412,7 +2506,7 @@ void gtk_scale_set_digits( GtkScale *scale,
 </verb>
 </tscreen>
 
-where <tt/digits/ is the number of decimal places you want.  You can
+where <tt/digits/ is the number of decimal places you want. You can
 set <tt/digits/ to anything you like, but no more than 13 decimal
 places will actually be drawn on screen.
 
@@ -2426,12 +2520,20 @@ void gtk_scale_set_value_pos( GtkScale        *scale,
 </verb>
 </tscreen>
 
-If you've read the section on the notebook widget, then you already
-know what the possible values of <tt/pos/ are.  They are defined as
-<tt>enum GtkPositionType</tt> in <tt>&lt;gtk/gtkenums.h&gt;</tt> and
-are pretty self-explanatory.  If you position the value on the "side"
-of the trough (e.g. on the top or bottom of a horizontal scale
-widget), then it will follow the slider up and down the trough.
+The argument <tt/pos/ is of type <tt>GtkPositionType</tt>, which is
+defined in <tt>&lt;gtk/gtkenums.h&gt;</tt>, and can take one of the
+following values:
+
+<itemize>
+<item> GTK_POS_LEFT
+<item> GTK_POS_RIGHT
+<item> GTK_POS_TOP
+<item> GTK_POS_BOTTOM
+</itemize>
+
+If you position the value on the "side" of the trough (e.g. on the top
+or bottom of a horizontal scale widget), then it will follow the
+slider up and down the trough.
 
 All the preceding functions are defined in
 <tt>&lt;gtk/gtkscale.h&gt;</tt>.
@@ -2439,14 +2541,15 @@ All the preceding functions are defined in
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1> Common Functions<label id="sec_Range_Functions">
+<sect1> Common Functions <label id="sec_Range_Functions">
 <p>
 The GtkRange widget class is fairly complicated internally, but, like
 all the "base class" widgets, most of its complexity is only
-interesting if you want to hack on it.  Also, almost all of the
+interesting if you want to hack on it. Also, almost all of the
 functions and signals it defines are only really used in writing
-derived widgets.  There are, however, a few useful functions that
-are defined in <tt>&lt;gtk/gtkrange.h&gt;</tt> and will work on all range widgets.
+derived widgets. There are, however, a few useful functions that are
+defined in <tt>&lt;gtk/gtkrange.h&gt;</tt> and will work on all range
+widgets.
 
 <!-- ----------------------------------------------------------------- -->
 <sect2> Setting the Update Policy
@@ -2454,7 +2557,7 @@ are defined in <tt>&lt;gtk/gtkrange.h&gt;</tt> and will work on all range widget
 The "update policy" of a range widget defines at what points during
 user interaction it will change the <tt/value/ field of its
 GtkAdjustment and emit the "value_changed" signal on this
-GtkAdjustment.  The update policies, defined in
+GtkAdjustment. The update policies, defined in
 <tt>&lt;gtk/gtkenums.h&gt;</tt> as type <tt>enum GtkUpdateType</tt>,
 are:
 
@@ -2477,8 +2580,8 @@ The update policy of a range widget can be set by casting it using the
 <tt>GTK_RANGE (Widget)</tt> macro and passing it to this function:
 
 <tscreen><verb>
-void           gtk_range_set_update_policy      (GtkRange      *range,
-						 GtkUpdateType  policy);
+void gtk_range_set_update_policy( GtkRange      *range,
+	                          GtkUpdateType  policy) ;
 </verb></tscreen>
 
 <!-- ----------------------------------------------------------------- -->
@@ -2499,12 +2602,12 @@ which <tt/range/ is connected.
 
 <tt/gtk_range_set_adjustment()/ does absolutely nothing if you pass it
 the adjustment that <tt/range/ is already using, regardless of whether
-you changed any of its fields or not.  If you pass it a new
+you changed any of its fields or not. If you pass it a new
 GtkAdjustment, it will unreference the old one if it exists (possibly
 destroying it), connect the appropriate signals to the new one, and
 call the private function <tt/gtk_range_adjustment_changed()/, which
-will (or at least, is supposed to...)  recalculate the size and/or
-position of the slider and redraw if necessary.  As mentioned in the
+will (or at least, is supposed to...) recalculate the size and/or
+position of the slider and redraw if necessary. As mentioned in the
 section on adjustments, if you wish to reuse the same GtkAdjustment,
 when you modify its values directly, you should emit the "changed"
 signal on it, like this:
@@ -2519,15 +2622,15 @@ gtk_signal_emit_by_name (GTK_OBJECT (adjustment), "changed");
 <sect1> Key and Mouse bindings
 <p>
 All of the GTK+ range widgets react to mouse clicks in more or less
-the same way.  Clicking button 1 in the trough will cause its
+the same way. Clicking button-1 in the trough will cause its
 adjustment's <tt/page_increment/ to be added or subtracted from its
-<tt/value/, and the slider to be moved accordingly.  Clicking mouse button 2
-in the trough will jump the slider to the point at which the button
-was clicked.  Clicking any button on a scrollbar's arrows will cause
-its adjustment's value to change <tt/step_increment/ at a time.
+<tt/value/, and the slider to be moved accordingly. Clicking mouse
+button-2 in the trough will jump the slider to the point at which the
+button was clicked. Clicking any button on a scrollbar's arrows will
+cause its adjustment's value to change <tt/step_increment/ at a time.
 
 It may take a little while to get used to, but by default, scrollbars
-as well as scale widgets can take the keyboard focus in GTK+.  If you
+as well as scale widgets can take the keyboard focus in GTK+. If you
 think your users will find this too confusing, you can always disable
 this by unsetting the GTK_CAN_FOCUS flag on the scrollbar, like this:
 
@@ -2537,7 +2640,7 @@ GTK_WIDGET_UNSET_FLAGS (scrollbar, GTK_CAN_FOCUS);
 
 The key bindings (which are, of course, only active when the widget
 has focus) are slightly different between horizontal and vertical
-range widgets, for obvious reasons.  They are also not quite the same
+range widgets, for obvious reasons. They are also not quite the same
 for scale widgets as they are for scrollbars, for somewhat less
 obvious reasons (possibly to avoid confusion between the keys for
 horizontal and vertical scrollbars in scrolled windows, where both
@@ -2546,12 +2649,12 @@ operate on the same area).
 <sect2> Vertical Range Widgets
 <p>
 All vertical range widgets can be operated with the up and down arrow
-keys, as well as with the <tt/Page Up/ and <tt/Page Down/ keys.  The
+keys, as well as with the <tt/Page Up/ and <tt/Page Down/ keys. The
 arrows move the slider up and down by <tt/step_increment/, while
 <tt/Page Up/ and <tt/Page Down/ move it by <tt/page_increment/.
 
 The user can also move the slider all the way to one end or the other
-of the trough using the keyboard.  With the GtkVScale widget, this is
+of the trough using the keyboard. With the GtkVScale widget, this is
 done with the <tt/Home/ and <tt/End/ keys, whereas with the
 GtkVScrollbar widget, this is done by typing <tt>Control-Page Up</tt>
 and <tt>Control-Page Down</tt>.
@@ -2560,7 +2663,7 @@ and <tt>Control-Page Down</tt>.
 <sect2> Horizontal Range Widgets
 <p>
 The left and right arrow keys work as you might expect in these
-widgets, moving the slider back and forth by <tt/step_increment/.  The
+widgets, moving the slider back and forth by <tt/step_increment/. The
 <tt/Home/ and <tt/End/ keys move the slider to the ends of the trough.
 For the GtkHScale widget, moving the slider by <tt/page_increment/ is
 accomplished with <tt>Control-Left</tt> and <tt>Control-Right</tt>,
@@ -2572,8 +2675,8 @@ while for GtkHScrollbar, it's done with <tt>Control-Home</tt> and
 <!-- ----------------------------------------------------------------- -->
 <sect1> Example<label id="sec_Range_Example">
 <p>
-This example is a somewhat modified version of the "range widgets"
-test from <tt/testgtk.c/.  It basically puts up a window with three
+This example is a somewhat modified version of the "range controls"
+test from <tt/testgtk.c/. It basically puts up a window with three
 range widgets all connected to the same adjustment, and a couple of
 controls for adjusting some of the parameters mentioned above and in
 the seciton on adjustments, so you can see how they affect the way
@@ -2586,284 +2689,288 @@ these widgets work for the user.
 
 GtkWidget *hscale, *vscale;
 
-void cb_pos_menu_select (GtkWidget *item, GtkPositionType pos)
+void cb_pos_menu_select( GtkWidget       *item,
+                         GtkPositionType  pos )
 {
-  /* set the value position on both scale widgets */
-  gtk_scale_set_value_pos (GTK_SCALE (hscale), pos);
-  gtk_scale_set_value_pos (GTK_SCALE (vscale), pos);
+    /* Set the value position on both scale widgets */
+    gtk_scale_set_value_pos (GTK_SCALE (hscale), pos);
+    gtk_scale_set_value_pos (GTK_SCALE (vscale), pos);
 }
 
-void cb_update_menu_select (GtkWidget *item, GtkUpdateType policy)
+void cb_update_menu_select( GtkWidget     *item,
+                            GtkUpdateType  policy )
 {
-  /* set the update policy for both scale widgets */
-  gtk_range_set_update_policy (GTK_RANGE (hscale), policy);
-  gtk_range_set_update_policy (GTK_RANGE (vscale), policy);
+    /* Set the update policy for both scale widgets */
+    gtk_range_set_update_policy (GTK_RANGE (hscale), policy);
+    gtk_range_set_update_policy (GTK_RANGE (vscale), policy);
 }
 
-void cb_digits_scale (GtkAdjustment *adj)
+void cb_digits_scale( GtkAdjustment *adj )
 {
-  /* set the number of decimal places to which adj->vaule is rounded
-   */
-  gtk_scale_set_digits (GTK_SCALE (hscale), (gint) adj->value);
-  gtk_scale_set_digits (GTK_SCALE (vscale), (gint) adj->value);
+    /* Set the number of decimal places to which adj->value is rounded */
+    gtk_scale_set_digits (GTK_SCALE (hscale), (gint) adj->value);
+    gtk_scale_set_digits (GTK_SCALE (vscale), (gint) adj->value);
 }
 
-void cb_page_size (GtkAdjustment *get, GtkAdjustment *set)
+void cb_page_size( GtkAdjustment *get,
+                   GtkAdjustment *set )
 {
-  /* set the page size and page increment size of the sample
-     adjustment to the value specified by the "Page Size" scale */
-  set->page_size = get->value;
-  set->page_increment = get->value;
-  /* now emit the "changed" signal to reconfigure all the widgets that
-     are attached to this adjustment */
-  gtk_signal_emit_by_name (GTK_OBJECT (set), "changed");
+    /* Set the page size and page increment size of the sample
+     * adjustment to the value specified by the "Page Size" scale */
+    set->page_size = get->value;
+    set->page_increment = get->value;
+    /* Now emit the "changed" signal to reconfigure all the widgets that
+     * are attached to this adjustment */
+    gtk_signal_emit_by_name (GTK_OBJECT (set), "changed");
 }
 
-void cb_draw_value (GtkToggleButton *button)
+void cb_draw_value( GtkToggleButton *button )
 {
-  /* turn the value display on the scale widgets off or on depending
-     on the state of the checkbutton */
-  gtk_scale_set_draw_value (GTK_SCALE (hscale), button->active);
-  gtk_scale_set_draw_value (GTK_SCALE (vscale), button->active);  
+    /* Turn the value display on the scale widgets off or on depending
+     *  on the state of the checkbutton */
+    gtk_scale_set_draw_value (GTK_SCALE (hscale), button->active);
+    gtk_scale_set_draw_value (GTK_SCALE (vscale), button->active);  
 }
 
-/* convenience functions */
+/* Convenience functions */
 
-GtkWidget *make_menu_item (gchar *name, GtkSignalFunc callback,
-			   gpointer data)
+GtkWidget *make_menu_item( gchar         *name,
+                           GtkSignalFunc  callback,
+			   gpointer       data )
 {
-  GtkWidget *item;
+    GtkWidget *item;
   
-  item = gtk_menu_item_new_with_label (name);
-  gtk_signal_connect (GTK_OBJECT (item), "activate",
-		      callback, data);
-  gtk_widget_show (item);
+    item = gtk_menu_item_new_with_label (name);
+    gtk_signal_connect (GTK_OBJECT (item), "activate",
+                        callback, data);
+    gtk_widget_show (item);
 
-  return item;
+    return(item);
 }
 
-void scale_set_default_values (GtkScale *scale)
+void scale_set_default_values( GtkScale *scale )
 {
-  gtk_range_set_update_policy (GTK_RANGE (scale),
-			       GTK_UPDATE_CONTINUOUS);
-  gtk_scale_set_digits (scale, 1);
-  gtk_scale_set_value_pos (scale, GTK_POS_TOP);
-  gtk_scale_set_draw_value (scale, TRUE);
+    gtk_range_set_update_policy (GTK_RANGE (scale),
+                                 GTK_UPDATE_CONTINUOUS);
+    gtk_scale_set_digits (scale, 1);
+    gtk_scale_set_value_pos (scale, GTK_POS_TOP);
+    gtk_scale_set_draw_value (scale, TRUE);
 }
 
 /* makes the sample window */
 
-void create_range_controls (void)
+void create_range_controls( void )
 {
-  GtkWidget *window;
-  GtkWidget *box1, *box2, *box3;
-  GtkWidget *button;
-  GtkWidget *scrollbar;
-  GtkWidget *separator;
-  GtkWidget *opt, *menu, *item;
-  GtkWidget *label;
-  GtkWidget *scale;
-  GtkObject *adj1, *adj2;
+    GtkWidget *window;
+    GtkWidget *box1, *box2, *box3;
+    GtkWidget *button;
+    GtkWidget *scrollbar;
+    GtkWidget *separator;
+    GtkWidget *opt, *menu, *item;
+    GtkWidget *label;
+    GtkWidget *scale;
+    GtkObject *adj1, *adj2;
 
-  /* standard window-creating stuff */
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_signal_connect (GTK_OBJECT (window), "destroy",
-		      GTK_SIGNAL_FUNC(gtk_main_quit),
-		      NULL);
-  gtk_window_set_title (GTK_WINDOW (window), "range controls");
+    /* Standard window-creating stuff */
+    window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    gtk_signal_connect (GTK_OBJECT (window), "destroy",
+                        GTK_SIGNAL_FUNC(gtk_main_quit),
+                        NULL);
+    gtk_window_set_title (GTK_WINDOW (window), "range controls");
 
-  box1 = gtk_vbox_new (FALSE, 0);
-  gtk_container_add (GTK_CONTAINER (window), box1);
-  gtk_widget_show (box1);
+    box1 = gtk_vbox_new (FALSE, 0);
+    gtk_container_add (GTK_CONTAINER (window), box1);
+    gtk_widget_show (box1);
 
-  box2 = gtk_hbox_new (FALSE, 10);
-  gtk_container_border_width (GTK_CONTAINER (box2), 10);
-  gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
-  gtk_widget_show (box2);
+    box2 = gtk_hbox_new (FALSE, 10);
+    gtk_container_border_width (GTK_CONTAINER (box2), 10);
+    gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
+    gtk_widget_show (box2);
 
-  /* value, lower, upper, step_increment, page_increment, page_size */
-  /* note that the page_size value only makes a difference for
-     scrollbar widgets, and the highest value you'll get is actually
-     (upper - page_size). */
-  adj1 = gtk_adjustment_new (0.0, 0.0, 101.0, 0.1, 1.0, 1.0);
+    /* calue, lower, upper, step_increment, page_increment, page_size */
+    /* Note that the page_size value only makes a difference for
+     * scrollbar widgets, and the highest value you'll get is actually
+     * (upper - page_size). */
+    adj1 = gtk_adjustment_new (0.0, 0.0, 101.0, 0.1, 1.0, 1.0);
   
-  vscale = gtk_vscale_new (GTK_ADJUSTMENT (adj1));
-  scale_set_default_values (GTK_SCALE (vscale));
-  gtk_box_pack_start (GTK_BOX (box2), vscale, TRUE, TRUE, 0);
-  gtk_widget_show (vscale);
+    vscale = gtk_vscale_new (GTK_ADJUSTMENT (adj1));
+    scale_set_default_values (GTK_SCALE (vscale));
+    gtk_box_pack_start (GTK_BOX (box2), vscale, TRUE, TRUE, 0);
+    gtk_widget_show (vscale);
 
-  box3 = gtk_vbox_new (FALSE, 10);
-  gtk_box_pack_start (GTK_BOX (box2), box3, TRUE, TRUE, 0);
-  gtk_widget_show (box3);
+    box3 = gtk_vbox_new (FALSE, 10);
+    gtk_box_pack_start (GTK_BOX (box2), box3, TRUE, TRUE, 0);
+    gtk_widget_show (box3);
 
-  /* reuse the same adjustment */
-  hscale = gtk_hscale_new (GTK_ADJUSTMENT (adj1));
-  gtk_widget_set_usize (GTK_WIDGET (hscale), 200, 30);
-  scale_set_default_values (GTK_SCALE (hscale));
-  gtk_box_pack_start (GTK_BOX (box3), hscale, TRUE, TRUE, 0);
-  gtk_widget_show (hscale);
+    /* Reuse the same adjustment */
+    hscale = gtk_hscale_new (GTK_ADJUSTMENT (adj1));
+    gtk_widget_set_usize (GTK_WIDGET (hscale), 200, 30);
+    scale_set_default_values (GTK_SCALE (hscale));
+    gtk_box_pack_start (GTK_BOX (box3), hscale, TRUE, TRUE, 0);
+    gtk_widget_show (hscale);
 
-  /* reuse the same adjustment again */
-  scrollbar = gtk_hscrollbar_new (GTK_ADJUSTMENT (adj1));
-  /* notice how this causes the scales to always be updated
-     continuously when the scrollbar is moved */
-  gtk_range_set_update_policy (GTK_RANGE (scrollbar), 
-			       GTK_UPDATE_CONTINUOUS);
-  gtk_box_pack_start (GTK_BOX (box3), scrollbar, TRUE, TRUE, 0);
-  gtk_widget_show (scrollbar);
+    /* Reuse the same adjustment again */
+    scrollbar = gtk_hscrollbar_new (GTK_ADJUSTMENT (adj1));
+    /* Notice how this causes the scales to always be updated
+     * continuously when the scrollbar is moved */
+    gtk_range_set_update_policy (GTK_RANGE (scrollbar), 
+                                 GTK_UPDATE_CONTINUOUS);
+    gtk_box_pack_start (GTK_BOX (box3), scrollbar, TRUE, TRUE, 0);
+    gtk_widget_show (scrollbar);
 
-  box2 = gtk_hbox_new (FALSE, 10);
-  gtk_container_border_width (GTK_CONTAINER (box2), 10);
-  gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
-  gtk_widget_show (box2);
+    box2 = gtk_hbox_new (FALSE, 10);
+    gtk_container_border_width (GTK_CONTAINER (box2), 10);
+    gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
+    gtk_widget_show (box2);
 
-  /* a checkbutton to control whether the value is displayed or not */
-  button = gtk_check_button_new_with_label
-    ("Display value on scale widgets");
-  gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (button), TRUE);
-  gtk_signal_connect (GTK_OBJECT (button), "toggled", GTK_SIGNAL_FUNC
-		      (cb_draw_value), NULL);
-  gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-  gtk_widget_show (button);
+    /* A checkbutton to control whether the value is displayed or not */
+    button = gtk_check_button_new_with_label("Display value on scale widgets");
+    gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (button), TRUE);
+    gtk_signal_connect (GTK_OBJECT (button), "toggled",
+                        GTK_SIGNAL_FUNC(cb_draw_value), NULL);
+    gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
+    gtk_widget_show (button);
   
-  box2 = gtk_hbox_new (FALSE, 10);
-  gtk_container_border_width (GTK_CONTAINER (box2), 10);
+    box2 = gtk_hbox_new (FALSE, 10);
+    gtk_container_border_width (GTK_CONTAINER (box2), 10);
 
-  /* an option menu to change the position of the value */
-  label = gtk_label_new ("Scale Value Position:");
-  gtk_box_pack_start (GTK_BOX (box2), label, FALSE, FALSE, 0);
-  gtk_widget_show (label);
+    /* An option menu to change the position of the value */
+    label = gtk_label_new ("Scale Value Position:");
+    gtk_box_pack_start (GTK_BOX (box2), label, FALSE, FALSE, 0);
+    gtk_widget_show (label);
   
-  opt = gtk_option_menu_new();
-  menu = gtk_menu_new();
+    opt = gtk_option_menu_new();
+    menu = gtk_menu_new();
 
-  item = make_menu_item ("Top", GTK_SIGNAL_FUNC (cb_pos_menu_select),
-			 GINT_TO_POINTER (GTK_POS_TOP));
-  gtk_menu_append (GTK_MENU (menu), item);
+    item = make_menu_item ("Top",
+                           GTK_SIGNAL_FUNC(cb_pos_menu_select),
+                           GINT_TO_POINTER (GTK_POS_TOP));
+    gtk_menu_append (GTK_MENU (menu), item);
   
-  item = make_menu_item ("Bottom", GTK_SIGNAL_FUNC (cb_pos_menu_select), 
-			 GINT_TO_POINTER (GTK_POS_BOTTOM));
-  gtk_menu_append (GTK_MENU (menu), item);
+    item = make_menu_item ("Bottom", GTK_SIGNAL_FUNC (cb_pos_menu_select), 
+                           GINT_TO_POINTER (GTK_POS_BOTTOM));
+    gtk_menu_append (GTK_MENU (menu), item);
   
-  item = make_menu_item ("Left", GTK_SIGNAL_FUNC (cb_pos_menu_select),
-			 GINT_TO_POINTER (GTK_POS_LEFT));
-  gtk_menu_append (GTK_MENU (menu), item);
+    item = make_menu_item ("Left", GTK_SIGNAL_FUNC (cb_pos_menu_select),
+                           GINT_TO_POINTER (GTK_POS_LEFT));
+    gtk_menu_append (GTK_MENU (menu), item);
   
-  item = make_menu_item ("Right", GTK_SIGNAL_FUNC (cb_pos_menu_select),
-			 GINT_TO_POINTER (GTK_POS_RIGHT));
-  gtk_menu_append (GTK_MENU (menu), item);
+    item = make_menu_item ("Right", GTK_SIGNAL_FUNC (cb_pos_menu_select),
+                            GINT_TO_POINTER (GTK_POS_RIGHT));
+    gtk_menu_append (GTK_MENU (menu), item);
   
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (opt), menu);
-  gtk_box_pack_start (GTK_BOX (box2), opt, TRUE, TRUE, 0);
-  gtk_widget_show (opt);
+    gtk_option_menu_set_menu (GTK_OPTION_MENU (opt), menu);
+    gtk_box_pack_start (GTK_BOX (box2), opt, TRUE, TRUE, 0);
+    gtk_widget_show (opt);
 
-  gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
-  gtk_widget_show (box2);
+    gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
+    gtk_widget_show (box2);
 
-  box2 = gtk_hbox_new (FALSE, 10);
-  gtk_container_border_width (GTK_CONTAINER (box2), 10);
+    box2 = gtk_hbox_new (FALSE, 10);
+    gtk_container_border_width (GTK_CONTAINER (box2), 10);
 
-  /* yet another option menu, this time for the update policy of the
-     scale widgets */
-  label = gtk_label_new ("Scale Update Policy:");
-  gtk_box_pack_start (GTK_BOX (box2), label, FALSE, FALSE, 0);
-  gtk_widget_show (label);
+    /* Yet another option menu, this time for the update policy of the
+     * scale widgets */
+    label = gtk_label_new ("Scale Update Policy:");
+    gtk_box_pack_start (GTK_BOX (box2), label, FALSE, FALSE, 0);
+    gtk_widget_show (label);
   
-  opt = gtk_option_menu_new();
-  menu = gtk_menu_new();
+    opt = gtk_option_menu_new();
+    menu = gtk_menu_new();
   
-  item = make_menu_item ("Continuous",
-			 GTK_SIGNAL_FUNC (cb_update_menu_select),
-			 GINT_TO_POINTER (GTK_UPDATE_CONTINUOUS));
-  gtk_menu_append (GTK_MENU (menu), item);
+    item = make_menu_item ("Continuous",
+                           GTK_SIGNAL_FUNC (cb_update_menu_select),
+                           GINT_TO_POINTER (GTK_UPDATE_CONTINUOUS));
+    gtk_menu_append (GTK_MENU (menu), item);
   
-  item = make_menu_item ("Discontinuous",
-			 GTK_SIGNAL_FUNC (cb_update_menu_select),
-			 GINT_TO_POINTER (GTK_UPDATE_DISCONTINUOUS));
-  gtk_menu_append (GTK_MENU (menu), item);
+    item = make_menu_item ("Discontinuous",
+                            GTK_SIGNAL_FUNC (cb_update_menu_select),
+                            GINT_TO_POINTER (GTK_UPDATE_DISCONTINUOUS));
+    gtk_menu_append (GTK_MENU (menu), item);
   
-  item = make_menu_item ("Delayed",
-			 GTK_SIGNAL_FUNC (cb_update_menu_select),
-			 GINT_TO_POINTER (GTK_UPDATE_DELAYED));
-  gtk_menu_append (GTK_MENU (menu), item);
+    item = make_menu_item ("Delayed",
+                           GTK_SIGNAL_FUNC (cb_update_menu_select),
+                           GINT_TO_POINTER (GTK_UPDATE_DELAYED));
+    gtk_menu_append (GTK_MENU (menu), item);
   
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (opt), menu);
-  gtk_box_pack_start (GTK_BOX (box2), opt, TRUE, TRUE, 0);
-  gtk_widget_show (opt);
+    gtk_option_menu_set_menu (GTK_OPTION_MENU (opt), menu);
+    gtk_box_pack_start (GTK_BOX (box2), opt, TRUE, TRUE, 0);
+    gtk_widget_show (opt);
   
-  gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
-  gtk_widget_show (box2);
+    gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
+    gtk_widget_show (box2);
 
-  box2 = gtk_hbox_new (FALSE, 10);
-  gtk_container_border_width (GTK_CONTAINER (box2), 10);
+    box2 = gtk_hbox_new (FALSE, 10);
+    gtk_container_border_width (GTK_CONTAINER (box2), 10);
   
-  /* a GtkHScale widget for adjusting the number of digits on the
-     sample scales. */
-  label = gtk_label_new ("Scale Digits:");
-  gtk_box_pack_start (GTK_BOX (box2), label, FALSE, FALSE, 0);
-  gtk_widget_show (label);
+    /* A GtkHScale widget for adjusting the number of digits on the
+     * sample scales. */
+    label = gtk_label_new ("Scale Digits:");
+    gtk_box_pack_start (GTK_BOX (box2), label, FALSE, FALSE, 0);
+    gtk_widget_show (label);
 
-  adj2 = gtk_adjustment_new (1.0, 0.0, 5.0, 1.0, 1.0, 0.0);
-  gtk_signal_connect (GTK_OBJECT (adj2), "value_changed",
-		      GTK_SIGNAL_FUNC (cb_digits_scale), NULL);
-  scale = gtk_hscale_new (GTK_ADJUSTMENT (adj2));
-  gtk_scale_set_digits (GTK_SCALE (scale), 0);
-  gtk_box_pack_start (GTK_BOX (box2), scale, TRUE, TRUE, 0);
-  gtk_widget_show (scale);
+    adj2 = gtk_adjustment_new (1.0, 0.0, 5.0, 1.0, 1.0, 0.0);
+    gtk_signal_connect (GTK_OBJECT (adj2), "value_changed",
+                        GTK_SIGNAL_FUNC (cb_digits_scale), NULL);
+    scale = gtk_hscale_new (GTK_ADJUSTMENT (adj2));
+    gtk_scale_set_digits (GTK_SCALE (scale), 0);
+    gtk_box_pack_start (GTK_BOX (box2), scale, TRUE, TRUE, 0);
+    gtk_widget_show (scale);
 
-  gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
-  gtk_widget_show (box2);
+    gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
+    gtk_widget_show (box2);
   
-  box2 = gtk_hbox_new (FALSE, 10);
-  gtk_container_border_width (GTK_CONTAINER (box2), 10);
+    box2 = gtk_hbox_new (FALSE, 10);
+    gtk_container_border_width (GTK_CONTAINER (box2), 10);
   
-  /* And, one last GtkHScale widget for adjusting the page size of the
-     scrollbar. */
-  label = gtk_label_new ("Scrollbar Page Size:");
-  gtk_box_pack_start (GTK_BOX (box2), label, FALSE, FALSE, 0);
-  gtk_widget_show (label);
+    /* And, one last GtkHScale widget for adjusting the page size of the
+     * scrollbar. */
+    label = gtk_label_new ("Scrollbar Page Size:");
+    gtk_box_pack_start (GTK_BOX (box2), label, FALSE, FALSE, 0);
+    gtk_widget_show (label);
 
-  adj2 = gtk_adjustment_new (1.0, 1.0, 101.0, 1.0, 1.0, 0.0);
-  gtk_signal_connect (GTK_OBJECT (adj2), "value_changed",
-		      GTK_SIGNAL_FUNC (cb_page_size), adj1);
-  scale = gtk_hscale_new (GTK_ADJUSTMENT (adj2));
-  gtk_scale_set_digits (GTK_SCALE (scale), 0);
-  gtk_box_pack_start (GTK_BOX (box2), scale, TRUE, TRUE, 0);
-  gtk_widget_show (scale);
+    adj2 = gtk_adjustment_new (1.0, 1.0, 101.0, 1.0, 1.0, 0.0);
+    gtk_signal_connect (GTK_OBJECT (adj2), "value_changed",
+                        GTK_SIGNAL_FUNC (cb_page_size), adj1);
+    scale = gtk_hscale_new (GTK_ADJUSTMENT (adj2));
+    gtk_scale_set_digits (GTK_SCALE (scale), 0);
+    gtk_box_pack_start (GTK_BOX (box2), scale, TRUE, TRUE, 0);
+    gtk_widget_show (scale);
 
-  gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
-  gtk_widget_show (box2);
+    gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
+    gtk_widget_show (box2);
 
-  separator = gtk_hseparator_new ();
-  gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
-  gtk_widget_show (separator);
+    separator = gtk_hseparator_new ();
+    gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
+    gtk_widget_show (separator);
 
-  box2 = gtk_vbox_new (FALSE, 10);
-  gtk_container_border_width (GTK_CONTAINER (box2), 10);
-  gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
-  gtk_widget_show (box2);
+    box2 = gtk_vbox_new (FALSE, 10);
+    gtk_container_border_width (GTK_CONTAINER (box2), 10);
+    gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
+    gtk_widget_show (box2);
 
-  button = gtk_button_new_with_label ("Quit");
-  gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-			     GTK_SIGNAL_FUNC(gtk_main_quit),
-			     NULL);
-  gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-  GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
-  gtk_widget_grab_default (button);
-  gtk_widget_show (button);
+    button = gtk_button_new_with_label ("Quit");
+    gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+                               GTK_SIGNAL_FUNC(gtk_main_quit),
+                               NULL);
+    gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
+    GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+    gtk_widget_grab_default (button);
+    gtk_widget_show (button);
 
-  gtk_widget_show (window);
+    gtk_widget_show (window);
 }
 
-int main (int argc, char *argv[])
+int main( int   argc,
+          char *argv[] )
 {
-  gtk_init(&amp;argc, &amp;argv);
+    gtk_init(&amp;argc, &amp;argv);
 
-  create_range_controls();
+    create_range_controls();
 
-  gtk_main();
+    gtk_main();
 
-  return 0;
+    return(0);
 }
 
 /* example-end */
@@ -2878,9 +2985,9 @@ int main (int argc, char *argv[])
 <!-- ----------------------------------------------------------------- -->
 <sect1> Labels
 <p>
-Labels are used a lot in GTK, and are relatively simple. Labels emit no
-signals as they do not have an associated X window. If you need to catch
-signals, or do clipping, use the EventBox widget.
+Labels are used a lot in GTK, and are relatively simple. Labels emit
+no signals as they do not have an associated X window. If you need to
+catch signals, or do clipping, use the EventBox widget.
 
 To create a new label, use:
 
@@ -12814,7 +12921,7 @@ Use GNU autoconf and automake!  They are your friends :)  I am planning to
 make a quick intro on them here.
 
 <!-- ***************************************************************** -->
-<sect>Contributing
+<sect>Contributing <label id="sec_Contributing">
 <!-- ***************************************************************** -->
 
 <p>

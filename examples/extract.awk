@@ -35,6 +35,8 @@ $2 == "example-start"			 { in_example=1 }
 $2 == "example-start" && check == 0 \
   { if ( (spec_example == "") || (spec_example == $4) ) {
     if ( flatten == 0 ) {
+      if (file_name != "")
+          close(file_name);
       file_name = sprintf("%s/%s",$3, $4);
       command = sprintf("mkdir -p %s", $3);
       system(command);

@@ -1,13 +1,11 @@
-/* This file extracted from the GTK tutorial. */
-
-/* packbox.c */
+/* example-start packbox packbox.c */
 
 #include <stdio.h>
-#include <gtk/gtk.h>
-#include <stdlib.h>
+#include "gtk/gtk.h"
 
-void
-delete_event (GtkWidget *widget, GdkEvent *event, gpointer data)
+void delete_event( GtkWidget *widget,
+                   GdkEvent  *event,
+		   gpointer   data )
 {
     gtk_main_quit ();
 }
@@ -15,18 +13,21 @@ delete_event (GtkWidget *widget, GdkEvent *event, gpointer data)
 /* Make a new hbox filled with button-labels. Arguments for the 
  * variables we're interested are passed in to this function. 
  * We do not show the box, but do show everything inside. */
-GtkWidget *make_box (gint homogeneous, gint spacing,
-		     gint expand, gint fill, gint padding) 
+GtkWidget *make_box( gint homogeneous,
+                     gint spacing,
+		     gint expand,
+		     gint fill,
+		     gint padding ) 
 {
     GtkWidget *box;
     GtkWidget *button;
     char padstr[80];
     
-    /* create a new hbox with the appropriate homogeneous and spacing
-     * settings */
+    /* Create a new hbox with the appropriate homogeneous
+     * and spacing settings */
     box = gtk_hbox_new (homogeneous, spacing);
     
-    /* create a series of buttons with the appropriate settings */
+    /* Create a series of buttons with the appropriate settings */
     button = gtk_button_new_with_label ("gtk_box_pack");
     gtk_box_pack_start (GTK_BOX (box), button, expand, fill, padding);
     gtk_widget_show (button);
@@ -39,7 +40,7 @@ GtkWidget *make_box (gint homogeneous, gint spacing,
     gtk_box_pack_start (GTK_BOX (box), button, expand, fill, padding);
     gtk_widget_show (button);
     
-    /* create a button with the label depending on the value of
+    /* Create a button with the label depending on the value of
      * expand. */
     if (expand == TRUE)
 	    button = gtk_button_new_with_label ("TRUE,");
@@ -64,8 +65,8 @@ GtkWidget *make_box (gint homogeneous, gint spacing,
     return box;
 }
 
-int
-main (int argc, char *argv[])
+int main( int   argc,
+          char *argv[]) 
 {
     GtkWidget *window;
     GtkWidget *button;
@@ -91,7 +92,7 @@ main (int argc, char *argv[])
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
     /* You should always remember to connect the destroy signal to the
-     * main window.  This is very important for proper intuitive
+     * main window. This is very important for proper intuitive
      * behavior */
     gtk_signal_connect (GTK_OBJECT (window), "delete_event",
 			GTK_SIGNAL_FUNC (delete_event), NULL);
@@ -102,7 +103,7 @@ main (int argc, char *argv[])
      * on top of the other in this vbox. */
     box1 = gtk_vbox_new (FALSE, 0);
     
-    /* which example to show.  These correspond to the pictures above. */
+    /* which example to show. These correspond to the pictures above. */
     switch (which) {
     case 1:
 	/* create a new label. */
@@ -117,16 +118,16 @@ main (int argc, char *argv[])
 	 * order. */
 	gtk_box_pack_start (GTK_BOX (box1), label, FALSE, FALSE, 0);
 	
-	/* show the label */
+	/* Show the label */
 	gtk_widget_show (label);
 	
-	/* call our make box function - homogeneous = FALSE, spacing = 0,
+	/* Call our make box function - homogeneous = FALSE, spacing = 0,
 	 * expand = FALSE, fill = FALSE, padding = 0 */
 	box2 = make_box (FALSE, 0, FALSE, FALSE, 0);
 	gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, FALSE, 0);
 	gtk_widget_show (box2);
 
-	/* call our make box function - homogeneous = FALSE, spacing = 0,
+	/* Call our make box function - homogeneous = FALSE, spacing = 0,
 	 * expand = FALSE, fill = FALSE, padding = 0 */
 	box2 = make_box (FALSE, 0, TRUE, FALSE, 0);
 	gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, FALSE, 0);
@@ -137,17 +138,17 @@ main (int argc, char *argv[])
 	gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, FALSE, 0);
 	gtk_widget_show (box2);
 	
-	/* creates a separator, we'll learn more about these later, 
+	/* Creates a separator, we'll learn more about these later, 
 	 * but they are quite simple. */
 	separator = gtk_hseparator_new ();
 	
-	/* pack the separator into the vbox.  Remember each of these
+	/* Cack the separator into the vbox. Remember each of these
 	 * widgets are being packed into a vbox, so they'll be stacked
 	 * vertically. */
 	gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 5);
 	gtk_widget_show (separator);
 	
-	/* create another new label, and show it. */
+	/* Create another new label, and show it. */
 	label = gtk_label_new ("gtk_hbox_new (TRUE, 0);");
 	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
 	gtk_box_pack_start (GTK_BOX (box1), label, FALSE, FALSE, 0);
@@ -163,7 +164,7 @@ main (int argc, char *argv[])
 	gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, FALSE, 0);
 	gtk_widget_show (box2);
 	
-	/* another new separator. */
+	/* Another new separator. */
 	separator = gtk_hseparator_new ();
 	/* The last 3 arguments to gtk_box_pack_start are: expand, fill, padding. */
 	gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 5);
@@ -173,7 +174,7 @@ main (int argc, char *argv[])
 
     case 2:
 
-	/* create a new label, remember box1 is a vbox as created 
+	/* Create a new label, remember box1 is a vbox as created 
 	 * near the beginning of main() */
 	label = gtk_label_new ("gtk_hbox_new (FALSE, 10);");
 	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
@@ -218,27 +219,28 @@ main (int argc, char *argv[])
     
     case 3:
 
-    /* This demonstrates the ability to use gtk_box_pack_end() to
-	 * right justify widgets.  First, we create a new box as before. */
+        /* This demonstrates the ability to use gtk_box_pack_end() to
+	 * right justify widgets. First, we create a new box as before. */
 	box2 = make_box (FALSE, 0, FALSE, FALSE, 0);
-	/* create the label that will be put at the end. */
+
+	/* Create the label that will be put at the end. */
 	label = gtk_label_new ("end");
-	/* pack it using gtk_box_pack_end(), so it is put on the right side
-	 * of the hbox created in the make_box() call. */
+	/* Pack it using gtk_box_pack_end(), so it is put on the right
+	 * side of the hbox created in the make_box() call. */
 	gtk_box_pack_end (GTK_BOX (box2), label, FALSE, FALSE, 0);
-	/* show the label. */
+	/* Show the label. */
 	gtk_widget_show (label);
 	
-	/* pack box2 into box1 (the vbox remember ? :) */
+	/* Pack box2 into box1 (the vbox remember ? :) */
 	gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, FALSE, 0);
 	gtk_widget_show (box2);
 	
-	/* a separator for the bottom. */
+	/* A separator for the bottom. */
 	separator = gtk_hseparator_new ();
-	/* this explicitly sets the separator to 400 pixels wide by 5 pixels
-	 * high.  This is so the hbox we created will also be 400 pixels wide,
+	/* This explicitly sets the separator to 400 pixels wide by 5 pixels
+	 * high. This is so the hbox we created will also be 400 pixels wide,
 	 * and the "end" label will be separated from the other labels in the
-	 * hbox.  Otherwise, all the widgets in the hbox would be packed as
+	 * hbox. Otherwise, all the widgets in the hbox would be packed as
 	 * close together as possible. */
 	gtk_widget_set_usize (separator, 400, 5);
 	/* pack the separator into the vbox (box1) created near the start 
@@ -253,23 +255,23 @@ main (int argc, char *argv[])
     /* Our quit button. */
     button = gtk_button_new_with_label ("Quit");
     
-    /* setup the signal to destroy the window.  Remember that this will send
+    /* Setup the signal to destroy the window. Remember that this will send
      * the "destroy" signal to the window which will be caught by our signal
      * handler as defined above. */
     gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
 			       GTK_SIGNAL_FUNC (gtk_main_quit),
 			       GTK_OBJECT (window));
-    /* pack the button into the quitbox.
+    /* Pack the button into the quitbox.
      * The last 3 arguments to gtk_box_pack_start are: expand, fill, padding. */
     gtk_box_pack_start (GTK_BOX (quitbox), button, TRUE, FALSE, 0);
     /* pack the quitbox into the vbox (box1) */
     gtk_box_pack_start (GTK_BOX (box1), quitbox, FALSE, FALSE, 0);
     
-    /* pack the vbox (box1) which now contains all our widgets, into the
+    /* Pack the vbox (box1) which now contains all our widgets, into the
      * main window. */
     gtk_container_add (GTK_CONTAINER (window), box1);
     
-    /* and show everything left */
+    /* And show everything left */
     gtk_widget_show (button);
     gtk_widget_show (quitbox);
     
@@ -280,8 +282,9 @@ main (int argc, char *argv[])
     /* And of course, our main function. */
     gtk_main ();
 
-    /* control returns here when gtk_main_quit() is called, but not when 
+    /* Control returns here when gtk_main_quit() is called, but not when 
      * gtk_exit is used. */
     
-    return 0;
+    return(0);
 }
+/* example-end */

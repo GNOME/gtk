@@ -1,3 +1,10 @@
+Mon Dec  7 15:15:06 GMT 1998  Tony Gale <gale@gtk.org>
+
+	* docs/gtk_tut.sgml: Start mass update for GTK 1.1
+        * examples/extract.sh: Look for the best version of awk
+        * examples/extract.awk: Fix FD leak
+        * example/base: minimal example from Tutorial
+
 Mon Dec  7 01:29:27 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gtk/gtkwindow.c: New functions
