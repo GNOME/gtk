@@ -3048,6 +3048,8 @@ open_new_dir (gchar       *dir_name,
   while ((dirent = g_dir_read_name (directory)) != NULL)
     entry_count++;
 
+  entry_count += 2;		/* For ".",".." */
+
   sent->entries = g_new (CompletionDirEntry, entry_count);
   sent->entry_count = entry_count;
 
@@ -3057,14 +3059,15 @@ open_new_dir (gchar       *dir_name,
     {
       GError *error = NULL;
 
-      dirent = g_dir_read_name (directory);
-
-      if (!dirent)
+      if (i == 0)
+	dirent = ".";
+      else if (i == 1)
+	dirent = "..";
+      else
 	{
-	  g_warning ("Failure reading folder '%s'", sys_dir_name);
-	  g_dir_close (directory);
-	  g_free (sys_dir_name);
-	  return NULL;
+	  dirent = g_dir_read_name (directory);
+	  if (!dirent)		/* Directory changed */
+	    break;
 	}
 
       sent->entries[n_entries].entry_name = g_filename_to_utf8 (dirent, -1, NULL, NULL, &error);

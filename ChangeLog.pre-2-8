@@ -1,3 +1,15 @@
+Thu Dec 12 19:51:45 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfilesel.c (open_new_dir): Include "."
+	and ".." in the list of entries; they are needed for 
+	correct	handling of .<TAB>, ..<TAB>; were lost
+	with the GDir conversion. (Francisco Bustamante,
+	#89972)
+
+	* gtk/gtkfilesel.c (open_new_dir): If we hit
+	EOF unexpectedly, that's OK... a file was just
+	deleted while we were reading the directory.
+
 Thu Dec 12 18:02:34 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmain.c (gtk_main_do_event): Intercept events
