@@ -1,5 +1,12 @@
 2001-10-22  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtktextlayout.h: add a #error unless you define
+	GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API, so people don't use this accidentally
+
+        * gtk/gtktext*.c: #define GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API as appropriate.
+	
+2001-10-22  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtktextview.c (gtk_text_view_get_border_window_size): fix 
 	#62365
 

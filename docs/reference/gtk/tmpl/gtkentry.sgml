@@ -349,7 +349,12 @@ to fit.
 
 @entry: the object which received the signal.
 
-<!-- ##### ARG GtkEntry:text-position ##### -->
+<!-- ##### ARG GtkEntry:cursor-position ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:selection-bound ##### -->
 <para>
 
 </para>

@@ -750,6 +750,12 @@ You may not attach these to signals created with the
 @arg2: 
 @arg3: 
 
+<!-- ##### ARG GtkEntry:text-position ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### ENUM GtkFontFilterType ##### -->
 <para>
 A set of bit flags used to specify the filter being set
@@ -1087,7 +1093,19 @@ produce superscript and subscript.
 </para>
 
 
+<!-- ##### ARG GtkTextView:height-lines ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### ARG GtkTextView:justify ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkTextView:width-columns ##### -->
 <para>
 
 </para>
