@@ -1,3 +1,8 @@
+1999-09-07  Raja R Harinath  <harinath@cs.umn.edu>
+
+	* gtk/Makefile.am (gtk.defs): Go back to using `touch' to create
+	an empty file.
+
 Mon Sep  6 00:11:56 1999  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkctree.c (gtk_ctree_is_ancestor): return FALSE if node has

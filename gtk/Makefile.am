@@ -328,7 +328,7 @@ $(OBJECTS): COPYING 	# this is our oldest-source-stamp
 
 # initial creation of the real stamp-* files
 gtk.defs gtkmarshal.h gtktypebuiltins.h:          # never add deps here
-	-test -f $@ || test -f "$(srcdir)/$@" || (:) > $(srcdir)/$@
+	-test -f $@ || test -f "$(srcdir)/$@" || touch $(srcdir)/$@
 # normal autogeneration rules
 stamp-gtk.defs: @REBUILD@ makeenums.pl gtk.defs gtk-boxed.defs $(gtk_public_h_sources) $(gdk_headers)
 	cd $(srcdir) \
