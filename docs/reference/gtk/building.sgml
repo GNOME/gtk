@@ -98,8 +98,8 @@ How to compile GTK+ itself
       a search path that <command>pkg-config</command> (see below)
       uses when looking for for file describing how to compile
       programs using different libraries. If you were installing GTK+
-      and it's dependencies into <filename>/opt/gtk</filename>, you might want to set
-      these variables as:
+      and it's dependencies into <filename>/opt/gtk</filename>, you 
+      might want to set these variables as:
     </para>
     <programlisting>
       CPPFLAGS="-I/opt/gtk/include"
@@ -137,12 +137,12 @@ How to compile GTK+ itself
 	  url="http://www.freedesktop.org/software/pkgconfig">pkg-config</ulink>
 	  is a tool for tracking the compilation flags needed for
 	  libraries that are used by the GTK+ libraries. (For each
-	  library, a small <literal>.pc</literal> text file is installed in a standard
-	  location that contains the compilation flags needed for that
-	  library along with version number information.)  The version
-	  of <command>pkg-config</command> needed to build GTK+ is
-	  mirrored in the <filename>dependencies</filename> directory
-	  on the <ulink url="ftp://ftp.gtk.org/pub/gtk/v2.2/">GTK+ FTP
+	  library, a small <literal>.pc</literal> text file is installed 
+          in a standard location that contains the compilation flags 
+          needed for that library along with version number information.)  
+          The version of <command>pkg-config</command> needed to build 
+          GTK+ is mirrored in the <filename>dependencies</filename> directory
+	  on the <ulink url="ftp://ftp.gtk.org/pub/gtk/v2.6/">GTK+ FTP
 	  site.</ulink>
 	</para>
       </listitem>
@@ -169,7 +169,7 @@ How to compile GTK+ itself
 	  The GLib library provides core non-graphical functionality
 	  such as high level data types, Unicode manipulation, and
 	  an object and type system to C programs. It is available
-	  from the <ulink url="ftp://ftp.gtk.org/pub/gtk/v2.2/">GTK+
+	  from the <ulink url="ftp://ftp.gtk.org/pub/gtk/v2.6/">GTK+
 	  FTP site.</ulink>
 	</para>
       </listitem>
@@ -177,9 +177,8 @@ How to compile GTK+ itself
 	<para>
 	  <ulink url="http://www.pango.org">Pango</ulink> is a library
 	  for internationalized text handling. It is available from
-	  the <ulink url="ftp://ftp.gtk.org/pub/gtk/v2.2/">GTK+ FTP
-	  site.</ulink>. Either Pango-1.0 or Pango-1.2 can be used
-	  with GTK+-2.2, though Pango-1.2 is recommended.
+	  the <ulink url="ftp://ftp.gtk.org/pub/gtk/v2.6/">GTK+ FTP
+	  site.</ulink>. 
 	</para>
       </listitem>
       <listitem>
@@ -188,7 +187,7 @@ How to compile GTK+ itself
 	  interfaces allowing accessibility technologies such as
 	  screen readers to interact with a graphical user interface.
 	  It is available from the <ulink
-	  url="ftp://ftp.gtk.org/pub/gtk/v2.2/">GTK+ FTP site.</ulink>
+	  url="ftp://ftp.gtk.org/pub/gtk/v2.6/">GTK+ FTP site.</ulink>
 	</para>
       </listitem>
       <listitem>
@@ -215,11 +214,12 @@ How to compile GTK+ itself
 	  The <ulink
 	    url="ftp://ftp.uu.net/graphics/jpeg/">JPEG</ulink>,
 	  <ulink url="http://www.libpng.org">PNG</ulink>, and
-	  <ulink url="http://www.libtiff.org">TIFF</ulink> image loading libraries are needed to
-	  compile GTK+. You probably already have these libraries
-	  installed, but if not, the versions you need are available in
-	  the <filename>dependencies</filename> directory on the the
-	  <ulink url="ftp://ftp.gtk.org/pub/gtk/v2.2/dependencies/">GTK+
+	  <ulink url="http://www.libtiff.org">TIFF</ulink> image 
+          loading libraries are needed to compile GTK+. You probably 
+          already have these libraries installed, but if not, the 
+          versions you need are available in the 
+           <filename>dependencies</filename> directory on the the
+	  <ulink url="ftp://ftp.gtk.org/pub/gtk/v2.6/dependencies/">GTK+
 	    FTP site.</ulink>. (Before installing these libraries
 	  from source, you should check if your operating system
 	  vendor has prebuilt packages of these libraries that you
@@ -239,13 +239,14 @@ How to compile GTK+ itself
 	<para>
 	  The <ulink url="http://www.fontconfig.org">fontconfig</ulink>
 	  library provides Pango with a standard way of locating
-	  fonts and matching them against font names. The Xft2
+	  fonts and matching them against font names. The 
+          <ulink url="http://www.freedesktop.org/wiki/Software/Xft">Xft2</ulink>
 	  library, distributed with fontconfig, provides support for
 	  scalable and antialiased fonts on X. Pango includes two
 	  backends that work on top of fontconfig: an Xft2 backend
 	  and a backend that uses fontconfig and the underlying
-	  <ulink url="http://www.freetype.org">FreeType
-	  library</ulink> directly. Neither backend is mandatory, but the
+	  <ulink url="http://www.freetype.org">FreeType</ulink>
+	  library directly. Neither backend is mandatory, but the
 	  Xft2 backend is the preferred backend for X and the FreeType
 	  backend is needed by many applications.
 	</para>
