@@ -198,10 +198,9 @@ get_keymap_for_display (GdkDisplay * display)
 
 
 /**
- * gdk_keymap_get_entries_for_keyval_for_display:
+ * gdk_keymap_get_entries_for_keyval:
  * @keymap: a #GdkKeymap, or %NULL to use the default keymap
  * @keyval: a keyval, such as %GDK_a, %GDK_Up, %GDK_Return, etc.
- * @display: the display where to retrieve the #GdkKeymap
  * @keys: return location for an array of #GdkKeymapKey
  * @n_keys: return location for number of elements in returned array
  * 
@@ -219,21 +218,23 @@ get_keymap_for_display (GdkDisplay * display)
  *
  * Return value: %TRUE if keys were found and returned
  **/
-
 gboolean
-gdk_keymap_get_entries_for_keyval_for_display (GdkKeymap * keymap,
-					       guint keyval,
-					       GdkDisplay * display,
-					       GdkKeymapKey ** keys,
-					       gint * n_keys)
+gdk_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
+                                   guint          keyval,
+                                   GdkKeymapKey **keys,
+                                   gint          *n_keys)
 {
   GArray *retval;
-  GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11 (display);
+  GdkDisplayImplX11 *dpy_impl;
+  GdkDisplay *display;
 
   g_return_val_if_fail (keymap == NULL || GDK_IS_KEYMAP (keymap), FALSE);
   g_return_val_if_fail (keys != NULL, FALSE);
   g_return_val_if_fail (n_keys != NULL, FALSE);
   g_return_val_if_fail (keyval != 0, FALSE);
+
+  display = keymap->display;
+  dpy_impl = GDK_DISPLAY_IMPL_X11 (display);
 
   retval = g_array_new (FALSE, FALSE, sizeof (GdkKeymapKey));
 
@@ -349,43 +350,9 @@ gdk_keymap_get_entries_for_keyval_for_display (GdkKeymap * keymap,
 }
 
 /**
- * gdk_keymap_get_entries_for_keyval:
- * @keymap: a #GdkKeymap, or %NULL to use the default keymap
- * @keyval: a keyval, such as %GDK_a, %GDK_Up, %GDK_Return, etc.
- * @keys: return location for an array of #GdkKeymapKey
- * @n_keys: return location for number of elements in returned array
- * 
- * Obtains a list of keycode/group/level combinations that will
- * generate @keyval. Groups and levels are two kinds of keyboard mode;
- * in general, the level determines whether the top or bottom symbol
- * on a key is used, and the group determines whether the left or
- * right symbol is used. On US keyboards, the shift key changes the
- * keyboard level, and there are no groups. A group switch key might
- * convert a keyboard between Hebrew to English modes, for example.
- * #GdkEventKey contains a %group field that indicates the active
- * keyboard group. The level is computed from the modifier mask.
- * The returned array should be freed
- * with g_free().
- *
- * Return value: %TRUE if keys were found and returned
- **/
-gboolean
-gdk_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
-                                   guint          keyval,
-                                   GdkKeymapKey **keys,
-                                   gint          *n_keys)
-{
-  GDK_NOTE(MULTIHEAD,g_message("Use gdk_keymap_get_entries_for_keyval_for_display instead\n"));
-  return gdk_keymap_get_entries_for_keyval_for_display(keymap,
-				    keyval,DEFAULT_GDK_DISPLAY,
-				    keys,n_keys);
-}
-
-/**
- * gdk_keymap_get_entries_for_keycode_for_display:
+ * gdk_keymap_get_entries_for_keycode:
  * @keymap: a #GdkKeymap or %NULL to use the default keymap
  * @hardware_keycode: a keycode
- * @display : the display where to retrieve the #GdkKeymap
  * @keys: return location for array of #GdkKeymapKey, or NULL
  * @keyvals: return location for array of keyvals, or NULL
  * @n_entries: length of @keys and @keyvals
@@ -399,21 +366,23 @@ gdk_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
  *
  * Returns: %TRUE if there were any entries
  **/
-
 gboolean
-gdk_keymap_get_entries_for_keycode_for_display (GdkKeymap * keymap,
-						guint hardware_keycode,
-						GdkDisplay * display,
-						GdkKeymapKey ** keys,
-						guint ** keyvals,
-						gint * n_entries)
+gdk_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
+                                    guint          hardware_keycode,
+                                    GdkKeymapKey **keys,
+                                    guint        **keyvals,
+                                    gint          *n_entries)
 {
   GArray *key_array;
   GArray *keyval_array;
-  GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11 (display);
+  GdkDisplay *display;
+  GdkDisplayImplX11 *dpy_impl;
 
   g_return_val_if_fail (keymap == NULL || GDK_IS_KEYMAP (keymap), FALSE);
   g_return_val_if_fail (n_entries != NULL, FALSE);
+
+  display = keymap->display;
+  dpy_impl = GDK_DISPLAY_IMPL_X11 (display);
 
   update_keyrange_for_display (display);
 
@@ -556,64 +525,6 @@ gdk_keymap_get_entries_for_keycode_for_display (GdkKeymap * keymap,
 }
 
 /**
- * gdk_keymap_get_entries_for_keycode:
- * @keymap: a #GdkKeymap or %NULL to use the default keymap
- * @hardware_keycode: a keycode
- * @keys: return location for array of #GdkKeymapKey, or NULL
- * @keyvals: return location for array of keyvals, or NULL
- * @n_entries: length of @keys and @keyvals
- *
- * Returns the keyvals bound to @hardware_keycode.
- * The Nth #GdkKeymapKey in @keys is bound to the Nth
- * keyval in @keyvals. Free the returned arrays with g_free().
- * When a keycode is pressed by the user, the keyval from
- * this list of entries is selected by considering the effective
- * keyboard group and level. See gdk_keymap_translate_keyboard_state().
- *
- * Returns: %TRUE if there were any entries
- **/
-gboolean
-gdk_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
-                                    guint          hardware_keycode,
-                                    GdkKeymapKey **keys,
-                                    guint        **keyvals,
-                                    gint          *n_entries)
-{
-  return gdk_keymap_get_entries_for_keycode_for_display(keymap,
-							hardware_keycode,
-							DEFAULT_GDK_DISPLAY,
-							keys,keyvals,
-							n_entries);
-}
-guint
-gdk_keymap_lookup_key_for_display (GdkKeymap * keymap,
-				   const GdkKeymapKey * key,
-				   GdkDisplay * display)
-{
-
-  GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11 (display);
-  g_return_val_if_fail (keymap == NULL || GDK_IS_KEYMAP (keymap), 0);
-  g_return_val_if_fail (key != NULL, 0);
-  g_return_val_if_fail (key->group < 4, 0);
-
-#ifdef HAVE_XKB
-  if (dpy_impl->_gdk_use_xkb) {
-    XkbDescRec *xkb = get_xkb_for_display (display);
-
-    return XkbKeySymEntry (xkb, key->keycode, key->level, key->group);
-  }
-  else
-#endif /*HAVE_XKB*/
-  {
-    update_keymaps_for_display (display);
-
-    return XKeycodeToKeysym (dpy_impl->xdisplay, key->keycode,
-			     key->group * dpy_impl->keysyms_per_keycode +
-			     key->level);
-  }
-}
-
-/**
  * gdk_keymap_lookup_key:
  * @keymap: a #GdkKeymap or %NULL to use the default keymap
  * @key: a #GdkKeymapKey with keycode, group, and level initialized
@@ -630,8 +541,27 @@ guint
 gdk_keymap_lookup_key (GdkKeymap          *keymap,
                        const GdkKeymapKey *key)
 { 
-  GDK_NOTE(MULTIHEAD,g_message("Use gdk_keymap_lookup_key_for_display instead\n"));
-  return gdk_keymap_lookup_key_for_display(keymap,key,DEFAULT_GDK_DISPLAY);
+  GdkDisplayImplX11 *dpy_impl; 
+  g_return_val_if_fail (keymap == NULL || GDK_IS_KEYMAP (keymap), 0);
+  g_return_val_if_fail (key != NULL, 0);
+  g_return_val_if_fail (key->group < 4, 0);
+  dpy_impl = GDK_DISPLAY_IMPL_X11 (keymap->display);
+
+#ifdef HAVE_XKB
+  if (dpy_impl->_gdk_use_xkb) {
+    XkbDescRec *xkb = get_xkb_for_display (keymap->display);
+
+    return XkbKeySymEntry (xkb, key->keycode, key->level, key->group);
+  }
+  else
+#endif /*HAVE_XKB*/
+  {
+    update_keymaps_for_display (keymap->display);
+
+    return XKeycodeToKeysym (dpy_impl->xdisplay, key->keycode,
+			     key->group * dpy_impl->keysyms_per_keycode +
+			     key->level);
+  }
 }
 
 #ifdef HAVE_XKB
@@ -744,19 +674,42 @@ MyEnhancedXkbTranslateKeyCode(register XkbDescPtr     xkb,
 }
 #endif /* HAVE_XKB */
 
+/**
+ * gdk_keymap_translate_keyboard_state:
+ * @keymap: a #GdkKeymap, or %NULL to use the default
+ * @hardware_keycode: a keycode
+ * @state: a modifier state 
+ * @group: active keyboard group
+ * @keyval: return location for keyval
+ * @effective_group: return location for effective group
+ * @level: return location for level
+ * @unused_modifiers: return location for modifiers that didn't affect the group or level
+ * 
+ *
+ * Translates the contents of a #GdkEventKey into a keyval, effective
+ * group, and level. Modifiers that didn't affect the translation and
+ * are thus available for application use are returned in
+ * @unused_modifiers.  See gdk_keyval_get_keys() for an explanation of
+ * groups and levels.  The @effective_group is the group that was
+ * actually used for the translation; some keys such as Enter are not
+ * affected by the active keyboard group. The @level is derived from
+ * @state. For convenience, #GdkEventKey already contains the translated
+ * keyval, so this function isn't as useful as you might think.
+ * 
+ * Return value: %TRUE if there was a keyval bound to the keycode/state/group
+ **/
 gboolean
-gdk_keymap_translate_keyboard_state_for_display (GdkKeymap * keymap,
-						 guint hardware_keycode,
-						 GdkDisplay * display,
-						 GdkModifierType state,
-						 gint group,
-						 guint * keyval,
-						 gint * effective_group,
-						 gint * level,
-						 GdkModifierType *
-						 unused_modifiers)
+gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
+                                     guint            hardware_keycode,
+                                     GdkModifierType  state,
+                                     gint             group,
+                                     guint           *keyval,
+                                     gint            *effective_group,
+                                     gint            *level,
+                                     GdkModifierType *unused_modifiers)
 {
-  GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11 (display);
+  GdkDisplay *display = keymap->display;
+  GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11 (keymap->display);
   KeySym tmp_keyval = NoSymbol;
 
   g_return_val_if_fail (keymap == NULL || GDK_IS_KEYMAP (keymap), FALSE);
@@ -831,49 +784,6 @@ gdk_keymap_translate_keyboard_state_for_display (GdkKeymap * keymap,
   }
 
   return tmp_keyval != NoSymbol;
-}
-/**
- * gdk_keymap_translate_keyboard_state:
- * @keymap: a #GdkKeymap, or %NULL to use the default
- * @hardware_keycode: a keycode
- * @state: a modifier state 
- * @group: active keyboard group
- * @keyval: return location for keyval
- * @effective_group: return location for effective group
- * @level: return location for level
- * @unused_modifiers: return location for modifiers that didn't affect the group or level
- * 
- *
- * Translates the contents of a #GdkEventKey into a keyval, effective
- * group, and level. Modifiers that didn't affect the translation and
- * are thus available for application use are returned in
- * @unused_modifiers.  See gdk_keyval_get_keys() for an explanation of
- * groups and levels.  The @effective_group is the group that was
- * actually used for the translation; some keys such as Enter are not
- * affected by the active keyboard group. The @level is derived from
- * @state. For convenience, #GdkEventKey already contains the translated
- * keyval, so this function isn't as useful as you might think.
- * 
- * Return value: %TRUE if there was a keyval bound to the keycode/state/group
- **/
-gboolean
-gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
-                                     guint            hardware_keycode,
-                                     GdkModifierType  state,
-                                     gint             group,
-                                     guint           *keyval,
-                                     gint            *effective_group,
-                                     gint            *level,
-                                     GdkModifierType *unused_modifiers)
-{
-  GDK_NOTE(MULTIHEAD, 
-	g_message("Use gdk_keymap_translate_keyboard_state_for_display instead\n"));
-  return gdk_keymap_translate_keyboard_state_for_display(keymap,hardware_keycode,
-							 DEFAULT_GDK_DISPLAY,
-							 state,group,keyval,
-							 effective_group,
-							 level,
-							 unused_modifiers);
 }
 
 

@@ -155,7 +155,7 @@ gdk_font_hash_lookup (GdkDisplay *display, GdkFontType type, const gchar *font_n
 }
 
 GdkFont *
-gdk_font_load_for_display (const gchar * font_name, GdkDisplay * display)
+gdk_font_load_for_display (GdkDisplay * display, const gchar * font_name)
 {
   GdkFont *font;
   GdkFontPrivateX *private;
@@ -205,7 +205,7 @@ GdkFont*
 gdk_font_load (const gchar *font_name)
 {  
    GDK_NOTE(MULTIHEAD,g_message("Use gdk_font_load_for_display instead\n"));
-   return gdk_font_load_for_display(font_name,DEFAULT_GDK_DISPLAY);
+   return gdk_font_load_for_display (DEFAULT_GDK_DISPLAY, font_name);
 }
 
 char *
@@ -269,7 +269,7 @@ gdk_font_from_description_for_display (GdkDisplay * display,
 					&subfont_ids, &subfont_charsets);
     if (n_subfonts > 0) {
       gchar *xlfd = pango_x_font_subfont_xlfd (font, subfont_ids[0]);
-      result = gdk_font_load_for_display (xlfd, display);
+      result = gdk_font_load_for_display (display, xlfd);
 
       g_free (xlfd);
     }
@@ -306,8 +306,8 @@ gdk_font_from_description (PangoFontDescription *font_desc)
 }
 
 GdkFont *
-gdk_fontset_load_for_display (const gchar * fontset_name,
-			      GdkDisplay * display)
+gdk_fontset_load_for_display (GdkDisplay * display,
+			      const gchar * fontset_name)
 {
   GdkFont *font;
   GdkFontPrivateX *private;
@@ -372,7 +372,7 @@ GdkFont*
 gdk_fontset_load (const gchar *fontset_name)
 {
   GDK_NOTE(MULTIHEAD,g_message("Use gdk_fontset_load_for_display instead\n"));
-  return gdk_fontset_load_for_display(fontset_name,DEFAULT_GDK_DISPLAY);
+  return gdk_fontset_load_for_display(DEFAULT_GDK_DISPLAY, fontset_name);
 }
 
 void

@@ -24,8 +24,11 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#include "gdkkeys.h"
 #include <config.h>
+#include "gdkdisplay.h"
+#include "gdkdisplaymgr.h"
+#include "gdkinternals.h"
+#include "gdkkeys.h"
 
 static void gdk_keymap_init       (GdkKeymap      *keymap);
 static void gdk_keymap_class_init (GdkKeymapClass *klass);
@@ -86,12 +89,20 @@ gdk_keymap_finalize (GObject *object)
 }
 
 GdkKeymap*
+gdk_keymap_new (GdkDisplay *display)
+{
+ GdkKeymap *keymap = g_object_new (gdk_keymap_get_type (), NULL);
+ keymap->display = display;
+ return keymap;
+}
+
+GdkKeymap*
 gdk_keymap_get_default (void)
 {
   static GdkKeymap *keymap = NULL;
 
   if (keymap == NULL)
-    keymap = g_object_new (gdk_keymap_get_type (), NULL);
+    keymap = gdk_keymap_new(DEFAULT_GDK_DISPLAY);
 
   return keymap;
 }

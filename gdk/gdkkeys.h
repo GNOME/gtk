@@ -64,7 +64,8 @@ typedef struct _GdkKeymapClass GdkKeymapClass;
 
 struct _GdkKeymap
 {
-  GObject parent_instance;
+  GObject	parent_instance;
+  GdkDisplay*	display;
 };
 
 struct _GdkKeymapClass
@@ -75,23 +76,11 @@ struct _GdkKeymapClass
 GType gdk_keymap_get_type (void) G_GNUC_CONST;
 
 GdkKeymap* gdk_keymap_get_default (void);
+GdkKeymap* gdk_keymap_new (GdkDisplay * display);
 
-guint    gdk_keymap_lookup_key_for_display (GdkKeymap * keymap,
-					    const GdkKeymapKey * key,
-					    GdkDisplay * display);
 
 guint    gdk_keymap_lookup_key               (GdkKeymap           *keymap,
                                               const GdkKeymapKey  *key);
-gboolean
-gdk_keymap_translate_keyboard_state_for_display (GdkKeymap * keymap,
-					         guint hardware_keycode,
-						 GdkDisplay * display,
-						 GdkModifierType state,
-						 gint group,
-						 guint * keyval,
-						 gint * effective_group,
-						 gint * level,
-						 GdkModifierType *unused_modifiers);
 gboolean gdk_keymap_translate_keyboard_state (GdkKeymap           *keymap,
                                               guint                hardware_keycode,
                                               GdkModifierType      state,
@@ -100,21 +89,10 @@ gboolean gdk_keymap_translate_keyboard_state (GdkKeymap           *keymap,
                                               gint                *effective_group,
                                               gint                *level,
                                               GdkModifierType     *unused_modifiers);
-gboolean gdk_keymap_get_entries_for_keyval_for_display (GdkKeymap * keymap,
-						        guint keyval,
-							GdkDisplay * display,
-							GdkKeymapKey ** keys,
-							gint * n_keys);
 gboolean gdk_keymap_get_entries_for_keyval   (GdkKeymap           *keymap,
                                               guint                keyval,
                                               GdkKeymapKey       **keys,
                                               gint                *n_keys);
-gboolean gdk_keymap_get_entries_for_keycode_for_display (GdkKeymap * keymap,
-						         guint hardware_keycode,
-							 GdkDisplay * display,
-							 GdkKeymapKey ** keys,
-							 guint ** keyvals,
-							 gint * n_entries);
 gboolean gdk_keymap_get_entries_for_keycode  (GdkKeymap           *keymap,
                                               guint                hardware_keycode,
                                               GdkKeymapKey       **keys,

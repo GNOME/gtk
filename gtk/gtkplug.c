@@ -415,10 +415,9 @@ gtk_plug_accel_entries_changed (GtkWindow *window)
 	  GdkKeymapKey *keys;
 	  gint n_keys;
 	  
-	  if (gdk_keymap_get_entries_for_keyval_for_display (NULL,
-				      gdk_window_get_display(window->window),
-				      entries[i].accelerator_key, 
-				      &keys, &n_keys))
+	  if (gdk_keymap_get_entries_for_keyval (gdk_keymap_new(gdk_window_get_display(window->window)),
+				      		 entries[i].accelerator_key, 
+				      		 &keys, &n_keys))
 	    {
 	      GrabbedKey *key = g_new (GrabbedKey, 1);
 	      
