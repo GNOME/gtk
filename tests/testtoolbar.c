@@ -675,6 +675,8 @@ main (gint argc, gchar **argv)
 
   make_prop_editor (G_OBJECT (toolbar));
 
+  g_signal_connect (window, "delete_event", G_CALLBACK (gtk_main_quit), NULL);
+  
   g_signal_connect (toolbar, "popup_context_menu", G_CALLBACK (popup_context_menu), NULL);
   
   gtk_main ();

@@ -1,3 +1,8 @@
+Mon Sep  1 00:32:30 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* tests/testtoolbar.c (main): connect to "delete_event" so the
+	application will actually quit when you close the window
+
 2003-09-01  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkuimanager.c (gtk_ui_manager_get_widget) 
