@@ -3468,9 +3468,9 @@ gtk_default_draw_box (GtkStyle      *style,
     {
       GdkGC *gc = style->bg_gc[state_type];
       
-      if (state_type == GTK_STATE_SELECTED && strcmp (detail, "paned") == 0)
+      if (state_type == GTK_STATE_SELECTED && detail && strcmp (detail, "paned") == 0)
 	{
-	  if (!GTK_WIDGET_HAS_FOCUS (widget))
+	  if (widget && !GTK_WIDGET_HAS_FOCUS (widget))
 	    gc = style->base_gc[GTK_STATE_ACTIVE];
 	}
 
@@ -4877,13 +4877,13 @@ gtk_default_draw_handle (GtkStyle      *style,
                  detail, x, y, width, height);
   
   
-  if (!strcmp (detail, "paned"))
+  if (detail && !strcmp (detail, "paned"))
     {
       /* we want to ignore the shadow border in paned widgets */
       xthick = 0;
       ythick = 0;
 
-      if (state_type == GTK_STATE_SELECTED && !GTK_WIDGET_HAS_FOCUS (widget))
+      if (state_type == GTK_STATE_SELECTED && widget && !GTK_WIDGET_HAS_FOCUS (widget))
 	{
 	  GdkColor unfocused_light;
       
