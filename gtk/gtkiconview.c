@@ -95,12 +95,14 @@ struct _EggIconListPrivate
   guint shift_pressed : 1;
   
   EggIconListItem *last_single_clicked;
-  
+
+#ifdef DND_WORKS
   /* Drag-and-drop. */
   gint pressed_button;
   gint press_start_x;
   gint press_start_y;
-
+#endif
+  
   /* Layout used to draw icon text */
   PangoLayout *layout;
 };
@@ -201,8 +203,10 @@ static gboolean   egg_icon_list_item_hit_test               (EggIconListItem *it
 							     gint             y,
 							     gint             width,
 							     gint             height);
+#ifdef DND_WORKS
 static gboolean   egg_icon_list_maybe_begin_dragging_items  (EggIconList     *icon_list,
 							     GdkEventMotion  *event);
+#endif
 static gboolean   egg_icon_list_unselect_all_internal       (EggIconList     *icon_list,
 							     gboolean         emit);
 static void       egg_icon_list_calculate_item_size         (EggIconList     *icon_list,
@@ -559,9 +563,11 @@ egg_icon_list_init (EggIconList *icon_list)
   icon_list->priv->width = 0;
   icon_list->priv->height = 0;
   icon_list->priv->selection_mode = GTK_SELECTION_SINGLE;
+#ifdef DND_WORKS
   icon_list->priv->pressed_button = -1;
   icon_list->priv->press_start_x = -1;
   icon_list->priv->press_start_y = -1;
+#endif
   icon_list->priv->text_column = -1;
   icon_list->priv->markup_column = -1;  
   icon_list->priv->pixbuf_column = -1;
@@ -880,9 +886,9 @@ egg_icon_list_motion (GtkWidget      *widget,
   gint abs_y;
   
   icon_list = EGG_ICON_LIST (widget);
-
+#ifdef DND_WORKS
   egg_icon_list_maybe_begin_dragging_items (icon_list, event);
-
+#endif
   if (icon_list->priv->rubberbanding)
     {
       rubberbanding (widget);
@@ -983,7 +989,7 @@ egg_icon_list_button_press (GtkWidget      *widget,
 	      egg_icon_list_set_cursor_item (icon_list, item);
 	      icon_list->priv->anchor_item = item;
 	    }
-	    
+#ifdef DND_WORKS
 	  /* Save press to possibly begin a drag */
 	  if (icon_list->priv->pressed_button < 0)
 	    {
@@ -991,7 +997,7 @@ egg_icon_list_button_press (GtkWidget      *widget,
 	      icon_list->priv->press_start_x = event->x;
 	      icon_list->priv->press_start_y = event->y;
 	    }
-
+#endif
 	  if (!icon_list->priv->last_single_clicked)
 	    icon_list->priv->last_single_clicked = item;
 	}
@@ -1039,10 +1045,11 @@ egg_icon_list_button_release (GtkWidget      *widget,
   EggIconList *icon_list;
 
   icon_list = EGG_ICON_LIST (widget);
-
+  
+#ifdef DND_WORKS
   if (icon_list->priv->pressed_button == event->button)
     icon_list->priv->pressed_button = -1;
-
+#endif
   egg_icon_list_stop_rubberbanding (icon_list);
 
   if (icon_list->priv->scroll_timeout_id != 0)
@@ -1213,6 +1220,7 @@ egg_icon_list_item_hit_test (EggIconListItem  *item,
   return FALSE;
 }
 
+#ifdef DND_WORKS
 static gboolean
 egg_icon_list_maybe_begin_dragging_items (EggIconList     *icon_list,
 					  GdkEventMotion  *event)
@@ -1259,7 +1267,7 @@ egg_icon_list_maybe_begin_dragging_items (EggIconList     *icon_list,
   
   return retval;
 }
-
+#endif
 
 static gboolean
 egg_icon_list_unselect_all_internal (EggIconList  *icon_list,
@@ -2134,6 +2142,7 @@ egg_icon_list_row_deleted (GtkTreeModel *model,
   EggIconList *icon_list;
   EggIconListItem *item;
   GList *list;
+  gboolean emit = FALSE;
   
   icon_list = EGG_ICON_LIST (data);
 
@@ -2141,10 +2150,23 @@ egg_icon_list_row_deleted (GtkTreeModel *model,
 
   list = g_list_nth (icon_list->priv->items, index);
   item = list->data;
+
+  if (item == icon_list->priv->anchor_item)
+    icon_list->priv->anchor_item = NULL;
+
+  if (item == icon_list->priv->cursor_item)
+    icon_list->priv->cursor_item = NULL;
+
+  if (item->selected)
+    emit = TRUE;
+  
   item->index = -1;
-  egg_icon_list_item_unref (item);  
+  egg_icon_list_item_unref (item);
+
   icon_list->priv->items = g_list_delete_link (icon_list->priv->items, list);
 
+  if (emit)
+    g_signal_emit (icon_list, icon_list_signals[SELECTION_CHANGED], 0);
 }
 
 static void
