@@ -93,8 +93,7 @@
         which considers a display to be the combination
         of a keyboard, a pointing device and one or more 
         <glossterm linkend="screen">screens</glossterm>. 
-        Applications open a display to show <glossterm 
-        linkend="window">windows</glossterm> and interact with the user.
+        Applications open a display to show windows and interact with the user.
         In GDK, a display is represented by a 
         <link linkend="GdkDisplay">GdkDisplay</link>.
       </para>
