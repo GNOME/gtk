@@ -512,10 +512,10 @@ uninstall-local:
 # test programs, not to be installed
 #
 noinst_PROGRAMS = testgtk testcalendar testinput testselection testrgb testdnd testtext simple testtextbuffer # testthreads
-DEPS = libgtk.la $(top_builddir)/gdk/libgdk.la
+DEPS = libgtk-x11.la $(top_builddir)/gdk/libgdk-x11.la
 LDADDS = @STRIP_BEGIN@ \
-	libgtk.la			\
-	$(top_builddir)/gdk/libgdk.la	\
+	libgtk-x11.la			\
+	$(top_builddir)/gdk/libgdk-x11.la	\
 	@x_ldflags@			\
 	@x_libs@			\
 	@GDK_WLIBS@			\

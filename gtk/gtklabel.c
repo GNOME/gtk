@@ -233,8 +233,8 @@ gtk_label_set_text (GtkLabel    *label,
 gchar *
 gtk_label_get_text (GtkLabel *label)
 {
-  g_return_if_fail (label != NULL);
-  g_return_if_fail (GTK_IS_LABEL (label));
+  g_return_val_if_fail (label != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_LABEL (label), NULL);
 
   return g_strdup (label->label);
 }
