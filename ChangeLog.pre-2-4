@@ -1,3 +1,8 @@
+Thu Jan 30 16:30:54 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* Makefile.am (EXTRA_DIST): Remove gtk+.spec.in from
+	EXTRA_DIST, and from dist rules. (#102231)
+
 Thu Jan 30 16:01:29 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkrgb.c (gdk_rgb_try_colormap): Remove the 
