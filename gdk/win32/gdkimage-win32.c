@@ -344,9 +344,9 @@ gdk_image_get (GdkWindow *window,
   BITMAP bm;
   int i;
 
-  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (GDK_IS_DRAWABLE (window), NULL);
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_IS_WINDOW (window) && GDK_WINDOW_DESTROYED (window))
     return NULL;
 
   GDK_NOTE (MISC, g_print ("gdk_image_get: %#x %dx%d@+%d+%d\n",

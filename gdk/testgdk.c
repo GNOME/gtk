@@ -78,11 +78,24 @@
 #define QTESTF(expr, failfmt) \
   CQTESTF (TRUE, expr, failfmt)
 
+#ifndef _DEBUG
 #define ASSERT(expr) \
   do { \
     if (!QTEST (expr)) \
       printf ("That is fatal. Goodbye\n"), exit (1);\
   } while (0)
+#else
+static void
+my_break()
+{
+  G_BREAKPOINT();
+}
+#define ASSERT(expr) \
+  do { \
+    if (!QTEST (expr)) \
+      printf ("That is fatal. Goodbye\n"), my_break();\
+  } while (0)
+#endif
 
 #define N(a) (sizeof(a)/sizeof(*a))
 
@@ -475,6 +488,8 @@ test_gc_function (GdkFunction function,
       QTEST (newpixel == ((oldpixel | (~foreground)) & mask)); break;
     case GDK_NAND:
       QTEST (newpixel == (((~oldpixel) | (~foreground)) & mask)); break;
+    case GDK_NOR:
+      QTEST (newpixel == (~oldpixel & ~mask)); break;
     case GDK_SET:
       QTEST (newpixel == ((~0) & mask)); break;
     default:
@@ -900,7 +915,13 @@ tests (void)
 int
 main (int argc, char **argv)
 {
+  GLogLevelFlags fatal_mask;
+
   gdk_init (&argc, &argv);
+
+  fatal_mask = g_log_set_always_fatal (G_LOG_FATAL_MASK);
+  fatal_mask |= G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL;
+  g_log_set_always_fatal (fatal_mask);
 
   tests ();
 

@@ -222,7 +222,7 @@ _gdk_windowing_window_init (void)
   impl->width = width;
   impl->height = height;
 
-  gdk_win32_handle_table_insert (gdk_root_window, gdk_parent_root);
+  gdk_win32_handle_table_insert (&gdk_root_window, gdk_parent_root);
 }
 
 /* The Win API function AdjustWindowRect may return negative values
@@ -570,6 +570,7 @@ gdk_window_new (GdkWindow     *parent,
   WideCharToMultiByte (GetACP (), 0, wctitle, -1,
 		       mbtitle, 3*titlelen, NULL, NULL);
   
+#ifdef WITHOUT_WM_CREATE
   draw_impl->handle = CreateWindowEx (dwExStyle,
 				      MAKEINTRESOURCE(klass),
 				      mbtitle,
@@ -580,6 +581,43 @@ gdk_window_new (GdkWindow     *parent,
 				      NULL,
 				      gdk_app_hmodule,
 				      NULL);
+#else
+  {
+  HWND hwndNew =
+    CreateWindowEx (dwExStyle,
+		    MAKEINTRESOURCE(klass),
+		    mbtitle,
+		    dwStyle,
+		    x, y, 
+		    width, height,
+		    hparent,
+		    NULL,
+		    gdk_app_hmodule,
+		    window);
+  if (GDK_WINDOW_HWND (window) != hwndNew)
+    {
+      g_warning("gdk_window_new: gdk_event_translate::WM_CREATE (%#x, %#x) HWND mismatch.",
+		GDK_WINDOW_HWND (window), hwndNew);
+
+      /* HB: IHMO due to a race condition the handle was increased by
+       * one, which causes much trouble. Because I can't find the 
+       * real bug, try to workaround it ...
+       * To reproduce: compile with MSVC 5, DEBUG=1
+       */
+# if 0
+      gdk_win32_handle_table_remove (GDK_WINDOW_HWND (window));
+      GDK_WINDOW_HWND (window) = hwndNew;
+      gdk_win32_handle_table_insert (&GDK_WINDOW_HWND (window), window);
+# else
+      /* the old behaviour, but with warning */
+      GDK_WINDOW_HWND (window) = hwndNew;
+# endif
+
+    }
+  }
+  gdk_drawable_ref (window);
+  gdk_win32_handle_table_insert (&GDK_WINDOW_HWND (window), window);
+#endif
 
   GDK_NOTE (MISC,
 	    g_print ("gdk_window_new: %s %s %dx%d@+%d+%d %#x = %#x\n"
@@ -606,8 +644,10 @@ gdk_window_new (GdkWindow     *parent,
       return NULL;
     }
 
+#ifdef WITHOUT_WM_CREATE
   gdk_drawable_ref (window);
-  gdk_win32_handle_table_insert (GDK_WINDOW_HWND (window), window);
+  gdk_win32_handle_table_insert (&GDK_WINDOW_HWND (window), window);
+#endif
 
   gdk_window_set_cursor (window, ((attributes_mask & GDK_WA_CURSOR) ?
 				  (attributes->cursor) :
@@ -659,7 +699,7 @@ gdk_window_foreign_new (GdkNativeWindow anid)
   private->depth = gdk_visual_get_system ()->depth;
 
   gdk_drawable_ref (window);
-  gdk_win32_handle_table_insert (GDK_WINDOW_HWND (window), window);
+  gdk_win32_handle_table_insert (&GDK_WINDOW_HWND (window), window);
 
   return window;
 }

@@ -122,7 +122,7 @@ gdk_cursor_new (GdkCursorType cursor_type)
       if (hcursor == NULL)
 	WIN32_API_FAILED ("LoadCursor");
       GDK_NOTE (MISC, g_print ("gdk_cursor_new: %#x %d\n",
-			       hcursor, cursor_type));
+			       (guint) hcursor, cursor_type));
     }
   else
     {
@@ -138,6 +138,14 @@ gdk_cursor_new (GdkCursorType cursor_type)
   cursor->ref_count = 1;
 
   return cursor;
+}
+
+static gboolean
+color_is_white (GdkColor *color)
+{
+  return (color->red == 0xFFFF
+	  && color->green == 0xFFFF
+	  && color->blue == 0xFFFF);
 }
 
 GdkCursor*
@@ -157,6 +165,7 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
   gint width, height, cursor_width, cursor_height;
   guchar residue;
   gint ix, iy;
+  const gboolean bg_is_white = color_is_white (bg);
   
   g_return_val_if_fail (GDK_IS_PIXMAP (source), NULL);
   g_return_val_if_fail (GDK_IS_PIXMAP (mask), NULL);
@@ -193,7 +202,13 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
   /* Such complex bit manipulation for this simple task, sigh.
    * The X cursor and Windows cursor concepts are quite different.
    * We assume here that we are always called with fg == black and
-   * bg == white.
+   * bg == white, *or* the other way around. Random colours won't work.
+   * (Well, you will get a cursor, but not in those colours.)
+   */
+
+  /* Note: The comments below refer to the case fg==black and
+   * bg==white, as that was what was implemented first. The fg==white
+   * (the "if (fg->pixel)" branches) case was added later.
    */
 
   /* First set masked-out source bits, as all source bits matter on Windoze.
@@ -205,7 +220,10 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
       q = (guchar *) mask_image->mem + iy*mask_image->bpl;
       
       for (ix = 0; ix < ((width-1)/8+1); ix++)
-	*p++ |= ~(*q++);
+	if (bg_is_white)
+	  *p++ |= ~(*q++);
+	else
+	  *p++ &= *q++;
     }
 
   /* XOR mask is initialized to zero */
@@ -217,7 +235,11 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
       q = xor_mask + iy*cursor_width/8;
 
       for (ix = 0; ix < ((width-1)/8+1); ix++)
-	*q++ = ~(*p++);
+	if (bg_is_white)
+	  *q++ = ~(*p++);
+	else
+	  *q++ = *p++;
+
       q[-1] &= ~residue;	/* Clear left-over bits */
     }
       
@@ -232,6 +254,7 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
 
       for (ix = 0; ix < ((width-1)/8+1); ix++)
 	*q++ = ~(*p++);
+
       q[-1] |= residue;	/* Set left-over bits */
     }
       
@@ -240,11 +263,11 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
 
   GDK_NOTE (MISC, g_print ("gdk_cursor_new_from_pixmap: "
 			   "%#x (%dx%d) %#x (%dx%d) = %#x (%dx%d)\n",
-			   GDK_PIXMAP_HBITMAP (source),
+			   (guint) GDK_PIXMAP_HBITMAP (source),
 			   source_impl->width, source_impl->height,
-			   GDK_PIXMAP_HBITMAP (mask),
+			   (guint) GDK_PIXMAP_HBITMAP (mask),
 			   mask_impl->width, mask_impl->height,
-			   hcursor, cursor_width, cursor_height));
+			   (guint) hcursor, cursor_width, cursor_height));
 
   g_free (xor_mask);
   g_free (and_mask);
@@ -270,7 +293,7 @@ _gdk_cursor_destroy (GdkCursor *cursor)
   private = (GdkCursorPrivate *) cursor;
 
   GDK_NOTE (MISC, g_print ("_gdk_cursor_destroy: %#x\n",
-			   (cursor->type == GDK_CURSOR_IS_PIXMAP) ? private->hcursor : 0));
+			   (cursor->type == GDK_CURSOR_IS_PIXMAP) ? (guint) private->hcursor : 0));
 
   if (cursor->type == GDK_CURSOR_IS_PIXMAP)
     if (!DestroyCursor (private->hcursor))

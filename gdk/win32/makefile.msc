@@ -8,6 +8,9 @@ WTKIT = ..\..\..\wtkit126
 
 # Nothing much configurable below
 
+TOP = ../../..
+!INCLUDE $(TOP)/build/win32/make.msc
+
 !IFNDEF DEBUG
 # Full optimization:
 OPTIMIZE = -Ox -MD
@@ -21,11 +24,9 @@ CC = cl -G5 -GF $(OPTIMIZE) -W3 -nologo
 
 LDFLAGS = /link /machine:ix86 $(LINKDEBUG)
 
-GLIB_VER=1.3
 GTK_VER=1.3
 
-GLIB = ..\..\..\glib
-CFLAGS = -I. -I.. -I..\.. -I$(WTKIT)\include -I$(GLIB) -DG_ENABLE_DEBUG -DHAVE_CONFIG_H -DGDK_VERSION=\"$(GTK_VER)\"
+CFLAGS = -I. -I.. -I..\.. $(GLIB_CFLAGS) $(PANGO_CFLAGS) -I$(WTKIT)\include -I$(GLIB) -DG_ENABLE_DEBUG -DHAVE_CONFIG_H -DGDK_VERSION=\"$(GTK_VER)\"
 
 all: \
 	..\..\config.h	\
@@ -46,11 +47,13 @@ gdk_win32_OBJECTS = \
 	gdkglobals-win32.obj \
 	gdkim-win32.obj \
 	gdkimage-win32.obj \
+	gdkinput.obj \
 	gdkinput-win32.obj \
 	gdkmain-win32.obj \
+	gdkpango-win32.obj \
 	gdkpixmap-win32.obj \
 	gdkproperty-win32.obj \
-	gdkregion-win32.obj \
+#	gdkregion-win32.obj \
 	gdkselection-win32.obj \
 	gdkvisual-win32.obj \
 	gdkwin32id.obj \

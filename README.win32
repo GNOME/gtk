@@ -1,22 +1,23 @@
-This current (CVS) version of the Win32 backend does *not* even
-compile properly. A zipfile with an older snapshot (from before the
-merge of the no-flicker branch, and the other recent additions), is
-available from http://www.gimp.org/win32/. That should be use by
-"production" code until this CVS version is useable. (But note, the
-Win32 backend has never been claimed to be "production quality",
-although it works OK for the GIMP.)
-
 The Win32 port of GTk+ is a work in progress, and not as stable or
 correct as the Unix/X11 version. For more information about the Win32
 port, see http://www.gimp.org/win32/ or
 http://www.iki.fi/tml/gimp/win32/ .
 
-To build GTk+ on Win32, you need either the Microsoft compiler and
-tools, or gcc-2.95 or later. The mingw setup of gcc is preferred, but
+This current (CVS) version of the Win32 backend does *not* necessarily
+even compile properly. A zipfile with an older snapshot (from before
+the merge of the no-flicker branch, and the other recent additions),
+is available from http://www.gimp.org/win32/. That should be used by
+"production" code until this CVS version is useable. (But note, the
+Win32 backend has never been claimed to be "production quality",
+although it works OK for the GIMP.)
+
+To build GTk+ on Win32, you need either gcc-2.95 or later, or the
+Microsoft compiler and tools. The mingw setup of gcc is preferred, but
 you can run gcc also under cygwin-b20.1 or later. Compile in
-gdk\win32, gdk and gtk with `nmake -f makefile.msc` or `make -f
-makefile.cygwin`. The name makefile.cygwin is misleading, it should
-really be called makefile.mingw.
+gdk\win32, gdk and gtk with `make -f makefile.mingw` (gcc) or `nmake
+-f makefile.msc` (MSVC). The name makefile.mingw needs an explanation:
+It refers to the target, not the build environment. As build
+envíronment, only cygwin is tested. GNU Make is definitely needed.
 
 See the README.win32 file in the GLib distribution for instructions
 how to build with gcc.

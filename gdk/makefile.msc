@@ -6,7 +6,11 @@
 ## There is no install target, you have to decide where and 
 ## how to install for yourself.
 
+TOP = ../..
+!INCLUDE $(TOP)/build/win32/make.msc
+
 # Location of the Wintab toolkit. Downloadable from http://www.pointing.com.
+# definition should possibly go to build/win32/module.def, too.
 WTKIT = ..\..\wtkit126
 
 ###############################################################
@@ -28,16 +32,19 @@ CC = cl -G5 -GF $(OPTIMIZE) -W3 -nologo
 
 LDFLAGS = /link $(LINKDEBUG)
 
-GLIB_VER=1.3
+# overwrite version?
 GTK_VER=1.3
 
-GLIB = ..\..\glib
-CFLAGS = -I . -I .. -I $(GLIB) -DG_ENABLE_DEBUG -DHAVE_CONFIG_H -DGDK_VERSION=\"$(GTK_VER)\"
+CFLAGS = -I . -I .. $(GLIB_CFLAGS) $(PANGO_CFLAGS) -I ../gdk-pixbuf \
+		-DG_ENABLE_DEBUG -DHAVE_CONFIG_H -DGDK_VERSION=\"$(GTK_VER)\"
+EXTRALIBS = $(WTKIT)\lib\i386\wntab32x.lib $(GLIB_LIBS) \
+		..\gdk-pixbuf\gdk_pixbuf-$(GDK_PIXBUF_VER).lib $(PANGOWIN32_LIBS)
 
 all: \
 	..\config.h \
 	gdkconfig.h \
-	gdk-$(GTK_VER).dll
+	gdk-$(GTK_VER).dll \
+	testgdk.exe
 
 gdk_OBJECTS = \
 	gdk.obj \
@@ -49,6 +56,12 @@ gdk_OBJECTS = \
 	gdkgc.obj \
 	gdkglobals.obj \
 	gdkimage.obj \
+	gdkkeyuni.obj \
+	gdkpango.obj \
+	gdkpixmap.obj \
+	gdkregion-generic.obj \
+	gdkpixbuf-render.obj \
+	gdkpolyreg-generic.obj \
 	gdkrgb.obj \
 	gdkrectangle.obj \
 	gdkwindow.obj
@@ -60,7 +73,10 @@ gdkconfig.h : gdkconfig.h.win32
 	copy gdkconfig.h.win32 gdkconfig.h
 
 gdk-$(GTK_VER).dll : $(gdk_OBJECTS) gdk.def win32\gdk-win32.lib
-	$(CC) $(CFLAGS) -LD -Fegdk-$(GTK_VER).dll $(gdk_OBJECTS) win32\gdk-win32.lib $(WTKIT)\lib\i386\wntab32x.lib $(GLIB)\glib-$(GLIB_VER).lib gdi32.lib user32.lib imm32.lib shell32.lib ole32.lib uuid.lib win32\gdk.res $(LDFLAGS) /def:gdk.def
+	$(CC) $(CFLAGS) -LD -Fegdk-$(GTK_VER).dll $(gdk_OBJECTS) win32\gdk-win32.lib $(EXTRALIBS) gdi32.lib user32.lib imm32.lib shell32.lib ole32.lib uuid.lib win32\gdk.res $(LDFLAGS) /def:gdk.def
+
+testgdk.exe : gdk-$(GTK_VER).dll testgdk.obj
+	$(CC) -Fetestgdk.exe testgdk.obj gdk-$(GTK_VER).lib $(EXTRALIBS) $(LDFLAGS)
 
 .c.obj :
 	$(CC) $(CFLAGS) -GD -c -DGDK_COMPILATION -DG_LOG_DOMAIN=\"Gdk\" $<

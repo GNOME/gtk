@@ -31,6 +31,7 @@
 #include <stdio.h>
 #include <math.h>
 
+#include "gdk.h"
 #include "gdkinput.h"
 #include "gdkinternals.h"
 #include "gdkprivate-win32.h"
@@ -84,9 +85,6 @@ gdk_device_get_history  (GdkDevice         *device,
 			 GdkTimeCoord    ***events,
 			 gint              *n_events)
 {
-  GdkTimeCoord **coords;
-  int i;
-
   g_return_val_if_fail (window != NULL, FALSE);
   g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
   g_return_val_if_fail (events != NULL, FALSE);
@@ -720,7 +718,9 @@ _gdk_input_other_event (GdkEvent  *event,
 			GdkWindow *window)
 {
 #ifdef HAVE_WINTAB
+#if !USE_SYSCONTEXT
   GdkWindow *current_window;
+#endif
   GdkWindowObject *obj;
   GdkWindowImplWin32 *impl;
   GdkInputWindow *input_window;
@@ -729,7 +729,6 @@ _gdk_input_other_event (GdkEvent  *event,
   POINT pt;
 
   PACKET packet;
-  gint return_val;
   gint k;
   gint x, y;
 
@@ -892,7 +891,7 @@ _gdk_input_other_event (GdkEvent  *event,
 				 & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK
 				    | GDK_BUTTON3_MASK | GDK_BUTTON4_MASK
 				    | GDK_BUTTON5_MASK));
-	  GDK_NOTE (EVENTS, g_print ("WINTAB button %s:%d %g,%g %g %g,%g\n",
+	  GDK_NOTE (EVENTS, g_print ("WINTAB button %s:%d %g,%g\n",
 				     (event->button.type == GDK_BUTTON_PRESS ?
 				      "press" : "release"),
 				     event->button.button,

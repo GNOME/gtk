@@ -1197,7 +1197,7 @@ propagate (GdkWindow  **window,
      if ((*doesnt_want_it) (GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (*window)->impl)->event_mask, msg))
 	{
 	  /* Owner doesn't want it, propagate to parent. */
-	  if (GDK_WINDOW (GDK_WINDOW_OBJECT (window)->parent) == gdk_parent_root)
+	  if (GDK_WINDOW (GDK_WINDOW_OBJECT (*window)->parent) == gdk_parent_root)
 	    {
 	      /* No parent; check if grabbed */
 	      if (grab_window != NULL)
@@ -1396,6 +1396,30 @@ gdk_event_translate (GdkEvent *event,
 	  PostMessage (msg->hwnd, msg->message,
 		       msg->wParam, msg->lParam);
 	}
+#ifndef WITHOUT_WM_CREATE
+      else if (WM_CREATE == msg->message)
+	{
+	  window = (UNALIGNED GdkWindow*) (((LPCREATESTRUCT) msg->lParam)->lpCreateParams);
+	  GDK_WINDOW_HWND (window) = msg->hwnd;
+	  GDK_NOTE (EVENTS, g_print ("gdk_event_translate: created %#x\n",
+				     (guint) msg->hwnd));
+# if 0
+	  /* This should handle allmost all the other window==NULL cases.
+	   * This code is executed while gdk_window_new is in it's 
+	   * CreateWindowEx call.
+	   * Don't insert xid there a second time, if it's done here. 
+	   */
+	  gdk_drawable_ref (window);
+	  gdk_win32_handle_table_insert (&GDK_WINDOW_HWND(window), window);
+# endif
+	}
+      else
+      {
+        GDK_NOTE (EVENTS, g_print ("gdk_event_translate: %s for %#x (NULL)\n",
+                                   gdk_win32_message_name(msg->message),
+				   (guint) msg->hwnd));
+      }
+#endif
       return FALSE;
     }
   

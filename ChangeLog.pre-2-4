@@ -1,3 +1,46 @@
+2000-10-09  Tor Lillqvist  <tml@iki.fi>
+
+	* README.win32: Update.
+
+	* gdk/win32/gdkgeometry-win32.c (gdk_window_clip_changed): Add two
+	lines that had been deleted by mistake (?).
+
+	* gdk/win32/gdkcursor-win32.c (gdk_cursor_new_from_pixmap): Handle
+	also the case fg==white and bg==black (but still not randomly
+	coloured cursors). Thanks to Wolfgang Sourdeau.
+
+	* gdk/win32/*.c: Silence gcc -Wall.
+
+	* gtk/gtk.def: Add missing entry points.
+
+	Fixes by Hans Breuer:
+
+	* gdk/makefile.msc
+	* gdk/win32/makefile.msc: Update.
+
+	* gdk/testgdk.c: If compiling with debugging (with _DEBUG defined,
+	some MSVC thing, presumably), cause breakpoint on failures. Add
+	GDK_NOR case. Call g_log_set_always_fatal.
+
+	* gdk/win32/gdkwin32id.c (gdk_win32_handle_table_insert): Handle
+	should be pased by reference.
+	
+	* gdk/win32/gdkprivate-win32.h: Correct declaration accordingly.
+	
+	* gdk/win32/*.c: Correct calls to gdk_win32_handle_table_insert.
+
+	* gdk/win32/gdkevents-win32.c
+	* gdk/win32/gdkwindow-win32.c: Handle WM_CREATE.
+
+	* gdk/win32/gdkgc-win32.c: Fix mixups of drawable and
+	implementation object.
+
+	* gdk/win32/gdkimage-win32.c (gdk_image_get): Handle drawables,
+	not just windows.
+	
+	* gdk/win32/gdkpixmap-win32.c (gdk_pixmap_impl_win32_finalize):
+	Use the wrapper object.
+	
 2000-10-06  Havoc Pennington  <hp@redhat.com>
 
 	* Makefile.am (SRC_SUBDIRS): contrib subdir

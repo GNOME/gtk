@@ -682,8 +682,8 @@ gdk_window_queue_translation (GdkWindow *window,
   item->u.translate.dx = dx;
   item->u.translate.dy = dy;
 
-  GDK_NOTE (EVENTS, g_print ("gdk_window_queue_translation %#x %d %d,%d\n",
-			     GDK_WINDOW_HWND (window),
+  GDK_NOTE (EVENTS, g_print ("gdk_window_queue_translation %#x %ld %d,%d\n",
+			     (guint) GDK_WINDOW_HWND (window),
 			     item->serial,
 			     dx, dy));
 
@@ -702,8 +702,8 @@ _gdk_windowing_window_queue_antiexpose (GdkWindow *window,
   item->type = GDK_WINDOW_QUEUE_ANTIEXPOSE;
   item->u.antiexpose.area = area;
 
-  GDK_NOTE (EVENTS, g_print ("_gdk_windowing_window_queue_antiexpose %#x %d %dx%d@+%d+%d\n",
-			     GDK_WINDOW_HWND (window),
+  GDK_NOTE (EVENTS, g_print ("_gdk_windowing_window_queue_antiexpose %#x %ld %dx%d@+%d+%d\n",
+			     (guint) GDK_WINDOW_HWND (window),
 			     item->serial,
 			     area->extents.x2 - area->extents.x1,
 			     area->extents.y2 - area->extents.y1,
@@ -727,8 +727,8 @@ _gdk_window_process_expose (GdkWindow    *window,
 
   impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl);
   
-  GDK_NOTE (EVENTS, g_print ("_gdk_window_process_expose %#x %d %dx%d@+%d+%d\n",
-			     GDK_WINDOW_HWND (window), serial,
+  GDK_NOTE (EVENTS, g_print ("_gdk_window_process_expose %#x %ld %dx%d@+%d+%d\n",
+			     (guint) GDK_WINDOW_HWND (window), serial,
 			     area->width, area->height, area->x, area->y));
 
   while (tmp_list)
@@ -802,8 +802,6 @@ gdk_window_tmp_reset_bg (GdkWindow *window)
   
   if (obj->bg_pixmap)
     {
-      HBITMAP hbitmap;
-
       /* ??? */
     }
   else
@@ -825,6 +823,9 @@ gdk_window_clip_changed (GdkWindow    *window,
   if (((GdkWindowObject *)window)->input_only)
     return;
 
+  obj = (GdkWindowObject *) window;
+  impl = GDK_WINDOW_IMPL_WIN32 (obj->impl);
+  
   old_clip_region = gdk_region_rectangle (old_clip);
   new_clip_region = gdk_region_rectangle (new_clip);
 
@@ -845,4 +846,3 @@ gdk_window_clip_changed (GdkWindow    *window,
   gdk_region_destroy (new_clip_region);
   gdk_region_destroy (old_clip_region);
 }
-

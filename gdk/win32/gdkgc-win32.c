@@ -945,9 +945,9 @@ gdk_win32_hdc_get (GdkDrawable    *drawable,
 
   g_assert (win32_gc->hdc == NULL);
 
-  win32_gc->hwnd = GDK_DRAWABLE_HANDLE (drawable);
-  
-  if (GDK_IS_PIXMAP (drawable))
+  win32_gc->hwnd = GDK_DRAWABLE_IMPL_WIN32(drawable)->handle;
+
+  if (GDK_IS_PIXMAP_IMPL_WIN32 (drawable))
     {
       if ((win32_gc->hdc = CreateCompatibleDC (NULL)) == NULL)
 	WIN32_GDI_FAILED ("CreateCompatibleDC"), ok = FALSE;
@@ -1151,7 +1151,7 @@ gdk_win32_hdc_release (GdkDrawable    *drawable,
 	WIN32_GDI_FAILED ("UnrealizeObject");
     }
 #endif
-  if (GDK_IS_PIXMAP (drawable))
+  if (GDK_IS_PIXMAP_IMPL_WIN32 (drawable))
     {
       if (!DeleteDC (win32_gc->hdc))
 	WIN32_GDI_FAILED ("DeleteDC");

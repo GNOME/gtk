@@ -106,12 +106,12 @@ gdk_pixmap_impl_win32_finalize (GObject *object)
   GdkPixmap *wrapper = GDK_PIXMAP (GDK_DRAWABLE_IMPL_WIN32 (impl)->wrapper);
 
   GDK_NOTE (MISC, g_print ("gdk_pixmap_impl_win32_finalize: %#x\n",
-			   GDK_PIXMAP_HBITMAP (object)));
+			   (guint) GDK_PIXMAP_HBITMAP (wrapper)));
 
-  if (!DeleteObject (GDK_PIXMAP_HBITMAP (object)))
+  if (!DeleteObject (GDK_PIXMAP_HBITMAP (wrapper)))
     WIN32_GDI_FAILED ("DeleteObject");
 
-  gdk_win32_handle_table_remove (GDK_PIXMAP_HBITMAP (object));
+  gdk_win32_handle_table_remove (GDK_PIXMAP_HBITMAP (wrapper));
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -268,9 +268,10 @@ gdk_pixmap_new (GdkWindow *window,
     }
   ReleaseDC (GDK_WINDOW_HWND (window), hdc);
 
-  GDK_NOTE (MISC, g_print ("... = %#x\n", GDK_PIXMAP_HBITMAP (pixmap)));
+  GDK_NOTE (MISC, g_print ("... = %#x\n",
+			   (guint) GDK_PIXMAP_HBITMAP (pixmap)));
 
-  gdk_win32_handle_table_insert (GDK_PIXMAP_HBITMAP (pixmap), pixmap);
+  gdk_win32_handle_table_insert (&GDK_PIXMAP_HBITMAP (pixmap), pixmap);
 
   return pixmap;
 }
@@ -352,12 +353,13 @@ gdk_bitmap_create_from_data (GdkWindow   *window,
   draw_impl->handle = CreateBitmap (width, height, 1, 1, bits);
 
   GDK_NOTE (MISC, g_print ("gdk_bitmap_create_from_data: %dx%d = %#x\n",
-			   width, height, GDK_PIXMAP_HBITMAP (pixmap)));
+			   width, height,
+			   (guint) GDK_PIXMAP_HBITMAP (pixmap)));
 
   g_free (bits);
 
   draw_impl->colormap = NULL;
-  gdk_win32_handle_table_insert (GDK_PIXMAP_HBITMAP (pixmap), pixmap);
+  gdk_win32_handle_table_insert (&GDK_PIXMAP_HBITMAP (pixmap), pixmap);
 
   return pixmap;
 }
@@ -389,7 +391,7 @@ gdk_pixmap_create_from_data (GdkWindow   *window,
 
   GDK_NOTE (MISC, g_print ("gdk_pixmap_create_from_data: %dx%dx%d = %#x\n",
 			   width, height, depth,
-			   GDK_PIXMAP_HBITMAP (result)));
+			   (guint) GDK_PIXMAP_HBITMAP (result)));
 
   return result;
 }
@@ -402,7 +404,7 @@ gdk_pixmap_foreign_new (GdkNativeWindow anid)
   GdkPixmapImplWin32 *pix_impl;
   HBITMAP hbitmap;
   SIZE size;
-  unsigned int x_ret, y_ret, w_ret, h_ret, bw_ret, depth_ret;
+  unsigned int w_ret, h_ret;
 
   /* check to make sure we were passed a HBITMAP */
   g_return_val_if_fail(GetObjectType ((HGDIOBJ) anid) == OBJ_BITMAP, NULL);
@@ -427,7 +429,7 @@ gdk_pixmap_foreign_new (GdkNativeWindow anid)
   pix_impl->width = w_ret;
   pix_impl->height = h_ret;
 
-  gdk_win32_handle_table_insert (GDK_PIXMAP_HBITMAP (pixmap), pixmap);
+  gdk_win32_handle_table_insert (&GDK_PIXMAP_HBITMAP (pixmap), pixmap);
 
   return pixmap;
 }

@@ -30,7 +30,20 @@
 #include <gdk/gdkprivate.h>
 #include "gdkwin32.h"
 
-void	 gdk_win32_handle_table_insert    (HANDLE   handle,
+/* Routines from gdkgeometry-win32.c */
+void
+_gdk_window_init_position (GdkWindow *window);
+void
+_gdk_window_move_resize_child (GdkWindow *window,
+			       gint       x,
+			       gint       y,
+			       gint       width,
+			       gint       height);
+
+void gdk_win32_selection_init (void);
+void gdk_win32_dnd_exit (void);
+
+void	 gdk_win32_handle_table_insert    (HANDLE   *handle,
 					   gpointer data);
 void	 gdk_win32_handle_table_remove    (HANDLE handle);
 

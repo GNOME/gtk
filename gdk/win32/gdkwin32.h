@@ -110,6 +110,9 @@ extern "C" {
 #endif
 
 /* Missing messages */
+#ifndef WM_SYNCPAINT
+#define WM_SYNCPAINT 0x88
+#endif
 #ifndef WM_MOUSEWHEEL
 #define WM_MOUSEWHEEL 0X20A
 #endif

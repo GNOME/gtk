@@ -791,7 +791,7 @@ target_context_new (void)
   result->context = gdk_drag_context_new ();
   result->context->is_source = FALSE;
 
-  GDK_NOTE (DND, g_print ("target_context_new: %#x\n", result));
+  GDK_NOTE (DND, g_print ("target_context_new: %p\n", result));
 
   return result;
 }
@@ -810,7 +810,7 @@ source_context_new (void)
   result->context = gdk_drag_context_new ();
   result->context->is_source = TRUE;
 
-  GDK_NOTE (DND, g_print ("source_context_new: %#x\n", result));
+  GDK_NOTE (DND, g_print ("source_context_new: %p\n", result));
 
   return result;
 }
@@ -951,7 +951,7 @@ gdk_dropfiles_filter (GdkXEvent *xev,
   MSG *msg = (MSG *) xev;
   HANDLE hdrop;
   POINT pt;
-  gint nfiles, i, k;
+  gint nfiles, i;
   guchar fileName[MAX_PATH], linkedFile[MAX_PATH];
   
   if (text_uri_list_atom == GDK_NONE)
@@ -959,7 +959,7 @@ gdk_dropfiles_filter (GdkXEvent *xev,
 
   if (msg->message == WM_DROPFILES)
     {
-      GDK_NOTE (DND, g_print ("WM_DROPFILES: %#x\n", msg->hwnd));
+      GDK_NOTE (DND, g_print ("WM_DROPFILES: %#x\n", (guint) msg->hwnd));
 
       context = gdk_drag_context_new ();
       private = PRIVATE_DATA (context);
@@ -1075,9 +1075,9 @@ GdkDragContext *
 gdk_drag_begin (GdkWindow *window,
 		GList     *targets)
 {
-  GList *tmp_list;
   source_drag_context *ctx;
 #ifdef OLE2_DND
+  GList *tmp_list;
   data_object *dobj;
   HRESULT hResult;
   DWORD dwEffect;
@@ -1149,12 +1149,11 @@ gdk_drag_find_window (GdkDragContext  *context,
 		      GdkWindow      **dest_window,
 		      GdkDragProtocol *protocol)
 {
-  GdkDragContextPrivateWin32 *private = PRIVATE_DATA (context);
   HWND recipient;
   POINT pt;
 
   GDK_NOTE (DND, g_print ("gdk_drag_find_window: %#x +%d+%d\n",
-			  (drag_window ? GDK_WINDOW_HWND (drag_window) : 0),
+			  (drag_window ? (guint) GDK_WINDOW_HWND (drag_window) : 0),
 			  x_root, y_root));
 
   pt.x = x_root;
@@ -1164,7 +1163,7 @@ gdk_drag_find_window (GdkDragContext  *context,
     *dest_window = NULL;
   else
     {
-      *dest_window = gdk_win32_handle_table_lookup (recipient);
+      *dest_window = gdk_win32_handle_table_lookup (GPOINTER_TO_UINT(recipient));
       if (*dest_window)
 	gdk_drawable_ref (*dest_window);
       *protocol = GDK_DRAG_PROTO_WIN32_DROPFILES;
@@ -1266,7 +1265,7 @@ gdk_window_register_dnd (GdkWindow *window)
   g_return_if_fail (window != NULL);
 
   GDK_NOTE (DND, g_print ("gdk_window_register_dnd: %#x\n",
-			  GDK_WINDOW_HWND (window)));
+			  (guint) GDK_WINDOW_HWND (window)));
 
   /* We always claim to accept dropped files, but in fact we might not,
    * of course. This function is called in such a way that it cannot know

@@ -43,9 +43,8 @@ gdk_handle_compare (HANDLE *a,
   return (*a == *b);
 }
 
-/* Note that the handle is passed by value to this function! */
 void
-gdk_win32_handle_table_insert (HANDLE   handle,
+gdk_win32_handle_table_insert (HANDLE  *handle,
 			       gpointer data)
 {
   g_return_if_fail (handle != NULL);
@@ -54,7 +53,7 @@ gdk_win32_handle_table_insert (HANDLE   handle,
     handle_ht = g_hash_table_new ((GHashFunc) gdk_handle_hash,
 				  (GCompareFunc) gdk_handle_compare);
 
-  g_hash_table_insert (handle_ht, &handle, data);
+  g_hash_table_insert (handle_ht, handle, data);
 }
 
 void
