@@ -177,7 +177,7 @@ gdk_property_get (GdkWindow   *window,
   if (nbytes > 0)
     {
       *data = g_malloc (nbytes+1);
-      memcpy (data, prop->data + offset, nbytes);
+      memcpy (*data, prop->data + offset, nbytes);
       (*data)[nbytes] = 0;
     }
   else

@@ -1,3 +1,8 @@
+2002-04-29  Alex Larsson  <alexl@redhat.com>
+
+	* gdk/linux-fb/gdkproperty-fb.c (gdk_property_get):
+	Fix silly bug, noticed by Sven Neumann.
+
 Sun Apr 28 22:43:55 2002  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_set_sort_func): Fix
