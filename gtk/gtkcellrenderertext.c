@@ -1227,7 +1227,7 @@ gtk_cell_renderer_text_set_property (GObject      *object,
       break;
 
     case PROP_ELLIPSIZE_SET:
-      priv->ellipsize_set = g_value_get_enum (value);
+      priv->ellipsize_set = g_value_get_boolean (value);
       break;
       
     default:

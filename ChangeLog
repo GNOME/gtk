@@ -1,3 +1,9 @@
+2004-12-30  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_set_property): 
+	Use g_value_get_boolean() for ellipsize_set.  (#162447, 
+	Brian Tarricone)
+
 2004-12-30  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk/gtkicontheme.c (gtk_icon_theme_init): Use /usr/share/pixmaps
