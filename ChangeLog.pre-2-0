@@ -2,6 +2,7 @@
 
 	* gtk/gtktextview.c (gtk_text_view_update_im_spot_location): 
 	Update IM spot location at appropriate times, #50626
+        (Hidetoshi Tajima)
 
 2001-10-23  Havoc Pennington  <hp@redhat.com>
 
