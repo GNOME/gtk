@@ -143,7 +143,7 @@ int main (int argc, char *argv[])
     window = gtk_window_new( GTK_WINDOW_POPUP );
     gtk_signal_connect (GTK_OBJECT (window), "delete_event",
                         GTK_SIGNAL_FUNC (close_application), NULL);
-    gtk_widget_show (window);
+    gtk_widget_realize (window);
 
     /* now for the pixmap and the pixmap widget */
     style = gtk_widget_get_default_style();

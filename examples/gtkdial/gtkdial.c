@@ -253,17 +253,18 @@ gtk_dial_size_allocate (GtkWidget     *widget,
   g_return_if_fail (allocation != NULL);
 
   widget->allocation = *allocation;
+  dial = GTK_DIAL (widget);
+
   if (GTK_WIDGET_REALIZED (widget))
     {
-      dial = GTK_DIAL (widget);
 
       gdk_window_move_resize (widget->window,
 			      allocation->x, allocation->y,
 			      allocation->width, allocation->height);
 
-      dial->radius = MAX(allocation->width,allocation->height) * 0.45;
-      dial->pointer_width = dial->radius / 5;
     }
+  dial->radius = MIN(allocation->width,allocation->height) * 0.45;
+  dial->pointer_width = dial->radius / 5;
 }
 
 static gint
