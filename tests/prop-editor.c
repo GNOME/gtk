@@ -695,7 +695,7 @@ properties_from_type (GObject     *object,
 	  continue;
 	}
 
-      label = gtk_label_new (g_param_get_nick (spec));
+      label = gtk_label_new (g_param_spec_get_nick (spec));
       gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
       gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, i, i + 1);
       
@@ -707,8 +707,8 @@ properties_from_type (GObject     *object,
           if (!can_modify)
             gtk_widget_set_sensitive (prop_edit, FALSE);
 
-	  if (g_param_get_blurb (spec))
-	    gtk_tooltips_set_tip (tips, prop_edit, g_param_get_blurb (spec), NULL);
+	  if (g_param_spec_get_blurb (spec))
+	    gtk_tooltips_set_tip (tips, prop_edit, g_param_spec_get_blurb (spec), NULL);
 	  
           /* set initial value */
           g_object_notify (object, spec->name);
