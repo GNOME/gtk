@@ -427,5 +427,5 @@ gdk_draw_lines (GdkDrawable *drawable,
   if (GDK_DRAWABLE_DESTROYED (drawable))
     return;
 
-  ((GdkDrawablePrivate *)drawable)->klass->draw_points (drawable, gc, points, npoints);
+  ((GdkDrawablePrivate *)drawable)->klass->draw_lines (drawable, gc, points, npoints);
 }
