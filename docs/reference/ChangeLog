@@ -1,3 +1,8 @@
+2004-04-29  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/tmpl/gtkfilechooser.sgml: Added an .gtkrc-2.0 example of how
+	to actually change the key bindings.
+
 2004-04-23  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkdialog.sgml: 

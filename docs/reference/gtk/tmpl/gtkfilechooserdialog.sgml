@@ -130,7 +130,6 @@ dialog = gtk_file_chooser_dialog_new ("Open File",
 @Returns: 
 
 
-
 <!-- ##### FUNCTION gtk_file_chooser_dialog_new_with_backend ##### -->
 <para>
 
@@ -151,3 +150,5 @@ mode: sgml
 sgml-parent-document: ("../gtk-docs.sgml" "book" "refsect1")
 End:
 -->
+
+

@@ -157,6 +157,68 @@ update_preview_cb (GtkFileChooser *file_chooser, gpointer data)
 	describes the available key binding signals.
       </para>
 
+      <example id="gtkfilechooser-key-binding-example">
+	<title>GtkFileChooser key binding example</title>
+
+	<para>
+	  The default keys that activate the key-binding signals in
+	  <classname>GtkFileChooserDefaultClass</classname> are as
+	  follows:
+	</para>
+
+	<informaltable>
+	  <tgroup cols="2">
+	    <tbody>
+	      <row>
+		<entry>Signal name</entry>
+		<entry>Key</entry>
+	      </row>
+	      <row>
+		<entry>location-popup</entry>
+		<entry><keycombo><keycap>Control</keycap><keycap>L</keycap></keycombo></entry>
+	      </row>
+	      <row>
+		<entry>up-folder</entry>
+		<entry><keycombo><keycap>Alt</keycap><keycap>Up</keycap></keycombo></entry>
+	      </row>
+	      <row>
+		<entry>down-folder</entry>
+		<entry><keycombo><keycap>Alt</keycap><keycap>Down</keycap></keycombo></entry>
+	      </row>
+	      <row>
+		<entry>home-folder</entry>
+		<entry><keycombo><keycap>Alt</keycap><keycap>Home</keycap></keycombo></entry>
+	      </row>
+	    </tbody>
+	  </tgroup>
+	</informaltable>
+
+	<para>
+	  To change these defaults to something else, you could
+	  include the following fragment in your
+	  <filename>.gtkrc-2.0</filename> file:
+	</para>
+
+	<programlisting>
+binding "my-own-gtkfilechooser-bindings" {
+	bind "&lt;Alt&gt;&lt;Shift&gt;l" {
+		"location-popup" ()
+	}
+	bind "&lt;Alt&gt;&lt;Shift&gt;Up" {
+		"up-folder" ()
+	}
+	bind "&lt;Alt&gt;&lt;Shift&gt;Down" {
+		"down-folder" ()
+	}
+	bind "&lt;Alt&gt;&lt;Shift&gt;Home" {
+		"home-folder-folder" ()
+	}
+}
+
+class "GtkFileChooserDefault" binding "my-own-gtkfilechooser-bindings"
+	</programlisting>
+      </example>
+
       <refsect3 id="GtkFileChooserDefault-location-popup">
 	<title>The &quot;GtkFileChooserDefault::location-popup&quot; signal</title>
 
