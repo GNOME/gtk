@@ -1,3 +1,5 @@
+# KTranslator Generated File
+
 # This is the Croatian locale translation for GTK+.
 # Copyright (C) 1999 Tomislav Vujec & friends
 # Tomislav Vujec <tvujec@carnet.hr>, 1999.
@@ -9,7 +11,7 @@ msgstr ""
 "POT-Creation-Date: 1999-08-30 19:01+0200\n"
 "PO-Revision-Date: 1999-02-28 02:00+0100\n"
 "Last-Translator: Tomislav Vujec <tvujec@carnet.hr>\n"
-"Language-Team: hr <LL@li.org>\n"
+"Language-Team: Croatian <lokalizacija@linux.hr>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -46,7 +48,7 @@ msgstr "Prozirnost:"
 #: gtk/gtkcolorsel.c:1668 gtk/gtkfilesel.c:571 gtk/gtkfontsel.c:3722
 #: gtk/gtkgamma.c:416
 msgid "OK"
-msgstr "OK"
+msgstr "U redu"
 
 #. The Cancel button
 #: gtk/gtkcolorsel.c:1674 gtk/gtkfilesel.c:578 gtk/gtkfilesel.c:956
@@ -278,27 +280,27 @@ msgstr "(nil)"
 
 #: gtk/gtkfontsel.c:1228 gtk/gtkfontsel.c:2700
 msgid "regular"
-msgstr ""
+msgstr "regularno"
 
 #: gtk/gtkfontsel.c:1233 gtk/gtkfontsel.c:1994
 msgid "italic"
-msgstr ""
+msgstr "kurziv"
 
 #: gtk/gtkfontsel.c:1234 gtk/gtkfontsel.c:1995
 msgid "oblique"
-msgstr ""
+msgstr "elektronièko koso pismo"
 
 #: gtk/gtkfontsel.c:1235 gtk/gtkfontsel.c:1996
 msgid "reverse italic"
-msgstr ""
+msgstr "obrnuti kurziv"
 
 #: gtk/gtkfontsel.c:1236 gtk/gtkfontsel.c:1997
 msgid "reverse oblique"
-msgstr ""
+msgstr "obrnuto elektronièko koso pismo"
 
 #: gtk/gtkfontsel.c:1237 gtk/gtkfontsel.c:1998
 msgid "other"
-msgstr ""
+msgstr "drugo"
 
 #: gtk/gtkfontsel.c:1244
 msgid "[M]"
@@ -326,11 +328,11 @@ msgstr "(nepoznat)"
 
 #: gtk/gtkfontsel.c:1993
 msgid "roman"
-msgstr ""
+msgstr "rimski"
 
 #: gtk/gtkfontsel.c:2005
 msgid "proportional"
-msgstr ""
+msgstr "proporcionalno"
 
 #: gtk/gtkfontsel.c:2006
 msgid "monospaced"
@@ -354,7 +356,7 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:2684
 msgid "bold"
-msgstr ""
+msgstr "masno"
 
 #: gtk/gtkfontsel.c:2687
 msgid "demibold"
@@ -366,11 +368,11 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:2692
 msgid "normal"
-msgstr ""
+msgstr "normalno"
 
 #: gtk/gtkfontsel.c:2694
 msgid "light"
-msgstr ""
+msgstr "lagano"
 
 #: gtk/gtkfontsel.c:2696
 msgid "extralight"
@@ -378,7 +380,7 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:2698
 msgid "thin"
-msgstr ""
+msgstr "tanko"
 
 #: gtk/gtkfontsel.c:2875
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
