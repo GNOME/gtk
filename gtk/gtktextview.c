@@ -6692,12 +6692,12 @@ gtk_text_view_get_window (GtkTextView *text_view,
       break;
 
     case GTK_TEXT_WINDOW_PRIVATE:
-      g_warning ("%s: You can't get GTK_TEXT_WINDOW_PRIVATE, it has \"PRIVATE\" in the name because it is private.", __FUNCTION__);
+      g_warning ("%s: You can't get GTK_TEXT_WINDOW_PRIVATE, it has \"PRIVATE\" in the name because it is private.", G_GNUC_FUNCTION);
       return NULL;
       break;
     }
 
-  g_warning ("%s: Unknown GtkTextWindowType", __FUNCTION__);
+  g_warning ("%s: Unknown GtkTextWindowType", G_GNUC_FUNCTION);
   return NULL;
 }
 

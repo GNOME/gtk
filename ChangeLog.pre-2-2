@@ -1,3 +1,8 @@
+2002-02-08  Laszlo Peter  <laca@ireland.sun.com>
+
+	* gtk/gtktextchild.c: s/__FUNCTION__/G_GNUC_FUNCTION/
+	* gtk/gtktextview.c: ditto
+
 2002-02-07  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtkspinbutton.h (struct _GtkSpinButtonClass): add

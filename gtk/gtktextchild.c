@@ -52,8 +52,8 @@
 #include "gtktextbtree.h"
 #include "gtktextlayout.h"
 
-#define CHECK_IN_BUFFER(anchor) do { if ((anchor)->segment == NULL) g_warning ("%s: GtkTextChildAnchor hasn't been in a buffer yet", __FUNCTION__); } while (0)
-#define CHECK_IN_BUFFER_RETURN(anchor, val) do { if ((anchor)->segment == NULL) g_warning ("%s: GtkTextChildAnchor hasn't been in a buffer yet", __FUNCTION__); return (val); } while (0)
+#define CHECK_IN_BUFFER(anchor) do { if ((anchor)->segment == NULL) g_warning ("%s: GtkTextChildAnchor hasn't been in a buffer yet", G_GNUC_FUNCTION); } while (0)
+#define CHECK_IN_BUFFER_RETURN(anchor, val) do { if ((anchor)->segment == NULL) g_warning ("%s: GtkTextChildAnchor hasn't been in a buffer yet", G_GNUC_FUNCTION); return (val); } while (0)
 
 static GtkTextLineSegment *
 pixbuf_segment_cleanup_func (GtkTextLineSegment *seg,
