@@ -1041,8 +1041,8 @@ rewrite_events_translate (GdkWindow *old_window,
   gdk_window_get_origin	(old_window, &old_origin_x, &old_origin_y);
   gdk_window_get_origin	(new_window, &new_origin_x, &new_origin_y);
 
-  *x += new_origin_x - old_origin_x;
-  *y += new_origin_y - old_origin_y;
+  *x += old_origin_x - new_origin_x;
+  *y += old_origin_y - new_origin_y;
 }
 
 static GdkEvent *

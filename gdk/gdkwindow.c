@@ -2182,7 +2182,9 @@ gdk_window_process_all_updates (void)
 static gboolean
 gdk_window_update_idle (gpointer data)
 {
+  GDK_THREADS_ENTER ();
   gdk_window_process_all_updates ();
+  GDK_THREADS_LEAVE ();
   
   return FALSE;
 }
