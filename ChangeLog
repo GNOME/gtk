@@ -1,3 +1,21 @@
+Mon Oct 22 16:25:12 2001  Owen Taylor  <otaylor@redhat.com>
+
+	Fixing popup menus to have "Paste" sensitized correctly. Original
+	patches from Damian Ivereigh, much mangled.
+
+	* gtk/gtkselection.c: Add functions gtk_selection_data_get_targets(),
+	gtk_selection_data_targets_include_text(). (#60854)
+
+	* gtk/gtkclipboard.c: Add a simple do-it-all non-async "check if
+	the clipboard has text" function gtk_clipboard_wait_is_text_available.
+	(#60854)
+
+	* gtk/gtkentry.c: Only enable the paste item if the clipboard
+	contains text. (#60973)
+
+	* gtk/gtktextview.c: Only enable the paste item if the clipboard
+	contains text. (#60975)
+
 2001-10-22  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextview.c (gtk_text_view_class_init): rip out

@@ -5396,67 +5396,116 @@ popup_position_func (GtkMenu   *menu,
   *y = CLAMP (*y, 0, MAX (0, gdk_screen_height () - req.height));
 }
 
+typedef struct
+{
+  GtkTextView *text_view;
+  gint button;
+  guint time;
+} PopupInfo;
+
+static void
+popup_targets_received (GtkClipboard     *clipboard,
+			GtkSelectionData *data,
+			gpointer          user_data)
+{
+  PopupInfo *info = user_data;
+  GtkTextView *text_view = info->text_view;
+  
+  if (GTK_WIDGET_REALIZED (text_view))
+    {
+      /* We implicitely rely here on the fact that if we are pasting ourself, we'll
+       * have text targets as well as the private GTK_TEXT_BUFFER_CONTENTS target.
+       */
+      gboolean clipboard_contains_text = gtk_selection_data_targets_include_text (data);
+      GtkWidget *menuitem;
+      GtkWidget *submenu;
+      gboolean have_selection;
+      gboolean can_insert;
+      GtkTextIter iter;
+
+      if (text_view->popup_menu)
+	gtk_widget_destroy (text_view->popup_menu);
+
+      text_view->popup_menu = gtk_menu_new ();
+      
+      gtk_menu_attach_to_widget (GTK_MENU (text_view->popup_menu),
+				 GTK_WIDGET (text_view),
+				 popup_menu_detach);
+      
+      have_selection = gtk_text_buffer_get_selection_bounds (get_buffer (text_view),
+							     NULL, NULL);
+      
+      gtk_text_buffer_get_iter_at_mark (get_buffer (text_view),
+					&iter,
+					gtk_text_buffer_get_insert (get_buffer (text_view)));
+      
+      can_insert = gtk_text_iter_can_insert (&iter, text_view->editable);
+      
+      append_action_signal (text_view, text_view->popup_menu, _("Cut"), "cut_clipboard",
+			    have_selection);
+      append_action_signal (text_view, text_view->popup_menu, _("Copy"), "copy_clipboard",
+			    have_selection);
+      append_action_signal (text_view, text_view->popup_menu, _("Paste"), "paste_clipboard",
+			    can_insert && clipboard_contains_text);
+      
+      menuitem = gtk_separator_menu_item_new ();
+      gtk_widget_show (menuitem);
+      gtk_menu_shell_append (GTK_MENU_SHELL (text_view->popup_menu), menuitem);
+      
+      menuitem = gtk_menu_item_new_with_label (_("Input Methods"));
+      gtk_widget_show (menuitem);
+      submenu = gtk_menu_new ();
+      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), submenu);
+      gtk_menu_shell_append (GTK_MENU_SHELL (text_view->popup_menu), menuitem);
+      
+      gtk_im_multicontext_append_menuitems (GTK_IM_MULTICONTEXT (text_view->im_context),
+					    GTK_MENU_SHELL (submenu));
+      
+      gtk_signal_emit (GTK_OBJECT (text_view),
+		       signals[POPULATE_POPUP],
+		       text_view->popup_menu);
+      
+      if (info->button)
+	gtk_menu_popup (GTK_MENU (text_view->popup_menu), NULL, NULL,
+			NULL, NULL,
+			info->button, info->time);
+      else
+	gtk_menu_popup (GTK_MENU (text_view->popup_menu), NULL, NULL,
+			popup_position_func, text_view,
+			0, gtk_get_current_event_time ());
+    }
+
+  g_object_unref (text_view);
+  g_free (info);
+}
+
 static void
 gtk_text_view_do_popup (GtkTextView    *text_view,
                         GdkEventButton *event)
 {
-  GtkWidget *menuitem;
-  GtkWidget *submenu;
-  gboolean have_selection;
-  gboolean can_insert;
-  GtkTextIter iter;
-  
-  if (text_view->popup_menu)
-    gtk_widget_destroy (text_view->popup_menu);
-  
-  text_view->popup_menu = gtk_menu_new ();
+  PopupInfo *info = g_new (PopupInfo, 1);
 
-  gtk_menu_attach_to_widget (GTK_MENU (text_view->popup_menu),
-                             GTK_WIDGET (text_view),
-                             popup_menu_detach);
-
-  have_selection = gtk_text_buffer_get_selection_bounds (get_buffer (text_view),
-                                                         NULL, NULL);
-
-  gtk_text_buffer_get_iter_at_mark (get_buffer (text_view),
-                                    &iter,
-                                    gtk_text_buffer_get_insert (get_buffer (text_view)));
-  
-  can_insert = gtk_text_iter_can_insert (&iter, text_view->editable);
-  
-  append_action_signal (text_view, text_view->popup_menu, _("Cut"), "cut_clipboard",
-                        have_selection);
-  append_action_signal (text_view, text_view->popup_menu, _("Copy"), "copy_clipboard",
-                        have_selection);
-
-  append_action_signal (text_view, text_view->popup_menu, _("Paste"), "paste_clipboard",
-                        can_insert);
-
-  menuitem = gtk_separator_menu_item_new ();
-  gtk_widget_show (menuitem);
-  gtk_menu_shell_append (GTK_MENU_SHELL (text_view->popup_menu), menuitem);
-      
-  menuitem = gtk_menu_item_new_with_label (_("Input Methods"));
-  gtk_widget_show (menuitem);
-  submenu = gtk_menu_new ();
-  gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), submenu);
-  gtk_menu_shell_append (GTK_MENU_SHELL (text_view->popup_menu), menuitem);
-
-  gtk_im_multicontext_append_menuitems (GTK_IM_MULTICONTEXT (text_view->im_context),
-                                        GTK_MENU_SHELL (submenu));
-
-  gtk_signal_emit (GTK_OBJECT (text_view),
-                   signals[POPULATE_POPUP],
-                   text_view->popup_menu);
+  /* In order to know what entries we should make sensitive, we
+   * ask for the current targets of the clipboard, and when
+   * we get them, then we actually pop up the menu.
+   */
+  info->text_view = g_object_ref (text_view);
   
   if (event)
-    gtk_menu_popup (GTK_MENU (text_view->popup_menu), NULL, NULL,
-                    NULL, NULL,
-                    event->button, event->time);
+    {
+      info->button = event->button;
+      info->time = event->time;
+    }
   else
-    gtk_menu_popup (GTK_MENU (text_view->popup_menu), NULL, NULL,
-                    popup_position_func, text_view,
-                    0, gtk_get_current_event_time ());
+    {
+      info->button = 0;
+      info->time = gtk_get_current_event_time ();
+    }
+
+  gtk_clipboard_request_contents (gtk_clipboard_get (GDK_SELECTION_CLIPBOARD),
+				  gdk_atom_intern ("TARGETS", FALSE),
+				  popup_targets_received,
+				  info);
 }
 
 static void

@@ -820,3 +820,35 @@ gtk_clipboard_wait_for_text (GtkClipboard *clipboard)
   return results.data;
 }
 
+/**
+ * gtk_clipboard_wait_is_text_available:
+ * @clipboard: a #GtkClipboard
+ * 
+ * Test to see if there is text available to be pasted
+ * This is done by requesting the TARGETS atom and checking
+ * if it contains any of the names: STRING, TEXT, COMPOUND_TEXT,
+ * UTF8_STRING. This function waits for the data to be received
+ * using the main loop, so events, timeouts, etc, may be dispatched
+ * during the wait.
+ *
+ * This function is a little faster than calling
+ * gtk_clipboard_wait_for_text() since it doesn't need to retrieve
+ * the actual text.
+ * 
+ * Return value: %TRUE is there is text available, %FALSE otherwise.
+ **/
+gboolean
+gtk_clipboard_wait_is_text_available (GtkClipboard *clipboard)
+{
+  GtkSelectionData *data;
+  gboolean result = FALSE;
+
+  data = gtk_clipboard_wait_for_contents (clipboard, gdk_atom_intern ("TARGETS", FALSE));
+  if (data)
+    {
+      result = gtk_selection_data_targets_include_text (data);
+      gtk_selection_data_free (data);
+    }
+
+  return result;
+}

@@ -866,6 +866,84 @@ gtk_selection_data_get_text (GtkSelectionData *selection_data)
   return result;
 }
 
+/**
+ * gtk_selection_data_get_targets:
+ * @selection_data: a #GtkSelectionData object
+ * @targets: location to store an array of targets. The result
+ *           stored here must be freed with g_free().
+ * @n_atoms: location to store number of items in @targets.
+ * 
+ * Get the contents of @selection_data as an array of targets.
+ * This can be used to interpret the results of getting
+ * the standard TARGETS target that is always supplied for
+ * any selection.
+ * 
+ * Return value: %TRUE if @selection_data contains a valid
+ *    array of targets, otherwise %FALSE.
+ **/
+gboolean
+gtk_selection_data_get_targets (GtkSelectionData  *selection_data,
+				GdkAtom          **targets,
+				gint              *n_atoms)
+{
+  if (selection_data->length >= 0 &&
+      selection_data->format == 32 &&
+      selection_data->type == GDK_SELECTION_TYPE_ATOM)
+    {
+      if (targets)
+	*targets = g_memdup (selection_data->data, selection_data->length);
+      if (n_atoms)
+	*n_atoms = selection_data->length / sizeof (GdkAtom);
+
+      return TRUE;
+    }
+  else
+    {
+      if (targets)
+	*targets = NULL;
+      if (n_atoms)
+	*n_atoms = -1;
+
+      return FALSE;
+    }
+}
+
+/**
+ * gtk_selection_data_targets_include_text:
+ * @selection_data: a #GtkSelectionData object
+ * 
+ * Given a #GtkSelectionData object holding a list of targets,
+ * Determines if any of the targets in @targets can be used to
+ * provide text.
+ * 
+ * Return value: %TRUE if @selection_data holds a list of targets,
+ *   and a suitable target for text is included, otherwise %FALSE.
+ **/
+gboolean
+gtk_selection_data_targets_include_text (GtkSelectionData *selection_data)
+{
+  GdkAtom *targets;
+  gint n_targets;
+  gint i;
+  gboolean result = FALSE;
+
+  if (gtk_selection_data_get_targets (selection_data, &targets, &n_targets))
+    {
+      for (i=0; i < n_targets; i++)
+	{
+	  if (targets[i] == gdk_atom_intern ("STRING", FALSE) ||
+	      targets[i] == gdk_atom_intern ("TEXT", FALSE) ||
+	      targets[i] == gdk_atom_intern ("COMPOUND_TEXT", FALSE) ||
+	      targets[i] == gdk_atom_intern ("UTF8_STRING", FALSE))
+	    result = TRUE;
+	}
+
+      g_free (targets);
+    }
+
+  return result;
+}
+	  
 /*************************************************************
  * gtk_selection_init:
  *     Initialize local variables
