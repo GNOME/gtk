@@ -1,3 +1,10 @@
+1999-11-03  Federico Mena Quintero  <federico@redhat.com>
+
+	* src/gnome-canvas-pixbuf.c (recompute_bounding_box): Do proper
+	rounding of bounding box coordinates.
+	(gnome_canvas_pixbuf_bounds): Implemented the ::bounds() method.
+	(gnome_canvas_pixbuf_draw): Use the correct alpha threshold value.
+
 1999-11-03  Jonathan Blandford  <jrb@redhat.com>
 
 	* src/io-gif.c (gif_prepare_lzw): s/lwz/lzw/g

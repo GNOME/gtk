@@ -578,8 +578,10 @@ recompute_bounding_box (GnomeCanvasPixbuf *gcp)
 	item->x2 = MAX (max_x1, max_x2);
 	item->y2 = MAX (max_y1, max_y2);
 
-	item->x2++;
-	item->y2++;
+	item->x1 = floor (item->x1);
+	item->y1 = floor (item->y1);
+	item->x2 = ceil (item->x2);
+	item->y2 = ceil (item->y2);
 }
 
 
@@ -708,7 +710,7 @@ gnome_canvas_pixbuf_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 					     0, 0,
 					     width, height,
 					     GDK_PIXBUF_ALPHA_BILEVEL,
-					     127,
+					     128,
 					     GDK_RGB_DITHER_MAX,
 					     x, y);
 
@@ -808,5 +810,21 @@ gnome_canvas_pixbuf_bounds (GnomeCanvasItem *item, double *x1, double *y1, doubl
 	gcp = GNOME_CANVAS_PIXBUF (item);
 	priv = gcp->priv;
 
-	
+	*x1 = 0.0;
+	*y1 = 0.0;
+
+	if (priv->pixbuf) {
+		if (priv->width_set)
+			*x2 = priv->width;
+		else
+			*x2 = priv->pixbuf->art_pixbuf->width;
+
+		if (priv->height_set)
+			*y2 = priv->height;
+		else
+			*y2 = priv->pixbuf->art_pixbuf->height;
+	} else {
+		*x2 = 0.0;
+		*y2 = 0.0;
+	}
 }
