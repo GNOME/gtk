@@ -1,3 +1,9 @@
+Wed Jun 12 15:08:37 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrc.c (gtk_rc_get_style_by_paths): Allow 
+	NULL for widget path or class path as documented.
+	(#83150, Sergey Kuzminov)
+
 Wed Jun 12 15:02:30 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktextutil.c: Fix ZWJ => ZWN typo.

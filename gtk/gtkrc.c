@@ -1614,7 +1614,9 @@ gtk_rc_get_style (GtkWidget *widget)
  * gtk_rc_get_style_by_paths:
  * @settings: a #GtkSettings object
  * @widget_path: the widget path to use when looking up the style, or %NULL
+ *               if no matching against the widget path should be done
  * @class_path: the class path to use when looking up the style, or %NULL
+ *               if no matching against the class path should be done.
  * @type: a type that will be used along with parent types of this type
  *        when matching against class styles, or #G_TYPE_NONE
  * 
@@ -1655,7 +1657,7 @@ gtk_rc_get_style_by_paths (GtkSettings *settings,
 
   context = gtk_rc_context_get (settings);
 
-  if (context->rc_sets_widget)
+  if (widget_path && context->rc_sets_widget)
     {
       gchar *path_reversed;
       guint path_length;
@@ -1668,7 +1670,7 @@ gtk_rc_get_style_by_paths (GtkSettings *settings,
       g_free (path_reversed);
     }
   
-  if (context->rc_sets_widget_class)
+  if (class_path && context->rc_sets_widget_class)
     {
       gchar *path_reversed;
       guint path_length;
