@@ -1,3 +1,7 @@
+December 20, 1999 Elliot Lee <sopwith@redhat.com>
+	* gtk/Makefile.am: Fix builddir != srcdir for
+	  generation of gtktypebuiltins*.[ch]
+
 Thu Dec  2 10:59:14 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkdnd.c (xdnd_check_dest): Allow version >= 3,
