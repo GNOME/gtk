@@ -1,3 +1,9 @@
+Sat Aug 23 21:40:18 2003  Owen Taylor  <otaylor@redhat.com>
+ 
+ 	* gtk/gtkrc.c (gtk_rc_context_parse_one_file): Fix 
+ 	problem where rc_file->directory wasn't always getting
+	set. (#120549, Luis Villa)
+ 
 2003-08-22  Christian Rose  <menthos@menthos.com>
 
 	* configure.in: Added "ne" to ALL_LINGUAS.

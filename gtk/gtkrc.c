@@ -779,9 +779,10 @@ gtk_rc_context_parse_one_file (GtkRcContext *context,
 
 	  cwd = g_get_current_dir ();
 	  rc_file->canonical_name = g_build_filename (cwd, rc_file->name, NULL);
-	  rc_file->directory = g_path_get_dirname (rc_file->canonical_name);
 	  g_free (cwd);
 	}
+      
+      rc_file->directory = g_path_get_dirname (rc_file->canonical_name);
     }
 
   /* If the file is already being parsed (recursion), do nothing
