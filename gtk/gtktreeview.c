@@ -1076,6 +1076,8 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   tree_view->priv->search_column = -1;
   tree_view->priv->search_dialog_position_func = gtk_tree_view_search_position_func;
   tree_view->priv->search_equal_func = gtk_tree_view_search_equal_func;
+  tree_view->priv->init_hadjust_value = TRUE;    
+  tree_view->priv->width = 0;                    
 }
 
 
@@ -1583,10 +1585,12 @@ gtk_tree_view_update_size (GtkTreeView *tree_view)
   if (tree_view->priv->model == NULL)
     {
       tree_view->priv->width = 0;
+      tree_view->priv->prev_width = 0;                   
       tree_view->priv->height = 0;
       return;
     }
 
+  tree_view->priv->prev_width = tree_view->priv->width;  
   tree_view->priv->width = 0;
   /* keep this in sync with size_allocate below */
   for (list = tree_view->priv->columns, i = 0; list; list = list->next, i++)
@@ -1887,6 +1891,7 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
   GtkTreeView *tree_view;
   gboolean width_changed = FALSE;
   gboolean dy_changed = FALSE;
+  gint old_width = widget->allocation.width;           
 
   g_return_if_fail (GTK_IS_TREE_VIEW (widget));
 
@@ -1921,8 +1926,30 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
   tree_view->priv->hadjustment->lower = 0;
   tree_view->priv->hadjustment->upper = MAX (tree_view->priv->hadjustment->page_size, tree_view->priv->width);
 
-  if (tree_view->priv->hadjustment->value + allocation->width > tree_view->priv->width)
-    tree_view->priv->hadjustment->value = MAX (tree_view->priv->width - allocation->width, 0);
+  if (gtk_widget_get_direction(widget) == GTK_TEXT_DIR_RTL)   
+     {
+      if (allocation->width < tree_view->priv->width)
+         {
+         if (tree_view->priv->init_hadjust_value)
+           {
+           tree_view->priv->hadjustment->value = MAX (tree_view->priv->width - allocation->width, 0);
+           tree_view->priv->init_hadjust_value = FALSE;
+           }
+         else if(allocation->width != old_width)
+           tree_view->priv->hadjustment->value = CLAMP(tree_view->priv->hadjustment->value - allocation->width + old_width, 0, tree_view->priv->width - allocation->width);
+         else
+           tree_view->priv->hadjustment->value = CLAMP(tree_view->priv->width - (tree_view->priv->prev_width - tree_view->priv->hadjustment->value), 0, tree_view->priv->width - allocation->width);
+         }
+      else
+         {
+         tree_view->priv->hadjustment->value = 0;
+         tree_view->priv->init_hadjust_value = TRUE;
+         }
+     }
+  else
+     if (tree_view->priv->hadjustment->value + allocation->width > tree_view->priv->width)
+        tree_view->priv->hadjustment->value = MAX (tree_view->priv->width - allocation->width, 0);
+
   gtk_adjustment_changed (tree_view->priv->hadjustment);
 
   tree_view->priv->vadjustment->page_size = allocation->height - TREE_VIEW_HEADER_HEIGHT (tree_view);

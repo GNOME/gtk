@@ -210,6 +210,8 @@ struct _GtkTreeViewPrivate
   GtkTreeViewSearchEqualFunc search_equal_func;
   gpointer search_user_data;
   GtkDestroyNotify search_destroy;
+  guint init_hadjust_value :1;              
+  gint prev_width;                          
 };
 
 #ifdef __GNUC__

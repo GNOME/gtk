@@ -1,3 +1,14 @@
+Tue Feb  3 00:15:17 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktreeprivate.h (struct _GtkTreeViewPrivate): Add 
+	init_hadjust_value and prev_width.
+	* gtk/gtktreeview.c (gtk_tree_view_init): Initialize 
+	them here.
+	* gtk/gtktreeview.c (gtk_tree_view_update_size): ...and here.
+	* gtk/gtktreeview.c (gtk_tree_view_size_allocate): Use them
+	here to properly handle the initial position of rtl-oriented
+	tree views.  (#127581, chinen@jp.ibm.com)
+
 2004-01-20  Federico Mena Quintero  <federico@ximian.com>
 
 	Fix #130846, reported by R. McFarland <rwmcfa1@neces.com>.
