@@ -330,7 +330,8 @@ static gboolean do_setlocale = TRUE;
 /**
  * gtk_disable_setlocale:
  * 
- * Prevents gtk_init() and gtk_init_check() from automatically
+ * Prevents gtk_init(), gtk_init_check(), gtk_init_with_args() and
+ * gtk_parse_args() from automatically
  * calling <literal>setlocale (LC_ALL, "")</literal>. You would 
  * want to use this function if you wanted to set the locale for 
  * your program to something other than the user's locale, or if 
@@ -537,6 +538,21 @@ post_parse_hook (GOptionContext *context,
 }
 
 
+/**
+ * gtk_get_option_group:
+ * @open_default_display: whether to open the default display 
+ *    when parsing the commandline arguments
+ * 
+ * Returns a #GOptionGroup for the commandline arguments recognized
+ * by GTK+ and GDK. You should add this group to your #GOptionContext 
+ * with g_option_context_add_group(), if you are using 
+ * g_option_context_parse() to parse your commandline arguments.
+ *
+ * Returns a #GOptionGroup for the commandline arguments recognized
+ *   by GTK+
+ *
+ * Since: 2.6
+ */
 GOptionGroup *
 gtk_get_option_group (gboolean open_default_display)
 {
@@ -556,6 +572,31 @@ gtk_get_option_group (gboolean open_default_display)
   return group;
 }
 
+/**
+ * gtk_init_with_args:
+ * @argc: a pointer to the number of command line arguments.
+ * @argv: a pointer to the array of command line arguments.
+ * @parameter_string: a string which is displayed in
+ *    the first line of <option>--help</option> output, after 
+ *    <literal><replaceable>programname</replaceable> [OPTION...]</literal>
+ * @entries: a %NULL-terminated array of #GOptionEntry<!-- -->s
+ *    describing the options of your program
+ * @translation_domain: a translation domain to use for translating
+ *    the <option>--help</option> output for the options in @entries
+ *    with gettext(), or %NULL
+ * @error: a return location for errors 
+ *
+ * This function does the same work as gtk_init_check(). 
+ * Additionally, it allows you to add your own commandline options, 
+ * and it automatically generated nicely formatted 
+ * <option>--help</option> output. Note that your program will
+ * be terminated after writing out the help output.
+ *
+ * Returns: %TRUE if the GUI has been successfully initialized, 
+ *               %FALSE otherwise.
+ * 
+ * Since: 2.6
+ */
 gboolean
 gtk_init_with_args (int            *argc,
 		    char         ***argv,
@@ -582,7 +623,7 @@ gtk_init_with_args (int            *argc,
   if (entries)
     g_option_context_add_main_entries (context, entries, translation_domain);
   retval = g_option_context_parse (context, argc, argv, error);
-
+  
   g_option_context_free (context);
 
   return retval;
@@ -676,7 +717,13 @@ gtk_init_check (int	 *argc,
  * applications.  It will initialize everything needed to operate the 
  * toolkit and parses some standard command line options. @argc and 
  * @argv are adjusted accordingly so your own code will 
- * never see those standard arguments.
+ * never see those standard arguments. 
+ *
+ * Note that there are some alternative ways to initialize GTK+: 
+ * if you are calling gtk_parse_args(), gtk_init_check(), 
+ * gtk_init_with_args() or g_option_context_parse() with 
+ * the option group returned by gtk_get_option_group(), you 
+ * <emphasis>don't</emphasis> have to call gtk_init().
  *
  * <note><para>
  * This function will terminate your program if it was unable to initialize 
