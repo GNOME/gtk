@@ -28,7 +28,6 @@
 
 #include <stdio.h>
 
-#include "gdkalias.h"
 #include "gdktypes.h"
 #include "gdkprivate.h"
 

@@ -22,11 +22,11 @@
  */
 
 #include <config.h>
-#include "gdkalias.h"
 #include "gdk.h"		/* For gdk_rectangle_intersect() */
 #include "gdkcolor.h"
 #include "gdkwindow.h"
 #include "gdkscreen.h"
+#include "gdkalias.h"
 
 static void gdk_screen_class_init  (GdkScreenClass *klass);
 static void gdk_screen_dispose     (GObject        *object);
@@ -316,3 +316,6 @@ gdk_screen_height_mm (void)
 {
   return gdk_screen_get_height_mm (gdk_screen_get_default ());
 }
+
+#define __GDK_SCREEN_C__
+#include "gdkaliasdef.c"

@@ -27,10 +27,10 @@
 #undef GDK_DISABLE_DEPRECATED
 
 #include <config.h>
-#include "gdkalias.h"
 #include "gdkdisplay.h"
 #include "gdkfont.h"
 #include "gdkinternals.h"
+#include "gdkalias.h"
 
 GType
 gdk_font_get_type (void)
@@ -355,4 +355,5 @@ gdk_font_load (const gchar *font_name)
    return gdk_font_load_for_display (gdk_display_get_default(), font_name);
 }
 
-
+#define __GDK_FONT_C__
+#include "gdkaliasdef.c"

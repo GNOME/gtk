@@ -1,8 +1,8 @@
 #include <config.h>
-#include "gdkalias.h"
 #include "gdkproperty.h"
 #include "gdkdisplay.h"
 #include "gdkselection.h"
+#include "gdkalias.h"
 
 gboolean
 gdk_selection_owner_set (GdkWindow *owner,
@@ -109,3 +109,5 @@ gdk_utf8_to_compound_text (const gchar *str,
 						ctext, length);
 }
 
+#define __GDK_SELECTION_C__
+#include "gdkaliasdef.c"

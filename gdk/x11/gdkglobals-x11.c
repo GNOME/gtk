@@ -27,7 +27,6 @@
 #include <config.h>
 #include <stdio.h>
 
-#include "gdkalias.h"
 #include "gdktypes.h"
 #include "gdkprivate-x11.h"
 

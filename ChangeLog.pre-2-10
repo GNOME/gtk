@@ -1,3 +1,18 @@
+2005-03-15  Matthias Clasen  <mclasen@redhat.com>
+
+	Make PLT-reduction work with gcc4, and don't include
+	everything in gdkalias.h:
+
+	* gdk/gdk.symbols: Group symbols by header and source file.
+	* gdk/makegdkalias.pl: Protect definitions by the same
+	preprocessor symbols used to guard the headers. Move
+	the alias declarations to a separate file which is
+	produced when calling makegdkalias.pl -def
+	* gdk/Makefile.am (gdkaliasdef.c): Add a rule to generate this
+	file.
+	* gdk/*.c, gdk/x11/*.c: Include gdkalias.h after the other
+	headers, include gdkaliasdef.c at the bottom.
+
 2005-03-16  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkdisplay-win32.c (_win32_on_clipboard_change): Print

@@ -29,7 +29,6 @@
 #include <X11/Xatom.h>
 #include <string.h>
 
-#include "gdkalias.h"
 #include "gdk.h"          /* For gdk_flush() */
 #include "gdkx.h"
 #include "gdkasync.h"
@@ -39,6 +38,7 @@
 #include "gdkinternals.h"
 #include "gdkscreen-x11.h"
 #include "gdkdisplay-x11.h"
+#include "gdkalias.h"
 
 typedef struct _GdkDragContextPrivateX11 GdkDragContextPrivateX11;
 
@@ -3808,3 +3808,6 @@ gdk_drag_drop_succeeded (GdkDragContext *context)
 
   return !private->drop_failed;
 }
+
+#define __GDK_DND_X11_C__
+#include "gdkaliasdef.c"

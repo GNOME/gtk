@@ -25,10 +25,10 @@
  */
 
 #include <config.h>
-#include "gdkalias.h"
 #include <gdkdnd.h>
 #include <gdkdrawable.h>
 #include <gdkdisplay.h>
+#include "gdkalias.h"
 
 /**
  * gdk_drag_find_window:
@@ -77,6 +77,5 @@ gdk_drag_get_protocol (guint32          xid,
   return gdk_drag_get_protocol_for_display (gdk_display_get_default (), xid, protocol);
 }
 
-
-
-
+#define __GDK_DND_C__
+#include "gdkaliasdef.c"

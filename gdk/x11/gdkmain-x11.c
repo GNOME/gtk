@@ -41,7 +41,6 @@
 #include <X11/XKBlib.h>
 #endif
 
-#include "gdkalias.h"
 #include "gdk.h"
 
 #include "gdkx.h"
@@ -50,6 +49,7 @@
 #include "gdkintl.h"
 #include "gdkregion-generic.h"
 #include "gdkinputprivate.h"
+#include "gdkalias.h"
 
 typedef struct _GdkPredicate  GdkPredicate;
 typedef struct _GdkErrorTrap  GdkErrorTrap;
@@ -797,4 +797,5 @@ gdk_x11_get_default_xdisplay (void)
   return GDK_DISPLAY_XDISPLAY (gdk_display_get_default ());
 }
 
-
+#define __GDK_MAIN_X11_C__
+#include "gdkaliasdef.c"

@@ -177,10 +177,13 @@ uninstall-ms-lib:
 endif
 
 gdk.def: gdk.symbols
-	(echo -e EXPORTS; $(CPP) -P -DGDK_WINDOWING_WIN32 -DINCLUDE_VARIABLES - <$(srcdir)/gdk.symbols | sed -e '/^$$/d' -e 's/^/	/' -e 's/G_GNUC_[^ ]*//g') > gdk.def
+	(echo -e EXPORTS; $(CPP) -P -DALL_FILES -DGDK_WINDOWING_WIN32 -DINCLUDE_VARIABLES - <$(srcdir)/gdk.symbols | sed -e '/^$$/d' -e 's/^/	/' -e 's/G_GNUC_[^ ]*//g') > gdk.def
 
 gdkalias.h: gdk.symbols
 	 $(PERL) $(srcdir)/makegdkalias.pl < $(srcdir)/gdk.symbols > gdkalias.h
+
+gdkaliasdef.c: gdk.symbols
+	 $(PERL) $(srcdir)/makegdkalias.pl -def < $(srcdir)/gdk.symbols > gdkaliasdef.c
 
 if OS_LINUX
 TESTS = abicheck.sh
@@ -215,6 +218,7 @@ endif
 #note: not gdkconfig.h
 BUILT_SOURCES =					\
 	gdkalias.h				\
+	gdkaliasdef.c				\
 	gdkenumtypes.h				\
 	gdkenumtypes.c				\
 	gdkmarshalers.h 			\
@@ -235,8 +239,9 @@ stamp-gdkenumtypes.h: @REBUILD@ $(gdk_public_h_sources) Makefile
 	&& echo timestamp > $(@F)
 gdkenumtypes.c: @REBUILD@ $(gdk_public_h_sources) Makefile
 	( cd $(srcdir) && glib-mkenums \
-			--fhead "#define GDK_ENABLE_BROKEN\n#include \"gdkalias.h\"\n#include \"gdk.h\"" \
-		--fprod "\n/* enumerations from \"@filename@\" */" \
+			--fhead "#define GDK_ENABLE_BROKEN\n#include \"gdk.h\"\n#include \"gdkalias.h\"\n" \
+  			--fprod "\n/* enumerations from \"@filename@\" */" \
+			--ftail "\n#define __GDK_ENUM_TYPES_C__\n#include \"gdkaliasdef.c\"\n" \
 			--vhead "GType\n@enum_name@_get_type (void)\n{\n  static GType etype = 0;\n  if (etype == 0) {\n    static const G@Type@Value values[] = {" \
 			--vprod "      { @VALUENAME@, \"@VALUENAME@\", \"@valuenick@\" }," \
 			--vtail "      { 0, NULL, NULL }\n    };\n    etype = g_@type@_register_static (\"@EnumName@\", values);\n  }\n  return etype;\n}\n" \

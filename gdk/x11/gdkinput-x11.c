@@ -25,12 +25,12 @@
  */
 
 #include <config.h>
-#include "gdkalias.h"
 #include "gdkinputprivate.h"
 #include "gdkinternals.h"
 #include "gdkx.h"
 #include "gdk.h"		/* For gdk_error_trap_push()/pop() */
 #include "gdkdisplay-x11.h"
+#include "gdkalias.h"
 
 #include <string.h>
 
@@ -833,3 +833,6 @@ gdk_device_get_state (GdkDevice       *device,
       XFreeDeviceState (state);
     }
 }
+
+#define __GDK_INPUT_X11_C__
+#include "gdkaliasdef.c"

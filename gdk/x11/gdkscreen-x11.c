@@ -27,12 +27,12 @@
 #include <string.h>
 
 #include <glib.h>
-#include "gdkalias.h"
 #include "gdkscreen.h"
 #include "gdkscreen-x11.h"
 #include "gdkdisplay.h"
 #include "gdkdisplay-x11.h"
 #include "gdkx.h"
+#include "gdkalias.h"
 
 #ifdef HAVE_SOLARIS_XINERAMA
 #include <X11/extensions/xinerama.h>
@@ -710,3 +710,6 @@ gdk_screen_make_display_name (GdkScreen *screen)
   return _gdk_windowing_substitute_screen_number (old_display, 
 						  gdk_screen_get_number (screen));
 }
+
+#define __GDK_SCREEN_X11_C__
+#include "gdkaliasdef.c"

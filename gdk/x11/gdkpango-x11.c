@@ -20,12 +20,12 @@
 #include <config.h>
 #include <stdlib.h>
 
-#include "gdkalias.h"
 #include "gdkx.h"
 #include "gdkdisplay-x11.h"
 #include "gdkpango.h"
 #include <pango/pangoxft.h>
 #include <pango/pangoxft-render.h>
+#include "gdkalias.h"
 
 #include <math.h>
 
@@ -170,3 +170,5 @@ gdk_pango_context_get_for_screen (GdkScreen *screen)
   return context;
 }
 
+#define __GDK_PANGO_X11_C__
+#include "gdkaliasdef.c"

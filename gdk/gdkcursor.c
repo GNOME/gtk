@@ -25,10 +25,10 @@
  */
 
 #include <config.h>
-#include "gdkalias.h"
 #include "gdkcursor.h"
 #include "gdkdisplay.h"
 #include "gdkinternals.h"
+#include "gdkalias.h"
 
 GType
 gdk_cursor_get_type (void)
@@ -98,3 +98,6 @@ gdk_cursor_new (GdkCursorType cursor_type)
 {
   return gdk_cursor_new_for_display (gdk_display_get_default(), cursor_type);
 }
+
+#define __GDK_CURSOR_C__
+#include "gdkaliasdef.c"

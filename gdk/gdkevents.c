@@ -27,9 +27,9 @@
 #include <config.h>
 #include <string.h>		/* For memset() */
 
-#include "gdkalias.h"
 #include "gdk.h"
 #include "gdkinternals.h"
+#include "gdkalias.h"
 
 typedef struct _GdkIOClosure GdkIOClosure;
 
@@ -1221,3 +1221,6 @@ gdk_setting_get (const gchar *name,
 {
   return gdk_screen_get_setting (gdk_screen_get_default (), name, value);
 }
+
+#define __GDK_EVENTS_C__
+#include "gdkaliasdef.c"

@@ -26,7 +26,7 @@
 
 #include <config.h>
 
-#include "gdkalias.h"
+#include "gdkscreen.h"
 #include "gdkdisplay.h"
 #include "gdkdisplaymanager.h"
 
@@ -34,6 +34,8 @@
 #include "gdkmarshalers.h"
 
 #include "gdkintl.h"
+
+#include "gdkalias.h"
 
 struct _GdkDisplayManager
 {
@@ -277,3 +279,5 @@ gdk_display_manager_list_displays (GdkDisplayManager *display_manager)
   return g_slist_copy (_gdk_displays);
 }
 
+#define __GDK_DISPLAY_MANAGER_C__
+#include "gdkaliasdef.c"

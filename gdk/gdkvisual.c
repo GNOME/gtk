@@ -22,9 +22,9 @@
  */
 
 #include <config.h>
-#include "gdkalias.h"
 #include "gdkvisual.h"
 #include "gdkscreen.h"
+#include "gdkalias.h"
 
 /**
  * gdk_list_visuals:
@@ -59,3 +59,6 @@ gdk_visual_get_system (void)
 {
   return gdk_screen_get_system_visual (gdk_screen_get_default());
 }
+
+#define __GDK_VISUAL_C__
+#include "gdkaliasdef.c"
