@@ -27,6 +27,10 @@
 extern "C" {
 #endif /* __cplusplus */
 
+#define GTK_PRIORITY_HIGH      -20
+#define GTK_PRIORITY_INTERNAL  -10
+#define GTK_PRIORITY_DEFAULT     0
+#define GTK_PRIORITY_LOW        10
 
 typedef gint    (*GtkKeySnoopFunc)      (GtkWidget      *grab_widget,
 					 GdkEventKey    *event,
@@ -56,6 +60,11 @@ void	   gtk_grab_remove	 (GtkWidget	*widget);
 void	   gtk_init_add		 (GtkFunction	 function,
 				  gpointer	 data);
 
+gint       gtk_timeout_add_full   (guint32            interval,
+				   GtkFunction        function,
+				   GtkCallbackMarshal marshal,
+				   gpointer           data,
+				   GtkDestroyNotify   destroy);
 gint	   gtk_timeout_add	   (guint32	   interval,
 				    GtkFunction	   function,
 				    gpointer	   data);
@@ -65,13 +74,30 @@ gint	   gtk_timeout_add_interp  (guint32	   interval,
 				    GtkDestroyNotify notify);
 void	   gtk_timeout_remove	   (gint	   tag);
 
-gint	   gtk_idle_add		   (GtkFunction	   function,
-				    gpointer	   data);
-gint	   gtk_idle_add_interp	   (GtkCallbackMarshal function,
+gint	   gtk_idle_add		   (GtkFunction	       function,
+				    gpointer	       data);
+gint       gtk_idle_add_priority   (gint               priority,
+				    GtkFunction        function,
+				    gpointer           data);
+gint	   gtk_idle_add_full	   (gint               priority,
+				    GtkFunction        function,
+				    GtkCallbackMarshal marshal,
+				    gpointer	       data,
+				    GtkDestroyNotify   destroy);
+gint	   gtk_idle_add_interp	   (GtkCallbackMarshal marshal,
 				    gpointer	       data,
 				    GtkDestroyNotify   destroy);
 void	   gtk_idle_remove	   (gint	   tag);
 void	   gtk_idle_remove_by_data (gpointer	 data);
+gint       gtk_input_add_full      (gint               source,
+				    GdkInputCondition  condition,
+				    GdkInputFunction   function,
+				    GtkCallbackMarshal marshal,
+				    gpointer           data,
+				    GtkDestroyNotify   destroy);
+void       gtk_input_remove        (gint               tag);
+
+
 gint	   gtk_key_snooper_install (GtkKeySnoopFunc snooper,
 				    gpointer	    func_data);
 void	   gtk_key_snooper_remove  (gint	    snooper_id);

@@ -57,11 +57,12 @@ void    gdk_timer_set     (guint32 milliseconds);
 void    gdk_timer_enable  (void);
 void    gdk_timer_disable (void);
 
-gint gdk_input_add_interp (gint              source,
+gint gdk_input_add_full   (gint              source,
 			   GdkInputCondition condition,
 			   GdkInputFunction  function,
 			   gpointer          data,
 			   GdkDestroyNotify  destroy);
+#define gdk_input_add_interp gdk_input_add_full  
 gint gdk_input_add        (gint              source,
 			   GdkInputCondition condition,
 			   GdkInputFunction  function,

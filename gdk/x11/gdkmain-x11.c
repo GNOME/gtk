@@ -1101,11 +1101,11 @@ gdk_timer_disable ()
 }
 
 gint
-gdk_input_add_interp (gint              source,
-		      GdkInputCondition condition,
-		      GdkInputFunction  function,
-		      gpointer          data,
-		      GdkDestroyNotify  destroy)
+gdk_input_add_full (gint              source,
+		    GdkInputCondition condition,
+		    GdkInputFunction  function,
+		    gpointer          data,
+		    GdkDestroyNotify  destroy)
 {
   static gint next_tag = 1;
   GList *list;

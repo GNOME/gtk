@@ -54,8 +54,8 @@ struct _GtkTimeoutFunction
   guint32 start;
   guint32 interval;
   guint32 originterval;
-  gint interp;
   GtkFunction function;
+  GtkCallbackMarshal marshal;
   gpointer data;
   GtkDestroyNotify destroy;
 };
@@ -63,7 +63,8 @@ struct _GtkTimeoutFunction
 struct _GtkIdleFunction
 {
   gint tag;
-  gint interp;
+  gint priority;
+  GtkCallbackMarshal marshal;
   GtkFunction function;
   gpointer data;
   GtkDestroyNotify destroy;
@@ -593,16 +594,18 @@ gtk_invoke_key_snoopers (GtkWidget *grab_widget,
   return return_val;
 }
 
-static gint
-gtk_timeout_add_internal (guint32     interval,
-			  gint	      interp,
-			  GtkFunction function,
-			  gpointer    data,
-			  GtkDestroyNotify destroy)
+gint
+gtk_timeout_add_full (guint32            interval,
+		      GtkFunction        function,
+		      GtkCallbackMarshal marshal,
+		      gpointer           data,
+		      GtkDestroyNotify   destroy)
 {
   static gint timeout_tag = 1;
   GtkTimeoutFunction *timeoutf;
   
+  g_return_val_if_fail ((function != NULL) || (marshal != NULL), 0);
+
   /* Create a new timeout function structure.
    * The start time is the current time.
    */
@@ -616,8 +619,8 @@ gtk_timeout_add_internal (guint32     interval,
   timeoutf->start = gdk_time_get ();
   timeoutf->interval = interval;
   timeoutf->originterval = interval;
-  timeoutf->interp = interp;
   timeoutf->function = function;
+  timeoutf->marshal = marshal;
   timeoutf->data = data;
   timeoutf->destroy = destroy;
   
@@ -639,7 +642,7 @@ gtk_timeout_add (guint32     interval,
 		 GtkFunction function,
 		 gpointer    data)
 {
-  return gtk_timeout_add_internal (interval, FALSE, function, data, NULL);
+  return gtk_timeout_add_full (interval, function, FALSE, data, NULL);
 }
 
 gint
@@ -648,9 +651,7 @@ gtk_timeout_add_interp (guint32		   interval,
 			gpointer	   data,
 			GtkDestroyNotify   destroy)
 {
-  return gtk_timeout_add_internal (interval, TRUE,
-				   (GtkFunction) function,
-				   data, destroy);
+  return gtk_timeout_add_full (interval, NULL, function, data, destroy);
 }
 
 void
@@ -698,15 +699,19 @@ gtk_timeout_remove (gint tag)
     }
 }
 
-static gint
-gtk_idle_add_internal (gint		interp,
-		       GtkFunction	function,
-		       gpointer		data,
-		       GtkDestroyNotify destroy)
+gint
+gtk_idle_add_full (gint		        priority,
+		   GtkFunction	        function,
+		   GtkCallbackMarshal	marshal,
+		   gpointer		data,
+		   GtkDestroyNotify     destroy)
 {
   static gint idle_tag = 1;
-  GtkIdleFunction *idlef;
+  GtkIdleFunction *idlef, *temp;
+  GList *tmp_list, *new_list;
   
+  g_return_val_if_fail ((function != NULL) || (marshal != NULL), 0);
+
   if (!idle_mem_chunk)
     idle_mem_chunk = g_mem_chunk_new ("idle mem chunk", sizeof (GtkIdleFunction),
 				      1024, G_ALLOC_AND_FREE);
@@ -714,14 +719,50 @@ gtk_idle_add_internal (gint		interp,
   idlef = g_chunk_new (GtkIdleFunction, idle_mem_chunk);
   
   idlef->tag = idle_tag++;
-  idlef->interp = interp;
+  idlef->priority = priority;
   idlef->function = function;
+  idlef->marshal = marshal;
   idlef->data = data;
   idlef->destroy = destroy;
+
+  /* Insert the idle function into the list of idle functions 
+   * sorted by priority. This really should just use
+   * glist_insert_sorted, but that ignores duplicates
+   */
+  tmp_list = idle_functions;
+  while (tmp_list)
+    {
+      temp = tmp_list->data;
+      if (idlef->priority < temp->priority)
+	{
+	  new_list = g_list_alloc ();
+	  new_list->data = idlef;
+	  new_list->next = tmp_list;
+	  new_list->prev = tmp_list->prev;
+	  if (tmp_list->prev)
+	    tmp_list->prev->next = new_list;
+	  tmp_list->prev = new_list;
+	  
+	  if (tmp_list == idle_functions)
+	    idle_functions = new_list;
+	  
+	  return idlef->tag;
+	}
+      
+      tmp_list = tmp_list->next;
+    }
   
   idle_functions = g_list_append (idle_functions, idlef);
   
   return idlef->tag;
+}
+
+gint
+gtk_idle_add_interp  (GtkCallbackMarshal   marshal,
+		      gpointer		   data,
+		      GtkDestroyNotify     destroy)
+{
+  return gtk_idle_add_full (GTK_PRIORITY_DEFAULT, NULL, marshal, data, destroy);
 }
 
 static void
@@ -736,15 +777,15 @@ gint
 gtk_idle_add (GtkFunction function,
 	      gpointer	  data)
 {
-  return gtk_idle_add_internal (FALSE, function, data, NULL);
+  return gtk_idle_add_full (GTK_PRIORITY_DEFAULT, function, NULL, data, NULL);
 }
 
-gint
-gtk_idle_add_interp (GtkCallbackMarshal function,
-		     gpointer		data,
-		     GtkDestroyNotify	destroy)
+gint       
+gtk_idle_add_priority   (gint               priority,
+			 GtkFunction        function,
+			 gpointer           data)
 {
-  return gtk_idle_add_internal (TRUE, (GtkFunction)function, data, destroy);
+  return gtk_idle_add_full (priority, function, NULL, data, NULL);
 }
 
 void
@@ -856,21 +897,38 @@ gtk_destroy_input_function (GtkInputFunction *input)
 }
 
 gint
+gtk_input_add_full (gint source,
+		    GdkInputCondition condition,
+		    GdkInputFunction function,
+		    GtkCallbackMarshal marshal,
+		    gpointer data,
+		    GtkDestroyNotify destroy)
+{
+  if (marshal)
+    {
+      GtkInputFunction *input = g_new (GtkInputFunction, 1);
+      input->callback = marshal;
+      input->data = data;
+      input->destroy = destroy;
+
+      return gdk_input_add_interp (source,
+				   condition,
+				   (GdkInputFunction) gtk_invoke_input_function,
+				   input,
+				   (GdkDestroyNotify) gtk_destroy_input_function);
+    }
+  else
+    return gdk_input_add_interp (source, condition, function, data, destroy);
+}
+
+gint
 gtk_input_add_interp (gint source,
 		      GdkInputCondition condition,
 		      GtkCallbackMarshal callback,
 		      gpointer data,
 		      GtkDestroyNotify destroy)
 {
-  GtkInputFunction *input = g_new (GtkInputFunction, 1);
-  input->callback = callback;
-  input->data = data;
-  input->destroy = destroy;
-  return gdk_input_add_interp (source,
-			       condition,
-			       (GdkInputFunction) gtk_invoke_input_function,
-			       input,
-			       (GdkDestroyNotify) gtk_destroy_input_function);
+  gdk_input_add_full (source, condition, NULL, callback, data);
 }
 
 void
@@ -952,7 +1010,7 @@ gtk_timeout_insert (GtkTimeoutFunction *timeoutf)
 static gint
 gtk_invoke_timeout_function (GtkTimeoutFunction *timeoutf)
 {
-  if (!timeoutf->interp)
+  if (!timeoutf->marshal)
     return timeoutf->function (timeoutf->data);
   else
     {
@@ -1040,7 +1098,7 @@ gtk_handle_timeouts ()
 static gint
 gtk_idle_invoke_function (GtkIdleFunction *idlef)
 {
-  if (!idlef->interp)
+  if (!idlef->marshal)
     return idlef->function (idlef->data);
   else
     {
@@ -1049,9 +1107,9 @@ gtk_idle_invoke_function (GtkIdleFunction *idlef)
       args[0].name = NULL;
       args[0].type = GTK_TYPE_BOOL;
       args[0].d.pointer_data = &ret_val;
-      ((GtkCallbackMarshal)idlef->function) (NULL,
-					     idlef->data,
-					     0, args);
+      ((GtkCallbackMarshal)idlef->marshal) (NULL,
+					    idlef->data,
+					    0, args);
       return ret_val;
     }
 }
@@ -1060,6 +1118,7 @@ static void
 gtk_handle_current_idles ()
 {
   GList *tmp_list;
+  GList *tmp_list2;
   GtkIdleFunction *idlef;
   
   while (current_idles)
@@ -1076,7 +1135,30 @@ gtk_handle_current_idles ()
 	}
       else
 	{
-	  idle_functions = g_list_concat (idle_functions, tmp_list);
+	  /* Insert the idle function back into the list of idle
+	   * functions at the end of the idles of this priority
+	   */
+	  tmp_list2 = idle_functions;
+	  while (tmp_list2 &&
+		 (((GtkIdleFunction *)tmp_list2->data)->priority <= idlef->priority))
+	    tmp_list2 = tmp_list2->next;
+
+	  if (!tmp_list2)
+	    idle_functions = g_list_concat (idle_functions, tmp_list);
+	  else if (tmp_list2 == idle_functions)
+	    {
+	      tmp_list->next = idle_functions;
+	      if (idle_functions)
+		idle_functions->prev = tmp_list;
+	      idle_functions = tmp_list;
+	    }
+	  else
+	    {
+	      tmp_list->prev = tmp_list2->prev;
+	      tmp_list->next = tmp_list2;
+	      tmp_list2->prev->next = tmp_list;
+	      tmp_list2->prev = tmp_list;
+	    }
 	}
     }
 }
@@ -1089,10 +1171,27 @@ gtk_handle_idle ()
    */
   g_assert (current_idles == NULL);
   
+  /* Handle only the idle functions that have the highest priority */
   if (idle_functions)
     {
+      GList *tmp_list;
+      gint top_priority;
+
+      tmp_list = idle_functions;
+      top_priority = ((GtkIdleFunction *)tmp_list->data)->priority;
+ 
+      while (tmp_list &&
+	     (((GtkIdleFunction *)tmp_list->data)->priority == top_priority))
+	tmp_list = tmp_list->next;
+
       current_idles = idle_functions;
-      idle_functions = NULL;
+      idle_functions = tmp_list;
+
+      if (tmp_list) 
+	{
+	  tmp_list->prev->next = NULL;
+	  tmp_list->prev = NULL;
+	}
       
       gtk_handle_current_idles();
     }

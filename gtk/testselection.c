@@ -407,14 +407,14 @@ main (int argc, char *argv[])
 		      GTK_SIGNAL_FUNC (selection_received), NULL);
 
   gtk_selection_add_handler (selection_button, GDK_SELECTION_PRIMARY,
-			     seltypes[STRING], selection_handle, NULL, NULL);
+			     seltypes[STRING], selection_handle, NULL);
 
   gtk_selection_add_handler (selection_button, GDK_SELECTION_PRIMARY,
-			     seltypes[TEXT], selection_handle, NULL, NULL);
+			     seltypes[TEXT], selection_handle, NULL);
 
   gtk_selection_add_handler (selection_button, GDK_SELECTION_PRIMARY,
 			     seltypes[COMPOUND_TEXT],
-			     selection_handle, NULL, NULL);
+			     selection_handle, NULL);
 
   selection_text = gtk_text_new (NULL, NULL);
   gtk_table_attach_defaults (GTK_TABLE (table), selection_text, 0, 1, 1, 2);

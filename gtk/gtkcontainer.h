@@ -89,7 +89,12 @@ void   gtk_container_foreach             (GtkContainer     *container,
 					  GtkCallback       callback,
 					  gpointer          callback_data);
 void   gtk_container_foreach_interp      (GtkContainer     *container,
-					  GtkCallbackMarshal callback,
+					  GtkCallbackMarshal marshal,
+					  gpointer          callback_data,
+					  GtkDestroyNotify  notify);
+void   gtk_container_foreach_full        (GtkContainer     *container,
+					  GtkCallback       callback,
+					  GtkCallbackMarshal marshal,
 					  gpointer          callback_data,
 					  GtkDestroyNotify  notify);
 gint   gtk_container_focus               (GtkContainer     *container,

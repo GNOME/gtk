@@ -1,3 +1,46 @@
+Thu Feb 12 23:59:49 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtksignal.[ch] gtk/gtkmain.[ch] gtk/gtkcontainer.[ch]
+	  gtk/gtkselection.[ch] gdk/gdk.[ch] gtktypeutils.h 
+	  
+ 	  Replaced all _interp functions with _full functions.
+	  (_interp functions left in for compatibility until 0.99.5). 
+	  Difference: _full functions take _both_ a C-language callback and a
+	  marshaller, and simply ignore the C-language callback
+	  if the marshaller is present. This allows the destroy notification
+	  to be used without marshalling.
+
+	  gtk_selection_add_handler[_full]() regularized to agree
+	  with other callbacks.
+	
+	  Also, added gtk_input_add_full() to the header file. 
+	  (gtk_input_add_interp() was never there)
+
+	* gtk/gtkmain.[ch] gtk/gtkwidget.c: Idle functions are now prioritized.
+	  Added new function gtk_idle_add_priority to create
+	  an idle with a specified priority (default is zero)
+	  constants #defined - GTK_PRIORITY_[HIGH/INTERNAL/DEFAULT/LOW]
+	  (redraws, resizes run at GTK_PRIORITY_INTERNAL)
+	
+	* gtk/gtkentry.c gtk/testselection.c: changes to keep up with change
+  	  to gtkselection.c. 
+
+	* gtk/gtkentry.c gtk/gtkinputdialog.c gtk/gtklist.c
+	  gtk/gtklistitem.c gtktree.c gtk/gtktreeitem.c testgtkrc:
+
+	  Change style->white to style->base[] where appropriate.
+	  Change the default style to make this apparent. (Yes, its
+	  ugly... it can be removed later)
+	
+Tue Feb 10 15:01:44 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkobject.c gtk/gtkobject.h: Add a DestroyNotify
+	field, and gtk_object_set_data_full() to match.
+
+	* gtk/gtkobject.c (gtk_object_finalize): ObjectData structures
+	were being added to a free list, then forgotten about. Just
+	rely on GMemChunk instead.
+
 2018-02-11  Federico Mena Quintero  <federico@nuclecu.unam.mx>
 
 	* gtk/gtkclist.c:

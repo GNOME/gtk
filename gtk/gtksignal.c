@@ -108,10 +108,10 @@ static GtkHandler*  gtk_signal_get_handlers    (GtkObject     *object,
 						gint           signal_type);
 static gint         gtk_signal_connect_by_type (GtkObject     *object,
 						gint           signal_type,
-						gint           object_signal,
 						GtkSignalFunc  func,
 						gpointer       func_data,
 						GtkSignalDestroy destroy_func,
+						gint           object_signal,
 						gint           after,
 						gint           no_marshal);
 static GtkEmission* gtk_emission_new           (void);
@@ -421,9 +421,9 @@ gtk_signal_connect (GtkObject     *object,
       return 0;
     }
 
-  return gtk_signal_connect_by_type (object, type, FALSE,
+  return gtk_signal_connect_by_type (object, type, 
 				     func, func_data, NULL,
-				     FALSE, FALSE);
+				     FALSE, FALSE, FALSE);
 }
 
 gint
@@ -447,18 +447,20 @@ gtk_signal_connect_after (GtkObject     *object,
       return 0;
     }
 
-  return gtk_signal_connect_by_type (object, type, FALSE,
+  return gtk_signal_connect_by_type (object, type, 
 				     func, func_data, NULL,
-				     TRUE, FALSE);
+				     FALSE, TRUE, FALSE);
 }
 
-gint
-gtk_signal_connect_interp (GtkObject         *object,
-			   gchar             *name,
-			   GtkCallbackMarshal func,
-			   gpointer           func_data,
-			   GtkDestroyNotify   destroy_func,
-			   gint               after)
+gint   
+gtk_signal_connect_full (GtkObject           *object,
+			 gchar               *name,
+			 GtkSignalFunc        func,
+			 GtkCallbackMarshal   marshal,
+			 gpointer             func_data,
+			 GtkDestroyNotify     destroy_func,
+			 gint                 object_signal,
+			 gint                 after)
 {
   gint type;
 
@@ -475,9 +477,26 @@ gtk_signal_connect_interp (GtkObject         *object,
       return 0;
     }
 
-  return gtk_signal_connect_by_type (object, type, FALSE,
-				     (GtkSignalFunc) func, func_data,
-				     destroy_func, after, TRUE);
+  if (marshal)
+    return gtk_signal_connect_by_type (object, type, (GtkSignalFunc) marshal, 
+				       func_data, destroy_func, 
+				       object_signal, after, TRUE);
+  else
+    return gtk_signal_connect_by_type (object, type, func, 
+				       func_data, destroy_func, 
+				       object_signal, after, FALSE);
+}
+
+gint
+gtk_signal_connect_interp (GtkObject         *object,
+			   gchar             *name,
+			   GtkCallbackMarshal func,
+			   gpointer           func_data,
+			   GtkDestroyNotify   destroy_func,
+			   gint               after)
+{
+  return gtk_signal_connect_full (object, name, NULL, func,
+				  func_data, destroy_func, FALSE, after);
 }
 
 gint
@@ -502,9 +521,9 @@ gtk_signal_connect_object (GtkObject     *object,
       return 0;
     }
 
-  return gtk_signal_connect_by_type (object, type, TRUE,
+  return gtk_signal_connect_by_type (object, type, 
 				     func, slot_object, NULL,
-				     FALSE, FALSE);
+				     TRUE, FALSE, FALSE);
 }
 
 gint
@@ -528,9 +547,9 @@ gtk_signal_connect_object_after (GtkObject     *object,
       return 0;
     }
 
-  return gtk_signal_connect_by_type (object, type, TRUE,
+  return gtk_signal_connect_by_type (object, type, 
 				     func, slot_object, NULL,
-				     TRUE, FALSE);
+				     TRUE, TRUE, FALSE);
 }
 
 typedef struct _GtkDisconnectInfo       GtkDisconnectInfo;
@@ -1125,10 +1144,10 @@ gtk_signal_handler_pending (GtkObject           *object,
 static gint
 gtk_signal_connect_by_type (GtkObject       *object,
 			    gint             signal_type,
-			    gint             object_signal,
 			    GtkSignalFunc    func,
 			    gpointer         func_data,
 			    GtkSignalDestroy destroy_func,
+			    gint             object_signal,
 			    gint             after,
 			    gint             no_marshal)
 {

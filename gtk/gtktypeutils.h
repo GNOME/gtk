@@ -81,7 +81,6 @@ typedef void (*GtkObjectInitFunc) (gpointer object);
 typedef void (*GtkArgGetFunc) (GtkObject *object, GtkArg *arg, guint arg_id);
 typedef void (*GtkArgSetFunc) (GtkObject *object, GtkArg *arg, guint arg_id);
 typedef gint (*GtkFunction) (gpointer data);
-typedef void (*GtkRemoveFunction) (gpointer data);
 typedef void (*GtkCallbackMarshal) (GtkObject *object,
 				    gpointer data,
 				    int n_args,
