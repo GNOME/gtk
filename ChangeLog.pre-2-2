@@ -1,3 +1,10 @@
+2001-10-30  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtktextview.c (changed_handler): Update the IM spot location
+	here, if text was invalidated in the visible area, because the
+	scroll offset doesn't normally change in that case, and the mark
+	isn't set, just implicitly moved over as text is added/removed
+	
 Mon Oct 29 19:18:35 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkseparatormenuitem.c: Code cleanup.

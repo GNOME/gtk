@@ -2886,6 +2886,8 @@ changed_handler (GtkTextLayout     *layout,
           if (text_view->bottom_window)
             text_window_invalidate_rect (text_view->bottom_window,
                                          &redraw_rect);
+
+          gtk_text_view_update_im_spot_location (text_view);
         }
     }
   
