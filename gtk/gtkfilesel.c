@@ -1363,7 +1363,7 @@ gtk_file_selection_create_dir (GtkWidget *widget,
   gtk_widget_show (fs->fileop_entry);
   
   /* buttons */
-  button = gtk_button_new_with_label (_("Cancel"));
+  button = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
   gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
 			     (GtkSignalFunc) gtk_widget_destroy, 
 			     (gpointer) dialog);
@@ -1492,7 +1492,7 @@ gtk_file_selection_delete_file (GtkWidget *widget,
   g_free (buf);
   
   /* buttons */
-  button = gtk_button_new_with_label (_("Cancel"));
+  button = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
   gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
 			     (GtkSignalFunc) gtk_widget_destroy, 
 			     (gpointer) dialog);
@@ -1502,7 +1502,7 @@ gtk_file_selection_delete_file (GtkWidget *widget,
   gtk_widget_grab_default (button);
   gtk_widget_show (button);
 
-  button = gtk_button_new_with_label (_("Delete"));
+  button = gtk_button_new_from_stock (GTK_STOCK_DELETE);
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
 		      (GtkSignalFunc) gtk_file_selection_delete_file_confirmed, 
 		      (gpointer) fs);
@@ -1650,7 +1650,7 @@ gtk_file_selection_rename_file (GtkWidget *widget,
 			      0, strlen (fs->fileop_file));
 
   /* buttons */
-  button = gtk_button_new_with_label (_("Cancel"));
+  button = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
   gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
 			     (GtkSignalFunc) gtk_widget_destroy, 
 			     (gpointer) dialog);

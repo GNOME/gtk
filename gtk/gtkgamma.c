@@ -39,6 +39,7 @@
 #include "gtkpixmap.h"
 #include "gtkradiobutton.h"
 #include "gtksignal.h"
+#include "gtkstock.h"
 #include "gtktable.h"
 #include "gtkvbox.h"
 #include "gtkwindow.h"
@@ -416,13 +417,13 @@ button_clicked_callback (GtkWidget *w, gpointer data)
 	  /* fill in action area: */
 	  hbox = GTK_DIALOG (c->gamma_dialog)->action_area;
 
-	  button = gtk_button_new_with_label (_("Cancel"));
+          button = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
 	  gtk_signal_connect (GTK_OBJECT (button), "clicked",
 			      (GtkSignalFunc) gamma_cancel_callback, c);
 	  gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
 	  gtk_widget_show (button);
 	  
-	  button = gtk_button_new_with_label (_("OK"));
+          button = gtk_button_new_from_stock (GTK_STOCK_OK);
 	  GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
 	  gtk_signal_connect (GTK_OBJECT (button), "clicked",
 			      (GtkSignalFunc) gamma_ok_callback, c);

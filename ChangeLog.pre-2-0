@@ -1,3 +1,9 @@
+2002-02-08  Sven Neumann  <sven@gimp.org>
+
+	* gtk/gtkfilesel.c
+	* gtk/gtkgamma.c
+	* gtk/gtkinputdialog.c: use stock labels for dialog action buttons.
+
 2002-02-08  Darin Adler  <darin@bentspoon.com>
 
 	* gtk/gtktreemodelsort.c: (gtk_tree_model_sort_ref_node),

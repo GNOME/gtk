@@ -51,6 +51,7 @@
 #include "gtkoptionmenu.h"
 #include "gtkscrolledwindow.h"
 #include "gtksignal.h"
+#include "gtkstock.h"
 #include "gtktable.h"
 #include "gtkvbox.h"
 
@@ -327,7 +328,7 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
 
   /* We create the save button in any case, so that clients can 
      connect to it, without paying attention to whether it exits */
-  inputd->save_button = gtk_button_new_with_label (_("Save"));
+  inputd->save_button = gtk_button_new_from_stock (GTK_STOCK_SAVE);
   GTK_WIDGET_SET_FLAGS (inputd->save_button, GTK_CAN_DEFAULT);
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG(inputd)->action_area),
 		      inputd->save_button, TRUE, TRUE, 0);
@@ -336,7 +337,7 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
   if (g_list_length(device_info) <= 1) /* only core device */
     gtk_widget_set_sensitive(inputd->save_button, FALSE);
 
-  inputd->close_button = gtk_button_new_with_label (_("Close"));
+  inputd->close_button = gtk_button_new_from_stock (GTK_STOCK_CLOSE);
   GTK_WIDGET_SET_FLAGS (inputd->close_button, GTK_CAN_DEFAULT);
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG(inputd)->action_area),
 		      inputd->close_button, TRUE, TRUE, 0);
