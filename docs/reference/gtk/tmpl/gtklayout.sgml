@@ -123,3 +123,23 @@ GtkLayout
 @arg1: 
 @arg2: 
 
+<!-- ##### ARG GtkLayout:hadjustment ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLayout:vadjustment ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLayout:width ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLayout:height ##### -->
+<para>
+
+</para>
+

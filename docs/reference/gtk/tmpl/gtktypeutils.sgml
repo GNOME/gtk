@@ -560,33 +560,30 @@ Create a new, unique type.
 @type_info: must not be null, and @type_info->type_name must also not be null.
 
 
-<!-- ##### MACRO gtk_type_name ##### -->
+<!-- ##### FUNCTION gtk_type_name ##### -->
 <para>
 </para>
 
-@Returns: a pointer to the name of a type, or NULL if it has none.
-<!-- # Unused Parameters # -->
 @type: a GtkType
+@Returns: a pointer to the name of a type, or NULL if it has none.
 
 
-<!-- ##### MACRO gtk_type_from_name ##### -->
+<!-- ##### FUNCTION gtk_type_from_name ##### -->
 <para>
 Get the internal representation of a type given its name.
 </para>
 
-@Returns: a GtkType
-<!-- # Unused Parameters # -->
 @name: the name of a gtk type
+@Returns: a GtkType
 
 
-<!-- ##### MACRO gtk_type_parent ##### -->
+<!-- ##### FUNCTION gtk_type_parent ##### -->
 <para>
 
 </para>
 
-@Returns: the GtkType of the parent
-<!-- # Unused Parameters # -->
 @type: a GtkType
+@Returns: the GtkType of the parent
 
 
 <!-- ##### FUNCTION gtk_type_class ##### -->
@@ -611,16 +608,15 @@ has all the proper initializers called.
 @Returns: gpointer to a GtkTypeObject
 
 
-<!-- ##### MACRO gtk_type_is_a ##### -->
+<!-- ##### FUNCTION gtk_type_is_a ##### -->
 <para>
 Look in the type hierarchy to see if @type has @is_a_type among its
 ancestors.  Do so with a simple lookup, not a loop.
 </para>
 
-@Returns: 
-<!-- # Unused Parameters # -->
 @type: GtkType
 @is_a_type: GtkType
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_type_enum_get_values ##### -->

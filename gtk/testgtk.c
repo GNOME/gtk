@@ -8252,7 +8252,8 @@ configure_event_callback (GtkWidget *widget,
   gchar *msg;
   gint x, y;
 
-  gtk_window_get_location (GTK_WINDOW (widget), &x, &y);
+  x = widget->allocation.x;
+  y = widget->allocation.y;
   
   msg = g_strdup_printf ("event: %d,%d  %d x %d\n"
                          "location: %d, %d",
@@ -8289,8 +8290,7 @@ set_size_callback (GtkWidget *widget,
   
   get_ints (data, &w, &h);
 
-  gtk_window_set_size (g_object_get_data (data, "target"),
-                       w, h);
+  gtk_window_set_default_size (GTK_WINDOW (g_object_get_data (data, "target")), w, h);
 }
      
 static void
@@ -8325,8 +8325,7 @@ set_location_callback (GtkWidget *widget,
   
   get_ints (data, &x, &y);
 
-  gtk_window_set_location (g_object_get_data (data, "target"),
-                           x, y);
+  gtk_widget_set_uposition (g_object_get_data (data, "target"), x, y);
 }
 
 static void
@@ -8363,7 +8362,7 @@ static void
 gravity_selected (GtkWidget *widget,
                   gpointer data)
 {
-  gtk_window_set_gravity (G_OBJECT (g_object_get_data (data, "target")),
+  gtk_window_set_gravity (GTK_WINDOW (g_object_get_data (data, "target")),
                           gtk_option_menu_get_history (GTK_OPTION_MENU (widget)) + GDK_GRAVITY_NORTH_WEST);
 }
 
@@ -8486,7 +8485,7 @@ window_controls (GtkWidget *window)
   while (i < 10)
     {
       GtkWidget *mi;
-      static gchar *names[10] = {
+      static gchar *names[] = {
         "GDK_GRAVITY_NORTH_WEST",
         "GDK_GRAVITY_NORTH",
         "GDK_GRAVITY_NORTH_EAST",

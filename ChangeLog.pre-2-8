@@ -1,3 +1,23 @@
+Sun Apr  1 03:28:14 2001  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwidget.c: fixed a bunch of notifications, added
+	reference counts around emissions where the widget is used afterwards.
+	added freeze/thaws around multiple properties being notified.
+	(_gtk_widget_get_aux_info): cleanups.
+	
+	* gtk/gtksettings.c (gtk_settings_install_property): provide
+	default parsing functions for gdkcolor, enums and flags.
+
+	* gtk/gtkwindow.[hc]: partially reverted patch from havoc,
+	applied by owen.
+	kept a flag in GtkWindowGeometryInfo to handle user
+	resetting default sizes.
+	cleaned up ZVT comments.
+	bunch of assorted bug fixes, notification fixes.
+	(_gtk_window_reposition): make this a really internal function.
+	
+	* gtk/testgtk.c: fixups.
+	
 2001-03-31  Hans Breuer  <hans@breuer.org>
 
 	* config.h.win32.in : disable USE_MMX for msvc build cause

@@ -381,10 +381,23 @@ void
 gtk_settings_install_property (GtkSettings *settings,
 			       GParamSpec  *pspec)
 {
+  GtkRcPropertyParser parser = NULL;
+
   g_return_if_fail (GTK_IS_SETTINGS (settings));
   g_return_if_fail (G_IS_PARAM_SPEC (pspec));
+
+  /* convenient automatic parser selection
+   */
+  if (G_PARAM_SPEC_VALUE_TYPE (pspec) == GTK_TYPE_GDK_COLOR)
+    parser = gtk_rc_property_parse_color;
+  else if (G_TYPE_FUNDAMENTAL (G_PARAM_SPEC_VALUE_TYPE (pspec)) == G_TYPE_ENUM &&
+	   G_TYPE_IS_DERIVED (G_PARAM_SPEC_VALUE_TYPE (pspec)))
+    parser = gtk_rc_property_parse_enum;
+  else if (G_TYPE_FUNDAMENTAL (G_PARAM_SPEC_VALUE_TYPE (pspec)) == G_TYPE_FLAGS &&
+	   G_TYPE_IS_DERIVED (G_PARAM_SPEC_VALUE_TYPE (pspec)))
+    parser = gtk_rc_property_parse_flags;
   
-  settings_install_property_parser (GTK_SETTINGS_GET_CLASS (settings), pspec, NULL);
+  settings_install_property_parser (GTK_SETTINGS_GET_CLASS (settings), pspec, parser);
 }
 
 void

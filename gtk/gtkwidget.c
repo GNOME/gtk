@@ -198,7 +198,6 @@ static void gtk_widget_propagate_hierarchy_changed (GtkWidget *widget,
 static gboolean gtk_widget_real_activate_mnemonic  (GtkWidget *widget,
 						    gboolean   group_cycling);
 
-static GtkWidgetAuxInfo* gtk_widget_aux_info_new     (void);
 static void		 gtk_widget_aux_info_destroy (GtkWidgetAuxInfo *aux_info);
 
 static void  gtk_widget_do_uposition (GtkWidget *widget);
@@ -1331,6 +1330,8 @@ gtk_widget_unparent (GtkWidget *widget)
   /* keep this function in sync with gtk_menu_detach()
    */
 
+  g_object_freeze_notify (G_OBJECT (widget));
+
   /* unset focused and default children properly, this code
    * should eventually move into some gtk_window_unparent_branch() or
    * similar function.
@@ -1443,8 +1444,8 @@ gtk_widget_unparent (GtkWidget *widget)
   gtk_widget_set_parent_window (widget, NULL);
   gtk_signal_emit (GTK_OBJECT (widget), widget_signals[PARENT_SET], old_parent);
   gtk_widget_propagate_hierarchy_changed (widget, NULL);
-  
   g_object_notify (G_OBJECT (widget), "parent");
+  g_object_thaw_notify (G_OBJECT (widget));
   gtk_widget_unref (widget);
 }
 
@@ -1528,10 +1529,12 @@ gtk_widget_show (GtkWidget *widget)
   
   if (!GTK_WIDGET_VISIBLE (widget))
     {
+      g_object_ref (G_OBJECT (widget));
       if (!GTK_WIDGET_TOPLEVEL (widget))
 	gtk_widget_queue_resize (widget);
       gtk_signal_emit (GTK_OBJECT (widget), widget_signals[SHOW]);
       g_object_notify (G_OBJECT (widget), "visible");
+      g_object_unref (G_OBJECT (widget));
     }
 }
 
@@ -2930,9 +2933,10 @@ gtk_widget_grab_focus (GtkWidget *widget)
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
+  g_object_ref (G_OBJECT (widget));
   gtk_signal_emit (GTK_OBJECT (widget), widget_signals[GRAB_FOCUS]);
-
   g_object_notify (G_OBJECT (widget), "has_focus");
+  g_object_unref (G_OBJECT (widget));
 }
 
 static void
@@ -3075,10 +3079,10 @@ gtk_widget_grab_default (GtkWidget *widget)
   if (window && gtk_type_is_a (GTK_WIDGET_TYPE (window), window_type))
     {
       gtk_window_set_default (GTK_WINDOW (window), widget);
-      g_object_notify (G_OBJECT (window), "has_default");
+      g_object_notify (G_OBJECT (widget), "has_default");
     }
   else
-    g_warning("gtk_widget_grab_default() called on a widget not within a GtkWindow");
+    g_warning (G_STRLOC ": widget not within a GtkWindow");
 }
 
 /**
@@ -3189,9 +3193,9 @@ gtk_widget_set_app_paintable (GtkWidget *widget,
 
       if (GTK_WIDGET_DRAWABLE (widget))
 	gtk_widget_queue_clear (widget);
-    }
 
-  g_object_notify (G_OBJECT (widget), "app_paintable");
+      g_object_notify (G_OBJECT (widget), "app_paintable");
+    }
 }
 
 /**
@@ -3367,8 +3371,6 @@ gtk_widget_set_style (GtkWidget *widget,
     }
 
   gtk_widget_set_style_internal (widget, style, initial_emission);
-
-  g_object_notify (G_OBJECT (widget), "style");
 }
 
 /**
@@ -3734,6 +3736,9 @@ gtk_widget_set_style_internal (GtkWidget *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (style != NULL);
 
+  g_object_ref (G_OBJECT (widget));
+  g_object_freeze_notify (G_OBJECT (widget));
+
   if (widget->style != style || initial_emission)
     {
       PangoContext *context = gtk_widget_peek_pango_context (widget);
@@ -3778,11 +3783,12 @@ gtk_widget_set_style_internal (GtkWidget *widget,
 	}
     }
   else if (initial_emission)
-    {
-      gtk_signal_emit (GTK_OBJECT (widget),
-		       widget_signals[STYLE_SET],
-		       NULL);
-    }
+    gtk_signal_emit (GTK_OBJECT (widget),
+		     widget_signals[STYLE_SET],
+		     NULL);
+  g_object_notify (G_OBJECT (widget), "style");
+  g_object_thaw_notify (G_OBJECT (widget));
+  g_object_unref (G_OBJECT (widget));
 }
 
 static void
@@ -4117,15 +4123,17 @@ gtk_widget_do_uposition (GtkWidget *widget)
   GtkWidgetAuxInfo *aux_info =_gtk_widget_get_aux_info (widget, FALSE);
 
   if (GTK_IS_WINDOW (widget) && aux_info->x_set && aux_info->y_set)
-    gtk_window_reposition (GTK_WINDOW (widget), aux_info->x, aux_info->y);
+    _gtk_window_reposition (GTK_WINDOW (widget), aux_info->x, aux_info->y);
   
   if (GTK_WIDGET_VISIBLE (widget) && widget->parent)
     gtk_widget_size_allocate (widget, &widget->allocation);
 
+  g_object_freeze_notify (G_OBJECT (widget));
   if (aux_info->x_set)
     g_object_notify (G_OBJECT (widget), "x");
   if (aux_info->y_set)
     g_object_notify (G_OBJECT (widget), "y");
+  g_object_thaw_notify (G_OBJECT (widget));
 }
 
 /**
@@ -4162,8 +4170,6 @@ gtk_widget_set_uposition (GtkWidget *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
   
   aux_info =_gtk_widget_get_aux_info (widget, TRUE);
-
-  /* keep this in sync with gtk_window_set_location() */
   
   if (x > -2)
     {
@@ -4225,20 +4231,25 @@ gtk_widget_set_usize (GtkWidget *widget,
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
   
+  g_object_freeze_notify (G_OBJECT (widget));
+
   aux_info =_gtk_widget_get_aux_info (widget, TRUE);
   
   if (width > -2)
-    aux_info->width = width;
+    {
+      g_object_notify (G_OBJECT (widget), "width");
+      aux_info->width = width;
+    }
   if (height > -2)
-    aux_info->height = height;
+    {
+      g_object_notify (G_OBJECT (widget), "height");  
+      aux_info->height = height;
+    }
   
   if (GTK_WIDGET_VISIBLE (widget))
     gtk_widget_queue_resize (widget);
 
-  if (width > -2)
-    g_object_notify (G_OBJECT (widget), "width");
-  if (height > -2)
-    g_object_notify (G_OBJECT (widget), "height");  
+  g_object_thaw_notify (G_OBJECT (widget));
 }
 
 /**
@@ -5204,7 +5215,7 @@ gtk_widget_propagate_state (GtkWidget           *widget,
  * Return value: the #GtkAuxInfo structure for the widget, or
  *    %NULL if @create is %FALSE and one doesn't already exist.
  **/
-GtkWidgetAuxInfo *
+GtkWidgetAuxInfo*
 _gtk_widget_get_aux_info (GtkWidget *widget,
 			  gboolean   create)
 {
@@ -5213,41 +5224,20 @@ _gtk_widget_get_aux_info (GtkWidget *widget,
   aux_info = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_aux_info);
   if (!aux_info && create)
     {
-      aux_info = gtk_widget_aux_info_new ();
+      if (!aux_info_mem_chunk)
+	aux_info_mem_chunk = g_mem_chunk_new ("widget aux info mem chunk",
+					      sizeof (GtkWidgetAuxInfo),
+					      1024, G_ALLOC_AND_FREE);
+      aux_info = g_chunk_new (GtkWidgetAuxInfo, aux_info_mem_chunk);
+
+      aux_info->width = -1;
+      aux_info->height = -1;
+      aux_info->x = 0;
+      aux_info->y = 0;
+      aux_info->x_set = FALSE;
+      aux_info->y_set = FALSE;
       gtk_object_set_data_by_id (GTK_OBJECT (widget), quark_aux_info, aux_info);
-
-      aux_info->width = aux_info->height = -1;
-      aux_info->x = aux_info->y = 0;
-      aux_info->x_set = aux_info->y_set = FALSE;
     }
-  
-  return aux_info;
-}
-
-/*****************************************
- * gtk_widget_aux_info_new:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
-static GtkWidgetAuxInfo*
-gtk_widget_aux_info_new (void)
-{
-  GtkWidgetAuxInfo *aux_info;
-  
-  if (!aux_info_mem_chunk)
-    aux_info_mem_chunk = g_mem_chunk_new ("widget aux info mem chunk",
-					  sizeof (GtkWidgetAuxInfo),
-					  1024, G_ALLOC_AND_FREE);
-  
-  aux_info = g_chunk_new (GtkWidgetAuxInfo, aux_info_mem_chunk);
-  
-  aux_info->x = -1;
-  aux_info->y = -1;
-  aux_info->width = 0;
-  aux_info->height = 0;
   
   return aux_info;
 }

@@ -47,8 +47,9 @@ extern "C" {
 #define GTK_WINDOW_GET_CLASS(obj)       (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_WINDOW, GtkWindowClass))
 
 
-typedef struct _GtkWindow      GtkWindow;
-typedef struct _GtkWindowClass GtkWindowClass;
+typedef struct _GtkWindow             GtkWindow;
+typedef struct _GtkWindowClass        GtkWindowClass;
+typedef struct _GtkWindowGeometryInfo GtkWindowGeometryInfo;
 
 struct _GtkWindow
 {
@@ -58,15 +59,16 @@ struct _GtkWindow
   gchar *wmclass_name;
   gchar *wmclass_class;
   gchar *wm_role;
-  GtkWindowType type;
 
-  GdkWindow *frame;
-  
   GtkWidget *focus_widget;
   GtkWidget *default_widget;
   GtkWindow *transient_parent;
+  GtkWindowGeometryInfo *geometry_info;
+  GdkWindow *frame;
 
-  gushort resize_count;
+  guint16 resize_count;
+
+  GtkWindowType type : 4;
   guint has_user_ref_count : 1;
   guint allow_shrink : 1;
   guint allow_grow : 1;
@@ -90,11 +92,9 @@ struct _GtkWindow
   guint iconify_initially : 1;
   guint stick_initially : 1;
   guint maximize_initially : 1;
-
   guint decorated : 1;
   
   GdkWindowTypeHint type_hint : 3;
-
   GdkGravity gravity : 5;
   
   guint frame_left;
@@ -145,25 +145,9 @@ void       gtk_window_set_decorations_hint     (GtkWindow	    *window,
 void       gtk_window_set_functions_hint       (GtkWindow	    *window,
                                                 GdkWMFunction	     functions);
 
-
 void       gtk_window_set_resizeable           (GtkWindow           *window,
-                                                gboolean             setting);
+                                                gboolean             resizeable);
 gboolean   gtk_window_get_resizeable           (GtkWindow           *window);
-
-
-void       gtk_window_set_size                 (GtkWindow           *window,
-                                                gint                 width,
-                                                gint                 height);
-void       gtk_window_get_size                 (GtkWindow           *window,
-                                                gint                *width,
-                                                gint                *height);
-
-void       gtk_window_set_location             (GtkWindow           *window,
-                                                gint                 root_x,
-                                                gint                 root_y);
-void       gtk_window_get_location             (GtkWindow           *window,
-                                                gint                *root_x,
-                                                gint                *root_y);
 
 void       gtk_window_set_gravity              (GtkWindow           *window,
                                                 GdkGravity           gravity);
