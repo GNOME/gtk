@@ -1,3 +1,8 @@
+Sat Jan  3 11:39:42 2004  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtkclipboard.c: Update freedesktop.org clipboard doc link.
+	Patch from Andrew Moise (#130462).
+
 2004-01-01  Jody Goldberg <jody@gnome.org>
 
 	* gtk/gtkaction.c (_GtkActionPrivate) : add visible_horizontal,

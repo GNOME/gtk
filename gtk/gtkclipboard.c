@@ -178,12 +178,12 @@ clipboard_display_closed (GdkDisplay   *display,
  * user sees as the clipboard.
  *
  * (Passing #GDK_NONE is the same as using <literal>gdk_atom_intern
- * ("CLIPBOARD", FALSE)</literal>. See
- * <ulink url="http://www.freedesktop.org/standards/clipboards.txt">
- * http://www.freedesktop.org/standards/clipboards.txt</ulink>
- * for a detailed discussion of the "CLIPBOARD" vs. "PRIMARY" selections
- * under the X window system. On Win32 the #GDK_SELECTION_PRIMARY
- * clipboard is essentially ignored.)
+ * ("CLIPBOARD", FALSE)</literal>. See <ulink
+ * url="http://www.freedesktop.org/standards/clipboards-spec/clipboards.txt">
+ * http://www.freedesktop.org/standards/clipboards-spec/clipboards.txt</ulink>
+ * for a detailed discussion of the "CLIPBOARD" vs. "PRIMARY"
+ * selections under the X window system. On Win32 the
+ * #GDK_SELECTION_PRIMARY clipboard is essentially ignored.)
  *
  * It's possible to have arbitrary named clipboards; if you do invent
  * new clipboards, you should prefix the selection name with an
