@@ -179,8 +179,8 @@ gtk_clipboard_get (GdkAtom selection)
 static void 
 selection_get_cb (GtkWidget          *widget,
 		  GtkSelectionData   *selection_data,
-		  guint               time,
-		  guint               info)
+		  guint               info,
+		  guint               time)
 {
   GtkClipboard *clipboard = gtk_widget_get_clipboard (widget, selection_data->selection);
 

@@ -138,6 +138,9 @@ static void     gtk_font_selection_show_available_sizes  (GtkFontSelection *fs,
 							  gboolean          first_time);
 static void     gtk_font_selection_size_activate         (GtkWidget        *w,
 							  gpointer          data);
+static gboolean gtk_font_selection_size_focus_out        (GtkWidget        *w,
+							  GdkEventFocus    *event,
+							  gpointer          data);
 static void     gtk_font_selection_select_size           (GtkTreeSelection *selection,
 							  gpointer          data);
 
@@ -322,6 +325,9 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   gtk_signal_connect (GTK_OBJECT (fontsel->size_entry), "activate",
 		      (GtkSignalFunc) gtk_font_selection_size_activate,
 		      fontsel);
+  gtk_signal_connect_after (GTK_OBJECT (fontsel->size_entry), "focus_out_event",
+			    (GtkSignalFunc) gtk_font_selection_size_focus_out,
+			    fontsel);
   
   font_label = gtk_label_new_with_mnemonic (_("_Family:"));
   gtk_misc_set_alignment (GTK_MISC (font_label), 0.0, 0.5);
@@ -993,6 +999,16 @@ gtk_font_selection_size_activate (GtkWidget   *w,
   new_size = MAX (0.1, atof (text) * PANGO_SCALE + 0.5);
 
   gtk_font_selection_set_size (fontsel, new_size);
+}
+
+static gboolean
+gtk_font_selection_size_focus_out (GtkWidget     *w,
+				   GdkEventFocus *event,
+				   gpointer       data)
+{
+  gtk_font_selection_size_activate (w, data);
+  
+  return TRUE;
 }
 
 /* This is called when a size is selected in the list. */
