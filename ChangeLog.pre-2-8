@@ -1,3 +1,9 @@
+Wed Jan 29 17:02:41 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkkeyuni.c (get_decimal_char): Make the 
+	translation of GDK_KP_Decimal dependent on LC_NUMERIC.
+	(#101225)
+
 Wed Jan 29 15:43:56 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmenushell.c (gtk_real_menu_shell_move_current):
