@@ -1,3 +1,10 @@
+2004-01-30  Not Zed  <NotZed@Ximian.com>
+
+	Fixes #132929.
+
+	* gtk/gtktreeview.c (cancel_arrow_animation): remove the timeout
+	handler when we clear the timeout id.
+
 Thu Jan 29 18:08:06 2004  Owen Taylor  <otaylor@redhat.com>
  
  	* gtk/gtktextlayout.c (line_display_iter_to_index)
