@@ -56,13 +56,13 @@ gtk_tree_sortable_base_init (gpointer g_class)
 
   if (! initialized)
     {
-      g_signal_newc ("sort_column_changed",
-		     GTK_TYPE_TREE_SORTABLE,
-		     G_SIGNAL_RUN_LAST,
-		     G_STRUCT_OFFSET (GtkTreeSortableIface, sort_column_changed),
-		     NULL, NULL,
-		     gtk_marshal_VOID__VOID,
-		     G_TYPE_NONE, 0);
+      g_signal_new ("sort_column_changed",
+                    GTK_TYPE_TREE_SORTABLE,
+                    G_SIGNAL_RUN_LAST,
+                    G_STRUCT_OFFSET (GtkTreeSortableIface, sort_column_changed),
+                    NULL, NULL,
+                    gtk_marshal_VOID__VOID,
+                    G_TYPE_NONE, 0);
       initialized = TRUE;
     }
 }

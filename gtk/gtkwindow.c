@@ -397,7 +397,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                                    PROP_DEFAULT_HEIGHT,
                                    g_param_spec_int ("default_height",
 						     _("Default Height"),
-						     _("The default height of the windo, or 0 to use the size request."),
+						     _("The default height of the window, or 0 to use the size request."),
 						     0,
 						     G_MAXINT,
 						     0,
@@ -407,62 +407,62 @@ gtk_window_class_init (GtkWindowClass *klass)
                                    PROP_DESTROY_WITH_PARENT,
                                    g_param_spec_boolean ("destroy_with_parent",
 							 _("Destroy with Parent"),
-							 _("If this window should be destroyed when the parent is destroyed,"),
+							 _("If this window should be destroyed when the parent is destroyed"),
                                                          FALSE,
 							 G_PARAM_READWRITE));
 
   /* Style props are set or not */
 
   window_signals[SET_FOCUS] =
-    g_signal_newc ("set_focus",
-                   G_TYPE_FROM_CLASS (object_class),
-                   G_SIGNAL_RUN_LAST,
-                   G_STRUCT_OFFSET (GtkWindowClass, set_focus),
-                   NULL, NULL,
-                   gtk_marshal_VOID__OBJECT,
-                   G_TYPE_NONE, 1,
-                   GTK_TYPE_WIDGET);
+    g_signal_new ("set_focus",
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkWindowClass, set_focus),
+                  NULL, NULL,
+                  gtk_marshal_VOID__OBJECT,
+                  G_TYPE_NONE, 1,
+                  GTK_TYPE_WIDGET);
   
   window_signals[FRAME_EVENT] =
-    g_signal_newc ("frame_event",
-		   G_TYPE_FROM_CLASS(object_class),
-		   G_SIGNAL_RUN_LAST,
-		   G_STRUCT_OFFSET(GtkWindowClass, frame_event),
-		   _gtk_boolean_handled_accumulator, NULL,
-		   gtk_marshal_BOOLEAN__BOXED,
-		   G_TYPE_BOOLEAN, 1,
-		   GDK_TYPE_EVENT);
+    g_signal_new ("frame_event",
+                  G_TYPE_FROM_CLASS(object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET(GtkWindowClass, frame_event),
+                  _gtk_boolean_handled_accumulator, NULL,
+                  gtk_marshal_BOOLEAN__BOXED,
+                  G_TYPE_BOOLEAN, 1,
+                  GDK_TYPE_EVENT);
 
   window_signals[ACTIVATE_FOCUS] =
-    g_signal_newc ("activate_focus",
-                   G_OBJECT_CLASS_TYPE (object_class),
-                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                   GTK_SIGNAL_OFFSET (GtkWindowClass, activate_focus),
-		   NULL, NULL,
-		   gtk_marshal_VOID__VOID,
-                   G_TYPE_NONE,
-                   0);
+    g_signal_new ("activate_focus",
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  GTK_SIGNAL_OFFSET (GtkWindowClass, activate_focus),
+                  NULL, NULL,
+                  gtk_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
 
   window_signals[ACTIVATE_DEFAULT] =
-    g_signal_newc ("activate_default",
-                   G_OBJECT_CLASS_TYPE (object_class),
-                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                   GTK_SIGNAL_OFFSET (GtkWindowClass, activate_default),
-		   NULL, NULL,
-		   gtk_marshal_VOID__VOID,
-                   G_TYPE_NONE,
-                   0);
+    g_signal_new ("activate_default",
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  GTK_SIGNAL_OFFSET (GtkWindowClass, activate_default),
+                  NULL, NULL,
+                  gtk_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
 
   window_signals[MOVE_FOCUS] =
-    g_signal_newc ("move_focus",
-                   G_OBJECT_CLASS_TYPE (object_class),
-                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                   GTK_SIGNAL_OFFSET (GtkWindowClass, move_focus),
-		   NULL, NULL,
-		   gtk_marshal_VOID__ENUM,
-                   G_TYPE_NONE,
-                   1,
-                   GTK_TYPE_DIRECTION_TYPE);
+    g_signal_new ("move_focus",
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  GTK_SIGNAL_OFFSET (GtkWindowClass, move_focus),
+                  NULL, NULL,
+                  gtk_marshal_VOID__ENUM,
+                  G_TYPE_NONE,
+                  1,
+                  GTK_TYPE_DIRECTION_TYPE);
   
   if (!mnemonic_hash_table)
     mnemonic_hash_table = g_hash_table_new (mnemonic_hash,
@@ -3428,12 +3428,12 @@ gtk_window_present (GtkWindow *window)
  * gtk_window_iconify:
  * @window: a #GtkWindow
  *
- * Asks to iconify @window. Note that you shouldn't assume the window
- * is definitely iconified afterward, because other entities (e.g. the
- * user or window manager) could deiconify it again, or there may not
- * be a window manager in which case iconification isn't possible,
- * etc. But normally the window will end up iconified. Just don't write
- * code that crashes if not.
+ * Asks to iconify (i.e. minimize) the specified @window. Note that you
+ * shouldn't assume the window is definitely iconified afterward,
+ * because other entities (e.g. the user or window manager) could
+ * deiconify it again, or there may not be a window manager in which
+ * case iconification isn't possible, etc. But normally the window
+ * will end up iconified. Just don't write code that crashes if not.
  *
  * It's permitted to call this function before showing a window,
  * in which case the window will be iconified before it ever appears
@@ -3468,10 +3468,11 @@ gtk_window_iconify (GtkWindow *window)
  * gtk_window_deiconify:
  * @window: a #GtkWindow
  *
- * Asks to deiconify @window. Note that you shouldn't assume the
- * window is definitely deiconified afterward, because other entities
- * (e.g. the user or window manager) could iconify it again before
- * your code which assumes deiconification gets to run.
+ * Asks to deiconify (i.e. unminimize) the specified @window. Note
+ * that you shouldn't assume the window is definitely deiconified
+ * afterward, because other entities (e.g. the user or window manager)
+ * could iconify it again before your code which assumes
+ * deiconification gets to run.
  *
  * You can track iconification via the "window_state_event" signal
  * on #GtkWidget.

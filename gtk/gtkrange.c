@@ -226,24 +226,24 @@ gtk_range_class_init (GtkRangeClass *class)
   class->stepper_detail = "stepper";
 
   signals[VALUE_CHANGED] =
-    g_signal_newc ("value_changed",
-		   G_TYPE_FROM_CLASS (object_class),
-		   G_SIGNAL_RUN_LAST,
-		   G_STRUCT_OFFSET (GtkRangeClass, value_changed),
-		   NULL, NULL,
-		   gtk_marshal_NONE__NONE,
-		   G_TYPE_NONE, 0);
+    g_signal_new ("value_changed",
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkRangeClass, value_changed),
+                  NULL, NULL,
+                  gtk_marshal_NONE__NONE,
+                  G_TYPE_NONE, 0);
   
   signals[MOVE_SLIDER] =
-    g_signal_newc ("move_slider",
-                   G_TYPE_FROM_CLASS (object_class),
-                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                   G_STRUCT_OFFSET (GtkRangeClass, move_slider),
-                   NULL, NULL,
-                   gtk_marshal_VOID__ENUM,
-                   G_TYPE_NONE, 1,
-                   GTK_TYPE_SCROLL_TYPE);
-
+    g_signal_new ("move_slider",
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (GtkRangeClass, move_slider),
+                  NULL, NULL,
+                  gtk_marshal_VOID__ENUM,
+                  G_TYPE_NONE, 1,
+                  GTK_TYPE_SCROLL_TYPE);
+  
   
   g_object_class_install_property (gobject_class,
                                    PROP_UPDATE_POLICY,

@@ -132,13 +132,13 @@ gtk_option_menu_class_init (GtkOptionMenuClass *class)
   parent_class = gtk_type_class (gtk_button_get_type ());
 
   signals[CHANGED] =
-    g_signal_newc ("changed",
-                   G_OBJECT_CLASS_TYPE (class),
-                   G_SIGNAL_RUN_LAST,
-                   G_STRUCT_OFFSET (GtkOptionMenuClass, changed),
-                   NULL, NULL,
-                   gtk_marshal_VOID__VOID,
-                   G_TYPE_NONE, 0);
+    g_signal_new ("changed",
+                  G_OBJECT_CLASS_TYPE (class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkOptionMenuClass, changed),
+                  NULL, NULL,
+                  gtk_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
   
   object_class->destroy = gtk_option_menu_destroy;
   

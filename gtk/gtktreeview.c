@@ -575,138 +575,138 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		    GTK_TYPE_TREE_VIEW_COLUMN);
 
   tree_view_signals[TEST_EXPAND_ROW] =
-    g_signal_newc ("test_expand_row",
-		   G_TYPE_FROM_CLASS (object_class),
-		   G_SIGNAL_RUN_LAST,
-		   G_STRUCT_OFFSET (GtkTreeViewClass, test_expand_row),
-		   _gtk_boolean_handled_accumulator, NULL,
-		    gtk_marshal_BOOLEAN__BOXED_BOXED,
-		   G_TYPE_BOOLEAN, 2,
-		   GTK_TYPE_TREE_ITER,
-		   GTK_TYPE_TREE_PATH);
+    g_signal_new ("test_expand_row",
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkTreeViewClass, test_expand_row),
+                  _gtk_boolean_handled_accumulator, NULL,
+                  gtk_marshal_BOOLEAN__BOXED_BOXED,
+                  G_TYPE_BOOLEAN, 2,
+                  GTK_TYPE_TREE_ITER,
+                  GTK_TYPE_TREE_PATH);
 
   tree_view_signals[TEST_COLLAPSE_ROW] =
-    g_signal_newc ("test_collapse_row",
-		   G_TYPE_FROM_CLASS (object_class),
-		   G_SIGNAL_RUN_LAST,
-		   G_STRUCT_OFFSET (GtkTreeViewClass, test_collapse_row),
-		   _gtk_boolean_handled_accumulator, NULL,
-		    gtk_marshal_BOOLEAN__BOXED_BOXED,
-		   G_TYPE_BOOLEAN, 2,
-		   GTK_TYPE_TREE_ITER,
-		   GTK_TYPE_TREE_PATH);
+    g_signal_new ("test_collapse_row",
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkTreeViewClass, test_collapse_row),
+                  _gtk_boolean_handled_accumulator, NULL,
+                  gtk_marshal_BOOLEAN__BOXED_BOXED,
+                  G_TYPE_BOOLEAN, 2,
+                  GTK_TYPE_TREE_ITER,
+                  GTK_TYPE_TREE_PATH);
 
   tree_view_signals[ROW_EXPANDED] =
-    g_signal_newc ("row_expanded",
-		   G_TYPE_FROM_CLASS (object_class),
-		   G_SIGNAL_RUN_LAST,
-		   G_STRUCT_OFFSET (GtkTreeViewClass, row_expanded),
-		   NULL, NULL,
-		    gtk_marshal_VOID__BOXED_BOXED,
-		   GTK_TYPE_NONE, 2,
-		   GTK_TYPE_TREE_ITER,
-		   GTK_TYPE_TREE_PATH);
+    g_signal_new ("row_expanded",
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkTreeViewClass, row_expanded),
+                  NULL, NULL,
+                  gtk_marshal_VOID__BOXED_BOXED,
+                  GTK_TYPE_NONE, 2,
+                  GTK_TYPE_TREE_ITER,
+                  GTK_TYPE_TREE_PATH);
 
   tree_view_signals[ROW_COLLAPSED] =
-    g_signal_newc ("row_collapsed",
-		   G_TYPE_FROM_CLASS (object_class),
-		   G_SIGNAL_RUN_LAST,
-		   G_STRUCT_OFFSET (GtkTreeViewClass, row_collapsed),
-		   NULL, NULL,
-		    gtk_marshal_VOID__BOXED_BOXED,
-		   GTK_TYPE_NONE, 2,
-		   GTK_TYPE_TREE_ITER,
-		   GTK_TYPE_TREE_PATH);
+    g_signal_new ("row_collapsed",
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkTreeViewClass, row_collapsed),
+                  NULL, NULL,
+                  gtk_marshal_VOID__BOXED_BOXED,
+                  GTK_TYPE_NONE, 2,
+                  GTK_TYPE_TREE_ITER,
+                  GTK_TYPE_TREE_PATH);
 
   tree_view_signals[COLUMNS_CHANGED] =
-    g_signal_newc ("columns_changed",
-		   G_TYPE_FROM_CLASS (object_class),
-		   G_SIGNAL_RUN_LAST,
-		   G_STRUCT_OFFSET (GtkTreeViewClass, columns_changed),
-		   NULL, NULL,
-		   gtk_marshal_NONE__NONE,
-		   G_TYPE_NONE, 0);
+    g_signal_new ("columns_changed",
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkTreeViewClass, columns_changed),
+                  NULL, NULL,
+                  gtk_marshal_NONE__NONE,
+                  G_TYPE_NONE, 0);
 
   tree_view_signals[BEGIN_EXTENDED_SELECTION] =
-    g_signal_newc ("begin_extended_selection",
-		   G_TYPE_FROM_CLASS (object_class),
-		   G_SIGNAL_RUN_LAST | GTK_RUN_ACTION,
-		   G_STRUCT_OFFSET (GtkTreeViewClass, begin_extended_selection),
-		   NULL, NULL,
-		   gtk_marshal_NONE__NONE,
-		   G_TYPE_NONE, 0);
+    g_signal_new ("begin_extended_selection",
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST | GTK_RUN_ACTION,
+                  G_STRUCT_OFFSET (GtkTreeViewClass, begin_extended_selection),
+                  NULL, NULL,
+                  gtk_marshal_NONE__NONE,
+                  G_TYPE_NONE, 0);
 
   tree_view_signals[END_EXTENDED_SELECTION] =
-    g_signal_newc ("end_extended_selection",
-		   G_TYPE_FROM_CLASS (object_class),
-		   G_SIGNAL_RUN_LAST | GTK_RUN_ACTION,
-		   G_STRUCT_OFFSET (GtkTreeViewClass, end_extended_selection),
-		   NULL, NULL,
-		   gtk_marshal_NONE__NONE,
-		   G_TYPE_NONE, 0);
+    g_signal_new ("end_extended_selection",
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST | GTK_RUN_ACTION,
+                  G_STRUCT_OFFSET (GtkTreeViewClass, end_extended_selection),
+                  NULL, NULL,
+                  gtk_marshal_NONE__NONE,
+                  G_TYPE_NONE, 0);
 
   tree_view_signals[BEGIN_FREE_MOTION] =
-    g_signal_newc ("begin_free_motion",
-		   G_TYPE_FROM_CLASS (object_class),
-		   G_SIGNAL_RUN_LAST | GTK_RUN_ACTION,
-		   G_STRUCT_OFFSET (GtkTreeViewClass, begin_free_motion),
-		   NULL, NULL,
-		   gtk_marshal_NONE__NONE,
-		   G_TYPE_NONE, 0);
+    g_signal_new ("begin_free_motion",
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST | GTK_RUN_ACTION,
+                  G_STRUCT_OFFSET (GtkTreeViewClass, begin_free_motion),
+                  NULL, NULL,
+                  gtk_marshal_NONE__NONE,
+                  G_TYPE_NONE, 0);
 
   tree_view_signals[END_FREE_MOTION] =
-    g_signal_newc ("end_free_motion",
-		   G_TYPE_FROM_CLASS (object_class),
-		   G_SIGNAL_RUN_LAST | GTK_RUN_ACTION,
-		   G_STRUCT_OFFSET (GtkTreeViewClass, end_free_motion),
-		   NULL, NULL,
-		   gtk_marshal_NONE__NONE,
-		   G_TYPE_NONE, 0);
+    g_signal_new ("end_free_motion",
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST | GTK_RUN_ACTION,
+                  G_STRUCT_OFFSET (GtkTreeViewClass, end_free_motion),
+                  NULL, NULL,
+                  gtk_marshal_NONE__NONE,
+                  G_TYPE_NONE, 0);
 
   tree_view_signals[MOVE_CURSOR] =
-    g_signal_newc ("move_cursor",
-		   G_TYPE_FROM_CLASS (object_class),
- 		   G_SIGNAL_RUN_LAST | GTK_RUN_ACTION,
-		   G_STRUCT_OFFSET (GtkTreeViewClass, move_cursor),
-		   NULL, NULL,
-		   gtk_marshal_VOID__ENUM_INT,
-		   GTK_TYPE_NONE, 2, GTK_TYPE_MOVEMENT_STEP, GTK_TYPE_INT);
+    g_signal_new ("move_cursor",
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST | GTK_RUN_ACTION,
+                  G_STRUCT_OFFSET (GtkTreeViewClass, move_cursor),
+                  NULL, NULL,
+                  gtk_marshal_VOID__ENUM_INT,
+                  GTK_TYPE_NONE, 2, GTK_TYPE_MOVEMENT_STEP, GTK_TYPE_INT);
 
   tree_view_signals[SELECT_CURSOR_ROW] =
-    g_signal_newc ("select_cursor_row",
-		   G_TYPE_FROM_CLASS (object_class),
- 		   G_SIGNAL_RUN_LAST | GTK_RUN_ACTION,
-		   G_STRUCT_OFFSET (GtkTreeViewClass, select_cursor_row),
-		   NULL, NULL,
-		   gtk_marshal_NONE__NONE,
-		   GTK_TYPE_NONE, 0);
+    g_signal_new ("select_cursor_row",
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST | GTK_RUN_ACTION,
+                  G_STRUCT_OFFSET (GtkTreeViewClass, select_cursor_row),
+                  NULL, NULL,
+                  gtk_marshal_NONE__NONE,
+                  GTK_TYPE_NONE, 0);
 
   tree_view_signals[TOGGLE_CURSOR_ROW] =
-    g_signal_newc ("toggle_cursor_row",
-		   G_TYPE_FROM_CLASS (object_class),
- 		   G_SIGNAL_RUN_LAST | GTK_RUN_ACTION,
-		   G_STRUCT_OFFSET (GtkTreeViewClass, toggle_cursor_row),
-		   NULL, NULL,
-		   gtk_marshal_NONE__NONE,
-		   GTK_TYPE_NONE, 0);
+    g_signal_new ("toggle_cursor_row",
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST | GTK_RUN_ACTION,
+                  G_STRUCT_OFFSET (GtkTreeViewClass, toggle_cursor_row),
+                  NULL, NULL,
+                  gtk_marshal_NONE__NONE,
+                  GTK_TYPE_NONE, 0);
 
   tree_view_signals[EXPAND_COLLAPSE_CURSOR_ROW] =
-    g_signal_newc ("expand_collapse_cursor_row",
-		   G_TYPE_FROM_CLASS (object_class),
- 		   G_SIGNAL_RUN_LAST | GTK_RUN_ACTION,
-		   G_STRUCT_OFFSET (GtkTreeViewClass, expand_collapse_cursor_row),
-		   NULL, NULL,
-		   gtk_marshal_VOID__BOOLEAN_BOOLEAN_BOOLEAN,
-		   GTK_TYPE_NONE, 3, GTK_TYPE_BOOL, GTK_TYPE_BOOL, GTK_TYPE_BOOL);
+    g_signal_new ("expand_collapse_cursor_row",
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST | GTK_RUN_ACTION,
+                  G_STRUCT_OFFSET (GtkTreeViewClass, expand_collapse_cursor_row),
+                  NULL, NULL,
+                  gtk_marshal_VOID__BOOLEAN_BOOLEAN_BOOLEAN,
+                  GTK_TYPE_NONE, 3, GTK_TYPE_BOOL, GTK_TYPE_BOOL, GTK_TYPE_BOOL);
 
   tree_view_signals[SELECT_CURSOR_PARENT] =
-    g_signal_newc ("select_cursor_parent",
-		   G_TYPE_FROM_CLASS (object_class),
- 		   G_SIGNAL_RUN_LAST | GTK_RUN_ACTION,
-		   G_STRUCT_OFFSET (GtkTreeViewClass, select_cursor_parent),
-		   NULL, NULL,
-		   gtk_marshal_NONE__NONE,
-		   GTK_TYPE_NONE, 0);
+    g_signal_new ("select_cursor_parent",
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST | GTK_RUN_ACTION,
+                  G_STRUCT_OFFSET (GtkTreeViewClass, select_cursor_parent),
+                  NULL, NULL,
+                  gtk_marshal_NONE__NONE,
+                  GTK_TYPE_NONE, 0);
 
   /* Key bindings */
   gtk_binding_entry_add_signal (binding_set, GDK_Shift_L, 0, "begin_extended_selection", 0);
@@ -4680,31 +4680,26 @@ gtk_tree_view_setup_model (GtkTreeView *tree_view)
 
   tree_view->priv->tree = NULL;
 
-  g_signal_connectc (tree_view->priv->model,
-		     "range_changed",
-		     (GCallback) gtk_tree_view_range_changed,
-		     tree_view,
-		     FALSE);
-  g_signal_connectc (tree_view->priv->model,
-		     "inserted",
-		     (GCallback) gtk_tree_view_inserted,
-		     tree_view,
-		     FALSE);
-  g_signal_connectc (tree_view->priv->model,
-		     "has_child_toggled",
-		     (GCallback) gtk_tree_view_has_child_toggled,
-		     tree_view,
-		     FALSE);
-  g_signal_connectc (tree_view->priv->model,
-		     "deleted",
-		     (GCallback) gtk_tree_view_deleted,
-		     tree_view,
-		     FALSE);
-  g_signal_connectc (tree_view->priv->model,
-		     "reordered",
-		     (GCallback) gtk_tree_view_reordered,
-		     tree_view,
-		     FALSE);
+  g_signal_connect (tree_view->priv->model,
+                    "range_changed",
+                    (GCallback) gtk_tree_view_range_changed,
+                    tree_view);
+  g_signal_connect (tree_view->priv->model,
+                    "inserted",
+                    (GCallback) gtk_tree_view_inserted,
+                    tree_view);
+  g_signal_connect (tree_view->priv->model,
+                    "has_child_toggled",
+                    (GCallback) gtk_tree_view_has_child_toggled,
+                    tree_view);
+  g_signal_connect (tree_view->priv->model,
+                    "deleted",
+                    (GCallback) gtk_tree_view_deleted,
+                    tree_view);
+  g_signal_connect (tree_view->priv->model,
+                    "reordered",
+                    (GCallback) gtk_tree_view_reordered,
+                    tree_view);
 
   if (tree_view->priv->columns == NULL)
     return;

@@ -173,40 +173,40 @@ gtk_text_layout_class_init (GtkTextLayoutClass *klass)
   klass->free_line_data = gtk_text_layout_real_free_line_data;
 
   signals[INVALIDATED] =
-    g_signal_newc ("invalidated",
-                   G_OBJECT_CLASS_TYPE (object_class),
-                   G_SIGNAL_RUN_LAST,
-                   G_STRUCT_OFFSET (GtkTextLayoutClass, invalidated),
-		   NULL, NULL,
-		   gtk_marshal_VOID__VOID,
-                   GTK_TYPE_NONE,
-                   0);
+    g_signal_new ("invalidated",
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkTextLayoutClass, invalidated),
+                  NULL, NULL,
+                  gtk_marshal_VOID__VOID,
+                  GTK_TYPE_NONE,
+                  0);
 
   signals[CHANGED] =
-    g_signal_newc ("changed",
-                   G_OBJECT_CLASS_TYPE (object_class),
-                   G_SIGNAL_RUN_LAST,
-                   G_STRUCT_OFFSET (GtkTextLayoutClass, changed),
-		   NULL, NULL,
-		   gtk_marshal_VOID__INT_INT_INT,
-                   GTK_TYPE_NONE,
-                   3,
-                   GTK_TYPE_INT,
-                   GTK_TYPE_INT,
-                   GTK_TYPE_INT);
+    g_signal_new ("changed",
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkTextLayoutClass, changed),
+                  NULL, NULL,
+                  gtk_marshal_VOID__INT_INT_INT,
+                  GTK_TYPE_NONE,
+                  3,
+                  GTK_TYPE_INT,
+                  GTK_TYPE_INT,
+                  GTK_TYPE_INT);
 
   signals[ALLOCATE_CHILD] =
-    g_signal_newc ("allocate_child",
-                   G_OBJECT_CLASS_TYPE (object_class),
-                   G_SIGNAL_RUN_LAST,
-                   G_STRUCT_OFFSET (GtkTextLayoutClass, allocate_child),
-		   NULL, NULL,
-		   gtk_marshal_VOID__OBJECT_INT_INT,
-                   GTK_TYPE_NONE,
-                   3,
-                   GTK_TYPE_OBJECT,
-                   GTK_TYPE_INT,
-                   GTK_TYPE_INT);
+    g_signal_new ("allocate_child",
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkTextLayoutClass, allocate_child),
+                  NULL, NULL,
+                  gtk_marshal_VOID__OBJECT_INT_INT,
+                  GTK_TYPE_NONE,
+                  3,
+                  GTK_TYPE_OBJECT,
+                  GTK_TYPE_INT,
+                  GTK_TYPE_INT);
 }
 
 void

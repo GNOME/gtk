@@ -1,3 +1,10 @@
+2001-06-29  Havoc Pennington  <hp@redhat.com>
+
+       * Throughout: fixes to compile with G_DISABLE_COMPAT
+	(s/g_signal_connectc/g_signal_connect/,
+	s/g_signal_newc/g_signal_new/,
+	s/g_signal_disconnect_by_func/g_signal_handlers_disconnect_by_func/)
+
 Fri Jun 29 03:14:16 2001  Jonathan Blandford  <jrb@webwynk.net>
 
 	* gtk/gtktreeselection.c (gtk_tree_selection_selected_foreach):

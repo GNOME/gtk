@@ -901,44 +901,44 @@ gtk_tree_model_types_class_init (GtkTreeModelTypesClass *class)
   object_class = (GObjectClass*) class;
 
   model_types_signals[CHANGED] =
-    g_signal_newc ("changed",
-                   GTK_CLASS_TYPE (object_class),
-                   G_SIGNAL_RUN_FIRST,
-                   GTK_SIGNAL_OFFSET (GtkTreeModelTypesClass, changed),
-                   NULL, NULL,
-                   gtk_marshal_VOID__BOXED_BOXED,
-                   G_TYPE_NONE, 2,
-                   G_TYPE_POINTER,
-                   G_TYPE_POINTER);
+    g_signal_new ("changed",
+                  GTK_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_FIRST,
+                  GTK_SIGNAL_OFFSET (GtkTreeModelTypesClass, changed),
+                  NULL, NULL,
+                  gtk_marshal_VOID__BOXED_BOXED,
+                  G_TYPE_NONE, 2,
+                  G_TYPE_POINTER,
+                  G_TYPE_POINTER);
   model_types_signals[INSERTED] =
-    g_signal_newc ("inserted",
-                   GTK_CLASS_TYPE (object_class),
-                   G_SIGNAL_RUN_FIRST,
-                   GTK_SIGNAL_OFFSET (GtkTreeModelTypesClass, inserted),
-                   NULL, NULL,
-                   gtk_marshal_VOID__BOXED_BOXED,
-                   G_TYPE_NONE, 2,
-                   G_TYPE_POINTER,
-                   G_TYPE_POINTER);
+    g_signal_new ("inserted",
+                  GTK_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_FIRST,
+                  GTK_SIGNAL_OFFSET (GtkTreeModelTypesClass, inserted),
+                  NULL, NULL,
+                  gtk_marshal_VOID__BOXED_BOXED,
+                  G_TYPE_NONE, 2,
+                  G_TYPE_POINTER,
+                  G_TYPE_POINTER);
   model_types_signals[CHILD_TOGGLED] =
-    g_signal_newc ("child_toggled",
-                   GTK_CLASS_TYPE (object_class),
-                   G_SIGNAL_RUN_FIRST,
-                   GTK_SIGNAL_OFFSET (GtkTreeModelTypesClass, child_toggled),
-                   NULL, NULL,
-                   gtk_marshal_VOID__BOXED_BOXED,
-                   G_TYPE_NONE, 2,
-                   G_TYPE_POINTER,
-                   G_TYPE_POINTER);
+    g_signal_new ("child_toggled",
+                  GTK_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_FIRST,
+                  GTK_SIGNAL_OFFSET (GtkTreeModelTypesClass, child_toggled),
+                  NULL, NULL,
+                  gtk_marshal_VOID__BOXED_BOXED,
+                  G_TYPE_NONE, 2,
+                  G_TYPE_POINTER,
+                  G_TYPE_POINTER);
   model_types_signals[DELETED] =
-    g_signal_newc ("deleted",
-                   GTK_CLASS_TYPE (object_class),
-                   G_SIGNAL_RUN_FIRST,
-                   GTK_SIGNAL_OFFSET (GtkTreeModelTypesClass, deleted),
-                   NULL, NULL,
-                   gtk_marshal_VOID__BOXED,
-                   G_TYPE_NONE, 1,
-                   G_TYPE_POINTER);
+    g_signal_new ("deleted",
+                  GTK_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_FIRST,
+                  GTK_SIGNAL_OFFSET (GtkTreeModelTypesClass, deleted),
+                  NULL, NULL,
+                  gtk_marshal_VOID__BOXED,
+                  G_TYPE_NONE, 1,
+                  G_TYPE_POINTER);
 }
 
 static void

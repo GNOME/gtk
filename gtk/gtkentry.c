@@ -1556,9 +1556,9 @@ gtk_entry_focus_out (GtkWidget     *widget,
 
   gtk_entry_check_cursor_blink (entry);
   
-  g_signal_disconnect_by_func (gdk_keymap_get_default (),
-			       gtk_entry_keymap_direction_changed,
-			       entry);
+  g_signal_handlers_disconnect_by_func (gdk_keymap_get_default (),
+                                        gtk_entry_keymap_direction_changed,
+                                        entry);
 
   return FALSE;
 }

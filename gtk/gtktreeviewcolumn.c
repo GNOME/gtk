@@ -156,13 +156,13 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
   object_class->get_property = gtk_tree_view_column_get_property;
   
   tree_column_signals[CLICKED] =
-    g_signal_newc ("clicked",
-                   GTK_CLASS_TYPE (object_class),
-                   G_SIGNAL_RUN_LAST,
-                   G_STRUCT_OFFSET (GtkTreeViewColumnClass, clicked),
-		   NULL, NULL,
-		   gtk_marshal_VOID__VOID,
-                   GTK_TYPE_NONE, 0);
+    g_signal_new ("clicked",
+                  GTK_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkTreeViewColumnClass, clicked),
+                  NULL, NULL,
+                  gtk_marshal_VOID__VOID,
+                  GTK_TYPE_NONE, 0);
 
   g_object_class_install_property (object_class,
                                    PROP_VISIBLE,
@@ -849,10 +849,10 @@ gtk_tree_view_column_setup_sort_column_id_callback (GtkTreeViewColumn *tree_colu
 
       if (tree_column->sort_column_changed_signal == 0)
 	tree_column->sort_column_changed_signal =
-	  g_signal_connectc (G_OBJECT (model), "sort_column_changed",
-			     GTK_SIGNAL_FUNC (gtk_tree_view_model_sort_column_changed),
-			     tree_column, FALSE);
-
+	  g_signal_connect (G_OBJECT (model), "sort_column_changed",
+                            GTK_SIGNAL_FUNC (gtk_tree_view_model_sort_column_changed),
+                            tree_column);
+      
       if (gtk_tree_sortable_get_sort_column_id (GTK_TREE_SORTABLE (model),
 						&real_sort_column_id,
 						&real_order) &&
@@ -1870,10 +1870,10 @@ gtk_tree_view_column_set_sort_column_id (GtkTreeViewColumn *tree_column,
   gtk_tree_view_column_set_clickable (tree_column, TRUE);
 
   if (! tree_column->sort_clicked_signal)
-    tree_column->sort_clicked_signal = g_signal_connectc (G_OBJECT (tree_column),
-							  "clicked",
-							  G_CALLBACK (gtk_tree_view_column_sort),
-							  NULL, FALSE);
+    tree_column->sort_clicked_signal = g_signal_connect (G_OBJECT (tree_column),
+                                                         "clicked",
+                                                         G_CALLBACK (gtk_tree_view_column_sort),
+                                                         NULL);
 
   gtk_tree_view_column_setup_sort_column_id_callback (tree_column);
 }

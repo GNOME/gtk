@@ -294,29 +294,25 @@ gtk_tree_model_sort_set_model (GtkTreeModelSort *tree_model_sort,
       gint i, n_columns;
 
       tree_model_sort->changed_id =
-	g_signal_connectc (child_model,
-			   "range_changed",
-			   G_CALLBACK (gtk_tree_model_sort_range_changed),
-			   tree_model_sort,
-			   FALSE);
+	g_signal_connect (child_model,
+                          "range_changed",
+                          G_CALLBACK (gtk_tree_model_sort_range_changed),
+                          tree_model_sort);
       tree_model_sort->inserted_id =
-	g_signal_connectc (child_model,
-			   "inserted",
-			   G_CALLBACK (gtk_tree_model_sort_inserted),
-			   tree_model_sort,
-			   FALSE);
+	g_signal_connect (child_model,
+                          "inserted",
+                          G_CALLBACK (gtk_tree_model_sort_inserted),
+                          tree_model_sort);
       tree_model_sort->has_child_toggled_id =
-	g_signal_connectc (child_model,
-			   "has_child_toggled",
-			   G_CALLBACK (gtk_tree_model_sort_has_child_toggled),
-			   tree_model_sort,
-			   FALSE);
+	g_signal_connect (child_model,
+                          "has_child_toggled",
+                          G_CALLBACK (gtk_tree_model_sort_has_child_toggled),
+                          tree_model_sort);
       tree_model_sort->deleted_id =
-	g_signal_connectc (child_model,
-			   "deleted",
-			   G_CALLBACK (gtk_tree_model_sort_deleted),
-			   tree_model_sort,
-			   FALSE);
+	g_signal_connect (child_model,
+                          "deleted",
+                          G_CALLBACK (gtk_tree_model_sort_deleted),
+                          tree_model_sort);
 
       tree_model_sort->flags = gtk_tree_model_get_flags (child_model);
       n_columns = gtk_tree_model_get_n_columns (child_model);

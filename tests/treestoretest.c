@@ -276,10 +276,10 @@ make_window (gint view_type)
   /* buttons */
   button = gtk_button_new_with_label ("gtk_tree_store_remove");
   gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
-  g_signal_connectc (G_OBJECT (selection),
-		     "changed",
-		     selection_changed,
-		     button, FALSE);
+  g_signal_connect (G_OBJECT (selection),
+                    "changed",
+                    selection_changed,
+                    button);
   gtk_signal_connect (GTK_OBJECT (button), "clicked", iter_remove, tree_view);
   gtk_widget_set_sensitive (button, FALSE);
 
@@ -296,19 +296,19 @@ make_window (gint view_type)
   button = gtk_button_new_with_label ("gtk_tree_store_insert_before");
   gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
   gtk_signal_connect (GTK_OBJECT (button), "clicked", iter_insert_before, tree_view);
-  g_signal_connectc (G_OBJECT (selection),
-		     "changed",
-		     selection_changed,
-		     button, FALSE);
+  g_signal_connect (G_OBJECT (selection),
+                    "changed",
+                    selection_changed,
+                    button);
   gtk_widget_set_sensitive (button, FALSE);
 
   button = gtk_button_new_with_label ("gtk_tree_store_insert_after");
   gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
   gtk_signal_connect (GTK_OBJECT (button), "clicked", iter_insert_after, tree_view);
-  g_signal_connectc (G_OBJECT (selection),
-		     "changed",
-		     selection_changed,
-		     button, FALSE);
+  g_signal_connect (G_OBJECT (selection),
+                    "changed",
+                    selection_changed,
+                    button);
   gtk_widget_set_sensitive (button, FALSE);
 
   button = gtk_button_new_with_label ("gtk_tree_store_prepend");

@@ -3439,9 +3439,9 @@ gtk_text_view_focus_out_event (GtkWidget *widget, GdkEventFocus *event)
       gtk_text_view_check_cursor_blink (text_view);
     }
 
-  g_signal_disconnect_by_func (gdk_keymap_get_default (),
-			       keymap_direction_changed,
-			       text_view);
+  g_signal_handlers_disconnect_by_func (gdk_keymap_get_default (),
+                                        keymap_direction_changed,
+                                        text_view);
 
   text_view->need_im_reset = TRUE;
   gtk_im_context_focus_out (GTK_TEXT_VIEW (widget)->im_context);

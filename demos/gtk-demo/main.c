@@ -716,8 +716,8 @@ create_tree (void)
   gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view),
 			       GTK_TREE_VIEW_COLUMN (column));
 
-  g_signal_connectc (G_OBJECT (selection), "changed", GTK_SIGNAL_FUNC (selection_cb), model, FALSE);
-  gtk_signal_connect (GTK_OBJECT (tree_view), "row_activated", GTK_SIGNAL_FUNC (row_activated_cb), model);
+  g_signal_connect (G_OBJECT (selection), "changed", GTK_SIGNAL_FUNC (selection_cb), model);
+  g_signal_connect (G_OBJECT (tree_view), "row_activated", GTK_SIGNAL_FUNC (row_activated_cb), model);
 
   return tree_view;
 }

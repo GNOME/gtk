@@ -443,24 +443,24 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 		    GTK_TYPE_POINTER,
 		    GTK_TYPE_UINT);
   notebook_signals[FOCUS_TAB] = 
-    g_signal_newc ("focus_tab",
-                   G_TYPE_FROM_CLASS (object_class),
-                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                   G_STRUCT_OFFSET (GtkNotebookClass, focus_tab),
-                   NULL, NULL,
-                   gtk_marshal_VOID__ENUM,
-                   G_TYPE_NONE, 1,
-                   GTK_TYPE_NOTEBOOK_TAB);
+    g_signal_new ("focus_tab",
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (GtkNotebookClass, focus_tab),
+                  NULL, NULL,
+                  gtk_marshal_VOID__ENUM,
+                  G_TYPE_NONE, 1,
+                  GTK_TYPE_NOTEBOOK_TAB);
   notebook_signals[SELECT_PAGE] = 
-    g_signal_newc ("select_page",
-                   G_TYPE_FROM_CLASS (object_class),
-                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                   G_STRUCT_OFFSET (GtkNotebookClass, select_page),
-                   NULL, NULL,
-                   gtk_marshal_VOID__BOOLEAN,
-                   G_TYPE_NONE, 1,
-                   G_TYPE_BOOLEAN);
-
+    g_signal_new ("select_page",
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (GtkNotebookClass, select_page),
+                  NULL, NULL,
+                  gtk_marshal_VOID__BOOLEAN,
+                  G_TYPE_NONE, 1,
+                  G_TYPE_BOOLEAN);
+  
   binding_set = gtk_binding_set_by_class (object_class);
   gtk_binding_entry_add_signal (binding_set,
                                 GDK_Return, 0,

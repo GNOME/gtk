@@ -23,11 +23,10 @@ menuitem_cb (gpointer             callback_data,
                                     gtk_item_factory_path_from_widget (widget));
 
   /* Close dialog on user response */
-  g_signal_connectc (G_OBJECT (dialog),
-                     "response",
-                     G_CALLBACK (gtk_widget_destroy),
-                     NULL,
-                     FALSE);
+  g_signal_connect (G_OBJECT (dialog),
+                    "response",
+                    G_CALLBACK (gtk_widget_destroy),
+                    NULL);
   
   gtk_widget_show (dialog);
 }
@@ -71,11 +70,10 @@ toolbar_cb (GtkWidget *button,
                                    "You selected a toolbar button");
 
   /* Close dialog on user response */
-  g_signal_connectc (G_OBJECT (dialog),
-                     "response",
-                     G_CALLBACK (gtk_widget_destroy),
-                     NULL,
-                     FALSE);
+  g_signal_connect (G_OBJECT (dialog),
+                    "response",
+                    G_CALLBACK (gtk_widget_destroy),
+                    NULL);
   
   gtk_widget_show (dialog);
 }
@@ -201,9 +199,9 @@ do_appwindow (void)
       gtk_window_set_title (GTK_WINDOW (window), "Application Window");
 
       /* NULL window variable when window is closed */
-      g_signal_connectc (G_OBJECT (window), "destroy",
-                         G_CALLBACK (gtk_widget_destroyed),
-                         &window, FALSE);
+      g_signal_connect (G_OBJECT (window), "destroy",
+                        G_CALLBACK (gtk_widget_destroyed),
+                        &window);
 
       table = gtk_table_new (1, 4, FALSE);
       
@@ -314,15 +312,15 @@ do_appwindow (void)
       /* Show text widget info in the statusbar */
       buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (contents));
       
-      g_signal_connectc (G_OBJECT (buffer),
-                         "changed",
-                         G_CALLBACK (update_statusbar),
-                         statusbar, FALSE);
+      g_signal_connect (G_OBJECT (buffer),
+                        "changed",
+                        G_CALLBACK (update_statusbar),
+                        statusbar);
 
-      g_signal_connectc (G_OBJECT (buffer),
-                         "mark_set", /* cursor moved */
-                         G_CALLBACK (mark_set_callback),
-                         statusbar, FALSE);
+      g_signal_connect (G_OBJECT (buffer),
+                        "mark_set", /* cursor moved */
+                        G_CALLBACK (mark_set_callback),
+                        statusbar);
       
       update_statusbar (buffer, GTK_STATUSBAR (statusbar));
     }

@@ -158,142 +158,142 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
   klass->changed = gtk_text_buffer_real_changed;
 
   signals[INSERT_TEXT] =
-    g_signal_newc ("insert_text",
-                   G_OBJECT_CLASS_TYPE (object_class),
-                   G_SIGNAL_RUN_LAST,
-                   G_STRUCT_OFFSET (GtkTextBufferClass, insert_text),
-                   NULL, NULL,
-                   gtk_marshal_VOID__BOXED_STRING_INT,
-                   GTK_TYPE_NONE,
-                   3,
-                   GTK_TYPE_TEXT_ITER | G_SIGNAL_TYPE_STATIC_SCOPE,
-                   GTK_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
-                   GTK_TYPE_INT);
+    g_signal_new ("insert_text",
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkTextBufferClass, insert_text),
+                  NULL, NULL,
+                  gtk_marshal_VOID__BOXED_STRING_INT,
+                  GTK_TYPE_NONE,
+                  3,
+                  GTK_TYPE_TEXT_ITER | G_SIGNAL_TYPE_STATIC_SCOPE,
+                  GTK_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
+                  GTK_TYPE_INT);
 
   signals[INSERT_PIXBUF] =
-    g_signal_newc ("insert_pixbuf",
-                   G_OBJECT_CLASS_TYPE (object_class),
-                   G_SIGNAL_RUN_LAST,
-                   G_STRUCT_OFFSET (GtkTextBufferClass, insert_pixbuf),
-                   NULL, NULL,
-                   gtk_marshal_VOID__BOXED_OBJECT,
-                   GTK_TYPE_NONE,
-                   2,
-                   GTK_TYPE_TEXT_ITER | G_SIGNAL_TYPE_STATIC_SCOPE,
-                   GDK_TYPE_PIXBUF);
+    g_signal_new ("insert_pixbuf",
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkTextBufferClass, insert_pixbuf),
+                  NULL, NULL,
+                  gtk_marshal_VOID__BOXED_OBJECT,
+                  GTK_TYPE_NONE,
+                  2,
+                  GTK_TYPE_TEXT_ITER | G_SIGNAL_TYPE_STATIC_SCOPE,
+                  GDK_TYPE_PIXBUF);
 
   signals[INSERT_CHILD_ANCHOR] =
-    g_signal_newc ("insert_child_anchor",
-                   G_OBJECT_CLASS_TYPE (object_class),
-                   G_SIGNAL_RUN_LAST,
-                   G_STRUCT_OFFSET (GtkTextBufferClass, insert_child_anchor),
-		   NULL, NULL,
-                   gtk_marshal_VOID__BOXED_OBJECT,
-                   GTK_TYPE_NONE,
-                   2,
-                   GTK_TYPE_TEXT_ITER | G_SIGNAL_TYPE_STATIC_SCOPE,
-                   GTK_TYPE_TEXT_CHILD_ANCHOR);
+    g_signal_new ("insert_child_anchor",
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkTextBufferClass, insert_child_anchor),
+                  NULL, NULL,
+                  gtk_marshal_VOID__BOXED_OBJECT,
+                  GTK_TYPE_NONE,
+                  2,
+                  GTK_TYPE_TEXT_ITER | G_SIGNAL_TYPE_STATIC_SCOPE,
+                  GTK_TYPE_TEXT_CHILD_ANCHOR);
   
   signals[DELETE_RANGE] =
-    g_signal_newc ("delete_range",
-                   G_OBJECT_CLASS_TYPE (object_class),
-                   G_SIGNAL_RUN_LAST,
-                   G_STRUCT_OFFSET (GtkTextBufferClass, delete_range),
-		   NULL, NULL,
-                   gtk_marshal_VOID__BOXED_BOXED,
-                   GTK_TYPE_NONE,
-                   2,
-                   GTK_TYPE_TEXT_ITER | G_SIGNAL_TYPE_STATIC_SCOPE,
-                   GTK_TYPE_TEXT_ITER | G_SIGNAL_TYPE_STATIC_SCOPE);
+    g_signal_new ("delete_range",
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkTextBufferClass, delete_range),
+                  NULL, NULL,
+                  gtk_marshal_VOID__BOXED_BOXED,
+                  GTK_TYPE_NONE,
+                  2,
+                  GTK_TYPE_TEXT_ITER | G_SIGNAL_TYPE_STATIC_SCOPE,
+                  GTK_TYPE_TEXT_ITER | G_SIGNAL_TYPE_STATIC_SCOPE);
 
   signals[CHANGED] =
-    g_signal_newc ("changed",
-                   G_OBJECT_CLASS_TYPE (object_class),
-                   G_SIGNAL_RUN_LAST,                   
-                   G_STRUCT_OFFSET (GtkTextBufferClass, changed),
-		   NULL, NULL,
-                   gtk_marshal_VOID__VOID,
-                   GTK_TYPE_NONE,
-                   0);
+    g_signal_new ("changed",
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,                   
+                  G_STRUCT_OFFSET (GtkTextBufferClass, changed),
+                  NULL, NULL,
+                  gtk_marshal_VOID__VOID,
+                  GTK_TYPE_NONE,
+                  0);
 
   signals[MODIFIED_CHANGED] =
-    g_signal_newc ("modified_changed",
-                   G_OBJECT_CLASS_TYPE (object_class),
-                   G_SIGNAL_RUN_LAST,
-                   G_STRUCT_OFFSET (GtkTextBufferClass, modified_changed),
-		   NULL, NULL,
-                   gtk_marshal_VOID__VOID,
-                   GTK_TYPE_NONE,
-                   0);
+    g_signal_new ("modified_changed",
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkTextBufferClass, modified_changed),
+                  NULL, NULL,
+                  gtk_marshal_VOID__VOID,
+                  GTK_TYPE_NONE,
+                  0);
 
   signals[MARK_SET] =
-    g_signal_newc ("mark_set",
-                   G_OBJECT_CLASS_TYPE (object_class),
-                   G_SIGNAL_RUN_LAST,                   
-                   G_STRUCT_OFFSET (GtkTextBufferClass, mark_set),
-		   NULL, NULL,
-                   gtk_marshal_VOID__BOXED_OBJECT,
-                   GTK_TYPE_NONE,
-                   2,
-                   GTK_TYPE_TEXT_ITER,
-                   GTK_TYPE_TEXT_MARK);
+    g_signal_new ("mark_set",
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,                   
+                  G_STRUCT_OFFSET (GtkTextBufferClass, mark_set),
+                  NULL, NULL,
+                  gtk_marshal_VOID__BOXED_OBJECT,
+                  GTK_TYPE_NONE,
+                  2,
+                  GTK_TYPE_TEXT_ITER,
+                  GTK_TYPE_TEXT_MARK);
 
   signals[MARK_DELETED] =
-    g_signal_newc ("mark_deleted",
-                   G_OBJECT_CLASS_TYPE (object_class),
-                   G_SIGNAL_RUN_LAST,                   
-                   G_STRUCT_OFFSET (GtkTextBufferClass, mark_deleted),
-		   NULL, NULL,
-                   gtk_marshal_VOID__OBJECT,
-                   GTK_TYPE_NONE,
-                   1,
-                   GTK_TYPE_TEXT_MARK);
+    g_signal_new ("mark_deleted",
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,                   
+                  G_STRUCT_OFFSET (GtkTextBufferClass, mark_deleted),
+                  NULL, NULL,
+                  gtk_marshal_VOID__OBJECT,
+                  GTK_TYPE_NONE,
+                  1,
+                  GTK_TYPE_TEXT_MARK);
   
   signals[APPLY_TAG] =
-    g_signal_newc ("apply_tag",
-                   G_OBJECT_CLASS_TYPE (object_class),
-                   G_SIGNAL_RUN_LAST,
-                   G_STRUCT_OFFSET (GtkTextBufferClass, apply_tag),
-		   NULL, NULL,
-                   gtk_marshal_VOID__OBJECT_BOXED_BOXED,
-                   GTK_TYPE_NONE,
-                   3,
-                   GTK_TYPE_TEXT_TAG,
-                   GTK_TYPE_TEXT_ITER,
-                   GTK_TYPE_TEXT_ITER);
+    g_signal_new ("apply_tag",
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkTextBufferClass, apply_tag),
+                  NULL, NULL,
+                  gtk_marshal_VOID__OBJECT_BOXED_BOXED,
+                  GTK_TYPE_NONE,
+                  3,
+                  GTK_TYPE_TEXT_TAG,
+                  GTK_TYPE_TEXT_ITER,
+                  GTK_TYPE_TEXT_ITER);
 
   signals[REMOVE_TAG] =
-    g_signal_newc ("remove_tag",
-                   G_OBJECT_CLASS_TYPE (object_class),
-                   G_SIGNAL_RUN_LAST,
-                   G_STRUCT_OFFSET (GtkTextBufferClass, remove_tag),
-		   NULL, NULL,
-                   gtk_marshal_VOID__OBJECT_BOXED_BOXED,
-                   GTK_TYPE_NONE,
-                   3,
-                   GTK_TYPE_TEXT_TAG,
-                   GTK_TYPE_TEXT_ITER,
-                   GTK_TYPE_TEXT_ITER);
+    g_signal_new ("remove_tag",
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkTextBufferClass, remove_tag),
+                  NULL, NULL,
+                  gtk_marshal_VOID__OBJECT_BOXED_BOXED,
+                  GTK_TYPE_NONE,
+                  3,
+                  GTK_TYPE_TEXT_TAG,
+                  GTK_TYPE_TEXT_ITER,
+                  GTK_TYPE_TEXT_ITER);
 
   signals[BEGIN_USER_ACTION] =
-    g_signal_newc ("begin_user_action",
-                   G_OBJECT_CLASS_TYPE (object_class),
-                   G_SIGNAL_RUN_LAST,                   
-                   G_STRUCT_OFFSET (GtkTextBufferClass, begin_user_action),
-		   NULL, NULL,
-                   gtk_marshal_VOID__VOID,
-                   GTK_TYPE_NONE,
-                   0);
+    g_signal_new ("begin_user_action",
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,                   
+                  G_STRUCT_OFFSET (GtkTextBufferClass, begin_user_action),
+                  NULL, NULL,
+                  gtk_marshal_VOID__VOID,
+                  GTK_TYPE_NONE,
+                  0);
 
   signals[END_USER_ACTION] =
-    g_signal_newc ("end_user_action",
-                   G_OBJECT_CLASS_TYPE (object_class),
-                   G_SIGNAL_RUN_LAST,                   
-                   G_STRUCT_OFFSET (GtkTextBufferClass, end_user_action),
-		   NULL, NULL,
-                   gtk_marshal_VOID__VOID,
-                   GTK_TYPE_NONE,
-                   0);  
+    g_signal_new ("end_user_action",
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,                   
+                  G_STRUCT_OFFSET (GtkTextBufferClass, end_user_action),
+                  NULL, NULL,
+                  gtk_marshal_VOID__VOID,
+                  GTK_TYPE_NONE,
+                  0);  
 }
 
 void

@@ -72,38 +72,38 @@ gtk_text_tag_table_class_init (GtkTextTagTableClass *klass)
   object_class->finalize = gtk_text_tag_table_finalize;
   
   signals[TAG_CHANGED] =
-    g_signal_newc ("tag_changed",
-                   G_OBJECT_CLASS_TYPE (object_class),
-                   G_SIGNAL_RUN_LAST,
-                   G_STRUCT_OFFSET (GtkTextTagTableClass, tag_changed),
-		   NULL, NULL,
-		   gtk_marshal_VOID__OBJECT_BOOLEAN,
-                   G_TYPE_NONE,
-                   2,
-                   G_TYPE_OBJECT,
-                   G_TYPE_BOOLEAN);  
+    g_signal_new ("tag_changed",
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkTextTagTableClass, tag_changed),
+                  NULL, NULL,
+                  gtk_marshal_VOID__OBJECT_BOOLEAN,
+                  G_TYPE_NONE,
+                  2,
+                  G_TYPE_OBJECT,
+                  G_TYPE_BOOLEAN);  
 
   signals[TAG_ADDED] =
-    g_signal_newc ("tag_added",
-                   GTK_CLASS_TYPE (object_class),
-                   G_SIGNAL_RUN_LAST,
-                   G_STRUCT_OFFSET (GtkTextTagTableClass, tag_added),
-		   NULL, NULL,
-		   gtk_marshal_VOID__OBJECT,
-                   GTK_TYPE_NONE,
-                   1,
-                   G_TYPE_OBJECT);
+    g_signal_new ("tag_added",
+                  GTK_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkTextTagTableClass, tag_added),
+                  NULL, NULL,
+                  gtk_marshal_VOID__OBJECT,
+                  GTK_TYPE_NONE,
+                  1,
+                  G_TYPE_OBJECT);
 
   signals[TAG_REMOVED] =
-    g_signal_newc ("tag_removed",                   
-                   GTK_CLASS_TYPE (object_class),
-                   G_SIGNAL_RUN_LAST,
-                   G_STRUCT_OFFSET (GtkTextTagTableClass, tag_removed),
-		   NULL, NULL,
-		   gtk_marshal_VOID__OBJECT,
-                   GTK_TYPE_NONE,
-                   1,
-                   G_TYPE_OBJECT);
+    g_signal_new ("tag_removed",                   
+                  GTK_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkTextTagTableClass, tag_removed),
+                  NULL, NULL,
+                  gtk_marshal_VOID__OBJECT,
+                  GTK_TYPE_NONE,
+                  1,
+                  G_TYPE_OBJECT);
 }
 
 void

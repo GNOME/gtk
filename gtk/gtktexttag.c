@@ -616,17 +616,17 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                 _("Whether this tag affects text visibility"));
 
   signals[EVENT] =
-    g_signal_newc ("event",
-                   G_OBJECT_CLASS_TYPE (object_class),
-                   G_SIGNAL_RUN_LAST,
-                   GTK_SIGNAL_OFFSET (GtkTextTagClass, event),
-		   _gtk_boolean_handled_accumulator, NULL,
-		   gtk_marshal_BOOLEAN__OBJECT_BOXED_BOXED,
-                   G_TYPE_BOOLEAN,
-                   3,
-                   G_TYPE_OBJECT,
-                   GDK_TYPE_EVENT,
-                   GTK_TYPE_TEXT_ITER);
+    g_signal_new ("event",
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  GTK_SIGNAL_OFFSET (GtkTextTagClass, event),
+                  _gtk_boolean_handled_accumulator, NULL,
+                  gtk_marshal_BOOLEAN__OBJECT_BOXED_BOXED,
+                  G_TYPE_BOOLEAN,
+                  3,
+                  G_TYPE_OBJECT,
+                  GDK_TYPE_EVENT,
+                  GTK_TYPE_TEXT_ITER);
 }
 
 void
