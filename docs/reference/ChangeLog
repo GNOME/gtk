@@ -1,5 +1,11 @@
 2001-11-10  Matthias Clasen  <matthiasc@poet.de>
 
+	* gtk/tmpl/gtkpaned.sgml: Document gtk_paned_set_gutter_size
+	as noop. (#45802)
+
+	* gtk/tmpl/gtkcolorsel.sgml: Remove stuff duplicating inline
+	docs. (#60481)
+
 	* gtk/tmpl/gtkstock.sgml: Document all stock items
 	with their stock text. 
 

@@ -780,7 +780,8 @@ gtk_container_get_property (GObject         *object,
  * gtk_container_set_border_width:
  * @container: a #GtkContainer
  * @border_width: amount of blank space to leave <emphasis>outside</emphasis> the container.
- * Valid values are in the range 0-65535 pixels.
+ *   Valid values are in the range 0-65535 pixels.
+ *
  * The border width of a container is the amount of space to leave
  * around the outside of the container. The only exception to this is
  * #GtkWindow; because toplevel windows can't leave space outside,
@@ -788,7 +789,6 @@ gtk_container_get_property (GObject         *object,
  * the container. To add space to only one side, one approach is to
  * create a #GtkAlignment widget, call gtk_widget_set_usize() to give
  * it a size, and place it on the side of the container as a spacer.
- * 
  **/
 void
 gtk_container_set_border_width (GtkContainer *container,

@@ -27,10 +27,10 @@ and should be accessed using the functions below.
 
 <!-- ##### FUNCTION gtk_color_selection_new ##### -->
 <para>
-Create a new #GtkColorSelection.
+
 </para>
 
-@Returns: a #GtkColorSelection.
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_color_selection_set_update_policy ##### -->
@@ -71,8 +71,6 @@ time.
 
 @colorsel: 
 @has_opacity: 
-<!-- # Unused Parameters # -->
-@use_opacity: 
 
 
 <!-- ##### FUNCTION gtk_color_selection_get_has_opacity_control ##### -->
@@ -91,8 +89,6 @@ time.
 
 @colorsel: 
 @has_palette: 
-<!-- # Unused Parameters # -->
-@use_palette: 
 
 
 <!-- ##### FUNCTION gtk_color_selection_get_has_palette ##### -->
@@ -226,23 +222,20 @@ time.
 
 <!-- ##### FUNCTION gtk_color_selection_set_color ##### -->
 <para>
-Sets the color in the #GtkColorSelection.  The widgets are updated
-to reflect the new color.
+
 </para>
 
-@colorsel: a #GtkColorSelection.
-@color: a color array consisting of 4 gfloat values for red, green,
-blue, and opacity.
+@colorsel:
+@color: 
 
 
 <!-- ##### FUNCTION gtk_color_selection_get_color ##### -->
 <para>
-Retrieve the currently selected color value.
+
 </para>
 
-@colorsel: a #GtkColorSelection
-@color: a color array consisting of 4 gfloat values for red, green,
-blue, and opacity.
+@colorsel:
+@color:
 
 
 <!-- ##### SIGNAL GtkColorSelection::color-changed ##### -->

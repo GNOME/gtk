@@ -1968,16 +1968,17 @@ gtk_tree_view_column_get_sort_indicator  (GtkTreeViewColumn     *tree_column)
  * @tree_column: a #GtkTreeViewColumn
  * @order: sort order that the sort indicator should indicate
  *
- * Changes the appearance of the sort indicator. (This <emphasis>does
- * not</emphasis> actually sort the model.  Use
+ * Changes the appearance of the sort indicator. 
+ * 
+ * This <emphasis>does not</emphasis> actually sort the model.  Use
  * gtk_tree_view_column_set_sort_column_id() if you want automatic sorting
  * support.  This function is primarily for custom sorting behavior, and should
- * be used in conjunction with #gtk_tree_sortable_set_sort_column() to do
- * that. For custom models, the mechanism will vary. The sort indicator changes
- * direction to indicate normal sort or reverse sort. Note that you must have
- * the sort indicator enabled to see anything when calling this function; see
- * gtk_tree_view_column_set_sort_indicator().
+ * be used in conjunction with gtk_tree_sortable_set_sort_column() to do
+ * that. For custom models, the mechanism will vary. 
  * 
+ * The sort indicator changes direction to indicate normal sort or reverse sort.
+ * Note that you must have the sort indicator enabled to see anything when 
+ * calling this function; see gtk_tree_view_column_set_sort_indicator().
  **/
 void
 gtk_tree_view_column_set_sort_order      (GtkTreeViewColumn     *tree_column,

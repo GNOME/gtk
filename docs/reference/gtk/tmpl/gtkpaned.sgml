@@ -112,9 +112,6 @@ Old name for gtk_paned_set_handle_size()
 Old name for gtk_paned_set_gutter_size()
 </para>
 
-@p: 
-@s: 
-
 
 <!-- ##### FUNCTION gtk_paned_pack1 ##### -->
 <para>
@@ -140,14 +137,12 @@ Add a child to the bottom or right pane.
 
 <!-- ##### MACRO gtk_paned_set_gutter_size ##### -->
 <para>
-Set the width of the gutter. (The area between the two panes).
+In older versions of Gtk, this function used to set the width of the 
+gutter (the area between the two panes). It does nothing now.
 </para>
 
-@p: 
-@s: 
-<!-- # Unused Parameters # -->
-@paned: a paned widget
-@size: the width of the widget in pixels
+@p: a paned widget
+@s: the width of the gutter in pixels
 
 
 <!-- ##### FUNCTION gtk_paned_set_position ##### -->
