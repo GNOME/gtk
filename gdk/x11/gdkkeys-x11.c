@@ -499,7 +499,7 @@ gdk_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
  * Return value: a keyval, or 0 if none was mapped to the given @key
  **/
 guint
-gdk_key_key_to_keyval (GdkKeymap          *keymap,
+gdk_keymap_lookup_key (GdkKeymap          *keymap,
                        const GdkKeymapKey *key)
 {
   g_return_val_if_fail (keymap == NULL || GDK_IS_KEYMAP (keymap), 0);

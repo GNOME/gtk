@@ -1,3 +1,8 @@
+2000-12-07  Havoc Pennington  <hp@pobox.com>
+
+	* gdk/x11/gdkkeys-x11.c (gdk_keymap_lookup_key): fix name of 
+	function, noticed by Alex
+
 2000-12-06  Elliot Lee  <sopwith@redhat.com>
 	* configure.in: Detect freetype properly
 	* modules/basic/Makefile.am, gdk/linux-fb/Makefile.am: Make use of above.
