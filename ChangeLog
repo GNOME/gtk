@@ -1,3 +1,24 @@
+Mon Mar 29 17:02:58 1999  Owen Taylor  <otaylor@redhat.com>
+
+        Patches from Akira Higuchi <a-higuti@math.sci.hokudai.ac.jp>
+	gtk-a-higuti-990322-[0-3]
+
+	* gdk/gdkfont.c (gdk_text_extents_wc): Make  work when
+	sizeof(wchar_t) != sizeof (GdkWChar)
+
+	* configure.in: Fix confusion between GTK_LOCALE_[C]FLAGS
+	that was causing -DX_LOCALE not	to work.
+
+	* gtk/gtkrc.c (gtk_rc_init):
+	X_LOCALE will never have LC_MESSAGES defined
+
+	* gdk/gdk.c (gdk_init_check):
+	Remove --xim-preedit and --xim-status from argv properly.
+
+	* gdk/gdkim.c (gdk_ic_real_new): Add a gdk_flush() so
+	that the client window is present on the X server
+	before we pass it to the input method.
+
 Tue Mar  9 10:46:49 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkdnd.c (motif_find_drag_window): Fix bug where

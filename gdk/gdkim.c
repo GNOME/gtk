@@ -518,6 +518,12 @@ gdk_ic_real_new (GdkIC *ic)
       break;
     }
 
+  /* We have to ensure that the client window is actually created on
+   * the X server, or XCreateIC fails because the XIM server can't get
+   * information about the client window.
+   */
+  gdk_flush();
+  
   if (preedit_attr != NULL && status_attr != NULL)
     private->xic = XCreateIC (xim_im,
 			      XNInputStyle,

@@ -416,7 +416,7 @@ need_x_locale=yes)
 AC_MSG_RESULT($need_x_locale)
 
 if test $need_x_locale = yes; then
-  GTK_LOCALE_CFLAGS="-DX_LOCALE"
+  GTK_LOCALE_FLAGS="-DX_LOCALE"
 fi
 
 # Checks for header files.

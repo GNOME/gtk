@@ -333,6 +333,7 @@ gdk_init_check (int	 *argc,
 		      gdk_im_set_best_style (GDK_IM_PREEDIT_POSITION);
 		    else if (strcmp ("callbacks", (*argv)[i]) == 0)
 		      gdk_im_set_best_style (GDK_IM_PREEDIT_CALLBACKS);
+		    (*argv)[i] = NULL;
 		  }
 	      }
 	    else if (strcmp ("--xim-status", (*argv)[i]) == 0)
@@ -348,6 +349,7 @@ gdk_init_check (int	 *argc,
 		      gdk_im_set_best_style (GDK_IM_STATUS_AREA);
 		    else if (strcmp ("callbacks", (*argv)[i]) == 0)
 		      gdk_im_set_best_style (GDK_IM_STATUS_CALLBACKS);
+		    (*argv)[i] = NULL;
 		  }
 	      }
 #endif

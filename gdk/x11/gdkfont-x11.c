@@ -578,7 +578,20 @@ gdk_text_extents_wc (GdkFont        *font,
       }
     case GDK_FONT_FONTSET:
       fontset = (XFontSet) private->xfont;
-      XwcTextExtents (fontset, text, text_length, &ink, &logical);
+
+      if (sizeof(GdkWChar) == sizeof(wchar_t))
+	XwcTextExtents (fontset, (wchar_t *)text, text_length, &ink, &logical);
+      else
+	{
+	  wchar_t *text_wchar;
+	  gint i;
+	  
+	  text_wchar = g_new (wchar_t, text_length);
+	  for (i = 0; i < text_length; i++)
+	    text_wchar[i] = text[i];
+	  XwcTextExtents (fontset, text_wchar, text_length, &ink, &logical);
+	  g_free (text_wchar);
+	}
       if (lbearing)
 	*lbearing = ink.x;
       if (rbearing)
