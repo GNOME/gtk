@@ -227,13 +227,58 @@ gdk_drawable_impl_x11_finalize (GObject *object)
 gboolean
 _gdk_x11_have_render (GdkDisplay *display)
 {
-  /* This check is cheap, but if we have to do version checks, we will
-   * need to cache the result since version checks are round-trip
-   */
-  int event_base, error_base;
+  Display *xdisplay = GDK_DISPLAY_XDISPLAY (display);
+  GdkDisplayX11 *x11display = GDK_DISPLAY_X11 (display);
 
-  return XRenderQueryExtension (GDK_DISPLAY_XDISPLAY (display), 
-				&event_base, &error_base);
+  if (x11display->have_render == GDK_UNKNOWN)
+    {
+      int event_base, error_base;
+      x11display->have_render =
+	XRenderQueryExtension (xdisplay, &event_base, &error_base)
+	? GDK_YES : GDK_NO;
+
+      if (x11display->have_render == GDK_YES)
+	{
+	  /*
+	   * Sun advertises RENDER, but fails to support 32-bit pixmaps.
+	   * That is just no good.  Therefore, we check all screens
+	   * for proper support.
+	   */
+
+	  int screen;
+	  for (screen = 0; screen < ScreenCount (xdisplay); screen++)
+	    {
+	      int count;
+	      int *depths = XListDepths (xdisplay, screen, &count);
+	      gboolean has_8 = FALSE, has_32 = FALSE;
+
+	      if (depths)
+		{
+		  int i;
+
+		  for (i = 0; i < count; i++)
+		    {
+		      if (depths[i] == 8)
+			has_8 = TRUE;
+		      else if (depths[i] == 32)
+			has_32 = TRUE;
+		    }
+		  XFree (depths);
+		}
+
+	      if (!(has_8 && has_32))
+		{
+		  g_warning ("The X server advertises that RENDER support is present,\n"
+			     "but fails to supply the necessary pixmap support.  In\n"
+			     "other words, it is buggy.");
+		  x11display->have_render = GDK_NO;
+		  break;
+		}
+	    }
+	}
+    }
+
+  return x11display->have_render == GDK_YES;
 }
 
 #ifdef HAVE_XFT2

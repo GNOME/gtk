@@ -79,6 +79,7 @@ struct _GdkDisplayX11
   gboolean have_shm_pixmaps;
   GdkTristate have_shape;
   GdkTristate gravity_works;
+  GdkTristate have_render;
   
   /* Information about current pointer and keyboard grabs held by this
    * client. If gdk_pointer_xgrab_window or gdk_keyboard_xgrab_window
