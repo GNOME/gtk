@@ -1,3 +1,11 @@
+Thu Nov 19 00:15:27 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkctree.c (gtk_ctree_node_nth): return the nth GtkCTreeNode
+	in row_list. (from Samuel Solon <ssolon@usa.net>)
+	
+	* gtk/gtkclist.c (gtk_clist_get_column_title): return column title
+	(gtk_clist_get_column_widget): return column widget
+
 Wed Nov 18 11:54:57 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkdnd.c (gtk_drag_find_widget): Accept drops

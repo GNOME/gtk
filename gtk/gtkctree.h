@@ -238,6 +238,8 @@ GtkCTreeNode * gtk_ctree_last                    (GtkCTree     *ctree,
 					          GtkCTreeNode *node);
 GtkCTreeNode * gtk_ctree_find_node_ptr           (GtkCTree     *ctree,
 					          GtkCTreeRow  *ctree_row);
+GtkCTreeNode * gtk_ctree_node_nth                (GtkCTree     *ctree,
+						  guint         row);
 gboolean gtk_ctree_find                          (GtkCTree     *ctree,
 					          GtkCTreeNode *node,
 					          GtkCTreeNode *child);

@@ -429,10 +429,18 @@ void gtk_clist_set_column_title (GtkCList    *clist,
 				 gint         column,
 				 const gchar *title);
 
+/* returns the title of column. Returns NULL if title is not set */
+gchar * gtk_clist_get_column_title (GtkCList *clist,
+				    gint      column);
+
 /* set a widget instead of a title for the column title button */
 void gtk_clist_set_column_widget (GtkCList  *clist,
 				  gint       column,
 				  GtkWidget *widget);
+
+/* returns the column widget */
+GtkWidget * gtk_clist_get_column_widget (GtkCList *clist,
+					 gint      column);
 
 /* set the justification on a column */
 void gtk_clist_set_column_justification (GtkCList         *clist,

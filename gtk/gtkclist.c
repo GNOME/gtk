@@ -1177,6 +1177,7 @@ gtk_clist_thaw (GtkCList *clist)
  *   gtk_clist_column_titles_active
  *   gtk_clist_column_titles_passive
  *   gtk_clist_set_column_title
+ *   gtk_clist_get_column_title
  *   gtk_clist_set_column_widget
  *   gtk_clist_set_column_justification
  *   gtk_clist_set_column_visibility
@@ -1346,6 +1347,19 @@ gtk_clist_set_column_title (GtkCList    *clist,
     size_allocate_title_buttons (clist);
 }
 
+gchar *
+gtk_clist_get_column_title (GtkCList *clist,
+			    gint      column)
+{
+  g_return_val_if_fail (clist != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_CLIST (clist), NULL);
+
+  if (column < 0 || column >= clist->columns)
+    return NULL;
+
+  return clist->column[column].title;
+}
+
 void
 gtk_clist_set_column_widget (GtkCList  *clist,
 			     gint       column,
@@ -1387,6 +1401,22 @@ gtk_clist_set_column_widget (GtkCList  *clist,
    * column button positions have to be re-computed */
   if (GTK_WIDGET_VISIBLE (clist) && new_button)
     size_allocate_title_buttons (clist);
+}
+
+GtkWidget *
+gtk_clist_get_column_widget (GtkCList *clist,
+			     gint      column)
+{
+  g_return_val_if_fail (clist != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_CLIST (clist), NULL);
+
+  if (column < 0 || column >= clist->columns)
+    return NULL;
+
+  if (clist->column[column].button)
+    return GTK_BUTTON (clist->column[column].button)->child;
+
+  return NULL;
 }
 
 void

@@ -4294,6 +4294,19 @@ gtk_ctree_find_node_ptr (GtkCTree    *ctree,
   return node;
 }
 
+GtkCTreeNode *
+gtk_ctree_node_nth (GtkCTree *ctree,
+		    guint     row)
+{
+  g_return_val_if_fail (ctree != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_CTREE (ctree), NULL);
+
+  if ((row < 0) || (row >= GTK_CLIST(ctree)->rows))
+    return NULL;
+ 
+  return GTK_CTREE_NODE (g_list_nth (GTK_CLIST (ctree)->row_list, row));
+}
+
 gboolean
 gtk_ctree_find (GtkCTree     *ctree,
 		GtkCTreeNode *node,
