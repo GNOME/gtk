@@ -551,6 +551,22 @@ gtk_file_chooser_default_finalize (GObject *object)
   if (impl->preview_path)
     gtk_file_path_free (impl->preview_path);
 
+  /* Free all the Models we have */
+  if (impl->browse_files_model)
+    g_object_unref (impl->browse_files_model);
+
+  if (impl->browse_directories_model)
+    g_object_unref (impl->browse_directories_model);
+
+  if (impl->shortcuts_model)
+    g_object_unref (impl->shortcuts_model);
+
+  if (impl->shortcuts_filter_model)
+    g_object_unref (impl->shortcuts_filter_model);
+
+  if (impl->sort_model)
+    g_object_unref (impl->sort_model);
+
   g_free (impl->preview_display_name);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
