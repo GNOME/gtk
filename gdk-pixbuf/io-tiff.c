@@ -111,7 +111,7 @@ image_load_real (FILE *f, TiffData *context)
 
 	if (context) {
 		gdk_pixbuf_unref (pixbuf);
-		(* context->update_func) (pixbuf, context->user_data, 0, 0, w, h);
+		(* context->update_func) (pixbuf, 0, 0, w, h, context->user_data);
 	}
 
 	return pixbuf;
@@ -139,6 +139,8 @@ image_load (FILE *f)
 gpointer
 image_begin_load (ModulePreparedNotifyFunc prepare_func,
 		  ModuleUpdatedNotifyFunc update_func,
+		  ModuleFrameDoneNotifyFunc frame_done_func,
+		  ModuleAnimationDoneNotifyFunc anim_done_func,
 		  gpointer user_data)
 {
 	TiffData *context;

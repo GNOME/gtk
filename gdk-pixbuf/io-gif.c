@@ -786,31 +786,31 @@ gif_get_lzw (GifContext *context)
 		if (lower_bound <= upper_bound && first_pass == context->draw_pass) {
 			(* context->update_func)
 				(context->pixbuf,
-				 context->user_data,
 				 0, lower_bound,
 				 gdk_pixbuf_get_width (context->pixbuf),
-				 upper_bound - lower_bound);
+				 upper_bound - lower_bound,
+				 context->user_data);
 		} else {
 			if (lower_bound <= upper_bound) {
 				(* context->update_func)
 					(context->pixbuf,
-					 context->user_data,
 					 0, 0,
 					 gdk_pixbuf_get_width (context->pixbuf),
-					 gdk_pixbuf_get_height (context->pixbuf));
+					 gdk_pixbuf_get_height (context->pixbuf),
+					 context->user_data);
 			} else {
 				(* context->update_func)
 					(context->pixbuf,
-					 context->user_data,
 					 0, 0,
 					 gdk_pixbuf_get_width (context->pixbuf),
-					 upper_bound);
+					 upper_bound,
+					 context->user_data);
 				(* context->update_func)
 					(context->pixbuf,
-					 context->user_data,
 					 0, lower_bound,
 					 gdk_pixbuf_get_width (context->pixbuf),
-					 gdk_pixbuf_get_height (context->pixbuf));
+					 gdk_pixbuf_get_height (context->pixbuf),
+					 context->user_data);
 			}
 		}
 	}
@@ -1087,6 +1087,8 @@ image_load (FILE *file)
 gpointer
 image_begin_load (ModulePreparedNotifyFunc prepare_func,
 		  ModuleUpdatedNotifyFunc update_func,
+		  ModuleFrameDoneNotifyFunc frame_done_func,
+		  ModuleAnimationDoneNotifyFunc anim_done_func,
 		  gpointer user_data)
 {
 	GifContext *context;

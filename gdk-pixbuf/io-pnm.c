@@ -77,7 +77,10 @@ typedef struct {
 
 GdkPixbuf *image_load (FILE *f);
 gpointer image_begin_load (ModulePreparedNotifyFunc func, 
-			   ModuleUpdatedNotifyFunc func2, gpointer user_data);
+			   ModuleUpdatedNotifyFunc func2,
+			   ModuleFrameDoneNotifyFunc frame_done_func,
+			   ModuleAnimationDoneNotifyFunc anim_done_func,
+			   gpointer user_data);
 void image_stop_load (gpointer context);
 gboolean image_load_increment(gpointer context, guchar *buf, guint size);
 
@@ -686,6 +689,8 @@ image_load (FILE *f)
 gpointer
 image_begin_load (ModulePreparedNotifyFunc prepared_func, 
 		  ModuleUpdatedNotifyFunc  updated_func,
+		  ModuleFrameDoneNotifyFunc frame_done_func,
+		  ModuleAnimationDoneNotifyFunc anim_done_func,
 		  gpointer user_data)
 {
 	PnmLoaderContext *context;
@@ -836,11 +841,11 @@ image_load_increment (gpointer data, guchar *buf, guint size)
 
 				/* send updated signal */
 				(* context->updated_func) (context->pixbuf,
-						 context->user_data,
-						 0, 
-						 context->output_row-1,
-						 context->width, 
-						 1);
+							   0, 
+							   context->output_row-1,
+							   context->width, 
+							   1,
+							   context->user_data);
 			}
 		}
 

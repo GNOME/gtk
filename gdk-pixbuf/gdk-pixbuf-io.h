@@ -1,4 +1,5 @@
-/* GdkPixbuf library - Io handling
+/* GdkPixbuf library - Io handling.  This is an internal header for gdk-pixbuf.
+ * You should never use it unless you are doing developement for gdkpixbuf itself.
  *
  * Copyright (C) 1999 The Free Software Foundation
  *
@@ -38,9 +39,16 @@ extern "C" {
 
 
 typedef void (* ModulePreparedNotifyFunc) (GdkPixbuf *pixbuf, gpointer user_data);
-typedef void (* ModuleUpdatedNotifyFunc) (GdkPixbuf *pixbuf, gpointer user_data,
+typedef void (* ModuleUpdatedNotifyFunc) (GdkPixbuf *pixbuf,
 					  guint x, guint y,
-					  guint width, guint height);
+					  guint width, guint height,
+					  gpointer user_data);
+/* Needed only for animated images. */
+typedef void (* ModuleFrameDoneNotifyFunc) (GdkPixbuf *pixbuf,
+					    gint frame,
+					    gpointer user_data);
+typedef void (* ModuleAnimationDoneNotifyFunc) (GdkPixbuf *pixbuf,
+						gpointer user_data);
 
 typedef struct _GdkPixbufModule GdkPixbufModule;
 struct _GdkPixbufModule {
@@ -54,6 +62,8 @@ struct _GdkPixbufModule {
 
         gpointer (* begin_load) (ModulePreparedNotifyFunc prepare_func,
 				 ModuleUpdatedNotifyFunc update_func,
+				 ModuleFrameDoneNotifyFunc frame_done_func,
+				 ModuleAnimationDoneNotifyFunc anim_done_func,
 				 gpointer user_data);
         void (* stop_load) (gpointer context);
         gboolean (* load_increment) (gpointer context, const guchar *buf, guint size);

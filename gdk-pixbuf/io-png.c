@@ -276,6 +276,8 @@ struct _LoadContext {
 gpointer
 image_begin_load (ModulePreparedNotifyFunc prepare_func,
 		  ModuleUpdatedNotifyFunc update_func,
+		  ModuleFrameDoneNotifyFunc frame_done_func,
+		  ModuleAnimationDoneNotifyFunc anim_done_func,
 		  gpointer user_data)
 {
         LoadContext* lc;
@@ -367,34 +369,38 @@ image_load_increment(gpointer context, guchar *buf, guint size)
                         
                         if (pass_diff == 0) {
                                 /* start and end row were in the same pass */
-                                (lc->update_func)(lc->pixbuf, lc->notify_user_data, 0,
+                                (lc->update_func)(lc->pixbuf, 0,
                                                   lc->first_row_seen_in_chunk,
                                                   lc->pixbuf->art_pixbuf->width,
                                                   (lc->last_row_seen_in_chunk -
-                                                   lc->first_row_seen_in_chunk) + 1);
+                                                   lc->first_row_seen_in_chunk) + 1,
+						  lc->notify_user_data);
                         } else if (pass_diff == 1) {
                                 /* We have from the first row seen to
                                    the end of the image (max row
                                    seen), then from the top of the
                                    image to the last row seen */
                                 /* first row to end */
-                                (lc->update_func)(lc->pixbuf, lc->notify_user_data, 0,
+                                (lc->update_func)(lc->pixbuf, 0,
                                                   lc->first_row_seen_in_chunk,
                                                   lc->pixbuf->art_pixbuf->width,
                                                   (lc->max_row_seen_in_chunk -
-                                                   lc->first_row_seen_in_chunk) + 1);
+                                                   lc->first_row_seen_in_chunk) + 1,
+						  lc->notify_user_data);
                                 /* top to last row */
-                                (lc->update_func)(lc->pixbuf, lc->notify_user_data,
+                                (lc->update_func)(lc->pixbuf,
                                                   0, 0, 
                                                   lc->pixbuf->art_pixbuf->width,
-                                                  lc->last_row_seen_in_chunk + 1);
+                                                  lc->last_row_seen_in_chunk + 1,
+						  lc->notify_user_data);
                         } else {
                                 /* We made at least one entire pass, so update the
                                    whole image */
-                                (lc->update_func)(lc->pixbuf, lc->notify_user_data,
+                                (lc->update_func)(lc->pixbuf,
                                                   0, 0, 
                                                   lc->pixbuf->art_pixbuf->width,
-                                                  lc->max_row_seen_in_chunk + 1);
+                                                  lc->max_row_seen_in_chunk + 1,
+						  lc->notify_user_data);
                         }
                 }
                 

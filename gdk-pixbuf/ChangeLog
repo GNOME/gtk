@@ -1,3 +1,19 @@
+2000-01-05  Jonathan Blandford  <jrb@redhat.com>
+
+	* gdk-pixbuf/gdk-pixbuf-io.h: Change the order of the update func
+	to make it more compatible with the rest of GTK.  Added animation
+	framework for progressive loading.
+ 
+	* gdk-pixbuf/io-bmp.c (image_begin_load): Modified to handle new
+	system.  
+	* gdk-pixbuf/io-ico.c (image_begin_load): ditto
+	* gdk-pixbuf/io-png.c (image_begin_load): ditto
+	* gdk-pixbuf/io-ras.c (image_begin_load): ditto
+	* gdk-pixbuf/io-jpeg.c (image_begin_load): ditto
+	* gdk-pixbuf/io-pnm.c (image_begin_load): ditto
+	* gdk-pixbuf/io-tiff.c (image_begin_load): ditto
+	* gdk-pixbuf/io-gif.c (image_begin_load): ditto
+
 2000-01-05  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk-pixbuf/pixops/README: Added a README with a TODO

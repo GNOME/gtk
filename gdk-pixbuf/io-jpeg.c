@@ -89,7 +89,10 @@ typedef struct {
 
 GdkPixbuf *image_load (FILE *f);
 gpointer image_begin_load (ModulePreparedNotifyFunc func, 
-			   ModuleUpdatedNotifyFunc func2, gpointer user_data);
+			   ModuleUpdatedNotifyFunc func2,
+			   ModuleFrameDoneNotifyFunc func3,
+			   ModuleAnimationDoneNotifyFunc func4,
+			   gpointer user_data);
 void image_stop_load (gpointer context);
 gboolean image_load_increment(gpointer context, guchar *buf, guint size);
 
@@ -274,6 +277,8 @@ skip_input_data (j_decompress_ptr cinfo, long num_bytes)
 gpointer
 image_begin_load (ModulePreparedNotifyFunc prepared_func, 
 		  ModuleUpdatedNotifyFunc  updated_func,
+		  ModuleFrameDoneNotifyFunc frame_func,
+		  ModuleAnimationDoneNotifyFunc anim_done_func,
 		  gpointer user_data)
 {
 	JpegProgContext *context;
@@ -508,11 +513,11 @@ image_load_increment (gpointer data, guchar *buf, guint size)
 
 				/* send updated signal */
 				(* context->updated_func) (context->pixbuf,
-						 context->user_data,
-						 0, 
-						 cinfo->output_scanline-1,
-						 cinfo->image_width, 
-						 nlines);
+							   0, 
+							   cinfo->output_scanline-1,
+							   cinfo->image_width, 
+							   nlines,
+							   context->user_data);
 
 #undef DEBUG_JPEG_PROGRESSIVE
 #ifdef DEBUG_JPEG_PROGRESSIVE

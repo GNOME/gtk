@@ -94,7 +94,10 @@ struct ras_progressive_state {
 
 gpointer
 image_begin_load(ModulePreparedNotifyFunc prepared_func,
-		 ModuleUpdatedNotifyFunc updated_func, gpointer user_data);
+		 ModuleUpdatedNotifyFunc updated_func,
+		 ModuleFrameDoneNotifyFunc frame_done_func,
+		 ModuleAnimationDoneNotifyFunc anim_done_func,
+		 gpointer user_data);
 void image_stop_load(gpointer data);
 gboolean image_load_increment(gpointer data, guchar * buf, guint size);
 
@@ -109,7 +112,7 @@ GdkPixbuf *image_load(FILE * f)
 	
 	GdkPixbuf *pb;
 	
-	State = image_begin_load(NULL, NULL, NULL);
+	State = image_begin_load(NULL, NULL, NULL, NULL, NULL);
 	
 	membuf = g_malloc(4096);
 	
@@ -206,7 +209,10 @@ static void RAS2State(struct rasterfile *RAS,
 
 gpointer
 image_begin_load(ModulePreparedNotifyFunc prepared_func,
-		 ModuleUpdatedNotifyFunc updated_func, gpointer user_data)
+		 ModuleUpdatedNotifyFunc updated_func,
+		 ModuleFrameDoneNotifyFunc frame_done_func,
+		 ModuleAnimationDoneNotifyFunc anim_done_func,
+		 gpointer user_data)
 {
 	struct ras_progressive_state *context;
 
@@ -364,11 +370,11 @@ static void OneLine(struct ras_progressive_state *context)
 
 	if (context->updated_func != NULL) {
 		(*context->updated_func) (context->pixbuf,
-					  context->user_data,
 					  0,
 					  context->Lines,
 					  context->Header.width,
-					  context->Header.height);
+					  context->Header.height,
+					  context->user_data);
 
 	}
 }
