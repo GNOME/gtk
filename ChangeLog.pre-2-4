@@ -1,3 +1,21 @@
+2001-02-25  Hans Breuer  <hans@breuer.org>
+
+	* gdk/gdk.h : changed #ifdef GDK_DISBALE_DEPRECARED to #ifndef
+	cause we want to loose those prototypes only in the latter case
+
+	* gdk/win32/gdkevents-win32.c : can't cast from GdkPixmap to
+	GdkPixmapImplWin32 because it itsn't derived from it. Use the
+	impl member variable instead
+
+	* gtk/gtk.def : updated
+
+	* gtk/gtklist.c : 
+	* gtk/gtkmenus.c : include <string.h> for memset ()
+
+	* gtk/makefile.msc.in : updated and don't define GTK_COMPILATION
+	for everthing built here, but for gtk-x.x.dll only. This solves
+	problem of indifferent gtk type definitions
+
 Sat Feb 24 20:11:39 2001  Jonathan Blandford  <jrb@webwynk.net>
 
 	* gtk/gtkclipboard.h: actually put /* */ around #endif comment.
