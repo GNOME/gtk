@@ -42,6 +42,8 @@ enum _GtkToolbarChildType
 {
   GTK_TOOLBAR_CHILD_SPACE,
   GTK_TOOLBAR_CHILD_BUTTON,
+  GTK_TOOLBAR_CHILD_TOGGLEBUTTON,
+  GTK_TOOLBAR_CHILD_RADIOBUTTON,
   GTK_TOOLBAR_CHILD_WIDGET
 };
 
@@ -89,6 +91,7 @@ guint      gtk_toolbar_get_type        (void);
 GtkWidget *gtk_toolbar_new             (GtkOrientation   orientation,
 					GtkToolbarStyle  style);
 
+/* Simple button items */
 GtkWidget *gtk_toolbar_append_item     (GtkToolbar      *toolbar,
 					const char      *text,
 					const char      *tooltip_text,
@@ -111,10 +114,46 @@ GtkWidget *gtk_toolbar_insert_item     (GtkToolbar      *toolbar,
 					GtkSignalFunc    callback,
 					gpointer         user_data,
 					gint             position);
+
+/* Space Items */
 void       gtk_toolbar_append_space    (GtkToolbar      *toolbar);
 void       gtk_toolbar_prepend_space   (GtkToolbar      *toolbar);
 void       gtk_toolbar_insert_space    (GtkToolbar      *toolbar,
 					gint             position);
+
+/* Any element type */
+GtkWidget *gtk_toolbar_append_element  (GtkToolbar      *toolbar,
+					GtkToolbarChildType type,
+					GtkWidget       *widget,
+					const char      *text,
+					const char      *tooltip_text,
+					const char      *tooltip_private_text,
+					GtkWidget       *icon,
+					GtkSignalFunc    callback,
+					gpointer         user_data);
+
+GtkWidget *gtk_toolbar_prepend_element (GtkToolbar      *toolbar,
+					GtkToolbarChildType type,
+					GtkWidget       *widget,
+					const char      *text,
+					const char      *tooltip_text,
+					const char      *tooltip_private_text,
+					GtkWidget       *icon,
+					GtkSignalFunc    callback,
+					gpointer         user_data);
+
+GtkWidget *gtk_toolbar_insert_element  (GtkToolbar      *toolbar,
+					GtkToolbarChildType type,
+					GtkWidget       *widget,
+					const char      *text,
+					const char      *tooltip_text,
+					const char      *tooltip_private_text,
+					GtkWidget       *icon,
+					GtkSignalFunc    callback,
+					gpointer         user_data,
+					gint             position);
+
+/* Generic Widgets */
 void       gtk_toolbar_append_widget   (GtkToolbar      *toolbar,
 					GtkWidget       *widget,
 					const char      *tooltip_text,
@@ -129,6 +168,7 @@ void       gtk_toolbar_insert_widget   (GtkToolbar      *toolbar,
 					const char      *tooltip_private_text,
 					gint             position);
 
+/* Style functions */
 void       gtk_toolbar_set_orientation (GtkToolbar      *toolbar,
 					GtkOrientation   orientation);
 void       gtk_toolbar_set_style       (GtkToolbar      *toolbar,

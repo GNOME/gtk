@@ -1,3 +1,13 @@
+Mon Feb 23 15:45:37 1998  Marc Ewing <marc@redhat.com>
+
+	* gtk/gtktoolbar.h:
+	* gtk/gtktoolbar.c:
+	Added gtk_toolbar_*_element() functions.  Rewrote others
+	to simply call gtk_toolbar_insert_element() to do the
+	work.
+	Added two new GtkToolbarChildType options: TOGGLEBUTTON and
+	RADIOBUTTON, available through the gtk_toolbar_*_element() functions.
+	
 Mon Feb 23 13:44:10 1998  Tim Janik  <timj@gimp.org>
 
 	* gtk/gtkstatusbar.h:
