@@ -71,12 +71,12 @@ AC_ARG_WITH(threads, [  --with-threads=[posix] support threading ])
 
 if test "x$enable_debug" = "xyes"; then
   test "$cflags_set" = set || CFLAGS="$CFLAGS -g"
-  CFLAGS="$CFLAGS -DG_ENABLE_DEBUG"
+  GTK_DEBUG_FLAGS="-DG_ENABLE_DEBUG"
 else
   if test "x$enable_debug" = "xno"; then
-    CFLAGS="$CFLAGS -DG_DISABLE_ASSERT -DG_DISABLE_CHECKS -DGTK_NO_CHECK_CASTS"
+    GTK_DEBUG_FLAGS="-DG_DISABLE_ASSERT -DG_DISABLE_CHECKS -DGTK_NO_CHECK_CASTS"
   else
-    CFLAGS="$CFLAGS -DGTK_NO_CHECK_CASTS"
+    GTK_DEBUG_FLAGS="-DGTK_NO_CHECK_CASTS"
   fi
 fi
 
@@ -164,7 +164,7 @@ AC_TRY_COMPILE([#include <dirent.h>], [DIR *dir;],
     AC_MSG_WARN([Could not determine POSIX flag. (-posix didn't work.)])))
 
 if test "x$enable_xim" = "xyes"; then
-  CFLAGS="$CFLAGS -DUSE_XIM"
+  GTK_XIM_FLAGS="-DUSE_XIM"
 fi
 
 if test x$with_glib = xyes ; then
@@ -291,20 +291,20 @@ fi
 
 # Threads
 
-CFLAGS="$saved_cflags"
-LDFLAGS="$saved_ldflags"
-
 if test "x$with_threads" = "xposix" || test "x$with_threads" = "xyes"; then
   AC_CHECK_LIB(pthread, pthread_attr_init, 
     [AC_DEFINE(USE_PTHREADS)
     x_libs="$x_libs -lpthread"
-    CFLAGS="$CFLAGS -D_REENTRANT"],
+    GTK_THREAD_FLAGS="-D_REENTRANT"],
     # AIX has libpthreads, cause they're special. Special friends (TM)
     AC_CHECK_LIB(pthreads, pthread_attr_init,
       [AC_DEFINE(USE_PTHREADS)
       x_libs="$x_libs -lpthreads"
-      CFLAGS="$CFLAGS -D_REENTRANT -D_THREAD_SAFE"]))
+      GTK_THREAD_FLAGS="-D_REENTRANT -D_THREAD_SAFE"]))
 fi
+
+CFLAGS="$saved_cflags"
+LDFLAGS="$saved_ldflags"
 
 AC_SUBST(x_cflags)
 AC_SUBST(x_includes)
@@ -404,7 +404,7 @@ need_x_locale=yes)
 AC_MSG_RESULT($need_x_locale)
 
 if test $need_x_locale = yes; then
-  CFLAGS="$CFLAGS -DX_LOCALE"
+  GTK_LOCALE_CFLAGS="-DX_LOCALE"
 fi
 
 # Checks for header files.
@@ -492,6 +492,11 @@ if test $gtk_ok = no; then
 fi
 AC_MSG_RESULT($gtk_ok)
 AC_SUBST(GDK_WLIBS)
+
+AC_SUBST(GTK_DEBUG_FLAGS)
+AC_SUBST(GTK_XIM_FLAGS)
+AC_SUBST(GTK_LOCALE_FLAGS)
+AC_SUBST(GTK_THREAD_FLAGS)
 
 AC_OUTPUT([
 Makefile

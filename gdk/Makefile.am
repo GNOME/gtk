@@ -4,7 +4,15 @@ gdkincludedir = $(includedir)/gdk
 
 lib_LTLIBRARIES = libgdk.la
 
-INCLUDES = -DG_LOG_DOMAIN=\"Gdk\" -I$(top_srcdir) @GLIB_CFLAGS@ @x_cflags@ 
+INCLUDES = \
+	-DG_LOG_DOMAIN=\"Gdk\"	\
+	-I$(top_srcdir)		\
+	@GTK_DEBUG_FLAGS@ 	\
+	@GTK_XIM_FLAGS@		\
+	@GTK_LOCALE_FLAGS@	\
+	@GTK_THREAD_FLAGS@	\
+	@GLIB_CFLAGS@		\
+	@x_cflags@ 
 
 libgdk_la_SOURCES = \
 	gdk.c		\

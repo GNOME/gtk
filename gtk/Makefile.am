@@ -340,10 +340,16 @@ EXTRA_DIST = \
         circles.xbm
 
 INCLUDES = \
-	-DG_LOG_DOMAIN=\"Gtk\" \
-	-DGTK_EXE_PREFIX=\"$(exec_prefix)\"   \
-	-DGTK_DATA_PREFIX=\"$(prefix)\"   \
-	-I$(top_srcdir) @GLIB_CFLAGS@ @x_cflags@
+	-DG_LOG_DOMAIN=\"Gtk\"			\
+	-DGTK_EXE_PREFIX=\"$(exec_prefix)\"	\
+	-DGTK_DATA_PREFIX=\"$(prefix)\"		\
+	-I$(top_srcdir)				\
+	@GTK_DEBUG_FLAGS@			\
+	@GTK_XIM_FLAGS@				\
+	@GTK_LOCALE_FLAGS@			\
+	@GTK_THREAD_FLAGS@			\
+	@GLIB_CFLAGS@				\
+	@x_cflags@
 
 noinst_PROGRAMS = testgtk testinput testselection testthreads testrgb testdnd simple 
 
