@@ -479,6 +479,9 @@ gtk_style_attach (GtkStyle  *style,
   colormap = gdk_window_get_colormap (window);
   depth = gdk_window_get_visual (window)->depth;
 
+  if (!style->styles)
+    style->styles = g_slist_append (NULL, style);
+
   styles = style->styles;
   while (styles)
     {
@@ -505,6 +508,8 @@ gtk_style_attach (GtkStyle  *style,
 
   if (new_style->attach_count == 0)
     gtk_style_ref (new_style);
+
+
   
   new_style->attach_count++;
 
@@ -536,7 +541,7 @@ gtk_style_detach (GtkStyle *style)
 	}
       if (style->engine)
 	style->engine->unrealize_style (style);
-      
+
       gtk_style_unref (style);
     }
 }
@@ -661,6 +666,22 @@ static void
 gtk_style_destroy (GtkStyle *style)
 {
   g_return_if_fail (style->attach_count == 0);
+
+  if (style->styles)
+    {
+      if (style->styles->data != style)
+	g_slist_remove (style->styles, style);
+      else
+	{
+	  GSList *tmp_list = style->styles->next;
+	  while (tmp_list)
+	    {
+	      ((GtkStyle *)tmp_list->data)->styles = style->styles->next;
+	      tmp_list = tmp_list->next;
+	    }
+	  g_slist_free_1 (style->styles);
+	}
+    }
 
   if (style->engine)
     style->engine->destroy_style (style);

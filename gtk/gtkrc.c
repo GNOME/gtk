@@ -338,21 +338,7 @@ gtk_rc_clear_realized_node (gpointer key,
 			    gpointer data,
 			    gpointer user_data)
 {
-  GSList *rc_styles = key;
-  GSList *tmp_list = ((GtkStyle *)data)->styles;
-
-  while (tmp_list)
-    {
-      GtkStyle *style = tmp_list->data;
-
-      style->styles = NULL;
-      gtk_style_unref (style);
-
-      tmp_list = tmp_list->next;
-    }
-
-  g_slist_free (tmp_list);
-  g_slist_free (rc_styles);
+  gtk_style_unref (data);
 }
 
 static void
@@ -855,8 +841,6 @@ gtk_rc_style_init (GSList *rc_styles)
 	}
 
       style = gtk_rc_style_to_style (proto_style);
-
-      style->styles = g_slist_append (NULL, style);
 
       g_hash_table_insert (realized_style_ht, rc_styles, style);
     }

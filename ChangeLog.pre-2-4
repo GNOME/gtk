@@ -1,3 +1,10 @@
+Thu Jul 30 18:09:21 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrc.c gtk/gtkstyle.c: More mm fixups
+
+	* gtk/gtktooltips.c: Pass a widget (the window) to the
+	  drawing function instead of the GtkTooltips.
+
 Thu Jul 30 17:27:10 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkwindow.c: Abstract out checking for shape
