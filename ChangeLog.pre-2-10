@@ -1,3 +1,15 @@
+Fri Oct  4 11:43:47 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in: Add a check for the Xrandr extension.
+
+	* gdk/gdkscreen.[ch]: Add a size-changed signal.
+
+	* gdk/x11/gdkscreen-x11.[ch]: Patch from Keith packard
+	to hook up ConfigureNotify events on the root window
+	to the ::size-changed signal. (#94560)
+
+	* gtk/gtkimcontextsimple.c: Warning fixes
+	
 Fri Oct  4 00:57:53 2002  Manish Singh  <yosh@gimp.org>
 
 	* gtkhscrollbar.[ch] gtkhseparator.[ch] gtkrange.[ch]

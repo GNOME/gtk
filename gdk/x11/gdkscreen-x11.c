@@ -45,6 +45,7 @@ static void         gdk_screen_x11_class_init  (GdkScreenX11Class *klass);
 static void         gdk_screen_x11_dispose     (GObject		  *object);
 static void         gdk_screen_x11_finalize    (GObject		  *object);
 static void	    init_xinerama_support      (GdkScreen	  *screen);
+static void	    init_randr_support	       (GdkScreen	  *screen);
 
 enum
 {
@@ -382,6 +383,7 @@ _gdk_x11_screen_new (GdkDisplay *display,
   screen_x11->window_manager_name = g_strdup ("unknown");
   
   init_xinerama_support (screen);
+  init_randr_support (screen);
   
   _gdk_visual_init (screen);
   _gdk_windowing_window_init (screen);
@@ -480,6 +482,9 @@ static void
 init_xinerama_support (GdkScreen * screen)
 {
   GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
+
+  if (screen_x11->monitors)
+    g_free (screen_x11->monitors);
   
 #ifdef HAVE_XINERAMA
   int opcode, firstevent, firsterror;
@@ -501,6 +506,40 @@ init_xinerama_support (GdkScreen * screen)
   screen_x11->monitors[0].y = 0;
   screen_x11->monitors[0].width = WidthOfScreen (screen_x11->xscreen);
   screen_x11->monitors[0].height = HeightOfScreen (screen_x11->xscreen);
+}
+
+static void
+init_randr_support (GdkScreen * screen)
+{
+  GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
+  
+  XSelectInput (GDK_SCREEN_XDISPLAY (screen),
+		screen_x11->xroot_window,
+		StructureNotifyMask);
+}
+
+void
+_gdk_x11_screen_size_changed (GdkScreen *screen,
+			      XEvent    *event)
+{
+#ifdef HAVE_RANDR
+  if (!XRRUpdateConfiguration (event))
+    return;
+#else
+  if (event->type == ConfigureNotify)
+    {
+      XConfigureEvent *rcevent = (XConfigureEvent *) event;
+      Screen	    *xscreen = gdk_x11_screen_get_xscreen (screen);
+      
+      xscreen->width   = rcevent->width;
+      xscreen->height  = rcevent->height;
+    }
+  else
+    return;
+#endif
+  
+  init_xinerama_support (screen);
+  g_signal_emit_by_name (G_OBJECT (screen), "size_changed");
 }
 
 void

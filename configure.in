@@ -1177,6 +1177,21 @@ if test "x$gdktarget" = "xx11"; then
 
   AM_CONDITIONAL(XINPUT_XFREE, test x$with_xinput = xxfree)
 
+  # Check for the RANDR extension
+
+  AC_CHECK_LIB(Xrandr, XRRUpdateConfiguration,
+      [AC_CHECK_HEADER(X11/extensions/Xrandr.h,
+          # RANDR requires RENDER
+	  if test -z "`echo $x_extra_libs $x_libs | grep "\-lXrender" 2> /dev/null`"; then
+	      x_extra_libs="-lXrender $x_extra_libs"
+	  fi
+	  x_extra_libs="-lXrandr $x_extra_libs"
+	  AC_DEFINE(HAVE_RANDR, 1, Have the Xrandr extension library))],
+       :,
+       $X_LIBS -lXrandr -lXrender -lX11 $X_EXTRA_LIBS)
+
+  # Xshm checks
+
   if test "x$enable_shm" = "xyes"; then
     # Check for shared memory
     AC_CHECK_HEADER(sys/ipc.h, AC_DEFINE(HAVE_IPC_H), no_sys_ipc=yes)

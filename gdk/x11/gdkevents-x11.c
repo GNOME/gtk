@@ -1447,6 +1447,9 @@ gdk_event_translate (GdkDisplay *display,
 			   : xevent->xconfigure.event != xevent->xconfigure.window
 			   ? " (discarding substructure)"
 			   : ""));
+      if (window && GDK_WINDOW_TYPE (window) == GDK_WINDOW_ROOT)
+	_gdk_x11_screen_size_changed (screen, xevent);
+
       if (window &&
 	  xevent->xconfigure.event == xevent->xconfigure.window &&
 	  !GDK_WINDOW_DESTROYED (window) &&

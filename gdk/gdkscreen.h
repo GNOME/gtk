@@ -48,6 +48,8 @@ struct _GdkScreen
 struct _GdkScreenClass
 {
   GObjectClass parent_class;
+
+  void (*size_changed) (GdkScreen *screen);
 };
 
 GType        gdk_screen_get_type              (void);

@@ -27,6 +27,16 @@
 #include "gdkwindow.h"
 #include "gdkscreen.h"
 
+static void         gdk_screen_class_init  (GdkScreenClass *klass);
+
+enum
+{
+  SIZE_CHANGED,
+  LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL] = { 0 };
+
 GType
 gdk_screen_get_type (void)
 {
@@ -39,7 +49,7 @@ gdk_screen_get_type (void)
 	  sizeof (GdkScreenClass),
 	  (GBaseInitFunc) NULL,
 	  (GBaseFinalizeFunc) NULL,
-	  NULL,                 /* class_init */
+	  (GClassInitFunc) gdk_screen_class_init,
 	  NULL,			/* class_finalize */
 	  NULL,			/* class_data */
 	  sizeof (GdkScreen),
@@ -52,6 +62,20 @@ gdk_screen_get_type (void)
     }
 
   return object_type;
+}
+
+void
+gdk_screen_x11_class_init (GdkScreenClass *klass)
+{
+  signals[SIZE_CHANGED] =
+    g_signal_new ("size_changed",
+                  G_OBJECT_CLASS_TYPE (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GdkScreenClass, size_changed),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
 }
 
 void 

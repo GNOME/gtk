@@ -248,3 +248,10 @@ when GDK gets multihead support.
 @Returns: 
 
 
+<!-- ##### SIGNAL GdkScreen::size-changed ##### -->
+<para>
+
+</para>
+
+@gdkscreen: the object which received the signal.
+
