@@ -1,3 +1,14 @@
+Tue Jan 30 18:57:59 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktext.c (clear_focus_area): We need to clear the focus
+	area on focus out, even if a background pixmap isn't set.
+	(#13941)
+	
+Tue Jan 30 18:31:23 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkstyle.c (gtk_style_detach): Handle the case where
+	bg_pixmap[i] == GDK_PARENT_RELATIVE.
+
 Tue Jan 30 18:24:10 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtknotebook.c (gtk_notebook_set_shape): Fix from Sean Cunningham
