@@ -76,6 +76,10 @@ gint          gtk_combo_box_get_column_span_column (GtkComboBox *combo_box);
 void          gtk_combo_box_set_column_span_column (GtkComboBox *combo_box,
                                                     gint         column_span);
 
+gboolean      gtk_combo_box_get_add_tearoffs       (GtkComboBox *combo_box);
+void          gtk_combo_box_set_add_tearoffs       (GtkComboBox *combo_box,
+						    gboolean     add_tearoffs);
+
 /* get/set active item */
 gint          gtk_combo_box_get_active       (GtkComboBox     *combo_box);
 void          gtk_combo_box_set_active       (GtkComboBox     *combo_box,

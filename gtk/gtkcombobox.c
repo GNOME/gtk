@@ -32,6 +32,7 @@
 #include "gtkliststore.h"
 #include "gtkmain.h"
 #include "gtkmenu.h"
+#include "gtktearoffmenuitem.h"
 #include "gtktogglebutton.h"
 #include "gtktreeselection.h"
 #include "gtkvseparator.h"
@@ -102,6 +103,7 @@ struct _GtkComboBoxPrivate
 
   guint popup_in_progress : 1;
   guint destroying : 1;
+  guint add_tearoffs : 1;
 };
 
 /* While debugging this evil code, I have learned that
@@ -169,7 +171,8 @@ enum {
   PROP_WRAP_WIDTH,
   PROP_ROW_SPAN_COLUMN,
   PROP_COLUMN_SPAN_COLUMN,
-  PROP_ACTIVE
+  PROP_ACTIVE,
+  PROP_ADD_TEAROFFS
 };
 
 static GtkBinClass *parent_class = NULL;
@@ -504,6 +507,24 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                      0,
                                                      G_PARAM_READWRITE));
 
+  /**
+   * GtkComboBox:add-tearoffs:
+   *
+   * The "add-tearoffs" property controls whether generated menus 
+   * have tearoff menu items. 
+   *
+   * Note that this only affects menu style combo boxes.
+   *
+   * Since: 2.6
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_ADD_TEAROFFS,
+				   g_param_spec_boolean ("add-tearoffs",
+							 P_("Add tearoffs to menus"),
+							 P_("Whether combobox dropdowns should have a tearoff menu item"),
+							 FALSE,
+							 G_PARAM_READWRITE));
+  
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_boolean ("appears-as-list",
                                                                  P_("Appears as list"),
@@ -574,6 +595,10 @@ gtk_combo_box_set_property (GObject      *object,
         gtk_combo_box_set_active (combo_box, g_value_get_int (value));
         break;
 
+      case PROP_ADD_TEAROFFS:
+        gtk_combo_box_set_add_tearoffs (combo_box, g_value_get_boolean (value));
+        break;
+
       default:
         break;
     }
@@ -607,6 +632,10 @@ gtk_combo_box_get_property (GObject    *object,
 
       case PROP_ACTIVE:
         g_value_set_int (value, gtk_combo_box_get_active (combo_box));
+        break;
+
+      case PROP_ADD_TEAROFFS:
+        g_value_set_boolean (value, gtk_combo_box_get_add_tearoffs (combo_box));
         break;
 
       default:
@@ -807,6 +836,7 @@ gtk_combo_box_menu_show (GtkWidget *menu,
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (user_data);
 
+  combo_box->priv->popup_in_progress = TRUE;
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (combo_box->priv->button),
                                 TRUE);
   combo_box->priv->popup_in_progress = FALSE;
@@ -833,10 +863,10 @@ gtk_combo_box_detacher (GtkWidget *widget,
   combo_box = GTK_COMBO_BOX (widget);
   g_return_if_fail (combo_box->priv->popup_widget == (GtkWidget*) menu);
 
-  g_signal_handlers_disconnect_by_func (menu,
+  g_signal_handlers_disconnect_by_func (menu->toplevel,
 					gtk_combo_box_menu_show,
 					combo_box);
-  g_signal_handlers_disconnect_by_func (menu,
+  g_signal_handlers_disconnect_by_func (menu->toplevel,
 					gtk_combo_box_menu_hide,
 					combo_box);
   
@@ -871,9 +901,14 @@ gtk_combo_box_set_popup_widget (GtkComboBox *combo_box,
 
       combo_box->priv->popup_widget = popup;
 
-      g_signal_connect (popup, "show",
+      /* 
+       * Note that we connect to show/hide on the toplevel, not the
+       * menu itself, since the menu is not shown/hidden when it is
+       * popped up while torn-off.
+       */
+      g_signal_connect (GTK_MENU (popup)->toplevel, "show",
                         G_CALLBACK (gtk_combo_box_menu_show), combo_box);
-      g_signal_connect (popup, "hide",
+      g_signal_connect (GTK_MENU (popup)->toplevel, "hide",
                         G_CALLBACK (gtk_combo_box_menu_hide), combo_box);
 
       gtk_menu_attach_to_widget (GTK_MENU (popup),
@@ -1682,6 +1717,19 @@ gtk_combo_box_menu_fill (GtkComboBox *combo_box)
   items = gtk_tree_model_iter_n_children (combo_box->priv->model, NULL);
   menu = combo_box->priv->popup_widget;
 
+  if (combo_box->priv->add_tearoffs)
+    {
+      GtkWidget *tearoff = gtk_tearoff_menu_item_new ();
+
+      gtk_widget_show (tearoff);
+      
+      if (combo_box->priv->wrap_width)
+	gtk_menu_attach (GTK_MENU (menu), tearoff, 
+			 0, combo_box->priv->wrap_width, 0, 1);
+      else
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), tearoff);
+    }
+
   for (i = 0; i < items; i++)
     {
       GtkTreePath *path;
@@ -1781,8 +1829,6 @@ menu_occupied (GtkMenu *menu,
   for (i = GTK_MENU_SHELL (menu)->children; i; i = i->next)
     {
       guint l, r, b, t;
-      gboolean h_intersect = FALSE;
-      gboolean v_intersect = FALSE;
 
       gtk_container_child_get (GTK_CONTAINER (menu), i->data,
                                "left_attach", &l,
@@ -1792,14 +1838,8 @@ menu_occupied (GtkMenu *menu,
                                NULL);
 
       /* look if this item intersects with the given coordinates */
-      h_intersect  = left_attach <= l && l <= right_attach;
-      h_intersect &= left_attach <= r && r <= right_attach;
-
-      v_intersect  = top_attach <= t && t <= bottom_attach;
-      v_intersect &= top_attach <= b && b <= bottom_attach;
-
-      if (h_intersect && v_intersect)
-        return TRUE;
+      if (right_attach > l && left_attach < r && bottom_attach > t && top_attach < b)
+	return TRUE;
     }
 
   return FALSE;
@@ -1820,6 +1860,8 @@ gtk_combo_box_relayout_item (GtkComboBox *combo_box,
     return;
 
   list = gtk_container_get_children (GTK_CONTAINER (menu));
+  if (combo_box->priv->add_tearoffs)
+    list = list->next;
   item = g_list_nth_data (list, index);
   g_list_free (list);
 
@@ -1923,12 +1965,17 @@ gtk_combo_box_menu_item_activate (GtkWidget *item,
 {
   gint index;
   GtkWidget *menu;
+  GList *children;
   GtkComboBox *combo_box = GTK_COMBO_BOX (user_data);
 
   menu = combo_box->priv->popup_widget;
   g_return_if_fail (GTK_IS_MENU (menu));
 
-  index = g_list_index (GTK_MENU_SHELL (menu)->children, item);
+  children = GTK_MENU_SHELL (menu)->children;
+  if (combo_box->priv->add_tearoffs)
+    children = children->next;
+
+  index = g_list_index (children, item);
 
   gtk_combo_box_set_active (combo_box, index);
 }
@@ -2166,6 +2213,10 @@ gtk_combo_box_list_setup (GtkComboBox *combo_box)
   gtk_tree_selection_set_mode (sel, GTK_SELECTION_SINGLE);
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (combo_box->priv->tree_view),
                                      FALSE);
+  g_object_set (combo_box->priv->tree_view, 
+		"hover_selection", TRUE,
+		NULL);
+
   if (combo_box->priv->model)
     gtk_tree_view_set_model (GTK_TREE_VIEW (combo_box->priv->tree_view),
 			     combo_box->priv->model);
@@ -2554,6 +2605,9 @@ gtk_combo_box_cell_layout_pack_start (GtkCellLayout   *layout,
         {
           GtkCellView *view;
 
+          if (GTK_IS_TEAROFF_MENU_ITEM (i->data))
+	    continue;
+
           if (GTK_IS_CELL_VIEW_MENU_ITEM (i->data))
             view = GTK_CELL_VIEW (GTK_BIN (i->data)->child);
           else
@@ -2603,6 +2657,9 @@ gtk_combo_box_cell_layout_pack_end (GtkCellLayout   *layout,
       for (i = list; i; i = i->next)
         {
           GtkCellView *view;
+
+          if (GTK_IS_TEAROFF_MENU_ITEM (i->data))
+	    continue;
 
           if (GTK_IS_CELL_VIEW_MENU_ITEM (i->data))
             view = GTK_CELL_VIEW (GTK_BIN (i->data)->child);
@@ -2654,6 +2711,9 @@ gtk_combo_box_cell_layout_clear (GtkCellLayout *layout)
         {
           GtkCellView *view;
 
+          if (GTK_IS_TEAROFF_MENU_ITEM (i->data))
+	    continue;
+
           if (GTK_IS_CELL_VIEW_MENU_ITEM (i->data))
             view = GTK_CELL_VIEW (GTK_BIN (i->data)->child);
           else
@@ -2704,6 +2764,9 @@ gtk_combo_box_cell_layout_add_attribute (GtkCellLayout   *layout,
       for (i = list; i; i = i->next)
         {
           GtkCellView *view;
+
+          if (GTK_IS_TEAROFF_MENU_ITEM (i->data))
+	    continue;
 
           if (GTK_IS_CELL_VIEW_MENU_ITEM (i->data))
             view = GTK_CELL_VIEW (GTK_BIN (i->data)->child);
@@ -2765,6 +2828,9 @@ gtk_combo_box_cell_layout_set_cell_data_func (GtkCellLayout         *layout,
         {
           GtkCellView *view;
 
+          if (GTK_IS_TEAROFF_MENU_ITEM (i->data))
+	    continue;
+
           if (GTK_IS_CELL_VIEW_MENU_ITEM (i->data))
             view = GTK_CELL_VIEW (GTK_BIN (i->data)->child);
           else
@@ -2820,6 +2886,9 @@ gtk_combo_box_cell_layout_clear_attributes (GtkCellLayout   *layout,
       for (i = list; i; i = i->next)
         {
           GtkCellView *view;
+
+          if (GTK_IS_TEAROFF_MENU_ITEM (i->data))
+	    continue;
 
           if (GTK_IS_CELL_VIEW_MENU_ITEM (i->data))
             view = GTK_CELL_VIEW (GTK_BIN (i->data)->child);
@@ -2879,6 +2948,9 @@ gtk_combo_box_cell_layout_reorder (GtkCellLayout   *layout,
       for (i = list; i; i = i->next)
         {
           GtkCellView *view;
+
+          if (GTK_IS_TEAROFF_MENU_ITEM (i->data))
+	    continue;
 
           if (GTK_IS_CELL_VIEW_MENU_ITEM (i->data))
             view = GTK_CELL_VIEW (GTK_BIN (i->data)->child);
@@ -3561,4 +3633,30 @@ gtk_combo_box_finalize (GObject *object)
    g_slist_free (combo_box->priv->cells);
 
    G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
+
+gboolean
+gtk_combo_box_get_add_tearoffs (GtkComboBox *combo_box)
+{
+  g_return_val_if_fail (GTK_IS_COMBO_BOX (combo_box), FALSE);
+
+  return combo_box->priv->add_tearoffs;
+}
+
+void
+gtk_combo_box_set_add_tearoffs (GtkComboBox *combo_box,
+				gboolean     add_tearoffs)
+{
+  g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
+
+  add_tearoffs = add_tearoffs != FALSE;
+
+  if (combo_box->priv->add_tearoffs != add_tearoffs)
+    {
+      combo_box->priv->add_tearoffs = add_tearoffs;
+      gtk_combo_box_check_appearance (combo_box);
+      gtk_combo_box_relayout (combo_box);
+      g_object_notify (G_OBJECT (combo_box), "add_tearoffs");
+    }
 }

@@ -1,5 +1,9 @@
 2004-05-10  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcombobox.h: 
+	* gtk/gtkcombobox.c: Support tearoffable combo boxes (in menu 
+	mode). Add a new property, add-tearoffs, for this.  (#135956)
+
 	* gtk/gtkfontsel.c (list_row_activated): Make Return activate the
 	default button.  (#118921)
 
