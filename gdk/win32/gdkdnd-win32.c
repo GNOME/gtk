@@ -1362,8 +1362,8 @@ gdk_drag_find_window_for_screen (GdkDragContext  *context,
 {
   find_window_enum_arg a;
 
-  a.x = x_root;
-  a.y = y_root;
+  a.x = x_root - _gdk_offset_x;
+  a.y = y_root - _gdk_offset_y;
   a.ignore = drag_window ? GDK_WINDOW_HWND (drag_window) : NULL;
   a.result = NULL;
 
