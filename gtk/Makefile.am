@@ -461,7 +461,7 @@ EXTRA_DIST += @STRIP_BEGIN@ \
 	testgtk.1 		\
 	testgtkrc 		\
 	testgtkrc2 		\
-        circles.xbm		\
+	circles.xbm		\
 	line-arrow.xbm 		\
 	line-wrap.xbm 		\
 	tree_plus.xbm		\
