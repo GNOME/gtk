@@ -1,3 +1,24 @@
+2002-11-27  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkfont-win32.c (gdk_font_load_internal): If we are
+	asked for "courier", try "Courier New" instead right
+	away. Otherwise (as there is no TrueType font called just
+	"courier"), Windows might well decide to match some unsuitable
+	font. For instance, after I installed the Code2000 font, Windows
+	started returning that when trying to load (a nonexistent)
+	"courier" font at certain sizes, which didn't look good at all.
+	To clarify code, always allocate lpszFace dynamically, and free it
+	each round through the loop.
+
+	* gtk/gtkmain.c (check_sizeof_GtkWindow): Also mention -mms-bitfields.
+
+	* gtk/gtktext.c (draw_line_wrap): As stippled drawing is not
+	implemented on Win32 in this version of GTK+, don't try to draw a
+	stippled rectangle (as it would appear as an ugly filled
+	rectangle). Draw a small solid triangle instead, either pointing
+	left-down or right depending on whether lines are wrapped or
+	truncated. (#35850, J. Ali Harlow)
+
 2002-11-03  Tor Lillqvist  <tml@iki.fi>
 
 	* Makefile.am (SUBDIRS): Do include docs.

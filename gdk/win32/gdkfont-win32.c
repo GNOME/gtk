@@ -1403,7 +1403,10 @@ gdk_font_load_internal (GdkFont     *font_set,
 	fdwPitchAndFamily = VARIABLE_PITCH;
       else 
 	fdwPitchAndFamily = DEFAULT_PITCH;
-      lpszFace = g_filename_from_utf8 (family, -1, NULL, NULL, NULL);
+      if (g_strcasecmp (family, "courier") == 0)
+	lpszFace = g_strdup ("courier new");
+      else
+	lpszFace = g_filename_from_utf8 (family, -1, NULL, NULL, NULL);
     }
 
   for (tries = 0; ; tries++)
@@ -1420,11 +1423,7 @@ gdk_font_load_internal (GdkFont     *font_set,
 			  fnWeight, fdwItalic, fdwUnderline, fdwStrikeOut,
 			  fdwCharSet, fdwOutputPrecision, fdwClipPrecision,
 			  fdwQuality, fdwPitchAndFamily, lpszFace);
-      /* After the first try lpszFace contains a return value
-       * from g_filename_from_utf8(), so free it.
-       */
-      if (tries == 0)
-	g_free (lpszFace);
+      g_free (lpszFace);
 
       if (hfont != NULL)
 	break;
@@ -1433,39 +1432,37 @@ gdk_font_load_internal (GdkFont     *font_set,
       if (tries == 0)
 	{
 	  if (g_strcasecmp (family, "helvetica") == 0)
-	    lpszFace = "arial";
+	    lpszFace = g_strdup ("arial");
 	  else if (g_strcasecmp (family, "new century schoolbook") == 0)
-	    lpszFace = "century schoolbook";
-	  else if (g_strcasecmp (family, "courier") == 0)
-	    lpszFace = "courier new";
+	    lpszFace = g_strdup ("century schoolbook");
 	  else if (g_strcasecmp (family, "lucida") == 0)
-	    lpszFace = "lucida sans unicode";
+	    lpszFace = g_strdup ("lucida sans unicode");
 	  else if (g_strcasecmp (family, "lucidatypewriter") == 0)
-	    lpszFace = "lucida console";
+	    lpszFace = g_strdup ("lucida console");
 	  else if (g_strcasecmp (family, "times") == 0)
-	    lpszFace = "times new roman";
+	    lpszFace = g_strdup ("times new roman");
 	}
       else if (tries == 1)
 	{
 	  if (g_strcasecmp (family, "courier") == 0)
 	    {
-	      lpszFace = "";
+	      lpszFace = g_strdup ("");
 	      fdwPitchAndFamily |= FF_MODERN;
 	    }
 	  else if (g_strcasecmp (family, "times new roman") == 0)
 	    {
-	      lpszFace = "";
+	      lpszFace = g_strdup ("");
 	      fdwPitchAndFamily |= FF_ROMAN;
 	    }
 	  else if (g_strcasecmp (family, "helvetica") == 0
 		   || g_strcasecmp (family, "lucida") == 0)
 	    {
-	      lpszFace = "";
+	      lpszFace = g_strdup ("");
 	      fdwPitchAndFamily |= FF_SWISS;
 	    }
 	  else
 	    {
-	      lpszFace = "";
+	      lpszFace = g_strdup ("");
 	      fdwPitchAndFamily = (fdwPitchAndFamily & 0x0F) | FF_DONTCARE;
 	    }
 	}

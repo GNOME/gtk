@@ -546,8 +546,9 @@ check_sizeof_GtkWindow (size_t sizeof_GtkWindow)
 	     "The code using GTK+ thinks GtkWindow is of different\n"
              "size than it actually is in this build of GTK+.\n"
 	     "On Windows, this probably means that you have compiled\n"
-	     "your code with gcc without the -fnative-struct switch.");
-
+	     "your code with gcc without the -fnative-struct\n"
+	     "(or -mms-bitfields) switch, or that you are using\n"
+	     "an unsupported compiler.");
 }
 
 void

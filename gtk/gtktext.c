@@ -5124,13 +5124,16 @@ draw_line_wrap (GtkText* text, guint height /* baseline height */)
   gdk_window_get_size (text->text_area, &width, NULL);
   width -= LINE_WRAP_ROOM;
   
+#ifndef GDK_WINDOWING_WIN32
   gdk_gc_set_stipple (text->gc,
 		      bitmap);
   
   gdk_gc_set_fill (text->gc, GDK_STIPPLED);
-  
+#endif
+
   gdk_gc_set_foreground (text->gc, &GTK_WIDGET (text)->style->text[GTK_STATE_NORMAL]);
   
+#ifndef GDK_WINDOWING_WIN32
   gdk_gc_set_ts_origin (text->gc,
 			width + 1,
 			height - bitmap_height - 1);
@@ -5146,6 +5149,38 @@ draw_line_wrap (GtkText* text, guint height /* baseline height */)
   gdk_gc_set_ts_origin (text->gc, 0, 0);
   
   gdk_gc_set_fill (text->gc, GDK_SOLID);
+#else /* Draw a small filled triangle instead... */
+  if (text->line_wrap)
+    {
+      GdkPoint pts[3];
+      
+      pts[0].x = width + 4;
+      pts[0].y = height - bitmap_height - 1;
+
+      pts[1].x = pts[0].x - 3;
+      pts[1].y = pts[0].y + bitmap_height - 2;
+
+      pts[2].x = pts[0].x + bitmap_width - 2;
+      pts[2].y = pts[0].y + 2;
+      
+      gdk_draw_polygon (text->text_area, text->gc, TRUE, pts, G_N_ELEMENTS (pts));
+    }
+  else
+    {
+      GdkPoint pts[3];
+      
+      pts[0].x = width + 1;
+      pts[0].y = height - bitmap_height/2 - 2;
+
+      pts[1].x = pts[0].x + bitmap_width;
+      pts[1].y = height - bitmap_height/2;
+
+      pts[2].x = pts[0].x;
+      pts[2].y = height - bitmap_height/2 + 2;
+      
+      gdk_draw_polygon (text->text_area, text->gc, TRUE, pts, G_N_ELEMENTS (pts));
+    }
+#endif
 }
 
 static void
@@ -5299,7 +5334,7 @@ expose_text (GtkText* text, GdkRectangle *area, gboolean cursor)
       if (pixels < max_y && (pixels + (gint)LINE_HEIGHT(CACHE_DATA(cache))) >= min_y)
 	{
 	  draw_line (text, pixels, &CACHE_DATA(cache));
-	  
+
 	  if (CACHE_DATA(cache).wraps)
 	    draw_line_wrap (text, pixels + CACHE_DATA(cache).font_ascent);
 	}
