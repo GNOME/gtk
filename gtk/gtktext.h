@@ -197,6 +197,13 @@ gint       gtk_text_backward_delete (GtkText       *text,
 gint       gtk_text_forward_delete  (GtkText       *text,
 				     guint          nchars);
 
+gchar *    gtk_text_get_chars       (GtkText       *text,
+				     guint          index,
+				     guint          nchars);
+
+#define GTK_TEXT_INDEX(t, index)  \
+      ((index) < (t)->gap_position ? (t)->text[index] : \
+                                     (t)->text[(index) + (t)->gap_size])
 
 #ifdef __cplusplus
 }
