@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-21 18:18-0500\n"
-"PO-Revision-Date: 2004-11-21 22:53-0400\n"
+"POT-Creation-Date: 2004-11-28 12:49-0500\n"
+"PO-Revision-Date: 2004-11-28 22:53-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: English/Canada <adamw@FreeBSD.org>\n"
 "MIME-Version: 1.0\n"
@@ -89,6 +89,14 @@ msgstr "Default Display"
 #: gdk/gdkdisplaymanager.c:128
 msgid "The default display for GDK"
 msgstr "The default display for GDK"
+
+#: gdk/gdkpango.c:574 gtk/gtkinvisible.c:116 gtk/gtkwindow.c:574
+msgid "Screen"
+msgstr "Screen"
+
+#: gdk/gdkpango.c:575
+msgid "the GdkScreen for the renderer"
+msgstr "the GdkScreen for the renderer"
 
 #: gtk/gtkaboutdialog.c:195
 msgid "Program name"
@@ -1431,7 +1439,7 @@ msgstr "Title"
 msgid "The title of the color selection dialog"
 msgstr "The title of the colour selection dialogue"
 
-#: gtk/gtkcolorbutton.c:233 gtk/gtkcolorsel.c:1782
+#: gtk/gtkcolorbutton.c:233 gtk/gtkcolorsel.c:1839
 msgid "Current Color"
 msgstr "Current colour"
 
@@ -1439,7 +1447,7 @@ msgstr "Current colour"
 msgid "The selected color"
 msgstr "The selected colour"
 
-#: gtk/gtkcolorbutton.c:248 gtk/gtkcolorsel.c:1789
+#: gtk/gtkcolorbutton.c:248 gtk/gtkcolorsel.c:1846
 msgid "Current Alpha"
 msgstr "Current Alpha"
 
@@ -1447,35 +1455,35 @@ msgstr "Current Alpha"
 msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 
-#: gtk/gtkcolorsel.c:1768
+#: gtk/gtkcolorsel.c:1825
 msgid "Has Opacity Control"
 msgstr "Has Opacity Control"
 
-#: gtk/gtkcolorsel.c:1769
+#: gtk/gtkcolorsel.c:1826
 msgid "Whether the color selector should allow setting opacity"
 msgstr "Whether the colour selector should allow setting opacity"
 
-#: gtk/gtkcolorsel.c:1775
+#: gtk/gtkcolorsel.c:1832
 msgid "Has palette"
 msgstr "Has palette"
 
-#: gtk/gtkcolorsel.c:1776
+#: gtk/gtkcolorsel.c:1833
 msgid "Whether a palette should be used"
 msgstr "Whether a palette should be used"
 
-#: gtk/gtkcolorsel.c:1783
+#: gtk/gtkcolorsel.c:1840
 msgid "The current color"
 msgstr "The current colour"
 
-#: gtk/gtkcolorsel.c:1790
+#: gtk/gtkcolorsel.c:1847
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "The current opacity value (0 fully transparent, 65535 fully opaque)"
 
-#: gtk/gtkcolorsel.c:1804
+#: gtk/gtkcolorsel.c:1861
 msgid "Custom palette"
 msgstr "Custom palette"
 
-#: gtk/gtkcolorsel.c:1805
+#: gtk/gtkcolorsel.c:1862
 msgid "Palette to use in the color selector"
 msgstr "Palette to use in the colour selector"
 
@@ -2350,10 +2358,6 @@ msgstr "Show menu images"
 #: gtk/gtkimagemenuitem.c:138
 msgid "Whether images should be shown in menus"
 msgstr "Whether images should be shown in menus"
-
-#: gtk/gtkinvisible.c:116 gtk/gtkwindow.c:574
-msgid "Screen"
-msgstr "Screen"
 
 #: gtk/gtkinvisible.c:117 gtk/gtkwindow.c:575
 msgid "The screen where this window will be displayed"
