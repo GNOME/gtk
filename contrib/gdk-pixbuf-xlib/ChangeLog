@@ -1,3 +1,7 @@
+Tue Oct  7 23:30:00 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixbuf-xlib.h: Add C++ guards. (123955, Harring Figueiredo)
+
 2002-08-06  jacob berkman  <jacob@ximian.com>
 
 	* Makefile.am (lib_LTLIBRARIES): link against xlibs
