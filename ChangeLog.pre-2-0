@@ -1,3 +1,9 @@
+Wed Feb 24 19:08:51 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkclist.c (draw_cell_pixmap): Unset the clip
+	mask for the GC if we set it. (Patch from
+	Lars Hamann <lars@gtk.org>)
+
 Thu Feb 24 23:58:44 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtksignal.c (gtk_signal_handler_pending_by_id): added function

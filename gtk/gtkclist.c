@@ -5566,6 +5566,8 @@ draw_cell_pixmap (GdkWindow    *window,
 
   gdk_draw_pixmap (window, fg_gc, pixmap, xsrc, ysrc, x, y, width, height);
   gdk_gc_set_clip_origin (fg_gc, 0, 0);
+  if (mask)
+    gdk_gc_set_clip_mask (fg_gc, NULL);
 
   return x + MAX (width, 0);
 }
