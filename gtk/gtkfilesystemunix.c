@@ -378,13 +378,14 @@ gtk_file_system_unix_create_folder (GtkFileSystem     *file_system,
 
   if (!result)
     {
+      int save_errno = errno;
       gchar *filename_utf8 = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
       g_set_error (error,
 		   GTK_FILE_SYSTEM_ERROR,
 		   GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
 		   _("error creating directory '%s': %s"),
 		   filename_utf8 ? filename_utf8 : "???",
-		   g_strerror (errno));
+		   g_strerror (save_errno));
       g_free (filename_utf8);
       return FALSE;
     }
@@ -466,13 +467,14 @@ get_icon_type (const char *filename,
   if (stat (filename, &statbuf) != 0 &&
       lstat (filename, &statbuf) != 0)
     {
+      int save_errno = errno;
       gchar *filename_utf8 = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
       g_set_error (error,
 		   GTK_FILE_SYSTEM_ERROR,
 		   GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
 		   _("error getting information for '%s': %s"),
 		   filename_utf8 ? filename_utf8 : "???",
-		   g_strerror (errno));
+		   g_strerror (save_errno));
       g_free (filename_utf8);
 
       return ICON_NONE;
@@ -1389,13 +1391,14 @@ filename_get_info (const gchar     *filename,
       stat (filename, &statbuf) != 0 &&
       lstat (filename, &statbuf) != 0)
     {
+      int save_errno = errno;
       gchar *filename_utf8 = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
       g_set_error (error,
 		   GTK_FILE_SYSTEM_ERROR,
 		   GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
 		   _("error getting information for '%s': %s"),
 		   filename_utf8 ? filename_utf8 : "???",
-		   g_strerror (errno));
+		   g_strerror (save_errno));
       g_free (filename_utf8);
 
       return NULL;

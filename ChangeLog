@@ -1,3 +1,8 @@
+2004-03-08  Morten Welinder  <terra@gnome.org>
+
+	* gtk/gtkfilesystemunix.c (gtk_file_system_unix_create_folder,
+	get_icon_type, filename_get_info): Protect errno.
+
 2004-03-08  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* gtk/gtkentry.c: (gtk_entry_completion_key_press):
