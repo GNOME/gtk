@@ -45,16 +45,25 @@
 #include "gdkkeysyms.h"
 
 #include <objbase.h>
+
+#if defined (__GNUC__) && defined (HAVE_DIMM_H)
+/* The w32api imm.h clashes a bit with the IE5.5 dimm.h */
+# define IMEMENUITEMINFOA hidden_IMEMENUITEMINFOA
+# define IMEMENUITEMINFOW hidden_IMEMENUITEMINFOW
+#endif
+
 #include <imm.h>
+
+#if defined (__GNUC__) && defined (HAVE_DIMM_H)
+# undef IMEMENUITEMINFOA
+# undef IMEMENUITEMINFOW
+#endif
 
 #ifdef HAVE_DIMM_H
 #include <dimm.h>
-#else
-#include "surrogate-dimm.h"
 #endif
 
 
-typedef struct _GdkIOClosure GdkIOClosure;
 typedef struct _GdkEventPrivate GdkEventPrivate;
 
 typedef enum
@@ -64,14 +73,6 @@ typedef enum
    */
   GDK_EVENT_PENDING = 1 << 0
 } GdkEventFlags;
-
-struct _GdkIOClosure
-{
-  GdkInputFunction function;
-  GdkInputCondition condition;
-  GdkDestroyNotify notify;
-  gpointer data;
-};
 
 struct _GdkEventPrivate
 {
@@ -135,8 +136,10 @@ static UINT msh_mousewheel_msg;
 static gboolean ignore_wm_char = FALSE;
 static gboolean is_altgr_key = FALSE;
 
+#ifdef HAVE_DIMM_H
 static IActiveIMMApp *active_imm_app = NULL;
 static IActiveIMMMessagePumpOwner *active_imm_msgpump_owner = NULL;
+#endif
 
 typedef BOOL (WINAPI *PFN_TrackMouseEvent) (LPTRACKMOUSEEVENT);
 static PFN_TrackMouseEvent track_mouse_event = NULL;
@@ -255,11 +258,15 @@ real_window_procedure (HWND   hwnd,
     return ret_val;
   else
     {
+#ifndef HAVE_DIMM_H
+      return DefWindowProc (hwnd, message, wparam, lparam);
+#else
       if (active_imm_app == NULL
 	  || (*active_imm_app->lpVtbl->OnDefWindowProc) (active_imm_app, hwnd, message, wparam, lparam, &lres) == S_FALSE)
 	return DefWindowProc (hwnd, message, wparam, lparam);
       else
 	return lres;
+#endif
     }
 }
 
@@ -313,6 +320,7 @@ _gdk_events_init (void)
   g_source_set_can_recurse (source, TRUE);
   g_source_attach (source, NULL);
 
+#ifdef HAVE_DIMM_H
   hres = CoCreateInstance (&CLSID_CActiveIMM,
 			   NULL,
 			   CLSCTX_ALL,
@@ -330,6 +338,7 @@ _gdk_events_init (void)
 				 active_imm_msgpump_owner));
       (active_imm_msgpump_owner->lpVtbl->Start) (active_imm_msgpump_owner);
     }
+#endif
 
 #ifdef USE_TRACKMOUSEEVENT
   user32 = GetModuleHandle ("user32.dll");
@@ -3155,10 +3164,13 @@ _gdk_events_queue (void)
     {
       GDK_NOTE (EVENTS, g_print ("PeekMessage: %#lx %s\n",
 				 (gulong) msg.hwnd, gdk_win32_message_name (msg.message)));
-
+#ifndef HAVE_DIMM_H
+      TranslateMessage (&msg);
+#else
       if (active_imm_msgpump_owner == NULL
 	  || (active_imm_msgpump_owner->lpVtbl->OnTranslateMessage) (active_imm_msgpump_owner, &msg) != S_OK)
 	TranslateMessage (&msg);
+#endif
 
 #if 1 /* It was like this all the time */
       DispatchMessage (&msg);

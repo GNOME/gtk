@@ -30,6 +30,10 @@ no_undefined = -no-undefined
 if HAVE_WINTAB
 wintab_lib = -Lwin32 -lwntab32x
 endif
+
+if HAVE_IE55
+ie55uuid_lib = -Lwin32 -lie55uuid
+endif
 endif
 
 if OS_WIN32
@@ -170,7 +174,7 @@ if USE_WIN32
 libgdk_win32_includedir = $(includedir)/gtk-2.0/gdk
 
 libgdk_win32_1_3_la_LIBADD = \
-	$(gtarget)/libgdk-$(gtarget).la $(wintab_lib)
+	$(gtarget)/libgdk-$(gtarget).la $(wintab_lib) $(ie55uuid_lib)
 
 libgdk_win32_include_HEADERS = $(gdk_headers)
 libgdk_win32_1_3_la_SOURCES = $(gdk_c_sources) gdkenumtypes.c

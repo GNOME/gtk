@@ -19,19 +19,30 @@ LDADDS = @STRIP_BEGIN@ 		\
 @STRIP_END@
 
 if HAVE_WINTAB
-noinst_DATA = .libs/libwntab32x.a
+libwntab32x_a = .libs/libwntab32x.a
 
 .libs/libwntab32x.a: @WINTAB_LIB@
 	cp $< $@
 endif
+
+if HAVE_IE55
+libie55uuid_a = .libs/libie55uuid.a
+
+.libs/libie55uuid.a: @IE55_UUID_LIB@
+	cp $< $@
+endif
+
+noinst_DATA = $(libwntab32x_a) $(libie55uuid_a)
 
 noinst_LTLIBRARIES = libgdk-win32.la
 
 SUBDIRS=rc
 
 EXTRA_DIST = \
-	makefile.mingw \
-	makefile.msc
+	makefile.mingw	\
+	makefile.msc	\
+	libie55uuid.la	\
+	libwntab32x.la
 
 libgdk_win32_la_SOURCES = \
 	bdfcursor.c \
@@ -63,8 +74,7 @@ libgdk_win32_la_SOURCES = \
 	gdkwin32.h \
 	gdkwin32id.c \
 	gdkwindow-win32.c \
-	gdkwindow-win32.h \
-	surrogate-dimm.h
+	gdkwindow-win32.h
 
 libgdkinclude_HEADERS =		\
 	gdkwin32.h

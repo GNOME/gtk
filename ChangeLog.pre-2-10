@@ -1,3 +1,30 @@
+2001-11-08  Tor Lillqvist  <tml@iki.fi>
+
+	* README.win32: Add headers. Add section about ActiveIMM.
+
+	* configure.in: Add --with-ie55 flag to specify the location of
+	the "IE55 libs and headers" package downloadable from Microsoft,
+	which contains, among other things, the Active IMM header dimm.h
+	and UUID library uuid.lib. Use test -f instead of AC_CHECK_FILE.
+	Require GLib 1.3.10.
+	
+	* config.h.win32.in: New version, produced by merging two
+	configure-generated ones (for gcc and MSVC). Hopefully #defines
+	the same flags that the previous, hand-written one, did.
+
+	* gdk/Makefile.am
+	* gdk/win32/Makefile.am: Handle the uuid library from the IE55 lib.
+
+	* gdk/win32/gdkevents-win32.c: Conditionalize ActiveIMM
+	stuff. Remove unused GdkIOClosure.
+
+	* gdk/win32/surrogate-dimm.h: Remove, use real dimm.h instead (if
+	available).
+
+	* gdk/win32/libie55uuid.la: New file, handwritten libtool wrapper
+	for uuid.lib. (Does it really have to be this hard to use an
+	existing library with libtool? Probably I am missing something.)
+
 2001-11-08  Darin Adler  <darin@bentspoon.com>
 
 	* gtk/gtklabel.c: (gtk_label_ensure_layout): Fix an obvious

@@ -10,11 +10,17 @@ until the CVS HEAD version is useable. (But note, the Win32 backend
 has never been claimed to be "production quality", although it works
 surprisingly well for the GIMP.)
 
+Building GTK+ on Win32
+======================
+
 There are two ways to build GTK+ for win32:
 
 1) Use the autoconf-generated configure script, and the resulting
 Makefiles (which use libtool and gcc to do the compilation). I use
 this myself, but it might be hell to setup correctly. 
+
+Personally I run configure with:
+CC='gcc -mpentium -fnative-struct' CPPFLAGS='-I/target/include' CFLAGS=-O2 LDFLAGS='-L/target/lib' ./configure --disable-static --prefix=/target --with-gdktarget=win32 --with-wintab=/src/wtkit126 --with-ie55=/src/workshop/ie55_lib --host=i386-pc-mingw32 --enable-maintainer-mode
 
 2) Use the Microsoft compiler, cl and Make, nmake. Say nmake -f
 makefile.msc in gdk and gtk.
@@ -34,6 +40,9 @@ taking care of those makefiles. At times, we disagree a bit, and the
 msc makefiles might not produce compatible or identically named DLLs
 and import libraries as the autoconfiscated makefiles and libtool do.
 
+Using GTK+ on Win32
+===================
+
 To use GTK+ on Win32, you also need either one of the above mentioned
 compilers. Other compilers might work, but don't count on it. The same
 instructions on how to set up a correct version of gcc should also be
@@ -41,11 +50,25 @@ followed if you want to build applications that use GTk+ with gcc. For
 prebuilt developer packages (DLLs, import libraries, headers), see the
 above website.
 
+Multi-threaded use of GTK+ on Win32
+===================================
+
+Multi-threaded GTK+ programs might work in special simple cases, but
+not in general. Sorry. If you have all GTK+ and GDK calls in the same
+thread, it might work. Otherwise, probably not at all. Possible ways
+to fix this are being investigated.
+
+Wintab
+======
+
 The tablet support uses the Wintab API. The Wintab development kit can
 be downloaded from http://www.pointing.com. Pass the --with-wintab
 flag to configure if you use that. If you use nmake and you don't care
 for Wintab, undefine HAVE_WINTAB in config.h.win32 and remove
 references to the wntab32x library from the makefile before building.
+
+Libintl
+=======
 
 GTK wants to be built with the GNU "intl" library for
 internationalisation (i18n). Get the version ported to Win32 (not a
@@ -58,5 +81,17 @@ the makefiles.
 Note that while the GNU gettext package is under the GPL, the "intl"
 part of it is under the LGPL (like GTK or GLib), as of
 gettext-0.10.40.
+
+ActiveIMM
+=========
+
+If you want to build a GTK+ that supports ActiveIMM (the Input Method
+Manager for non-EastAsia locales that can be used on Win9x/NT4), you
+need the dimm.h header file. That is somewhat difficult to find, but
+http://msdn.microsoft.com/downloads/samples/internet/wizard/ seems to
+be a good place to look nowadays. If you use autoconfiscated build,
+pass the --with-ie55 flag to configure specifyin the location of the
+ie55_lib directory created by downloading the IE5.5 headers and libs
+from the above URL.
 
 --Tor Lillqvist <tml@iki.fi>
