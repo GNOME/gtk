@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
 "POT-Creation-Date: 2002-10-30 20:51+0200\n"
-"PO-Revision-Date: 2002-10-30 10:10--500\n"
+"PO-Revision-Date: 2002-10-30 10:18--500\n"
 "Last-Translator: Yuriy Syrota <yuri@renome.rovno.ua>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -281,23 +281,23 @@ msgstr ""
 
 #: gdk-pixbuf/io-png.c:55
 msgid "Bits per channel of PNG image is invalid."
-msgstr ""
+msgstr "Неправильне значення числа бітів на канал для зображення у форматі PNG"
 
 #: gdk-pixbuf/io-png.c:136
 msgid "Transformed PNG has zero width or height."
-msgstr ""
+msgstr "Перетворене зображення у форматі PNG має нульову ширину чи висоту"
 
 #: gdk-pixbuf/io-png.c:144
 msgid "Bits per channel of transformed PNG is not 8."
-msgstr ""
+msgstr "Значення числа бітів на канал перетвореного зображення у форматі PNG не дорівнює 8-ми."
 
 #: gdk-pixbuf/io-png.c:153
 msgid "Transformed PNG not RGB or RGBA."
-msgstr ""
+msgstr "Перетворене зображення у форматі PNG не є зображенням типу RGB чи RGBA"
 
 #: gdk-pixbuf/io-png.c:162
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr ""
+msgstr "Перетворене зображення у форматі PNG має непідтримуване число каналів, це число має бути 3 чи 4."
 
 #: gdk-pixbuf/io-png.c:183
 #, c-format
