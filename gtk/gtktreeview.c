@@ -928,6 +928,8 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   tree_view->priv->press_start_y = -1;
   tree_view->priv->reorderable = FALSE;
   tree_view->priv->presize_handler_timer = 0;
+  tree_view->priv->scroll_sync_timer = 0;
+  tree_view->priv->fixed_height_check = 0;
   gtk_tree_view_set_adjustments (tree_view, NULL, NULL);
   tree_view->priv->selection = _gtk_tree_selection_new_with_tree_view (tree_view);
   tree_view->priv->enable_search = TRUE;
@@ -3910,6 +3912,10 @@ do_validate_rows (GtkTreeView *tree_view)
   GtkTreePath *path = NULL;
   GtkTreeIter iter;
   gint i = 0;
+
+  gint prev_height = -1;
+  gboolean fixed_height = TRUE;
+
   g_assert (tree_view);
 
   if (tree_view->priv->tree == NULL)
@@ -3919,7 +3925,6 @@ do_validate_rows (GtkTreeView *tree_view)
     }
   do
     {
-
       if (! GTK_RBNODE_FLAG_SET (tree_view->priv->tree->root, GTK_RBNODE_DESCENDANTS_INVALID))
 	{
 	  retval = FALSE;
@@ -3979,9 +3984,29 @@ do_validate_rows (GtkTreeView *tree_view)
 	  gtk_tree_model_get_iter (tree_view->priv->model, &iter, path);
 	}
       validated_area = validate_row (tree_view, tree, node, &iter, path) | validated_area;
+
+      if (!tree_view->priv->fixed_height_check)
+        {
+	  gint height;
+
+	  height = MAX (GTK_RBNODE_GET_HEIGHT (node), tree_view->priv->expander_size);
+	  if (prev_height < 0)
+	    prev_height = height;
+	  else if (prev_height != height)
+	    fixed_height = FALSE;
+	}
+
       i++;
     }
   while (i < GTK_TREE_VIEW_NUM_ROWS_PER_IDLE);
+
+  if (!tree_view->priv->fixed_height_check)
+   {
+     if (fixed_height)
+       _gtk_rbtree_set_fixed_height (tree_view->priv->tree, prev_height);
+
+     tree_view->priv->fixed_height_check = 1;
+   }
   
  done:
   if (gtk_tree_row_reference_valid (tree_view->priv->top_row))
@@ -7455,6 +7480,7 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
       g_object_unref (tree_view->priv->model);
       tree_view->priv->search_column = -1;
       GTK_TREE_VIEW_SET_FLAG (tree_view, GTK_TREE_VIEW_IS_LIST);
+      tree_view->priv->fixed_height_check = 0;
     }
 
   tree_view->priv->model = model;

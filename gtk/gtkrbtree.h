@@ -140,6 +140,8 @@ void       _gtk_rbtree_node_mark_valid  (GtkRBTree              *tree,
 					 GtkRBNode              *node);
 void       _gtk_rbtree_column_invalid   (GtkRBTree              *tree);
 void       _gtk_rbtree_mark_invalid     (GtkRBTree              *tree);
+void       _gtk_rbtree_set_fixed_height (GtkRBTree              *tree,
+					 gint                    height);
 gint       _gtk_rbtree_node_find_offset (GtkRBTree              *tree,
 					 GtkRBNode              *node);
 gint       _gtk_rbtree_node_find_parity (GtkRBTree              *tree,
