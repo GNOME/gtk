@@ -22,7 +22,8 @@ and <filename>.gtkrc-2.0</filename> in the users home directory.
 (<filename>&lt;SYSCONFDIR&gt;</filename> defaults to 
 <filename>/usr/local/etc</filename>. It can be changed with the
 <option>--prefix</option> or <option>--sysconfdir</option> options when 
-configuring GTK+.)
+configuring GTK+.) Note that although the filenames contain the version 
+number 2.0, all 2.x versions of GTK+ look for these files.  
 </para>
 <para>
 The set of these <firstterm>default</firstterm> files
