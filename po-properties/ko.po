@@ -1,11 +1,11 @@
 # gtk+ ko.po
 # Sung-Hyun Nam <namsh@lgic.co.kr>, 1998
-# Changwoo Ryu <cwryu@debian.org>, 2002-2003
+# Changwoo Ryu <cwryu@debian.org>, 2002-2004
 msgid ""
 msgstr ""
 "Project-Id-Version: $PACKAGE $VERSION, no-define\n"
 "POT-Creation-Date: 2004-01-17 01:51+0100\n"
-"PO-Revision-Date: 2004-01-09 00:08+0900\n"
+"PO-Revision-Date: 2004-01-20 23:56+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: GTP Korean <gnome-kr-translation@gnome.or.kr>\n"
 "MIME-Version: 1.0\n"
@@ -203,29 +203,26 @@ msgid "Whether the action is visible."
 msgstr "동작을 표시할 지 여부"
 
 #: gtk/gtkaction.c:271
-#, fuzzy
 msgid "Action Group"
-msgstr "동작"
+msgstr "동작 그룹"
 
 #: gtk/gtkaction.c:272
 msgid ""
 "The GtkActionGroup this GtkAction is associated with, or NULL (for internal "
 "use)."
-msgstr ""
+msgstr "이 GtkAction과 연결되어 있는 GtkActionGroup, 혹은 NULL (내부적으로 사용)."
 
 #: gtk/gtkactiongroup.c:134
 msgid "A name for the action group."
 msgstr "이 동작 그룹의 이름."
 
 #: gtk/gtkactiongroup.c:142
-#, fuzzy
 msgid "Whether the action group is enabled."
-msgstr "이 동작을 사용할 지 여부"
+msgstr "이 동작 그룹을 사용할 지 여부."
 
 #: gtk/gtkactiongroup.c:149
-#, fuzzy
 msgid "Whether the action group is visible."
-msgstr "동작을 표시할 지 여부"
+msgstr "동작 그룹을 표시할 지 여부."
 
 #: gtk/gtkalignment.c:116
 msgid "Horizontal alignment"
@@ -2545,9 +2542,8 @@ msgid "Group"
 msgstr "그룹"
 
 #: gtk/gtkradioaction.c:156
-#, fuzzy
 msgid "The radio action whose group this action belongs."
-msgstr "이 위젯이 포함될 그룹의 라디오 단추"
+msgstr "이 동작이 포함될 그룹의 라디오 동작"
 
 #: gtk/gtkradiobutton.c:110
 msgid "The radio button whose group this widget belongs."
