@@ -1,3 +1,23 @@
+Mon Dec  3 21:15:59 2001  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreedatalist.c (_gtk_tree_data_list_value_to_node): if
+	we use pointers, we should free the previous pointer first (if
+	it exists), before we set a new pointer. (#64726)
+
+	* gtk/gtktreeprivate.h: get rid of cursor_drag
+
+	* gtk/gtktreeview.c (gtk_tree_view_unrealize): remove check	
+	for cursor_drag
+	(gtk_tree_view_bin_expose): don't directly return in the while
+	loop
+	(gtk_tree_view_class_init): indentend expanders by default
+	(gtk_tree_view_header_focus): only give the button focus
+	if it's clickable, visible and the column is reorderable
+	(#65539)
+
+	* gtk/gtktreeviewcolumn.c (_gtk_tree_view_column_realize_button):
+	create and free cursor
+
 Mon Dec  3 10:23:07 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcalendar.c (gtk_calendar_size_request): Fix

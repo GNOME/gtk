@@ -616,7 +616,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 					   g_param_spec_boolean ("indent_expanders",
 								 _("Indent Expanders"),
 								 _("Make the expanders indented."),
-								 FALSE,
+								 TRUE,
 								 G_PARAM_READABLE));
   /* Signals */
   widget_class->set_scroll_adjustments_signal =
@@ -1347,12 +1347,6 @@ gtk_tree_view_unrealize (GtkWidget *widget)
       gdk_window_set_user_data (tree_view->priv->drag_highlight_window, NULL);
       gdk_window_destroy (tree_view->priv->drag_highlight_window);
       tree_view->priv->drag_highlight_window = NULL;
-    }
-
-  if (tree_view->priv->cursor_drag)
-    {
-      gdk_cursor_destroy (tree_view->priv->cursor_drag);
-      tree_view->priv->cursor_drag = NULL;
     }
 
   if (tree_view->priv->xor_gc)
@@ -2835,9 +2829,8 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 		  node = tree->parent_node;
 		  tree = tree->parent_tree;
 		  if (tree == NULL)
-		    /* we've run out of tree.  It's okay to return though, as
-		     * we'd only break out of the while loop below. */
-		    return TRUE;
+		    /* we should go to done to free some memory */
+		    goto done;
 		  has_parent = gtk_tree_model_iter_parent (tree_view->priv->model,
 							   &iter,
 							   &parent_iter);
@@ -2852,6 +2845,7 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
     }
   while (y_offset < event->area.height);
 
+ done:
   if (cursor_path)
     gtk_tree_path_free (cursor_path);
 
@@ -3993,6 +3987,8 @@ gtk_tree_view_header_focus (GtkTreeView      *tree_view,
   while (last_column)
     {
       if (GTK_WIDGET_CAN_FOCUS (GTK_TREE_VIEW_COLUMN (last_column->data)->button) &&
+	  GTK_TREE_VIEW_COLUMN (last_column->data)->clickable &&
+	  GTK_TREE_VIEW_COLUMN (last_column->data)->reorderable &&
 	  GTK_TREE_VIEW_COLUMN (last_column->data)->visible)
 	break;
       last_column = last_column->prev;
@@ -4007,6 +4003,8 @@ gtk_tree_view_header_focus (GtkTreeView      *tree_view,
   while (first_column)
     {
       if (GTK_WIDGET_CAN_FOCUS (GTK_TREE_VIEW_COLUMN (first_column->data)->button) &&
+	  GTK_TREE_VIEW_COLUMN (first_column->data)->clickable &&
+	  GTK_TREE_VIEW_COLUMN (last_column->data)->reorderable &&
 	  GTK_TREE_VIEW_COLUMN (first_column->data)->visible)
 	break;
       first_column = first_column->next;

@@ -117,7 +117,6 @@ struct _GtkTreeViewPrivate
   GtkTreeRowReference *cursor;
 
   /* Column Resizing */
-  GdkCursor *cursor_drag;
   GdkGC *xor_gc;
   gint drag_pos;
   gint x_drag;

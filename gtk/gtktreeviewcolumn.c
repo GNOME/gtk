@@ -929,7 +929,6 @@ _gtk_tree_view_column_realize_button (GtkTreeViewColumn *column)
 		     GDK_KEY_PRESS_MASK);
   attributes_mask = GDK_WA_CURSOR | GDK_WA_X | GDK_WA_Y;
   attr.cursor = gdk_cursor_new (GDK_SB_H_DOUBLE_ARROW);
-  tree_view->priv->cursor_drag = attr.cursor;
 
   attr.y = 0;
   attr.width = TREE_VIEW_DRAG_WIDTH;
@@ -942,6 +941,8 @@ _gtk_tree_view_column_realize_button (GtkTreeViewColumn *column)
   gdk_window_set_user_data (column->window, tree_view);
 
   gtk_tree_view_column_update_button (column);
+
+  gdk_cursor_unref (attr.cursor);
 }
 
 void

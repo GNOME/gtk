@@ -196,12 +196,18 @@ _gtk_tree_data_list_value_to_node (GtkTreeDataList *list,
       list->data.v_double = g_value_get_double (value);
       break;
     case G_TYPE_STRING:
+      if (list->data.v_pointer)
+	g_free (list->data.v_pointer);
       list->data.v_pointer = g_value_dup_string (value);
       break;
     case G_TYPE_OBJECT:
+      if (list->data.v_pointer)
+	g_object_unref (list->data.v_pointer);
       list->data.v_pointer = g_value_dup_object (value);
       break;
     case G_TYPE_BOXED:
+      if (list->data.v_pointer)
+	g_boxed_free (G_VALUE_TYPE (value), list->data.v_pointer);
       list->data.v_pointer = g_value_dup_boxed (value);
       break;
     default:
