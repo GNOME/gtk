@@ -70,10 +70,6 @@ static void gtk_real_tree_item_expand   (GtkTreeItem      *item);
 static void gtk_real_tree_item_collapse (GtkTreeItem      *item);
 static void gtk_real_tree_item_expand   (GtkTreeItem      *item);
 static void gtk_real_tree_item_collapse (GtkTreeItem      *item);
-static void gtk_tree_item_marshal_signal (GtkObject      *object,
-					  GtkSignalFunc   func,
-					  gpointer        func_data,
-					  GtkArg         *args);
 static void gtk_tree_item_destroy        (GtkObject *object);
 static void gtk_tree_item_subtree_button_click (GtkWidget *widget);
 static void gtk_tree_item_subtree_button_changed_state (GtkWidget *widget);
@@ -128,14 +124,14 @@ gtk_tree_item_class_init (GtkTreeItemClass *class)
 		    GTK_RUN_FIRST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkTreeItemClass, expand),
-		    gtk_tree_item_marshal_signal,
+		    gtk_signal_default_marshaller,
 		    GTK_TYPE_NONE, 0);
   tree_item_signals[COLLAPSE_TREE] =
     gtk_signal_new ("collapse",
 		    GTK_RUN_FIRST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkTreeItemClass, collapse),
-		    gtk_tree_item_marshal_signal,
+		    gtk_signal_default_marshaller,
 		    GTK_TYPE_NONE, 0);
 
   gtk_object_class_add_signals (object_class, tree_item_signals, LAST_SIGNAL);
@@ -806,19 +802,6 @@ gtk_real_tree_item_toggle (GtkItem *item)
 	gtk_widget_set_state (GTK_WIDGET (item), GTK_STATE_SELECTED);
       gtk_widget_queue_draw (GTK_WIDGET (item));
     }
-}
-
-static void
-gtk_tree_item_marshal_signal (GtkObject      *object,
-			      GtkSignalFunc   func,
-			      gpointer        func_data,
-			      GtkArg         *args)
-{
-  GtkTreeItemSignal rfunc;
-
-  rfunc = (GtkTreeItemSignal) func;
-
-  (* rfunc) (object, GTK_VALUE_OBJECT (args[0]), func_data);
 }
 
 static void

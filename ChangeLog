@@ -1,3 +1,8 @@
+Mon Feb 16 17:35:17 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtktreeitem.c: Use gtk_signal_default_marshaller,
+	  for expand/collapse signals.
+
 Fri Feb 13 19:08:51 1998  Tim Janik  <timj@gimp.org>
 
 	* gtk/gtkclist.c (check_exposures): check for clist !REALIZED.
