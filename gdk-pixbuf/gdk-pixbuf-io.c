@@ -120,6 +120,21 @@ pixbuf_check_pnm (guchar *buffer, int size)
 	}
 	return FALSE;
 }
+static gboolean
+pixbuf_check_sunras (guchar *buffer, int size)
+{
+	if (size < 32)
+		return FALSE;
+
+	if (buffer [0] != 0x59 ||
+	    buffer [1] != 0xA6 ||
+	    buffer [2] != 0x6A ||
+	    buffer [3] != 0x95)
+		return FALSE;
+
+	return TRUE;
+}
+
 
 #if 0
 static gboolean
@@ -144,6 +159,7 @@ GdkPixbufModule file_formats [] = {
 #define XPM_FILE_FORMAT_INDEX 4
 	{ "xpm",  pixbuf_check_xpm, NULL,  NULL, NULL, NULL, NULL, NULL },
 	{ "pnm",  pixbuf_check_pnm, NULL,  NULL, NULL, NULL, NULL, NULL },
+	{ "ras",  pixbuf_check_sunras, NULL,  NULL, NULL, NULL, NULL, NULL },
 #if 0
 	{ "bmp",  pixbuf_check_bmp, NULL,  NULL, NULL, NULL, NULL, NULL },
 #endif
