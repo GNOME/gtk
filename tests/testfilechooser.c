@@ -291,6 +291,9 @@ update_preview_cb (GtkFileChooser *chooser)
 	}
       
       g_free (filename);
+
+      if (error)
+	g_error_free (error);
     }
 
   gtk_file_chooser_set_preview_widget_active (chooser, have_preview);
