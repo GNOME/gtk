@@ -1,3 +1,8 @@
+Thu Jul 17 16:11:21 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_rows_reordered): stop editing
+	if needed. (Fixes #115869, reported by Michael Natterer).
+
 Wed Jul 16 19:31:19 BST 2003  Tony Gale <gale@gtk.org>
 
 	* docs/tutorial/gtk-tut.sgml docss/faq/gtk-faq.sgml:
