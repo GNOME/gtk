@@ -277,6 +277,15 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
 						      GTK_SHADOW_NONE,
                                                       G_PARAM_READABLE | G_PARAM_WRITABLE));
 
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_int ("scrollbar_spacing",
+							     _("Scrollbar spacing"),
+							     _("Number of pixels between the scrollbars and the scrolled window"),
+							     0,
+							     G_MAXINT,
+							     DEFAULT_SCROLLBAR_SPACING,
+							     G_PARAM_READABLE));
+
   signals[SCROLL_CHILD] =
     g_signal_new ("scroll_child",
                   G_TYPE_FROM_CLASS (object_class),
@@ -1384,6 +1393,16 @@ _gtk_scrolled_window_get_scrollbar_spacing (GtkScrolledWindow *scrolled_window)
 
   class = GTK_SCROLLED_WINDOW_GET_CLASS (scrolled_window);
 
-  return class->scrollbar_spacing >= 0 ? class->scrollbar_spacing : DEFAULT_SCROLLBAR_SPACING;
-}
+  if (class->scrollbar_spacing >= 0)
+    return class->scrollbar_spacing;
+  else
+    {
+      gint scrollbar_spacing;
+      
+      gtk_widget_style_get (GTK_WIDGET (scrolled_window),
+			    "scrollbar_spacing", &scrollbar_spacing,
+			    NULL);
 
+      return scrollbar_spacing;
+    }
+}

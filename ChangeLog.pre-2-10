@@ -1,3 +1,9 @@
+Sun Oct 20 14:58:02 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_class_init):
+	Add a scrollbar_spacing style property (#81396, based
+	on a patch from Anders Carlsson)
+
 2002-10-19  Jeremy Katz  <katzj@redhat.com>
 
 	* configure.in: make configure checks for Xrandr and Xinerama
