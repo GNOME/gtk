@@ -1,3 +1,9 @@
+1998-09-02  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gtk/gtkcolorsel.c: Replaced "foo == TRUE" and "foo == FALSE"
+	constructs by more forgiving ones.  (Does anyone else feel like
+	the color selector need rewriting?).
+
 Tue Sep  1 10:53:52 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkprogress.c (gtk_progress_finalize): Unref

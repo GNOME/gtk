@@ -465,7 +465,7 @@ gtk_color_selection_set_color (GtkColorSelection *colorsel,
       colorsel->values[n] = color[i++];
     }
 
-  if (colorsel->use_opacity == TRUE)
+  if (colorsel->use_opacity)
     {
       colorsel->old_values[OPACITY] = colorsel->values[OPACITY];
       colorsel->values[OPACITY] = color[i];
@@ -494,7 +494,7 @@ gtk_color_selection_get_color (GtkColorSelection *colorsel,
 
   for (n = RED; n <= BLUE; n++)
     color[i++] = colorsel->values[n];
-  if (colorsel->use_opacity == TRUE)
+  if (colorsel->use_opacity)
     color[i] = colorsel->values[OPACITY];
 }
 
@@ -776,13 +776,13 @@ gtk_color_selection_set_opacity (GtkColorSelection *colorsel,
 
   colorsel->use_opacity = use_opacity;
 
-  if (use_opacity == FALSE && GTK_WIDGET_VISIBLE (colorsel->scales[OPACITY]))
+  if (!use_opacity && GTK_WIDGET_VISIBLE (colorsel->scales[OPACITY]))
     {
       gtk_widget_hide (colorsel->opacity_label);
       gtk_widget_hide (colorsel->scales[OPACITY]);
       gtk_widget_hide (colorsel->entries[OPACITY]);
     }
-  else if (use_opacity == TRUE && !GTK_WIDGET_VISIBLE (colorsel->scales[OPACITY]))
+  else if (use_opacity && !GTK_WIDGET_VISIBLE (colorsel->scales[OPACITY]))
     {
       gtk_widget_show (colorsel->opacity_label);
       gtk_widget_show (colorsel->scales[OPACITY]);
@@ -972,7 +972,7 @@ gtk_color_selection_value_events (GtkWidget *area,
       break;
     case GDK_BUTTON_RELEASE:
       gtk_grab_remove (area);
-      if (colorsel->timer_active == TRUE)
+      if (colorsel->timer_active)
 	gtk_timeout_remove (colorsel->timer_tag);
       colorsel->timer_active = FALSE;
 
@@ -996,7 +996,7 @@ gtk_color_selection_value_events (GtkWidget *area,
 	  gtk_color_selection_color_changed (colorsel);
 	  break;
 	case GTK_UPDATE_DELAYED:
-	  if (colorsel->timer_active == TRUE)
+	  if (colorsel->timer_active)
 	    gtk_timeout_remove (colorsel->timer_tag);
 
 	  colorsel->timer_tag = gtk_timeout_add (TIMER_DELAY,
@@ -1060,7 +1060,7 @@ gtk_color_selection_wheel_events (GtkWidget *area,
       break;
     case GDK_BUTTON_RELEASE:
       gtk_grab_remove (area);
-      if (colorsel->timer_active == TRUE)
+      if (colorsel->timer_active)
 	gtk_timeout_remove (colorsel->timer_tag);
       colorsel->timer_active = FALSE;
 
@@ -1087,7 +1087,7 @@ gtk_color_selection_wheel_events (GtkWidget *area,
 	  gtk_color_selection_color_changed (colorsel);
 	  break;
 	case GTK_UPDATE_DELAYED:
-	  if (colorsel->timer_active == TRUE)
+	  if (colorsel->timer_active)
 	    gtk_timeout_remove (colorsel->timer_tag);
 	  colorsel->timer_tag = gtk_timeout_add (TIMER_DELAY,
 						 (GtkFunction) gtk_color_selection_wheel_timeout,
@@ -1204,7 +1204,7 @@ gtk_color_selection_draw_wheel (GtkColorSelection *colorsel,
       i = 0;
       for (x = 0; x < wid; x++)
 	{
-	  if (gtk_color_selection_eval_wheel (x, y, cx, cy, &h, &s) == TRUE)
+	  if (gtk_color_selection_eval_wheel (x, y, cx, cy, &h, &s))
 	    {
 	      for (n = 0; n < 3; n++)
 		colorsel->wheel_buf[i++] = bg[n];
@@ -1250,7 +1250,7 @@ gtk_color_selection_draw_sample (GtkColorSelection *colorsel,
       c[n + 3] = (guchar) (255.0 * colorsel->values[i++]);
     }
 
-  if (colorsel->use_opacity == TRUE)
+  if (colorsel->use_opacity)
     {
       o = colorsel->values[OPACITY];
       oldo = colorsel->old_values[OPACITY];
