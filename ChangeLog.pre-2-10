@@ -1,3 +1,170 @@
+2003-07-25  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkprivate-win32.h
+	* gdk/win32/gdkglobals-win32.c: New flags _gdk_input_locale_is_ime
+	and _gdk_keyboard_has_altgr.
+	
+	* gdk/win32/gdkevents-win32.c: Lots of changes. Most important
+	ones detailled here.
+
+	Code that has been ifdeffed out for a long time removed. Remove
+	some really old doc comments that were left behind for some public
+	functions, the official ones are in the X11 backend anyway. Change
+	GDK_WINDOW_OBJECT() calls to GdkWindowObject casts. Reformat
+	multi-line boolean expressions to have the operators at ends of
+	lines.
+
+	As mouse capture with SetCapture() indeed seems to work OK, no
+	need to have the correspoinding macro USE_SETCAPTURE and ifdefs.
+
+	Ifdef out the gdk-ping-msg stuff. I don't remember why it was
+	needed at some time, and things seem to work fine now without
+	(knock on wood).
+
+	Ifdef out the search for some Latin locale keyboard layout being
+	loaded. Not used currently, but might be needed after all, if we
+	decide that we want to be able to generate ASCII control character
+	events with a non-Latin keyboard.
+
+	(assign_object): New helper function, handles the g_object_ref()
+	and unref() calls when assigning GObject pointers.
+		
+	(generate_crossing_events): Also generate the GDK_NOTIFY_INTERIOR
+	enter event when the pointer has moved to an ancestor window. Was
+	left out by mistake.
+
+	(gdk_window_is_ancestor): Renamed from gdk_window_is_child().
+
+	(gdk_pointer_grab, gdk_pointer_ungrab): Implement the confine_to
+	functionality, using ClipCursor().
+		
+	(find_window_for_mouse_event): Splice part of code into new
+	function find_real_window_for_grabbed_mouse_event().
+
+	(fixup_event, append_event, apply_filters): New functions, code
+	refactored out from elsewhere.
+
+	(synthesize_enter_or_leave_event, synthesize_leave_event,
+	synthesize_enter_event,
+	synthesize_leave_events,synthesize_enter_events): Also take a
+	GdkCrossingMode parameter, in preparation to generating
+	GDK_CROSSING_GRAB and GDK_CROSSING_UNGRAB events.
+
+	(fixup_event, append_event, fill_key_event_string): New functions,
+	code refactoring.
+
+	(vk_from_char, build_keypress_event, build_keyrelease_event):
+	Removed as part of dropping WM_CHAR handling.
+
+	(build_key_event_state,gdk_event_translate): Call
+	GetKeyboardState(), once, for each keyboard message, instead of
+	several calls to GetKeyState() here and there.
+
+	(gdk_event_translate): Fix bugs #104516, #104662, #115902. While
+	at it, do some major refactoring, and some fixes for potential
+	problems noticed while going through the code.
+
+	Don't handle WM_CHAR at all. Only handle WM_KEYDOWN and
+	WM_KEYUP. Don't need the state variables related to whether to
+	wait for WM_CHAR or not, and whether the current key is
+	AltGr. Remove lots of complexity. Thus don't need the
+	use_ime_composition flag.
+
+	Not handling WM_CHAR means dead key handling will have to be taken
+	care of by GTK, but that seems to work fine, so no worry.
+
+	Another side-effect is that Alt+keypad digits don't work any
+	longer, but it's better to learn to use GTK's ISO14755 support is
+	anyway.
+
+	Be more careful in checking whether AltGr is involved. Only
+	attempt to handle it if the keyboard actually has it. And
+	explicitly check for *left* Control plus *right* Alt being
+	pressed. Still, allow (left) Alt and/or (right) Control with AltGr
+	chars.
+
+	Handle keys using similar code as in the X11 backend. As we have
+	built a keymap in gdkkeys-win32.c anyway, use it by calling
+	gdk_keymap_translate_keyboard_state() to look up the keysym from
+	the virtual key code and keyboard state. Build the key event
+	string in exactly the same way as the X11 backend.
+
+	If an IME is being used, don't generate GDK events for keys
+	between receiving WM_IME_STARTCOMPOSITION and
+	WM_IME_ENDCOMPOSITION, as those keys are for the IME.
+	
+	For WM_IME_COMPOSITION, handle all the Unicode chars returned from
+	the IME, not just the first one.
+
+	gdk_event_translate() is still quite complex, could split the
+	message handler cases out into separate functions.
+
+	On mouse events, when the mouse is grabbed, use
+	find_real_window_for_grabbed_mouse_event() in order to be able to
+	generate correct crossing events.
+	
+	No longer take a pre-allocated GdkEvent as parameter. Instead,
+	allocate events as needed and append them to the queue. (This is
+	different from how gdk_event_translate() in the X11 backend
+	works.) This change made the code much clearer, especially in the
+	cases where we have to generate several GDK events for one Windows
+	message.  Return FALSE if DefWindowProc() should be called, TRUE
+	if not. If DefWindowProc() should not be called, also return the
+	value to be returned from the window procedure.
+
+	(Previously, the interaction with gdk_event_translate()'s caller
+	was much more complex, when we had to indicate whether the
+	already-queued event should be left in the queue or removed, and
+	in addition also had to indicate whether to call DefWindowProc()
+	or not, and what value to return from the window procedure if
+	not.)
+
+	Don't use a separate "private" variable required to be pointing to
+	the GdkWindowObject of the "window" variable at all times. Just
+	use casts, even if looks a bit uglier.
+
+	Notice destroyed windows as early as possible, and break out of
+	the messsage switch.
+
+	Use _gdk_pointer_root as current_window when the pointer is
+	outside GDK's top-level windows.
+	
+	On WM_INPUTLANGCHANGE, set _gdk_input_locale_is_ime as
+	appropriate, based on ImmIsIME().
+	
+	(gdk_event_translate, gdk_event_send_client_message_for_display,
+	gdk_screen_broadcast_client_message): Implement client messages.
+	Use a registered Windows message to pass GDK client messages. Note
+	that the amount of user data is restricted to four bytes, as it is
+	carried in the LPARAM. (The WPARAM is used for the message type
+	"atom".)
+	
+	(real_window_procedure): Adapt for new gdk_event_translate()
+	interface.
+
+	* gdk/win32/gdkmain-win32.c (_gdk_windowing_init): Set
+	_gdk_input_locale_is_ime initially.
+
+	* gdk/win32/gdkwindow-win32.c: Use g_object_ref()/unref() instead
+	of g_colormap_ref()/unref().
+
+	(gdk_window_new): Made code a bit more like the X11 one, pretend
+	to handle screens (although we just have one for now).
+
+	* gdk/x11/gdkevents-x11.c
+	(gdk_event_send_client_message_for_display,
+	gdk_screen_broadcast_client_message): Document the user data
+	limitation on Win32.
+
+	* gdk/win32/gdkevents-win32.c (print_event): More complete enter
+	and leave notify detail output.
+
+	* gdk/win32/gdkkeys-win32.c (update_keymap): Make dead keys
+	visible to GDK and GTK. Store the corresponding GDK_dead_* keysym
+	for those, so that the GtkIMContextCimple compose tables will
+	work. Deduce if the keyboard layout has the AltGr key, and set the
+	above flag accordingly.
+
 2003-07-26  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkwidget.c: Document DND signals.
