@@ -1,5 +1,7 @@
 1999-12-02  Federico Mena Quintero  <federico@redhat.com>
 
+	* src/gdk-pixbuf.h: Removed unused transformation prototypes.
+
 	* src/gdk-pixbuf-util.c: New file with utility and convenience
 	functions for pixbufs.
 

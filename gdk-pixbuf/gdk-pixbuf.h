@@ -118,12 +118,6 @@ void gdk_pixbuf_render_to_drawable_alpha (GdkPixbuf *pixbuf, GdkDrawable *drawab
 					  GdkRgbDither dither,
 					  int x_dither, int y_dither);
 
-/* Transformations */
-#if 0
-GdkPixbuf *gdk_pixbuf_scale (const GdkPixbuf *pixbuf, gint w, gint h);
-GdkPixbuf *gdk_pixbuf_rotate (GdkPixbuf *pixbuf, gdouble angle);
-#endif
-
 
 
 #ifdef __cplusplus
