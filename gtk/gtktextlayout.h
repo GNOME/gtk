@@ -115,6 +115,7 @@ struct _GtkTextLineDisplay
 {
   PangoLayout *layout;
   GSList *cursors;
+  GSList *pixmaps;
 
   GtkTextDirection direction;
 

@@ -1,3 +1,18 @@
+Fri Jul 21 15:28:13 2000  Owen Taylor  <otaylor@redhat.com>
+
+        * gtk/gtktextlayout.[ch], gtk/gtktextdisplay.c: Use new
+	PangoAttrShape to reserve space for pixmaps, add 
+	GSList *pixmaps to GtkTextLineDisplay, draw the pixmaps
+	in the display functions.
+	
+	* gtk/testgtk.c (create_layout): Set some more exotic
+	scrolled window options
+
+	* gtk/gtkscrolledwindow.[ch] (gtk_scrolled_window_set_shadow_type):
+	Add function to set the shadow type of a window, to allow
+	putting a shadow around widgets such as GtkLayout or GnomeCanvas
+	which don't draw their own frame.
+
 Fri Jul 21 16:34:42 BST 2000  Tony Gale <gale@gtk.org>
 
 	* docs/tutorial/package-db-tutorial.sh: New file for

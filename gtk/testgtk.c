@@ -8418,6 +8418,10 @@ void create_layout (void)
       gtk_widget_set_usize (window, 200, 200);
 
       scrolledwindow = gtk_scrolled_window_new (NULL, NULL);
+      gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolledwindow),
+					   GTK_SHADOW_IN);
+      gtk_scrolled_window_set_placement (GTK_SCROLLED_WINDOW (scrolledwindow),
+					 GTK_CORNER_TOP_RIGHT);
 
       gtk_container_add (GTK_CONTAINER (window), scrolledwindow);
       

@@ -63,6 +63,8 @@ struct _GtkScrolledWindow
   guint hscrollbar_visible     : 1;
   guint vscrollbar_visible     : 1;
   guint window_placement       : 2;
+
+  guint16 shadow_type;
 };
 
 struct _GtkScrolledWindowClass
@@ -87,6 +89,8 @@ void           gtk_scrolled_window_set_policy        (GtkScrolledWindow *scrolle
 						      GtkPolicyType      vscrollbar_policy);
 void           gtk_scrolled_window_set_placement     (GtkScrolledWindow *scrolled_window,
 						      GtkCornerType      window_placement);
+void           gtk_scrolled_window_set_shadow_type   (GtkScrolledWindow *scrolled_window,
+						      GtkShadowType      type);
 void	       gtk_scrolled_window_add_with_viewport (GtkScrolledWindow *scrolled_window,
 						      GtkWidget		*child);
 

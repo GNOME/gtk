@@ -55,6 +55,7 @@
 #include "gtktextiterprivate.h"
 
 #include <stdlib.h>
+#include <string.h>
 
 static GtkTextLineData    *gtk_text_line_data_new                 (GtkTextLayout     *layout,
 								   GtkTextLine       *line);
@@ -1090,17 +1091,35 @@ add_text_attrs (GtkTextLayout      *layout,
       attr->start_index = start;
       attr->end_index = start + byte_count;
 
-      pango_attr_list_insert (attrs, attr);
+      pango_attr_list_insert (attrs, attr); 
     }
 }
 
 static void
 add_pixmap_attrs (GtkTextLayout      *layout,
+		  GtkTextLineDisplay *display,
 		  GtkTextStyleValues *style,
 		  GtkTextLineSegment *seg,
 		  PangoAttrList      *attrs,
 		  gint                start)
 {
+  PangoAttribute *attr;
+  PangoRectangle logical_rect;
+  GtkTextPixmap *pixmap = &seg->body.pixmap;
+  gint width, height;
+
+  gdk_drawable_get_size (pixmap->pixmap, &width, &height);
+  logical_rect.x = 0;
+  logical_rect.y = -height * PANGO_SCALE;
+  logical_rect.width = width * PANGO_SCALE;
+  logical_rect.height = height * PANGO_SCALE;
+
+  attr = pango_attr_shape_new (&logical_rect, &logical_rect);
+  attr->start_index = start;
+  attr->end_index = start + seg->byte_count;
+  pango_attr_list_insert (attrs, attr);
+
+  display->pixmaps = g_slist_append (display->pixmaps, pixmap);
 }
 
 static void
@@ -1271,7 +1290,7 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
 		}
 	      else
 		{
-		  add_pixmap_attrs (layout, style, seg, attrs, byte_offset);
+		  add_pixmap_attrs (layout, display, style, seg, attrs, byte_offset);
 		  memcpy (text + byte_offset, gtk_text_unknown_char_utf8, seg->byte_count);
 		  byte_offset += seg->byte_count;
 		}
@@ -1365,6 +1384,7 @@ gtk_text_layout_free_line_display (GtkTextLayout      *layout,
 	{
 	  g_slist_foreach (display->cursors, (GFunc)g_free, NULL);
 	  g_slist_free (display->cursors);
+	  g_slist_free (display->pixmaps);
 	}
       
       g_free (display);

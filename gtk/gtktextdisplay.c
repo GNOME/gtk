@@ -159,6 +159,7 @@ static void
 render_layout_line (GdkDrawable        *drawable,
 		    GtkTextRenderState *render_state,
 		    PangoLayoutLine    *line,
+		    GSList            **pixmap_pointer,
 		    int                 x, 
 		    int                 y,
 		    gboolean            selected)
@@ -245,6 +246,39 @@ render_layout_line (GdkDrawable        *drawable,
 
 	  x_off += logical_rect.width;
 	}
+      else			/* Pixmap segment */
+	{
+	  GtkTextPixmap *pixmap = (*pixmap_pointer)->data;
+	  gint width, height;
+	  GdkRectangle pixmap_rect, draw_rect;
+	  
+	  *pixmap_pointer = (*pixmap_pointer)->next;
+
+	  gdk_drawable_get_size (pixmap->pixmap, &width, &height);
+
+	  pixmap_rect.x = x + x_off / PANGO_SCALE;
+	  pixmap_rect.y = y - height;
+	  pixmap_rect.width = width;
+	  pixmap_rect.height = height;
+
+	  gdk_rectangle_intersect (&pixmap_rect, &render_state->clip_rect, &draw_rect);
+
+	  if (pixmap->mask)
+	    {
+	      gdk_gc_set_clip_mask (render_state->fg_gc, pixmap->mask);
+	      gdk_gc_set_clip_origin (render_state->fg_gc,
+				      pixmap_rect.x, pixmap_rect.y);
+	    }
+	  
+	  gdk_draw_drawable (drawable, render_state->fg_gc, pixmap->pixmap,
+			     draw_rect.x - pixmap_rect.x, draw_rect.y - pixmap_rect.y,
+			     draw_rect.x, draw_rect.y, draw_rect.width, draw_rect.height);
+
+	  if (pixmap->mask)
+	    gdk_gc_set_clip_rectangle (render_state->fg_gc, &render_state->clip_rect);
+
+	  x_off += width * PANGO_SCALE;
+	}
     }
 }
 
@@ -258,6 +292,7 @@ render_para (GdkDrawable        *drawable,
 	     int                 selection_end_index)
 {
   PangoRectangle logical_rect;
+  GSList *pixmap_pointer = line_display->pixmaps;
   GSList *tmp_list;
   PangoAlignment align;
   PangoLayout *layout = line_display->layout;
@@ -340,14 +375,16 @@ render_para (GdkDrawable        *drawable,
 			      TRUE,
 			      x + line_display->left_margin, selection_y,
 			      total_width / PANGO_SCALE, selection_height);
-	  render_layout_line (drawable, render_state,
-			      line, x + x_offset / PANGO_SCALE, y + (y_offset - logical_rect.y) / PANGO_SCALE,
+	  render_layout_line (drawable, render_state, line, &pixmap_pointer,
+			      x + x_offset / PANGO_SCALE, y + (y_offset - logical_rect.y) / PANGO_SCALE,
 			      TRUE);
 	}
       else
 	{
-	  render_layout_line (drawable, render_state,
-			      line, x + x_offset / PANGO_SCALE, y + (y_offset - logical_rect.y) / PANGO_SCALE,
+	  GSList *pixmap_pointer_tmp = pixmap_pointer;
+	  
+	  render_layout_line (drawable, render_state, line, &pixmap_pointer,
+			      x + x_offset / PANGO_SCALE, y + (y_offset - logical_rect.y) / PANGO_SCALE,
 			      FALSE);
 
 	  if (selection_start_index < byte_offset + line->length &&
@@ -368,8 +405,8 @@ render_para (GdkDrawable        *drawable,
 				  logical_rect.width / PANGO_SCALE,
 				  selection_height);
 	      
-	      render_layout_line (drawable, render_state,
-				  line, x + x_offset / PANGO_SCALE, y + (y_offset - logical_rect.y) / PANGO_SCALE,
+	      render_layout_line (drawable, render_state, line, &pixmap_pointer_tmp,
+				  x + x_offset / PANGO_SCALE, y + (y_offset - logical_rect.y) / PANGO_SCALE,
 				  TRUE);
 
 	      gdk_gc_set_clip_region (render_state->widget->style->fg_gc [GTK_STATE_SELECTED], NULL);
@@ -467,8 +504,9 @@ get_item_properties (PangoItem          *item,
       if (attr->klass->type == gtk_text_attr_appearance_type)
 	{
 	  *appearance = &((GtkTextAttrAppearance *)attr)->appearance;
-	  return;
 	}
+
+      tmp_list = tmp_list->next;
     }
 }
 
