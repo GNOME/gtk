@@ -1,3 +1,8 @@
+2004-04-15  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/tmpl/gtkfilechooser.sgml: Added a section explaining
+	character encoding for filenames.
+
 2004-04-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkuimanager.sgml: Some corrections.

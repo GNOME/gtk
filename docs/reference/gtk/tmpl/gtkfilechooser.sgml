@@ -15,6 +15,35 @@ File chooser interface used by #GtkFileChooserWidget and #GtkFileChooserDialog.
       programming interface.
     </para>
 
+    <refsect2 id="gtkfilechooser-encodings">
+      <title>File Names and Encodings</title>
+
+      <para>
+	When the user is finished selecting files in a
+	#GtkFileChooser, your program can get the selected names
+	either as filenames or as URIs.  For URIs, the normal escaping
+	rules are applied if the URI contains non-ASCII characters.
+	However, filenames are <emphasis>always</emphasis> returned in
+	the character set specified by the
+	<envar>G_FILENAME_ENCODING</envar> environment variable.
+	Please see the Glib documentation for more details about this
+	variable.
+      </para>
+
+      <important>
+	<para>
+	  This means that while you can pass the result of
+	  gtk_file_chooser_get_filename() to
+	  <function>open(2)</function> or
+	  <function>fopen(3)</function>, you may not be able to
+	  directly set it as the text of a #GtkLabel widget unless you
+	  convert it first to UTF-8, which all GTK+ widgets expect.
+	  You should use g_filename_to_utf8() to convert filenames
+	  into strings that can be passed to GTK+ widgets.
+	</para>
+      </important>
+    </refsect2>
+
     <refsect2 id="gtkfilechooser-preview">
       <title>Adding a Preview Widget</title>
 
