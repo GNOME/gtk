@@ -1,3 +1,12 @@
+Wed May  8 16:14:49 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktreeview.c 
+	(gtk_tree_view_init): set_redraw_on_allocate (FALSE);
+	(gtk_tree_view_size_allocate): invalidate last column if width
+	changed.
+	(gtk_tree_view_bin_expose): skip over cells that aren't in
+	event->region
+
 Tue May  7 18:36:03 2002  Owen Taylor  <otaylor@redhat.com>
  
  	* gdk/x11/xsettings-client.c (xsettings_client_process_event): 

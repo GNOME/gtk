@@ -916,6 +916,8 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   tree_view->priv = g_new0 (GtkTreeViewPrivate, 1);
   GTK_WIDGET_SET_FLAGS (tree_view, GTK_CAN_FOCUS);
 
+  gtk_widget_set_redraw_on_allocate (GTK_WIDGET (tree_view), FALSE);
+
   tree_view->priv->flags = GTK_TREE_VIEW_IS_LIST | GTK_TREE_VIEW_SHOW_EXPANDERS | GTK_TREE_VIEW_DRAW_KEYFOCUS | GTK_TREE_VIEW_HEADERS_VISIBLE;
 
   /* We need some padding */
@@ -1603,14 +1605,51 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget)
 }
 
 static void
+invalidate_last_column (GtkTreeView *tree_view)
+{
+  GList *list, *last_column;
+  gint last_column_x;
+  GtkWidget *widget = GTK_WIDGET (tree_view);
+
+  for (last_column = g_list_last (tree_view->priv->columns);
+       last_column && !(GTK_TREE_VIEW_COLUMN (last_column->data)->visible);
+       last_column = last_column->prev)
+    ;
+  
+  last_column_x = 0;
+  for (list = tree_view->priv->columns; list; list = list->next)
+    {
+      GtkTreeViewColumn *column = list->data;
+      if (list == last_column)
+	{
+	  GdkRectangle invalid_rect;
+	  
+	  invalid_rect.x = last_column_x;
+	  invalid_rect.y = 0;
+	  invalid_rect.width = column->width;
+	  invalid_rect.height = widget->allocation.height;
+	  
+	  gdk_window_invalidate_rect (widget->window, &invalid_rect, TRUE);
+	  break;
+	}
+      
+      last_column_x += column->width;
+    }
+}
+
+static void
 gtk_tree_view_size_allocate (GtkWidget     *widget,
 			     GtkAllocation *allocation)
 {
   GList *tmp_list;
   GtkTreeView *tree_view;
+  gboolean width_changed = FALSE;
 
   g_return_if_fail (GTK_IS_TREE_VIEW (widget));
 
+  if (allocation->width != widget->allocation.width)
+    width_changed = TRUE;
+  
   widget->allocation = *allocation;
 
   tree_view = GTK_TREE_VIEW (widget);
@@ -1672,6 +1711,9 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
     }
 
   gtk_tree_view_size_allocate_columns (widget);
+
+  if (GTK_WIDGET_REALIZED (widget) && width_changed)
+    invalidate_last_column (tree_view);
 }
 
 static gboolean
@@ -2842,16 +2884,6 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 
       parity = _gtk_rbtree_node_find_parity (tree, node);
 
-      for (list = tree_view->priv->columns; list; list = list->next)
-        {
-	  GtkTreeViewColumn *column = list->data;
-	  gtk_tree_view_column_cell_set_cell_data (column,
-						   tree_view->priv->model,
-						   &iter,
-						   GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_PARENT),
-						   node->children?TRUE:FALSE);
-	}
-
       has_special_cell = gtk_tree_view_has_special_cell (tree_view);
 
       for (list = tree_view->priv->columns; list; list = list->next)
@@ -2883,6 +2915,18 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
           cell_area.x += horizontal_separator / 2;
           cell_area.height -= vertical_separator;
 	  cell_area.width -= horizontal_separator;
+
+	  if (gdk_region_rect_in (event->region, &background_area) == GDK_OVERLAP_RECTANGLE_OUT)
+	    {
+	      cell_offset += column->width;
+	      continue;
+	    }
+
+	  gtk_tree_view_column_cell_set_cell_data (column,
+						   tree_view->priv->model,
+						   &iter,
+						   GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_PARENT),
+						   node->children?TRUE:FALSE);
 
           /* Select the detail for drawing the cell.  relevant
            * factors are parity, sortedness, and whether to
@@ -2994,7 +3038,6 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 	    }
 	  cell_offset += column->width;
 	}
-
 
       if (node == drag_highlight)
         {
