@@ -99,7 +99,7 @@ if test "$echo_cflags" = "yes"; then
           fi
         done
       fi
-      echo -I@libdir@/gtk+/include $includes $glib_cflags @x_cflags@ 
+      echo -I@libdir@/gtk+/include $includes $glib_cflags @PANGO_CFLAGS@ @x_cflags@ 
 fi
 
 if test "$echo_libs" = "yes"; then
@@ -115,6 +115,6 @@ if test "$echo_libs" = "yes"; then
         fi
       done
 
-      echo $libdirs @x_ldflags@ -lgtk -lgdk $my_glib_libs @INTLLIBS@ @x_libs@ @GDK_WLIBS@ @MATH_LIB@
+      echo $libdirs @x_ldflags@ -lgtk -lgdk $my_glib_libs @INTLLIBS@ @PANGO_LIBS@ @x_libs@ @GDK_WLIBS@ @MATH_LIB@
 fi      
 

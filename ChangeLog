@@ -1,3 +1,21 @@
+Mon Jun  5 13:29:31 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkevents-x11.c: Hack gdk_event_get_graphics_expose()
+	to sort of work by adding an extra return_exposes arg
+	to gdk_event_translate() - it might be better to simply
+	deprecate the function altogether and force people to rewrite
+	without it. gdk_window_scroll() handles most of it, and where
+	gdk_window_scroll() doesn't work, simply redrawing more does.
+
+	* gtk/gtkwidget.c (gtk_widget_set_default_direction): Fix up
+	assertion.
+
+	* gtk-config.in: Include PANGO_CFLAGS/LIBS.
+
+	* gdk/x11/gdkevents-x11.c (gdk_event_translate): Remove a 
+	bunch of pretty much useless /* Print debugging info */ comments 
+	which had drifted away from the code they were commenting.
+
 2000-06-02  Havoc Pennington  <hp@pobox.com>
 
         * gtk/testtextbuffer.c: Test program to make sure GtkTextBuffer

@@ -4026,12 +4026,12 @@ gtk_widget_get_direction (GtkWidget *widget)
  *        %GTK_TEXT_DIR_NONE.
  * 
  * Set the default reading direction for widgets where the
- * direction has not been explicitely set by gtk_widget_set_direction().
+ * direction has not been explicitly set by gtk_widget_set_direction().
  **/
 void
 gtk_widget_set_default_direction (GtkTextDirection dir)
 {
-  g_return_if_fail (dir == GTK_TEXT_DIR_RTL || GTK_TEXT_DIR_LTR);
+  g_return_if_fail (dir == GTK_TEXT_DIR_RTL || dir == GTK_TEXT_DIR_LTR);
 
   gtk_default_direction = dir;
 }

@@ -78,7 +78,8 @@ static gint	 gdk_event_apply_filters (XEvent   *xevent,
 					  GdkEvent *event,
 					  GList    *filters);
 static gint	 gdk_event_translate	 (GdkEvent *event, 
-					  XEvent   *xevent);
+					  XEvent   *xevent,
+					  gboolean  return_exposes);
 #if 0
 static Bool	 gdk_event_get_type	(Display   *display, 
 					 XEvent	   *xevent, 
@@ -207,7 +208,7 @@ gdk_event_get_graphics_expose (GdkWindow *window)
     {
       event = gdk_event_new ();
       
-      if (gdk_event_translate (event, &xevent))
+      if (gdk_event_translate (event, &xevent, TRUE))
 	return event;
       else
 	gdk_event_free (event);
@@ -255,7 +256,8 @@ gdk_add_client_message_filter (GdkAtom       message_type,
 
 static gint
 gdk_event_translate (GdkEvent *event,
-		     XEvent   *xevent)
+		     XEvent   *xevent,
+		     gboolean  return_exposes)
 {
   
   GdkWindow *window;
@@ -435,8 +437,6 @@ gdk_event_translate (GdkEvent *event,
       else
 	buf[charcount] = '\0';
       
-      /* Print debugging info. */
-      
 #ifdef G_ENABLE_DEBUG
       if (gdk_debug_flags & GDK_DEBUG_EVENTS)
 	{
@@ -474,8 +474,6 @@ gdk_event_translate (GdkEvent *event,
 				 &keysym, &compose);
       event->key.keyval = keysym;      
       
-      /* Print debugging info.
-       */
       GDK_NOTE (EVENTS, 
 		g_message ("key release:\t\twindow: %ld	 key: %12s  %d",
 			   xevent->xkey.window,
@@ -492,8 +490,6 @@ gdk_event_translate (GdkEvent *event,
       break;
       
     case ButtonPress:
-      /* Print debugging info.
-       */
       GDK_NOTE (EVENTS, 
 		g_message ("button press:\t\twindow: %ld  x,y: %d %d  button: %d",
 			   xevent->xbutton.window,
@@ -551,8 +547,6 @@ gdk_event_translate (GdkEvent *event,
       break;
       
     case ButtonRelease:
-      /* Print debugging info.
-       */
       GDK_NOTE (EVENTS, 
 		g_message ("button release:\twindow: %ld  x,y: %d %d  button: %d",
 			   xevent->xbutton.window,
@@ -592,8 +586,6 @@ gdk_event_translate (GdkEvent *event,
       break;
       
     case MotionNotify:
-      /* Print debugging info.
-       */
       GDK_NOTE (EVENTS,
 		g_message ("motion notify:\t\twindow: %ld  x,y: %d %d  hint: %s", 
 			   xevent->xmotion.window,
@@ -626,8 +618,6 @@ gdk_event_translate (GdkEvent *event,
       break;
       
     case EnterNotify:
-      /* Print debugging info.
-       */
       GDK_NOTE (EVENTS,
 		g_message ("enter notify:\t\twindow: %ld  detail: %d subwin: %ld",
 			   xevent->xcrossing.window,
@@ -703,8 +693,6 @@ gdk_event_translate (GdkEvent *event,
       break;
       
     case LeaveNotify:
-      /* Print debugging info.
-       */
       GDK_NOTE (EVENTS, 
 		g_message ("leave notify:\t\twindow: %ld  detail: %d subwin: %ld",
 			   xevent->xcrossing.window,
@@ -781,8 +769,6 @@ gdk_event_translate (GdkEvent *event,
 	case NotifyAncestor:
 	case NotifyInferior:
 	case NotifyNonlinear:
-	  /* Print debugging info.
-	   */
 	  GDK_NOTE (EVENTS,
 		    g_message ("focus %s:\t\twindow: %ld",
 			       (xevent->xany.type == FocusIn) ? "in" : "out",
@@ -806,8 +792,6 @@ gdk_event_translate (GdkEvent *event,
       break;
       
     case KeymapNotify:
-      /* Print debugging info.
-       */
       GDK_NOTE (EVENTS,
 		g_message ("keymap notify"));
 
@@ -816,8 +800,6 @@ gdk_event_translate (GdkEvent *event,
       break;
       
     case Expose:
-      /* Print debugging info.
-       */
       GDK_NOTE (EVENTS,
 		g_message ("expose:\t\twindow: %ld  %d	x,y: %d %d  w,h: %d %d%s",
 			   xevent->xexpose.window, xevent->xexpose.count,
@@ -832,38 +814,58 @@ gdk_event_translate (GdkEvent *event,
 	expose_rect.width = xevent->xexpose.width;
 	expose_rect.height = xevent->xexpose.height;
 
-	_gdk_window_process_expose (window, xevent->xexpose.serial, &expose_rect);
+	if (return_exposes)
+	  {
+	    event->expose.type = GDK_EXPOSE;
+	    event->expose.area = expose_rect;
+	    event->expose.window = window;
 
+	    return_val = TRUE;
+	  }
+	else
+	  {
+	    _gdk_window_process_expose (window, xevent->xexpose.serial, &expose_rect);
+
+	    return_val = FALSE;
+	  }
+	
 	return_val = FALSE;
       }
 	
       break;
       
     case GraphicsExpose:
-      /* Print debugging info.
-       */
       {
 	GdkRectangle expose_rect;
 
         GDK_NOTE (EVENTS,
 		  g_message ("graphics expose:\tdrawable: %ld",
 			     xevent->xgraphicsexpose.drawable));
-      
 
 	expose_rect.x = xevent->xgraphicsexpose.x + xoffset;
 	expose_rect.y = xevent->xgraphicsexpose.y + yoffset;
 	expose_rect.width = xevent->xgraphicsexpose.width;
 	expose_rect.height = xevent->xgraphicsexpose.height;
+	    
+	if (return_exposes)
+	  {
+	    event->expose.type = GDK_EXPOSE;
+	    event->expose.area = expose_rect;
+	    event->expose.window = window;
 
-	_gdk_window_process_expose (window, xevent->xgraphicsexpose.serial, &expose_rect);
-
-	return_val = FALSE;
+	    return_val = TRUE;
+	  }
+	else
+	  {
+	    _gdk_window_process_expose (window, xevent->xgraphicsexpose.serial, &expose_rect);
+	    
+	    return_val = FALSE;
+	  }
+	
       }
       break;
       
     case NoExpose:
-      /* Print debugging info.
-       */
       GDK_NOTE (EVENTS,
 		g_message ("no expose:\t\tdrawable: %ld",
 			   xevent->xnoexpose.drawable));
@@ -874,8 +876,6 @@ gdk_event_translate (GdkEvent *event,
       break;
       
     case VisibilityNotify:
-      /* Print debugging info.
-       */
 #ifdef G_ENABLE_DEBUG
       if (gdk_debug_flags & GDK_DEBUG_EVENTS)
 	switch (xevent->xvisibility.state)
@@ -930,8 +930,6 @@ gdk_event_translate (GdkEvent *event,
       break;
       
     case DestroyNotify:
-      /* Print debugging info.
-       */
       GDK_NOTE (EVENTS,
 		g_message ("destroy notify:\twindow: %ld",
 			   xevent->xdestroywindow.window));
@@ -946,8 +944,6 @@ gdk_event_translate (GdkEvent *event,
       break;
       
     case UnmapNotify:
-      /* Print debugging info.
-       */
       GDK_NOTE (EVENTS,
 		g_message ("unmap notify:\t\twindow: %ld",
 			   xevent->xmap.window));
@@ -961,8 +957,6 @@ gdk_event_translate (GdkEvent *event,
       break;
       
     case MapNotify:
-      /* Print debugging info.
-       */
       GDK_NOTE (EVENTS,
 		g_message ("map notify:\t\twindow: %ld",
 			   xevent->xmap.window));
@@ -973,8 +967,6 @@ gdk_event_translate (GdkEvent *event,
       break;
       
     case ReparentNotify:
-      /* Print debugging info.
-       */
       GDK_NOTE (EVENTS,
 		g_message ("reparent notify:\twindow: %ld  x,y: %d %d  parent: %ld	ovr: %d",
 			   xevent->xreparent.window,
@@ -988,8 +980,6 @@ gdk_event_translate (GdkEvent *event,
       break;
       
     case ConfigureNotify:
-      /* Print debugging info.
-       */
       GDK_NOTE (EVENTS,
 		g_message ("configure notify:\twindow: %ld  x,y: %d %d	w,h: %d %d  b-w: %d  above: %ld	 ovr: %d%s",
 			   xevent->xconfigure.window,
@@ -1060,8 +1050,6 @@ gdk_event_translate (GdkEvent *event,
       break;
       
     case PropertyNotify:
-      /* Print debugging info.
-       */
       GDK_NOTE (EVENTS,
 		gchar *atom = gdk_atom_name (xevent->xproperty.atom);
 		g_message ("property notify:\twindow: %ld, atom(%ld): %s%s%s",
@@ -1124,8 +1112,6 @@ gdk_event_translate (GdkEvent *event,
       break;
       
     case ColormapNotify:
-      /* Print debugging info.
-       */
       GDK_NOTE (EVENTS,
 		g_message ("colormap notify:\twindow: %ld",
 			   xevent->xcolormap.window));
@@ -1139,8 +1125,6 @@ gdk_event_translate (GdkEvent *event,
 	GList *tmp_list;
 	GdkFilterReturn result = GDK_FILTER_CONTINUE;
 
-	/* Print debugging info.
-	 */
 	GDK_NOTE (EVENTS,
 		  g_message ("client message:\twindow: %ld",
 			     xevent->xclient.window));
@@ -1180,8 +1164,6 @@ gdk_event_translate (GdkEvent *event,
       break;
       
     case MappingNotify:
-      /* Print debugging info.
-       */
       GDK_NOTE (EVENTS,
 		g_message ("mapping notify"));
       
@@ -1269,7 +1251,7 @@ gdk_event_get_type (Display  *display,
   GdkEvent event;
   GdkPredicate *pred;
   
-  if (gdk_event_translate (&event, xevent))
+  if (gdk_event_translate (&event, xevent, FALSE))
     {
       pred = (GdkPredicate*) arg;
       return (* pred->func) (&event, pred->data);
@@ -1320,7 +1302,7 @@ gdk_events_queue (void)
       gdk_event_queue_append (event);
       node = gdk_queued_tail;
 
-      if (gdk_event_translate (event, &xevent))
+      if (gdk_event_translate (event, &xevent, FALSE))
 	{
 	  ((GdkEventPrivate *)event)->flags &= ~GDK_EVENT_PENDING;
 	}

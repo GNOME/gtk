@@ -5,11 +5,13 @@ Makefile.in
 _libs
 .libs
 libgtk-1.1.la
+testcalender
 testgtk
 testinput
 testrgb
 testselection
 testtext
+testtextbuffer
 simple
 testtree
 gtkcompat.h
