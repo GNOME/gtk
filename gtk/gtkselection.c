@@ -298,7 +298,6 @@ gtk_target_list_find (GtkTargetList *list,
   while (tmp_list)
     {
       GtkTargetPair *pair = tmp_list->data;
-
       if (pair->target == target)
 	{
 	  *info = pair->info;

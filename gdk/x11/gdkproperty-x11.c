@@ -52,36 +52,99 @@ GdkAtomMap;
 
 static GSList *display_atom_lists = NULL;
 
+typedef struct {
+  GQuark virtual_atom;
+  Atom	 x_atom;
+} PredefinedAtoms;
+
+typedef struct {
+  PredefinedAtoms list[67];
+  GQuark	  min;
+  GQuark	  max;
+} PredefinedAtomsCache; 
+
+static PredefinedAtomsCache pac;
+static gboolean predefined_atom_cache_initialised = FALSE;
+
+gchar *XAtomsStrings [] = { 
+"PRIMARY",
+"SECONDARY",
+"ARC",
+"ATOM",
+"BITMAP",
+"CARDINAL",
+"COLORMAP",
+"CURSOR",
+"CUT_BUFFER0",
+"CUT_BUFFER1",
+"CUT_BUFFER2",
+"CUT_BUFFER3",
+"CUT_BUFFER4",
+"CUT_BUFFER5",
+"CUT_BUFFER6",
+"CUT_BUFFER7",
+"DRAWABLE",
+"FONT",
+"INTEGER",
+"PIXMAP",
+"POINT",
+"RECTANGLE",
+"RESOURCE_MANAGER",
+"RGB_COLOR_MAP",
+"RGB_BEST_MAP",
+"RGB_BLUE_MAP",
+"RGB_DEFAULT_MAP",
+"RGB_GRAY_MAP",
+"RGB_GREEN_MAP",
+"RGB_RED_MAP",
+"STRING",
+"VISUALID",
+"WINDOW",
+"WM_COMMAND",
+"WM_HINTS",
+"WM_CLIENT_MACHINE",
+"WM_ICON_NAME",
+"WM_ICON_SIZE",
+"WM_NAME",
+"WM_NORMAL_HINTS",
+"WM_SIZE_HINTS",
+"WM_ZOOM_HINTS",
+"MIN_SPACE",
+"NORM_SPACE",
+"MAX_SPACE",
+"END_SPACE",
+"SUPERSCRIPT_X",
+"SUPERSCRIPT_Y",
+"SUBSCRIPT_X",
+"SUBSCRIPT_Y",
+"UNDERLINE_POSITION",
+"UNDERLINE_THICKNESS",
+"STRIKEOUT_ASCENT",
+"STRIKEOUT_DESCENT",
+"ITALIC_ANGLE",
+"X_HEIGHT",
+"QUAD_WIDTH",
+"WEIGHT",
+"POINT_SIZE",
+"RESOLUTION",
+"COPYRIGHT",
+"NOTICE",
+"FONT_NAME",
+"FAMILY_NAME",
+"FULL_NAME",
+"CAP_HEIGHT",
+"WM_CLASS",
+"WM_TRANSIENT_FOR"
+};
+
 static gboolean
 check_if_predefined_atom (atom)
 {
-  switch (atom)
-  {
-    case 0:
-	return TRUE;
-    case GDK_SELECTION_PRIMARY:
-	return TRUE;
-    case GDK_SELECTION_SECONDARY:
-	return TRUE;
-    case GDK_SELECTION_TYPE_ATOM:	
-	return TRUE;
-    case GDK_SELECTION_TYPE_BITMAP:
-	return TRUE;
-    case GDK_SELECTION_TYPE_COLORMAP:
-	return TRUE;
-    case GDK_SELECTION_TYPE_DRAWABLE:
-	return TRUE;
-    case GDK_SELECTION_TYPE_INTEGER:
-	return TRUE;
-    case GDK_SELECTION_TYPE_PIXMAP:
-	return TRUE;
-    case GDK_SELECTION_TYPE_WINDOW:
-	return TRUE;
-    case GDK_SELECTION_TYPE_STRING:
-	return TRUE;
-    default:
-	return FALSE;
-  }
+ /* if the atom is a protocol atom then don't do
+  * the real - virtual or virtual real convertion */
+ if (atom < XA_LAST_PREDEFINED)
+   return TRUE;
+ return FALSE;
 }
 
 
@@ -96,7 +159,7 @@ gdk_x11_get_real_atom (GdkDisplay *display, GdkAtom virtual_atom, gboolean only_
   
   if (check_if_predefined_atom (virtual_atom))
   {
-    g_print ("We got a predefined atom %ld\n", virtual_atom);
+    /*g_print ("We got a predefined atom %ld\n", virtual_atom);*/
     return virtual_atom;
   }
   
@@ -192,7 +255,7 @@ gdk_x11_get_virtual_atom (GdkDisplay *display, GdkAtom xatom)
 
   if (check_if_predefined_atom (xatom))
   {
-    g_print ("We got a predefined atom %ld\n", xatom);
+    /*g_print ("We got a predefined atom %ld\n", xatom);*/
     return xatom;
   }
 
@@ -201,10 +264,7 @@ gdk_x11_get_virtual_atom (GdkDisplay *display, GdkAtom xatom)
     atom_map = g_new0 (GdkAtomMap, 1);
     atom_map->x_atom = xatom;
     xatom_string = XGetAtomName (GDK_DISPLAY_XDISPLAY (display), xatom);
-    atom_map->virtual_atom = g_quark_from_string (xatom_string);
-    if (check_if_predefined_atom (atom_map->virtual_atom))
-	g_warning ("gdk_x11_get_virtual_atom created a virtual atom which\
-		    is already used as a real Atom\n");
+    atom_map->virtual_atom = gdk_atom_intern (xatom_string, FALSE);
     XFree (xatom_string);
     atom_display_list = g_new0 (GdkAtomDisplayList, 1);
     atom_display_list->display = display;
@@ -239,10 +299,7 @@ gdk_x11_get_virtual_atom (GdkDisplay *display, GdkAtom xatom)
     atom_map = g_new0 (GdkAtomMap, 1);
     atom_map->x_atom = xatom;
     xatom_string = XGetAtomName (GDK_DISPLAY_XDISPLAY (display), xatom);
-    atom_map->virtual_atom = g_quark_from_string (xatom_string);
-    if (check_if_predefined_atom (atom_map->virtual_atom))
-       g_warning ("gdk_x11_get_virtual_atom created a virtual atom which\
-	           is already used as a real Atom\n");
+    atom_map->virtual_atom = gdk_atom_intern (xatom_string, FALSE);
 /*    g_print ("\nGet VIRTUAL (%d) string (%s) return virtual = %d\n", xatom, xatom_string, atom_map->virtual_atom);*/
     XFree (xatom_string);
     atom_display_list->atom_list = g_slist_append (atom_display_list->atom_list,
@@ -253,10 +310,7 @@ gdk_x11_get_virtual_atom (GdkDisplay *display, GdkAtom xatom)
   atom_map = g_new0 (GdkAtomMap, 1);
   atom_map->x_atom = xatom;
   xatom_string = XGetAtomName (GDK_DISPLAY_XDISPLAY (display), xatom);
-  atom_map->virtual_atom = g_quark_from_string (xatom_string);
-  if (check_if_predefined_atom (atom_map->virtual_atom))
-    g_warning ("gdk_x11_get_virtual_atom created a virtual atom which\
-	        is already used as a real Atom\n");
+  atom_map->virtual_atom = gdk_atom_intern (xatom_string, FALSE);
 /*g_print ("\n!New Display! Get VIRTUAL (%d) string (%s) return virtual = %d\n", xatom, xatom_string, atom_map->virtual_atom);*/
   XFree (xatom_string);  
   atom_display_list = g_new0 (GdkAtomDisplayList, 1);
@@ -290,10 +344,35 @@ gdk_atom_intern (const gchar *atom_name, gboolean only_if_exists)
 {
   GdkAtom virtual_atom;
   g_return_val_if_fail (atom_name != NULL, GDK_NONE);
+  if (!predefined_atom_cache_initialised)
+  {
+    int i;
+    for (i=0;i<68;i++)
+    {
+      pac.list[i].virtual_atom = g_quark_from_string (XAtomsStrings[i]);
+      pac.list[i].x_atom = i+1;
+      /*g_print ("i (%d), virtual (%ld), xatom (%ld), Name (%s)\n",
+	     i,pac.list[i].virtual_atom, pac.list[i].x_atom,
+	     XAtomsStrings[i]);*/
+    }
+    pac.max = pac.list[67].virtual_atom;
+    pac.min = pac.list[0].virtual_atom;
+    /*g_print ("min is (%ld), max is (%ld)\n",
+	     pac.min,
+	     pac.max);*/
+    predefined_atom_cache_initialised = TRUE;
+  }
   virtual_atom = g_quark_from_string (atom_name);
-  if (check_if_predefined_atom (virtual_atom))
-    g_warning ("gdk_x11_get_virtual_atom created a virtual atom which\
-	        is already used as a real Atom\n");
+  if (virtual_atom < pac.max && virtual_atom > pac.min)
+  {
+    /*g_print ("predefined atom (%s) virtual %ld, X %ld\n",
+	     atom_name,
+	     virtual_atom,
+	     pac.list[virtual_atom - pac.min].x_atom);*/
+    /* I assume the quarks in pac.list are consecutives */
+    virtual_atom = pac.list[virtual_atom - pac.min].x_atom;
+    return virtual_atom;
+  }
   return virtual_atom;
 }
 

@@ -1593,6 +1593,7 @@ motif_read_initiator_info_for_display (Window source_window,
     print_target_list (*targets, dpy);
 #endif /* G_ENABLE_DEBUG */
 
+  /* need to X atom as this is an motif internal function */
   *selection = initiator_info->selection_atom;
 
   XFree (initiator_info);
@@ -2005,6 +2006,7 @@ xdnd_action_from_atom (GdkAtom atom)
   return 0;
 }
 
+/* returns a X Atom */
 static GdkAtom
 xdnd_action_to_atom (GdkDisplay *display, GdkDragAction action)
 {
@@ -3404,9 +3406,11 @@ gdk_drag_get_selection (GdkDragContext *context)
   g_return_val_if_fail (context != NULL, GDK_NONE);
 
   if (context->protocol == GDK_DRAG_PROTO_MOTIF)
-    return (PRIVATE_DATA (context))->motif_selection;
+    return gdk_x11_get_virtual_atom(GDK_DRAWABLE_DISPLAY (context->source_window),
+				    (PRIVATE_DATA (context))->motif_selection);
   else if (context->protocol == GDK_DRAG_PROTO_XDND)
-    return (PRIVATE_DATA (context))->xdnd_selection;
+    return gdk_x11_get_virtual_atom(GDK_DRAWABLE_DISPLAY (context->source_window),
+				    (PRIVATE_DATA (context))->xdnd_selection);
   else 
     return GDK_NONE;
 }
