@@ -1,5 +1,11 @@
 2005-02-23  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtklabel.c (gtk_label_style_set): Revert the last 
+	change, since gtk_widget_set_style_internal() already
+	queues a resize.
+
+2005-02-23  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtklabel.c (gtk_label_style_set): Queue a resize, since
 	fonts may have changed.  (#164128, Phil Blundell)
 
