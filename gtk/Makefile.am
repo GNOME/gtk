@@ -311,7 +311,7 @@ libgtk_la_LDFLAGS = \
 #	$(top_builddir)/gdk/libgdk.la
 
 gtkconfdir = $(sysconfdir)/gtk
-gtkconf_DATA = gtkrc gtkrc.ja gtkrc.ko gtkrc.ru
+gtkconf_DATA = gtkrc gtkrc.ja gtkrc.ko gtkrc.pl gtkrc.ru
 
 gtkrc:
 	:
@@ -359,6 +359,7 @@ EXTRA_DIST = \
         circles.xbm		\
 	gtkrc.ja 		\
 	gtkrc.ko		\
+	gtkrc.pl		\
 	gtkrc.ru		\
 	gtk.def			\
 	makefile.msc
