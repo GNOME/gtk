@@ -19,7 +19,7 @@ static void gdk_x11_gc_set_values (GdkGC           *gc,
 				   GdkGCValuesMask  values_mask);
 static void gdk_x11_gc_set_dashes (GdkGC           *gc,
 				   gint             dash_offset,
-				   gchar            dash_list[],
+				   gint8            dash_list[],
 				   gint             n);
 
 static void gdk_windowing_gc_init       (GdkWindowingGC      *windowing_gc);
@@ -373,7 +373,7 @@ gdk_x11_gc_set_values (GdkGC           *gc,
 static void
 gdk_x11_gc_set_dashes (GdkGC *gc,
 		       gint   dash_offset,
-		       gchar  dash_list[],
+		       gint8  dash_list[],
 		       gint   n)
 {
   g_return_if_fail (GDK_IS_GC (gc));

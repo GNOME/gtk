@@ -178,7 +178,7 @@ struct _GdkGCClass
 			  GdkGCValuesMask mask);
   void (*set_dashes)     (GdkGC          *gc,
 			  gint	          dash_offset,
-			  gchar           dash_list[],
+			  gint8           dash_list[],
 			  gint            n);
 };
 
