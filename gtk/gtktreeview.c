@@ -12372,8 +12372,7 @@ gtk_tree_view_search_activate (GtkEntry    *entry,
       if (node && GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED))
 	gtk_tree_view_row_activated (tree_view, path, tree_view->priv->focus_column);
       
-      if (path)
-	gtk_tree_path_free (path);
+      gtk_tree_path_free (path);
     }
 }
 
