@@ -64,7 +64,7 @@ struct _GtkEntryCompletionClass
   void     (* action_activated) (GtkEntryCompletion *completion,
                                  gint                index_);
   gboolean (* insert_prefix)    (GtkEntryCompletion *completion,
-				 gchar              *prefix); 
+				 const gchar        *prefix); 
 
   /* Padding for future expansion */
   void (*_gtk_reserved0) (void);

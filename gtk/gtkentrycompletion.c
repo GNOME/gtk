@@ -133,7 +133,7 @@ static gboolean gtk_entry_completion_match_selected      (GtkEntryCompletion *co
 							  GtkTreeModel       *model,
 							  GtkTreeIter        *iter);
 static gboolean gtk_entry_completion_real_insert_prefix  (GtkEntryCompletion *completion,
-							  gchar              *key);
+							  const gchar        *prefix);
 
 static GObjectClass *parent_class = NULL;
 static guint entry_completion_signals[LAST_SIGNAL] = { 0 };
@@ -903,18 +903,6 @@ gtk_entry_completion_get_entry (GtkEntryCompletion *completion)
   return completion->priv->entry;
 }
 
-static void
-filter_model_changed_cb (GtkTreeModel     *model,
-			 GtkTreePath      *path,
-			 GtkTreeIter      *iter,
-			 gpointer          user_data)
-{
-  GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (user_data);
-
-  if (GTK_WIDGET_VISIBLE (completion->priv->popup_window))
-    _gtk_entry_completion_resize_popup (completion);  
-}
-
 /**
  * gtk_entry_completion_set_model:
  * @completion: A #GtkEntryCompletion.
@@ -1461,7 +1449,7 @@ gtk_entry_completion_compute_prefix (GtkEntryCompletion *completion)
 
 static gboolean
 gtk_entry_completion_real_insert_prefix (GtkEntryCompletion *completion,
-					 gchar              *prefix)
+					 const gchar        *prefix)
 {
   if (prefix)
     {

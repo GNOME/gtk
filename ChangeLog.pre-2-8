@@ -1,3 +1,13 @@
+2004-12-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* configure.in: Require glib 2.6.0 for 
+	g_filename_display_basename.
+
+	* gtk/gtkentrycompletion.[hc]: Make the prefix parameter 
+	to the insert-prefix signal a const gchar* instead of a 
+	gchar*.  (#161415, Murray Cumming)
+	Also remove an unused static function.
+
 2004-12-15  Alexander Larsson  <alexl@redhat.com>
 
 	* gtk/gtkfilesystemunix.c (gtk_file_folder_unix_get_info):
