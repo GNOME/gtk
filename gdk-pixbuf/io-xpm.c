@@ -1209,7 +1209,7 @@ pixbuf_create_from_xpm (const gchar * (*get_buf) (enum buf_op op, gpointer handl
                         GError **error)
 {
 	gint w, h, n_col, cpp;
-	gint cnt, xcnt, ycnt, wbytes, n, ns;
+	gint cnt, xcnt, ycnt, wbytes, n;
 	gint is_trans = FALSE;
 	const gchar *buffer;
         gchar *name_buf;
@@ -1322,9 +1322,10 @@ pixbuf_create_from_xpm (const gchar * (*get_buf) (enum buf_op op, gpointer handl
 	}
 
 	wbytes = w * cpp;
-	pixtmp = pixbuf->pixels;
 
 	for (ycnt = 0; ycnt < h; ycnt++) {
+		pixtmp = pixbuf->pixels + ycnt * pixbuf->rowstride;
+
 		buffer = (*get_buf) (op_body, handle);
 		if ((!buffer) || (strlen (buffer) < wbytes))
 			continue;
@@ -1332,7 +1333,6 @@ pixbuf_create_from_xpm (const gchar * (*get_buf) (enum buf_op op, gpointer handl
 		for (n = 0, cnt = 0, xcnt = 0; n < wbytes; n += cpp, xcnt++) {
 			strncpy (pixel_str, &buffer[n], cpp);
 			pixel_str[cpp] = 0;
-			ns = 0;
 
 			color = g_hash_table_lookup (color_hash, pixel_str);
 

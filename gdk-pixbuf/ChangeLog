@@ -1,3 +1,18 @@
+2002-05-22  Federico Mena Quintero  <federico@ximian.com>
+
+	* io-xpm.c (pixbuf_create_from_xpm): Ahem, take the rowstride into
+	account!!!  Fixes #82515.
+
+	[This bug is not present in the GNOME 1.4 branch as its XPM loader
+	does not use gdk_pixbuf_new(); rather it malloc()s a buffer with
+	no row padding and then uses gdk_pixbuf_new_from_data() on it.]
+
+	[IMPORTANT: The comment above is to make my life easier when
+	merging stuff across branches.  If you make changes to gdk-pixbuf
+	in either branch, please include a comment in the ChangeLog that
+	indicates whether this should be merged into the other branch.
+	Thanks!]
+
 2002-05-18  Matthias Clasen  <maclas@gmx.de>
 
 	* io-tiff.c (tiff_image_parse): fix packing order on bigendian 
