@@ -157,7 +157,7 @@ int main( int   argc,
 </literallayout></para>
 
 <para>The meaning of the unusual compilation options is explained below in
-<link linkend="ch-Compiling">Compiling Hello World</link>.</para>
+<link linkend="sec-Compiling">Compiling Hello World</link>.</para>
 
 <para>All programs will of course include gtk/gtk.h which declares the
 variables, functions, structures, etc. that will be used in your GTK
@@ -346,7 +346,7 @@ int main( int   argc,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-Compiling">
 <title>Compiling Hello World</title>
 
 <para>To compile use:</para>
@@ -637,11 +637,11 @@ should be propagated further by the GTK event handling
 mechanism. Returning TRUE indicates that the event has been handled,
 and that it should not propagate further. Returning FALSE continues
 the normal event handling.  See the section on
-<link linkend="ch-AdvEventsAndSignals">Advanced Event and Signal Handling</link> for more details on this
+<link linkend="ch-AdvancedEventsAndSignals">Advanced Event and Signal Handling</link> for more details on this
 propagation process.</para>
 
 <para>For details on the GdkEvent data types, see the appendix entitled
-<link linkend="ch-GDKEventTypes">GDK Event Types</link>.</para>
+<link linkend="app-GDKEventTypes">GDK Event Types</link>.</para>
 
 </sect1>
 
@@ -1974,7 +1974,7 @@ learn how a widget works just by looking at the function declarations.</para>
 
 <para>The following widgets do not have an associated window. If you want to
 capture events, you'll have to use the EventBox. See the section on
-the <link linkend="ch-EventBox">EventBox</link> widget.</para>
+the <link linkend="sec-EventBox">EventBox</link> widget.</para>
 
 <programlisting role="C">
 GtkAlignment
@@ -2146,7 +2146,7 @@ selection, and other graphics data relevant to a widget. These style
 values are defaulted in each widget, and are required by many GDK
 function calls, such as <literal>gdk_pixmap_create_from_xpm</literal>, which here is
 given the "normal" background color. The style data of widgets may
-be customized, using <link linkend="ch-GTKRCFilesiles">GTK's rc files</link>.</para>
+be customized, using <link linkend="ch-GTKRCFiles">GTK's rc files</link>.</para>
 
 <para>Also notice the call to <literal>gtk_widget_realize</literal> after setting the
 window's border width. This function uses GDK to create the X
@@ -2280,7 +2280,7 @@ toggle button.</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-RadioButtons">
 <title>Radio Buttons</title>
 
 <para>Radio buttons are similar to check buttons except they are grouped so
@@ -2433,7 +2433,7 @@ int main( int   argc,
 
 <!-- ***************************************************************** -->
 <chapter id="ch-Adjustments">
-<title> Adjustments</title>
+<title>Adjustments</title>
 
 <para>GTK has various widgets that can be visually adjusted by the user
 using the mouse or the keyboard, such as the range widgets, described
@@ -2469,9 +2469,9 @@ propagate adjustment values transparently between adjustable widgets.</para>
 
 <para>You will see how adjustments fit in when you see the other widgets
 that incorporate them:
-<link linkend="ch-ProgressBar">Progress Bars</link>,
-<link linkend="ch-Viewports">Viewports</link>,
-<link linkend="ch-ScrolledWindow">Scrolled Windows</link>, and others.</para>
+<link linkend="sec-ProgressBars">Progress Bars</link>,
+<link linkend="sec-Viewports">Viewports</link>,
+<link linkend="sec-ScrolledWindows">Scrolled Windows</link>, and others.</para>
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>
@@ -2668,7 +2668,7 @@ clicking in the trough advances the slider towards the location of the
 click, either completely, or by a designated amount, depending on
 which mouse button is used.</para>
 
-<para>As mentioned in <link linkend="ch-Adjustment">Adjustments</link> above,
+<para>As mentioned in <link linkend="ch-Adjustments">Adjustments</link> above,
 all range widgets are associated with an adjustment object, from which
 they calculate the length of the slider and its position within the
 trough. When the user manipulates the slider, the range widget will
@@ -2742,7 +2742,7 @@ order to avoid confusing yourself, you probably want to create your
 adjustment with a <literal>page_size</literal> of <literal>0.0</literal> so that its <literal>upper</literal>
 value actually corresponds to the highest value the user can select.
 (If you're <emphasis>already</emphasis> thoroughly confused, read the section on <link
-linkend="ch-Adjustment">Adjustments</link> again for an explanation of
+linkend="ch-Adjustments">Adjustments</link> again for an explanation of
 what exactly adjustments do and how to create and manipulate them.)</para>
 
 </sect2>
@@ -3280,7 +3280,7 @@ window.</para>
 
 <para>Labels are used a lot in GTK, and are relatively simple. Labels emit
 no signals as they do not have an associated X window. If you need to
-catch signals, or do clipping, place it inside a <link linkend="ch-EventBox">
+catch signals, or do clipping, place it inside a <link linkend="sec-EventBox">
 EventBox</link> widget or a Button widget.</para>
 
 <para>To create a new label, use:</para>
@@ -3357,7 +3357,7 @@ first two characters and eight and ninth characters.</para>
 
 <para>Below is a short example to illustrate these functions. This example
 makes use of the Frame widget to better demonstrate the label
-styles. You can ignore this for now as the <link linkend="ch-Frames">Frame</link> widget is explained later on.</para>
+styles. You can ignore this for now as the <link linkend="sec-Frames">Frame</link> widget is explained later on.</para>
 
 <programlisting role="C">
 /* example-start label label.c */
@@ -3680,7 +3680,7 @@ you'll ever want to know :-)</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-ProgressBars">
 <title>Progress Bars</title>
 
 <para>Progress bars are used to show the status of an operation. They are
@@ -4192,7 +4192,7 @@ vertical box.</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-Pixmaps">
 <title>Pixmaps</title>
 
 <para>Pixmaps are data structures that contain pictures. These pictures can
@@ -5168,7 +5168,7 @@ action of holding down one of the buttons optionally results in an
 acceleration of change in the value according to how long it is
 depressed.</para>
 
-<para>The Spin Button uses an <link linkend="ch-Adjustment">Adjustment</link>
+<para>The Spin Button uses an <link linkend="ch-Adjustments">Adjustment</link>
 object to hold information about the range of values that the spin
 button can take. This makes for a powerful Spin Button widget.</para>
 
@@ -6749,7 +6749,7 @@ int main( int   argc,
 <title>Container Widgets</title>
 
 <!-- ----------------------------------------------------------------- -->   
-<sect1>
+<sect1 id="sec-EventBox">
 <title>The EventBox</title>
 
 <para>Some GTK widgets don't have associated X windows, so they just draw on
@@ -6886,7 +6886,7 @@ space allocated to the widget.</para>
 </programlisting>
 
 <para>For an example of using an Alignment widget, refer to the example for
-the <link linkend="ch-ProgressBar">Progress Bar</link> widget.</para>
+the <link linkend="sec-ProgressBars">Progress Bar</link> widget.</para>
 
 </sect1>
 
@@ -7083,7 +7083,7 @@ void gtk_layout_set_vadjustment( GtkLayout     *layout,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-Frames">
 <title>Frames</title>
 
 <para>Frames can be used to enclose one or a group of widgets with a box
@@ -7492,17 +7492,17 @@ int main( int   argc,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-Viewports">
 <title>Viewports</title>
 
 <para>It is unlikely that you will ever need to use the Viewport widget
 directly. You are much more likely to use the
-<link linkend="ch-ScrolledWindow">Scrolled Window</link> widget which
+<link linkend="sec-ScrolledWindows">Scrolled Window</link> widget which
 itself uses the Viewport.</para>
 
 <para>A viewport widget allows you to place a larger widget within it such
 that you can view a part of it at a time. It uses
-<link linkend="ch-Adjustment">Adjustments</link> to define the area that
+<link linkend="ch-Adjustments">Adjustments</link> to define the area that
 is currently in view.</para>
 
 <para>A Viewport is created with the function</para>
@@ -7550,7 +7550,7 @@ void gtk_viewport_set_shadow_type( GtkViewport   *viewport,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-ScrolledWindows"
 <title>Scrolled Windows</title>
 
 <para>Scrolled windows are used to create a scrollable area with another
@@ -8147,7 +8147,7 @@ together quite often.</para>
 <para>Well, what we do above is just a straightforward initialization of
 the toolbar widget and creation of a GDK pixmap with its mask. If you
 want to know something more about using pixmaps, refer to GDK
-documentation or to the <link linkend="ch-Pixmaps">Pixmaps</link> section
+documentation or to the <link linkend="sec-Pixmaps">Pixmaps</link> section
 earlier in this tutorial.</para>
 
 <programlisting role="C">
@@ -8195,7 +8195,7 @@ or +<literal>GTK_TOOLBAR_CHILD_BUTTON</literal>). In the above case we start
 creating a radio group. In creating other radio buttons for this group
 a pointer to the previous button in the group is required, so that a
 list of buttons can be easily constructed (see the section on <link
-linkend="ch-RadioButtons"> Radio Buttons </link> earlier in this
+linkend="sec-RadioButtons"> Radio Buttons </link> earlier in this
 tutorial).</para>
 
 <programlisting role="C">
@@ -9714,7 +9714,7 @@ scrolled window to ensure that it is big enough to see the tree's
 items, as the default size for ScrolledWindow is quite small.</para>
 
 <para>Now that you have a tree, you'll probably want to add some items to
-it.  <link linkend="ch-TreeItemWidget">The Tree Item Widget</link> below
+it.  <link linkend="sec-TreeItemWidget">The Tree Item Widget</link> below
 explains the gory details of TreeItem. For now, it'll suffice to
 create one, using:</para>
 
@@ -9723,7 +9723,7 @@ GtkWidget *gtk_tree_item_new_with_label( gchar *label );
 </programlisting>
 
 <para>You can then add it to the tree using one of the following (see
-<link linkend="ch-TreeFunctions">Functions and Macros</link>
+<link linkend="sec-TreeFunctionsAndMacros">Functions and Macros</link>
 below for more options):</para>
 
 <programlisting role="C">
@@ -9783,7 +9783,7 @@ void gtk_tree_set_selection_mode( GtkTree          *tree,
 <para>The semantics associated with the various selection modes are
 described in the section on the CList widget. As with the CList
 widget, the "select_child", "unselect_child" (not really - see <link
-linkend="ch-TreeSignals">Signals</link> below for an explanation),
+linkend="sec-TreeSignals">Signals</link> below for an explanation),
 and "selection_changed" signals are emitted when list items are
 selected or unselected. However, in order to take advantage of these
 signals, you need to know <emphasis>which</emphasis> Tree widget they will be
@@ -9870,7 +9870,7 @@ a level one greater than the parent level. This field is set only
 after a Tree widget is actually mapped (i.e. drawn on the screen).</para>
 
 <!-- ----------------------------------------------------------------- -->
-<sect2>
+<sect2 id="sec-TreeSignals">
 <title>Signals</title>
 
 <programlisting role="C">
@@ -9907,7 +9907,7 @@ child, nor on emission of the "toggle" signal by gtk_item_toggle().</para>
 </sect2>
 
 <!-- ----------------------------------------------------------------- -->
-<sect2>
+<sect2 id="sec-TreeFunctionsAndMacros">
 <title>Functions and Macros</title>
 
 <programlisting role="C">
@@ -10090,7 +10090,7 @@ above warning applies here, too.</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>
+<sect1 id="sec-TreeItemWidget">
 <title>Tree Item Widget</title>
 
 <para>The TreeItem widget, like CListItem, is derived from Item,
@@ -10541,7 +10541,8 @@ the menus.</para>
 <para>In the true tradition of teaching, we'll show you the hard way
 first. <literal>:)</></para>
 
-<para>There are three widgets that go into making a menubar and submenus:
+<para>There are three widgets that go into making a menubar and submenus:</para>
+
 <itemizedlist>
 <listitem><simpara>a menu item, which is what the user wants to select, e.g.,
 "Save"</simpara>
@@ -10561,11 +10562,9 @@ which, when selected, activates the menu.</para>
 <para>Let's look at the functions that are used to create menus and
 menubars.  This first function is used to create a new menubar.</para>
 
-<para><tscreen>
-<verb>
+<programlisting role="C">
 GtkWidget *gtk_menu_bar_new( void );
-</verb>
-</tscreen></para>
+</programlisting>
 
 <para>This rather self explanatory function creates a new menubar. You use
 gtk_container_add to pack this into a window, or the box_pack
@@ -10612,32 +10611,32 @@ standard <literal>File</literal> menu, with the options <literal>Open</literal>,
 <literal>Quit</literal>, the code would look something like:</para>
 
 <programlisting role="C">
-    file_menu = gtk_menu_new ();    /* Don't need to show menus */</para>
+    file_menu = gtk_menu_new ();    /* Don't need to show menus */
 
-<para>    /* Create the menu items */
+    /* Create the menu items */
     open_item = gtk_menu_item_new_with_label ("Open");
     save_item = gtk_menu_item_new_with_label ("Save");
-    quit_item = gtk_menu_item_new_with_label ("Quit");</para>
+    quit_item = gtk_menu_item_new_with_label ("Quit");
 
-<para>    /* Add them to the menu */
+    /* Add them to the menu */
     gtk_menu_append (GTK_MENU (file_menu), open_item);
     gtk_menu_append (GTK_MENU (file_menu), save_item);
-    gtk_menu_append (GTK_MENU (file_menu), quit_item);</para>
+    gtk_menu_append (GTK_MENU (file_menu), quit_item);
 
-<para>    /* Attach the callback functions to the activate signal */
+    /* Attach the callback functions to the activate signal */
     gtk_signal_connect_object (GTK_OBJECT (open_items), "activate",
                                GTK_SIGNAL_FUNC (menuitem_response),
                                (gpointer) "file.open");
     gtk_signal_connect_object (GTK_OBJECT (save_items), "activate",
                                GTK_SIGNAL_FUNC (menuitem_response),
-                               (gpointer) "file.save");</para>
+                               (gpointer) "file.save");
 
-<para>    /* We can attach the Quit menu item to our exit function */
+    /* We can attach the Quit menu item to our exit function */
     gtk_signal_connect_object (GTK_OBJECT (quit_items), "activate",
                                GTK_SIGNAL_FUNC (destroy),
-                               (gpointer) "file.quit");</para>
+                               (gpointer) "file.quit");
 
-<para>    /* We do need to show menu items */
+    /* We do need to show menu items */
     gtk_widget_show (open_item);
     gtk_widget_show (save_item);
     gtk_widget_show (quit_item);
@@ -10650,19 +10649,19 @@ looks like this:</para>
 <programlisting role="C">
     menu_bar = gtk_menu_bar_new ();
     gtk_container_add (GTK_CONTAINER (window), menu_bar);
-    gtk_widget_show (menu_bar);</para>
+    gtk_widget_show (menu_bar);
 
-<para>    file_item = gtk_menu_item_new_with_label ("File");
+    file_item = gtk_menu_item_new_with_label ("File");
     gtk_widget_show (file_item);
 </programlisting>
 
 <para>Now we need to associate the menu with <literal>file_item</literal>. This is done
 with the function</para>
 
-<para><tscreen>
+<programlisting role="C">
 void gtk_menu_item_set_submenu( GtkMenuItem *menu_item,
                                 GtkWidget   *submenu );
-</tscreen></para>
+</programlisting>
 
 <para>So, our example would continue with</para>
 
@@ -10673,10 +10672,10 @@ void gtk_menu_item_set_submenu( GtkMenuItem *menu_item,
 <para>All that is left to do is to add the menu to the menubar, which is
 accomplished using the function</para>
 
-<para><tscreen>
+<programlisting role="C">
 void gtk_menu_bar_append( GtkMenuBar *menu_bar,
                           GtkWidget  *menu_item );
-</tscreen></para>
+</programlisting>
 
 <para>which in our case looks like this:</para>
 
@@ -10699,20 +10698,25 @@ attached:</para>
 <itemizedlist>
 <listitem><simpara> Create a new menu using gtk_menu_new()</simpara>
 </listitem>
+
 <listitem><simpara> Use multiple calls to gtk_menu_item_new() for each item you
 wish to have on your menu. And use gtk_menu_append() to put each of
 these new items on to the menu.</simpara>
 </listitem>
+
 <listitem><simpara> Create a menu item using gtk_menu_item_new(). This will be the
 root of the menu, the text appearing here will be on the menubar
 itself.</simpara>
 </listitem>
+
 <listitem><simpara>Use gtk_menu_item_set_submenu() to attach the menu to the root
 menu item (the one created in the above step).</simpara>
 </listitem>
+
 <listitem><simpara> Create a new menubar using gtk_menu_bar_new. This step only
 needs to be done once when creating a series of menus on one menu bar.</simpara>
 </listitem>
+
 <listitem><simpara> Use gtk_menu_bar_append() to put the root menu onto the menubar.</simpara>
 </listitem>
 </itemizedlist>
@@ -10724,24 +10728,26 @@ example.  Take these steps:</para>
 
 <itemizedlist>
 <listitem><simpara>Create an event handling function. It needs to have the
-prototype
-<tscreen>
+prototype</simpara>
+<programlisting role="C">
 static gint handler (GtkWidget *widget,
                      GdkEvent  *event);
-</tscreen>
-and it will use the event to find out where to pop up the menu.</simpara>
+</programlisting>
+<simpara>and it will use the event to find out where to pop up the menu.</simpara>
 </listitem>
+
 <listitem><simpara>In the event handler, if the event is a mouse button press,
 treat <literal>event</literal> as a button event (which it is) and use it as
 shown in the sample code to pass information to gtk_menu_popup().</simpara>
 </listitem>
-<listitem><simpara>Bind that event handler to a widget with
-<tscreen>
+
+<listitem><simpara>Bind that event handler to a widget with</simpara>
+<programlisting role="C">
     gtk_signal_connect_object (GTK_OBJECT (widget), "event",
                                GTK_SIGNAL_FUNC (handler),
                                GTK_OBJECT (menu));
-</tscreen>
-where <literal>widget</literal> is the widget you are binding to,
+</programlisting>
+<simpara>where <literal>widget</literal> is the widget you are binding to,
 <literal>handler</literal> is the handling function, and <literal>menu</literal> is a menu
 created with gtk_menu_new(). This can be a menu which is also posted
 by a menu bar, as shown in the sample code.</simpara>
@@ -10936,30 +10942,30 @@ static void print_hello( GtkWidget *w,
    Item 5: The item type, used to define what kind of an item it is.
            Here are the possible values:
 
-           NULL               -> "<Item>"
-           ""                 -> "<Item>"
-           "<Title>"          -> create a title item
-           "<Item>"           -> create a simple item
-           "<CheckItem>"      -> create a check item
-           "<ToggleItem>"     -> create a toggle item
-           "<RadioItem>"      -> create a radio item
-           <path>             -> path of a radio item to link against
-           "<Separator>"      -> create a separator
-           "<Branch>"         -> create an item to hold sub items (optional)
-           "<LastBranch>"     -> create a right justified branch 
+           NULL               -> "&lt;Item>"
+           ""                 -> "&lt;Item>"
+           "&lt;Title>"          -> create a title item
+           "&lt;Item>"           -> create a simple item
+           "&lt;CheckItem>"      -> create a check item
+           "&lt;ToggleItem>"     -> create a toggle item
+           "&lt;RadioItem>"      -> create a radio item
+           &lt;path>             -> path of a radio item to link against
+           "&lt;Separator>"      -> create a separator
+           "&lt;Branch>"         -> create an item to hold sub items (optional)
+           "&lt;LastBranch>"     -> create a right justified branch 
 */
 
 static GtkItemFactoryEntry menu_items[] = {
-  { "/_File",         NULL,         NULL, 0, "<Branch>" },
-  { "/File/_New",     "<control>N", print_hello, 0, NULL },
-  { "/File/_Open",    "<control>O", print_hello, 0, NULL },
-  { "/File/_Save",    "<control>S", print_hello, 0, NULL },
+  { "/_File",         NULL,         NULL, 0, "&lt;Branch>" },
+  { "/File/_New",     "&lt;control>N", print_hello, 0, NULL },
+  { "/File/_Open",    "&lt;control>O", print_hello, 0, NULL },
+  { "/File/_Save",    "&lt;control>S", print_hello, 0, NULL },
   { "/File/Save _As", NULL,         NULL, 0, NULL },
-  { "/File/sep1",     NULL,         NULL, 0, "<Separator>" },
-  { "/File/Quit",     "<control>Q", gtk_main_quit, 0, NULL },
-  { "/_Options",      NULL,         NULL, 0, "<Branch>" },
+  { "/File/sep1",     NULL,         NULL, 0, "&lt;Separator>" },
+  { "/File/Quit",     "&lt;control>Q", gtk_main_quit, 0, NULL },
+  { "/_Options",      NULL,         NULL, 0, "&lt;Branch>" },
   { "/Options/Test",  NULL,         NULL, 0, NULL },
-  { "/_Help",         NULL,         NULL, 0, "<LastBranch>" },
+  { "/_Help",         NULL,         NULL, 0, "&lt;LastBranch>" },
   { "/_Help/About",   NULL,         NULL, 0, NULL },
 };
 
@@ -10981,7 +10987,7 @@ void get_main_menu( GtkWidget  *window,
               the accelerator table while generating menus.
   */
 
-  item_factory = gtk_item_factory_new (GTK_TYPE_MENU_BAR, "<main>", 
+  item_factory = gtk_item_factory_new (GTK_TYPE_MENU_BAR, "&lt;main>", 
 				       accel_group);
 
   /* This function generates the menu items. Pass the item factory,
@@ -10994,7 +11000,7 @@ void get_main_menu( GtkWidget  *window,
 
   if (menubar)
     /* Finally, return the actual menu bar created by the item factory. */ 
-    *menubar = gtk_item_factory_get_widget (item_factory, "<main>");
+    *menubar = gtk_item_factory_get_widget (item_factory, "&lt;main>");
 }
 
 int main( int argc,
@@ -11030,8 +11036,7 @@ int main( int argc,
 /* example-end */
 </programlisting>
 
-<para>
-For now, there's only this example. An explanation and lots 'o' comments
+<para>For now, there's only this example. An explanation and lots 'o' comments
 will follow later.</para>
 
 </sect1>
@@ -11128,9 +11133,11 @@ TRUE or FALSE value.</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>Text Manipulation
-<P>
-The current insertion point of a Text widget can be set using</para>
+<sect1>
+<title>Text Manipulation</title>
+
+<para>The current insertion point of a Text widget can be set using</para>
+
 <programlisting role="C">
 void gtk_text_set_point( GtkText *text,
                          guint    index );
@@ -11189,9 +11196,9 @@ updates are complete.</para>
 <para>The following two functions perform this freeze and thaw action:</para>
 
 <programlisting role="C">
-void gtk_text_freeze( GtkText *text );</para>
+void gtk_text_freeze( GtkText *text );
 
-<para>void gtk_text_thaw( GtkText *text );         
+void gtk_text_thaw( GtkText *text );         
 </programlisting>
 
 <para>Text is deleted from the text widget relative to the current insertion
@@ -11200,9 +11207,9 @@ FALSE indicator of whether the operation was successful.</para>
 
 <programlisting role="C">
 gint gtk_text_backward_delete( GtkText *text,
-                               guint    nchars );</para>
+                               guint    nchars );
 
-<para>gint gtk_text_forward_delete ( GtkText *text,
+gint gtk_text_forward_delete ( GtkText *text,
                                guint    nchars );
 </programlisting>
 
@@ -11224,7 +11231,7 @@ text starts at 0.</para>
 
 <para>The function allocates a new chunk of memory for the text block, so
 don't forget to free it with a call to g_free when you have finished
-with it.
+with it.</para>
  
 </sect1>
 
@@ -11241,10 +11248,11 @@ key movement will move the cursor by words rather than
 characters. Holding down Shift whilst using cursor movement will
 extend the selection.</para>
 
-<para><sect2>
+<!-- ----------------------------------------------------------------- -->
+<sect2>
 <title>Motion Shortcuts</title>
 
-<itemizedlist>
+<itemizedlist spacing=compact>
 <listitem><simpara> Ctrl-A   Beginning of line</simpara>
 </listitem>
 <listitem><simpara> Ctrl-E   End of line</simpara>
@@ -11263,10 +11271,13 @@ extend the selection.</para>
 </listitem>
 </itemizedlist>
 
-<para><sect2>
+</sect2>
+
+<!-- ----------------------------------------------------------------- -->
+<sect2>
 <title>Editing Shortcuts</title>
 
-<itemizedlist>
+<itemizedlist spacing=compact>
 <listitem><simpara> Ctrl-H   Delete Backward Character (Backspace)</simpara>
 </listitem>
 <listitem><simpara> Ctrl-D   Delete Forward Character (Delete)</simpara>
@@ -11281,10 +11292,13 @@ extend the selection.</para>
 </listitem>
 </itemizedlist>
 
-<para><sect2>
+</sect2>
+
+<!-- ----------------------------------------------------------------- -->
+<sect2>
 <title>Selection Shortcuts</title>
 
-<itemizedlist>
+<itemizedlist spacing=compact>
 <listitem><simpara> Ctrl-X   Cut to clipboard</simpara>
 </listitem>
 <listitem><simpara> Ctrl-C   Copy to clipboard</simpara>
@@ -11293,6 +11307,7 @@ extend the selection.</para>
 </listitem>
 </itemizedlist>
 
+</sect2>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
@@ -11510,7 +11525,9 @@ from your time.</para>
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>
-<title> CTree</title>
+<title>CTree</title>
+
+<para></para>
 
 </sect1>
 
@@ -11518,11 +11535,15 @@ from your time.</para>
 <sect1>
 <title> Curves</title>
 
+<para></para>
+
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>
 <title> Drawing Area</title>
+
+<para></para>
 
 </sect1>
 
@@ -11530,11 +11551,15 @@ from your time.</para>
 <sect1>
 <title> Font Selection Dialog</title>
 
+<para></para>
+
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>
 <title> Gamma Curve</title>
+
+<para></para>
 
 </sect1>
 
@@ -11542,11 +11567,15 @@ from your time.</para>
 <sect1>
 <title> Image</title>
 
+<para></para>
+
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>
 <title> Packer</title>
+
+<para></para>
 
 </sect1>
 
@@ -11554,11 +11583,15 @@ from your time.</para>
 <sect1>
 <title> Plugs and Sockets</title>
 
+<para></para>
+
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>
 <title> Preview</title>
+
+<para></para>
 
 <!--
 
@@ -12022,42 +12055,42 @@ void gtk_widget_install_accelerator( GtkWidget           *widget,
                                      GtkAcceleratorTable *table,
                                      gchar               *signal_name,
                                      gchar                key,
-                                     guint8               modifiers );</para>
+                                     guint8               modifiers );
 
-<para>void gtk_widget_remove_accelerator ( GtkWidget           *widget,
+void gtk_widget_remove_accelerator ( GtkWidget           *widget,
                                      GtkAcceleratorTable *table,
-                                     gchar               *signal_name);</para>
+                                     gchar               *signal_name);
 
-<para>void gtk_widget_activate( GtkWidget *widget );</para>
+void gtk_widget_activate( GtkWidget *widget );
 
-<para>void gtk_widget_set_name( GtkWidget *widget,
-                          gchar     *name );</para>
+void gtk_widget_set_name( GtkWidget *widget,
+                          gchar     *name );
 
-<para>gchar *gtk_widget_get_name( GtkWidget *widget );</para>
+gchar *gtk_widget_get_name( GtkWidget *widget );
 
-<para>void gtk_widget_set_sensitive( GtkWidget *widget,
-                               gint       sensitive );</para>
+void gtk_widget_set_sensitive( GtkWidget *widget,
+                               gint       sensitive );
 
-<para>void gtk_widget_set_style( GtkWidget *widget,
+void gtk_widget_set_style( GtkWidget *widget,
                            GtkStyle  *style );
 					   
-GtkStyle *gtk_widget_get_style( GtkWidget *widget );</para>
+GtkStyle *gtk_widget_get_style( GtkWidget *widget );
 
-<para>GtkStyle *gtk_widget_get_default_style( void );</para>
+GtkStyle *gtk_widget_get_default_style( void );
 
-<para>void gtk_widget_set_uposition( GtkWidget *widget,
+void gtk_widget_set_uposition( GtkWidget *widget,
                                gint       x,
-                               gint       y );</para>
+                               gint       y );
 
-<para>void gtk_widget_set_usize( GtkWidget *widget,
+void gtk_widget_set_usize( GtkWidget *widget,
                            gint       width,
-                           gint       height );</para>
+                           gint       height );
 
-<para>void gtk_widget_grab_focus( GtkWidget *widget );</para>
+void gtk_widget_grab_focus( GtkWidget *widget );
 
-<para>void gtk_widget_show( GtkWidget *widget );</para>
+void gtk_widget_show( GtkWidget *widget );
 
-<para>void gtk_widget_hide( GtkWidget *widget );
+void gtk_widget_hide( GtkWidget *widget );
 </programlisting>
 
 </chapter>
@@ -12126,9 +12159,9 @@ may be one of:</para>
 
 <itemizedlist>
 <listitem><simpara><literal>GDK_INPUT_READ</literal> - Call your function when there is data
-ready for reading on your file descriptor.</para>
-</simpara>
+ready for reading on your file descriptor.</simpara>
 </listitem>
+
 <listitem><simpara>><literal>GDK_INPUT_WRITE</literal> - Call your function when the file
 descriptor is ready for writing.</simpara>
 </listitem>
@@ -12198,59 +12231,58 @@ called.</para>
 <sect2>
 <title>Connecting and Disconnecting Signal Handlers</title>
 
-</para>
 <programlisting role="C">
 guint gtk_signal_connect( GtkObject     *object,
                           const gchar   *name,
                           GtkSignalFunc  func,
-                          gpointer       func_data );</para>
+                          gpointer       func_data );
 
-<para>guint gtk_signal_connect_after( GtkObject     *object,
+guint gtk_signal_connect_after( GtkObject     *object,
                                 const gchar   *name,
                                 GtkSignalFunc  func,
-                                gpointer       func_data );</para>
+                                gpointer       func_data );
 
-<para>guint gtk_signal_connect_object( GtkObject     *object,
+guint gtk_signal_connect_object( GtkObject     *object,
                                  const gchar   *name,
                                  GtkSignalFunc  func,
-                                 GtkObject     *slot_object );</para>
+                                 GtkObject     *slot_object );
 
-<para>guint gtk_signal_connect_object_after( GtkObject     *object,
+guint gtk_signal_connect_object_after( GtkObject     *object,
                                        const gchar   *name,
                                        GtkSignalFunc  func,
-                                       GtkObject     *slot_object );</para>
+                                       GtkObject     *slot_object );
 
-<para>guint gtk_signal_connect_full( GtkObject          *object,
+guint gtk_signal_connect_full( GtkObject          *object,
                                const gchar        *name,
                                GtkSignalFunc       func,
                                GtkCallbackMarshal  marshal,
                                gpointer            data,
                                GtkDestroyNotify    destroy_func,
                                gint                object_signal,
-                               gint                after );</para>
+                               gint                after );
 
-<para>guint gtk_signal_connect_interp( GtkObject          *object,
+guint gtk_signal_connect_interp( GtkObject          *object,
                                  const gchar        *name,
                                  GtkCallbackMarshal  func,
                                  gpointer            data,
                                  GtkDestroyNotify    destroy_func,
-                                 gint                after );</para>
+                                 gint                after );
 
-<para>void gtk_signal_connect_object_while_alive( GtkObject     *object,
+void gtk_signal_connect_object_while_alive( GtkObject     *object,
                                             const gchar   *signal,
                                             GtkSignalFunc  func,
-                                            GtkObject     *alive_object );</para>
+                                            GtkObject     *alive_object );
 
-<para>void gtk_signal_connect_while_alive( GtkObject     *object,
+void gtk_signal_connect_while_alive( GtkObject     *object,
                                      const gchar   *signal,
                                      GtkSignalFunc  func,
                                      gpointer       func_data,
-                                     GtkObject     *alive_object );</para>
+                                     GtkObject     *alive_object );
 
-<para>void gtk_signal_disconnect( GtkObject *object,
-                            guint      handler_id );</para>
+void gtk_signal_disconnect( GtkObject *object,
+                            guint      handler_id );
 
-<para>void gtk_signal_disconnect_by_func( GtkObject     *object,
+void gtk_signal_disconnect_by_func( GtkObject     *object,
                                     GtkSignalFunc  func,
                                     gpointer       data );
 </programlisting>
@@ -12263,23 +12295,23 @@ guint gtk_signal_connect( GtkObject     *object,
 
 <programlisting role="C">
 void gtk_signal_handler_block( GtkObject *object,
-                               guint      handler_id);</para>
+                               guint      handler_id);
 
-<para>void gtk_signal_handler_block_by_func( GtkObject     *object,
+void gtk_signal_handler_block_by_func( GtkObject     *object,
                                        GtkSignalFunc  func,
-                                       gpointer       data );</para>
+                                       gpointer       data );
 
-<para>void gtk_signal_handler_block_by_data( GtkObject *object,
-                                       gpointer   data );</para>
+void gtk_signal_handler_block_by_data( GtkObject *object,
+                                       gpointer   data );
 
-<para>void gtk_signal_handler_unblock( GtkObject *object,
-                                 guint      handler_id );</para>
+void gtk_signal_handler_unblock( GtkObject *object,
+                                 guint      handler_id );
 
-<para>void gtk_signal_handler_unblock_by_func( GtkObject     *object,
+void gtk_signal_handler_unblock_by_func( GtkObject     *object,
                                          GtkSignalFunc  func,
-                                         gpointer       data );</para>
+                                         gpointer       data );
 
-<para>void gtk_signal_handler_unblock_by_data( GtkObject *object,
+void gtk_signal_handler_unblock_by_data( GtkObject *object,
                                          gpointer   data );
 </programlisting>
 
@@ -12292,30 +12324,30 @@ void gtk_signal_handler_block( GtkObject *object,
 <programlisting role="C">
 void gtk_signal_emit( GtkObject *object,
                       guint      signal_id,
-                      ... );</para>
+                      ... );
 
-<para>void gtk_signal_emit_by_name( GtkObject   *object,
+void gtk_signal_emit_by_name( GtkObject   *object,
                               const gchar *name,
-                              ... );</para>
+                              ... );
 
-<para>void gtk_signal_emitv( GtkObject *object,
+void gtk_signal_emitv( GtkObject *object,
                        guint      signal_id,
-                       GtkArg    *params );</para>
+                       GtkArg    *params );
 
-<para>void gtk_signal_emitv_by_name( GtkObject   *object,
+void gtk_signal_emitv_by_name( GtkObject   *object,
                                const gchar *name,
-                               GtkArg      *params );</para>
+                               GtkArg      *params );
 
-<para>guint gtk_signal_n_emissions( GtkObject *object,
-                              guint      signal_id );</para>
+guint gtk_signal_n_emissions( GtkObject *object,
+                              guint      signal_id );
 
-<para>guint gtk_signal_n_emissions_by_name( GtkObject   *object,
-                                      const gchar *name );</para>
+guint gtk_signal_n_emissions_by_name( GtkObject   *object,
+                                      const gchar *name );
 
-<para>void gtk_signal_emit_stop( GtkObject *object,
-                           guint      signal_id );</para>
+void gtk_signal_emit_stop( GtkObject *object,
+                           guint      signal_id );
 
-<para>void gtk_signal_emit_stop_by_name( GtkObject   *object,
+void gtk_signal_emit_stop_by_name( GtkObject   *object,
                                    const gchar *name );
 </programlisting>
 
@@ -12334,34 +12366,36 @@ value of the <emphasis>last</emphasis> handler executed. Since event signals are
 all of type <literal>GTK_RUN_LAST</literal>, this will be the default (GTK supplied)
 handler, unless you connect with gtk_signal_connect_after().</para>
 
-<para>The way an event (say "button_press_event") is handled, is:
+<para>The way an event (say "button_press_event") is handled, is:</para>
+
 <itemizedlist>
-<listitem><simpara>Start with the widget where the event occured.</para>
-</simpara>
+<listitem><simpara>Start with the widget where the event occured.</simpara>
 </listitem>
+
 <listitem><simpara>Emit the generic "event" signal. If that signal handler returns
-a value of TRUE, stop all processing.</para>
-</simpara>
+a value of TRUE, stop all processing.</simpara>
 </listitem>
+
 <listitem><simpara>Otherwise, emit a specific, "button_press_event" signal. If that
-returns TRUE, stop all processing.</para>
-</simpara>
+returns TRUE, stop all processing.</simpara>
 </listitem>
+
 <listitem><simpara>Otherwise, go to the widget's parent, and repeat the above two
-steps.</para>
-</simpara>
+steps.</simpara>
 </listitem>
+
 <listitem><simpara>Continue until some signal handler returns TRUE, or until the
 top-level widget is reached.</simpara>
 </listitem>
 </itemizedlist>
 
-<para>Some consequences of the above are:
+<para>Some consequences of the above are:</para>
+
 <itemizedlist>
 <listitem><simpara>Your handler's return value will have no effect if there is a
-default handler, unless you connect with gtk_signal_connect_after().</para>
-</simpara>
+default handler, unless you connect with gtk_signal_connect_after().</simpara>
 </listitem>
+
 <listitem><simpara>To prevent the default handler from being run, you need to
 connect with gtk_signal_connect() and use
 gtk_signal_emit_stop_by_name() - the return value only affects whether
@@ -12378,7 +12412,7 @@ the signal is propagated, not the current emission.</simpara>
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>
-<title> Overview</title>
+<title>Overview</title>
 
 <para>One type of interprocess communication supported by X and GTK is
 <emphasis>selections</emphasis>. A selection identifies a chunk of data, for
@@ -12426,7 +12460,7 @@ gint gtk_selection_convert( GtkWidget *widget,
                             GdkAtom    selection, 
                             GdkAtom    target,
                             guint32    time );
-</verb</tscreen></para>
+</programlisting>
 
 <para>This <emphasis>converts</emphasis> the selection into the form specified by
 <literal>target</literal>. If at all possible, the time field should be the time
@@ -12523,7 +12557,7 @@ void selection_received( GtkWidget        *widget,
   atoms = (GdkAtom *)selection_data->data;
 
   item_list = NULL;
-  for (i=0; i<selection_data->length/sizeof(GdkAtom); i++)
+  for (i=0; i&lt;selection_data->length/sizeof(GdkAtom); i++)
     {
       char *name;
       name = gdk_atom_name (atoms[i]);
@@ -12576,7 +12610,7 @@ int main( int   argc,
 </sect1>
 <!-- ----------------------------------------------------------------- -->
 <sect1>
-<title> Supplying the selection </title>
+<title>Supplying the selection </title>
 
 <para>Supplying the selection is a bit more complicated. You must register 
 handlers that will be called when your selection is requested. For
@@ -12779,7 +12813,7 @@ data which can be indexed on any number of fields), and caches.</para>
 <para>A summary of some of GLib's capabilities follows; not every function,
 data structure, or operation is covered here.  For more complete
 information about the GLib routines, see the GLib documentation. One
-source of GLib documentation is <ulink url="http://www.gtk.org/"> http://www.gtk.org/ </ulink>.</para>
+source of GLib documentation is <ulink url="http://www.gtk.org/">http://www.gtk.org/</ulink>.</para>
 
 <para>If you are using a language other than C, you should consult your
 language's binding documentation. In some cases your language may
@@ -12815,20 +12849,20 @@ char   gchar;
 short  gshort;
 long   glong;
 int    gint;
-char   gboolean;</para>
+char   gboolean;
 
-<para>unsigned char   guchar;
+unsigned char   guchar;
 unsigned short  gushort;
 unsigned long   gulong;
-unsigned int    guint;</para>
+unsigned int    guint;
 
-<para>float   gfloat;
+float   gfloat;
 double  gdouble;
-long double gldouble;</para>
+long double gldouble;
 
-<para>void* gpointer;</para>
+void* gpointer;
 
-<para>gint8
+gint8
 guint8
 gint16
 guint16
@@ -12869,9 +12903,9 @@ GList *g_list_append( GList    *list,
 </programlisting>
 
 <para>This adds a new element (with value <literal>data</literal>) onto the end of the
-list.
+list.</para>
   
-<tscreen><verb>	   
+<programlisting role="C">
 GList *g_list_prepend( GList    *list,
                        gpointer  data );
 </programlisting>
@@ -12879,12 +12913,11 @@ GList *g_list_prepend( GList    *list,
 <para>This adds a new element (with value <literal>data</literal>) to the beginning of the
 list.</para>
 
-<para><tscreen><verb>		
+<programlisting role="C">
 GList *g_list_insert( GList    *list,
                       gpointer  data,
-                      gint      position );</para>
-
-<para></verb></tscreen></para>
+                      gint      position );
+</programlisting>
 
 <para>This inserts a new element (with value data) into the list at the
 given position. If position is 0, this is just like g_list_prepend();
@@ -12910,29 +12943,28 @@ first.</para>
 see the glib documentation for more information.  Here are a few of
 the more useful functions' signatures:</para>
 
-<para><tscreen><verb>		   
+<programlisting role="C">  
 GList *g_list_remove_link( GList *list,
-                           GList *link );</para>
+                           GList *link );
 
-<para>GList *g_list_reverse( GList *list );</para>
+GList *g_list_reverse( GList *list );
 
-<para>GList *g_list_nth( GList *list,
+GList *g_list_nth( GList *list,
                    gint   n );
 			   
 GList *g_list_find( GList    *list,
-                    gpointer  data );</para>
+                    gpointer  data );
 
-<para>GList *g_list_last( GList *list );</para>
+GList *g_list_last( GList *list );
 
-<para>GList *g_list_first( GList *list );</para>
+GList *g_list_first( GList *list );
 
-<para>gint g_list_length( GList *list );</para>
+gint g_list_length( GList *list );
 
-<para>void g_list_foreach( GList    *list,
+void g_list_foreach( GList    *list,
                      GFunc     func,
                      gpointer  user_data );
-</verb></tscreen>
-</para>
+</programlisting>
 
 </sect1>
 
@@ -12960,19 +12992,19 @@ GSList *g_slist_remove( GSList   *list,
 GSList *g_slist_remove_link( GSList *list,
                              GSList *link );
 			     
-GSList *g_slist_reverse( GSList *list );</para>
+GSList *g_slist_reverse( GSList *list );
 
-<para>GSList *g_slist_nth( GSList *list,
+GSList *g_slist_nth( GSList *list,
                      gint    n );
 			     
 GSList *g_slist_find( GSList   *list,
                       gpointer  data );
 			     
-GSList *g_slist_last( GSList *list );</para>
+GSList *g_slist_last( GSList *list );
 
-<para>gint g_slist_length( GSList *list );</para>
+gint g_slist_length( GSList *list );
 
-<para>void g_slist_foreach( GSList   *list,
+void g_slist_foreach( GSList   *list,
                       GFunc     func,
                       gpointer  user_data );
 	
@@ -13039,19 +13071,19 @@ g_timer_stop() to stop timing an operation, and g_timer_elapsed() to
 determine the elapsed time.</para>
 
 <programlisting role="C">
-GTimer *g_timer_new( void );</para>
+GTimer *g_timer_new( void );
 
-<para>void g_timer_destroy( GTimer *timer );</para>
+void g_timer_destroy( GTimer *timer );
 
-<para>void g_timer_start( GTimer  *timer );</para>
+void g_timer_start( GTimer  *timer );
 
-<para>void g_timer_stop( GTimer  *timer );</para>
+void g_timer_stop( GTimer  *timer );
 
-<para>void g_timer_reset( GTimer  *timer );</para>
+void g_timer_reset( GTimer  *timer );
 
-<para>gdouble g_timer_elapsed( GTimer *timer,
+gdouble g_timer_elapsed( GTimer *timer,
                          gulong *microseconds );
-</verb></tscreen>			 </para>
+</programlisting>
 
 </sect1>
 
@@ -13083,19 +13115,17 @@ GString *g_string_new( gchar *init );
 
 <para>This constructs a GString, copying the string value of <literal>init</literal>
 into the GString and returning a pointer to it. NULL may be given as
-the argument for an initially empty GString.
- 
-<tscreen><verb></para>
+the argument for an initially empty GString.</para>
 
-<para>void g_string_free( GString *string,
+<programlisting role="C">
+void g_string_free( GString *string,
                     gint     free_segment );
 </programlisting>
 
 <para>This frees the memory for the given GString. If <literal>free_segment</literal> is
 TRUE, then this also frees its character data.</para>
 
-<programlisting role="C">
-			     
+<programlisting role="C">	     
 GString *g_string_assign( GString     *lval,
                           const gchar *rval );
 </programlisting>
@@ -13107,8 +13137,8 @@ function.</para>
 
 <para>The rest of these functions should be relatively obvious (the _c
 versions accept a character instead of a string):</para>
-
-<para><tscreen><verb>		     
+	     
+<programlisting role="C">	     
 GString *g_string_truncate( GString *string,
                             gint     len );
 			     
@@ -13131,8 +13161,7 @@ void g_string_sprintf( GString *string,
 void g_string_sprintfa ( GString *string,
                          gchar   *fmt,
                          ... );
-</verb></tscreen>
-</para>
+</programlisting>
 
 </sect1>
 
@@ -13320,7 +13349,7 @@ activated, it will take these attributes.</simpara>
 format is:</para>
 
 <programlisting role="C">
-fg[<STATE>] = { Red, Green, Blue }
+fg[&lt;STATE>] = { Red, Green, Blue }
 </programlisting>
 
 <para>Where STATE is one of the above states (PRELIGHT, ACTIVE, etc), and the Red,
@@ -13336,8 +13365,9 @@ filename.</para>
 searched for any pixmap you specify.</para>
 
 <para>The font directive is simply:</para>
+
 <programlisting role="C">
-font = "<font name>"
+font = "&lt;font name>"
 </programlisting>
 
 <para>The only hard part is figuring out the font string. Using xfontsel or
@@ -13382,19 +13412,18 @@ simple matter of common sense really. Anything that could apply, should.</para>
 <title>Example rc file</title>
 
 <programlisting role="C">
-# pixmap_path "<dir 1>:<dir 2>:<dir 3>:..."
+# pixmap_path "&lt;dir 1>:&lt;dir 2>:&lt;dir 3>:..."
 #
 pixmap_path "/usr/include/X11R6/pixmaps:/home/imain/pixmaps"
 #
-# style <name> [= <name>]
+# style &lt;name> [= &lt;name>]
 # {
-#   <option>
+#   &lt;option>
 # }
 #
-# widget <widget_set> style <style_name>
-# widget_class <widget_class_set> style <style_name></para>
+# widget &lt;widget_set> style &lt;style_name>
+# widget_class &lt;widget_class_set> style &lt;style_name>
 
-<para>
 # Here is a list of all the possible states.  Note that some do not apply to
 # certain widgets.
 #
@@ -13419,19 +13448,19 @@ pixmap_path "/usr/include/X11R6/pixmaps:/home/imain/pixmaps"
 # fg - Sets the background color of a widget.
 # bg_pixmap - Sets the background of a widget to a tiled pixmap.
 # font - Sets the font to be used with the given widget.
-#</para>
+#
 
-<para># This sets a style called "button".  The name is not really important, as
-# it is assigned to the actual widgets at the bottom of the file.</para>
+# This sets a style called "button".  The name is not really important, as
+# it is assigned to the actual widgets at the bottom of the file.
 
-<para>style "window"
+style "window"
 {
   #This sets the padding around the window to the pixmap specified.
-  #bg_pixmap[<STATE>] = "<pixmap filename>"
+  #bg_pixmap[&lt;STATE>] = "&lt;pixmap filename>"
   bg_pixmap[NORMAL] = "warning.xpm"
-}</para>
+}
 
-<para>style "scale"
+style "scale"
 {
   #Sets the foreground color (font color) to red when in the "NORMAL"
   #state.
@@ -13439,10 +13468,10 @@ pixmap_path "/usr/include/X11R6/pixmaps:/home/imain/pixmaps"
   fg[NORMAL] = { 1.0, 0, 0 }
   
   #Sets the background pixmap of this widget to that of its parent.
-  bg_pixmap[NORMAL] = "<parent>"
-}</para>
+  bg_pixmap[NORMAL] = "&lt;parent>"
+}
 
-<para>style "button"
+style "button"
 {
   # This shows all the possible states for a button.  The only one that
   # doesn't apply is the SELECTED state.
@@ -13455,46 +13484,46 @@ pixmap_path "/usr/include/X11R6/pixmaps:/home/imain/pixmaps"
   fg[NORMAL] = { .99, 0, .99 }
   bg[INSENSITIVE] = { 1.0, 1.0, 1.0 }
   fg[INSENSITIVE] = { 1.0, 0, 1.0 }
-}</para>
+}
 
-<para># In this example, we inherit the attributes of the "button" style and then
+# In this example, we inherit the attributes of the "button" style and then
 # override the font and background color when prelit to create a new
-# "main_button" style.</para>
+# "main_button" style.
 
-<para>style "main_button" = "button"
+style "main_button" = "button"
 {
   font = "-adobe-helvetica-medium-r-normal--*-100-*-*-*-*-*-*"
   bg[PRELIGHT] = { 0.75, 0, 0 }
-}</para>
+}
 
-<para>style "toggle_button" = "button"
+style "toggle_button" = "button"
 {
   fg[NORMAL] = { 1.0, 0, 0 }
   fg[ACTIVE] = { 1.0, 0, 0 }
   
   # This sets the background pixmap of the toggle_button to that of its
   # parent widget (as defined in the application).
-  bg_pixmap[NORMAL] = "<parent>"
-}</para>
+  bg_pixmap[NORMAL] = "&lt;parent>"
+}
 
-<para>style "text"
+style "text"
 {
   bg_pixmap[NORMAL] = "marble.xpm"
   fg[NORMAL] = { 1.0, 1.0, 1.0 }
-}</para>
+}
 
-<para>style "ruler"
+style "ruler"
 {
   font = "-adobe-helvetica-medium-r-normal--*-80-*-*-*-*-*-*"
-}</para>
+}
 
-<para># pixmap_path "~/.pixmaps"</para>
+# pixmap_path "~/.pixmaps"
 
-<para># These set the widget types to use the styles defined above.
+# These set the widget types to use the styles defined above.
 # The widget types are listed in the class hierarchy, but could probably be
-# just listed in this document for the users reference.</para>
+# just listed in this document for the users reference.
 
-<para>widget_class "GtkWindow" style "window"
+widget_class "GtkWindow" style "window"
 widget_class "GtkDialog" style "window"
 widget_class "GtkFileSelection" style "window"
 widget_class "*Gtk*Scale" style "scale"
@@ -13502,9 +13531,9 @@ widget_class "*GtkCheckButton*" style "toggle_button"
 widget_class "*GtkRadioButton*" style "toggle_button"
 widget_class "*GtkButton*" style "button"
 widget_class "*Ruler" style "ruler"
-widget_class "*GtkText" style "text"</para>
+widget_class "*GtkText" style "text"
 
-<para># This sets all the buttons that are children of the "main window" to
+# This sets all the buttons that are children of the "main window" to
 # the main_button style.  These must be documented to be taken advantage of.
 widget "main window.*GtkButton*" style "main_button"
 </programlisting>
@@ -13537,7 +13566,7 @@ other people can benefit. The best place to do this is probably the
 <para>Complete sources for the example widgets are available at the place you 
 got this tutorial, or from:</para>
 
-<para><ulink url="http://www.gtk.org/~otaylor/gtk/tutorial/"> http://www.gtk.org/~otaylor/gtk/tutorial/ </ulink></para>
+<para><ulink url="http://www.gtk.org/~otaylor/gtk/tutorial/">http://www.gtk.org/~otaylor/gtk/tutorial/</ulink></para>
 
 
 </sect1>
@@ -13566,9 +13595,9 @@ looks like:</para>
 <programlisting role="C">
 struct _GtkButtonClass
 {
-  GtkContainerClass parent_class;</para>
+  GtkContainerClass parent_class;
 
-<para>  void (* pressed)  (GtkButton *button);
+  void (* pressed)  (GtkButton *button);
   void (* released) (GtkButton *button);
   void (* clicked)  (GtkButton *button);
   void (* enter)    (GtkButton *button);
@@ -13589,11 +13618,11 @@ like:</para>
 <programlisting role="C">
 struct _GtkButton
 {
-  GtkContainer container;</para>
+  GtkContainer container;
 
-<para>  GtkWidget *child;</para>
+  GtkWidget *child;
 
-<para>  guint in_button : 1;
+  guint in_button : 1;
   guint button_down : 1;
 };
 </programlisting>
@@ -13691,56 +13720,56 @@ if an object is a Tictactoe widget respectively.</para>
 <para>Here is the complete header file:</para>
 
 <programlisting role="C">
-/* tictactoe.h */</para>
+/* tictactoe.h */
 
-<para>#ifndef __TICTACTOE_H__
-#define __TICTACTOE_H__</para>
+#ifndef __TICTACTOE_H__
+#define __TICTACTOE_H__
 
-<para>#include &lt;gdk/gdk.h&gt;
-#include &lt;gtk/gtkvbox.h&gt;</para>
+#include &lt;gdk/gdk.h&gt;
+#include &lt;gtk/gtkvbox.h&gt;
 
-<para>#ifdef __cplusplus
+#ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */</para>
+#endif /* __cplusplus */
 
-<para>#define TICTACTOE(obj)          GTK_CHECK_CAST (obj, tictactoe_get_type (), Tictactoe)
+#define TICTACTOE(obj)          GTK_CHECK_CAST (obj, tictactoe_get_type (), Tictactoe)
 #define TICTACTOE_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, tictactoe_get_type (), TictactoeClass)
-#define IS_TICTACTOE(obj)       GTK_CHECK_TYPE (obj, tictactoe_get_type ())</para>
+#define IS_TICTACTOE(obj)       GTK_CHECK_TYPE (obj, tictactoe_get_type ())
 
-<para>
+
 typedef struct _Tictactoe       Tictactoe;
-typedef struct _TictactoeClass  TictactoeClass;</para>
+typedef struct _TictactoeClass  TictactoeClass;
 
-<para>struct _Tictactoe
+struct _Tictactoe
 {
   GtkVBox vbox;
   
   GtkWidget *buttons[3][3];
-};</para>
+};
 
-<para>struct _TictactoeClass
+struct _TictactoeClass
 {
-  GtkVBoxClass parent_class;</para>
+  GtkVBoxClass parent_class;
 
-<para>  void (* tictactoe) (Tictactoe *ttt);
-};</para>
+  void (* tictactoe) (Tictactoe *ttt);
+};
 
-<para>guint          tictactoe_get_type        (void);
+guint          tictactoe_get_type        (void);
 GtkWidget*     tictactoe_new             (void);
-void	       tictactoe_clear           (Tictactoe *ttt);</para>
+void	       tictactoe_clear           (Tictactoe *ttt);
 
-<para>#ifdef __cplusplus
+#ifdef __cplusplus
 }
-#endif /* __cplusplus */</para>
+#endif /* __cplusplus */
 
-<para>#endif /* __TICTACTOE_H__ */</para>
-
-<para></verb></tscreen></para>
+#endif /* __TICTACTOE_H__ */
+</programlisting>
 
 </sect2>
 
 <!-- ----------------------------------------------------------------- -->
-<sect2> The <literal>_get_type()</literal> function.</para>
+<sect2>
+<title>The <literal>_get_type()</literal> function</title>
 
 <para>We now continue on to the implementation of our widget. A core
 function for every widget is the function
@@ -13752,9 +13781,9 @@ the widget class. Upon subsequent calls, it just returns the ID.</para>
 guint
 tictactoe_get_type ()
 {
-  static guint ttt_type = 0;</para>
+  static guint ttt_type = 0;
 
-<para>  if (!ttt_type)
+  if (!ttt_type)
     {
       GtkTypeInfo ttt_info =
       {
@@ -13765,12 +13794,12 @@ tictactoe_get_type ()
 	(GtkObjectInitFunc) tictactoe_init,
 	(GtkArgSetFunc) NULL,
         (GtkArgGetFunc) NULL
-      };</para>
+      };
 
-<para>      ttt_type = gtk_type_unique (gtk_vbox_get_type (), &amp;ttt_info);
-    }</para>
+      ttt_type = gtk_type_unique (gtk_vbox_get_type (), &amp;ttt_info);
+    }
 
-<para>  return ttt_type;
+  return ttt_type;
 }
 </programlisting>
 
@@ -13800,38 +13829,39 @@ type. </para>
 </sect2>
 
 <!-- ----------------------------------------------------------------- -->
-<sect2> The <literal>_class_init()</literal> function</para>
+<sect2>
+<title>The <literal>_class_init()</literal> function</title>
 
 <para>The <literal>WIDGETNAME_class_init()</literal> function initializes the fields of
 the widget's class structure, and sets up any signals for the
 class. For our Tictactoe widget it looks like:</para>
 
-<para><tscreen><verb></para>
-
-<para>enum {
+<programlisting role="C">
+enum {
   TICTACTOE_SIGNAL,
   LAST_SIGNAL
-};</para>
+};
 
-<para>static gint tictactoe_signals[LAST_SIGNAL] = { 0 };</para>
 
-<para>static void
+static gint tictactoe_signals[LAST_SIGNAL] = { 0 };
+
+static void
 tictactoe_class_init (TictactoeClass *class)
 {
-  GtkObjectClass *object_class;</para>
+  GtkObjectClass *object_class;
 
-<para>  object_class = (GtkObjectClass*) class;
+  object_class = (GtkObjectClass*) class;
   
   tictactoe_signals[TICTACTOE_SIGNAL] = gtk_signal_new ("tictactoe",
 					 GTK_RUN_FIRST,
 					 object_class->type,
 					 GTK_SIGNAL_OFFSET (TictactoeClass, tictactoe),
-					 gtk_signal_default_marshaller, GTK_TYPE_NONE, 0);</para>
+					 gtk_signal_default_marshaller, GTK_TYPE_NONE, 0);
 
-<para>
-  gtk_object_class_add_signals (object_class, tictactoe_signals, LAST_SIGNAL);</para>
 
-<para>  class->tictactoe = NULL;
+  gtk_object_class_add_signals (object_class, tictactoe_signals, LAST_SIGNAL);
+
+  class->tictactoe = NULL;
 }
 </programlisting>
 
@@ -13859,26 +13889,33 @@ gint gtk_signal_new( const gchar         *name,
 <itemizedlist>
 <listitem><simpara> <literal>name</literal>: The name of the signal.</simpara>
 </listitem>
+
 <listitem><simpara> <literal>run_type</literal>: Whether the default handler runs before or after
 user handlers. Usually this will be <literal>GTK_RUN_FIRST</literal>, or <literal>GTK_RUN_LAST</literal>,
 although there are other possibilities.</simpara>
 </listitem>
+
 <listitem><simpara> <literal>object_type</literal>: The ID of the object that this signal applies
 to. (It will also apply to that objects descendants.)</simpara>
 </listitem>
+
 <listitem><simpara> <literal>function_offset</literal>: The offset within the class structure of
 a pointer to the default handler.</simpara>
 </listitem>
+
 <listitem><simpara> <literal>marshaller</literal>: A function that is used to invoke the signal
 handler. For signal handlers that have no arguments other than the
 object that emitted the signal and user data, we can use the
 pre-supplied marshaller function <literal>gtk_signal_default_marshaller</literal>.</simpara>
 </listitem>
+
 <listitem><simpara> <literal>return_val</literal>: The type of the return val.</simpara>
 </listitem>
+
 <listitem><simpara> <literal>nparams</literal>: The number of parameters of the signal handler
 (other than the two default ones mentioned above)</simpara>
 </listitem>
+
 <listitem><simpara> <literal>...</literal>: The types of the parameters.</simpara>
 </listitem>
 </itemizedlist>
@@ -13904,17 +13941,17 @@ typedef enum
   GTK_TYPE_BOXED,
   GTK_TYPE_FOREIGN,
   GTK_TYPE_CALLBACK,
-  GTK_TYPE_ARGS,</para>
+  GTK_TYPE_ARGS,
 
-<para>  GTK_TYPE_POINTER,</para>
+  GTK_TYPE_POINTER,
 
-<para>  /* it'd be great if the next two could be removed eventually */
+  /* it'd be great if the next two could be removed eventually */
   GTK_TYPE_SIGNAL,
-  GTK_TYPE_C_CALLBACK,</para>
+  GTK_TYPE_C_CALLBACK,
 
-<para>  GTK_TYPE_OBJECT</para>
+  GTK_TYPE_OBJECT
 
-<para>} GtkFundamentalType;
+} GtkFundamentalType;
 </programlisting>
 
 <para><literal>gtk_signal_new()</literal> returns a unique integer identifier for the
@@ -13933,7 +13970,8 @@ indicating that there is no default action.</para>
 </sect2>
 
 <!-- ----------------------------------------------------------------- -->
-<sect2> The <literal>_init()</literal> function.</para>
+<sect2>
+<title>The <literal>_init()</literal> function</title>
 
 <para>Each widget class also needs a function to initialize the object
 structure. Usually, this function has the fairly limited role of
@@ -13949,9 +13987,9 @@ tictactoe_init (Tictactoe *ttt)
   
   table = gtk_table_new (3, 3, TRUE);
   gtk_container_add (GTK_CONTAINER(ttt), table);
-  gtk_widget_show (table);</para>
+  gtk_widget_show (table);
 
-<para>  for (i=0;i<3; i++)
+  for (i=0;i<3; i++)
     for (j=0;j<3; j++)
       {
 	ttt->buttons[i][j] = gtk_toggle_button_new ();
@@ -13969,7 +14007,7 @@ tictactoe_init (Tictactoe *ttt)
 
 <!-- ----------------------------------------------------------------- -->
 <sect2>
-<title> And the rest...</title>
+<title>And the rest...</title>
 
 <para>There is one more function that every widget (except for base widget
 types like Bin that cannot be instantiated) needs to have - the
@@ -13989,19 +14027,19 @@ user clicks on a button. It checks to see if there are any winning
 combinations that involve the toggled button, and if so, emits
 the "tictactoe" signal.</para>
 
-<para><tscreen><verb>  
+<programlisting role="C">
 GtkWidget*
 tictactoe_new ()
 {
   return GTK_WIDGET ( gtk_type_new (tictactoe_get_type ()));
-}</para>
+}
 
-<para>void	       
+void	       
 tictactoe_clear (Tictactoe *ttt)
 {
-  int i,j;</para>
+  int i,j;
 
-<para>  for (i=0;i<3;i++)
+  for (i=0;i<3;i++)
     for (j=0;j<3;j++)
       {
 	gtk_signal_handler_block_by_data (GTK_OBJECT(ttt->buttons[i][j]), ttt);
@@ -14009,28 +14047,28 @@ tictactoe_clear (Tictactoe *ttt)
 				     FALSE);
 	gtk_signal_handler_unblock_by_data (GTK_OBJECT(ttt->buttons[i][j]), ttt);
       }
-}</para>
+}
 
-<para>static void
+static void
 tictactoe_toggle (GtkWidget *widget, Tictactoe *ttt)
 {
-  int i,k;</para>
+  int i,k;
 
-<para>  static int rwins[8][3] = { { 0, 0, 0 }, { 1, 1, 1 }, { 2, 2, 2 },
+  static int rwins[8][3] = { { 0, 0, 0 }, { 1, 1, 1 }, { 2, 2, 2 },
 			     { 0, 1, 2 }, { 0, 1, 2 }, { 0, 1, 2 },
 			     { 0, 1, 2 }, { 0, 1, 2 } };
   static int cwins[8][3] = { { 0, 1, 2 }, { 0, 1, 2 }, { 0, 1, 2 },
 			     { 0, 0, 0 }, { 1, 1, 1 }, { 2, 2, 2 },
-			     { 0, 1, 2 }, { 2, 1, 0 } };</para>
+			     { 0, 1, 2 }, { 2, 1, 0 } };
 
-<para>  int success, found;</para>
+  int success, found;
 
-<para>  for (k=0; k<8; k++)
+  for (k=0; k<8; k++)
     {
       success = TRUE;
-      found = FALSE;</para>
+      found = FALSE;
 
-<para>      for (i=0;i<3;i++)
+      for (i=0;i<3;i++)
 	{
 	  success = success &amp;&amp; 
 	    GTK_TOGGLE_BUTTON(ttt->buttons[rwins[k][i]][cwins[k][i]])->active;
@@ -14052,61 +14090,60 @@ tictactoe_toggle (GtkWidget *widget, Tictactoe *ttt)
 
 <programlisting role="C">
 #include &lt;gtk/gtk.h&gt;
-#include "tictactoe.h"</para>
+#include "tictactoe.h"
 
-<para>/* Invoked when a row, column or diagonal is completed */
+/* Invoked when a row, column or diagonal is completed */
 void
 win (GtkWidget *widget, gpointer data)
 {
   g_print ("Yay!\n");
   tictactoe_clear (TICTACTOE (widget));
-}</para>
+}
 
-<para>int 
+int 
 main (int argc, char *argv[])
 {
   GtkWidget *window;
   GtkWidget *ttt;
   
-  gtk_init (&amp;argc, &amp;argv);</para>
+  gtk_init (&amp;argc, &amp;argv);
 
-<para>  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   
   gtk_window_set_title (GTK_WINDOW (window), "Aspect Frame");
   
   gtk_signal_connect (GTK_OBJECT (window), "destroy",
 		      GTK_SIGNAL_FUNC (gtk_exit), NULL);
   
-  gtk_container_set_border_width (GTK_CONTAINER (window), 10);</para>
+  gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 
-<para>  /* Create a new Tictactoe widget */
+  /* Create a new Tictactoe widget */
   ttt = tictactoe_new ();
   gtk_container_add (GTK_CONTAINER (window), ttt);
-  gtk_widget_show (ttt);</para>
+  gtk_widget_show (ttt);
 
-<para>  /* And attach to its "tictactoe" signal */
+  /* And attach to its "tictactoe" signal */
   gtk_signal_connect (GTK_OBJECT (ttt), "tictactoe",
-		      GTK_SIGNAL_FUNC (win), NULL);</para>
+		      GTK_SIGNAL_FUNC (win), NULL);
 
-<para>  gtk_widget_show (window);
+  gtk_widget_show (window);
   
   gtk_main ();
   
   return 0;
-}</para>
-
-</verb></tscreen>
+}
+</programlisting>
 
 </sect2>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>
-<title> Creating a widget from scratch.</title>
+<title>Creating a widget from scratch.</title>
 
 <!-- ----------------------------------------------------------------- -->
 <sect2>
-<title> Introduction</title>
+<title>Introduction</title>
 
 <para>In this section, we'll learn more about how widgets display themselves
 on the screen and interact with events. As an example of this, we'll
@@ -14216,77 +14253,77 @@ Tictactoe widget. First, we have a header file:</para>
  * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the Free
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- */</para>
+ */
 
-<para>#ifndef __GTK_DIAL_H__
-#define __GTK_DIAL_H__</para>
+#ifndef __GTK_DIAL_H__
+#define __GTK_DIAL_H__
 
-<para>#include &lt;gdk/gdk.h&gt;
+#include &lt;gdk/gdk.h&gt;
 #include &lt;gtk/gtkadjustment.h&gt;
-#include &lt;gtk/gtkwidget.h&gt;</para>
+#include &lt;gtk/gtkwidget.h&gt;
 
-<para>
+
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */</para>
+#endif /* __cplusplus */
 
-<para>
+
 #define GTK_DIAL(obj)          GTK_CHECK_CAST (obj, gtk_dial_get_type (), GtkDial)
 #define GTK_DIAL_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_dial_get_type (), GtkDialClass)
-#define GTK_IS_DIAL(obj)       GTK_CHECK_TYPE (obj, gtk_dial_get_type ())</para>
+#define GTK_IS_DIAL(obj)       GTK_CHECK_TYPE (obj, gtk_dial_get_type ())
 
-<para>
+
 typedef struct _GtkDial        GtkDial;
-typedef struct _GtkDialClass   GtkDialClass;</para>
+typedef struct _GtkDialClass   GtkDialClass;
 
-<para>struct _GtkDial
+struct _GtkDial
 {
-  GtkWidget widget;</para>
+  GtkWidget widget;
 
-<para>  /* update policy (GTK_UPDATE_[CONTINUOUS/DELAYED/DISCONTINUOUS]) */
-  guint policy : 2;</para>
+  /* update policy (GTK_UPDATE_[CONTINUOUS/DELAYED/DISCONTINUOUS]) */
+  guint policy : 2;
 
-<para>  /* Button currently pressed or 0 if none */
-  guint8 button;</para>
+  /* Button currently pressed or 0 if none */
+  guint8 button;
 
-<para>  /* Dimensions of dial components */
+  /* Dimensions of dial components */
   gint radius;
-  gint pointer_width;</para>
+  gint pointer_width;
 
-<para>  /* ID of update timer, or 0 if none */
-  guint32 timer;</para>
+  /* ID of update timer, or 0 if none */
+  guint32 timer;
 
-<para>  /* Current angle */
-  gfloat angle;</para>
+  /* Current angle */
+  gfloat angle;
 
-<para>  /* Old values from adjustment stored so we know when something changes */
+  /* Old values from adjustment stored so we know when something changes */
   gfloat old_value;
   gfloat old_lower;
-  gfloat old_upper;</para>
+  gfloat old_upper;
 
-<para>  /* The adjustment object that stores the data for this dial */
+  /* The adjustment object that stores the data for this dial */
   GtkAdjustment *adjustment;
-};</para>
+};
 
-<para>struct _GtkDialClass
+struct _GtkDialClass
 {
   GtkWidgetClass parent_class;
-};</para>
+};
 
-<para>
+
 GtkWidget*     gtk_dial_new                    (GtkAdjustment *adjustment);
 guint          gtk_dial_get_type               (void);
 GtkAdjustment* gtk_dial_get_adjustment         (GtkDial      *dial);
 void           gtk_dial_set_update_policy      (GtkDial      *dial,
-						GtkUpdateType  policy);</para>
+						GtkUpdateType  policy);
 
-<para>void           gtk_dial_set_adjustment         (GtkDial      *dial,
+void           gtk_dial_set_adjustment         (GtkDial      *dial,
 						GtkAdjustment *adjustment);
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */</para>
+#endif /* __cplusplus */
 
-<para>
+
 #endif /* __GTK_DIAL_H__ */
 </programlisting>
 
@@ -14302,27 +14339,27 @@ and initialize it:</para>
 #include &lt;math.h&gt;
 #include &lt;stdio.h&gt;
 #include &lt;gtk/gtkmain.h&gt;
-#include &lt;gtk/gtksignal.h&gt;</para>
+#include &lt;gtk/gtksignal.h&gt;
 
-<para>#include "gtkdial.h"</para>
+#include "gtkdial.h"
 
-<para>#define SCROLL_DELAY_LENGTH  300
-#define DIAL_DEFAULT_SIZE 100</para>
+#define SCROLL_DELAY_LENGTH  300
+#define DIAL_DEFAULT_SIZE 100
 
-<para>/* Forward declarations */</para>
+/* Forward declarations */
 
-<para>[ omitted to save space ]</para>
+[ omitted to save space ]
 
-<para>/* Local data */</para>
+/* Local data */
 
-<para>static GtkWidgetClass *parent_class = NULL;</para>
+static GtkWidgetClass *parent_class = NULL;
 
-<para>guint
+guint
 gtk_dial_get_type ()
 {
-  static guint dial_type = 0;</para>
+  static guint dial_type = 0;
 
-<para>  if (!dial_type)
+  if (!dial_type)
     {
       GtkTypeInfo dial_info =
       {
@@ -14333,37 +14370,37 @@ gtk_dial_get_type ()
 	(GtkObjectInitFunc) gtk_dial_init,
 	(GtkArgSetFunc) NULL,
         (GtkArgGetFunc) NULL,
-      };</para>
+      };
 
-<para>      dial_type = gtk_type_unique (gtk_widget_get_type (), &amp;dial_info);
-    }</para>
+      dial_type = gtk_type_unique (gtk_widget_get_type (), &amp;dial_info);
+    }
 
-<para>  return dial_type;
-}</para>
+  return dial_type;
+}
 
-<para>static void
+static void
 gtk_dial_class_init (GtkDialClass *class)
 {
   GtkObjectClass *object_class;
-  GtkWidgetClass *widget_class;</para>
+  GtkWidgetClass *widget_class;
 
-<para>  object_class = (GtkObjectClass*) class;
-  widget_class = (GtkWidgetClass*) class;</para>
+  object_class = (GtkObjectClass*) class;
+  widget_class = (GtkWidgetClass*) class;
 
-<para>  parent_class = gtk_type_class (gtk_widget_get_type ());</para>
+  parent_class = gtk_type_class (gtk_widget_get_type ());
 
-<para>  object_class->destroy = gtk_dial_destroy;</para>
+  object_class->destroy = gtk_dial_destroy;
 
-<para>  widget_class->realize = gtk_dial_realize;
+  widget_class->realize = gtk_dial_realize;
   widget_class->expose_event = gtk_dial_expose;
   widget_class->size_request = gtk_dial_size_request;
   widget_class->size_allocate = gtk_dial_size_allocate;
   widget_class->button_press_event = gtk_dial_button_press;
   widget_class->button_release_event = gtk_dial_button_release;
   widget_class->motion_notify_event = gtk_dial_motion_notify;
-}</para>
+}
 
-<para>static void
+static void
 gtk_dial_init (GtkDial *dial)
 {
   dial->button = 0;
@@ -14376,37 +14413,37 @@ gtk_dial_init (GtkDial *dial)
   dial->old_lower = 0.0;
   dial->old_upper = 0.0;
   dial->adjustment = NULL;
-}</para>
+}
 
-<para>GtkWidget*
+GtkWidget*
 gtk_dial_new (GtkAdjustment *adjustment)
 {
-  GtkDial *dial;</para>
+  GtkDial *dial;
 
-<para>  dial = gtk_type_new (gtk_dial_get_type ());</para>
+  dial = gtk_type_new (gtk_dial_get_type ());
 
-<para>  if (!adjustment)
-    adjustment = (GtkAdjustment*) gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);</para>
+  if (!adjustment)
+    adjustment = (GtkAdjustment*) gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 
-<para>  gtk_dial_set_adjustment (dial, adjustment);</para>
+  gtk_dial_set_adjustment (dial, adjustment);
 
-<para>  return GTK_WIDGET (dial);
-}</para>
+  return GTK_WIDGET (dial);
+}
 
-<para>static void
+static void
 gtk_dial_destroy (GtkObject *object)
 {
-  GtkDial *dial;</para>
+  GtkDial *dial;
 
-<para>  g_return_if_fail (object != NULL);
-  g_return_if_fail (GTK_IS_DIAL (object));</para>
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (GTK_IS_DIAL (object));
 
-<para>  dial = GTK_DIAL (object);</para>
+  dial = GTK_DIAL (object);
 
-<para>  if (dial->adjustment)
-    gtk_object_unref (GTK_OBJECT (dial->adjustment));</para>
+  if (dial->adjustment)
+    gtk_object_unref (GTK_OBJECT (dial->adjustment));
 
-<para>  if (GTK_OBJECT_CLASS (parent_class)->destroy)
+  if (GTK_OBJECT_CLASS (parent_class)->destroy)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
 </programlisting>
@@ -14418,7 +14455,6 @@ we store a pointer to the Adjustment object, we increment its
 reference count, (and correspondingly decrement it when we no longer
 use it) so that GTK can keep track of when it can be safely destroyed.</para>
 
-<para>
 <para>Also, there are a few function to manipulate the widget's options:</para>
 
 <programlisting role="C">
@@ -14426,55 +14462,58 @@ GtkAdjustment*
 gtk_dial_get_adjustment (GtkDial *dial)
 {
   g_return_val_if_fail (dial != NULL, NULL);
-  g_return_val_if_fail (GTK_IS_DIAL (dial), NULL);</para>
+  g_return_val_if_fail (GTK_IS_DIAL (dial), NULL);
 
-<para>  return dial->adjustment;
-}</para>
+  return dial->adjustment;
+}
 
-<para>void
+void
 gtk_dial_set_update_policy (GtkDial      *dial,
 			     GtkUpdateType  policy)
 {
   g_return_if_fail (dial != NULL);
-  g_return_if_fail (GTK_IS_DIAL (dial));</para>
+  g_return_if_fail (GTK_IS_DIAL (dial));
 
-<para>  dial->policy = policy;
-}</para>
+  dial->policy = policy;
+}
 
-<para>void
+void
 gtk_dial_set_adjustment (GtkDial      *dial,
 			  GtkAdjustment *adjustment)
 {
   g_return_if_fail (dial != NULL);
-  g_return_if_fail (GTK_IS_DIAL (dial));</para>
+  g_return_if_fail (GTK_IS_DIAL (dial));
 
-<para>  if (dial->adjustment)
+  if (dial->adjustment)
     {
       gtk_signal_disconnect_by_data (GTK_OBJECT (dial->adjustment), (gpointer) dial);
       gtk_object_unref (GTK_OBJECT (dial->adjustment));
-    }</para>
+    }
 
-<para>  dial->adjustment = adjustment;
-  gtk_object_ref (GTK_OBJECT (dial->adjustment));</para>
+  dial->adjustment = adjustment;
+  gtk_object_ref (GTK_OBJECT (dial->adjustment));
 
-<para>  gtk_signal_connect (GTK_OBJECT (adjustment), "changed",
+  gtk_signal_connect (GTK_OBJECT (adjustment), "changed",
 		      (GtkSignalFunc) gtk_dial_adjustment_changed,
 		      (gpointer) dial);
   gtk_signal_connect (GTK_OBJECT (adjustment), "value_changed",
 		      (GtkSignalFunc) gtk_dial_adjustment_value_changed,
-		      (gpointer) dial);</para>
+		      (gpointer) dial);
 
-<para>  dial->old_value = adjustment->value;
+  dial->old_value = adjustment->value;
   dial->old_lower = adjustment->lower;
-  dial->old_upper = adjustment->upper;</para>
+  dial->old_upper = adjustment->upper;
 
-<para>  gtk_dial_update (dial);
+  gtk_dial_update (dial);
 }
 </programlisting>
 
-<para><sect2> <literal>gtk_dial_realize()</literal></para>
+</sect2>
 
-<para>
+<!-- ----------------------------------------------------------------- -->
+<sect2>
+<title><literal>gtk_dial_realize()</literal></title>
+
 <para>Now we come to some new types of functions. First, we have a function
 that does the work of creating the X window. Notice that a mask is
 passed to the function <literal>gdk_window_new()</literal> which specifies which fields of
@@ -14485,7 +14524,6 @@ event mask of the widget is created. We call
 has specified for this widget (with <literal>gtk_widget_set_events()</literal>), and
 add the events that we are interested in ourselves.</para>
 
-<para>
 <para>After creating the window, we set its style and background, and put a
 pointer to the widget in the user data field of the GdkWindow. This
 last step allows GTK to dispatch events for this window to the correct
@@ -14497,15 +14535,15 @@ gtk_dial_realize (GtkWidget *widget)
 {
   GtkDial *dial;
   GdkWindowAttr attributes;
-  gint attributes_mask;</para>
+  gint attributes_mask;
 
-<para>  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_DIAL (widget));</para>
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_DIAL (widget));
 
-<para>  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
-  dial = GTK_DIAL (widget);</para>
+  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+  dial = GTK_DIAL (widget);
 
-<para>  attributes.x = widget->allocation.x;
+  attributes.x = widget->allocation.x;
   attributes.y = widget->allocation.y;
   attributes.width = widget->allocation.width;
   attributes.height = widget->allocation.height;
@@ -14516,23 +14554,25 @@ gtk_dial_realize (GtkWidget *widget)
     GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK |
     GDK_POINTER_MOTION_HINT_MASK;
   attributes.visual = gtk_widget_get_visual (widget);
-  attributes.colormap = gtk_widget_get_colormap (widget);</para>
+  attributes.colormap = gtk_widget_get_colormap (widget);
 
-<para>  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
-  widget->window = gdk_window_new (widget->parent->window, &amp;attributes, attributes_mask);</para>
+  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
+  widget->window = gdk_window_new (widget->parent->window, &amp;attributes, attributes_mask);
 
-<para>  widget->style = gtk_style_attach (widget->style, widget->window);</para>
+  widget->style = gtk_style_attach (widget->style, widget->window);
 
-<para>  gdk_window_set_user_data (widget->window, widget);</para>
+  gdk_window_set_user_data (widget->window, widget);
 
-<para>  gtk_style_set_background (widget->style, widget->window, GTK_STATE_ACTIVE);
+  gtk_style_set_background (widget->style, widget->window, GTK_STATE_ACTIVE);
 }
 </programlisting>
 
-<para><sect2>
-<title> Size negotiation</title>
+</sect2>
 
-<para>
+<!-- ----------------------------------------------------------------- -->
+<sect2>
+<title>Size negotiation</title>
+
 <para>Before the first time that the window containing a widget is
 displayed, and whenever the layout of the window changes, GTK asks
 each child widget for its desired size. This request is handled by the
@@ -14550,7 +14590,6 @@ gtk_dial_size_request (GtkWidget      *widget,
 }
 </programlisting>
 
-<para>
 <para>After all the widgets have requested an ideal size, the layout of the
 window is computed and each child widget is notified of its actual
 size. Usually, this will be at least as large as the requested size,
@@ -14566,33 +14605,33 @@ static void
 gtk_dial_size_allocate (GtkWidget     *widget,
 			GtkAllocation *allocation)
 {
-  GtkDial *dial;</para>
+  GtkDial *dial;
 
-<para>  g_return_if_fail (widget != NULL);
+  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_DIAL (widget));
-  g_return_if_fail (allocation != NULL);</para>
+  g_return_if_fail (allocation != NULL);
 
-<para>  widget->allocation = *allocation;
+  widget->allocation = *allocation;
   if (GTK_WIDGET_REALIZED (widget))
     {
-      dial = GTK_DIAL (widget);</para>
+      dial = GTK_DIAL (widget);
 
-<para>      gdk_window_move_resize (widget->window,
+      gdk_window_move_resize (widget->window,
 			      allocation->x, allocation->y,
-			      allocation->width, allocation->height);</para>
+			      allocation->width, allocation->height);
 
-<para>      dial->radius = MAX(allocation->width,allocation->height) * 0.45;
+      dial->radius = MAX(allocation->width,allocation->height) * 0.45;
       dial->pointer_width = dial->radius / 5;
     }
 }
-</verb></tscreen>.</para>
+</programlisting>
 
 </sect2>
 
 <!-- ----------------------------------------------------------------- -->
-<sect2> <literal>gtk_dial_expose()</literal></para>
+<sect2>
+<title><literal>gtk_dial_expose()</literal></title>
 
-<para>
 <para>As mentioned above, all the drawing of this widget is done in the
 handler for expose events. There's not much to remark on here except
 the use of the function <literal>gtk_draw_polygon</literal> to draw the pointer with
@@ -14610,34 +14649,34 @@ gtk_dial_expose (GtkWidget      *widget,
   gdouble theta;
   gint xc, yc;
   gint tick_length;
-  gint i;</para>
+  gint i;
 
-<para>  g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_DIAL (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);</para>
+  g_return_val_if_fail (event != NULL, FALSE);
 
-<para>  if (event->count > 0)
+  if (event->count > 0)
     return FALSE;
   
-  dial = GTK_DIAL (widget);</para>
+  dial = GTK_DIAL (widget);
 
-<para>  gdk_window_clear_area (widget->window,
+  gdk_window_clear_area (widget->window,
 			 0, 0,
 			 widget->allocation.width,
-			 widget->allocation.height);</para>
+			 widget->allocation.height);
 
-<para>  xc = widget->allocation.width/2;
-  yc = widget->allocation.height/2;</para>
+  xc = widget->allocation.width/2;
+  yc = widget->allocation.height/2;
 
-<para>  /* Draw ticks */</para>
+  /* Draw ticks */
 
-<para>  for (i=0; i<25; i++)
+  for (i=0; i<25; i++)
     {
       theta = (i*M_PI/18. - M_PI/6.);
       s = sin(theta);
-      c = cos(theta);</para>
+      c = cos(theta);
 
-<para>      tick_length = (i%6 == 0) ? dial->pointer_width : dial->pointer_width/2;
+      tick_length = (i%6 == 0) ? dial->pointer_width : dial->pointer_width/2;
       
       gdk_draw_line (widget->window,
 		     widget->style->fg_gc[widget->state],
@@ -14645,22 +14684,22 @@ gtk_dial_expose (GtkWidget      *widget,
 		     yc - s*(dial->radius - tick_length),
 		     xc + c*dial->radius,
 		     yc - s*dial->radius);
-    }</para>
+    }
 
-<para>  /* Draw pointer */</para>
+  /* Draw pointer */
 
-<para>  s = sin(dial->angle);
-  c = cos(dial->angle);</para>
+  s = sin(dial->angle);
+  c = cos(dial->angle);
 
-<para>
+
   points[0].x = xc + s*dial->pointer_width/2;
   points[0].y = yc + c*dial->pointer_width/2;
   points[1].x = xc + c*dial->radius;
   points[1].y = yc - s*dial->radius;
   points[2].x = xc - s*dial->pointer_width/2;
-  points[2].y = yc - c*dial->pointer_width/2;</para>
+  points[2].y = yc - c*dial->pointer_width/2;
 
-<para>  gtk_draw_polygon (widget->style,
+  gtk_draw_polygon (widget->style,
 		    widget->window,
 		    GTK_STATE_NORMAL,
 		    GTK_SHADOW_OUT,
@@ -14675,14 +14714,14 @@ gtk_dial_expose (GtkWidget      *widget,
 
 <!-- ----------------------------------------------------------------- -->
 <sect2>
-<title> Event handling</title>
+<title>Event handling</title>
 
 <para>The rest of the widget's code handles various types of events, and
 isn't too different from what would be found in many GTK
 applications. Two types of events can occur - either the user can
 click on the widget with the mouse and drag to move the pointer, or
 the value of the Adjustment object can change due to some external
-circumstance. </para>
+circumstance.</para>
 
 <para>When the user clicks on the widget, we check to see if the click was
 appropriately near the pointer, and if so, store the button that the
@@ -14705,15 +14744,15 @@ gtk_dial_button_press (GtkWidget      *widget,
   gint dx, dy;
   double s, c;
   double d_parallel;
-  double d_perpendicular;</para>
+  double d_perpendicular;
 
-<para>  g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_DIAL (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);</para>
+  g_return_val_if_fail (event != NULL, FALSE);
 
-<para>  dial = GTK_DIAL (widget);</para>
+  dial = GTK_DIAL (widget);
 
-<para>  /* Determine if button press was within pointer region - we 
+  /* Determine if button press was within pointer region - we 
      do this by computing the parallel and perpendicular distance of
      the point where the mouse was pressed from the line passing through
      the pointer */
@@ -14731,68 +14770,68 @@ gtk_dial_button_press (GtkWidget      *widget,
       (d_perpendicular < dial->pointer_width/2) &&
       (d_parallel > - dial->pointer_width))
     {
-      gtk_grab_add (widget);</para>
+      gtk_grab_add (widget);
 
-<para>      dial->button = event->button;</para>
+      dial->button = event->button;
 
-<para>      gtk_dial_update_mouse (dial, event->x, event->y);
-    }</para>
+      gtk_dial_update_mouse (dial, event->x, event->y);
+    }
 
-<para>  return FALSE;
-}</para>
+  return FALSE;
+}
 
-<para>static gint
+static gint
 gtk_dial_button_release (GtkWidget      *widget,
 			  GdkEventButton *event)
 {
-  GtkDial *dial;</para>
+  GtkDial *dial;
 
-<para>  g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_DIAL (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);</para>
+  g_return_val_if_fail (event != NULL, FALSE);
 
-<para>  dial = GTK_DIAL (widget);</para>
+  dial = GTK_DIAL (widget);
 
-<para>  if (dial->button == event->button)
+  if (dial->button == event->button)
     {
-      gtk_grab_remove (widget);</para>
+      gtk_grab_remove (widget);
 
-<para>      dial->button = 0;</para>
+      dial->button = 0;
 
-<para>      if (dial->policy == GTK_UPDATE_DELAYED)
+      if (dial->policy == GTK_UPDATE_DELAYED)
 	gtk_timeout_remove (dial->timer);
       
       if ((dial->policy != GTK_UPDATE_CONTINUOUS) &&
 	  (dial->old_value != dial->adjustment->value))
 	gtk_signal_emit_by_name (GTK_OBJECT (dial->adjustment), "value_changed");
-    }</para>
+    }
 
-<para>  return FALSE;
-}</para>
+  return FALSE;
+}
 
-<para>static gint
+static gint
 gtk_dial_motion_notify (GtkWidget      *widget,
 			 GdkEventMotion *event)
 {
   GtkDial *dial;
   GdkModifierType mods;
-  gint x, y, mask;</para>
+  gint x, y, mask;
 
-<para>  g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_DIAL (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);</para>
+  g_return_val_if_fail (event != NULL, FALSE);
 
-<para>  dial = GTK_DIAL (widget);</para>
+  dial = GTK_DIAL (widget);
 
-<para>  if (dial->button != 0)
+  if (dial->button != 0)
     {
       x = event->x;
-      y = event->y;</para>
+      y = event->y;
 
-<para>      if (event->is_hint || (event->window != widget->window))
-	gdk_window_get_pointer (widget->window, &amp;x, &amp;y, &amp;mods);</para>
+      if (event->is_hint || (event->window != widget->window))
+	gdk_window_get_pointer (widget->window, &amp;x, &amp;y, &amp;mods);
 
-<para>      switch (dial->button)
+      switch (dial->button)
 	{
 	case 1:
 	  mask = GDK_BUTTON1_MASK;
@@ -14806,55 +14845,55 @@ gtk_dial_motion_notify (GtkWidget      *widget,
 	default:
 	  mask = 0;
 	  break;
-	}</para>
+	}
 
-<para>      if (mods & mask)
+      if (mods & mask)
 	gtk_dial_update_mouse (dial, x,y);
-    }</para>
+    }
 
-<para>  return FALSE;
-}</para>
+  return FALSE;
+}
 
-<para>static gint
+static gint
 gtk_dial_timer (GtkDial *dial)
 {
   g_return_val_if_fail (dial != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_DIAL (dial), FALSE);</para>
+  g_return_val_if_fail (GTK_IS_DIAL (dial), FALSE);
 
-<para>  if (dial->policy == GTK_UPDATE_DELAYED)
-    gtk_signal_emit_by_name (GTK_OBJECT (dial->adjustment), "value_changed");</para>
+  if (dial->policy == GTK_UPDATE_DELAYED)
+    gtk_signal_emit_by_name (GTK_OBJECT (dial->adjustment), "value_changed");
 
-<para>  return FALSE;
-}</para>
+  return FALSE;
+}
 
-<para>static void
+static void
 gtk_dial_update_mouse (GtkDial *dial, gint x, gint y)
 {
   gint xc, yc;
-  gfloat old_value;</para>
+  gfloat old_value;
 
-<para>  g_return_if_fail (dial != NULL);
-  g_return_if_fail (GTK_IS_DIAL (dial));</para>
+  g_return_if_fail (dial != NULL);
+  g_return_if_fail (GTK_IS_DIAL (dial));
 
-<para>  xc = GTK_WIDGET(dial)->allocation.width / 2;
-  yc = GTK_WIDGET(dial)->allocation.height / 2;</para>
+  xc = GTK_WIDGET(dial)->allocation.width / 2;
+  yc = GTK_WIDGET(dial)->allocation.height / 2;
 
-<para>  old_value = dial->adjustment->value;
-  dial->angle = atan2(yc-y, x-xc);</para>
+  old_value = dial->adjustment->value;
+  dial->angle = atan2(yc-y, x-xc);
 
-<para>  if (dial->angle < -M_PI/2.)
-    dial->angle += 2*M_PI;</para>
+  if (dial->angle < -M_PI/2.)
+    dial->angle += 2*M_PI;
 
-<para>  if (dial->angle < -M_PI/6)
-    dial->angle = -M_PI/6;</para>
+  if (dial->angle < -M_PI/6)
+    dial->angle = -M_PI/6;
 
-<para>  if (dial->angle > 7.*M_PI/6.)
-    dial->angle = 7.*M_PI/6.;</para>
+  if (dial->angle > 7.*M_PI/6.)
+    dial->angle = 7.*M_PI/6.;
 
-<para>  dial->adjustment->value = dial->adjustment->lower + (7.*M_PI/6 - dial->angle) *
-    (dial->adjustment->upper - dial->adjustment->lower) / (4.*M_PI/3.);</para>
+  dial->adjustment->value = dial->adjustment->lower + (7.*M_PI/6 - dial->angle) *
+    (dial->adjustment->upper - dial->adjustment->lower) / (4.*M_PI/3.);
 
-<para>  if (dial->adjustment->value != old_value)
+  if (dial->adjustment->value != old_value)
     {
       if (dial->policy == GTK_UPDATE_CONTINUOUS)
 	{
@@ -14862,14 +14901,14 @@ gtk_dial_update_mouse (GtkDial *dial, gint x, gint y)
 	}
       else
 	{
-	  gtk_widget_draw (GTK_WIDGET(dial), NULL);</para>
+	  gtk_widget_draw (GTK_WIDGET(dial), NULL);
 
-<para>	  if (dial->policy == GTK_UPDATE_DELAYED)
+	  if (dial->policy == GTK_UPDATE_DELAYED)
 	    {
 	      if (dial->timer)
-		gtk_timeout_remove (dial->timer);</para>
+		gtk_timeout_remove (dial->timer);
 
-<para>	      dial->timer = gtk_timeout_add (SCROLL_DELAY_LENGTH,
+	      dial->timer = gtk_timeout_add (SCROLL_DELAY_LENGTH,
 					     (GtkFunction) gtk_dial_timer,
 					     (gpointer) dial);
 	    }
@@ -14891,67 +14930,67 @@ gtk_dial_update (GtkDial *dial)
   gfloat new_value;
   
   g_return_if_fail (dial != NULL);
-  g_return_if_fail (GTK_IS_DIAL (dial));</para>
+  g_return_if_fail (GTK_IS_DIAL (dial));
 
-<para>  new_value = dial->adjustment->value;
+  new_value = dial->adjustment->value;
   
   if (new_value < dial->adjustment->lower)
-    new_value = dial->adjustment->lower;</para>
+    new_value = dial->adjustment->lower;
 
-<para>  if (new_value > dial->adjustment->upper)
-    new_value = dial->adjustment->upper;</para>
+  if (new_value > dial->adjustment->upper)
+    new_value = dial->adjustment->upper;
 
-<para>  if (new_value != dial->adjustment->value)
+  if (new_value != dial->adjustment->value)
     {
       dial->adjustment->value = new_value;
       gtk_signal_emit_by_name (GTK_OBJECT (dial->adjustment), "value_changed");
-    }</para>
+    }
 
-<para>  dial->angle = 7.*M_PI/6. - (new_value - dial->adjustment->lower) * 4.*M_PI/3. /
-    (dial->adjustment->upper - dial->adjustment->lower);</para>
+  dial->angle = 7.*M_PI/6. - (new_value - dial->adjustment->lower) * 4.*M_PI/3. /
+    (dial->adjustment->upper - dial->adjustment->lower);
 
-<para>  gtk_widget_draw (GTK_WIDGET(dial), NULL);
-}</para>
+  gtk_widget_draw (GTK_WIDGET(dial), NULL);
+}
 
-<para>static void
+static void
 gtk_dial_adjustment_changed (GtkAdjustment *adjustment,
 			      gpointer       data)
 {
-  GtkDial *dial;</para>
+  GtkDial *dial;
 
-<para>  g_return_if_fail (adjustment != NULL);
-  g_return_if_fail (data != NULL);</para>
+  g_return_if_fail (adjustment != NULL);
+  g_return_if_fail (data != NULL);
 
-<para>  dial = GTK_DIAL (data);</para>
+  dial = GTK_DIAL (data);
 
-<para>  if ((dial->old_value != adjustment->value) ||
+  if ((dial->old_value != adjustment->value) ||
       (dial->old_lower != adjustment->lower) ||
       (dial->old_upper != adjustment->upper))
     {
-      gtk_dial_update (dial);</para>
+      gtk_dial_update (dial);
 
-<para>      dial->old_value = adjustment->value;
+      dial->old_value = adjustment->value;
       dial->old_lower = adjustment->lower;
       dial->old_upper = adjustment->upper;
     }
-}</para>
+}
 
-<para>static void
+static void
 gtk_dial_adjustment_value_changed (GtkAdjustment *adjustment,
 				    gpointer       data)
 {
-  GtkDial *dial;</para>
+  GtkDial *dial;
 
-<para>  g_return_if_fail (adjustment != NULL);
-  g_return_if_fail (data != NULL);</para>
+  g_return_if_fail (adjustment != NULL);
+  g_return_if_fail (data != NULL);
 
-<para>  dial = GTK_DIAL (data);</para>
+  dial = GTK_DIAL (data);
 
-<para>  if (dial->old_value != adjustment->value)
+  if (dial->old_value != adjustment->value)
     {
-      gtk_dial_update (dial);</para>
+      gtk_dial_update (dial);
 
-<para>      dial->old_value = adjustment->value;
+      dial->old_value = adjustment->value;
     }
 }
 </programlisting>
@@ -14960,7 +14999,7 @@ gtk_dial_adjustment_value_changed (GtkAdjustment *adjustment,
 
 <!-- ----------------------------------------------------------------- -->
 <sect2>
-<title> Possible Enhancements</title>
+<title>Possible Enhancements</title>
 
 <para>The Dial widget as we've described it so far runs about 670 lines of
 code. Although that might sound like a fair bit, we've really
@@ -14974,35 +15013,35 @@ flashing as the pointer is dragged around. This is because the entire
 widget is erased every time the pointer is moved before being
 redrawn. Often, the best way to handle this problem is to draw to an
 offscreen pixmap, then copy the final results onto the screen in one
-step. (The ProgressBar widget draws itself in this fashion.)</para>
-</simpara>
+step. (The ProgressBar widget draws itself in this fashion.)</simpara>
 </listitem>
+
 <listitem><simpara> The user should be able to use the up and down arrow keys to
-increase and decrease the value.</para>
-</simpara>
+increase and decrease the value.</simpara>
 </listitem>
+
 <listitem><simpara> It would be nice if the widget had buttons to increase and
 decrease the value in small or large steps. Although it would be
 possible to use embedded Button widgets for this, we would also like
 the buttons to auto-repeat when held down, as the arrows on a
 scrollbar do. Most of the code to implement this type of behavior can
-be found in the Range widget.</para>
-</simpara>
+be found in the Range widget.</simpara>
 </listitem>
+
 <listitem><simpara> The Dial widget could be made into a container widget with a
 single child widget positioned at the bottom between the buttons
 mentioned above. The user could then add their choice of a label or
-entry widget to display the current value of the dial.</para>
-
-<para></itemizedlist>
+entry widget to display the current value of the dial.</simpara>
+</listitem>
+</itemizedlist>
 
 </sect2>
+</sect1>
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>
-<title> Learning More</title>
+<title>Learning More</title>
 
-<para>
 <para>Only a small part of the many details involved in creating widgets
 could be described above. If you want to write your own widgets, the
 best source of examples is the GTK source itself. Ask yourself some
@@ -15020,7 +15059,7 @@ Good luck!</para>
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>
-<title> Overview</title>
+<title>Overview</title>
 
 <para>In this section, we will build a simple drawing program. In the
 process, we will examine how to handle mouse events, how to draw in a
@@ -15034,7 +15073,7 @@ pressure and tilt, from such devices quite easy.</para>
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>
-<title> Event Handling</title>
+<title>Event Handling</title>
 
 <para>The GTK signals we have already discussed are for high-level actions,
 such as a menu item being selected. However, sometimes it is useful to
@@ -15147,7 +15186,7 @@ GtkHSeparator
 </programlisting>
 
 <para>To capture events for these widgets, you need to use an EventBox
-widget. See the section on the <link linkend="ch-EventBox">EventBox</link> widget for details.</para>
+widget. See the section on the <link linkend="sec-EventBox">EventBox</link> widget for details.</para>
 
 <para>For our drawing program, we want to know when the mouse button is
 pressed and when the mouse is moved, so we specify
@@ -15197,9 +15236,9 @@ are pressed.)</para>
   gtk_signal_connect (GTK_OBJECT (drawing_area), "motion_notify_event",
 		      (GtkSignalFunc) motion_notify_event, NULL);
   gtk_signal_connect (GTK_OBJECT (drawing_area), "button_press_event",
-		      (GtkSignalFunc) button_press_event, NULL);</para>
+		      (GtkSignalFunc) button_press_event, NULL);
 
-<para>  gtk_widget_set_events (drawing_area, GDK_EXPOSURE_MASK
+  gtk_widget_set_events (drawing_area, GDK_EXPOSURE_MASK
 			 | GDK_LEAVE_NOTIFY_MASK
 			 | GDK_BUTTON_PRESS_MASK
 			 | GDK_POINTER_MOTION_MASK
@@ -15215,18 +15254,18 @@ static gint
 button_press_event (GtkWidget *widget, GdkEventButton *event)
 {
   if (event->button == 1 &amp;&amp; pixmap != NULL)
-      draw_brush (widget, event->x, event->y);</para>
+      draw_brush (widget, event->x, event->y);
 
-<para>  return TRUE;
-}</para>
+  return TRUE;
+}
 
-<para>static gint
+static gint
 motion_notify_event (GtkWidget *widget, GdkEventMotion *event)
 {
   int x, y;
-  GdkModifierType state;</para>
+  GdkModifierType state;
 
-<para>  if (event->is_hint)
+  if (event->is_hint)
     gdk_window_get_pointer (event->window, &amp;x, &amp;y, &amp;state);
   else
     {
@@ -15246,7 +15285,7 @@ motion_notify_event (GtkWidget *widget, GdkEventMotion *event)
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>
-<title> The DrawingArea Widget, And Drawing</title>
+<title>The DrawingArea Widget, And Drawing</title>
 
 <para>We now turn to the process of drawing on the screen. The 
 widget we use for this is the DrawingArea widget. A drawing area
@@ -15308,16 +15347,16 @@ is originally created.</para>
 
 <programlisting role="C">
 /* Backing pixmap for drawing area */
-static GdkPixmap *pixmap = NULL;</para>
+static GdkPixmap *pixmap = NULL;
 
-<para>/* Create a new backing pixmap of the appropriate size */
+/* Create a new backing pixmap of the appropriate size */
 static gint
 configure_event (GtkWidget *widget, GdkEventConfigure *event)
 {
   if (pixmap)
-    gdk_pixmap_unref(pixmap);</para>
+    gdk_pixmap_unref(pixmap);
 
-<para>  pixmap = gdk_pixmap_new(widget->window,
+  pixmap = gdk_pixmap_new(widget->window,
 			  widget->allocation.width,
 			  widget->allocation.height,
 			  -1);
@@ -15326,9 +15365,9 @@ configure_event (GtkWidget *widget, GdkEventConfigure *event)
 		      TRUE,
 		      0, 0,
 		      widget->allocation.width,
-		      widget->allocation.height);</para>
+		      widget->allocation.height);
 
-<para>  return TRUE;
+  return TRUE;
 }
 </programlisting>
 
@@ -15349,9 +15388,9 @@ expose_event (GtkWidget *widget, GdkEventExpose *event)
 		  pixmap,
 		  event->area.x, event->area.y,
 		  event->area.x, event->area.y,
-		  event->area.width, event->area.height);</para>
+		  event->area.width, event->area.height);
 
-<para>  return FALSE;
+  return FALSE;
 }
 </programlisting>
 
@@ -15423,9 +15462,9 @@ on the screen, is then:</para>
 static void
 draw_brush (GtkWidget *widget, gdouble x, gdouble y)
 {
-  GdkRectangle update_rect;</para>
+  GdkRectangle update_rect;
 
-<para>  update_rect.x = x - 5;
+  update_rect.x = x - 5;
   update_rect.y = y - 5;
   update_rect.width = 10;
   update_rect.height = 10;
@@ -15480,7 +15519,7 @@ such as:</para>
 </itemizedlist>
 
 <para>For information about the XInput extension, see the <ulink
-url="http://www.msc.cornell.edu/~otaylor/xinput/XInput-HOWTO.html"> XInput-HOWTO </ulink>.</para>
+url="http://www.msc.cornell.edu/~otaylor/xinput/XInput-HOWTO.html">XInput-HOWTO</ulink>.</para>
 
 <para>If we examine the full definition of, for example, the GdkEventMotion
 structure, we see that it has fields to support extended device
@@ -15525,8 +15564,9 @@ be used to find out further information about the device using the
 <literal>GDK_CORE_POINTER</literal> is used for the core pointer device. (Usually
 the mouse.)</para>
 
-<para><sect2>
-<title> Enabling extended device information</title>
+<!-- ----------------------------------------------------------------- -->
+<sect2>
+<title>Enabling extended device information</title>
 
 <para>To let GTK know about our interest in the extended device information,
 we merely have to add a single line to our program:</para>
@@ -15537,8 +15577,8 @@ gtk_widget_set_extension_events (drawing_area, GDK_EXTENSION_EVENTS_CURSOR);
 
 <para>By giving the value <literal>GDK_EXTENSION_EVENTS_CURSOR</literal> we say that
 we are interested in extension events, but only if we don't have
-to draw our own cursor. See the section <ref
-id="ch-Further_Sophistications"> Further Sophistications </ulink> below
+to draw our own cursor. See the section <link
+linkend="sec-FurtherSophistications"> Further Sophistications </link> below
 for more information about drawing the cursor. We could also 
 give the values <literal>GDK_EXTENSION_EVENTS_ALL</literal> if we were willing 
 to draw our own cursor, or <literal>GDK_EXTENSION_EVENTS_NONE</literal> to revert
@@ -15556,26 +15596,26 @@ void
 input_dialog_destroy (GtkWidget *w, gpointer data)
 {
   *((GtkWidget **)data) = NULL;
-}</para>
+}
 
-<para>void
+void
 create_input_dialog ()
 {
-  static GtkWidget *inputd = NULL;</para>
+  static GtkWidget *inputd = NULL;
 
-<para>  if (!inputd)
+  if (!inputd)
     {
-      inputd = gtk_input_dialog_new();</para>
+      inputd = gtk_input_dialog_new();
 
-<para>      gtk_signal_connect (GTK_OBJECT(inputd), "destroy",
+      gtk_signal_connect (GTK_OBJECT(inputd), "destroy",
 			  (GtkSignalFunc)input_dialog_destroy, &amp;inputd);
       gtk_signal_connect_object (GTK_OBJECT(GTK_INPUT_DIALOG(inputd)->close_button),
 				 "clicked",
 				 (GtkSignalFunc)gtk_widget_hide,
 				 GTK_OBJECT(inputd));
-      gtk_widget_hide ( GTK_INPUT_DIALOG(inputd)->save_button);</para>
+      gtk_widget_hide ( GTK_INPUT_DIALOG(inputd)->save_button);
 
-<para>      gtk_widget_show (inputd);
+      gtk_widget_show (inputd);
     }
   else
     {
@@ -15597,8 +15637,11 @@ have no actions assigned to them. In the above function we make
 "Close" hide the dialog, hide the "Save" button, since we don't
 implement saving of XInput options in this program.</para>
 
-<para><sect2>
-<title> Using extended device information</title>
+</sect2>
+
+<!-- ----------------------------------------------------------------- -->
+<sect2>
+<title>Using extended device information</title>
 
 <para>Once we've enabled the device, we can just use the extended 
 device information in the extra fields of the event structures.
@@ -15641,19 +15684,19 @@ button_press_event (GtkWidget *widget, GdkEventButton *event)
   print_button_press (event->deviceid);
   
   if (event->button == 1 &amp;&amp; pixmap != NULL)
-    draw_brush (widget, event->source, event->x, event->y, event->pressure);</para>
+    draw_brush (widget, event->source, event->x, event->y, event->pressure);
 
-<para>  return TRUE;
-}</para>
+  return TRUE;
+}
 
-<para>static gint
+static gint
 motion_notify_event (GtkWidget *widget, GdkEventMotion *event)
 {
   gdouble x, y;
   gdouble pressure;
-  GdkModifierType state;</para>
+  GdkModifierType state;
 
-<para>  if (event->is_hint)
+  if (event->is_hint)
     gdk_input_window_get_pointer (event->window, event->deviceid,
 				  &amp;x, &amp;y, &amp;pressure, NULL, NULL, &amp;state);
   else
@@ -15684,9 +15727,9 @@ draw_brush (GtkWidget *widget, GdkInputSource source,
 	    gdouble x, gdouble y, gdouble pressure)
 {
   GdkGC *gc;
-  GdkRectangle update_rect;</para>
+  GdkRectangle update_rect;
 
-<para>  switch (source)
+  switch (source)
     {
     case GDK_SOURCE_MOUSE:
       gc = widget->style->dark_gc[GTK_WIDGET_STATE (widget)];
@@ -15699,9 +15742,9 @@ draw_brush (GtkWidget *widget, GdkInputSource source,
       break;
     default:
       gc = widget->style->light_gc[GTK_WIDGET_STATE (widget)];
-    }</para>
+    }
 
-<para>  update_rect.x = x - 10 * pressure;
+  update_rect.x = x - 10 * pressure;
   update_rect.y = y - 10 * pressure;
   update_rect.width = 20 * pressure;
   update_rect.height = 20 * pressure;
@@ -15712,8 +15755,11 @@ draw_brush (GtkWidget *widget, GdkInputSource source,
 }
 </programlisting>
 
-<para><sect2>
-<title> Finding out more about a device</title>
+</sect2>
+
+<!-- ----------------------------------------------------------------- -->
+<sect2>
+<title>Finding out more about a device</title>
 
 <para>As an example of how to find out more about a device, our program
 will print the name of the device that generates each button
@@ -15758,30 +15804,34 @@ the name of the device.</para>
 static void
 print_button_press (guint32 deviceid)
 {
-  GList *tmp_list;</para>
+  GList *tmp_list;
 
-<para>  /* gdk_input_list_devices returns an internal list, so we shouldn't
+  /* gdk_input_list_devices returns an internal list, so we shouldn't
      free it afterwards */
-  tmp_list = gdk_input_list_devices();</para>
+  tmp_list = gdk_input_list_devices();
 
-<para>  while (tmp_list)
+  while (tmp_list)
     {
-      GdkDeviceInfo *info = (GdkDeviceInfo *)tmp_list->data;</para>
+      GdkDeviceInfo *info = (GdkDeviceInfo *)tmp_list->data;
 
-<para>      if (info->deviceid == deviceid)
+      if (info->deviceid == deviceid)
 	{
 	  printf("Button press on device '%s'\n", info->name);
 	  return;
-	}</para>
+	}
 
-<para>      tmp_list = tmp_list->next;
+      tmp_list = tmp_list->next;
     }
 }
 </programlisting>
 
 <para>That completes the changes to "XInputize" our program.</para>
 
-<para><sect2> Further sophistications <label id="ch-Further_Sophistications"></para>
+</sect2>
+
+<!-- ----------------------------------------------------------------- -->
+<sect2 id="sec-FurtherSophistications">
+<title>Further sophistications</title>
 
 <para>Although our program now supports XInput quite well, it lacks some
 features we would want in a full-featured application. First, the user
@@ -15805,7 +15855,7 @@ gdk_input_set_key()
 <para>(The list returned from <literal>gdk_input_list_devices()</literal> should not be
 modified directly.) An example of doing this can be found in the
 drawing program gsumi. (Available from <ulink
-url="http://www.msc.cornell.edu/~otaylor/gsumi/"> http://www.msc.cornell.edu/~otaylor/gsumi/ </ulink>) Eventually, it
+url="http://www.msc.cornell.edu/~otaylor/gsumi/">http://www.msc.cornell.edu/~otaylor/gsumi/</ulink>) Eventually, it
 would be nice to have a standard way of doing this for all
 applications. This probably belongs at a slightly higher level than
 GTK, perhaps in the GNOME library.</para>
@@ -15813,8 +15863,8 @@ GTK, perhaps in the GNOME library.</para>
 <para>Another major omission that we have mentioned above is the lack of
 cursor drawing. Platforms other than XFree86 currently do not allow
 simultaneously using a device as both the core pointer and directly by
-an application. See the <url
-url="http://www.msc.cornell.edu/~otaylor/xinput/XInput-HOWTO.html"> XInput-HOWTO </ulink> for more information about this. This means that
+an application. See the <ulink
+url="http://www.msc.cornell.edu/~otaylor/xinput/XInput-HOWTO.html">XInput-HOWTO</ulink> for more information about this. This means that
 applications that want to support the widest audience need to draw
 their own cursor.</para>
 
@@ -15828,6 +15878,8 @@ The first is done by searching the device list, as we did
 to find out the device name. The second is achieved by selecting
 "proximity_out" events. An example of drawing one's own cursor is
 found in the "testinput" program found in the GTK distribution.</para>
+
+</sect2>
 
 </sect1>
 </chapter>
@@ -15866,7 +15918,7 @@ any aspect of GTK that does not already have documentation, please
 consider contributing to this document.</para>
 
 <para>If you do decide to contribute, please mail your text to Tony Gale,
-<literal><ulink url="mailto:gale@gtk.org"> gale@gtk.org </ulink></literal>. Also, be aware that the entirety of this
+<literal><ulink url="mailto:gale@gtk.org">gale@gtk.org</ulink></literal>. Also, be aware that the entirety of this
 document is free, and any addition by you provide must also be
 free. That is, people may use any portion of your examples in their
 programs, and copies of this document may be distributed at will, etc.</para>
@@ -15882,65 +15934,65 @@ programs, and copies of this document may be distributed at will, etc.</para>
 <para>We would like to thank the following for their contributions to this text.</para>
 
 <itemizedlist>
-<listitem><simpara>Bawer Dagdeviren, <literal><ulink url="mailto:chamele0n@geocities.com"> chamele0n@geocities.com </ulink></literal> for the menus tutorial.			      </para>
-</simpara>
+<listitem><simpara>Bawer Dagdeviren, <literal><ulink url="mailto:chamele0n@geocities.com">chamele0n@geocities.com</ulink></literal> for the menus tutorial.</simpara>
 </listitem>
-<listitem><simpara>Raph Levien, <literal><ulink url="mailto:raph@acm.org"> raph@acm.org </ulink></literal>
+
+<listitem><simpara>Raph Levien, <literal><ulink url="mailto:raph@acm.org">raph@acm.org</ulink></literal>
 for hello world ala GTK, widget packing, and general all around wisdom.
-He's also generously donated a home for this tutorial.</para>
-</simpara>
+He's also generously donated a home for this tutorial.</simpara>
 </listitem>
-<listitem><simpara>Peter Mattis, <literal><ulink url="mailto:petm@xcf.berkeley.edu"> petm@xcf.berkeley.edu </ulink></literal> for the simplest GTK program.. 
-and the ability to make it :)</para>
-</simpara>
+
+<listitem><simpara>Peter Mattis, <literal><ulink url="mailto:petm@xcf.berkeley.edu">petm@xcf.berkeley.edu</ulink></literal> for the simplest GTK program.. 
+and the ability to make it :)</simpara>
 </listitem>
-<listitem><simpara>Werner Koch <literal><ulink url="mailto:werner.koch@guug.de"> werner.koch@guug.de </ulink></literal> for converting the original plain text to
-SGML, and the widget class hierarchy.</para>
-</simpara>
+
+<listitem><simpara>Werner Koch <literal><ulink url="mailto:werner.koch@guug.de">werner.koch@guug.de</ulink></literal> for converting the original plain text to
+SGML, and the widget class hierarchy.</simpara>
 </listitem>
+
 <listitem><simpara>Mark Crichton <literal><ulink
-url="mailto:crichton@expert.cc.purdue.edu"> crichton@expert.cc.purdue.edu </ulink></literal> for the menu factory code,
-and the table packing tutorial.</para>
-</simpara>
+url="mailto:crichton@expert.cc.purdue.edu">crichton@expert.cc.purdue.edu</ulink></literal> for the menu factory code,
+and the table packing tutorial.</simpara>
 </listitem>
-<listitem><simpara>Owen Taylor <literal><ulink url="mailto:owt1@cornell.edu"> owt1@cornell.edu </ulink></literal> for the EventBox widget section (and the
+
+<listitem><simpara>Owen Taylor <literal><ulink url="mailto:owt1@cornell.edu">owt1@cornell.edu</ulink></literal> for the EventBox widget section (and the
 patch to the distro).  He's also responsible for the selections code
 and tutorial, as well as the sections on writing your own GTK widgets,
-and the example application. Thanks a lot Owen for all you help!</para>
-</simpara>
+and the example application. Thanks a lot Owen for all you help!</simpara>
 </listitem>
-<listitem><simpara>Mark VanderBoom <literal><ulink url="mailto:mvboom42@calvin.edu"> mvboom42@calvin.edu </ulink></literal> for his wonderful work on the
+
+<listitem><simpara>Mark VanderBoom <literal><ulink url="mailto:mvboom42@calvin.edu">mvboom42@calvin.edu</ulink></literal> for his wonderful work on the
 Notebook, Progress Bar, Dialogs, and File selection widgets.  Thanks a
-lot Mark!  You've been a great help.</para>
-</simpara>
+lot Mark!  You've been a great help.</simpara>
 </listitem>
-<listitem><simpara>Tim Janik <literal><ulink url="mailto:timj@gtk.org"> timj@psynet.net </ulink></literal> for his great job on the Lists
+
+<listitem><simpara>Tim Janik <literal><ulink url="mailto:timj@gtk.org">timj@psynet.net</ulink></literal> for his great job on the Lists
 Widget. His excellent work on automatically extracting the widget tree
-and signal information from GTK. Thanks Tim :)</para>
-</simpara>
+and signal information from GTK. Thanks Tim :)</simpara>
 </listitem>
-<listitem><simpara>Rajat Datta <literal><ulink url="mailto:rajat@ix.netcom.com"
-name="rajat@ix.netcom.com"</literal> for the excellent job on the Pixmap
-tutorial.</para>
-</simpara>
+
+<listitem><simpara>Rajat Datta <literal><ulink url="mailto:rajat@ix.netcom.com">rajat@ix.netcom.com</ulink>
+</literal> for the excellent job on the Pixmap
+tutorial.</simpara>
 </listitem>
-<listitem><simpara>Michael K. Johnson <literal><ulink url="mailto:johnsonm@redhat.com"> johnsonm@redhat.com </ulink></literal> for info and code for popup menus.</para>
-</simpara>
+
+<listitem><simpara>Michael K. Johnson <literal><ulink url="mailto:johnsonm@redhat.com">johnsonm@redhat.com</ulink></literal> for info and code for popup menus.</simpara>
 </listitem>
+
 <listitem><simpara>David Huggins-Daines <literal><ulink
-url="mailto:bn711@freenet.carleton.ca"> bn711@freenet.carleton.ca </ulink></literal> for the Range Widgets and Tree
-Widget sections.</para>
-</simpara>
+url="mailto:bn711@freenet.carleton.ca">bn711@freenet.carleton.ca</ulink></literal> for the Range Widgets and Tree
+Widget sections.</simpara>
 </listitem>
-<listitem><simpara>Stefan Mars <literal><ulink url="mailto:mars@lysator.liu.se"> mars@lysator.liu.se </ulink></literal> for the CList section.</para>
-</simpara>
+
+<listitem><simpara>Stefan Mars <literal><ulink url="mailto:mars@lysator.liu.se">mars@lysator.liu.se</ulink></literal> for the CList section.</simpara>
 </listitem>
-<listitem><simpara>David A. Wheeler <literal><ulink url="mailto:dwheeler@ida.org"> dwheeler@ida.org </ulink></literal> for portions of the text on GLib
+
+<listitem><simpara>David A. Wheeler <literal><ulink url="mailto:dwheeler@ida.org">dwheeler@ida.org</ulink></literal> for portions of the text on GLib
 and various tutorial fixups and improvements.
 The GLib text was in turn based on material developed by Damon Chaplin
-<literal><ulink url="mailto:DAChaplin@msn.com"> DAChaplin@msn.com </ulink></literal></para>
-</simpara>
+<literal><ulink url="mailto:DAChaplin@msn.com">DAChaplin@msn.com</ulink></literal></simpara>
 </listitem>
+
 <listitem><simpara>David King for style checking the entire document.</simpara>
 </listitem>
 </itemizedlist>
@@ -15955,7 +16007,6 @@ The GLib text was in turn based on material developed by Damon Chaplin
 <chapter id="ch-Copyright">
 <title>Tutorial Copyright and Permissions Notice</title>
 
-<para>
 <para>The GTK Tutorial is Copyright (C) 1997 Ian Main. </para>
 
 <para>Copyright (C) 1998-1999 Tony Gale.</para>
@@ -15968,8 +16019,9 @@ preserved on all copies.</para>
 this document under the conditions for verbatim copying, provided that 
 this copyright notice is included exactly as in the original,
 and that the entire resulting derived work is distributed under 
-the terms of a permission notice identical to this one.
-<P>Permission is granted to copy and distribute translations of this 
+the terms of a permission notice identical to this one.</para>
+
+<para>Permission is granted to copy and distribute translations of this 
 document into another language, under the above conditions for modified 
 versions.</para>
 
@@ -15988,7 +16040,7 @@ not make any guarantee that the information is even accurate.</para>
 <!-- ***************************************************************** -->
 
 <!-- ***************************************************************** -->
-<appendix id="app_GTKSignals">
+<appendix id="app-GTKSignals">
 <title>GTK Signals</title>
 
 <para>As GTK is an object oriented widget set, it has a hierarchy of
@@ -16011,9 +16063,8 @@ void GtkObject::destroy	(GtkObject *,
 <sect1>
 <title>GtkWidget</title>
 
-<para><tscreen><verb></para>
-
-<para>void GtkWidget::show	(GtkWidget *,
+<programlisting role="C">
+void GtkWidget::show	(GtkWidget *,
                     	 gpointer);
 void GtkWidget::hide	(GtkWidget *,
                     	 gpointer);
@@ -16197,6 +16248,8 @@ void GtkData::disconnect	(GtkData *,
                         	 gpointer);
 </programlisting>
 
+</sect1>
+
 <!-- ----------------------------------------------------------------- -->
 <sect1>
 <title>GtkContainer</title>
@@ -16218,6 +16271,8 @@ void GtkContainer::set-focus-child	(GtkContainer *,
                                   	 gpointer);
 </programlisting>
 
+</sect1>
+
 <!-- ----------------------------------------------------------------- -->
 <sect1>
 <title>GtkCalendar</title>
@@ -16238,6 +16293,8 @@ void GtkCalendar::prev-year	(GtkCalendar *,
 void GtkCalendar::next-year	(GtkCalendar *,
                            	 gpointer);
 </programlisting>
+
+</sect1>
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>
@@ -16294,6 +16351,8 @@ void GtkEditable::paste-clipboard	(GtkEditable *,
                                  	 gpointer);
 </programlisting>
 
+</sect1>
+
 <!-- ----------------------------------------------------------------- -->
 <sect1>
 <title>GtkTipsQuery</title>
@@ -16315,6 +16374,8 @@ gboolean GtkTipsQuery::widget-selected	(GtkTipsQuery *,
                                       	 GdkEvent *,
                                       	 gpointer);
 </programlisting>
+
+</sect1>
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>
@@ -16373,6 +16434,8 @@ void GtkCList::abort-column-resize	(GtkCList *,
                                   	 gpointer);
 </programlisting>
 
+</sect1>
+
 <!-- ----------------------------------------------------------------- -->
 <sect1>
 <title>GtkNotebook</title>
@@ -16381,9 +16444,10 @@ void GtkCList::abort-column-resize	(GtkCList *,
 void GtkNotebook::switch-page	(GtkNotebook *,
                              	 ggpointer,
                              	 gguint,
-                             	 gpointer);</para>
+                             	 gpointer);
+</programlisting>
 
-<para></verb></tscreen></para>
+</sect1>
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>
@@ -16399,6 +16463,8 @@ void GtkList::unselect-child	(GtkList *,
                             	 GtkWidget *,
                             	 gpointer);
 </programlisting>
+
+</sect1>
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>
@@ -16419,6 +16485,8 @@ void GtkMenuShell::cancel	(GtkMenuShell *,
                          	 gpointer);
 </programlisting>
 
+</sect1>
+
 <!-- ----------------------------------------------------------------- -->
 <sect1>
 <title>GtkToolbar</title>
@@ -16431,6 +16499,8 @@ void GtkToolbar::style-changed	(GtkToolbar *,
                               	 ggint,
                               	 gpointer);
 </programlisting>
+
+</sect1>
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>
@@ -16446,6 +16516,8 @@ void GtkTree::unselect-child	(GtkTree *,
                             	 GtkWidget *,
                             	 gpointer);
 </programlisting>
+
+</sect1>
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>
@@ -16464,6 +16536,8 @@ void GtkButton::leave	(GtkButton *,
                      	 gpointer);
 </programlisting>
 
+</sect1>
+
 <!-- ----------------------------------------------------------------- -->
 <sect1>
 <title>GtkItem</title>
@@ -16477,6 +16551,8 @@ void GtkItem::toggle	(GtkItem *,
                     	 gpointer);
 </programlisting>
 
+</sect1>
+
 <!-- ----------------------------------------------------------------- -->
 <sect1>
 <title>GtkWindow</title>
@@ -16486,6 +16562,8 @@ void GtkWindow::set-focus	(GtkWindow *,
                          	 ggpointer,
                          	 gpointer);
 </programlisting>
+
+</sect1>
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>
@@ -16500,15 +16578,18 @@ void GtkHandleBox::child-detached	(GtkHandleBox *,
                                  	 gpointer);
 </programlisting>
 
+</sect1>
+
 <!-- ----------------------------------------------------------------- -->
 <sect1>
 <title>GtkToggleButton</title>
 
 <programlisting role="C">
 void GtkToggleButton::toggled	(GtkToggleButton *,
-                             	 gpointer);</para>
+                             	 gpointer);
+</programlisting>
 
-<para></verb></tscreen></para>
+</sect1>
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>
@@ -16520,6 +16601,8 @@ void GtkMenuItem::activate	(GtkMenuItem *,
 void GtkMenuItem::activate-item	(GtkMenuItem *,
                                	 gpointer);
 </programlisting>
+
+</sect1>
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>
@@ -16555,6 +16638,8 @@ void GtkListItem::scroll-horizontal	(GtkListItem *,
                                    	 gpointer);
 </programlisting>
 
+</sect1>
+
 <!-- ----------------------------------------------------------------- -->
 <sect1>
 <title>GtkTreeItem</title>
@@ -16566,6 +16651,8 @@ void GtkTreeItem::expand	(GtkTreeItem *,
                         	 gpointer);
 </programlisting>
 
+</sect1>
+
 <!-- ----------------------------------------------------------------- -->
 <sect1>
 <title>GtkCheckMenuItem</title>
@@ -16574,6 +16661,8 @@ void GtkTreeItem::expand	(GtkTreeItem *,
 void GtkCheckMenuItem::toggled	(GtkCheckMenuItem *,
                               	 gpointer);
 </programlisting>
+
+</sect1>
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>
@@ -16588,6 +16677,8 @@ void GtkInputDialog::disable-device	(GtkInputDialog *,
                                    	 gpointer);
 </programlisting>
 
+</sect1>
+
 <!-- ----------------------------------------------------------------- -->
 <sect1>
 <title>GtkColorSelection</title>
@@ -16596,6 +16687,8 @@ void GtkInputDialog::disable-device	(GtkInputDialog *,
 void GtkColorSelection::color-changed	(GtkColorSelection *,
                                      	 gpointer);
 </programlisting>
+
+</sect1>
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>
@@ -16611,6 +16704,8 @@ void GtkStatusbar::text-popped	(GtkStatusbar *,
                               	 GtkString *,
                               	 gpointer);
 </programlisting>
+
+</sect1>
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>
@@ -16641,6 +16736,8 @@ void GtkCTree::change-focus-row-expansion	(GtkCTree *,
                                          	 gpointer);
 </programlisting>
 
+</sect1>
+
 <!-- ----------------------------------------------------------------- -->
 <sect1>
 <title>GtkCurve</title>
@@ -16650,9 +16747,11 @@ void GtkCurve::curve-type-changed	(GtkCurve *,
                                  	 gpointer);
 </programlisting>
 
+</sect1>
+
 <!-- ----------------------------------------------------------------- -->
 <sect1>
-<title>GtkAdjustment
+<title>GtkAdjustment</title>
 
 <programlisting role="C">
 void GtkAdjustment::changed	(GtkAdjustment *,
@@ -16661,27 +16760,28 @@ void GtkAdjustment::value-changed	(GtkAdjustment *,
                                  	 gpointer);
 </programlisting>
 
-</chapter>
+</sect1>
+</appendix>
 
 <!-- ***************************************************************** -->
-<appendix id="GDKEventTypes">
+<appendix id="app-GDKEventTypes">
 <title>GDK Event Types</title>
 
 <para>The following data types are passed into event handlers by GTK+. For
 each data type listed, the signals that use this data type are listed.</para>
 
 <itemizedlist>
-<listitem><simpara>  GdkEvent
+<listitem><simpara>  GdkEvent</simpara>
           <itemizedlist>
           <listitem><simpara>drag_end_event</simpara>
 	  </listitem>
           </itemizedlist>
-</simpara>
 </listitem>
-<listitem><simpara>  GdkEventType</para>
-</simpara>
+
+<listitem><simpara>  GdkEventType<</simpara>
 </listitem>
-<listitem><simpara>  GdkEventAny
+
+<listitem><simpara>  GdkEventAny</simpara>
           <itemizedlist>
           <listitem><simpara>delete_event</simpara>
 	  </listitem>
@@ -16694,79 +16794,78 @@ each data type listed, the signals that use this data type are listed.</para>
           <listitem><simpara>no_expose_event</simpara>
 	  </listitem>
           </itemizedlist>
-</simpara>
 </listitem>
-<listitem><simpara>  GdkEventExpose
+
+<listitem><simpara>  GdkEventExpose</simpara>
           <itemizedlist>
           <listitem><simpara>expose_event</simpara>
 	  </listitem>
           </itemizedlist>
-</simpara>
 </listitem>
-<listitem><simpara>  GdkEventNoExpose</para>
-</simpara>
+
+<listitem><simpara>  GdkEventNoExpose</simpara>
 </listitem>
-<listitem><simpara>  GdkEventVisibility</para>
-</simpara>
+
+<listitem><simpara>  GdkEventVisibility</simpara>
 </listitem>
-<listitem><simpara>  GdkEventMotion
+
+<listitem><simpara>  GdkEventMotion</simpara>
           <itemizedlist>
           <listitem><simpara>motion_notify_event</simpara>
 	  </listitem>
 	  </itemizedlist>
-</simpara>
 </listitem>
-<listitem><simpara>  GdkEventButton
+<listitem><simpara>  GdkEventButton</simpara>
           <itemizedlist>
           <listitem><simpara>button_press_event</simpara>
 	  </listitem>
 	  <listitem><simpara>button_release_event</simpara>
 	  </listitem>
 	  </itemizedlist>
-</simpara>
 </listitem>
-<listitem><simpara>  GdkEventKey
+
+<listitem><simpara>  GdkEventKey</simpara>
           <itemizedlist>
           <listitem><simpara>key_press_event</simpara>
 	  </listitem>
           <listitem><simpara>key_release_event</simpara>
 	  </listitem>
 	  </itemizedlist>
-</simpara>
 </listitem>
-<listitem><simpara>  GdkEventCrossing
+
+<listitem><simpara>  GdkEventCrossing</simpara>
           <itemizedlist>
           <listitem><simpara>enter_notify_event</simpara>
 	  </listitem>
           <listitem><simpara>leave_notify_event</simpara>
 	  </listitem>
 	  </itemizedlist>
-</simpara>
 </listitem>
-<listitem><simpara>  GdkEventFocus
+
+<listitem><simpara>  GdkEventFocus</simpara>
           <itemizedlist>
           <listitem><simpara>focus_in_event</simpara>
 	  </listitem>
           <listitem><simpara>focus_out_event</simpara>
 	  </listitem>
 	  </itemizedlist>
-</simpara>
 </listitem>
-<listitem><simpara>  GdkEventConfigure
+
+<listitem><simpara>  GdkEventConfigure</simpara>
           <itemizedlist>
           <listitem><simpara>configure_event</simpara>
 	  </listitem>
 	  </itemizedlist>
-</simpara>
 </listitem>
-<listitem><simpara>  GdkEventProperty
+
+<listitem><simpara>  GdkEventProperty</simpara>
           <itemizedlist>
           <listitem><simpara>property_notify_event</simpara>
 	  </listitem>
 	  </itemizedlist>
-</simpara>
 </listitem>
-<listitem><simpara>  GdkEventSelection
+
+<listitem><simpara>  GdkEventSelection</simpara>
           <itemizedlist>
           <listitem><simpara>selection_clear_event</simpara>
 	  </listitem>
@@ -16775,64 +16874,64 @@ each data type listed, the signals that use this data type are listed.</para>
           <listitem><simpara>selection_notify_event</simpara>
 	  </listitem>
 	  </itemizedlist>
-</simpara>
 </listitem>
-<listitem><simpara>  GdkEventProximity
+
+<listitem><simpara>  GdkEventProximity</simpara>
           <itemizedlist>
           <listitem><simpara>proximity_in_event</simpara>
 	  </listitem>
           <listitem><simpara>proximity_out_event</simpara>
 	  </listitem>
 	  </itemizedlist>
-</simpara>
 </listitem>
-<listitem><simpara>  GdkEventDragBegin
+
+<listitem><simpara>  GdkEventDragBegin</simpara>
           <itemizedlist>
           <listitem><simpara>drag_begin_event</simpara>
 	  </listitem>
 	  </itemizedlist>
-</simpara>
 </listitem>
-<listitem><simpara>  GdkEventDragRequest
+
+<listitem><simpara>  GdkEventDragRequest</simpara>
           <itemizedlist>
           <listitem><simpara>drag_request_event</simpara>
 	  </listitem>
 	  </itemizedlist>
-</simpara>
 </listitem>
-<listitem><simpara>  GdkEventDropEnter
+
+<listitem><simpara>  GdkEventDropEnter</simpara>
           <itemizedlist>
           <listitem><simpara>drop_enter_event</simpara>
 	  </listitem>
 	  </itemizedlist>
-</simpara>
 </listitem>
-<listitem><simpara>  GdkEventDropLeave
+
+<listitem><simpara>  GdkEventDropLeave</simpara>
           <itemizedlist>
           <listitem><simpara>drop_leave_event</simpara>
 	  </listitem>
 	  </itemizedlist>
-</simpara>
 </listitem>
-<listitem><simpara>  GdkEventDropDataAvailable
+
+<listitem><simpara>  GdkEventDropDataAvailable</simpara>
           <itemizedlist>
           <listitem><simpara>drop_data_available_event</simpara>
 	  </listitem>
 	  </itemizedlist>
-</simpara>
 </listitem>
-<listitem><simpara>  GdkEventClient
+
+<listitem><simpara>  GdkEventClient</simpara>
           <itemizedlist>
           <listitem><simpara>client_event</simpara>
 	  </listitem>
 	  </itemizedlist>
-</simpara>
 </listitem>
-<listitem><simpara>  GdkEventOther
+
+<listitem><simpara>  GdkEventOther</simpara>
           <itemizedlist>
           <listitem><simpara>other_event</simpara>
 	  </listitem>
-	  </itemizedlist></simpara>
+	  </itemizedlist>
 </listitem>
 </itemizedlist>
 
@@ -16885,8 +16984,8 @@ typedef enum
 data types, which allows it to be cast to a specific
 event data type within a signal handler.</para>
 
-<para><!-- Just a big list for now, needs expanding upon - TRG -->
-So, the event data types are defined as follows:</para>
+<!-- Just a big list for now, needs expanding upon - TRG -->
+<para>So, the event data types are defined as follows:</para>
 
 <programlisting role="C">
 struct _GdkEventAny
@@ -16894,34 +16993,34 @@ struct _GdkEventAny
   GdkEventType type;
   GdkWindow *window;
   gint8 send_event;
-};</para>
+};
 
-<para>struct _GdkEventExpose
+struct _GdkEventExpose
 {
   GdkEventType type;
   GdkWindow *window;
   gint8 send_event;
   GdkRectangle area;
   gint count; /* If non-zero, how many more events follow. */
-};</para>
+};
 
-<para>struct _GdkEventNoExpose
+struct _GdkEventNoExpose
 {
   GdkEventType type;
   GdkWindow *window;
   gint8 send_event;
   /* XXX: does anyone need the X major_code or minor_code fields? */
-};</para>
+};
 
-<para>struct _GdkEventVisibility
+struct _GdkEventVisibility
 {
   GdkEventType type;
   GdkWindow *window;
   gint8 send_event;
   GdkVisibilityState state;
-};</para>
+};
 
-<para>struct _GdkEventMotion
+struct _GdkEventMotion
 {
   GdkEventType type;
   GdkWindow *window;
@@ -16937,9 +17036,9 @@ struct _GdkEventAny
   GdkInputSource source;
   guint32 deviceid;
   gdouble x_root, y_root;
-};</para>
+};
 
-<para>struct _GdkEventButton
+struct _GdkEventButton
 {
   GdkEventType type;
   GdkWindow *window;
@@ -16955,9 +17054,9 @@ struct _GdkEventAny
   GdkInputSource source;
   guint32 deviceid;
   gdouble x_root, y_root;
-};</para>
+};
 
-<para>struct _GdkEventKey
+struct _GdkEventKey
 {
   GdkEventType type;
   GdkWindow *window;
@@ -16967,26 +17066,26 @@ struct _GdkEventAny
   guint keyval;
   gint length;
   gchar *string;
-};</para>
+};
 
-<para>struct _GdkEventCrossing
+struct _GdkEventCrossing
 {
   GdkEventType type;
   GdkWindow *window;
   gint8 send_event;
   GdkWindow *subwindow;
   GdkNotifyType detail;
-};</para>
+};
 
-<para>struct _GdkEventFocus
+struct _GdkEventFocus
 {
   GdkEventType type;
   GdkWindow *window;
   gint8 send_event;
   gint16 in;
-};</para>
+};
 
-<para>struct _GdkEventConfigure
+struct _GdkEventConfigure
 {
   GdkEventType type;
   GdkWindow *window;
@@ -16994,9 +17093,9 @@ struct _GdkEventAny
   gint16 x, y;
   gint16 width;
   gint16 height;
-};</para>
+};
 
-<para>struct _GdkEventProperty
+struct _GdkEventProperty
 {
   GdkEventType type;
   GdkWindow *window;
@@ -17004,9 +17103,9 @@ struct _GdkEventAny
   GdkAtom atom;
   guint32 time;
   guint state;
-};</para>
+};
 
-<para>struct _GdkEventSelection
+struct _GdkEventSelection
 {
   GdkEventType type;
   GdkWindow *window;
@@ -17016,12 +17115,12 @@ struct _GdkEventAny
   GdkAtom property;
   guint32 requestor;
   guint32 time;
-};</para>
+};
 
-<para>/* This event type will be used pretty rarely. It only is important
-   for XInput aware programs that are drawing their own cursor */</para>
+/* This event type will be used pretty rarely. It only is important
+   for XInput aware programs that are drawing their own cursor */
 
-<para>struct _GdkEventProximity
+struct _GdkEventProximity
 {
   GdkEventType type;
   GdkWindow *window;
@@ -17029,9 +17128,9 @@ struct _GdkEventAny
   guint32 time;
   GdkInputSource source;
   guint32 deviceid;
-};</para>
+};
 
-<para>struct _GdkEventDragRequest
+struct _GdkEventDragRequest
 {
   GdkEventType type;
   GdkWindow *window;
@@ -17051,14 +17150,14 @@ struct _GdkEventAny
   } u;
   guint8 isdrop; /* This gdk event can be generated by a couple of
                     X events - this lets the app know whether the
-                    drop really occurred or we just set the data */</para>
+                    drop really occurred or we just set the data */
 
-<para>  GdkPoint drop_coords;
+  GdkPoint drop_coords;
   gchar *data_type;
   guint32 timestamp;
-};</para>
+};
 
-<para>struct _GdkEventDragBegin
+struct _GdkEventDragBegin
 {
   GdkEventType type;
   GdkWindow *window;
@@ -17070,9 +17169,9 @@ struct _GdkEventAny
     } flags;
     glong allflags;
   } u;
-};</para>
+};
 
-<para>struct _GdkEventDropEnter
+struct _GdkEventDropEnter
 {
   GdkEventType type;
   GdkWindow *window;
@@ -17087,9 +17186,9 @@ struct _GdkEventAny
     } flags;
     glong allflags;
   } u;
-};</para>
+};
 
-<para>struct _GdkEventDropLeave
+struct _GdkEventDropLeave
 {
   GdkEventType type;
   GdkWindow *window;
@@ -17102,9 +17201,9 @@ struct _GdkEventAny
     } flags;
     glong allflags;
   } u;
-};</para>
+};
 
-<para>struct _GdkEventDropDataAvailable
+struct _GdkEventDropDataAvailable
 {
   GdkEventType type;
   GdkWindow *window;
@@ -17123,9 +17222,9 @@ struct _GdkEventAny
   gpointer data;
   guint32 timestamp;
   GdkPoint coords;
-};</para>
+};
 
-<para>struct _GdkEventClient
+struct _GdkEventClient
 {
   GdkEventType type;
   GdkWindow *window;
@@ -17137,9 +17236,9 @@ struct _GdkEventAny
     short s[10];
     long l[5];
   } data;
-};</para>
+};
 
-<para>struct _GdkEventOther
+struct _GdkEventOther
 {
   GdkEventType type;
   GdkWindow *window;
@@ -17148,11 +17247,11 @@ struct _GdkEventAny
 };
 </programlisting>
 
-</chapter>
+</appendix>
 
 <!-- ***************************************************************** -->
-<appendix id="app_CodeExamples">
-<title> Code Examples</title>
+<appendix id="app-CodeExamples">
+<title>Code Examples</title>
 
 <para>Below are the code examples that are used in the above text
 which are not included in complete form elsewhere.</para>
@@ -18226,8 +18325,7 @@ gtk_dial_adjustment_value_changed (GtkAdjustment *adjustment,
     }
 }
 /* example-end */
-
-<para></verb></tscreen></para>
+</programlisting>
 
 </sect2>
 
@@ -18300,9 +18398,8 @@ int main( int   argc,
   gtk_main ();
   
   return 0;
-}</para>
-
-<para></verb></tscreen></para>
+}
+</programlisting>
 
 </sect2>
 </sect1>
@@ -18779,10 +18876,11 @@ main (int argc, char *argv[])
 
 </sect2>
 </sect1>
-</chapter>
+
+</appendix>
 
 <!-- ***************************************************************** -->
-<appendix id="app_ListWidget">
+<appendix id="app-ListWidget">
 <title>List Widget</title>
 
 <para>NOTE: The List widget has been superseded by the CList widget. It is
@@ -19330,12 +19428,16 @@ ListItem.</para>
 <para>As one is not forced to add a GtkLabel to a GtkListItem, you could
 also add a GtkVBox or a GtkArrow etc. to the GtkListItem.</para>
 
+</sect1>
+
 <!-- ----------------------------------------------------------------- -->
 <sect1>
-<title> Signals</title>
+<title>Signals</title>
 
 <para>AkListItem does not create new signals on its own, but inherits
 the signals of a Item.</para>
+
+</sect1>
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>
@@ -19396,14 +19498,17 @@ gint GTK_IS_LIST_ITEM( gpointer obj );
 </programlisting>
 
 <para>Determine if a generic pointer refers to a `GtkListItem' object.
-*Note Standard Macros::, for more info.
- 
+*Note Standard Macros::, for more info.</para>
+
+</sect1>
+
 <!-- ----------------------------------------------------------------- -->
 <sect1>
-<title> Example</title>
+<title>Example</title>
 
 <para>Please see the List example on this, which covers the usage of a
 ListItem as well.</para>
 
-      </sect1>
-    </chapter>
+</sect1>
+</appendix>
+</book>
