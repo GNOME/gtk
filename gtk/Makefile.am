@@ -238,6 +238,9 @@ $(srcdir)/gtktypebuiltins_evals.c: @MAINT@ makeenums.pl $(srcdir)/gtk.defs
 	  perl $(srcdir)/makeenums.pl arrays $(srcdir)/gtk*.h \
                $(top_srcdir)/gdk/gdk*.h > $@
 
+gtkmarshal.c gtkmarshal.h: @MAINT@ gtkmarshal.list
+	srcdir=$(srcdir) perl $(srcdir)/genmarshal.pl
+
 # special remake rules
 #$(srcdir)/gtk.defs: @MAINT@ $(srcdir)/makeenums.awk
 #$(srcdir)/gtk.defs: @MAINT@ $(srcdir)/makeenums.h
@@ -328,6 +331,3 @@ test-debug: testgtk
 	builddir=`pwd`; cd $(top_builddir); top_builddir=`pwd`; \
 	cd $$builddir; cd $(srcdir); \
 	$(SHELL) $$top_builddir/libtool --mode=execute gdb $$builddir/testgtk
-
-gtkmarshal.c gtkmarshal.h: gtkmarshal.list
-	srcdir=$(srcdir) perl $(srcdir)/genmarshal.pl
