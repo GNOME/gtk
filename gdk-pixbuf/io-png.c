@@ -240,7 +240,7 @@ gdk_pixbuf__png_image_load (FILE *f, GError **error)
 {
         GdkPixbuf *pixbuf;
 	png_structp png_ptr;
-	png_infop info_ptr, end_info;
+	png_infop info_ptr;
         png_textp text_ptr;
 	gint i, ctype, bpp;
 	png_uint_32 w, h;
@@ -272,12 +272,6 @@ gdk_pixbuf__png_image_load (FILE *f, GError **error)
 		return NULL;
 	}
 
-	end_info = png_create_info_struct (png_ptr);
-	if (!end_info) {
-		png_destroy_read_struct (&png_ptr, &info_ptr, NULL);
-		return NULL;
-	}
-
 	if (setjmp (png_ptr->jmpbuf)) {
 	    	if (rows)
 		  	g_free (rows);
@@ -285,7 +279,7 @@ gdk_pixbuf__png_image_load (FILE *f, GError **error)
 		if (pixels)
 			g_free (pixels);
 
-		png_destroy_read_struct (&png_ptr, &info_ptr, &end_info);
+		png_destroy_read_struct (&png_ptr, &info_ptr, NULL);
 		return NULL;
 	}
 
@@ -293,7 +287,7 @@ gdk_pixbuf__png_image_load (FILE *f, GError **error)
 	png_read_info (png_ptr, info_ptr);
 
         if (!setup_png_transformations(png_ptr, info_ptr, error, &w, &h, &ctype)) {
-                png_destroy_read_struct (&png_ptr, &info_ptr, &end_info);
+                png_destroy_read_struct (&png_ptr, &info_ptr, NULL);
                 return NULL;
         }
         
@@ -314,7 +308,7 @@ gdk_pixbuf__png_image_load (FILE *f, GError **error)
                                      _("Insufficient memory to load PNG file"));
                 }
                 
-		png_destroy_read_struct (&png_ptr, &info_ptr, &end_info);
+		png_destroy_read_struct (&png_ptr, &info_ptr, NULL);
 		return NULL;
 	}
 
@@ -324,6 +318,7 @@ gdk_pixbuf__png_image_load (FILE *f, GError **error)
 		rows[i] = pixels + i * w * bpp;
 
 	png_read_image (png_ptr, rows);
+        png_read_end (png_ptr, info_ptr);
 
         if (png_get_text (png_ptr, info_ptr, &text_ptr, &num_texts)) {
                 options = g_new (gchar *, num_texts * 2);
@@ -333,7 +328,7 @@ gdk_pixbuf__png_image_load (FILE *f, GError **error)
                                                    options + 2*i + 1);
                 }
         }
-	png_destroy_read_struct (&png_ptr, &info_ptr, &end_info);
+	png_destroy_read_struct (&png_ptr, &info_ptr, NULL);
 	g_free (rows);
 
 	if (ctype & PNG_COLOR_MASK_ALPHA)
@@ -511,7 +506,7 @@ gdk_pixbuf__png_image_stop_load (gpointer context, GError **error)
         if (lc->pixbuf)
                 g_object_unref (lc->pixbuf);
         
-        png_destroy_read_struct(&lc->png_read_ptr, NULL, NULL);
+        png_destroy_read_struct(&lc->png_read_ptr, &lc->png_info_ptr, NULL);
         g_free(lc);
 
         return TRUE;

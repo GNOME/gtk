@@ -1,5 +1,13 @@
 2002-03-27  Matthias Clasen  <maclas@gmx.de>
 
+	* io-png.c (gdk_pixbuf__png_image_stop_load): Don't leak info_ptr.
+
+	* io-png.c (gdk_pixbuf__png_image_load): Get rid of unused
+	end_info. Also call png_read_end to check proper ending of the png
+	file and catch text chunks after the image data.
+
+2002-03-27  Matthias Clasen  <maclas@gmx.de>
+
 	* io-png.c (gdk_pixbuf__png_image_load,
 	gdk_pixbuf__png_image_begin_load): Make libpng use g_malloc
 	instead of system malloc. 
