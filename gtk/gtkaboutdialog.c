@@ -1830,8 +1830,8 @@ add_credits_page (GtkAboutDialog *about,
     }
 
   view = gtk_text_view_new ();
-  g_signal_connect (about, "style_set",
-		    G_CALLBACK (text_view_style_set), view);
+  g_signal_connect_object (about, "style_set",
+		           G_CALLBACK (text_view_style_set), view);
   
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
   gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (view), FALSE);
