@@ -1,3 +1,9 @@
+Sat Oct 12 15:44:29 2002  Manish Singh  <yosh@gimp.org>
+
+        * gtk/gtkitemfactory.c: use GTK_IS_RADIO_MENU_ITEM instead
+        of comparing the type directly. This handles possible subclasses
+        too. (Recommended by Tim Janik)
+
 Fri Oct 11 15:56:20 2002  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkaccellabel.[ch] gtk/gtkaccessible.[ch] gtk/gtkbutton.[ch]

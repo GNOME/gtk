@@ -1070,7 +1070,7 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
   if (option_menu && !option_menu->menu_item)
     gtk_option_menu_set_history (option_menu, 0);
 
-  if (type == GTK_TYPE_RADIO_MENU_ITEM)
+  if (GTK_IS_RADIO_MENU_ITEM (widget))
     gtk_radio_menu_item_set_group (GTK_RADIO_MENU_ITEM (widget), radio_group);
   if (GTK_IS_CHECK_MENU_ITEM (widget))
     gtk_check_menu_item_set_show_toggle (GTK_CHECK_MENU_ITEM (widget), TRUE);
