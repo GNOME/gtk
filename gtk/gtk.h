@@ -104,7 +104,6 @@
 #include <gtk/gtkobject.h>
 #include <gtk/gtkoldeditable.h>
 #include <gtk/gtkoptionmenu.h>
-/* #include <gtk/gtkpacker.h> */
 #include <gtk/gtkpaned.h>
 #include <gtk/gtkpixmap.h>
 #include <gtk/gtkplug.h>
