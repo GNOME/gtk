@@ -1,3 +1,8 @@
+2003-01-03  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtkrc.sgml: Update description of priorities for styles
+	and bindings.  (#98054)
+
 2002-12-31  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkrc.sgml: Add a note about gtkrc-2.0 being parsed by

@@ -95,6 +95,28 @@ but also #GtkToggleButton and
 #GtkCheckButton widgets, since
 those classes derive from #GtkButton.
 </para>
+<para>
+Additionally, a priority can be specified for each pattern, and styles 
+override other styles first by priority, then by pattern type and then 
+by order of specification (later overrides earlier). The priorities 
+that can be specified are (highest to lowest):
+<simplelist>
+<member><literal>highest</literal></member>
+<member><literal>rc</literal></member>
+<member><literal>theme</literal></member>
+<member><literal>application</literal></member>
+<member><literal>gtk</literal></member>
+<member><literal>lowest</literal></member>
+</simplelist>
+<literal>rc</literal> is the default for styles
+read from an RC file, <literal>theme</literal>
+is the default for styles read from theme RC files,
+<literal>application</literal> 
+should be used for styles an application sets
+up, and <literal>gtk</literal> is used for styles
+that GTK+ creates internally.
+</para>
+
 </refsect2>
 
 <refsect2><title>Toplevel declarations</title>
@@ -118,7 +140,7 @@ The possible toplevel declarations are:
   </varlistentry>
   <varlistentry>
     <term><literal>class <replaceable>pattern</replaceable> 
-          [ style | binding [ : <replaceable>priority</replaceable> ]]
+          [ style | binding ][ : <replaceable>priority</replaceable> ]
           <replaceable>name</replaceable></literal></term>
     <listitem>
      <para>Specifies a style or binding set for a particular
@@ -163,7 +185,7 @@ The possible toplevel declarations are:
   </varlistentry>
   <varlistentry>
     <term><literal>widget <replaceable>pattern</replaceable> 
-          [ style | binding [ : <replaceable>priority</replaceable> ]]
+          [ style | binding ][ : <replaceable>priority</replaceable> ]
           <replaceable>name</replaceable></literal></term>
     <listitem>
      <para>Specifies a style or binding set for a particular
@@ -172,7 +194,7 @@ The possible toplevel declarations are:
   </varlistentry>
   <varlistentry>
     <term><literal>widget_class <replaceable>pattern</replaceable> 
-          [ style | binding [ : <replaceable>priority</replaceable> ]]
+          [ style | binding ][ : <replaceable>priority</replaceable> ]
           <replaceable>name</replaceable></literal></term>
     <listitem>
      <para>Specifies a style or binding set for a particular
@@ -506,29 +528,11 @@ parameters of the signal.
 </para>
 
 <para>
-Binding sets are connected to widgets in the
-same manner as styles, with one addition. 
-A priority can be specified for each pattern,
-and within each type of pattern, binding sets
-override other binding sets first by priority,
-and only then by order of specification. (Later
-overrides earlier). The priorities that can
-be specified are (highest to lowest):
-<simplelist>
-<member><literal>highest</literal></member>
-<member><literal>rc</literal></member>
-<member><literal>theme</literal></member>
-<member><literal>application</literal></member>
-<member><literal>gtk</literal></member>
-<member><literal>lowest</literal></member>
-</simplelist>
-<literal>rc</literal> is the default for bindings
-read from an RC file, <literal>theme</literal>
-is the default for bindings read from theme RC files,
-<literal>application</literal> 
-should be used for bindings an application sets
-up, and <literal>gtk</literal> is used for bindings
-that GTK+ creates internally.
+Binding sets are connected to widgets in the same manner as styles, 
+with one difference: Binding sets override other binding sets first 
+by pattern type, then by priority and then by order of specification.
+The priorities that can be specified and their default values are the 
+same as for styles.
 </para>
 </refsect2>
 
