@@ -1,3 +1,8 @@
+Fri Jul 17 23:49:28 PDT 1998 Manish Singh <yosh@gimp.org>
+
+	* gtk/gtktypeutils.h
+	* gtk/gtkitemfactory.h: explicitly specify void in prototype
+
 Fri Jul 17 17:54:02 1998  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkclist.c (scroll_vertical): fix to avoid flicker at begin/end
