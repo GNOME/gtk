@@ -46,9 +46,9 @@ You might do a non-modal #GtkMessageDialog as follows:
                                   filename, g_strerror (errno));
 
  /* Destroy the dialog when the user responds to it (e.g. clicks a button) */
- g_signal_connect_swapped (GTK_OBJECT (dialog), "response",
+ g_signal_connect_swapped (dialog, "response",
                            G_CALLBACK (gtk_widget_destroy),
-                           GTK_OBJECT (dialog));
+                           dialog);
 </programlisting>
 </example>
 </para>

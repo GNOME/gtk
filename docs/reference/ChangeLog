@@ -1,5 +1,14 @@
 2004-04-23  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/tmpl/gtkdialog.sgml: 
+	* gtk/tmpl/gtkeditable.sgml: 
+	* gtk/tmpl/gtkfilesel.sgml: 
+	* gtk/tmpl/gtkmain.sgml: 
+	* gtk/tmpl/gtkmenu.sgml: 
+	* gtk/tmpl/gtkmessagedialog.sgml: 
+	* gtk/tmpl/gtktogglebutton.sgml: Remove excessive
+	casts from examples.  (#139387, Olexiy Avramchenko)
+
 	* gtk/migrating-GtkAction.sgml: Fix an example.  
 	(#138966, Tim-Philipp Müller)
 
