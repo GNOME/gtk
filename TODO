@@ -12,8 +12,7 @@ Bugs:
    GtkLabels sometimes redraw without clearing up the underlying background on
    window resizes.
  
- * Are there still some GtkCList changes outstanding? (Jay Painter)
-   GtkCList is derived from GtkContainer but doesn't implement the
+ * GtkCList is derived from GtkContainer but doesn't implement the
    need_resize, focus, add and remove methods from containers.
    it should at least issue a warning upon invokation of not supported
    member functions.
@@ -87,6 +86,7 @@ TODO AFTER GTK 1.0
 
  * Make all widget attributes configurable after the widget is created (timj).
 
+ * GtkCList improvements. (Jay Painter)
  * Seperate GtkObject and signaling system from Gdk dependancies?
   
  * move *_input_add (wrappers for select(2)) mechanism into glib.

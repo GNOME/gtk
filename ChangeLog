@@ -12,6 +12,23 @@ Sat Mar 21 19:07:01 1998  Owen Taylor  <owt1@cornell.edu>
 	* gtk/gtkmain.c: Make temporary copy of string returned by
 	  setlocale, since it may be changed by subsequent calls.
 
+Sat Mar 21 22:54:31 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkhandlebox.h:
+	* gtk/gtkhandlebox.c: major overhaul of the code, fixed all
+	known bugs (hopefully ;).
+
+Sat Mar 20 15:33:17 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwidget.c (gtk_widget_real_show): queue the resize for the
+ 	parent.
+
+Thu Mar 19 02:00:50 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwidget.c (gtk_widget_unrealize): unset flags after emission,
+	especially GTK_MAPPED, since that might not have been taken care of
+	by an UNMAP emission.
+
 Sat Mar 21 10:39:02 CET 1998 Paolo Molaro <lupus@debian.org>
 
 	* gtk/gtkcombo.[ch] "activate" signal can be disabled now
