@@ -31,6 +31,11 @@
 #undef XINPUT_GXI
 #undef XINPUT_XFREE
 
+#undef GTK_MAJOR_VERSION
+#undef GTK_MINOR_VERSION
+#undef GTK_MICRO_VERSION
+#undef GTK_VERSION
+
 /* Define as the return type of signal handlers (int or void).  */
 #undef RETSIGTYPE
 

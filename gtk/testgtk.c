@@ -5267,6 +5267,8 @@ create_main_window ()
   GtkWidget *box2;
   GtkWidget *scrolled_window;
   GtkWidget *button;
+  GtkWidget *label;
+  gchar buffer[64];
   GtkWidget *separator;
   int i;
 
@@ -5285,6 +5287,22 @@ create_main_window ()
   box1 = gtk_vbox_new (FALSE, 0);
   gtk_container_add (GTK_CONTAINER (window), box1);
   gtk_widget_show (box1);
+
+  if (gtk_micro_version > 0)
+    sprintf (buffer,
+	     "Gtk+ v%d.%d.%d",
+	     gtk_major_version,
+	     gtk_minor_version,
+	     gtk_micro_version);
+  else
+    sprintf (buffer,
+	     "Gtk+ v%d.%d",
+	     gtk_major_version,
+	     gtk_minor_version);
+
+  label = gtk_label_new (buffer);
+  gtk_widget_show (label);
+  gtk_box_pack_start (GTK_BOX (box1), label, FALSE, FALSE, 0);
 
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
   gtk_container_border_width (GTK_CONTAINER (scrolled_window), 10);

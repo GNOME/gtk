@@ -1,3 +1,12 @@
+Sun Mar  8 03:00:17 1998  Tim Janik  <timj@gimp.org>
+
+	* configure.in: define the version variables in config.h.
+
+	* gtk/gtkmain.h:
+	* gtk/gtkmain.c: added static version variables.
+
+	* gdk/gdkpixmap.c: fixed memory leaks (gtk-gronlund-980307-1.patch.gz)
+
 Sat Mar  7 18:46:57 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtkpreview.[ch]: Added a new function, gtk_preview_reset(),

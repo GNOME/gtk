@@ -36,6 +36,11 @@ typedef gint    (*GtkKeySnoopFunc)      (GtkWidget      *grab_widget,
 					 GdkEventKey    *event,
 					 gpointer        func_data);
 
+/* Gtk version.
+ */
+extern const guint gtk_major_version;
+extern const guint gtk_minor_version;
+extern const guint gtk_micro_version;
 
 /* Initialization, exit, mainloop and miscellaneous routines
  */

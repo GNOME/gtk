@@ -320,8 +320,7 @@ gdk_pixmap_extract_color (gchar *buffer)
     return NULL;
   else if (ptr[0] == '#')
     {
-      retcol = g_new(gchar, strlen (ptr) + 1);
-      strcpy (retcol, ptr);
+      retcol = g_strdup (ptr);
       return retcol;
     }
 
@@ -346,8 +345,7 @@ gdk_pixmap_extract_color (gchar *buffer)
         }
     }
 
-  retcol = g_new(gchar, strlen (color) + 1);
-  strcpy (retcol, color);
+  retcol = g_strdup (color);
   return retcol;
 }
 
@@ -366,7 +364,7 @@ gdk_pixmap_create_from_xpm (GdkWindow  *window,
   GdkGC *gc;
   GdkColor tmp_color;
   gint width, height, num_cols, cpp, cnt, n, ns, xcnt, ycnt;
-  gchar *buffer = NULL, *color_name = NULL, pixel_str[32];
+  gchar *buffer = NULL, pixel_str[32];
   guint buffer_size = 0;
   _GdkPixmapColor *colors = NULL, *color = NULL;
   gulong index;
@@ -399,6 +397,8 @@ gdk_pixmap_create_from_xpm (GdkWindow  *window,
 
               for (cnt = 0; cnt < num_cols; cnt++)
                 {
+		  gchar *color_name;
+
                   gdk_pixmap_seek_char (infile, '"');
                   fseek (infile, -1, SEEK_CUR);
                   gdk_pixmap_read_string (infile, &buffer, &buffer_size);
@@ -408,9 +408,6 @@ gdk_pixmap_create_from_xpm (GdkWindow  *window,
                     colors[cnt].color_string[n] = buffer[n];
                   colors[cnt].color_string[n] = 0;
 		  colors[cnt].transparent = FALSE;
-
-                  if (color_name != NULL)
-                    g_free (color_name);
 
                   color_name = gdk_pixmap_extract_color (&buffer[cpp]);
 
@@ -427,6 +424,8 @@ gdk_pixmap_create_from_xpm (GdkWindow  *window,
 		      colors[cnt].color = *transparent_color;
 		      colors[cnt].transparent = TRUE;
 		    }
+
+		  g_free (color_name);
 
                   gdk_color_alloc (colormap, &colors[cnt].color);
                 }
@@ -527,7 +526,7 @@ gdk_pixmap_create_from_xpm_d (GdkWindow  *window,
   GdkGC *gc;
   GdkColor tmp_color;
   gint width, height, num_cols, cpp, cnt, n, ns, xcnt, ycnt, i;
-  gchar *buffer, *color_name = NULL, pixel_str[32];
+  gchar *buffer, pixel_str[32];
   _GdkPixmapColor *colors = NULL, *color = NULL;
   gulong index;
 
@@ -550,6 +549,8 @@ gdk_pixmap_create_from_xpm_d (GdkWindow  *window,
 
   for (cnt = 0; cnt < num_cols; cnt++)
     {
+      gchar *color_name;
+
       buffer = data[i++];
 
       colors[cnt].color_string = g_new(gchar, cpp + 1);
@@ -557,9 +558,6 @@ gdk_pixmap_create_from_xpm_d (GdkWindow  *window,
 	colors[cnt].color_string[n] = buffer[n];
       colors[cnt].color_string[n] = 0;
       colors[cnt].transparent = FALSE;
-
-      if (color_name != NULL)
-	g_free (color_name);
 
       color_name = gdk_pixmap_extract_color (&buffer[cpp]);
 
@@ -576,6 +574,8 @@ gdk_pixmap_create_from_xpm_d (GdkWindow  *window,
 	  colors[cnt].color = *transparent_color;
 	  colors[cnt].transparent = TRUE;
 	}
+
+      g_free (color_name);
 
       gdk_color_alloc (colormap, &colors[cnt].color);
     }

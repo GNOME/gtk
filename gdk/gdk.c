@@ -270,7 +270,7 @@ gdk_init (int    *argc,
   int argc_orig = *argc;
   char **argv_orig;
 
-  argv_orig = malloc ((argc_orig + 1) * sizeof (char*));
+  argv_orig = g_malloc ((argc_orig + 1) * sizeof (char*));
   for (i = 0; i < argc_orig; i++)
     argv_orig[i] = g_strdup ((*argv)[i]);
   argv_orig[argc_orig] = NULL;

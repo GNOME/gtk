@@ -32,6 +32,7 @@
 #include "gtkwidget.h"
 #include "gtkwindow.h"
 #include "gtkprivate.h"
+#include "../config.h"
 
 
 /* Private type definitions
@@ -118,6 +119,10 @@ static gint  gtk_idle_compare            (gpointer            a,
 
 static gint  gtk_timeout_compare         (gpointer            a, 
 					  gpointer            b);
+
+const guint gtk_major_version = GTK_MAJOR_VERSION;
+const guint gtk_minor_version = GTK_MINOR_VERSION;
+const guint gtk_micro_version = GTK_MICRO_VERSION;
 
 static gboolean iteration_done = FALSE;
 static guint main_level = 0;
