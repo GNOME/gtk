@@ -1,3 +1,8 @@
+2004-09-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilesystemunix.c (gtk_file_folder_unix_list_children): 
+	Emit ::finished-loading.
+
 2004-09-27  Roozbeh Pournader  <roozbeh@farsiweb.info>
  
 	* configure.in: Added Iranian Azerbaijani (az_IR) to ALL_LINUGAS.

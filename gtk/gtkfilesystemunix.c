@@ -1804,6 +1804,8 @@ gtk_file_folder_unix_list_children (GtkFileFolder  *folder,
       l->data = filename_to_path (fullname);
       g_free (fullname);
     }
+  g_signal_emit_by_name (folder_unix, "finished-loading");
+
   return TRUE;
 }
 
