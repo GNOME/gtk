@@ -440,23 +440,33 @@ gdk_text_property_to_text_list_for_display (GdkDisplay   *display,
   XTextProperty property;
   gint count = 0;
   gint res;
+  gchar **local_list;
   g_return_val_if_fail (GDK_IS_DISPLAY (display), 0);
-
-  if (!list) 
-    return 0;
 
   property.value = (guchar *)text;
   property.encoding = gdk_x11_atom_to_xatom_for_display (display, encoding);
   property.format = format;
   property.nitems = length;
   res = XmbTextPropertyToTextList (GDK_DISPLAY_XDISPLAY (display), &property, 
-				   list, &count);
+				   local_list, &count);
 
   if (res == XNoMemory || res == XLocaleNotSupported || 
       res == XConverterNotFound)
-    return 0;
+    {
+      if (list)
+	*list = NULL;
+
+      return 0;
+    }
   else
-    return count;
+    {
+      if (list)
+	*list = local_list;
+      else
+	XFreeStringList (local_list);
+      
+      return count;
+    }
 }
 #ifndef GDK_MULTIHEAD_SAFE
 gint
@@ -635,8 +645,10 @@ gdk_text_property_to_utf8_list_for_display (GdkDisplay    *display,
 		(*list)[count++] = g_strdup (local_list[i]);
 	    }
 	}
+
+      if (local_count)
+	gdk_free_text_list (local_list);
       
-      gdk_free_text_list (local_list);
       (*list)[count] = NULL;
 
       return count;

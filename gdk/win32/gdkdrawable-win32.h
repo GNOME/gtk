@@ -50,11 +50,8 @@ typedef struct _GdkDrawableImplWin32Class GdkDrawableImplWin32Class;
 struct _GdkDrawableImplWin32
 {
   GdkDrawable parent_instance;
-
   GdkDrawable *wrapper;
-  
   GdkColormap *colormap;
-  
   HANDLE handle;
 };
  

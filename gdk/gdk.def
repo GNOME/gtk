@@ -29,7 +29,6 @@ EXPORTS
 	gdk_colormap_get_system_size
 	gdk_colormap_get_type
 	gdk_colormap_get_visual
-	gdk_colormap_lookup
 	gdk_colormap_new
 	gdk_colormap_query_color
 	gdk_colormap_ref
@@ -351,7 +350,6 @@ EXPORTS
 	gdk_visual_get_best_with_type
 	gdk_visual_get_system
 	gdk_visual_get_type
-	gdk_visual_lookup
 	gdk_visual_type_get_type
 	gdk_wcstombs
 	gdk_win32_drawable_get_handle

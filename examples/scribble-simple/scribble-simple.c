@@ -1,4 +1,3 @@
-/* example-start scribble-simple scribble-simple.c */
 
 /* GTK - The GIMP Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
@@ -29,7 +28,7 @@ static gint configure_event( GtkWidget         *widget,
                              GdkEventConfigure *event )
 {
   if (pixmap)
-    gdk_pixmap_unref(pixmap);
+    g_object_unref(pixmap);
 
   pixmap = gdk_pixmap_new(widget->window,
 			  widget->allocation.width,
@@ -49,7 +48,7 @@ static gint configure_event( GtkWidget         *widget,
 static gint expose_event( GtkWidget      *widget,
                           GdkEventExpose *event )
 {
-  gdk_draw_pixmap(widget->window,
+  gdk_draw_drawable(widget->window,
 		  widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
 		  pixmap,
 		  event->area.x, event->area.y,
@@ -75,7 +74,9 @@ static void draw_brush( GtkWidget *widget,
 		      TRUE,
 		      update_rect.x, update_rect.y,
 		      update_rect.width, update_rect.height);
-  gtk_widget_draw (widget, &update_rect);
+  gtk_widget_queue_draw_area (widget, 
+		      update_rect.x, update_rect.y,
+		      update_rect.width, update_rect.height);
 }
 
 static gint button_press_event( GtkWidget      *widget,
@@ -110,7 +111,7 @@ static gint motion_notify_event( GtkWidget *widget,
 
 void quit ()
 {
-  gtk_exit (0);
+  exit (0);
 }
 
 int main( int   argc, 
@@ -131,29 +132,29 @@ int main( int   argc,
   gtk_container_add (GTK_CONTAINER (window), vbox);
   gtk_widget_show (vbox);
 
-  gtk_signal_connect (GTK_OBJECT (window), "destroy",
+  g_signal_connect (GTK_OBJECT (window), "destroy",
 		      GTK_SIGNAL_FUNC (quit), NULL);
 
   /* Create the drawing area */
 
   drawing_area = gtk_drawing_area_new ();
-  gtk_drawing_area_size (GTK_DRAWING_AREA (drawing_area), 200, 200);
+  gtk_widget_set_size_request (GTK_WIDGET (drawing_area), 200, 200);
   gtk_box_pack_start (GTK_BOX (vbox), drawing_area, TRUE, TRUE, 0);
 
   gtk_widget_show (drawing_area);
 
   /* Signals used to handle backing pixmap */
 
-  gtk_signal_connect (GTK_OBJECT (drawing_area), "expose_event",
+  g_signal_connect (GTK_OBJECT (drawing_area), "expose_event",
 		      (GtkSignalFunc) expose_event, NULL);
-  gtk_signal_connect (GTK_OBJECT(drawing_area),"configure_event",
+  g_signal_connect (GTK_OBJECT(drawing_area),"configure_event",
 		      (GtkSignalFunc) configure_event, NULL);
 
   /* Event signals */
 
-  gtk_signal_connect (GTK_OBJECT (drawing_area), "motion_notify_event",
+  g_signal_connect (GTK_OBJECT (drawing_area), "motion_notify_event",
 		      (GtkSignalFunc) motion_notify_event, NULL);
-  gtk_signal_connect (GTK_OBJECT (drawing_area), "button_press_event",
+  g_signal_connect (GTK_OBJECT (drawing_area), "button_press_event",
 		      (GtkSignalFunc) button_press_event, NULL);
 
   gtk_widget_set_events (drawing_area, GDK_EXPOSURE_MASK
@@ -166,7 +167,7 @@ int main( int   argc,
   button = gtk_button_new_with_label ("Quit");
   gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
-  gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+  g_signal_connect_swapped (GTK_OBJECT (button), "clicked",
 			     GTK_SIGNAL_FUNC (gtk_widget_destroy),
 			     GTK_OBJECT (window));
   gtk_widget_show (button);
@@ -177,4 +178,3 @@ int main( int   argc,
 
   return 0;
 }
-/* example-end */

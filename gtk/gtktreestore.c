@@ -1423,6 +1423,47 @@ gtk_tree_store_iter_depth (GtkTreeStore *tree_store,
   return g_node_depth (G_NODE (iter->user_data)) - 2;
 }
 
+/* simple ripoff from g_node_traverse_post_order */
+static gboolean
+gtk_tree_store_clear_traverse (GNode *node,
+			       GtkTreeStore *store)
+{
+  GtkTreeIter iter;
+
+  if (node->children)
+    {
+      GNode *child;
+
+      child = node->children;
+      while (child)
+        {
+	  register GNode *current;
+
+	  current = child;
+	  child = current->next;
+	  if (gtk_tree_store_clear_traverse (current, store))
+	    return TRUE;
+	}
+
+      if (node->parent)
+        {
+	  iter.stamp = store->stamp;
+	  iter.user_data = node;
+
+	  gtk_tree_store_remove (store, &iter);
+	}
+    }
+  else if (node->parent)
+    {
+      iter.stamp = store->stamp;
+      iter.user_data = node;
+
+      gtk_tree_store_remove (store, &iter);
+    }
+
+  return FALSE;
+}
+
 /**
  * gtk_tree_store_clear:
  * @tree_store: a #GtkTreeStore
@@ -1432,16 +1473,9 @@ gtk_tree_store_iter_depth (GtkTreeStore *tree_store,
 void
 gtk_tree_store_clear (GtkTreeStore *tree_store)
 {
-  GtkTreeIter iter;
-
   g_return_if_fail (GTK_IS_TREE_STORE (tree_store));
 
-  while (G_NODE (tree_store->root)->children)
-    {
-      iter.stamp = tree_store->stamp;
-      iter.user_data = G_NODE (tree_store->root)->children;
-      gtk_tree_store_remove (tree_store, &iter);
-    }
+  gtk_tree_store_clear_traverse (tree_store->root, tree_store);
 }
 
 /* DND */

@@ -1,6 +1,6 @@
 /* GDK - The GIMP Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
- * Copyright (C) 1999 Tor Lillqvist
+ * Copyright (C) 1998-2002 Tor Lillqvist
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -217,23 +217,23 @@ gdk_input_wintab_init (void)
       WTInfo (0, 0, NULL))
     {
       WTInfo (WTI_INTERFACE, IFC_SPECVERSION, &specversion);
-      GDK_NOTE (MISC, g_print ("Wintab interface version %d.%d\n",
+      GDK_NOTE (INPUT, g_print ("Wintab interface version %d.%d\n",
 			       HIBYTE (specversion), LOBYTE (specversion)));
 #if USE_SYSCONTEXT
       WTInfo (WTI_DEFSYSCTX, 0, &defcontext);
 #if DEBUG_WINTAB
-      GDK_NOTE (MISC, (g_print("DEFSYSCTX:\n"), print_lc(&defcontext)));
+      GDK_NOTE (INPUT, (g_print("DEFSYSCTX:\n"), print_lc(&defcontext)));
 #endif
 #else
       WTInfo (WTI_DEFCONTEXT, 0, &defcontext);
 #if DEBUG_WINTAB
-      GDK_NOTE (MISC, (g_print("DEFCONTEXT:\n"), print_lc(&defcontext)));
+      GDK_NOTE (INPUT, (g_print("DEFCONTEXT:\n"), print_lc(&defcontext)));
 #endif
 #endif
       WTInfo (WTI_INTERFACE, IFC_NDEVICES, &ndevices);
       WTInfo (WTI_INTERFACE, IFC_NCURSORS, &ncursors);
 #if DEBUG_WINTAB
-      GDK_NOTE (MISC, g_print ("NDEVICES: %d, NCURSORS: %d\n",
+      GDK_NOTE (INPUT, g_print ("NDEVICES: %d, NCURSORS: %d\n",
 			       ndevices, ncursors));
 #endif
       /* Create a dummy window to receive wintab events */
@@ -324,7 +324,7 @@ gdk_input_wintab_init (void)
 #endif
 	    }
 #if DEBUG_WINTAB
-	  GDK_NOTE (MISC, (g_print("context for device %d:\n", devix),
+	  GDK_NOTE (INPUT, (g_print("context for device %d:\n", devix),
 			   print_lc(&lc)));
 #endif
 	  hctx = g_new (HCTX, 1);
@@ -333,7 +333,7 @@ gdk_input_wintab_init (void)
 	      g_warning ("_gdk_input_init: WTOpen failed");
 	      return;
 	    }
-	  GDK_NOTE (MISC, g_print ("opened Wintab device %d %p\n",
+	  GDK_NOTE (INPUT, g_print ("opened Wintab device %d %p\n",
 				   devix, *hctx));
 
 	  wintab_contexts = g_list_append (wintab_contexts, hctx);
@@ -343,7 +343,7 @@ gdk_input_wintab_init (void)
 	  WTOverlap (*hctx, TRUE);
 
 #if DEBUG_WINTAB
-	  GDK_NOTE (MISC, (g_print("context for device %d after WTOpen:\n", devix),
+	  GDK_NOTE (INPUT, (g_print("context for device %d after WTOpen:\n", devix),
 			   print_lc(&lc)));
 #endif
 	  for (cursorix = firstcsr; cursorix < firstcsr + ncsrtypes; cursorix++)
@@ -453,13 +453,13 @@ gdk_input_wintab_init (void)
 		}
 	      gdkdev->info.num_keys = 0;
 	      gdkdev->info.keys = NULL;
-	      GDK_NOTE (EVENTS,
+	      GDK_NOTE (INPUT,
 			g_print ("device: (%d) %s axes: %d\n",
 				 cursorix,
 				 gdkdev->info.name,
 				 gdkdev->info.num_axes));
 	      for (i = 0; i < gdkdev->info.num_axes; i++)
-		GDK_NOTE (EVENTS,
+		GDK_NOTE (INPUT,
 			  g_print ("...axis %d: %d--%d@%d (%d--%d@%d)\n",
 				   i,
 				   gdkdev->axes[i].xmin_value, 
@@ -720,9 +720,9 @@ _gdk_input_other_event (GdkEvent  *event,
 
   gdk_drawable_ref (window);
 
-  GDK_NOTE (EVENTS,
-	    g_print ("gdk_input_win32_other_event: window=%#x (%d,%d)\n",
-		     (guint) GDK_WINDOW_HWND (window), x, y));
+  GDK_NOTE (EVENTS_OR_INPUT,
+	    g_print ("gdk_input_win32_other_event: window=%p (%d,%d)\n",
+		     GDK_WINDOW_HWND (window), x, y));
   
 #else
   /* ??? This code is pretty bogus */
@@ -749,7 +749,7 @@ _gdk_input_other_event (GdkEvent  *event,
     case WT_PACKET:
       if (window == _gdk_parent_root)
 	{
-	  GDK_NOTE (EVENTS, g_print ("...is root\n"));
+	  GDK_NOTE (EVENTS_OR_INPUT, g_print ("...is root\n"));
 	  return FALSE;
 	}
 
@@ -813,7 +813,7 @@ _gdk_input_other_event (GdkEvent  *event,
       if (!impl->extension_events_selected
 	  || !(obj->extension_events & masktest))
 	{
-	  GDK_NOTE (EVENTS, g_print ("...not selected\n"));
+	  GDK_NOTE (EVENTS_OR_INPUT, g_print ("...not selected\n"));
 
 	  if (obj->parent == GDK_WINDOW_OBJECT (_gdk_parent_root))
 	    return FALSE;
@@ -828,8 +828,8 @@ _gdk_input_other_event (GdkEvent  *event,
 	  ScreenToClient (GDK_WINDOW_HWND (window), &pt);
 	  x = pt.x;
 	  y = pt.y;
-	  GDK_NOTE (EVENTS, g_print ("...propagating to %#x, (%d,%d)\n",
-				     (guint) GDK_WINDOW_HWND (window), x, y));
+	  GDK_NOTE (EVENTS_OR_INPUT, g_print ("...propagating to %p (%d,%d)\n",
+					      GDK_WINDOW_HWND (window), x, y));
 	  goto dijkstra;
 	}
 
@@ -866,11 +866,12 @@ _gdk_input_other_event (GdkEvent  *event,
 				 & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK
 				    | GDK_BUTTON3_MASK | GDK_BUTTON4_MASK
 				    | GDK_BUTTON5_MASK));
-	  GDK_NOTE (EVENTS, g_print ("WINTAB button %s:%d %g,%g\n",
-				     (event->button.type == GDK_BUTTON_PRESS ?
-				      "press" : "release"),
-				     event->button.button,
-				     event->button.x, event->button.y));
+	  GDK_NOTE (EVENTS_OR_INPUT,
+		    g_print ("WINTAB button %s:%d %g,%g\n",
+			     (event->button.type == GDK_BUTTON_PRESS ?
+			      "press" : "release"),
+			     event->button.button,
+			     event->button.x, event->button.y));
 	}
       else
 	{
@@ -889,8 +890,9 @@ _gdk_input_other_event (GdkEvent  *event,
 				    | GDK_BUTTON3_MASK | GDK_BUTTON4_MASK
 				    | GDK_BUTTON5_MASK));
 
-	  GDK_NOTE (EVENTS, g_print ("WINTAB motion: %g,%g\n",
-				     event->motion.x, event->motion.y));
+	  GDK_NOTE (EVENTS_OR_INPUT,
+		    g_print ("WINTAB motion: %g,%g\n",
+			     event->motion.x, event->motion.y));
 
 	  /* Check for missing release or press events for the normal
 	   * pressure button. At least on my ArtPadII I sometimes miss a
@@ -919,12 +921,13 @@ _gdk_input_other_event (GdkEvent  *event,
 					 | GDK_BUTTON3_MASK | GDK_BUTTON4_MASK
 					 | GDK_BUTTON5_MASK));
 	      event2->button.button = 1;
-	      GDK_NOTE (EVENTS, g_print ("WINTAB synthesized button %s: %d %g,%gg\n",
-					 (event2->button.type == GDK_BUTTON_PRESS ?
-					  "press" : "release"),
-					 event2->button.button,
-					 event2->button.x,
-					 event2->button.y));
+	      GDK_NOTE (EVENTS_OR_INPUT,
+			g_print ("WINTAB synthesized button %s: %d %g,%gg\n",
+				 (event2->button.type == GDK_BUTTON_PRESS ?
+				  "press" : "release"),
+				 event2->button.button,
+				 event2->button.x,
+				 event2->button.y));
 	      _gdk_event_queue_append (event2);
 	    }
 	}
@@ -944,9 +947,10 @@ _gdk_input_other_event (GdkEvent  *event,
       event->proximity.time = msg->time;
       event->proximity.device = &gdkdev->info;
 
-      GDK_NOTE (EVENTS, g_print ("WINTAB proximity %s\n",
-				 (event->proximity.type == GDK_PROXIMITY_IN ?
-				  "in" : "out")));
+      GDK_NOTE (EVENTS_OR_INPUT,
+		g_print ("WINTAB proximity %s\n",
+			 (event->proximity.type == GDK_PROXIMITY_IN ?
+			  "in" : "out")));
       return TRUE;
     }
 #endif
@@ -996,7 +1000,7 @@ _gdk_input_grab_pointer (GdkWindow    *window,
   new_window = NULL;
   need_ungrab = FALSE;
 
-  GDK_NOTE (MISC, g_print ("gdk_input_win32_grab_pointer: %#x %d %#x\n",
+  GDK_NOTE (INPUT, g_print ("gdk_input_win32_grab_pointer: %#x %d %#x\n",
 			   (guint) GDK_WINDOW_HWND (window),
 			   owner_events,
 			   (confine_to ? (guint) GDK_WINDOW_HWND (confine_to) : 0)));
@@ -1078,7 +1082,7 @@ _gdk_input_ungrab_pointer (guint32 time)
   GdkDevicePrivate *gdkdev;
   GList *tmp_list;
 
-  GDK_NOTE (MISC, g_print ("gdk_input_win32_ungrab_pointer\n"));
+  GDK_NOTE (INPUT, g_print ("gdk_input_win32_ungrab_pointer\n"));
 
   tmp_list = _gdk_input_windows;
   while (tmp_list)

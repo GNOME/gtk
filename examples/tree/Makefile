@@ -1,8 +1,14 @@
 
 CC = gcc
 
+CFLAGS = -Wall			 	\
+	-DG_DISABLE_DEPRECATED 	 	\
+	-DGDK_DISABLE_DEPRECATED 	\
+	-DGDK_PIXBUF_DISABLE_DEPRECATED \
+	-DGTK_DISABLE_DEPRECATED
+
 tree: tree.c 
-	$(CC) `pkg-config --cflags gtk+-2.0`  tree.c -o tree `pkg-config --libs gtk+-2.0`
+	$(CC) tree.c -o tree $(CFLAGS) `pkg-config gtk+-2.0 --cflags --libs`
 
 clean: 
 	rm -f *.o tree

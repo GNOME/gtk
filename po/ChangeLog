@@ -1,3 +1,19 @@
+Sun Feb 17 21:24:55 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* POTFILES.in: Add io-wbmp.c.
+
+2002-02-16  Tõivo Leedjärv  <leedjarv@interest.ee>
+
+	* et.po: Updated Estonian translation.
+
+2002-02-12  Kjartan Maraas  <kmaraas@gnome.org>
+
+	* no.po: Updated Norwegian (bokmål) translation.
+	
+2002-02-11  Duarte Loreto <happyguy_pt@hotmail.com>
+
+        * pt.po: Updated Portuguese translation.
+
 2002-02-10  Kjartan Maraas  <kmaraas@gnome.org>
 
 	* no.po: Updated Norwegian (bokmål) translation.

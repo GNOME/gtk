@@ -1,5 +1,6 @@
 /* GDK - The GIMP Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+ * Copyright (C) 1998-2002 Tor Lillqvist
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -28,7 +29,7 @@ _gdk_win32_data_to_wcursor (GdkCursorType cursor_type)
   gint i, j, x, y, ofs;
   HCURSOR rv = NULL;
   gint w, h;
-  guchar *ANDplane, *XORplane;
+  guchar *and_plane, *xor_plane;
 
   for (i = 0; i < G_N_ELEMENTS (cursors); i++)
     if (cursors[i].type == cursor_type)
@@ -40,10 +41,10 @@ _gdk_win32_data_to_wcursor (GdkCursorType cursor_type)
   w = GetSystemMetrics (SM_CXCURSOR);
   h = GetSystemMetrics (SM_CYCURSOR);
 
-  ANDplane = g_malloc ((w/8) * h);
-  memset (ANDplane, 0xff, (w/8) * h);
-  XORplane = g_malloc ((w/8) * h);
-  memset (XORplane, 0, (w/8) * h);
+  and_plane = g_malloc ((w/8) * h);
+  memset (and_plane, 0xff, (w/8) * h);
+  xor_plane = g_malloc ((w/8) * h);
+  memset (xor_plane, 0, (w/8) * h);
 
 #define SET_BIT(v,b)  (v |= (1 << b))
 #define RESET_BIT(v,b)  (v &= ~(1 << b))
@@ -61,9 +62,9 @@ _gdk_win32_data_to_wcursor (GdkCursorType cursor_type)
 
         if (data)
           {
-            RESET_BIT (ANDplane[pofs], bit);
+            RESET_BIT (and_plane[pofs], bit);
             if (data == 1)
-              SET_BIT (XORplane[pofs], bit);
+              SET_BIT (xor_plane[pofs], bit);
           }
       }
     }
@@ -72,11 +73,11 @@ _gdk_win32_data_to_wcursor (GdkCursorType cursor_type)
 #undef RESET_BIT
 
   rv = CreateCursor (gdk_app_hmodule, cursors[i].hotx, cursors[i].hoty,
-		     w, h, ANDplane, XORplane);
+		     w, h, and_plane, xor_plane);
   if (rv == NULL)
     WIN32_API_FAILED ("CreateCursor");
-  g_free (ANDplane);
-  g_free (XORplane);
+  g_free (and_plane);
+  g_free (xor_plane);
   
   return rv;
 }
@@ -153,16 +154,52 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
 
   residue = (1 << ((8-(width%8))%8)) - 1;
 
-  source_image = gdk_image_get (source, 0, 0, width, height);
-  mask_image = gdk_image_get (mask, 0, 0, width, height);
+  source_image = source_impl->image;
+  mask_image = mask_impl->image;
 
-  if (source_image->depth != 1 || mask_image->depth != 1)
+  g_return_val_if_fail (source_image->depth == 1 && mask_image->depth == 1,
+			NULL);
+
+#ifdef G_ENABLE_DEBUG
+  if (_gdk_debug_flags & GDK_DEBUG_CURSOR)
     {
-      gdk_image_unref (source_image);
-      gdk_image_unref (mask_image);
-      g_return_val_if_fail (source_image->depth == 1 && mask_image->depth == 1,
-			    NULL);
+      g_print ("gdk_cursor_new_from_pixmap: source=%p:\n",
+	       source_impl->parent_instance.handle);
+      for (iy = 0; iy < height; iy++)
+	{
+	  if (iy == 16)
+	    break;
+
+	  p = (guchar *) source_image->mem + iy*source_image->bpl;
+	  for (ix = 0; ix < width; ix++)
+	    {
+	      if (ix == 79)
+		break;
+	      g_print ("%c", ".X"[((*p)>>(7-(ix%8)))&1]);
+	      if ((ix%8) == 7)
+		p++;
+	    }
+	  g_print ("\n");
+	}
+      g_print ("...mask=%p:\n", mask_impl->parent_instance.handle);
+      for (iy = 0; iy < height; iy++)
+	{
+	  if (iy == 16)
+	    break;
+
+	  p = (guchar *) mask_image->mem + iy*source_image->bpl;
+	  for (ix = 0; ix < width; ix++)
+	    {
+	      if (ix == 79)
+		break;
+	      g_print ("%c", ".X"[((*p)>>(7-(ix%8)))&1]);
+	      if ((ix%8) == 7)
+		p++;
+	    }
+	  g_print ("\n");
+	}
     }
+#endif
 
   /* Such complex bit manipulation for this simple task, sigh.
    * The X cursor and Windows cursor concepts are quite different.
@@ -236,9 +273,6 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
 
   g_free (xor_mask);
   g_free (and_mask);
-
-  gdk_image_unref (source_image);
-  gdk_image_unref (mask_image);
 
   private = g_new (GdkCursorPrivate, 1);
   private->hcursor = hcursor;

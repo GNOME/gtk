@@ -188,36 +188,11 @@
 #define CopyCursor(pcur) ((HCURSOR)CopyIcon((HICON)(pcur)))
 #endif
 
-/* Define corresponding Windows types for some X11 types, just for laziness. */
-typedef PALETTEENTRY XColor;
-
-/* Some structs are somewhat useful to emulate internally. */
-typedef struct {
-  HPALETTE palette;		/* Palette handle used when drawing. */
-  guint size;			/* Number of entries in the palette. */
-  gboolean stale;		/* 1 if palette needs to be realized,
-				 * otherwise 0. */
-  gboolean *in_use;
-  gboolean rc_palette;		/* If RC_PALETTE is on in the RASTERCAPS */
-  gulong sizepalette;		/* SIZEPALETTE if rc_palette */
-} ColormapStruct, *Colormap;
-  
-typedef struct {
-  gint map_entries;
-  guint visualid;
-  guint bitspixel;
-} Visual;
-
-typedef struct {
-  Colormap colormap;
-  unsigned long red_max;
-  unsigned long red_mult;
-  unsigned long green_max;
-  unsigned long green_mult;
-  unsigned long blue_max;
-  unsigned long blue_mult;
-  unsigned long base_pixel;
-} XStandardColormap;
+/* Define some combinations of GdkDebugFlags */
+#define GDK_DEBUG_EVENTS_OR_COLORMAP (GDK_DEBUG_EVENTS|GDK_DEBUG_COLORMAP)
+#define GDK_DEBUG_EVENTS_OR_INPUT (GDK_DEBUG_EVENTS|GDK_DEBUG_INPUT)
+#define GDK_DEBUG_PIXMAP_OR_COLORMAP (GDK_DEBUG_PIXMAP|GDK_DEBUG_COLORMAP)
+#define GDK_DEBUG_MISC_OR_COLORMAP (GDK_DEBUG_MISC|GDK_DEBUG_COLORMAP)
 
 #define GDK_TYPE_GC_WIN32              (_gdk_gc_win32_get_type ())
 #define GDK_GC_WIN32(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_GC_WIN32, GdkGCWin32))
@@ -230,10 +205,8 @@ typedef struct _GdkColormapPrivateWin32 GdkColormapPrivateWin32;
 typedef struct _GdkCursorPrivate        GdkCursorPrivate;
 typedef struct _GdkWin32SingleFont      GdkWin32SingleFont;
 typedef struct _GdkFontPrivateWin32     GdkFontPrivateWin32;
-typedef struct _GdkImagePrivateWin32    GdkImagePrivateWin32;
-typedef struct _GdkVisualPrivate        GdkVisualPrivate;
-typedef struct _GdkGCWin32      GdkGCWin32;
-typedef struct _GdkGCWin32Class GdkGCWin32Class;
+typedef struct _GdkGCWin32		GdkGCWin32;
+typedef struct _GdkGCWin32Class		GdkGCWin32Class;
 
 struct _GdkCursorPrivate
 {
@@ -261,25 +234,21 @@ struct _GdkVisualClass
   GObjectClass parent_class;
 };
 
-struct _GdkVisualPrivate
-{
-  GdkVisual visual;
-  Visual *xvisual;
-};
+typedef enum {
+  GDK_WIN32_PE_STATIC,
+  GDK_WIN32_PE_AVAILABLE,
+  GDK_WIN32_PE_INUSE
+} GdkWin32PalEntryState;
 
 struct _GdkColormapPrivateWin32
 {
-  Colormap xcolormap;
+  HPALETTE hpal;
+  gint current_size;		/* Current size of hpal */
+  GdkWin32PalEntryState *use;
   gint private_val;
 
   GHashTable *hash;
   GdkColorInfo *info;
-  DWORD last_sync_time;
-};
-
-struct _GdkImagePrivateWin32
-{
-  HBITMAP hbitmap;
 };
 
 struct _GdkGCWin32
@@ -295,6 +264,8 @@ struct _GdkGCWin32
    * GdkGCWin32 object.
    */
   HDC hdc;
+
+  int saved_dc;
 
   GdkRegion *clip_region;
   HRGN hcliprgn;
@@ -316,7 +287,7 @@ struct _GdkGCWin32
   HANDLE hwnd;			/* If a HDC is allocated, for which window,
 				 * or what bitmap is selected into it
 				 */
-  int saved_dc;
+  HPALETTE holdpal;
 };
 
 struct _GdkGCWin32Class
@@ -327,14 +298,12 @@ struct _GdkGCWin32Class
 GType _gdk_gc_win32_get_type (void);
 
 /* Routines from gdkgeometry-win32.c */
-void
-_gdk_window_init_position (GdkWindow *window);
-void
-_gdk_window_move_resize_child (GdkWindow *window,
-			       gint       x,
-			       gint       y,
-			       gint       width,
-			       gint       height);
+void _gdk_window_init_position     (GdkWindow *window);
+void _gdk_window_move_resize_child (GdkWindow *window,
+				    gint       x,
+				    gint       y,
+				    gint       width,
+				    gint       height);
 void _gdk_window_process_expose    (GdkWindow     *window,
                                     gulong         serial,
                                     GdkRectangle  *area);
@@ -351,35 +320,59 @@ void _gdk_win32_draw_tiles (GdkDrawable *drawable,
 void _gdk_win32_selection_init (void);
 void _gdk_win32_dnd_exit (void);
 
-void	 gdk_win32_handle_table_insert    (HANDLE   *handle,
-					   gpointer data);
-void	 gdk_win32_handle_table_remove    (HANDLE handle);
+void	 gdk_win32_handle_table_insert  (HANDLE   *handle,
+					 gpointer data);
+void	 gdk_win32_handle_table_remove  (HANDLE handle);
 
-GdkGC *  _gdk_win32_gc_new       (GdkDrawable        *drawable,
-				  GdkGCValues        *values,
-				  GdkGCValuesMask     values_mask);
+GdkGC    *_gdk_win32_gc_new             (GdkDrawable        *drawable,
+					 GdkGCValues        *values,
+					 GdkGCValuesMask     values_mask);
 
-GdkImage* _gdk_win32_get_image (GdkDrawable    *drawable,
-				gint            x,
-				gint            y,
-				gint            width,
-				gint            height);
+GdkImage *_gdk_win32_get_image 		(GdkDrawable *drawable,
+					 gint         x,
+					 gint         y,
+					 gint         width,
+					 gint         height);
 
-GdkImage *_gdk_win32_copy_to_image       (GdkDrawable *drawable,
-					  GdkImage    *image,
-					  gint         src_x,
-					  gint         src_y,
-					  gint         dest_x,
-					  gint         dest_y,
-					  gint         width,
-					  gint         height);
+GdkImage *_gdk_win32_copy_to_image      (GdkDrawable *drawable,
+					 GdkImage    *image,
+					 gint         src_x,
+					 gint         src_y,
+					 gint         dest_x,
+					 gint         dest_y,
+					 gint         width,
+					 gint         height);
 
-COLORREF _gdk_win32_colormap_color       (GdkColormap *colormap,
-				          gulong       pixel);
+GdkPixmap *_gdk_win32_pixmap_new 	(GdkWindow *window,
+				 	 GdkVisual *visual,
+				 	 gint       width,
+				 	 gint       height,
+				 	 gint       depth);
 
-HRGN	 BitmapToRegion                  (HBITMAP hBmp);
+GdkImage *_gdk_win32_setup_pixmap_image (GdkPixmap *pixmap,
+					 GdkWindow *window,
+					 gint       width,
+					 gint       height,
+					 gint       depth,
+					 guchar    *bits);
 
-gchar   *gdk_font_full_name_get          (GdkFont *font);
+void      _gdk_win32_blit               (gboolean              use_fg_bg,
+					 GdkDrawableImplWin32 *drawable,
+					 GdkGC       	       *gc,
+					 GdkDrawable   	       *src,
+					 gint        	    	xsrc,
+					 gint        	    	ysrc,
+					 gint        	    	xdest,
+					 gint        	    	ydest,
+					 gint        	    	width,
+					 gint        	    	height);
+
+COLORREF  _gdk_win32_colormap_color     (GdkColormap *colormap,
+				         gulong       pixel);
+
+HRGN	  _gdk_win32_bitmap_to_region   (GdkPixmap   *bitmap);
+
+gchar     *gdk_font_full_name_get         (GdkFont     *font);
 
 void    _gdk_selection_property_store (GdkWindow *owner,
                                        GdkAtom    type,
@@ -473,7 +466,8 @@ extern DWORD		 windows_version;
 /* Options */
 extern gboolean		 gdk_input_ignore_wintab;
 extern gboolean		 gdk_event_func_from_window_proc;
+extern gint		 gdk_max_colors;
 
-#define IMAGE_PRIVATE_DATA(image) ((GdkImagePrivateWin32 *) GDK_IMAGE (image)->windowing_data)
+#define GDK_WIN32_COLORMAP_DATA(cmap) ((GdkColormapPrivateWin32 *) GDK_COLORMAP (cmap)->windowing_data)
 
 #endif /* __GDK_PRIVATE_WIN32_H__ */

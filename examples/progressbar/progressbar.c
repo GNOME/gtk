@@ -1,4 +1,3 @@
-/* example-start progressbar progressbar.c */
 
 #include <gtk/gtk.h>
 
@@ -29,7 +28,7 @@ gint progress_timeout( gpointer data )
 
     /* As this is a timeout function, return TRUE so that it
      * continues to get called */
-    return(TRUE);
+    return TRUE;
 } 
 
 /* Callback that toggles the text display within the progress
@@ -97,9 +96,9 @@ int main( int   argc,
     pdata = g_malloc( sizeof(ProgressData) );
   
     pdata->window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_policy (GTK_WINDOW (pdata->window), FALSE, FALSE, TRUE);
+    gtk_window_set_resizable (GTK_WINDOW (pdata->window), TRUE);
 
-    gtk_signal_connect (GTK_OBJECT (pdata->window), "destroy",
+    g_signal_connect (GTK_OBJECT (pdata->window), "destroy",
 	                GTK_SIGNAL_FUNC (destroy_progress),
                         pdata);
     gtk_window_set_title (GTK_WINDOW (pdata->window), "GtkProgressBar");
@@ -150,7 +149,7 @@ int main( int   argc,
     gtk_table_attach (GTK_TABLE (table), check, 0, 1, 0, 1,
                       GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
                       5, 5);
-    gtk_signal_connect (GTK_OBJECT (check), "clicked",
+    g_signal_connect (GTK_OBJECT (check), "clicked",
                         GTK_SIGNAL_FUNC (toggle_show_text),
                         pdata);
     gtk_widget_show(check);
@@ -160,7 +159,7 @@ int main( int   argc,
     gtk_table_attach (GTK_TABLE (table), check, 0, 1, 1, 2,
                       GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
                       5, 5);
-    gtk_signal_connect (GTK_OBJECT (check), "clicked",
+    g_signal_connect (GTK_OBJECT (check), "clicked",
                         GTK_SIGNAL_FUNC (toggle_activity_mode),
                         pdata);
     gtk_widget_show(check);
@@ -176,19 +175,19 @@ int main( int   argc,
     gtk_table_attach (GTK_TABLE (table), button, 2, 3, 0, 1,
                       GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
                       5, 5);
-    gtk_signal_connect (GTK_OBJECT (button), "clicked",
+    g_signal_connect (GTK_OBJECT (button), "clicked",
                         GTK_SIGNAL_FUNC (set_continuous_mode),
                         pdata);
     gtk_widget_show (button);
 
     /* Add a radio button to select discrete display mode */
     button = gtk_radio_button_new_with_label(
-               gtk_radio_button_group (GTK_RADIO_BUTTON (button)),
+               gtk_radio_button_get_group (GTK_RADIO_BUTTON (button)),
                "Discrete");
     gtk_table_attach (GTK_TABLE (table), button, 2, 3, 1, 2,
                       GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
                       5, 5);
-    gtk_signal_connect (GTK_OBJECT (button), "clicked",
+    g_signal_connect (GTK_OBJECT (button), "clicked",
                         GTK_SIGNAL_FUNC (set_discrete_mode),
                         pdata);
     gtk_widget_show (button);
@@ -199,7 +198,7 @@ int main( int   argc,
 
     /* Add a button to exit the program */
     button = gtk_button_new_with_label ("close");
-    gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+    g_signal_connect_swapped (GTK_OBJECT (button), "clicked",
                                (GtkSignalFunc) gtk_widget_destroy,
                                GTK_OBJECT (pdata->window));
     gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
@@ -216,6 +215,5 @@ int main( int   argc,
 
     gtk_main ();
     
-    return(0);
+    return 0;
 }
-/* example-end */

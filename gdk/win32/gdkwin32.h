@@ -47,12 +47,8 @@ G_BEGIN_DECLS
 #define GDK_ROOT_PARENT()             ((GdkWindow *) _gdk_parent_root)
 #define GDK_WINDOW_HWND(win)          (GDK_DRAWABLE_IMPL_WIN32(((GdkWindowObject *)win)->impl)->handle)
 #define GDK_PIXMAP_HBITMAP(pixmap)    (GDK_DRAWABLE_IMPL_WIN32(((GdkPixmapObject *)pixmap)->impl)->handle)
-#define GDK_DRAWABLE_HANDLE(win)      (GDK_IS_WINDOW (win) ? (GDK_WINDOW_HWND (win)) : (GDK_PIXMAP_HBITMAP (win)))
-#define GDK_IMAGE_HBM(image)          (((GdkImagePrivateWin32 *) GDK_IMAGE (image)->windowing_data)->hbm)
-#define GDK_COLORMAP_PRIVATE_DATA(cmap) ((GdkColormapPrivateWin32 *) GDK_COLORMAP (cmap)->windowing_data)
-#define GDK_COLORMAP_WIN32COLORMAP(cmap) (((GdkColormapPrivateWin32 *)GDK_COLORMAP (cmap)->windowing_data)->xcolormap)
-#define GDK_VISUAL_XVISUAL(vis)       (((GdkVisualPrivate *) vis)->xvisual)
-
+#define GDK_DRAWABLE_IMPL_WIN32_HANDLE(d) (((GdkDrawableImplWin32 *) d)->handle)
+#define GDK_DRAWABLE_HANDLE(win)      (GDK_IS_WINDOW (win) ? GDK_WINDOW_HWND (win) : (GDK_IS_PIXMAP (win) ? GDK_PIXMAP_HBITMAP (win) : (GDK_IS_DRAWABLE_IMPL_WIN32 (win) ? GDK_DRAWABLE_IMPL_WIN32_HANDLE (win) : 0)))
 #else
 /* definition for exported 'internals' go here */
 #define GDK_WINDOW_HWND(d) (gdk_win32_drawable_get_handle (d))
@@ -65,8 +61,8 @@ G_BEGIN_DECLS
 /* Return the Gdk* for a particular HANDLE */
 gpointer      gdk_win32_handle_table_lookup (GdkNativeWindow handle);
 
-/* Translate from drawable to windows handle */
-HWND          gdk_win32_drawable_get_handle (GdkDrawable *drawable);
+/* Translate from drawable to Windows handle */
+HGDIOBJ       gdk_win32_drawable_get_handle (GdkDrawable *drawable);
 
 /* Return a device context to draw in a drawable, given a GDK GC,
  * and a mask indicating which GC values might be used (for efficiency,

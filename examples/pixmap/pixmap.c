@@ -1,4 +1,3 @@
-/* example-start pixmap pixmap.c */
 
 #include <gtk/gtk.h>
 
@@ -87,4 +86,3 @@ int main( int   argc,
           
     return 0;
 }
-/* example-end */

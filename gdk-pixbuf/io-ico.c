@@ -453,6 +453,13 @@ static void DecodeHeader(guchar *Data, gint Bytes,
 		    gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8,
 				   State->Header.width,
 				   State->Header.height);
+		if (!State->pixbuf) {
+			g_set_error (error,
+				     GDK_PIXBUF_ERROR,
+				     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+				     _("Not enough memory to load icon"));
+			return;
+		}
 
 		if (State->prepared_func != NULL)
 			/* Notify the client that we are ready to go */

@@ -1,8 +1,14 @@
 
 CC = gcc
 
+CFLAGS = -Wall			 	\
+	-DG_DISABLE_DEPRECATED 	 	\
+	-DGDK_DISABLE_DEPRECATED 	\
+	-DGDK_PIXBUF_DISABLE_DEPRECATED \
+	-DGTK_DISABLE_DEPRECATED
+
 statusbar: statusbar.c 
-	$(CC) `pkg-config --cflags gtk+-2.0`  statusbar.c -o statusbar `pkg-config --libs gtk+-2.0`
+	$(CC) statusbar.c -o statusbar $(CFLAGS) `pkg-config gtk+-2.0 --cflags --libs`
 
 clean: 
 	rm -f *.o statusbar

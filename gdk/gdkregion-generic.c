@@ -1345,7 +1345,8 @@ miSubtractO (GdkRegion    *pReg,
 	      assert(pReg->numRects<=pReg->size);
 	    }
 	  r1++;
-	  x1 = r1->x1;
+	  if (r1 != r1End)
+	    x1 = r1->x1;
 	}
     }
 

@@ -984,20 +984,31 @@ gdk_dropfiles_filter (GdkXEvent *xev,
       result = g_string_new (NULL);
       for (i = 0; i < nfiles; i++)
 	{
-	  g_string_append (result, "file:");
+	  gchar *uri;
+
 	  DragQueryFile (hdrop, i, fileName, MAX_PATH);
 
 	  /* Resolve shortcuts */
 	  if (resolve_link (msg->hwnd, fileName, linkedFile, NULL))
 	    {
-	      g_string_append (result, linkedFile);
-	      GDK_NOTE (DND, g_print ("...%s link to %s\n",
-				      fileName, linkedFile));
+	      uri = g_filename_to_uri (linkedFile, NULL, NULL);
+	      if (uri != NULL)
+		{
+		  g_string_append (result, uri);
+		  GDK_NOTE (DND, g_print ("...%s link to %s: %s\n",
+					  fileName, linkedFile, uri));
+		  g_free (uri);
+		}
 	    }
 	  else
 	    {
-	      g_string_append (result, fileName);
-	      GDK_NOTE (DND, g_print ("...%s\n", fileName));
+	      uri = g_filename_to_uri (fileName, NULL, NULL);
+	      if (uri != NULL)
+		{
+		  g_string_append (result, uri);
+		  GDK_NOTE (DND, g_print ("...%s: %s\n", fileName, uri));
+		  g_free (uri);
+		}
 	    }
 	  g_string_append (result, "\015\012");
 	}

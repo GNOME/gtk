@@ -50,7 +50,7 @@ static void gtk_tooltips_class_init        (GtkTooltipsClass *klass);
 static void gtk_tooltips_init              (GtkTooltips      *tooltips);
 static void gtk_tooltips_destroy           (GtkObject        *object);
 
-static gint gtk_tooltips_event_handler     (GtkWidget   *widget,
+static void gtk_tooltips_event_handler     (GtkWidget   *widget,
                                             GdkEvent    *event);
 static void gtk_tooltips_widget_unmap      (GtkWidget   *widget,
                                             gpointer     data);
@@ -62,6 +62,8 @@ static gint gtk_tooltips_timeout           (gpointer     data);
 
 static gint gtk_tooltips_paint_window      (GtkTooltips *tooltips);
 static void gtk_tooltips_draw_tips         (GtkTooltips *tooltips);
+
+static gboolean get_keyboard_mode          (GtkWidget   *widget);
 
 static GtkObjectClass *parent_class;
 static const gchar  *tooltips_data_key = "_GtkTooltipsData";
@@ -241,27 +243,11 @@ gtk_tooltips_set_tip (GtkTooltips *tooltips,
 		      const gchar *tip_private)
 {
   GtkTooltipsData *tooltipsdata;
-  GdkScreen	  *screen;
 
   g_return_if_fail (GTK_IS_TOOLTIPS (tooltips));
   g_return_if_fail (widget != NULL);
 
   tooltipsdata = gtk_tooltips_data_get (widget);
-
-  screen = gtk_widget_get_screen (widget);
-  
-  if (!g_object_get_data (G_OBJECT (screen),"gtk-tooltips-have-rc"))
-    {
-      gtk_rc_parse_string_for_screen (screen,
-	    "style \"gtk-default-tooltips-style\" {\n"
-	    "  bg[NORMAL] = \"#ffffc0\"\n"
-	    "  fg[NORMAL] = \"#000000\"\n"
-	    "}\n"
-	    "\n"
-    "widget \"gtk-tooltips*\" style : gtk \"gtk-default-tooltips-style\"\n");
-      g_object_set_data (G_OBJECT (screen), "gtk-tooltips-have-rc", 
-			 widget);
-    }
 
   if (!tip_text)
     {
@@ -299,7 +285,7 @@ gtk_tooltips_set_tip (GtkTooltips *tooltips,
 
       tooltips->tips_data_list = g_list_append (tooltips->tips_data_list,
                                                 tooltipsdata);
-      gtk_signal_connect_after (GTK_OBJECT (widget), "event",
+      gtk_signal_connect_after (GTK_OBJECT (widget), "event-after",
                                (GtkSignalFunc) gtk_tooltips_event_handler,
                                tooltipsdata);
 
@@ -332,13 +318,14 @@ gtk_tooltips_paint_window (GtkTooltips *tooltips)
 }
 
 static void
-gtk_tooltips_draw_tips (GtkTooltips * tooltips)
+gtk_tooltips_draw_tips (GtkTooltips *tooltips)
 {
   GtkRequisition requisition;
   GtkWidget *widget;
   GtkStyle *style;
-  gint x, y, w, h, screen_w, screen_h;
+  gint x, y, w, h, scr_w, scr_h;
   GtkTooltipsData *data;
+  gboolean keyboard_mode;
   GdkScreen *screen;
 
   if (!tooltips->tip_window)
@@ -350,10 +337,13 @@ gtk_tooltips_draw_tips (GtkTooltips * tooltips)
   style = tooltips->tip_window->style;
   
   widget = tooltips->active_tips_data->widget;
+  
+  keyboard_mode = get_keyboard_mode (widget);
+  
   screen = gtk_widget_get_screen (widget);
 
-  screen_w = gdk_screen_get_width (screen);
-  screen_h = gdk_screen_get_height (screen);
+  scr_w = gdk_screen_get_width (screen);
+  scr_h = gdk_screen_get_height (screen);
 
   data = tooltips->active_tips_data;
 
@@ -363,20 +353,27 @@ gtk_tooltips_draw_tips (GtkTooltips * tooltips)
   w = requisition.width;
   h = requisition.height;
 
-  gdk_window_get_pointer (gdk_screen_get_root_window (screen),
-			  &x, NULL, NULL);
-  gdk_window_get_origin (widget->window, NULL, &y);
+  gdk_window_get_origin (widget->window, &x, &y);
   if (GTK_WIDGET_NO_WINDOW (widget))
-    y += widget->allocation.y;
+    {
+      x += widget->allocation.x;
+      y += widget->allocation.y;
+    }
+
+  x += widget->allocation.width / 2;
+    
+  if (!keyboard_mode)
+    gdk_window_get_pointer (gdk_screen_get_root_window (screen),
+			    &x, NULL, NULL);
 
   x -= (w / 2 + 4);
 
-  if ((x + w) > screen_w)
-    x -= (x + w) - screen_w;
+  if ((x + w) > scr_w)
+    x -= (x + w) - scr_w;
   else if (x < 0)
     x = 0;
 
-  if ((y + h + widget->allocation.height + 4) > screen_h)
+  if ((y + h + widget->allocation.height + 4) > scr_h)
     y = y - h - 4;
   else
     y = y + widget->allocation.height + 4;
@@ -443,6 +440,35 @@ gtk_tooltips_set_active_widget (GtkTooltips *tooltips,
     }
 }
 
+static void
+gtk_tooltips_show_tip (GtkWidget *widget)
+{
+  GtkTooltipsData *tooltipsdata;
+
+  tooltipsdata = gtk_tooltips_data_get (widget);
+
+  if (tooltipsdata &&
+      (!tooltipsdata->tooltips->active_tips_data ||
+       tooltipsdata->tooltips->active_tips_data->widget != widget))
+    {
+      gtk_tooltips_set_active_widget (tooltipsdata->tooltips, widget);
+      gtk_tooltips_draw_tips (tooltipsdata->tooltips);
+    }
+}
+
+static void
+gtk_tooltips_hide_tip (GtkWidget *widget)
+{
+  GtkTooltipsData *tooltipsdata;
+
+  tooltipsdata = gtk_tooltips_data_get (widget);
+
+  if (tooltipsdata &&
+      (tooltipsdata->tooltips->active_tips_data &&
+       tooltipsdata->tooltips->active_tips_data->widget == widget))
+    gtk_tooltips_set_active_widget (tooltipsdata->tooltips, NULL);
+}
+
 static gboolean
 gtk_tooltips_recently_shown (GtkTooltips *tooltips)
 {
@@ -455,70 +481,133 @@ gtk_tooltips_recently_shown (GtkTooltips *tooltips)
   return (msec < STICKY_REVERT_DELAY);
 }
 
-static gint
+static gboolean
+get_keyboard_mode (GtkWidget *widget)
+{
+  GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
+  if (GTK_IS_WINDOW (toplevel))
+    return GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (toplevel), "gtk-tooltips-keyboard-mode"));
+  else
+    return FALSE;
+}
+
+static void
+start_keyboard_mode (GtkWidget *widget)
+{
+  GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
+  if (GTK_IS_WINDOW (toplevel))
+    {
+      GtkWidget *focus = GTK_WINDOW (toplevel)->focus_widget;
+      if (focus)
+	gtk_tooltips_show_tip (focus);
+      
+      g_object_set_data (G_OBJECT (toplevel), "gtk-tooltips-keyboard-mode", GUINT_TO_POINTER (TRUE));
+    }
+}
+
+static void
+stop_keyboard_mode (GtkWidget *widget)
+{
+  GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
+  if (GTK_IS_WINDOW (toplevel))
+    {
+      GtkWidget *focus = GTK_WINDOW (toplevel)->focus_widget;
+      if (focus)
+	gtk_tooltips_hide_tip (focus);
+      
+      g_object_set_data (G_OBJECT (toplevel), "gtk-tooltips-keyboard-mode", GUINT_TO_POINTER (FALSE));
+    }
+}
+
+static void
 gtk_tooltips_event_handler (GtkWidget *widget,
                             GdkEvent  *event)
 {
   GtkTooltips *tooltips;
   GtkTooltipsData *old_tips_data;
   GtkWidget *event_widget;
+  gboolean keyboard_mode = get_keyboard_mode (widget);
 
   if ((event->type == GDK_LEAVE_NOTIFY || event->type == GDK_ENTER_NOTIFY) &&
       event->crossing.detail == GDK_NOTIFY_INFERIOR)
-    return FALSE;
+    return;
 
-  event_widget = gtk_get_event_widget (event);
-  if (event_widget != widget)
-    return FALSE;
-  
   old_tips_data = gtk_tooltips_data_get (widget);
   tooltips = old_tips_data->tooltips;
 
-  switch (event->type)
+  if (keyboard_mode)
     {
-    case GDK_MOTION_NOTIFY:
-    case GDK_EXPOSE:
-      /* do nothing */
-      break;
-      
-    case GDK_ENTER_NOTIFY:
-      old_tips_data = tooltips->active_tips_data;
-      if (tooltips->enabled &&
-	  (!old_tips_data || old_tips_data->widget != widget))
+      switch (event->type)
 	{
-	  guint delay;
-	  
-	  gtk_tooltips_set_active_widget (tooltips, widget);
-	  
-	  if (tooltips->use_sticky_delay  &&
-	      gtk_tooltips_recently_shown (tooltips))
-	    delay = STICKY_DELAY;
+	case GDK_FOCUS_CHANGE:
+	  if (event->focus_change.in)
+	    gtk_tooltips_show_tip (widget);
 	  else
-	    delay = tooltips->delay;
-	  tooltips->timer_tag = gtk_timeout_add (delay,
-						 gtk_tooltips_timeout,
-						 (gpointer) tooltips);
+	    gtk_tooltips_hide_tip (widget);
+	  break;
+	default:
+	  break;
 	}
-      break;
-
-    case GDK_LEAVE_NOTIFY:
-      {
-	gboolean use_sticky_delay;
-
-	use_sticky_delay = tooltips->tip_window &&
-		GTK_WIDGET_VISIBLE (tooltips->tip_window);
-	gtk_tooltips_set_active_widget (tooltips, NULL);
-	tooltips->use_sticky_delay = use_sticky_delay;
-      }
-      break;
-      
-    default:
-      gtk_tooltips_set_active_widget (tooltips, NULL);
-      return FALSE;
-      break;
     }
+  else
+    {
+      if (event->type != GDK_KEY_PRESS && event->type != GDK_KEY_RELEASE)
+	{
+	  event_widget = gtk_get_event_widget (event);
+	  if (event_widget != widget)
+	    return;
+	}
+  
+      switch (event->type)
+	{
+	case GDK_MOTION_NOTIFY:
+	case GDK_EXPOSE:
+	  /* do nothing */
+	  break;
+	  
+	case GDK_ENTER_NOTIFY:
+	  old_tips_data = tooltips->active_tips_data;
+	  if (tooltips->enabled &&
+	      (!old_tips_data || old_tips_data->widget != widget))
+	    {
+	      guint delay;
+	      
+	      gtk_tooltips_set_active_widget (tooltips, widget);
+	      
+	      if (tooltips->use_sticky_delay  &&
+	      gtk_tooltips_recently_shown (tooltips))
+		delay = STICKY_DELAY;
+	      else
+		delay = tooltips->delay;
+	      tooltips->timer_tag = gtk_timeout_add (delay,
+						     gtk_tooltips_timeout,
+						     (gpointer) tooltips);
+	    }
+	  break;
+	  
+	case GDK_LEAVE_NOTIFY:
+	  {
+	    gboolean use_sticky_delay;
+	    
+	    use_sticky_delay = tooltips->tip_window &&
+	      GTK_WIDGET_VISIBLE (tooltips->tip_window);
+	    gtk_tooltips_set_active_widget (tooltips, NULL);
+	    tooltips->use_sticky_delay = use_sticky_delay;
+	  }
+	  break;
 
-  return FALSE;
+	case GDK_BUTTON_PRESS:
+	case GDK_BUTTON_RELEASE:
+	case GDK_KEY_PRESS:
+	case GDK_KEY_RELEASE:
+	case GDK_PROXIMITY_IN:
+	case GDK_SCROLL:
+	  gtk_tooltips_set_active_widget (tooltips, NULL);
+	  break;
+	default:
+	  break;
+	}
+    }
 }
 
 static void
@@ -546,25 +635,12 @@ gtk_tooltips_widget_remove (GtkWidget *widget,
   gtk_tooltips_destroy_data (tooltipsdata);
 }
 
-gboolean
-_gtk_tooltips_show_tip (GtkWidget *widget)
+void
+_gtk_tooltips_toggle_keyboard_mode (GtkWidget *widget)
 {
-  /* Showing the tip from the keyboard */
-
-  /* FIXME this function is completely broken right now,
-   * popdown doesn't occur when it should.
-   */
-  
-  GtkTooltipsData *tooltipsdata;
-
-  tooltipsdata = gtk_tooltips_data_get (widget);
-
-  if (tooltipsdata == NULL)
-    return FALSE;
-
-  gtk_tooltips_set_active_widget (tooltipsdata->tooltips,
-                                  widget);
-
-  gtk_tooltips_timeout (tooltipsdata->tooltips);
-  return TRUE;
+  if (get_keyboard_mode (widget))
+    stop_keyboard_mode (widget);
+  else
+    start_keyboard_mode (widget);
 }
+

@@ -1,5 +1,6 @@
 /* GDK - The GIMP Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+ * Copyright (C) 1998-2002 Tor Lillqvist
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -33,7 +34,7 @@ static void  gdk_visual_decompose_mask (gulong     mask,
 					gint      *shift,
 					gint      *prec);
 
-static GdkVisualPrivate *system_visual = NULL;
+static GdkVisual *system_visual = NULL;
 
 static gint available_depths[1];
 
@@ -51,7 +52,6 @@ gdk_visual_class_init (GObjectClass *class)
   class->finalize = gdk_visual_finalize;
 }
 
-
 GType
 gdk_visual_get_type (void)
 {
@@ -67,7 +67,7 @@ gdk_visual_get_type (void)
         (GClassInitFunc) gdk_visual_class_init,
         NULL,           /* class_finalize */
         NULL,           /* class_data */
-        sizeof (GdkVisualPrivate),
+        sizeof (GdkVisual),
         0,              /* n_preallocs */
         (GInstanceInitFunc) NULL,
       };
@@ -94,44 +94,83 @@ _gdk_visual_init (void)
   } bmi;
   HBITMAP hbm;
 
-  int rastercaps, numcolors, sizepalette, bitspixel;
+  const gint rastercaps = GetDeviceCaps (gdk_display_hdc, RASTERCAPS);
+  gint bitspixel = GetDeviceCaps (gdk_display_hdc, BITSPIXEL);
+  gint map_entries = 0;
 
-  system_visual = g_new (GdkVisualPrivate, 1);
-
-  bitspixel = GetDeviceCaps (gdk_display_hdc, BITSPIXEL);
-  rastercaps = GetDeviceCaps (gdk_display_hdc, RASTERCAPS);
-  system_visual->xvisual = g_new (Visual, 1);
-  system_visual->xvisual->visualid = 0;
-  system_visual->xvisual->bitspixel = bitspixel;
+  system_visual = g_object_new (GDK_TYPE_VISUAL, NULL);
 
   if (rastercaps & RC_PALETTE)
     {
-      if (!getenv ("GDK_WIN32_ENABLE_BROKEN_PSEUDOCOLOR_VISUAL"))
-	g_error ("Palettized display (%d-colour) mode not supported on Windows.",
-		 GetDeviceCaps (gdk_display_hdc, SIZEPALETTE));
-      system_visual->visual.type = GDK_VISUAL_PSEUDO_COLOR;
-      numcolors = GetDeviceCaps (gdk_display_hdc, NUMCOLORS);
-      sizepalette = GetDeviceCaps (gdk_display_hdc, SIZEPALETTE);
-      system_visual->xvisual->map_entries = sizepalette;
+      const int sizepalette = GetDeviceCaps (gdk_display_hdc, SIZEPALETTE);
+      const int numcolors = GetDeviceCaps (gdk_display_hdc, NUMCOLORS);
+      gchar *max_colors = getenv ("GDK_WIN32_MAX_COLORS");
+      system_visual->type = GDK_VISUAL_PSEUDO_COLOR;
+
+      GDK_NOTE (COLORMAP, g_print ("BITSPIXEL=%d NUMCOLORS=%d SIZEPALETTE=%d\n",
+				   bitspixel, numcolors, sizepalette));
+      g_assert (sizepalette == 256);
+
+      if (max_colors != NULL)
+	gdk_max_colors = atoi (max_colors);
+      
+      map_entries = gdk_max_colors;
+
+      if (map_entries >= 16 && map_entries < sizepalette)
+	{
+	  /* The calls to gdk_rgb_set_min_colors() here have knowledge
+	   * of what color cubes gdk_rgb_do_colormaps() will try, and
+	   * of the static system palette colors... XXX
+	   */
+	  if (map_entries < 32)
+	    {
+	      map_entries = 16;
+	      system_visual->type = GDK_VISUAL_STATIC_COLOR;
+	      bitspixel = 4;
+	      gdk_rgb_set_min_colors (2*2*2);
+	    }
+	  else if (map_entries < 64)
+	    {
+	      map_entries = 32;
+	      bitspixel = 5;
+	      gdk_rgb_set_min_colors (3*3*3);
+	    }
+	  else if (map_entries < 128)
+	    {
+	      map_entries = 64;
+	      bitspixel = 6;
+	      gdk_rgb_set_min_colors (3*3*3);
+	    }
+	  else if (map_entries < 256)
+	    {
+	      map_entries = 128;
+	      bitspixel = 7;
+	      gdk_rgb_set_min_colors (5*5*4);
+	    }
+	  else
+	    g_assert_not_reached ();
+	}
+      else
+	map_entries = sizepalette;
     }
   else if (bitspixel == 1)
     {
-      system_visual->visual.type = GDK_VISUAL_STATIC_GRAY;
-      system_visual->xvisual->map_entries = 2;
+      system_visual->type = GDK_VISUAL_STATIC_GRAY;
+      map_entries = 2;
     }
   else if (bitspixel == 4)
     {
-      system_visual->visual.type = GDK_VISUAL_STATIC_COLOR;
-      system_visual->xvisual->map_entries = 16;
+      system_visual->type = GDK_VISUAL_STATIC_COLOR;
+      map_entries = 16;
     }
   else if (bitspixel == 8)
     {
-      system_visual->visual.type = GDK_VISUAL_STATIC_COLOR;
-      system_visual->xvisual->map_entries = 256;
+      system_visual->type = GDK_VISUAL_STATIC_COLOR;
+      map_entries = 256;
     }
   else if (bitspixel == 16)
     {
-      system_visual->visual.type = GDK_VISUAL_TRUE_COLOR;
+      system_visual->type = GDK_VISUAL_TRUE_COLOR;
 #if 1
       /* This code by Mike Enright,
        * see http://www.users.cts.com/sd/m/menright/display.html
@@ -157,9 +196,9 @@ _gdk_visual_init (void)
 	    {
 	      /* It's 555 */
 	      bitspixel = 15;
-	      system_visual->visual.red_mask   = 0x00007C00;
-	      system_visual->visual.green_mask = 0x000003E0;
-	      system_visual->visual.blue_mask  = 0x0000001F;
+	      system_visual->red_mask   = 0x00007C00;
+	      system_visual->green_mask = 0x000003E0;
+	      system_visual->blue_mask  = 0x0000001F;
 	    }
 	  else
 	    {
@@ -178,75 +217,74 @@ _gdk_visual_init (void)
 	      allmasks/=2;
 	    }
 	  bitspixel = k;
-	  system_visual->visual.red_mask = bmi.u.fields[0];
-	  system_visual->visual.green_mask = bmi.u.fields[1];
-	  system_visual->visual.blue_mask  = bmi.u.fields[2];
+	  system_visual->red_mask = bmi.u.fields[0];
+	  system_visual->green_mask = bmi.u.fields[1];
+	  system_visual->blue_mask  = bmi.u.fields[2];
 	}
 #else
       /* Old, incorrect (but still working) code. */
 #if 0
-      system_visual->visual.red_mask   = 0x0000F800;
-      system_visual->visual.green_mask = 0x000007E0;
-      system_visual->visual.blue_mask  = 0x0000001F;
+      system_visual->red_mask   = 0x0000F800;
+      system_visual->green_mask = 0x000007E0;
+      system_visual->blue_mask  = 0x0000001F;
 #else
-      system_visual->visual.red_mask   = 0x00007C00;
-      system_visual->visual.green_mask = 0x000003E0;
-      system_visual->visual.blue_mask  = 0x0000001F;
+      system_visual->red_mask   = 0x00007C00;
+      system_visual->green_mask = 0x000003E0;
+      system_visual->blue_mask  = 0x0000001F;
 #endif
 #endif
     }
   else if (bitspixel == 24 || bitspixel == 32)
     {
       bitspixel = 24;
-      system_visual->visual.type = GDK_VISUAL_TRUE_COLOR;
-      system_visual->visual.red_mask   = 0x00FF0000;
-      system_visual->visual.green_mask = 0x0000FF00;
-      system_visual->visual.blue_mask  = 0x000000FF;
+      system_visual->type = GDK_VISUAL_TRUE_COLOR;
+      system_visual->red_mask   = 0x00FF0000;
+      system_visual->green_mask = 0x0000FF00;
+      system_visual->blue_mask  = 0x000000FF;
     }
   else
     g_error ("_gdk_visual_init: unsupported BITSPIXEL: %d\n", bitspixel);
 
-  system_visual->visual.depth = bitspixel;
-  system_visual->visual.byte_order = GDK_LSB_FIRST;
-  system_visual->visual.bits_per_rgb = 42; /* Not used? */
+  system_visual->depth = bitspixel;
+  system_visual->byte_order = GDK_LSB_FIRST;
+  system_visual->bits_per_rgb = 42; /* Not used? */
 
-  if ((system_visual->visual.type == GDK_VISUAL_TRUE_COLOR) ||
-      (system_visual->visual.type == GDK_VISUAL_DIRECT_COLOR))
+  if ((system_visual->type == GDK_VISUAL_TRUE_COLOR) ||
+      (system_visual->type == GDK_VISUAL_DIRECT_COLOR))
     {
-      gdk_visual_decompose_mask (system_visual->visual.red_mask,
-				 &system_visual->visual.red_shift,
-				 &system_visual->visual.red_prec);
+      gdk_visual_decompose_mask (system_visual->red_mask,
+				 &system_visual->red_shift,
+				 &system_visual->red_prec);
 
-      gdk_visual_decompose_mask (system_visual->visual.green_mask,
-				 &system_visual->visual.green_shift,
-				 &system_visual->visual.green_prec);
+      gdk_visual_decompose_mask (system_visual->green_mask,
+				 &system_visual->green_shift,
+				 &system_visual->green_prec);
 
-      gdk_visual_decompose_mask (system_visual->visual.blue_mask,
-				 &system_visual->visual.blue_shift,
-				 &system_visual->visual.blue_prec);
-      system_visual->xvisual->map_entries =
-	1 << (MAX (system_visual->visual.red_prec,
-		   MAX (system_visual->visual.green_prec,
-			system_visual->visual.blue_prec)));
+      gdk_visual_decompose_mask (system_visual->blue_mask,
+				 &system_visual->blue_shift,
+				 &system_visual->blue_prec);
+      map_entries = 1 << (MAX (system_visual->red_prec,
+			       MAX (system_visual->green_prec,
+				    system_visual->blue_prec)));
     }
   else
     {
-      system_visual->visual.red_mask = 0;
-      system_visual->visual.red_shift = 0;
-      system_visual->visual.red_prec = 0;
+      system_visual->red_mask = 0;
+      system_visual->red_shift = 0;
+      system_visual->red_prec = 0;
 
-      system_visual->visual.green_mask = 0;
-      system_visual->visual.green_shift = 0;
-      system_visual->visual.green_prec = 0;
+      system_visual->green_mask = 0;
+      system_visual->green_shift = 0;
+      system_visual->green_prec = 0;
 
-      system_visual->visual.blue_mask = 0;
-      system_visual->visual.blue_shift = 0;
-      system_visual->visual.blue_prec = 0;
+      system_visual->blue_mask = 0;
+      system_visual->blue_shift = 0;
+      system_visual->blue_prec = 0;
     }
-  system_visual->visual.colormap_size = system_visual->xvisual->map_entries;
+  system_visual->colormap_size = map_entries;
 
-  available_depths[0] = system_visual->visual.depth;
-  available_types[0] = system_visual->visual.type;
+  available_depths[0] = system_visual->depth;
+  available_types[0] = system_visual->type;
 }
 
 gint
@@ -276,7 +314,7 @@ gdk_visual_get_best (void)
 GdkVisual*
 gdk_visual_get_best_with_depth (gint depth)
 {
-  if (depth == system_visual->visual.depth)
+  if (depth == system_visual->depth)
     return (GdkVisual*) system_visual;
   else
     return NULL;
@@ -285,8 +323,8 @@ gdk_visual_get_best_with_depth (gint depth)
 GdkVisual*
 gdk_visual_get_best_with_type (GdkVisualType visual_type)
 {
-  if (visual_type == system_visual->visual.type)
-    return (GdkVisual*) system_visual;
+  if (visual_type == system_visual->type)
+    return system_visual;
   else
     return NULL;
 }
@@ -295,9 +333,8 @@ GdkVisual*
 gdk_visual_get_best_with_both (gint          depth,
 			       GdkVisualType visual_type)
 {
-  if ((depth == system_visual->visual.depth) &&
-      (visual_type == system_visual->visual.type))
-    return (GdkVisual*) system_visual;
+  if ((depth == system_visual->depth) && (visual_type == system_visual->type))
+    return system_visual;
   else
     return NULL;
 }
@@ -322,15 +359,6 @@ GList*
 gdk_list_visuals (void)
 {
   return g_list_append (NULL, (gpointer) system_visual);
-}
-
-GdkVisual*
-gdk_visual_lookup (Visual *xvisual)
-{
-  if (system_visual->xvisual == xvisual)
-    return (GdkVisual *) system_visual;
-  else
-    return NULL;
 }
 
 static void

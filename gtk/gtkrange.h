@@ -109,6 +109,8 @@ struct _GtkRangeClass
   gchar *stepper_detail;
 
   void (* value_changed)    (GtkRange     *range);
+  void (* adjust_bounds)    (GtkRange     *range,
+                             gdouble	   new_value);
   
   /* action signals for keybindings */
   void (* move_slider)      (GtkRange     *range,

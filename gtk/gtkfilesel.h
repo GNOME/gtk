@@ -74,7 +74,9 @@ struct _GtkFileSelection
   
   GtkWidget *button_area;
   GtkWidget *action_area;
-  
+
+  GPtrArray *selected_names;
+  gchar     *last_selected;
 };
 
 struct _GtkFileSelectionClass
@@ -100,6 +102,11 @@ void	   gtk_file_selection_complete		  (GtkFileSelection *filesel,
 void       gtk_file_selection_show_fileop_buttons (GtkFileSelection *filesel);
 void       gtk_file_selection_hide_fileop_buttons (GtkFileSelection *filesel);
 
+gchar**    gtk_file_selection_get_selections      (GtkFileSelection *filesel);
+
+void       gtk_file_selection_set_select_multiple (GtkFileSelection *filesel,
+						   gboolean          select_multiple);
+gboolean   gtk_file_selection_get_select_multiple (GtkFileSelection *filesel);
 
 #ifdef __cplusplus
 }
@@ -107,13 +114,3 @@ void       gtk_file_selection_hide_fileop_buttons (GtkFileSelection *filesel);
 
 
 #endif /* __GTK_FILESEL_H__ */
-
-
-
-
-
-
-
-
-
-

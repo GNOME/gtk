@@ -795,7 +795,7 @@ gtk_list_store_set_valist (GtkListStore *list_store,
   gint column;
   gboolean emit_signal = FALSE;
   gboolean maybe_need_sort = FALSE;
-  GtkTreeIterCompareFunc func;
+  GtkTreeIterCompareFunc func = NULL;
 
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
   g_return_if_fail (VALID_ITER (iter, list_store));
@@ -1777,11 +1777,9 @@ gtk_list_store_sort_iter_changed (GtkListStore *list_store,
 	cmp_a = (* func) (GTK_TREE_MODEL (list_store), iter, &tmp_iter, data);
     }
 
-  if (!list->next && cmp_a > 0)
-    new_location++;
-
   if ((!list->next) && (cmp_a > 0))
     {
+      new_location++;
       list->next = G_SLIST (iter->user_data);
       list_store->tail = list->next;
     }

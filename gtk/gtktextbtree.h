@@ -1,6 +1,16 @@
 #ifndef GTK_TEXT_BTREE_H
 #define GTK_TEXT_BTREE_H
 
+#if 0
+#define DEBUG_VALIDATION_AND_SCROLLING
+#endif
+
+#ifdef DEBUG_VALIDATION_AND_SCROLLING
+#define DV(x) (x)
+#else
+#define DV(x)
+#endif
+
 #include <gtk/gtktextbuffer.h>
 #include <gtk/gtktexttag.h>
 #include <gtk/gtktextmark.h>

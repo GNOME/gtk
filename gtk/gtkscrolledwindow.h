@@ -63,6 +63,7 @@ struct _GtkScrolledWindow
   guint hscrollbar_visible     : 1;
   guint vscrollbar_visible     : 1;
   guint window_placement       : 2;
+  guint focus_out              : 1;	/* Flag used by ::move-focus-out implementation */
 
   guint16 shadow_type;
 };
@@ -72,6 +73,20 @@ struct _GtkScrolledWindowClass
   GtkBinClass parent_class;
   
   gint scrollbar_spacing;
+
+  /* Action signals for keybindings. Do not connect to these signals
+   */
+
+  /* Unfortunately, GtkScrollType is deficient in that there is
+   * no horizontal/vertical variants for GTK_SCROLL_START/END,
+   * so we have to add an additional boolean flag.
+   */
+  void (*scroll_child) (GtkScrolledWindow *scrolled_window,
+			GtkScrollType      scroll,
+			gboolean           horizontal);
+
+  void (* move_focus_out) (GtkScrolledWindow *scrolled_window,
+			   GtkDirectionType   direction);
 };
 
 

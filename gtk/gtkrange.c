@@ -46,6 +46,7 @@ enum {
 
 enum {
   VALUE_CHANGED,
+  ADJUST_BOUNDS,
   MOVE_SLIDER,
   LAST_SIGNAL
 };
@@ -244,6 +245,16 @@ gtk_range_class_init (GtkRangeClass *class)
                   _gtk_marshal_NONE__NONE,
                   G_TYPE_NONE, 0);
   
+  signals[ADJUST_BOUNDS] =
+    g_signal_new ("adjust_bounds",
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkRangeClass, adjust_bounds),
+                  NULL, NULL,
+                  _gtk_marshal_VOID__DOUBLE,
+                  G_TYPE_NONE, 1,
+                  G_TYPE_DOUBLE);
+  
   signals[MOVE_SLIDER] =
     g_signal_new ("move_slider",
                   G_TYPE_FROM_CLASS (object_class),
@@ -253,7 +264,6 @@ gtk_range_class_init (GtkRangeClass *class)
                   _gtk_marshal_VOID__ENUM,
                   G_TYPE_NONE, 1,
                   GTK_TYPE_SCROLL_TYPE);
-  
   
   g_object_class_install_property (gobject_class,
                                    PROP_UPDATE_POLICY,
@@ -2149,6 +2159,9 @@ static void
 gtk_range_internal_set_value (GtkRange *range,
                               gdouble   value)
 {
+  /* potentially adjust the bounds _before we clamp */
+  g_signal_emit (G_OBJECT (range), signals[ADJUST_BOUNDS], 0, value);
+
   value = CLAMP (value, range->adjustment->lower,
                  (range->adjustment->upper - range->adjustment->page_size));
 

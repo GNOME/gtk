@@ -1,5 +1,5 @@
-/* example-start selection gettargets.c */
 
+#include <stdlib.h>
 #include <gtk/gtk.h>
 
 void selection_received( GtkWidget        *widget, 
@@ -74,17 +74,17 @@ int main( int   argc,
   gtk_window_set_title (GTK_WINDOW (window), "Event Box");
   gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 
-  gtk_signal_connect (GTK_OBJECT (window), "destroy",
-		      GTK_SIGNAL_FUNC (gtk_exit), NULL);
+  g_signal_connect (GTK_OBJECT (window), "destroy",
+		      GTK_SIGNAL_FUNC (exit), NULL);
 
   /* Create a button the user can click to get targets */
 
   button = gtk_button_new_with_label ("Get Targets");
   gtk_container_add (GTK_CONTAINER (window), button);
 
-  gtk_signal_connect (GTK_OBJECT(button), "clicked",
+  g_signal_connect (GTK_OBJECT(button), "clicked",
 		      GTK_SIGNAL_FUNC (get_targets), NULL);
-  gtk_signal_connect (GTK_OBJECT(button), "selection_received",
+  g_signal_connect (GTK_OBJECT(button), "selection_received",
 		      GTK_SIGNAL_FUNC (selection_received), NULL);
 
   gtk_widget_show (button);
@@ -94,4 +94,3 @@ int main( int   argc,
   
   return 0;
 }
-/* example-end */

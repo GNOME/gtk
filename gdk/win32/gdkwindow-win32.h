@@ -47,7 +47,8 @@ struct _GdkWin32PositionInfo
   gboolean mapped : 1;
   gboolean no_bg : 1;	        /* Set when the window background
 				 * is temporarily unset during resizing
-				 * and scaling */
+				 * and scaling
+				 */
   GdkRectangle clip_rect;	/* visible rectangle of window */
 };
 

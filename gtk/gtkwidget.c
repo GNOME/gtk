@@ -1077,7 +1077,18 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 							     _("Width, in pixels, between focus indicator and the widget 'box'."),
 							     0, G_MAXINT, 1,
 							     G_PARAM_READWRITE));
-
+  gtk_widget_class_install_style_property (klass,
+					   g_param_spec_boxed ("cursor-color",
+							       _("Cursor color"),
+							       _("Color with which to draw insertion cursor"),
+							       GDK_TYPE_COLOR,
+							       G_PARAM_READABLE));
+  gtk_widget_class_install_style_property (klass,
+                                           g_param_spec_float ("cursor-aspect-ratio",
+                                                               _("Cursor line aspect ratio"),
+                                                               _("Aspect ratio with which to draw insertion cursor"),
+                                                               0.0, 1.0, 0.033,
+                                                               G_PARAM_READABLE));
 }
 
 static void
@@ -1698,7 +1709,7 @@ gtk_widget_hide (GtkWidget *widget)
     {
       gtk_widget_ref (widget);
       gtk_signal_emit (GTK_OBJECT (widget), widget_signals[HIDE]);
-      if (!GTK_WIDGET_TOPLEVEL (widget) && GTK_WIDGET_REALIZED (widget))
+      if (!GTK_WIDGET_TOPLEVEL (widget))
 	gtk_widget_queue_resize (widget);
       g_object_notify (G_OBJECT (widget), "visible");
       gtk_widget_unref (widget);
@@ -3403,9 +3414,12 @@ gtk_widget_real_show_help (GtkWidget        *widget,
                            GtkWidgetHelpType help_type)
 {
   if (help_type == GTK_WIDGET_HELP_TOOLTIP)
-     return _gtk_tooltips_show_tip (widget);
+    {
+      _gtk_tooltips_toggle_keyboard_mode (widget);
+      return TRUE;
+    }
   else
-     return FALSE;
+    return FALSE;
 }
 
 static gboolean

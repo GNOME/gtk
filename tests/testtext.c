@@ -1086,7 +1086,7 @@ do_apply_colors (gpointer callback_data,
               gtk_text_iter_forward_char (&next);
               gtk_text_iter_forward_char (&next);
 
-              if (gtk_text_iter_compare (&next, &end) > 0)
+              if (gtk_text_iter_compare (&next, &end) >= 0)
                 {
                   next = end;
                   done = TRUE;

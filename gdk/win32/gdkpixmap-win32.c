@@ -1,6 +1,6 @@
 /* GDK - The GIMP Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
- * Copyright (C) 1998-1999 Tor Lillqvist
+ * Copyright (C) 1998-2002 Tor Lillqvist
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -102,8 +102,8 @@ gdk_pixmap_impl_win32_finalize (GObject *object)
   GdkPixmapImplWin32 *impl = GDK_PIXMAP_IMPL_WIN32 (object);
   GdkPixmap *wrapper = GDK_PIXMAP (GDK_DRAWABLE_IMPL_WIN32 (impl)->wrapper);
 
-  GDK_NOTE (MISC, g_print ("gdk_pixmap_impl_win32_finalize: %#x\n",
-			   (guint) GDK_PIXMAP_HBITMAP (wrapper)));
+  GDK_NOTE (PIXMAP, g_print ("gdk_pixmap_impl_win32_finalize: %p\n",
+			     GDK_PIXMAP_HBITMAP (wrapper)));
 
   if (!DeleteObject (GDK_PIXMAP_HBITMAP (wrapper)))
     WIN32_GDI_FAILED ("DeleteObject");
@@ -125,18 +125,12 @@ gdk_pixmap_impl_win32_get_size (GdkDrawable *drawable,
 }
 
 GdkPixmap*
-gdk_pixmap_new (GdkWindow *window,
-		gint       width,
-		gint       height,
-		gint       depth)
+_gdk_win32_pixmap_new (GdkWindow *window,
+		       GdkVisual *visual,
+		       gint       width,
+		       gint       height,
+		       gint       depth)
 {
-  GdkPixmap *pixmap;
-  GdkDrawableImplWin32 *draw_impl;
-  GdkPixmapImplWin32 *pix_impl;
-  GdkVisual *visual;
-  GdkColormap *cmap = NULL;
-  gint window_depth;
-
   struct {
     BITMAPINFOHEADER bmiHeader;
     union {
@@ -147,26 +141,17 @@ gdk_pixmap_new (GdkWindow *window,
   } bmi;
   UINT iUsage;
   HDC hdc;
-
+  HPALETTE holdpal = NULL;
+  HBITMAP hbitmap;
+  GdkPixmap *pixmap;
+  GdkDrawableImplWin32 *drawable_impl;
+  GdkPixmapImplWin32 *pixmap_impl;
   guchar *bits;
   gint i;
 
   g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), NULL);
   g_return_val_if_fail ((window != NULL) || (depth != -1), NULL);
-#if 1
   g_return_val_if_fail ((width != 0) && (height != 0), NULL);
-#else
-  /* HB: Not The Right Thing to do, but a nice way to debug
-   * the backing store facility without immediate crashes ...
-   */
-  if (width == 0 || height == 0)
-    {
-      g_warning("gdk_pixmap_new: size requested: %ld %ld", width, height);
-      /* testing: where does it crash next? */
-      if (width == 0) width = 1;
-      if (height == 0) height = 1;
-    }
-#endif
 
   if (!window)
     window = _gdk_parent_root;
@@ -174,23 +159,29 @@ gdk_pixmap_new (GdkWindow *window,
   if (GDK_WINDOW_DESTROYED (window))
     return NULL;
 
-  visual = gdk_drawable_get_visual (window);
+  if (!visual)
+    {
+      if (window)
+	visual = gdk_drawable_get_visual (window);
+      else
+	visual = gdk_visual_get_system ();
+    }
 
-  window_depth = gdk_drawable_get_depth (GDK_DRAWABLE (window));
   if (depth == -1)
-    depth = window_depth;
+    depth = visual->depth;
 
-  GDK_NOTE (MISC, g_print ("gdk_pixmap_new: %dx%dx%d\n",
-			   width, height, depth));
+  GDK_NOTE (PIXMAP, g_print ("_gdk_win32_pixmap_new: %dx%dx%d "
+			     "window=%p visual=%p\n",
+			     width, height, depth, window, visual));
 
   pixmap = g_object_new (gdk_pixmap_get_type (), NULL);
-  draw_impl = GDK_DRAWABLE_IMPL_WIN32 (GDK_PIXMAP_OBJECT (pixmap)->impl);
-  pix_impl = GDK_PIXMAP_IMPL_WIN32 (GDK_PIXMAP_OBJECT (pixmap)->impl);
-  draw_impl->wrapper = GDK_DRAWABLE (pixmap);
+  drawable_impl = GDK_DRAWABLE_IMPL_WIN32 (GDK_PIXMAP_OBJECT (pixmap)->impl);
+  pixmap_impl = GDK_PIXMAP_IMPL_WIN32 (GDK_PIXMAP_OBJECT (pixmap)->impl);
+  drawable_impl->wrapper = GDK_DRAWABLE (pixmap);
   
-  pix_impl->is_foreign = FALSE;
-  pix_impl->width = width;
-  pix_impl->height = height;
+  pixmap_impl->is_foreign = FALSE;
+  pixmap_impl->width = width;
+  pixmap_impl->height = height;
   GDK_PIXMAP_OBJECT (pixmap)->depth = depth;
 
   if ((hdc = GetDC (GDK_WINDOW_HWND (window))) == NULL)
@@ -204,14 +195,40 @@ gdk_pixmap_new (GdkWindow *window,
   bmi.bmiHeader.biWidth = width;
   bmi.bmiHeader.biHeight = -height;
   bmi.bmiHeader.biPlanes = 1;
-  if (depth == 15)
-    bmi.bmiHeader.biBitCount = 16;
-  else
-    bmi.bmiHeader.biBitCount = depth;
-  if (depth == 16)
+  switch (depth)
+    {
+    case 1:
+    case 24:
+    case 32:
+      bmi.bmiHeader.biBitCount = depth;
+      break;
+
+    case 4:
+      bmi.bmiHeader.biBitCount = 4;
+      break;
+      
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+      bmi.bmiHeader.biBitCount = 8;
+      break;
+      
+    case 15:
+    case 16:
+      bmi.bmiHeader.biBitCount = 16;
+      break;
+
+    default:
+      g_warning ("gdk_win32_pixmap_new: depth = %d", depth);
+      g_assert_not_reached ();
+    }
+
+  if (bmi.bmiHeader.biBitCount == 16)
     bmi.bmiHeader.biCompression = BI_BITFIELDS;
   else
     bmi.bmiHeader.biCompression = BI_RGB;
+
   bmi.bmiHeader.biSizeImage = 0;
   bmi.bmiHeader.biXPelsPerMeter =
     bmi.bmiHeader.biYPelsPerMeter = 0;
@@ -230,55 +247,81 @@ gdk_pixmap_new (GdkWindow *window,
 	bmi.u.bmiColors[1].rgbGreen =
 	bmi.u.bmiColors[1].rgbRed = 0xFF;
       bmi.u.bmiColors[1].rgbReserved = 0x00;
-      draw_impl->colormap = NULL;
+      drawable_impl->colormap = NULL;
     }
   else
     {
-      if (depth == 8)
+      if (depth > 8 && depth != visual->depth)
+	g_warning ("_gdk_win32_pixmap_new: depth %d doesn't match display depth %d",
+		   depth, visual->depth);
+
+      drawable_impl->colormap = GDK_DRAWABLE_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl)->colormap;
+
+      if (drawable_impl->colormap == NULL)
+	drawable_impl->colormap = gdk_colormap_get_system ();
+      gdk_colormap_ref (drawable_impl->colormap);
+
+      if (depth <= 8)
 	{
+	  GdkColormapPrivateWin32 *cmapp =
+	    GDK_WIN32_COLORMAP_DATA (drawable_impl->colormap);
+	  gint k;
+
+	  if ((holdpal = SelectPalette (hdc, cmapp->hpal, FALSE)) == NULL)
+	    WIN32_GDI_FAILED ("SelectPalette");
+	  else if ((k = RealizePalette (hdc)) == GDI_ERROR)
+	    WIN32_GDI_FAILED ("RealizePalette");
+	  else if (k > 0)
+	    GDK_NOTE (PIXMAP_OR_COLORMAP, g_print ("_gdk_win32_pixmap_new: realized %p: %d colors\n",
+						   cmapp->hpal, k));
+
 	  iUsage = DIB_PAL_COLORS;
 	  for (i = 0; i < 256; i++)
 	    bmi.u.bmiIndices[i] = i;
 	}
-      else
+      else if (bmi.bmiHeader.biBitCount == 16)
 	{
-	  if (depth != visual->depth)
-	    g_warning ("gdk_pixmap_new: depth %d doesn't match display depth %d",
-		       depth, visual->depth);
-	  if (depth == 16)
-	    {
-	      bmi.u.bmiMasks[0] = visual->red_mask;
-	      bmi.u.bmiMasks[1] = visual->green_mask;
-	      bmi.u.bmiMasks[2] = visual->blue_mask;
-	    }
+	  bmi.u.bmiMasks[0] = visual->red_mask;
+	  bmi.u.bmiMasks[1] = visual->green_mask;
+	  bmi.u.bmiMasks[2] = visual->blue_mask;
 	}
     }
-  if ((draw_impl->handle = CreateDIBSection (hdc, (BITMAPINFO *) &bmi,
-					     iUsage, (PVOID *) &bits,
-					     NULL, 0)) == NULL)
+
+  hbitmap = CreateDIBSection (hdc, (BITMAPINFO *) &bmi,
+			      iUsage, (PVOID *) &bits, NULL, 0);
+  if (holdpal != NULL)
+    SelectPalette (hdc, holdpal, FALSE);
+
+  if (!ReleaseDC (GDK_WINDOW_HWND (window), hdc))
+    WIN32_GDI_FAILED ("ReleaseDC");
+
+  GDK_NOTE (PIXMAP, g_print ("...=%p bits=%p\n", hbitmap, bits));
+
+  if (hbitmap == NULL)
     {
       WIN32_GDI_FAILED ("CreateDIBSection");
       ReleaseDC (GDK_WINDOW_HWND (window), hdc);
       g_object_unref ((GObject *) pixmap);
       return NULL;
     }
-  ReleaseDC (GDK_WINDOW_HWND (window), hdc);
 
-  if (depth == window_depth)
-    {
-      cmap = gdk_drawable_get_colormap (window);
-      if (cmap)
-        gdk_drawable_set_colormap (pixmap, cmap);
-    }
-
-  GDK_NOTE (MISC, g_print ("... colormap %p\n", cmap));
-
-  GDK_NOTE (MISC, g_print ("... = %#x\n",
-			   (guint) GDK_PIXMAP_HBITMAP (pixmap)));
+  drawable_impl->handle = hbitmap;
+  pixmap_impl->image = _gdk_win32_setup_pixmap_image (pixmap, window,
+						      width, height,
+						      depth, bits);
 
   gdk_win32_handle_table_insert (&GDK_PIXMAP_HBITMAP (pixmap), pixmap);
 
   return pixmap;
+}
+
+GdkPixmap*
+gdk_pixmap_new (GdkWindow *window,
+		gint       width,
+		gint       height,
+		gint       depth)
+{
+  return _gdk_win32_pixmap_new (window, NULL, width, height, depth);
 }
 
 static unsigned char mirror[256] = {
@@ -323,9 +366,8 @@ gdk_bitmap_create_from_data (GdkWindow   *window,
 			     gint         height)
 {
   GdkPixmap *pixmap;
-  GdkDrawableImplWin32 *draw_impl;
-  GdkPixmapImplWin32 *pix_impl;
-  gint i, j, bpl, aligned_bpl;
+  GdkPixmapImplWin32 *pixmap_impl;
+  gint i, j, data_bpl, image_bpl;
   guchar *bits;
 
   g_return_val_if_fail (data != NULL, NULL);
@@ -338,33 +380,22 @@ gdk_bitmap_create_from_data (GdkWindow   *window,
   if (GDK_WINDOW_DESTROYED (window))
     return NULL;
 
-  pixmap = g_object_new (gdk_pixmap_get_type (), NULL);
-  draw_impl = GDK_DRAWABLE_IMPL_WIN32 (GDK_PIXMAP_OBJECT (pixmap)->impl);
-  pix_impl = GDK_PIXMAP_IMPL_WIN32 (GDK_PIXMAP_OBJECT (pixmap)->impl);
-  draw_impl->wrapper = GDK_DRAWABLE (pixmap);
+  pixmap = gdk_pixmap_new (window, width, height, 1);
 
-  pix_impl->is_foreign = FALSE;
-  pix_impl->width = width;
-  pix_impl->height = height;
-  GDK_PIXMAP_OBJECT (pixmap)->depth = 1;
+  if (pixmap == NULL)
+    return NULL;
 
-  bpl = ((width - 1) / 8 + 1);
-  aligned_bpl = ((bpl - 1) / 2 + 1) * 2;
-  bits = g_malloc (aligned_bpl * height);
+  pixmap_impl = GDK_PIXMAP_IMPL_WIN32 (GDK_PIXMAP_OBJECT (pixmap)->impl);
+  bits = pixmap_impl->image->mem;
+  data_bpl = ((width - 1) / 8 + 1);
+  image_bpl = pixmap_impl->image->bpl;
+
   for (i = 0; i < height; i++)
-    for (j = 0; j < bpl; j++)
-      bits[i*aligned_bpl + j] = mirror[(guchar) data[i*bpl + j]];
+    for (j = 0; j < data_bpl; j++)
+      bits[i*image_bpl + j] = mirror[(guchar) data[i*data_bpl + j]];
 
-  draw_impl->handle = CreateBitmap (width, height, 1, 1, bits);
-
-  GDK_NOTE (MISC, g_print ("gdk_bitmap_create_from_data: %dx%d = %#x\n",
-			   width, height,
-			   (guint) GDK_PIXMAP_HBITMAP (pixmap)));
-
-  g_free (bits);
-
-  draw_impl->colormap = NULL;
-  gdk_win32_handle_table_insert (&GDK_PIXMAP_HBITMAP (pixmap), pixmap);
+  GDK_NOTE (PIXMAP, g_print ("gdk_bitmap_create_from_data: %dx%d=%p\n",
+			     width, height, GDK_PIXMAP_HBITMAP (pixmap)));
 
   return pixmap;
 }
@@ -398,13 +429,16 @@ gdk_pixmap_create_from_data (GdkWindow   *window,
 
   gdk_gc_set_foreground (gc, fg);
   gdk_gc_set_background (gc, bg);
-  gdk_draw_drawable (result, gc, source, 0, 0, 0, 0, width, height);
+  _gdk_win32_blit
+    (TRUE,
+     GDK_DRAWABLE_IMPL_WIN32 (GDK_PIXMAP_OBJECT (result)->impl),
+     gc, source, 0, 0, 0, 0, width, height);
   gdk_drawable_unref (source);
   gdk_gc_unref (gc);
 
-  GDK_NOTE (MISC, g_print ("gdk_pixmap_create_from_data: %dx%dx%d = %#x\n",
-			   width, height, depth,
-			   (guint) GDK_PIXMAP_HBITMAP (result)));
+  GDK_NOTE (PIXMAP, g_print ("gdk_pixmap_create_from_data: %dx%dx%d=%p\n",
+			     width, height, depth,
+			     GDK_PIXMAP_HBITMAP (result)));
 
   return result;
 }
@@ -417,21 +451,18 @@ gdk_pixmap_foreign_new (GdkNativeWindow anid)
   GdkPixmapImplWin32 *pix_impl;
   HBITMAP hbitmap;
   SIZE size;
-  unsigned int w_ret, h_ret;
 
-  /* check to make sure we were passed a HBITMAP */
-  g_return_val_if_fail(GetObjectType ((HGDIOBJ) anid) == OBJ_BITMAP, NULL);
+  /* Check to make sure we were passed a HBITMAP */
+  g_return_val_if_fail (GetObjectType ((HGDIOBJ) anid) == OBJ_BITMAP, NULL);
 
-  /* set the pixmap to the passed in value */
   hbitmap = (HBITMAP) anid;
 
-  /* get information about the bitmap to fill in the structure for
-     the gdk window */
+  /* Get information about the bitmap to fill in the structure for the
+   * GDK window.
+   */
   GetBitmapDimensionEx (hbitmap, &size);
-  w_ret = size.cx;
-  h_ret = size.cy;
 
-  /* allocate a new gdk pixmap */
+  /* Allocate a new GDK pixmap */
   pixmap = g_object_new (gdk_pixmap_get_type (), NULL);
   draw_impl = GDK_DRAWABLE_IMPL_WIN32 (GDK_PIXMAP_OBJECT (pixmap)->impl);
   pix_impl = GDK_PIXMAP_IMPL_WIN32 (GDK_PIXMAP_OBJECT (pixmap)->impl);
@@ -439,8 +470,13 @@ gdk_pixmap_foreign_new (GdkNativeWindow anid)
   
   draw_impl->handle = hbitmap;
   draw_impl->colormap = NULL;
-  pix_impl->width = w_ret;
-  pix_impl->height = h_ret;
+  pix_impl->width = size.cx;
+  pix_impl->height = size.cy;
+  pix_impl->image =
+    _gdk_win32_setup_pixmap_image (pixmap, _gdk_parent_root,
+				   size.cx, size.cy,
+				   gdk_visual_get_system ()->depth,
+				   NULL);
 
   gdk_win32_handle_table_insert (&GDK_PIXMAP_HBITMAP (pixmap), pixmap);
 

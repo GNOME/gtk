@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.1.15\n"
-"POT-Creation-Date: 2002-01-07 11:47+0900\n"
+"POT-Creation-Date: 2002-02-17 21:22-0500\n"
 "PO-Revision-Date: 1999-04-24 22:53+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@adam.kaist.ac.kr>\n"
 "Language-Team: Korean <ko@li.org>\n"
@@ -54,8 +54,8 @@ msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
 msgstr ""
-"그림 읽기 모듈 %s가 올바른 인터페이스를 내놓지 않습니다; 아마 다른 GTK "
-"판번호의 모듈일 것입니다"
+"그림 읽기 모듈 %s가 올바른 인터페이스를 내놓지 않습니다; 아마 다른 GTK 판번호"
+"의 모듈일 것입니다"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:460 gdk-pixbuf/gdk-pixbuf-io.c:486
 #, c-format
@@ -97,14 +97,15 @@ msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
 msgstr ""
-"그림을 저장하는 동안 '%s'를 닫는데 실패하였습니다, 모든 데이터가 저장되지 않았을 것입니다: %s"
+"그림을 저장하는 동안 '%s'를 닫는데 실패하였습니다, 모든 데이터가 저장되지 않"
+"았을 것입니다: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:250
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:273 gdk-pixbuf/gdk-pixbuf-loader.c:374
+#: gdk-pixbuf/gdk-pixbuf-loader.c:274 gdk-pixbuf/gdk-pixbuf-loader.c:375
 #, c-format
 msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
@@ -123,12 +124,53 @@ msgstr "BMP 그림이 잘못된 헤더 데이터를 가지고 있습니다"
 msgid "Not enough memory to load bitmap image"
 msgstr "비트맵 그림을 읽는데 메모리가 충분하지 않습니다"
 
+#: gdk-pixbuf/io-ico.c:207
+#, fuzzy, c-format
+msgid "Failure reading ICO: %s"
+msgstr "GIF 읽는 중 실패: %s"
+
+#: gdk-pixbuf/io-ico.c:224
+msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
+msgstr ""
+
+#: gdk-pixbuf/io-ico.c:262 gdk-pixbuf/io-ico.c:318 gdk-pixbuf/io-ico.c:381
+#: gdk-pixbuf/io-ico.c:443 gdk-pixbuf/io-ico.c:460
+#, fuzzy
+msgid "Not enough memory to load icon"
+msgstr "GIF 파일을 읽는데 메모리가 충분하지 않습니다"
+
+#: gdk-pixbuf/io-ico.c:303
+msgid "Invalid header in icon"
+msgstr ""
+
+#: gdk-pixbuf/io-ico.c:340
+msgid "Icon has zero width"
+msgstr ""
+
+#: gdk-pixbuf/io-ico.c:350
+msgid "Icon has zero height"
+msgstr ""
+
+#: gdk-pixbuf/io-ico.c:395
+#, fuzzy
+msgid "Compressed icons are not supported"
+msgstr "그림 형식 '%s'를 지원하지 않습니다"
+
+#: gdk-pixbuf/io-ico.c:428
+msgid "Unsupported icon type"
+msgstr ""
+
+#: gdk-pixbuf/io-ico.c:499
+#, fuzzy
+msgid "Not enough memory to load ICO file"
+msgstr "GIF 파일을 읽는데 메모리가 충분하지 않습니다"
+
 #: gdk-pixbuf/io-gif.c:218
 #, c-format
 msgid "Failure reading GIF: %s"
 msgstr "GIF 읽는 중 실패: %s"
 
-#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1360 gdk-pixbuf/io-gif.c:1519
+#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1371 gdk-pixbuf/io-gif.c:1530
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr ""
 
@@ -149,39 +191,39 @@ msgstr "잘못된 코드 만남"
 msgid "Circular table entry in GIF file"
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:754 gdk-pixbuf/io-gif.c:1348 gdk-pixbuf/io-gif.c:1393
-#: gdk-pixbuf/io-gif.c:1507
+#: gdk-pixbuf/io-gif.c:762 gdk-pixbuf/io-gif.c:1359 gdk-pixbuf/io-gif.c:1404
+#: gdk-pixbuf/io-gif.c:1518
 msgid "Not enough memory to load GIF file"
 msgstr "GIF 파일을 읽는데 메모리가 충분하지 않습니다"
 
-#: gdk-pixbuf/io-gif.c:998
+#: gdk-pixbuf/io-gif.c:1009
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "GIF 그림이 잘못되었습니다 (잘못된 LZW 압축)"
 
-#: gdk-pixbuf/io-gif.c:1048
+#: gdk-pixbuf/io-gif.c:1059
 msgid "File does not appear to be a GIF file"
 msgstr "GIF파일인것 같지 않습니다"
 
-#: gdk-pixbuf/io-gif.c:1060
+#: gdk-pixbuf/io-gif.c:1071
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "GIF 파일 형식의 판번호 %s 는 지원되지 않습니다."
 
-#: gdk-pixbuf/io-gif.c:1135
+#: gdk-pixbuf/io-gif.c:1146
 msgid "GIF image contained a frame appearing outside the image bounds."
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:1151
+#: gdk-pixbuf/io-gif.c:1162
 msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:1186
+#: gdk-pixbuf/io-gif.c:1197
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:1415
+#: gdk-pixbuf/io-gif.c:1426
 msgid "GIF image was truncated or incomplete."
 msgstr ""
 
@@ -218,36 +260,36 @@ msgstr ""
 msgid "Fatal error in PNG image file: %s"
 msgstr "PNG 그림 파일에서 심각한 오류: %s"
 
-#: gdk-pixbuf/io-png.c:267
+#: gdk-pixbuf/io-png.c:273
 msgid "Insufficient memory to load PNG file"
 msgstr ""
 
-#: gdk-pixbuf/io-png.c:585
+#: gdk-pixbuf/io-png.c:591
 #, c-format
 msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
 "applications to reduce memory usage"
 msgstr ""
 
-#: gdk-pixbuf/io-png.c:636
+#: gdk-pixbuf/io-png.c:642
 msgid "Fatal error reading PNG image file"
 msgstr ""
 
-#: gdk-pixbuf/io-png.c:685
+#: gdk-pixbuf/io-png.c:691
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
 msgstr ""
 
-#: gdk-pixbuf/io-png.c:750
+#: gdk-pixbuf/io-png.c:757
 msgid ""
 "Keys for PNG tEXt chunks must have at least 1 and at most 79 characters."
 msgstr ""
 
-#: gdk-pixbuf/io-png.c:758
+#: gdk-pixbuf/io-png.c:765
 msgid "Keys for PNG tEXt chunks must be ASCII characters."
 msgstr ""
 
-#: gdk-pixbuf/io-png.c:779
+#: gdk-pixbuf/io-png.c:786
 msgid "Value for PNG tEXt chunk can not be converted to ISO-8859-1 encoding."
 msgstr ""
 
@@ -319,6 +361,119 @@ msgstr ""
 msgid "Insufficient memory to load PNM file"
 msgstr "PNM 파일 읽는데 메모리 부족"
 
+#: gdk-pixbuf/io-tga.c:157
+#, fuzzy
+msgid "Can't allocate memory for IOBuffer struct"
+msgstr "XPM 그림을 읽을 메모리를 할당할 수 없습니다"
+
+#: gdk-pixbuf/io-tga.c:176
+#, fuzzy
+msgid "Can't allocate memory for IOBuffer data"
+msgstr "XPM 그림을 읽을 메모리를 할당할 수 없습니다"
+
+#: gdk-pixbuf/io-tga.c:187
+msgid "Can't realloc IOBuffer data"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:216
+#, fuzzy
+msgid "Can't allocate temporary IOBuffer data"
+msgstr "XPM 그림을 읽을 메모리를 할당할 수 없습니다"
+
+#: gdk-pixbuf/io-tga.c:249
+msgid "fread() failed -- premature end-of-file probably encountered"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:259
+msgid "fseek() failed -- premature end-of-file probably encountered"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:288
+msgid "Can't allocate new pixbuf"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:557
+msgid "Can't allocate colormap structure"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:564
+msgid "Can't allocate colormap entries"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:587
+msgid "Unexpected bitdepth for colormap entries"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:607
+msgid "Can't allocate TGA header memory"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:618
+msgid "TGA image has invalid dimensions"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:624
+msgid "TGA image comment length is too long"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:633 gdk-pixbuf/io-tga.c:647
+#, fuzzy
+msgid "TGA image type not supported"
+msgstr "그림 형식 '%s'를 지원하지 않습니다"
+
+#: gdk-pixbuf/io-tga.c:692
+#, fuzzy
+msgid "Can't allocate memory for TGA context struct"
+msgstr "XPM 그림을 읽을 메모리를 할당할 수 없습니다"
+
+#: gdk-pixbuf/io-tga.c:756
+msgid "Excess data in file"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:798
+#, fuzzy
+msgid "Can't allocate memory for TGA header"
+msgstr "XPM 그림을 읽을 메모리를 할당할 수 없습니다"
+
+#: gdk-pixbuf/io-tga.c:808
+msgid "Too big value in the infolen field of TGA header."
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:832
+#, fuzzy
+msgid "Can't allocate memory for TGA cmap temporary buffer"
+msgstr "XPM 그림을 읽을 메모리를 할당할 수 없습니다"
+
+#: gdk-pixbuf/io-tga.c:844
+#, fuzzy
+msgid "Can't allocate memory for TGA colormap struct"
+msgstr "XPM 그림을 읽을 메모리를 할당할 수 없습니다"
+
+#: gdk-pixbuf/io-tga.c:853
+#, fuzzy
+msgid "Can't allocate memory for TGA colormap entries"
+msgstr "XPM 그림을 읽을 메모리를 할당할 수 없습니다"
+
+#: gdk-pixbuf/io-tga.c:863
+msgid "Unexpected bitdepth for TGA colormap"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:903
+msgid "Pseudo-Color image without colormap"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:910
+msgid "Can't seek to image offset -- end-of-file probably encountered"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:919 gdk-pixbuf/io-tga.c:1015 gdk-pixbuf/io-tga.c:1081
+msgid "Can't allocate pixbuf"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:1147 gdk-pixbuf/io-tga.c:1176
+msgid "Unsupported TGA image type"
+msgstr ""
+
 #: gdk-pixbuf/io-tiff.c:152
 msgid "Could not get image width (bad TIFF file)"
 msgstr ""
@@ -351,15 +506,15 @@ msgstr ""
 msgid "Failed to load TIFF image"
 msgstr ""
 
-#: gdk-pixbuf/io-xbm.c:284
+#: gdk-pixbuf/io-xbm.c:283
 msgid "Invalid XBM file"
 msgstr ""
 
-#: gdk-pixbuf/io-xbm.c:294
+#: gdk-pixbuf/io-xbm.c:293
 msgid "Insufficient memory to load XBM image file"
 msgstr ""
 
-#: gdk-pixbuf/io-xbm.c:428
+#: gdk-pixbuf/io-xbm.c:427
 msgid "Failed to write to temporary file when loading XBM image"
 msgstr ""
 
@@ -412,19 +567,19 @@ msgstr "잘못된 그림 픽셀 데이터"
 msgid "failed to allocate image buffer of %u bytes"
 msgstr ""
 
-#: gtk/gtkaccellabel.c:122
+#: gtk/gtkaccellabel.c:121
 msgid "Accelerator Closure"
 msgstr ""
 
-#: gtk/gtkaccellabel.c:123
+#: gtk/gtkaccellabel.c:122
 msgid "The closure to be monitored for accelerator changes"
 msgstr ""
 
-#: gtk/gtkaccellabel.c:129
+#: gtk/gtkaccellabel.c:128
 msgid "Accelerator Widget"
 msgstr ""
 
-#: gtk/gtkaccellabel.c:130
+#: gtk/gtkaccellabel.c:129
 msgid "The widget to be monitored for accelerator changes"
 msgstr ""
 
@@ -578,7 +733,7 @@ msgstr "간격"
 msgid "The amount of space between children."
 msgstr "자식들의 간격 크기"
 
-#: gtk/gtkbox.c:135 gtk/gtknotebook.c:399
+#: gtk/gtkbox.c:135 gtk/gtknotebook.c:437
 msgid "Homogeneous"
 msgstr ""
 
@@ -586,7 +741,7 @@ msgstr ""
 msgid "Whether the children should all be the same size."
 msgstr ""
 
-#: gtk/gtkbutton.c:189 gtk/gtkframe.c:125 gtk/gtklabel.c:282
+#: gtk/gtkbutton.c:189 gtk/gtkframe.c:125 gtk/gtklabel.c:281
 msgid "Label"
 msgstr ""
 
@@ -596,11 +751,11 @@ msgid ""
 "widget."
 msgstr ""
 
-#: gtk/gtkbutton.c:197 gtk/gtklabel.c:303
+#: gtk/gtkbutton.c:197 gtk/gtklabel.c:302
 msgid "Use underline"
 msgstr "밑줄 사용"
 
-#: gtk/gtkbutton.c:198 gtk/gtklabel.c:304
+#: gtk/gtkbutton.c:198 gtk/gtklabel.c:303
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -779,7 +934,7 @@ msgstr ""
 msgid "Marked up text to render"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:190 gtk/gtklabel.c:289
+#: gtk/gtkcellrenderertext.c:190 gtk/gtklabel.c:288
 msgid "Attributes"
 msgstr "속성"
 
@@ -820,17 +975,17 @@ msgid "Foreground color as a GdkColor"
 msgstr ""
 
 #: gtk/gtkcellrenderertext.c:231 gtk/gtkentry.c:454 gtk/gtktexttag.c:277
-#: gtk/gtktextview.c:549
+#: gtk/gtktextview.c:566
 #, fuzzy
 msgid "Editable"
 msgstr "(사용 안함)"
 
-#: gtk/gtkcellrenderertext.c:232 gtk/gtktexttag.c:278 gtk/gtktextview.c:550
+#: gtk/gtkcellrenderertext.c:232 gtk/gtktexttag.c:278 gtk/gtktextview.c:567
 msgid "Whether the text can be modified by the user"
 msgstr ""
 
 #: gtk/gtkcellrenderertext.c:239 gtk/gtkcellrenderertext.c:247
-#: gtk/gtkfontsel.c:192 gtk/gtktexttag.c:285 gtk/gtktexttag.c:293
+#: gtk/gtkfontsel.c:201 gtk/gtktexttag.c:285 gtk/gtktexttag.c:293
 msgid "Font"
 msgstr "글꼴"
 
@@ -1090,135 +1245,135 @@ msgid ""
 "it for use in the future."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:907
+#: gtk/gtkcolorsel.c:910
 msgid "_Save color here"
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1075
+#: gtk/gtkcolorsel.c:1079
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1694
+#: gtk/gtkcolorsel.c:1698
 msgid "Has Opacity Control"
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1695
+#: gtk/gtkcolorsel.c:1699
 msgid "Whether the color selector should allow setting opacity"
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1701
+#: gtk/gtkcolorsel.c:1705
 msgid "Has palette"
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1702
+#: gtk/gtkcolorsel.c:1706
 msgid "Whether a palette should be used"
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1708
+#: gtk/gtkcolorsel.c:1712
 msgid "Current Color"
 msgstr "현재 색상"
 
-#: gtk/gtkcolorsel.c:1709
+#: gtk/gtkcolorsel.c:1713
 msgid "The current color"
 msgstr "현재 색상"
 
-#: gtk/gtkcolorsel.c:1715
+#: gtk/gtkcolorsel.c:1719
 msgid "Current Alpha"
 msgstr "현재 알파"
 
-#: gtk/gtkcolorsel.c:1716
+#: gtk/gtkcolorsel.c:1720
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1729
+#: gtk/gtkcolorsel.c:1733
 msgid "Custom palette"
 msgstr "사용자 팔레트"
 
-#: gtk/gtkcolorsel.c:1730
+#: gtk/gtkcolorsel.c:1734
 msgid "Palette to use in the color selector"
 msgstr "색상 선택기에서 사용되는 팔레트"
 
-#: gtk/gtkcolorsel.c:1772
+#: gtk/gtkcolorsel.c:1778
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1800
+#: gtk/gtkcolorsel.c:1806
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1809
+#: gtk/gtkcolorsel.c:1815
 msgid "_Hue:"
 msgstr "색상(_H):"
 
-#: gtk/gtkcolorsel.c:1810
+#: gtk/gtkcolorsel.c:1816
 msgid "Position on the color wheel."
 msgstr "색상 동그라미의 위치"
 
-#: gtk/gtkcolorsel.c:1811
+#: gtk/gtkcolorsel.c:1817
 msgid "_Saturation:"
 msgstr "채도(_S):"
 
-#: gtk/gtkcolorsel.c:1812
+#: gtk/gtkcolorsel.c:1818
 msgid "\"Deepness\" of the color."
 msgstr "색상의 \"깊이\""
 
-#: gtk/gtkcolorsel.c:1813
+#: gtk/gtkcolorsel.c:1819
 msgid "_Value:"
 msgstr "값(_V):"
 
-#: gtk/gtkcolorsel.c:1814
+#: gtk/gtkcolorsel.c:1820
 msgid "Brightness of the color."
 msgstr "색상의 밝기"
 
-#: gtk/gtkcolorsel.c:1815
+#: gtk/gtkcolorsel.c:1821
 msgid "_Red:"
 msgstr "빨강(_R):"
 
-#: gtk/gtkcolorsel.c:1816
+#: gtk/gtkcolorsel.c:1822
 msgid "Amount of red light in the color."
 msgstr "색상에서 빨강 빛의 양"
 
-#: gtk/gtkcolorsel.c:1817
+#: gtk/gtkcolorsel.c:1823
 msgid "_Green:"
 msgstr "초록(_G):"
 
-#: gtk/gtkcolorsel.c:1818
+#: gtk/gtkcolorsel.c:1824
 msgid "Amount of green light in the color."
 msgstr "색상에서 초록 빛의 양"
 
-#: gtk/gtkcolorsel.c:1819
+#: gtk/gtkcolorsel.c:1825
 msgid "_Blue:"
 msgstr "파랑(_B):"
 
-#: gtk/gtkcolorsel.c:1820
+#: gtk/gtkcolorsel.c:1826
 msgid "Amount of blue light in the color."
 msgstr "색상에서 파랑 빛의 양"
 
-#: gtk/gtkcolorsel.c:1823
+#: gtk/gtkcolorsel.c:1829
 msgid "_Opacity:"
 msgstr "불투명도(_O):"
 
-#: gtk/gtkcolorsel.c:1831
+#: gtk/gtkcolorsel.c:1837
 msgid "Transparency of the currently-selected color."
 msgstr "현재 선택된 생상의 투명도"
 
-#: gtk/gtkcolorsel.c:1846
+#: gtk/gtkcolorsel.c:1852
 msgid "Color _Name:"
 msgstr "색상 이름(_N):"
 
-#: gtk/gtkcolorsel.c:1858
+#: gtk/gtkcolorsel.c:1864
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1877
+#: gtk/gtkcolorsel.c:1883
 msgid "_Palette"
 msgstr "팔레트(_P)"
 
@@ -1327,51 +1482,51 @@ msgstr ""
 msgid "Maximum possible value for Y"
 msgstr ""
 
-#: gtk/gtkdialog.c:126
+#: gtk/gtkdialog.c:128
 msgid "Has separator"
 msgstr ""
 
-#: gtk/gtkdialog.c:127
+#: gtk/gtkdialog.c:129
 msgid "The dialog has a separator bar above its buttons"
 msgstr ""
 
-#: gtk/gtkdialog.c:150
+#: gtk/gtkdialog.c:152
 msgid "Content area border"
 msgstr ""
 
-#: gtk/gtkdialog.c:151
+#: gtk/gtkdialog.c:153
 msgid "Width of border around the main dialog area"
 msgstr ""
 
-#: gtk/gtkdialog.c:158
+#: gtk/gtkdialog.c:160
 msgid "Button spacing"
 msgstr ""
 
-#: gtk/gtkdialog.c:159
+#: gtk/gtkdialog.c:161
 msgid "Spacing between buttons"
 msgstr ""
 
-#: gtk/gtkdialog.c:167
+#: gtk/gtkdialog.c:169
 msgid "Action area border"
 msgstr ""
 
-#: gtk/gtkdialog.c:168
+#: gtk/gtkdialog.c:170
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr ""
 
-#: gtk/gtkentry.c:434 gtk/gtklabel.c:360
+#: gtk/gtkentry.c:434 gtk/gtklabel.c:359
 msgid "Cursor Position"
 msgstr "커서 위치"
 
-#: gtk/gtkentry.c:435 gtk/gtklabel.c:361
+#: gtk/gtkentry.c:435 gtk/gtklabel.c:360
 msgid "The current position of the insertion cursor in chars."
 msgstr ""
 
-#: gtk/gtkentry.c:444 gtk/gtklabel.c:370
+#: gtk/gtkentry.c:444 gtk/gtklabel.c:369
 msgid "Selection Bound"
 msgstr "선택 경계"
 
-#: gtk/gtkentry.c:445 gtk/gtklabel.c:371
+#: gtk/gtkentry.c:445 gtk/gtklabel.c:370
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars."
 msgstr ""
@@ -1444,58 +1599,77 @@ msgstr ""
 msgid "The contents of the entry"
 msgstr ""
 
-#: gtk/gtkentry.c:529 gtk/gtklabel.c:379 gtk/gtktextview.c:625
-msgid "Cursor color"
-msgstr "커서 색상"
+#: gtk/gtkentry.c:727
+#, fuzzy
+msgid "Select on focus"
+msgstr "선택 경계"
 
-#: gtk/gtkentry.c:530 gtk/gtklabel.c:380 gtk/gtktextview.c:626
-msgid "Color with which to draw insertion cursor"
-msgstr "삽입 커서를 그릴때 사용되는 색상"
+#: gtk/gtkentry.c:728
+msgid "Whether to select the contents of an entry when it is focused."
+msgstr ""
 
-#: gtk/gtkentry.c:3847 gtk/gtklabel.c:3161
+#: gtk/gtkentry.c:3808 gtk/gtklabel.c:3163
 msgid "Select All"
 msgstr "모두 바꿈"
 
-#: gtk/gtkentry.c:3857 gtk/gtklabel.c:3171
+#: gtk/gtkentry.c:3818 gtk/gtklabel.c:3173
 msgid "Input Methods"
 msgstr "입력기"
 
-#: gtk/gtkentry.c:3867 gtk/gtktextview.c:5829
+#: gtk/gtkentry.c:3828 gtk/gtktextview.c:6303
 msgid "_Insert Unicode control character"
 msgstr "유니코드 제어문자 삽입(_I)"
 
-#: gtk/gtkfilesel.c:506
+#: gtk/gtkfilesel.c:526 gtk/gtkimage.c:161
 msgid "Filename"
 msgstr "파일 이름"
 
-#: gtk/gtkfilesel.c:507
+#: gtk/gtkfilesel.c:527
 msgid "The currently selected filename."
 msgstr "현재 선택된 파일이름"
 
-#: gtk/gtkfilesel.c:513
+#: gtk/gtkfilesel.c:533
 msgid "Show file operations"
 msgstr "파일 행동 보기"
 
-#: gtk/gtkfilesel.c:514
+#: gtk/gtkfilesel.c:534
 msgid "Whether buttons for creating/manipulating files should be displayed."
 msgstr ""
 
-#. The directories clist
-#: gtk/gtkfilesel.c:636
-msgid "Directories"
-msgstr "디렉토리"
+#: gtk/gtkfilesel.c:541
+#, fuzzy
+msgid "Select multiple"
+msgstr "모두 바꿈"
 
-#. The files clist
-#: gtk/gtkfilesel.c:656
+#: gtk/gtkfilesel.c:542
+msgid "Whether to allow multiple files to be selected."
+msgstr ""
+
+#: gtk/gtkfilesel.c:677
+#, fuzzy
+msgid "Folders"
+msgstr "파일"
+
+#: gtk/gtkfilesel.c:681
+#, fuzzy
+msgid "Fol_ders"
+msgstr "파일"
+
+#: gtk/gtkfilesel.c:709
 msgid "Files"
 msgstr "파일"
 
-#: gtk/gtkfilesel.c:726 gtk/gtkfilesel.c:2057
-#, c-format
-msgid "Directory unreadable: %s"
+#: gtk/gtkfilesel.c:713
+#, fuzzy
+msgid "_Files"
+msgstr "파일"
+
+#: gtk/gtkfilesel.c:789 gtk/gtkfilesel.c:2102
+#, fuzzy, c-format
+msgid "Folder unreadable: %s"
 msgstr "디렉토리를 읽을 수 없음: %s"
 
-#: gtk/gtkfilesel.c:848
+#: gtk/gtkfilesel.c:913
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -1503,66 +1677,64 @@ msgid ""
 "Are you sure that you want to select it?"
 msgstr ""
 
-#: gtk/gtkfilesel.c:978
-msgid "Create Dir"
-msgstr "디렉토리 만들기"
+#: gtk/gtkfilesel.c:1043
+msgid "_New Folder"
+msgstr ""
 
-#: gtk/gtkfilesel.c:989 gtk/gtkfilesel.c:1416
-msgid "Delete File"
+#: gtk/gtkfilesel.c:1054
+#, fuzzy
+msgid "De_lete File"
 msgstr "파일 지우기"
 
-#: gtk/gtkfilesel.c:1000 gtk/gtkfilesel.c:1559
-msgid "Rename File"
+#: gtk/gtkfilesel.c:1065
+#, fuzzy
+msgid "_Rename File"
 msgstr "파일이름 바꿈"
 
-#: gtk/gtkfilesel.c:1237
-#, c-format
+#: gtk/gtkfilesel.c:1325
+#, fuzzy, c-format
 msgid ""
-"The directory name \"%s\" contains symbols that are not allowed in filenames"
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
+"파일이름 \"%s\"에는 파일이름으로 허용되지 않는 문자가 포함되어 있습니다"
 
-#: gtk/gtkfilesel.c:1239
-#, c-format
+#: gtk/gtkfilesel.c:1327
+#, fuzzy, c-format
 msgid ""
-"Error creating directory \"%s\": %s\n"
+"Error creating folder \"%s\": %s\n"
 "%s"
 msgstr ""
-"디렉토리 \"%s\" 만드는 중 오류: %s\n"
+"파일 \"%s\" 이름 바꾸는중 오류: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1240 gtk/gtkfilesel.c:1493
+#: gtk/gtkfilesel.c:1328 gtk/gtkfilesel.c:1564
 msgid "You probably used symbols not allowed in filenames."
 msgstr "파일이름에 허용되지 않는 문자가 사용됩니다."
 
-#: gtk/gtkfilesel.c:1248
-#, c-format
-msgid "Error creating directory \"%s\": %s\n"
+#: gtk/gtkfilesel.c:1336
+#, fuzzy, c-format
+msgid "Error creating folder \"%s\": %s\n"
 msgstr "디렉토리 \"%s\" 만드는중 오류: %s\n"
 
-#: gtk/gtkfilesel.c:1282
-msgid "Create Directory"
-msgstr "디렉토리 만듦"
+#: gtk/gtkfilesel.c:1370
+msgid "New Folder"
+msgstr ""
 
-#: gtk/gtkfilesel.c:1296
-msgid "_Directory name:"
-msgstr "디렉토리 이름(_D):"
+#: gtk/gtkfilesel.c:1385
+#, fuzzy
+msgid "_Folder name:"
+msgstr "파일 이름"
 
-#. buttons
-#: gtk/gtkfilesel.c:1310 gtk/gtkfilesel.c:1438 gtk/gtkfilesel.c:1592
-#: gtk/gtkgamma.c:417
-msgid "Cancel"
-msgstr "취소"
-
-#: gtk/gtkfilesel.c:1322
+#: gtk/gtkfilesel.c:1411
 msgid "Create"
 msgstr "만들기"
 
-#: gtk/gtkfilesel.c:1356
+#: gtk/gtkfilesel.c:1452
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "파일이름 \"%s\"에 파일이름으로 허용되지 않는 문자가 포함되어 있습니다"
 
-#: gtk/gtkfilesel.c:1359
+#: gtk/gtkfilesel.c:1455
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -1571,25 +1743,31 @@ msgstr ""
 "파일 \"%s\" 지우는중 오류: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1361 gtk/gtkfilesel.c:1507
+#: gtk/gtkfilesel.c:1457 gtk/gtkfilesel.c:1578
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "파일이름에 허용되지 않은 문자가 포함되어 있습니다."
 
-#: gtk/gtkfilesel.c:1370
+#: gtk/gtkfilesel.c:1466
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "파일 \"%s\" 지우는중 오류: %s"
 
-#: gtk/gtkfilesel.c:1448
-msgid "Delete"
-msgstr "지우기"
+#: gtk/gtkfilesel.c:1509
+#, fuzzy, c-format
+msgid "Really delete file \"%s\" ?"
+msgstr "파일 \"%s\" 지우는중 오류: %s"
 
-#: gtk/gtkfilesel.c:1489 gtk/gtkfilesel.c:1503
+#: gtk/gtkfilesel.c:1514
+msgid "Delete File"
+msgstr "파일 지우기"
+
+#: gtk/gtkfilesel.c:1560 gtk/gtkfilesel.c:1574
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
-msgstr "파일이름 \"%s\"에는 파일이름으로 허용되지 않는 문자가 포함되어 있습니다"
+msgstr ""
+"파일이름 \"%s\"에는 파일이름으로 허용되지 않는 문자가 포함되어 있습니다"
 
-#: gtk/gtkfilesel.c:1491
+#: gtk/gtkfilesel.c:1562
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -1598,7 +1776,7 @@ msgstr ""
 "파일 \"%s\"로 이름 바꾸는중 오류: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1505
+#: gtk/gtkfilesel.c:1576
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -1607,72 +1785,98 @@ msgstr ""
 "파일 \"%s\" 이름 바꾸는중 오류: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1515
+#: gtk/gtkfilesel.c:1586
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "파일 \"%s\"를 \"%s\"로 이름바꾸는 중 오류: %s"
 
-#: gtk/gtkfilesel.c:1604
+#: gtk/gtkfilesel.c:1633
+msgid "Rename File"
+msgstr "파일이름 바꿈"
+
+#: gtk/gtkfilesel.c:1648
+#, fuzzy, c-format
+msgid "Rename file \"%s\" to:"
+msgstr "파일이름 바꿈"
+
+#: gtk/gtkfilesel.c:1679
 msgid "Rename"
 msgstr "이름 바꿈"
 
-#: gtk/gtkfilesel.c:2036
+#: gtk/gtkfilesel.c:2081
 msgid "Selection: "
 msgstr "선택: "
 
-#: gtk/gtkfilesel.c:2647
+#: gtk/gtkfilesel.c:2953
 #, c-format
 msgid ""
 "The filename %s couldn't be converted to UTF-8. Try setting the environment "
 "variable G_BROKEN_FILENAMES."
 msgstr ""
 
-#: gtk/gtkfilesel.c:3515
+#: gtk/gtkfilesel.c:3817
 msgid "Name too long"
 msgstr "너무 긴 이름"
 
-#: gtk/gtkfilesel.c:3517
+#: gtk/gtkfilesel.c:3819
 msgid "Couldn't convert filename"
 msgstr "파일이름 변환할 수 없음"
 
-#: gtk/gtkfontsel.c:185
+#: gtk/gtkfixed.c:120 gtk/gtklayout.c:597
+msgid "X position"
+msgstr "가로 위치"
+
+#: gtk/gtkfixed.c:121 gtk/gtklayout.c:598
+msgid "X position of child widget"
+msgstr "자식 위젯의 가로 위치"
+
+#: gtk/gtkfixed.c:130 gtk/gtklayout.c:607
+msgid "Y position"
+msgstr "세로 위치"
+
+#: gtk/gtkfixed.c:131 gtk/gtklayout.c:608
+msgid "Y position of child widget"
+msgstr "자식 위젯의 세로 위치"
+
+#: gtk/gtkfontsel.c:194
 msgid "Font name"
 msgstr "글꼴 이름"
 
-#: gtk/gtkfontsel.c:186
+#: gtk/gtkfontsel.c:195
 msgid "The X string that represents this font."
 msgstr "이 글꼴을 표현하는 X 문자열"
 
-#: gtk/gtkfontsel.c:193
+#: gtk/gtkfontsel.c:202
 msgid "The GdkFont that is currently selected."
 msgstr "현재 선택된 Gdk글꼴"
 
-#: gtk/gtkfontsel.c:199
+#: gtk/gtkfontsel.c:208
 msgid "Preview text"
 msgstr "글자 미리보기"
 
-#: gtk/gtkfontsel.c:200
+#: gtk/gtkfontsel.c:209
 msgid "The text to display in order to demonstrate the selected font."
 msgstr ""
 
-#: gtk/gtkfontsel.c:296
+#: gtk/gtkfontsel.c:311
 msgid "_Family:"
 msgstr ""
 
-#: gtk/gtkfontsel.c:303
+#: gtk/gtkfontsel.c:317
 msgid "_Style:"
 msgstr "모양새(_S):"
 
-#: gtk/gtkfontsel.c:310
+#: gtk/gtkfontsel.c:323
 msgid "Si_ze:"
 msgstr "크기(_z):"
 
 #. create the text entry widget
-#: gtk/gtkfontsel.c:391
-msgid "Preview:"
+#: gtk/gtkfontsel.c:452
+#, fuzzy
+msgid "_Preview:"
 msgstr "미리보기:"
 
-#: gtk/gtkfontsel.c:1059
+#: gtk/gtkfontsel.c:1203
 msgid "Font Selection"
 msgstr "글꼴 선택"
 
@@ -1720,15 +1924,11 @@ msgstr ""
 msgid "Gamma"
 msgstr "감마"
 
-#: gtk/gtkgamma.c:403
+#: gtk/gtkgamma.c:406
 msgid "_Gamma value"
 msgstr "감마(_G) 값"
 
-#: gtk/gtkgamma.c:423
-msgid "OK"
-msgstr "확인"
-
-#: gtk/gtkhandlebox.c:192 gtk/gtkmenubar.c:148 gtk/gtkstatusbar.c:158
+#: gtk/gtkhandlebox.c:192 gtk/gtkmenubar.c:150 gtk/gtkstatusbar.c:158
 #: gtk/gtktoolbar.c:277 gtk/gtkviewport.c:148
 msgid "Shadow type"
 msgstr "그림자 형식"
@@ -1758,10 +1958,91 @@ msgstr ""
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1061
+#: gtk/gtkiconfactory.c:1060
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "아이콘 읽는 중 오류: %s"
+
+#: gtk/gtkimage.c:129
+#, fuzzy
+msgid "Pixbuf"
+msgstr "Pixbuf 객체"
+
+#: gtk/gtkimage.c:130
+msgid "A GdkPixbuf to display."
+msgstr ""
+
+#: gtk/gtkimage.c:137
+msgid "Pixmap"
+msgstr ""
+
+#: gtk/gtkimage.c:138
+msgid "A GdkPixmap to display."
+msgstr ""
+
+#: gtk/gtkimage.c:145
+msgid "Image"
+msgstr ""
+
+#: gtk/gtkimage.c:146
+msgid "A GdkImage to display."
+msgstr ""
+
+#: gtk/gtkimage.c:153
+msgid "Mask"
+msgstr ""
+
+#: gtk/gtkimage.c:154
+msgid "Mask bitmap to use with GdkImage or GdkPixmap"
+msgstr ""
+
+#: gtk/gtkimage.c:162
+msgid "Filename to load and display."
+msgstr ""
+
+#: gtk/gtkimage.c:170
+msgid "Stock ID"
+msgstr ""
+
+#: gtk/gtkimage.c:171
+msgid "Stock ID for a stock image to display."
+msgstr ""
+
+#: gtk/gtkimage.c:178
+#, fuzzy
+msgid "Icon set"
+msgstr "아이콘"
+
+#: gtk/gtkimage.c:179
+msgid "Icon set to display."
+msgstr ""
+
+#: gtk/gtkimage.c:186
+#, fuzzy
+msgid "Icon size"
+msgstr "글꼴 크기"
+
+#: gtk/gtkimage.c:187
+msgid "Size to use for stock icon or icon set."
+msgstr ""
+
+#: gtk/gtkimage.c:195
+#, fuzzy
+msgid "Animation"
+msgstr "정보"
+
+#: gtk/gtkimage.c:196
+msgid "GdkPixbufAnimation to display."
+msgstr ""
+
+#: gtk/gtkimage.c:203
+#, fuzzy
+msgid "Storage type"
+msgstr "굴곡 형식"
+
+#: gtk/gtkimage.c:204
+msgid "The representation being used for image data."
+msgstr ""
 
 #: gtk/gtkimagemenuitem.c:124
 msgid "Image widget"
@@ -1772,209 +2053,183 @@ msgid "Child widget to appear next to the menu text"
 msgstr ""
 
 #. shell and main vbox
-#: gtk/gtkinputdialog.c:182
+#: gtk/gtkinputdialog.c:184
 msgid "Input"
 msgstr "입력"
 
-#: gtk/gtkinputdialog.c:190
+#: gtk/gtkinputdialog.c:192
 msgid "No input devices"
 msgstr "입력 장치 없음"
 
-#: gtk/gtkinputdialog.c:219
+#: gtk/gtkinputdialog.c:221
 msgid "_Device:"
 msgstr "장치(_D):"
 
-#: gtk/gtkinputdialog.c:236
+#: gtk/gtkinputdialog.c:238
 msgid "Disabled"
 msgstr "사용 안함"
 
-#: gtk/gtkinputdialog.c:244
+#: gtk/gtkinputdialog.c:246
 msgid "Screen"
 msgstr "화면"
 
-#: gtk/gtkinputdialog.c:252
+#: gtk/gtkinputdialog.c:254
 msgid "Window"
 msgstr "창"
 
-#: gtk/gtkinputdialog.c:260
+#: gtk/gtkinputdialog.c:262
 msgid "_Mode: "
 msgstr "방식(_M): "
 
 #. The axis listbox
-#: gtk/gtkinputdialog.c:291
+#: gtk/gtkinputdialog.c:293
 msgid "_Axes"
 msgstr "축(_A)"
 
 #. Keys listbox
-#: gtk/gtkinputdialog.c:307
+#: gtk/gtkinputdialog.c:309
 msgid "_Keys"
 msgstr "글쇠(_K)"
 
-#. We create the save button in any case, so that clients can
-#. connect to it, without paying attention to whether it exits
-#: gtk/gtkinputdialog.c:328
-msgid "Save"
-msgstr "저장"
-
-#: gtk/gtkinputdialog.c:337
-msgid "Close"
-msgstr "닫기"
-
-#: gtk/gtkinputdialog.c:470
+#: gtk/gtkinputdialog.c:474
 msgid "X"
 msgstr "가로"
 
-#: gtk/gtkinputdialog.c:471
+#: gtk/gtkinputdialog.c:475
 msgid "Y"
 msgstr "세로"
 
-#: gtk/gtkinputdialog.c:472
+#: gtk/gtkinputdialog.c:476
 msgid "Pressure"
 msgstr "압력"
 
-#: gtk/gtkinputdialog.c:473
+#: gtk/gtkinputdialog.c:477
 msgid "X Tilt"
 msgstr "가로 각도"
 
-#: gtk/gtkinputdialog.c:474
+#: gtk/gtkinputdialog.c:478
 msgid "Y Tilt"
 msgstr "세로 각도"
 
-#: gtk/gtkinputdialog.c:475
+#: gtk/gtkinputdialog.c:479
 msgid "Wheel"
 msgstr "휠"
 
-#: gtk/gtkinputdialog.c:515
+#: gtk/gtkinputdialog.c:519
 msgid "none"
 msgstr "없음"
 
-#: gtk/gtkinputdialog.c:549 gtk/gtkinputdialog.c:585
+#: gtk/gtkinputdialog.c:553 gtk/gtkinputdialog.c:589
 msgid "(disabled)"
 msgstr "(사용 안함)"
 
-#: gtk/gtkinputdialog.c:578
+#: gtk/gtkinputdialog.c:582
 msgid "(unknown)"
 msgstr "(모름)"
 
 #. and clear button
-#: gtk/gtkinputdialog.c:663
+#: gtk/gtkinputdialog.c:667
 msgid "clear"
 msgstr "지움"
 
-#: gtk/gtklabel.c:283
+#: gtk/gtklabel.c:282
 msgid "The text of the label."
 msgstr ""
 
-#: gtk/gtklabel.c:290
+#: gtk/gtklabel.c:289
 msgid "A list of style attributes to apply to the text of the label."
 msgstr ""
 
-#: gtk/gtklabel.c:296
+#: gtk/gtklabel.c:295
 msgid "Use markup"
 msgstr "마크업 사용"
 
-#: gtk/gtklabel.c:297
+#: gtk/gtklabel.c:296
 msgid "The text of the label includes XML markup. See pango_parse_markup()."
 msgstr ""
 
-#: gtk/gtklabel.c:311 gtk/gtktexttag.c:378 gtk/gtktextview.c:566
+#: gtk/gtklabel.c:310 gtk/gtktexttag.c:378 gtk/gtktextview.c:583
 msgid "Justification"
 msgstr ""
 
-#: gtk/gtklabel.c:312
+#: gtk/gtklabel.c:311
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
 "GtkMisc::xalign for that."
 msgstr ""
 
-#: gtk/gtklabel.c:320
+#: gtk/gtklabel.c:319
 msgid "Pattern"
 msgstr ""
 
-#: gtk/gtklabel.c:321
+#: gtk/gtklabel.c:320
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline."
 msgstr ""
 
-#: gtk/gtklabel.c:328
+#: gtk/gtklabel.c:327
 msgid "Line wrap"
 msgstr ""
 
-#: gtk/gtklabel.c:329
+#: gtk/gtklabel.c:328
 msgid "If set, wrap lines if the text becomes too wide."
 msgstr ""
 
-#: gtk/gtklabel.c:335
+#: gtk/gtklabel.c:334
 msgid "Selectable"
 msgstr "선택가능"
 
-#: gtk/gtklabel.c:336
+#: gtk/gtklabel.c:335
 msgid "Whether the label text can be selected with the mouse."
 msgstr ""
 
-#: gtk/gtklabel.c:342
+#: gtk/gtklabel.c:341
 msgid "Mnemonic key"
 msgstr ""
 
-#: gtk/gtklabel.c:343
+#: gtk/gtklabel.c:342
 msgid "The mnemonic accelerator key for this label."
 msgstr ""
 
-#: gtk/gtklabel.c:351
+#: gtk/gtklabel.c:350
 msgid "Mnemonic widget"
 msgstr ""
 
-#: gtk/gtklabel.c:352
+#: gtk/gtklabel.c:351
 msgid "The widget to be activated when the label's mnemonic key is pressed."
 msgstr ""
 
-#: gtk/gtklayout.c:576
-msgid "X position"
-msgstr "가로 위치"
-
-#: gtk/gtklayout.c:577
-msgid "X position of child widget"
-msgstr "자식 위젯의 가로 위치"
-
-#: gtk/gtklayout.c:586
-msgid "Y position"
-msgstr "세로 위치"
-
-#: gtk/gtklayout.c:587
-msgid "Y position of child widget"
-msgstr "자식 위젯의 세로 위치"
-
-#: gtk/gtklayout.c:596 gtk/gtkviewport.c:132
+#: gtk/gtklayout.c:617 gtk/gtkviewport.c:132
 msgid "Horizontal adjustment"
 msgstr "가로 조정"
 
-#: gtk/gtklayout.c:597
+#: gtk/gtklayout.c:618 gtk/gtkscrolledwindow.c:238
 msgid "The GtkAdjustment for the horizontal position."
 msgstr ""
 
-#: gtk/gtklayout.c:604 gtk/gtkviewport.c:140
+#: gtk/gtklayout.c:625 gtk/gtkviewport.c:140
 msgid "Vertical adjustment"
 msgstr "세로 조정"
 
-#: gtk/gtklayout.c:605
+#: gtk/gtklayout.c:626 gtk/gtkscrolledwindow.c:245
 msgid "The GtkAdjustment for the vertical position."
 msgstr ""
 
-#: gtk/gtklayout.c:612 gtk/gtktreeviewcolumn.c:189
+#: gtk/gtklayout.c:633 gtk/gtktreeviewcolumn.c:187
 msgid "Width"
 msgstr "너비"
 
-#: gtk/gtklayout.c:613
+#: gtk/gtklayout.c:634
 msgid "The width of the layout."
 msgstr ""
 
-#: gtk/gtklayout.c:621
+#: gtk/gtklayout.c:642
 msgid "Height"
 msgstr "높이"
 
-#: gtk/gtklayout.c:622
+#: gtk/gtklayout.c:643
 msgid "The height of the layout."
 msgstr ""
 
@@ -1983,19 +2238,39 @@ msgstr ""
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:613
+#: gtk/gtkmain.c:615
 msgid "default:LTR"
 msgstr ""
 
-#: gtk/gtkmenubar.c:149
+#: gtk/gtkmenu.c:191
+msgid "Tearoff Title"
+msgstr ""
+
+#: gtk/gtkmenu.c:192
+msgid ""
+"A title that may be displayed by the window manager when this menu is torn-"
+"off."
+msgstr ""
+
+#: gtk/gtkmenu.c:260
+msgid "Can change accelerators"
+msgstr ""
+
+#: gtk/gtkmenu.c:261
+msgid ""
+"Whether menu accelerators can be changed by pressing a key over the menu "
+"item."
+msgstr ""
+
+#: gtk/gtkmenubar.c:151
 msgid "Style of bevel around the menubar"
 msgstr ""
 
-#: gtk/gtkmenubar.c:156 gtk/gtktoolbar.c:251
+#: gtk/gtkmenubar.c:158 gtk/gtktoolbar.c:251
 msgid "Internal padding"
 msgstr ""
 
-#: gtk/gtkmenubar.c:157
+#: gtk/gtkmenubar.c:159
 msgid "Amount of border space between the menubar shadow and the menu items"
 msgstr ""
 
@@ -2057,85 +2332,85 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr ""
 
-#: gtk/gtknotebook.c:327
+#: gtk/gtknotebook.c:365
 msgid "Page"
 msgstr ""
 
-#: gtk/gtknotebook.c:328
+#: gtk/gtknotebook.c:366
 msgid "The index of the current page"
 msgstr ""
 
-#: gtk/gtknotebook.c:336
+#: gtk/gtknotebook.c:374
 msgid "Tab Position"
 msgstr "탭 위치"
 
-#: gtk/gtknotebook.c:337
+#: gtk/gtknotebook.c:375
 msgid "Which side of the notebook holds the tabs"
 msgstr ""
 
-#: gtk/gtknotebook.c:344
+#: gtk/gtknotebook.c:382
 msgid "Tab Border"
 msgstr "탭 가장자리"
 
-#: gtk/gtknotebook.c:345
+#: gtk/gtknotebook.c:383
 msgid "Width of the border around the tab labels"
 msgstr ""
 
-#: gtk/gtknotebook.c:353
+#: gtk/gtknotebook.c:391
 msgid "Horizontal Tab Border"
 msgstr ""
 
-#: gtk/gtknotebook.c:354
+#: gtk/gtknotebook.c:392
 msgid "Width of the horizontal border of tab labels"
 msgstr ""
 
-#: gtk/gtknotebook.c:362
+#: gtk/gtknotebook.c:400
 msgid "Vertical Tab Border"
 msgstr ""
 
-#: gtk/gtknotebook.c:363
+#: gtk/gtknotebook.c:401
 msgid "Width of the vertical border of tab labels"
 msgstr ""
 
-#: gtk/gtknotebook.c:371
+#: gtk/gtknotebook.c:409
 msgid "Show Tabs"
 msgstr "탭 보기"
 
-#: gtk/gtknotebook.c:372
+#: gtk/gtknotebook.c:410
 msgid "Whether tabs should be shown or not"
 msgstr ""
 
-#: gtk/gtknotebook.c:378
+#: gtk/gtknotebook.c:416
 msgid "Show Border"
 msgstr "가장자리 보기"
 
-#: gtk/gtknotebook.c:379
+#: gtk/gtknotebook.c:417
 msgid "Whether the border should be shown or not"
 msgstr ""
 
-#: gtk/gtknotebook.c:385
+#: gtk/gtknotebook.c:423
 msgid "Scrollable"
 msgstr "스크롤 가능"
 
-#: gtk/gtknotebook.c:386
+#: gtk/gtknotebook.c:424
 msgid "If TRUE, scroll arrows are added if there are to many tabs to fit"
 msgstr ""
 
-#: gtk/gtknotebook.c:392
+#: gtk/gtknotebook.c:430
 msgid "Enable Popup"
 msgstr "팝업 가능"
 
-#: gtk/gtknotebook.c:393
+#: gtk/gtknotebook.c:431
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
 msgstr ""
 
-#: gtk/gtknotebook.c:400
+#: gtk/gtknotebook.c:438
 msgid "Whether tabs should have homogeneous sizes"
 msgstr ""
 
-#: gtk/gtknotebook.c:2283 gtk/gtknotebook.c:4515
+#: gtk/gtknotebook.c:2442 gtk/gtknotebook.c:4697
 #, c-format
 msgid "Page %u"
 msgstr "%u쪽"
@@ -2156,42 +2431,42 @@ msgstr ""
 msgid "Spacing around indicator"
 msgstr ""
 
-#: gtk/gtkpaned.c:120 gtk/gtkruler.c:138
+#: gtk/gtkpaned.c:211 gtk/gtkruler.c:138
 msgid "Position"
 msgstr "위치"
 
-#: gtk/gtkpaned.c:121
+#: gtk/gtkpaned.c:212
 msgid ""
 "Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr ""
 
-#: gtk/gtkpaned.c:129
+#: gtk/gtkpaned.c:220
 msgid "Position Set"
 msgstr ""
 
-#: gtk/gtkpaned.c:130
+#: gtk/gtkpaned.c:221
 msgid "TRUE if the Position property should be used"
 msgstr ""
 
-#: gtk/gtkpaned.c:136
+#: gtk/gtkpaned.c:227
 msgid "Handle Size"
 msgstr ""
 
-#: gtk/gtkpaned.c:137
+#: gtk/gtkpaned.c:228
 msgid "Width of handle"
 msgstr ""
 
-#: gtk/gtkrc.c:2726
+#: gtk/gtkrc.c:2222
 #, c-format
-msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr "그림 파일을 pixmap_path에서 찾을 수 없음: \"%s\" %d번째 줄"
+msgid "Unable to find include file: \"%s\""
+msgstr ""
 
-#: gtk/gtkrc.c:2729
+#: gtk/gtkrc.c:2867 gtk/gtkrc.c:2870
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "그림 파일을 pixmap_path에서 찾을 수 없음: \"%s\""
 
-#: gtk/gtkrc.c:3138
+#: gtk/gtkrc.c:3309
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr ""
@@ -2245,7 +2520,7 @@ msgid ""
 "in the progress widget"
 msgstr ""
 
-#: gtk/gtkprogressbar.c:131 gtk/gtkrange.c:270 gtk/gtkspinbutton.c:214
+#: gtk/gtkprogressbar.c:131 gtk/gtkrange.c:280 gtk/gtkspinbutton.c:234
 msgid "Adjustment"
 msgstr ""
 
@@ -2317,55 +2592,55 @@ msgstr ""
 msgid "Text to be displayed in the progress bar"
 msgstr ""
 
-#: gtk/gtkrange.c:261
+#: gtk/gtkrange.c:271
 msgid "Update policy"
 msgstr ""
 
-#: gtk/gtkrange.c:262
+#: gtk/gtkrange.c:272
 msgid "How the range should be updated on the screen"
 msgstr ""
 
-#: gtk/gtkrange.c:271
+#: gtk/gtkrange.c:281
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr ""
 
-#: gtk/gtkrange.c:278
+#: gtk/gtkrange.c:288
 msgid "Inverted"
 msgstr ""
 
-#: gtk/gtkrange.c:279
+#: gtk/gtkrange.c:289
 msgid "Invert direction slider moves to increase range value"
 msgstr ""
 
-#: gtk/gtkrange.c:285
+#: gtk/gtkrange.c:295
 msgid "Slider Width"
 msgstr ""
 
-#: gtk/gtkrange.c:286
+#: gtk/gtkrange.c:296
 msgid "Width of scrollbar or scale thumb"
 msgstr ""
 
-#: gtk/gtkrange.c:293
+#: gtk/gtkrange.c:303
 msgid "Trough Border"
 msgstr ""
 
-#: gtk/gtkrange.c:294
+#: gtk/gtkrange.c:304
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr ""
 
-#: gtk/gtkrange.c:301
+#: gtk/gtkrange.c:311
 msgid "Stepper Size"
 msgstr ""
 
-#: gtk/gtkrange.c:302
+#: gtk/gtkrange.c:312
 msgid "Length of step buttons at ends"
 msgstr ""
 
-#: gtk/gtkrange.c:309
+#: gtk/gtkrange.c:319
 msgid "Stepper Spacing"
 msgstr ""
 
-#: gtk/gtkrange.c:310
+#: gtk/gtkrange.c:320
 msgid "Spacing between step buttons and thumb"
 msgstr ""
 
@@ -2397,43 +2672,43 @@ msgstr ""
 msgid "Maximum size of the ruler"
 msgstr ""
 
-#: gtk/gtkscale.c:148 gtk/gtkspinbutton.c:232
+#: gtk/gtkscale.c:155 gtk/gtkspinbutton.c:252
 msgid "Digits"
 msgstr ""
 
-#: gtk/gtkscale.c:149
+#: gtk/gtkscale.c:156
 msgid "The number of decimal places that are displayed in the value"
 msgstr ""
 
-#: gtk/gtkscale.c:158
+#: gtk/gtkscale.c:165
 msgid "Draw Value"
 msgstr ""
 
-#: gtk/gtkscale.c:159
+#: gtk/gtkscale.c:166
 msgid "Whether the current value is displayed as a string next to the slider"
 msgstr ""
 
-#: gtk/gtkscale.c:166
+#: gtk/gtkscale.c:173
 msgid "Value Position"
 msgstr ""
 
-#: gtk/gtkscale.c:167
+#: gtk/gtkscale.c:174
 msgid "The position in which the current value is displayed"
 msgstr ""
 
-#: gtk/gtkscale.c:174
+#: gtk/gtkscale.c:181
 msgid "Slider Length"
 msgstr ""
 
-#: gtk/gtkscale.c:175
+#: gtk/gtkscale.c:182
 msgid "Length of scale's slider"
 msgstr ""
 
-#: gtk/gtkscale.c:183
+#: gtk/gtkscale.c:190
 msgid "Value spacing"
 msgstr ""
 
-#: gtk/gtkscale.c:184
+#: gtk/gtkscale.c:191
 msgid "Space between value text and the slider/trough area"
 msgstr ""
 
@@ -2485,6 +2760,48 @@ msgstr ""
 #: gtk/gtkscrollbar.c:118
 msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
+msgstr ""
+
+#: gtk/gtkscrolledwindow.c:237 gtk/gtktext.c:604 gtk/gtktreeview.c:508
+msgid "Horizontal Adjustment"
+msgstr ""
+
+#: gtk/gtkscrolledwindow.c:244 gtk/gtktext.c:612 gtk/gtktreeview.c:516
+msgid "Vertical Adjustment"
+msgstr ""
+
+#: gtk/gtkscrolledwindow.c:251
+msgid "Horizontal Scrollbar Policy"
+msgstr ""
+
+#: gtk/gtkscrolledwindow.c:252
+msgid "When the horizontal scrollbar is displayed"
+msgstr ""
+
+#: gtk/gtkscrolledwindow.c:259
+msgid "Vertical Scrollbar Policy"
+msgstr ""
+
+#: gtk/gtkscrolledwindow.c:260
+msgid "When the vertical scrollbar is displayed"
+msgstr ""
+
+#: gtk/gtkscrolledwindow.c:268
+#, fuzzy
+msgid "Window Placement"
+msgstr "창 제목"
+
+#: gtk/gtkscrolledwindow.c:269
+msgid "Where the contents are located with respect to the scrollbars"
+msgstr ""
+
+#: gtk/gtkscrolledwindow.c:276
+#, fuzzy
+msgid "Shadow Type"
+msgstr "그림자 형식"
+
+#: gtk/gtkscrolledwindow.c:277
+msgid "Style of bevel around the contents"
 msgstr ""
 
 #: gtk/gtksettings.c:147
@@ -2555,62 +2872,62 @@ msgstr ""
 msgid "Number of pixels the cursor can move before dragging"
 msgstr ""
 
-#: gtk/gtkspinbutton.c:215
+#: gtk/gtkspinbutton.c:235
 msgid "The adjustment that holds the value of the spinbutton"
 msgstr ""
 
-#: gtk/gtkspinbutton.c:222
+#: gtk/gtkspinbutton.c:242
 msgid "Climb Rate"
 msgstr ""
 
-#: gtk/gtkspinbutton.c:223
+#: gtk/gtkspinbutton.c:243
 msgid "The acceleration rate when you hold down a button"
 msgstr ""
 
-#: gtk/gtkspinbutton.c:233
+#: gtk/gtkspinbutton.c:253
 msgid "The number of decimal places to display"
 msgstr ""
 
-#: gtk/gtkspinbutton.c:242
+#: gtk/gtkspinbutton.c:262
 msgid "Snap to Ticks"
 msgstr ""
 
-#: gtk/gtkspinbutton.c:243
+#: gtk/gtkspinbutton.c:263
 msgid ""
 "Whether erroneous values are automatically changed to a spin button's "
 "nearest step increment"
 msgstr ""
 
-#: gtk/gtkspinbutton.c:250
+#: gtk/gtkspinbutton.c:270
 msgid "Numeric"
 msgstr ""
 
-#: gtk/gtkspinbutton.c:251
+#: gtk/gtkspinbutton.c:271
 msgid "Whether non-numeric characters should be ignored"
 msgstr ""
 
-#: gtk/gtkspinbutton.c:258
+#: gtk/gtkspinbutton.c:278
 msgid "Wrap"
 msgstr ""
 
-#: gtk/gtkspinbutton.c:259
+#: gtk/gtkspinbutton.c:279
 msgid "Whether a spin button should wrap upon reaching its limits"
 msgstr ""
 
-#: gtk/gtkspinbutton.c:266
+#: gtk/gtkspinbutton.c:286
 msgid "Update Policy"
 msgstr ""
 
-#: gtk/gtkspinbutton.c:267
+#: gtk/gtkspinbutton.c:287
 msgid ""
 "Whether the spin button should update always, or only when the value is legal"
 msgstr ""
 
-#: gtk/gtkspinbutton.c:275
+#: gtk/gtkspinbutton.c:295
 msgid "Value"
 msgstr "값"
 
-#: gtk/gtkspinbutton.c:276
+#: gtk/gtkspinbutton.c:296
 msgid "Reads the current value, or sets a new value"
 msgstr ""
 
@@ -2931,16 +3248,8 @@ msgstr ""
 msgid "If TRUE this means the table cells are all the same width/height"
 msgstr ""
 
-#: gtk/gtktext.c:604 gtk/gtktreeview.c:506
-msgid "Horizontal Adjustment"
-msgstr ""
-
 #: gtk/gtktext.c:605
 msgid "Horizontal adjustment for the text widget"
-msgstr ""
-
-#: gtk/gtktext.c:612 gtk/gtktreeview.c:514
-msgid "Vertical Adjustment"
 msgstr ""
 
 #: gtk/gtktext.c:613
@@ -3005,7 +3314,7 @@ msgstr "글자 방향"
 msgid "Text direction, e.g. right-to-left or left-to-right"
 msgstr ""
 
-#: gtk/gtktexttag.c:379 gtk/gtktextview.c:567
+#: gtk/gtktexttag.c:379 gtk/gtktextview.c:584
 msgid "Left, right, or center justification"
 msgstr ""
 
@@ -3021,7 +3330,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "왼쪽 여백"
 
-#: gtk/gtktexttag.c:396 gtk/gtktextview.c:576
+#: gtk/gtktexttag.c:396 gtk/gtktextview.c:593
 msgid "Width of the left margin in pixels"
 msgstr ""
 
@@ -3029,15 +3338,15 @@ msgstr ""
 msgid "Right margin"
 msgstr "오른쪽 여백"
 
-#: gtk/gtktexttag.c:406 gtk/gtktextview.c:586
+#: gtk/gtktexttag.c:406 gtk/gtktextview.c:603
 msgid "Width of the right margin in pixels"
 msgstr ""
 
-#: gtk/gtktexttag.c:416 gtk/gtktextview.c:595
+#: gtk/gtktexttag.c:416 gtk/gtktextview.c:612
 msgid "Indent"
 msgstr "들여쓰기"
 
-#: gtk/gtktexttag.c:417 gtk/gtktextview.c:596
+#: gtk/gtktexttag.c:417 gtk/gtktextview.c:613
 msgid "Amount to indent the paragraph, in pixels"
 msgstr ""
 
@@ -3045,7 +3354,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr ""
 
-#: gtk/gtktexttag.c:438 gtk/gtktextview.c:520
+#: gtk/gtktexttag.c:438 gtk/gtktextview.c:537
 msgid "Pixels of blank space above paragraphs"
 msgstr ""
 
@@ -3053,7 +3362,7 @@ msgstr ""
 msgid "Pixels below lines"
 msgstr ""
 
-#: gtk/gtktexttag.c:448 gtk/gtktextview.c:530
+#: gtk/gtktexttag.c:448 gtk/gtktextview.c:547
 msgid "Pixels of blank space below paragraphs"
 msgstr ""
 
@@ -3061,7 +3370,7 @@ msgstr ""
 msgid "Pixels inside wrap"
 msgstr ""
 
-#: gtk/gtktexttag.c:458 gtk/gtktextview.c:540
+#: gtk/gtktexttag.c:458 gtk/gtktextview.c:557
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr ""
 
@@ -3069,16 +3378,16 @@ msgstr ""
 msgid "Wrap mode"
 msgstr ""
 
-#: gtk/gtktexttag.c:485 gtk/gtktextview.c:558
+#: gtk/gtktexttag.c:485 gtk/gtktextview.c:575
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 
-#: gtk/gtktexttag.c:494 gtk/gtktextview.c:605
+#: gtk/gtktexttag.c:494 gtk/gtktextview.c:622
 msgid "Tabs"
 msgstr ""
 
-#: gtk/gtktexttag.c:495 gtk/gtktextview.c:606
+#: gtk/gtktexttag.c:495 gtk/gtktextview.c:623
 msgid "Custom tabs for this text"
 msgstr ""
 
@@ -3198,40 +3507,80 @@ msgstr ""
 msgid "Whether this tag affects text visibility"
 msgstr ""
 
-#: gtk/gtktextview.c:519
+#: gtk/gtktextutil.c:46
+msgid "LRM _Left-to-right mark"
+msgstr ""
+
+#: gtk/gtktextutil.c:47
+msgid "RLM _Right-to-left mark"
+msgstr ""
+
+#: gtk/gtktextutil.c:48
+msgid "LRE Left-to-right _embedding"
+msgstr ""
+
+#: gtk/gtktextutil.c:49
+msgid "RLE Right-to-left e_mbedding"
+msgstr ""
+
+#: gtk/gtktextutil.c:50
+msgid "LRO Left-to-right _override"
+msgstr ""
+
+#: gtk/gtktextutil.c:51
+msgid "RLO Right-to-left o_verride"
+msgstr ""
+
+#: gtk/gtktextutil.c:52
+msgid "PDF _Pop directional formatting"
+msgstr ""
+
+#: gtk/gtktextutil.c:53
+msgid "ZWS _Zero width space"
+msgstr ""
+
+#: gtk/gtktextutil.c:54
+msgid "ZWN Zero width _joiner"
+msgstr ""
+
+#: gtk/gtktextutil.c:55
+msgid "ZWNJ Zero width _non-joiner"
+msgstr ""
+
+#: gtk/gtktextview.c:536
 msgid "Pixels Above Lines"
 msgstr "라인위 픽셀"
 
-#: gtk/gtktextview.c:529
+#: gtk/gtktextview.c:546
 msgid "Pixels Below Lines"
 msgstr "라인밑 픽셀"
 
-#: gtk/gtktextview.c:539
+#: gtk/gtktextview.c:556
 msgid "Pixels Inside Wrap"
 msgstr ""
 
-#: gtk/gtktextview.c:557
+#: gtk/gtktextview.c:574
 msgid "Wrap Mode"
 msgstr ""
 
-#: gtk/gtktextview.c:575
+#: gtk/gtktextview.c:592
 msgid "Left Margin"
 msgstr "왼쪽 여백"
 
-#: gtk/gtktextview.c:585
+#: gtk/gtktextview.c:602
 msgid "Right Margin"
 msgstr "오른쪽 여백"
 
-#: gtk/gtktextview.c:613
+#: gtk/gtktextview.c:630
 #, fuzzy
 msgid "Cursor Visible"
 msgstr "사용 안함"
 
-#: gtk/gtktextview.c:614
+#: gtk/gtktextview.c:631
 msgid "If the insertion cursor is shown"
 msgstr ""
 
-#: gtk/gtktextview.c:5820
+#: gtk/gtktextview.c:6294
 msgid "Input _Methods"
 msgstr "입력방법(_M)"
 
@@ -3321,215 +3670,225 @@ msgstr "도구막대 아이콘 크기"
 msgid "Size of icons in default toolbars"
 msgstr "기본 도구막대의 아이콘 크기"
 
-#: gtk/gtktreeview.c:498
+#: gtk/gtktreemodelsort.c:303
+#, fuzzy
+msgid "TreeModelSort Model"
+msgstr "트리뷰 모델"
+
+#: gtk/gtktreemodelsort.c:304
+#, fuzzy
+msgid "The model for the TreeModelSort to sort"
+msgstr "트리뷰를 위한 모델"
+
+#: gtk/gtktreeview.c:500
 msgid "TreeView Model"
 msgstr "트리뷰 모델"
 
-#: gtk/gtktreeview.c:499
+#: gtk/gtktreeview.c:501
 msgid "The model for the tree view"
 msgstr "트리뷰를 위한 모델"
 
-#: gtk/gtktreeview.c:507
+#: gtk/gtktreeview.c:509
 msgid "Horizontal Adjustment for the widget"
 msgstr ""
 
-#: gtk/gtktreeview.c:515
+#: gtk/gtktreeview.c:517
 msgid "Vertical Adjustment for the widget"
 msgstr ""
 
-#: gtk/gtktreeview.c:522 gtk/gtktreeviewcolumn.c:173 gtk/gtkwidget.c:427
+#: gtk/gtktreeview.c:524 gtk/gtktreeviewcolumn.c:171 gtk/gtkwidget.c:425
 msgid "Visible"
 msgstr "보임"
 
-#: gtk/gtktreeview.c:523
+#: gtk/gtktreeview.c:525
 msgid "Show the column header buttons"
 msgstr ""
 
-#: gtk/gtktreeview.c:530
+#: gtk/gtktreeview.c:532
 msgid "Headers Clickable"
 msgstr ""
 
-#: gtk/gtktreeview.c:531
+#: gtk/gtktreeview.c:533
 msgid "Column headers respond to click events"
 msgstr ""
 
-#: gtk/gtktreeview.c:538
+#: gtk/gtktreeview.c:540
 msgid "Expander Column"
 msgstr ""
 
-#: gtk/gtktreeview.c:539
+#: gtk/gtktreeview.c:541
 msgid "Set the column for the expander column"
 msgstr ""
 
-#: gtk/gtktreeview.c:546 gtk/gtktreeviewcolumn.c:272
+#: gtk/gtktreeview.c:548 gtk/gtktreeviewcolumn.c:270
 msgid "Reorderable"
 msgstr ""
 
-#: gtk/gtktreeview.c:547
+#: gtk/gtktreeview.c:549
 msgid "View is reorderable"
 msgstr ""
 
-#: gtk/gtktreeview.c:554
+#: gtk/gtktreeview.c:556
 msgid "Rules Hint"
 msgstr ""
 
-#: gtk/gtktreeview.c:555
+#: gtk/gtktreeview.c:557
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
 
-#: gtk/gtktreeview.c:562
+#: gtk/gtktreeview.c:564
 msgid "Enable Search"
 msgstr "검색 사용"
 
-#: gtk/gtktreeview.c:563
+#: gtk/gtktreeview.c:565
 msgid "View allows user to search through columns interactively"
 msgstr ""
 
-#: gtk/gtktreeview.c:570
+#: gtk/gtktreeview.c:572
 msgid "Search Column"
 msgstr ""
 
-#: gtk/gtktreeview.c:571
+#: gtk/gtktreeview.c:573
 msgid "Model column to search through when searching through code"
 msgstr ""
 
-#: gtk/gtktreeview.c:584
+#: gtk/gtktreeview.c:586
 msgid "Expander Size"
 msgstr "크기 확대"
 
-#: gtk/gtktreeview.c:585
+#: gtk/gtktreeview.c:587
 msgid "Size of the expander arrow."
 msgstr ""
 
-#: gtk/gtktreeview.c:593
+#: gtk/gtktreeview.c:595
 msgid "Vertical Separator Width"
 msgstr ""
 
-#: gtk/gtktreeview.c:594
+#: gtk/gtktreeview.c:596
 msgid "Vertical space between cells.  Must be an even number."
 msgstr ""
 
-#: gtk/gtktreeview.c:602
+#: gtk/gtktreeview.c:604
 msgid "Horizontal Separator Width"
 msgstr ""
 
-#: gtk/gtktreeview.c:603
+#: gtk/gtktreeview.c:605
 msgid "Horizontal space between cells.  Must be an even number."
 msgstr ""
 
-#: gtk/gtktreeview.c:611
+#: gtk/gtktreeview.c:613
 msgid "Allow Rules"
 msgstr ""
 
-#: gtk/gtktreeview.c:612
+#: gtk/gtktreeview.c:614
 msgid "Allow drawing of alternating color rows."
 msgstr ""
 
-#: gtk/gtktreeview.c:618
+#: gtk/gtktreeview.c:620
 msgid "Indent Expanders"
 msgstr ""
 
-#: gtk/gtktreeview.c:619
+#: gtk/gtktreeview.c:621
 msgid "Make the expanders indented."
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:174
+#: gtk/gtktreeviewcolumn.c:172
 msgid "Whether to display the column"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:181 gtk/gtkwindow.c:394
+#: gtk/gtktreeviewcolumn.c:179 gtk/gtkwindow.c:432
 msgid "Resizable"
 msgstr "크기 조절 가능"
 
-#: gtk/gtktreeviewcolumn.c:182
+#: gtk/gtktreeviewcolumn.c:180
 msgid "Column is user-resizable"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:190
+#: gtk/gtktreeviewcolumn.c:188
 msgid "Current width of the column"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:198
+#: gtk/gtktreeviewcolumn.c:196
 msgid "Sizing"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:199
+#: gtk/gtktreeviewcolumn.c:197
 msgid "Resize mode of the column"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:207
+#: gtk/gtktreeviewcolumn.c:205
 msgid "Fixed Width"
 msgstr "고정 폭"
 
-#: gtk/gtktreeviewcolumn.c:208
+#: gtk/gtktreeviewcolumn.c:206
 msgid "Current fixed width of the column"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:217
+#: gtk/gtktreeviewcolumn.c:215
 msgid "Minimum Width"
 msgstr "최소 너비"
 
-#: gtk/gtktreeviewcolumn.c:218
+#: gtk/gtktreeviewcolumn.c:216
 msgid "Minimum allowed width of the column"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:227
+#: gtk/gtktreeviewcolumn.c:225
 msgid "Maximum Width"
 msgstr "최대 너비"
 
-#: gtk/gtktreeviewcolumn.c:228
+#: gtk/gtktreeviewcolumn.c:226
 msgid "Maximum allowed width of the column"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:237
+#: gtk/gtktreeviewcolumn.c:235
 msgid "Title"
 msgstr "제목"
 
-#: gtk/gtktreeviewcolumn.c:238
+#: gtk/gtktreeviewcolumn.c:236
 msgid "Title to appear in column header"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:245
+#: gtk/gtktreeviewcolumn.c:243
 msgid "Clickable"
 msgstr "클릭 가능"
 
-#: gtk/gtktreeviewcolumn.c:246
+#: gtk/gtktreeviewcolumn.c:244
 msgid "Whether the header can be clicked"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:254
+#: gtk/gtktreeviewcolumn.c:252
 msgid "Widget"
 msgstr "위젯"
 
-#: gtk/gtktreeviewcolumn.c:255
+#: gtk/gtktreeviewcolumn.c:253
 msgid "Widget to put in column header button instead of column title"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:262
+#: gtk/gtktreeviewcolumn.c:260
 msgid "Alignment"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:263
+#: gtk/gtktreeviewcolumn.c:261
 msgid "X Alignment of the column header text or widget"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:273
+#: gtk/gtktreeviewcolumn.c:271
 msgid "Whether the column can be reordered around the headers"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:280
+#: gtk/gtktreeviewcolumn.c:278
 msgid "Sort indicator"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:281
+#: gtk/gtktreeviewcolumn.c:279
 msgid "Whether to show a sort indicator"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:288
+#: gtk/gtktreeviewcolumn.c:286
 msgid "Sort order"
 msgstr "정렬 순서"
 
-#: gtk/gtktreeviewcolumn.c:289
+#: gtk/gtktreeviewcolumn.c:287
 msgid "Sort direction the sort indicator should indicate"
 msgstr ""
 
@@ -3549,133 +3908,133 @@ msgstr ""
 msgid "Determines how the shadowed box around the viewport is drawn."
 msgstr ""
 
-#: gtk/gtkwidget.c:394
+#: gtk/gtkwidget.c:392
 msgid "Widget name"
 msgstr "위젯 이름"
 
-#: gtk/gtkwidget.c:395
+#: gtk/gtkwidget.c:393
 msgid "The name of the widget"
 msgstr "위젯의 이름"
 
-#: gtk/gtkwidget.c:401
+#: gtk/gtkwidget.c:399
 msgid "Parent widget"
 msgstr "부모 위젯"
 
-#: gtk/gtkwidget.c:402
+#: gtk/gtkwidget.c:400
 msgid "The parent widget of this widget. Must be a Container widget."
 msgstr "이 위젯의 부모 위젯. 컨테이너 위젯이어야 합니다"
 
-#: gtk/gtkwidget.c:409
+#: gtk/gtkwidget.c:407
 msgid "Width request"
 msgstr "너비 요청"
 
-#: gtk/gtkwidget.c:410
+#: gtk/gtkwidget.c:408
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used."
 msgstr ""
 
-#: gtk/gtkwidget.c:418
+#: gtk/gtkwidget.c:416
 msgid "Height request"
 msgstr "높이 요청"
 
-#: gtk/gtkwidget.c:419
+#: gtk/gtkwidget.c:417
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used."
 msgstr ""
 
-#: gtk/gtkwidget.c:428
+#: gtk/gtkwidget.c:426
 msgid "Whether the widget is visible"
 msgstr ""
 
-#: gtk/gtkwidget.c:434
+#: gtk/gtkwidget.c:432
 msgid "Sensitive"
 msgstr ""
 
-#: gtk/gtkwidget.c:435
+#: gtk/gtkwidget.c:433
 msgid "Whether the widget responds to input"
 msgstr ""
 
-#: gtk/gtkwidget.c:441
+#: gtk/gtkwidget.c:439
 msgid "Application paintable"
 msgstr ""
 
-#: gtk/gtkwidget.c:442
+#: gtk/gtkwidget.c:440
 msgid "Whether the application will paint directly on the widget"
 msgstr ""
 
-#: gtk/gtkwidget.c:448
+#: gtk/gtkwidget.c:446
 msgid "Can focus"
 msgstr ""
 
-#: gtk/gtkwidget.c:449
+#: gtk/gtkwidget.c:447
 msgid "Whether the widget can accept the input focus"
 msgstr ""
 
-#: gtk/gtkwidget.c:455
+#: gtk/gtkwidget.c:453
 msgid "Has focus"
 msgstr ""
 
-#: gtk/gtkwidget.c:456
+#: gtk/gtkwidget.c:454
 msgid "Whether the widget has the input focus"
 msgstr ""
 
-#: gtk/gtkwidget.c:462
+#: gtk/gtkwidget.c:460
 msgid "Can default"
 msgstr ""
 
-#: gtk/gtkwidget.c:463
+#: gtk/gtkwidget.c:461
 msgid "Whether the widget can be the default widget"
 msgstr ""
 
-#: gtk/gtkwidget.c:469
+#: gtk/gtkwidget.c:467
 msgid "Has default"
 msgstr "기본값 가짐"
 
-#: gtk/gtkwidget.c:470
+#: gtk/gtkwidget.c:468
 msgid "Whether the widget is the default widget"
 msgstr ""
 
-#: gtk/gtkwidget.c:476
+#: gtk/gtkwidget.c:474
 msgid "Receives default"
 msgstr "기본값 받음"
 
-#: gtk/gtkwidget.c:477
+#: gtk/gtkwidget.c:475
 msgid "If TRUE, the widget will receive the default action when it is focused."
 msgstr ""
 
-#: gtk/gtkwidget.c:483
+#: gtk/gtkwidget.c:481
 msgid "Composite child"
 msgstr ""
 
-#: gtk/gtkwidget.c:484
+#: gtk/gtkwidget.c:482
 msgid "Whether the widget is composed of other widgets"
 msgstr ""
 
-#: gtk/gtkwidget.c:490
+#: gtk/gtkwidget.c:488
 msgid "Style"
 msgstr "모양새"
 
-#: gtk/gtkwidget.c:491
+#: gtk/gtkwidget.c:489
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)."
 msgstr ""
 
-#: gtk/gtkwidget.c:497
+#: gtk/gtkwidget.c:495
 msgid "Events"
 msgstr "이벤트"
 
-#: gtk/gtkwidget.c:498
+#: gtk/gtkwidget.c:496
 msgid "The event mask that decides what kind of GdkEvents this widget gets."
 msgstr ""
 
-#: gtk/gtkwidget.c:505
+#: gtk/gtkwidget.c:503
 msgid "Extension events"
 msgstr "확장 이벤트"
 
-#: gtk/gtkwidget.c:506
+#: gtk/gtkwidget.c:504
 msgid "The mask that decides what kind of extension events this widget gets."
 msgstr ""
 
@@ -3711,96 +4070,111 @@ msgstr ""
 msgid "Width, in pixels, between focus indicator and the widget 'box'."
 msgstr ""
 
-#: gtk/gtkwindow.c:359
+#: gtk/gtkwidget.c:1079
+msgid "Cursor color"
+msgstr "커서 색상"
+
+#: gtk/gtkwidget.c:1080
+msgid "Color with which to draw insertion cursor"
+msgstr "삽입 커서를 그릴때 사용되는 색상"
+
+#: gtk/gtkwidget.c:1085
+msgid "Cursor line aspect ratio"
+msgstr ""
+
+#: gtk/gtkwidget.c:1086
+#, fuzzy
+msgid "Aspect ratio with which to draw insertion cursor"
+msgstr "삽입 커서를 그릴때 사용되는 색상"
+
+#: gtk/gtkwindow.c:397
 msgid "Window Type"
 msgstr "창 형식"
 
-#: gtk/gtkwindow.c:360
+#: gtk/gtkwindow.c:398
 msgid "The type of the window"
 msgstr "창의 형식"
 
-#: gtk/gtkwindow.c:369
+#: gtk/gtkwindow.c:407
 msgid "Window Title"
 msgstr "창 제목"
 
-#: gtk/gtkwindow.c:370
+#: gtk/gtkwindow.c:408
 msgid "The title of the window"
 msgstr "창의 제목"
 
-#: gtk/gtkwindow.c:377
+#: gtk/gtkwindow.c:415
 msgid "Allow Shrink"
 msgstr ""
 
-#: gtk/gtkwindow.c:379
+#: gtk/gtkwindow.c:417
 #, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
 "time a bad idea."
 msgstr ""
 
-#: gtk/gtkwindow.c:386
+#: gtk/gtkwindow.c:424
 msgid "Allow Grow"
 msgstr ""
 
-#: gtk/gtkwindow.c:387
+#: gtk/gtkwindow.c:425
 msgid "If TRUE, users can expand the window beyond its minimum size."
 msgstr ""
 
-#: gtk/gtkwindow.c:395
+#: gtk/gtkwindow.c:433
 msgid "If TRUE, users can resize the window."
 msgstr ""
 
-#: gtk/gtkwindow.c:402
+#: gtk/gtkwindow.c:440
 msgid "Modal"
 msgstr ""
 
-#: gtk/gtkwindow.c:403
+#: gtk/gtkwindow.c:441
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)."
 msgstr ""
 
-#: gtk/gtkwindow.c:410
+#: gtk/gtkwindow.c:448
 msgid "Window Position"
 msgstr "창 위치"
 
-#: gtk/gtkwindow.c:411
+#: gtk/gtkwindow.c:449
 msgid "The initial position of the window."
 msgstr ""
 
-#: gtk/gtkwindow.c:419
+#: gtk/gtkwindow.c:457
 msgid "Default Width"
 msgstr "기본 너비"
 
-#: gtk/gtkwindow.c:420
+#: gtk/gtkwindow.c:458
 msgid ""
 "The default width of the window, used when initially showing the window."
-msgstr ""
-"창의 기본 너비는 창이 처음으로 보여질때 사용됩니다."
+msgstr "창의 기본 너비는 창이 처음으로 보여질때 사용됩니다."
 
-#: gtk/gtkwindow.c:429
+#: gtk/gtkwindow.c:467
 msgid "Default Height"
 msgstr "기본 높이"
 
-#: gtk/gtkwindow.c:430
+#: gtk/gtkwindow.c:468
 msgid ""
 "The default height of the window, used when initially showing the window."
-msgstr ""
-"창의 기본 높이는 창이 처음으로 보여질때 사용됩니다."
+msgstr "창의 기본 높이는 창이 처음으로 보여질때 사용됩니다."
 
-#: gtk/gtkwindow.c:439
+#: gtk/gtkwindow.c:477
 msgid "Destroy with Parent"
 msgstr ""
 
-#: gtk/gtkwindow.c:440
+#: gtk/gtkwindow.c:478
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr ""
 
-#: gtk/gtkwindow.c:447
+#: gtk/gtkwindow.c:485
 msgid "Icon"
 msgstr "아이콘"
 
-#: gtk/gtkwindow.c:448
+#: gtk/gtkwindow.c:486
 msgid "Icon for this window"
 msgstr "이 창의 아이콘"
 
@@ -3810,8 +4184,13 @@ msgstr "방식"
 
 #: gtk/gtksizegroup.c:243
 msgid ""
-"The the directions in which the size group effects the requested sizes of "
-"its component widgets."
+"The directions in which the size group effects the requested sizes of its "
+"component widgets."
+msgstr ""
+
+#. ID
+#: modules/input/imam-et.c:454
+msgid "Amharic (EZ+)"
 msgstr ""
 
 #. ID
@@ -3835,6 +4214,16 @@ msgid "Thai (Broken)"
 msgstr "타이어 (깨졌음)"
 
 #. ID
+#: modules/input/imti-er.c:453
+msgid "Tigrigna-Eritrean (EZ+)"
+msgstr ""
+
+#. ID
+#: modules/input/imti-et.c:453
+msgid "Tigrigna-Ethiopian (EZ+)"
+msgstr ""
+
+#. ID
 #: modules/input/imviqr.c:243
 msgid "Vietnamese (VIQR)"
 msgstr "베트남어 (VIQR)"
@@ -3843,3 +4232,40 @@ msgstr "베트남어 (VIQR)"
 #: modules/input/imxim.c:27
 msgid "X Input Method"
 msgstr "X 입력기"
+
+#~ msgid "Directories"
+#~ msgstr "디렉토리"
+
+#~ msgid "Create Dir"
+#~ msgstr "디렉토리 만들기"
+
+#~ msgid ""
+#~ "Error creating directory \"%s\": %s\n"
+#~ "%s"
+#~ msgstr ""
+#~ "디렉토리 \"%s\" 만드는 중 오류: %s\n"
+#~ "%s"
+
+#~ msgid "Create Directory"
+#~ msgstr "디렉토리 만듦"
+
+#~ msgid "_Directory name:"
+#~ msgstr "디렉토리 이름(_D):"
+
+#~ msgid "Cancel"
+#~ msgstr "취소"
+
+#~ msgid "Delete"
+#~ msgstr "지우기"
+
+#~ msgid "OK"
+#~ msgstr "확인"
+
+#~ msgid "Save"
+#~ msgstr "저장"
+
+#~ msgid "Close"
+#~ msgstr "닫기"
+
+#~ msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
+#~ msgstr "그림 파일을 pixmap_path에서 찾을 수 없음: \"%s\" %d번째 줄"

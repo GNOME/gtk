@@ -1612,7 +1612,7 @@ miGetArcPts(SppArcPtr parc, int cpt, SppPointPtr *ppPts)
 	x1 = x2; y1 = y2;
     }
     /* adjust the last point */
-    if (abs(parc->angle2) >= 360.0)
+    if (fabs(parc->angle2) >= 360.0)
 	poly[cpt +i -1] = poly[0];
     else {
 	poly[cpt +i -1].x = (miDcos(st + et) * parc->width/2.0 + xc);

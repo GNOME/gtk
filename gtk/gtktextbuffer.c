@@ -850,6 +850,15 @@ gtk_text_buffer_real_insert_range (GtkTextBuffer     *buffer,
   range_start = start;
   range_end = start;
 
+
+  /* FIXME if you insert a range into itself, this can loop infinitely because
+   * the region being copied keeps growing as we insert. The fix is probably to create a
+   * copy of what's being inserted, or to save two regions, the region before
+   * the insertion point and the region after.
+   * 
+   * http://bugzilla.gnome.org/show_bug.cgi?id=71412
+   */
+  
   while (TRUE)
     {
       gint start_offset;

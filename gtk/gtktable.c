@@ -1335,18 +1335,21 @@ gtk_table_size_allocate_pass1 (GtkTable *table)
   
   if (table->homogeneous)
     {
-      nexpand = 0;
-      for (col = 0; col < table->ncols; col++)
-	if (table->cols[col].expand)
-	  {
-	    nexpand += 1;
-	    break;
-	  }
-      
-      if (nexpand > 0)
+      if (!table->children)
+	nexpand = 1;
+      else
+	{
+	  nexpand = 0;
+	  for (col = 0; col < table->ncols; col++)
+	    if (table->cols[col].expand)
+	      {
+		nexpand += 1;
+		break;
+	      }
+	}
+      if (nexpand)
 	{
 	  width = real_width;
-	  
 	  for (col = 0; col + 1 < table->ncols; col++)
 	    width -= table->cols[col].spacing;
 	  
@@ -1423,15 +1426,19 @@ gtk_table_size_allocate_pass1 (GtkTable *table)
   
   if (table->homogeneous)
     {
-      nexpand = 0;
-      for (row = 0; row < table->nrows; row++)
-	if (table->rows[row].expand)
-	  {
-	    nexpand += 1;
-	    break;
-	  }
-      
-      if (nexpand > 0)
+      if (!table->children)
+	nexpand = 1;
+      else
+	{
+	  nexpand = 0;
+	  for (row = 0; row < table->nrows; row++)
+	    if (table->rows[row].expand)
+	      {
+		nexpand += 1;
+		break;
+	      }
+	}
+      if (nexpand)
 	{
 	  height = real_height;
 	  

@@ -1,5 +1,5 @@
-/* example-start selection setselection.c */
 
+#include <stdlib.h>
 #include <gtk/gtk.h>
 #include <time.h>
 
@@ -77,8 +77,8 @@ int main( int   argc,
   gtk_window_set_title (GTK_WINDOW (window), "Event Box");
   gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 
-  gtk_signal_connect (GTK_OBJECT (window), "destroy",
-		      GTK_SIGNAL_FUNC (gtk_exit), NULL);
+  g_signal_connect (GTK_OBJECT (window), "destroy",
+		      GTK_SIGNAL_FUNC (exit), NULL);
 
   /* Create a toggle button to act as the selection */
 
@@ -86,16 +86,16 @@ int main( int   argc,
   gtk_container_add (GTK_CONTAINER (window), selection_button);
   gtk_widget_show (selection_button);
 
-  gtk_signal_connect (GTK_OBJECT(selection_button), "toggled",
+  g_signal_connect (GTK_OBJECT(selection_button), "toggled",
 		      GTK_SIGNAL_FUNC (selection_toggled), &have_selection);
-  gtk_signal_connect (GTK_OBJECT(selection_button), "selection_clear_event",
+  g_signal_connect (GTK_OBJECT(selection_button), "selection_clear_event",
 		      GTK_SIGNAL_FUNC (selection_clear), &have_selection);
 
   gtk_selection_add_target (selection_button,
 			    GDK_SELECTION_PRIMARY,
 			    GDK_SELECTION_TYPE_STRING,
 		            1);
-  gtk_signal_connect (GTK_OBJECT(selection_button), "selection_get",
+  g_signal_connect (GTK_OBJECT(selection_button), "selection_get",
 		      GTK_SIGNAL_FUNC (selection_handle), &have_selection);
 
   gtk_widget_show (selection_button);
@@ -105,4 +105,3 @@ int main( int   argc,
   
   return 0;
 }
-/* example-end */

@@ -511,7 +511,7 @@ typesystem_recurse (GType        type,
   
   gtk_tree_store_append (store, &iter, parent_iter);
 
-  str = g_strdup_printf ("%d", type);
+  str = g_strdup_printf ("%ld", (glong)type);
   gtk_tree_store_set (store, &iter, 0, str, 1, g_type_name (type),
                       2, our_pixbuf,
                       3, 7.0, 4, (guint) 9000,
