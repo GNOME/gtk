@@ -699,7 +699,7 @@ gtk_drag_finish (GdkDragContext *context,
 			     time);
     }
   
-  if (!del)
+  if (!(success && del))
     gdk_drop_finish (context, success, time);
 }
 
@@ -1061,7 +1061,8 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
  * gtk_drag_dest_find_target:
  * @widget: drag destination widget
  * @context: drag context
- * @target_list: list of droppable targets
+ * @target_list: list of droppable targets, or %NULL to use
+ *    gtk_drag_dest_get_target_list (@widget).
  * 
  * Looks for a match between @context->targets and the
  * @dest_target_list, returning the first matching target, otherwise
@@ -1080,8 +1081,16 @@ gtk_drag_dest_find_target (GtkWidget      *widget,
 {
   GList *tmp_target;
   GList *tmp_source = NULL;
-  GtkWidget *source_widget = gtk_drag_get_source_widget (context);
+  GtkWidget *source_widget;
 
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), GDK_NONE);
+  g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), GDK_NONE);
+
+  source_widget = gtk_drag_get_source_widget (context);
+
+  if (target_list == NULL)
+    target_list = gtk_drag_dest_get_target_list (widget);
+  
   if (target_list == NULL)
     return GDK_NONE;
   
@@ -1569,7 +1578,7 @@ gtk_drag_dest_motion (GtkWidget	     *widget,
 	    }
 	}
       
-      if (action && gtk_drag_dest_find_target (widget, context, site->target_list))
+      if (action && gtk_drag_dest_find_target (widget, context, NULL))
 	{
 	  if (!site->have_drag)
 	    {
@@ -1676,12 +1685,15 @@ gtk_drag_dest_drop (GtkWidget	     *widget,
 
       if (site->flags & GTK_DEST_DEFAULT_DROP)
 	{
-	  GdkAtom target = gtk_drag_dest_find_target (widget, context, site->target_list);
+	  GdkAtom target = gtk_drag_dest_find_target (widget, context, NULL);
       
 	  if (target == GDK_NONE)
-	    return FALSE;
-	  
-	  gtk_drag_get_data (widget, context, target, time);
+	    {
+	      gtk_drag_finish (context, FALSE, FALSE, time);
+	      return TRUE;
+	    }
+	  else
+	    gtk_drag_get_data (widget, context, target, time);
 	}
 
       gtk_signal_emit_by_name (GTK_OBJECT (widget), "drag_drop",

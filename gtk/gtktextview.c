@@ -955,7 +955,7 @@ gtk_text_view_init (GtkTextView *text_view)
   text_view->editable = TRUE;
 
   gtk_drag_dest_set (widget,
-                     GTK_DEST_DEFAULT_DROP,
+		     0,
                      target_table, G_N_ELEMENTS (target_table),
                      GDK_ACTION_COPY | GDK_ACTION_MOVE);
 
@@ -4903,6 +4903,8 @@ gtk_text_view_drag_drop (GtkWidget        *widget,
                          guint             time)
 {
   GtkTextView *text_view;
+  GtkTextIter drop_point;
+  GdkAtom target = GDK_NONE;
   
   text_view = GTK_TEXT_VIEW (widget);
   
@@ -4912,7 +4914,19 @@ gtk_text_view_drag_drop (GtkWidget        *widget,
   text_view->scroll_timeout = 0;
 
   gtk_text_mark_set_visible (text_view->dnd_mark, FALSE);
-  
+
+  gtk_text_buffer_get_iter_at_mark (get_buffer (text_view),
+                                    &drop_point,
+                                    text_view->dnd_mark);
+
+  if (gtk_text_iter_can_insert (&drop_point, text_view->editable))
+    target = gtk_drag_dest_find_target (widget, context, NULL);
+
+  if (target != GDK_NONE)
+    gtk_drag_get_data (widget, context, target, time);
+  else
+    gtk_drag_finish (context, FALSE, FALSE, time);
+
   return TRUE;
 }
 
@@ -4945,19 +4959,19 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
 {
   GtkTextIter drop_point;
   GtkTextView *text_view;
-  GtkTextMark *drag_target_mark;
+  gboolean success = FALSE;
 
   text_view = GTK_TEXT_VIEW (widget);
 
-  drag_target_mark = gtk_text_buffer_get_mark (get_buffer (text_view),
-                                               "gtk_drag_target");
-
-  if (drag_target_mark == NULL)
-    return;
+  if (!text_view->dnd_mark)
+    goto done;
 
   gtk_text_buffer_get_iter_at_mark (get_buffer (text_view),
                                     &drop_point,
-                                    drag_target_mark);
+                                    text_view->dnd_mark);
+  
+  if (!gtk_text_iter_can_insert (&drop_point, text_view->editable))
+    goto done;
 
   if (selection_data->target == gdk_atom_intern ("GTK_TEXT_BUFFER_CONTENTS", FALSE))
     {
@@ -5003,6 +5017,13 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
     }
   else
     insert_text_data (text_view, &drop_point, selection_data);
+
+  success = TRUE;
+
+ done:
+  gtk_drag_finish (context, success,
+		   success && context->action == GDK_ACTION_MOVE,
+		   time);
 }
 
 static GtkAdjustment*

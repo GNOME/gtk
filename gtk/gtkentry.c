@@ -146,6 +146,11 @@ static void   gtk_entry_direction_changed    (GtkWidget        *widget,
 static void   gtk_entry_state_changed        (GtkWidget        *widget,
 					      GtkStateType      previous_state);
 
+static gboolean gtk_entry_drag_drop          (GtkWidget        *widget,
+                                              GdkDragContext   *context,
+                                              gint              x,
+                                              gint              y,
+                                              guint             time);
 static gboolean gtk_entry_drag_motion        (GtkWidget        *widget,
 					      GdkDragContext   *context,
 					      gint              x,
@@ -380,6 +385,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   widget_class->state_changed = gtk_entry_state_changed;
   widget_class->mnemonic_activate = gtk_entry_mnemonic_activate;
 
+  widget_class->drag_drop = gtk_entry_drag_drop;
   widget_class->drag_motion = gtk_entry_drag_motion;
   widget_class->drag_leave = gtk_entry_drag_leave;
   widget_class->drag_data_received = gtk_entry_drag_data_received;
@@ -908,7 +914,7 @@ gtk_entry_init (GtkEntry *entry)
   entry->has_frame = TRUE;
   
   gtk_drag_dest_set (GTK_WIDGET (entry),
-                     GTK_DEST_DEFAULT_DROP | GTK_DEST_DEFAULT_HIGHLIGHT,
+                     GTK_DEST_DEFAULT_HIGHLIGHT,
                      target_table, G_N_ELEMENTS (target_table),
                      GDK_ACTION_COPY | GDK_ACTION_MOVE);
 
@@ -1525,8 +1531,9 @@ gtk_entry_motion_notify (GtkWidget      *widget,
 	{
 	  GdkDragContext *context;
 	  GtkTargetList *target_list = gtk_target_list_new (target_table, G_N_ELEMENTS (target_table));
+	  guint actions = entry->editable ? GDK_ACTION_COPY | GDK_ACTION_MOVE : GDK_ACTION_COPY;
 	  
-	  context = gtk_drag_begin (widget, target_list, GDK_ACTION_COPY | GDK_ACTION_MOVE,
+	  context = gtk_drag_begin (widget, target_list, actions,
 			  entry->button, (GdkEvent *)event);
 
 	  
@@ -3823,6 +3830,29 @@ gtk_entry_drag_leave (GtkWidget        *widget,
 }
 
 static gboolean
+gtk_entry_drag_drop  (GtkWidget        *widget,
+		      GdkDragContext   *context,
+		      gint              x,
+		      gint              y,
+		      guint             time)
+{
+  GtkEntry *entry;
+  GdkAtom target = GDK_NONE;
+  
+  entry = GTK_ENTRY (widget);
+
+  if (entry->editable)
+    target = gtk_drag_dest_find_target (widget, context, NULL);
+
+  if (target != GDK_NONE)
+    gtk_drag_get_data (widget, context, target, time);
+  else
+    gtk_drag_finish (context, FALSE, FALSE, time);
+  
+  return TRUE;
+}
+
+static gboolean
 gtk_entry_drag_motion (GtkWidget        *widget,
 		       GdkDragContext   *context,
 		       gint              x,
@@ -3843,31 +3873,40 @@ gtk_entry_drag_motion (GtkWidget        *widget,
   old_position = entry->dnd_position;
   new_position = gtk_entry_find_position (entry, x + entry->scroll_offset);
 
-  source_widget = gtk_drag_get_source_widget (context);
-  suggested_action = context->suggested_action;
-
-  if (!gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &sel1, &sel2) ||
-      new_position < sel1 || new_position > sel2)
+  if (entry->editable)
     {
-      if (source_widget == widget)
-	{
-	  /* Default to MOVE, unless the user has
-	   * pressed ctrl or alt to affect available actions
-	   */
-	  if ((context->actions & GDK_ACTION_MOVE) != 0)
-	    suggested_action = GDK_ACTION_MOVE;
-	}
+      source_widget = gtk_drag_get_source_widget (context);
+      suggested_action = context->suggested_action;
+
+      if (!gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &sel1, &sel2) ||
+          new_position < sel1 || new_position > sel2)
+        {
+          if (source_widget == widget)
+	    {
+	      /* Default to MOVE, unless the user has
+	       * pressed ctrl or alt to affect available actions
+	       */
+	      if ((context->actions & GDK_ACTION_MOVE) != 0)
+	        suggested_action = GDK_ACTION_MOVE;
+	    }
+              
+          entry->dnd_position = new_position;
+        }
+      else
+        {
+          if (source_widget == widget)
+	    suggested_action = 0;	/* Can't drop in selection where drag started */
           
-      entry->dnd_position = new_position;
+          entry->dnd_position = -1;
+        }
     }
   else
     {
-      if (source_widget == widget)
-	suggested_action = 0;	/* Can't drop in selection where drag started */
-      
+      /* Entry not editable */
+      suggested_action = 0;
       entry->dnd_position = -1;
     }
-
+  
   gdk_drag_status (context, suggested_action, time);
   
   if (entry->dnd_position != old_position)
@@ -3894,7 +3933,7 @@ gtk_entry_drag_data_received (GtkWidget        *widget,
 
   str = gtk_selection_data_get_text (selection_data);
 
-  if (str)
+  if (str && entry->editable)
     {
       gint new_position;
       gint sel1, sel2;
@@ -3914,6 +3953,12 @@ gtk_entry_drag_data_received (GtkWidget        *widget,
 	}
       
       g_free (str);
+      gtk_drag_finish (context, TRUE, context->action == GDK_ACTION_MOVE, time);
+    }
+  else
+    {
+      /* Drag and drop didn't happen! */
+      gtk_drag_finish (context, FALSE, FALSE, time);
     }
 }
 
@@ -3947,7 +3992,8 @@ gtk_entry_drag_data_delete (GtkWidget      *widget,
 
   GtkEditable *editable = GTK_EDITABLE (widget);
   
-  if (gtk_editable_get_selection_bounds (editable, &sel_start, &sel_end))
+  if (GTK_ENTRY (widget)->editable &&
+      gtk_editable_get_selection_bounds (editable, &sel_start, &sel_end))
     gtk_editable_delete_text (editable, sel_start, sel_end);
 }
 

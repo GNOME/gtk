@@ -1,3 +1,34 @@
+Wed Oct  3 10:42:54 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdnd.c (gtk_drag_dest_find_target): Allow
+	NUOL for @target_list to mean, use
+	gtk_drag_dest_get_target_list (widget).
+
+	* gtk/gtkdnd.c (gtk_drag_finish): Fix problem where
+	drop could hang when calling gtk_drag_finish with 
+	success == FALSE and del == TRUE.
+
+	* gtk/gtkdnd.c (gtk_drag_dest_drop): Fix problem where
+	drops without a matching target found would propagate
+	to the parent widget rather than being rejected.
+
+	* gtk/gtktextview.c (gtk_text_view_drag_data_received): 
+	Use text_view->dnd_mark instead of mark name to be
+	consistent with the rest of the code.
+
+	* gtk/gtktextview.c (gtk_text_view_drag_motion): Make
+	pendantically correct for a drop-only-in-some-places
+	widget. (Check whether you can insert in drag_drop,
+	not just in drag_motion ... matters in theory, and
+	for Motif drag and drop in practice.)
+
+	* gtk/gtkentry.c (gtk_entry_drag_drop): Patch from 
+	Damian Ivereigh to not allow drops on non-editable
+	entries. (#61124)
+
+	* gtk/gtkentry.c (gtk_entry_motion_notify): Don't allow
+	text to be moved from a non-editable entry.
+	
 2001-10-03  James Henstridge  <james@daa.com.au>
 
 	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_set_fixed_width):
