@@ -1,3 +1,16 @@
+2004-11-23  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk-pixbuf-core.h: Don't mark gdk_pixbuf_error_quark() as const,
+	to be consistent with all the other error_quark functions. 
+	(technically they are const, but since these are called only
+	in error paths, giving the compiler better optimization 
+	opportunities doesn't matter much)
+
+	* gdk-pixbuf.symbols: Add attribute annotations.
+	* makegdkpixbufalias.pl: Keep attribute annotations, but strip PRIVATE.
+	* Makefile.am (gdk_pixbuf.def): Strip attribute annotations, but keep 
+	PRIVATE.
+
 Mon Nov 15 18:58:22 2004  Manish Singh  <yosh@gimp.org>
 
 	* gdk-pixbuf-private.h: _gdk_pixbuf_lock now returns a gboolean.
