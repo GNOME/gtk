@@ -1,3 +1,10 @@
+Sat Apr 11 05:51:22 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktooltips.c (gtk_tooltips_event_handler): don't shut down the
+	tooltip on expose events.
+
+	* gtk/testgtk.c (create_progress_bar): add an example tooltip.
+
 Fri Apr 10 00:10:16 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* README/INSTALL: Extended for the 1.0 release.

@@ -4768,7 +4768,8 @@ create_progress_bar ()
   GtkWidget *vbox;
   GtkWidget *pbar;
   GtkWidget *label;
-
+  GtkTooltips *tooltips;
+  
   if (!window)
     {
       window = gtk_dialog_new ();
@@ -4780,6 +4781,7 @@ create_progress_bar ()
       gtk_window_set_title (GTK_WINDOW (window), "dialog");
       gtk_container_border_width (GTK_CONTAINER (window), 0);
 
+      tooltips = gtk_tooltips_new();
 
       vbox = gtk_vbox_new (FALSE, 5);
       gtk_container_border_width (GTK_CONTAINER (vbox), 10);
@@ -4793,9 +4795,12 @@ create_progress_bar ()
       gtk_widget_show (label);
 
       pbar = gtk_progress_bar_new ();
+      gtk_widget_set_events (pbar, GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK);
       gtk_widget_set_usize (pbar, 200, 20);
       gtk_box_pack_start (GTK_BOX (vbox), pbar, TRUE, TRUE, 0);
       gtk_widget_show (pbar);
+      gtk_tooltips_set_tip (tooltips, pbar, "Countdown is progressing yet!", "Secret!");
+      gtk_tooltips_set_delay (tooltips, 0);
 
       progress_timer = gtk_timeout_add (100, progress_timeout, pbar);
 

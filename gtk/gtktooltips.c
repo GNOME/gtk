@@ -541,6 +541,7 @@ gtk_tooltips_event_handler (GtkWidget *widget,
   switch (event->type)
     {
     case GDK_MOTION_NOTIFY:
+    case GDK_EXPOSE:
       /* do nothing */
       break;
       
