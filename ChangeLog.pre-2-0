@@ -1,5 +1,14 @@
 2001-01-23    <alexl@redhat.com>
 
+	* gtk/gtkcolorsel.c (grab_color_at_mouse):
+	Don't leak image. Simplify using gdk_colormap_query_color().
+	(gtk_color_selection_init): Don't leak dropper_pixmap and mask.
+
+	* linux-fb/gdkcolor-fb.c:
+	Implemented gdk_colormap_query_color.
+
+2001-01-23    <alexl@redhat.com>
+
         * linux-fb/gdkcursor-fb.c:
 	Don't leak built-in cursors.
 
