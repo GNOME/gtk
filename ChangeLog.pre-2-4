@@ -1,3 +1,9 @@
+Mon Jan 19 00:46:18 1998 MET  Eckehard Berns  <eb@berns.prima.de>
+
+	* gtk/gtktoolbar.[ch]: changed
+ 	  gtk_toolbar_{append,prepend,inser]_item to accept any GtkWidget
+ 	  as icon to allow more flexibility
+
 Sun Jan 18 16:54:55 CST 1998 Shawn T. Amundson <amundson@gimp.org>
 	* gtk/gtkstatusbar.[ch] added new widget, the statusbar
 

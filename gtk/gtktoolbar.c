@@ -573,7 +573,7 @@ GtkWidget *
 gtk_toolbar_append_item (GtkToolbar    *toolbar,
 			 const char    *text,
 			 const char    *tooltip_text,
-			 GtkPixmap     *icon,
+			 GtkWidget     *icon,
 			 GtkSignalFunc  callback,
 			 gpointer       user_data)
 {
@@ -585,7 +585,7 @@ GtkWidget *
 gtk_toolbar_prepend_item (GtkToolbar    *toolbar,
 			  const char    *text,
 			  const char    *tooltip_text,
-			  GtkPixmap     *icon,
+			  GtkWidget     *icon,
 			  GtkSignalFunc  callback,
 			  gpointer       user_data)
 {
@@ -597,7 +597,7 @@ GtkWidget *
 gtk_toolbar_insert_item (GtkToolbar    *toolbar,
 			 const char    *text,
 			 const char    *tooltip_text,
-			 GtkPixmap     *icon,
+			 GtkWidget     *icon,
 			 GtkSignalFunc  callback,
 			 gpointer       user_data,
 			 gint           position)
