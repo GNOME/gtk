@@ -1,3 +1,8 @@
+1998-03-10  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gdk/gdkgc.c (gdk_gc_set_function): Replace GXor by GXxor.  Seems
+	to have been a typo.
+
 Tue Mar 10 00:49:18 EST 1998 The Rasterman <raster@redhat.com>
         * gdk/gdkwindow.c: (gdk_window_xid_at) fixed minor memory leak and
 	minor buglet in tree search.
