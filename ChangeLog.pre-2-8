@@ -1,3 +1,12 @@
+Thu Jul 12 17:33:00 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkbbox.h gtk/gtkcompat.h: Patch from Mathias 
+	Hasselmann to fix warnings in compat macros. 
+	(#56773)
+
+	* gtk/gtkmenubar.c (gtk_menu_bar_hierarchy_changed): Fix 
+	stupid wrong cast added in last patch.
+
 Thu Jul 12 16:51:34 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c: Replace a couple of inappropriate calls to 
@@ -6,7 +15,7 @@ Thu Jul 12 16:51:34 2001  Owen Taylor  <otaylor@redhat.com>
 Thu Jul 12 14:06:19 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmenubar.c (gtk_menu_bar_hierarchy_changed): Add
-	missing case.
+	missing cast.
 
 	* gtk/gtkcontainer.c (gtk_container_get_focus_chain): Fix
 	NULL/FALSE return value confusion.

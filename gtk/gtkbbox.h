@@ -74,8 +74,8 @@ void              gtk_button_box_set_child_secondary (GtkButtonBox      *widget,
 						      gboolean           is_secondary);
 
 #ifndef GTK_DISABLE_DEPRECATED
-#define gtk_button_box_set_spacing gtk_box_set_spacing
-#define gtk_button_box_get_spacing gtk_box_get_spacing
+#define gtk_button_box_set_spacing(b,s) gtk_box_set_spacing (GTK_BOX (b), s)
+#define gtk_button_box_get_spacing(b)   gtk_box_get_spacing (GTK_BOX (b))
 
 void gtk_button_box_set_child_size     (GtkButtonBox *widget,
 					gint          min_width,
