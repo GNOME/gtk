@@ -77,7 +77,6 @@ gdk_colormap_new (GdkVisual *visual,
     case GDK_VISUAL_GRAYSCALE:
     case GDK_VISUAL_PSEUDO_COLOR:
       private->info = g_new0 (GdkColorInfo, colormap->size);
-      colormap->colors = g_new (GdkColor, colormap->size);
       
       private->hash = g_hash_table_new ((GHashFunc) gdk_color_hash,
 					(GCompareFunc) gdk_color_equal);

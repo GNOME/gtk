@@ -333,7 +333,7 @@ GtkType		gtk_type_unique			(GtkType	   parent_type,
 						 const GtkTypeInfo *type_info);
 void		gtk_type_set_chunk_alloc	(GtkType	 type,
 						 guint		 n_chunks);
-gchar*		gtk_type_name			(guint		 type);
+gchar*		gtk_type_name			(GtkType	 type);
 GtkType		gtk_type_from_name		(const gchar	*name);
 GtkType		gtk_type_parent			(GtkType	 type);
 gpointer	gtk_type_class			(GtkType	 type);

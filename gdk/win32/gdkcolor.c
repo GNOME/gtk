@@ -1349,7 +1349,6 @@ gdk_colormap_new (GdkVisual *visual,
     case GDK_VISUAL_GRAYSCALE:
     case GDK_VISUAL_PSEUDO_COLOR:
       private->info = g_new0 (GdkColorInfo, colormap->size);
-      colormap->colors = g_new (GdkColor, colormap->size);
       
       private->hash = g_hash_table_new ((GHashFunc) gdk_color_hash,
 					(GCompareFunc) gdk_color_equal);
@@ -1485,6 +1484,14 @@ gdk_colormap_sync (GdkColormap *colormap,
       colormap->colors[i].red = (xpalette[i].peRed * 65535) / 255;
       colormap->colors[i].green = (xpalette[i].peGreen * 65535) / 255;
       colormap->colors[i].blue = (xpalette[i].peBlue * 65535) / 255;
+    }
+
+  for (  ; i < colormap->size; i++)
+    {
+      colormap->colors[i].pixel = i;
+      colormap->colors[i].red = 0;
+      colormap->colors[i].green = 0;
+      colormap->colors[i].blue = 0;
     }
 
   g_free (xpalette);

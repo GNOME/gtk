@@ -3652,7 +3652,7 @@ gtk_font_selection_create_xlfd (gint		  size,
  * GtkFontSelectionDialog
  *****************************************************************************/
 
-guint
+GtkType
 gtk_font_selection_dialog_get_type (void)
 {
   static guint font_selection_dialog_type = 0;

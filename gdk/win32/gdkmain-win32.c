@@ -46,8 +46,6 @@ static void	 gdkx_XConvertCase	(KeySym	       symbol,
 
 static void	    gdk_exit_func		 (void);
 
-static RETSIGTYPE   gdk_signal			 (int	       signum);
-
 
 /* Private variable declarations
  */
@@ -112,7 +110,6 @@ gboolean
 gdk_init_check (int    *argc,
 		char ***argv)
 {
-  HRESULT hres;
   gint i, j, k;
   
   if (gdk_initialized)

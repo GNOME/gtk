@@ -1,3 +1,20 @@
+1999-09-14  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/gdkcolor.c (gdk_colormap_new)
+	* gdk/win32/gdkcolor.c (gdk_colormap_new): Fix memory leak:
+	colormap->colors was allocated twice.
+
+	* gdk/win32/gdk.c: Remove some unused stuff.
+
+	* gdk/win32/gdkcolor.c (gdk_colormap_sync): Initialize all of the
+	colormap.
+
+	* gtk/gtkfontsel.c (gtk_font_selection_dialog_get_type)
+	* gtk/gtklabel.h (gtk_label_get_type)
+	* gtk/gtktipsquery.c (gtk_tips_query_get_type)
+	* gtk/gtktypeutils.h (gtk_type_name): : Use GtkType
+	in a couple of places, not guint.
+
 Fri Sep 10 21:31:00 CEST 1999 Pablo Saratxaga <pablo@mandrakesoft.com>
 
 	* configure.in,po/et.po: added Estonian language file
