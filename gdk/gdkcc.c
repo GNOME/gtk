@@ -851,8 +851,9 @@ gdk_color_context_get_pixels (GdkColorContext *cc,
   gint bad_alloc = FALSE;
   gint failed[MAX_IMAGE_COLORS], allocated[MAX_IMAGE_COLORS];
   GdkColor defs[MAX_IMAGE_COLORS], cmap[MAX_IMAGE_COLORS];
+#ifdef G_ENABLE_DEBUG  
   gint exact_col = 0, subst_col = 0, close_col = 0, black_col = 0;
-
+#endif
   g_assert (cc != NULL);
   g_assert (reds != NULL);
   g_assert (greens != NULL);
@@ -934,7 +935,7 @@ gdk_color_context_get_pixels (GdkColorContext *cc,
       return;
     }
 
-#ifdef DEBUG
+#ifdef G_ENABLE_DEBUG
   exact_col = ncols;
 #endif
 
@@ -1012,7 +1013,7 @@ gdk_color_context_get_pixels (GdkColorContext *cc,
 	      defs[i] = cmap[close];
 	      defs[i].pixel = colors[i];
 	      allocated[ncols++] = colors[i];
-#ifdef DEBUG
+#ifdef G_ENABLE_DEBUG
 	      close_col++;
 #endif
 	    } else
@@ -1086,14 +1087,14 @@ gdk_color_context_get_pixels (GdkColorContext *cc,
 
 	  defs[i].pixel = cc->black_pixel;
 	  defs[i].red = defs[i].green = defs[i].blue = 0;
-#ifdef DEBUG
+#ifdef G_ENABLE_DEBUG
 	  black_col++;
 #endif
 	}
       else
 	{
 	  defs[i] = defs[close];
-#ifdef DEBUG
+#ifdef G_ENABLE_DEBUG
 	  subst_col++;
 #endif
 	}
@@ -1123,7 +1124,9 @@ gdk_color_context_get_pixels_incremental (GdkColorContext *cc,
   gint bad_alloc = FALSE;
   gint failed[MAX_IMAGE_COLORS], allocated[MAX_IMAGE_COLORS];
   GdkColor defs[MAX_IMAGE_COLORS], cmap[MAX_IMAGE_COLORS];
+#ifdef G_ENABLE_DEBUG  
   gint exact_col = 0, subst_col = 0, close_col = 0, black_col = 0;
+#endif  
 
   g_assert (cc != NULL);
   g_assert (reds != NULL);
@@ -1204,7 +1207,7 @@ gdk_color_context_get_pixels_incremental (GdkColorContext *cc,
       return;
     }
 
-#ifdef DEBUG
+#ifdef G_ENABLE_DEBUG
   exact_col = ncols;
 #endif
 
@@ -1276,7 +1279,7 @@ gdk_color_context_get_pixels_incremental (GdkColorContext *cc,
 	      defs[i] = cmap[close];
 	      defs[i].pixel = colors[i];
 	      allocated[ncols++] = colors[i];
-#ifdef DEBUG
+#ifdef G_ENABLE_DEBUG
 	      close_col++;
 #endif
 	    }
@@ -1348,14 +1351,14 @@ gdk_color_context_get_pixels_incremental (GdkColorContext *cc,
 
 	  defs[i].pixel = cc->black_pixel;
 	  defs[i].red = defs[i].green = defs[i].blue = 0;
-#ifdef DEBUG
+#ifdef G_ENABLE_DEBUG
 	  black_col++;
 #endif
 	}
       else
 	{
 	  defs[i] = defs[close];
-#ifdef DEBUG
+#ifdef G_ENABLE_DEBUG
 	  subst_col++;
 #endif
 	}

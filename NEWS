@@ -1,3 +1,50 @@
+
+Overview of Changes in GTK+ 1.0.0:
+
+* A few bug fixes.
+
+Overview of Changes in GTK+ 0.99.10:
+
+* Lots of bug fixes
+* Documentation improvements
+* Better looking handlebox
+* A few convenience functions
+
+Overview of Changes in GTK+ 0.99.9:
+
+* Added examples directory, even more examples soon
+* Added optional word wrap to gtktext
+* Changes to gtkhandlebox
+* Lots of bug fixes
+
+Overview of Changes in GTK+ 0.99.8:
+
+* Compilation and configuration fixes
+* DND Fixes
+* New test in testgtk: cursors
+* Tutorial updates/additions
+* Few more FAQ additions
+* More prep for 1.0
+
+Overview of Changes in GTK+ 0.99.7:
+
+* This release is mainly because 0.99.6 did not compile completely
+  due to a missing file.
+* Fixes to Gtk's quit handlers.
+
+Overview of Changes in GTK+ 0.99.6:
+
+* Intermediate release to become 1.0.
+* More signedness corrections for handler functions in gtkmain.h.
+* Semantics of GtkWidget::delete_event changed.
+* Documentation updates.
+* Inclusion of Gtk tutorial.
+* Implementation of a new shutdown method for GtkObject's executed prior to
+  actual destruction. WARNING: this breaks binary compatibility, programs using
+  Gtk need to be recompiled.
+* Clean ups due to compiler warnings.
+* Various widget fixes.
+
 Overview of Fixes in GTK+ 0.99.5:
 
 * Signal signedness and naming corrections

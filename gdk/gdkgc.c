@@ -430,7 +430,7 @@ gdk_gc_set_function (GdkGC	 *gc,
       XSetFunction (private->xdisplay, private->xgc, GXinvert);
       break;
     case GDK_XOR:
-      XSetFunction (private->xdisplay, private->xgc, GXor);
+      XSetFunction (private->xdisplay, private->xgc, GXxor);
       break;
     }
 }

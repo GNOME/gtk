@@ -1,5 +1,7 @@
 ## Process this file with automake to produce Makefile.in
 
+configincludedir = $(pkglibdir)/include
+
 lib_LTLIBRARIES = libglib.la
 
 libglib_la_SOURCES = \
@@ -18,7 +20,9 @@ libglib_la_SOURCES = \
 		gutils.c
 
 include_HEADERS = \
-		glib.h \
+		glib.h
+
+configinclude_DATA = \
 		glibconfig.h
 
 libglib_la_LDFLAGS = -version-info 1:0:0
@@ -26,7 +30,7 @@ libglib_la_LDFLAGS = -version-info 1:0:0
 INCLUDES = -I$(top_srcdir)
 
 noinst_PROGRAMS = testglib
-testglib_LDADD = $(top_builddir)/libglib.la
+testglib_LDADD = libglib.la
 
 .PHONY: files release
 

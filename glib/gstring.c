@@ -324,7 +324,7 @@ g_string_insert (GString *fstring, gint pos, gchar *val)
 
   g_string_maybe_expand (string, len);
 
-  g_memmove (string->str + pos + len, string->str + pos, string->len);
+  g_memmove (string->str + pos + len, string->str + pos, string->len - pos);
 
   strncpy (string->str + pos, val, len);
 
@@ -344,7 +344,7 @@ g_string_insert_c (GString *fstring, gint pos, gchar c)
 
   g_string_maybe_expand (string, 1);
 
-  g_memmove (string->str + pos + 1, string->str + pos, string->len);
+  g_memmove (string->str + pos + 1, string->str + pos, string->len - pos);
 
   string->str[pos] = c;
 

@@ -146,6 +146,7 @@ struct _GdkDndCursorInfo {
   Cursor	  gdk_cursor_dragdefault, gdk_cursor_dragok;
   GdkWindow	 *drag_pm_default, *drag_pm_ok;
   GdkPoint	  default_hotspot, ok_hotspot;
+  GList *xids;
 };
 typedef struct _GdkDndCursorInfo GdkDndCursorInfo;
 
@@ -238,8 +239,8 @@ void gdk_dnd_display_drag_cursor(gint x,
 				 gboolean change_made);
 
 /* Please see gdkwindow.c for comments on how to use */ 
-Window gdk_window_xid_at(Window base, gint bx, gint by, gint x, gint y);
-Window gdk_window_xid_at_coords(gint x, gint y, GList *excludes);
+Window gdk_window_xid_at(Window base, gint bx, gint by, gint x, gint y, GList *excludes, gboolean excl_child);
+Window gdk_window_xid_at_coords(gint x, gint y, GList *excludes, gboolean excl_child);
 
 extern gint		 gdk_debug_level;
 extern gint		 gdk_show_events;

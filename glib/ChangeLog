@@ -1,3 +1,57 @@
+Tue Apr  7 19:36:48 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gutils.c (g_direct_compare): Removed, because that's what
+	a NULL comparison function means. And it wasn't 64 bit safe.
+
+Mon Apr  6 18:43:25 1998  Tim Janik  <timj@gtk.org>
+
+	* gscanner.c (g_scanner_get_token_ll): fixed a bug that caused floats
+	of the format ".xxx" to be parsed as "xxx".
+
+Fri Apr  3 20:36:35 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gutils.c (g_parse_debug_string): Make debug string
+	parsine case-insensitive
+
+Fri Apr  3 17:03:18 PST 1998 Manish Singh <yosh@gimp.org>
+
+	* gstring.c: corrected possible overrun when inserting into
+	GStrings (thanks Elrond)
+
+Fri Apr  3 18:05:45 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* testglib.c: Removed literal german from strings
+	to appease SGI compiler.
+	
+Thu Mar 26 20:47:21 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* configure.in glib glibconfig.h.in: Add test for atexit/on_exit -
+	use on_exit if atexit not found in definition of ATEXIT.
+
+Wed Mar 25 15:23:37 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* Makefile.am: Switched glibconfig.h rule from HEADERS
+	to DATA, so that it is not added to DISTFILES
+
+Wed Mar 18 22:27:08 PST 1998 Manish Singh <yosh@gimp.org>
+
+	* garray.c: g_rarray_truncate length done correctly
+
+Sun Mar 15 07:13:34 1998  Tim Janik  <timj@gimp.org>
+
+	* gutils.c: changed *_handler variables to be named glib_*_handler,
+	so you can easily access them from gdb.
+
+Sat Mar 14 17:47:43 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* Makefile.am: Don't refer to current directory as $(top_builddir)
+	to avoid confusing non-gmakes
+
+Sat Mar 14 01:37:35 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* Makefile.am (configincludedir): Moved glibconfig.h to
+          $(pkglibdir)/include
+
 Tue Mar 10 02:03:12 1998  Tim Janik  <timj@gimp.org>
 
 	* gscanner.c (g_scanner_destroy_symbol_table_entry): new function to

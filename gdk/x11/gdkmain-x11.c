@@ -146,12 +146,17 @@ static RETSIGTYPE   gdk_signal                   (int          signum);
 
 
 #ifdef USE_XIM
+static guint         gdk_im_va_count     (va_list list);
+static XVaNestedList gdk_im_va_to_nested (va_list list, 
+                                          guint   count);
+
 static GdkIM  gdk_im_get		(void);
 static gint   gdk_im_open		(XrmDatabase db,
 					 gchar* res_name,
 					 gchar* rec_class);
 static void   gdk_im_close		(void);
 static void   gdk_ic_cleanup 		(void);
+
 #endif /* USE_XIM */
 
 /* Private variable declarations
@@ -307,45 +312,66 @@ gdk_init (int    *argc,
   if (argc && argv)
     {
       if (*argc > 0)
-	gdk_progname = (*argv)[0];
+	{
+	  gchar *d;
+
+	  d = strrchr((*argv)[0],'/');
+	  if (d != NULL)
+	    gdk_progname = g_strdup (d + 1);
+	  else
+	    gdk_progname = g_strdup ((*argv)[0]);
+	  GDK_NOTE (MISC,
+		    g_print ("Gdk: progname: \"%s\"\n", gdk_progname));
+	}
 
       for (i = 1; i < *argc;)
 	{
-	  if ((*argv)[i] == NULL)
-	    {
-	      i += 1;
-	      continue;
-	    }
-	  
 #ifdef G_ENABLE_DEBUG	  
-	  if (strcmp ("--gdk-debug", (*argv)[i]) == 0)
+	  if ((strcmp ("--gdk-debug", (*argv)[i]) == 0) ||
+	      (strncmp ("--gdk-debug=", (*argv)[i], 12) == 0))
 	    {
-	      (*argv)[i] = NULL;
-
-	      if ((i + 1) < *argc && (*argv)[i + 1])
+	      gchar *equal_pos = strchr ((*argv)[i], '=');
+	      
+	      if (equal_pos != NULL)
+		{
+		  gdk_debug_flags |= g_parse_debug_string (equal_pos+1,
+							   gdk_debug_keys,
+							   gdk_ndebug_keys);
+		}
+	      else if ((i + 1) < *argc && (*argv)[i + 1])
 		{
 		  gdk_debug_flags |= g_parse_debug_string ((*argv)[i+1],
 							   gdk_debug_keys,
 							   gdk_ndebug_keys);
-		  (*argv)[i + 1] = NULL;
+		  (*argv)[i] = NULL;
 		  i += 1;
 		}
-	    }
-	  else if (strcmp ("--gdk-no-debug", (*argv)[i]) == 0)
-	    {
 	      (*argv)[i] = NULL;
+	    }
+	  else if ((strcmp ("--gdk-no-debug", (*argv)[i]) == 0) ||
+		   (strncmp ("--gdk-no-debug=", (*argv)[i], 15) == 0))
+	    {
+	      gchar *equal_pos = strchr ((*argv)[i], '=');
 
-	      if ((i + 1) < *argc && (*argv)[i + 1])
+	      if (equal_pos != NULL)
+		{
+		  gdk_debug_flags &= ~g_parse_debug_string (equal_pos+1,
+							    gdk_debug_keys,
+							    gdk_ndebug_keys);
+		}
+	      else if ((i + 1) < *argc && (*argv)[i + 1])
 		{
 		  gdk_debug_flags &= ~g_parse_debug_string ((*argv)[i+1],
 							    gdk_debug_keys,
 							    gdk_ndebug_keys);
-		  (*argv)[i + 1] = NULL;
+		  (*argv)[i] = NULL;
 		  i += 1;
 		}
+	      (*argv)[i] = NULL;
 	    }
+	  else 
 #endif /* G_ENABLE_DEBUG */
-	  else if (strcmp ("--display", (*argv)[i]) == 0)
+	    if (strcmp ("--display", (*argv)[i]) == 0)
 	    {
 	      (*argv)[i] = NULL;
 
@@ -479,7 +505,7 @@ gdk_init (int    *argc,
 
   connection_number = ConnectionNumber (gdk_display);
   GDK_NOTE (MISC,
-    g_print ("connection number: %d\n", connection_number));
+    g_print ("Gdk: connection number: %d\n", connection_number));
 
   if (synchronize)
     XSynchronize (gdk_display, True);
@@ -1671,9 +1697,11 @@ gdk_event_translate (GdkEvent *event,
 #endif
   gint return_val;
 
-  /* Are static variables used for this purpose thread-safe? */
-
   return_val = FALSE;
+
+  /* We need to play catch-up with the dnd motion events */
+  if(gdk_dnd.drag_really && xevent->type == MotionNotify)
+	while (XCheckTypedEvent(xevent->xany.display,MotionNotify,xevent));
 
   /* Find the GdkWindow that this event occurred in.
    * All events occur in some GdkWindow (otherwise, why
@@ -1937,7 +1965,7 @@ gdk_event_translate (GdkEvent *event,
 	    
 	    window_private->dnd_drag_savedeventmask = dnd_winattr.your_event_mask;
 	    dnd_setwinattr.event_mask = 
-	      window_private->dnd_drag_eventmask = ButtonMotionMask |
+	      window_private->dnd_drag_eventmask = ButtonMotionMask | ButtonPressMask | ButtonReleaseMask |
 			EnterWindowMask | LeaveWindowMask;
 	    XChangeWindowAttributes(gdk_display, window_private->xwindow,
 				    CWEventMask, &dnd_setwinattr);
@@ -2069,7 +2097,10 @@ gdk_event_translate (GdkEvent *event,
 	  /* XXX there has to be a better way to do this, perhaps with
 	     XTranslateCoordinates or XQueryTree - I don't know how,
 	     and this sort of works */
-	  static Window lastwin = None, curwin = None, twin;
+	  static Window lastwin = None, curwin = None;
+#if 0
+	  Window twin;
+#endif
 	  Window childwin = gdk_root_window;
 	  int x, y, ox, oy;
 
@@ -2083,6 +2114,13 @@ gdk_event_translate (GdkEvent *event,
 	  curwin = gdk_root_window;
 	  ox = x = xevent->xmotion.x_root;
 	  oy = y = xevent->xmotion.y_root;
+#if 1
+	  curwin = gdk_window_xid_at_coords(xevent->xmotion.x_root,
+					    xevent->xmotion.y_root,
+					    gdk_dnd.c->xids,TRUE);
+	  XTranslateCoordinates(gdk_display, gdk_root_window, curwin,
+				x, y, &x, &y, &childwin);
+#else
 	  while(childwin != None)
 	    {
 	      ox = x; oy = y;
@@ -2095,6 +2133,7 @@ gdk_event_translate (GdkEvent *event,
 					x, y, &x, &y, &twin);
 		}
 	    }
+#endif
 	  GDK_NOTE (DND,
 	    g_print("Drag is now in window %#lx, lastwin was %#lx, ddc = %#lx\n",
 		    curwin, lastwin, gdk_dnd.dnd_drag_curwin));
@@ -2506,7 +2545,10 @@ gdk_event_translate (GdkEvent *event,
       while ((XPending (gdk_display) > 0) &&
 	     XCheckTypedWindowEvent(gdk_display, xevent->xany.window,
 				    ConfigureNotify, xevent))
-	/*XSync (gdk_display, 0)*/;
+        GDK_NOTE (EVENTS, 
+	  g_print ("configure notify discarded:\twindow: %ld\n",
+		  xevent->xconfigure.window - base_id));
+	/*XSync (gdk_display, 0);*/
       
       GDK_NOTE (EVENTS,
 	g_print ("configure notify:\twindow: %ld  x,y: %d %d  w,h: %d %d  b-w: %d  above: %ld  ovr: %d\n",
@@ -2533,7 +2575,8 @@ gdk_event_translate (GdkEvent *event,
 	      event->configure.height = xevent->xconfigure.height;
 	      
 	      if (!xevent->xconfigure.x &&
-		  !xevent->xconfigure.y)
+		  !xevent->xconfigure.y &&
+		  !window_private->destroyed)
 		{
 		  gint tx = 0;
 		  gint ty = 0;
@@ -3035,7 +3078,12 @@ gdk_x_error (Display     *display,
   if (gdk_error_warnings)
     {
       XGetErrorText (display, error->error_code, buf, 63);
-      g_error ("%s", buf);
+      g_error ("%s\n  serial %ld error_code %d request_code %d minor_code %d\n", 
+	       buf, 
+	       error->serial, 
+	       error->error_code, 
+	       error->request_code,
+	       error->minor_code);
     }
 
   gdk_error_code = -1;
@@ -3138,13 +3186,16 @@ gdk_signal (int sig_num)
 static void
 gdk_dnd_drag_begin (GdkWindow *initial_window)
 {
-  GdkEventDragBegin tev;
-  tev.type = GDK_DRAG_BEGIN;
-  tev.window = initial_window;
-  tev.u.allflags = 0;
-  tev.u.flags.protocol_version = DND_PROTOCOL_VERSION;
+  GdkEvent tev;
 
-  gdk_event_put ((GdkEvent *) &tev);
+  GDK_NOTE(DND, g_print("------- STARTING DRAG from %p\n", initial_window));
+
+  tev.type = GDK_DRAG_BEGIN;
+  tev.dragbegin.window = initial_window;
+  tev.dragbegin.u.allflags = 0;
+  tev.dragbegin.u.flags.protocol_version = DND_PROTOCOL_VERSION;
+
+  gdk_event_put (&tev);
 }
 
 static void
@@ -3184,7 +3235,7 @@ gdk_dnd_drag_enter (Window dest)
 	    }
 	  else
 	    sev.xclient.data.l[3] = sev.xclient.data.l[4] = None;
-	  if (!gdk_send_xevent (dest, False, NoEventMask, &sev))
+	  if (!gdk_send_xevent (dest, False, StructureNotifyMask, &sev))
 		GDK_NOTE (DND, g_print("Sending XdeEnter to %#lx failed\n",
 				       dest));
 	}
@@ -3194,6 +3245,84 @@ gdk_dnd_drag_enter (Window dest)
 
 
 #ifdef USE_XIM
+
+/* The following routines duplicate functionality in Xlib to
+ * translate from varargs to X's internal opaque XVaNestedList.
+ * 
+ * If all vendors have stuck close to the reference implementation,
+ * then we should hopefully be OK. 
+ */
+
+/* This needs to match XIMArg as defined in Xlcint.h exactly */
+  
+typedef struct {
+  gchar   *name;
+  gpointer value;
+} GdkImArg;
+
+/*************************************************************
+ * gdk_im_va_count:
+ *    Counts the number of name/value pairs in the vararg list
+ *
+ *   arguments:
+ *     
+ *   results:
+ *************************************************************/
+
+static guint 
+gdk_im_va_count (va_list list)
+{
+  gint count = 0;
+  gchar *name;
+
+  name = va_arg (list, gchar *);
+  while (name)
+    {
+      count++;
+      (void)va_arg (list, gpointer);
+      name = va_arg (list, gchar *);
+    }
+
+  return count;
+}
+
+/*************************************************************
+ * gdk_im_va_to_nested:
+ *     Given a varargs list and the result of gdk_im_va_count,
+ *     create a XVaNestedList.
+ *
+ *   arguments:
+ *     
+ *   results:
+ *************************************************************/
+
+static XVaNestedList
+gdk_im_va_to_nested (va_list list, guint count)
+{
+  GdkImArg *result;
+  GdkImArg *arg;
+
+  gchar *name;
+
+  if (count == 0)
+    return NULL;
+
+  result = g_new (GdkImArg, count+1);
+  arg = result;
+
+  name = va_arg (list, gchar *);
+  while (name)
+    {
+      arg->name = name;
+      arg->value = va_arg (list, gpointer);
+      arg++;
+      name = va_arg (list, gchar *);
+    }
+
+  arg->name = NULL;
+
+  return (XVaNestedList)result;
+}
 
 /*
  *--------------------------------------------------------------
@@ -3413,7 +3542,8 @@ gdk_ic_new (GdkWindow* client_window,
 {
   va_list list;
   GdkICPrivate *private;
-  XVaNestedList preedit_attr;
+  XVaNestedList preedit_attr = NULL;
+  guint count;
 
   g_return_val_if_fail (client_window != NULL, NULL);
   g_return_val_if_fail (focus_window != NULL, NULL);
@@ -3422,9 +3552,13 @@ gdk_ic_new (GdkWindow* client_window,
   private = g_new (GdkICPrivate, 1);
 
   va_start (list, style);
-  preedit_attr =  (XVaNestedList) & (va_arg (list, void *));
+  count = gdk_im_va_count (list);
   va_end (list);
 
+  va_start (list, style);
+  preedit_attr = gdk_im_va_to_nested (list, count);
+  va_end (list);
+  
   private->style = gdk_im_decide_style (style);
   if (private->style != style)
     {
@@ -3439,6 +3573,9 @@ gdk_ic_new (GdkWindow* client_window,
 		      	XNFocusWindow,  GDK_WINDOW_XWINDOW (focus_window),
 		      	preedit_attr? XNPreeditAttributes : NULL, preedit_attr,
 		      	NULL);
+
+  g_free (preedit_attr);
+  
   if (!private->xic)
     {
       g_free (private);
@@ -3484,16 +3621,23 @@ gdk_ic_set_values (GdkIC ic, ...)
   va_list list;
   XVaNestedList args;
   GdkICPrivate *private;
+  guint count;
 
   g_return_if_fail (ic != NULL);
 
   private = (GdkICPrivate *) ic;
 
   va_start (list, ic);
-  args =  (XVaNestedList) & (va_arg (list, void *));
+  count = gdk_im_va_count (list);
+  va_end (list);
+
+  va_start (list, ic);
+  args = gdk_im_va_to_nested (list, count);
   va_end (list);
 
   XSetICValues (private->xic, XNVaNestedList, args, NULL);
+
+  g_free (args);
 }
 
 void 
@@ -3502,16 +3646,23 @@ gdk_ic_get_values (GdkIC ic, ...)
   va_list list;
   XVaNestedList args;
   GdkICPrivate *private;
+  guint count;
 
   g_return_if_fail (ic != NULL);
 
   private = (GdkICPrivate *) ic;
 
   va_start (list, ic);
-  args =  (XVaNestedList) & (va_arg (list, void *));
+  count = gdk_im_va_count (list);
+  va_end (list);
+
+  va_start (list, ic);
+  args = gdk_im_va_to_nested (list, count);
   va_end (list);
 
   XGetICValues (private->xic, XNVaNestedList, args, NULL);
+
+  g_free (args);
 }
 
 void 
@@ -3520,6 +3671,7 @@ gdk_ic_set_attr (GdkIC ic, const char *target, ...)
   va_list list;
   XVaNestedList attr;
   GdkICPrivate *private;
+  guint count;
 
   g_return_if_fail (ic != NULL);
   g_return_if_fail (target != NULL);
@@ -3527,10 +3679,16 @@ gdk_ic_set_attr (GdkIC ic, const char *target, ...)
   private = (GdkICPrivate *) ic;
 
   va_start (list, target);
-  attr =  (XVaNestedList) & (va_arg (list, void *));
+  count = gdk_im_va_count (list);
+  va_end (list);
+
+  va_start (list, target);
+  attr = gdk_im_va_to_nested (list, count);
   va_end (list);
 
   XSetICValues (private->xic, target, attr, NULL);
+
+  g_free (attr);
 }
 
 void 
@@ -3539,6 +3697,7 @@ gdk_ic_get_attr (GdkIC ic, const char *target, ...)
   va_list list;
   XVaNestedList attr;
   GdkICPrivate *private;
+  guint count;
 
   g_return_if_fail (ic != NULL);
   g_return_if_fail (target != NULL);
@@ -3546,10 +3705,16 @@ gdk_ic_get_attr (GdkIC ic, const char *target, ...)
   private = (GdkICPrivate *) ic;
 
   va_start (list, target);
-  attr =  (XVaNestedList) & (va_arg (list, void *));
+  count = gdk_im_va_count (list);
+  va_end (list);
+
+  va_start (list, target);
+  attr = gdk_im_va_to_nested (list, count);
   va_end (list);
 
   XGetICValues (private->xic, target, attr, NULL);
+
+  g_free (attr);
 }
 
 GdkEventMask 
@@ -3705,6 +3870,9 @@ _g_mbtowc (wchar_t *wstr, const char *str, size_t len)
   wcs[0] = (wchar_t) NULL;
   mbs[0] = '\0';
 
+  /* The last argument isn't a mistake. The X locale code trims
+   *  the input string to the length of the output string!
+   */
   len = _Xmbstowcs (wcs, str, (len<MB_CUR_MAX)? len:MB_CUR_MAX);
   if (len < 1)
     return len;
@@ -3742,7 +3910,7 @@ gdk_dnd_drag_leave (Window dest)
     {
       wp = (GdkWindowPrivate *) gdk_dnd.drag_startwindows[i];
       sev.xclient.data.l[0] = wp->xwindow;
-      if (!gdk_send_xevent (dest, False, NoEventMask, &sev))
+      if (!gdk_send_xevent (dest, False, StructureNotifyMask, &sev))
 	GDK_NOTE (DND, g_print("Sending XdeLeave to %#lx failed\n",
 			       dest));
       wp->dnd_drag_accepted = 0;
@@ -3759,28 +3927,28 @@ gdk_dnd_drag_end (Window     dest,
 		  GdkPoint   coords)
 {
   GdkWindowPrivate *wp;
-  GdkEventDragRequest tev;
+  GdkEvent tev;
   int i;
 
-  tev.type = GDK_DRAG_REQUEST;
-  tev.drop_coords = coords;
-  tev.requestor = dest;
-  tev.u.allflags = 0;
-  tev.u.flags.protocol_version = DND_PROTOCOL_VERSION;
-  tev.isdrop = 1;
+  tev.dragrequest.type = GDK_DRAG_REQUEST;
+  tev.dragrequest.drop_coords = coords;
+  tev.dragrequest.requestor = dest;
+  tev.dragrequest.u.allflags = 0;
+  tev.dragrequest.u.flags.protocol_version = DND_PROTOCOL_VERSION;
+  tev.dragrequest.isdrop = 1;
 
   for (i = 0; i < gdk_dnd.drag_numwindows; i++)
     {
       wp = (GdkWindowPrivate *) gdk_dnd.drag_startwindows[i];
       if (wp->dnd_drag_accepted)
 	{
-	  tev.window = (GdkWindow *) wp;
-	  tev.u.flags.delete_data = wp->dnd_drag_destructive_op;
-          tev.timestamp = gdk_dnd.last_drop_time;
-	  tev.data_type = 
+	  tev.dragrequest.window = (GdkWindow *) wp;
+	  tev.dragrequest.u.flags.delete_data = wp->dnd_drag_destructive_op;
+          tev.dragrequest.timestamp = gdk_dnd.last_drop_time;
+	  tev.dragrequest.data_type = 
 	  	gdk_atom_name(wp->dnd_drag_data_type);
 
-	  gdk_event_put((GdkEvent *) &tev);
+	  gdk_event_put(&tev);
 	}
     }
 }
@@ -4005,7 +4173,7 @@ gdk_event_send_clientmessage_toall(GdkEvent *event)
     curwin = gdk_get_client_window(gdk_display, ret_children[i]);
     sev.xclient.window = curwin;
     if (!gdk_send_xevent (curwin, False, NoEventMask, &sev))
-      GDK_NOTE (MISC, g_print("Sending client message %ld to %#lx failed\n",
+      GDK_NOTE (MISC, g_print("Gdk: Sending client message %ld to %#lx failed\n",
 			     event->client.message_type, curwin));
   }
 

@@ -1,3 +1,25 @@
-Peter Mattis    (petm@xcf.berkeley.edu)
-Spencer Kimball (spencer@xcf.berkeley.edu)
-Josh MacDonald  (jmacd@xcf.berkeley.edu)
+Original Authors
+----------------
+Peter Mattis      <petm@xcf.berkeley.edu>
+Spencer Kimball   <spencer@xcf.berkeley.edu>
+Josh MacDonald    <jmacd@xcf.berkeley.edu>
+
+
+The GTK+ Team (in alphabetical order)
+-------------------------------------
+Shawn T. Amundson <amundson@gtk.org>
+Jerome Bolliet    <bolliet@in2p3.fr>
+Tony Gale         <gale@gtk.org>
+Lars Hamann       <hamann@braunschweig.netsurf.de>
+Tim Janik         <timj@gtk.org>
+Stefan Jeske      <jeske@braunschweig.netsurf.de>
+Elliot Lee        <sopwith@gtk.org>
+Ian Main          <imain@gtk.org>
+Fedrerico Mena    <quartic@gtk.org>
+Paolo Molaro      <lupus@lettere.unipd.it>
+Jay Painter       <jpaint@gtk.org>
+Manish Singh      <manish@gtk.org>
+Owen Taylor       <otaylor@gtk.org>
+
+There are many others who have contributed patches; we thank them,
+GTK+ is much better because of them.

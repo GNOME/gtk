@@ -107,7 +107,7 @@ g_rarray_truncate (GArray *array,
 {
   if (array->data)
     memset (array->data + length * size, 0, size);
-  array->len = length;
+  array->len = length * size;
   return array;
 }
 

@@ -111,8 +111,8 @@ void gdk_query_depths	    (gint	    **depths,
 			     gint	     *count);
 void gdk_query_visual_types (GdkVisualType  **visual_types,
 			     gint	     *count);
-void gdk_query_visuals	    (GdkVisual	    **visuals,
-			     gint	     *count);
+
+GList* gdk_list_visuals (void);
 
 
 /* Windows

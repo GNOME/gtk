@@ -53,8 +53,14 @@
 /* The number of bytes in a void *.  */
 #undef SIZEOF_VOID_P
 
+/* Define if you have the atexit function.  */
+#undef HAVE_ATEXIT
+
 /* Define if you have the memmove function.  */
 #undef HAVE_MEMMOVE
+
+/* Define if you have the on_exit function.  */
+#undef HAVE_ON_EXIT
 
 /* Define if you have the strcasecmp function.  */
 #undef HAVE_STRCASECMP

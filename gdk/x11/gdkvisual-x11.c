@@ -40,7 +40,9 @@ static gint navailable_depths;
 static GdkVisualType available_types[6];
 static gint navailable_types;
 
-static char* visual_names[] =
+#ifdef G_ENABLE_DEBUG
+
+static gchar* visual_names[] =
 {
   "static gray",
   "grayscale",
@@ -49,6 +51,8 @@ static char* visual_names[] =
   "true color",
   "direct color",
 };
+
+#endif /* G_ENABLE_DEBUG */
 
 static GHashTable *visual_hash = NULL;
 
@@ -204,7 +208,7 @@ gdk_visual_init ()
 #ifdef G_ENABLE_DEBUG 
   if (gdk_debug_flags & GDK_DEBUG_MISC)
     for (i = 0; i < nvisuals; i++)
-      g_print ("visual: %s: %d\n",
+      g_print ("Gdk: visual: %s: %d\n",
 	       visual_names[visuals[i].visual.type],
 	       visuals[i].visual.depth);
 #endif /* G_ENABLE_DEBUG */
@@ -350,12 +354,17 @@ gdk_query_visual_types (GdkVisualType **visual_types,
   *visual_types = available_types;
 }
 
-void
-gdk_query_visuals (GdkVisual **visual_return,
-		   gint       *count)
+GList*
+gdk_list_visuals (void)
 {
-  *count = nvisuals;
-  *visual_return = (GdkVisual*) visuals;
+  GList *list;
+  guint i;
+
+  list = NULL;
+  for (i = 0; i < nvisuals; ++i)
+    list = g_list_append (list, (gpointer) &visuals[i]);
+
+  return list;
 }
 
 

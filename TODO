@@ -1,34 +1,11 @@
-TODO BEFORE GTK 1.0
--------------------
-
 Bugs:
- * pasting into a GtkEntry that already has a very long string,
-   causes the app to hang.
- 
- * Vertical scrollbar: the expose event looks hosed and is causing 
-   quite a bit of flickering
-   Actually this affects both scrollbar implementation, you can best
-   tell if you run the application with --sync (timj)
-
- * signal parameters don't seem to get refreshed on recursive invokations
-   of GTK_NO_RECURSE signals, which causes the restarted emissions to loose
-   their actual point, i.e. parameter changes on the restarted emission,
-   needs further investigation.
+ * Scrolled windows (GtkList?) get cought in an endless reallocation loop
+   under certain (rare) circumstances.
 
  * Widget redrawing when the window resizes sometimes messes up.
    GtkLabels sometimes redraw without clearing up the underlying background on
    window resizes.
  
- * Are there still some GtkCList changes outstanding? (Jay Painter)
-   GtkCList is derived from GtkContainer but doesn't implement the
-   need_resize, focus, add and remove methods from containers.
-   it should at least issue a warning upon invokation of not supported
-   member functions.
-
- * GtkTree and GtkList should express in their *_add implementations,
-   that they expect GtkListItems/GtkTreeItems as children. Similar
-   things might apply to other containers.
-
  * delay dnd settings to take effect once a widget is realized, this is
    to avoid force realizations. i think this goes along with owens dnd
    changes?
@@ -57,14 +34,11 @@ Bugs:
    segfault in malloc
     -timj
 
- * Change bitfields to guints from enums for C++ ?
+ * Change bitfields to guints from enums, or vice versa?
 
- * Force paned window handle to be kept on screen
+ * Expose events aren't being generated correctly for DND demo
 
 Additions:
- * widgets which are redrawn because of a gtk_widget_draw(,NULL) should
-   be removed from the redraw queue.
-   
  * GScanner: it might be good to ues stdio and getch() instead of 1-character
    reads. so one can take advantage of buffering. Currently each read() takes
    a separate syscall.
@@ -89,13 +63,19 @@ Additions:
    void gtk_rc_string_export (const gchar *rc_additions,
                               gboolean     override_rc_styles);
 
- * Configure events for windows that no longer exist fail in
-   XTranslateCoordinates
+ * Should release grab before activating menu item (and remove
+   menu from screen?)
  
-TODO AFTER GTK 1.0
-------------------
-
  * Make all widget attributes configurable after the widget is created (timj).
+ 
+ * Widgets dervied from GtkButton need to be able to override
+   GtkButtonClass.paint. e.g. redrawing of GtkToggleButton with CAN_DEFAULT
+   is messed up otheriwse. This does in fact not only apply to (toggle)buttons,
+   we should introduce a common paint member for the GtkWidgetClass.
+ 
+ * Radio buttons need to display CAN/HAS_DEFAULT correctly.
+
+ * GtkCList improvements. (Jay Painter)
 
  * Seperate GtkObject and signaling system from Gdk dependancies?
   
@@ -112,6 +92,9 @@ TODO AFTER GTK 1.0
 
  * Entry should have a password mode (and it should show stars
    for user feedback).
+
+ * Entry should allow set_usize to work better, and should compute
+   a different width when a maximum length is used.
 
  * More dialogs: Print, GtkFontSelector, maybe others...
 
@@ -155,11 +138,70 @@ TODO AFTER GTK 1.0
     ( You'd have to extend gdk_window_set_hints to accept the
       window gravity option to get it right. )
 
- * Text/Edit widget: (some of these might be bugs that should be fixed now)
+ ? Allow moving the separator for paned widgets by dragging 
+   it directly instead of using the handle. 
+
+ ? Mark public use of gtk_tree_remove_item as deprecated - it should be used
+   as:
+         gtk_container_remove (GTK_CONTAINER(tree), widget);
+
+ * Standardize that all strings should be passed as gchar *, not 
+   guchar *. But what about non-string data? (gdk_property_change,
+   gtk_selection_data_set) X makes these sort of things guchar...
+
+ * Check into XAddConnectionWatch - is this needed for XIM?
+
+ * Places where a _full variant is needed:
+
+    gtk_clist_set_row_data
+    gtk_init_add
+    gtk_menu_popup
+    gtk_toolbar_prepend_element
+    gtk_toolbar_insert_element
+    gtk_widget_dnd_data_set (should be guchar * with a copy?
+                             shouldn't be there at all...)
+    ??? GtkDrawingarea.draw_data
+ 
+ * gtk_rc_add_[name/class]_style are broken for bg pixmaps, because
+   styles are broken for bg pixmaps, and RC styles only hack around
+   that.
+
+ * Try to rationally deal with someone else deleting one of our
+   windows??? This would mean keeping track of our window heirarchy
+   ourselves, for one thing, and will never be safe, because of
+   race conditions.
+
+ * --g-fatal-warnings flag that does 
+        g_set_warning_handler ((GWarningHandler)g_error);
+
+ * If a window spontaneously resizes itself N times before any
+   ConfigureNotify events are received, then due to the interaction
+   of the ConfigureNotify compression code in GDK and the resize
+   count used for the window, the window will be size_allocated
+   the next N-1 times it is moved.
+
+   Fix: Only send GDK_EVENT_CONFIGURE when the window is resized,
+   create a new event type for toplevel motion. (GDK_EVENT_REPOSITION?)
+   and eliminate the resize count in GtkWindow.
+
+ * Generic ScrolledWindow interface, which provide automatic scrollbar
+   capability to Viewport, Text, and CList widgets.
+
+   GTK_POLICY_NEVER for scrolled windows.
+
+ * Consider caching more state in GdkWindowPrivate. Currently, 
+   every widget realization involves a XGetGeometry and a
+   XGetWindowAttributes. And every GdkWindow destruction
+   involves a XQueryTree.
+
+ * Scrolled windows need to be smarter about when they size-request/allocate
+   their children.
+
+Text/Edit widget:
 
   Bugs:
 
-  - Who knows?
+  - Really big font (150 pt), plus lots of editing caused segfault
 
   Improvements:
 
@@ -200,30 +242,29 @@ TODO AFTER GTK 1.0
     appearance on exposes. But this would require using another
     window to get the origins.
 
- ? Allow moving the separator for paned widgets by dragging 
-   it directly instead of using the handle. 
+  - In word wrap mode, break:
 
- ? Mark public use of gtk_tree_remove_item as deprecated - it should be used
-   as:
-         gtk_container_remove (GTK_CONTAINER(tree), widget);
+     aaaaaaaaaaa bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 
- * Standardize that all strings should be passed as gchar *, not 
-   guchar *. But what about non-string data? (gdk_property_change,
-   gtk_selection_data_set) X makes these sort of things guchar...
+     as:
+                            | Maximum column
+     aaaaaaaaaaa bbbbbbbbbbb|
+     bbbbbbbbbbbbbbbbbbbbbbb|
+     bbbbbbbbb              |
 
- * Check into XAddConnectionWatch - is this needed for XIM?
+     Instead of:
+                            | 
+     aaaaaaaaaaa            |
+     bbbbbbbbbbbbbbbbbbbbbbb|
+     bbbbbbbbbbbbbbbbbbbb   |
 
- * Places where a _full variant is needed:
+  - Blinking cursor
 
-    gtk_clist_set_row_data
-    gtk_init_add
-    gtk_menu_popup
-    gtk_toolbar_prepend_element
-    gtk_toolbar_insert_element
-    gtk_widget_dnd_data_set (should be guchar * with a copy?
-                             shouldn't be there at all...)
-    ??? GtkDrawingarea.draw_data
- 
- * gtk_rc_add_[name/class]_style are broken for bg pixmaps, because
-   styles are broken for bg pixmaps, and RC styles only hack around
-   that.
+  - API's : gtk_text_clear, gtk_text_delete_lines (gint start, gint end),
+    gtk_text_append/prepend, gtk_text_insert_at (gint row, gint column),
+    some function to get the row/column from the x/y-coordinates of a 
+    mouse click, some function to get the word/line under the mouse pointer 
+    [ From: Stefan Jeske <jeske@braunschweig.netsurf.de> ]
+
+  - "changed" emitted when doing deletes on empty Text widget.
+

@@ -40,7 +40,6 @@ gdk_colormap_new (GdkVisual *visual,
   GdkColormap *colormap;
   GdkColormapPrivate *private;
   Visual *xvisual;
-  XColor default_colors[256];
   int size;
   int i;
 
@@ -55,6 +54,9 @@ gdk_colormap_new (GdkVisual *visual,
   private->ref_count = 1;
   xvisual = ((GdkVisualPrivate*) visual)->xvisual;
 
+  colormap->size = visual->colormap_size;
+  colormap->colors = g_new (GdkColor, colormap->size);
+
   switch (visual->type)
     {
     case GDK_VISUAL_GRAYSCALE:
@@ -65,14 +67,18 @@ gdk_colormap_new (GdkVisual *visual,
 
       if (private_cmap)
 	{
-	  for (i = 0; i < 256; i++)
+	  XColor *default_colors;
+
+	  default_colors = g_new (XColor, colormap->size);
+
+	  for (i = 0; i < colormap->size; i++)
 	    default_colors[i].pixel = i;
 
 	  XQueryColors (private->xdisplay,
 			DefaultColormap (private->xdisplay, gdk_screen),
-			default_colors, visual->colormap_size);
+			default_colors, colormap->size);
 
-	  for (i = 0; i < visual->colormap_size; i++)
+	  for (i = 0; i < colormap->size; i++)
 	    {
 	      colormap->colors[i].pixel = default_colors[i].pixel;
 	      colormap->colors[i].red = default_colors[i].red;
@@ -80,7 +86,9 @@ gdk_colormap_new (GdkVisual *visual,
 	      colormap->colors[i].blue = default_colors[i].blue;
 	    }
 
-	  gdk_colormap_change (colormap, visual->colormap_size);
+	  gdk_colormap_change (colormap, colormap->size);
+	  
+	  g_free (default_colors);
 	}
       break;
 
@@ -101,7 +109,7 @@ gdk_colormap_new (GdkVisual *visual,
       for (i = 0; i < size; i++)
 	colormap->colors[i].blue = i * 65535 / (size - 1);
 
-      gdk_colormap_change (colormap, visual->colormap_size);
+      gdk_colormap_change (colormap, colormap->size);
       break;
 
     case GDK_VISUAL_STATIC_GRAY:
@@ -130,6 +138,7 @@ gdk_colormap_real_destroy (GdkColormap *colormap)
 
   gdk_colormap_remove (colormap);
   XFreeColormap (private->xdisplay, private->xcolormap);
+  g_free (colormap->colors);
   g_free (colormap);
 }
 
@@ -159,7 +168,7 @@ gdk_colormap_get_system (void)
 {
   static GdkColormap *colormap = NULL;
   GdkColormapPrivate *private;
-  XColor xpalette[256];
+  XColor *xpalette;
   gint i;
 
   if (!colormap)
@@ -174,10 +183,15 @@ gdk_colormap_get_system (void)
       private->next_color = 0;
       private->ref_count = 1;
 
+      colormap->size = private->visual->colormap_size;
+      colormap->colors = g_new (GdkColor, colormap->size);
+
       if ((private->visual->type == GDK_VISUAL_GRAYSCALE) ||
 	  (private->visual->type == GDK_VISUAL_PSEUDO_COLOR))
 	{
-	  for (i = 0; i < 256; i++)
+	  xpalette = g_new (XColor, colormap->size);
+	  
+	  for (i = 0; i < colormap->size; i++)
 	    {
 	      xpalette[i].pixel = i;
 	      xpalette[i].red = 0;
@@ -186,15 +200,17 @@ gdk_colormap_get_system (void)
 	    }
 	  
 	  XQueryColors (gdk_display, private->xcolormap, xpalette, 
-			MIN (private->visual->colormap_size, 256));
+			colormap->size);
 	  
-	  for (i = 0; i < 256; i++)
+	  for (i = 0; i < colormap->size; i++)
 	    {
 	      colormap->colors[i].pixel = xpalette[i].pixel;
 	      colormap->colors[i].red = xpalette[i].red;
 	      colormap->colors[i].green = xpalette[i].green;
 	      colormap->colors[i].blue = xpalette[i].blue;
 	    }
+
+	  g_free (xpalette);
 	}
 
       gdk_colormap_add (colormap);
@@ -215,13 +231,15 @@ gdk_colormap_change (GdkColormap *colormap,
 {
   GdkColormapPrivate *private;
   GdkVisual *visual;
-  XColor palette[256];
+  XColor *palette;
   gint shift;
   int max_colors;
   int size;
   int i;
 
   g_return_if_fail (colormap != NULL);
+
+  palette = g_new (XColor, ncolors);
 
   private = (GdkColormapPrivate*) colormap;
   switch (private->visual->type)
@@ -287,6 +305,8 @@ gdk_colormap_change (GdkColormap *colormap,
     default:
       break;
     }
+
+  g_free (palette);
 }
 
 void
@@ -423,8 +443,7 @@ gdk_color_alloc (GdkColormap *colormap,
   GdkColormapPrivate *private;
   GdkVisual *visual;
   XColor xcolor;
-  gchar available[256];
-  gint available_init;
+  gchar *available = NULL;
   gint return_val;
   gint i, index;
 
@@ -446,9 +465,10 @@ gdk_color_alloc (GdkColormap *colormap,
     case GDK_VISUAL_PSEUDO_COLOR:
       if (private->private_val)
 	{
-	  if (private->next_color > 255)
+	  if (private->next_color >= colormap->size)
 	    {
-	      for (i = 0; i < 256; i++)
+	      available = g_new (gchar, colormap->size);
+	      for (i = 0; i < colormap->size; i++)
 		available[i] = TRUE;
 
 	      index = gdk_colormap_match_color (colormap, color, available);
@@ -465,7 +485,7 @@ gdk_color_alloc (GdkColormap *colormap,
 	    }
 	  else
 	    {
-	      xcolor.pixel = 255 - private->next_color;
+	      xcolor.pixel = colormap->size - 1 -private->next_color;
 	      color->pixel = xcolor.pixel;
 	      private->next_color += 1;
 
@@ -475,8 +495,6 @@ gdk_color_alloc (GdkColormap *colormap,
 	}
       else
 	{
-	  available_init = 1;
-
 	  while (1)
 	    {
 	      if (XAllocColor (private->xdisplay, private->xcolormap, &xcolor))
@@ -486,17 +504,18 @@ gdk_color_alloc (GdkColormap *colormap,
 		  color->green = xcolor.green;
 		  color->blue = xcolor.blue;
 
-		  colormap->colors[color->pixel] = *color;
+		  if (color->pixel < colormap->size)
+		    colormap->colors[color->pixel] = *color;
 
 		  return_val = TRUE;
 		  break;
 		}
 	      else
 		{
-		  if (available_init)
+		  if (available == NULL)
 		    {
-		      available_init = 0;
-		      for (i = 0; i < 256; i++)
+		      available = g_new (gchar, colormap->size);
+		      for (i = 0; i < colormap->size; i++)
 			available[i] = TRUE;
 		    }
 
@@ -540,6 +559,9 @@ gdk_color_alloc (GdkColormap *colormap,
       break;
     }
 
+  if (available)
+    g_free (available);
+  
   return return_val;
 }
 
@@ -582,8 +604,6 @@ gdkx_colormap_get (Colormap xcolormap)
 {
   GdkColormap *colormap;
   GdkColormapPrivate *private;
-  XColor xpalette[256];
-  gint i;
 
   colormap = gdk_colormap_lookup (xcolormap);
   if (colormap)
@@ -601,6 +621,12 @@ gdkx_colormap_get (Colormap xcolormap)
   private->private_val = TRUE;
   private->next_color = 0;
 
+  /* To do the following safely, we would have to have some way of finding
+   * out what the size or visual of the given colormap is. It seems
+   * X doesn't allow this
+   */
+
+#if 0
   for (i = 0; i < 256; i++)
     {
       xpalette[i].pixel = i;
@@ -618,6 +644,10 @@ gdkx_colormap_get (Colormap xcolormap)
       colormap->colors[i].green = xpalette[i].green;
       colormap->colors[i].blue = xpalette[i].blue;
     }
+#endif
+
+  colormap->colors = NULL;
+  colormap->size = 0;
 
   gdk_colormap_add (colormap);
 
@@ -642,7 +672,7 @@ gdk_colormap_match_color (GdkColormap *cmap,
   max = 3 * (65536);
   index = -1;
 
-  for (i = 0; i < 256; i++)
+  for (i = 0; i < cmap->size; i++)
     {
       if ((!available) || (available && available[i]))
 	{
