@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-01-15 12:29+0100\n"
-"PO-Revision-Date: 2005-01-19 18:33+0200\n"
+"PO-Revision-Date: 2005-01-21 08:16+0200\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -49,7 +49,7 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf-io.c:444
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
-msgstr "Ei saa piltide laadimise moodulit laadida: %s: %s"
+msgstr "Piltide laadimise moodulit ei saa laadida: %s: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:459
 #, c-format
@@ -57,7 +57,7 @@ msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
 msgstr ""
-"Pildilaadimis moodul '%s' ei väljasta korralikku liidest; võibolla on "
+"Pildilaadimismoodul '%s' ei väljasta korralikku liidest; võibolla on "
 "tegemist erinevate GTK versioonidega?"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:628 gdk-pixbuf/gdk-pixbuf-io.c:680
@@ -287,7 +287,7 @@ msgstr "ICO faili laadimiseks ei ole piisavalt mälu"
 
 #: gdk-pixbuf/io-ico.c:947
 msgid "Image too large to be saved as ICO"
-msgstr ""
+msgstr "Pilt on ICO vormingus salvestamiseks liiga suur"
 
 #: gdk-pixbuf/io-ico.c:958
 msgid "Cursor hotspot outside image"
@@ -318,12 +318,12 @@ msgstr ""
 #: gdk-pixbuf/io-jpeg.c:383 gdk-pixbuf/io-jpeg.c:749
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
-msgstr ""
+msgstr "Toetamata JPEG värvituum (%s)"
 
 #: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:678 gdk-pixbuf/io-jpeg.c:943
 #: gdk-pixbuf/io-jpeg.c:952
 msgid "Couldn't allocate memory for loading JPEG file"
-msgstr ""
+msgstr "JPEG faili laadimiseks ei saa mälu eraldada"
 
 #: gdk-pixbuf/io-jpeg.c:894
 #, c-format
@@ -331,7 +331,7 @@ msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
 msgstr ""
-"JPEG kvaliteedi väärtus peab olema 0 ja 100 vahel; väärtust '%s'ei ole "
+"JPEG kvaliteedi väärtus peab olema 0 ja 100 vahel; väärtust '%s' ei ole "
 "võimalik analüüsida."
 
 #: gdk-pixbuf/io-jpeg.c:909
@@ -348,7 +348,7 @@ msgstr "JPEG pildivorming"
 
 #: gdk-pixbuf/io-pcx.c:191
 msgid "Couldn't allocate memory for header"
-msgstr ""
+msgstr "Päise jaoks ei saa mälu eraldada"
 
 #: gdk-pixbuf/io-pcx.c:206 gdk-pixbuf/io-pcx.c:566
 msgid "Couldn't allocate memory for context buffer"
@@ -759,7 +759,7 @@ msgstr "EKRAAN"
 #. Description of --gdk-debug=FLAGS in --help output
 #: gdk/gdk.c:128
 msgid "Gdk debugging flags to set"
-msgstr ""
+msgstr "Gdk silumislipud, mida seada"
 
 #. Placeholder in --gdk-debug=FLAGS in --help output
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
@@ -772,7 +772,7 @@ msgstr "LIPUD"
 #. Description of --gdk-no-debug=FLAGS in --help output
 #: gdk/gdk.c:131
 msgid "Gdk debugging flags to unset"
-msgstr ""
+msgstr "Gdk silumislipud, mida maha võtta"
 
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:60
@@ -807,7 +807,7 @@ msgstr ""
 #. Description of --sync in --help output
 #: gdk/x11/gdkmain-x11.c:92
 msgid "Make X calls synchronous"
-msgstr ""
+msgstr "X'i kutsungid sünkroonseks"
 
 #: gtk/gtkaboutdialog.c:260 gtk/gtkaboutdialog.c:1939
 msgid "License"
@@ -1020,7 +1020,7 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:2022
 msgid "_Palette"
-msgstr "Pa_lett"
+msgstr "Pal_ett"
 
 #: gtk/gtkcolorsel.c:2054
 msgid "Color Wheel"
@@ -1671,27 +1671,27 @@ msgstr "Vali kõik"
 #. Description of --gtk-module=MODULES in --help output
 #: gtk/gtkmain.c:398
 msgid "Load additional GTK+ modules"
-msgstr ""
+msgstr "Täiendavate GTK+ moodulite laadimine"
 
 #. Placeholder in --gtk-module=MODULES in --help output
 #: gtk/gtkmain.c:399
 msgid "MODULES"
-msgstr ""
+msgstr "MOODULID"
 
 #. Description of --g-fatal-warnings in --help output
 #: gtk/gtkmain.c:401
 msgid "Make all warnings fatal"
-msgstr ""
+msgstr "Kõikide hoiatuste fataalseks muutmine"
 
 #. Description of --gtk-debug=FLAGS in --help output
 #: gtk/gtkmain.c:404
 msgid "GTK+ debugging flags to set"
-msgstr ""
+msgstr "GTK+ silumislipud, mida seada"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
 #: gtk/gtkmain.c:407
 msgid "GTK+ debugging flags to unset"
-msgstr ""
+msgstr "GTK+ silumislipud, mida maha võtta"
 
 #. Translate to default:RTL if you want your widgets
 #. * to be RTL, otherwise translate to default:LTR.
@@ -1704,11 +1704,11 @@ msgstr "default:LTR"
 
 #: gtk/gtkmain.c:565
 msgid "GTK+ Options"
-msgstr ""
+msgstr "GTK+ võtmed"
 
 #: gtk/gtkmain.c:565
 msgid "Show GTK+ Options"
-msgstr ""
+msgstr "GTK+ võtmete näitamine"
 
 #: gtk/gtknotebook.c:2712 gtk/gtknotebook.c:5060
 #, c-format
@@ -1808,7 +1808,7 @@ msgstr "K_äivita"
 
 #: gtk/gtkstock.c:307
 msgid "_Edit"
-msgstr ""
+msgstr "_Redigeeri"
 
 #: gtk/gtkstock.c:308
 msgid "_Find"
@@ -2173,25 +2173,3 @@ msgstr "X Sisestusmeetod"
 msgid "Could not get information for file '%s': %s"
 msgstr ""
 
-#~ msgid ""
-#~ "Could not change the current folder to %s:\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Ei suuda kataloogi %s aktiivseks teha:\n"
-#~ "%s"
-
-#~ msgid ""
-#~ "Could not create folder %s:\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Ei suuda luua kataloogi %s:\n"
-#~ "%s"
-
-#~ msgid "%s: %s"
-#~ msgstr "%s: %s"
-
-#~ msgid "Input Methods"
-#~ msgstr "Sisestusmeetodid"
-
-#~ msgid "Unsupported TIFF variant"
-#~ msgstr "Toetamata TIFF variant"
