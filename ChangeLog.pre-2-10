@@ -1,3 +1,7 @@
+Thu Feb 26 21:41:38 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkrc.c (gtk_rc_reset_styles): Mark as 2.4 API addition.
+
 Thu Feb 26 14:47:22 2004  Dom Lachowicz <cinamod@hotmail.com>
 
 	* gtk/gtk.def: Export gtk_rc_reset_styles()

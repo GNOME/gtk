@@ -4697,6 +4697,7 @@ gtk_rc_parse
 gtk_rc_parse_string
 gtk_rc_reparse_all
 gtk_rc_reparse_all_for_settings
+gtk_rc_reset_styles
 gtk_rc_add_default_file
 gtk_rc_get_default_files
 gtk_rc_set_default_files

@@ -1,3 +1,7 @@
+Thu Feb 26 21:41:25 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-sections.txt: Add gtk_rc_reset_styles.
+
 Tue Feb 24 19:06:20 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* === Released 2.3.4 ===

@@ -1345,6 +1345,8 @@ gtk_rc_clear_realized_style (gpointer key,
  * set by the operating system changes. Note that this function
  * doesn't affect widgets that have a style set explicitely on them
  * with gtk_widget_set_style().
+ *
+ * Since: 2.4
  **/
 void
 gtk_rc_reset_styles (GtkSettings *settings)
