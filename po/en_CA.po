@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-18 14:22-0400\n"
+"POT-Creation-Date: 2004-09-19 16:42-0400\n"
 "PO-Revision-Date: 2004-09-15 13:05-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: English/Canada <adamw@FreeBSD.org>\n"
@@ -838,7 +838,7 @@ msgstr "_Saturation:"
 
 #: gtk/gtkcolorsel.c:1884
 msgid "\"Deepness\" of the color."
-msgstr "\"Deppness\" of the colour."
+msgstr "\"Deepness\" of the colour."
 
 #: gtk/gtkcolorsel.c:1885
 msgid "_Value:"
@@ -1964,6 +1964,3 @@ msgstr "X Input Method"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Could not get information for file '%s': %s"
-
-#~ msgid "Cannot allocate memory for loading XPM image"
-#~ msgstr "Cannot allocate memory for loading XPM image"
