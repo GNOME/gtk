@@ -3127,8 +3127,12 @@ paste_received (GtkClipboard *clipboard,
       
   if (text)
     {
-      gint pos = entry->current_pos;
+      gint pos, start, end;
       
+      if (gtk_editable_get_selection_bounds (editable, &start, &end))
+        gtk_editable_delete_text (editable, start, end);
+
+      pos = entry->current_pos;
       gtk_editable_insert_text (editable, text, -1, &pos);
       gtk_editable_set_position (editable, pos);
     }

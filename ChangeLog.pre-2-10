@@ -1,3 +1,15 @@
+Wed Sep 26 16:15:25 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtknotebook.c (gtk_notebook_set_tab_label): Fix
+	problem where menmonic wasn't removed properly when
+	setting a label when there already is a label.
+	Also, handle setting the tab label back to the same
+	value. (#61160, #61161)
+
+	* gtk/gtkentry.c (paste_received): Patch from 
+        Damian Ivereigh to replace selection if there is 
+	one. (#61121)
+	
 2001-09-25  Darin Adler  <darin@bentspoon.com>
 
 	* tests/.cvsignore: Ignore new test program.
