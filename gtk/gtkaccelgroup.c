@@ -798,7 +798,7 @@ gtk_accel_groups_activate (GObject	  *object,
  * Determines whether a given keyval and modifier mask constitute
  * a valid keyboard accelerator. For example, the #GDK_a keyval
  * plus #GDK_CONTROL_MASK is valid - this is a "Ctrl+a" accelerator.
- * But, you can't, for instance, use the #GDL_Control_L keyval
+ * But, you can't, for instance, use the #GDK_Control_L keyval
  * as an accelerator.
  */
 gboolean

@@ -1,3 +1,8 @@
+2002-03-21  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkaccelgroup.c (gtk_accelerator_valid): Trivial typo
+	fix. (Vitaly Tishkov, #75726)
+
 Thu Mar 21 10:04:05 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkwindow.c (gdk_window_real_get_depth): Remove
