@@ -195,7 +195,7 @@ static const gchar *ui_info =
 "</Root>\n";
 
 static void
-add_widget (GtkMenuMerge *merge,
+add_widget (GtkUIManager *merge,
 	    GtkWidget   *widget,
 	    GtkContainer *container)
 {
@@ -213,7 +213,7 @@ add_widget (GtkMenuMerge *merge,
 static void
 create_window (GtkActionGroup *action_group)
 {
-  GtkMenuMerge *merge;
+  GtkUIManager *merge;
   GtkWidget *window;
   GtkWidget *box;
   GError *error = NULL;
@@ -227,14 +227,14 @@ create_window (GtkActionGroup *action_group)
   gtk_container_add (GTK_CONTAINER (window), box);
   gtk_widget_show (box);
 
-  merge = gtk_menu_merge_new ();
-  gtk_menu_merge_insert_action_group (merge, action_group, 0);
+  merge = gtk_ui_manager_new ();
+  gtk_ui_manager_insert_action_group (merge, action_group, 0);
   g_signal_connect (merge, "add_widget", G_CALLBACK (add_widget), box);
 
   gtk_window_add_accel_group (GTK_WINDOW (window), 
-			      gtk_menu_merge_get_accel_group (merge));
+			      gtk_ui_manager_get_accel_group (merge));
 
-  if (!gtk_menu_merge_add_ui_from_string (merge, ui_info, -1, &error))
+  if (!gtk_ui_manager_add_ui_from_string (merge, ui_info, -1, &error))
     {
       g_message ("building menus failed: %s", error->message);
       g_error_free (error);

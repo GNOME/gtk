@@ -105,7 +105,6 @@
 #include <gtk/gtkmenu.h>
 #include <gtk/gtkmenubar.h>
 #include <gtk/gtkmenuitem.h>
-#include <gtk/gtkmenumerge.h>
 #include <gtk/gtkmenushell.h>
 #include <gtk/gtkmessagedialog.h>
 #include <gtk/gtkmisc.h>
@@ -166,6 +165,7 @@
 #include <gtk/gtktreeview.h>
 #include <gtk/gtktreeviewcolumn.h>
 #include <gtk/gtktypeutils.h>
+#include <gtk/gtkuimanager.h>
 #include <gtk/gtkvbbox.h>
 #include <gtk/gtkvbox.h>
 #include <gtk/gtkversion.h>

@@ -15,11 +15,11 @@ struct { const gchar *filename; guint merge_id; } merge_ids[] = {
 
 static void
 dump_tree (GtkWidget    *button, 
-	   GtkMenuMerge *merge)
+	   GtkUIManager *merge)
 {
   gchar *dump;
 
-  dump = gtk_menu_merge_get_ui (merge);
+  dump = gtk_ui_manager_get_ui (merge);
   g_message (dump);
   g_free (dump);
 }
@@ -82,7 +82,7 @@ static GtkActionGroupEntry entries[] = {
 static guint n_entries = G_N_ELEMENTS (entries);
 
 static void
-add_widget (GtkMenuMerge *merge, 
+add_widget (GtkUIManager *merge, 
 	    GtkWidget    *widget, 
 	    GtkBox       *box)
 {
@@ -92,7 +92,7 @@ add_widget (GtkMenuMerge *merge,
 
 static void
 toggle_merge (GtkWidget    *button, 
-	      GtkMenuMerge *merge)
+	      GtkUIManager *merge)
 {
   gint mergenum;
 
@@ -104,7 +104,7 @@ toggle_merge (GtkWidget    *button,
 
       g_message ("merging %s", merge_ids[mergenum].filename);
       merge_ids[mergenum].merge_id =
-	gtk_menu_merge_add_ui_from_file (merge, merge_ids[mergenum].filename, &err);
+	gtk_ui_manager_add_ui_from_file (merge, merge_ids[mergenum].filename, &err);
       if (err != NULL)
 	{
 	  GtkWidget *dialog;
@@ -124,7 +124,7 @@ toggle_merge (GtkWidget    *button,
     {
       g_message ("unmerging %s (merge_id=%u)", merge_ids[mergenum].filename,
 		 merge_ids[mergenum].merge_id);
-      gtk_menu_merge_remove_ui (merge, merge_ids[mergenum].merge_id);
+      gtk_ui_manager_remove_ui (merge, merge_ids[mergenum].merge_id);
     }
 }
 
@@ -252,7 +252,7 @@ iter_compare_func (GtkTreeModel *model,
 }
 
 static GtkWidget *
-create_tree_view (GtkMenuMerge *merge)
+create_tree_view (GtkUIManager *merge)
 {
   GtkWidget *tree_view, *sw;
   GtkListStore *store;
@@ -265,7 +265,7 @@ create_tree_view (GtkMenuMerge *merge)
   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store), 0,
 					GTK_SORT_ASCENDING);
   
-  for (p = gtk_menu_merge_get_action_groups (merge); p; p = p->next)
+  for (p = gtk_ui_manager_get_action_groups (merge); p; p = p->next)
     {
       GList *actions, *l;
 
@@ -315,14 +315,14 @@ create_tree_view (GtkMenuMerge *merge)
 static gboolean
 area_press (GtkWidget      *drawing_area,
 	    GdkEventButton *event,
-	    GtkMenuMerge   *merge)
+	    GtkUIManager   *merge)
 {
   gtk_widget_grab_focus (drawing_area);
 
   if (event->button == 3 &&
       event->type == GDK_BUTTON_PRESS)
     {
-      GtkWidget *menu = gtk_menu_merge_get_widget (merge, "/popups/FileMenu");
+      GtkWidget *menu = gtk_ui_manager_get_widget (merge, "/popups/FileMenu");
       
       if (GTK_IS_MENU (menu)) 
 	{
@@ -341,7 +341,7 @@ int
 main (int argc, char **argv)
 {
   GtkActionGroup *action_group;
-  GtkMenuMerge *merge;
+  GtkUIManager *merge;
   GtkWidget *window, *table, *frame, *menu_box, *vbox, *view, *area;
   GtkWidget *button;
   gint i;
@@ -375,16 +375,16 @@ main (int argc, char **argv)
   gtk_box_pack_end (GTK_BOX (menu_box), area, FALSE, FALSE, 0);
   gtk_widget_show (area);
 
-  merge = gtk_menu_merge_new ();
+  merge = gtk_ui_manager_new ();
 
   g_signal_connect (area, "button_press_event",
 		    G_CALLBACK (area_press), merge);
 
-  gtk_menu_merge_insert_action_group (merge, action_group, 0);
+  gtk_ui_manager_insert_action_group (merge, action_group, 0);
   g_signal_connect (merge, "add_widget", G_CALLBACK (add_widget), menu_box);
 
   gtk_window_add_accel_group (GTK_WINDOW (window), 
-			      gtk_menu_merge_get_accel_group (merge));
+			      gtk_ui_manager_get_accel_group (merge));
   
   frame = gtk_frame_new ("UI Files");
   gtk_table_attach (GTK_TABLE (table), frame, 0,1, 0,1,

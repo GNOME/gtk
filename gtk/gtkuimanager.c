@@ -31,7 +31,7 @@
 #include <config.h>
 
 #include <string.h>
-#include "gtkmenumerge.h"
+#include "gtkuimanager.h"
 #include "gtktoolbar.h"
 #include "gtkseparatortoolitem.h"
 #include "gtkmenushell.h"
@@ -40,28 +40,28 @@
 #include "gtkseparatormenuitem.h"
 #include "gtkintl.h"
 
-#undef DEBUG_MENU_MERGE
+#undef DEBUG_UI_MANAGER
 
 typedef enum 
 {
-  GTK_MENU_MERGE_UNDECIDED,
-  GTK_MENU_MERGE_ROOT,
-  GTK_MENU_MERGE_MENUBAR,
-  GTK_MENU_MERGE_MENU,
-  GTK_MENU_MERGE_TOOLBAR,
-  GTK_MENU_MERGE_MENU_PLACEHOLDER,
-  GTK_MENU_MERGE_TOOLBAR_PLACEHOLDER,
-  GTK_MENU_MERGE_POPUPS,
-  GTK_MENU_MERGE_MENUITEM,
-  GTK_MENU_MERGE_TOOLITEM,
-  GTK_MENU_MERGE_SEPARATOR,
-} GtkMenuMergeNodeType;
+  GTK_UI_MANAGER_UNDECIDED,
+  GTK_UI_MANAGER_ROOT,
+  GTK_UI_MANAGER_MENUBAR,
+  GTK_UI_MANAGER_MENU,
+  GTK_UI_MANAGER_TOOLBAR,
+  GTK_UI_MANAGER_MENU_PLACEHOLDER,
+  GTK_UI_MANAGER_TOOLBAR_PLACEHOLDER,
+  GTK_UI_MANAGER_POPUPS,
+  GTK_UI_MANAGER_MENUITEM,
+  GTK_UI_MANAGER_TOOLITEM,
+  GTK_UI_MANAGER_SEPARATOR,
+} GtkUIManagerNodeType;
 
 
-typedef struct _GtkMenuMergeNode  GtkMenuMergeNode;
+typedef struct _GtkUIManagerNode  GtkUIManagerNode;
 
-struct _GtkMenuMergeNode {
-  GtkMenuMergeNodeType type;
+struct _GtkUIManagerNode {
+  GtkUIManagerNodeType type;
 
   const gchar *name;
 
@@ -75,9 +75,9 @@ struct _GtkMenuMergeNode {
   guint dirty : 1;
 };
 
-#define GTK_MENU_MERGE_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_MENU_MERGE, GtkMenuMergePrivate))
+#define GTK_UI_MANAGER_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_UI_MANAGER, GtkUIManagerPrivate))
 
-struct _GtkMenuMergePrivate 
+struct _GtkUIManagerPrivate 
 {
   GtkAccelGroup *accel_group;
 
@@ -89,7 +89,7 @@ struct _GtkMenuMergePrivate
   guint update_tag;  
 };
 
-#define NODE_INFO(node) ((GtkMenuMergeNode *)node->data)
+#define NODE_INFO(node) ((GtkUIManagerNode *)node->data)
 
 typedef struct _NodeUIReference NodeUIReference;
 
@@ -99,29 +99,29 @@ struct _NodeUIReference
   GQuark action_quark;
 };
 
-static void   gtk_menu_merge_class_init    (GtkMenuMergeClass *class);
-static void   gtk_menu_merge_init          (GtkMenuMerge *merge);
+static void   gtk_ui_manager_class_init    (GtkUIManagerClass *class);
+static void   gtk_ui_manager_init          (GtkUIManager *merge);
 
-static void   gtk_menu_merge_queue_update  (GtkMenuMerge *self);
-static void   gtk_menu_merge_dirty_all     (GtkMenuMerge *self);
+static void   gtk_ui_manager_queue_update  (GtkUIManager *self);
+static void   gtk_ui_manager_dirty_all     (GtkUIManager *self);
 
-static GNode *get_child_node               (GtkMenuMerge *self, GNode *parent,
+static GNode *get_child_node               (GtkUIManager *self, GNode *parent,
 					    const gchar *childname,
 					    gint childname_length,
-					    GtkMenuMergeNodeType node_type,
+					    GtkUIManagerNodeType node_type,
 					    gboolean create, gboolean top);
-static GNode *gtk_menu_merge_get_node      (GtkMenuMerge *self,
+static GNode *gtk_ui_manager_get_node      (GtkUIManager *self,
 					    const gchar *path,
-					    GtkMenuMergeNodeType node_type,
+					    GtkUIManagerNodeType node_type,
 					    gboolean create);
-static guint gtk_menu_merge_next_merge_id  (GtkMenuMerge *self);
+static guint gtk_ui_manager_next_merge_id  (GtkUIManager *self);
 
-static void  gtk_menu_merge_node_prepend_ui_reference (GtkMenuMergeNode *node,
+static void  gtk_ui_manager_node_prepend_ui_reference (GtkUIManagerNode *node,
 						       guint merge_id,
 						       GQuark action_quark);
-static void  gtk_menu_merge_node_remove_ui_reference  (GtkMenuMergeNode *node,
+static void  gtk_ui_manager_node_remove_ui_reference  (GtkUIManagerNode *node,
 						       guint merge_id);
-static void  gtk_menu_merge_ensure_update  (GtkMenuMerge *self);
+static void  gtk_ui_manager_ensure_update  (GtkUIManager *self);
 
 
 enum 
@@ -136,7 +136,7 @@ static guint merge_signals[LAST_SIGNAL] = { 0 };
 static GMemChunk *merge_node_chunk = NULL;
 
 GType
-gtk_menu_merge_get_type (void)
+gtk_ui_manager_get_type (void)
 {
   static GtkType type = 0;
 
@@ -144,41 +144,41 @@ gtk_menu_merge_get_type (void)
     {
       static const GTypeInfo type_info =
       {
-        sizeof (GtkMenuMergeClass),
+        sizeof (GtkUIManagerClass),
         (GBaseInitFunc) NULL,
         (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gtk_menu_merge_class_init,
+        (GClassInitFunc) gtk_ui_manager_class_init,
         (GClassFinalizeFunc) NULL,
         NULL,
         
-        sizeof (GtkMenuMerge),
+        sizeof (GtkUIManager),
         0, /* n_preallocs */
-        (GInstanceInitFunc) gtk_menu_merge_init,
+        (GInstanceInitFunc) gtk_ui_manager_init,
       };
 
       type = g_type_register_static (G_TYPE_OBJECT,
-				     "GtkMenuMerge",
+				     "GtkUIManager",
 				     &type_info, 0);
     }
   return type;
 }
 
 static void
-gtk_menu_merge_class_init (GtkMenuMergeClass *klass)
+gtk_ui_manager_class_init (GtkUIManagerClass *klass)
 {
   GObjectClass *gobject_class;
 
   gobject_class = G_OBJECT_CLASS (klass);
 
   if (!merge_node_chunk)
-    merge_node_chunk = g_mem_chunk_create (GtkMenuMergeNode, 64,
+    merge_node_chunk = g_mem_chunk_create (GtkUIManagerNode, 64,
 					   G_ALLOC_AND_FREE);
 
   merge_signals[ADD_WIDGET] =
     g_signal_new ("add_widget",
 		  G_OBJECT_CLASS_TYPE (klass),
 		  G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE,
-		  G_STRUCT_OFFSET (GtkMenuMergeClass, add_widget), NULL, NULL,
+		  G_STRUCT_OFFSET (GtkUIManagerClass, add_widget), NULL, NULL,
 		  g_cclosure_marshal_VOID__OBJECT,
 		  G_TYPE_NONE, 1,
 		  GTK_TYPE_WIDGET);
@@ -186,22 +186,22 @@ gtk_menu_merge_class_init (GtkMenuMergeClass *klass)
     g_signal_new ("remove_widget",
 		  G_OBJECT_CLASS_TYPE (klass),
 		  G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE,
-		  G_STRUCT_OFFSET (GtkMenuMergeClass, remove_widget), NULL, NULL,
+		  G_STRUCT_OFFSET (GtkUIManagerClass, remove_widget), NULL, NULL,
 		  g_cclosure_marshal_VOID__OBJECT,
 		  G_TYPE_NONE, 1,
 		  GTK_TYPE_WIDGET);  
   
-  g_type_class_add_private (gobject_class, sizeof (GtkMenuMergePrivate));
+  g_type_class_add_private (gobject_class, sizeof (GtkUIManagerPrivate));
 }
 
 
 static void
-gtk_menu_merge_init (GtkMenuMerge *self)
+gtk_ui_manager_init (GtkUIManager *self)
 {
   guint merge_id;
   GNode *node;
 
-  self->private_data = GTK_MENU_MERGE_GET_PRIVATE (self);
+  self->private_data = GTK_UI_MANAGER_GET_PRIVATE (self);
 
   self->private_data->accel_group = gtk_accel_group_new ();
 
@@ -211,18 +211,18 @@ gtk_menu_merge_init (GtkMenuMerge *self)
   self->private_data->last_merge_id = 0;
 
 
-  merge_id = gtk_menu_merge_next_merge_id (self);
+  merge_id = gtk_ui_manager_next_merge_id (self);
   node = get_child_node (self, NULL, "Root", 4,
-			GTK_MENU_MERGE_ROOT, TRUE, FALSE);
-  gtk_menu_merge_node_prepend_ui_reference (NODE_INFO (node), merge_id, 0);
+			GTK_UI_MANAGER_ROOT, TRUE, FALSE);
+  gtk_ui_manager_node_prepend_ui_reference (NODE_INFO (node), merge_id, 0);
   node = get_child_node (self, self->private_data->root_node, "popups", 6,
-			 GTK_MENU_MERGE_POPUPS, TRUE, FALSE);
-  gtk_menu_merge_node_prepend_ui_reference (NODE_INFO (node), merge_id, 0);
+			 GTK_UI_MANAGER_POPUPS, TRUE, FALSE);
+  gtk_ui_manager_node_prepend_ui_reference (NODE_INFO (node), merge_id, 0);
 }
 
 
 /**
- * gtk_menu_merge_new:
+ * gtk_ui_manager_new:
  * 
  * Creates a new menu merge object.
  * 
@@ -230,16 +230,16 @@ gtk_menu_merge_init (GtkMenuMerge *self)
  *
  * Since: 2.4
  **/
-GtkMenuMerge*
-gtk_menu_merge_new (void)
+GtkUIManager*
+gtk_ui_manager_new (void)
 {
-  return g_object_new (GTK_TYPE_MENU_MERGE, NULL);
+  return g_object_new (GTK_TYPE_UI_MANAGER, NULL);
 }
 
 
 /**
- * gtk_menu_merge_insert_action_group:
- * @self: a #GtkMenuMerge object
+ * gtk_ui_manager_insert_action_group:
+ * @self: a #GtkUIManager object
  * @action_group: the action group to be inserted
  * @pos: the position at which the group will be inserted
  * 
@@ -248,11 +248,11 @@ gtk_menu_merge_new (void)
  * Since: 2.4
  **/
 void
-gtk_menu_merge_insert_action_group (GtkMenuMerge   *self,
+gtk_ui_manager_insert_action_group (GtkUIManager   *self,
 				    GtkActionGroup *action_group, 
 				    gint            pos)
 {
-  g_return_if_fail (GTK_IS_MENU_MERGE (self));
+  g_return_if_fail (GTK_IS_UI_MANAGER (self));
   g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
   g_return_if_fail (g_list_find (self->private_data->action_groups, action_group) == NULL);
 
@@ -260,12 +260,12 @@ gtk_menu_merge_insert_action_group (GtkMenuMerge   *self,
   self->private_data->action_groups = g_list_insert (self->private_data->action_groups, action_group, pos);
 
   /* dirty all nodes, as action bindings may change */
-  gtk_menu_merge_dirty_all (self);
+  gtk_ui_manager_dirty_all (self);
 }
 
 /**
- * gtk_menu_merge_remove_action_group:
- * @self: a #GtkMenuMerge object
+ * gtk_ui_manager_remove_action_group:
+ * @self: a #GtkUIManager object
  * @action_group: the action group to be removed
  * 
  * Removes an action group from the list of action groups associated with @self.
@@ -273,10 +273,10 @@ gtk_menu_merge_insert_action_group (GtkMenuMerge   *self,
  * Since: 2.4
  **/
 void
-gtk_menu_merge_remove_action_group (GtkMenuMerge   *self,
+gtk_ui_manager_remove_action_group (GtkUIManager   *self,
 				    GtkActionGroup *action_group)
 {
-  g_return_if_fail (GTK_IS_MENU_MERGE (self));
+  g_return_if_fail (GTK_IS_UI_MANAGER (self));
   g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
   g_return_if_fail (g_list_find (self->private_data->action_groups, 
 				 action_group) != NULL);
@@ -286,12 +286,12 @@ gtk_menu_merge_remove_action_group (GtkMenuMerge   *self,
   g_object_unref (action_group);
 
   /* dirty all nodes, as action bindings may change */
-  gtk_menu_merge_dirty_all (self);
+  gtk_ui_manager_dirty_all (self);
 }
 
 /**
- * gtk_menu_merge_get_action_groups:
- * @self: a #GtkMenuMerge object
+ * gtk_ui_manager_get_action_groups:
+ * @self: a #GtkUIManager object
  * 
  * Returns the list of action groups associated with @self.
  *
@@ -301,16 +301,16 @@ gtk_menu_merge_remove_action_group (GtkMenuMerge   *self,
  * Since: 2.4
  **/
 GList *
-gtk_menu_merge_get_action_groups (GtkMenuMerge   *self)
+gtk_ui_manager_get_action_groups (GtkUIManager   *self)
 {
-  g_return_val_if_fail (GTK_IS_MENU_MERGE (self), NULL);
+  g_return_val_if_fail (GTK_IS_UI_MANAGER (self), NULL);
 
   return self->private_data->action_groups;
 }
 
 /**
- * gtk_menu_merge_get_accel_group:
- * @self: a #GtkMenuMerge object
+ * gtk_ui_manager_get_accel_group:
+ * @self: a #GtkUIManager object
  * 
  * Returns the #GtkAccelGroup associated with @self.
  *
@@ -319,16 +319,16 @@ gtk_menu_merge_get_action_groups (GtkMenuMerge   *self)
  * Since: 2.4
  **/
 GtkAccelGroup *
-gtk_menu_merge_get_accel_group (GtkMenuMerge   *self)
+gtk_ui_manager_get_accel_group (GtkUIManager   *self)
 {
-  g_return_val_if_fail (GTK_IS_MENU_MERGE (self), NULL);
+  g_return_val_if_fail (GTK_IS_UI_MANAGER (self), NULL);
 
   return self->private_data->accel_group;
 }
 
 /**
- * gtk_menu_merge_get_widget:
- * @self: a #GtkMenuMerge
+ * gtk_ui_manager_get_widget:
+ * @self: a #GtkUIManager
  * @path: a path
  * 
  * Looks up a widget by following a path. The path consists of the names specified
@@ -342,16 +342,16 @@ gtk_menu_merge_get_accel_group (GtkMenuMerge   *self)
  * Since: 2.4
  **/
 GtkWidget *
-gtk_menu_merge_get_widget (GtkMenuMerge *self, 
+gtk_ui_manager_get_widget (GtkUIManager *self, 
 			   const gchar  *path)
 {
   GNode *node;
 
   /* ensure that there are no pending updates before we get the
    * widget */
-  gtk_menu_merge_ensure_update (self);
+  gtk_ui_manager_ensure_update (self);
 
-  node = gtk_menu_merge_get_node (self, path, GTK_MENU_MERGE_UNDECIDED, FALSE);
+  node = gtk_ui_manager_get_node (self, path, GTK_UI_MANAGER_UNDECIDED, FALSE);
 
   if (node == NULL)
     return NULL;
@@ -360,19 +360,19 @@ gtk_menu_merge_get_widget (GtkMenuMerge *self,
 }
 
 static GNode *
-get_child_node (GtkMenuMerge        *self, 
+get_child_node (GtkUIManager        *self, 
 		GNode               *parent,
 		const gchar         *childname, 
 		gint                 childname_length,
-		GtkMenuMergeNodeType node_type,
+		GtkUIManagerNodeType node_type,
 		gboolean             create, 
 		gboolean             top)
 {
   GNode *child = NULL;
 
   g_return_val_if_fail (parent == NULL ||
-			(NODE_INFO (parent)->type != GTK_MENU_MERGE_MENUITEM &&
-			 NODE_INFO (parent)->type != GTK_MENU_MERGE_TOOLITEM), 
+			(NODE_INFO (parent)->type != GTK_UI_MANAGER_MENUITEM &&
+			 NODE_INFO (parent)->type != GTK_UI_MANAGER_TOOLITEM), 
 			NULL);
 
   if (parent)
@@ -385,12 +385,12 @@ get_child_node (GtkMenuMerge        *self,
 		  !strncmp (NODE_INFO (child)->name, childname, childname_length))
 		{
 		  /* if undecided about node type, set it */
-		  if (NODE_INFO (child)->type == GTK_MENU_MERGE_UNDECIDED)
+		  if (NODE_INFO (child)->type == GTK_UI_MANAGER_UNDECIDED)
 		    NODE_INFO (child)->type = node_type;
 		  
 		  /* warn about type mismatch */
-		  if (NODE_INFO (child)->type != GTK_MENU_MERGE_UNDECIDED &&
-		      node_type != GTK_MENU_MERGE_UNDECIDED &&
+		  if (NODE_INFO (child)->type != GTK_UI_MANAGER_UNDECIDED &&
+		      node_type != GTK_UI_MANAGER_UNDECIDED &&
 		      NODE_INFO (child)->type != node_type)
 		    g_warning ("node type doesn't match %d (%s is type %d)",
 			       node_type, 
@@ -403,9 +403,9 @@ get_child_node (GtkMenuMerge        *self,
 	}
       if (!child && create)
 	{
-	  GtkMenuMergeNode *mnode;
+	  GtkUIManagerNode *mnode;
 	  
-	  mnode = g_chunk_new0 (GtkMenuMergeNode, merge_node_chunk);
+	  mnode = g_chunk_new0 (GtkUIManagerNode, merge_node_chunk);
 	  mnode->type = node_type;
 	  mnode->name = g_strndup (childname, childname_length);
 	  mnode->dirty = TRUE;
@@ -425,14 +425,14 @@ get_child_node (GtkMenuMerge        *self,
 	  if (strncmp (NODE_INFO (child)->name, childname, childname_length) != 0)
 	    g_warning ("root node name '%s' doesn't match '%s'",
 		       childname, NODE_INFO (child)->name);
-	  if (NODE_INFO (child)->type != GTK_MENU_MERGE_ROOT)
+	  if (NODE_INFO (child)->type != GTK_UI_MANAGER_ROOT)
 	    g_warning ("base element must be of type ROOT");
 	}
       else if (create)
 	{
-	  GtkMenuMergeNode *mnode;
+	  GtkUIManagerNode *mnode;
 
-	  mnode = g_chunk_new0 (GtkMenuMergeNode, merge_node_chunk);
+	  mnode = g_chunk_new0 (GtkUIManagerNode, merge_node_chunk);
 	  mnode->type = node_type;
 	  mnode->name = g_strndup (childname, childname_length);
 	  mnode->dirty = TRUE;
@@ -445,9 +445,9 @@ get_child_node (GtkMenuMerge        *self,
 }
 
 static GNode *
-gtk_menu_merge_get_node (GtkMenuMerge        *self, 
+gtk_ui_manager_get_node (GtkUIManager        *self, 
 			 const gchar         *path,
-			 GtkMenuMergeNodeType node_type, 
+			 GtkUIManagerNodeType node_type, 
 			 gboolean             create)
 {
   const gchar *pos, *end;
@@ -467,7 +467,7 @@ gtk_menu_merge_get_node (GtkMenuMerge        *self,
       else
 	length = strlen (pos);
 
-      node = get_child_node (self, parent, pos, length, GTK_MENU_MERGE_UNDECIDED,
+      node = get_child_node (self, parent, pos, length, GTK_UI_MANAGER_UNDECIDED,
 			     create, FALSE);
       if (!node)
 	return NULL;
@@ -476,13 +476,13 @@ gtk_menu_merge_get_node (GtkMenuMerge        *self,
       parent = node;
     }
 
-  if (NODE_INFO (node)->type == GTK_MENU_MERGE_UNDECIDED)
+  if (NODE_INFO (node)->type == GTK_UI_MANAGER_UNDECIDED)
     NODE_INFO (node)->type = node_type;
   return node;
 }
 
 static guint
-gtk_menu_merge_next_merge_id (GtkMenuMerge *self)
+gtk_ui_manager_next_merge_id (GtkUIManager *self)
 {
   self->private_data->last_merge_id++;
 
@@ -490,7 +490,7 @@ gtk_menu_merge_next_merge_id (GtkMenuMerge *self)
 }
 
 static void
-gtk_menu_merge_node_prepend_ui_reference (GtkMenuMergeNode *node,
+gtk_ui_manager_node_prepend_ui_reference (GtkUIManagerNode *node,
 					  guint             merge_id, 
 					  GQuark            action_quark)
 {
@@ -507,7 +507,7 @@ gtk_menu_merge_node_prepend_ui_reference (GtkMenuMergeNode *node,
 }
 
 static void
-gtk_menu_merge_node_remove_ui_reference (GtkMenuMergeNode *node,
+gtk_ui_manager_node_remove_ui_reference (GtkUIManagerNode *node,
 					 guint             merge_id)
 {
   GList *p;
@@ -547,7 +547,7 @@ struct _ParseContext
   ParseState state;
   ParseState prev_state;
 
-  GtkMenuMerge *self;
+  GtkUIManager *self;
 
   GNode *current;
 
@@ -563,7 +563,7 @@ start_element_handler (GMarkupParseContext *context,
 		       GError             **error)
 {
   ParseContext *ctx = user_data;
-  GtkMenuMerge *self = ctx->self;
+  GtkUIManager *self = ctx->self;
 
   gint i;
   const gchar *node_name;
@@ -606,7 +606,7 @@ start_element_handler (GMarkupParseContext *context,
 	  ctx->current = self->private_data->root_node;
 	  raise_error = FALSE;
 
-	  gtk_menu_merge_node_prepend_ui_reference (NODE_INFO (ctx->current),
+	  gtk_ui_manager_node_prepend_ui_reference (NODE_INFO (ctx->current),
 						    ctx->merge_id, verb_quark);
 	}
       break;
@@ -616,12 +616,12 @@ start_element_handler (GMarkupParseContext *context,
 	  ctx->state = STATE_MENU;
 	  ctx->current = get_child_node (self, ctx->current,
 					 node_name, strlen (node_name),
-					 GTK_MENU_MERGE_MENUBAR,
+					 GTK_UI_MANAGER_MENUBAR,
 					 TRUE, FALSE);
 	  if (NODE_INFO (ctx->current)->action_name == 0)
 	    NODE_INFO (ctx->current)->action_name = verb_quark;
 
-	  gtk_menu_merge_node_prepend_ui_reference (NODE_INFO (ctx->current),
+	  gtk_ui_manager_node_prepend_ui_reference (NODE_INFO (ctx->current),
 						    ctx->merge_id, verb_quark);
 	  NODE_INFO (ctx->current)->dirty = TRUE;
 
@@ -634,12 +634,12 @@ start_element_handler (GMarkupParseContext *context,
 	  ctx->state = STATE_MENUITEM;
 	  node = get_child_node (self, ctx->current,
 				 node_name, strlen (node_name),
-				 GTK_MENU_MERGE_MENUITEM,
+				 GTK_UI_MANAGER_MENUITEM,
 				 TRUE, top);
 	  if (NODE_INFO (node)->action_name == 0)
 	    NODE_INFO (node)->action_name = verb_quark;
 	  
-	  gtk_menu_merge_node_prepend_ui_reference (NODE_INFO (node),
+	  gtk_ui_manager_node_prepend_ui_reference (NODE_INFO (node),
 						    ctx->merge_id, verb_quark);
 	  NODE_INFO (node)->dirty = TRUE;
 	  
@@ -652,12 +652,12 @@ start_element_handler (GMarkupParseContext *context,
 	  ctx->state = STATE_TOOLBAR;
 	  ctx->current = get_child_node (self, ctx->current,
 					 node_name, strlen (node_name),
-					 GTK_MENU_MERGE_TOOLBAR,
+					 GTK_UI_MANAGER_TOOLBAR,
 					 TRUE, FALSE);
 	  if (NODE_INFO (ctx->current)->action_name == 0)
 	    NODE_INFO (ctx->current)->action_name = verb_quark;
 	  
-	  gtk_menu_merge_node_prepend_ui_reference (NODE_INFO (ctx->current),
+	  gtk_ui_manager_node_prepend_ui_reference (NODE_INFO (ctx->current),
 						    ctx->merge_id, verb_quark);
 	  NODE_INFO (ctx->current)->dirty = TRUE;
 	  
@@ -670,10 +670,10 @@ start_element_handler (GMarkupParseContext *context,
 	  ctx->state = STATE_POPUPS;
 	  ctx->current = get_child_node (self, ctx->current,
 					 node_name, strlen (node_name),
-					 GTK_MENU_MERGE_POPUPS,
+					 GTK_UI_MANAGER_POPUPS,
 					 TRUE, FALSE);
 	  
-	  gtk_menu_merge_node_prepend_ui_reference (NODE_INFO (ctx->current),
+	  gtk_ui_manager_node_prepend_ui_reference (NODE_INFO (ctx->current),
 						    ctx->merge_id, verb_quark);
 	  NODE_INFO (ctx->current)->dirty = TRUE;
 	  
@@ -684,12 +684,12 @@ start_element_handler (GMarkupParseContext *context,
 	  ctx->state = STATE_MENU;
 	  ctx->current = get_child_node (self, ctx->current,
 					 node_name, strlen (node_name),
-					 GTK_MENU_MERGE_MENU,
+					 GTK_UI_MANAGER_MENU,
 					 TRUE, FALSE);
 	  if (NODE_INFO (ctx->current)->action_name == 0)
 	    NODE_INFO (ctx->current)->action_name = verb_quark;
 	  
-	  gtk_menu_merge_node_prepend_ui_reference (NODE_INFO (ctx->current),
+	  gtk_ui_manager_node_prepend_ui_reference (NODE_INFO (ctx->current),
 						    ctx->merge_id, verb_quark);
 	  NODE_INFO (ctx->current)->dirty = TRUE;
 	  
@@ -701,15 +701,15 @@ start_element_handler (GMarkupParseContext *context,
 	  if (ctx->state == STATE_MENU)
 	    ctx->current = get_child_node (self, ctx->current,
 					   node_name, strlen (node_name),
-					   GTK_MENU_MERGE_MENU_PLACEHOLDER,
+					   GTK_UI_MANAGER_MENU_PLACEHOLDER,
 					   TRUE, top);
 	  else
 	    ctx->current = get_child_node (self, ctx->current,
 					   node_name, strlen (node_name),
-					   GTK_MENU_MERGE_TOOLBAR_PLACEHOLDER,
+					   GTK_UI_MANAGER_TOOLBAR_PLACEHOLDER,
 					   TRUE, top);
 	  
-	  gtk_menu_merge_node_prepend_ui_reference (NODE_INFO (ctx->current),
+	  gtk_ui_manager_node_prepend_ui_reference (NODE_INFO (ctx->current),
 						    ctx->merge_id, verb_quark);
 	  NODE_INFO (ctx->current)->dirty = TRUE;
 	  
@@ -722,12 +722,12 @@ start_element_handler (GMarkupParseContext *context,
 	  ctx->state = STATE_MENU;
 	  ctx->current = get_child_node (self, ctx->current,
 					 node_name, strlen (node_name),
-					 GTK_MENU_MERGE_MENU,
+					 GTK_UI_MANAGER_MENU,
 					 TRUE, top);
 	  if (NODE_INFO (ctx->current)->action_name == 0)
 	    NODE_INFO (ctx->current)->action_name = verb_quark;
 
-	  gtk_menu_merge_node_prepend_ui_reference (NODE_INFO (ctx->current),
+	  gtk_ui_manager_node_prepend_ui_reference (NODE_INFO (ctx->current),
 						    ctx->merge_id, verb_quark);
 	  NODE_INFO (ctx->current)->dirty = TRUE;
 	  
@@ -744,12 +744,12 @@ start_element_handler (GMarkupParseContext *context,
 	    ctx->state = STATE_TOOLITEM;
 	  node = get_child_node (self, ctx->current,
 				 node_name, strlen (node_name),
-				 GTK_MENU_MERGE_SEPARATOR,
+				 GTK_UI_MANAGER_SEPARATOR,
 				 TRUE, top);
 	  if (NODE_INFO (node)->action_name == 0)
 	    NODE_INFO (node)->action_name = verb_quark;
 
-	  gtk_menu_merge_node_prepend_ui_reference (NODE_INFO (node),
+	  gtk_ui_manager_node_prepend_ui_reference (NODE_INFO (node),
 						    ctx->merge_id, verb_quark);
 	  NODE_INFO (node)->dirty = TRUE;
 	  
@@ -764,12 +764,12 @@ start_element_handler (GMarkupParseContext *context,
 	  ctx->state = STATE_TOOLITEM;
 	  node = get_child_node (self, ctx->current,
 				node_name, strlen (node_name),
-				 GTK_MENU_MERGE_TOOLITEM,
+				 GTK_UI_MANAGER_TOOLITEM,
 				 TRUE, top);
 	  if (NODE_INFO (node)->action_name == 0)
 	    NODE_INFO (node)->action_name = verb_quark;
 	  
-	  gtk_menu_merge_node_prepend_ui_reference (NODE_INFO (node),
+	  gtk_ui_manager_node_prepend_ui_reference (NODE_INFO (node),
 						    ctx->merge_id, verb_quark);
 	  NODE_INFO (node)->dirty = TRUE;
 
@@ -809,7 +809,7 @@ end_element_handler (GMarkupParseContext *context,
 		     GError             **error)
 {
   ParseContext *ctx = user_data;
-  GtkMenuMerge *self = ctx->self;
+  GtkUIManager *self = ctx->self;
 
   switch (ctx->state)
     {
@@ -825,9 +825,9 @@ end_element_handler (GMarkupParseContext *context,
       break;
     case STATE_MENU:
       ctx->current = ctx->current->parent;
-      if (NODE_INFO (ctx->current)->type == GTK_MENU_MERGE_ROOT) /* menubar */
+      if (NODE_INFO (ctx->current)->type == GTK_UI_MANAGER_ROOT) /* menubar */
 	ctx->state = STATE_ROOT;
-      else if (NODE_INFO (ctx->current)->type == GTK_MENU_MERGE_POPUPS) /* popup */
+      else if (NODE_INFO (ctx->current)->type == GTK_UI_MANAGER_POPUPS) /* popup */
 	ctx->state = STATE_POPUPS;
       /* else, stay in STATE_MENU state */
       break;
@@ -835,7 +835,7 @@ end_element_handler (GMarkupParseContext *context,
       ctx->current = ctx->current->parent;
       /* we conditionalise this test, in case we are closing off a
        * placeholder */
-      if (NODE_INFO (ctx->current)->type == GTK_MENU_MERGE_ROOT)
+      if (NODE_INFO (ctx->current)->type == GTK_UI_MANAGER_ROOT)
 	ctx->state = STATE_ROOT;
       /* else, stay in STATE_TOOLBAR state */
       break;
@@ -862,13 +862,13 @@ cleanup (GMarkupParseContext *context,
 	 gpointer             user_data)
 {
   ParseContext *ctx = user_data;
-  GtkMenuMerge *self = ctx->self;
+  GtkUIManager *self = ctx->self;
 
   ctx->current = NULL;
   /* should also walk through the tree and get rid of nodes related to
    * this UI file's tag */
 
-  gtk_menu_merge_remove_ui (self, ctx->merge_id);
+  gtk_ui_manager_remove_ui (self, ctx->merge_id);
 }
 
 static GMarkupParser ui_parser = {
@@ -881,8 +881,8 @@ static GMarkupParser ui_parser = {
 
 
 /**
- * gtk_menu_merge_add_ui_from_string:
- * @self: a #GtkMenuMerge object
+ * gtk_ui_manager_add_ui_from_string:
+ * @self: a #GtkUIManager object
  * @buffer: the string to parse
  * @length: the length of @buffer (may be -1 if @buffer is nul-terminated)
  * @error: return location for an error
@@ -891,13 +891,13 @@ static GMarkupParser ui_parser = {
  * contents of @self. FIXME: describe the XML format.
  * 
  * Return value: The merge id for the merged UI. The merge id can be used
- *   to unmerge the UI with gtk_menu_merge_remove_ui(). If an error occurred,
+ *   to unmerge the UI with gtk_ui_manager_remove_ui(). If an error occurred,
  *   the return value is 0.
  *
  * Since: 2.4
  **/
 guint
-gtk_menu_merge_add_ui_from_string (GtkMenuMerge *self,
+gtk_ui_manager_add_ui_from_string (GtkUIManager *self,
 				   const gchar  *buffer, 
 				   gsize         length,
 				   GError      **error)
@@ -906,13 +906,13 @@ gtk_menu_merge_add_ui_from_string (GtkMenuMerge *self,
   GMarkupParseContext *context;
   gboolean res = TRUE;
 
-  g_return_val_if_fail (GTK_IS_MENU_MERGE (self), FALSE);
+  g_return_val_if_fail (GTK_IS_UI_MANAGER (self), FALSE);
   g_return_val_if_fail (buffer != NULL, FALSE);
 
   ctx.state = STATE_START;
   ctx.self = self;
   ctx.current = NULL;
-  ctx.merge_id = gtk_menu_merge_next_merge_id (self);
+  ctx.merge_id = gtk_ui_manager_next_merge_id (self);
 
   context = g_markup_parse_context_new (&ui_parser, 0, &ctx, NULL);
   if (length < 0)
@@ -928,7 +928,7 @@ gtk_menu_merge_add_ui_from_string (GtkMenuMerge *self,
 
   g_markup_parse_context_free (context);
 
-  gtk_menu_merge_queue_update (self);
+  gtk_ui_manager_queue_update (self);
 
   if (res)
     return ctx.merge_id;
@@ -937,22 +937,22 @@ gtk_menu_merge_add_ui_from_string (GtkMenuMerge *self,
 }
 
 /**
- * gtk_menu_merge_add_ui_from_file:
- * @self: a #GtkMenuMerge object
+ * gtk_ui_manager_add_ui_from_file:
+ * @self: a #GtkUIManager object
  * @filename: the name of the file to parse 
  * @error: return location for an error
  * 
  * Parses a file containing a UI description and merge it with the current
- * contents of @self. See gtk_menu_merge_add_ui_from_file().
+ * contents of @self. See gtk_ui_manager_add_ui_from_file().
  * 
  * Return value: The merge id for the merged UI. The merge id can be used
- *   to unmerge the UI with gtk_menu_merge_remove_ui(). If an error occurred,
+ *   to unmerge the UI with gtk_ui_manager_remove_ui(). If an error occurred,
  *   the return value is 0.
  *
  * Since: 2.4
  **/
 guint
-gtk_menu_merge_add_ui_from_file (GtkMenuMerge *self,
+gtk_ui_manager_add_ui_from_file (GtkUIManager *self,
 				 const gchar  *filename,
 				 GError      **error)
 {
@@ -963,7 +963,7 @@ gtk_menu_merge_add_ui_from_file (GtkMenuMerge *self,
   if (!g_file_get_contents (filename, &buffer, &length, error))
     return 0;
 
-  res = gtk_menu_merge_add_ui_from_string (self, buffer, length, error);
+  res = gtk_ui_manager_add_ui_from_string (self, buffer, length, error);
   g_free (buffer);
 
   return res;
@@ -975,35 +975,35 @@ remove_ui (GNode   *node,
 {
   guint merge_id = GPOINTER_TO_UINT (user_data);
 
-  gtk_menu_merge_node_remove_ui_reference (NODE_INFO (node), merge_id);
+  gtk_ui_manager_node_remove_ui_reference (NODE_INFO (node), merge_id);
 
   return FALSE; /* continue */
 }
 
 /**
- * gtk_menu_merge_remove_ui:
- * @self: a #GtkMenuMerge object
- * @merge_id: a merge id as returned by gtk_menu_merge_add_ui_from_string()
+ * gtk_ui_manager_remove_ui:
+ * @self: a #GtkUIManager object
+ * @merge_id: a merge id as returned by gtk_ui_manager_add_ui_from_string()
  * 
  * Unmerges the part of @self<!-- -->s content identified by @merge_id.
  *
  * Since: 2.4
  **/
 void
-gtk_menu_merge_remove_ui (GtkMenuMerge *self, 
+gtk_ui_manager_remove_ui (GtkUIManager *self, 
 			  guint         merge_id)
 {
   g_node_traverse (self->private_data->root_node, G_POST_ORDER, G_TRAVERSE_ALL, -1,
 		   remove_ui, GUINT_TO_POINTER (merge_id));
 
-  gtk_menu_merge_queue_update (self);
+  gtk_ui_manager_queue_update (self);
 }
 
 /* -------------------- Updates -------------------- */
 
 
 static GtkAction *
-get_action_by_name (GtkMenuMerge *merge, 
+get_action_by_name (GtkUIManager *merge, 
 		    const char   *action_name)
 {
   GList *tmp;
@@ -1035,10 +1035,10 @@ find_menu_position (GNode      *node,
   gint pos;
 
   g_return_val_if_fail (node != NULL, FALSE);
-  g_return_val_if_fail (NODE_INFO (node)->type == GTK_MENU_MERGE_MENU ||
-			NODE_INFO (node)->type == GTK_MENU_MERGE_MENU_PLACEHOLDER ||
-			NODE_INFO (node)->type == GTK_MENU_MERGE_MENUITEM ||
-			NODE_INFO (node)->type == GTK_MENU_MERGE_SEPARATOR,
+  g_return_val_if_fail (NODE_INFO (node)->type == GTK_UI_MANAGER_MENU ||
+			NODE_INFO (node)->type == GTK_UI_MANAGER_MENU_PLACEHOLDER ||
+			NODE_INFO (node)->type == GTK_UI_MANAGER_MENUITEM ||
+			NODE_INFO (node)->type == GTK_UI_MANAGER_SEPARATOR,
 			FALSE);
 
   /* first sibling -- look at parent */
@@ -1049,17 +1049,17 @@ find_menu_position (GNode      *node,
       parent = node->parent;
       switch (NODE_INFO (parent)->type)
 	{
-	case GTK_MENU_MERGE_MENUBAR:
+	case GTK_UI_MANAGER_MENUBAR:
 	  menushell = NODE_INFO (parent)->proxy;
 	  pos = 0;
 	  break;
-	case GTK_MENU_MERGE_MENU:
+	case GTK_UI_MANAGER_MENU:
 	  menushell = NODE_INFO (parent)->proxy;
 	  if (GTK_IS_MENU_ITEM (menushell))
 	    menushell = gtk_menu_item_get_submenu (GTK_MENU_ITEM (menushell));
 	  pos = 0;
 	  break;
-	case GTK_MENU_MERGE_MENU_PLACEHOLDER:
+	case GTK_UI_MANAGER_MENU_PLACEHOLDER:
 	  menushell = gtk_widget_get_parent (NODE_INFO (parent)->proxy);
 	  g_return_val_if_fail (GTK_IS_MENU_SHELL (menushell), FALSE);
 	  pos = g_list_index (GTK_MENU_SHELL (menushell)->children,
@@ -1077,7 +1077,7 @@ find_menu_position (GNode      *node,
       GNode *sibling;
 
       sibling = node->prev;
-      if (NODE_INFO (sibling)->type == GTK_MENU_MERGE_MENU_PLACEHOLDER)
+      if (NODE_INFO (sibling)->type == GTK_UI_MANAGER_MENU_PLACEHOLDER)
 	prev_child = NODE_INFO (sibling)->extra; /* second Separator */
       else
 	prev_child = NODE_INFO (sibling)->proxy;
@@ -1106,10 +1106,10 @@ find_toolbar_position (GNode      *node,
   gint pos;
 
   g_return_val_if_fail (node != NULL, FALSE);
-  g_return_val_if_fail (NODE_INFO (node)->type == GTK_MENU_MERGE_TOOLBAR ||
-			NODE_INFO (node)->type == GTK_MENU_MERGE_TOOLBAR_PLACEHOLDER ||
-			NODE_INFO (node)->type == GTK_MENU_MERGE_TOOLITEM ||
-			NODE_INFO (node)->type == GTK_MENU_MERGE_SEPARATOR,
+  g_return_val_if_fail (NODE_INFO (node)->type == GTK_UI_MANAGER_TOOLBAR ||
+			NODE_INFO (node)->type == GTK_UI_MANAGER_TOOLBAR_PLACEHOLDER ||
+			NODE_INFO (node)->type == GTK_UI_MANAGER_TOOLITEM ||
+			NODE_INFO (node)->type == GTK_UI_MANAGER_SEPARATOR,
 			FALSE);
 
   /* first sibling -- look at parent */
@@ -1120,11 +1120,11 @@ find_toolbar_position (GNode      *node,
       parent = node->parent;
       switch (NODE_INFO (parent)->type)
 	{
-	case GTK_MENU_MERGE_TOOLBAR:
+	case GTK_UI_MANAGER_TOOLBAR:
 	  toolbar = NODE_INFO (parent)->proxy;
 	  pos = 0;
 	  break;
-	case GTK_MENU_MERGE_TOOLBAR_PLACEHOLDER:
+	case GTK_UI_MANAGER_TOOLBAR_PLACEHOLDER:
 	  toolbar = gtk_widget_get_parent (NODE_INFO (parent)->proxy);
 	  g_return_val_if_fail (GTK_IS_TOOLBAR (toolbar), FALSE);
 	  pos = gtk_toolbar_get_item_index (GTK_TOOLBAR (toolbar),
@@ -1142,7 +1142,7 @@ find_toolbar_position (GNode      *node,
       GNode *sibling;
 
       sibling = node->prev;
-      if (NODE_INFO (sibling)->type == GTK_MENU_MERGE_TOOLBAR_PLACEHOLDER)
+      if (NODE_INFO (sibling)->type == GTK_UI_MANAGER_TOOLBAR_PLACEHOLDER)
 	prev_child = NODE_INFO (sibling)->extra; /* second Separator */
       else
 	prev_child = NODE_INFO (sibling)->proxy;
@@ -1164,13 +1164,13 @@ find_toolbar_position (GNode      *node,
 }
 
 static void
-update_node (GtkMenuMerge *self, 
+update_node (GtkUIManager *self, 
 	     GNode        *node)
 {
-  GtkMenuMergeNode *info;
+  GtkUIManagerNode *info;
   GNode *child;
   GtkAction *action;
-#ifdef DEBUG_MENU_MERGE
+#ifdef DEBUG_UI_MANAGER
   GList *tmp;
 #endif
 
@@ -1179,7 +1179,7 @@ update_node (GtkMenuMerge *self,
 
   info = NODE_INFO (node);
 
-#ifdef DEBUG_MENU_MERGE
+#ifdef DEBUG_UI_MANAGER
   g_print ("update_node name=%s dirty=%d (", info->name, info->dirty);
   for (tmp = info->uifiles; tmp != NULL; tmp = tmp->next)
     {
@@ -1211,11 +1211,11 @@ update_node (GtkMenuMerge *self,
 
       /* Check if the node doesn't have an action and must have an action */
       if (action == NULL &&
-	  info->type != GTK_MENU_MERGE_MENUBAR &&
-	  info->type != GTK_MENU_MERGE_TOOLBAR &&
-	  info->type != GTK_MENU_MERGE_SEPARATOR &&
-	  info->type != GTK_MENU_MERGE_MENU_PLACEHOLDER &&
-	  info->type != GTK_MENU_MERGE_TOOLBAR_PLACEHOLDER)
+	  info->type != GTK_UI_MANAGER_MENUBAR &&
+	  info->type != GTK_UI_MANAGER_TOOLBAR &&
+	  info->type != GTK_UI_MANAGER_SEPARATOR &&
+	  info->type != GTK_UI_MANAGER_MENU_PLACEHOLDER &&
+	  info->type != GTK_UI_MANAGER_TOOLBAR_PLACEHOLDER)
 	{
 	  /* FIXME: Should we warn here? */
 	  goto recurse_children;
@@ -1238,7 +1238,7 @@ update_node (GtkMenuMerge *self,
 
       switch (info->type)
 	{
-	case GTK_MENU_MERGE_MENUBAR:
+	case GTK_UI_MANAGER_MENUBAR:
 	  if (info->proxy == NULL)
 	    {
 	      info->proxy = gtk_menu_bar_new ();
@@ -1246,8 +1246,8 @@ update_node (GtkMenuMerge *self,
 	      g_signal_emit (self, merge_signals[ADD_WIDGET], 0, info->proxy);
 	    }
 	  break;
-	case GTK_MENU_MERGE_MENU:
-	  if (NODE_INFO (node->parent)->type == GTK_MENU_MERGE_POPUPS)
+	case GTK_UI_MANAGER_MENU:
+	  if (NODE_INFO (node->parent)->type == GTK_UI_MANAGER_POPUPS)
 	    {
 	      if (info->proxy == NULL) 
 		{
@@ -1302,12 +1302,12 @@ update_node (GtkMenuMerge *self,
 		}
 	    }
 	  break;
-	case GTK_MENU_MERGE_UNDECIDED:
+	case GTK_UI_MANAGER_UNDECIDED:
 	  g_warning ("found 'undecided node!");
 	  break;
-	case GTK_MENU_MERGE_ROOT:
+	case GTK_UI_MANAGER_ROOT:
 	  break;
-	case GTK_MENU_MERGE_TOOLBAR:
+	case GTK_UI_MANAGER_TOOLBAR:
 	  if (info->proxy == NULL)
 	    {
 	      info->proxy = gtk_toolbar_new ();
@@ -1315,7 +1315,7 @@ update_node (GtkMenuMerge *self,
 	      g_signal_emit (self, merge_signals[ADD_WIDGET], 0, info->proxy);
 	    }
 	  break;
-	case GTK_MENU_MERGE_MENU_PLACEHOLDER:
+	case GTK_UI_MANAGER_MENU_PLACEHOLDER:
 	  /* create menu items for placeholders if necessary ... */
 	  if (!GTK_IS_SEPARATOR_MENU_ITEM (info->proxy) ||
 	      !GTK_IS_SEPARATOR_MENU_ITEM (info->extra))
@@ -1346,7 +1346,7 @@ update_node (GtkMenuMerge *self,
 		}
 	    }
 	  break;
-	case GTK_MENU_MERGE_TOOLBAR_PLACEHOLDER:
+	case GTK_UI_MANAGER_TOOLBAR_PLACEHOLDER:
 	  /* create toolbar items for placeholders if necessary ... */
 	  if (!GTK_IS_SEPARATOR_TOOL_ITEM (info->proxy) ||
 	      !GTK_IS_SEPARATOR_TOOL_ITEM (info->extra))
@@ -1379,9 +1379,9 @@ update_node (GtkMenuMerge *self,
 		}
 	    }
 	  break;
-	case GTK_MENU_MERGE_POPUPS:
+	case GTK_UI_MANAGER_POPUPS:
 	  break;
-	case GTK_MENU_MERGE_MENUITEM:
+	case GTK_UI_MANAGER_MENUITEM:
 	  /* remove the proxy if it is of the wrong type ... */
 	  if (info->proxy &&  G_OBJECT_TYPE (info->proxy) !=
 	      GTK_ACTION_GET_CLASS (info->action)->menu_item_type)
@@ -1410,7 +1410,7 @@ update_node (GtkMenuMerge *self,
 	      gtk_action_connect_proxy (info->action, info->proxy);
 	    }
 	  break;
-	case GTK_MENU_MERGE_TOOLITEM:
+	case GTK_UI_MANAGER_TOOLITEM:
 	  /* remove the proxy if it is of the wrong type ... */
 	  if (info->proxy &&  G_OBJECT_TYPE (info->proxy) !=
 	      GTK_ACTION_GET_CLASS (info->action)->toolbar_item_type)
@@ -1438,9 +1438,9 @@ update_node (GtkMenuMerge *self,
 	      gtk_action_connect_proxy (info->action, info->proxy);
 	    }
 	  break;
-	case GTK_MENU_MERGE_SEPARATOR:
-	  if (NODE_INFO (node->parent)->type == GTK_MENU_MERGE_TOOLBAR ||
-	      NODE_INFO (node->parent)->type == GTK_MENU_MERGE_TOOLBAR_PLACEHOLDER)
+	case GTK_UI_MANAGER_SEPARATOR:
+	  if (NODE_INFO (node->parent)->type == GTK_UI_MANAGER_TOOLBAR ||
+	      NODE_INFO (node->parent)->type == GTK_UI_MANAGER_TOOLBAR_PLACEHOLDER)
 	    {
 	      GtkWidget *toolbar;
 	      gint pos;
@@ -1503,8 +1503,8 @@ update_node (GtkMenuMerge *self,
     {
       if (NODE_INFO (node)->proxy)
 	gtk_widget_destroy (NODE_INFO (node)->proxy);
-      if ((NODE_INFO (node)->type == GTK_MENU_MERGE_MENU_PLACEHOLDER ||
-	   NODE_INFO (node)->type == GTK_MENU_MERGE_TOOLBAR_PLACEHOLDER) &&
+      if ((NODE_INFO (node)->type == GTK_UI_MANAGER_MENU_PLACEHOLDER ||
+	   NODE_INFO (node)->type == GTK_UI_MANAGER_TOOLBAR_PLACEHOLDER) &&
 	  NODE_INFO (node)->extra)
 	gtk_widget_destroy (NODE_INFO (node)->extra);
       g_chunk_free (NODE_INFO (node), merge_node_chunk);
@@ -1513,7 +1513,7 @@ update_node (GtkMenuMerge *self,
 }
 
 static gboolean
-do_updates (GtkMenuMerge *self)
+do_updates (GtkUIManager *self)
 {
   /* this function needs to check through the tree for dirty nodes.
    * For such nodes, it needs to do the following:
@@ -1536,7 +1536,7 @@ do_updates (GtkMenuMerge *self)
 }
 
 static void
-gtk_menu_merge_queue_update (GtkMenuMerge *self)
+gtk_ui_manager_queue_update (GtkUIManager *self)
 {
   if (self->private_data->update_tag != 0)
     return;
@@ -1545,7 +1545,7 @@ gtk_menu_merge_queue_update (GtkMenuMerge *self)
 }
 
 static void
-gtk_menu_merge_ensure_update (GtkMenuMerge *self)
+gtk_ui_manager_ensure_update (GtkUIManager *self)
 {
   if (self->private_data->update_tag != 0)
     {
@@ -1563,11 +1563,11 @@ dirty_traverse_func (GNode   *node,
 }
 
 static void
-gtk_menu_merge_dirty_all (GtkMenuMerge *self)
+gtk_ui_manager_dirty_all (GtkUIManager *self)
 {
   g_node_traverse (self->private_data->root_node, G_PRE_ORDER, G_TRAVERSE_ALL, -1,
 		   dirty_traverse_func, NULL);
-  gtk_menu_merge_queue_update (self);
+  gtk_ui_manager_queue_update (self);
 }
 
 static const gchar *open_tag_format[] = {
@@ -1601,19 +1601,19 @@ static const gchar *close_tag_format[] = {
 };
 
 static void
-print_node (GtkMenuMerge *self, 
+print_node (GtkUIManager *self, 
 	    GNode        *node, 
 	    gint          indent_level,
 	    GString      *buffer)
 {
-  GtkMenuMergeNode *mnode;
+  GtkUIManagerNode *mnode;
   GNode *child;
   guint type;
   
   mnode = node->data;
-  if (mnode->type == GTK_MENU_MERGE_MENU &&
-      NODE_INFO (node->parent)->type == GTK_MENU_MERGE_POPUPS)
-      type = GTK_MENU_MERGE_SEPARATOR + 1;
+  if (mnode->type == GTK_UI_MANAGER_MENU &&
+      NODE_INFO (node->parent)->type == GTK_UI_MANAGER_POPUPS)
+      type = GTK_UI_MANAGER_SEPARATOR + 1;
   else
     type = mnode->type;
 
@@ -1631,8 +1631,8 @@ print_node (GtkMenuMerge *self,
 }
 
 /**
- * gtk_menu_merge_get_ui:
- * @self: a #GtkMenuMerge
+ * gtk_ui_manager_get_ui:
+ * @self: a #GtkUIManager
  * 
  * Creates an XML representation of the merged ui.
  * 
@@ -1642,13 +1642,13 @@ print_node (GtkMenuMerge *self,
  * Since: 2.4
  **/
 gchar*
-gtk_menu_merge_get_ui (GtkMenuMerge   *self)
+gtk_ui_manager_get_ui (GtkUIManager   *self)
 {
   GString *buffer;
 
   buffer = g_string_new (NULL);
 
-  gtk_menu_merge_ensure_update (self); 
+  gtk_ui_manager_ensure_update (self); 
  
   print_node (self, self->private_data->root_node, 0, buffer);  
 

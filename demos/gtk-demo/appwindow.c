@@ -33,69 +33,107 @@ activate_action (GtkAction *action)
 }
 
 
-#ifndef N_
-#define N_(String) String
-#endif
-
 static GtkActionGroupEntry entries[] = {
-  { "FileMenu", N_("_File"), NULL, NULL, NULL, NULL, NULL },
-  { "PreferencesMenu", N_("_Preferences"), NULL, NULL, NULL, NULL, NULL },
-  { "ColorMenu", N_("_Color"), NULL, NULL, NULL, NULL, NULL },
-  { "ShapeMenu", N_("_Shape"), NULL, NULL, NULL, NULL, NULL },
-  { "HelpMenu", N_("_Help"), NULL, NULL, NULL, NULL, NULL },
-
-  { "New", N_("_New"), GTK_STOCK_NEW, "<control>N", N_("Create a new file"), G_CALLBACK (activate_action), NULL },
-  { "Open", N_("_Open"), GTK_STOCK_OPEN, "<control>O", N_("Open a file"), G_CALLBACK (activate_action), NULL },
-  { "Save", N_("_Save"), GTK_STOCK_SAVE, "<control>S", N_("Save current file"), G_CALLBACK (activate_action), NULL },
-  { "SaveAs", N_("Save _As..."), GTK_STOCK_SAVE, NULL, N_("Save to a file"), G_CALLBACK (activate_action), NULL },
-  { "Quit", N_("_Quit"), GTK_STOCK_QUIT, "<control>Q", N_("Quit"), G_CALLBACK (activate_action), NULL },
-
-  { "Red", N_("_Red"), NULL, "<control>R", N_("Blood"), G_CALLBACK (activate_action), NULL, GTK_ACTION_RADIO },
-  { "Green", N_("_Green"), NULL, "<control>G", N_("Grass"), G_CALLBACK (activate_action), NULL, GTK_ACTION_RADIO, "Red" },
-  { "Blue", N_("_Blue"), NULL, "<control>B", N_("Sky"), G_CALLBACK (activate_action), NULL, GTK_ACTION_RADIO, "Red" },
-
-  { "Square", N_("_Square"), NULL, "<control>S", N_("Square"), G_CALLBACK (activate_action), NULL, GTK_ACTION_RADIO },
-  { "Rectangle", N_("_Rectangle"), NULL, "<control>R", N_("Rectangle"), G_CALLBACK (activate_action), NULL, GTK_ACTION_RADIO, "Square" },
-  { "Oval", N_("_Oval"), NULL, "<control>O", N_("Egg"), G_CALLBACK (activate_action), NULL, GTK_ACTION_RADIO, "Square" },
-  { "About", N_("_About"), NULL, "<control>A", N_("About"), G_CALLBACK (activate_action), NULL },
-  { "Logo", NULL, "demo-gtk-logo", NULL, N_("GTK+"), G_CALLBACK (activate_action), NULL },
+  { "FileMenu", "_File" },               /* name, label */
+  { "PreferencesMenu", "_Preferences" }, /* name, label */
+  { "ColorMenu", "_Color"  },            /* name, label */
+  { "ShapeMenu", "_Shape" },             /* name, label */
+  { "HelpMenu", "_Help" },               /* name, label */
+  { "New", "_New",                       /* name, label */
+    GTK_STOCK_NEW, "<control>N",         /* stock_id, accelerator */
+    "Create a new file",                 /* tooltip */ 
+    G_CALLBACK (activate_action) },      
+  { "Open", "_Open",                     /* name, label */
+    GTK_STOCK_OPEN, "<control>O",        /* stock_id, accelerator */     
+    "Open a file",                       /* tooltip */
+    G_CALLBACK (activate_action) },
+  { "Save", "_Save",                     /* name, label */
+    GTK_STOCK_SAVE, "<control>S",        /* stock_id, accelerator */     
+    "Save current file",                 /* tooltip */
+    G_CALLBACK (activate_action) },
+  { "SaveAs", "Save _As...",             /* name, label */
+    GTK_STOCK_SAVE, NULL,                /* stock_id, accelerator */     
+    "Save to a file",                    /* tooltip */
+    G_CALLBACK (activate_action) },
+  { "Quit", "_Quit",                     /* name, label */
+    GTK_STOCK_QUIT, "<control>Q",        /* stock_id, accelerator */     
+    "Quit",                              /* tooltip */
+    G_CALLBACK (activate_action) },
+  { "Red", "_Red",                       /* name, label */
+    NULL, "<control>R",                  /* stock_id, accelerator */     
+    "Blood",                             /* tooltip */
+    G_CALLBACK (activate_action), NULL,  
+    GTK_ACTION_RADIO },                  /* entry type */
+  { "Green", "_Green",                   /* name, label */
+    NULL, "<control>G",                  /* stock_id, accelerator */     
+    "Grass",                             /* tooltip */
+    G_CALLBACK (activate_action), NULL, 
+    GTK_ACTION_RADIO, "Red" },           /* entry type, radio group */
+  { "Blue", "_Blue",                     /* name, label */
+    NULL, "<control>B",                  /* stock_id, accelerator */     
+    "Sky",                               /* tooltip */
+    G_CALLBACK (activate_action), NULL, 
+    GTK_ACTION_RADIO, "Red" },           /* entry type, radio group */
+  { "Square", "_Square",                 /* name, label */
+    NULL, "<control>S",                  /* stock_id, accelerator */     
+    "Square",                            /* tooltip */
+    G_CALLBACK (activate_action), NULL, 
+    GTK_ACTION_RADIO },                  /* entry type */
+  { "Rectangle", "_Rectangle",           /* name, label */
+    NULL, "<control>R",                  /* stock_id, accelerator */     
+    "Rectangle",                         /* tooltip */
+    G_CALLBACK (activate_action), NULL, 
+    GTK_ACTION_RADIO, "Square" },        /* entry type, radio group */
+  { "Oval", "_Oval",                     /* name, label */
+    NULL, "<control>O",                  /* stock_id, accelerator */     
+    "Egg",                               /* tooltip */  
+    G_CALLBACK (activate_action), NULL, 
+    GTK_ACTION_RADIO, "Square" },        /* entry type, radio group */
+  { "About", "_About",                   /* name, label */
+    NULL, "<control>A",                  /* stock_id, accelerator */     
+    "About",                             /* tooltip */  
+    G_CALLBACK (activate_action) },
+  { "Logo", NULL,                        /* name, label */
+    "demo-gtk-logo", NULL,               /* stock_id, accelerator */     
+    "GTK+",                              /* tooltip */
+    G_CALLBACK (activate_action) },
 };
 static guint n_entries = G_N_ELEMENTS (entries);
 
 static const gchar *ui_info = 
-"<Root>\n"
-"  <menu>\n"
-"    <submenu name='FileMenu'>\n"
-"      <menuitem name='New'/>\n"
-"      <menuitem name='Open'/>\n"
-"      <menuitem name='Save'/>\n"
-"      <menuitem name='SaveAs'/>\n"
-"      <separator name='Sep1'/>\n"
-"      <menuitem name='Quit'/>\n"
-"    </submenu>\n"
-"    <submenu name='PreferencesMenu'>\n"
-"      <submenu name='ColorMenu'>\n"
-"	<menuitem name='Red'/>\n"
-"	<menuitem name='Green'/>\n"
-"	<menuitem name='Blue'/>\n"
-"      </submenu>\n"
-"      <submenu name='ShapeMenu'>\n"
-"        <menuitem name='Square'/>\n"
-"        <menuitem name='Rectangle'/>\n"
-"        <menuitem name='Oval'/>\n"
-"      </submenu>\n"
-"    </submenu>\n"
-"    <submenu name='HelpMenu'>\n"
-"      <menuitem name='About'/>\n"
-"    </submenu>\n"
-"  </menu>\n"
-"  <dockitem>\n"
-"    <toolitem name='Open'/>\n"
-"    <toolitem name='Quit'/>\n"
-"    <separator name='Sep1'/>\n"
-"    <toolitem name='Logo'/>\n"
-"  </dockitem>\n"
-"</Root>\n";
+"<Root>"
+"  <menu name='MenuBar'>"
+"    <submenu name='FileMenu'>"
+"      <menuitem name='New'/>"
+"      <menuitem name='Open'/>"
+"      <menuitem name='Save'/>"
+"      <menuitem name='SaveAs'/>"
+"      <separator name='Sep1'/>"
+"      <menuitem name='Quit'/>"
+"    </submenu>"
+"    <submenu name='PreferencesMenu'>"
+"      <submenu name='ColorMenu'>"
+"	<menuitem name='Red'/>"
+"	<menuitem name='Green'/>"
+"	<menuitem name='Blue'/>"
+"      </submenu>"
+"      <submenu name='ShapeMenu'>"
+"        <menuitem name='Square'/>"
+"        <menuitem name='Rectangle'/>"
+"        <menuitem name='Oval'/>"
+"      </submenu>"
+"    </submenu>"
+"    <submenu name='HelpMenu'>"
+"      <menuitem name='About'/>"
+"    </submenu>"
+"  </menu>"
+"  <dockitem name='ToolBar'>"
+"    <toolitem name='Open'/>"
+"    <toolitem name='Quit'/>"
+"    <separator name='Sep1'/>"
+"    <toolitem name='Logo'/>"
+"  </dockitem>"
+"</Root>";
 
 
 
@@ -213,33 +251,6 @@ update_resize_grip (GtkWidget           *widget,
 }
 		    
 
-static void
-add_widget (GtkMenuMerge *merge,
-	    GtkWidget   *widget,
-	    GtkTable *table)
-{
-  if (GTK_IS_MENU_BAR (widget)) 
-    {
-      gtk_table_attach (GTK_TABLE (table),
-			widget, 
-                        /* X direction */          /* Y direction */
-                        0, 1,                      0, 1,
-                        GTK_EXPAND | GTK_FILL,     0,
-                        0,                         0);
-    }
-  else if (GTK_IS_TOOLBAR (widget)) 
-    {
-      gtk_table_attach (GTK_TABLE (table),
-                        widget,
-                        /* X direction */       /* Y direction */
-                        0, 1,                   1, 2,
-                        GTK_EXPAND | GTK_FILL,  0,
-                        0,                      0);
-    }
-
-  gtk_widget_show (widget);
-}
-
 GtkWidget *
 do_appwindow (void)
 {  
@@ -249,10 +260,11 @@ do_appwindow (void)
       GtkWidget *statusbar;
       GtkWidget *contents;
       GtkWidget *sw;
+      GtkWidget *bar;
       GtkTextBuffer *buffer;
       GtkActionGroup *action_group;
       GtkAction *action;
-      GtkMenuMerge *merge;
+      GtkUIManager *merge;
       GError *error = NULL;
 
       register_stock_icons ();
@@ -278,22 +290,39 @@ do_appwindow (void)
       action_group = gtk_action_group_new ("AppWindowActions");
       gtk_action_group_add_actions (action_group, entries, n_entries);
 
-      action = gtk_action_group_get_action (action_group, "red");
+      action = gtk_action_group_get_action (action_group, "Red");
       gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);
-      action = gtk_action_group_get_action (action_group, "square");
+      action = gtk_action_group_get_action (action_group, "Square");
       gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);
 
-      merge = gtk_menu_merge_new ();
-      gtk_menu_merge_insert_action_group (merge, action_group, 0);
-      g_signal_connect (merge, "add_widget", G_CALLBACK (add_widget), table);
+      merge = gtk_ui_manager_new ();
+      gtk_ui_manager_insert_action_group (merge, action_group, 0);
       gtk_window_add_accel_group (GTK_WINDOW (window), 
-				  gtk_menu_merge_get_accel_group (merge));
+				  gtk_ui_manager_get_accel_group (merge));
       
-      if (!gtk_menu_merge_add_ui_from_string (merge, ui_info, -1, &error))
+      if (!gtk_ui_manager_add_ui_from_string (merge, ui_info, -1, &error))
 	{
 	  g_message ("building menus failed: %s", error->message);
 	  g_error_free (error);
 	}
+
+      bar = gtk_ui_manager_get_widget (merge, "/MenuBar");
+      gtk_widget_show (bar);
+      gtk_table_attach (GTK_TABLE (table),
+			bar, 
+                        /* X direction */          /* Y direction */
+                        0, 1,                      0, 1,
+                        GTK_EXPAND | GTK_FILL,     0,
+                        0,                         0);
+
+      bar = gtk_ui_manager_get_widget (merge, "/ToolBar");
+      gtk_widget_show (bar);
+      gtk_table_attach (GTK_TABLE (table),
+			bar, 
+                        /* X direction */       /* Y direction */
+                        0, 1,                   1, 2,
+                        GTK_EXPAND | GTK_FILL,  0,
+                        0,                      0);
 
       /* Create document
        */

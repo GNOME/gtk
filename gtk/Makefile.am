@@ -167,7 +167,6 @@ gtk_public_h_sources =          \
 	gtkmenu.h		\
 	gtkmenubar.h		\
 	gtkmenuitem.h		\
-	gtkmenumerge.h		\
 	gtkmenushell.h		\
 	gtkmessagedialog.h	\
 	gtkmisc.h		\
@@ -236,6 +235,7 @@ gtk_public_h_sources =          \
 	gtktreeview.h		\
 	gtktreeviewcolumn.h	\
 	gtktypeutils.h		\
+	gtkuimanager.h		\
 	gtkvbbox.h		\
 	gtkvbox.h		\
 	gtkviewport.h		\
@@ -358,7 +358,6 @@ gtk_c_sources =                 \
 	gtkmarshalers.c		\
 	gtkmarshal.c		\
 	gtkmenu.c		\
-	gtkmenumerge.c		\
 	gtkmenubar.c		\
 	gtkmenuitem.c		\
 	gtkmenushell.c		\
@@ -429,6 +428,7 @@ gtk_c_sources =                 \
 	gtktreeviewcolumn.c	\
 	gtktypebuiltins.c	\
 	gtktypeutils.c		\
+	gtkuimanager.c		\
 	gtkvbbox.c		\
 	gtkvbox.c		\
 	gtkviewport.c		\

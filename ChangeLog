@@ -1,3 +1,19 @@
+2003-08-26  Matthias Clasen  <maclas@gmx.de>
+
+        Rename GtkMenuMerge to GtkUIManager. 
+	
+	* gtk/gtkuimanager.[hc]: New files. 
+	* gtk/gtkmenumerge.[hc]: Removed. 
+
+	* gtk/Makefile.am: 
+	* gtk/gtk.h:
+	* tests/testmerge.c: 
+	* tests/testactions.c: 
+	* demos/gtk-demo/appwindow.c: Replace all uses of GtkMenuMerge by GtkUIManager.
+
+	* demos/gtk-demo/appwindow.c: Make GtkMenuMerge demo less intimidating: add comments to
+	entries array, remove newlines from ui definition. Don't use the ::add_widget signal.
+
 Mon Aug 25 17:28:04 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtknotebook.c (gtk_notebook_forall): Don't
