@@ -2,6 +2,15 @@
 
 	Merged from gtk-2-6:
 
+	* gtk/gtkfilechooserdefault.c
+	(browse_files_model_finished_loading_cb): Don't
+	g_assert_not_reached() if we are in any other state.  Another code
+	path may have triggered a folder reload.  Fixes #165556.
+
+2005-02-01  Federico Mena Quintero  <federico@ximian.com>
+
+	Merged from gtk-2-6:
+
 	Fix #165770:
 
 	* gtk/gtkfilechooserdefault.c (FALLBACK_ICON_SIZE): Make the
