@@ -42,8 +42,6 @@ static void gdk_image_init          (GdkImage      *image);
 static void gdk_image_class_init    (GdkImageClass *klass);
 static void gdk_image_finalize      (GObject       *object);
 
-#define PRIVATE_DATA(image) ((GdkImagePrivateWin32 *) GDK_IMAGE (image)->windowing_data)
-
 GType
 gdk_image_get_type (void)
 {
@@ -134,7 +132,7 @@ gdk_image_new_bitmap (GdkVisual *visual,
   int bpl32 = ((w-1)/32 + 1)*4;
 
   image = g_object_new (gdk_image_get_type (), NULL);
-  private = PRIVATE_DATA (image);
+  private = IMAGE_PRIVATE_DATA (image);
 
   image->type = GDK_IMAGE_SHARED;
   image->visual = visual;
@@ -221,7 +219,7 @@ gdk_image_new (GdkImageType  type,
 			    "???")));
   
   image = g_object_new (gdk_image_get_type (), NULL);
-  private = PRIVATE_DATA (image);
+  private = IMAGE_PRIVATE_DATA (image);
 
   image->type = type;
   image->visual = visual;
@@ -315,8 +313,8 @@ gdk_image_new (GdkImageType  type,
   else
     image->bpl = ((width*image->bpp - 1)/4 + 1)*4;
 
-  GDK_NOTE (MISC, g_print ("... = %#x mem = %#x, bpl = %d\n",
-			   private->hbitmap, image->mem, image->bpl));
+  GDK_NOTE (MISC, g_print ("... = %#x mem = %p, bpl = %d\n",
+			   (guint) private->hbitmap, image->mem, image->bpl));
 
   return image;
 }
@@ -350,10 +348,11 @@ gdk_image_get (GdkWindow *window,
     return NULL;
 
   GDK_NOTE (MISC, g_print ("gdk_image_get: %#x %dx%d@+%d+%d\n",
-			   GDK_DRAWABLE_HANDLE (window), width, height, x, y));
+			   (guint) GDK_DRAWABLE_HANDLE (window),
+			   width, height, x, y));
 
   image = g_object_new (gdk_image_get_type (), NULL);
-  private = PRIVATE_DATA (image);
+  private = IMAGE_PRIVATE_DATA (image);
 
   image->type = GDK_IMAGE_SHARED;
   image->visual = gdk_drawable_get_visual (window);
@@ -380,7 +379,7 @@ gdk_image_get (GdkWindow *window,
 	}
       GetObject (GDK_PIXMAP_HBITMAP (window), sizeof (BITMAP), &bm);
       GDK_NOTE (MISC,
-		g_print ("gdk_image_get: bmWidth = %d, bmHeight = %d, bmWidthBytes = %d, bmBitsPixel = %d\n",
+		g_print ("gdk_image_get: bmWidth:%ld bmHeight:%ld bmWidthBytes:%ld bmBitsPixel:%d\n",
 			 bm.bmWidth, bm.bmHeight, bm.bmWidthBytes, bm.bmBitsPixel));
       image->depth = bm.bmBitsPixel;
       if (image->depth <= 8)
@@ -554,8 +553,8 @@ gdk_image_get (GdkWindow *window,
   else
     image->bpl = ((width*image->bpp - 1)/4 + 1)*4;
 
-  GDK_NOTE (MISC, g_print ("... = %#x mem = %#x, bpl = %d\n",
-			   private->hbitmap, image->mem, image->bpl));
+  GDK_NOTE (MISC, g_print ("... = %#x mem = %p, bpl = %d\n",
+			   (guint) private->hbitmap, image->mem, image->bpl));
 
   return image;
 }
@@ -644,7 +643,7 @@ gdk_win32_image_destroy (GdkImage *image)
 
   g_return_if_fail (GDK_IS_IMAGE (image));
 
-  private = PRIVATE_DATA (image);
+  private = IMAGE_PRIVATE_DATA (image);
 
   if (private == NULL) /* This means that gdk_image_exit() destroyed the
                         * image already, and now we're called a second
@@ -652,8 +651,8 @@ gdk_win32_image_destroy (GdkImage *image)
                         */
     return;
   
-  GDK_NOTE (MISC, g_print ("gdk_win32_image_destroy: %#x%s\n",
-			   private->hbitmap));
+  GDK_NOTE (MISC, g_print ("gdk_win32_image_destroy: %#x\n",
+			   (guint) private->hbitmap));
   
   switch (image->type)
     {

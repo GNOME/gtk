@@ -178,7 +178,7 @@ gdk_pixmap_new (GdkWindow *window,
   visual = gdk_drawable_get_visual (window);
 
   if (depth == -1)
-    depth = visual->depth;
+    depth = gdk_drawable_get_depth (GDK_DRAWABLE (window));
 
   GDK_NOTE (MISC, g_print ("gdk_pixmap_new: %dx%dx%d\n",
 			   width, height, depth));

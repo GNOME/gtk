@@ -885,6 +885,14 @@ gdk_win32_draw_glyphs (GdkDrawable      *drawable,
 
   hdc = gdk_win32_hdc_get (drawable, gc, mask);
 
+  /* HB: Maybe there should be a GDK_GC_PANGO flag for hdc_get */
+  /* default write mode is transparent (leave background) */
+  if (SetBkMode (hdc, TRANSPARENT) == 0)
+    WIN32_GDI_FAILED ("SetBkMode");
+
+  if (GDI_ERROR == SetTextAlign (hdc, TA_LEFT|TA_BOTTOM|TA_NOUPDATECP))
+    WIN32_GDI_FAILED ("SetTextAlign");
+
   pango_win32_render (hdc, font, glyphs, x, y);
 
   gdk_win32_hdc_release (drawable, gc, mask);

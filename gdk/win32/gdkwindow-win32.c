@@ -1369,6 +1369,10 @@ gdk_window_set_title (GdkWindow   *window,
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (title != NULL);
+
+  /* Empty window titles not allowed, so set it to just a period. */
+  if (!title[0])
+    title = ".";
   
   GDK_NOTE (MISC, g_print ("gdk_window_set_title: %#x %s\n",
 			   GDK_WINDOW_HWND (window), title));

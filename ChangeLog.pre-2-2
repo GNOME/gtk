@@ -1,5 +1,8 @@
 2000-10-22  Tor Lillqvist  <tml@iki.fi>
 
+	* gdk/win32/gdkgc-win32.c
+	* gdk/win32/gdkimage-win32.c: Remove gcc -Wall warnings.
+
 	* gtk/makefile.mingw.in
 	* gtk/gtk.def: Updates.
 
@@ -19,6 +22,31 @@
 	* gtk/gtktextbuffer.c (gtk_text_buffer_create_child_anchor)
 	* gtk/gtktextbtree.c (gtk_text_line_char_to_byte): Return
 	something even if not implemented, to satisfy picky MSVC.
+
+	Patches by Hans Breuer:
+	
+	* gdk/win32/gdkdrawable-win32.c (gdk_win32_draw_glyphs): Call
+	SetBkMode() and SetTextAlign() before calling
+	pango_win32_render().
+
+	* gdk/win32/gdkgc-win32.c (gdk_win32_gc_values_to_win32values):
+	Set hcliprgn to NULL after destroying it.
+	(gdk_gc_set_clip_rectangle): Delete hcliprgn and set to NULL.
+
+	* gdk/win32/gdkgeometry-win32.c
+	(_gdk_windowing_window_queue_antiexpose): More effective
+	implementation.
+
+	* gdk/win32/gdkpixmap-win32.c (gdk_pixmap_new): Use drawable's
+	depth as default, not the visual's.
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_set_title): Guard
+	against empty title.
+
+	* gdk/win32/gdkprivate-win32.h: Define a helper macro,
+	IMAGE_PRIVATE_DATA.
+
+	* gdk/win32/gdkimage-win32.c (gdk_image_get_type): Use it.
 
 2000-10-22  Robert Brady  <robert@suse.co.uk>
 

@@ -695,6 +695,7 @@ gboolean
 _gdk_windowing_window_queue_antiexpose (GdkWindow *window,
 					GdkRegion *area)
 {
+#if 0
   GdkWindowQueueItem *item = g_new (GdkWindowQueueItem, 1);
 
   item->window = window;
@@ -713,6 +714,25 @@ _gdk_windowing_window_queue_antiexpose (GdkWindow *window,
   translate_queue = g_slist_append (translate_queue, item);
 
   return TRUE;
+#else
+  GdkRectangle r;
+  HRGN hrgn;
+
+  gdk_region_get_clipbox (area, &r);
+  hrgn = CreateRectRgn(r.x, r.y, r.width+1, r.height+1);
+
+  g_return_val_if_fail (area != NULL, FALSE);
+
+  GDK_NOTE (MISC, g_print ("_gdk_windowing_window_queue_antiexpose %#x\n",
+			   (guint) GDK_WINDOW_HWND (window)));
+
+  /* HB: not quite sure if this is the right thing to do.
+   * (Region not to be proceesed by next WM_PAINT)
+   */
+  ValidateRgn(GDK_WINDOW_HWND (window), hrgn);
+  DeleteObject(hrgn);
+  return TRUE;
+#endif
 }
 
 void

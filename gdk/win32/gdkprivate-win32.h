@@ -127,4 +127,6 @@ extern DWORD		 windows_version;
 
 extern gint		 gdk_input_ignore_wintab;
 
+#define IMAGE_PRIVATE_DATA(image) ((GdkImagePrivateWin32 *) GDK_IMAGE (image)->windowing_data)
+
 #endif /* __GDK_PRIVATE_WIN32_H__ */
