@@ -1,3 +1,18 @@
+Tue Apr 30 11:37:09 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* modules/input/gtkimcontextxim.c: Make multihead-safe;
+	use a different IM context per display.
+
+	* configure.in acconfig.h: Add Xinerama checks from
+	multihead branch, changing HAS_XINERAMA => HAVE_XINERAMA.
+
+	* gdk/x11/gdkdisplay-x11.c: HAS_XINERAMA => HAVE_XINERAMA.
+
+2002-04-29  Alex Larsson  <alexl@redhat.com>
+
+	* gdk/gdkpango.c (gdk_draw_layout_line_with_colors):
+	Use tmp also if foreground is set.
+
 Mon Apr 29 18:28:00 2002  Owen Taylor  <otaylor@redhat.com>
 
 	Integrate Erwann Chenede's multihead changes for the gtk/ directory.

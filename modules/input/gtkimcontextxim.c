@@ -27,6 +27,7 @@
 
 struct _GtkXIMInfo
 {
+  GdkDisplay *display;
   XIM im;
   char *locale;
   XIMStyle style;
@@ -61,7 +62,7 @@ static GObjectClass *parent_class;
 
 GType gtk_type_im_context_xim = 0;
 
-static GSList *open_ims = NULL;
+GSList *open_ims = NULL;
 
 void
 gtk_im_context_xim_register_type (GTypeModule *type_module)
@@ -171,16 +172,19 @@ setup_im (GtkXIMInfo *info)
 }
 
 static GtkXIMInfo *
-get_im (const char *locale)
+get_im (GdkDisplay *display,
+	const char *locale)
 {
-  GSList *tmp_list = open_ims;
+  GSList *tmp_list;
   GtkXIMInfo *info;
   XIM im = NULL;
 
+  tmp_list = open_ims;
   while (tmp_list)
     {
       info = tmp_list->data;
-      if (!strcmp (info->locale, locale))
+      if (info->display == display &&
+	  strcmp (info->locale, locale) == 0)
 	return info;
 
       tmp_list = tmp_list->next;
@@ -193,13 +197,14 @@ get_im (const char *locale)
       if (!XSetLocaleModifiers (""))
 	g_warning ("can not set locale modifiers");
       
-      im = XOpenIM (GDK_DISPLAY(), NULL, NULL, NULL);
+      im = XOpenIM (GDK_DISPLAY_XDISPLAY (display), NULL, NULL, NULL);
       
       if (im)
 	{
 	  info = g_new (GtkXIMInfo, 1);
 	  open_ims = g_slist_prepend (open_ims, im);
-	  
+
+	  info->display = display;
 	  info->locale = g_strdup (locale);
 	  info->im = im;
 
@@ -246,6 +251,7 @@ gtk_im_context_xim_finalize (GObject *obj)
       context_xim->ic = NULL;
     }
  
+  g_free (context_xim->locale);
   g_free (context_xim->mb_charset);
 }
 
@@ -273,22 +279,22 @@ gtk_im_context_xim_set_client_window (GtkIMContext          *context,
 
   reinitialize_ic (context_xim);
   context_xim->client_window = client_window;
+
+  if (context_xim->client_window)
+    context_xim->im_info = get_im (gdk_drawable_get_display (context_xim->client_window), context_xim->locale);
+  else
+    context_xim->im_info = NULL;
 }
 
 GtkIMContext *
 gtk_im_context_xim_new (void)
 {
-  GtkXIMInfo *info;
   GtkIMContextXIM *result;
   const gchar *charset;
 
-  info = get_im (setlocale (LC_CTYPE, NULL));
-  if (!info)
-    return NULL;
-
   result = GTK_IM_CONTEXT_XIM (g_object_new (GTK_TYPE_IM_CONTEXT_XIM, NULL));
 
-  result->im_info = info;
+  result->locale = g_strdup (setlocale (LC_CTYPE, NULL));
   
   g_get_charset (&charset);
   result->mb_charset = g_strdup (charset);
@@ -333,6 +339,7 @@ gtk_im_context_xim_filter_keypress (GtkIMContext *context,
   KeySym keysym;
   Status status;
   gboolean result = FALSE;
+  GdkWindow *root_window = gdk_screen_get_root_window (gdk_drawable_get_screen (event->window));
 
   XKeyPressedEvent xevent;
 
@@ -344,7 +351,7 @@ gtk_im_context_xim_filter_keypress (GtkIMContext *context,
   xevent.send_event = event->send_event;
   xevent.display = GDK_DRAWABLE_XDISPLAY (event->window);
   xevent.window = GDK_DRAWABLE_XID (event->window);
-  xevent.root = GDK_ROOT_WINDOW();
+  xevent.root = GDK_DRAWABLE_XID (root_window);
   xevent.subwindow = xevent.window;
   xevent.time = event->time;
   xevent.x = xevent.x_root = 0;
@@ -957,14 +964,16 @@ status_window_configure (GtkWidget         *toplevel,
   GdkRectangle rect;
   GtkRequisition requisition;
   gint y;
+  gint height = gdk_screen_get_height (gtk_widget_get_screen (toplevel));
+  
 
   gdk_window_get_frame_extents (toplevel->window, &rect);
   gtk_widget_size_request (status_window, &requisition);
 
-  if (rect.y + rect.height + requisition.height < gdk_screen_height ())
+  if (rect.y + rect.height + requisition.height < height)
     y = rect.y + rect.height;
   else
-    y = gdk_screen_height () - requisition.height;
+    y = height - requisition.height;
   
   gtk_window_move (GTK_WINDOW (status_window), rect.x, y);
 

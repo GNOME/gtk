@@ -48,7 +48,8 @@ struct _GtkIMContextXIM
   GtkIMContext object;
 
   GtkXIMInfo *im_info;
-  
+
+  gchar *locale;
   gchar *mb_charset;
 
   GdkWindow *client_window;
