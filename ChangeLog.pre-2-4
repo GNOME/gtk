@@ -1,3 +1,7 @@
+2002-09-05  jacob berkman  <jacob@ximian.com>
+
+	* autogen.sh: get automake-1.4 changes from -2-0 branch
+
 2002-09-05  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkproperty-win32.c (gdk_property_change): Fix braino,
