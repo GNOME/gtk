@@ -1,3 +1,9 @@
+2003-08-03  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/x11/gdkscreen-x11.c (gdk_screen_get_n_monitors): 
+	(gdk_screen_get_monitor_geometry): Improve wording of the docs, avoid the
+	term "virtual screen".  (#119030, Tor Lillquist)
+
 2003-08-02  Matthias Clasen  <maclas@gmx.de>
 
 	* tests/testtext.c (test_init): 

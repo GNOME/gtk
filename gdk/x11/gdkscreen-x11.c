@@ -322,10 +322,9 @@ gdk_screen_x11_finalize (GObject *object)
  * gdk_screen_get_n_monitors:
  * @screen: a #GdkScreen.
  *
- * Returns the number of monitors being part of the virtual screen
+ * Returns the number of monitors which @screen consists of.
  *
- * Returns: number of monitors part of the virtual screen or
- *          0 if @screen is not in virtual screen mode.
+ * Returns: number of monitors which @screen consists of.
  *
  * Since: 2.2
  **/
@@ -343,11 +342,10 @@ gdk_screen_get_n_monitors (GdkScreen *screen)
  * @monitor_num: the monitor number. 
  * @dest : a #GdkRectangle to be filled with the monitor geometry
  *
- * Retrieves the #GdkRectangle representing the size and start
- * coordinates of the individual monitor within the the entire virtual
- * screen.
+ * Retrieves the #GdkRectangle representing the size and position of 
+ * the individual monitor within the the entire screen area.
  * 
- * Note that the virtual screen coordinates can be retrieved via 
+ * Note that the size of the entire screen area can be retrieved via 
  * gdk_screen_get_width() and gdk_screen_get_height().
  *
  * Since: 2.2
