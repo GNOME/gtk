@@ -1,5 +1,7 @@
 2004-11-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserbutton.c: Move some docs inline.
+
 	* gtk/gtkaboutdialog.c (gtk_show_about_dialog): Doc update.
 
 	* gtk/gtktextbuffer.c (gtk_text_buffer_backspace): Revalidate the

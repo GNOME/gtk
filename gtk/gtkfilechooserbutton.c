@@ -239,6 +239,13 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
   widget_class->screen_changed = gtk_file_chooser_button_screen_changed;
   widget_class->mnemonic_activate = gtk_file_chooser_button_mnemonic_activate;
 
+  /**
+   * GtkFileChooserButton:dialog:
+   * 
+   * Instance of the #GtkFileChooserDialog associated with the button.
+   *
+   * Since: 2.6
+   */
   g_object_class_install_property (gobject_class, PROP_DIALOG,
 				   g_param_spec_object ("dialog",
 							P_("Dialog"),
@@ -246,17 +253,43 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
 							GTK_TYPE_FILE_CHOOSER_DIALOG,
 							(G_PARAM_WRITABLE |
 							 G_PARAM_CONSTRUCT_ONLY)));
+
+  /**
+   * GtkFileChooserButton:title:
+   * 
+   * Title to put on the #GtkFileChooserDialog associated with the button.
+   *
+   * Since: 2.6
+   */
   g_object_class_install_property (gobject_class, PROP_TITLE,
 				   g_param_spec_string ("title",
 							P_("Title"),
 							P_("The title of the file chooser dialog."),
 							_("Select a File"),
 							G_PARAM_READWRITE));
+
+  /**
+   * GtkFileChooserButton:active:
+   * 
+   * %TRUE, if the #GtkFileChooserDialog associated with the button has been
+   * made visible.  This can also be set by the application, though it is
+   * rarely useful to do so.
+   *
+   * Since: 2.6
+   */
   g_object_class_install_property (gobject_class, PROP_ACTIVE,
 				   g_param_spec_boolean ("active",
 							 P_("Active"),
 							 P_("Whether the browse dialog is visible or not."),
 							 FALSE, G_PARAM_READWRITE));
+
+  /**
+   * GtkFileChooserButton:
+   * 
+   * The width of the entry and label inside the button, in characters.
+   *
+   * Since: 2.6
+   */
   g_object_class_install_property (gobject_class, PROP_WIDTH_CHARS,
 				   g_param_spec_int ("width-chars",
 						     P_("Width In Characters"),
