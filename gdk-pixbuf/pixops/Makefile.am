@@ -1,6 +1,6 @@
 noinst_LTLIBRARIES = libpixops.la
 
-INCLUDES = $(GLIB_CFLAGS) $(LIBART_CFLAGS) -I$(top_srcdir)/gdk-pixbuf
+INCLUDES = $(GLIB_CFLAGS) $(GTK_CFLAGS) -I$(top_srcdir)/gdk-pixbuf
 
 noinst_PROGRAMS = timescale
 

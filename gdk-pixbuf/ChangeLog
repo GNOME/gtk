@@ -1,3 +1,8 @@
+2000-04-14 Tomasz K³opczko <kloczek@pld.org.pl>
+
+	* gdk-pixbuf/pixops/makefile.am: $(LIBART_CFLAGS) replaced by 
+	$(GTK_CFLAGS) - now gdk-pixbuf compiles correctly.
+
 2000-04-13  James Henstridge  <james@daa.com.au>
 
 	* configure.in: when performing the configure check to see if
