@@ -764,9 +764,6 @@ gtk_binding_entry_add_signal (GtkBindingSet  *binding_set,
   g_return_if_fail (binding_set != NULL);
   g_return_if_fail (signal_name != NULL);
   
-  keyval = gdk_keyval_to_lower (keyval);
-  modifiers = modifiers & BINDING_MOD_MASK ();
-
   va_start (args, n_args);
   slist = NULL;
   for (i = 0; i < n_args; i++)

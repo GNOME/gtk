@@ -1,3 +1,8 @@
+2002-03-25  Mark McLoughlin  <mark@skynet.ie>
+
+	* gtk/gtkbindings.c: (gtk_binding_entry_add_signal),
+	kill code duplicated in gtk_binding_entry_add_signall.
+
 Sun Mar 24 10:32:38 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreemodel.c (gtk_tree_path_copy): Make path arg const, #75653
