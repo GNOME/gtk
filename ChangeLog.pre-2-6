@@ -1,3 +1,8 @@
+2004-10-05  Paolo Borelli  <pborelli@katamail.com>
+
+	* gtk/gtkmenutoolbutton.c: rename the activate-menu signal to
+	show-menu as discussed in bug #153873.
+
 2004-10-05  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkuimanager.c (gtk_ui_manager_add_ui): Set 

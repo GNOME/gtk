@@ -50,7 +50,7 @@ struct _GtkMenuToolButtonClass
 {
   GtkToolButtonClass parent_class;
 
-  void (*menu_activated) (GtkMenuToolButton *button);
+  void (*show_menu) (GtkMenuToolButton *button);
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

@@ -41,7 +41,7 @@ A #GtkToolItem containing a button with an additional dropdown menu.
 </para>
 
 
-<!-- ##### SIGNAL GtkMenuToolButton::menu-activated ##### -->
+<!-- ##### SIGNAL GtkMenuToolButton::show-menu ##### -->
 <para>
 
 </para>

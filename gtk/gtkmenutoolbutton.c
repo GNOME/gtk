@@ -48,7 +48,7 @@ static void gtk_menu_tool_button_finalize   (GObject                *object);
 
 enum
 {
-  MENU_ACTIVATED,
+  SHOW_MENU,
   LAST_SIGNAL
 };
 
@@ -232,14 +232,14 @@ gtk_menu_tool_button_class_init (GtkMenuToolButtonClass *klass)
   toolitem_class->set_tooltip = gtk_menu_tool_button_set_tooltip;
   toolitem_class->toolbar_reconfigured = gtk_menu_tool_button_toolbar_reconfigured;
 
-  signals[MENU_ACTIVATED] =
-    g_signal_new ("menu-activated",
+  signals[SHOW_MENU] =
+    g_signal_new ("show-menu",
                   G_OBJECT_CLASS_TYPE (klass),
-		  G_SIGNAL_RUN_FIRST,
-                  G_STRUCT_OFFSET (GtkMenuToolButtonClass, menu_activated),
-		  NULL, NULL,
-		  g_cclosure_marshal_VOID__VOID,
-		  G_TYPE_NONE, 0);
+                  G_SIGNAL_RUN_FIRST,
+                  G_STRUCT_OFFSET (GtkMenuToolButtonClass, show_menu),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
 
   g_object_class_install_property (object_class,
                                    PROP_MENU,
@@ -338,7 +338,7 @@ popup_menu_under_arrow (GtkMenuToolButton *button,
 
   priv = GTK_MENU_TOOL_BUTTON_GET_PRIVATE (button);
 
-  g_signal_emit (button, signals[MENU_ACTIVATED], 0);
+  g_signal_emit (button, signals[SHOW_MENU], 0);
 
   if (!priv->menu)
     return;
