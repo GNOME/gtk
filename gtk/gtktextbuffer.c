@@ -3069,6 +3069,9 @@ gtk_text_buffer_remove_selection_clipboard (GtkTextBuffer *buffer,
     {
       if (gtk_clipboard_get_owner (selection_clipboard->clipboard) == G_OBJECT (buffer))
 	gtk_clipboard_clear (selection_clipboard->clipboard);
+
+      buffer->selection_clipboards = g_slist_remove (buffer->selection_clipboards,
+                                                     selection_clipboard);
       
       g_free (selection_clipboard);
     }

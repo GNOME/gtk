@@ -1,3 +1,16 @@
+2001-09-07  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextlayout.c (gtk_text_layout_get_lines): remove some
+	debug code that seems to have caused a breakpoint in valid cases
+	
+	* gtk/gtktextbtree.c (_gtk_text_btree_add_view): set the prev
+	pointer on the first view when adding the second view, fixes
+	crash when closing gtk-demo text test with active selection
+
+	* gtk/gtktextbuffer.c
+	(gtk_text_buffer_remove_selection_clipboard): don't leave dead
+	clipboards in the list of clipboards - probably fixes #59836
+
 Fri Sep  7 11:51:44 2001  Owen Taylor  <otaylor@redhat.com>
 
       Make gdkx.h the only installed header from gdk/x11.

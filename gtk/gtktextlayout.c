@@ -586,12 +586,6 @@ gtk_text_layout_get_lines (GtkTextLayout *layout,
                                _gtk_text_btree_line_count (_gtk_text_buffer_get_btree (layout->buffer)) - 1,
                                NULL);
 
-  {
-    GtkTextLineData *ld = _gtk_text_line_get_data (last_btree_line, layout);
-    if (ld->height == 0)
-      G_BREAKPOINT ();
-  }
-
   g_assert (last_btree_line != NULL);
 
   line = first_btree_line;

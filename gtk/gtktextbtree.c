@@ -1395,6 +1395,12 @@ _gtk_text_btree_add_view (GtkTextBTree *tree,
   view->next = tree->views;
   view->prev = NULL;
 
+  if (tree->views)
+    {
+      g_assert (tree->views->prev == NULL);
+      tree->views->prev = view;
+    }
+  
   tree->views = view;
 
   /* The last line in the buffer has identity values for the per-view
@@ -1453,6 +1459,9 @@ _gtk_text_btree_remove_view (GtkTextBTree *tree,
 
   gtk_text_btree_node_remove_view (view, tree->root_node, view_id);
 
+  view->layout = (gpointer) 0xdeadbeef;
+  view->view_id = (gpointer) 0xdeadbeef;
+  
   g_free (view);
 }
 
@@ -3276,7 +3285,7 @@ _gtk_text_line_remove_data (GtkTextLine *line,
 
 gpointer
 _gtk_text_line_get_data (GtkTextLine *line,
-                        gpointer view_id)
+                         gpointer view_id)
 {
   GtkTextLineData *iter;
 
