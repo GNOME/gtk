@@ -782,7 +782,7 @@ init_atoms (void)
  * The string is converted to the form determined by
  * @selection_data->target.
  * 
- * Return value: %TRUE if the selection was succesfully set,
+ * Return value: %TRUE if the selection was successfully set,
  *   otherwise %FALSE.
  **/
 gboolean

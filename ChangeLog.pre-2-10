@@ -1,3 +1,7 @@
+2001-10-08  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/gtkselection.c: s/succesfully/successfully/g
+
 2001-10-08  Havoc Pennington  <hp@pobox.com>
 
 	* demos/gtk-demo/stock_browser.c: remove unused enum
