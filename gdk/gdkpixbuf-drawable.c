@@ -131,7 +131,7 @@ gdk_pixbuf_from_drawable_core (GdkWindow *window, gint x, gint y, gint width, gi
 	art_pixbuf = with_alpha ? art_pixbuf_new_rgba (buff, width,  height, rowstride) :
 		art_pixbuf_new_rgb (buff, width, height, rowstride);
 
-	return gdk_pixbuf_new(art_pixbuf, NULL);
+	return gdk_pixbuf_new_from_art_pixbuf(art_pixbuf);
 }
 
 /* Public functions */

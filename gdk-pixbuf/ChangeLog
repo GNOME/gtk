@@ -1,3 +1,7 @@
+1999-11-02  Cody Russell  <bratsche@dfw.net>
+	* src/gdk-pixbuf-drawable.c (gdk_pixbuf_from_drawable_core): Now
+	calls gdk_pixbuf_new_from_art_pixbuf() instead of gdk_pixbuf_new().
+
 1999-11-02  Jonathan Blandford  <jrb@redhat.com>
 
 	* src/io-gif.c (gif_main_loop): Now progressive gif loading works!
