@@ -2723,6 +2723,9 @@ gtk_text_layout_move_iter_to_next_line (GtkTextLayout *layout,
       line = _gtk_text_line_next_excluding_last (line);
     }
 
+  if (!found_after)
+    gtk_text_buffer_get_end_iter (layout->buffer, iter);
+  
   return
     !gtk_text_iter_equal (iter, &orig) &&
     !gtk_text_iter_is_end (iter);

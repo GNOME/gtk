@@ -1,3 +1,10 @@
+Thu Jun  5 15:33:38 2003  Owen Taylor  <otaylor@redhat.com>
+ 
+ 	* gtk/gtktextlayout.c (gtk_text_layout_move_iter_to_next_line):
+ 	If at the end of the buffer, move to the end iter -
+ 	parallels behavior of move_iter_to_previous_line.
+ 	(#81960, Padraig O'Briain)
+ 
 Thu Jun  5 16:12:54 2003  Owen Taylor  <otaylor@redhat.com>
 
         #80023, Yao Zhang, TOKUNAGA Hiroyuki
