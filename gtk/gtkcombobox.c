@@ -127,6 +127,8 @@ static guint combo_box_signals[LAST_SIGNAL] = {0,};
 static void     gtk_combo_box_class_init           (GtkComboBoxClass *klass);
 static void     gtk_combo_box_cell_layout_init     (GtkCellLayoutIface *iface);
 static void     gtk_combo_box_init                 (GtkComboBox      *combo_box);
+static void     gtk_combo_box_finalize             (GObject          *object);
+static void     gtk_combo_box_destroy              (GtkObject        *object);
 
 static void     gtk_combo_box_set_property         (GObject         *object,
                                                     guint            prop_id,
@@ -136,7 +138,6 @@ static void     gtk_combo_box_get_property         (GObject         *object,
                                                     guint            prop_id,
                                                     GValue          *value,
                                                     GParamSpec      *spec);
-static void     gtk_combo_box_finalize             (GObject          *object);
 
 static void     gtk_combo_box_style_set            (GtkWidget       *widget,
                                                     GtkStyle        *previous_style,
@@ -304,6 +305,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
 {
   GObjectClass *object_class;
   GtkBindingSet *binding_set;
+  GtkObjectClass *gtk_object_class;
   GtkContainerClass *container_class;
   GtkWidgetClass *widget_class;
 
@@ -319,6 +321,9 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   widget_class->expose_event = gtk_combo_box_expose_event;
   widget_class->scroll_event = gtk_combo_box_scroll_event;
   widget_class->mnemonic_activate = gtk_combo_box_mnemonic_activate;
+
+  gtk_object_class = (GtkObjectClass *)klass;
+  gtk_object_class->destroy = gtk_combo_box_destroy;
 
   object_class = (GObjectClass *)klass;
   object_class->finalize = gtk_combo_box_finalize;
@@ -2932,6 +2937,15 @@ gtk_combo_box_mnemonic_activate (GtkWidget *widget,
   return TRUE;
 }
 
+static void
+gtk_combo_box_destroy (GtkObject *object)
+{
+  GtkComboBox *combo_box = GTK_COMBO_BOX (object);
+
+  GTK_OBJECT_CLASS (parent_class)->destroy (object);
+
+  combo_box->priv->cell_view = NULL;
+}
 
 static void
 gtk_combo_box_finalize (GObject *object)

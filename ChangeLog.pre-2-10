@@ -1,3 +1,11 @@
+Tue Feb 24 01:08:27 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombobox.c: Add a destroy implementation in order to
+	set priv->cell_view to NULL before finalize stumbles over the 
+	dangling pointer. This big array of pointers into the widget 
+	tree in GtkComboBoxPrivate is really fragile and should be
+	cleaned up.
+
 Mon Feb 23 17:52:43 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtkfilechooserdefault.c (main_paned_create): use a size
