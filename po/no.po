@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.5\n"
-"POT-Creation-Date: 1999-10-08 10:56-0500\n"
-"PO-Revision-Date: 1999-09-04 11:33+02:00\n"
+"POT-Creation-Date: 2000-02-04 09:50+0100\n"
+"PO-Revision-Date: 2000-02-04 09:55+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@online.no>\n"
 "Language-Team: Norwegian <no@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -441,17 +441,17 @@ msgstr "(slått av)"
 msgid "clear"
 msgstr "tøm"
 
-#: gtk/gtknotebook.c:2048 gtk/gtknotebook.c:4120
+#: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
 #, c-format
 msgid "Page %u"
 msgstr "Side %u"
 
-#: gtk/gtkrc.c:1706
+#: gtk/gtkrc.c:1702
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Kunne ikke finne bildefilen i pixmap_patg: \"%s\" linje %d"
 
-#: gtk/gtkrc.c:1709
+#: gtk/gtkrc.c:1705
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kunne ikke finne bildefil i pixmap_path: \"%s\""
