@@ -1,3 +1,15 @@
+Wed Feb 18 17:53:27 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gdk/gdkwindow.c (gdk_window_get_bg_gc): Use a scratch GC in the
+	case where the background is a solid color.
+	(gdk_window_clear_backing_rect): Reset the clip region after use.
+
+	* gdk/gdkpixbuf-render.c (gdk_pixbuf_render_threshold_alpha): Go
+	back to using a scratch GC. Pointed out by Owen Taylor
+	
+	* gdk/gdkdraw.c (gdk_drawable_real_draw_pixbuf): Only use a
+	scratch GC if the passed-in one is NULL
+
 Wed Feb 18 14:27:08 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gdk/gdkwindow.c (gdk_window_get_composite_drawable): Reset clip

@@ -1404,7 +1404,8 @@ gdk_drawable_real_draw_pixbuf (GdkDrawable  *drawable,
     return;
   
   /* Actually draw */
-  gc = _gdk_drawable_get_scratch_gc (drawable, FALSE);
+  if (!gc)
+    gc = _gdk_drawable_get_scratch_gc (drawable, FALSE);
   
   if (pixbuf->has_alpha)
     {
@@ -1540,8 +1541,8 @@ gdk_drawable_real_draw_pixbuf (GdkDrawable  *drawable,
  * the standard values for @drawable, except for the graphics_exposures
  * field which is determined by the @graphics_exposures parameter.
  *
- * The returned #GdkGC must not be altered in any way and must not
- * be freed.
+ * The foreground color of the returned #GdkGC is undefined. The #GdkGC
+ * must not be altered in any way, except to change its foreground color.
  * 
  * Return value: A #GdkGC suitable for drawing on @drawable
  * 
@@ -1561,7 +1562,7 @@ _gdk_drawable_get_scratch_gc (GdkDrawable *drawable,
   g_return_val_if_fail (!screen->closed, NULL);
 
   depth = gdk_drawable_get_depth (drawable);
-  
+
   if (graphics_exposures)
     {
       if (!screen->exposure_gcs[depth])

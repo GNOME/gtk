@@ -851,41 +851,6 @@ gdk_window_begin_paint_rect (GdkWindow    *window,
   gdk_region_destroy (region);
 }
 
-static GdkGC *
-gdk_window_get_bg_gc (GdkWindow      *window,
-		      GdkWindowPaint *paint)
-{
-  GdkWindowObject *private = (GdkWindowObject *)window;
-
-  guint gc_mask = 0;
-  GdkGCValues gc_values;
-
-  if (private->bg_pixmap == GDK_PARENT_RELATIVE_BG && private->parent)
-    {
-      GdkWindowPaint tmp_paint = *paint;
-      tmp_paint.x_offset += private->x;
-      tmp_paint.y_offset += private->y;
-      
-      return gdk_window_get_bg_gc (GDK_WINDOW (private->parent), &tmp_paint);
-    }
-  else if (private->bg_pixmap && 
-           private->bg_pixmap != GDK_PARENT_RELATIVE_BG && 
-           private->bg_pixmap != GDK_NO_BG)
-    {
-      gc_values.fill = GDK_TILED;
-      gc_values.tile = private->bg_pixmap;
-      
-      gc_mask = GDK_GC_FILL | GDK_GC_TILE;
-    }
-  else
-    {
-      gc_values.foreground = private->bg_color;
-      gc_mask = GDK_GC_FOREGROUND;
-    }
-
-  return gdk_gc_new_with_values (paint->pixmap, &gc_values, gc_mask);
-}
-
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"
 #endif
@@ -1663,6 +1628,44 @@ gdk_window_draw_glyphs (GdkDrawable      *drawable,
   RESTORE_GC (gc);
 }
 
+static GdkGC *
+gdk_window_get_bg_gc (GdkWindow      *window,
+		      GdkWindowPaint *paint)
+{
+  GdkWindowObject *private = (GdkWindowObject *)window;
+
+  guint gc_mask = 0;
+  GdkGCValues gc_values;
+
+  if (private->bg_pixmap == GDK_PARENT_RELATIVE_BG && private->parent)
+    {
+      GdkWindowPaint tmp_paint = *paint;
+      tmp_paint.x_offset += private->x;
+      tmp_paint.y_offset += private->y;
+      
+      return gdk_window_get_bg_gc (GDK_WINDOW (private->parent), &tmp_paint);
+    }
+  else if (private->bg_pixmap && 
+           private->bg_pixmap != GDK_PARENT_RELATIVE_BG && 
+           private->bg_pixmap != GDK_NO_BG)
+    {
+      gc_values.fill = GDK_TILED;
+      gc_values.tile = private->bg_pixmap;
+      
+      gc_mask = GDK_GC_FILL | GDK_GC_TILE;
+
+      return gdk_gc_new_with_values (paint->pixmap, &gc_values, gc_mask);
+    }
+  else
+    {
+      GdkGC *gc = _gdk_drawable_get_scratch_gc (paint->pixmap, FALSE);
+
+      gdk_gc_set_foreground (gc, &(private->bg_color));
+
+      return g_object_ref (gc);
+    }
+}
+
 static void
 gdk_window_clear_backing_rect (GdkWindow *window,
 			       gint       x,
@@ -1683,6 +1686,8 @@ gdk_window_clear_backing_rect (GdkWindow *window,
   gdk_draw_rectangle (window, tmp_gc, TRUE,
 		      x, y, width, height);
 
+  gdk_gc_set_clip_region (tmp_gc, NULL);
+  
   g_object_unref (tmp_gc);
 }
 
