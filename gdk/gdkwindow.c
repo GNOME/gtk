@@ -1796,16 +1796,16 @@ gdk_window_invalidate_region (GdkWindow *window,
   visible_region = gdk_drawable_get_visible_region (window);
   gdk_region_intersect (visible_region, region);
 
-  if (!gdk_region_empty (region))
+  if (!gdk_region_empty (visible_region))
     {
       if (private->update_area)
 	{
-	  gdk_region_union (private->update_area, region);
+	  gdk_region_union (private->update_area, visible_region);
 	}
       else
 	{
 	  update_windows = g_slist_prepend (update_windows, window);
-	  private->update_area = gdk_region_copy (region);
+	  private->update_area = gdk_region_copy (visible_region);
 	  
 	  if (!private->update_freeze_count && !update_idle)
 	    update_idle = g_idle_add_full (GDK_PRIORITY_REDRAW,
@@ -1830,7 +1830,7 @@ gdk_window_invalidate_region (GdkWindow *window,
 		  gdk_window_get_position ((GdkWindow *)child, &x, &y);
 
 		  /* This copy could be saved with a little more complexity */
-		  child_region = gdk_region_copy (region);
+		  child_region = gdk_region_copy (visible_region);
 		  gdk_region_offset (child_region, -x, -y);
 		  
 		  gdk_window_invalidate_region ((GdkWindow *)child, child_region, TRUE);
@@ -1840,6 +1840,8 @@ gdk_window_invalidate_region (GdkWindow *window,
 	    }
 	}
     }
+  
+  gdk_region_destroy (visible_region);
 }
 
 GdkRegion *

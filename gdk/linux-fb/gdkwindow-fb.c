@@ -254,8 +254,6 @@ gdk_window_new (GdkWindow     *parent,
       impl->drawable_data.colormap = NULL;
     }
 
-  gdk_drawable_ref (window);
-  
   if (impl->drawable_data.colormap)
     gdk_colormap_ref (impl->drawable_data.colormap);
   
@@ -488,7 +486,7 @@ gdk_fb_window_find_focus (void)
     return _gdk_fb_keyboard_grab_window;
   
   if (!gdk_fb_focused_window)
-    gdk_fb_focused_window = gdk_parent_root;
+    gdk_fb_focused_window = gdk_window_ref (gdk_parent_root);
   
   return gdk_fb_focused_window;
 }
@@ -525,8 +523,11 @@ gdk_fb_change_focus (GdkWindow *new_focus_window)
 	  event = (GdkEventFocus *)gdk_event_make (event_win, GDK_FOCUS_CHANGE, TRUE);
 	  event->in = TRUE;
 	}
+      
+      if (gdk_fb_focused_window)
+	gdk_window_unref (gdk_fb_focused_window);
+      gdk_fb_focused_window = gdk_window_ref (new_win);
     }
-  gdk_fb_focused_window = new_win;
 }
 
 static GdkWindow *
@@ -597,6 +598,13 @@ gdk_fb_window_send_crossing_events (GdkWindow *src,
   if (a==b)
     return;
 
+  /* gdk_fb_window_containing_pointer might have been destroyed.
+   * The refcount we hold on it should keep it, but it's parents
+   * might have died.
+   */
+  if (GDK_WINDOW_DESTROYED (a))
+    a = gdk_parent_root;
+  
   gdk_fb_mouse_get_info (&x, &y, &my_mask);
 
   c = gdk_fb_find_common_ancestor (a, b);

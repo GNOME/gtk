@@ -1,5 +1,17 @@
 2001-01-22    <alexl@redhat.com>
 
+	* gdk/gdkwindow.c (gdk_window_invalidate_region):
+	Don't leak visible_region. Use visible_region instead of region.
+	
+	* gdk/linux-fb/gdkwindow-fb.c (gdk_window_new):
+	Don't do extra gdk_drawable_ref(). This is not X.
+	(gdk_fb_window_find_focus, gdk_fb_change_focus): make sure
+	gdk_fb_focused_window is ref:ed.
+	(gdk_fb_window_send_crossing_events): Watch out for destroyed
+	windows.
+
+2001-01-22    <alexl@redhat.com>
+
 	* gtk/gtkwindow-decorate.c (gtk_decorated_window_realize):
 	Don't leak the PangoFontDescriptor.
 
