@@ -46,15 +46,15 @@ global_filter_func (void     *xevent,
       /* catch theme changes */
     case WM_THEMECHANGED:
     case WM_SYSCOLORCHANGE:
-      
+
       if(msw_reset_rc_styles != NULL) {
 	xp_theme_reset ();
 	msw_style_init ();
-	
+
 	/* force all gtkwidgets to redraw */
 	(*msw_reset_rc_styles) (gtk_settings_get_default());
       }
-      
+
       return GDK_FILTER_REMOVE;
 
     case WM_SETTINGCHANGE:
@@ -78,12 +78,12 @@ theme_init (GTypeModule *module)
      on any GTK 2.x.x platform. */
   if(gtk_check_version(2,4,0) == NULL) {
     this_module = g_module_open(NULL, 0);
-    
+
     if(this_module)
       g_module_symbol (this_module, "gtk_rc_reset_styles",
 		       (gpointer *)(&msw_reset_rc_styles));
   }
-  
+
   msw_style_init ();
   gdk_window_add_filter (NULL, global_filter_func, NULL);
 }
@@ -113,7 +113,5 @@ G_MODULE_EXPORT const gchar* g_module_check_init (GModule *module);
 const gchar*
 g_module_check_init (GModule *module)
 {
-  return gtk_check_version (GTK_MAJOR_VERSION,
-			    GTK_MINOR_VERSION,
-			    GTK_MICRO_VERSION - GTK_INTERFACE_AGE);
+  return gtk_check_version (2,0,0);
 }

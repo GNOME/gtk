@@ -1335,7 +1335,7 @@ static gboolean is_toolbar_child(GtkWidget * wid)
 {
 	while(wid)
 	{
-		if(GTK_IS_TOOLBAR(wid))
+		if(GTK_IS_TOOLBAR(wid) || GTK_IS_HANDLE_BOX(wid))
 			return TRUE;
 		else
 			wid = wid->parent;

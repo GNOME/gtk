@@ -159,19 +159,4 @@ typedef HANDLE HTHEME;
 #define TMT_STATUSFONT 804
 #define TMT_MSGBOXFONT 805
 
-#if UXTHEME_HAS_LINES
-
-#error unknown/undocumented uxtheme values
-
-/* #define GP_LINEHORZ */
-/* #define GP_LINEVERT */
-/* #define LHS_RAISED */
-/* #define LHS_SUNKEN */
-/* #define LHS_FLAT */
-/* #define LVS_RAISED */
-/* #define LVS_SUNKEN */
-/* #define LHS_FLAT */
-
-#endif /* UXTHEME_HAS_LINES */
-
 #endif /* XP_THEME_DFNS_H */

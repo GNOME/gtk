@@ -1,3 +1,12 @@
+2004-06-02  Dom Lachowicz <cinamod@hotmail.com>
+
+	* configure.in: Bump version number (0.6.1)
+	* src/msw_theme_main.c: Lower GTK+ requirements. We'll work fine on 2.0.x or better
+	* src/xp_theme_defs.h: Remove HAVE_LINES junk
+	* src/xp_theme.c: Disable application theming if XP asks us to
+	* src/msw_style.c: Return true for 'is_toolbar()' check if our parent
+	is a GtkHandleBox. This fixes Inkscape's toolbar icons.
+
 2004-05-21  Raymond Penners  <raymond@dotsphinx.com>
 
 	* === Released 0.6.0 ===

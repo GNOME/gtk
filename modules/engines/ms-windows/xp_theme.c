@@ -115,6 +115,7 @@ typedef HRESULT (FAR PASCAL *DrawThemeBackgroundFunc)
       const RECT *pRect, const RECT *pClipRect);
 typedef HRESULT (FAR PASCAL *EnableThemeDialogTextureFunc)(HWND hwnd, DWORD dwFlags);
 typedef BOOL (FAR PASCAL *IsThemeActiveFunc)(VOID);
+typedef BOOL (FAR PASCAL *IsAppThemedFunc)(VOID);
 
 static GetThemeSysFontFunc get_theme_sys_font_func = NULL;
 static GetThemeSysColorFunc get_theme_sys_color_func = NULL;
@@ -124,8 +125,7 @@ static CloseThemeDataFunc close_theme_data_func = NULL;
 static DrawThemeBackgroundFunc draw_theme_background_func = NULL;
 static EnableThemeDialogTextureFunc enable_theme_dialog_texture_func = NULL;
 static IsThemeActiveFunc is_theme_active_func = NULL;
-
-static gboolean was_theming_active = FALSE;
+static IsAppThemedFunc is_app_themed_func = NULL;
 
 static void
 xp_theme_close_open_handles (void)
@@ -152,31 +152,27 @@ xp_theme_init (void)
 
   uxtheme_dll = LoadLibrary("uxtheme.dll");
   if (!uxtheme_dll) {
-	  was_theming_active = FALSE;
 	  return;
   }
 
-  is_theme_active_func = (IsThemeActiveFunc) GetProcAddress(uxtheme_dll, "IsThemeActive");
-  open_theme_data_func = (OpenThemeDataFunc) GetProcAddress(uxtheme_dll, "OpenThemeData");
-  close_theme_data_func = (CloseThemeDataFunc) GetProcAddress(uxtheme_dll, "CloseThemeData");
-  draw_theme_background_func = (DrawThemeBackgroundFunc) GetProcAddress(uxtheme_dll, "DrawThemeBackground");
-  enable_theme_dialog_texture_func = (EnableThemeDialogTextureFunc) GetProcAddress(uxtheme_dll, "EnableThemeDialogTexture");
-  get_theme_sys_font_func = (GetThemeSysFontFunc) GetProcAddress(uxtheme_dll, "GetThemeSysFont");
-  get_theme_sys_color_func = (GetThemeSysColorFunc) GetProcAddress(uxtheme_dll, "GetThemeSysColor");
-  get_theme_sys_metric_func = (GetThemeSysSizeFunc) GetProcAddress(uxtheme_dll, "GetThemeSysSize");
+  is_app_themed_func = (IsAppThemedFunc) GetProcAddress(uxtheme_dll, "IsAppThemed");
 
-  if (is_theme_active_func)
-    {
-      was_theming_active = (*is_theme_active_func) ();
-    }
+  if(is_app_themed_func) {
+	  is_theme_active_func = (IsThemeActiveFunc) GetProcAddress(uxtheme_dll, "IsThemeActive");
+	  open_theme_data_func = (OpenThemeDataFunc) GetProcAddress(uxtheme_dll, "OpenThemeData");
+	  close_theme_data_func = (CloseThemeDataFunc) GetProcAddress(uxtheme_dll, "CloseThemeData");
+	  draw_theme_background_func = (DrawThemeBackgroundFunc) GetProcAddress(uxtheme_dll, "DrawThemeBackground");
+	  enable_theme_dialog_texture_func = (EnableThemeDialogTextureFunc) GetProcAddress(uxtheme_dll, "EnableThemeDialogTexture");
+	  get_theme_sys_font_func = (GetThemeSysFontFunc) GetProcAddress(uxtheme_dll, "GetThemeSysFont");
+	  get_theme_sys_color_func = (GetThemeSysColorFunc) GetProcAddress(uxtheme_dll, "GetThemeSysColor");
+	  get_theme_sys_metric_func = (GetThemeSysSizeFunc) GetProcAddress(uxtheme_dll, "GetThemeSysSize");
+  }
 }
 
 void
 xp_theme_reset (void)
 {
   xp_theme_close_open_handles ();
-  was_theming_active = is_theme_active_func
-    ? (*is_theme_active_func) () : FALSE;
 }
 
 void
@@ -190,6 +186,7 @@ xp_theme_exit (void)
   FreeLibrary (uxtheme_dll);
   uxtheme_dll = NULL;
 
+  is_app_themed_func = NULL;
   is_theme_active_func = NULL;
   open_theme_data_func = NULL;
   close_theme_data_func = NULL;
@@ -705,26 +702,29 @@ xp_theme_draw (GdkWindow *win, XpThemeElement element, GtkStyle *style,
   return TRUE;
 }
 
+static gboolean
+xp_theme_is_active (void)
+{
+  gboolean active = FALSE;
+
+  if (is_app_themed_func)
+  {
+	  active = (*is_app_themed_func) ();
+
+	  if (active && is_theme_active_func)
+	    {
+	      active = (*is_theme_active_func) ();
+		}
+  }
+
+  return active;
+}
+
 gboolean
 xp_theme_is_drawable (XpThemeElement element)
 {
-  if (is_theme_active_func)
-    {
-      gboolean active = (*is_theme_active_func) ();
-      /* A bit of a hack, but it at least detects theme
-	 switches between XP and classic looks on systems
-	 using older GTK+ version (2.2.0-?) that do not
-	 support theme switch detection (gdk_window_add_filter). */
-      if (active != was_theming_active)
-        {
-          xp_theme_reset ();
-        }
-
-      if (active)
-        {
-          return (xp_theme_get_handle_by_element (element) != NULL);
-        }
-    }
+ if (xp_theme_is_active ())
+  return (xp_theme_get_handle_by_element (element) != NULL);
 
   return FALSE;
 }
