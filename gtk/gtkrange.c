@@ -613,7 +613,8 @@ gtk_range_set_increments (GtkRange *range,
  * @max: maximum range value
  * 
  * Sets the allowable values in the #GtkRange, and clamps the range
- * value to be between min and max.
+ * value to be between @min and @max. (If the range has a non-zero
+ * page size, it is clamped between @min and @max - page-size.)
  **/
 void
 gtk_range_set_range (GtkRange *range,
@@ -631,8 +632,9 @@ gtk_range_set_range (GtkRange *range,
   value = CLAMP (range->adjustment->value,
                  range->adjustment->lower,
                  (range->adjustment->upper - range->adjustment->page_size));
-  
-  gtk_adjustment_changed (range->adjustment);  
+
+  gtk_adjustment_set_value (range->adjustment, value);
+  gtk_adjustment_changed (range->adjustment);
 }
 
 /**

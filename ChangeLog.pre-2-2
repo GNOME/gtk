@@ -1,3 +1,8 @@
+Wed Feb 27 10:34:46 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrange.c (gtk_range_set_range): After computing
+	the clamped value, actually set it. (#62639, Sergey Kuzminov)
+
 Tue Feb 26 22:22:37 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkbox.c (gtk_box_reorder_child): Clean up
