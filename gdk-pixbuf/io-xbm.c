@@ -244,6 +244,7 @@ read_bitmap_file_data (FILE *fstream,
 				*ptr=value;
 			}
 		}
+		break;
 	}
 
 	if (!bits)
@@ -323,6 +324,7 @@ gdk_pixbuf__xbm_image_load_real (FILE *f, XBMData *context, GError **error)
 		}
 		pixels += row_stride;
 	}
+	g_free (data);
 
 	if (context) {
 		(* context->update_func) (pixbuf, 0, 0, w, h, context->user_data);

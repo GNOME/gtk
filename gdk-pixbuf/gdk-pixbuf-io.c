@@ -193,17 +193,22 @@ pixbuf_check_xbm (guchar *buffer, int size)
 	if (size < 20)
 		return FALSE;
 
-	if (buffer [0] != '#'
-	    || buffer [1] != 'd'
-	    || buffer [2] != 'e'
-	    || buffer [3] != 'f'
-	    || buffer [4] != 'i'
-	    || buffer [5] != 'n'
-	    || buffer [6] != 'e'
-	    || buffer [7] != ' ')
-		return FALSE;
+	if (buffer [0] == '#'
+	    && buffer [1] == 'd'
+	    && buffer [2] == 'e'
+	    && buffer [3] == 'f'
+	    && buffer [4] == 'i'
+	    && buffer [5] == 'n'
+	    && buffer [6] == 'e'
+	    && buffer [7] == ' ')
+		return TRUE;
 
-	return TRUE;
+	/* Note that this requires xpm to be checked before xbm. */
+	if (buffer [0] == '/'
+	    && buffer [1] != '*')
+		return TRUE;
+
+	return FALSE;
 }
 
 static gboolean

@@ -1,3 +1,13 @@
+2002-06-01  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixbuf-io.c (pixbuf_check_xbm): Accept xbms starting
+	with a C comment - those seem to be not uncommon, e.g. the Gimp 
+	produces them.  (#82706)
+
+	* io-xbm.c (read_bitmap_file_data): Don't leak memory on certain
+	invalid inputs.
+	(gdk_pixbuf__xbm_image_load_real): Don't leak memory on valid inputs.
+
 2002-05-22  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk-pixbuf-io.c (get_libdir): Use GTK_BINARY_VERSION (and not
