@@ -770,6 +770,9 @@ guchar		 gdk_color_context_get_index_from_palette (GdkColorContext *cc,
 GdkRegion*     gdk_region_new	    (void);
 void	       gdk_region_destroy   (GdkRegion	   *region);
 
+void	       gdk_region_get_clipbox(GdkRegion    *region,
+				      GdkRectangle *rectangle);
+
 gboolean       gdk_region_empty	    (GdkRegion	   *region);
 gboolean       gdk_region_equal	    (GdkRegion	   *region1,
 				     GdkRegion	   *region2);

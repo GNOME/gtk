@@ -82,6 +82,25 @@ gdk_region_equal (GdkRegion      *region1,
   return XEqualRegion (private1->xregion, private2->xregion);
 }
 
+void
+gdk_region_get_clipbox(GdkRegion    *region,
+		       GdkRectangle *rectangle)
+{
+	GdkRegionPrivate *rp;
+	XRectangle r;
+
+	g_return_if_fail(region != NULL);
+	g_return_if_fail(rectangle != NULL);
+
+	rp = (GdkRegionPrivate *)region;
+	XClipBox(rp->xregion, &r);
+
+	rectangle->x = r.x;
+	rectangle->y = r.y;	
+	rectangle->width = r.width;
+	rectangle->height = r.height;
+}
+
 gboolean
 gdk_region_point_in (GdkRegion      *region,
                      gint           x,
