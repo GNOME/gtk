@@ -15,9 +15,10 @@ extern GdkFBDisplay *gdk_display;
 
 extern const char *gdk_progclass;
 
-#define gdk_window_lookup(xid)	   (xid)
-#define gdk_pixmap_lookup(xid)	   (xid)
-#define gdk_font_lookup(xid)	   (xid)
 #define gdk_window_foreign_new(xid) gdk_window_ref(xid)
+#define gdk_window_lookup(xid)	   ((GdkWindow*) (xid))
+#define gdk_pixmap_lookup(xid)	   ((GdkPixmap*) (xid))
+#define gdk_font_lookup(xid)	   ((GdkFont*) (xid))
+
 
 #endif /* GDKFB_H */

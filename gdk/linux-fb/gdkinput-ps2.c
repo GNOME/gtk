@@ -57,18 +57,10 @@ typedef struct {
   gboolean caps_lock : 1;
 } Keyboard;
 
-static void gdk_input_ps2_get_pointer (GdkWindow       *window,
-				       guint32	  deviceid,
-				       gdouble         *x,
-				       gdouble         *y,
-				       gdouble         *pressure,
-				       gdouble         *xtilt,
-				       gdouble         *ytilt,
-				       GdkModifierType *mask);
 static Keyboard * tty_keyboard_open(void);
 static guint keyboard_get_state(Keyboard *k);
 
-static PS2Mouse *ps2mouse = NULL;
+PS2Mouse *gdk_fb_ps2mouse = NULL;
 static Keyboard *keyboard = NULL;
 FILE *debug_out;
 
@@ -151,15 +143,12 @@ send_button_event(PS2Mouse *mouse, guint button, gboolean press_event, time_t th
   event->button.x = x;
   event->button.y = y;
   event->button.button = button;
-  event->button.pressure = 0.5;
-  event->button.xtilt = event->button.ytilt = 0;
   event->button.state = (mouse->button1_pressed?GDK_BUTTON1_MASK:0)
     | (mouse->button2_pressed?GDK_BUTTON2_MASK:0)
     | (mouse->button3_pressed?GDK_BUTTON3_MASK:0)
     | (1 << (button + 8)) /* badhack */
     | keyboard_get_state(keyboard);
-  event->button.source = GDK_SOURCE_MOUSE;
-  event->button.deviceid = 0;
+  event->button.device = gdk_core_pointer;
   event->button.x_root = mouse->x;
   event->button.y_root = mouse->y;
 
@@ -192,8 +181,8 @@ send_button_event(PS2Mouse *mouse, guint button, gboolean press_event, time_t th
 
       tmp_gc = gdk_gc_new(window);
       GDK_GC_FBDATA(tmp_gc)->values.foreground.pixel = 0;
-      gdk_fb_draw_rectangle(window, tmp_gc, TRUE, 0, 0,
-			    GDK_DRAWABLE_P(window)->width, GDK_DRAWABLE_P(window)->height);
+      gdk_fb_draw_rectangle(GDK_DRAWABLE_IMPL(window), tmp_gc, TRUE, 0, 0,
+			    GDK_DRAWABLE_IMPL_FBDATA(window)->width, GDK_DRAWABLE_IMPL_FBDATA(window)->height);
       gdk_gc_unref(tmp_gc);
     }
 #endif
@@ -213,6 +202,7 @@ static GdkCursor *last_cursor = NULL;
 GdkFBDrawingContext *gdk_fb_cursor_dc = NULL;
 static GdkFBDrawingContext cursor_dc_dat;
 static GdkGC *cursor_gc;
+static gint cursor_visibility_count = 1;
 
 static GdkFBDrawingContext *
 gdk_fb_cursor_dc_reset(void)
@@ -221,7 +211,7 @@ gdk_fb_cursor_dc_reset(void)
     gdk_fb_drawing_context_finalize(gdk_fb_cursor_dc);
 
   gdk_fb_cursor_dc = &cursor_dc_dat;
-  gdk_fb_drawing_context_init(gdk_fb_cursor_dc, gdk_parent_root, cursor_gc, TRUE, FALSE);
+  gdk_fb_drawing_context_init(gdk_fb_cursor_dc, GDK_DRAWABLE_IMPL(gdk_parent_root), cursor_gc, TRUE, FALSE);
 
   return gdk_fb_cursor_dc;
 }
@@ -231,6 +221,11 @@ gdk_fb_cursor_hide(void)
 {
   GdkFBDrawingContext *mydc = gdk_fb_cursor_dc;
 
+  cursor_visibility_count--;
+  g_assert(cursor_visibility_count <= 0);
+  if(cursor_visibility_count < 0)
+    return;
+
   if(!mydc)
     mydc = gdk_fb_cursor_dc_reset();
 
@@ -238,7 +233,7 @@ gdk_fb_cursor_hide(void)
     {
       gdk_gc_set_clip_mask(cursor_gc, NULL);
       /* Restore old picture */
-      gdk_fb_draw_drawable_3(gdk_parent_root, cursor_gc, last_contents,
+      gdk_fb_draw_drawable_3(GDK_DRAWABLE_IMPL(gdk_parent_root), cursor_gc, GDK_DRAWABLE_IMPL(last_contents),
 			     mydc,
 			     0, 0,
 			     last_location.x,
@@ -251,8 +246,11 @@ gdk_fb_cursor_hide(void)
 void
 gdk_fb_cursor_invalidate(void)
 {
-  gdk_pixmap_unref(last_contents);
-  last_contents = NULL;
+  if(last_contents)
+    {
+      gdk_pixmap_unref(last_contents);
+      last_contents = NULL;
+    }
 }
 
 void
@@ -260,42 +258,80 @@ gdk_fb_cursor_unhide()
 {
   GdkFBDrawingContext *mydc = gdk_fb_cursor_dc;
 
+  cursor_visibility_count++;
+  g_assert(cursor_visibility_count <= 1);
+  if(cursor_visibility_count < 1)
+    return;
+
   if(!mydc)
     mydc = gdk_fb_cursor_dc_reset();
 
   if(last_cursor)
     {
       if(!last_contents
-	 || GDK_DRAWABLE_P(GDK_CURSOR_FB(last_cursor)->cursor)->width > GDK_DRAWABLE_P(last_contents)->width
-	 || GDK_DRAWABLE_P(GDK_CURSOR_FB(last_cursor)->cursor)->height > GDK_DRAWABLE_P(last_contents)->height)
+	 || GDK_DRAWABLE_IMPL_FBDATA(GDK_CURSOR_FB(last_cursor)->cursor)->width > GDK_DRAWABLE_IMPL_FBDATA(last_contents)->width
+	 || GDK_DRAWABLE_IMPL_FBDATA(GDK_CURSOR_FB(last_cursor)->cursor)->height > GDK_DRAWABLE_IMPL_FBDATA(last_contents)->height)
 	{
 	  if(last_contents)
 	    gdk_pixmap_unref(last_contents);
 
 	  last_contents = gdk_pixmap_new(gdk_parent_root,
-					 GDK_DRAWABLE_P(GDK_CURSOR_FB(last_cursor)->cursor)->width,
-					 GDK_DRAWABLE_P(GDK_CURSOR_FB(last_cursor)->cursor)->height,
-					 GDK_DRAWABLE_P(gdk_parent_root)->depth);
+					 GDK_DRAWABLE_IMPL_FBDATA(GDK_CURSOR_FB(last_cursor)->cursor)->width,
+					 GDK_DRAWABLE_IMPL_FBDATA(GDK_CURSOR_FB(last_cursor)->cursor)->height,
+					 GDK_DRAWABLE_IMPL_FBDATA(gdk_parent_root)->depth);
 	}
 
       gdk_gc_set_clip_mask(cursor_gc, NULL);
-      gdk_fb_draw_drawable_2(last_contents, cursor_gc, gdk_parent_root, last_location.x,
+      gdk_fb_draw_drawable_2(GDK_DRAWABLE_IMPL(last_contents), cursor_gc, GDK_DRAWABLE_IMPL(gdk_parent_root), last_location.x,
 			     last_location.y, 0, 0,
-			     GDK_DRAWABLE_P(GDK_CURSOR_FB(last_cursor)->cursor)->width,
-			     GDK_DRAWABLE_P(GDK_CURSOR_FB(last_cursor)->cursor)->height, TRUE, FALSE);
-      last_contents_size.x = GDK_DRAWABLE_P(GDK_CURSOR_FB(last_cursor)->cursor)->width;
-      last_contents_size.y = GDK_DRAWABLE_P(GDK_CURSOR_FB(last_cursor)->cursor)->height;
+			     GDK_DRAWABLE_IMPL_FBDATA(GDK_CURSOR_FB(last_cursor)->cursor)->width,
+			     GDK_DRAWABLE_IMPL_FBDATA(GDK_CURSOR_FB(last_cursor)->cursor)->height, TRUE, FALSE);
+      last_contents_size.x = GDK_DRAWABLE_IMPL_FBDATA(GDK_CURSOR_FB(last_cursor)->cursor)->width;
+      last_contents_size.y = GDK_DRAWABLE_IMPL_FBDATA(GDK_CURSOR_FB(last_cursor)->cursor)->height;
       gdk_gc_set_clip_mask(cursor_gc, GDK_CURSOR_FB(last_cursor)->mask);
-      gdk_gc_set_clip_origin(cursor_gc, last_location.x, last_location.y);
+      gdk_gc_set_clip_origin(cursor_gc, last_location.x + GDK_CURSOR_FB(last_cursor)->mask_off_x,
+			     last_location.y + GDK_CURSOR_FB(last_cursor)->mask_off_y);
 
       gdk_fb_cursor_dc_reset();
-      gdk_fb_draw_drawable_3(gdk_parent_root, cursor_gc, GDK_CURSOR_FB(last_cursor)->cursor, mydc,
-			     0, 0, last_location.x, last_location.y,
-			     GDK_DRAWABLE_P(GDK_CURSOR_FB(last_cursor)->cursor)->width,
-			     GDK_DRAWABLE_P(GDK_CURSOR_FB(last_cursor)->cursor)->height);
+      gdk_fb_draw_drawable_3(GDK_DRAWABLE_IMPL(gdk_parent_root), cursor_gc, GDK_DRAWABLE_IMPL(GDK_CURSOR_FB(last_cursor)->cursor),
+			     mydc, 0, 0, last_location.x, last_location.y,
+			     GDK_DRAWABLE_IMPL_FBDATA(GDK_CURSOR_FB(last_cursor)->cursor)->width,
+			     GDK_DRAWABLE_IMPL_FBDATA(GDK_CURSOR_FB(last_cursor)->cursor)->height);
     }
   else
     gdk_fb_cursor_invalidate();
+}
+
+gboolean
+gdk_fb_cursor_region_need_hide(GdkRegion *region)
+{
+  GdkRectangle testme;
+
+  if(!last_cursor)
+    return FALSE;
+
+  testme.x = last_location.x;
+  testme.y = last_location.y;
+  testme.width = GDK_DRAWABLE_IMPL_FBDATA(GDK_CURSOR_FB(last_cursor)->cursor)->width;
+  testme.height = GDK_DRAWABLE_IMPL_FBDATA(GDK_CURSOR_FB(last_cursor)->cursor)->height;
+
+  return (gdk_region_rect_in(region, &testme)!=GDK_OVERLAP_RECTANGLE_OUT);
+}
+
+gboolean
+gdk_fb_cursor_need_hide(GdkRectangle *rect)
+{
+  GdkRectangle testme;
+
+  if(!last_cursor)
+    return FALSE;
+
+  testme.x = last_location.x;
+  testme.y = last_location.y;
+  testme.width = GDK_DRAWABLE_IMPL_FBDATA(GDK_CURSOR_FB(last_cursor)->cursor)->width;
+  testme.height = GDK_DRAWABLE_IMPL_FBDATA(GDK_CURSOR_FB(last_cursor)->cursor)->height;
+
+  return gdk_rectangle_intersect(rect, &testme, &testme);
 }
 
 void
@@ -305,8 +341,8 @@ gdk_fb_get_cursor_rect(GdkRectangle *rect)
     {
       rect->x = last_location.x;
       rect->y = last_location.y;
-      rect->width = GDK_DRAWABLE_P(GDK_CURSOR_FB(last_cursor)->cursor)->width;
-      rect->height = GDK_DRAWABLE_P(GDK_CURSOR_FB(last_cursor)->cursor)->height;
+      rect->width = GDK_DRAWABLE_IMPL_FBDATA(GDK_CURSOR_FB(last_cursor)->cursor)->width;
+      rect->height = GDK_DRAWABLE_IMPL_FBDATA(GDK_CURSOR_FB(last_cursor)->cursor)->height;
     }
   else
     {
@@ -336,9 +372,9 @@ move_pointer(PS2Mouse *mouse, GdkWindow *in_window)
     the_cursor = _gdk_fb_pointer_grab_cursor;
   else
     {
-      while(!GDK_WINDOW_FBDATA(in_window)->cursor && GDK_WINDOW_P(in_window)->parent)
-	in_window = GDK_WINDOW_P(in_window)->parent;
-      the_cursor = GDK_WINDOW_FBDATA(in_window)->cursor;
+      while(!GDK_WINDOW_IMPL_FBDATA(in_window)->cursor && GDK_WINDOW_P(in_window)->parent)
+	in_window = (GdkWindow *)GDK_WINDOW_P(in_window)->parent;
+      the_cursor = GDK_WINDOW_IMPL_FBDATA(in_window)->cursor;
     }
 
   last_location.x = mouse->x - GDK_CURSOR_FB(the_cursor)->hot_x;
@@ -353,6 +389,82 @@ move_pointer(PS2Mouse *mouse, GdkWindow *in_window)
   gdk_fb_cursor_unhide();
 }
 
+void
+gdk_fb_cursor_reset(void)
+{
+  GdkWindow *win = gdk_window_get_pointer(NULL, NULL, NULL, NULL);
+
+  move_pointer(gdk_fb_ps2mouse, win);
+}
+
+void gdk_fb_window_visibility_crossing(GdkWindow *window, gboolean is_show)
+{
+  gint winx, winy;
+  GdkModifierType my_mask;
+
+  gdk_input_ps2_get_mouseinfo(&winx, &winy, &my_mask);
+
+  if(winx >= GDK_DRAWABLE_IMPL_FBDATA(window)->llim_x
+     && winx < GDK_DRAWABLE_IMPL_FBDATA(window)->lim_x
+     && winy >= GDK_DRAWABLE_IMPL_FBDATA(window)->llim_y
+     && winy < GDK_DRAWABLE_IMPL_FBDATA(window)->lim_y)
+    {
+      GdkWindow *oldwin, *newwin, *curwin;
+      GdkEvent *event;
+
+      curwin = gdk_window_get_pointer(NULL, NULL, NULL, NULL);
+
+      if(is_show)
+	{
+	  /* Window is about to be shown */
+	  oldwin = curwin;
+	  newwin = window;
+	}
+      else
+	{
+	  /* Window is about to be hidden */
+	  oldwin = window;
+	  newwin = curwin;
+	}
+
+      event = gdk_event_make(oldwin, GDK_LEAVE_NOTIFY, TRUE);
+      if(event)
+	{
+	  guint x_int, y_int;
+	  event->crossing.subwindow = gdk_window_ref(newwin);
+	  gdk_window_get_root_origin(oldwin, &x_int, &y_int);
+	  event->crossing.x = winx - x_int;
+	  event->crossing.y = winy - y_int;
+	  event->crossing.x_root = winx;
+	  event->crossing.y_root = winy;
+	  event->crossing.mode = GDK_CROSSING_NORMAL;
+	  event->crossing.detail = GDK_NOTIFY_UNKNOWN;
+	  event->crossing.focus = FALSE;
+	  event->crossing.state = my_mask;
+	}
+
+      event = gdk_event_make(newwin, GDK_ENTER_NOTIFY, TRUE);
+      if(event)
+	{
+	  guint x_int, y_int;
+	  event->crossing.subwindow = gdk_window_ref(oldwin);
+	  gdk_window_get_root_origin(newwin, &x_int, &y_int);
+	  event->crossing.x = winx - x_int;
+	  event->crossing.y = winy - y_int;
+	  event->crossing.x_root = winx;
+	  event->crossing.y_root = winy;
+	  event->crossing.mode = GDK_CROSSING_NORMAL;
+	  event->crossing.detail = GDK_NOTIFY_UNKNOWN;
+	  event->crossing.focus = FALSE;
+	  event->crossing.state = my_mask;
+	}
+
+      if(gdk_fb_ps2mouse->prev_window)
+	gdk_window_unref(gdk_fb_ps2mouse->prev_window);
+      gdk_fb_ps2mouse->prev_window = gdk_window_ref(newwin);
+    }
+}
+
 static gboolean
 handle_input(GIOChannel *gioc, GIOCondition cond, gpointer data)
 {
@@ -362,47 +474,63 @@ handle_input(GIOChannel *gioc, GIOCondition cond, gpointer data)
   gboolean new_button1, new_button2, new_button3;
   time_t the_time = g_latest_time.tv_sec;
   GdkWindow *mousewin;
+  gboolean got_motion = FALSE;
 
-  for(left = sizeof(buf); left > 0; )
+  while(1) /* Go through as many mouse events as we can */
     {
-      n = read(mouse->fd, buf+sizeof(buf)-left, left);
-      g_assert(n > 0);
-      left -= n;
+      for(left = sizeof(buf); left > 0; )
+	{
+	  n = read(mouse->fd, buf+sizeof(buf)-left, left);
+
+	  if(n <= 0)
+	    {
+	      if(left != sizeof(buf))
+		continue; /* XXX FIXME - this will be slow compared to turning on blocking mode, etc. */
+
+	      goto done_reading_mouse_events;
+	    }
+
+	  left -= n;
+	}
+
+      new_button1 = (buf[0] & 1) && 1;
+      new_button3 = (buf[0] & 2) && 1;
+      new_button2 = (buf[0] & 4) && 1;
+
+      if(new_button1 != mouse->button1_pressed)
+	{
+	  mouse->button1_pressed = new_button1; 
+	  send_button_event(mouse, 1, new_button1, the_time);
+	}
+
+      if(new_button2 != mouse->button2_pressed)
+	{
+	  mouse->button2_pressed = new_button2;
+	  send_button_event(mouse, 2, new_button2, the_time);
+	}
+
+      if(new_button3 != mouse->button3_pressed)
+	{
+	  mouse->button3_pressed = new_button3; 
+	  send_button_event(mouse, 3, new_button3, the_time);
+	}
+
+      if(buf[1] != 0)
+	dx = ((buf[0] & 0x10) ? ((gint)buf[1])-256 : buf[1]);
+      else
+	dx = 0;
+      if(buf[2] != 0)
+	dy = -((buf[0] & 0x20) ? ((gint)buf[2])-256 : buf[2]);
+      else
+	dy = 0;
+
+      mouse->x += dx;
+      mouse->y += dy;
+      if(dx || dy)
+	got_motion = TRUE;
     }
+ done_reading_mouse_events:
 
-  new_button1 = (buf[0] & 1) && 1;
-  new_button3 = (buf[0] & 2) && 1;
-  new_button2 = (buf[0] & 4) && 1;
-
-  if(new_button1 != mouse->button1_pressed)
-    {
-      mouse->button1_pressed = new_button1; 
-      send_button_event(mouse, 1, new_button1, the_time);
-    }
-
-  if(new_button2 != mouse->button2_pressed)
-    {
-      mouse->button2_pressed = new_button2;
-      send_button_event(mouse, 2, new_button2, the_time);
-    }
-
-  if(new_button3 != mouse->button3_pressed)
-    {
-      mouse->button3_pressed = new_button3; 
-      send_button_event(mouse, 3, new_button3, the_time);
-    }
-
-  if(buf[1] != 0)
-    dx =  ((buf[0] & 0x10) ? ((gint)buf[1])-256 : buf[1]);
-  else
-    dx = 0;
-  if(buf[2] != 0)
-    dy = -((buf[0] & 0x20) ? ((gint)buf[2])-256 : buf[2]);
-  else
-    dy = 0;
-
-  mouse->x += dx;
-  mouse->y += dy;
   if(_gdk_fb_pointer_grab_confine)
     mousewin = _gdk_fb_pointer_grab_confine;
   else
@@ -410,14 +538,14 @@ handle_input(GIOChannel *gioc, GIOCondition cond, gpointer data)
 
   if(mouse->x < 0)
     mouse->x = 0;
-  else if(mouse->x > (GDK_DRAWABLE_FBDATA(mousewin)->lim_x - 1))
-    mouse->x = GDK_DRAWABLE_FBDATA(mousewin)->lim_x - 1;
+  else if(mouse->x > (GDK_DRAWABLE_IMPL_FBDATA(mousewin)->lim_x - 1))
+    mouse->x = GDK_DRAWABLE_IMPL_FBDATA(mousewin)->lim_x - 1;
   if(mouse->y < 0)
     mouse->y = 0;
-  else if(mouse->y > (GDK_DRAWABLE_FBDATA(mousewin)->lim_y - 1))
-    mouse->y = GDK_DRAWABLE_FBDATA(mousewin)->lim_y - 1;
+  else if(mouse->y > (GDK_DRAWABLE_IMPL_FBDATA(mousewin)->lim_y - 1))
+    mouse->y = GDK_DRAWABLE_IMPL_FBDATA(mousewin)->lim_y - 1;
 
-  if(dx || dy) {
+  if(got_motion) {
     GdkEvent *event;
     gint x, y;
     GdkWindow *win;
@@ -443,12 +571,9 @@ handle_input(GIOChannel *gioc, GIOCondition cond, gpointer data)
       {
 	event->motion.x = x;
 	event->motion.y = y;
-	event->motion.pressure = 0.5;
-	event->motion.xtilt = event->motion.ytilt = 0;
 	event->motion.state = state;
 	event->motion.is_hint = FALSE;
-	event->motion.source = GDK_SOURCE_MOUSE;
-	event->motion.deviceid = 0;
+	event->motion.device = gdk_core_pointer;
 	event->motion.x_root = mouse->x;
 	event->motion.y_root = mouse->y;
       }
@@ -518,6 +643,8 @@ mouse_open(void)
   write(retval->fd, buf, i);
   read(retval->fd, buf, 3); /* Get rid of misc garbage whatever stuff from mouse */
 
+  fcntl(retval->fd, F_SETFL, O_RDWR|O_NONBLOCK);
+
   gioc = g_io_channel_unix_new(retval->fd);
   retval->fd_tag = g_io_add_watch(gioc, G_IO_IN|G_IO_ERR|G_IO_HUP|G_IO_NVAL, handle_input, retval);
 
@@ -530,58 +657,23 @@ mouse_open(void)
 void
 gdk_input_init (void)
 {
-  gdk_input_vtable.set_mode           = NULL;
-  gdk_input_vtable.set_axes           = NULL;
-  gdk_input_vtable.set_key            = NULL;
-  gdk_input_vtable.motion_events      = NULL;
-  gdk_input_vtable.get_pointer        = gdk_input_ps2_get_pointer;
-  gdk_input_vtable.grab_pointer       = NULL;
-  gdk_input_vtable.ungrab_pointer     = NULL;
-  gdk_input_vtable.configure_event    = NULL;
-  gdk_input_vtable.enter_event        = NULL;
-  gdk_input_vtable.other_event        = NULL;
-  gdk_input_vtable.window_none_event  = NULL;
-  gdk_input_vtable.enable_window      = NULL;
-  gdk_input_vtable.disable_window     = NULL;
-
-  gdk_input_devices = g_list_append (NULL, (GdkDeviceInfo *) &gdk_input_core_info);
+  gdk_input_devices = g_list_append (NULL, gdk_core_pointer);
 
   gdk_input_ignore_core = FALSE;
 
-  ps2mouse = mouse_open();
+  gdk_fb_ps2mouse = mouse_open();
 }
 
 void
 gdk_input_ps2_get_mouseinfo(gint *x, gint *y, GdkModifierType *mask)
 {
-  *x = ps2mouse->x;
-  *y = ps2mouse->y;
+  *x = gdk_fb_ps2mouse->x;
+  *y = gdk_fb_ps2mouse->y;
   *mask =
-    (ps2mouse->button1_pressed?GDK_BUTTON1_MASK:0)
-    | (ps2mouse->button2_pressed?GDK_BUTTON2_MASK:0)
-    | (ps2mouse->button3_pressed?GDK_BUTTON3_MASK:0)
+    (gdk_fb_ps2mouse->button1_pressed?GDK_BUTTON1_MASK:0)
+    | (gdk_fb_ps2mouse->button2_pressed?GDK_BUTTON2_MASK:0)
+    | (gdk_fb_ps2mouse->button3_pressed?GDK_BUTTON3_MASK:0)
     | keyboard_get_state(keyboard);
-}
-
-static void
-gdk_input_ps2_get_pointer (GdkWindow       *window,
-			   guint32          deviceid,
-			   gdouble         *x,
-			   gdouble         *y,
-			   gdouble         *pressure,
-			   gdouble         *xtilt,
-			   gdouble         *ytilt,
-			   GdkModifierType *mask)
-{
-  gint x_int, y_int;
-
-  gdk_window_get_root_origin(window, &x_int, &y_int);
-
-  if (x) *x = ps2mouse->x - x_int;
-  if (y) *y = ps2mouse->y - y_int;
-  if (pressure) *pressure = 0.5;
-  if (xtilt) *xtilt = 0;
-  if (ytilt) *ytilt = 0;
 }
 
 /* Returns the modifier mask for the keyboard */
@@ -629,6 +721,296 @@ gdk_window_find_focus(void)
   return gdk_parent_root;
 }
 
+static const guint trans_table[256][3] = {
+  /* 0x00 */
+  {0, 0, 0},
+  {GDK_Escape, 0, 0},
+  {'1', '!', 0},
+  {'2', '@', 0},
+  {'3', '#', 0},
+  {'4', '$', 0},
+  {'5', '%', 0},
+  {'6', '^', 0},
+  {'7', '&', 0},
+  {'8', '*', 0},
+  {'9', '(', 0},
+  {'0', ')', 0},
+  {'-', '_', 0},
+  {'=', '+', 0},
+  {GDK_BackSpace, 0, 0},
+  {GDK_Tab, 0, 0},
+
+  /* 0x10 */
+  {'q', 'Q', 0},
+  {'w', 'W', 0},
+  {'e', 'E', 0},
+  {'r', 'R', 0},
+  {'t', 'T', 0},
+  {'y', 'Y', 0},
+  {'u', 'U', 0},
+  {'i', 'I', 0},
+  {'o', 'O', 0},
+  {'p', 'P', 0},
+  {'[', '{', 0},
+  {']', '}', 0},
+  {GDK_Return, 0, 0},
+  {GDK_Control_L, 0, 0}, /* mod */
+  {'a', 'A', 0},
+  {'s', 'S', 0},
+
+	/* 0x20 */
+  {'d', 'D', 0},
+  {'f', 'F', 0},
+  {'g', 'G', 0},
+  {'h', 'H', 0},
+  {'j', 'J', 0},
+  {'k', 'K', 0},
+  {'l', 'L', 0},
+  {';', ':', 0},
+  {'\'', '"', 0},
+  {'`', '~', 0},
+  {GDK_Shift_L, 0, 0}, /* mod */
+  {'\\', 0, 0},
+  {'z', 0, 0},
+  {'x', 0, 0},
+  {'c', 0, 0},
+
+  {'v', 'V', 0},
+
+	/* 0x30 */
+  {'b', 'B', 0},
+  {'n', 'N', 0},
+  {'m', 'M', 0},
+  {',', 0, 0},
+  {'.', 0, 0},
+  {'/', 0, 0},
+  {GDK_Shift_R, 0, 0}, /* mod */
+  {GDK_KP_Multiply, 0, 0},
+  {0, 0, 0},
+  {GDK_space, 0, 0},
+  {0, 0, 0},
+  {GDK_F1, 0, 0},
+  {GDK_F2, 0, 0},
+  {GDK_F3, 0, 0},
+  {GDK_F4, 0, 0},
+  {GDK_F5, 0, 0},
+
+	/* 0x40 */
+  {GDK_F6, 0, 0},
+  {GDK_F7, 0, 0},
+  {GDK_F8, 0, 0},
+  {GDK_F9, 0, 0},
+  {GDK_F10, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+
+	/* 0x50 */
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {GDK_F11, 0, 0},
+  {GDK_F12, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+
+	/* 0x60 */
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+
+	/* 0x70 */
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+
+	/* 0x80 */
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+
+	/* 0x90 */
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+
+	/* 0xA0 */
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+
+	/* 0xB0 */
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+
+	/* 0xC0 */
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {GDK_Up, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {GDK_Left, 0, 0},
+  {GDK_Right, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+
+	/* 0xD0 */
+  {GDK_Down, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+
+	/* 0xE0 */
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+
+	/* 0xF0 */
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+};
 static gboolean
 handle_keyboard_input(GIOChannel *gioc, GIOCondition cond, gpointer data)
 {
@@ -647,296 +1029,6 @@ handle_keyboard_input(GIOChannel *gioc, GIOCondition cond, gpointer data)
   for(i = 0; i < n; i++)
     {
       guchar base_char;
-      static const guint trans_table[256][3] = {
-	/* 0x00 */
-	{0, 0, 0},
-	{GDK_Escape, 0, 0},
-	{'1', '!', 0},
-	{'2', '@', 0},
-	{'3', '#', 0},
-	{'4', '$', 0},
-	{'5', '%', 0},
-	{'6', '^', 0},
-	{'7', '&', 0},
-	{'8', '*', 0},
-	{'9', '(', 0},
-	{'0', ')', 0},
-	{'-', '_', 0},
-	{'=', '+', 0},
-	{GDK_BackSpace, 0, 0},
-	{GDK_Tab, 0, 0},
-
-	/* 0x10 */
-	{'q', 'Q', 0},
-	{'w', 'W', 0},
-	{'e', 'E', 0},
-	{'r', 'R', 0},
-	{'t', 'T', 0},
-	{'y', 'Y', 0},
-	{'u', 'U', 0},
-	{'i', 'I', 0},
-	{'o', 'O', 0},
-	{'p', 'P', 0},
-	{'[', '{', 0},
-	{']', '}', 0},
-	{GDK_Return, 0, 0},
-	{GDK_Control_L, 0, 0}, /* mod */
-	{'a', 'A', 0},
-	{'s', 'S', 0},
-
-	/* 0x20 */
-	{'d', 'D', 0},
-	{'f', 'F', 0},
-	{'g', 'G', 0},
-	{'h', 'H', 0},
-	{'j', 'J', 0},
-	{'k', 'K', 0},
-	{'l', 'L', 0},
-	{';', ':', 0},
-	{'\'', '"', 0},
-	{'`', '~', 0},
-	{GDK_Shift_L, 0, 0}, /* mod */
-	{'\\', 0, 0},
-	{'z', 0, 0},
-	{'x', 0, 0},
-	{'c', 0, 0},
-
-	{'v', 'V', 0},
-
-	/* 0x30 */
-	{'b', 'B', 0},
-	{'n', 'N', 0},
-	{'m', 'M', 0},
-	{',', 0, 0},
-	{'.', 0, 0},
-	{'/', 0, 0},
-	{GDK_Shift_R, 0, 0}, /* mod */
-	{GDK_KP_Multiply, 0, 0},
-	{0, 0, 0},
-	{GDK_space, 0, 0},
-	{0, 0, 0},
-	{GDK_F1, 0, 0},
-	{GDK_F2, 0, 0},
-	{GDK_F3, 0, 0},
-	{GDK_F4, 0, 0},
-	{GDK_F5, 0, 0},
-
-	/* 0x40 */
-	{GDK_F6, 0, 0},
-	{GDK_F7, 0, 0},
-	{GDK_F8, 0, 0},
-	{GDK_F9, 0, 0},
-	{GDK_F10, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-
-	/* 0x50 */
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{GDK_F11, 0, 0},
-	{GDK_F12, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-
-	/* 0x60 */
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-
-	/* 0x70 */
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-
-	/* 0x80 */
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-
-	/* 0x90 */
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-
-	/* 0xA0 */
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-
-	/* 0xB0 */
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-
-	/* 0xC0 */
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{GDK_Up, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{GDK_Left, 0, 0},
-	{GDK_Right, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-
-	/* 0xD0 */
-	{GDK_Down, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-
-	/* 0xE0 */
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-
-	/* 0xF0 */
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-	{0, 0, 0},
-      };
       GdkEvent *event;
       GdkWindow *win;
       char dummy[2];
@@ -1023,11 +1115,30 @@ handle_keyboard_input(GIOChannel *gioc, GIOCondition cond, gpointer data)
 	mod = 1;
       do {
 	keyval = trans_table[base_char][mod--];
-      } while(!keyval && (mod > 0));
+      } while(!keyval && (mod >= 0));
 
       if(k->caps_lock && (keyval >= 'a')
 	 && (keyval <= 'z'))
 	keyval = toupper(keyval);
+
+      /* handle some magic keys */
+      if(state & (GDK_CONTROL_MASK|GDK_MOD1_MASK))
+	{
+	  if(!k->states[base_char])
+	    {
+	      if(keyval == GDK_BackSpace)
+		exit(1);
+
+	      if(keyval == GDK_Return)
+		gdk_fb_redraw_all();
+
+	    }
+
+	  keyval = 0;
+	}
+
+      if(!keyval)
+	continue;
 
       win = gdk_window_find_focus();
       event = gdk_event_make(win, k->states[base_char]?GDK_KEY_PRESS:GDK_KEY_RELEASE, TRUE);

@@ -1066,8 +1066,8 @@ miPolyArc(GdkDrawable *pDraw, GdkGC *pGC, int narcs, miArc *parcs)
 	    /* compute pixmap size; limit it to size of drawable */
 	    xOrg = MAX(xMin, 0);
 	    yOrg = MAX(yMin, 0);
-	    pixmapWidth = MIN(xMax, GDK_DRAWABLE_P(pDraw)->width) - xOrg;
-	    pixmapHeight = MIN(yMax, GDK_DRAWABLE_P(pDraw)->height) - yOrg;
+	    pixmapWidth = MIN(xMax, GDK_DRAWABLE_FBDATA(pDraw)->width) - xOrg;
+	    pixmapHeight = MIN(yMax, GDK_DRAWABLE_FBDATA(pDraw)->height) - yOrg;
 
 	    /* if nothing left, return */
 	    if ( (pixmapWidth <= 0) || (pixmapHeight <= 0) ) return;

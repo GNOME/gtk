@@ -173,15 +173,12 @@ gdk_pointer_grab (GdkWindow *	  window,
   if(!owner_events)
     _gdk_fb_pointer_grab_window = gdk_window_ref(window);
 
-  if(cursor)
-    gdk_fb_cursor_hide();
-
   _gdk_fb_pointer_grab_confine = confine_to?gdk_window_ref(confine_to):NULL;
   _gdk_fb_pointer_grab_events = event_mask;
   _gdk_fb_pointer_grab_cursor = cursor?gdk_cursor_ref(cursor):NULL;
 
   if(cursor)
-    gdk_fb_cursor_unhide();
+    gdk_fb_cursor_reset();
   
   return GDK_GRAB_SUCCESS;
 }
@@ -206,9 +203,6 @@ gdk_pointer_ungrab (guint32 time)
 {
   gboolean have_grab_cursor = _gdk_fb_pointer_grab_cursor && 1;
 
-  if(have_grab_cursor)
-    gdk_fb_cursor_hide();
-
   if(_gdk_fb_pointer_grab_window)
     gdk_window_unref(_gdk_fb_pointer_grab_window);
   _gdk_fb_pointer_grab_window = NULL;
@@ -222,7 +216,7 @@ gdk_pointer_ungrab (guint32 time)
   _gdk_fb_pointer_grab_cursor = NULL;
 
   if(have_grab_cursor)
-    gdk_fb_cursor_unhide();
+    gdk_fb_cursor_reset();
 }
 
 /*
@@ -471,7 +465,7 @@ gdk_event_make(GdkWindow *window, GdkEventType type, gboolean append_to_queue)
     GDK_SUBSTRUCTURE_MASK, /* GDK_DELETE		= 0, */
     GDK_STRUCTURE_MASK, /* GDK_DESTROY		= 1, */
     GDK_EXPOSURE_MASK, /* GDK_EXPOSE		= 2, */
-    GDK_POINTER_MOTION_MASK|GDK_BUTTON_MOTION_MASK, /* GDK_MOTION_NOTIFY	= 3, */
+    GDK_POINTER_MOTION_MASK, /* GDK_MOTION_NOTIFY	= 3, */
     GDK_BUTTON_PRESS_MASK, /* GDK_BUTTON_PRESS	= 4, */
     GDK_BUTTON_PRESS_MASK, /* GDK_2BUTTON_PRESS	= 5, */
     GDK_BUTTON_PRESS_MASK, /* GDK_3BUTTON_PRESS	= 6, */
@@ -501,24 +495,47 @@ gdk_event_make(GdkWindow *window, GdkEventType type, gboolean append_to_queue)
     GDK_EXPOSURE_MASK, /* GDK_NO_EXPOSE		= 30, */
     GDK_SCROLL_MASK /* GDK_SCROLL            = 31 */
   };
+  guint evmask;
+  evmask = GDK_WINDOW_IMPL_FBDATA(window)->event_mask;
 
-  if(GDK_WINDOW_FBDATA(window)->event_mask & type_masks[type])
+  if(evmask & GDK_BUTTON_MOTION_MASK)
+    {
+      evmask |= GDK_BUTTON1_MOTION_MASK|GDK_BUTTON2_MOTION_MASK|GDK_BUTTON3_MOTION_MASK;
+    }
+
+  if(evmask & (GDK_BUTTON1_MOTION_MASK|GDK_BUTTON2_MOTION_MASK|GDK_BUTTON3_MOTION_MASK))
+    {
+      gint x, y;
+      GdkModifierType mask;
+
+      gdk_input_ps2_get_mouseinfo(&x, &y, &mask);
+
+      if(((mask & GDK_BUTTON1_MASK) && (evmask & GDK_BUTTON1_MOTION_MASK))
+	 || ((mask & GDK_BUTTON2_MASK) && (evmask & GDK_BUTTON2_MOTION_MASK))
+	 || ((mask & GDK_BUTTON3_MASK) && (evmask & GDK_BUTTON3_MOTION_MASK)))
+	evmask |= GDK_POINTER_MOTION_MASK;
+    }
+
+  if(evmask & type_masks[type])
     {
       GdkEvent *event = gdk_event_new();
-      guint32 the_time = g_latest_time.tv_sec;
+      guint32 the_time = g_latest_time.tv_sec * 1000 + g_latest_time.tv_usec / 1000;
 
       event->any.type = type;
       event->any.window = gdk_window_ref(window);
+      event->any.send_event = FALSE;
       switch(type)
 	{
 	case GDK_MOTION_NOTIFY:
 	  event->motion.time = the_time;
+	  event->motion.axes = NULL;
 	  break;
 	case GDK_BUTTON_PRESS:
 	case GDK_2BUTTON_PRESS:
 	case GDK_3BUTTON_PRESS:
 	case GDK_BUTTON_RELEASE:
 	  event->button.time = the_time;
+	  event->button.axes = NULL;
 	  break;
 	case GDK_KEY_PRESS:
 	case GDK_KEY_RELEASE:
@@ -581,6 +598,8 @@ void CM(void)
   gpointer arry[256];
   int i;
 
+  return;
+
   free(mymem);
 
   for(i = 0; i < sizeof(arry)/sizeof(arry[0]); i++)
@@ -610,9 +629,9 @@ void RP(GdkDrawable *d)
       if(!GDK_PIXMAP_FBDATA(d)->no_free_mem)
 	{
 	  guchar *oldmem = GDK_DRAWABLE_FBDATA(d)->mem;
-	  guint len = ((GDK_DRAWABLE_P(d)->width * GDK_DRAWABLE_P(d)->depth + 7) / 8) * GDK_DRAWABLE_P(d)->height;
-	  GDK_DRAWABLE_FBDATA(d)->mem = g_malloc(len);
-	  memcpy(GDK_DRAWABLE_FBDATA(d)->mem, oldmem, len);
+	  guint len = ((GDK_DRAWABLE_IMPL_FBDATA(d)->width * GDK_DRAWABLE_IMPL_FBDATA(d)->depth + 7) / 8) * GDK_DRAWABLE_IMPL_FBDATA(d)->height;
+	  GDK_DRAWABLE_IMPL_FBDATA(d)->mem = g_malloc(len);
+	  memcpy(GDK_DRAWABLE_IMPL_FBDATA(d)->mem, oldmem, len);
 	  g_free(oldmem);
 	}
     }

@@ -95,7 +95,7 @@ struct _GdkAxisInfo
 #define GDK_INPUT_NUM_EVENTC 6
 
 struct _GdkDevicePrivate {
-  GdkDeviceInfo  info;
+  GdkDevice  info;
 };
 
 struct _GdkInputWindow
@@ -120,7 +120,7 @@ struct _GdkInputWindow
 
 /* Global data */
 
-extern const GdkDeviceInfo gdk_input_core_info;
+extern const GdkDevice gdk_input_core_info;
 extern GList *gdk_input_devices;
 extern GList *gdk_input_windows;
 

@@ -53,67 +53,92 @@ struct _GdkDragContextPrivate {
 /* Drag Contexts */
 
 static GList *contexts;
+static gpointer parent_class = NULL;
+
+
+static void
+gdk_drag_context_init (GdkDragContext *dragcontext)
+{
+  dragcontext->windowing_data = NULL;
+
+  contexts = g_list_prepend (contexts, dragcontext);
+}
+
+static void
+gdk_drag_context_finalize (GObject *object)
+{
+  GdkDragContext *context = GDK_DRAG_CONTEXT (object);
+  
+  g_list_free (context->targets);
+
+  if (context->source_window)
+    {
+      gdk_window_unref (context->source_window);
+    }
+  
+  if (context->dest_window)
+    gdk_window_unref (context->dest_window);
+  
+  contexts = g_list_remove (contexts, context);
+
+  G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
+static void
+gdk_drag_context_class_init (GdkDragContextClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  parent_class = g_type_class_peek_parent (klass);
+
+  object_class->finalize = gdk_drag_context_finalize;
+}
+
+
+GType
+gdk_drag_context_get_type (void)
+{
+  static GType object_type = 0;
+
+  if (!object_type)
+    {
+      static const GTypeInfo object_info =
+      {
+        sizeof (GdkDragContextClass),
+        (GBaseInitFunc) NULL,
+        (GBaseFinalizeFunc) NULL,
+        (GClassInitFunc) gdk_drag_context_class_init,
+        NULL,           /* class_finalize */
+        NULL,           /* class_data */
+        sizeof (GdkDragContext),
+        0,              /* n_preallocs */
+        (GInstanceInitFunc) gdk_drag_context_init,
+      };
+      
+      object_type = g_type_register_static (G_TYPE_OBJECT,
+                                            "GdkDragContext",
+                                            &object_info);
+    }
+  
+  return object_type;
+}
 
 GdkDragContext *
 gdk_drag_context_new        (void)
 {
-  GdkDragContextPrivate *result;
-
-  result = g_new0 (GdkDragContextPrivate, 1);
-
-  result->ref_count = 1;
-
-  contexts = g_list_prepend (contexts, result);
-
-  return (GdkDragContext *)result;
+  return (GdkDragContext *)g_type_create_instance(gdk_drag_context_get_type());
 }
 
 void            
 gdk_drag_context_ref (GdkDragContext *context)
 {
-  g_return_if_fail (context != NULL);
-
-  ((GdkDragContextPrivate *)context)->ref_count++;
+  g_object_ref(G_OBJECT(context));
 }
 
 void            
 gdk_drag_context_unref (GdkDragContext *context)
 {
-  GdkDragContextPrivate *private = (GdkDragContextPrivate *)context;
-
-  g_return_if_fail (context != NULL);
-  g_return_if_fail (private->ref_count > 0);
-
-  private->ref_count--;
-  
-  if (private->ref_count == 0)
-    {
-      g_dataset_destroy (private);
-      
-      g_list_free (context->targets);
-
-      if (context->source_window)
-	{
-#if 0
-	  if ((context->protocol == GDK_DRAG_PROTO_XDND) &&
-	      !context->is_source)
-	    xdnd_manage_source_filter (context, context->source_window, FALSE);
-#endif
-
-	  gdk_window_unref (context->source_window);
-	}
-
-      if (context->dest_window)
-	gdk_window_unref (context->dest_window);
-
-#if 0
-      if (private->window_cache)
-	gdk_window_cache_destroy (private->window_cache);
-#endif
-
-      contexts = g_list_remove (contexts, private);
-      g_free (private);
-    }
+  g_object_unref(G_OBJECT(context));
 }
 
 /*************************************************************

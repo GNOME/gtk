@@ -9,6 +9,7 @@
 #include <pango/pango-modules.h>
 
 #include <freetype/freetype.h>
+#include <freetype/ftglyph.h>
 #include <freetype/ftgrays.h>
 #if !defined(FREETYPE_MAJOR) || FREETYPE_MAJOR != 2
 #error "We need Freetype 2.0 (beta?)"
@@ -38,11 +39,13 @@ typedef struct {
 
 FT_Library gdk_fb_ft_lib = NULL;
 
+#define USE_FTGRAYS
+
 void
 gdk_fb_font_init(void)
 {
   FT_Init_FreeType(&gdk_fb_ft_lib);
-#if 0
+#ifdef USE_FTGRAYS
   FT_Set_Raster(gdk_fb_ft_lib, &ft_grays_raster); /* If this is removed, also turn off USE_FTGRAYS define in gdkdrawable-fb2.c */
 #endif
 }
@@ -52,6 +55,8 @@ gdk_fb_font_fini(void)
 {
   FT_Done_FreeType(gdk_fb_ft_lib);
 }
+
+void pango_fb_font_set_size(PangoFont *font);
 
 static void pango_fb_font_map_init(PangoFBFontMap *fontmap);
 static PangoFont *pango_fb_font_map_load_font(PangoFontMap *fontmap,
@@ -187,7 +192,7 @@ list_fonts(PangoFBFontMap *fm, const char *family,
 	{
 	  ec = FT_New_Face(gdk_fb_ft_lib, buf, i, &ftf);
 	  if(ec)
-	    continue; /* error opening */
+	    break; /* error opening */
 
 	  FT_Select_Charmap(ftf, ft_encoding_unicode);
 
@@ -197,14 +202,15 @@ list_fonts(PangoFBFontMap *fm, const char *family,
 	    {
 	      g_warning("No family/style on %s", buf);
 	      FT_Done_Face(ftf);
-	      i = n;
-	      continue;
+	      break;
 	    }
 
-	  g_message("Typeface %s/%s", ftf->family_name, ftf->style_name);
 	  pfd = g_new0(PangoFBFontListing, 1);
 	  /* Now add the item */
-	  pfd->desc.family_name = g_strdup(ftf->family_name);
+	  if(ftf->family_name[0] == '/')
+	    pfd->desc.family_name = g_strdup(ftf->family_name+1);
+	  else
+	    pfd->desc.family_name = g_strdup(ftf->family_name);
 
 	  pfd->desc.style = PANGO_STYLE_NORMAL;
 	  pfd->desc.variant = PANGO_VARIANT_NORMAL;
@@ -238,6 +244,8 @@ list_fonts(PangoFBFontMap *fm, const char *family,
 	  i++;
 	}
     }
+
+  closedir(dirh);
 }
 
 static guint
@@ -430,12 +438,14 @@ static void
 pango_fb_font_init (PangoFBFont *font)
 {
   font->desc.size = -1;
-  font->extents = g_hash_table_new(NULL, NULL);
+  font->glyph_info = g_hash_table_new(NULL, NULL);
 }
 
 static gboolean
 g_free_2(gpointer key, gpointer value, gpointer data)
 {
+  PangoFBGlyphInfo *pgi = value;
+  g_free(pgi->fbd.drawable_data.mem);
   g_free(value);
   return TRUE;
 }
@@ -443,9 +453,101 @@ g_free_2(gpointer key, gpointer value, gpointer data)
 static void
 pango_fb_font_clear_extent_cache(PangoFBFont *fbf)
 {
-  g_hash_table_foreach_remove(fbf->extents, g_free_2, NULL);
+  g_hash_table_foreach_remove(fbf->glyph_info, g_free_2, NULL);
 }
-				
+
+PangoFBGlyphInfo *
+pango_fb_font_get_glyph_info(PangoFont *font, PangoGlyph glyph)
+{
+  PangoFBGlyphInfo *pgi;
+  PangoFBFont *fbf = PANGO_FB_FONT(font);
+  FT_Bitmap *renderme;
+  FT_GlyphSlot g;
+  PangoRectangle *my_logical_rect, *my_ink_rect;
+  FT_Face ftf;
+
+  ftf = fbf->ftf;
+
+  pango_fb_font_set_size(font);
+
+  pgi = g_hash_table_lookup(fbf->glyph_info, GUINT_TO_POINTER(glyph));
+  if(pgi)
+    return pgi;
+
+  pgi = g_new0(PangoFBGlyphInfo, 1);
+
+  FT_Load_Glyph(ftf, glyph, FT_LOAD_DEFAULT);
+
+  g = ftf->glyph;
+
+  if(g->format != ft_glyph_format_bitmap)
+    {
+      FT_BitmapGlyph bgy;
+      int bdepth;
+
+#if defined(USE_AA) || 1
+#ifdef USE_FTGRAYS
+      bdepth = 256;
+#else
+      bdepth = 128;
+#endif
+#else
+      bdepth = 0;
+#endif
+
+      if(FT_Get_Glyph_Bitmap(ftf, glyph, 0, bdepth, NULL, &bgy))
+	g_error("Glyph render failed");
+
+      renderme = &bgy->bitmap;
+    }
+  else
+    renderme = &g->bitmap;
+
+  pgi->fbd.drawable_data.mem = g_memdup(renderme->buffer, renderme->pitch * renderme->rows);
+  pgi->fbd.drawable_data.rowstride = renderme->pitch;
+  pgi->fbd.drawable_data.width = pgi->fbd.drawable_data.lim_x = renderme->width;
+  pgi->fbd.drawable_data.height = pgi->fbd.drawable_data.lim_y = renderme->rows;
+
+  switch(renderme->pixel_mode)
+    {
+    case ft_pixel_mode_mono:
+      pgi->fbd.drawable_data.depth = 1;
+      break;
+    case ft_pixel_mode_grays:
+#if defined(USE_FTGRAYS)
+      pgi->fbd.drawable_data.depth = 78;
+#else
+      pgi->fbd.drawable_data.depth = 77;
+#endif
+      break;
+    default:
+      g_assert_not_reached();
+      break;
+    }
+
+  my_ink_rect = &pgi->extents[0];
+  my_logical_rect = &pgi->extents[1];
+
+  {
+    my_ink_rect->width = (PANGO_SCALE * g->metrics.width) >> 6;
+    my_ink_rect->height = (PANGO_SCALE * g->metrics.height) >> 6;
+    my_ink_rect->x = - ((PANGO_SCALE * g->metrics.horiBearingX) >> 6);
+    my_ink_rect->y = - ((PANGO_SCALE * g->metrics.horiBearingY) >> 6);
+  }
+
+  {
+    my_logical_rect->width = (PANGO_SCALE * g->metrics.horiAdvance) >> 6;
+    my_logical_rect->height = (PANGO_SCALE * ftf->size->metrics.height) >> 6;
+    my_logical_rect->x = - ((PANGO_SCALE * g->metrics.horiBearingX) >> 6);
+    my_logical_rect->y = - ((PANGO_SCALE * ftf->size->metrics.ascender) >> 6);
+  }
+
+  pgi->hbearing = ((-g->metrics.horiBearingY) >> 6);
+      
+  g_hash_table_insert(fbf->glyph_info, GUINT_TO_POINTER(glyph), pgi);
+
+  return pgi;
+}
 
 static void pango_fb_font_finalize   (GObject         *object)
 {
@@ -455,7 +557,7 @@ static void pango_fb_font_finalize   (GObject         *object)
   pango_coverage_unref(fbf->coverage);
   g_free(fbf->desc.family_name);
   pango_fb_font_clear_extent_cache(fbf);
-  g_hash_table_destroy(fbf->extents);
+  g_hash_table_destroy(fbf->glyph_info);
 }
 
 static void
@@ -575,56 +677,17 @@ pango_fb_font_get_glyph_extents (PangoFont        *font,
 				 PangoRectangle   *ink_rect,
 				 PangoRectangle   *logical_rect)
 {
-  FT_Face ftf;
   PangoFBFont *fbf;
-  PangoRectangle *my_extents, *my_logical_rect, *my_ink_rect;
-  FT_GlyphSlot gs;
+  PangoRectangle *my_extents;
+  PangoFBGlyphInfo *gi;
 
   fbf = PANGO_FB_FONT(font);
 
   pango_fb_font_set_size(font);
 
-  my_extents = g_hash_table_lookup(fbf->extents, GUINT_TO_POINTER(glyph));
-  if(my_extents)
-    goto out;
+  gi = pango_fb_font_get_glyph_info(font, glyph);
+  my_extents = gi->extents;
 
-  if(!strcmp(fbf->desc.family_name, "Bitstream Charter"))
-    G_BREAKPOINT();
-
-  ftf = fbf->ftf;
-  if(FT_Load_Glyph(ftf, glyph, FT_LOAD_DEFAULT))
-    {
-      if(ink_rect)
-	memset(ink_rect, 0, sizeof(*ink_rect));
-      if(logical_rect)
-	memset(logical_rect, 0, sizeof(*logical_rect));
-
-      return;
-    }
-
-  gs = ftf->glyph;
-
-  my_extents = g_new(PangoRectangle, 2);
-  my_ink_rect = my_extents;
-  my_logical_rect = my_extents + 1;
-
-    {
-      my_ink_rect->width = (PANGO_SCALE * gs->metrics.width) >> 6;
-      my_ink_rect->height = (PANGO_SCALE * gs->metrics.height) >> 6;
-      my_ink_rect->x = - ((PANGO_SCALE * gs->metrics.horiBearingX) >> 6);
-      my_ink_rect->y = - ((PANGO_SCALE * gs->metrics.horiBearingY) >> 6);
-    }
-
-    {
-      my_logical_rect->width = (PANGO_SCALE * gs->metrics.horiAdvance) >> 6;
-      my_logical_rect->height = (PANGO_SCALE * ftf->size->metrics.height) >> 6;
-      my_logical_rect->x = - ((PANGO_SCALE * gs->metrics.horiBearingX) >> 6);
-      my_logical_rect->y = - ((PANGO_SCALE * ftf->size->metrics.ascender) >> 6);
-    }
-      
-    g_hash_table_insert(fbf->extents, GUINT_TO_POINTER(glyph), my_extents);
-
- out:
   if(ink_rect)
     *ink_rect = my_extents[0];
 

@@ -1,3 +1,5 @@
 . Fix CTree
 . DnD?
-. All the standard X cursors
+. Fix xbm cursors (almost done, need to figure out edges thingie).
+. When cursor is changed on active window, really change the cursor
+. Faster

@@ -34,7 +34,7 @@
 
 #include <limits.h>
 
-GdkDrawableClass _gdk_windowing_window_class;
+static gpointer parent_class = NULL;
 
 static void recompute_drawable(GdkDrawable *drawable);
 
@@ -45,15 +45,12 @@ g_free_2nd(gpointer a, gpointer b, gpointer data)
 }
 
 static void
-gdk_fb_window_destroy (GdkDrawable *drawable)
+gdk_window_impl_fb_finalize (GObject *object)
 {
-  GdkWindowFBData *fbd = GDK_WINDOW_FBDATA(drawable);
+  GdkWindowFBData *fbd = GDK_WINDOW_FBDATA(object);
 
-  if (!GDK_DRAWABLE_DESTROYED (drawable))
-    g_warning ("losing last reference to undestroyed window\n");
-
-  if(GDK_WINDOW_P(drawable)->mapped)
-    gdk_window_hide(drawable);
+  if(GDK_WINDOW_P(fbd->drawable_data.wrapper)->mapped)
+    gdk_window_hide(fbd->drawable_data.wrapper);
 
   if(fbd->cursor)
     gdk_cursor_unref(fbd->cursor);
@@ -64,74 +61,90 @@ gdk_fb_window_destroy (GdkDrawable *drawable)
       g_hash_table_destroy(fbd->properties);
     }
 
-  g_free (GDK_DRAWABLE_FBDATA (drawable));
+  G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
-static GdkWindow *
-gdk_fb_window_alloc (void)
+static void
+gdk_window_impl_fb_class_init (GdkWindowFBClass *klass)
 {
-  GdkWindow *window;
-  GdkWindowPrivate *private;
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  //  GdkDrawableClass *drawable_class = GDK_DRAWABLE_CLASS (klass);
   
-  static gboolean initialized = FALSE;
+  parent_class = g_type_class_peek_parent (klass);
 
-  if (!initialized)
+  object_class->finalize = gdk_window_impl_fb_finalize;
+}
+
+static void
+gdk_window_impl_fb_init (GdkWindowFBData *impl)
+{
+  impl->drawable_data.depth = gdk_display->modeinfo.bits_per_pixel;
+  impl->drawable_data.colormap = gdk_colormap_get_system ();
+  impl->event_mask = GDK_STRUCTURE_MASK;
+}
+
+GType
+_gdk_window_impl_get_type (void)
+{
+  static GType object_type = 0;
+
+  if (!object_type)
     {
-      initialized = TRUE;
-
-      _gdk_windowing_window_class = _gdk_fb_drawable_class;
-      _gdk_windowing_window_class.destroy = gdk_fb_window_destroy;
+      static const GTypeInfo object_info =
+      {
+        sizeof (GdkWindowFBClass),
+        (GBaseInitFunc) NULL,
+        (GBaseFinalizeFunc) NULL,
+        (GClassInitFunc) gdk_window_impl_fb_class_init,
+        NULL,           /* class_finalize */
+        NULL,           /* class_data */
+        sizeof (GdkWindowFBData),
+        0,              /* n_preallocs */
+        (GInstanceInitFunc) gdk_window_impl_fb_init,
+      };
+      
+      object_type = g_type_register_static (gdk_drawable_impl_fb_get_type(),
+                                            "GdkWindowFB",
+                                            &object_info);
     }
-
-  window = _gdk_window_alloc ();
-  private = (GdkWindowPrivate *)window;
-
-  private->drawable.klass = &_gdk_window_class;
-  private->drawable.klass_data = g_new0 (GdkWindowFBData, 1);
-  private->drawable.depth = gdk_display->modeinfo.bits_per_pixel;
-  private->drawable.colormap = gdk_colormap_get_system ();
-  GDK_WINDOW_FBDATA(private)->event_mask = GDK_STRUCTURE_MASK;
-
-  return window;
+  
+  return object_type;
 }
 
 #include "/usr/include/X11/bitmaps/left_ptr"
 #include "/usr/include/X11/bitmaps/left_ptrmsk"
 
 void
-gdk_window_init (void)
+_gdk_windowing_window_init (void)
 {
+  GdkWindowAttr attr;
+
   GdkBitmap *ptr, *mask;
   GdkCursor *cursor;
   GdkWindowPrivate *private;
 
-  gdk_parent_root = gdk_fb_window_alloc ();
-  private = (GdkWindowPrivate *)gdk_parent_root;
-
-  private->drawable.window_type = GDK_WINDOW_ROOT;
-  private->drawable.width = gdk_screen_width ();
-  private->drawable.height = gdk_screen_height ();
-  private->mapped = TRUE;
-  private->x = 0;
-  private->y = 0;
-
-  GDK_DRAWABLE_FBDATA(private)->mem = gdk_display->fbmem;
-#if 0
-  GDK_DRAWABLE_FBDATA(private)->rowstride = gdk_display->modeinfo.xres * (gdk_display->modeinfo.bits_per_pixel >> 3);
-#else
-  GDK_DRAWABLE_FBDATA(private)->rowstride = gdk_display->sinfo.line_length;
-#endif
-  GDK_DRAWABLE_FBDATA(private)->lim_x = gdk_display->modeinfo.xres;
-  GDK_DRAWABLE_FBDATA(private)->lim_y = gdk_display->modeinfo.yres;
-  GDK_WINDOW_FBDATA(private)->event_mask = GDK_EXPOSURE_MASK;
-
-  gdk_fb_drawable_clear(gdk_parent_root);
-
   ptr = gdk_bitmap_create_from_data(gdk_parent_root, left_ptr_bits, left_ptr_width, left_ptr_height);
   mask = gdk_bitmap_create_from_data(gdk_parent_root, left_ptrmsk_bits, left_ptrmsk_width, left_ptrmsk_height);
+#if 1
   cursor = gdk_cursor_new_from_pixmap(ptr, mask, NULL, NULL, left_ptr_x_hot, left_ptr_y_hot);
+#else
+  cursor = gdk_cursor_new(GDK_LEFT_PTR);
+#endif
 
-  gdk_window_set_cursor(gdk_parent_root, cursor);
+  attr.width = gdk_screen_width();
+  attr.height = gdk_screen_height();
+  attr.window_type = GDK_WINDOW_ROOT;
+  attr.cursor = cursor;
+  attr.event_mask = GDK_EXPOSURE_MASK;
+  attr.wclass = GDK_INPUT_OUTPUT;
+  gdk_parent_root = gdk_window_new(NULL, &attr, GDK_WA_CURSOR);
+  private = (GdkWindowPrivate *)gdk_parent_root;
+
+  private->mapped = TRUE;
+
+  GDK_DRAWABLE_IMPL_FBDATA(gdk_parent_root)->lim_x = attr.width;
+  GDK_DRAWABLE_IMPL_FBDATA(gdk_parent_root)->lim_y = attr.height;
+  gdk_fb_drawable_clear(gdk_parent_root);
 }
 
 GdkWindow*
@@ -143,6 +156,7 @@ gdk_window_new (GdkWindow     *parent,
   GdkWindowPrivate *private;
   GdkWindowPrivate *parent_private;
   GdkVisual *visual;
+  GdkWindowFBData *impl;
 
   int x, y, depth;
   
@@ -152,13 +166,11 @@ gdk_window_new (GdkWindow     *parent,
     parent = gdk_parent_root;
   
   parent_private = (GdkWindowPrivate*) parent;
-  if (GDK_DRAWABLE_DESTROYED (parent))
-    return NULL;
   
-  window = gdk_fb_window_alloc ();
-  private = (GdkWindowPrivate *)window;
+  window = (GdkWindow *)g_type_create_instance(GDK_TYPE_WINDOW);
+  private = (GdkWindowObject *)window;
 
-  private->parent = parent;
+  private->parent = parent_private;
 
   if (attributes_mask & GDK_WA_X)
     x = attributes->x;
@@ -174,41 +186,49 @@ gdk_window_new (GdkWindow     *parent,
 
   if (attributes_mask & GDK_WA_VISUAL)
     visual = attributes->visual;
+  else
+    visual = gdk_visual_get_system();
 
+  impl = (GdkWindowFBData *)private->impl;
+  impl->drawable_data.wrapper = window;
   private->x = x;
   private->y = y;
-  private->drawable.width = (attributes->width > 1) ? (attributes->width) : (1);
-  private->drawable.height = (attributes->height > 1) ? (attributes->height) : (1);
-  private->drawable.window_type = attributes->window_type;
-  GDK_DRAWABLE_FBDATA(private)->mem = gdk_display->fbmem;
-  GDK_DRAWABLE_FBDATA(private)->rowstride = GDK_DRAWABLE_FBDATA(gdk_parent_root)->rowstride;
+  impl->drawable_data.width = (attributes->width > 1) ? (attributes->width) : (1);
+  impl->drawable_data.height = (attributes->height > 1) ? (attributes->height) : (1);
+  private->window_type = impl->drawable_data.window_type = attributes->window_type;
+  impl->drawable_data.mem = gdk_display->fbmem;
+  impl->drawable_data.rowstride = gdk_display->sinfo.line_length;
   gdk_window_move_resize (window, x, y,
-			  private->drawable.width, private->drawable.height);
+			  impl->drawable_data.width, impl->drawable_data.height);
 
   if (attributes->wclass == GDK_INPUT_OUTPUT)
     {
       depth = visual->depth;
 
       private->input_only = FALSE;
-      private->drawable.depth = depth;
+      private->depth = impl->drawable_data.depth;
       
       if ((attributes_mask & GDK_WA_COLORMAP)
 	  && attributes->colormap)
-	private->drawable.colormap = attributes->colormap;
+	impl->drawable_data.colormap = attributes->colormap;
+      else
+	impl->drawable_data.colormap = gdk_colormap_get_system();
       
-      switch (private->drawable.window_type)
+      switch (impl->drawable_data.window_type)
 	{
 	case GDK_WINDOW_TOPLEVEL:
 	case GDK_WINDOW_CHILD:
 	case GDK_WINDOW_DIALOG:
 	case GDK_WINDOW_TEMP:
+	default:
 	  break;
 	  
 	case GDK_WINDOW_ROOT:
-	  g_error ("cannot make windows of type GDK_WINDOW_ROOT");
+	  if(gdk_parent_root)
+	    g_error ("cannot make windows of type GDK_WINDOW_ROOT");
 	  break;
-	case GDK_WINDOW_PIXMAP:
-	  g_error ("cannot make windows of type GDK_WINDOW_PIXMAP (use gdk_pixmap_new)");
+	case GDK_DRAWABLE_PIXMAP:
+	  g_error ("cannot make windows of type GDK_DRAWABLE_PIXMAP (use gdk_pixmap_new)");
 	  break;
 	}
     }
@@ -216,23 +236,25 @@ gdk_window_new (GdkWindow     *parent,
     {
       depth = 0;
       private->input_only = TRUE;
-      GDK_WINDOW_FBDATA(private)->level = 10000;
-      private->drawable.colormap = NULL;
+      impl->level = 10000;
+      impl->drawable_data.colormap = NULL;
     }
 
   gdk_drawable_ref (window);
   
-  if (private->drawable.colormap)
-    gdk_colormap_ref (private->drawable.colormap);
+  if (impl->drawable_data.colormap)
+    gdk_colormap_ref (impl->drawable_data.colormap);
   
   gdk_window_set_cursor (window, ((attributes_mask & GDK_WA_CURSOR) ?
 				  (attributes->cursor) :
 				  NULL));
   
   if (parent_private)
+    {
     parent_private->children = g_list_prepend (parent_private->children, window);
-  if(parent_private && parent_private->children->next)
-    GDK_WINDOW_FBDATA(private)->level = GDK_WINDOW_FBDATA(parent_private->children->next->data)->level + 1;
+    if(parent_private->children->next)
+      impl->level = GDK_WINDOW_FBDATA(GDK_WINDOW_P(parent_private->children->next->data)->impl)->level + 1;
+    }
   
   return window;
 }
@@ -248,6 +270,7 @@ _gdk_windowing_window_destroy(GdkWindow *window,
 			      gboolean   recursing,
 			      gboolean   foreign_destroy)
 {
+#if 0
   GdkWindowPrivate *private;
   GdkWindowPrivate *temp_private;
   GdkWindow *temp_window;
@@ -259,14 +282,14 @@ _gdk_windowing_window_destroy(GdkWindow *window,
   
   private = (GdkWindowPrivate*) window;
   
-  switch (private->drawable.window_type)
+  switch (private->window_type)
     {
     case GDK_WINDOW_TOPLEVEL:
     case GDK_WINDOW_CHILD:
     case GDK_WINDOW_DIALOG:
     case GDK_WINDOW_TEMP:
     case GDK_WINDOW_FOREIGN:
-      if (!private->drawable.destroyed)
+      if (!private->destroyed)
 	{
 	  if (private->parent)
 	    {
@@ -275,12 +298,12 @@ _gdk_windowing_window_destroy(GdkWindow *window,
 		parent_private->children = g_list_remove (parent_private->children, window);
 	    }
 
-	  if (private->bg_pixmap && private->bg_pixmap != GDK_PARENT_RELATIVE_BG)
+	  if (private->bg_pixmap && private->bg_pixmap != GDK_PARENT_RELATIVE_BG && private->bg_pixmap != GDK_NO_BG)
 	    {
 	      gdk_pixmap_unref (private->bg_pixmap);
 	      private->bg_pixmap = NULL;
 	    }
-	  
+
 	  if (GDK_DRAWABLE_TYPE (window) != GDK_WINDOW_FOREIGN)
 	    {
 	      children = tmp = private->children;
@@ -317,7 +340,7 @@ _gdk_windowing_window_destroy(GdkWindow *window,
 	      private->filters = NULL;
 	    }
 	  
-	  if (private->drawable.window_type == GDK_WINDOW_FOREIGN)
+	  if (private->window_type == GDK_WINDOW_FOREIGN)
 	    {
 	      if (our_destroy && (private->parent != NULL))
 		{
@@ -334,8 +357,8 @@ _gdk_windowing_window_destroy(GdkWindow *window,
 		}
 	    }
 	  
-	  if (private->drawable.colormap)
-	    gdk_colormap_unref (private->drawable.colormap);
+	  if (private->colormap)
+	    gdk_colormap_unref (private->colormap);
 	  
 	  private->mapped = FALSE;
 	  private->drawable.destroyed = TRUE;
@@ -350,25 +373,10 @@ _gdk_windowing_window_destroy(GdkWindow *window,
       g_error ("called gdk_window_destroy on a pixmap (use gdk_pixmap_unref)");
       break;
     }
+#endif
 }
 
 /* This function is called when the XWindow is really gone.  */
-
-void
-gdk_window_destroy_notify (GdkWindow *window)
-{
-  g_return_if_fail (window != NULL);
-  
-  if (!GDK_DRAWABLE_DESTROYED (window))
-    {
-      if (GDK_DRAWABLE_TYPE(window) != GDK_WINDOW_FOREIGN)
-	g_warning ("GdkWindow %#x unexpectedly destroyed", GPOINTER_TO_UINT(window));
-
-      _gdk_windowing_window_destroy (window, TRUE, TRUE);
-    }
-  
-  gdk_drawable_unref (window);
-}
 
 static gboolean all_parents_shown(GdkWindowPrivate *private)
 {
@@ -386,11 +394,12 @@ static gboolean all_parents_shown(GdkWindowPrivate *private)
 static void
 send_map_events(GdkWindowPrivate *private, gboolean is_map)
 {
-  GdkEvent *event;
   GList *l;
-  GdkWindow *parent = private->parent;
+  GdkWindow *parent = (GdkWindow *)private->parent;
 
-  if(!private->mapped || GDK_DRAWABLE_DESTROYED(private))
+  g_assert(is_map);
+
+  if(!private->mapped)
     return;
 
   if(is_map)
@@ -402,112 +411,159 @@ send_map_events(GdkWindowPrivate *private, gboolean is_map)
   if(!parent)
     parent = (GdkWindow *)private;
 
-  if(((GDK_DRAWABLE_FBDATA(private)->abs_x > GDK_DRAWABLE_FBDATA(parent)->lim_x)
-      || (GDK_DRAWABLE_FBDATA(private)->abs_y > GDK_DRAWABLE_FBDATA(parent)->lim_y)
-      || (GDK_DRAWABLE_FBDATA(private)->lim_x < GDK_DRAWABLE_FBDATA(parent)->llim_x)
-      || (GDK_DRAWABLE_FBDATA(private)->lim_y < GDK_DRAWABLE_FBDATA(parent)->llim_y)))
+  if(((GDK_DRAWABLE_IMPL_FBDATA(private)->abs_x > GDK_DRAWABLE_IMPL_FBDATA(parent)->lim_x)
+      || (GDK_DRAWABLE_IMPL_FBDATA(private)->abs_y > GDK_DRAWABLE_IMPL_FBDATA(parent)->lim_y)
+      || (GDK_DRAWABLE_IMPL_FBDATA(private)->lim_x < GDK_DRAWABLE_IMPL_FBDATA(parent)->llim_x)
+      || (GDK_DRAWABLE_IMPL_FBDATA(private)->lim_y < GDK_DRAWABLE_IMPL_FBDATA(parent)->llim_y)))
      return;
 
   if(is_map)
     gdk_window_clear((GdkWindow *)private);
 
+#if 0
   event = gdk_event_new();
   event->expose.type = GDK_EXPOSE;
   event->expose.window = gdk_window_ref((GdkWindow *)private);
-  if(GDK_DRAWABLE_FBDATA(private)->abs_x > GDK_DRAWABLE_FBDATA(parent)->llim_x)
+  if(GDK_DRAWABLE_IMPL_FBDATA(private)->abs_x > GDK_DRAWABLE_IMPL_FBDATA(parent)->llim_x)
     event->expose.area.x = 0;
   else
-    event->expose.area.x = GDK_DRAWABLE_FBDATA(parent)->llim_x - GDK_DRAWABLE_FBDATA(private)->abs_x;
+    event->expose.area.x = GDK_DRAWABLE_IMPL_FBDATA(parent)->llim_x - GDK_DRAWABLE_IMPL_FBDATA(private)->abs_x;
 
-  if(GDK_DRAWABLE_FBDATA(private)->abs_y > GDK_DRAWABLE_FBDATA(parent)->llim_y)
+  if(GDK_DRAWABLE_IMPL_FBDATA(private)->abs_y > GDK_DRAWABLE_IMPL_FBDATA(parent)->llim_y)
     event->expose.area.y = 0;
   else
-    event->expose.area.y = GDK_DRAWABLE_FBDATA(parent)->llim_y - GDK_DRAWABLE_FBDATA(private)->abs_y;
+    event->expose.area.y = GDK_DRAWABLE_IMPL_FBDATA(parent)->llim_y - GDK_DRAWABLE_IMPL_FBDATA(private)->abs_y;
 
-  event->expose.area.width = MIN(private->drawable.width,
-				 GDK_DRAWABLE_FBDATA(private)->lim_x - GDK_DRAWABLE_FBDATA(private)->abs_x);
-  event->expose.area.height = MIN(private->drawable.height,
-				  GDK_DRAWABLE_FBDATA(private)->lim_y - GDK_DRAWABLE_FBDATA(private)->abs_y);
+  event->expose.area.width = MIN(GDK_DRAWABLE_IMPL_FBDATA(private)->width,
+				 GDK_DRAWABLE_IMPL_FBDATA(private)->lim_x - GDK_DRAWABLE_IMPL_FBDATA(private)->abs_x);
+  event->expose.area.height = MIN(GDK_DRAWABLE_IMPL_FBDATA(private)->height,
+				  GDK_DRAWABLE_IMPL_FBDATA(private)->lim_y - GDK_DRAWABLE_IMPL_FBDATA(private)->abs_y);
   if(event->expose.area.width > 0
      && event->expose.area.height > 0)
     {
       gdk_event_queue_append(event);
-      for(l = private->children; l; l = l->next)
-	send_map_events(l->data, is_map);
     }
   else
     gdk_event_free(event);
+#endif
+  for(l = private->children; l; l = l->next)
+    send_map_events(l->data, is_map);
+}
+
+/* Cut & paste versions of the stuff in gdkwindow.c, with the addition of clearing the newly exposed region. */
+void
+gdk_window_invalidate_region_clear(GdkWindow *window, GdkRegion *region)
+{
+  int i;
+  GdkWindowPrivate *private = GDK_WINDOW_P(window);
+
+  if (private->input_only)
+    return;
+
+  if(private->bg_pixmap != GDK_NO_BG)
+    for(i = 0; i < region->numRects; i++)
+      gdk_window_clear_area(window,
+			    region->rects[i].x1,
+			    region->rects[i].y1,
+			    region->rects[i].x2 - region->rects[i].x1,
+			    region->rects[i].y2 - region->rects[i].y1);
+
+  gdk_window_invalidate_region(window, region, FALSE);
+
+  {
+    GList *tmp_list;
+    GdkRectangle child_rect;
+    GdkRegion *child_region;
+
+    tmp_list = private->children;
+    while (tmp_list)
+      {
+	GdkWindowObject *child = tmp_list->data;
+	tmp_list = tmp_list->next;
+
+	if (!child->input_only)
+	  {
+	    gint width, height;
+
+	    gdk_drawable_get_size (GDK_DRAWABLE (child),
+				   &width, &height);
+              
+	    child_rect.x = child->x;
+	    child_rect.y = child->y;
+	    child_rect.width = width;
+	    child_rect.height = height;
+	      
+	    child_region = gdk_region_rectangle (&child_rect);
+	    gdk_region_intersect (child_region, region);
+	      
+	    if (!gdk_region_empty (child_region))
+	      {
+		gdk_region_offset (child_region, - child_rect.x, - child_rect.y);
+		gdk_window_invalidate_region_clear ((GdkWindow *)child, child_region);
+	      }
+	      
+	    gdk_region_destroy (child_region);
+	  }
+      }
+  }  
+}
+
+void
+gdk_window_invalidate_rect_clear(GdkWindow *window, GdkRectangle *rect)
+{
+  GdkWindowPrivate *private = GDK_WINDOW_P(window);
+
+  if (private->input_only)
+    return;
+
+  if(GDK_WINDOW_P(window)->bg_pixmap != GDK_NO_BG)
+    gdk_window_clear_area(window, rect->x, rect->y, rect->width, rect->height);
+  gdk_window_invalidate_rect(window, rect, FALSE);
+
+  {
+    GList *tmp_list;
+    GdkRectangle child_rect, new_rect;
+
+    tmp_list = private->children;
+    while (tmp_list)
+      {
+	GdkWindowObject *child = tmp_list->data;
+	tmp_list = tmp_list->next;
+
+	if (!child->input_only)
+	  {
+	    gint width, height;
+
+	    width = GDK_DRAWABLE_IMPL_FBDATA(child)->width;
+	    height = GDK_DRAWABLE_IMPL_FBDATA(child)->height;
+              
+	    child_rect.x = child->x;
+	    child_rect.y = child->y;
+	    child_rect.width = width;
+	    child_rect.height = height;
+	      
+	    if (gdk_rectangle_intersect (rect, &child_rect, &new_rect))
+	      {
+		new_rect.x -= child_rect.x;
+		new_rect.y -= child_rect.y;
+		  
+		gdk_window_invalidate_rect_clear ((GdkWindow *)child, &new_rect);
+	      }
+	  }
+      }
+  }
 
 }
 
 void
 gdk_fb_redraw_all(void)
 {
-  send_map_events((GdkWindowPrivate *)gdk_parent_root, FALSE);
-}
-
-static
-void gdk_fb_window_visibility_crossing(GdkWindow *window, gboolean is_show)
-{
-  gint winx, winy;
-  GdkModifierType my_mask;
-
-  gdk_input_ps2_get_mouseinfo(&winx, &winy, &my_mask);
-
-  if(winx >= GDK_DRAWABLE_FBDATA(window)->llim_x
-     && winx < GDK_DRAWABLE_FBDATA(window)->lim_x
-     && winy >= GDK_DRAWABLE_FBDATA(window)->llim_y
-     && winy < GDK_DRAWABLE_FBDATA(window)->lim_y && 0)
-    {
-      GdkWindow *oldwin, *newwin, *curwin;
-      GdkEvent *event;
-
-      curwin = gdk_window_get_pointer(NULL, NULL, NULL, NULL);
-
-      if(is_show)
-	{
-	  /* Window is about to be shown */
-	  oldwin = curwin;
-	  newwin = window;
-	}
-      else
-	{
-	  /* Window is about to be hidden */
-	  oldwin = window;
-	  newwin = curwin;
-	}
-      event = gdk_event_make(oldwin, GDK_LEAVE_NOTIFY, TRUE);
-      if(event)
-	{
-	  guint x_int, y_int;
-	  event->crossing.subwindow = gdk_window_ref(newwin);
-	  gdk_window_get_root_origin(oldwin, &x_int, &y_int);
-	  event->crossing.x = winx - x_int;
-	  event->crossing.y = winy - y_int;
-	  event->crossing.x_root = winx;
-	  event->crossing.y_root = winy;
-	  event->crossing.mode = GDK_CROSSING_NORMAL;
-	  event->crossing.detail = GDK_NOTIFY_UNKNOWN;
-	  event->crossing.focus = FALSE;
-	  event->crossing.state = my_mask;
-	}
-
-      event = gdk_event_make(newwin, GDK_ENTER_NOTIFY, TRUE);
-      if(event)
-	{
-	  guint x_int, y_int;
-	  event->crossing.subwindow = gdk_window_ref(oldwin);
-	  gdk_window_get_root_origin(newwin, &x_int, &y_int);
-	  event->crossing.x = winx - x_int;
-	  event->crossing.y = winy - y_int;
-	  event->crossing.x_root = winx;
-	  event->crossing.y_root = winy;
-	  event->crossing.mode = GDK_CROSSING_NORMAL;
-	  event->crossing.detail = GDK_NOTIFY_UNKNOWN;
-	  event->crossing.focus = FALSE;
-	  event->crossing.state = my_mask;
-	}
-    }
+  GdkRectangle r;
+  r.x = r.y = 0;
+  r.width = GDK_DRAWABLE_IMPL_FBDATA(gdk_parent_root)->width;
+  r.height = GDK_DRAWABLE_IMPL_FBDATA(gdk_parent_root)->height;
+  gdk_window_invalidate_rect(gdk_parent_root, &r, TRUE);
+  gdk_window_process_all_updates();
 }
 
 void
@@ -519,70 +575,31 @@ gdk_window_show (GdkWindow *window)
   
   private = (GdkWindowPrivate*) window;
 
-  if (!private->drawable.destroyed && !private->mapped)
+  if (!private->destroyed && !private->mapped)
     {
       private->mapped = TRUE;
 
       if(all_parents_shown((GdkWindowPrivate *)private->parent))
 	{
+	  GdkRectangle rect;
+
 	  recompute_drawable((GdkDrawable *)window);
+
 	  send_map_events(private, TRUE);
 
 	  private->mapped = FALSE; /* a hack, ayup, to make gdk_window_get_pointer get the other window */
 	  gdk_fb_window_visibility_crossing(window, TRUE);
 	  private->mapped = TRUE;
+
+	  if(private->input_only)
+	    return;
+
+	  rect.x = GDK_DRAWABLE_IMPL_FBDATA(window)->llim_x;
+	  rect.y = GDK_DRAWABLE_IMPL_FBDATA(window)->llim_y;
+	  rect.width = GDK_DRAWABLE_IMPL_FBDATA(window)->lim_x - rect.x;
+	  rect.height = GDK_DRAWABLE_IMPL_FBDATA(window)->lim_y - rect.y;
+	  gdk_window_invalidate_rect_clear(gdk_parent_root, &rect);
 	}
-    }
-}
-
-static gboolean
-rects_overlap(GdkRectangle *r1, GdkRectangle *r2)
-{
-  if(r1->x > (r2->x + r2->width))
-    return FALSE;
-  if(r2->x > (r1->x + r1->width))
-    return FALSE;
-  if(r1->y > (r2->y + r2->height))
-    return FALSE;
-  if(r2->y > (r1->y + r1->height))
-    return FALSE;
-  
-  return TRUE;
-}
-
-static void
-gdk_window_on_hide(GdkWindow *window, GdkRectangle *in_rect, GdkWindow *ignore)
-{
-  GdkEvent *event;
-  GdkRectangle this_rect, test_rect;
-
-  if(!GDK_WINDOW_P(window)->mapped || window == ignore || GDK_WINDOW_P(window)->input_only)
-    return;
-
-  this_rect.x = MAX(GDK_DRAWABLE_FBDATA(window)->llim_x - GDK_DRAWABLE_FBDATA(window)->abs_x, 0);
-
-  this_rect.y = MAX(GDK_DRAWABLE_FBDATA(window)->llim_y - GDK_DRAWABLE_FBDATA(window)->abs_y, 0);
-
-  this_rect.width = MIN(GDK_DRAWABLE_P(window)->width,
-			GDK_DRAWABLE_FBDATA(window)->lim_x - GDK_DRAWABLE_FBDATA(window)->abs_x);
-  this_rect.height = MIN(GDK_DRAWABLE_P(window)->height,
-			 GDK_DRAWABLE_FBDATA(window)->lim_y - GDK_DRAWABLE_FBDATA(window)->abs_y);
-
-  test_rect = this_rect;
-  test_rect.x += GDK_DRAWABLE_FBDATA(window)->abs_x;
-  test_rect.y += GDK_DRAWABLE_FBDATA(window)->abs_y;
-  if(this_rect.width > 0
-     && this_rect.height > 0
-     && rects_overlap(&test_rect, in_rect))
-    {
-      GList *l;
-
-      event = gdk_event_make(window, GDK_EXPOSE, TRUE);
-      if(event)
-	event->expose.area = this_rect;
-
-      for(l = GDK_WINDOW_P(window)->children; l; l = l->next)
-	gdk_window_on_hide(l->data, in_rect, ignore);
     }
 }
 
@@ -595,26 +612,34 @@ gdk_window_hide (GdkWindow *window)
   
   private = (GdkWindowPrivate*) window;
 
-  if (!private->drawable.destroyed && private->mapped)
+  if (!private->destroyed && private->mapped)
     {
       GdkEvent *event;
       GdkRectangle r;
+      gboolean do_hide;
 
       event = gdk_event_make(window, GDK_UNMAP, TRUE);
 
-      r.x = GDK_DRAWABLE_FBDATA(window)->llim_x;
-      r.y = GDK_DRAWABLE_FBDATA(window)->llim_y;
-      r.width = GDK_DRAWABLE_FBDATA(window)->lim_x - r.x;
-      r.height = GDK_DRAWABLE_FBDATA(window)->lim_y - r.y;
+      r.x = GDK_DRAWABLE_IMPL_FBDATA(window)->llim_x;
+      r.y = GDK_DRAWABLE_IMPL_FBDATA(window)->llim_y;
+      r.width = GDK_DRAWABLE_IMPL_FBDATA(window)->lim_x - r.x;
+      r.height = GDK_DRAWABLE_IMPL_FBDATA(window)->lim_y - r.y;
 
       private->mapped = FALSE;
-      gdk_window_on_hide(private->parent, &r, NULL);
 
-      if(private->parent == gdk_parent_root)
-	gdk_fb_drawable_clear((GdkDrawable *)gdk_parent_root);
+      if(private->parent == GDK_WINDOW_P(gdk_parent_root))
+	gdk_fb_drawable_clear(gdk_parent_root);
 
       if(all_parents_shown((GdkWindowPrivate *)private->parent))
 	gdk_fb_window_visibility_crossing(window, FALSE);
+
+      do_hide = gdk_fb_cursor_need_hide(&r);
+
+      if(do_hide)
+	gdk_fb_cursor_hide();
+      gdk_window_invalidate_rect_clear(gdk_parent_root, &r);
+      if(do_hide)
+	gdk_fb_cursor_unhide();
     }
 }
 
@@ -635,7 +660,7 @@ gdk_window_move (GdkWindow *window,
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   gdk_window_move_resize (window, x, y,
-			  private->drawable.width, private->drawable.height);
+			  GDK_DRAWABLE_IMPL_FBDATA(private)->width, GDK_DRAWABLE_IMPL_FBDATA(private)->height);
 }
 
 void
@@ -667,38 +692,45 @@ recompute_abs_positions(GdkDrawable *drawable, gint parent_x, gint parent_y,
   if(GDK_IS_WINDOW(drawable))
     {
       GdkWindowPrivate *private = GDK_WINDOW_P(drawable);
+      int x, y;
 
       if(!private->mapped)
 	return;
 
-      GDK_DRAWABLE_FBDATA(private)->abs_x = parent_x + private->x;
-      GDK_DRAWABLE_FBDATA(private)->abs_y = parent_y + private->y;
-      GDK_DRAWABLE_FBDATA(private)->llim_x = MIN(MAX(parent_llim_x, GDK_DRAWABLE_FBDATA(private)->abs_x),
-						 parent_lim_x);
-      GDK_DRAWABLE_FBDATA(private)->llim_y = MIN(MAX(parent_llim_y, GDK_DRAWABLE_FBDATA(private)->abs_y),
-						 parent_lim_y);
-      GDK_DRAWABLE_FBDATA(private)->lim_x = MAX(MIN(parent_lim_x, GDK_DRAWABLE_FBDATA(private)->abs_x + GDK_DRAWABLE_P(private)->width),
-						GDK_DRAWABLE_FBDATA(private)->llim_x);
-      GDK_DRAWABLE_FBDATA(private)->lim_y = MAX(MIN(parent_lim_y,
-						GDK_DRAWABLE_FBDATA(private)->abs_y + GDK_DRAWABLE_P(private)->height),
-						GDK_DRAWABLE_FBDATA(private)->llim_y);
+      
+      GDK_DRAWABLE_IMPL_FBDATA(private)->abs_x = parent_x + private->x;
+      GDK_DRAWABLE_IMPL_FBDATA(private)->abs_y = parent_y + private->y;
+      x = MAX(parent_llim_x, GDK_DRAWABLE_IMPL_FBDATA(private)->abs_x);
+      x = MIN(x, parent_lim_x);
+      GDK_DRAWABLE_IMPL_FBDATA(private)->llim_x = x;
+      y = MAX(parent_llim_y, GDK_DRAWABLE_IMPL_FBDATA(private)->abs_y);
+      y = MIN(y, parent_lim_y);
+      GDK_DRAWABLE_IMPL_FBDATA(private)->llim_y = y;
+      x = MIN(parent_lim_x,
+	      GDK_DRAWABLE_IMPL_FBDATA(private)->abs_x + GDK_DRAWABLE_IMPL_FBDATA(private)->width);
+      x = MAX(x, GDK_DRAWABLE_IMPL_FBDATA(private)->llim_x);
+      GDK_DRAWABLE_IMPL_FBDATA(private)->lim_x = x;
+      y = MIN(parent_lim_y,
+	      GDK_DRAWABLE_IMPL_FBDATA(private)->abs_y + GDK_DRAWABLE_IMPL_FBDATA(private)->height);
+      y = MAX(y, GDK_DRAWABLE_IMPL_FBDATA(private)->llim_y);
+      GDK_DRAWABLE_IMPL_FBDATA(private)->lim_y = y;
 
-      g_assert(GDK_DRAWABLE_FBDATA(private)->llim_x <= GDK_DRAWABLE_FBDATA(private)->lim_x);
-      g_assert(GDK_DRAWABLE_FBDATA(private)->llim_y <= GDK_DRAWABLE_FBDATA(private)->lim_y);
+      g_assert(GDK_DRAWABLE_IMPL_FBDATA(private)->llim_x <= GDK_DRAWABLE_IMPL_FBDATA(private)->lim_x);
+      g_assert(GDK_DRAWABLE_IMPL_FBDATA(private)->llim_y <= GDK_DRAWABLE_IMPL_FBDATA(private)->lim_y);
 
       for(l = private->children; l; l = l->next)
-	recompute_abs_positions(l->data, GDK_DRAWABLE_FBDATA(private)->abs_x, GDK_DRAWABLE_FBDATA(private)->abs_y,
-				GDK_DRAWABLE_FBDATA(private)->llim_x, GDK_DRAWABLE_FBDATA(private)->llim_y,
-				GDK_DRAWABLE_FBDATA(private)->lim_x, GDK_DRAWABLE_FBDATA(private)->lim_y);
+	recompute_abs_positions(l->data, GDK_DRAWABLE_IMPL_FBDATA(private)->abs_x, GDK_DRAWABLE_IMPL_FBDATA(private)->abs_y,
+				GDK_DRAWABLE_IMPL_FBDATA(private)->llim_x, GDK_DRAWABLE_IMPL_FBDATA(private)->llim_y,
+				GDK_DRAWABLE_IMPL_FBDATA(private)->lim_x, GDK_DRAWABLE_IMPL_FBDATA(private)->lim_y);
     }
   else
     {
-      GDK_DRAWABLE_FBDATA(drawable)->abs_x = 0;
-      GDK_DRAWABLE_FBDATA(drawable)->abs_y = 0;
-      GDK_DRAWABLE_FBDATA(drawable)->llim_x = 0;
-      GDK_DRAWABLE_FBDATA(drawable)->llim_y = 0;
-      GDK_DRAWABLE_FBDATA(drawable)->lim_x = GDK_DRAWABLE_P(drawable)->width;
-      GDK_DRAWABLE_FBDATA(drawable)->lim_y = GDK_DRAWABLE_P(drawable)->height;
+      GDK_DRAWABLE_IMPL_FBDATA(drawable)->abs_x = 0;
+      GDK_DRAWABLE_IMPL_FBDATA(drawable)->abs_y = 0;
+      GDK_DRAWABLE_IMPL_FBDATA(drawable)->llim_x = 0;
+      GDK_DRAWABLE_IMPL_FBDATA(drawable)->llim_y = 0;
+      GDK_DRAWABLE_IMPL_FBDATA(drawable)->lim_x = GDK_DRAWABLE_IMPL_FBDATA(drawable)->width;
+      GDK_DRAWABLE_IMPL_FBDATA(drawable)->lim_y = GDK_DRAWABLE_IMPL_FBDATA(drawable)->height;
     }
 }
 
@@ -710,19 +742,132 @@ recompute_drawable(GdkDrawable *drawable)
       GdkWindowPrivate *private = GDK_WINDOW_P(drawable);
       GdkWindow *parent;
 
-      parent = private->parent;
+      parent = (GdkWindow *)private->parent;
       if(!parent)
 	parent = gdk_parent_root;
 
-      recompute_abs_positions(drawable, GDK_DRAWABLE_FBDATA(parent)->abs_x,
-			      GDK_DRAWABLE_FBDATA(parent)->abs_y,
-			      GDK_DRAWABLE_FBDATA(parent)->llim_x,
-			      GDK_DRAWABLE_FBDATA(parent)->llim_y,
-			      GDK_DRAWABLE_FBDATA(parent)->lim_x,
-			      GDK_DRAWABLE_FBDATA(parent)->lim_y);
+      recompute_abs_positions(drawable, GDK_DRAWABLE_IMPL_FBDATA(parent)->abs_x,
+			      GDK_DRAWABLE_IMPL_FBDATA(parent)->abs_y,
+			      GDK_DRAWABLE_IMPL_FBDATA(parent)->llim_x,
+			      GDK_DRAWABLE_IMPL_FBDATA(parent)->llim_y,
+			      GDK_DRAWABLE_IMPL_FBDATA(parent)->lim_x,
+			      GDK_DRAWABLE_IMPL_FBDATA(parent)->lim_y);
     }
   else
     recompute_abs_positions(drawable, 0, 0, 0, 0, INT_MAX, INT_MAX);
+}
+
+void
+gdk_fb_window_move_resize (GdkWindow *window,
+			   gint       x,
+			   gint       y,
+			   gint       width,
+			   gint       height,
+			   gboolean   send_expose_events)
+{
+  GdkWindowPrivate *private;
+  gint dx, dy, dw, dh;
+
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (width < 1)
+    width = 1;
+  if (height < 1)
+    height = 1;
+
+  private = (GdkWindowPrivate*) window;
+
+  if (!private->destroyed)
+    {
+      GdkRegion *old_region;
+      GdkRectangle old_rect;
+
+      if(private->input_only)
+	send_expose_events = FALSE;
+
+      if(private->mapped && send_expose_events)
+	{
+	  old_region = gdk_fb_clip_region(GDK_DRAWABLE_IMPL(window), NULL, TRUE, FALSE);
+
+	  old_rect.x = GDK_DRAWABLE_IMPL_FBDATA(window)->llim_x;
+	  old_rect.y = GDK_DRAWABLE_IMPL_FBDATA(window)->llim_y;
+	  old_rect.width = GDK_DRAWABLE_IMPL_FBDATA(window)->lim_x - old_rect.x;
+	  old_rect.height = GDK_DRAWABLE_IMPL_FBDATA(window)->lim_y - old_rect.y;
+	}
+
+      dx = x - private->x;
+      dy = y - private->y;
+      dw = width - GDK_DRAWABLE_IMPL_FBDATA(private)->width;
+      dh = height - GDK_DRAWABLE_IMPL_FBDATA(private)->height;
+
+      private->x = x;
+      private->y = y;
+      GDK_DRAWABLE_IMPL_FBDATA(private)->width = width;
+      GDK_DRAWABLE_IMPL_FBDATA(private)->height = height;
+
+      if(private->mapped)
+	{
+	  recompute_drawable((GdkDrawable *)window);
+
+	  if(send_expose_events)
+	    {
+	      GdkRectangle new_rect;
+	      GdkRegion *new_region, *region;
+	      int i;
+	      gboolean handle_cursor = FALSE;
+
+	      new_region = gdk_fb_clip_region(GDK_DRAWABLE_IMPL(window), NULL, TRUE, FALSE);
+
+	      new_rect.x = GDK_DRAWABLE_IMPL_FBDATA(window)->llim_x;
+	      new_rect.y = GDK_DRAWABLE_IMPL_FBDATA(window)->llim_y;
+	      new_rect.width = GDK_DRAWABLE_IMPL_FBDATA(window)->lim_x - new_rect.x;
+	      new_rect.height = GDK_DRAWABLE_IMPL_FBDATA(window)->lim_y - new_rect.y;
+
+	      region = gdk_region_copy(old_region);
+	      gdk_region_offset(region, dx, dy);
+	      gdk_region_intersect(region, new_region);
+
+	      if(region->numRects)
+		{
+		  GdkFBDrawingContext fbdc;
+		  GdkRectangle cursor_rect;
+
+		  gdk_fb_get_cursor_rect(&cursor_rect);
+
+		  if(gdk_fb_cursor_region_need_hide(region))
+		    {
+		      gdk_fb_cursor_hide();
+		      handle_cursor = TRUE;
+		    }
+
+		  gdk_fb_drawing_context_init(&fbdc, GDK_DRAWABLE_IMPL(gdk_parent_root), NULL, FALSE, FALSE);
+		  for(i = 0; i < region->numRects; i++)
+		    {
+		      gdk_fb_draw_drawable_3(GDK_DRAWABLE_IMPL(gdk_parent_root), NULL, GDK_DRAWABLE_IMPL(gdk_parent_root),
+					     &fbdc,
+					     (region->rects[i].x1 - dx),
+					     (region->rects[i].y1 - dy),
+					     (region->rects[i].x1),
+					     (region->rects[i].y1),
+					     (region->rects[i].x2 - region->rects[i].x1),
+					     (region->rects[i].y2 - region->rects[i].y1));
+		    }
+		  gdk_fb_drawing_context_finalize(&fbdc);
+		}
+
+	      gdk_region_union(new_region, old_region);
+	      gdk_region_subtract(new_region, region);
+	      gdk_region_destroy(region);
+	      gdk_window_invalidate_region_clear(gdk_parent_root, new_region);
+	      if(handle_cursor)
+		gdk_fb_cursor_unhide();
+
+	      gdk_region_destroy(old_region);
+	      gdk_region_destroy(new_region);
+	    }
+	}
+    }
 }
 
 void
@@ -732,40 +877,7 @@ gdk_window_move_resize (GdkWindow *window,
 			gint       width,
 			gint       height)
 {
-  GdkWindowPrivate *private;
-  
-  g_return_if_fail (window != NULL);
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
-  if (width < 1)
-    width = 1;
-  if (height < 1)
-    height = 1;
-  
-  private = (GdkWindowPrivate*) window;
-
-  if (!GDK_DRAWABLE_DESTROYED (window))
-    {
-      private->x = x;
-      private->y = y;
-      GDK_DRAWABLE_P(private)->width = width;
-      GDK_DRAWABLE_P(private)->height = height;
-
-      if(private->mapped)
-	{
-	  GdkRectangle r;
-
-	  r.x = GDK_DRAWABLE_FBDATA(window)->llim_x;
-	  r.y = GDK_DRAWABLE_FBDATA(window)->llim_y;
-	  r.width = GDK_DRAWABLE_FBDATA(window)->lim_x - r.x;
-	  r.height = GDK_DRAWABLE_FBDATA(window)->lim_y - r.y;
-
-	  recompute_drawable((GdkDrawable *)window);
-	  send_map_events(private, FALSE);
-
-	  gdk_window_on_hide(private->parent, &r, window);
-	}
-    }
+  gdk_fb_window_move_resize(window, x, y, width, height, TRUE);
 }
 
 void
@@ -790,9 +902,9 @@ gdk_window_reparent (GdkWindow *window,
   old_parent_private = (GdkWindowPrivate*)window_private->parent;
   parent_private = (GdkWindowPrivate*) new_parent;
   
-  g_assert(window_private->drawable.colormap);
+  g_assert(GDK_DRAWABLE_IMPL_FBDATA(window_private)->colormap);
 
-  window_private->parent = new_parent;
+  window_private->parent = (GdkWindowPrivate *)new_parent;
   
   if (old_parent_private)
     old_parent_private->children = g_list_remove (old_parent_private->children, window);
@@ -800,7 +912,26 @@ gdk_window_reparent (GdkWindow *window,
   parent_private->children = g_list_prepend (parent_private->children, window);
 
   if(window_private->mapped)
-    recompute_drawable((GdkDrawable *)window);
+    {
+      GdkRectangle r;
+      GdkRegion *region;
+
+      r.x = GDK_DRAWABLE_IMPL_FBDATA(window)->llim_x;
+      r.y = GDK_DRAWABLE_IMPL_FBDATA(window)->llim_y;
+      r.width = GDK_DRAWABLE_IMPL_FBDATA(window)->lim_x - r.x;
+      r.height = GDK_DRAWABLE_IMPL_FBDATA(window)->lim_y - r.y;
+      region = gdk_region_rectangle(&r);
+
+      recompute_drawable((GdkDrawable *)window);
+      r.x = GDK_DRAWABLE_IMPL_FBDATA(window)->llim_x;
+      r.y = GDK_DRAWABLE_IMPL_FBDATA(window)->llim_y;
+      r.width = GDK_DRAWABLE_IMPL_FBDATA(window)->lim_x - r.x;
+      r.height = GDK_DRAWABLE_IMPL_FBDATA(window)->lim_y - r.y;
+      gdk_region_union_with_rect(region, &r);
+
+      gdk_window_invalidate_region_clear(gdk_parent_root, region);
+      gdk_region_destroy(region);
+    }
 }
 
 
@@ -814,26 +945,30 @@ _gdk_windowing_window_clear_area (GdkWindow *window,
   GdkPixmap *bgpm;
   GdkWindow *relto;
 
-  g_return_if_fail (window != NULL);
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
   if(GDK_WINDOW_P(window)->input_only)
     return;
 
   bgpm = GDK_WINDOW_P(window)->bg_pixmap;
-  for(relto = window; bgpm == GDK_PARENT_RELATIVE_BG && relto; relto = GDK_WINDOW_P(relto)->parent)
+
+#if 0  
+  for(relto = window; bgpm == GDK_PARENT_RELATIVE_BG && relto; relto = (GdkWindow *)GDK_WINDOW_P(relto)->parent)
     bgpm = GDK_WINDOW_P(relto)->bg_pixmap;
+#endif
 
   if(bgpm && bgpm != GDK_NO_BG)
     {
       int curx, cury;
       int xtrans, ytrans;
       int xstep, ystep;
+      GdkFBDrawingContext fbdc;
 
-      return; /* Don't bother doing this - gtk+ will do it itself using GC tiles */
+      return; /* Don't bother doing this - gtk+ will do it itself using GC tiles. If removing this line,
+		 then also remove the #if 0 stuff */
 
-      xtrans = GDK_DRAWABLE_FBDATA(relto)->abs_x - GDK_DRAWABLE_FBDATA(window)->abs_x;
-      ytrans = GDK_DRAWABLE_FBDATA(relto)->abs_y - GDK_DRAWABLE_FBDATA(window)->abs_y;
+      gdk_fb_drawing_context_init(&fbdc, window, NULL, FALSE, TRUE);
+
+      xtrans = GDK_DRAWABLE_IMPL_FBDATA(relto)->abs_x - GDK_DRAWABLE_IMPL_FBDATA(window)->abs_x;
+      ytrans = GDK_DRAWABLE_IMPL_FBDATA(relto)->abs_y - GDK_DRAWABLE_IMPL_FBDATA(window)->abs_y;
 
       for(cury = y - ytrans; cury < (y - ytrans + height); cury += ystep)
 	{
@@ -842,17 +977,20 @@ _gdk_windowing_window_clear_area (GdkWindow *window,
 
 	  for(curx = x - xtrans; curx < (x - xtrans + width); curx += xstep)
 	    {
-	      int draww = curx % GDK_DRAWABLE_P(bgpm)->width;
-	      xstep = GDK_DRAWABLE_P(bgpm)->width - draww;
+	      int draww = curx % GDK_DRAWABLE_IMPL_FBDATA(bgpm)->width;
+	      xstep = GDK_DRAWABLE_IMPL_FBDATA(bgpm)->width - draww;
 
-	      gdk_fb_draw_drawable_2(window, NULL, bgpm,
+	      gdk_fb_draw_drawable_3(GDK_DRAWABLE_IMPL(window), NULL, GDK_DRAWABLE_IMPL(bgpm),
+				     &fbdc,
 				     draww, drawh, curx + xtrans, cury + ytrans,
-				     xstep, ystep, FALSE, TRUE);
+				     xstep, ystep);
 	    }
 	}
+
+      gdk_fb_drawing_context_finalize(&fbdc);
     }
   else if(!bgpm)
-    gdk_fb_draw_rectangle(window, NULL, TRUE, x, y, width, height);
+    gdk_fb_draw_rectangle(GDK_DRAWABLE_IMPL(window), NULL, TRUE, x, y, width, height);
 }
 
 /* What's the diff? */
@@ -869,7 +1007,7 @@ _gdk_windowing_window_clear_area_e (GdkWindow *window,
 static gint
 compare_window_levels(gconstpointer a, gconstpointer b)
 {
-  return (GDK_WINDOW_FBDATA(b)->level - GDK_WINDOW_FBDATA(a)->level);
+  return (GDK_WINDOW_IMPL_FBDATA(b)->level - GDK_WINDOW_IMPL_FBDATA(a)->level);
 }
 
 /* Child list is sorted bottom-to-top */
@@ -882,7 +1020,9 @@ gdk_window_resort_children(GdkWindow *win)
 
   /* Now the fun part - redraw */
   if(GDK_WINDOW_P(win)->parent)
-    send_map_events(private, FALSE);
+    {
+      gdk_window_invalidate_rect(win, NULL, TRUE);
+    }
 }
 
 void
@@ -891,10 +1031,10 @@ gdk_window_raise (GdkWindow *window)
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  GDK_WINDOW_FBDATA(window)->level++;
+  GDK_WINDOW_IMPL_FBDATA(window)->level++;
 
   if(GDK_WINDOW_P(window)->parent)
-    gdk_window_resort_children(GDK_WINDOW_P(window)->parent);
+    gdk_window_resort_children((GdkWindow *)GDK_WINDOW_P(window)->parent);
 }
 
 void
@@ -903,10 +1043,10 @@ gdk_window_lower (GdkWindow *window)
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
   
-  GDK_WINDOW_FBDATA(window)->level--;
+  GDK_WINDOW_IMPL_FBDATA(window)->level--;
 
   if(GDK_WINDOW_P(window)->parent)
-    gdk_window_resort_children(GDK_WINDOW_P(window)->parent);
+    gdk_window_resort_children((GdkWindow *)GDK_WINDOW_P(window)->parent);
 }
 
 void
@@ -944,7 +1084,7 @@ void
 gdk_window_set_transient_for (GdkWindow *window, 
 			      GdkWindow *parent)
 {
-  GDK_WINDOW_FBDATA(window)->level = GDK_WINDOW_FBDATA(parent)->level + 1;
+  GDK_WINDOW_IMPL_FBDATA(window)->level = GDK_WINDOW_IMPL_FBDATA(parent)->level + 1;
 }
 
 void
@@ -1008,12 +1148,22 @@ void
 gdk_window_set_cursor (GdkWindow *window,
 		       GdkCursor *cursor)
 {
-  GdkCursor *old_cursor = GDK_WINDOW_FBDATA(window)->cursor;
+  GdkCursor *old_cursor = GDK_WINDOW_IMPL_FBDATA(window)->cursor;
+  GdkRectangle window_reg;
 
-  GDK_WINDOW_FBDATA(window)->cursor = cursor?gdk_cursor_ref(cursor):NULL;
+  GDK_WINDOW_IMPL_FBDATA(window)->cursor = cursor?gdk_cursor_ref(cursor):NULL;
 
   if(old_cursor)
     gdk_cursor_unref(old_cursor);
+
+  window_reg.x = GDK_DRAWABLE_IMPL_FBDATA(window)->llim_x;
+  window_reg.y = GDK_DRAWABLE_IMPL_FBDATA(window)->llim_y;
+  window_reg.width = GDK_DRAWABLE_IMPL_FBDATA(window)->lim_x - window_reg.x;
+  window_reg.height = GDK_DRAWABLE_IMPL_FBDATA(window)->lim_y - window_reg.y;
+  if(gdk_fb_cursor_need_hide(&window_reg))
+    {
+      gdk_fb_cursor_reset();
+    }
 }
 
 void
@@ -1031,7 +1181,7 @@ gdk_window_get_geometry (GdkWindow *window,
   if (!window)
     window = gdk_parent_root;
   
-  if (!GDK_DRAWABLE_DESTROYED (window))
+  if (!private->destroyed)
     {
 
       if (x)
@@ -1039,9 +1189,9 @@ gdk_window_get_geometry (GdkWindow *window,
       if (y)
 	*y = private->y;
       if (width)
-	*width = GDK_DRAWABLE_P(window)->width;
+	*width = GDK_DRAWABLE_IMPL_FBDATA(window)->width;
       if (height)
-	*height = GDK_DRAWABLE_P(window)->height;
+	*height = GDK_DRAWABLE_IMPL_FBDATA(window)->height;
       if (depth)
 	*depth = gdk_display->modeinfo.bits_per_pixel;
     }
@@ -1055,9 +1205,9 @@ gdk_window_get_origin (GdkWindow *window,
   g_return_val_if_fail (window != NULL, 0);
   
   if (x)
-    *x = GDK_DRAWABLE_FBDATA(window)->abs_x;
+    *x = GDK_DRAWABLE_IMPL_FBDATA(window)->abs_x;
   if (y)
-    *y = GDK_DRAWABLE_FBDATA(window)->abs_y;
+    *y = GDK_DRAWABLE_IMPL_FBDATA(window)->abs_y;
 
   return TRUE;
 }
@@ -1073,10 +1223,10 @@ gdk_window_get_deskrelative_origin (GdkWindow *window,
 
   g_return_val_if_fail (window != NULL, 0);
   
-  if (!GDK_DRAWABLE_DESTROYED (window))
+  if (!GDK_WINDOW_DESTROYED (window))
     {
-      tx = GDK_DRAWABLE_FBDATA(window)->abs_x;
-      ty = GDK_DRAWABLE_FBDATA(window)->abs_y;
+      tx = GDK_DRAWABLE_IMPL_FBDATA(window)->abs_x;
+      ty = GDK_DRAWABLE_IMPL_FBDATA(window)->abs_y;
 
       return_val = TRUE;
     }
@@ -1131,8 +1281,8 @@ gdk_window_get_pointer (GdkWindow       *window,
   
   return_val = NULL;
   
-  if((winx >= 0) && (winx < GDK_DRAWABLE_P(window)->width)
-     && (winy >= 0) && (winy < GDK_DRAWABLE_P(window)->height))
+  if((winx >= 0) && (winx < GDK_DRAWABLE_IMPL_FBDATA(window)->width)
+     && (winy >= 0) && (winy < GDK_DRAWABLE_IMPL_FBDATA(window)->height))
     {
       GdkWindowPrivate *private;
       GdkWindowPrivate *sub;
@@ -1150,9 +1300,9 @@ gdk_window_get_pointer (GdkWindow       *window,
 		continue;
 
 	      if(subx >= sub->x
-		 && (subx < (GDK_DRAWABLE_P(sub)->width + sub->x))
+		 && (subx < (GDK_DRAWABLE_IMPL_FBDATA(sub)->width + sub->x))
 		 && (suby >= sub->y)
-		 && (suby < (GDK_DRAWABLE_P(sub)->height + sub->y)))
+		 && (suby < (GDK_DRAWABLE_IMPL_FBDATA(sub)->height + sub->y)))
 		{
 		  subx -= sub->x;
 		  suby -= sub->y;
@@ -1195,32 +1345,16 @@ gdk_window_at_pointer (gint *win_x,
   return retval;
 }
 
-GList*
-gdk_window_get_children (GdkWindow *window)
-{
-  GList *children;
-  
-  g_return_val_if_fail (window != NULL, NULL);
-  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
-
-  if (GDK_DRAWABLE_DESTROYED (window))
-    return NULL;
-  
-  children = NULL;
-
-  return ((GdkWindowPrivate *)window)->children; /* Need to copy this list? */
-}
-
 GdkEventMask  
 gdk_window_get_events (GdkWindow *window)
 {
   g_return_val_if_fail (window != NULL, 0);
   g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
 
-  if (GDK_DRAWABLE_DESTROYED (window))
+  if (GDK_WINDOW_DESTROYED (window))
     return 0;
   else
-    return GDK_WINDOW_FBDATA(window)->event_mask;
+    return GDK_WINDOW_IMPL_FBDATA(window)->event_mask;
 }
 
 void          
@@ -1231,8 +1365,8 @@ gdk_window_set_events (GdkWindow       *window,
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
   
-  if (!GDK_DRAWABLE_DESTROYED (window))
-    GDK_WINDOW_FBDATA(window)->event_mask = event_mask;
+  if (!GDK_WINDOW_DESTROYED (window))
+    GDK_WINDOW_IMPL_FBDATA(window)->event_mask = event_mask;
 }
 
 void

@@ -110,7 +110,7 @@ gdk_events_init (void)
     NULL
   };
 
-  g_source_add(G_PRIORITY_HIGH_IDLE, TRUE, &fb_events_funcs, NULL, NULL, NULL);
+  g_source_add(GDK_PRIORITY_EVENTS, TRUE, &fb_events_funcs, NULL, NULL, NULL);
 }
 
 /*
@@ -205,7 +205,9 @@ fb_events_dispatch(gpointer source_data, GTimeVal *dispatch_time, gpointer user_
     {
       if(event->type == GDK_EXPOSE
 	 && event->expose.window == gdk_parent_root)
-	gdk_fb_drawable_clear(event->expose.window);
+	gdk_window_clear_area(event->expose.window, event->expose.area.x, event->expose.area.y, event->expose.area.width,
+			      event->expose.area.height);
+
       else if(gdk_event_func)
 	(*gdk_event_func)(event, gdk_event_data);
 

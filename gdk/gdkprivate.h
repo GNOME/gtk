@@ -47,10 +47,6 @@ extern "C" {
 #define GDK_WINDOW_TYPE(d) (((GdkWindowObject*)(GDK_WINDOW (d)))->window_type)
 #define GDK_WINDOW_DESTROYED(d) (((GdkWindowObject*)(GDK_WINDOW (d)))->destroyed)
 
-#define gdk_window_lookup(xid)	   ((GdkWindow*) gdk_xid_table_lookup (xid))
-#define gdk_pixmap_lookup(xid)	   ((GdkPixmap*) gdk_xid_table_lookup (xid))
-#define gdk_font_lookup(xid)	   ((GdkFont*) gdk_xid_table_lookup (xid))
-
 typedef struct _GdkColorInfo           GdkColorInfo;
 typedef struct _GdkFontPrivate	       GdkFontPrivate;
 typedef struct _GdkEventFilter	       GdkEventFilter;

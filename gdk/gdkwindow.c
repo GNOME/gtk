@@ -1631,7 +1631,7 @@ gdk_window_invalidate_region (GdkWindow *window,
 	  GdkWindowObject *child = tmp_list->data;
 	  tmp_list = tmp_list->next;
 
-	  if (child->input_only)
+	  if (!child->input_only)
 	    {
               gint width, height;
 

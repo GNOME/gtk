@@ -52,7 +52,7 @@ gdk_property_delete_2 (GdkWindow *window,
 		       GdkAtom property,
 		       GdkWindowProperty *prop)
 {
-  GdkWindowFBData *fbd = GDK_WINDOW_FBDATA(window);
+  GdkWindowFBData *fbd = GDK_WINDOW_IMPL_FBDATA(window);
   GdkEvent *event;
   
   g_hash_table_remove(fbd->properties, GUINT_TO_POINTER(property));

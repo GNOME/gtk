@@ -29,7 +29,7 @@
 PangoGlyph
 pango_fb_get_unknown_glyph(PangoFont *font)
 {
-  return '*';
+  return FT_Get_Char_Index(PANGO_FB_FONT(font)->ftf, '~');
 }
 
 typedef struct _CharRange CharRange;
@@ -220,7 +220,7 @@ conv_8bit (CharCache  *cache,
   char *outptr = &outbuf;
   size_t outbytesleft = 1;
 
-  inbytesleft = g_utf8_next_char (input) - input;
+  inbytesleft = g_utf8_next_char(input) - input;
   
   cd = find_converter (cache, charset);
 
@@ -242,7 +242,7 @@ conv_euc (CharCache  *cache,
   char *outptr = outbuf;
   size_t outbytesleft = 2;
 
-  inbytesleft = g_utf8_next_char (input) - input;
+  inbytesleft = g_utf8_next_char(input) - input;
   
   cd = find_converter (cache, charset);
 
@@ -330,7 +330,7 @@ basic_engine_shape (PangoFont        *font,
       char buf[6];
       const char *input;
 
-      wc = g_utf8_get_char (p);
+      wc = g_utf8_get_char(p);
 
       input = p;
       if (analysis->level % 2)
@@ -377,7 +377,7 @@ basic_engine_shape (PangoFont        *font,
 	    set_glyph (font, glyphs, i, p - text, pango_fb_get_unknown_glyph (font));
 	}
       
-      p = g_utf8_next_char (p);
+      p = g_utf8_next_char(p);
     }
 
   /* Simple bidi support... may have separate modules later */

@@ -1,3 +1,16 @@
+2000-07-24 Elliot Lee <sopwith@redhat.com>
+	* gdk/gdkprivate.h: Remove gdk_*_lookup() defines, since they are defined by the
+	individual backends already.
+	* gdk/gdkregion-generic.h, gdk/gdktypes.h: Put gdkregionbox & gdksegment back together
+	again. Yes, there really is a good reason for this, if you are using the gdkregion
+	internals, and if you're not, why do you care?
+	* gdk/gdkwindow.c: Fix inverted condition
+	* gdk/linux-fb: Compiles (for me - it will not work elsewhere most likely).
+	* gtk/gtkcolorsel.c, gtk/gtkwindow.c: Add include for linux-fb
+	* gtk/gtkrange.c: Redraw trough when moving.
+	* gtk/gtktypeutils.c: Fix warning by adding const cast.
+	* modules/linux-fb/basic.c: Fix unknown glyph retrieval.
+
 2000-07-23  Tor Lillqvist  <tml@iki.fi>
 
 	* configure.in: Check for mkstemp and sigsetjmp. Output

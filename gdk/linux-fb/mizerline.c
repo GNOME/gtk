@@ -115,8 +115,8 @@ miZeroLine(pDraw, pGC, mode, npt, pptInit)
 
     xleft   = 0;
     ytop    = 0;
-    xright  = GDK_DRAWABLE_P(pDraw)->width - 1;
-    ybottom = GDK_DRAWABLE_P(pDraw)->height - 1;
+    xright  = GDK_DRAWABLE_FBDATA(pDraw)->width - 1;
+    ybottom = GDK_DRAWABLE_FBDATA(pDraw)->height - 1;
 
     /* it doesn't matter whether we're in drawable or screen coordinates,
      * FillSpans simply cannot take starting coordinates outside of the

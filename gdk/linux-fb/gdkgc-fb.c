@@ -8,7 +8,7 @@ typedef enum {
   GDK_GC_DIRTY_TS = 1 << 1
 } GdkGCDirtyValues;
 
-static void gdk_fb_gc_destroy    (GdkGC           *gc);
+static void gdk_fb_gc_finalize   (GObject *obj);
 static void gdk_fb_gc_get_values (GdkGC           *gc,
 				   GdkGCValues     *values);
 static void gdk_fb_gc_set_values (GdkGC           *gc,
@@ -16,15 +16,52 @@ static void gdk_fb_gc_set_values (GdkGC           *gc,
 				   GdkGCValuesMask  values_mask);
 static void gdk_fb_gc_set_dashes (GdkGC          *gc,
 				  gint	          dash_offset,
-				  gchar           dash_list[],
+				  gint8           dash_list[],
 				  gint            n);
 
-static GdkGCClass gdk_fb_gc_class = {
-  gdk_fb_gc_destroy,
-  gdk_fb_gc_get_values,
-  gdk_fb_gc_set_values,
-  gdk_fb_gc_set_dashes
-};
+static gpointer parent_class = NULL;
+
+static void
+gdk_gc_fb_class_init (GdkGCFBClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GdkGCClass *gc_class = GDK_GC_CLASS (klass);
+  
+  parent_class = g_type_class_peek_parent (klass);
+
+  object_class->finalize = gdk_fb_gc_finalize;
+
+  gc_class->get_values = gdk_fb_gc_get_values;
+  gc_class->set_values = gdk_fb_gc_set_values;
+  gc_class->set_dashes = gdk_fb_gc_set_dashes;
+}
+
+GType gdk_gc_fb_get_type (void)
+{
+  static GType object_type = 0;
+
+  if (!object_type)
+    {
+      static const GTypeInfo object_info =
+      {
+        sizeof (GdkGCFBClass),
+        (GBaseInitFunc) NULL,
+        (GBaseFinalizeFunc) NULL,
+        (GClassInitFunc) gdk_gc_fb_class_init,
+        NULL,           /* class_finalize */
+        NULL,           /* class_data */
+        sizeof (GdkGCFBData),
+        0,              /* n_preallocs */
+        (GInstanceInitFunc) NULL,
+      };
+      
+      object_type = g_type_register_static (GDK_TYPE_GC,
+                                            "GdkGCFB",
+                                            &object_info);
+    }
+
+  return object_type;
+}
 
 GdkGC *
 _gdk_fb_gc_new (GdkDrawable      *drawable,
@@ -32,14 +69,13 @@ _gdk_fb_gc_new (GdkDrawable      *drawable,
 		GdkGCValuesMask   values_mask)
 {
   GdkGC *gc;
-  GdkGCPrivate *private;
+  GdkGC *private;
   GdkGCFBData *data;
   
-  gc = gdk_gc_alloc ();
-  private = (GdkGCPrivate *)gc;
+  gc = GDK_GC(g_type_create_instance(gdk_gc_fb_get_type()));
+  private = (GdkGC *)gc;
 
-  private->klass = &gdk_fb_gc_class;
-  private->klass_data = data = g_new0 (GdkGCFBData, 1);
+  data = (GdkGCFBData *)gc;
   data->values.foreground.pixel = 255;
   data->values.foreground.red = data->values.foreground.green = data->values.foreground.blue = 65535;
 
@@ -49,12 +85,18 @@ _gdk_fb_gc_new (GdkDrawable      *drawable,
 }
 
 static void
-gdk_fb_gc_destroy (GdkGC *gc)
+gdk_fb_gc_finalize (GObject *obj)
 {
+  GdkGC *gc = GDK_GC_P(obj);
+
   if (GDK_GC_FBDATA (gc)->clip_region)
     gdk_region_destroy (GDK_GC_FBDATA (gc)->clip_region);
-  
-  g_free (GDK_GC_FBDATA (gc));
+  if (GDK_GC_FBDATA (gc)->values.clip_mask)
+    gdk_pixmap_unref(GDK_GC_FBDATA (gc)->values.clip_mask);
+  if (GDK_GC_FBDATA (gc)->values.stipple)
+    gdk_pixmap_unref(GDK_GC_FBDATA (gc)->values.stipple);
+  if (GDK_GC_FBDATA (gc)->values.tile)
+    gdk_pixmap_unref(GDK_GC_FBDATA (gc)->values.tile);
 }
 
 static void
@@ -110,7 +152,7 @@ gdk_fb_gc_set_values (GdkGC           *gc,
     {
       oldpm = GDK_GC_FBDATA(gc)->values.tile;
       if(values->tile)
-	g_assert(GDK_DRAWABLE_P(values->tile)->depth >= 8);
+	g_assert(GDK_DRAWABLE_IMPL_FBDATA(values->tile)->depth >= 8);
 
       GDK_GC_FBDATA(gc)->values.tile = values->tile?gdk_pixmap_ref(values->tile):NULL;
       GDK_GC_FBDATA(gc)->values_mask |= GDK_GC_TILE;
@@ -122,7 +164,7 @@ gdk_fb_gc_set_values (GdkGC           *gc,
     {
       oldpm = GDK_GC_FBDATA(gc)->values.stipple;
       if(values->stipple)
-	g_assert(GDK_DRAWABLE_P(values->stipple)->depth == 1);
+	g_assert(GDK_DRAWABLE_IMPL_FBDATA(values->stipple)->depth == 1);
       GDK_GC_FBDATA(gc)->values.stipple = values->stipple?gdk_pixmap_ref(values->stipple):NULL;
       GDK_GC_FBDATA(gc)->values_mask |= GDK_GC_STIPPLE;
       if(oldpm)
@@ -209,7 +251,7 @@ gdk_fb_gc_set_values (GdkGC           *gc,
 static void
 gdk_fb_gc_set_dashes (GdkGC *gc,
 		      gint dash_offset,
-		      gchar dash_list[],
+		      gint8 dash_list[],
 		      gint n)
 {
   GDK_GC_FBDATA(gc)->dash_offset = dash_offset;
@@ -229,7 +271,6 @@ gdk_fb_gc_set_dashes (GdkGC *gc,
 static void
 gc_unset_cmask(GdkGC *gc)
 {
-  GdkGCPrivate *private = (GdkGCPrivate *)gc;
   GdkGCFBData *data;
   data = GDK_GC_FBDATA (gc);
   if(data->values.clip_mask)
@@ -243,7 +284,7 @@ void
 gdk_gc_set_clip_rectangle (GdkGC	*gc,
 			   GdkRectangle *rectangle)
 {
-  GdkGCPrivate *private = (GdkGCPrivate *)gc;
+  GdkGC *private = (GdkGC *)gc;
   GdkGCFBData *data;
 
   g_return_if_fail (gc != NULL);
@@ -271,7 +312,7 @@ void
 gdk_gc_set_clip_region (GdkGC	  *gc,
 			GdkRegion *region)
 {
-  GdkGCPrivate *private = (GdkGCPrivate *)gc;
+  GdkGC *private = (GdkGC *)gc;
   GdkGCFBData *data;
 
   g_return_if_fail (gc != NULL);

@@ -394,12 +394,7 @@ miLineOnePoint (pDrawable, pGC, pixel, spanData, x, y)
 }
 
 static void
-miLineJoin (pDrawable, pGC, pixel, spanData, pLeft, pRight)
-    GdkDrawable*	    pDrawable;
-    GdkGC*	    pGC;
-    GdkColor *pixel;
-    SpanDataPtr	    spanData;
-    register LineFacePtr pLeft, pRight;
+miLineJoin (GdkDrawable *pDrawable, GdkGC *pGC, GdkColor *pixel, SpanDataPtr spanData, LineFacePtr pLeft, LineFacePtr pRight)
 {
     double	    mx, my;
     double	    denom = 0.0;
@@ -1493,9 +1488,9 @@ miWideLine (pDrawable, pGC, mode, npt, pPts)
 	    	else if (GDK_GC_FBDATA(pGC)->values.cap_style == GDK_CAP_ROUND)
 		{
 		    if (GDK_GC_FBDATA(pGC)->values.line_width == 1 && !spanData)
-			miLineOnePoint (pDrawable, pGC, pixel, spanData, x1, y1);
+			miLineOnePoint (pDrawable, pGC, &pixel, spanData, x1, y1);
 		    else
-		    	miLineArc (pDrawable, pGC, pixel, spanData,
+		    	miLineArc (pDrawable, pGC, &pixel, spanData,
 			       	   &leftFace, (LineFacePtr) NULL,
  			       	   (double)0.0, (double)0.0,
 			       	   TRUE);
@@ -1503,7 +1498,7 @@ miWideLine (pDrawable, pGC, mode, npt, pPts)
 	    }
 	    else
 	    {
-	    	miLineJoin (pDrawable, pGC, pixel, spanData, &leftFace,
+	    	miLineJoin (pDrawable, pGC, &pixel, spanData, &leftFace,
 		            &prevRightFace);
 	    }
 	    prevRightFace = rightFace;
@@ -1513,14 +1508,14 @@ miWideLine (pDrawable, pGC, mode, npt, pPts)
 	if (npt == 1 && somethingDrawn)
  	{
 	    if (selfJoin)
-		miLineJoin (pDrawable, pGC, pixel, spanData, &firstFace,
+		miLineJoin (pDrawable, pGC, &pixel, spanData, &firstFace,
 			    &rightFace);
 	    else if (GDK_GC_FBDATA(pGC)->values.cap_style == GDK_CAP_ROUND)
 	    {
 		if (GDK_GC_FBDATA(pGC)->values.line_width == 1 && !spanData)
-		    miLineOnePoint (pDrawable, pGC, pixel, spanData, x2, y2);
+		    miLineOnePoint (pDrawable, pGC, &pixel, spanData, x2, y2);
 		else
-		    miLineArc (pDrawable, pGC, pixel, spanData,
+		    miLineArc (pDrawable, pGC, &pixel, spanData,
 			       (LineFacePtr) NULL, &rightFace,
 			       (double)0.0, (double)0.0,
 			       TRUE);
@@ -2023,7 +2018,7 @@ miWideDash (pDrawable, pGC, mode, npt, pPts)
 	    	}
 	    	else
 	    	{
-	    	    miLineJoin (pDrawable, pGC, pixel, spanData, &leftFace,
+	    	    miLineJoin (pDrawable, pGC, &pixel, spanData, &leftFace,
 		            	&prevRightFace);
 	    	}
 	    }
@@ -2039,13 +2034,13 @@ miWideDash (pDrawable, pGC, mode, npt, pPts)
 		pixel = endIsFg ? GDK_GC_FBDATA(pGC)->values.foreground : GDK_GC_FBDATA(pGC)->values.background;
 		if (selfJoin && (GDK_GC_FBDATA(pGC)->values.line_style == GDK_LINE_DOUBLE_DASH || firstIsFg))
 		{
-		    miLineJoin (pDrawable, pGC, pixel, spanData, &firstFace,
+		    miLineJoin (pDrawable, pGC, &pixel, spanData, &firstFace,
 				&rightFace);
 		}
 		else 
 		{
 		    if (GDK_GC_FBDATA(pGC)->values.cap_style == GDK_CAP_ROUND)
-			miLineArc (pDrawable, pGC, pixel, spanData,
+			miLineArc (pDrawable, pGC, &pixel, spanData,
 				    (LineFacePtr) NULL, &rightFace,
 				    (double)0.0, (double)0.0, TRUE);
 		}

@@ -155,11 +155,11 @@ struct _GdkWindowObject
 {
   GdkDrawable parent_instance;
 
-  gpointer user_data;
-
   GdkDrawable *impl; /* window-system-specific delegate object */  
   
   GdkWindowObject *parent;
+
+  gpointer user_data;
 
   gint x;
   gint y;

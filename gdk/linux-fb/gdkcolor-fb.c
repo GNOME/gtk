@@ -35,6 +35,71 @@
 static gint  gdk_colormap_match_color (GdkColormap *cmap,
 				       GdkColor    *color,
 				       const gchar *available);
+
+static gpointer parent_class;
+
+static void
+gdk_colormap_finalize (GObject *object)
+{
+  GdkColormap *colormap = GDK_COLORMAP(object);
+  GdkColormapPrivateFB *private = (GdkColormapPrivateFB*) colormap;
+
+  if (private->hash)
+    g_hash_table_destroy (private->hash);
+  
+  g_free (private->info);
+  g_free (colormap->colors);
+
+  G_OBJECT_CLASS(parent_class)->finalize(object);
+}
+
+static void
+gdk_colormap_init (GdkColormap *colormap)
+{
+  colormap->windowing_data = NULL;
+  
+  colormap->size = 0;
+  colormap->colors = NULL;
+}
+
+static void
+gdk_colormap_class_init (GdkColormapClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  parent_class = g_type_class_peek_parent (klass);
+
+  object_class->finalize = gdk_colormap_finalize;
+}
+
+GType
+gdk_colormap_get_type (void)
+{
+  static GType object_type = 0;
+
+  if (!object_type)
+    {
+      static const GTypeInfo object_info =
+      {
+        sizeof (GdkColormapFBClass),
+        (GBaseInitFunc) NULL,
+        (GBaseFinalizeFunc) NULL,
+        (GClassInitFunc) gdk_colormap_class_init,
+        NULL,           /* class_finalize */
+        NULL,           /* class_data */
+        sizeof (GdkColormapPrivateFB),
+        0,              /* n_preallocs */
+        (GInstanceInitFunc) gdk_colormap_init,
+      };
+      
+      object_type = g_type_register_static (G_TYPE_OBJECT,
+                                            "GdkColormap",
+                                            &object_info);
+    }
+  
+  return object_type;
+}
+
 GdkColormap*
 gdk_colormap_new (GdkVisual *visual,
 		  gint       private_cmap)
@@ -46,11 +111,10 @@ gdk_colormap_new (GdkVisual *visual,
 
   g_return_val_if_fail (visual != NULL, NULL);
 
-  private = g_new (GdkColormapPrivateFB, 1);
+  private = (GdkColormapPrivateFB *)g_type_create_instance(gdk_colormap_get_type());
   colormap = (GdkColormap*) private;
 
   private->base.visual = visual;
-  private->base.ref_count = 1;
   fbd = gdk_display;
 
   private->hash = NULL;
@@ -123,19 +187,6 @@ gdk_colormap_new (GdkVisual *visual,
     }
 
   return colormap;
-}
-
-void
-_gdk_colormap_real_destroy (GdkColormap *colormap)
-{
-  GdkColormapPrivateFB *private = (GdkColormapPrivateFB*) colormap;
-
-  if (private->hash)
-    g_hash_table_destroy (private->hash);
-  
-  g_free (private->info);
-  g_free (colormap->colors);
-  g_free (colormap);
 }
 
 #define MIN_SYNC_TIME 2
