@@ -1,3 +1,8 @@
+Wed Nov 28 18:37:04 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtksocket.[ch] (gtk_socket_add_id): Rename 'id' parameter 
+	to avoid problems with Objective C.
+
 2001-11-28  Matthias Clasen  <matthiasc@poet.de>
 	
 	* gtk/gtkaccelmap.c: Typo fixes. (#65607)
