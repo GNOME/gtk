@@ -1,3 +1,8 @@
+Sun Oct 13 17:41:53 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkwidget.c (gtk_widget_queue_clear_area): Don't invalidate
+	a widget if it or one of its ancestors isn't mapped.
+
 Sun Oct 13 17:21:15 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* tests/testgtk.c (window_controls), tests/testgtk.c

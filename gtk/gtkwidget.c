@@ -2051,11 +2051,17 @@ gtk_widget_queue_clear_area (GtkWidget *widget,
 			     gint       height)
 {
   GdkRectangle invalid_rect;
+  GtkWidget *w;
   
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if (!(widget->window && gdk_window_is_viewable (widget->window)))
+  if (!GTK_WIDGET_REALIZED (widget))
     return;
+  
+  /* Just return if the widget or one of its ancestors isn't mapped */
+  for (w = widget; w != NULL; w = w->parent)
+    if (!GTK_WIDGET_MAPPED (w))
+      return;
 
   /* Find the correct widget */
 
