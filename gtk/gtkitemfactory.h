@@ -24,6 +24,9 @@
 
 
 #include <gtk/gtkwidget.h>
+#include <gtk/gtkmenufactory.h>	/* for GtkMenuEntry */
+#include <gtk/gtkbindings.h>	/* for GtkPatternSpec */
+
 
 #ifdef __cplusplus
 extern "C" {
@@ -136,13 +139,19 @@ GtkWidget*	gtk_item_factory_get_widget	    (GtkItemFactory   *ifactory,
 GtkWidget*	gtk_item_factory_get_widget_by_action (GtkItemFactory *ifactory,
 						       guint	       action);
 
-/* If `ifactory_path' is passed as `NULL', this function will iterate over
- * all hash entries.
+/* If `path_pspec' is passed as `NULL', this function will iterate over
+ * all hash entries. otherwise only those entries will be dumped for which
+ * the pattern matches, e.g. "<Image>*...".
  */
-void	gtk_item_factory_dump_rc	(const gchar		*ifactory_path,
+void	gtk_item_factory_dump_items	(GtkPatternSpec		*path_pspec,
 					 gboolean		 modified_only,
 					 GtkPrintFunc		 print_func,
 					 gpointer		 func_data);
+void	gtk_item_factory_dump_rc	(const gchar		*file_name,
+					 GtkPatternSpec		*path_pspec,
+					 gboolean		 modified_only);
+void	gtk_item_factory_print_func	(gpointer		 FILE_pointer,
+					 gchar			*string);
 void	gtk_item_factory_create_item	(GtkItemFactory		*ifactory,
 					 GtkItemFactoryEntry	*entry,
 					 gpointer		 callback_data,
@@ -156,8 +165,6 @@ void	gtk_item_factory_create_items_ac(GtkItemFactory		*ifactory,
 					 GtkItemFactoryEntry	*entries,
 					 gpointer		 callback_data,
 					 guint			 callback_type);
-void	gtk_item_factory_path_delete	(const gchar		*ifactory_path,
-					 const gchar		*path);
 void	gtk_item_factory_delete_item	(GtkItemFactory		*ifactory,
 					 const gchar		*path);
 void	gtk_item_factory_delete_entry	(GtkItemFactory		*ifactory,
@@ -179,8 +186,15 @@ void	gtk_item_factory_popup_with_data(GtkItemFactory		*ifactory,
 					 guint32		 time);
 gpointer gtk_item_factory_popup_data	(GtkItemFactory		*ifactory);
 gpointer gtk_item_factory_popup_data_from_widget (GtkWidget	*widget);
-     
-     
+
+/* Compatibility functions for ol GtkMenuFactory code
+ */
+GtkItemFactory*	gtk_item_factory_from_path   (const gchar       *path);
+void	gtk_item_factory_create_menu_entries (guint		 n_entries,
+					      GtkMenuEntry      *entries);
+void	gtk_item_factories_path_delete	   (const gchar		*ifactory_path,
+					    const gchar		*path);
+
 
 
 

@@ -26,12 +26,14 @@
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
 
-
-#define GTK_MENU_BAR(obj)          GTK_CHECK_CAST (obj, gtk_menu_bar_get_type (), GtkMenuBar)
-#define GTK_MENU_BAR_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_menu_bar_get_type (), GtkMenuBarClass)
-#define GTK_IS_MENU_BAR(obj)       GTK_CHECK_TYPE (obj, gtk_menu_bar_get_type ())
+#define	GTK_TYPE_MENU_BAR		(gtk_menu_bar_get_type ())
+#define GTK_MENU_BAR(obj)		(GTK_CHECK_CAST ((obj), GTK_TYPE_MENU_BAR, GtkMenuBar))
+#define GTK_MENU_BAR_CLASS(klass)	(GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_MENU_BAR, GtkMenuBarClass))
+#define GTK_IS_MENU_BAR(obj)		(GTK_CHECK_TYPE ((obj), GTK_TYPE_MENU_BAR))
+#define GTK_IS_MENU_BAR_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_MENU_BAR))
 
 
 typedef struct _GtkMenuBar       GtkMenuBar;
@@ -48,7 +50,7 @@ struct _GtkMenuBarClass
 };
 
 
-guint      gtk_menu_bar_get_type (void);
+GtkType    gtk_menu_bar_get_type (void);
 GtkWidget* gtk_menu_bar_new      (void);
 void       gtk_menu_bar_append   (GtkMenuBar *menu_bar,
 				  GtkWidget  *child);

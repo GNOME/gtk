@@ -28,15 +28,16 @@
 #include	"gtk/gtkradiomenuitem.h"
 #include	"gtk/gtkcheckmenuitem.h"
 #include	"gtk/gtkaccellabel.h"
+#include	"gdk/gdkprivate.h" /* for gdk_progname */
 #include	<string.h>
 #include	<sys/stat.h>
 #include	<fcntl.h>
 #include	<unistd.h>
+#include	<stdio.h>
 
 
 
 /* --- defines --- */
-#define		PARENT_DELIMITER	('/')
 #define		ITEM_FACTORY_STRING	((gchar*) item_factory_string)
 #define		ITEM_BLOCK_SIZE		(128)
 
@@ -44,6 +45,7 @@
 /* --- structures --- */
 typedef struct	_GtkIFCBData		GtkIFCBData;
 typedef struct	_GtkIFActionLink	GtkIFActionLink;
+typedef struct  _GtkIFDumpData		GtkIFDumpData;
 struct _GtkIFCBData
 {
   GtkItemFactoryCallback  func;
@@ -55,6 +57,13 @@ struct _GtkIFActionLink
 {
   GtkWidget *widget;
   guint callback_action;
+};
+struct _GtkIFDumpData
+{
+  GtkPrintFunc	         print_func;
+  gpointer	         func_data;
+  guint		         modified_only : 1;
+  GtkPatternSpec	*pspec;
 };
 
 
@@ -227,7 +236,7 @@ gtk_item_factory_new (GtkType	     container_type,
 
   g_return_val_if_fail (path != NULL, NULL);
 
-  ifactory = gtk_type_new (gtk_item_factory_get_type ());
+  ifactory = gtk_type_new (GTK_TYPE_ITEM_FACTORY);
   gtk_item_factory_construct (ifactory, container_type, path, accel_group);
 
   return ifactory;
@@ -405,6 +414,7 @@ gtk_item_factory_add_item (GtkItemFactory		*ifactory,
   gchar *fpath;
   
   g_return_if_fail (widget != NULL);
+  g_return_if_fail (item_type != NULL);
 
   class = GTK_ITEM_FACTORY_CLASS (GTK_OBJECT (ifactory)->klass);
 
@@ -579,6 +589,39 @@ gtk_item_factory_construct (GtkItemFactory	*ifactory,
 			     ifactory->widget);
 }
 
+GtkItemFactory*
+gtk_item_factory_from_path (const gchar      *path)
+{
+  GtkItemFactoryClass *class;
+  GtkItemFactoryItem *item;
+  gchar *fname;
+  guint i;
+
+  g_return_val_if_fail (path != NULL, NULL);
+  g_return_val_if_fail (path[0] == '<', NULL);
+
+  class = gtk_type_class (GTK_TYPE_ITEM_FACTORY);
+
+  i = 0;
+  while (path[i] && path[i] != '>')
+    i++;
+  if (path[i] != '>')
+    {
+      g_warning ("gtk_item_factory_from_path(): invalid factory path \"%s\"",
+		 path);
+      return NULL;
+    }
+  fname = g_new (gchar, i + 2);
+  g_memmove (fname, path, i + 1);
+  fname[i + 1] = 0;
+
+  item = g_hash_table_lookup (class->item_ht, fname);
+  if (item && item->widgets)
+    return gtk_item_factory_from_widget (item->widgets->data);
+
+  return NULL;
+}
+
 static void
 gtk_item_factory_destroy (GtkObject		 *object)
 {
@@ -647,22 +690,13 @@ gtk_item_factory_path_from_widget (GtkWidget	    *widget)
   return gtk_object_get_data_by_id (GTK_OBJECT (widget), key_id_item_factory_path);
 }
 
-typedef struct
-{
-  GtkPrintFunc	       print_func;
-  gpointer	       func_data;
-  guint		       modified_only : 1;
-  guint		       path_length;
-  const gchar	      *path;
-} DumpLimiterData;
-
 static void
 gtk_item_factory_foreach (gpointer hash_key,
 			  gpointer value,
 			  gpointer user_data)
 {
   GtkItemFactoryItem *item;
-  DumpLimiterData *data;
+  GtkIFDumpData *data;
   gchar *string;
   gchar *name;
   gchar comment_prefix[2] = "\000\000";
@@ -670,8 +704,7 @@ gtk_item_factory_foreach (gpointer hash_key,
   item = value;
   data = user_data;
 
-  if ((data->path && strncmp (item->path, data->path, data->path_length)) ||
-      (data->modified_only && !item->modified))
+  if (data->pspec && !gtk_pattern_match_string (data->pspec, item->path))
     return;
 
   comment_prefix[0] = gtk_item_factory_class->cpair_comment_single[0];
@@ -692,12 +725,12 @@ gtk_item_factory_foreach (gpointer hash_key,
 }
 
 void
-gtk_item_factory_dump_rc (const gchar		 *ifactory_path,
-			  gboolean		  modified_only,
-			  GtkPrintFunc		  print_func,
-			  gpointer		  func_data)
+gtk_item_factory_dump_items (GtkPatternSpec	 *path_pspec,
+			     gboolean		  modified_only,
+			     GtkPrintFunc	  print_func,
+			     gpointer		  func_data)
 {
-  DumpLimiterData data;
+  GtkIFDumpData data;
 
   g_return_if_fail (print_func != NULL);
 
@@ -707,10 +740,50 @@ gtk_item_factory_dump_rc (const gchar		 *ifactory_path,
   data.print_func = print_func;
   data.func_data = func_data;
   data.modified_only = (modified_only != FALSE);
-  data.path_length = ifactory_path ? strlen (ifactory_path) : 0;
-  data.path = ifactory_path;
+  data.pspec = path_pspec;
 
   g_hash_table_foreach (gtk_item_factory_class->item_ht, gtk_item_factory_foreach, &data);
+}
+
+void
+gtk_item_factory_print_func (gpointer FILE_pointer,
+			     gchar   *string)
+{
+  FILE *f_out = FILE_pointer;
+
+  g_return_if_fail (FILE_pointer != NULL);
+  g_return_if_fail (string != NULL);
+  
+  fputs (string, f_out);
+  fputc ('\n', f_out);
+}
+
+void
+gtk_item_factory_dump_rc (const gchar            *file_name,
+			  GtkPatternSpec         *path_pspec,
+			  gboolean                modified_only)
+{
+  FILE *f_out;
+
+  g_return_if_fail (file_name != NULL);
+
+  f_out = fopen (file_name, "w");
+  if (!f_out)
+    return;
+
+  fputs ("; ", f_out);
+  if (gdk_progname)
+    fputs (gdk_progname, f_out);
+  fputs (" GtkItemFactory rc-file         -*- scheme -*-\n", f_out);
+  fputs ("; this file is an automated menu-path dump\n", f_out);
+  fputs (";\n", f_out);
+
+  gtk_item_factory_dump_items (path_pspec,
+			       modified_only,
+			       gtk_item_factory_print_func,
+			       f_out);
+
+  fclose (f_out);
 }
 
 void
@@ -750,7 +823,6 @@ gtk_item_factory_get_widget (GtkItemFactory   *ifactory,
 {
   GtkItemFactoryClass *class;
   GtkItemFactoryItem *item;
-  gchar *fpath;
 
   g_return_val_if_fail (ifactory != NULL, NULL);
   g_return_val_if_fail (GTK_IS_ITEM_FACTORY (ifactory), NULL);
@@ -758,9 +830,16 @@ gtk_item_factory_get_widget (GtkItemFactory   *ifactory,
 
   class = GTK_ITEM_FACTORY_CLASS (GTK_OBJECT (ifactory)->klass);
 
-  fpath = g_strconcat (ifactory->path, path, NULL);
-  item = g_hash_table_lookup (class->item_ht, fpath);
-  g_free (fpath);
+  if (path[0] == '<')
+    item = g_hash_table_lookup (class->item_ht, (gpointer) path);
+  else
+    {
+      gchar *fpath;
+
+      fpath = g_strconcat (ifactory->path, path, NULL);
+      item = g_hash_table_lookup (class->item_ht, fpath);
+      g_free (fpath);
+    }
 
   if (item)
     {
@@ -811,19 +890,26 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
   gchar *p;
   guint type_id;
   GtkType type;
+  gchar *item_type_path;
 
   g_return_if_fail (ifactory != NULL);
   g_return_if_fail (GTK_IS_ITEM_FACTORY (ifactory));
   g_return_if_fail (entry != NULL);
   g_return_if_fail (entry->path != NULL);
-  g_return_if_fail (entry->path[0] == PARENT_DELIMITER);
+  g_return_if_fail (entry->path[0] == '/');
   g_return_if_fail (callback_type >= 1 && callback_type <= 2);
 
   if (!entry->item_type ||
-      entry->item_type == 0)
-    type_id = key_id_type_item;
+      entry->item_type[0] == 0)
+    {
+      item_type_path = (gpointer) key_type_item;
+      type_id = key_id_type_item;
+    }
   else
-    type_id = gtk_object_data_try_key (entry->item_type);
+    {
+      item_type_path = entry->item_type;
+      type_id = gtk_object_data_try_key (item_type_path);
+    }
 
   radio_group = NULL;
   if (type_id == key_id_type_item)
@@ -846,7 +932,7 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
     {
       GtkWidget *radio_link;
 
-      radio_link = gtk_item_factory_get_widget (ifactory, entry->item_type);
+      radio_link = gtk_item_factory_get_widget (ifactory, item_type_path);
       if (radio_link && GTK_IS_RADIO_MENU_ITEM (radio_link))
 	{
 	  type = gtk_radio_menu_item_get_type ();
@@ -856,13 +942,13 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
 	{
 	  g_warning ("GtkItemFactory: entry path `%s' has invalid type `%s'",
 		     entry->path,
-		     entry->item_type);
+		     item_type_path);
 	  return;
 	}
     }
   
   parent_path = g_strdup (entry->path);
-  p = strrchr (parent_path, PARENT_DELIMITER);
+  p = strrchr (parent_path, '/');
   if (!p)
     {
       g_warning ("GtkItemFactory: invalid entry path `%s'", entry->path);
@@ -889,7 +975,7 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
 
   g_return_if_fail (parent != NULL);
   
-  p = strrchr (entry->path, PARENT_DELIMITER);
+  p = strrchr (entry->path, '/');
   p++;
   
   widget = gtk_widget_new (type,
@@ -934,27 +1020,81 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
 			     entry->path, entry->accelerator,
 			     entry->callback, entry->callback_action, callback_data,
 			     callback_type,
-			     entry->item_type,
+			     item_type_path,
 			     widget);
 }
 
 void
-gtk_item_factory_path_delete (const gchar *ifactory_path,
-			      const gchar *path)
+gtk_item_factory_create_menu_entries (guint              n_entries,
+				      GtkMenuEntry      *entries)
+{
+  static GtkPatternSpec pspec = { 42, 0 };
+  guint i;
+
+  if (!n_entries)
+    return;
+  g_return_if_fail (entries != NULL);
+
+  if (pspec.pattern_length == 0)
+    gtk_pattern_spec_init (&pspec, "*<separator>*");
+
+  for (i = 0; i < n_entries; i++)
+    {
+      GtkItemFactory *ifactory;
+      GtkItemFactoryEntry entry;
+      gchar *path;
+
+      path = entries[i].path;
+      ifactory = gtk_item_factory_from_path (path);
+      if (!ifactory)
+	{
+	  g_warning ("gtk_item_factory_create_menu_entries(): "
+		     "entry[%u] refers to unknown item factory: \"%s\"",
+		     i, entries[i].path);
+	  continue;
+	}
+
+      while (*path != '>')
+	path++;
+      path++;
+
+      entry.path = path;
+      entry.accelerator = entries[i].accelerator;
+      entry.callback = entries[i].callback;
+      entry.callback_action = 0;
+      entry.item_type = (gtk_pattern_match_string (&pspec, path) ?
+			 (gpointer) key_type_separator_item :
+			 NULL);
+
+      gtk_item_factory_create_item (ifactory, &entry, entries[i].callback_data, 2);
+      entries[i].widget = gtk_item_factory_get_widget (ifactory, entries[i].path);
+    }
+}
+
+void
+gtk_item_factories_path_delete (const gchar *ifactory_path,
+				const gchar *path)
 {
   GtkItemFactoryClass *class;
   GtkItemFactoryItem *item;
-  gchar *fpath;
 
-  g_return_if_fail (ifactory_path != NULL);
   g_return_if_fail (path != NULL);
 
   class = gtk_type_class (GTK_TYPE_ITEM_FACTORY);
 
-  fpath = g_strconcat (ifactory_path, path, NULL);
-  item = g_hash_table_lookup (class->item_ht, fpath);
-  g_free (fpath);
+  if (path[0] == '<')
+    item = g_hash_table_lookup (class->item_ht, (gpointer) path);
+  else
+    {
+      gchar *fpath;
 
+      g_return_if_fail (ifactory_path != NULL);
+      
+      fpath = g_strconcat (ifactory_path, path, NULL);
+      item = g_hash_table_lookup (class->item_ht, fpath);
+      g_free (fpath);
+    }
+  
   if (item)
     {
       GSList *widget_list;

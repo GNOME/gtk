@@ -38,10 +38,10 @@ static gint gtk_menu_bar_expose        (GtkWidget       *widget,
 					GdkEventExpose  *event);
 
 
-guint
+GtkType
 gtk_menu_bar_get_type (void)
 {
-  static guint menu_bar_type = 0;
+  static GtkType menu_bar_type = 0;
 
   if (!menu_bar_type)
     {

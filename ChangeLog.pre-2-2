@@ -3,9 +3,15 @@
 	* gdk/gdk.h (gdk_color_copy, gdk_color_free): New prototypes.
 	* gdk/gdk.c (gdk_color_copy, gdk_color_free): New functions.
 	
-Sun Jun  7 09:36:04 1998  Tim Janik  <timj@gtk.org>
+Sun Jun  7 10:53:02 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkitemfactory.h: 
+	* gtk/gtkitemfactory.c: further additions to fit the gimp's code.
+	additions to the dumping code to feature GtkPatternSpec.
+	even found a bug to fix in the original code ;)
+	
+Sun Jun  7 09:36:04 1998  Tim Janik  <timj@gtk.org>
+
 	* gtk/gtkitemfactory.c: support different types of callbacks, to
 	maintain existing code.
 
