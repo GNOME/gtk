@@ -146,6 +146,7 @@ struct _GdkDndCursorInfo {
   Cursor	  gdk_cursor_dragdefault, gdk_cursor_dragok;
   GdkWindow	 *drag_pm_default, *drag_pm_ok;
   GdkPoint	  default_hotspot, ok_hotspot;
+  GList *xids;
 };
 typedef struct _GdkDndCursorInfo GdkDndCursorInfo;
 

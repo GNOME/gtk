@@ -34,7 +34,7 @@ Atom              gdk_wm_protocols;
 Atom              gdk_wm_window_protocols[2];
 Atom              gdk_selection_property;
 GdkDndCursorInfo  gdk_dnd_cursorinfo = {None, None, NULL, NULL,
-					{0,0}, {0,0}};
+					{0,0}, {0,0}, NULL};
 GdkDndGlobals     gdk_dnd = {None,None,None,
 			     None,None,None,
 			     None,

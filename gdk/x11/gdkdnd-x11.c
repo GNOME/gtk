@@ -26,6 +26,8 @@ gdk_dnd_set_drag_cursors(GdkCursor *default_cursor, GdkCursor *goahead_cursor)
 	      gdk_window_unref(gdk_dnd.c->drag_pm_ok);
 	    }
 	  gdk_dnd.c->drag_pm_default = gdk_dnd.c->drag_pm_ok = NULL;
+	  g_list_free(gdk_dnd.c->xids);
+	  gdk_dnd.c->xids = NULL;
 	}
       gdk_dnd_display_drag_cursor(-1, -1,
 				  gdk_dnd.dnd_drag_target?TRUE:FALSE,
@@ -41,6 +43,7 @@ gdk_dnd_set_drag_shape(GdkWindow *default_pixmapwin,
 {
   g_return_if_fail(default_pixmapwin != NULL);
 
+  g_list_free(gdk_dnd.c->xids); gdk_dnd.c->xids = NULL;
   if(gdk_dnd.c->drag_pm_default)
     gdk_window_unref(gdk_dnd.c->drag_pm_default);
   if(gdk_dnd.c->drag_pm_ok)
@@ -51,9 +54,11 @@ gdk_dnd_set_drag_shape(GdkWindow *default_pixmapwin,
   gdk_window_ref(default_pixmapwin);
   gdk_dnd.c->drag_pm_default = default_pixmapwin;
   gdk_dnd.c->default_hotspot = *default_hotspot;
+  gdk_dnd.c->xids = g_list_append(gdk_dnd.c->xids, ((GdkWindowPrivate *)default_pixmapwin)->xwindow);
   if(goahead_pixmapwin)
     {
       gdk_window_ref(goahead_pixmapwin);
+      gdk_dnd.c->xids = g_list_append(gdk_dnd.c->xids, ((GdkWindowPrivate *)goahead_pixmapwin)->xwindow);
       gdk_dnd.c->drag_pm_ok = goahead_pixmapwin;
       gdk_dnd.c->ok_hotspot = *goahead_hotspot;
     }
