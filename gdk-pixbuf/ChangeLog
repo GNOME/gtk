@@ -1,3 +1,8 @@
+Sun Aug  1 23:57:06 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* io-pcx.c (pcx_increment_load_data_1): Fix progressive
+	loading of 8bit pcx files. (#148518, Magnus Bergman)
+
 2004-08-01  Matthias Clasen  <mclasen@redhat.com>
                                                                                 
         * === Released 2.5.1 ===
