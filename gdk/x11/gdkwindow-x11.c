@@ -4126,6 +4126,7 @@ gdk_window_unstick (GdkWindow *window)
       gint format;
       gulong nitems;
       gulong bytes_after;
+      guchar *data;
       gulong *current_desktop;
       GdkDisplay *display = gdk_drawable_get_display (window);
       
@@ -4141,10 +4142,12 @@ gdk_window_unstick (GdkWindow *window)
 			  gdk_x11_get_xatom_by_name_for_display (display, "_NET_CURRENT_DESKTOP"),
                           0, G_MAXLONG,
                           False, XA_CARDINAL, &type, &format, &nitems,
-                          &bytes_after, (guchar **)&current_desktop);
+                          &bytes_after, &data);
 
       if (type == XA_CARDINAL)
         {
+	  current_desktop = (gulong *)data;
+	  
           xev.xclient.type = ClientMessage;
           xev.xclient.serial = 0;
           xev.xclient.send_event = True;
@@ -4480,7 +4483,7 @@ gdk_window_get_mwm_hints (GdkWindow *window)
 {
   GdkDisplay *display;
   Atom hints_atom = None;
-  MotifWmHints *hints;
+  guchar *data;
   Atom type;
   gint format;
   gulong nitems;
@@ -4496,12 +4499,12 @@ gdk_window_get_mwm_hints (GdkWindow *window)
   XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XID (window),
 		      hints_atom, 0, sizeof (MotifWmHints)/sizeof (long),
 		      False, AnyPropertyType, &type, &format, &nitems,
-		      &bytes_after, (guchar **)&hints);
+		      &bytes_after, &data);
 
   if (type == None)
     return NULL;
   
-  return hints;
+  return (MotifWmHints *)data;
 }
 
 static void
@@ -4510,6 +4513,7 @@ gdk_window_set_mwm_hints (GdkWindow *window,
 {
   GdkDisplay *display;
   Atom hints_atom = None;
+  guchar *data;
   MotifWmHints *hints;
   Atom type;
   gint format;
@@ -4526,12 +4530,14 @@ gdk_window_set_mwm_hints (GdkWindow *window,
   XGetWindowProperty (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window),
 		      hints_atom, 0, sizeof (MotifWmHints)/sizeof (long),
 		      False, AnyPropertyType, &type, &format, &nitems,
-		      &bytes_after, (guchar **)&hints);
+		      &bytes_after, &data);
   
   if (type == None)
     hints = new_hints;
   else
     {
+      hints = (MotifWmHints *)data;
+	
       if (new_hints->flags & MWM_HINTS_FUNCTIONS)
 	{
 	  hints->flags |= MWM_HINTS_FUNCTIONS;

@@ -909,6 +909,7 @@ motif_read_target_table (GdkDisplay *display)
 
   if (motif_find_drag_window (display, FALSE))
     {
+      guchar *data;
       MotifTargetTableHeader *header = NULL;
       guchar *target_bytes = NULL;
       guchar *p;
@@ -921,10 +922,12 @@ motif_read_target_table (GdkDisplay *display)
 			  0, (sizeof(MotifTargetTableHeader)+3)/4, FALSE,
 			  motif_drag_targets_atom, 
 			  &type, &format, &nitems, &bytes_after,
-			  (guchar **)&header);
+			  &data);
 
       if (gdk_error_trap_pop () || (format != 8) || (nitems < sizeof (MotifTargetTableHeader)))
 	goto error;
+
+      header = (MotifTargetTableHeader *)data;
 
       header->n_lists = card16_to_host (header->n_lists, header->byte_order);
       header->total_size = card32_to_host (header->total_size, header->byte_order);
@@ -1260,6 +1263,7 @@ motif_check_dest (GdkDisplay *display,
 		  Window      win)
 {
   gboolean retval = FALSE;
+  guchar *data;
   MotifDragReceiverInfo *info;
   Atom type = None;
   int format;
@@ -1271,12 +1275,14 @@ motif_check_dest (GdkDisplay *display,
 		      motif_drag_receiver_info_atom, 
 		      0, (sizeof(*info)+3)/4, False, AnyPropertyType,
 		      &type, &format, &nitems, &after, 
-		      (guchar **)&info);
+		      &data);
 
   if (gdk_error_trap_pop() == 0)
     {
       if (type != None)
 	{
+	  info = (MotifDragReceiverInfo *)data;
+	  
 	  if ((format == 8) && (nitems == sizeof(*info)))
 	    {
 	      if ((info->protocol_version == 0) &&
@@ -1456,6 +1462,7 @@ motif_read_initiator_info (GdkDisplay *display,
   gint format;
   gulong nitems;
   gulong bytes_after;
+  guchar *data;
   MotifDragInitiatorInfo *initiator_info;
   
   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
@@ -1465,13 +1472,15 @@ motif_read_initiator_info (GdkDisplay *display,
 		      0, sizeof(*initiator_info), FALSE,
 		      gdk_x11_get_xatom_by_name_for_display (display, "_MOTIF_DRAG_INITIATOR_INFO"),
 		      &type, &format, &nitems, &bytes_after,
-		      (guchar **)&initiator_info);
+		      &data);
 
   if (gdk_error_trap_pop () || (format != 8) || (nitems != sizeof (MotifDragInitiatorInfo)) || (bytes_after != 0))
     {
       g_warning ("Error reading initiator info\n");
       return FALSE;
     }
+
+  initiator_info = (MotifDragInitiatorInfo *)data;
 
   motif_read_target_table (display);
 
@@ -2383,6 +2392,7 @@ xdnd_check_dest (GdkDisplay *display,
   Atom type = None;
   int format;
   unsigned long nitems, after;
+  guchar *data;
   Atom *version;
   Window *proxy_data;
   Window proxy;
@@ -2397,10 +2407,12 @@ xdnd_check_dest (GdkDisplay *display,
 			  xdnd_proxy_atom, 0, 
 			  1, False, AnyPropertyType,
 			  &type, &format, &nitems, &after, 
-			  (guchar **)&proxy_data) == Success)
+			  &data) == Success)
     {
       if (type != None)
 	{
+	  proxy_data = (Window *)data;
+	  
 	  if ((format == 32) && (nitems == 1))
 	    {
 	      proxy = *proxy_data;
@@ -2417,9 +2429,11 @@ xdnd_check_dest (GdkDisplay *display,
 			       xdnd_aware_atom, 0, 
 			       1, False, AnyPropertyType,
 			       &type, &format, &nitems, &after, 
-			       (guchar **)&version) == Success) &&
+			       &data) == Success) &&
 	  type != None)
 	{
+	  version = (Atom *)data;
+	  
 	  if ((format == 32) && (nitems == 1))
 	    {
 	      if (*version >= 3)
@@ -2450,7 +2464,8 @@ xdnd_read_actions (GdkDragContext *context)
   Atom type;
   int format;
   gulong nitems, after;
-  Atom *data;
+  guchar *data;
+  Atom *atoms;
 
   gint i;
   
@@ -2467,13 +2482,15 @@ xdnd_read_actions (GdkDragContext *context)
 			      gdk_x11_get_xatom_by_name_for_display (display, "XdndActionList"),
 			      0, 65536,
 			      False, XA_ATOM, &type, &format, &nitems,
-			      &after, (guchar **)&data) == Success &&
+			      &after, &data) == Success &&
 	  type == XA_ATOM)
 	{
+	  atoms = (Atom *)data;
+	  
 	  context->actions = 0;
 	  
 	  for (i=0; i<nitems; i++)
-	    context->actions |= xdnd_action_from_atom (display, data[i]);
+	    context->actions |= xdnd_action_from_atom (display, atoms[i]);
 	  
 	  PRIVATE_DATA (context)->xdnd_have_actions = TRUE;
 	  
@@ -2495,7 +2512,7 @@ xdnd_read_actions (GdkDragContext *context)
 	    }
 #endif /* G_ENABLE_DEBUG */
 	  
-	  XFree(data);
+	  XFree(atoms);
 	}
       
       gdk_error_trap_pop ();
@@ -2644,7 +2661,8 @@ xdnd_enter_filter (GdkXEvent *xev,
   Atom type;
   int format;
   gulong nitems, after;
-  Atom *data;
+  guchar *data;
+  Atom *atoms;
 
   guint32 source_window;
   gboolean get_types;
@@ -2708,7 +2726,7 @@ xdnd_enter_filter (GdkXEvent *xev,
 			  gdk_x11_get_xatom_by_name_for_display (display, "XdndTypeList"),
 			  0, 65536,
 			  False, XA_ATOM, &type, &format, &nitems,
-			  &after, (guchar **)&data);
+			  &after, &data);
 
       if (gdk_error_trap_pop () || (format != 32) || (type != XA_ATOM))
 	{
@@ -2716,13 +2734,15 @@ xdnd_enter_filter (GdkXEvent *xev,
 	  return GDK_FILTER_REMOVE;
 	}
 
+      atoms = (Atom *)data;
+
       for (i=0; i<nitems; i++)
 	new_context->targets = 
 	  g_list_append (new_context->targets,
 			 GDK_ATOM_TO_POINTER (gdk_x11_xatom_to_atom_for_display (display,
-										 data[i])));
+										 atoms[i])));
 
-      XFree(data);
+      XFree(atoms);
     }
   else
     {

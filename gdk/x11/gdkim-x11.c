@@ -160,11 +160,15 @@ gdk_wcstombs (const GdkWChar *src)
 	}
       else
 	{
-	  if (XwcTextListToTextProperty (xdisplay, (wchar_t**)&src, 1,
+	  wchar_t *tmp;
+	  
+	  if (XwcTextListToTextProperty (xdisplay, &tmp, 1,
 					 XTextStyle, &tpr) != Success)
 	    {
 	      return NULL;
 	    }
+	  
+	  src = (GdkWChar *)tmp;
 	}
       /*
        * We must copy the string into an area allocated by glib, because

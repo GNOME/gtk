@@ -461,6 +461,7 @@ gdk_check_wm_desktop_changed (GdkWindow *window)
 
   if (toplevel->have_sticky)
     {
+      guchar *data;
       gulong *desktop;
       
       type = None;
@@ -470,11 +471,12 @@ gdk_check_wm_desktop_changed (GdkWindow *window)
                           gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_DESKTOP"),
 			  0, G_MAXLONG, False, XA_CARDINAL, &type, 
 			  &format, &nitems,
-                          &bytes_after, (guchar **)&desktop);
+                          &bytes_after, &data);
       gdk_error_trap_pop ();
 
       if (type != None)
         {
+	  desktop = (gulong *)data;
           toplevel->on_all_desktops = (*desktop == 0xFFFFFFFF);
           XFree (desktop);
         }
@@ -495,6 +497,7 @@ gdk_check_wm_state_changed (GdkWindow *window)
   gint format;
   gulong nitems;
   gulong bytes_after;
+  guchar *data;
   Atom *atoms = NULL;
   gulong i;
 
@@ -510,7 +513,7 @@ gdk_check_wm_state_changed (GdkWindow *window)
   XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XID (window),
 		      gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE"),
 		      0, G_MAXLONG, False, XA_ATOM, &type, &format, &nitems,
-		      &bytes_after, (guchar **)&atoms);
+		      &bytes_after, &data);
   gdk_error_trap_pop ();
 
   if (type != None)
@@ -519,6 +522,8 @@ gdk_check_wm_state_changed (GdkWindow *window)
       Atom maxvert_atom = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE_MAXIMIZED_VERT");
       Atom maxhorz_atom	= gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE_MAXIMIZED_HORZ");
       Atom fullscreen_atom = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE_FULLSCREEN");
+
+      atoms = (Atom *)data;
 
       i = 0;
       while (i < nitems)
@@ -2460,6 +2465,7 @@ fetch_net_wm_check_window (GdkScreen *screen)
   gint format;
   gulong n_items;
   gulong bytes_after;
+  guchar *data;
   Window *xwindow;
   
   /* This function is very slow on every call if you are not running a
@@ -2479,10 +2485,12 @@ fetch_net_wm_check_window (GdkScreen *screen)
   XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), screen_x11->xroot_window,
 		      gdk_x11_get_xatom_by_name_for_display (display, "_NET_SUPPORTING_WM_CHECK"),
 		      0, G_MAXLONG, False, XA_WINDOW, &type, &format, 
-		      &n_items, &bytes_after, (guchar **) & xwindow);
+		      &n_items, &bytes_after, &data);
   
   if (type != XA_WINDOW)
     return;
+
+  xwindow = (Window *)data;
 
   gdk_error_trap_push ();
   

@@ -1,3 +1,8 @@
+Tue Nov 16 19:44:26 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkevents-x11.c gdk/x11/gdkim-x11.c gdk/x11/gdkwindow-x11.c: 
+	More strict aliasing warning suppressage.
+
 Tue Nov 16 19:26:30 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkdnd-x11.c (_gdk_drag_get_protocol_for_display): 
