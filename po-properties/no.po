@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-13 16:03+0100\n"
-"PO-Revision-Date: 2004-02-13 16:07+0100\n"
+"POT-Creation-Date: 2004-02-18 00:57+0100\n"
+"PO-Revision-Date: 2004-02-18 00:57+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian (bokmål) <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -826,14 +826,14 @@ msgid "Size"
 msgstr "Størrelse"
 
 #: gtk/gtkcellrendererpixbuf.c:169
-msgid "The size of the rendered icon"
-msgstr "Størrelsen på rendret ikon"
+msgid "The GtkIconSize value that specifies the size of the rendered icon"
+msgstr "Verdien for GtkIconSize som spesifiserer størrelsen for rendret ikon"
 
-#: gtk/gtkcellrendererpixbuf.c:177
+#: gtk/gtkcellrendererpixbuf.c:178
 msgid "Detail"
 msgstr "Detalj"
 
-#: gtk/gtkcellrendererpixbuf.c:178
+#: gtk/gtkcellrendererpixbuf.c:179
 msgid "Render detail to pass to the theme engine"
 msgstr "Rendringsdetalj som skal sendes til temamotor"
 
@@ -1305,51 +1305,51 @@ msgstr "Verdi i listen"
 msgid "Whether entered values must already be present in the list"
 msgstr "Verdier som spesifiseres må allerede være i listen"
 
-#: gtk/gtkcombobox.c:346
+#: gtk/gtkcombobox.c:344
 msgid "ComboBox model"
 msgstr "Modell for ComboBox"
 
-#: gtk/gtkcombobox.c:347
+#: gtk/gtkcombobox.c:345
 msgid "The model for the combo box"
 msgstr "Modell for komboboksen"
 
-#: gtk/gtkcombobox.c:354
+#: gtk/gtkcombobox.c:352
 msgid "Wrap width"
 msgstr "Bredde for bryting"
 
-#: gtk/gtkcombobox.c:355
+#: gtk/gtkcombobox.c:353
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Brytningsbredde for utplassering av oppføringer i et rutenett"
 
-#: gtk/gtkcombobox.c:364
+#: gtk/gtkcombobox.c:362
 msgid "Row span column"
 msgstr "Kolonne for radutbredelse"
 
-#: gtk/gtkcombobox.c:365
+#: gtk/gtkcombobox.c:363
 msgid "TreeModel column containing the row span values"
 msgstr "TreeModel-kolonne som inneholder verdier for radutbredelse"
 
-#: gtk/gtkcombobox.c:374
+#: gtk/gtkcombobox.c:372
 msgid "Column span column"
 msgstr "Kolonne for kolonneutbredelse"
 
-#: gtk/gtkcombobox.c:375
+#: gtk/gtkcombobox.c:373
 msgid "TreeModel column containing the column span values"
 msgstr "TreeModel-kolonne som inneholder verdier for kolonneutbredelse"
 
-#: gtk/gtkcombobox.c:384
+#: gtk/gtkcombobox.c:382
 msgid "Active item"
 msgstr "Aktiv oppføring"
 
-#: gtk/gtkcombobox.c:385
+#: gtk/gtkcombobox.c:383
 msgid "The item which is currently active"
 msgstr "Oppføringen som er aktiv"
 
-#: gtk/gtkcombobox.c:393
+#: gtk/gtkcombobox.c:391
 msgid "ComboBox appareance"
 msgstr "Utseende for ComboBox"
 
-#: gtk/gtkcombobox.c:394
+#: gtk/gtkcombobox.c:392
 msgid "ComboBox appearance, where TRUE means Windows-style."
 msgstr "Utseende for ComboBox. TRUE betyr Windows-stil."
 
