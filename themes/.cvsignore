@@ -11,3 +11,16 @@ configure
 config.cache
 .deps
 .libs
+metal_data/.libs
+metal_data/.deps
+metal_data/Makefile.in
+metal_data/Makefile
+motif_data/.libs
+motif_data/.deps
+motif_data/Makefile.in
+motif_data/Makefile
+win95_data/.libs
+win95_data/.deps
+win95_data/Makefile.in
+win95_data/Makefile
+

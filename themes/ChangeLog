@@ -1,3 +1,7 @@
+Tue Sep  1 00:12:12 CDT 1998  Frank Belew <frb@umr.edu>
+	* Makefile.am: added support for new imlib.m4
+	* configure.in: added support for new imlib.m4
+
 Fri Aug 21 19:08:25 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* Makefile.am: Added support for metal theme. 

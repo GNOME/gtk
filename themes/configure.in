@@ -27,7 +27,8 @@ AC_PROG_MAKE_SET
 
 AM_PATH_GTK(1.1.0, , 
 	AC_MSG_ERROR([*** GTK 1.1 not installed - please install first ***]))
-
+AM_PATH_GDK_IMLIB(1.8, ,
+        AC_MSG_ERROR([*** IMLIB 1.8 not installed - please install first ***]))
 # Checks for header files.
 AC_HEADER_STDC
 
