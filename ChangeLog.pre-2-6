@@ -1,5 +1,10 @@
 2000-12-21  Alexander Larsson  <alexl@redhat.com>
 
+	* docs/README.linux-fb:
+	Update the docs to the new pangoft2 way.
+
+2000-12-21  Alexander Larsson  <alexl@redhat.com>
+
 	* configure.in:
 	For linux-fb get the pangoft2 cflags and libs. This needs a recent
 	pango version.

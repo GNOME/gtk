@@ -14,6 +14,8 @@ on libfribidi, but for normal GtkFB usage that can be ignored.
 
 You also need freetype 2, I recommend that you use freetype 2.0.1 or
 later, as there was some problems with freetype-config in 2.0.
+Make sure that you install freetype before pango, since pango also
+needs it.
 Freetype can be found at ftp://ftp.freetype.org
 
 Hardware requirements:
@@ -30,38 +32,34 @@ First build and install glib and pango as usual, in that order.
 Then configure Gtk by running configure (or autogen.sh if running from
 cvs) with --with-gdktarget=linux-fb.
 
-Make sure that pango and gtk+ are installed in the same prefix, as
-gtk+ installs a new pango module that pango must be able to find.
-
 Then compile as ususal: make; make install
-
-This installs a new pango module that pango must be instructed to
-find. This is done by running something like:
-pango-querymodules > /your_prefix/etc/pango/pango.modules
-(look at this file and make sure it contains a row with fb-basic.so.
 
 Fonts:
 ------
 Since GtkFB uses freetype 2 to render fonts it can render truetype and
-postscript type 1 antialiased fonts. At startup it scans these
-directories looking for any fonts:
-/usr/share/fonts/default/TrueType
-/usr/share/fonts/default/Type1
-/usr/lib/X11/fonts/TrueType
-/usr/lib/X11/fonts/Type1
-$(prefix)/share/fonts
+postscript type 1 antialiased fonts.
 
-It also has a hardcoded font alias handling. This is important because
-most program refers to the standard fonts by the names "Sans", "Serif"
-and "Monotype". The default aliases in GtkFB maps these to the
-M$ truetype fonts: Arial, Times New Roman, and Courier New (you need
-to own a copy of Windows to use these) and the type1 fonts URW Gothic,
-URW Bookman and Courier. You will need to have at least Arial or URW
-Gothic installed, because the "Sans" font is used as a last case font.
+At startup it scans some directories looking for fonts. By default
+it looks in $prefix/lib/ft2fonts, and if you want to change this you
+must add something like:
 
-If you've done all this and fonts still doesn't work, make sure you've
-run pango-querymodules as described in the building and installing
-section.
+[PangoFT2]
+FontPath = /usr/share/fonts/default/TrueType
+
+To your $prefix/etc/pango/pangorc or ~/.pangorc.
+
+You must also set up font aliases for the fonts Sans, Serif and Monotype.
+This is done by creating a $prefix/etc/pango/pangoft2.aliases or
+~/.pangoft2.aliases file. You can also set the name of this file using the
+key AliasFiles in the PangoFT2 section in pangorc.
+
+An example of a font alias file is:
+sans normal normal normal normal "arial"
+serif normal normal normal normal "times new roman"
+monospace normal normal normal normal "courier new"
+
+A more detailed example can be found in examples/pangoft2.aliases in the
+pango distribution.
 
 Running:
 --------
