@@ -357,7 +357,10 @@ EXTRA_DIST = \
 	tree_minus.xpm		\
 	tree_plus.xbm		\
 	tree_minus.xbm          \
-        circles.xbm
+        circles.xbm		\
+	gtkrc.ja 		\
+	gtkrc.ko		\
+	gtkrc.ru
 
 INCLUDES = \
 	-DGTK_DISABLE_COMPAT_H				\

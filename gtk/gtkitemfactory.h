@@ -83,6 +83,8 @@ struct _GtkItemFactoryClass
   gchar			*cpair_comment_single;
 
   GHashTable		*item_ht;
+
+  gpointer               dummy;
 };
 
 struct _GtkItemFactoryEntry

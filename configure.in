@@ -28,8 +28,8 @@ AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl
 # set GTK_BINARY_AGE and GTK_INTERFACE_AGE to 0.
 #
 GTK_MAJOR_VERSION=1
-GTK_MINOR_VERSION=1
-GTK_MICRO_VERSION=16
+GTK_MINOR_VERSION=2
+GTK_MICRO_VERSION=0
 GTK_INTERFACE_AGE=0
 GTK_BINARY_AGE=0
 GTK_VERSION=$GTK_MAJOR_VERSION.$GTK_MINOR_VERSION.$GTK_MICRO_VERSION
@@ -214,10 +214,10 @@ fi
 if test x$with_glib = x ; then 
   # Look for separately installed glib
 
-  AM_PATH_GLIB(1.1.16,,
+  AM_PATH_GLIB(1.2.0,,
     AC_MSG_ERROR([
-*** GLIB 1.1.16 or better is required. The latest version of GLIB
-*** is always available from ftp://ftp.gtk.org.]),
+*** GLIB 1.2.0 or better is required. The latest version of GLIB
+*** is always available from ftp://ftp.gtk.org/.]),
     gmodule gthread)
 
   # we do not want to make all gtk progs to link to thread libraries.

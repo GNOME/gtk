@@ -4,20 +4,26 @@ Peter Mattis      <petm@xcf.berkeley.edu>
 Spencer Kimball   <spencer@xcf.berkeley.edu>
 Josh MacDonald    <jmacd@xcf.berkeley.edu>
 
+Please do not mail the original authors asking questions about this 
+version of GTK+.
 
 The GTK+ Team (in alphabetical order)
 -------------------------------------
 Shawn T. Amundson <amundson@gtk.org>
-Jerome Bolliet    <bolliet@in2p3.fr>
+Jerome Bolliet    <bolliet@gtk.org>
+Damon Chaplin     <damon@gtk.org>
 Tony Gale         <gale@gtk.org>
+Jeff Garzik       <jgarzik@gtk.org>
 Lars Hamann       <lars@gtk.org>
+Raja R Harinath   <harinath@gtk.org>
+Carsten Haitzler  <raster@gtk.org>
 Tim Janik         <timj@gtk.org>
 Stefan Jeske      <stefan@gtk.org>
 Elliot Lee        <sopwith@gtk.org>
 Raph Levien       <raph@gtk.org>
 Ian Main          <imain@gtk.org>
 Federico Mena     <quartic@gtk.org>
-Paolo Molaro      <lupus@lettere.unipd.it>
+Paolo Molaro      <lupus@gtk.org>
 Jay Painter       <jpaint@gtk.org>
 Manish Singh      <manish@gtk.org>
 Owen Taylor       <otaylor@gtk.org>

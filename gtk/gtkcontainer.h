@@ -97,6 +97,10 @@ struct _GtkContainerClass
 				 guint        	 arg_id);
   gchar*  (*composite_name)	(GtkContainer	*container,
 				 GtkWidget	*child);
+
+  /* Padding for future expansion */
+  GtkFunction pad1;
+  GtkFunction pad2;
 };
 
 /* Application-level methods */

@@ -1,3 +1,23 @@
+What's New in GTK+ 1.2.0 (since 1.0.x):
+
+* New widgets: GtkFontSelector, GtkPacker, GtkItemFactory, GtkCTree,
+  GtkInvisible, GtkCalendar, GtkLayout, GtkPlug, GtkSocket
+* Many new features and robustness for existing widgets
+* Theme support
+* New DND implementation
+* Internationalization of standard dialogs
+* New key binding system
+* Tearoff menus and menu accelerators
+* Wide character support for entry and text
+* Resizing code has been overhauled
+* Queued redraws of partial areas
+* Far better support for object arguments
+* Speed optimizations
+* Runtime loading of dynamic modules
+* Support for GLib log domains
+* Tutorial improvements
+* A bug fix or two
+
 Overview of Changes in GTK+ 1.1.16:
 
 * Major fixes and improvements for handlebox

@@ -1,3 +1,20 @@
+Wed Feb 24 05:27:44 CST 1999 Shawn T. Amundson <amundson@gtk.org>
+
+	* Released GTK+ 1.2.0
+
+	* AUTHORS: updated
+	
+Wed Feb 24 05:26:20 CST 1999 Shawn T. Amundson <amundson@gtk.org>
+
+	* gtk/gtkitemfactory.h: added a dummy gpointer to 
+	  GtkItemFactoryClass for Tim Janik.
+
+Mon Feb 22 21:22:11 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcontainer.h gtk/gtkwidget.h: Added some
+	  padding to class structures to allow addition
+	  of signals without breaking binary compatibility.
+
 Thu Feb 25 13:38:38 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_size_request): still

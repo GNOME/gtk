@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.1.16\n"
-"POT-Creation-Date: 1999-02-24 23:55+0100\n"
+"POT-Creation-Date: 1999-02-25 05:04-0600\n"
 "PO-Revision-Date: 1998-02-25 00:00+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@fib.hl.no>\n"
 "Language-Team: Norwegian <no@li.org>\n"
@@ -42,14 +42,14 @@ msgid "Opacity:"
 msgstr "Ugjennomsiktighet:"
 
 #. The OK button
-#: gtk/gtkcolorsel.c:1668 gtk/gtkfilesel.c:469 gtk/gtkfontsel.c:3472
+#: gtk/gtkcolorsel.c:1668 gtk/gtkfilesel.c:469 gtk/gtkfontsel.c:3475
 #: gtk/gtkgamma.c:416
 msgid "OK"
 msgstr "OK"
 
 #. The Cancel button
 #: gtk/gtkcolorsel.c:1674 gtk/gtkfilesel.c:476 gtk/gtkfilesel.c:851
-#: gtk/gtkfilesel.c:951 gtk/gtkfilesel.c:1066 gtk/gtkfontsel.c:3485
+#: gtk/gtkfilesel.c:951 gtk/gtkfilesel.c:1066 gtk/gtkfontsel.c:3488
 #: gtk/gtkgamma.c:424
 msgid "Cancel"
 msgstr "Avbryt"
@@ -196,7 +196,7 @@ msgstr "Reell verdi"
 msgid "Font"
 msgstr "Skrifttype"
 
-#: gtk/gtkfontsel.c:504 gtk/gtkfontsel.c:2153 gtk/gtkfontsel.c:2383
+#: gtk/gtkfontsel.c:504 gtk/gtkfontsel.c:2156 gtk/gtkfontsel.c:2386
 msgid "Font:"
 msgstr "Skrifttype:"
 
@@ -271,23 +271,23 @@ msgstr "Skalert bilde"
 msgid "regular"
 msgstr "vanlig"
 
-#: gtk/gtkfontsel.c:1220 gtk/gtkfontsel.c:1945
+#: gtk/gtkfontsel.c:1220 gtk/gtkfontsel.c:1948
 msgid "italic"
 msgstr "kursiv"
 
-#: gtk/gtkfontsel.c:1221 gtk/gtkfontsel.c:1946
+#: gtk/gtkfontsel.c:1221 gtk/gtkfontsel.c:1949
 msgid "oblique"
 msgstr "hellende"
 
-#: gtk/gtkfontsel.c:1222 gtk/gtkfontsel.c:1947
+#: gtk/gtkfontsel.c:1222 gtk/gtkfontsel.c:1950
 msgid "reverse italic"
 msgstr "omvendt kursiv"
 
-#: gtk/gtkfontsel.c:1223 gtk/gtkfontsel.c:1948
+#: gtk/gtkfontsel.c:1223 gtk/gtkfontsel.c:1951
 msgid "reverse oblique"
 msgstr "omvendt hellende"
 
-#: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1949
+#: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1952
 msgid "other"
 msgstr "annet"
 
@@ -299,51 +299,51 @@ msgstr "[M]"
 msgid "[C]"
 msgstr "[C]"
 
-#: gtk/gtkfontsel.c:1777
+#: gtk/gtkfontsel.c:1780
 msgid "The selected font is not available."
 msgstr "Den valgte skrifttypen er ikke tilgjengelig."
 
-#: gtk/gtkfontsel.c:1783
+#: gtk/gtkfontsel.c:1786
 msgid "The selected font is not a valid font."
 msgstr "Den valgte skrifttypen er ikke en gyldig skrifttype."
 
-#: gtk/gtkfontsel.c:1841
+#: gtk/gtkfontsel.c:1844
 msgid "This is a 2-byte font and may not be displayed correctly."
 msgstr "Dette er en 2-byte skrifttype og vil kanskje ikke vises riktig."
 
-#: gtk/gtkfontsel.c:1933 gtk/gtkinputdialog.c:607
+#: gtk/gtkfontsel.c:1936 gtk/gtkinputdialog.c:607
 msgid "(unknown)"
 msgstr "(ukjent)"
 
-#: gtk/gtkfontsel.c:1944
+#: gtk/gtkfontsel.c:1947
 msgid "roman"
 msgstr "romansk"
 
-#: gtk/gtkfontsel.c:1956
+#: gtk/gtkfontsel.c:1959
 msgid "proportional"
 msgstr "proporsjonal"
 
-#: gtk/gtkfontsel.c:1957
+#: gtk/gtkfontsel.c:1960
 msgid "monospaced"
 msgstr ""
 
-#: gtk/gtkfontsel.c:1958
+#: gtk/gtkfontsel.c:1961
 msgid "char cell"
 msgstr "tegncelle"
 
-#: gtk/gtkfontsel.c:2158
+#: gtk/gtkfontsel.c:2161
 msgid "Font: (Filter Applied)"
 msgstr "Skrifttype: (med filter på)"
 
-#: gtk/gtkfontsel.c:2634
+#: gtk/gtkfontsel.c:2637
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
 msgstr "MAX_FONTS oversteget. Noen skrifttyper mangler kanskje."
 
-#: gtk/gtkfontsel.c:3479
+#: gtk/gtkfontsel.c:3482
 msgid "Apply"
 msgstr "Bruk"
 
-#: gtk/gtkfontsel.c:3501
+#: gtk/gtkfontsel.c:3504
 msgid "Font Selection"
 msgstr "Valg av skrifttype"
 
