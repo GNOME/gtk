@@ -1,3 +1,7 @@
+2005-02-05  Hans Breuer  <hans@breuer.org>
+
+	* makefile.msc : rule for gdk_pixbuf.def
+
 2005-02-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* io-pnm.c (pnm_read_next_value): Pass in the max number 
