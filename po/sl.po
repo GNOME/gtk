@@ -374,7 +374,7 @@ msgstr "Ključi za sklope besedila PNG morajo biti znaki ASCII."
 msgid ""
 "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
 msgstr ""
-"Vrednosti za sklop besedila PNG ni mogoče pretvoriti v znakovni nabor ISO-"
+"Vrednosti za sklop besedila PNG %s ni mogoče pretvoriti v znakovni nabor ISO-"
 "8859-1."
 
 #: gdk-pixbuf/io-png.c:919
