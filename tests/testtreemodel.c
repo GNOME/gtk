@@ -191,7 +191,7 @@ test_run (gchar        *title,
   gchar *text;
   GTimer *timer;
   gdouble elapsed;
-  int uordblks_before;
+  int uordblks_before, memused;
 
   g_print ("%s (average over %d runs, time in milliseconds)\n"
 	   "items \ttime      \ttime/item \tused memory\n", title, repeats);
@@ -205,7 +205,10 @@ test_run (gchar        *title,
       for (d = 0; d < repeats; d++)
 	{
 	  (*clear)(store);
+#ifdef HAVE_MALLINFO
+	  /* Peculiar location of this, btw.  -- MW.  */
 	  uordblks_before = mallinfo().uordblks;
+#endif
 	  g_timer_reset (timer);
 	  g_timer_start (timer);
 	  for (i = 0; i < items; i++)
@@ -215,8 +218,13 @@ test_run (gchar        *title,
 	}
       
       elapsed = elapsed * 1000 / repeats;
-      g_print ("%d \t%lf \t%lf  \t%ldk\n", 
-	       items, elapsed, elapsed/items, (mallinfo().uordblks - uordblks_before) / 1024);
+#ifdef HAVE_MALLINFO
+      memused = (mallinfo().uordblks - uordblks_before) / 1024;
+#else
+      memused = 0;
+#endif
+      g_print ("%d \t%f \t%f  \t%dk\n", 
+	       items, elapsed, elapsed/items, memused);
     }  
 }
 

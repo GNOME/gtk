@@ -1,4 +1,3 @@
-<<<<<<< ChangeLog
 2004-08-16  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_render_icon): Doc update.
@@ -10,6 +9,9 @@
 	a pointer to the beginning of the sizes array, not the end.
 
 2004-08-16  Morten Welinder  <terra@gnome.org>
+
+	* tests/testtreemodel.c (test_run): Comment out mallinfo stuff.
+	Fix g_print %-strings.
 
 	* gtk/gtksequence.c (_gtk_sequence_set): Fix C99ism.
 
