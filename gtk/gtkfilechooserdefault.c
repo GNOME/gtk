@@ -1504,16 +1504,14 @@ renderer_edited_cb (GtkCellRendererText   *cell_renderer_text,
     }
 
   error = NULL;
-  if (!gtk_file_system_create_folder (impl->file_system, file_path, &error))
-    {
-      error_dialog (impl,
-		    _("Could not create folder %s:\n%s"),
-		    file_path, error);
-    }
+  if (gtk_file_system_create_folder (impl->file_system, file_path, &error))
+    change_folder_and_display_error (impl, file_path);
+  else
+    error_dialog (impl,
+		  _("Could not create folder %s:\n%s"),
+		  file_path, error);
 
   gtk_file_path_free (file_path);
-
-  /* FIXME: scroll to the new folder and select it */
 }
 
 /* Callback used from the text cell renderer when the new folder edition gets
@@ -2608,10 +2606,12 @@ trap_activate_cb (GtkWidget   *widget,
 	  && widget != window->default_widget
 	  && !(widget == window->focus_widget &&
 	       (!window->default_widget || !GTK_WIDGET_SENSITIVE (window->default_widget))))
-	gtk_window_activate_default (window);
-
-      return TRUE;
+	{
+	  gtk_window_activate_default (window);
+	  return TRUE;
+	}
     }
+
   return FALSE;
 }
 
