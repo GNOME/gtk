@@ -101,6 +101,8 @@ struct _GtkDragSourceInfo
   guint              drop_timeout;     /* Timeout for aborting drop */
   guint              destroy_icon : 1; /* If true, destroy icon_window
 					*/
+  guint              have_grab : 1;    /* Do we still have the pointer grab
+					*/
 };
 
 struct _GtkDragDestSite 
@@ -1897,6 +1899,8 @@ gtk_drag_begin (GtkWidget         *widget,
 	}
     }
 
+  info->have_grab = TRUE;
+
   return info->context;
 }
 
@@ -2456,7 +2460,7 @@ _gtk_drag_source_handle_event (GtkWidget *widget,
 		  }
 	      }
 	  }
-	else
+	else if (info->have_grab)
 	  {
 	    cursor = gtk_drag_get_cursor (gtk_widget_get_screen (widget),
 					  event->dnd.context->action);
@@ -3022,6 +3026,8 @@ gtk_drag_end (GtkDragSourceInfo *info, guint32 time)
   GtkWidget *source_widget = info->widget;
   GdkDisplay *display = gtk_widget_get_display (source_widget);
 
+  info->have_grab = FALSE;
+  
   gdk_display_pointer_ungrab (display, time);
   gdk_display_keyboard_ungrab (display, time);
   gtk_grab_remove (info->ipc_widget);
