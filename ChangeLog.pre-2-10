@@ -1,3 +1,8 @@
+Fri Jul 23 11:01:00 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktextbtree.c (_gtk_text_line_previous_could_contain_tag): 
+	Don't iterate too far up.  (#147965, Olivier Sessink)
+
 Fri Jul 23 10:28:43 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktreeview.c (gtk_tree_view_finalize): 

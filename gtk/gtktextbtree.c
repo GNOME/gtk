@@ -4487,8 +4487,7 @@ _gtk_text_line_previous_could_contain_tag (GtkTextLine  *line,
       line_ancestor = line->parent;
       line_ancestor_parent = line->parent->parent;
 
-      node = line_ancestor_parent->children.node;
-      while (node != line_ancestor || line_ancestor != info->tag_root)
+      while (line_ancestor != info->tag_root)
         {
           GSList *child_nodes = NULL;
           GSList *tmp;
@@ -4496,6 +4495,11 @@ _gtk_text_line_previous_could_contain_tag (GtkTextLine  *line,
           /* Create reverse-order list of nodes before
            * line_ancestor
            */
+          if (line_ancestor_parent != NULL)
+	    node = line_ancestor_parent->children.node;
+	  else
+	    node = line_ancestor;
+
           while (node != line_ancestor && node != NULL)
             {
               child_nodes = g_slist_prepend (child_nodes, node);
@@ -4526,11 +4530,6 @@ _gtk_text_line_previous_could_contain_tag (GtkTextLine  *line,
           /* Didn't find anything on this level; go up one level. */
           line_ancestor = line_ancestor_parent;
           line_ancestor_parent = line_ancestor->parent;
-
-          if (line_ancestor_parent != NULL)
-            {
-              node = line_ancestor_parent->children.node;
-            }
         }
 
       /* No dice. */
