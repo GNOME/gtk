@@ -3134,7 +3134,9 @@ save_widgets_create (GtkFileChooserDefault *impl)
 		    0, 0);
   gtk_widget_show (widget);
 
-  impl->save_file_name_entry = gtk_entry_new ();
+  impl->save_file_name_entry = _gtk_file_chooser_entry_new ();
+  _gtk_file_chooser_entry_set_file_system (GTK_FILE_CHOOSER_ENTRY (impl->save_file_name_entry),
+					   impl->file_system);
   gtk_entry_set_width_chars (GTK_ENTRY (impl->save_file_name_entry), 45);
   gtk_entry_set_activates_default (GTK_ENTRY (impl->save_file_name_entry), TRUE);
   gtk_table_attach (GTK_TABLE (table), impl->save_file_name_entry,
@@ -4075,8 +4077,8 @@ update_chooser_entry (GtkFileChooserDefault *impl)
   info = _gtk_file_system_model_get_info (impl->browse_files_model, &child_iter);
 
   if (!gtk_file_info_get_is_folder (info))
-    gtk_entry_set_text (GTK_ENTRY (impl->save_file_name_entry),
-			gtk_file_info_get_display_name (info));
+    _gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (impl->save_file_name_entry),
+					   gtk_file_info_get_display_name (info));
 }
 
 static gboolean
@@ -4124,6 +4126,11 @@ gtk_file_chooser_default_set_current_folder (GtkFileChooser    *chooser,
       impl->changing_folder = FALSE;
     }
 
+  /* Set the folder on the save entry */
+
+  _gtk_file_chooser_entry_set_base_folder (GTK_FILE_CHOOSER_ENTRY (impl->save_file_name_entry),
+					   impl->current_folder);
+
   /* Create a new list model.  This is slightly evil; we store the result value
    * but perform more actions rather than returning immediately even if it
    * generates an error.
@@ -4161,7 +4168,7 @@ gtk_file_chooser_default_set_current_name (GtkFileChooser *chooser,
   g_return_if_fail (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
 		    || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER);
 
-  gtk_entry_set_text (GTK_ENTRY (impl->save_file_name_entry), name);
+  _gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (impl->save_file_name_entry), name);
 }
 
 static void
@@ -4295,16 +4302,21 @@ check_save_entry (GtkFileChooserDefault *impl,
 		  gboolean              *is_valid,
 		  gboolean              *is_empty)
 {
-  const char *filename;
+  GtkFileChooserEntry *chooser_entry;
+  const GtkFilePath *current_folder;
+  const char *file_part;
   GtkFilePath *path;
   GError *error;
 
   g_assert (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
 	    || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER);
 
-  filename = gtk_entry_get_text (GTK_ENTRY (impl->save_file_name_entry));
+  chooser_entry = GTK_FILE_CHOOSER_ENTRY (impl->save_file_name_entry);
 
-  if (!filename || filename[0] == '\0')
+  current_folder = _gtk_file_chooser_entry_get_current_folder (chooser_entry);
+  file_part = _gtk_file_chooser_entry_get_file_part (chooser_entry);
+
+  if (!file_part || file_part[0] == '\0')
     {
       *is_valid = FALSE;
       *is_empty = TRUE;
@@ -4314,11 +4326,11 @@ check_save_entry (GtkFileChooserDefault *impl,
   *is_empty = FALSE;
 
   error = NULL;
-  path = gtk_file_system_make_path (impl->file_system, impl->current_folder, filename, &error);
+  path = gtk_file_system_make_path (impl->file_system, current_folder, file_part, &error);
 
   if (!path)
     {
-      error_building_filename_dialog (impl, impl->current_folder, filename, error);
+      error_building_filename_dialog (impl, current_folder, file_part, error);
       *is_valid = FALSE;
       return NULL;
     }

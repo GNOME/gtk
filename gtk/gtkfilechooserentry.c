@@ -841,6 +841,7 @@ _gtk_file_chooser_entry_set_base_folder (GtkFileChooserEntry *chooser_entry,
 
   chooser_entry->base_folder = gtk_file_path_copy (path);
 
+  gtk_file_chooser_entry_changed (GTK_EDITABLE (chooser_entry));
   gtk_editable_select_region (GTK_EDITABLE (chooser_entry), 0, -1);
 }
 

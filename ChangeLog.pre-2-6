@@ -1,3 +1,23 @@
+2004-08-06  Federico Mena Quintero  <federico@ximian.com>
+
+	Fix #144232:
+
+	* gtk/gtkfilechooserdefault.c (save_widgets_create): Use a
+	GtkFileChooserEntry for the file name, rather than a GtkEntry.
+	(update_chooser_entry): Set the contents of the file chooser entry
+	rather than the plain entry's.
+	(gtk_file_chooser_default_set_current_folder): Set the new folder
+	on the save entry.
+	(gtk_file_chooser_default_set_current_name): Set the name on the
+	file chooser entry.
+	(check_save_entry): Use the file chooser entry rather than the
+	plain entry.
+
+	* gtk/gtkfilechooserentry.c
+	(_gtk_file_chooser_entry_set_base_folder): Call
+	gtk_file_chooser_entry_changed() so that we recompute the current
+	folder based on the new base folder.
+
 2004-08-06  Hans Breuer  <hans@breuer.org>
 
 	* gdk/win32/gdkwindow-win32.c : make it compile and more
