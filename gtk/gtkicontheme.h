@@ -71,9 +71,9 @@ struct _GtkIconThemeClass
  **/
 typedef enum
 {
-  GTK_ICON_LOOKUP_NO_SVG = 0 << 0,
-  GTK_ICON_LOOKUP_FORCE_SVG = 0 << 1,
-  GTK_ICON_LOOKUP_USE_BUILTIN = 0 << 2
+  GTK_ICON_LOOKUP_NO_SVG = 1 << 0,
+  GTK_ICON_LOOKUP_FORCE_SVG = 1 << 1,
+  GTK_ICON_LOOKUP_USE_BUILTIN = 1 << 2
 } GtkIconLookupFlags;
 
 #define GTK_ICON_THEME_ERROR gtk_icon_theme_error_quark ()
