@@ -2265,6 +2265,14 @@ entry_toggle_editable (GtkWidget *checkbutton,
 }
 
 static void
+entry_toggle_visibility (GtkWidget *checkbutton,
+			GtkWidget *entry)
+{
+   gtk_entry_set_visibility(GTK_ENTRY(entry),
+			 GTK_TOGGLE_BUTTON(checkbutton)->active);
+}
+
+static void
 create_entry (void)
 {
   static GtkWidget *window = NULL;
@@ -2327,6 +2335,13 @@ create_entry (void)
       gtk_box_pack_start (GTK_BOX (box2), editable_check, FALSE, TRUE, 0);
       gtk_signal_connect (GTK_OBJECT(editable_check), "toggled",
 			  GTK_SIGNAL_FUNC(entry_toggle_editable), entry);
+      gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(editable_check), TRUE);
+      gtk_widget_show (editable_check);
+
+      editable_check = gtk_check_button_new_with_label("Visible");
+      gtk_box_pack_start (GTK_BOX (box2), editable_check, FALSE, TRUE, 0);
+      gtk_signal_connect (GTK_OBJECT(editable_check), "toggled",
+			  GTK_SIGNAL_FUNC(entry_toggle_visibility), entry);
       gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(editable_check), TRUE);
       gtk_widget_show (editable_check);
 

@@ -76,6 +76,8 @@ struct _GtkEditableClass
 			 gint            end_pos);
   void (* activate)     (GtkEditable    *editable);
   void (* changed)      (GtkEditable    *editable);
+  void (* set_position) (GtkEditable    *editable,
+			 gint            position);
 };
 
 guint      gtk_editable_get_type       (void);
@@ -104,6 +106,9 @@ void       gtk_editable_claim_selection (GtkEditable     *editable,
 void       gtk_editable_delete_selection (GtkEditable    *editable);
 
 void       gtk_editable_changed         (GtkEditable    *editable);
+void       gtk_editable_set_position    (GtkEditable    *editable,
+					 gint            position);
+gint       gtk_editable_get_position    (GtkEditable    *editable);
 
 
 #ifdef __cplusplus

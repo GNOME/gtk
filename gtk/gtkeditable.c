@@ -35,6 +35,8 @@
 enum {
   ACTIVATE,
   CHANGED,
+  INSERT_TEXT,
+  DELETE_TEXT,
   LAST_SIGNAL
 };
 
@@ -53,11 +55,31 @@ static void gtk_editable_set_selection    (GtkEditable          *editable,
 					   gint               start,
 					   gint               end);
 
+static void gtk_editable_marshal_signal_1    (GtkObject * object,
+					      GtkSignalFunc func,
+					      gpointer func_data,
+					      GtkArg * args);
+static void gtk_editable_marshal_signal_2    (GtkObject * object,
+					      GtkSignalFunc func,
+					      gpointer func_data,
+					      GtkArg * args);
+
 static GtkWidgetClass *parent_class = NULL;
 static guint editable_signals[LAST_SIGNAL] = { 0 };
 static GdkAtom ctext_atom = GDK_NONE;
 static GdkAtom text_atom = GDK_NONE;
 static GdkAtom clipboard_atom = GDK_NONE;
+
+typedef void (*GtkTextSignal1) (GtkObject * object,
+				 gchar *arg1,
+				 gint arg2,
+				 gint *arg3,
+				 gpointer data);
+
+typedef void (*GtkTextSignal2) (GtkObject * object,
+				 gint arg1,
+				 gint arg2,
+				 gpointer data);
 
 guint
 gtk_editable_get_type (void)
@@ -109,6 +131,29 @@ gtk_editable_class_init (GtkEditableClass *class)
 		    GTK_SIGNAL_OFFSET (GtkEditableClass, changed),
 		    gtk_signal_default_marshaller,
 		    GTK_TYPE_NONE, 0);
+
+  editable_signals[INSERT_TEXT] =
+    gtk_signal_new ("insert_text",
+		    GTK_RUN_LAST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkEditableClass, insert_text),
+		    gtk_editable_marshal_signal_1,
+		    GTK_TYPE_NONE,
+		    3,
+		    GTK_TYPE_STRING,
+		    GTK_TYPE_INT,
+		    GTK_TYPE_POINTER);
+
+  editable_signals[DELETE_TEXT] =
+    gtk_signal_new ("delete_text",
+		    GTK_RUN_LAST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkEditableClass, delete_text),
+		    gtk_editable_marshal_signal_2,
+		    GTK_TYPE_NONE,
+		    2,
+		    GTK_TYPE_INT,
+		    GTK_TYPE_INT);		    
 
   gtk_object_class_add_signals (object_class, editable_signals, LAST_SIGNAL);
 
@@ -219,7 +264,7 @@ gtk_editable_insert_text (GtkEditable *editable,
 
   strncpy (text, new_text, new_text_length);
 
-  klass->insert_text (editable, text, new_text_length, position);
+  gtk_signal_emit (GTK_OBJECT (editable), editable_signals[INSERT_TEXT], text, new_text_length, position);
   gtk_signal_emit (GTK_OBJECT (editable), editable_signals[CHANGED]);
 
   if (new_text_length > 64)
@@ -238,7 +283,7 @@ gtk_editable_delete_text (GtkEditable *editable,
 
   klass = GTK_EDITABLE_CLASS (GTK_OBJECT (editable)->klass);
 
-  klass->delete_text (editable, start_pos, end_pos);
+  gtk_signal_emit (GTK_OBJECT (editable), editable_signals[DELETE_TEXT], start_pos, end_pos);
   gtk_signal_emit (GTK_OBJECT (editable), editable_signals[CHANGED]);
 }
 
@@ -285,6 +330,26 @@ gtk_editable_set_selection (GtkEditable *editable,
   klass = GTK_EDITABLE_CLASS (GTK_OBJECT (editable)->klass);
 
   klass->set_selection (editable, start_pos, end_pos);
+}
+
+void
+gtk_editable_set_position      (GtkEditable      *editable,
+				gint              position)
+{
+  GtkEditableClass *klass;
+
+  g_return_if_fail (editable != NULL);
+  g_return_if_fail (GTK_IS_EDITABLE (editable));
+
+  klass = GTK_EDITABLE_CLASS (GTK_OBJECT (editable)->klass);
+
+  return klass->set_position (editable, position);
+}
+
+gint
+gtk_editable_get_position (GtkEditable      *editable)
+{
+  return editable->current_pos;
 }
 
 static gint
@@ -572,4 +637,35 @@ void
 gtk_editable_changed (GtkEditable *editable)
 {
   gtk_signal_emit (GTK_OBJECT (editable), editable_signals[CHANGED]);
+}
+
+static void
+gtk_editable_marshal_signal_1 (GtkObject * object,
+			       GtkSignalFunc func,
+			       gpointer func_data,
+			       GtkArg * args)
+{
+  GtkTextSignal1 rfunc;
+
+  rfunc = (GtkTextSignal1) func;
+
+  (*rfunc) (object, GTK_VALUE_STRING (args[0]),
+	    GTK_VALUE_INT (args[1]),
+	    GTK_VALUE_POINTER (args[2]),
+	    func_data);
+}
+
+static void
+gtk_editable_marshal_signal_2 (GtkObject * object,
+			       GtkSignalFunc func,
+			       gpointer func_data,
+			       GtkArg * args)
+{
+  GtkTextSignal2 rfunc;
+
+  rfunc = (GtkTextSignal2) func;
+
+  (*rfunc) (object, GTK_VALUE_INT (args[0]),
+	    GTK_VALUE_INT (args[1]),
+	    func_data);
 }

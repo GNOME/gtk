@@ -49,6 +49,8 @@ static void gtk_handle_box_map            (GtkWidget         *widget);
 static void gtk_handle_box_unmap          (GtkWidget         *widget);
 static void gtk_handle_box_realize        (GtkWidget         *widget);
 static void gtk_handle_box_unrealize      (GtkWidget         *widget);
+static void gtk_handle_box_style_set      (GtkWidget         *widget,
+					   GtkStyle          *previous_style);
 static void gtk_handle_box_size_request   (GtkWidget         *widget,
 					   GtkRequisition    *requisition);
 static void gtk_handle_box_size_allocate  (GtkWidget         *widget,
@@ -151,6 +153,7 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
   widget_class->unmap = gtk_handle_box_unmap;
   widget_class->realize = gtk_handle_box_realize;
   widget_class->unrealize = gtk_handle_box_unrealize;
+  widget_class->style_set = gtk_handle_box_style_set;
   widget_class->size_request = gtk_handle_box_size_request;
   widget_class->size_allocate = gtk_handle_box_size_allocate;
   widget_class->draw = gtk_handle_box_draw;
@@ -347,6 +350,29 @@ gtk_handle_box_unrealize (GtkWidget *widget)
 
   if (GTK_WIDGET_CLASS (parent_class)->unrealize)
     (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
+}
+
+static void
+gtk_handle_box_style_set (GtkWidget *widget,
+			  GtkStyle  *previous_style)
+{
+  GtkHandleBox *hb;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_HANDLE_BOX (widget));
+
+  hb = GTK_HANDLE_BOX (widget);
+
+  if (GTK_WIDGET_REALIZED (widget) &&
+      !GTK_WIDGET_NO_WINDOW (widget))
+    {
+      gtk_style_set_background (widget->style, widget->window,
+widget->state);
+      gtk_style_set_background (widget->style, hb->bin_window, widget->state);
+      gtk_style_set_background (widget->style, hb->float_window, widget->state);
+      if (GTK_WIDGET_DRAWABLE (widget))
+	gdk_window_clear (widget->window);
+    }
 }
 
 static void
