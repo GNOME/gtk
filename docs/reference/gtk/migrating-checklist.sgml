@@ -127,7 +127,8 @@ my_widget_popup_menu_handler (GtkWidget *widget)
 	in the case where the <parameter>event</parameter> is
 	<constant>NULL</constant>.  This function should compute the
 	desired position for a menu when it is invoked through the
-	keyboard.
+	keyboard.  For example, <xref linkend="GtkEntry"/> aligns the
+	top edge of its popup menu with the bottom edge of the entry.
       </para>
     </note>
   </section>

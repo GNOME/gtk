@@ -1,5 +1,10 @@
 2004-01-22  Federico Mena Quintero  <federico@ximian.com>
 
+	* gtk/migrating-checklist.sgml: Point to GtkEntry as an example of
+	a widget that uses a custom function to position its popup menu.
+
+2004-01-22  Federico Mena Quintero  <federico@ximian.com>
+
 	* gtk/migrating-checklist.sgml: New chapter with a "Migration
 	Checklist" of things people need to do to be good citizens in the
 	GTK+ world.  This is mainly a way to tell people about interesting
