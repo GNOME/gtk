@@ -193,6 +193,7 @@
 <!ENTITY gtk-migrating-GtkComboBox SYSTEM "migrating-GtkComboBox.sgml">
 <!ENTITY gtk-migrating-GtkIconView SYSTEM "migrating-GtkIconView.sgml">
 <!ENTITY gtk-migrating-GtkAboutDialog SYSTEM "migrating-GtkAboutDialog.sgml">
+<!ENTITY gtk-migrating-GtkColorButton SYSTEM "migrating-GtkColorButton.sgml">
 <!ENTITY version SYSTEM "version.xml">
 <!ENTITY gtk-query-immodules SYSTEM "gtk-query-immodules-2.0.xml">
 <!ENTITY gtk-update-icon-cache SYSTEM "gtk-update-icon-cache.xml">
@@ -564,6 +565,9 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
       <para>
 	This part describes what you need to change in programs use
 	older versions of GTK+ so that they can use the new features.
+        It also mentions how to convert applications using widgets
+        found in the libgnomeui library to use their counterparts
+        in GTK+.
       </para>
     </partintro>
 
@@ -575,6 +579,7 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
     &gtk-migrating-GtkComboBox;
     &gtk-migrating-GtkIconView;
     &gtk-migrating-GtkAboutDialog;
+    &gtk-migrating-GtkColorButton;
   </part>
 
   <part>
