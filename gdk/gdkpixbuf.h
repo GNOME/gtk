@@ -72,4 +72,4 @@ GdkPixbuf *gdk_pixbuf_get_from_drawable (GdkPixbuf   *dest,
 }
 #endif /* __cplusplus */
 
-#endif __GDK_PIXBUF_H__
+#endif /* __GDK_PIXBUF_H__ */
