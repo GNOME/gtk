@@ -2700,6 +2700,14 @@ gtk_list_signal_item_toggle (GtkListItem *list_item,
   g_return_if_fail (list != NULL);
   g_return_if_fail (GTK_IS_LIST (list));
 
+  if ((list->selection_mode == GTK_SELECTION_BROWSE ||
+       list->selection_mode == GTK_SELECTION_EXTENDED) &&
+      GTK_WIDGET (list_item)->state == GTK_STATE_NORMAL)
+    {
+      gtk_widget_set_state (GTK_WIDGET (list_item), GTK_STATE_SELECTED);
+      return;
+    }
+  
   switch (GTK_WIDGET (list_item)->state)
     {
     case GTK_STATE_SELECTED:

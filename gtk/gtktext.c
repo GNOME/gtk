@@ -1505,19 +1505,30 @@ static void
 clear_focus_area (GtkText *text, gint area_x, gint area_y, gint area_width, gint area_height)
 {
   GtkWidget *widget = GTK_WIDGET (text);
-  
+  GdkGC *gc;
+ 
   gint ythick = TEXT_BORDER_ROOM + widget->style->ythickness;
   gint xthick = TEXT_BORDER_ROOM + widget->style->xthickness;
   
   gint width, height;
   
-  gdk_window_get_size (widget->style->bg_pixmap[GTK_STATE_NORMAL], &width, &height);
+  if (area_width == 0 || area_height == 0)
+    return;
+    
+  if (widget->style->bg_pixmap[GTK_STATE_NORMAL])
+    {
+      gdk_window_get_size (widget->style->bg_pixmap[GTK_STATE_NORMAL], &width, &height);
   
-  gdk_gc_set_ts_origin (text->bg_gc,
-			(- text->first_onscreen_hor_pixel + xthick) % width,
-			(- text->first_onscreen_ver_pixel + ythick) % height);
+      gdk_gc_set_ts_origin (text->bg_gc,
+			    (- text->first_onscreen_hor_pixel + xthick) % width,
+			    (- text->first_onscreen_ver_pixel + ythick) % height);
+      
+       gc = text->bg_gc;
+    }
+  else
+    gc = widget->style->bg_gc[widget->state];
 
-  gdk_draw_rectangle (GTK_WIDGET (text)->window, text->bg_gc, TRUE,
+  gdk_draw_rectangle (GTK_WIDGET (text)->window, gc, TRUE,
 		      area_x, area_y, area_width, area_height);
 }
 
@@ -1573,19 +1584,16 @@ gtk_text_draw_focus (GtkWidget *widget)
       width -= 2 * xthick;
       height -= 2 * ythick;
       
-      if (widget->style->bg_pixmap[GTK_STATE_NORMAL])
-	{
-	  /* top rect */
-	  clear_focus_area (text, x, y, width, yextra);
-	  /* left rect */
-	  clear_focus_area (text, x, y + yextra, 
-			    xextra, y + height - 2 * yextra);
-	  /* right rect */
-	  clear_focus_area (text, x + width - xextra, y + yextra, 
-			    xextra, height - 2 * ythick);
-	  /* bottom rect */
-	  clear_focus_area (text, x, x + height - yextra, width, yextra);
-	}
+      /* top rect */
+      clear_focus_area (text, x, y, width, yextra);
+      /* left rect */
+      clear_focus_area (text, x, y + yextra, 
+			xextra, y + height - 2 * yextra);
+      /* right rect */
+      clear_focus_area (text, x + width - xextra, y + yextra, 
+			xextra, height - 2 * ythick);
+      /* bottom rect */
+      clear_focus_area (text, x, x + height - yextra, width, yextra);
     }
   else
     {

@@ -89,6 +89,18 @@
 #define FILE_LIST_WIDTH  180
 #define FILE_LIST_HEIGHT 180
 
+/* The Hurd doesn't define either PATH_MAX or MAXPATHLEN, so we put this
+ * in here, since the rest of the code in the file does require some
+ * fixed maximum.
+ */
+#ifndef MAXPATHLEN
+#  ifdef PATH_MAX
+#    define MAXPATHLEN PATH_MAX
+#  else
+#    define MAXPATHLEN 2048
+#  endif
+#endif
+
 /* I've put this here so it doesn't get confused with the 
  * file completion interface */
 typedef struct _HistoryCallbackArg HistoryCallbackArg;

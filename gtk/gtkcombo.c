@@ -46,51 +46,54 @@ const gchar *gtk_combo_string_key = "gtk-combo-string-value";
 #define COMBO_LIST_MAX_HEIGHT	(400)
 #define	EMPTY_LIST_HEIGHT	(15)
 
-static void         gtk_combo_class_init      (GtkComboClass *klass);
-static void         gtk_combo_init            (GtkCombo      *combo);
-static void         gtk_combo_destroy         (GtkObject     *combo);
-static GtkListItem *gtk_combo_find            (GtkCombo      *combo);
-static gchar *      gtk_combo_func            (GtkListItem  *li);
-static gint         gtk_combo_focus_idle      (GtkCombo      *combo);
-static gint         gtk_combo_entry_focus_out (GtkEntry      *entry, 
-                                               GdkEventFocus *event, 
-                                               GtkCombo      *combo);
-static void         gtk_combo_get_pos         (GtkCombo      *combo, 
-                                               gint          *x, 
-                                               gint          *y, 
-                                               gint          *height, 
-                                               gint          *width);
-static void         gtk_combo_popup_list      (GtkCombo      *combo);
-static void         gtk_combo_activate        (GtkWidget        *widget,
-					       GtkCombo         *combo);
+static void         gtk_combo_class_init         (GtkComboClass    *klass);
+static void         gtk_combo_init               (GtkCombo         *combo);
+static void         gtk_combo_destroy            (GtkObject        *combo);
+static GtkListItem *gtk_combo_find               (GtkCombo         *combo);
+static gchar *      gtk_combo_func               (GtkListItem      *li);
+static gint         gtk_combo_focus_idle         (GtkCombo         *combo);
+static gint         gtk_combo_entry_focus_out    (GtkEntry         *entry,
+						  GdkEventFocus    *event,
+						  GtkCombo         *combo);
+static void         gtk_combo_get_pos            (GtkCombo         *combo,
+						  gint             *x,
+						  gint             *y,
+						  gint             *height,
+						  gint             *width);
+static void         gtk_combo_popup_list         (GtkCombo         *combo);
+static void         gtk_combo_activate           (GtkWidget        *widget,
+						  GtkCombo         *combo);
 static void         gtk_combo_popup_button_press (GtkWidget        *button,
 						  GdkEventButton   *event,
 						  GtkCombo         *combo);
 static void         gtk_combo_popup_button_leave (GtkWidget        *button,
 						  GdkEventCrossing *event,
 						  GtkCombo         *combo);
-static void         gtk_combo_update_entry    (GtkList       *list, 
-                                               GtkCombo      *combo);
-static void         gtk_combo_update_list     (GtkEntry      *entry, 
-                                               GtkCombo      *combo);
-static gint         gtk_combo_button_press    (GtkWidget     *widget,
-				               GdkEvent      *event,
-				               GtkCombo      *combo);
-static gint         gtk_combo_button_release  (GtkWidget     *widget,
-				               GdkEvent      *event,
-				               GtkCombo      *combo);
-static gint         gtk_combo_list_enter      (GtkWidget        *widget,
-				               GdkEventCrossing *event,
-				               GtkCombo         *combo);
-static gint         gtk_combo_list_key_press  (GtkWidget     *widget, 
-                                               GdkEventKey   *event, 
-                                               GtkCombo      *combo);
-static gint         gtk_combo_entry_key_press (GtkEntry      *widget, 
-                                               GdkEventKey   *event, 
-                                               GtkCombo      *combo);
-static void         gtk_combo_item_destroy    (GtkObject     *object);
-static void         gtk_combo_size_allocate   (GtkWidget     *widget,
-					       GtkAllocation *allocation);
+static void         gtk_combo_update_entry       (GtkList          *list,
+						  GtkCombo         *combo);
+static void         gtk_combo_update_list        (GtkEntry         *entry,
+						  GtkCombo         *combo);
+static gint         gtk_combo_button_press       (GtkWidget        *widget,
+						  GdkEvent         *event,
+						  GtkCombo         *combo);
+static gint         gtk_combo_button_release     (GtkWidget        *widget,
+						  GdkEvent         *event,
+						  GtkCombo         *combo);
+static gint         gtk_combo_list_enter         (GtkWidget        *widget,
+						  GdkEventCrossing *event,
+						  GtkCombo         *combo);
+static gint         gtk_combo_list_key_press     (GtkWidget        *widget,
+						  GdkEventKey      *event,
+						  GtkCombo         *combo);
+static gint         gtk_combo_entry_key_press    (GtkEntry         *widget,
+						  GdkEventKey      *event,
+						  GtkCombo         *combo);
+static gint         gtk_combo_window_key_press   (GtkWidget        *window,
+						  GdkEventKey      *event,
+						  GtkCombo         *combo);
+static void         gtk_combo_item_destroy       (GtkObject        *object);
+static void         gtk_combo_size_allocate      (GtkWidget        *widget,
+						  GtkAllocation    *allocation);
 
 static GtkHBoxClass *parent_class = NULL;
 
@@ -205,6 +208,34 @@ gtk_combo_entry_key_press (GtkEntry * entry, GdkEventKey * event, GtkCombo * com
 	  return TRUE;
 	}
     }
+  return FALSE;
+}
+
+static int
+gtk_combo_window_key_press (GtkWidget   *window,
+			    GdkEventKey *event,
+			    GtkCombo    *combo)
+{
+  GList *li;
+
+  if (event->keyval == GDK_Return || event->keyval == GDK_KP_Enter)
+    {
+      if (GTK_WIDGET_VISIBLE (combo->popwin))
+	{
+	  gtk_widget_hide (combo->popwin);
+	  
+	  if (GTK_WIDGET_HAS_GRAB (combo->popwin))
+	    {
+	      gtk_grab_remove (combo->popwin);
+	      gdk_pointer_ungrab (event->time);
+	    }
+	}
+
+      gtk_signal_emit_stop_by_name (GTK_OBJECT (window), "key_press_event");
+
+      return TRUE;
+    }
+
   return FALSE;
 }
 
@@ -686,6 +717,9 @@ gtk_combo_init (GtkCombo * combo)
   combo->popwin = gtk_window_new (GTK_WINDOW_POPUP);
   gtk_widget_ref (combo->popwin);
   gtk_window_set_policy (GTK_WINDOW (combo->popwin), 1, 1, 0);
+
+  gtk_signal_connect (GTK_OBJECT (combo->popwin), "key_press_event",
+		      GTK_SIGNAL_FUNC (gtk_combo_window_key_press), combo);
   
   gtk_widget_set_events (combo->popwin, GDK_KEY_PRESS_MASK);
 

@@ -683,6 +683,12 @@ gtk_menu_shell_remove (GtkContainer *container,
   menu_shell = GTK_MENU_SHELL (container);
   menu_shell->children = g_list_remove (menu_shell->children, widget);
   
+  if (widget == menu_shell->active_menu_item)
+    {
+      gtk_item_deselect (GTK_ITEM (menu_shell->active_menu_item));
+      menu_shell->active_menu_item = NULL;
+    }
+
   gtk_widget_unparent (widget);
   
   /* queue resize regardless of GTK_WIDGET_VISIBLE (container),

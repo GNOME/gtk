@@ -1732,6 +1732,8 @@ gtk_entry_commit_cb (GtkIMContext *context,
   GtkEditable *editable = GTK_EDITABLE (entry);
   gint tmp_pos = entry->current_pos;
 
+  gtk_editable_delete_selection (editable);
+
   gtk_editable_insert_text (editable, str, strlen (str), &tmp_pos);
   gtk_editable_set_position (editable, tmp_pos);
 }

@@ -5,7 +5,7 @@ SUBDIRS=stock-icons
 INCLUDES = @STRIP_BEGIN@ \
 	-DG_LOG_DOMAIN=\"Gtk\"				\
 	-DGTK_DISABLE_COMPAT_H				\
-	-DGTK_EXE_PREFIX=\"$(exec_prefix)\"		\
+	-DGTK_LIBDIR=\"$(libdir)\"			\
 	-DGTK_DATA_PREFIX=\"$(prefix)\"			\
 	-DGTK_SYSCONFDIR=\"$(sysconfdir)\"		\
 	-DGTK_LOCALEDIR=\"$(gtklocaledir)\"		\
@@ -70,7 +70,6 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtkcolorsel.h		\
 	gtkcolorseldialog.h	\
 	gtkcombo.h		\
-	gtkcompat.h		\
 	gtkcontainer.h		\
 	gtkctree.h		\
 	gtkcurve.h		\
@@ -423,7 +422,7 @@ gtk_extra_sources = @STRIP_BEGIN@ \
 #
 # setup GTK+ sources and their dependancies
 #
-gtk_target_headers = $(gtk_public_h_sources) $(gtk_built_public_sources)
+gtk_target_headers = $(gtk_public_h_sources) $(gtk_built_public_sources) gtkcompat.h
 gtk_target_sources = $(gtk_c_sources)
 MAINTAINERCLEANFILES += $(gtk_built_sources)
 EXTRA_HEADERS +=

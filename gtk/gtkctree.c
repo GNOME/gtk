@@ -2418,8 +2418,7 @@ real_tree_move (GtkCTree     *ctree,
   gtk_clist_freeze (clist);
 
   work = NULL;
-  if (gtk_ctree_is_viewable (ctree, node) ||
-      gtk_ctree_is_viewable (ctree, new_sibling))
+  if (gtk_ctree_is_viewable (ctree, node))
     work = GTK_CTREE_NODE (g_list_nth (clist->row_list, clist->focus_row));
       
   gtk_ctree_unlink (ctree, node, FALSE);
@@ -2904,6 +2903,9 @@ set_cell_contents (GtkCList    *clist,
   gboolean visible = FALSE;
   GtkCTree *ctree;
   GtkRequisition requisition;
+  gchar *old_text = NULL;
+  GdkPixmap *old_pixmap = NULL;
+  GdkBitmap *old_mask = NULL;
 
   g_return_if_fail (clist != NULL);
   g_return_if_fail (GTK_IS_CTREE (clist));
@@ -2930,26 +2932,17 @@ set_cell_contents (GtkCList    *clist,
     {
     case GTK_CELL_EMPTY:
       break;
-      
     case GTK_CELL_TEXT:
-      g_free (GTK_CELL_TEXT (clist_row->cell[column])->text);
+      old_text = GTK_CELL_TEXT (clist_row->cell[column])->text;
       break;
     case GTK_CELL_PIXMAP:
-      gdk_pixmap_unref (GTK_CELL_PIXMAP (clist_row->cell[column])->pixmap);
-      if (GTK_CELL_PIXMAP (clist_row->cell[column])->mask)
-	gdk_bitmap_unref (GTK_CELL_PIXMAP (clist_row->cell[column])->mask);
+      old_pixmap = GTK_CELL_PIXMAP (clist_row->cell[column])->pixmap;
+      old_mask = GTK_CELL_PIXMAP (clist_row->cell[column])->mask;
       break;
     case GTK_CELL_PIXTEXT:
-      if (GTK_CELL_PIXTEXT (clist_row->cell[column])->text)
-	g_free (GTK_CELL_PIXTEXT (clist_row->cell[column])->text);
-      if (GTK_CELL_PIXTEXT (clist_row->cell[column])->pixmap)
-	{
-	  gdk_pixmap_unref
-	    (GTK_CELL_PIXTEXT (clist_row->cell[column])->pixmap);
-	  if (GTK_CELL_PIXTEXT (clist_row->cell[column])->mask)
-	    gdk_bitmap_unref
-	      (GTK_CELL_PIXTEXT (clist_row->cell[column])->mask);
-	}
+      old_text = GTK_CELL_PIXTEXT (clist_row->cell[column])->text;
+      old_pixmap = GTK_CELL_PIXTEXT (clist_row->cell[column])->pixmap;
+      old_mask = GTK_CELL_PIXTEXT (clist_row->cell[column])->mask;
       break;
     case GTK_CELL_WIDGET:
       /* unimplimented */
@@ -2963,6 +2956,8 @@ set_cell_contents (GtkCList    *clist,
   if (column == ctree->tree_column && type != GTK_CELL_EMPTY)
     type = GTK_CELL_PIXTEXT;
 
+  /* Note that pixmap and mask were already ref'ed by the caller
+   */
   switch (type)
     {
     case GTK_CELL_TEXT:
@@ -3017,6 +3012,13 @@ set_cell_contents (GtkCList    *clist,
   if (visible && clist->column[column].auto_resize &&
       !GTK_CLIST_AUTO_RESIZE_BLOCKED (clist))
     column_auto_resize (clist, clist_row, column, requisition.width);
+
+  if (old_text)
+    g_free (old_text);
+  if (old_pixmap)
+    gdk_pixmap_unref (old_pixmap);
+  if (old_mask)
+    gdk_pixmap_unref (old_mask);
 }
 
 static void 

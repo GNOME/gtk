@@ -71,8 +71,11 @@ struct _GtkLabelClass
 
 GtkType    gtk_label_get_type       (void) G_GNUC_CONST;
 GtkWidget *gtk_label_new            (const char       *str);
-void       gtk_label_set_text       (GtkLabel         *label,
-				     const char       *str);
+
+void                  gtk_label_set_text (GtkLabel   *label,
+					  const char *str);
+G_CONST_RETURN gchar *gtk_label_get_text (GtkLabel   *label);
+
 void       gtk_label_set_attributes (GtkLabel         *label,
                                      PangoAttrList    *attrs);
 
@@ -81,8 +84,6 @@ void  gtk_label_set_markup            (GtkLabel    *label,
 guint gtk_label_set_markup_with_accel (GtkLabel    *label,
                                        const gchar *str);
                                             
-
-/* Temporarily commented out until memory management behavior is figured out *//* gchar *    gtk_label_get_text      (GtkLabel         *label); */
 void       gtk_label_set_justify   (GtkLabel         *label,
 				    GtkJustification  jtype);
 void       gtk_label_set_pattern   (GtkLabel         *label,

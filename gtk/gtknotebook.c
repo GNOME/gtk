@@ -2547,8 +2547,8 @@ gtk_notebook_set_shape (GtkNotebook *notebook)
     }
   gdk_draw_rectangle(pm, pmgc, TRUE, x, y, width, height);
 
-  /* if theres an area for scrollign arrows draw the shape for them */
-  if (notebook->panel)
+  /* if theres an area for scrolling arrows draw the shape for them */
+  if (notebook->panel && gdk_window_is_visible (notebook->panel))
     {
       gdk_window_get_geometry(notebook->panel, &x, &y, &width, &height, &depth);
       gdk_draw_rectangle(pm, pmgc, TRUE, x, y, width, height);

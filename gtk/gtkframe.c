@@ -73,12 +73,6 @@ static void gtk_frame_real_compute_child_allocation (GtkFrame      *frame,
 static GtkBinClass *parent_class = NULL;
 
 
-/* Here until I convince timj about memory management behavior
- */
-gchar *    gtk_frame_get_label        (GtkFrame      *frame);
-gchar *    gtk_label_get_text (GtkLabel         *label);
-
-
 GtkType
 gtk_frame_get_type (void)
 {
@@ -276,7 +270,7 @@ gtk_frame_set_label (GtkFrame *frame,
  *               was no label widget or the lable widget was not
  *               a #GtkLabel. This value must be freed with g_free().
  **/
-gchar *
+G_CONST_RETURN gchar *
 gtk_frame_get_label (GtkFrame *frame)
 {
   g_return_val_if_fail (frame != NULL, NULL);

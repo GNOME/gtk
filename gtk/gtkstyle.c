@@ -635,6 +635,9 @@ gtk_style_detach (GtkStyle *style)
     {
       GTK_STYLE_GET_CLASS (style)->unrealize (style);
       
+      gdk_colormap_unref (style->colormap);
+      style->colormap = NULL;
+      
       gtk_style_unref (style);
     }
 }
@@ -657,7 +660,7 @@ gtk_style_realize (GtkStyle    *style,
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   
-  style->colormap = colormap;
+  style->colormap = gdk_colormap_ref (colormap);
   style->depth = gdk_colormap_get_visual (colormap)->depth;
 
   GTK_STYLE_GET_CLASS (style)->realize (style);
@@ -1231,7 +1234,18 @@ gtk_style_real_unrealize (GtkStyle *style)
       gtk_gc_release (style->mid_gc[i]);
       gtk_gc_release (style->text_gc[i]);
       gtk_gc_release (style->base_gc[i]);
+
+      if (style->bg_pixmap[i] &&  style->bg_pixmap[i] != (GdkPixmap*) GDK_PARENT_RELATIVE)
+	gdk_pixmap_unref (style->bg_pixmap[i]);
     }
+  
+  gdk_colormap_free_colors (style->colormap, style->fg, 5);
+  gdk_colormap_free_colors (style->colormap, style->bg, 5);
+  gdk_colormap_free_colors (style->colormap, style->light, 5);
+  gdk_colormap_free_colors (style->colormap, style->dark, 5);
+  gdk_colormap_free_colors (style->colormap, style->mid, 5);
+  gdk_colormap_free_colors (style->colormap, style->text, 5);
+  gdk_colormap_free_colors (style->colormap, style->base, 5);
 }
 
 static void

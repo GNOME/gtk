@@ -297,11 +297,11 @@ gtk_rc_make_default_dir (const gchar *type)
 #ifndef G_OS_WIN32
   var = getenv("GTK_EXE_PREFIX");
   if (var)
-    path = g_strdup_printf("%s%s%s", var, "/lib/gtk-2.0/" GTK_VERSION "/", type);
+    path = g_strconcat (var, "/lib/gtk-2.0/" GTK_VERSION "/", type, NULL);
   else
-    path = g_strdup_printf("%s%s%s", GTK_EXE_PREFIX, "/lib/gtk-2.0/" GTK_VERSION "/", type);
+    path = g_strconcat (GTK_LIBDIR "/gtk-2.0/" GTK_VERSION "/", type, NULL);
 #else
-  path = g_strdup_printf ("%s\\%s", get_themes_directory (), type);
+  path = g_strconcat ("%s\\%s", get_themes_directory (), type);
 #endif
 
   return path;
@@ -351,9 +351,9 @@ gtk_rc_get_theme_dir(void)
 #ifndef G_OS_WIN32
   var = getenv("GTK_DATA_PREFIX");
   if (var)
-    path = g_strdup_printf("%s%s", var, "/share/themes");
+    path = g_strconcat (var, "/share/themes", NULL);
   else
-    path = g_strdup_printf("%s%s", GTK_DATA_PREFIX, "/share/themes");
+    path = g_strconcat (GTK_DATA_PREFIX, "/share/themes", NULL);
 #else
   path = g_strdup (get_themes_directory ());
 #endif
@@ -380,11 +380,11 @@ gtk_rc_append_default_module_path(void)
 #ifndef G_OS_WIN32
   var = getenv("GTK_EXE_PREFIX");
   if (var)
-    path = g_strdup_printf("%s%s", var, "/lib/gtk-2.0/" GTK_VERSION "/engines");
+    path = g_strconcat(var, "/lib/gtk-2.0/" GTK_VERSION "/engines", NULL);
   else
-    path = g_strdup_printf("%s%s", GTK_EXE_PREFIX, "/lib/gtk-2.0/" GTK_VERSION "/engines");
+    path = g_strdup (GTK_LIBDIR "/gtk-2.0/" GTK_VERSION "/engines");
 #else
-  path = g_strdup_printf ("%s%s", get_themes_directory (), "\\engines");
+  path = g_strconcat (get_themes_directory (), "\\engines", NULL);
 #endif
   module_path[n++] = path;
 
@@ -400,10 +400,10 @@ gtk_rc_append_default_module_path(void)
       else
 	sep = "";
       /* This produces something like ~/.gtk-2.0/2.0/engines */
-      path = g_strdup_printf ("%s%s%s", var, sep,
-			      ".gtk-2.0" G_DIR_SEPARATOR_S
-			      GTK_VERSION G_DIR_SEPARATOR_S
-			      "engines");
+      path = g_strconcat (var, sep,
+			  ".gtk-2.0" G_DIR_SEPARATOR_S
+			  GTK_VERSION G_DIR_SEPARATOR_S
+			  "engines", NULL);
       module_path[n++] = path;
     }
   module_path[n] = NULL;

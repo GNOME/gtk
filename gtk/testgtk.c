@@ -2913,10 +2913,18 @@ static GtkItemFactoryEntry menu_items[] =
   { "/_Preferences/Shape/_Square",      NULL, gtk_ifactory_cb, 0, "<RadioItem>" },
   { "/_Preferences/Shape/_Rectangle",   NULL, gtk_ifactory_cb, 0, "/Preferences/Shape/Square" },
   { "/_Preferences/Shape/_Oval",        NULL, gtk_ifactory_cb, 0, "/Preferences/Shape/Rectangle" },
+  { "/_Preferences/Shape/_Rectangle",   NULL, gtk_ifactory_cb, 0, "/Preferences/Shape/Square" },
+  { "/_Preferences/Shape/_Oval",        NULL, gtk_ifactory_cb, 0, "/Preferences/Shape/Rectangle" },
+
+  /* For testing deletion of menus */
+  { "/_Preferences/Should_NotAppear",          NULL, 0,               0, "<Branch>" },
+  { "/Preferences/ShouldNotAppear/SubItem1",   NULL, gtk_ifactory_cb, 0 },
+  { "/Preferences/ShouldNotAppear/SubItem2",   NULL, gtk_ifactory_cb, 0 },
 
   { "/_Help",            NULL,         0,                     0, "<LastBranch>" },
   { "/Help/_About",      NULL,         gtk_ifactory_cb,       0 },
 };
+
 
 static int nmenu_items = sizeof (menu_items) / sizeof (menu_items[0]);
 
@@ -2990,6 +2998,8 @@ create_item_factory (void)
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
       gtk_widget_grab_default (button);
 
+      gtk_item_factory_delete_item (item_factory, "/Preferences/ShouldNotAppear");
+      
       gtk_widget_show_all (window);
     }
   else

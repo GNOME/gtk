@@ -110,6 +110,8 @@ static void gtk_menu_position       (GtkMenu           *menu);
 static void gtk_menu_reparent       (GtkMenu           *menu, 
 				     GtkWidget         *new_parent, 
 				     gboolean           unrealize);
+static void gtk_menu_remove         (GtkContainer      *menu,
+				     GtkWidget         *widget);
 
 static GtkMenuShellClass *parent_class = NULL;
 static const gchar	 *attach_data_key = "gtk-menu-attach-data";
@@ -169,6 +171,8 @@ gtk_menu_class_init (GtkMenuClass *class)
   widget_class->hide_all = gtk_menu_hide_all;
   widget_class->enter_notify_event = gtk_menu_enter_notify;
   widget_class->leave_notify_event = gtk_menu_leave_notify;
+
+  container_class->remove = gtk_menu_remove;
   
   menu_shell_class->submenu_placement = GTK_LEFT_RIGHT;
   menu_shell_class->deactivate = gtk_menu_deactivate;
@@ -395,6 +399,28 @@ gtk_menu_detach (GtkMenu *menu)
   
   gtk_widget_unref (GTK_WIDGET (menu));
 }
+
+void 
+gtk_menu_remove(GtkContainer *container,
+	        GtkWidget    *widget)
+{
+  GtkMenu *menu;
+  g_return_if_fail (GTK_IS_MENU (container));
+  g_return_if_fail (GTK_IS_MENU_ITEM (widget));
+
+  menu = GTK_MENU (container);
+
+  /* Clear out old_active_menu_item if it matches the item we are removing
+   */
+  if (menu->old_active_menu_item == widget)
+    {
+      gtk_widget_unref (menu->old_active_menu_item);
+      menu->old_active_menu_item = NULL;
+    }
+
+  GTK_CONTAINER_CLASS (parent_class)->remove (container, widget);
+}
+
 
 GtkWidget*
 gtk_menu_new (void)

@@ -926,7 +926,7 @@ gtk_range_button_press (GtkWidget      *widget,
 	}
     }
 
-  return FALSE;
+  return TRUE;
 }
 
 static gint
@@ -982,7 +982,7 @@ gtk_range_button_release (GtkWidget      *widget,
       range->click_child = 0;
     }
 
-  return FALSE;
+  return TRUE;
 }
 
 static gint
@@ -1054,7 +1054,7 @@ gtk_range_motion_notify (GtkWidget      *widget,
 	}
     }
 
-  return FALSE;
+  return TRUE;
 }
 
 static gint
@@ -1156,7 +1156,7 @@ gtk_range_enter_notify (GtkWidget        *widget,
 	gtk_range_draw_step_back (range);
     }
 
-  return FALSE;
+  return TRUE;
 }
 
 static gint
@@ -1194,7 +1194,7 @@ gtk_range_leave_notify (GtkWidget        *widget,
 	gtk_range_draw_step_back (range);
     }
 
-  return FALSE;
+  return TRUE;
 }
 
 static gint
@@ -1207,7 +1207,7 @@ gtk_range_focus_in (GtkWidget     *widget,
   GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_FOCUS);
   gtk_widget_draw_focus (widget);
 
-  return FALSE;
+  return TRUE;
 }
 
 static gint
@@ -1220,7 +1220,7 @@ gtk_range_focus_out (GtkWidget     *widget,
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_FOCUS);
   gtk_widget_draw_focus (widget);
 
-  return FALSE;
+  return TRUE;
 }
 
 static void

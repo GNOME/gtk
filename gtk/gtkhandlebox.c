@@ -443,6 +443,7 @@ gtk_handle_box_style_set (GtkWidget *widget,
 			  GtkStyle  *previous_style)
 {
   GtkHandleBox *hb;
+  GdkRectangle new_area;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_HANDLE_BOX (widget));
@@ -880,27 +881,29 @@ gtk_handle_box_button_changed (GtkWidget      *widget,
 	return FALSE;
 
       child = GTK_BIN (hb)->child;
-      
-      switch (hb->handle_position)
-	{
-	case GTK_POS_LEFT:
-	  in_handle = event->x < DRAG_HANDLE_SIZE;
-	  break;
-	case GTK_POS_TOP:
-	  in_handle = event->y < DRAG_HANDLE_SIZE;
-	  break;
-	case GTK_POS_RIGHT:
-	  in_handle = event->x > 2 * GTK_CONTAINER (hb)->border_width + child->allocation.width;
-	  break;
-	case GTK_POS_BOTTOM:
-	  in_handle = event->y > 2 * GTK_CONTAINER (hb)->border_width + child->allocation.height;
-	  break;
-	default:
-	  in_handle = FALSE;
-	  break;
-	}
 
-      if (!child)
+      if (child)
+	{
+	  switch (hb->handle_position)
+	    {
+	    case GTK_POS_LEFT:
+	      in_handle = event->x < DRAG_HANDLE_SIZE;
+	      break;
+	    case GTK_POS_TOP:
+	      in_handle = event->y < DRAG_HANDLE_SIZE;
+	      break;
+	    case GTK_POS_RIGHT:
+	      in_handle = event->x > 2 * GTK_CONTAINER (hb)->border_width + child->allocation.width;
+	      break;
+	    case GTK_POS_BOTTOM:
+	      in_handle = event->y > 2 * GTK_CONTAINER (hb)->border_width + child->allocation.height;
+	      break;
+	    default:
+	      in_handle = FALSE;
+	      break;
+	    }
+	}
+      else
 	{
 	  in_handle = FALSE;
 	  event_handled = TRUE;

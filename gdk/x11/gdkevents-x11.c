@@ -1307,6 +1307,16 @@ gdk_events_queue (void)
 #else
       XNextEvent (gdk_display, &xevent);
 #endif
+
+      switch (xevent.type)
+	{
+	case KeyPress:
+	case KeyRelease:
+	  break;
+	default:
+	  if (XFilterEvent (&xevent, None))
+	    continue;
+	}
       
       event = gdk_event_new ();
       

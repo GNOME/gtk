@@ -559,6 +559,56 @@ gtk_option_menu_changed (GtkOptionMenu *option_menu)
 }
 
 static void
+gtk_option_menu_select_first_sensitive (GtkOptionMenu *option_menu)
+{
+  if (option_menu->menu)
+    {
+      GList *children = GTK_MENU_SHELL (option_menu->menu)->children;
+      gint index = 0;
+
+      while (children)
+	{
+	  if (GTK_WIDGET_SENSITIVE (children->data))
+	    {
+	      gtk_option_menu_set_history (option_menu, index);
+	      return;
+	    }
+	  
+	  children = children->next;
+	  index++;
+	}
+    }
+}
+
+static void
+gtk_option_menu_item_state_changed_cb (GtkWidget      *widget,
+				       GtkStateType    previous_state,
+				       GtkOptionMenu  *option_menu)
+{
+  GtkWidget *child = GTK_BIN (option_menu)->child;
+
+  if (child && GTK_WIDGET_SENSITIVE (child) != GTK_WIDGET_IS_SENSITIVE (widget))
+    gtk_widget_set_sensitive (child, GTK_WIDGET_IS_SENSITIVE (widget));
+}
+
+static void
+gtk_option_menu_item_destroy_cb (GtkWidget     *widget,
+				 GtkOptionMenu *option_menu)
+{
+  GtkWidget *child = GTK_BIN (option_menu)->child;
+
+  if (child)
+    {
+      gtk_widget_ref (child);
+      gtk_option_menu_remove_contents (option_menu);
+      gtk_widget_destroy (child);
+      gtk_widget_unref (child);
+
+      gtk_option_menu_select_first_sensitive (option_menu);
+    }
+}
+
+static void
 gtk_option_menu_update_contents (GtkOptionMenu *option_menu)
 {
   GtkWidget *child;
@@ -580,13 +630,15 @@ gtk_option_menu_update_contents (GtkOptionMenu *option_menu)
 	  child = GTK_BIN (option_menu->menu_item)->child;
 	  if (child)
 	    {
-	      if (GTK_BIN (option_menu)->child)
-		gtk_container_remove (GTK_CONTAINER (option_menu),
-				      GTK_BIN (option_menu)->child);
-	      if (GTK_WIDGET (option_menu)->state != child->state)
-		gtk_widget_set_state (child, GTK_WIDGET (option_menu)->state);
+	      if (!GTK_WIDGET_IS_SENSITIVE (option_menu->menu_item))
+		gtk_widget_set_sensitive (child, FALSE);
 	      gtk_widget_reparent (child, GTK_WIDGET (option_menu));
 	    }
+
+	  gtk_signal_connect (GTK_OBJECT (option_menu->menu_item), "state_changed",
+			      GTK_SIGNAL_FUNC (gtk_option_menu_item_state_changed_cb), option_menu);
+	  gtk_signal_connect (GTK_OBJECT (option_menu->menu_item), "destroy",
+			      GTK_SIGNAL_FUNC (gtk_option_menu_item_destroy_cb), option_menu);
 
 	  gtk_widget_size_request (child, &child_requisition);
 	  gtk_widget_size_allocate (GTK_WIDGET (option_menu),
@@ -604,15 +656,28 @@ gtk_option_menu_update_contents (GtkOptionMenu *option_menu)
 static void
 gtk_option_menu_remove_contents (GtkOptionMenu *option_menu)
 {
+  GtkWidget *child;
+  
   g_return_if_fail (option_menu != NULL);
   g_return_if_fail (GTK_IS_OPTION_MENU (option_menu));
 
-  if (GTK_BIN (option_menu)->child)
+  if (option_menu->menu_item)
     {
-      if (GTK_WIDGET (option_menu->menu_item)->state != GTK_BIN (option_menu)->child->state)
-	gtk_widget_set_state (GTK_BIN (option_menu)->child,
-			      GTK_WIDGET (option_menu->menu_item)->state);
-      gtk_widget_reparent (GTK_BIN (option_menu)->child, option_menu->menu_item);
+      child = GTK_BIN (option_menu)->child;
+  
+      if (child)
+	{
+	  gtk_widget_set_sensitive (child, TRUE);
+	  gtk_widget_reparent (child, option_menu->menu_item);
+	}
+
+      gtk_signal_disconnect_by_func (GTK_OBJECT (option_menu->menu_item),
+				     GTK_SIGNAL_FUNC (gtk_option_menu_item_state_changed_cb),
+				     option_menu);				     
+      gtk_signal_disconnect_by_func (GTK_OBJECT (option_menu->menu_item),
+				     GTK_SIGNAL_FUNC (gtk_option_menu_item_destroy_cb),
+				     option_menu);   
+      
       gtk_widget_unref (option_menu->menu_item);
       option_menu->menu_item = NULL;
     }
