@@ -1,5 +1,9 @@
 2004-10-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/visual_index.xml: Correct some linkends.
+
+	* gtk/tmpl/gtkfontbutton.sgml: Remove test image.
+
 	* gtk/Makefile.am (IGNORE_HFILES): Remove some no longer
 	private headers.
 	(HTML_IMAGES): Remove a duplicate entry.
