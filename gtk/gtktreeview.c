@@ -10335,10 +10335,10 @@ gtk_tree_view_get_reorderable (GtkTreeView *tree_view)
  * #GtkTreeStore and #GtkListStore support these.  If @reorderable is %TRUE, then
  * the user can reorder the model by dragging and dropping rows.  The
  * developer can listen to these changes by connecting to the model's
- * signals.
+ * row_inserted and row_deleted signals.
  *
  * This function does not give you any degree of control over the order -- any
- * reorderering is allowed.  If more control is needed, you should probably
+ * reordering is allowed.  If more control is needed, you should probably
  * handle drag and drop manually.
  **/
 void

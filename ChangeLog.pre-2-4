@@ -1,3 +1,8 @@
+Fri Mar  5 23:37:16 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktreeview.c (gtk_tree_view_set_reorderable): Clarify the
+	doc comment.  (#118602)
+
 Fri Mar  5 22:37:15 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkbutton.c (gtk_button_construct_child): Don't let
