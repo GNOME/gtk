@@ -1714,7 +1714,7 @@ gtk_menu_set_tearoff_hints (GtkMenu *menu,
   geometry_hints.max_width = width;
     
   geometry_hints.min_height = 0;
-  geometry_hints.max_height = GTK_WIDGET (menu)->requisition.height + 10;
+  geometry_hints.max_height = GTK_WIDGET (menu)->requisition.height;
 
   gtk_window_set_geometry_hints (GTK_WINDOW (menu->tearoff_window),
 				 NULL,
@@ -2840,7 +2840,7 @@ gtk_menu_scroll_by (GtkMenu *menu,
     gtk_menu_scroll_to (menu, offset);
 }
 
-Static gboolean
+static gboolean
 gtk_menu_scroll_timeout (gpointer  data)
 {
   GtkMenu *menu;

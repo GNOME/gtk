@@ -1,5 +1,8 @@
 2004-12-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkmenu.c (gtk_menu_scroll): Implement scroll wheel scrolling
+	for menus. (#88532)
+
 	* gtk/gtkwindow.c (gtk_window_real_set_focus): Compare only
 	the HAS_DEFAULT flags.  (#160711, Tommi Komulainen)
 
