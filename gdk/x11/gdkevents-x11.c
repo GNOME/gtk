@@ -718,7 +718,7 @@ gdk_event_translate (GdkEvent *event,
             event->scroll.direction = GDK_SCROLL_RIGHT;
 
 	  event->scroll.window = window;
-	  event->scroll.time = xevent->xbutton.x;
+	  event->scroll.time = xevent->xbutton.time;
 	  event->scroll.x = xevent->xbutton.x + xoffset;
 	  event->scroll.y = xevent->xbutton.y + yoffset;
 	  event->scroll.x_root = (gfloat)xevent->xbutton.x_root;

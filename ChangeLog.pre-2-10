@@ -1,3 +1,8 @@
+Wed Mar 20 10:55:56 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkevents-x11.c (gdk_event_translate): Fix assignment
+	of time in scroll events. (Sven Neumann, #75574)
+
 2002-03-20  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkdnd-win32.c (gdk_drag_find_window): Use
