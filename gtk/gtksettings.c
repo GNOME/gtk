@@ -31,7 +31,8 @@ enum {
   PROP_KEY_THEME_NAME,
   PROP_MENU_BAR_ACCEL,
   PROP_DND_DRAG_THRESHOLD,
-  PROP_FONT_NAME
+  PROP_FONT_NAME,
+  PROP_ICON_SIZES
 };
 
 
@@ -213,7 +214,15 @@ gtk_settings_class_init (GtkSettingsClass *class)
 								  G_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_FONT_NAME);
- 
+
+  result = settings_install_property_parser (class,
+                                             g_param_spec_string ("gtk-icon-sizes",
+								   _("Icon Sizes"),
+								   _("List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."),
+								  NULL,
+								  G_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_ICON_SIZES);
 }
 
 static void
@@ -366,6 +375,7 @@ gtk_settings_notify (GObject    *object,
   GtkSettings *settings = GTK_SETTINGS (object);
   guint property_id = pspec->param_id;
   gint double_click_time;
+  gchar *icon_sizes;
 
   if (settings->screen == NULL) /* initialization */
     return;

@@ -1,3 +1,22 @@
+Tue Sep 24 16:40:14 2002  Owen Taylor  <otaylor@redhat.com>
+
+	Make icon sizes configurable (#70648, slightly based
+	on a patch from Bill Haneman, Brian Cameron)
+
+	* gtk/gtkiconfactory.[ch]: Add 
+	gtk_icon_size_lookup_for_settings().
+
+	* gtk/gtksettings.c: Add gtk-icon-sizes XSETTING
+
+	* gtk/gtkiconfactory.c: Make icon sizes per-GtkSettings.
+
+	* gtk/gtkstyle.c: Use gtk_icon_size_lookup_for_settings()
+
+	* gtk/gtkrc.[ch]: Privately export _gtk_rc_reset_styles()
+	to force all the widgets to recompute their appearance.
+
+	* gdk/x11/gdkevents-x11.c: Add gtk-icon-sizes XSETTING
+
 Tue Sep 24 16:24:22 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/win32/gdkimage-win32.c gdk/x11/gdkimage-x11.c 

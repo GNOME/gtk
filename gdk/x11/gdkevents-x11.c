@@ -2200,6 +2200,7 @@ static struct
   { "Gtk/CanChangeAccels", "gtk-can-change-accels" },
   { "Gtk/ColorPalette", "gtk-color-palette" },
   { "Gtk/FontName", "gtk-font-name" },
+  { "Gtk/IconSizes", "gtk-icon-sizes" },
   { "Gtk/KeyThemeName", "gtk-key-theme-name" },
   { "Gtk/ToolbarStyle", "gtk-toolbar-style" },
   { "Gtk/ToolbarIconSize", "gtk-toolbar-icon-size" },

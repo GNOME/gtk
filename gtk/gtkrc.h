@@ -232,6 +232,7 @@ const GtkRcProperty* _gtk_rc_style_lookup_rc_property (GtkRcStyle *rc_style,
 						       GQuark      property_name);
 
 const gchar* _gtk_rc_context_get_default_font_name (GtkSettings *settings);
+void         _gtk_rc_reset_styles                  (GtkSettings *settings);
 
 #ifdef __cplusplus
 }

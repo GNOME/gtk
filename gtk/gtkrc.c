@@ -1269,10 +1269,10 @@ gtk_rc_clear_styles (GtkRcContext *context)
  * icon sets so they get re-rendered.
  */
 static void
-gtk_rc_reset_widgets (GtkRcContext *context)
+gtk_rc_reset_widgets (GtkSettings *settings)
 {
   GList *list, *toplevels;
-  
+
   _gtk_icon_set_invalidate_caches ();
   
   toplevels = gtk_window_list_toplevels ();
@@ -1306,6 +1306,53 @@ gtk_rc_clear_realized_style (gpointer key,
   g_slist_free (rc_styles);
 }
 
+/**
+ * _gtk_rc_reset_styles:
+ * @settings: a #GtkSettings
+ * 
+ * This setting resets all of our styles; we use it when the font
+ * rendering parameters or the icon sizes have changed. It's both less
+ * and more comprehensive then we actually need:
+ *
+ * Less comprehensive: it doesn't affect widgets that have a style
+ *   set on them.
+ *
+ * More comprehensive: it resets the styles, but the styles haven't
+ *   changed. The main reason for resetting the styles is becaues
+ *   most widgets will redo all their font stuff when their style
+ *   change.
+ **/
+void
+_gtk_rc_reset_styles (GtkSettings *settings)
+{
+  GtkRcContext *context;
+  gboolean reset = FALSE;
+
+  g_return_if_fail (GTK_IS_SETTINGS (settings));
+
+  context = gtk_rc_context_get (settings);
+  
+  if (context->default_style)
+    {
+      g_object_unref (G_OBJECT (context->default_style));
+      context->default_style = NULL;
+      reset = TRUE;
+    }
+  
+  /* Clear out styles that have been looked up already
+   */
+  if (realized_style_ht)
+    {
+      g_hash_table_foreach (realized_style_ht, gtk_rc_clear_realized_style, NULL);
+      g_hash_table_destroy (realized_style_ht);
+      realized_style_ht = NULL;
+      reset = TRUE;
+    }
+  
+  if (reset)
+    gtk_rc_reset_widgets (settings);
+}
+
 const gchar*
 _gtk_rc_context_get_default_font_name (GtkSettings *settings)
 {
@@ -1322,29 +1369,10 @@ _gtk_rc_context_get_default_font_name (GtkSettings *settings)
 
   if (new_font_name != context->font_name && !(new_font_name && strcmp (context->font_name, new_font_name) == 0))
     {
-      gboolean reset = FALSE;
-      g_free (context->font_name);
-      context->font_name = g_strdup (new_font_name);
-
-      if (context->default_style)
-        {
-	  g_object_unref (G_OBJECT (context->default_style));
-	  context->default_style = NULL;
-	  reset = TRUE;
-        }
-
-      /* Clear out styles that have been looked up already
-       */
-      if (realized_style_ht)
-	{
-	  g_hash_table_foreach (realized_style_ht, gtk_rc_clear_realized_style, NULL);
-	  g_hash_table_destroy (realized_style_ht);
-	  realized_style_ht = NULL;
-	  reset = TRUE;
-	}
-
-      if (reset)
-	gtk_rc_reset_widgets (context);
+       g_free (context->font_name);
+       context->font_name = g_strdup (new_font_name);
+ 
+       _gtk_rc_reset_styles (settings);
     }
           
   g_free (new_font_name);
@@ -1454,7 +1482,7 @@ gtk_rc_reparse_all_for_settings (GtkSettings *settings,
       
       g_object_thaw_notify (G_OBJECT (context->settings));
 
-      gtk_rc_reset_widgets (context);
+      gtk_rc_reset_widgets (context->settings);
     }
 
   return force_load || mtime_modified;

@@ -1989,6 +1989,8 @@ gtk_default_render_icon (GtkStyle            *style,
   GdkPixbuf *scaled;
   GdkPixbuf *stated;
   GdkPixbuf *base_pixbuf;
+  GdkScreen *screen;
+  GtkSettings *settings;
 
   /* Oddly, style can be NULL in this function, because
    * GtkIconSet can be used without a style and if so
@@ -1998,10 +2000,28 @@ gtk_default_render_icon (GtkStyle            *style,
   base_pixbuf = gtk_icon_source_get_pixbuf (source);
 
   g_return_val_if_fail (base_pixbuf != NULL, NULL);
-  
-  if (size != (GtkIconSize) -1 && !gtk_icon_size_lookup (size, &width, &height))
+
+  if (widget && gtk_widget_has_screen (widget))
     {
-      g_warning (G_STRLOC ": invalid icon size `%d'", size);
+      screen = gtk_widget_get_screen (widget);
+      settings = gtk_settings_get_for_screen (screen);
+    }
+  else if (style->colormap)
+    {
+      screen = gdk_colormap_get_screen (style->colormap);
+      settings = gtk_settings_get_for_screen (screen);
+    }
+  else
+    {
+      settings = gtk_settings_get_default ();
+      GTK_NOTE (MULTIHEAD,
+		g_warning ("Using the default screen for gtk_default_render_icon()"));
+    }
+
+  
+  if (size != (GtkIconSize) -1 && !gtk_icon_size_lookup_for_settings (settings, size, &width, &height))
+    {
+      g_warning (G_STRLOC ": invalid icon size '%d'", size);
       return NULL;
     }
 
