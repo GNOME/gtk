@@ -54,6 +54,13 @@ update_keyrange (void)
 #ifdef HAVE_XKB
 #include <X11/XKBlib.h>
 
+/* OSF-4.0 is apparently missing this macro
+ */
+#ifndef XkbKeySymEntry
+#define	XkbKeySymEntry(d,k,sl,g) \
+	(XkbKeySym(d,k,((XkbKeyGroupsWidth(d,k)*(g))+(sl))))
+#endif
+
 gboolean _gdk_use_xkb = FALSE;
 gint _gdk_xkb_event_type;
 static XkbDescPtr xkb_desc = NULL;

@@ -1311,13 +1311,17 @@ gdk_event_translate (GdkEvent *event,
 			   ? " (discarding)"
 			   : GDK_WINDOW_TYPE (window) == GDK_WINDOW_CHILD
 			   ? " (discarding child)"
+			   : xevent->xconfigure.event != xevent->xconfigure.window
+			   ? " (discarding substructure)"
 			   : ""));
       if (window &&
+	  xevent->xconfigure.event == xevent->xconfigure.window &&
 	  !GDK_WINDOW_DESTROYED (window) &&
 	  (window_private->extension_events != 0))
 	_gdk_input_configure_event (&xevent->xconfigure, window);
 
       if (!window ||
+	  xevent->xconfigure.event != xevent->xconfigure.window ||
           GDK_WINDOW_TYPE (window) == GDK_WINDOW_CHILD ||
           GDK_WINDOW_TYPE (window) == GDK_WINDOW_ROOT)
 	return_val = FALSE;

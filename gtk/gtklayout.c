@@ -108,7 +108,8 @@ static void gtk_layout_style_set          (GtkWidget      *widget,
 					   GtkStyle       *old_style);
 
 static void gtk_layout_set_adjustment_upper (GtkAdjustment *adj,
-					     gdouble        upper);
+					     gdouble        upper,
+					     gboolean       always_emit_changed);
 
 static GtkWidgetClass *parent_class = NULL;
 
@@ -222,7 +223,7 @@ gtk_layout_set_adjustments (GtkLayout     *layout,
       layout->hadjustment = hadj;
       gtk_object_ref (GTK_OBJECT (layout->hadjustment));
       gtk_object_sink (GTK_OBJECT (layout->hadjustment));
-      gtk_layout_set_adjustment_upper (layout->hadjustment, layout->width);
+      gtk_layout_set_adjustment_upper (layout->hadjustment, layout->width, FALSE);
       
       gtk_signal_connect (GTK_OBJECT (layout->hadjustment), "value_changed",
 			  (GtkSignalFunc) gtk_layout_adjustment_changed,
@@ -235,7 +236,7 @@ gtk_layout_set_adjustments (GtkLayout     *layout,
       layout->vadjustment = vadj;
       gtk_object_ref (GTK_OBJECT (layout->vadjustment));
       gtk_object_sink (GTK_OBJECT (layout->vadjustment));
-      gtk_layout_set_adjustment_upper (layout->vadjustment, layout->height);
+      gtk_layout_set_adjustment_upper (layout->vadjustment, layout->height, FALSE);
       
       gtk_signal_connect (GTK_OBJECT (layout->vadjustment), "value_changed",
 			  (GtkSignalFunc) gtk_layout_adjustment_changed,
@@ -420,25 +421,30 @@ gtk_layout_move (GtkLayout     *layout,
 
 static void
 gtk_layout_set_adjustment_upper (GtkAdjustment *adj,
-				 gdouble        upper)
+				 gdouble        upper,
+				 gboolean       always_emit_changed)
 {
+  gboolean changed = FALSE;
+  gboolean value_changed = FALSE;
+  
+  gdouble min = MAX (0., upper - adj->page_size);
+
   if (upper != adj->upper)
     {
-      gdouble min = MAX (0., upper - adj->page_size);
-      gboolean value_changed = FALSE;
-      
       adj->upper = upper;
-      
-      if (adj->value > min)
-	{
-	  adj->value = min;
-	  value_changed = TRUE;
-	}
-      
-      gtk_signal_emit_by_name (GTK_OBJECT (adj), "changed");
-      if (value_changed)
-	gtk_signal_emit_by_name (GTK_OBJECT (adj), "value_changed");
+      changed = TRUE;
     }
+      
+  if (adj->value > min)
+    {
+      adj->value = min;
+      value_changed = TRUE;
+    }
+  
+  if (changed || always_emit_changed)
+    gtk_signal_emit_by_name (GTK_OBJECT (adj), "changed");
+  if (value_changed)
+    gtk_signal_emit_by_name (GTK_OBJECT (adj), "value_changed");
 }
 
 /**
@@ -475,9 +481,9 @@ gtk_layout_set_size (GtkLayout     *layout,
   g_object_thaw_notify (G_OBJECT (layout));
 
   if (layout->hadjustment)
-    gtk_layout_set_adjustment_upper (layout->hadjustment, layout->width);
+    gtk_layout_set_adjustment_upper (layout->hadjustment, layout->width, FALSE);
   if (layout->vadjustment)
-    gtk_layout_set_adjustment_upper (layout->vadjustment, layout->height);
+    gtk_layout_set_adjustment_upper (layout->vadjustment, layout->height, FALSE);
 
   if (GTK_WIDGET_REALIZED (layout))
     {
@@ -1002,14 +1008,14 @@ gtk_layout_size_allocate (GtkWidget     *widget,
   layout->hadjustment->page_size = allocation->width;
   layout->hadjustment->page_increment = allocation->width * 0.9;
   layout->hadjustment->lower = 0;
-  layout->hadjustment->upper = MAX (allocation->width, layout->width);
-  gtk_signal_emit_by_name (GTK_OBJECT (layout->hadjustment), "changed");
+  /* set_adjustment_upper() emits ::changed */
+  gtk_layout_set_adjustment_upper (layout->hadjustment, MAX (allocation->width, layout->width), TRUE);
 
   layout->vadjustment->page_size = allocation->height;
   layout->vadjustment->page_increment = allocation->height * 0.9;
   layout->vadjustment->lower = 0;
   layout->vadjustment->upper = MAX (allocation->height, layout->height);
-  gtk_signal_emit_by_name (GTK_OBJECT (layout->vadjustment), "changed");
+  gtk_layout_set_adjustment_upper (layout->vadjustment, MAX (allocation->height, layout->height), TRUE);
 }
 
 static gint 

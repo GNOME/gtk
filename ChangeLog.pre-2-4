@@ -1,3 +1,29 @@
+Tue May 14 15:09:33 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkkeys-x11.c: Try adding a #ifndef/#define
+	for XkbKeySymEntry to make up for OSF broken 
+	XKB extension. (#77819, Gareth Pearce)
+
+	* gtk/gtklayout.c: Clamp the upper values in response
+	to ::size-allocate if necessary. (#81290, Christophe Saout)
+	
+	* gtk/gtkcombo.c (gtk_combo_entry_focus_out): Handle
+	combo being destroyed before idle fires.
+	(#81396, Timo Sirainen)
+
+Tue May 14 11:21:19 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkevents-x11.c (gdk_event_translate): 
+	Discard configure events from SubstructureNotify.
+	(#81760, Rich Burridge)
+
+	* gtk/gtkfontsel.c (cmp_families): Use g_utf8_strcoll(), not
+	strcmp().
+
+	* gtk/gtkmenuitem.c (gtk_menu_item_size_allocate): Clamp 
+	width of child allocation to >= 1. (Fixes warnings from
+	#77639, Martin Schulze)
+	
 Mon May 13 23:19:20 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_cell_process_action):
