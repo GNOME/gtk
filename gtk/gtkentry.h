@@ -174,7 +174,7 @@ gint       gtk_entry_get_width_chars            (GtkEntry      *entry);
 
 /* Somewhat more convenient than the GtkEditable generic functions
  */
-void                  gtk_entry_set_text        (GtkEntry      *entry,
+void       gtk_entry_set_text                   (GtkEntry      *entry,
                                                  const gchar   *text);
 /* returns a reference to the text */
 G_CONST_RETURN gchar* gtk_entry_get_text        (GtkEntry      *entry);
@@ -190,6 +190,14 @@ gfloat     gtk_entry_get_alignment              (GtkEntry      *entry);
 void                gtk_entry_set_completion (GtkEntry           *entry,
                                               GtkEntryCompletion *completion);
 GtkEntryCompletion *gtk_entry_get_completion (GtkEntry           *entry);
+
+PangoLayout* gtk_entry_get_layout (GtkEntry *entry);
+
+gint       gtk_entry_layout_index_to_text_index (GtkEntry      *entry,
+                                                 gint           layout_index);
+gint       gtk_entry_text_index_to_layout_index (GtkEntry      *entry,
+                                                 gint           text_index);
+
 
 /* Deprecated compatibility functions
  */

@@ -1,3 +1,9 @@
+Mon Aug  9 10:50:05 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkentry.h: Add gtk_entry_layout_index_to_text_index() 
+	and its inverse. The have always been exported and are meant
+	to be public.
+	
 Mon Aug  9 00:28:34 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkicontheme.c (load_svg_at_size): Don't leak the 

@@ -1064,6 +1064,8 @@ gtk_entry_set_alignment
 gtk_entry_get_alignment
 gtk_entry_get_layout
 gtk_entry_get_layout_offsets
+gtk_entry_layout_index_to_text_index
+gtk_entry_text_index_to_layout_index
 gtk_entry_get_max_length
 gtk_entry_get_visibility
 gtk_entry_set_completion

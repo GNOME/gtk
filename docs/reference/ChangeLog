@@ -1,3 +1,8 @@
+Mon Aug  9 10:52:23 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-sections.txt: Add gtk_entry_layout_index_to_text_index() 
+	and its inverse. 
+
 2004-08-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkrc.sgml: Fix a typo (#164470, Mariano 
