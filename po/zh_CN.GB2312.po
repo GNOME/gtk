@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.1.7 \n"
-"POT-Creation-Date:\n"
+"POT-Creation-Date: 2001-02-15 22:06-0500\n"
 "PO-Revision-Date: 1999-01-31\n"
 "Last-Translator: Wu Yulun <migr@operamail.com>\n"
 "Language-Team: Chinese <zh@li.org>\n"
@@ -9,302 +9,454 @@ msgstr ""
 "Content-Type: text/plain; charset=gb2312\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "%i fonts available with a total of %i styles."
-msgstr "有 %i 种字体可用，共 %i 种形式。"
-
-msgid "(disabled)"
-msgstr "(禁止)"
-
-msgid "(unknown)"
-msgstr "(未知)"
-
-msgid "*"
-msgstr "*"
-
-msgid "--- No Tip ---"
-msgstr "--- 无提示 ---"
-
-msgid "Actual Font Name:"
-msgstr "字体真实名称:"
-
-msgid "Actual Value"
-msgstr "真实值"
-
-msgid "Add Style:"
-msgstr "增加式样:"
-
-msgid "Apply"
-msgstr "应用"
-
-msgid "Average Width:"
-msgstr "平均宽度:"
-
-msgid "Axes"
-msgstr "坐标"
-
-msgid "Bitmap"
-msgstr "位图"
-
-msgid "Blue:"
-msgstr "蓝:"
-
-msgid "Cancel"
-msgstr "取消"
-
-msgid "Charset:"
-msgstr "字符集:"
-
-msgid "Close"
-msgstr "关闭"
-
-msgid "Create"
-msgstr "创建"
-
-msgid "Create Dir"
-msgstr "创建目录"
-
-msgid "Create Directory"
-msgstr "创建目录"
-
-msgid "Delete"
-msgstr "删除"
-
-msgid "Delete File"
-msgstr "删除文件"
-
-msgid "Device:"
-msgstr "设备:"
-
-msgid "Directories"
-msgstr "目录"
-
-msgid "Directory name:"
-msgstr "目录名称:"
-
-msgid "Directory unreadable: %s"
-msgstr "无法读取目录: %s"
-
-msgid "Disabled"
-msgstr "禁止"
-
-msgid "Error"
-msgstr "错误"
-
-msgid "Family:"
-msgstr "家族:"
-
-msgid "Files"
-msgstr "文件"
-
-msgid "Filter"
-msgstr "过滤器"
-
-msgid "Font"
-msgstr "字体"
-
-msgid "Font Information"
-msgstr "字体信息"
-
-msgid "Font Property"
-msgstr "字体属性"
-
-msgid "Font Selection"
-msgstr "字体选择"
-
-msgid "Font Style:"
-msgstr "字体式样:"
-
-msgid "Font Types:"
-msgstr "字体类型:"
-
-msgid "Font:"
-msgstr "字体:"
-
-msgid "Font: (Filter Applied)"
-msgstr "字体: (使用过滤器)"
-
-msgid "Foundry:"
-msgstr "制作:"
-
-msgid "Gamma"
-msgstr "Gamma"
-
-msgid "Gamma value"
-msgstr "Gamma 值"
-
-msgid "Green:"
-msgstr "绿:"
-
-msgid "Help"
-msgstr "帮助"
-
+#: gtk/gtkcolorsel.c:221
 msgid "Hue:"
 msgstr "色调:"
 
-msgid "Input"
-msgstr "输入"
-
-msgid "Keys"
-msgstr "键"
-
-msgid "MAX_FONTS exceeded. Some fonts may be missing."
-msgstr "超过 MAX_FONTS 数，某些字体可能被遗漏。"
-
-msgid "Metric:"
-msgstr "量度:"
-
-msgid "Mode: "
-msgstr "模式:"
-
-msgid "No input devices"
-msgstr "无输入设备"
-
-msgid "OK"
-msgstr "确定"
-
-msgid "Opacity:"
-msgstr "透明度:"
-
-msgid "Page %u"
-msgstr "第 %u 页"
-
-msgid "Pixel Size:"
-msgstr "像素大小:"
-
-msgid "Pixels"
-msgstr "像素"
-
-msgid "Point Size:"
-msgstr "点大小:"
-
-msgid "Points"
-msgstr "点"
-
-msgid "Pressure"
-msgstr "压力"
-
-msgid "Preview:"
-msgstr "预览:"
-
-msgid "Red:"
-msgstr "红:"
-
-msgid "Rename"
-msgstr "重命名"
-
-msgid "Rename File"
-msgstr "重命名文件"
-
-msgid "Requested Font Name:"
-msgstr "所需字体名:"
-
-msgid "Requested Value"
-msgstr "所需值"
-
-msgid "Reset Filter"
-msgstr "重置过滤器"
-
-msgid "Resolution X:"
-msgstr "X 轴解析度:"
-
-msgid "Resolution Y:"
-msgstr "Y 轴解析度:"
-
+#: gtk/gtkcolorsel.c:222
 msgid "Saturation:"
 msgstr "饱和度:"
 
-msgid "Save"
-msgstr "保存"
-
-msgid "Scalable"
-msgstr "可缩放"
-
-msgid "Scaled Bitmap"
-msgstr "可缩放位图"
-
-msgid "Screen"
-msgstr "屏幕"
-
-msgid "Selection: "
-msgstr "选择: "
-
-msgid "Set Width:"
-msgstr "设置宽度:"
-
-msgid "Size:"
-msgstr "大小:"
-
-msgid "Slant:"
-msgstr "斜体:"
-
-msgid "Spacing:"
-msgstr "间距:"
-
-msgid "The selected font is not a valid font."
-msgstr "选定的字体无效。"
-
-msgid "The selected font is not available."
-msgstr "选定的字体不可用。"
-
-msgid "This is a 2-byte font and may not be displayed correctly."
-msgstr "该字体为双字节字体，可能无法正确显示。"
-
-msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "无法通过 pixmap_path 找到图像: \"%s\""
-
-msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr "无法通过 pixmap_path 找到图像: \"%s\" 第 %d 行"
-
-msgid "Unable to locate loadable module in module_path: \"%s\","
-msgstr "无法通过 module_path 装载组件: \"%s\","
-
+#: gtk/gtkcolorsel.c:223
 msgid "Value:"
 msgstr "值:"
 
+#: gtk/gtkcolorsel.c:224
+msgid "Red:"
+msgstr "红:"
+
+#: gtk/gtkcolorsel.c:225
+msgid "Green:"
+msgstr "绿:"
+
+#: gtk/gtkcolorsel.c:226
+msgid "Blue:"
+msgstr "蓝:"
+
+#: gtk/gtkcolorsel.c:227
+msgid "Opacity:"
+msgstr "透明度:"
+
+#. The OK button
+#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:481 gtk/gtkfontsel.c:3501
+#: gtk/gtkgamma.c:416
+msgid "OK"
+msgstr "确定"
+
+#. The Cancel button
+#: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:488 gtk/gtkfilesel.c:868
+#: gtk/gtkfilesel.c:968 gtk/gtkfilesel.c:1083 gtk/gtkfontsel.c:3514
+#: gtk/gtkgamma.c:424
+msgid "Cancel"
+msgstr "取消"
+
+#: gtk/gtkcolorsel.c:1738
+msgid "Help"
+msgstr "帮助"
+
+#. The directories clist
+#: gtk/gtkfilesel.c:430
+msgid "Directories"
+msgstr "目录"
+
+#. The files clist
+#: gtk/gtkfilesel.c:449
+msgid "Files"
+msgstr "文件"
+
+#: gtk/gtkfilesel.c:519 gtk/gtkfilesel.c:1478
+#, c-format
+msgid "Directory unreadable: %s"
+msgstr "无法读取目录: %s"
+
+#: gtk/gtkfilesel.c:551
+msgid "Create Dir"
+msgstr "创建目录"
+
+#: gtk/gtkfilesel.c:562 gtk/gtkfilesel.c:937
+msgid "Delete File"
+msgstr "删除文件"
+
+#: gtk/gtkfilesel.c:573 gtk/gtkfilesel.c:1041
+msgid "Rename File"
+msgstr "重命名文件"
+
+#.
+#. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
+#. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
+#. (gpointer) fs);
+#.
+#: gtk/gtkfilesel.c:734
+msgid "Error"
+msgstr "错误"
+
+#. close button
+#: gtk/gtkfilesel.c:757 gtk/gtkinputdialog.c:354
+msgid "Close"
+msgstr "关闭"
+
+#: gtk/gtkfilesel.c:832
+msgid "Create Directory"
+msgstr "创建目录"
+
+#: gtk/gtkfilesel.c:846
+msgid "Directory name:"
+msgstr "目录名称:"
+
+#. buttons
+#: gtk/gtkfilesel.c:859
+msgid "Create"
+msgstr "创建"
+
+#. buttons
+#: gtk/gtkfilesel.c:959
+msgid "Delete"
+msgstr "删除"
+
+#. buttons
+#: gtk/gtkfilesel.c:1074
+msgid "Rename"
+msgstr "重命名"
+
+#: gtk/gtkfilesel.c:1457
+msgid "Selection: "
+msgstr "选择: "
+
+#: gtk/gtkfontsel.c:210
+msgid "Foundry:"
+msgstr "制作:"
+
+#: gtk/gtkfontsel.c:211
+msgid "Family:"
+msgstr "家族:"
+
+#: gtk/gtkfontsel.c:212
 msgid "Weight:"
 msgstr "宽度:"
 
-msgid "Window"
-msgstr "窗口"
+#: gtk/gtkfontsel.c:213
+msgid "Slant:"
+msgstr "斜体:"
 
-msgid "X Tilt"
-msgstr "X 向倾斜"
+#: gtk/gtkfontsel.c:214
+msgid "Set Width:"
+msgstr "设置宽度:"
 
-msgid "Y Tilt"
-msgstr "Y 向倾斜"
+#: gtk/gtkfontsel.c:215
+msgid "Add Style:"
+msgstr "增加式样:"
 
-msgid "char cell"
-msgstr "字符元"
+#: gtk/gtkfontsel.c:216
+msgid "Pixel Size:"
+msgstr "像素大小:"
 
-msgid "clear"
-msgstr "清除"
+#: gtk/gtkfontsel.c:217
+msgid "Point Size:"
+msgstr "点大小:"
 
-msgid "italic"
-msgstr "斜体"
+#: gtk/gtkfontsel.c:218
+msgid "Resolution X:"
+msgstr "X 轴解析度:"
 
-msgid "monospaced"
-msgstr "定宽"
+#: gtk/gtkfontsel.c:219
+msgid "Resolution Y:"
+msgstr "Y 轴解析度:"
 
-msgid "none"
-msgstr "无"
+#: gtk/gtkfontsel.c:220
+msgid "Spacing:"
+msgstr "间距:"
 
-msgid "oblique"
-msgstr "倾斜"
+#: gtk/gtkfontsel.c:221
+msgid "Average Width:"
+msgstr "平均宽度:"
 
-msgid "other"
-msgstr "其它"
+#: gtk/gtkfontsel.c:222
+msgid "Charset:"
+msgstr "字符集:"
 
-msgid "proportional"
-msgstr "成比例的"
+#. Number of internationalized titles here must match number
+#. of NULL initializers above
+#: gtk/gtkfontsel.c:459
+msgid "Font Property"
+msgstr "字体属性"
 
+#: gtk/gtkfontsel.c:460
+msgid "Requested Value"
+msgstr "所需值"
+
+#: gtk/gtkfontsel.c:461
+msgid "Actual Value"
+msgstr "真实值"
+
+#: gtk/gtkfontsel.c:494
+msgid "Font"
+msgstr "字体"
+
+#: gtk/gtkfontsel.c:504 gtk/gtkfontsel.c:2185 gtk/gtkfontsel.c:2415
+msgid "Font:"
+msgstr "字体:"
+
+#: gtk/gtkfontsel.c:509
+msgid "Font Style:"
+msgstr "字体式样:"
+
+#: gtk/gtkfontsel.c:514
+msgid "Size:"
+msgstr "大小:"
+
+#: gtk/gtkfontsel.c:646 gtk/gtkfontsel.c:868
+msgid "Reset Filter"
+msgstr "重置过滤器"
+
+#: gtk/gtkfontsel.c:660
+msgid "Metric:"
+msgstr "量度:"
+
+#: gtk/gtkfontsel.c:664
+msgid "Points"
+msgstr "点"
+
+#: gtk/gtkfontsel.c:671
+msgid "Pixels"
+msgstr "像素"
+
+#. create the text entry widget
+#: gtk/gtkfontsel.c:687
+msgid "Preview:"
+msgstr "预览:"
+
+#: gtk/gtkfontsel.c:716
+msgid "Font Information"
+msgstr "字体信息"
+
+#: gtk/gtkfontsel.c:749
+msgid "Requested Font Name:"
+msgstr "所需字体名:"
+
+#: gtk/gtkfontsel.c:760
+msgid "Actual Font Name:"
+msgstr "字体真实名称:"
+
+#: gtk/gtkfontsel.c:771
+#, c-format
+msgid "%i fonts available with a total of %i styles."
+msgstr "有 %i 种字体可用，共 %i 种形式。"
+
+#: gtk/gtkfontsel.c:786
+msgid "Filter"
+msgstr "过滤器"
+
+#: gtk/gtkfontsel.c:799
+msgid "Font Types:"
+msgstr "字体类型:"
+
+#: gtk/gtkfontsel.c:807
+msgid "Bitmap"
+msgstr "位图"
+
+#: gtk/gtkfontsel.c:813
+msgid "Scalable"
+msgstr "可缩放"
+
+#: gtk/gtkfontsel.c:819
+msgid "Scaled Bitmap"
+msgstr "可缩放位图"
+
+#: gtk/gtkfontsel.c:890
+msgid "*"
+msgstr "*"
+
+#. Convert '(nil)' weights to 'regular', since it looks nicer.
+#: gtk/gtkfontsel.c:1215
+msgid "(nil)"
+msgstr ""
+
+#: gtk/gtkfontsel.c:1215
 msgid "regular"
 msgstr "规则"
 
+#: gtk/gtkfontsel.c:1220 gtk/gtkfontsel.c:1977
+msgid "italic"
+msgstr "斜体"
+
+#: gtk/gtkfontsel.c:1221 gtk/gtkfontsel.c:1978
+msgid "oblique"
+msgstr "倾斜"
+
+#: gtk/gtkfontsel.c:1222 gtk/gtkfontsel.c:1979
 msgid "reverse italic"
 msgstr "反斜体"
 
+#: gtk/gtkfontsel.c:1223 gtk/gtkfontsel.c:1980
 msgid "reverse oblique"
 msgstr "反倾斜"
 
+#: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1981
+msgid "other"
+msgstr "其它"
+
+#: gtk/gtkfontsel.c:1231
+msgid "[M]"
+msgstr ""
+
+#: gtk/gtkfontsel.c:1232
+msgid "[C]"
+msgstr ""
+
+#: gtk/gtkfontsel.c:1797
+msgid "The selected font is not available."
+msgstr "选定的字体不可用。"
+
+#: gtk/gtkfontsel.c:1803
+msgid "The selected font is not a valid font."
+msgstr "选定的字体无效。"
+
+#: gtk/gtkfontsel.c:1861
+msgid "This is a 2-byte font and may not be displayed correctly."
+msgstr "该字体为双字节字体，可能无法正确显示。"
+
+#: gtk/gtkfontsel.c:1965 gtk/gtkinputdialog.c:607
+msgid "(unknown)"
+msgstr "(未知)"
+
+#: gtk/gtkfontsel.c:1976
 msgid "roman"
 msgstr "罗马体"
+
+#: gtk/gtkfontsel.c:1988
+msgid "proportional"
+msgstr "成比例的"
+
+#: gtk/gtkfontsel.c:1989
+msgid "monospaced"
+msgstr "定宽"
+
+#: gtk/gtkfontsel.c:1990
+msgid "char cell"
+msgstr "字符元"
+
+#: gtk/gtkfontsel.c:2190
+msgid "Font: (Filter Applied)"
+msgstr "字体: (使用过滤器)"
+
+#: gtk/gtkfontsel.c:2666
+msgid "MAX_FONTS exceeded. Some fonts may be missing."
+msgstr "超过 MAX_FONTS 数，某些字体可能被遗漏。"
+
+#: gtk/gtkfontsel.c:3508
+msgid "Apply"
+msgstr "应用"
+
+#: gtk/gtkfontsel.c:3530
+msgid "Font Selection"
+msgstr "字体选择"
+
+#: gtk/gtkgamma.c:396
+msgid "Gamma"
+msgstr "Gamma"
+
+#: gtk/gtkgamma.c:403
+msgid "Gamma value"
+msgstr "Gamma 值"
+
+#. shell and main vbox
+#: gtk/gtkinputdialog.c:200
+msgid "Input"
+msgstr "输入"
+
+#: gtk/gtkinputdialog.c:208
+msgid "No input devices"
+msgstr "无输入设备"
+
+#: gtk/gtkinputdialog.c:237
+msgid "Device:"
+msgstr "设备:"
+
+#: gtk/gtkinputdialog.c:253
+msgid "Disabled"
+msgstr "禁止"
+
+#: gtk/gtkinputdialog.c:261
+msgid "Screen"
+msgstr "屏幕"
+
+#: gtk/gtkinputdialog.c:269
+msgid "Window"
+msgstr "窗口"
+
+#: gtk/gtkinputdialog.c:277
+msgid "Mode: "
+msgstr "模式:"
+
+#. The axis listbox
+#: gtk/gtkinputdialog.c:307
+msgid "Axes"
+msgstr "坐标"
+
+#. Keys listbox
+#: gtk/gtkinputdialog.c:323
+msgid "Keys"
+msgstr "键"
+
+#. We create the save button in any case, so that clients can
+#. connect to it, without paying attention to whether it exits
+#: gtk/gtkinputdialog.c:345
+msgid "Save"
+msgstr "保存"
+
+#: gtk/gtkinputdialog.c:500
+msgid "X"
+msgstr ""
+
+#: gtk/gtkinputdialog.c:501
+msgid "Y"
+msgstr ""
+
+#: gtk/gtkinputdialog.c:502
+msgid "Pressure"
+msgstr "压力"
+
+#: gtk/gtkinputdialog.c:503
+msgid "X Tilt"
+msgstr "X 向倾斜"
+
+#: gtk/gtkinputdialog.c:504
+msgid "Y Tilt"
+msgstr "Y 向倾斜"
+
+#: gtk/gtkinputdialog.c:544
+msgid "none"
+msgstr "无"
+
+#: gtk/gtkinputdialog.c:578 gtk/gtkinputdialog.c:614
+msgid "(disabled)"
+msgstr "(禁止)"
+
+#. and clear button
+#: gtk/gtkinputdialog.c:692
+msgid "clear"
+msgstr "清除"
+
+#: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
+#, c-format
+msgid "Page %u"
+msgstr "第 %u 页"
+
+#: gtk/gtkrc.c:1702
+#, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
+msgstr "无法通过 pixmap_path 找到图像: \"%s\" 第 %d 行"
+
+#: gtk/gtkrc.c:1705
+#, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\""
+msgstr "无法通过 pixmap_path 找到图像: \"%s\""
+
+#: gtk/gtkthemes.c:79
+#, c-format
+msgid "Unable to locate loadable module in module_path: \"%s\","
+msgstr "无法通过 module_path 装载组件: \"%s\","
+
+#: gtk/gtktipsquery.c:180
+msgid "--- No Tip ---"
+msgstr "--- 无提示 ---"

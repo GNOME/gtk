@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.3\n"
-"POT-Creation-Date: 2000-05-19 07:11+0200\n"
+"POT-Creation-Date: 2001-02-15 22:06-0500\n"
 "PO-Revision-Date: 1999-01-12 22:50+0100\n"
 "Last-Translator: Tomas Ögren <stric@ing.umu.se>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -42,14 +42,14 @@ msgid "Opacity:"
 msgstr "Opacitet:"
 
 #. The OK button
-#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:469 gtk/gtkfontsel.c:3492
+#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:481 gtk/gtkfontsel.c:3501
 #: gtk/gtkgamma.c:416
 msgid "OK"
 msgstr "OK"
 
 #. The Cancel button
-#: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:476 gtk/gtkfilesel.c:856
-#: gtk/gtkfilesel.c:956 gtk/gtkfilesel.c:1071 gtk/gtkfontsel.c:3505
+#: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:488 gtk/gtkfilesel.c:868
+#: gtk/gtkfilesel.c:968 gtk/gtkfilesel.c:1083 gtk/gtkfontsel.c:3514
 #: gtk/gtkgamma.c:424
 msgid "Cancel"
 msgstr "Avbryt"
@@ -59,29 +59,29 @@ msgid "Help"
 msgstr "Hjälp"
 
 #. The directories clist
-#: gtk/gtkfilesel.c:418
+#: gtk/gtkfilesel.c:430
 msgid "Directories"
 msgstr "Kataloger"
 
 #. The files clist
-#: gtk/gtkfilesel.c:437
+#: gtk/gtkfilesel.c:449
 msgid "Files"
 msgstr "Filer"
 
-#: gtk/gtkfilesel.c:507 gtk/gtkfilesel.c:1466
+#: gtk/gtkfilesel.c:519 gtk/gtkfilesel.c:1478
 #, c-format
 msgid "Directory unreadable: %s"
 msgstr "Katalog oläsbar: %s"
 
-#: gtk/gtkfilesel.c:539
+#: gtk/gtkfilesel.c:551
 msgid "Create Dir"
 msgstr "Skapa katalog"
 
-#: gtk/gtkfilesel.c:550 gtk/gtkfilesel.c:925
+#: gtk/gtkfilesel.c:562 gtk/gtkfilesel.c:937
 msgid "Delete File"
 msgstr "Ta bort fil"
 
-#: gtk/gtkfilesel.c:561 gtk/gtkfilesel.c:1029
+#: gtk/gtkfilesel.c:573 gtk/gtkfilesel.c:1041
 msgid "Rename File"
 msgstr "Ändra filnamn"
 
@@ -90,39 +90,39 @@ msgstr "Ändra filnamn"
 #. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
 #. (gpointer) fs);
 #.
-#: gtk/gtkfilesel.c:722
+#: gtk/gtkfilesel.c:734
 msgid "Error"
 msgstr "Fel"
 
 #. close button
-#: gtk/gtkfilesel.c:745 gtk/gtkinputdialog.c:354
+#: gtk/gtkfilesel.c:757 gtk/gtkinputdialog.c:354
 msgid "Close"
 msgstr "Stäng"
 
-#: gtk/gtkfilesel.c:820
+#: gtk/gtkfilesel.c:832
 msgid "Create Directory"
 msgstr "Skapa katalog"
 
-#: gtk/gtkfilesel.c:834
+#: gtk/gtkfilesel.c:846
 msgid "Directory name:"
 msgstr "Katalogens namn:"
 
 #. buttons
-#: gtk/gtkfilesel.c:847
+#: gtk/gtkfilesel.c:859
 msgid "Create"
 msgstr "Skapa"
 
 #. buttons
-#: gtk/gtkfilesel.c:947
+#: gtk/gtkfilesel.c:959
 msgid "Delete"
 msgstr "Ta bort"
 
 #. buttons
-#: gtk/gtkfilesel.c:1062
+#: gtk/gtkfilesel.c:1074
 msgid "Rename"
 msgstr "Ändra namn"
 
-#: gtk/gtkfilesel.c:1445
+#: gtk/gtkfilesel.c:1457
 msgid "Selection: "
 msgstr "Markering: "
 
@@ -196,7 +196,7 @@ msgstr "Erhållet värde"
 msgid "Font"
 msgstr "Typsnitt"
 
-#: gtk/gtkfontsel.c:504 gtk/gtkfontsel.c:2181 gtk/gtkfontsel.c:2411
+#: gtk/gtkfontsel.c:504 gtk/gtkfontsel.c:2185 gtk/gtkfontsel.c:2415
 msgid "Font:"
 msgstr "Typsnitt:"
 
@@ -279,23 +279,23 @@ msgstr "(nil)"
 msgid "regular"
 msgstr "reguljär"
 
-#: gtk/gtkfontsel.c:1220 gtk/gtkfontsel.c:1973
+#: gtk/gtkfontsel.c:1220 gtk/gtkfontsel.c:1977
 msgid "italic"
 msgstr "kursiv"
 
-#: gtk/gtkfontsel.c:1221 gtk/gtkfontsel.c:1974
+#: gtk/gtkfontsel.c:1221 gtk/gtkfontsel.c:1978
 msgid "oblique"
 msgstr "lutande"
 
-#: gtk/gtkfontsel.c:1222 gtk/gtkfontsel.c:1975
+#: gtk/gtkfontsel.c:1222 gtk/gtkfontsel.c:1979
 msgid "reverse italic"
 msgstr "omvänt kursiv"
 
-#: gtk/gtkfontsel.c:1223 gtk/gtkfontsel.c:1976
+#: gtk/gtkfontsel.c:1223 gtk/gtkfontsel.c:1980
 msgid "reverse oblique"
 msgstr "omvänt lutande"
 
-#: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1977
+#: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1981
 msgid "other"
 msgstr "annan"
 
@@ -307,51 +307,51 @@ msgstr "[M]"
 msgid "[C]"
 msgstr "[C]"
 
-#: gtk/gtkfontsel.c:1793
+#: gtk/gtkfontsel.c:1797
 msgid "The selected font is not available."
 msgstr "Det valda typsnittet är ej tillgängligt."
 
-#: gtk/gtkfontsel.c:1799
+#: gtk/gtkfontsel.c:1803
 msgid "The selected font is not a valid font."
 msgstr "Det valda typsnittet är ej ett giltigt typsnitt."
 
-#: gtk/gtkfontsel.c:1857
+#: gtk/gtkfontsel.c:1861
 msgid "This is a 2-byte font and may not be displayed correctly."
 msgstr "Detta är ett 2-byte typsnitt och kanske inte visas helt korrekt."
 
-#: gtk/gtkfontsel.c:1961 gtk/gtkinputdialog.c:607
+#: gtk/gtkfontsel.c:1965 gtk/gtkinputdialog.c:607
 msgid "(unknown)"
 msgstr "(okänd)"
 
-#: gtk/gtkfontsel.c:1972
+#: gtk/gtkfontsel.c:1976
 msgid "roman"
 msgstr "romersk"
 
-#: gtk/gtkfontsel.c:1984
+#: gtk/gtkfontsel.c:1988
 msgid "proportional"
 msgstr "proportionell"
 
-#: gtk/gtkfontsel.c:1985
+#: gtk/gtkfontsel.c:1989
 msgid "monospaced"
 msgstr "singelstorlek"
 
-#: gtk/gtkfontsel.c:1986
+#: gtk/gtkfontsel.c:1990
 msgid "char cell"
 msgstr "bokstavscell"
 
-#: gtk/gtkfontsel.c:2186
+#: gtk/gtkfontsel.c:2190
 msgid "Font: (Filter Applied)"
 msgstr "Typsnitt: (Filter applicerat)"
 
-#: gtk/gtkfontsel.c:2662
+#: gtk/gtkfontsel.c:2666
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
 msgstr "MAX_FONTS nått. Några typsnitt kanske saknas."
 
-#: gtk/gtkfontsel.c:3499
+#: gtk/gtkfontsel.c:3508
 msgid "Apply"
 msgstr "Verkställ"
 
-#: gtk/gtkfontsel.c:3521
+#: gtk/gtkfontsel.c:3530
 msgid "Font Selection"
 msgstr "Typsnittsval"
 

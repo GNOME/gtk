@@ -113,17 +113,20 @@ htmldir:
 textdir:
 	mkdir -p $(srcdir)/text
 
-gdk.html gdk_toc.html: gdk.texi
-	(cd $(srcdir); texi2html gdk.texi)
-
-gtk.html gtk_toc.html: gtk.texi
-	(cd $(srcdir); texi2html gtk.texi)
-
-html/gdk.html html/gdk_toc.html: htmldir gdk.html gdk_toc.html
-	(cd $(srcdir); cp gdk.html gdk_toc.html html/)
-
-html/gtk.html html/gtk_toc.html: htmldir gtk.html gtk_toc.html
-	(cd $(srcdir); cp gtk.html gtk_toc.html html/)
+#
+# The content is useless and the texi makes texi2html unhappy 
+#
+#gdk.html gdk_toc.html: gdk.texi
+#	(cd $(srcdir); texi2html gdk.texi)
+#
+#gtk.html gtk_toc.html: gtk.texi
+#	(cd $(srcdir); texi2html gtk.texi)
+#
+#html/gdk.html html/gdk_toc.html: htmldir gdk.html gdk_toc.html
+#	(cd $(srcdir); cp gdk.html gdk_toc.html html/)
+#
+#html/gtk.html html/gtk_toc.html: htmldir gtk.html gtk_toc.html
+#	(cd $(srcdir); cp gtk.html gtk_toc.html html/)
 
 $(FAQ_FILES): faq
 
@@ -191,10 +194,6 @@ EXTRA_DIST += \
 	html/gtk_tut_packbox1.gif 	\
 	html/gtk_tut_packbox2.gif 	\
 	gtk_tut_table.gif		\
-	html/gdk.html            	\
-	html/gdk_toc.html        	\
-	html/gtk.html            	\
-	html/gtk_toc.html        	\
 	$(TUTORIAL_FILES)		\
 	$(TUTORIAL_FR_FILES)		\
 	$(TUTORIAL_IT_FILES)		\

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.6\n"
-"POT-Creation-Date: 2000-05-19 07:11+0200\n"
+"POT-Creation-Date: 2001-02-15 22:06-0500\n"
 "PO-Revision-Date: 1999-09-26 23:40+0300\n"
 "Last-Translator: Lauris Kaplinski <lauris@ariman.ee>\n"
 "Language-Team: Estonian\n"
@@ -42,14 +42,14 @@ msgid "Opacity:"
 msgstr "Katvus:"
 
 #. The OK button
-#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:469 gtk/gtkfontsel.c:3492
+#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:481 gtk/gtkfontsel.c:3501
 #: gtk/gtkgamma.c:416
 msgid "OK"
 msgstr "Sobib"
 
 #. The Cancel button
-#: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:476 gtk/gtkfilesel.c:856
-#: gtk/gtkfilesel.c:956 gtk/gtkfilesel.c:1071 gtk/gtkfontsel.c:3505
+#: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:488 gtk/gtkfilesel.c:868
+#: gtk/gtkfilesel.c:968 gtk/gtkfilesel.c:1083 gtk/gtkfontsel.c:3514
 #: gtk/gtkgamma.c:424
 msgid "Cancel"
 msgstr "Vabandust"
@@ -59,29 +59,29 @@ msgid "Help"
 msgstr "Abimees"
 
 #. The directories clist
-#: gtk/gtkfilesel.c:418
+#: gtk/gtkfilesel.c:430
 msgid "Directories"
 msgstr "Kataloogid"
 
 #. The files clist
-#: gtk/gtkfilesel.c:437
+#: gtk/gtkfilesel.c:449
 msgid "Files"
 msgstr "Failid"
 
-#: gtk/gtkfilesel.c:507 gtk/gtkfilesel.c:1466
+#: gtk/gtkfilesel.c:519 gtk/gtkfilesel.c:1478
 #, c-format
 msgid "Directory unreadable: %s"
 msgstr "Kataloog %s on loetamatu"
 
-#: gtk/gtkfilesel.c:539
+#: gtk/gtkfilesel.c:551
 msgid "Create Dir"
 msgstr "Loo kataloog"
 
-#: gtk/gtkfilesel.c:550 gtk/gtkfilesel.c:925
+#: gtk/gtkfilesel.c:562 gtk/gtkfilesel.c:937
 msgid "Delete File"
 msgstr "Kustuta fail"
 
-#: gtk/gtkfilesel.c:561 gtk/gtkfilesel.c:1029
+#: gtk/gtkfilesel.c:573 gtk/gtkfilesel.c:1041
 msgid "Rename File"
 msgstr "Nimeta ümber"
 
@@ -90,39 +90,39 @@ msgstr "Nimeta ümber"
 #. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
 #. (gpointer) fs);
 #.
-#: gtk/gtkfilesel.c:722
+#: gtk/gtkfilesel.c:734
 msgid "Error"
 msgstr "Viga"
 
 #. close button
-#: gtk/gtkfilesel.c:745 gtk/gtkinputdialog.c:354
+#: gtk/gtkfilesel.c:757 gtk/gtkinputdialog.c:354
 msgid "Close"
 msgstr "Sulge"
 
-#: gtk/gtkfilesel.c:820
+#: gtk/gtkfilesel.c:832
 msgid "Create Directory"
 msgstr "Loo uus kataloog"
 
-#: gtk/gtkfilesel.c:834
+#: gtk/gtkfilesel.c:846
 msgid "Directory name:"
 msgstr "Kataloogi nimi:"
 
 #. buttons
-#: gtk/gtkfilesel.c:847
+#: gtk/gtkfilesel.c:859
 msgid "Create"
 msgstr "Loo"
 
 #. buttons
-#: gtk/gtkfilesel.c:947
+#: gtk/gtkfilesel.c:959
 msgid "Delete"
 msgstr "Kustuta"
 
 #. buttons
-#: gtk/gtkfilesel.c:1062
+#: gtk/gtkfilesel.c:1074
 msgid "Rename"
 msgstr "Nimeta ümber"
 
-#: gtk/gtkfilesel.c:1445
+#: gtk/gtkfilesel.c:1457
 msgid "Selection: "
 msgstr "Valik: "
 
@@ -196,7 +196,7 @@ msgstr "Tegelik väärtus"
 msgid "Font"
 msgstr "Shrift"
 
-#: gtk/gtkfontsel.c:504 gtk/gtkfontsel.c:2181 gtk/gtkfontsel.c:2411
+#: gtk/gtkfontsel.c:504 gtk/gtkfontsel.c:2185 gtk/gtkfontsel.c:2415
 msgid "Font:"
 msgstr "Shrift:"
 
@@ -279,23 +279,23 @@ msgstr "(ei ole)"
 msgid "regular"
 msgstr "püstine"
 
-#: gtk/gtkfontsel.c:1220 gtk/gtkfontsel.c:1973
+#: gtk/gtkfontsel.c:1220 gtk/gtkfontsel.c:1977
 msgid "italic"
 msgstr "kursiiv"
 
-#: gtk/gtkfontsel.c:1221 gtk/gtkfontsel.c:1974
+#: gtk/gtkfontsel.c:1221 gtk/gtkfontsel.c:1978
 msgid "oblique"
 msgstr "obliikva"
 
-#: gtk/gtkfontsel.c:1222 gtk/gtkfontsel.c:1975
+#: gtk/gtkfontsel.c:1222 gtk/gtkfontsel.c:1979
 msgid "reverse italic"
 msgstr "vasakule kursiiv"
 
-#: gtk/gtkfontsel.c:1223 gtk/gtkfontsel.c:1976
+#: gtk/gtkfontsel.c:1223 gtk/gtkfontsel.c:1980
 msgid "reverse oblique"
 msgstr "vasakule obliikva"
 
-#: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1977
+#: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1981
 msgid "other"
 msgstr "muu"
 
@@ -307,51 +307,51 @@ msgstr "[M]"
 msgid "[C]"
 msgstr "[C]"
 
-#: gtk/gtkfontsel.c:1793
+#: gtk/gtkfontsel.c:1797
 msgid "The selected font is not available."
 msgstr "Sellist shrifti ei ole."
 
-#: gtk/gtkfontsel.c:1799
+#: gtk/gtkfontsel.c:1803
 msgid "The selected font is not a valid font."
 msgstr "Valitud shrift ei ole korrektne."
 
-#: gtk/gtkfontsel.c:1857
+#: gtk/gtkfontsel.c:1861
 msgid "This is a 2-byte font and may not be displayed correctly."
 msgstr "See on 2-baidine shrift ja ei pruugi korralikult esituda."
 
-#: gtk/gtkfontsel.c:1961 gtk/gtkinputdialog.c:607
+#: gtk/gtkfontsel.c:1965 gtk/gtkinputdialog.c:607
 msgid "(unknown)"
 msgstr "(tundmatu)"
 
-#: gtk/gtkfontsel.c:1972
+#: gtk/gtkfontsel.c:1976
 msgid "roman"
 msgstr "romaani"
 
-#: gtk/gtkfontsel.c:1984
+#: gtk/gtkfontsel.c:1988
 msgid "proportional"
 msgstr "proportsionaalne"
 
-#: gtk/gtkfontsel.c:1985
+#: gtk/gtkfontsel.c:1989
 msgid "monospaced"
 msgstr "ühelaiune"
 
-#: gtk/gtkfontsel.c:1986
+#: gtk/gtkfontsel.c:1990
 msgid "char cell"
 msgstr "täheruut"
 
-#: gtk/gtkfontsel.c:2186
+#: gtk/gtkfontsel.c:2190
 msgid "Font: (Filter Applied)"
 msgstr "Shrift: (läbi filtri)"
 
-#: gtk/gtkfontsel.c:2662
+#: gtk/gtkfontsel.c:2666
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
 msgstr "MAX_FONTS ületatud. Osa shrifte võib puududa."
 
-#: gtk/gtkfontsel.c:3499
+#: gtk/gtkfontsel.c:3508
 msgid "Apply"
 msgstr "Proovi"
 
-#: gtk/gtkfontsel.c:3521
+#: gtk/gtkfontsel.c:3530
 msgid "Font Selection"
 msgstr "Shrifti valik"
 

@@ -1,3 +1,12 @@
+Tue Feb 13 15:39:28 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* 1.2.9pre1
+
+	* NEWS: Update.
+
+	* docs/Makefile.am: Remove building of HTML for 
+	gdk.texi gtk.texi since it doesn't work.
+
 Tue Feb 13 13:56:58 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktext.c (find_char_width): Fix problems with

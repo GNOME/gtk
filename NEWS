@@ -6,6 +6,15 @@ Overview of Changes in GTK+ 1.2.9:
 * Some DEFAULT widget shuffeling
 * Minor GtkTable improvements
 * Selection and DND bug fixes
+* Patch enabling themes with better appearance by making some 
+  geometry parameters settable.
+* Many bug fixes 
+
+  (#50686, #50686, #50678, #50511, #8170, #567
+  #424, #1290, #4524, #8041, #8002, #7302, #11008, #34218, #12074,
+  #12072, #9656, #10316, #14082, #13941, #13432, #7841, #6739,
+  #8079, #28842, #50290, #50337, #6510, #15282, #11887, #18648,
+  #26545, and others)
 
 Overview of Changes in GTK+ 1.2.8:
 
