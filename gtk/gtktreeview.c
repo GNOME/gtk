@@ -3824,7 +3824,7 @@ validate_visible_area (GtkTreeView *tree_view)
   GtkRBNode *node = NULL;
   gboolean need_redraw = FALSE;
   gboolean size_changed = FALSE;
-  gboolean modify_dy = FALSE;
+  gboolean update_dy = FALSE;
   gint total_height;
   gint area_above = 0;
   gint area_below = 0;
@@ -3867,10 +3867,11 @@ validate_visible_area (GtkTreeView *tree_view)
 	    }
 	  else
 	    {
-	      /* FIXME: */
-	      g_warning ("non use_align not implemented yet");
-	      gtk_tree_path_free (path);
-	      path = NULL;
+	      /* FIXME: temporary solution, just validate a complete height
+	       * and all will be fine...
+	       */
+	      area_above = total_height;
+	      area_below = total_height;
 	    }
 	}
       else
@@ -4025,7 +4026,7 @@ validate_visible_area (GtkTreeView *tree_view)
 	    size_changed = TRUE;
 	}
       area_above -= MAX (GTK_RBNODE_GET_HEIGHT (node), tree_view->priv->expander_size);
-      modify_dy = TRUE;
+      update_dy = TRUE;
     }
 
   if (size_changed)
@@ -4041,8 +4042,19 @@ validate_visible_area (GtkTreeView *tree_view)
       gtk_widget_queue_resize (GTK_WIDGET (tree_view));
     }
 
+  /* if we scroll at all, always update dy and kill the top_row */
+  if (tree_view->priv->scroll_to_path)
+    {
+      update_dy = TRUE;
+      if (tree_view->priv->top_row)
+        {
+	  gtk_tree_row_reference_free (tree_view->priv->top_row);
+	  tree_view->priv->top_row = NULL;
+	}
+    }
+
   /* if we walk backwards at all, then we need to reset our dy. */
-  if (modify_dy)
+  if (update_dy)
     {
       gint dy;
       if (node != NULL)
@@ -6484,28 +6496,20 @@ gtk_tree_view_clamp_node_visible (GtkTreeView *tree_view,
 				  GtkRBTree   *tree,
 				  GtkRBNode   *node)
 {
-  GdkRectangle cell_rect;
-  GdkRectangle vis_rect;
-  gint dest_y;
+  GtkTreePath *path = NULL;
 
   /* We process updates because we want to clear old selected items when we scroll.
    * if this is removed, we get a "selection streak" at the bottom. */
   if (!GTK_WIDGET_REALIZED (tree_view))
     return;
 
-  gdk_window_process_updates (tree_view->priv->bin_window, TRUE);
-  cell_rect.y = TREE_WINDOW_Y_TO_RBTREE_Y (tree_view, BACKGROUND_FIRST_PIXEL (tree_view, tree, node));
-  cell_rect.height = BACKGROUND_HEIGHT (node);
-  gtk_tree_view_get_visible_rect (tree_view, &vis_rect);
+  path = _gtk_tree_view_find_path (tree_view, tree, node);
 
-  dest_y = vis_rect.y;
-
-  if (cell_rect.y + cell_rect.height > vis_rect.y + vis_rect.height)
-    dest_y = cell_rect.y + cell_rect.height - vis_rect.height;
-  if (cell_rect.y < vis_rect.y)
-    dest_y = cell_rect.y;
-
-  gtk_tree_view_scroll_to_point (tree_view, -1, dest_y);
+  if (path)
+    {
+      gtk_tree_view_scroll_to_cell (tree_view, path, NULL, FALSE, 0.0, 0.0);
+      gtk_tree_path_free (path);
+    }
 }
 
 static void
@@ -7701,7 +7705,6 @@ gtk_tree_view_adjustment_changed (GtkAdjustment *adjustment,
       gtk_tree_view_dy_to_top_row (tree_view);
       gdk_window_process_updates (tree_view->priv->bin_window, TRUE);
       gdk_window_process_updates (tree_view->priv->header_window, TRUE);
-
     }
 }
 

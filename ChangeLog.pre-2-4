@@ -1,3 +1,14 @@
+Sun Oct 27 15:58:30 2002  Kristian Rietveld  <kris@gtk.org>
+
+	This fixes a scrolling bug. Shouldn't cause problems, but you
+	never know ... (#81627, testcase by Timo Sirainen).
+
+	* gtk/gtktreeview.c (validate_visible_area): add a temporary
+	implemention for non use_align, always update dy and ->top_row
+	if we scroll here,
+	(gtk_tree_view_clamp_node_visible): reimplement using
+	_scroll_to_cell (#73895).
+
 Sun Oct 27 11:41:37 GMT 2002  Tony Gale <gale@gtk.org>
 
 	* docs/tutorial/gtk-tut.sgml:
