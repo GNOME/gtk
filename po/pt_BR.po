@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.1.12\n"
-"POT-Creation-Date: 2002-07-31 16:57-0400\n"
-"PO-Revision-Date: 2002-06-09T18:11-0300\n"
+"POT-Creation-Date: 2002-08-13 16:43-0300\n"
+"PO-Revision-Date: 2002-08-13 16:45-0300\n"
 "Last-Translator: Gustavo Noronha Silva <kov@debian.org>\n"
 "Language-Team: Brazilian Portuguese <ldp-br@bazar.conectiva.com.br>, Debian-"
 "BR <debian-l10n-portuguese@lists.debian.org>\n"
@@ -438,9 +438,8 @@ msgid "RAS image has unknown type"
 msgstr "A imagem RAS tem tipo desconhecido"
 
 #: gdk-pixbuf/io-ras.c:188
-#, fuzzy
 msgid "unsupported RAS image variation"
-msgstr "Tipo de imagem TGA não suportado"
+msgstr "tipo de imagem RAS não suportado"
 
 #: gdk-pixbuf/io-ras.c:203 gdk-pixbuf/io-ras.c:223
 msgid "Not enough memory to load RAS image"
@@ -569,7 +568,7 @@ msgstr "Largura ou altura da imagem TIFF é zero"
 
 #: gdk-pixbuf/io-tiff.c:215 gdk-pixbuf/io-tiff.c:224
 msgid "Dimensions of TIFF image too large"
-msgstr ""
+msgstr "Imagem TIFF tem dimensões demasiadamente grandes"
 
 #: gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:246 gdk-pixbuf/io-tiff.c:552
 msgid "Insufficient memory to open TIFF file"
@@ -580,9 +579,8 @@ msgid "Failed to load RGB data from TIFF file"
 msgstr "Falha ao carregar dados RGB do arquivo TIFF"
 
 #: gdk-pixbuf/io-tiff.c:266
-#, fuzzy
 msgid "Unsupported TIFF variant"
-msgstr "Tipo de imagem TGA não suportado"
+msgstr "Tipo de imagem TIFF não suportado"
 
 #: gdk-pixbuf/io-tiff.c:336
 msgid "Failed to open TIFF image"
@@ -1781,7 +1779,7 @@ msgstr "Selecionar Tudo"
 msgid "Input Methods"
 msgstr "Métodos de Entrada"
 
-#: gtk/gtkentry.c:3890 gtk/gtktextview.c:6395
+#: gtk/gtkentry.c:3890 gtk/gtktextview.c:6407
 msgid "_Insert Unicode control character"
 msgstr "_Inserir caracter de controlo Unicode"
 
@@ -3451,6 +3449,7 @@ msgid "_Yes"
 msgstr "_Sim"
 
 #: gtk/gtkstock.c:334
+#, c-format
 msgid "Zoom _100%"
 msgstr "Zoom _100%"
 
@@ -3803,9 +3802,8 @@ msgid "ZWS _Zero width space"
 msgstr "ZWS largura zero espaço"
 
 #: gtk/gtktextutil.c:54
-#, fuzzy
 msgid "ZWJ Zero width _joiner"
-msgstr "ZWNJ largura zero _unida"
+msgstr "ZWJ largura zero _unida"
 
 #: gtk/gtktextutil.c:55
 msgid "ZWNJ Zero width _non-joiner"
@@ -3843,7 +3841,7 @@ msgstr "Cursor Visível"
 msgid "If the insertion cursor is shown"
 msgstr "Se o cursor de inserção é mostrado"
 
-#: gtk/gtktextview.c:6386
+#: gtk/gtktextview.c:6398
 msgid "Input _Methods"
 msgstr "_Métodos de Entrada"
 
