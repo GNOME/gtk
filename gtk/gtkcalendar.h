@@ -71,9 +71,13 @@ struct _GtkCalendar
   GdkColor marked_date_color[31];
   
   GdkGC *gc;
-  
-  guint highlight_row;
-  guint highlight_col;
+  GdkGC *xor_gc;
+
+  gint focus_row;
+  gint focus_col;
+
+  gint highlight_row;
+  gint highlight_col;
   
   gpointer private_data;
   char grow_space [32];

@@ -1,3 +1,14 @@
+Sun Oct  4 22:47:22 CDT 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* gtk/gtkcalendar.h:
+	  gtk/gtkcalendar.c: More changes:
+	  - The day with focus is now seperated from the day selected
+	  - The day with focus has the xor's line around it
+	  - The selected day is now standard selected style
+	  - The week names and week numbers are now also drawn
+	    with selected style
+	  - Space now selects the day which has focus
+
 Sun Oct  4 17:55:52 CDT 1998 Shawn T. Amundson <amundson@gtk.org>
 
 	* gtk/gtkcalendar.h:
