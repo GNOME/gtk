@@ -31,7 +31,8 @@
 /* Shared library entry point */
 GdkPixBuf *image_load(FILE * f)
 {
-    gint fn, is_trans, done;
+    gint fn, is_trans = FALSE;
+    gint done = 0;
     gint t_color = -1;
     gint w, h, i, j;
     art_u8 *pixels, *tmpptr;
@@ -49,6 +50,7 @@ GdkPixBuf *image_load(FILE * f)
     g_return_val_if_fail(f != NULL, NULL);
 
     fn = fileno(f);
+/*    lseek(fn, 0, 0);*/
     gif = DGifOpenFileHandle(fn);
 
     if (!gif) {
@@ -74,13 +76,13 @@ GdkPixBuf *image_load(FILE * f)
 	    }
 	    w = gif->Image.Width;
 	    h = gif->Image.Height;
-	    rows = g_malloc(h * sizeof(GifRowType *));
+	    rows = g_malloc0(h * sizeof(GifRowType *));
 	    if (!rows) {
 		DGifCloseFile(gif);
 		return NULL;
 	    }
 	    for (i = 0; i < h; i++) {
-		rows[i] = g_malloc(w * sizeof(GifPixelType));
+		rows[i] = g_malloc0(w * sizeof(GifPixelType));
 		if (!rows[i]) {
 		    DGifCloseFile(gif);
 		    for (i = 0; i < h; i++)
@@ -99,14 +101,14 @@ GdkPixBuf *image_load(FILE * f)
 		for (i = 0; i < h; i++)
 		    DGifGetLine(gif, rows[i], w);
 	    }
-	    done = TRUE;
+	    done = 1;
 	} else if (rec == EXTENSION_RECORD_TYPE) {
 	    gint ext_code;
 	    GifByteType *ext;
 
 	    DGifGetExtension(gif, &ext_code, &ext);
 	    while (ext) {
-		if ((ext_code == GRAPHICS_EXT_FUNC_CODE) &&
+		if ((ext_code == 0xf9) &&
 		    (ext[1] & 1) && (t_color < 0)) {
 		    is_trans = TRUE;
 		    t_color = (gint) ext[4];
@@ -150,7 +152,7 @@ GdkPixBuf *image_load(FILE * f)
 		tmpptr[3] = 0;
 	    else
 		tmpptr[3] = 0xFF;
-	    tmpptr += (is_trans ? 3 : 4);
+	    tmpptr += (is_trans ? 4 : 3);
 	}
     }
 
@@ -171,3 +173,5 @@ GdkPixBuf *image_load(FILE * f)
 
     return pixbuf;
 }
+
+image_save() {}

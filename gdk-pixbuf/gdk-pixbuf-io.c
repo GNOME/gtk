@@ -6,7 +6,11 @@
  */
 #include <config.h>
 #include <stdio.h>
+#include <glib.h>
+#include <gmodule.h>
 #include "gdk-pixbuf.h"
+
+#define PIXBUF_LIBDIR "."
 
 static gboolean
 pixbuf_check_png (unsigned char *buffer, int size)
@@ -112,23 +116,23 @@ static struct {
 	char      *module_name;
 	gboolean   (*format_check)(unsigned char *buffer, int size);
 	GModule   *module;
-	GdkPixBuf *(*load)(FILE *f)
+	GdkPixBuf *(*load)(FILE *f);
 	int        (*save)(char *filename, ...);
 } file_formats [] = {
 	{ "png",  pixbuf_check_png,  NULL, NULL, NULL },
 	{ "jpeg", pixbuf_check_jpeg, NULL, NULL, NULL },
 	{ "tiff", pixbuf_check_tiff, NULL, NULL, NULL },
 	{ "gif",  pixbuf_check_gif,  NULL, NULL, NULL },
-	{ "xpm",  pixbuf_check_xpm,  NULL, NULL, NULL }
-	{ "bmp",  pixbuf_check_bmp,  NULL, NULL, NULL },
-	{ "ppm",  pixbuf_check_ppm,  NULL, NULL, NULL },
-	{ NULL, NULL, NULL, NULL, NULL },
+	{ "xpm",  pixbuf_check_xpm,  NULL, NULL, NULL },
+/*	{ "bmp",  pixbuf_check_bmp,  NULL, NULL, NULL },
+	{ "ppm",  pixbuf_check_ppm,  NULL, NULL, NULL },*/
+	{ NULL, NULL, NULL, NULL, NULL }
 };
 
 static int
 image_file_format (const char *file)
 {
-	FILE *f = fopen (file);
+	FILE *f = fopen (file, "r");
 
 	if (!f)
 		return -1;
@@ -162,11 +166,11 @@ GdkPixBuf *
 gdk_pixbuf_load_image (const char *file)
 {
 	GdkPixBuf *pixbuf;
-	FormatLoader format_loader;
+	gint n, i;
 	FILE *f;
 	char buffer [128];
 
-	f = fopen (file);
+	f = fopen (file, "r");
 	if (!f)
 		return NULL;
 	n = fread (&buffer, 1, sizeof (buffer), f);
@@ -186,7 +190,7 @@ gdk_pixbuf_load_image (const char *file)
 				return NULL;
 			}
 
-			rewind (f);
+			fseek(f, 0, SEEK_SET);
 			pixbuf = (*file_formats [i].load)(f);
 			fclose (f);
 			return pixbuf;

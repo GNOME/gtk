@@ -53,12 +53,12 @@ struct file_handle {
     FILE *infile;
     gchar *buffer;
     guint buffer_size;
-};
+} file_handle;
 
 struct mem_handle {
     gchar **data;
     int offset;
-};
+} mem_handle;
 
 static gint
  xpm_seek_string(FILE * infile,
@@ -423,14 +423,13 @@ static GdkPixBuf *
 GdkPixBuf *image_load(FILE * f)
 {
     GdkPixBuf *pixbuf;
-    struct file_handler h;
+    struct file_handle h;
 
     g_return_val_if_fail(f != NULL, NULL);
 
-    h = g_new(file_handler, 1);
     h.infile = f;
     pixbuf = _pixbuf_create_from_xpm(file_buffer, &h);
-    g_free(h);
+    g_free(h.buffer);
 
     return pixbuf;
 }

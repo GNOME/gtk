@@ -1,0 +1,148 @@
+/* GTK - The GIMP Toolkit
+ * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
+
+/*
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
+ * file for a list of people on the GTK+ Team.  See the ChangeLog
+ * files for a list of changes.  These files are distributed with
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ */
+
+
+/* Note: these #includes differ slightly from the testrgb.c file included
+   in the GdkRgb release. */
+
+/* For gettimeofday */
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+
+#include <gtk/gtk.h>
+#include "gdk-pixbuf.h"
+
+static void
+quit_func (GtkWidget *widget, gpointer dummy)
+{
+  gtk_main_quit ();
+}
+
+static void
+testrgb_rgb_test (GtkWidget *drawing_area, GdkPixBuf *pixbuf)
+{
+  guchar *buf;
+  gint i, j;
+  gint offset;
+  guchar val;
+  gdouble start_time, total_time;
+  gint x, y;
+  gboolean dither;
+  int dith_max;
+
+  buf = pixbuf->art_pixbuf->pixels;
+  x = pixbuf->art_pixbuf->width;
+  y = pixbuf->art_pixbuf->height;
+
+  g_print("X: %d Y: %d\n", x, y);
+while (TRUE) {
+  if (pixbuf->art_pixbuf->has_alpha){
+g_print("32\n");
+ gdk_draw_rgb_32_image (drawing_area->window,
+                      drawing_area->style->black_gc,
+                      0, 0, x, y,
+                      GDK_RGB_DITHER_MAX,
+                      pixbuf->art_pixbuf->pixels,
+		      pixbuf->art_pixbuf->rowstride);
+}else{
+g_print("24\n");
+  gdk_draw_rgb_image (drawing_area->window,
+		      drawing_area->style->white_gc,
+		      0, 0, x, y,
+		      GDK_RGB_DITHER_NORMAL,
+		      buf,
+                      pixbuf->art_pixbuf->rowstride);
+}}
+
+}
+
+void
+new_testrgb_window (GdkPixBuf *pixbuf)
+{
+  GtkWidget *window;
+  GtkWidget *vbox;
+  GtkWidget *button;
+  GtkWidget *drawing_area;
+  gint w, h;
+ 
+  w = pixbuf->art_pixbuf->width;
+  h = pixbuf->art_pixbuf->height;
+
+  window = gtk_widget_new (gtk_window_get_type (),
+			   "GtkObject::user_data", NULL,
+			   "GtkWindow::type", GTK_WINDOW_TOPLEVEL,
+			   "GtkWindow::title", "testrgb",
+			   "GtkWindow::allow_shrink", FALSE,
+			   NULL);
+  gtk_signal_connect (GTK_OBJECT (window), "destroy",
+		      (GtkSignalFunc) quit_func, NULL);
+
+  vbox = gtk_vbox_new (FALSE, 0);
+
+  drawing_area = gtk_drawing_area_new ();
+
+  gtk_widget_set_usize (drawing_area, w, h);
+  gtk_box_pack_start (GTK_BOX (vbox), drawing_area, FALSE, FALSE, 0);
+  gtk_widget_show (drawing_area);
+
+  button = gtk_button_new_with_label ("Quit");
+  gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+  gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+			     (GtkSignalFunc) gtk_widget_destroy,
+			     GTK_OBJECT (window));
+
+  gtk_widget_show (button);
+
+  gtk_container_add (GTK_CONTAINER (window), vbox);
+  gtk_widget_show (vbox);
+
+  gtk_widget_show (window);
+
+
+  testrgb_rgb_test (drawing_area, pixbuf);
+}
+
+int
+main (int argc, char **argv)
+{
+  GdkPixBuf *pixbuf;
+
+  gtk_init (&argc, &argv);
+
+  gdk_rgb_set_verbose (TRUE);
+
+  gdk_rgb_init ();
+
+  gtk_widget_set_default_colormap (gdk_rgb_get_cmap ());
+  gtk_widget_set_default_visual (gdk_rgb_get_visual ());
+  pixbuf = gdk_pixbuf_load_image ("test.gif");
+  new_testrgb_window (pixbuf);
+
+  gtk_main ();
+
+  return 0;
+}

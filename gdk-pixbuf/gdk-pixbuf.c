@@ -5,6 +5,7 @@
  *    Miguel de Icaza (miguel@gnu.org)
  */
 #include <config.h>
+#include <glib.h>
 #include "gdk-pixbuf.h"
 
 
