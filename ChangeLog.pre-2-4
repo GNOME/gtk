@@ -1,5 +1,10 @@
 2001-09-08  Havoc Pennington  <hp@pobox.com>
 
+	* gtk/gtkaccelgroup.c: add docs to functions that I can imagine 
+	people might want to use
+
+2001-09-08  Havoc Pennington  <hp@pobox.com>
+
 	* gtk/gtkalignment.c (gtk_alignment_class_init): default
 	xscale/yscale to 0.0, not 0.5, 0.5 isn't useful
 

@@ -7,11 +7,11 @@ global keyboard accelerators (for an entire #GtkWindow)
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-A #GtkAccelGroup represents a group of keyboard accelerators, attached
-to a toplevel #GtkWindow (with gtk_window_add_accel_group()). Usually
-you won't need to create a #GtkAccelGroup directly; instead, when
-using #GtkItemFactory, GTK+ automatically sets up the accelerators for
-your menus.
+A #GtkAccelGroup represents a group of keyboard accelerators,
+typically attached to a toplevel #GtkWindow (with
+gtk_window_add_accel_group()). Usually you won't need to create a
+#GtkAccelGroup directly; instead, when using #GtkItemFactory, GTK+
+automatically sets up the accelerators for your menus.
 </para>
 
 <para>
@@ -91,6 +91,48 @@ On opaque data type representing a group of accelerators.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_accel_group_attach ##### -->
+<para>
+
+</para>
+
+@accel_group: 
+@object: 
+
+
+<!-- ##### FUNCTION gtk_accel_group_detach ##### -->
+<para>
+
+</para>
+
+@accel_group: 
+@object: 
+
+
+<!-- ##### FUNCTION gtk_accel_group_add ##### -->
+<para>
+
+</para>
+
+@accel_group: 
+@accel_key: 
+@accel_mods: 
+@accel_flags: 
+@object: 
+@accel_signal: 
+
+
+<!-- ##### FUNCTION gtk_accel_group_remove ##### -->
+<para>
+
+</para>
+
+@accel_group: 
+@accel_key: 
+@accel_mods: 
+@object: 
+
+
 <!-- ##### FUNCTION gtk_accel_group_lock ##### -->
 <para>
 
@@ -150,143 +192,6 @@ On opaque data type representing a group of accelerators.
 
 </para>
 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_accel_group_attach ##### -->
-<para>
-
-</para>
-
-@accel_group: 
-@object: 
-
-
-<!-- ##### FUNCTION gtk_accel_group_detach ##### -->
-<para>
-
-</para>
-
-@accel_group: 
-@object: 
-
-
-<!-- ##### FUNCTION gtk_accel_group_get_entry ##### -->
-<para>
-
-</para>
-
-@accel_group: 
-@accel_key: 
-@accel_mods: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_accel_group_lock_entry ##### -->
-<para>
-
-</para>
-
-@accel_group: 
-@accel_key: 
-@accel_mods: 
-
-
-<!-- ##### FUNCTION gtk_accel_group_unlock_entry ##### -->
-<para>
-
-</para>
-
-@accel_group: 
-@accel_key: 
-@accel_mods: 
-
-
-<!-- ##### FUNCTION gtk_accel_group_add ##### -->
-<para>
-
-</para>
-
-@accel_group: 
-@accel_key: 
-@accel_mods: 
-@accel_flags: 
-@object: 
-@accel_signal: 
-
-
-<!-- ##### FUNCTION gtk_accel_group_remove ##### -->
-<para>
-
-</para>
-
-@accel_group: 
-@accel_key: 
-@accel_mods: 
-@object: 
-
-
-<!-- ##### FUNCTION gtk_accel_group_handle_add ##### -->
-<para>
-
-</para>
-
-@object: 
-@accel_signal_id: 
-@accel_group: 
-@accel_key: 
-@accel_mods: 
-@accel_flags: 
-
-
-<!-- ##### FUNCTION gtk_accel_group_handle_remove ##### -->
-<para>
-
-</para>
-
-@object: 
-@accel_group: 
-@accel_key: 
-@accel_mods: 
-
-
-<!-- ##### FUNCTION gtk_accel_group_create_add ##### -->
-<para>
-
-</para>
-
-@class_type: 
-@signal_flags: 
-@handler_offset: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_accel_group_create_remove ##### -->
-<para>
-
-</para>
-
-@class_type: 
-@signal_flags: 
-@handler_offset: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_accel_groups_from_object ##### -->
-<para>
-
-</para>
-
-@object: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_accel_group_entries_from_object ##### -->
-<para>
-
-</para>
-
-@object: 
 @Returns: 
 
 

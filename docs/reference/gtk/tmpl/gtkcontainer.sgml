@@ -38,6 +38,13 @@ GtkContainer
 @pspec: 
 
 
+<!-- ##### MACRO GTK_HAVE_CONTAINER_FOCUS_ADJUSTMENTS ##### -->
+<para>
+
+</para>
+
+
+
 <!-- ##### MACRO gtk_container_border_width ##### -->
 <para>
 

@@ -1,5 +1,10 @@
 2001-09-08  Havoc Pennington  <hp@pobox.com>
 
+	* gtk/gtk-sections.txt: move some of the accel group functions 
+	into a Private subsection
+
+2001-09-08  Havoc Pennington  <hp@pobox.com>
+
 	* gtk/tmpl/gtklayout.sgml: docs
 
 	* gdk-pixbuf/gdk-pixbuf.sgml: remove the section on compiling

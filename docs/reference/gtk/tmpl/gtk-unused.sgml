@@ -225,12 +225,6 @@ has the focus.
 
 @clist: The #GtkCList widget to check.
 
-<!-- ##### MACRO GTK_HAVE_CONTAINER_FOCUS_ADJUSTMENTS ##### -->
-<para>
-
-</para>
-
-
 <!-- ##### MACRO GTK_ICON_SIZE_BUTTON ##### -->
 <para>
 
@@ -1101,6 +1095,92 @@ If the window shrinks automatically when widgets within it shrink.
 
 </para>
 
+
+<!-- ##### FUNCTION gtk_accel_group_create_add ##### -->
+<para>
+
+</para>
+
+@class_type: 
+@signal_flags: 
+@handler_offset: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_accel_group_create_remove ##### -->
+<para>
+
+</para>
+
+@class_type: 
+@signal_flags: 
+@handler_offset: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_accel_group_entries_from_object ##### -->
+<para>
+
+</para>
+
+@object: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_accel_group_get_entry ##### -->
+<para>
+
+</para>
+
+@accel_group: 
+@accel_key: 
+@accel_mods: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_accel_group_handle_add ##### -->
+<para>
+
+</para>
+
+@object: 
+@accel_signal_id: 
+@accel_group: 
+@accel_key: 
+@accel_mods: 
+@accel_flags: 
+
+<!-- ##### FUNCTION gtk_accel_group_handle_remove ##### -->
+<para>
+
+</para>
+
+@object: 
+@accel_group: 
+@accel_key: 
+@accel_mods: 
+
+<!-- ##### FUNCTION gtk_accel_group_lock_entry ##### -->
+<para>
+
+</para>
+
+@accel_group: 
+@accel_key: 
+@accel_mods: 
+
+<!-- ##### FUNCTION gtk_accel_group_unlock_entry ##### -->
+<para>
+
+</para>
+
+@accel_group: 
+@accel_key: 
+@accel_mods: 
+
+<!-- ##### FUNCTION gtk_accel_groups_from_object ##### -->
+<para>
+
+</para>
+
+@object: 
+@Returns: 
 
 <!-- ##### FUNCTION gtk_arg_copy ##### -->
 <para>

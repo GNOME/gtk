@@ -3554,6 +3554,10 @@ gtk_accel_group_ref
 gtk_accel_group_unref
 gtk_accel_group_activate
 gtk_accel_groups_activate
+gtk_accel_group_attach
+gtk_accel_group_detach
+gtk_accel_group_add
+gtk_accel_group_remove
 gtk_accel_group_lock
 gtk_accel_group_unlock
 gtk_accelerator_valid
@@ -3561,13 +3565,10 @@ gtk_accelerator_parse
 gtk_accelerator_name
 gtk_accelerator_set_default_mod_mask
 gtk_accelerator_get_default_mod_mask
-gtk_accel_group_attach
-gtk_accel_group_detach
+<SUBSECTION Private>
 gtk_accel_group_get_entry
 gtk_accel_group_lock_entry
 gtk_accel_group_unlock_entry
-gtk_accel_group_add
-gtk_accel_group_remove
 gtk_accel_group_handle_add
 gtk_accel_group_handle_remove
 gtk_accel_group_create_add
