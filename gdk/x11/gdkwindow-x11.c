@@ -2774,7 +2774,7 @@ _gdk_windowing_window_at_pointer (GdkDisplay *display,
    * than we'll end up with inaccurate values for win_x, win_y
    * and the result.
    */
-  XGrabServer (xdisplay);
+  gdk_x11_display_grab (display);
   XQueryPointer (xdisplay, xwindow,
 		 &root, &child, &rootx, &rooty, &winx, &winy, &xmask);
 
@@ -2789,7 +2789,7 @@ _gdk_windowing_window_at_pointer (GdkDisplay *display,
       XQueryPointer (xdisplay, xwindow,
 		     &root, &xwindow, &rootx, &rooty, &winx, &winy, &xmask);
     }
-  XUngrabServer (xdisplay);
+  gdk_x11_display_ungrab (display);
 
   window = gdk_window_lookup_for_display (GDK_SCREEN_DISPLAY(screen),
 					  xwindow_last);
