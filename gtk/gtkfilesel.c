@@ -1461,41 +1461,25 @@ gtk_file_selection_dir_button (GtkWidget *widget,
 #if defined(G_OS_WIN32) || defined(G_WITH_CYGWIN)
 
 static void
-win32_gtk_add_drives_to_dir_list(GtkWidget *the_dir_list)
+win32_gtk_add_drives_to_dir_list (GtkWidget *dir_list)
 {
-  gchar *text[2], *textPtr;
-  gchar buffer[128];
-  char volumeNameBuf[128];
-  char formatBuffer[128];
-  gint row;
+  gchar drives[128], *drivep = drives, *text[2];
+
+  GetLogicalDriveStrings (sizeof (drives), drives);
 
   text[1] = NULL;
-
-  /* Get the Drives string */
-  GetLogicalDriveStrings(sizeof(buffer), buffer);
-
   /* Add the drives as necessary */
-  textPtr = buffer;
-  while (*textPtr != '\0') {
-    /* Get the volume information for this drive */
-    if ((tolower(textPtr[0]) != 'a') && (tolower(textPtr[0]) != 'b'))
-      {
-	/* Ignore floppies (?) */
-	DWORD maxComponentLength, flags;
-
-	GetVolumeInformation(textPtr,
-			     volumeNameBuf, sizeof(volumeNameBuf),
-			     NULL, &maxComponentLength,
-			     &flags, NULL, 0);
-	/* Build the actual displayable string */
-	sprintf(formatBuffer, "%c:\\", toupper(textPtr[0]));
-
-	/* Add to the list */
-	text[0] = formatBuffer;
-	row = gtk_clist_append (GTK_CLIST (the_dir_list), text);
-      }
-    textPtr += (strlen(textPtr) + 1);
-  }
+  while (*drivep != '\0')
+    {
+      /* Ignore floppies */
+      if (GetDriveType (drivep) != DRIVE_REMOVABLE)
+	{
+	  *drivep = toupper (*drivep);
+	  text[0] = drivep;
+	  gtk_clist_append (GTK_CLIST (dir_list), text);
+	}
+      drivep += (strlen (drivep) + 1);
+    }
 }
 #endif
 

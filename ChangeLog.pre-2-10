@@ -1,3 +1,9 @@
+2003-02-09  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk/gtkfilesel.c (win32_gtk_add_drives_to_dir_list): Clean up.
+	Instead of always skipping A: and B:, use GetDriveType() to skip
+	removable drives. (#105654)
+
 2003-01-15  Tor Lillqvist  <tml@iki.fi>
 
 	* configure.in: On Win32 with gcc, use either -fnative-struct or
