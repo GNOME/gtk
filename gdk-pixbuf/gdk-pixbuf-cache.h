@@ -4,12 +4,12 @@
 /* The optional cache interface */
 typedef struct {
 	int dummy;
-} GdkPixBufCache;
+} GdkPixbufCache;
 
-GdkPixBufCache  *gdk_pixbuf_cache_new        (long image_cache_limit,
+GdkPixbufCache  *gdk_pixbuf_cache_new        (long image_cache_limit,
 				              long pixmap_bitmap_cache_limit);
-void             gdk_pixbuf_cache_destroy    (GdkPixBufCache *cache);
+void             gdk_pixbuf_cache_destroy    (GdkPixbufCache *cache);
 
-GdkPixBuf       *gdk_pixbuf_cache_load_image (GdkPixBufCache *cache,
+GdkPixbuf       *gdk_pixbuf_cache_load_image (GdkPixbufCache *cache,
 					      const char *file);
 #endif

@@ -1,5 +1,5 @@
 /*
- * io-xpm.c: GdkPixBuf I/O for XPM files.
+ * io-xpm.c: GdkPixbuf I/O for XPM files.
  * Copyright (C) 1999 Mark Crichton
  * Author: Mark Crichton <crichton@gimp.org>
  *
@@ -38,399 +38,394 @@
  */
 
 enum buf_op {
-    op_header,
-    op_cmap,
-    op_body
+	op_header,
+	op_cmap,
+	op_body
 };
 
 typedef struct {
-    gchar *color_string;
-    GdkColor color;
-    gint transparent;
+	gchar *color_string;
+	GdkColor color;
+	gint transparent;
 } _XPMColor;
 
 struct file_handle {
-    FILE *infile;
-    gchar *buffer;
-    guint buffer_size;
+	FILE *infile;
+	gchar *buffer;
+	guint buffer_size;
 } file_handle;
 
 struct mem_handle {
-    gchar **data;
-    int offset;
+	gchar **data;
+	int offset;
 } mem_handle;
 
 static gint
- xpm_seek_string(FILE * infile,
-		 const gchar * str,
-		 gint skip_comments)
+xpm_seek_string(FILE *infile, const gchar *str, gint skip_comments)
 {
-    char instr[1024];
+	char instr[1024];
 
-    while (!feof(infile)) {
-	fscanf(infile, "%1023s", instr);
-	if (skip_comments == TRUE && strcmp(instr, "/*") == 0) {
-	    fscanf(infile, "%1023s", instr);
-	    while (!feof(infile) && strcmp(instr, "*/") != 0)
+	while (!feof(infile)) {
 		fscanf(infile, "%1023s", instr);
-	    fscanf(infile, "%1023s", instr);
-	}
-	if (strcmp(instr, str) == 0)
-	    return TRUE;
-    }
-
-    return FALSE;
-}
-
-static gint
- xpm_seek_char(FILE * infile,
-	       gchar c)
-{
-    gint b, oldb;
-
-    while ((b = getc(infile)) != EOF) {
-	if (c != b && b == '/') {
-	    b = getc(infile);
-	    if (b == EOF)
-		return FALSE;
-	    else if (b == '*') {	/* we have a comment */
-		b = -1;
-		do {
-		    oldb = b;
-		    b = getc(infile);
-		    if (b == EOF)
-			return FALSE;
+		if (skip_comments == TRUE && strcmp(instr, "/*") == 0) {
+			fscanf(infile, "%1023s", instr);
+			while (!feof(infile) && strcmp(instr, "*/") != 0)
+				fscanf(infile, "%1023s", instr);
+			fscanf(infile, "%1023s", instr);
 		}
-		while (!(oldb == '*' && b == '/'));
-	    }
-	} else if (c == b)
-	    return TRUE;
-    }
-    return FALSE;
+		if (strcmp(instr, str) == 0)
+			return TRUE;
+	}
+
+	return FALSE;
 }
 
 static gint
- xpm_read_string(FILE * infile,
-		 gchar ** buffer,
-		 guint * buffer_size)
+xpm_seek_char(FILE *infile, gchar c)
 {
-    gint c;
-    guint cnt = 0, bufsiz, ret = FALSE;
-    gchar *buf;
+	gint b, oldb;
 
-    buf = *buffer;
-    bufsiz = *buffer_size;
-    if (buf == NULL) {
-	bufsiz = 10 * sizeof(gchar);
-	buf = g_new(gchar, bufsiz);
-    }
-    do
-	c = getc(infile);
-    while (c != EOF && c != '"');
+	while ((b = getc(infile)) != EOF) {
+		if (c != b && b == '/') {
+			b = getc(infile);
+			if (b == EOF)
+				return FALSE;
+			else if (b == '*') {	/* we have a comment */
+				b = -1;
+				do {
+					oldb = b;
+					b = getc(infile);
+					if (b == EOF)
+						return FALSE;
+				}
+				while (!(oldb == '*' && b == '/'));
+			}
+		} else if (c == b)
+			return TRUE;
+	}
+	return FALSE;
+}
 
-    if (c != '"')
-	goto out;
+static gint
+xpm_read_string(FILE *infile, gchar **buffer, guint *buffer_size)
+{
+	gint c;
+	guint cnt = 0, bufsiz, ret = FALSE;
+	gchar *buf;
 
-    while ((c = getc(infile)) != EOF) {
-	if (cnt == bufsiz) {
-	    guint new_size = bufsiz * 2;
-	    if (new_size > bufsiz)
-		bufsiz = new_size;
-	    else
+	buf = *buffer;
+	bufsiz = *buffer_size;
+	if (buf == NULL) {
+		bufsiz = 10 * sizeof(gchar);
+		buf = g_new(gchar, bufsiz);
+	}
+
+	do {
+		c = getc(infile);
+	} while (c != EOF && c != '"');
+
+	if (c != '"')
 		goto out;
 
-	    buf = (gchar *) g_realloc(buf, bufsiz);
-	    buf[bufsiz - 1] = '\0';
-	}
-	if (c != '"')
-	    buf[cnt++] = c;
-	else {
-	    buf[cnt] = 0;
-	    ret = TRUE;
-	    break;
-	}
-    }
+	while ((c = getc(infile)) != EOF) {
+		if (cnt == bufsiz) {
+			guint new_size = bufsiz * 2;
+			if (new_size > bufsiz)
+				bufsiz = new_size;
+			else
+				goto out;
 
-  out:
-    buf[bufsiz - 1] = '\0';	/* ensure null termination for errors */
-    *buffer = buf;
-    *buffer_size = bufsiz;
-    return ret;
+			buf = (gchar *) g_realloc(buf, bufsiz);
+			buf[bufsiz - 1] = '\0';
+		}
+		if (c != '"')
+			buf[cnt++] = c;
+		else {
+			buf[cnt] = 0;
+			ret = TRUE;
+			break;
+		}
+	}
+
+ out:
+	buf[bufsiz - 1] = '\0';	/* ensure null termination for errors */
+	*buffer = buf;
+	*buffer_size = bufsiz;
+	return ret;
 }
 
 static gchar *
- xpm_skip_whitespaces(gchar * buffer)
+xpm_skip_whitespaces(gchar *buffer)
 {
-    gint32 index = 0;
+	gint32 index = 0;
 
-    while (buffer[index] != 0 && (buffer[index] == 0x20 || buffer[index] == 0x09))
-	index++;
+	while (buffer[index] != 0 && (buffer[index] == 0x20 || buffer[index] == 0x09))
+		index++;
 
-    return &buffer[index];
+	return &buffer[index];
 }
 
 static gchar *
- xpm_skip_string(gchar * buffer)
+xpm_skip_string(gchar *buffer)
 {
-    gint32 index = 0;
+	gint32 index = 0;
 
-    while (buffer[index] != 0 && buffer[index] != 0x20 && buffer[index] != 0x09)
-	index++;
+	while (buffer[index] != 0 && buffer[index] != 0x20 && buffer[index] != 0x09)
+		index++;
 
-    return &buffer[index];
+	return &buffer[index];
 }
 
 /* Xlib crashed once at a color name lengths around 125 */
 #define MAX_COLOR_LEN 120
 
 static gchar *
- xpm_extract_color(gchar * buffer)
+xpm_extract_color(gchar *buffer)
 {
-    gint counter, numnames;
-    gchar *ptr = NULL, ch, temp[128];
-    gchar color[MAX_COLOR_LEN], *retcol;
-    gint space;
-    counter = 0;
-    while (ptr == NULL) {
-	if (buffer[counter] == 'c') {
-	    ch = buffer[counter + 1];
-	    if (ch == 0x20 || ch == 0x09)
-		ptr = &buffer[counter + 1];
-	} else if (buffer[counter] == 0)
-	    return NULL;
+	gint counter, numnames;
+	gchar *ptr = NULL, ch, temp[128];
+	gchar color[MAX_COLOR_LEN], *retcol;
+	gint space;
+	counter = 0;
+	while (ptr == NULL) {
+		if (buffer[counter] == 'c') {
+			ch = buffer[counter + 1];
+			if (ch == 0x20 || ch == 0x09)
+				ptr = &buffer[counter + 1];
+		} else if (buffer[counter] == 0)
+			return NULL;
 
-	counter++;
-    }
-    ptr = xpm_skip_whitespaces(ptr);
-
-    if (ptr[0] == 0)
-	return NULL;
-    else if (ptr[0] == '#') {
-	counter = 1;
-	while (ptr[counter] != 0 &&
-	       ((ptr[counter] >= '0' && ptr[counter] <= '9') ||
-		(ptr[counter] >= 'a' && ptr[counter] <= 'f') ||
-		(ptr[counter] >= 'A' && ptr[counter] <= 'F')))
-	    counter++;
-	retcol = g_new(gchar, counter + 1);
-	strncpy(retcol, ptr, counter);
-
-	retcol[counter] = 0;
-
-	return retcol;
-    }
-    color[0] = 0;
-    numnames = 0;
-
-    space = MAX_COLOR_LEN - 1;
-    while (space > 0) {
-	sscanf(ptr, "%127s", temp);
-
-	if (((gint) ptr[0] == 0) ||
-	    (strcmp("s", temp) == 0) || (strcmp("m", temp) == 0) ||
-	    (strcmp("g", temp) == 0) || (strcmp("g4", temp) == 0)) {
-	    break;
-	} else {
-	    if (numnames > 0) {
-		space -= 1;
-		strcat(color, " ");
-	    }
-	    strncat(color, temp, space);
-	    space -= MIN(space, strlen(temp));
-	    ptr = xpm_skip_string(ptr);
-	    ptr = xpm_skip_whitespaces(ptr);
-	    numnames++;
+		counter++;
 	}
-    }
+	ptr = xpm_skip_whitespaces(ptr);
 
-    retcol = g_strdup(color);
-    return retcol;
+	if (ptr[0] == 0)
+		return NULL;
+	else if (ptr[0] == '#') {
+		counter = 1;
+		while (ptr[counter] != 0 &&
+		       ((ptr[counter] >= '0' && ptr[counter] <= '9') ||
+			(ptr[counter] >= 'a' && ptr[counter] <= 'f') ||
+			(ptr[counter] >= 'A' && ptr[counter] <= 'F')))
+			counter++;
+		retcol = g_new(gchar, counter + 1);
+		strncpy(retcol, ptr, counter);
+
+		retcol[counter] = 0;
+
+		return retcol;
+	}
+	color[0] = 0;
+	numnames = 0;
+
+	space = MAX_COLOR_LEN - 1;
+	while (space > 0) {
+		sscanf(ptr, "%127s", temp);
+
+		if (((gint) ptr[0] == 0) ||
+		    (strcmp("s", temp) == 0) || (strcmp("m", temp) == 0) ||
+		    (strcmp("g", temp) == 0) || (strcmp("g4", temp) == 0)) {
+			break;
+		} else {
+			if (numnames > 0) {
+				space -= 1;
+				strcat(color, " ");
+			}
+			strncat(color, temp, space);
+			space -= MIN(space, strlen(temp));
+			ptr = xpm_skip_string(ptr);
+			ptr = xpm_skip_whitespaces(ptr);
+			numnames++;
+		}
+	}
+
+	retcol = g_strdup(color);
+	return retcol;
 }
-
 
 /* (almost) direct copy from gdkpixmap.c... loads an XPM from a file */
 
 static gchar *
- file_buffer(enum buf_op op, gpointer handle)
+file_buffer(enum buf_op op, gpointer handle)
 {
-    struct file_handle *h = handle;
+	struct file_handle *h = handle;
 
-    switch (op) {
-    case op_header:
-	if (xpm_seek_string(h->infile, "XPM", FALSE) != TRUE)
-	    break;
+	switch (op) {
+	case op_header:
+		if (xpm_seek_string(h->infile, "XPM", FALSE) != TRUE)
+			break;
 
-	if (xpm_seek_char(h->infile, '{') != TRUE)
-	    break;
-	/* Fall through to the next xpm_seek_char. */
+		if (xpm_seek_char(h->infile, '{') != TRUE)
+			break;
+		/* Fall through to the next xpm_seek_char. */
 
-    case op_cmap:
-	xpm_seek_char(h->infile, '"');
-	fseek(h->infile, -1, SEEK_CUR);
-	/* Fall through to the xpm_read_string. */
+	case op_cmap:
+		xpm_seek_char(h->infile, '"');
+		fseek(h->infile, -1, SEEK_CUR);
+		/* Fall through to the xpm_read_string. */
 
-    case op_body:
-	xpm_read_string(h->infile, &h->buffer, &h->buffer_size);
-	return h->buffer;
-    }
-    return 0;
+	case op_body:
+		xpm_read_string(h->infile, &h->buffer, &h->buffer_size);
+		return h->buffer;
+	}
+	return 0;
 }
 
 /* This reads from memory */
 static gchar *
- mem_buffer(enum buf_op op, gpointer handle)
+mem_buffer(enum buf_op op, gpointer handle)
 {
-    struct mem_handle *h = handle;
-    switch (op) {
-    case op_header:
-    case op_cmap:
-    case op_body:
-	if (h->data[h->offset])
-	    return h->data[h->offset++];
-    }
-    return NULL;
+	struct mem_handle *h = handle;
+	switch (op) {
+	case op_header:
+	case op_cmap:
+	case op_body:
+		if (h->data[h->offset])
+			return h->data[h->offset++];
+	}
+	return NULL;
 }
 
 /* This function does all the work. */
 
-static GdkPixBuf *
- _pixbuf_create_from_xpm(gchar * (*get_buf) (enum buf_op op, gpointer handle),
-			 gpointer handle)
+static GdkPixbuf *
+_pixbuf_create_from_xpm(gchar * (*get_buf) (enum buf_op op, gpointer handle), gpointer handle)
 {
-    gint w, h, n_col, cpp;
-    gint cnt, xcnt, ycnt, wbytes, n, ns;
-    gint is_trans = FALSE;
-    gchar *buffer, *name_buf;
-    gchar pixel_str[32];
-    GHashTable *color_hash;
-    _XPMColor *colors, *color, *fallbackcolor;
-    art_u8 *pixels, *pixtmp;
-    GdkPixBuf *pixbuf;
-    ArtPixBuf *art_pixbuf;
+	gint w, h, n_col, cpp;
+	gint cnt, xcnt, ycnt, wbytes, n, ns;
+	gint is_trans = FALSE;
+	gchar *buffer, *name_buf;
+	gchar pixel_str[32];
+	GHashTable *color_hash;
+	_XPMColor *colors, *color, *fallbackcolor;
+	art_u8 *pixels, *pixtmp;
+	GdkPixbuf *pixbuf;
+	ArtPixBuf *art_pixbuf;
 
-    buffer = (*get_buf) (op_header, handle);
-    if (!buffer) {
-	g_warning("No XPM header found");
-	return NULL;
-    }
-    sscanf(buffer, "%d %d %d %d", &w, &h, &n_col, &cpp);
-    if (cpp >= 32) {
-	g_warning("XPM has more than 31 chars per pixel.");
-	return NULL;
-    }
-    /* The hash is used for fast lookups of color from chars */
-    color_hash = g_hash_table_new(g_str_hash, g_str_equal);
-
-    name_buf = g_new(gchar, n_col * (cpp + 1));
-    colors = g_new(_XPMColor, n_col);
-
-    for (cnt = 0; cnt < n_col; cnt++) {
-	gchar *color_name;
-
-	buffer = (*get_buf) (op_cmap, handle);
+	buffer = (*get_buf) (op_header, handle);
 	if (!buffer) {
-	    g_warning("Can't load XPM colormap");
-	    g_hash_table_destroy(color_hash);
-	    g_free(name_buf);
-	    g_free(colors);
-	    return NULL;
+		g_warning("No XPM header found");
+		return NULL;
 	}
-	color = &colors[cnt];
-	color->color_string = &name_buf[cnt * (cpp + 1)];
-	strncpy(color->color_string, buffer, cpp);
-	color->color_string[cpp] = 0;
-	buffer += strlen(color->color_string);
-	color->transparent = FALSE;
+	sscanf(buffer, "%d %d %d %d", &w, &h, &n_col, &cpp);
+	if (cpp >= 32) {
+		g_warning("XPM has more than 31 chars per pixel.");
+		return NULL;
+	}
+	/* The hash is used for fast lookups of color from chars */
+	color_hash = g_hash_table_new(g_str_hash, g_str_equal);
 
-	color_name = xpm_extract_color(buffer);
+	name_buf = g_new(gchar, n_col * (cpp + 1));
+	colors = g_new(_XPMColor, n_col);
 
-	if ((color_name == NULL) || (g_strcasecmp(color_name, "None") == 0)
-	    || (gdk_color_parse(color_name, &color->color) == FALSE)) {
-	    color->transparent = TRUE;
-	    is_trans = TRUE;
+	for (cnt = 0; cnt < n_col; cnt++) {
+		gchar *color_name;
+
+		buffer = (*get_buf) (op_cmap, handle);
+		if (!buffer) {
+			g_warning("Can't load XPM colormap");
+			g_hash_table_destroy(color_hash);
+			g_free(name_buf);
+			g_free(colors);
+			return NULL;
+		}
+		color = &colors[cnt];
+		color->color_string = &name_buf[cnt * (cpp + 1)];
+		strncpy(color->color_string, buffer, cpp);
+		color->color_string[cpp] = 0;
+		buffer += strlen(color->color_string);
+		color->transparent = FALSE;
+
+		color_name = xpm_extract_color(buffer);
+
+		if ((color_name == NULL) || (g_strcasecmp(color_name, "None") == 0)
+		    || (gdk_color_parse(color_name, &color->color) == FALSE)) {
+			color->transparent = TRUE;
+			is_trans = TRUE;
+		}
+
+		g_free(color_name);
+		g_hash_table_insert(color_hash, color->color_string, color);
+
+		if (cnt == 0)
+			fallbackcolor = color;
 	}
 
-	g_free(color_name);
-	g_hash_table_insert(color_hash, color->color_string, color);
+	if (is_trans)
+		pixels = art_alloc(w * h * 4);
+	else
+		pixels = art_alloc(w * h * 3);
 
-	if (cnt == 0)
-	    fallbackcolor = color;
-    }
+	if (!pixels) {
+		g_warning("XPM: Cannot alloc ArtBuf");
+		g_hash_table_destroy(color_hash);
+		g_free(colors);
+		g_free(name_buf);
+		return NULL;
+	}
+	wbytes = w * cpp;
+	pixtmp = pixels;
 
-    if (is_trans)
-	pixels = art_alloc(w * h * 4);
-    else
-	pixels = art_alloc(w * h * 3);
+	for (ycnt = 0; ycnt < h; ycnt++) {
+		buffer = (*get_buf) (op_body, handle);
+		if ((!buffer) || (strlen(buffer) < wbytes))
+			continue;
+		for (n = 0, cnt = 0, xcnt = 0; n < wbytes; n += cpp, xcnt++) {
+			strncpy(pixel_str, &buffer[n], cpp);
+			pixel_str[cpp] = 0;
+			ns = 0;
 
-    if (!pixels) {
-	g_warning("XPM: Cannot alloc ArtBuf");
+			color = g_hash_table_lookup(color_hash, pixel_str);
+
+			/* Bad XPM...punt */
+			if (!color)
+				color = fallbackcolor;
+
+			*pixtmp++ = (color->color.red)>>8;
+			*pixtmp++ = (color->color.green)>>8;
+			*pixtmp++ = (color->color.blue)>>8;
+
+			if ((is_trans) && (color->transparent)) {
+				*pixtmp++ = 0;
+			} else if (is_trans) {
+				*pixtmp++ = 0xFF;
+			}
+		}
+	}
 	g_hash_table_destroy(color_hash);
 	g_free(colors);
 	g_free(name_buf);
-	return NULL;
-    }
-    wbytes = w * cpp;
-    pixtmp = pixels;
 
-    for (ycnt = 0; ycnt < h; ycnt++) {
-	buffer = (*get_buf) (op_body, handle);
-	if ((!buffer) || (strlen(buffer) < wbytes))
-	    continue;
-	for (n = 0, cnt = 0, xcnt = 0; n < wbytes; n += cpp, xcnt++) {
-	    strncpy(pixel_str, &buffer[n], cpp);
-	    pixel_str[cpp] = 0;
-	    ns = 0;
+	/* Ok, now stuff the GdkPixbuf with goodies */
 
-	    color = g_hash_table_lookup(color_hash, pixel_str);
+	if (is_trans)
+		art_pixbuf = art_pixbuf_new_rgba(pixels, w, h, (w * 4));
+	else
+		art_pixbuf = art_pixbuf_new_rgb(pixels, w, h, (w * 3));
 
-	    /* Bad XPM...punt */
-	    if (!color)
-		color = fallbackcolor;
+	pixbuf = gdk_pixbuf_new (art_pixbuf, NULL);
 
-	    *pixtmp++ = (color->color.red)>>8;
-	    *pixtmp++ = (color->color.green)>>8;
-	    *pixtmp++ = (color->color.blue)>>8;
+	if (!pixbuf)
+		art_free(pixels);
 
-	    if ((is_trans) && (color->transparent)) {
-		*pixtmp++ = 0;
-	    } else if (is_trans) {
-		*pixtmp++ = 0xFF;
-	    }
-	}
-    }
-    g_hash_table_destroy(color_hash);
-    g_free(colors);
-    g_free(name_buf);
-
-    /* Ok, now stuff the GdkPixBuf with goodies */
-
-    if (is_trans)
-	    art_pixbuf = art_pixbuf_new_rgba(pixels, w, h, (w * 4));
-    else
-	    art_pixbuf = art_pixbuf_new_rgb(pixels, w, h, (w * 3));
-
-    pixbuf = gdk_pixbuf_new (art_pixbuf, NULL);
-
-    if (!pixbuf)
-        art_free(pixels);
-
-    return pixbuf;
+	return pixbuf;
 }
 
 /* Shared library entry point for file loading */
-GdkPixBuf *image_load(FILE * f)
+GdkPixbuf *
+image_load (FILE *f)
 {
-    GdkPixBuf *pixbuf;
-    struct file_handle h;
+	GdkPixbuf *pixbuf;
+	struct file_handle h;
 
-    g_return_val_if_fail(f != NULL, NULL);
+	g_return_val_if_fail(f != NULL, NULL);
 
-    memset(&h, 0, sizeof(h));
-    h.infile = f;
-    pixbuf = _pixbuf_create_from_xpm(file_buffer, &h);
-    g_free(h.buffer);
+	memset(&h, 0, sizeof(h));
+	h.infile = f;
+	pixbuf = _pixbuf_create_from_xpm(file_buffer, &h);
+	g_free(h.buffer);
 
-    return pixbuf;
+	return pixbuf;
 }
 
 image_save()

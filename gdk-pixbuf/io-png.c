@@ -1,5 +1,5 @@
 /*
- * io-png.c: GdkPixBuf I/O for PNG files.
+ * io-png.c: GdkPixbuf I/O for PNG files.
  * Copyright (C) 1999 Mark Crichton
  * Author: Mark Crichton <crichton@gimp.org>
  *
@@ -26,214 +26,216 @@
 #include <png.h>
 
 /* Shared library entry point */
-GdkPixBuf *image_load(FILE * f)
+GdkPixbuf *
+image_load (FILE *f)
 {
-    png_structp png_ptr;
-    png_infop info_ptr, end_info;
-    gint i, depth, ctype, inttype, passes, bpp;		/* bpp = BYTES/pixel */
-    png_uint_32 w, h, x, y;
-    png_bytepp rows;
-    art_u8 *pixels, *temp, *rowdata;
-    GdkPixBuf *pixbuf;
-    ArtPixBuf *art_pixbuf;
+	png_structp png_ptr;
+	png_infop info_ptr, end_info;
+	gint i, depth, ctype, inttype, passes, bpp;		/* bpp = BYTES/pixel */
+	png_uint_32 w, h, x, y;
+	png_bytepp rows;
+	art_u8 *pixels, *temp, *rowdata;
+	GdkPixbuf *pixbuf;
+	ArtPixBuf *art_pixbuf;
 
-    g_return_val_if_fail (f != NULL, NULL);
+	g_return_val_if_fail (f != NULL, NULL);
 
-    png_ptr = png_create_read_struct (PNG_LIBPNG_VER_STRING,
-				      NULL, NULL, NULL);
-    if (!png_ptr)
-	    return NULL;
+	png_ptr = png_create_read_struct (PNG_LIBPNG_VER_STRING,
+					  NULL, NULL, NULL);
+	if (!png_ptr)
+		return NULL;
 
-    info_ptr = png_create_info_struct (png_ptr);
-    if (!info_ptr) {
-	    png_destroy_read_struct (&png_ptr, NULL, NULL);
-	    return NULL;
-    }
+	info_ptr = png_create_info_struct (png_ptr);
+	if (!info_ptr) {
+		png_destroy_read_struct (&png_ptr, NULL, NULL);
+		return NULL;
+	}
 
-    end_info = png_create_info_struct (png_ptr);
-    if (!end_info) {
-	    png_destroy_read_struct (&png_ptr, &info_ptr, NULL);
-	    return NULL;
-    }
+	end_info = png_create_info_struct (png_ptr);
+	if (!end_info) {
+		png_destroy_read_struct (&png_ptr, &info_ptr, NULL);
+		return NULL;
+	}
 
-    if (setjmp (png_ptr->jmpbuf)) {
-	    png_destroy_read_struct (&png_ptr, &info_ptr, &end_info);
-	    return NULL;
-    }
+	if (setjmp (png_ptr->jmpbuf)) {
+		png_destroy_read_struct (&png_ptr, &info_ptr, &end_info);
+		return NULL;
+	}
 
-    png_init_io   (png_ptr, f);
-    png_read_info (png_ptr, info_ptr);
-    png_get_IHDR  (png_ptr, info_ptr, &w, &h, &depth, &ctype, &inttype,
-		   NULL, NULL);
+	png_init_io   (png_ptr, f);
+	png_read_info (png_ptr, info_ptr);
+	png_get_IHDR  (png_ptr, info_ptr, &w, &h, &depth, &ctype, &inttype,
+		       NULL, NULL);
 
-    /* Ok, we want to work with 24 bit images.
-     * However, PNG can vary depth per channel.
-     * So, we use the png_set_expand function to expand
-     * everything into a format libart expects.
-     * We also use png_set_strip_16 to reduce down to 8 bit/chan.
-     */
-    if (ctype == PNG_COLOR_TYPE_PALETTE && depth <= 8)
-	png_set_expand (png_ptr);
+	/* Ok, we want to work with 24 bit images.
+	 * However, PNG can vary depth per channel.
+	 * So, we use the png_set_expand function to expand
+	 * everything into a format libart expects.
+	 * We also use png_set_strip_16 to reduce down to 8 bit/chan.
+	 */
+	if (ctype == PNG_COLOR_TYPE_PALETTE && depth <= 8)
+		png_set_expand (png_ptr);
 
-    if (ctype == PNG_COLOR_TYPE_GRAY && depth < 8)
-	png_set_expand (png_ptr);
+	if (ctype == PNG_COLOR_TYPE_GRAY && depth < 8)
+		png_set_expand (png_ptr);
 
-    if (png_get_valid (png_ptr, info_ptr, PNG_INFO_tRNS)) {
-	png_set_expand (png_ptr);
-	g_warning ("FIXME: We are going to crash");
-    }
+	if (png_get_valid (png_ptr, info_ptr, PNG_INFO_tRNS)) {
+		png_set_expand (png_ptr);
+		g_warning ("FIXME: We are going to crash");
+	}
 
-    if (depth == 16)
-	png_set_strip_16 (png_ptr);
+	if (depth == 16)
+		png_set_strip_16 (png_ptr);
 
-    /* We also have png "packing" bits into bytes if < 8 */
-    if (depth < 8)
-	png_set_packing (png_ptr);
+	/* We also have png "packing" bits into bytes if < 8 */
+	if (depth < 8)
+		png_set_packing (png_ptr);
 
-    /* Lastly, if the PNG is greyscale, convert to RGB */
-    if (ctype == PNG_COLOR_TYPE_GRAY || ctype == PNG_COLOR_TYPE_GRAY_ALPHA)
-	png_set_gray_to_rgb (png_ptr);
+	/* Lastly, if the PNG is greyscale, convert to RGB */
+	if (ctype == PNG_COLOR_TYPE_GRAY || ctype == PNG_COLOR_TYPE_GRAY_ALPHA)
+		png_set_gray_to_rgb (png_ptr);
 
-    /* ...and if we're interlaced... */
-    passes = png_set_interlace_handling (png_ptr);
+	/* ...and if we're interlaced... */
+	passes = png_set_interlace_handling (png_ptr);
 
-    /* Update our info structs */
-    png_read_update_info (png_ptr, info_ptr);
+	/* Update our info structs */
+	png_read_update_info (png_ptr, info_ptr);
 
-    /* Allocate some memory and set up row array */
-    /* This "inhales vigorously"... */
-    if (ctype & PNG_COLOR_MASK_ALPHA)
-	bpp = 4;
-    else
-	bpp = 3;
+	/* Allocate some memory and set up row array */
+	/* This "inhales vigorously"... */
+	if (ctype & PNG_COLOR_MASK_ALPHA)
+		bpp = 4;
+	else
+		bpp = 3;
 
-    pixels = art_alloc (w * h * bpp);
-    rows   = g_malloc  (h * sizeof(png_bytep));
+	pixels = art_alloc (w * h * bpp);
+	rows   = g_malloc  (h * sizeof(png_bytep));
 
-    if (!pixels || !rows) {
+	if (!pixels || !rows) {
+		png_destroy_read_struct (&png_ptr, &info_ptr, &end_info);
+		return NULL;
+	}
+	/* Icky code, but it has to be done... */
+	for (i = 0; i < h; i++) {
+		if ((rows[i] = g_malloc (w * sizeof (art_u8) * bpp)) == NULL) {
+			int n;
+			for (n = 0; n < i; n++)
+				g_free (rows[i]);
+			g_free (rows);
+			art_free (pixels);
+			png_destroy_read_struct (&png_ptr, &info_ptr, &end_info);
+			return NULL;
+		}
+	}
+
+	/* And we FINALLY get here... */
+	png_read_image (png_ptr, rows);
 	png_destroy_read_struct (&png_ptr, &info_ptr, &end_info);
-	return NULL;
-    }
-    /* Icky code, but it has to be done... */
-    for (i = 0; i < h; i++) {
-	if ((rows[i] = g_malloc (w * sizeof (art_u8) * bpp)) == NULL) {
-	    int n;
-	    for (n = 0; n < i; n++)
-		g_free (rows[i]);
-	    g_free (rows);
-	    art_free (pixels);
-	    png_destroy_read_struct (&png_ptr, &info_ptr, &end_info);
-	    return NULL;
+
+	/* Now stuff the bytes into pixels & free rows[y] */
+
+	temp = pixels;
+
+	for (y = 0; y < h; y++) {
+		(png_bytep) rowdata = rows[y];
+		for (x = 0; x < w; x++) {
+			temp[0] = rowdata[(x * bpp)];
+			temp[1] = rowdata[(x * bpp) + 1];
+			temp[2] = rowdata[(x * bpp) + 2];
+			if (bpp == 4)
+				temp[3] = rowdata[(x * bpp) + 3];
+			temp += bpp;
+		}
+		g_free (rows[y]);
 	}
-    }
+	g_free (rows);
 
-    /* And we FINALLY get here... */
-    png_read_image (png_ptr, rows);
-    png_destroy_read_struct (&png_ptr, &info_ptr, &end_info);
+	if (ctype & PNG_COLOR_MASK_ALPHA)
+		art_pixbuf = art_pixbuf_new_rgba (pixels, w, h, (w * 4));
+	else
+		art_pixbuf = art_pixbuf_new_rgb  (pixels, w, h, (w * 3));
 
-    /* Now stuff the bytes into pixels & free rows[y] */
+	pixbuf = gdk_pixbuf_new (art_pixbuf, NULL);
 
-    temp = pixels;
+	if (!pixbuf)
+		art_free (pixels);
 
-    for (y = 0; y < h; y++) {
-	(png_bytep) rowdata = rows[y];
-	for (x = 0; x < w; x++) {
-	    temp[0] = rowdata[(x * bpp)];
-	    temp[1] = rowdata[(x * bpp) + 1];
-	    temp[2] = rowdata[(x * bpp) + 2];
-	    if (bpp == 4)
-		temp[3] = rowdata[(x * bpp) + 3];
-	    temp += bpp;
-	}
-	g_free (rows[y]);
-    }
-    g_free (rows);
-
-    if (ctype & PNG_COLOR_MASK_ALPHA)
-	    art_pixbuf = art_pixbuf_new_rgba (pixels, w, h, (w * 4));
-    else
-	    art_pixbuf = art_pixbuf_new_rgb  (pixels, w, h, (w * 3));
-
-    pixbuf = gdk_pixbuf_new (art_pixbuf, NULL);
-
-    if (!pixbuf)
-        art_free (pixels);
-
-    return pixbuf;
+	return pixbuf;
 }
 
-int image_save(GdkPixBuf *pixbuf, FILE *file)
+int
+image_save (GdkPixbuf *pixbuf, FILE *file)
 {
-     png_structp png_ptr;
-     png_infop info_ptr;
-     art_u8 *data;
-     gint y, h, w;
-     png_bytepp row_ptr;
-     png_color_8 sig_bit;
-     gint type;
+	png_structp png_ptr;
+	png_infop info_ptr;
+	art_u8 *data;
+	gint y, h, w;
+	png_bytepp row_ptr;
+	png_color_8 sig_bit;
+	gint type;
 
-     g_return_val_if_fail(file != NULL, FALSE);
-     g_return_val_if_fail(pixbuf != NULL, FALSE);
+	g_return_val_if_fail(file != NULL, FALSE);
+	g_return_val_if_fail(pixbuf != NULL, FALSE);
 
-     h = pixbuf->art_pixbuf->height;
-     w = pixbuf->art_pixbuf->width;
+	h = pixbuf->art_pixbuf->height;
+	w = pixbuf->art_pixbuf->width;
 
-     png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING,
-				       NULL, NULL, NULL);
-     if (png_ptr == NULL) {
-	  fclose(file);
-	  return FALSE;
-     }
+	png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING,
+					  NULL, NULL, NULL);
+	if (png_ptr == NULL) {
+		fclose(file);
+		return FALSE;
+	}
 
-     info_ptr = png_create_info_struct(png_ptr);
-     if (info_ptr == NULL) {
-	  fclose(file);
-	  png_destroy_write_struct(&png_ptr, (png_infopp) NULL);
-	  return FALSE;
-     }
+	info_ptr = png_create_info_struct(png_ptr);
+	if (info_ptr == NULL) {
+		fclose(file);
+		png_destroy_write_struct(&png_ptr, (png_infopp) NULL);
+		return FALSE;
+	}
 
-     if (setjmp(png_ptr->jmpbuf)) {
-	  fclose(file);
-	  png_destroy_write_struct(&png_ptr, (png_infopp) NULL);
-	  return FALSE;
-     }
+	if (setjmp(png_ptr->jmpbuf)) {
+		fclose(file);
+		png_destroy_write_struct(&png_ptr, (png_infopp) NULL);
+		return FALSE;
+	}
 
-     png_init_io(png_ptr, file);
-     if (pixbuf->art_pixbuf->has_alpha) {
-	  sig_bit.alpha = 8;
-	  type = PNG_COLOR_TYPE_RGB_ALPHA;
-     } else {
-	  sig_bit.alpha = 0;
-	  type = PNG_COLOR_TYPE_RGB;
-     }
+	png_init_io(png_ptr, file);
+	if (pixbuf->art_pixbuf->has_alpha) {
+		sig_bit.alpha = 8;
+		type = PNG_COLOR_TYPE_RGB_ALPHA;
+	} else {
+		sig_bit.alpha = 0;
+		type = PNG_COLOR_TYPE_RGB;
+	}
 
-     sig_bit.red = sig_bit.green = sig_bit.blue = 8;
-     png_set_IHDR(png_ptr, info_ptr, w, h, 8, type, PNG_INTERLACE_NONE,
-		  PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
-     png_set_sBIT(png_ptr, info_ptr, &sig_bit);
-     png_write_info(png_ptr, info_ptr);
-     png_set_shift(png_ptr, &sig_bit);
-     png_set_packing(png_ptr);
+	sig_bit.red = sig_bit.green = sig_bit.blue = 8;
+	png_set_IHDR(png_ptr, info_ptr, w, h, 8, type, PNG_INTERLACE_NONE,
+		     PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
+	png_set_sBIT(png_ptr, info_ptr, &sig_bit);
+	png_write_info(png_ptr, info_ptr);
+	png_set_shift(png_ptr, &sig_bit);
+	png_set_packing(png_ptr);
 
-     data = pixbuf->art_pixbuf->pixels;
-     row_ptr = g_new(png_byte *, h);
+	data = pixbuf->art_pixbuf->pixels;
+	row_ptr = g_new(png_byte *, h);
 
-     for (y = 0; y < h; y++)
-	 row_ptr[y] = data + y * pixbuf->art_pixbuf->rowstride;
+	for (y = 0; y < h; y++)
+		row_ptr[y] = data + y * pixbuf->art_pixbuf->rowstride;
 #if 0
-     {
-	  if (pixbuf->art_pixbuf->has_alpha)
-	       row_ptr[y] = data + (w * y * 4);
-	  else
-	       row_ptr[y] = data + (w * y * 3);
-     }
+	{
+		if (pixbuf->art_pixbuf->has_alpha)
+			row_ptr[y] = data + (w * y * 4);
+		else
+			row_ptr[y] = data + (w * y * 3);
+	}
 #endif
 
-     png_write_image(png_ptr, row_ptr);
-     g_free (row_ptr);
+	png_write_image(png_ptr, row_ptr);
+	g_free (row_ptr);
 
-     png_write_end(png_ptr, info_ptr);
-     png_destroy_write_struct(&png_ptr, (png_infopp) NULL);
+	png_write_end(png_ptr, info_ptr);
+	png_destroy_write_struct(&png_ptr, (png_infopp) NULL);
 
-     return TRUE;
+	return TRUE;
 }

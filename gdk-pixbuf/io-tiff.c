@@ -1,5 +1,5 @@
 /*
- * io-tiff.c: GdkPixBuf I/O for TIFF files.
+ * io-tiff.c: GdkPixbuf I/O for TIFF files.
  * Copyright (C) 1999 Mark Crichton
  * Author: Mark Crichton <crichton@gimp.org>
  *
@@ -30,68 +30,69 @@
 #include "gdk-pixbuf.h"
 /*#include "gdk-pixbuf-io.h" */
 
-GdkPixBuf *image_load(FILE * f)
+GdkPixbuf *
+image_load (FILE *f)
 {
-    GdkPixBuf *pixbuf;
-    TIFF *tiff;
-    art_u8 *pixels, *tmppix;
-    gint w, h, x, y, num_pixs, fd;
-    uint32 *rast, *tmp_rast;
+	GdkPixbuf *pixbuf;
+	TIFF *tiff;
+	art_u8 *pixels, *tmppix;
+	gint w, h, x, y, num_pixs, fd;
+	uint32 *rast, *tmp_rast;
 
-    g_return_val_if_fail(f != NULL, NULL);
+	g_return_val_if_fail(f != NULL, NULL);
 
-    fd = fileno(f);
-    tiff = TIFFFdOpen(fd, "libpixbuf-tiff", "r");
+	fd = fileno(f);
+	tiff = TIFFFdOpen(fd, "libpixbuf-tiff", "r");
 
-    if (!tiff)
-	return NULL;
+	if (!tiff)
+		return NULL;
 
-    TIFFGetField(tiff, TIFFTAG_IMAGEWIDTH, &w);
-    TIFFGetField(tiff, TIFFTAG_IMAGELENGTH, &h);
-    num_pixs = w * h;
+	TIFFGetField(tiff, TIFFTAG_IMAGEWIDTH, &w);
+	TIFFGetField(tiff, TIFFTAG_IMAGELENGTH, &h);
+	num_pixs = w * h;
 
-    /* Yes, it needs to be _TIFFMalloc... */
-    rast = (uint32 *) _TIFFmalloc(num_pixs * sizeof(uint32));
+	/* Yes, it needs to be _TIFFMalloc... */
+	rast = (uint32 *) _TIFFmalloc(num_pixs * sizeof(uint32));
 
-    if (!rast) {
+	if (!rast) {
+		TIFFClose(tiff);
+		return NULL;
+	}
+
+	if (TIFFReadRGBAImage(tiff, w, h, rast, 0)) {
+		pixels = art_alloc(num_pixs * 4);
+		if (!pixels) {
+			_TIFFfree(rast);
+			TIFFClose(tiff);
+			return NULL;
+		}
+		tmppix = pixels;
+
+		for (y = 0; y < h; y++) {
+			/* Unexplainable...are tiffs backwards? */
+			/* Also looking at the GIMP plugin, this
+			 * whole reading thing can be a bit more
+			 * robust.
+			 */
+			tmp_rast = rast + ((h - y - 1) * w);
+			for (x = 0; x < w; x++) {
+				tmppix[0] = TIFFGetR(*tmp_rast);
+				tmppix[1] = TIFFGetG(*tmp_rast);
+				tmppix[2] = TIFFGetB(*tmp_rast);
+				tmppix[3] = TIFFGetA(*tmp_rast);
+				tmp_rast++;
+				tmppix += 4;
+			}
+		}
+	}
+	_TIFFfree(rast);
 	TIFFClose(tiff);
-	return NULL;
-    }
 
-    if (TIFFReadRGBAImage(tiff, w, h, rast, 0)) {
-	pixels = art_alloc(num_pixs * 4);
-	if (!pixels) {
-	    _TIFFfree(rast);
-	    TIFFClose(tiff);
-	    return NULL;
-	}
-	tmppix = pixels;
+	pixbuf = gdk_pixbuf_new (art_pixbuf_new_rgba (pixels, w, h, (w * 4)),
+				 NULL);
 
-	for (y = 0; y < h; y++) {
-	    /* Unexplainable...are tiffs backwards? */
-	    /* Also looking at the GIMP plugin, this
-	     * whole reading thing can be a bit more
-	     * robust.
-	     */
-	    tmp_rast = rast + ((h - y - 1) * w);
-	    for (x = 0; x < w; x++) {
-		tmppix[0] = TIFFGetR(*tmp_rast);
-		tmppix[1] = TIFFGetG(*tmp_rast);
-		tmppix[2] = TIFFGetB(*tmp_rast);
-		tmppix[3] = TIFFGetA(*tmp_rast);
-		tmp_rast++;
-		tmppix += 4;
-	    }
-	}
-    }
-    _TIFFfree(rast);
-    TIFFClose(tiff);
+	if (!pixbuf)
+		art_free (pixels);
 
-    pixbuf = gdk_pixbuf_new (art_pixbuf_new_rgba (pixels, w, h, (w * 4)),
-			     NULL);
-
-    if (!pixbuf)
-	    art_free (pixels);
-
-    return pixbuf;
+	return pixbuf;
 }

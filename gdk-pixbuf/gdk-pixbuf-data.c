@@ -1,5 +1,5 @@
 /*
- * gdk-pixbuf-data.c: Code to load images into GdkPixBufs from constant data
+ * gdk-pixbuf-data.c: Code to load images into GdkPixbufs from constant data
  *
  * Author:
  *    Michael Fulbright (drmike@redhat.com)
@@ -15,10 +15,10 @@
 
 /* This function does all the work. */
 
-static GdkPixBuf *
+static GdkPixbuf *
 _pixbuf_create_from_rgb_d(unsigned char *data, int w, int h)
 {
-	GdkPixBuf *pixbuf;
+	GdkPixbuf *pixbuf;
 	ArtPixBuf *art_pixbuf;
 	art_u8 *pixels;
 
@@ -40,12 +40,10 @@ _pixbuf_create_from_rgb_d(unsigned char *data, int w, int h)
 }
 
 
-GdkPixBuf *
-gdk_pixbuf_load_image_from_rgb_d (unsigned char *data, 
-				  int rgb_width, int rgb_height)
+GdkPixbuf *
+gdk_pixbuf_load_image_from_rgb_d (unsigned char *data, int rgb_width, int rgb_height)
 {
 	g_return_val_if_fail (data != NULL, NULL);
 
 	return _pixbuf_create_from_rgb_d(data, rgb_width, rgb_height);
 }
-

@@ -1,5 +1,5 @@
 /*
- * io-bmp.c: GdkPixBuf I/O for BMP files.
+ * io-bmp.c: GdkPixbuf I/O for BMP files.
  *
  * Copyright (C) 1999 Mark Crichton
  * Author: Mark Crichton <crichton@gimp.org>
@@ -30,18 +30,18 @@
 /* Loosely based off the BMP loader from The GIMP, hence it's complexity */
 
 /* Shared library entry point */
-GdkPixBuf *image_load(FILE * f)
+GdkPixbuf *image_load(FILE * f)
 {
-    art_u8 *pixels;
-    ArtPixBuf *art_pixbuf;
+	art_u8 *pixels;
+	ArtPixBuf *art_pixbuf;
 
-    /* Ok, now stuff the GdkPixBuf with goodies */
+	/* Ok, now stuff the GdkPixbuf with goodies */
 
-    if (is_trans)
-	    art_pixbuf = art_pixbuf_new_rgba (pixels, w, h, (w * 4));
-    else
-	    art_pixbuf = art_pixbuf_new_rgb  (pixels, w, h, (w * 3));
+	if (is_trans)
+		art_pixbuf = art_pixbuf_new_rgba (pixels, w, h, (w * 4));
+	else
+		art_pixbuf = art_pixbuf_new_rgb  (pixels, w, h, (w * 3));
 
-    /* Ok, I'm anal...shoot me */
-    return gdk_pixbuf_new (art_pixbuf, NULL);
+	/* Ok, I'm anal...shoot me */
+	return gdk_pixbuf_new (art_pixbuf, NULL);
 }

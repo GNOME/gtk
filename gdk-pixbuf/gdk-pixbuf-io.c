@@ -1,5 +1,5 @@
 /*
- * gdk-pixbuf-io.c: Code to load images into GdkPixBufs
+ * gdk-pixbuf-io.c: Code to load images into GdkPixbufs
  *
  * Author:
  *    Miguel de Icaza (miguel@gnu.org)
@@ -106,7 +106,7 @@ pixbuf_check_ppm (unsigned char *buffer, int size)
 	if (size < 20)
 		return FALSE;
 
-	if (buffer [0] == 'P'){
+	if (buffer [0] == 'P') {
 		if (buffer [1] == '1' ||
 		    buffer [1] == '2' ||
 		    buffer [1] == '3' ||
@@ -122,8 +122,8 @@ static struct {
 	char      *module_name;
 	gboolean   (*format_check)(unsigned char *buffer, int size);
 	GModule   *module;
-	GdkPixBuf *(*load)(FILE *f);
-	int        (*save)(GdkPixBuf *p, FILE *f, ...);
+	GdkPixbuf *(*load)(FILE *f);
+	int        (*save)(GdkPixbuf *p, FILE *f, ...);
 } file_formats [] = {
 	{ "png",  pixbuf_check_png,  NULL, NULL, NULL },
 	{ "jpeg", pixbuf_check_jpeg, NULL, NULL, NULL },
@@ -163,10 +163,10 @@ image_handler_load (int idx)
 		file_formats [idx].save = save_sym;
 }
 
-GdkPixBuf *
+GdkPixbuf *
 gdk_pixbuf_load_image (const char *file)
 {
-	GdkPixBuf *pixbuf;
+	GdkPixbuf *pixbuf;
 	gint n, i;
 	FILE *f;
 	char buffer [128];
@@ -176,17 +176,17 @@ gdk_pixbuf_load_image (const char *file)
 		return NULL;
 	n = fread (&buffer, 1, sizeof (buffer), f);
 
-	if (n == 0){
+	if (n == 0) {
 		fclose (f);
 		return NULL;
 	}
 
-	for (i = 0; file_formats [i].module_name; i++){
-		if ((*file_formats [i].format_check)(buffer, n)){
+	for (i = 0; file_formats [i].module_name; i++) {
+		if ((*file_formats [i].format_check)(buffer, n)) {
 			if (!file_formats [i].load)
 				image_handler_load (i);
 
-			if (!file_formats [i].load){
+			if (!file_formats [i].load) {
 				fclose (f);
 				return NULL;
 			}

@@ -1,5 +1,5 @@
 /*
- * Creates an GdkPixBuf from a Drawable
+ * Creates an GdkPixbuf from a Drawable
  *
  * Author:
  *   Cody Russell <bratsche@dfw.net>
@@ -14,10 +14,8 @@
 
 /* private function */
 
-static GdkPixBuf *
-gdk_pixbuf_from_drawable_core (GdkWindow *window,
-			       gint x, gint y,
-			       gint width, gint height,
+static GdkPixbuf *
+gdk_pixbuf_from_drawable_core (GdkWindow *window, gint x, gint y, gint width, gint height,
 			       gint with_alpha)
 {
 	GdkImage *image;
@@ -41,26 +39,20 @@ gdk_pixbuf_from_drawable_core (GdkWindow *window,
 				&window_width, &window_height, NULL);
 	gdk_window_get_origin(window, &window_x, &window_y);
 
-	if(window_x < 0)
-	{
+	if(window_x < 0) {
 		x = ABS(window_x);
 		width = window_width - x;
-	}
-	else
-	{
+	} else {
 		width = CLAMP(window_x + window_width, window_x,
-				screen_width) - window_x;
+			      screen_width) - window_x;
 	}
 
-	if(window_y < 0)
-	{
+	if(window_y < 0) {
 		y = ABS(window_y);
 		height = window_height - y;
-	}
-	else
-	{
+	} else {
 		height = CLAMP(window_y + window_height, window_y,
-				screen_height) - window_y;
+			       screen_height) - window_y;
 	}
 
 	image = gdk_image_get (window, x, y, width, height);
@@ -72,8 +64,7 @@ gdk_pixbuf_from_drawable_core (GdkWindow *window,
 	buff = art_alloc (rowstride * height);
 	pixels = buff;
 
-	switch (image->depth)
-	{
+	switch (image->depth) {
 	case 0:
 	case 1:
 	case 2:
@@ -83,10 +74,8 @@ gdk_pixbuf_from_drawable_core (GdkWindow *window,
 	case 6:
 	case 7:
 	case 8:
-		for (yy = 0; yy < height; yy++)
-		{
-			for (xx = 0; xx < width; xx++)
-			{
+		for (yy = 0; yy < height; yy++) {
+			for (xx = 0; xx < width; xx++) {
 				pixel = gdk_image_get_pixel (image, xx, yy);
 				pixels[0] = colormap->colors[pixel].red;
 				pixels[1] = colormap->colors[pixel].green;
@@ -94,17 +83,15 @@ gdk_pixbuf_from_drawable_core (GdkWindow *window,
 				if (with_alpha)
 					pixels[3] = 0;
 				pixels += fatness;
-           
+
 			}
 		}
 		break;
 
 	case 16:
 	case 15:
-		for (yy = 0; yy < height; yy++)
-		{
-			for (xx = 0; xx < width; xx++)
-			{
+		for (yy = 0; yy < height; yy++) {
+			for (xx = 0; xx < width; xx++) {
 				pixel = gdk_image_get_pixel (image, xx, yy);
 				r =  (pixel >> 8) & 0xf8;
 				g =  (pixel >> 3) & 0xfc;
@@ -121,10 +108,8 @@ gdk_pixbuf_from_drawable_core (GdkWindow *window,
 
 	case 24:
 	case 32:
-		for (yy = 0; yy < height; yy++)
-		{
-			for (xx = 0; xx < width; xx++)
-			{
+		for (yy = 0; yy < height; yy++) {
+			for (xx = 0; xx < width; xx++) {
 				pixel = gdk_image_get_pixel (image, xx, yy);
 				r =  (pixel >> 16) & 0xff;
 				g =  (pixel >> 8)  & 0xff;
@@ -151,18 +136,14 @@ gdk_pixbuf_from_drawable_core (GdkWindow *window,
 
 /* Public functions */
 
-GdkPixBuf *
-gdk_pixbuf_rgb_from_drawable  (GdkWindow *window,
-			      gint x, gint y,
-			      gint width, gint height)
+GdkPixbuf *
+gdk_pixbuf_rgb_from_drawable (GdkWindow *window, gint x, gint y, gint width, gint height)
 {
 	return gdk_pixbuf_from_drawable_core  (window, x, y, width, height, 0);
 }
-          
-GdkPixBuf *
-gdk_pixbuf_rgba_from_drawable  (GdkWindow *window,
-			       gint x, gint y,
-			       gint width, gint height)
+
+GdkPixbuf *
+gdk_pixbuf_rgba_from_drawable (GdkWindow *window, gint x, gint y, gint width, gint height)
 {
 	return gdk_pixbuf_from_drawable_core  (window, x, y, width, height, 1);
 }

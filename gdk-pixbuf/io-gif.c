@@ -1,5 +1,5 @@
 /*
- * io-gif.c: GdkPixBuf I/O for GIF files.
+ * io-gif.c: GdkPixbuf I/O for GIF files.
  * ...second verse, same as the first...
  *
  * Copyright (C) 1999 Mark Crichton
@@ -29,148 +29,149 @@
 #include <gif_lib.h>
 
 /* Shared library entry point */
-GdkPixBuf *image_load(FILE * f)
+GdkPixbuf *
+image_load(FILE *f)
 {
-    gint fn, is_trans = FALSE;
-    gint done = 0;
-    gint t_color = -1;
-    gint w, h, i, j;
-    art_u8 *pixels, *tmpptr;
-    GifFileType *gif;
-    GifRowType *rows;
-    GifRecordType rec;
-    ColorMapObject *cmap;
-    int intoffset[] =
-    {0, 4, 2, 1};
-    int intjump[] =
-    {8, 8, 4, 2};
+	gint fn, is_trans = FALSE;
+	gint done = 0;
+	gint t_color = -1;
+	gint w, h, i, j;
+	art_u8 *pixels, *tmpptr;
+	GifFileType *gif;
+	GifRowType *rows;
+	GifRecordType rec;
+	ColorMapObject *cmap;
+	int intoffset[] =
+	{0, 4, 2, 1};
+	int intjump[] =
+	{8, 8, 4, 2};
 
-    GdkPixBuf *pixbuf;
-    ArtPixBuf *art_pixbuf;
+	GdkPixbuf *pixbuf;
+	ArtPixBuf *art_pixbuf;
 
-    g_return_val_if_fail(f != NULL, NULL);
+	g_return_val_if_fail(f != NULL, NULL);
 
-    fn = fileno(f);
+	fn = fileno(f);
 /*    lseek(fn, 0, 0);*/
-    gif = DGifOpenFileHandle(fn);
+	gif = DGifOpenFileHandle(fn);
 
-    if (!gif) {
-	g_error("DGifOpenFilehandle FAILED");
-	PrintGifError();
-	return NULL;
-    }
-    /* Now we do the ungodly mess of loading a GIF image
-     * I used to remember when I liked this file format...
-     * of course, I still coded in assembler then.
-     * This comes from gdk_imlib, with some cleanups.
-     */
-
-    do {
-	if (DGifGetRecordType(gif, &rec) == GIF_ERROR) {
-	    PrintGifError();
-	    rec = TERMINATE_RECORD_TYPE;
-	}
-	if ((rec == IMAGE_DESC_RECORD_TYPE) && (!done)) {
-	    if (DGifGetImageDesc(gif) == GIF_ERROR) {
+	if (!gif) {
+		g_error("DGifOpenFilehandle FAILED");
 		PrintGifError();
-		rec = TERMINATE_RECORD_TYPE;
-	    }
-	    w = gif->Image.Width;
-	    h = gif->Image.Height;
-	    rows = g_malloc0(h * sizeof(GifRowType *));
-	    if (!rows) {
-		DGifCloseFile(gif);
 		return NULL;
-	    }
-	    for (i = 0; i < h; i++) {
-		rows[i] = g_malloc0(w * sizeof(GifPixelType));
-		if (!rows[i]) {
-		    DGifCloseFile(gif);
-		    for (i = 0; i < h; i++)
-			if (rows[i])
-			    g_free(rows[i]);
-		    free(rows);
-		    return NULL;
-		}
-	    }
-	    if (gif->Image.Interlace) {
-		for (i = 0; i < 4; i++) {
-		    for (j = intoffset[i]; j < h; j += intjump[i])
-			DGifGetLine(gif, rows[j], w);
-		}
-	    } else {
-		for (i = 0; i < h; i++)
-		    DGifGetLine(gif, rows[i], w);
-	    }
-	    done = 1;
-	} else if (rec == EXTENSION_RECORD_TYPE) {
-	    gint ext_code;
-	    GifByteType *ext;
-
-	    DGifGetExtension(gif, &ext_code, &ext);
-	    while (ext) {
-		if ((ext_code == 0xf9) &&
-		    (ext[1] & 1) && (t_color < 0)) {
-		    is_trans = TRUE;
-		    t_color = (gint) ext[4];
-		}
-		ext = NULL;
-		DGifGetExtensionNext(gif, &ext);
-	    }
 	}
-    }
-    while (rec != TERMINATE_RECORD_TYPE);
+	/* Now we do the ungodly mess of loading a GIF image
+	 * I used to remember when I liked this file format...
+	 * of course, I still coded in assembler then.
+	 * This comes from gdk_imlib, with some cleanups.
+	 */
 
-    /* Ok, we're loaded, now to convert from indexed -> RGB
-     * with alpha if necessary
-     */
+	do {
+		if (DGifGetRecordType(gif, &rec) == GIF_ERROR) {
+			PrintGifError();
+			rec = TERMINATE_RECORD_TYPE;
+		}
+		if ((rec == IMAGE_DESC_RECORD_TYPE) && (!done)) {
+			if (DGifGetImageDesc(gif) == GIF_ERROR) {
+				PrintGifError();
+				rec = TERMINATE_RECORD_TYPE;
+			}
+			w = gif->Image.Width;
+			h = gif->Image.Height;
+			rows = g_malloc0(h * sizeof(GifRowType *));
+			if (!rows) {
+				DGifCloseFile(gif);
+				return NULL;
+			}
+			for (i = 0; i < h; i++) {
+				rows[i] = g_malloc0(w * sizeof(GifPixelType));
+				if (!rows[i]) {
+					DGifCloseFile(gif);
+					for (i = 0; i < h; i++)
+						if (rows[i])
+							g_free(rows[i]);
+					free(rows);
+					return NULL;
+				}
+			}
+			if (gif->Image.Interlace) {
+				for (i = 0; i < 4; i++) {
+					for (j = intoffset[i]; j < h; j += intjump[i])
+						DGifGetLine(gif, rows[j], w);
+				}
+			} else {
+				for (i = 0; i < h; i++)
+					DGifGetLine(gif, rows[i], w);
+			}
+			done = 1;
+		} else if (rec == EXTENSION_RECORD_TYPE) {
+			gint ext_code;
+			GifByteType *ext;
 
-    if (is_trans)
-	pixels = art_alloc(h * w * 4);
-    else
-	pixels = art_alloc(h * w * 3);
-    tmpptr = pixels;
-
-    if (!pixels)
-	return NULL;
-
-    /* The meat of the transformation */
-    /* Get the right palette */
-    cmap = (gif->Image.ColorMap ? gif->Image.ColorMap : gif->SColorMap);
-
-    /* Unindex the data, and pack it in RGB(A) order.
-     * Note for transparent GIFs, the alpha is set to 0
-     * for the transparent color, and 0xFF for everything else.
-     * I think that's right...
-     */
-
-    for (i = 0; i < h; i++) {
-	for (j = 0; j < w; j++) {
-	    tmpptr[0] = cmap->Colors[rows[i][j]].Red;
-	    tmpptr[1] = cmap->Colors[rows[i][j]].Green;
-	    tmpptr[2] = cmap->Colors[rows[i][j]].Blue;
-	    if (is_trans && (rows[i][j] == t_color))
-		tmpptr[3] = 0;
-	    else
-		tmpptr[3] = 0xFF;
-	    tmpptr += (is_trans ? 4 : 3);
+			DGifGetExtension(gif, &ext_code, &ext);
+			while (ext) {
+				if ((ext_code == 0xf9) &&
+				    (ext[1] & 1) && (t_color < 0)) {
+					is_trans = TRUE;
+					t_color = (gint) ext[4];
+				}
+				ext = NULL;
+				DGifGetExtensionNext(gif, &ext);
+			}
+		}
 	}
-	g_free(rows[i]);
-    }
-    g_free(rows);
+	while (rec != TERMINATE_RECORD_TYPE);
 
-    if (is_trans)
-	    art_pixbuf = art_pixbuf_new_rgba(pixels, w, h, (w * 4));
-    else
-	    art_pixbuf = art_pixbuf_new_rgb(pixels, w, h, (w * 3));
+	/* Ok, we're loaded, now to convert from indexed -> RGB
+	 * with alpha if necessary
+	 */
 
-    pixbuf = gdk_pixbuf_new (art_pixbuf, NULL);
+	if (is_trans)
+		pixels = art_alloc(h * w * 4);
+	else
+		pixels = art_alloc(h * w * 3);
+	tmpptr = pixels;
 
-    /* Ok, I'm anal...shoot me */
-    if (!pixbuf)
-        art_free(pixels);
+	if (!pixels)
+		return NULL;
 
-    return pixbuf;
+	/* The meat of the transformation */
+	/* Get the right palette */
+	cmap = (gif->Image.ColorMap ? gif->Image.ColorMap : gif->SColorMap);
+
+	/* Unindex the data, and pack it in RGB(A) order.
+	 * Note for transparent GIFs, the alpha is set to 0
+	 * for the transparent color, and 0xFF for everything else.
+	 * I think that's right...
+	 */
+
+	for (i = 0; i < h; i++) {
+		for (j = 0; j < w; j++) {
+			tmpptr[0] = cmap->Colors[rows[i][j]].Red;
+			tmpptr[1] = cmap->Colors[rows[i][j]].Green;
+			tmpptr[2] = cmap->Colors[rows[i][j]].Blue;
+			if (is_trans && (rows[i][j] == t_color))
+				tmpptr[3] = 0;
+			else
+				tmpptr[3] = 0xFF;
+			tmpptr += (is_trans ? 4 : 3);
+		}
+		g_free(rows[i]);
+	}
+	g_free(rows);
+
+	if (is_trans)
+		art_pixbuf = art_pixbuf_new_rgba(pixels, w, h, (w * 4));
+	else
+		art_pixbuf = art_pixbuf_new_rgb(pixels, w, h, (w * 3));
+
+	pixbuf = gdk_pixbuf_new (art_pixbuf, NULL);
+
+	/* Ok, I'm anal...shoot me */
+	if (!pixbuf)
+		art_free(pixels);
+
+	return pixbuf;
 }
 
 image_save() {}

@@ -1,5 +1,5 @@
 /*
-  io-jpeg.c: GdkPixBuf loader for jpeg files.
+  io-jpeg.c: GdkPixbuf loader for jpeg files.
 
   Based on io-jpeg from gdk_imlib, but not much.
 
@@ -19,10 +19,9 @@
 #include <jpeglib.h>
 
 /* error handler data */
-struct iojpeg_JPEG_error_mgr
-{
+struct iojpeg_JPEG_error_mgr {
 	struct jpeg_error_mgr pub;
-	sigjmp_buf          setjmp_buffer;
+	sigjmp_buf setjmp_buffer;
 };
 
 static void
@@ -39,17 +38,18 @@ g_JPEGFatalErrorHandler(j_common_ptr cinfo)
 	return;
 }
 
-GdkPixBuf *image_load(FILE *f)
+GdkPixbuf *
+image_load(FILE *f)
 {
 	int w,h,i,j;
 	art_u8 *pixels=NULL, *dptr;
 	unsigned char *lines[4], /* Used to expand rows, via rec_outbuf_height, from
-				  the header file:
-				  "* Usually rec_outbuf_height will be 1 or 2, at most 4." */
+				    the header file:
+				    "* Usually rec_outbuf_height will be 1 or 2, at most 4." */
 		**lptr;
 	struct jpeg_decompress_struct cinfo;
 	struct iojpeg_JPEG_error_mgr jerr;
-	GdkPixBuf *pixbuf;
+	GdkPixbuf *pixbuf;
 
 	/* setup error handler */
 	cinfo.err = jpeg_std_error(&(jerr.pub));
