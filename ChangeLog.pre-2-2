@@ -1,5 +1,12 @@
 2002-03-23  Havoc Pennington  <hp@pobox.com>
 
+	* gtk/gtktextlayout.c (gtk_text_layout_real_invalidate):
+	invalidate the line containing start, even if the [start,end)
+	range is empty (just invalidate [start,end], essentially).
+	Partially fixes #72374
+
+2002-03-23  Havoc Pennington  <hp@pobox.com>
+
 	* gtk/gtktextview.c (gtk_text_view_do_popup): end any selection in
 	progress, patch from db@zigo.dhs.org, #74620
 
