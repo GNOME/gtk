@@ -1,3 +1,14 @@
+2004-06-21  Michael Natterer  <mitch@gimp.org>
+
+	Merge from stable:
+
+	* gdk/x11/gdkdrawable-x11.[ch]: made convert_format() utility
+	function public as _gdk_x11_convert_to_format().
+
+	* gdk/x11/gdkcursor-x11.c (create_cursor_image): premultiply
+	the pixels from the GdkPixbuf when putting them in the
+	Xcursor image. Fixes bug #144350.
+
 2004-06-16  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilesystemmodel.c (do_files_added): When inserting a

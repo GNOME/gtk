@@ -921,14 +921,8 @@ gdk_x11_drawable_get_xid (GdkDrawable *drawable)
  * what's the fastest depending on the available picture formats,
  * whether we can used shared pixmaps, etc.
  */
-typedef enum {
-  FORMAT_NONE,
-  FORMAT_EXACT_MASK,
-  FORMAT_ARGB_MASK,
-  FORMAT_ARGB
-} FormatType;
 
-static FormatType
+static GdkX11FormatType
 select_format (GdkDisplay         *display,
 	       XRenderPictFormat **format,
 	       XRenderPictFormat **mask)
@@ -937,7 +931,7 @@ select_format (GdkDisplay         *display,
   XRenderPictFormat pf;
 
   if (!_gdk_x11_have_render (display))
-    return FORMAT_NONE;
+    return GDK_X11_FORMAT_NONE;
   
   /* Look for a 32-bit xRGB and Axxx formats that exactly match the
    * in memory data format. We can use them as pixmap and mask
@@ -993,7 +987,7 @@ select_format (GdkDisplay         *display,
 			     0);
 
   if (*format && *mask)
-    return FORMAT_EXACT_MASK;
+    return GDK_X11_FORMAT_EXACT_MASK;
 
   /* OK, that failed, now look for xRGB and Axxx formats in
    * RENDER's preferred order
@@ -1023,7 +1017,7 @@ select_format (GdkDisplay         *display,
 			     0);
 
   if (*format && *mask)
-    return FORMAT_ARGB_MASK;
+    return GDK_X11_FORMAT_ARGB_MASK;
 
   /* Finally, if neither of the above worked, fall back to
    * looking for combined ARGB -- we'll premultiply ourselves.
@@ -1048,9 +1042,9 @@ select_format (GdkDisplay         *display,
   *mask = NULL;
 
   if (*format)
-    return FORMAT_ARGB;
+    return GDK_X11_FORMAT_ARGB;
 
-  return FORMAT_NONE;
+  return GDK_X11_FORMAT_NONE;
 }
 
 #if 0
@@ -1081,15 +1075,15 @@ list_formats (XRenderPictFormat *pf)
 }
 #endif  
 
-static void
-convert_to_format (guchar        *src_buf,
-		   gint           src_rowstride,
-		   guchar        *dest_buf,
-		   gint           dest_rowstride,
-		   FormatType     dest_format,
-		   GdkByteOrder   dest_byteorder,
-		   gint           width,
-		   gint           height)
+void
+_gdk_x11_convert_to_format (guchar           *src_buf,
+                            gint              src_rowstride,
+                            guchar           *dest_buf,
+                            gint              dest_rowstride,
+                            GdkX11FormatType  dest_format,
+                            GdkByteOrder      dest_byteorder,
+                            gint              width,
+                            gint              height)
 {
   gint i;
 
@@ -1097,14 +1091,14 @@ convert_to_format (guchar        *src_buf,
     {
       switch (dest_format)
 	{
-	case FORMAT_EXACT_MASK:
+	case GDK_X11_FORMAT_EXACT_MASK:
 	  {
 	    memcpy (dest_buf + i * dest_rowstride,
 		    src_buf + i * src_rowstride,
 		    width * 4);
 	    break;
 	  }
-	case FORMAT_ARGB_MASK:
+	case GDK_X11_FORMAT_ARGB_MASK:
 	  {
 	    guchar *row = src_buf + i * src_rowstride;
 	    if (((gsize)row & 3) != 0)
@@ -1182,7 +1176,7 @@ convert_to_format (guchar        *src_buf,
 	      }
 	    break;
 	  }
-	case FORMAT_ARGB:
+	case GDK_X11_FORMAT_ARGB:
 	  {
 	    guchar *p = (src_buf + i * src_rowstride);
 	    guchar *q = (dest_buf + i * dest_rowstride);
@@ -1218,7 +1212,7 @@ convert_to_format (guchar        *src_buf,
 #undef MULT
 	    break;
 	  }
-	case FORMAT_NONE:
+	case GDK_X11_FORMAT_NONE:
 	  g_assert_not_reached ();
 	  break;
 	}
@@ -1228,7 +1222,7 @@ convert_to_format (guchar        *src_buf,
 static void
 draw_with_images (GdkDrawable       *drawable,
 		  GdkGC             *gc,
-		  FormatType         format_type,
+		  GdkX11FormatType   format_type,
 		  XRenderPictFormat *format,
 		  XRenderPictFormat *mask_format,
 		  guchar            *src_rgb,
@@ -1273,10 +1267,10 @@ draw_with_images (GdkDrawable       *drawable,
 	  
 	  image = _gdk_image_get_scratch (screen, width1, height1, 32, &xs0, &ys0);
 	  
-	  convert_to_format (src_rgb + y0 * src_rowstride + 4 * x0, src_rowstride,
-			     (guchar *)image->mem + ys0 * image->bpl + xs0 * image->bpp, image->bpl,
-			     format_type, image->byte_order, 
-			     width1, height1);
+	  _gdk_x11_convert_to_format (src_rgb + y0 * src_rowstride + 4 * x0, src_rowstride,
+                                      (guchar *)image->mem + ys0 * image->bpl + xs0 * image->bpp, image->bpl,
+                                      format_type, image->byte_order, 
+                                      width1, height1);
 
 	  gdk_draw_image (pix, pix_gc,
 			  image, xs0, ys0, x0, y0, width1, height1);
@@ -1352,7 +1346,7 @@ get_shm_pixmap_for_image (Display           *xdisplay,
 static gboolean
 draw_with_pixmaps (GdkDrawable       *drawable,
 		   GdkGC             *gc,
-		   FormatType         format_type,
+		   GdkX11FormatType   format_type,
 		   XRenderPictFormat *format,
 		   XRenderPictFormat *mask_format,
 		   guchar            *src_rgb,
@@ -1386,10 +1380,10 @@ draw_with_pixmaps (GdkDrawable       *drawable,
 	  if (!get_shm_pixmap_for_image (xdisplay, image, format, mask_format, &pix, &pict, &mask))
 	    return FALSE;
 
-	  convert_to_format (src_rgb + y0 * src_rowstride + 4 * x0, src_rowstride,
-			     (guchar *)image->mem + ys0 * image->bpl + xs0 * image->bpp, image->bpl,
-			     format_type, image->byte_order, 
-			     width1, height1);
+	  _gdk_x11_convert_to_format (src_rgb + y0 * src_rowstride + 4 * x0, src_rowstride,
+                                      (guchar *)image->mem + ys0 * image->bpl + xs0 * image->bpp, image->bpl,
+                                      format_type, image->byte_order, 
+                                      width1, height1);
 
 	  XRenderComposite (xdisplay, PictOpOver, pict, mask, dest_pict, 
 			    xs0, ys0, xs0, ys0, x0 + dest_x, y0 + dest_y,
@@ -1415,7 +1409,7 @@ gdk_x11_draw_pixbuf (GdkDrawable     *drawable,
 		     gint             x_dither,
 		     gint             y_dither)
 {
-  FormatType format_type;
+  GdkX11FormatType format_type;
   XRenderPictFormat *format, *mask_format;
   gint rowstride;
 #ifdef USE_SHM  
@@ -1425,7 +1419,7 @@ gdk_x11_draw_pixbuf (GdkDrawable     *drawable,
   format_type = select_format (gdk_drawable_get_display (drawable),
 			       &format, &mask_format);
 
-  if (format_type == FORMAT_NONE ||
+  if (format_type == GDK_X11_FORMAT_NONE ||
       !gdk_pixbuf_get_has_alpha (pixbuf) ||
       gdk_drawable_get_depth (drawable) == 1 ||
       (dither == GDK_RGB_DITHER_MAX && gdk_drawable_get_depth (drawable) != 24) ||

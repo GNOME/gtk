@@ -305,16 +305,14 @@ gdk_cursor_get_display (GdkCursor *cursor)
 #ifdef HAVE_XCURSOR
 
 static XcursorImage*
-create_cursor_image (GdkPixbuf *pixbuf, 
-		     gint       x, 
+create_cursor_image (GdkPixbuf *pixbuf,
+		     gint       x,
 		     gint       y)
 {
   guint width, height, rowstride, n_channels;
   guchar *pixels, *src;
   XcursorImage *xcimage;
   XcursorPixel *dest;
-  guchar a;
-  gint i, j;
 
   width = gdk_pixbuf_get_width (pixbuf);
   height = gdk_pixbuf_get_height (pixbuf);
@@ -324,26 +322,36 @@ create_cursor_image (GdkPixbuf *pixbuf,
   pixels = gdk_pixbuf_get_pixels (pixbuf);
 
   xcimage = XcursorImageCreate (width, height);
-      
+
   xcimage->xhot = x;
   xcimage->yhot = y;
 
   dest = xcimage->pixels;
 
-  for (j = 0; j < height; j++) 
+  if (n_channels == 3)
     {
-      src = pixels + j * rowstride;
-      for (i = 0; i < width; i++) 
-	{
-	  if (n_channels == 3) 
-	    a = 0xff;
-	  else
-	    a = src[3];
-	  
-	  *dest =  (a << 24) | (src[0] << 16) | (src[1] << 8) | src[2];
+      gint i, j;
+
+      for (j = 0; j < height; j++)
+        {
+          src = pixels + j * rowstride;
+          for (i = 0; i < width; i++)
+            {
+              *dest = (0xff << 24) | (src[0] << 16) | (src[1] << 8) | src[2];
+            }
+
 	  src += n_channels;
 	  dest++;
 	}
+    }
+  else
+    {
+      _gdk_x11_convert_to_format (pixels, rowstride,
+                                  (guchar *) dest, 4 * width,
+                                  GDK_X11_FORMAT_ARGB,
+                                  (G_BYTE_ORDER == G_BIG_ENDIAN) ?
+                                  GDK_MSB_FIRST : GDK_LSB_FIRST,
+                                  width, height);
     }
 
   return xcimage;
