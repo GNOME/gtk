@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-06-21 12:55+0200\n"
+"POT-Creation-Date: 2003-07-07 13:08+0200\n"
 "PO-Revision-Date: 2003-06-05 20:24+0100\n"
 "Last-Translator: Vincent van Adrighem <V.vanAdrighem@dirck.mine.nu>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
@@ -180,7 +180,7 @@ msgstr "Het BMP-bestandsformaat"
 msgid "Failure reading GIF: %s"
 msgstr "Lezen van GIF mislukt: %s"
 
-#: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1439 gdk-pixbuf/io-gif.c:1600
+#: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1431 gdk-pixbuf/io-gif.c:1592
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "GIF-bestand miste data (misschien was het afgebroken?)"
 
@@ -205,8 +205,8 @@ msgstr "Foute code ontdekt"
 msgid "Circular table entry in GIF file"
 msgstr "Circulair tabelveld in GIF-bestand"
 
-#: gdk-pixbuf/io-gif.c:826 gdk-pixbuf/io-gif.c:1427 gdk-pixbuf/io-gif.c:1473
-#: gdk-pixbuf/io-gif.c:1588
+#: gdk-pixbuf/io-gif.c:826 gdk-pixbuf/io-gif.c:1419 gdk-pixbuf/io-gif.c:1465
+#: gdk-pixbuf/io-gif.c:1580
 msgid "Not enough memory to load GIF file"
 msgstr "Onvoldoende geheugen om GIF-bestand te laden"
 
@@ -228,13 +228,7 @@ msgid "GIF image contained a frame appearing outside the image bounds."
 msgstr ""
 "GIF-bestand bevatte een afbeelding die buiten het kader lijkt te vallen"
 
-#: gdk-pixbuf/io-gif.c:1227
-msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
-msgstr ""
-"De eerste afbeelding in het GIF-bestand heeft 'terug naar vorige' als "
-"afsluitopdracht"
-
-#: gdk-pixbuf/io-gif.c:1263
+#: gdk-pixbuf/io-gif.c:1255
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
@@ -242,44 +236,44 @@ msgstr ""
 "GIF-bestand heeft geen globaal kleurenpalet, en een afbeelding erin heeft "
 "geen lokaal kleurenpalet"
 
-#: gdk-pixbuf/io-gif.c:1495
+#: gdk-pixbuf/io-gif.c:1487
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF-bestand is afgebroken of onvolledig"
 
-#: gdk-pixbuf/io-gif.c:1647
+#: gdk-pixbuf/io-gif.c:1639
 msgid "The GIF image format"
 msgstr "Het GIF-bestandsformaat"
 
-#: gdk-pixbuf/io-ico.c:218 gdk-pixbuf/io-ico.c:277 gdk-pixbuf/io-ico.c:338
-#: gdk-pixbuf/io-ico.c:401 gdk-pixbuf/io-ico.c:418
+#: gdk-pixbuf/io-ico.c:217 gdk-pixbuf/io-ico.c:269 gdk-pixbuf/io-ico.c:330
+#: gdk-pixbuf/io-ico.c:393 gdk-pixbuf/io-ico.c:410
 msgid "Not enough memory to load icon"
 msgstr "Onvoldoende geheugen om pictogram te laden"
 
-#: gdk-pixbuf/io-ico.c:262
+#: gdk-pixbuf/io-ico.c:254
 msgid "Invalid header in icon"
 msgstr "Ongeldige header in pictogram"
 
-#: gdk-pixbuf/io-ico.c:299
+#: gdk-pixbuf/io-ico.c:291
 msgid "Icon has zero width"
 msgstr "Pictogram heeft breedte nul"
 
-#: gdk-pixbuf/io-ico.c:309
+#: gdk-pixbuf/io-ico.c:301
 msgid "Icon has zero height"
 msgstr "Pictogram heeft hoogte nul"
 
-#: gdk-pixbuf/io-ico.c:353
+#: gdk-pixbuf/io-ico.c:345
 msgid "Compressed icons are not supported"
 msgstr "Gecomprimeerde pictogrammen worden niet ondersteund"
 
-#: gdk-pixbuf/io-ico.c:386
+#: gdk-pixbuf/io-ico.c:378
 msgid "Unsupported icon type"
 msgstr "Niet ondersteund pictogramtype"
 
-#: gdk-pixbuf/io-ico.c:466
+#: gdk-pixbuf/io-ico.c:458
 msgid "Not enough memory to load ICO file"
 msgstr "Onvoldoende geheugen om ICO-bestand te laden"
 
-#: gdk-pixbuf/io-ico.c:872
+#: gdk-pixbuf/io-ico.c:868
 msgid "The ICO image format"
 msgstr "Het ICO-bestandsformaat"
 
@@ -3575,7 +3569,7 @@ msgstr "_Bovenste"
 
 #: gtk/gtkstock.c:294
 msgid "_Back"
-msgstr "Vo_rige"
+msgstr "_Terug"
 
 #: gtk/gtkstock.c:295
 msgid "_Down"
@@ -3587,7 +3581,7 @@ msgstr "_Volgende"
 
 #: gtk/gtkstock.c:297
 msgid "_Up"
-msgstr "Om_hoog"
+msgstr "_Omhoog"
 
 #: gtk/gtkstock.c:298
 msgid "_Help"
@@ -3667,7 +3661,7 @@ msgstr "A_fsluiten"
 
 #: gtk/gtkstock.c:317
 msgid "_Redo"
-msgstr "_Herhalen"
+msgstr "O_pnieuw"
 
 #: gtk/gtkstock.c:318
 msgid "_Refresh"
@@ -3711,7 +3705,7 @@ msgstr "_Spellingscontrole"
 
 #: gtk/gtkstock.c:328
 msgid "_Stop"
-msgstr "_Stop"
+msgstr "_Stoppen"
 
 #: gtk/gtkstock.c:329
 msgid "_Strikethrough"
@@ -3727,7 +3721,7 @@ msgstr "_Onderstrepen"
 
 #: gtk/gtkstock.c:332
 msgid "_Undo"
-msgstr "_Herstel"
+msgstr "_Ongedaan maken"
 
 #: gtk/gtkstock.c:333
 msgid "_Yes"
@@ -5032,6 +5026,12 @@ msgstr "IM statusstijl"
 #: modules/input/gtkimcontextxim.c:286
 msgid "How to draw the input method statusbar"
 msgstr "Hoe de statusbalk voor invoermethode moet worden getekend"
+
+#~ msgid ""
+#~ "First frame of GIF image had 'revert to previous' as its disposal mode."
+#~ msgstr ""
+#~ "De eerste afbeelding in het GIF-bestand heeft 'terug naar vorige' als "
+#~ "afsluitopdracht"
 
 #~ msgid "GIF image contained a frame with height or width 0."
 #~ msgstr "GIF-bestand bevatte een afbeelding met hoogte of breedte 0."
