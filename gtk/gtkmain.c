@@ -149,17 +149,17 @@ gtk_check_version (guint required_major,
 		   guint required_micro)
 {
   if (required_major > GTK_MAJOR_VERSION)
-    return "Gtk+ version to old (major mismatch)";
+    return "Gtk+ version too old (major mismatch)";
   if (required_major < GTK_MAJOR_VERSION)
-    return "Gtk+ version to new (major mismatch)";
+    return "Gtk+ version too new (major mismatch)";
   if (required_minor > GTK_MINOR_VERSION)
-    return "Gtk+ version to old (minor mismatch)";
+    return "Gtk+ version too old (minor mismatch)";
   if (required_minor < GTK_MINOR_VERSION)
-    return "Gtk+ version to new (minor mismatch)";
+    return "Gtk+ version too new (minor mismatch)";
   if (required_micro < GTK_MICRO_VERSION - GTK_BINARY_AGE)
-    return "Gtk+ version to new (micro mismatch)";
+    return "Gtk+ version too new (micro mismatch)";
   if (required_micro > GTK_MICRO_VERSION)
-    return "Gtk+ version to old (micro mismatch)";
+    return "Gtk+ version too old (micro mismatch)";
   return NULL;
 }
 

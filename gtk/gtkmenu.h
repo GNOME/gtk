@@ -128,8 +128,14 @@ void	   gtk_menu_detach		  (GtkMenu	       *menu);
 GtkWidget* gtk_menu_get_attach_widget	  (GtkMenu	       *menu);
 
 void	   gtk_menu_detach		  (GtkMenu	       *menu);
-void       gtk_menu_set_tearoff_state    (GtkMenu              *menu,
-					  gboolean              torn_off);
+void       gtk_menu_set_tearoff_state     (GtkMenu             *menu,
+					   gboolean             torn_off);
+
+/* This sets the window manager title for the window that
+ * appears when a menu is torn off
+ */
+void       gtk_menu_set_title             (GtkMenu             *menu,
+					   const gchar         *title);
 
 #ifdef __cplusplus
 }

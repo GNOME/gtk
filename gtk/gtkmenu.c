@@ -602,6 +602,7 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
 	  if (!menu->tearoff_window)
 	    {
 	      GtkWidget *attach_widget;
+	      gchar *title;
 	      
 	      menu->tearoff_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	      gtk_widget_set_app_paintable (menu->tearoff_window, TRUE);
@@ -611,17 +612,20 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
 					 GTK_OBJECT (menu));
 	      gtk_widget_realize (menu->tearoff_window);
 	      
-	      attach_widget = gtk_menu_get_attach_widget (menu);
-	      if (GTK_IS_MENU_ITEM (attach_widget))
+	      title = gtk_object_get_data (GTK_OBJECT (menu), "gtk-menu-title");
+	      if (!title)
 		{
-		  GtkWidget *child = GTK_BIN (attach_widget)->child;
-		  if (GTK_IS_LABEL (child))
+		  attach_widget = gtk_menu_get_attach_widget (menu);
+		  if (GTK_IS_MENU_ITEM (attach_widget))
 		    {
-		      gchar *ret;
-		      gtk_label_get (GTK_LABEL (child), &ret);
-		      gdk_window_set_title (menu->tearoff_window->window, ret);
+		      GtkWidget *child = GTK_BIN (attach_widget)->child;
+		      if (GTK_IS_LABEL (child))
+			gtk_label_get (GTK_LABEL (child), &title);
 		    }
 		}
+
+	      if (title)
+		gdk_window_set_title (menu->tearoff_window->window, title);
 
 	      gdk_window_set_decorations (menu->tearoff_window->window, 
 					  GDK_DECOR_ALL |
@@ -644,6 +648,17 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
 	  gtk_menu_reparent (menu, menu->toplevel, FALSE);
 	}
     }
+}
+
+void       
+gtk_menu_set_title (GtkMenu     *menu,
+		    const gchar *title)
+{
+  g_return_if_fail (menu != NULL);
+  g_return_if_fail (GTK_IS_MENU (menu));
+
+  gtk_object_set_data_full (GTK_OBJECT (menu), "gtk-menu-title",
+			    g_strdup (title), (GtkDestroyNotify) g_free);
 }
 
 static void

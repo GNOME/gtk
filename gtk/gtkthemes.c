@@ -81,7 +81,10 @@ gtk_theme_engine_get (gchar *name)
        library = g_module_open (engine_path, 0);
        g_free(engine_path);
        if (!library)
-	 g_error(g_module_error());
+	 {
+	   g_warning (g_module_error());
+	   return NULL;
+	 }
        else
 	 {
 	    result = g_new (GtkThemeEnginePrivate, 1);
@@ -96,7 +99,7 @@ gtk_theme_engine_get (gchar *name)
 		!g_module_symbol (library, "theme_exit", 
 				  (gpointer *)&result->exit))
 	      {
-		g_error (g_module_error());
+		g_warning (g_module_error());
 		g_free (result);
 		return NULL;
 	      }
