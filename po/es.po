@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.6\n"
-"POT-Creation-Date: 2000-01-09 20:10+0100\n"
+"POT-Creation-Date: 2000-01-28 15:18+0100\n"
 "PO-Revision-Date: 1999-02-07 17:37+0100\n"
 "Last-Translator: Pablo Saratxaga <srtxg@chanae.alphanet.ch>\n"
 "Language-Team: \n"
@@ -444,7 +444,7 @@ msgstr "(desactivado)"
 msgid "clear"
 msgstr "limpiar"
 
-#: gtk/gtknotebook.c:2048 gtk/gtknotebook.c:4120
+#: gtk/gtknotebook.c:2057 gtk/gtknotebook.c:4129
 #, c-format
 msgid "Page %u"
 msgstr "Página %u"
@@ -469,8 +469,8 @@ msgstr "Imposible de encontrar un módulo cargable en module_path: \"%s\","
 msgid "--- No Tip ---"
 msgstr "--- Ningún Tip ---"
 
-#~ msgid "bold"
-#~ msgstr "negritas"
-
 #~ msgid "normal"
 #~ msgstr "normal"
+
+#~ msgid "bold"
+#~ msgstr "negritas"
