@@ -1,5 +1,9 @@
 Tue Feb 17 05:41:31 1998  Tim Janik  <timj@gimp.org>
 
+	* gtk/gtkentry.c (gtk_entry_init): invoke gtk_entry_grow_text already
+	  in this place, so the application will never see entry->text==NULL.
+	  (see also ChangeLog entry from Tue Feb 11 1997 on this).
+
         * gtk/gtkcheckbutton.c:
         * gtk/gtkradiobutton.c:
         * gtk/gtktogglebutton.c:

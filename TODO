@@ -21,27 +21,14 @@ BUGS
    GTK_PARENT_BASIC (similar to GTK_PARENT_SENSITIVE) flag, to prevent
    tree iterations upon every container addition.
  
- * Make gtk_menu_item_set_submenu() and gtk_option_menu_set_menu() fit into
-   the normal tree manner (e.g. make propagation possible).
- 
- * GtkOptionMenu needs to reference its curent GtkMenuItem.
- 
  * GtkMenu needs to properly unref() accelerator tables upon destroy.
- 
- * Display of GtkToggleButton is messed up if GtkContainer::container_width
-   is greate than 0. GtkCheckButton and GtkRadioButton are only messed up
-   if draw_indicator is FALSE.
 
  * Using gtk_container_add() on an option menu to add a label works, but then
    gtk_option_menu_button_press() segfaults. This is supposed to fail while
    adding due to a g_return_if_fail (GTK_IS_MENU_ITEM (child));
+
+ * enforce invariants on *_RESIZE* and *_REDRAW* flags.
  
- * the new fileselection dialog sometimes segfaults after subsequent
-   selections from the option menu, because it destroyes the menu
-   that is connected to the optionmenu, and the option menu only handles
-   the deactivation, but not the destruction of it's submenu.
-   this is not a bug in the fileselection code but in the optionmenu
-   code.
    
 
 NEW FEATURES

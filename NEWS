@@ -1,3 +1,20 @@
+Forthcoming Changes for GTK+ 0.99.4:
+
+* Reference counting revolution integrated.
+  Refer to docs/refcounting.txt on this issue.
+* Additions on the signal code for querying information about certain signals,
+  and pending handlers of signals.
+* Support for user signals, and major changes to internal signal handler
+  handling for proper removal and invokation of after signals.
+* GtkTooltips became a true descendant of GtkObject.
+* Split up of the widget/object flags into a private and a public portion,
+  consult docs/widget_system.txt on this.
+* Support for hot keys on gtk programs via gtk_key_snooper_install().
+* Reimplementation of the *_interp functions as *_full functions to provide
+  simple callback functions as well.
+* Idle functions are now prioritized.
+* Clean ups and many many bug fixes by a lot of people all over the place.
+* New, long and descriptive ChangeLog entries for bored readers ;)
 
 Overview of Changes in GTK+ 0.99.3:
 
@@ -21,4 +38,3 @@ Overview of Changes in GTK+ 0.99.3:
 * Added switch_page signal to notebook widget
 * Documentation additions
 * Other bug fixes...
-

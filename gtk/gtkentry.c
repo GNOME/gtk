@@ -372,6 +372,8 @@ gtk_entry_init (GtkEntry *entry)
 			     ctext_atom,
 			     gtk_entry_selection_handler,
 			     NULL);
+
+  gtk_entry_grow_text (entry);
 }
 
 GtkWidget*
@@ -541,6 +543,7 @@ gtk_entry_finalize (GtkObject *object)
   if (entry->timer)
     gtk_timeout_remove (entry->timer);
 
+  entry->text_size = 0;
   if (entry->text)
     g_free (entry->text);
   entry->text = NULL;
