@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
 "POT-Creation-Date: 2002-10-30 20:51+0200\n"
-"PO-Revision-Date: 2002-10-30 10:18--500\n"
+"PO-Revision-Date: 2002-10-30 14:01--500\n"
 "Last-Translator: Yuriy Syrota <yuri@renome.rovno.ua>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -193,7 +193,7 @@ msgstr "Зображення у форматі GIF містить кадр з н
 
 #: gdk-pixbuf/io-gif.c:1167
 msgid "GIF image contained a frame appearing outside the image bounds."
-msgstr ""
+msgstr "Зображення у форматі GIF містить кадр, що виходить за межі зображення."
 
 #: gdk-pixbuf/io-gif.c:1183
 msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
@@ -201,11 +201,11 @@ msgstr ""
 
 #: gdk-pixbuf/io-gif.c:1218
 msgid "GIF image has no global colormap, and a frame inside it has no local colormap."
-msgstr ""
+msgstr "Зображення у форматі GIF не має глобальної мапи кольорів, і кадр всередині нього не має локальної мапи кольорів."
 
 #: gdk-pixbuf/io-gif.c:1447
 msgid "GIF image was truncated or incomplete."
-msgstr ""
+msgstr "Зображення у форматі GIF було обрізано чи незавершено."
 
 #: gdk-pixbuf/io-ico.c:207
 #, c-format
@@ -214,7 +214,7 @@ msgstr "Збій зчитування ICO: %s"
 
 #: gdk-pixbuf/io-ico.c:224
 msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
-msgstr ""
+msgstr "Файл в у форматі ICO містив зіпсовані дані (можливо його було обрізано)"
 
 #: gdk-pixbuf/io-ico.c:262
 #: gdk-pixbuf/io-ico.c:318
@@ -255,7 +255,7 @@ msgstr "Помилка інтерпретації файлу зображенн�
 
 #: gdk-pixbuf/io-jpeg.c:346
 msgid "Insufficient memory to load image, try exiting some applications to free memory"
-msgstr ""
+msgstr "Недостатньо пам'яті для завантаження зображення, спробуйте закрити кілька додатків, щоб звільнити пам'ять"
 
 #: gdk-pixbuf/io-jpeg.c:380
 #: gdk-pixbuf/io-jpeg.c:730
@@ -324,15 +324,15 @@ msgstr "Фатальна помилка зчитування файлу зобр
 
 #: gdk-pixbuf/io-png.c:765
 msgid "Keys for PNG tEXt chunks must have at least 1 and at most 79 characters."
-msgstr ""
+msgstr "Ключі для блоків tEXt зображення в форматі PNG мають містити не менше 1 і не більше 79 символів."
 
 #: gdk-pixbuf/io-png.c:773
 msgid "Keys for PNG tEXt chunks must be ASCII characters."
-msgstr ""
+msgstr "Ключі для блоків tEXt зображення у форматі PNG мають бути з символами ASCII."
 
 #: gdk-pixbuf/io-png.c:794
 msgid "Value for PNG tEXt chunk can not be converted to ISO-8859-1 encoding."
-msgstr ""
+msgstr "Значення для блоку tEXt зображення у форматі PNG не може бути перетворено у кодування ISO-8859-1."
 
 #: gdk-pixbuf/io-pnm.c:247
 msgid "PNM loader expected to find an integer, but didn't"
@@ -356,15 +356,15 @@ msgstr "Файл PNM містить зображення нульової вис
 
 #: gdk-pixbuf/io-pnm.c:378
 msgid "Maximum color value in PNM file is 0"
-msgstr ""
+msgstr "Максимальне значення кольору у файлі в форматі PNM дорівнює 0"
 
 #: gdk-pixbuf/io-pnm.c:386
 msgid "Maximum color value in PNM file is too large"
-msgstr ""
+msgstr "Максимальне значення кольору у файлі в форматі PNM надто велике"
 
 #: gdk-pixbuf/io-pnm.c:394
 msgid "Can't handle PNM files with maximum color values greater than 255"
-msgstr ""
+msgstr "Неможливо обробити файли у форматі PNM з максимальними значеннями кольору більше 255"
 
 #: gdk-pixbuf/io-pnm.c:433
 #: gdk-pixbuf/io-pnm.c:461
