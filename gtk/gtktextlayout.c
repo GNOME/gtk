@@ -2511,7 +2511,7 @@ gtk_text_layout_move_iter_to_line_end (GtkTextLayout *layout,
 	   * to next line on a forced break not at whitespace. Real fix
 	   * is to keep track of whether marks are at leading or trailing edge?
            */
-          if (direction < 0 && layout_line->length > 0)
+          if (direction > 0 && layout_line->length > 0)
             gtk_text_iter_prev_char (iter);
 
           break;

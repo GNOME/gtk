@@ -1,3 +1,14 @@
+Tue Nov 14 20:13:06 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextlayout.c (gtk_text_layout_move_iter_to_line_end): Fix
+	reversed > that was causing Home to go to end of previous line.
+
+	* gtk/gtkimcontextsimple.c (gtk_im_context_simple_filter_keypress): Ignore
+	modified-keypresses (leave for bindings.)
+
+	* modules/input/Makefile.am: Remove useless -export-dynamic
+	from module LDFLAGS.
+
 2000-11-14  Havoc Pennington  <hp@redhat.com>
 
 	* gdk/gdkpango.c (gdk_draw_layout_line): Draw underlines one pixel

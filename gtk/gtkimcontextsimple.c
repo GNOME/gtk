@@ -20,6 +20,7 @@
 #include <stdlib.h>
 
 #include <gdk/gdkkeysyms.h>
+#include "gtkaccelgroup.h"
 #include "gtksignal.h"
 #include "gtkimcontextsimple.h"
 
@@ -915,7 +916,6 @@ check_table (GtkIMContextSimple    *context_simple,
   return FALSE;
 }
 
-
 static gboolean
 gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 				       GdkEventKey  *event)
@@ -927,11 +927,15 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
   int n_compose = 0;
   int i;
 
-  /* Ignore modifier key presses
+  /* Ignore modifier key presses, and any presses with modifiers set
    */
   for (i=0; i < G_N_ELEMENTS (gtk_compose_ignore); i++)
     if (event->keyval == gtk_compose_ignore[i])
       return FALSE;
+
+  if (event->state &
+      (gtk_accelerator_get_default_mod_mask () & ~GDK_SHIFT_MASK))
+    return FALSE;
   
   /* Then, check for compose sequences
    */
