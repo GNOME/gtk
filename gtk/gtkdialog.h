@@ -156,6 +156,9 @@ gboolean gtk_alternative_dialog_button_order (GdkScreen *screen);
 void     gtk_dialog_set_alternative_button_order (GtkDialog *dialog,
 						  gint       first_response_id,
 						  ...);
+void     gtk_dialog_set_alternative_button_order_from_array (GtkDialog *dialog,
+                                                             gint       n_params,
+                                                             gint      *new_order);
 
 /* Emit response signal */
 void gtk_dialog_response           (GtkDialog *dialog,

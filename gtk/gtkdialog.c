@@ -1185,4 +1185,43 @@ gtk_dialog_set_alternative_button_order (GtkDialog *dialog,
 						  args);
   va_end (args);
 }
+/**
+ * gtk_dialog_set_alternative_button_order_from_array:
+ * @dialog: a #GtkDialog
+ * @n_params: the number of response ids in @new_order
+ * @new_order: an array of response ids of @dialog's buttons
+ *
+ * Sets an alternative button order. If the gtk-alternative-button-order 
+ * setting is set to %TRUE, the dialog buttons are reordered according to 
+ * the order of the response ids in @new_order.
+ *
+ * See gtk_dialog_set_alternative_button_order() for more information.
+ *
+ * This function is for use by language bindings.
+ * 
+ * Since: 2.6
+ */
+void 
+gtk_dialog_set_alternative_button_order_from_array (GtkDialog *dialog,
+                                                    gint       n_params,
+                                                    gint      *new_order)
+{
+  GdkScreen *screen;
+  GtkWidget *child;
+  gint position;
+
+  g_return_if_fail (GTK_IS_DIALOG (dialog));
+  g_return_if_fail (new_order != NULL);
+
+  screen = gtk_widget_get_screen (GTK_WIDGET (dialog));
+  if (!gtk_alternative_dialog_button_order (screen))
+      return;
+
+  for (position = 0; position < n_params; position++)
+  {
+      /* reorder child with response_id to position */
+      child = dialog_find_button (dialog, new_order[position]);
+      gtk_box_reorder_child (GTK_BOX (dialog->action_area), child, position);
+    }
+}
 

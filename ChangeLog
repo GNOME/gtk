@@ -1,3 +1,10 @@
+2004-11-20  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkdialog.h: 
+	* gtk/gtkdialog.c (gtk_dialog_set_alternative_button_order_from_array): 
+	Provide a non-varargs variant of gtk_dialog_set_alternative_button_order()
+	for language bindings.  (#158798, John Finlay)
+	
 2004-11-20  Federico Mena Quintero  <federico@ximian.com>
 
 	Merged from gtk-2-4:
