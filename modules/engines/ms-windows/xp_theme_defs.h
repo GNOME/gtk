@@ -138,8 +138,8 @@ typedef HANDLE HTHEME;
 #define UPS_PRESSED 3
 #define UPS_DISABLED 4
 
-#define GLPS_OPENED 1
-#define GLPS_CLOSED 2
+#define GLPS_CLOSED 1
+#define GLPS_OPENED 2
 
 #if UXTHEME_HAS_LINES
 

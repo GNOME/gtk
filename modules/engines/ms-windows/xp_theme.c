@@ -77,6 +77,7 @@ static const short element_part_map[]=
   SPNP_UP,
   SPNP_DOWN,
   BP_RADIOBUTTON,
+  BP_RADIOBUTTON,
   TVP_GLYPH,
   TVP_GLYPH,
   PP_CHUNK,
@@ -226,6 +227,7 @@ xp_theme_get_handle_by_element (XpThemeElement element)
     case XP_THEME_ELEMENT_CHECKBOX:
     case XP_THEME_ELEMENT_BUTTON:
     case XP_THEME_ELEMENT_DEFAULT_BUTTON:
+    case XP_THEME_ELEMENT_PRESSED_RADIO_BUTTON:
     case XP_THEME_ELEMENT_RADIO_BUTTON:
       klazz = XP_THEME_CLASS_BUTTON;
       break;
@@ -470,6 +472,7 @@ xp_theme_map_gtk_state (XpThemeElement element, GtkStateType state)
       break;
 
     case XP_THEME_ELEMENT_PRESSED_CHECKBOX:
+    case XP_THEME_ELEMENT_PRESSED_RADIO_BUTTON:
       switch(state)
         {
         case GTK_STATE_SELECTED:

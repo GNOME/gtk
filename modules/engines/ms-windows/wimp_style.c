@@ -766,9 +766,10 @@ draw_option(GtkStyle      *style,
     }
   else
     {
-      if (xp_theme_draw(window,
-                        XP_THEME_ELEMENT_RADIO_BUTTON, style,
-                        x, y, width, height, state, area))
+      if (xp_theme_draw (window, shadow == GTK_SHADOW_IN
+                        ? XP_THEME_ELEMENT_PRESSED_RADIO_BUTTON
+                        : XP_THEME_ELEMENT_RADIO_BUTTON,
+                        style, x, y, width, height, state, area))
         {
         }
       else
@@ -1509,27 +1510,29 @@ draw_handle (GtkStyle        *style,
 {
   XpThemeElement hndl;
 
-  if (!GTK_IS_HANDLE_BOX(widget)) {
-	  if (orientation == GTK_ORIENTATION_VERTICAL)
-	    hndl = XP_THEME_ELEMENT_GRIPPER_V;
-	  else
-	    hndl = XP_THEME_ELEMENT_GRIPPER_H;
+  if (!GTK_IS_HANDLE_BOX (widget))
+    {
+      if (orientation == GTK_ORIENTATION_VERTICAL)
+        hndl = XP_THEME_ELEMENT_GRIPPER_V;
+      else
+        hndl = XP_THEME_ELEMENT_GRIPPER_H;
 
-	  if (xp_theme_draw(window, hndl, style, x, y, width, height, state_type, area))
-	    {
-	      return;
-	    }
-	}
-
-  if (!GTK_IS_HANDLE_BOX(widget)) {
-    /* grippers are just flat boxes when they're not a toolbar */
-    parent_class->draw_box (style, window, state_type, shadow_type, area, widget,
-			    detail, x, y, width, height);
-  } else {
-    /* TODO: Draw handle boxes as double lines: || */
-    parent_class->draw_handle (style, window, state_type, shadow_type, area, widget,
-			       detail, x, y, width, height, orientation);
-  }
+      if (xp_theme_draw (window, hndl, style, x, y, width, height,
+                         state_type, area))
+        {
+          return;
+        }
+      /* grippers are just flat boxes when they're not a toolbar */
+      parent_class->draw_box (style, window, state_type, shadow_type,
+                              area, widget, detail, x, y, width, height);
+    }
+  else
+    {
+      /* TODO: Draw handle boxes as double lines: || */
+      parent_class->draw_handle (style, window, state_type, shadow_type,
+                                 area, widget, detail, x, y, width, height,
+                                 orientation);
+    }
 }
 
 static void

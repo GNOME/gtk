@@ -1,3 +1,10 @@
+2003-04-15  Arnaud Charlet  <charlet@ACT-Europe.FR>
+
+	* src/*.c: The handling of selected radio button was broken.
+
+	* src/xp_theme_defs.h: When building with gcc, the tree expanders
+	were inverted.
+
 2003-10-08  Raymond Penners  <raymond@dotsphinx.com>
 
 	* === Released 0.5.0 ===
