@@ -1,5 +1,10 @@
 2001-10-22  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtktextview.c (gtk_text_view_get_border_window_size): fix 
+	#62365
+
+2001-10-22  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtktextview.c (gtk_text_view_get_window_type): fix 
 	#62436
 
