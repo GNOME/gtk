@@ -1,6 +1,7 @@
 *.lo
 config.log
 config.h
+config.h.in
 libtool
 config.status
 stamp-h
