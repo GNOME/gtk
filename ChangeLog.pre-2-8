@@ -1,3 +1,12 @@
+Mon Mar  8 01:06:17 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* tests/testentrycompletion.c: Test dynamic addition/removal. 
+
+Sun Mar  7 22:38:49 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkframe.c (gtk_frame_paint): Use ythickness, not 
+	xthickness in the calculation of vertical dimensions.
+
 Sun Mar  7 17:38:03 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtkbutton.c (gtk_button_class_init): actually use

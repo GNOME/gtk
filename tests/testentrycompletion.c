@@ -1,5 +1,7 @@
 
 #include <config.h>
+#include <stdlib.h>
+#include <string.h>
 #include <gtk/gtk.h>
 
 /* Don't copy this bad example; inline RGB data is always a better
@@ -130,16 +132,32 @@ create_completion_model (void)
   return GTK_TREE_MODEL (store);
 }
 
-#if 0
 static gboolean
 match_func (GtkEntryCompletion *completion,
 	    const gchar        *key,
 	    GtkTreeIter        *iter,
 	    gpointer            user_data)
 {
-  return FALSE;
+  gchar *item = NULL;
+  GtkTreeModel *model;
+
+  gboolean ret = FALSE;
+
+  model = gtk_entry_completion_get_model (completion);
+
+  gtk_tree_model_get (model, iter, 1, &item, -1);
+
+  if (item != NULL)
+    {
+      g_print ("compare %s %s\n", key, item);
+      if (strncmp (key, item, strlen (key)) == 0)
+	ret = TRUE;
+
+      g_free (item);
+    }
+
+  return ret;
 }
-#endif
 
 static void
 activated_cb (GtkEntryCompletion *completion, 
@@ -147,6 +165,60 @@ activated_cb (GtkEntryCompletion *completion,
 	      gpointer            user_data)
 {
   g_print ("action activated: %d\n", index);
+}
+
+static gint timer_count = 0;
+
+static gchar *dynamic_completions[] = {
+  "GNOME",
+  "gnominious",
+  "Gnomonic projection",
+  "total",
+  "totally",
+  "toto",
+  "tottery",
+  "totterer",
+  "Totten trust",
+  "totipotent",
+  "totipotency",
+  "totemism",
+  "totem pole",
+  "Totara",
+  "totalizer",
+  "totalizator",
+  "totalitarianism",
+  "total parenteral nutrition",
+  "total hysterectomy",
+  "total eclipse",
+  "Totipresence",
+  "Totipalmi",
+  "zombie"
+};
+
+static gint
+animation_timer (GtkEntryCompletion *completion)
+{
+  GtkTreeIter iter;
+  gint n_completions = G_N_ELEMENTS (dynamic_completions);
+  gint n;
+
+  GtkListStore *store = GTK_LIST_STORE (gtk_entry_completion_get_model (completion));
+
+  if ((timer_count / n_completions) % 2 == 0)
+    {
+      n = timer_count % n_completions;
+      gtk_list_store_append (store, &iter);
+      gtk_list_store_set (store, &iter, 0, dynamic_completions[n], -1);
+      
+    }
+  else
+    {
+      gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter);
+      gtk_list_store_remove (store, &iter);
+    }
+  
+  timer_count++;
+  return TRUE;
 }
 
 int 
@@ -215,21 +287,40 @@ main (int argc, char *argv[])
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (completion), cell, FALSE);
   gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (completion), cell, 
 				  "pixbuf", 0, NULL); 
-  /* Use model column 1 as the text column */
-  gtk_entry_completion_set_text_column (completion, 1);
 
-#if 0
   cell = gtk_cell_renderer_text_new ();
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (completion), cell, FALSE);
   gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (completion), cell, 
 				  "text", 1, NULL); 
   
   gtk_entry_completion_set_match_func (completion, match_func, NULL, NULL);
-#endif
 
   gtk_entry_completion_insert_action_text (completion, 100, "action!");
   gtk_entry_completion_insert_action_text (completion, 101, "'nother action!");
   g_signal_connect (completion, "action_activated", G_CALLBACK (activated_cb), 0);
+
+  /* Create our third entry */
+  entry = gtk_entry_new ();
+  gtk_box_pack_start (GTK_BOX (vbox), entry, FALSE, FALSE, 0);
+
+  /* Create the completion object */
+  completion = gtk_entry_completion_new ();
+  
+  /* Assign the completion to the entry */
+  gtk_entry_set_completion (GTK_ENTRY (entry), completion);
+  g_object_unref (completion);
+  
+  /* Create a tree model and use it as the completion model */
+  completion_model = tgtk_list_store_new (1, G_TYPE_STRING);
+
+  gtk_entry_completion_set_model (completion, completion_model);
+  g_object_unref (completion_model);
+
+  /* Use model column 0 as the text column */
+  gtk_entry_completion_set_text_column (completion, 0);
+
+  /* Fill the completion dynamically */
+  g_timeout_add (1000, (GSourceFunc) animation_timer, completion);
 
   gtk_widget_show_all (window);
 

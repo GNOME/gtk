@@ -502,7 +502,7 @@ gtk_frame_paint (GtkWidget    *widget,
       frame = GTK_FRAME (widget);
 
       x = frame->child_allocation.x - widget->style->xthickness;
-      y = frame->child_allocation.y - widget->style->ythickness;
+      y = frame->child_allocation.y; - widget->style->ythickness;
       width = frame->child_allocation.width + 2 * widget->style->xthickness;
       height =  frame->child_allocation.height + 2 * widget->style->ythickness;
 
@@ -520,7 +520,7 @@ gtk_frame_paint (GtkWidget    *widget,
 	  else
 	    xalign = 1 - frame->label_xalign;
 
-	  height_extra = MAX (0, child_requisition.height - widget->style->xthickness);
+	  height_extra = MAX (0, child_requisition.height - widget->style->ythickness);
 	  y -= height_extra * (1 - frame->label_yalign);
 	  height += height_extra * (1 - frame->label_yalign);
 	  
@@ -570,7 +570,7 @@ gtk_frame_size_request (GtkWidget      *widget,
 
       requisition->width = child_requisition.width + 2 * LABEL_PAD + 2 * LABEL_SIDE_PAD;
       requisition->height =
-	MAX (0, child_requisition.height - GTK_WIDGET (widget)->style->xthickness);
+	MAX (0, child_requisition.height - GTK_WIDGET (widget)->style->ythickness);
     }
   else
     {
