@@ -1,3 +1,7 @@
+Tue Dec 15 02:27:42 MET 1998 Sven Neumann <sven@gimp.org>
+
+	* po/de.po: Replaced the crappy german po-file with a valid one.
+
 Mon Dec 14 16:10:05 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkrc.c (gtk_rc_init): Append locale-specific
