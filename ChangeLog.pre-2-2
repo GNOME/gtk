@@ -1,3 +1,21 @@
+1998-05-11  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gtk/gtkpreview.c (gtk_preview_realize): Create the window using
+	GtkPreview's visual and colormap, otherwise things can BadMatch.
+
+	* gtk/testgtk.c (create_color_preview): 
+	(create_gray_preview): Removed pushing/popping of visual/colormap
+	now that GtkPreview does things correctly.
+
+	* gtk/gtkcolorsel.c (gtk_color_selection_draw_wheel_frame): 
+	(gtk_color_selection_draw_wheel): Pick the style from the correct
+	place (the colorsel->wheel_area widget) so that the GCs will match
+	with where we are going to paint to.
+
+	* gtk/testgtk.c (create_color_selection): Removed pushing/popping
+	of visual/colormap now that GtkColorSelection does things the
+	right way.
+
 Mon May 11 21:04:51 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gtk/gtkwindow.c (gtk_real_window_move_resize): Use the

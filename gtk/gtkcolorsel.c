@@ -1152,7 +1152,7 @@ gtk_color_selection_draw_wheel_frame (GtkColorSelection *colorsel)
   GtkStyle *style;
   gint w, h;
 
-  style = gtk_widget_get_style (GTK_WIDGET (colorsel));
+  style = gtk_widget_get_style (colorsel->wheel_area);
 
   w = colorsel->wheel_area->allocation.width;
   h = colorsel->wheel_area->allocation.height;
@@ -1175,7 +1175,7 @@ gtk_color_selection_draw_wheel (GtkColorSelection *colorsel,
   gint x, y, i, wid, heig, n;
   gdouble cx, cy, h, s, c[3];
   guchar bg[3];
-  GtkStyle *style = gtk_widget_get_style (GTK_WIDGET (colorsel));
+  GtkStyle *style = gtk_widget_get_style (colorsel->wheel_area);
 
   wid = colorsel->wheel_area->allocation.width;
   heig = colorsel->wheel_area->allocation.height;

@@ -4223,10 +4223,6 @@ create_color_selection (void)
 
   if (!window)
     {
-      gtk_preview_set_install_cmap (TRUE);
-      gtk_widget_push_visual (gtk_preview_get_visual ());
-      gtk_widget_push_colormap (gtk_preview_get_cmap ());
-
       window = gtk_color_selection_dialog_new ("color selection dialog");
 
       gtk_color_selection_set_opacity (
@@ -4260,9 +4256,6 @@ create_color_selection (void)
 	"clicked",
 	GTK_SIGNAL_FUNC(gtk_widget_destroy),
 	GTK_OBJECT (window));
-
-      gtk_widget_pop_colormap ();
-      gtk_widget_pop_visual ();
     }
 
   if (!GTK_WIDGET_VISIBLE (window))
@@ -5725,9 +5718,6 @@ create_color_preview (void)
 
   if (!window)
     {
-      gtk_widget_push_visual (gtk_preview_get_visual ());
-      gtk_widget_push_colormap (gtk_preview_get_cmap ());
-
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
@@ -5756,9 +5746,6 @@ create_color_preview (void)
 	}
 
       color_idle = gtk_idle_add ((GtkFunction) color_idle_func, preview);
-
-      gtk_widget_pop_colormap ();
-      gtk_widget_pop_visual ();
     }
 
   if (!GTK_WIDGET_VISIBLE (window))
@@ -5815,9 +5802,6 @@ create_gray_preview (void)
 
   if (!window)
     {
-      gtk_widget_push_visual (gtk_preview_get_visual ());
-      gtk_widget_push_colormap (gtk_preview_get_cmap ());
-
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
@@ -5841,9 +5825,6 @@ create_gray_preview (void)
 	}
 
       gray_idle = gtk_idle_add ((GtkFunction) gray_idle_func, preview);
-
-      gtk_widget_pop_colormap ();
-      gtk_widget_pop_visual ();
     }
 
   if (!GTK_WIDGET_VISIBLE (window))
