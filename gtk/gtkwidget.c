@@ -3175,7 +3175,7 @@ gtk_widget_set_name (GtkWidget	 *widget,
     g_free (widget->name);
   widget->name = g_strdup (name);
 
-  if (!GTK_WIDGET_USER_STYLE (widget))
+  if (GTK_WIDGET_RC_STYLE (widget))
     gtk_widget_set_rc_style (widget);
 }
 
@@ -3480,10 +3480,17 @@ gtk_widget_modify_style (GtkWidget      *widget,
   old_style = gtk_object_get_data_by_id (GTK_OBJECT (widget), rc_style_key_id);
 
   if (style != old_style)
-    gtk_object_set_data_by_id_full (GTK_OBJECT (widget),
-				    rc_style_key_id,
-				    style,
-				    (GtkDestroyNotify)gtk_rc_style_unref);
+    {
+      gtk_rc_style_ref (style);
+      
+      gtk_object_set_data_by_id_full (GTK_OBJECT (widget),
+				      rc_style_key_id,
+				      style,
+				      (GtkDestroyNotify)gtk_rc_style_unref);
+    }
+
+  if (GTK_WIDGET_RC_STYLE (widget))
+    gtk_widget_set_rc_style (widget);
 }
 
 static void
