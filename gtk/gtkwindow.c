@@ -3307,7 +3307,7 @@ gtk_window_realize (GtkWidget *widget)
       
       attributes.window_type = GDK_WINDOW_CHILD;
       attributes.x = window->frame_left;
-      attributes.y = window->frame_right;
+      attributes.y = window->frame_top;
     
       attributes_mask = GDK_WA_X | GDK_WA_Y;
 
