@@ -180,6 +180,7 @@ gdk_pixbuf_gif_anim_get_iter (GdkPixbufAnimation *anim,
 
         iter->start_time = *start_time;
         iter->current_time = *start_time;
+        iter->first_loop_slowness = 0;
         
         return GDK_PIXBUF_ANIMATION_ITER (iter);
 }
@@ -287,8 +288,21 @@ gdk_pixbuf_gif_anim_iter_advance (GdkPixbufAnimationIter *anim_iter,
          * and subtract time for that.
          */
 
-        loop = elapsed / iter->gif_anim->total_time;
-        elapsed = elapsed % iter->gif_anim->total_time;
+        if (iter->gif_anim->loading)
+                loop = 0;
+        else {
+                /* If current_frame is NULL at this point, we have loaded the
+                 * animation from a source which fell behind the speed of the 
+                 * display. We remember how much slower the first loop was due
+                 * to this and correct the position calculation in order to not
+                 * jump in the middle of the second loop.
+                 */
+                if (iter->current_frame == NULL)
+                        iter->first_loop_slowness = MAX(0, elapsed - iter->gif_anim->total_time);
+
+                loop = (elapsed - iter->first_loop_slowness) / iter->gif_anim->total_time;
+                elapsed = (elapsed - iter->first_loop_slowness) % iter->gif_anim->total_time;
+        }
 
         iter->position = elapsed;
 
@@ -334,9 +348,8 @@ gdk_pixbuf_gif_anim_iter_get_delay_time (GdkPixbufAnimationIter *anim_iter)
 #endif
                 
                 return frame->delay_time - (iter->position - frame->elapsed);
-        } else {
+        } else 
                 return -1; /* show last frame forever */
-        }
 }
 
 void

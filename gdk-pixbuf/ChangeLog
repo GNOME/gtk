@@ -1,3 +1,15 @@
+2003-05-19  Matthias Clasen  <maclas@gmx.de>
+
+	Improve progressive loading from slow sources:  (#107368)
+	
+	* io-gif-animation.c (gdk_pixbuf_gif_anim_get_iter): Initialize
+	first_loop_slowness. 
+	(gdk_pixbuf_gif_anim_iter_advance): Don't wrap during loading if
+	the datasource falls behind the speed of the display.
+
+	* io-gif-animation.h: Add a loading flag to GdkPixbufGifAnim and  
+	first_loop_slowness to GdkPixbufGifAnimIter.
+
 Wed May 14 18:24:50 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk-pixdata.c (gdk_pixdata_deserialize): Add a 
