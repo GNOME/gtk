@@ -941,7 +941,8 @@ gtk_tree_store_set (GtkTreeStore *tree_store,
  * @iter: A valid #GtkTreeIter
  * 
  * Removes @iter from @tree_store.  After being removed, @iter is set to the
- * next valid row at that level, or invalidated if it previeously pointed to the last one.
+ * next valid row at that level, or invalidated if it previeously pointed to the
+ * last one.
  **/
 void
 gtk_tree_store_remove (GtkTreeStore *tree_store,
@@ -958,7 +959,7 @@ gtk_tree_store_remove (GtkTreeStore *tree_store,
   parent = G_NODE (iter->user_data)->parent;
 
   g_assert (parent != NULL);
-  next_node = G_NODE (iter->user_data);
+  next_node = G_NODE (iter->user_data)->next;
 
   if (G_NODE (iter->user_data)->data)
     _gtk_tree_data_list_free ((GtkTreeDataList *) G_NODE (iter->user_data)->data,
@@ -992,6 +993,7 @@ gtk_tree_store_remove (GtkTreeStore *tree_store,
   else
     {
       iter->stamp = 0;
+      iter->user_data = NULL;
     }
 }
 
