@@ -1,3 +1,11 @@
+Sun Nov 25 21:19:02 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkgeometry-x11.c: Add long, but horribly sketchy
+	comment about what is going on in this file.
+
+	* gdk/x11/gdkgeometry-x11.c (gdk_window_compute_position): Fix 
+	x/y problem.
+
 Sun Nov 25 18:59:19 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkoptionmenu.c (gtk_option_menu_calc_size): 
