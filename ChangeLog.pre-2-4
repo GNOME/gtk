@@ -1,3 +1,19 @@
+2000-10-22  Robert Brady  <robert@suse.co.uk>
+
+	* configure.in: Check for bind_textdomain_codeset
+
+	* gtk/gtkmain.c (gtk_init_check): If bind_textdomain_codeset 
+	present, make use of it.
+
+	Add a translatable string "default:LTR" which, if translated
+	to "default:RTL", will cause the default direction to be
+	Right-to-Left.
+
+	* gtk/gtkrange.h, gtk/gtkrange.c: Take into account the widget 
+	direction if marked as flippable.
+
+	* gtk/gtkhscale.c: Mark widget as flippable.
+	
 2000-10-04  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/testgtk.c (create_buttons): create some stock buttons

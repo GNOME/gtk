@@ -68,6 +68,7 @@ struct _GtkRange
   guint in_child : 3;
   guint click_child : 3;
   guint need_timer : 1;
+  guint flippable : 1;
 
   guint32 timer;
 

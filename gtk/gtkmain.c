@@ -393,9 +393,12 @@ gtk_init_check (int	 *argc,
     }
 
 #ifdef ENABLE_NLS
-#ifndef G_OS_WIN32
+#  ifndef G_OS_WIN32
   bindtextdomain(GETTEXT_PACKAGE, GTK_LOCALEDIR);
-#else
+#    ifdef HAVE_BIND_TEXTDOMAIN_CODSET
+  bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
+#    endif
+#  else /* !G_OS_WIN32 */
   {
     /* GTk+ locale dir is %WinDir%\gtk+\locale */
     bindtextdomain (GETTEXT_PACKAGE,
@@ -406,6 +409,18 @@ gtk_init_check (int	 *argc,
   }
 #endif
 #endif  
+
+  {
+  /* Translate to default:RTL if you want your widgets
+   * to be RTL, otherwise translate to default:LTR 
+   */
+    char *e = _("default:LTR");
+    if (strcmp (e, "default:RTL")==0) {
+      gtk_widget_set_default_direction (GTK_TEXT_DIR_RTL);
+    } else if (strcmp (e, "default:LTR")) {
+      g_warning ("Whoever translated default:LTR did so wrongly.\n");
+    }
+  }
 
   /* Initialize the default visual and colormap to be
    *  used in creating widgets. (We want to use the system

@@ -194,7 +194,7 @@ if test "x$enable_rebuilds" = "xyes" && \
 fi
 AC_SUBST(REBUILD)
 
-AC_CHECK_FUNCS(lstat mkstemp sigsetjmp)
+AC_CHECK_FUNCS(lstat mkstemp sigsetjmp bind_textdomain_codeset)
 
 AC_MSG_CHECKING(whether make is GNU Make)
 STRIP_BEGIN=

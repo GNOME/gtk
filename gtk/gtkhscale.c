@@ -185,6 +185,8 @@ gtk_hscale_new (GtkAdjustment *adjustment)
 			   "adjustment", adjustment,
 			   NULL);
 
+  GTK_RANGE (hscale) -> flippable = 1;
+
   return hscale;
 }
 
