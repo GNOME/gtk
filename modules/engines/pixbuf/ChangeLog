@@ -1,3 +1,8 @@
+Thu Mar 18 10:07:15 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* pixbuf-draw.c (match_theme_image): Fix ./-> typo.
+	(Federic Crozat)
+
 Wed Mar 17 16:38:00 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* pixbuf-draw.c (match_theme_image): Fix problem with

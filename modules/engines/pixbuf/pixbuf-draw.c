@@ -75,7 +75,7 @@ match_theme_image (GtkStyle       *style,
 	continue;
 
       if (image->match_data.detail &&
-	  (!match_data.detail ||
+	  (!match_data->detail ||
 	   strcmp (match_data->detail, image->match_data.detail) != 0))
       continue;
 
