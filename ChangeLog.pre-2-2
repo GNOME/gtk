@@ -1,3 +1,15 @@
+Fri Feb 12 00:08:01 1999  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtklist.c (gtk_list_remove_items_internal): don't autoselect
+	focus_row in case of GTK_SELECTION_EXTENDED
+
+	* gtk/testgtk.c : few changes in list example.
+
+	* gtk/gtklistitem.c (gtk_list_item_class_init): 
+	* gtk/gtkctree.c (gtk_ctree_class_init): 
+	* gtk/gtkclist.c (gtk_clist_class_init): 
+	fixed indentation, removed unused key bindings
+	
 Wed Feb 10 01:02:46 1999  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkclist.c (real_remove_row): 

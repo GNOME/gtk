@@ -1096,7 +1096,6 @@ gtk_list_insert_items (GtkList *list,
       gtk_signal_connect (GTK_OBJECT (widget), "toggle",
 			  GTK_SIGNAL_FUNC (gtk_list_signal_item_toggle),
 			  list);
-
       if (GTK_WIDGET_VISIBLE (widget->parent))
 	{
 	  if (GTK_WIDGET_REALIZED (widget->parent) &&
@@ -1108,6 +1107,7 @@ gtk_list_insert_items (GtkList *list,
 	    gtk_widget_map (widget);
 	}
     }
+
 
   nchildren = g_list_length (list->children);
   if ((position < 0) || (position > nchildren))
@@ -1140,7 +1140,7 @@ gtk_list_insert_items (GtkList *list,
       if (tmp_list == list->children)
 	list->children = items;
     }
-
+  
   if (list->children && !list->selection &&
       (list->selection_mode == GTK_SELECTION_BROWSE))
     {
@@ -1411,8 +1411,7 @@ gtk_list_remove_items_internal (GtkList	 *list,
       else if (container->focus_child)
 	gtk_container_set_focus_child (container, new_focus_child);
 
-      if ((list->selection_mode == GTK_SELECTION_BROWSE ||
-	   list->selection_mode == GTK_SELECTION_EXTENDED) && !list->selection)
+      if (list->selection_mode == GTK_SELECTION_BROWSE && !list->selection)
 	{
 	  list->last_focus_child = new_focus_child; 
 	  gtk_list_select_child (list, new_focus_child);
@@ -1577,7 +1576,7 @@ gtk_list_unselect_all (GtkList *list)
 
   if (!list->children)
     return;
-  
+
   if (gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (list))
     gtk_list_end_drag_selection (list);
 
