@@ -493,6 +493,7 @@ gdk_display_get_window_at_pointer (GdkDisplay *display,
 
 /**
  * gdk_display_set_pointer_hooks:
+ * @display: a #GdkDisplay
  * @new_hooks: a table of pointers to functions for getting
  *   quantities related to the current pointer position,
  *   or %NULL to restore the default table.

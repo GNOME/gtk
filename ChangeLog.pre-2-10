@@ -1,5 +1,9 @@
 2002-10-11  Matthias Clasen  <maclas@gmx.de>
 
+	* gdk/x11/gdkwindow-x11.c (gdk_window_set_skip_pager_hint): 
+	* gdk/gdkdisplay.c (gdk_display_set_pointer_hooks): Fix
+	doc comments.
+
 	* gtk/gtkiconfactory.c (gtk_icon_size_lookup_for_settings): 
 	* gtk/gtknotebook.c (gtk_notebook_get_n_pages): 
 	* gtk/gtkwindow.c (gtk_window_set_icon_from_file): 

@@ -134,7 +134,11 @@ gdk_display_peek_event
 gdk_display_put_event
 gdk_display_add_client_message_filter
 gdk_display_set_double_click_time
-gdk_display_set_sm_client_id
+gdk_display_get_pointer
+gdk_display_get_window_at_pointer
+GdkDisplayPointerHooks
+gdk_display_set_pointer_hooks
+
 <SUBSECTION Standard>
 GDK_DISPLAY_OBJECT
 GDK_IS_DISPLAY
@@ -179,13 +183,13 @@ gdk_screen_get_rgb_visual
 gdk_screen_get_root_window
 gdk_screen_get_display
 gdk_screen_get_number
-gdk_screen_get_window_at_pointer
 gdk_screen_get_width
 gdk_screen_get_height
 gdk_screen_get_width_mm
 gdk_screen_get_height_mm
 gdk_screen_list_visuals
 gdk_screen_get_toplevel_windows
+gdk_screen_make_display_name
 gdk_screen_get_n_monitors
 gdk_screen_get_monitor_geometry
 gdk_screen_get_monitor_at_point
@@ -395,10 +399,6 @@ gdk_text_height
 gdk_char_height
 
 <SUBSECTION>
-gdk_font_full_name_get
-gdk_font_full_name_free
-
-<SUBSECTION>
 GdkWChar
 gdk_wcstombs
 gdk_mbstowcs
@@ -434,6 +434,7 @@ gdk_draw_point
 gdk_draw_points
 gdk_draw_line
 gdk_draw_lines
+gdk_draw_pixbuf
 gdk_draw_segments
 GdkSegment
 gdk_draw_rectangle
@@ -603,6 +604,8 @@ gdk_window_stick
 gdk_window_unstick
 gdk_window_maximize
 gdk_window_unmaximize
+gdk_window_fullscreen
+gdk_window_unfullscreen
 gdk_window_move
 gdk_window_resize
 gdk_window_move_resize
@@ -663,6 +666,8 @@ gdk_window_set_geometry_hints
 gdk_window_set_icon_list
 gdk_window_set_modal_hint
 gdk_window_set_type_hint
+gdk_window_set_skip_taskbar_hint
+gdk_window_set_skip_pager_hint
 gdk_window_get_position
 gdk_window_get_root_origin
 gdk_window_get_frame_extents
@@ -963,6 +968,7 @@ gdk_event_peek
 gdk_event_get
 gdk_event_get_graphics_expose
 gdk_event_put
+gdk_event_new
 gdk_event_copy
 gdk_event_free
 gdk_event_get_time
@@ -984,6 +990,8 @@ gdk_add_client_message_filter
 <SUBSECTION>
 gdk_get_show_events
 gdk_set_show_events
+gdk_event_set_screen
+gdk_event_get_screen
 
 <SUBSECTION>
 gdk_setting_get
@@ -1086,6 +1094,7 @@ gdk_drop_reply
 gdk_drag_context_new
 gdk_drag_drop
 gdk_drag_find_window
+gdk_drag_find_window_for_screen
 gdk_drag_context_ref
 gdk_drag_begin
 gdk_drag_motion
@@ -1143,7 +1152,6 @@ GDK_GC_XGC
 GDK_GC_GET_XGC
 GDK_WINDOW_XWINDOW
 gdkx_visual_get
-gdkx_visual_get_for_screen
 gdkx_colormap_get
 gdk_pixmap_foreign_new
 gdk_pixmap_foreign_new_for_display
@@ -1161,11 +1169,16 @@ gdk_x11_lookup_xdisplay
 gdk_x11_get_server_time
 gdk_net_wm_supports
 gdk_x11_screen_supports_net_wm_hint
+gdk_x11_screen_get_window_manager_name
+gdk_x11_screen_lookup_visual
+gdk_x11_colormap_foreign_new
 gdk_x11_colormap_get_xcolormap
 gdk_x11_colormap_get_xdisplay
 gdk_x11_cursor_get_xcursor
 gdk_x11_cursor_get_xdisplay
 gdk_x11_display_get_xdisplay
+gdk_x11_display_grab
+gdk_x11_display_ungrab
 gdk_x11_drawable_get_xdisplay
 gdk_x11_drawable_get_xid
 gdk_x11_font_get_name

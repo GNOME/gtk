@@ -1,3 +1,11 @@
+2002-10-11  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_get_format): Remove
+	unused variable.
+
+	* gdk-pixbuf-io.h: Remove unused typedef 
+	GdkPixbufModuleGetSignatureFunc.
+
 2002-10-04  jacob berkman  <jacob@ximian.com>
 
 	* queryloaders.c (query_module): make legal C

@@ -106,7 +106,6 @@ struct _GdkPixbufModule {
 
 typedef void (* GdkPixbufModuleFillVtableFunc) (GdkPixbufModule *module);
 typedef void (* GdkPixbufModuleFillInfoFunc) (GdkPixbufFormat *info);
-typedef const GdkPixbufModulePattern *(* GdkPixbufModuleGetSignatureFunc) (void);
 
 /*  key/value pairs that can be attached by the pixbuf loader  */
 

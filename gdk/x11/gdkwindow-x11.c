@@ -1755,7 +1755,7 @@ gdk_window_set_skip_taskbar_hint (GdkWindow *window,
 /**
  * gdk_window_set_skip_pager_hint:
  * @window: a toplevel #GdkWindow
- * @skips_taskbar: %TRUE to skip the pager
+ * @skips_pager: %TRUE to skip the pager
  * 
  * Toggles whether a window should appear in a pager (workspace
  * switcher, or other desktop utility program that displays a small

@@ -48,9 +48,9 @@ gdk_pixbuf_error_get_type
 
 <SECTION>
 <FILE>refcounting</FILE>
-GdkPixbufDestroyNotify
 gdk_pixbuf_ref
 gdk_pixbuf_unref
+GdkPixbufDestroyNotify
 </SECTION>
 
 <SECTION>
@@ -98,7 +98,6 @@ gdk_pixbuf_fill
 
 <SECTION>
 <FILE>animation</FILE>
-GdkPixbufFrame
 GdkPixbufAnimation
 GdkPixbufAnimationIter
 gdk_pixbuf_animation_new_from_file
@@ -123,6 +122,8 @@ GDK_PIXBUF_ANIMATION_ITER
 GDK_TYPE_PIXBUF_ANIMATION_ITER
 
 <SUBSECTION Private>
+gdk_pixbuf_non_anim_new
+
 gdk_pixbuf_animation_get_type
 gdk_pixbuf_animation_iter_get_type
 </SECTION>
@@ -148,6 +149,7 @@ gdk_interp_type_get_type
 <TITLE>GdkPixbufLoader</TITLE>
 gdk_pixbuf_loader_new
 gdk_pixbuf_loader_new_with_type
+gdk_pixbuf_loader_get_format
 gdk_pixbuf_loader_write
 gdk_pixbuf_loader_set_size
 gdk_pixbuf_loader_get_pixbuf
@@ -168,11 +170,34 @@ gdk_pixbuf_loader_get_type
 <SECTION>
 <TITLE>Module Interface</TITLE>
 <FILE>module_interface</FILE>
-ModuleFillVtableFunc
-ModuleSizeFunc
-ModulePreparedNotifyFunc
-ModuleUpdatedNotifyFunc
+gdk_pixbuf_set_option
+gdk_pixbuf_get_formats
+gdk_pixbuf_format_get_name
+gdk_pixbuf_format_get_description
+gdk_pixbuf_format_get_mime_types
+gdk_pixbuf_format_get_extensions
+gdk_pixbuf_format_is_writable
+GdkPixbufFormat
+GdkPixbufFormatFlags
+GdkPixbufModulePattern
+GdkPixbufModuleFillVtableFunc
+GdkPixbufModuleFillInfoFunc
+GdkPixbufModuleSizeFunc
+GdkPixbufModulePreparedFunc
+GdkPixbufModuleUpdatedFunc
 GdkPixbufModule
+
+<SUBSECTION Animation>
+GdkPixbufAnimationClass
+GdkPixbufAnimationIterClass
+
+<SUBSECTION Standard>
+GDK_PIXBUF_ANIMATION_GET_CLASS
+GDK_IS_PIXBUF_ANIMATION_ITER_CLASS
+GDK_PIXBUF_ANIMATION_ITER_CLASS
+GDK_IS_PIXBUF_ANIMATION_CLASS
+GDK_PIXBUF_ANIMATION_ITER_GET_CLASS
+GDK_PIXBUF_ANIMATION_CLASS
 </SECTION>
 
 <SECTION>

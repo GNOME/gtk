@@ -660,7 +660,6 @@ GdkPixbufFormat *
 gdk_pixbuf_loader_get_format (GdkPixbufLoader *loader)
 {
   GdkPixbufLoaderPrivate *priv;
-  gboolean retval = TRUE;
   
   g_return_val_if_fail (loader != NULL, NULL);
   g_return_val_if_fail (GDK_IS_PIXBUF_LOADER (loader), NULL);

@@ -24,6 +24,8 @@ CFILE_GLOB=$(top_srcdir)/gdk/*.c
 
 # Header files to ignore when scanning
 IGNORE_HFILES=			\
+	gdkintl.h		\
+	gdkmarshalers.h		\
 	gdkkeysyms.h		\
 	gdkinternals.h		\
 	gdkprivate.h		\
