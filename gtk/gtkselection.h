@@ -26,7 +26,6 @@
 
 #ifdef __cplusplus
 extern "C" {
-#pragma }
 #endif /* __cplusplus */
 
 typedef struct _GtkSelectionData GtkSelectioData;

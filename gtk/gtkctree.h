@@ -27,9 +27,7 @@
 #include <gtk/gtkclist.h>
 
 #ifdef __cplusplus
-extern "C"
-{
-#pragma }
+extern "C" {
 #endif				/* __cplusplus */
 
 #define GTK_TYPE_CTREE            (gtk_ctree_get_type ())

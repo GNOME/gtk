@@ -32,7 +32,6 @@
 
 #ifdef __cplusplus
 extern "C" {
-#pragma }
 #endif /* __cplusplus */
 
 #define GTK_TYPE_FONT_SELECTION		     (gtk_font_selection_get_type ())

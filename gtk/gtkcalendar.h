@@ -28,7 +28,6 @@
 
 #ifdef __cplusplus
 extern "C" {
-#pragma }
 #endif /* __cplusplus */
 
 
@@ -129,7 +128,6 @@ void	   gtk_calendar_thaw		(GtkCalendar *calendar);
 
 
 #ifdef __cplusplus
-#pragma {
 }
 #endif /* __cplusplus */
 

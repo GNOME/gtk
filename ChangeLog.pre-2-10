@@ -1,3 +1,12 @@
+Wed Oct  7 05:15:36 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtk*.h:
+	* gdk/gdk.h: removed all occourances of #pragma } and #pragma {
+	which were in place to fixup emacs' cc-mode indentation.
+	putting (c-set-offset 'inextern-lang 0) into ~/.emacs is the
+	proper way to achive this and doesn't produce problems for
+	stupid pragma-related compiler bugs. ;)
+
 Wed Oct  7 00:59:46 1998  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkclist.h: new signal GtkCList::resize_column.

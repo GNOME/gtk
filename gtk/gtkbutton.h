@@ -27,7 +27,6 @@
 
 #ifdef __cplusplus
 extern "C" {
-#pragma }
 #endif /* __cplusplus */
 
 #define GTK_TYPE_BUTTON			(gtk_button_get_type ())

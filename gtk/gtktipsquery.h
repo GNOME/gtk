@@ -28,7 +28,6 @@
 
 #ifdef __cplusplus
 extern "C" {
-#pragma }
 #endif /* __cplusplus */
 
 
@@ -93,7 +92,6 @@ void		gtk_tips_query_set_labels 	(GtkTipsQuery   *tips_query,
 
 
 #ifdef __cplusplus
-#pragma {
 }
 #endif /* __cplusplus */
 
