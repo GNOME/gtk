@@ -1,3 +1,8 @@
+2002-02-21  jacob berkman  <jacob@ximian.com>
+
+	* gtk/theme-bits/Makefile.am (EXTRA_DIST): inconsitent files are
+	.pngs too
+
 Wed Feb 20 21:52:13 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkselection.c (gtk_selection_request): Set the property
