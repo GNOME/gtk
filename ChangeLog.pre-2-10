@@ -1,3 +1,11 @@
+Mon Jan 11 13:31:49 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktypeutils.[hc]: removed Paolo Molaro's type creation hooks
+	again, since they 1) don't care about infinite recursion (likely
+	to achive), 2) we are in feature freeze for 1.2. this definitely
+	deserves a sane implementation in 1.3 though (but without a hook
+	return value, without seq_id hackery and with recursion checks).
+
 Mon Jan 11 13:18:37 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwindow.c:

@@ -65,7 +65,6 @@ static guint	    n_type_nodes = 0;
 static guint	    n_ftype_nodes = 0;
 static GHashTable  *type_name_2_type_ht = NULL;
 
-static GHookList *creation_hook_list = NULL;
 
 static GtkTypeNode*
 gtk_type_node_next_and_invalidate (GtkType parent_type)
@@ -228,15 +227,6 @@ gtk_type_create (GtkType      parent_type,
   return new_node->type;
 }
 
-static gboolean
-gtk_creation_marshaller (GHook* hook, gpointer data)
-{
-  GtkTypeQuery *query = (GtkTypeQuery*) data;
-  GtkCreationHook func = hook->func;
-  
-  return func(query, hook->data);
-}
-
 GtkType
 gtk_type_unique (GtkType      parent_type,
 		 const GtkTypeInfo *type_info)
@@ -262,16 +252,6 @@ gtk_type_unique (GtkType      parent_type,
   
   if (!new_type)
     g_free (type_name);
-  else if ( creation_hook_list )
-    {
-      GtkTypeQuery data;
-      data.type = new_type;
-      data.type_name = type_name;
-      data.object_size = type_info->object_size;
-      data.class_size = type_info->class_size;
-
-      g_hook_list_marshal_check(creation_hook_list, FALSE, gtk_creation_marshaller, &data);
-    }
 
   return new_type;
 }
@@ -1033,41 +1013,4 @@ gtk_identifier_get_type (void)
     identifier_type = gtk_type_register_intern ("GtkIdentifier", GTK_TYPE_STRING, NULL);
   
   return identifier_type;
-}
-
-guint
-gtk_type_add_creation_hook (GtkCreationHook hook_func,
-                            gpointer        data,
-                            GDestroyNotify  destroy)
-{
-  static guint seq_id =1;
-  GHook * hook;
-  
-  g_return_val_if_fail(hook_func != NULL, 0);
-
-  if (!creation_hook_list)
-    {
-      creation_hook_list = g_new(GHookList, 1);
-      g_hook_list_init(creation_hook_list, sizeof(GHook));
-    }
-
-  hook = g_hook_alloc (creation_hook_list);
-  hook->data = data;
-  hook->func = hook_func;
-  hook->destroy = destroy;
-
-  creation_hook_list->seq_id = seq_id;
-  g_hook_prepend(creation_hook_list, hook);
-  seq_id = creation_hook_list->seq_id;
-
-  return hook->hook_id;
-}
-
-void
-gtk_type_remove_creation_hook (guint hook_id)
-{
-  g_return_if_fail(hook_id != 0);
-
-  if (!creation_hook_list || !g_hook_destroy(creation_hook_list, hook_id))
-    g_warning("gtk_type_remove_creation_hook(): could not find hook (%u)", hook_id);
 }
