@@ -1402,9 +1402,6 @@ gtk_spin_button_get_value_as_float (GtkSpinButton *spin_button)
   g_return_val_if_fail (spin_button != NULL, 0.0);
   g_return_val_if_fail (GTK_IS_SPIN_BUTTON (spin_button), 0.0);
 
-  if (GTK_EDITABLE (spin_button)->editable)
-    gtk_spin_button_update (spin_button);
-
   return spin_button->adjustment->value;
 }
 
@@ -1415,9 +1412,6 @@ gtk_spin_button_get_value_as_int (GtkSpinButton *spin_button)
 
   g_return_val_if_fail (spin_button != NULL, 0);
   g_return_val_if_fail (GTK_IS_SPIN_BUTTON (spin_button), 0);
-
-  if (GTK_EDITABLE (spin_button)->editable)
-    gtk_spin_button_update (spin_button);
 
   val = spin_button->adjustment->value;
   if (val - floor (val) < ceil (val) - val)

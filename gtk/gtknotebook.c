@@ -1071,8 +1071,8 @@ gtk_notebook_button_press (GtkWidget      *widget,
 	      else
 		{
 		  gtk_notebook_switch_focus_tab (notebook, children);
-		  gtk_notebook_switch_page (notebook, page, num);
 		  gtk_widget_grab_focus (widget);
+		  gtk_notebook_switch_page (notebook, page, num);
 		}
 	      break;
 	    }
@@ -2477,7 +2477,11 @@ gtk_notebook_set_shape (GtkNotebook *notebook)
 	}
       else
 	{
-	  page =  notebook->cur_page;
+	  if (notebook->cur_page)
+	    page = notebook->cur_page;
+	  else
+	    page = notebook->children->data;
+
 	  if (!GTK_WIDGET_MAPPED (page->tab_label))
 	    {
 	      if (notebook->tab_pos == GTK_POS_LEFT)

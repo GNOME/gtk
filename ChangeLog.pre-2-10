@@ -1,3 +1,14 @@
+Sat Jan 23 01:44:43 1999  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkspinbutton.c (gtk_spin_button_get_value_as_int)
+	(gtk_spin_button_get_value_as_float): removed extra
+ 	gtk_spin_button_update calls again.
+	* gtk/gtkclist.c (gtk_clist_unmap): unblock dnd signal handler if
+	neccessary
+	* gtk/gtknotebook.c (gtk_notebook_button_press): grab_focus before
+	switch_page
+	(gtk_notebook_set_shape): don't use cur_page if it's NULL.
+
 Fri Jan 22 12:20:54 1999  Jeff Garzik  <jgarzik@pobox.com>
 
 	* gtk/gtktooltips.c:
@@ -164,7 +175,7 @@ Tue Jan 19 22:15:10 1999  Lars Hamann  <lars@gtk.org>
 	(gtk_list_signal_focus_lost): removed.
 	(gtk_list_focus) (gtk_list_set_focus_child): set last_focus_child.
 	(gtk_list_remove_items_internal) (gtk_list_clear_items): unset
- 	undo_focus_child if necessary. In case of SELECTION_BROWSE/EXTENDED
+ 	undo_focus_child if neccessary. In case of SELECTION_BROWSE/EXTENDED
  	select a new item if selection is empty.
 
 Tue Jan 19 00:21:15 1999  Tim Janik  <timj@gtk.org>

@@ -4658,7 +4658,18 @@ gtk_clist_unmap (GtkWidget *widget)
 	  clist->click_cell.row = -1;
 	  clist->click_cell.column = -1;
 	  clist->drag_button = 0;
-	  GTK_CLIST_UNSET_FLAG (clist, CLIST_IN_DRAG);
+
+	  if (GTK_CLIST_IN_DRAG(clist))
+	    {
+	      gpointer drag_data;
+
+	      GTK_CLIST_UNSET_FLAG (clist, CLIST_IN_DRAG);
+	      drag_data = gtk_object_get_data (GTK_OBJECT (clist),
+					       "gtk-site-data");
+	      if (drag_data)
+		gtk_signal_handler_unblock_by_data (GTK_OBJECT (clist),
+						    drag_data);
+	    }
 	}
 
       for (i = 0; i < clist->columns; i++)
