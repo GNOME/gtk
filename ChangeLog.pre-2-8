@@ -1,6 +1,11 @@
+Wed Jul 21 22:46:27 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_new_text): Don't leak the
+	list store.  (#148134, Crispin Flowerday)
+
 Wed Jul 21 22:35:47 2004  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk/gtkcellview.c (gtk_cell_view_finalize): Don't leak the
+	* gtk/gtkcombobox.c (gtk_combo_box_destroy): Don't leak the
 	menu.  (#148110, Tommi Komulainen)
 
 Wed Jul 21 22:24:10 2004  Matthias Clasen  <maclas@gmx.de>

@@ -3825,8 +3825,8 @@ gtk_combo_box_new_text (void)
   GtkListStore *store;
 
   store = gtk_list_store_new (1, G_TYPE_STRING);
-
   combo_box = gtk_combo_box_new_with_model (GTK_TREE_MODEL (store));
+  g_object_unref (store);
 
   cell = gtk_cell_renderer_text_new ();
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo_box), cell, TRUE);
