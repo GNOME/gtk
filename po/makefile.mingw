@@ -68,6 +68,10 @@ et.utf8: et.po
 eu.utf8: eu.po
 	iconv -f ISO-8859-1 -t UTF-8 eu.po >$@
 
+# Farsi is already in UTF-8.
+fa.utf8: fa.po
+	cp fa.po fa.utf8
+
 fi.utf8: fi.po
 	iconv -f ISO-8859-1 -t UTF-8 fi.po >$@
 
@@ -79,6 +83,10 @@ ga.utf8: ga.po
 
 gl.utf8: gl.po
 	iconv -f ISO-8859-1 -t UTF-8 gl.po >$@
+
+# Hebrew is already in UTF-8.
+he.utf8: he.po
+	cp he.po he.utf8
 
 hr.utf8: hr.po
 	iconv -f ISO-8859-2 -t UTF-8 hr.po >$@
@@ -127,6 +135,12 @@ sl.utf8: sl.po
 
 sv.utf8: sv.po
 	iconv -f ISO-8859-1 -t UTF-8 sv.po >$@
+
+sp.utf8: sp.po
+	iconv -f ISO-8859-5 -t UTF-8 sp.po >$@
+
+sr.utf8: sr.po
+	iconv -f ISO-8859-2 -t UTF-8 sr.po >$@
 
 uk.utf8: uk.po
 	iconv -f KOI8-U -t UTF-8 uk.po >$@

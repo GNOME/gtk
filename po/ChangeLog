@@ -1,3 +1,9 @@
+2000-10-15  Tor Lillqvist  <tml@iki.fi>
+
+	* ChangeLog: Remove leftover CVS conflict indicator lines (>>>>>>>).
+
+	* makefile.mingw: Add rules for fa, he, sp and sr.
+
 2000-10-14  Robert Brady  <robert@suse.co.uk>
 
 	* fa.po: Added Persian translation from Roozbeh Pournader 
@@ -122,7 +128,6 @@
 2000-03-13  Pablo Saratxaga <pablo@mandrakesoft.com>
 	* lt.po: Updated Lithuanian file
 
->>>>>>> 1.71
 2000-02-26  Christopher R. Gabriel  <cgabriel@firenze.linux.it>
 
 	* it.po: Updated italian translation.
@@ -155,7 +160,6 @@
 
 	* tr.po: Added the Turkish translation , edited ../configure.in & makefile.cygwin .
 
->>>>>>> 1.48
 1999-10-31  Tor Lillqvist  <tml@iki.fi>
 
 	* makefile.cygwin: New file for building the message catalogs on
@@ -164,7 +168,6 @@
 	to UTF-8 in two passes using the useful native2ascii tool from the
 	JDK.
 
->>>>>>> 1.40
 1999-10-06  Stanislav Brabec  <utx@penguin.cz>
 
 	* cs.po: Updated.
@@ -196,7 +199,6 @@
 	* et.po: Added Estonian language file from
 	 Lauris Kaplinski <lauris@ariman.ee>
 
->>>>>>> 1.39
 1999-09-03  Zbigniew Chyla  <chyla@alice.ci.pwr.wroc.pl>
 
 	* pl.po: Updated translation.
