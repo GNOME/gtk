@@ -31,17 +31,22 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-typedef void	(*GtkPrintFunc)		  (gpointer		 func_data,
-					   gchar		*str);
-typedef	void	(*GtkItemFactoryCallback) (gpointer		 callback_data,
-					   guint		 callback_action,
-					   GtkWidget		*widget);
+typedef void	(*GtkPrintFunc)		   (gpointer		 func_data,
+					    gchar		*str);
+typedef	void	(*GtkItemFactoryCallback)  ();
+typedef	void	(*GtkItemFactoryCallback1) (gpointer		 callback_data,
+					    guint		 callback_action,
+					    GtkWidget		*widget);
+typedef	void	(*GtkItemFactoryCallback2) (GtkWidget		*widget,
+					    gpointer		 callback_data,
+					    guint		 callback_action);
 
 #define	GTK_TYPE_ITEM_FACTORY		 (gtk_item_factory_get_type ())
 #define	GTK_ITEM_FACTORY(object)	 (GTK_CHECK_CAST (object, GTK_TYPE_ITEM_FACTORY, GtkItemFactory))
 #define	GTK_ITEM_FACTORY_CLASS(klass)	 (GTK_CHECK_CLASS_CAST (klass, GTK_TYPE_ITEM_FACTORY, GtkItemFactoryClass))
 #define	GTK_IS_ITEM_FACTORY(object)	 (GTK_CHECK_TYPE (object, GTK_TYPE_ITEM_FACTORY))
 #define	GTK_IS_ITEM_FACTORY_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ITEM_FACTORY))
+
 
 typedef	struct	_GtkItemFactory			GtkItemFactory;
 typedef	struct	_GtkItemFactoryClass		GtkItemFactoryClass;
@@ -140,11 +145,17 @@ void	gtk_item_factory_dump_rc	(const gchar		*ifactory_path,
 					 gpointer		 func_data);
 void	gtk_item_factory_create_item	(GtkItemFactory		*ifactory,
 					 GtkItemFactoryEntry	*entry,
-					 gpointer		 callback_data);
+					 gpointer		 callback_data,
+					 guint			 callback_type);
 void	gtk_item_factory_create_items	(GtkItemFactory		*ifactory,
 					 guint			 n_entries,
 					 GtkItemFactoryEntry	*entries,
 					 gpointer		 callback_data);
+void	gtk_item_factory_create_items_ac(GtkItemFactory		*ifactory,
+					 guint			 n_entries,
+					 GtkItemFactoryEntry	*entries,
+					 gpointer		 callback_data,
+					 guint			 callback_type);
 void	gtk_item_factory_path_delete	(const gchar		*ifactory_path,
 					 const gchar		*path);
 void	gtk_item_factory_delete_item	(GtkItemFactory		*ifactory,

@@ -46,9 +46,10 @@ typedef struct	_GtkIFCBData		GtkIFCBData;
 typedef struct	_GtkIFActionLink	GtkIFActionLink;
 struct _GtkIFCBData
 {
-  GtkItemFactoryCallback func;
-  gpointer		 func_data;
-  guint			 callback_action;
+  GtkItemFactoryCallback  func;
+  guint			  callback_type;
+  gpointer		  func_data;
+  guint			  callback_action;
 };
 struct _GtkIFActionLink
 {
@@ -240,7 +241,16 @@ gtk_item_factory_callback_marshal (GtkWidget *widget,
 
   data = func_data;
 
-  data->func (data->func_data, data->callback_action, widget);
+  if (data->callback_type == 1)
+    {
+      GtkItemFactoryCallback1 func1 = data->func;
+      func1 (data->func_data, data->callback_action, widget);
+    }
+  else if (data->callback_type == 2)
+    {
+      GtkItemFactoryCallback2 func2 = data->func;
+      func2 (widget, data->func_data, data->callback_action);
+    }
 }
 
 static void
@@ -386,6 +396,7 @@ gtk_item_factory_add_item (GtkItemFactory		*ifactory,
 			   GtkItemFactoryCallback	callback,
 			   guint			callback_action,
 			   gpointer			callback_data,
+			   guint			callback_type,
 			   gchar			*item_type,
 			   GtkWidget			*widget)
 {
@@ -505,6 +516,7 @@ gtk_item_factory_add_item (GtkItemFactory		*ifactory,
 
       data = g_chunk_new (GtkIFCBData, ifactory_cb_data_chunks);
       data->func = callback;
+      data->callback_type = callback_type;
       data->func_data = callback_data;
       data->callback_action = callback_action;
 
@@ -562,7 +574,7 @@ gtk_item_factory_construct (GtkItemFactory	*ifactory,
 					 GTK_OBJECT (ifactory));
   gtk_item_factory_add_item (ifactory,
 			     "", NULL,
-			     NULL, 0, NULL,
+			     NULL, 0, NULL, 0,
 			     ITEM_FACTORY_STRING,
 			     ifactory->widget);
 }
@@ -707,15 +719,29 @@ gtk_item_factory_create_items (GtkItemFactory	      *ifactory,
 			       GtkItemFactoryEntry    *entries,
 			       gpointer		       callback_data)
 {
+  gtk_item_factory_create_items_ac (ifactory, n_entries, entries, callback_data, 1);
+}
+
+void
+gtk_item_factory_create_items_ac (GtkItemFactory       *ifactory,
+				  guint		        n_entries,
+				  GtkItemFactoryEntry  *entries,
+				  gpointer		callback_data,
+				  guint			callback_type)
+{
   guint i;
 
   g_return_if_fail (ifactory != NULL);
   g_return_if_fail (GTK_IS_ITEM_FACTORY (ifactory));
-  if (n_entries == 0) return;
+  g_return_if_fail (callback_type >= 1 && callback_type <= 2);
+
+  if (n_entries == 0)
+    return;
+
   g_return_if_fail (entries != NULL);
 
   for (i = 0; i < n_entries; i++)
-    gtk_item_factory_create_item (ifactory, entries + i, callback_data);
+    gtk_item_factory_create_item (ifactory, entries + i, callback_data, callback_type);
 }
 
 GtkWidget*
@@ -775,7 +801,8 @@ gtk_item_factory_get_widget_by_action (GtkItemFactory   *ifactory,
 void
 gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
 			      GtkItemFactoryEntry    *entry,
-			      gpointer		      callback_data)
+			      gpointer		      callback_data,
+			      guint		      callback_type)
 {
   GtkWidget *parent;
   GtkWidget *widget;
@@ -790,6 +817,7 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
   g_return_if_fail (entry != NULL);
   g_return_if_fail (entry->path != NULL);
   g_return_if_fail (entry->path[0] == PARENT_DELIMITER);
+  g_return_if_fail (callback_type >= 1 && callback_type <= 2);
 
   if (!entry->item_type ||
       entry->item_type == 0)
@@ -853,7 +881,7 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
       pentry.callback_action = 0;
       pentry.item_type = "<Branch>";
 
-      gtk_item_factory_create_item (ifactory, &pentry, NULL);
+      gtk_item_factory_create_item (ifactory, &pentry, NULL, 1);
 
       parent = gtk_item_factory_get_widget (ifactory, parent_path);
     }
@@ -905,6 +933,7 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
   gtk_item_factory_add_item (ifactory,
 			     entry->path, entry->accelerator,
 			     entry->callback, entry->callback_action, callback_data,
+			     callback_type,
 			     entry->item_type,
 			     widget);
 }

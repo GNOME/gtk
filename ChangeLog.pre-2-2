@@ -1,3 +1,9 @@
+Sun Jun  7 09:36:04 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkitemfactory.h: 
+	* gtk/gtkitemfactory.c: support different types of callbacks, to
+	maintain existing code.
+
 Sat Jun  6 06:01:24 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtksignal.c (gtk_signal_emitv): fixed an assertment.
