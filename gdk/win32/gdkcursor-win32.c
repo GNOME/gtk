@@ -251,7 +251,8 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
   private->xcursor = xcursor;
   cursor = (GdkCursor*) private;
   cursor->type = GDK_CURSOR_IS_PIXMAP;
-
+  cursor->ref_count = 1;
+  
   return cursor;
 }
 
