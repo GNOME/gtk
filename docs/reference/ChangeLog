@@ -2,6 +2,7 @@
 
 	* gtk/Makefile.am (IGNORE_HFILES): Remove some no longer
 	private headers.
+	(HTML_IMAGES): Remove a duplicate entry.
 
 2004-10-08  Matthias Clasen  <mclasen@redhat.com>
 

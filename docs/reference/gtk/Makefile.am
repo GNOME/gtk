@@ -208,7 +208,6 @@ HTML_IMAGES = \
 	$(srcdir)/images/color-button.png				\
 	$(srcdir)/images/combo-box-entry.png				\
 	$(srcdir)/images/entry.png					\
-	$(srcdir)/images/font-button.png				\
 	$(srcdir)/images/frame.png					\
 	$(srcdir)/images/label.png					\
 	$(srcdir)/images/list-and-tree.png				\
