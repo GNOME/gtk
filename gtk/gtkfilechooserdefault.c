@@ -2962,6 +2962,14 @@ add_to_shortcuts_cb (GtkMenuItem           *item,
   bookmarks_add_selected_folder (impl);
 }
 
+/* Callback used when the "Open Location" menu item is activated */
+static void
+open_location_cb (GtkMenuItem           *item,
+		  GtkFileChooserDefault *impl)
+{
+  location_popup_handler (impl, "");
+}
+
 /* Callback used when the "Show Hidden Files" menu item is toggled */
 static void
 show_hidden_toggled_cb (GtkCheckMenuItem      *item,
@@ -2993,6 +3001,14 @@ file_list_build_popup_menu (GtkFileChooserDefault *impl)
   gtk_widget_set_sensitive (item, FALSE);
   g_signal_connect (item, "activate",
 		    G_CALLBACK (add_to_shortcuts_cb), impl);
+  gtk_widget_show (item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (impl->browse_files_popup_menu), item);
+
+  item = gtk_image_menu_item_new_with_mnemonic (_("Open _Location"));
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item),
+				 gtk_image_new_from_stock (GTK_STOCK_OPEN, GTK_ICON_SIZE_MENU));
+  g_signal_connect (item, "activate",
+		    G_CALLBACK (open_location_cb), impl);
   gtk_widget_show (item);
   gtk_menu_shell_append (GTK_MENU_SHELL (impl->browse_files_popup_menu), item);
 
