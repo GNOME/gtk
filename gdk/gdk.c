@@ -2329,11 +2329,11 @@ gdk_event_translate (GdkEvent *event,
 	  gdk_dnd_drag_addwindow((GdkWindow *) gdk_dnd.real_sw);
 	  gdk_dnd_drag_begin((GdkWindow *) gdk_dnd.real_sw);
 	  xgpret = 
-	  XGrabPointer(gdk_display, gdk_dnd.real_sw->xwindow, False,
+	  XGrabPointer(gdk_display, gdk_dnd.real_sw->xwindow, True,
 		       ButtonMotionMask | PointerMotionMask |
 		       /* PointerMotionHintMask | */ /* HINTME */
-		       ButtonPressMask | ButtonReleaseMask | ExposureMask,
-		       GrabModeAsync, GrabModeAsync, gdk_root_window,
+		       ButtonPressMask | ButtonReleaseMask,
+		       GrabModeAsync, GrabModeAsync, None,
 		       None, CurrentTime);
 #ifdef G_ENABLE_DEBUG
 	  GDK_NOTE(DND, g_print("xgpret = %d\n", xgpret));

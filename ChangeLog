@@ -1,3 +1,9 @@
+1998-04-28  Miguel de Icaza  <miguel@nuclecu.unam.mx>
+
+	* gdk/gdk.c (gdk_event_translate): Random debugging fixed this
+	bug:  There is no need to set the ExposureMask in the XGrabPointer
+	(this caused DnD programs to crash).
+
 Fri Apr 24 01:29:04 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkaccelerator.h (struct _GtkAcceleratorTable): changed ref_count
