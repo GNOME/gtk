@@ -1,3 +1,9 @@
+Fri Jun 29 00:13:34 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreemodel.c (gtk_tree_model_foreach): New function to
+	walk through a model in a depth first manner, with the option to
+	break out.
+
 Fri Jun  8 18:52:10 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.[hc]: Patch Thomas Broyer from

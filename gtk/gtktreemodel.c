@@ -1116,6 +1116,61 @@ gtk_tree_model_reordered (GtkTreeModel *tree_model,
 }
 
 
+static gboolean
+gtk_tree_model_foreach_helper (GtkTreeModel            *model,
+			       GtkTreeIter             *iter,
+			       GtkTreePath             *path,
+			       GtkTreeModelForeachFunc  func,
+			       gpointer                 user_data)
+{
+  gtk_tree_path_append_index (path, 0);
+
+  do
+    {
+      GtkTreeIter child;
+
+      if (gtk_tree_model_iter_children (model, &child, iter))
+	{
+	  if (gtk_tree_model_foreach_helper (model, &child, path, func, user_data))
+	    return TRUE;
+	}
+
+      if ((* func) (model, path, iter, user_data))
+	return TRUE;
+
+      gtk_tree_path_next (path);
+    }
+  while (gtk_tree_model_iter_next (model, iter));
+
+  gtk_tree_path_up (path);
+  return FALSE;
+}
+
+/**
+ * gtk_tree_model_foreach:
+ * @model: A #GtkTreeModel
+ * @func: A function to be called on each row
+ * @user_data: User data to passed to func.
+ * 
+ * Calls func on each node in model in a depth-first fashion.  If func returns
+ * %TRUE, then the tree ceases to be walked, and gtk_tree_model_foreach returns.
+ **/
+
+void
+gtk_tree_model_foreach (GtkTreeModel            *model,
+			GtkTreeModelForeachFunc  func,
+			gpointer                 user_data)
+{
+  GtkTreePath *path;
+  GtkTreeIter iter;
+
+  path = gtk_tree_path_new_root ();
+  gtk_tree_model_get_iter (model, &iter, path);
+  gtk_tree_model_foreach_helper (model, &iter, path, func, user_data);
+  gtk_tree_path_free (path);
+}
+
+
 /*
  * GtkTreeRowReference
  */
@@ -1520,3 +1575,4 @@ gtk_tree_row_reference_reordered (GObject     *proxy,
   gtk_tree_row_ref_reordered_callback (NULL, path, iter, new_order, proxy);
 }
   
+
