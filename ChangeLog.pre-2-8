@@ -1,3 +1,8 @@
+2000-06-21 Christopher Blizzard  <blizzard@redhat.com>
+
+        * gdk/x11/Makefile.am (install-data-local): use $(mkinstalldirs)
+        not $(MKINSTALLDIRS)
+
 Wed Jun 21 12:24:28 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/testgtk.c (create_text): Finish the job Elliot started
