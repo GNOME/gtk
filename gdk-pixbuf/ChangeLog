@@ -1,0 +1,5 @@
+1999-07-12  Raja R Harinath  <harinath@cs.umn.edu>
+
+	* configure.in (AC_OUTPUT): Remove spurious `,'.
+
+
