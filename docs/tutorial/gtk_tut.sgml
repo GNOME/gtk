@@ -10,7 +10,7 @@
 			      name="&lt;imain@gtk.org&gt;"></tt>,
 Tony Gale <tt><htmlurl url="mailto:gale@gtk.org"
 			      name="&lt;gale@gtk.org&gt;"></tt>
-<date>July 25th, 1998
+<date>August 13th, 1998
 
 <!-- ***************************************************************** -->
 <sect>Introduction
@@ -482,14 +482,17 @@ static gint button_press_event (GtkWidget      *widget,
 Note that we can declare the second argument as type <tt/GdkEventButton/
 as we know what type of event will occur for this function to be called.
 
-<!-- Need an Annex with all the event types in it - TRG -->
-
-<!-- Need to check this - TRG
 The value returned from this function indicates whether the event should
-be processed further by the GTK event handling mechanism. Returning
+be propagated further by the GTK event handling mechanism. Returning
 TRUE indicates that the event has been handled, and that it should not
-propogate further. Returning FALSE continues the normal event handling.
--->
+propagate further. Returning FALSE continues the normal event handling.
+See the section on
+<ref id="sec_Adv_Events_and_Signals"
+name="Advanced Event and Signal Handling"> for more details on this
+propagation process.
+
+For details on the GdkEvent data types, see the appendix entitled
+<ref id="sec_GDK_Event_Types" name="GDK Event Types">.
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>Stepping Through Hello World
@@ -2084,6 +2087,775 @@ removes the need for a variable to hold the list of buttons:
 </verb></tscreen>
 
 <!-- TODO: checout out gtk_radio_button_new_from_widget function - TRG -->
+
+<!-- ***************************************************************** -->
+<sect>Range Widgets
+<!-- ***************************************************************** -->
+<p>
+The category of range widgets includes the ubiquitous <em>scrollbar</em>
+widget and the less common <em>scale</em> widget.  Though these two
+types of widgets are typically used for vastly different
+purposes, they are quite similar in function and implementation.
+Range widgets allow the user to visually manipulate a value
+within a specified range (hence the name).
+
+All range widgets share a set of common graphic elements, each
+of which has its own X window and receives events.  They all
+contain a "trough" and a "slider" (what is sometimes called a
+"thumbwheel" in other GUI environments).  Dragging the slider
+with the pointer moves it back and forth within the trough,
+while clicking in the trough advances the slider towards the
+location of the click, either completely, or by a designated
+amount (called a "page"), depending on which button was used.
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>The Scale Widgets
+<p>
+Scale widgets are used to set an explicitly numeric parameter
+which has a visual correlate, and which the user might be
+expected to adjust primarily by sight.  For example, the
+GtkColorSelection compound widget contains scale widgets which
+control the components of the colour being selected.
+Typically, the precise value of the number is less important
+here than its side-effects, and thus the user should be spared
+the effort of reaching for the keyboard.
+
+<!-- ----------------------------------------------------------------- -->
+<sect2>Creating a Scale Widget
+<p>
+There are actually two types of scale widget: GtkHScale
+widgets, which are horizontal, and GtkVScale widgets, which
+
+are vertical.  (Most programmers seem to favour horizontal
+scale widgets). Since they work essentially the same way,
+there's no need to treat them separately here.  The
+following functions, defined in
+<tt>&lt;gtk/gtkvscale.h&gt;</tt> and
+<tt>&lt;gtk/gtkhscale.h&gt;</tt>, create vertical and
+horizontal scale widgets, respectively:
+
+<tscreen><verb>
+GtkWidget* gtk_vscale_new( GtkAdjustment *adjustment );
+
+GtkWidget* gtk_hscale_new( GtkAdjustment *adjustment );
+</verb></tscreen>
+
+<tt/adjustment/ can either be an adjustment which has
+already been created with <tt/gtk_adjustment_new()/, or
+<tt/NULL/, in which case, an anonymous GtkAdjustment is
+created with all of its values set to <tt/0.0/.  If you're
+thoroughly confused by now, see <ref
+id="sec_Range_GtkAdjustment" name="The Adjustment Object">
+below for an explanation of what exactly the <tt/adjustment/
+argument does and how to create and manipulate it.
+
+<!-- ----------------------------------------------------------------- -->
+<sect2>Functions, Signals, and Macros
+<p>
+Scale widgets can display their current value as a number
+beside the trough.  The default behaviour is to show the
+value, but you can change this with this function:
+	  
+<tscreen><verb>
+void gtk_scale_set_draw_value( GtkScale *scale,
+                               gint      draw_value );
+</verb></tscreen>
+
+As you might have guessed, <tt/draw_value/ is either
+<tt/TRUE/ or <tt/FALSE/, with predictable consequences for
+either one.
+
+The value displayed by a scale widget is rounded to one
+decimal point by default (as is the <tt/value/ field in its
+GtkAdjustment... but I digress).  You can change this with:
+	  
+<tscreen><verb>
+void gtk_scale_set_digits( GtkScale *scale,
+                           gint     digits);
+</verb></tscreen>
+
+where <tt/digits/ is the number of decimal places you want.
+You can set <tt/digits/ to anything you like, but no more
+than 13 decimal places will actually be drawn on screen.
+This probably isn't too horribly restrictive.
+
+Finally, the value can be drawn in different positions
+relative to the trough:
+	  
+<tscreen><verb>
+void gtk_scale_set_value_pos( GtkScale        *scale,
+                              GtkPositionType  pos );
+</verb></tscreen>
+
+If you've read the section on the notebook widget, then you
+know what the possible values of <tt/pos/ are.  They are
+defined as type <tt>GtkPositionType</tt> and can take one
+of the following values:
+
+<itemize>
+<item>GTK_POS_LEFT
+<item>GTK_POS_RIGHT
+<item>GTK_POS_TOP
+<item>GTK_POS_BOTTOM
+</itemize>
+
+If you position the value on the "side"
+of the trough (e.g. on the top or bottom of a horizontal
+scale widget), then it will follow the slider up and down
+the trough.
+
+All the preceding functions are defined in
+<tt>&lt;gtk/gtkscale.h&gt;</tt>.  The other signals and
+functions defined in the header files for the scale widgets
+are either not useful for anyone other than writers of scale
+widgets, or are the standard GTK+ type-casting macros and
+functions.
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>The Scrollbar Widgets
+<p>
+These are your standard, run-of-the-mill scrollbars. As with
+the scale widgets, there are separate types for horizontal and
+vertical scrollbars.  There really isn't much to say about
+these.  You create them with the following functions:
+
+<tscreen><verb>
+GtkWidget* gtk_hscrollbar_new( GtkAdjustment *adjustment );
+
+GtkWidget* gtk_vscrollbar_new( GtkAdjustment *adjustment );
+</verb></tscreen>
+
+and that's about it (if you don't believe me, look in the
+header files!).  Again, <tt/adjustment/ can either be a
+pointer to an existing GtkAdjustment, or NULL, in which case
+one will be created for you.
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>The Adjustment Object<label id="sec_Range_GtkAdjustment">
+<p>
+As you might have noticed, there really isn't much to the
+various range widgets themselves from the programmer's point
+of view.  Most of your program's interaction with these
+widgets will take place by way of the heretofore mysterious
+<tt/adjustment/ object.
+
+Every range widget contains a pointer to a GtkAdjustment
+object.  You'll usually create one of these in order to pass
+it to the <tt/gtk_*_new()/ function which creates a range
+widget, or some compound widget that uses range widgets, such
+as GtkScrolledWindow or GtkCList.
+
+Aside from specifying some characteristics related to the
+range widget's appearance and behaviour, the GtkAdjustment you
+pass to this function becomes "attached" to the newly-created
+range widget and from that point on will always contain the
+numerical value corresponding to the position of the slider
+(unless, at some point in the future, you set a new adjustment
+for the range widget).
+
+One adjustment object can be shared between many range
+widgets.  Reusing the same adjustment object across several
+range widgets will cause them all to change when one of them
+is changed.
+
+<!-- ----------------------------------------------------------------- -->
+<sect2>Creating a GtkAdjustment
+<p>
+You create an adjustment using:
+	  
+<tscreen><verb>
+GtkObject* gtk_adjustment_new( gfloat value,
+                               gfloat lower,
+                               gfloat upper,
+                               gfloat step_increment,
+                               gfloat page_increment,
+                               gfloat page_size );
+</verb></tscreen>
+
+It may or may not be obvious by now that the values given to
+<tt/gtk_adjustment_new()/ are simply arbitrary floating-point
+values.  The mapping between these values and the on-screen
+size of the range widget and its constituent parts is
+handled by the range widget.  Thus, you're free to use
+whatever numbers are most meaningful to your program.
+
+The <tt/value/ argument is the initial value you want to
+give to the adjustment.  The <tt/lower/ argument specifies
+the lowest value which the adjustment can hold, or, in other
+words, the lowest value which the user can select using the
+range widget which uses this adjustment.  The
+<tt/step_increment/ argument specifies the "smaller" of the
+two increments by which the user can change the value, while
+the <tt/page_increment/ is the "larger" one.  <ref
+id="sec_Range_Bindings" name="Key and Mouse Bindings"> below
+describes the default key and mouse bindings for range
+widgets, and how they relate to these increments.  The
+<tt/page_size/ argument is only relevant for scrollbars.
+Its most obvious effect is that it determines the size of
+the slider; however, you should set it based on the "size"
+of the visible area of whatever you're scrolling.
+
+As an example, say you're writing a text editor.  You might
+want to have the value of the vertical scrollbar beside the
+editing area correspond to the line number
+of the first visible line in the editing area.  In that
+case, you might call <tt/gtk_adjustment_new()/ like this:
+
+<tscreen><verb>
+GtkObject *adj;
+	      
+adj = gtk_adjustment_new (0, first_line, last_line, 1,
+	                  window_height - 2, window_height);
+</verb></tscreen>
+
+where <tt/window_height/ is the number of visible lines in
+the window.
+
+Finally, with regard to the <tt/upper/ argument to
+<tt/gtk_adjustment_new/, you'll notice that, since the value
+of the adjustment corresponds to the <em/first/ visible line
+in the window, the maximum value in the adjustment is not
+actually <tt/last_line/, but rather <tt>last_line -
+window_height</tt> (or, in more general terms, <tt>upper -
+page_height</tt>).  This is a little confusing at first, but
+it makes sense if you think about it in terms of what the
+user expects to see in a scrolled window when the
+scrollbar's slider is moved all the way to the end of the
+trough.
+
+Since the size of the slider on scale widgets is invariable,
+to avoid excessive confusion, it's a good idea to set the
+<tt/page_size/ to <tt/0.0/ for adjustments that are only
+going to be used for scale widgets.
+
+<!-- ----------------------------------------------------------------- -->
+<sect2>Inside the GtkAdjustment object
+<p>
+OK, you say, that's nice, but how do I get at all these
+values, and, more importantly, how do I know when the user
+has moved the slider around?  To answer these questions and
+more, let's start by taking a look at <tt/struct _GtkAdjustment/ itself:
+
+<tscreen><verb>
+struct _GtkAdjustment
+{
+  GtkData data;
+  
+  gfloat lower;
+  gfloat upper;
+  gfloat value;
+  gfloat step_increment;
+  gfloat page_increment;
+  gfloat page_size;
+};     
+
+struct _GtkAdjustmentClass
+{
+  GtkDataClass parent_class;
+  
+  void (* changed)	 (GtkAdjustment *adjustment);
+  void (* value_changed) (GtkAdjustment *adjustment);
+};
+</verb></tscreen>
+
+The first thing you should know is that there aren't any
+handy-dandy macros or accessor functions for getting the
+<tt/value/ out of a GtkAdjustment, so you'll have to (horror
+of horrors) do it like a <em/real/ C programmer.  Don't
+worry - the <tt>GTK_ADJUSTMENT (Object)</tt> macro does
+run-time type checking (as do all the GTK+ type-casting
+macros, actually).  On the other hand, unless you're writing
+a new type of range widget, you probably don't want to
+<em/set/ these fields directly.  To set <tt/value/, you can
+use:
+
+<tscreen><verb>
+void gtk_adjustment_set_value( GtkAdjustment *adjustment,
+                               gfloat         value );
+</verb></tscreen>
+
+If you need to change the other fields, and you don't intend
+to do this very frequently, it's best to create a new
+GtkAdjustment and set it with
+<tt/gtk_range_set_adjustment()/, as detailed in <ref
+id="sec_Range_Functions" name="Common Functions, Signals,
+and Macros"> below.
+
+You might have noticed that, while adjustments are not
+widgets, they are still a "subclass" of GtkObject.
+Therefore, they can (and do) emit signals of their own.
+
+The various widgets that use the GtkAdjustment object will
+emit the "value_changed" signal on an adjustment whenever
+they change its value (see <ref id="sec_Range_UpdatePolicy"
+name="Update Policies"> below for more detail).  This
+happens both when user input causes the slider to move on a
+range widget, as well as when the program explicitly changes
+the value with <tt/gtk_adjustment_set_value()/.  So, for
+example, if you have a scale widget, and you want to change
+the rotation of a picture whenever its value changes, you
+would create a callback like this:
+	  
+<tscreen><verb>
+void cb_rotate_picture (GtkAdjustment *adj, GtkWidget *picture)
+{
+  set_picture_rotation (picture, adj->value);
+...
+</verb></tscreen>
+
+and connect it to the scale widget's adjustment like this:
+
+<tscreen><verb>
+gtk_signal_connect (GTK_OBJECT (adj), "value_changed",
+	            GTK_SIGNAL_FUNC (cb_rotate_picture), picture);
+</verb></tscreen>
+
+The "changed" signal is somewhat more elusive.  It is never
+emitted directly due to the <em/user's/ actions.  Rather,
+programs or other widgets should emit it on a GtkAdjustment
+when they modify any of its fields directly.  This will
+force any range widgets that use this adjustment to
+recalculate and redraw if necessary.  This is useful if you
+have a number of range widgets using the same GtkAdjustment,
+and don't want to call <tt/gtk_range_set_adjustment()/ for
+all of them.  It's also handy if you are going to be
+continuously changing these values, such as in our
+hypothetical text editor, where the <tt/upper/ field will
+have to change every time a new line is added, and you don't
+want the extra overhead of creating a new GtkAdjustment
+object every time.
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>Common Functions, Signals, and Macros<label id="sec_Range_Functions">
+<p>
+The GtkRange widget class is fairly complicated internally,
+but, like all the "base class" widgets, most of its complexity
+is only interesting if you want to hack on it.  Also, almost
+all of the functions and signals it defines are only really
+used in writing derived widgets.  There are, however, a few
+useful functions and concepts that are defined in gtkrange.h
+and are common to all range widgets.
+
+<!-- ----------------------------------------------------------------- -->
+<sect2>Update Policies<label id="sec_Range_UpdatePolicy">
+<p>
+The "update policy" of a range widget defines at what points
+during user interaction it will change the <tt/value/ field
+of its GtkAdjustment and emit the "value_changed" signal on
+this GtkAdjustment.  The update policies, defined in
+<tt>&lt;gtk/gtkenums.h&gt;</tt> as the <tt>enum
+GtkUpdateType</tt>, are:
+
+<itemize>
+<item>GTK_UPDATE_POLICY_CONTINUOUS - This is the default.
+The "value_changed" signal is emitted continuously,
+i.e. whenever the slider is moved by even the tiniest
+amount.
+</item>
+
+<item>GTK_UPDATE_POLICY_DISCONTINUOUS - The
+"value_changed" signal is only emitted once the slider
+has stopped moving and the user has released the mouse
+button.
+</item>
+	    
+<item>GTK_UPDATE_POLICY_DELAYED - The "value_change"
+signal is emitted when the user releases the mouse button,
+or if the slider stops moving for a short period of
+time.
+</item>
+</itemize>
+
+The update policy of a range widget can be set by casting it
+using the <tt>GTK_RANGE (Widget)</tt> macro and passing it
+to this function:
+
+<tscreen><verb>
+void gtk_range_set_update_policy( GtkRange      *range,
+                                  GtkUpdateType  policy );
+</verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->
+<sect2>Getting and setting adjustments
+<p>
+Getting and setting the adjustment for a range widget "on
+the fly" is done, predictably, with:
+	  
+<tscreen><verb>
+GtkAdjustment* gtk_range_get_adjustment( GtkRange *range );
+
+void gtk_range_set_adjustment( GtkRange      *range,
+                               GtkAdjustment *adjustment );
+</verb>
+</tscreen>
+
+<tt/gtk_range_get_adjustment()/ returns a pointer to the
+adjustment to which <tt/range/ is connected.
+
+<tt/gtk_range_set_adjustment()/ does absolutely nothing if
+you pass it the adjustment that <tt/range/ is already using,
+regardless of whether you changed any of its fields or not.
+If you pass it a new GtkAdjustment, it will unreference the
+old one if it exists (possibly destroying it), connect the
+appropriate signals to the new one, and call the private
+function <tt/gtk_range_adjustment_changed()/, which will (or
+at least, is supposed to...)  recalculate the size and/or
+position of the slider and redraw if necessary.  As
+mentioned above, if you wish to reuse the same
+GtkAdjustment, when you modify its values directly, you
+should emit the "changed" signal on it, like this:
+
+<tscreen><verb>
+gtk_signal_emit_by_name (GTK_OBJECT (adjustment), "changed");
+</verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>Key and Mouse bindings<label id="sec_Range_Bindings">
+<p>
+All of the GTK+ range widgets react to mouse clicks in more
+or less the same way.  Clicking button 1 in the trough will
+cause its adjustment's <tt/page_increment/  to be added or
+subtracted from its <tt/value/, and the slider to be moved
+accordingly.  Clicking button 2 in the trough will jump the
+slider to the point at which the button was clicked.
+Clicking any button on a scrollbar's arrows will cause its
+adjustment's value to change <tt/step_increment/ at a time.
+
+The key bindings, by contrast, are slightly different
+between horizontal and vertical range widgets, for obvious
+reasons.  They are also not quite the same for scale widgets
+as they are for scrollbars, for somewhat less obvious
+reasons (possibly to avoid confusion between the keys for
+horizontal and vertical scrollbars in scrolled windows,
+where both operate on the same area).
+
+<!-- ----------------------------------------------------------------- -->
+<sect2>Vertical Range Widgets
+<p>
+All vertical range widgets can be operated with the up and
+down arrow keys, as well as with the <tt/Page Up/ and
+<tt/Page Down/ keys.  The arrows move the slider up and
+down by <tt/step_increment/, while <tt/Page Up/ and
+<tt/Page Down/ move it by <tt/page_increment/.
+
+The user can also move the slider all the way to one end
+or the other of the trough using the keyboard.  With the
+GtkVScale widget, this is done with the <tt/Home/ and
+<tt/End/ keys, whereas with the GtkVScrollbar widget, this
+is done by typing <tt>Control-Page Up</tt> and
+<tt>Control-Page Down</tt>.
+
+<!-- ----------------------------------------------------------------- -->
+<sect2>Horizontal Range Widgets
+<p>
+The left and right arrow keys work as you might expect in
+these widgets, moving the slider back and forth by
+<tt/step_increment/.  The <tt/Home/ and <tt/End/ keys move
+the slider to the ends of the trough.  For the GtkHScale
+widget, moving the slider by <tt/page_increment/ is
+accomplished with <tt>Control-Left</tt> and
+<tt>Control-Right</tt>, while for GtkHScrollbar, it's done
+with <tt>Control-Home</tt> and <tt>Control-End</tt>.
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>Example<label id="sec_Range_Example"></heading>
+<p>
+This example is a somewhat modified version of the "range
+widgets" test from <tt/testgtk.c/.  It basically puts up a
+window with three range widgets all connected to the same
+adjustment, and a couple of controls for adjusting some of the
+parameters for scale widgets mentioned above, so you can see
+how they affect the way these widgets work for the user.
+      
+<tscreen><verb>
+/* example-start rangewidgets rangewidgets.c */
+
+#include <gtk/gtk.h>
+
+GtkWidget *hscale, *vscale;
+
+void cb_pos_menu_select (GtkWidget *item, GtkPositionType pos)
+{
+  /* set the value position on both scale widgets */
+  gtk_scale_set_value_pos (GTK_SCALE (hscale), pos);
+  gtk_scale_set_value_pos (GTK_SCALE (vscale), pos);
+}
+
+void cb_update_menu_select (GtkWidget *item, GtkUpdateType policy)
+{
+  /* set the update policy for both scale widgets */
+  gtk_range_set_update_policy (GTK_RANGE (hscale), policy);
+  gtk_range_set_update_policy (GTK_RANGE (vscale), policy);
+}
+
+void cb_digits_scale (GtkAdjustment *adj)
+{
+  /* set the number of decimal places to which adj->vaule is rounded
+   */
+  gtk_scale_set_digits (GTK_SCALE (hscale), (gint) adj->value);
+  gtk_scale_set_digits (GTK_SCALE (vscale), (gint) adj->value);
+}
+
+void cb_page_size (GtkAdjustment *get, GtkAdjustment *set)
+{
+  /* set the page size and page increment size of the sample
+     adjustment to the value specified by the "Page Size" scale */
+  set->page_size = get->value;
+  set->page_increment = get->value;
+  /* now emit the "changed" signal to reconfigure all the widgets that
+     are attached to this adjustment */
+  gtk_signal_emit_by_name (GTK_OBJECT (set), "changed");
+}
+
+void cb_draw_value (GtkToggleButton *button)
+{
+  /* turn the value display on the scale widgets off or on depending
+     on the state of the checkbutton */
+  gtk_scale_set_draw_value (GTK_SCALE (hscale), button->active);
+  gtk_scale_set_draw_value (GTK_SCALE (vscale), button->active);  
+}
+
+/* convenience functions */
+
+GtkWidget *make_menu_item (gchar *name, GtkSignalFunc callback,
+			   gpointer data)
+{
+  GtkWidget *item;
+  
+  item = gtk_menu_item_new_with_label (name);
+  gtk_signal_connect (GTK_OBJECT (item), "activate",
+		      callback, data);
+  gtk_widget_show (item);
+
+  return item;
+}
+
+void scale_set_default_values (GtkScale *scale)
+{
+  gtk_range_set_update_policy (GTK_RANGE (scale),
+			       GTK_UPDATE_CONTINUOUS);
+  gtk_scale_set_digits (scale, 1);
+  gtk_scale_set_value_pos (scale, GTK_POS_TOP);
+  gtk_scale_set_draw_value (scale, TRUE);
+}
+
+/* makes the sample window */
+
+void create_range_controls (void)
+{
+  GtkWidget *window;
+  GtkWidget *box1, *box2, *box3;
+  GtkWidget *button;
+  GtkWidget *scrollbar;
+  GtkWidget *separator;
+  GtkWidget *opt, *menu, *item;
+  GtkWidget *label;
+  GtkWidget *scale;
+  GtkObject *adj1, *adj2;
+
+  /* standard window-creating stuff */
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_signal_connect (GTK_OBJECT (window), "destroy",
+		      GTK_SIGNAL_FUNC(gtk_main_quit),
+		      NULL);
+  gtk_window_set_title (GTK_WINDOW (window), "range controls");
+
+  box1 = gtk_vbox_new (FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (window), box1);
+  gtk_widget_show (box1);
+
+  box2 = gtk_hbox_new (FALSE, 10);
+  gtk_container_border_width (GTK_CONTAINER (box2), 10);
+  gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
+  gtk_widget_show (box2);
+
+  /* value, lower, upper, step_increment, page_increment, page_size */
+  /* note that the page_size value only makes a difference for
+     scrollbar widgets, and the highest value you'll get is actually
+     (upper - page_size). */
+  adj1 = gtk_adjustment_new (0.0, 0.0, 101.0, 0.1, 1.0, 1.0);
+  
+  vscale = gtk_vscale_new (GTK_ADJUSTMENT (adj1));
+  scale_set_default_values (GTK_SCALE (vscale));
+  gtk_box_pack_start (GTK_BOX (box2), vscale, TRUE, TRUE, 0);
+  gtk_widget_show (vscale);
+
+  box3 = gtk_vbox_new (FALSE, 10);
+  gtk_box_pack_start (GTK_BOX (box2), box3, TRUE, TRUE, 0);
+  gtk_widget_show (box3);
+
+  /* reuse the same adjustment */
+  hscale = gtk_hscale_new (GTK_ADJUSTMENT (adj1));
+  gtk_widget_set_usize (GTK_WIDGET (hscale), 200, 30);
+  scale_set_default_values (GTK_SCALE (hscale));
+  gtk_box_pack_start (GTK_BOX (box3), hscale, TRUE, TRUE, 0);
+  gtk_widget_show (hscale);
+
+  /* reuse the same adjustment again */
+  scrollbar = gtk_hscrollbar_new (GTK_ADJUSTMENT (adj1));
+  /* notice how this causes the scales to always be updated
+     continuously when the scrollbar is moved */
+  gtk_range_set_update_policy (GTK_RANGE (scrollbar), 
+			       GTK_UPDATE_CONTINUOUS);
+  gtk_box_pack_start (GTK_BOX (box3), scrollbar, TRUE, TRUE, 0);
+  gtk_widget_show (scrollbar);
+
+  box2 = gtk_hbox_new (FALSE, 10);
+  gtk_container_border_width (GTK_CONTAINER (box2), 10);
+  gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
+  gtk_widget_show (box2);
+
+  /* a checkbutton to control whether the value is displayed or not */
+  button = gtk_check_button_new_with_label
+    ("Display value on scale widgets");
+  gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (button), TRUE);
+  gtk_signal_connect (GTK_OBJECT (button), "toggled", GTK_SIGNAL_FUNC
+		      (cb_draw_value), NULL);
+  gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
+  gtk_widget_show (button);
+  
+  box2 = gtk_hbox_new (FALSE, 10);
+  gtk_container_border_width (GTK_CONTAINER (box2), 10);
+
+  /* an option menu to change the position of the value */
+  label = gtk_label_new ("Scale Value Position:");
+  gtk_box_pack_start (GTK_BOX (box2), label, FALSE, FALSE, 0);
+  gtk_widget_show (label);
+  
+  opt = gtk_option_menu_new();
+  menu = gtk_menu_new();
+
+  item = make_menu_item ("Top", GTK_SIGNAL_FUNC (cb_pos_menu_select),
+			 GINT_TO_POINTER (GTK_POS_TOP));
+  gtk_menu_append (GTK_MENU (menu), item);
+  
+  item = make_menu_item ("Bottom", GTK_SIGNAL_FUNC (cb_pos_menu_select), 
+			 GINT_TO_POINTER (GTK_POS_BOTTOM));
+  gtk_menu_append (GTK_MENU (menu), item);
+  
+  item = make_menu_item ("Left", GTK_SIGNAL_FUNC (cb_pos_menu_select),
+			 GINT_TO_POINTER (GTK_POS_LEFT));
+  gtk_menu_append (GTK_MENU (menu), item);
+  
+  item = make_menu_item ("Right", GTK_SIGNAL_FUNC (cb_pos_menu_select),
+			 GINT_TO_POINTER (GTK_POS_RIGHT));
+  gtk_menu_append (GTK_MENU (menu), item);
+  
+  gtk_option_menu_set_menu (GTK_OPTION_MENU (opt), menu);
+  gtk_box_pack_start (GTK_BOX (box2), opt, TRUE, TRUE, 0);
+  gtk_widget_show (opt);
+
+  gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
+  gtk_widget_show (box2);
+
+  box2 = gtk_hbox_new (FALSE, 10);
+  gtk_container_border_width (GTK_CONTAINER (box2), 10);
+
+  /* yet another option menu, this time for the update policy of the
+     scale widgets */
+  label = gtk_label_new ("Scale Update Policy:");
+  gtk_box_pack_start (GTK_BOX (box2), label, FALSE, FALSE, 0);
+  gtk_widget_show (label);
+  
+  opt = gtk_option_menu_new();
+  menu = gtk_menu_new();
+  
+  item = make_menu_item ("Continuous",
+			 GTK_SIGNAL_FUNC (cb_update_menu_select),
+			 GINT_TO_POINTER (GTK_UPDATE_CONTINUOUS));
+  gtk_menu_append (GTK_MENU (menu), item);
+  
+  item = make_menu_item ("Discontinuous",
+			 GTK_SIGNAL_FUNC (cb_update_menu_select),
+			 GINT_TO_POINTER (GTK_UPDATE_DISCONTINUOUS));
+  gtk_menu_append (GTK_MENU (menu), item);
+  
+  item = make_menu_item ("Delayed",
+			 GTK_SIGNAL_FUNC (cb_update_menu_select),
+			 GINT_TO_POINTER (GTK_UPDATE_DELAYED));
+  gtk_menu_append (GTK_MENU (menu), item);
+  
+  gtk_option_menu_set_menu (GTK_OPTION_MENU (opt), menu);
+  gtk_box_pack_start (GTK_BOX (box2), opt, TRUE, TRUE, 0);
+  gtk_widget_show (opt);
+  
+  gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
+  gtk_widget_show (box2);
+
+  box2 = gtk_hbox_new (FALSE, 10);
+  gtk_container_border_width (GTK_CONTAINER (box2), 10);
+  
+  /* a GtkHScale widget for adjusting the number of digits on the
+     sample scales. */
+  label = gtk_label_new ("Scale Digits:");
+  gtk_box_pack_start (GTK_BOX (box2), label, FALSE, FALSE, 0);
+  gtk_widget_show (label);
+
+  adj2 = gtk_adjustment_new (1.0, 0.0, 5.0, 1.0, 1.0, 0.0);
+  gtk_signal_connect (GTK_OBJECT (adj2), "value_changed",
+		      GTK_SIGNAL_FUNC (cb_digits_scale), NULL);
+  scale = gtk_hscale_new (GTK_ADJUSTMENT (adj2));
+  gtk_scale_set_digits (GTK_SCALE (scale), 0);
+  gtk_box_pack_start (GTK_BOX (box2), scale, TRUE, TRUE, 0);
+  gtk_widget_show (scale);
+
+  gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
+  gtk_widget_show (box2);
+  
+  box2 = gtk_hbox_new (FALSE, 10);
+  gtk_container_border_width (GTK_CONTAINER (box2), 10);
+  
+  /* And, one last GtkHScale widget for adjusting the page size of the
+     scrollbar. */
+  label = gtk_label_new ("Scrollbar Page Size:");
+  gtk_box_pack_start (GTK_BOX (box2), label, FALSE, FALSE, 0);
+  gtk_widget_show (label);
+
+  adj2 = gtk_adjustment_new (1.0, 1.0, 101.0, 1.0, 1.0, 0.0);
+  gtk_signal_connect (GTK_OBJECT (adj2), "value_changed",
+		      GTK_SIGNAL_FUNC (cb_page_size), adj1);
+  scale = gtk_hscale_new (GTK_ADJUSTMENT (adj2));
+  gtk_scale_set_digits (GTK_SCALE (scale), 0);
+  gtk_box_pack_start (GTK_BOX (box2), scale, TRUE, TRUE, 0);
+  gtk_widget_show (scale);
+
+  gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
+  gtk_widget_show (box2);
+
+  separator = gtk_hseparator_new ();
+  gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
+  gtk_widget_show (separator);
+
+  box2 = gtk_vbox_new (FALSE, 10);
+  gtk_container_border_width (GTK_CONTAINER (box2), 10);
+  gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
+  gtk_widget_show (box2);
+
+  button = gtk_button_new_with_label ("Quit");
+  gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+			     GTK_SIGNAL_FUNC(gtk_main_quit),
+			     NULL);
+  gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
+  GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+  gtk_widget_grab_default (button);
+  gtk_widget_show (button);
+
+  gtk_widget_show (window);
+}
+
+int main (int argc, char *argv[])
+{
+  gtk_init(&amp;argc, &amp;argv);
+
+  create_range_controls();
+
+  gtk_main();
+
+  return 0;
+}
+
+/* example-end */
+</verb></tscreen>
 
 <!-- ***************************************************************** -->
 <sect> Miscallaneous Widgets
@@ -6328,7 +7100,7 @@ tree, and connects all the signals for the relevant objects, so you
 can see when they are emitted.
 
 <tscreen><verb>
-/* example-start tree tree.c */
+/* example-start tree tree.h */
 
 #include <gtk/gtk.h>
 
@@ -6872,14 +7644,14 @@ of the global variables used in the menufactory.c file.
 extern "C" {
 #endif /* __cplusplus */
 
-void get_main_menu (GtkWidget **menubar, GtkAcceleratorTable **table);
-void menus_create(GtkMenuEntry *entries, int nmenu_entries);
+void get_main_menu (GtkWidget *, GtkWidget **menubar);
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
 
 #endif /* __MENUFACTORY_H__ */
+
 /* example-end */
 </verb></tscreen>
 
@@ -6893,11 +7665,7 @@ And here is the menufactory.c file.
 
 #include "mfmain.h"
 
-
-static void menus_remove_accel(GtkWidget * widget, gchar * signal_name, gchar * path);
-static gint menus_install_accel(GtkWidget * widget, gchar * signal_name, gchar key, gchar modifiers, gchar * path);
-void menus_init(void);
-void menus_create(GtkMenuEntry * entries, int nmenu_entries);
+static void print_hello(GtkWidget *widget, gpointer data);
 
 
 /* this is the GtkMenuEntry structure used to create new menus.  The
@@ -6910,131 +7678,39 @@ void menus_create(GtkMenuEntry * entries, int nmenu_entries);
 
 static GtkMenuEntry menu_items[] =
 {
-	{"<Main>/File/New", "<control>N", NULL, NULL},
-	{"<Main>/File/Open", "<control>O", NULL, NULL},
-	{"<Main>/File/Save", "<control>S", NULL, NULL},
-	{"<Main>/File/Save as", NULL, NULL, NULL},
-	{"<Main>/File/<separator>", NULL, NULL, NULL},
-	{"<Main>/File/Quit", "<control>Q", file_quit_cmd_callback, "OK, I'll quit"},
-	{"<Main>/Options/Test", NULL, NULL, NULL}
+    {"<Main>/File/New", "<control>N", print_hello, NULL},
+    {"<Main>/File/Open", "<control>O", print_hello, NULL},
+    {"<Main>/File/Save", "<control>S", print_hello, NULL},
+    {"<Main>/File/Save as", NULL, NULL, NULL},
+    {"<Main>/File/<separator>", NULL, NULL, NULL},
+    {"<Main>/File/Quit", "<control>Q", file_quit_cmd_callback, "OK, I'll quit"},
+    {"<Main>/Options/Test", NULL, NULL, NULL}
 };
 
-/* calculate the number of menu_item's */
-static int nmenu_items = sizeof(menu_items) / sizeof(menu_items[0]);
 
-static int initialize = TRUE;
-static GtkMenuFactory *factory = NULL;
-static GtkMenuFactory *subfactory[1];
-static GHashTable *entry_ht = NULL;
-
-void get_main_menu(GtkWidget ** menubar, GtkAcceleratorTable ** table)
+static void
+print_hello(GtkWidget *widget, gpointer data)
 {
-    if (initialize)
-	    menus_init();
+    printf("hello!\n");
+}
+
+void get_main_menu(GtkWidget *window, GtkWidget ** menubar)
+{
+    int nmenu_items = sizeof(menu_items) / sizeof(menu_items[0]);
+    GtkMenuFactory *factory;
+    GtkMenuFactory *subfactory;
+
+    factory = gtk_menu_factory_new(GTK_MENU_FACTORY_MENU_BAR);
+    subfactory = gtk_menu_factory_new(GTK_MENU_FACTORY_MENU_BAR);
+
+    gtk_menu_factory_add_subfactory(factory, subfactory, "<Main>");
+    gtk_menu_factory_add_entries(factory, menu_items, nmenu_items);
+    gtk_window_add_accelerator_table(GTK_WINDOW(window), subfactory->table);
     
     if (menubar)
-	    *menubar = subfactory[0]->widget;
-    if (table)
-	    *table = subfactory[0]->table;
+        *menubar = subfactory->widget;
 }
 
-void menus_init(void)
-{
-    if (initialize) {
-	initialize = FALSE;
-	
-	factory = gtk_menu_factory_new(GTK_MENU_FACTORY_MENU_BAR);
-	subfactory[0] = gtk_menu_factory_new(GTK_MENU_FACTORY_MENU_BAR);
-	
-	gtk_menu_factory_add_subfactory(factory, subfactory[0], "<Main>");
-	menus_create(menu_items, nmenu_items);
-    }
-}
-
-void menus_create(GtkMenuEntry * entries, int nmenu_entries)
-{
-    char *accelerator;
-    int i;
-    
-    if (initialize)
-	    menus_init();
-    
-    if (entry_ht)
-	    for (i = 0; i < nmenu_entries; i++) {
-		accelerator = g_hash_table_lookup(entry_ht, entries[i].path);
-		if (accelerator) {
-		    if (accelerator[0] == '\0')
-			    entries[i].accelerator = NULL;
-		    else
-			    entries[i].accelerator = accelerator;
-		}
-	    }
-    gtk_menu_factory_add_entries(factory, entries, nmenu_entries);
-    
-    for (i = 0; i < nmenu_entries; i++)
-	    if (entries[i].widget) {
-		gtk_signal_connect(GTK_OBJECT(entries[i].widget), "install_accelerator",
-				   (GtkSignalFunc) menus_install_accel,
-				   entries[i].path);
-		gtk_signal_connect(GTK_OBJECT(entries[i].widget), "remove_accelerator",
-				   (GtkSignalFunc) menus_remove_accel,
-				   entries[i].path);
-	    }
-}
-
-static gint menus_install_accel(GtkWidget * widget, gchar * signal_name, gchar key, gchar modifiers, gchar * path)
-{
-    char accel[64];
-    char *t1, t2[2];
-    
-    accel[0] = '\0';
-    if (modifiers & GDK_CONTROL_MASK)
-	    strcat(accel, "<control>");
-    if (modifiers & GDK_SHIFT_MASK)
-	    strcat(accel, "<shift>");
-    if (modifiers & GDK_MOD1_MASK)
-	    strcat(accel, "<alt>");
-    
-    t2[0] = key;
-    t2[1] = '\0';
-    strcat(accel, t2);
-    
-    if (entry_ht) {
-	t1 = g_hash_table_lookup(entry_ht, path);
-	g_free(t1);
-    } else
-	    entry_ht = g_hash_table_new(g_str_hash, g_str_equal);
-    
-    g_hash_table_insert(entry_ht, path, g_strdup(accel));
-    
-    return TRUE;
-}
-
-static void menus_remove_accel(GtkWidget * widget, gchar * signal_name, gchar * path)
-{
-    char *t;
-    
-    if (entry_ht) {
-	t = g_hash_table_lookup(entry_ht, path);
-	g_free(t);
-	
-	g_hash_table_insert(entry_ht, path, g_strdup(""));
-    }
-}
-
-void menus_set_sensitive(char *path, int sensitive)
-{
-    GtkMenuPath *menu_path;
-    
-    if (initialize)
-	    menus_init();
-    
-    menu_path = gtk_menu_factory_find(factory, path);
-    if (menu_path)
-	    gtk_widget_set_sensitive(menu_path->widget, sensitive);
-    else
-	    g_warning("Unable to set sensitivity for menu which doesn't exist: %s", path);
-}
 /* example-end */
 </verb></tscreen>
 
@@ -7058,6 +7734,7 @@ void file_quit_cmd_callback(GtkWidget *widget, gpointer data);
 #endif /* __cplusplus */
 
 #endif /* __MFMAIN_H__ */
+
 /* example-end */
 </verb></tscreen>
 
@@ -7071,14 +7748,11 @@ And mfmain.c
 #include "mfmain.h"
 #include "menufactory.h"
 
-
 int main(int argc, char *argv[])
 {
     GtkWidget *window;
     GtkWidget *main_vbox;
     GtkWidget *menubar;
-    
-    GtkAcceleratorTable *accel;
     
     gtk_init(&amp;argc, &amp;argv);
     
@@ -7094,8 +7768,7 @@ int main(int argc, char *argv[])
     gtk_container_add(GTK_CONTAINER(window), main_vbox);
     gtk_widget_show(main_vbox);
     
-    get_main_menu(&amp;menubar, &amp;accel);
-    gtk_window_add_accelerator_table(GTK_WINDOW(window), accel);
+    get_main_menu(window, &amp;menubar);
     gtk_box_pack_start(GTK_BOX(main_vbox), menubar, FALSE, TRUE, 0);
     gtk_widget_show(menubar);
     
@@ -7114,6 +7787,7 @@ void file_quit_cmd_callback (GtkWidget *widget, gpointer data)
     g_print ("%s\n", (char *) data);
     gtk_exit(0);
 }
+
 /* example-end */
 </verb></tscreen>
 
@@ -7572,16 +8246,10 @@ widget, please consider writing a tutorial on it so others may benifit
 from your time.
 
 <!-- ----------------------------------------------------------------- -->
-<sect1> Adjustments
-<p>
-<!-- ----------------------------------------------------------------- -->
 <sect1> Toolbar
 <p>
 <!-- ----------------------------------------------------------------- -->
 <sect1> Fixed Container
-<p>
-<!-- ----------------------------------------------------------------- -->
-<sect1> Range Controls
 <p>
 <!-- ----------------------------------------------------------------- -->
 <sect1> Curves
@@ -8281,6 +8949,169 @@ I won't explain the meaning of the arguments as they follow very much like
 the ones above. The function pointed to by the first argument to
 gtk_idle_add will be called whenever the opportunity arises. As with the
 others, returning FALSE will stop the idle function from being called.
+
+<!-- ***************************************************************** -->
+<sect>Advanced Event and Signal Handling<label id="sec_Adv_Events_and_Signals">
+<!-- ***************************************************************** -->
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>Signal Functions
+
+<!-- ----------------------------------------------------------------- -->
+<sect2>Connecting and Disconnecting Signal Handlers
+<p>
+
+<tscreen><verb>
+guint gtk_signal_connect( GtkObject     *object,
+                          const gchar   *name,
+                          GtkSignalFunc  func,
+                          gpointer       func_data );
+
+guint gtk_signal_connect_after( GtkObject     *object,
+                                const gchar   *name,
+                                GtkSignalFunc  func,
+                                gpointer       func_data );
+
+guint gtk_signal_connect_object( GtkObject     *object,
+                                 const gchar   *name,
+                                 GtkSignalFunc  func,
+                                 GtkObject     *slot_object );
+
+guint gtk_signal_connect_object_after( GtkObject     *object,
+                                       const gchar   *name,
+                                       GtkSignalFunc  func,
+                                       GtkObject     *slot_object );
+
+guint gtk_signal_connect_full( GtkObject          *object,
+                               const gchar        *name,
+                               GtkSignalFunc       func,
+                               GtkCallbackMarshal  marshal,
+                               gpointer            data,
+                               GtkDestroyNotify    destroy_func,
+                               gint                object_signal,
+                               gint                after );
+
+guint gtk_signal_connect_interp( GtkObject          *object,
+                                 const gchar        *name,
+                                 GtkCallbackMarshal  func,
+                                 gpointer            data,
+                                 GtkDestroyNotify    destroy_func,
+                                 gint                after );
+
+void gtk_signal_connect_object_while_alive( GtkObject     *object,
+                                            const gchar   *signal,
+                                            GtkSignalFunc  func,
+                                            GtkObject     *alive_object );
+
+void gtk_signal_connect_while_alive( GtkObject     *object,
+                                     const gchar   *signal,
+                                     GtkSignalFunc  func,
+                                     gpointer       func_data,
+                                     GtkObject     *alive_object );
+
+void gtk_signal_disconnect( GtkObject *object,
+                            guint      handler_id );
+
+void gtk_signal_disconnect_by_func( GtkObject     *object,
+                                    GtkSignalFunc  func,
+                                    gpointer       data );
+</verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->
+<sect2>Blocking and Unblocking Signal Handlers
+<p>
+<tscreen><verb>
+void gtk_signal_handler_block( GtkObject *object,
+                               guint      handler_id);
+
+void gtk_signal_handler_block_by_func( GtkObject     *object,
+                                       GtkSignalFunc  func,
+                                       gpointer       data );
+
+void gtk_signal_handler_block_by_data( GtkObject *object,
+                                       gpointer   data );
+
+void gtk_signal_handler_unblock( GtkObject *object,
+                                 guint      handler_id );
+
+void gtk_signal_handler_unblock_by_func( GtkObject     *object,
+                                         GtkSignalFunc  func,
+                                         gpointer       data );
+
+void gtk_signal_handler_unblock_by_data( GtkObject *object,
+                                         gpointer   data );
+</verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->
+<sect2>Emitting and Stopping Signals
+<p>
+<tscreen><verb>
+void gtk_signal_emit( GtkObject *object,
+                      guint      signal_id,
+                      ... );
+
+void gtk_signal_emit_by_name( GtkObject   *object,
+                              const gchar *name,
+                              ... );
+
+void gtk_signal_emitv( GtkObject *object,
+                       guint      signal_id,
+                       GtkArg    *params );
+
+void gtk_signal_emitv_by_name( GtkObject   *object,
+                               const gchar *name,
+                               GtkArg      *params );
+
+guint gtk_signal_n_emissions( GtkObject *object,
+                              guint      signal_id );
+
+guint gtk_signal_n_emissions_by_name( GtkObject   *object,
+                                      const gchar *name );
+
+void gtk_signal_emit_stop( GtkObject *object,
+                           guint      signal_id );
+
+void gtk_signal_emit_stop_by_name( GtkObject   *object,
+                                   const gchar *name );
+</verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>Signal Emission and Propagation
+<p>
+Signal emission is the process wherby GTK+ runs all handlers for a
+specific object and signal.
+
+First, note that the return value from a signal emission is the
+return value of the <em>last</em> handler executed. Since event signals
+are all of type GTK_RUN_LAST, this will be the default (GTK+ supplied)
+default handler, unless you connect with gtk_signal_connect_after().
+
+The way an event (say GTK_BUTTON_PRESS) is handled, is:
+<itemize>
+<item>Start with the widget where the event occured.
+
+<item>Emit the generic "event" signal. If that signal handler returns
+a value of TRUE, stop all processing.
+
+<item>Otherwise, emit a specific, "button_press_event" signal. If that
+returns TRUE, stop all processing.
+
+<item>Otherwise, go to the widget's parent, and repeat the above steps.
+
+<item>Contimue until some signal handler returns TRUE, or until the
+top-level widget is reached.
+</itemize>
+
+Some consequences of the above are:
+<itemize>
+<item>Your handler's return value will have no effect if there is a
+default handler, unless you connect with gtk_signal_connect_after().
+
+<item>To prevent the default handler from being run, you need to connect
+with gtk_signal_connect() and use gtk_signal_emit_stop_by_name() - the
+return value only affects whether the signal is propagated, not the
+current emission.
+</itemize>
 
 <!-- ***************************************************************** -->
 <sect>Managing Selections
@@ -11636,6 +12467,12 @@ name="rajat@ix.netcom.com"</tt> for the excellent job on the Pixmap tutorial.
 <item>Michael K. Johnson <tt><htmlurl url="mailto:johnsonm@redhat.com"
 name="johnsonm@redhat.com"></tt> for info and code for popup menus. 
 
+<item>David Huggins-Daines <tt><htmlurl url="mailto:bn711@freenet.carleton.ca"
+name="bn711@freenet.carleton.ca"></tt> for the Range Widgets and Tree Widget
+sections. 
+
+<item>Stefan Mars <tt><htmlurl url="mailto:mars@lysator.liu.se"
+name="mars@lysator.liu.se"></tt> for the GtkCList section
 </itemize>
 <p>
 And to all of you who commented and helped refine this document.
@@ -11675,6 +12512,439 @@ not make any guarentee that the information is even accurate.
 <!-- ***************************************************************** -->
 
 <!-- ***************************************************************** -->
+<sect> GDK Event Types<label id="sec_GDK_Event_Types">
+<!-- ***************************************************************** -->
+<p>
+The follwing data types are passed into event handlers by GTK+. For
+each data type listed, the signals that use this data type are listed.
+
+<itemize>
+<item>  GdkEvent
+          <itemize>
+          <item>drag_end_event
+          </itemize>
+
+<item>  GdkEventType
+
+<item>  GdkEventAny
+          <itemize>
+          <item>delete_event
+          <item>destroy_event
+          <item>map_event
+          <item>unmap_event
+          <item>no_expose_event
+          </itemize>
+
+<item>  GdkEventExpose
+          <itemize>
+          <item>expose_event
+          </itemize>
+
+<item>  GdkEventNoExpose
+
+<item>  GdkEventVisibility
+
+<item>  GdkEventMotion
+          <itemize>
+          <item>motion_notify_event
+	  </itemize>
+
+<item>  GdkEventButton
+          <itemize>
+          <item>button_press_event
+	  <item>button_release_event
+	  </itemize>
+
+<item>  GdkEventKey
+          <itemize>
+          <item>key_press_event
+          <item>key_release_event
+	  </itemize>
+
+<item>  GdkEventCrossing
+          <itemize>
+          <item>enter_notify_event
+          <item>leave_notify_event
+	  </itemize>
+
+<item>  GdkEventFocus
+          <itemize>
+          <item>focus_in_event
+          <item>focus_out_event
+	  </itemize>
+
+<item>  GdkEventConfigure
+          <itemize>
+          <item>configure_event
+	  </itemize>
+
+<item>  GdkEventProperty
+          <itemize>
+          <item>property_notify_event
+	  </itemize>
+
+<item>  GdkEventSelection
+          <itemize>
+          <item>selection_clear_event
+          <item>selection_request_event
+          <item>selection_notify_event
+	  </itemize>
+
+<item>  GdkEventProximity
+          <itemize>
+          <item>proximity_in_event
+          <item>proximity_out_event
+	  </itemize>
+
+<item>  GdkEventDragBegin
+          <itemize>
+          <item>drag_begin_event
+	  </itemize>
+
+<item>  GdkEventDragRequest
+          <itemize>
+          <item>drag_request_event
+	  </itemize>
+
+<item>  GdkEventDropEnter
+          <itemize>
+          <item>drop_enter_event
+	  </itemize>
+
+<item>  GdkEventDropLeave
+          <itemize>
+          <item>drop_leave_event
+	  </itemize>
+
+<item>  GdkEventDropDataAvailable
+          <itemize>
+          <item>drop_data_available_event
+	  </itemize>
+
+<item>  GdkEventClient
+          <itemize>
+          <item>client_event
+	  </itemize>
+
+<item>  GdkEventOther
+          <itemize>
+          <item>other_event
+	  </itemize>
+</itemize>
+
+The data type <tt/GdkEventType/ is a special data type that is used by
+all the other data types as an indicator of the data type being passed
+to the signal handler. As you will see below, each of the event data
+structures has a member of this type. It is defined as an enumeration
+type as follows:
+
+<tscreen><verb>
+typedef enum
+{
+  GDK_NOTHING           = -1,
+  GDK_DELETE            = 0,
+  GDK_DESTROY           = 1,
+  GDK_EXPOSE            = 2,
+  GDK_MOTION_NOTIFY     = 3,
+  GDK_BUTTON_PRESS      = 4,
+  GDK_2BUTTON_PRESS     = 5,
+  GDK_3BUTTON_PRESS     = 6,
+  GDK_BUTTON_RELEASE    = 7,
+  GDK_KEY_PRESS         = 8,
+  GDK_KEY_RELEASE       = 9,
+  GDK_ENTER_NOTIFY      = 10,
+  GDK_LEAVE_NOTIFY      = 11,
+  GDK_FOCUS_CHANGE      = 12,
+  GDK_CONFIGURE         = 13,
+  GDK_MAP               = 14,
+  GDK_UNMAP             = 15,
+  GDK_PROPERTY_NOTIFY   = 16,
+  GDK_SELECTION_CLEAR   = 17,
+  GDK_SELECTION_REQUEST = 18,
+  GDK_SELECTION_NOTIFY  = 19,
+  GDK_PROXIMITY_IN      = 20,
+  GDK_PROXIMITY_OUT     = 21,
+  GDK_DRAG_BEGIN        = 22,
+  GDK_DRAG_REQUEST      = 23,
+  GDK_DROP_ENTER        = 24,
+  GDK_DROP_LEAVE        = 25,
+  GDK_DROP_DATA_AVAIL   = 26,
+  GDK_CLIENT_EVENT      = 27,
+  GDK_VISIBILITY_NOTIFY = 28,
+  GDK_NO_EXPOSE         = 29,
+  GDK_OTHER_EVENT       = 9999  /* Deprecated, use filters instead */
+} GdkEventType;
+</verb></tscreen>
+
+The other event type that is different from the others is
+<tt/GdkEvent/ itself. This is a union of all the other
+data types, which allows it to be cast to a specific
+event data type within a signal handler.
+
+<!-- Just a big list for now, needs expanding upon - TRG -->
+So, the event data types are defined as follows:
+
+<tscreen><verb>
+struct _GdkEventAny
+{
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+};
+
+struct _GdkEventExpose
+{
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+  GdkRectangle area;
+  gint count; /* If non-zero, how many more events follow. */
+};
+
+struct _GdkEventNoExpose
+{
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+  /* XXX: does anyone need the X major_code or minor_code fields? */
+};
+
+struct _GdkEventVisibility
+{
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+  GdkVisibilityState state;
+};
+
+struct _GdkEventMotion
+{
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+  guint32 time;
+  gdouble x;
+  gdouble y;
+  gdouble pressure;
+  gdouble xtilt;
+  gdouble ytilt;
+  guint state;
+  gint16 is_hint;
+  GdkInputSource source;
+  guint32 deviceid;
+  gdouble x_root, y_root;
+};
+
+struct _GdkEventButton
+{
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+  guint32 time;
+  gdouble x;
+  gdouble y;
+  gdouble pressure;
+  gdouble xtilt;
+  gdouble ytilt;
+  guint state;
+  guint button;
+  GdkInputSource source;
+  guint32 deviceid;
+  gdouble x_root, y_root;
+};
+
+struct _GdkEventKey
+{
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+  guint32 time;
+  guint state;
+  guint keyval;
+  gint length;
+  gchar *string;
+};
+
+struct _GdkEventCrossing
+{
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+  GdkWindow *subwindow;
+  GdkNotifyType detail;
+};
+
+struct _GdkEventFocus
+{
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+  gint16 in;
+};
+
+struct _GdkEventConfigure
+{
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+  gint16 x, y;
+  gint16 width;
+  gint16 height;
+};
+
+struct _GdkEventProperty
+{
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+  GdkAtom atom;
+  guint32 time;
+  guint state;
+};
+
+struct _GdkEventSelection
+{
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+  GdkAtom selection;
+  GdkAtom target;
+  GdkAtom property;
+  guint32 requestor;
+  guint32 time;
+};
+
+/* This event type will be used pretty rarely. It only is important
+   for XInput aware programs that are drawing their own cursor */
+
+struct _GdkEventProximity
+{
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+  guint32 time;
+  GdkInputSource source;
+  guint32 deviceid;
+};
+
+struct _GdkEventDragRequest
+{
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+  guint32 requestor;
+  union {
+    struct {
+      guint protocol_version:4;
+      guint sendreply:1;
+      guint willaccept:1;
+      guint delete_data:1; /* Do *not* delete if link is sent, only
+                              if data is sent */
+      guint senddata:1;
+      guint reserved:22;
+    } flags;
+    glong allflags;
+  } u;
+  guint8 isdrop; /* This gdk event can be generated by a couple of
+                    X events - this lets the app know whether the
+                    drop really occurred or we just set the data */
+
+  GdkPoint drop_coords;
+  gchar *data_type;
+  guint32 timestamp;
+};
+
+struct _GdkEventDragBegin
+{
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+  union {
+    struct {
+      guint protocol_version:4;
+      guint reserved:28;
+    } flags;
+    glong allflags;
+  } u;
+};
+
+struct _GdkEventDropEnter
+{
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+  guint32 requestor;
+  union {
+    struct {
+      guint protocol_version:4;
+      guint sendreply:1;
+      guint extended_typelist:1;
+      guint reserved:26;
+    } flags;
+    glong allflags;
+  } u;
+};
+
+struct _GdkEventDropLeave
+{
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+  guint32 requestor;
+  union {
+    struct {
+      guint protocol_version:4;
+      guint reserved:28;
+    } flags;
+    glong allflags;
+  } u;
+};
+
+struct _GdkEventDropDataAvailable
+{
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+  guint32 requestor;
+  union {
+    struct {
+      guint protocol_version:4;
+      guint isdrop:1;
+      guint reserved:25;
+    } flags;
+    glong allflags;
+  } u;
+  gchar *data_type; /* MIME type */
+  gulong data_numbytes;
+  gpointer data;
+  guint32 timestamp;
+  GdkPoint coords;
+};
+
+struct _GdkEventClient
+{
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+  GdkAtom message_type;
+  gushort data_format;
+  union {
+    char b[20];
+    short s[10];
+    long l[5];
+  } data;
+};
+
+struct _GdkEventOther
+{
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+  GdkXEvent *xevent;
+};
+</verb></tscreen>
+
+<!-- ***************************************************************** -->
 <sect> Code Examples
 <!-- ***************************************************************** -->
 <p>
@@ -11682,10 +12952,12 @@ Below are the code examples that are used in the above text
 which are not included in complete form elsewhere.
 
 <!-- ----------------------------------------------------------------- -->
-<sect1> Scribble
+<sect1>Tictactoe
+<!-- ----------------------------------------------------------------- -->
+<sect2>tictactoe.h
 <p>
 <tscreen><verb>
-/* example-start scribble-simple scribble-simple.c */
+/* example-start tictactoe tictactoe.h */
 
 /* GTK - The GIMP Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
@@ -11705,165 +12977,267 @@ which are not included in complete form elsewhere.
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
+#ifndef __TICTACTOE_H__
+#define __TICTACTOE_H__
+
+
+#include <gdk/gdk.h>
+#include <gtk/gtkvbox.h>
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
+#define TICTACTOE(obj)          GTK_CHECK_CAST (obj, tictactoe_get_type (), Tictactoe)
+#define TICTACTOE_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, tictactoe_get_type (), TictactoeClass)
+#define IS_TICTACTOE(obj)       GTK_CHECK_TYPE (obj, tictactoe_get_type ())
+
+
+typedef struct _Tictactoe       Tictactoe;
+typedef struct _TictactoeClass  TictactoeClass;
+
+struct _Tictactoe
+{
+  GtkVBox vbox;
+  
+  GtkWidget *buttons[3][3];
+};
+
+struct _TictactoeClass
+{
+  GtkVBoxClass parent_class;
+
+  void (* tictactoe) (Tictactoe *ttt);
+};
+
+guint          tictactoe_get_type        (void);
+GtkWidget*     tictactoe_new             (void);
+void	       tictactoe_clear           (Tictactoe *ttt);
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
+#endif /* __TICTACTOE_H__ */
+
+/* example-end */
+</verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->
+<sect2>tictactoe.c
+<p>
+<tscreen><verb>
+/* example-start tictactoe tictactoe.c */
+
+/* GTK - The GIMP Toolkit
+ * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
+#include "gtk/gtksignal.h"
+#include "gtk/gtktable.h"
+#include "gtk/gtktogglebutton.h"
+#include "tictactoe.h"
+
+enum {
+  TICTACTOE_SIGNAL,
+  LAST_SIGNAL
+};
+
+static void tictactoe_class_init          (TictactoeClass *klass);
+static void tictactoe_init                (Tictactoe      *ttt);
+static void tictactoe_toggle              (GtkWidget *widget, Tictactoe *ttt);
+
+static gint tictactoe_signals[LAST_SIGNAL] = { 0 };
+
+guint
+tictactoe_get_type ()
+{
+  static guint ttt_type = 0;
+
+  if (!ttt_type)
+    {
+      GtkTypeInfo ttt_info =
+      {
+	"Tictactoe",
+	sizeof (Tictactoe),
+	sizeof (TictactoeClass),
+	(GtkClassInitFunc) tictactoe_class_init,
+	(GtkObjectInitFunc) tictactoe_init,
+        (GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL
+      };
+
+      ttt_type = gtk_type_unique (gtk_vbox_get_type (), &amp;ttt_info);
+    }
+
+  return ttt_type;
+}
+
+static void
+tictactoe_class_init (TictactoeClass *class)
+{
+  GtkObjectClass *object_class;
+
+  object_class = (GtkObjectClass*) class;
+  
+  tictactoe_signals[TICTACTOE_SIGNAL] = gtk_signal_new ("tictactoe",
+					 GTK_RUN_FIRST,
+					 object_class->type,
+					 GTK_SIGNAL_OFFSET (TictactoeClass, tictactoe),
+					 gtk_signal_default_marshaller, GTK_TYPE_NONE, 0);
+
+
+  gtk_object_class_add_signals (object_class, tictactoe_signals, LAST_SIGNAL);
+
+  class->tictactoe = NULL;
+}
+
+static void
+tictactoe_init (Tictactoe *ttt)
+{
+  GtkWidget *table;
+  gint i,j;
+  
+  table = gtk_table_new (3, 3, TRUE);
+  gtk_container_add (GTK_CONTAINER(ttt), table);
+  gtk_widget_show (table);
+
+  for (i=0;i<3; i++)
+    for (j=0;j<3; j++)
+      {
+	ttt->buttons[i][j] = gtk_toggle_button_new ();
+	gtk_table_attach_defaults (GTK_TABLE(table), ttt->buttons[i][j], 
+				   i, i+1, j, j+1);
+	gtk_signal_connect (GTK_OBJECT (ttt->buttons[i][j]), "toggled",
+			    GTK_SIGNAL_FUNC (tictactoe_toggle), ttt);
+	gtk_widget_set_usize (ttt->buttons[i][j], 20, 20);
+	gtk_widget_show (ttt->buttons[i][j]);
+      }
+}
+
+GtkWidget*
+tictactoe_new ()
+{
+  return GTK_WIDGET ( gtk_type_new (tictactoe_get_type ()));
+}
+
+void	       
+tictactoe_clear (Tictactoe *ttt)
+{
+  int i,j;
+
+  for (i=0;i<3;i++)
+    for (j=0;j<3;j++)
+      {
+	gtk_signal_handler_block_by_data (GTK_OBJECT(ttt->buttons[i][j]), ttt);
+	gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (ttt->buttons[i][j]),
+				     FALSE);
+	gtk_signal_handler_unblock_by_data (GTK_OBJECT(ttt->buttons[i][j]), ttt);
+      }
+}
+
+static void
+tictactoe_toggle (GtkWidget *widget, Tictactoe *ttt)
+{
+  int i,k;
+
+  static int rwins[8][3] = { { 0, 0, 0 }, { 1, 1, 1 }, { 2, 2, 2 },
+			     { 0, 1, 2 }, { 0, 1, 2 }, { 0, 1, 2 },
+			     { 0, 1, 2 }, { 0, 1, 2 } };
+  static int cwins[8][3] = { { 0, 1, 2 }, { 0, 1, 2 }, { 0, 1, 2 },
+			     { 0, 0, 0 }, { 1, 1, 1 }, { 2, 2, 2 },
+			     { 0, 1, 2 }, { 2, 1, 0 } };
+
+  int success, found;
+
+  for (k=0; k<8; k++)
+    {
+      success = TRUE;
+      found = FALSE;
+
+      for (i=0;i<3;i++)
+	{
+	  success = success &amp;&amp; 
+	    GTK_TOGGLE_BUTTON(ttt->buttons[rwins[k][i]][cwins[k][i]])->active;
+	  found = found ||
+	    ttt->buttons[rwins[k][i]][cwins[k][i]] == widget;
+	}
+      
+      if (success &amp;&amp; found)
+	{
+	  gtk_signal_emit (GTK_OBJECT (ttt), 
+			   tictactoe_signals[TICTACTOE_SIGNAL]);
+	  break;
+	}
+    }
+}
+
+/* example-end */
+</verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->
+<sect2>ttt_test.c
+<p>
+<tscreen><verb>
+/* example-start tictactoe ttt_test.c */
 
 #include <gtk/gtk.h>
-
-/* Backing pixmap for drawing area */
-static GdkPixmap *pixmap = NULL;
-
-/* Create a new backing pixmap of the appropriate size */
-static gint
-configure_event (GtkWidget *widget, GdkEventConfigure *event)
-{
-  if (pixmap)
-    gdk_pixmap_unref(pixmap);
-
-  pixmap = gdk_pixmap_new(widget->window,
-			  widget->allocation.width,
-			  widget->allocation.height,
-			  -1);
-  gdk_draw_rectangle (pixmap,
-		      widget->style->white_gc,
-		      TRUE,
-		      0, 0,
-		      widget->allocation.width,
-		      widget->allocation.height);
-
-  return TRUE;
-}
-
-/* Redraw the screen from the backing pixmap */
-static gint
-expose_event (GtkWidget *widget, GdkEventExpose *event)
-{
-  gdk_draw_pixmap(widget->window,
-		  widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
-		  pixmap,
-		  event->area.x, event->area.y,
-		  event->area.x, event->area.y,
-		  event->area.width, event->area.height);
-
-  return FALSE;
-}
-
-/* Draw a rectangle on the screen */
-static void
-draw_brush (GtkWidget *widget, gdouble x, gdouble y)
-{
-  GdkRectangle update_rect;
-
-  update_rect.x = x - 5;
-  update_rect.y = y - 5;
-  update_rect.width = 10;
-  update_rect.height = 10;
-  gdk_draw_rectangle (pixmap,
-		      widget->style->black_gc,
-		      TRUE,
-		      update_rect.x, update_rect.y,
-		      update_rect.width, update_rect.height);
-  gtk_widget_draw (widget, &amp;update_rect);
-}
-
-static gint
-button_press_event (GtkWidget *widget, GdkEventButton *event)
-{
-  if (event->button == 1 &amp;&amp; pixmap != NULL)
-    draw_brush (widget, event->x, event->y);
-
-  return TRUE;
-}
-
-static gint
-motion_notify_event (GtkWidget *widget, GdkEventMotion *event)
-{
-  int x, y;
-  GdkModifierType state;
-
-  if (event->is_hint)
-    gdk_window_get_pointer (event->window, &amp;x, &amp;y, &amp;state);
-  else
-    {
-      x = event->x;
-      y = event->y;
-      state = event->state;
-    }
-    
-  if (state &amp; GDK_BUTTON1_MASK &amp;&amp; pixmap != NULL)
-    draw_brush (widget, x, y);
-  
-  return TRUE;
-}
+#include "tictactoe.h"
 
 void
-quit ()
+win (GtkWidget *widget, gpointer data)
 {
-  gtk_exit (0);
+  g_print ("Yay!\n");
+  tictactoe_clear (TICTACTOE (widget));
 }
 
-int
+int 
 main (int argc, char *argv[])
 {
   GtkWidget *window;
-  GtkWidget *drawing_area;
-  GtkWidget *vbox;
-
-  GtkWidget *button;
-
+  GtkWidget *ttt;
+  
   gtk_init (&amp;argc, &amp;argv);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_widget_set_name (window, "Test Input");
-
-  vbox = gtk_vbox_new (FALSE, 0);
-  gtk_container_add (GTK_CONTAINER (window), vbox);
-  gtk_widget_show (vbox);
-
+  
+  gtk_window_set_title (GTK_WINDOW (window), "Aspect Frame");
+  
   gtk_signal_connect (GTK_OBJECT (window), "destroy",
-		      GTK_SIGNAL_FUNC (quit), NULL);
+		      GTK_SIGNAL_FUNC (gtk_exit), NULL);
+  
+  gtk_container_border_width (GTK_CONTAINER (window), 10);
 
-  /* Create the drawing area */
+  ttt = tictactoe_new ();
+  
+  gtk_container_add (GTK_CONTAINER (window), ttt);
+  gtk_widget_show (ttt);
 
-  drawing_area = gtk_drawing_area_new ();
-  gtk_drawing_area_size (GTK_DRAWING_AREA (drawing_area), 200, 200);
-  gtk_box_pack_start (GTK_BOX (vbox), drawing_area, TRUE, TRUE, 0);
-
-  gtk_widget_show (drawing_area);
-
-  /* Signals used to handle backing pixmap */
-
-  gtk_signal_connect (GTK_OBJECT (drawing_area), "expose_event",
-		      (GtkSignalFunc) expose_event, NULL);
-  gtk_signal_connect (GTK_OBJECT(drawing_area),"configure_event",
-		      (GtkSignalFunc) configure_event, NULL);
-
-  /* Event signals */
-
-  gtk_signal_connect (GTK_OBJECT (drawing_area), "motion_notify_event",
-		      (GtkSignalFunc) motion_notify_event, NULL);
-  gtk_signal_connect (GTK_OBJECT (drawing_area), "button_press_event",
-		      (GtkSignalFunc) button_press_event, NULL);
-
-  gtk_widget_set_events (drawing_area, GDK_EXPOSURE_MASK
-			 | GDK_LEAVE_NOTIFY_MASK
-			 | GDK_BUTTON_PRESS_MASK
-			 | GDK_POINTER_MOTION_MASK
-			 | GDK_POINTER_MOTION_HINT_MASK);
-
-  /* .. And a quit button */
-  button = gtk_button_new_with_label ("Quit");
-  gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
-
-  gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-			     GTK_SIGNAL_FUNC (gtk_widget_destroy),
-			     GTK_OBJECT (window));
-  gtk_widget_show (button);
+  gtk_signal_connect (GTK_OBJECT (ttt), "tictactoe",
+		      GTK_SIGNAL_FUNC (win), NULL);
 
   gtk_widget_show (window);
-
+  
   gtk_main ();
-
+  
   return 0;
 }
+
 /* example-end */
 </verb></tscreen>
 
@@ -12565,4 +13939,191 @@ gtk_dial_adjustment_value_changed (GtkAdjustment *adjustment,
 }
 /* example-end */
 </verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1> Scribble
+<p>
+<tscreen><verb>
+/* example-start scribble-simple scribble-simple.c */
+
+/* GTK - The GIMP Toolkit
+ * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
+
+#include <gtk/gtk.h>
+
+/* Backing pixmap for drawing area */
+static GdkPixmap *pixmap = NULL;
+
+/* Create a new backing pixmap of the appropriate size */
+static gint
+configure_event (GtkWidget *widget, GdkEventConfigure *event)
+{
+  if (pixmap)
+    gdk_pixmap_unref(pixmap);
+
+  pixmap = gdk_pixmap_new(widget->window,
+			  widget->allocation.width,
+			  widget->allocation.height,
+			  -1);
+  gdk_draw_rectangle (pixmap,
+		      widget->style->white_gc,
+		      TRUE,
+		      0, 0,
+		      widget->allocation.width,
+		      widget->allocation.height);
+
+  return TRUE;
+}
+
+/* Redraw the screen from the backing pixmap */
+static gint
+expose_event (GtkWidget *widget, GdkEventExpose *event)
+{
+  gdk_draw_pixmap(widget->window,
+		  widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+		  pixmap,
+		  event->area.x, event->area.y,
+		  event->area.x, event->area.y,
+		  event->area.width, event->area.height);
+
+  return FALSE;
+}
+
+/* Draw a rectangle on the screen */
+static void
+draw_brush (GtkWidget *widget, gdouble x, gdouble y)
+{
+  GdkRectangle update_rect;
+
+  update_rect.x = x - 5;
+  update_rect.y = y - 5;
+  update_rect.width = 10;
+  update_rect.height = 10;
+  gdk_draw_rectangle (pixmap,
+		      widget->style->black_gc,
+		      TRUE,
+		      update_rect.x, update_rect.y,
+		      update_rect.width, update_rect.height);
+  gtk_widget_draw (widget, &amp;update_rect);
+}
+
+static gint
+button_press_event (GtkWidget *widget, GdkEventButton *event)
+{
+  if (event->button == 1 &amp;&amp; pixmap != NULL)
+    draw_brush (widget, event->x, event->y);
+
+  return TRUE;
+}
+
+static gint
+motion_notify_event (GtkWidget *widget, GdkEventMotion *event)
+{
+  int x, y;
+  GdkModifierType state;
+
+  if (event->is_hint)
+    gdk_window_get_pointer (event->window, &amp;x, &amp;y, &amp;state);
+  else
+    {
+      x = event->x;
+      y = event->y;
+      state = event->state;
+    }
+    
+  if (state &amp; GDK_BUTTON1_MASK &amp;&amp; pixmap != NULL)
+    draw_brush (widget, x, y);
+  
+  return TRUE;
+}
+
+void
+quit ()
+{
+  gtk_exit (0);
+}
+
+int
+main (int argc, char *argv[])
+{
+  GtkWidget *window;
+  GtkWidget *drawing_area;
+  GtkWidget *vbox;
+
+  GtkWidget *button;
+
+  gtk_init (&amp;argc, &amp;argv);
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_widget_set_name (window, "Test Input");
+
+  vbox = gtk_vbox_new (FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (window), vbox);
+  gtk_widget_show (vbox);
+
+  gtk_signal_connect (GTK_OBJECT (window), "destroy",
+		      GTK_SIGNAL_FUNC (quit), NULL);
+
+  /* Create the drawing area */
+
+  drawing_area = gtk_drawing_area_new ();
+  gtk_drawing_area_size (GTK_DRAWING_AREA (drawing_area), 200, 200);
+  gtk_box_pack_start (GTK_BOX (vbox), drawing_area, TRUE, TRUE, 0);
+
+  gtk_widget_show (drawing_area);
+
+  /* Signals used to handle backing pixmap */
+
+  gtk_signal_connect (GTK_OBJECT (drawing_area), "expose_event",
+		      (GtkSignalFunc) expose_event, NULL);
+  gtk_signal_connect (GTK_OBJECT(drawing_area),"configure_event",
+		      (GtkSignalFunc) configure_event, NULL);
+
+  /* Event signals */
+
+  gtk_signal_connect (GTK_OBJECT (drawing_area), "motion_notify_event",
+		      (GtkSignalFunc) motion_notify_event, NULL);
+  gtk_signal_connect (GTK_OBJECT (drawing_area), "button_press_event",
+		      (GtkSignalFunc) button_press_event, NULL);
+
+  gtk_widget_set_events (drawing_area, GDK_EXPOSURE_MASK
+			 | GDK_LEAVE_NOTIFY_MASK
+			 | GDK_BUTTON_PRESS_MASK
+			 | GDK_POINTER_MOTION_MASK
+			 | GDK_POINTER_MOTION_HINT_MASK);
+
+  /* .. And a quit button */
+  button = gtk_button_new_with_label ("Quit");
+  gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+
+  gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+			     GTK_SIGNAL_FUNC (gtk_widget_destroy),
+			     GTK_OBJECT (window));
+  gtk_widget_show (button);
+
+  gtk_widget_show (window);
+
+  gtk_main ();
+
+  return 0;
+}
+/* example-end */
+</verb></tscreen>
+
 </article>

@@ -1,6 +1,4 @@
-/* This file extracted from the GTK tutorial. */
-
-/* mfmain.h */
+/* example-start menu mfmain.h */
 
 #ifndef __MFMAIN_H__
 #define __MFMAIN_H__
@@ -17,3 +15,5 @@ void file_quit_cmd_callback(GtkWidget *widget, gpointer data);
 #endif /* __cplusplus */
 
 #endif /* __MFMAIN_H__ */
+
+/* example-end */

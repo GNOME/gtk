@@ -1,20 +1,15 @@
-/* This file extracted from the GTK tutorial. */
-
-/* mfmain.c */
+/* example-start menu mfmain.c */
 
 #include <gtk/gtk.h>
 
 #include "mfmain.h"
 #include "menufactory.h"
 
-
 int main(int argc, char *argv[])
 {
     GtkWidget *window;
     GtkWidget *main_vbox;
     GtkWidget *menubar;
-    
-    GtkAcceleratorTable *accel;
     
     gtk_init(&argc, &argv);
     
@@ -30,8 +25,7 @@ int main(int argc, char *argv[])
     gtk_container_add(GTK_CONTAINER(window), main_vbox);
     gtk_widget_show(main_vbox);
     
-    get_main_menu(&menubar, &accel);
-    gtk_window_add_accelerator_table(GTK_WINDOW(window), accel);
+    get_main_menu(window, &menubar);
     gtk_box_pack_start(GTK_BOX(main_vbox), menubar, FALSE, TRUE, 0);
     gtk_widget_show(menubar);
     
@@ -50,3 +44,5 @@ void file_quit_cmd_callback (GtkWidget *widget, gpointer data)
     g_print ("%s\n", (char *) data);
     gtk_exit(0);
 }
+
+/* example-end */
