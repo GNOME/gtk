@@ -281,14 +281,18 @@ mb_to_utf8 (GtkIMContextXIM *context_xim,
   GError *error = NULL;
   gchar *result;
 
-  result = g_convert (str, -1,
-		      "UTF-8", context_xim->mb_charset,
-		      NULL, NULL, &error);
-
-  if (!result)
+  if (strcmp (context_xim->mb_charset, "UTF-8") == 0)
+    result = g_strdup (str);
+  else
     {
-      g_warning ("Error converting text from IM to UTF-8: %s\n", error->message);
-      g_error_free (error);
+      result = g_convert (str, -1,
+			  "UTF-8", context_xim->mb_charset,
+			  NULL, NULL, &error);
+      if (!result)
+	{
+	  g_warning ("Error converting text from IM to UTF-8: %s\n", error->message);
+	  g_error_free (error);
+	}
     }
   
   return result;
@@ -603,11 +607,14 @@ xim_text_to_utf8 (GtkIMContextXIM *context, XIMText *xim_text, gchar **text)
 	  return 0;
 	}
 
-      result = g_convert (xim_text->string.multi_byte,
-			  -1,
-			  "UTF-8",
-			  context->mb_charset,
-			  NULL, NULL, &error);
+      if (strcmp (context->mb_charset, "UTF-8") == 0)
+	result = g_strdup (xim_text->string.multi_byte);
+      else
+	result = g_convert (xim_text->string.multi_byte,
+			    -1,
+			    "UTF-8",
+			    context->mb_charset,
+			    NULL, NULL, &error);
       
       if (result)
 	{

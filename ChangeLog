@@ -1,3 +1,9 @@
+2001-08-06  HideToshi Tajima  <tajima@eng.sun.com>
+
+	* modules/input/gtkimcontextxim.c (mb_to_utf8), xim_text_to_utf8):
+	Skip g_convert when to_codeset and from_codeset are both 'UTF-8'
+	(gnome bugzilla #58202)
+
 2001-08-06  Havoc Pennington  <hp@pobox.com>
  
  	* gdk/x11/gdkimage-x11.c (_gdk_x11_get_image): The whole 
