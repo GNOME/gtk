@@ -1,3 +1,8 @@
+Mon Apr 13 15:04:26 1998  Michael K. Johnson <johnsonm@redhat.com>
+
+	* gtk/testgtk.c (create_clist): removed duplicate call to
+	gtk_widget_set_policy.
+
 Mon Apr 13 05:03:11 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwindow.c (gtk_window_add_accelerator_table): check for

@@ -3268,8 +3268,6 @@ create_clist ()
 			    GTK_POLICY_AUTOMATIC,
 			    GTK_POLICY_AUTOMATIC);
 
-      gtk_clist_set_policy (GTK_CLIST (clist), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-
       gtk_clist_set_column_justification (GTK_CLIST (clist), 1, GTK_JUSTIFY_RIGHT);
       gtk_clist_set_column_justification (GTK_CLIST (clist), 2, GTK_JUSTIFY_CENTER);
       
