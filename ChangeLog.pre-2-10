@@ -1,3 +1,33 @@
+2002-11-24  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkdrawable-win32.c: Remove the already ifdeffed-out
+	code that didn't use generic_draw.
+
+	(generic_draw): When drawing into the mask (for tiled/stippled
+	fill styles), copy the line attributes from the actual GC. Also
+	ask for text drawing setup if needed. Use differently set up HDCs
+	in the normal and tiled/stippled cases.
+
+	(draw_segments) Slight code reorg.
+
+	(draw_lines, gdk_win32_draw_lines): Use generic_draw() also for
+	lines.
+
+	* gdk/win32/gdkgc-win32.c: Remove ifdeffed-out code.
+
+	(predraw_set_foreground, gdk_win32_hdc_get): Some code moved
+	around. Call SetROP2() only if necessary. Call SetTextColor() only
+	if GDK_GC_FOREGROUND flag present.
+
+	Remove background color handling from here. The background color
+	of a GdkGC is supposed to affect only GDK_OPAQUE_STIPPLED fill style,
+	which it is already handled in generic_draw(), and
+	GDK_LINE_DOUBLE_DASH lines, which aren't implemented properly
+	anyway. Calling SetBkColor() is unnecessary.
+
+	(gdk_win32_hdc_get, gdk_win32_hdc_release): Add doc comments, as
+	these are public functions.
+
 2002-11-23  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkdrawable-win32.c (draw_polygon,
