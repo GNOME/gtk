@@ -48,6 +48,12 @@ typedef enum
   GTK_TOOLBAR_CHILD_WIDGET
 } GtkToolbarChildType;
 
+typedef enum
+{
+  GTK_TOOLBAR_SPACE_EMPTY,
+  GTK_TOOLBAR_SPACE_LINE
+} GtkToolbarSpaceStyle;
+
 typedef struct _GtkToolbarChild      GtkToolbarChild;
 typedef struct _GtkToolbar           GtkToolbar;
 typedef struct _GtkToolbarClass      GtkToolbarClass;
@@ -69,6 +75,7 @@ struct _GtkToolbar
   GtkOrientation   orientation;
   GtkToolbarStyle  style;
   gint             space_size; /* big optional space between buttons */
+  GtkToolbarSpaceStyle space_style;
 
   GtkTooltips     *tooltips;
 
@@ -170,17 +177,19 @@ void       gtk_toolbar_insert_widget   (GtkToolbar      *toolbar,
 					gint             position);
 
 /* Style functions */
-void       gtk_toolbar_set_orientation (GtkToolbar      *toolbar,
-					GtkOrientation   orientation);
-void       gtk_toolbar_set_style       (GtkToolbar      *toolbar,
-					GtkToolbarStyle  style);
-void       gtk_toolbar_set_space_size  (GtkToolbar      *toolbar,
-					gint             space_size);
-void       gtk_toolbar_set_tooltips    (GtkToolbar      *toolbar,
-					gint             enable);
-void       gtk_toolbar_set_button_relief      (GtkToolbar      *toolbar,
-					GtkReliefStyle   relief);
-GtkReliefStyle gtk_toolbar_get_button_relief  (GtkToolbar      *toolbar);
+void       gtk_toolbar_set_orientation       (GtkToolbar           *toolbar,
+					      GtkOrientation        orientation);
+void       gtk_toolbar_set_style             (GtkToolbar           *toolbar,
+					      GtkToolbarStyle       style);
+void       gtk_toolbar_set_space_size        (GtkToolbar           *toolbar,
+					      gint                  space_size);
+void       gtk_toolbar_set_space_style       (GtkToolbar           *toolbar,
+					      GtkToolbarSpaceStyle  space_style);
+void       gtk_toolbar_set_tooltips          (GtkToolbar           *toolbar,
+					      gint                  enable);
+void       gtk_toolbar_set_button_relief     (GtkToolbar           *toolbar,
+					      GtkReliefStyle        relief);
+GtkReliefStyle gtk_toolbar_get_button_relief (GtkToolbar           *toolbar);
 
 
 #ifdef __cplusplus

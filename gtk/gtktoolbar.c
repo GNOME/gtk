@@ -26,13 +26,25 @@
 #include "gtktoolbar.h"
 
 
-#define DEFAULT_SPACE_SIZE 5
+#define DEFAULT_SPACE_SIZE  5
+#define DEFAULT_SPACE_STYLE GTK_TOOLBAR_SPACE_EMPTY
 
+#define SPACE_LINE_DIVISION 10
+#define SPACE_LINE_START    3
+#define SPACE_LINE_END      7
 
 enum {
   ORIENTATION_CHANGED,
   STYLE_CHANGED,
   LAST_SIGNAL
+};
+
+typedef struct _GtkToolbarChildSpace GtkToolbarChildSpace;
+struct _GtkToolbarChildSpace
+{
+  GtkToolbarChild child;
+
+  gint alloc_x, alloc_y;
 };
 
 static void gtk_toolbar_class_init               (GtkToolbarClass *class);
@@ -154,6 +166,7 @@ gtk_toolbar_init (GtkToolbar *toolbar)
   toolbar->style        = GTK_TOOLBAR_ICONS;
   toolbar->relief       = GTK_RELIEF_NORMAL;
   toolbar->space_size   = DEFAULT_SPACE_SIZE;
+  toolbar->space_style  = DEFAULT_SPACE_STYLE;
   toolbar->tooltips     = gtk_tooltips_new ();
   toolbar->button_maxw  = 0;
   toolbar->button_maxh  = 0;
@@ -258,6 +271,47 @@ gtk_toolbar_unmap (GtkWidget *widget)
 }
 
 static void
+gtk_toolbar_paint_space_line (GtkWidget       *widget,
+			      GdkRectangle    *area,
+			      GtkToolbarChild *child)
+{
+  GtkToolbar *toolbar;
+  GtkToolbarChildSpace *child_space;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_TOOLBAR (widget));
+  g_return_if_fail (child != NULL);
+  g_return_if_fail (child->type == GTK_TOOLBAR_CHILD_SPACE);
+
+  toolbar = GTK_TOOLBAR (widget);
+
+  child_space = (GtkToolbarChildSpace *) child;
+
+  if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
+    gtk_paint_vline (widget->style, widget->window,
+		     GTK_WIDGET_STATE (widget), area, widget,
+		     "toolbar",
+		     child_space->alloc_y + toolbar->button_maxh *
+		     SPACE_LINE_START / SPACE_LINE_DIVISION,
+		     child_space->alloc_y + toolbar->button_maxh *
+		     SPACE_LINE_END / SPACE_LINE_DIVISION,
+		     child_space->alloc_x +
+		     (toolbar->space_size -
+		      widget->style->klass->xthickness) / 2);
+  else
+    gtk_paint_hline (widget->style, widget->window,
+		     GTK_WIDGET_STATE (widget), area, widget,
+		     "toolbar",
+		     child_space->alloc_x + toolbar->button_maxw *
+		     SPACE_LINE_START / SPACE_LINE_DIVISION,
+		     child_space->alloc_x + toolbar->button_maxw *
+		     SPACE_LINE_END / SPACE_LINE_DIVISION,
+		     child_space->alloc_y +
+		     (toolbar->space_size -
+		      widget->style->klass->ythickness) / 2);
+}
+
+static void
 gtk_toolbar_draw (GtkWidget    *widget,
 		  GdkRectangle *area)
 {
@@ -277,8 +331,12 @@ gtk_toolbar_draw (GtkWidget    *widget,
 	{
 	  child = children->data;
 
-	  if ((child->type != GTK_TOOLBAR_CHILD_SPACE)
-	      && gtk_widget_intersect (child->widget, area, &child_area))
+	  if (child->type == GTK_TOOLBAR_CHILD_SPACE)
+	    {
+	      if (toolbar->space_style == GTK_TOOLBAR_SPACE_LINE)
+		gtk_toolbar_paint_space_line (widget, area, child);
+	    }
+	  else if (gtk_widget_intersect (child->widget, area, &child_area))
 	    gtk_widget_draw (child->widget, &child_area);
 	}
     }
@@ -307,9 +365,13 @@ gtk_toolbar_expose (GtkWidget      *widget,
 	{
 	  child = children->data;
 
-	  if ((child->type != GTK_TOOLBAR_CHILD_SPACE)
-	      && GTK_WIDGET_NO_WINDOW (child->widget)
-	      && gtk_widget_intersect (child->widget, &event->area, &child_event.area))
+	  if (child->type == GTK_TOOLBAR_CHILD_SPACE)
+	    {
+	      if (toolbar->space_style == GTK_TOOLBAR_SPACE_LINE)
+		gtk_toolbar_paint_space_line (widget, &event->area, child);
+	    }
+	  else if (GTK_WIDGET_NO_WINDOW (child->widget)
+		   && gtk_widget_intersect (child->widget, &event->area, &child_event.area))
 	    gtk_widget_event (child->widget, (GdkEvent *) &child_event);
 	}
     }
@@ -413,6 +475,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
   GtkToolbar *toolbar;
   GList *children;
   GtkToolbarChild *child;
+  GtkToolbarChildSpace *child_space;
   GtkAllocation alloc;
   gint border_width;
 
@@ -437,10 +500,21 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
       switch (child->type)
 	{
 	case GTK_TOOLBAR_CHILD_SPACE:
+
+	  child_space = (GtkToolbarChildSpace *) child;
+
 	  if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
-	    alloc.x += toolbar->space_size;
+	    {
+	      child_space->alloc_x = alloc.x;
+	      child_space->alloc_y = allocation->y + (allocation->height - toolbar->button_maxh) / 2;
+	      alloc.x += toolbar->space_size;
+	    }
 	  else
-	    alloc.y += toolbar->space_size;
+	    {
+	      child_space->alloc_x = allocation->x + (allocation->width - toolbar->button_maxw) / 2;
+	      child_space->alloc_y = alloc.y;
+	      alloc.y += toolbar->space_size;
+	    }
 
 	  break;
 
@@ -746,7 +820,11 @@ gtk_toolbar_insert_element (GtkToolbar          *toolbar,
   else if (type != GTK_TOOLBAR_CHILD_RADIOBUTTON)
     g_return_val_if_fail (widget == NULL, NULL);
 
-  child = g_new (GtkToolbarChild, 1);
+  if (type == GTK_TOOLBAR_CHILD_SPACE)
+    child = (GtkToolbarChild *) g_new (GtkToolbarChildSpace, 1);
+  else
+    child = g_new (GtkToolbarChild, 1);
+
   child->type = type;
   child->icon = NULL;
   child->label = NULL;
@@ -755,6 +833,8 @@ gtk_toolbar_insert_element (GtkToolbar          *toolbar,
     {
     case GTK_TOOLBAR_CHILD_SPACE:
       child->widget = NULL;
+      ((GtkToolbarChildSpace *) child)->alloc_x =
+	((GtkToolbarChildSpace *) child)->alloc_y = 0;
       break;
 
     case GTK_TOOLBAR_CHILD_WIDGET:
@@ -877,6 +957,20 @@ gtk_toolbar_set_space_size (GtkToolbar *toolbar,
   if (toolbar->space_size != space_size)
     {
       toolbar->space_size = space_size;
+      gtk_widget_queue_resize (GTK_WIDGET (toolbar));
+    }
+}
+
+void
+gtk_toolbar_set_space_style (GtkToolbar           *toolbar,
+			     GtkToolbarSpaceStyle  space_style)
+{
+  g_return_if_fail (toolbar != NULL);
+  g_return_if_fail (GTK_IS_TOOLBAR (toolbar));
+
+  if (toolbar->space_style != space_style)
+    {
+      toolbar->space_style = space_style;
       gtk_widget_queue_resize (GTK_WIDGET (toolbar));
     }
 }

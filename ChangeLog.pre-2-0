@@ -1,3 +1,23 @@
+1998-12-08  Andrew T. Veliath  <andrewtv@usa.net>
+
+	* gtk/testgtk.c: Functions to test the toolbar space style.
+
+	* gtk/gtktoolbar.c: Add a private GtkToolbarChildSpace subclass of
+	GtkToolbarChild to hold allocation. Set default space style to
+	GTK_TOOLBAR_SPACE_EMPTY, define SPACE_LINE_* for separator
+	fraction defaults.
+	(gtk_toolbar_paint_space_line): New function; paints the separator
+	line, using "toolbar" as the detail.
+	(gtk_toolbar_expose): (gtk_toolbar_draw): Handle CHILD_SPACE when
+	style is set to SPACE_LINE.
+	(gtk_toolbar_size_allocate): Store space allocations.
+	(gtk_toolbar_insert_element): If we are a space, allocate and
+	initialize a GtkToolbarChildSpace instead of a GtkToolbarChild.
+	(gtk_toolbar_set_space_style): New function.
+
+	* gtk/gtktoolbar.h: Add GtkToolbarSpaceStyle, with styles of EMPTY
+	and LINE. Add prototype for gtk_toolbar_set_space_style.
+
 Mon Dec  7 16:03:55 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkthemes.h: Remove random unnecessary includes

@@ -658,6 +658,20 @@ set_toolbar_borderless (GtkWidget *widget,
 }
 
 static void
+set_toolbar_space_style_empty (GtkWidget *widget,
+			       gpointer   data)
+{
+  gtk_toolbar_set_space_style (GTK_TOOLBAR (data), GTK_TOOLBAR_SPACE_EMPTY);
+}
+
+static void
+set_toolbar_space_style_line (GtkWidget *widget,
+			      gpointer   data)
+{
+  gtk_toolbar_set_space_style (GTK_TOOLBAR (data), GTK_TOOLBAR_SPACE_LINE);
+}
+
+static void
 create_toolbar (void)
 {
   static GtkWidget *window = NULL;
@@ -742,6 +756,17 @@ create_toolbar (void)
 			       "Borderless", "Hide Borders", NULL,
 			       new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
 			       (GtkSignalFunc) set_toolbar_borderless, toolbar);
+
+      gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
+      
+      gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
+			       "Empty", "Empty spaces", NULL,
+			       new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
+			       (GtkSignalFunc) set_toolbar_space_style_empty, toolbar);
+      gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
+			       "Lines", "Lines in spaces", NULL,
+			       new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
+			       (GtkSignalFunc) set_toolbar_space_style_line, toolbar);
 
       gtk_container_add (GTK_CONTAINER (window), toolbar);
     }
