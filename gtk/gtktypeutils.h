@@ -100,7 +100,7 @@ typedef struct _GtkEnumValue   GtkFlagValue;
 
 typedef void (*GtkClassInitFunc)   (gpointer   klass);
 typedef void (*GtkObjectInitFunc)  (gpointer   object);
-typedef void (*GtkSignalFunc)      (void);
+typedef void (*GtkSignalFunc)      ();
 typedef gint (*GtkFunction)	   (gpointer   data);
 typedef void (*GtkDestroyNotify)   (gpointer   data);
 typedef void (*GtkCallbackMarshal) (GtkObject *object,

@@ -1,3 +1,25 @@
+Sat Jul 18 22:59:04 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkmain.h: 
+	* gtk/gtkmain.c: export gtk_binary_age and gtk_interface_age.
+
+	* gtk/gtktypeutils.h:
+	* gtk/gtkitemfactory.h: remove "void" from prototypes again.
+
+Sat Jul 18 00:54:01 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtknotebook.c (gtk_notebook_set_child_arg): added support for
+  	CHILD_ARG_MENU_LABEL, CHILD_ARG_TAB_LABEL
+	(gtk_notebook_get_child_arg): added support for CHILD_ARG_MENU_LABEL,
+	CHILD_ARG_POSITION
+	(gtk_notebook_reorder_child): new funktion to change position of a
+	notebook page
+	(gtk_notebook_draw_arrow): draw left/right arrow with
+	GTK_SHADOW_ETCHED_IN if focus_tab is first/last tab.
+
+	* gtk/gtkstyle.c (gtk_default_draw_arrow):
+	added GTK_SHADOW_ETCHED_IN/OUT
+
 Sun Jul 19 12:19:16 1998  Stefan Jeske  <stefan@gtk.org>
 
 	* gtk/gtkprogress.c gtk/gtkprogress.h gtk/gtkprogressbar.c

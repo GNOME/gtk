@@ -137,6 +137,8 @@ static gint  gtk_timeout_compare	 (gconstpointer      a,
 const guint gtk_major_version = GTK_MAJOR_VERSION;
 const guint gtk_minor_version = GTK_MINOR_VERSION;
 const guint gtk_micro_version = GTK_MICRO_VERSION;
+const guint gtk_binary_age = GTK_BINARY_AGE;
+const guint gtk_interface_age = GTK_INTERFACE_AGE;
 
 static gboolean iteration_done = FALSE;
 static guint main_level = 0;

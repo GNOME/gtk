@@ -26,6 +26,7 @@
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
 
 #define GTK_PRIORITY_HIGH      -20
@@ -42,6 +43,9 @@ typedef gint	(*GtkKeySnoopFunc)	(GtkWidget	*grab_widget,
 extern const guint gtk_major_version;
 extern const guint gtk_minor_version;
 extern const guint gtk_micro_version;
+extern const guint gtk_binary_age;
+extern const guint gtk_interface_age;
+
 
 /* Initialization, exit, mainloop and miscellaneous routines
  */

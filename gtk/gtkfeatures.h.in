@@ -31,6 +31,8 @@ extern "C" {
 #define GTK_MAJOR_VERSION				(@GTK_MAJOR_VERSION@)
 #define GTK_MINOR_VERSION				(@GTK_MINOR_VERSION@)
 #define GTK_MICRO_VERSION				(@GTK_MICRO_VERSION@)
+#define GTK_BINARY_AGE					(@GTK_BINARY_AGE@)
+#define GTK_INTERFACE_AGE				(@GTK_INTERFACE_AGE@)
 
 /* new gtk_container_set_focus_[hv]adjustment()
  */

@@ -7445,6 +7445,10 @@ create_main_window (void)
   gtk_widget_show (window);
 }
 
+#ifdef HAVE_LIBGLE
+#include <gle/gle.h>
+#endif /* !HAVE_LIBGLE */
+
 int
 main (int argc, char *argv[])
 {

@@ -121,6 +121,9 @@ void       gtk_notebook_set_page          (GtkNotebook      *notebook,
 				           gint              page_num);
 void       gtk_notebook_next_page         (GtkNotebook      *notebook);
 void       gtk_notebook_prev_page         (GtkNotebook      *notebook);
+void       gtk_notebook_reorder_child     (GtkNotebook      *notebook,
+					   GtkWidget        *child,
+					   gint              position);
 void       gtk_notebook_set_tab_pos       (GtkNotebook      *notebook,
 					   GtkPositionType   pos);
 void       gtk_notebook_set_show_tabs     (GtkNotebook      *notebook,
