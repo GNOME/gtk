@@ -404,8 +404,7 @@ gdk_pixbuf_gif_anim_frame_composite (GdkPixbufGifAnim *gif_anim,
                                 gdk_pixbuf_fill (f->composited,
                                                  (gif_anim->bg_red << 24) |
                                                  (gif_anim->bg_green << 16) |
-                                                 (gif_anim->bg_blue << 8) |
-                                                 (f->bg_transparent ? 0 : 255));
+                                                 (gif_anim->bg_blue << 8));
 
                                 gdk_pixbuf_composite (f->pixbuf,
                                                       f->composited,
@@ -459,8 +458,7 @@ gdk_pixbuf_gif_anim_frame_composite (GdkPixbufGifAnim *gif_anim,
                                         gdk_pixbuf_fill (area,
                                                          (gif_anim->bg_red << 24) |
                                                          (gif_anim->bg_green << 16) |
-                                                         (gif_anim->bg_blue << 8) |
-                                                         prev_frame->bg_transparent ? 0 : 255);
+                                                         (gif_anim->bg_blue << 8));
 
                                         g_object_unref (area);
                                         

@@ -1,3 +1,10 @@
+2003-02-20  Matthias Clasen  <maclas@gmx.de>
+
+	* io-gif-animation.c (gdk_pixbuf_gif_anim_frame_composite): 
+	Always clear the initial frame and "disposed" areas with
+	transparent pixels, no matter whether the frame has transparency
+	or not.  (#55502)
+
 2003-02-18  Matthias Clasen  <maclas@gmx.de>
 
 	* io-tga.c (pixbuf_flip_row): 
