@@ -1,3 +1,9 @@
+2004-04-05  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkpathbar.c (_gtk_path_bar_set_path): Ref/sink the
+	buttons.  Also, free them correctly upon failure.  Based on a
+	patch by Morten Welinder, fixes #137956.
+
 2004-04-05  Anders Carlsson  <andersca@gnome.org>
 
 	* gdk/gdk.c (gdk_arg_context_parse): Handle '--' correctly.

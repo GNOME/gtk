@@ -1058,6 +1058,9 @@ _gtk_path_bar_set_path (GtkPathBar         *path_bar,
       gtk_file_info_free (file_info);
       gtk_file_path_free (path);
 
+      g_object_ref (button_data->button);
+      gtk_object_sink (GTK_OBJECT (button_data->button));
+
       new_buttons = g_list_prepend (new_buttons, button_data);
 
       if (button_data->type != NORMAL_BUTTON)
@@ -1089,9 +1092,12 @@ _gtk_path_bar_set_path (GtkPathBar         *path_bar,
 
       for (l = new_buttons; l; l = l->next)
 	{
-	  GtkWidget *button = BUTTON_DATA (l->data)->button;
-	  gtk_widget_destroy (button);
-	  gtk_widget_unref (button);
+	  ButtonData *button_data;
+
+	  button_data = BUTTON_DATA (l->data);
+
+	  gtk_widget_unref (button_data->button);
+	  button_data_free (button_data);
 	}
 
       g_list_free (new_buttons);
