@@ -1,3 +1,8 @@
+2001-12-08  Anders Carlsson  <andersca@gnu.org>
+
+	* tests/testgtk.c (layout_expose_handler): Don't return TRUE
+	since then the default GtkLayout expose handler won't be called.
+
 Fri Dec  7 23:42:50 2001  Jonathan Blandford  <jrb@webwynk.net>
 
 	* gtk/gtktreeview.c (validate_rows_handler): remove

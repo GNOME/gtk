@@ -10706,7 +10706,7 @@ layout_expose_handler (GtkWidget *widget, GdkEventExpose *event)
 			    10*i, 10*j, 
 			    1+i%10, 1+j%10);
   
-  return TRUE;
+  return FALSE;
 }
 
 void create_layout (void)
