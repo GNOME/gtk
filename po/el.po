@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.6\n"
-"POT-Creation-Date: 2000-07-14 16:26-0400\n"
+"POT-Creation-Date: 2000-08-10 21:20-0400\n"
 "PO-Revision-Date: 1999-10-22 22:43-0000\n"
 "Last-Translator: Spiros Papadimitriou <spapadim+@cs.cmu.edu>\n"
 "Language-Team: Greek <nls@tux.hellug.gr>\n"
@@ -15,51 +15,51 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #
-#: gtk/gtkcolorsel.c:1415
+#: gtk/gtkcolorsel.c:1420
 msgid "Hue:"
 msgstr "Απόχρωση:"
 
 #
-#: gtk/gtkcolorsel.c:1416
+#: gtk/gtkcolorsel.c:1421
 msgid "Saturation:"
 msgstr "Κορεσμός:"
 
 #
-#: gtk/gtkcolorsel.c:1417
+#: gtk/gtkcolorsel.c:1422
 msgid "Value:"
 msgstr "Τιμή:"
 
 #
-#: gtk/gtkcolorsel.c:1418
+#: gtk/gtkcolorsel.c:1423
 msgid "Red:"
 msgstr "Κόκκινο:"
 
 #
-#: gtk/gtkcolorsel.c:1419
+#: gtk/gtkcolorsel.c:1424
 msgid "Green:"
 msgstr "Πράσινο:"
 
 #
-#: gtk/gtkcolorsel.c:1420
+#: gtk/gtkcolorsel.c:1425
 msgid "Blue:"
 msgstr "Μπλέ:"
 
 #
-#: gtk/gtkcolorsel.c:1423
+#: gtk/gtkcolorsel.c:1428
 msgid "Opacity:"
 msgstr "Διαφάνεια:"
 
 #
-#: gtk/gtkcolorsel.c:1438
+#: gtk/gtkcolorsel.c:1443
 #, fuzzy
 msgid "Hex Value:"
 msgstr "Τιμή:"
 
-#: gtk/gtkcolorsel.c:1459
+#: gtk/gtkcolorsel.c:1464
 msgid "Custom Palette"
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1464
+#: gtk/gtkcolorsel.c:1469
 msgid "Set Color"
 msgstr ""
 
@@ -319,19 +319,19 @@ msgid "Page %u"
 msgstr "Σελίδα %u"
 
 #
-#: gtk/gtkrc.c:1875
+#: gtk/gtkrc.c:1872
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Το αρχείο εικόνας δε βρέθηκε στο pixmap_path: \"%s\" line %d"
 
 #
-#: gtk/gtkrc.c:1878
+#: gtk/gtkrc.c:1875
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Το αρχείο εικόνας δε βρέθηκε στο pixmap_path: \"%s\""
 
 #
-#: gtk/gtkthemes.c:103
+#: gtk/gtkthemes.c:117
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
 msgstr "Το module δε βρέθηκε στο module_path: \"%s\","

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.1.15\n"
-"POT-Creation-Date: 2000-07-14 16:26-0400\n"
+"POT-Creation-Date: 2000-08-10 21:20-0400\n"
 "PO-Revision-Date: 1999-04-24 22:53+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@adam.kaist.ac.kr>\n"
 "Language-Team: Korean <ko@li.org>\n"
@@ -12,44 +12,44 @@ msgstr ""
 "Content-Type: text/plain; charset=euc-kr\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: gtk/gtkcolorsel.c:1415
+#: gtk/gtkcolorsel.c:1420
 msgid "Hue:"
 msgstr "색상:"
 
-#: gtk/gtkcolorsel.c:1416
+#: gtk/gtkcolorsel.c:1421
 msgid "Saturation:"
 msgstr "채도:"
 
-#: gtk/gtkcolorsel.c:1417
+#: gtk/gtkcolorsel.c:1422
 msgid "Value:"
 msgstr "값:"
 
-#: gtk/gtkcolorsel.c:1418
+#: gtk/gtkcolorsel.c:1423
 msgid "Red:"
 msgstr "빨강:"
 
-#: gtk/gtkcolorsel.c:1419
+#: gtk/gtkcolorsel.c:1424
 msgid "Green:"
 msgstr "초록:"
 
-#: gtk/gtkcolorsel.c:1420
+#: gtk/gtkcolorsel.c:1425
 msgid "Blue:"
 msgstr "파랑:"
 
-#: gtk/gtkcolorsel.c:1423
+#: gtk/gtkcolorsel.c:1428
 msgid "Opacity:"
 msgstr "불투명:"
 
-#: gtk/gtkcolorsel.c:1438
+#: gtk/gtkcolorsel.c:1443
 #, fuzzy
 msgid "Hex Value:"
 msgstr "값:"
 
-#: gtk/gtkcolorsel.c:1459
+#: gtk/gtkcolorsel.c:1464
 msgid "Custom Palette"
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1464
+#: gtk/gtkcolorsel.c:1469
 msgid "Set Color"
 msgstr ""
 
@@ -263,17 +263,17 @@ msgstr "지움"
 msgid "Page %u"
 msgstr "%u쪽"
 
-#: gtk/gtkrc.c:1875
+#: gtk/gtkrc.c:1872
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "그림 파일을 pixmap_path에서 찾을 수 없음: \"%s\" %d번째 줄"
 
-#: gtk/gtkrc.c:1878
+#: gtk/gtkrc.c:1875
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "그림 파일을 pixmap_path에서 찾을 수 없음: \"%s\""
 
-#: gtk/gtkthemes.c:103
+#: gtk/gtkthemes.c:117
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
 msgstr "모듈을 module_path에서 찾을 수 없음: \"%s\","

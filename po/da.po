@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 2000-07-27 14:03+0200\n"
+"POT-Creation-Date: 2000-08-10 21:20-0400\n"
 "PO-Revision-Date: 1999-12-08 17:14+01:00\n"
 "Last-Translator: Birger Langkjer <birger.langkjer@image.dk>\n"
 "Language-Team: Danish <sslug-locale@sslug.dk>\n"
@@ -14,43 +14,43 @@ msgstr ""
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: gtk/gtkcolorsel.c:1418
+#: gtk/gtkcolorsel.c:1420
 msgid "Hue:"
 msgstr "Glød:"
 
-#: gtk/gtkcolorsel.c:1419
+#: gtk/gtkcolorsel.c:1421
 msgid "Saturation:"
 msgstr "Mætning:"
 
-#: gtk/gtkcolorsel.c:1420
+#: gtk/gtkcolorsel.c:1422
 msgid "Value:"
 msgstr "Værdi:"
 
-#: gtk/gtkcolorsel.c:1421
+#: gtk/gtkcolorsel.c:1423
 msgid "Red:"
 msgstr "Rød:"
 
-#: gtk/gtkcolorsel.c:1422
+#: gtk/gtkcolorsel.c:1424
 msgid "Green:"
 msgstr "Grøn:"
 
-#: gtk/gtkcolorsel.c:1423
+#: gtk/gtkcolorsel.c:1425
 msgid "Blue:"
 msgstr "Blå:"
 
-#: gtk/gtkcolorsel.c:1426
+#: gtk/gtkcolorsel.c:1428
 msgid "Opacity:"
 msgstr "Gennemsigtighed:"
 
-#: gtk/gtkcolorsel.c:1441
+#: gtk/gtkcolorsel.c:1443
 msgid "Hex Value:"
 msgstr "Hexværdi:"
 
-#: gtk/gtkcolorsel.c:1462
+#: gtk/gtkcolorsel.c:1464
 msgid "Custom Palette"
 msgstr "Personlig palette"
 
-#: gtk/gtkcolorsel.c:1467
+#: gtk/gtkcolorsel.c:1469
 msgid "Set Color"
 msgstr "Sæt farve"
 

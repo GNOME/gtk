@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.1.9\n"
-"POT-Creation-Date: 2000-07-14 16:26-0400\n"
+"POT-Creation-Date: 2000-08-10 21:20-0400\n"
 "PO-Revision-Date: 2000-04-17 12:56+0300\n"
 "Last-Translator: Pauli Virtanen <pauli.virtanen@saunalahti.fi>\n"
 "Language-Team: Finnish <fi@li.org>\n"
@@ -14,44 +14,44 @@ msgstr ""
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: gtk/gtkcolorsel.c:1415
+#: gtk/gtkcolorsel.c:1420
 msgid "Hue:"
 msgstr "Sävy:"
 
-#: gtk/gtkcolorsel.c:1416
+#: gtk/gtkcolorsel.c:1421
 msgid "Saturation:"
 msgstr "Kylläisyys:"
 
-#: gtk/gtkcolorsel.c:1417
+#: gtk/gtkcolorsel.c:1422
 msgid "Value:"
 msgstr "Arvo:"
 
-#: gtk/gtkcolorsel.c:1418
+#: gtk/gtkcolorsel.c:1423
 msgid "Red:"
 msgstr "Punainen:"
 
-#: gtk/gtkcolorsel.c:1419
+#: gtk/gtkcolorsel.c:1424
 msgid "Green:"
 msgstr "Vihreä:"
 
-#: gtk/gtkcolorsel.c:1420
+#: gtk/gtkcolorsel.c:1425
 msgid "Blue:"
 msgstr "Sininen:"
 
-#: gtk/gtkcolorsel.c:1423
+#: gtk/gtkcolorsel.c:1428
 msgid "Opacity:"
 msgstr "Peitto:"
 
-#: gtk/gtkcolorsel.c:1438
+#: gtk/gtkcolorsel.c:1443
 #, fuzzy
 msgid "Hex Value:"
 msgstr "Arvo:"
 
-#: gtk/gtkcolorsel.c:1459
+#: gtk/gtkcolorsel.c:1464
 msgid "Custom Palette"
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1464
+#: gtk/gtkcolorsel.c:1469
 msgid "Set Color"
 msgstr ""
 
@@ -268,19 +268,19 @@ msgid "Page %u"
 msgstr "Sivu %u"
 
 # , c-format
-#: gtk/gtkrc.c:1875
+#: gtk/gtkrc.c:1872
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Kuvatiedostoa ei löytynyt pixmap_path:sta: \"%s\" rivi %d"
 
 # , c-format
-#: gtk/gtkrc.c:1878
+#: gtk/gtkrc.c:1875
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kuvatiedostoa ei löytynyt pixmap_path:sta: \"%s\""
 
 # , c-format
-#: gtk/gtkthemes.c:103
+#: gtk/gtkthemes.c:117
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
 msgstr "Ladattavaa moduulia ei löytynyt module_path:sta:\"%s\","
