@@ -1,4 +1,8 @@
-Mon Jul 17 13:59:29 BST 2000  Tony Gale <gale@dera.gov.uk>
+Mon Jul 17 18:19:06 BST 2000  Tony Gale <gale@gtk.org>
+
+	* docs/tutorial/gtk-tut.sgml: Clean ups.
+
+Mon Jul 17 13:59:29 BST 2000  Tony Gale <gale@gtk.org>
 
 	* docs/tutorial/gtk-tut.sgml: Initial DocBook version. Lots
 	  of cleaning up to do.
