@@ -1512,6 +1512,8 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget)
       else
 	{
 	  real_requested_width = column->requested_width;
+	  if (real_requested_width < 0)
+	    real_requested_width = 0;
 	}
 
       if (column->min_width != -1)
@@ -3222,8 +3224,6 @@ validate_visible_area (GtkTreeView *tree_view)
   gtk_tree_model_get_iter (tree_view->priv->model, &iter, path);
   do
     {
-      gint old_height;
-
       if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_INVALID) ||
 	  GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_COLUMN_INVALID))
 	{
@@ -3310,9 +3310,11 @@ validate_rows_handler (GtkTreeView *tree_view)
   GtkTreeIter iter;
   gint i = 0;
   g_assert (tree_view);
-  g_return_val_if_fail (tree_view->priv->tree != NULL, FALSE);
 
   GDK_THREADS_ENTER ();
+
+  if (tree_view->priv->tree == NULL)
+    return FALSE;
 
   do
     {
