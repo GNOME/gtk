@@ -303,7 +303,7 @@ gdk_event_translate (GdkEvent *event,
   event->any.window = window;
   event->any.send_event = xevent->xany.send_event ? TRUE : FALSE;
   
-  if (window_private && GDK_DRAWABLE_DESTROYED (window))
+  if (window_private && GDK_WINDOW_DESTROYED (window))
     {
       if (xevent->type != DestroyNotify)
 	return FALSE;
@@ -327,7 +327,7 @@ gdk_event_translate (GdkEvent *event,
 
 #ifdef USE_XIM
   if (window == NULL && gdk_xim_window && xevent->type == KeyPress &&
-      !GDK_DRAWABLE_DESTROYED (gdk_xim_window))
+      !GDK_WINDOW_DESTROYED (gdk_xim_window))
     {
       /*
        * If user presses a key in Preedit or Status window, keypress event
@@ -939,9 +939,9 @@ gdk_event_translate (GdkEvent *event,
       event->any.type = GDK_DESTROY;
       event->any.window = window;
       
-      return_val = window_private && !GDK_DRAWABLE_DESTROYED (window);
+      return_val = window_private && !GDK_WINDOW_DESTROYED (window);
       
-      if (window && GDK_DRAWABLE_XID (window) != GDK_ROOT_WINDOW())
+      if (window && GDK_WINDOW_XID (window) != GDK_ROOT_WINDOW())
 	gdk_window_destroy_notify (window);
       break;
       
@@ -1006,7 +1006,7 @@ gdk_event_translate (GdkEvent *event,
 			   ? " (discarding child)"
 			   : ""));
       if (window &&
-	  !GDK_DRAWABLE_DESTROYED (window) &&
+	  !GDK_WINDOW_DESTROYED (window) &&
 	  (window_private->extension_events != 0) &&
 	  gdk_input_vtable.configure_event)
 	gdk_input_vtable.configure_event (&xevent->xconfigure, window);

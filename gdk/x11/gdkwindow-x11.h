@@ -50,6 +50,9 @@ struct _GdkWindowImpl
 {
   GdkDrawableImpl parent_instance;
 
+  gint width;
+  gint height;
+  
   GdkXPositionInfo position_info;
 };
  

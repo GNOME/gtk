@@ -208,6 +208,10 @@ void _gdk_windowing_window_destroy (GdkWindow *window,
 				    gboolean   recursing,
 				    gboolean   foreign_destroy);
 
+/* Implementation types */
+GType gdk_window_impl_get_type (void);
+GType gdk_pixmap_impl_get_type (void);
+
 /************************************
  * Initialization and exit routines *
  ************************************/

@@ -126,7 +126,7 @@ struct _GdkWindowAttr
   GdkWindowClass wclass;
   GdkVisual *visual;
   GdkColormap *colormap;
-  GdkDrawableType window_type;
+  GdkWindowType window_type;
   GdkCursor *cursor;
   gchar *wmclass_name;
   gchar *wmclass_class;
@@ -163,15 +163,13 @@ struct _GdkWindowObject
 
   gpointer user_data;
 
-  GdkDrawable *impl; /* window-system-specific delegate object */
-  
-  gint width;
-  gint height;
+  GdkDrawable *impl; /* window-system-specific delegate object */  
   
   GdkWindowObject *parent;
+
   gint x;
   gint y;
-
+  
   gint extension_events;
 
   GList *filters;
@@ -204,7 +202,7 @@ struct _GdkWindowObjectClass
 
 /* Windows
  */
-GtkType       gdk_window_get_type    (void);
+GType         gdk_window_get_type    (void);
 GdkWindow*    gdk_window_new	     (GdkWindow	    *parent,
 				      GdkWindowAttr *attributes,
 				      gint	     attributes_mask);

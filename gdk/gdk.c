@@ -313,6 +313,8 @@ gdk_init_check (int    *argc,
   }
 #endif	/* G_ENABLE_DEBUG */
 
+  g_type_init ();
+  
   arg_context = gdk_arg_context_new (NULL);
   gdk_arg_context_add_table (arg_context, gdk_args);
   gdk_arg_context_add_table (arg_context, _gdk_windowing_args);

@@ -32,7 +32,8 @@
 #include <unistd.h>
 #include <X11/Xlib.h>
 
-#include "gdkpixmap.h"
+#include <gdk/gdkpixmap.h>
+#include "gdkpixmap-x11.h"
 #include "gdkprivate-x11.h"
 
 typedef struct

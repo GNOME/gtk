@@ -62,10 +62,10 @@ struct _GdkWindowParentPos
   GdkRectangle clip_rect;
 };
 
-static void gdk_window_compute_position   (GdkWindow          *window,
+static void gdk_window_compute_position   (GdkWindowImpl      *window,
 					   GdkWindowParentPos *parent_pos,
 					   GdkXPositionInfo   *info);
-static void gdk_window_compute_parent_pos (GdkWindow          *window,
+static void gdk_window_compute_parent_pos (GdkWindowImpl      *window,
 					   GdkWindowParentPos *parent_pos);
 static void gdk_window_premove            (GdkWindow          *window,
 					   GdkWindowParentPos *parent_pos);
@@ -97,17 +97,15 @@ _gdk_windowing_window_get_offsets (GdkWindow *window,
 void
 _gdk_window_init_position (GdkWindow *window)
 {
-  GdkWindowPrivate *private = (GdkWindowPrivate *)window;
-  GdkWindowXData *data;
   GdkWindowParentPos parent_pos;
-
-  g_return_if_fail (window != NULL);
+  GdkWindowImpl *impl;
+  
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  data = (GdkWindowXData *)private->drawable.klass_data;
-
-  gdk_window_compute_parent_pos (window, &parent_pos);
-  gdk_window_compute_position (window, &parent_pos, &data->position_info);
+  impl = GDK_WINDOW_IMPL (((GdkWindowObject*)window)->impl);
+  
+  gdk_window_compute_parent_pos (impl, &parent_pos);
+  gdk_window_compute_position (impl, &parent_pos, &window->position_info);
 }
 
 void
@@ -271,61 +269,65 @@ _gdk_window_move_resize_child (GdkWindow *window,
 }
 
 static void
-gdk_window_compute_position (GdkWindow          *window,
+gdk_window_compute_position (GdkWindowImpl      *window,
 			     GdkWindowParentPos *parent_pos,
 			     GdkXPositionInfo   *info)
 {
-  GdkWindowPrivate *private = (GdkWindowPrivate *)window;
+  GdkWindowObject *wrapper;
   int parent_x_offset;
   int parent_y_offset;
+
+  g_return_if_fail (GDK_IS_WINDOW_IMPL (window));
+
+  wrapper = (GdkWindowObject *) GDK_DRAWABLE_IMPL (window)->wrapper;
   
   info->big = FALSE;
   
-  if (private->drawable.width <= 32768)
+  if (window->width <= 32768)
     {
-      info->width = private->drawable.width;
-      info->x = parent_pos->x + private->x - parent_pos->x11_x;
+      info->width = window->width;
+      info->x = parent_pos->x + wrapper->x - parent_pos->x11_x;
     }
   else
     {
       info->big = TRUE;
       info->width = 32768;
-      if (parent_pos->x + private->x < -16384)
+      if (parent_pos->x + wrapper->x < -16384)
 	{
-	  if (parent_pos->x + private->x + private->drawable.width < 16384)
-	    info->x = parent_pos->x + private->x + private->drawable.width - 32768 - parent_pos->x11_x;
+	  if (parent_pos->x + wrapper->x + window->width < 16384)
+	    info->x = parent_pos->x + wrapper->x + window->width - 32768 - parent_pos->x11_x;
 	  else
 	    info->x = -16384 - parent_pos->x11_y;
 	}
       else
-	info->x = parent_pos->x + private->x - parent_pos->x11_x;
+	info->x = parent_pos->x + wrapper->x - parent_pos->x11_x;
     }
 
-  if (private->drawable.height <= 32768)
+  if (window->height <= 32768)
     {
-      info->height = private->drawable.height;
-      info->y = parent_pos->y + private->y - parent_pos->x11_y;
+      info->height = window->height;
+      info->y = parent_pos->y + wrapper->y - parent_pos->x11_y;
     }
   else
     {
       info->big = TRUE;
       info->height = 32768;
-      if (parent_pos->y + private->y < -16384)
+      if (parent_pos->y + wrapper->y < -16384)
 	{
-	  if (parent_pos->y + private->y + private->drawable.height < 16384)
-	    info->y = parent_pos->y + private->y + private->drawable.height - 32768 - parent_pos->x11_y;
+	  if (parent_pos->y + wrapper->y + window->height < 16384)
+	    info->y = parent_pos->y + wrapper->y + wrapper->drawable.height - 32768 - parent_pos->x11_y;
 	  else
 	    info->y = -16384 - parent_pos->x11_y;
 	}
       else
-	info->y = parent_pos->y + private->y - parent_pos->x11_y;
+	info->y = parent_pos->y + wrapper->y - parent_pos->x11_y;
     }
 
   parent_x_offset = parent_pos->x11_x - parent_pos->x;
   parent_y_offset = parent_pos->x11_y - parent_pos->y;
   
-  info->x_offset = parent_x_offset + info->x - private->x;
-  info->y_offset = parent_y_offset + info->y - private->y;
+  info->x_offset = parent_x_offset + info->x - wrapper->x;
+  info->y_offset = parent_y_offset + info->y - wrapper->y;
 
   /* We don't considering the clipping of toplevel windows and their immediate children
    * by their parents, and simply always map those windows.
@@ -343,17 +345,17 @@ gdk_window_compute_position (GdkWindow          *window,
 
   info->no_bg = FALSE;
 
-  if (GDK_DRAWABLE_TYPE (private) == GDK_WINDOW_CHILD)
+  if (GDK_WINDOW_TYPE (wrapper) == GDK_WINDOW_CHILD)
     {
-      info->clip_rect.x = private->x;
-      info->clip_rect.y = private->y;
-      info->clip_rect.width = private->drawable.width;
-      info->clip_rect.height = private->drawable.height;
+      info->clip_rect.x = wrapper->x;
+      info->clip_rect.y = wrapper->y;
+      info->clip_rect.width = window->width;
+      info->clip_rect.height = window->height;
       
       gdk_rectangle_intersect (&info->clip_rect, &parent_pos->clip_rect, &info->clip_rect);
 
-      info->clip_rect.x -= private->x;
-      info->clip_rect.y -= private->y;
+      info->clip_rect.x -= wrapper->x;
+      info->clip_rect.y -= wrapper->y;
     }
   else
     {
@@ -365,16 +367,20 @@ gdk_window_compute_position (GdkWindow          *window,
 }
 
 static void
-gdk_window_compute_parent_pos (GdkWindow          *window,
+gdk_window_compute_parent_pos (GdkWindowImpl      *window,
 			       GdkWindowParentPos *parent_pos)
 {
-  GdkWindowPrivate *private = (GdkWindowPrivate *)window;
-  GdkWindowXData *data;
+  GdkWindowObject *wrapper;
+  GdkWindowObject *parent;
   GdkRectangle tmp_clip;
   
   int clip_xoffset = 0;
   int clip_yoffset = 0;
 
+  g_return_if_fail (GDK_IS_WINDOW_IMPL (window));
+
+  wrapper = (GdkWindowObject *)GDK_DRAWABLE_IMPL (window)->wrapper;
+  
   parent_pos->x = 0;
   parent_pos->y = 0;
   parent_pos->x11_x = 0;
@@ -396,27 +402,27 @@ gdk_window_compute_parent_pos (GdkWindow          *window,
   parent_pos->clip_rect.width = G_MAXINT;
   parent_pos->clip_rect.height = G_MAXINT;
 
-  private = (GdkWindowPrivate *)private->parent;
-  while (private && private->drawable.window_type == GDK_WINDOW_CHILD)
+  parent = (GdkWindowObject *)wrapper->parent;
+  while (parent && parent->window_type == GDK_WINDOW_CHILD)
     {
-      data = (GdkWindowXData *)private->drawable.klass_data;
-
+      GdkWindowImpl *impl = GDK_WINDOW_IMPL (parent->impl);
+      
       tmp_clip.x = - clip_xoffset;
       tmp_clip.y = - clip_yoffset;
-      tmp_clip.width = private->drawable.width;
-      tmp_clip.height = private->drawable.height;
+      tmp_clip.width = impl->width;
+      tmp_clip.height = impl->height;
 
       gdk_rectangle_intersect (&parent_pos->clip_rect, &tmp_clip, &parent_pos->clip_rect);
 
-      parent_pos->x += private->x;
-      parent_pos->y += private->y;
+      parent_pos->x += parent->x;
+      parent_pos->y += parent->y;
       parent_pos->x11_x += data->position_info.x;
       parent_pos->x11_y += data->position_info.y;
 
-      clip_xoffset += private->x;
-      clip_yoffset += private->y;
+      clip_xoffset += parent->x;
+      clip_yoffset += parent->y;
 
-      private = (GdkWindowPrivate *)private->parent;
+      parent = (GdkWindowObject *)parent->parent;
     }
 }
 

@@ -25,6 +25,8 @@
  */
 
 #include "gdkprivate-x11.h"
+#include "gdkdrawable-x11.h"
+#include "gdkpixmap-x11.h"
 
 static void gdk_x11_draw_rectangle (GdkDrawable    *drawable,
 				    GdkGC          *gc,
@@ -114,7 +116,7 @@ gdk_drawable_impl_get_type (void)
         (GInstanceInitFunc) gdk_drawable_impl_init,
       };
       
-      object_type = g_type_register_static (G_TYPE_DRAWABLE,
+      object_type = g_type_register_static (GDK_TYPE_DRAWABLE,
                                             "GdkDrawableImpl",
                                             &object_info);
     }

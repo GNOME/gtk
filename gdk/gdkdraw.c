@@ -128,7 +128,7 @@ gdk_drawable_get_size (GdkDrawable *drawable,
 GdkVisual*
 gdk_drawable_get_visual (GdkDrawable *drawable)
 {
-  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
+  g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
   
   return GDK_DRAWABLE_GET_CLASS (drawable)->get_visual (drawable);
 }
@@ -136,7 +136,7 @@ gdk_drawable_get_visual (GdkDrawable *drawable)
 gint
 gdk_drawable_get_depth (GdkDrawable *drawable)
 {
-  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
+  g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), 0);
 
   return GDK_DRAWABLE_GET_CLASS (drawable)->get_depth (drawable);
 }
@@ -171,7 +171,7 @@ gdk_drawable_ref (GdkDrawable *drawable)
 void
 gdk_drawable_unref (GdkDrawable *drawable)
 {
-  g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
+  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
 
   g_object_unref (G_OBJECT (drawable));
 }
@@ -229,15 +229,15 @@ gdk_draw_rectangle (GdkDrawable *drawable,
 		    gint         y,
 		    gint         width,
 		    gint         height)
-{
-  gint real_width;
-  gint real_height;
-  
+{  
   g_return_if_fail (GDK_IS_DRAWABLE (drawable));
   g_return_if_fail (gc != NULL);
 
   if (width < 0 || height < 0)
     {
+      gint real_width;
+      gint real_height;
+      
       gdk_drawable_get_size (drawable, &real_width, &real_height);
 
       if (width < 0)
@@ -260,21 +260,22 @@ gdk_draw_arc (GdkDrawable *drawable,
 	      gint         height,
 	      gint         angle1,
 	      gint         angle2)
-{
-  GdkDrawablePrivate *drawable_private;
-  GdkGCPrivate *gc_private;
-
+{  
   g_return_if_fail (GDK_IS_DRAWABLE (drawable));
   g_return_if_fail (gc != NULL);
 
-  drawable_private = (GdkDrawablePrivate*) drawable;
+  if (width < 0 || height < 0)
+    {
+      gint real_width;
+      gint real_height;
+      
+      gdk_drawable_get_size (drawable, &real_width, &real_height);
 
-  gc_private = (GdkGCPrivate*) gc;
-
-  if (width < 0)
-    width = drawable_private->width;
-  if (height < 0)
-    height = drawable_private->height;
+      if (width < 0)
+        width = real_width;
+      if (height < 0)
+        height = real_height;
+    }
 
   GDK_DRAWABLE_GET_CLASS (drawable)->draw_arc (drawable, gc, filled,
                                                x, y, width, height, angle1, angle2);
@@ -366,14 +367,22 @@ gdk_draw_drawable (GdkDrawable *drawable,
   g_return_if_fail (src != NULL);
   g_return_if_fail (gc != NULL);
 
-  if (width == -1)
-    width = ((GdkDrawablePrivate *)src)->width;
-  if (height == -1)
-    height = ((GdkDrawablePrivate *)src)->height;
+  if (width < 0 || height < 0)
+    {
+      gint real_width;
+      gint real_height;
+      
+      gdk_drawable_get_size (drawable, &real_width, &real_height);
+
+      if (width < 0)
+        width = real_width;
+      if (height < 0)
+        height = real_height;
+    }
 
   GDK_DRAWABLE_GET_CLASS (drawable)->draw_drawable (drawable, gc, src,
-							  xsrc, ysrc, xdest, ydest,
-							  width, height);
+                                                    xsrc, ysrc, xdest, ydest,
+                                                    width, height);
 }
 
 void

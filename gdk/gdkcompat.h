@@ -11,8 +11,6 @@ extern "C" {
  */
 #ifndef	GDK_DISABLE_COMPAT_H
 
-#define GdkWindowType                  GdkDrawableType
-
 #define gdk_draw_pixmap                gdk_draw_drawable
 #define gdk_draw_bitmap                gdk_draw_drawable
 

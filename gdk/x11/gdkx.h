@@ -33,6 +33,9 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
+#include <gdk/x11/gdkwindow-x11.h>
+#include <gdk/x11/gdkpixmap-x11.h>
+
 typedef struct _GdkGCXData          GdkGCXData;
 typedef struct _GdkXPositionInfo    GdkXPositionInfo;
 typedef struct _GdkColormapPrivateX GdkColormapPrivateX;
@@ -149,9 +152,6 @@ struct _GdkICPrivate
 
 #define GDK_GC_XGC(gc)       (GDK_GC_XDATA(gc)->xgc)
 #define GDK_GC_GET_XGC(gc)   (GDK_GC_XDATA(gc)->dirty_mask ? _gdk_x11_gc_flush (gc) : GDK_GC_XGC (gc))
-
-#define GDK_WINDOW_XWINDOW            GDK_DRAWABLE_XID
-#define GDK_WINDOW_XDISPLAY           GDK_DRAWABLE_XDISPLAY
 
 extern Display		*gdk_display;
 extern Window		 gdk_root_window;
