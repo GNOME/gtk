@@ -1,3 +1,9 @@
+2005-01-24  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/x11/gdkdisplay-x11.c (_gdk_windowing_set_default_display): 
+	Initialize user_time from DESKTOP_STARTUP_ID.  (#165131,
+	Elijah Newren)
+
 2005-01-24  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserdefault.c: Removed leftover comments.
