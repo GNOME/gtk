@@ -417,13 +417,13 @@ typedef struct {
   GtkTreeModelFilterClass parent_class;
 } ShortcutsModelFilterClass;
 
-#define SHORTCUTS_MODEL_FILTER_TYPE (shortcuts_model_filter_get_type ())
+#define SHORTCUTS_MODEL_FILTER_TYPE (_shortcuts_model_filter_get_type ())
 #define SHORTCUTS_MODEL_FILTER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SHORTCUTS_MODEL_FILTER_TYPE, ShortcutsModelFilter))
 
 static void shortcuts_model_filter_drag_source_iface_init (GtkTreeDragSourceIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (ShortcutsModelFilter,
-			 shortcuts_model_filter,
+			 _shortcuts_model_filter,
 			 GTK_TYPE_TREE_MODEL_FILTER,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_DRAG_SOURCE,
 						shortcuts_model_filter_drag_source_iface_init));
@@ -5712,12 +5712,12 @@ home_folder_handler (GtkFileChooserDefault *impl)
 /* Drag and drop interfaces */
 
 static void
-shortcuts_model_filter_class_init (ShortcutsModelFilterClass *class)
+_shortcuts_model_filter_class_init (ShortcutsModelFilterClass *class)
 {
 }
 
 static void
-shortcuts_model_filter_init (ShortcutsModelFilter *model)
+_shortcuts_model_filter_init (ShortcutsModelFilter *model)
 {
   model->impl = NULL;
 }

@@ -77,7 +77,7 @@ struct _GtkIMModuleClass
   GTypeModuleClass parent_class;
 };
 
-GType gtk_im_module_get_type (void);
+static GType gtk_im_module_get_type (void);
 
 static gint n_loaded_contexts = 0;
 static GHashTable *contexts_hash = NULL;
@@ -163,7 +163,7 @@ gtk_im_module_class_init (GtkIMModuleClass *class)
   gobject_class->finalize = gtk_im_module_finalize;
 }
 
-GType
+static GType
 gtk_im_module_get_type (void)
 {
   static GType im_module_type = 0;

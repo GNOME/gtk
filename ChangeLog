@@ -1,3 +1,12 @@
+2004-08-12  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilesystem.c: Underscore-prefix gtk_file_system_module_get_type().
+	* gtk/gtkfilechooserdefault.c: Underscore-prefix shortcuts_model_filter_get_type().
+
+	* gtk/gtkimmodule.c: Make gtk_im_module_get_type() static.
+	* gtk/gtk.symbols:
+	* gtk/gtkinternals.h: Remove the no longer exported get_type functions.
+
 Thu Aug 12 01:35:46 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkiconview.c: Make the icon view accessible by

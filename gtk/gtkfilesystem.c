@@ -1006,8 +1006,8 @@ struct _GtkFileSystemModuleClass
   GTypeModuleClass parent_class;
 };
 
-G_DEFINE_TYPE (GtkFileSystemModule, gtk_file_system_module, G_TYPE_TYPE_MODULE);
-#define GTK_TYPE_FILE_SYSTEM_MODULE       (gtk_file_system_module_get_type ())
+G_DEFINE_TYPE (GtkFileSystemModule, _gtk_file_system_module, G_TYPE_TYPE_MODULE);
+#define GTK_TYPE_FILE_SYSTEM_MODULE       (_gtk_file_system_module_get_type ())
 #define GTK_FILE_SYSTEM_MODULE(module)	  (G_TYPE_CHECK_INSTANCE_CAST ((module), GTK_TYPE_FILE_SYSTEM_MODULE, GtkFileSystemModule))
 
 
@@ -1071,11 +1071,11 @@ gtk_file_system_module_finalize (GObject *object)
 
   g_free (module->path);
 
-  G_OBJECT_CLASS (gtk_file_system_module_parent_class)->finalize (object);
+  G_OBJECT_CLASS (_gtk_file_system_module_parent_class)->finalize (object);
 }
 
 static void
-gtk_file_system_module_class_init (GtkFileSystemModuleClass *class)
+_gtk_file_system_module_class_init (GtkFileSystemModuleClass *class)
 {
   GTypeModuleClass *module_class = G_TYPE_MODULE_CLASS (class);
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
@@ -1087,7 +1087,7 @@ gtk_file_system_module_class_init (GtkFileSystemModuleClass *class)
 }
 
 static void
-gtk_file_system_module_init (GtkFileSystemModule *fs_module)
+_gtk_file_system_module_init (GtkFileSystemModule *fs_module)
 {
 }
 

@@ -857,9 +857,6 @@ gtk_file_system_insert_bookmark
 gtk_file_system_list_bookmarks
 gtk_file_system_list_volumes
 gtk_file_system_make_path
-#ifdef INCLUDE_INTERNAL_SYMBOLS
-gtk_file_system_module_get_type
-#endif
 gtk_file_system_parse
 gtk_file_system_path_is_local
 gtk_file_system_path_to_filename
@@ -1128,9 +1125,6 @@ gtk_im_context_set_use_preedit
 gtk_im_context_simple_add_table
 gtk_im_context_simple_get_type
 gtk_im_context_simple_new
-#ifdef INCLUDE_INTERNAL_SYMBOLS
-gtk_im_module_get_type
-#endif
 gtk_im_multicontext_append_menuitems
 gtk_im_multicontext_get_type
 gtk_im_multicontext_new
@@ -2840,6 +2834,3 @@ gtk_window_unfullscreen
 gtk_window_unmaximize
 gtk_window_unstick
 gtk_wrap_mode_get_type
-#ifdef INCLUDE_INTERNAL_SYMBOLS
-shortcuts_model_filter_get_type
-#endif
