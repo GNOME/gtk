@@ -2,7 +2,7 @@
 Standard Enumerations
 
 <!-- ##### SECTION Short_Description ##### -->
-
+Public enumerated types used throughout GTK+.
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
@@ -26,43 +26,54 @@ Standard Enumerations
 
 <!-- ##### ENUM GtkArrowType ##### -->
 <para>
-
+Used to indicate the direction in which a #GtkArrow should point.
 </para>
 
-@GTK_ARROW_UP: 
-@GTK_ARROW_DOWN: 
-@GTK_ARROW_LEFT: 
-@GTK_ARROW_RIGHT: 
+@GTK_ARROW_UP: Represents an upward pointing arrow.
+@GTK_ARROW_DOWN: Represents a downward pointing arrow.
+@GTK_ARROW_LEFT: Represents a left pointing arrow.
+@GTK_ARROW_RIGHT: Represents a right pointing arrow.
 
 <!-- ##### ENUM GtkAttachOptions ##### -->
 <para>
-
+Denotes the expansion properties that a widget will have when it (or it's
+parent) is resized.
 </para>
 
-@GTK_EXPAND: 
-@GTK_SHRINK: 
-@GTK_FILL: 
+@GTK_EXPAND: the widget should expand to take up any extra space in its
+container that has been allocated.
+@GTK_SHRINK: the widget should shrink as and when possible.
+@GTK_FILL: the widget should fill the space allocated to it.
 
 <!-- ##### ENUM GtkButtonBoxStyle ##### -->
 <para>
-
+Used to dictate the style that a #GtkButtonBox uses to layout the buttons it
+contains. (See also: #GtkVButtonBox and #GtkHButtonBox).
 </para>
 
-@GTK_BUTTONBOX_DEFAULT_STYLE: 
-@GTK_BUTTONBOX_SPREAD: 
-@GTK_BUTTONBOX_EDGE: 
-@GTK_BUTTONBOX_START: 
-@GTK_BUTTONBOX_END: 
+@GTK_BUTTONBOX_DEFAULT_STYLE: Default packing.
+@GTK_BUTTONBOX_SPREAD: Buttons are evenly spread across the ButtonBox.
+@GTK_BUTTONBOX_EDGE: Buttons are placed at the edges of the ButtonBox.
+@GTK_BUTTONBOX_START: Buttons are grouped towards the start of box, (on the
+left for a HBox, or the top for a VBox).
+@GTK_BUTTONBOX_END: Buttons are grouped towards the end of a box, (on the
+right for a HBox, or the bottom for a VBox).
 
 <!-- ##### ENUM GtkCornerType ##### -->
 <para>
-
+Specifies which corner a child widget should be placed in when packed into
+a #GtkScrolledWindow. This is effectively the opposite of where the scroll
+bars are placed.
 </para>
 
-@GTK_CORNER_TOP_LEFT: 
-@GTK_CORNER_BOTTOM_LEFT: 
-@GTK_CORNER_TOP_RIGHT: 
-@GTK_CORNER_BOTTOM_RIGHT: 
+@GTK_CORNER_TOP_LEFT: Place the scrollbars on the right and bottom of the
+widget (default behaviour).
+@GTK_CORNER_BOTTOM_LEFT: Place the scrollbars on the top and right of the
+widget.
+@GTK_CORNER_TOP_RIGHT: Place the scrollbars on the left and bottom of the
+widget.
+@GTK_CORNER_BOTTOM_RIGHT: Place the scrollbars on the top and left of the
+widget.
 
 <!-- ##### ENUM GtkCurveType ##### -->
 <para>
@@ -87,13 +98,14 @@ Standard Enumerations
 
 <!-- ##### ENUM GtkJustification ##### -->
 <para>
-
+Used for justifying the text inside a #GtkLabel widget. (See also
+#GtkAlignment).
 </para>
 
-@GTK_JUSTIFY_LEFT: 
-@GTK_JUSTIFY_RIGHT: 
-@GTK_JUSTIFY_CENTER: 
-@GTK_JUSTIFY_FILL: 
+@GTK_JUSTIFY_LEFT: The text is placed at the left edge of the label.
+@GTK_JUSTIFY_RIGHT: The text is placed at the right edge of the label.
+@GTK_JUSTIFY_CENTER: The text is placed in the center of the label.
+@GTK_JUSTIFY_FILL: The text is placed is distributed across the label.
 
 <!-- ##### ENUM GtkMatchType ##### -->
 <para>
@@ -126,10 +138,11 @@ Standard Enumerations
 
 <!-- ##### ENUM GtkPackType ##### -->
 <para>
-
+Used for packing widgets into #GtkBox widgets. (See also: #GtkVBox,
+#GtkHBox, and #GtkButtonBox).
 </para>
 
-@GTK_PACK_START: 
+@GTK_PACK_START: The 
 @GTK_PACK_END: 
 
 <!-- ##### ENUM GtkPathPriorityType ##### -->
@@ -155,12 +168,13 @@ Standard Enumerations
 
 <!-- ##### ENUM GtkPolicyType ##### -->
 <para>
-
+Determines when a scroll bar will be visible. 
 </para>
 
-@GTK_POLICY_ALWAYS: 
-@GTK_POLICY_AUTOMATIC: 
-@GTK_POLICY_NEVER: 
+@GTK_POLICY_ALWAYS: The scrollbar is always visible.
+@GTK_POLICY_AUTOMATIC: The scrollbar will appear and disappear as necessary. For example,
+when all of a #GtkCList can not be seen.
+@GTK_POLICY_NEVER: The scrollbar will never appear.
 
 <!-- ##### ENUM GtkPositionType ##### -->
 <para>
@@ -176,26 +190,10 @@ Standard Enumerations
 <para>
 An enumeration which describes whether a preview
 contains grayscale or red-green-blue data.
-
-<informaltable pgwide=1 frame="none" role="enum">
-<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
-<tbody>
-
-<row>
-<entry>GTK_PREVIEW_COLOR</entry>
-<entry>the preview contains red-green-blue data.</entry>
-</row>
-
-<row>
-<entry>GTK_PREVIEW_GRAYSCALE</entry>
-<entry>The preview contains grayscale data.</entry>
-</row>
-
-</tbody></tgroup></informaltable>
 </para>
 
-@GTK_PREVIEW_COLOR: 
-@GTK_PREVIEW_GRAYSCALE: 
+@GTK_PREVIEW_COLOR: the preview contains red-green-blue data.
+@GTK_PREVIEW_GRAYSCALE: The preview contains grayscale data.
 
 <!-- ##### ENUM GtkReliefStyle ##### -->
 <para>
@@ -239,32 +237,34 @@ contains grayscale or red-green-blue data.
 
 <!-- ##### ENUM GtkShadowType ##### -->
 <para>
-
+Used to change the appearance of an outline typically provided by a #GtkFrame.
 </para>
 
-@GTK_SHADOW_NONE: 
-@GTK_SHADOW_IN: 
-@GTK_SHADOW_OUT: 
-@GTK_SHADOW_ETCHED_IN: 
+@GTK_SHADOW_NONE: No outline.
+@GTK_SHADOW_IN: The outline is bevelled inwards.
+@GTK_SHADOW_OUT: The outline is bevelled outwards like a button.
+@GTK_SHADOW_ETCHED_IN: The outline itself is an inward bevel, but the frame
+does 
 @GTK_SHADOW_ETCHED_OUT: 
 
 <!-- ##### ENUM GtkStateType ##### -->
 <para>
-
+This type indicates the current state of a widget.
 </para>
 
-@GTK_STATE_NORMAL: 
-@GTK_STATE_ACTIVE: 
-@GTK_STATE_PRELIGHT: 
+@GTK_STATE_NORMAL: The state during normal operation.
+@GTK_STATE_ACTIVE: The widget is currently active, such as a
+@GTK_STATE_PRELIGHT: The mouse pointer is over the widget.
 @GTK_STATE_SELECTED: 
-@GTK_STATE_INSENSITIVE: 
+@GTK_STATE_INSENSITIVE: The state of the widget can not be altered by the
+user. Its appearance will usually indicate this.
 
 <!-- ##### ENUM GtkSubmenuDirection ##### -->
 <para>
-
+Indicates the direction a sub-menu will appear.
 </para>
 
-@GTK_DIRECTION_LEFT: 
+@GTK_DIRECTION_LEFT: A sub-menu will appear
 @GTK_DIRECTION_RIGHT: 
 
 <!-- ##### ENUM GtkSubmenuPlacement ##### -->
@@ -277,12 +277,12 @@ contains grayscale or red-green-blue data.
 
 <!-- ##### ENUM GtkToolbarStyle ##### -->
 <para>
-
+Used to customize the appearance of a #GtkToolbar.
 </para>
 
-@GTK_TOOLBAR_ICONS: 
-@GTK_TOOLBAR_TEXT: 
-@GTK_TOOLBAR_BOTH: 
+@GTK_TOOLBAR_ICONS: Buttons should display only icons in the toolbar.
+@GTK_TOOLBAR_TEXT: Buttons should display only text labels in the toolbar.
+@GTK_TOOLBAR_BOTH: Buttons should display text and icons in the toolbar.
 
 <!-- ##### ENUM GtkTroughType ##### -->
 <para>
@@ -314,27 +314,33 @@ contains grayscale or red-green-blue data.
 
 <!-- ##### ENUM GtkWindowPosition ##### -->
 <para>
-
+Window placement can be influenced using this enumeration.
 </para>
 
-@GTK_WIN_POS_NONE: 
-@GTK_WIN_POS_CENTER: 
-@GTK_WIN_POS_MOUSE: 
+@GTK_WIN_POS_NONE: No influence is made on placement.
+@GTK_WIN_POS_CENTER: Windows should be placed in the center of the screen.
+@GTK_WIN_POS_MOUSE: Windows should be placed at the current mouse position.
 
 <!-- ##### ENUM GtkWindowType ##### -->
 <para>
-
+A #GtkWindow can be of these types. A toplevel window has standard window
+decorations by default. A dialog may have fewer decorations and obey a
+different placement policy. A popup window will have no decorations.
+</para>
+<para>
+It should be noted that such decorations can often be over-ridden by modern
+window managers.
 </para>
 
-@GTK_WINDOW_TOPLEVEL: 
-@GTK_WINDOW_DIALOG: 
-@GTK_WINDOW_POPUP: 
+@GTK_WINDOW_TOPLEVEL: A window for a typical application.
+@GTK_WINDOW_DIALOG: A window for transient messages and dialogs.
+@GTK_WINDOW_POPUP: A window for popups.
 
 <!-- ##### ENUM GtkSortType ##### -->
 <para>
-
+Determines the direction of a sort.
 </para>
 
-@GTK_SORT_ASCENDING: 
-@GTK_SORT_DESCENDING: 
+@GTK_SORT_ASCENDING: Sorting is in ascending order.
+@GTK_SORT_DESCENDING: Sorting is in descending order.
 
