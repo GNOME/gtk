@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
-"POT-Creation-Date: 2003-06-24 11:33+0700\n"
-"PO-Revision-Date: 2003-06-22 20:5555500\n"
+"POT-Creation-Date: 2003-06-30 10:39+0700\n"
+"PO-Revision-Date: 2003-06-28 20:55+0700\n"
 "Last-Translator: Mohammad DAMT <mdamt@bisnisweb.com>\n"
-"Language-Team: Indonesia <id@li.org>\n"
+"Language-Team: Indonesia <sukarelawan@gnome.linux.or.id>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -228,36 +228,36 @@ msgstr "Gambar GIF rusak atau tidak lengkap."
 msgid "The GIF image format"
 msgstr "Format gambar GIF"
 
-#: gdk-pixbuf/io-ico.c:218 gdk-pixbuf/io-ico.c:277 gdk-pixbuf/io-ico.c:338
-#: gdk-pixbuf/io-ico.c:401 gdk-pixbuf/io-ico.c:418
+#: gdk-pixbuf/io-ico.c:217 gdk-pixbuf/io-ico.c:269 gdk-pixbuf/io-ico.c:330
+#: gdk-pixbuf/io-ico.c:393 gdk-pixbuf/io-ico.c:410
 msgid "Not enough memory to load icon"
 msgstr "Tidak cukup memori untuk membuka ikon"
 
-#: gdk-pixbuf/io-ico.c:262
+#: gdk-pixbuf/io-ico.c:254
 msgid "Invalid header in icon"
 msgstr "Header error pada ikon"
 
-#: gdk-pixbuf/io-ico.c:299
+#: gdk-pixbuf/io-ico.c:291
 msgid "Icon has zero width"
 msgstr "Ikon memiliki lebar 0"
 
-#: gdk-pixbuf/io-ico.c:309
+#: gdk-pixbuf/io-ico.c:301
 msgid "Icon has zero height"
 msgstr "Ikon memiliki tinggi 0"
 
-#: gdk-pixbuf/io-ico.c:353
+#: gdk-pixbuf/io-ico.c:345
 msgid "Compressed icons are not supported"
 msgstr "Ikon terkompresi tidak bisa dibuka"
 
-#: gdk-pixbuf/io-ico.c:386
+#: gdk-pixbuf/io-ico.c:378
 msgid "Unsupported icon type"
 msgstr "Tipe ikon tidak bisa dibuka"
 
-#: gdk-pixbuf/io-ico.c:466
+#: gdk-pixbuf/io-ico.c:458
 msgid "Not enough memory to load ICO file"
 msgstr "Tidak cukup memori untuk membuka file ICO"
 
-#: gdk-pixbuf/io-ico.c:872
+#: gdk-pixbuf/io-ico.c:868
 msgid "The ICO image format"
 msgstr "Format gambar ICO"
 
@@ -935,7 +935,7 @@ msgstr "Jarak"
 msgid "The amount of space between children"
 msgstr "Jarak antar anak"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:465
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:465 gtk/gtktoolbar.c:394
 msgid "Homogeneous"
 msgstr "Homogen"
 
@@ -943,7 +943,8 @@ msgstr "Homogen"
 msgid "Whether the children should all be the same size"
 msgstr "Menentukan apakah semua anak memiliki ukuran yang sama atau tidak"
 
-#: gtk/gtkbox.c:146 gtk/gtkpreview.c:132 gtk/gtktreeviewcolumn.c:258
+#: gtk/gtkbox.c:146 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:386
+#: gtk/gtktreeviewcolumn.c:258
 msgid "Expand"
 msgstr "Ekspansi"
 
@@ -2097,7 +2098,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1107
 msgid "_New Folder"
-msgstr "Forlder_Baru"
+msgstr "Buat Folder _Baru"
 
 #: gtk/gtkfilesel.c:1118
 msgid "De_lete File"
@@ -2133,7 +2134,7 @@ msgstr "Error saat membuat folder %s: %s\n"
 
 #: gtk/gtkfilesel.c:1474
 msgid "New Folder"
-msgstr "Folder baru"
+msgstr "Buat Folder baru"
 
 #: gtk/gtkfilesel.c:1489
 msgid "_Folder name:"
@@ -2218,7 +2219,7 @@ msgstr "_Ganti nama"
 
 #: gtk/gtkfilesel.c:2217
 msgid "_Selection: "
-msgstr "_Pilihan:"
+msgstr "_Yang Dipilih: "
 
 #: gtk/gtkfilesel.c:3111
 #, c-format
@@ -2353,7 +2354,7 @@ msgid "_Gamma value"
 msgstr "nilai _Gamma"
 
 #: gtk/gtkhandlebox.c:202 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:161
-#: gtk/gtktoolbar.c:284 gtk/gtkviewport.c:150
+#: gtk/gtktoolbar.c:443 gtk/gtkviewport.c:150
 msgid "Shadow type"
 msgstr "Tipe shadow"
 
@@ -2738,7 +2739,7 @@ msgstr ""
 msgid "Style of bevel around the menubar"
 msgstr "Gaya kotak sekitar kotak menu"
 
-#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:258
+#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:419
 msgid "Internal padding"
 msgstr "Isian internal"
 
@@ -3091,7 +3092,7 @@ msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
 msgstr ""
 "GtkAdjustment yang terhubung ke progress bar (Sebaiknya tidak digunakan)"
 
-#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:231
+#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:360
 msgid "Orientation"
 msgstr "Orientasi"
 
@@ -3568,6 +3569,10 @@ msgstr "Nilai"
 #: gtk/gtkspinbutton.c:302
 msgid "Reads the current value, or sets a new value"
 msgstr "Membaca nilai saat ini, atau mengisi nilai baru"
+
+#: gtk/gtkspinbutton.c:311
+msgid "Style of bevel around the spin button"
+msgstr "Gaya bevel disekeliling tombol spin"
 
 #: gtk/gtkstatusbar.c:162
 msgid "Style of bevel around the statusbar text"
@@ -4409,67 +4414,92 @@ msgstr "Indikator gambar"
 msgid "If the toggle part of the button is displayed"
 msgstr "Menentukan apakah bagian togel tombol ditampilkan"
 
-#: gtk/gtktoolbar.c:232
+#: gtk/gtktoolbar.c:361
 msgid "The orientation of the toolbar"
 msgstr "Arah orientasi toolbar"
 
-#: gtk/gtktoolbar.c:240
+#: gtk/gtktoolbar.c:369
 msgid "Toolbar Style"
 msgstr "Gaya toolbar"
 
-#: gtk/gtktoolbar.c:241
+#: gtk/gtktoolbar.c:370
 msgid "How to draw the toolbar"
 msgstr "Cara menggambar toolbar"
 
-#: gtk/gtktoolbar.c:249
+#: gtk/gtktoolbar.c:377
+msgid "Show Arrow"
+msgstr "Tampilkan Panah"
+
+#: gtk/gtktoolbar.c:378
+msgid "If an arrow should be shown if the toolbar doesn't fit"
+msgstr "Menentukan apakah panah harus ditampilkan pada toolbar bila ruangannya sudah tidak cukup"
+
+#: gtk/gtktoolbar.c:387
+msgid "Whether the item should receive extra space when the toolbar grows"
+msgstr ""
+"Menentukan apakah obyek bisa menambah ruang saat toolbar bertambah besar"
+
+#: gtk/gtktoolbar.c:395
+msgid "Whether the item should be the same size as other homogeneous items"
+msgstr "Menentukan apakah obyek memiliki ukuran yang sama dengan obyek homogen lain atau tidak"
+
+#: gtk/gtktoolbar.c:402
+msgid "Pack End"
+msgstr "Pak di akhir"
+
+#: gtk/gtktoolbar.c:403
+msgid "Whether the item is positioned at the end of the toolbar"
+msgstr "Menentukan apakah obyek ditempatkan pada akhir toolbar atau tidak"
+
+#: gtk/gtktoolbar.c:410
 msgid "Spacer size"
 msgstr "Ukuran pengisi ruang"
 
-#: gtk/gtktoolbar.c:250
+#: gtk/gtktoolbar.c:411
 msgid "Size of spacers"
 msgstr "Ukuran pengisi ruang"
 
-#: gtk/gtktoolbar.c:259
+#: gtk/gtktoolbar.c:420
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr "Jumlah ruangan dalam batas antara bayangan toolbar dan tombolnya"
 
-#: gtk/gtktoolbar.c:267
+#: gtk/gtktoolbar.c:428
 msgid "Space style"
 msgstr "Gaya pengisi ruangan"
 
-#: gtk/gtktoolbar.c:268
+#: gtk/gtktoolbar.c:429
 msgid "Whether spacers are vertical lines or just blank"
 msgstr ""
 "Menentukan apakah pengisi ruangan digambar secara vertikal atau kosong saja"
 
-#: gtk/gtktoolbar.c:276
+#: gtk/gtktoolbar.c:436
 msgid "Button relief"
 msgstr "Relief tombol"
 
-#: gtk/gtktoolbar.c:277
+#: gtk/gtktoolbar.c:437
 msgid "Type of bevel around toolbar buttons"
 msgstr "Tipe gaya dekorasi di sekeliling tombol toolbar"
 
-#: gtk/gtktoolbar.c:285
+#: gtk/gtktoolbar.c:444
 msgid "Style of bevel around the toolbar"
 msgstr "Gaya dekorasi sekeliling toolbar"
 
-#: gtk/gtktoolbar.c:291
+#: gtk/gtktoolbar.c:450
 msgid "Toolbar style"
 msgstr "Gaya toolbar"
 
-#: gtk/gtktoolbar.c:292
+#: gtk/gtktoolbar.c:451
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 "Menentukan apakah toolbar default hanya berisi teks, teks dan ikon, ikon "
 "saja, dsb."
 
-#: gtk/gtktoolbar.c:298
+#: gtk/gtktoolbar.c:457
 msgid "Toolbar icon size"
 msgstr "Ukuran ikon toolbar"
 
-#: gtk/gtktoolbar.c:299
+#: gtk/gtktoolbar.c:458
 msgid "Size of icons in default toolbars"
 msgstr "Ukuran ikon pada toolbar default"
 
@@ -4881,51 +4911,51 @@ msgstr ""
 "Tipe kejadian yang menentukan jenis kejadian tambahan yang akan diterima "
 "widget"
 
-#: gtk/gtkwidget.c:1170
+#: gtk/gtkwidget.c:1169
 msgid "Interior Focus"
 msgstr "Fokus interior"
 
-#: gtk/gtkwidget.c:1171
+#: gtk/gtkwidget.c:1170
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Menentukan apakah menggambar indikator fokus di dalam widget"
 
-#: gtk/gtkwidget.c:1177
+#: gtk/gtkwidget.c:1176
 msgid "Focus linewidth"
 msgstr "Lebar garis fokus"
 
-#: gtk/gtkwidget.c:1178
+#: gtk/gtkwidget.c:1177
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Lebar garis indikator fokus dalam piksel"
 
-#: gtk/gtkwidget.c:1184
+#: gtk/gtkwidget.c:1183
 msgid "Focus line dash pattern"
 msgstr "Garis fokus berpola garis-garis"
 
-#: gtk/gtkwidget.c:1185
+#: gtk/gtkwidget.c:1184
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "Pola garis-garis yang digunakan untuk menggambar indikator fokus"
 
-#: gtk/gtkwidget.c:1190
+#: gtk/gtkwidget.c:1189
 msgid "Focus padding"
 msgstr "Isian fokus"
 
-#: gtk/gtkwidget.c:1191
+#: gtk/gtkwidget.c:1190
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "Lebar antara indikator fokus dan kotak widget dalam piksel"
 
-#: gtk/gtkwidget.c:1196
+#: gtk/gtkwidget.c:1195
 msgid "Cursor color"
 msgstr "Warna kursor"
 
-#: gtk/gtkwidget.c:1197
+#: gtk/gtkwidget.c:1196
 msgid "Color with which to draw insertion cursor"
 msgstr "Warna untuk menggambar kursor pengisian"
 
-#: gtk/gtkwidget.c:1202
+#: gtk/gtkwidget.c:1201
 msgid "Secondary cursor color"
 msgstr "Wanra kursor sekunder"
 
-#: gtk/gtkwidget.c:1203
+#: gtk/gtkwidget.c:1202
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -4933,11 +4963,11 @@ msgstr ""
 "Warna yang akan digambarkan pada kursor pengisian sekunder saat mengedit "
 "campuran teks kanan-ke-kiri dan kiri-ke-kanan"
 
-#: gtk/gtkwidget.c:1208
+#: gtk/gtkwidget.c:1207
 msgid "Cursor line aspect ratio"
 msgstr "Rasio aspek garis kursor"
 
-#: gtk/gtkwidget.c:1209
+#: gtk/gtkwidget.c:1208
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Rasio aspek yang digunakan saat menggambar kursor pengisian teks"
 
