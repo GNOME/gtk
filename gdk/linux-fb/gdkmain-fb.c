@@ -471,7 +471,7 @@ gdk_fb_set_mode (GdkFBDisplay *display)
 static GdkFBDisplay *
 gdk_fb_display_new (const char *filename)
 {
-  int fd, n;
+  int fd;
   GdkFBDisplay *retval;
 
   fd = open (filename, O_RDWR);
@@ -497,19 +497,6 @@ gdk_fb_display_new (const char *filename)
 			fd,
 			0);
   g_assert (retval->fbmem != MAP_FAILED);
-
-  
-  if (retval->sinfo.visual == FB_VISUAL_PSEUDOCOLOR)
-    {
-      guint16 red[256], green[256], blue[256];
-      struct fb_cmap cmap;
-      for(n = 0; n < 16; n++)
-	red[n] = green[n] = blue[n] = n << 12;
-      for(n = 16; n < 256; n++)
-	red[n] = green[n] = blue[n] = n << 8;
-      cmap.red = red; cmap.green = green; cmap.blue = blue; cmap.len = 256; cmap.start = 0;
-      ioctl (fd, FBIOPUTCMAP, &cmap);
-    }
 
   if (retval->sinfo.visual == FB_VISUAL_TRUECOLOR)
     {

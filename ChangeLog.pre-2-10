@@ -1,5 +1,10 @@
 2000-12-05  Alexander Larsson  <alexl@redhat.com>
 
+	* gdk/linux-fb/gdkmain-fb.c (gdk_fb_display_new):
+	Remove bogus colormap setting.
+
+2000-12-05  Alexander Larsson  <alexl@redhat.com>
+
 	* gdk/linux-fb/gdkcolor-fb.c:
 	More complete colormap handling. Now GdkRGB work in 8 bpp modes.
 
