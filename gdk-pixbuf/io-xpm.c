@@ -898,7 +898,8 @@ static XPMColorEntry xColors[] = {
 static int
 compare_xcolor_entries (const void *a, const void *b)
 {
-  return g_strcasecmp ((const char *) a, ((const XPMColorEntry *) b)->name);
+  return g_ascii_strcasecmp ((const char *) a, 
+			     ((const XPMColorEntry *) b)->name);
 }
 
 static gboolean

@@ -1,3 +1,7 @@
+2001-12-14  Sebastian Wilhelmi  <wilhelmi@ira.uka.de>
+
+	* io-xpm.c: Use g_ascii_strcasecmp() instead of g_strcasecmp().
+
 2001-12-13  Sebastian Wilhelmi  <wilhelmi@ira.uka.de>
 
 	* gdk-pixbuf-animation.c, gdk-pixbuf-loader.c, gdk-pixpuf.c,
