@@ -61,7 +61,7 @@ gdk_window_impl_fb_finalize (GObject *object)
 {
   GdkWindowFBData *fbd = GDK_WINDOW_FBDATA (object);
 
-  if (GDK_WINDOW_P (fbd->drawable_data.wrapper)->mapped)
+  if (GDK_WINDOW_IS_MAPPED (fbd->drawable_data.wrapper))
     gdk_window_hide (fbd->drawable_data.wrapper);
 
   if (fbd->cursor)
@@ -146,7 +146,7 @@ _gdk_windowing_window_init (void)
   gdk_parent_root = gdk_window_new (NULL, &attr, GDK_WA_CURSOR);
   private = (GdkWindowObject *)gdk_parent_root;
 
-  private->mapped = TRUE;
+  private->state = 0;
 
   GDK_DRAWABLE_IMPL_FBDATA (gdk_parent_root)->lim_x = attr.width;
   GDK_DRAWABLE_IMPL_FBDATA (gdk_parent_root)->lim_y = attr.height;
@@ -300,7 +300,7 @@ _gdk_windowing_window_destroy (GdkWindow *window,
 static gboolean
 all_parents_shown (GdkWindowObject *private)
 {
-  while (private->mapped)
+  while (GDK_WINDOW_IS_MAPPED (private))
     {
       if (private->parent)
 	private = (GdkWindowObject *)private->parent;
@@ -320,7 +320,7 @@ send_map_events (GdkWindowObject *private, gboolean is_map)
   
   g_assert (is_map);
 
-  if (!private->mapped)
+  if (!GDK_WINDOW_IS_MAPPED (private))
     return;
 
   if (is_map)
@@ -356,7 +356,7 @@ gdk_window_invalidate_region_clear(GdkWindow *window,
   int i;
   GdkWindowObject *private = GDK_WINDOW_P (window);
 
-  if (private->input_only || !private->mapped)
+  if (private->input_only || !GDK_WINDOW_IS_MAPPED (private))
     return;
 
   if (private->bg_pixmap != GDK_NO_BG)
@@ -413,7 +413,7 @@ gdk_window_invalidate_rect_clear (GdkWindow *window,
 {
   GdkWindowObject *private = GDK_WINDOW_P (window);
 
-  if (private->input_only || !private->mapped)
+  if (private->input_only || !GDK_WINDOW_IS_MAPPED (private))
     return;
 
   if (GDK_WINDOW_P (window)->bg_pixmap != GDK_NO_BG)
@@ -473,7 +473,7 @@ gdk_fb_window_find_toplevel (GdkWindow *window)
   GdkWindowObject *priv = (GdkWindowObject *)window;
   while (priv != (GdkWindowObject *)gdk_parent_root)
     {
-      if ((priv->parent == (GdkWindowObject *)gdk_parent_root) && priv->mapped)
+      if ((priv->parent == (GdkWindowObject *)gdk_parent_root) && GDK_WINDOW_IS_MAPPED (priv))
 	return (GdkWindow *)priv;
       priv = priv->parent;
     }
@@ -749,9 +749,9 @@ gdk_window_show (GdkWindow *window)
   
   private = (GdkWindowObject*) window;
 
-  if (!private->destroyed && !private->mapped)
+  if (!private->destroyed && !GDK_WINDOW_IS_MAPPED (private))
     {
-      private->mapped = TRUE;
+      private->state = 0;
       gdk_fb_window_raise (window);
       
       if (all_parents_shown ((GdkWindowObject *)private->parent))
@@ -790,7 +790,7 @@ gdk_window_hide (GdkWindow *window)
   
   private = (GdkWindowObject*) window;
 
-  if (!private->destroyed && private->mapped)
+  if (!private->destroyed && GDK_WINDOW_IS_MAPPED (private))
     {
       GdkEvent *event;
       GdkRectangle r;
@@ -805,7 +805,7 @@ gdk_window_hide (GdkWindow *window)
       r.width = GDK_DRAWABLE_IMPL_FBDATA (window)->lim_x - r.x;
       r.height = GDK_DRAWABLE_IMPL_FBDATA (window)->lim_y - r.y;
 
-      private->mapped = FALSE;
+      private->state = GDK_WINDOW_STATE_WITHDRAWN;
 
       mousewin = gdk_window_at_pointer (NULL, NULL);
       gdk_fb_window_send_crossing_events (NULL,
@@ -904,7 +904,7 @@ recompute_abs_positions(GdkDrawable *drawable,
       GdkWindowObject *private = GDK_WINDOW_P (drawable);
       int x, y;
 
-      if (!private->mapped)
+      if (!GDK_WINDOW_IS_MAPPED (private))
 	return;
 
       
@@ -1042,7 +1042,7 @@ gdk_fb_window_move_resize (GdkWindow *window,
       if (private->input_only)
 	send_expose_events = FALSE;
 
-      if (private->mapped && send_expose_events)
+      if (GDK_WINDOW_IS_MAPPED (private) && send_expose_events)
 	old_region = gdk_fb_clip_region (GDK_DRAWABLE_IMPL(window), NULL, TRUE, FALSE, FALSE);
 
       dx = x - private->x;
@@ -1055,7 +1055,7 @@ gdk_fb_window_move_resize (GdkWindow *window,
       GDK_DRAWABLE_IMPL_FBDATA (private)->width = width;
       GDK_DRAWABLE_IMPL_FBDATA (private)->height = height;
 
-      if (private->mapped)
+      if (GDK_WINDOW_IS_MAPPED (private))
 	{
 	  recompute_drawable ((GdkDrawable *)window);
 
@@ -1198,7 +1198,7 @@ gdk_window_reparent (GdkWindow *window,
 
   parent_private->children = g_list_prepend (parent_private->children, window);
 
-  if (window_private->mapped)
+  if (GDK_WINDOW_IS_MAPPED (window_private))
     {
       GdkRectangle r;
       GdkRegion *region;
@@ -1637,7 +1637,7 @@ gdk_window_get_pointer (GdkWindow       *window,
 	    {
 	      sub = ltmp->data;
 
-	      if (!sub->mapped)
+	      if (!GDK_WINDOW_IS_MAPPED (sub))
 		continue;
 
 	      shape = gdk_fb_window_peek_shape (GDK_WINDOW (sub),
@@ -1881,6 +1881,31 @@ gdk_window_shape_combine_mask (GdkWindow *window,
 }
 
 void
+gdk_window_shape_combine_region (GdkWindow *window,
+                                 GdkRegion *shape,
+                                 gint       x,
+                                 gint       y)
+{
+  GdkWindowFBData *private;
+  
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  private = GDK_WINDOW_IMPL_FBDATA (window);
+
+  if (private->shape && private->shape != GDK_FB_USE_CHILD_SHAPE)
+    gdk_region_destroy (private->shape);
+
+  if (shape)
+    {
+      private->shape = gdk_region_copy (shape);
+      gdk_region_offset (private->shape, x, y);
+    }
+  else
+    private->shape = NULL;
+}
+
+void
 gdk_window_set_override_redirect (GdkWindow *window,
 				  gboolean override_redirect)
 {
@@ -2040,4 +2065,76 @@ _gdk_windowing_window_queue_antiexpose (GdkWindow  *window,
 					GdkRegion  *area)
 {
   return FALSE;
+}
+
+void
+gdk_window_stick (GdkWindow *window)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+}
+
+void
+gdk_window_unstick (GdkWindow *window)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+}
+
+void
+gdk_window_maximize (GdkWindow *window)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  g_warning ("gdk_window_maximize() not implemented.\n");
+}
+
+void
+gdk_window_unmaximize (GdkWindow *window)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  g_warning ("gdk_window_unmaximize() not implemented.\n");
+}
+
+void
+gdk_window_iconify (GdkWindow *window)
+{
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  g_warning ("gdk_window_iconify() not implemented.\n");
+}
+
+void
+gdk_window_deiconify (GdkWindow *window)
+{
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  g_warning ("gdk_window_deiconify() not implemented.\n");
+}
+
+void
+gdk_window_focus (GdkWindow *window,
+                  guint32    timestamp)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  g_warning ("gdk_window_focus() not implemented.\n");
+}
+
+void
+gdk_window_set_type_hint (GdkWindow        *window,
+			  GdkWindowTypeHint hint)
+{
+  GdkAtom atom;
+  
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (GDK_IS_WINDOW (window));
+}
+
+void
+gdk_window_set_modal_hint (GdkWindow *window,
+			   gboolean   modal)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
 }

@@ -319,7 +319,7 @@ gdk_fb_clip_region (GdkDrawable *drawable,
   draw_rect.x = private->llim_x;
   draw_rect.y = private->llim_y;
   if (!GDK_IS_WINDOW (private) ||
-      GDK_WINDOW_P (private->wrapper)->mapped)
+      GDK_WINDOW_IS_MAPPED (private->wrapper))
     {
       draw_rect.width = private->lim_x - draw_rect.x;
       draw_rect.height = private->lim_y - draw_rect.y;
@@ -376,7 +376,7 @@ gdk_fb_clip_region (GdkDrawable *drawable,
 
   if (do_clipping &&
       GDK_IS_WINDOW (private->wrapper) &&
-      GDK_WINDOW_P (private->wrapper)->mapped &&
+      GDK_WINDOW_IS_MAPPED (private->wrapper) &&
       !GDK_WINDOW_P (private->wrapper)->input_only)
     {
       GdkWindow *parentwin, *lastwin;
@@ -395,7 +395,7 @@ gdk_fb_clip_region (GdkDrawable *drawable,
 
 	  for (cur = GDK_WINDOW_P (parentwin)->children; cur && cur->data != lastwin; cur = cur->next)
 	    {
-	      if (!GDK_WINDOW_P (cur->data)->mapped || GDK_WINDOW_P (cur->data)->input_only)
+	      if (!GDK_WINDOW_IS_MAPPED (cur->data) || GDK_WINDOW_P (cur->data)->input_only)
 		continue;
 
 	      impl_private = GDK_DRAWABLE_IMPL_FBDATA(cur->data);
@@ -510,7 +510,7 @@ gdk_fb_fill_spans (GdkDrawable *real_drawable,
 
   g_assert (gc);
 
-  if (GDK_IS_WINDOW (private->wrapper) && !GDK_WINDOW_P (private->wrapper)->mapped)
+  if (GDK_IS_WINDOW (private->wrapper) && !GDK_WINDOW_IS_MAPPED (private->wrapper))
     return;
   if (GDK_IS_WINDOW (private->wrapper) && GDK_WINDOW_P (private->wrapper)->input_only)
     g_error ("Drawing on the evil input-only!");
@@ -682,7 +682,7 @@ gdk_fb_draw_drawable_3 (GdkDrawable *drawable,
 
   if (GDK_IS_WINDOW (private->wrapper))
     {
-      if (!GDK_WINDOW_P (private->wrapper)->mapped)
+      if (!GDK_WINDOW_IS_MAPPED (private->wrapper))
 	return;
       if (GDK_WINDOW_P (private->wrapper)->input_only)
 	g_error ("Drawing on the evil input-only!");

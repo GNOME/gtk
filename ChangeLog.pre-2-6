@@ -1,5 +1,17 @@
 2001-03-12  Alexander Larsson  <alexl@redhat.com>
 
+	Make GtkFB compile and link.
+	
+        * gdk/linux-fb/gdkdrawable-fb2.c:
+	window->mapped to GDK_WINDOW_IS_MAPPED(). 
+	
+	* gdk/linux-fb/gdkwindow-fb.c:
+	window->mapped to GDK_WINDOW_IS_MAPPED(). 
+	Added gdk_window_shape_combine_region.
+	Added assorted placeholders for unimplemented new GdkWindow API calls.
+
+2001-03-12  Alexander Larsson  <alexl@redhat.com>
+
 	* gtk/gtkfilesel.c:
 	Add more test when converting filenames from/to utf-8.
 	Don't allow entering text in the filename entry which isn't allowed in
