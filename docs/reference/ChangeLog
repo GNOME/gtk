@@ -1,5 +1,8 @@
 2004-10-31  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/tmpl/gtktreemodel.sgml: Small correction for
+	gtk_tree_path_new_root().  (#156956, Vincent Untz)
+
 	* gtk/gtk-sections.txt: Additions.
 
 2004-10-29  Matthias Clasen  <mclasen@redhat.com>

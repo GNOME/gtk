@@ -365,13 +365,12 @@ section.
 
 <!-- ##### MACRO gtk_tree_path_new_root ##### -->
 <para>
-An alternate name for gtk_tree_path_new_iter() provided for
-compatibility reasons; this macro will be deprecated in future
-versions of GTK+.
+An alternate name for gtk_tree_path_new_first() provided for
+compatibility reasons.
 </para>
 
 @Returns: A new #GtkTreePath.
-
+@Deprecated: Use gtk_tree_path_new_first() instead.
 
 <!-- ##### FUNCTION gtk_tree_path_append_index ##### -->
 <para>
