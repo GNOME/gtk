@@ -351,16 +351,9 @@ gdk_image_get (GdkWindow *window,
    */
   if (GDK_DRAWABLE_TYPE (window) == GDK_DRAWABLE_PIXMAP)
     {
-      if ((hdc = CreateCompatibleDC (NULL)) == NULL)
+      hdc = gdk_win32_obtain_offscreen_hdc (GDK_DRAWABLE_XID (window));
+      if (hdc == NULL)
 	{
-	  WIN32_GDI_FAILED ("CreateCompatibleDC");
-	  g_free (image);
-	  return NULL;
-	}
-      if ((oldbitmap1 = SelectObject (hdc, GDK_DRAWABLE_XID (window))) == NULL)
-	{
-	  WIN32_GDI_FAILED ("SelectObject");
-	  DeleteDC (hdc);
 	  g_free (image);
 	  return NULL;
 	}
@@ -380,9 +373,9 @@ gdk_image_get (GdkWindow *window,
     }
   else
     {
-      if ((hdc = GetDC (GDK_DRAWABLE_XID (window))) == NULL)
+      hdc = gdk_win32_obtain_window_hdc (GDK_DRAWABLE_XID (window));
+      if (hdc == NULL)
 	{
-	  WIN32_GDI_FAILED ("GetDC");
 	  g_free (image);
 	  return NULL;
 	}
@@ -401,14 +394,9 @@ gdk_image_get (GdkWindow *window,
     {
       WIN32_GDI_FAILED ("CreateCompatibleDC");
       if (GDK_DRAWABLE_TYPE (window) == GDK_DRAWABLE_PIXMAP)
-	{
-	  SelectObject (hdc, oldbitmap1);
-	  DeleteDC (hdc);
-	}
+        gdk_win32_release_hdc (NULL, hdc);
       else
-	{
-	  ReleaseDC (GDK_DRAWABLE_XID (window), hdc);
-	}
+        gdk_win32_release_hdc (GDK_DRAWABLE_XID (window), hdc);
       g_free (image);
       return NULL;
     }
@@ -450,14 +438,9 @@ gdk_image_get (GdkWindow *window,
       WIN32_GDI_FAILED ("CreateDIBSection");
       DeleteDC (memdc);
       if (GDK_DRAWABLE_TYPE (window) == GDK_DRAWABLE_PIXMAP)
-	{
-	  SelectObject (hdc, oldbitmap1);
-	  DeleteDC (hdc);
-	}
+        gdk_win32_release_hdc (NULL, hdc);
       else
-	{
-	  ReleaseDC (GDK_DRAWABLE_XID (window), hdc);
-	}
+        gdk_win32_release_hdc (GDK_DRAWABLE_XID (window), hdc);
       g_free (image);
       return NULL;
     }
@@ -468,14 +451,9 @@ gdk_image_get (GdkWindow *window,
       DeleteObject (private->ximage);
       DeleteDC (memdc);
       if (GDK_DRAWABLE_TYPE (window) == GDK_DRAWABLE_PIXMAP)
-	{
-	  SelectObject (hdc, oldbitmap1);
-	  DeleteDC (hdc);
-	}
+        gdk_win32_release_hdc (NULL, hdc);
       else
-	{
-	  ReleaseDC (GDK_DRAWABLE_XID (window), hdc);
-	}
+        gdk_win32_release_hdc (GDK_DRAWABLE_XID (window), hdc);
       g_free (image);
       return NULL;
     }
@@ -487,14 +465,9 @@ gdk_image_get (GdkWindow *window,
       DeleteObject (private->ximage);
       DeleteDC (memdc);
       if (GDK_DRAWABLE_TYPE (window) == GDK_DRAWABLE_PIXMAP)
-	{
-	  SelectObject (hdc, oldbitmap1);
-	  DeleteDC (hdc);
-	}
+        gdk_win32_release_hdc (NULL, hdc);
       else
-	{
-	  ReleaseDC (GDK_DRAWABLE_XID (window), hdc);
-	}
+        gdk_win32_release_hdc (GDK_DRAWABLE_XID (window), hdc);
       g_free (image);
       return NULL;
     }
@@ -506,14 +479,9 @@ gdk_image_get (GdkWindow *window,
     WIN32_GDI_FAILED ("DeleteDC");
 
   if (GDK_DRAWABLE_TYPE (window) == GDK_DRAWABLE_PIXMAP)
-    {
-      SelectObject (hdc, oldbitmap1);
-      DeleteDC (hdc);
-    }
+    gdk_win32_release_hdc (NULL, hdc);
   else
-    {
-      ReleaseDC (GDK_DRAWABLE_XID (window), hdc);
-    }
+    gdk_win32_release_hdc (GDK_DRAWABLE_XID (window), hdc);
 
   switch (image->depth)
     {
@@ -734,30 +702,16 @@ gdk_image_put (GdkImage    *image,
   else
     {
       HDC memdc;
-      HGDIOBJ oldbitmap;
 
-      if ((memdc = CreateCompatibleDC (hdc)) == NULL)
+      memdc = gdk_win32_obtain_offscreen_hdc ((HGDIOBJ)image_private->ximage);
+      if (memdc != NULL)
 	{
-	  WIN32_GDI_FAILED ("CreateCompatibleDC");
-	  gdk_gc_postdraw (drawable, gc_private, 0);
-	  return;
+          if (!BitBlt (hdc, xdest, ydest, width, height,
+		     memdc, xsrc, ysrc, SRCCOPY))
+	    WIN32_GDI_FAILED ("BitBlt");
+
+	  gdk_win32_release_hdc (NULL, memdc);
 	}
-
-      if ((oldbitmap = SelectObject (memdc, image_private->ximage)) == NULL)
-	{
-	  WIN32_GDI_FAILED ("SelectObject");
-	  gdk_gc_postdraw (drawable, gc_private, 0);
-	  return;
-	}
-      if (!BitBlt (hdc, xdest, ydest, width, height,
-		   memdc, xsrc, ysrc, SRCCOPY))
-	WIN32_GDI_FAILED ("BitBlt");
-
-      if (SelectObject (memdc, oldbitmap) == NULL)
-	WIN32_GDI_FAILED ("SelectObject");
-
-      if (!DeleteDC (memdc))
-	WIN32_GDI_FAILED ("DeleteDC");
     }
   gdk_gc_postdraw (drawable, gc_private, 0);
 }

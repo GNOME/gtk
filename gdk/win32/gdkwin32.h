@@ -70,6 +70,11 @@ void          gdk_win32_hdc_release (GdkDrawable    *drawable,
 				     GdkGC          *gc,
 				     GdkGCValuesMask usage);
 
+HDC           gdk_win32_obtain_offscreen_hdc (HWND hwnd);
+HDC           gdk_win32_obtain_window_hdc    (HWND hwnd);
+void          gdk_win32_release_hdc	     (HWND hwnd,
+					      HDC  hdc);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

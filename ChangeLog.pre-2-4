@@ -6,7 +6,8 @@
 	
 	* README.win32: Update.
 
-	* gdk/gdk.def: Add gdk_ic_attr_{destroy,new}. 
+	* gdk/gdk.def
+	* gdk/win32/gdkim-win32.c: Add gdk_ic_attr_{destroy,new}. 
 
 	* gdk/gdkdraw.c (gdk_drawable_unref): Remove silly leftover
 	debugging printout.
@@ -65,6 +66,7 @@
 	(gdk_text_width): Shortcut for strings of length one.
 
 	* gdk/win32/gdkgc-win32.c
+	* gdk/win32/gdkimage-win32.c
 	* gdk/win32/gdkpixmap-win32.c: Cache pens and HDCs. Many new
 	functions.
 
