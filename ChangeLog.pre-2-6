@@ -1,3 +1,31 @@
+2004-11-19  Federico Mena Quintero  <federico@ximian.com>
+
+	Merged from gtk-2-4:
+
+	Fix #158477:
+
+	* gtk/gtkfilechooserdefault.c (struct _GtkFileChooserDefault):
+	Remove the "save_extra_align" and "browse_extra_align" fields; use
+	a single "extra_align" field.
+	(save_widgets_create): Don't create the save_extra_align.
+	(browse_widgets_create): Don't create the browse_extra_align.
+	(gtk_file_chooser_default_constructor): Create the extra_align
+	here.
+	(set_extra_widget): Add the extra widget to the alignment here,
+	and remove the old one if necessary.
+	(update_appearance): No need to frob the extra widget's alignments
+	anymore.
+	(gtk_file_chooser_default_set_property): No need to call
+	update_appearance() anymore when we set the extra widget.
+
+2004-11-19  Federico Mena Quintero  <federico@ximian.com>
+
+	Merged from gtk-2-4:
+
+	* gtk/gtkfilechooserdefault.c
+	(gtk_file_chooser_default_initial_focus): Don't set the cursor if
+	we are still loading.
+
 2004-11-18  Federico Mena Quintero  <federico@ximian.com>
 
 	Merged from gtk-2-4:
