@@ -21,6 +21,7 @@
 #define __GTK_TREE_MODEL_SORT_H__
 
 #include <gtk/gtktreemodel.h>
+#include <gtk/gtktreesortable.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -48,9 +49,13 @@ struct _GtkTreeModelSort
   gint stamp;
   guint flags;
   GtkTreeModel *child_model;
-  gint sort_col;
-  GValueCompareFunc func;
 
+  /* sort information */
+  GList *sort_list;
+  gint sort_column_id;
+  GtkTreeSortOrder order;
+
+  /* signal ids */
   guint changed_id;
   guint inserted_id;
   guint has_child_toggled_id;
@@ -65,9 +70,7 @@ struct _GtkTreeModelSortClass
 
 GtkType       gtk_tree_model_sort_get_type       (void);
 GtkTreeModel *gtk_tree_model_sort_new            (void);
-GtkTreeModel *gtk_tree_model_sort_new_with_model (GtkTreeModel      *child_model,
-						  GValueCompareFunc  func,
-						  gint               sort_col);
+GtkTreeModel *gtk_tree_model_sort_new_with_model (GtkTreeModel      *child_model);
 void          gtk_tree_model_sort_set_model      (GtkTreeModelSort  *tree_model_sort,
 						  GtkTreeModel      *child_model);
 GtkTreeModel *gtk_tree_model_sort_get_model      (GtkTreeModelSort  *tree_model);

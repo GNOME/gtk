@@ -576,8 +576,8 @@ gtk_tree_iter_free (GtkTreeIter *iter)
  * @tree_model: A #GtkTreeModel.
  *
  * Returns a set of flags supported by this interface.  The flags are a bitwise
- * combination of #GtkTreeModelFlags.  It is expected that the flags supported
- * do not change for an interface.
+ * combination of #GtkTreeModelFlags.  The flags supported should not change
+ * during the lifecycle of the tree_model.
  *
  * Return value: The flags supported by this interface.
  **/

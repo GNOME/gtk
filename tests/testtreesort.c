@@ -65,15 +65,15 @@ main (int argc, char *argv[])
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
   gtk_box_pack_start (GTK_BOX (vbox), scrolled_window, TRUE, TRUE, 0);
 
-  model = gtk_list_store_new_with_types (NUM_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
+  model = gtk_tree_store_new_with_types (NUM_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
   //  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (model), 0, GTK_TREE_SORT_ASCENDING);
   g_print ("start model\n");
   tree_view = gtk_tree_view_new_with_model (model);
   for (j = 0; j < 2; j++)
     for (i = 0; data[i].word_1 != NULL; i++)
       {
-	gtk_list_store_prepend (GTK_LIST_STORE (model), &iter);
-	gtk_list_store_set (GTK_LIST_STORE (model), &iter,
+	gtk_tree_store_prepend (GTK_TREE_STORE (model), &iter, NULL);
+	gtk_tree_store_set (GTK_TREE_STORE (model), &iter,
 			    WORD_COLUMN_1, data[i].word_1,
 			    WORD_COLUMN_2, data[i].word_2,
 			    WORD_COLUMN_3, data[i].word_3,

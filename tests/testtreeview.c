@@ -673,11 +673,11 @@ main (int    argc,
   models[MODEL_TREE] = create_tree_model ();
 
   model = create_list_model ();
-  models[MODEL_SORTED_LIST] = gtk_tree_model_sort_new_with_model (model, NULL, 0);
+  models[MODEL_SORTED_LIST] = gtk_tree_model_sort_new_with_model (model);
   g_object_unref (G_OBJECT (model));
 
   model = create_tree_model ();
-  models[MODEL_SORTED_TREE] = gtk_tree_model_sort_new_with_model (model, NULL, 0);
+  models[MODEL_SORTED_TREE] = gtk_tree_model_sort_new_with_model (model);
   g_object_unref (G_OBJECT (model));
 
   models[MODEL_EMPTY_LIST] = GTK_TREE_MODEL (gtk_list_store_new ());

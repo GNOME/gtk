@@ -1330,11 +1330,127 @@ gtk_tree_store_row_drop_possible (GtkTreeDragDest *drag_dest,
   return TRUE;
 }
 
+/* Sorting */
+typedef struct _SortTuple
+{
+  gint offset;
+  GNode *node;
+} SortTuple;
+
+static gint
+gtk_tree_store_compare_func (gconstpointer a,
+			     gconstpointer b,
+			     gpointer      user_data)
+{
+  GtkTreeStore *tree_store = user_data;
+  GtkTreeDataSortHeader *header = NULL;
+  GNode *node_a;
+  GNode *node_b;
+  GtkTreeIter iter_a;
+  GtkTreeIter iter_b;
+  gint retval;
+
+  header = _gtk_tree_data_list_get_header (tree_store->sort_list,
+					   tree_store->sort_column_id);
+
+  g_return_val_if_fail (header != NULL, 0);
+  g_return_val_if_fail (header->func != NULL, 0);
+
+  node_a = ((SortTuple *) a)->node;
+  node_b = ((SortTuple *) b)->node;
+
+  iter_a.stamp = tree_store->stamp;
+  iter_a.user_data = node_a;
+  iter_b.stamp = tree_store->stamp;
+  iter_b.user_data = node_b;
+
+  retval = (* header->func) (GTK_TREE_MODEL (user_data),
+			     &iter_a, &iter_b,
+			     header->data);
+
+  if (tree_store->order == GTK_TREE_SORT_DESCENDING)
+    {
+      if (retval > 0)
+	retval = -1;
+      else if (retval < 0)
+	retval = 1;
+    }
+  return retval;
+}
+
+static void
+gtk_tree_store_sort_helper (GtkTreeStore *tree_store,
+			    GNode        *node)
+{
+  GtkTreeDataSortHeader *header = NULL;
+  GtkTreeIter iter;
+  GArray *sort_array;
+  GNode *tmp_node;
+  gint list_length;
+  gint i;
+  gint *new_order;
+  GtkTreePath *path;
+
+  if (node->next == NULL)
+    return;
+
+  g_assert (GTK_TREE_STORE_IS_SORTED (tree_store));
+
+  header = _gtk_tree_data_list_get_header (tree_store->sort_list, tree_store->sort_column_id);
+
+  /* We want to make sure that we have a function */
+  g_return_if_fail (header != NULL);
+  g_return_if_fail (header->func != NULL);
+
+  list_length = 0;
+  for (tmp_node = node; tmp_node; tmp_node = tmp_node->next)
+    list_length++;
+
+  sort_array = g_array_sized_new (FALSE, FALSE, sizeof (SortTuple), list_length);
+
+  i = 0;
+  for (tmp_node = node; tmp_node; tmp_node = tmp_node->next)
+    {
+      SortTuple tuple;
+
+      tuple.offset = i;
+      tuple.node = tmp_node;
+      g_array_append_val (sort_array, tuple);
+      i++;
+    }
+
+  g_array_sort_with_data (sort_array, gtk_tree_store_compare_func, tree_store);
+
+  for (i = 0; i < list_length - 1; i++)
+    {
+      g_array_index (sort_array, SortTuple, i).node->next =
+	g_array_index (sort_array, SortTuple, i + 1).node;
+      g_array_index (sort_array, SortTuple, i + 1).node->prev =
+	g_array_index (sort_array, SortTuple, i).node;
+    }
+  g_array_index (sort_array, SortTuple, list_length - 1).node->next = NULL;
+  g_array_index (sort_array, SortTuple, 0).node->prev = NULL;
+  G_NODE (tree_store->root)->children = g_array_index (sort_array, SortTuple, 0).node;
+
+  /* Let the world know about our new order */
+  new_order = g_new (gint, list_length);
+  for (i = 0; i < list_length; i++)
+    new_order[i] = g_array_index (sort_array, SortTuple, i).offset;
+  path = gtk_tree_path_new ();
+  iter.stamp = tree_store->stamp;
+  iter.user_data = NULL;
+
+  gtk_tree_model_reordered (GTK_TREE_MODEL (tree_store),
+			    path, &iter, new_order);
+  gtk_tree_path_free (path);
+  g_free (new_order);
+  g_array_free (sort_array, TRUE);
+}
 
 static void
 gtk_tree_store_sort (GtkTreeStore *tree_store)
 {
-
+  gtk_tree_store_sort_helper (tree_store, G_NODE (tree_store->root)->children);
 }
 
 static void

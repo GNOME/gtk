@@ -1571,7 +1571,6 @@ gtk_tree_view_button_press (GtkWidget      *widget,
           tree_view->priv->press_start_y = event->y;
         }
 
-      g_print ("%d\n", event->state);
       gtk_tree_view_real_set_cursor (tree_view, path, TRUE, event->state);
 
       if (event->button == 1 && event->type == GDK_2BUTTON_PRESS)

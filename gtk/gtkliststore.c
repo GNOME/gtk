@@ -1347,9 +1347,9 @@ typedef struct _SortTuple
 } SortTuple;
 
 static gint
-_gtk_list_store_compare_func (gconstpointer a,
-			      gconstpointer b,
-			      gpointer      user_data)
+gtk_list_store_compare_func (gconstpointer a,
+			     gconstpointer b,
+			     gpointer      user_data)
 {
   GtkListStore *list_store = user_data;
   GtkTreeDataSortHeader *header = NULL;
@@ -1394,7 +1394,6 @@ gtk_list_store_sort (GtkListStore *list_store)
   GtkTreeIter iter;
   GArray *sort_array;
   gint i;
-  GList *header_list;
   gint *new_order;
   GSList *list;
   GtkTreePath *path;
@@ -1404,12 +1403,7 @@ gtk_list_store_sort (GtkListStore *list_store)
 
   g_assert (GTK_LIST_STORE_IS_SORTED (list_store));
 
-  for (header_list = list_store->sort_list; header_list; header_list = header_list->next)
-    {
-      header = (GtkTreeDataSortHeader*) header_list->data;
-      if (header->sort_column_id == list_store->sort_column_id)
-	break;
-    }
+  header = _gtk_tree_data_list_get_header (list_store->sort_list, list_store->sort_column_id);
 
   /* We want to make sure that we have a function */
   g_return_if_fail (header != NULL);
@@ -1435,7 +1429,7 @@ gtk_list_store_sort (GtkListStore *list_store)
       list = list->next;
     }
 
-  g_array_sort_with_data (sort_array, _gtk_list_store_compare_func, list_store);
+  g_array_sort_with_data (sort_array, gtk_list_store_compare_func, list_store);
 
   for (i = 0; i < list_store->length - 1; i++)
       g_array_index (sort_array, SortTuple, i).el->next =

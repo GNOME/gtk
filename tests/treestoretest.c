@@ -224,7 +224,7 @@ make_window (gint view_type)
   GtkWidget *tree_view;
   GtkTreeViewColumn *column;
   GtkCellRenderer *cell;
-  GtkObject *selection;
+  GObject *selection;
 
   /* Make the Widgets/Objects */
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -251,14 +251,16 @@ make_window (gint view_type)
       {
 	GtkTreeModel *sort_model;
 	
-	sort_model = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (base_model),
-							 NULL, 1);
+	sort_model = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (base_model));
 	tree_view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (sort_model));
       }
       break;
+    default:
+      g_assert_not_reached ();
+      break;
     }
 
-  selection = GTK_OBJECT (gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view)));
+  selection = G_OBJECT (gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view)));
   gtk_tree_selection_set_mode (GTK_TREE_SELECTION (selection), GTK_TREE_SELECTION_SINGLE);
 
   /* Put them together */
@@ -319,11 +321,17 @@ make_window (gint view_type)
   /* The selected column */
   cell = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes ("Node ID", cell, "markup", 0, NULL);
+  gtk_tree_view_column_set_sort_column_id (column, 0);
   gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
+  g_object_unref (G_OBJECT (cell));
+  g_object_unref (G_OBJECT (column));
 
   cell = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes ("Random Number", cell, "text", 1, NULL);
+  gtk_tree_view_column_set_sort_column_id (column, 1);
   gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
+  g_object_unref (G_OBJECT (cell));
+  g_object_unref (G_OBJECT (column));
 
   /* A few to start */
   if (view_type == 0)
@@ -334,9 +342,9 @@ make_window (gint view_type)
       iter_append (NULL, GTK_TREE_VIEW (tree_view));
       iter_append (NULL, GTK_TREE_VIEW (tree_view));
       iter_append (NULL, GTK_TREE_VIEW (tree_view));
+      gtk_widget_show_all (window);
     }
   /* Show it all */
-  gtk_widget_show_all (window);
 }
 
 int
@@ -348,7 +356,7 @@ main (int argc, char *argv[])
 
   /* FIXME: reverse this */
   make_window (0);
-  make_window (1);
+  //  make_window (1);
 
   gtk_main ();
 
