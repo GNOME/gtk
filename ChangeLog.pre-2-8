@@ -1,3 +1,89 @@
+Tue May 30 14:01:10 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfontsel.c (gtk_font_selection_dialog_init): Start of
+	redoing (vastly simplifying) for Pango. Still needs quite
+	a bit of work. (Size selection is currently poor. List of 
+	predefined sizes is not a good idea, since all of these
+	sizes won't necessarily be distinct.)
+
+Tue May 30 13:50:19 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkfont-x11.c (gdk_font_charset_for_locale): Handle
+	CODESET results for LANG=C.
+
+Mon May 29 15:49:10 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrc.[ch]: Add a 'font_name' declaration to RC
+	which takes a stringized pango font description;
+	ignore the older 'font' and 'fontset' declarations.
+
+	* gtk/gtkstyle.c gtk/gtkrc.c: Fill in the style->font
+	field with a GdkFont derived via gdk_font_from_description(),
+	for compatibility. (Should we just remove it entirely?
+	Probably too much compatibility breakage, but people
+	should be migrating to the new Pango stuff as quickly
+	as possible.)
+
+Mon May 29 15:47:41 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c gtk/gtkclist.c: s/pango_font_unref/g_object_unref/.
+
+Mon May 29 15:44:46 2000  Owen Taylor  <otaylor@redhat.com>
+
+        * gtk/gtkcalender.c: Roughly pango-ized. Really needs 
+	redoing; there are some bugs in size allocation right
+	now, the semi-existant distinction between header / day
+	fonts was removed, but, with Pango, could actually
+	be made functional in a nice way.
+	
+	* gtk/testcalender: Move calender from examples into this
+	directory as a test program. (We really need to restrcture
+	testgtk into a whole directory full of tests for every
+	widget or functionality group, separated into multiple .c
+	files.)
+
+Mon May 29 15:19:56 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/testgtk.c (file_exists): Fix stupid typo that
+	was keeping RC file from being loaded.
+
+	* gtk/testgtkrc gtk/testgtkrc2: Test new pango-ized
+	RC file font code.
+
+Mon May 29 14:31:27 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkfont.h gdk/x11/gdkfont-x11.c (gdk_font_from_description):
+	Add function to load a GdkFont from a #PangoFontDescription.
+
+Fri May 26 17:16:40 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/frame.[ch] gtkaspectframe.c: Make frame widgets able
+	to have any widget for the label, use a GtkLabel widget
+	to display the text. (Based partially on a patch from
+	Anders Carlson.)
+
+	(Quite a bit of code reorganization - strip 90% of the
+	guts out of gtkaspectframe and add a single virtual
+	func to GtkFrameClass - compute_child_allocation.)
+
+Fri May 26 13:59:03 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtklabel.[ch] (gtk_label_get_text): New function
+	that returns strdup'ed string.
+
+Fri May 26 12:00:02 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkctree.c gtk/gtkclist.[ch]: Pangoized.
+	(Removed clist->row_center_offset field because caching
+	it wasn't saving time or code, added private function
+	_gtk_clist_create_cell_layout()).
+
+Wed May 24 15:59:37 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkaccellabel.c: Pangoized.
+
+	* gtk/[hv]ruler.c: Pangoized
+
 Mon May 22 19:23:59 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkfilesel.c (gtk_file_selection_init):
@@ -23,6 +109,8 @@ Mon May 22 18:50:26 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktextbtree.c gtk/gtktextbuffer.c gtk/gtktextlayout.c
 	  gtk/gtktextview.c gtk/gtktextview.[ch]: Fix up includes.
+
+	* gtk/gtktextview.c: Fix structure inheritance.
 
 	* gtk/gtkprogressbar.c: Pangoize.
 

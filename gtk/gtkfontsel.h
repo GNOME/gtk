@@ -34,7 +34,7 @@
 
 #include <gdk/gdk.h>
 #include <gtk/gtkwindow.h>
-#include <gtk/gtknotebook.h>
+#include <gtk/gtkvbox.h>
 
 
 #ifdef __cplusplus
@@ -63,64 +63,10 @@ typedef struct _GtkFontSelectionClass	     GtkFontSelectionClass;
 typedef struct _GtkFontSelectionDialog	     GtkFontSelectionDialog;
 typedef struct _GtkFontSelectionDialogClass  GtkFontSelectionDialogClass;
 
-
-
-
-/* This is the number of properties which we keep in the properties array,
-   i.e. Weight, Slant, Set Width, Spacing, Charset & Foundry. */
-#define GTK_NUM_FONT_PROPERTIES	 6
-
-/* This is the number of properties each style has i.e. Weight, Slant,
-   Set Width, Spacing & Charset. Note that Foundry is not included,
-   since it is the same for all styles of the same FontInfo. */
-#define GTK_NUM_STYLE_PROPERTIES 5
-
-
-/* Used to determine whether we are using point or pixel sizes. */
-typedef enum
-{
-  GTK_FONT_METRIC_PIXELS,
-  GTK_FONT_METRIC_POINTS
-} GtkFontMetricType;
-
-/* Used for determining the type of a font style, and also for setting filters.
-   These can be combined if a style has bitmaps and scalable fonts available.*/
-typedef enum
-{
-  GTK_FONT_BITMAP		= 1 << 0,
-  GTK_FONT_SCALABLE		= 1 << 1,
-  GTK_FONT_SCALABLE_BITMAP	= 1 << 2,
-
-  GTK_FONT_ALL			= 0x07
-} GtkFontType;
-
-/* These are the two types of filter available - base and user. The base
-   filter is set by the application and can't be changed by the user. */
-#define	GTK_NUM_FONT_FILTERS	2
-typedef enum
-{
-  GTK_FONT_FILTER_BASE,
-  GTK_FONT_FILTER_USER
-} GtkFontFilterType;
-
-/* These hold the arrays of current filter settings for each property.
-   If nfilters is 0 then all values of the property are OK. If not the
-   filters array contains the indexes of the valid property values. */
-typedef struct _GtkFontFilter	GtkFontFilter;
-struct _GtkFontFilter
-{
-  gint font_type;
-  guint16 *property_filters[GTK_NUM_FONT_PROPERTIES];
-  guint16 property_nfilters[GTK_NUM_FONT_PROPERTIES];
-};
-
-
 struct _GtkFontSelection
 {
-  GtkNotebook notebook;
+  GtkVBox parent_instance;
   
-  /* These are on the font page. */
-  GtkWidget *main_vbox;
   GtkWidget *font_label;
   GtkWidget *font_entry;
   GtkWidget *font_clist;
@@ -132,44 +78,17 @@ struct _GtkFontSelection
   GtkWidget *points_button;
   GtkWidget *filter_button;
   GtkWidget *preview_entry;
-  GtkWidget *message_label;
-  
-  /* These are on the font info page. */
-  GtkWidget *info_vbox;
-  GtkWidget *info_clist;
-  GtkWidget *requested_font_name;
-  GtkWidget *actual_font_name;
-  
-  /* These are on the filter page. */
-  GtkWidget *filter_vbox;
-  GtkWidget *type_bitmaps_button;
-  GtkWidget *type_scalable_button;
-  GtkWidget *type_scaled_bitmaps_button;
-  GtkWidget *filter_clists[GTK_NUM_FONT_PROPERTIES];
-  
-  GdkFont *font;
-  gint font_index;
-  gint style;
-  GtkFontMetricType metric;
-  /* The size is either in pixels or deci-points, depending on the metric. */
-  gint size;
-  
-  /* This is the last size explicitly selected. When the user selects different
-     fonts we try to find the nearest size to this. */
-  gint selected_size;
-  
-  /* These are the current property settings. They are indexes into the
-     strings in the GtkFontSelInfo properties array. */
-  guint16 property_values[GTK_NUM_STYLE_PROPERTIES];
-  
-  /* These are the base and user font filters. */
-  GtkFontFilter filters[GTK_NUM_FONT_FILTERS];
-};
 
+  PangoContext *context;
+  PangoFontDescription *font_desc;
+  GdkFont *font;		/* Cache for gdk_font_selection_get_font, so we can preserve
+				 * refcounting behavior
+				 */
+};
 
 struct _GtkFontSelectionClass
 {
-  GtkNotebookClass parent_class;
+  GtkVBoxClass parent_class;
 };
 
 
@@ -209,15 +128,6 @@ gchar*	   gtk_font_selection_get_font_name	(GtkFontSelection *fontsel);
 GdkFont*   gtk_font_selection_get_font		(GtkFontSelection *fontsel);
 gboolean   gtk_font_selection_set_font_name	(GtkFontSelection *fontsel,
 						 const gchar	  *fontname);
-void	   gtk_font_selection_set_filter	(GtkFontSelection *fontsel,
-						 GtkFontFilterType filter_type,
-						 GtkFontType	   font_type,
-						 gchar		 **foundries,
-						 gchar		 **weights,
-						 gchar		 **slants,
-						 gchar		 **setwidths,
-						 gchar		 **spacings,
-						 gchar		 **charsets);
 gchar*	   gtk_font_selection_get_preview_text	(GtkFontSelection *fontsel);
 void	   gtk_font_selection_set_preview_text	(GtkFontSelection *fontsel,
 						 const gchar	  *text);
@@ -251,38 +161,6 @@ GdkFont* gtk_font_selection_dialog_get_font	    (GtkFontSelectionDialog *fsd);
    It returns TRUE on success. */
 gboolean gtk_font_selection_dialog_set_font_name    (GtkFontSelectionDialog *fsd,
 						     const gchar	*fontname);
-
-/* This sets one of the font filters, to limit the fonts shown. The filter_type
-   is GTK_FONT_FILTER_BASE or GTK_FONT_FILTER_USER. The font type is a
-   combination of the bit flags GTK_FONT_BITMAP, GTK_FONT_SCALABLE and
-   GTK_FONT_SCALABLE_BITMAP (or GTK_FONT_ALL for all font types).
-   The foundries, weights etc. are arrays of strings containing property
-   values, e.g. 'bold', 'demibold', and *MUST* finish with a NULL.
-   Standard long names are also accepted, e.g. 'italic' instead of 'i'.
-
-   e.g. to allow only fixed-width fonts ('char cell' or 'monospaced') to be
-   selected use:
-
-  gchar *spacings[] = { "c", "m", NULL };
-  gtk_font_selection_dialog_set_filter (GTK_FONT_SELECTION_DIALOG (fontsel),
-				       GTK_FONT_FILTER_BASE, GTK_FONT_ALL,
-				       NULL, NULL, NULL, NULL, spacings, NULL);
-
-  to allow only true scalable fonts to be selected use:
-
-  gtk_font_selection_dialog_set_filter (GTK_FONT_SELECTION_DIALOG (fontsel),
-				       GTK_FONT_FILTER_BASE, GTK_FONT_SCALABLE,
-				       NULL, NULL, NULL, NULL, NULL, NULL);
-*/
-void	   gtk_font_selection_dialog_set_filter	(GtkFontSelectionDialog *fsd,
-						 GtkFontFilterType filter_type,
-						 GtkFontType	   font_type,
-						 gchar		 **foundries,
-						 gchar		 **weights,
-						 gchar		 **slants,
-						 gchar		 **setwidths,
-						 gchar		 **spacings,
-						 gchar		 **charsets);
 
 /* This returns the text in the preview entry. You should copy the returned
    text if you need it. */

@@ -27,4 +27,10 @@ Incompatible Changes from GTK+-1.2 to GTK+-1.4:
   position in the text instead of moving it to the location of
   the insertion/deletion.
 
-  
+- The ->label field of GtkFrame widgets has been removed. (As part of
+  a change to allow the arbitrary widgets in the title position.) The
+  text can now be retrieved with the new function gtk_frame_get_text().
+
+- The 'font' and 'font_set' declarations in RC files are now ignored. There
+  is a new 'font_name' field that holds the string form of a Pango font
+  description.
