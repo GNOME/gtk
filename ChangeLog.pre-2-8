@@ -1,5 +1,9 @@
 2005-01-22  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/gdkdisplay.h (gdk_display_add_client_message_filter_full): 
+	Remove the accidentally added prototype for this unimplemented 
+	function.  (#164893, Jeff Franks)
+
 	* gtk/gtktreeview.c (gtk_tree_view_leave_notify): Avoid spurious
 	drags.  (#164884)
 
