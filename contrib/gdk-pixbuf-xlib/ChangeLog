@@ -1,3 +1,14 @@
+2002-01-25  Federico Mena Quintero  <federico@ximian.com>
+
+	Merge from gdk-pixbuf stable.
+
+	* gdk-pixbuf-xlib-drawable.c (rgb565msb): Fixed the endianness
+	conversion --- swap the individual 16 bit values instead of taking
+	everying as a 32 bit value.
+	(rgb565lsb): Likewise.
+	(rgb555lsb): Likewise.
+	(rgb555msb): Likewise.
+
 2001-11-26  Akira TAGOH  <tagoh@redhat.com>
 
 	* Makefile.am (libgdk_pixbuf_xlib_1_3_la_LDFLAGS):
