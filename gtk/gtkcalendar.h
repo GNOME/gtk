@@ -87,13 +87,13 @@ struct _GtkCalendarClass
   GtkWidgetClass parent_class;
   
   /* Signal handlers */
-  void (* month_changed)		(GtkCalendarClass *calendar);
-  void (* day_selected)			(GtkCalendarClass *calendar);
-  void (* day_selected_double_click)	(GtkCalendarClass *calendar);
-  void (* prev_month)			(GtkCalendarClass *calendar);
-  void (* next_month)			(GtkCalendarClass *calendar);
-  void (* prev_year)			(GtkCalendarClass *calendar);
-  void (* next_year)			(GtkCalendarClass *calendar);
+  void (* month_changed)		(GtkCalendar *calendar);
+  void (* day_selected)			(GtkCalendar *calendar);
+  void (* day_selected_double_click)	(GtkCalendar *calendar);
+  void (* prev_month)			(GtkCalendar *calendar);
+  void (* next_month)			(GtkCalendar *calendar);
+  void (* prev_year)			(GtkCalendar *calendar);
+  void (* next_year)			(GtkCalendar *calendar);
   
 };
 
