@@ -63,9 +63,20 @@ struct _GtkUIManager {
 struct _GtkUIManagerClass {
   GObjectClass parent_class;
 
+  /* Signals */
   void (* add_widget)       (GtkUIManager *merge, 
                              GtkWidget    *widget);
   void (* actions_changed)  (GtkUIManager *merge);
+  void (* connect_proxy)    (GtkUIManager *merge,
+			     GtkAction    *action,
+			     GtkWidget    *proxy);
+  void (* disconnect_proxy) (GtkUIManager *merge,
+			     GtkAction    *action,
+			     GtkWidget    *proxy);
+  void (* pre_activate)     (GtkUIManager *merge,
+			     GtkAction    *action);
+  void (* post_activate)    (GtkUIManager *merge,
+			     GtkAction    *action);
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

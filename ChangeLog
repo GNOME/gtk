@@ -1,8 +1,16 @@
+Thu Feb 19 01:39:30 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkuimanager.h: 
+	* gtk/gtkuimanager.c (gtk_ui_manager_class_init): Add
+	default handlers for all signals; for consistency and for the
+	benefit of language bindings which still rely on header parsing
+	to find the signals.  (#134269, Jeroen Zwartepoorte)
+	
 Thu Feb 19 00:45:02 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktreeselection.c (gtk_tree_selection_get_selected_rows): 
 	Improve the efficiency here by prepending on the list and reverting
-	it after the loop.  (#133435, Christian Biere)
+	it after the loop.  (#134435, Christian Biere)
 
 Thu Feb 19 00:32:21 2004  Matthias Clasen  <maclas@gmx.de>
 
