@@ -1,3 +1,7 @@
+2004-08-11  Kjartan Maraas  <kmaraas@gnome.org>
+
+	* configure.in: Added nb to ALL_LINGUAS.
+
 Mon Aug  9 00:28:56 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkicontheme.c (load_svg_at_size): Don't leak the 
