@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-22 18:01-0500\n"
-"PO-Revision-Date: 2004-01-18 12:41+0100\n"
+"POT-Creation-Date: 2004-01-23 11:03+0100\n"
+"PO-Revision-Date: 2004-01-23 11:04+0100\n"
 "Last-Translator: Данило Шеган <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -1400,6 +1400,10 @@ msgid ""
 "You can get a copy from:\n"
 "\t%s"
 msgstr ""
+"Не могу да нађем икону „%s“. Ни тема „%s“ није \n"
+"нађена, можда треба да је инсталирате.\n"
+"Можете набавити примерак са:\n"
+"\t%s"
 
 #: gtk/gtkicontheme.c:1247
 #, c-format
@@ -1653,11 +1657,11 @@ msgstr "_Почетак"
 
 #: gtk/gtkstock.c:301
 msgid "Increase Indent"
-msgstr ""
+msgstr "Повећај увлачење"
 
 #: gtk/gtkstock.c:302
 msgid "Decrease Indent"
-msgstr ""
+msgstr "Умањи увлачење"
 
 #: gtk/gtkstock.c:303
 msgid "_Index"
