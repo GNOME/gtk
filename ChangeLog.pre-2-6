@@ -1,3 +1,9 @@
+Mon Feb  2 23:41:48 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_row_changed): 
+	Don't access the level after removing the node, since that may
+	kill the level.  (#132615, Crispin Flowerday)
+
 2004-02-02  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkevents-win32.c (gdk_pointer_grab): Set the cursor

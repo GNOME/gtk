@@ -1079,12 +1079,13 @@ gtk_tree_model_filter_row_changed (GtkTreeModel *c_model,
     {
       /* get rid of this node */
       gtk_tree_model_get_iter (GTK_TREE_MODEL (filter), &iter, path);
-      gtk_tree_model_filter_remove_node (filter, &iter, TRUE);
 
       level = FILTER_LEVEL (iter.user_data);
 
       if (!level->parent_level)
         filter->priv->root_level_visible--;
+
+      gtk_tree_model_filter_remove_node (filter, &iter, TRUE);
 
       goto done;
     }
