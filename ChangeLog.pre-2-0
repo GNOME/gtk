@@ -46,7 +46,7 @@
 	* gdk/win32/gdkprivate-win32.h: Define a helper macro,
 	IMAGE_PRIVATE_DATA.
 
-	* gdk/win32/gdkimage-win32.c (gdk_image_get_type): Use it.
+	* gdk/win32/gdkimage-win32.c: Use it.
 
 2000-10-22  Robert Brady  <robert@suse.co.uk>
 
