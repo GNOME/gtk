@@ -1,3 +1,11 @@
+2002-02-14  Jody Goldberg <jody@gnome.org>
+
+	* gtk/gtkrange.c (gtk_range_class_init) : add new signal
+	  'adjust_bounds' to potentialy change the bounds before assigning the
+	  new value and camping it to the existing bounds.
+	(gtk_range_internal_set_value) : used here. #68800.
+	* gtk/gtkmarshalers.list : add VOID:DOUBLE
+
 Thu Feb 14 21:08:49 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkglobals.c: Remove GDKVAR from C file, see
