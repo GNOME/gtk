@@ -503,13 +503,11 @@ gtk_style_new (void)
  * results in two separate, unlinked styles s2 and s3 which
  * are identical and could be shared. To fix this, we would
  * want to never remove a style from the list of linked
- * styles as long as as it has a reference count. In fact,
- * I don't really think we need attach_count at all if we
- * do this. However, the disadvantage of doing it
- * this way means that we would need two passes through the linked
- * list when attaching (one to check for matching styles,
- * one to look for empty unattached styles - but it will almost
- * never be longer than 2 elements.
+ * styles as long as as it has a reference count. However, the 
+ * disadvantage of doing it this way means that we would need two 
+ * passes through the linked list when attaching (one to check for 
+ * matching styles, one to look for empty unattached styles - but 
+ * it will almost never be longer than 2 elements.
  *************************************************************/
 
 GtkStyle*

@@ -1,3 +1,8 @@
+Tue Jun  1 23:38:38 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkstyle.c: Removed ill-thought-out part of last
+	comment.
+
 Tue Jun  1 23:30:09 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkstyle.c (gtk_style_attach): Get the reference
