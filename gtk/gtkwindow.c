@@ -1467,9 +1467,7 @@ gtk_window_real_set_focus (GtkWindow *window,
 	  (window->focus_widget != window->default_widget))
         {
 	  GTK_WIDGET_UNSET_FLAGS (window->focus_widget, GTK_HAS_DEFAULT);
-	  /* if any widget had the default set there should be
-	     a default_widget, but might not so this is a sanity
-	     check */
+
 	  if (window->default_widget)
 	    GTK_WIDGET_SET_FLAGS (window->default_widget, GTK_HAS_DEFAULT);
         }
@@ -1485,26 +1483,17 @@ gtk_window_real_set_focus (GtkWindow *window,
       event.window = window->focus_widget->window;
       event.in = TRUE;
 
-      if (window->default_widget)
-        {
-          if (GTK_WIDGET_RECEIVES_DEFAULT (window->focus_widget) &&
-	      (window->focus_widget != window->default_widget))
-            {
-	      if (GTK_WIDGET_CAN_DEFAULT (window->focus_widget))
-	        GTK_WIDGET_SET_FLAGS (window->focus_widget, GTK_HAS_DEFAULT);
-	      GTK_WIDGET_UNSET_FLAGS (window->default_widget, GTK_HAS_DEFAULT);
-            }
-	  else
-	    {
-	      GTK_WIDGET_SET_FLAGS (window->default_widget, GTK_HAS_DEFAULT);
-	    }
+      if (GTK_WIDGET_RECEIVES_DEFAULT (window->focus_widget) &&
+	  (window->focus_widget != window->default_widget))
+	{
+	  if (GTK_WIDGET_CAN_DEFAULT (window->focus_widget))
+	    GTK_WIDGET_SET_FLAGS (window->focus_widget, GTK_HAS_DEFAULT);
+
+	  if (window->default_widget)
+	    GTK_WIDGET_UNSET_FLAGS (window->default_widget, GTK_HAS_DEFAULT);
 	}
       
       gtk_widget_event (window->focus_widget, (GdkEvent*) &event);
-    }
-  else if (window->default_widget)
-    {
-      GTK_WIDGET_SET_FLAGS (window->default_widget, GTK_HAS_DEFAULT);
     }
   
   if (window->default_widget &&

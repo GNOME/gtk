@@ -1,3 +1,20 @@
+Tue Jan 30 15:51:25 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_real_set_focus): Fix a problem where
+	the focus widget sometimes wasn't drawn with the default if there
+	was no default widget.
+
+	* gdk/gdkim.c (gdk_ic_destroy): Don't rely on
+	ic->mask, which is completely unreliably set, when
+	deciding what items to unref/free. (A bit of a hack,
+	but this code will be dead in GTK+-2.0.) (#6739)
+
+	* gtk/gtkstyle.c (gtk_style_detach): free colors,
+	unreference pixmaps. 
+
+	* gtk/gtkstyle.c (gtk_style_init): Reference colormap
+	for some extra safety.
+
 Mon Jan 29 19:44:26 2001  Owen Taylor  <otaylor@redhat.com>
 
         [ Backport from HEAD ]

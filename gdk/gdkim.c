@@ -691,23 +691,23 @@ gdk_ic_destroy (GdkIC *ic)
   if (private->xic != NULL)
     XDestroyIC (private->xic);
 
-  if (private->mask & GDK_IC_CLIENT_WINDOW)
+  if (private->attr->client_window)
     gdk_window_unref (private->attr->client_window);
-  if (private->mask & GDK_IC_FOCUS_WINDOW)
+  if (private->attr->focus_window)
     gdk_window_unref (private->attr->focus_window);
 
-  if (private->mask & GDK_IC_PREEDIT_FONTSET)
+  if (private->attr->preedit_fontset)
     gdk_font_unref (private->attr->preedit_fontset);
-  if (private->mask & GDK_IC_PREEDIT_PIXMAP)
+  if (private->attr->preedit_pixmap)
     gdk_pixmap_unref (private->attr->preedit_pixmap);
-  if (private->mask & GDK_IC_PREEDIT_COLORMAP)
+  if (private->attr->preedit_colormap)
     gdk_colormap_unref (private->attr->preedit_colormap);
 
-  if (private->mask & GDK_IC_STATUS_FONTSET)
+  if (private->attr->status_fontset)
     gdk_font_unref (private->attr->status_fontset);
-  if (private->mask & GDK_IC_STATUS_PIXMAP)
+  if (private->attr->status_pixmap)
     gdk_pixmap_unref (private->attr->status_pixmap);
-  if (private->mask & GDK_IC_STATUS_COLORMAP)
+  if (private->attr->status_colormap)
     gdk_colormap_unref (private->attr->status_colormap);
 
   xim_ic_list = g_list_remove (xim_ic_list, private);
