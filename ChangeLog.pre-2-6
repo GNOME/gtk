@@ -1,3 +1,9 @@
+Sun Jul 25 19:51:17 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtknotebook.c (gtk_notebook_scroll): Ignore scroll
+	events from the content of the page.  (#148409, Gabriel 
+	de Perthuis)
+
 Sat Jul 24 21:38:12 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktoolbar.c (internal_insert_element): Warn if you try to

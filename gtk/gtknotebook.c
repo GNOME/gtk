@@ -1767,6 +1767,19 @@ gtk_notebook_scroll (GtkWidget      *widget,
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
 
+  GtkWidget* child;
+  GtkWidget* originator;
+
+  if (!notebook->cur_page)
+    return FALSE;
+
+  child = notebook->cur_page->child;
+  originator = gtk_get_event_widget ((GdkEvent *)event);
+
+  /* ignore scroll events from the content of the page */
+  if (!originator || gtk_widget_is_ancestor (originator, child))
+    return FALSE;
+  
   switch (event->direction)
     {
     case GDK_SCROLL_RIGHT:
