@@ -1,3 +1,9 @@
+2005-01-17  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_add_bookmarks): Save
+	and restore the selected row in the bookmark list and the
+	save folder combo.  (#164290)
+
 2005-01-16  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilechooserdialog.c (gtk_file_chooser_dialog_new_with_backend):
