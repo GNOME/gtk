@@ -1,3 +1,8 @@
+Wed Dec 16 16:57:55 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkevents.c (gdk_events_queue): Don't
+	call XPending() if we have putback events.
+
 Wed Dec 16 16:04:41 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtklabel.c (gtk_label_expose): Do nothing

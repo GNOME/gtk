@@ -1836,7 +1836,7 @@ gdk_events_queue (void)
   GdkEvent *event;
   XEvent xevent;
 
-  while (!queued_events && XPending (gdk_display))
+  while (!(putback_events || queued_events) && XPending (gdk_display))
     {
   #ifdef USE_XIM
       Window w = None;
