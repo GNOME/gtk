@@ -1,7 +1,5 @@
 Sun Aug 16 23:14:20 CDT 1998 Shawn T. Amundson <amundson@gtk.org>
 
-	* Released GTK+ 1.1.2
-		
 	* NEWS: updated for 1.1.2
 	* gtk+.spec: version = 1.1.2
 
