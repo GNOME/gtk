@@ -1,3 +1,11 @@
+Sun Jan 18 15:25:39 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktoolbar.[ch]: Add _gtk_toolbar_paint_space_line(),
+	_gtk_toolbar_get_default_space_size ();
+
+	* gtk/gtkseparatortoolitem.c (gtk_separator_tool_item_expose,
+	get_space_size): Use them here.
+
 Sun Jan 18 13:16:34 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* tests/testgtk.c (create_toolbar): Set a small size request and

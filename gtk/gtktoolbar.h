@@ -167,11 +167,11 @@ void            gtk_toolbar_set_drop_highlight_item   (GtkToolbar      *toolbar,
 
 /* internal functions */
 gchar *	             _gtk_toolbar_elide_underscores (const gchar *original);
-/* these two functions actually accept NULL for the toolbar, in which case
- * you'll get a default value
- */
-int	             _gtk_toolbar_get_space_size    (GtkToolbar *toolbar);
-GtkToolbarSpaceStyle _gtk_toolbar_get_space_style   (GtkToolbar *toolbar);
+void                 _gtk_toolbar_paint_space_line (GtkWidget       *widget,
+						    GtkToolbar      *toolbar,
+						    GdkRectangle    *area,
+						    GtkAllocation   *allocation);
+gint                 _gtk_toolbar_get_default_space_size (void);
 
 #ifndef GTK_DISABLE_DEPRECATED
 void       gtk_toolbar_set_icon_size   (GtkToolbar      *toolbar,

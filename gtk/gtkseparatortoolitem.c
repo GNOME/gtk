@@ -26,14 +26,6 @@
 #include "gtkintl.h"
 #include "gtktoolbar.h"
 
-/* note: keep in sync with DEFAULT_SPACE_SIZE and DEFAULT_SPACE_STYLE in gtktoolbar.c */
-#define DEFAULT_SPACE_SIZE 4
-#define DEFAULT_SPACE_STYLE GTK_TOOLBAR_SPACE_LINE
-
-#define SPACE_LINE_DIVISION 10
-#define SPACE_LINE_START    3
-#define SPACE_LINE_END      7
-
 #define MENU_ID "gtk-separator-tool-item-menu-id"
 
 enum {
@@ -59,8 +51,7 @@ static gboolean gtk_separator_tool_item_expose            (GtkWidget            
 							   GdkEventExpose            *event);
 static void     gtk_separator_tool_item_add               (GtkContainer              *container,
 							   GtkWidget                 *child);
-static GtkToolbarSpaceStyle get_space_style               (GtkToolItem               *tool_item);
-static gint                 get_space_size                (GtkToolItem               *tool_item);
+static gint     get_space_size                            (GtkToolItem               *tool_item);
 
 
 
@@ -99,26 +90,10 @@ gtk_separator_tool_item_get_type (void)
   return type;
 }
 
-static GtkToolbarSpaceStyle
-get_space_style (GtkToolItem *tool_item)
-{
-  GtkToolbarSpaceStyle space_style = DEFAULT_SPACE_STYLE;
-  GtkWidget *parent = GTK_WIDGET (tool_item)->parent;
-  
-  if (GTK_IS_TOOLBAR (parent))
-    {
-      gtk_widget_style_get (parent,
-			    "space_style", &space_style,
-			    NULL);
-    }
-  
-  return space_style;  
-}
-
 static gint
 get_space_size (GtkToolItem *tool_item)
 {
-  gint space_size = DEFAULT_SPACE_SIZE;
+  gint space_size = _gtk_toolbar_get_default_space_size();
   GtkWidget *parent = GTK_WIDGET (tool_item)->parent;
   
   if (GTK_IS_TOOLBAR (parent))
@@ -176,7 +151,7 @@ static void
 gtk_separator_tool_item_add (GtkContainer *container,
 			     GtkWidget    *child)
 {
-  g_warning("attempt to add a child to an GtkSeparatorToolItem");
+  g_warning ("attempt to add a child to an GtkSeparatorToolItem");
 }
 
 static gboolean
@@ -252,44 +227,13 @@ static gboolean
 gtk_separator_tool_item_expose (GtkWidget      *widget,
 				GdkEventExpose *event)
 {
-  GtkToolItem *tool_item = GTK_TOOL_ITEM (widget);
-  GtkSeparatorToolItem *separator_tool_item = GTK_SEPARATOR_TOOL_ITEM (widget);
-  gint space_size;
-  GtkAllocation *allocation;
-  GtkOrientation orientation;
-  GdkRectangle *area;
+  GtkToolbar *toolbar = NULL;
 
-  if (separator_tool_item->priv->draw &&
-      get_space_style (tool_item) == GTK_TOOLBAR_SPACE_LINE)
-    {
-      space_size = get_space_size (tool_item);
-      allocation = &(widget->allocation);
-      orientation = gtk_tool_item_get_orientation (tool_item);
-      area = &(event->area);
-      
-      if (orientation == GTK_ORIENTATION_HORIZONTAL)
-	{
-	  gtk_paint_vline (widget->style, widget->window,
-			   GTK_WIDGET_STATE (widget), area, widget,
-			   "separator_tool_item",
-			   allocation->y + allocation->height *
-			   SPACE_LINE_START / SPACE_LINE_DIVISION,
-			   allocation->y + allocation->height *
-			   SPACE_LINE_END / SPACE_LINE_DIVISION,
-			   allocation->x + (space_size - widget->style->xthickness) / 2);
-	}
-      else if (orientation == GTK_ORIENTATION_VERTICAL)
-	{
-	  gtk_paint_hline (widget->style, widget->window,
-			   GTK_WIDGET_STATE (widget), area, widget,
-			   "separator_tool_item",
-			   allocation->x + allocation->width *
-			   SPACE_LINE_START / SPACE_LINE_DIVISION,
-			   allocation->x + allocation->width *
-			   SPACE_LINE_END / SPACE_LINE_DIVISION,
-			   allocation->y + (space_size - widget->style->ythickness) / 2);
-	}
-    }
+  if (widget->parent && GTK_IS_TOOLBAR (widget->parent))
+    toolbar = GTK_TOOLBAR (widget->parent);
+
+  _gtk_toolbar_paint_space_line (widget, toolbar,
+				 &(event->area), &widget->allocation);
   
   return FALSE;
 }
