@@ -1599,6 +1599,50 @@ gdk_pixbuf_save (GdkPixbuf  *pixbuf,
         return result;
 }
 
+#ifdef G_OS_WIN32
+
+#undef gdk_pixbuf_save
+
+gboolean
+gdk_pixbuf_save (GdkPixbuf  *pixbuf, 
+                 const char *filename, 
+                 const char *type, 
+                 GError    **error,
+                 ...)
+{
+	char *utf8_filename;
+        gchar **keys = NULL;
+        gchar **values = NULL;
+        va_list args;
+	gboolean result;
+
+        g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+        
+	utf8_filename = g_locale_to_utf8 (filename, -1, NULL, NULL, error);
+
+	if (utf8_filename == NULL)
+		return FALSE;
+
+        va_start (args, error);
+        
+        collect_save_options (args, &keys, &values);
+        
+        va_end (args);
+
+        result = gdk_pixbuf_savev_utf8 (pixbuf, utf8_filename, type,
+					keys, values,
+					error);
+
+	g_free (utf8_filename);
+
+        g_strfreev (keys);
+        g_strfreev (values);
+
+        return result;
+}
+
+#endif
+
 /**
  * gdk_pixbuf_savev:
  * @pixbuf: a #GdkPixbuf.
@@ -1625,7 +1669,6 @@ gdk_pixbuf_savev (GdkPixbuf  *pixbuf,
 {
         FILE *f = NULL;
         gboolean result;
-        
        
         g_return_val_if_fail (filename != NULL, FALSE);
         g_return_val_if_fail (type != NULL, FALSE);
@@ -1671,6 +1714,38 @@ gdk_pixbuf_savev (GdkPixbuf  *pixbuf,
        
        return TRUE;
 }
+
+#ifdef G_OS_WIN32
+
+#undef gdk_pixbuf_savev
+
+gboolean
+gdk_pixbuf_savev (GdkPixbuf  *pixbuf, 
+                  const char *filename, 
+                  const char *type,
+                  char      **option_keys,
+                  char      **option_values,
+                  GError    **error)
+{
+	char *utf8_filename;
+	gboolean retval;
+
+        g_return_val_if_fail (filename != NULL, FALSE);
+       
+	utf8_filename = g_locale_to_utf8 (filename, -1, NULL, NULL, error);
+
+	if (utf8_filename == NULL)
+		return FALSE;
+
+	retval = gdk_pixbuf_savev_utf8 (pixbuf, utf8_filename, type,
+					option_keys, option_values, error);
+
+	g_free (utf8_filename);
+
+	return retval;
+}
+
+#endif
 
 /**
  * gdk_pixbuf_save_to_callback:
