@@ -1,3 +1,10 @@
+Wed Jun 30 19:26:36 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdnd.c:
+	- Code cleanups
+	- Instantaneously update on modifier key presses
+	- Allow cancellation of the drag with Escape.
+
 Tue Jun 29 23:02:42 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdk.c (gdk_x_error / gdk_x_io_error): Don't
