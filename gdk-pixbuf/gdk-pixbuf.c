@@ -89,9 +89,11 @@ gdk_pixbuf_finalize (GObject *object)
  * gdk_pixbuf_ref:
  * @pixbuf: A pixbuf.
  *
- * Adds a reference to a pixbuf. Deprecated; use g_object_ref().
+ * Adds a reference to a pixbuf. 
  *
  * Return value: The same as the @pixbuf argument.
+ *
+ * Deprecated: Use g_object_ref().
  **/
 GdkPixbuf *
 gdk_pixbuf_ref (GdkPixbuf *pixbuf)
@@ -103,9 +105,9 @@ gdk_pixbuf_ref (GdkPixbuf *pixbuf)
  * gdk_pixbuf_unref:
  * @pixbuf: A pixbuf.
  *
- * Removes a reference from a pixbuf. Deprecated; use
- * g_object_unref().
+ * Removes a reference from a pixbuf. 
  *
+ * Deprecated: Use g_object_unref().
  **/
 void
 gdk_pixbuf_unref (GdkPixbuf *pixbuf)

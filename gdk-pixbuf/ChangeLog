@@ -1,3 +1,8 @@
+2002-11-29  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixbuf-animation.c: 
+	* gdk-pixbuf.c: Add deprecation docs. 
+
 2002-11-28  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixbuf/gdk-pixbuf-io.c:
