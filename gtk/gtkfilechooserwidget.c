@@ -22,26 +22,33 @@
 #include "gtkfilechooserimpldefault.h"
 #include "gtkfilechooserenums.h"
 #include "gtkfilechooserutils.h"
-#include "gtkfilesystemgnomevfs.h"
 #include "gtkfilesystemunix.h"
 
 struct _GtkFileChooserWidgetPrivate
 {
   GtkWidget *impl;
+
+  GtkFileSystem *file_system;
 };
 
 #define GTK_FILE_CHOOSER_WIDGET_GET_PRIVATE(o)  (GTK_FILE_CHOOSER_WIDGET (o)->priv)
 
 static void gtk_file_chooser_widget_class_init   (GtkFileChooserWidgetClass *class);
 static void gtk_file_chooser_widget_init         (GtkFileChooserWidget      *chooser_widget);
-static void gtk_file_chooser_widget_set_property (GObject                   *object,
-						  guint                      prop_id,
-						  const GValue              *value,
-						  GParamSpec                *pspec);
-static void gtk_file_chooser_widget_get_property (GObject                   *object,
-						  guint                      prop_id,
-						  GValue                    *value,
-						  GParamSpec                *pspec);
+
+static GObject* gtk_file_chooser_widget_constructor  (GType                  type,
+						      guint                  n_construct_properties,
+						      GObjectConstructParam *construct_params);
+static void     gtk_file_chooser_widget_set_property (GObject               *object,
+						      guint                  prop_id,
+						      const GValue          *value,
+						      GParamSpec            *pspec);
+static void     gtk_file_chooser_widget_get_property (GObject               *object,
+						      guint                  prop_id,
+						      GValue                *value,
+						      GParamSpec            *pspec);
+
+GObjectClass *parent_class;
 
 GType
 gtk_file_chooser_widget_get_type (void)
@@ -85,6 +92,9 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
 
+  parent_class = g_type_class_peek_parent (class);
+
+  gobject_class->constructor = gtk_file_chooser_widget_constructor;
   gobject_class->set_property = gtk_file_chooser_widget_set_property;
   gobject_class->get_property = gtk_file_chooser_widget_get_property;
 
@@ -99,15 +109,31 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *chooser_widget)
   GtkFileChooserWidgetPrivate *priv = G_TYPE_INSTANCE_GET_PRIVATE (chooser_widget,
 								   GTK_TYPE_FILE_CHOOSER_WIDGET,
 								   GtkFileChooserWidgetPrivate);
+  chooser_widget->priv = priv;
+}
+
+static GObject*
+gtk_file_chooser_widget_constructor (GType                  type,
+				     guint                  n_construct_properties,
+				     GObjectConstructParam *construct_params)
+{
+  GtkFileChooserWidgetPrivate *priv;
+  GObject *object;
   gchar *current_folder;
   gchar *current_folder_uri;
   
-  chooser_widget->priv = priv;
-  
+  object = parent_class->constructor (type,
+				      n_construct_properties,
+				      construct_params);
+  priv = GTK_FILE_CHOOSER_WIDGET_GET_PRIVATE (object);
+
   gtk_widget_push_composite_child ();
 
-  priv->impl = _gtk_file_chooser_impl_default_new (_gtk_file_system_gnome_vfs_new ());
-  gtk_box_pack_start (GTK_BOX (chooser_widget), priv->impl, TRUE, TRUE, 0);
+  if (!priv->file_system)
+    priv->file_system = _gtk_file_system_unix_new ();
+      
+  priv->impl = _gtk_file_chooser_impl_default_new (priv->file_system);
+  gtk_box_pack_start (GTK_BOX (object), priv->impl, TRUE, TRUE, 0);
   gtk_widget_show (priv->impl);
 
   current_folder = g_get_current_dir ();
@@ -119,10 +145,12 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *chooser_widget)
     }
   g_free (current_folder);
   
-  _gtk_file_chooser_set_delegate (GTK_FILE_CHOOSER (chooser_widget),
+  _gtk_file_chooser_set_delegate (GTK_FILE_CHOOSER (object),
 				  GTK_FILE_CHOOSER (priv->impl));
   
   gtk_widget_pop_composite_child ();
+
+  return object;
 }
 
 static void
@@ -132,8 +160,26 @@ gtk_file_chooser_widget_set_property (GObject         *object,
 				      GParamSpec      *pspec)
 {
   GtkFileChooserWidgetPrivate *priv = GTK_FILE_CHOOSER_WIDGET_GET_PRIVATE (object);
-  
-  g_object_set_property (G_OBJECT (priv->impl), pspec->name, value);
+
+  switch (prop_id)
+    {
+    case GTK_FILE_CHOOSER_PROP_FILE_SYSTEM:
+      {
+	GtkFileSystem *file_system = g_value_get_object (value);
+	if (priv->file_system != file_system)
+	  {
+	    if (priv->file_system)
+	      g_object_unref (priv->file_system);
+	    priv->file_system = file_system;
+	    if (priv->file_system)
+	      g_object_ref (priv->file_system);
+	  }
+      }
+      break;
+    default:
+      g_object_set_property (G_OBJECT (priv->impl), pspec->name, value);
+      break;
+    }
 }
 
 static void

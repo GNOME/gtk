@@ -22,6 +22,7 @@
 #define __GTK_FILE_SYSTEM_UNIX_H__
 
 #include <glib-object.h>
+#include "gtkfilesystem.h"
 
 G_BEGIN_DECLS
 

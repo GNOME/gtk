@@ -79,15 +79,19 @@ struct _GtkFileChooserImplDefault
 static void gtk_file_chooser_impl_default_class_init   (GtkFileChooserImplDefaultClass *class);
 static void gtk_file_chooser_impl_default_iface_init   (GtkFileChooserIface            *iface);
 static void gtk_file_chooser_impl_default_init         (GtkFileChooserImplDefault      *impl);
-static void gtk_file_chooser_impl_default_finalize     (GObject                        *object);
-static void gtk_file_chooser_impl_default_set_property (GObject                        *object,
-							guint                           prop_id,
-							const GValue                   *value,
-							GParamSpec                     *pspec);
-static void gtk_file_chooser_impl_default_get_property (GObject                        *object,
-							guint                           prop_id,
-							GValue                         *value,
-							GParamSpec                     *pspec);
+
+static GObject* gtk_file_chooser_impl_default_constructor  (GType                  type,
+							    guint                  n_construct_properties,
+							    GObjectConstructParam *construct_params);
+static void     gtk_file_chooser_impl_default_finalize     (GObject               *object);
+static void     gtk_file_chooser_impl_default_set_property (GObject               *object,
+							    guint                  prop_id,
+							    const GValue          *value,
+							    GParamSpec            *pspec);
+static void     gtk_file_chooser_impl_default_get_property (GObject               *object,
+							    guint                  prop_id,
+							    GValue                *value,
+							    GParamSpec            *pspec);
 
 static void    gtk_file_chooser_impl_default_set_current_folder (GtkFileChooser *chooser,
 								 const char     *uri);
@@ -106,6 +110,24 @@ static void list_selection_changed (GtkTreeSelection          *tree_selection,
 				    GtkFileChooserImplDefault *impl);
 static void entry_activate         (GtkEntry                  *entry,
 				    GtkFileChooserImplDefault *impl);
+
+static void tree_name_data_func (GtkTreeViewColumn *tree_column,
+				 GtkCellRenderer   *cell,
+				 GtkTreeModel      *tree_model,
+				 GtkTreeIter       *iter,
+				 gpointer           data);
+static void list_name_data_func (GtkTreeViewColumn *tree_column,
+				 GtkCellRenderer   *cell,
+				 GtkTreeModel      *tree_model,
+				 GtkTreeIter       *iter,
+				 gpointer           data);
+static void list_size_data_func (GtkTreeViewColumn *tree_column,
+				 GtkCellRenderer   *cell,
+				 GtkTreeModel      *tree_model,
+				 GtkTreeIter       *iter,
+				 gpointer           data);
+
+GObjectClass *parent_class;
 
 GType
 _gtk_file_chooser_impl_default_get_type (void)
@@ -150,6 +172,7 @@ gtk_file_chooser_impl_default_class_init (GtkFileChooserImplDefaultClass *class)
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
 
   gobject_class->finalize = gtk_file_chooser_impl_default_finalize;
+  gobject_class->constructor = gtk_file_chooser_impl_default_constructor;
   gobject_class->set_property = gtk_file_chooser_impl_default_set_property;
   gobject_class->get_property = gtk_file_chooser_impl_default_get_property;
 
@@ -171,6 +194,55 @@ gtk_file_chooser_impl_default_iface_init (GtkFileChooserIface *iface)
 static void
 gtk_file_chooser_impl_default_init (GtkFileChooserImplDefault *impl)
 {
+  impl->folder_mode = FALSE;
+  impl->local_only = TRUE;
+  impl->preview_widget_active = TRUE;
+  impl->select_multiple = FALSE;
+  impl->show_hidden = FALSE;
+
+  gtk_container_set_border_width (GTK_CONTAINER (impl), 5);
+}
+
+static void
+gtk_file_chooser_impl_default_finalize (GObject *object)
+{
+  GtkFileChooserImplDefault *impl = GTK_FILE_CHOOSER_IMPL_DEFAULT (object);
+
+  g_object_unref (impl->file_system);
+
+  G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
+static void
+set_preview_widget (GtkFileChooserImplDefault *impl,
+		    GtkWidget                 *preview_widget)
+{
+  if (preview_widget == impl->preview_widget)
+    return;
+
+  if (impl->preview_widget)
+    {
+      g_object_unref (impl->preview_widget);
+      impl->preview_widget = NULL;
+    }
+
+  impl->preview_widget = preview_widget;
+  if (impl->preview_widget)
+    {
+      g_object_ref (impl->preview_widget);
+      gtk_object_sink (GTK_OBJECT (impl->preview_widget));
+    }
+}
+
+static GObject*
+gtk_file_chooser_impl_default_constructor (GType                  type,
+					   guint                  n_construct_properties,
+					   GObjectConstructParam *construct_params)
+{
+  GtkFileChooserImplDefault *impl;
+  GtkTreeViewColumn *column;
+  GtkCellRenderer *renderer;
+  GObject *object;
   GtkWidget *hpaned;
   GtkWidget *hbox;
   GtkWidget *label;
@@ -179,14 +251,13 @@ gtk_file_chooser_impl_default_init (GtkFileChooserImplDefault *impl)
   GList *focus_chain;
 #endif  
 
-  impl->folder_mode = FALSE;
-  impl->local_only = TRUE;
-  impl->preview_widget_active = TRUE;
-  impl->select_multiple = FALSE;
-  impl->show_hidden = FALSE;
+  object = parent_class->constructor (type,
+				      n_construct_properties,
+				      construct_params);
+  impl = GTK_FILE_CHOOSER_IMPL_DEFAULT (object);
 
-  gtk_container_set_border_width (GTK_CONTAINER (impl), 5);
-  
+  g_assert (impl->file_system);
+
   gtk_widget_push_composite_child ();
 
   hpaned = gtk_hpaned_new ();
@@ -257,35 +328,42 @@ gtk_file_chooser_impl_default_init (GtkFileChooserImplDefault *impl)
 #endif  
   
   gtk_widget_pop_composite_child ();
-}
 
-static void
-gtk_file_chooser_impl_default_finalize (GObject *object)
-{
-  GtkFileChooserImplDefault *impl = GTK_FILE_CHOOSER_IMPL_DEFAULT (object);
+  impl->tree_model = _gtk_file_system_model_new (impl->file_system, NULL, -1,
+						 GTK_FILE_INFO_DISPLAY_NAME);
+  _gtk_file_system_model_set_show_files (impl->tree_model, FALSE);
 
-  g_object_unref (impl->file_system);
-}
+  gtk_tree_view_set_model (GTK_TREE_VIEW (impl->tree),
+			   GTK_TREE_MODEL (impl->tree_model));
 
-static void
-set_preview_widget (GtkFileChooserImplDefault *impl,
-		    GtkWidget                 *preview_widget)
-{
-  if (preview_widget == impl->preview_widget)
-    return;
+  gtk_tree_view_insert_column_with_data_func (GTK_TREE_VIEW (impl->tree), 0,
+					      "File name",
+					      gtk_cell_renderer_text_new (),
+					      tree_name_data_func, impl, NULL);
+  gtk_tree_view_set_search_column (GTK_TREE_VIEW (impl->tree),
+				   GTK_FILE_SYSTEM_MODEL_DISPLAY_NAME);
 
-  if (impl->preview_widget)
-    {
-      g_object_unref (impl->preview_widget);
-      impl->preview_widget = NULL;
-    }
+  column = gtk_tree_view_column_new ();
+  gtk_tree_view_column_set_title  (column, "File name");
+  renderer = gtk_cell_renderer_text_new ();
+  gtk_tree_view_column_pack_start (column, renderer, TRUE);
+  gtk_tree_view_column_set_cell_data_func (column, renderer,
+					   list_name_data_func, impl, NULL);
+  gtk_tree_view_column_set_sort_column_id (column, 0);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (impl->list), column);
+  
+  column = gtk_tree_view_column_new ();
+  gtk_tree_view_column_set_title  (column, "Size");
+  renderer = gtk_cell_renderer_text_new ();
+  gtk_tree_view_column_pack_start (column, renderer, TRUE);
+  gtk_tree_view_column_set_cell_data_func (column, renderer,
+					   list_size_data_func, impl, NULL);
+  gtk_tree_view_column_set_sort_column_id (column, 1);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (impl->list), column);
 
-  impl->preview_widget = preview_widget;
-  if (impl->preview_widget)
-    {
-      g_object_ref (impl->preview_widget);
-      gtk_object_sink (GTK_OBJECT (impl->preview_widget));
-    }
+  _gtk_file_chooser_entry_set_file_system (GTK_FILE_CHOOSER_ENTRY (impl->entry),
+					   impl->file_system);
+  return object;
 }
 
 static void
@@ -301,6 +379,19 @@ gtk_file_chooser_impl_default_set_property (GObject         *object,
     {
     case GTK_FILE_CHOOSER_PROP_ACTION:
       impl->action = g_value_get_enum (value);
+      break;
+    case GTK_FILE_CHOOSER_PROP_FILE_SYSTEM:
+      {
+	GtkFileSystem *file_system = g_value_get_object (value);
+	if (impl->file_system != file_system)
+	  {
+	    if (impl->file_system)
+	      g_object_unref (impl->file_system);
+	    impl->file_system = file_system;
+	    if (impl->file_system)
+	      g_object_ref (impl->file_system);
+	  }
+      }
       break;
     case GTK_FILE_CHOOSER_PROP_FOLDER_MODE:
       {	
@@ -887,46 +978,7 @@ list_size_data_func (GtkTreeViewColumn *tree_column,
 GtkWidget *
 _gtk_file_chooser_impl_default_new (GtkFileSystem *file_system)
 {
-  GtkWidget *result = g_object_new (GTK_TYPE_FILE_CHOOSER_IMPL_DEFAULT, NULL);
-  GtkFileChooserImplDefault *impl = GTK_FILE_CHOOSER_IMPL_DEFAULT (result);
-  GtkTreeViewColumn *column;
-  GtkCellRenderer *renderer;
-
-  impl->file_system = g_object_ref(file_system);
-  impl->tree_model = _gtk_file_system_model_new (file_system, NULL, -1,
-						 GTK_FILE_INFO_DISPLAY_NAME);
-  _gtk_file_system_model_set_show_files (impl->tree_model, FALSE);
-
-  gtk_tree_view_set_model (GTK_TREE_VIEW (impl->tree),
-			   GTK_TREE_MODEL (impl->tree_model));
-
-  gtk_tree_view_insert_column_with_data_func (GTK_TREE_VIEW (impl->tree), 0,
-					      "File name",
-					      gtk_cell_renderer_text_new (),
-					      tree_name_data_func, impl, NULL);
-  gtk_tree_view_set_search_column (GTK_TREE_VIEW (impl->tree),
-				   GTK_FILE_SYSTEM_MODEL_DISPLAY_NAME);
-
-  column = gtk_tree_view_column_new ();
-  gtk_tree_view_column_set_title  (column, "File name");
-  renderer = gtk_cell_renderer_text_new ();
-  gtk_tree_view_column_pack_start (column, renderer, TRUE);
-  gtk_tree_view_column_set_cell_data_func (column, renderer,
-					   list_name_data_func, impl, NULL);
-  gtk_tree_view_column_set_sort_column_id (column, 0);
-  gtk_tree_view_append_column (GTK_TREE_VIEW (impl->list), column);
-  
-  column = gtk_tree_view_column_new ();
-  gtk_tree_view_column_set_title  (column, "Size");
-  renderer = gtk_cell_renderer_text_new ();
-  gtk_tree_view_column_pack_start (column, renderer, TRUE);
-  gtk_tree_view_column_set_cell_data_func (column, renderer,
-					   list_size_data_func, impl, NULL);
-  gtk_tree_view_column_set_sort_column_id (column, 1);
-  gtk_tree_view_append_column (GTK_TREE_VIEW (impl->list), column);
-
-  _gtk_file_chooser_entry_set_file_system (GTK_FILE_CHOOSER_ENTRY (impl->entry),
-					   file_system);
-
-  return result;
+  return  g_object_new (GTK_TYPE_FILE_CHOOSER_IMPL_DEFAULT,
+			"file-system", file_system,
+			NULL);
 }

@@ -3,6 +3,12 @@
 #include "gtkfilechooser.h"
 #include "prop-editor.h"
 
+#ifdef USE_GNOME_VFS
+#include "gtkfilesystemgnomevfs.h"
+#else
+#include "gtkfilesystemunix.h"
+#endif
+
 static void
 print_current_folder (GtkFileChooser *chooser)
 {
@@ -45,14 +51,26 @@ main (int argc, char **argv)
   GtkWidget *button;
   GtkWidget *dialog;
   GtkWidget *prop_editor;
+  GtkFileSystem *file_system;
   
   gtk_init (&argc, &argv);
 
-  dialog = gtk_file_chooser_dialog_new ("Select a file", NULL,
-					GTK_FILE_CHOOSER_ACTION_OPEN,
-					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-					GTK_STOCK_OPEN, GTK_RESPONSE_OK,
-					NULL);
+#ifdef USE_GNOME_VFS
+  file_system = _gtk_file_system_gnome_vfs_new ();
+#else  
+  file_system = _gtk_file_system_unix_new ();
+#endif
+  
+  dialog = g_object_new (GTK_TYPE_FILE_CHOOSER_DIALOG,
+			 "action", GTK_FILE_CHOOSER_ACTION_OPEN,
+			 "file_system", file_system,
+			 "title", "Select a file",
+			 NULL);
+			 
+  gtk_dialog_add_buttons (GTK_DIALOG (dialog),
+			  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+			  GTK_STOCK_OPEN, GTK_RESPONSE_OK,
+			  NULL);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
   
   g_signal_connect (dialog, "selection_changed",

@@ -289,6 +289,8 @@ gtk_file_system_get_type (void)
       file_system_type = g_type_register_static (G_TYPE_INTERFACE,
 						 "GtkFileSystem",
 						 &file_system_info, 0);
+
+      g_type_interface_add_prerequisite (file_system_type, G_TYPE_OBJECT);
     }
 
   return file_system_type;
@@ -485,6 +487,8 @@ gtk_file_folder_get_type (void)
       file_folder_type = g_type_register_static (G_TYPE_INTERFACE,
 						 "GtkFileFolder",
 						 &file_folder_info, 0);
+      
+      g_type_interface_add_prerequisite (file_folder_type, G_TYPE_OBJECT);
     }
 
   return file_folder_type;

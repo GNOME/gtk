@@ -22,6 +22,7 @@
 #include "gtkfilechooserutils.h"
 #include "gtkfilechooser.h"
 #include "gtkfilechooserenums.h"
+#include "gtkfilesystem.h"
 
 static void    delegate_set_current_folder (GtkFileChooser *chooser,
 					    const char     *uri);
@@ -58,6 +59,11 @@ _gtk_file_chooser_install_properties (GObjectClass *klass)
 				   g_param_spec_override ("action",
 							  GTK_TYPE_FILE_CHOOSER_ACTION,
 							  G_PARAM_READWRITE));
+  g_object_class_install_property (klass,
+				   GTK_FILE_CHOOSER_PROP_FILE_SYSTEM,
+				   g_param_spec_override ("file_system",
+							  GTK_TYPE_FILE_SYSTEM,
+							  G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
   g_object_class_install_property (klass,
 				   GTK_FILE_CHOOSER_PROP_FOLDER_MODE,
 				   g_param_spec_override ("folder_mode",
