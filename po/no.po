@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.14\n"
-"POT-Creation-Date: 2002-11-10 15:51+0100\n"
-"PO-Revision-Date: 2002-11-10 15:55+0100\n"
+"POT-Creation-Date: 2002-11-15 22:18+0100\n"
+"PO-Revision-Date: 2002-11-15 22:20+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian (bokmål) <no@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -889,7 +889,7 @@ msgstr "Mellomrom"
 msgid "The amount of space between children"
 msgstr "Mengde mellomrom mellom barn."
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:435
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:433
 msgid "Homogeneous"
 msgstr "Homogen"
 
@@ -927,22 +927,22 @@ msgstr ""
 msgid "Pack type"
 msgstr "Type pakking"
 
-#: gtk/gtkbox.c:168 gtk/gtknotebook.c:479
+#: gtk/gtkbox.c:168 gtk/gtknotebook.c:477
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
 msgstr ""
 
-#: gtk/gtkbox.c:174 gtk/gtknotebook.c:457 gtk/gtkpaned.c:218
+#: gtk/gtkbox.c:174 gtk/gtknotebook.c:455 gtk/gtkpaned.c:218
 #: gtk/gtkruler.c:138
 msgid "Position"
 msgstr "Posisjon"
 
-#: gtk/gtkbox.c:175 gtk/gtknotebook.c:458
+#: gtk/gtkbox.c:175 gtk/gtknotebook.c:456
 msgid "The index of the child in the parent"
 msgstr "Indeks for etterkommer i opphav"
 
-#: gtk/gtkbutton.c:189 gtk/gtkframe.c:125 gtk/gtklabel.c:287
+#: gtk/gtkbutton.c:189 gtk/gtkframe.c:125 gtk/gtklabel.c:290
 msgid "Label"
 msgstr "Etikett"
 
@@ -953,11 +953,11 @@ msgid ""
 msgstr ""
 "Tekst for etiketten inne i knappen, hvis knappen inneholder en etikett."
 
-#: gtk/gtkbutton.c:197 gtk/gtklabel.c:308
+#: gtk/gtkbutton.c:197 gtk/gtklabel.c:311
 msgid "Use underline"
 msgstr "Bruk understreking"
 
-#: gtk/gtkbutton.c:198 gtk/gtklabel.c:309
+#: gtk/gtkbutton.c:198 gtk/gtklabel.c:312
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -1190,7 +1190,7 @@ msgstr "Tagging"
 msgid "Marked up text to render"
 msgstr "Tagget tekst som skal rendres"
 
-#: gtk/gtkcellrenderertext.c:190 gtk/gtklabel.c:294
+#: gtk/gtkcellrenderertext.c:190 gtk/gtklabel.c:297
 msgid "Attributes"
 msgstr "Attributter"
 
@@ -1648,44 +1648,43 @@ msgstr ""
 msgid "_Palette"
 msgstr "_Palett"
 
-#: gtk/gtkcombo.c:140
+#: gtk/gtkcombo.c:141
 msgid "Enable arrow keys"
 msgstr "Aktiver piltaster"
 
-#: gtk/gtkcombo.c:141
+#: gtk/gtkcombo.c:142
 msgid "Whether the arrow keys move through the list of items"
 msgstr "Om piltastene skal flytte markøren gjennom listen med oppføringer"
 
-#: gtk/gtkcombo.c:147
+#: gtk/gtkcombo.c:148
 msgid "Always enable arrows"
 msgstr "Alltid aktiver piler"
 
-#: gtk/gtkcombo.c:148
-msgid ""
-"Whether the arrow keys work, even if the entry contents are not in the list"
-msgstr "Om piltastene fungerer, selv om oppføringens innhold ikke er i listen"
+#: gtk/gtkcombo.c:149
+msgid "Obsolete property, ignored"
+msgstr "Gammel egenskap, ignorert"
 
-#: gtk/gtkcombo.c:154
+#: gtk/gtkcombo.c:155
 msgid "Case sensitive"
 msgstr "Skill mellom små/store bokstaver"
 
-#: gtk/gtkcombo.c:155
+#: gtk/gtkcombo.c:156
 msgid "Whether list item matching is case sensitive"
 msgstr "Om det skilles på små og store bokstaver i listeoppføringen"
 
-#: gtk/gtkcombo.c:162
+#: gtk/gtkcombo.c:163
 msgid "Allow empty"
 msgstr "Tillat tom"
 
-#: gtk/gtkcombo.c:163
+#: gtk/gtkcombo.c:164
 msgid "Whether an empty value may be entered in this field"
 msgstr "En tom verdi kan oppgis i dette feltet"
 
-#: gtk/gtkcombo.c:170
+#: gtk/gtkcombo.c:171
 msgid "Value in list"
 msgstr "Verdi i listen"
 
-#: gtk/gtkcombo.c:171
+#: gtk/gtkcombo.c:172
 msgid "Whether entered values must already be present in the list"
 msgstr "Verdier som spesifiseres må allerede være i listen"
 
@@ -1785,19 +1784,19 @@ msgstr "Kant for handlingsområde"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Bredde på kanten rundt knappeområdet nederst i dialogen"
 
-#: gtk/gtkentry.c:436 gtk/gtklabel.c:365
+#: gtk/gtkentry.c:436 gtk/gtklabel.c:368
 msgid "Cursor Position"
 msgstr "Markørposisjon"
 
-#: gtk/gtkentry.c:437 gtk/gtklabel.c:366
+#: gtk/gtkentry.c:437 gtk/gtklabel.c:369
 msgid "The current position of the insertion cursor in chars"
 msgstr "Nåværende posisjon for innsettingsmarkør i tegn"
 
-#: gtk/gtkentry.c:446 gtk/gtklabel.c:375
+#: gtk/gtkentry.c:446 gtk/gtklabel.c:378
 msgid "Selection Bound"
 msgstr "Utvalg bundet"
 
-#: gtk/gtkentry.c:447 gtk/gtklabel.c:376
+#: gtk/gtkentry.c:447 gtk/gtklabel.c:379
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "Posisjon for motsatt ende av utvalget fra markøren i tegn"
@@ -1884,11 +1883,11 @@ msgstr "Velg på fokus"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Om innholdet i oppføringen skal markeres når den får fokus"
 
-#: gtk/gtkentry.c:3950 gtk/gtklabel.c:3217
+#: gtk/gtkentry.c:3950 gtk/gtklabel.c:3224
 msgid "Select All"
 msgstr "Velg alt"
 
-#: gtk/gtkentry.c:3960 gtk/gtklabel.c:3227
+#: gtk/gtkentry.c:3960 gtk/gtklabel.c:3234
 msgid "Input Methods"
 msgstr "Inndatametode"
 
@@ -2335,83 +2334,82 @@ msgstr "Bildewidget"
 msgid "Child widget to appear next to the menu text"
 msgstr "Barnwidget som skal vises ved siden av menyteksten"
 
-#. shell and main vbox
-#: gtk/gtkinputdialog.c:187
+#: gtk/gtkinputdialog.c:230
 msgid "Input"
 msgstr "Inndata"
 
-#: gtk/gtkinputdialog.c:195
+#: gtk/gtkinputdialog.c:239
 msgid "No input devices"
 msgstr "Ingen innenheter"
 
-#: gtk/gtkinputdialog.c:225
+#: gtk/gtkinputdialog.c:251
 msgid "_Device:"
 msgstr "_Enhet:"
 
-#: gtk/gtkinputdialog.c:242
+#: gtk/gtkinputdialog.c:268
 msgid "Disabled"
 msgstr "Slått av"
 
-#: gtk/gtkinputdialog.c:250 gtk/gtkinvisible.c:114 gtk/gtkwindow.c:552
+#: gtk/gtkinputdialog.c:275 gtk/gtkinvisible.c:114 gtk/gtkwindow.c:552
 msgid "Screen"
 msgstr "Skjerm"
 
-#: gtk/gtkinputdialog.c:258
+#: gtk/gtkinputdialog.c:282
 msgid "Window"
 msgstr "Vindu"
 
-#: gtk/gtkinputdialog.c:266
+#: gtk/gtkinputdialog.c:289
 msgid "_Mode: "
 msgstr "_Modus: "
 
 #. The axis listbox
-#: gtk/gtkinputdialog.c:297
+#: gtk/gtkinputdialog.c:320
 msgid "_Axes"
 msgstr "_Akser"
 
 #. Keys listbox
-#: gtk/gtkinputdialog.c:314
+#: gtk/gtkinputdialog.c:337
 msgid "_Keys"
 msgstr "_Taster"
 
-#: gtk/gtkinputdialog.c:484
+#: gtk/gtkinputdialog.c:557
 msgid "X"
 msgstr "X"
 
-#: gtk/gtkinputdialog.c:485
+#: gtk/gtkinputdialog.c:558
 msgid "Y"
 msgstr "Y"
 
-#: gtk/gtkinputdialog.c:486
+#: gtk/gtkinputdialog.c:559
 msgid "Pressure"
 msgstr "Trykk"
 
-#: gtk/gtkinputdialog.c:487
+#: gtk/gtkinputdialog.c:560
 msgid "X Tilt"
 msgstr "X-helling"
 
-#: gtk/gtkinputdialog.c:488
+#: gtk/gtkinputdialog.c:561
 msgid "Y Tilt"
 msgstr "Y-helling"
 
-#: gtk/gtkinputdialog.c:489
+#: gtk/gtkinputdialog.c:562
 msgid "Wheel"
 msgstr "Hjul"
 
-#: gtk/gtkinputdialog.c:529
+#: gtk/gtkinputdialog.c:602
 msgid "none"
 msgstr "ingen"
 
-#: gtk/gtkinputdialog.c:564 gtk/gtkinputdialog.c:600
+#: gtk/gtkinputdialog.c:638 gtk/gtkinputdialog.c:674
 msgid "(disabled)"
 msgstr "(slått av)"
 
-#: gtk/gtkinputdialog.c:593
+#: gtk/gtkinputdialog.c:667
 msgid "(unknown)"
 msgstr "(ukjent)"
 
 #. and clear button
-#: gtk/gtkinputdialog.c:677
+#: gtk/gtkinputdialog.c:754
 msgid "clear"
 msgstr "tøm"
 
@@ -2419,27 +2417,27 @@ msgstr "tøm"
 msgid "The screen where this window will be displayed"
 msgstr "Skjermen hvor dette vinduet vil vises"
 
-#: gtk/gtklabel.c:288
+#: gtk/gtklabel.c:291
 msgid "The text of the label"
 msgstr "Tekst for etiketten"
 
-#: gtk/gtklabel.c:295
+#: gtk/gtklabel.c:298
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "En liste med stilattributter som skal påføres etikettens tekst"
 
-#: gtk/gtklabel.c:301
+#: gtk/gtklabel.c:304
 msgid "Use markup"
 msgstr "Bruk tagging"
 
-#: gtk/gtklabel.c:302
+#: gtk/gtklabel.c:305
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "Teksten i etiketten inneholder XML-tagger. Se pango_parse_markup()"
 
-#: gtk/gtklabel.c:316 gtk/gtktexttag.c:374 gtk/gtktextview.c:583
+#: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:583
 msgid "Justification"
 msgstr "Justering"
 
-#: gtk/gtklabel.c:317
+#: gtk/gtklabel.c:320
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
@@ -2449,11 +2447,11 @@ msgstr ""
 "påvirker IKKE justeringen av etiketten innen sitt område. Se GtkMisc::xalign "
 "for det"
 
-#: gtk/gtklabel.c:325
+#: gtk/gtklabel.c:328
 msgid "Pattern"
 msgstr "Mønster"
 
-#: gtk/gtklabel.c:326
+#: gtk/gtklabel.c:329
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline"
@@ -2461,35 +2459,35 @@ msgstr ""
 "En streng med «_»-tegn i posisjoner tilsvarer tegn i teksten som skal "
 "understrekes"
 
-#: gtk/gtklabel.c:333
+#: gtk/gtklabel.c:336
 msgid "Line wrap"
 msgstr "Linjebryting"
 
-#: gtk/gtklabel.c:334
+#: gtk/gtklabel.c:337
 msgid "If set, wrap lines if the text becomes too wide"
 msgstr "Bryt linjer hvis teksten blir for bred hvis dette er satt"
 
-#: gtk/gtklabel.c:340
+#: gtk/gtklabel.c:343
 msgid "Selectable"
 msgstr "Velgbar"
 
-#: gtk/gtklabel.c:341
+#: gtk/gtklabel.c:344
 msgid "Whether the label text can be selected with the mouse"
 msgstr "Om etiketteksten kan velges med musen"
 
-#: gtk/gtklabel.c:347
+#: gtk/gtklabel.c:350
 msgid "Mnemonic key"
 msgstr "Hinttast"
 
-#: gtk/gtklabel.c:348
+#: gtk/gtklabel.c:351
 msgid "The mnemonic accelerator key for this label"
 msgstr "Hint for akselleratortast for denne etiketten"
 
-#: gtk/gtklabel.c:356
+#: gtk/gtklabel.c:359
 msgid "Mnemonic widget"
 msgstr "Hintwidget"
 
-#: gtk/gtklabel.c:357
+#: gtk/gtklabel.c:360
 msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr "Widget som skal aktiveres når etikettens hinttast trykkes"
 
@@ -2652,77 +2650,77 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "Mende mellomrom over og under widgetet, i piksler"
 
-#: gtk/gtknotebook.c:363
+#: gtk/gtknotebook.c:361
 msgid "Page"
 msgstr "Side"
 
-#: gtk/gtknotebook.c:364
+#: gtk/gtknotebook.c:362
 msgid "The index of the current page"
 msgstr "Indeks for aktiv side"
 
-#: gtk/gtknotebook.c:372
+#: gtk/gtknotebook.c:370
 msgid "Tab Position"
 msgstr "Faneplassering"
 
-#: gtk/gtknotebook.c:373
+#: gtk/gtknotebook.c:371
 msgid "Which side of the notebook holds the tabs"
 msgstr "Hvilken side av notisblokken innehar fanene"
 
-#: gtk/gtknotebook.c:380
+#: gtk/gtknotebook.c:378
 msgid "Tab Border"
 msgstr "Fanekant"
 
-#: gtk/gtknotebook.c:381
+#: gtk/gtknotebook.c:379
 msgid "Width of the border around the tab labels"
 msgstr "Bredde på kanten rundt faneetikettene"
 
-#: gtk/gtknotebook.c:389
+#: gtk/gtknotebook.c:387
 msgid "Horizontal Tab Border"
 msgstr "Horisontal fanekant"
 
-#: gtk/gtknotebook.c:390
+#: gtk/gtknotebook.c:388
 msgid "Width of the horizontal border of tab labels"
 msgstr "Bredde på horisontal kant på faneetikettene"
 
-#: gtk/gtknotebook.c:398
+#: gtk/gtknotebook.c:396
 msgid "Vertical Tab Border"
 msgstr "Vertikal fanekant"
 
-#: gtk/gtknotebook.c:399
+#: gtk/gtknotebook.c:397
 msgid "Width of the vertical border of tab labels"
 msgstr "Bredde på vertikal kant på faneetikettene"
 
-#: gtk/gtknotebook.c:407
+#: gtk/gtknotebook.c:405
 msgid "Show Tabs"
 msgstr "Vis faner"
 
-#: gtk/gtknotebook.c:408
+#: gtk/gtknotebook.c:406
 msgid "Whether tabs should be shown or not"
 msgstr "Vis/Ikke vis faner"
 
-#: gtk/gtknotebook.c:414
+#: gtk/gtknotebook.c:412
 msgid "Show Border"
 msgstr "Vis kant"
 
-#: gtk/gtknotebook.c:415
+#: gtk/gtknotebook.c:413
 msgid "Whether the border should be shown or not"
 msgstr "Vis/ikke vis kant"
 
-#: gtk/gtknotebook.c:421
+#: gtk/gtknotebook.c:419
 msgid "Scrollable"
 msgstr "Rullbar"
 
-#: gtk/gtknotebook.c:422
+#: gtk/gtknotebook.c:420
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr ""
 "Hvis SANN vil rullepiler legges til hvis det er flere faner enn det som "
 "passer"
 
-#: gtk/gtknotebook.c:428
+#: gtk/gtknotebook.c:426
 msgid "Enable Popup"
 msgstr "Slå på oppsprett"
 
-#: gtk/gtknotebook.c:429
+#: gtk/gtknotebook.c:427
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -2730,47 +2728,47 @@ msgstr ""
 "Hvis denne er satt til SANN vil det ved å klikke på notisblokken med høyre "
 "musknapp sprette opp en meny som kan brukes til å gå til en side"
 
-#: gtk/gtknotebook.c:436
+#: gtk/gtknotebook.c:434
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Om faner skal ha ensartet størrelse"
 
-#: gtk/gtknotebook.c:443
+#: gtk/gtknotebook.c:441
 msgid "Tab label"
 msgstr "Etikett for fanen"
 
-#: gtk/gtknotebook.c:444
+#: gtk/gtknotebook.c:442
 msgid "The string displayed on the childs tab label"
 msgstr "Strengen som vises i etterkommerens faneetikett"
 
-#: gtk/gtknotebook.c:450
+#: gtk/gtknotebook.c:448
 msgid "Menu label"
 msgstr "Etikett for meny"
 
-#: gtk/gtknotebook.c:451
+#: gtk/gtknotebook.c:449
 msgid "The string displayed in the childs menu entry"
 msgstr "Strengen som vises i etterkommerens menyoppføring"
 
-#: gtk/gtknotebook.c:464
+#: gtk/gtknotebook.c:462
 msgid "Tab expand"
 msgstr "Faneutvidelse"
 
-#: gtk/gtknotebook.c:465
+#: gtk/gtknotebook.c:463
 msgid "Whether to expand the childs tab or not"
 msgstr "Om etterkommers fane skal utvides eller ikke"
 
-#: gtk/gtknotebook.c:471
+#: gtk/gtknotebook.c:469
 msgid "Tab fill"
 msgstr "Fyll for fane"
 
-#: gtk/gtknotebook.c:472
+#: gtk/gtknotebook.c:470
 msgid "Wheather the childs tab should fill the allocated area or not"
 msgstr "Om etterkommers fane skal fylle allokert område eller ikke"
 
-#: gtk/gtknotebook.c:478
+#: gtk/gtknotebook.c:476
 msgid "Tab pack type"
 msgstr "Type fanepakking"
 
-#: gtk/gtknotebook.c:2467 gtk/gtknotebook.c:4751
+#: gtk/gtknotebook.c:2416 gtk/gtknotebook.c:4700
 #, c-format
 msgid "Page %u"
 msgstr "Side %u"
@@ -4862,18 +4860,24 @@ msgstr "Vietnamesisk (VIQR)"
 msgid "X Input Method"
 msgstr "X-inndatametode"
 
-#: modules/input/gtkimcontextxim.c:257
+#: modules/input/gtkimcontextxim.c:260
 msgid "IM Preedit style"
 msgstr "Stil for IM-forhåndsredigering"
 
-#: modules/input/gtkimcontextxim.c:258
+#: modules/input/gtkimcontextxim.c:261
 msgid "How to draw the input method preedit string"
 msgstr "Hvordan forhåndsredigeringsstrengen for en inndatametode tegnes"
 
-#: modules/input/gtkimcontextxim.c:266
+#: modules/input/gtkimcontextxim.c:269
 msgid "IM Status style"
 msgstr "IM statusstil"
 
-#: modules/input/gtkimcontextxim.c:267
+#: modules/input/gtkimcontextxim.c:270
 msgid "How to draw the input method statusbar"
 msgstr "Hvordan statuslinjen for inndatametoden tegnes"
+
+#~ msgid ""
+#~ "Whether the arrow keys work, even if the entry contents are not in the "
+#~ "list"
+#~ msgstr ""
+#~ "Om piltastene fungerer, selv om oppføringens innhold ikke er i listen"
