@@ -1,3 +1,9 @@
+Fri Apr 18 15:30:38 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkwindow-x11.c (set_text_property): Use
+	gdk_free_compound_text(), not g_free(). (#107643,
+	Michael Zucchi)
+
 Fri Apr 18 15:11:50 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkdisplay-x11.c (_gdk_display_x11_get_type)

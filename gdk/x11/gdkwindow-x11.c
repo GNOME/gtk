@@ -2093,7 +2093,7 @@ set_text_property (GdkDisplay  *display,
 		       PropModeReplace, prop_text,
 		       prop_length);
 
-      g_free (prop_text);
+      gdk_free_compound_text (prop_text);
     }
 }
 
