@@ -1,3 +1,8 @@
+2003-07-03  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/gdk.def: Add gdk_string_to_compound_text_for_display.
+	(#116537, Peter Zelezny)
+
 2003-07-01  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkspinbutton.c (gtk_spin_button_set_digits): Improve docs.  (116364, Morten Welinder)

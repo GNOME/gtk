@@ -401,6 +401,7 @@ EXPORTS
 	gdk_string_height
 	gdk_string_measure
 	gdk_string_to_compound_text
+	gdk_string_to_compound_text_for_display
 	gdk_string_width
 	gdk_subwindow_mode_get_type
 	gdk_synthesize_window_state
