@@ -5,14 +5,14 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 2.1.1\n"
+"Project-Id-Version: gtk+ 2.2\n"
 "POT-Creation-Date: 2003-06-09 16:30-0400\n"
-"PO-Revision-Date: 2002-12-07 16:19+0100\n"
+"PO-Revision-Date: 2003-07-10 13:17+0200\n"
 "Last-Translator: Andras Timar <timar@gnome.hu>\n"
 "Language-Team: Hungarian <hu@gnome.hu>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8-bit\n"
+"Content-Transfer-Encoding: 8bit\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:737
 #, c-format
@@ -155,111 +155,102 @@ msgstr ""
 msgid "The BMP image format"
 msgstr "BMP képformátum"
 
-#: gdk-pixbuf/io-gif.c:219
+#: gdk-pixbuf/io-gif.c:220
 #, c-format
 msgid "Failure reading GIF: %s"
 msgstr "Hiba a GIF olvasásánál: %s"
 
-#: gdk-pixbuf/io-gif.c:491 gdk-pixbuf/io-gif.c:1428 gdk-pixbuf/io-gif.c:1589
+#: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1431 gdk-pixbuf/io-gif.c:1592
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "A GIF fájl egyes adatai hiányoznak (lehet, hogy csonkolódott a fájl?)"
 
-#: gdk-pixbuf/io-gif.c:500
+#: gdk-pixbuf/io-gif.c:501
 #, c-format
 msgid "Internal error in the GIF loader (%s)"
 msgstr "Belső hiba a GIF betöltőben (%s)"
 
-#: gdk-pixbuf/io-gif.c:574
+#: gdk-pixbuf/io-gif.c:575
 msgid "Stack overflow"
 msgstr "Veremtúlcsordulás"
 
-#: gdk-pixbuf/io-gif.c:634
+#: gdk-pixbuf/io-gif.c:635
 msgid "GIF image loader can't understand this image."
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:663
+#: gdk-pixbuf/io-gif.c:664
 msgid "Bad code encountered"
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:673
+#: gdk-pixbuf/io-gif.c:674
 msgid "Circular table entry in GIF file"
 msgstr "Körkörös táblázat bejegyzés a GIF fájlban"
 
-#: gdk-pixbuf/io-gif.c:806 gdk-pixbuf/io-gif.c:1416 gdk-pixbuf/io-gif.c:1462
-#: gdk-pixbuf/io-gif.c:1577
+#: gdk-pixbuf/io-gif.c:826 gdk-pixbuf/io-gif.c:1419 gdk-pixbuf/io-gif.c:1465
+#: gdk-pixbuf/io-gif.c:1580
 msgid "Not enough memory to load GIF file"
 msgstr "Nincs elég memória a GIF-fájl betöltéséhez"
 
-#: gdk-pixbuf/io-gif.c:1053
+#: gdk-pixbuf/io-gif.c:1074
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "A GIF-kép hibás (nem megfelelő LZW-tömörítés)"
 
-#: gdk-pixbuf/io-gif.c:1103
+#: gdk-pixbuf/io-gif.c:1124
 msgid "File does not appear to be a GIF file"
 msgstr "A fájl nem tűnik GIF formátumúnak"
 
-#: gdk-pixbuf/io-gif.c:1115
+#: gdk-pixbuf/io-gif.c:1136
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "A %s verziójú GIF formátum nincs támogatva"
 
-#: gdk-pixbuf/io-gif.c:1188
-#, fuzzy
-msgid "GIF image contained a frame with height or width 0."
-msgstr "A GIF animáció egy nem megfelelő méretű képkockát tartalmaz"
-
-#: gdk-pixbuf/io-gif.c:1201
+#: gdk-pixbuf/io-gif.c:1211
 msgid "GIF image contained a frame appearing outside the image bounds."
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:1217
-msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
-msgstr ""
-
-#: gdk-pixbuf/io-gif.c:1252
+#: gdk-pixbuf/io-gif.c:1255
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:1484
+#: gdk-pixbuf/io-gif.c:1487
 msgid "GIF image was truncated or incomplete."
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:1636
+#: gdk-pixbuf/io-gif.c:1639
 msgid "The GIF image format"
 msgstr "GIF képformátum"
 
-#: gdk-pixbuf/io-ico.c:218 gdk-pixbuf/io-ico.c:277 gdk-pixbuf/io-ico.c:338
-#: gdk-pixbuf/io-ico.c:401 gdk-pixbuf/io-ico.c:418
+#: gdk-pixbuf/io-ico.c:217 gdk-pixbuf/io-ico.c:269 gdk-pixbuf/io-ico.c:330
+#: gdk-pixbuf/io-ico.c:393 gdk-pixbuf/io-ico.c:410
 msgid "Not enough memory to load icon"
 msgstr ""
 
-#: gdk-pixbuf/io-ico.c:262
+#: gdk-pixbuf/io-ico.c:254
 msgid "Invalid header in icon"
 msgstr ""
 
-#: gdk-pixbuf/io-ico.c:299
+#: gdk-pixbuf/io-ico.c:291
 msgid "Icon has zero width"
 msgstr "Az ikon szélessége nulla"
 
-#: gdk-pixbuf/io-ico.c:309
+#: gdk-pixbuf/io-ico.c:301
 msgid "Icon has zero height"
 msgstr "Az ikon magassága nulla"
 
-#: gdk-pixbuf/io-ico.c:353
+#: gdk-pixbuf/io-ico.c:345
 msgid "Compressed icons are not supported"
 msgstr "Tömörített ikonok nincsenek támogatva"
 
-#: gdk-pixbuf/io-ico.c:386
+#: gdk-pixbuf/io-ico.c:378
 msgid "Unsupported icon type"
 msgstr "Nem támogatott ikontípus"
 
-#: gdk-pixbuf/io-ico.c:466
+#: gdk-pixbuf/io-ico.c:458
 msgid "Not enough memory to load ICO file"
 msgstr ""
 
-#: gdk-pixbuf/io-ico.c:872
+#: gdk-pixbuf/io-ico.c:868
 msgid "The ICO image format"
 msgstr "ICO képformátum"
 
@@ -281,7 +272,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:673 gdk-pixbuf/io-jpeg.c:858
 msgid "Couldn't allocate memory for loading JPEG file"
-msgstr ""
+msgstr "Nem sikerült a memóriafoglalás a JPEG-fájl betöltéséhez"
 
 #: gdk-pixbuf/io-jpeg.c:812
 #, c-format
@@ -1168,15 +1159,15 @@ msgstr "Szöveg"
 
 #: gtk/gtkcellrenderertext.c:176
 msgid "Text to render"
-msgstr ""
+msgstr "Megjelenítendő szöveg"
 
 #: gtk/gtkcellrenderertext.c:183
 msgid "Markup"
-msgstr ""
+msgstr "Formátum"
 
 #: gtk/gtkcellrenderertext.c:184
 msgid "Marked up text to render"
-msgstr ""
+msgstr "Megjelenítendő formázott szöveg"
 
 #: gtk/gtkcellrenderertext.c:191 gtk/gtklabel.c:297
 msgid "Attributes"
@@ -1200,7 +1191,7 @@ msgstr "Háttérszín"
 
 #: gtk/gtkcellrenderertext.c:208
 msgid "Background color as a GdkColor"
-msgstr ""
+msgstr "Háttérszín, mint GdkColor"
 
 #: gtk/gtkcellrenderertext.c:215 gtk/gtktexttag.c:239
 msgid "Foreground color name"
@@ -1227,6 +1218,8 @@ msgstr "Szerkeszthető"
 msgid "Whether the text can be modified by the user"
 msgstr ""
 
+# #-#-#-#-#  gnome-terminal.HEAD.hu.po-new.po (gnome-terminal HEAD)  #-#-#-#-#
+# gnome-terminal/gnome-terminal.c:1127
 #: gtk/gtkcellrenderertext.c:240 gtk/gtkcellrenderertext.c:248
 #: gtk/gtkfontsel.c:217 gtk/gtktexttag.c:281 gtk/gtktexttag.c:289
 msgid "Font"
@@ -1234,11 +1227,11 @@ msgstr "Betűkészlet"
 
 #: gtk/gtkcellrenderertext.c:241
 msgid "Font description as a string"
-msgstr ""
+msgstr "Betűkészlet leírása szövegként"
 
 #: gtk/gtkcellrenderertext.c:249 gtk/gtktexttag.c:290
 msgid "Font description as a PangoFontDescription struct"
-msgstr ""
+msgstr "Betűkészlet leírása PangoFontDescription struktúraként"
 
 #: gtk/gtkcellrenderertext.c:257 gtk/gtktexttag.c:298
 msgid "Font family"
@@ -1246,7 +1239,7 @@ msgstr "Betűcsalád"
 
 #: gtk/gtkcellrenderertext.c:258 gtk/gtktexttag.c:299
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
-msgstr ""
+msgstr "A betűcsalád megnevezése, pl. Sans, Helvetica, Times, Monospace"
 
 #: gtk/gtkcellrenderertext.c:265 gtk/gtkcellrenderertext.c:266
 #: gtk/gtktexttag.c:306
@@ -1266,7 +1259,7 @@ msgstr "Betűvastagság"
 #: gtk/gtkcellrenderertext.c:293 gtk/gtkcellrenderertext.c:294
 #: gtk/gtktexttag.c:335
 msgid "Font stretch"
-msgstr ""
+msgstr "Betűszélesség"
 
 #: gtk/gtkcellrenderertext.c:302 gtk/gtkcellrenderertext.c:303
 #: gtk/gtktexttag.c:344
@@ -1275,11 +1268,11 @@ msgstr "Betűméret"
 
 #: gtk/gtkcellrenderertext.c:312 gtk/gtktexttag.c:364
 msgid "Font points"
-msgstr ""
+msgstr "Pont"
 
 #: gtk/gtkcellrenderertext.c:313 gtk/gtktexttag.c:365
 msgid "Font size in points"
-msgstr ""
+msgstr "Méret pontokban"
 
 #: gtk/gtkcellrenderertext.c:322 gtk/gtktexttag.c:354
 #, fuzzy
@@ -1292,28 +1285,30 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:332 gtk/gtktexttag.c:423
 msgid "Rise"
-msgstr ""
+msgstr "Elhelyezés"
 
 #: gtk/gtkcellrenderertext.c:333
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative)"
 msgstr ""
+"Szöveg eltolása az alapvonal fölé (ha az elhelyezés negatív, az alapvonal "
+"alá)"
 
 #: gtk/gtkcellrenderertext.c:343 gtk/gtktexttag.c:463
 msgid "Strikethrough"
-msgstr ""
+msgstr "Áthúzás"
 
 #: gtk/gtkcellrenderertext.c:344 gtk/gtktexttag.c:464
 msgid "Whether to strike through the text"
-msgstr ""
+msgstr "Szöveg áthúzása"
 
 #: gtk/gtkcellrenderertext.c:351 gtk/gtktexttag.c:471
 msgid "Underline"
-msgstr ""
+msgstr "Aláhúzás"
 
 #: gtk/gtkcellrenderertext.c:352 gtk/gtktexttag.c:472
 msgid "Style of underline for this text"
-msgstr ""
+msgstr "A szöveg aláhúzásának stílusa"
 
 #: gtk/gtkcellrenderertext.c:362 gtk/gtktexttag.c:508
 msgid "Background set"
@@ -1341,51 +1336,51 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:374 gtk/gtktexttag.c:532
 msgid "Font family set"
-msgstr ""
+msgstr "Betűcsalád beállítása"
 
 #: gtk/gtkcellrenderertext.c:375 gtk/gtktexttag.c:533
 msgid "Whether this tag affects the font family"
-msgstr ""
+msgstr "Az elem befolyásolja a betűcsaládot"
 
 #: gtk/gtkcellrenderertext.c:378 gtk/gtktexttag.c:536
 msgid "Font style set"
-msgstr ""
+msgstr "Betűstílus beállítása"
 
 #: gtk/gtkcellrenderertext.c:379 gtk/gtktexttag.c:537
 msgid "Whether this tag affects the font style"
-msgstr ""
+msgstr "Az elem befolyásolja a betű stílusát"
 
 #: gtk/gtkcellrenderertext.c:382 gtk/gtktexttag.c:540
 msgid "Font variant set"
-msgstr ""
+msgstr "Betűváltozat beállítása"
 
 #: gtk/gtkcellrenderertext.c:383 gtk/gtktexttag.c:541
 msgid "Whether this tag affects the font variant"
-msgstr ""
+msgstr "Az elem befolyásolja a betű változatát"
 
 #: gtk/gtkcellrenderertext.c:386 gtk/gtktexttag.c:544
 msgid "Font weight set"
-msgstr ""
+msgstr "Betű erősségének beállítása"
 
 #: gtk/gtkcellrenderertext.c:387 gtk/gtktexttag.c:545
 msgid "Whether this tag affects the font weight"
-msgstr ""
+msgstr "Az elem befolyásolja a betű erősségét"
 
 #: gtk/gtkcellrenderertext.c:390 gtk/gtktexttag.c:548
 msgid "Font stretch set"
-msgstr ""
+msgstr "Betűszélesség beállítása"
 
 #: gtk/gtkcellrenderertext.c:391 gtk/gtktexttag.c:549
 msgid "Whether this tag affects the font stretch"
-msgstr ""
+msgstr "Az elem befolyásolja a betű szélességét"
 
 #: gtk/gtkcellrenderertext.c:394 gtk/gtktexttag.c:552
 msgid "Font size set"
-msgstr ""
+msgstr "Betűméret beállítása"
 
 #: gtk/gtkcellrenderertext.c:395 gtk/gtktexttag.c:553
 msgid "Whether this tag affects the font size"
-msgstr ""
+msgstr "Az elem befolyásolja a betű méretét"
 
 #: gtk/gtkcellrenderertext.c:398 gtk/gtktexttag.c:556
 msgid "Font scale set"
@@ -1397,27 +1392,27 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:402 gtk/gtktexttag.c:576
 msgid "Rise set"
-msgstr ""
+msgstr "Elhelyezés beállítása"
 
 #: gtk/gtkcellrenderertext.c:403 gtk/gtktexttag.c:577
 msgid "Whether this tag affects the rise"
-msgstr ""
+msgstr "Az elem befolyásolja a betű elhelyezését"
 
 #: gtk/gtkcellrenderertext.c:406 gtk/gtktexttag.c:592
 msgid "Strikethrough set"
-msgstr ""
+msgstr "Áthúzás beállítása"
 
 #: gtk/gtkcellrenderertext.c:407 gtk/gtktexttag.c:593
 msgid "Whether this tag affects strikethrough"
-msgstr ""
+msgstr "Az elem befolyásolja a betű áthúzását"
 
 #: gtk/gtkcellrenderertext.c:410 gtk/gtktexttag.c:600
 msgid "Underline set"
-msgstr ""
+msgstr "Aláhúzás beállítása"
 
 #: gtk/gtkcellrenderertext.c:411 gtk/gtktexttag.c:601
 msgid "Whether this tag affects underlining"
-msgstr ""
+msgstr "Az elem befolyásolja az aláhúzást"
 
 #: gtk/gtkcellrenderertoggle.c:132
 msgid "Toggle state"
@@ -1651,7 +1646,7 @@ msgstr ""
 
 #: gtk/gtkcombo.c:157
 msgid "Case sensitive"
-msgstr ""
+msgstr "Kis- és nagybetű megkülönböztetése"
 
 #: gtk/gtkcombo.c:158
 msgid "Whether list item matching is case sensitive"
@@ -1778,10 +1773,10 @@ msgstr "Kurzorpozíció"
 msgid "The current position of the insertion cursor in chars"
 msgstr ""
 
+# components/help/converters/gnome-db2html2/sect-elements.c:1028
 #: gtk/gtkentry.c:449 gtk/gtklabel.c:378
-#, fuzzy
 msgid "Selection Bound"
-msgstr "Kiválasztott: "
+msgstr "Kijelölés mérete"
 
 #: gtk/gtkentry.c:450 gtk/gtklabel.c:379
 msgid ""
@@ -1866,18 +1861,29 @@ msgstr "Kiválasztott: "
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr ""
 
+# #-#-#-#-#  epiphany.HEAD.hu.po-new.po (Epiphany CVS)  #-#-#-#-#
+# src/trans.h:52 src/trans.h:336
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:52 src/trans.h:336
 #: gtk/gtkentry.c:3993 gtk/gtklabel.c:3222 gtk/gtktextview.c:6621
 msgid "Select All"
 msgstr "Mindent kijelöl"
 
 #: gtk/gtkentry.c:4003 gtk/gtklabel.c:3232
 msgid "Input Methods"
-msgstr "Beviteli módszerek"
+msgstr "Beviteli módok"
 
 #: gtk/gtkentry.c:4013 gtk/gtktextview.c:6640
 msgid "_Insert Unicode control character"
 msgstr "_Unicode vezérlőkarakter beszúrása"
 
+# #-#-#-#-#  epiphany.HEAD.hu.po-new.po (Epiphany CVS)  #-#-#-#-#
+# src/trans.h:377
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# #-#-#-#-#  epiphany.HEAD.hu.po-new.po (Epiphany CVS)  #-#-#-#-#
+# src/trans.h:377
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:377
 #: gtk/gtkfilesel.c:551 gtk/gtkimage.c:167
 msgid "Filename"
 msgstr "Fájlnév"
@@ -2061,7 +2067,7 @@ msgstr "Érvénytelen UTF-8"
 
 #: gtk/gtkfilesel.c:3991
 msgid "Name too long"
-msgstr "Túl hosszú a név"
+msgstr "A név túl hosszú"
 
 #: gtk/gtkfilesel.c:3993
 msgid "Couldn't convert filename"
@@ -2069,7 +2075,7 @@ msgstr ""
 
 #: gtk/gtkfixed.c:120 gtk/gtklayout.c:611
 msgid "X position"
-msgstr ""
+msgstr "X pozíció"
 
 #: gtk/gtkfixed.c:121 gtk/gtklayout.c:612
 msgid "X position of child widget"
@@ -2077,7 +2083,7 @@ msgstr ""
 
 #: gtk/gtkfixed.c:130 gtk/gtklayout.c:621
 msgid "Y position"
-msgstr ""
+msgstr "Y pozíció"
 
 #: gtk/gtkfixed.c:131 gtk/gtklayout.c:622
 msgid "Y position of child widget"
@@ -2091,7 +2097,7 @@ msgstr "árvíztűrő tükörfúrógép ÁRVÍZTŰRŐ TÜKÖRFÚRÓGÉP"
 
 #: gtk/gtkfontsel.c:210
 msgid "Font name"
-msgstr "Betűtípus"
+msgstr "Betűkészlet neve"
 
 #: gtk/gtkfontsel.c:211
 msgid "The X string that represents this font"
@@ -2103,7 +2109,7 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:224
 msgid "Preview text"
-msgstr "Minta szöveg"
+msgstr "Mintaszöveg"
 
 #: gtk/gtkfontsel.c:225
 msgid "The text to display in order to demonstrate the selected font"
@@ -2128,7 +2134,7 @@ msgstr "_Előnézet:"
 
 #: gtk/gtkfontsel.c:1285
 msgid "Font Selection"
-msgstr "Betűkészlet választó"
+msgstr "Betűkészlet kiválasztása"
 
 #: gtk/gtkframe.c:126
 msgid "Text of the frame's label"
@@ -2240,6 +2246,11 @@ msgstr ""
 msgid "A GdkPixmap to display"
 msgstr ""
 
+# #-#-#-#-#  gnumeric.HEAD.hu.po-new.po (gnumeric 0.70)  #-#-#-#-#
+# #-#-#-#-#  nautilus.HEAD.hu.po-new.po (nautilus CVS-HEAD)  #-#-#-#-#
+# src/nautilus-property-browser.c:957
+# #-#-#-#-#  nautilus.HEAD.hu.po-new.po (nautilus CVS-HEAD)  #-#-#-#-#
+# src/nautilus-property-browser.c:957
 #: gtk/gtkimage.c:151
 msgid "Image"
 msgstr "Kép"
@@ -2305,19 +2316,25 @@ msgstr "Kép widget"
 msgid "Child widget to appear next to the menu text"
 msgstr ""
 
+# #-#-#-#-#  gnome-system-tools.HEAD.hu.po-new.po (gnome-system-tools CVS)  #-#-#-#-#
+# interfaces/users.glade.h:63
+# #-#-#-#-#  gnumeric.HEAD.hu.po-new.po (gnumeric 0.70)  #-#-#-#-#
+# #-#-#-#-#  gnome-system-tools.HEAD.hu.po-new.po (gnome-system-tools CVS)  #-#-#-#-#
+# interfaces/users.glade.h:63
 #: gtk/gtkimmodule.c:419
-#, fuzzy
 msgid "Default"
-msgstr "default:LTR"
+msgstr "Alapértelmezett"
 
 #: gtk/gtkinputdialog.c:230
 msgid "Input"
-msgstr "Bevitel"
+msgstr "Bemenet"
 
 #: gtk/gtkinputdialog.c:239
 msgid "No input devices"
 msgstr "Nincs beviteli eszköz"
 
+# #-#-#-#-#  gnome-system-tools.HEAD.hu.po-new.po (gnome-system-tools CVS)  #-#-#-#-#
+# interfaces/disks.glade.h:9 interfaces/memory.glade.h:14
 #: gtk/gtkinputdialog.c:251
 msgid "_Device:"
 msgstr "_Eszköz:"
@@ -2372,6 +2389,8 @@ msgstr "Y döntés"
 msgid "Wheel"
 msgstr "Görgő"
 
+# #-#-#-#-#  nautilus.HEAD.hu.po-new.po (nautilus CVS-HEAD)  #-#-#-#-#
+# src/file-manager/fm-icon-text-window.c:87
 #: gtk/gtkinputdialog.c:602
 msgid "none"
 msgstr "nincs"
@@ -2411,7 +2430,7 @@ msgstr ""
 
 #: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:593
 msgid "Justification"
-msgstr ""
+msgstr "Sorkizárás"
 
 #: gtk/gtklabel.c:320
 msgid ""
@@ -2432,7 +2451,7 @@ msgstr ""
 
 #: gtk/gtklabel.c:336
 msgid "Line wrap"
-msgstr ""
+msgstr "Sorok tördelése"
 
 #: gtk/gtklabel.c:337
 msgid "If set, wrap lines if the text becomes too wide"
@@ -2621,7 +2640,7 @@ msgstr ""
 
 #: gtk/gtknotebook.c:378
 msgid "Page"
-msgstr "Lap"
+msgstr "Oldal"
 
 #: gtk/gtknotebook.c:379
 msgid "The index of the current page"
@@ -2769,7 +2788,7 @@ msgstr ""
 
 #: gtk/gtkpaned.c:234
 msgid "Handle Size"
-msgstr ""
+msgstr "Fogantyúméret"
 
 #: gtk/gtkpaned.c:235
 msgid "Width of handle"
@@ -2821,7 +2840,7 @@ msgstr ""
 
 #: gtk/gtkprogressbar.c:142 gtk/gtkrange.c:290 gtk/gtkspinbutton.c:240
 msgid "Adjustment"
-msgstr ""
+msgstr "Igazítás"
 
 #: gtk/gtkprogressbar.c:143
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
@@ -2829,7 +2848,7 @@ msgstr ""
 
 #: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:231
 msgid "Orientation"
-msgstr ""
+msgstr "Irány"
 
 #: gtk/gtkprogressbar.c:151
 msgid "Orientation and growth direction of the progress bar"
@@ -2872,9 +2891,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkprogressbar.c:198
-#, fuzzy
 msgid "Fraction"
-msgstr "Információ"
+msgstr "Tört"
 
 #: gtk/gtkprogressbar.c:199
 msgid "The fraction of total work that has been completed"
@@ -2892,9 +2910,11 @@ msgstr ""
 msgid "Text to be displayed in the progress bar"
 msgstr ""
 
+# #-#-#-#-#  gnome-system-tools.HEAD.hu.po-new.po (gnome-system-tools CVS)  #-#-#-#-#
+# interfaces/users.glade.h:47
 #: gtk/gtkradiobutton.c:109
 msgid "Group"
-msgstr ""
+msgstr "Csoport"
 
 #: gtk/gtkradiobutton.c:110
 msgid "The radio button whose group this widget belongs."
@@ -3168,9 +3188,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtksettings.c:176
-#, fuzzy
 msgid "Cursor Blink"
-msgstr "Tiltva"
+msgstr "Villogó kurzor"
 
 #: gtk/gtksettings.c:177
 msgid "Whether the cursor should blink"
@@ -3229,16 +3248,15 @@ msgstr ""
 
 #: gtk/gtksettings.c:235
 msgid "Font Name"
-msgstr "Betűtípus"
+msgstr "Betűkészlet neve"
 
 #: gtk/gtksettings.c:236
 msgid "Name of default font to use"
-msgstr ""
+msgstr "A használandó alapértelmezett betűkészlet neve"
 
 #: gtk/gtksettings.c:244
-#, fuzzy
 msgid "Icon Sizes"
-msgstr "Ikonméret"
+msgstr "Ikonméretek"
 
 #: gtk/gtksettings.c:245
 msgid "List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."
@@ -3317,19 +3335,43 @@ msgstr ""
 msgid "Style of bevel around the statusbar text"
 msgstr ""
 
+# #-#-#-#-#  nautilus.HEAD.hu.po-new.po (nautilus CVS-HEAD)  #-#-#-#-#
+# components/help/Nautilus_View_help.oaf.in.h:8
+# #-#-#-#-#  zenity.HEAD.hu.po-new.po (zenity CVS)  #-#-#-#-#
+# #-#-#-#-#  nautilus.HEAD.hu.po-new.po (nautilus CVS-HEAD)  #-#-#-#-#
+# components/help/Nautilus_View_help.oaf.in.h:8
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: gtk/gtkstock.c:267
 msgid "Information"
 msgstr "Információ"
 
+# #-#-#-#-#  eel.HEAD.hu.po-new.po (eel CVS-HEAD)  #-#-#-#-#
+# libnautilus-extensions/nautilus-stock-dialogs.c:519
+# #-#-#-#-#  zenity.HEAD.hu.po-new.po (zenity CVS)  #-#-#-#-#
+# #-#-#-#-#  eel.HEAD.hu.po-new.po (eel CVS-HEAD)  #-#-#-#-#
+# libnautilus-extensions/nautilus-stock-dialogs.c:519
 #: gtk/gtkstock.c:268
 msgid "Warning"
-msgstr "Figyelem"
+msgstr "Figyelmeztetés"
 
+# #-#-#-#-#  eel.HEAD.hu.po-new.po (eel CVS-HEAD)  #-#-#-#-#
+# libnautilus-extensions/nautilus-stock-dialogs.c:530
+# libnautilus-extensions/nautilus-stock-dialogs.c:570
+# #-#-#-#-#  zenity.HEAD.hu.po-new.po (zenity CVS)  #-#-#-#-#
+# #-#-#-#-#  eel.HEAD.hu.po-new.po (eel CVS-HEAD)  #-#-#-#-#
+# libnautilus-extensions/nautilus-stock-dialogs.c:530
+# libnautilus-extensions/nautilus-stock-dialogs.c:570
 #: gtk/gtkstock.c:269
 msgid "Error"
 msgstr "Hiba"
 
+# #-#-#-#-#  eel.HEAD.hu.po-new.po (eel CVS-HEAD)  #-#-#-#-#
+# libnautilus-extensions/nautilus-stock-dialogs.c:603
+# libnautilus-extensions/nautilus-stock-dialogs.c:631
+# #-#-#-#-#  zenity.HEAD.hu.po-new.po (zenity CVS)  #-#-#-#-#
+# #-#-#-#-#  eel.HEAD.hu.po-new.po (eel CVS-HEAD)  #-#-#-#-#
+# libnautilus-extensions/nautilus-stock-dialogs.c:603
+# libnautilus-extensions/nautilus-stock-dialogs.c:631
 #: gtk/gtkstock.c:270
 msgid "Question"
 msgstr "Kérdés"
@@ -3361,6 +3403,23 @@ msgstr "_CDROM"
 msgid "_Clear"
 msgstr "_Törlés"
 
+# #-#-#-#-#  epiphany.HEAD.hu.po-new.po (Epiphany CVS)  #-#-#-#-#
+# src/trans.h:363
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# #-#-#-#-#  epiphany.HEAD.hu.po-new.po (Epiphany CVS)  #-#-#-#-#
+# src/trans.h:363
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:363
+# #-#-#-#-#  gnumeric.HEAD.hu.po-new.po (gnumeric 0.70)  #-#-#-#-#
+# #-#-#-#-#  epiphany.HEAD.hu.po-new.po (Epiphany CVS)  #-#-#-#-#
+# src/trans.h:363
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:363
+# #-#-#-#-#  gnumeric.HEAD.hu.po-new.po (gnumeric 0.70)  #-#-#-#-#
+# #-#-#-#-#  epiphany.HEAD.hu.po-new.po (Epiphany CVS)  #-#-#-#-#
+# src/trans.h:363
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:363
 #: gtk/gtkstock.c:281
 msgid "_Close"
 msgstr "_Bezárás"
@@ -3377,6 +3436,41 @@ msgstr "_Másolás"
 msgid "Cu_t"
 msgstr "_Kivágás"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# #-#-#-#-#  gnome-system-tools.HEAD.hu.po-new.po (gnome-system-tools CVS)  #-#-#-#-#
+# interfaces/nameresolution.glade.h:11 interfaces/nameresolution.glade.h:31
+# interfaces/nameresolution.glade.h:36 interfaces/nameresolution.glade.h:46
+# interfaces/users.glade.h:35 interfaces/users.glade.h:43
+# interfaces/users.glade.h:67
+# #-#-#-#-#  gnumeric.HEAD.hu.po-new.po (gnumeric 0.70)  #-#-#-#-#
+# #-#-#-#-#  gnome-system-tools.HEAD.hu.po-new.po (gnome-system-tools CVS)  #-#-#-#-#
+# interfaces/nameresolution.glade.h:11 interfaces/nameresolution.glade.h:31
+# interfaces/nameresolution.glade.h:36 interfaces/nameresolution.glade.h:46
+# interfaces/users.glade.h:35 interfaces/users.glade.h:43
+# interfaces/users.glade.h:67
+# #-#-#-#-#  nautilus.HEAD.hu.po-new.po (nautilus CVS-HEAD)  #-#-#-#-#
+# src/file-manager/fm-directory-view.c:2607
+# src/file-manager/fm-directory-view.c:2648
+# #-#-#-#-#  nautilus.HEAD.hu.po-new.po (nautilus CVS-HEAD)  #-#-#-#-#
+# src/file-manager/fm-directory-view.c:2607
+# src/file-manager/fm-directory-view.c:2648
+# #-#-#-#-#  gnome-system-tools.HEAD.hu.po-new.po (gnome-system-tools CVS)  #-#-#-#-#
+# interfaces/nameresolution.glade.h:11 interfaces/nameresolution.glade.h:31
+# interfaces/nameresolution.glade.h:36 interfaces/nameresolution.glade.h:46
+# interfaces/users.glade.h:35 interfaces/users.glade.h:43
+# interfaces/users.glade.h:67
+# #-#-#-#-#  gnumeric.HEAD.hu.po-new.po (gnumeric 0.70)  #-#-#-#-#
+# #-#-#-#-#  gnome-system-tools.HEAD.hu.po-new.po (gnome-system-tools CVS)  #-#-#-#-#
+# interfaces/nameresolution.glade.h:11 interfaces/nameresolution.glade.h:31
+# interfaces/nameresolution.glade.h:36 interfaces/nameresolution.glade.h:46
+# interfaces/users.glade.h:35 interfaces/users.glade.h:43
+# interfaces/users.glade.h:67
+# #-#-#-#-#  nautilus.HEAD.hu.po-new.po (nautilus CVS-HEAD)  #-#-#-#-#
+# src/file-manager/fm-directory-view.c:2607
+# src/file-manager/fm-directory-view.c:2648
+# #-#-#-#-#  nautilus.HEAD.hu.po-new.po (nautilus CVS-HEAD)  #-#-#-#-#
+# src/file-manager/fm-directory-view.c:2607
+# src/file-manager/fm-directory-view.c:2648
 #: gtk/gtkstock.c:285
 msgid "_Delete"
 msgstr "_Törlés"
@@ -3385,6 +3479,8 @@ msgstr "_Törlés"
 msgid "_Execute"
 msgstr "_Végrehajtás"
 
+# #-#-#-#-#  nautilus.HEAD.hu.po-new.po (nautilus CVS-HEAD)  #-#-#-#-#
+# src/nautilus-shell-ui.xml.h:78 src/nautilus-window-menus.c:1280
 #: gtk/gtkstock.c:287
 msgid "_Find"
 msgstr "_Keresés"
@@ -3413,6 +3509,17 @@ msgstr "_Utolsó"
 msgid "_Top"
 msgstr "_Fent"
 
+# #-#-#-#-#  epiphany.HEAD.hu.po-new.po (Epiphany CVS)  #-#-#-#-#
+# src/trans.h:35 src/trans.h:357
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# #-#-#-#-#  epiphany.HEAD.hu.po-new.po (Epiphany CVS)  #-#-#-#-#
+# src/trans.h:35 src/trans.h:357
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:35 src/trans.h:357
+# #-#-#-#-#  nautilus.HEAD.hu.po-new.po (nautilus CVS-HEAD)  #-#-#-#-#
+# src/nautilus-shell-ui.xml.h:69
+# #-#-#-#-#  nautilus.HEAD.hu.po-new.po (nautilus CVS-HEAD)  #-#-#-#-#
+# src/nautilus-shell-ui.xml.h:69
 #: gtk/gtkstock.c:294
 msgid "_Back"
 msgstr "_Vissza"
@@ -3425,17 +3532,45 @@ msgstr "_Le"
 msgid "_Forward"
 msgstr "_Előre"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# #-#-#-#-#  gnumeric.HEAD.hu.po-new.po (gnumeric 0.70)  #-#-#-#-#
+# #-#-#-#-#  nautilus.HEAD.hu.po-new.po (nautilus CVS-HEAD)  #-#-#-#-#
+# src/nautilus-shell-ui.xml.h:58
+# #-#-#-#-#  nautilus.HEAD.hu.po-new.po (nautilus CVS-HEAD)  #-#-#-#-#
+# src/nautilus-shell-ui.xml.h:58
+# #-#-#-#-#  gnumeric.HEAD.hu.po-new.po (gnumeric 0.70)  #-#-#-#-#
+# #-#-#-#-#  nautilus.HEAD.hu.po-new.po (nautilus CVS-HEAD)  #-#-#-#-#
+# src/nautilus-shell-ui.xml.h:58
+# #-#-#-#-#  nautilus.HEAD.hu.po-new.po (nautilus CVS-HEAD)  #-#-#-#-#
+# src/nautilus-shell-ui.xml.h:58
 #: gtk/gtkstock.c:297
 msgid "_Up"
 msgstr "_Fel"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# #-#-#-#-#  gnumeric.HEAD.hu.po-new.po (gnumeric 0.70)  #-#-#-#-#
+# #-#-#-#-#  nautilus.HEAD.hu.po-new.po (nautilus CVS-HEAD)  #-#-#-#-#
+# src/nautilus-shell-ui.xml.h:81
+# #-#-#-#-#  nautilus.HEAD.hu.po-new.po (nautilus CVS-HEAD)  #-#-#-#-#
+# src/nautilus-shell-ui.xml.h:81
+# #-#-#-#-#  gnumeric.HEAD.hu.po-new.po (gnumeric 0.70)  #-#-#-#-#
+# #-#-#-#-#  nautilus.HEAD.hu.po-new.po (nautilus CVS-HEAD)  #-#-#-#-#
+# src/nautilus-shell-ui.xml.h:81
+# #-#-#-#-#  nautilus.HEAD.hu.po-new.po (nautilus CVS-HEAD)  #-#-#-#-#
+# src/nautilus-shell-ui.xml.h:81
 #: gtk/gtkstock.c:298
 msgid "_Help"
 msgstr "_Súgó"
 
+# #-#-#-#-#  epiphany.HEAD.hu.po-new.po (Epiphany CVS)  #-#-#-#-#
+# src/trans.h:42
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:42
+# #-#-#-#-#  nautilus.HEAD.hu.po-new.po (nautilus CVS-HEAD)  #-#-#-#-#
+# src/nautilus-shell-ui.xml.h:82
 #: gtk/gtkstock.c:299
 msgid "_Home"
-msgstr "_Haza"
+msgstr "_Kezdőlap"
 
 #: gtk/gtkstock.c:300
 msgid "_Index"
@@ -3477,17 +3612,19 @@ msgstr "_Nem"
 msgid "_OK"
 msgstr "_OK"
 
+# #-#-#-#-#  nautilus.HEAD.hu.po-new.po (nautilus CVS-HEAD)  #-#-#-#-#
+# src/file-manager/nautilus-directory-view-ui.xml.h:40
 #: gtk/gtkstock.c:310
 msgid "_Open"
 msgstr "_Megnyitás"
 
 #: gtk/gtkstock.c:311
 msgid "_Paste"
-msgstr "Be_illesztés"
+msgstr "_Beillesztés"
 
 #: gtk/gtkstock.c:312
 msgid "_Preferences"
-msgstr "Beál_lítások"
+msgstr "_Beállítások"
 
 #: gtk/gtkstock.c:313
 msgid "_Print"
@@ -3495,7 +3632,7 @@ msgstr "_Nyomtatás"
 
 #: gtk/gtkstock.c:314
 msgid "Print Pre_view"
-msgstr "Nyomtatási előnézet"
+msgstr "Nyomtatási _kép"
 
 #: gtk/gtkstock.c:315
 msgid "_Properties"
@@ -3513,22 +3650,33 @@ msgstr "Új_ra"
 msgid "_Refresh"
 msgstr "_Frissítés"
 
+# #-#-#-#-#  gnome-system-tools.HEAD.hu.po-new.po (gnome-system-tools CVS)  #-#-#-#-#
+# interfaces/memory.glade.h:40 interfaces/shares.glade.h:56
+# interfaces/shares.glade.h:65 interfaces/shares.glade.h:68
+# #-#-#-#-#  gnumeric.HEAD.hu.po-new.po (gnumeric 0.70)  #-#-#-#-#
+# #-#-#-#-#  gnome-system-tools.HEAD.hu.po-new.po (gnome-system-tools CVS)  #-#-#-#-#
+# interfaces/memory.glade.h:40 interfaces/shares.glade.h:56
+# interfaces/shares.glade.h:65 interfaces/shares.glade.h:68
 #: gtk/gtkstock.c:319
 msgid "_Remove"
 msgstr "_Eltávolítás"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:97 src/trans.h:146
 #: gtk/gtkstock.c:320
 msgid "_Revert"
 msgstr "_Visszaállítás"
 
 #: gtk/gtkstock.c:321
 msgid "_Save"
-msgstr "_Mentés"
+msgstr "M_entés"
 
 #: gtk/gtkstock.c:322
 msgid "Save _As"
-msgstr "Mentés má_sként"
+msgstr "Men_tés másként"
 
+# src/trans.h:363
 #: gtk/gtkstock.c:323
 msgid "_Color"
 msgstr "_Szín"
@@ -3549,6 +3697,16 @@ msgstr "_Csökkenő"
 msgid "_Spell Check"
 msgstr "_Helyesírás-ellenőrzés"
 
+# #-#-#-#-#  epiphany.HEAD.hu.po-new.po (Epiphany CVS)  #-#-#-#-#
+# src/trans.h:31
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:31
+# #-#-#-#-#  nautilus.HEAD.hu.po-new.po (nautilus CVS-HEAD)  #-#-#-#-#
+# components/music/nautilus-music-view.c:1535
+# libnautilus-private/nautilus-file-operations.c:945
+# libnautilus-private/nautilus-file-operations.c:960
+# libnautilus-private/nautilus-file-operations.c:979
+# src/nautilus-shell-ui.xml.h:54
 #: gtk/gtkstock.c:328
 msgid "_Stop"
 msgstr "_Leállítás"
@@ -3565,6 +3723,11 @@ msgstr "_Visszaállítás"
 msgid "_Underline"
 msgstr "_Aláhúzás"
 
+# #-#-#-#-#  gnumeric.HEAD.hu.po-new.po (gnumeric 0.70)  #-#-#-#-#
+# #-#-#-#-#  nautilus.HEAD.hu.po-new.po (nautilus CVS-HEAD)  #-#-#-#-#
+# src/nautilus-shell-ui.xml.h:95
+# #-#-#-#-#  nautilus.HEAD.hu.po-new.po (nautilus CVS-HEAD)  #-#-#-#-#
+# src/nautilus-shell-ui.xml.h:95
 #: gtk/gtkstock.c:332
 msgid "_Undo"
 msgstr "_Visszavonás"
@@ -3581,10 +3744,32 @@ msgstr "_100% nagyítás"
 msgid "Zoom to _Fit"
 msgstr ""
 
+# #-#-#-#-#  epiphany.HEAD.hu.po-new.po (Epiphany CVS)  #-#-#-#-#
+# src/trans.h:45
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# #-#-#-#-#  epiphany.HEAD.hu.po-new.po (Epiphany CVS)  #-#-#-#-#
+# src/trans.h:45
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:45
+# #-#-#-#-#  nautilus.HEAD.hu.po-new.po (nautilus CVS-HEAD)  #-#-#-#-#
+# src/nautilus-shell-ui.xml.h:65
+# #-#-#-#-#  nautilus.HEAD.hu.po-new.po (nautilus CVS-HEAD)  #-#-#-#-#
+# src/nautilus-shell-ui.xml.h:65
 #: gtk/gtkstock.c:336
 msgid "Zoom _In"
 msgstr "_Nagyítás"
 
+# #-#-#-#-#  epiphany.HEAD.hu.po-new.po (Epiphany CVS)  #-#-#-#-#
+# src/trans.h:45
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# #-#-#-#-#  epiphany.HEAD.hu.po-new.po (Epiphany CVS)  #-#-#-#-#
+# src/trans.h:45
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:45
+# #-#-#-#-#  nautilus.HEAD.hu.po-new.po (nautilus CVS-HEAD)  #-#-#-#-#
+# src/nautilus-shell-ui.xml.h:66
+# #-#-#-#-#  nautilus.HEAD.hu.po-new.po (nautilus CVS-HEAD)  #-#-#-#-#
+# src/nautilus-shell-ui.xml.h:66
 #: gtk/gtkstock.c:337
 msgid "Zoom _Out"
 msgstr "_Kicsinyítés"
@@ -3774,7 +3959,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:264
 msgid "Text direction"
-msgstr "Szövegirány"
+msgstr "Szöveg iránya"
 
 #: gtk/gtktexttag.c:265
 msgid "Text direction, e.g. right-to-left or left-to-right"
@@ -3817,9 +4002,16 @@ msgstr ""
 msgid "Left, right, or center justification"
 msgstr ""
 
+# #-#-#-#-#  epiphany.HEAD.hu.po-new.po (Epiphany CVS)  #-#-#-#-#
+# src/prefs.c:416 src/trans.h:280
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# #-#-#-#-#  epiphany.HEAD.hu.po-new.po (Epiphany CVS)  #-#-#-#-#
+# src/prefs.c:416 src/trans.h:280
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/prefs.c:416 src/trans.h:280
 #: gtk/gtktexttag.c:383
 msgid "Language"
-msgstr ""
+msgstr "Nyelv"
 
 #: gtk/gtktexttag.c:384
 msgid ""
@@ -3846,7 +4038,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:412 gtk/gtktextview.c:622
 msgid "Indent"
-msgstr ""
+msgstr "Behúzás"
 
 #: gtk/gtktexttag.c:413 gtk/gtktextview.c:623
 msgid "Amount to indent the paragraph, in pixels"
@@ -3884,7 +4076,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:480
 msgid "Wrap mode"
-msgstr ""
+msgstr "Sortörési mód"
 
 #: gtk/gtktexttag.c:481 gtk/gtktextview.c:585
 msgid ""
@@ -3893,7 +4085,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:490 gtk/gtktextview.c:632
 msgid "Tabs"
-msgstr ""
+msgstr "Tabulátorok"
 
 #: gtk/gtktexttag.c:491 gtk/gtktextview.c:633
 msgid "Custom tabs for this text"
@@ -4058,32 +4250,31 @@ msgstr "ZWNJ Null szélességű _nem-összekötő"
 
 #: gtk/gtktextview.c:546
 msgid "Pixels Above Lines"
-msgstr ""
+msgstr "Sorok feletti pixelek"
 
 #: gtk/gtktextview.c:556
 msgid "Pixels Below Lines"
-msgstr ""
+msgstr "Sorok alatti pixelek"
 
 #: gtk/gtktextview.c:566
 msgid "Pixels Inside Wrap"
-msgstr ""
+msgstr "Törésen belüli pixelek"
 
 #: gtk/gtktextview.c:584
 msgid "Wrap Mode"
-msgstr ""
+msgstr "Sortörés módja"
 
 #: gtk/gtktextview.c:602
 msgid "Left Margin"
-msgstr ""
+msgstr "Bal oldali margó"
 
 #: gtk/gtktextview.c:612
 msgid "Right Margin"
-msgstr ""
+msgstr "Jobb oldali margó"
 
 #: gtk/gtktextview.c:640
-#, fuzzy
 msgid "Cursor Visible"
-msgstr "Tiltva"
+msgstr "Kurzor látható"
 
 #: gtk/gtktextview.c:641
 msgid "If the insertion cursor is shown"
@@ -4160,11 +4351,11 @@ msgstr ""
 
 #: gtk/gtktoolbar.c:285
 msgid "Style of bevel around the toolbar"
-msgstr ""
+msgstr "Az eszköztár körüli fazetta stílusa"
 
 #: gtk/gtktoolbar.c:291
 msgid "Toolbar style"
-msgstr ""
+msgstr "Eszköztár stílusa"
 
 #: gtk/gtktoolbar.c:292
 msgid ""
@@ -4203,7 +4394,7 @@ msgstr ""
 msgid "Vertical Adjustment for the widget"
 msgstr ""
 
-#: gtk/gtktreeview.c:544 gtk/gtktreeviewcolumn.c:185 gtk/gtkwidget.c:433
+#: gtk/gtktreeview.c:544 gtk/gtktreeviewcolumn.c:185 gtk/gtkwidget.c:505
 msgid "Visible"
 msgstr "Látható"
 
@@ -4261,11 +4452,11 @@ msgstr ""
 
 #: gtk/gtktreeview.c:606
 msgid "Expander Size"
-msgstr ""
+msgstr "Expander mérete"
 
 #: gtk/gtktreeview.c:607
 msgid "Size of the expander arrow"
-msgstr ""
+msgstr "A széthúzó nyíl mérete"
 
 #: gtk/gtktreeview.c:615
 msgid "Vertical Separator Width"
@@ -4349,7 +4540,7 @@ msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:229
 msgid "Minimum Width"
-msgstr ""
+msgstr "Minimális szélesség"
 
 #: gtk/gtktreeviewcolumn.c:230
 msgid "Minimum allowed width of the column"
@@ -4389,7 +4580,7 @@ msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:274
 msgid "Alignment"
-msgstr ""
+msgstr "Igazítás"
 
 #: gtk/gtktreeviewcolumn.c:275
 msgid "X Alignment of the column header text or widget"
@@ -4431,201 +4622,201 @@ msgstr ""
 msgid "Determines how the shadowed box around the viewport is drawn"
 msgstr ""
 
-#: gtk/gtkwidget.c:400
+#: gtk/gtkwidget.c:472
 msgid "Widget name"
 msgstr "Widget neve"
 
-#: gtk/gtkwidget.c:401
+#: gtk/gtkwidget.c:473
 msgid "The name of the widget"
 msgstr ""
 
-#: gtk/gtkwidget.c:407
+#: gtk/gtkwidget.c:479
 msgid "Parent widget"
 msgstr ""
 
-#: gtk/gtkwidget.c:408
+#: gtk/gtkwidget.c:480
 msgid "The parent widget of this widget. Must be a Container widget"
 msgstr ""
 
-#: gtk/gtkwidget.c:415
+#: gtk/gtkwidget.c:487
 msgid "Width request"
 msgstr ""
 
-#: gtk/gtkwidget.c:416
+#: gtk/gtkwidget.c:488
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
 msgstr ""
 
-#: gtk/gtkwidget.c:424
+#: gtk/gtkwidget.c:496
 msgid "Height request"
 msgstr ""
 
-#: gtk/gtkwidget.c:425
+#: gtk/gtkwidget.c:497
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
 msgstr ""
 
-#: gtk/gtkwidget.c:434
+#: gtk/gtkwidget.c:506
 msgid "Whether the widget is visible"
 msgstr ""
 
-#: gtk/gtkwidget.c:440
+#: gtk/gtkwidget.c:512
 msgid "Sensitive"
 msgstr ""
 
-#: gtk/gtkwidget.c:441
+#: gtk/gtkwidget.c:513
 msgid "Whether the widget responds to input"
 msgstr ""
 
-#: gtk/gtkwidget.c:447
+#: gtk/gtkwidget.c:519
 msgid "Application paintable"
 msgstr ""
 
-#: gtk/gtkwidget.c:448
+#: gtk/gtkwidget.c:520
 msgid "Whether the application will paint directly on the widget"
 msgstr ""
 
-#: gtk/gtkwidget.c:454
+#: gtk/gtkwidget.c:526
 msgid "Can focus"
 msgstr ""
 
-#: gtk/gtkwidget.c:455
+#: gtk/gtkwidget.c:527
 msgid "Whether the widget can accept the input focus"
 msgstr ""
 
-#: gtk/gtkwidget.c:461
+#: gtk/gtkwidget.c:533
 msgid "Has focus"
 msgstr ""
 
-#: gtk/gtkwidget.c:462
+#: gtk/gtkwidget.c:534
 msgid "Whether the widget has the input focus"
 msgstr ""
 
-#: gtk/gtkwidget.c:468
+#: gtk/gtkwidget.c:540
 msgid "Is focus"
 msgstr ""
 
-#: gtk/gtkwidget.c:469
+#: gtk/gtkwidget.c:541
 msgid "Whether the widget is the focus widget within the toplevel"
 msgstr ""
 
-#: gtk/gtkwidget.c:475
+#: gtk/gtkwidget.c:547
 #, fuzzy
 msgid "Can default"
 msgstr "default:LTR"
 
-#: gtk/gtkwidget.c:476
+#: gtk/gtkwidget.c:548
 msgid "Whether the widget can be the default widget"
 msgstr ""
 
-#: gtk/gtkwidget.c:482
+#: gtk/gtkwidget.c:554
 #, fuzzy
 msgid "Has default"
 msgstr "default:LTR"
 
-#: gtk/gtkwidget.c:483
+#: gtk/gtkwidget.c:555
 msgid "Whether the widget is the default widget"
 msgstr ""
 
-#: gtk/gtkwidget.c:489
+#: gtk/gtkwidget.c:561
 msgid "Receives default"
 msgstr ""
 
-#: gtk/gtkwidget.c:490
+#: gtk/gtkwidget.c:562
 msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr ""
 
-#: gtk/gtkwidget.c:496
+#: gtk/gtkwidget.c:568
 msgid "Composite child"
 msgstr ""
 
-#: gtk/gtkwidget.c:497
+#: gtk/gtkwidget.c:569
 msgid "Whether the widget is part of a composite widget"
 msgstr ""
 
-#: gtk/gtkwidget.c:503
+#: gtk/gtkwidget.c:575
 msgid "Style"
 msgstr "Stílus"
 
-#: gtk/gtkwidget.c:504
+#: gtk/gtkwidget.c:576
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
 msgstr ""
 
-#: gtk/gtkwidget.c:510
+#: gtk/gtkwidget.c:582
 msgid "Events"
 msgstr "Események"
 
-#: gtk/gtkwidget.c:511
+#: gtk/gtkwidget.c:583
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr ""
 
-#: gtk/gtkwidget.c:518
+#: gtk/gtkwidget.c:590
 msgid "Extension events"
 msgstr ""
 
-#: gtk/gtkwidget.c:519
+#: gtk/gtkwidget.c:591
 msgid "The mask that decides what kind of extension events this widget gets"
 msgstr ""
 
-#: gtk/gtkwidget.c:1098
+#: gtk/gtkwidget.c:1170
 msgid "Interior Focus"
 msgstr ""
 
-#: gtk/gtkwidget.c:1099
+#: gtk/gtkwidget.c:1171
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr ""
 
-#: gtk/gtkwidget.c:1105
+#: gtk/gtkwidget.c:1177
 msgid "Focus linewidth"
 msgstr ""
 
-#: gtk/gtkwidget.c:1106
+#: gtk/gtkwidget.c:1178
 msgid "Width, in pixels, of the focus indicator line"
 msgstr ""
 
-#: gtk/gtkwidget.c:1112
+#: gtk/gtkwidget.c:1184
 msgid "Focus line dash pattern"
 msgstr ""
 
-#: gtk/gtkwidget.c:1113
+#: gtk/gtkwidget.c:1185
 msgid "Dash pattern used to draw the focus indicator"
 msgstr ""
 
-#: gtk/gtkwidget.c:1118
+#: gtk/gtkwidget.c:1190
 msgid "Focus padding"
 msgstr ""
 
-#: gtk/gtkwidget.c:1119
+#: gtk/gtkwidget.c:1191
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr ""
 
-#: gtk/gtkwidget.c:1124
+#: gtk/gtkwidget.c:1196
 msgid "Cursor color"
 msgstr ""
 
-#: gtk/gtkwidget.c:1125
+#: gtk/gtkwidget.c:1197
 msgid "Color with which to draw insertion cursor"
 msgstr ""
 
-#: gtk/gtkwidget.c:1130
+#: gtk/gtkwidget.c:1202
 msgid "Secondary cursor color"
 msgstr ""
 
-#: gtk/gtkwidget.c:1131
+#: gtk/gtkwidget.c:1203
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
 msgstr ""
 
-#: gtk/gtkwidget.c:1136
+#: gtk/gtkwidget.c:1208
 msgid "Cursor line aspect ratio"
 msgstr ""
 
-#: gtk/gtkwidget.c:1137
+#: gtk/gtkwidget.c:1209
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr ""
 
@@ -4639,7 +4830,7 @@ msgstr ""
 
 #: gtk/gtkwindow.c:466
 msgid "Window Title"
-msgstr "Ablakcím"
+msgstr "Ablak címe"
 
 #: gtk/gtkwindow.c:467
 msgid "The title of the window"
@@ -4670,7 +4861,7 @@ msgstr ""
 
 #: gtk/gtkwindow.c:499
 msgid "Modal"
-msgstr "Modal"
+msgstr "Modális"
 
 #: gtk/gtkwindow.c:500
 msgid ""
@@ -4806,18 +4997,18 @@ msgstr "Vietnami (VIQR)"
 msgid "X Input Method"
 msgstr ""
 
-#: modules/input/gtkimcontextxim.c:263
+#: modules/input/gtkimcontextxim.c:276
 msgid "IM Preedit style"
 msgstr ""
 
-#: modules/input/gtkimcontextxim.c:264
+#: modules/input/gtkimcontextxim.c:277
 msgid "How to draw the input method preedit string"
 msgstr ""
 
-#: modules/input/gtkimcontextxim.c:272
+#: modules/input/gtkimcontextxim.c:285
 msgid "IM Status style"
 msgstr ""
 
-#: modules/input/gtkimcontextxim.c:273
+#: modules/input/gtkimcontextxim.c:286
 msgid "How to draw the input method statusbar"
 msgstr ""
