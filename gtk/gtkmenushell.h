@@ -56,15 +56,15 @@ struct _GtkMenuShell
   GtkWidget *active_menu_item;
   GtkWidget *parent_menu_shell;
   
+  guint button;
+  guint32 activate_time;
+
   guint active : 1;
   guint have_grab : 1;
   guint have_xgrab : 1;
-  guint button : 2;
   guint ignore_leave : 1;
   guint menu_flag : 1;
   guint ignore_enter : 1;
-  
-  guint32 activate_time;
 };
 
 struct _GtkMenuShellClass

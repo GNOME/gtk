@@ -1,3 +1,7 @@
+2000-11-21  Elliot Lee  <sopwith@redhat.com>
+	* gtk/gtkmenushell.h: GdkEventButton->button can occupy significantly
+	more than 2 bits. Besides, I need to implement an evil hack. :)
+
 Tue Nov 21 14:17:51 GMT 2000  Tony Gale <gale@gtk.org>
 
 	* docs/tutorial/gtk-tut.sgml: minor corrections
