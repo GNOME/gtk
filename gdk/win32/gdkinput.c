@@ -225,7 +225,7 @@ gdk_device_free_history (GdkTimeCoord **events,
 }
 
 GdkInputWindow *
-gdk_input_window_find(GdkWindow *window)
+_gdk_input_window_find(GdkWindow *window)
 {
   GList *tmp_list;
 
@@ -282,7 +282,7 @@ gdk_input_set_extension_events (GdkWindow *window, gint mask,
     }
   else
     {
-      iw = gdk_input_window_find (window);
+      iw = _gdk_input_window_find (window);
       if (iw)
 	{
 	  _gdk_input_windows = g_list_remove(_gdk_input_windows,iw);
@@ -308,11 +308,11 @@ gdk_input_set_extension_events (GdkWindow *window, gint mask,
 }
 
 void
-gdk_input_window_destroy (GdkWindow *window)
+_gdk_input_window_destroy (GdkWindow *window)
 {
   GdkInputWindow *input_window;
 
-  input_window = gdk_input_window_find (window);
+  input_window = _gdk_input_window_find (window);
   g_return_if_fail (input_window != NULL);
 
   _gdk_input_windows = g_list_remove (_gdk_input_windows,input_window);

@@ -661,7 +661,7 @@ _gdk_input_configure_event (GdkEventConfigure *event,
   GdkInputWindow *input_window;
   int root_x, root_y;
 
-  input_window = gdk_input_window_find (window);
+  input_window = _gdk_input_window_find (window);
   g_return_if_fail (window != NULL);
 
   gdk_input_get_root_relative_geometry (GDK_WINDOW_HWND (window),
@@ -678,7 +678,7 @@ _gdk_input_enter_event (GdkEventCrossing *event,
   GdkInputWindow *input_window;
   int root_x, root_y;
 
-  input_window = gdk_input_window_find (window);
+  input_window = _gdk_input_window_find (window);
   g_return_if_fail (window != NULL);
 
   gdk_input_get_root_relative_geometry (GDK_WINDOW_HWND (window), &root_x, &root_y);
@@ -835,7 +835,7 @@ _gdk_input_other_event (GdkEvent  *event,
 	  goto dijkstra;
 	}
 
-      input_window = gdk_input_window_find (window);
+      input_window = _gdk_input_window_find (window);
 
       g_assert (input_window != NULL);
 
@@ -1162,7 +1162,7 @@ gdk_device_get_state (GdkDevice       *device,
 	gdk_window_get_pointer (window, NULL, NULL, mask);
       
       gdkdev = (GdkDevicePrivate *)device;
-      input_window = gdk_input_window_find (window);
+      input_window = _gdk_input_window_find (window);
       g_return_if_fail (input_window != NULL);
 
 #if 0 /* FIXME */

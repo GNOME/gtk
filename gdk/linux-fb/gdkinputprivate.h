@@ -137,20 +137,16 @@ extern gint             _gdk_input_ignore_core;
 
 /* Function declarations */
 
-GdkDevicePrivate * gdk_input_find_device    (guint32           id);
-GdkInputWindow *   gdk_input_window_find    (GdkWindow        *window);
-void               gdk_input_window_destroy (GdkWindow        *window);
+GdkInputWindow *   _gdk_input_window_find    (GdkWindow        *window);
+void               _gdk_input_window_destroy (GdkWindow        *window);
 void               _gdk_input_init           (void);
 void               _gdk_input_exit           (void);
-gint               gdk_input_enable_window  (GdkWindow        *window,
-					     GdkDevicePrivate *gdkdev);
-gint               gdk_input_disable_window (GdkWindow        *window,
-					     GdkDevicePrivate *gdkdev);
-void              _gdk_init_input_core      (void);
+gint               _gdk_input_enable_window  (GdkWindow        *window,
+					      GdkDevicePrivate *gdkdev);
+gint               _gdk_input_disable_window (GdkWindow        *window,
+					      GdkDevicePrivate *gdkdev);
+void               _gdk_init_input_core      (void);
 
-GdkDevicePrivate *gdk_input_find_device (guint32 id);
-GdkInputWindow *gdk_input_window_find (GdkWindow *window);
-void gdk_input_window_destroy (GdkWindow *window);
 void _gdk_input_exit           (void);
 
 #endif /* __GDK_INPUTPRIVATE_H__ */

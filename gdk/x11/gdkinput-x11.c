@@ -46,8 +46,8 @@ static guint             gdk_input_translate_state       (guint             stat
 							  guint             device_state);
 
 GdkDevicePrivate *
-gdk_input_find_device (GdkDisplay *display,
-		       guint32     id)
+_gdk_input_find_device (GdkDisplay *display,
+			guint32     id)
 {
   GList *tmp_list = GDK_DISPLAY_X11 (display)->input_devices;
   GdkDevicePrivate *gdkdev;
@@ -62,8 +62,8 @@ gdk_input_find_device (GdkDisplay *display,
 }
 
 void
-gdk_input_get_root_relative_geometry(Display *display, Window w, int *x_ret, int *y_ret,
-				     int *width_ret, int *height_ret)
+_gdk_input_get_root_relative_geometry(Display *display, Window w, int *x_ret, int *y_ret,
+				      int *width_ret, int *height_ret)
 {
   Window root, parent, child;
   Window *children;
@@ -258,11 +258,11 @@ gdk_input_device_new (GdkDisplay  *display,
 }
 
 void
-gdk_input_common_find_events(GdkWindow *window,
-			     GdkDevicePrivate *gdkdev,
-			     gint mask,
-			     XEventClass *classes,
-			     int *num_classes)
+_gdk_input_common_find_events(GdkWindow *window,
+			      GdkDevicePrivate *gdkdev,
+			      gint mask,
+			      XEventClass *classes,
+			      int *num_classes)
 {
   gint i;
   XEventClass class;
@@ -360,18 +360,18 @@ gdk_input_common_find_events(GdkWindow *window,
 }
 
 void
-gdk_input_common_select_events(GdkWindow *window,
-			       GdkDevicePrivate *gdkdev)
+_gdk_input_common_select_events(GdkWindow *window,
+				GdkDevicePrivate *gdkdev)
 {
   XEventClass classes[GDK_MAX_DEVICE_CLASSES];
   gint num_classes;
 
   if (gdkdev->info.mode == GDK_MODE_DISABLED)
-    gdk_input_common_find_events(window, gdkdev, 0, classes, &num_classes);
+    _gdk_input_common_find_events(window, gdkdev, 0, classes, &num_classes);
   else
-    gdk_input_common_find_events(window, gdkdev, 
-				 ((GdkWindowObject *)window)->extension_events,
-				 classes, &num_classes);
+    _gdk_input_common_find_events(window, gdkdev, 
+				  ((GdkWindowObject *)window)->extension_events,
+				  classes, &num_classes);
   
   XSelectExtensionEvent (GDK_WINDOW_XDISPLAY (window),
 			 GDK_WINDOW_XWINDOW (window),
@@ -379,8 +379,8 @@ gdk_input_common_select_events(GdkWindow *window,
 }
 
 gint 
-gdk_input_common_init (GdkDisplay *display,
-		       gint        include_core)
+_gdk_input_common_init (GdkDisplay *display,
+			gint        include_core)
 {
   char **extensions;
   XDeviceInfo   *devices;
@@ -529,10 +529,10 @@ gdk_input_translate_state(guint state, guint device_state)
 
 
 gint 
-gdk_input_common_other_event (GdkEvent         *event,
-			      XEvent           *xevent,
-			      GdkInputWindow   *input_window,
-			      GdkDevicePrivate *gdkdev)
+_gdk_input_common_other_event (GdkEvent         *event,
+			       XEvent           *xevent,
+			       GdkInputWindow   *input_window,
+			       GdkDevicePrivate *gdkdev)
 {
   if ((xevent->type == gdkdev->buttonpress_type) ||
       (xevent->type == gdkdev->buttonrelease_type)) 
@@ -695,7 +695,7 @@ _gdk_device_get_history (GdkDevice         *device,
   gint i;
 
   gdkdev = (GdkDevicePrivate *)device;
-  input_window = gdk_input_window_find (window);
+  input_window = _gdk_input_window_find (window);
 
   g_return_val_if_fail (input_window != NULL, FALSE);
 
@@ -757,7 +757,7 @@ gdk_device_get_state (GdkDevice       *device,
 	gdk_window_get_pointer (window, NULL, NULL, mask);
       
       gdkdev = (GdkDevicePrivate *)device;
-      input_window = gdk_input_window_find (window);
+      input_window = _gdk_input_window_find (window);
       g_return_if_fail (input_window != NULL);
 
       state = XQueryDeviceState (GDK_WINDOW_XDISPLAY (window),

@@ -814,7 +814,7 @@ _gdk_windowing_window_destroy (GdkWindow *window,
   _gdk_selection_window_destroyed (window);
   
   if (private->extension_events != 0)
-    gdk_input_window_destroy (window);
+    _gdk_input_window_destroy (window);
 
 #ifdef HAVE_XFT  
   {

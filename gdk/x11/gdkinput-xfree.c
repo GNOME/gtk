@@ -36,7 +36,7 @@ _gdk_input_init(GdkDisplay *display)
 {
   _gdk_init_input_core (display);
   GDK_DISPLAY_X11 (display)->input_ignore_core = FALSE;
-  gdk_input_common_init (display, FALSE);
+  _gdk_input_common_init (display, FALSE);
 }
 
 gboolean
@@ -147,12 +147,12 @@ _gdk_input_configure_event (XConfigureEvent *xevent,
   GdkInputWindow *input_window;
   gint root_x, root_y;
 
-  input_window = gdk_input_window_find(window);
+  input_window = _gdk_input_window_find(window);
   g_return_if_fail (window != NULL);
 
-  gdk_input_get_root_relative_geometry(GDK_WINDOW_XDISPLAY (window),
-				       GDK_WINDOW_XWINDOW (window),
-				       &root_x, &root_y, NULL, NULL);
+  _gdk_input_get_root_relative_geometry(GDK_WINDOW_XDISPLAY (window),
+					GDK_WINDOW_XWINDOW (window),
+					&root_x, &root_y, NULL, NULL);
 
   input_window->root_x = root_x;
   input_window->root_y = root_y;
@@ -165,14 +165,14 @@ _gdk_input_enter_event (XCrossingEvent *xevent,
   GdkInputWindow *input_window;
   gint root_x, root_y;
 
-  input_window = gdk_input_window_find (window);
+  input_window = _gdk_input_window_find (window);
   g_return_if_fail (window != NULL);
 
   gdk_input_check_proximity(GDK_WINDOW_DISPLAY (window));
 
-  gdk_input_get_root_relative_geometry(GDK_WINDOW_XDISPLAY (window),
-				       GDK_WINDOW_XWINDOW(window),
-				       &root_x, &root_y, NULL, NULL);
+  _gdk_input_get_root_relative_geometry(GDK_WINDOW_XDISPLAY (window),
+					GDK_WINDOW_XWINDOW(window),
+					&root_x, &root_y, NULL, NULL);
 
   input_window->root_x = root_x;
   input_window->root_y = root_y;
@@ -189,15 +189,15 @@ _gdk_input_other_event (GdkEvent *event,
   gint return_val;
   GdkDisplayX11 *display_impl = GDK_DISPLAY_X11 (GDK_WINDOW_DISPLAY (window));
 
-  input_window = gdk_input_window_find(window);
+  input_window = _gdk_input_window_find(window);
   g_return_val_if_fail (window != NULL, -1);
 
   /* This is a sort of a hack, as there isn't any XDeviceAnyEvent -
      but it's potentially faster than scanning through the types of
      every device. If we were deceived, then it won't match any of
      the types for the device anyways */
-  gdkdev = gdk_input_find_device (GDK_WINDOW_DISPLAY (window),
-				  ((XDeviceButtonEvent *)xevent)->deviceid);
+  gdkdev = _gdk_input_find_device (GDK_WINDOW_DISPLAY (window),
+				   ((XDeviceButtonEvent *)xevent)->deviceid);
   if (!gdkdev)
     return -1;			/* we don't handle it - not an XInput event */
 
@@ -211,8 +211,8 @@ _gdk_input_other_event (GdkEvent *event,
   if (!display_impl->input_ignore_core)
     gdk_input_check_proximity(GDK_WINDOW_DISPLAY (window));
 
-  return_val = gdk_input_common_other_event (event, xevent, 
-					     input_window, gdkdev);
+  return_val = _gdk_input_common_other_event (event, xevent, 
+					      input_window, gdkdev);
 
   if (return_val > 0 && event->type == GDK_PROXIMITY_OUT &&
       display_impl->input_ignore_core)
@@ -225,14 +225,14 @@ gboolean
 _gdk_input_enable_window(GdkWindow *window, GdkDevicePrivate *gdkdev)
 {
   /* FIXME: watchout, gdkdev might be core pointer, never opened */
-  gdk_input_common_select_events (window, gdkdev);
+  _gdk_input_common_select_events (window, gdkdev);
   return TRUE;
 }
 
 gboolean
 _gdk_input_disable_window(GdkWindow *window, GdkDevicePrivate *gdkdev)
 {
-  gdk_input_common_select_events (window, gdkdev);
+  _gdk_input_common_select_events (window, gdkdev);
   return TRUE;
 }
 
@@ -281,9 +281,9 @@ _gdk_input_grab_pointer (GdkWindow *     window,
 	  gdkdev = (GdkDevicePrivate *)tmp_list->data;
 	  if (!GDK_IS_CORE (gdkdev) && gdkdev->xdevice)
 	    {
-	      gdk_input_common_find_events (window, gdkdev,
-					    event_mask,
-					    event_classes, &num_classes);
+	      _gdk_input_common_find_events (window, gdkdev,
+					     event_mask,
+					     event_classes, &num_classes);
 #ifdef G_ENABLE_DEBUG
 	      if (_gdk_debug_flags & GDK_DEBUG_NOGRABS)
 		result = GrabSuccess;

@@ -131,7 +131,6 @@ extern gint   _gdk_input_ignore_core;
 /* Function declarations */
 void             _gdk_init_input_core (void);
 
-void gdk_input_window_destroy (GdkWindow *window);
 GdkTimeCoord ** _gdk_device_allocate_history (GdkDevice *device,
 					      gint       n_events);
 
@@ -150,9 +149,9 @@ gint             _gdk_input_other_event      (GdkEvent         *event,
 
 /* These should be in gdkinternals.h */
 
-GdkInputWindow   *gdk_input_window_find      (GdkWindow        *window);
+GdkInputWindow  *_gdk_input_window_find      (GdkWindow        *window);
 
-void              gdk_input_window_destroy   (GdkWindow *window);
+void             _gdk_input_window_destroy   (GdkWindow *window);
 
 gint             _gdk_input_enable_window    (GdkWindow        *window,
 					      GdkDevicePrivate *gdkdev);
@@ -170,14 +169,5 @@ gboolean         _gdk_device_get_history     (GdkDevice         *device,
 					      guint32            stop,
 					      GdkTimeCoord    ***events,
 					      gint              *n_events);
-
-
-#define GDK_MAX_DEVICE_CLASSES 13
-
-gint             gdk_input_common_init        (gint              include_core);
-gint             gdk_input_common_other_event (GdkEvent          *event,
-					       MSG               *msg,
-					       GdkInputWindow    *input_window,
-					       GdkWindow         *window);
 
 #endif /* __GDK_INPUT_WIN32_H__ */

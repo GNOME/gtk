@@ -215,20 +215,20 @@ gdk_device_set_mode (GdkDevice   *device,
 }
 
 gint
-gdk_input_enable_window (GdkWindow *window, GdkDevicePrivate *gdkdev)
+_gdk_input_enable_window (GdkWindow *window, GdkDevicePrivate *gdkdev)
 {
   return TRUE;
 }
 
 gint
-gdk_input_disable_window (GdkWindow *window, GdkDevicePrivate *gdkdev)
+_gdk_input_disable_window (GdkWindow *window, GdkDevicePrivate *gdkdev)
 {
   return TRUE;
 }
 
 
 GdkInputWindow *
-gdk_input_window_find(GdkWindow *window)
+_gdk_input_window_find(GdkWindow *window)
 {
   GList *tmp_list;
 
@@ -283,7 +283,7 @@ gdk_input_set_extension_events (GdkWindow *window, gint mask,
     }
   else
     {
-      iw = gdk_input_window_find (window);
+      iw = _gdk_input_window_find (window);
       if (iw)
 	{
 	  _gdk_input_windows = g_list_remove (_gdk_input_windows,iw);
@@ -301,19 +301,19 @@ gdk_input_set_extension_events (GdkWindow *window, gint mask,
 	{
 	  if (mask != 0 && gdkdev->info.mode != GDK_MODE_DISABLED
 	      && (gdkdev->info.has_cursor || mode == GDK_EXTENSION_EVENTS_ALL))
-	    gdk_input_enable_window (window,gdkdev);
+	    _gdk_input_enable_window (window,gdkdev);
 	  else
-	    gdk_input_disable_window (window,gdkdev);
+	    _gdk_input_disable_window (window,gdkdev);
 	}
     }
 }
 
 void
-gdk_input_window_destroy (GdkWindow *window)
+_gdk_input_window_destroy (GdkWindow *window)
 {
   GdkInputWindow *input_window;
 
-  input_window = gdk_input_window_find (window);
+  input_window = _gdk_input_window_find (window);
   g_return_if_fail (input_window != NULL);
 
   _gdk_input_windows = g_list_remove (_gdk_input_windows,input_window);

@@ -130,8 +130,8 @@ struct _GdkInputWindow
 
 /* Function declarations */
 
-GdkInputWindow *gdk_input_window_find        (GdkWindow *window);
-void            gdk_input_window_destroy     (GdkWindow *window);
+GdkInputWindow *_gdk_input_window_find       (GdkWindow *window);
+void            _gdk_input_window_destroy    (GdkWindow *window);
 GdkTimeCoord ** _gdk_device_allocate_history (GdkDevice *device,
 					      gint       n_events);
 void            _gdk_init_input_core         (GdkDisplay *display);
@@ -170,24 +170,24 @@ gboolean         _gdk_device_get_history     (GdkDevice         *device,
 
 #define GDK_MAX_DEVICE_CLASSES 13
 
-gint               gdk_input_common_init                (GdkDisplay	  *display,
+gint               _gdk_input_common_init               (GdkDisplay	  *display,
 							 gint              include_core);
-GdkDevicePrivate * gdk_input_find_device                (GdkDisplay	  *display,
+GdkDevicePrivate * _gdk_input_find_device               (GdkDisplay	  *display,
 							 guint32           id);
-void               gdk_input_get_root_relative_geometry (Display          *display,
+void               _gdk_input_get_root_relative_geometry(Display          *display,
 							 Window            w,
 							 int              *x_ret,
 							 int              *y_ret,
 							 int              *width_ret,
 							 int              *height_ret);
-void               gdk_input_common_find_events         (GdkWindow        *window,
+void               _gdk_input_common_find_events        (GdkWindow        *window,
 							 GdkDevicePrivate *gdkdev,
 							 gint              mask,
 							 XEventClass      *classes,
 							 int              *num_classes);
-void               gdk_input_common_select_events       (GdkWindow        *window,
+void               _gdk_input_common_select_events      (GdkWindow        *window,
 							 GdkDevicePrivate *gdkdev);
-gint               gdk_input_common_other_event         (GdkEvent         *event,
+gint               _gdk_input_common_other_event        (GdkEvent         *event,
 							 XEvent           *xevent,
 							 GdkInputWindow   *input_window,
 							 GdkDevicePrivate *gdkdev);

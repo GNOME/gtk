@@ -238,9 +238,9 @@ gdk_screen_x11_dispose (GObject *object)
 {
   GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (object);
 
-  pango_x_shutdown_display (screen_x11->xdisplay, screen_x11->xscreen);
+  pango_x_shutdown_display (screen_x11->xdisplay);
 #ifdef HAVE_XFT  
-  pango_xft_shutdown_display (screen_x11->xdisplay, screen_x11->xscreen);
+  pango_xft_shutdown_display (screen_x11->xdisplay, screen_x11->screen_num);
 #endif  
   _gdk_x11_events_uninit_screen (GDK_SCREEN (object));
   

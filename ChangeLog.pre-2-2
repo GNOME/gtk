@@ -1,3 +1,16 @@
+Fri Aug  2 15:56:47 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkscreen-x11.c (gdk_screen_x11_dispose): Fix
+	args to pango_x_shutdown_display().
+
+	* gdk/linux-fb/gdkinput.c gdk/linux-fb/gdkinputprivate.h
+	gdk/win32/gdkinput-win32.[ch] gdk/win32/gdkinput.c
+	gdk/win32/gdkwindow-win32.c gdk/x11/gdkinput-x11.c
+	gdk/x11/gdkinput-xfree.c gdk/x11/gdkinput.c
+	gdk/x11/gdkinputprivate.h gdk/x11/gdkwindow-x11.c: Move
+	a bunch of functions gdk_input => _gdk_input. Clean
+	up some header file cruft. (#79971)
+
 Fri Aug  2 12:21:41 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkscreen-x11.c (gdk_screen_x11_dispose):
