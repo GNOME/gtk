@@ -1300,7 +1300,6 @@ shortcuts_remove_rows (GtkFileChooserDefault *impl,
 
       gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), &iter, 
 			  SHORTCUTS_COL_NAME, &text, -1);
-      g_print ("removing shortcut %s\n", text);
 			  
       shortcuts_free_row_data (impl, &iter);
       gtk_list_store_remove (impl->shortcuts_model, &iter);

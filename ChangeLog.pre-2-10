@@ -1,5 +1,8 @@
 2004-09-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserdefault.c (shortcuts_remove_rows): Remove 
+	debug spew.
+
 	* gtk/gtkimcontext.c (gtk_im_context_get_preedit_string): 
 	cursor_pos is in characters, not bytes.  (#153332, Owen Taylor)
 
