@@ -1,3 +1,8 @@
+Sat Sep  1 21:57:27 2001  Kristian Rietveld  <kristian@planet.nl>
+
+	* gtk/gtkrbtree.c (_gtk_rbtree_reorder): add warnings
+	per jrb's request.
+
 Fri Aug 31 20:01:23 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_search_iter): pass in user data.
