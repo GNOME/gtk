@@ -1,5 +1,7 @@
 
 #include <gtk/gtk.h>
+#include <string.h>
+
 
 static void
 get_param_specs (GObject *object,
@@ -26,6 +28,45 @@ g_object_connect_property (GObject *object,
   g_free (with_detail);
 }
 
+typedef struct 
+{
+  GObject *obj;
+  gchar *prop;
+} ObjectProperty;
+
+static void
+free_object_property (ObjectProperty *p)
+{
+  g_free (p->prop);
+  g_free (p);
+}
+
+static void
+connect_controller (GObject *controller,
+                    const gchar *signal,
+                    GObject *model,
+                    const gchar *prop_name,
+                    GtkSignalFunc func)
+{
+  ObjectProperty *p;
+
+  p = g_new (ObjectProperty, 1);
+  p->obj = model;
+  p->prop = g_strdup (prop_name);
+
+  g_signal_connect_data (controller, signal, func, p,
+                         (GDestroyNotify)free_object_property,
+                         FALSE, FALSE);
+}
+
+static void
+int_modified (GtkAdjustment *adj, gpointer data)
+{
+  ObjectProperty *p = data;
+
+  g_object_set (p->obj, p->prop, (int) adj->value, NULL);
+}
+
 static void
 int_changed (GObject *object, GParamSpec *pspec, gpointer data)
 {
@@ -34,9 +75,23 @@ int_changed (GObject *object, GParamSpec *pspec, gpointer data)
 
   g_value_init (&val, G_TYPE_INT);
   g_object_get_property (object, pspec->name, &val);
-  
-  gtk_adjustment_set_value (adj, g_value_get_int (&val));
+
+  if (g_value_get_int (&val) != (int)adj->value)
+    gtk_adjustment_set_value (adj, g_value_get_int (&val));
+
   g_value_unset (&val);
+}
+
+
+static void
+string_modified (GtkEntry *entry, gpointer data)
+{
+  ObjectProperty *p = data;
+  gchar *text;
+
+  text = gtk_entry_get_text (entry);
+
+  g_object_set (p->obj, p->prop, text, NULL);
 }
 
 static void
@@ -45,14 +100,28 @@ string_changed (GObject *object, GParamSpec *pspec, gpointer data)
   GtkEntry *entry = GTK_ENTRY (data);
   GValue val = { 0, };  
   gchar *str;
+  gchar *text;
   
   g_value_init (&val, G_TYPE_STRING);
   g_object_get_property (object, pspec->name, &val);
 
   str = g_value_get_string (&val);
+  if (str == NULL)
+    str = "";
+  text = gtk_entry_get_text (entry);
+
+  if (strcmp (str, text) != 0)
+    gtk_entry_set_text (entry, str);
   
-  gtk_entry_set_text (entry, str ? str : "");
   g_value_unset (&val);
+}
+
+static void
+bool_modified (GtkToggleButton *tb, gpointer data)
+{
+  ObjectProperty *p = data;
+
+  g_object_set (p->obj, p->prop, (int) tb->active, NULL);
 }
 
 static void
@@ -64,8 +133,9 @@ bool_changed (GObject *object, GParamSpec *pspec, gpointer data)
   g_value_init (&val, G_TYPE_BOOLEAN);
   g_object_get_property (object, pspec->name, &val);
 
-  gtk_toggle_button_set_active (tb, g_value_get_boolean (&val));
-  
+  if (g_value_get_boolean (&val) != tb->active)
+    gtk_toggle_button_set_active (tb, g_value_get_boolean (&val));
+
   gtk_label_set_text (GTK_LABEL (GTK_BIN (tb)->child), g_value_get_boolean (&val) ?
                       "TRUE" : "FALSE");
   
@@ -85,8 +155,13 @@ create_prop_editor (GObject *object)
   GParamSpec **specs = NULL;
   gint i;
   GtkAdjustment *adj;
-
+  
   win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+
+  /* hold a strong ref to the object we're editing */
+  g_object_ref (G_OBJECT (object));
+  g_object_set_data_full (G_OBJECT (win), "model-object",
+                          object, (GDestroyNotify)g_object_unref);
   
   vbox = gtk_vbox_new (TRUE, 2);
 
@@ -103,8 +178,12 @@ create_prop_editor (GObject *object)
   while (i < n_specs)
     {
       GParamSpec *spec = specs[i];
-
+      gboolean can_modify;
+      
       prop_edit = NULL;
+
+      can_modify = ((spec->flags & G_PARAM_WRITABLE) != 0 &&
+                    (spec->flags & G_PARAM_CONSTRUCT_ONLY) == 0);
       
       if ((spec->flags & G_PARAM_READABLE) == 0)
         {
@@ -136,6 +215,10 @@ create_prop_editor (GObject *object)
           g_object_connect_property (object, spec->name,
                                      GTK_SIGNAL_FUNC (int_changed),
                                      adj);
+
+          if (can_modify)
+            connect_controller (G_OBJECT (adj), "value_changed",
+                                object, spec->name, (GtkSignalFunc) int_modified);
           break;
 
         case G_TYPE_STRING:
@@ -152,6 +235,10 @@ create_prop_editor (GObject *object)
           g_object_connect_property (object, spec->name,
                                      GTK_SIGNAL_FUNC (string_changed),
                                      prop_edit);
+
+          if (can_modify)
+            connect_controller (G_OBJECT (prop_edit), "changed",
+                                object, spec->name, (GtkSignalFunc) string_modified);
           break;
 
         case G_TYPE_BOOLEAN:
@@ -168,17 +255,29 @@ create_prop_editor (GObject *object)
           g_object_connect_property (object, spec->name,
                                      GTK_SIGNAL_FUNC (bool_changed),
                                      prop_edit);
+
+          if (can_modify)
+            connect_controller (G_OBJECT (prop_edit), "toggled",
+                                object, spec->name, (GtkSignalFunc) bool_modified);
           break;
 
         default:
+          {
+            gchar *msg = g_strdup_printf ("%s: don't know how to edit type %s",
+                                          spec->nick, g_type_name (spec->value_type));
+            hbox = gtk_hbox_new (FALSE, 10);
+            label = gtk_label_new (msg);            
+            g_free (msg);
+            gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+            gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+            gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
+          }
           break;
         }
 
       if (prop_edit)
         {
-          /* make insensitive if the property isn't writable */
-          if ((spec->flags & G_PARAM_WRITABLE) == 0 ||
-              (spec->flags & G_PARAM_CONSTRUCT_ONLY) != 0)
+          if (!can_modify)
             gtk_widget_set_sensitive (prop_edit, FALSE);
           
           /* set initial value */
