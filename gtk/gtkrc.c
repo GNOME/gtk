@@ -55,6 +55,7 @@
 #include "gtkintl.h"
 #include "gtkiconfactory.h"
 #include "gtkmain.h"
+#include "gtkmodules.h"
 #include "gtkprivate.h"
 #include "gtksettings.h"
 #include "gtkwindow.h"
