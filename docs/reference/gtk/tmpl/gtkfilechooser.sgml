@@ -2,74 +2,51 @@
 GtkFileChooser
 
 <!-- ##### SECTION Short_Description ##### -->
-an interface that represents a graphical file selector
+File chooser interface used by #GtkFileChooserWidget and #GtkFileChooserDialog.
 
 <!-- ##### SECTION Long_Description ##### -->
-<para>
-
-</para>
+    <para>
+      #GtkFileChooser is an interface that can be implemented by file
+      selection widgets.  In GTK+, the main objects that implement
+      this interface are #GtkFileChooserWidget and
+      #GtkFileChooserDialog.  You do not need to write an object that
+      implements the #GtkFileChooser interface unless you are trying
+      to adapt an existing file selector to expose a standard
+      programming interface.
+    </para>
 
 <!-- ##### SECTION See_Also ##### -->
-<para>
-
-</para>
-
-<!-- ##### STRUCT GtkFileChooser ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### SIGNAL GtkFileChooser::current-folder-changed ##### -->
-<para>
-
-</para>
-
-@filechooser: the object which received the signal.
-
-<!-- ##### SIGNAL GtkFileChooser::file-activated ##### -->
-<para>
-
-</para>
-
-@filechooser: the object which received the signal.
-
-<!-- ##### SIGNAL GtkFileChooser::selection-changed ##### -->
-<para>
-
-</para>
-
-@filechooser: the object which received the signal.
-
-<!-- ##### SIGNAL GtkFileChooser::update-preview ##### -->
-<para>
-
-</para>
-
-@filechooser: the object which received the signal.
+    <para>
+      #GtkFileChooserDialog, #GtkFileChooserWidget
+    </para>
 
 <!-- ##### ENUM GtkFileChooserAction ##### -->
-<para>
+    <para>
+      Describes whether a #GtkFileChooser is being used to open
+      existing files or to save to a possibly new file.
+    </para>
 
-</para>
-
-@GTK_FILE_CHOOSER_ACTION_OPEN: 
-@GTK_FILE_CHOOSER_ACTION_SAVE: 
+@GTK_FILE_CHOOSER_ACTION_OPEN: Indicates Open mode.  The file chooser
+    will only let the user pick an existing file.
+@GTK_FILE_CHOOSER_ACTION_SAVE: Indicates Save mode.  The file chooser
+    will let the user pick an existing file, or type in a new
+    filename.
 
 <!-- ##### MACRO GTK_FILE_CHOOSER_ERROR ##### -->
-<para>
-
-</para>
+    <para>
+      Used to get the #GError quark for #GtkFileChooser errors.
+    </para>
 
 
 
 <!-- ##### ENUM GtkFileChooserError ##### -->
-<para>
+    <para>
+      These identify the various errors that can occur while calling
+      #GtkFileChooser functions.
+    </para>
 
-</para>
-
-@GTK_FILE_CHOOSER_ERROR_NONEXISTENT: 
-@GTK_FILE_CHOOSER_ERROR_BAD_FILENAME: 
+@GTK_FILE_CHOOSER_ERROR_NONEXISTENT: Indicates that a file does not exist.
+@GTK_FILE_CHOOSER_ERROR_BAD_FILENAME: Indicates a malformed filename.
 
 <!-- ##### FUNCTION gtk_file_chooser_error_quark ##### -->
 <para>
@@ -479,5 +456,14 @@ an interface that represents a graphical file selector
 
 @chooser: 
 @Returns: 
+
+
+
+<!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("../gtk-docs.sgml" "book" "refentry")
+End:
+-->
 
 

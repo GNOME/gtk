@@ -2,18 +2,59 @@
 GtkFileChooserDialog
 
 <!-- ##### SECTION Short_Description ##### -->
-implements GtkFileChooser as a dialog
-
+A file chooser dialog, suitable for "File/Open" or "File/Save" commands.
 
 <!-- ##### SECTION Long_Description ##### -->
-<para>
+    <para>
+      #GtkFileChooserDialog is a dialog box suitable for use with
+      "File/Open" or "File/Save as" commands.  This widget works by
+      putting a #GtkFileChooserWidget inside a #GtkDialog.  It exposes
+      the #GtkFileChooserIface interface, so you can use all of the
+      #GtkFileChooser functions on the file chooser dialog as well as
+      those for #GtkDialog.
+    </para>
 
-</para>
+    <para>
+      Note that #GtkFileChooserDialog does not have any methods of its
+      own.  Instead, you should use the functions that work on a
+      #GtkFileChooser.
+    </para>
+
+    <example>
+      <title>Typical usage</title>
+
+      <para>
+	In the simplest of cases, you can use #GtkFileChooserDialog
+	as in the following code:
+      </para>
+
+      <programlisting>
+GtkWidget *dialog;
+
+dialog = gtk_file_chooser_dialog_new ("Open File",
+				      parent_window,
+				      GTK_FILE_CHOOSER_ACTION_OPEN,
+				      GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+				      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+				      NULL);
+
+if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
+  {
+    char *filename;
+
+    filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+    open_file (filename);
+    g_free (filename);
+  }
+
+gtk_widget_destroy (dialog);
+      </programlisting>
+    </example>
 
 <!-- ##### SECTION See_Also ##### -->
-<para>
-
-</para>
+    <para>
+      #GtkFileChooser, #GtkDialog
+    </para>
 
 <!-- ##### FUNCTION gtk_file_chooser_dialog_new ##### -->
 <para>
@@ -26,5 +67,13 @@ implements GtkFileChooser as a dialog
 @first_button_text: 
 @Varargs: 
 @Returns: 
+
+
+<!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("../gtk-docs.sgml" "book" "refentry")
+End:
+-->
 
 

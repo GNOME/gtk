@@ -2,17 +2,27 @@
 GtkFileChooserWidget
 
 <!-- ##### SECTION Short_Description ##### -->
-implements GtkFileChooser as an embeddable widget
+File chooser widget that can be embedded in other widgets.
 
 <!-- ##### SECTION Long_Description ##### -->
-<para>
+    <para>
+      #GtkFileChooserWidget is a widget suitable for selecting files.
+      It is the main building block of a #GtkFileChooserDialog.  Most
+      applications will only need to use the latter; you can use
+      #GtkFileChooserWidget as part of a larger window if you have
+      special needs.
+    </para>
 
-</para>
+    <para>
+      Note that #GtkFileChooserWidget does not have any methods of its
+      own.  Instead, you should use the functions that work on a
+      #GtkFileChooser.
+    </para>
 
 <!-- ##### SECTION See_Also ##### -->
-<para>
-
-</para>
+    <para>
+      #GtkFileChooser, #GtkFileChooserDialog
+    </para>
 
 <!-- ##### FUNCTION gtk_file_chooser_widget_new ##### -->
 <para>
@@ -21,5 +31,15 @@ implements GtkFileChooser as an embeddable widget
 
 @action: 
 @Returns: 
+
+
+
+
+<!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("../gtk-docs.sgml" "book" "refentry")
+End:
+-->
 
 

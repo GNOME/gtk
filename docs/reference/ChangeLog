@@ -1,3 +1,14 @@
+2003-10-23  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/tmpl/gtkfilechooser.sgml: Added the text for the initial
+	section, and descriptions for the signals and enumerations.
+
+	* gtk/tmpl/gtkfilechooserdialog.sgml: Added the text for the
+	initial section, and a short example.
+
+	* gtk/tmpl/gtkfilechooserwidget.sgml: Added the text for the
+	initial section.
+
 Fri Oct 24 00:25:07 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkfilefilter.sgml: 
