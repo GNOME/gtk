@@ -60,11 +60,11 @@ gdk_dnd_set_drag_shape(GdkWindow *default_pixmapwin,
   gdk_window_ref(default_pixmapwin);
   gdk_dnd.c->drag_pm_default = default_pixmapwin;
   gdk_dnd.c->default_hotspot = *default_hotspot;
-  gdk_dnd.c->xids = g_list_append(gdk_dnd.c->xids, GUINT_TO_GPOINTER (((GdkWindowPrivate *)default_pixmapwin)->xwindow));
+  gdk_dnd.c->xids = g_list_append(gdk_dnd.c->xids, GUINT_TO_POINTER (((GdkWindowPrivate *)default_pixmapwin)->xwindow));
   if(goahead_pixmapwin)
     {
       gdk_window_ref(goahead_pixmapwin);
-      gdk_dnd.c->xids = g_list_append(gdk_dnd.c->xids, GUINT_TO_GPOINTER (((GdkWindowPrivate *)goahead_pixmapwin)->xwindow));
+      gdk_dnd.c->xids = g_list_append(gdk_dnd.c->xids, GUINT_TO_POINTER (((GdkWindowPrivate *)goahead_pixmapwin)->xwindow));
       gdk_dnd.c->drag_pm_ok = goahead_pixmapwin;
       gdk_dnd.c->ok_hotspot = *goahead_hotspot;
     }
