@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-22 18:01-0500\n"
-"PO-Revision-Date: 2004-01-19 20:38+0100\n"
+"POT-Creation-Date: 2004-02-07 00:07+0100\n"
+"PO-Revision-Date: 2004-02-07 00:08+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian (bokmål) <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -113,7 +113,7 @@ msgid "A unique name for the action."
 msgstr "Et unikt navn for handlingen."
 
 #: gtk/gtkaction.c:201 gtk/gtkbutton.c:203 gtk/gtkexpander.c:202
-#: gtk/gtkframe.c:125 gtk/gtklabel.c:290 gtk/gtktoolbutton.c:179
+#: gtk/gtkframe.c:125 gtk/gtklabel.c:288 gtk/gtktoolbutton.c:179
 msgid "Label"
 msgstr "Etikett"
 
@@ -425,7 +425,7 @@ msgstr "Mellomrom"
 msgid "The amount of space between children"
 msgstr "Mengde mellomrom mellom barn."
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:468 gtk/gtktoolbar.c:534
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:468 gtk/gtktoolbar.c:533
 msgid "Homogeneous"
 msgstr "Homogen"
 
@@ -433,7 +433,7 @@ msgstr "Homogen"
 msgid "Whether the children should all be the same size"
 msgstr "Om alle barn skal være av samme størrelse."
 
-#: gtk/gtkbox.c:146 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:526
+#: gtk/gtkbox.c:146 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:525
 #: gtk/gtktreeviewcolumn.c:294
 msgid "Expand"
 msgstr "Utvid"
@@ -492,12 +492,12 @@ msgid ""
 msgstr ""
 "Tekst for etiketten inne i knappen, hvis knappen inneholder en etikett."
 
-#: gtk/gtkbutton.c:211 gtk/gtkexpander.c:210 gtk/gtklabel.c:311
+#: gtk/gtkbutton.c:211 gtk/gtkexpander.c:210 gtk/gtklabel.c:309
 #: gtk/gtktoolbutton.c:186
 msgid "Use underline"
 msgstr "Bruk understreking"
 
-#: gtk/gtkbutton.c:212 gtk/gtkexpander.c:211 gtk/gtklabel.c:312
+#: gtk/gtkbutton.c:212 gtk/gtkexpander.c:211 gtk/gtklabel.c:310
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -805,7 +805,7 @@ msgstr "Tagging"
 msgid "Marked up text to render"
 msgstr "Tagget tekst som skal rendres"
 
-#: gtk/gtkcellrenderertext.c:208 gtk/gtklabel.c:297
+#: gtk/gtkcellrenderertext.c:208 gtk/gtklabel.c:295
 msgid "Attributes"
 msgstr "Attributter"
 
@@ -1257,59 +1257,59 @@ msgstr "Verdi i listen"
 msgid "Whether entered values must already be present in the list"
 msgstr "Verdier som spesifiseres må allerede være i listen"
 
-#: gtk/gtkcombobox.c:341
+#: gtk/gtkcombobox.c:346
 msgid "ComboBox model"
 msgstr "Modell for ComboBox"
 
-#: gtk/gtkcombobox.c:342
+#: gtk/gtkcombobox.c:347
 msgid "The model for the combo box"
 msgstr "Modell for komboboksen"
 
-#: gtk/gtkcombobox.c:349
+#: gtk/gtkcombobox.c:354
 msgid "Wrap width"
 msgstr "Bredde for bryting"
 
-#: gtk/gtkcombobox.c:350
+#: gtk/gtkcombobox.c:355
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Brytningsbredde for utplassering av oppføringer i et rutenett"
 
-#: gtk/gtkcombobox.c:359
+#: gtk/gtkcombobox.c:364
 msgid "Row span column"
 msgstr "Kolonne for radutbredelse"
 
-#: gtk/gtkcombobox.c:360
+#: gtk/gtkcombobox.c:365
 msgid "TreeModel column containing the row span values"
 msgstr "TreeModel-kolonne som inneholder verdier for radutbredelse"
 
-#: gtk/gtkcombobox.c:369
+#: gtk/gtkcombobox.c:374
 msgid "Column span column"
 msgstr "Kolonne for kolonneutbredelse"
 
-#: gtk/gtkcombobox.c:370
+#: gtk/gtkcombobox.c:375
 msgid "TreeModel column containing the column span values"
 msgstr "TreeModel-kolonne som inneholder verdier for kolonneutbredelse"
 
-#: gtk/gtkcombobox.c:379
+#: gtk/gtkcombobox.c:384
 msgid "Active item"
 msgstr "Aktiv oppføring"
 
-#: gtk/gtkcombobox.c:380
+#: gtk/gtkcombobox.c:385
 msgid "The item which is currently active"
 msgstr "Oppføringen som er aktiv"
 
-#: gtk/gtkcombobox.c:388
+#: gtk/gtkcombobox.c:393
 msgid "ComboBox appareance"
 msgstr "Utseende for ComboBox"
 
-#: gtk/gtkcombobox.c:389
+#: gtk/gtkcombobox.c:394
 msgid "ComboBox appearance, where TRUE means Windows-style."
 msgstr "Utseende for ComboBox. TRUE betyr Windows-stil."
 
-#: gtk/gtkcomboboxentry.c:104
+#: gtk/gtkcomboboxentry.c:109
 msgid "Text Column"
 msgstr "Tekstkolonne"
 
-#: gtk/gtkcomboboxentry.c:105
+#: gtk/gtkcomboboxentry.c:110
 msgid "A column in the data source model to get the strings from"
 msgstr "En kolonne i datakildemodellen hvor man kan hente strenger"
 
@@ -1377,51 +1377,51 @@ msgstr "Maksimum Y"
 msgid "Maximum possible value for Y"
 msgstr "Største mulige verdi for Y"
 
-#: gtk/gtkdialog.c:136
+#: gtk/gtkdialog.c:144
 msgid "Has separator"
 msgstr "Har separator"
 
-#: gtk/gtkdialog.c:137
+#: gtk/gtkdialog.c:145
 msgid "The dialog has a separator bar above its buttons"
 msgstr "Dialogen har en skillelinje over knappene"
 
-#: gtk/gtkdialog.c:162
+#: gtk/gtkdialog.c:170
 msgid "Content area border"
 msgstr "Kant for innholdsområde"
 
-#: gtk/gtkdialog.c:163
+#: gtk/gtkdialog.c:171
 msgid "Width of border around the main dialog area"
 msgstr "Bredde på kanten rundt hoveddialogområdet"
 
-#: gtk/gtkdialog.c:170
+#: gtk/gtkdialog.c:178
 msgid "Button spacing"
 msgstr "Knappeavstand"
 
-#: gtk/gtkdialog.c:171
+#: gtk/gtkdialog.c:179
 msgid "Spacing between buttons"
 msgstr "Avstand mellom knapper"
 
-#: gtk/gtkdialog.c:179
+#: gtk/gtkdialog.c:187
 msgid "Action area border"
 msgstr "Kant for handlingsområde"
 
-#: gtk/gtkdialog.c:180
+#: gtk/gtkdialog.c:188
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Bredde på kanten rundt knappeområdet nederst i dialogen"
 
-#: gtk/gtkentry.c:446 gtk/gtklabel.c:368
+#: gtk/gtkentry.c:446 gtk/gtklabel.c:366
 msgid "Cursor Position"
 msgstr "Markørposisjon"
 
-#: gtk/gtkentry.c:447 gtk/gtklabel.c:369
+#: gtk/gtkentry.c:447 gtk/gtklabel.c:367
 msgid "The current position of the insertion cursor in chars"
 msgstr "Nåværende posisjon for innsettingsmarkør i tegn"
 
-#: gtk/gtkentry.c:456 gtk/gtklabel.c:378
+#: gtk/gtkentry.c:456 gtk/gtklabel.c:376
 msgid "Selection Bound"
 msgstr "Utvalg bundet"
 
-#: gtk/gtkentry.c:457 gtk/gtklabel.c:379
+#: gtk/gtkentry.c:457 gtk/gtklabel.c:377
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "Posisjon for motsatt ende av utvalget fra markøren i tegn"
@@ -1508,19 +1508,19 @@ msgstr "Velg på fokus"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Om innholdet i oppføringen skal markeres når den får fokus"
 
-#: gtk/gtkentrycompletion.c:196
+#: gtk/gtkentrycompletion.c:197
 msgid "Completion Model"
 msgstr "Fullføringsmodell"
 
-#: gtk/gtkentrycompletion.c:197
+#: gtk/gtkentrycompletion.c:198
 msgid "The model to find matches in"
 msgstr "Modell for søk etter treff"
 
-#: gtk/gtkentrycompletion.c:203
+#: gtk/gtkentrycompletion.c:204
 msgid "Minimum Key Length"
 msgstr "Minste lengde på nøkkel"
 
-#: gtk/gtkentrycompletion.c:204
+#: gtk/gtkentrycompletion.c:205
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Minimumslengde på nøkkel for søk for å slå opp treff"
 
@@ -1560,11 +1560,11 @@ msgstr "Om utvideren er åpnet for å avdekke underkomponenten"
 msgid "Text of the expander's label"
 msgstr "Tekst i utviderens etikett"
 
-#: gtk/gtkexpander.c:218 gtk/gtklabel.c:304
+#: gtk/gtkexpander.c:218 gtk/gtklabel.c:302
 msgid "Use markup"
 msgstr "Bruk tagging"
 
-#: gtk/gtkexpander.c:219 gtk/gtklabel.c:305
+#: gtk/gtkexpander.c:219 gtk/gtklabel.c:303
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "Teksten i etiketten inneholder XML-tagger. Se pango_parse_markup()"
 
@@ -1812,7 +1812,7 @@ msgid "A widget to display in place of the usual frame label"
 msgstr "Et widget som vises i stedet for den vanlige rammeetiketten"
 
 #: gtk/gtkhandlebox.c:202 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:194
-#: gtk/gtktoolbar.c:575 gtk/gtkviewport.c:150
+#: gtk/gtktoolbar.c:574 gtk/gtkviewport.c:150
 msgid "Shadow type"
 msgstr "Skyggetype"
 
@@ -1939,19 +1939,19 @@ msgstr "Skjerm"
 msgid "The screen where this window will be displayed"
 msgstr "Skjermen hvor dette vinduet vil vises"
 
-#: gtk/gtklabel.c:291
+#: gtk/gtklabel.c:289
 msgid "The text of the label"
 msgstr "Tekst for etiketten"
 
-#: gtk/gtklabel.c:298
+#: gtk/gtklabel.c:296
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "En liste med stilattributter som skal påføres etikettens tekst"
 
-#: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:602
+#: gtk/gtklabel.c:317 gtk/gtktexttag.c:374 gtk/gtktextview.c:602
 msgid "Justification"
 msgstr "Justering"
 
-#: gtk/gtklabel.c:320
+#: gtk/gtklabel.c:318
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
@@ -1961,11 +1961,11 @@ msgstr ""
 "påvirker IKKE justeringen av etiketten innen sitt område. Se GtkMisc::xalign "
 "for det"
 
-#: gtk/gtklabel.c:328
+#: gtk/gtklabel.c:326
 msgid "Pattern"
 msgstr "Mønster"
 
-#: gtk/gtklabel.c:329
+#: gtk/gtklabel.c:327
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline"
@@ -1973,35 +1973,35 @@ msgstr ""
 "En streng med «_»-tegn i posisjoner tilsvarer tegn i teksten som skal "
 "understrekes"
 
-#: gtk/gtklabel.c:336
+#: gtk/gtklabel.c:334
 msgid "Line wrap"
 msgstr "Linjebryting"
 
-#: gtk/gtklabel.c:337
+#: gtk/gtklabel.c:335
 msgid "If set, wrap lines if the text becomes too wide"
 msgstr "Bryt linjer hvis teksten blir for bred hvis dette er satt"
 
-#: gtk/gtklabel.c:343
+#: gtk/gtklabel.c:341
 msgid "Selectable"
 msgstr "Velgbar"
 
-#: gtk/gtklabel.c:344
+#: gtk/gtklabel.c:342
 msgid "Whether the label text can be selected with the mouse"
 msgstr "Om etiketteksten kan velges med musen"
 
-#: gtk/gtklabel.c:350
+#: gtk/gtklabel.c:348
 msgid "Mnemonic key"
 msgstr "Hinttast"
 
-#: gtk/gtklabel.c:351
+#: gtk/gtklabel.c:349
 msgid "The mnemonic accelerator key for this label"
 msgstr "Hint for akselleratortast for denne etiketten"
 
-#: gtk/gtklabel.c:359
+#: gtk/gtklabel.c:357
 msgid "Mnemonic widget"
 msgstr "Hintwidget"
 
-#: gtk/gtklabel.c:360
+#: gtk/gtklabel.c:358
 msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr "Widget som skal aktiveres når etikettens hinttast trykkes"
 
@@ -2138,7 +2138,7 @@ msgstr "Tid før undermenyen skjules når pekeren beveger seg mot undermenyen"
 msgid "Style of bevel around the menubar"
 msgstr "Stil på kanten rundt menylinjen"
 
-#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:551
+#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:550
 msgid "Internal padding"
 msgstr "Internt fyll"
 
@@ -2162,19 +2162,28 @@ msgstr "Kant for bilde/etikett"
 msgid "Width of border around the label and image in the message dialog"
 msgstr "Bredde på kanten rundt etikett og bilde i meldingsdialogen"
 
-#: gtk/gtkmessagedialog.c:115
+#: gtk/gtkmessagedialog.c:122
+msgid "Use separator"
+msgstr "Bruk skillelinje"
+
+#: gtk/gtkmessagedialog.c:123
+msgid ""
+"Whether to put a separator between the message dialog's text and the buttons"
+msgstr "Om en skillelinje skal plasseres mellom dialogens tekst og knapper"
+
+#: gtk/gtkmessagedialog.c:129
 msgid "Message Type"
 msgstr "Meldingstype"
 
-#: gtk/gtkmessagedialog.c:116
+#: gtk/gtkmessagedialog.c:130
 msgid "The type of message"
 msgstr "Type melding"
 
-#: gtk/gtkmessagedialog.c:123
+#: gtk/gtkmessagedialog.c:137
 msgid "Message Buttons"
 msgstr "Meldingsknapper"
 
-#: gtk/gtkmessagedialog.c:124
+#: gtk/gtkmessagedialog.c:138
 msgid "The buttons shown in the message dialog"
 msgstr "Knappene som vises i meldingsdialogen"
 
@@ -2493,7 +2502,7 @@ msgstr "Justering"
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
 msgstr "GtkAdjustment koblet til fremgangsmåleren (Utfaset)"
 
-#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:500
+#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:499
 msgid "Orientation"
 msgstr "Orientering"
 
@@ -3493,81 +3502,81 @@ msgstr "Tegn indikator"
 msgid "If the toggle part of the button is displayed"
 msgstr "Om venderdelen av knappen skal vises"
 
-#: gtk/gtktoolbar.c:501
+#: gtk/gtktoolbar.c:500
 msgid "The orientation of the toolbar"
 msgstr "Orientering for verktøylinjen"
 
-#: gtk/gtktoolbar.c:509
+#: gtk/gtktoolbar.c:508
 msgid "Toolbar Style"
 msgstr "Stil for verktøylinje"
 
-#: gtk/gtktoolbar.c:510
+#: gtk/gtktoolbar.c:509
 msgid "How to draw the toolbar"
 msgstr "Hvordan tegnes verktøylinjen"
 
-#: gtk/gtktoolbar.c:517
+#: gtk/gtktoolbar.c:516
 msgid "Show Arrow"
 msgstr "Vis pil"
 
-#: gtk/gtktoolbar.c:518
+#: gtk/gtktoolbar.c:517
 msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr "Om en pil skal vises hvis verktøylinjen ikke passer"
 
-#: gtk/gtktoolbar.c:527
+#: gtk/gtktoolbar.c:526
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr "Om oppføringen skal få mer plass når verktøylinjen vokser"
 
-#: gtk/gtktoolbar.c:535
+#: gtk/gtktoolbar.c:534
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr ""
 "Om oppføringen skal forbli samme størrelse som andre homogene oppføringer"
 
-#: gtk/gtktoolbar.c:542
+#: gtk/gtktoolbar.c:541
 msgid "Spacer size"
 msgstr "Størrelse på mellomrom"
 
-#: gtk/gtktoolbar.c:543
+#: gtk/gtktoolbar.c:542
 msgid "Size of spacers"
 msgstr "Størrelse på plassholdere"
 
-#: gtk/gtktoolbar.c:552
+#: gtk/gtktoolbar.c:551
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr "Mengde kantområde mellom verktøylinjens skygge og knappene"
 
-#: gtk/gtktoolbar.c:560
+#: gtk/gtktoolbar.c:559
 msgid "Space style"
 msgstr "Stil på mellomrom"
 
-#: gtk/gtktoolbar.c:561
+#: gtk/gtktoolbar.c:560
 msgid "Whether spacers are vertical lines or just blank"
 msgstr "Om mellomrommene er vertikale linjer eller bare tomrom"
 
-#: gtk/gtktoolbar.c:568
+#: gtk/gtktoolbar.c:567
 msgid "Button relief"
 msgstr "Kantavsleping"
 
-#: gtk/gtktoolbar.c:569
+#: gtk/gtktoolbar.c:568
 msgid "Type of bevel around toolbar buttons"
 msgstr "Type kant rundt verktøylinjeknappene"
 
-#: gtk/gtktoolbar.c:576
+#: gtk/gtktoolbar.c:575
 msgid "Style of bevel around the toolbar"
 msgstr "Stil på kant rundt verktøylinjen"
 
-#: gtk/gtktoolbar.c:582
+#: gtk/gtktoolbar.c:581
 msgid "Toolbar style"
 msgstr "Verktøylinjestil"
 
-#: gtk/gtktoolbar.c:583
+#: gtk/gtktoolbar.c:582
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr "Om forvalgte verktøylinje har tekst, tekst og ikoner, kun ikoner, etc."
 
-#: gtk/gtktoolbar.c:589
+#: gtk/gtktoolbar.c:588
 msgid "Toolbar icon size"
 msgstr "Størrelse på verktøylinjeikon"
 
-#: gtk/gtktoolbar.c:590
+#: gtk/gtktoolbar.c:589
 msgid "Size of icons in default toolbars"
 msgstr "Størrelse på ikiner i standard verktøylinjer"
 

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-03 00:02+0100\n"
-"PO-Revision-Date: 2004-02-03 00:02+0100\n"
+"POT-Creation-Date: 2004-02-07 00:05+0100\n"
+"PO-Revision-Date: 2004-02-07 00:06+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian (bokmål) <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -938,7 +938,7 @@ msgstr ""
 "Kunne ikke legge til bokmerke for %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:465 gtk/gtkfilechooserdefault.c:2937
+#: gtk/gtkfilechooserdefault.c:465 gtk/gtkfilechooserdefault.c:2939
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -956,7 +956,7 @@ msgstr "Hjem"
 msgid "Desktop"
 msgstr "Skrivebord"
 
-#: gtk/gtkfilechooserdefault.c:876
+#: gtk/gtkfilechooserdefault.c:878
 #, c-format
 msgid ""
 "Could not go to the parent folder of %s:\n"
@@ -965,7 +965,7 @@ msgstr ""
 "Kunne ikke gå til opphavsmappe for %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:925
+#: gtk/gtkfilechooserdefault.c:927
 #, c-format
 msgid ""
 "Could not create folder %s:\n"
@@ -974,28 +974,28 @@ msgstr ""
 "Kunne ikke opprette mappe %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1001
+#: gtk/gtkfilechooserdefault.c:1003
 msgid "Add"
 msgstr "Legg til"
 
-#: gtk/gtkfilechooserdefault.c:1011
+#: gtk/gtkfilechooserdefault.c:1013
 msgid "Remove"
 msgstr "Fjern"
 
-#: gtk/gtkfilechooserdefault.c:1021
+#: gtk/gtkfilechooserdefault.c:1023
 msgid "Up"
 msgstr "Opp"
 
-#: gtk/gtkfilechooserdefault.c:1101 gtk/gtkfilechooserdefault.c:1456
+#: gtk/gtkfilechooserdefault.c:1103 gtk/gtkfilechooserdefault.c:1458
 msgid "File name"
 msgstr "Filnavn"
 
-#: gtk/gtkfilechooserdefault.c:1127
+#: gtk/gtkfilechooserdefault.c:1129
 #, c-format
 msgid "Could not add bookmark for %s because it is not a folder."
 msgstr "Kunne ikke legge til bokmerke for %s fordi det ikke er en mappe."
 
-#: gtk/gtkfilechooserdefault.c:1175
+#: gtk/gtkfilechooserdefault.c:1177
 #, c-format
 msgid ""
 "Could not remove bookmark for %s:\n"
@@ -1004,83 +1004,83 @@ msgstr ""
 "Kunne ikke fjerne bokmerke for %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1330
+#: gtk/gtkfilechooserdefault.c:1332
 #, c-format
 msgid "Could not add a bookmark for %s because it is an invalid path name."
 msgstr "Kunne ikke legge til bokmerke for %s fordi det er en ugyldig sti."
 
-#: gtk/gtkfilechooserdefault.c:1403
+#: gtk/gtkfilechooserdefault.c:1405
 msgid "Folder"
 msgstr "Mappe"
 
-#: gtk/gtkfilechooserdefault.c:1478
+#: gtk/gtkfilechooserdefault.c:1480
 msgid "Size"
 msgstr "Størrelse"
 
-#: gtk/gtkfilechooserdefault.c:1490
+#: gtk/gtkfilechooserdefault.c:1492
 msgid "Modified"
 msgstr "Endret"
 
 #. Label and entry
-#: gtk/gtkfilechooserdefault.c:1513
+#: gtk/gtkfilechooserdefault.c:1515
 msgid "_Filename:"
 msgstr "_Filnavn:"
 
 #. Preview
-#: gtk/gtkfilechooserdefault.c:1598
+#: gtk/gtkfilechooserdefault.c:1600
 msgid "Preview"
 msgstr "Forhåndsvisning"
 
 #. Change the current folder label
-#: gtk/gtkfilechooserdefault.c:2130
+#: gtk/gtkfilechooserdefault.c:2132
 #, c-format
 msgid "Current folder: %s"
 msgstr "Aktiv mappe: %s"
 
-#: gtk/gtkfilechooserdefault.c:2533
+#: gtk/gtkfilechooserdefault.c:2535
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "snarvei %s eksisterer ikke"
 
-#: gtk/gtkfilechooserdefault.c:3083
+#: gtk/gtkfilechooserdefault.c:3085
 msgid "Type name of new folder"
 msgstr "Skriv inn navn på ny mappe"
 
-#: gtk/gtkfilechooserdefault.c:3110
+#: gtk/gtkfilechooserdefault.c:3112
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d bytes"
 
-#: gtk/gtkfilechooserdefault.c:3112
+#: gtk/gtkfilechooserdefault.c:3114
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:3114
+#: gtk/gtkfilechooserdefault.c:3116
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:3116
+#: gtk/gtkfilechooserdefault.c:3118
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:3161
+#: gtk/gtkfilechooserdefault.c:3163
 msgid "Today"
 msgstr "I dag"
 
-#: gtk/gtkfilechooserdefault.c:3163
+#: gtk/gtkfilechooserdefault.c:3165
 msgid "Yesterday"
 msgstr "I går"
 
-#: gtk/gtkfilechooserdefault.c:3171
+#: gtk/gtkfilechooserdefault.c:3173
 msgid "%d/%b/%Y"
 msgstr "%b.%d.%Y"
 
-#: gtk/gtkfilechooserdefault.c:3174
+#: gtk/gtkfilechooserdefault.c:3176
 msgid "Unknown"
 msgstr "Ukjent"
 
@@ -1266,26 +1266,26 @@ msgstr "Kunne ikke konvertere filnavnet"
 msgid "(Empty)"
 msgstr "(Tom)"
 
-#: gtk/gtkfilesystemunix.c:351 gtk/gtkfilesystemwin32.c:373
+#: gtk/gtkfilesystemunix.c:379 gtk/gtkfilesystemwin32.c:373
 #, c-format
 msgid "error creating directory '%s': %s"
 msgstr "feil under oppretting av katalog «%s»: %s"
 
-#: gtk/gtkfilesystemunix.c:392 gtk/gtkfilesystemwin32.c:414
+#: gtk/gtkfilesystemunix.c:440 gtk/gtkfilesystemwin32.c:414
 msgid "This file system does not support mounting"
 msgstr "Dette filsystemet støtter ikke montering"
 
-#: gtk/gtkfilesystemunix.c:400
+#: gtk/gtkfilesystemunix.c:448
 msgid "Filesystem"
 msgstr "Filsystem"
 
-#: gtk/gtkfilesystemunix.c:419 gtk/gtkfilesystemunix.c:1295
+#: gtk/gtkfilesystemunix.c:467 gtk/gtkfilesystemunix.c:1345
 #: gtk/gtkfilesystemwin32.c:1154
 #, c-format
 msgid "error getting information for '%s': %s"
 msgstr "feil under henting av informasjon om «%s»: %s"
 
-#: gtk/gtkfilesystemunix.c:1005 gtk/gtkfilesystemwin32.c:777
+#: gtk/gtkfilesystemunix.c:1053 gtk/gtkfilesystemwin32.c:777
 #, c-format
 msgid "Bookmark saving failed (%s)"
 msgstr "Lagring av bokmerke feilet (%s)"
@@ -1451,11 +1451,11 @@ msgstr "(ukjent)"
 msgid "clear"
 msgstr "tøm"
 
-#: gtk/gtklabel.c:3225
+#: gtk/gtklabel.c:3217
 msgid "Select All"
 msgstr "Velg alt"
 
-#: gtk/gtklabel.c:3235
+#: gtk/gtklabel.c:3227
 msgid "Input Methods"
 msgstr "Inndatametode"
 
@@ -1769,12 +1769,12 @@ msgid "_Yes"
 msgstr "_Ja"
 
 #: gtk/gtkstock.c:338
-msgid "Zoom _100%"
-msgstr "Zoom _100%"
+msgid "_Normal Size"
+msgstr "_Normal størrelse"
 
 #: gtk/gtkstock.c:339
-msgid "Zoom to _Fit"
-msgstr "Zoom _tilpasset"
+msgid "Best _Fit"
+msgstr "Beste _tilpasning"
 
 #: gtk/gtkstock.c:340
 msgid "Zoom _In"
