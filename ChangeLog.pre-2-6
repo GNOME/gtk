@@ -1,5 +1,7 @@
 2004-08-24  Matthias Clasen  <mclasen@redhat.com>
 
+	* NEWS: Update for 2.4.8
+
 	* gtk/gtkaction.c (connect_proxy, disconnect_proxy): Handle 
 	action_group being NULL.  (#150869,  Tommi Komulainen)
 

@@ -1,3 +1,26 @@
+Overview of Changes from GTK+ 2.4.7 to GTK+ 2.4.8
+=================================================
+* GtkFileChooser
+ - Fix some memory leaks [Federico Mena Quintero]
+* GtkEntryCompletion
+ - Warn if text column has wrong type [Fernando San Martin Woerner,
+   Gustavo Carneiro]
+* GtkTreeView
+ - Fix a redraw problem in fixed height mode [Pawel Salek]
+* GDK
+ - Complete the _NEW_WM_USER_TIME implementation [Elijah Newren]
+ - Update the _NET_ACTIVE_WINDOW implementation [Elijah]
+* gdk-pixbuf
+ - Avoid infinite loops for bad BMPs [Chris Evans, Manish Singh]
+ - Fix a problem with GDK_INTERP_NEAREST scaling which caused
+   Nautilus thumbnails to be misdrawn [Christoph Fergeau]
+ - Avoid segfaults in gdk-pixbuf-csource [Matthias Clasen]
+* Win32 bug fixes [Tim Evans, Tor Lillqvist]
+* Other bug fixes [Gustavo, Torsten Schoenfeld, Manish, Tomislav Jonjic, 
+  Soeren Sandmann, Tommi Komulainen, Philip Langdale, Jon-Kare Hellan]
+* Documentation improvements [Matthias]
+* Updated translations (bs,da,fi,sq)
+
 Overview of Changes from GTK+ 2.4.6 to GTK+ 2.4.7
 =================================================
 * GtkFileChooser
