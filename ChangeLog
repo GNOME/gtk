@@ -1,3 +1,16 @@
+Tue Dec 1 1997 Owen Taylor <owt1@cornell.edu>
+	* glib/glib.h, glib/configure.in. Disabled gldouble, since
+	it wasn't used anywhere and caused portability problems
+
+Tue Dec 1 1997 Owen Taylor <owt1@cornell.edu>
+	* glib/glib.h, glib/configure.in, glib/glibconfig.h.in: Added a
+	g_memmove function which is simply memmove if it exists, otherwise
+	bcopy.(Should really check if bcopy has the correct semantics, and
+	create our own memmove is necessary) 
+	* glib/gstring.c, glib/garray.c, gtk/gtktext.c:
+	memmove => g_memmove
+
+	
 Sun Nov 30 1997 Jay Painter <jpaint@serv.net>
 	* gtk/gtknotebook.c: fixed a old bug where all the notebook pages
 	which were not displayed when the notebook widget was realized were

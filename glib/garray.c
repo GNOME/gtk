@@ -92,7 +92,7 @@ g_rarray_prepend (GArray   *array,
 {
   g_array_maybe_expand ((GRealArray*) array, size);
 
-  memmove (array->data + size, array->data, array->len);
+  g_memmove (array->data + size, array->data, array->len);
   memcpy (array->data, data, size);
 
   array->len += size;

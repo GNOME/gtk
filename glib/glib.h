@@ -257,11 +257,16 @@ typedef unsigned int    guint;
 typedef float   gfloat;
 typedef double  gdouble;
 
+/* HAVE_LONG_DOUBLE doesn't work correctly on all platforms. 
+ * Since gldouble isn't used anywhere, just disable it for now */
+
+#if 0
 #ifdef HAVE_LONG_DOUBLE
 typedef long double gldouble;
 #else /* HAVE_LONG_DOUBLE */
 typedef double gldouble;
 #endif /* HAVE_LONG_DOUBLE */
+#endif /* 0 */
 
 typedef void* gpointer;
 
@@ -588,6 +593,14 @@ gchar* g_strdup    (const gchar *str);
 gchar* g_strerror  (gint errnum);
 gchar* g_strsignal (gint signum);
 
+/* We make the assumption that if memmove isn't available, then
+ * bcopy will do the job. This isn't safe everywhere. (bcopy can't
+ * necessarily handle overlapping copies) */
+#ifdef HAVE_MEMMOVE
+#define g_memmove memmove
+#else 
+#define g_memmove(a,b,c) bcopy(b,a,c)
+#endif
 
 /* Errors
  */

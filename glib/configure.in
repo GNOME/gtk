@@ -63,7 +63,8 @@ AC_CHECK_SIZEOF(long)
 AC_CHECK_SIZEOF(int)
 AC_CHECK_SIZEOF(void *)
 
-AC_C_LONG_DOUBLE
+# long doubles were not used, and a portability problem 
+# AC_C_LONG_DOUBLE
 AC_C_CONST
 AC_C_INLINE
 
@@ -71,8 +72,8 @@ AC_CHECK_HEADERS(float.h, AC_DEFINE(HAVE_FLOAT_H))
 AC_CHECK_HEADERS(limits.h, AC_DEFINE(HAVE_LIMITS_H))
 AC_CHECK_HEADERS(values.h, AC_DEFINE(HAVE_VALUES_H))
 
-# Check for strerror and strsignal functions
-AC_CHECK_FUNCS(strerror strsignal)
+# Check for strerror, strsignal, and memmove functions
+AC_CHECK_FUNCS(strerror strsignal memmove)
 
 # Check for sys_errlist
 AC_MSG_CHECKING(sys_errlist)

@@ -1729,9 +1729,9 @@ move_gap_to_point (GtkText* text)
     {
       gint diff = text->point.index - text->gap_position;
 
-      memmove (text->text + text->gap_position,
-	       text->text + text->gap_position + text->gap_size,
-	       diff);
+      g_memmove (text->text + text->gap_position,
+		 text->text + text->gap_position + text->gap_size,
+		 diff);
 
       text->gap_position = text->point.index;
     }
@@ -1739,9 +1739,9 @@ move_gap_to_point (GtkText* text)
     {
       gint diff = text->gap_position - text->point.index;
 
-      memmove (text->text + text->point.index + text->gap_size,
-	       text->text + text->point.index,
-	       diff);
+      g_memmove (text->text + text->point.index + text->gap_size,
+		 text->text + text->point.index,
+		 diff);
 
       text->gap_position = text->point.index;
     }
@@ -1764,9 +1764,9 @@ make_forward_space (GtkText* text, guint len)
 	  text->text = (guchar*)g_realloc(text->text, i);
 	}
 
-      memmove (text->text + text->gap_position + text->gap_size + 2*len,
-	       text->text + text->gap_position + text->gap_size,
-	       text->text_end - (text->gap_position + text->gap_size));
+      g_memmove (text->text + text->gap_position + text->gap_size + 2*len,
+		 text->text + text->gap_position + text->gap_size,
+		 text->text_end - (text->gap_position + text->gap_size));
 
       text->text_end += len*2;
       text->gap_size += len*2;

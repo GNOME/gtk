@@ -286,7 +286,7 @@ g_string_prepend (GString *fstring, gchar *val)
 
   g_string_maybe_expand (string, len);
 
-  memmove (string->str, string->str + len, string->len);
+  g_memmove (string->str, string->str + len, string->len);
 
   strncpy (string->str, val, len);
 
@@ -304,7 +304,7 @@ g_string_prepend_c (GString *fstring, char c)
 
   g_string_maybe_expand (string, 1);
 
-  memmove (string->str, string->str + 1, string->len);
+  g_memmove (string->str, string->str + 1, string->len);
 
   string->str[0] = c;
 
