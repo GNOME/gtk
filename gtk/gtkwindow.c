@@ -1520,7 +1520,7 @@ gtk_window_activate_focus (GtkWindow *window)
  * is not focused then  <literal>GTK_WIDGET_HAS_FOCUS (widget)</literal> will
  * not be %TRUE for the widget. 
  * 
- * Return value: the currently focused widget.
+ * Return value: the currently focused widget, or %NULL if there is none.
  **/
 GtkWidget *
 gtk_window_get_focus (GtkWindow *window)
