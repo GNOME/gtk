@@ -20,8 +20,9 @@ pixmap_path ".:/home/raster/themes"
 style "default"
 {
   font = "-adobe-helvetica-medium-r-normal--8-*-*-*-*-*-*-*"
-  bg_pixmap[NORMAL] = "marble.xpm"
-  engine "win95" 
+#  bg_pixmap[NORMAL] = "marble.xpm"
+
+  engine "motif" 
   {
   }
   

@@ -472,14 +472,14 @@ draw_shadow (GtkStyle      *style,
       gdk_draw_line (window, gc1,
 		     x + width - 1, y, x + width - 1, y + height - 1);
       
-      gdk_draw_line (window, style->bg_gc[state_type],
+      gdk_draw_line (window, gc1,
 		     x + 1, y + height - 2, x + width - 2, y + height - 2);
-      gdk_draw_line (window, style->bg_gc[state_type],
+      gdk_draw_line (window, gc1,
 		     x + width - 2, y + 1, x + width - 2, y + height - 2);
       
-      gdk_draw_line (window, style->black_gc,
+      gdk_draw_line (window, gc2,
 		     x + 1, y + 1, x + width - 2, y + 1);
-      gdk_draw_line (window, style->black_gc,
+      gdk_draw_line (window, gc2,
 		     x + 1, y + 1, x + 1, y + height - 2);
       
       gdk_draw_line (window, gc2,
@@ -499,14 +499,14 @@ draw_shadow (GtkStyle      *style,
       gdk_draw_line (window, gc2,
 		     x, y, x, y + height - 1);
       
-      gdk_draw_line (window, style->bg_gc[state_type],
+      gdk_draw_line (window, gc2,
 		     x + 1, y + 1, x + width - 2, y + 1);
-      gdk_draw_line (window, style->bg_gc[state_type],
+      gdk_draw_line (window, gc2,
 		     x + 1, y + 1, x + 1, y + height - 2);
       
-      gdk_draw_line (window, style->black_gc,
+      gdk_draw_line (window, gc1,
 		     x, y + height - 1, x + width - 1, y + height - 1);
-      gdk_draw_line (window, style->black_gc,
+      gdk_draw_line (window, gc1,
 		     x + width - 1, y, x + width - 1, y + height - 1);
       break;
       
@@ -617,10 +617,10 @@ draw_polygon (GtkStyle      *style,
   switch (shadow_type)
     {
      case GTK_SHADOW_IN:
-      gc1 = style->bg_gc[state_type];
+      gc1 = style->light_gc[state_type];
       gc2 = style->dark_gc[state_type];
       gc3 = style->light_gc[state_type];
-      gc4 = style->black_gc;
+      gc4 = style->dark_gc[state_type];
       break;
      case GTK_SHADOW_ETCHED_IN:
       gc1 = style->light_gc[state_type];
@@ -631,8 +631,8 @@ draw_polygon (GtkStyle      *style,
      case GTK_SHADOW_OUT:
       gc1 = style->dark_gc[state_type];
       gc2 = style->light_gc[state_type];
-      gc3 = style->black_gc;
-      gc4 = style->bg_gc[state_type];
+      gc3 = style->dark_gc[state_type];
+      gc4 = style->light_gc[state_type];
       break;
      case GTK_SHADOW_ETCHED_OUT:
       gc1 = style->dark_gc[state_type];
@@ -750,16 +750,16 @@ draw_arrow (GtkStyle      *style,
   switch (shadow_type)
     {
      case GTK_SHADOW_IN:
-      gc1 = style->bg_gc[state_type];
+      gc1 = style->light_gc[state_type];
       gc2 = style->dark_gc[state_type];
       gc3 = style->light_gc[state_type];
-      gc4 = style->black_gc;
+      gc4 = style->dark_gc[state_type];
       break;
      case GTK_SHADOW_OUT:
       gc1 = style->dark_gc[state_type];
       gc2 = style->light_gc[state_type];
-      gc3 = style->black_gc;
-      gc4 = style->bg_gc[state_type];
+      gc3 = style->dark_gc[state_type];
+      gc4 = style->light_gc[state_type];
       break;
      case GTK_SHADOW_ETCHED_IN:
       gc1 = style->light_gc[state_type];
@@ -1112,10 +1112,10 @@ draw_diamond (GtkStyle      *style,
   switch (shadow_type)
     {
      case GTK_SHADOW_IN:
-      gdk_draw_line (window, style->bg_gc[state_type],
+      gdk_draw_line (window, style->light_gc[state_type],
 		     x + 2, y + half_height,
 		     x + half_width, y + height - 2);
-      gdk_draw_line (window, style->bg_gc[state_type],
+      gdk_draw_line (window, style->light_gc[state_type],
 		     x + half_width, y + height - 2,
 		     x + width - 2, y + half_height);
       gdk_draw_line (window, style->light_gc[state_type],
@@ -1131,10 +1131,10 @@ draw_diamond (GtkStyle      *style,
 		     x + half_width, y + height,
 		     x + width, y + half_height);
       
-      gdk_draw_line (window, style->black_gc,
+      gdk_draw_line (window, style->dark_gc[state_type],
 		     x + 2, y + half_height,
 		     x + half_width, y + 2);
-      gdk_draw_line (window, style->black_gc,
+      gdk_draw_line (window, style->dark_gc[state_type],
 		     x + half_width, y + 2,
 		     x + width - 2, y + half_height);
       gdk_draw_line (window, style->dark_gc[state_type],
@@ -1163,17 +1163,17 @@ draw_diamond (GtkStyle      *style,
       gdk_draw_line (window, style->dark_gc[state_type],
 		     x + half_width, y + height - 1,
 		     x + width - 1, y + half_height);
-      gdk_draw_line (window, style->black_gc,
+      gdk_draw_line (window, style->dark_gc[state_type],
 		     x, y + half_height,
 		     x + half_width, y + height);
-      gdk_draw_line (window, style->black_gc,
+      gdk_draw_line (window, style->dark_gc[state_type],
 		     x + half_width, y + height,
 		     x + width, y + half_height);
       
-      gdk_draw_line (window, style->bg_gc[state_type],
+      gdk_draw_line (window, style->light_gc[state_type],
 		     x + 2, y + half_height,
 		     x + half_width, y + 2);
-      gdk_draw_line (window, style->bg_gc[state_type],
+      gdk_draw_line (window, style->light_gc[state_type],
 		     x + half_width, y + 2,
 		     x + width - 2, y + half_height);
       gdk_draw_line (window, style->light_gc[state_type],

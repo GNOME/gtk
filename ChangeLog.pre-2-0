@@ -1,3 +1,6 @@
+Thu Jul 30 19:23:48 EDT 1998 The Rasterman <raster@redhat.com>
+	* Fixed warning from colorsel widget...
+
 Thu Jul 30 19:10:42 EDT 1998 The Rasterman <raster@redhat.com>
 	* Fixed defautl drawing code to no longer clobber the original style
 	  pixmap bgs as it did and added a helper funciton og gtkstyle.c to

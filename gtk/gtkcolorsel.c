@@ -1220,6 +1220,7 @@ gtk_color_selection_draw_wheel (GtkColorSelection *colorsel,
       gtk_preview_draw_row (GTK_PREVIEW (colorsel->wheel_area), colorsel->wheel_buf, 0, y, wid);
     }
 
+  if (colorsel->wheel_area->window)
      {
 	GdkPixmap *pm = NULL;
 	GdkGC     *pmgc = NULL;
