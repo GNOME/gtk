@@ -193,9 +193,9 @@ gdk_window_copy_area_scroll (GdkWindow    *window,
 static void
 compute_intermediate_position (GdkWin32PositionInfo *position_info,
 			       GdkWin32PositionInfo *new_info,
-			       gint              d_xoffset,
-			       gint              d_yoffset,
-			       GdkRectangle     *new_position)
+			       gint                  d_xoffset,
+			       gint                  d_yoffset,
+			       GdkRectangle         *new_position)
 {
   gint new_x0, new_x1, new_y0, new_y1;
   
@@ -578,8 +578,8 @@ _gdk_window_move_resize_child (GdkWindow *window,
 
 static void
 gdk_window_compute_position (GdkWindowImplWin32   *window,
-			     GdkWindowParentPos *parent_pos,
-			     GdkWin32PositionInfo   *info)
+			     GdkWindowParentPos   *parent_pos,
+			     GdkWin32PositionInfo *info)
 {
   GdkWindowObject *wrapper;
   int parent_x_offset;
@@ -675,7 +675,7 @@ gdk_window_compute_position (GdkWindowImplWin32   *window,
 }
 
 static void
-gdk_window_compute_parent_pos (GdkWindowImplWin32      *window,
+gdk_window_compute_parent_pos (GdkWindowImplWin32 *window,
 			       GdkWindowParentPos *parent_pos)
 {
   GdkWindowObject *wrapper;
@@ -923,8 +923,8 @@ _gdk_windowing_window_queue_antiexpose (GdkWindow *window,
 }
 
 void
-_gdk_window_process_expose (GdkWindow    *window,
-			    GdkRegion    *invalidate_region)
+_gdk_window_process_expose (GdkWindow *window,
+			    GdkRegion *invalidate_region)
 {
   GdkWindowImplWin32 *impl;
   GdkRegion *clip_region;
