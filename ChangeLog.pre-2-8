@@ -1,3 +1,8 @@
+2004-07-08  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/x11/gdkdnd-x11.c (xdnd_send_xevent): Don't leak 
+	references to the drag context.  (#144324, Alex Larsson)
+
 Thu Jul  8 00:31:34 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktreeview.c (gtk_tree_view_set_model): Stop editing

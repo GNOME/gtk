@@ -2193,7 +2193,10 @@ xdnd_send_xevent (GdkDragContext *context,
 	      temp_event.any.window = window;
 
 	      if  ((*xdnd_filters[i].func) (event_send, &temp_event, NULL) == GDK_FILTER_TRANSLATE)
-		gdk_event_put (&temp_event);
+		{
+		  gdk_event_put (&temp_event);
+		  g_object_unref (tmp_event.dnd.context);
+		}
 	      
 	      return TRUE;
 	    }
