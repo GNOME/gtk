@@ -24,14 +24,14 @@ Information that describes an image.
     </para>
 
     <example id="put-pixel">
-      <title>put_pixel() example</title>
+      <title>put_pixel(<!-- -->) example</title>
 
       <para>
-	The following code illustrates a simple put_pixel() function
-	for RGB pixbufs with 8 bits per channel with an alpha channel.
-	It is not included in the gdk-pixbuf library for performance
-	reasons; rather than making several function calls for each
-	pixel, your own code can take shortcuts.
+	The following code illustrates a simple put_pixel(<!-- -->)
+	function for RGB pixbufs with 8 bits per channel with an alpha
+	channel.  It is not included in the gdk-pixbuf library for
+	performance reasons; rather than making several function calls
+	for each pixel, your own code can take shortcuts.
       </para>
 
       <programlisting>
@@ -51,8 +51,8 @@ put_pixel (GdkPixbuf *pixbuf, int x, int y, guchar red, guchar green, guchar blu
   width = gdk_pixbuf_get_width (pixbuf);
   height = gdk_pixbuf_get_height (pixbuf);
 
-  g_assert (x &gt;= 0 && x < width);
-  g_assert (y &gt;= 0 && y < height);
+  g_assert (x &gt;= 0 &amp;&amp; x &lt; width);
+  g_assert (y &gt;= 0 &amp;&amp; y &lt; height);
 
   rowstride = gdk_pixbuf_get_rowstride (pixbuf);
   pixels = gdk_pixbuf_get_pixels (pixbuf);
@@ -284,3 +284,5 @@ mode: sgml
 sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2")
 End:
 -->
+
+
