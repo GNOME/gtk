@@ -1,3 +1,8 @@
+Tue Jan 28 15:18:24 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* autogen.sh (have_automake): Fix version in complaint
+	message about automake. (#104366, Rich Burridge)
+
 Mon Jan 27 16:38:13 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in: Remove SOEXT stuff; it doesn't work portably.
