@@ -36,6 +36,7 @@
 #include "gtksignal.h"
 #include "gtktreedatalist.h"
 #include <string.h>
+#include "gtkintl.h"
 
 typedef struct _SortElt SortElt;
 typedef struct _SortLevel SortLevel;
@@ -75,6 +76,15 @@ struct _SortTuple
   gint       offset;  
 };
 
+/* Properties */
+enum {
+  PROP_0,
+  /* Construct args */
+  PROP_MODEL
+};
+
+
+
 #define GTK_TREE_MODEL_SORT_CACHE_CHILD_ITERS(tree_model_sort) \
 	(((GtkTreeModelSort *)tree_model_sort)->child_flags&GTK_TREE_MODEL_ITERS_PERSIST)
 #define SORT_ELT(sort_elt) ((SortElt *)sort_elt)
@@ -87,6 +97,14 @@ static void gtk_tree_model_sort_class_init            (GtkTreeModelSortClass *tr
 static void gtk_tree_model_sort_tree_model_init       (GtkTreeModelIface     *iface);
 static void gtk_tree_model_sort_tree_sortable_init    (GtkTreeSortableIface  *iface);
 static void gtk_tree_model_sort_finalize              (GObject               *object);
+static void gtk_tree_model_sort_set_property          (GObject         *object,
+						       guint            prop_id,
+						       const GValue    *value,
+						       GParamSpec      *pspec);
+static void gtk_tree_model_sort_get_property          (GObject         *object,
+						       guint            prop_id,
+						       GValue          *value,
+						       GParamSpec      *pspec);
 static void gtk_tree_model_sort_row_changed           (GtkTreeModel          *model,
 						       GtkTreePath           *start_path,
 						       GtkTreeIter           *start_iter,
@@ -283,7 +301,19 @@ gtk_tree_model_sort_class_init (GtkTreeModelSortClass *class)
   object_class = (GObjectClass *) class;
   parent_class = g_type_class_peek_parent (class);
 
+  object_class->set_property = gtk_tree_model_sort_set_property;
+  object_class->get_property = gtk_tree_model_sort_get_property;
+
   object_class->finalize = gtk_tree_model_sort_finalize;
+
+  /* Properties */
+  g_object_class_install_property (object_class,
+                                   PROP_MODEL,
+                                   g_param_spec_object ("model",
+							_("TreeModelSort Model"),
+							_("The model for the TreeModelSort to sort"),
+							GTK_TYPE_TREE_MODEL,
+							G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 }
 
 static void
@@ -356,6 +386,44 @@ gtk_tree_model_sort_finalize (GObject *object)
 
   /* must chain up */
   parent_class->finalize (object);
+}
+
+static void
+gtk_tree_model_sort_set_property (GObject      *object,
+				  guint         prop_id,
+				  const GValue *value,
+				  GParamSpec   *pspec)
+{
+  GtkTreeModelSort *tree_model_sort = GTK_TREE_MODEL_SORT (object);
+
+  switch (prop_id)
+    {
+    case PROP_MODEL:
+      gtk_tree_model_sort_set_model (tree_model_sort, g_value_get_object (value));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_tree_model_sort_get_property (GObject    *object,
+				  guint       prop_id,
+				  GValue     *value,
+				  GParamSpec *pspec)
+{
+  GtkTreeModelSort *tree_model_sort = GTK_TREE_MODEL_SORT (object);
+
+  switch (prop_id)
+    {
+    case PROP_MODEL:
+      g_value_set_object (value, gtk_tree_model_sort_get_model(tree_model_sort));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
 }
 
 static void

@@ -250,13 +250,17 @@ static void
 gtk_tree_store_init (GtkTreeStore *tree_store)
 {
   tree_store->root = g_node_new (NULL);
+  /* While the odds are against us getting 0...
+   */
   do
     {
       tree_store->stamp = g_random_int ();
     }
   while (tree_store->stamp == 0);
+
   tree_store->sort_list = NULL;
   tree_store->sort_column_id = -2;
+  tree_store->columns_dirty = FALSE;
 }
 
 /**
@@ -334,6 +338,40 @@ gtk_tree_store_newv (gint   n_columns,
     }
 
   return retval;
+}
+
+
+/**
+ * gtk_tree_store_set_column_types:
+ * @tree_store: A #GtkTreeStore
+ * @n_columns: Number of columns for the tree store
+ * @types: An array length n of @GTypes
+ * 
+ * This function is meant primarily for GObjects that inherit from GtkTreeStore,
+ * and should only be used when constructing a new @GtkTreeStore.  It will not
+ * function after a row has been added, or a method on the @GtkTreeModel
+ * interface is called.
+ **/
+void
+gtk_tree_store_set_column_types (GtkTreeStore *tree_store,
+				 gint          n_columns,
+				 GType        *types)
+{
+  gint i;
+
+  g_return_if_fail (GTK_IS_TREE_STORE (tree_store));
+  g_return_if_fail (tree_store->columns_dirty == 0);
+
+  gtk_tree_store_set_n_columns (tree_store, n_columns);
+   for (i = 0; i < n_columns; i++)
+    {
+      if (! _gtk_tree_data_list_check_type (types[i]))
+	{
+	  g_warning ("%s: Invalid type %s passed to gtk_tree_store_set_column_types\n", G_STRLOC, g_type_name (types[i]));
+	  continue;
+	}
+      gtk_tree_store_set_column_type (tree_store, i, types[i]);
+    }
 }
 
 static void
@@ -438,20 +476,28 @@ gtk_tree_store_get_flags (GtkTreeModel *tree_model)
 static gint
 gtk_tree_store_get_n_columns (GtkTreeModel *tree_model)
 {
+  GtkTreeStore *tree_store = (GtkTreeStore *) tree_model;
+
   g_return_val_if_fail (GTK_IS_TREE_STORE (tree_model), 0);
 
-  return GTK_TREE_STORE (tree_model)->n_columns;
+  tree_store->columns_dirty = TRUE;
+
+  return tree_store->n_columns;
 }
 
 static GType
 gtk_tree_store_get_column_type (GtkTreeModel *tree_model,
 				gint          index)
 {
+  GtkTreeStore *tree_store = (GtkTreeStore *) tree_model;
+
   g_return_val_if_fail (GTK_IS_TREE_STORE (tree_model), G_TYPE_INVALID);
   g_return_val_if_fail (index < GTK_TREE_STORE (tree_model)->n_columns &&
 			index >= 0, G_TYPE_INVALID);
 
-  return GTK_TREE_STORE (tree_model)->column_headers[index];
+  tree_store->columns_dirty = TRUE;
+
+  return tree_store->column_headers[index];
 }
 
 static gboolean
@@ -465,7 +511,9 @@ gtk_tree_store_get_iter (GtkTreeModel *tree_model,
   gint depth, i;
 
   g_return_val_if_fail (GTK_IS_TREE_STORE (tree_store), FALSE);
-  
+
+  tree_store->columns_dirty = TRUE;
+
   indices = gtk_tree_path_get_indices (path);
   depth = gtk_tree_path_get_depth (path);
 
@@ -1030,6 +1078,8 @@ gtk_tree_store_insert (GtkTreeStore *tree_store,
   else
     parent_node = tree_store->root;
 
+  tree_store->columns_dirty = TRUE;
+
   iter->stamp = tree_store->stamp;
   iter->user_data = g_node_new (NULL);
   g_node_insert (parent_node, position, G_NODE (iter->user_data));
@@ -1076,6 +1126,8 @@ gtk_tree_store_insert_before (GtkTreeStore *tree_store,
     g_return_if_fail (VALID_ITER (parent, tree_store));
   if (sibling != NULL)
     g_return_if_fail (VALID_ITER (sibling, tree_store));
+
+  tree_store->columns_dirty = TRUE;
 
   new_node = g_node_new (NULL);
 
@@ -1141,6 +1193,8 @@ gtk_tree_store_insert_after (GtkTreeStore *tree_store,
   if (sibling != NULL)
     g_return_if_fail (VALID_ITER (sibling, tree_store));
 
+  tree_store->columns_dirty = TRUE;
+
   new_node = g_node_new (NULL);
 
   if (parent == NULL && sibling == NULL)
@@ -1195,6 +1249,8 @@ gtk_tree_store_prepend (GtkTreeStore *tree_store,
   g_return_if_fail (iter != NULL);
   if (parent != NULL)
     g_return_if_fail (VALID_ITER (parent, tree_store));
+
+  tree_store->columns_dirty = TRUE;
 
   if (parent == NULL)
     parent_node = tree_store->root;
@@ -1257,6 +1313,8 @@ gtk_tree_store_append (GtkTreeStore *tree_store,
     parent_node = tree_store->root;
   else
     parent_node = parent->user_data;
+
+  tree_store->columns_dirty = TRUE;
 
   if (parent_node->children == NULL)
     {

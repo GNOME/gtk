@@ -1,3 +1,14 @@
+Tue Nov 13 21:00:59 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_class_init): new
+	"model" construct property for language bindings.
+
+	* gtk/gtktreestore.c (gtk_tree_store_set_column_types): New
+	function to let you set the column types of a GtkTreeStore for
+	language bindings.
+
+	* gtk/gtkliststore.c (gtk_list_store_set_column_types): ditto.
+
 2001-11-13  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextview.c (gtk_text_view_add_child_in_window): docs
