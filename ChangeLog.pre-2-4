@@ -1,3 +1,8 @@
+Thu Feb 12 15:46:26 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktoolbar.c (gtk_toolbar_size_allocate): Fix up item_area
+	correctly in RTL mode. (#133984, patch from Semion Chichelnitsky).
+
 Thu Feb 12 02:22:02 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_set_modify_func): 

@@ -1468,7 +1468,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
       if (need_arrow)
 	fixup_allocation_for_rtl (available_size, &arrow_allocation);
 
-      fixup_allocation_for_rtl (allocation->width, &item_area);
+      fixup_allocation_for_rtl (available_size, &item_area);
     }
   
   /* translate the items by allocation->(x,y) */
