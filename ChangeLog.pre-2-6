@@ -1,3 +1,10 @@
+Mon Apr 21 15:07:29 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkdisplay-x11.c (gdk_display_keyboard/pointer_ungrab):
+	Calling XFlush() after ungrabbing, to avoid problems if
+	the app subsequently blocks on a long-running operation.
+	(#106520, reported by Rajkumar Siva)
+
 Fri Apr 18 17:42:45 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkwindow-x11.c (set_initial_hints): Add

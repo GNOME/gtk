@@ -413,10 +413,16 @@ void
 gdk_display_pointer_ungrab (GdkDisplay *display,
 			    guint32     time)
 {
+  Display *xdisplay;
+  
   g_return_if_fail (GDK_IS_DISPLAY (display));
+
+  xdisplay = GDK_DISPLAY_XDISPLAY (display);
   
   _gdk_input_ungrab_pointer (display, time);
-  XUngrabPointer (GDK_DISPLAY_XDISPLAY (display), time);
+  XUngrabPointer (xdisplay, time);
+  XFlush (xdisplay);
+  
   GDK_DISPLAY_X11 (display)->pointer_xgrab_window = NULL;
 }
 
@@ -451,9 +457,15 @@ void
 gdk_display_keyboard_ungrab (GdkDisplay *display,
 			     guint32     time)
 {
-  g_return_if_fail (GDK_IS_DISPLAY (display));
+  Display *xdisplay;
   
-  XUngrabKeyboard (GDK_DISPLAY_XDISPLAY (display), time);
+  g_return_if_fail (GDK_IS_DISPLAY (display));
+
+  xdisplay = GDK_DISPLAY_XDISPLAY (display);
+  
+  XUngrabKeyboard (xdisplay, time);
+  XFlush (xdisplay);
+  
   GDK_DISPLAY_X11 (display)->keyboard_xgrab_window = NULL;
 }
 
