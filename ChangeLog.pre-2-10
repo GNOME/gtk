@@ -1,5 +1,9 @@
 2004-12-30  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcombobox.c (gtk_combo_box_button_state_changed): Fix
+	state propagation when making an insensitive combo box sensitive
+	again.  (#162524, Carlos Garnacho Parro)
+
 	* gtk/gtkfilechooserdefault.c: Use secondary text for error 
 	dialogs.
 

@@ -854,8 +854,15 @@ gtk_combo_box_button_state_changed (GtkWidget    *widget,
   if (GTK_WIDGET_REALIZED (widget))
     {
       if (!combo_box->priv->tree_view && combo_box->priv->cell_view)
-	gtk_widget_set_state (combo_box->priv->cell_view, 
-			      GTK_WIDGET_STATE (widget));
+	{
+	  if ((GTK_WIDGET_STATE (widget) == GTK_STATE_INSENSITIVE) !=
+	      (GTK_WIDGET_STATE (combo_box->priv->cell_view) == GTK_STATE_INSENSITIVE))
+	    gtk_widget_set_sensitive (combo_box->priv->cell_view, GTK_WIDGET_SENSITIVE (widget));
+	  
+	  gtk_widget_set_state (combo_box->priv->cell_view, 
+				GTK_WIDGET_STATE (widget));
+	  
+	}
     }
 
   gtk_widget_queue_draw (widget);
