@@ -115,7 +115,7 @@ gdk_selection_owner_set_for_display (GdkDisplay *display,
                                      guint32     time,
                                      gboolean    send_event)
 {
-  HWND xwindow;
+  HWND hwnd;
   GdkEvent tmp_event;
   gchar *sel_name;
 
@@ -143,32 +143,26 @@ gdk_selection_owner_set_for_display (GdkDisplay *display,
       if (GDK_WINDOW_DESTROYED (owner))
 	return FALSE;
 
-      xwindow = GDK_WINDOW_HWND (owner);
+      hwnd = GDK_WINDOW_HWND (owner);
     }
   else
-    xwindow = NULL;
+    hwnd = NULL;
 
-  if (!OpenClipboard (xwindow))
+  if (!API_CALL (OpenClipboard, (hwnd)))
+    return FALSE;
+
+  if (!API_CALL (EmptyClipboard, ()))
     {
-      WIN32_API_FAILED ("OpenClipboard");
-      return FALSE;
-    }
-  if (!EmptyClipboard ())
-    {
-      WIN32_API_FAILED ("EmptyClipboard");
-      CloseClipboard ();
+      API_CALL (CloseClipboard, ());
       return FALSE;
     }
 #if 0
   /* No delayed rendering */
-  if (xwindow != NULL)
+  if (hwnd != NULL)
     SetClipboardData (CF_TEXT, NULL);
 #endif
-  if (!CloseClipboard ())
-    {
-      WIN32_API_FAILED ("CloseClipboard");
-      return FALSE;
-    }
+  if (!API_CALL (CloseClipboard, ()))
+    return FALSE;
 
   if (owner != NULL)
     {
@@ -183,7 +177,7 @@ gdk_selection_owner_set_for_display (GdkDisplay *display,
       tmp_event.selection.selection = selection;
       tmp_event.selection.target = GDK_TARGET_STRING;
       tmp_event.selection.property = _gdk_selection_property;
-      tmp_event.selection.requestor = (guint32) xwindow;
+      tmp_event.selection.requestor = (guint32) hwnd;
       tmp_event.selection.time = time;
 
       gdk_event_put (&tmp_event);
@@ -273,11 +267,8 @@ gdk_selection_convert (GdkWindow *requestor,
       /* He wants to know what formats are on the clipboard.  If there
        * is some kind of text, tell him so.
        */
-      if (!OpenClipboard (GDK_WINDOW_HWND (requestor)))
-	{
-	  WIN32_API_FAILED ("OpenClipboard");
-	  return;
-	}
+      if (!API_CALL (OpenClipboard, (GDK_WINDOW_HWND (requestor))))
+	return;
 
       if (IsClipboardFormatAvailable (CF_UNICODETEXT) ||
 	  IsClipboardFormatAvailable (_cf_utf8_string) ||
@@ -290,6 +281,8 @@ gdk_selection_convert (GdkWindow *requestor,
 	}
       else
 	property = GDK_NONE;
+
+      API_CALL (CloseClipboard, ());
     }
   else if (selection == GDK_SELECTION_CLIPBOARD &&
 	   (target == _compound_text ||
@@ -299,11 +292,8 @@ gdk_selection_convert (GdkWindow *requestor,
        * contents of the clipboard. Get the clipboard data,
        * and store it for later.
        */
-      if (!OpenClipboard (GDK_WINDOW_HWND (requestor)))
-	{
-	  WIN32_API_FAILED ("OpenClipboard");
-	  return;
-	}
+      if (!API_CALL (OpenClipboard, (GDK_WINDOW_HWND (requestor))))
+	return;
 
       /* Try various formats. First the simplest, CF_UNICODETEXT. */
       if ((hdata = GetClipboardData (CF_UNICODETEXT)) != NULL)
@@ -424,7 +414,7 @@ gdk_selection_convert (GdkWindow *requestor,
       else
 	property = GDK_NONE;
 
-      CloseClipboard ();
+      API_CALL (CloseClipboard, ());
     }
   else if (selection == _gdk_win32_dropfiles)
     {

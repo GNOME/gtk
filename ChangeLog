@@ -1,3 +1,10 @@
+2003-12-14  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkselection-win32.c: Calls to OpenClipboard() must be
+	followed by calls to CloseClipboard(). Add a missing call to
+	CloseClipboard(). Found by Adam Wright, fixes #104944. Use
+	API_CALL macro in more places.
+
 Fri Dec 12 00:12:01 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkrange.c (gtk_range_scroll): Fix direction of 
