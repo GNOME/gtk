@@ -2953,10 +2953,10 @@ gtk_window_get_default_size (GtkWindow *window,
   info = gtk_window_get_geometry_info (window, FALSE);
 
   if (width)
-    *width = info->default_width;
+    *width = info ? info->default_width : -1;
 
   if (height)
-    *height = info->default_height;
+    *height = info ? info->default_height : -1;
 }
 
 /**
