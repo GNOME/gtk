@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0.x\n"
-"POT-Creation-Date: 2002-11-08 14:52-0500\n"
-"PO-Revision-Date: 2002-10-15 14:21+0400\n"
+"POT-Creation-Date: 2002-11-09 10:09+0300\n"
+"PO-Revision-Date: 2002-11-09 10:15+0300\n"
 "Last-Translator: Dmitry G. Mastrukov <dmitry@taurussoft.org>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -133,7 +133,7 @@ msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
 "but didn't give a reason for the failure"
 msgstr ""
-"Внутренняя ошибка: Модуль загрузки изображений '%s' засбоил при начале "
+"Внутренняя ошибка: Модуль загрузки изображений \"%s\" засбоил при начале "
 "загрузки изображения, но не сообщил причину сбоя"
 
 #: gdk-pixbuf/gdk-pixdata.c:146
@@ -190,7 +190,7 @@ msgstr "Внутренняя ошибка в загрузчике GIF (%s)"
 
 #: gdk-pixbuf/io-gif.c:543
 msgid "Stack overflow"
-msgstr ""
+msgstr "Пнрнполнение стека (stack overflow)"
 
 # gdk-pixbuf/io-gif.c:592
 #: gdk-pixbuf/io-gif.c:603
