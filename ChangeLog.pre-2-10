@@ -15,6 +15,7 @@
 	functionality in list mode.
 
 	* gtk/gtktreeview.h: 
+	* gtk/gtktreeprivate.h:
 	* gtk/gtktreeview.c (gtk_tree_view_get_row_separator_func): 
 	* gtk/gtktreeview.c (gtk_tree_view_set_row_separator_func): 
 	Add a callback to determine whether a row is a separator.

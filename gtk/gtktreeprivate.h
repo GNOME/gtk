@@ -221,6 +221,10 @@ struct _GtkTreeViewPrivate
   GtkWidget *search_entry;
 
   gint prev_width;
+
+  GtkTreeViewRowSeparatorFunc row_separator_func;
+  gpointer row_separator_data;
+  GtkDestroyNotify row_separator_destroy;
 };
 
 #ifdef __GNUC__
