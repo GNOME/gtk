@@ -1,3 +1,9 @@
+2000-05-18  Elliot Lee  <sopwith@redhat.com>
+
+	* gdk/x11/gdkregion-generic.c: If a region does not have any
+ 	rectangles, or if the specified rectangle is not in the region, then return GDK_OVERLAP_RECTANGLE_OUT
+	instead of GDK_OVERLAP_RECTANGLE_IN.
+
 2000-05-17  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtklayout.c (gtk_layout_map): Remove references to

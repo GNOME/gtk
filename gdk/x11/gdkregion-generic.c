@@ -1438,7 +1438,7 @@ gdk_region_rect_in (GdkRegion    *region,
     
     /* this is (just) a useful optimization */
   if ((region->numRects == 0) || !EXTENTCHECK (&region->extents, prect))
-    return GDK_OVERLAP_RECTANGLE_IN;
+    return GDK_OVERLAP_RECTANGLE_OUT;
 
   partOut = FALSE;
   partIn = FALSE;
