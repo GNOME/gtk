@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+\n"
-"POT-Creation-Date: 2002-09-29 20:52+0300\n"
-"PO-Revision-Date: 2002-09-29 21:00+0300\n"
+"POT-Creation-Date: 2002-10-27 13:18+0200\n"
+"PO-Revision-Date: 2002-10-27 13:25+0300\n"
 "Last-Translator: Borislav Aleksandrov <B.Aleksandrov@cnsys.bg>\n"
 "Language-Team: Bulgarian <dict@linux.zonebg.com>\n"
 "MIME-Version: 1.0\n"
@@ -153,7 +153,7 @@ msgstr "BMP картинка има 'фалшива' заглавна част"
 msgid "Failure reading GIF: %s"
 msgstr "Неуспех при четене на GIF: %s "
 
-#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1382 gdk-pixbuf/io-gif.c:1542
+#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1392 gdk-pixbuf/io-gif.c:1552
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "GIF файла има грешни данни (може би е орязан някак си?)"
 
@@ -162,57 +162,61 @@ msgstr "GIF файла има грешни данни (може би е оряз
 msgid "Internal error in the GIF loader (%s)"
 msgstr "Вътрешна грешка в заглавната част на GIF (%s)"
 
-#: gdk-pixbuf/io-gif.c:592
+#: gdk-pixbuf/io-gif.c:541
+msgid "Stack overflow"
+msgstr "Препълване на стека"
+
+#: gdk-pixbuf/io-gif.c:600
 msgid "GIF image loader can't understand this image."
 msgstr "GIF заглавната част не може да разбере тази картинка."
 
-#: gdk-pixbuf/io-gif.c:621
+#: gdk-pixbuf/io-gif.c:629
 msgid "Bad code encountered"
 msgstr "Срещнат е лош код"
 
-#: gdk-pixbuf/io-gif.c:630
+#: gdk-pixbuf/io-gif.c:639
 msgid "Circular table entry in GIF file"
 msgstr "Кръгов табличен запис в GIF файла"
 
-#: gdk-pixbuf/io-gif.c:762 gdk-pixbuf/io-gif.c:1370 gdk-pixbuf/io-gif.c:1415
-#: gdk-pixbuf/io-gif.c:1530
+#: gdk-pixbuf/io-gif.c:772 gdk-pixbuf/io-gif.c:1380 gdk-pixbuf/io-gif.c:1425
+#: gdk-pixbuf/io-gif.c:1540
 msgid "Not enough memory to load GIF file"
 msgstr "Няма достатъчно памет да заредя GIF файла"
 
-#: gdk-pixbuf/io-gif.c:1009
+#: gdk-pixbuf/io-gif.c:1019
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "GIF файла е повреден (грешна LZW компресация)"
 
-#: gdk-pixbuf/io-gif.c:1059
+#: gdk-pixbuf/io-gif.c:1069
 msgid "File does not appear to be a GIF file"
 msgstr "Файла не изглежда да е GIF файл"
 
-#: gdk-pixbuf/io-gif.c:1071
+#: gdk-pixbuf/io-gif.c:1081
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "Версия %s на GIF формата на файла не се поддържа"
 
-#: gdk-pixbuf/io-gif.c:1144
+#: gdk-pixbuf/io-gif.c:1154
 msgid "GIF image contained a frame with height or width 0."
 msgstr "GIF картинката съдържа фрейм с височина или ширина 0."
 
-#: gdk-pixbuf/io-gif.c:1157
+#: gdk-pixbuf/io-gif.c:1167
 msgid "GIF image contained a frame appearing outside the image bounds."
 msgstr "GIF картинката съдържа фрейм с размери извън границите."
 
-#: gdk-pixbuf/io-gif.c:1173
+#: gdk-pixbuf/io-gif.c:1183
 msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
 msgstr ""
 "Първият фрейм на GIF картинката има'обръща към прфдишната' като режим на "
 "разполагане."
 
-#: gdk-pixbuf/io-gif.c:1208
+#: gdk-pixbuf/io-gif.c:1218
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
 msgstr "GIF картинката няма глобална цветна карта, както и фрейма вътре в нея."
 
-#: gdk-pixbuf/io-gif.c:1437
+#: gdk-pixbuf/io-gif.c:1447
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF картинката е орязана или непълна."
 
@@ -1755,15 +1759,15 @@ msgstr "Избор на фокус"
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr "Дали избраното съдържание ще се отдели при фокусиране."
 
-#: gtk/gtkentry.c:3877 gtk/gtklabel.c:3179
+#: gtk/gtkentry.c:3902 gtk/gtklabel.c:3179
 msgid "Select All"
 msgstr "Избира Всичко"
 
-#: gtk/gtkentry.c:3887 gtk/gtklabel.c:3189
+#: gtk/gtkentry.c:3912 gtk/gtklabel.c:3189
 msgid "Input Methods"
 msgstr "Режими на въвеждане"
 
-#: gtk/gtkentry.c:3897 gtk/gtktextview.c:6426
+#: gtk/gtkentry.c:3922 gtk/gtktextview.c:6426
 msgid "_Insert Unicode control character"
 msgstr "_Вмъква Уникод контролен символ"
 
@@ -2364,7 +2368,7 @@ msgstr ""
 msgid "Horizontal adjustment"
 msgstr "Хоризонтално нагласяване"
 
-#: gtk/gtklayout.c:624 gtk/gtkscrolledwindow.c:237
+#: gtk/gtklayout.c:624 gtk/gtkscrolledwindow.c:233
 msgid "The GtkAdjustment for the horizontal position."
 msgstr "Нагласяване на Gtk по хоризонталата."
 
@@ -2372,7 +2376,7 @@ msgstr "Нагласяване на Gtk по хоризонталата."
 msgid "Vertical adjustment"
 msgstr "Вертикално нагласяване"
 
-#: gtk/gtklayout.c:632 gtk/gtkscrolledwindow.c:244
+#: gtk/gtklayout.c:632 gtk/gtkscrolledwindow.c:240
 msgid "The GtkAdjustment for the vertical position."
 msgstr "Нагласяване на Gtk по вертикалата."
 
@@ -2964,43 +2968,43 @@ msgid ""
 msgstr ""
 "Втори бутон със стрелка напред от другата страна на лентата за скролиране"
 
-#: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:523
+#: gtk/gtkscrolledwindow.c:232 gtk/gtktext.c:598 gtk/gtktreeview.c:523
 msgid "Horizontal Adjustment"
 msgstr "Хоризонтално Нагласяване"
 
-#: gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:606 gtk/gtktreeview.c:531
+#: gtk/gtkscrolledwindow.c:239 gtk/gtktext.c:606 gtk/gtktreeview.c:531
 msgid "Vertical Adjustment"
 msgstr "Вертикално Нагласяване"
 
-#: gtk/gtkscrolledwindow.c:250
+#: gtk/gtkscrolledwindow.c:246
 msgid "Horizontal Scrollbar Policy"
 msgstr "Политика на Хоризонтална Лента за придвижване"
 
-#: gtk/gtkscrolledwindow.c:251
+#: gtk/gtkscrolledwindow.c:247
 msgid "When the horizontal scrollbar is displayed"
 msgstr "Когато се показва хоризонтална лента за придвижване"
 
-#: gtk/gtkscrolledwindow.c:258
+#: gtk/gtkscrolledwindow.c:254
 msgid "Vertical Scrollbar Policy"
 msgstr "Политика на Вертикална Лента за придвижване"
 
-#: gtk/gtkscrolledwindow.c:259
+#: gtk/gtkscrolledwindow.c:255
 msgid "When the vertical scrollbar is displayed"
 msgstr "Когато се показва вертикалната лента за придвижване"
 
-#: gtk/gtkscrolledwindow.c:267
+#: gtk/gtkscrolledwindow.c:263
 msgid "Window Placement"
 msgstr "Разполагане на Прозорец"
 
-#: gtk/gtkscrolledwindow.c:268
+#: gtk/gtkscrolledwindow.c:264
 msgid "Where the contents are located with respect to the scrollbars"
 msgstr "Къде е поместено съдържанието относно лентите за скролиране"
 
-#: gtk/gtkscrolledwindow.c:275
+#: gtk/gtkscrolledwindow.c:271
 msgid "Shadow Type"
 msgstr "Тип на Сянка"
 
-#: gtk/gtkscrolledwindow.c:276
+#: gtk/gtkscrolledwindow.c:272
 msgid "Style of bevel around the contents"
 msgstr "Стила около съдържанието"
 
@@ -3419,6 +3423,7 @@ msgid "_Yes"
 msgstr "_Да"
 
 #: gtk/gtkstock.c:334
+#, c-format
 msgid "Zoom _100%"
 msgstr "Мащаб _100%"
 
