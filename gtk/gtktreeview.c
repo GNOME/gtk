@@ -12280,7 +12280,7 @@ static void
 gtk_tree_view_search_activate (GtkEntry    *entry,
 			       GtkTreeView *tree_view)
 {
-  GtkTreePath *path;
+  GtkTreePath *path = NULL;
   GtkRBNode *node;
   GtkRBTree *tree;
 
@@ -12297,7 +12297,8 @@ gtk_tree_view_search_activate (GtkEntry    *entry,
   if (node && GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED))
     gtk_tree_view_row_activated (tree_view, path, tree_view->priv->focus_column);
 
-  gtk_tree_path_free (path);
+  if (path)
+    gtk_tree_path_free (path);
 }
 
 static gboolean

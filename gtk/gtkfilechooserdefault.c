@@ -2649,9 +2649,8 @@ shortcuts_list_create (GtkFileChooserDefault *impl)
   /* Tree */
 
   impl->browse_shortcuts_tree_view = gtk_tree_view_new ();
-  g_signal_connect (impl->browse_shortcuts_tree_view,
-		    "key-press-event", tree_view_keybinding_cb,
-		    impl);
+  g_signal_connect (impl->browse_shortcuts_tree_view, "key-press-event",
+		    G_CALLBACK (tree_view_keybinding_cb), impl);
   atk_object_set_name (gtk_widget_get_accessible (impl->browse_shortcuts_tree_view), _("Shortcuts"));
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (impl->browse_shortcuts_tree_view), FALSE);
 
@@ -5504,10 +5503,10 @@ location_entry_create (GtkFileChooserDefault *impl)
 
   if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN
       || impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
-    _gtk_file_chooser_entry_set_file_part (entry, "");
+    _gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (entry), "");
   else if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
 	   || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
-    _gtk_file_chooser_entry_set_file_part (entry,
+    _gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (entry),
 					   gtk_entry_get_text (GTK_ENTRY (impl->save_file_name_entry)));
   else
     g_assert_not_reached ();

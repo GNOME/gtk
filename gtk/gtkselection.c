@@ -1014,7 +1014,7 @@ selection_get_text_plain (GtkSelectionData *selection_data)
 {
   const gchar *charset = NULL;
   gchar *str, *result;
-  gint len;
+  gsize len;
   GError *error = NULL;
 
   str = g_strdup (selection_data->data);

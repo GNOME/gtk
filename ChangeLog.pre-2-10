@@ -1,3 +1,21 @@
+Wed Aug 25 17:14:58 2004  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_search_activate): initialize
+	path so we don't potentially use an undefined pointer.
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_list_create): add G_CALLBACK
+	cast for tree_view_keybinding_cb.
+
+	* gtk/gtkfilechooserdefault.c (location_entry_create): cast to
+	GTK_FILE_CHOOSER_ENTRY for _gtk_file_chooser_entry_set_file_part()
+	calls.
+
+	* gtk/gtkcellrenderercombo.c (gtk_cell_renderer_combo_start_editing):
+	cast to GTK_COMBO_BOX for gtk_combo_box_set_active_iter() call.
+
+	* gtk/gtkselection.c (selection_get_text_plain): make len a gsize,
+	since that's what g_convert_with_fallback() expects.
+
 Wed Aug 25 16:14:34 2004  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_search_activate): activate the

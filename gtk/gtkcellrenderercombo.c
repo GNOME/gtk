@@ -369,7 +369,8 @@ gtk_cell_renderer_combo_start_editing (GtkCellRenderer     *cell,
       search_data.found = FALSE;
       gtk_tree_model_foreach (cell_combo->model, find_text, &search_data);
       if (search_data.found)
-	gtk_combo_box_set_active_iter (combo, &(search_data.iter));
+	gtk_combo_box_set_active_iter (GTK_COMBO_BOX (combo),
+				       &(search_data.iter));
     }
 
   g_object_set (combo, "has_frame", FALSE, NULL);
