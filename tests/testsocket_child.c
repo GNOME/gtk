@@ -3,7 +3,8 @@
 
 #include <gtk/gtk.h>
 
-extern guint32 create_child_plug (guint32  xid,
+extern guint32 create_child_plug (GdkScreen *screen,
+				  guint32  xid,
 				  gboolean local);
 
 int
@@ -11,7 +12,10 @@ main (int argc, char *argv[])
 {
   guint32 xid;
   guint32 plug_xid;
-
+/*  int i = 1;
+  while (i)
+    sleep (1);
+*/
   gtk_init (&argc, &argv);
 
   if (argc != 1 && argc != 2)
@@ -29,11 +33,11 @@ main (int argc, char *argv[])
 	  exit (1);
 	}
       
-      create_child_plug (xid, FALSE);
+      create_child_plug (NULL, xid, FALSE);
     }
   else
     {
-      plug_xid = create_child_plug (0, FALSE);
+      plug_xid = create_child_plug (NULL, 0, FALSE);
       printf ("%d\n", plug_xid);
       fflush (stdout);
     }

@@ -73,7 +73,8 @@ add_buttons (GtkWidget *widget, GtkWidget *box)
 }
 
 guint32
-create_child_plug (guint32  xid,
+create_child_plug (GdkScreen *screen,
+		   guint32  xid,
 		   gboolean local)
 {
   GtkWidget *window;
@@ -81,8 +82,11 @@ create_child_plug (guint32  xid,
   GtkWidget *entry;
   GtkWidget *button;
   GtkWidget *label;
-
+  
   window = gtk_plug_new (xid);
+
+  if (screen && !xid)
+    gtk_window_set_screen (GTK_WINDOW(window), screen);
 
   gtk_signal_connect (GTK_OBJECT (window), "destroy",
 		      local ? GTK_SIGNAL_FUNC (local_destroy) : GTK_SIGNAL_FUNC (remote_destroy),

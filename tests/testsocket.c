@@ -18,7 +18,8 @@ typedef struct
   GtkWidget *socket;
 } Socket;
 
-extern guint32 create_child_plug (guint32  xid,
+extern guint32 create_child_plug (GdkScreen *screen,
+				  guint32  xid,
 				  gboolean local);
 
 static void
@@ -196,9 +197,18 @@ add_child (GtkWidget *window,
   Socket *socket;
   char *argv[3] = { "./testsocket_child", NULL, NULL };
   char buffer[20];
+  char dpy_buf[60];
+  char* screen_separator;
   int out_fd;
   GIOChannel *channel;
   GError *error = NULL;
+
+  sprintf (dpy_buf, "--display=%s", 
+	   gdk_display_get_name (gtk_widget_get_display (window)));
+  screen_separator = strrchr (dpy_buf, '.');
+  sprintf (screen_separator, ".%d", gdk_screen_get_number (gtk_widget_get_screen (window)));
+  
+  argv[1] = dpy_buf;
 
   if (active)
     {
@@ -206,7 +216,7 @@ add_child (GtkWidget *window,
       gtk_box_pack_start (GTK_BOX (vbox), socket->box, TRUE, TRUE, 0);
       gtk_widget_show (socket->box);
       sprintf(buffer, "%#lx", (gulong) gtk_socket_get_id (GTK_SOCKET (socket->socket)));
-      argv[1] = buffer;
+      argv[2] = buffer;
     }
   
   if (!g_spawn_async_with_pipes (NULL, argv, NULL, 0, NULL, NULL, NULL, NULL, &out_fd, NULL, &error))
@@ -248,7 +258,8 @@ add_local_active_child (GtkWidget *window)
   gtk_box_pack_start (GTK_BOX (vbox), socket->box, TRUE, TRUE, 0);
   gtk_widget_show (socket->box);
 
-  create_child_plug (gtk_socket_get_id (GTK_SOCKET (socket->socket)), TRUE);
+  create_child_plug (NULL,
+		     gtk_socket_get_id (GTK_SOCKET (socket->socket)), TRUE);
 }
 
 void
@@ -261,8 +272,84 @@ add_local_passive_child (GtkWidget *window)
   gtk_box_pack_start (GTK_BOX (vbox), socket->box, TRUE, TRUE, 0);
   gtk_widget_show (socket->box);
 
-  xid = create_child_plug (0, TRUE);
+  xid = create_child_plug (gtk_widget_get_screen (window), 0, TRUE);
   gtk_socket_add_id (GTK_SOCKET (socket->socket), xid);
+}
+
+/* Create a new toplevel and reparent  */
+void change_screen (GdkScreen *new_screen, GtkWidget *toplevel)
+{
+  GtkWidget *child = gtk_bin_get_child (GTK_BIN (toplevel));
+  GtkWidget *new_toplevel;
+
+  GdkGeometry geometry;
+
+  new_toplevel= gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  
+  gtk_window_set_screen (GTK_WINDOW (new_toplevel), new_screen);
+
+  gtk_widget_set_name (new_toplevel, "main window");
+
+  geometry.min_width = -1;
+  geometry.min_height = -1;
+  geometry.max_width = -1;
+  geometry.max_height = G_MAXSHORT;
+  gtk_window_set_geometry_hints (GTK_WINDOW (new_toplevel), NULL,
+				 &geometry,
+				 GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE);
+
+  gtk_signal_connect (GTK_OBJECT (new_toplevel), "destroy",
+		      GTK_SIGNAL_FUNC(gtk_main_quit),
+		      NULL);
+  gtk_signal_connect (GTK_OBJECT (new_toplevel), "delete-event",
+		      GTK_SIGNAL_FUNC (gtk_false),
+		      NULL);
+
+  gtk_widget_reparent (GTK_WIDGET (child), new_toplevel);
+  gtk_widget_show_all (new_toplevel);
+  window = new_toplevel;
+
+  g_signal_handlers_disconnect_by_func( G_OBJECT (toplevel), 
+					G_CALLBACK (gtk_main_quit), NULL);
+  g_signal_handlers_disconnect_by_func( G_OBJECT (toplevel), 
+					G_CALLBACK (gtk_false), NULL);
+  gtk_widget_destroy (toplevel);
+}
+
+void move_screen (GtkWidget *widget)
+{
+  GdkScreen *screen = gtk_widget_get_screen (window);
+  GdkDisplay *display = gtk_widget_get_display (window);
+
+  if (g_slist_length (sockets) != 0)
+    {
+      GtkWidget *dialog= gtk_message_dialog_new 
+	(GTK_WINDOW (gtk_widget_get_toplevel (window)),
+	 GTK_DIALOG_DESTROY_WITH_PARENT,
+	 GTK_MESSAGE_ERROR,
+	 GTK_BUTTONS_OK,
+	 "Please remove all sockets before changing screen");
+      
+      gtk_window_set_screen (GTK_WINDOW (dialog), screen);
+      gtk_widget_show (dialog);
+      g_signal_connect (G_OBJECT (dialog), "response",
+			G_CALLBACK (gtk_widget_destroy),
+			NULL);
+    }
+  else
+    {
+      if (gdk_display_get_n_screens(display) > 1)
+	{
+	  GdkScreen *new_screen;
+	  int number_of_screens = gdk_display_get_n_screens (display);
+	  int screen_num = gdk_screen_get_number (screen);
+	  if ((screen_num +1) < number_of_screens)
+	    new_screen = gdk_display_get_screen (display, screen_num + 1);
+	  else
+	    new_screen = gdk_display_get_screen (display, 0);
+	  change_screen (new_screen, gtk_widget_get_toplevel (window)); 
+	}
+    }
 }
 
 int
@@ -298,7 +385,16 @@ main (int argc, char *argv[])
   gtk_box_pack_start (GTK_BOX (vbox),
 		      gtk_item_factory_get_widget (item_factory, "<main>"),
 		      FALSE, FALSE, 0);
-
+  
+  if (gdk_display_get_n_screens (gtk_widget_get_display (window)) > 1)
+    {
+      button = gtk_button_new_with_label ("Move the next screen");
+      gtk_box_pack_start (GTK_BOX(vbox), button, FALSE, FALSE, 0);
+      gtk_signal_connect_object (GTK_OBJECT(button), "clicked",
+				 GTK_SIGNAL_FUNC(move_screen),
+				 GTK_OBJECT(vbox));
+    }
+  
   button = gtk_button_new_with_label ("Add Active Child");
   gtk_box_pack_start (GTK_BOX(vbox), button, FALSE, FALSE, 0);
 

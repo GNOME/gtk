@@ -27,7 +27,7 @@
 static void gdk_screen_class_init (GObjectClass * klass);
 static gpointer parent_class = NULL;
 
-GType
+GtkType
 gdk_screen_get_type (void)
 {
 
