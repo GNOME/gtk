@@ -1,3 +1,7 @@
+2003-07-07  Pablo Saratxaga  <pablo@mandrakesoft.com>
+
+	* wa.po: Updated Walloon file
+
 Wed Jul  2 18:00:32 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* POTFILES.in: add gtkicontheme.c

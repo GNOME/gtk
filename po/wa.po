@@ -6,13 +6,13 @@
 #
 # Copyright (C) 2001 Free Software Foundation, Inc.
 # Pablo Saratxaga <srtxg@chanae.alphanet.ch> 2001
+# Pablo Saratxaga <pablo@walon.org>, 2003.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk20 1.3.0\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-06-29 03:38+0200\n"
-"PO-Revision-Date: 1999-02-07 17:37+0100\n"
+"POT-Creation-Date: 2003-07-07 13:08+0200\n"
+"PO-Revision-Date: 2003-07-07 23:19+0200\n"
 "Last-Translator: Pablo Saratxaga <srtxg@chanae.alphanet.ch>\n"
 "Language-Team: walon <linux-wa@chanae.alphanet.ch>\n"
 "MIME-Version: 1.0\n"
@@ -31,8 +31,7 @@ msgstr "Li fitchî imådje «%s» n' a nole dinêye dvins."
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:198 gdk-pixbuf/gdk-pixbuf-io.c:781
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:226
@@ -117,7 +116,7 @@ msgstr "Les dnêyes di picsels del imådje sont crombes"
 #: gdk-pixbuf/gdk-pixdata.c:402
 #, c-format
 msgid "failed to allocate image buffer of %u bytes"
-msgstr "dji n' a savou alouwer on tampon di %u octets po l' imådje"
+msgstr "dji n' a savou alower on tampon di %u octets po l' imådje"
 
 #: gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
@@ -277,7 +276,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:673 gdk-pixbuf/io-jpeg.c:858
 msgid "Couldn't allocate memory for loading JPEG file"
-msgstr "Dji n' a savou alouwer del memwere assez po tcherdjî l' fitchî JPEG"
+msgstr "Dji n' a savou alower del memwere assez po tcherdjî l' fitchî JPEG"
 
 #: gdk-pixbuf/io-jpeg.c:812
 #, c-format
@@ -288,8 +287,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:827
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:940
@@ -317,14 +315,13 @@ msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:183
-#, fuzzy, c-format
+#, c-format
 msgid "Fatal error in PNG image file: %s"
-msgstr "Åk n' a nén stî cwand dji tcherdjeve li fitchî pixmap: %s"
+msgstr ""
 
 #: gdk-pixbuf/io-png.c:301
-#, fuzzy
 msgid "Insufficient memory to load PNG file"
-msgstr "Nén del memwere assez po tcherdjî l' imådje GIF"
+msgstr "Nén del memwere assez po tcherdjî l' imådje PNG"
 
 #: gdk-pixbuf/io-png.c:605
 #, c-format
@@ -334,18 +331,16 @@ msgid ""
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:656
-#, fuzzy
 msgid "Fatal error reading PNG image file"
-msgstr "Åk n' a nén stî cwand dji tcherdjeve li fitchî pixmap: %s"
+msgstr ""
 
 #: gdk-pixbuf/io-png.c:705
-#, fuzzy, c-format
+#, c-format
 msgid "Fatal error reading PNG image file: %s"
-msgstr "Åk n' a nén stî cwand dji tcherdjeve li fitchî pixmap: %s"
+msgstr ""
 
 #: gdk-pixbuf/io-png.c:771
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:779
@@ -354,8 +349,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-png.c:812
 #, c-format
-msgid ""
-"Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
+msgid "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:919
@@ -403,9 +397,8 @@ msgid "PNM image format is invalid"
 msgstr ""
 
 #: gdk-pixbuf/io-pnm.c:655
-#, fuzzy
 msgid "PNM image loader does not support this PNM subformat"
-msgstr " Li sierveu n' sopoite nén cisse modêye ci "
+msgstr ""
 
 #: gdk-pixbuf/io-pnm.c:710
 msgid "Premature end-of-file encountered"
@@ -416,23 +409,20 @@ msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr ""
 
 #: gdk-pixbuf/io-pnm.c:769
-#, fuzzy
 msgid "Can't allocate memory for loading PNM image"
-msgstr "Dji n' pou alower del memwere!\n"
+msgstr "Dji n' pou alower del memwere po tcherdjî l' imådje PNM"
 
 #: gdk-pixbuf/io-pnm.c:819
-#, fuzzy
 msgid "Insufficient memory to load PNM context struct"
-msgstr "Nén del memwere assez po tcherdjî l' imådje GIF"
+msgstr "Nén del memwere assez po tcherdjî li structeure di contecse del imådje PNM"
 
 #: gdk-pixbuf/io-pnm.c:869
 msgid "Unexpected end of PNM image data"
 msgstr ""
 
 #: gdk-pixbuf/io-pnm.c:991
-#, fuzzy
 msgid "Insufficient memory to load PNM file"
-msgstr "Nén del memwere assez po tcherdjî l' imådje GIF"
+msgstr "Nén del memwere assez po tcherdjî l' imådje PNM"
 
 #: gdk-pixbuf/io-pnm.c:1070
 msgid "The PNM/PBM/PGM/PPM image format family"
@@ -451,32 +441,28 @@ msgid "unsupported RAS image variation"
 msgstr ""
 
 #: gdk-pixbuf/io-ras.c:170 gdk-pixbuf/io-ras.c:190
-#, fuzzy
 msgid "Not enough memory to load RAS image"
-msgstr "Nén del memwere assez po tcherdjî l' imådje GIF"
+msgstr "Nén del memwere assez po tcherdjî l' imådje RAS"
 
 #: gdk-pixbuf/io-ras.c:532
 msgid "The Sun raster image format"
 msgstr ""
 
 #: gdk-pixbuf/io-tga.c:157
-#, fuzzy
 msgid "Can't allocate memory for IOBuffer struct"
-msgstr "Dji n' pou alower del memwere!\n"
+msgstr ""
 
 #: gdk-pixbuf/io-tga.c:176
-#, fuzzy
 msgid "Can't allocate memory for IOBuffer data"
-msgstr "Dji n' pou alower del memwere!\n"
+msgstr ""
 
 #: gdk-pixbuf/io-tga.c:187
 msgid "Can't realloc IOBuffer data"
 msgstr ""
 
 #: gdk-pixbuf/io-tga.c:217
-#, fuzzy
 msgid "Can't allocate temporary IOBuffer data"
-msgstr "Dji n' pou alower del memwere!\n"
+msgstr ""
 
 #: gdk-pixbuf/io-tga.c:281
 msgid "fread() failed -- premature end-of-file probably encountered"
@@ -516,42 +502,36 @@ msgstr ""
 
 #: gdk-pixbuf/io-tga.c:732 gdk-pixbuf/io-tga.c:741 gdk-pixbuf/io-tga.c:751
 #: gdk-pixbuf/io-tga.c:761 gdk-pixbuf/io-tga.c:768
-#, fuzzy
 msgid "TGA image type not supported"
-msgstr "Li sôre d' imådje %s n' est nén sopoirté"
+msgstr "Li sôre d' imådje TGA n' est nén sopoirtêye"
 
 #: gdk-pixbuf/io-tga.c:814
-#, fuzzy
 msgid "Can't allocate memory for TGA context struct"
-msgstr "Dji n' pou alower del memwere!\n"
+msgstr ""
 
 #: gdk-pixbuf/io-tga.c:878
 msgid "Excess data in file"
 msgstr ""
 
 #: gdk-pixbuf/io-tga.c:924
-#, fuzzy
 msgid "Can't allocate memory for TGA header"
-msgstr "Dji n' pou alower del memwere!\n"
+msgstr ""
 
 #: gdk-pixbuf/io-tga.c:934
 msgid "Too big value in the infolen field of TGA header."
 msgstr ""
 
 #: gdk-pixbuf/io-tga.c:958
-#, fuzzy
 msgid "Can't allocate memory for TGA cmap temporary buffer"
-msgstr "Dji n' pou alower del memwere!\n"
+msgstr ""
 
 #: gdk-pixbuf/io-tga.c:970
-#, fuzzy
 msgid "Can't allocate memory for TGA colormap struct"
-msgstr "Dji n' pou alower del memwere!\n"
+msgstr ""
 
 #: gdk-pixbuf/io-tga.c:979
-#, fuzzy
 msgid "Can't allocate memory for TGA colormap entries"
-msgstr "Dji n' pou alower del memwere!\n"
+msgstr ""
 
 #: gdk-pixbuf/io-tga.c:989
 msgid "Unexpected bitdepth for TGA colormap"
@@ -594,51 +574,44 @@ msgid "Dimensions of TIFF image too large"
 msgstr ""
 
 #: gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:246 gdk-pixbuf/io-tiff.c:553
-#, fuzzy
 msgid "Insufficient memory to open TIFF file"
-msgstr "Nén del memwere assez po tcherdjî l' imådje GIF"
+msgstr "Nén del memwere assez po drovi l' imådje TIFF"
 
 #: gdk-pixbuf/io-tiff.c:258
-#, fuzzy
 msgid "Failed to load RGB data from TIFF file"
-msgstr "Dji n' a savou lére des dnêyes do precessus efant"
+msgstr ""
 
 #: gdk-pixbuf/io-tiff.c:266
 msgid "Unsupported TIFF variant"
 msgstr ""
 
 #: gdk-pixbuf/io-tiff.c:336
-#, fuzzy
 msgid "Failed to open TIFF image"
-msgstr "Dji n' a savou drovi li fitchî «%s»: %s"
+msgstr "Dji n' a savou drovi l' imådje TIFF"
 
 #: gdk-pixbuf/io-tiff.c:349
-#, fuzzy
 msgid "TIFFClose operation failed"
-msgstr "Dj' a fwait berwete"
+msgstr ""
 
 #: gdk-pixbuf/io-tiff.c:483 gdk-pixbuf/io-tiff.c:496
-#, fuzzy
 msgid "Failed to load TIFF image"
-msgstr "Dji n' a savou tcherdjî l' imådje «%s»: %s"
+msgstr "Dji n' a savou tcherdjî l' imådje TIFF"
 
 #: gdk-pixbuf/io-tiff.c:591
 msgid "The TIFF image format"
 msgstr ""
 
 #: gdk-pixbuf/io-wbmp.c:246
-#, fuzzy
 msgid "Image has zero width"
-msgstr "Håyneu d' imådjes"
+msgstr "L' imådje a ene lårdjeu di zero"
 
 #: gdk-pixbuf/io-wbmp.c:264
 msgid "Image has zero height"
 msgstr ""
 
 #: gdk-pixbuf/io-wbmp.c:275
-#, fuzzy
 msgid "Not enough memory to load image"
-msgstr "Nén del memwere assez po tcherdjî l' imådje GIF"
+msgstr "Nén del memwere assez po tcherdjî l' imådje"
 
 #: gdk-pixbuf/io-wbmp.c:334
 msgid "Couldn't save the rest"
@@ -653,9 +626,8 @@ msgid "Invalid XBM file"
 msgstr ""
 
 #: gdk-pixbuf/io-xbm.c:295
-#, fuzzy
 msgid "Insufficient memory to load XBM image file"
-msgstr "Nén del memwere assez po tcherdjî l' imådje GIF"
+msgstr "Nén del memwere assez po tcherdjî l' imådje XBM"
 
 #: gdk-pixbuf/io-xbm.c:439
 msgid "Failed to write to temporary file when loading XBM image"
@@ -666,9 +638,8 @@ msgid "The XBM image format"
 msgstr ""
 
 #: gdk-pixbuf/io-xpm.c:1229
-#, fuzzy
 msgid "No XPM header found"
-msgstr "Nou scriftôr di trové\n"
+msgstr "Nole tiestire XPM di trovêye"
 
 #: gdk-pixbuf/io-xpm.c:1237
 msgid "XPM file has image width <= 0"
@@ -717,7 +688,7 @@ msgstr "Li prémetou håynaedje po GDK"
 #.
 #: gtk/gtkaccellabel.c:117
 msgid "Shift"
-msgstr ""
+msgstr "Shift"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the control key. If the text on this key isn't typically
@@ -738,18 +709,16 @@ msgid "Alt"
 msgstr "Alt"
 
 #: gtk/gtkaccellabel.c:137
-#, fuzzy
 msgid "Accelerator Closure"
-msgstr "Rascourti"
+msgstr ""
 
 #: gtk/gtkaccellabel.c:138
 msgid "The closure to be monitored for accelerator changes"
 msgstr ""
 
 #: gtk/gtkaccellabel.c:144
-#, fuzzy
 msgid "Accelerator Widget"
-msgstr "Rascourti"
+msgstr ""
 
 #: gtk/gtkaccellabel.c:145
 msgid "The widget to be monitored for accelerator changes"
@@ -804,9 +773,8 @@ msgid "The direction the arrow should point"
 msgstr ""
 
 #: gtk/gtkarrow.c:106
-#, fuzzy
 msgid "Arrow shadow"
-msgstr "shadow"
+msgstr ""
 
 #: gtk/gtkarrow.c:107
 msgid "Appearance of the shadow surrounding the arrow"
@@ -829,9 +797,8 @@ msgid "Y alignment of the child"
 msgstr ""
 
 #: gtk/gtkaspectframe.c:122
-#, fuzzy
 msgid "Ratio"
-msgstr "aKtion!"
+msgstr ""
 
 #: gtk/gtkaspectframe.c:123
 msgid "Aspect ratio if obey_child is FALSE"
@@ -878,9 +845,8 @@ msgid "Amount to increase child's size on the top and bottom"
 msgstr ""
 
 #: gtk/gtkbbox.c:155
-#, fuzzy
 msgid "Layout style"
-msgstr "Stîle del fonte"
+msgstr ""
 
 #: gtk/gtkbbox.c:156
 msgid ""
@@ -899,9 +865,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkbox.c:128
-#, fuzzy
 msgid "Spacing"
-msgstr "Espaçmint:"
+msgstr "Espåçmint"
 
 #: gtk/gtkbox.c:129
 msgid "The amount of space between children"
@@ -916,11 +881,8 @@ msgid "Whether the children should all be the same size"
 msgstr ""
 
 #: gtk/gtkbox.c:146 gtk/gtkpreview.c:132
-#, fuzzy
 msgid "Expand"
 msgstr ""
-"Tot l'\n"
-"coxhlaedje"
 
 #: gtk/gtkbox.c:147
 msgid "Whether the child should receive extra space when the parent grows"
@@ -945,9 +907,8 @@ msgid "Extra space to put between the child and its neighbors, in pixels"
 msgstr ""
 
 #: gtk/gtkbox.c:167
-#, fuzzy
 msgid "Pack type"
-msgstr "Stîle do cåde"
+msgstr ""
 
 #: gtk/gtkbox.c:168 gtk/gtknotebook.c:494
 msgid ""
@@ -957,14 +918,12 @@ msgstr ""
 
 #: gtk/gtkbox.c:174 gtk/gtknotebook.c:472 gtk/gtkpaned.c:218
 #: gtk/gtkruler.c:138
-#, fuzzy
 msgid "Position"
-msgstr "Eplaeçmint do tecse"
+msgstr "Eplaeçmint"
 
 #: gtk/gtkbox.c:175 gtk/gtknotebook.c:473
-#, fuzzy
 msgid "The index of the child in the parent"
-msgstr "Difén li djeu do moumint"
+msgstr ""
 
 #: gtk/gtkbutton.c:189 gtk/gtkframe.c:125 gtk/gtklabel.c:290
 msgid "Label"
@@ -977,9 +936,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkbutton.c:197 gtk/gtklabel.c:311
-#, fuzzy
 msgid "Use underline"
-msgstr "Sorligné"
+msgstr "Eployî sorlignaedje"
 
 #: gtk/gtkbutton.c:198 gtk/gtklabel.c:312
 msgid ""
@@ -992,33 +950,28 @@ msgid "Use stock"
 msgstr ""
 
 #: gtk/gtkbutton.c:206
-msgid ""
-"If set, the label is used to pick a stock item instead of being displayed"
+msgid "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
 
 #: gtk/gtkbutton.c:213
-#, fuzzy
 msgid "Border relief"
-msgstr "Grandeu do tchamp"
+msgstr ""
 
 #: gtk/gtkbutton.c:214
-#, fuzzy
 msgid "The border relief style"
-msgstr "Grandeu do tchamp"
+msgstr ""
 
 #: gtk/gtkbutton.c:271
-#, fuzzy
 msgid "Default Spacing"
-msgstr "Prémetowe accion"
+msgstr "Prémetou espåçmint"
 
 #: gtk/gtkbutton.c:272
 msgid "Extra space to add for CAN_DEFAULT buttons"
 msgstr ""
 
 #: gtk/gtkbutton.c:278
-#, fuzzy
 msgid "Default Outside Spacing"
-msgstr "Eployî li prémetou drovaedje"
+msgstr ""
 
 #: gtk/gtkbutton.c:279
 msgid ""
@@ -1031,8 +984,7 @@ msgid "Child X Displacement"
 msgstr ""
 
 #: gtk/gtkbutton.c:285
-msgid ""
-"How far in the x direction to move the child when the button is depressed"
+msgid "How far in the x direction to move the child when the button is depressed"
 msgstr ""
 
 #: gtk/gtkbutton.c:292
@@ -1040,14 +992,12 @@ msgid "Child Y Displacement"
 msgstr ""
 
 #: gtk/gtkbutton.c:293
-msgid ""
-"How far in the y direction to move the child when the button is depressed"
+msgid "How far in the y direction to move the child when the button is depressed"
 msgstr ""
 
 #: gtk/gtkcellrenderer.c:116
-#, fuzzy
 msgid "mode"
-msgstr "Môde"
+msgstr "môde"
 
 #: gtk/gtkcellrenderer.c:117
 msgid "Editable mode of the CellRenderer"
@@ -1058,150 +1008,120 @@ msgid "visible"
 msgstr "veyåve"
 
 #: gtk/gtkcellrenderer.c:127
-#, fuzzy
 msgid "Display the cell"
-msgstr "Vey li tchedje do sistinme"
+msgstr ""
 
 #: gtk/gtkcellrenderer.c:135
-#, fuzzy
 msgid "xalign"
-msgstr "xpaint"
+msgstr ""
 
 #: gtk/gtkcellrenderer.c:136
-#, fuzzy
 msgid "The x-align"
-msgstr "xpaint"
+msgstr ""
 
 #: gtk/gtkcellrenderer.c:146
-#, fuzzy
 msgid "yalign"
-msgstr "Itålyinne"
+msgstr ""
 
 #: gtk/gtkcellrenderer.c:147
-#, fuzzy
 msgid "The y-align"
-msgstr "Itålyinne"
+msgstr ""
 
 #: gtk/gtkcellrenderer.c:157
-#, fuzzy
 msgid "xpad"
-msgstr "xpaint"
+msgstr ""
 
 #: gtk/gtkcellrenderer.c:158
-#, fuzzy
 msgid "The xpad"
-msgstr "xpaint"
+msgstr ""
 
 #: gtk/gtkcellrenderer.c:168
-#, fuzzy
 msgid "ypad"
-msgstr "sicret"
+msgstr ""
 
 #: gtk/gtkcellrenderer.c:169
-#, fuzzy
 msgid "The ypad"
-msgstr "sicret"
+msgstr ""
 
 #: gtk/gtkcellrenderer.c:179
-#, fuzzy
 msgid "width"
-msgstr "Lårdjeu"
+msgstr "lårdjeu"
 
 #: gtk/gtkcellrenderer.c:180
-#, fuzzy
 msgid "The fixed width"
-msgstr "Lårdjeu do tecse"
+msgstr ""
 
 #: gtk/gtkcellrenderer.c:190
-#, fuzzy
 msgid "height"
-msgstr "hût"
+msgstr "hôteu"
 
 #: gtk/gtkcellrenderer.c:191
-#, fuzzy
 msgid "The fixed height"
-msgstr "Hôteu do tecse"
+msgstr ""
 
 #: gtk/gtkcellrenderer.c:201
-#, fuzzy
 msgid "Is Expander"
 msgstr ""
-"Tot l'\n"
-"coxhlaedje"
 
 #: gtk/gtkcellrenderer.c:202
 msgid "Row has children"
 msgstr ""
 
 #: gtk/gtkcellrenderer.c:211
-#, fuzzy
 msgid "Is Expanded"
 msgstr ""
-"Tot l'\n"
-"coxhlaedje"
 
 #: gtk/gtkcellrenderer.c:212
 msgid "Row is an expander row, and is expanded"
 msgstr ""
 
 #: gtk/gtkcellrenderer.c:220
-#, fuzzy
 msgid "Cell background color name"
-msgstr "No del coleur di fond"
+msgstr ""
 
 #: gtk/gtkcellrenderer.c:221
-#, fuzzy
 msgid "Cell background color as a string"
-msgstr "Coleur di fond come ene tchinne di tecse"
+msgstr ""
 
 #: gtk/gtkcellrenderer.c:228
-#, fuzzy
 msgid "Cell background color"
-msgstr "Coleur di fond"
+msgstr ""
 
 #: gtk/gtkcellrenderer.c:229
-#, fuzzy
 msgid "Cell background color as a GdkColor"
-msgstr "Coleur di fond come valixhance GdkColor"
+msgstr ""
 
 #: gtk/gtkcellrenderer.c:237
-#, fuzzy
 msgid "Cell background set"
-msgstr "Apontiaedje do fond do scribanne"
+msgstr ""
 
 #: gtk/gtkcellrenderer.c:238
-#, fuzzy
 msgid "Whether this tag affects the cell background color"
-msgstr "Diner li coleur di fond"
+msgstr ""
 
 #: gtk/gtkcellrendererpixbuf.c:132
-#, fuzzy
 msgid "Pixbuf Object"
-msgstr "Objets do scriftôr"
+msgstr ""
 
 #: gtk/gtkcellrendererpixbuf.c:133
-#, fuzzy
 msgid "The pixbuf to render"
-msgstr "Tecse a håyner"
+msgstr ""
 
 #: gtk/gtkcellrendererpixbuf.c:141
-#, fuzzy
 msgid "Pixbuf Expander Open"
-msgstr "Grandeu do papî"
+msgstr ""
 
 #: gtk/gtkcellrendererpixbuf.c:142
-#, fuzzy
 msgid "Pixbuf for open expander"
-msgstr "Tecse a håyner"
+msgstr ""
 
 #: gtk/gtkcellrendererpixbuf.c:150
 msgid "Pixbuf Expander Closed"
 msgstr ""
 
 #: gtk/gtkcellrendererpixbuf.c:151
-#, fuzzy
 msgid "Pixbuf for closed expander"
-msgstr "Tecse a håyner"
+msgstr ""
 
 #: gtk/gtkcellrendererpixbuf.c:159 gtk/gtkimage.c:176
 msgid "Stock ID"
@@ -1212,18 +1132,16 @@ msgid "The stock ID of the stock icon to render"
 msgstr ""
 
 #: gtk/gtkcellrendererpixbuf.c:167
-#, fuzzy
 msgid "Size"
-msgstr "_Grandeu:"
+msgstr "Grandeu"
 
 #: gtk/gtkcellrendererpixbuf.c:168
-#, fuzzy
 msgid "The size of the rendered icon"
-msgstr "Disfacer li purnea."
+msgstr "Li grandeu del imådjete håynêye"
 
 #: gtk/gtkcellrendererpixbuf.c:176
 msgid "Detail"
-msgstr ""
+msgstr "Detay"
 
 #: gtk/gtkcellrendererpixbuf.c:177
 msgid "Render detail to pass to the theme engine"
@@ -1328,7 +1246,7 @@ msgstr "Variante del fonte"
 #: gtk/gtkcellrenderertext.c:283 gtk/gtkcellrenderertext.c:284
 #: gtk/gtktexttag.c:324
 msgid "Font weight"
-msgstr "Pwed del fonte"
+msgstr "Pwès del fonte"
 
 #: gtk/gtkcellrenderertext.c:293 gtk/gtkcellrenderertext.c:294
 #: gtk/gtktexttag.c:335
@@ -1361,8 +1279,7 @@ msgid "Rise"
 msgstr "Hôteu"
 
 #: gtk/gtkcellrenderertext.c:333
-msgid ""
-"Offset of text above the baseline (below the baseline if rise is negative)"
+msgid "Offset of text above the baseline (below the baseline if rise is negative)"
 msgstr ""
 "Eplaeçmint e hôteu pa rapoirt al roye di båze pol tecse (å dzo del roye si "
 "l' valixhance est negative)"
@@ -1377,182 +1294,159 @@ msgstr "Bårer li tecse d' ene roye å d' truviè"
 
 #: gtk/gtkcellrenderertext.c:351 gtk/gtktexttag.c:471
 msgid "Underline"
-msgstr "Sorligné"
+msgstr "Sorlignî"
 
 #: gtk/gtkcellrenderertext.c:352 gtk/gtktexttag.c:472
 msgid "Style of underline for this text"
 msgstr "Stîle di sorlignaedje po ci tecse chal"
 
 #: gtk/gtkcellrenderertext.c:362 gtk/gtktexttag.c:508
-#, fuzzy
 msgid "Background set"
-msgstr "Apontiaedje do fond do scribanne"
+msgstr ""
 
 #: gtk/gtkcellrenderertext.c:363 gtk/gtktexttag.c:509
-#, fuzzy
 msgid "Whether this tag affects the background color"
-msgstr "Diner li coleur di fond"
+msgstr ""
 
 #: gtk/gtkcellrenderertext.c:366 gtk/gtktexttag.c:520
-#, fuzzy
 msgid "Foreground set"
-msgstr "Coleur di _dvant: "
+msgstr ""
 
 #: gtk/gtkcellrenderertext.c:367 gtk/gtktexttag.c:521
-#, fuzzy
 msgid "Whether this tag affects the foreground color"
-msgstr "gtranslator -- coleur di dvant"
+msgstr ""
 
 #: gtk/gtkcellrenderertext.c:370 gtk/gtktexttag.c:528
-#, fuzzy
 msgid "Editability set"
-msgstr "Aspougnåve"
+msgstr ""
 
 #: gtk/gtkcellrenderertext.c:371 gtk/gtktexttag.c:529
 msgid "Whether this tag affects text editability"
 msgstr ""
 
 #: gtk/gtkcellrenderertext.c:374 gtk/gtktexttag.c:532
-#, fuzzy
 msgid "Font family set"
-msgstr "Famile del fonte"
+msgstr ""
 
 #: gtk/gtkcellrenderertext.c:375 gtk/gtktexttag.c:533
 msgid "Whether this tag affects the font family"
 msgstr ""
 
 #: gtk/gtkcellrenderertext.c:378 gtk/gtktexttag.c:536
-#, fuzzy
 msgid "Font style set"
-msgstr "Stîle del fonte"
+msgstr ""
 
 #: gtk/gtkcellrenderertext.c:379 gtk/gtktexttag.c:537
 msgid "Whether this tag affects the font style"
 msgstr ""
 
 #: gtk/gtkcellrenderertext.c:382 gtk/gtktexttag.c:540
-#, fuzzy
 msgid "Font variant set"
-msgstr "Variante del fonte"
+msgstr ""
 
 #: gtk/gtkcellrenderertext.c:383 gtk/gtktexttag.c:541
 msgid "Whether this tag affects the font variant"
 msgstr ""
 
 #: gtk/gtkcellrenderertext.c:386 gtk/gtktexttag.c:544
-#, fuzzy
 msgid "Font weight set"
-msgstr "Pwed del fonte"
+msgstr ""
 
 #: gtk/gtkcellrenderertext.c:387 gtk/gtktexttag.c:545
 msgid "Whether this tag affects the font weight"
 msgstr ""
 
 #: gtk/gtkcellrenderertext.c:390 gtk/gtktexttag.c:548
-#, fuzzy
 msgid "Font stretch set"
-msgstr "Lårdjeu del fonte"
+msgstr ""
 
 #: gtk/gtkcellrenderertext.c:391 gtk/gtktexttag.c:549
 msgid "Whether this tag affects the font stretch"
 msgstr ""
 
 #: gtk/gtkcellrenderertext.c:394 gtk/gtktexttag.c:552
-#, fuzzy
 msgid "Font size set"
-msgstr "Grandeu del fonte"
+msgstr ""
 
 #: gtk/gtkcellrenderertext.c:395 gtk/gtktexttag.c:553
 msgid "Whether this tag affects the font size"
 msgstr ""
 
 #: gtk/gtkcellrenderertext.c:398 gtk/gtktexttag.c:556
-#, fuzzy
 msgid "Font scale set"
-msgstr "Schåle del fonte"
+msgstr ""
 
 #: gtk/gtkcellrenderertext.c:399 gtk/gtktexttag.c:557
 msgid "Whether this tag scales the font size by a factor"
 msgstr ""
 
 #: gtk/gtkcellrenderertext.c:402 gtk/gtktexttag.c:576
-#, fuzzy
 msgid "Rise set"
-msgstr "Rimete a zerô"
+msgstr ""
 
 #: gtk/gtkcellrenderertext.c:403 gtk/gtktexttag.c:577
 msgid "Whether this tag affects the rise"
 msgstr ""
 
 #: gtk/gtkcellrenderertext.c:406 gtk/gtktexttag.c:592
-#, fuzzy
 msgid "Strikethrough set"
-msgstr "Båré"
+msgstr ""
 
 #: gtk/gtkcellrenderertext.c:407 gtk/gtktexttag.c:593
-#, fuzzy
 msgid "Whether this tag affects strikethrough"
-msgstr "Bårer li tecse d' ene roye å d' truviè"
+msgstr ""
 
 #: gtk/gtkcellrenderertext.c:410 gtk/gtktexttag.c:600
-#, fuzzy
 msgid "Underline set"
-msgstr "Sorligné"
+msgstr ""
 
 #: gtk/gtkcellrenderertext.c:411 gtk/gtktexttag.c:601
 msgid "Whether this tag affects underlining"
 msgstr ""
 
 #: gtk/gtkcellrenderertoggle.c:132
-#, fuzzy
 msgid "Toggle state"
-msgstr "Statistikes log"
+msgstr ""
 
 #: gtk/gtkcellrenderertoggle.c:133
 msgid "The toggle state of the button"
 msgstr ""
 
 #: gtk/gtkcellrenderertoggle.c:141
-#, fuzzy
 msgid "Inconsistent state"
-msgstr "Eplaeçmint del imådjete"
+msgstr ""
 
 #: gtk/gtkcellrenderertoggle.c:142
-#, fuzzy
 msgid "The inconsistent state of the button"
-msgstr "Li djeu del vicåreye"
+msgstr ""
 
 #: gtk/gtkcellrenderertoggle.c:150
-#, fuzzy
 msgid "Activatable"
-msgstr "En alaedje"
+msgstr ""
 
 #: gtk/gtkcellrenderertoggle.c:151
 msgid "The toggle button can be activated"
 msgstr ""
 
 #: gtk/gtkcellrenderertoggle.c:159
-#, fuzzy
 msgid "Radio state"
-msgstr "Statistikes log"
+msgstr ""
 
 #: gtk/gtkcellrenderertoggle.c:160
 msgid "Draw the toggle button as a radio button"
 msgstr ""
 
 #: gtk/gtkcheckbutton.c:98 gtk/gtkoptionmenu.c:197
-#, fuzzy
 msgid "Indicator Size"
-msgstr "Indicateu"
+msgstr ""
 
 #: gtk/gtkcheckbutton.c:99
 msgid "Size of check or radio indicator"
 msgstr ""
 
 #: gtk/gtkcheckbutton.c:106 gtk/gtkoptionmenu.c:203
-#, fuzzy
 msgid "Indicator Spacing"
-msgstr "Indicateu"
+msgstr ""
 
 #: gtk/gtkcheckbutton.c:107
 msgid "Spacing around check or radio indicator"
@@ -1567,14 +1461,12 @@ msgid "Whether the menu item is checked"
 msgstr ""
 
 #: gtk/gtkcheckmenuitem.c:125 gtk/gtktogglebutton.c:140
-#, fuzzy
 msgid "Inconsistent"
-msgstr "Eplaeçmint del imådjete"
+msgstr ""
 
 #: gtk/gtkcheckmenuitem.c:126
-#, fuzzy
 msgid "Whether to display an \"inconsistent\" state"
-msgstr "Li lårdjeu des colones"
+msgstr ""
 
 #: gtk/gtkcolorsel.c:559
 msgid ""
@@ -1600,18 +1492,16 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkcolorsel.c:1752
-#, fuzzy
 msgid "Has Opacity Control"
-msgstr "Contrôle di aRts"
+msgstr ""
 
 #: gtk/gtkcolorsel.c:1753
 msgid "Whether the color selector should allow setting opacity"
 msgstr ""
 
 #: gtk/gtkcolorsel.c:1759
-#, fuzzy
 msgid "Has palette"
-msgstr "_Schaper palete"
+msgstr ""
 
 #: gtk/gtkcolorsel.c:1760
 msgid "Whether a palette should be used"
@@ -1626,9 +1516,8 @@ msgid "The current color"
 msgstr "Li coleur en alaedje pol moumint"
 
 #: gtk/gtkcolorsel.c:1773
-#, fuzzy
 msgid "Current Alpha"
-msgstr "Do moumint"
+msgstr ""
 
 #: gtk/gtkcolorsel.c:1774
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
@@ -1708,7 +1597,7 @@ msgstr "_Zeroveyaedje:"
 
 #: gtk/gtkcolorsel.c:1886
 msgid "Transparency of the currently-selected color."
-msgstr "Livea di «veyaedje hoûte» del coleur tchoezeye pol moumint."
+msgstr "Livea di «veyaedje houte» del coleur tchoezeye pol moumint."
 
 #: gtk/gtkcolorsel.c:1901
 msgid "Color _Name:"
@@ -1725,14 +1614,12 @@ msgid "_Palette"
 msgstr "_Palete"
 
 #: gtk/gtkcombo.c:143
-#, fuzzy
 msgid "Enable arrow keys"
-msgstr "Fletche valeye"
+msgstr ""
 
 #: gtk/gtkcombo.c:144
-#, fuzzy
 msgid "Whether the arrow keys move through the list of items"
-msgstr "Bårer li tecse d' ene roye å d' truviè"
+msgstr ""
 
 #: gtk/gtkcombo.c:150
 msgid "Always enable arrows"
@@ -1759,18 +1646,16 @@ msgid "Whether an empty value may be entered in this field"
 msgstr ""
 
 #: gtk/gtkcombo.c:173
-#, fuzzy
 msgid "Value in list"
-msgstr "Espåçmint del tabulåcion : "
+msgstr ""
 
 #: gtk/gtkcombo.c:174
 msgid "Whether entered values must already be present in the list"
 msgstr ""
 
 #: gtk/gtkcontainer.c:202
-#, fuzzy
 msgid "Resize mode"
-msgstr "Candjî di grandeu"
+msgstr ""
 
 #: gtk/gtkcontainer.c:203
 msgid "Specify how resize events are handled"
@@ -1793,9 +1678,8 @@ msgid "Can be used to add a new child to the container"
 msgstr ""
 
 #: gtk/gtkcurve.c:121
-#, fuzzy
 msgid "Curve type"
-msgstr "Sôre di cåde"
+msgstr ""
 
 #: gtk/gtkcurve.c:122
 msgid "Is this curve linear, spline interpolated, or free-form"
@@ -1834,9 +1718,8 @@ msgid "Maximum possible value for Y"
 msgstr "Valixhance macsimom possibe po Y"
 
 #: gtk/gtkdialog.c:136
-#, fuzzy
 msgid "Has separator"
-msgstr "Novea _separateu"
+msgstr ""
 
 #: gtk/gtkdialog.c:137
 msgid "The dialog has a separator bar above its buttons"
@@ -1851,43 +1734,36 @@ msgid "Width of border around the main dialog area"
 msgstr ""
 
 #: gtk/gtkdialog.c:170
-#, fuzzy
 msgid "Button spacing"
-msgstr "Botons"
+msgstr "Espåçmint des botons"
 
 #: gtk/gtkdialog.c:171
 msgid "Spacing between buttons"
-msgstr ""
+msgstr "Espåçmint inte les botons"
 
 #: gtk/gtkdialog.c:179
-#, fuzzy
 msgid "Action area border"
-msgstr "Båze di dnêyes des bouyes"
+msgstr ""
 
 #: gtk/gtkdialog.c:180
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr ""
 
 #: gtk/gtkentry.c:439 gtk/gtklabel.c:368
-#, fuzzy
 msgid "Cursor Position"
-msgstr "Eplaeçmint do tecse"
+msgstr "Eplaeçmint do cursoe"
 
 #: gtk/gtkentry.c:440 gtk/gtklabel.c:369
-#, fuzzy
 msgid "The current position of the insertion cursor in chars"
-msgstr "Eplaeçmint x do purnea"
+msgstr ""
 
 #: gtk/gtkentry.c:449 gtk/gtklabel.c:378
-#, fuzzy
 msgid "Selection Bound"
-msgstr "Tchuze: "
+msgstr ""
 
 #: gtk/gtkentry.c:450 gtk/gtklabel.c:379
-#, fuzzy
-msgid ""
-"The position of the opposite end of the selection from the cursor in chars"
-msgstr "Eplaeçmint x do purnea"
+msgid "The position of the opposite end of the selection from the cursor in chars"
+msgstr ""
 
 #: gtk/gtkentry.c:460
 msgid "Whether the entry contents can be edited"
@@ -1898,9 +1774,8 @@ msgid "Maximum length"
 msgstr "Longeu macsimom"
 
 #: gtk/gtkentry.c:468
-#, fuzzy
 msgid "Maximum number of characters for this entry. Zero if no maximum"
-msgstr "Li nombe macsimom di caracteres po ciste intrêye chal"
+msgstr "Li nombe macsimom di caracteres po ciste intrêye chal. Zero s' i n' a pont d' macsimom."
 
 #: gtk/gtkentry.c:476
 msgid "Visibility"
@@ -1913,9 +1788,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkentry.c:484
-#, fuzzy
 msgid "Has Frame"
-msgstr "_Schaper palete"
+msgstr ""
 
 #: gtk/gtkentry.c:485
 msgid "FALSE removes outside bevel from entry"
@@ -1930,9 +1804,8 @@ msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 
 #: gtk/gtkentry.c:500
-#, fuzzy
 msgid "Activates default"
-msgstr "prémetou"
+msgstr ""
 
 #: gtk/gtkentry.c:501
 msgid ""
@@ -1945,28 +1818,24 @@ msgid "Width in chars"
 msgstr "Lårdjeu e caracteres"
 
 #: gtk/gtkentry.c:508
-#, fuzzy
 msgid "Number of characters to leave space for in the entry"
-msgstr "Li nombe macsimom di caracteres po ciste intrêye chal"
+msgstr ""
 
 #: gtk/gtkentry.c:517
-#, fuzzy
 msgid "Scroll offset"
-msgstr "Foyter cwand vos tapez"
+msgstr ""
 
 #: gtk/gtkentry.c:518
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr ""
 
 #: gtk/gtkentry.c:528
-#, fuzzy
 msgid "The contents of the entry"
-msgstr "Li djeu del vicåreye"
+msgstr ""
 
 #: gtk/gtkentry.c:759
-#, fuzzy
 msgid "Select on focus"
-msgstr "Tchuze: "
+msgstr ""
 
 #: gtk/gtkentry.c:760
 msgid "Whether to select the contents of an entry when it is focused"
@@ -1991,9 +1860,8 @@ msgid "Filename"
 msgstr "No do fitchî"
 
 #: gtk/gtkfilesel.c:552
-#, fuzzy
 msgid "The currently selected filename"
-msgstr "Li no do fitchî tchoezi pol moumint."
+msgstr "Li no do fitchî tchoezi pol moumint"
 
 #: gtk/gtkfilesel.c:558
 msgid "Show file operations"
@@ -2004,11 +1872,8 @@ msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr ""
 
 #: gtk/gtkfilesel.c:566
-#, fuzzy
 msgid "Select multiple"
 msgstr ""
-"Tchoezi\n"
-"totafwait"
 
 #: gtk/gtkfilesel.c:567
 msgid "Whether to allow multiple files to be selected"
@@ -2057,17 +1922,16 @@ msgstr "_Rilomer li fitchî"
 
 #: gtk/gtkfilesel.c:1429
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 
 #: gtk/gtkfilesel.c:1431
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
 "%s"
 msgstr ""
-"Åk n' a nén stî come dji disfacer l' fitchî «%s»: %s\n"
+"Åk n' a nén stî tot-z ahivant l' ridant «%s»: %s\n"
 "%s"
 
 #: gtk/gtkfilesel.c:1432 gtk/gtkfilesel.c:1668
@@ -2075,9 +1939,9 @@ msgid "You probably used symbols not allowed in filenames."
 msgstr ""
 
 #: gtk/gtkfilesel.c:1440
-#, fuzzy, c-format
+#, c-format
 msgid "Error creating folder \"%s\": %s\n"
-msgstr "Åk n' a nén stî cwand dji fjheve li ridant «%s»: %s\n"
+msgstr "Åk n' a nén stî tot-z ahivant l' ridant «%s»: %s\n"
 
 #: gtk/gtkfilesel.c:1474
 msgid "New Folder"
@@ -2115,9 +1979,9 @@ msgid "Error deleting file \"%s\": %s"
 msgstr "Åk n' a nén stî come dji disfacer l' fitchî «%s»: %s"
 
 #: gtk/gtkfilesel.c:1613
-#, fuzzy, c-format
+#, c-format
 msgid "Really delete file \"%s\" ?"
-msgstr "Åk n' a nén stî come dji disfacer l' fitchî «%s»: %s"
+msgstr "Disfacer po do bon li fitchî «%s»?"
 
 #: gtk/gtkfilesel.c:1618
 msgid "Delete File"
@@ -2129,46 +1993,44 @@ msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 
 #: gtk/gtkfilesel.c:1666
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
 "%s"
 msgstr ""
-"Åk n' a nén stî come dji disfacer l' fitchî «%s»: %s\n"
+"Åk n' a nén stî come dji rloméve li fitchî a «%s»: %s\n"
 "%s"
 
 #: gtk/gtkfilesel.c:1680
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
 "%s"
 msgstr ""
-"Åk n' a nén stî come dji disfacer l' fitchî «%s»: %s\n"
+"Åk n' a nén stî come dji rloméve li fitchî «%s»: %s\n"
 "%s"
 
 #: gtk/gtkfilesel.c:1690
-#, fuzzy, c-format
+#, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
-msgstr "Åk n' a nén stî come dji sayive di lére li fitchî «%s»: %s"
+msgstr "Åk n' a nén stî come dji rloméve li fitchî «%s» a «%s»: %s"
 
 #: gtk/gtkfilesel.c:1737
 msgid "Rename File"
 msgstr "Rlomer li fitchî"
 
 #: gtk/gtkfilesel.c:1752
-#, fuzzy, c-format
+#, c-format
 msgid "Rename file \"%s\" to:"
-msgstr "Rlomer li fitchî"
+msgstr "Rilomer li fitchî «%s» a:"
 
 #: gtk/gtkfilesel.c:1781
-#, fuzzy
 msgid "_Rename"
-msgstr "Rilomer"
+msgstr "_Rilomer"
 
 #: gtk/gtkfilesel.c:2217
-#, fuzzy
 msgid "_Selection: "
-msgstr "Tchuze: "
+msgstr "_Tchuze: "
 
 #: gtk/gtkfilesel.c:3111
 #, c-format
@@ -2186,23 +2048,20 @@ msgid "Name too long"
 msgstr "Li no est pår trop long"
 
 #: gtk/gtkfilesel.c:3993
-#, fuzzy
 msgid "Couldn't convert filename"
-msgstr "Dji n' pou schaper l' fitchî!"
+msgstr ""
 
 #: gtk/gtkfixed.c:120 gtk/gtklayout.c:611
-#, fuzzy
 msgid "X position"
-msgstr "Eplaeçmint do tecse"
+msgstr ""
 
 #: gtk/gtkfixed.c:121 gtk/gtklayout.c:612
 msgid "X position of child widget"
 msgstr ""
 
 #: gtk/gtkfixed.c:130 gtk/gtklayout.c:621
-#, fuzzy
 msgid "Y position"
-msgstr "Eplaeçmint do tecse"
+msgstr ""
 
 #: gtk/gtkfixed.c:131 gtk/gtklayout.c:622
 msgid "Y position of child widget"
@@ -2223,9 +2082,8 @@ msgid "The X string that represents this font"
 msgstr ""
 
 #: gtk/gtkfontsel.c:218
-#, fuzzy
 msgid "The GdkFont that is currently selected"
-msgstr "Li no do fitchî tchoezi pol moumint."
+msgstr ""
 
 #: gtk/gtkfontsel.c:224
 msgid "Preview text"
@@ -2257,36 +2115,32 @@ msgid "Font Selection"
 msgstr "Tchoezi les fontes"
 
 #: gtk/gtkframe.c:126
-#, fuzzy
 msgid "Text of the frame's label"
-msgstr "Li coleur do tchmin a shure."
+msgstr "Li tecse del etikete do cåde"
 
 #: gtk/gtkframe.c:133
 msgid "Label xalign"
 msgstr ""
 
 #: gtk/gtkframe.c:134
-#, fuzzy
 msgid "The horizontal alignment of the label"
-msgstr "Li coleur do tchmin a shure."
+msgstr "L' aroyaedje di coûtchî del etikete"
 
 #: gtk/gtkframe.c:143
 msgid "Label yalign"
 msgstr ""
 
 #: gtk/gtkframe.c:144
-#, fuzzy
 msgid "The vertical alignment of the label"
-msgstr "Li coleur do tchmin a shure."
+msgstr "L' aroyaedje d' astampé del etikete"
 
 #: gtk/gtkframe.c:153 gtk/gtkhandlebox.c:195
 msgid "Deprecated property, use shadow_type instead"
 msgstr ""
 
 #: gtk/gtkframe.c:160
-#, fuzzy
 msgid "Frame shadow"
-msgstr "shadow"
+msgstr ""
 
 #: gtk/gtkframe.c:161
 msgid "Appearance of the frame border"
@@ -2318,19 +2172,16 @@ msgid "Appearance of the shadow that surrounds the container"
 msgstr ""
 
 #: gtk/gtkhandlebox.c:211
-#, fuzzy
 msgid "Handle position"
-msgstr "Eplaeçmint do scriftôr"
+msgstr ""
 
 #: gtk/gtkhandlebox.c:212
-#, fuzzy
 msgid "Position of the handle relative to the child widget"
-msgstr "Li tchmin po «hdlist» (tchmin relatif al hårdêye chal pa dzeu)"
+msgstr ""
 
 #: gtk/gtkhandlebox.c:220
-#, fuzzy
 msgid "Snap edge"
-msgstr "Swap di libe"
+msgstr ""
 
 #: gtk/gtkhandlebox.c:221
 msgid ""
@@ -2339,9 +2190,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkhandlebox.c:229
-#, fuzzy
 msgid "Snap edge set"
-msgstr "Swap di libe"
+msgstr ""
 
 #: gtk/gtkhandlebox.c:230
 msgid ""
@@ -2358,9 +2208,8 @@ msgid "Error loading icon: %s"
 msgstr "Åk n' a nén stî come dji sayive di tcherdjî l' imådjete: %s"
 
 #: gtk/gtkimage.c:135
-#, fuzzy
 msgid "Pixbuf"
-msgstr "Objets do scriftôr"
+msgstr ""
 
 #: gtk/gtkimage.c:136
 msgid "A GdkPixbuf to display"
@@ -2368,88 +2217,79 @@ msgstr ""
 
 #: gtk/gtkimage.c:143
 msgid "Pixmap"
-msgstr ""
+msgstr "Imådje picsmap"
 
 #: gtk/gtkimage.c:144
 msgid "A GdkPixmap to display"
 msgstr ""
 
 #: gtk/gtkimage.c:151
-#, fuzzy
 msgid "Image"
-msgstr "Pådje"
+msgstr "Imådje"
 
 #: gtk/gtkimage.c:152
 msgid "A GdkImage to display"
-msgstr ""
+msgstr "Ene imådje GdkImage a håyner"
 
 #: gtk/gtkimage.c:159
-#, fuzzy
 msgid "Mask"
-msgstr "Sorbriyance"
+msgstr ""
 
 #: gtk/gtkimage.c:160
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr ""
 
 #: gtk/gtkimage.c:168
-#, fuzzy
 msgid "Filename to load and display"
-msgstr "Dji n' a savou tcherdjî l' imådje «%s»: %s"
+msgstr "No d' fitchî a tcherdjî et a håyner"
 
 #: gtk/gtkimage.c:177
 msgid "Stock ID for a stock image to display"
 msgstr ""
 
 #: gtk/gtkimage.c:184
-#, fuzzy
 msgid "Icon set"
-msgstr "Eplaeçmint del imådjete"
+msgstr ""
 
 #: gtk/gtkimage.c:185
 msgid "Icon set to display"
 msgstr ""
 
 #: gtk/gtkimage.c:192
-#, fuzzy
 msgid "Icon size"
-msgstr "Grandeu del fonte"
+msgstr "Grandeu del imådjete"
 
 #: gtk/gtkimage.c:193
 msgid "Size to use for stock icon or icon set"
 msgstr ""
 
 #: gtk/gtkimage.c:201
-#, fuzzy
 msgid "Animation"
-msgstr "Informåcion"
+msgstr "Animåcion"
 
 #: gtk/gtkimage.c:202
 msgid "GdkPixbufAnimation to display"
-msgstr ""
+msgstr "Animåcion GdkPixbufAnimation a håyner"
 
 #: gtk/gtkimage.c:209
-#, fuzzy
 msgid "Storage type"
-msgstr "Sôre di cåde"
+msgstr ""
 
 #: gtk/gtkimage.c:210
 msgid "The representation being used for image data"
 msgstr ""
 
 #: gtk/gtkimagemenuitem.c:124
-#, fuzzy
 msgid "Image widget"
-msgstr "Håyneu d' imådjes"
+msgstr "Ahesse imådje"
 
 #: gtk/gtkimagemenuitem.c:125
 msgid "Child widget to appear next to the menu text"
 msgstr ""
 
 #: gtk/gtkimmodule.c:419
-#, fuzzy
 msgid "Default"
-msgstr "Lårdjeu prémetowe"
+msgstr "Prémetou"
 
 #: gtk/gtkinputdialog.c:230
 msgid "Input"
@@ -2481,15 +2321,13 @@ msgstr "_Môde: "
 
 #. The axis listbox
 #: gtk/gtkinputdialog.c:320
-#, fuzzy
 msgid "_Axes"
-msgstr "Assis"
+msgstr "_Aessis"
 
 #. Keys listbox
 #: gtk/gtkinputdialog.c:337
-#, fuzzy
 msgid "_Keys"
-msgstr "Tapes"
+msgstr "_Tapes"
 
 #: gtk/gtkinputdialog.c:557
 msgid "X"
@@ -2525,7 +2363,7 @@ msgstr "(essocté)"
 
 #: gtk/gtkinputdialog.c:667
 msgid "(unknown)"
-msgstr "(nén cnoxhu)"
+msgstr "(nén cnoxhou)"
 
 #. and clear button
 #: gtk/gtkinputdialog.c:754
@@ -2537,18 +2375,16 @@ msgid "The screen where this window will be displayed"
 msgstr ""
 
 #: gtk/gtklabel.c:291
-#, fuzzy
 msgid "The text of the label"
-msgstr "Li coleur do tchmin a shure."
+msgstr "Li tecse del etikete"
 
 #: gtk/gtklabel.c:298
 msgid "A list of style attributes to apply to the text of the label"
 msgstr ""
 
 #: gtk/gtklabel.c:304
-#, fuzzy
 msgid "Use markup"
-msgstr "Groupe di l' uzeu"
+msgstr ""
 
 #: gtk/gtklabel.c:305
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
@@ -2576,9 +2412,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtklabel.c:336
-#, fuzzy
 msgid "Line wrap"
-msgstr "Royes: "
+msgstr ""
 
 #: gtk/gtklabel.c:337
 msgid "If set, wrap lines if the text becomes too wide"
@@ -2609,18 +2444,16 @@ msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr ""
 
 #: gtk/gtklayout.c:631 gtk/gtkviewport.c:134
-#, fuzzy
 msgid "Horizontal adjustment"
-msgstr "Adjinçmint di coûtchî"
+msgstr ""
 
 #: gtk/gtklayout.c:632 gtk/gtkscrolledwindow.c:236
 msgid "The GtkAdjustment for the horizontal position"
 msgstr ""
 
 #: gtk/gtklayout.c:639 gtk/gtkviewport.c:142
-#, fuzzy
 msgid "Vertical adjustment"
-msgstr "Adjinçmint d' astampé"
+msgstr ""
 
 #: gtk/gtklayout.c:640 gtk/gtkscrolledwindow.c:243
 msgid "The GtkAdjustment for the vertical position"
@@ -2631,18 +2464,16 @@ msgid "Width"
 msgstr "Lårdjeu"
 
 #: gtk/gtklayout.c:648
-#, fuzzy
 msgid "The width of the layout"
-msgstr "Li lårdjeu des colones"
+msgstr ""
 
 #: gtk/gtklayout.c:656
 msgid "Height"
 msgstr "Hôteu"
 
 #: gtk/gtklayout.c:657
-#, fuzzy
 msgid "The height of the layout"
-msgstr "Li hôteu des royes"
+msgstr ""
 
 #. Translate to default:RTL if you want your widgets
 #. * to be RTL, otherwise translate to default:LTR.
@@ -2664,13 +2495,11 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkmenu.c:379
-#, fuzzy
 msgid "Can change accelerators"
-msgstr "Tapes po fé pus rade ene bouye e menu"
+msgstr ""
 
 #: gtk/gtkmenu.c:380
-msgid ""
-"Whether menu accelerators can be changed by pressing a key over the menu item"
+msgid "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 
 #: gtk/gtkmenu.c:385
@@ -2678,8 +2507,7 @@ msgid "Delay before submenus appear"
 msgstr ""
 
 #: gtk/gtkmenu.c:386
-msgid ""
-"Minimum time the pointer must stay over a menu item before the submenu appear"
+msgid "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 
 #: gtk/gtkmenu.c:393
@@ -2697,9 +2525,8 @@ msgid "Style of bevel around the menubar"
 msgstr ""
 
 #: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:258
-#, fuzzy
 msgid "Internal padding"
-msgstr " Divintrinne aroke "
+msgstr ""
 
 #: gtk/gtkmenubar.c:165
 msgid "Amount of border space between the menubar shadow and the menu items"
@@ -2738,9 +2565,8 @@ msgid "The buttons shown in the message dialog"
 msgstr "Les botons håynés dins l' purnea di messaedje"
 
 #: gtk/gtkmisc.c:98
-#, fuzzy
 msgid "X align"
-msgstr "XMlink"
+msgstr ""
 
 #: gtk/gtkmisc.c:99
 msgid "The horizontal alignment, from 0 (left) to 1 (right)"
@@ -2755,23 +2581,19 @@ msgid "The vertical alignment, from 0 (top) to 1 (bottom)"
 msgstr ""
 
 #: gtk/gtkmisc.c:118
-#, fuzzy
 msgid "X pad"
-msgstr "Xpdf"
+msgstr ""
 
 #: gtk/gtkmisc.c:119
-msgid ""
-"The amount of space to add on the left and right of the widget, in pixels"
+msgid "The amount of space to add on the left and right of the widget, in pixels"
 msgstr ""
 
 #: gtk/gtkmisc.c:128
-#, fuzzy
 msgid "Y pad"
-msgstr " eyèt "
+msgstr ""
 
 #: gtk/gtkmisc.c:129
-msgid ""
-"The amount of space to add on the top and bottom of the widget, in pixels"
+msgid "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr ""
 
 #: gtk/gtknotebook.c:378
@@ -2831,18 +2653,16 @@ msgid "Whether the border should be shown or not"
 msgstr ""
 
 #: gtk/gtknotebook.c:436
-#, fuzzy
 msgid "Scrollable"
-msgstr "Vectoriå"
+msgstr ""
 
 #: gtk/gtknotebook.c:437
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr ""
 
 #: gtk/gtknotebook.c:443
-#, fuzzy
 msgid "Enable Popup"
-msgstr "Mete en alaedje les plugins"
+msgstr "Mete en alaedje les aspitants menus"
 
 #: gtk/gtknotebook.c:444
 msgid ""
@@ -2871,16 +2691,12 @@ msgid "The string displayed in the childs menu entry"
 msgstr ""
 
 #: gtk/gtknotebook.c:479
-#, fuzzy
 msgid "Tab expand"
 msgstr ""
-"Tot l'\n"
-"coxhlaedje"
 
 #: gtk/gtknotebook.c:480
-#, fuzzy
 msgid "Whether to expand the childs tab or not"
-msgstr "Li lårdjeu des colones"
+msgstr ""
 
 #: gtk/gtknotebook.c:486
 msgid "Tab fill"
@@ -2901,55 +2717,47 @@ msgstr "Pådje %u"
 
 #: gtk/gtkoptionmenu.c:190
 msgid "Menu"
-msgstr ""
+msgstr "Menu"
 
 #: gtk/gtkoptionmenu.c:191
 msgid "The menu of options"
-msgstr ""
+msgstr "Li menu des tchuzes"
 
 #: gtk/gtkoptionmenu.c:198
-#, fuzzy
 msgid "Size of dropdown indicator"
-msgstr "Grandeu des ponts"
+msgstr ""
 
 #: gtk/gtkoptionmenu.c:204
-#, fuzzy
 msgid "Spacing around indicator"
-msgstr "Imådje di fond"
+msgstr ""
 
 #: gtk/gtkpaned.c:219
-msgid ""
-"Position of paned separator in pixels (0 means all the way to the left/top)"
+msgid "Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr ""
 
 #: gtk/gtkpaned.c:227
-#, fuzzy
 msgid "Position Set"
-msgstr "Leyî po pus tård"
+msgstr ""
 
 #: gtk/gtkpaned.c:228
 msgid "TRUE if the Position property should be used"
 msgstr ""
 
 #: gtk/gtkpaned.c:234
-#, fuzzy
 msgid "Handle Size"
-msgstr "Grandeu do papî"
+msgstr ""
 
 #: gtk/gtkpaned.c:235
-#, fuzzy
 msgid "Width of handle"
-msgstr "Lårdjeu do purnea"
+msgstr ""
 
 #: gtk/gtkpreview.c:133
-msgid ""
-"Whether the preview widget should take up the entire space it is allocated"
+msgid "Whether the preview widget should take up the entire space it is allocated"
 msgstr ""
 
 #: gtk/gtkprogress.c:129
-#, fuzzy
 msgid "Activity mode"
-msgstr "Mete en ouve"
+msgstr ""
 
 #: gtk/gtkprogress.c:130
 msgid ""
@@ -2959,18 +2767,16 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkprogress.c:137
-#, fuzzy
 msgid "Show text"
-msgstr "Mostrer date"
+msgstr "Mostrer tecse"
 
 #: gtk/gtkprogress.c:138
 msgid "Whether the progress is shown as text"
-msgstr ""
+msgstr "Si l' avançmint doet esse mostré come do tecse"
 
 #: gtk/gtkprogress.c:145
-#, fuzzy
 msgid "Text x alignment"
-msgstr "foirt ledjires"
+msgstr ""
 
 #: gtk/gtkprogress.c:146
 msgid ""
@@ -2979,9 +2785,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkprogress.c:154
-#, fuzzy
 msgid "Text y alignment"
-msgstr "foirt ledjires"
+msgstr ""
 
 #: gtk/gtkprogress.c:155
 msgid ""
@@ -2990,9 +2795,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkprogressbar.c:142 gtk/gtkrange.c:290 gtk/gtkspinbutton.c:240
-#, fuzzy
 msgid "Adjustment"
-msgstr "Djeus"
+msgstr ""
 
 #: gtk/gtkprogressbar.c:143
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
@@ -3007,19 +2811,16 @@ msgid "Orientation and growth direction of the progress bar"
 msgstr ""
 
 #: gtk/gtkprogressbar.c:159
-#, fuzzy
 msgid "Bar style"
-msgstr "Stîle do cåde"
+msgstr "Stîle del bår"
 
 #: gtk/gtkprogressbar.c:160
-#, fuzzy
 msgid "Specifies the visual style of the bar in percentage mode (Deprecated)"
-msgstr "Defini li sôre mime kel sicrirece vout bén en intrêye"
+msgstr ""
 
 #: gtk/gtkprogressbar.c:168
-#, fuzzy
 msgid "Activity Step"
-msgstr "Mete en ouve"
+msgstr ""
 
 #: gtk/gtkprogressbar.c:169
 msgid "The increment used for each iteration in activity mode (Deprecated)"
@@ -3036,9 +2837,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkprogressbar.c:188
-#, fuzzy
 msgid "Discrete Blocks"
-msgstr "Disfacer do calpin"
+msgstr ""
 
 #: gtk/gtkprogressbar.c:189
 msgid ""
@@ -3047,18 +2847,16 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkprogressbar.c:198
-#, fuzzy
 msgid "Fraction"
-msgstr "Accion"
+msgstr ""
 
 #: gtk/gtkprogressbar.c:199
 msgid "The fraction of total work that has been completed"
 msgstr ""
 
 #: gtk/gtkprogressbar.c:208
-#, fuzzy
 msgid "Pulse Step"
-msgstr "eployî pptp"
+msgstr ""
 
 #: gtk/gtkprogressbar.c:209
 msgid "The fraction of total progress to move the bouncing block when pulsed"
@@ -3070,16 +2868,15 @@ msgstr ""
 
 #: gtk/gtkradiobutton.c:109
 msgid "Group"
-msgstr ""
+msgstr "Groupe"
 
 #: gtk/gtkradiobutton.c:110
 msgid "The radio button whose group this widget belongs."
 msgstr ""
 
 #: gtk/gtkrange.c:281
-#, fuzzy
 msgid "Update policy"
-msgstr "Seulmint les metaedjes a djoû"
+msgstr ""
 
 #: gtk/gtkrange.c:282
 msgid "How the range should be updated on the screen"
@@ -3090,68 +2887,59 @@ msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr ""
 
 #: gtk/gtkrange.c:298
-#, fuzzy
 msgid "Inverted"
-msgstr "Sititchî"
+msgstr ""
 
 #: gtk/gtkrange.c:299
 msgid "Invert direction slider moves to increase range value"
 msgstr ""
 
 #: gtk/gtkrange.c:305
-#, fuzzy
 msgid "Slider Width"
-msgstr "Lårdjeu:"
+msgstr ""
 
 #: gtk/gtkrange.c:306
 msgid "Width of scrollbar or scale thumb"
 msgstr ""
 
 #: gtk/gtkrange.c:313
-#, fuzzy
 msgid "Trough Border"
-msgstr "Boirds del tåve"
+msgstr ""
 
 #: gtk/gtkrange.c:314
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr ""
 
 #: gtk/gtkrange.c:321
-#, fuzzy
 msgid "Stepper Size"
-msgstr "Grandeu do papî"
+msgstr ""
 
 #: gtk/gtkrange.c:322
 msgid "Length of step buttons at ends"
 msgstr ""
 
 #: gtk/gtkrange.c:329
-#, fuzzy
 msgid "Stepper Spacing"
-msgstr "Doirmant"
+msgstr ""
 
 #: gtk/gtkrange.c:330
 msgid "Spacing between step buttons and thumb"
 msgstr ""
 
 #: gtk/gtkrange.c:337
-#, fuzzy
 msgid "Arrow X Displacement"
-msgstr "Grandeu do purnea"
+msgstr ""
 
 #: gtk/gtkrange.c:338
-msgid ""
-"How far in the x direction to move the arrow when the button is depressed"
+msgid "How far in the x direction to move the arrow when the button is depressed"
 msgstr ""
 
 #: gtk/gtkrange.c:345
-#, fuzzy
 msgid "Arrow Y Displacement"
-msgstr "Grandeu do purnea"
+msgstr ""
 
 #: gtk/gtkrange.c:346
-msgid ""
-"How far in the y direction to move the arrow when the button is depressed"
+msgid "How far in the y direction to move the arrow when the button is depressed"
 msgstr ""
 
 #: gtk/gtkrc.c:2376
@@ -3170,115 +2958,100 @@ msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr ""
 
 #: gtk/gtkruler.c:118
-#, fuzzy
 msgid "Lower"
-msgstr "da"
+msgstr "Bas"
 
 #: gtk/gtkruler.c:119
-#, fuzzy
 msgid "Lower limit of ruler"
-msgstr "Djivêye des uzeus"
+msgstr ""
 
 #: gtk/gtkruler.c:128
-#, fuzzy
 msgid "Upper"
-msgstr "Uzeu"
+msgstr "Hôt"
 
 #: gtk/gtkruler.c:129
 msgid "Upper limit of ruler"
 msgstr ""
 
 #: gtk/gtkruler.c:139
-#, fuzzy
 msgid "Position of mark on the ruler"
-msgstr "Eplaeçmint wice ki l' enondeu doet esse metou"
+msgstr ""
 
 #: gtk/gtkruler.c:148
-#, fuzzy
 msgid "Max Size"
-msgstr "Å pus grand"
+msgstr ""
 
 #: gtk/gtkruler.c:149
-#, fuzzy
 msgid "Maximum size of the ruler"
-msgstr "Macsimom di sayes po passer hute"
+msgstr ""
 
 #: gtk/gtkscale.c:156 gtk/gtkspinbutton.c:258
-#, fuzzy
 msgid "Digits"
-msgstr "Purneas di cweriaedje"
+msgstr ""
 
 #: gtk/gtkscale.c:157
 msgid "The number of decimal places that are displayed in the value"
 msgstr ""
 
 #: gtk/gtkscale.c:166
-#, fuzzy
 msgid "Draw Value"
-msgstr "Pougneye do ridant"
+msgstr ""
 
 #: gtk/gtkscale.c:167
 msgid "Whether the current value is displayed as a string next to the slider"
 msgstr ""
 
 #: gtk/gtkscale.c:174
-#, fuzzy
 msgid "Value Position"
-msgstr "Eplaeçmint do scriftôr"
+msgstr ""
 
 #: gtk/gtkscale.c:175
 msgid "The position in which the current value is displayed"
 msgstr ""
 
 #: gtk/gtkscale.c:182
-#, fuzzy
 msgid "Slider Length"
-msgstr "Longeu"
+msgstr ""
 
 #: gtk/gtkscale.c:183
 msgid "Length of scale's slider"
 msgstr ""
 
 #: gtk/gtkscale.c:191
-#, fuzzy
 msgid "Value spacing"
-msgstr "Espåçmint del tabulåcion : "
+msgstr ""
 
 #: gtk/gtkscale.c:192
 msgid "Space between value text and the slider/trough area"
 msgstr ""
 
 #: gtk/gtkscrollbar.c:80
-#, fuzzy
 msgid "Minimum Slider Length"
-msgstr "Lårdjeu minimom"
+msgstr ""
 
 #: gtk/gtkscrollbar.c:81
 msgid "Minimum length of scrollbar slider"
 msgstr ""
 
 #: gtk/gtkscrollbar.c:89
-#, fuzzy
 msgid "Fixed slider size"
-msgstr "Grandeu do tchamp"
+msgstr ""
 
 #: gtk/gtkscrollbar.c:90
 msgid "Don't change slider size, just lock it to the minimum length"
 msgstr ""
 
 #: gtk/gtkscrollbar.c:97
-#, fuzzy
 msgid "Backward stepper"
-msgstr "En erî"
+msgstr ""
 
 #: gtk/gtkscrollbar.c:98
 msgid "Display the standard backward arrow button"
 msgstr ""
 
 #: gtk/gtkscrollbar.c:105
-#, fuzzy
 msgid "Forward stepper"
-msgstr "5s en avant"
+msgstr ""
 
 #: gtk/gtkscrollbar.c:106
 msgid "Display the standard forward arrow button"
@@ -3289,71 +3062,60 @@ msgid "Secondary backward stepper"
 msgstr ""
 
 #: gtk/gtkscrollbar.c:114
-msgid ""
-"Display a second backward arrow button on the opposite end of the scrollbar"
+msgid "Display a second backward arrow button on the opposite end of the scrollbar"
 msgstr ""
 
 #: gtk/gtkscrollbar.c:121
-#, fuzzy
 msgid "Secondary forward stepper"
-msgstr "Coleur secondaire"
+msgstr ""
 
 #: gtk/gtkscrollbar.c:122
-msgid ""
-"Display a secondary forward arrow button on the opposite end of the scrollbar"
+msgid "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr ""
 
 #: gtk/gtkscrolledwindow.c:235 gtk/gtktext.c:601 gtk/gtktreeview.c:528
-#, fuzzy
 msgid "Horizontal Adjustment"
-msgstr "Adjinçmint di coûtchî"
+msgstr ""
 
 #: gtk/gtkscrolledwindow.c:242 gtk/gtktext.c:609 gtk/gtktreeview.c:536
-#, fuzzy
 msgid "Vertical Adjustment"
-msgstr "Adjinçmint d' astampé"
+msgstr ""
 
 #: gtk/gtkscrolledwindow.c:249
-#, fuzzy
 msgid "Horizontal Scrollbar Policy"
-msgstr "Di coûtchî"
+msgstr ""
 
 #: gtk/gtkscrolledwindow.c:250
 msgid "When the horizontal scrollbar is displayed"
 msgstr ""
 
 #: gtk/gtkscrolledwindow.c:257
-#, fuzzy
 msgid "Vertical Scrollbar Policy"
-msgstr "D' astampé"
+msgstr ""
 
 #: gtk/gtkscrolledwindow.c:258
 msgid "When the vertical scrollbar is displayed"
 msgstr ""
 
 #: gtk/gtkscrolledwindow.c:266
-#, fuzzy
 msgid "Window Placement"
-msgstr "Grandeu do purnea"
+msgstr ""
 
 #: gtk/gtkscrolledwindow.c:267
 msgid "Where the contents are located with respect to the scrollbars"
 msgstr ""
 
 #: gtk/gtkscrolledwindow.c:274
-#, fuzzy
 msgid "Shadow Type"
 msgstr "Sôre d' ombion"
 
 #: gtk/gtkscrolledwindow.c:275
-#, fuzzy
 msgid "Style of bevel around the contents"
-msgstr "Stîle di sorlignaedje po ci tecse chal"
+msgstr ""
 
 #: gtk/gtkscrolledwindow.c:282
-#, fuzzy
 msgid "Scrollbar spacing"
-msgstr "Håynaedje des colones"
+msgstr ""
 
 #: gtk/gtkscrolledwindow.c:283
 msgid "Number of pixels between the scrollbars and the scrolled window"
@@ -3370,18 +3132,16 @@ msgid ""
 msgstr ""
 
 #: gtk/gtksettings.c:176
-#, fuzzy
 msgid "Cursor Blink"
-msgstr "Coleur do cursoe"
+msgstr ""
 
 #: gtk/gtksettings.c:177
 msgid "Whether the cursor should blink"
 msgstr ""
 
 #: gtk/gtksettings.c:184
-#, fuzzy
 msgid "Cursor Blink Time"
-msgstr "Cursoe veyåve"
+msgstr ""
 
 #: gtk/gtksettings.c:185
 msgid "Length of the cursor blink cycle, in milleseconds"
@@ -3402,24 +3162,20 @@ msgid "Theme Name"
 msgstr "No do tinme"
 
 #: gtk/gtksettings.c:201
-#, fuzzy
 msgid "Name of theme RC file to load"
-msgstr "No do profil a askepyî:"
+msgstr "No do fitchî RC (apontiaedje di tinmes po gtk) a tcherdjî"
 
 #: gtk/gtksettings.c:208
-#, fuzzy
 msgid "Key Theme Name"
-msgstr "No do tinme"
+msgstr "No do tinme di tapes"
 
 #: gtk/gtksettings.c:209
-#, fuzzy
 msgid "Name of key theme RC file to load"
-msgstr "No do profil a askepyî:"
+msgstr "No do fitchî RC (apontiaedje di tinme) di tapes a tcherdjî"
 
 #: gtk/gtksettings.c:217
-#, fuzzy
 msgid "Menu bar accelerator"
-msgstr "Tapes po fé pus rade ene bouye e menu"
+msgstr ""
 
 #: gtk/gtksettings.c:218
 msgid "Keybinding to activate the menu bar"
@@ -3434,18 +3190,16 @@ msgid "Number of pixels the cursor can move before dragging"
 msgstr ""
 
 #: gtk/gtksettings.c:235
-#, fuzzy
 msgid "Font Name"
 msgstr "No del fonte"
 
 #: gtk/gtksettings.c:236
 msgid "Name of default font to use"
-msgstr ""
+msgstr "No del prémetowe fonte a-z eployî"
 
 #: gtk/gtksettings.c:244
-#, fuzzy
 msgid "Icon Sizes"
-msgstr "Grandeu del fonte"
+msgstr "Grandeu des imådjetes"
 
 #: gtk/gtksettings.c:245
 msgid "List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."
@@ -3478,9 +3232,8 @@ msgid "The number of decimal places to display"
 msgstr ""
 
 #: gtk/gtkspinbutton.c:268
-#, fuzzy
 msgid "Snap to Ticks"
-msgstr "Taper å batch"
+msgstr ""
 
 #: gtk/gtkspinbutton.c:269
 msgid ""
@@ -3497,22 +3250,19 @@ msgid "Whether non-numeric characters should be ignored"
 msgstr ""
 
 #: gtk/gtkspinbutton.c:284
-#, fuzzy
 msgid "Wrap"
-msgstr "_Côper"
+msgstr ""
 
 #: gtk/gtkspinbutton.c:285
 msgid "Whether a spin button should wrap upon reaching its limits"
 msgstr ""
 
 #: gtk/gtkspinbutton.c:292
-#, fuzzy
 msgid "Update Policy"
-msgstr "Seulmint les metaedjes a djoû"
+msgstr ""
 
 #: gtk/gtkspinbutton.c:293
-msgid ""
-"Whether the spin button should update always, or only when the value is legal"
+msgid "Whether the spin button should update always, or only when the value is legal"
 msgstr ""
 
 #: gtk/gtkspinbutton.c:301
@@ -3520,14 +3270,12 @@ msgid "Value"
 msgstr "Valixhance"
 
 #: gtk/gtkspinbutton.c:302
-#, fuzzy
 msgid "Reads the current value, or sets a new value"
-msgstr "Bodjî foû li vuwe do tampon do moumint"
+msgstr ""
 
 #: gtk/gtkstatusbar.c:162
-#, fuzzy
 msgid "Style of bevel around the statusbar text"
-msgstr "Stîle di sorlignaedje po ci tecse chal"
+msgstr ""
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: gtk/gtkstock.c:267
@@ -3536,7 +3284,7 @@ msgstr "Informåcion"
 
 #: gtk/gtkstock.c:268
 msgid "Warning"
-msgstr "Advertixhmint"
+msgstr "Adviertixhmint"
 
 #: gtk/gtkstock.c:269
 msgid "Error"
@@ -3611,20 +3359,19 @@ msgstr "_Plakete"
 
 #: gtk/gtkstock.c:290
 msgid "_Bottom"
-msgstr ""
+msgstr "Al _valêye"
 
 #: gtk/gtkstock.c:291
 msgid "_First"
-msgstr ""
+msgstr "_Prumî"
 
 #: gtk/gtkstock.c:292
 msgid "_Last"
 msgstr "_Dierin"
 
 #: gtk/gtkstock.c:293
-#, fuzzy
 msgid "_Top"
-msgstr "Å_we"
+msgstr "Al _copete"
 
 #: gtk/gtkstock.c:294
 msgid "_Back"
@@ -3632,7 +3379,7 @@ msgstr "En _erî"
 
 #: gtk/gtkstock.c:295
 msgid "_Down"
-msgstr ""
+msgstr "_Dischinde"
 
 #: gtk/gtkstock.c:296
 msgid "_Forward"
@@ -3640,7 +3387,7 @@ msgstr "En _avant"
 
 #: gtk/gtkstock.c:297
 msgid "_Up"
-msgstr ""
+msgstr "_Monter"
 
 #: gtk/gtkstock.c:298
 msgid "_Help"
@@ -3704,7 +3451,7 @@ msgstr "_Preferinces"
 
 #: gtk/gtkstock.c:313
 msgid "_Print"
-msgstr "_Eprimer"
+msgstr "_Eprimî"
 
 #: gtk/gtkstock.c:314
 msgid "Print Pre_view"
@@ -3723,14 +3470,12 @@ msgid "_Redo"
 msgstr "_Rifé"
 
 #: gtk/gtkstock.c:318
-#, fuzzy
 msgid "_Refresh"
-msgstr "_Preferinces"
+msgstr "_Rafrister"
 
 #: gtk/gtkstock.c:319
-#, fuzzy
 msgid "_Remove"
-msgstr "_Rimete come divant"
+msgstr "_Oister"
 
 #: gtk/gtkstock.c:320
 msgid "_Revert"
@@ -3773,13 +3518,12 @@ msgid "_Strikethrough"
 msgstr "_Båré"
 
 #: gtk/gtkstock.c:330
-#, fuzzy
 msgid "_Undelete"
-msgstr "_Sorligné"
+msgstr "_Disrafacer"
 
 #: gtk/gtkstock.c:331
 msgid "_Underline"
-msgstr "_Sorligné"
+msgstr "_Sorlignî"
 
 #: gtk/gtkstock.c:332
 msgid "_Undo"
@@ -3790,9 +3534,8 @@ msgid "_Yes"
 msgstr "_Oyi"
 
 #: gtk/gtkstock.c:334
-#, fuzzy
 msgid "Zoom _100%"
-msgstr "_100%"
+msgstr "Zoum a _100%"
 
 #: gtk/gtkstock.c:335
 msgid "Zoom to _Fit"
@@ -3800,12 +3543,11 @@ msgstr ""
 
 #: gtk/gtkstock.c:336
 msgid "Zoom _In"
-msgstr ""
+msgstr "_Zoumer"
 
 #: gtk/gtkstock.c:337
-#, fuzzy
 msgid "Zoom _Out"
-msgstr "Moussî foû"
+msgstr "_Diszoumer"
 
 #: gtk/gtktable.c:158
 msgid "Rows"
@@ -3896,9 +3638,8 @@ msgid "Options specifying the vertical behaviour of the child"
 msgstr ""
 
 #: gtk/gtktable.c:244
-#, fuzzy
 msgid "Horizontal padding"
-msgstr "Prémetou ridant po-z aberweter:"
+msgstr ""
 
 #: gtk/gtktable.c:245
 msgid ""
@@ -3907,9 +3648,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtktable.c:251
-#, fuzzy
 msgid "Vertical padding"
-msgstr " Divintrinne aroke "
+msgstr ""
 
 #: gtk/gtktable.c:252
 msgid ""
@@ -3926,32 +3666,28 @@ msgid "Vertical adjustment for the text widget"
 msgstr ""
 
 #: gtk/gtktext.c:617
-#, fuzzy
 msgid "Line Wrap"
-msgstr "Royes: "
+msgstr ""
 
 #: gtk/gtktext.c:618
 msgid "Whether lines are wrapped at widget edges"
 msgstr ""
 
 #: gtk/gtktext.c:625
-#, fuzzy
 msgid "Word Wrap"
-msgstr " Côper les mots "
+msgstr ""
 
 #: gtk/gtktext.c:626
 msgid "Whether words are wrapped at widget edges"
 msgstr ""
 
 #: gtk/gtktextbuffer.c:180
-#, fuzzy
 msgid "Tag Table"
-msgstr "No del etikete"
+msgstr ""
 
 #: gtk/gtktextbuffer.c:181
-#, fuzzy
 msgid "Text Tag Table"
-msgstr "foirt ledjires"
+msgstr ""
 
 #: gtk/gtktexttag.c:195
 msgid "Tag name"
@@ -3962,14 +3698,12 @@ msgid "Name used to refer to the text tag. NULL for anonymous tags"
 msgstr ""
 
 #: gtk/gtktexttag.c:214
-#, fuzzy
 msgid "Background color as a (possibly unallocated) GdkColor"
-msgstr "Coleur di fond come valixhance GdkColor"
+msgstr ""
 
 #: gtk/gtktexttag.c:221
-#, fuzzy
 msgid "Background full height"
-msgstr "Apontiaedjes do fond do scribanne"
+msgstr ""
 
 #: gtk/gtktexttag.c:222
 msgid ""
@@ -3978,23 +3712,20 @@ msgid ""
 msgstr ""
 
 #: gtk/gtktexttag.c:230
-#, fuzzy
 msgid "Background stipple mask"
-msgstr "Sôre di fond"
+msgstr ""
 
 #: gtk/gtktexttag.c:231
 msgid "Bitmap to use as a mask when drawing the text background"
 msgstr ""
 
 #: gtk/gtktexttag.c:248
-#, fuzzy
 msgid "Foreground color as a (possibly unallocated) GdkColor"
-msgstr "Coleur di dvant come valixhance GdkColor"
+msgstr ""
 
 #: gtk/gtktexttag.c:256
-#, fuzzy
 msgid "Foreground stipple mask"
-msgstr "No del coleur di dvant"
+msgstr ""
 
 #: gtk/gtktexttag.c:257
 msgid "Bitmap to use as a mask when drawing the text foreground"
@@ -4006,16 +3737,15 @@ msgstr "Sinse do tecse"
 
 #: gtk/gtktexttag.c:265
 msgid "Text direction, e.g. right-to-left or left-to-right"
-msgstr "Since do tecse, eg del droete al hintche oudobén del hintche al droete"
+msgstr "Sinse do tecse, eg del droete al hintche oudonbén del hintche al droete"
 
 #: gtk/gtktexttag.c:282
-#, fuzzy
 msgid "Font description as a string, e.g. \"Sans Italic 12\""
-msgstr "Discrijhaedje del fonte (tchinne di tecse)"
+msgstr "Discrijhaedje del fonte come ene tchinne, eg: «Sans Italic 12»"
 
 #: gtk/gtktexttag.c:307
 msgid "Font style as a PangoStyle, e.g. PANGO_STYLE_ITALIC"
-msgstr ""
+msgstr "Stîle del fonte come on stîle pango (PangoStyle), eg: PANGO_STYLE_ITALIC"
 
 #: gtk/gtktexttag.c:316
 msgid "Font variant as a PangoVariant, e.g. PANGO_VARIANT_SMALL_CAPS"
@@ -4032,9 +3762,8 @@ msgid "Font stretch as a PangoStretch, e.g. PANGO_STRETCH_CONDENSED"
 msgstr ""
 
 #: gtk/gtktexttag.c:345
-#, fuzzy
 msgid "Font size in Pango units"
-msgstr "Grandeu del fonte (e ponts)"
+msgstr "Grandeu del fonte en unités di Pango"
 
 #: gtk/gtktexttag.c:355
 msgid ""
@@ -4045,7 +3774,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:375 gtk/gtktextview.c:594
 msgid "Left, right, or center justification"
-msgstr "Djustifiaedje a hintche, a droete oudobén å mitan"
+msgstr "Djustifiaedje a hintche, a droete oudonbén å mitan"
 
 #: gtk/gtktexttag.c:383
 msgid "Language"
@@ -4059,22 +3788,20 @@ msgid ""
 msgstr ""
 
 #: gtk/gtktexttag.c:391
-#, fuzzy
 msgid "Left margin"
-msgstr "Sayî co ene feye"
+msgstr "Mådje di hintche"
 
 #: gtk/gtktexttag.c:392 gtk/gtktextview.c:603
 msgid "Width of the left margin in pixels"
-msgstr ""
+msgstr "Lårdjeu del mådje di hintche e picsels"
 
 #: gtk/gtktexttag.c:401
-#, fuzzy
 msgid "Right margin"
-msgstr "tchôde marke"
+msgstr "Mådje di droete"
 
 #: gtk/gtktexttag.c:402 gtk/gtktextview.c:613
 msgid "Width of the right margin in pixels"
-msgstr ""
+msgstr "Lårdjeu del mådje di droete e picsels"
 
 #: gtk/gtktexttag.c:412 gtk/gtktextview.c:622
 msgid "Indent"
@@ -4085,13 +3812,12 @@ msgid "Amount to indent the paragraph, in pixels"
 msgstr ""
 
 #: gtk/gtktexttag.c:424
-#, fuzzy
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative) "
 "in pixels"
 msgstr ""
 "Eplaeçmint e hôteu pa rapoirt al roye di båze pol tecse (å dzo del roye si "
-"l' valixhance est negative)"
+"l' valixhance est negative), e picsels"
 
 #: gtk/gtktexttag.c:433
 msgid "Pixels above lines"
@@ -4122,8 +3848,7 @@ msgid "Wrap mode"
 msgstr "Môde côpaedje di roye"
 
 #: gtk/gtktexttag.c:481 gtk/gtktextview.c:585
-msgid ""
-"Whether to wrap lines never, at word boundaries, or at character boundaries"
+msgid "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 
 #: gtk/gtktexttag.c:490 gtk/gtktextview.c:632
@@ -4131,9 +3856,8 @@ msgid "Tabs"
 msgstr ""
 
 #: gtk/gtktexttag.c:491 gtk/gtktextview.c:633
-#, fuzzy
 msgid "Custom tabs for this text"
-msgstr "Imådjete da vosse po dismonté:"
+msgstr ""
 
 #: gtk/gtktexttag.c:498
 msgid "Invisible"
@@ -4144,9 +3868,8 @@ msgid "Whether this text is hidden. Not implemented in GTK 2.0"
 msgstr ""
 
 #: gtk/gtktexttag.c:512
-#, fuzzy
 msgid "Background full height set"
-msgstr "Li fond s' erôle eto"
+msgstr ""
 
 #: gtk/gtktexttag.c:513
 msgid "Whether this tag affects background height"
@@ -4161,45 +3884,40 @@ msgid "Whether this tag affects the background stipple"
 msgstr ""
 
 #: gtk/gtktexttag.c:524
-#, fuzzy
 msgid "Foreground stipple set"
-msgstr "No del coleur di dvant"
+msgstr ""
 
 #: gtk/gtktexttag.c:525
 msgid "Whether this tag affects the foreground stipple"
 msgstr ""
 
 #: gtk/gtktexttag.c:560
-#, fuzzy
 msgid "Justification set"
-msgstr "Djustifiaedje"
+msgstr ""
 
 #: gtk/gtktexttag.c:561
 msgid "Whether this tag affects paragraph justification"
 msgstr ""
 
 #: gtk/gtktexttag.c:564
-#, fuzzy
 msgid "Language set"
-msgstr "Lingaedjes"
+msgstr ""
 
 #: gtk/gtktexttag.c:565
 msgid "Whether this tag affects the language the text is rendered as"
 msgstr ""
 
 #: gtk/gtktexttag.c:568
-#, fuzzy
 msgid "Left margin set"
-msgstr "Fletche hintche"
+msgstr ""
 
 #: gtk/gtktexttag.c:569
 msgid "Whether this tag affects the left margin"
 msgstr ""
 
 #: gtk/gtktexttag.c:572
-#, fuzzy
 msgid "Indent set"
-msgstr "Ritrait"
+msgstr ""
 
 #: gtk/gtktexttag.c:573
 msgid "Whether this tag affects indentation"
@@ -4210,9 +3928,8 @@ msgid "Pixels above lines set"
 msgstr ""
 
 #: gtk/gtktexttag.c:581 gtk/gtktexttag.c:585
-#, fuzzy
 msgid "Whether this tag affects the number of pixels above lines"
-msgstr "Candjî li nombe di picsels divant di candjî d' coleur."
+msgstr ""
 
 #: gtk/gtktexttag.c:584
 msgid "Pixels below lines set"
@@ -4227,36 +3944,32 @@ msgid "Whether this tag affects the number of pixels between wrapped lines"
 msgstr ""
 
 #: gtk/gtktexttag.c:596
-#, fuzzy
 msgid "Right margin set"
-msgstr "Fletche droete"
+msgstr ""
 
 #: gtk/gtktexttag.c:597
 msgid "Whether this tag affects the right margin"
 msgstr ""
 
 #: gtk/gtktexttag.c:604
-#, fuzzy
 msgid "Wrap mode set"
-msgstr "Môde côpaedje di roye"
+msgstr ""
 
 #: gtk/gtktexttag.c:605
 msgid "Whether this tag affects line wrap mode"
 msgstr ""
 
 #: gtk/gtktexttag.c:608
-#, fuzzy
 msgid "Tabs set"
-msgstr "Apontiaedje di GTali"
+msgstr ""
 
 #: gtk/gtktexttag.c:609
 msgid "Whether this tag affects tabs"
 msgstr ""
 
 #: gtk/gtktexttag.c:612
-#, fuzzy
 msgid "Invisible set"
-msgstr "Nén veyåve"
+msgstr ""
 
 #: gtk/gtktexttag.c:613
 msgid "Whether this tag affects text visibility"
@@ -4315,19 +4028,16 @@ msgid "Pixels Inside Wrap"
 msgstr ""
 
 #: gtk/gtktextview.c:584
-#, fuzzy
 msgid "Wrap Mode"
-msgstr "Môde côpaedje di roye"
+msgstr ""
 
 #: gtk/gtktextview.c:602
-#, fuzzy
 msgid "Left Margin"
-msgstr "Sayî co ene feye"
+msgstr "Mådje di hintche"
 
 #: gtk/gtktextview.c:612
-#, fuzzy
 msgid "Right Margin"
-msgstr "Droete mwin"
+msgstr "Mådje di droete"
 
 #: gtk/gtktextview.c:640
 msgid "Cursor Visible"
@@ -4338,9 +4048,8 @@ msgid "If the insertion cursor is shown"
 msgstr ""
 
 #: gtk/gtktextview.c:6631
-#, fuzzy
 msgid "Input _Methods"
-msgstr "Metôdes d' intrêye"
+msgstr "_Metôdes d' intrêye"
 
 #: gtk/gtkthemes.c:69
 #, c-format
@@ -4356,61 +4065,52 @@ msgid "If the toggle button should be pressed in or not"
 msgstr ""
 
 #: gtk/gtktogglebutton.c:141
-#, fuzzy
 msgid "If the toggle button is in an \"in between\" state"
-msgstr "Candje si li bår ås menus est mostrêye ou nén."
+msgstr ""
 
 #: gtk/gtktogglebutton.c:148
-#, fuzzy
 msgid "Draw Indicator"
-msgstr "Indicateu"
+msgstr ""
 
 #: gtk/gtktogglebutton.c:149
-#, fuzzy
 msgid "If the toggle part of the button is displayed"
-msgstr "Candje si li bår ås menus est mostrêye ou nén."
+msgstr ""
 
 #: gtk/gtktoolbar.c:232
 msgid "The orientation of the toolbar"
 msgstr ""
 
 #: gtk/gtktoolbar.c:240
-#, fuzzy
 msgid "Toolbar Style"
-msgstr "Stîle del bår ås usteyes:"
+msgstr "Stîle del bår ås usteyes"
 
 #: gtk/gtktoolbar.c:241
-#, fuzzy
 msgid "How to draw the toolbar"
-msgstr "Apontyî l' bår ås usteyes a vosse môde"
+msgstr "Kimint dessiner l' bår ås usteyes"
 
 #: gtk/gtktoolbar.c:249
-#, fuzzy
 msgid "Spacer size"
-msgstr "Grandeu do papî"
+msgstr ""
 
 #: gtk/gtktoolbar.c:250
-#, fuzzy
 msgid "Size of spacers"
-msgstr "Grandeu des picsels"
+msgstr ""
 
 #: gtk/gtktoolbar.c:259
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr ""
 
 #: gtk/gtktoolbar.c:267
-#, fuzzy
 msgid "Space style"
-msgstr "Stîle do cåde"
+msgstr ""
 
 #: gtk/gtktoolbar.c:268
 msgid "Whether spacers are vertical lines or just blank"
 msgstr ""
 
 #: gtk/gtktoolbar.c:276
-#, fuzzy
 msgid "Button relief"
-msgstr "Clitch do boton1:"
+msgstr ""
 
 #: gtk/gtktoolbar.c:277
 msgid "Type of bevel around toolbar buttons"
@@ -4421,44 +4121,36 @@ msgid "Style of bevel around the toolbar"
 msgstr ""
 
 #: gtk/gtktoolbar.c:291
-#, fuzzy
 msgid "Toolbar style"
-msgstr "Stîle del bår ås usteyes:"
+msgstr "Stîle del bår ås usteyes"
 
 #: gtk/gtktoolbar.c:292
-msgid ""
-"Whether default toolbars have text only, text and icons, icons only, etc."
+msgid "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 
 #: gtk/gtktoolbar.c:298
-#, fuzzy
 msgid "Toolbar icon size"
-msgstr "Tchuzes pol bårs ås usteyes"
+msgstr "Grandeu des imådjetes pol bårs ås usteyes"
 
 #: gtk/gtktoolbar.c:299
-#, fuzzy
 msgid "Size of icons in default toolbars"
-msgstr "Grandeu del fonte, pa rapoirt al prémetowe grandeu"
+msgstr "Grandeu des imådjetes dins les prémetowès bårs ås usteyes"
 
 #: gtk/gtktreemodelsort.c:306
-#, fuzzy
 msgid "TreeModelSort Model"
-msgstr "Môde do fitchî"
+msgstr ""
 
 #: gtk/gtktreemodelsort.c:307
-#, fuzzy
 msgid "The model for the TreeModelSort to sort"
-msgstr "Fé li minme po li rmanant"
+msgstr ""
 
 #: gtk/gtktreeview.c:520
-#, fuzzy
 msgid "TreeView Model"
-msgstr "Môde do fitchî"
+msgstr ""
 
 #: gtk/gtktreeview.c:521
-#, fuzzy
 msgid "The model for the tree view"
-msgstr "Fé li minme po li rmanant"
+msgstr ""
 
 #: gtk/gtktreeview.c:529
 msgid "Horizontal Adjustment for the widget"
@@ -4473,87 +4165,76 @@ msgid "Visible"
 msgstr "Veyåve"
 
 #: gtk/gtktreeview.c:545
-#, fuzzy
 msgid "Show the column header buttons"
-msgstr "Mostrer les botons po catchî"
+msgstr ""
 
 #: gtk/gtktreeview.c:552
-#, fuzzy
 msgid "Headers Clickable"
-msgstr "Clitchåve"
+msgstr ""
 
 #: gtk/gtktreeview.c:553
 msgid "Column headers respond to click events"
 msgstr ""
 
 #: gtk/gtktreeview.c:560
-#, fuzzy
 msgid "Expander Column"
-msgstr "Tot l' coxhlaedje"
+msgstr ""
 
 #: gtk/gtktreeview.c:561
 msgid "Set the column for the expander column"
 msgstr ""
 
 #: gtk/gtktreeview.c:568 gtk/gtktreeviewcolumn.c:284
-#, fuzzy
 msgid "Reorderable"
-msgstr "Bodjåve"
+msgstr ""
 
 #: gtk/gtktreeview.c:569
-#, fuzzy
 msgid "View is reorderable"
-msgstr "Loukî ci fitchî chal"
+msgstr ""
 
 #: gtk/gtktreeview.c:576
-#, fuzzy
 msgid "Rules Hint"
-msgstr "Rûles"
+msgstr ""
 
 #: gtk/gtktreeview.c:577
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
 
 #: gtk/gtktreeview.c:584
-#, fuzzy
 msgid "Enable Search"
-msgstr "Fletche valeye"
+msgstr ""
 
 #: gtk/gtktreeview.c:585
 msgid "View allows user to search through columns interactively"
 msgstr ""
 
 #: gtk/gtktreeview.c:592
-#, fuzzy
 msgid "Search Column"
-msgstr "Tot l' coxhlaedje"
+msgstr ""
 
 #: gtk/gtktreeview.c:593
 msgid "Model column to search through when searching through code"
 msgstr ""
 
 #: gtk/gtktreeview.c:606
-#, fuzzy
 msgid "Expander Size"
-msgstr "Grandeu do papî"
+msgstr ""
 
 #: gtk/gtktreeview.c:607
 msgid "Size of the expander arrow"
 msgstr ""
 
 #: gtk/gtktreeview.c:615
-#, fuzzy
 msgid "Vertical Separator Width"
-msgstr "Adjinçmint d' astampé"
+msgstr ""
 
 #: gtk/gtktreeview.c:616
 msgid "Vertical space between cells.  Must be an even number"
 msgstr ""
 
 #: gtk/gtktreeview.c:624
-#, fuzzy
 msgid "Horizontal Separator Width"
-msgstr "Adjinçmint di coûtchî"
+msgstr ""
 
 #: gtk/gtktreeview.c:625
 msgid "Horizontal space between cells.  Must be an even number"
@@ -4568,11 +4249,8 @@ msgid "Allow drawing of alternating color rows"
 msgstr ""
 
 #: gtk/gtktreeview.c:640
-#, fuzzy
 msgid "Indent Expanders"
 msgstr ""
-"Tot l'\n"
-"coxhlaedje"
 
 #: gtk/gtktreeview.c:641
 msgid "Make the expanders indented"
@@ -4595,14 +4273,12 @@ msgid "Color to use for odd rows"
 msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:186
-#, fuzzy
 msgid "Whether to display the column"
-msgstr "Li lårdjeu des colones"
+msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:193 gtk/gtkwindow.c:491
-#, fuzzy
 msgid "Resizable"
-msgstr "Candjî di grandeu"
+msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:194
 msgid "Column is user-resizable"
@@ -4613,24 +4289,20 @@ msgid "Current width of the column"
 msgstr "Li lårdjeu do moumint del colone"
 
 #: gtk/gtktreeviewcolumn.c:210
-#, fuzzy
 msgid "Sizing"
-msgstr "Swing"
+msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:211
-#, fuzzy
 msgid "Resize mode of the column"
-msgstr "Li lårdjeu do moumint del colone"
+msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:219
-#, fuzzy
 msgid "Fixed Width"
-msgstr "Lårdjeu:"
+msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:220
-#, fuzzy
 msgid "Current fixed width of the column"
-msgstr "Li lårdjeu do moumint del colone"
+msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:229
 msgid "Minimum Width"
@@ -4681,14 +4353,12 @@ msgid "X Alignment of the column header text or widget"
 msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:285
-#, fuzzy
 msgid "Whether the column can be reordered around the headers"
-msgstr "Lårdjeu do tecse a håyner"
+msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:292
-#, fuzzy
 msgid "Sort indicator"
-msgstr "Enonder el ridant:"
+msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:293
 msgid "Whether to show a sort indicator"
@@ -4728,7 +4398,7 @@ msgstr "Li no del ahesse"
 
 #: gtk/gtkwidget.c:479
 msgid "Parent widget"
-msgstr "Ahesse aprint"
+msgstr "Ahesse parint"
 
 #: gtk/gtkwidget.c:480
 msgid "The parent widget of this widget. Must be a Container widget"
@@ -4905,8 +4575,8 @@ msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
 msgstr ""
-"Coleur pol deujhinme cursoe di stitchaedje, po l' aspougnaedje di tecse "
-"ki maxhe les sins droete-a-hintche eyet hintche-a-droete"
+"Coleur pol deujhinme cursoe di stitchaedje, po l' aspougnaedje di tecse ki "
+"maxhe les sins droete-a-hintche eyet hintche-a-droete"
 
 #: gtk/gtkwidget.c:1208
 msgid "Cursor line aspect ratio"
@@ -4986,8 +4656,7 @@ msgid "Default Height"
 msgstr "Hôteu prémetowe"
 
 #: gtk/gtkwindow.c:527
-msgid ""
-"The default height of the window, used when initially showing the window"
+msgid "The default height of the window, used when initially showing the window"
 msgstr "Li prémetowe hôteu do purnea, pol prumî côp k' il est håyné"
 
 #: gtk/gtkwindow.c:536
@@ -5102,11 +4771,9 @@ msgid "How to draw the input method preedit string"
 msgstr ""
 
 #: modules/input/gtkimcontextxim.c:285
-#, fuzzy
 msgid "IM Status style"
-msgstr "Stîle do cåde"
+msgstr ""
 
 #: modules/input/gtkimcontextxim.c:286
-#, fuzzy
 msgid "How to draw the input method statusbar"
-msgstr "Apontyî l' bår ås usteyes a vosse môde"
+msgstr ""
