@@ -1,3 +1,19 @@
+2004-08-26  Matthias Clasen  <mclasen@redhat.com>
+
+	Make gdk_window_process_[all]_updates() respect 
+	update_freeze_counter  (#144272, Soeren Sandmann)
+	
+	* gdk/gdkwindow.c (gdk_window_schedule_update): New function to
+	install an idle for gdk_window_update_idle() if one isn't there
+	already.
+	(gdk_window_process_all_updates): 
+	(gdk_window_process_updates): Only process the updates if the
+	window isn't frozen.
+	(gdk_window_invalidate_maybe_recurse): Schedule an update when
+	necessary.
+	(gdk_window_thaw_updates): Use gdk_window_schedule_update() instead
+	of directly installing the idle.
+
 2004-08-22  Robert Ögren  <gtk@roboros.com>
 
 	On Win32, make graphical tablets work on multi-monitor systems.

@@ -1987,10 +1987,32 @@ gdk_window_copy_to_image (GdkDrawable     *drawable,
 
 /* Code for dirty-region queueing
  */
-
 static GSList *update_windows = NULL;
 static guint update_idle = 0;
 static gboolean debug_updates = FALSE;
+
+static gboolean
+gdk_window_update_idle (gpointer data)
+{
+  GDK_THREADS_ENTER ();
+  gdk_window_process_all_updates ();
+  GDK_THREADS_LEAVE ();
+  
+  return FALSE;
+}
+
+static void
+gdk_window_schedule_update (GdkWindow *window)
+{
+  if (window && GDK_WINDOW_OBJECT (window)->update_freeze_count)
+    return;
+
+  if (!update_idle)
+    {
+      update_idle = g_idle_add_full (GDK_PRIORITY_REDRAW,
+				     gdk_window_update_idle, NULL, NULL);
+    }
+}
 
 static void
 gdk_window_process_updates_internal (GdkWindow *window)
@@ -2111,7 +2133,13 @@ gdk_window_process_all_updates (void)
   
   while (tmp_list)
     {
-      gdk_window_process_updates_internal (tmp_list->data);
+      GdkWindowObject *private = (GdkWindowObject *)tmp_list->data;
+      
+      if (private->update_freeze_count)
+	update_windows = g_slist_prepend (update_windows, private);
+      else
+	gdk_window_process_updates_internal (tmp_list->data);
+      
       g_object_unref (tmp_list->data);
       tmp_list = tmp_list->next;
     }
@@ -2119,16 +2147,6 @@ gdk_window_process_all_updates (void)
   g_slist_free (old_update_windows);
 
   flush_all_displays ();
-}
-
-static gboolean
-gdk_window_update_idle (gpointer data)
-{
-  GDK_THREADS_ENTER ();
-  gdk_window_process_all_updates ();
-  GDK_THREADS_LEAVE ();
-  
-  return FALSE;
 }
 
 /**
@@ -2155,7 +2173,7 @@ gdk_window_process_updates (GdkWindow *window,
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
   
-  if (private->update_area)
+  if (private->update_area && !private->update_freeze_count)
     {      
       gdk_window_process_updates_internal (window);
       update_windows = g_slist_remove (update_windows, window);
@@ -2300,9 +2318,7 @@ gdk_window_invalidate_maybe_recurse (GdkWindow *window,
 	  update_windows = g_slist_prepend (update_windows, window);
 	  private->update_area = gdk_region_copy (visible_region);
 	  
-	  if (!private->update_freeze_count && !update_idle)
-	    update_idle = g_idle_add_full (GDK_PRIORITY_REDRAW,
-					   gdk_window_update_idle, NULL, NULL);
+	  gdk_window_schedule_update (window);
 	}
       
       if (child_func)
@@ -2474,10 +2490,8 @@ gdk_window_thaw_updates (GdkWindow *window)
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (private->update_freeze_count > 0);
 
-  private->update_freeze_count--;
-  if (!private->update_freeze_count && private->update_area && !update_idle)
-    update_idle = g_idle_add_full (GDK_PRIORITY_REDRAW,
-				   gdk_window_update_idle, NULL, NULL);
+  if (--private->update_freeze_count == 0)
+    gdk_window_schedule_update (window);
 }
 
 /**
