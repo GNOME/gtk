@@ -1,3 +1,7 @@
+Thu Jan 11 13:16:50 GMT 2001  Tony Gale <gale@gtk.org>
+
+	* docs/faq/gtk-faq.sgml: update to make web site updating easier
+
 2001-01-10  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktreestore.c (gtk_tree_store_insert_before): handle case
