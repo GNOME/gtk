@@ -1,3 +1,8 @@
+Tue Dec  2 01:01:54 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkiconfactory.h: Remove duplicate declaration of 
+	gtk_icon_source_set_icon_name().  (#Jeff Franks, #128269)
+
 2003-12-01  Federico Mena Quintero  <federico@ximian.com>
 
 	Patch from Hans-Petter Jansson <hpj@ximian.com> to align the

@@ -146,8 +146,6 @@ void           gtk_icon_source_set_icon_name            (GtkIconSource       *so
                                                          const gchar         *icon_name);
 void           gtk_icon_source_set_pixbuf               (GtkIconSource       *source,
                                                          GdkPixbuf           *pixbuf);
-void           gtk_icon_source_set_icon_name            (GtkIconSource       *source,
-							 const gchar         *icon_name);
 
 G_CONST_RETURN gchar* gtk_icon_source_get_filename  (const GtkIconSource *source);
 G_CONST_RETURN gchar* gtk_icon_source_get_icon_name (const GtkIconSource *source);
