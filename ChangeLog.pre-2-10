@@ -1,3 +1,15 @@
+2004-05-11  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from HEAD:
+	
+	* gtk/gtktreeprivate.h:
+	* gtk/gtktreeview.c: Add a hove selection mode, which 
+	when TRUE makes the selection follow the mouse. 
+
+	* gtk/gtkentrycompletion.c (gtk_entry_completion_init): 
+	* gtk/gtkcombobox.c (gtk_combo_box_list_setup): Use hover selection
+	mode.  (#127648, Dave Bordoley)
+	
 Mon May 10 23:04:25 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkwidget.h: Add prototype for _gtk_widget_grab_notify()
