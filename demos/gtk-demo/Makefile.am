@@ -1,12 +1,13 @@
 ## Makefile.am for gtk+/demos
 
-democodedir=$(datadir)/gtk-demo
+democodedir=$(datadir)/gtk-2.0/demo
 
 demos = @STRIP_BEGIN@	\
 	button_box.c	\
 	item_factory.c	\
 	menus.c		\
 	panes.c		\
+	textview.c	\
 @STRIP_END@
 
 INCLUDES = @STRIP_BEGIN@ \

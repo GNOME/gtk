@@ -66,6 +66,8 @@ main (int argc, char** argv)
 
   run_tests (buffer);
 
+  g_object_unref (G_OBJECT (buffer));
+  
   g_print ("All tests passed.\n");
 
   return 0;

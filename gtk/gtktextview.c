@@ -2443,7 +2443,7 @@ gtk_text_view_draw (GtkWidget *widget, GdkRectangle *area)
   text_view = GTK_TEXT_VIEW (widget);
 
   gtk_text_view_paint (widget, area);
-
+  
   /* If the area overlaps the "edge" of the widget, draw the focus
    * rectangle
    */
@@ -2452,7 +2452,7 @@ gtk_text_view_draw (GtkWidget *widget, GdkRectangle *area)
       (area->x + area->width) > (widget->allocation.width - FOCUS_EDGE_WIDTH) ||
       (area->y + area->height) > (widget->allocation.height - FOCUS_EDGE_WIDTH))
     gtk_widget_draw_focus (widget);
-
+  
   /* Synthesize expose events for the user-drawn border windows,
    * just as we would for a drawing area.
    */
@@ -2480,14 +2480,14 @@ gtk_text_view_draw (GtkWidget *widget, GdkRectangle *area)
 
 static gint
 gtk_text_view_expose_event (GtkWidget *widget, GdkEventExpose *event)
-{
+{  
   if (event->window == gtk_text_view_get_window (GTK_TEXT_VIEW (widget),
                                                  GTK_TEXT_WINDOW_TEXT))
     gtk_text_view_paint (widget, &event->area);
 
   if (event->window == widget->window)
     gtk_widget_draw_focus (widget);
-
+  
   return TRUE;
 }
 

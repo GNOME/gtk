@@ -1023,9 +1023,10 @@ do_search (gpointer callback_data,
 
   buffer = gtk_text_buffer_new (NULL);
 
-  /* FIXME memory leak once buffer is a GObject */
   search_text = gtk_text_view_new_with_buffer (buffer);
 
+  g_object_unref (G_OBJECT (buffer));
+  
   gtk_box_pack_end (GTK_BOX (GTK_DIALOG (dialog)->vbox),
                     search_text,
                     TRUE, TRUE, 0);
@@ -1276,8 +1277,6 @@ create_buffer (void)
   buffer = g_new (Buffer, 1);
 
   buffer->buffer = gtk_text_buffer_new (NULL);
-  gtk_object_ref (GTK_OBJECT (buffer->buffer));
-  gtk_object_sink (GTK_OBJECT (buffer->buffer));
   
   buffer->refcount = 1;
   buffer->filename = NULL;

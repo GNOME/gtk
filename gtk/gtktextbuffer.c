@@ -262,6 +262,9 @@ gtk_text_buffer_new (GtkTextTagTable *table)
       gtk_object_sink (GTK_OBJECT (text_buffer->tag_table));
     }
 
+  gtk_object_ref (GTK_OBJECT (text_buffer));
+  gtk_object_sink (GTK_OBJECT (text_buffer));
+  
   return text_buffer;
 }
 

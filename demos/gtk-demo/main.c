@@ -307,8 +307,8 @@ create_tree (void)
   GtkTreeSelection *selection;
   GtkCellRenderer *cell;
   GtkWidget *tree_view;
-  GtkObject *column;
-  GtkObject *model;
+  GtkTreeViewColumn *column;
+  GtkTreeStore *model;
   GtkTreeIter iter;
   gint i;
 
@@ -334,7 +334,7 @@ create_tree (void)
     }
 
   cell = gtk_cell_renderer_text_new ();
-  column = gtk_tree_view_column_new_with_attributes ("Widget",
+  column = gtk_tree_view_column_new_with_attributes ("Widget (double click for demo)",
 						     cell,
 						     "text", TITLE_COLUMN,
 						     "italic", ITALIC_COLUMN,

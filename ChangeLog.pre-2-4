@@ -1,5 +1,27 @@
 2000-11-12  Havoc Pennington  <hp@pobox.com>
 
+	* demos/gtk-demo/Makefile.am (democodedir): change demo install
+	dir to datadir/gtk+-2.0/demo
+
+	* demos/gtk-demo/textview.c: Text widget demo; reveals all 
+	sorts of text widget and Pango font bugs. Urgh.
+
+	* demos/gtk-demo/Makefile.am (demos): Add textview.c
+
+	* demos/gtk-demo/main.c (create_tree): Add instructions at top of
+	tree that you should double click to see the demo. Fix 
+	types of variables to reflect changed return values from 
+	GtkTreeStore and GtkTreeViewColumn constructors.
+
+	* gtk/gtktextbuffer.c (gtk_text_buffer_new): ref/sink the
+	newly-created buffer to prepare for GObject semantics
+
+	* gtk/testtext.c: don't leak the buffer with GObject semantics
+
+	* gtk/testtextbuffer.c: ditto
+	
+2000-11-12  Havoc Pennington  <hp@pobox.com>
+
         Rename this testgtk to gtk-demo to avoid confusion, and 
 	install it so people can use it as a supplement to 
 	the documentation.
