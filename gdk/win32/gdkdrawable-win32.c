@@ -239,20 +239,35 @@ gdk_win32_set_colormap (GdkDrawable *drawable,
 /* Drawing
  */
 
-/*
- * Render a dashed line 'by hand' cause the Win9x GDI is 
- * too limited to do so
+static DWORD default_double_dashes[] = { 3, 3 };
+
+/* Render a dashed line 'by hand'. Used for all dashes on Win9x (where
+ * GDI is way too limited), and for double dashes on all Windowses.
  */
 static inline gboolean
-render_line_horizontal (HDC    hdc,
+render_line_horizontal (GdkGCWin32 *gcwin32,
                         int    x1, 
                         int    x2,
-                        int    y,
-                        int    pen_width,
-                        DWORD *dashes,
-                        int    num_dashes)
+                        int    y)
 {
-  int n;
+  int	  n;
+  HDC	  hdc = gcwin32->hdc;
+  int	  pen_width = gcwin32->pen_width;
+  DWORD	  *dashes;
+  int	  num_dashes;
+  int	  _x1 = x1;
+
+  if (gcwin32->pen_dashes)
+    {
+      dashes = gcwin32->pen_dashes;
+      num_dashes = gcwin32->pen_num_dashes;
+      x1 += gcwin32->pen_dash_offset;
+    }
+  else
+    {
+      dashes = default_double_dashes;
+      num_dashes = G_N_ELEMENTS (default_double_dashes);
+    }
 
   for (n = 0; x1 < x2; n++)
     {
@@ -269,19 +284,60 @@ render_line_horizontal (HDC    hdc,
       x1 += dashes[n % num_dashes];
     }
 
+  if (gcwin32->pen_double_dash)
+    {
+      HBRUSH hbr;
+
+      if ((hbr = SelectObject (hdc, gcwin32->pen_hbrbg)) == HGDI_ERROR)
+	return FALSE;
+      x1 = _x1;
+      if (gcwin32->pen_dashes)
+	x1 += gcwin32->pen_dash_offset;
+      for (n = 0; x1 < x2; n++)
+	{
+	  int len = dashes[n % num_dashes];
+	  if (x1 + len > x2)
+	    len = x2 - x1;
+
+	  if (n % 2)
+	    if (!GDI_CALL (PatBlt, (hdc, x1, y - pen_width / 2,
+				    len, pen_width,
+				    PATCOPY)))
+	      return FALSE;
+
+	  x1 += dashes[n % num_dashes];
+	}
+      if (SelectObject (hdc, hbr) == HGDI_ERROR)
+	return FALSE;
+    }
+
   return TRUE;
 }
 
 static inline gboolean
-render_line_vertical (HDC    hdc,
+render_line_vertical (GdkGCWin32 *gcwin32,
 		      int    x, 
                       int    y1,
-                      int    y2,
-                      int    pen_width,
-                      DWORD *dashes,
-		      int    num_dashes)
+                      int    y2)
 {
-  int n;
+  int	  n;
+  HDC	  hdc = gcwin32->hdc;
+  int	  pen_width = gcwin32->pen_width;
+  DWORD	  *dashes;
+  int	  num_dashes;
+  int	  _y1 = y1;
+
+  if (gcwin32->pen_dashes)
+    {
+      dashes = gcwin32->pen_dashes;
+      num_dashes = gcwin32->pen_num_dashes;
+      y1 += gcwin32->pen_dash_offset;
+    }
+  else
+    {
+      dashes = default_double_dashes;
+      num_dashes = G_N_ELEMENTS (default_double_dashes);
+    }
 
   for (n = 0; y1 < y2; n++)
     {
@@ -295,6 +351,32 @@ render_line_vertical (HDC    hdc,
 	  return FALSE;
 
       y1 += dashes[n % num_dashes];
+    }
+
+  if (gcwin32->pen_double_dash)
+    {
+      HBRUSH hbr;
+
+      if ((hbr = SelectObject (hdc, gcwin32->pen_hbrbg)) == HGDI_ERROR)
+	return FALSE;
+      y1 = _y1;
+      if (gcwin32->pen_dashes)
+	y1 += gcwin32->pen_dash_offset;
+      for (n = 0; y1 < y2; n++)
+	{
+	  int len = dashes[n % num_dashes];
+	  if (y1 + len > y2)
+	    len = y2 - y1;
+	  if (n % 2)
+	    if (!GDI_CALL (PatBlt, (hdc, x - pen_width / 2, y1,
+				    pen_width, len,
+				    PATCOPY)))
+	      return FALSE;
+
+	  y1 += dashes[n % num_dashes];
+	}
+      if (SelectObject (hdc, hbr) == HGDI_ERROR)
+	return FALSE;
     }
 
   return TRUE;
@@ -736,24 +818,14 @@ draw_rectangle (GdkGCWin32 *gcwin32,
   x -= x_offset;
   y -= y_offset;
 
-  if (!filled && gcwin32->pen_dashes && !G_WIN32_IS_NT_BASED ())
+  if (!filled && (gcwin32->pen_double_dash ||
+                  (gcwin32->pen_dashes && (gcwin32->pen_dash_offset ||
+					   !G_WIN32_IS_NT_BASED ()))))
     {
-      render_line_vertical (hdc, x, y, y+height+1,
-			    gcwin32->pen_width,
-			    gcwin32->pen_dashes,
-			    gcwin32->pen_num_dashes) &&
-      render_line_horizontal (hdc, x, x+width+1, y,
-			      gcwin32->pen_width,
-			      gcwin32->pen_dashes,
-			      gcwin32->pen_num_dashes) &&
-      render_line_vertical (hdc, x+width+1, y, y+height+1,
-			    gcwin32->pen_width,
-			    gcwin32->pen_dashes,
-			    gcwin32->pen_num_dashes) &&
-      render_line_horizontal (hdc, x, x+width+1, y+height+1,
-			      gcwin32->pen_width,
-			      gcwin32->pen_dashes,
-			      gcwin32->pen_num_dashes);
+      render_line_vertical (gcwin32, x, y, y+height+1) &&
+      render_line_horizontal (gcwin32, x, x+width+1, y) &&
+      render_line_vertical (gcwin32, x+width+1, y, y+height+1) &&
+      render_line_horizontal (gcwin32, x, x+width+1, y+height+1);
     }
   else
     {
@@ -796,7 +868,8 @@ gdk_win32_draw_rectangle (GdkDrawable *drawable,
   region = widen_bounds (&bounds, GDK_GC_WIN32 (gc)->pen_width);
 
   generic_draw (drawable, gc,
-		GDK_GC_FOREGROUND | (filled ? 0 : LINE_ATTRIBUTES),
+		GDK_GC_FOREGROUND | GDK_GC_BACKGROUND |
+		(filled ? 0 : LINE_ATTRIBUTES),
 		draw_rectangle, region, filled, x, y, width, height);
 
   gdk_region_destroy (region);
@@ -1196,7 +1269,9 @@ draw_segments (GdkGCWin32 *gcwin32,
         }
     }
 
-  if (gcwin32->pen_dashes && !G_WIN32_IS_NT_BASED ())
+  if (gcwin32->pen_double_dash ||
+      (gcwin32->pen_dashes && (gcwin32->pen_dash_offset ||
+			       !G_WIN32_IS_NT_BASED ())))
     {
       for (i = 0; i < nsegs; i++)
 	{
@@ -1209,11 +1284,7 @@ draw_segments (GdkGCWin32 *gcwin32,
 	      else
 		y1 = segs[i].y2, y2 = segs[i].y1;
 	      
-	      render_line_vertical (hdc,
-				    segs[i].x1, y1, y2,
-				    gcwin32->pen_width,
-				    gcwin32->pen_dashes,
-				    gcwin32->pen_num_dashes);
+	      render_line_vertical (gcwin32, segs[i].x1, y1, y2);
 	    }
 	  else if (segs[i].y1 == segs[i].y2)
 	    {
@@ -1224,11 +1295,7 @@ draw_segments (GdkGCWin32 *gcwin32,
 	      else
 		x1 = segs[i].x2, x2 = segs[i].x1;
 	      
-	      render_line_horizontal (hdc,
-				      x1, x2, segs[i].y1,
-				      gcwin32->pen_width,
-				      gcwin32->pen_dashes,
-				      gcwin32->pen_num_dashes);
+	      render_line_horizontal (gcwin32, x1, x2, segs[i].y1);
 	    }
 	  else
 	    GDI_CALL (MoveToEx, (hdc, segs[i].x1, segs[i].y1, NULL)) &&
@@ -1311,7 +1378,8 @@ gdk_win32_draw_segments (GdkDrawable *drawable,
 
   region = widen_bounds (&bounds, GDK_GC_WIN32 (gc)->pen_width);
 
-  generic_draw (drawable, gc, GDK_GC_FOREGROUND|LINE_ATTRIBUTES,
+  generic_draw (drawable, gc, GDK_GC_FOREGROUND | GDK_GC_FOREGROUND |
+			      LINE_ATTRIBUTES,
 		draw_segments, region, segs, nsegs);
 
   gdk_region_destroy (region);
@@ -1338,7 +1406,9 @@ draw_lines (GdkGCWin32 *gcwin32,
 	pts[i].y -= y_offset;
       }
   
-  if (gcwin32->pen_dashes && !G_WIN32_IS_NT_BASED ())
+  if (gcwin32->pen_double_dash ||
+      (gcwin32->pen_dashes && (gcwin32->pen_dash_offset ||
+			       !G_WIN32_IS_NT_BASED ())))
     {
       for (i = 0; i < npoints - 1; i++)
         {
@@ -1350,10 +1420,7 @@ draw_lines (GdkGCWin32 *gcwin32,
 	      else
 	        y1 = pts[i].y, y2 = pts[i+1].y;
 	      
-	      render_line_vertical (hdc, pts[i].x, y1, y2,
-	                            gcwin32->pen_width,
-	                            gcwin32->pen_dashes,
-	                            gcwin32->pen_num_dashes);
+	      render_line_vertical (gcwin32, pts[i].x, y1, y2);
 	    }
 	  else if (pts[i].y == pts[i+1].y)
 	    {
@@ -1363,10 +1430,7 @@ draw_lines (GdkGCWin32 *gcwin32,
 	      else
 	        x1 = pts[i].x, x2 = pts[i+1].x;
 
-	      render_line_horizontal (hdc, x1, x2, pts[i].y,
-	                              gcwin32->pen_width,
-	                              gcwin32->pen_dashes,
-	                              gcwin32->pen_num_dashes);
+	      render_line_horizontal (gcwin32, x1, x2, pts[i].y);
 	    }
 	  else
 	    GDI_CALL (MoveToEx, (hdc, pts[i].x, pts[i].y, NULL)) &&
@@ -1418,7 +1482,8 @@ gdk_win32_draw_lines (GdkDrawable *drawable,
 
   region = widen_bounds (&bounds, GDK_GC_WIN32 (gc)->pen_width);
 
-  generic_draw (drawable, gc, GDK_GC_FOREGROUND|LINE_ATTRIBUTES,
+  generic_draw (drawable, gc, GDK_GC_FOREGROUND | GDK_GC_BACKGROUND |
+			      LINE_ATTRIBUTES,
 		draw_lines, region, pts, npoints);
 
   gdk_region_destroy (region);
