@@ -4812,8 +4812,12 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
           if (!gtk_tree_selection_get_selected (sel, &model, &iter))
             return FALSE;
 
+	  g_signal_handler_block (completion->priv->entry,
+				  completion->priv->changed_id);
           g_signal_emit_by_name (completion, "match_selected",
                                  model, &iter, &entry_set);
+	  g_signal_handler_unblock (completion->priv->entry,
+				    completion->priv->changed_id);
 
           if (!entry_set)
             {
