@@ -1,3 +1,8 @@
+Sat Feb 14 11:05:26 2004  Manish Singh  <yosh@gimp.org>
+
+        * configure.in: Remove unnecessary STRIP_* definitions, and GNU
+        make check.
+
 2004-02-13  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilesystemunix.c (gtk_file_system_unix_add_bookmark):
