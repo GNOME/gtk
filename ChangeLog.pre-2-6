@@ -1,3 +1,9 @@
+2001-09-13  Jakub Steiner <jimmac@ximian.com>
+
+	* gtk/stock-icons/dialog_question.png:
+	* gtk/stock-icons/dialog_warning.png: anders and jonathan seem to
+	  like a road sign.
+
 Wed Sep 12 19:01:05 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreemodel.h (struct _GtkTreeModelIface): Rename interface
