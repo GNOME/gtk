@@ -593,6 +593,7 @@ EXPORTS
 	gtk_item_factory_popup_data_from_widget
 	gtk_item_factory_popup_with_data
 	gtk_item_factory_print_func
+	gtk_item_factory_set_translate_func
 	gtk_item_get_type
 	gtk_item_select
 	gtk_item_toggle
