@@ -82,7 +82,7 @@ libgtk-cvs-1.1: build
 	dh_installdeb -plibgtk-cvs-1.1
 	dh_shlibdeps -plibgtk-cvs-1.1
 	dh_gencontrol -plibgtk-cvs-1.1
-	dh_makeshlibs -plibgtk-cvs-1.1 -V'libgtk-cvs-1.1 (='`cat debian/version`')'
+	dh_makeshlibs -plibgtk-cvs-1.1 -V 'libgtk-cvs-1.1 (='`cat debian/version`')'
 	dh_md5sums -plibgtk-cvs-1.1
 	dh_builddeb -plibgtk-cvs-1.1
 
