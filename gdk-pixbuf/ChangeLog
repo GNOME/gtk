@@ -1,3 +1,15 @@
+2000-06-09  Larry Ewing  <lewing@helixcode.com>
+
+	* gdk-pixbuf/io-png.c (gdk_pixbuf__png_image_load_increment):
+	setjmp for the png error handler.  It seems setting the error
+	handling functions does not avoid the jump, and so not calling
+	setjmp was causing the incremental loader to jump into lala land.
+	(gdk_pixbuf__png_image_begin_load): setjmp for error handling, I'm
+	not sure this one is actually required but the docs say it must be
+	set for every call to a png_* function.
+	Also changed the comment to reflect the fact that setting the
+	error handlers does _not_ avoid the longjmp.
+
 2000-06-06  Larry Ewing  <lewing@helixcode.com>
 
 	* gdk-pixbuf/gdk-pixbuf-loader.c (gdk_pixbuf_loader_frame_done):

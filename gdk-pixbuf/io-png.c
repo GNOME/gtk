@@ -220,7 +220,8 @@ gdk_pixbuf__png_image_load (FILE *f)
 						 free_buffer, NULL);
 }
 
-/* These avoid the setjmp()/longjmp() crap in libpng */
+/* I wish these avoided the setjmp()/longjmp() crap in libpng instead
+   just allow you to change the error reporting. */
 static void png_error_callback  (png_structp png_read_ptr,
                                  png_const_charp error_msg);
 
@@ -299,6 +300,7 @@ gdk_pixbuf__png_image_begin_load (ModulePreparedNotifyFunc prepare_func,
         
         /* Create the main PNG context struct */
 
+		
         lc->png_read_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING,
                                                   lc, /* error/warning callback data */
                                                   png_error_callback,
@@ -308,6 +310,13 @@ gdk_pixbuf__png_image_begin_load (ModulePreparedNotifyFunc prepare_func,
                 g_free(lc);
                 return NULL;
         }
+
+	if (setjmp (lc->png_read_ptr->jmpbuf)) {
+		if (lc->png_info_ptr)
+			png_destroy_read_struct(&lc->png_read_ptr, NULL, NULL);
+                g_free(lc);
+                return NULL;
+	}
 
         /* Create the auxiliary context struct */
 
@@ -357,7 +366,11 @@ gdk_pixbuf__png_image_load_increment(gpointer context, guchar *buf, guint size)
         lc->max_row_seen_in_chunk = -1;
         
         /* Invokes our callbacks as needed */
-        png_process_data(lc->png_read_ptr, lc->png_info_ptr, buf, size);
+	if (setjmp (lc->png_read_ptr->jmpbuf)) {
+		return FALSE;
+	} else {
+		png_process_data(lc->png_read_ptr, lc->png_info_ptr, buf, size);
+	}
 
         if (lc->fatal_error_occurred)
                 return FALSE;
@@ -522,3 +535,7 @@ png_warning_callback(png_structp png_read_ptr,
         
         fprintf(stderr, "Warning loading PNG: %s\n", warning_msg);
 }
+
+
+
+
