@@ -771,7 +771,11 @@ gboolean       gdk_region_point_in  (GdkRegion	   *region,
 				     int		   x,
 				     int		   y);
 GdkOverlapType gdk_region_rect_in   (GdkRegion	   *region,
-				     GdkRectangle   *rect);
+				     GdkRectangle  *rect);
+
+GdkRegion*     gdk_region_polygon   (GdkPoint      *points,
+				     gint           npoints,
+				     GdkFillRule    fill_rule);
 
 void	       gdk_region_offset   (GdkRegion	   *region,
 				    gint	   dx,

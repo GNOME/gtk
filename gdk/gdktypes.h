@@ -239,6 +239,16 @@ typedef enum
   GDK_OPAQUE_STIPPLED
 } GdkFill;
 
+/* GC fill rule for polygons
+ *  EvenOddRule
+ *  WindingRule
+ */
+typedef enum
+{
+  GDK_EVEN_ODD_RULE,
+  GDK_WINDING_RULE
+} GdkFillRule;
+
 /* GC line styles
  *  Solid:
  *  OnOffDash:

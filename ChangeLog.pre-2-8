@@ -1,3 +1,12 @@
+1998-04-13  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gdk/gdkregion.c (gdk_region_polygon): New function; wrapper for
+	XPolygonRegion().
+
+	* gdk/gdk.h: Added prototype for gdk_region_polygon().
+
+	* gdk/gdktypes.h (GdkFillRule): New enum type of fill rule for polygons.
+
 Mon Apr 13 15:04:26 1998  Michael K. Johnson <johnsonm@redhat.com>
 
 	* gtk/testgtk.c (create_clist): removed duplicate call to
