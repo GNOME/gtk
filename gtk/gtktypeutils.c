@@ -576,7 +576,7 @@ gtk_type_class_init (GtkType type)
       while (base_node)
 	{
 	  if (base_node->type_info.base_class_init_func)
-	    slist = g_slist_prepend (slist, base_node->type_info.base_class_init_func);
+	    slist = g_slist_prepend (slist, (gpointer) base_node->type_info.base_class_init_func);
 	  LOOKUP_TYPE_NODE (base_node, base_node->parent_type);
 	}
       if (slist)
@@ -587,7 +587,7 @@ gtk_type_class_init (GtkType type)
 	    {
 	      GtkClassInitFunc base_class_init;
 	      
-	      base_class_init = walk->data;
+	      base_class_init = (GtkClassInitFunc) walk->data;
 	      base_class_init (node->klass);
 	      LOOKUP_TYPE_NODE (node, type);
 	    }

@@ -61,8 +61,9 @@ gtk_plug_get_type ()
 	sizeof (GtkPlugClass),
 	(GtkClassInitFunc) gtk_plug_class_init,
 	(GtkObjectInitFunc) gtk_plug_init,
-	(GtkArgSetFunc) NULL,
-	(GtkArgGetFunc) NULL
+        /* reserved_1 */ NULL,
+	/* reserved_2 */ NULL,
+	(GtkClassInitFunc) NULL,
       };
 
       plug_type = gtk_type_unique (gtk_window_get_type (), &plug_info);

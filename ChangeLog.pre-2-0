@@ -1,3 +1,25 @@
+Wed Feb 28 19:10:43 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkclist.c (real_remove_row): Patch from ChiDeok
+	Hwang to move call to sync_selection() up a few lines
+	to before the row list is modified, to fix crash when
+	removing rows in the undo_selection list.
+
+	(Test case provided by Daniel Elstner:
+
+        http://mail.gnome.org/archives/gtk-list/2001-February/msg00359.html)
+
+Wed Feb 28 15:40:27 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcalender.c gtk/gtkdnd.c gtk/gtkitemfactory.c gtk/gtklayout.c
+	  gtk/gtkplug.c gtk/gtksocket.c gtk/gtktypeutils.c
+	  gtk/gtkwidget.c genmarshal.pl: Fix implicit casts
+	between void * and function pointers.
+
+	* gtk/gtklayout.c: Remove cruft after #endif
+
+	* gtk/gtkdnd.c: Include stdlib.h for abs.
+
 Tue Feb 27 18:38:27 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwindow.c (gtk_window_map): Redo the focus stuff

@@ -357,8 +357,9 @@ gtk_layout_get_type (void)
 	sizeof (GtkLayoutClass),
 	(GtkClassInitFunc) gtk_layout_class_init,
 	(GtkObjectInitFunc) gtk_layout_init,
-	(GtkArgSetFunc) NULL,
-        (GtkArgGetFunc) NULL,
+        /* reserved_1 */ NULL,
+	/* reserved_2 */ NULL,
+	(GtkClassInitFunc) NULL,
       };
 
       layout_type = gtk_type_unique (GTK_TYPE_CONTAINER, &layout_info);
@@ -1178,7 +1179,7 @@ gtk_layout_filter (GdkXEvent *gdk_xevent,
   
   return GDK_FILTER_CONTINUE;
 }
-#endif 0
+#endif
 
 /* Although GDK does have a GDK_VISIBILITY_NOTIFY event,
  * there is no corresponding event in GTK, so we have

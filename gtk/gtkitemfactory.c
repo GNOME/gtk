@@ -1530,7 +1530,7 @@ gtk_item_factory_parse_statement (GScanner            *scanner,
     {
       guint (*parser_func) (GScanner*, GtkItemFactoryClass*);
 
-      parser_func = scanner->value.v_symbol;
+      parser_func = (guint (*) (GScanner *, GtkItemFactoryClass*)) scanner->value.v_symbol;
 
       /* check whether this is a GtkItemFactory symbol.
        */
@@ -1598,7 +1598,7 @@ gtk_item_factory_parse_rc_scanner (GScanner *scanner)
 
   saved_symbol = g_scanner_lookup_symbol (scanner, "menu-path");
   g_scanner_remove_symbol (scanner, "menu-path");
-  g_scanner_add_symbol (scanner, "menu-path", gtk_item_factory_parse_menu_path);
+  g_scanner_add_symbol (scanner, "menu-path", (gpointer)gtk_item_factory_parse_menu_path);
 
   g_scanner_peek_next_token (scanner);
 

@@ -75,8 +75,9 @@ gtk_socket_get_type ()
 	sizeof (GtkSocketClass),
 	(GtkClassInitFunc) gtk_socket_class_init,
 	(GtkObjectInitFunc) gtk_socket_init,
-	(GtkArgSetFunc) NULL,
-	(GtkArgGetFunc) NULL
+        /* reserved_1 */ NULL,
+	/* reserved_2 */ NULL,
+	(GtkClassInitFunc) NULL,
       };
 
       socket_type = gtk_type_unique (gtk_container_get_type (), &socket_info);

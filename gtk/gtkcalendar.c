@@ -328,8 +328,9 @@ gtk_calendar_get_type (void)
 	sizeof (GtkCalendarClass),
 	(GtkClassInitFunc) gtk_calendar_class_init,
 	(GtkObjectInitFunc) gtk_calendar_init,
-	(GtkArgSetFunc) NULL,
-	(GtkArgGetFunc) NULL,
+        /* reserved_1 */ NULL,
+	/* reserved_2 */ NULL,
+	(GtkClassInitFunc) NULL,
       };
       
       calendar_type = gtk_type_unique (GTK_TYPE_WIDGET, &calendar_info);

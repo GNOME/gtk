@@ -107,8 +107,8 @@ EOT
   $argn = 1;
   for (@params) { 
 	if($_ eq "C_CALLBACK") {
-		print OS "gpointer arg".$argn."a,\n";
-		print OS "gpointer arg".$argn."b,\n";
+		print OS "GtkFunction arg".$argn."a,\n";
+		print OS "gpointer    arg".$argn."b,\n";
 		$argn++;
 	} elsif($_ eq "SIGNAL") {
 		print OS "gpointer arg".$argn."a,\n";

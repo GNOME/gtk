@@ -1668,7 +1668,7 @@ gtk_signal_add_emission_hook_full (guint           signal_id,
 
   hook = g_hook_alloc (signal->hook_list);
   hook->data = data;
-  hook->func = hook_func;
+  hook->func = (gpointer)hook_func;
   hook->destroy = destroy;
 
   signal->hook_list->seq_id = seq_hook_id;
@@ -1701,7 +1701,7 @@ gtk_emission_hook_marshaller (GHook   *hook,
   GtkEmissionHookData *data = data_p;
   GtkEmissionHook func;
 
-  func = hook->func;
+  func = (gpointer)hook->func;
 
   if (!GTK_OBJECT_DESTROYED (data->object))
     return func (data->object, data->signal_id,
