@@ -218,9 +218,8 @@ gdk_image_new (GdkImageType  type,
   GDK_NOTE (MISC, g_print ("gdk_image_new: %dx%d %s\n",
 			   width, height,
 			   (type == GDK_IMAGE_SHARED ? "shared" :
-			    (type == GDK_IMAGE_SHARED_PIXMAP ? "shared_pixmap" :
-			     "???"))));
-
+			    "???")));
+  
   image = g_object_new (gdk_image_get_type (), NULL);
   private = PRIVATE_DATA (image);
 
@@ -654,18 +653,10 @@ gdk_win32_image_destroy (GdkImage *image)
     return;
   
   GDK_NOTE (MISC, g_print ("gdk_win32_image_destroy: %#x%s\n",
-			   private->hbitmap,
-			   (image->type == GDK_IMAGE_SHARED_PIXMAP ?
-			    " (shared pixmap)" : "")));
+			   private->hbitmap));
   
   switch (image->type)
     {
-    case GDK_IMAGE_SHARED_PIXMAP:
-      break;			/* The Windows bitmap has already been
-				 * (or will be) deleted when freeing
-				 * the corresponding pixmap.
-				 */
-
     case GDK_IMAGE_SHARED:
       if (!DeleteObject (private->hbitmap))
 	WIN32_GDI_FAILED ("DeleteObject");

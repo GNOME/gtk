@@ -194,6 +194,8 @@ static gchar *add_dll_suffix(gchar *module_name)
 }
 #endif
 
+#undef gtk_init_check
+
 gboolean
 gtk_init_check (int	 *argc,
 		char   ***argv)
@@ -460,6 +462,9 @@ gtk_init_check (int	 *argc,
 
   return TRUE;
 }
+
+#undef gtk_init
+
 void
 gtk_init (int *argc, char ***argv)
 {
@@ -469,6 +474,38 @@ gtk_init (int *argc, char ***argv)
       exit(1);
     }
 }
+
+#ifdef G_OS_WIN32
+
+static void
+check_sizeof_GtkWindow (size_t sizeof_GtkWindow)
+{
+  if (sizeof_GtkWindow != sizeof (GtkWindow))
+    g_error ("Incompatible build!\n"
+	     "The code using GTK+ thinks GtkWindow is of different\n"
+             "size than it actually is in this build of GTK+.\n"
+	     "On Windows, this probably means that you have compiled\n"
+	     "your code with gcc without the -fnative-struct switch.");
+}
+
+/* These two functions might get more checks added later, thus pass
+ * in the number of extra args.
+ */
+void
+gtk_init_abi_check (int *argc, char ***argv, int num_checks, size_t sizeof_GtkWindow)
+{
+  check_sizeof_GtkWindow (sizeof_GtkWindow);
+  gtk_init (argc, argv);
+}
+
+gboolean
+gtk_init_check_abi_check (int *argc, char ***argv, int num_checks, size_t sizeof_GtkWindow)
+{
+  check_sizeof_GtkWindow (sizeof_GtkWindow);
+  return gtk_init_check (argc, argv);
+}
+
+#endif
 
 void
 gtk_exit (gint errorcode)

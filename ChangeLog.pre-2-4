@@ -1,3 +1,22 @@
+2000-08-20  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/gdkimage.h
+	* gdk/win32/gdkimage-win32.c: No need any longer on Win32 for the
+	shared memory image+pixmap GdkImage type, or
+	gdk_image_bitmap_new(). They were used in the gdk_imlib port, but
+	I am dropping that.
+
+	* gtk/gtkmain.h: On Win32, use a #define to map gtk_init() to
+	actually call gtk_init_abi_check(), passing also
+	sizeof(GtkWindow). Ditto for gtk_init_check(). 
+
+	* gtk/gtk.def
+	* gtk/gtkmain.c: (gtk_init_abi_check, gtk_init_check_abi_check):
+	New functions, used to check that the GTK+-using code has been
+	compiled using the correct compiler and switches. In particular,
+	with gcc one has to use the -fnative-struct switch as GTK+ is
+	compiled with that.
+
 Fri Aug 18 17:27:46 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkclist.c (gtk_clist_merge): Don't leave dangling

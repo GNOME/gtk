@@ -17,16 +17,12 @@ extern "C" {
  *	     for both the X server and the program to be reading/writing
  *	     the image simultaneously and producing undesired results.
  *	     On Win32, also a bitmap.
- *   Shared Pixmap: Also a shared memory image, which also has a
- *	     pixmap using the same memory. Used by gdk_imlib with the
- *	     Win32 backend.
  */
 typedef enum
 {
   GDK_IMAGE_NORMAL,
   GDK_IMAGE_SHARED,
-  GDK_IMAGE_FASTEST,
-  GDK_IMAGE_SHARED_PIXMAP
+  GDK_IMAGE_FASTEST
 } GdkImageType;
 
 typedef struct _GdkImageClass GdkImageClass;
@@ -70,13 +66,7 @@ GdkImage*  gdk_image_new       (GdkImageType  type,
 				GdkVisual    *visual,
 				gint	      width,
 				gint	      height);
-#ifdef GDK_WINDOWING_WIN32
-GdkImage*  gdk_image_bitmap_new(GdkImageType  type,
-				GdkVisual    *visual,
-				gint	      width,
-				gint	      height);
 
-#endif
 GdkImage*  gdk_image_get       (GdkDrawable  *drawable,
 				gint	      x,
 				gint	      y,

@@ -569,8 +569,10 @@ EXPORTS
 	gtk_image_new
 	gtk_image_set
 	gtk_init
+	gtk_init_abi_check
 	gtk_init_add
 	gtk_init_check
+	gtk_init_check_abi_check
 	gtk_input_add_full
 	gtk_input_dialog_get_type
 	gtk_input_dialog_new

@@ -81,8 +81,28 @@ gchar* gtk_check_version (guint	required_major,
 
 void     gtk_init                 (int    *argc,
                                    char ***argv);
+
 gboolean gtk_init_check           (int    *argc,
                                    char ***argv);
+#ifdef G_OS_WIN32
+
+/* Variants that are used to check for correct struct packing
+ * when building GTK+-using code.
+ */
+void	 gtk_init_abi_check       (int	  *argc,
+				   char	***argv,
+				   int     num_checks,
+				   size_t  sizeof_GtkWindow);
+gboolean gtk_init_check_abi_check (int	  *argc,
+				   char	***argv,
+				   int     num_checks,
+				   size_t  sizeof_GtkWindow);
+
+#define gtk_init(argc, argv) gtk_init_abi_check (argc, argv, 1, sizeof (GtkWindow))
+#define gtk_init_check(args, argv) gtk_init_check_abi_check (argc, argv, 1, sizeof (GtkWindow))
+
+#endif
+
 void     gtk_exit                 (gint    error_code);
 gchar*   gtk_set_locale           (void);
 gchar*   gtk_get_default_language (void);
