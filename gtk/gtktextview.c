@@ -5833,7 +5833,7 @@ gtk_text_view_get_window_type (GtkTextView *text_view,
   GtkTextWindow *win;
 
   g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), 0);
-  g_return_val_if_fail (GDK_IS_WINDOW (text_view), 0);
+  g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
 
   if (window == GTK_WIDGET (text_view)->window)
     return GTK_TEXT_WINDOW_WIDGET;
