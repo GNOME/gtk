@@ -244,10 +244,13 @@ gtk_button_new ()
    GtkButton *button;
    
    button=GTK_BUTTON(gtk_type_new(gtk_button_get_type()));
-   button->init=th_dat.functions.button.init;
-   button->border=th_dat.functions.button.border;
-   button->draw=th_dat.functions.button.draw;
-   button->exit=th_dat.functions.button.exit;
+   if (button)
+     {
+	button->init=th_dat.functions.button.init;
+	button->border=th_dat.functions.button.border;
+	button->draw=th_dat.functions.button.draw;
+	button->exit=th_dat.functions.button.exit;
+     }
    return GTK_WIDGET(button);
 }
 
@@ -487,9 +490,9 @@ gtk_button_draw (GtkWidget    *widget,
    
    g_return_if_fail (widget != NULL);
    g_return_if_fail (GTK_IS_BUTTON (widget));
-   
-   
+      
    button = GTK_BUTTON (widget);
+   
    if (GTK_WIDGET_DRAWABLE (widget))
      {
 	if (!area)
@@ -509,6 +512,7 @@ gtk_button_draw (GtkWidget    *widget,
 	     GtkShadowType shadow_type;
 	     gint width, height;
 	     gint x, y;
+	     
 	     restrict_area.x = GTK_WIDGET (widget)->style->klass->xthickness;
 	     restrict_area.y = GTK_WIDGET (widget)->style->klass->ythickness;
 	     restrict_area.width = (GTK_WIDGET (widget)->allocation.width - restrict_area.x * 2 -
@@ -935,7 +939,7 @@ gtk_button_unrealize (GtkWidget *widget)
      gtk_container_foreach (GTK_CONTAINER (widget),
 			    (GtkCallback)gtk_widget_unrealize,
 			    NULL);
-      if (button->exit)
+   if (button->exit)
      button->exit(GTK_WIDGET(widget));
    
    widget->window = NULL;

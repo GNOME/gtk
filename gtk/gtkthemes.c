@@ -45,43 +45,54 @@ gtk_themes_init (int	 *argc,
 {
    int i;
    char *s,ss[1024];
-/* Reset info */
+   char *thenv;
+   
+   /* Reset info */
    th_dat.theme_lib=NULL;
    th_dat.theme_name=NULL;
    th_dat.data=NULL;
    
    printf("init theme\n");
-/* get the library name for the theme */
-   if ((argc)&&(argv))
+   /* get the library name for the theme */
+   
+   thenv=getenv("THEME");
+   if (thenv)
      {
-	for(i=1;i<*argc;i++)
+	snprintf(ss,1024,"%s/themes/lib%s.so",getenv("HOME"),thenv);
+	th_dat.theme_name=strdup(ss);
+     }
+   else
+     {
+	if ((argc)&&(argv))
 	  {
-	     if ((*argv)[i]==NULL)
+	     for(i=1;i<*argc;i++)
 	       {
-		  i+=1;continue;
-	       }
+		  if ((*argv)[i]==NULL)
+		    {
+		       i+=1;continue;
+		    }
 /* If the program is run wiht a --theme THEME_NAME parameter it loads that */
 /* theme currently hard-coded as ".lib/libTHEME_NAME.so" jsut so it will */
 /* work for me for the moment */	     
-	     if (strcmp("--theme",(*argv)[i])==0)
-	       {
-		  (*argv)[i]=NULL;
-		  if (((i+1)<*argc)&&((*argv)[i+1]))
+		  if (strcmp("--theme",(*argv)[i])==0)
 		    {
-		       s=(*argv)[i+1];
-		       if (s)
+		       (*argv)[i]=NULL;
+		       if (((i+1)<*argc)&&((*argv)[i+1]))
 			 {
-			    snprintf(ss,1024,"%s/themes/lib%s.so",getenv("HOME"),s);
-			    th_dat.theme_name=strdup(ss);
+			    s=(*argv)[i+1];
+			    if (s)
+			      {
+				 snprintf(ss,1024,"%s/themes/lib%s.so",getenv("HOME"),s);
+				 th_dat.theme_name=strdup(ss);
+			      }
+			    (*argv)[i+1]=NULL;
+			    i+=1;
 			 }
-		       (*argv)[i+1]=NULL;
-		       i+=1;
 		    }
 	       }
-	     
 	  }
      }
-/* load the lib */
+   /* load the lib */
    th_dat.theme_lib=NULL;
    if (th_dat.theme_name)
      {
@@ -100,7 +111,7 @@ gtk_themes_init (int	 *argc,
 	th_dat.functions.button.exit=NULL;
 	return;
      }
-/* extract symbols from the lib */   
+   /* extract symbols from the lib */   
    th_dat.init=dlsym(th_dat.theme_lib,"theme_init");
    th_dat.exit=dlsym(th_dat.theme_lib,"theme_exit");
    th_dat.functions.button.border=dlsym(th_dat.theme_lib,"button_border");
