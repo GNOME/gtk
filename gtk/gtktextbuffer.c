@@ -629,7 +629,7 @@ gtk_text_buffer_insert_at_cursor (GtkTextBuffer *buffer,
  * @len: length of text in bytes, or -1
  * @default_editable: default editability of buffer
  *
- * Like gtk_text_buffer_insert (), but the insertion will not occur if
+ * Like gtk_text_buffer_insert(), but the insertion will not occur if
  * @iter is at a non-editable location in the buffer.  Usually you
  * want to prevent insertions at ineditable locations if the insertion
  * results from a user action (is interactive).
@@ -3322,12 +3322,14 @@ gtk_text_buffer_delete_selection (GtkTextBuffer *buffer,
  * key with the cursor at the position specified by @iter. In the
  * normal case a single character will be deleted, but when
  * combining accents are involved, more than one character can
- * be deleted, and when precomposed character and accent combinations,
- * less than one character will be deleted.
+ * be deleted, and when precomposed character and accent combinations
+ * are involved, less than one character will be deleted.
+ * 
+ * Because the buffer is modified, all outstanding iterators become 
+ * invalid after calling this function; however, the @iter will be
+ * re-initialized to point to the location where text was deleted. 
  *
- * @iter must be at a cursor position.
- *
- * Return value: %TRUE if tbe buffer was modified
+ * Return value: %TRUE if the buffer was modified
 
  * Since: 2.6
  **/
@@ -3401,6 +3403,9 @@ gtk_text_buffer_backspace (GtkTextBuffer *buffer,
     gtk_text_buffer_end_user_action (buffer);
   
   g_free (cluster_text);
+
+  /* Revalidate the users iter */
+  *iter = start;
 
   return retval;
 }
