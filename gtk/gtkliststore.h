@@ -71,6 +71,9 @@ GtkListStore *gtk_list_store_newv             (gint          n_columns,
 void          gtk_list_store_set_column_types (GtkListStore *list_store,
 					       gint          n_columns,
 					       GType        *types);
+
+/* NOTE: use gtk_tree_model_get to get values from a GtkListStore */
+
 void          gtk_list_store_set_value        (GtkListStore *list_store,
 					       GtkTreeIter  *iter,
 					       gint          column,

@@ -1,3 +1,9 @@
+Fri Feb  8 21:25:56 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_row_deleted): fix
+	evil ref bug where the wrong row and a deleted row was unreffed.
+	Found by Darin Adler <darin@bentspoon.com>
+
 Fri Feb  8 18:46:13 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkbindings.[ch] (_gtk_binding_reset_parsed): Add

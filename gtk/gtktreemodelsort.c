@@ -168,6 +168,9 @@ static gboolean     gtk_tree_model_sort_iter_parent        (GtkTreeModel        
                                                             GtkTreeIter           *child);
 static void         gtk_tree_model_sort_ref_node           (GtkTreeModel          *tree_model,
                                                             GtkTreeIter           *iter);
+static void         gtk_tree_model_sort_real_unref_node    (GtkTreeModel          *tree_model,
+                                                            GtkTreeIter           *iter,
+							    gboolean               propagate_unref);
 static void         gtk_tree_model_sort_unref_node         (GtkTreeModel          *tree_model,
                                                             GtkTreeIter           *iter);
 
@@ -686,20 +689,21 @@ gtk_tree_model_sort_row_deleted (GtkTreeModel *s_model,
   elt = SORT_ELT (iter.user_data2);
   offset = elt->offset;
 
-  gtk_tree_model_sort_increment_stamp (tree_model_sort);
-  gtk_tree_model_row_deleted (GTK_TREE_MODEL (data), path);
-
   while (elt->ref_count > 0)
-    gtk_tree_model_sort_unref_node (GTK_TREE_MODEL (data), &iter);
+    gtk_tree_model_sort_real_unref_node (GTK_TREE_MODEL (data), &iter, FALSE);
 
   if (level->ref_count == 0 && level != tree_model_sort->root)
     {
       /* This will prune the level, so I can just emit the signal and not worry
        * about cleaning this level up. */
-
+      gtk_tree_model_sort_increment_stamp (tree_model_sort);
+      gtk_tree_model_row_deleted (GTK_TREE_MODEL (data), path);
       gtk_tree_path_free (path);
       return;
     }
+
+  gtk_tree_model_sort_increment_stamp (tree_model_sort);
+  gtk_tree_model_row_deleted (GTK_TREE_MODEL (data), path);
 
   /* Remove the row */
   for (i = 0; i < level->array->len; i++)
@@ -1131,8 +1135,9 @@ gtk_tree_model_sort_ref_node (GtkTreeModel *tree_model,
 }
 
 static void
-gtk_tree_model_sort_unref_node (GtkTreeModel *tree_model,
-				GtkTreeIter  *iter)
+gtk_tree_model_sort_real_unref_node (GtkTreeModel *tree_model,
+				     GtkTreeIter  *iter,
+				     gboolean      propagate_unref)
 {
   GtkTreeModelSort *tree_model_sort = (GtkTreeModelSort *) tree_model;
   GtkTreeIter child_iter;
@@ -1145,7 +1150,8 @@ gtk_tree_model_sort_unref_node (GtkTreeModel *tree_model,
 
   GET_CHILD_ITER (tree_model, &child_iter, iter);
 
-  gtk_tree_model_unref_node (GTK_TREE_MODEL_SORT (tree_model)->child_model, &child_iter);
+  if (propagate_unref)
+    gtk_tree_model_unref_node (GTK_TREE_MODEL_SORT (tree_model)->child_model, &child_iter);
 
   level = iter->user_data;
   elt = iter->user_data2;
@@ -1169,6 +1175,13 @@ gtk_tree_model_sort_unref_node (GtkTreeModel *tree_model,
 	}
       tree_model_sort->zero_ref_count++;
     }
+}
+
+static void
+gtk_tree_model_sort_unref_node (GtkTreeModel *tree_model,
+				GtkTreeIter  *iter)
+{
+  gtk_tree_model_sort_real_unref_node (tree_model, iter, TRUE);
 }
 
 /* Sortable interface */
