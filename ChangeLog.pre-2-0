@@ -1,3 +1,10 @@
+Thu Dec 24 14:35:48 1998  Jeff Garzik  <jgarzik@pobox.com>
+
+	* gdk/gdkevents.c, gdk/gdkim.c, gdk/gdkrgb.c, gdk/gdkwindow.c,
+	  gtk/gtkprogressbar.c:
+	Pull in string.h for various mem*() and str*() functions,
+	in an autoconf-friendly way.
+
 Thu Dec 24 12:40:45 1998  Jeff Garzik  <jgarzik@pobox.com>
 
 	* gdk/gdkfont.c: removed unused var

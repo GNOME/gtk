@@ -23,6 +23,14 @@
 #include "gdki18n.h"
 #include "gdkx.h"
 
+#if HAVE_CONFIG_H
+#  include <config.h>
+#  if STDC_HEADERS
+#    include <string.h>
+#  endif
+#endif
+
+
 /* If this variable is FALSE, it indicates that we should
  * avoid trying to use multibyte conversion functions and
  * assume everything is 1-byte per character

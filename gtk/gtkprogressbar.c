@@ -17,7 +17,16 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <stdio.h>
+#if HAVE_CONFIG_H
+#  include <config.h>
+#  if STDC_HEADERS
+#    include <string.h>
+#    include <stdio.h>
+#  endif
+#else
+#  include <stdio.h>
+#endif
+
 #include "gtkprogressbar.h"
 #include "gtksignal.h"
 

@@ -26,8 +26,19 @@
 #include "gdkinput.h"
 #include "gdkprivate.h"
 #include "MwmUtil.h"
-#include <stdlib.h>
-#include <stdio.h>
+
+#if HAVE_CONFIG_H
+#  include <config.h>
+#  if STDC_HEADERS
+#    include <stdlib.h>
+#    include <stdio.h>
+#    include <string.h>
+#  endif
+#else
+#  include <stdlib.h>
+#  include <stdio.h>
+#endif
+
 
 #ifdef HAVE_SHAPE_EXT
 #include <X11/extensions/shape.h>

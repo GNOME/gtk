@@ -23,6 +23,14 @@
 #include "gdkinput.h"
 #include "gdkkeysyms.h"
 
+#if HAVE_CONFIG_H
+#  include <config.h>
+#  if STDC_HEADERS
+#    include <string.h>
+#  endif
+#endif
+
+
 typedef struct _GdkIOClosure GdkIOClosure;
 
 #define DOUBLE_CLICK_TIME      250
