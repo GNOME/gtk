@@ -433,7 +433,7 @@ gtk_file_chooser_get_filename (GtkFileChooser *chooser)
  * @chooser: a #GtkFileChooser
  * @filename: the filename to set as current
  * 
- * Sets @filename as the current filename for the the file chooser;
+ * Sets @filename as the current filename for the file chooser;
  * If the file name isn't in the current folder of @chooser, then the
  * current folder of @chooser will be changed to the folder containing
  * @filename. This is equivalent to a sequence of
@@ -721,7 +721,7 @@ gtk_file_chooser_get_uri (GtkFileChooser *chooser)
  * @chooser: a #GtkFileChooser
  * @uri: the URI to set as current
  * 
- * Sets the file referred to by @uri as the current file for the the
+ * Sets the file referred to by @uri as the current file for the
  * file chooser; If the file name isn't in the current folder of @chooser,
  * then the current folder of @chooser will be changed to the folder containing
  * @uri. This is equivalent to a sequence of gtk_file_chooser_unselect_all()

@@ -3257,7 +3257,7 @@ destroy_accel_path (gpointer data)
 /**
  * gtk_widget_set_accel_path:
  * @widget: a #GtkWidget
- * @accel_path: path used to look up the the accelerator
+ * @accel_path: path used to look up the accelerator
  * @accel_group: a #GtkAccelGroup.
  * 
  * Given an accelerator group, @accel_group, and an accelerator path,

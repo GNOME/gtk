@@ -9222,7 +9222,7 @@ gtk_tree_view_new_with_model (GtkTreeModel *model)
  * gtk_tree_view_get_model:
  * @tree_view: a #GtkTreeView
  *
- * Returns the model the the #GtkTreeView is based on.  Returns %NULL if the
+ * Returns the model the #GtkTreeView is based on.  Returns %NULL if the
  * model is unset.
  *
  * Return value: A #GtkTreeModel, or %NULL if none is currently being used.
@@ -9508,7 +9508,7 @@ gtk_tree_view_get_headers_visible (GtkTreeView *tree_view)
  * @tree_view: A #GtkTreeView.
  * @headers_visible: %TRUE if the headers are visible
  *
- * Sets the the visibility state of the headers.
+ * Sets the visibility state of the headers.
  **/
 void
 gtk_tree_view_set_headers_visible (GtkTreeView *tree_view,

@@ -1170,7 +1170,7 @@ translate_keysym (GdkKeymapX11   *keymap_x11,
     }
   else
     {
-      /* Fall back to the the first level if no symbol for the level
+      /* Fall back to the first level if no symbol for the level
        * we were passed.
        */
       shift_level = (state & shift_modifiers) ? 1 : 0;

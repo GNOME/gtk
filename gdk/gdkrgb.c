@@ -1312,7 +1312,7 @@ gdk_rgb_convert_gray8_gray (GdkRgbInfo *image_info, GdkImage *image,
 #ifdef HAIRY_CONVERT_565
 /* Render a 24-bit RGB image in buf into the GdkImage, without dithering.
    This assumes native byte ordering - what should really be done is to
-   check whether the the image byte_order is consistent with the _ENDIAN
+   check whether the image byte_order is consistent with the _ENDIAN
    config flag, and if not, use a different function.
 
    This one is even faster than the one below - its inner loop loads 3

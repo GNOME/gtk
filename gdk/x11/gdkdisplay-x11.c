@@ -1132,7 +1132,7 @@ gdk_display_supports_clipboard_persistence (GdkDisplay *display)
  *                    if all available targets should be saved.
  * @n_targets:        length of the @targets array
  *
- * Issues a request to the the clipboard manager to store the
+ * Issues a request to the clipboard manager to store the
  * clipboard data. On X11, this is a special program that works
  * according to the freedesktop clipboard specification, available at
  * <ulink url="http://www.freedesktop.org/Standards/clipboard-manager-spec">

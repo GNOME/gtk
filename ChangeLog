@@ -1,5 +1,8 @@
 2005-02-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* */*.c: Fix many instances of "the the" in docs and
+	comments.  (#165815, Masao Mutoh)
+
 	* gtk/updateiconcache.c (main): Add a --quiet option.
 
 2005-02-01  Tor Lillqvist  <tml@novell.com>

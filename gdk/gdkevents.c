@@ -873,7 +873,7 @@ gdk_event_set_screen (GdkEvent  *event,
  * Returns the screen for the event. The screen is
  * typically the screen for <literal>event->any.window</literal>, but
  * for events such as mouse events, it is the screen
- * where the the pointer was when the event occurs -
+ * where the pointer was when the event occurs -
  * that is, the screen which has the root window 
  * to which <literal>event->motion.x_root</literal> and
  * <literal>event->motion.y_root</literal> are relative.
