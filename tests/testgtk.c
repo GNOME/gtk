@@ -274,7 +274,7 @@ create_buttons (void)
   if (!GTK_WIDGET_VISIBLE (window))
     gtk_widget_show_all (window);
   else
-    gtk_widget_hide (window);
+    gtk_widget_destroy (window);
 }
 
 /*
@@ -7609,237 +7609,6 @@ create_panes (void)
 }
 
 /*
- * Drag -N- Drop
- */
-
-#if 0
-gint
-dnd_drop_destroy_popup (GtkWidget *widget, GtkWindow **window)
-{
-  if(GTK_IS_BUTTON(widget)) /* I.e. they clicked the close button */
-    gtk_widget_destroy(GTK_WIDGET(*window));
-  else {
-    gtk_grab_remove(GTK_WIDGET(*window));
-    *window = NULL;
-  }
-
-  return FALSE;
-}
-
-void
-dnd_drop (GtkWidget *button, GdkEvent *event)
-{
-  static GtkWidget *window = NULL;
-  GtkWidget *vbox, *lbl, *btn;
-  gchar *msg;
-
-  /* DND doesn't obey gtk_grab's, so check if we're already displaying
-   * drop modal dialog first
-   */
-  if (window)
-    return;
-
-  window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-  gtk_container_set_border_width (GTK_CONTAINER(window), 10);
-
-  gtk_signal_connect (GTK_OBJECT (window), "destroy",
-		      GTK_SIGNAL_FUNC(dnd_drop_destroy_popup),
-		      &window);
-  gtk_signal_connect (GTK_OBJECT (window), "delete-event",
-		      GTK_SIGNAL_FUNC(gtk_false),
-		      &window);
-
-  vbox = gtk_vbox_new(FALSE, 5);
-
-  /* Display message that we got from drop source */
-  msg = g_malloc(strlen(event->dropdataavailable.data)
-		 + strlen(event->dropdataavailable.data_type) + 100);
-  sprintf(msg, "Drop data of type %s was:\n\n%s",
-	  event->dropdataavailable.data_type,
-	  (char *)event->dropdataavailable.data);
-  lbl = gtk_label_new(msg);
-  gtk_label_set_justify(GTK_LABEL(lbl), GTK_JUSTIFY_FILL);
-  g_free(msg);
-  gtk_widget_show(lbl);
-  gtk_box_pack_start_defaults(GTK_BOX(vbox), lbl);
-
-  /* Provide an obvious way out of this heinousness */
-  btn = gtk_button_new_with_label("Continue with life in\nspite of this oppression");
-  gtk_signal_connect_object (GTK_OBJECT (btn), "clicked",
-			     GTK_SIGNAL_FUNC(gtk_widget_destroy),
-			     GTK_OBJECT (window));
-  gtk_widget_show(btn);
-  gtk_box_pack_start_defaults(GTK_BOX(vbox), btn);
-
-  gtk_container_add(GTK_CONTAINER(window), vbox);
-
-  gtk_widget_show(vbox);
-  gtk_grab_add(window);
-  gtk_widget_show(window);
-}
-
-void
-dnd_drag_request (GtkWidget *button, GdkEvent *event)
-{
-#define DND_STRING "Bill Gates demands royalties for\nyour use of his innovation."
-  gtk_widget_dnd_data_set (button, event, DND_STRING, strlen(DND_STRING) + 1);
-}
-
-void
-create_dnd (void)
-{
-  static GtkWidget *window = NULL;
-  GtkWidget *box1;
-  GtkWidget *box2;
-  GtkWidget *box3;
-  GtkWidget *frame;
-  GtkWidget *button;
-  GtkWidget *separator;
-
-  /* For clarity... */
-  char *possible_drag_types[] = {"text/plain"};
-  char *accepted_drop_types[] = {"text/plain"};
-
-  static GtkWidget *drag_icon = NULL;
-  static GtkWidget *drop_icon = NULL;
-
-  if (!window)
-    {
-      GdkPoint hotspot = {5,5};
-      
-      if (!drag_icon)
-	{
-	  drag_icon = shape_create_icon ("Modeller.xpm",
-					 440, 140, 0,0, GTK_WINDOW_POPUP);
-	  
-	  gtk_signal_connect (GTK_OBJECT (drag_icon), "destroy",
-			      GTK_SIGNAL_FUNC(gtk_widget_destroyed),
-			      &drag_icon);
-
-	  gtk_widget_hide (drag_icon);
-	}
-      
-      if (!drop_icon)
-	{
-	  drop_icon = shape_create_icon ("3DRings.xpm",
-					 440, 140, 0,0, GTK_WINDOW_POPUP);
-	  
-	  gtk_signal_connect (GTK_OBJECT (drop_icon), "destroy",
-			      GTK_SIGNAL_FUNC(gtk_widget_destroyed),
-			      &drop_icon);
-
-	  gtk_widget_hide (drop_icon);
-	}
-
-      gdk_dnd_set_drag_shape(drag_icon->window,
-			     &hotspot,
-			     drop_icon->window,
-			     &hotspot);
-
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-
-      gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			  GTK_SIGNAL_FUNC(gtk_widget_destroyed),
-			  &window);
-
-      gtk_window_set_title (GTK_WINDOW (window), "Drag -N- Drop");
-      gtk_container_set_border_width (GTK_CONTAINER (window), 0);
-
-      box1 = gtk_vbox_new (FALSE, 0);
-      gtk_container_add (GTK_CONTAINER (window), box1);
-      gtk_widget_show (box1);
-
-      box2 = gtk_hbox_new (FALSE, 5);
-      gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
-      gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
-      gtk_widget_show (box2);
-
-      frame = gtk_frame_new ("Drag");
-      gtk_box_pack_start (GTK_BOX (box2), frame, TRUE, TRUE, 0);
-      gtk_widget_show (frame);
-
-      box3 = gtk_vbox_new (FALSE, 5);
-      gtk_container_set_border_width (GTK_CONTAINER (box3), 5);
-      gtk_container_add (GTK_CONTAINER (frame), box3);
-      gtk_widget_show (box3);
-
-      /*
-       * FROM Button
-       */
-      button = gtk_button_new_with_label ("Drag me!");
-      gtk_box_pack_start (GTK_BOX (box3), button, FALSE, TRUE, 0);
-      gtk_widget_show (button);
-
-      /*
-       * currently, the widget has to be realized to
-       * set dnd on it, this needs to change
-       */
-      gtk_widget_realize (button);
-      gtk_signal_connect (GTK_OBJECT (button),
-			  "drag_request_event",
-			  GTK_SIGNAL_FUNC(dnd_drag_request),
-			  button);
-      
-      gtk_widget_dnd_drag_set (button, TRUE, possible_drag_types, 1);
-
-
-      frame = gtk_frame_new ("Drop");
-      gtk_box_pack_start (GTK_BOX (box2), frame, TRUE, TRUE, 0);
-      gtk_widget_show (frame);
-
-      box3 = gtk_vbox_new (FALSE, 5);
-      gtk_container_set_border_width (GTK_CONTAINER (box3), 5);
-      gtk_container_add (GTK_CONTAINER (frame), box3);
-      gtk_widget_show (box3);
-
-
-      /*
-       * TO Button
-       */
-      button = gtk_button_new_with_label ("To");
-      gtk_box_pack_start (GTK_BOX (box3), button, FALSE, TRUE, 0);
-      gtk_widget_show (button);
-
-      gtk_widget_realize (button);
-      gtk_signal_connect (GTK_OBJECT (button), 
-			  "drop_data_available_event",
-			  GTK_SIGNAL_FUNC(dnd_drop),
-			  button);
-
-      gtk_widget_dnd_drop_set (button, TRUE, accepted_drop_types, 1, FALSE);
-
-
-      separator = gtk_hseparator_new ();
-      gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
-      gtk_widget_show (separator);
-
-
-      box2 = gtk_vbox_new (FALSE, 10);
-      gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
-      gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
-      gtk_widget_show (box2);
-
-
-      button = gtk_button_new_with_label ("close");
-
-      gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-				 GTK_SIGNAL_FUNC(gtk_widget_destroy),
-				 GTK_OBJECT (window));
-
-      gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
-      gtk_widget_grab_default (button);
-      gtk_widget_show (button);
-    }
-
-  if (!GTK_WIDGET_VISIBLE (window))
-    gtk_widget_show (window);
-  else
-    gtk_widget_destroy (window);
-}
-#endif
-
-/*
  * Shaped Windows
  */
 
@@ -10249,73 +10018,74 @@ do_exit (GtkWidget *widget, GtkWidget *window)
   gtk_main_quit ();
 }
 
+struct {
+  char *label;
+  void (*func) ();
+  gboolean do_not_benchmark;
+} buttons[] =
+{
+  { "button box", create_button_box },
+  { "buttons", create_buttons },
+  { "check buttons", create_check_buttons },
+  { "clist", create_clist},
+  { "color selection", create_color_selection },
+  { "ctree", create_ctree },
+  { "cursors", create_cursors },
+  { "dialog", create_dialog },
+  { "entry", create_entry },
+  { "event watcher", create_event_watcher },
+  { "file selection", create_file_selection },
+  { "flipping", create_flipping },
+  { "focus", create_focus },
+  { "font selection", create_font_selection },
+  { "gamma curve", create_gamma_curve, TRUE },
+  { "handle box", create_handle_box },
+  { "image from drawable", create_get_image },
+  { "image", create_image },
+  { "item factory", create_item_factory },
+  { "labels", create_labels },
+  { "layout", create_layout },
+  { "list", create_list },
+  { "menus", create_menus },
+  { "message dialog", create_message_dialog },
+  { "modal window", create_modal_window, TRUE },
+  { "notebook", create_notebook },
+  { "panes", create_panes },
+  { "pixmap", create_pixmap },
+  { "preview color", create_color_preview, TRUE },
+  { "preview gray", create_gray_preview, TRUE },
+  { "progress bar", create_progress_bar },
+  { "radio buttons", create_radio_buttons },
+  { "range controls", create_range_controls },
+  { "rc file", create_rc_file },
+  { "reparent", create_reparent },
+  { "rulers", create_rulers },
+  { "saved position", create_saved_position },
+  { "scrolled windows", create_scrolled_windows },
+  { "shapes", create_shapes },
+  { "size groups", create_size_groups },
+  { "spinbutton", create_spins },
+  { "statusbar", create_statusbar },
+  { "styles", create_styles },
+  { "test idle", create_idle_test },
+  { "test mainloop", create_mainloop, TRUE },
+  { "test scrolling", create_scroll_test },
+  { "test selection", create_selection_test },
+  { "test timeout", create_timeout_test },
+  { "text", create_text },
+  { "toggle buttons", create_toggle_buttons },
+  { "toolbar", create_toolbar },
+  { "tooltips", create_tooltips },
+  { "tree", create_tree_mode_window},
+  { "WM hints", create_wmhints },
+  { "window sizing", create_window_sizing },
+  { "window states", create_window_states }
+};
+int nbuttons = sizeof (buttons) / sizeof (buttons[0]);
+
 void
 create_main_window (void)
 {
-  struct {
-    char *label;
-    void (*func) ();
-  } buttons[] =
-    {
-      { "button box", create_button_box },
-      { "buttons", create_buttons },
-      { "check buttons", create_check_buttons },
-      { "clist", create_clist},
-      { "color selection", create_color_selection },
-      { "ctree", create_ctree },
-      { "cursors", create_cursors },
-      { "dialog", create_dialog },
-      /*      { "dnd", create_dnd }, */
-      { "entry", create_entry },
-      { "event watcher", create_event_watcher },
-      { "file selection", create_file_selection },
-      { "flipping", create_flipping },
-      { "focus", create_focus },
-      { "font selection", create_font_selection },
-      { "gamma curve", create_gamma_curve },
-      { "handle box", create_handle_box },
-      { "image from drawable", create_get_image },
-      { "image", create_image },
-      { "item factory", create_item_factory },
-      { "labels", create_labels },
-      { "layout", create_layout },
-      { "list", create_list },
-      { "menus", create_menus },
-      { "message dialog", create_message_dialog },
-      { "modal window", create_modal_window },
-      { "notebook", create_notebook },
-      { "panes", create_panes },
-      { "pixmap", create_pixmap },
-      { "preview color", create_color_preview },
-      { "preview gray", create_gray_preview },
-      { "progress bar", create_progress_bar },
-      { "radio buttons", create_radio_buttons },
-      { "range controls", create_range_controls },
-      { "rc file", create_rc_file },
-      { "reparent", create_reparent },
-      { "rulers", create_rulers },
-      { "saved position", create_saved_position },
-      { "scrolled windows", create_scrolled_windows },
-      { "shapes", create_shapes },
-      { "size groups", create_size_groups },
-      { "spinbutton", create_spins },
-      { "statusbar", create_statusbar },
-      { "styles", create_styles },
-      { "test idle", create_idle_test },
-      { "test mainloop", create_mainloop },
-      { "test scrolling", create_scroll_test },
-      { "test selection", create_selection_test },
-      { "test timeout", create_timeout_test },
-      { "text", create_text },
-      { "toggle buttons", create_toggle_buttons },
-      { "toolbar", create_toolbar },
-      { "tooltips", create_tooltips },
-      { "tree", create_tree_mode_window},
-      { "WM hints", create_wmhints },
-      { "window sizing", create_window_sizing },
-      { "window states", create_window_states }
-    };
-  int nbuttons = sizeof (buttons) / sizeof (buttons[0]);
   GtkWidget *window;
   GtkWidget *box1;
   GtkWidget *box2;
@@ -10420,10 +10190,116 @@ test_init ()
     }
 }
 
+static char *
+pad (const char *str, int to)
+{
+  static char buf[256];
+  int len = strlen (str);
+  int i;
+
+  for (i = 0; i < to; i++)
+    buf[i] = ' ';
+
+  buf[to] = '\0';
+
+  memcpy (buf, str, len);
+
+  return buf;
+}
+
+static void
+bench_iteration (void (* fn) ())
+{
+  fn (); /* on */
+  while (g_main_iteration (FALSE));
+  fn (); /* off */
+  while (g_main_iteration (FALSE));
+}
+
+void
+do_real_bench (void (* fn) (), char *name, int num)
+{
+  GTimeVal tv0, tv1;
+  double dt_first;
+  double dt;
+  int n;
+  static gboolean printed_headers = FALSE;
+
+  if (!printed_headers) {
+    g_print ("Test                 Iters      First      Other\n");
+    g_print ("-------------------- ----- ---------- ----------\n");
+    printed_headers = TRUE;
+  }
+
+  g_get_current_time (&tv0);
+  bench_iteration (fn); 
+  g_get_current_time (&tv1);
+
+  dt_first = ((double)tv1.tv_sec - tv0.tv_sec) * 1000.0
+	+ (tv1.tv_usec - tv0.tv_usec) / 1000.0;
+
+  g_get_current_time (&tv0);
+  for (n = 0; n < num - 1; n++)
+    bench_iteration (fn); 
+  g_get_current_time (&tv1);
+  dt = ((double)tv1.tv_sec - tv0.tv_sec) * 1000.0
+	+ (tv1.tv_usec - tv0.tv_usec) / 1000.0;
+
+  g_print ("%s %5d ", pad (name, 20), num);
+  if (num > 1)
+    g_print ("%10.1f %10.1f\n", dt_first, dt/(num-1));
+  else
+    g_print ("%10.1f\n", dt_first);
+}
+
+void
+do_bench (char* what, int num)
+{
+  int i;
+  void (* fn) ();
+  fn = NULL;
+
+  if (g_strcasecmp (what, "ALL") == 0)
+    {
+      for (i = 0; i < nbuttons; i++)
+	{
+	  if (!buttons[i].do_not_benchmark)
+	    do_real_bench (buttons[i].func, buttons[i].label, num);
+	}
+
+      return;
+    }
+  else
+    {
+      for (i = 0; i < nbuttons; i++)
+	{
+	  if (strcmp (buttons[i].label, what) == 0)
+	    {
+	      fn = buttons[i].func;
+	      break;
+	    }
+	}
+      
+      if (!fn)
+	g_print ("Can't bench: \"%s\" not found.\n", what);
+      else
+	do_real_bench (fn, buttons[i].label, num);
+    }
+}
+
+void 
+usage (void)
+{
+  fprintf (stderr, "Usage: testgtk [--bench ALL|<bench>[:<count>]]\n");
+  exit (1);
+}
+
 int
 main (int argc, char *argv[])
 {
   GtkBindingSet *binding_set;
+  int i;
+  gboolean done_benchmarks = FALSE;
 
   srand (time (NULL));
 
@@ -10437,6 +10313,49 @@ main (int argc, char *argv[])
     gtk_rc_add_default_file ("testgtkrc");
 
   gtk_init (&argc, &argv);
+
+  /*  benchmarking
+   */
+  for (i = 1; i < argc; i++)
+    {
+      if (strncmp (argv[i], "--bench", strlen("--bench")) == 0)
+        {
+          int num = 1;
+	  char *nextarg;
+	  char *what;
+	  char *count;
+	  
+	  nextarg = strchr (argv[i], '=');
+	  if (nextarg)
+	    nextarg++;
+	  else
+	    {
+	      i++;
+	      if (i == argc)
+		usage ();
+	      nextarg = argv[i];
+	    }
+
+	  count = strchr (nextarg, ':');
+	  if (count)
+	    {
+	      what = g_strndup (nextarg, count - nextarg);
+	      count++;
+	      num = atoi (count);
+	      if (num <= 0)
+		usage ();
+	    }
+	  else
+	    what = g_strdup (nextarg);
+
+          do_bench (what, num ? num : 1);
+	  done_benchmarks = TRUE;
+        }
+      else
+	usage ();
+    }
+  if (done_benchmarks)
+    return 0;
 
   /* bindings test
    */

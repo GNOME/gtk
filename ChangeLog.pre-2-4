@@ -1,3 +1,10 @@
+Sat Aug  4 19:28:21 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* tests/testgtk.c: Patch from Hans (with various modifications),
+	to add the ability to use testgtk as a rough-and-ready
+	benchmark. Try, 'testgtk --bench all:5' (if you want decent
+	numbers, run without a window manager)
+
 2001-08-04 Alexander Larsson <alexl@redhat.com>
 
 	* gdk/win32/gdkinput.c:
