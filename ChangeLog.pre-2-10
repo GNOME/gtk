@@ -1,3 +1,8 @@
+2005-01-22  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_leave_notify): Avoid spurious
+	drags.  (#164884)
+
 2005-01-23  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkkeys-win32.c (update_keymap): Handle Greek tonos
