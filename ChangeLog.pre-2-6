@@ -7,6 +7,11 @@ Wed Nov 18 11:54:57 1998  Owen Taylor  <otaylor@redhat.com>
 	* gdk/gdkdnd.c gdk/gdk.h: Added support for a
 	XdndProxy atom which proxies the drag to another window.
 
+1998-11-17  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gtk/gtkpaned.h (struct _GtkPaned): Removed the cursor field, now
+	that it is not needed.
+
 Tue Nov 17 1998 The Rasterman <raster@redhat.com>
 	* gdk/gdk.h, gdk/gdkwindow.c: Added gdk_window_get_deskrelative_origin
 	  function to correctly determine gdk window position relative to
