@@ -787,14 +787,14 @@ get_real_window (GdkDisplay *display,
 }
 
 #ifdef G_ENABLE_DEBUG
-static const char notify_modes[][18] = {
+static const char notify_modes[][19] = {
   "NotifyNormal",
   "NotifyGrab",
   "NotifyUngrab",
   "NotifyWhileGrabbed"
 };
 
-static const char notify_details[][22] = {
+static const char notify_details[][23] = {
   "NotifyAncestor",
   "NotifyVirtual",
   "NotifyInferior",

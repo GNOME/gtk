@@ -1,3 +1,8 @@
+Fri May 28 14:20:17 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/x11/gdkevents-x11.c: Fix off-by-one allocation 
+	errors. (#143337, Billy Biggs) 
+
 Thu May 27 16:36:22 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkcolor-x11.c (gdk_colormap_alloc_colors): Set
