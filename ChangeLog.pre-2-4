@@ -17,8 +17,7 @@
 	_gdk_offset_x and _gdk_offset_y.
 	
 	* gdk/win32/gdkdisplay-win32.c (count_monitor, enum_monitor): New
-	functions, enumeration functions passed to
-	EnumDisplayMonitors().
+	functions, enumeration functions passed to EnumDisplayMonitors().
 
 	(gdk_display_open): If the EnumDisplayMonitors() and
 	GetMonitorInfo() API is present (on Win98, Win2000 and newer), use
@@ -26,14 +25,14 @@
 
 	Calculate the offset between Win32 coordinates (relative to the
 	primary monitor's origin (and thus negative on monitors to the
-	left of or above it), and GDK's
-	(visible coordinates should be non-negative).
+	left of or above it), and GDK's (visible coordinates should be
+	non-negative).
 	
 	* gdk/win32/gdkscreen-win32 (gdk_screen_get_n_monitors,
 	gdk_screen_get_monitor_geometry): Use information collected above.
 
-	(gdk_window_move, gdk_window_move_resize_window_get_geometry): Subtract
-	_gdk_offset_{x,y} from GDK root window coordinates.
+	(gdk_window_move, gdk_window_move_resize_window_get_geometry):
+	Subtract _gdk_offset_{x,y} from GDK root window coordinates.
 
 	(gdk_window_get_geometry, gdk_window_get_origin,
 	gdk_window_get_frame_extents): For top-level windows, add
