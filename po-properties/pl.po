@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-06 08:25+0100\n"
+"POT-Creation-Date: 2004-02-13 11:57+0100\n"
 "PO-Revision-Date: 2003-11-14 17:38+0100\n"
 "Last-Translator: Gnome PL Team <translators@gnome.pl>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -240,6 +240,54 @@ msgstr "Określa, czy grupa operacji jest dostępna."
 #: gtk/gtkactiongroup.c:149
 msgid "Whether the action group is visible."
 msgstr "Określa, czy grupa operacji jest widoczna."
+
+#: gtk/gtkadjustment.c:106 gtk/gtkspinbutton.c:301
+msgid "Value"
+msgstr "Wartość"
+
+#: gtk/gtkadjustment.c:107
+msgid "The value of the adjustment"
+msgstr "Wartość ustawienia"
+
+#: gtk/gtkadjustment.c:116
+msgid "Minimum Value"
+msgstr "Wartość minimalna"
+
+#: gtk/gtkadjustment.c:117
+msgid "The minimum value of the adjustment"
+msgstr "Minimalna wartość ustawienia"
+
+#: gtk/gtkadjustment.c:126
+msgid "Maximum Value"
+msgstr "Wartość maksymalna"
+
+#: gtk/gtkadjustment.c:127
+msgid "The maximum value of the adjustment"
+msgstr "Maksymalna wartość ustawienia"
+
+#: gtk/gtkadjustment.c:136
+msgid "Step Increment"
+msgstr "Przyrost kroku"
+
+#: gtk/gtkadjustment.c:137
+msgid "The step increment of the adjustment"
+msgstr "Przyrost kroku ustawienia"
+
+#: gtk/gtkadjustment.c:146
+msgid "Page Increment"
+msgstr "Przyrost strony"
+
+#: gtk/gtkadjustment.c:147
+msgid "The page increment of the adjustment"
+msgstr "Przyrost strony ustawienia"
+
+#: gtk/gtkadjustment.c:156
+msgid "Page Size"
+msgstr "Rozmiar strony"
+
+#: gtk/gtkadjustment.c:157
+msgid "The page size of the adjustment"
+msgstr "Rozmiar strony ustawienia"
 
 #: gtk/gtkalignment.c:116
 msgid "Horizontal alignment"
@@ -2208,36 +2256,36 @@ msgstr "Opóźnienie pojawienia się menu rozwijanego"
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "Opóźnienie pojawienia się podmenu paska menu"
 
-#: gtk/gtkmessagedialog.c:106
+#: gtk/gtkmessagedialog.c:109
 msgid "Image/label border"
 msgstr "Krawędź obrazu/etykiety"
 
-#: gtk/gtkmessagedialog.c:107
+#: gtk/gtkmessagedialog.c:110
 msgid "Width of border around the label and image in the message dialog"
 msgstr "Szerokość krawędzi wokół etykiety i obrazu wewnątrz okna dialogowego"
 
-#: gtk/gtkmessagedialog.c:122
+#: gtk/gtkmessagedialog.c:125
 msgid "Use separator"
 msgstr "Z separatotem"
 
-#: gtk/gtkmessagedialog.c:123
+#: gtk/gtkmessagedialog.c:126
 msgid ""
 "Whether to put a separator between the message dialog's text and the buttons"
 msgstr "Określa, czy umieścić separator pomiędzy tekstem okna, a przyciskami"
 
-#: gtk/gtkmessagedialog.c:129
+#: gtk/gtkmessagedialog.c:132
 msgid "Message Type"
 msgstr "Typ komunikatu"
 
-#: gtk/gtkmessagedialog.c:130
+#: gtk/gtkmessagedialog.c:133
 msgid "The type of message"
 msgstr "Typ komunikatu"
 
-#: gtk/gtkmessagedialog.c:137
+#: gtk/gtkmessagedialog.c:140
 msgid "Message Buttons"
 msgstr "Przyciski pod komunikatem"
 
-#: gtk/gtkmessagedialog.c:138
+#: gtk/gtkmessagedialog.c:141
 msgid "The buttons shown in the message dialog"
 msgstr "Przyciski wyświetlane w oknie komunikatu"
 
@@ -2766,45 +2814,45 @@ msgstr "Maksymalny rozmiar"
 msgid "Maximum size of the ruler"
 msgstr "Maksymalny rozmiar linijki"
 
-#: gtk/gtkscale.c:156 gtk/gtkspinbutton.c:258
+#: gtk/gtkscale.c:170 gtk/gtkspinbutton.c:258
 msgid "Digits"
 msgstr "Cyfry"
 
-#: gtk/gtkscale.c:157
+#: gtk/gtkscale.c:171
 msgid "The number of decimal places that are displayed in the value"
 msgstr "Maksymalna liczba wyświetlanych cyfr dziesiętnych wartości"
 
-#: gtk/gtkscale.c:166
+#: gtk/gtkscale.c:180
 msgid "Draw Value"
 msgstr "Wyświetlanie wartości"
 
-#: gtk/gtkscale.c:167
+#: gtk/gtkscale.c:181
 msgid "Whether the current value is displayed as a string next to the slider"
 msgstr ""
 "Określa, czy obok suwaka powinna być wyświetlana w formie tekstu bieżąca "
 "wartość"
 
-#: gtk/gtkscale.c:174
+#: gtk/gtkscale.c:188
 msgid "Value Position"
 msgstr "Pozycja wartości"
 
-#: gtk/gtkscale.c:175
+#: gtk/gtkscale.c:189
 msgid "The position in which the current value is displayed"
 msgstr "Pozycja, na której powinna być wyświetlana bieżąca wartość"
 
-#: gtk/gtkscale.c:182
+#: gtk/gtkscale.c:196
 msgid "Slider Length"
 msgstr "Długość suwaka"
 
-#: gtk/gtkscale.c:183
+#: gtk/gtkscale.c:197
 msgid "Length of scale's slider"
 msgstr "Długość suwaka skali"
 
-#: gtk/gtkscale.c:191
+#: gtk/gtkscale.c:205
 msgid "Value spacing"
 msgstr "Odstęp wartości"
 
-#: gtk/gtkscale.c:192
+#: gtk/gtkscale.c:206
 msgid "Space between value text and the slider/trough area"
 msgstr "Odstęp pomiędzy tekstem zawierającym wartość i obszarem suwaka"
 
@@ -3074,10 +3122,6 @@ msgid ""
 msgstr ""
 "Określa, czy wartość w wejściu liczbowym powinna być odświeżana zawsze, czy "
 "tylko, gdy jest poprawna."
-
-#: gtk/gtkspinbutton.c:301
-msgid "Value"
-msgstr "Wartość"
 
 #: gtk/gtkspinbutton.c:302
 msgid "Reads the current value, or sets a new value"
