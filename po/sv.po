@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2001-04-10 03:06+0200\n"
-"PO-Revision-Date: 2001-04-11 01:48+0200\n"
+"POT-Creation-Date: 2001-04-12 02:29+0200\n"
+"PO-Revision-Date: 2001-04-12 02:54+0200\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -36,8 +36,8 @@ msgstr "Vet inte hur man läser in animationen i filen \"%s\""
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
-"Misslyckades med att läsa in bilden \"%s\": anledningen är okänd, troligtvis "
-"en trasig bildfil"
+"Misslyckades med att läsa in bilden \"%s\": anledningen är okänd, "
+"troligtvis en trasig bildfil"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:226
 #, c-format
@@ -62,7 +62,8 @@ msgstr ""
 
 #: gdk-pixbuf/gdk-pixbuf-data.c:154
 msgid "Image size is impossibly large, perhaps the data was corrupted somehow"
-msgstr "Bildstorleken är omöjligt stor, kanske datat skadades på något sätt"
+msgstr ""
+"Bildstorleken är omöjligt stor, kanske datat skadades på något sätt"
 
 #: gdk-pixbuf/gdk-pixbuf-data.c:167
 msgid "Image data is partially missing, probably it was corrupted somehow."
@@ -74,8 +75,8 @@ msgid ""
 "Image has an unknown colorspace code (%d), perhaps the image data was "
 "corrupted"
 msgstr ""
-"Bilden har en okänd färgområdeskod (%d), kanske bilddatat skadades på på "
-"något sätt"
+"Bilden har en okänd färgområdeskod (%d), kanske bilddatat skadades på "
+"på något sätt"
 
 #: gdk-pixbuf/gdk-pixbuf-data.c:192
 #, c-format
@@ -101,8 +102,8 @@ msgid ""
 "Not enough memory to store a %d by %d image; try exiting some applications "
 "to free memory."
 msgstr ""
-"Det finns inte tillräckligt med ledigt minne för att lagra en %d × %d stor "
-"bild; försök att avsluta några program för att frigöra minne."
+"Det finns inte tillräckligt med ledigt minne för att lagra en %d × %d "
+"stor bild; försök att avsluta några program för att frigöra minne."
 
 #: gdk-pixbuf/gdk-pixbuf-data.c:298
 msgid "Image contained no data."
@@ -128,8 +129,8 @@ msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
 msgstr ""
-"Bildinläsningsmodulen %s exporterar inte rätt gränssnitt; den kanske är från "
-"en annan GTK-version?"
+"Bildinläsningsmodulen %s exporterar inte rätt gränssnitt; den kanske är "
+"från en annan GTK-version?"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:425 gdk-pixbuf/gdk-pixbuf-io.c:451
 #, c-format
@@ -228,8 +229,8 @@ msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
 msgstr ""
-"Inte tillräckligt med minne för att läsa in bild, försök att avsluta några "
-"program för att frigöra minne"
+"Inte tillräckligt med minne för att läsa in bild, försök att avsluta "
+"några program för att frigöra minne"
 
 #: gdk-pixbuf/io-jpeg.c:533
 msgid "Couldn't allocate memory for loading JPEG file"
@@ -241,16 +242,16 @@ msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
 msgstr ""
-"JPEG-kvaliteten måste vara ett värde mellan 0 och 100; värdet \"%s\" kunde "
-"inte tolkas."
+"JPEG-kvaliteten måste vara ett värde mellan 0 och 100; värdet \"%s\" "
+"kunde inte tolkas."
 
 #: gdk-pixbuf/io-jpeg.c:673
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
-"JPEG-kvaliteten måste vara ett värd emellan 0 och 100; värdet \"%d\" är inte "
-"tillåtet."
+"JPEG-kvaliteten måste vara ett värde mellan 0 och 100; värdet \"%d\" är "
+"inte tillåtet."
 
 #: gdk-pixbuf/io-png.c:158
 #, c-format
@@ -267,8 +268,8 @@ msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
 "applications to reduce memory usage"
 msgstr ""
-"Inte tillräckligt med minne för att lagra en %ld × %ld stor bild; försök att "
-"avsluta några program för att frigöra minne"
+"Inte tillräckligt med minne för att lagra en %ld × %ld stor bild; "
+"försök att avsluta några program för att frigöra minne"
 
 #: gdk-pixbuf/io-png.c:608
 #, c-format
@@ -289,7 +290,7 @@ msgstr "PNM-filen har en ogiltig första byte"
 
 #: gdk-pixbuf/io-pnm.c:310
 msgid "PNM file is not in a recognized PNM subformat"
-msgstr "PNM-filen är inte i ett känt PNM-underformat"
+msgstr "PNM-filen är inte i ett känt underformat av PNM"
 
 #: gdk-pixbuf/io-pnm.c:335
 msgid "PNM file has an image width of 0"
@@ -313,7 +314,7 @@ msgstr "PNM-bildformatet är ogiltigt"
 
 #: gdk-pixbuf/io-pnm.c:639
 msgid "PNM image loader does not support this PNM subformat"
-msgstr "PNM-bildinläsaren stöder inte detta PNM-underformat"
+msgstr "PNM-bildinläsaren stöder inte detta underformat av PNM"
 
 #: gdk-pixbuf/io-pnm.c:815
 msgid "Unexpected end of PNM image data"
@@ -347,7 +348,8 @@ msgstr "Inte tillräckligt med minne för att läsa in XBM-bildfil"
 
 #: gdk-pixbuf/io-xbm.c:431
 msgid "Failed to write to temporary file when loading XBM image"
-msgstr "Misslyckades med att skriva till temporär fil vid inläsning av XBM-fil"
+msgstr ""
+"Misslyckades med att skriva till temporär fil vid inläsning av XBM-fil"
 
 #: gdk-pixbuf/io-xpm.c:1257
 msgid "No XPM header found"
@@ -367,7 +369,8 @@ msgstr "Kan inte allokera minne för inläsning av XPM-bild"
 
 #: gdk-pixbuf/io-xpm.c:1505
 msgid "Failed to write to temporary file when loading XPM image"
-msgstr "Misslyckades med skrivning till temporär fil vid inläsning av XPM-bild"
+msgstr ""
+"Misslyckades med skrivning till temporär fil vid inläsning av XPM-bild"
 
 #: gtk/gtkcellrenderer.c:101
 msgid "can_activate"
@@ -794,7 +797,8 @@ msgstr "Osynligt tecken"
 #: gtk/gtkentry.c:407
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
-"Tecknet att använda när fältets innehåll ska maskeras (i \"lösenordsläge\")"
+"Tecknet att använda när fältets innehåll ska maskeras (i "
+"\"lösenordsläge\")"
 
 #: gtk/gtkentry.c:414
 msgid "Activates default"
@@ -887,7 +891,8 @@ msgstr "Byt namn på fil"
 #, c-format
 msgid ""
 "The directory name \"%s\" contains symbols that are not allowed in filenames"
-msgstr "Katalognamnet \"%s\" innehåller tecken som inte är tillåtna i filnamn"
+msgstr ""
+"Katalognamnet \"%s\" innehåller tecken som inte är tillåtna i filnamn"
 
 #: gtk/gtkfilesel.c:1003
 #, c-format
@@ -1265,7 +1270,7 @@ msgstr "Textriktning"
 
 #: gtk/gtktexttag.c:266
 msgid "Text direction, e.g. right-to-left or left-to-right"
-msgstr "Textriktning, dvs. höger till vänster eller vänster till höger"
+msgstr "Textriktning, d.v.s. höger till vänster eller vänster till höger"
 
 #: gtk/gtktexttag.c:365
 msgid "Justification"
@@ -1344,11 +1349,11 @@ msgstr ""
 
 #: gtk/gtktexttag.c:481
 msgid "Tabs"
-msgstr "Flikar"
+msgstr "Tabbsteg"
 
 #: gtk/gtktexttag.c:482
 msgid "Custom tabs for this text"
-msgstr "Anpassade flikar för denna text"
+msgstr "Anpassade tabbsteg för denna text"
 
 #: gtk/gtktexttag.c:489
 msgid "Invisible"
@@ -1452,11 +1457,11 @@ msgstr "Huruvida denna tagg påverkar radbrytningsläget"
 
 #: gtk/gtktexttag.c:595
 msgid "Tabs set"
-msgstr "Flikar inställt"
+msgstr "Tabbsteg inställt"
 
 #: gtk/gtktexttag.c:596
 msgid "Whether this tag affects tabs"
-msgstr "Huruvida denna tagg påverkar flikar"
+msgstr "Huruvida denna tagg påverkar tabbsteg"
 
 #: gtk/gtktexttag.c:599
 msgid "Invisible set"
