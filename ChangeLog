@@ -1,3 +1,10 @@
+Mon Nov 29 17:51:51 2004  Søren Sandmann  <sandmann@redhat.com>
+
+	* gtk/gtksequence.c (_gtk_sequence_sort_changed): If the item is
+	already in the right place, don't move it. Bug #157670.
+	
+	* gtk/gtksequence.c (already_in_place): New function
+
 Mon Nov 29 17:28:53 2004  Søren Sandmann  <sandmann@redhat.com>
 
 	* gtk/gtksequence.c (_gtk_sequence_sort): Take nodes in reverse

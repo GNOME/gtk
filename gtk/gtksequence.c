@@ -448,6 +448,25 @@ _gtk_sequence_ptr_move           (GtkSequencePtr             ptr,
   return _gtk_sequence_node_find_by_pos (ptr, new_pos);
 }
 
+static gboolean
+already_in_place (GtkSequencePtr	ptr,
+		  GCompareDataFunc	cmp_func,
+		  gpointer		data)
+{
+  SortInfo info;
+
+  info.cmp = cmp_func;
+  info.data = data;
+
+  if (node_compare (_gtk_sequence_node_prev (ptr), ptr, &info) <= 0	&&
+      node_compare (_gtk_sequence_node_next (ptr), ptr, &info) >= 0)
+  {
+      return TRUE;
+  }
+
+  return FALSE;
+}
+      
 void
 _gtk_sequence_sort_changed  (GtkSequencePtr	     ptr,
 			     GCompareDataFunc	     cmp_func,
@@ -455,8 +474,12 @@ _gtk_sequence_sort_changed  (GtkSequencePtr	     ptr,
   
 {
   GtkSequence *seq;
-  
+
+  g_return_if_fail (ptr != NULL);
   g_return_if_fail (!ptr->is_end);
+
+  if (already_in_place (ptr, cmp_func, cmp_data))
+      return;
   
   seq = _gtk_sequence_node_get_sequence (ptr);
   _gtk_sequence_unlink (seq, ptr);
