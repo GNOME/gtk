@@ -88,6 +88,9 @@ gtk_menu_factory_destroy (GtkMenuFactory *factory)
 
   if (factory->table)
     gtk_accelerator_table_unref (factory->table);
+  
+  if (factory->widget)
+    gtk_widget_unref (factory->widget);
 }
 
 void
@@ -102,7 +105,11 @@ gtk_menu_factory_add_entries (GtkMenuFactory *factory,
   g_return_if_fail (nentries > 0);
 
   if (!factory->widget)
-    factory->widget = gtk_menu_factory_make_widget (factory);
+    {
+      factory->widget = gtk_menu_factory_make_widget (factory);
+      gtk_widget_ref  (factory->widget);
+      gtk_object_sink (GTK_OBJECT (factory->widget));
+    }
 
   for (i = 0; i < nentries; i++)
     gtk_menu_factory_create (factory, &entries[i], factory->widget, entries[i].path);
@@ -272,8 +279,13 @@ gtk_menu_factory_create (GtkMenuFactory *factory,
 	      if (subfactory->path &&
 		  (strcmp (subfactory->path, tmp_path) == 0))
 		{
-		  if (!subfactory->widget)
-		    subfactory->widget = gtk_menu_factory_make_widget (subfactory);
+		  if (!subfactory->widget) 
+		    {
+		      subfactory->widget = gtk_menu_factory_make_widget (subfactory);
+		      gtk_widget_ref  (subfactory->widget);
+		      gtk_object_sink (GTK_OBJECT (subfactory->widget));
+		    }
+
 		  gtk_menu_factory_create (subfactory, entry, subfactory->widget, p + 1);
 		  return;
 		}

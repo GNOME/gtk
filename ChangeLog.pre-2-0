@@ -1,3 +1,8 @@
+Wed Feb  4 23:05:28 1998  Scott Goehring  <scott@poverty.bloomington.in.us>
+
+	* gtk/gtkmenufactory.c: menufactories now ref&sink the menus they
+  	create
+
 Thu Feb  5 02:13:08 1998  Tim Janik  <timj@gimp.org>
 
 	* gtk/gtklist.h:
