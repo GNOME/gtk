@@ -1,3 +1,22 @@
+Wed Mar  3 23:28:48 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_set_active): Move the actual
+	implementation into a new gtk_combo_box_set_active_internal() 
+	function, which doesn't do the short-circuiting. 
+	* gtk/gtkcombobox.c (gtk_combo_box_model_row_deleted): Use
+	set_active_internal() here, since the active item may change here,
+	although the index is unchanged.
+
+Wed Mar  3 23:26:49 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_menu_position): Reintroduce the
+	traditional option menu placement of the popup for regular combo
+	boxes. Grids and editable combo boxes use the combo-like placement 
+	below the entry.  (#136021)
+	* gtk/gtkcombobox.c (gtk_combo_box_menu_button_press): 
+	* gtk/gtkcombobox.c (gtk_combo_box_popup): Call gtk_menu_set_active()
+	before popping up the menu, to make the placement work.
+	
 Wed Mar  3 17:20:15 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmain.c (gtk_propagate_event): Special case
