@@ -1931,7 +1931,6 @@ gtk_combo_box_forall (GtkContainer *container,
 	(* callback) (combo_box->priv->cell_view_frame, callback_data);
     }
 
-  g_print ("combo box forall\n");
   if (GTK_BIN (container)->child)
     (* callback) (GTK_BIN (container)->child, callback_data);
 }
