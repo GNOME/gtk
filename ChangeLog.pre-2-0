@@ -1,3 +1,14 @@
+Tue May  5 11:03:00 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkselection.c (gtk_selection_clear): Fixed
+	reversed conditionals that caused segfault on some
+	platforms.
+
+Tue May  5 00:44:47 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkcontainer.c (gtk_container_set_focus_[hv]adjustment):
+	cast to GTK_OBJECT for gtk_object_ref.
+
 Mon May  4 21:07:36 PDT 1998 Shawn T. Amundson <amundson@gtk.org>
 
 	* Released GTK 1.0.1
