@@ -1086,14 +1086,10 @@ gtk_window_size_allocate (GtkWidget     *widget,
     {
       child_allocation.x = GTK_CONTAINER (window)->border_width;
       child_allocation.y = GTK_CONTAINER (window)->border_width;
-      if (allocation->width > child_allocation.x * 2)
-	child_allocation.width = allocation->width - child_allocation.x * 2;
-      else
-	child_allocation.width = 1;
-      if (child_allocation.height > child_allocation.y * 2)
-	child_allocation.height = allocation->height - child_allocation.y * 2;
-      else
-	child_allocation.height = 1;
+      child_allocation.width =
+	MAX (1, (gint)allocation->width - child_allocation.x * 2);
+      child_allocation.height =
+	MAX (1, (gint)allocation->height - child_allocation.y * 2);
 
       gtk_widget_size_allocate (window->bin.child, &child_allocation);
     }

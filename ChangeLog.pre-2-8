@@ -1,3 +1,12 @@
+Fri Sep 10 15:22:50 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_size_allocate): Fix typo
+	where comparison was being done against an uninitialized
+	value causing intermittant results depending on
+	compiler flags. Also make it clearer that we aren't
+	ever initializing the child as 0x0 (though this will
+	be caught in gtk_widget_size_allocate())
+
 Fri Sep 10 10:06:56 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwindow.c (gtk_window_set_transient_for): Move
