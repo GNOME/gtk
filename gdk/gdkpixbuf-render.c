@@ -87,6 +87,9 @@ gdk_pixbuf_render_threshold_alpha (GdkPixbuf *pixbuf, GdkBitmap *bitmap,
 	gdk_gc_set_foreground (gc, &color);
 	gdk_draw_rectangle (bitmap, gc, TRUE, dest_x, dest_y, width, height);
 
+	color.pixel = 1;
+	gdk_gc_set_foreground (gc, &color);
+
 	for (y = 0; y < height; y++) {
 		p = (apb->pixels + (y + src_y) * apb->rowstride + src_x * apb->n_channels
 		     + apb->n_channels - 1);
@@ -98,11 +101,10 @@ gdk_pixbuf_render_threshold_alpha (GdkPixbuf *pixbuf, GdkBitmap *bitmap,
 			status = *p < alpha_threshold;
 
 			if (status != start_status) {
-				color.pixel = start_status ? 0 : 1;
-				gdk_gc_set_foreground (gc, &color);
-				gdk_draw_line (bitmap, gc,
-					       start + dest_x, y + dest_y,
-					       x - 1 + dest_x, y + dest_y);
+				if (!start_status)
+					gdk_draw_line (bitmap, gc,
+						       start + dest_x, y + dest_y,
+						       x - 1 + dest_x, y + dest_y);
 
 				start = x;
 				start_status = status;
@@ -111,11 +113,10 @@ gdk_pixbuf_render_threshold_alpha (GdkPixbuf *pixbuf, GdkBitmap *bitmap,
 			p += apb->n_channels;
 		}
 
-		color.pixel = start_status ? 0 : 1;
-		gdk_gc_set_foreground (gc, &color);
-		gdk_draw_line (bitmap, gc,
-			       start + dest_x, y + dest_y,
-			       x - 1 + dest_x, y + dest_y);
+		if (!start_status)
+			gdk_draw_line (bitmap, gc,
+				       start + dest_x, y + dest_y,
+				       x - 1 + dest_x, y + dest_y);
 	}
 
 	gdk_gc_unref (gc);

@@ -3,6 +3,17 @@
 	* Removed #PRAGMA } from headers.  Also, make compile if you don't
 	have it installed, already.
 
+1999-11-22  Federico Mena Quintero  <federico@redhat.com>
+
+	* src/gnome-canvas-pixbuf.c (gnome_canvas_pixbuf_draw): Create the
+	temporary buffer to the size of the interesction of the bounding
+	box and the expose area, not the whole expose area.  This speeds
+	up things a lot.
+
+	* src/gdk-pixbuf-render.c (gdk_pixbuf_render_threshold_alpha): Do
+	not paint black on the mask, since we already cleared it in a
+	single gdk_draw_rectangle() operation.
+
 1999-11-22  Raja R Harinath  <harinath@cs.umn.edu>
 
 	* configure.in (GDK_PIXBUF_DIR): Fix for srcdir != builddir.

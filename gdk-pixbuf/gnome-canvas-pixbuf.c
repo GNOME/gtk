@@ -552,14 +552,14 @@ compute_viewport_affine (GnomeCanvasPixbuf *gcp, double *viewport_affine, double
 
 /* Computes the affine transformation with which the pixbuf needs to be
  * transformed to render it on the canvas.  This is not the same as the
- * item_to_canvas transformation because we may need to scale the pixbuf 
+ * item_to_canvas transformation because we may need to scale the pixbuf
  * by some other amount.
  */
 static void
 compute_render_affine (GnomeCanvasPixbuf *gcp, double *render_affine, double *i2c)
 {
 	double viewport_affine[6];
-	
+
 	compute_viewport_affine (gcp, viewport_affine, i2c);
 	art_affine_multiply (render_affine, viewport_affine, i2c);
 }
@@ -703,6 +703,8 @@ gnome_canvas_pixbuf_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 	double i2c[6], render_affine[6];
 	guchar *buf;
 	GdkPixbuf *pixbuf;
+	ArtIRect p_rect, a_rect, d_rect;
+	int w, h;
 
 	gcp = GNOME_CANVAS_PIXBUF (item);
 	priv = gcp->priv;
@@ -713,21 +715,44 @@ gnome_canvas_pixbuf_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 	gnome_canvas_item_i2c_affine (item, i2c);
 	compute_render_affine (gcp, render_affine, i2c);
 
-	buf = g_new0 (guchar, width * height * 4);
-	transform_pixbuf (buf, x, y, width, height, width * 4, priv->pixbuf, render_affine);
+	/* Compute the area we need to repaint */
 
-	pixbuf = gdk_pixbuf_new_from_data (buf, ART_PIX_RGB, TRUE,
-					   width, height, width * 4,
-					   NULL, NULL);
+	p_rect.x0 = item->x1;
+	p_rect.y0 = item->y1;
+	p_rect.x1 = item->x2;
+	p_rect.y1 = item->y2;
+
+	a_rect.x0 = x;
+	a_rect.y0 = y;
+	a_rect.x1 = x + width;
+	a_rect.y1 = y + height;
+
+	art_irect_intersect (&d_rect, &p_rect, &a_rect);
+	if (art_irect_empty (&d_rect))
+		return;
+
+	/* Create a temporary buffer and transform the pixbuf there */
+
+	w = d_rect.x1 - d_rect.x0;
+	h = d_rect.y1 - d_rect.y0;
+
+	buf = g_new0 (guchar, w * h * 4);
+	transform_pixbuf (buf,
+			  d_rect.x0, d_rect.y0,
+			  w, h,
+			  w * 4,
+			  priv->pixbuf, render_affine);
+
+	pixbuf = gdk_pixbuf_new_from_data (buf, ART_PIX_RGB, TRUE, w, h, w * 4, NULL, NULL);
 
 	gdk_pixbuf_render_to_drawable_alpha (pixbuf, drawable,
 					     0, 0,
-					     0, 0,
-					     width, height,
+					     d_rect.x0 - x, d_rect.y0 - y,
+					     w, h,
 					     GDK_PIXBUF_ALPHA_BILEVEL,
 					     128,
 					     GDK_RGB_DITHER_MAX,
-					     x, y);
+					     d_rect.x0, d_rect.y0);
 
 	gdk_pixbuf_unref (pixbuf);
 	g_free (buf);
@@ -837,7 +862,7 @@ gnome_canvas_pixbuf_bounds (GnomeCanvasItem *item, double *x1, double *y1, doubl
 
 	rect.y0 = 0.0;
 	rect.y1 = priv->pixbuf->art_pixbuf->height;
-       
+
 	gnome_canvas_item_i2c_affine (item, i2c);
 	compute_viewport_affine (gcp, viewport_affine, i2c);
 	art_drect_affine_transform (&rect, &rect, viewport_affine);
