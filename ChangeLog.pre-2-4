@@ -1,3 +1,20 @@
+2002-02-09  Matthias Clasen  <matthias@local>
+
+	* gtk/gtknotebook.c (gtk_notebook_set_focus_child): Avoid segfault
+	for selectable tab labels (even without a segfault, they make the
+	notebook almost unusable, though).  (#69985)
+
+2002-02-08  Matthias Clasen  <matthias@local>
+
+	* gtk/gtkmenuitem.c (gtk_menu_item_set_accel_path): Silently do 
+	nothing if the parent is not a menu.  (#66492)
+
+2002-02-06  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/gtkitemfactory.c (gtk_item_factory_from_widget,
+	gtk_item_factory_path_from_widget): Try fetching the return value 
+	from menu_item->submenu as a fallback.  (#69020)
+	
 Sat Feb  9 22:57:43 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_build_level): convert

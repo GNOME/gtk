@@ -2068,7 +2068,7 @@ gtk_notebook_focus (GtkWidget        *widget,
   g_assert_not_reached ();
   return FALSE;
 }  
-  
+
 static void
 gtk_notebook_set_focus_child (GtkContainer *container,
 			      GtkWidget    *child)
@@ -2091,15 +2091,18 @@ gtk_notebook_set_focus_child (GtkContainer *container,
 	  if (page_child->parent == GTK_WIDGET (container))
 	    {
 	      GList *list = gtk_notebook_find_child (notebook, page_child, NULL);
-	      GtkNotebookPage *page = list->data;
-
-	      if (page->last_focus_child)
-		g_object_remove_weak_pointer (G_OBJECT (page->last_focus_child), (gpointer *)&page->last_focus_child);
-		
-	      page->last_focus_child = GTK_WINDOW (toplevel)->focus_widget;
-	      g_object_add_weak_pointer (G_OBJECT (page->last_focus_child), (gpointer *)&page->last_focus_child);
+	      if (list != NULL) 
+		{
+		  GtkNotebookPage *page = list->data;
 	      
-	      break;
+		  if (page->last_focus_child)
+		    g_object_remove_weak_pointer (G_OBJECT (page->last_focus_child), (gpointer *)&page->last_focus_child);
+		  
+		  page->last_focus_child = GTK_WINDOW (toplevel)->focus_widget;
+		  g_object_add_weak_pointer (G_OBJECT (page->last_focus_child), (gpointer *)&page->last_focus_child);
+	      
+		  break;
+		}
 	    }
 
 	  page_child = page_child->parent;
