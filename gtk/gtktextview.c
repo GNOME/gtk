@@ -301,6 +301,8 @@ static void gtk_text_view_mark_set_handler       (GtkTextBuffer     *buffer,
                                                   const GtkTextIter *location,
                                                   GtkTextMark       *mark,
                                                   gpointer           data);
+static void gtk_text_view_get_cursor_location    (GtkTextView       *text_view,
+						  GdkRectangle      *pos);
 static void gtk_text_view_get_virtual_cursor_pos (GtkTextView       *text_view,
                                                   gint              *x,
                                                   gint              *y);
@@ -1723,16 +1725,19 @@ static void
 gtk_text_view_update_im_spot_location (GtkTextView *text_view)
 {
   GdkRectangle area;
-  gint cursor_x_pos, cursor_y_pos;
 
   if (text_view->layout == NULL)
     return;
   
-  gtk_text_view_get_virtual_cursor_pos (text_view, &cursor_x_pos, &cursor_y_pos);
+  gtk_text_view_get_cursor_location (text_view, &area);
 
-  area.x = cursor_x_pos;
-  area.y = cursor_y_pos;
-  area.width = area.height = 0;
+  area.x -= text_view->xoffset;
+  area.y -= text_view->yoffset;
+    
+  /* Width returned by Pango indicates direction of cursor,
+   * by it's sign more than the size of cursor.
+   */
+  area.width = 0;
 
   gtk_im_context_set_cursor_location (text_view->im_context, &area);
 }
@@ -6352,27 +6357,35 @@ gtk_text_view_mark_set_handler (GtkTextBuffer     *buffer,
 }
 
 static void
-gtk_text_view_get_virtual_cursor_pos (GtkTextView *text_view,
-                                      gint        *x,
-                                      gint        *y)
+gtk_text_view_get_cursor_location  (GtkTextView   *text_view,
+				    GdkRectangle  *pos)
 {
-  GdkRectangle strong_pos;
   GtkTextIter insert;
-
+  
   gtk_text_buffer_get_iter_at_mark (get_buffer (text_view), &insert,
                                     gtk_text_buffer_get_mark (get_buffer (text_view),
                                                               "insert"));
 
+  gtk_text_layout_get_cursor_locations (text_view->layout, &insert, pos, NULL);
+}
+
+static void
+gtk_text_view_get_virtual_cursor_pos (GtkTextView *text_view,
+                                      gint        *x,
+                                      gint        *y)
+{
+  GdkRectangle pos;
+
   if ((x && text_view->virtual_cursor_x == -1) ||
       (y && text_view->virtual_cursor_y == -1))
-    gtk_text_layout_get_cursor_locations (text_view->layout, &insert, &strong_pos, NULL);
+    gtk_text_view_get_cursor_location (text_view, &pos);
 
   if (x)
     {
       if (text_view->virtual_cursor_x != -1)
         *x = text_view->virtual_cursor_x;
       else
-        *x = strong_pos.x;
+        *x = pos.x;
     }
 
   if (y)
@@ -6380,7 +6393,7 @@ gtk_text_view_get_virtual_cursor_pos (GtkTextView *text_view,
       if (text_view->virtual_cursor_x != -1)
         *y = text_view->virtual_cursor_y;
       else
-        *y = strong_pos.y + strong_pos.height / 2;
+        *y = pos.y + pos.height / 2;
     }
 }
 
@@ -6389,18 +6402,13 @@ gtk_text_view_set_virtual_cursor_pos (GtkTextView *text_view,
                                       gint         x,
                                       gint         y)
 {
-  GdkRectangle strong_pos;
-  GtkTextIter insert;
-
-  gtk_text_buffer_get_iter_at_mark (get_buffer (text_view), &insert,
-                                    gtk_text_buffer_get_mark (get_buffer (text_view),
-                                                              "insert"));
+  GdkRectangle pos;
 
   if (x == -1 || y == -1)
-    gtk_text_layout_get_cursor_locations (text_view->layout, &insert, &strong_pos, NULL);
+    gtk_text_view_get_cursor_location (text_view, &pos);
 
-  text_view->virtual_cursor_x = (x == -1) ? strong_pos.x : x;
-  text_view->virtual_cursor_y = (y == -1) ? strong_pos.y + strong_pos.height / 2 : y;
+  text_view->virtual_cursor_x = (x == -1) ? pos.x : x;
+  text_view->virtual_cursor_y = (y == -1) ? pos.y + pos.height / 2 : y;
 }
 
 /* Quick hack of a popup menu

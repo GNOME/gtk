@@ -2188,6 +2188,7 @@ gtk_text_layout_get_cursor_locations (GtkTextLayout  *layout,
   GtkTextLineDisplay *display;
   gint line_top;
   gint index;
+  GtkTextIter insert_iter;
 
   PangoRectangle pango_strong_pos;
   PangoRectangle pango_weak_pos;
@@ -2201,6 +2202,13 @@ gtk_text_layout_get_cursor_locations (GtkTextLayout  *layout,
   
   line_top = _gtk_text_btree_find_line_top (_gtk_text_buffer_get_btree (layout->buffer),
                                            line, layout);
+  
+  gtk_text_buffer_get_iter_at_mark (layout->buffer, &insert_iter,
+                                    gtk_text_buffer_get_mark (layout->buffer,
+                                                              "insert"));
+
+  if (gtk_text_iter_equal (iter, &insert_iter))
+    index += layout->preedit_cursor - layout->preedit_len;
   
   pango_layout_get_cursor_pos (display->layout, index,
                                strong_pos ? &pango_strong_pos : NULL,
