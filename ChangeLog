@@ -1,3 +1,14 @@
+Thu Feb 12 11:05:16 2004  Manish Singh  <yosh@gimp.org>
+
+	* gdk/x11/gdkproperty-x11.c (gdk_property_get): Assign xtype using
+	gdk_x11_atom_to_xatom_for_display () when type != GDK_NONE.
+
+	* gtk/gtkselection.c (_gtk_selection_request): Use GDK_NONE in
+	gdk_property_get call instead of 0.
+
+	* docs/reference/gdk/tmpl/properties.sgml: Document the above
+	as GDK_NONE instead of simply 0.
+
 Thu Feb 12 15:46:26 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktoolbar.c (gtk_toolbar_size_allocate): Fix up item_area

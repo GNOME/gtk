@@ -267,7 +267,7 @@ is provided.
 
 @window: a #GdkWindow.
 @property: the property to retrieve.
-@type: the desired property type, or 0, if any type of data
+@type: the desired property type, or %GDK_NONE, if any type of data
        is acceptable. If this does not match the actual
        type, then @actual_format and @actual_length will
        be filled in, a warning will be printed to stderr

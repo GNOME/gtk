@@ -508,7 +508,7 @@ gdk_property_get (GdkWindow   *window,
   if (type == GDK_NONE)
     xtype = AnyPropertyType;
   else
-    xtype = GDK_NONE;
+    xtype = gdk_x11_atom_to_xatom_for_display (display, type);
 
   ret_data = NULL;
   

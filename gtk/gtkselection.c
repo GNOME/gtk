@@ -1141,7 +1141,7 @@ _gtk_selection_request (GtkWidget *widget,
       mult_atoms = NULL;
       
       gdk_error_trap_push ();
-      if (!gdk_property_get (info->requestor, event->property, 0, /* AnyPropertyType */
+      if (!gdk_property_get (info->requestor, event->property, GDK_NONE, /* AnyPropertyType */
 			     0, GTK_SELECTION_MAX_SIZE, FALSE,
 			     &type, &format, &length, &mult_atoms))
 	{
