@@ -1,3 +1,8 @@
+Thu Feb 26 19:48:39 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/xsettings-client.c (read_settings): Fix memory leak
+	in case of mismatched property type.
+
 Thu Feb 26 18:25:57 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtkfilechooser.h (GtkFileChooserAction): Add two more folder

@@ -383,9 +383,13 @@ read_settings (XSettingsClient *client)
 				   &type, &format, &n_items, &bytes_after, &data);
       XSetErrorHandler (old_handler);
       
-      if (result == Success && type == client->xsettings_atom)
+      if (result == Success && type != None)
 	{
-	  if (format != 8)
+	  if (type != client->xsettings_atom)
+	    {
+	      fprintf (stderr, "Invalid type for XSETTINGS property");
+	    }
+	  eles if (format != 8)
 	    {
 	      fprintf (stderr, "Invalid format for XSETTINGS property %d", format);
 	    }
