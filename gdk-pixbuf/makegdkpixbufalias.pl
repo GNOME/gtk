@@ -19,7 +19,6 @@ print <<EOF;
 
 #include "gdk-pixbuf.h"
 #include "gdk-pixdata.h"
-#include "gdk-pixbuf-marshal.h"
 
 EOF
 
@@ -28,14 +27,63 @@ while (<>) {
   # ignore empty lines
   next if /^\s*$/;
 
+  # skip comments
+  if ($_ =~ /^\s*\/\*/)
+  {
+      $in_comment = 1;
+  }
+  
+  if ($in_comment)
+  {
+      if ($_ =~  /\*\/\s$/)
+      {
+	  $in_comment = 0;
+      }
+      
+      next;
+  }
+
+  # handle ifdefs
+  if ($_ =~ /^\#endif/)
+  {
+      if (!$in_skipped_section)
+      {
+	  print $_;
+      }
+
+      $in_skipped_section = 0;
+
+      next;
+  }
+
+  if ($_ =~ /^\#ifdef\s+INCLUDE_VARIABLES/)
+  {
+      $in_skipped_section = 1;
+  }
+
+  if ($in_skipped_section)
+  {
+      next;
+  }
+
+  if ($_ =~ /^\#ifdef\s+G/)
+  {
+      print $_;
+      
+      next;
+  }
+
+
   my $str = $_;
   chomp($str);
   my $alias = $str."__internal_alias";
   
-  print "extern __typeof ($str) $alias __attribute((visibility(\"hidden\"))); \n";
-  print "extern __typeof ($str) $str __attribute((alias(\"$alias\"), visibility(\"default\"))); \n";
-  print "#define $str $alias \n";
-  print "\n";
+  print <<EOF
+extern __typeof ($str) $alias __attribute((visibility("hidden")));
+extern __typeof ($str) $str __attribute((alias("$alias"), visibility("default")));
+\#define $str $alias
+
+EOF
 }
 
 print <<EOF;

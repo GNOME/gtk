@@ -1,5 +1,21 @@
 2004-08-17  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/abicheck.sh: No need for INCLUDE_INTERNAL_SYMBOLS anymore.
+
+	* gdk/gdk.symbols: Don't use #if defined().
+
+	* gdk/Makefile.am (gdkalias.h): 
+	* gtk/Makefile.am (gtkalias.h): Don't use cpp to filter gtk.symbols.
+
+	* gdk/makegdkalias.pl: 
+	* gtk/makegtkalias.pl: Move the #ifdef processing into the perl script, and
+	keep the #ifdefs which differentiate between platforms.
+
+	* gtk/Makefile.am (gtk_private_h_sources): Remove gtkinternals.h, it is no 
+	longer needed.
+
+2004-08-17  Matthias Clasen  <mclasen@redhat.com>
+
 	* tests/testfilechooserbutton.c: Use g_message() throughout, add RTL envar for
 	rtl testing.
 

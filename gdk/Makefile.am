@@ -180,7 +180,7 @@ gdk.def: gdk.symbols
 	(echo -e EXPORTS; cpp -P -DGDK_WINDOWING_WIN32 -DINCLUDE_VARIABLES gdk.symbols | sed -e '/^$$/d' -e 's/^/\t/') > gdk.def
 
 gdkalias.h: gdk.symbols
-	 cpp -P gdk.symbols -DGDK_WINDOWING_X11 | ./makegdkalias.pl > gdkalias.h
+	 ./makegdkalias.pl <gdk.symbols > gdkalias.h
 
 if OS_UNIX
 TESTS = abicheck.sh

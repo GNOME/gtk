@@ -74,7 +74,7 @@ gtk.def: gtk.symbols
 	(echo -e EXPORTS; cpp -P -DINCLUDE_VARIABLES -DG_OS_WIN32 gtk.symbols | sed -e '/^$$/d' -e 's/^/\t/') > gtk.def
 
 gtkalias.h: gtk.symbols
-	 cpp -P -DG_OS_UNIX -DGTK_WINDOWING_X11 -DINCLUDE_INTERNAL_SYMBOLS gtk.symbols | ./makegtkalias.pl > gtkalias.h
+	  ./makegtkalias.pl < gtk.symbols > gtkalias.h
 
 if OS_UNIX
 TESTS = abicheck.sh
@@ -295,7 +295,6 @@ gtk_private_h_sources =		\
 	gtkfilechooserutils.h	\
 	gtkfilesystemunix.h	\
 	gtkfilesystemmodel.h	\
-	gtkinternals.h		\
 	gtkpathbar.h		\
 	gtkrbtree.h		\
 	gtksequence.h		\

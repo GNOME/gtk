@@ -57,10 +57,6 @@ gdk_pixbuf_loader_new_with_mime_type
 gdk_pixbuf_loader_new_with_type
 gdk_pixbuf_loader_set_size
 gdk_pixbuf_loader_write
-#ifdef INCLUDE_INTERNAL_SYMBOLS
-gdk_pixbuf_marshal_VOID__INT_INT
-gdk_pixbuf_marshal_VOID__INT_INT_INT_INT
-#endif
 gdk_pixbuf_new
 gdk_pixbuf_new_from_data
 gdk_pixbuf_new_from_file

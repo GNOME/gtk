@@ -1,3 +1,16 @@
+2004-08-17  Matthias Clasen  <mclasen@redhat.com>
+
+	* abicheck.sh: No need for INCLUDE_INTERNAL_SYMBOLS any more.
+
+	* Makefile.am (gdk-pixbuf-alias.h): Don't use cpp to filter the symbols.
+
+	* makegdkpixbufalias.pl: Move the #ifdef processing into the perl script,
+	and keep the #ifdefs which differentiate between platforms.
+
+	* gdk-pixbuf.symbols: Remove the marshalers.
+
+	* Makefile.am (stamp-gdk-pixbuf-marshal.h): _-prefix the marshalers.
+
 Thu Aug 12 22:19:12 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* io-bmp.c (DecodeHeader): Properly determine the number of 

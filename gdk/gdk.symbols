@@ -285,7 +285,10 @@ gdk_line_style_get_type
 gdk_list_visuals
 gdk_mbstowcs
 gdk_modifier_type_get_type
-#if defined(GDK_WINDOWING_X11) || defined(GDK_WINDOWING_WIN32)
+#ifdef GDK_WINDOWING_X11
+gdk_net_wm_supports
+#endif
+#ifdef GDK_WINDOWING_WIN32
 gdk_net_wm_supports
 #endif
 gdk_notify_startup_complete

@@ -43,7 +43,7 @@ gdk_pixbuf.def: gdk-pixbuf.symbols
 	(echo -e EXPORTS; cpp -P -DINCLUDE_VARIABLES gdk-pixbuf.symbols | sed -e '/^$$/d' -e 's/^/\t/') > gdk_pixbuf.def
 
 gdk-pixbuf-alias.h: gdk-pixbuf.symbols
-	 cpp -P -DINCLUDE_INTERNAL_SYMBOLS gdk-pixbuf.symbols | ./makegdkpixbufalias.pl > gdk-pixbuf-alias.h
+	 ./makegdkpixbufalias.pl < gdk-pixbuf.symbols > gdk-pixbuf-alias.h
 
 if OS_UNIX
 TESTS = abicheck.sh
@@ -392,7 +392,7 @@ gdk-pixbuf-marshal.h: @REBUILD@ stamp-gdk-pixbuf-marshal.h
 	@true
 
 stamp-gdk-pixbuf-marshal.h: @REBUILD@ $(srcdir)/gdk-pixbuf-marshal.list
-	$(GLIB_GENMARSHAL) --prefix=gdk_pixbuf_marshal $(srcdir)/gdk-pixbuf-marshal.list --header >> xgen-gmh \
+	$(GLIB_GENMARSHAL) --prefix=_gdk_pixbuf_marshal $(srcdir)/gdk-pixbuf-marshal.list --header >> xgen-gmh \
 	&& (cmp -s xgen-gmh gdk-pixbuf-marshal.h || cp xgen-gmh gdk-pixbuf-marshal.h) \
 	&& rm -f xgen-gmh xgen-gmh~ \
 	&& echo timestamp > $(@F)
