@@ -678,7 +678,8 @@ gtk_entry_completion_selection_changed (GtkTreeSelection *selection,
   if (completion->priv->first_sel_changed)
     {
       completion->priv->first_sel_changed = FALSE;
-      gtk_tree_selection_unselect_all (selection);
+      if (gtk_widget_is_focus (completion->priv->tree_view))
+        gtk_tree_selection_unselect_all (selection);
     }
 }
 

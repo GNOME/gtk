@@ -1,3 +1,9 @@
+Wed Nov 19 00:06:04 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkentrycompletion.c (gtk_entry_completion_selection_changed):
+	only unselect all items if the treeview has focus. (Fixes bug
+	reported by Marco Pesenti Gritti).
+
 Tue Nov 18 22:26:30 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkentry.c (gtk_entry_completion_key_press): the total
