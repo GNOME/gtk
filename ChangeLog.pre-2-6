@@ -1,3 +1,10 @@
+Tue Dec 10 02:14:12 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_get_path_at_pos): x can be in
+	the range [0, upper], which can be bigger than [0, page_size].
+	(Fixed #99778, reported and testcase provided by Carlos Garnacho
+	Parro).
+
 Mon Dec  9 19:49:03 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwindow.c (gtk_window_move_resize): Remove

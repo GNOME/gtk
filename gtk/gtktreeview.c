@@ -9772,7 +9772,7 @@ gtk_tree_view_get_path_at_pos (GtkTreeView        *tree_view,
   if (tree_view->priv->tree == NULL)
     return FALSE;
 
-  if (x > tree_view->priv->hadjustment->page_size)
+  if (x > tree_view->priv->hadjustment->upper)
     return FALSE;
 
   if (x < 0 || y < 0)
