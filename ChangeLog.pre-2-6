@@ -1,5 +1,7 @@
 2004-09-18  Matthias Clasen  <mclasen@redhat.com>
-
+	
+	* configure.in: Bump version.
+	
 	* === Released 2.4.10 ===
 
 2004-09-18  Marco Pesenti Gritti  <marco@gnome.org>
