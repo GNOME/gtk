@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2.0\n"
 "POT-Creation-Date: 2003-02-22 23:41+0100\n"
-"PO-Revision-Date: 2003-02-22 23:48+0100\n"
+"PO-Revision-Date: 2003-02-22 23:55+0100\n"
 "Last-Translator: Jordi Mallach <jordi@sindominio.net>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "MIME-Version: 1.0\n"
@@ -4627,8 +4627,7 @@ msgstr "Símbol"
 
 #: gtk/gtktreeviewcolumn.c:267
 msgid "Widget to put in column header button instead of column title"
-msgstr ""
-"Símbol a posar a la capçalera de columna en comptes del tìtol de columna"
+msgstr "Símbol a posar a la capçalera de columna en comptes del títol de columna"
 
 #: gtk/gtktreeviewcolumn.c:274
 msgid "Alignment"
