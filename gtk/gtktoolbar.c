@@ -1138,6 +1138,7 @@ gtk_toolbar_insert_stock (GtkToolbar      *toolbar,
   GtkWidget *image = NULL;
   const gchar *label;
   gchar *label_no_mnemonic;
+  GtkWidget *retval;
 
   if (gtk_stock_lookup (stock_id, &item))
     {
@@ -1149,16 +1150,18 @@ gtk_toolbar_insert_stock (GtkToolbar      *toolbar,
 
   label_no_mnemonic = elide_underscores (label);
   
-  return gtk_toolbar_internal_insert_item (toolbar,
-					   label_no_mnemonic,
-					   tooltip_text,
-					   tooltip_private_text,
-					   image,
-					   callback,
-					   user_data,
-					   position);
+  retval =  gtk_toolbar_internal_insert_item (toolbar,
+	   				      label_no_mnemonic,
+					      tooltip_text,
+					      tooltip_private_text,
+					      image,
+					      callback,
+					      user_data,
+					      position);
 
   g_free (label_no_mnemonic);
+
+  return retval;
 }
 
 

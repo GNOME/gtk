@@ -1,3 +1,8 @@
+2002-10-31  Padraig O'Briain  <padraig.obriain@sun.com>
+
+	* gtk/gtktoolbar.c (gtk_toolbar_insert_stock): Move g_free()
+	call to before return.
+
 2002-10-29  Matthias Clasen  <maclas@gmx.de>
 
 	* tests/testgtkrc: Adjust for current gtk-engines.
