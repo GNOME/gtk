@@ -716,6 +716,8 @@ gdk_pango_layout_line_get_clip_region (PangoLayoutLine *line,
   pango_layout_iter_get_line_extents (iter, NULL, &logical_rect);
   baseline = pango_layout_iter_get_baseline (iter);
   
+  pango_layout_iter_free (iter);
+  
   i = 0;
   while (i < n_ranges)
     {  
