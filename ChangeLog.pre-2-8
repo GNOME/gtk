@@ -1,3 +1,8 @@
+Wed Dec 17 23:36:57 1997  Scott Goehring  <scott@poverty.bloomington.in.us>
+
+	* gdk/gdkcc.c (gdk_color_context_free): Caught a stray
+	gdk_colormap_destroy that Owen missed (and Shawn found).
+
 Wed Dec 17 20:59:52 1997  Owen Taylor  <owt1@cornell.edu>
 	* gdk/gdkinput.c gdk/gdkinput.h gdk/gdkinputcommon.h
 	  gdk/gdkinputxfree.h gdk/gdkinputgxi.h gdk/gdkinputnone.h.

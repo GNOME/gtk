@@ -644,7 +644,7 @@ gdk_color_context_free(GdkColorContext *cc)
 		g_free(cc->cmap);
 
 	if (cc->need_to_free_colormap)
-		gdk_colormap_destroy(cc->colormap);
+		gdk_colormap_unref(cc->colormap);
 
 	/* free any palette that has been associated with this GdkColorContext */
 
