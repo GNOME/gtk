@@ -3291,6 +3291,8 @@ validate_visible_area (GtkTreeView *tree_view)
     gtk_widget_queue_resize (GTK_WIDGET (tree_view));
   if (validated_area)
     gtk_widget_queue_draw (GTK_WIDGET (tree_view));
+  if (path)
+    gtk_tree_path_free (path);
 }
 
 /* Our strategy for finding nodes to validate is a little convoluted.  We find
