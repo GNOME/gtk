@@ -2,23 +2,35 @@
 GtkAboutDialog
 
 <!-- ##### SECTION Short_Description ##### -->
-
+a widget displaying information about a program
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+The #GtkAboutDialog offers a simple way to display information about
+a program like its logo, name, copyright, website and license. It is
+also possible to give credits to the authors, documenters, translators
+and artists who have worked on the program. An about dialog is typically
+opened when the user selects the <literal>About</literal> option from 
+the <literal>Help</literal> menu. All parts of the dialog are optional.
+</para>
+<para>
+About dialog often contain links and email addresses. #GtkAboutDialog 
+supports this by offering global hooks, which are called when the user
+clicks on a link or email address, see gtk_about_dialog_set_email_hook()
+and gtk_about_dialog_set_url_hook().
 </para>
 
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
-
+#GTK_STOCK_ABOUT
 </para>
 
 
 <!-- ##### STRUCT GtkAboutDialog ##### -->
 <para>
-
+The <structname>GtkAboutDialog</structname> struct contains
+only private fields and should not be directly accessed.
 </para>
 
 @parent_instance: 
@@ -231,11 +243,12 @@ GtkAboutDialog
 
 <!-- ##### USER_FUNCTION GtkAboutDialogActivateLinkFunc ##### -->
 <para>
-
+The type of a function which is called when a URL or email
+link is activated. 
 </para>
 
-@about: 
-@link: 
+@about: the #GtkAboutDialog in which the link was activated
+@link: the URL or email address to whiche the activated link points
 
 
 <!-- ##### FUNCTION gtk_about_dialog_set_email_hook ##### -->

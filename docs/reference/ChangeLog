@@ -1,3 +1,7 @@
+Tue Jul 13 02:01:56 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtkaboutdialog.sgml: Additions.
+
 Tue Jul 13 01:16:20 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkiconview.sgml: Updates.
