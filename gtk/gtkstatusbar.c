@@ -776,7 +776,7 @@ gtk_statusbar_size_allocate  (GtkWidget     *widget,
 
   if (statusbar->has_resize_grip && statusbar->grip_window)
     {
-      GdkRectangle rect;
+      GdkRectangle rect, overlap;
       GtkAllocation allocation;
       
       get_grip_rect (statusbar, &rect);
@@ -787,11 +787,14 @@ gtk_statusbar_size_allocate  (GtkWidget     *widget,
 			      rect.width, rect.height);
       
       allocation = statusbar->label->allocation;
-      allocation.width -= rect.width;
-      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL) 
-	allocation.x += rect.width;
-
-      gtk_widget_size_allocate (statusbar->label, &allocation);
+      if (gdk_rectangle_intersect (&rect, &allocation, &overlap))
+      {
+	allocation.width -= rect.width;
+	if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL) 
+	  allocation.x += rect.width;
+	
+	gtk_widget_size_allocate (statusbar->label, &allocation);
+      }
     }
 }
 

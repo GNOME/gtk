@@ -1,5 +1,8 @@
 2004-11-10  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkstatusbar.c (gtk_statusbar_size_allocate): Only
+	shorten the label if it actually overlaps the resize grip.
+
 	* gdk/linux-fb/*: Fix many sparse warnings.  (#157253,
 	Kjartan Maraas.
 	
