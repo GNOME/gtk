@@ -1,3 +1,12 @@
+Thu Sep 17 05:12:48 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkobject.h: added gtk_object_set_data_destroy and
+	gtk_object_set_data_destroy_by_id functions to set the destroy
+	function pointer for an existing data portion.
+
+	* gtk/gtkobject.c: removed the GtkObjectData implementation and
+	made all gtk_object_*data* functions use the GLib equivalents.
+
 1998-09-16  Federico Mena Quintero  <federico@nuclecu.unam.mx>
 
 	* gtk/gtktoolbar.c (gtk_toolbar_insert_element): Test whether type
