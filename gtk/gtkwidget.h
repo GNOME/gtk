@@ -707,7 +707,6 @@ void gtk_widget_style_get          (GtkWidget	     *widget,
 
 /* Set certain default values to be used at widget creation time.
  */
-void	     gtk_widget_set_default_style    (GtkStyle	  *style);
 void	     gtk_widget_set_default_colormap (GdkColormap *colormap);
 GtkStyle*    gtk_widget_get_default_style    (void);
 GdkColormap* gtk_widget_get_default_colormap (void);

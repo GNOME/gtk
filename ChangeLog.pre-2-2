@@ -1,3 +1,10 @@
+Sat Aug 18 23:01:33 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.h: Really remove set_default_style().
+
+	* docs/Changes-2.0.txt: added a note about
+	gtk_widget_push/pop/set_default_style.
+
 2001-08-18  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtkwindow.c (gtk_window_move_resize): constrain position on
