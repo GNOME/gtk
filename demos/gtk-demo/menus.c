@@ -71,7 +71,7 @@ create_menu (gint     depth,
 }
 
 GtkWidget *
-do_menus (void)
+do_menus (GtkWidget *do_widget)
 {
   static GtkWidget *window = NULL;
   GtkWidget *box1;
@@ -86,7 +86,8 @@ do_menus (void)
       GtkAccelGroup *accel_group;
       
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-      
+      gtk_window_set_screen (GTK_WINDOW (window),
+			     gtk_widget_get_screen (do_widget));
       g_signal_connect (window, "destroy",
 			G_CALLBACK(gtk_widget_destroyed), &window);
       g_signal_connect (window, "delete-event",

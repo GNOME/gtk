@@ -41,7 +41,7 @@ create_bbox (gint  horizontal,
 }
 
 GtkWidget *
-do_button_box (void)
+do_button_box (GtkWidget *do_widget)
 {
   static GtkWidget *window = NULL;
   GtkWidget *main_vbox;
@@ -53,6 +53,8 @@ do_button_box (void)
   if (!window)
   {
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    gtk_window_set_screen (GTK_WINDOW (window),
+			   gtk_widget_get_screen (do_widget));
     gtk_window_set_title (GTK_WINDOW (window), "Button Boxes");
     
     g_signal_connect (window, "destroy",

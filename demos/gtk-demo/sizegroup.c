@@ -80,7 +80,7 @@ toggle_grouping (GtkToggleButton *check_button,
 }
 
 GtkWidget *
-do_sizegroup (void)
+do_sizegroup (GtkWidget *do_widget)
 {
   GtkWidget *table;
   GtkWidget *frame;
@@ -103,7 +103,8 @@ do_sizegroup (void)
   if (!window)
     {
       window = gtk_dialog_new_with_buttons ("GtkSizeGroup",
-					    NULL, 0,
+					    GTK_WINDOW (do_widget),
+					    0,
 					    GTK_STOCK_CLOSE,
 					    GTK_RESPONSE_NONE,
 					    NULL);

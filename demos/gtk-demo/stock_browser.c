@@ -400,7 +400,7 @@ label_set_func (GtkTreeViewColumn *tree_column,
 }
 
 GtkWidget *
-do_stock_browser (void)
+do_stock_browser (GtkWidget *do_widget)
 {  
   if (!window)
     {
@@ -417,6 +417,8 @@ do_stock_browser (void)
       GtkTreeViewColumn *column;
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      gtk_window_set_screen (GTK_WINDOW (window),
+			     gtk_widget_get_screen (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Stock Icons and Items");
       gtk_window_set_default_size (GTK_WINDOW (window), -1, 500);
 

@@ -604,7 +604,7 @@ row_activated_cb (GtkTreeView       *tree_view,
 			  &iter,
 			  ITALIC_COLUMN, !italic,
 			  -1);
-      window = (func) ();
+      window = (func) (gtk_widget_get_toplevel (GTK_WIDGET (tree_view)));
       
       if (window != NULL)
 	{

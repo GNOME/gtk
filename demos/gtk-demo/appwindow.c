@@ -300,7 +300,7 @@ update_resize_grip (GtkWidget           *widget,
 		    
 
 GtkWidget *
-do_appwindow (void)
+do_appwindow (GtkWidget *do_widget)
 {  
   if (!window)
     {
@@ -320,6 +320,8 @@ do_appwindow (void)
        */
       
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      gtk_window_set_screen (GTK_WINDOW (window),
+			     gtk_widget_get_screen (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Application Window");
 
       /* NULL window variable when window is closed */

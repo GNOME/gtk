@@ -1,3 +1,32 @@
+Sat Nov  8 23:06:02 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* demos/gtk-demo/main.c (row_activated_cb): Call the do_
+	functions with the toplevel as argument.
+
+	* demos/gtk-demo/geninclude.pl.in: Change the signature
+	of GDoDemoFunc to take a widget argument
+
+	* demos/gtk-demo/ui_manager.c (do_ui_manager): 
+	* demos/gtk-demo/tree_store.c (do_tree_store): 
+	* demos/gtk-demo/textview.c (do_textview): 
+	* demos/gtk-demo/stock_browser.c (do_stock_browser): 
+	* demos/gtk-demo/sizegroup.c (do_sizegroup): 
+	* demos/gtk-demo/pixbufs.c (do_pixbufs): 
+	* demos/gtk-demo/panes.c (do_panes): 
+	* demos/gtk-demo/menus.c (do_menus): 
+	* demos/gtk-demo/list_store.c (do_list_store): 
+	* demos/gtk-demo/images.c (do_images): 
+	* demos/gtk-demo/hypertext.c (do_hypertext): 
+	* demos/gtk-demo/editable_cells.c (do_editable_cells): 
+	* demos/gtk-demo/drawingarea.c (do_drawingarea): 
+	* demos/gtk-demo/dialog.c (do_dialog): 
+	* demos/gtk-demo/colorsel.c (do_colorsel): 
+	* demos/gtk-demo/changedisplay.c (do_changedisplay): 
+	* demos/gtk-demo/button_box.c (do_button_box): 
+	* demos/gtk-demo/appwindow.c (do_appwindow): Take a widget
+	as argument, and make new windows or dialogs appear on the
+	same screen.  (#80388)
+
 Sat Nov  8 21:59:30 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkeventbox.c (gtk_event_box_class_init): Let 

@@ -1,8 +1,9 @@
 /* Text Widget/Hypertext
  *
- * Usually, tags modify the appearance of text in the view, e.g. making it bold or colored or underlined.
- * But tags are not restricted to appearance. They can also affect the behavior of mouse and key presses,
- * as this demo shows.
+ * Usually, tags modify the appearance of text in the view, e.g. making it 
+ * bold or colored or underlined. But tags are not restricted to appearance. 
+ * They can also affect the behavior of mouse and key presses, as this demo 
+ * shows.
  */
 
 #include <gtk/gtk.h>
@@ -252,7 +253,7 @@ visibility_notify_event (GtkWidget          *text_view,
 }
 
 GtkWidget *
-do_hypertext (void)
+do_hypertext (GtkWidget *do_widget)
 {
   static GtkWidget *window = NULL;
 
@@ -266,6 +267,8 @@ do_hypertext (void)
       regular_cursor = gdk_cursor_new (GDK_XTERM);
       
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      gtk_window_set_screen (GTK_WINDOW (window),
+			     gtk_widget_get_screen (do_widget));
       gtk_window_set_default_size (GTK_WINDOW (window),
 				   450, 450);
       

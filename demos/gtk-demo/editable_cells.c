@@ -223,7 +223,7 @@ add_columns (GtkTreeView *treeview)
 }
 
 GtkWidget *
-do_editable_cells (void)
+do_editable_cells (GtkWidget *do_widget)
 {
   if (!window)
     {
@@ -236,6 +236,8 @@ do_editable_cells (void)
 
       /* create window, etc */
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      gtk_window_set_screen (GTK_WINDOW (window),
+			     gtk_widget_get_screen (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Shopping list");
       gtk_container_set_border_width (GTK_CONTAINER (window), 5);
       g_signal_connect (window, "destroy",

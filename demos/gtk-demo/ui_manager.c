@@ -141,7 +141,7 @@ static const gchar *ui_info =
 "</ui>";
 
 GtkWidget *
-do_ui_manager (void)
+do_ui_manager (GtkWidget *do_widget)
 {
   static GtkWidget *window = NULL;
   
@@ -157,6 +157,8 @@ do_ui_manager (void)
       GError *error = NULL;
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      gtk_window_set_screen (GTK_WINDOW (window),
+			     gtk_widget_get_screen (do_widget));
       
       g_signal_connect (window, "destroy",
 			G_CALLBACK (gtk_widget_destroyed), &window);
