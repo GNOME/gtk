@@ -1,3 +1,14 @@
+Thu Jun 13 12:24:09 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfilesel.c (gtk_file_selection_set_filename):
+	Fix so that the encoding of the filename is handled
+	properly in the case of non-UTF-8 filesystems;
+	document the encoding. (#83386, Sebastian Ritau)
+
+	* gtk/gtkfilesel.c (filenames_drag_get): Remove
+	debug printf. Fix UTF-8 / filename encoding 
+	confusion.
+
 2002-06-13  Christian Rose  <menthos@menthos.com>
 
 	* Makefile.am (EXTRA_DIST): Remove po/README.tools, po/desk.pl

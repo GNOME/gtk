@@ -938,13 +938,21 @@ filenames_dropped (GtkWidget        *widget,
   else
     {
       GtkWidget *dialog;
+      gchar *filename_utf8;
+
+      /* Conversion back to UTF-8 should always succeed for the result
+       * of g_filename_from_uri()
+       */
+      filename_utf8 = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
+      g_assert (filename_utf8);
       
       dialog = gtk_message_dialog_new (GTK_WINDOW (widget),
 				       GTK_DIALOG_DESTROY_WITH_PARENT,
 				       GTK_MESSAGE_QUESTION,
 				       GTK_BUTTONS_YES_NO,
 				       _("The file \"%s\" resides on another machine (called %s) and may not be available to this program.\n"
-					 "Are you sure that you want to select it?"), filename, hostname);
+					 "Are you sure that you want to select it?"), filename_utf8, hostname);
+      g_free (filename_utf8);
 
       g_object_set_data_full (G_OBJECT (dialog), "gtk-fs-dnd-filename", g_strdup (filename), g_free);
       
@@ -1008,8 +1016,10 @@ filenames_drag_get (GtkWidget        *widget,
 	}
       else
 	{
-	  g_print ("Setting text: '%s'\n", file);
-	  gtk_selection_data_set_text (selection_data, file, -1);
+	  gchar *filename_utf8 = g_filename_to_utf8 (file, -1, NULL, NULL, NULL);
+	  g_assert (filename_utf8);
+	  gtk_selection_data_set_text (selection_data, filename_utf8, -1);
+	  g_free (filename_utf8);
 	}
     }
 }
@@ -1134,15 +1144,31 @@ gtk_file_selection_hide_fileop_buttons (GtkFileSelection *filesel)
 
 
 
+/**
+ * gtk_file_selection_set_filename:
+ * @filesel: a #GtkFileSelection.
+ * @filename:  a string to set as the default file name.
+ * 
+ * Sets a default path for the file requestor. If @filename includes a
+ * directory path, then the requestor will open with that path as its
+ * current working directory.
+ *
+ * The encoding of @filename is the on-disk encoding, which
+ * may not be UTF-8. See g_filename_from_utf8().
+ **/
 void
 gtk_file_selection_set_filename (GtkFileSelection *filesel,
 				 const gchar      *filename)
 {
   gchar *buf;
   const char *name, *last_slash;
+  char *filename_utf8;
 
   g_return_if_fail (GTK_IS_FILE_SELECTION (filesel));
   g_return_if_fail (filename != NULL);
+
+  filename_utf8 = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
+  g_return_if_fail (filename_utf8 == NULL);
 
   last_slash = strrchr (filename, G_DIR_SEPARATOR);
 
@@ -1164,6 +1190,8 @@ gtk_file_selection_set_filename (GtkFileSelection *filesel,
     gtk_entry_set_text (GTK_ENTRY (filesel->selection_entry), name);
   g_free (buf);
   g_object_notify (G_OBJECT (filesel), "filename");
+
+  g_free (filename_utf8);
 }
 
 /**
