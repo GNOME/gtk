@@ -1,3 +1,21 @@
+Thu Feb  7 19:39:27 2002  Kristian Rietveld  <kris@gtk.org>
+
+	Fixes #70782 and some drag dest rectangle/line issues
+
+	* gtk/gtktreeview.c (gtk_tree_view_set_model): set
+	GTK_TREE_VIEW_IS_LIST flag (we can switch from a TreeStore to a
+	ListStore for example)
+	(gtk_tree_view_get_path_at_pos): revert previous change, we
+	shouldn't correct for the header, because we are taking bin_window
+	coordinates here
+	(gtk_tree_view_set_drag_dest_row): queue old drag_dest row and
+	upper/lower neighbors for draw, so the drag dest rectangle/line will
+	be cleared correctly
+	(gtk_tree_view_get_dest_row_at_pos): correct for treeview header
+	here, as drag_y is relative to the widget and _get_path_at_pos wants
+	coords relative to bin_window, draw black outline rectangle after
+	drawing the cells
+
 Thu Feb  7 10:53:12 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkentry.c (gtk_entry_draw_text): Use layout text

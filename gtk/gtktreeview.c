@@ -6745,6 +6745,7 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
 
       g_object_unref (tree_view->priv->model);
       tree_view->priv->search_column = -1;
+      GTK_TREE_VIEW_SET_FLAG (tree_view, GTK_TREE_VIEW_IS_LIST);
     }
 
   tree_view->priv->model = model;
@@ -8487,7 +8488,7 @@ gtk_tree_view_get_path_at_pos (GtkTreeView        *tree_view,
     }
 
   y_offset = _gtk_rbtree_find_offset (tree_view->priv->tree,
-				      TREE_WINDOW_Y_TO_RBTREE_Y (tree_view, y - TREE_VIEW_HEADER_HEIGHT (tree_view)),
+				      TREE_WINDOW_Y_TO_RBTREE_Y (tree_view, y),
 				      &tree, &node);
 
   if (tree == NULL)
@@ -8844,12 +8845,6 @@ gtk_tree_view_set_drag_dest_row (GtkTreeView            *tree_view,
   if (tree_view->priv->drag_dest_row)
     current_dest = gtk_tree_row_reference_get_path (tree_view->priv->drag_dest_row);
 
-  if (current_dest)
-    {
-      gtk_tree_view_queue_draw_path (tree_view, current_dest, NULL);
-      gtk_tree_path_free (current_dest);
-    }
-
   if (tree_view->priv->drag_dest_row)
     gtk_tree_row_reference_free (tree_view->priv->drag_dest_row);
 
@@ -8863,6 +8858,26 @@ gtk_tree_view_set_drag_dest_row (GtkTreeView            *tree_view,
     }
   else
     tree_view->priv->drag_dest_row = NULL;
+
+  if (current_dest)
+    {
+      GtkRBTree *tree, *new_tree;
+      GtkRBNode *node, *new_node;
+
+      _gtk_tree_view_find_node (tree_view, current_dest, &tree, &node);
+      _gtk_tree_view_queue_draw_node (tree_view, tree, node, NULL);
+
+      if (tree && node)
+	{
+	  _gtk_rbtree_next_full (tree, node, &new_tree, &new_node);
+	  if (new_tree && new_node)
+	    _gtk_tree_view_queue_draw_node (tree_view, new_tree, new_node, NULL);
+
+	  _gtk_rbtree_prev_full (tree, node, &new_tree, &new_node);
+	  if (new_tree && new_node)
+	    _gtk_tree_view_queue_draw_node (tree_view, new_tree, new_node, NULL);
+	}
+    }
 }
 
 void
@@ -8920,7 +8935,8 @@ gtk_tree_view_get_dest_row_at_pos (GtkTreeView             *tree_view,
    */
 
   if (!gtk_tree_view_get_path_at_pos (tree_view,
-                                      drag_x, drag_y,
+                                      drag_x,
+				      drag_y - TREE_VIEW_HEADER_HEIGHT (tree_view),
                                       &tmp_path,
                                       &column,
                                       NULL,
@@ -9037,13 +9053,6 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
                       bin_window_width + 2,
                       background_area.height + 2);
 
-  gdk_draw_rectangle (drawable,
-                      widget->style->black_gc,
-                      FALSE,
-                      0, 0,
-                      bin_window_width + 1,
-                      background_area.height + 1);
-
   for (list = tree_view->priv->columns; list; list = list->next)
     {
       GtkTreeViewColumn *column = list->data;
@@ -9083,6 +9092,13 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
 
       cell_offset += column->width;
     }
+
+  gdk_draw_rectangle (drawable,
+                      widget->style->black_gc,
+                      FALSE,
+                      0, 0,
+                      bin_window_width + 1,
+                      background_area.height + 1);
 
   return drawable;
 }
