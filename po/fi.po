@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.1.9\n"
-"POT-Creation-Date: 2000-05-19 07:11+0200\n"
-"PO-Revision-Date: 2000-05-19 12:36+02:00\n"
+"POT-Creation-Date: 2000-05-19 18:30+0300\n"
+"PO-Revision-Date: 2000-04-17 12:56+0300\n"
 "Last-Translator: Pauli Virtanen <pauli.virtanen@saunalahti.fi>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -62,7 +62,7 @@ msgstr "Ohje"
 #. The directories clist
 #: gtk/gtkfilesel.c:418
 msgid "Directories"
-msgstr "Kansiot"
+msgstr "Hakemistot"
 
 #. The files clist
 #: gtk/gtkfilesel.c:437
@@ -73,11 +73,11 @@ msgstr "Tiedostot"
 #: gtk/gtkfilesel.c:507 gtk/gtkfilesel.c:1466
 #, c-format
 msgid "Directory unreadable: %s"
-msgstr "Kansiota ei voi lukea: %s"
+msgstr "Hakemistoa ei voi lukea: %s"
 
 #: gtk/gtkfilesel.c:539
 msgid "Create Dir"
-msgstr "Luo kansio"
+msgstr "Luo hakemisto"
 
 #: gtk/gtkfilesel.c:550 gtk/gtkfilesel.c:925
 msgid "Delete File"
@@ -103,11 +103,11 @@ msgstr "Sulje"
 
 #: gtk/gtkfilesel.c:820
 msgid "Create Directory"
-msgstr "Luo kansio"
+msgstr "Luo hakemisto"
 
 #: gtk/gtkfilesel.c:834
 msgid "Directory name:"
-msgstr "Kansion nimi:"
+msgstr "Hakemiston nimi:"
 
 #. buttons
 #: gtk/gtkfilesel.c:847
