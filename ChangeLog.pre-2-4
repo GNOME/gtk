@@ -1,3 +1,7 @@
+2001-06-07  Havoc Pennington  <hp@redhat.com>
+
+	* configure.in: output m4macros/Makefile
+	
 Wed Jun  6 21:59:16 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_size_allocate): hook up arrow

@@ -1103,6 +1103,7 @@ gtk+-2.0.pc
 gdk-pixbuf-2.0-uninstalled.pc
 gdk-2.0-uninstalled.pc
 gtk+-2.0-uninstalled.pc
+m4macros/Makefile
 po/Makefile.in
 build/Makefile
 build/win32/Makefile
