@@ -1,3 +1,7 @@
+2004-03-15  Tor Lillqvist  <tml@iki.fi>
+
+	* README.win32: Updates.
+
 2004-03-15  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserdefault.c (update_appearance): Only hide the

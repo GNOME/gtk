@@ -1,14 +1,14 @@
-The Win32 port of GTK+ is a work in progress, and not as stable or
-correct as the Unix/X11 version. For more information about the Win32
-port, and prebuilt runtime and developer packages see
-http://www.gimp.org/win32/ .
+The Win32 backend in GTK+ is not as stable or correct as the X11
+one. 
 
-There is a gtk-1-3-win32-production branch of GTK+ that was branched
-off from before the addition of the no-flicker and other recent
-functionality. That is what should be used by "production" code until
-this CVS HEAD (2.0) version is useable. (But note, the Win32 backend
-has never been claimed to be "production quality", although it works
-surprisingly well for the GIMP.)
+For prebuilt runtime and developer packages see
+http://www.gimp.org/win32/downloads.html .
+
+There is also a gtk-1-3-win32-production branch of GTK+ that was
+branched off from before the addition of the no-flicker and other
+functionality that was new in GTK+ 2.0.0. The vesion number used for
+that branch is 1.3.0. It corresponds most closely to GTK 1.2.7 on
+Unix. For new code, you shouldn't be using that.
 
 Building GTK+ on Win32
 ======================
@@ -17,7 +17,7 @@ There are two ways to build GTK+ for win32.
 
 1) Use the autoconf-generated configure script, and the resulting
 Makefiles (which use libtool and gcc to do the compilation). I use
-this myself, but it might be hell to setup correctly. 
+this myself, but it can be hard to setup correctly.
 
 Personally I run configure with:
 CC='gcc -mpentium -fnative-struct' CPPFLAGS='-I/target/include' CFLAGS=-O2 LDFLAGS='-L/target/lib' ./configure --disable-static --prefix=/target --with-gdktarget=win32 --with-wintab=/src/wtkit126 --with-ie55=/src/workshop/ie55_lib --host=i386-pc-mingw32
@@ -64,10 +64,10 @@ above website.
 Multi-threaded use of GTK+ on Win32
 ===================================
 
-Multi-threaded GTK+ programs might work in special simple cases, but
-not in general. Sorry. If you have all GTK+ and GDK calls in the same
-thread, it might work. Otherwise, probably not at all. Possible ways
-to fix this are being investigated.
+Multi-threaded GTK+ programs might work on Windows in special simple
+cases, but not in general. Sorry. If you have all GTK+ and GDK calls
+in the same thread, it might work. Otherwise, probably not at
+all. Possible ways to fix this are being investigated.
 
 Wintab
 ======
@@ -77,26 +77,6 @@ be downloaded from http://www.pointing.com. Pass the --with-wintab
 flag to configure if you use that. If you use nmake and you don't care
 for Wintab, undefine HAVE_WINTAB in config.h.win32 and remove
 references to the wntab32x library from the makefile before building.
-
-Libintl
-=======
-
-Before building GTK+ you must also have GNU gettext. Get prebuilt
-binaries of gettext-runtime (0.12.1 or newer) from your nearest GNU
-ftp mirror. If you use gcc, you will also have to edit the libintl.h
-file from gettext a tiny bit: Change the
-
-# if __GNUC__ >= 2 && !defined __APPLE_CC__ && (defined __STDC__ || defined __cplusplus)
-
-line to
-
-# if __GNUC__ >= 2 && !defined __APPLE_CC__ && !defined __MINGW32__ && (defined __STDC__ || defined __cplusplus)
-
-around line 102.
-
-If you use libtool, you will also have to copy intl.lib to libintl.a
-so that libtool will find them. Alternatively, use pexports and
-dlltool to generate a gcc import library.
 
 ActiveIMM
 =========
