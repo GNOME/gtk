@@ -1974,8 +1974,6 @@ erase_background (GdkWindow *window,
     }
 }
 
-#endif
-
 static GdkRegion *
 _gdk_win32_hrgn_to_region (HRGN hrgn)
 {
