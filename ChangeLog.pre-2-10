@@ -1,3 +1,9 @@
+2004-12-11  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_menu_fill_level) 
+	(gtk_combo_box_menu_row_changed): Only wrap if we are in the
+	topmost menu.  (#160936, John Finlay)
+
 2004-12-10  Matthias Clasen  <mclasen@redhat.com>
 
 	Support no-Alt mnemnonics in menu bars  (#101309, Owen Taylor)
