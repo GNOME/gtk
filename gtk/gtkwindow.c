@@ -1487,6 +1487,14 @@ gtk_window_set_position (GtkWindow         *window,
   g_object_notify (G_OBJECT (window), "window_position");
 }
 
+/**
+ * gtk_window_activate_focus:
+ * @window: a #GtkWindow
+ * 
+ * Activates the current focused widget within the window.
+ * 
+ * Return value: %TRUE if a widget got activated.
+ **/
 gboolean 
 gtk_window_activate_focus (GtkWindow *window)
 {
@@ -1522,6 +1530,17 @@ gtk_window_get_focus (GtkWindow *window)
   return window->focus_widget;
 }
 
+/**
+ * gtk_window_activate_default:
+ * @window: a #GtkWindow
+ * 
+ * Activates the default widget for the window, unless the current 
+ * focused widget has been configured to receive the default action 
+ * (see #GTK_RECEIVES_DEFAULT in #GtkWidgetFlags), in which case the
+ * focused widget is activated. 
+ * 
+ * Return value: %TRUE if a widget got activated.
+ **/
 gboolean
 gtk_window_activate_default (GtkWindow *window)
 {

@@ -334,6 +334,16 @@ container_set_child_property (GtkContainer       *container,
   g_value_unset (&tmp_value);
 }
 
+/**
+ * gtk_container_child_get_valist:
+ * @container: a #GtkContainer
+ * @child: a widget which is a child of @container
+ * @first_prop_name: the name of the first property to get
+ * @va_list: a %NULL-terminated list of property names and #GValue*, 
+ *           starting with @first_prop_name.
+ * 
+ * Gets the values of one or more child properties for @child and @container.
+ **/
 void
 gtk_container_child_get_valist (GtkContainer *container,
 				GtkWidget    *child,
@@ -394,6 +404,15 @@ gtk_container_child_get_valist (GtkContainer *container,
   g_object_unref (container);
 }
 
+/**
+ * gtk_container_child_get_property:
+ * @container: a #GtkContainer
+ * @child: a widget which is a child of @container
+ * @property_name: the name of the property to get
+ * @value: a location to return the value
+ * 
+ * Gets the value of a child property for @child and @container.
+ **/
 void
 gtk_container_child_get_property (GtkContainer *container,
 				  GtkWidget    *child,
@@ -459,6 +478,16 @@ gtk_container_child_get_property (GtkContainer *container,
   g_object_unref (container);
 }
 
+/**
+ * gtk_container_child_set_valist:
+ * @container: a #GtkContainer
+ * @child: a widget which is a child of @container
+ * @first_prop_name: the name of the first property to set
+ * @va_list: a %NULL-terminated list of property names and values, starting
+ *           with @first_prop_name.
+ * 
+ * Sets one or more child properties for @child and @container.
+ **/
 void
 gtk_container_child_set_valist (GtkContainer *container,
 				GtkWidget    *child,
@@ -525,6 +554,15 @@ gtk_container_child_set_valist (GtkContainer *container,
   g_object_unref (child);
 }
 
+/**
+ * gtk_container_child_set_property:
+ * @container: a #GtkContainer
+ * @child: a widget which is a child of @container
+ * @property_name: the name of the property to set
+ * @value: the value to set the property to
+ * 
+ * Sets a child property for @child and @container.
+ **/
 void
 gtk_container_child_set_property (GtkContainer *container,
 				  GtkWidget    *child,
@@ -567,6 +605,17 @@ gtk_container_child_set_property (GtkContainer *container,
   g_object_unref (child);
 }
 
+/**
+ * gtk_container_add_with_properties:
+ * @container: a #GtkContainer 
+ * @widget: a widget to be placed inside @container 
+ * @first_prop_name: the name of the first child property to set 
+ * @Varargs: a %NULL-terminated list of property names and values, starting
+ *           with @first_prop_name.
+ * 
+ * Adds @widget to @container, setting child properties at the same time.
+ * See gtk_container_add() and gtk_container_child_set() for more details.
+ **/
 void
 gtk_container_add_with_properties (GtkContainer *container,
 				   GtkWidget    *widget,
@@ -596,6 +645,16 @@ gtk_container_add_with_properties (GtkContainer *container,
   g_object_unref (container);
 }
 
+/**
+ * gtk_container_child_set:
+ * @container: a #GtkContainer
+ * @child: a widget which is a child of @container
+ * @first_prop_name: the name of the first property to set
+ * @Varargs: a %NULL-terminated list of property names and values, starting
+ *           with @first_prop_name.
+ * 
+ * Sets one or more child properties for @child and @container.
+ **/
 void
 gtk_container_child_set (GtkContainer      *container,
 			 GtkWidget         *child,
@@ -613,6 +672,16 @@ gtk_container_child_set (GtkContainer      *container,
   va_end (var_args);
 }
 
+/**
+ * gtk_container_child_get:
+ * @container: a #GtkContainer
+ * @child: a widget which is a child of @container
+ * @first_prop_name: the name of the first property to get
+ * @Varargs: a %NULL-terminated list of property names and #GValue*, 
+ *           starting with @first_prop_name.
+ * 
+ * Gets the values of one or more child properties for @child and @container.
+ **/
 void
 gtk_container_child_get (GtkContainer      *container,
 			 GtkWidget         *child,
@@ -630,6 +699,14 @@ gtk_container_child_get (GtkContainer      *container,
   va_end (var_args);
 }
 
+/**
+ * gtk_container_class_install_child_property:
+ * @cclass: a #GtkContainerClass
+ * @property_id: the id for the property
+ * @pspec: the #GParamSpec for the property
+ * 
+ * Installs a child property on a container class. 
+ **/
 void
 gtk_container_class_install_child_property (GtkContainerClass *cclass,
 					    guint              property_id,
@@ -685,7 +762,8 @@ gtk_container_class_find_child_property (GObjectClass *cclass,
  * gtk_container_class_list_child_properties:
  * @cclass: a #GtkContainerClass
  * @n_properties: location to return the number of child properties found
- * @returns: an newly allocated array of #GParamSpec*. The array must be freed with g_free().
+ * @returns: a newly allocated array of #GParamSpec*. The array must be 
+ *           freed with g_free().
  *
  * Returns all child properties of a container class.
  */
