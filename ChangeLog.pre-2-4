@@ -1,4 +1,21 @@
-2001-02-19    <alla@lysator.liu.se>
+2001-02-19 Alexander Larsson  <alexl@redhat.com>
+
+	* gdk/linux-fb/gdkimage-fb.c (gdk_image_new_bitmap):
+	Copy data and free data with free().
+
+	* gdk-pixbuf/gdk-pixbuf.c:
+	* gdk-pixbuf/io-jpeg.c:
+	* gdk-pixbuf/io-png.c:
+	Use g_try_malloc/g_free instead malloc/free.
+	
+	* gdk-pixbuf/test-gdk-pixbuf.c:
+	Must... initialize... gobject...
+	
+	* gdk-pixbuf/pixops/timescale.c:
+	* gtk/gtkcalendar.c:
+	Use g_malloc instead of malloc.
+	
+2001-02-19 Alexander Larsson  <alla@lysator.liu.se>
 
 	* gtk/testgtkrc:
 	Comment out property assignments, these don't work yet.

@@ -430,7 +430,7 @@ gtk_calendar_init (GtkCalendar *calendar)
   widget = GTK_WIDGET (calendar);
   GTK_WIDGET_SET_FLAGS (widget, GTK_CAN_FOCUS);
   
-  calendar->private_data = (gpointer) malloc (sizeof (GtkCalendarPrivateData));
+  calendar->private_data = (gpointer) g_malloc (sizeof (GtkCalendarPrivateData));
   private_data = GTK_CALENDAR_PRIVATE_DATA (calendar);
 
   if (!default_abbreviated_dayname[0])

@@ -176,7 +176,7 @@ png_simple_warning_callback(png_structp png_save_ptr,
 static void
 free_buffer (guchar *pixels, gpointer data)
 {
-	free (pixels);
+	g_free (pixels);
 }
 
 /* Shared library entry point */
@@ -230,7 +230,7 @@ gdk_pixbuf__png_image_load (FILE *f, GError **error)
 	else
 		bpp = 3;
 
-	pixels = malloc (w * h * bpp);
+	pixels = g_try_malloc (w * h * bpp);
 	if (!pixels) {
                 /* Check error NULL, normally this would be broken,
                  * but libpng makes me want to code defensively.
@@ -701,7 +701,7 @@ gdk_pixbuf__png_image_save (FILE          *f,
                png_set_IHDR (png_ptr, info_ptr, w, h, bpc,
                              PNG_COLOR_TYPE_RGB, PNG_INTERLACE_NONE,
                              PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
-               data = malloc (w * 3 * sizeof (char));
+               data = g_try_malloc (w * 3 * sizeof (char));
 
                if (data == NULL) {
                        /* Check error NULL, normally this would be broken,
@@ -741,7 +741,7 @@ gdk_pixbuf__png_image_save (FILE          *f,
        }
 
        if (data)
-               free (data);
+               g_free (data);
 
        png_write_end (png_ptr, info_ptr);
        png_destroy_write_struct (&png_ptr, (png_infopp) NULL);

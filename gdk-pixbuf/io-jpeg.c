@@ -145,7 +145,7 @@ output_message_handler (j_common_ptr cinfo)
 static void
 free_buffer (guchar *pixels, gpointer data)
 {
-	free (pixels);
+	g_free (pixels);
 }
 
 
@@ -222,7 +222,7 @@ gdk_pixbuf__jpeg_image_load (FILE *f, GError **error)
 	w = cinfo.output_width;
 	h = cinfo.output_height;
 
-	pixels = malloc (h * w * 3);
+	pixels = g_try_malloc (h * w * 3);
 	if (!pixels) {
 		jpeg_destroy_decompress (&cinfo);
 

@@ -146,10 +146,10 @@ int main (int argc, char **argv)
 
 	int filter_level;
 
-	src_buf = malloc(src_rowstride * src_height);
+	src_buf = g_malloc(src_rowstride * src_height);
 	memset (src_buf, 0x80, src_rowstride * src_height);
 	
-	dest_buf = malloc(dest_rowstride * dest_height);
+	dest_buf = g_malloc(dest_rowstride * dest_height);
 	memset (dest_buf, 0x80, dest_rowstride * dest_height);
 
 	for (filter_level = GDK_INTERP_NEAREST ; filter_level <= GDK_INTERP_HYPER; filter_level++)
@@ -216,8 +216,8 @@ int main (int argc, char **argv)
 	  }
 	printf ("\n");
 
-	free (src_buf);
-	free (dest_buf);
+	g_free (src_buf);
+	g_free (dest_buf);
       }
 
   printf ("SCALE\n=====\n\n");

@@ -117,7 +117,7 @@ gdk_pixbuf_unref (GdkPixbuf *pixbuf)
 static void
 free_buffer (guchar *pixels, gpointer data)
 {
-	free (pixels);
+	g_free (pixels);
 }
 
 /**
@@ -153,7 +153,7 @@ gdk_pixbuf_new (GdkColorspace colorspace, gboolean has_alpha, int bits_per_sampl
 	channels = has_alpha ? 4 : 3;
 	rowstride = 4 * ((channels * width + 3) / 4);
 
-	buf = malloc (height * rowstride);
+	buf = g_try_malloc (height * rowstride);
 	if (!buf)
 		return NULL;
 
@@ -188,7 +188,7 @@ gdk_pixbuf_copy (const GdkPixbuf *pixbuf)
 	size = ((pixbuf->height - 1) * pixbuf->rowstride +
 		pixbuf->width * ((pixbuf->n_channels * pixbuf->bits_per_sample + 7) / 8));
 
-	buf = malloc (size * sizeof (guchar));
+	buf = g_try_malloc (size * sizeof (guchar));
 	if (!buf)
 		return NULL;
 

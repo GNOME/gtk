@@ -25,6 +25,7 @@
 
 #include <stdlib.h>
 #include "gdk-pixbuf.h"
+#include <gobject/gtype.h>
 
 
 
@@ -228,6 +229,8 @@ main (int argc, char **argv)
 	int result;
 
 	result = EXIT_SUCCESS;
+
+	g_type_init (G_TYPE_DEBUG_NONE);
 	
 	/* Run some tests. */
 	if (!simple_composite_test ()) {

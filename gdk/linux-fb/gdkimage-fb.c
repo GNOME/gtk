@@ -126,7 +126,12 @@ gdk_image_new_bitmap(GdkVisual *visual,
   image->bpp = 1;
   image->bpl = (w+7)/8;
   image->mem = g_malloc (image->bpl * h / 8);
+  memcpy (image->mem, data, image->bpl * h / 8);
 
+  /* This must be freed using free, not g_free, since in the X version
+     this is freed by xlib. */
+  free (data); 
+  
   return image;
 }
 
