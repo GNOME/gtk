@@ -710,6 +710,8 @@ gtk_menu_window_size_request (GtkWidget      *window,
 static void
 gtk_menu_init (GtkMenu *menu)
 {
+  GtkMenuPrivate *priv = gtk_menu_get_private (menu);
+
   menu->parent_menu_item = NULL;
   menu->old_active_menu_item = NULL;
   menu->accel_group = NULL;
@@ -755,6 +757,8 @@ gtk_menu_init (GtkMenu *menu)
   menu->lower_arrow_prelight = FALSE;
   
   MENU_NEEDS_RESIZE (menu) = TRUE;
+
+  priv->columns = 1;
 }
 
 static void
@@ -949,7 +953,7 @@ gtk_menu_do_remove (GtkMenuShell *menu_shell,
   single_column = priv->columns == 1;
 
   /* Recalculate these, assuming the child has already been removed. 
-   * Note that an empty menu is assumed to have one column.
+   * Note that an empty menu is assumed to have one column
    */
   priv->rows = 0;
   priv->columns = 1;

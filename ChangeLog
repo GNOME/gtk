@@ -1,3 +1,8 @@
+Tue Feb 17 23:28:33 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkmenu.c (gtk_menu_init): ...and don't forget to initalize
+	priv->columns to 1.
+
 Tue Feb 17 23:11:21 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkmenu.c (gtk_menu_do_remove): Make sure that we keep
