@@ -286,23 +286,29 @@ static gint gtk_handle_box_button_changed(GtkWidget *widget,
       if(event->type == GDK_BUTTON_PRESS
 	 && event->x < DRAG_HANDLE_SIZE)
 	{
+	  gdk_window_raise(widget->window);
 	  hb->is_being_dragged = TRUE;
 	  dragoff_x = event->x;
 	  dragoff_y = event->y;
-	  if(!hb->real_parent) {
+	  if(hb->real_parent == NULL) {
 	    hb->real_parent = widget->parent;
 	    gdk_window_set_override_redirect(widget->window, TRUE);
 	    rootx = event->x_root - event->x;
 	    rooty = event->y_root - event->y;
 	    gdk_window_reparent(widget->window, GDK_ROOT_PARENT(),
 				rootx, rooty);
-	    g_print("Reparenting to %dx%d (%dx%d)\n", rootx, rooty,
-		    (gint)event->x_root, (gint)event->y_root);
-	  } else
-	    gdk_window_raise(widget->window);
+	  }
+	  gdk_pointer_grab(widget->window,
+			   TRUE,
+			   GDK_POINTER_MOTION_MASK
+			   |GDK_BUTTON_RELEASE_MASK,
+			   GDK_ROOT_PARENT(),
+			   NULL, 
+			   GDK_CURRENT_TIME);
 	}
       else if(event->type == GDK_BUTTON_RELEASE)
 	{
+	  gdk_pointer_ungrab(GDK_CURRENT_TIME);
 	  hb->is_being_dragged = FALSE;
 	}
     }
