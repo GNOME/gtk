@@ -2092,7 +2092,7 @@ msgstr ""
 
 #: gtk/gtkmessagedialog.c:115
 msgid "Message Type"
-msgstr "Saghas Teachtaireacht"
+msgstr "Saghas ScéaScéall"
 
 #: gtk/gtkmessagedialog.c:116
 msgid "The type of message"
@@ -2100,7 +2100,7 @@ msgstr ""
 
 #: gtk/gtkmessagedialog.c:123
 msgid "Message Buttons"
-msgstr ""
+msgstr "Cnaipí Scéala"
 
 #: gtk/gtkmessagedialog.c:124
 msgid "The buttons shown in the message dialog"
