@@ -41,6 +41,7 @@
 /* signals */
 enum
 {
+  INSERT_PREFIX,
   MATCH_SELECTED,
   ACTION_ACTIVATED,
   LAST_SIGNAL
@@ -52,7 +53,9 @@ enum
   PROP_0,
   PROP_MODEL,
   PROP_MINIMUM_KEY_LENGTH,
-  PROP_TEXT_COLUMN
+  PROP_TEXT_COLUMN,
+  PROP_INLINE_COMPLETION,
+  PROP_POPUP_COMPLETION
 };
 
 #define GTK_ENTRY_COMPLETION_GET_PRIVATE(obj)(G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_ENTRY_COMPLETION, GtkEntryCompletionPrivate))
@@ -128,6 +131,8 @@ static void     gtk_entry_completion_action_data_func    (GtkTreeViewColumn     
 static gboolean gtk_entry_completion_match_selected      (GtkEntryCompletion *completion,
 							  GtkTreeModel       *model,
 							  GtkTreeIter        *iter);
+static gboolean gtk_entry_completion_real_insert_prefix  (GtkEntryCompletion *completion,
+							  gchar              *key);
 
 static GObjectClass *parent_class = NULL;
 static guint entry_completion_signals[LAST_SIGNAL] = { 0 };
@@ -185,6 +190,35 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
   object_class->finalize = gtk_entry_completion_finalize;
 
   klass->match_selected = gtk_entry_completion_match_selected;
+  klass->insert_prefix = gtk_entry_completion_real_insert_prefix;
+
+  /**
+   * GtkEntryCompletion::insert-prefix:
+   * @widget: the object which received the signal
+   * @prefix: the common prefix of all possible completions
+   * 
+   * The ::insert-prefix signal is emitted when the inline autocompletion
+   * is triggered. The default behaviour is to make the entry display the 
+   * whole prefix and select the newly inserted part.
+   *
+   * Applications may connect to this signal in order to insert only a
+   * smaller part of the @prefix into the entry - e.g. the entry used in
+   * the #GtkFileChooser inserts only the part of the prefix up to the 
+   * next '/'.
+   *
+   * Return value: %TRUE if the signal has been handled
+   * 
+   * Since: 2.6
+   */ 
+  entry_completion_signals[INSERT_PREFIX] =
+    g_signal_new ("insert_prefix",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkEntryCompletionClass, insert_prefix),
+                  _gtk_boolean_handled_accumulator, NULL,
+                  _gtk_marshal_BOOLEAN__STRING,
+                  G_TYPE_BOOLEAN, 1,
+                  G_TYPE_STRING);
 
   /**
    * GtkEntryCompletion::match-selected:
@@ -198,6 +232,8 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    * @iter.
    *
    * Return value: %TRUE if the signal has been handled
+   * 
+   * Since: 2.4
    */ 
   entry_completion_signals[MATCH_SELECTED] =
     g_signal_new ("match_selected",
@@ -217,6 +253,8 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    *
    * The ::action-activated signal is emitted when an action
    * is activated.
+   * 
+   * Since: 2.4
    */
   entry_completion_signals[ACTION_ACTIVATED] =
     g_signal_new ("action_activated",
@@ -245,7 +283,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
                                                      1,
                                                      G_PARAM_READWRITE));
   /**
-   * GtkEntryCompletion::text-column:
+   * GtkEntryCompletion:text-column:
    *
    * The column of the model containing the strings.
    *
@@ -260,6 +298,38 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
                                                      G_MAXINT,
                                                      -1,
                                                      G_PARAM_READWRITE));
+
+  /**
+   * GtkEntryCompletion:inline_completion:
+   * 
+   * The boolean :inline_completion property determines whether the
+   * common prefix of the possible completions should be inserted 
+   * automatically in the entry.
+   *
+   * Since: 2.6
+   **/
+  g_object_class_install_property (object_class,
+				   PROP_INLINE_COMPLETION,
+				   g_param_spec_boolean ("inline_completion",
+ 							 P_("Inline completion"),
+ 							 P_("Whether the common prefix should be inserted automatically"),
+ 							 FALSE,
+ 							 G_PARAM_READWRITE));
+  /**
+   * GtkEntryCompletion:popup_completion:
+   * 
+   * The boolean :popup_completion property determines whether the
+   * possible completions should be shown in a popup window. 
+   *
+   * Since: 2.6
+   **/
+  g_object_class_install_property (object_class,
+				   PROP_POPUP_COMPLETION,
+				   g_param_spec_boolean ("popup_completion",
+ 							 P_("Popup completion"),
+ 							 P_("Whether the completions should be shown in a popup window"),
+ 							 TRUE,
+ 							 G_PARAM_READWRITE));
 
   g_type_class_add_private (object_class, sizeof (GtkEntryCompletionPrivate));
 }
@@ -289,6 +359,9 @@ gtk_entry_completion_init (GtkEntryCompletion *completion)
 
   priv->minimum_key_length = 1;
   priv->text_column = -1;
+  priv->has_completion = FALSE;
+  priv->inline_completion = FALSE;
+  priv->popup_completion = TRUE;
 
   /* completions */
   priv->filter_model = NULL;
@@ -410,6 +483,14 @@ gtk_entry_completion_set_property (GObject      *object,
 	priv->text_column = g_value_get_int (value);
         break;
 
+      case PROP_INLINE_COMPLETION:
+	priv->inline_completion = g_value_get_boolean (value);
+        break;
+
+      case PROP_POPUP_COMPLETION:
+	priv->popup_completion = g_value_get_boolean (value);
+        break;
+
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
         break;
@@ -437,6 +518,14 @@ gtk_entry_completion_get_property (GObject    *object,
 
       case PROP_TEXT_COLUMN:
         g_value_set_int (value, gtk_entry_completion_get_text_column (completion));
+        break;
+
+      case PROP_INLINE_COMPLETION:
+        g_value_set_boolean (value, gtk_entry_completion_get_inline_completion (completion));
+        break;
+
+      case PROP_POPUP_COMPLETION:
+        g_value_set_boolean (value, gtk_entry_completion_get_popup_completion (completion));
         break;
 
       default:
@@ -1319,4 +1408,200 @@ gtk_entry_completion_match_selected (GtkEntryCompletion *completion,
   g_free (str);
 
   return TRUE;
+}
+
+
+static gchar *
+gtk_entry_completion_compute_prefix (GtkEntryCompletion *completion)
+{
+  GtkTreeIter iter;
+  gchar *prefix = NULL;
+  gboolean valid;
+
+  const gchar *key = gtk_entry_get_text (GTK_ENTRY (completion->priv->entry));
+
+  valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (completion->priv->filter_model),
+					 &iter);
+  
+  while (valid)
+    {
+      gchar *text;
+      
+      gtk_tree_model_get (GTK_TREE_MODEL (completion->priv->filter_model),
+			  &iter, completion->priv->text_column, &text,
+			  -1);
+
+      if (g_str_has_prefix (text, key))
+	{
+	  if (!prefix)
+	    prefix = g_strdup (text);
+	  else
+	    {
+	      gchar *p = prefix;
+	      const gchar *q = text;
+	      
+	      while (*p && *p == *q)
+		{
+		  p++;
+		  q++;
+		}
+	      
+	      *p = '\0';
+	    }
+	}
+      
+      g_free (text);
+      valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (completion->priv->filter_model),
+					&iter);
+    }
+
+  return prefix;
+}
+
+
+static gboolean
+gtk_entry_completion_real_insert_prefix (GtkEntryCompletion *completion,
+					 gchar              *prefix)
+{
+  if (prefix)
+    {
+      gint key_len;
+      gint prefix_len;
+      gint pos;
+      const gchar *key;
+
+      prefix_len = g_utf8_strlen (prefix, -1);
+
+      key = gtk_entry_get_text (GTK_ENTRY (completion->priv->entry));
+      key_len = g_utf8_strlen (key, -1);
+
+      if (prefix_len > key_len)
+	{
+	  gtk_editable_insert_text (GTK_EDITABLE (completion->priv->entry),
+				    prefix + key_len, -1, &pos);
+	  gtk_editable_select_region (GTK_EDITABLE (completion->priv->entry),
+				      key_len, prefix_len);
+
+	  completion->priv->has_completion = TRUE;
+	}
+    }
+
+  return TRUE;
+}
+
+/**
+ * gtk_entry_completion_insert_prefix:
+ * @completion: a #GtkEntryCompletion
+ * 
+ * Requests a prefix insertion. 
+ * 
+ * Since: 2.6
+ **/
+void
+gtk_entry_completion_insert_prefix (GtkEntryCompletion *completion)
+{
+  gboolean done;
+  gchar *prefix;
+
+  g_signal_handler_block (completion->priv->entry,
+			  completion->priv->insert_text_id);
+  prefix = gtk_entry_completion_compute_prefix (completion);
+  if (prefix)
+    {
+      g_signal_emit (completion, entry_completion_signals[INSERT_PREFIX],
+		     0, prefix, &done);
+      g_free (prefix);
+    }
+  g_signal_handler_unblock (completion->priv->entry,
+			    completion->priv->insert_text_id);
+}
+
+/**
+ * gtk_entry_completion_set_inline_completion:
+ * @completion: a #GtkEntryCompletion
+ * @inline_completion: %TRUE to do inline completion
+ * 
+ * Sets whether the common prefix of the possible completions should
+ * be automatically inserted in the entry.
+ * 
+ * Since: 2.6
+ **/
+void 
+gtk_entry_completion_set_inline_completion (GtkEntryCompletion *completion,
+					    gboolean            inline_completion)
+{
+  g_return_if_fail (GTK_IS_ENTRY_COMPLETION (completion));
+  
+  inline_completion = inline_completion != FALSE;
+
+  if (completion->priv->inline_completion != inline_completion)
+    {
+      completion->priv->inline_completion = inline_completion;
+
+      g_object_notify (G_OBJECT (completion), "inline_completion");
+    }
+}
+
+
+/**
+ * gtk_entry_completion_get_inline_completion:
+ * @completion: a #GtkEntryCompletion
+ * 
+ * Returns whether the common prefix of the possible completions should
+ * be automatically inserted in the entry.
+ * 
+ * Return value: %TRUE if inline completion is turned on
+ * 
+ * Since: 2.6
+ **/
+gboolean
+gtk_entry_completion_get_inline_completion (GtkEntryCompletion *completion)
+{
+  g_return_val_if_fail (GTK_IS_ENTRY_COMPLETION (completion), FALSE);
+  
+  return completion->priv->inline_completion;
+}
+
+/**
+ * gtk_entry_completion_set_popup_completion:
+ * @completion: a #GtkEntryCompletion
+ * @inline_completion: %TRUE to do popup completion
+ * 
+ * Sets whether the completions should be presented in a popup window.
+ * 
+ * Since: 2.6
+ **/
+void 
+gtk_entry_completion_set_popup_completion (GtkEntryCompletion *completion,
+					   gboolean            popup_completion)
+{
+  g_return_if_fail (GTK_IS_ENTRY_COMPLETION (completion));
+  
+  popup_completion = popup_completion != FALSE;
+
+  if (completion->priv->popup_completion != popup_completion)
+    {
+      completion->priv->popup_completion = popup_completion;
+
+      g_object_notify (G_OBJECT (completion), "popup_completion");
+    }
+}
+
+
+/**
+ * gtk_entry_completion_get_popup_completion:
+ * @completion: a #GtkEntryCompletion
+ * 
+ * Returns whether the completions should be presented in a popup window.
+ * 
+ * Return value: %TRUE if popup completion is turned on
+ * 
+ * Since: 2.6
+ **/
+gboolean
+gtk_entry_completion_get_popup_completion (GtkEntryCompletion *completion)
+{
+  g_return_val_if_fail (GTK_IS_ENTRY_COMPLETION (completion), TRUE);
+  
+  return completion->priv->popup_completion;
 }

@@ -63,12 +63,13 @@ struct _GtkEntryCompletionClass
                                  GtkTreeIter        *iter);
   void     (* action_activated) (GtkEntryCompletion *completion,
                                  gint                index_);
+  gboolean (* insert_prefix)    (GtkEntryCompletion *completion,
+				 gchar              *prefix); 
 
   /* Padding for future expansion */
   void (*_gtk_reserved0) (void);
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
 };
 
 /* core */
@@ -89,6 +90,7 @@ void                gtk_entry_completion_set_minimum_key_length (GtkEntryComplet
                                                                  gint                         length);
 gint                gtk_entry_completion_get_minimum_key_length (GtkEntryCompletion          *completion);
 void                gtk_entry_completion_complete               (GtkEntryCompletion          *completion);
+void                gtk_entry_completion_insert_prefix          (GtkEntryCompletion          *completion);
 
 void                gtk_entry_completion_insert_action_text     (GtkEntryCompletion          *completion,
                                                                  gint                         index_,
@@ -98,6 +100,13 @@ void                gtk_entry_completion_insert_action_markup   (GtkEntryComplet
                                                                  const gchar                 *markup);
 void                gtk_entry_completion_delete_action          (GtkEntryCompletion          *completion,
                                                                  gint                         index_);
+
+void                gtk_entry_completion_set_inline_completion  (GtkEntryCompletion          *completion,
+                                                                 gboolean inline_completion);
+gboolean            gtk_entry_completion_get_inline_completion  (GtkEntryCompletion          *completion);
+void                gtk_entry_completion_set_popup_completion   (GtkEntryCompletion          *completion,
+                                                                 gboolean popup_completion);
+gboolean            gtk_entry_completion_get_popup_completion   (GtkEntryCompletion          *completion);
 
 /* convenience */
 void                gtk_entry_completion_set_text_column        (GtkEntryCompletion          *completion,

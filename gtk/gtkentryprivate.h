@@ -55,10 +55,14 @@ struct _GtkEntryCompletionPrivate
 
   gulong completion_timeout;
   gulong changed_id;
-  gulong key_press_id;
-  gulong key_release_id;
+  gulong insert_text_id;
 
-  gboolean ignore_enter;
+  guint ignore_enter      : 1;
+  guint has_completion    : 1;
+  guint inline_completion : 1;
+  guint popup_completion  : 1;
+
+  GSource *check_completion_idle;
 };
 
 gboolean            _gtk_entry_completion_resize_popup           (GtkEntryCompletion          *completion);

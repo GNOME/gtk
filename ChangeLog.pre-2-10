@@ -1,3 +1,19 @@
+2004-07-19  Matthias Clasen  <mclasen@redhat.com>
+
+	Support inline autocompletion in entries  (#135953)
+	
+	* gtk/gtkentryprivate.h: 
+	* gtk/gtkentrycompletion.h: 
+	* gtk/gtkentrycompletion.c (gtk_entry_completion_class_init): 
+	Add a new signal ::insert-prefix which can be used to override 
+	the default inline-completion behaviour. Add two new boolean
+	properties, :popup_completion and :inline_completion which
+	determine how the possible completions should be presented.
+	(gtk_entry_completion_insert_prefix): New function to request
+	a prefix insertion. 
+
+	* gtk/gtkentry.c: Add the necessary glue for inline completion. 
+
 Sun Jul 18 15:28:24 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkdnd.c (gtk_drag_source_set, gtk_drag_dest_set): Create an

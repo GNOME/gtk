@@ -322,6 +322,31 @@ static void         get_widget_window_size             (GtkEntry       *entry,
 							gint           *width,
 							gint           *height);
 
+/* Completion */
+static gint         gtk_entry_completion_timeout       (gpointer            data);
+static gboolean     gtk_entry_completion_key_press     (GtkWidget          *widget,
+							GdkEventKey        *event,
+							gpointer            user_data);
+static void         gtk_entry_completion_changed       (GtkWidget          *entry,
+							gpointer            user_data);
+static gboolean     check_completion_callback          (GtkEntryCompletion *completion);
+static void         clear_completion_callback          (GtkEntry           *entry,
+							GParamSpec         *pspec);
+static gboolean     accept_completion_callback         (GtkEntry           *entry);
+static void         completion_insert_text_callback    (GtkEntry           *entry,
+							const gchar        *text,
+							gint                length,
+							gint                position,
+							GtkEntryCompletion *completion);
+static void         completion_changed                 (GtkEntryCompletion *completion,
+							GParamSpec         *pspec,
+							gpointer            data);
+static void         disconnect_completion_signals      (GtkEntry           *entry,
+							GtkEntryCompletion *completion);
+static void         connect_completion_signals         (GtkEntry           *entry,
+							GtkEntryCompletion *completion);
+
+
 static GtkWidgetClass *parent_class = NULL;
 
 GType
@@ -4999,6 +5024,122 @@ gtk_entry_completion_changed (GtkWidget *entry,
                    completion);
 }
 
+static gboolean
+check_completion_callback (GtkEntryCompletion *completion)
+{
+  completion->priv->check_completion_idle = NULL;
+  
+  gtk_entry_completion_insert_prefix (completion);
+
+  return FALSE;
+}
+
+static void
+clear_completion_callback (GtkEntry   *entry,
+			   GParamSpec *pspec)
+{
+  GtkEntryCompletion *completion = gtk_entry_get_completion (entry);
+
+  completion->priv->has_completion = FALSE;
+}
+
+static gboolean
+accept_completion_callback (GtkEntry *entry)
+{
+  GtkEntryCompletion *completion = gtk_entry_get_completion (entry);
+
+  if (completion->priv->has_completion)
+    gtk_editable_set_position (GTK_EDITABLE (entry),
+			       entry->text_length);
+
+  return FALSE;
+}
+
+static void
+completion_insert_text_callback (GtkEntry           *entry,
+				 const gchar        *text,
+				 gint                length,
+				 gint                position,
+				 GtkEntryCompletion *completion)
+{
+  /* idle to update the selection based on the file list */
+  if (completion->priv->check_completion_idle == NULL)
+    {
+      completion->priv->check_completion_idle = g_idle_source_new ();
+      g_source_set_priority (completion->priv->check_completion_idle, G_PRIORITY_HIGH);
+      g_source_set_closure (completion->priv->check_completion_idle,
+			    g_cclosure_new_object (G_CALLBACK (check_completion_callback),
+						   G_OBJECT (completion)));
+      g_source_attach (completion->priv->check_completion_idle, NULL);
+    }
+}
+
+static void
+completion_changed (GtkEntryCompletion *completion,
+		    GParamSpec         *pspec,
+		    gpointer            data)
+{
+  GtkEntry *entry = GTK_ENTRY (data);
+
+  disconnect_completion_signals (entry, completion);
+  connect_completion_signals (entry, completion);
+}
+
+static void
+disconnect_completion_signals (GtkEntry           *entry,
+			       GtkEntryCompletion *completion)
+{
+  g_signal_handlers_disconnect_by_func (completion, 
+				       G_CALLBACK (completion_changed), entry);
+  if (completion->priv->changed_id > 0 &&
+      g_signal_handler_is_connected (entry, completion->priv->changed_id))
+    g_signal_handler_disconnect (entry, completion->priv->changed_id);
+  g_signal_handlers_disconnect_by_func (entry, 
+					G_CALLBACK (gtk_entry_completion_key_press), completion);
+  if (completion->priv->insert_text_id > 0 &&
+      g_signal_handler_is_connected (entry, completion->priv->insert_text_id))
+    g_signal_handler_disconnect (entry, completion->priv->insert_text_id);
+  g_signal_handlers_disconnect_by_func (entry, 
+					G_CALLBACK (completion_insert_text_callback), completion);
+  g_signal_handlers_disconnect_by_func (entry, 
+					G_CALLBACK (clear_completion_callback), completion);
+  g_signal_handlers_disconnect_by_func (entry, 
+					G_CALLBACK (accept_completion_callback), completion);
+}
+
+static void
+connect_completion_signals (GtkEntry           *entry,
+			    GtkEntryCompletion *completion)
+{
+  if (completion->priv->popup_completion)
+    {
+      completion->priv->changed_id =
+	g_signal_connect (entry, "changed",
+			  G_CALLBACK (gtk_entry_completion_changed), completion);
+      g_signal_connect (entry, "key_press_event",
+			G_CALLBACK (gtk_entry_completion_key_press), completion);
+    }
+ 
+  if (completion->priv->inline_completion)
+    {
+      completion->priv->insert_text_id =
+	g_signal_connect (entry, "insert_text",
+			  G_CALLBACK (completion_insert_text_callback), completion);
+      g_signal_connect (entry, "notify::cursor-position",
+			G_CALLBACK (clear_completion_callback), completion);
+      g_signal_connect (entry, "notify::selection-bound",
+			G_CALLBACK (clear_completion_callback), completion);
+      g_signal_connect (entry, "activate",
+			G_CALLBACK (accept_completion_callback), completion);
+      g_signal_connect (entry, "focus_out_event",
+			G_CALLBACK (accept_completion_callback), completion);
+    }
+  g_signal_connect (completion, "notify::popup_completion",
+		    G_CALLBACK (completion_changed), entry);
+  g_signal_connect (completion, "notify::inline_completion",
+		    G_CALLBACK (completion_changed), entry);
+}
+
 /**
  * gtk_entry_set_completion:
  * @entry: A #GtkEntry.
@@ -5035,14 +5176,7 @@ gtk_entry_set_completion (GtkEntry           *entry,
       if (GTK_WIDGET_MAPPED (old->priv->popup_window))
         _gtk_entry_completion_popdown (old);
 
-      gtk_cell_layout_clear (GTK_CELL_LAYOUT (old));
-      old->priv->text_column = -1;
-
-      if (g_signal_handler_is_connected (entry, old->priv->changed_id))
-        g_signal_handler_disconnect (entry, old->priv->changed_id);
-      if (g_signal_handler_is_connected (entry, old->priv->key_press_id))
-        g_signal_handler_disconnect (entry, old->priv->key_press_id);
-
+      disconnect_completion_signals (entry, old);
       old->priv->entry = NULL;
 
       g_object_unref (old);
@@ -5057,14 +5191,7 @@ gtk_entry_set_completion (GtkEntry           *entry,
   /* hook into the entry */
   g_object_ref (completion);
 
-  completion->priv->changed_id =
-    g_signal_connect (entry, "changed",
-                      G_CALLBACK (gtk_entry_completion_changed), completion);
-
-  completion->priv->key_press_id =
-    g_signal_connect (entry, "key_press_event",
-                      G_CALLBACK (gtk_entry_completion_key_press), completion);
-
+  connect_completion_signals (entry, completion);    
   completion->priv->entry = GTK_WIDGET (entry);
   g_object_set_data (G_OBJECT (entry), GTK_ENTRY_COMPLETION_KEY, completion);
 }
