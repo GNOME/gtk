@@ -990,6 +990,12 @@ after other user handlers and the default handler.
 </para>
 
 
+<!-- ##### ARG GtkSettings:gtk-dnd-drag-threshold ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### ENUM GtkSideType ##### -->
 <para>
 
@@ -2621,6 +2627,19 @@ a gtk_object_unref().
 
 @tree_store: 
 @n_columns: 
+
+<!-- ##### FUNCTION gtk_tree_view_column_cell_event ##### -->
+<para>
+
+</para>
+
+@tree_column: 
+@event: 
+@path_string: 
+@background_area: 
+@cell_area: 
+@flags: 
+@Returns: 
 
 <!-- ##### FUNCTION gtk_tree_view_column_set_cell_data ##### -->
 <para>

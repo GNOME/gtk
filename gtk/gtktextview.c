@@ -4712,7 +4712,6 @@ gtk_text_view_reset_im_context (GtkTextView *text_view)
     {
       text_view->need_im_reset = FALSE;
       gtk_im_context_reset (text_view->im_context);
-      gtk_text_view_update_im_spot_location (text_view);
     }
 }
 
@@ -5321,6 +5320,7 @@ gtk_text_view_mark_set_handler (GtkTextBuffer     *buffer,
     {
       text_view->virtual_cursor_x = -1;
       text_view->virtual_cursor_y = -1;
+      gtk_text_view_update_im_spot_location (text_view);
       need_reset = TRUE;
     }
   else if (mark == gtk_text_buffer_get_selection_bound (buffer))
