@@ -1,3 +1,8 @@
+Mon Feb 18 17:34:43 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c gtk/gtktextview.c: Remove support for
+	the poorly defined text/plain type for now. (#55117)
+
 Mon Feb 18 16:44:00 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* docs/widget_system.txt: Add some docs for GTK_NEED_REQUEST

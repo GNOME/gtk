@@ -98,7 +98,6 @@ static GtkTargetEntry target_table[] = {
   { "UTF8_STRING",   0, 0 },
   { "COMPOUND_TEXT", 0, 0 },
   { "TEXT",          0, 0 },
-  { "text/plain",    0, 0 },
   { "STRING",        0, 0 }
 };
 
