@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
 "POT-Creation-Date: 2003-02-04 10:14+0200\n"
-"PO-Revision-Date: 2003-02-04 05:49--500\n"
+"PO-Revision-Date: 2003-02-04 13:22--500\n"
 "Last-Translator: Yuriy Syrota <yuri@renome.rovno.ua>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -284,9 +284,9 @@ msgstr "Недостатньо пам'яті для завантаження з�
 
 #: gdk-pixbuf/io-jpeg.c:383
 #: gdk-pixbuf/io-jpeg.c:744
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported JPEG color space (%s)"
-msgstr "Непідтримуваний тип піктограми"
+msgstr "Колірний простір (%s) формату JPEG не підтримується"
 
 #: gdk-pixbuf/io-jpeg.c:481
 #: gdk-pixbuf/io-jpeg.c:673
@@ -445,18 +445,16 @@ msgid "The PNM/PBM/PGM/PPM image format family"
 msgstr "Родина форматів зображень PNM/PBM/PGM/PPM"
 
 #: gdk-pixbuf/io-ras.c:125
-#, fuzzy
 msgid "RAS image has bogus header data"
-msgstr "Зображення BMP має непідтримуваний розмір заголовку"
+msgstr "Заголовок зображення формату RAS містить неправильні дані"
 
 #: gdk-pixbuf/io-ras.c:147
 msgid "RAS image has unknown type"
 msgstr "RAS-зображення має невідомий тип"
 
 #: gdk-pixbuf/io-ras.c:155
-#, fuzzy
 msgid "unsupported RAS image variation"
-msgstr "Непідтримуваний тип зображення TGA"
+msgstr "Невідомий тип зображення формату RAS"
 
 #: gdk-pixbuf/io-ras.c:170
 #: gdk-pixbuf/io-ras.c:190
@@ -514,7 +512,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-tga.c:719
 msgid "TGA image has invalid dimensions"
-msgstr ""
+msgstr "Неправильний розмір зображення у форматі TGA"
 
 #: gdk-pixbuf/io-tga.c:725
 msgid "TGA image comment length is too long"
@@ -535,7 +533,7 @@ msgstr "Неможливо виділити пам'ять для заванта�
 
 #: gdk-pixbuf/io-tga.c:880
 msgid "Excess data in file"
-msgstr ""
+msgstr "Надлишкові дані у файлі"
 
 #: gdk-pixbuf/io-tga.c:926
 msgid "Can't allocate memory for TGA header"
@@ -543,7 +541,7 @@ msgstr "Неможливо виділити пам'ять для заголов�
 
 #: gdk-pixbuf/io-tga.c:936
 msgid "Too big value in the infolen field of TGA header."
-msgstr ""
+msgstr "Надто велике значення в полі \"infolen\" заголовка формату TGA."
 
 #: gdk-pixbuf/io-tga.c:960
 #, fuzzy
@@ -611,9 +609,8 @@ msgid "Insufficient memory to open TIFF file"
 msgstr "Не достатньо пам'яті для відкривання файлу TIFF"
 
 #: gdk-pixbuf/io-tiff.c:258
-#, fuzzy
 msgid "Failed to load RGB data from TIFF file"
-msgstr "Не вдалося відкрити зображення TIFF"
+msgstr "Стався збій під час завантаження даних RGB з файлу формату TIFF"
 
 #: gdk-pixbuf/io-tiff.c:266
 msgid "Unsupported TIFF variant"
@@ -1789,9 +1786,8 @@ msgid "Maximum X"
 msgstr "Максимальне X"
 
 #: gtk/gtkcurve.c:141
-#, fuzzy
 msgid "Maximum possible X value"
-msgstr "Максимальне можливе значення X."
+msgstr "Максимальне можливе значення X"
 
 #: gtk/gtkcurve.c:150
 msgid "Minimum Y"
@@ -3034,18 +3030,16 @@ msgid "Spacing between step buttons and thumb"
 msgstr ""
 
 #: gtk/gtkrange.c:331
-#, fuzzy
 msgid "Arrow X Displacement"
-msgstr "Розміщення вікна"
+msgstr "Горизонтальний зсув стрілки"
 
 #: gtk/gtkrange.c:332
 msgid "How far in the x direction to move the arrow when the button is depressed"
 msgstr ""
 
 #: gtk/gtkrange.c:339
-#, fuzzy
 msgid "Arrow Y Displacement"
-msgstr "Розміщення вікна"
+msgstr "Вертикальний зсув стрілки"
 
 #: gtk/gtkrange.c:340
 msgid "How far in the y direction to move the arrow when the button is depressed"
@@ -3073,7 +3067,7 @@ msgstr ""
 
 #: gtk/gtkruler.c:119
 msgid "Lower limit of ruler"
-msgstr ""
+msgstr "Нижня межа лінійки"
 
 #: gtk/gtkruler.c:128
 msgid "Upper"
@@ -3081,11 +3075,11 @@ msgstr ""
 
 #: gtk/gtkruler.c:129
 msgid "Upper limit of ruler"
-msgstr ""
+msgstr "Верхня межа лінійки"
 
 #: gtk/gtkruler.c:139
 msgid "Position of mark on the ruler"
-msgstr ""
+msgstr "Положення позначки на лінійці"
 
 #: gtk/gtkruler.c:148
 msgid "Max Size"
@@ -3093,7 +3087,7 @@ msgstr "Максимальний розмір"
 
 #: gtk/gtkruler.c:149
 msgid "Maximum size of the ruler"
-msgstr ""
+msgstr "Максимальний розмір лінійки"
 
 #: gtk/gtkscale.c:156
 #: gtk/gtkspinbutton.c:258
@@ -3106,11 +3100,11 @@ msgstr "Кількість десяткових місць для відобра
 
 #: gtk/gtkscale.c:166
 msgid "Draw Value"
-msgstr ""
+msgstr "Показувати значення"
 
 #: gtk/gtkscale.c:167
 msgid "Whether the current value is displayed as a string next to the slider"
-msgstr ""
+msgstr "Чи буде поточне значення відображатися у вигляді рядка за повзунком"
 
 #: gtk/gtkscale.c:174
 msgid "Value Position"
@@ -3118,7 +3112,7 @@ msgstr "Положення значення"
 
 #: gtk/gtkscale.c:175
 msgid "The position in which the current value is displayed"
-msgstr ""
+msgstr "Місце, в якому відображається поточне значення"
 
 #: gtk/gtkscale.c:182
 msgid "Slider Length"
@@ -3130,7 +3124,7 @@ msgstr "Довжина повзунка"
 
 #: gtk/gtkscale.c:191
 msgid "Value spacing"
-msgstr ""
+msgstr "Відступ значення"
 
 #: gtk/gtkscale.c:192
 msgid "Space between value text and the slider/trough area"
@@ -3354,9 +3348,8 @@ msgid "Numeric"
 msgstr "Числове"
 
 #: gtk/gtkspinbutton.c:277
-#, fuzzy
 msgid "Whether non-numeric characters should be ignored"
-msgstr "Стан відображення індикатора сортування"
+msgstr "Чи пропускатимуться нецифрові символи"
 
 #: gtk/gtkspinbutton.c:284
 msgid "Wrap"
@@ -3479,9 +3472,8 @@ msgid "_Last"
 msgstr "В кінець"
 
 #: gtk/gtkstock.c:293
-#, fuzzy
 msgid "_Top"
-msgstr "Скопіювати"
+msgstr "В самий _верх"
 
 #: gtk/gtkstock.c:294
 msgid "_Back"
@@ -3501,12 +3493,11 @@ msgstr "В_гору"
 
 #: gtk/gtkstock.c:298
 msgid "_Help"
-msgstr "Довідка"
+msgstr "_Довідка"
 
 #: gtk/gtkstock.c:299
-#, fuzzy
 msgid "_Home"
-msgstr "Довідка"
+msgstr "_Додому"
 
 #: gtk/gtkstock.c:300
 msgid "_Index"
@@ -3521,14 +3512,12 @@ msgid "_Jump to"
 msgstr "_Перейти до"
 
 #: gtk/gtkstock.c:303
-#, fuzzy
 msgid "_Center"
-msgstr "Створити"
+msgstr "По _центру"
 
 #: gtk/gtkstock.c:304
-#, fuzzy
 msgid "_Fill"
-msgstr "Гарнітура:"
+msgstr "По _ширині"
 
 #: gtk/gtkstock.c:305
 msgid "_Left"
@@ -3977,9 +3966,8 @@ msgid "Invisible"
 msgstr "Невидимий"
 
 #: gtk/gtktexttag.c:499
-#, fuzzy
 msgid "Whether this text is hidden. Not implemented in GTK 2.0"
-msgstr "Чи прихований цей текст"
+msgstr "Чи схований цей текст. Не реалізовано у GTK 2.0"
 
 #: gtk/gtktexttag.c:512
 msgid "Background full height set"
@@ -4349,7 +4337,6 @@ msgid "Vertical Separator Width"
 msgstr "Вертикальний проміжок між комірками"
 
 #: gtk/gtktreeview.c:615
-#, fuzzy
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "Вертикальний проміжок між комірками. Має бути парним числом."
 
@@ -4358,7 +4345,6 @@ msgid "Horizontal Separator Width"
 msgstr "Ширина горизонтального розділювача"
 
 #: gtk/gtktreeview.c:624
-#, fuzzy
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "Горизонтальний  проміжок між комірками. Має бути парним числом."
 
