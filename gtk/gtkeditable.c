@@ -27,6 +27,7 @@
 #include <config.h>
 #include <string.h>
 
+#include "gtkalias.h"
 #include "gtkeditable.h"
 #include "gtkmarshalers.h"
 

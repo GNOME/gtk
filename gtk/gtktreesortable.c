@@ -19,6 +19,7 @@
 
 
 #include <config.h>
+#include "gtkalias.h"
 #include "gtktreesortable.h"
 #include "gtkmarshalers.h"
 

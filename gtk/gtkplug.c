@@ -25,6 +25,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include "gtkalias.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkplug.h"

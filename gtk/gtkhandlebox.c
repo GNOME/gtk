@@ -27,6 +27,7 @@
 
 #include <config.h>
 #include <stdlib.h>
+#include "gtkalias.h"
 #include "gtkhandlebox.h"
 #include "gtkinvisible.h"
 #include "gtkmain.h"
@@ -274,7 +275,7 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
 		  GTK_TYPE_WIDGET);
 }
 
-GtkHandleBoxPrivate *
+static GtkHandleBoxPrivate *
 gtk_handle_box_get_private (GtkHandleBox *hb)
 {
   GtkHandleBoxPrivate *private;

@@ -22,6 +22,7 @@
 #include <string.h>
 #include <gdk/gdkkeysyms.h>
 
+#include "gtkalias.h"
 #include "gtktreeview.h"
 #include "gtkrbtree.h"
 #include "gtktreednd.h"

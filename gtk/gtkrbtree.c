@@ -18,6 +18,7 @@
  */
 
 #include <config.h>
+#include "gtkalias.h"
 #include "gtkrbtree.h"
 #include "gtkdebug.h"
 

@@ -28,6 +28,7 @@
 #include <math.h>
 #include <glib/gprintf.h>
 #include <string.h>
+#include "gtkalias.h"
 #include "gtkhruler.h"
 
 

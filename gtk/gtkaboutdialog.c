@@ -31,8 +31,10 @@
 #include <config.h>
 
 #include <gdk/gdkkeysyms.h>
-#include "gtkaboutdialog.h"
 
+#include "gtkalias.h"
+
+#include "gtkaboutdialog.h"
 #include "gtkbutton.h"
 #include "gtkbbox.h"
 #include "gtkdialog.h"

@@ -25,6 +25,8 @@
  */
 
 #include <config.h>
+
+#include "gtkalias.h"
 #include "gtkmenu.h"
 #include "gtktearoffmenuitem.h"
 

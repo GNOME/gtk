@@ -18,6 +18,7 @@
  */
 
 #include <config.h>
+#include "gtkalias.h"
 #include "gtkcomboboxentry.h"
 #include "gtkcelllayout.h"
 

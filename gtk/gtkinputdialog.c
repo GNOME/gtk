@@ -35,6 +35,7 @@
 #include <config.h>
 #include <glib/gprintf.h>
 #include <stdlib.h>
+#include "gtkalias.h"
 #include "gdk/gdkkeysyms.h"
 #include "gtkbutton.h"
 #include "gtkentry.h"
@@ -149,7 +150,7 @@ gtk_input_dialog_get_type (void)
   return input_dialog_type;
 }
 
-GtkInputDialogPrivate *
+static GtkInputDialogPrivate *
 gtk_input_dialog_get_private (GtkInputDialog *input_dialog)
 {
   GtkInputDialogPrivate *private;

@@ -20,6 +20,7 @@
 #include <config.h>
 #include <string.h>
 
+#include "gtkalias.h"
 #include "gtkintl.h"
 #include "gtkbin.h"
 #include "gtkentry.h"

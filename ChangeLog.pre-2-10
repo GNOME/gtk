@@ -1,3 +1,35 @@
+Mon Aug  9 12:48:04 2004  Matthias Clasen  <maclas@gmx.de>
+
+	Add hidden aliases for exported symbols which are
+	used internally in order to get rid of many PLT 
+	entries.  (#145519, Arjan van de Ven)
+	
+	* gtk/Makefile.am: Add rules to generate gtk.def and 
+	from gtk.symbols, and make make check check the abi 
+	with abicheck.sh.
+	(gtk_private_h_sources): Add gtkinternals.h
+	(gtk_built_private_headers): Add gtkalias.h
+	(gtk_extra_sources): Add gtk.symbols
+	(EXTRA_DIST): Add makegtkalias.pl and abicheck.sh
+
+	* gtk/gtk.symbols: New file. Definition of the GTK+ ABI.
+	The file can be processed by cpp to filter out certain 
+	subsets of symbols.
+
+	* gtk/abicheck.sh: New file. Script to check the actually 
+	symbols exported from libgtk-x11.2.0.so against the symbols
+	found in gtk.symbols.
+
+	* gtk/makegtkalias.pl: New file. Perl script to generate the 
+	header containing the alias definitions for internally used 
+	exported symbols from a list of symbols.
+
+	* gtk/gtkinternals.h: New file. An uninstalled header listing
+	symbols which must be exported for some reason and do not appear
+	in any other header.
+
+	* gtk/*.c: Include gtkalias.h
+	
 Mon Aug  9 11:49:46 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkmain.c: Only undef gtk_init_check and gtk_init on win32.

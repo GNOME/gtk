@@ -22,6 +22,7 @@
  */
 
 #include <config.h>
+#include "gtkalias.h"
 #include "gtkprivate.h"
 #include "gtkwindow.h"
 #include "gtkmain.h"

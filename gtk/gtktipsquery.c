@@ -30,6 +30,7 @@
 #undef GTK_DISABLE_DEPRECATED
 
 #include	<config.h>
+#include 	"gtkalias.h"
 #include	"gtktipsquery.h"
 #include	"gtksignal.h"
 #include	"gtktooltips.h"

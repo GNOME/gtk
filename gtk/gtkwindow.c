@@ -30,6 +30,7 @@
 #include "gdk/gdk.h"
 #include "gdk/gdkkeysyms.h"
 
+#include "gtkalias.h"
 #include "gtkprivate.h"
 #include "gtkrc.h"
 #include "gtkwindow.h"

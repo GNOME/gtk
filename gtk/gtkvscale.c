@@ -28,6 +28,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "gtkalias.h"
 #include "gtkvscale.h"
 #include "gtkintl.h"
 

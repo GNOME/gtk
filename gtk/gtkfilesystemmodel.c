@@ -21,6 +21,7 @@
 #include <config.h>
 #include <string.h>
 
+#include "gtkalias.h"
 #include "gtkfilesystemmodel.h"
 #include "gtkfilesystem.h"
 #include "gtkintl.h"

@@ -28,6 +28,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
+#include "gtkalias.h"
 #include "gtkgc.h"
 #include "gtkmarshalers.h"
 #include "gtkrc.h"

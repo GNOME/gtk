@@ -31,6 +31,7 @@
 #include <config.h>
 #include "gdkconfig.h"
 
+#include "gtkalias.h"
 #include "gtklayout.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"

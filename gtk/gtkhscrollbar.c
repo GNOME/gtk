@@ -26,6 +26,7 @@
  */
 
 #include <config.h>
+#include "gtkalias.h"
 #include "gtkhscrollbar.h"
 #include "gdk/gdkkeysyms.h"
 #include "gtkintl.h"

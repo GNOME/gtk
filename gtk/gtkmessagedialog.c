@@ -25,6 +25,7 @@
  */
 
 #include <config.h>
+#include "gtkalias.h"
 #include "gtkmessagedialog.h"
 #include "gtklabel.h"
 #include "gtkhbox.h"

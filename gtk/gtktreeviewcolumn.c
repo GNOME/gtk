@@ -19,6 +19,7 @@
 
 #include <config.h>
 #include <string.h>
+#include "gtkalias.h"
 #include "gtktreeviewcolumn.h"
 #include "gtktreeview.h"
 #include "gtktreeprivate.h"

@@ -34,6 +34,7 @@
 #include <string.h>
 #include <locale.h>
 #include "gdk/gdkkeysyms.h"
+#include "gtkalias.h"
 #include "gtkbindings.h"
 #include "gtkspinbutton.h"
 #include "gtkmain.h"

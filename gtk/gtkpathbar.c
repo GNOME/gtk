@@ -19,6 +19,7 @@
 
 #include <config.h>
 #include <string.h>
+#include "gtkalias.h"
 #include "gtkpathbar.h"
 #include "gtktogglebutton.h"
 #include "gtkalignment.h"

@@ -29,6 +29,7 @@
 #include <string.h>
 #include <stdio.h>
 
+#include "gtkalias.h"
 #include "gtklabel.h"
 #include "gtkmain.h"
 #include "gtkmenuitem.h"

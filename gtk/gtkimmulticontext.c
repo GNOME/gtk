@@ -22,6 +22,7 @@
 #include <string.h>
 #include <locale.h>
 
+#include "gtkalias.h"
 #include "gtkimmulticontext.h"
 #include "gtkimmodule.h"
 #include "gtkmain.h"

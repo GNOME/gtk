@@ -41,6 +41,8 @@
 #define _GNU_SOURCE
 #endif
 
+#include "gtkalias.h"
+
 static gunichar
 get_char (const char **str)
 {

@@ -26,6 +26,7 @@
  */
 
 #include <config.h>
+#include "gtkalias.h"
 #include "gtkframe.h"
 #include "gtklabel.h"
 #include "gtkmarshalers.h"

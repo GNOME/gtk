@@ -56,6 +56,7 @@
 #include <string.h>
 #include "gdk.h"
 
+#include "gtkalias.h"
 #include "gtkmain.h"
 #include "gtkselection.h"
 

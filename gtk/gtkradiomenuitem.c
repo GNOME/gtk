@@ -25,6 +25,7 @@
  */
 
 #include <config.h>
+#include "gtkalias.h"
 #include "gtkaccellabel.h"
 #include "gtkmarshalers.h"
 #include "gtkradiomenuitem.h"

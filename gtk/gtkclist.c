@@ -33,6 +33,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "gtkalias.h"
 #include "gtkmain.h"
 #include "gtkclist.h"
 #include "gtkbindings.h"

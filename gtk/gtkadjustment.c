@@ -25,6 +25,7 @@
  */
 
 #include <config.h>
+#include "gtkalias.h"
 #include "gtkadjustment.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"

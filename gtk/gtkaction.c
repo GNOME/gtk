@@ -30,6 +30,7 @@
 
 #include <config.h>
 
+#include "gtkalias.h"
 #include "gtkaction.h"
 #include "gtkactiongroup.h"
 #include "gtkaccellabel.h"

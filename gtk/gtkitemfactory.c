@@ -29,6 +29,7 @@
 
 #include	<config.h>
 
+#include 	"gtkalias.h"
 #include	"gtkitemfactory.h"
 #include	"gtk/gtkmenubar.h"
 #include	"gtk/gtkmenu.h"

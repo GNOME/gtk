@@ -21,6 +21,7 @@
  */
 
 #include <config.h>
+#include "gtkalias.h"
 #include "gtkradiotoolbutton.h"
 #include "gtkradiobutton.h"
 #include "gtkintl.h"

@@ -48,6 +48,7 @@
  */
 
 #include <config.h>
+#include "gtkalias.h"
 #include "gtkmain.h"
 #include "gtktexttag.h"
 #include "gtktexttypes.h"

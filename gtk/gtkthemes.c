@@ -30,6 +30,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <gmodule.h>
+#include "gtkalias.h"
 #include "gtkthemes.h"
 #include "gtkrc.h"
 #include "gtkintl.h"

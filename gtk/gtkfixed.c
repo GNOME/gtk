@@ -25,6 +25,7 @@
  */
 
 #include <config.h>
+#include "gtkalias.h"
 #include "gtkfixed.h"
 #include "gtkintl.h"
 

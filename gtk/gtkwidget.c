@@ -28,6 +28,7 @@
 #include <stdarg.h>
 #include <string.h>
 #include <locale.h>
+#include "gtkalias.h"
 #include "gtkcontainer.h"
 #include "gtkaccelmap.h"
 #include "gtkclipboard.h"

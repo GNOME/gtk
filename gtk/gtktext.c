@@ -32,6 +32,7 @@
 #include <string.h>
 #include "gdk/gdkkeysyms.h"
 #include "gdk/gdki18n.h"
+#include "gtkalias.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkselection.h"

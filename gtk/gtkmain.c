@@ -50,6 +50,7 @@
 
 #include <pango/pango-utils.h>	/* For pango_split_file_list */
 
+#include "gtkalias.h"
 #include "gtkintl.h"
 
 #include "gtkaccelmap.h"

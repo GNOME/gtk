@@ -25,6 +25,7 @@
  */
 
 #include <config.h>
+#include "gtkalias.h"
 #include "gtkvpaned.h"
 
 static void     gtk_vpaned_class_init     (GtkVPanedClass *klass);

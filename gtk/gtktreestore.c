@@ -20,6 +20,7 @@
 #include <config.h>
 #include <string.h>
 #include <gobject/gvaluecollector.h>
+#include "gtkalias.h"
 #include "gtktreemodel.h"
 #include "gtktreestore.h"
 #include "gtktreedatalist.h"

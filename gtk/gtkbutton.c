@@ -26,6 +26,7 @@
 
 #include <config.h>
 #include <string.h>
+#include "gtkalias.h"
 #include "gtkalignment.h"
 #include "gtkbutton.h"
 #include "gtklabel.h"

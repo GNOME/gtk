@@ -25,6 +25,7 @@
  */
 
 #include <config.h>
+#include "gtkalias.h"
 #include "gtkcheckbutton.h"
 #include "gtkintl.h"
 #include "gtklabel.h"

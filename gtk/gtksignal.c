@@ -20,6 +20,7 @@
 #undef GTK_DISABLE_DEPRECATED
 
 #include	<config.h>
+#include 	"gtkalias.h"
 #include	"gtksignal.h"
 
 /* the real parameter limit is of course given by GSignal, bu we need

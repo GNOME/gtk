@@ -19,6 +19,7 @@
  */
 
 #include <config.h>
+#include "gtkalias.h"
 #include "gtkcontainer.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"

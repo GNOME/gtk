@@ -25,6 +25,7 @@
  */
 #include <config.h>
 #include <glib.h>
+#include "gtkalias.h"
 #include "gtkcolorseldialog.h"
 #include "gtkframe.h"
 #include "gtkhbbox.h"

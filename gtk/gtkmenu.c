@@ -29,6 +29,7 @@
 #include <config.h>
 #include <string.h> /* memset */
 #include "gdk/gdkkeysyms.h"
+#include "gtkalias.h"
 #include "gtkaccellabel.h"
 #include "gtkaccelmap.h"
 #include "gtkbindings.h"
@@ -241,7 +242,7 @@ gtk_menu_free_private (gpointer data)
   g_free (priv);
 }
 
-GtkMenuPrivate *
+static GtkMenuPrivate *
 gtk_menu_get_private (GtkMenu *menu)
 {
   GtkMenuPrivate *private;

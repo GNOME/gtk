@@ -20,6 +20,7 @@
 
 #include <config.h>
 #include "gdk/gdkkeysyms.h"
+#include "gtkalias.h"
 #include "gtkalignment.h"
 #include "gtkbindings.h"
 #include "gtkbutton.h"

@@ -29,6 +29,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "gtkalias.h"
 #include "gtkcontainer.h"
 #include "gtkprivate.h"
 #include "gtkmain.h"

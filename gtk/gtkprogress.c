@@ -28,6 +28,7 @@
 #include <glib/gprintf.h>
 #include <math.h>
 #include <string.h>
+#include "gtkalias.h"
 #include "gtkprogress.h" 
 #include "gtkintl.h"
 

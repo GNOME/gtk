@@ -29,6 +29,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "gtkalias.h"
 #include "gtkgamma.h"
 #include "gtkcurve.h"
 #include "gtkdialog.h"

@@ -27,6 +27,7 @@
 #include <config.h>
 #include <math.h>
 #include <gdk/gdkkeysyms.h>
+#include "gtkalias.h"
 #include "gtkbindings.h"
 #include "gtkmarshalers.h"
 #include "gtkscrolledwindow.h"

@@ -19,7 +19,7 @@
 
 #include <config.h>
 #include <string.h>
-
+#include "gtkalias.h"
 #include "gtkimcontext.h"
 #include "gtkmain.h"		/* For _gtk_boolean_handled_accumulator */
 #include "gtkmarshalers.h"

@@ -30,6 +30,7 @@
  */
 
 #include <config.h>
+#include "gtkalias.h"
 #include "gtkaspectframe.h"
 #include "gtkintl.h"
 

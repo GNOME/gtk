@@ -1,4 +1,5 @@
 #include <config.h>
+#include "gtkalias.h"
 #include "gtkfilechooserembed.h"
 #include "gtkmarshalers.h"
 

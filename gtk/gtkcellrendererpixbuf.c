@@ -19,6 +19,7 @@
 
 #include <config.h>
 #include <stdlib.h>
+#include "gtkalias.h"
 #include "gtkcellrendererpixbuf.h"
 #include "gtkiconfactory.h"
 #include "gtkintl.h"

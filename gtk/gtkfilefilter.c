@@ -21,6 +21,7 @@
 #include <config.h>
 #include <string.h>
 
+#include "gtkalias.h"
 #include "gtkfilefilter.h"
 #include "gtkobject.h"
 #include "gtkprivate.h"

@@ -30,6 +30,7 @@
 
 #include <config.h>
 
+#include "gtkalias.h"
 #include "gtkcolorbutton.h"
 #include "gdk/gdkkeysyms.h"
 #include "gdk-pixbuf/gdk-pixbuf.h"

@@ -29,6 +29,7 @@
 #include "gdkconfig.h"
 #include <math.h>
 
+#include "gtkalias.h"
 #include "gdk/gdkkeysyms.h"
 #include "gtkcolorsel.h"
 #include "gtkhsv.h"

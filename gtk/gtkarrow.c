@@ -26,6 +26,7 @@
 
 #include <config.h>
 #include <math.h>
+#include "gtkalias.h"
 #include "gtkarrow.h"
 #include "gtkintl.h"
 

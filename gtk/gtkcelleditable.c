@@ -19,6 +19,7 @@
 
 
 #include <config.h>
+#include "gtkalias.h"
 #include "gtkcelleditable.h"
 #include "gtkmarshalers.h"
 

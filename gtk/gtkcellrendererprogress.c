@@ -27,6 +27,8 @@
 
 #include "config.h"
 #include <stdlib.h>
+
+#include "gtkalias.h"
 #include "gtkcellrendererprogress.h"
 #include "gtkintl.h"
 

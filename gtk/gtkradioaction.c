@@ -30,6 +30,7 @@
 
 #include <config.h>
 
+#include "gtkalias.h"
 #include "gtkradioaction.h"
 #include "gtkradiomenuitem.h"
 #include "gtktoggleactionprivate.h"

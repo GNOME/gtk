@@ -39,6 +39,7 @@
 #include "gdk/gdk.h"
 #include "gdk/gdkkeysyms.h"
 
+#include "gtkalias.h"
 #include "gtkfontsel.h"
 
 #include "gtkbutton.h"

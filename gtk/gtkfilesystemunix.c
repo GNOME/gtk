@@ -20,6 +20,7 @@
 
 #include <config.h>
 
+#include "gtkalias.h"
 #include "gtkfilesystem.h"
 #include "gtkfilesystemunix.h"
 #include "gtkicontheme.h"

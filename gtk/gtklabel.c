@@ -26,6 +26,7 @@
 #include <config.h>
 #include <math.h>
 #include <string.h>
+#include "gtkalias.h"
 #include "gtklabel.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"

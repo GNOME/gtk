@@ -28,6 +28,8 @@
 
 #include <config.h>
 #include <string.h>
+
+#include "gtkalias.h"
 #include "gtkaccellabel.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"

@@ -31,6 +31,7 @@
 #include <string.h>
 #include <stdarg.h>
 #include <gdkkeysyms.h>
+#include "gtkalias.h"
 #include "gtkbindings.h"
 #include "gtkkeyhash.h"
 #include "gtkwidget.h"

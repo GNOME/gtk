@@ -26,6 +26,7 @@
  */
 
 #include <config.h>
+#include "gtkalias.h"
 #include "gtkscrollbar.h"
 #include "gtkintl.h"
 

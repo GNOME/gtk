@@ -23,7 +23,10 @@
 #include <locale.h>
 #include <stdlib.h>
 
+#include "gtkalias.h"
 #include "gtkiconthemeparser.h"
+
+
 
 typedef struct _GtkIconThemeFileSection GtkIconThemeFileSection;
 typedef struct _GtkIconThemeFileLine GtkIconThemeFileLine;

@@ -36,6 +36,7 @@
 #include <sys/param.h>
 #endif
 #include "gdk/gdkrgb.h"
+#include "gtkalias.h"
 #include "gtkpreview.h"
 #include "gtksignal.h"
 #include "gtkintl.h"

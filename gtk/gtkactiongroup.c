@@ -30,6 +30,7 @@
 
 #include <config.h>
 
+#include "gtkalias.h"
 #include "gtkactiongroup.h"
 #include "gtkstock.h"
 #include "gtktoggleaction.h"

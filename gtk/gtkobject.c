@@ -28,6 +28,7 @@
 #include <stdarg.h>
 #include <string.h>
 #include <stdio.h>
+#include "gtkalias.h"
 #include "gtkobject.h"
 #include "gtkmarshalers.h"
 #include "gtksignal.h"

@@ -39,6 +39,7 @@
 #include <time.h>
 #include <glib/gprintf.h>
 
+#include "gtkalias.h"
 #include "gtkcalendar.h"
 #include "gtkdnd.h"
 #include "gtkintl.h"

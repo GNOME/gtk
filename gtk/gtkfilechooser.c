@@ -19,6 +19,7 @@
  */
 
 #include <config.h>
+#include "gtkalias.h"
 #include "gtkfilechooser.h"
 #include "gtkfilechooserprivate.h"
 #include "gtkfilesystem.h"

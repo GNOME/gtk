@@ -29,6 +29,7 @@
 #include <config.h>
 #include <string.h> /* memset */
 
+#include "gtkalias.h"
 #include "gtklist.h"
 #include "gtklistitem.h"
 #include "gtkmain.h"

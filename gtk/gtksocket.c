@@ -29,6 +29,7 @@
 #include <string.h>
 
 #include "gdk/gdkkeysyms.h"
+#include "gtkalias.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkwindow.h"
@@ -106,7 +107,7 @@ static guint socket_signals[LAST_SIGNAL] = { 0 };
 
 static GtkWidgetClass *parent_class = NULL;
 
-GtkSocketPrivate *
+static GtkSocketPrivate *
 gtk_socket_get_private (GtkSocket *socket)
 {
   GtkSocketPrivate *private;

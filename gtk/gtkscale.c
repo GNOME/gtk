@@ -27,6 +27,7 @@
 
 #include <config.h>
 #include <math.h>
+#include "gtkalias.h"
 #include "gtkintl.h"
 #include "gtkscale.h"
 #include "gtkmarshalers.h"

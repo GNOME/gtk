@@ -20,6 +20,7 @@
  */
 
 #include <config.h>
+#include "gtkalias.h"
 #include "gtkfilechooserutils.h"
 #include "gtkfilechooser.h"
 #include "gtkfilesystem.h"

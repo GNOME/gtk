@@ -19,6 +19,7 @@
 
 #include <config.h>
 #include <stdlib.h>
+#include "gtkalias.h"
 #include "gtkcellrenderertext.h"
 #include "gtkeditable.h"
 #include "gtkentry.h"

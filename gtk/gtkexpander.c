@@ -23,6 +23,7 @@
 
 #include <config.h>
 
+#include "gtkalias.h"
 #include "gtkexpander.h"
 
 #include "gtklabel.h"

@@ -34,6 +34,7 @@
 #  include <stdio.h>
 #endif
 
+#include "gtkalias.h"
 #include "gtkprogressbar.h"
 #include "gtkintl.h"
 

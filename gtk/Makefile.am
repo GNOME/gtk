@@ -70,6 +70,16 @@ install-ms-lib:
 uninstall-ms-lib:
 endif
 
+gtk.def: gtk.symbols
+	(echo -e EXPORTS; cpp -P -DINCLUDE_VARIABLES -DG_OS_WIN32 gtk.symbols | sed -e '/^$$/d' -e 's/^/\t/') > gtk.def
+
+gtkalias.h: gtk.symbols
+	 cpp -P -DG_OS_UNIX -DGTK_WINDOWING_X11 -DINCLUDE_INTERNAL_SYMBOLS gtk.symbols | ./makegtkalias.pl > gtkalias.h
+
+if OS_UNIX
+TEST = abicheck.sh
+endif
+
 # libtool stuff: set version and export symbols for resolving
 # since automake doesn't support conditionalized libsomething_la_LDFLAGS
 # we use the general approach here
@@ -284,6 +294,7 @@ gtk_private_h_sources =         \
 	gtkfilechooserutils.h	\
 	gtkfilesystemunix.h	\
 	gtkfilesystemmodel.h	\
+	gtkinternals.h		\
 	gtkpathbar.h		\
 	gtkrbtree.h 		\
 	gtktextbtree.h		\
@@ -523,10 +534,11 @@ gtk_built_public_sources =			\
 	gtkmarshal.h				\
 	gtktypebuiltins.h
 
+# built sources that don't get installed
 gtk_built_private_headers =			\
+	gtkalias.h				\
 	gtkmarshalers.h
 
-# built sources that don't get installed
 gtk_built_sources =				\
 	gtktypebuiltins.c			\
 	gtkmarshalers.c				\
@@ -544,6 +556,7 @@ stamp_files =					\
 # that don't serve as direct make target sources, i.e. they don't have
 # their own .lo rules and don't get publically installed
 gtk_extra_sources =				\
+	gtk.symbols				\
 	gtkversion.h.in				\
 	gtkmarshalers.list			\
 	gtkmarshal.list
@@ -610,7 +623,7 @@ stamp-gtktypebuiltins.h: @REBUILD@ $(gtk_public_h_sources) Makefile
 	&& echo timestamp > $(@F)
 gtktypebuiltins.c: @REBUILD@ $(gtk_public_h_sources) Makefile
 	( cd $(srcdir) && glib-mkenums \
-			--fhead "#undef GTK_DISABLE_DEPRECATED\n#define GTK_ENABLE_BROKEN\n#include \"gtk.h\"\n#include \"gtkprivate.h\"" \
+			--fhead "#undef GTK_DISABLE_DEPRECATED\n#define GTK_ENABLE_BROKEN\n#include \"gtkalias.h\"\n#include \"gtk.h\"\n#include \"gtkprivate.h\"" \
 			--fprod "\n/* enumerations from \"@filename@\" */" \
 			--vhead "GType\n@enum_name@_get_type (void)\n{\n  static GType etype = 0;\n  if (etype == 0) {\n    static const G@Type@Value values[] = {" \
 			--vprod "      { @VALUENAME@, \"@VALUENAME@\", \"@valuenick@\" }," \
@@ -711,7 +724,9 @@ EXTRA_DIST +=                   \
 	gtkrc.key.default	\
 	gtkrc.key.emacs		\
 	makefile.msc		\
-	makefile.msc.in
+	makefile.msc.in		\
+	makegtkalias.pl		\
+	abicheck.sh
 
 install-data-local:
 

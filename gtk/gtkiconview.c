@@ -22,6 +22,7 @@
 
 #include <gdk/gdkkeysyms.h>
 
+#include "gtkalias.h"
 #include "gtkiconview.h"
 #include "gtkmarshalers.h"
 #include "gtkbindings.h"

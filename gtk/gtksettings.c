@@ -17,6 +17,7 @@
  */
 
 #include <config.h>
+#include "gtkalias.h"
 #include "gtksettings.h"
 #include "gtkrc.h"
 #include "gtkintl.h"

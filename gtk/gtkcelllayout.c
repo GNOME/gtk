@@ -18,6 +18,7 @@
  */
 
 #include <config.h>
+#include "gtkalias.h"
 #include "gtkcelllayout.h"
 
 GType

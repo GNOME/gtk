@@ -22,6 +22,7 @@
 #undef GTK_DISABLE_DEPRECATED
 
 #include <config.h>
+#include "gtkalias.h"
 #include "gtkseparatormenuitem.h"
 #include "gtkseparatortoolitem.h"
 #include "gtkintl.h"

@@ -29,6 +29,7 @@
 #include <string.h>
 #include <math.h>
 
+#include "gtkalias.h"
 #include "gtkcurve.h"
 #include "gtkdrawingarea.h"
 #include "gtkmain.h"

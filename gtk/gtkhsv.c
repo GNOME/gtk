@@ -25,6 +25,7 @@
 #include <config.h>
 #include <math.h>
 #include <string.h>
+#include "gtkalias.h"
 #include "gtkhsv.h"
 #include "gdk/gdkkeysyms.h"
 #include "gtkbindings.h"

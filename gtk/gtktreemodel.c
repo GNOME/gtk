@@ -23,6 +23,7 @@
 #include <glib.h>
 #include <glib/gprintf.h>
 #include <gobject/gvaluecollector.h>
+#include "gtkalias.h"
 #include "gtktreemodel.h"
 #include "gtktreeview.h"
 #include "gtktreeprivate.h"

@@ -31,6 +31,7 @@
 #include <config.h>
 
 #include <string.h>
+#include "gtkalias.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkmenu.h"

@@ -25,6 +25,7 @@
  */
 
 #include <config.h>
+#include "gtkalias.h"
 #include "gtkimagemenuitem.h"
 #include "gtkaccellabel.h"
 #include "gtkintl.h"

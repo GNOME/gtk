@@ -25,6 +25,7 @@
  */
 
 #include <config.h>
+#include "gtkalias.h"
 #include "gtktextutil.h"
 #include "gtkintl.h"
 #include "gtkmenuitem.h"

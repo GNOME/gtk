@@ -34,6 +34,7 @@
 
 #include <gmodule.h>
 #include <pango/pango-utils.h>
+#include "gtkalias.h"
 #include "gtkimmodule.h"
 #include "gtkimcontextsimple.h"
 #include "gtkrc.h"

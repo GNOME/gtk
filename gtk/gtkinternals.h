@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
@@ -21,28 +21,21 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#include <config.h>
-#include "gtkalias.h"
-#include "gtkseparatormenuitem.h"
+#ifndef __GTK_INTERNALS_H__
+#define __GTK_INTERNALS_H__
 
-G_DEFINE_TYPE(GtkSeparatorMenuItem, gtk_separator_menu_item, GTK_TYPE_MENU_ITEM);
+/* Uninstalled header defining types and functions internal to GDK */
 
-static void
-gtk_separator_menu_item_class_init (GtkSeparatorMenuItemClass *class)
-{
-  GTK_CONTAINER_CLASS (class)->child_type = NULL;
-}
+#include <glib-object.h>
 
-static void 
-gtk_separator_menu_item_init (GtkSeparatorMenuItem *item)
-{
-}
+G_BEGIN_DECLS
 
-GtkWidget *
-gtk_separator_menu_item_new (void)
-{
-  return g_object_new (GTK_TYPE_SEPARATOR_MENU_ITEM, NULL);
-}
+GType gtk_im_module_get_type (void);
+GType gtk_file_system_module_get_type (void);
+
+G_END_DECLS
+
+#endif /* __GTK_INTERNALS_H__ */

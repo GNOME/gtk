@@ -27,6 +27,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <glib.h>
+#include "gtkalias.h"
 
 #ifdef G_OS_WIN32
 #ifndef S_ISDIR
@@ -39,6 +40,8 @@
 #include "gtkintl.h"
 #include "gtksettings.h"
 #include "gtkprivate.h"
+
+
 
 #define DEFAULT_THEME_NAME "hicolor"
 

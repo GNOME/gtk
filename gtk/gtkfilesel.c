@@ -55,6 +55,7 @@
 #endif
 
 #include "gdk/gdkkeysyms.h"
+#include "gtkalias.h"
 #include "gtkbutton.h"
 #include "gtkcellrenderertext.h"
 #include "gtkentry.h"

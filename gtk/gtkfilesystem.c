@@ -20,6 +20,7 @@
 
 #include <config.h>
 #include <gmodule.h>
+#include "gtkalias.h"
 #include "gtkfilesystem.h"
 #include "gtkicontheme.h"
 #include "gtkmain.h"

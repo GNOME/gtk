@@ -29,6 +29,8 @@
 #include <string.h>
 #include <stdarg.h>
 
+
+#include "gtkalias.h"
 #define GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
 #include "gtkclipboard.h"
 #include "gtkinvisible.h"

@@ -21,6 +21,7 @@
  */
 
 #include <config.h>
+#include "gtkalias.h"
 #include "gtktoolitem.h"
 #include "gtkmarshalers.h"
 #include "gtktoolbar.h"

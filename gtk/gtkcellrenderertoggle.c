@@ -19,6 +19,7 @@
 
 #include <config.h>
 #include <stdlib.h>
+#include "gtkalias.h"
 #include "gtkcellrenderertoggle.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"

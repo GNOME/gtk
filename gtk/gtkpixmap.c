@@ -32,6 +32,7 @@
 
 #include <config.h>
 #include <math.h>
+#include "gtkalias.h"
 #include "gtkcontainer.h"
 #include "gtkpixmap.h"
 

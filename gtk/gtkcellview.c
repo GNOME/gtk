@@ -18,6 +18,7 @@
  */
 
 #include <config.h>
+#include "gtkalias.h"
 #include "gtkcellview.h"
 #include "gtkcelllayout.h"
 #include "gtkintl.h"

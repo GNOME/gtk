@@ -18,6 +18,7 @@
  */
 
 #include <config.h>
+#include "gtkalias.h"
 #include "gtkentrycompletion.h"
 #include "gtkentryprivate.h"
 #include "gtkcelllayout.h"

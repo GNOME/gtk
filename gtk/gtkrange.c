@@ -28,6 +28,7 @@
 #include <config.h>
 #include <stdio.h>
 #include <math.h>
+#include "gtkalias.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"

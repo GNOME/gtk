@@ -28,6 +28,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "gtkalias.h"
 #include "gtkaccelgroup.h"
 #include "gtkaccelmap.h"
 #include "gtkmain.h"		/* For _gtk_boolean_handled_accumulator */

@@ -33,6 +33,7 @@
 #include <config.h>
 #include <string.h>
 
+#include "gtkalias.h"
 #include "gtkarrow.h"
 #include "gtklabel.h"
 #include "gtklist.h"

@@ -30,6 +30,7 @@
 #include <string.h>
 #include "gdk/gdkkeysyms.h"
 #include "gdk/gdki18n.h"
+#include "gtkalias.h"
 #include "gtkclipboard.h"
 #include "gtkoldeditable.h"
 #include "gtkmain.h"

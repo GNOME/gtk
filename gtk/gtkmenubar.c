@@ -28,6 +28,7 @@
 
 #include <config.h>
 #include "gdk/gdkkeysyms.h"
+#include "gtkalias.h"
 #include "gtkbindings.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"

@@ -27,6 +27,7 @@
 #undef GTK_DISABLE_DEPRECATED
 
 #include <config.h>
+#include "gtkalias.h"
 #include "gtklabel.h"
 #include "gtkeventbox.h"
 #include "gtkpixmap.h"

@@ -29,6 +29,7 @@
 #include <config.h>
 #include <string.h> /* strcmp */
 
+#include "gtkalias.h"
 #include "gtktypeutils.h"
 #include "gtkobject.h"
 

@@ -30,6 +30,7 @@
 #include <pango/pango.h>
 
 #include "gdk/gdkkeysyms.h"
+#include "gtkalias.h"
 #include "gtkbindings.h"
 #include "gtkcelleditable.h"
 #include "gtkclipboard.h"
@@ -4156,7 +4157,7 @@ gtk_entry_layout_index_to_text_index (GtkEntry *entry,
  * @entry: a #GtkEntry
  * @text_index: byte index into the entry contents
  * 
- * Converts from a position in the entry's #PangoLayout(returned by
+ * Converts from a position in the entry's #PangoLayout (returned by
  * gtk_entry_get_layout()) to a position in the entry contents
  * (returned by gtk_entry_get_text()).
  * 

@@ -26,12 +26,15 @@
 
 #include <config.h>
 #include <math.h>
+#include "gtkalias.h"
 #include "gtkcontainer.h"
 #include "gtkimage.h"
 #include "gtkiconfactory.h"
 #include "gtkstock.h"
 #include "gtkintl.h"
 #include <string.h>
+
+
 
 #define DEFAULT_ICON_SIZE GTK_ICON_SIZE_BUTTON
 

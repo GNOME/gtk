@@ -27,6 +27,7 @@
 #include <config.h>
 #include <string.h>
 
+#include "gtkalias.h"
 #define GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
 #include "gtkbindings.h"
 #include "gtkdnd.h"

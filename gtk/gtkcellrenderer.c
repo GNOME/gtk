@@ -18,6 +18,7 @@
  */
 
 #include <config.h>
+#include "gtkalias.h"
 #include "gtkcellrenderer.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"

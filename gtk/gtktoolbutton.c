@@ -21,6 +21,7 @@
  */
 
 #include <config.h>
+#include "gtkalias.h"
 #include "gtktoolbutton.h"
 #include "gtkbutton.h"
 #include "gtkhbox.h"

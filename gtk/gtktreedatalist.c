@@ -21,6 +21,7 @@
  */
 
 #include <config.h>
+#include "gtkalias.h"
 #include "gtktreedatalist.h"
 #include <string.h>
 static GMemChunk *tree_chunk = NULL;

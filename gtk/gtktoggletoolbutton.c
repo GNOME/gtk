@@ -20,6 +20,7 @@
  */
 
 #include <config.h>
+#include "gtkalias.h"
 #include "gtktoggletoolbutton.h"
 #include "gtkcheckmenuitem.h"
 #include "gtklabel.h"

@@ -28,6 +28,7 @@
 
 #include <config.h>
 
+#include "gtkalias.h"
 #include "gtkfontbutton.h"
 
 #include "gtksignal.h"

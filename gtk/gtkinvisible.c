@@ -26,6 +26,7 @@
 
 #include <config.h>
 #include <gdk/gdk.h>
+#include "gtkalias.h"
 #include "gtkinvisible.h"
 #include "gtkintl.h"
 

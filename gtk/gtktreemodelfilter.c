@@ -19,6 +19,7 @@
  */
 
 #include <config.h>
+#include "gtkalias.h"
 #include "gtktreemodelfilter.h"
 #include "gtkintl.h"
 #include "gtktreednd.h"

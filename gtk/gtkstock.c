@@ -27,6 +27,7 @@
 #include <config.h>
 #include <string.h>
 
+#include "gtkalias.h"
 #include "gtkstock.h"
 #include "gtkiconfactory.h"
 #include "gtkintl.h"

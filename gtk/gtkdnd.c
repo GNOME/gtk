@@ -25,6 +25,7 @@
  */
 
 #include <config.h>
+#include "gtkalias.h"
 #include "gdkconfig.h"
 
 #include "gdk/gdkkeysyms.h"

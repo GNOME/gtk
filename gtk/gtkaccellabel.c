@@ -30,6 +30,7 @@
 #include <config.h>
 #include <string.h>
 
+#include "gtkalias.h"
 #include "gtkaccellabel.h"
 #include "gtkaccelmap.h"
 #include "gtkmain.h"

@@ -39,6 +39,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "gtkalias.h"
+
 #ifndef HAVE_LSTAT
 #define lstat stat
 #endif

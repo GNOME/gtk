@@ -20,6 +20,7 @@
  */
 
 #include <config.h>
+#include "gtkalias.h"
 #include "gtkfilesystem.h"
 #include "gtkfilesystemwin32.h"
 #include "gtkintl.h"
