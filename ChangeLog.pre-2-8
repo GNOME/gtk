@@ -1,5 +1,8 @@
 2005-04-04  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkiconview.c (gtk_icon_view_calculate_item_size): Take
+	padding into account when calculating max_layout_width.  
+
 	* gtk/gtkactiongroup.c (gtk_action_group_add_action_with_accel): 
 	Use gtk_accel_map_change_entry(), so that reusing the same
 	action name works.  (#170727, Paolo Borelli)

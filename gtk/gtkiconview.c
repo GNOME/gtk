@@ -1888,6 +1888,7 @@ gtk_icon_view_calculate_item_size (GtkIconView     *icon_view,
 			NULL);
 
   spacing = icon_view->priv->spacing;
+  padding = 2 * (ICON_TEXT_PADDING + focus_width + focus_pad);
 
   if (icon_view->priv->pixbuf_column != -1)
     {
@@ -1907,10 +1908,10 @@ gtk_icon_view_calculate_item_size (GtkIconView     *icon_view,
       item_width > 0)
     {
       colspan = item->pixbuf_width / item_width + 1;
-      maximum_layout_width = MAX (colspan * item_width - item->pixbuf_width - icon_view->priv->spacing - 2 * (ICON_TEXT_PADDING + focus_width + focus_pad), 50);
+      maximum_layout_width = MAX (colspan * item_width - item->pixbuf_width - icon_view->priv->spacing - padding, 50);
     }
   else
-    maximum_layout_width = MAX (item_width, item->pixbuf_width);
+    maximum_layout_width = MAX (item_width, item->pixbuf_width) - padding;
     
   if (icon_view->priv->markup_column != -1 ||
       icon_view->priv->text_column != -1)
@@ -1924,7 +1925,6 @@ gtk_icon_view_calculate_item_size (GtkIconView     *icon_view,
       
       item->layout_width = layout_width;
       item->layout_height = layout_height;
-      padding = 2 * (ICON_TEXT_PADDING + focus_width + focus_pad);
     }
   else
     {
