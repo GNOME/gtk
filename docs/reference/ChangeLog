@@ -1,3 +1,7 @@
+2003-01-30  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/running.sgml: s/overwrite/override/g  (#104627, Brian Cameron)
+
 2003-01-21  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkrc.sgml: Fix integer color range.  (#103992)
