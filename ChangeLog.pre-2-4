@@ -1,3 +1,8 @@
+2002-07-31  Sven Neumann  <sven@gimp.org>
+
+	* gtk/queryimmodules.c (print_escaped): Fix wrong number of
+	parameters in call to escape_string().
+
 Wed Jul 31 12:50:51 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/queryimmodules.c: Avoid using g_strescape(),
