@@ -1,3 +1,9 @@
+1999-12-18  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkfont-win32.c (gdk_text_size, gdk_text_extents):
+	When handling a single character (text length == 1), don't handle
+	it as if it was UTF-8.
+
 1999-12-11  Tor Lillqvist  <tml@iki.fi>
 
 	* Makefile.am: Distribute README.win32.

@@ -1786,10 +1786,20 @@ gdk_text_size (GdkFont           *font,
   g_assert (font->type == GDK_FONT_FONT || font->type == GDK_FONT_FONTSET);
 
   wcstr = g_new (wchar_t, text_length);
-  if ((wlen = gdk_nmbstowchar_ts (wcstr, text, text_length, text_length)) == -1)
-    g_warning ("gdk_text_size: gdk_nmbstowchar_ts failed");
+  if (text_length == 1)
+    {
+      /* For single characters, don't try to interpret as UTF-8.
+       */
+      wcstr[0] = (guchar) text[0];
+      gdk_wchar_text_handle (font, wcstr, 1, gdk_text_size_handler, arg);
+    }
   else
-    gdk_wchar_text_handle (font, wcstr, wlen, gdk_text_size_handler, arg);
+    {
+      if ((wlen = gdk_nmbstowchar_ts (wcstr, text, text_length, text_length)) == -1)
+	g_warning ("gdk_text_size: gdk_nmbstowchar_ts failed");
+      else
+	gdk_wchar_text_handle (font, wcstr, wlen, gdk_text_size_handler, arg);
+    }
 
   g_free (wcstr);
 
@@ -1885,10 +1895,18 @@ gdk_text_extents (GdkFont     *font,
   arg.total.cx = arg.total.cy = 0;
 
   wcstr = g_new (wchar_t, text_length);
-  if ((wlen = gdk_nmbstowchar_ts (wcstr, text, text_length, text_length)) == -1)
-    g_warning ("gdk_text_extents: gdk_nmbstowchar_ts failed");
+  if (text_length == 1)
+    {
+      wcstr[0] = (guchar) text[0];
+      gdk_wchar_text_handle (font, wcstr, 1, gdk_text_size_handler, &arg);
+    }
   else
-    gdk_wchar_text_handle (font, wcstr, wlen, gdk_text_size_handler, &arg);
+    {
+      if ((wlen = gdk_nmbstowchar_ts (wcstr, text, text_length, text_length)) == -1)
+	g_warning ("gdk_text_extents: gdk_nmbstowchar_ts failed");
+      else
+	gdk_wchar_text_handle (font, wcstr, wlen, gdk_text_size_handler, &arg);
+    }
 
   g_free (wcstr);
 
