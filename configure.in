@@ -1007,11 +1007,14 @@ gdk-pixbuf/gdk-pixbuf-features.h
 gdk-pixbuf/pixops/Makefile
 gdk-pixbuf/pixops/makefile.mingw
 gdk/Makefile
+gdk/makefile.mingw
 gdk/x11/Makefile
 gdk/win32/Makefile
+gdk/win32/makefile.mingw
 gdk/nanox/Makefile
 gdk/linux-fb/Makefile
 gtk/Makefile
+gtk/makefile.mingw
 gtk/gtkcompat.h
 modules/Makefile
 modules/linux-fb/Makefile

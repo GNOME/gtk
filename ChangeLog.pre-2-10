@@ -2,8 +2,8 @@
 
 	* Makefile.am: Include the build directory.
 
-	* configure.in: Generate build/Makefile, build/win32/Makefile
-	and gtk/makefile.mingw.
+	* configure.in: Generate build/Makefile, build/win32/Makefile,
+	gdk/, gdk/win32/, and gtk/makefile.mingw.
 
 	* config.h.win32: Add USE_GMODULE and USE_MMX for gdk-pixbuf.
 	Add GETTEXT_PACKAGE.
