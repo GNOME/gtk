@@ -1597,12 +1597,12 @@ gdk_window_shape_combine_mask (GdkWindow *window,
   g_return_if_fail (window != NULL);
 
 #ifdef HAVE_SHAPE_EXT
+  window_private = (GdkWindowPrivate*) window;
+  if (window_private->destroyed)
+    return;
+
   if (gdk_window_have_shape_ext())
     {
-      window_private = (GdkWindowPrivate*) window;
-      if (window_private->destroyed)
-	return;
-      
       if (mask)
 	{
 	  GdkWindowPrivate *pixmap_private;
@@ -2542,13 +2542,12 @@ gdk_window_set_child_shapes (GdkWindow *window)
   g_return_if_fail (window != NULL);
    
 #ifdef HAVE_SHAPE_EXT
+  private = (GdkWindowPrivate*) window;
+  if (private->destroyed)
+    return;
+
   if (gdk_window_have_shape_ext())
-    {
-      private = (GdkWindowPrivate*) window;
-      if (private->destroyed)
-	return;
-      gdk_propagate_shapes (private->xdisplay, private->xwindow);
-    }
+    gdk_propagate_shapes (private->xdisplay, private->xwindow);
 #endif   
 }
 
@@ -2560,12 +2559,11 @@ gdk_window_combine_child_shapes (GdkWindow *window)
   g_return_if_fail (window != NULL);
   
 #ifdef HAVE_SHAPE_EXT
+  private = (GdkWindowPrivate*) window;
+  if (private->destroyed)
+    return;
+
   if (gdk_window_have_shape_ext())
-     {
-       private = (GdkWindowPrivate*) window;
-       if (private->destroyed)
-	 return;
-       gdk_propagate_combine_shapes (private->xdisplay, private->xwindow);
-     }
+    gdk_propagate_combine_shapes (private->xdisplay, private->xwindow);
 #endif   
 }

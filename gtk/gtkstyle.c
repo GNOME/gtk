@@ -526,6 +526,9 @@ gtk_style_detach (GtkStyle *style)
   style->attach_count -= 1;
   if (style->attach_count == 0)
     {
+      if (style->engine)
+	style->engine->unrealize_style (style);
+
       gtk_gc_release (style->black_gc);
       gtk_gc_release (style->white_gc);
       
@@ -539,8 +542,6 @@ gtk_style_detach (GtkStyle *style)
 	  gtk_gc_release (style->text_gc[i]);
 	  gtk_gc_release (style->base_gc[i]);
 	}
-      if (style->engine)
-	style->engine->unrealize_style (style);
 
       gtk_style_unref (style);
     }

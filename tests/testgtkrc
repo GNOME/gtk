@@ -19,7 +19,7 @@ pixmap_path ".:/home/raster/themes"
 
 style "default"
 {
-  font = "-adobe-helvetica-medium-r-normal--8-*-*-*-*-*-*-*"
+#  font = "-adobe-helvetica-medium-r-normal--8-*-*-*-*-*-*-*"
 #  bg_pixmap[NORMAL] = "marble.xpm"
 
   engine "win95" 
@@ -118,7 +118,7 @@ widget "main window.*GtkScrolledWindow.*GtkButton*" style "button_list"
 # common default
 class "GtkWidget" style "default"
 
-class "GtkScrollbar" style "red-bar"
+#class "GtkScrollbar" style "red-bar"
 
 widget_class "GtkWindow" style "window"
 widget_class "GtkDialog" style "window"

@@ -112,10 +112,6 @@ DEFS = @DEFS@ -I. -I$(srcdir)
 CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
-X_CFLAGS = @X_CFLAGS@
-X_LIBS = @X_LIBS@
-X_EXTRA_LIBS = @X_EXTRA_LIBS@
-X_PRE_LIBS = @X_PRE_LIBS@
 libpixmap_la_LDFLAGS = 
 libpixmap_la_LIBADD = 
 libpixmap_la_OBJECTS =  pixmap_theme_draw.lo pixmap_theme_main.lo
@@ -184,7 +180,7 @@ install-libLTLIBRARIES: $(lib_LTLIBRARIES)
 	    $(mkinstalldirs) $(exec_prefix)/share/gtk/themes/$$l; \
 	    for f in `ls $$p`; do \
 	      if test -f $$p/$$f; then \
-  	        $(INSTALL) $$p/$$f \
+		$(INSTALL) $$p/$$f \
 	        $(exec_prefix)/share/gtk/themes/$$l/; \
 	      fi; \
 	    done; \

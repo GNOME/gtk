@@ -28,18 +28,6 @@ AC_PROG_MAKE_SET
 AM_PATH_GTK(1.1.0, , 
 	AC_MSG_ERROR([*** GTK 1.1 not installed - please install first ***]))
 
-AC_SUBST(GLIB_CFLAGS)
-AC_SUBST(GLIB_LIBS)
-AC_SUBST(GTK_CFLAGS)
-AC_SUBST(GTK_LIBS)
-
-# Find the X11 include and library directories
-AC_PATH_X
-AC_PATH_XTRA
-
-CFLAGS="$CFLAGS $X_CFLAGS"
-LDFLAGS="$LDFLAGS $X_LDFLAGS $X_LIBS"
-
 # Checks for header files.
 AC_HEADER_STDC
 

@@ -52,11 +52,11 @@ static guint	   gtk_rc_styles_hash		   (const GSList *rc_styles);
 static gint	   gtk_rc_styles_compare	   (const GSList *a,
 						    const GSList *b);
 static GtkRcStyle* gtk_rc_style_find		   (const char   *name);
-static GSList *    gtk_rc_styles_match             (GSList       *sets,
+static GSList *    gtk_rc_styles_match             (GSList       *rc_styles,
+						    GSList       *sets,
 						    guint         path_length,
 						    gchar        *path,
-						    gchar        *path_reversed,
-						    GSList       *rc_styles);
+						    gchar        *path_reversed);
 static GtkStyle *  gtk_rc_style_to_style           (GtkRcStyle   *rc_style);
 static GtkStyle*   gtk_rc_style_init		   (GSList       *rc_styles);
 static void        gtk_rc_parse_file               (const gchar  *filename,
@@ -376,6 +376,9 @@ gtk_rc_style_unref (GtkRcStyle  *rc_style)
 
   if (rc_style->ref_count == 0)
     {
+      if (rc_style->engine)
+	rc_style->engine->destroy_rc_style (rc_style);
+
       if (rc_style->name)
 	g_free (rc_style->name);
       if (rc_style->fontset_name)
@@ -387,9 +390,6 @@ gtk_rc_style_unref (GtkRcStyle  *rc_style)
 	if (rc_style->bg_pixmap_name[i])
 	  g_free (rc_style->bg_pixmap_name[i]);
       
-      if (rc_style->engine)
-	rc_style->engine->destroy_rc_style (rc_style);
-
       g_free (rc_style);
     }
 }
@@ -499,11 +499,12 @@ gtk_rc_reparse_all (void)
 }
 
 static GSList *
-gtk_rc_styles_match (GSList	  *sets,
+gtk_rc_styles_match (GSList       *rc_styles,
+		     GSList	  *sets,
 		     guint         path_length,
 		     gchar        *path,
-		     gchar        *path_reversed,
-		     GSList       *rc_styles)
+		     gchar        *path_reversed)
+		     
 {
   GtkRcSet *rc_set;
 
@@ -530,7 +531,7 @@ gtk_rc_get_style (GtkWidget *widget)
       guint path_length;
 
       gtk_widget_path (widget, &path_length, &path, &path_reversed);
-      rc_styles = gtk_rc_styles_match (gtk_rc_sets_widget, path_length, path, path_reversed, rc_styles);
+      rc_styles = gtk_rc_styles_match (rc_styles, gtk_rc_sets_widget, path_length, path, path_reversed);
       g_free (path);
       g_free (path_reversed);
       
@@ -542,7 +543,7 @@ gtk_rc_get_style (GtkWidget *widget)
       guint path_length;
 
       gtk_widget_class_path (widget, &path_length, &path, &path_reversed);
-      rc_styles = gtk_rc_styles_match (gtk_rc_sets_widget_class, path_length, path, path_reversed, rc_styles);
+      rc_styles = gtk_rc_styles_match (rc_styles, gtk_rc_sets_widget_class, path_length, path, path_reversed);
       g_free (path);
       g_free (path_reversed);
     }
@@ -562,7 +563,7 @@ gtk_rc_get_style (GtkWidget *widget)
 	  path_reversed = g_strdup (path);
 	  g_strreverse (path_reversed);
 	  
-	  rc_styles = gtk_rc_styles_match (gtk_rc_sets_class, path_length, path, path_reversed, rc_styles);
+	  rc_styles = gtk_rc_styles_match (rc_styles, gtk_rc_sets_class, path_length, path, path_reversed);
 	  g_free (path_reversed);
       
 	  type = gtk_type_parent (type);
