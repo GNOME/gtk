@@ -1,3 +1,13 @@
+Wed Dec 23 13:58:14 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtklabel.c (gtk_label_parse_uline):
+	label->label should be the mb text _after_ removing
+	the underlines, not before.
+
+	* gtk/gtkmenu.c: Reverted Elliot's tearoff-menu-item
+	title hack. If it deserves being done, it deserves
+	being done right.
+	
 1998-12-23  Elliot Lee  <sopwith@redhat.com>
 
 	* gtk/gtkmenu.c: Allow programmer to gtk_object_set_data(obj,

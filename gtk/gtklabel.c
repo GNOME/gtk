@@ -215,29 +215,18 @@ gtk_label_new (const char *str)
   return GTK_WIDGET (label);
 }
 
-void
-gtk_label_set_text (GtkLabel *label,
-		    const char *str)
+static void
+gtk_label_set_text_internal (GtkLabel *label,
+			     char     *str,
+			     GdkWChar *str_wc)
 {
-  guint len;
-  guint wc_len;
-  
-  g_return_if_fail (label != NULL);
-  g_return_if_fail (GTK_IS_LABEL (label));
-  g_return_if_fail (str != NULL);
-
   if (label->label)
     g_free (label->label);
   if (label->label_wc)
     g_free (label->label_wc);
 
-  label->label = g_strdup (str);
-
-  /* Convert text to wide characters */
-  len = strlen (str);
-  label->label_wc = g_new (GdkWChar, len + 1);
-  wc_len = gdk_mbstowcs (label->label_wc, str, len + 1);
-  label->label_wc[wc_len] = '\0';
+  label->label = str;
+  label->label_wc = str_wc;
 
   gtk_label_free_words (label);
 
@@ -248,6 +237,27 @@ gtk_label_set_text (GtkLabel *label,
 
       gtk_widget_queue_resize (GTK_WIDGET (label));
     }
+}
+
+void
+gtk_label_set_text (GtkLabel *label,
+		    const char *str)
+{
+  GdkWChar *str_wc;
+  gint len;
+  gint wc_len;
+  
+  g_return_if_fail (label != NULL);
+  g_return_if_fail (GTK_IS_LABEL (label));
+  g_return_if_fail (str != NULL);
+
+  /* Convert text to wide characters */
+  len = strlen (str);
+  str_wc = g_new (GdkWChar, len + 1);
+  wc_len = gdk_mbstowcs (str_wc, str, len + 1);
+  str_wc[wc_len] = '\0';
+
+  gtk_label_set_text_internal (label, g_strdup (str), str_wc);
 }
 
 void
@@ -445,6 +455,7 @@ gtk_label_split_text (GtkLabel *label)
   max_line_width = 0;
   tailp = &label->words;
   str = label->label_wc;
+
   while (*str)
     {
       word = gtk_label_word_alloc ();
@@ -488,6 +499,21 @@ gtk_label_split_text (GtkLabel *label)
 	str++;
       
       line_width += word->space + word->width;
+      
+      *tailp = word;
+      tailp = &word->next;
+    }
+
+  /* Add an empty word to represent an empty line
+   */
+  if ((str == label->label_wc) || (str[-1] == '\n'))
+    {
+      word = gtk_label_word_alloc ();
+
+      word->space = 0;
+      word->beginning = str;
+      word->length = 0;
+      word->width = 0;
       
       *tailp = word;
       tailp = &word->next;
@@ -918,21 +944,23 @@ gtk_label_parse_uline (GtkLabel         *label,
 		       const gchar      *string)
 {
   guint accel_key = GDK_VoidSymbol;
-  GdkWChar *p, *q;
+  GdkWChar *p, *q, *string_wc;
   gchar *r;
   gchar *pattern;
-
-  gint length;
+  gint length, wc_length;
   gboolean underscore;
 
+  /* Convert text to wide characters */
   length = strlen (string);
+  string_wc = g_new (GdkWChar, length + 1);
+  wc_length = gdk_mbstowcs (string_wc, string, length + 1);
+  string_wc[wc_length] = '\0';
   
-  gtk_label_set_text (label, string);
   pattern = g_new (gchar, length+1);
 
   underscore = FALSE;
 
-  p = q = label->label_wc;
+  p = q = string_wc;
   r = pattern;
 
   while (*p)
@@ -965,7 +993,8 @@ gtk_label_parse_uline (GtkLabel         *label,
     }
   *q = 0;
   *r = 0;
- 
+
+  gtk_label_set_text_internal (label, gdk_wcstombs (string_wc), string_wc);
   gtk_label_set_pattern (label, pattern);
   
   g_free (pattern);
