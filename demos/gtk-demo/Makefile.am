@@ -55,7 +55,7 @@ EXTRA_DIST = 		\
 	$(IMAGEFILES)
 
 demos.h: $(demos) geninclude.pl
-	(cd $(srcdir) && ./geninclude.pl $(demos) > demos.h)
+	(cd $(srcdir) && $(PERL) ./geninclude.pl $(demos) > demos.h)
 
 gtk_demo_SOURCES = 		\
 	$(demos)		\
