@@ -1,3 +1,8 @@
+Thu Sep 17 10:49:51 1998  Raph Levien  <raph@gimp.org>
+
+	* HACKING: added GNU indent, as it is now required to successfully
+	build gtk+. Should this be detected in autoconf, possibly?
+
 Tue Sep 15 14:57:30 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* Makefile.am gtk-config.in l*: Update to libtool-1.2b,
