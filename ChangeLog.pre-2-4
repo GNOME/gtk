@@ -1,3 +1,8 @@
+1998-07-03  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gtk/gtkfeatures.h.in: Added GDK_HAVE_FULL_CROSSING_EVENT, since
+	I seem to have erroneously added it to gtkfeatures.h (not .h.in).
+
 Fri Jul  3 14:55:31 PDT 1998 Manish Singh <yosh@gimp.org>
 
 	* gtk/gtkfeatures.h.in: added GTK_HAVE_RELIEF_STYLE
