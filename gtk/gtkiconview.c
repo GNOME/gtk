@@ -3234,6 +3234,8 @@ gtk_icon_view_set_model (GtkIconView *icon_view,
       icon_view->priv->anchor_item = NULL;
       icon_view->priv->cursor_item = NULL;
       icon_view->priv->last_single_clicked = NULL;
+      icon_view->priv->width = 0;
+      icon_view->priv->height = 0;
     }
 
   icon_view->priv->model = model;
@@ -3259,11 +3261,14 @@ gtk_icon_view_set_model (GtkIconView *icon_view,
 			icon_view);
 
       gtk_icon_view_build_items (icon_view);
+
+      gtk_icon_view_queue_layout (icon_view);
     }
 
-  gtk_icon_view_queue_layout (icon_view);
-
   g_object_notify (G_OBJECT (icon_view), "model");  
+
+  if (GTK_WIDGET_REALIZED (icon_view))
+    gtk_widget_queue_resize (GTK_WIDGET (icon_view));
 }
 
 /**

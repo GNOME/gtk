@@ -1,5 +1,10 @@
 2005-03-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkiconview.c (gtk_icon_view_set_model): Queue a resize 
+	when the model is unset.  (#169528, Tomislav Jonjic)
+
+2005-03-09  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkviewport.c (gtk_viewport_class_init): 
 	* gtk/gtkuimanager.c (gtk_ui_manager_class_init): 
 	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_class_init): 
