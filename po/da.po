@@ -28,8 +28,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 2002-01-29 22:58-0500\n"
-"PO-Revision-Date: 2002-01-27 18:28+0100\n"
+"POT-Creation-Date: 2002-01-30 23:30+0100\n"
+"PO-Revision-Date: 2002-01-30 23:31+0100\n"
 "Last-Translator: Ole Laursen <olau@hardworking.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -1414,35 +1414,35 @@ msgstr "Største y"
 msgid "Maximum possible value for Y"
 msgstr "Største mulige værdi for y"
 
-#: gtk/gtkdialog.c:126
+#: gtk/gtkdialog.c:128
 msgid "Has separator"
 msgstr "Med adskillelseslinje"
 
-#: gtk/gtkdialog.c:127
+#: gtk/gtkdialog.c:129
 msgid "The dialog has a separator bar above its buttons"
 msgstr "Om vinduet har en adskillelseslinje over dets knapper"
 
-#: gtk/gtkdialog.c:150
+#: gtk/gtkdialog.c:152
 msgid "Content area border"
 msgstr "Indholdsområdekant"
 
-#: gtk/gtkdialog.c:151
+#: gtk/gtkdialog.c:153
 msgid "Width of border around the main dialog area"
 msgstr "Bredde på kanten omkring hovedområdet i vinduet"
 
-#: gtk/gtkdialog.c:158
+#: gtk/gtkdialog.c:160
 msgid "Button spacing"
 msgstr "Knapmellemrum"
 
-#: gtk/gtkdialog.c:159
+#: gtk/gtkdialog.c:161
 msgid "Spacing between buttons"
 msgstr "Mellemrum mellem knapper"
 
-#: gtk/gtkdialog.c:167
+#: gtk/gtkdialog.c:169
 msgid "Action area border"
 msgstr "Handlingsområdekant"
 
-#: gtk/gtkdialog.c:168
+#: gtk/gtkdialog.c:170
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Bredde på kanten omkring knapområdet nederst i vinduet"
 
@@ -1581,18 +1581,16 @@ msgid "Directories"
 msgstr "Mapper"
 
 #: gtk/gtkfilesel.c:660
-#, fuzzy
 msgid "_Directories"
-msgstr "Mapper"
+msgstr "_Mapper"
 
 #: gtk/gtkfilesel.c:688
 msgid "Files"
 msgstr "Filer"
 
 #: gtk/gtkfilesel.c:692
-#, fuzzy
 msgid "_Files"
-msgstr "Filer"
+msgstr "_Filer"
 
 #: gtk/gtkfilesel.c:768 gtk/gtkfilesel.c:2105
 #, c-format
@@ -1611,19 +1609,16 @@ msgstr ""
 "Er du sikker på at du vil vælge den?"
 
 #: gtk/gtkfilesel.c:1022
-#, fuzzy
 msgid "Crea_te Dir"
-msgstr "Opret mappe"
+msgstr "O_pret mappe"
 
 #: gtk/gtkfilesel.c:1033
-#, fuzzy
 msgid "De_lete File"
-msgstr "Slet fil"
+msgstr "S_let fil"
 
 #: gtk/gtkfilesel.c:1044
-#, fuzzy
 msgid "_Rename File"
-msgstr "Omdøb fil"
+msgstr "_Omdøb fil"
 
 #: gtk/gtkfilesel.c:1292
 #, c-format
@@ -1791,9 +1786,8 @@ msgstr "Stø_rrelse"
 # passer godt her
 #. create the text entry widget
 #: gtk/gtkfontsel.c:453
-#, fuzzy
 msgid "_Preview:"
-msgstr "Udseende:"
+msgstr "_Udseende:"
 
 #: gtk/gtkfontsel.c:1204
 msgid "Font Selection"
