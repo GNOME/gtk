@@ -1,3 +1,8 @@
+1999-10-27  Michael Fulbright  <msf@avatar.labs.redhat.com>
+
+	* src/gdk-pixbuf-loader.c (gdk_pixbuf_loader_destroy): Fixed
+	logic so we only try to close loader if it wasn't previously closed.
+
 1999-10-27  Michael Fulbright  <msf@redhat.com>
 
 	* src/gdk-pixbuf-loader.c: Made sure image_loader struct member of
