@@ -531,7 +531,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                          TRUE,
 							 G_PARAM_READABLE | G_PARAM_WRITABLE));
 
-    g_object_class_install_property (gobject_class,
+  g_object_class_install_property (gobject_class,
                                    PROP_INVISIBLE_CHAR,
                                    g_param_spec_unichar ("invisible_char",
 							 P_("Invisible character"),
@@ -1609,9 +1609,10 @@ gtk_entry_motion_notify (GtkWidget      *widget,
 	{
 	  GdkDragContext *context;
 	  GtkTargetList *target_list = gtk_target_list_new (NULL, 0);
-	  gtk_target_list_add_text_targets (target_list);
 	  guint actions = entry->editable ? GDK_ACTION_COPY | GDK_ACTION_MOVE : GDK_ACTION_COPY;
-	  
+
+	  gtk_target_list_add_text_targets (target_list);
+
 	  context = gtk_drag_begin (widget, target_list, actions,
 			  entry->button, (GdkEvent *)event);
 

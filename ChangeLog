@@ -1,3 +1,7 @@
+2004-08-02  Morten Welinder  <terra@gnome.org>
+
+	* gtk/gtkentry.c (gtk_entry_motion_notify): C99ism.
+
 Mon Aug  2 01:30:03 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktextview.[hc]: 
