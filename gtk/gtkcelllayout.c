@@ -105,7 +105,8 @@ gtk_cell_layout_pack_end (GtkCellLayout   *cell_layout,
  * gtk_cell_layout_clear:
  * @cell_layout: A #GtkCellLayout.
  *
- * Unsets all the mappings on all renderers on @cell_layout.
+ * Unsets all the mappings on all renderers on @cell_layout and
+ * removes all renderers from @cell_layout.
  *
  * Since: 2.4
  */
