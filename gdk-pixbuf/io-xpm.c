@@ -1230,6 +1230,15 @@ pixbuf_create_from_xpm (const gchar * (*get_buf) (enum buf_op op, gpointer handl
 		return NULL;
 	}
 	items = sscanf (buffer, "%d %d %d %d %d %d", &w, &h, &n_col, &cpp, &x_hot, &y_hot);
+
+	if (items != 4 && items != 6) {
+		g_set_error (error,
+                             GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                             _("Invalid XPM header"));
+		return NULL;
+	}
+
 	if (w <= 0) {
                 g_set_error (error,
                              GDK_PIXBUF_ERROR,
