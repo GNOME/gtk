@@ -151,6 +151,7 @@ gboolean     gtk_tree_path_is_descendant    (GtkTreePath       *path,
  * want to call gtk_tree_row_reference_new.
  */
 
+GType                gtk_tree_row_reference_get_type (void);
 GtkTreeRowReference *gtk_tree_row_reference_new       (GtkTreeModel        *model,
 						       GtkTreePath         *path);
 GtkTreeRowReference *gtk_tree_row_reference_new_proxy (GObject             *proxy,

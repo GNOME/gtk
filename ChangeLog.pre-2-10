@@ -1,3 +1,8 @@
+2002-12-02  Murray Cumming  <murrayc@usa.net>
+
+	* gtk/gtktreemodel.h: Declare gtk_tree_row_reference_get_type(). It is
+	already used by a macro in the same header.
+
 2002-11-28  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/gdkdisplay.c: 
