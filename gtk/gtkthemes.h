@@ -81,19 +81,5 @@ GtkThemeEngine *gtk_theme_engine_get   (const gchar    *name);
 void            gtk_theme_engine_ref   (GtkThemeEngine *engine);
 void            gtk_theme_engine_unref (GtkThemeEngine *engine);
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
-/* Initialization, exit, mainloop and miscellaneous routines
- */
-void	   gtk_themes_init	 (int	       *argc,
-				  char	     ***argv);
-void	   gtk_themes_exit	 (gint		error_code);
-
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
 
 #endif /* __GTK_THEMES_H__ */

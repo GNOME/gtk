@@ -158,14 +158,6 @@ guint		gtk_accel_group_create_add	(GtkType	 class_type,
 guint		gtk_accel_group_create_remove	(GtkType	 class_type,
 						 GtkSignalRunType signal_flags,
 						 guint		 handler_offset);
-void		gtk_accel_group_marshal_add	(GtkObject	*object,
-						 GtkSignalFunc	 func,
-						 gpointer	 func_data,
-						 GtkArg		*args);
-void		gtk_accel_group_marshal_remove	(GtkObject	*object,
-						 GtkSignalFunc	 func,
-						 gpointer	 func_data,
-						 GtkArg		*args);
 
 /* Miscellaneous (internal)
  */
