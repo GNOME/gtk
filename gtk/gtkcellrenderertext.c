@@ -1308,7 +1308,9 @@ gtk_cell_renderer_text_get_size (GtkCellRenderer *cell,
       row_height = (pango_font_metrics_get_ascent (metrics) +
 		    pango_font_metrics_get_descent (metrics));
       pango_font_metrics_unref (metrics);
-      
+
+      pango_font_description_free (font_desc);
+
       gtk_cell_renderer_set_fixed_size (cell,
 					cell->width, 2*cell->ypad +
 					celltext->fixed_height_rows * PANGO_PIXELS (row_height));
