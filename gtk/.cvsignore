@@ -11,8 +11,10 @@ gtkversion.h
 libgtk.la
 gtkfeatures.h
 gtkmarshal.h
-gtktypebuiltins.h
 gtkmarshal.c
+gtkmarshalers.h
+gtkmarshalers.c
+gtktypebuiltins.h
 gtktypebuiltins_ids.c
 gtktypebuiltins_vars.c
 gtktypebuiltins_evals.c
@@ -21,6 +23,7 @@ gtk-win32.rc
 testdnd
 stamp-gtktypebuiltins.h
 stamp-gtkmarshal.h
+stamp-gtkmarshalers.h
 stamp-gtk.defs
 gtk-query-immodules-2.0
 .saved
