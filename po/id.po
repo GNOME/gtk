@@ -5,11 +5,11 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ HEAD\n"
-"POT-Creation-Date: 2003-06-24 11:42+0700\n"
-"PO-Revision-Date: 2003-06-22 20:5555500\n"
+"Project-Id-Version: gtk+ gtk-2-2\n"
+"POT-Creation-Date: 2003-06-30 10:39+0700\n"
+"PO-Revision-Date: 2003-06-28 20:55+0700\n"
 "Last-Translator: Mohammad DAMT <mdamt@bisnisweb.com>\n"
-"Language-Team: Indonesia <id@li.org>\n"
+"Language-Team: Indonesia <sukarelawan@gnome.linux.or.id>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -232,36 +232,36 @@ msgstr "Gambar GIF rusak atau tidak lengkap."
 msgid "The GIF image format"
 msgstr "Format gambar GIF"
 
-#: gdk-pixbuf/io-ico.c:218 gdk-pixbuf/io-ico.c:277 gdk-pixbuf/io-ico.c:338
-#: gdk-pixbuf/io-ico.c:401 gdk-pixbuf/io-ico.c:418
+#: gdk-pixbuf/io-ico.c:217 gdk-pixbuf/io-ico.c:269 gdk-pixbuf/io-ico.c:330
+#: gdk-pixbuf/io-ico.c:393 gdk-pixbuf/io-ico.c:410
 msgid "Not enough memory to load icon"
 msgstr "Tidak cukup memori untuk membuka ikon"
 
-#: gdk-pixbuf/io-ico.c:262
+#: gdk-pixbuf/io-ico.c:254
 msgid "Invalid header in icon"
 msgstr "Header error pada ikon"
 
-#: gdk-pixbuf/io-ico.c:299
+#: gdk-pixbuf/io-ico.c:291
 msgid "Icon has zero width"
 msgstr "Ikon memiliki lebar 0"
 
-#: gdk-pixbuf/io-ico.c:309
+#: gdk-pixbuf/io-ico.c:301
 msgid "Icon has zero height"
 msgstr "Ikon memiliki tinggi 0"
 
-#: gdk-pixbuf/io-ico.c:353
+#: gdk-pixbuf/io-ico.c:345
 msgid "Compressed icons are not supported"
 msgstr "Ikon terkompresi tidak bisa dibuka"
 
-#: gdk-pixbuf/io-ico.c:386
+#: gdk-pixbuf/io-ico.c:378
 msgid "Unsupported icon type"
 msgstr "Tipe ikon tidak bisa dibuka"
 
-#: gdk-pixbuf/io-ico.c:466
+#: gdk-pixbuf/io-ico.c:458
 msgid "Not enough memory to load ICO file"
 msgstr "Tidak cukup memori untuk membuka file ICO"
 
-#: gdk-pixbuf/io-ico.c:872
+#: gdk-pixbuf/io-ico.c:868
 msgid "The ICO image format"
 msgstr "Format gambar ICO"
 
@@ -1988,15 +1988,15 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1107
 msgid "_New Folder"
-msgstr "Forlder_Baru"
+msgstr "Buat Folder _Baru"
 
 #: gtk/gtkfilesel.c:1118
 msgid "De_lete File"
-msgstr "Ha_pus file"
+msgstr "Ha_pus File"
 
 #: gtk/gtkfilesel.c:1129
 msgid "_Rename File"
-msgstr "_Ganti nama file"
+msgstr "_Ganti Nama File"
 
 #: gtk/gtkfilesel.c:1429
 #, c-format
@@ -2024,7 +2024,7 @@ msgstr "Error saat membuat folder %s: %s\n"
 
 #: gtk/gtkfilesel.c:1474
 msgid "New Folder"
-msgstr "Folder baru"
+msgstr "Buat Folder Baru"
 
 #: gtk/gtkfilesel.c:1489
 msgid "_Folder name:"
@@ -2109,7 +2109,7 @@ msgstr "_Ganti nama"
 
 #: gtk/gtkfilesel.c:2217
 msgid "_Selection: "
-msgstr "_Pilihan:"
+msgstr "_Yang Dipilih: "
 
 #: gtk/gtkfilesel.c:3111
 #, c-format
