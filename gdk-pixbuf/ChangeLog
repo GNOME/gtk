@@ -1,5 +1,12 @@
 1999-11-22  Havoc Pennington  <hp@pobox.com>
 
+	* src/Makefile.am (GDK_PIXBUF_LIBS): Patch from Paul Fisher
+	<pnfisher@redhat.com> adds all -lgdk-pixbuf and all other
+	dependencies to LIBADD variables for loadable modules. Necessary
+	for a Java dynamic loading thing to be able to figure it out.
+
+1999-11-22  Havoc Pennington  <hp@pobox.com>
+
 	* src/io-png.c (image_load_increment): Call the update_area
 	callback depending on the number of rows loaded in this increment.
 
