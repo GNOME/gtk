@@ -1,5 +1,10 @@
 2001-08-09  Matthias Clasen  <matthiasc@waldgeist.poet.de>
 
+	* gtk/gtkstyle.c (gtk_style_real_unrealize): Don't forget to
+	free the text_aa parts. (#57549)
+
+2001-08-09  Matthias Clasen  <matthiasc@waldgeist.poet.de>
+
 	* gdk/gdkgc.c (gdk_gc_set_rgb_bg_color): Set the background color,
 	not the foreground color. (#57621)
 
