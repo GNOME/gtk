@@ -1,3 +1,9 @@
+Thu Apr 12 17:41:17 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk-2.0.m4: Fix up to refer to GTK+, not to GLib; fix some
+	wording problems. (Compared to version from Johannes Stezenbach to
+	check correctness.)
+
 Thu Apr 12 21:04:26 2001  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtktreeview.c (_gtk_tree_view_column_start_drag): get
