@@ -1,3 +1,16 @@
+2004-03-20  Hans Breuer  <hans@breuer.org>
+
+	* gtk/gtkfilesystemwin32.c : applied the undisputable and
+	required [due to recent gtkfilesystem internal api semantic 
+	changes] part of patches to fix bug #137543 (Tor Lillqvist,
+	J. Ali Harlow)
+
+	* gdk/gdkevents-win32.c (handle_configure_event) :
+             (gdk_event_translate), WM_WINDOWPOSCHANGED : initialize
+	GdkWindowObject::x, y with screen coords to make 
+	gdk_window_get_position () return the right thing and thus fix
+	drag and drop positioning (e.g. Gimp tabs, fixes bug #137192)
+
 2004-03-19  Federico Mena Quintero  <federico@ximian.com>
 
 	* Revert the patch to #137520, as 2.4.1 is for conservative bug

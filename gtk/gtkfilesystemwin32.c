@@ -40,7 +40,7 @@
 #define mkdir(p,m) _mkdir(p)
 #include <gdk/win32/gdkwin32.h> /* gdk_win32_hdc_get */
 #else
-#error "The implementation is win32 only yet."
+#error "The implementation is win32 only."
 #endif /* G_OS_WIN32 */
 
 typedef struct _GtkFileSystemWin32Class GtkFileSystemWin32Class;
@@ -305,10 +305,10 @@ gtk_file_system_win32_list_volumes (GtkFileSystem *file_system)
       if (p[0] == 'a' || p[0] == 'b')
         vol->is_mounted = FALSE; /* skip floppy */
       else
-        vol->is_mounted = TRUE;
+        vol->is_mounted = TRUE; /* handle other removable drives special, too? */
 
       /*FIXME: gtk_file_path_compare() is case sensitive, we are not*/
-      p[0] = toupper (p[0]);
+      p[0] = g_ascii_toupper (p[0]);
       vol->drive = g_strdup (p);
 
       list = g_slist_append (list, vol);
@@ -328,9 +328,9 @@ gtk_file_system_win32_get_volume_for_path (GtkFileSystem     *file_system,
   g_return_val_if_fail (p != NULL, NULL);
 
   /*FIXME: gtk_file_path_compare() is case sensitive, we are not*/
-  p[0] = toupper (p[0]);
+  p[0] = g_ascii_toupper (p[0]);
   vol->drive = p;
-  vol->is_mounted = (p[0] != 'a' && p[0] != 'b');
+  vol->is_mounted = (p[0] != 'A' && p[0] != 'B');
 
   return vol;
 }
@@ -423,15 +423,35 @@ gtk_file_system_win32_volume_get_display_name (GtkFileSystem       *file_system,
 					      GtkFileSystemVolume *volume)
 {
   gchar display_name[80];
+  gunichar2 *wdrive = g_utf8_to_utf16 (volume->drive, -1, NULL, NULL, NULL);
+  gunichar2  wname[80];
 
-  if (GetVolumeInformation (volume->drive, 
+  g_return_val_if_fail (wdrive != NULL, NULL);
+
+  if (GetVolumeInformationW (wdrive, wname, sizeof(wname), 
+                             NULL, NULL, NULL, NULL, 0))
+    {
+      gchar *name = g_utf16_to_utf8 (wname, -1, NULL, NULL, NULL);
+      gchar *real_display_name = g_strconcat (name, " (", volume->drive, ")", NULL);
+
+      g_free (name);
+      g_free (wdrive);
+      GTK_NOTE (MISC, g_print ("Wide volume display name: %s\n", real_display_name));
+
+      return real_display_name;
+    }
+  else if (GetVolumeInformation (volume->drive, 
                             display_name, sizeof(display_name),
                             NULL, /* serial number */
                             NULL, /* max. component length */
                             NULL, /* fs flags */
                             NULL, 0)) /* fs type like FAT, NTFS */
     {
-      gchar* real_display_name = g_strconcat (display_name, " (", volume->drive, ")", NULL);
+      gchar *name = g_locale_to_utf8 (display_name, -1, NULL, NULL, NULL);
+      gchar *real_display_name = g_strconcat (name, " (", volume->drive, ")", NULL);
+
+      g_free (name);
+      GTK_NOTE (MISC, g_print ("Locale volume display name: %s\n", real_display_name));
 
       return real_display_name;
     }
@@ -1095,6 +1115,16 @@ gtk_file_folder_win32_get_info (GtkFileFolder     *folder,
   gchar *dirname;
   gchar *filename;
   
+  if (!path)
+    {
+      g_return_val_if_fail (filename_is_root (folder_win32->filename), NULL);
+
+      /* ??? */
+      info = filename_get_info (folder_win32->filename, folder_win32->types, error);
+
+      return info;
+    }
+
   filename = filename_from_path (path);
   g_return_val_if_fail (filename != NULL, NULL);
 
@@ -1291,6 +1321,6 @@ filename_is_root (const char *filename)
   /* accept both forms */
 
   return (   (len == 2 && filename[1] == ':')
-          || (len == 3 && filename[1] == ':' && filename[2] == '\\'));
+          || (len == 3 && filename[1] == ':' && (filename[2] == '\\' || filename[2] == '/')));
 }
 

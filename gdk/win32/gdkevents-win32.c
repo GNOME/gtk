@@ -1685,23 +1685,25 @@ handle_configure_event (MSG       *msg,
 			GdkWindow *window)
 {
   RECT client_rect;
+  POINT point;
 
   GetClientRect (msg->hwnd, &client_rect);
-  
+  point.x = client_rect.left; /* always 0 */
+  point.y = client_rect.top;
+  /* top level windows need screen coords */
+  if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TOPLEVEL)
+    ClientToScreen (msg->hwnd, &point);
+
   GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) window)->impl)->width = client_rect.right - client_rect.left;
   GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) window)->impl)->height = client_rect.bottom - client_rect.top;
   
-  ((GdkWindowObject *) window)->x = client_rect.left;
-  ((GdkWindowObject *) window)->y = client_rect.top;
+  ((GdkWindowObject *) window)->x = point.x;
+  ((GdkWindowObject *) window)->y = point.y;
   
   if (((GdkWindowObject *) window)->event_mask & GDK_STRUCTURE_MASK)
     {
-      POINT point;
       GdkEvent *event = gdk_event_new (GDK_CONFIGURE);
 
-      point.x = point.y = 0;
-      ClientToScreen (msg->hwnd, &point);
-      
       event->configure.window = window;
 
       event->configure.width = client_rect.right - client_rect.left;
@@ -2980,22 +2982,24 @@ gdk_event_translate (GdkDisplay *display,
 	 !GDK_WINDOW_DESTROYED (window))
 	{
 	  RECT client_rect;
+	  POINT point;
 
 	  GetClientRect (msg->hwnd, &client_rect);
+	  point.x = client_rect.left; /* always 0 */
+	  point.y = client_rect.top;
+	  /* top level windows need screen coords */
+	  if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TOPLEVEL)
+	    ClientToScreen (msg->hwnd, &point);
   
 	  GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) window)->impl)->width = client_rect.right - client_rect.left;
 	  GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) window)->impl)->height = client_rect.bottom - client_rect.top;
 	  
-	  ((GdkWindowObject *) window)->x = client_rect.left;
-	  ((GdkWindowObject *) window)->y = client_rect.top;
+	  ((GdkWindowObject *) window)->x = point.x;
+	  ((GdkWindowObject *) window)->y = point.y;
 	  
 	  if (((GdkWindowObject *) window)->event_mask & GDK_STRUCTURE_MASK)
 	    {
-	      POINT point;
 	      GdkEvent *event = gdk_event_new (GDK_CONFIGURE);
-	      
-	      point.x = point.y = 0;
-	      ClientToScreen (msg->hwnd, &point);
 	      
 	      event->configure.window = window;
 	      
