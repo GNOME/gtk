@@ -340,9 +340,12 @@ gtk_file_system_create_folder(GtkFileSystem     *file_system,
  * @path: a #GtkFilePath
  * 
  * Queries the file system volume that corresponds to a specific path.
+ * There might not be a volume for all paths (consinder for instance remote
+ * shared), so this can return NULL.
  * 
  * Return value: the #GtkFileSystemVolume that corresponds to the specified
- * @path.  You should free this value with gtk_file_system_volume_free().
+ * @path, or NULL if there is no such volume. You should free this value with
+ * gtk_file_system_volume_free().
  **/
 GtkFileSystemVolume *
 gtk_file_system_get_volume_for_path (GtkFileSystem     *file_system,

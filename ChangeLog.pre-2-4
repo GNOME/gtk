@@ -1,3 +1,12 @@
+2004-03-05  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkfilesystem.c (gtk_file_system_get_volume_for_path):
+	Document the fact that there might not be a volume for all
+	paths.
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_add_current_folder):
+	Don't assume there is a volume for all paths.
+
 Fri Mar  5 01:45:04 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtkfilechooserdefault.c (shortcuts_append_paths): insert in

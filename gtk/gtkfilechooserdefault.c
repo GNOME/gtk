@@ -1088,20 +1088,25 @@ shortcuts_add_current_folder (GtkFileChooserDefault *impl)
       pos = shortcuts_get_index (impl, SHORTCUTS_CURRENT_FOLDER);
 
       volume = gtk_file_system_get_volume_for_path (impl->file_system, impl->current_folder);
-      base_path = gtk_file_system_volume_get_base_path (impl->file_system, volume);
-
-      if (strcmp (gtk_file_path_get_string (base_path), gtk_file_path_get_string (impl->current_folder)) == 0)
+      if (volume)
+	base_path = gtk_file_system_volume_get_base_path (impl->file_system, volume);
+      else
+	base_path = NULL;
+      
+      if (base_path &&
+	  strcmp (gtk_file_path_get_string (base_path), gtk_file_path_get_string (impl->current_folder)) == 0)
 	{
 	  success = shortcuts_insert_path (impl, pos, TRUE, volume, NULL, NULL, FALSE, NULL);
 	  impl->shortcuts_current_folder_is_volume = TRUE;
 	}
       else
 	{
-	  gtk_file_system_volume_free (impl->file_system, volume);
 	  success = shortcuts_insert_path (impl, pos, FALSE, NULL, impl->current_folder, NULL, FALSE, NULL);
 	  impl->shortcuts_current_folder_is_volume = FALSE;
 	}
 
+      if (volume)
+	gtk_file_system_volume_free (impl->file_system, volume);
       gtk_file_path_free (base_path);
 
       if (!success)
