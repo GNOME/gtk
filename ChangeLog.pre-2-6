@@ -1,5 +1,12 @@
 2004-06-04  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkbutton.c (gtk_button_size_allocate): Give the space
+	requested for drawing the focus indicator to the child in the
+	!CAN_FOCUS case. This should fix issues which the Gimp has with 
+	the button allocation changes in 2.4.2.
+
+2004-06-04  Matthias Clasen  <mclasen@redhat.com>
+
 	* configure.in: Bump version to 2.4.3
 
 	* === Released 2.4.2 ===
