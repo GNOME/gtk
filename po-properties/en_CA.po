@@ -1,14 +1,15 @@
 # English/Canada translation of gtk+-properties
 # Copyright (C) 2004 Adam Weinberger and the GNOME Foundation
-# This file is distributed under the same license as the gtk+ package.
+# This file is distributed under the same licence as the gtk+ package.
 # Adam Weinberger <adamw@FreeBSD.org>, 2004.
+#
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-19 00:27-0400\n"
-"PO-Revision-Date: 2004-09-07 22:53-0400\n"
+"POT-Creation-Date: 2004-09-24 13:41-0400\n"
+"PO-Revision-Date: 2004-09-24 22:53-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: English/Canada <adamw@FreeBSD.org>\n"
 "MIME-Version: 1.0\n"
@@ -637,11 +638,23 @@ msgid ""
 msgstr ""
 "How far in the y direction to move the child when the button is depressed"
 
-#: gtk/gtkbutton.c:380
+#: gtk/gtkbutton.c:389
+msgid "Displace focus"
+msgstr "Displace focus"
+
+#: gtk/gtkbutton.c:390
+msgid ""
+"Whether the child_displacement_x/_y properties should also affect the focus "
+"rectangle"
+msgstr ""
+"Whether the child_displacement_x/_y properties should also affect the focus "
+"rectangle"
+
+#: gtk/gtkbutton.c:395
 msgid "Show button images"
 msgstr "Show button images"
 
-#: gtk/gtkbutton.c:381
+#: gtk/gtkbutton.c:396
 msgid "Whether stock icons should be shown in buttons"
 msgstr "Whether stock icons should be shown in buttons"
 
@@ -1252,7 +1265,7 @@ msgstr "Title"
 
 #: gtk/gtkcolorbutton.c:219
 msgid "The title of the color selection dialog"
-msgstr "The title of the colour selection dialog"
+msgstr "The title of the colour selection dialogue"
 
 #: gtk/gtkcolorbutton.c:233 gtk/gtkcolorsel.c:1782
 msgid "Current Color"
@@ -1488,7 +1501,7 @@ msgstr "Has separator"
 
 #: gtk/gtkdialog.c:148
 msgid "The dialog has a separator bar above its buttons"
-msgstr "The dialog has a separator bar above its buttons"
+msgstr "The dialogue has a separator bar above its buttons"
 
 #: gtk/gtkdialog.c:173
 msgid "Content area border"
@@ -1496,7 +1509,7 @@ msgstr "Content area border"
 
 #: gtk/gtkdialog.c:174
 msgid "Width of border around the main dialog area"
-msgstr "Width of border around the main dialog area"
+msgstr "Width of border around the main dialogue area"
 
 #: gtk/gtkdialog.c:181
 msgid "Button spacing"
@@ -1512,7 +1525,7 @@ msgstr "Action area border"
 
 #: gtk/gtkdialog.c:191
 msgid "Width of border around the button area at the bottom of the dialog"
-msgstr "Width of border around the button area at the bottom of the dialog"
+msgstr "Width of border around the button area at the bottom of the dialogue"
 
 #: gtk/gtkentry.c:485 gtk/gtklabel.c:372
 msgid "Cursor Position"
@@ -1579,7 +1592,7 @@ msgid ""
 "dialog) when Enter is pressed"
 msgstr ""
 "Whether to activate the default widget (such as the default button in a "
-"dialog) when Enter is pressed"
+"dialogue) when Enter is pressed"
 
 #: gtk/gtkentry.c:553
 msgid "Width in chars"
@@ -1811,11 +1824,11 @@ msgstr "Show Hidden"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Whether the hidden files and folders should be displayed"
 
-#: gtk/gtkfilechooserdefault.c:581
+#: gtk/gtkfilechooserdefault.c:587
 msgid "Default file chooser backend"
 msgstr "Default file chooser backend"
 
-#: gtk/gtkfilechooserdefault.c:582
+#: gtk/gtkfilechooserdefault.c:588
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Name of the GtkFileChooser backend to use by default"
 
@@ -1857,7 +1870,7 @@ msgstr "Y position of child widget"
 
 #: gtk/gtkfontbutton.c:177
 msgid "The title of the font selection dialog"
-msgstr "The title of the font selection dialog"
+msgstr "The title of the font selection dialogue"
 
 #: gtk/gtkfontbutton.c:192 gtk/gtkfontsel.c:215
 msgid "Font name"
@@ -2332,7 +2345,7 @@ msgstr "Image/label border"
 
 #: gtk/gtkmessagedialog.c:109
 msgid "Width of border around the label and image in the message dialog"
-msgstr "Width of border around the label and image in the message dialog"
+msgstr "Width of border around the label and image in the message dialogue"
 
 #: gtk/gtkmessagedialog.c:124
 msgid "Use separator"
@@ -2342,7 +2355,7 @@ msgstr "Use separator"
 msgid ""
 "Whether to put a separator between the message dialog's text and the buttons"
 msgstr ""
-"Whether to put a separator between the message dialog's text and the buttons"
+"Whether to put a separator between the message dialogue's text and the buttons"
 
 #: gtk/gtkmessagedialog.c:131
 msgid "Message Type"
@@ -2358,7 +2371,7 @@ msgstr "Message Buttons"
 
 #: gtk/gtkmessagedialog.c:140
 msgid "The buttons shown in the message dialog"
-msgstr "The buttons shown in the message dialog"
+msgstr "The buttons shown in the message dialogue"
 
 #: gtk/gtkmisc.c:110
 msgid "Y align"
