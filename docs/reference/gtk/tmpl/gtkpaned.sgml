@@ -154,6 +154,57 @@ gutter (the area between the two panes). It does nothing now.
 @Returns: 
 
 
+<!-- ##### SIGNAL GtkPaned::accept-position ##### -->
+<para>
+
+</para>
+
+@paned: the object which received the signal.
+@Returns: 
+
+<!-- ##### SIGNAL GtkPaned::cancel-position ##### -->
+<para>
+
+</para>
+
+@paned: the object which received the signal.
+@Returns: 
+
+<!-- ##### SIGNAL GtkPaned::cycle-child-focus ##### -->
+<para>
+
+</para>
+
+@paned: the object which received the signal.
+@arg1: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkPaned::cycle-handle-focus ##### -->
+<para>
+
+</para>
+
+@paned: the object which received the signal.
+@arg1: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkPaned::move-handle ##### -->
+<para>
+
+</para>
+
+@paned: the object which received the signal.
+@arg1: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkPaned::toggle-handle-focus ##### -->
+<para>
+
+</para>
+
+@paned: the object which received the signal.
+@Returns: 
+
 <!-- ##### ARG GtkPaned:position ##### -->
 <para>
 

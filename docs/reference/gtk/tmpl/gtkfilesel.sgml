@@ -178,12 +178,44 @@ Hides the file operation buttons that normally appear at the top of the dialog. 
 @filesel: a #GtkFileSelection.
 
 
+<!-- ##### FUNCTION gtk_file_selection_get_selections ##### -->
+<para>
+
+</para>
+
+@filesel: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_selection_set_select_multiple ##### -->
+<para>
+
+</para>
+
+@filesel: 
+@select_multiple: 
+
+
+<!-- ##### FUNCTION gtk_file_selection_get_select_multiple ##### -->
+<para>
+
+</para>
+
+@filesel: 
+@Returns: 
+
+
 <!-- ##### ARG GtkFileSelection:show-fileops ##### -->
 <para>
 
 </para>
 
 <!-- ##### ARG GtkFileSelection:filename ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFileSelection:select-multiple ##### -->
 <para>
 
 </para>

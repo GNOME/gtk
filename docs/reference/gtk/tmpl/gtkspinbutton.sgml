@@ -401,6 +401,14 @@ use gtk_spin_button_get_value() instead.
 
 
 
+<!-- ##### SIGNAL GtkSpinButton::change-value ##### -->
+<para>
+
+</para>
+
+@spinbutton: the object which received the signal.
+@arg1: 
+
 <!-- ##### SIGNAL GtkSpinButton::input ##### -->
 <para>
 

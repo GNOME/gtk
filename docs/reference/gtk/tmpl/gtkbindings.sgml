@@ -26,6 +26,7 @@ Bindings
 @class_branch_pspecs: 
 @entries: 
 @current: 
+@parsed: 
 
 <!-- ##### STRUCT GtkBindingEntry ##### -->
 <para>
