@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
-"POT-Creation-Date: 2002-07-31 16:57-0400\n"
-"PO-Revision-Date: 2000-11-07 06:28+0100\n"
+"POT-Creation-Date: 2002-09-14 18:57+0200\n"
+"PO-Revision-Date: 2002-09-14 19:14+0200\n"
 "Last-Translator: Szabolcs BAN <shooby@gnome.hu>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1694,69 +1694,64 @@ msgstr "Kiválasztott: "
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr ""
 
-#: gtk/gtkentry.c:3870 gtk/gtklabel.c:3177
-#, fuzzy
+#: gtk/gtkentry.c:3877 gtk/gtklabel.c:3177
 msgid "Select All"
-msgstr "Törlés"
+msgstr "Mindet kijelöli"
 
-#: gtk/gtkentry.c:3880 gtk/gtklabel.c:3187
+#: gtk/gtkentry.c:3887 gtk/gtklabel.c:3187
 msgid "Input Methods"
-msgstr ""
+msgstr "Beviteli módszerek"
 
-#: gtk/gtkentry.c:3890 gtk/gtktextview.c:6395
+#: gtk/gtkentry.c:3897 gtk/gtktextview.c:6426
 msgid "_Insert Unicode control character"
 msgstr ""
 
-#: gtk/gtkfilesel.c:536 gtk/gtkimage.c:161
+#: gtk/gtkfilesel.c:513 gtk/gtkimage.c:161
 msgid "Filename"
 msgstr "Fájlnév"
 
-#: gtk/gtkfilesel.c:537
+#: gtk/gtkfilesel.c:514
 msgid "The currently selected filename."
-msgstr ""
+msgstr "A jelenleg kiválasztott fájlnév"
 
-#: gtk/gtkfilesel.c:543
+#: gtk/gtkfilesel.c:520
 msgid "Show file operations"
-msgstr ""
+msgstr "Fájlműveletek megjelenítése"
 
-#: gtk/gtkfilesel.c:544
+#: gtk/gtkfilesel.c:521
 msgid "Whether buttons for creating/manipulating files should be displayed."
-msgstr ""
+msgstr "Megjelenjenek-e a fáljlétrehozó, illetve fájlművelet gombok."
 
-#: gtk/gtkfilesel.c:551
-#, fuzzy
+#: gtk/gtkfilesel.c:528
 msgid "Select multiple"
-msgstr "Törlés"
+msgstr "Többszörös kijelölés"
 
-#: gtk/gtkfilesel.c:552
+#: gtk/gtkfilesel.c:529
 msgid "Whether to allow multiple files to be selected."
-msgstr ""
+msgstr "Lehetséges legyen-e a többszörös kijelölés."
 
-#: gtk/gtkfilesel.c:707
-#, fuzzy
+#: gtk/gtkfilesel.c:684
 msgid "Folders"
-msgstr "Fájlok"
+msgstr "Mappák"
 
-#: gtk/gtkfilesel.c:711
-#, fuzzy
+#: gtk/gtkfilesel.c:688
 msgid "Fol_ders"
-msgstr "Fájlok"
+msgstr "_Mappák"
 
-#: gtk/gtkfilesel.c:742
+#: gtk/gtkfilesel.c:719
 msgid "Files"
 msgstr "Fájlok"
 
-#: gtk/gtkfilesel.c:746
-#, fuzzy
+#: gtk/gtkfilesel.c:723
 msgid "_Files"
-msgstr "Fájlok"
+msgstr "_Fájlok"
 
-#: gtk/gtkfilesel.c:822 gtk/gtkfilesel.c:2152
-#, fuzzy, c-format
+#: gtk/gtkfilesel.c:799 gtk/gtkfilesel.c:2138
+#, c-format
 msgid "Folder unreadable: %s"
-msgstr "Olvashatatlan könyvtár: %s"
+msgstr "Olvashatatlan mappa: %s"
 
-#: gtk/gtkfilesel.c:953
+#: gtk/gtkfilesel.c:930
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -1764,171 +1759,183 @@ msgid ""
 "Are you sure that you want to select it?"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1086
+#: gtk/gtkfilesel.c:1063
 msgid "_New Folder"
-msgstr ""
+msgstr "Ú_j mappa"
 
-#: gtk/gtkfilesel.c:1097
-#, fuzzy
+#: gtk/gtkfilesel.c:1074
 msgid "De_lete File"
-msgstr "Fájl törlése"
+msgstr "Fájl _törlése"
 
-#: gtk/gtkfilesel.c:1108
-#, fuzzy
+#: gtk/gtkfilesel.c:1085
 msgid "_Rename File"
-msgstr "Fájl átnevezése"
+msgstr "Fájl át_nevezése"
 
-#: gtk/gtkfilesel.c:1386
+#: gtk/gtkfilesel.c:1363
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
+"A mappanév (\"%s\") olyan jeleket tartalmaz, amelyek nem megengedettek "
+"fájlnevekben."
 
-#: gtk/gtkfilesel.c:1388
+#: gtk/gtkfilesel.c:1365
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
 "%s"
 msgstr ""
+"Hiba a mappa létrehozása közben: \"%s\": %s\n"
+"%s"
 
-#: gtk/gtkfilesel.c:1389 gtk/gtkfilesel.c:1625
+#: gtk/gtkfilesel.c:1366 gtk/gtkfilesel.c:1602
 msgid "You probably used symbols not allowed in filenames."
 msgstr ""
+"Valószínűleg olyan jeleket használtál, amelyek nem megengedettek "
+"fájlnevekben."
 
-#: gtk/gtkfilesel.c:1397
+#: gtk/gtkfilesel.c:1374
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
-msgstr ""
+msgstr "Hiba a mappa létrehozása közben: \"%s\": %s\n"
 
-#: gtk/gtkfilesel.c:1431
+#: gtk/gtkfilesel.c:1408
 msgid "New Folder"
-msgstr ""
+msgstr "Új mappa"
 
-#: gtk/gtkfilesel.c:1446
-#, fuzzy
+#: gtk/gtkfilesel.c:1423
 msgid "_Folder name:"
-msgstr "Fájlnév"
+msgstr "_Mappa neve:"
 
-#: gtk/gtkfilesel.c:1472
+#: gtk/gtkfilesel.c:1449
 msgid "Create"
 msgstr "Létrehozás"
 
-#: gtk/gtkfilesel.c:1513
+#: gtk/gtkfilesel.c:1490
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
+"A fájlnév (\"%s\") olyan jeleket tartalmaz, amelyek nem megengedettek "
+"fájlnevekben."
 
-#: gtk/gtkfilesel.c:1516
+#: gtk/gtkfilesel.c:1493
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
 "%s"
 msgstr ""
+"Hiba a fájl törlése közben: \"%s\": %s\n"
+"%s"
 
-#: gtk/gtkfilesel.c:1518 gtk/gtkfilesel.c:1639
+#: gtk/gtkfilesel.c:1495 gtk/gtkfilesel.c:1616
 msgid "It probably contains symbols not allowed in filenames."
 msgstr ""
+"Valószínűleg olyan jelet tartalmaz, amely nem megengedett fájlnevekben."
 
-#: gtk/gtkfilesel.c:1527
+#: gtk/gtkfilesel.c:1504
 #, c-format
 msgid "Error deleting file \"%s\": %s"
-msgstr ""
+msgstr "Hiba a fájl törlése közben: \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1570
+#: gtk/gtkfilesel.c:1547
 #, c-format
 msgid "Really delete file \"%s\" ?"
-msgstr ""
+msgstr "Tényleg törlöd \"%s\" fájlt?"
 
-#: gtk/gtkfilesel.c:1575
+#: gtk/gtkfilesel.c:1552
 msgid "Delete File"
 msgstr "Fájl törlése"
 
-#: gtk/gtkfilesel.c:1621 gtk/gtkfilesel.c:1635
+#: gtk/gtkfilesel.c:1598 gtk/gtkfilesel.c:1612
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
+"A fájlnév (\"%s\") olyan jelet tartalmaz, amely nem megengedett fájlnevekben."
 
-#: gtk/gtkfilesel.c:1623
+#: gtk/gtkfilesel.c:1600
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
 "%s"
 msgstr ""
+"Hiba a fájl átnevezése közben: \"%s\": %s\n"
+"%s"
 
-#: gtk/gtkfilesel.c:1637
+#: gtk/gtkfilesel.c:1614
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
 "%s"
 msgstr ""
+"Hiba a fájl átnevezése közben: \"%s\": %s\n"
+"%s"
 
-#: gtk/gtkfilesel.c:1647
+#: gtk/gtkfilesel.c:1624
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
-msgstr ""
+msgstr "Hiba a fájl átnevezése közben \"%s\" -> \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1694
+#: gtk/gtkfilesel.c:1671
 msgid "Rename File"
 msgstr "Fájl átnevezése"
 
-#: gtk/gtkfilesel.c:1709
-#, fuzzy, c-format
+#: gtk/gtkfilesel.c:1686
+#, c-format
 msgid "Rename file \"%s\" to:"
-msgstr "Fájl átnevezése"
+msgstr "Fájl átnevezése \"%s\" névről"
 
-#: gtk/gtkfilesel.c:1740
+#: gtk/gtkfilesel.c:1717
 msgid "Rename"
 msgstr "Átnevezés"
 
-#: gtk/gtkfilesel.c:2131
+#: gtk/gtkfilesel.c:2117
 msgid "Selection: "
 msgstr "Kiválasztott: "
 
-#: gtk/gtkfilesel.c:3011
+#: gtk/gtkfilesel.c:2997
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
 "environment variable G_BROKEN_FILENAMES): %s"
 msgstr ""
 
-#: gtk/gtkfilesel.c:3014
+#: gtk/gtkfilesel.c:3000
 msgid "Invalid Utf-8"
-msgstr ""
+msgstr "Érvénytelen UTF-8"
 
-#: gtk/gtkfilesel.c:3880
+#: gtk/gtkfilesel.c:3866
 msgid "Name too long"
 msgstr "Túl hosszú a név"
 
-#: gtk/gtkfilesel.c:3882
+#: gtk/gtkfilesel.c:3868
 msgid "Couldn't convert filename"
-msgstr ""
+msgstr "Fájnév konverziója sikertelen"
 
 #: gtk/gtkfixed.c:120 gtk/gtklayout.c:603
 msgid "X position"
-msgstr ""
+msgstr "X pozíció"
 
 #: gtk/gtkfixed.c:121 gtk/gtklayout.c:604
 msgid "X position of child widget"
-msgstr ""
+msgstr "A gyermekwidget X pozíciója"
 
 #: gtk/gtkfixed.c:130 gtk/gtklayout.c:613
 msgid "Y position"
-msgstr ""
+msgstr "Y pozíció"
 
 #: gtk/gtkfixed.c:131 gtk/gtklayout.c:614
 msgid "Y position of child widget"
-msgstr ""
+msgstr "A gyermekwidget Y pozíciója"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
 #: gtk/gtkfontsel.c:69
 msgid "abcdefghijk ABCDEFGHIJK"
-msgstr ""
+msgstr "áéíóöőúüű ÁÉÍÓÖŐÚÜŰ"
 
 #: gtk/gtkfontsel.c:205
-#, fuzzy
 msgid "Font name"
-msgstr "Család:"
+msgstr "Betűcsalád"
 
 #: gtk/gtkfontsel.c:206
 msgid "The X string that represents this font."
@@ -1939,18 +1946,16 @@ msgid "The GdkFont that is currently selected."
 msgstr ""
 
 #: gtk/gtkfontsel.c:219
-#, fuzzy
 msgid "Preview text"
-msgstr "Nézet:"
+msgstr "Próbaszöveg"
 
 #: gtk/gtkfontsel.c:220
 msgid "The text to display in order to demonstrate the selected font."
-msgstr ""
+msgstr "A kijelölt betűkészletet bemutató próbaszöveg."
 
 #: gtk/gtkfontsel.c:327
-#, fuzzy
 msgid "_Family:"
-msgstr "Család:"
+msgstr "_Család:"
 
 #: gtk/gtkfontsel.c:333
 msgid "_Style:"
@@ -1962,9 +1967,8 @@ msgstr "_Méret:"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:468
-#, fuzzy
 msgid "_Preview:"
-msgstr "Nézet:"
+msgstr "_Előnézet:"
 
 #: gtk/gtkfontsel.c:1269
 msgid "Font Selection"
@@ -3717,7 +3721,7 @@ msgstr "Tiltva"
 msgid "If the insertion cursor is shown"
 msgstr ""
 
-#: gtk/gtktextview.c:6386
+#: gtk/gtktextview.c:6417
 msgid "Input _Methods"
 msgstr ""
 
