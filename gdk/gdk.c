@@ -307,7 +307,17 @@ gdk_init (int    *argc,
   if (argc && argv)
     {
       if (*argc > 0)
-	gdk_progname = (*argv)[0];
+	{
+	  gchar *d;
+
+	  d = strrchr((*argv)[0],'/');
+	  if (d != NULL)
+	    gdk_progname = g_strdup (d + 1);
+	  else
+	    gdk_progname = g_strdup ((*argv)[0]);
+	  GDK_NOTE (MISC,
+		    g_print ("Gdk: progname: \"%s\"\n", gdk_progname));
+	}
 
       for (i = 1; i < *argc;)
 	{
@@ -474,7 +484,7 @@ gdk_init (int    *argc,
 
   connection_number = ConnectionNumber (gdk_display);
   GDK_NOTE (MISC,
-    g_print ("connection number: %d\n", connection_number));
+    g_print ("Gdk: connection number: %d\n", connection_number));
 
   if (synchronize)
     XSynchronize (gdk_display, True);
@@ -4013,7 +4023,7 @@ gdk_event_send_clientmessage_toall(GdkEvent *event)
     curwin = gdk_get_client_window(gdk_display, ret_children[i]);
     sev.xclient.window = curwin;
     if (!gdk_send_xevent (curwin, False, NoEventMask, &sev))
-      GDK_NOTE (MISC, g_print("Sending client message %ld to %#lx failed\n",
+      GDK_NOTE (MISC, g_print("Gdk: Sending client message %ld to %#lx failed\n",
 			     event->client.message_type, curwin));
   }
 

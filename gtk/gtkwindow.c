@@ -212,8 +212,8 @@ gtk_window_init (GtkWindow *window)
   GTK_WIDGET_SET_FLAGS (window, GTK_TOPLEVEL);
 
   window->title = NULL;
-  window->wmclass_name = NULL;
-  window->wmclass_class = NULL;
+  window->wmclass_name = g_strdup (gdk_progname);
+  window->wmclass_class = g_strdup (gdk_progclass);
   window->type = GTK_WINDOW_TOPLEVEL;
   window->accelerator_tables = NULL;
   window->focus_widget = NULL;

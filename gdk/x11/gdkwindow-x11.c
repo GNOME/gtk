@@ -119,7 +119,6 @@ gdk_window_xid_at_coords(gint x, gint y, GList *excludes, gboolean excl_child)
    Window root,child=0,parent_win=0,root_win=0;
    unsigned int num;
    int i;
-   GList *gl;
    
    window=(GdkWindow*)&gdk_root_parent;
    private=(GdkWindowPrivate*)window;

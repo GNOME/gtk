@@ -1,3 +1,20 @@
+Tue Mar 17 16:19:47 1998  Tim Janik  <timj@gimp.org>
+
+	* gdk/gdk.c: 
+	* gdk/gdkvisual.c: changed some debugging messages to be prefixed
+	by "Gdk:".
+
+	* gtk/gtkwidget.c (gtk_widget_real_draw): applied
+ 	gtk-shige-980317-0.patch.gz to set all event fields, but modified
+	the event.send_event field to be set to TRUE, since the event is not
+	really comming from the server.
+
+	* gtk/gtkwindow.c (gtk_window_init): applied gtk-ograf-980317-1.patch.gz
+	which cares about an initial setting of program name and program class.
+
+	* gdk/gdk.c (gdk_init): applied gtk-ograf-980317-0.patch.gz, which
+	strips leading pathnames from gdk_progname.
+
 Tue Mar 17 12:36:35 1998  Tim Janik  <timj@gimp.org>
 
 	* gtk/gtkstyle.c (gtk_default_draw_arrow): fixed a bug about drawing

@@ -3625,9 +3625,11 @@ gtk_widget_real_draw (GtkWidget	   *widget,
   if (GTK_WIDGET_DRAWABLE (widget))
     {
       event.type = GDK_EXPOSE;
+      event.send_event = TRUE;
       event.window = widget->window;
       event.area = *area;
-
+      event.count = 0;
+      
       gdk_window_ref (event.window);
       gtk_widget_event (widget, (GdkEvent*) &event);
       gdk_window_unref (event.window);
