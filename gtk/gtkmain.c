@@ -222,8 +222,13 @@ gtk_main_quit ()
   done = TRUE;
 }
 
+gint gtk_main_iteration ()
+{
+  return gtk_main_iteration_do(TRUE);
+}
+
 gint
-gtk_main_iteration ()
+gtk_main_iteration_do (gboolean blocking)
 {
   GtkWidget *event_widget;
   GtkWidget *grab_widget;
@@ -267,7 +272,7 @@ gtk_main_iteration ()
        */
       gtk_handle_timer ();
       
-      event = gdk_event_get ();
+      if(blocking) event = gdk_event_get ();
     }
   
   /* "gdk_event_get" can return FALSE if the timer goes off

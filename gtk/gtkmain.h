@@ -38,6 +38,8 @@ void	   gtk_main		 (void);
 guint	   gtk_main_level	 (void);
 void	   gtk_main_quit	 (void);
 gint	   gtk_main_iteration	 (void);
+/* gtk_main_iteration() calls gtk_main_iteration_do(TRUE) */
+gint	   gtk_main_iteration_do (gboolean blocking);
 
 gint	   gtk_true		 (void);
 gint	   gtk_false		 (void);

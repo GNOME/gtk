@@ -20,7 +20,6 @@
 #include "gtk.h"
 #include "../gdk/gdk.h"
 #include "../gdk/gdkx.h"
-#include "gtkhandlebox.h"
 
 void
 destroy_window (GtkWidget  *widget,
@@ -1346,12 +1345,16 @@ create_entry ()
   GtkWidget *box1;
   GtkWidget *box2;
   GtkWidget *editable_check;
-  GtkWidget *entry;
+  GtkWidget *entry, *cb;
   GtkWidget *button;
   GtkWidget *separator;
+  GList *cbitems = NULL;
 
-  /*  if (!window) */
+  if (!window)
     {
+      cbitems = g_list_append(cbitems, "item1");
+      cbitems = g_list_append(cbitems, "item2");
+      cbitems = g_list_append(cbitems, "and item3");
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
@@ -1376,12 +1379,18 @@ create_entry ()
       gtk_widget_show (box2);
 
       entry = gtk_entry_new ();
-      /* gtk_widget_set_usize (entry, 0, 25); */
       gtk_entry_set_text (GTK_ENTRY (entry), "hello world");
       gtk_entry_select_region (GTK_ENTRY (entry), 
 			       0, GTK_ENTRY(entry)->text_length);
       gtk_box_pack_start (GTK_BOX (box2), entry, TRUE, TRUE, 0);
       gtk_widget_show (entry);
+
+      cb = gtk_combo_box_new (cbitems);
+      gtk_entry_set_text (GTK_ENTRY (cb), "hello world");
+      gtk_entry_select_region (GTK_ENTRY (cb),
+			       0, GTK_ENTRY(entry)->text_length);
+      gtk_box_pack_start (GTK_BOX (box2), cb, TRUE, TRUE, 0);
+      gtk_widget_show (cb);
 
       editable_check = gtk_check_button_new_with_label("Editable");
       gtk_box_pack_start (GTK_BOX (box2), editable_check, TRUE, TRUE, 0);

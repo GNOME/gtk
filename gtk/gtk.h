@@ -33,6 +33,7 @@
 #include <gtk/gtkcheckmenuitem.h>
 #include <gtk/gtkclist.h>
 #include <gtk/gtkcolorsel.h>
+#include <gtk/gtkcombobox.h>
 #include <gtk/gtkcontainer.h>
 #include <gtk/gtkcurve.h>
 #include <gtk/gtkdata.h>

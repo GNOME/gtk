@@ -70,6 +70,8 @@ gdk_window_init ()
   gdk_root_parent.xwindow = gdk_root_window;
   gdk_root_parent.window_type = GDK_WINDOW_ROOT;
   gdk_root_parent.window.user_data = NULL;
+  gdk_root_parent.width = width;
+  gdk_root_parent.height = height;
 }
 
 GdkWindow*
