@@ -1,3 +1,11 @@
+Fri Jun  6 11:05:45 2003  Hidetoshi Tajima  <hidetoshi.tajima@sun.com>
+
+	* modules/input/gtkimcontextxim.h (struct _GtkIMContextXIM):
+	* modules/input/gtkimcontextxim.c (preedit_start_callback,
+	preedit_draw_callback, preedit_done_callback): Add a 'finalizing' flag 
+	to keep preedit-[start,changed,end] signals from being called during
+	finalization (#111861).
+
 2003-06-05  Noah Levitt  <nlevitt@columbia.edu>
 
 	* gtk/gtknotebook.c (gtk_notebook_button_press): Ignore button

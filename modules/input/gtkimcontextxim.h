@@ -75,6 +75,7 @@ struct _GtkIMContextXIM
 
   guint use_preedit : 1;
   guint status_visible : 1;
+  guint finalizing : 1;
 };
 
 struct _GtkIMContextXIMClass
