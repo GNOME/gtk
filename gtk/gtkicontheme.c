@@ -2326,7 +2326,7 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo *icon_info,
 	icon_info->scale = 1.0;
       
       if (icon_info->dir_type == ICON_THEME_DIR_UNTHEMED)
-	icon_info->scale = MIN (icon_info->scale, 1.5);
+	icon_info->scale = MIN (icon_info->scale, 1.0);
     }
 
   /* We don't short-circuit out here for scale_only, since, now

@@ -1,3 +1,8 @@
+2004-10-05  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkicontheme.c (icon_info_ensure_scale_and_pixbuf): Go back to
+	not scaling up at all. Less magic.
+
 Tue Oct  5 17:06:26 2004  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwidget.c (gtk_widget_size_allocate): if REQUEST_NEEDED is still
