@@ -1891,7 +1891,7 @@ theme_lookup_icon (IconTheme          *theme,
       
       if (min_dir->icon_data != NULL)
 	icon_info->data = g_hash_table_lookup (min_dir->icon_data, icon_name);
-      else
+      else if (min_dir->cache != NULL)
 	icon_info->data = _gtk_icon_cache_get_icon_data (min_dir->cache, icon_name, min_dir->subdir);
 
       if (icon_info->data == NULL &&
