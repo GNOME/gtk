@@ -34,22 +34,13 @@ expose_cb (GtkWidget *widget, GdkEventExpose *event, gpointer data)
   
   dest = gdk_pixbuf_new (ART_PIX_RGB, FALSE, 8, event->area.width, event->area.height);
 
-  if (pixbuf->art_pixbuf->has_alpha || overall_alpha != 255)
-    gdk_pixbuf_composite_color (pixbuf, dest,
-				0, 0, event->area.width, event->area.height,
-				-event->area.x, -event->area.y,
-				(double) widget->allocation.width / pixbuf->art_pixbuf->width,
-				(double) widget->allocation.height / pixbuf->art_pixbuf->height,
-				filter_level, overall_alpha,
-				event->area.x, event->area.y, 16, 0xaaaaaa, 0x555555);
-  else
-    gdk_pixbuf_scale (pixbuf, dest,
-		      0, 0, event->area.width, event->area.height,
-		      -event->area.x, -event->area.y,
-		      (double) widget->allocation.width / pixbuf->art_pixbuf->width,
-		      (double) widget->allocation.height / pixbuf->art_pixbuf->height,
-		      filter_level);
-
+  gdk_pixbuf_composite_color (pixbuf, dest,
+			      0, 0, event->area.width, event->area.height,
+			      -event->area.x, -event->area.y,
+			      (double) widget->allocation.width / pixbuf->art_pixbuf->width,
+			      (double) widget->allocation.height / pixbuf->art_pixbuf->height,
+			      filter_level, overall_alpha,
+			      event->area.x, event->area.y, 16, 0xaaaaaa, 0x555555);
 
   gdk_pixbuf_render_to_drawable (dest, widget->window, widget->style->fg_gc[GTK_STATE_NORMAL],
 				 0, 0, event->area.x, event->area.y,

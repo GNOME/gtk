@@ -6,10 +6,10 @@
  * gdk_pixbuf_scale:
  * @src: a #GdkPixbuf
  * @dest: the #GdkPixbuf into which to render the results
- * @dest_x: 
- * @dest_y: 
- * @dest_width: 
- * @dest_height: 
+ * @dest_x: the left coordinate for region to render
+ * @dest_y: the top coordinate for region to render
+ * @dest_width: the width of the region to render
+ * @dest_height: the height of the region to render
  * @offset_x: the offset in the X direction (currently rounded to an integer)
  * @offset_y: the offset in the Y direction (currently rounded to an integer)
  * @scale_x: the scale factor in the X direction
@@ -49,10 +49,10 @@ gdk_pixbuf_scale (GdkPixbuf      *src,
  * gdk_pixbuf_composite:
  * @src: a #GdkPixbuf
  * @dest: the #GdkPixbuf into which to render the results
- * @dest_x: 
- * @dest_y: 
- * @dest_width: 
- * @dest_height: 
+ * @dest_x: the left coordinate for region to render
+ * @dest_y: the top coordinate for region to render
+ * @dest_width: the width of the region to render
+ * @dest_height: the height of the region to render
  * @offset_x: the offset in the X direction (currently rounded to an integer)
  * @offset_y: the offset in the Y direction (currently rounded to an integer)
  * @scale_x: the scale factor in the X direction
@@ -93,10 +93,10 @@ gdk_pixbuf_composite (GdkPixbuf      *src,
  * gdk_pixbuf_composite_color:
  * @src: a #GdkPixbuf
  * @dest: the #GdkPixbuf into which to render the results
- * @dest_x: 
- * @dest_y: 
- * @dest_width: 
- * @dest_height: 
+ * @dest_x: the left coordinate for region to render
+ * @dest_y: the top coordinate for region to render
+ * @dest_width: the width of the region to render
+ * @dest_height: the height of the region to render
  * @offset_x: the offset in the X direction (currently rounded to an integer)
  * @offset_y: the offset in the Y direction (currently rounded to an integer)
  * @scale_x: the scale factor in the X direction

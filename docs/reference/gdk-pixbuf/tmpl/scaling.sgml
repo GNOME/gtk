@@ -1,0 +1,162 @@
+<!-- ##### SECTION Title ##### -->
+Scaling
+
+<!-- ##### SECTION Short_Description ##### -->
+Scaling pixbufs and scaling and compositing pixbufs
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+gdk-pixbuf contains functions to scale pixbufs, to scale pixbufs and
+composite against an existing image, and to scale pixbufs and
+composite against a solid color or checkerboard.  (Compositing a
+checkerboard is a common way to show an image with an alpha-channel in
+image-viewing and editing software.)
+</para>
+<para>
+Since the full-featured functions (gdk_pixbuf_scale(),
+gdk_pixbuf_composite(), and gdk_pixbuf_composite_color()) are
+rather complex to use and have many arguments, two simple
+convenience functions are provided, gdk_pixbuf_scale_simple()
+and gdk_pixbuf_composite_color_simple() which create a
+new pixbuf of a given size, scale an original image to fit,
+and then return the new pixmap.
+</para>
+
+<para>
+The following example demonstrates handling an expose event by
+rendering the appropriate area of a source image (which is scaled to
+fit the widget) onto the widget's window.  The source image is
+rendered against a checkerboard, which provides a visual
+representation of the alpha channel if the image has one. If the image
+doesn't have an alpha channel, calling gdk_pixbuf_composite_color()
+function has exactly the same effect as calling gdk_pixbuf_scale().
+</para>
+
+<programlisting>
+gboolean
+expose_cb (GtkWidget *widget, GdkEventExpose *event, gpointer data)
+{
+  GdkPixbuf *dest;
+
+  gdk_window_set_back_pixmap (widget->window, NULL, FALSE);
+  
+  dest = gdk_pixbuf_new (ART_PIX_RGB, FALSE, 8, event->area.width, event->area.height);
+
+  gdk_pixbuf_composite_color (pixbuf, dest,
+                              0, 0, event->area.width, event->area.height,
+                              -event->area.x, -event->area.y,
+                              (double) widget->allocation.width / pixbuf->art_pixbuf->width,
+                              (double) widget->allocation.height / pixbuf->art_pixbuf->height,
+                              filter_level, 255,
+                               event->area.x, event->area.y, 16, 0xaaaaaa, 0x555555);
+
+  gdk_pixbuf_render_to_drawable (dest, widget->window, widget->style->fg_gc[GTK_STATE_NORMAL],
+                                 0, 0, event->area.x, event->area.y,
+                                 event->area.width, event->area.height,
+                                 GDK_RGB_DITHER_NORMAL, event->area.x, event->area.y);
+  
+  gdk_pixbuf_unref (dest);
+  
+  return TRUE;
+}
+</programlisting>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gdk_pixbuf_scale ##### -->
+<para>
+
+</para>
+
+@src: 
+@dest: 
+@dest_x: 
+@dest_y: 
+@dest_width: 
+@dest_height: 
+@offset_x: 
+@offset_y: 
+@scale_x: 
+@scale_y: 
+@filter_level: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_composite ##### -->
+<para>
+
+</para>
+
+@src: 
+@dest: 
+@dest_x: 
+@dest_y: 
+@dest_width: 
+@dest_height: 
+@offset_x: 
+@offset_y: 
+@scale_x: 
+@scale_y: 
+@filter_level: 
+@overall_alpha: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_composite_color ##### -->
+<para>
+
+</para>
+
+@src: 
+@dest: 
+@dest_x: 
+@dest_y: 
+@dest_width: 
+@dest_height: 
+@offset_x: 
+@offset_y: 
+@scale_x: 
+@scale_y: 
+@filter_level: 
+@overall_alpha: 
+@check_x: 
+@check_y: 
+@check_size: 
+@color1: 
+@color2: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_scale_simple ##### -->
+<para>
+
+</para>
+
+@src: 
+@dest_width: 
+@dest_height: 
+@filter_level: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_composite_color_simple ##### -->
+<para>
+
+</para>
+
+@src: 
+@dest_width: 
+@dest_height: 
+@filter_level: 
+@overall_alpha: 
+@check_size: 
+@color1: 
+@color2: 
+@Returns: 
+
+<!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
+End:
+-->

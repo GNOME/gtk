@@ -13,12 +13,10 @@ Animations as multi-frame structures.
     about the frame's overlay mode and duration.
   </para>
 
-
 <!-- ##### SECTION See_Also ##### -->
   <para>
     #GdkPixbufLoader
   </para>
-
 
 <!-- ##### ENUM GdkPixbufFrameAction ##### -->
   <para>
@@ -82,12 +80,11 @@ Animations as multi-frame structures.
 
 </para>
 
-@animation: 
-
-
-<!--
+@animation: <!--
 Local variables:
 mode: sgml
 sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
 End:
 -->
+
+

@@ -4,6 +4,7 @@
 <!entity gdk-pixbuf-file-loading SYSTEM "sgml/file-loading.sgml">
 <!entity gdk-pixbuf-creating SYSTEM "sgml/creating.sgml">
 <!entity gdk-pixbuf-rendering SYSTEM "sgml/rendering.sgml">
+<!entity gdk-pixbuf-scaling SYSTEM "sgml/scaling.sgml">
 <!entity gdk-pixbuf-from-drawables SYSTEM "sgml/from-drawables.sgml">
 <!entity gdk-pixbuf-util SYSTEM "sgml/util.sgml">
 <!entity gdk-pixbuf-animation SYSTEM "sgml/animation.sgml">
@@ -49,6 +50,7 @@
     &gdk-pixbuf-file-loading;
     &gdk-pixbuf-creating;
     &gdk-pixbuf-rendering;
+    &gdk-pixbuf-scaling;
     &gdk-pixbuf-from-drawables;
     &gdk-pixbuf-util;
     &gdk-pixbuf-animation;

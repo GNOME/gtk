@@ -1322,6 +1322,9 @@ pixops_composite_color (art_u8         *dest_buf,
   g_return_if_fail (!(dest_channels == 3 && dest_has_alpha));
   g_return_if_fail (!(src_channels == 3 && src_has_alpha));
 
+  if (scale_x == 0 || scale_y == 0)
+    return;
+
   if (!src_has_alpha && overall_alpha == 255)
     pixops_scale (dest_buf, render_x0, render_y0, render_x1, render_y1,
 		  dest_rowstride, dest_channels, dest_has_alpha,
@@ -1397,6 +1400,9 @@ pixops_composite (art_u8        *dest_buf,
 
   g_return_if_fail (!(dest_channels == 3 && dest_has_alpha));
   g_return_if_fail (!(src_channels == 3 && src_has_alpha));
+
+  if (scale_x == 0 || scale_y == 0)
+    return;
 
   if (!src_has_alpha && overall_alpha == 255)
     pixops_scale (dest_buf, render_x0, render_y0, render_x1, render_y1,
@@ -1477,6 +1483,9 @@ pixops_scale (art_u8        *dest_buf,
   g_return_if_fail (!(dest_channels == 3 && dest_has_alpha));
   g_return_if_fail (!(src_channels == 3 && src_has_alpha));
   g_return_if_fail (!(src_has_alpha && !dest_has_alpha));
+
+  if (scale_x == 0 || scale_y == 0)
+    return;
 
   switch (filter_level)
     {

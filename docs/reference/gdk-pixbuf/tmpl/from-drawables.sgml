@@ -32,9 +32,7 @@ Getting parts of a drawable's image data into a pixbuf.
 @dest_y: 
 @width: 
 @height: 
-@Returns: 
-
-<!--
+@Returns: <!--
 Local variables:
 mode: sgml
 sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")

@@ -27,6 +27,7 @@ tmpl_sources =					\
 	tmpl/gnome-canvas-pixbuf.sgml		\
 	tmpl/refcounting.sgml			\
 	tmpl/rendering.sgml			\
+	tmpl/scaling.sgml			\
 	tmpl/util.sgml
 
 gdk_pixbuf_docdir = $(HTML_DIR)
@@ -56,7 +57,7 @@ scan:
 	-(cd $(srcdir) \
 	&& env CFLAGS=$(CFLAGS) LDFLAGS=$(LDFLAGS) \
 		 gtkdoc-scanobj --module=$(DOC_MODULE) \
-	&& gtkdoc-scan --module=$(DOC_MODULE) --source-dir=$(DOC_SOURCE_DIR) )
+	&& gtkdoc-scan --module=$(DOC_MODULE) --source-dir=$(DOC_SOURCE_DIR) --ignore-headers="pixops.h pixops-internal.h" )
 
 templates: scan
 	cd $(srcdir) && gtkdoc-mktmpl --module=$(DOC_MODULE)

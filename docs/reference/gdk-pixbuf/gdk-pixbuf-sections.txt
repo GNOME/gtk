@@ -61,6 +61,15 @@ gdk_pixbuf_animation_unref
 </SECTION>
 
 <SECTION>
+<FILE>scaling</FILE>
+gdk_pixbuf_scale
+gdk_pixbuf_composite
+gdk_pixbuf_composite_color
+gdk_pixbuf_scale_simple
+gdk_pixbuf_composite_color_simple
+</SECTION>
+
+<SECTION>
 <FILE>gdk-pixbuf-loader</FILE>
 GDK_PIXBUF_LOADER
 <TITLE>GdkPixbufLoader</TITLE>

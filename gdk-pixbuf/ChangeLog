@@ -1,5 +1,18 @@
 2000-01-05  Owen Taylor  <otaylor@redhat.com>
 
+	* doc/Makefile.am doc/gdk-pixbuf-sections.txt
+	  doc/gdk-pixbuf.sgml doc/tmpl/scaling.sgml: 
+	Added scaling functions into gtk-doc framework.
+
+	* gdk-pixbuf/gdk-pixbuf-scale.c: Documentation fixes.
+
+	* gdk-pixbuf/testpixbuf-scale.c (expose_cb): Simplify a bit.
+
+	* gdk-pixbuf/pixops/pixops.c (pixops_composite_color): Return
+	immediately if scale_x or scale_y is 0.
+
+2000-01-05  Owen Taylor  <otaylor@redhat.com>
+
 	* gdk-pixbuf/pixops/timescale.c: quick fix for initializing
 	arrays in benchmark.
 

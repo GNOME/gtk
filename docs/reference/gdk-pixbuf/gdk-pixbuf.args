@@ -17,7 +17,7 @@
 </ARG>
 
 <ARG>
-<NAME>GnomeCanvasPixbuf::width_in_pixels</NAME>
+<NAME>GnomeCanvasPixbuf::width_pixels</NAME>
 <TYPE>gboolean</TYPE>
 <FLAGS>rw</FLAGS>
 </ARG>
@@ -35,7 +35,7 @@
 </ARG>
 
 <ARG>
-<NAME>GnomeCanvasPixbuf::height_in_pixels</NAME>
+<NAME>GnomeCanvasPixbuf::height_pixels</NAME>
 <TYPE>gboolean</TYPE>
 <FLAGS>rw</FLAGS>
 </ARG>
@@ -53,7 +53,7 @@
 </ARG>
 
 <ARG>
-<NAME>GnomeCanvasPixbuf::x_in_pixels</NAME>
+<NAME>GnomeCanvasPixbuf::x_pixels</NAME>
 <TYPE>gboolean</TYPE>
 <FLAGS>rw</FLAGS>
 </ARG>
@@ -71,7 +71,7 @@
 </ARG>
 
 <ARG>
-<NAME>GnomeCanvasPixbuf::y_in_pixels</NAME>
+<NAME>GnomeCanvasPixbuf::y_pixels</NAME>
 <TYPE>gboolean</TYPE>
 <FLAGS>rw</FLAGS>
 </ARG>

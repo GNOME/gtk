@@ -6,9 +6,23 @@ GdkPixbuf *pixbuf, gpointer user_data
 <USER_FUNCTION>
 <NAME>ModuleUpdatedNotifyFunc</NAME>
 <RETURNS>void </RETURNS>
-GdkPixbuf *pixbuf, gpointer user_data,
+GdkPixbuf *pixbuf,
 					  guint x, guint y,
-					  guint width, guint height
+					  guint width, guint height,
+					  gpointer user_data
+</USER_FUNCTION>
+<USER_FUNCTION>
+<NAME>ModuleFrameDoneNotifyFunc</NAME>
+<RETURNS>void </RETURNS>
+GdkPixbuf *pixbuf,
+					    gint frame,
+					    gpointer user_data
+</USER_FUNCTION>
+<USER_FUNCTION>
+<NAME>ModuleAnimationDoneNotifyFunc</NAME>
+<RETURNS>void </RETURNS>
+GdkPixbuf *pixbuf,
+						gpointer user_data
 </USER_FUNCTION>
 <STRUCT>
 <NAME>GdkPixbufModule</NAME>
@@ -26,6 +40,8 @@ struct GdkPixbufModule {
 
         gpointer (* begin_load) (ModulePreparedNotifyFunc prepare_func,
 				 ModuleUpdatedNotifyFunc update_func,
+				 ModuleFrameDoneNotifyFunc frame_done_func,
+				 ModuleAnimationDoneNotifyFunc anim_done_func,
 				 gpointer user_data);
         void (* stop_load) (gpointer context);
         gboolean (* load_increment) (gpointer context, const guchar *buf, guint size);
@@ -273,6 +289,31 @@ GdkPixbuf *pixbuf, GdkDrawable *drawable,int src_x, int src_y,int dest_x, int de
 <NAME>gdk_pixbuf_get_from_drawable</NAME>
 <RETURNS>GdkPixbuf  *</RETURNS>
 GdkPixbuf *dest,GdkDrawable *src, GdkColormap *cmap,int src_x, int src_y,int dest_x, int dest_y,int width, int height
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_scale</NAME>
+<RETURNS>void  </RETURNS>
+GdkPixbuf      *src,GdkPixbuf      *dest,int             dest_x,int             dest_y,int             dest_width,int             dest_height,double          offset_x,double          offset_y,double          scale_x,double          scale_y,ArtFilterLevel  filter_level
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_composite</NAME>
+<RETURNS>void  </RETURNS>
+GdkPixbuf      *src,GdkPixbuf      *dest,int             dest_x,int             dest_y,int             dest_width,int             dest_height,double          offset_x,double          offset_y,double          scale_x,double          scale_y,ArtFilterLevel  filter_level,int             overall_alpha
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_composite_color</NAME>
+<RETURNS>void  </RETURNS>
+GdkPixbuf      *src,GdkPixbuf      *dest,int             dest_x,int             dest_y,int             dest_width,int             dest_height,double          offset_x,double          offset_y,double          scale_x,double          scale_y,ArtFilterLevel  filter_level,int             overall_alpha,int             check_x,int             check_y,int             check_size,art_u32         color1,art_u32         color2
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_scale_simple</NAME>
+<RETURNS>GdkPixbuf  *</RETURNS>
+GdkPixbuf      *src,int             dest_width,int             dest_height,ArtFilterLevel  filter_level
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_composite_color_simple</NAME>
+<RETURNS>GdkPixbuf  *</RETURNS>
+GdkPixbuf      *src,int             dest_width,int             dest_height,ArtFilterLevel  filter_level,int             overall_alpha,int             check_size,art_u32         color1,art_u32         color2
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_pixbuf_animation_new_from_file</NAME>

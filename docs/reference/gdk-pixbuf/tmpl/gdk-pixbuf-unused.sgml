@@ -1,3 +1,14 @@
+<!-- ##### ARG GnomeCanvasPixbuf:width_in_pixels ##### -->
+  <para>
+    If this argument is %TRUE, then the width of the pixbuf will be
+    considered to be in pixels, that is, it will not be visually
+    scaled even if the item's affine transformation changes.  If this
+    is %FALSE, then the width of the pixbuf will be considered to be
+    in canvas units, and so will be scaled normally by affine
+    transformations.  The default is %FALSE.
+  </para>
+
+
 <!-- ##### SECTION ./tmpl/gdk-pixbuf-io.sgml:See_Also ##### -->
 <para>
 
@@ -15,6 +26,14 @@
 
 
 
+<!-- ##### ARG GnomeCanvasPixbuf:height_in_pixels ##### -->
+  <para>
+    Works in the same way as the <link
+    linkend="GnomeCanvasPixbuf--width-in-pixels">width_in_pixels</link>
+    argument.  The default is %FALSE.
+  </para>
+
+
 <!-- ##### STRUCT GdkPixbufModule ##### -->
 <para>
 
@@ -28,6 +47,21 @@
 @begin_load: 
 @stop_load: 
 @load_increment: 
+
+<!-- ##### ARG GnomeCanvasPixbuf:y_in_pixels ##### -->
+  <para>
+    Works in the same way as the <link
+    linkend="GnomeCanvasPixbuf--x-in-pixels">x_in_pixels</link>
+    argument.  The default is %FALSE.
+  </para>
+
+<!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
+End:
+-->
+
 
 <!-- ##### SECTION ./tmpl/gdk-pixbuf-io.sgml:Long_Description ##### -->
 <para>
@@ -67,4 +101,15 @@ gdk-pixbuf-io
 @buffer: 
 @size: 
 @Returns: 
+
+<!-- ##### ARG GnomeCanvasPixbuf:x_in_pixels ##### -->
+  <para>
+    If this argument is %TRUE, the pixbuf's translation with respect
+    to its logical origin in item-relative coordinates will be in
+    pixels, that is, the visible offset will not change even if the
+    item's affine transformation changes.  If it is %FALSE, the
+    pixbuf's translation will be taken to be in canvas units, and thus
+    will change along with the item's affine transformation.
+  </para>
+
 
