@@ -538,8 +538,13 @@ render_para (GtkTextRenderer    *text_renderer,
 					   PANGO_SCALE * x + line_rect.x,
 					   PANGO_SCALE * y + baseline);
 
-          if (selection_start_index <= byte_offset + line->length &&
-              selection_end_index > byte_offset) /* Some selected */
+	  /* Check if some part of the line is selected; the newline
+	   * that is after line->length for the last line of the
+	   * paragraph counts as part of the line for this
+	   */
+          if ((selection_start_index < byte_offset + line->length ||
+	       (selection_start_index == byte_offset + line->length && pango_layout_iter_at_last_line (iter))) &&
+	      selection_end_index > byte_offset)
             {
               GdkRegion *clip_region = get_selected_clip (text_renderer, layout, line,
                                                           x + line_display->x_offset,
@@ -754,7 +759,7 @@ gtk_text_layout_draw (GtkTextLayout *layout,
                   if (gtk_text_iter_compare (&selection_end, &line_end) <= 0)
                     selection_end_index = gtk_text_iter_get_visible_line_index (&selection_end);
                   else
-                    selection_end_index = MAX(byte_count, 1);
+                    selection_end_index = byte_count + 1; /* + 1 to flag past-the-end */
                 }
             }
 

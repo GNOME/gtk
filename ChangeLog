@@ -1,3 +1,14 @@
+Tue Nov 30 16:25:29 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextdisplay.c (render_para): Don't paint in the
+	trailing end of a wrapped line when the selection 
+	starts after the line. (#159984, Matthias Clasen)
+
+	* gtk/gtktextdisplay.c (gtk_text_layout_draw): pass in byte_count + 1 
+	for selection_end index when the selection end is past the end of the 
+	line so that render_para() can distinguish it from selection-end
+	*at* the end of the line. Fixes newlines not being selected.
+
 2004-11-30  James M. Cape  <jcape@ignore-your.tv>
 
 	* gtk/gtkfilechooserbutton.h (gtk_file_chooser_button_get_active)
