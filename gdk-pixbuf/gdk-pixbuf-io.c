@@ -4,8 +4,10 @@
  * Author:
  *    Miguel de Icaza (miguel@gnu.org)
  */
+
 #include <config.h>
 #include <stdio.h>
+#include <string.h>
 #include <glib.h>
 #include <gmodule.h>
 #include "gdk-pixbuf.h"
@@ -37,7 +39,7 @@ pixbuf_check_jpeg (unsigned char *buffer, int size)
 
 	if (buffer [0] != 0xff || buffer [1] != 0xd8)
 		return FALSE;
-	
+
 	return TRUE;
 }
 
@@ -47,18 +49,18 @@ pixbuf_check_tiff (unsigned char *buffer, int size)
 	if (size < 10)
 		return FALSE;
 
-	if (buffer [0] == 'M' && 
-	    buffer [1] == 'M' && 
-	    buffer [2] == 0   && 
+	if (buffer [0] == 'M' &&
+	    buffer [1] == 'M' &&
+	    buffer [2] == 0   &&
 	    buffer [3] == 0x2a)
 		return TRUE;
 
-	if (buffer [0] == 'I' && 
-	    buffer [1] == 'I' && 
-	    buffer [2] == 0x2a && 
+	if (buffer [0] == 'I' &&
+	    buffer [1] == 'I' &&
+	    buffer [2] == 0x2a &&
 	    buffer [3] == 0)
 		return TRUE;
-	
+
 	return FALSE;
 }
 
@@ -67,10 +69,10 @@ pixbuf_check_gif (unsigned char *buffer, int size)
 {
 	if (size < 20)
 		return FALSE;
-		
+
 	if (strncmp (buffer, "GIF8", 4) == 0)
 		return TRUE;
-	
+
 	return FALSE;
 }
 
@@ -79,10 +81,10 @@ pixbuf_check_xpm (unsigned char *buffer, int size)
 {
 	if (size < 20)
 		return FALSE;
-	
+
 	if (strncmp (buffer, "/* XPM */", 9) == 0)
 		return TRUE;
-	
+
 	return FALSE;
 }
 
@@ -91,10 +93,10 @@ pixbuf_check_bmp (unsigned char *buffer, int size)
 {
 	if (size < 20)
 		return FALSE;
-	
+
 	if (buffer [0] != 'B' || buffer [1] != 'M')
 		return FALSE;
-	
+
 	return TRUE;
 }
 
@@ -133,15 +135,6 @@ static struct {
 	{ NULL, NULL, NULL, NULL, NULL }
 };
 
-static int
-image_file_format (const char *file)
-{
-	FILE *f = fopen (file, "r");
-
-	if (!f)
-		return -1;
-}
-
 static void
 image_handler_load (int idx)
 {
@@ -149,8 +142,8 @@ image_handler_load (int idx)
 	char *path;
 	GModule *module;
 	void *load_sym, *save_sym;
-       
-	module_name = g_strconcat ("pixbuf-", 
+
+	module_name = g_strconcat ("pixbuf-",
 				   file_formats [idx].module_name, NULL);
 	path = g_module_build_path (PIXBUF_LIBDIR, module_name);
 	g_free (module_name);
@@ -184,7 +177,7 @@ gdk_pixbuf_load_image (const char *file)
 	n = fread (&buffer, 1, sizeof (buffer), f);
 
 	if (n == 0){
-		fclose (f);		
+		fclose (f);
 		return NULL;
 	}
 

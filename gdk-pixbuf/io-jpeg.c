@@ -42,7 +42,7 @@ g_JPEGFatalErrorHandler(j_common_ptr cinfo)
 GdkPixBuf *image_load(FILE *f)
 {
 	int w,h,i,j;
-	art_u8 *pixels=NULL, *dptr, *fptr, *pptr;
+	art_u8 *pixels=NULL, *dptr;
 	unsigned char *lines[4], /* Used to expand rows, via rec_outbuf_height, from
 				  the header file:
 				  "* Usually rec_outbuf_height will be 1 or 2, at most 4." */
@@ -123,7 +123,7 @@ GdkPixBuf *image_load(FILE *f)
 	}
 	pixbuf->ref_count = 0;
 	pixbuf->unref_func = NULL;
-	
+
 	return pixbuf;
 }
 

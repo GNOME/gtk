@@ -342,7 +342,7 @@ static GdkPixBuf *
 	color->transparent = FALSE;
 
 	color_name = xpm_extract_color(buffer);
-       
+
 	if ((color_name == NULL) || (g_strcasecmp(color_name, "None") == 0)
 	    || (gdk_color_parse(color_name, &color->color) == FALSE)) {
 	    color->transparent = TRUE;

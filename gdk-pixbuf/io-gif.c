@@ -181,5 +181,3 @@ GdkPixBuf *image_load(FILE * f)
 }
 
 image_save() {}
-
-

@@ -170,12 +170,12 @@ int image_save(GdkPixBuf *pixbuf, FILE *file)
      png_infop info_ptr;
      art_u8 *data;
      gint y, h, w;
-     png_bytep row_ptr;
+     png_bytepp row_ptr;
      png_color_8 sig_bit;
      gint type;
-     
-     g_return_val_if_fail(file != NULL, NULL);
-     g_return_val_if_fail(pixbuf != NULL, NULL);
+
+     g_return_val_if_fail(file != NULL, FALSE);
+     g_return_val_if_fail(pixbuf != NULL, FALSE);
 
      h = pixbuf->art_pixbuf->height;
      w = pixbuf->art_pixbuf->width;
@@ -184,20 +184,20 @@ int image_save(GdkPixBuf *pixbuf, FILE *file)
 				       NULL, NULL, NULL);
      if (png_ptr == NULL) {
 	  fclose(file);
-	  return NULL;
+	  return FALSE;
      }
 
      info_ptr = png_create_info_struct(png_ptr);
      if (info_ptr == NULL) {
 	  fclose(file);
 	  png_destroy_write_struct(&png_ptr, (png_infopp) NULL);
-	  return NULL;
+	  return FALSE;
      }
 
      if (setjmp(png_ptr->jmpbuf)) {
 	  fclose(file);
 	  png_destroy_write_struct(&png_ptr, (png_infopp) NULL);
-	  return NULL;
+	  return FALSE;
      }
 
      png_init_io(png_ptr, file);
@@ -218,18 +218,24 @@ int image_save(GdkPixBuf *pixbuf, FILE *file)
      png_set_packing(png_ptr);
 
      data = pixbuf->art_pixbuf->pixels;
+     row_ptr = g_new(png_byte *, h);
 
-     for (y = 0; y < h; y++) {
+     for (y = 0; y < h; y++)
+	 row_ptr[y] = data + y * pixbuf->art_pixbuf->rowstride;
+#if 0
+     {
 	  if (pixbuf->art_pixbuf->has_alpha)
 	       row_ptr[y] = data + (w * y * 4);
 	  else
 	       row_ptr[y] = data + (w * y * 3);
      }
+#endif
 
      png_write_image(png_ptr, row_ptr);
+     g_free (row_ptr);
+
      png_write_end(png_ptr, info_ptr);
      png_destroy_write_struct(&png_ptr, (png_infopp) NULL);
 
      return TRUE;
 }
-     
