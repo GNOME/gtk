@@ -1,3 +1,8 @@
+1998-07-20  Raph Levien  <raph@acm.org>
+
+	* gdkrgb.c: Fixed minor config bug preventing big-endian
+	architectures from working.
+
 Tue Jul 21 06:32:43 1998  Stefan Jeske  <stefan@gtk.org>
 
 	* gtk/gtkprogressbar.{c,h} gtk/testgtk.c: Fixed wrong size of

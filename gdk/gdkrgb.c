@@ -25,10 +25,9 @@
 #include <math.h>
 #include <stdio.h>
 
-#include <gtk/gtk.h>
-
 #define ENABLE_GRAYSCALE
 
+#include <gdk/gdk.h>
 #include <gdk/gdkprivate.h>
 #include "gdkrgb.h"
 
