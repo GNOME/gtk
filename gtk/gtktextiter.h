@@ -185,7 +185,7 @@ void     gtk_text_iter_set_line_offset    (GtkTextIter *iter,
 void     gtk_text_iter_set_line_index     (GtkTextIter *iter,
                                            gint         byte_on_line);
 void     gtk_text_iter_forward_to_end     (GtkTextIter *iter);
-gboolean gtk_text_iter_forward_to_delimiters (GtkTextIter *iter);
+gboolean gtk_text_iter_forward_to_line_end (GtkTextIter *iter);
 
 
 /* returns TRUE if a toggle was found; NULL for the tag pointer

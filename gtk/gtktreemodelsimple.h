@@ -30,8 +30,8 @@ extern "C" {
 #define GTK_TYPE_MODEL_SIMPLE			(gtk_tree_model_simple_get_type ())
 #define GTK_TREE_MODEL_SIMPLE(obj)			(GTK_CHECK_CAST ((obj), GTK_TYPE_MODEL_SIMPLE, GtkTreeModelSimple))
 #define GTK_TREE_MODEL_SIMPLE_CLASS(klass)		(GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_MODEL_SIMPLE, GtkTreeModelSimpleClass))
-#define GTK_IS_MODEL_SIMPLE(obj)		(GTK_CHECK_TYPE ((obj), GTK_TYPE_MODEL_SIMPLE))
-#define GTK_IS_MODEL_SIMPLE_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((obj), GTK_TYPE_MODEL_SIMPLE))
+#define GTK_IS_TREE_MODEL_SIMPLE(obj)		(GTK_CHECK_TYPE ((obj), GTK_TYPE_MODEL_SIMPLE))
+#define GTK_IS_TREE_MODEL_SIMPLE_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((obj), GTK_TYPE_MODEL_SIMPLE))
 
 typedef struct _GtkTreeModelSimple       GtkTreeModelSimple;
 typedef struct _GtkTreeModelSimpleClass  GtkTreeModelSimpleClass;

@@ -2962,7 +2962,7 @@ gtk_text_iter_forward_to_end  (GtkTextIter       *iter)
 }
 
 /**
- * gtk_text_iter_forward_to_delimiters:
+ * gtk_text_iter_forward_to_line_end:
  * @iter: a #GtkTextIter
  * 
  * Moves the iterator to point to the paragraph delimiter characters,
@@ -2975,7 +2975,7 @@ gtk_text_iter_forward_to_end  (GtkTextIter       *iter)
  * Return value: %TRUE if we moved and the new location is not the end iterator
  **/
 gboolean
-gtk_text_iter_forward_to_delimiters (GtkTextIter *iter)
+gtk_text_iter_forward_to_line_end (GtkTextIter *iter)
 {
   gint current_offset;
   gint new_offset;
@@ -3001,7 +3001,7 @@ gtk_text_iter_forward_to_delimiters (GtkTextIter *iter)
            * empty lines.
            */
           if (!gtk_text_iter_ends_line (iter))
-            gtk_text_iter_forward_to_delimiters (iter);
+            gtk_text_iter_forward_to_line_end (iter);
           return TRUE;
         }
       else

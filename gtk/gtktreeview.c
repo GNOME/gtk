@@ -3273,15 +3273,15 @@ gtk_tree_view_columns_autosize (GtkTreeView *tree_view)
  * "active" is confusing since it also is a widget state
  */
 /**
- * gtk_tree_view_set_headers_active:
+ * gtk_tree_view_set_headers_clickable:
  * @tree_view: A #GtkTreeView.
- * @active: TRUE if the columns are active.
+ * @setting: TRUE if the columns are clickable.
  * 
- * Sets the headers active (eg. keyboard navigable) or inactive.
+ * Allow the column title buttons to be clicked.
  **/
 void
-gtk_tree_view_set_headers_active (GtkTreeView *tree_view,
-				  gboolean   active)
+gtk_tree_view_set_headers_clickable (GtkTreeView *tree_view,
+				  gboolean   setting)
 {
   GList *list;
 
@@ -3290,7 +3290,7 @@ gtk_tree_view_set_headers_active (GtkTreeView *tree_view,
   g_return_if_fail (tree_view->priv->model != NULL);
 
   for (list = tree_view->priv->columns; list; list = list->next)
-    gtk_tree_view_column_set_header_clickable (GTK_TREE_VIEW_COLUMN (list->data), active);
+    gtk_tree_view_column_set_header_clickable (GTK_TREE_VIEW_COLUMN (list->data), setting);
 }
 
 /**

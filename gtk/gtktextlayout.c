@@ -174,7 +174,7 @@ gtk_text_layout_class_init (GtkTextLayoutClass *klass)
   signals[INVALIDATED] =
     g_signal_newc ("invalidated",
                    G_TYPE_FROM_CLASS (object_class),
-                   GTK_RUN_LAST,
+                   G_SIGNAL_RUN_LAST,
                    G_STRUCT_OFFSET (GtkTextLayoutClass, invalidated),
                    NULL,
                    gtk_marshal_VOID__VOID,
@@ -184,7 +184,7 @@ gtk_text_layout_class_init (GtkTextLayoutClass *klass)
   signals[CHANGED] =
     g_signal_newc ("changed",
                    G_TYPE_FROM_CLASS (object_class),
-                   GTK_RUN_LAST,
+                   G_SIGNAL_RUN_LAST,
                    G_STRUCT_OFFSET (GtkTextLayoutClass, changed),
                    NULL,
                    gtk_marshal_VOID__INT_INT_INT,
@@ -197,7 +197,7 @@ gtk_text_layout_class_init (GtkTextLayoutClass *klass)
   signals[ALLOCATE_CHILD] =
     g_signal_newc ("allocate_child",
                    G_TYPE_FROM_CLASS (object_class),
-                   GTK_RUN_LAST,
+                   G_SIGNAL_RUN_LAST,
                    G_STRUCT_OFFSET (GtkTextLayoutClass, allocate_child),
                    NULL,
                    gtk_marshal_VOID__OBJECT_INT_INT,
@@ -1956,7 +1956,7 @@ line_display_index_to_iter (GtkTextLayout      *layout,
                                         iter, display->line, 0);
 
       if (!gtk_text_iter_ends_line (iter))
-        gtk_text_iter_forward_to_delimiters (iter);
+        gtk_text_iter_forward_to_line_end (iter);
     }
 
   /* FIXME should this be cursor positions? */

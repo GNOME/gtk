@@ -451,7 +451,7 @@ gtk_tree_model_simple_changed (GtkTreeModelSimple *simple,
 			  GtkTreeIter    *iter)
 {
   g_return_if_fail (simple != NULL);
-  g_return_if_fail (GTK_IS_MODEL_SIMPLE (simple));
+  g_return_if_fail (GTK_IS_TREE_MODEL_SIMPLE (simple));
   g_return_if_fail (path != NULL);
 
   gtk_signal_emit_by_name (GTK_OBJECT (simple), "changed", path, iter);
@@ -463,7 +463,7 @@ gtk_tree_model_simple_inserted (GtkTreeModelSimple *simple,
 			   GtkTreeIter    *iter)
 {
   g_return_if_fail (simple != NULL);
-  g_return_if_fail (GTK_IS_MODEL_SIMPLE (simple));
+  g_return_if_fail (GTK_IS_TREE_MODEL_SIMPLE (simple));
   g_return_if_fail (path != NULL);
 
   gtk_signal_emit_by_name (GTK_OBJECT (simple), "inserted", path, iter);
@@ -475,7 +475,7 @@ gtk_tree_model_simple_child_toggled (GtkTreeModelSimple *simple,
 				GtkTreeIter    *iter)
 {
   g_return_if_fail (simple != NULL);
-  g_return_if_fail (GTK_IS_MODEL_SIMPLE (simple));
+  g_return_if_fail (GTK_IS_TREE_MODEL_SIMPLE (simple));
   g_return_if_fail (path != NULL);
 
   gtk_signal_emit_by_name (GTK_OBJECT (simple), "child_toggled", path, iter);
@@ -487,7 +487,7 @@ gtk_tree_model_simple_iter_deleted (GtkTreeModelSimple *simple,
 			       GtkTreeIter    *iter)
 {
   g_return_if_fail (simple != NULL);
-  g_return_if_fail (GTK_IS_MODEL_SIMPLE (simple));
+  g_return_if_fail (GTK_IS_TREE_MODEL_SIMPLE (simple));
   g_return_if_fail (path != NULL);
 
   gtk_signal_emit_by_name (GTK_OBJECT (simple), "iter_deleted", path, iter);

@@ -558,7 +558,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   ADD_SET_PROP ("justify_set", PROP_JUSTIFY_SET,
                 _("Justification set"),
                 _("Whether this tag affects paragraph justification"));
-
+  
   ADD_SET_PROP ("language_set", PROP_LANGUAGE_SET,
                 _("Language set"),
                 _("Whether this tag affects the language the text is rendered as"));
@@ -683,12 +683,21 @@ set_bg_color (GtkTextTag *tag, GdkColor *color)
 {
   if (color)
     {
-      tag->bg_color_set = TRUE;
+      if (!tag->bg_color_set)
+        {
+          tag->bg_color_set = TRUE;
+          g_object_notify (G_OBJECT (tag), "bg_color_set");
+        }
+      
       tag->values->appearance.bg_color = *color;
     }
   else
     {
-      tag->bg_color_set = FALSE;
+      if (tag->bg_color_set)
+        {
+          tag->bg_color_set = FALSE;
+          g_object_notify (G_OBJECT (tag), "bg_color_set");
+        }
     }
 }
 
@@ -697,12 +706,20 @@ set_fg_color (GtkTextTag *tag, GdkColor *color)
 {
   if (color)
     {
-      tag->fg_color_set = TRUE;
+      if (!tag->fg_color_set)
+        {
+          tag->fg_color_set = TRUE;
+          g_object_notify (G_OBJECT (tag), "fg_color_set");
+        }
       tag->values->appearance.fg_color = *color;
     }
   else
     {
-      tag->fg_color_set = FALSE;
+      if (tag->fg_color_set)
+        {
+          tag->fg_color_set = FALSE;
+          g_object_notify (G_OBJECT (tag), "fg_color_set");
+        }
     }
 }
 
@@ -734,13 +751,37 @@ set_font_description (GtkTextTag           *text_tag,
                     NULL);
     }
   else
-    {      
-      text_tag->family_set = FALSE;
-      text_tag->style_set = FALSE;
-      text_tag->variant_set = FALSE;
-      text_tag->weight_set = FALSE;
-      text_tag->stretch_set = FALSE;
-      text_tag->size_set = FALSE;
+    {
+      if (text_tag->family_set)
+        {
+          text_tag->family_set = FALSE;
+          g_object_notify (G_OBJECT (text_tag), "family_set");
+        }
+      if (text_tag->style_set)
+        {
+          text_tag->style_set = FALSE;
+          g_object_notify (G_OBJECT (text_tag), "style_set");
+        }
+      if (text_tag->variant_set)
+        {
+          text_tag->variant_set = FALSE;
+          g_object_notify (G_OBJECT (text_tag), "variant_set");
+        }
+      if (text_tag->weight_set)
+        {
+          text_tag->weight_set = FALSE;
+          g_object_notify (G_OBJECT (text_tag), "weight_set");
+        }
+      if (text_tag->stretch_set)
+        {
+          text_tag->stretch_set = FALSE;
+          g_object_notify (G_OBJECT (text_tag), "stretch_set");
+        }
+      if (text_tag->size_set)
+        {
+          text_tag->size_set = FALSE;
+          g_object_notify (G_OBJECT (text_tag), "size_set");
+        }
     }
 }
 
@@ -806,7 +847,8 @@ gtk_text_tag_set_property (GObject      *object,
         GdkBitmap *bitmap = g_value_get_as_pointer (value);
 
         text_tag->bg_stipple_set = TRUE;
-
+        g_object_notify (G_OBJECT (text_tag), "bg_stipple_set");
+        
         if (text_tag->values->appearance.bg_stipple != bitmap)
           {
             if (bitmap != NULL)
@@ -825,6 +867,7 @@ gtk_text_tag_set_property (GObject      *object,
         GdkBitmap *bitmap = g_value_get_as_pointer (value);
 
         text_tag->fg_stipple_set = TRUE;
+        g_object_notify (G_OBJECT (text_tag), "fg_stipple_set");
 
         if (text_tag->values->appearance.fg_stipple != bitmap)
           {
@@ -875,77 +918,90 @@ gtk_text_tag_set_property (GObject      *object,
         g_free (text_tag->values->font.family_name);
       text_tag->values->font.family_name = g_strdup (g_value_get_string (value));
       text_tag->family_set = TRUE;
+      g_object_notify (G_OBJECT (text_tag), "family_set");
       size_changed = TRUE;
       break;
 
     case PROP_STYLE:
       text_tag->values->font.style = g_value_get_enum (value);
       text_tag->style_set = TRUE;
+      g_object_notify (G_OBJECT (text_tag), "style_set");
       size_changed = TRUE;
       break;
 
     case PROP_VARIANT:
       text_tag->values->font.variant = g_value_get_enum (value);
       text_tag->variant_set = TRUE;
+      g_object_notify (G_OBJECT (text_tag), "variant_set");
       size_changed = TRUE;
       break;
 
     case PROP_WEIGHT:
       text_tag->values->font.weight = g_value_get_int (value);
       text_tag->weight_set = TRUE;
+      g_object_notify (G_OBJECT (text_tag), "weight_set");
       size_changed = TRUE;
       break;
 
     case PROP_STRETCH:
       text_tag->values->font.stretch = g_value_get_enum (value);
       text_tag->stretch_set = TRUE;
+      g_object_notify (G_OBJECT (text_tag), "stretch_set");
       size_changed = TRUE;
       break;
 
     case PROP_SIZE:
       text_tag->values->font.size = g_value_get_int (value);
       text_tag->size_set = TRUE;
+      g_object_notify (G_OBJECT (text_tag), "size_set");
       size_changed = TRUE;
       break;
 
     case PROP_SIZE_POINTS:
       text_tag->values->font.size = g_value_get_double (value) * PANGO_SCALE;
       text_tag->size_set = TRUE;
+      g_object_notify (G_OBJECT (text_tag), "size_set");
       size_changed = TRUE;
       break;
       
     case PROP_PIXELS_ABOVE_LINES:
       text_tag->pixels_above_lines_set = TRUE;
       text_tag->values->pixels_above_lines = g_value_get_int (value);
+      g_object_notify (G_OBJECT (text_tag), "pixels_above_lines_set");
       size_changed = TRUE;
       break;
 
     case PROP_PIXELS_BELOW_LINES:
       text_tag->pixels_below_lines_set = TRUE;
       text_tag->values->pixels_below_lines = g_value_get_int (value);
+      g_object_notify (G_OBJECT (text_tag), "pixels_below_lines_set");
       size_changed = TRUE;
       break;
 
     case PROP_PIXELS_INSIDE_WRAP:
       text_tag->pixels_inside_wrap_set = TRUE;
       text_tag->values->pixels_inside_wrap = g_value_get_int (value);
+      g_object_notify (G_OBJECT (text_tag), "pixels_inside_wrap_set");
       size_changed = TRUE;
       break;
 
     case PROP_EDITABLE:
       text_tag->editable_set = TRUE;
       text_tag->values->editable = g_value_get_boolean (value);
+      g_object_notify (G_OBJECT (text_tag), "editable_set");
       break;
 
     case PROP_WRAP_MODE:
       text_tag->wrap_mode_set = TRUE;
       text_tag->values->wrap_mode = g_value_get_enum (value);
+      g_object_notify (G_OBJECT (text_tag), "wrap_mode_set");
       size_changed = TRUE;
       break;
 
     case PROP_JUSTIFY:
       text_tag->justify_set = TRUE;
       text_tag->values->justify = g_value_get_enum (value);
+      g_object_notify (G_OBJECT (text_tag), "justify_set");
       size_changed = TRUE;
       break;
 
@@ -956,45 +1012,53 @@ gtk_text_tag_set_property (GObject      *object,
     case PROP_LEFT_MARGIN:
       text_tag->left_margin_set = TRUE;
       text_tag->values->left_margin = g_value_get_int (value);
+      g_object_notify (G_OBJECT (text_tag), "left_margin_set");
       size_changed = TRUE;
       break;
 
     case PROP_INDENT:
       text_tag->indent_set = TRUE;
       text_tag->values->indent = g_value_get_int (value);
+      g_object_notify (G_OBJECT (text_tag), "indent_set");
       size_changed = TRUE;
       break;
 
     case PROP_STRIKETHROUGH:
       text_tag->strikethrough_set = TRUE;
       text_tag->values->appearance.strikethrough = g_value_get_boolean (value);
+      g_object_notify (G_OBJECT (text_tag), "strikethrough_set");
       break;
 
     case PROP_RIGHT_MARGIN:
       text_tag->right_margin_set = TRUE;
       text_tag->values->right_margin = g_value_get_int (value);
+      g_object_notify (G_OBJECT (text_tag), "right_margin_set");
       size_changed = TRUE;
       break;
 
     case PROP_UNDERLINE:
       text_tag->underline_set = TRUE;
       text_tag->values->appearance.underline = g_value_get_enum (value);
+      g_object_notify (G_OBJECT (text_tag), "underline_set");
       break;
 
     case PROP_RISE:
       text_tag->rise_set = TRUE;
       text_tag->values->appearance.rise = g_value_get_int (value);
-      size_changed = TRUE;
+      g_object_notify (G_OBJECT (text_tag), "rise_set");
+      size_changed = TRUE;      
       break;
 
     case PROP_BG_FULL_HEIGHT:
       text_tag->bg_full_height_set = TRUE;
       text_tag->values->bg_full_height = g_value_get_boolean (value);
+      g_object_notify (G_OBJECT (text_tag), "bg_full_height_set");
       break;
 
     case PROP_LANGUAGE:
       text_tag->language_set = TRUE;
       text_tag->values->language = g_strdup (g_value_get_string (value));
+      g_object_notify (G_OBJECT (text_tag), "language_set");
       break;
 
     case PROP_TABS:
@@ -1007,12 +1071,15 @@ gtk_text_tag_set_property (GObject      *object,
       text_tag->values->tabs =
         pango_tab_array_copy (g_value_get_as_pointer (value));
 
+      g_object_notify (G_OBJECT (text_tag), "tabs_set");
+      
       size_changed = TRUE;
       break;
 
     case PROP_INVISIBLE:
       text_tag->invisible_set = TRUE;
       text_tag->values->invisible = g_value_get_boolean (value);
+      g_object_notify (G_OBJECT (text_tag), "invisible_set");
       size_changed = TRUE;
       break;
       
@@ -1106,7 +1173,7 @@ gtk_text_tag_set_property (GObject      *object,
       text_tag->justify_set = g_value_get_boolean (value);
       size_changed = TRUE;
       break;
-
+      
     case PROP_LEFT_MARGIN_SET:
       text_tag->left_margin_set = g_value_get_boolean (value);
       size_changed = TRUE;
@@ -1300,6 +1367,10 @@ gtk_text_tag_get_property (GObject      *object,
       g_value_set_enum (value, tag->values->justify);
       break;
 
+    case PROP_DIRECTION:
+      g_value_set_enum (value, tag->values->direction);
+      break;
+      
     case PROP_LEFT_MARGIN:
       g_value_set_int (value,  tag->values->left_margin);
       break;
@@ -1406,7 +1477,7 @@ gtk_text_tag_get_property (GObject      *object,
     case PROP_JUSTIFY_SET:
       g_value_set_boolean (value, tag->justify_set);
       break;
-
+      
     case PROP_LEFT_MARGIN_SET:
       g_value_set_boolean (value, tag->left_margin_set);
       break;

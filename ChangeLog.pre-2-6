@@ -1,7 +1,29 @@
+2001-01-05  Havoc Pennington  <hp@redhat.com>
+
+	* tests/testtreeview.c: hack on this a bit
+
+	* gtk/gtktextlayout.c (gtk_text_layout_class_init):
+	s/GTK_RUN_LAST/G_SIGNAL_RUN_LAST
+
+	* gtk/gtktreemodelsimple.h (GTK_IS_TREE_MODEL_SIMPLE_CLASS): 
+	was spelled incorrectly
+	(GTK_IS_TREE_MODEL_SIMPLE): ditto
+
+	* gtk/gtktreeview.c (gtk_tree_view_set_headers_clickable): rename
+	from gtk_tree_view_set_headers_active	
+
+	* gtk/gtktexttag.c:
+	(gtk_text_tag_get_property): handle PROP_DIRECTION
+	(gtk_text_tag_set_property): g_object_notify when we toggle the _set
+	properties, bug 40235
+
+	* gtk/gtktextiter.c (gtk_text_iter_forward_to_delimiters): rename
+	forward_to_line_end
+
 Fri Jan  5 16:16:29 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/{gtkcalender.c,gtkfilesel.c,gtkimcontext.c},
-	modules/input/gtkimcontextxim.c: Adopt to new prototypes
+	modules/input/gtkimcontextxim.c: Adapt to new prototypes
 	for unicode,locale,filename conversion functions.
 
 2001-01-05  Havoc Pennington  <hp@redhat.com>

@@ -3317,7 +3317,7 @@ gtk_text_view_move_cursor (GtkTextView     *text_view,
 
     case GTK_MOVEMENT_PARAGRAPH_ENDS:
       if (count > 0)
-        gtk_text_iter_forward_to_delimiters (&newplace);
+        gtk_text_iter_forward_to_line_end (&newplace);
       else if (count < 0)
         gtk_text_iter_set_line_offset (&newplace, 0);
       break;
@@ -3521,7 +3521,7 @@ gtk_text_view_delete_from_cursor (GtkTextView   *text_view,
 
       while (count > 0)
         {
-          if (!gtk_text_iter_forward_to_delimiters (&end))
+          if (!gtk_text_iter_forward_to_line_end (&end))
             break;
 
           --count;
@@ -3535,12 +3535,12 @@ gtk_text_view_delete_from_cursor (GtkTextView   *text_view,
       if (count > 0)
         {
           gtk_text_iter_set_line_offset (&start, 0);
-          gtk_text_iter_forward_to_delimiters (&end);
+          gtk_text_iter_forward_to_line_end (&end);
 
           /* Do the lines beyond the first. */
           while (count > 1)
             {
-              gtk_text_iter_forward_to_delimiters (&end);
+              gtk_text_iter_forward_to_line_end (&end);
 
               --count;
             }

@@ -1,0 +1,4 @@
+This document is a laundry list of stuff to check if you want to
+verify that GtkTreeView and associated objects are working properly.
+
+
