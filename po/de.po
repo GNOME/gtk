@@ -10,25 +10,25 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2.x\n"
-"POT-Creation-Date: 2003-01-06 17:09+0100\n"
-"PO-Revision-Date: 2003-01-06 17:04+0100\n"
+"POT-Creation-Date: 2003-01-13 16:16+0100\n"
+"PO-Revision-Date: 2003-01-13 16:16+0100\n"
 "Last-Translator: Christian Neumair <chris@gnome-de.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:703
+#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:736
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Datei »%s« konnte nicht geöffnet werden: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:157 gdk-pixbuf/gdk-pixbuf-io.c:713
+#: gdk-pixbuf/gdk-pixbuf-animation.c:157 gdk-pixbuf/gdk-pixbuf-io.c:746
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "Bilddatei »%s« enthält keine Daten"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:197 gdk-pixbuf/gdk-pixbuf-io.c:747
+#: gdk-pixbuf/gdk-pixbuf-animation.c:197 gdk-pixbuf/gdk-pixbuf-io.c:780
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -45,12 +45,12 @@ msgstr ""
 "Animation »%s« konnte nicht geladen werden: Grund unbekannt, vermutlich eine "
 "defekte Animationsdatei"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:377
+#: gdk-pixbuf/gdk-pixbuf-io.c:410
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr "Bildlader-Modul konnte nicht geladen werden: %s: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:392
+#: gdk-pixbuf/gdk-pixbuf-io.c:425
 #, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
@@ -59,38 +59,38 @@ msgstr ""
 "Bildlader-Modul %s exportiert nicht die richtige Schnittstelle; vielleicht "
 "stammt es aus einer anderen GTK-Version?"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:531 gdk-pixbuf/gdk-pixbuf-io.c:579
+#: gdk-pixbuf/gdk-pixbuf-io.c:564 gdk-pixbuf/gdk-pixbuf-io.c:612
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "Bildtyp »%s« wird nicht unterstützt"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:611
+#: gdk-pixbuf/gdk-pixbuf-io.c:644
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "Das Format der Bilddatei »%s« konnte nicht erkannt werden"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:617
+#: gdk-pixbuf/gdk-pixbuf-io.c:650
 msgid "Unrecognized image file format"
 msgstr "Format der Bilddatei unbekannt"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:758
+#: gdk-pixbuf/gdk-pixbuf-io.c:791
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "Bild »%s« konnte nicht geladen werden: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:866
+#: gdk-pixbuf/gdk-pixbuf-io.c:899
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr ""
 "Diese Fassung von gdk-pixbuf unterstützt das Speichern in diesem Bildformat "
 "nicht: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:971
+#: gdk-pixbuf/gdk-pixbuf-io.c:1004
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "»%s« konnte nicht zum Schreiben geöffnet werden: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:992
+#: gdk-pixbuf/gdk-pixbuf-io.c:1025
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -2635,7 +2635,7 @@ msgstr "Die Höhe des Layouts"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:805
+#: gtk/gtkmain.c:806
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -3697,7 +3697,7 @@ msgstr "_Aktualisieren"
 
 #: gtk/gtkstock.c:319
 msgid "_Remove"
-msgstr "E_ntfernen"
+msgstr "_Entfernen"
 
 #: gtk/gtkstock.c:320
 msgid "_Revert"
@@ -3749,7 +3749,7 @@ msgstr "_Unterstreichen"
 
 #: gtk/gtkstock.c:332
 msgid "_Undo"
-msgstr "_Rückgängig"
+msgstr "_Rückgängig machen"
 
 #: gtk/gtkstock.c:333
 msgid "_Yes"
