@@ -2,59 +2,143 @@
 General
 
 <!-- ##### SECTION Short_Description ##### -->
-
+Mainloop and event handling
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+GTK uses an event oriented programming model. While conventional C programs
+have control over the program flow all the time this does not apply to 
+applications written using GTK. Instead you set up some objects and 
+register some functions (<quote>callbacks</quote>) to be called whenever 
+some event occurs and give control to the GTK mainloop (e.g. by calling 
+<function>gtk_main</function>).
 </para>
+
+<example>
+<title> Typical <function>main</function> function for a GTK application</title>
+<programlisting>
+int 
+main (int argc, char **argv)
+{
+  /* Initialize i18n support */
+  gtk_set_locale ();
+
+  /* Initialize the widget set */
+  gtk_init (&amp;argc, &amp;argv);
+
+  /* Create the main window */
+  mainwin = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+
+  /* Set up our GUI elements */
+  ...
+
+  /* Show the application window */
+  gtk_widget_showall (mainwin);
+
+  /* Let the user interact with our application */
+  gtk_main ();
+
+  /* The user lost interest */
+  gtk_exit (0);
+}
+</programlisting>
+</example>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
-
 </para>
 
 <!-- ##### FUNCTION gtk_set_locale ##### -->
 <para>
-
+Sets the current locale according to the program environment. This is the 
+same as calling the libc function setlocale(LC_ALL, "") but also takes 
+care of the locale specific setup of the windowing system used by GDK.
 </para>
 
-@Returns: 
+<para> 
+You should call this function before <function>gtk_init</function> to 
+support internationalization of your GTK+ applications.
+</para>
+
+@Returns: A string corresponding to the locale set. 
 
 
 <!-- ##### FUNCTION gtk_init ##### -->
 <para>
-
+Call this function before using any other GTK functions in your GUI
+applications.  It will initialize everything needed to operate the toolkit and
+parses some standard command line options. <parameter>argc</parameter> and 
+<parameter>argv</parameter> are adjusted accordingly so your own code will 
+never see those standard arguments.
 </para>
 
-@argc: 
-@argv: 
+<note>
+<para>
+This function will terminate your program if it was unable to initialize 
+the GUI for some reason. If you want your program to fall back to a 
+textual interface you want to call <function>gtk_init_check</function> 
+instead.
+</para>
+</note>
+
+@argc: Address of the <parameter>argc</parameter> parameter of your 
+<function>main</function> function. Changed if any arguments were 
+handled.
+@argv: Address of the <parameter>argv</parameter> parameter of 
+<function>main</function>. Any parameters understood by <function>
+gtk_init</function> are stripped before return.
 
 
 <!-- ##### FUNCTION gtk_init_check ##### -->
 <para>
-
+This function does the same work as <function>gtk_init</function> with only 
+a single change: It does not terminate the program if the GUI can't be 
+initialized. Instead it returns %FALSE on failure.
+</para>
+<para>
+This way the application can fall back to some other means of communication 
+with the user - for example a curses or command line interface.
 </para>
 
-@argc: 
-@argv: 
-@Returns: 
+@argc: A reference to the <parameter>argc</parameter> of the <function>main
+</function> function.
+@argv: A reference to the <parameter>argv</parameter> of the <function>main
+</function> function.
+@Returns: %TRUE if the GUI has been successful initialized, 
+%FALSE otherwise.
 
 
 <!-- ##### FUNCTION gtk_exit ##### -->
 <para>
-
+Terminate the program and return the given exit code to the caller. 
+This function will shut down the GUI and free all resources allocated 
+for GTK.
 </para>
 
-@error_code: 
+@error_code: Return value to pass to the caller. This is dependend on the
+target system but at least on Unix systems %0 means 
+success.
 
 
 <!-- ##### FUNCTION gtk_events_pending ##### -->
 <para>
-
+Check if any events are pending. This can be used to update the GUI 
+and invoke timeouts etc. while doing some time intensive computation.
 </para>
 
-@Returns: 
+<example>
+<title> Updating the GUI during a long computation</title>
+<programlisting>
+	/* computation going on */
+...
+        while (gtk_events_pending ())
+	  gtk_main_iteration ();
+...
+	/* computation continued */
+</programlisting>
+</example>
+
+@Returns: %TRUE if any events are pending, %FALSE otherwise.
 
 
 <!-- ##### FUNCTION gtk_main ##### -->
@@ -115,18 +199,53 @@ General
 
 <!-- ##### FUNCTION gtk_true ##### -->
 <para>
-
+All this function does it to return TRUE. This can be useful for example
+if you want to inhibit the deletion of a window. Of course you should 
+not do this as the user expects a reaction from clicking the close 
+icon of the window...
 </para>
 
-@Returns: 
+<example>
+<title> A persistent window</title>
+<programlisting>
+##include &lt;gtk/gtk.h&gt;
+
+int
+main (int argc, char **argv)
+{
+  GtkWidget     *win, *but;
+
+  gtk_init( &amp;argc, &amp;argv );
+
+  win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_signal_connect (GTK_OBJECT(win), "delete-event", 
+                      (GtkSignalFunc) gtk_true, NULL);
+  gtk_signal_connect (GTK_OBJECT(win), "destroy", 
+		      (GtkSignalFunc) gtk_main_quit, NULL);
+
+  but = gtk_button_new_with_label ("Close yourself. I mean it!");
+  gtk_signal_connect_object (
+		  GTK_OBJECT (but), "clicked", 
+		  (GtkSignalFunc) gtk_object_destroy, (gpointer) win );
+  gtk_container_add (GTK_CONTAINER (win), but);
+
+  gtk_widget_show_all (win);
+  gtk_main ();
+  return 0;
+}
+</programlisting>
+</example>
+
+@Returns: %TRUE
 
 
 <!-- ##### FUNCTION gtk_false ##### -->
 <para>
-
+Analogical to <function>gtk_true</function> this function does nothing 
+but always returns %FALSE.
 </para>
 
-@Returns: 
+@Returns: %FALSE
 
 
 <!-- ##### FUNCTION gtk_grab_add ##### -->
