@@ -91,12 +91,17 @@ Shift and Alt) and the pointer buttons. See #GdkModifierType.
 @keyval: the key that was pressed or released. See the <filename>&lt;gdk/gdkkeysym.h&gt;</filename>
 header file for a complete list of GDK key codes.
 @length: the length of @string.
-@string: a nul-terminated multi-byte string containing the composed characters
-resulting from the key press. When text is being input, in a #GtkEntry for
-example, it is these characters which should be added to the input buffer.
-When using <link linkend="gdk-Input-Methods">Input Methods</link> to support
-internationalized text input, the composed characters appear here after the
-pre-editing has been completed.
+@string: a string containing the an approximation of the text that
+would result from this keypress. The only correct way to handle text
+input of text is using input methods (see #GtkIMContext), so this
+field is deprecated and should never be used.
+(gdk_unicode_to_keyval() provides a non-deprecated way of getting
+an approximate translation for a key.) The string is encoded in the encoding
+of the current locale (Note: this for backwards compatibility:
+strings in GTK+ and GDK are typically in UTF-8.) and NUL-terminated.
+In some cases, the translation of the key code will be a single
+NUL byte, in which case looking at @length is necessary to distinguish
+it from the an empty translation.
 @hardware_keycode: the raw code of the key that was pressed or released.
 @group: the keyboard group.
 

@@ -1,3 +1,8 @@
+Fri Oct 18 15:13:24 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/tmpl/event_structs.sgml: Update the docs for
+	the event->key.string to say that @string is deprecated.
+
 Mon Oct 14 19:34:26 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/Makefile.am (content_files)
