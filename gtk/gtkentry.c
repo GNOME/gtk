@@ -4560,7 +4560,7 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
   if (keyval_is_cursor_move (event->keyval))
     {
       GtkTreePath *path = NULL;
-
+      
       if (event->keyval == GDK_Up || event->keyval == GDK_KP_Up)
         {
           completion->priv->current_selected--;
@@ -4574,10 +4574,39 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
             completion->priv->current_selected = matches + actions - 1;
         }
       else if (event->keyval == GDK_Page_Up)
-        completion->priv->current_selected = 0;
-
+	{
+	  if (completion->priv->current_selected <= 0)
+	    completion->priv->current_selected = -1;
+	  else if (completion->priv->current_selected < matches) 
+	    {
+	      completion->priv->current_selected -= 14;
+	      if (completion->priv->current_selected < 0)
+		completion->priv->current_selected = 0;
+	    }
+	  else 
+	    {
+	      completion->priv->current_selected -= 14;
+	      if (completion->priv->current_selected < matches - 1)
+		completion->priv->current_selected = matches - 1;
+	    }
+	}
       else if (event->keyval == GDK_Page_Down)
-        completion->priv->current_selected = matches + actions - 1;
+	{
+	  if (completion->priv->current_selected < 0)
+	    completion->priv->current_selected = 0;
+	  else if (completion->priv->current_selected < matches - 1)
+	    {
+	      completion->priv->current_selected += 14;
+	      if (completion->priv->current_selected > matches - 1)
+		completion->priv->current_selected = matches - 1;
+	    }
+	  else 
+	    {
+	      completion->priv->current_selected += 14;
+	      if (completion->priv->current_selected > matches + actions - 1)
+		completion->priv->current_selected = matches + actions - 1;
+	    }
+	}
 
       if (completion->priv->current_selected < 0)
         {
@@ -4643,7 +4672,7 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
               /* move the cursor to the end */
               gtk_editable_set_position (GTK_EDITABLE (widget), -1);
 
-              g_free (str);
+             g_free (str);
             }
 
           return TRUE;

@@ -1,3 +1,9 @@
+Sun Feb 29 03:31:42 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkentry.c (gtk_entry_completion_key_press): Fix Page_Up 
+	and Page_Down in the completion popup to move page-wise if we're
+	scrolling.
+
 2004-02-28  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserdefault.c (set_cell_text_bold_if_folder):
