@@ -841,9 +841,12 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
 }
 
 #ifdef HAVE_XKB
-/* This is copied straight from XFree86 Xlib, because I needed to
- * add the group and level return. It's unchanged for ease of
- * diff against the Xlib sources; don't reformat it.
+/* This is copied straight from XFree86 Xlib, to:
+ *  - add the group and level return.
+ *  - change the interpretation of mods_rtrn as described
+ *    in the docs for gdk_keymap_translate_keyboard_state()
+ * It's unchanged for ease of diff against the Xlib sources; don't
+ * reformat it.
  */
 static Bool
 MyEnhancedXkbTranslateKeyCode(register XkbDescPtr     xkb,
@@ -897,29 +900,48 @@ MyEnhancedXkbTranslateKeyCode(register XkbDescPtr     xkb,
     if (type->map) { /* find the column (shift level) within the group */
         register int i;
         register XkbKTMapEntryPtr entry;
+	/* ---- Begin section modified for GDK  ---- */
+	int found = 0;
+	
         for (i=0,entry=type->map;i<type->map_count;i++,entry++) {
-            if ((entry->active)&&((mods&type->mods.mask)==entry->mods.mask)) {
+	    if (mods_rtrn) {
+		int bits = 0;
+		unsigned long tmp = entry->mods.mask;
+		while (tmp) {
+		    if ((tmp & 1) == 1)
+			bits++;
+		    tmp >>= 1;
+		}
+		/* We always add one-modifiers levels to mods_rtrn since
+		 * they can't wipe out bits in the state unless the
+		 * level would be triggered. But return other modifiers
+		 * 
+		 */
+		if (bits == 1 || (mods&type->mods.mask)==entry->mods.mask)
+		    *mods_rtrn |= entry->mods.mask;
+	    }
+	    
+            if (!found&&entry->active&&((mods&type->mods.mask)==entry->mods.mask)) {
                 col+= entry->level;
                 if (type->preserve)
                     preserve= type->preserve[i].mask;
 
-                /* ---- Begin stuff GDK adds to the original Xlib version ---- */
-                
                 if (level_rtrn)
                   *level_rtrn = entry->level;
                 
-                /* ---- End stuff GDK adds to the original Xlib version ---- */
-                
-                break;
+                found = 1;
             }
         }
+	/* ---- End section modified for GDK ---- */
     }
 
     if (keysym_rtrn!=NULL)
         *keysym_rtrn= syms[col];
     if (mods_rtrn) {
-        *mods_rtrn= type->mods.mask&(~preserve);
-
+	/* ---- Begin section modified for GDK  ---- */
+        *mods_rtrn &= ~preserve;
+	/* ---- End section modified for GDK ---- */
+	
         /* ---- Begin stuff GDK comments out of the original Xlib version ---- */
         /* This is commented out because xkb_info is a private struct */
 
@@ -1040,6 +1062,49 @@ translate_keysym (GdkKeymapX11   *keymap_x11,
  * affected by the active keyboard group. The @level is derived from
  * @state. For convenience, #GdkEventKey already contains the translated
  * keyval, so this function isn't as useful as you might think.
+ *
+ * <note><para>
+ * @consumed_modifiers gives modifiers that should be masked out
+ * from @state when comparing this key press to a hot key. For
+ * instance, on a US keyboard, the <literal>plus</literal>
+ * symbol is shifted, so when comparing a key press to a
+ * <literal>&lt;Control&gt;plus</literal> accelerator &lt;Shift&gt; should
+ * be masked out.
+ * </para>
+ * <informalexample><programlisting>
+ * &sol;* We want to ignore irrelevant modifiers like ScrollLock *&sol;
+ * #define ALL_ACCELS_MASK (GDK_CONTROL_MASK | GDK_SHIFT_MASK | GDK_MOD1_MASK)
+ * gdk_keymap_translate_keyboard_state (keymap, event->hardware_keycode,
+ *                                      event->state, event->group,
+ *                                      &keyval, NULL, NULL, &consumed);
+ * if (keyval == GDK_PLUS &&
+ *     (event->state & ~consumed & ALL_ACCELS_MASK) == GDK_CONTROL_MASK)
+ *   &sol;* Control was pressed *&sol;
+ * </programlisting></informalexample>
+ * <para>
+ * An older interpretation @consumed_modifiers was that it contained
+ * all modifiers that might affect the translation of the key;
+ * this allowed accelerators to be stored with irrelevant consumed
+ * modifiers, by doing:</para>
+ * <informalexample><programlisting>
+ * &sol;* XXX Don't do this XXX *&sol;
+ * if (keyval == accel_keyval &&
+ *     (event->state & ~consumed & ALL_ACCELS_MASK) == (accel_mods & ~consumed))
+ *   &sol;* Accelerator was pressed *&sol;
+ * </programlisting></informalexample>
+ * <para>
+ * However, this did not work if multi-modifier combinations were
+ * used in the keymap, since, for instance, <literal>&lt;Control&gt;</literal>
+ * would be masked out even if only <literal>&lt;Control&gt;&lt;Alt&gt;</literal>
+ * was used in the keymap. To support this usage as well as well as
+ * possible, all <emphasis>single modifier</emphasis> combinations
+ * that could affect the key for any combination of modifiers will
+ * be returned in @consumed_modifiers; multi-modifier combinations
+ * are returned only when actually found in @state. When you store
+ * accelerators, you should always store them with consumed modifiers
+ * removed. Store <literal>&lt;Control&gt;plus</literal>,
+ * not <literal>&lt;Control&gt;&lt;Shift&gt;plus</literal>,
+ * </para></note>
  * 
  * Return value: %TRUE if there was a keyval bound to the keycode/state/group
  **/

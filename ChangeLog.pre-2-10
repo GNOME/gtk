@@ -1,3 +1,13 @@
+Thu Aug 21 15:17:42 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkkeys-x11.c: Change the interpretation
+	of consumed_modifiers so that it contains:
+	 - Modifiers combinations actually found in
+	   state.
+	 - Single modifier modifier combinations.
+	But not multi-modifier combinations that aren't
+	in event->state. Document. (#100439)
+
 Thu Aug 21 20:53:46 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Slightly modified patch from Yann Rouillard to improve selection
