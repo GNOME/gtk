@@ -2382,11 +2382,7 @@ static GtkWidget *spinner1;
 static void
 toggle_snap (GtkWidget *widget, GtkSpinButton *spin)
 {
-  if (GTK_TOGGLE_BUTTON (widget)->active)
-    gtk_spin_button_set_update_policy (spin, GTK_UPDATE_ALWAYS 
-				       | GTK_UPDATE_SNAP_TO_TICKS);
-  else
-    gtk_spin_button_set_update_policy (spin, GTK_UPDATE_ALWAYS);
+  gtk_spin_button_set_snap_to_ticks (spin, GTK_TOGGLE_BUTTON (widget)->active);
 }
 
 static void
@@ -2403,7 +2399,7 @@ change_digits (GtkWidget *widget, GtkSpinButton *spin)
 }
 
 static void
-get_value (GtkWidget *widget, gint data)
+get_value (GtkWidget *widget, gpointer data)
 {
   gchar buf[32];
   GtkLabel *label;
@@ -2411,7 +2407,7 @@ get_value (GtkWidget *widget, gint data)
 
   spin = GTK_SPIN_BUTTON (spinner1);
   label = GTK_LABEL (gtk_object_get_user_data (GTK_OBJECT (widget)));
-  if (data == 1)
+  if (GPOINTER_TO_INT (data) == 1)
     sprintf (buf, "%d", gtk_spin_button_get_value_as_int (spin));
   else
     sprintf (buf, "%0.*f", spin->digits,
@@ -2529,8 +2525,6 @@ create_spins (void)
       spinner1 = gtk_spin_button_new (adj, 1.0, 2);
       gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner1), TRUE);
       gtk_widget_set_usize (spinner1, 100, 0);
-      gtk_spin_button_set_update_policy (GTK_SPIN_BUTTON (spinner1),
-					 GTK_UPDATE_ALWAYS);
       gtk_box_pack_start (GTK_BOX (vbox2), spinner1, FALSE, TRUE, 0);
 
       vbox2 = gtk_vbox_new (FALSE, 0);
@@ -2574,14 +2568,14 @@ create_spins (void)
       gtk_object_set_user_data (GTK_OBJECT (button), val_label);
       gtk_signal_connect (GTK_OBJECT (button), "clicked",
 			  GTK_SIGNAL_FUNC (get_value),
-			  (gpointer) 1);
+			  GINT_TO_POINTER (1));
       gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 5);
 
       button = gtk_button_new_with_label ("Value as Float");
       gtk_object_set_user_data (GTK_OBJECT (button), val_label);
       gtk_signal_connect (GTK_OBJECT (button), "clicked",
 			  GTK_SIGNAL_FUNC (get_value),
-			  (gpointer) 2);
+			  GINT_TO_POINTER (2));
       gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 5);
 
       gtk_box_pack_start (GTK_BOX (vbox), val_label, TRUE, TRUE, 0);

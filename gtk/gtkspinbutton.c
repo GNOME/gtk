@@ -75,6 +75,8 @@ static void gtk_spin_button_value_changed  (GtkWidget          *widget,
 					    GtkSpinButton      *spin_button); 
 static gint gtk_spin_button_key_press      (GtkWidget          *widget,
 					    GdkEventKey        *event);
+static gint gtk_spin_button_key_release    (GtkWidget          *widget,
+					    GdkEventKey        *event);
 static void gtk_spin_button_update         (GtkSpinButton      *spin_button);
 static void gtk_spin_button_activate       (GtkEditable        *editable);
 static void gtk_spin_button_snap           (GtkSpinButton      *spin_button,
@@ -139,6 +141,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   widget_class->button_release_event = gtk_spin_button_button_release;
   widget_class->motion_notify_event = gtk_spin_button_motion_notify;
   widget_class->key_press_event = gtk_spin_button_key_press;
+  widget_class->key_release_event = gtk_spin_button_key_release;
   widget_class->enter_notify_event = gtk_spin_button_enter_notify;
   widget_class->leave_notify_event = gtk_spin_button_leave_notify;
   widget_class->focus_out_event = gtk_spin_button_focus_out;
@@ -154,17 +157,19 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   spin_button->panel = NULL;
   spin_button->shadow_type = GTK_SHADOW_OUT;
   spin_button->timer = 0;
+  spin_button->ev_time = 0;
   spin_button->climb_rate = 0.0;
   spin_button->timer_step = 0.0;
-  spin_button->update_policy = GTK_UPDATE_ALWAYS | GTK_UPDATE_SNAP_TO_TICKS;
+  spin_button->update_policy = GTK_UPDATE_ALWAYS;
   spin_button->in_child = 2;
   spin_button->click_child = 2;
   spin_button->button = 0;
   spin_button->need_timer = 0;
   spin_button->timer_calls = 0;
   spin_button->digits = 0;
-  spin_button->numeric = 0;
-  spin_button->wrap = 0;
+  spin_button->numeric = FALSE;
+  spin_button->wrap = FALSE;
+  spin_button->snap_to_ticks = FALSE;
 }
 
 void
@@ -213,7 +218,7 @@ gtk_spin_button_finalize (GtkObject *object)
 
   gtk_object_unref (GTK_OBJECT (GTK_SPIN_BUTTON (object)->adjustment));
   
-  (* GTK_OBJECT_CLASS (parent_class)->finalize) (object);
+  GTK_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 static void
@@ -257,7 +262,10 @@ gtk_spin_button_realize (GtkWidget *widget)
 
   real_width = widget->allocation.width;
   widget->allocation.width -= ARROW_SIZE + 2 * widget->style->klass->xthickness;
+  gtk_widget_set_events (widget, gtk_widget_get_events (widget) |
+			 GDK_KEY_RELEASE_MASK);
   GTK_WIDGET_CLASS (parent_class)->realize (widget);
+
   widget->allocation.width = real_width;
   
   attributes.window_type = GDK_WINDOW_CHILD;
@@ -411,6 +419,8 @@ gtk_spin_button_draw_arrow (GtkSpinButton *spin_button,
   GtkStateType state_type;
   GtkShadowType shadow_type;
   GtkWidget *widget;
+  gint x;
+  gint y;
 
   g_return_if_fail (spin_button != NULL);
   g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
@@ -436,22 +446,36 @@ gtk_spin_button_draw_arrow (GtkSpinButton *spin_button,
 
       if (arrow == GTK_ARROW_UP)
 	{
+	  if (spin_button->shadow_type != GTK_SHADOW_NONE)
+	    {
+	      x = widget->style->klass->xthickness;
+	      y = widget->style->klass->ythickness;
+	    }
+	  else
+	    {
+	      x = widget->style->klass->xthickness - 1;
+	      y = widget->style->klass->ythickness - 1;
+	    }
 	  gtk_draw_arrow (widget->style, spin_button->panel,
 			  state_type, shadow_type, arrow, TRUE, 
-			  widget->style->klass->xthickness, 
-			  widget->style->klass->ythickness, 
-			  ARROW_SIZE, 
-			  widget->requisition.height / 2 
+			  x, y, ARROW_SIZE, widget->requisition.height / 2 
 			  - widget->style->klass->ythickness);
 	}
       else
 	{
+	  if (spin_button->shadow_type != GTK_SHADOW_NONE)
+	    {
+	      x = widget->style->klass->xthickness;
+	      y = widget->requisition.height / 2;
+	    }
+	  else
+	    {
+	      x = widget->style->klass->xthickness - 1;
+	      y = widget->requisition.height / 2 + 1;
+	    }
 	  gtk_draw_arrow (widget->style, spin_button->panel,
 			  state_type, shadow_type, arrow, TRUE, 
-			  widget->style->klass->xthickness, 
-			  widget->requisition.height / 2,
-			  ARROW_SIZE, 
-			  widget->requisition.height / 2 
+			  x, y, ARROW_SIZE, widget->requisition.height / 2 
 			  - widget->style->klass->ythickness);
 	}
     }
@@ -777,9 +801,7 @@ gtk_spin_button_spin (GtkSpinButton *spin_button,
 	    new_value = spin_button->adjustment->upper;
 	}
       else
-	{
-	  new_value = MIN (new_value, spin_button->adjustment->upper);
-	}
+	new_value = MIN (new_value, spin_button->adjustment->upper);
     }
   else if (direction == GTK_ARROW_DOWN) 
     {
@@ -792,9 +814,7 @@ gtk_spin_button_spin (GtkSpinButton *spin_button,
 	    new_value = spin_button->adjustment->lower;
 	}
       else
-	{
-	  new_value = MAX (new_value, spin_button->adjustment->lower);
-	}
+	new_value = MAX (new_value, spin_button->adjustment->lower);
     }
   
   if (new_value != spin_button->adjustment->value)
@@ -821,13 +841,15 @@ gtk_spin_button_key_press (GtkWidget     *widget,
 {
   GtkSpinButton *spin;
   gint key;
+  gboolean key_repeat = FALSE;
 
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_SPIN_BUTTON (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
   
   spin = GTK_SPIN_BUTTON (widget);
   key = event->keyval;
+
+  key_repeat = (event->time == spin->ev_time);
 
   if (key == GDK_Up || key == GDK_Down || 
       key == GDK_Page_Up || key == GDK_Page_Down)
@@ -840,8 +862,25 @@ gtk_spin_button_key_press (GtkWidget     *widget,
 	{
 	  gtk_signal_emit_stop_by_name (GTK_OBJECT (widget), 
 					"key_press_event");
-	  gtk_spin_button_spin (spin, GTK_ARROW_UP,
-				spin->adjustment->step_increment);
+	  if (!key_repeat)
+	    spin->timer_step = spin->adjustment->step_increment;
+
+	  gtk_spin_button_spin (spin, GTK_ARROW_UP, spin->timer_step);
+
+	  if (key_repeat)
+	    {
+	      if (spin->climb_rate > 0.0 && spin->timer_step
+		  < spin->adjustment->page_increment)
+		{
+		  if (spin->timer_calls < MAX_TIMER_CALLS)
+		    spin->timer_calls++;
+		  else 
+		    {
+		      spin->timer_calls = 0;
+		      spin->timer_step += spin->climb_rate;
+		    }
+		}
+	    }
 	  return TRUE;
 	}
       return FALSE;
@@ -850,8 +889,25 @@ gtk_spin_button_key_press (GtkWidget     *widget,
 	{
 	  gtk_signal_emit_stop_by_name (GTK_OBJECT (widget), 
 					"key_press_event");
-	  gtk_spin_button_spin (spin, GTK_ARROW_DOWN,
-				spin->adjustment->step_increment);
+	  if (!key_repeat)
+	    spin->timer_step = spin->adjustment->step_increment;
+
+	  gtk_spin_button_spin (spin, GTK_ARROW_DOWN, spin->timer_step);
+
+	  if (key_repeat)
+	    {
+	      if (spin->climb_rate > 0.0 && spin->timer_step
+		  < spin->adjustment->page_increment)
+		{
+		  if (spin->timer_calls < MAX_TIMER_CALLS)
+		    spin->timer_calls++;
+		  else 
+		    {
+		      spin->timer_calls = 0;
+		      spin->timer_step += spin->climb_rate;
+		    }
+		}
+	    }
 	  return TRUE;
 	}
       return FALSE;
@@ -873,6 +929,21 @@ gtk_spin_button_key_press (GtkWidget     *widget,
       break;
     }
   return GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event);
+}
+
+static gint
+gtk_spin_button_key_release (GtkWidget   *widget,
+			     GdkEventKey *event)
+{
+  GtkSpinButton *spin;
+
+  g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_SPIN_BUTTON (widget), FALSE);
+  
+  spin = GTK_SPIN_BUTTON (widget);
+  
+  spin->ev_time = event->time;
+  return TRUE;
 }
 
 static void
@@ -901,15 +972,15 @@ gtk_spin_button_update (GtkSpinButton *spin_button)
   g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
 
   val = strtod (gtk_entry_get_text (GTK_ENTRY (spin_button)), &error);
-  
-  if (spin_button->update_policy & GTK_UPDATE_ALWAYS)
+
+  if (spin_button->update_policy == GTK_UPDATE_ALWAYS)
     {
       if (val < spin_button->adjustment->lower)
 	val = spin_button->adjustment->lower;
       else if (val > spin_button->adjustment->upper)
 	val = spin_button->adjustment->upper;
     }
-  else if ((spin_button->update_policy & GTK_UPDATE_IF_VALID) && 
+  else if ((spin_button->update_policy == GTK_UPDATE_IF_VALID) && 
 	   (*error ||
 	   val < spin_button->adjustment->lower ||
 	   val > spin_button->adjustment->upper))
@@ -919,7 +990,7 @@ gtk_spin_button_update (GtkSpinButton *spin_button)
       return;
     }
 
-  if (spin_button->update_policy & GTK_UPDATE_SNAP_TO_TICKS)
+  if (spin_button->snap_to_ticks)
     gtk_spin_button_snap (spin_button, val);
   else
     gtk_adjustment_set_value (spin_button->adjustment, val);
@@ -1031,14 +1102,6 @@ gtk_spin_button_set_update_policy (GtkSpinButton             *spin_button,
   g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
 
   spin_button->update_policy = policy;
-  if (policy & GTK_UPDATE_SNAP_TO_TICKS)
-    {
-      gchar *error = NULL;
-      gfloat val;
-
-      val = strtod (gtk_entry_get_text (GTK_ENTRY (spin_button)), &error);
-      gtk_spin_button_snap (spin_button, val);
-    }
 }
 
 void
@@ -1146,5 +1209,30 @@ gtk_spin_button_set_shadow_type (GtkSpinButton *spin_button,
       spin_button->shadow_type = shadow_type;
       if (GTK_WIDGET_DRAWABLE (spin_button))
 	gdk_window_clear (spin_button->panel);
+    }
+}
+
+void
+gtk_spin_button_set_snap_to_ticks (GtkSpinButton *spin_button,
+				   gint	          snap_to_ticks)
+{
+  guint new_val;
+
+  g_return_if_fail (spin_button != NULL);
+  g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
+
+  new_val = (snap_to_ticks != 0);
+
+  if (new_val != spin_button->snap_to_ticks)
+    {
+      spin_button->snap_to_ticks = new_val;
+      if (new_val)
+	{
+	  gchar *error = NULL;
+	  gfloat val;
+
+	  val = strtod (gtk_entry_get_text (GTK_ENTRY (spin_button)), &error);
+	  gtk_spin_button_snap (spin_button, val);
+	}
     }
 }

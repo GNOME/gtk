@@ -41,9 +41,8 @@ extern "C" {
   
 typedef enum
 {
-  GTK_UPDATE_ALWAYS	   = 1 << 0,
-  GTK_UPDATE_IF_VALID	   = 1 << 1,
-  GTK_UPDATE_SNAP_TO_TICKS = 1 << 2
+  GTK_UPDATE_ALWAYS,
+  GTK_UPDATE_IF_VALID
 } GtkSpinButtonUpdatePolicy;
   
   
@@ -61,11 +60,12 @@ struct _GtkSpinButton
   GtkShadowType shadow_type;
 
   guint32 timer;
+  guint32 ev_time;
   
   gfloat climb_rate;
   gfloat timer_step;
   
-  guint8 update_policy;
+  GtkSpinButtonUpdatePolicy update_policy;
   
   guint in_child : 2;
   guint click_child : 2;
@@ -75,6 +75,7 @@ struct _GtkSpinButton
   guint digits : 3;
   guint numeric : 1;
   guint wrap : 1;
+  guint snap_to_ticks : 1;
 };
 
 struct _GtkSpinButtonClass
@@ -124,7 +125,8 @@ void		gtk_spin_button_set_wrap	   (GtkSpinButton  *spin_button,
 void		gtk_spin_button_set_shadow_type	   (GtkSpinButton  *spin_button,
 						    GtkShadowType   shadow_type);
 
-
+void		gtk_spin_button_set_snap_to_ticks  (GtkSpinButton  *spin_button,
+						    gint	    snap_to_ticks);
 
 
 #ifdef __cplusplus
