@@ -1,5 +1,7 @@
 ## Makefile.am for gtk+/gtk
 
+SUBDIRS=stock-icons
+
 INCLUDES = @STRIP_BEGIN@ \
 	-DG_LOG_DOMAIN=\"Gtk\"				\
 	-DGTK_DISABLE_COMPAT_H				\
