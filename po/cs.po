@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-12-03 04:14+0100\n"
-"PO-Revision-Date: 2003-12-03 19:59+0100\n"
+"POT-Creation-Date: 2003-12-08 04:17+0100\n"
+"PO-Revision-Date: 2003-12-08 13:12+0100\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -2738,7 +2738,7 @@ msgstr "Nemohu převést název souboru"
 msgid "(Empty)"
 msgstr "(Prázdný)"
 
-#: gtk/gtkfilesystemunix.c:306
+#: gtk/gtkfilesystemunix.c:306 gtk/gtkfilesystemwin32.c:377
 #, c-format
 msgid "error creating directory '%s': %s"
 msgstr "chyba při vytváření adresáře '%s': %s"
@@ -2751,10 +2751,15 @@ msgstr "Tento systém souborů nepodporuje ikony"
 msgid "This file system does not support bookmarks"
 msgstr "Tento systém souborů nepodporuje záložky"
 
-#: gtk/gtkfilesystemunix.c:765
+#: gtk/gtkfilesystemunix.c:765 gtk/gtkfilesystemwin32.c:900
 #, c-format
 msgid "error getting information for '%s': %s"
 msgstr "chyba při získávání informací o '%s': %s"
+
+#: gtk/gtkfilesystemwin32.c:686
+#, c-format
+msgid "Bookmark saving failed (%s)"
+msgstr "Ukládání záložek selhalo (%s)"
 
 #: gtk/gtkfixed.c:120 gtk/gtklayout.c:611
 msgid "X position"
@@ -3195,11 +3200,11 @@ msgstr "Widget akcelerátoru"
 msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr "Widget aktivovaný při stisku klávesové zkratky popisu"
 
-#: gtk/gtklabel.c:3224
+#: gtk/gtklabel.c:3225
 msgid "Select All"
 msgstr "Vybrat vše"
 
-#: gtk/gtklabel.c:3234
+#: gtk/gtklabel.c:3235
 msgid "Input Methods"
 msgstr "Vstupní metody"
 
