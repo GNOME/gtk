@@ -1,3 +1,8 @@
+2004-07-28  Anders Carlsson  <andersca@gnome.org>
+
+	* gdk/x11/gdkdrawable-x11.c (gdk_draw_rectangle_alpha_libgtk_only): 
+	Cast to 32-bit integers when premultiplying, suggested by Keith Packard.
+
 2004-07-27  Anders Carlsson  <andersca@gnome.org>
 
 	* demos/gtk-demo/iconview.c: (do_iconview):

@@ -1511,9 +1511,9 @@ gdk_draw_rectangle_alpha_libgtk_only (GdkDrawable  *drawable,
   xdisplay = GDK_DISPLAY_XDISPLAY (gdk_drawable_get_display (drawable));
 
   render_color.alpha = alpha;
-  render_color.red = color->red * render_color.alpha / 0xffff;
-  render_color.green = color->green * render_color.alpha / 0xffff;
-  render_color.blue = color->blue * render_color.alpha / 0xffff;
+  render_color.red = (guint32)color->red * render_color.alpha / 0xffff;
+  render_color.green = (guint32)color->green * render_color.alpha / 0xffff;
+  render_color.blue = (guint32)color->blue * render_color.alpha / 0xffff;
 
   XRenderFillRectangle (xdisplay,
 			PictOpOver, pict, &render_color,
