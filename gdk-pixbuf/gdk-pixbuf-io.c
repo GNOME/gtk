@@ -200,6 +200,24 @@ pixbuf_check_xbm (guchar *buffer, int size)
 	return TRUE;
 }
 
+static gboolean
+pixbuf_check_tga (guchar *buffer, int size)
+{
+        if (size < 18)
+                return FALSE;
+        /* buffer[1] is a boolean telling if in the file a colormap is
+           present, while buffer[2] is the byte which specifies the image
+           type. (GrayScale/PseudoColor/TrueColor/RLE) */
+        if ((buffer[2] == 1) || (buffer[2] == 9)) {
+                if (buffer[1] != 1)
+                        return FALSE;
+        } else {
+                if (buffer[1] != 0)
+			return FALSE;
+        }
+        return TRUE;
+}
+
 static GdkPixbufModule file_formats [] = {
 	{ "png",  pixbuf_check_png, NULL,  NULL, NULL, NULL, NULL, NULL, NULL, },
 	{ "jpeg", pixbuf_check_jpeg, NULL, NULL, NULL, NULL, NULL, NULL, NULL },
@@ -209,10 +227,13 @@ static GdkPixbufModule file_formats [] = {
 	{ "xpm",  pixbuf_check_xpm, NULL,  NULL, NULL, NULL, NULL, NULL, NULL },
 	{ "pnm",  pixbuf_check_pnm, NULL,  NULL, NULL, NULL, NULL, NULL, NULL },
 	{ "ras",  pixbuf_check_sunras, NULL,  NULL, NULL, NULL, NULL, NULL, NULL },
-	{ "ico",  pixbuf_check_ico, NULL,  NULL, NULL, NULL, NULL, NULL, NULL },
 	{ "bmp",  pixbuf_check_bmp, NULL,  NULL, NULL, NULL, NULL, NULL, NULL },
 	{ "wbmp", pixbuf_check_wbmp, NULL, NULL, NULL, NULL, NULL, NULL, NULL },
 	{ "xbm",  pixbuf_check_xbm, NULL,  NULL, NULL, NULL, NULL, NULL, NULL },
+	{ "tga", pixbuf_check_tga, NULL, NULL, NULL, NULL, NULL, NULL, NULL },
+	/* Moved at the bottom, because it causes false positives against many
+	   of my TGA files. */
+	{ "ico",  pixbuf_check_ico, NULL,  NULL, NULL, NULL, NULL, NULL, NULL },
 	{ NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL }
 };
 
@@ -336,6 +357,7 @@ m_fill_vtable (ras);
 m_fill_vtable (tiff);
 m_fill_vtable (xpm);
 m_fill_vtable (xbm);
+m_fill_vtable (tga);
 
 gboolean
 _gdk_pixbuf_load_module (GdkPixbufModule *image_module,
@@ -414,6 +436,11 @@ _gdk_pixbuf_load_module (GdkPixbufModule *image_module,
 	}
 #endif
 
+#ifdef INCLUDE_tga
+	else if (strcmp (image_module->module_name, "tga") == 0){
+		fill_vtable = mname (tga, fill_vtable);
+	}
+#endif
         
         if (fill_vtable) {
                 (* fill_vtable) (image_module);

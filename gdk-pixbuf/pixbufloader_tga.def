@@ -1,0 +1,2 @@
+EXPORTS
+	gdk_pixbuf__tga_fill_vtable

@@ -524,7 +524,7 @@ else
    fi
 fi
 
-all_loaders="png,bmp,wbmp,gif,ico,jpeg,pnm,ras,tiff,xpm"
+all_loaders="png,bmp,wbmp,gif,ico,jpeg,pnm,ras,tiff,xpm,tga"
 included_loaders=""
 # If no loaders specified, include all
 if test "x$with_included_loaders" = xyes ; then

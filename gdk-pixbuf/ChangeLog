@@ -1,3 +1,8 @@
+2001-08-21  Matthias Clasen  <matthiasc@waldgeist.poet.de>
+
+	* Makefile.am, gdk-pixbuf-io.c, pixbufloader_tga.def, 
+	io-tga.c: Add tga loader, patch by Nicola Girardi. (#56067)
+
 2001-08-20  Matthias Clasen  <matthiasc@waldgeist.poet.de>
 
 	* test-images.h, test-loaders.c: Add ico and wbmp tests.
