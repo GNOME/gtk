@@ -1,3 +1,8 @@
+Mon Jun  7 23:07:40 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_remeasure): Handle
+	priv->model being NULL.  (#143856, Mariano Suárez-Alvarez)
+
 2004-06-07  Federico Mena Quintero  <federico@ximian.com>
 
 	Merge from HEAD:
@@ -6,7 +11,7 @@
 	from 2003/Sep/12.  This kept DnD in tree views within modal
 	dialogs from working, which is especially bad for the file
 	chooser.  Fixes #135168.
-
+	
 Sat Jun  5 23:07:30 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkentrycompletion.c: (gtk_entry_completion_init),
