@@ -1,3 +1,8 @@
+Mon Oct  1 16:05:44 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrc.c gtk/gtksettings.c: 
+	g_string_printfa => g_string_append_printf.
+
 Mon Oct  1 16:08:23 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkliststore.c (gtk_list_store_class_init): add a finalize

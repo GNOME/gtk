@@ -1977,10 +1977,10 @@ rc_parse_token_or_compound (GScanner  *scanner,
     {
       gchar *string;
     case G_TOKEN_INT:
-      g_string_printfa (gstring, " 0x%lx", scanner->value.v_int);
+      g_string_append_printf (gstring, " 0x%lx", scanner->value.v_int);
       break;
     case G_TOKEN_FLOAT:
-      g_string_printfa (gstring, " %f", scanner->value.v_float);
+      g_string_append_printf (gstring, " %f", scanner->value.v_float);
       break;
     case G_TOKEN_STRING:
       string = g_strescape (scanner->value.v_string, NULL);

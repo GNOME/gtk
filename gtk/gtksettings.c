@@ -360,12 +360,12 @@ _gtk_settings_parse_convert (GtkRcPropertyParser parser,
       else if (G_VALUE_HOLDS_LONG (src_value))
 	{
 	  gstring = g_string_new ("");
-	  g_string_printfa (gstring, "%ld", g_value_get_long (src_value));
+	  g_string_append_printf (gstring, "%ld", g_value_get_long (src_value));
 	}
       else if (G_VALUE_HOLDS_DOUBLE (src_value))
 	{
 	  gstring = g_string_new ("");
-	  g_string_printfa (gstring, "%f", g_value_get_double (src_value));
+	  g_string_append_printf (gstring, "%f", g_value_get_double (src_value));
 	}
       else if (G_VALUE_HOLDS_STRING (src_value))
 	{
