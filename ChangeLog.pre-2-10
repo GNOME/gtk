@@ -1,5 +1,11 @@
 2004-12-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkwidget.c (gtk_widget_class_init): Add some docs for
+	GtkWidget::delete-event and GtkWidget::destroy-event.  (#161142,
+	Paolo Borelli)
+
+2004-12-13  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtklabel.[hc]: Add a max-width-chars property, which can
 	be used to specify the width of the label in characters, while
 	still allowing it to fall short of this length if the text

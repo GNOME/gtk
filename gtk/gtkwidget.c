@@ -755,6 +755,21 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  _gtk_marshal_BOOLEAN__BOXED,
 		  G_TYPE_BOOLEAN, 1,
 		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+
+/**
+ * GtkWidget::delete-event:
+ * @widget: the object which received the signal.
+ * @event: the event which triggered this signal
+ *
+ * The ::delete-event signal is emitted if a user requests that
+ * a toplevel window is closed. The default handler for this signal
+ * destroys the window. Connecting gtk_widget_hide_on_delete() to
+ * this signal will cause the window to be hidden instead, so that
+ * it can later be shown again without reconstructing it.
+ *
+ * Returns: %TRUE to stop other handlers from being invoked for the event. 
+ *   %FALSE to propagate the event further.
+ */
   widget_signals[DELETE_EVENT] =
     g_signal_new ("delete_event",
 		  G_TYPE_FROM_CLASS (gobject_class),
@@ -764,6 +779,20 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  _gtk_marshal_BOOLEAN__BOXED,
 		  G_TYPE_BOOLEAN, 1,
 		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+
+/**
+ * GtkWidget::destroy-event:
+ * @widget: the object which received the signal.
+ * @event: the event which triggered this signal
+ *
+ * The ::destroy-event signal is emitted when a #GdkWindow is destroyed.
+ * You rarely get this signal, because most widgets disconnect themselves 
+ * from their window before they destroy it, so no widget owns the 
+ * window at destroy time.
+ * 
+ * Returns: %TRUE to stop other handlers from being invoked for the event. 
+ *   %FALSE to propagate the event further.
+ */
   widget_signals[DESTROY_EVENT] =
     g_signal_new ("destroy_event",
 		  G_TYPE_FROM_CLASS (gobject_class),
