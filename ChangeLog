@@ -1,3 +1,7 @@
+Tue Mar 15 20:34:33 2005  Manish Singh  <yosh@gimp.org>
+
+	* gdk/x11/gdkinput-xfree.c: #include gdkaliasdef.c here too.
+
 2005-03-15  Matthias Clasen  <mclasen@redhat.com>
 
 	Make PLT-reduction work with gcc4, and don't include
