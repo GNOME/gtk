@@ -1,3 +1,13 @@
+2000-09-29  Martin Baulig  <baulig@suse.de>
+
+	* Makefile.am (pkgconfigdir): Set this to `$(libexecdir)/pkgconfig';
+	this is the directory where pkg-config actually looks.
+
+	* gdk-pixbuf.pc.in: Renamed to gdb-pixbuf-2.0.pc.in to avoid
+	confusion with the GdkPixbuf of the GNOME 1.x platform.
+
+	* *.pc.in: Made the pkg-config scripts actually work.
+
 2000-09-29  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtktextview.c: Implement the side windows.

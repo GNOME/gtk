@@ -112,8 +112,8 @@ EXTRA_DIST =			\
 	examples/spinbutton/Makefile  \
 	examples/find-examples.sh
 
-pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA= gdk-pixbuf.pc gdk-2.0.pc gtk+-2.0.pc
+pkgconfigdir = $(libexecdir)/pkgconfig
+pkgconfig_DATA= gdk-pixbuf-2.0.pc gdk-2.0.pc gtk+-2.0.pc
 
 dist-hook: gtk+.spec
 	if test -e $(srcdir)/INSTALL.in && test -e $(srcdir)/README.in ; then \

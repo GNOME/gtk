@@ -1005,7 +1005,7 @@ gtk+.spec
 docs/gtk-config.1
 Makefile
 gtk-config-2.0
-gdk-pixbuf.pc
+gdk-pixbuf-2.0.pc
 gdk-2.0.pc
 gtk+-2.0.pc
 po/Makefile.in

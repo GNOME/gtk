@@ -1,0 +1,14 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+VERSION="@VERSION@"
+REQUIRES="gobject-2.0 gmodule-2.0"
+CFLAGS="-I${includedir} $CFLAGS"
+LIBS_PATH="-L${libdir} $LIBS_PATH"
+LIBS_LINK_SELF="-lgdk_pixbuf-1.3 $LIBS_LINK_SELF"
+LIBS_LINK_SYSTEM="@INTLLIBS@ @MATH_LIB@"
+
+#Name: GdkPixbuf
+#Description: Image loading and scaling
