@@ -1,3 +1,15 @@
+Wed Feb 11 02:06:38 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcellrenderer.c (gtk_cell_renderer_class_init): Remove 
+	arbitrary low upper limits on the xpad, ypad, width and height
+	properties.  (#129696, John Ellis)
+
+Wed Feb 11 01:24:20 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_cell_layout_clear_attributes): 
+	Ugh. Don't try to free ints, even if they're stored in pointers.
+	(#133997, Morten Welinder)
+
 2004-02-10  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_finalize):
@@ -32,6 +44,7 @@ Tue Feb 10 12:02:14 2004  Owen Taylor  <otaylor@redhat.com>
 	* tests/prop-editor.c (create_prop_editor): Free the title.
 	(object_changed): Free the children list.
 
+>>>>>>> 1.4914
 Tue Feb 10 01:58:55 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcontainer.c (gtk_container_set_focus_hadjustment): 

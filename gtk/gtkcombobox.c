@@ -2139,7 +2139,8 @@ gtk_combo_box_cell_layout_clear (GtkCellLayout *layout)
 {
   GtkWidget *menu;
   GtkComboBox *combo_box = GTK_COMBO_BOX (layout);
-
+  GSList *i;
+  
   g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
 
   if (combo_box->priv->cell_view)
@@ -2147,6 +2148,17 @@ gtk_combo_box_cell_layout_clear (GtkCellLayout *layout)
 
   if (combo_box->priv->column)
     gtk_tree_view_column_clear (combo_box->priv->column);
+
+  for (i = combo_box->priv->cells; i; i = i->next)
+    {
+     ComboCellInfo *info = (ComboCellInfo *)i->data;
+
+      gtk_combo_box_cell_layout_clear_attributes (layout, info->cell);
+      g_object_unref (G_OBJECT (info->cell));
+      g_free (info);
+    }
+  g_slist_free (combo_box->priv->cells);
+  combo_box->priv->cells = NULL;
 
   menu = combo_box->priv->popup_widget;
   if (GTK_IS_MENU (menu))
@@ -2286,6 +2298,7 @@ gtk_combo_box_cell_layout_clear_attributes (GtkCellLayout   *layout,
   ComboCellInfo *info;
   GtkComboBox *combo_box = GTK_COMBO_BOX (layout);
   GtkWidget *menu;
+  GSList *list;
 
   g_return_if_fail (GTK_IS_COMBO_BOX (layout));
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
@@ -2293,7 +2306,12 @@ gtk_combo_box_cell_layout_clear_attributes (GtkCellLayout   *layout,
   info = gtk_combo_box_get_cell_info (combo_box, cell);
   g_return_if_fail (info != NULL);
 
-  g_slist_foreach (info->attributes, (GFunc)g_free, NULL);
+  list = info->attributes;
+  while (list && list->next)
+    {
+      g_free (list->data);
+      list = list->next->next;
+    }
   g_slist_free (info->attributes);
   info->attributes = NULL;
 
@@ -2878,10 +2896,10 @@ gtk_combo_box_finalize (GObject *object)
     gtk_widget_destroy (combo_box->priv->popup_window);
 
   if (combo_box->priv->model)
-      g_object_unref (combo_box->priv->model);
+    g_object_unref (combo_box->priv->model);
 
-  g_slist_foreach (combo_box->priv->cells, (GFunc)g_free, NULL);
-  g_slist_free (combo_box->priv->cells);
+   g_slist_foreach (combo_box->priv->cells, (GFunc)g_free, NULL);
+   g_slist_free (combo_box->priv->cells);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+   G_OBJECT_CLASS (parent_class)->finalize (object);
 }

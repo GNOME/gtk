@@ -191,7 +191,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 						      P_("xpad"),
 						      P_("The xpad"),
 						      0,
-						      100,
+						      G_MAXUINT,
 						      2,
 						      G_PARAM_READABLE |
 						      G_PARAM_WRITABLE));
@@ -202,7 +202,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 						      P_("ypad"),
 						      P_("The ypad"),
 						      0,
-						      100,
+						      G_MAXUINT,
 						      2,
 						      G_PARAM_READABLE |
 						      G_PARAM_WRITABLE));
@@ -213,7 +213,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 						     P_("width"),
 						     P_("The fixed width"),
 						     -1,
-						     100,
+						     G_MAXINT,
 						     -1,
 						     G_PARAM_READABLE |
 						     G_PARAM_WRITABLE));
@@ -224,7 +224,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 						     P_("height"),
 						     P_("The fixed height"),
 						     -1,
-						     100,
+						     G_MAXINT,
 						     -1,
 						     G_PARAM_READABLE |
 						     G_PARAM_WRITABLE));
