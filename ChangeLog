@@ -1,5 +1,13 @@
 2005-04-05  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkicontheme.c: Store icon caches along with the
+	mtimes of the toplevel directories. The previous
+	mechanism of a hashtable-per-theme caused duplicate icon
+	caches for the same toplevel directory to be created.  
+	(#170030)
+
+2005-04-05  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_build_level): 
 	Fix a typo in a warning.
 
