@@ -1,5 +1,9 @@
 1998-07-20  Raph Levien  <raph@acm.org>
 
+	* gdk/gdkrgb.c: More cleanups in the config process.
+
+1998-07-20  Raph Levien  <raph@acm.org>
+
 	* gdkrgb.c: Fixed minor config bug preventing big-endian
 	architectures from working.
 

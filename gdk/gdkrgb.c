@@ -55,16 +55,6 @@ struct _GdkRgbInfo
   gulong *gray_pixels;
   gulong *reserved_pixels;
 
-  gulong *lookup_red;
-  gulong *lookup_green;
-  gulong *lookup_blue;
-
-  GtkDitherInfo *dither_red;
-  GtkDitherInfo *dither_green;
-  GtkDitherInfo *dither_blue;
-  GtkDitherInfo *dither_gray;
-  guchar ***dither_matrix;
-
   guint nred_shades;
   guint ngreen_shades;
   guint nblue_shades;
@@ -517,16 +507,6 @@ gdk_rgb_init (void)
       image_info->color_pixels = NULL;
       image_info->gray_pixels = NULL;
       image_info->reserved_pixels = NULL;
-
-      image_info->lookup_red = NULL;
-      image_info->lookup_green = NULL;
-      image_info->lookup_blue = NULL;
-
-      image_info->dither_red = NULL;
-      image_info->dither_green = NULL;
-      image_info->dither_blue = NULL;
-      image_info->dither_gray = NULL;
-      image_info->dither_matrix = NULL;
 
       image_info->nred_shades = 6;
       image_info->ngreen_shades = 6;
