@@ -1,3 +1,12 @@
+Sun Sep  2 23:27:16 2001  Kristian Rietveld  <kristian@planet.nl>
+
+	* gtk/gtktreemodelsort.[ch]: much changes in an attempt to make
+	it working. It mostly works now, although there're still a few issues
+	to be worked out.
+
+	* tests/testtreesort.c (main): changes to have a better test
+	application for the GtkTreeModelSort.
+
 Sun Sep  2 23:19:07 2001  Kristian Rietveld  <kristian@planet.nl>
 
 	* gtk/gtktreeview.c (gtk_tree_view_search_iter): code cleaup,
