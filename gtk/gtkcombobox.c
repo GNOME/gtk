@@ -344,12 +344,10 @@ static void     gtk_combo_box_menu_fill_level      (GtkComboBox      *combo_box,
 						    GtkTreeIter      *iter);
 static void     gtk_combo_box_menu_destroy         (GtkComboBox      *combo_box);
 
-static void     gtk_combo_box_item_get_size        (GtkComboBox      *combo_box,
-                                                    gint              index,
-                                                    gint             *cols,
-                                                    gint             *rows);
 static void     gtk_combo_box_relayout_item        (GtkComboBox      *combo_box,
-                                                    gint              index);
+						    GtkWidget        *item,
+                                                    GtkTreeIter      *iter,
+						    GtkWidget        *last);
 static void     gtk_combo_box_relayout             (GtkComboBox      *combo_box);
 
 static gboolean gtk_combo_box_menu_button_press    (GtkWidget        *widget,
@@ -2347,9 +2345,11 @@ gtk_combo_box_menu_fill_level (GtkComboBox *combo_box,
   GtkTreeIter iter;
   gboolean is_separator;
   gint i, n_children;
-
+  GtkWidget *last;
+  
   n_children = gtk_tree_model_iter_n_children (model, parent);
   
+  last = NULL;
   for (i = 0; i < n_children; i++)
     {
       gtk_tree_model_iter_nth_child (model, &iter, parent, i);
@@ -2393,11 +2393,11 @@ gtk_combo_box_menu_fill_level (GtkComboBox *combo_box,
 	}
       
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-
       if (combo_box->priv->wrap_width)
-        gtk_combo_box_relayout_item (combo_box, i);
-
+        gtk_combo_box_relayout_item (combo_box, item, &iter, last);
       gtk_widget_show (item);
+      
+      last = item;
     }
 }
 
@@ -2428,55 +2428,21 @@ gtk_combo_box_menu_destroy (GtkComboBox *combo_box)
  * grid
  */
 
-static void
-gtk_combo_box_item_get_size (GtkComboBox *combo_box,
-                             gint         index_,
-                             gint        *cols,
-                             gint        *rows)
-{
-  GtkTreeIter iter;
-
-  gtk_tree_model_iter_nth_child (combo_box->priv->model, &iter, NULL, index_);
-
-  if (cols)
-    {
-      if (combo_box->priv->col_column == -1)
-        *cols = 1;
-      else
-        gtk_tree_model_get (combo_box->priv->model, &iter,
-                            combo_box->priv->col_column, cols,
-                            -1);
-    }
-
-  if (rows)
-    {
-      if (combo_box->priv->row_column == -1)
-        *rows = 1;
-      else
-        gtk_tree_model_get (combo_box->priv->model, &iter,
-                            combo_box->priv->row_column, rows,
-                            -1);
-    }
-}
-
 static gboolean
-menu_occupied (GtkMenu *menu,
-               guint    left_attach,
-               guint    right_attach,
-               guint    top_attach,
-               guint    bottom_attach)
+menu_occupied (GtkMenu   *menu,
+               guint      left_attach,
+               guint      right_attach,
+               guint      top_attach,
+               guint      bottom_attach)
 {
   GList *i;
-
-  g_return_val_if_fail (GTK_IS_MENU (menu), TRUE);
-  g_return_val_if_fail (left_attach < right_attach, TRUE);
-  g_return_val_if_fail (top_attach < bottom_attach, TRUE);
 
   for (i = GTK_MENU_SHELL (menu)->children; i; i = i->next)
     {
       guint l, r, b, t;
 
-      gtk_container_child_get (GTK_CONTAINER (menu), i->data,
+      gtk_container_child_get (GTK_CONTAINER (menu), 
+			       i->data,
                                "left_attach", &l,
                                "right_attach", &r,
                                "bottom_attach", &b,
@@ -2493,41 +2459,58 @@ menu_occupied (GtkMenu *menu,
 
 static void
 gtk_combo_box_relayout_item (GtkComboBox *combo_box,
-                             gint         index)
+			     GtkWidget   *item,
+                             GtkTreeIter *iter,
+			     GtkWidget   *last)
 {
   gint current_col = 0, current_row = 0;
-  gint rows, cols;
-  GList *list;
-  GtkWidget *item;
-  GtkWidget *menu;
+  gint rows = 1, cols = 1;
+  GtkWidget *menu = combo_box->priv->popup_widget;
 
-  menu = combo_box->priv->popup_widget;
   if (!GTK_IS_MENU_SHELL (menu))
     return;
-
-  list = gtk_container_get_children (GTK_CONTAINER (menu));
-  if (combo_box->priv->add_tearoffs)
-    list = list->next;
-  item = g_list_nth_data (list, index);
-  g_list_free (list);
-
-  gtk_combo_box_item_get_size (combo_box, index, &cols, &rows);
-
-  /* look for a good spot */
-  while (1)
+  
+  if (combo_box->priv->col_column == -1 &&
+      combo_box->priv->row_column == -1 &&
+      last)
     {
+      gtk_container_child_get (GTK_CONTAINER (menu), 
+			       last,
+			       "right_attach", &current_col,
+			       "top_attach", &current_row,
+			       NULL);
       if (current_col + cols > combo_box->priv->wrap_width)
-        {
-          current_col = 0;
-          current_row++;
-        }
+	{
+	  current_col = 0;
+	  current_row++;
+	}
+    }
+  else
+    {
+      if (combo_box->priv->col_column != -1)
+	gtk_tree_model_get (combo_box->priv->model, iter,
+			    combo_box->priv->col_column, &cols,
+			    -1);
+      if (combo_box->priv->row_column != -1)
+	gtk_tree_model_get (combo_box->priv->model, iter,
+			    combo_box->priv->row_column, &rows,
+			    -1);
 
-      if (!menu_occupied (GTK_MENU (menu),
-                          current_col, current_col + cols,
-                          current_row, current_row + rows))
-        break;
-
-      current_col++;
+      while (1)
+	{
+	  if (current_col + cols > combo_box->priv->wrap_width)
+	    {
+	      current_col = 0;
+	      current_row++;
+	    }
+	  
+	  if (!menu_occupied (GTK_MENU (menu), 
+			      current_col, current_col + cols,
+			      current_row, current_row + rows))
+	    break;
+	  
+	  current_col++;
+	}
     }
 
   /* set attach props */
@@ -2540,7 +2523,8 @@ static void
 gtk_combo_box_relayout (GtkComboBox *combo_box)
 {
   GList *list, *j;
-  GtkWidget *menu;
+  GtkWidget *menu, *item;
+  gint row, col, width;
 
   menu = combo_box->priv->popup_widget;
   
@@ -2548,16 +2532,14 @@ gtk_combo_box_relayout (GtkComboBox *combo_box)
   if (combo_box->priv->tree_view || !GTK_IS_MENU_SHELL (menu))
     return;
   
-  /* get rid of all children */
   list = gtk_container_get_children (GTK_CONTAINER (menu));
   
   for (j = g_list_last (list); j; j = j->prev)
     gtk_container_remove (GTK_CONTAINER (menu), j->data);
   
-  g_list_free (list);
-      
-  /* and relayout */
   gtk_combo_box_menu_fill (combo_box);
+
+  g_list_free (list);
 }
 
 /* callbacks */
@@ -2918,14 +2900,17 @@ gtk_combo_box_menu_row_changed (GtkTreeModel *model,
                                 gpointer      user_data)
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (user_data);
+  GtkWidget *item;
   gint width;
 
   if (!combo_box->priv->popup_widget)
     return;
 
   if (combo_box->priv->wrap_width)
-    gtk_combo_box_relayout_item (combo_box,
-                                 gtk_tree_path_get_indices (path)[0]);
+    {
+      item = find_menu_by_path (combo_box->priv->popup_widget, path, FALSE);
+      gtk_combo_box_relayout_item (combo_box, item, iter, NULL);
+    }
 
   width = gtk_combo_box_calc_requested_width (combo_box, path);
 
@@ -3980,6 +3965,7 @@ void
 gtk_combo_box_set_wrap_width (GtkComboBox *combo_box,
                               gint         width)
 {
+  GTimer *timer;
   g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
   g_return_if_fail (width >= 0);
 
@@ -3987,8 +3973,16 @@ gtk_combo_box_set_wrap_width (GtkComboBox *combo_box,
     {
       combo_box->priv->wrap_width = width;
 
+  timer = g_timer_new ();
+  g_timer_start (timer);
+
       gtk_combo_box_check_appearance (combo_box);
+  g_timer_stop (timer);
+  g_print ("check appearance in %lf seconds\n", g_timer_elapsed (timer, NULL));
+  g_timer_reset (timer);
+  g_timer_start (timer);
       gtk_combo_box_relayout (combo_box);
+  g_print ("relayout in %lf seconds\n", g_timer_elapsed (timer, NULL));
       
       g_object_notify (G_OBJECT (combo_box), "wrap_width");
     }
