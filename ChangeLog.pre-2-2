@@ -1,3 +1,8 @@
+Wed Aug 22 19:03:27 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_set_model): clean up selection
+	when changing models.
+
 Wed Aug 22 18:25:46 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c: Fix selection.  I think it's all dandy now.

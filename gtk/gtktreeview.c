@@ -6201,11 +6201,13 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
 	  _gtk_rbtree_free (tree_view->priv->tree);
 	  tree_view->priv->tree = NULL;
 	}
-      if (tree_view->priv->drag_dest_row)
-	{
-	  gtk_tree_row_reference_free (tree_view->priv->drag_dest_row);
-	  tree_view->priv->drag_dest_row = NULL;
-	}
+      gtk_tree_row_reference_free (tree_view->priv->drag_dest_row);
+      tree_view->priv->drag_dest_row = NULL;
+      gtk_tree_row_reference_free (tree_view->priv->cursor);
+      tree_view->priv->cursor = NULL;
+      gtk_tree_row_reference_free (tree_view->priv->anchor);
+      tree_view->priv->anchor = NULL;
+
       g_object_unref (tree_view->priv->model);
       tree_view->priv->search_column = -1;
     }
