@@ -47,16 +47,42 @@ static GMemChunk *string_mem_chunk = NULL;
 /* Hash Functions.
  */
 
-/* Pete, you may have these elsewhere. */
 gint
-g_string_equal(gpointer v, gpointer v2)
+g_str_equal (const gpointer v, const gpointer v2)
 {
   return strcmp ((gchar*) v, (gchar*)v2) == 0;
 }
 
 /* a char* hash function from ASU */
 guint
-g_string_hash(gpointer v)
+g_str_hash (const gpointer v)
+{
+  char *s = (char*)v;
+  char *p;
+  guint h=0, g;
+
+  for(p = s; *p != '\0'; p += 1) {
+    h = ( h << 4 ) + *p;
+    if ( ( g = h & 0xf0000000 ) ) {
+      h = h ^ (g >> 24);
+      h = h ^ g;
+    }
+  }
+
+  return h /* % M */;
+}
+
+/* Deprecated, use g_str_* ... */
+
+gint
+g_string_equal (gpointer v, gpointer v2)
+{
+  return strcmp ((gchar*) v, (gchar*)v2) == 0;
+}
+
+/* a char* hash function from ASU */
+guint
+g_string_hash (gpointer v)
 {
   char *s = (char*)v;
   char *p;
@@ -161,7 +187,7 @@ g_string_chunk_insert_const (GStringChunk *fchunk,
   char* lookup;
 
   if (!chunk->const_table)
-    chunk->const_table = g_hash_table_new (g_string_hash, g_string_equal);
+    chunk->const_table = g_hash_table_new (g_str_hash, g_str_equal);
 
   lookup = (char*) g_hash_table_lookup (chunk->const_table, string);
 

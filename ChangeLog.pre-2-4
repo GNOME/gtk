@@ -1,23 +1,28 @@
 Sun Jan 18 09:57:00 1998  Owen Taylor  <owt1@cornell.edu>
-	* gtkbutton.c gtkclist.c gtkdrawingarea.c gtkentry.c gtkeventbox.c
- 	  gtkfixed.c gtkhandlebox.c gtkhscale.c gtkhscrollbar.c gtkitem.c
-	  gtklist.c gtkmenushell.c gtkmisc.c gtknotebook.c gtkpaned.c
-	  gtkpreview.c gtkprogressbar.c gtkruler.c gtktext.c gtktree.c
-	  gtkviewport.c gtkvscale.c gtkvscrollbar.c gtkwidget.{c,h}
 
-	Added gtk_widget_set_parent and gtk_widget_get_parent. All
-	widgets should use:
+	* gtk/gtkbutton.c gtk/gtkclist.c gtk/gtkdrawingarea.c
+	  gtk/gtkentry.c gtk/gtkeventbox.c gtk/gtkfixed.c
+	  gtk/gtkhandlebox.c gtk/gtkhscale.c gtk/gtkhscrollbar.c
+	  gtk/gtkitem.c gtk/gtklist.c gtk/gtkmenushell.c gtk/gtkmisc.c
+	  gtk/gtknotebook.c gtk/gtkpaned.c gtk/gtkpreview.c
+	  gtk/gtkprogressbar.c gtk/gtkruler.c gtk/gtktext.c gtk/gtktree.c
+	  gtk/gtkviewport.c gtk/gtkvscale.c gtk/gtkvscrollbar.c
+	  gtk/gtkwidget.{c,h}
+
+	Added gtk_widget_set_parent_window() and 
+	gtk_widget_get_parent_window(). All widgets should use:
 	
-	   gtk_widget_get_parent() instead of widget->parent->window.
-
+	   gtk_widget_get_parent_window() instead of widget->parent->window.
+	
 	Any widget that wants to have children not in the parent window,
-	should use gtk_widget_set_parent () in their realize() and
-	add () routines. 
+	should use gtk_widget_set_parent() in their realize() and
+	add() routines. 
 
 	CList and Viewport widgets changed to do this. (Viewport
 	widget using code from gtk-fortier-980117-0.patch.)
 
 Sat Jan 17 23:56:02 1998  Owen Taylor  <owt1@cornell.edu>
+
 	* gtk/gtkobject.c:
 	   renamed g_string_equal => g_str_equal
 	   renamed g_string_hash => g_str_hash

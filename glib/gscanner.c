@@ -191,7 +191,7 @@ g_scanner_new (GScannerConfig	*config_templ)
   scanner->next_line = 1;
   scanner->next_position = 0;
   
-  scanner->symbol_table = g_hash_table_new (g_string_hash, g_string_equal);
+  scanner->symbol_table = g_hash_table_new (g_str_hash, g_str_equal);
   scanner->text = NULL;
   scanner->text_len = 0;
   scanner->input_fd = -1;
