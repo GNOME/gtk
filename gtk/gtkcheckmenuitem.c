@@ -390,6 +390,9 @@ gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
               if (state_type == GTK_STATE_ACTIVE)
                 state_type = GTK_STATE_NORMAL;
             }
+
+	  if (!GTK_WIDGET_IS_SENSITIVE (widget))
+	    state_type = GTK_STATE_INSENSITIVE;
               
 	  gtk_paint_check (widget->style, widget->window,
 			   state_type, shadow_type,
