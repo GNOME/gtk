@@ -1989,6 +1989,9 @@ save_folder_combo_changed_cb (GtkComboBox           *combo,
 {
   int active;
 
+  if (impl->changing_folder)
+    return;
+
   active = gtk_combo_box_get_active (combo);
   if (active == -1)
     return;

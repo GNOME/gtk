@@ -1,3 +1,9 @@
+Wed Mar  3 16:06:03 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtkfilechooserdefault.c (save_folder_combo_changed_cb):
+	Don't activate the combo if we're in the midst of changing
+	folders.
+
 2004-03-03  Mark McLoughlin  <mark@skynet.ie>
 
 	* tests/testsocket_common.c: (print_hello): don't try and store
