@@ -1,3 +1,11 @@
+Thu Mar  8 00:18:29 2001  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtksignal.[hc]: removed old emission hook API.
+	
+	* docs/Changes-2.0.txt: fixed sections.
+	
+	* gtk/gtktextbuffer.c: signal arg fixups.
+
 2001-03-07  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextview.c (invalidated_handler): use PRIORITY_VALIDATE

@@ -127,62 +127,61 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
   gtk_signal_set_funcs(), gtk_signal_handler_pending_by_id(),
   gtk_signal_add_emission_hook(), gtk_signal_add_emission_hook_full(),
   gtk_signal_remove_emission_hook(), gtk_signal_query().
-  gtk_signal_add_emission_hook(), gtk_signal_remove_emission_hook().
   Also, the GtkCallbackMarshal argument to gtk_signal_connect_full() is
   not supported anymore.
   For many of the removed functions, similar variants are available
   in the g_signal_* namespace.
 
-- Inserting and deleting text in GtkEntry though functions such
+* Inserting and deleting text in GtkEntry though functions such
   as gtk_entry_insert_text() now leave the cursor at its original
   position in the text instead of moving it to the location of
   the insertion/deletion.
 
-- The ->label field of GtkFrame widgets has been removed. (As part of
+* The ->label field of GtkFrame widgets has been removed. (As part of
   a change to allow the arbitrary widgets in the title position.) The
   text can now be retrieved with the new function gtk_frame_get_text().
 
-- The 'font' and 'font_set' declarations in RC files are now ignored. There
+* The 'font' and 'font_set' declarations in RC files are now ignored. There
   is a new 'font_name' field that holds the string form of a Pango font
 
-- A number of types in GDK have become subclasses of GObject. For the
+* A number of types in GDK have become subclasses of GObject. For the
   most part, this should not break anyone's code. However, it's now 
   possible/encouraged to use g_object_ref()/g_object_unref() and other
   GObject features with these GDK types. The converted types are:
   GdkWindow, GdkDrawable, GdkPixmap, GdkImage, GdkGC, GdkDragContext,
   GdkColormap
 
-- All drawables including pixmaps used to have a type tag, the 
+* All drawables including pixmaps used to have a type tag, the 
   GdkWindowType enumeration, which included GDK_WINDOW_PIXMAP.
   GdkWindowType is now a property of GdkWindow _only_, and there is
   no GDK_WINDOW_PIXMAP. You can use the GDK_IS_PIXMAP() macro to see 
   if you have a pixmap, if you need to know that.
 
-- GtkStyle and GtkRcStyle are now subclasses of GObject as well.  This
+* GtkStyle and GtkRcStyle are now subclasses of GObject as well.  This
   requires fairly extensive changes to theme engines quite badly, but
   shouldn't affect most other code.
 
-- xthickness/ythickness have moved from GtkStyleClass to GtkStyle
+* xthickness/ythickness have moved from GtkStyleClass to GtkStyle
   (from class to instance). This gives themes a bit more flexibility
   and is generally more of the Right Thing. You can trivially fix
   your code with s/style->klass->xthickness/style->xthickness/g and 
   same for ythickness.
 
-- Some GtkStyle draw_ methods have been removed (cross, oval, ramp) 
+* Some GtkStyle draw_ methods have been removed (cross, oval, ramp) 
   and others have been added (expander, layout). This will require
   changes to theme engines.
 
-- If you were using private GDK types, they have been rearranged
+* If you were using private GDK types, they have been rearranged
   significantly. You shouldn't use private types. ;-) 
 
-- The visual for a widget, and also the default visual is now derived
+* The visual for a widget, and also the default visual is now derived
   from the colormap for the widget and the default colormap. 
   gtk_widget_set_visual(), gtk_widget_set_default_visual(), gtk_widget_push_visual() 
   and gtk_widget_pop_visual() now do nothing. Since the visual always
   had to match that of the colormap, it is safe to simply delete
   all references to these functions.
 
-- A number of functions in GDK have been renamed for consistency and
+* A number of functions in GDK have been renamed for consistency and
   clarity. #defines to provide backwards compatibility have been
   included, but can be disabled by defineing GDK_DISABLE_COMPAT_H.
 
@@ -214,15 +213,14 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
 
   #define gdk_rgb_get_cmap               gdk_rgb_get_colormap
 
-- gdk_pixmap_foreign_new() no longer calls XFreePixmap() on the 
+* gdk_pixmap_foreign_new() no longer calls XFreePixmap() on the 
   pixmap when the GdkPixmap is finalized. This change corresponds
   to the behavior of gdk_window_foreign_new(), and fixes a lot
   of problems with code where the pixmap wasn't supposed to be
   freed. If XFreePixmap() is needed, it can be done using the
   destroy-notification facilities of g_object_set_data().
 
--  GtkProgress/GtkProgressBar had serious problems in GTK 1.2.
- 
+* GtkProgress/GtkProgressBar had serious problems in GTK 1.2.
   - Only 3 or 4 functions are really needed for 95% of progress  
     interfaces; GtkProgress[Bar] had about 25 functions, and 
     didn't even include these 3 or 4.
@@ -237,17 +235,13 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
     change look-and-feel for no good reason
   - The split between GtkProgress and GtkProgressBar makes no sense 
     to me whatsoever.
-  
- This was a big wart on GTK and made people waste lots of time,
- both learning and using the interface.
- 
- So, we have added what we feel is the correct API, and marked all the
- rest deprecated. However, the changes are 100% backward-compatible and
- should break no existing code.
-
- The following 5 functions are the new programming interface and you 
- should consider changing your code to use them:
- 
+  This was a big wart on GTK and made people waste lots of time,
+  both learning and using the interface.
+  So, we have added what we feel is the correct API, and marked all the
+  rest deprecated. However, the changes are 100% backward-compatible and
+  should break no existing code.
+  The following 5 functions are the new programming interface and you 
+  should consider changing your code to use them:
   void       gtk_progress_bar_pulse                (GtkProgressBar *pbar);
   void       gtk_progress_bar_set_text             (GtkProgressBar *pbar,
                                                     const gchar    *text);
@@ -264,7 +258,7 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
   could be done by accessing the struct fields of this structure should be 
   accesible otherwise.
 
-- GtkMenuPositionFunc has a new parameter push_in which controls how
+* GtkMenuPositionFunc has a new parameter push_in which controls how
   menus placed outside the screen is handled. If this is set to true and
   part of the menu is outside the screen then Gtk+ pushes it into the visible
   area. Otherwise the menu is cut of at the end of the visible screen area.
@@ -273,7 +267,7 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
   that the items are placed in the same place as if the menu was placed
   outside the screen, using menu scrolling if necessary.
   
-- The "draw" signal and virtual method on GtkWidget has been removed.
+* The "draw" signal and virtual method on GtkWidget has been removed.
   All drawing should now occur by invalidating a region of the widget
   (call gdk_window_invalidate_rect() or gtk_widget_queue_draw() for
   example to invalidate a region). GTK+ merges all invalid regions,
@@ -281,29 +275,27 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
   invalid regions. gtk_widget_draw() is deprecated but still works; it
   adds the passed-in area to the invalid region and immediately sends
   expose events for the current invalid region. 
- 
   Most widgets will work fine if you just delete their "draw"
   implementation, since they will already have working expose_event
   implementations. The draw method was rarely called in practice
   anyway.
  
-- GtkText and GtkTree are buggy and broken. We don't recommend using
+* The draw_default and draw_focus methods/signals on GtkWidget are
+  gone; simply draw things in your expose handler. 
+  gtk_widget_draw_focus() and gtk_widget_draw_default() wrapper
+  functions are also gone; just queue a draw on the widget,  
+  or the part affected by the focus/default anyway.
+  Also, GtkWidget now has default implementations for focus_in_event
+  and focus_out_event. These set/unset GTK_HAS_FOCUS, and queue a
+  draw. So if your focus in/out handler just does that, you can delete
+  it.
+
+* GtkText and GtkTree are buggy and broken. We don't recommend using
   them, and changing old code to avoid them is a good idea. The
   recommended alternatives are GtkTextView and GtkTreeView.  The
   broken widgets are not declared in the headers by default; to use
   them, define the symbol GTK_ENABLE_BROKEN during compilation.  In
   some future release, these widgets will be removed from GTK+.
 
-- GdkColorContext is gone; you probably weren't using it anyway.
+* GdkColorContext is gone; you probably weren't using it anyway.
   Use GdkColormap and the gdk_rgb_* functions instead.
-
-- The draw_default and draw_focus methods/signals on GtkWidget are
-  gone; simply draw things in your expose handler. 
-  gtk_widget_draw_focus() and gtk_widget_draw_default() wrapper
-  functions are also gone; just queue a draw on the widget,  
-  or the part affected by the focus/default anyway.
-
-  Also, GtkWidget now has default implementations for focus_in_event
-  and focus_out_event. These set/unset GTK_HAS_FOCUS, and queue a
-  draw. So if your focus in/out handler just does that, you can delete
-  it.

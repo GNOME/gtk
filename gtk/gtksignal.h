@@ -126,12 +126,6 @@ void	gtk_signal_compat_matched		(GtkObject	    *object,
 						 guint               action);
 
 
-/* FIXME: non-functional relicts */
-typedef gpointer GtkEmissionHook;
-#define	gtk_signal_add_emission_hook(i,h,d)	(0)
-#define	gtk_signal_remove_emission_hook(i,h)	while (0)
-
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

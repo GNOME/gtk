@@ -165,13 +165,8 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                    gtk_marshal_VOID__BOXED_STRING_INT,
                    GTK_TYPE_NONE,
                    3,
-#if 0
-                   /* FIXME */
                    GTK_TYPE_TEXT_ITER,
                    GTK_TYPE_STRING,
-#endif
-                   GTK_TYPE_POINTER,
-                   GTK_TYPE_POINTER,
                    GTK_TYPE_INT);
 
   signals[INSERT_PIXBUF] =
@@ -183,11 +178,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                    gtk_marshal_VOID__BOXED_OBJECT,
                    GTK_TYPE_NONE,
                    2,
-#if 0
-                   /* FIXME */
                    GTK_TYPE_TEXT_ITER,
-#endif
-                   GTK_TYPE_POINTER,
                    GDK_TYPE_PIXBUF);
 
   signals[INSERT_CHILD_ANCHOR] =
@@ -199,11 +190,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                    gtk_marshal_VOID__BOXED_OBJECT,
                    GTK_TYPE_NONE,
                    2,
-#if 0
-                   /* FIXME */
                    GTK_TYPE_TEXT_ITER,
-#endif
-                   GTK_TYPE_POINTER,
                    GTK_TYPE_TEXT_CHILD_ANCHOR);
   
   signals[DELETE_RANGE] =
@@ -215,13 +202,8 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                    gtk_marshal_VOID__BOXED_BOXED,
                    GTK_TYPE_NONE,
                    2,
-#if 0
-                   /* FIXME */
                    GTK_TYPE_TEXT_ITER,
-                   GTK_TYPE_TEXT_ITER,
-#endif
-                   GTK_TYPE_POINTER,
-                   GTK_TYPE_POINTER);
+                   GTK_TYPE_TEXT_ITER);
 
   signals[CHANGED] =
     g_signal_newc ("changed",

@@ -6242,10 +6242,10 @@ event_watcher_down (void)
       guint signal_id;
 
       signal_id = gtk_signal_lookup ("enter_notify_event", GTK_TYPE_WIDGET);
-      gtk_signal_remove_emission_hook (signal_id, event_watcher_enter_id);
+      // gtk_signal_remove_emission_hook (signal_id, event_watcher_enter_id);
       event_watcher_enter_id = 0;
       signal_id = gtk_signal_lookup ("leave_notify_event", GTK_TYPE_WIDGET);
-      gtk_signal_remove_emission_hook (signal_id, event_watcher_leave_id);
+      // gtk_signal_remove_emission_hook (signal_id, event_watcher_leave_id);
       event_watcher_leave_id = 0;
     }
 }
@@ -6260,9 +6260,9 @@ event_watcher_toggle (void)
       guint signal_id;
 
       signal_id = gtk_signal_lookup ("enter_notify_event", GTK_TYPE_WIDGET);
-      event_watcher_enter_id = gtk_signal_add_emission_hook (signal_id, event_watcher, NULL);
+      // event_watcher_enter_id = gtk_signal_add_emission_hook (signal_id, event_watcher, NULL);
       signal_id = gtk_signal_lookup ("leave_notify_event", GTK_TYPE_WIDGET);
-      event_watcher_leave_id = gtk_signal_add_emission_hook (signal_id, event_watcher, NULL);
+      // event_watcher_leave_id = gtk_signal_add_emission_hook (signal_id, event_watcher, NULL);
     }
 }
 
