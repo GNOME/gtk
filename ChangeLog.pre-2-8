@@ -1,3 +1,8 @@
+Fri Feb  1 15:22:23 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkimage.c (gtk_image_class_init): Fix typo
+	in property description. (Christian Rose.)
+
 Fri Feb  1 14:50:36 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkrc.c (gtk_rc_parse_string): Handle reparsing
