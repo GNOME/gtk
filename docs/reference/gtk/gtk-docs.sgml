@@ -282,11 +282,8 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
     &gtk-Windows;
     &gtk-Framebuffer;
     &gtk-X11;
-    &gtk-Changes-1-2;
-    &gtk-Changes-2-0;
     &gtk-Resources;
     &gtk-Questions;
-
   </part>
 
 
@@ -310,7 +307,6 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
     &gtk-Feature-Test-Macros;
     &gtk-Signals;
     &gtk-Types;
-
   </part>
 
   <part id="gtkobjects">
@@ -545,6 +541,8 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
       </para>
     </partintro>
 
+    &gtk-Changes-1-2;
+    &gtk-Changes-2-0;
     &gtk-migrating-GtkFileChooser;
     &gtk-migrating-GtkAction;
   </part>

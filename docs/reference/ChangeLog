@@ -1,3 +1,8 @@
+Thu Jan 15 23:54:46 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-docs.sgml: Move the old chapters about 1.2 and 2.0 
+	changes to Federicos new 'migrating' part.
+
 Fri Jan  9 00:38:58 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk-sections.txt: Add gtk_ui_manager_get_toplevels.
