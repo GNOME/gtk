@@ -413,7 +413,7 @@ static gint           text_window_get_width       (GtkTextWindow     *win);
 static gint           text_window_get_height      (GtkTextWindow     *win);
 
 
-static GtkTargetEntry target_table[] = {
+static const GtkTargetEntry target_table[] = {
   { "GTK_TEXT_BUFFER_CONTENTS", GTK_TARGET_SAME_APP, 0 },
 };
 

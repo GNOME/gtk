@@ -101,9 +101,9 @@ static gchar* gtk_container_child_default_composite_name (GtkContainer *containe
 
 
 /* --- variables --- */
-static const gchar          *vadjustment_key = "gtk-vadjustment";
+static const gchar           vadjustment_key[] = "gtk-vadjustment";
 static guint                 vadjustment_key_id = 0;
-static const gchar          *hadjustment_key = "gtk-hadjustment";
+static const gchar           hadjustment_key[] = "gtk-hadjustment";
 static guint                 hadjustment_key_id = 0;
 static GSList	            *container_resize_queue = NULL;
 static guint                 container_signals[LAST_SIGNAL] = { 0 };

@@ -69,7 +69,7 @@ enum
     NUM_XPMS
   };
 
-static const char *xpm[][27] =
+static const char *const xpm[][27] =
   {
     /* spline: */
     {

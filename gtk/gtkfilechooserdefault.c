@@ -236,7 +236,7 @@ enum {
 };
 
 /* Target types for dragging from the shortcuts list */
-static GtkTargetEntry shortcuts_source_targets[] = {
+static const GtkTargetEntry shortcuts_source_targets[] = {
   { "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_WIDGET, GTK_TREE_MODEL_ROW }
 };
 
@@ -244,7 +244,7 @@ static const int num_shortcuts_source_targets = (sizeof (shortcuts_source_target
 						 / sizeof (shortcuts_source_targets[0]));
 
 /* Target types for dropping into the shortcuts list */
-static GtkTargetEntry shortcuts_dest_targets[] = {
+static const GtkTargetEntry shortcuts_dest_targets[] = {
   { "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_WIDGET, GTK_TREE_MODEL_ROW },
   { "text/uri-list", 0, TEXT_URI_LIST }
 };
@@ -253,7 +253,7 @@ static const int num_shortcuts_dest_targets = (sizeof (shortcuts_dest_targets)
 					       / sizeof (shortcuts_dest_targets[0]));
 
 /* Target types for DnD from the file list */
-static GtkTargetEntry file_list_source_targets[] = {
+static const GtkTargetEntry file_list_source_targets[] = {
   { "text/uri-list", 0, TEXT_URI_LIST }
 };
 

@@ -42,7 +42,7 @@
 static GPtrArray *virtual_atom_array;
 static GHashTable *virtual_atom_hash;
 
-static gchar *XAtomsStrings[] = {
+static const gchar *const XAtomsStrings[] = {
   /* These are all the standard predefined X atoms */
   "NONE",
   "PRIMARY",

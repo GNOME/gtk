@@ -55,7 +55,7 @@ static XdgAliasList *alias_list = NULL;
 static XdgParentList *parent_list = NULL;
 static XdgDirTimeList *dir_time_list = NULL;
 static XdgCallbackList *callback_list = NULL;
-const char *xdg_mime_type_unknown = "application/octet-stream";
+const char xdg_mime_type_unknown[] = "application/octet-stream";
 
 
 enum

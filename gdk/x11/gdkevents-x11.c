@@ -2698,7 +2698,7 @@ gdk_net_wm_supports (GdkAtom property)
   return gdk_x11_screen_supports_net_wm_hint (gdk_screen_get_default (), property);
 }
 
-static struct
+static const struct
 {
   const char *xsettings_name;
   const char *gdk_name;

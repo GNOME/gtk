@@ -54,7 +54,7 @@ typedef void (*GdkRgbConvFunc) (GdkRgbInfo *image_info, GdkImage *image,
 				gint x_align, gint y_align,
 				GdkRgbCmap *cmap);
 
-static const gchar* visual_names[] =
+static const gchar *const visual_names[] =
 {
   "static gray",
   "grayscale",
@@ -127,7 +127,7 @@ struct _GdkRgbCmapInfo
 
 static GdkRgbCmapInfo *gdk_rgb_cmap_get_info (GdkRgbCmap *cmap, GdkRgbInfo *image_info);
 
-static const char *gdk_rgb_key = "gdk-rgb-info";
+static const char gdk_rgb_key[] = "gdk-rgb-info";
 static GQuark gdk_rgb_quark = 0;
 
 static gboolean gdk_rgb_install_cmap = FALSE;

@@ -82,7 +82,7 @@ static void	gtk_item_factory_finalize		(GObject	      *object);
 /* --- static variables --- */
 static GtkItemFactoryClass *gtk_item_factory_class = NULL;
 static gpointer          parent_class = NULL;
-static const gchar	*item_factory_string = "Gtk-<ItemFactory>";
+static const gchar	 item_factory_string[] = "Gtk-<ItemFactory>";
 static GMemChunk	*ifactory_item_chunks = NULL;
 static GMemChunk	*ifactory_cb_data_chunks = NULL;
 static GQuark		 quark_popup_data = 0;

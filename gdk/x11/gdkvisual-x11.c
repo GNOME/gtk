@@ -50,7 +50,7 @@ static gboolean gdk_visual_equal          (Visual    *a,
 
 #ifdef G_ENABLE_DEBUG
 
-static const gchar* visual_names[] =
+static const gchar *const visual_names[] =
 {
   "static gray",
   "grayscale",

@@ -1892,7 +1892,7 @@ motif_dnd_filter (GdkXEvent *xev,
 /* Utility functions */
 
 static struct {
-  gchar *name;
+  const gchar *name;
   GdkAtom atom;
   GdkDragAction action;
 } xdnd_actions_table[] = {
@@ -3720,7 +3720,7 @@ gdk_drop_finish (GdkDragContext   *context,
 void            
 gdk_window_register_dnd (GdkWindow      *window)
 {
-  static gulong xdnd_version = 5;
+  static const gulong xdnd_version = 5;
   MotifDragReceiverInfo info;
   Atom motif_drag_receiver_info_atom;
   GdkDisplay *display = gdk_drawable_get_display (window);

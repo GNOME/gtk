@@ -234,7 +234,7 @@ static void _gtk_menu_refresh_accel_paths (GtkMenu *menu,
 					   gboolean group_changed);
 
 static GtkMenuShellClass *parent_class = NULL;
-static const gchar	 *attach_data_key = "gtk-menu-attach-data";
+static const gchar	  attach_data_key[] = "gtk-menu-attach-data";
 
 static guint menu_signals[LAST_SIGNAL] = { 0 };
 

@@ -75,7 +75,7 @@ gboolean
 _gtk_tree_data_list_check_type (GType type)
 {
   gint i = 0;
-  static GType type_list[] =
+  static const GType type_list[] =
   {
     G_TYPE_BOOLEAN,
     G_TYPE_CHAR,

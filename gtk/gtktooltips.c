@@ -69,8 +69,8 @@ static void gtk_tooltips_unset_tip_window  (GtkTooltips *tooltips);
 static gboolean get_keyboard_mode          (GtkWidget   *widget);
 
 static GtkObjectClass *parent_class;
-static const gchar  *tooltips_data_key = "_GtkTooltipsData";
-static const gchar  *tooltips_info_key = "_GtkTooltipsInfo";
+static const gchar  tooltips_data_key[] = "_GtkTooltipsData";
+static const gchar  tooltips_info_key[] = "_GtkTooltipsInfo";
 
 GType
 gtk_tooltips_get_type (void)
