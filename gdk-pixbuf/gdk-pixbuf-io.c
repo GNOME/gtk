@@ -413,6 +413,7 @@ module (tiff);
 module (xpm);
 module (xbm);
 module (tga);
+module (pcx);
 
 gboolean
 _gdk_pixbuf_load_module (GdkPixbufModule *image_module,
@@ -518,6 +519,13 @@ _gdk_pixbuf_load_module (GdkPixbufModule *image_module,
 	}
 #endif
         
+#ifdef INCLUDE_pcx
+	else if (strcmp (image_module->module_name, "pcx") == 0) {
+                fill_info = MODULE_ENTRY (pcx, fill_info);
+		fill_vtable = MODULE_ENTRY (pcx, fill_vtable);
+	}
+#endif
+        
         if (fill_vtable) {
                 (* fill_vtable) (image_module);
 		image_module->info = g_new0 (GdkPixbufFormat, 1);
@@ -541,7 +549,7 @@ gdk_pixbuf_io_init ()
 	gchar *included_formats[] = { 
 		"ani", "png", "bmp", "wbmp", "gif", 
 		"ico", "jpeg", "pnm", "ras", "tiff", 
-		"xpm", "xbm", "tga", 
+		"xpm", "xbm", "tga", "pcx",
 		NULL
 	};
 	gchar **name;

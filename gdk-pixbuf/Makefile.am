@@ -150,6 +150,14 @@ libpixbufloader_tga_la_SOURCES = io-tga.c
 libpixbufloader_tga_la_LDFLAGS = -avoid-version -module $(no_undefined)
 libpixbufloader_tga_la_LIBADD = $(module_libs)
 
+#
+# The PCX loader
+#
+libpixbufloader_static_pcx_la_SOURCES = io-pcx.c
+libpixbufloader_pcx_la_SOURCES = io-pcx.c
+libpixbufloader_pcx_la_LDFLAGS = -avoid-version -module $(no_undefined)
+libpixbufloader_pcx_la_LIBADD = $(module_libs)
+
 if HAVE_PNG
 PNG_LIB = libpixbufloader-png.la
 STATIC_PNG_LIB = libpixbufloader-static-png.la
@@ -195,6 +203,9 @@ STATIC_XBM_LIB = libpixbufloader-static-xbm.la
 TGA_LIB = libpixbufloader-tga.la
 STATIC_TGA_LIB = libpixbufloader-static-tga.la
 
+PCX_LIB = libpixbufloader-pcx.la
+STATIC_PCX_LIB = libpixbufloader-static-pcx.la
+
 if BUILD_DYNAMIC_MODULES
 
 loader_LTLIBRARIES = 	\
@@ -210,7 +221,8 @@ loader_LTLIBRARIES = 	\
 	$(BMP_LIB)	\
 	$(WBMP_LIB)	\
 	$(XBM_LIB)	\
-	$(TGA_LIB)
+	$(TGA_LIB)	\
+	$(PCX_LIB)
 
 
 extra_sources = 
@@ -231,7 +243,8 @@ noinst_LTLIBRARIES =		\
 	$(STATIC_BMP_LIB)	\
 	$(STATIC_WBMP_LIB)	\
 	$(STATIC_XBM_LIB)	\
-	$(STATIC_TGA_LIB)
+	$(STATIC_TGA_LIB)	\
+	$(STATIC_PCX_LIB)
 
 builtin_objs = @INCLUDED_LOADER_OBJ@
 
