@@ -28,8 +28,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 2002-01-31 09:59-0500\n"
-"PO-Revision-Date: 2002-01-30 23:31+0100\n"
+"POT-Creation-Date: 2002-02-01 17:33+0100\n"
+"PO-Revision-Date: 2002-02-01 18:51+0100\n"
 "Last-Translator: Ole Laursen <olau@hardworking.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -153,38 +153,34 @@ msgid "Not enough memory to load bitmap image"
 msgstr "Ikke tilstrækkelig hukommelse til indlæsning af bitmap-billede"
 
 #: gdk-pixbuf/io-ico.c:204
-#, fuzzy, c-format
+#, c-format
 msgid "Failure reading ICO: %s"
-msgstr "Fejl under læsning af GIF: %s"
+msgstr "Fejl under læsning af ICO: %s"
 
 #: gdk-pixbuf/io-ico.c:221
-#, fuzzy
 msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
-msgstr "GIF-fil manglede nogle data (måske er den blev afkortet?)"
+msgstr "ICO-fil manglede nogle data (måske er den blev afkortet?)"
 
 #: gdk-pixbuf/io-ico.c:259 gdk-pixbuf/io-ico.c:307 gdk-pixbuf/io-ico.c:370
 #: gdk-pixbuf/io-ico.c:423
-#, fuzzy
 msgid "Not enough memory to load icon"
-msgstr "Ikke nok hukommelse til indlæsning af GIF-fil"
+msgstr "Ikke nok hukommelse til indlæsning af ikon"
 
 #: gdk-pixbuf/io-ico.c:329
 msgid "Icon has zero width"
-msgstr ""
+msgstr "Ikon har bredden nul"
 
 #: gdk-pixbuf/io-ico.c:339
 msgid "Icon has zero height"
-msgstr ""
+msgstr "Ikon har højden nul"
 
 #: gdk-pixbuf/io-ico.c:384
-#, fuzzy
 msgid "Compressed icons are not supported"
-msgstr "Billedtypen '%s' er ikke understøttet"
+msgstr "Komprimerede ikoner er ikke understøttet"
 
 #: gdk-pixbuf/io-ico.c:472
-#, fuzzy
 msgid "Not enough memory to load ICO file"
-msgstr "Ikke nok hukommelse til indlæsning af GIF-fil"
+msgstr "Ikke tilstrækkelig hukommelse til indlæsning af ICO-fil"
 
 #: gdk-pixbuf/io-gif.c:218
 #, c-format
@@ -398,115 +394,104 @@ msgid "Insufficient memory to load PNM file"
 msgstr "Ikke tilstrækkelig hukommelse til indlæsning af PNM-fil"
 
 #: gdk-pixbuf/io-tga.c:157
-#, fuzzy
 msgid "Can't allocate memory for IOBuffer struct"
-msgstr "Kan ikke allokere hukommelse til indlæsning af PNM-fil"
+msgstr "Kan ikke allokere hukommelse til IOBuffer-struktur"
 
 #: gdk-pixbuf/io-tga.c:176
-#, fuzzy
 msgid "Can't allocate memory for IOBuffer data"
-msgstr "Kan ikke allokere hukommelse til indlæsning af PNM-fil"
+msgstr "Kan ikke allokere hukommelse til IOBuffer-data"
 
 #: gdk-pixbuf/io-tga.c:187
 msgid "Can't realloc IOBuffer data"
-msgstr ""
+msgstr "Kan ikke omallokere IOBuffer-data"
 
 #: gdk-pixbuf/io-tga.c:216
-#, fuzzy
 msgid "Can't allocate temporary IOBuffer data"
-msgstr "Ikke nok hukommelse til indlæsning af XPM-billede"
+msgstr "Kan ikke allokere midlertidige IOBuffer-data"
 
 #: gdk-pixbuf/io-tga.c:249
-#, fuzzy
 msgid "fread() failed -- premature end-of-file probably encountered"
-msgstr "Fil sluttede for tidligt"
+msgstr "fread() mislykkedes - filen sluttede sandsynligt for tidligt"
 
 #: gdk-pixbuf/io-tga.c:259
-#, fuzzy
 msgid "fseek() failed -- premature end-of-file probably encountered"
-msgstr "Fil sluttede for tidligt"
+msgstr "fseek() mislykkedes - filen sluttede sandsynligt for tidligt"
 
 #: gdk-pixbuf/io-tga.c:288
 msgid "Can't allocate new pixbuf"
-msgstr ""
+msgstr "Kan ikke allokere ny pixbuf"
 
 #: gdk-pixbuf/io-tga.c:557
 msgid "Can't allocate colormap structure"
-msgstr ""
+msgstr "Kan ikke allokere farvetabelsstruktur"
 
 #: gdk-pixbuf/io-tga.c:564
 msgid "Can't allocate colormap entries"
-msgstr ""
+msgstr "Kan ikke allokere farvetabelselementer"
 
 #: gdk-pixbuf/io-tga.c:587
 msgid "Unexpected bitdepth for colormap entries"
-msgstr ""
+msgstr "Uventet bitdybde for farvetabelselementer"
 
 #: gdk-pixbuf/io-tga.c:607
 msgid "Can't allocate TGA header memory"
-msgstr ""
+msgstr "Kan ikke allokere hukommelse til TGA-hoved"
 
 #: gdk-pixbuf/io-tga.c:619
 msgid "TGA image comment length is too long"
-msgstr ""
+msgstr "Længde af TGA-billedkommentar er for lang"
 
 #: gdk-pixbuf/io-tga.c:628
-#, fuzzy
 msgid "TGA image type not supported"
-msgstr "Billedtypen '%s' er ikke understøttet"
+msgstr "TGA-billedtype ikke understøttet"
 
 #: gdk-pixbuf/io-tga.c:671
-#, fuzzy
 msgid "Can't allocate memory for TGA context struct"
-msgstr "Ikke nok hukommelse til indlæsning af XPM-billede"
+msgstr "Kan ikke allokere hukommelse til TGA-kontekststruktur"
 
 #: gdk-pixbuf/io-tga.c:735
 msgid "Excess data in file"
-msgstr ""
+msgstr "For mange data i fil"
 
 #: gdk-pixbuf/io-tga.c:776
-#, fuzzy
 msgid "Can't allocate memory for TGA header"
-msgstr "Kan ikke allokere hukommelse til indlæsning af PNM-fil"
+msgstr "Kan ikke allokere hukommelse til TGA-hoved"
 
 #: gdk-pixbuf/io-tga.c:786
 msgid "Too big value in the infolen field of TGA header."
-msgstr ""
+msgstr "For stor værdi i infolen-feltet i TGA-hoved"
 
 #: gdk-pixbuf/io-tga.c:810
-#, fuzzy
 msgid "Can't allocate memory for TGA cmap temporary buffer"
-msgstr "Ikke nok hukommelse til indlæsning af XPM-billede"
+msgstr "Kan ikke allokere hukommelse til midlertidigt mellemlager til TGA-farvetabel"
 
 #: gdk-pixbuf/io-tga.c:822
-#, fuzzy
 msgid "Can't allocate memory for TGA colormap struct"
-msgstr "Ikke nok hukommelse til indlæsning af XPM-billede"
+msgstr "Kan ikke allokere hukommelse til TGA-farvetabelsstruktur"
 
 #: gdk-pixbuf/io-tga.c:831
-#, fuzzy
 msgid "Can't allocate memory for TGA colormap entries"
-msgstr "Ikke nok hukommelse til indlæsning af XPM-billede"
+msgstr "Kan ikke allokere TGA-farvetabelselementer"
 
 #: gdk-pixbuf/io-tga.c:841
 msgid "Unexpected bitdepth for TGA colormap"
-msgstr ""
+msgstr "Uventet bitdybde for TGA-farvetabel"
 
 #: gdk-pixbuf/io-tga.c:881
 msgid "Pseudo-Color image without colormap"
-msgstr ""
+msgstr "Pseudofarve-billede uden farvetabel"
 
 #: gdk-pixbuf/io-tga.c:888
 msgid "Can't seek to image offset -- end-of-file probably encountered"
-msgstr ""
+msgstr "Kan ikke søge til billedafsæt - sandsynligvis blev filslutningen mødt"
 
 #: gdk-pixbuf/io-tga.c:897 gdk-pixbuf/io-tga.c:993 gdk-pixbuf/io-tga.c:1059
 msgid "Can't allocate pixbuf"
-msgstr ""
+msgstr "Kan ikke allokere pixbuf"
 
 #: gdk-pixbuf/io-tga.c:1125 gdk-pixbuf/io-tga.c:1154
 msgid "Unsupported TGA image type"
-msgstr ""
+msgstr "Ikke-understøttet TGA-billedtype"
 
 #: gdk-pixbuf/io-tiff.c:152
 msgid "Could not get image width (bad TIFF file)"
@@ -2044,89 +2029,81 @@ msgid "Error loading icon: %s"
 msgstr "Fejl ved indlæsning af ikon: %s"
 
 #: gtk/gtkimage.c:129
-#, fuzzy
 msgid "Pixbuf"
-msgstr "Pixbuf-objekt"
+msgstr "Pixbuf"
 
 #: gtk/gtkimage.c:130
 msgid "A GdkPixbuf to display."
-msgstr ""
+msgstr "En GdkPixbuf der skal fremvises"
 
 #: gtk/gtkimage.c:137
 msgid "Pixmap"
-msgstr ""
+msgstr "Pixmap"
 
 #: gtk/gtkimage.c:138
 msgid "A GdkPixmap to display."
-msgstr ""
+msgstr "En GdkPixmap der skal fremvises"
 
+# navn på struktur - se næste tekst for forklaring
 #: gtk/gtkimage.c:145
-#, fuzzy
 msgid "Image"
-msgstr "Side"
+msgstr "Image"
 
 #: gtk/gtkimage.c:146
 msgid "A GdkImage to display."
-msgstr ""
+msgstr "En GdkImage der skal fremvises"
 
-# "markup" dækker over både opmærkning og tekst her
 #: gtk/gtkimage.c:153
-#, fuzzy
 msgid "Mask"
-msgstr "Opmærket tekst"
+msgstr "Maske"
 
 #: gtk/gtkimage.c:154
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
-msgstr ""
+msgstr "Maskebitkort der skal brugess med GdkImage eller GdkPixmap"
 
 #: gtk/gtkimage.c:162
-#, fuzzy
 msgid "Filename to load and siplay."
-msgstr "Fejl under indlæsning af TIFF-billede"
+msgstr "Filnavn der skal indlæses og vises"
 
 #: gtk/gtkimage.c:170
 msgid "Stock ID"
-msgstr ""
+msgstr "Lager-id"
 
 #: gtk/gtkimage.c:171
 msgid "Stock ID for a stock image to display."
-msgstr ""
+msgstr "Laged-id for et billede fra standardbilledlageret der skal fremvises"
 
 #: gtk/gtkimage.c:178
-#, fuzzy
 msgid "Icon set"
-msgstr "Inkonsistent"
+msgstr "Ikonsæt"
 
 #: gtk/gtkimage.c:179
 msgid "Icon set to display."
-msgstr ""
+msgstr "Ikonsæt der skal vises"
 
 #: gtk/gtkimage.c:186
-#, fuzzy
 msgid "Icon size"
-msgstr "Skrifttypestørrelse"
+msgstr "Ikonstørrelse"
 
 #: gtk/gtkimage.c:187
 msgid "Size to use for stock icon or icon set."
-msgstr ""
+msgstr "Størrelse der skal bruges for lagerikonet eller ikonsættet"
 
 #: gtk/gtkimage.c:195
-#, fuzzy
 msgid "Animation"
-msgstr "Information"
+msgstr "Animation"
 
 #: gtk/gtkimage.c:196
 msgid "GdkPixbufAnimation to display."
-msgstr ""
+msgstr "GdkPixbufAnimation der skal fremvises"
 
 #: gtk/gtkimage.c:203
-#, fuzzy
 msgid "Storage type"
-msgstr "Kurvetype"
+msgstr "Lagringstype"
 
 #: gtk/gtkimage.c:204
 msgid "The representation being used for image data."
-msgstr ""
+msgstr "Den repræsentation der bruges til billeddata"
 
 #: gtk/gtkimagemenuitem.c:124
 msgid "Image widget"
@@ -2339,19 +2316,19 @@ msgstr "Højden af layoutet"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:614
+#: gtk/gtkmain.c:613
 msgid "default:LTR"
 msgstr "default:LTR"
 
 #: gtk/gtkmenu.c:189
 msgid "Tearoff Title"
-msgstr ""
+msgstr "Afrivningstitel"
 
 #: gtk/gtkmenu.c:190
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off."
-msgstr ""
+msgstr "En titel som vindueshåndteringen kan vise når denne menu bliver revet af"
 
 #: gtk/gtkmenubar.c:151
 msgid "Style of bevel around the menubar"
@@ -2887,41 +2864,36 @@ msgid "Vertical Adjustment"
 msgstr "Lodret justering"
 
 #: gtk/gtkscrolledwindow.c:191
-#, fuzzy
 msgid "Horizontal Scrollbar Policy"
-msgstr "Vandret skalering"
+msgstr "Vandret rulleskaktspolitik"
 
 #: gtk/gtkscrolledwindow.c:192
 msgid "When the horizontal scrollbar is displayed"
-msgstr ""
+msgstr "Hvornår den vandrette rulleskakt vises"
 
 #: gtk/gtkscrolledwindow.c:199
-#, fuzzy
 msgid "Vertical Scrollbar Policy"
-msgstr "Lodret skalering"
+msgstr "Lodret rulleskaktspolitik"
 
 #: gtk/gtkscrolledwindow.c:200
 msgid "When the vertical scrollbar is displayed"
-msgstr ""
+msgstr "Hvornår den lodrette rulleskakt vises"
 
 #: gtk/gtkscrolledwindow.c:208
-#, fuzzy
 msgid "Window Placement"
-msgstr "Vinduestitel"
+msgstr "Vinduesposition"
 
 #: gtk/gtkscrolledwindow.c:209
 msgid "Where the contents are located with respect to the scrollbars"
-msgstr ""
+msgstr "Hvor indholdet er placeret i forhold til rulleskaktene"
 
 #: gtk/gtkscrolledwindow.c:216
-#, fuzzy
 msgid "Shadow Type"
 msgstr "Skyggetype"
 
 #: gtk/gtkscrolledwindow.c:217
-#, fuzzy
 msgid "Style of bevel around the contents"
-msgstr "Kanttype for menulinjen"
+msgstr "Kantstil omkring indholdet"
 
 #: gtk/gtksettings.c:147
 msgid "Double Click Time"
@@ -3638,43 +3610,44 @@ msgstr "Om dette mærke påvirker synligheden af teksten"
 
 #: gtk/gtktextutil.c:46
 msgid "LRM _Left-to-right mark"
-msgstr ""
+msgstr "LRM _venstre-mod-højre-mærke"
 
 #: gtk/gtktextutil.c:47
 msgid "RLM _Right-to-left mark"
-msgstr ""
+msgstr "RLM _højre-mod-venstre-mærke"
 
 #: gtk/gtktextutil.c:48
 msgid "LRE Left-to-right _embedding"
-msgstr ""
+msgstr "LRE venstre-mod-højre-_indlejring"
 
 #: gtk/gtktextutil.c:49
 msgid "RLE Right-to-left e_mbedding"
-msgstr ""
+msgstr "RLE højre-mod-venstre-i_ndlejring"
 
+# RETMIG: rigtigt?
 #: gtk/gtktextutil.c:50
 msgid "LRO Left-to-right _override"
-msgstr ""
+msgstr "LRO venstre-mod-højre-_overskrivning"
 
 #: gtk/gtktextutil.c:51
 msgid "RLO Right-to-left o_verride"
-msgstr ""
+msgstr "RLO højre-mod-venstre-o_verskrivning"
 
 #: gtk/gtktextutil.c:52
 msgid "PDF _Pop directional formatting"
-msgstr ""
+msgstr "PDF _glem retningsformatering"
 
 #: gtk/gtktextutil.c:53
 msgid "ZWS _Zero width space"
-msgstr ""
+msgstr "ZWS _nul bredde mellemrum"
 
 #: gtk/gtktextutil.c:54
 msgid "ZWN Zero width _joiner"
-msgstr ""
+msgstr "ZWN nul bredde _sammenbinder"
 
 #: gtk/gtktextutil.c:55
 msgid "ZWNJ Zero width _non-joiner"
-msgstr ""
+msgstr "ZWN nul bredde i_kke-sammenbinder"
 
 #: gtk/gtktextview.c:535
 msgid "Pixels Above Lines"
@@ -3802,14 +3775,12 @@ msgid "Size of icons in default toolbars"
 msgstr "Størrelsen af ikoner i standardværktøjslinjer"
 
 #: gtk/gtktreemodelsort.c:298
-#, fuzzy
 msgid "TreeModelSort Model"
-msgstr "TreeView-model"
+msgstr "TreeModelSort-model"
 
 #: gtk/gtktreemodelsort.c:299
-#, fuzzy
 msgid "The model for the TreeModelSort to sort"
-msgstr "Modellen for trævisningen"
+msgstr "Modellen som TreeModelSort skal sortere"
 
 #: gtk/gtktreeview.c:499
 msgid "TreeView Model"
@@ -4360,6 +4331,3 @@ msgstr "Vietnamesisk (VIQR)"
 #: modules/input/imxim.c:27
 msgid "X Input Method"
 msgstr "X-indtastningsmetode"
-
-#~ msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-#~ msgstr "Kunne ikke finde billedfil i pixmap_path: \"%s\" linje %d"
