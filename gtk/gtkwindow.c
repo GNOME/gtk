@@ -608,6 +608,34 @@ gtk_window_remove_embedded_xid (GtkWindow *window, guint xid)
 			      (GtkDestroyNotify) g_list_free : NULL);
 }
 
+void       
+gtk_window_reposition (GtkWindow *window,
+		       gint       x,
+		       gint       y)
+{
+  GtkWindowGeometryInfo *info;
+  
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  /* keep this in sync with gtk_window_compute_reposition()
+   */
+  if (GTK_WIDGET_REALIZED (window))
+    {
+      info = gtk_window_get_geometry_info (window, TRUE);
+
+      if (!info->last_flags & GDK_HINT_POS)
+	{
+	  info->last_flags |= GDK_HINT_POS;
+	  gdk_window_set_geometry_hints (GTK_WIDGET (window)->window,
+					 &info->last_geometry,
+					 info->last_flags);
+	}
+  
+      gdk_window_move (GTK_WIDGET (window)->window, x, y);
+    }
+}
+
 static void
 gtk_window_shutdown (GtkObject *object)
 {
@@ -1489,19 +1517,6 @@ gtk_window_move_resize (GtkWindow *window)
    */
   gtk_window_compute_hints (window, &new_geometry, &new_flags);
 
-  if (!gtk_window_compare_hints (&info->last_geometry, info->last_flags,
-				 &new_geometry, new_flags))
-    {
-      hints_changed = TRUE;
-      gdk_window_set_geometry_hints (widget->window,
-				     &new_geometry,
-				     new_flags);
-      info->last_geometry = new_geometry;
-      info->last_flags = new_flags;
-    }
-
-  /* Compute a new default size for the window
-   */
   gtk_widget_size_request (widget, NULL);
   gtk_window_compute_default_size (window, &new_width, &new_height);
   
@@ -1541,6 +1556,23 @@ gtk_window_move_resize (GtkWindow *window)
   /* compute new window position if a move is required
    */
   gtk_window_compute_reposition (window, new_width, new_height, &x, &y);
+
+  /* Now set hints if necessary, including new position
+   */
+  if (x != 1 && y != -1)
+    new_flags |= GDK_HINT_POS;
+  
+  if (!gtk_window_compare_hints (&info->last_geometry, info->last_flags,
+				 &new_geometry, new_flags))
+    {
+      hints_changed = TRUE;
+      gdk_window_set_geometry_hints (widget->window,
+				     &new_geometry,
+				     new_flags);
+      info->last_geometry = new_geometry;
+      info->last_flags = new_flags;
+    }
+
   if (x != -1 && y != -1)
     {
       gint geo_x, geo_y;
@@ -2000,15 +2032,15 @@ gtk_window_compute_reposition (GtkWindow  *window,
       /* we handle necessary window positioning by hand here,
        * so we can coalesce the window movement with possible
        * resizes to get only one configure event.
-       * keep this in sync with gtk_widget_set_uposition().
+       * keep this in sync with gtk_widget_set_uposition()
+       * and gtk_window_reposition().
        */
       gtk_widget_set_uposition (widget, -1, -1); /* ensure we have aux_info */
       
       aux_info = gtk_object_get_data (GTK_OBJECT (widget), "gtk-aux-info");
       aux_info->x = *x;
       aux_info->y = *y;
-      gdk_window_set_hints (widget->window, aux_info->x, aux_info->y, 0, 0, 0, 0, GDK_HINT_POS);
-      gdk_window_move (widget->window, aux_info->x, aux_info->y);
+
       window->use_uposition = FALSE;
     }
 }

@@ -135,6 +135,9 @@ void       gtk_window_remove_embedded_xid      (GtkWindow           *window,
 				                guint                xid);
 void       gtk_window_add_embedded_xid         (GtkWindow           *window,
 						guint                xid);
+void       gtk_window_reposition               (GtkWindow           *window,
+						gint                 x,
+						gint                 y);
 
 #ifdef __cplusplus
 }

@@ -1,3 +1,15 @@
+Tue Aug 31 15:58:46 1999  Owen Taylor  <otaylor@redhat.com>
+
+        * gtk/gtkwidget.c (gtk_widget_set_uposition):
+        * gtk/gtkwindow.[hc] (gtk_window_reposition):
+        Move the hint setting code from gtk_widget_set_uposition
+        to here; set the hints so that we respect any previously
+        set geometry hints.
+
+        * gtk/gtkwindow.c (gtk_window_compute_reposition): Don't
+        change the window hints here or move the window here,
+        let that happen in gtk_window_move_resize().
+
 Tue Aug 31 06:58:52 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwidget.c (gtk_widget_event): when discarding exposes due
@@ -47,7 +59,7 @@ Tue Aug 31 11:55:20 1999  Owen Taylor  <otaylor@redhat.com>
         * gtk/gtkwindow.c (gtk_window_constrain_size): Function
         from fvwm to constrain a size to the geometry hints.
 
-        * gtk/gtkwindow.c (gtk_window_compare_hints): New functio
+        * gtk/gtkwindow.c (gtk_window_compare_hints): New function
         to compare two sets of geometry hints.
 
         * gtk/gtkwindow.c (gtk_window_compute_hints): Renamed

@@ -3713,19 +3713,16 @@ gtk_widget_set_uposition (GtkWidget *widget,
       aux_info = gtk_widget_aux_info_new ();
       gtk_object_set_data_by_id (GTK_OBJECT (widget), aux_info_key_id, aux_info);
     }
+
+  /* keep this in sync with gtk_window_compute_reposition() */
   
   if (x > -2)
     aux_info->x = x;
   if (y > -2)
     aux_info->y = y;
   
-  if (GTK_WIDGET_REALIZED (widget) && GTK_IS_WINDOW (widget) &&
-      (aux_info->x != -1) && (aux_info->y != -1))
-    {
-      /* keep this in sync with gtk_window_move_resize() */
-      gdk_window_set_hints (widget->window, aux_info->x, aux_info->y, 0, 0, 0, 0, GDK_HINT_POS);
-      gdk_window_move (widget->window, aux_info->x, aux_info->y);
-    }
+  if (GTK_IS_WINDOW (widget) && (aux_info->x != -1) && (aux_info->y != -1))
+    gtk_window_reposition (GTK_WINDOW (widget), x, y);
   
   if (GTK_WIDGET_VISIBLE (widget) && widget->parent)
     gtk_widget_size_allocate (widget, &widget->allocation);
