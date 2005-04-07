@@ -71,7 +71,7 @@ is_cache_up_to_date (const gchar *path)
   retval = g_stat (cache_path, &cache_stat);
   g_free (cache_path);
   
-  if (retval < 0 && errno == ENOENT)
+  if (retval < 0)
     {
       /* Cache file not found */
       return FALSE;
@@ -385,8 +385,8 @@ struct _HashNode
 static guint
 icon_name_hash (gconstpointer key)
 {
-  const char *p = key;
-  guint h = *p;
+  const signed char *p = key;
+  guint32 h = *p;
 
   if (h)
     for (p += 1; *p != '\0'; p++)
@@ -992,8 +992,9 @@ build_cache (const gchar *path)
 
   /* Update time */
   /* FIXME: What do do if an error occurs here? */
-  g_stat (path, &path_stat);
-  g_stat (cache_path, &cache_stat);
+  if (g_stat (path, &path_stat) < 0 ||
+      g_stat (cache_path, &cache_stat))
+    exit (1);
 
   utime_buf.actime = path_stat.st_atime;
   utime_buf.modtime = cache_stat.st_mtime;
