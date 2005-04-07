@@ -12195,7 +12195,7 @@ gtk_tree_view_get_search_column (GtkTreeView *tree_view)
 /**
  * gtk_tree_view_set_search_column:
  * @tree_view: A #GtkTreeView
- * @column: the column of the model to search in
+ * @column: the column of the model to search in, or -1 to disable searching
  *
  * Sets @column as the column where the interactive search code should
  * search in. 
