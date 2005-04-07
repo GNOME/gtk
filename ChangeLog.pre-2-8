@@ -1,3 +1,9 @@
+2005-04-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/gdkpango.c (gdk_pango_layout_line_get_clip_region): 
+	Ignore regions which fall completely outside the line.  
+	(#165862, Felipe Heidrich)
+	
 2005-04-06  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/*.c, gdk/gdkdisplaymanager.c: s/G-OBJECT/G_OBJECT/g, 

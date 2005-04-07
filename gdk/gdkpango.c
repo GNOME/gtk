@@ -1316,12 +1316,14 @@ gdk_pango_layout_line_get_clip_region (PangoLayoutLine *line,
 
       /* Note that get_x_ranges returns layout coordinates
        */
-      pango_layout_line_get_x_ranges (line,
-                                      index_ranges[i*2],
-                                      index_ranges[i*2+1],
-                                      &pixel_ranges, &n_pixel_ranges);
-  
-      for (j=0; j < n_pixel_ranges; j++)
+      if (index_ranges[i*2+1] >= line->start_index &&
+	  index_ranges[i*2] < line->start_index + line->length)
+	pango_layout_line_get_x_ranges (line,
+					index_ranges[i*2],
+					index_ranges[i*2+1],
+					&pixel_ranges, &n_pixel_ranges);
+      
+      for (j = 0; j < n_pixel_ranges; j++)
         {
           GdkRectangle rect;
           
