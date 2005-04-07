@@ -1,5 +1,8 @@
 2005-04-07  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/tmpl/gtkbbox.sgml: Document that GtkButtonBox ignores
+	the homogeneous property.  (#171412, Morten Welinder)
+
 	* gtk/tmpl/gtkenums.sgml: Make the docs of GKT_SELECTION_MULTIPLE
 	more accurate by making them more vague.  (#167088,
 	Ken Siersma)
