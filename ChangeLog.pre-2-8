@@ -1,5 +1,10 @@
 2005-04-06  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/*.c, gdk/gdkdisplaymanager.c: Use canonical property
+	names for g_object_notify() calls.  (#171746, Morten Welinder)
+	  
+2005-04-06  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtktreeview.c (gtk_tree_view_set_search_column): Allow
 	resetting search-column to -1, and document it.  (#172891,
 	Lorenzo Gil Sanchez)

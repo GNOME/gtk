@@ -1888,7 +1888,7 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
 	  menu->tearoff_adjustment = NULL;
 	}
 
-      g_object_notify (G_OBJECT (menu), "tearoff_state");
+      g_object_notify (G-OBJECT (menu), "tearoff-state");
     }
 }
 
@@ -1930,7 +1930,7 @@ gtk_menu_set_title (GtkMenu     *menu,
     g_object_set_data (G_OBJECT (menu), "gtk-menu-title", NULL);
     
   gtk_menu_update_title (menu);
-  g_object_notify (G_OBJECT (menu), "tearoff_title");
+  g_object_notify (G-OBJECT (menu), "tearoff-title");
 }
 
 /**

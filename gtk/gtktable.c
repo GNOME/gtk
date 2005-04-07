@@ -553,7 +553,7 @@ gtk_table_resize (GtkTable *table,
 	      table->rows[i].shrink = 0;
 	    }
 
-	  g_object_notify (G_OBJECT (table), "n_rows");
+	  g_object_notify (G-OBJECT (table), "n-rows");
 	}
 
       if (n_cols != table->ncols)
@@ -575,7 +575,7 @@ gtk_table_resize (GtkTable *table,
 	      table->cols[i].shrink = 0;
 	    }
 
-	  g_object_notify (G_OBJECT (table), "n_columns");
+	  g_object_notify (G-OBJECT (table), "n-columns");
 	}
     }
 }
@@ -734,7 +734,7 @@ gtk_table_set_row_spacings (GtkTable *table,
   if (GTK_WIDGET_VISIBLE (table))
     gtk_widget_queue_resize (GTK_WIDGET (table));
 
-  g_object_notify (G_OBJECT (table), "row_spacing");
+  g_object_notify (G-OBJECT (table), "row-spacing");
 }
 
 /**
@@ -770,7 +770,7 @@ gtk_table_set_col_spacings (GtkTable *table,
   if (GTK_WIDGET_VISIBLE (table))
     gtk_widget_queue_resize (GTK_WIDGET (table));
 
-  g_object_notify (G_OBJECT (table), "column_spacing");
+  g_object_notify (G-OBJECT (table), "column-spacing");
 }
 
 /**

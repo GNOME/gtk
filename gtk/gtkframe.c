@@ -400,7 +400,7 @@ gtk_frame_set_label_widget (GtkFrame  *frame,
     gtk_widget_queue_resize (GTK_WIDGET (frame));
 
   g_object_freeze_notify (G_OBJECT (frame));
-  g_object_notify (G_OBJECT (frame), "label_widget");
+  g_object_notify (G-OBJECT (frame), "label-widget");
   g_object_notify (G_OBJECT (frame), "label");
   g_object_thaw_notify (G_OBJECT (frame));
 }
@@ -448,13 +448,13 @@ gtk_frame_set_label_align (GtkFrame *frame,
   if (xalign != frame->label_xalign)
     {
       frame->label_xalign = xalign;
-      g_object_notify (G_OBJECT (frame), "label_xalign");
+      g_object_notify (G-OBJECT (frame), "label-xalign");
     }
 
   if (yalign != frame->label_yalign)
     {
       frame->label_yalign = yalign;
-      g_object_notify (G_OBJECT (frame), "label_yalign");
+      g_object_notify (G-OBJECT (frame), "label-yalign");
     }
 
   g_object_thaw_notify (G_OBJECT (frame));
@@ -499,7 +499,7 @@ gtk_frame_set_shadow_type (GtkFrame      *frame,
   if ((GtkShadowType) frame->shadow_type != type)
     {
       frame->shadow_type = type;
-      g_object_notify (G_OBJECT (frame), "shadow_type");
+      g_object_notify (G-OBJECT (frame), "shadow-type");
 
       if (GTK_WIDGET_DRAWABLE (frame))
 	{

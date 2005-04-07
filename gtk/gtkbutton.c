@@ -1424,7 +1424,7 @@ gtk_button_set_use_underline (GtkButton *button,
   
       gtk_button_construct_child (button);
       
-      g_object_notify (G_OBJECT (button), "use_underline");
+      g_object_notify (G-OBJECT (button), "use-underline");
     }
 }
 
@@ -1468,7 +1468,7 @@ gtk_button_set_use_stock (GtkButton *button,
   
       gtk_button_construct_child (button);
       
-      g_object_notify (G_OBJECT (button), "use_stock");
+      g_object_notify (G-OBJECT (button), "use-stock");
     }
 }
 
@@ -1514,7 +1514,7 @@ gtk_button_set_focus_on_click (GtkButton *button,
     {
       button->focus_on_click = focus_on_click;
       
-      g_object_notify (G_OBJECT (button), "focus_on_click");
+      g_object_notify (G-OBJECT (button), "focus-on-click");
     }
 }
 

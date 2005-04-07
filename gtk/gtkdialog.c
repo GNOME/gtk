@@ -822,7 +822,7 @@ gtk_dialog_set_has_separator (GtkDialog *dialog,
       dialog->separator = NULL;
     }
 
-  g_object_notify (G_OBJECT (dialog), "has_separator");
+  g_object_notify (G-OBJECT (dialog), "has-separator");
 }
 
 /**

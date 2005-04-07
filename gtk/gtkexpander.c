@@ -1492,7 +1492,7 @@ gtk_expander_set_use_underline (GtkExpander *expander,
       if (priv->label_widget && GTK_IS_LABEL (priv->label_widget))
 	gtk_label_set_use_underline (GTK_LABEL (priv->label_widget), use_underline);
 
-      g_object_notify (G_OBJECT (expander), "use_underline");
+      g_object_notify (G-OBJECT (expander), "use-underline");
     }
 }
 
@@ -1546,7 +1546,7 @@ gtk_expander_set_use_markup (GtkExpander *expander,
       if (priv->label_widget && GTK_IS_LABEL (priv->label_widget))
 	gtk_label_set_use_markup (GTK_LABEL (priv->label_widget), use_markup);
 
-      g_object_notify (G_OBJECT (expander), "use_markup");
+      g_object_notify (G-OBJECT (expander), "use-markup");
     }
 }
 
@@ -1617,7 +1617,7 @@ gtk_expander_set_label_widget (GtkExpander *expander,
     gtk_widget_queue_resize (GTK_WIDGET (expander));
 
   g_object_freeze_notify (G_OBJECT (expander));
-  g_object_notify (G_OBJECT (expander), "label_widget");
+  g_object_notify (G-OBJECT (expander), "label-widget");
   g_object_notify (G_OBJECT (expander), "label");
   g_object_thaw_notify (G_OBJECT (expander));
 }

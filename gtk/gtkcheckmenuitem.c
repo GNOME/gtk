@@ -350,7 +350,7 @@ gtk_check_menu_item_set_draw_as_radio (GtkCheckMenuItem *check_menu_item,
 
       gtk_widget_queue_draw (GTK_WIDGET (check_menu_item));
 
-      g_object_notify (G_OBJECT (check_menu_item), "draw_as_radio");
+      g_object_notify (G-OBJECT (check-menu-item), "draw-as-radio");
     }
 }
 

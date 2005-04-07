@@ -508,7 +508,7 @@ gtk_font_button_set_use_font (GtkFontButton *font_button,
       else
 	gtk_widget_set_style (font_button->priv->font_label, NULL);
  
-     g_object_notify (G_OBJECT (font_button), "use_font");
+     g_object_notify (G-OBJECT (font-button), "use-font");
     }
 } 
 
@@ -554,7 +554,7 @@ gtk_font_button_set_use_size (GtkFontButton *font_button,
       if (font_button->priv->use_font)
         gtk_font_button_label_use_font (font_button);
 
-      g_object_notify (G_OBJECT (font_button), "use_size");
+      g_object_notify (G-OBJECT (font-button), "use-size");
     }
 } 
 
@@ -598,7 +598,7 @@ gtk_font_button_set_show_style (GtkFontButton *font_button,
       
       gtk_font_button_update_font_info (font_button);
   
-      g_object_notify (G_OBJECT (font_button), "show_style");
+      g_object_notify (G-OBJECT (font-button), "show-style");
     }
 } 
 
@@ -648,7 +648,7 @@ gtk_font_button_set_show_size (GtkFontButton *font_button,
       
       gtk_font_button_update_font_info (font_button);
 
-      g_object_notify (G_OBJECT (font_button), "show_size");
+      g_object_notify (G-OBJECT (font-button), "show-size");
     }
 } 
 
@@ -708,7 +708,7 @@ gtk_font_button_set_font_name (GtkFontButton *font_button,
   else
     result = FALSE;
 
-  g_object_notify (G_OBJECT (font_button), "font_name");
+  g_object_notify (G-OBJECT (font-button), "font-name");
 
   return result;
 }
@@ -769,7 +769,7 @@ dialog_ok_clicked (GtkWidget *widget,
   /* Set label font */
   gtk_font_button_update_font_info (font_button);
 
-  g_object_notify (G_OBJECT (font_button), "font_name");
+  g_object_notify (G-OBJECT (font-button), "font-name");
   
   /* Emit font_set signal */
   g_signal_emit (font_button, font_button_signals[FONT_SET], 0);

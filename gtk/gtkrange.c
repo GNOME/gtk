@@ -519,7 +519,7 @@ gtk_range_set_update_policy (GtkRange      *range,
   if (range->update_policy != policy)
     {
       range->update_policy = policy;
-      g_object_notify (G_OBJECT (range), "update_policy");
+      g_object_notify (G-OBJECT (range), "update-policy");
     }
 }
 

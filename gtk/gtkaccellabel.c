@@ -432,7 +432,7 @@ gtk_accel_label_set_accel_widget (GtkAccelLabel *accel_label,
 				   accel_label, G_CONNECT_SWAPPED);
 	  refetch_widget_accel_closure (accel_label);
 	}
-      g_object_notify (G_OBJECT (accel_label), "accel_widget");
+      g_object_notify (G-OBJECT (accel-label), "accel-widget");
     }
 }
 
@@ -495,7 +495,7 @@ gtk_accel_label_set_accel_closure (GtkAccelLabel *accel_label,
 				   accel_label, 0);
 	}
       gtk_accel_label_reset (accel_label);
-      g_object_notify (G_OBJECT (accel_label), "accel_closure");
+      g_object_notify (G-OBJECT (accel-label), "accel-closure");
     }
 }
 

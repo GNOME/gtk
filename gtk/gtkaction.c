@@ -446,7 +446,7 @@ gtk_action_set_property (GObject         *object,
 	  tmp = action->private_data->short_label;
 	  action->private_data->short_label = g_strdup (action->private_data->label);
 	  g_free (tmp);
-	  g_object_notify (object, "short_label");
+	  g_object_notify (object, "short-label");
 	}
       break;
     case PROP_SHORT_LABEL:
@@ -486,7 +486,7 @@ gtk_action_set_property (GObject         *object,
 	  tmp = action->private_data->short_label;
 	  action->private_data->short_label = g_strdup (action->private_data->label);
 	  g_free (tmp);
-	  g_object_notify (object, "short_label");
+	  g_object_notify (object, "short-label");
 	}
       break;
     case PROP_VISIBLE_HORIZONTAL:

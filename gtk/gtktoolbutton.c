@@ -739,7 +739,7 @@ gtk_tool_button_set_use_underline (GtkToolButton *button,
 
       gtk_tool_button_construct_contents (GTK_TOOL_ITEM (button));
 
-      g_object_notify (G_OBJECT (button), "use_underline");
+      g_object_notify (G-OBJECT (button), "use-underline");
     }
 }
 
@@ -787,7 +787,7 @@ gtk_tool_button_set_stock_id (GtkToolButton *button,
   button->priv->stock_id = g_strdup (stock_id);
   gtk_tool_button_construct_contents (GTK_TOOL_ITEM (button));
   
-  g_object_notify (G_OBJECT (button), "stock_id");
+  g_object_notify (G-OBJECT (button), "stock-id");
 
   g_free (old_stock_id);
 }
@@ -852,7 +852,7 @@ gtk_tool_button_set_icon_widget (GtkToolButton *button,
 
       gtk_tool_button_construct_contents (GTK_TOOL_ITEM (button));
       
-      g_object_notify (G_OBJECT (button), "icon_widget");
+      g_object_notify (G-OBJECT (button), "icon-widget");
     }
 }
 
@@ -899,7 +899,7 @@ gtk_tool_button_set_label_widget (GtkToolButton *button,
 
       gtk_tool_button_construct_contents (GTK_TOOL_ITEM (button));
       
-      g_object_notify (G_OBJECT (button), "label_widget");
+      g_object_notify (G-OBJECT (button), "label-widget");
     }
 }
 

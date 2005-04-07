@@ -460,7 +460,7 @@ gtk_scale_set_draw_value (GtkScale *scale,
 
       gtk_widget_queue_resize (GTK_WIDGET (scale));
 
-      g_object_notify (G_OBJECT (scale), "draw_value");
+      g_object_notify (G-OBJECT (scale), "draw-value");
     }
 }
 
@@ -486,7 +486,7 @@ gtk_scale_set_value_pos (GtkScale        *scale,
       if (GTK_WIDGET_VISIBLE (scale) && GTK_WIDGET_MAPPED (scale))
 	gtk_widget_queue_resize (GTK_WIDGET (scale));
 
-      g_object_notify (G_OBJECT (scale), "value_pos");
+      g_object_notify (G-OBJECT (scale), "value-pos");
     }
 }
 

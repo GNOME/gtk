@@ -652,7 +652,7 @@ gtk_progress_set_show_text (GtkProgress *progress,
 
       gtk_widget_queue_resize (GTK_WIDGET (progress));
 
-      g_object_notify (G_OBJECT (progress), "show_text");
+      g_object_notify (G-OBJECT (progress), "show-text");
     }
 }
 
@@ -671,13 +671,13 @@ gtk_progress_set_text_alignment (GtkProgress *progress,
       if (progress->x_align != x_align)
 	{
 	  progress->x_align = x_align;
-	  g_object_notify (G_OBJECT (progress), "text_xalign");
+	  g_object_notify (G-OBJECT (progress), "text-xalign");
 	}
 
       if (progress->y_align != y_align)
 	{
 	  progress->y_align = y_align;
-	  g_object_notify (G_OBJECT (progress), "text_yalign");
+	  g_object_notify (G-OBJECT (progress), "text-yalign");
 	}
       g_object_thaw_notify (G_OBJECT (progress));
 
@@ -751,7 +751,7 @@ gtk_progress_set_activity_mode (GtkProgress *progress,
       if (GTK_WIDGET_DRAWABLE (GTK_WIDGET (progress)))
 	gtk_widget_queue_resize (GTK_WIDGET (progress));
 
-      g_object_notify (G_OBJECT (progress), "activity_mode");
+      g_object_notify (G-OBJECT (progress), "activity-mode");
     }
 }
 

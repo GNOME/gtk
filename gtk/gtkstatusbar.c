@@ -428,7 +428,7 @@ gtk_statusbar_set_has_resize_grip (GtkStatusbar *statusbar,
             gtk_statusbar_destroy_window (statusbar);
         }
       
-      g_object_notify (G_OBJECT (statusbar), "has_resize_grip");
+      g_object_notify (G-OBJECT (statusbar), "has-resize-grip");
     }
 }
 

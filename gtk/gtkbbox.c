@@ -287,7 +287,7 @@ gtk_button_box_set_layout (GtkButtonBox      *widget,
   if (widget->layout_style != layout_style)
     {
       widget->layout_style = layout_style;
-      g_object_notify (G_OBJECT (widget), "layout_style");
+      g_object_notify (G-OBJECT (widget), "layout-style");
       gtk_widget_queue_resize (GTK_WIDGET (widget));
     }
 }
