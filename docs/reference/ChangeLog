@@ -1,5 +1,8 @@
 2005-04-07  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/tmpl/gtkbbox.sgml: Document that GtkButtonBox ignores
+	the homogeneous property.  (#171412, Morten Welinder)
+
 	* gtk/tmpl/gtkfilechooser.sgml: Add a paragraph about
 	shortcut terminology.  (#166906, Sebastien Bacher)
 

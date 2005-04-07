@@ -29,7 +29,9 @@ used to spread the buttons in a button box across the container, respectively.
 </para>
 
 <para>
-
+The main purpose of GtkButtonBox is to make sure the children have all the same size.
+Therefore it ignores the homogeneous property which it inherited from GtkBox, and always
+behaves as if homogeneous was %TRUE.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
