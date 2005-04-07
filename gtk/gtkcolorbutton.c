@@ -883,7 +883,7 @@ gtk_color_button_set_use_alpha (GtkColorButton *color_button,
       render (color_button);
       gtk_widget_queue_draw (color_button->priv->drawing_area);
 
-      g_object_notify (G_OBJECT (color-button), "use-alpha");
+      g_object_notify (G_OBJECT (color_button), "use-alpha");
     }
 }
 

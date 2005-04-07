@@ -807,7 +807,7 @@ gtk_handle_box_set_shadow_type (GtkHandleBox  *handle_box,
   if ((GtkShadowType) handle_box->shadow_type != type)
     {
       handle_box->shadow_type = type;
-      g_object_notify (G_OBJECT (handle-box), "shadow-type");
+      g_object_notify (G_OBJECT (handle_box), "shadow-type");
       gtk_widget_queue_resize (GTK_WIDGET (handle_box));
     }
 }
@@ -838,7 +838,7 @@ gtk_handle_box_set_handle_position  (GtkHandleBox    *handle_box,
   if ((GtkPositionType) handle_box->handle_position != position)
     {
       handle_box->handle_position = position;
-      g_object_notify (G_OBJECT (handle-box), "handle-position");
+      g_object_notify (G_OBJECT (handle_box), "handle-position");
       gtk_widget_queue_resize (GTK_WIDGET (handle_box));
     }
 }
@@ -871,8 +871,8 @@ gtk_handle_box_set_snap_edge        (GtkHandleBox    *handle_box,
       handle_box->snap_edge = edge;
       
       g_object_freeze_notify (G_OBJECT (handle_box));
-      g_object_notify (G_OBJECT (handle-box), "snap-edge");
-      g_object_notify (G_OBJECT (handle-box), "snap-edge-set");
+      g_object_notify (G_OBJECT (handle_box), "snap-edge");
+      g_object_notify (G_OBJECT (handle_box), "snap-edge-set");
       g_object_thaw_notify (G_OBJECT (handle_box));
     }
 }

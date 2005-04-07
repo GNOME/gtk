@@ -787,7 +787,7 @@ gtk_tool_item_set_is_important (GtkToolItem *tool_item, gboolean is_important)
 
       gtk_widget_queue_resize (GTK_WIDGET (tool_item));
 
-      g_object_notify (G_OBJECT (tool-item), "is-important");
+      g_object_notify (G_OBJECT (tool_item), "is-important");
     }
 }
 

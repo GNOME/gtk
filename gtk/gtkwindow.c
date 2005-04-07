@@ -1271,11 +1271,11 @@ gtk_window_set_default (GtkWindow *window,
 	}
 
       if (old_default_widget)
-	g_object_notify (G_OBJECT (old-default-widget), "has-default");
+	g_object_notify (G_OBJECT (old_default_widget), "has-default");
       
       if (default_widget)
 	{
-	  g_object_notify (G_OBJECT (default-widget), "has-default");
+	  g_object_notify (G_OBJECT (default_widget), "has-default");
 	  g_object_unref (default_widget);
 	}
     }
@@ -4726,7 +4726,7 @@ gtk_window_real_set_focus (GtkWindow *window,
       if (window->has_focus)
 	do_focus_change (old_focus, FALSE);
 
-      g_object_notify (G_OBJECT (old-focus), "is-focus");
+      g_object_notify (G_OBJECT (old_focus), "is-focus");
     }
 
   /* The above notifications may have set a new focus widget,
@@ -4749,7 +4749,7 @@ gtk_window_real_set_focus (GtkWindow *window,
       if (window->has_focus)
 	do_focus_change (window->focus_widget, TRUE);
 
-      g_object_notify (G_OBJECT (window->focus-widget), "is-focus");
+      g_object_notify (G_OBJECT (window->focus_widget), "is-focus");
     }
 
   /* If the default widget changed, a redraw will have been queued

@@ -9595,7 +9595,7 @@ gtk_tree_view_set_headers_visible (GtkTreeView *tree_view,
 
   gtk_widget_queue_resize (GTK_WIDGET (tree_view));
 
-  g_object_notify (G_OBJECT (tree-view), "headers-visible");
+  g_object_notify (G_OBJECT (tree_view), "headers-visible");
 }
 
 /**
@@ -9645,7 +9645,7 @@ gtk_tree_view_set_headers_clickable (GtkTreeView *tree_view,
   for (list = tree_view->priv->columns; list; list = list->next)
     gtk_tree_view_column_set_clickable (GTK_TREE_VIEW_COLUMN (list->data), setting);
 
-  g_object_notify (G_OBJECT (tree-view), "headers-clickable");
+  g_object_notify (G_OBJECT (tree_view), "headers-clickable");
 }
 
 
@@ -9682,7 +9682,7 @@ gtk_tree_view_set_rules_hint (GtkTreeView  *tree_view,
       gtk_widget_queue_draw (GTK_WIDGET (tree_view));
     }
 
-  g_object_notify (G_OBJECT (tree-view), "rules-hint");
+  g_object_notify (G_OBJECT (tree_view), "rules-hint");
 }
 
 /**
@@ -10082,7 +10082,7 @@ gtk_tree_view_set_expander_column (GtkTreeView       *tree_view,
 	}
 
       tree_view->priv->expander_column = column;
-      g_object_notify (G_OBJECT (tree-view), "expander-column");
+      g_object_notify (G_OBJECT (tree_view), "expander-column");
     }
 }
 
@@ -12152,7 +12152,7 @@ gtk_tree_view_set_enable_search (GtkTreeView *tree_view,
   if (tree_view->priv->enable_search != enable_search)
     {
        tree_view->priv->enable_search = enable_search;
-       g_object_notify (G_OBJECT (tree-view), "enable-search");
+       g_object_notify (G_OBJECT (tree_view), "enable-search");
     }
 }
 
@@ -12215,7 +12215,7 @@ gtk_tree_view_set_search_column (GtkTreeView *tree_view,
     return;
 
   tree_view->priv->search_column = column;
-  g_object_notify (G_OBJECT (tree-view), "search-column");
+  g_object_notify (G_OBJECT (tree_view), "search-column");
 }
 
 /**

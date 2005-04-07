@@ -1,6 +1,7 @@
 2005-04-06  Matthias Clasen  <mclasen@redhat.com>
 
-	* gtk/*.c, gdk/gdkdisplaymanager.c: s/G-OBJECT/G_OBJECT/g.
+	* gtk/*.c, gdk/gdkdisplaymanager.c: s/G-OBJECT/G_OBJECT/g, 
+	and some more build fixes.
 
 2005-04-06  Matthias Clasen  <mclasen@redhat.com>
 

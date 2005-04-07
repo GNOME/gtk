@@ -286,7 +286,7 @@ gtk_toggle_button_set_mode (GtkToggleButton *toggle_button,
       if (GTK_WIDGET_VISIBLE (toggle_button))
 	gtk_widget_queue_resize (GTK_WIDGET (toggle_button));
 
-      g_object_notify (G_OBJECT (toggle-button), "draw-indicator");
+      g_object_notify (G_OBJECT (toggle_button), "draw-indicator");
     }
 }
 

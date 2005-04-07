@@ -276,7 +276,7 @@ gtk_aspect_frame_set (GtkAspectFrame *aspect_frame,
       if (aspect_frame->obey_child != obey_child)
         {
           aspect_frame->obey_child = obey_child;
-          g_object_notify (G_OBJECT (aspect-frame), "obey-child");
+          g_object_notify (G_OBJECT (aspect_frame), "obey-child");
         }
       g_object_thaw_notify (G_OBJECT (aspect_frame));
 
