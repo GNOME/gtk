@@ -11,9 +11,9 @@ as its position in the object hierarchy reflects. It is only when multiple
 radio buttons are grouped together that they become a different user
 interface component in their own right.</para>
 <para>
-Every radio button is a member of some group of radio buttons. When one is selected, all other
-radio buttons in the same group are deselected. A #GtkRadioButton is one way
-of giving the user a choice from many options.
+Every radio button is a member of some group of radio buttons. When one is 
+selected, all other radio buttons in the same group are deselected. A 
+#GtkRadioButton is one way of giving the user a choice from many options.
 </para>
 <para>
 Radio button widgets are created with gtk_radio_button_new(), passing NULL
@@ -71,6 +71,13 @@ void create_radio_buttons (void) {
 </programlisting>
 </example>
 </para>
+<para>
+When an unselected button in the group is clicked the clicked button
+receives the "toggled" signal, as does the previously selected button.
+Inside the "toggled" handler, gtk_toggle_button_get_active() can be used 
+to determine if the button has been selected or deselected.
+</para>
+
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
@@ -83,9 +90,6 @@ many.</para></listitem>
 </variablelist>
 
 </para>
-
-<!-- ##### SECTION Stability_Level ##### -->
-
 
 <!-- ##### STRUCT GtkRadioButton ##### -->
 <para>
