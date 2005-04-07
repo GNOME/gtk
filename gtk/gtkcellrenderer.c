@@ -481,7 +481,7 @@ set_cell_bg_color (GtkCellRenderer *cell,
       if (!cell->cell_background_set)
         {
 	  cell->cell_background_set = TRUE;
-	  g_object_notify (G-OBJECT (cell), "cell-background-set");
+	  g_object_notify (G_OBJECT (cell), "cell-background-set");
 	}
 
       priv->cell_background.red = color->red;
@@ -493,7 +493,7 @@ set_cell_bg_color (GtkCellRenderer *cell,
       if (cell->cell_background_set)
         {
 	  cell->cell_background_set = FALSE;
-	  g_object_notify (G-OBJECT (cell), "cell-background-set");
+	  g_object_notify (G_OBJECT (cell), "cell-background-set");
 	}
     }
 }

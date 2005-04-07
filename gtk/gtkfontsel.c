@@ -619,7 +619,7 @@ static void
 gtk_font_selection_preview_changed (GtkWidget        *entry,
 				    GtkFontSelection *fontsel)
 {
-  g_object_notify (G-OBJECT (fontsel), "preview-text");
+  g_object_notify (G_OBJECT (fontsel), "preview-text");
 }
 
 static void
@@ -1269,7 +1269,7 @@ gtk_font_selection_set_font_name (GtkFontSelection *fontsel,
   gtk_font_selection_set_size (fontsel, pango_font_description_get_size (new_desc));
   
   g_object_freeze_notify (G_OBJECT (fontsel));
-  g_object_notify (G-OBJECT (fontsel), "font-name");
+  g_object_notify (G_OBJECT (fontsel), "font-name");
   g_object_notify (G_OBJECT (fontsel), "font");
   g_object_thaw_notify (G_OBJECT (fontsel));
 

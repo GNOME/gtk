@@ -753,7 +753,7 @@ set_bg_color (GtkCellRendererText *celltext,
       if (!celltext->background_set)
         {
           celltext->background_set = TRUE;
-          g_object_notify (G-OBJECT (celltext), "background-set");
+          g_object_notify (G_OBJECT (celltext), "background-set");
         }
       
       celltext->background.red = color->red;
@@ -765,7 +765,7 @@ set_bg_color (GtkCellRendererText *celltext,
       if (celltext->background_set)
         {
           celltext->background_set = FALSE;
-          g_object_notify (G-OBJECT (celltext), "background-set");
+          g_object_notify (G_OBJECT (celltext), "background-set");
         }
     }
 }
@@ -780,7 +780,7 @@ set_fg_color (GtkCellRendererText *celltext,
       if (!celltext->foreground_set)
         {
           celltext->foreground_set = TRUE;
-          g_object_notify (G-OBJECT (celltext), "foreground-set");
+          g_object_notify (G_OBJECT (celltext), "foreground-set");
         }
       
       celltext->foreground.red = color->red;
@@ -792,7 +792,7 @@ set_fg_color (GtkCellRendererText *celltext,
       if (celltext->foreground_set)
         {
           celltext->foreground_set = FALSE;
-          g_object_notify (G-OBJECT (celltext), "foreground-set");
+          g_object_notify (G_OBJECT (celltext), "foreground-set");
         }
     }
 }

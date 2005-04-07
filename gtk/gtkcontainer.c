@@ -904,7 +904,7 @@ gtk_container_set_border_width (GtkContainer *container,
   if (container->border_width != border_width)
     {
       container->border_width = border_width;
-      g_object_notify (G-OBJECT (container), "border-width");
+      g_object_notify (G_OBJECT (container), "border-width");
       
       if (GTK_WIDGET_REALIZED (container))
 	gtk_widget_queue_resize (GTK_WIDGET (container));
@@ -1034,7 +1034,7 @@ gtk_container_set_resize_mode (GtkContainer  *container,
       container->resize_mode = resize_mode;
       
       gtk_widget_queue_resize (GTK_WIDGET (container));
-      g_object_notify (G-OBJECT (container), "resize-mode");
+      g_object_notify (G_OBJECT (container), "resize-mode");
     }
 }
 

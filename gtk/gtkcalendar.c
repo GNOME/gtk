@@ -2438,13 +2438,13 @@ gtk_calendar_set_display_options (GtkCalendar	       *calendar,
   
   g_object_freeze_notify (G_OBJECT (calendar));
   if ((old_flags ^ calendar->display_flags) & GTK_CALENDAR_SHOW_HEADING)
-    g_object_notify (G-OBJECT (calendar), "show-heading");
+    g_object_notify (G_OBJECT (calendar), "show-heading");
   if ((old_flags ^ calendar->display_flags) & GTK_CALENDAR_SHOW_DAY_NAMES)
-    g_object_notify (G-OBJECT (calendar), "show-day-names");
+    g_object_notify (G_OBJECT (calendar), "show-day-names");
   if ((old_flags ^ calendar->display_flags) & GTK_CALENDAR_NO_MONTH_CHANGE)
-    g_object_notify (G-OBJECT (calendar), "no-month-change");
+    g_object_notify (G_OBJECT (calendar), "no-month-change");
   if ((old_flags ^ calendar->display_flags) & GTK_CALENDAR_SHOW_WEEK_NUMBERS)
-    g_object_notify (G-OBJECT (calendar), "show-week-numbers");
+    g_object_notify (G_OBJECT (calendar), "show-week-numbers");
   g_object_thaw_notify (G_OBJECT (calendar));
 }
 

@@ -1713,8 +1713,8 @@ update_color (GtkColorSelection *colorsel)
   g_signal_emit (colorsel, color_selection_signals[COLOR_CHANGED], 0);
   
   g_object_freeze_notify (G_OBJECT (colorsel));
-  g_object_notify (G-OBJECT (colorsel), "current-color");
-  g_object_notify (G-OBJECT (colorsel), "current-alpha");
+  g_object_notify (G_OBJECT (colorsel), "current-color");
+  g_object_notify (G_OBJECT (colorsel), "current-alpha");
   g_object_thaw_notify (G_OBJECT (colorsel));
   
   g_object_unref (colorsel);
@@ -2227,7 +2227,7 @@ gtk_color_selection_set_has_opacity_control (GtkColorSelection *colorsel,
 	}
       color_sample_draw_samples (colorsel);
       
-      g_object_notify (G-OBJECT (colorsel), "has-opacity-control");
+      g_object_notify (G_OBJECT (colorsel), "has-opacity-control");
     }
 }
 
@@ -2277,7 +2277,7 @@ gtk_color_selection_set_has_palette (GtkColorSelection *colorsel,
       else
 	gtk_widget_hide (priv->palette_frame);
       
-      g_object_notify (G-OBJECT (colorsel), "has-palette");
+      g_object_notify (G_OBJECT (colorsel), "has-palette");
     }
 }
 

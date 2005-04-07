@@ -379,7 +379,7 @@ gtk_toggle_action_set_draw_as_radio (GtkToggleAction *action,
     {
       action->private_data->draw_as_radio = draw_as_radio;
       
-      g_object_notify (G-OBJECT (action), "draw-as-radio");      
+      g_object_notify (G_OBJECT (action), "draw-as-radio");      
     }
 }
 

@@ -943,7 +943,7 @@ label_mnemonic_widget_weak_notify (gpointer      data,
   GtkLabel *label = data;
 
   label->mnemonic_widget = NULL;
-  g_object_notify (G-OBJECT (label), "mnemonic-widget");
+  g_object_notify (G_OBJECT (label), "mnemonic-widget");
 }
 
 /**
@@ -989,7 +989,7 @@ gtk_label_set_mnemonic_widget (GtkLabel  *label,
       gtk_widget_add_mnemonic_label (label->mnemonic_widget, GTK_WIDGET (label));
     }
   
-  g_object_notify (G-OBJECT (label), "mnemonic-widget");
+  g_object_notify (G_OBJECT (label), "mnemonic-widget");
 }
 
 /**
@@ -1057,7 +1057,7 @@ gtk_label_set_use_markup_internal (GtkLabel *label,
   val = val != FALSE;
   if (label->use_markup != val)
     {
-      g_object_notify (G-OBJECT (label), "use-markup");
+      g_object_notify (G_OBJECT (label), "use-markup");
       label->use_markup = val;
     }
 }
@@ -1069,7 +1069,7 @@ gtk_label_set_use_underline_internal (GtkLabel *label,
   val = val != FALSE;
   if (label->use_underline != val)
     {
-      g_object_notify (G-OBJECT (label), "use-underline");
+      g_object_notify (G_OBJECT (label), "use-underline");
       label->use_underline = val;
     }
 }
@@ -2370,13 +2370,12 @@ gtk_label_expose (GtkWidget      *widget,
                                                    range,
                                                    1);
 	  gdk_region_intersect (clip, event->region);
- 
+	  
          /* FIXME should use gtk_paint, but it can't use a clip
            * region
            */
 
           gdk_gc_set_clip_region (widget->style->black_gc, clip);
-
 
 	  state = GTK_STATE_SELECTED;
 	  if (!GTK_WIDGET_HAS_FOCUS (widget))
@@ -2993,8 +2992,8 @@ gtk_label_set_selectable (GtkLabel *label,
     {
       g_object_freeze_notify (G_OBJECT (label));
       g_object_notify (G_OBJECT (label), "selectable");
-      g_object_notify (G-OBJECT (label), "cursor-position");
-      g_object_notify (G-OBJECT (label), "selection-bound");
+      g_object_notify (G_OBJECT (label), "cursor-position");
+      g_object_notify (G_OBJECT (label), "selection-bound");
       g_object_thaw_notify (G_OBJECT (label));
       gtk_widget_queue_draw (GTK_WIDGET (label));
     }
@@ -3191,8 +3190,8 @@ gtk_label_select_region_index (GtkLabel *label,
       gtk_widget_queue_draw (GTK_WIDGET (label));
 
       g_object_freeze_notify (G_OBJECT (label));
-      g_object_notify (G-OBJECT (label), "cursor-position");
-      g_object_notify (G-OBJECT (label), "selection-bound");
+      g_object_notify (G_OBJECT (label), "cursor-position");
+      g_object_notify (G_OBJECT (label), "selection-bound");
       g_object_thaw_notify (G_OBJECT (label));
     }
 }

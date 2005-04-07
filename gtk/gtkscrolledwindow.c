@@ -552,7 +552,7 @@ gtk_scrolled_window_set_placement (GtkScrolledWindow *scrolled_window,
 
       gtk_widget_queue_resize (GTK_WIDGET (scrolled_window));
       
-      g_object_notify (G-OBJECT (scrolled-window), "window-placement");
+      g_object_notify (G_OBJECT (scrolled-window), "window-placement");
     }
 }
 
@@ -598,7 +598,7 @@ gtk_scrolled_window_set_shadow_type (GtkScrolledWindow *scrolled_window,
 
       gtk_widget_queue_resize (GTK_WIDGET (scrolled_window));
 
-      g_object_notify (G-OBJECT (scrolled-window), "shadow-type");
+      g_object_notify (G_OBJECT (scrolled-window), "shadow-type");
     }
 }
 

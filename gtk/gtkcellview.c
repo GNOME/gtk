@@ -1050,7 +1050,7 @@ gtk_cell_view_set_background_color (GtkCellView    *cell_view,
       if (!cell_view->priv->background_set)
         {
           cell_view->priv->background_set = TRUE;
-          g_object_notify (G-OBJECT (cell-view), "background-set");
+          g_object_notify (G_OBJECT (cell-view), "background-set");
         }
 
       cell_view->priv->background = *color;
@@ -1060,7 +1060,7 @@ gtk_cell_view_set_background_color (GtkCellView    *cell_view,
       if (cell_view->priv->background_set)
         {
           cell_view->priv->background_set = FALSE;
-          g_object_notify (G-OBJECT (cell-view), "background-set");
+          g_object_notify (G_OBJECT (cell-view), "background-set");
         }
     }
 

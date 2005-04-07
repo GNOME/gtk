@@ -2500,7 +2500,7 @@ gtk_toolbar_real_style_changed (GtkToolbar     *toolbar,
       gtk_toolbar_reconfigured (toolbar);
       
       gtk_widget_queue_resize (GTK_WIDGET (toolbar));
-      g_object_notify (G-OBJECT (toolbar), "toolbar-style");
+      g_object_notify (G_OBJECT (toolbar), "toolbar-style");
     }
 }
 
@@ -2975,7 +2975,7 @@ gtk_toolbar_set_show_arrow (GtkToolbar *toolbar,
 	gtk_widget_hide (priv->arrow_button);
       
       gtk_widget_queue_resize (GTK_WIDGET (toolbar));      
-      g_object_notify (G-OBJECT (toolbar), "show-arrow");
+      g_object_notify (G_OBJECT (toolbar), "show-arrow");
     }
 }
 

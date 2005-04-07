@@ -1024,7 +1024,7 @@ gtk_entry_completion_set_minimum_key_length (GtkEntryCompletion *completion,
     {
       completion->priv->minimum_key_length = length;
      
-      g_object_notify (G-OBJECT (completion), "minimum-key-length");
+      g_object_notify (G_OBJECT (completion), "minimum-key-length");
     }
 }
 
@@ -1207,7 +1207,7 @@ gtk_entry_completion_set_text_column (GtkEntryCompletion *completion,
                                  cell,
                                  "text", column);
 
-  g_object_notify (G-OBJECT (completion), "text-column");
+  g_object_notify (G_OBJECT (completion), "text-column");
 }
 
 /**
@@ -1539,7 +1539,7 @@ gtk_entry_completion_set_inline_completion (GtkEntryCompletion *completion,
     {
       completion->priv->inline_completion = inline_completion;
 
-      g_object_notify (G-OBJECT (completion), "inline-completion");
+      g_object_notify (G_OBJECT (completion), "inline-completion");
     }
 }
 
@@ -1584,7 +1584,7 @@ gtk_entry_completion_set_popup_completion (GtkEntryCompletion *completion,
     {
       completion->priv->popup_completion = popup_completion;
 
-      g_object_notify (G-OBJECT (completion), "popup-completion");
+      g_object_notify (G_OBJECT (completion), "popup-completion");
     }
 }
 

@@ -1152,7 +1152,7 @@ gtk_file_selection_show_fileop_buttons (GtkFileSelection *filesel)
   
   gtk_file_selection_update_fileops (filesel);
   
-  g_object_notify (G-OBJECT (filesel), "show-fileops");
+  g_object_notify (G_OBJECT (filesel), "show-fileops");
 }
 
 void       
@@ -1177,7 +1177,7 @@ gtk_file_selection_hide_fileop_buttons (GtkFileSelection *filesel)
       gtk_widget_destroy (filesel->fileop_c_dir);
       filesel->fileop_c_dir = NULL;
     }
-  g_object_notify (G-OBJECT (filesel), "show-fileops");
+  g_object_notify (G_OBJECT (filesel), "show-fileops");
 }
 
 

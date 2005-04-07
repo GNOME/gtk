@@ -574,7 +574,7 @@ gtk_ui_manager_set_add_tearoffs (GtkUIManager *self,
       
       dirty_all_nodes (self);
 
-      g_object_notify (G-OBJECT (self), "add-tearoffs");
+      g_object_notify (G_OBJECT (self), "add-tearoffs");
     }
 }
 

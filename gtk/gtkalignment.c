@@ -558,22 +558,22 @@ gtk_alignment_set_padding (GtkAlignment    *alignment,
   if (priv->padding_top != padding_top)
     {
       priv->padding_top = padding_top;
-      g_object_notify (G-OBJECT (alignment), "top-padding");
+      g_object_notify (G_OBJECT (alignment), "top-padding");
     }
   if (priv->padding_bottom != padding_bottom)
     {
       priv->padding_bottom = padding_bottom;
-      g_object_notify (G-OBJECT (alignment), "bottom-padding");
+      g_object_notify (G_OBJECT (alignment), "bottom-padding");
     }
   if (priv->padding_left != padding_left)
     {
       priv->padding_left = padding_left;
-      g_object_notify (G-OBJECT (alignment), "left-padding");
+      g_object_notify (G_OBJECT (alignment), "left-padding");
     }
   if (priv->padding_right != padding_right)
     {
       priv->padding_right = padding_right;
-      g_object_notify (G-OBJECT (alignment), "right-padding");
+      g_object_notify (G_OBJECT (alignment), "right-padding");
     }
 
   g_object_thaw_notify (G_OBJECT (alignment));

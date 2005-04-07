@@ -719,7 +719,7 @@ gtk_curve_set_curve_type (GtkCurve *c, GtkCurveType new_type)
 	  gtk_curve_interpolate (c, width, height);
 	}
       g_signal_emit (c, curve_type_changed_signal, 0);
-      g_object_notify (G-OBJECT (c), "curve-type");
+      g_object_notify (G_OBJECT (c), "curve-type");
       gtk_curve_draw (c, width, height);
     }
 }
@@ -793,7 +793,7 @@ gtk_curve_reset (GtkCurve *c)
   if (old_type != GTK_CURVE_TYPE_SPLINE)
     {
        g_signal_emit (c, curve_type_changed_signal, 0);
-       g_object_notify (G-OBJECT (c), "curve-type");
+       g_object_notify (G_OBJECT (c), "curve-type");
     }
 }
 
@@ -840,19 +840,19 @@ gtk_curve_set_range (GtkCurve *curve,
   g_object_freeze_notify (G_OBJECT (curve));
   if (curve->min_x != min_x) {
      curve->min_x = min_x;
-     g_object_notify (G-OBJECT (curve), "min-x");
+     g_object_notify (G_OBJECT (curve), "min-x");
   }
   if (curve->max_x != max_x) {
      curve->max_x = max_x;
-     g_object_notify (G-OBJECT (curve), "max-x");
+     g_object_notify (G_OBJECT (curve), "max-x");
   }
   if (curve->min_y != min_y) {
      curve->min_y = min_y;
-     g_object_notify (G-OBJECT (curve), "min-y");
+     g_object_notify (G_OBJECT (curve), "min-y");
   }
   if (curve->max_y != max_y) {
      curve->max_y = max_y;
-     g_object_notify (G-OBJECT (curve), "max-y");
+     g_object_notify (G_OBJECT (curve), "max-y");
   }
   g_object_thaw_notify (G_OBJECT (curve));
 
@@ -898,7 +898,7 @@ gtk_curve_set_vector (GtkCurve *c, int veclen, gfloat vector[])
   if (old_type != GTK_CURVE_TYPE_FREE)
     {
        g_signal_emit (c, curve_type_changed_signal, 0);
-       g_object_notify (G-OBJECT (c), "curve-type");
+       g_object_notify (G_OBJECT (c), "curve-type");
     }
 
   gtk_curve_draw (c, c->num_points, height);

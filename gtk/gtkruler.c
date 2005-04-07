@@ -292,7 +292,7 @@ gtk_ruler_set_range (GtkRuler *ruler,
   if (ruler->max_size != max_size)
     {
       ruler->max_size = max_size;
-      g_object_notify (G-OBJECT (ruler), "max-size");
+      g_object_notify (G_OBJECT (ruler), "max-size");
     }
   g_object_thaw_notify (G_OBJECT (ruler));
 

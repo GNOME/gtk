@@ -3148,7 +3148,7 @@ gtk_icon_view_set_selection_mode (GtkIconView      *icon_view,
   
   icon_view->priv->selection_mode = mode;
 
-  g_object_notify (G-OBJECT (icon-view), "selection-mode");
+  g_object_notify (G_OBJECT (icon-view), "selection-mode");
 }
 
 /**
@@ -3338,7 +3338,7 @@ gtk_icon_view_set_text_column (GtkIconView *icon_view,
   gtk_icon_view_invalidate_sizes (icon_view);
   gtk_icon_view_queue_layout (icon_view);
   
-  g_object_notify (G-OBJECT (icon-view), "text-column");
+  g_object_notify (G_OBJECT (icon-view), "text-column");
 }
 
 /**
@@ -3397,7 +3397,7 @@ gtk_icon_view_set_markup_column (GtkIconView *icon_view,
   gtk_icon_view_invalidate_sizes (icon_view);
   gtk_icon_view_queue_layout (icon_view);
   
-  g_object_notify (G-OBJECT (icon-view), "markup-column");
+  g_object_notify (G_OBJECT (icon-view), "markup-column");
 }
 
 /**
@@ -3454,7 +3454,7 @@ gtk_icon_view_set_pixbuf_column (GtkIconView *icon_view,
   gtk_icon_view_invalidate_sizes (icon_view);
   gtk_icon_view_queue_layout (icon_view);
   
-  g_object_notify (G-OBJECT (icon-view), "pixbuf-column");
+  g_object_notify (G_OBJECT (icon-view), "pixbuf-column");
   
 }
 
