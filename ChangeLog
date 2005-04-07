@@ -1,5 +1,12 @@
 2005-04-07  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/updateiconcache.c (write_card16, write_card32): Avoid
+	unaligned access.  (#172947)
+
+	* gtk/gtkfilechooserdefault.c (file_list_build_popup_menu): 
+	Consistently use the term "Bookmarks" in the UI.  (#166906,
+	Sebastian Bacher)
+
 	Some fixes from Morten Welinder (#172947):
 	
 	* gtk/updateiconcache.c (icon_name_hash): Make this compiler- 

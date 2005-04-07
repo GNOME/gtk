@@ -3184,7 +3184,7 @@ shortcuts_pane_create (GtkFileChooserDefault *impl,
 						  G_CALLBACK (add_bookmark_button_clicked_cb));
   gtk_box_pack_start (GTK_BOX (hbox), impl->browse_shortcuts_add_button, TRUE, TRUE, 0);
   gtk_tooltips_set_tip (impl->tooltips, impl->browse_shortcuts_add_button,
-                        _("Add the selected folder to the bookmarks"), NULL);
+                        _("Add the selected folder to the Bookmarks"), NULL);
 
   /* Remove bookmark button */
 
@@ -3259,7 +3259,7 @@ popup_menu_detach_cb (GtkWidget *attach_widget,
   impl->browse_files_popup_menu_hidden_files_item = NULL;
 }
 
-/* Callback used when the "Add to Shortcuts" menu item is activated */
+/* Callback used when the "Add to Bookmarks" menu item is activated */
 static void
 add_to_shortcuts_cb (GtkMenuItem           *item,
 		     GtkFileChooserDefault *impl)
@@ -3299,7 +3299,7 @@ file_list_build_popup_menu (GtkFileChooserDefault *impl)
 			     impl->browse_files_tree_view,
 			     popup_menu_detach_cb);
 
-  item = gtk_image_menu_item_new_with_mnemonic (_("_Add to Shortcuts"));
+  item = gtk_image_menu_item_new_with_mnemonic (_("_Add to Bookmarks"));
   impl->browse_files_popup_menu_add_shortcut_item = item;
   gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item),
 				 gtk_image_new_from_stock (GTK_STOCK_ADD, GTK_ICON_SIZE_MENU));
@@ -3335,7 +3335,7 @@ file_list_update_popup_menu (GtkFileChooserDefault *impl)
 {
   file_list_build_popup_menu (impl);
 
-  /* The sensitivity of the Add to Shortcuts item is set in
+  /* The sensitivity of the Add to Bookmarks item is set in
    * bookmarks_check_add_sensitivity()
    */
 
