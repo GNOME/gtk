@@ -1076,7 +1076,7 @@ if test "x$gdktarget" = "xx11"; then
   
   if test $pango_omitted_x_deps = yes ; then
     # Old versions of Xft didn't necessarily include -lX11 in the output
-    x_libs="`pkg-config --libs xft` -lX11 $X_EXTRA_LIBS"
+    x_libs="`$PKG_CONFIG --libs xft` -lX11 $X_EXTRA_LIBS"
   fi    	
 
   ## Strip the .la files

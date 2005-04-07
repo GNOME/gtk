@@ -1,5 +1,8 @@
 2005-04-07  Matthias Clasen  <mclasen@redhat.com>
 
+	* configure.in: Replace an explicit pkg-config by 
+	$PKG_CONFIG.  (#168074, Hans-Wolfgang Loidl)
+
 	* gdk/gdkpango.c (gdk_pango_layout_line_get_clip_region): 
 	Ignore regions which fall completely outside the line.  
 	(#165862, Felipe Heidrich)
