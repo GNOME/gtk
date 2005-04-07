@@ -1,5 +1,14 @@
 2005-04-07  Matthias Clasen  <mclasen@redhat.com>
 
+	Some fixes from Morten Welinder (#172947):
+	
+	* gtk/updateiconcache.c (icon_name_hash): Make this compiler- 
+	and platform-independent.
+	(is_cache_up_to_date): Don't compare mtimes is a stat call failed.
+	(build_cache): Error out if a stat fails.  
+
+2005-04-07  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/updateiconcache.c (is_cache_up_to_date): Return 
 	TRUE if the cache is newer than the directory.  (#172852,
 	Jacob Kroon)
