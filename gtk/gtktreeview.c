@@ -11638,8 +11638,8 @@ gtk_tree_view_enable_model_drag_source (GtkTreeView              *tree_view,
 
   gtk_drag_source_set (GTK_WIDGET (tree_view),
 		       0,
-		       NULL,
-		       0,
+		       targets,
+		       n_targets,
 		       actions);
 
   di = ensure_info (tree_view);
@@ -11676,8 +11676,8 @@ gtk_tree_view_enable_model_drag_dest (GtkTreeView              *tree_view,
 
   gtk_drag_dest_set (GTK_WIDGET (tree_view),
                      0,
-                     NULL,
-                     0,
+                     targets,
+                     n_targets,
                      actions);
 
   di = ensure_info (tree_view);
