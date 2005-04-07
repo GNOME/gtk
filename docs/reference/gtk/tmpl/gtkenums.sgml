@@ -14,9 +14,6 @@ Public enumerated types used throughout GTK+
 
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### ENUM GtkAccelFlags ##### -->
 <para>
 
@@ -347,9 +344,9 @@ Used to control what selections users are allowed to make.
   another element.
 @GTK_SELECTION_MULTIPLE: Any number of elements may be selected. 
    Clicks toggle the state of an item. Any number of elements may be selected. 
-   Click-drag selects a range of elements; the Ctrl key may be used to enlarge 
-   the selection, and Shift key to select between the focus and the child 
-   pointed to.
+   The Ctrl key may be used to enlarge the selection, and Shift key to select 
+   between the focus and the child pointed to. Some widgets may also allow
+   Click-drag to select a range of elements.
 @GTK_SELECTION_EXTENDED: Deprecated, behaves identical to %GTK_SELECTION_MULTIPLE.
 
 <!-- ##### ENUM GtkShadowType ##### -->
