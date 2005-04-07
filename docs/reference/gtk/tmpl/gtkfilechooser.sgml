@@ -15,6 +15,39 @@ File chooser interface used by GtkFileChooserWidget and GtkFileChooserDialog
       interface.
     </para>
 
+    <para>
+      #GtkFileChooser allows for shortcuts to various places in the filesystem.
+      In the default implementation these are displayed in the left pane. It
+      may be a bit confusing at first taht these shortcuts come from various 
+      sources and in various flavours, so lets explain the terminology here:
+    </para>
+      <variablelist>
+         <varlistentry>
+           <term>Bookmarks</term>
+           <listitem><para>
+             are created by the user, by dragging folders from the 
+             right pane to the left pane, or by using the "Add". Bookmarks
+             can be renamed and deleted by the user.
+           </para></listitem>
+         </varlistentry>
+         <varlistentry>
+           <term>Shortcuts</term>
+           <listitem><para> 
+             can be provided by the application or by the underlying filesystem
+             abstraction (e.g. both the gnome-vfs and the Windows filesystems 
+             provide "Desktop" shortcuts). Shortcuts cannot be modified by the 
+             user.
+           </para></listitem>
+         </varlistentry>
+         <varlistentry> 
+           <term>Volumes</term>
+           <listitem><para>
+             are provided by the underlying filesystem abstraction. They are
+             the "roots" of the filesystem. 
+           </para></listitem>
+         </varlistentry>
+      </variablelist>
+
     <refsect2 id="gtkfilechooser-encodings">
       <title>File Names and Encodings</title>
 

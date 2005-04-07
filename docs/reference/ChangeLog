@@ -1,5 +1,8 @@
 2005-04-07  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/tmpl/gtkfilechooser.sgml: Add a paragraph about
+	shortcut terminology.  (#166906, Sebastien Bacher)
+
 	* gtk/tmpl/gtkenums.sgml: Make the docs of GKT_SELECTION_MULTIPLE
 	more accurate by making them more vague.  (#167088,
 	Ken Siersma)
