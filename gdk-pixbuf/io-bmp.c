@@ -462,7 +462,7 @@ static gboolean DecodeColormap (guchar *buff,
 		return TRUE;
 	}
 
-	State->Colormap = g_malloc ((1 << State->Header.depth) * sizeof (*State->Colormap));
+	State->Colormap = g_malloc0 ((1 << State->Header.depth) * sizeof (*State->Colormap));
 	for (i = 0; i < State->Header.n_colors; i++)
 
 	{
