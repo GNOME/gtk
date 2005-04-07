@@ -1,5 +1,8 @@
 2005-04-07  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/updateiconcache.c (write_card32, write_card16): Avoid
+	unaligned access.  (#172947)
+
 	Some fixes from Morten Welinder (#172947):
 	
 	* gtk/updateiconcache.c (icon_name_hash): Make this compiler- 

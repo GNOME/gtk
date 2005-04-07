@@ -291,11 +291,10 @@ gboolean
 write_card16 (FILE *cache, guint16 n)
 {
   int i;
-  gchar s[2];
 
-  *((guint16 *)s) = GUINT16_TO_BE (n);
+  n = GUINT16_TO_BE (n);
   
-  i = fwrite (s, 2, 1, cache);
+  i = fwrite ((char *)&n, 2, 1, cache);
 
   return i == 1;
 }
@@ -304,11 +303,10 @@ gboolean
 write_card32 (FILE *cache, guint32 n)
 {
   int i;
-  gchar s[4];
 
-  *((guint32 *)s) = GUINT32_TO_BE (n);
+  n = GUINT32_TO_BE (n);
   
-  i = fwrite (s, 4, 1, cache);
+  i = fwrite ((char *)&n, 4, 1, cache);
 
   return i == 1;
 }
