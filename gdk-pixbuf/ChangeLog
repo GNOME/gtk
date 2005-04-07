@@ -1,3 +1,8 @@
+2005-04-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* io-bmp.c (DecodeColormap): Initialize the colormap to 
+	zero.  (#171762, David Costanzo)
+
 2005-04-03  Hans Breuer  <hans@breuer.org>
 
 	* makefile.msc : follow .symbols changes
