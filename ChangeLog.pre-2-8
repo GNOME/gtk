@@ -24,7 +24,7 @@
 	to gdk_window_get_pointer(). (#168015, Billy Biggs)
 
 	* po/.cvsignore, po-properties/.cvsignore: Remove
-	Makefile.in.in.  (#171092, Stefan Kasal)
+	Makefile.in.in.  (#171092, Stepan Kasal)
 
 	* gtk/gtkrc.c (gtk_rc_parse_style): Don't modify 
 	scanner->value, copy it first.  (#165693, Tommi Komulainen)
