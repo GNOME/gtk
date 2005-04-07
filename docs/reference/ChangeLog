@@ -1,3 +1,8 @@
+2005-04-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtkradiobutton.sgml: Add a sentence about
+	toggling.  (#159382, Worik Stanton)
+
 2005-04-05  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtktooltips.sgml: Mention enter and leave

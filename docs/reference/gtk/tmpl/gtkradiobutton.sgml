@@ -71,6 +71,12 @@ void create_radio_buttons (void) {
 </programlisting>
 </example>
 </para>
+<para>
+When an unselected button in the group is clicked the clicked button
+receives the "toggled" signal, as does the previously selected button.
+Inside the "toggled" handler, gtk_toggle_button_get_active() can be used 
+to determine if the button has been selected or deselected.
+</para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
