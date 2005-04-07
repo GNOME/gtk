@@ -78,7 +78,7 @@ is_cache_up_to_date (const gchar *path)
     }
 
   /* Check mtime */
-  return cache_stat.st_mtime <= path_stat.st_mtime;
+  return cache_stat.st_mtime >= path_stat.st_mtime;
 }
 
 typedef struct

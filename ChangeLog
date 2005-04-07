@@ -1,5 +1,9 @@
 2005-04-07  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/updateiconcache.c (is_cache_up_to_date): Return 
+	TRUE if the cache is newer than the directory.  (#172852,
+	Jacob Kroon)
+
 	* configure.in: Replace an explicit pkg-config by 
 	$PKG_CONFIG.  (#168074, Hans-Wolfgang Loidl)
 	
