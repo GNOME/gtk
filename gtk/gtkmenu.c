@@ -2495,6 +2495,15 @@ gtk_menu_paint (GtkWidget      *widget,
 			   arrow_size, arrow_size);
 	}
     }
+  else if (event->window == menu->bin_window)
+    {
+      gtk_paint_box (widget->style,
+		     menu->bin_window,
+		     GTK_STATE_NORMAL,
+		     GTK_SHADOW_OUT,
+		     NULL, widget, "menu",
+		     -border_x, -border_y, width, height);
+    }
 }
 
 static gboolean

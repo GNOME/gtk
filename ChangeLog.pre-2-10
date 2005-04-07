@@ -1,5 +1,8 @@
 2005-04-07  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkmenu.c (gtk_menu_paint): Allow setting background
+	images on menus.  (#169532, Benjamin Otte)
+	
 	* gtk/updateiconcache.c (write_card16, write_card32): Avoid
 	unaligned access.  (#172947)
 
