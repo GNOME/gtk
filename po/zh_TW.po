@@ -1,7 +1,7 @@
 # traditional Chinese translation of gtk+ 2.x
 # Copyright (C) 2000, 01, 02, 03, 04, 05 Free Software Foundation, Inc.
 # Chih-Wei Huang <cwhuang@linux.org.tw>, 2000.
-# Abel Cheung <maddog@linux.org.hk>, 2001-2003.
+# Abel Cheung <maddog@linuxhall.org>, 2001-03, 05.
 # 辛立仁 <hsin@med.cgu.edu.tw>, 2000, 2004.
 # Woodman Tuen <wmtuen@gmail.com>, 2005.
 #
@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-03-30 11:36+0800\n"
-"PO-Revision-Date: 2005-03-30 11:44+0800\n"
+"POT-Creation-Date: 2005-04-07 18:01+0800\n"
+"PO-Revision-Date: 2005-04-07 22:16+0800\n"
 "Last-Translator: L-Jen Hsin <hsin@med.cgu.edu.tw>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
 "MIME-Version: 1.0\n"
@@ -27,14 +27,14 @@ msgstr "無法開啟檔案‘%s’：%s"
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:166 ../gdk-pixbuf/gdk-pixbuf-io.c:850
 #, c-format
 msgid "Image file '%s' contains no data"
-msgstr "圖像檔‘%s’沒有內容"
+msgstr "圖片檔‘%s’沒有內容"
 
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:208 ../gdk-pixbuf/gdk-pixbuf-io.c:887
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1109 ../tests/testfilechooser.c:244
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr "無法載入圖像檔‘%s’：原因不明，可能檔案已經損毀"
+msgstr "無法載入圖片檔‘%s’：原因不明，可能檔案已經損毀"
 
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:241
 #, c-format
@@ -46,33 +46,33 @@ msgstr "無法載入動畫檔‘%s’：原因不明，可能動畫檔已經損�
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:444
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
-msgstr "無法載入用來載入圖像的模組：%s：%s"
+msgstr "無法載入用來載入圖片的模組：%s：%s"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:459
 #, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
-msgstr "圖像載入模組 %s 沒有匯出正確的介面；它是否屬於另一個 GTK 版本？"
+msgstr "圖片載入模組 %s 沒有匯出正確的介面；它是否屬於另一個 GTK 版本？"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:628 ../gdk-pixbuf/gdk-pixbuf-io.c:680
 #, c-format
 msgid "Image type '%s' is not supported"
-msgstr "不支援圖像類型‘%s’"
+msgstr "不支援圖片格式‘%s’"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:720
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "無法識別圖像檔‘%s’的圖像格式"
+msgstr "無法識別圖片檔‘%s’的圖片格式"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:728
 msgid "Unrecognized image file format"
-msgstr "無法識別的圖像檔格式"
+msgstr "無法識別的圖片檔格式"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:896
 #, c-format
 msgid "Failed to load image '%s': %s"
-msgstr "無法載入圖像‘%s’：%s"
+msgstr "無法載入圖片‘%s’：%s"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1336
 #, c-format
@@ -82,7 +82,7 @@ msgstr "寫入圖片檔時發生錯誤 (%s)"
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1382 ../gdk-pixbuf/gdk-pixbuf-io.c:1511
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr "此 gdk-pixbuf 版本不支援儲存以下的圖像格式：%s"
+msgstr "此 gdk-pixbuf 版本不支援儲存以下的圖片格式：%s"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1416
 msgid "Insufficient memory to save image to callback"
@@ -106,7 +106,7 @@ msgstr "無法開啟‘%s’以供寫入資料：%s"
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
-msgstr "寫入圖像後無法關閉‘%s’，資料可能無法完整地儲存：%s"
+msgstr "寫入圖片後無法關閉‘%s’，資料可能無法完整地儲存：%s"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1927 ../gdk-pixbuf/gdk-pixbuf-io.c:1977
 msgid "Insufficient memory to save image into a buffer"
@@ -115,32 +115,32 @@ msgstr "記憶體不足以將圖片寫入緩衝區"
 #: ../gdk-pixbuf/gdk-pixbuf-loader.c:383
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
-msgstr "不支援以漸進方式載入圖像類型‘%s’"
+msgstr "不支援以漸進方式載入格式為‘%s’的圖片"
 
 #: ../gdk-pixbuf/gdk-pixbuf-loader.c:411 ../gdk-pixbuf/gdk-pixbuf-loader.c:513
 #, c-format
 msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
 "but didn't give a reason for the failure"
-msgstr "內部錯誤：圖像載入模組 '%s' 無法載入圖像，但沒有提供任何原因"
+msgstr "內部錯誤：圖片載入模組 '%s' 無法載入圖片，但沒有提供任何原因"
 
 #: ../gdk-pixbuf/gdk-pixdata.c:147
 msgid "Image header corrupt"
-msgstr "圖像標頭損毀"
+msgstr "圖片標頭損毀"
 
 #: ../gdk-pixbuf/gdk-pixdata.c:152
 msgid "Image format unknown"
-msgstr "圖像格式不明"
+msgstr "圖片格式不明"
 
 #: ../gdk-pixbuf/gdk-pixdata.c:157 ../gdk-pixbuf/gdk-pixdata.c:487
 msgid "Image pixel data corrupt"
-msgstr "圖像像素資料損毀"
+msgstr "圖片像素資料損毀"
 
 #: ../gdk-pixbuf/gdk-pixdata.c:431
 #, c-format
 msgid "failed to allocate image buffer of %u byte"
 msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] "無法分配 %u 位元組的圖像緩衝區"
+msgstr[0] "無法分配 %u 位元組的圖片緩衝區"
 
 #: ../gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
@@ -167,37 +167,37 @@ msgstr "動畫中有部份資料不符合格式"
 
 #: ../gdk-pixbuf/io-ani.c:676
 msgid "The ANI image format"
-msgstr "ANI 圖像格式"
+msgstr "ANI 圖片格式"
 
 #: ../gdk-pixbuf/io-bmp.c:228 ../gdk-pixbuf/io-bmp.c:301
 #: ../gdk-pixbuf/io-bmp.c:333 ../gdk-pixbuf/io-bmp.c:356
 #: ../gdk-pixbuf/io-bmp.c:437
 msgid "BMP image has bogus header data"
-msgstr "BMP 圖像中有冗餘的標頭資料"
+msgstr "BMP 圖片中有冗餘的標頭資料"
 
 #: ../gdk-pixbuf/io-bmp.c:239 ../gdk-pixbuf/io-bmp.c:396
 msgid "Not enough memory to load bitmap image"
-msgstr "記憶體不足以載入點陣圖像"
+msgstr "記憶體不足以載入點陣圖片"
 
 #: ../gdk-pixbuf/io-bmp.c:282
 msgid "BMP image has unsupported header size"
-msgstr "不支援這種 BMP 圖像檔標頭大小"
+msgstr "不支援這種 BMP 圖片檔標頭大小"
 
 #: ../gdk-pixbuf/io-bmp.c:320
 msgid "Topdown BMP images cannot be compressed"
-msgstr ""
+msgstr "由上至下描繪的 BMP 圖片不可以壓縮"
 
-#: ../gdk-pixbuf/io-bmp.c:1194
+#: ../gdk-pixbuf/io-bmp.c:1198
 msgid "Couldn't allocate memory for saving BMP file"
 msgstr "無法分配記憶體來儲存 BMP 檔"
 
-#: ../gdk-pixbuf/io-bmp.c:1235
+#: ../gdk-pixbuf/io-bmp.c:1239
 msgid "Couldn't write to BMP file"
 msgstr "無法寫入 BMP 檔"
 
-#: ../gdk-pixbuf/io-bmp.c:1284
+#: ../gdk-pixbuf/io-bmp.c:1288
 msgid "The BMP image format"
-msgstr "BMP 圖像格式"
+msgstr "BMP 圖片格式"
 
 #: ../gdk-pixbuf/io-gif.c:220
 #, c-format
@@ -220,7 +220,7 @@ msgstr "堆疊溢位"
 
 #: ../gdk-pixbuf/io-gif.c:635
 msgid "GIF image loader cannot understand this image."
-msgstr "GIF 圖像載入模組無法了解此圖像。"
+msgstr "GIF 圖片載入模組無法了解此圖片。"
 
 #: ../gdk-pixbuf/io-gif.c:664
 msgid "Bad code encountered"
@@ -237,11 +237,11 @@ msgstr "記憶體不足以載入 GIF 檔"
 
 #: ../gdk-pixbuf/io-gif.c:947
 msgid "Not enough memory to composite a frame in GIF file"
-msgstr "沒有足夠的記憶體拼出 GIF 檔中的圖像"
+msgstr "沒有足夠的記憶體拼出 GIF 檔中的圖片"
 
 #: ../gdk-pixbuf/io-gif.c:1116
 msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr "GIF 圖像已損毀 (不正確的 LZW 壓縮資料)"
+msgstr "GIF 圖片已損毀 (不正確的 LZW 壓縮資料)"
 
 #: ../gdk-pixbuf/io-gif.c:1166
 msgid "File does not appear to be a GIF file"
@@ -256,7 +256,7 @@ msgstr "不支援 %s 版本的 GIF 檔案格式"
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
-msgstr "GIF 圖像沒有整體使用的色盤，而且圖像其中一個畫格沒有專用的色盤。"
+msgstr "GIF 圖片沒有整體使用的色盤，而且圖片其中一個畫格沒有專用的色盤。"
 
 #: ../gdk-pixbuf/io-gif.c:1519
 msgid "GIF image was truncated or incomplete."
@@ -264,7 +264,7 @@ msgstr "GIF 檔案被截斷或是不完整。"
 
 #: ../gdk-pixbuf/io-gif.c:1671
 msgid "The GIF image format"
-msgstr "GIF 圖像格式"
+msgstr "GIF 圖片格式"
 
 #: ../gdk-pixbuf/io-ico.c:219 ../gdk-pixbuf/io-ico.c:271
 #: ../gdk-pixbuf/io-ico.c:340 ../gdk-pixbuf/io-ico.c:403
@@ -298,11 +298,11 @@ msgstr "記憶體不足以載入 ICO 檔"
 
 #: ../gdk-pixbuf/io-ico.c:947
 msgid "Image too large to be saved as ICO"
-msgstr "圖像太大無法存為 ICO 格式"
+msgstr "圖片太大無法存為 ICO 格式"
 
 #: ../gdk-pixbuf/io-ico.c:958
 msgid "Cursor hotspot outside image"
-msgstr "游標熱點在圖像之外"
+msgstr "游標熱點在圖片之外"
 
 #: ../gdk-pixbuf/io-ico.c:981
 #, c-format
@@ -311,18 +311,18 @@ msgstr "ICO 檔含有未支援的深度：%d"
 
 #: ../gdk-pixbuf/io-ico.c:1210
 msgid "The ICO image format"
-msgstr "ICO 圖像格式"
+msgstr "ICO 圖片格式"
 
 #: ../gdk-pixbuf/io-jpeg.c:114
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
-msgstr "分析 JPEG 圖像檔時發生錯誤 (%s)"
+msgstr "分析 JPEG 圖片檔時發生錯誤 (%s)"
 
 #: ../gdk-pixbuf/io-jpeg.c:349
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
-msgstr "記憶體不足以載入圖像，請嘗試退出其它應用程式來釋放記憶體"
+msgstr "記憶體不足以載入圖片，請嘗試退出其它應用程式來釋放記憶體"
 
 #: ../gdk-pixbuf/io-jpeg.c:383 ../gdk-pixbuf/io-jpeg.c:749
 #, c-format
@@ -349,7 +349,7 @@ msgstr "JPEG 品質必須在 0 至 100 之間；不允許使用數值‘%d’。
 
 #: ../gdk-pixbuf/io-jpeg.c:1071
 msgid "The JPEG image format"
-msgstr "JPEG 圖像格式"
+msgstr "JPEG 圖片格式"
 
 #: ../gdk-pixbuf/io-pcx.c:191
 msgid "Couldn't allocate memory for header"
@@ -368,10 +368,24 @@ msgstr "圖片的寬度和/或高度無效"
 msgid "Image has unsupported bpp"
 msgstr "圖片不支援這種色彩深度"
 
+# (Abel) 以下是 PCX 格式有關 color plane 的節錄部份:
+# When more than one color plane is stored in the file, each line
+# of the image is stored by color plane (generally ordered
+# red, green, blue, intensity), As shown below.
+#
+# Scan line 0:         RRR...        (Plane 0)
+#                      GGG...        (Plane 1)
+#                      BBB...        (Plane 2)
+#                      III...        (Plane 3)
+#
+# 在另一份文件中:
+#    Number of color planes:
+#    4 -- 16 colors
+#    3 -- 24 bit color (16.7 million colors)
 #: ../gdk-pixbuf/io-pcx.c:624 ../gdk-pixbuf/io-pcx.c:632
 #, c-format
 msgid "Image has unsupported number of %d-bit planes"
-msgstr "圖像擁有不被支援的 %d-位元平面(bit planes)"
+msgstr "圖片中的 %d-位元色彩平面 (planes) 的數目太多或太少，無法支援"
 
 #: ../gdk-pixbuf/io-pcx.c:648
 msgid "Couldn't create new pixbuf"
@@ -387,7 +401,7 @@ msgstr "無法分配色盤資料所需的記憶體"
 
 #: ../gdk-pixbuf/io-pcx.c:710
 msgid "Didn't get all lines of PCX image"
-msgstr "未取得 PIX 圖像每一行的資料"
+msgstr "未取得 PIX 圖片每一行的資料"
 
 #: ../gdk-pixbuf/io-pcx.c:717
 msgid "No palette found at end of PCX data"
@@ -399,7 +413,7 @@ msgstr "PCX 圖片格式"
 
 #: ../gdk-pixbuf/io-png.c:55
 msgid "Bits per channel of PNG image is invalid."
-msgstr "PNG 圖像中每個色板所佔的位元數目無效。"
+msgstr "PNG 圖片中每個色板所佔的位元數目無效。"
 
 #: ../gdk-pixbuf/io-png.c:136
 msgid "Transformed PNG has zero width or height."
@@ -407,7 +421,7 @@ msgstr "變換後的 PNG 寬度及高度均為零。"
 
 #: ../gdk-pixbuf/io-png.c:144
 msgid "Bits per channel of transformed PNG is not 8."
-msgstr "變換後的 PNG 圖像中每個色板所佔的位元數目不是 8。"
+msgstr "變換後的 PNG 圖片中每個色板所佔的位元數目不是 8。"
 
 #: ../gdk-pixbuf/io-png.c:153
 msgid "Transformed PNG not RGB or RGBA."
@@ -420,7 +434,7 @@ msgstr "變換後的 PNG 色板數目不受支援，正確數字應為 3 或 4�
 #: ../gdk-pixbuf/io-png.c:183
 #, c-format
 msgid "Fatal error in PNG image file: %s"
-msgstr "PNG 圖像檔中有嚴重錯誤：%s"
+msgstr "PNG 圖片檔中有嚴重錯誤：%s"
 
 #: ../gdk-pixbuf/io-png.c:301
 msgid "Insufficient memory to load PNG file"
@@ -432,17 +446,17 @@ msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
 "applications to reduce memory usage"
 msgstr ""
-"記憶體不足以載入大小為 %ld×%ld 的圖像；\n"
+"記憶體不足以載入大小為 %ld×%ld 的圖片；\n"
 "請嘗試退出其它應用程式來減低記憶體使用量"
 
 #: ../gdk-pixbuf/io-png.c:669
 msgid "Fatal error reading PNG image file"
-msgstr "讀入 PNG 圖像檔時發生嚴重錯誤"
+msgstr "讀入 PNG 圖片檔時發生嚴重錯誤"
 
 #: ../gdk-pixbuf/io-png.c:718
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
-msgstr "讀入 PNG 圖像檔時發生嚴重錯誤：%s"
+msgstr "讀入 PNG 圖片檔時發生嚴重錯誤：%s"
 
 #: ../gdk-pixbuf/io-png.c:813
 msgid ""
@@ -460,7 +474,7 @@ msgstr "PNG text 區段的內容 %s 無法轉換為 ISO-8859-1 編碼。"
 
 #: ../gdk-pixbuf/io-png.c:994
 msgid "The PNG image format"
-msgstr "PNG 圖像格式"
+msgstr "PNG 圖片格式"
 
 #: ../gdk-pixbuf/io-pnm.c:252
 msgid "PNM loader expected to find an integer, but didn't"
@@ -476,11 +490,11 @@ msgstr "無法辨識這個 PNM 檔的副格式"
 
 #: ../gdk-pixbuf/io-pnm.c:339
 msgid "PNM file has an image width of 0"
-msgstr "PNM 圖像檔的寬為 0"
+msgstr "PNM 圖片檔的寬為 0"
 
 #: ../gdk-pixbuf/io-pnm.c:360
 msgid "PNM file has an image height of 0"
-msgstr "PNM 圖像檔的高為 0"
+msgstr "PNM 圖片檔的高為 0"
 
 #: ../gdk-pixbuf/io-pnm.c:383
 msgid "Maximum color value in PNM file is 0"
@@ -497,11 +511,11 @@ msgstr "無法處理最大顏色數目大於 255 的 PNM 檔"
 #: ../gdk-pixbuf/io-pnm.c:438 ../gdk-pixbuf/io-pnm.c:466
 #: ../gdk-pixbuf/io-pnm.c:498
 msgid "Raw PNM image type is invalid"
-msgstr "原始 PNM 圖像類型不正確"
+msgstr "原始 PNM 圖片類型不正確"
 
 #: ../gdk-pixbuf/io-pnm.c:562 ../gdk-pixbuf/io-pnm.c:604
 msgid "PNM image format is invalid"
-msgstr "PNM 圖像格式不正確"
+msgstr "PNM 圖片格式不正確"
 
 #: ../gdk-pixbuf/io-pnm.c:663
 msgid "PNM image loader does not support this PNM subformat"
@@ -517,7 +531,7 @@ msgstr "原始 PNM 格式需要在取樣資料前有一格空格 (whitespace)"
 
 #: ../gdk-pixbuf/io-pnm.c:777
 msgid "Cannot allocate memory for loading PNM image"
-msgstr "無法分配記憶體來載入 PNM 圖像"
+msgstr "無法分配記憶體來載入 PNM 圖片"
 
 #: ../gdk-pixbuf/io-pnm.c:827
 msgid "Insufficient memory to load PNM context struct"
@@ -525,7 +539,7 @@ msgstr "無法分配記憶體來載入 PNM 內容結構"
 
 #: ../gdk-pixbuf/io-pnm.c:878
 msgid "Unexpected end of PNM image data"
-msgstr "PNM 圖像資料過早完結"
+msgstr "PNM 圖片資料過早完結"
 
 #: ../gdk-pixbuf/io-pnm.c:1010
 msgid "Insufficient memory to load PNM file"
@@ -533,27 +547,27 @@ msgstr "記憶體不足以載入 PNM 檔"
 
 #: ../gdk-pixbuf/io-pnm.c:1089
 msgid "The PNM/PBM/PGM/PPM image format family"
-msgstr "PNM/PBM/PGM/PPM 圖像格式集合"
+msgstr "PNM/PBM/PGM/PPM 圖片格式集合"
 
 #: ../gdk-pixbuf/io-ras.c:126
 msgid "RAS image has bogus header data"
-msgstr "RAS 圖像中有冗餘的標頭資料"
+msgstr "RAS 圖片中有冗餘的標頭資料"
 
 #: ../gdk-pixbuf/io-ras.c:148
 msgid "RAS image has unknown type"
-msgstr "RAS 圖像類型不明"
+msgstr "RAS 圖片類型不明"
 
 #: ../gdk-pixbuf/io-ras.c:156
 msgid "unsupported RAS image variation"
-msgstr "不支援的 RAS 圖像格式"
+msgstr "不支援的 RAS 圖片格式"
 
 #: ../gdk-pixbuf/io-ras.c:171 ../gdk-pixbuf/io-ras.c:200
 msgid "Not enough memory to load RAS image"
-msgstr "記憶體不足以載入 RAS 圖像"
+msgstr "記憶體不足以載入 RAS 圖片"
 
 #: ../gdk-pixbuf/io-ras.c:543
 msgid "The Sun raster image format"
-msgstr "Sun raster 圖像格式"
+msgstr "Sun raster 圖片格式"
 
 #: ../gdk-pixbuf/io-tga.c:154
 msgid "Cannot allocate memory for IOBuffer struct"
@@ -593,13 +607,13 @@ msgstr "無法分配 TGA 標頭所需的記憶體"
 
 #: ../gdk-pixbuf/io-tga.c:769
 msgid "TGA image has invalid dimensions"
-msgstr "TGA 圖像的尺寸無效"
+msgstr "TGA 圖片的尺寸無效"
 
 #: ../gdk-pixbuf/io-tga.c:775 ../gdk-pixbuf/io-tga.c:784
 #: ../gdk-pixbuf/io-tga.c:794 ../gdk-pixbuf/io-tga.c:804
 #: ../gdk-pixbuf/io-tga.c:811
 msgid "TGA image type not supported"
-msgstr "不支援此類型的 TGA 圖像"
+msgstr "不支援此類型的 TGA 圖片"
 
 #: ../gdk-pixbuf/io-tga.c:858
 msgid "Cannot allocate memory for TGA context struct"
@@ -611,23 +625,23 @@ msgstr "檔案內有多餘的資料"
 
 #: ../gdk-pixbuf/io-tga.c:992
 msgid "The Targa image format"
-msgstr "Targa 圖像格式"
+msgstr "Targa 圖片格式"
 
 #: ../gdk-pixbuf/io-tiff.c:173
 msgid "Could not get image width (bad TIFF file)"
-msgstr "無法取得圖像寬度 (TIFF 檔損毀)"
+msgstr "無法取得圖片寬度 (TIFF 檔損毀)"
 
 #: ../gdk-pixbuf/io-tiff.c:180
 msgid "Could not get image height (bad TIFF file)"
-msgstr "無法取得圖像高度 (TIFF 檔損毀)"
+msgstr "無法取得圖片高度 (TIFF 檔損毀)"
 
 #: ../gdk-pixbuf/io-tiff.c:188
 msgid "Width or height of TIFF image is zero"
-msgstr "TIFF 圖像的寬度或高度為零"
+msgstr "TIFF 圖片的寬度或高度為零"
 
 #: ../gdk-pixbuf/io-tiff.c:197 ../gdk-pixbuf/io-tiff.c:206
 msgid "Dimensions of TIFF image too large"
-msgstr "TIFF 圖像的尺寸太大"
+msgstr "TIFF 圖片的尺寸太大"
 
 #: ../gdk-pixbuf/io-tiff.c:225 ../gdk-pixbuf/io-tiff.c:237
 #: ../gdk-pixbuf/io-tiff.c:286 ../gdk-pixbuf/io-tiff.c:572
@@ -640,7 +654,7 @@ msgstr "無法載入 TIFF 檔裡的 RGB 資料"
 
 #: ../gdk-pixbuf/io-tiff.c:361
 msgid "Failed to open TIFF image"
-msgstr "無法開啟 TIFF 圖像"
+msgstr "無法開啟 TIFF 圖片"
 
 #: ../gdk-pixbuf/io-tiff.c:373
 msgid "TIFFClose operation failed"
@@ -648,23 +662,23 @@ msgstr "TIFFClose 操作失敗"
 
 #: ../gdk-pixbuf/io-tiff.c:504 ../gdk-pixbuf/io-tiff.c:517
 msgid "Failed to load TIFF image"
-msgstr "無法載入 TIFF 圖像"
+msgstr "無法載入 TIFF 圖片"
 
 #: ../gdk-pixbuf/io-tiff.c:610
 msgid "The TIFF image format"
-msgstr "TIFF 圖像格式"
+msgstr "TIFF 圖片格式"
 
 #: ../gdk-pixbuf/io-wbmp.c:246
 msgid "Image has zero width"
-msgstr "圖像寬度為零"
+msgstr "圖片寬度為零"
 
 #: ../gdk-pixbuf/io-wbmp.c:264
 msgid "Image has zero height"
-msgstr "圖像高度為零"
+msgstr "圖片高度為零"
 
 #: ../gdk-pixbuf/io-wbmp.c:275
 msgid "Not enough memory to load image"
-msgstr "記憶體不足以載入圖像"
+msgstr "記憶體不足以載入圖片"
 
 #: ../gdk-pixbuf/io-wbmp.c:334
 msgid "Couldn't save the rest"
@@ -672,7 +686,7 @@ msgstr "無法儲存其它部份"
 
 #: ../gdk-pixbuf/io-wbmp.c:368
 msgid "The WBMP image format"
-msgstr "WBMP 圖像格式"
+msgstr "WBMP 圖片格式"
 
 #: ../gdk-pixbuf/io-xbm.c:287
 msgid "Invalid XBM file"
@@ -680,15 +694,15 @@ msgstr "無效的 XBM 檔"
 
 #: ../gdk-pixbuf/io-xbm.c:297
 msgid "Insufficient memory to load XBM image file"
-msgstr "記憶體不足以載入 XBM 圖像檔"
+msgstr "記憶體不足以載入 XBM 圖片檔"
 
 #: ../gdk-pixbuf/io-xbm.c:441
 msgid "Failed to write to temporary file when loading XBM image"
-msgstr "當載入 XBM 圖像時無法寫入暫存檔"
+msgstr "當載入 XBM 圖片時無法寫入暫存檔"
 
 #: ../gdk-pixbuf/io-xbm.c:476
 msgid "The XBM image format"
-msgstr "XBM 圖像格式"
+msgstr "XBM 圖片格式"
 
 #: ../gdk-pixbuf/io-xpm.c:467
 msgid "No XPM header found"
@@ -700,11 +714,11 @@ msgstr "無效的 XPM 標頭"
 
 #: ../gdk-pixbuf/io-xpm.c:484
 msgid "XPM file has image width <= 0"
-msgstr "XPM 圖像寬度不大於 0"
+msgstr "XPM 圖片寬度不大於 0"
 
 #: ../gdk-pixbuf/io-xpm.c:492
 msgid "XPM file has image height <= 0"
-msgstr "XPM 圖像高度不大於 0"
+msgstr "XPM 圖片高度不大於 0"
 
 #: ../gdk-pixbuf/io-xpm.c:500
 msgid "XPM has invalid number of chars per pixel"
@@ -712,12 +726,12 @@ msgstr "XPM 每個像素佔用的位元組數目不正確"
 
 #: ../gdk-pixbuf/io-xpm.c:507
 msgid "XPM file has invalid number of colors"
-msgstr "XPM 圖像檔顏色數目不正確"
+msgstr "XPM 圖片檔顏色數目不正確"
 
 #: ../gdk-pixbuf/io-xpm.c:519 ../gdk-pixbuf/io-xpm.c:528
 #: ../gdk-pixbuf/io-xpm.c:580
 msgid "Cannot allocate memory for loading XPM image"
-msgstr "無法分配記憶體來載入 XPM 圖像"
+msgstr "無法分配記憶體來載入 XPM 圖片"
 
 #: ../gdk-pixbuf/io-xpm.c:542
 msgid "Cannot read XPM colormap"
@@ -725,11 +739,11 @@ msgstr "無法讀入 XPM 色盤"
 
 #: ../gdk-pixbuf/io-xpm.c:771
 msgid "Failed to write to temporary file when loading XPM image"
-msgstr "當載入 XPM 圖像時無法寫入暫存檔"
+msgstr "當載入 XPM 圖片時無法寫入暫存檔"
 
 #: ../gdk-pixbuf/io-xpm.c:806
 msgid "The XPM image format"
-msgstr "XPM 圖像格式"
+msgstr "XPM 圖片格式"
 
 #. Description of --class=CLASS in --help output
 #: ../gdk/gdk.c:115
@@ -797,7 +811,7 @@ msgstr "不要同時處理多個 GDI 要求"
 #. Description of --no-wintab in --help output
 #: ../gdk/win32/gdkmain-win32.c:62
 msgid "Don't use the Wintab API for tablet support"
-msgstr ""
+msgstr "不使用 Wintab API 作為 tablet PC 的支援"
 
 #. Description of --ignore-wintab in --help output
 #: ../gdk/win32/gdkmain-win32.c:64
@@ -824,7 +838,7 @@ msgstr "顏色"
 msgid "Make X calls synchronous"
 msgstr "使用同步方式調用 X 函式"
 
-#: ../gtk/gtkaboutdialog.c:270 ../gtk/gtkaboutdialog.c:2023
+#: ../gtk/gtkaboutdialog.c:270 ../gtk/gtkaboutdialog.c:2025
 msgid "License"
 msgstr "許可證"
 
@@ -838,32 +852,32 @@ msgid "C_redits"
 msgstr "鳴謝(_R)"
 
 #. Add the license button
-#: ../gtk/gtkaboutdialog.c:500
+#: ../gtk/gtkaboutdialog.c:501
 msgid "_License"
 msgstr "許可證(_L)"
 
-#: ../gtk/gtkaboutdialog.c:729
+#: ../gtk/gtkaboutdialog.c:731
 #, c-format
 msgid "About %s"
 msgstr "關於 %s"
 
-#: ../gtk/gtkaboutdialog.c:1951
+#: ../gtk/gtkaboutdialog.c:1953
 msgid "Credits"
 msgstr "鳴謝"
 
-#: ../gtk/gtkaboutdialog.c:1977
+#: ../gtk/gtkaboutdialog.c:1979
 msgid "Written by"
 msgstr "程式編寫"
 
-#: ../gtk/gtkaboutdialog.c:1980
+#: ../gtk/gtkaboutdialog.c:1982
 msgid "Documented by"
 msgstr "文件編寫"
 
-#: ../gtk/gtkaboutdialog.c:1992
+#: ../gtk/gtkaboutdialog.c:1994
 msgid "Translated by"
 msgstr "翻譯"
 
-#: ../gtk/gtkaboutdialog.c:1996
+#: ../gtk/gtkaboutdialog.c:1998
 msgid "Artwork by"
 msgstr "美工設計"
 
@@ -1075,7 +1089,7 @@ msgstr "選取檔案"
 #: ../gtk/gtkfilechooserbutton.c:68 ../gtk/gtkfilechooserdefault.c:1288
 #: ../gtk/gtkpathbar.c:996
 msgid "Home"
-msgstr "家目錄"
+msgstr "個人資料夾"
 
 #: ../gtk/gtkfilechooserbutton.c:69 ../gtk/gtkfilechooserdefault.c:1315
 #: ../gtk/gtkpathbar.c:998
@@ -1539,7 +1553,7 @@ msgstr "取得‘/’的資訊時發生錯誤：%s"
 #: ../gtk/gtkfilesystemwin32.c:611
 #, c-format
 msgid "Network Drive (%s)"
-msgstr ""
+msgstr "網路磁碟 (%s)"
 
 #: ../gtk/gtkfilesystemwin32.c:626
 #, c-format
@@ -1607,7 +1621,7 @@ msgstr "_Gamma 值"
 msgid "Error loading icon: %s"
 msgstr "載入圖示時發生錯誤：%s"
 
-#: ../gtk/gtkicontheme.c:1249
+#: ../gtk/gtkicontheme.c:1250
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1620,7 +1634,7 @@ msgstr ""
 "您可以從下列地方取得：\n"
 "\t%s"
 
-#: ../gtk/gtkicontheme.c:1314
+#: ../gtk/gtkicontheme.c:1315
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "圖示‘%s’不存在於佈景主題中"
@@ -1772,12 +1786,12 @@ msgstr "此按鈕所屬的單選工具按鈕群組。"
 msgid "Unable to find include file: \"%s\""
 msgstr "找不到應包括的檔案：“%s”"
 
-#: ../gtk/gtkrc.c:3039 ../gtk/gtkrc.c:3042
+#: ../gtk/gtkrc.c:3042 ../gtk/gtkrc.c:3045
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "無法在 pixmap_path 中找到圖像檔：“%s”"
+msgstr "無法在 pixmap_path 中找到圖片檔：“%s”"
 
-#: ../gtk/gtkrc.c:3477
+#: ../gtk/gtkrc.c:3480
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Pixmap 路徑組成部份“%s”必須為絕對路徑，%s，第 %d 行"
@@ -1874,12 +1888,12 @@ msgstr "底層(_B)"
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:336
 msgid "Navigation|_First"
-msgstr ""
+msgstr "第一頁(_F)"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:338
 msgid "Navigation|_Last"
-msgstr ""
+msgstr "尾頁(_L)"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:340
@@ -1889,7 +1903,7 @@ msgstr "頂層(_T)"
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:342
 msgid "Navigation|_Back"
-msgstr ""
+msgstr "上一頁(_B)"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:344
@@ -1899,7 +1913,7 @@ msgstr "下層(_D)"
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:346
 msgid "Navigation|_Forward"
-msgstr ""
+msgstr "下一頁(_F)"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:348
@@ -2306,7 +2320,7 @@ msgstr "無法為檔案‘%s’取得資訊：%s"
 #~ msgstr "輸入法"
 
 #~ msgid "GIF image loader can't understand this image."
-#~ msgstr "GIF 圖像載入模組無法分析本圖像。"
+#~ msgstr "GIF 圖片載入模組無法分析本圖片。"
 
 #~ msgid ""
 #~ "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
@@ -2316,7 +2330,7 @@ msgstr "無法為檔案‘%s’取得資訊：%s"
 #~ msgstr "無法處理最大可用顏色數目大於 255 的 PNM 檔"
 
 #~ msgid "Can't allocate memory for loading PNM image"
-#~ msgstr "無法分配記憶體來載入 PNM 圖像"
+#~ msgstr "無法分配記憶體來載入 PNM 圖片"
 
 #~ msgid "Can't allocate memory for IOBuffer struct"
 #~ msgstr "無法分配 IOBuffer 結構所需的記憶體"
@@ -2349,10 +2363,10 @@ msgstr "無法為檔案‘%s’取得資訊：%s"
 #~ msgstr "無法讀入 XPM 色盤"
 
 #~ msgid "Can't allocate memory for loading XPM image"
-#~ msgstr "無法分配記憶體來載入 XPM 圖像"
+#~ msgstr "無法分配記憶體來載入 XPM 圖片"
 
 #~ msgid "Can't change to folder because it isn't local"
 #~ msgstr "無法變更至該資料夾因其並非本地端"
 
 #~ msgid "Unsupported TIFF variant"
-#~ msgstr "不支援的 TIFF 圖像格式"
+#~ msgstr "不支援的 TIFF 圖片格式"
