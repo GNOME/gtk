@@ -1,5 +1,8 @@
 2005-04-07  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeview.c (gtk_tree_view_set_expander_column): Add 
+	a hint about hiding expanders.
+
 	* gtk/updateiconcache.c (is_cache_up_to_date): Return 
 	TRUE if the cache is newer than the directory.  (#172852,
 	Jacob Kroon)

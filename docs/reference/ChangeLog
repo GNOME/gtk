@@ -1,5 +1,8 @@
 2005-04-07  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/question_index.sgml: Add a question about hiding
+	tree view expanders.
+
 	* gtk/tmpl/gtkradiobutton.sgml: Add a sentence about
 	toggling.  (#159382, Worik Stanton)
 

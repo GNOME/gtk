@@ -965,9 +965,18 @@ set_up_new_columns (GtkTreeView *myview)
 </para></answer>
 </qandaentry>
 
+<qandaentry>
+<question><para>
+How do I hide the expander arrows in my tree view ?
+</para></question>
+
+<answer><para>
+Set the expander-column property of the tree view to a hidden column.
+See <link linkend="gtk-tree-view-set-expander-column">gtk_tree_view_set_expander_column()</link> and <link linkend="gtk-tree-view-column-set-visible">gtk_tree_view_column_set_visible()</link>.
+</para></answer>
+</qandaentry>
+
 </qandadiv>
-
-
 
 </qandaset>
 
