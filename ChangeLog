@@ -1,3 +1,15 @@
+2005-04-08  Matthias Clasen  <mclasen@redhat.com>
+
+	Fix double-click to autosize treeview columns. This was
+	probably broken since 2.2 ! (#169675)
+	
+	* gtk/gtktreeview.c (gtk_tree_view_button_press): Leave the
+	"user-resized" state of the column on a double-click to
+	autosize.
+	(gtk_tree_view_button_press, gtk_tree_view_motion_resize_column): 
+	Enter the "user-resized" state of the column only if a drag
+	actually changes the column width, not on any click.
+
 2005-04-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/updateiconcache.c (write_card32, write_card16): Avoid

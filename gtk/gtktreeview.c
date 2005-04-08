@@ -2485,6 +2485,7 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 	  if (event->type == GDK_2BUTTON_PRESS &&
 	      gtk_tree_view_column_get_sizing (column) != GTK_TREE_VIEW_COLUMN_AUTOSIZE)
 	    {
+	      column->use_resized_width = FALSE;
 	      _gtk_tree_view_column_autosize (tree_view, column);
 	      return TRUE;
 	    }
@@ -2499,7 +2500,6 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 	  gtk_grab_add (widget);
 	  GTK_TREE_VIEW_SET_FLAG (tree_view, GTK_TREE_VIEW_IN_COLUMN_RESIZE);
 	  column->resized_width = column->width;
-	  column->use_resized_width = TRUE;
 
 	  /* block attached dnd signal handler */
 	  drag_data = g_object_get_data (G_OBJECT (widget), "gtk-site-data");
@@ -3185,6 +3185,7 @@ gtk_tree_view_motion_resize_column (GtkWidget      *widget,
   if (x != tree_view->priv->x_drag &&
       (new_width != column->fixed_width));
     {
+      column->use_resized_width = TRUE;
       column->resized_width = new_width;
       gtk_widget_queue_resize (widget);
     }
