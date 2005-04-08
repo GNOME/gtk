@@ -27,7 +27,7 @@
 #include "gdk-pixbuf-private.h"
 #include "gdk-pixbuf-io.h"
 
-#define PCX_DEBUG
+#undef PCX_DEBUG
 
 #define PCX_TASK_DONE 0
 #define PCX_TASK_LOAD_HEADER 1
