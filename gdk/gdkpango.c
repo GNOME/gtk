@@ -118,18 +118,16 @@ gdk_pango_renderer_constructor (GType                  type,
 static void
 emboss_context (cairo_t *cr)
 {
-  cairo_matrix_t *tmp_matrix = cairo_matrix_create ();
-  double a, b, c, d, tx, ty;
+  cairo_matrix_t tmp_matrix;
 
   /* The gymnastics here to adjust the matrix are because we want
    * to offset by +1,+1 in device-space, not in user-space,
    * so we can't just draw the layout at x + 1, y + 1
    */
-  cairo_get_matrix (cr, tmp_matrix);
-  cairo_matrix_get_affine (tmp_matrix, &a, &b, &c, &d, &tx, &ty);
-  cairo_matrix_set_affine (tmp_matrix, a, b, c, d, tx + 1, ty + 1);
-  cairo_set_matrix (cr, tmp_matrix);
-  cairo_matrix_destroy (tmp_matrix);
+  cairo_get_matrix (cr, &tmp_matrix);
+  tmp_matrix.x0 += 1.0;
+  tmp_matrix.y0 += 1.0;
+  cairo_set_matrix (cr, &tmp_matrix);
 
   cairo_set_rgb_color (cr, 1.0, 1.0, 1.0);
 }

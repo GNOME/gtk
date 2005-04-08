@@ -1,3 +1,11 @@
+2005-04-08  Carl Worth  <cworth@cworth.org>
+
+	* gdk/gdkpango.c: (emboss_context): Simplify matrix manipulation
+	now that cairo exposes the cairo_matrix_t structure.
+	
+	* gdk/gdkpixbuf-render.c: (gdk_pixbuf_set_as_cairo_source): Track
+	cairo API change in signedness of data argument.
+
 2005-04-08  Matthias Clasen  <mclasen@redhat.com>
 
 	Fix double-click to autosize treeview columns. This was

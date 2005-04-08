@@ -362,8 +362,9 @@ gdk_pixbuf_set_as_cairo_source (GdkPixbuf *pixbuf,
     format = CAIRO_FORMAT_ARGB32;
 
   cairo_pixels = g_malloc (4 * width * height);
-  surface = cairo_image_surface_create_for_data ((char *)cairo_pixels, format,
-					       width, height, 4 * width);
+  surface = cairo_image_surface_create_for_data ((unsigned char *)cairo_pixels,
+						 format,
+						 width, height, 4 * width);
   cairo_surface_set_user_data (surface, &key,
 			       cairo_pixels, (cairo_destroy_func_t)g_free);
 
