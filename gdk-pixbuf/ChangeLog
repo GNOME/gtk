@@ -1,6 +1,7 @@
 2005-04-08  Matthias Clasen  <mclasen@redhat.com>
 
-	* io-pcx.c: No debuggin output, please.
+	* io-pcx.c: No debugging output, please. (#173107,
+	John Ellis)
 
 2005-04-07  Matthias Clasen  <mclasen@redhat.com>
 
