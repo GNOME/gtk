@@ -8,6 +8,12 @@
 
 2005-04-08  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcombobox.c (gtk_combo_box_popdown): Make this
+	work when called from gtk_combo_box_destroy().  (#172999,
+	Christian Persch)
+
+2005-04-08  Matthias Clasen  <mclasen@redhat.com>
+
 	Fix double-click to autosize treeview columns. This was
 	probably broken since 2.2 ! (#169675)
 	
