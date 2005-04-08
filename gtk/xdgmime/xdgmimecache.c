@@ -79,8 +79,8 @@ struct _XdgMimeCache
   char   *buffer;
 };
 
-#define GET_UINT16(cache,offset) (ntohs(*(uint16_t*)&(cache)[offset]))
-#define GET_UINT32(cache,offset) (ntohl(*(uint32_t*)&(cache)[offset]))
+#define GET_UINT16(cache,offset) (ntohs(*(uint16_t*)((cache) + (offset))))
+#define GET_UINT32(cache,offset) (ntohl(*(uint32_t*)((cache) + (offset))))
 
 XdgMimeCache *
 _xdg_mime_cache_ref (XdgMimeCache *cache)
@@ -156,11 +156,11 @@ cache_magic_matchlet_compare_to_data (XdgMimeCache *cache,
 				      const void   *data,
 				      size_t        len)
 {
-  xdg_uint32_t range_start = GET_UINT32 (cache, offset);
-  xdg_uint32_t range_length = GET_UINT32 (cache, offset + 4);
-  xdg_uint32_t data_length = GET_UINT32 (cache, offset + 12);
-  xdg_uint32_t data_offset = GET_UINT32 (cache, offset + 16);
-  xdg_uint32_t mask_offset = GET_UINT32 (cache, offset + 20);
+  xdg_uint32_t range_start = GET_UINT32 (cache->buffer, offset);
+  xdg_uint32_t range_length = GET_UINT32 (cache->buffer, offset + 4);
+  xdg_uint32_t data_length = GET_UINT32 (cache->buffer, offset + 12);
+  xdg_uint32_t data_offset = GET_UINT32 (cache->buffer, offset + 16);
+  xdg_uint32_t mask_offset = GET_UINT32 (cache->buffer, offset + 20);
   
   int i, j;
 
@@ -208,9 +208,9 @@ cache_magic_matchlet_compare (XdgMimeCache *cache,
 			      const void   *data,
 			      size_t        len)
 {
-  xdg_uint32_t n_children = GET_UINT32 (cache, offset + 24);
-  xdg_uint32_t child_offset = GET_UINT32 (cache, offset + 28);
-  
+  xdg_uint32_t n_children = GET_UINT32 (cache->buffer, offset + 24);
+  xdg_uint32_t child_offset = GET_UINT32 (cache->buffer, offset + 28);
+
   int i;
   
   if (cache_magic_matchlet_compare_to_data (cache, offset, data, len))

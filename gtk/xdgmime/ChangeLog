@@ -1,3 +1,9 @@
+2005-04-08  Matthias Clasen  <mclasen@redhat.com>
+
+	* xdgmimecache.c (cache_magic_matchlet_compare_to_data) 
+	(cache_magic_matchlet_compare): Use cache->buffer, not 
+	cache.  
+
 Tue Apr  5 16:00:04 2005  Manish Singh  <yosh@gimp.org>
 
 	* Makefile.am: add xdgmimecache.[ch].
