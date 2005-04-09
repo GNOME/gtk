@@ -1547,6 +1547,9 @@ gtk_image_expose (GtkWidget      *widget,
       GdkBitmap *mask;
       GdkPixbuf *pixbuf;
       gboolean needs_state_transform;
+      GtkStockItem item;
+      gchar *stock_id;
+	  
       
       image = GTK_IMAGE (widget);
       misc = GTK_MISC (widget);
@@ -1634,8 +1637,7 @@ gtk_image_expose (GtkWidget      *widget,
 
         case GTK_IMAGE_PIXBUF:
           image_bound.width = gdk_pixbuf_get_width (image->data.pixbuf.pixbuf);
-          image_bound.height = gdk_pixbuf_get_height (image->data.pixbuf.pixbuf);          
-	  
+          image_bound.height = gdk_pixbuf_get_height (image->data.pixbuf.pixbuf);            
 
 	  if (rectangle_intersect_even (&area, &image_bound) &&
 	      needs_state_transform)
@@ -1655,8 +1657,12 @@ gtk_image_expose (GtkWidget      *widget,
           break;
 
         case GTK_IMAGE_STOCK:
+	  if (gtk_stock_lookup (image->data.stock.stock_id, &item))
+	    stock_id = image->data.stock.stock_id;
+	  else
+	    stock_id = GTK_STOCK_MISSING_IMAGE;
           pixbuf = gtk_widget_render_icon (widget,
-                                           image->data.stock.stock_id,
+                                           stock_id,
                                            image->icon_size,
                                            NULL);
           if (pixbuf)
@@ -1951,6 +1957,8 @@ gtk_image_calc_size (GtkImage *image)
 {
   GtkWidget *widget = GTK_WIDGET (image);
   GdkPixbuf *pixbuf = NULL;
+  GtkStockItem item;
+  gchar *stock_id;
   
   /* We update stock/icon set on every size request, because
    * the theme could have affected the size; for other kinds of
@@ -1960,8 +1968,12 @@ gtk_image_calc_size (GtkImage *image)
   switch (image->storage_type)
     {
     case GTK_IMAGE_STOCK:
+      if (gtk_stock_lookup (image->data.stock.stock_id, &item))
+	stock_id = image->data.stock.stock_id;
+      else
+	stock_id = GTK_STOCK_MISSING_IMAGE;
       pixbuf = gtk_widget_render_icon (widget,
-                                       image->data.stock.stock_id,
+                                       stock_id,
                                        image->icon_size,
                                        NULL);
       break;
