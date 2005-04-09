@@ -1155,7 +1155,7 @@ gdk_pixbuf__bmp_image_save_to_callback (GdkPixbufSaveFunc   save_func,
 					GError            **error)
 {
 	guint width, height, channel, size, stride, src_stride, x, y;
-	guchar BFH_BIH[40], *pixels, *buf, *src, *dst, *dst_line;
+	guchar BFH_BIH[54], *pixels, *buf, *src, *dst, *dst_line;
 	gboolean ret;
 
 	width = gdk_pixbuf_get_width (pixbuf);

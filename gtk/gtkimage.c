@@ -1547,7 +1547,6 @@ gtk_image_expose (GtkWidget      *widget,
       GdkBitmap *mask;
       GdkPixbuf *pixbuf;
       gboolean needs_state_transform;
-      GtkStockItem item;
       gchar *stock_id;
 	  
       
@@ -1657,7 +1656,7 @@ gtk_image_expose (GtkWidget      *widget,
           break;
 
         case GTK_IMAGE_STOCK:
-	  if (gtk_stock_lookup (image->data.stock.stock_id, &item))
+	  if (gtk_style_lookup_icon_set (widget->style, image->data.stock.stock_id))
 	    stock_id = image->data.stock.stock_id;
 	  else
 	    stock_id = GTK_STOCK_MISSING_IMAGE;
@@ -1957,7 +1956,6 @@ gtk_image_calc_size (GtkImage *image)
 {
   GtkWidget *widget = GTK_WIDGET (image);
   GdkPixbuf *pixbuf = NULL;
-  GtkStockItem item;
   gchar *stock_id;
   
   /* We update stock/icon set on every size request, because
@@ -1968,7 +1966,7 @@ gtk_image_calc_size (GtkImage *image)
   switch (image->storage_type)
     {
     case GTK_IMAGE_STOCK:
-      if (gtk_stock_lookup (image->data.stock.stock_id, &item))
+      if (gtk_style_lookup_icon_set (widget->style, image->data.stock.stock_id))
 	stock_id = image->data.stock.stock_id;
       else
 	stock_id = GTK_STOCK_MISSING_IMAGE;

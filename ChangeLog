@@ -1,3 +1,12 @@
+2005-04-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkimage.c (gtk_image_calc_size, gtk_image_expose): 
+	Don't display too many broken images.  (#169870, Roman
+	Kagan, patch by Ivan Wong)
+
+	* gtk/gtkwidget.c (gtk_widget_unparent): Remove debugging
+	output.  (#300013, Tommi Komulainen)
+
 2005-04-08  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkimage.c (gtk_image_expose, gtk_image_calc_size): 
