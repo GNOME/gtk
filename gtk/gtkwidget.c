@@ -1901,12 +1901,7 @@ gtk_widget_unparent (GtkWidget *widget)
   if (GTK_WIDGET_REALIZED (widget)) 
     {
       if (GTK_WIDGET_IN_REPARENT (widget))
-#if 1
-	{
-	  g_print ("unmapping!\n");
-	  gtk_widget_unmap (widget);
-	}
-#endif
+	gtk_widget_unmap (widget);
       else
 	gtk_widget_unrealize (widget);
     }

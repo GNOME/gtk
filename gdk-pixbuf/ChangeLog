@@ -1,5 +1,8 @@
 2005-04-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* io-bmp.c (gdk_pixbuf__bmp_image_save_to_callback): 
+	Don't overflow the stack.  (Jakub Jelinek, Arjan van de Ven)
+
 	* === Released 2.6.5 ===
 
 2005-04-08  Matthias Clasen  <mclasen@redhat.com>
