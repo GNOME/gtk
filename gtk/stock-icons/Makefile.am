@@ -63,6 +63,7 @@ IMAGES = \
 	stock_help_24.png 		\
 	stock_home_16.png		\
 	stock_home_24.png 		\
+	stock_index_16.png 		\
 	stock_index_24.png 		\
 	stock_jump_to_16.png		\
 	stock_jump_to_24.png 		\
@@ -165,9 +166,13 @@ IMAGES = \
 	stock_up_arrow_16.png		\
 	stock_up_arrow_24.png 		\
 	stock_yes_20.png		\
+	stock_zoom_1_16.png 		\
 	stock_zoom_1_24.png 		\
+	stock_zoom_fit_16.png 		\
 	stock_zoom_fit_24.png 		\
+	stock_zoom_in_16.png 		\
 	stock_zoom_in_24.png 		\
+	stock_zoom_out_16.png		\
 	stock_zoom_out_24.png
 
 VARIABLES1 = \
@@ -235,6 +240,7 @@ VARIABLES3 = \
 	stock_harddisk_24		$(srcdir)/stock_harddisk_24.png	\
 	stock_home_16		$(srcdir)/stock_home_16.png		\
 	stock_home_24		$(srcdir)/stock_home_24.png		\
+	stock_index_16		$(srcdir)/stock_index_16.png		\
 	stock_index_24		$(srcdir)/stock_index_24.png		\
 	stock_jump_to_16	$(srcdir)/stock_jump_to_16.png		\
 	stock_jump_to_24	$(srcdir)/stock_jump_to_24.png		\
@@ -342,9 +348,13 @@ VARIABLES6 = \
 	stock_up_arrow_16	$(srcdir)/stock_up_arrow_16.png		\
 	stock_up_arrow_24	$(srcdir)/stock_up_arrow_24.png		\
 	stock_yes_20		$(srcdir)/stock_yes_20.png  		\
+	stock_zoom_1_16		$(srcdir)/stock_zoom_1_16.png		\
 	stock_zoom_1_24		$(srcdir)/stock_zoom_1_24.png		\
+	stock_zoom_fit_16	$(srcdir)/stock_zoom_fit_16.png		\
 	stock_zoom_fit_24	$(srcdir)/stock_zoom_fit_24.png		\
+	stock_zoom_in_16	$(srcdir)/stock_zoom_in_16.png		\
 	stock_zoom_in_24	$(srcdir)/stock_zoom_in_24.png		\
+	stock_zoom_out_16	$(srcdir)/stock_zoom_out_16.png		\
 	stock_zoom_out_24	$(srcdir)/stock_zoom_out_24.png
 
 noinst_DATA = gtkstockpixbufs.h

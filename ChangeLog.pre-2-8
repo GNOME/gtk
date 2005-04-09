@@ -1,5 +1,19 @@
 2005-04-09  Matthias Clasen  <mclasen@redhat.com>
 
+	Add 16x16 versions of the zoom icons and of 
+	GTK_STOCK_INDEX. Some of the images were taken from 
+	the hicolor icon theme, and were originally created 
+	by Jakub Steiner and Tuomas Kuosmanen. 	(#167515, 
+	Vincent Noel)
+	
+	* gtk/stock-icons/stock_index_16.png:
+	* gtk/stock-icons/stock_zoom_1_16.png:
+	* gtk/stock-icons/stock_zoom_fit_16.png:
+	* gtk/stock-icons/stock_zoom_in_16.png:
+	* gtk/stock-icons/stock_zoom_out_16.png: New images.
+	
+	* gtk/stock-icons/Makefile.am: Add the new images. 
+
 	* gtk/gtkimage.c (gtk_image_calc_size, gtk_image_expose): 
 	Don't display too many broken images.  (#169870, Roman
 	Kagan, patch by Ivan Wong)

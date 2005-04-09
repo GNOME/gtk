@@ -760,16 +760,31 @@ get_default_icons (GtkIconFactory *factory)
 	     16, stock_media_stop_16,
 	     24, stock_media_stop_24);
 
+  add_icon2 (factory, GTK_STOCK_INDEX, 
+	     16, stock_index_16,
+	     24, stock_index_24);
+
+  add_icon2 (factory, GTK_STOCK_ZOOM_100, 
+	     16, stock_zoom_1_16,
+	     24, stock_zoom_1_24);
+
+  add_icon2 (factory, GTK_STOCK_ZOOM_IN, 
+	     16, stock_zoom_in_16,
+	     24, stock_zoom_in_24);
+
+  add_icon2 (factory, GTK_STOCK_ZOOM_OUT, 
+	     16, stock_zoom_out_16,
+	     24, stock_zoom_out_24);
+
+  add_icon2 (factory, GTK_STOCK_ZOOM_FIT, 
+	     16, stock_zoom_fit_16,
+	     24, stock_zoom_fit_24);
+
   /* Generic size only */
 
   add_icon (factory, GTK_STOCK_CLEAR, 24, stock_clear_24);
   add_icon (factory, GTK_STOCK_SELECT_COLOR, 24, stock_colorselector_24);
   add_icon (factory, GTK_STOCK_COLOR_PICKER, 25, stock_color_picker_25);
-  add_icon (factory, GTK_STOCK_INDEX, 24, stock_index_24);
-  add_icon (factory, GTK_STOCK_ZOOM_100, 24, stock_zoom_1_24);
-  add_icon (factory, GTK_STOCK_ZOOM_FIT, 24, stock_zoom_fit_24);
-  add_icon (factory, GTK_STOCK_ZOOM_IN, 24, stock_zoom_in_24);
-  add_icon (factory, GTK_STOCK_ZOOM_OUT, 24, stock_zoom_out_24);
 }
 
 /************************************************************
