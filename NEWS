@@ -9,16 +9,21 @@ Overview of Changes from GTK+ 2.6.4 to GTK+ 2.6.5
     the search entry is not visible  [Billy Biggs]
   - Make enable_search control only typeahead, not
     C-f search  [Sven Neumann]
+  - Allow resetting search-column to -1 [Lorenzo Gil Sanchez]
   - Make gtk_tree_view_expand_all work [Tristan Van Berkom,
     Jonathan Blandford]
-* GtkComboBoxEntry
+  - Make double-click to autosize work again [Matthias, 
+    Jonathan]
+* GtkComboBox, GtkComboBoxEntry
+  - Make gtk_widget_grab_focus() work [Gustavo Carneiro]
   - gtk_combo_box_get_active_text() now always returns
     the current text.  [Robert Staudinger]
 * gdk-pixbuf
-  - Bug fixes [Tommi Komulainen, Morten Welinder]
   - Use correct update regions when incrementally loading 
     BMP and TGA images [Owen Taylor, David Costanzo]
   - Support saving BMPs [Ivan Wong]
+  - Bug fixes [Tommi Komulainen, Morten Welinder, David,
+    John Ellis]
 * Win32
   - Make big windows work on NT-based Windows [Ivan]
   - Implement delayed rendering for transferring images
@@ -31,13 +36,15 @@ Overview of Changes from GTK+ 2.6.4 to GTK+ 2.6.5
   Philip Langdale, Tomislav Jonjic, Thomas Leonard, 
   Yury Puzis, Manish Singh, Doug Quale, Ryan Lortie,
   Kjartan Maraas, Morten, Felipe Heidrich, Paolo 
-  Borelli, Jorn Baayen]
+  Borelli, Jorn Baayen, Hazael Maldonado Torres,
+  Tommi, Stefan Kasal, Billy, Felipe Heidrich, 
+  Hans-Wolfgang Loidl, Jacob Kroon, Steven Walter]
 * Documentation improvements [Johan Dahlin, Matthias,
-  Jianfei Wang, Olivier Sessink, Jon-Kare Hellan]
+  Jianfei Wang, Olivier Sessink, Jon-Kare Hellan, Kristof
+  Vasant, Billy, Worik Stanton, Ken Siersma, Morten]
 * New and improved translations (ca,cs,cy,da,de,en_CA,
   en_GB,es,fi,fr,gu,hu,it,lt,nl,pl,pt,pt_BR,ro,ru,rw,sq,
-  sr,sr@Latn,sv,zh_CN,zh_TW)
-Bugs: 168966,168830,169047,169528,169873,169881,169989,169334,170146,170567,170611,168791,170776,170746,169534,171398,169516,135552,169753,172031,172038,170435,170755,171373,172350,171641,168173,170727,172236,172319,168857,168906,169741,167973,171707,150664,171883,168173,140706,143415
+  sr,sr@Latn,sv,uk,zh_CN,zh_TW)
 
 Overview of Changes from GTK+ 2.6.3 to GTK+ 2.6.4
 =================================================

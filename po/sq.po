@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ gtk-2-6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-03-31 12:53+0200\n"
+"POT-Creation-Date: 2005-04-09 00:38-0400\n"
 "PO-Revision-Date: 2005-03-31 19:25+0200\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: Albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
@@ -32,8 +32,10 @@ msgstr "File '%s' nuk përmban të dhëna"
 #: gdk-pixbuf/gdk-pixbuf-animation.c:208 gdk-pixbuf/gdk-pixbuf-io.c:887
 #: gdk-pixbuf/gdk-pixbuf-io.c:1109 tests/testfilechooser.c:244
 #, c-format
-msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr "Hapja e figurës '%s' dështoi: shkaku nuk njihet, ndoshta file është i dëmtuar"
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr ""
+"Hapja e figurës '%s' dështoi: shkaku nuk njihet, ndoshta file është i dëmtuar"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:241
 #, c-format
@@ -85,7 +87,8 @@ msgstr "Gabim gjatë shkrimit tek file i figurës: %s"
 #: gdk-pixbuf/gdk-pixbuf-io.c:1382 gdk-pixbuf/gdk-pixbuf-io.c:1511
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr "Ky variant i gdk-pixbuf nuk suporton ruajtjen e figurës në formatin: %s"
+msgstr ""
+"Ky variant i gdk-pixbuf nuk suporton ruajtjen e figurës në formatin: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1416
 msgid "Insufficient memory to save image to callback"
@@ -192,15 +195,15 @@ msgstr "Figura BMP ka një header me madhësi të pasuportuar"
 msgid "Topdown BMP images cannot be compressed"
 msgstr "Figurat Topdown BMP nuk mund të kompresohen"
 
-#: gdk-pixbuf/io-bmp.c:1198
+#: gdk-pixbuf/io-bmp.c:1214
 msgid "Couldn't allocate memory for saving BMP file"
 msgstr "E pamundur përgatitja e kujtesës për të ruajtur file BMP"
 
-#: gdk-pixbuf/io-bmp.c:1239
+#: gdk-pixbuf/io-bmp.c:1255
 msgid "Couldn't write to BMP file"
 msgstr "I pamundur shkrimi tek file BMP"
 
-#: gdk-pixbuf/io-bmp.c:1288
+#: gdk-pixbuf/io-bmp.c:1304
 msgid "The BMP image format"
 msgstr "Formati i figurës BMP"
 
@@ -352,8 +355,10 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:909
 #, c-format
-msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr "Cilësia JPEG duhet të jetë një vlerë midis 0 dhe 100; vlera '%d' nuk lejohet."
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgstr ""
+"Cilësia JPEG duhet të jetë një vlerë midis 0 dhe 100; vlera '%d' nuk lejohet."
 
 #: gdk-pixbuf/io-jpeg.c:1071
 msgid "The JPEG image format"
@@ -414,7 +419,8 @@ msgstr "Figura e transformuar në PNG ka gjerësi apo lartësi zero."
 
 #: gdk-pixbuf/io-png.c:144
 msgid "Bits per channel of transformed PNG is not 8."
-msgstr "Numri i bit-eve për kanal të figurës së transformuar në PNG nuk është 8."
+msgstr ""
+"Numri i bit-eve për kanal të figurës së transformuar në PNG nuk është 8."
 
 #: gdk-pixbuf/io-png.c:153
 msgid "Transformed PNG not RGB or RGBA."
@@ -454,7 +460,8 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "Gabim fatal gjatë leximit të file PNG: %s"
 
 #: gdk-pixbuf/io-png.c:813
-msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid ""
+"Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 "Kyçet për segmentet e tekstit PNG duhet të kenë të paktën 1 dhe në maksimum "
 "79 simbole."
@@ -504,7 +511,8 @@ msgstr "Vlera më e madhe e ngjyrës në file PNM është tepër e madhe"
 
 #: gdk-pixbuf/io-pnm.c:399
 msgid "Cannot handle PNM files with maximum color values greater than 255"
-msgstr "I pamundur trajtimi i files PNM me vlera maksimum ngjyrash më të mëdha se 255"
+msgstr ""
+"I pamundur trajtimi i files PNM me vlera maksimum ngjyrash më të mëdha se 255"
 
 #: gdk-pixbuf/io-pnm.c:438 gdk-pixbuf/io-pnm.c:466 gdk-pixbuf/io-pnm.c:498
 msgid "Raw PNM image type is invalid"
@@ -696,7 +704,8 @@ msgstr "Kujtesë e pamjaftueshme për ngarkimin e file XBM"
 
 #: gdk-pixbuf/io-xbm.c:441
 msgid "Failed to write to temporary file when loading XBM image"
-msgstr "Dështova në shkrimin e file të përkohshëm gjatë ngarkimit të figurës XBM"
+msgstr ""
+"Dështova në shkrimin e file të përkohshëm gjatë ngarkimit të figurës XBM"
 
 #: gdk-pixbuf/io-xbm.c:476
 msgid "The XBM image format"
@@ -736,7 +745,8 @@ msgstr "I pamundur leximi i hartës së ngjyrave XPM"
 
 #: gdk-pixbuf/io-xpm.c:1533
 msgid "Failed to write to temporary file when loading XPM image"
-msgstr "Dështova në shkrimin e file të përkohshëm gjatë ngarkimit të figurës XPM"
+msgstr ""
+"Dështova në shkrimin e file të përkohshëm gjatë ngarkimit të figurës XPM"
 
 #: gdk-pixbuf/io-xpm.c:1568
 msgid "The XPM image format"
@@ -835,7 +845,7 @@ msgstr "NGJYRAT"
 msgid "Make X calls synchronous"
 msgstr "Bëj që thirrjet e X të jenë të sinkronizuara"
 
-#: gtk/gtkaboutdialog.c:270 gtk/gtkaboutdialog.c:2023
+#: gtk/gtkaboutdialog.c:270 gtk/gtkaboutdialog.c:2025
 msgid "License"
 msgstr "Liçenca"
 
@@ -849,32 +859,32 @@ msgid "_Credits"
 msgstr "_Falenderime"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:500
+#: gtk/gtkaboutdialog.c:501
 msgid "_License"
 msgstr "_Liçenca"
 
-#: gtk/gtkaboutdialog.c:729
+#: gtk/gtkaboutdialog.c:731
 #, c-format
 msgid "About %s"
 msgstr "Informacione mbi %s"
 
-#: gtk/gtkaboutdialog.c:1951
+#: gtk/gtkaboutdialog.c:1953
 msgid "Credits"
 msgstr "Falenderime"
 
-#: gtk/gtkaboutdialog.c:1977
+#: gtk/gtkaboutdialog.c:1979
 msgid "Written by"
 msgstr "Shkruar nga"
 
-#: gtk/gtkaboutdialog.c:1980
+#: gtk/gtkaboutdialog.c:1982
 msgid "Documented by"
 msgstr "Dokumentuar nga"
 
-#: gtk/gtkaboutdialog.c:1992
+#: gtk/gtkaboutdialog.c:1994
 msgid "Translated by"
 msgstr "Përkthyer nga"
 
-#: gtk/gtkaboutdialog.c:1996
+#: gtk/gtkaboutdialog.c:1998
 msgid "Artwork by"
 msgstr "Grafika nga"
 
@@ -1362,7 +1372,8 @@ msgstr "_Riemërto File"
 
 #: gtk/gtkfilesel.c:1446
 #, c-format
-msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid ""
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Emri i kartelës \"%s\" përmban simbole që nuk lejohen në emrat e files"
 
 #: gtk/gtkfilesel.c:1448
@@ -1607,7 +1618,7 @@ msgstr "Vlera _gamma"
 msgid "Error loading icon: %s"
 msgstr "Gabim gjatë ngarkimit të ikonës: %s"
 
-#: gtk/gtkicontheme.c:1258
+#: gtk/gtkicontheme.c:1259
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1620,7 +1631,7 @@ msgstr ""
 "Mund të merrni një kopje nga:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1323
+#: gtk/gtkicontheme.c:1324
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Ikonë '%s' jo e pranishme në temë"
@@ -1708,7 +1719,7 @@ msgstr "(nuk njihet)"
 msgid "clear"
 msgstr "pastro"
 
-#: gtk/gtklabel.c:3931
+#: gtk/gtklabel.c:3930
 msgid "Select All"
 msgstr "Zgjidh gjithçka"
 
@@ -1772,15 +1783,16 @@ msgstr "Pulsanti radio me grupin në të cilin bën pjesë ky buton."
 msgid "Unable to find include file: \"%s\""
 msgstr "E pamundur gjetja e file që duhet përfshirë: \"%s\""
 
-#: gtk/gtkrc.c:3039 gtk/gtkrc.c:3042
+#: gtk/gtkrc.c:3042 gtk/gtkrc.c:3045
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "E pamundur gjetja e file së figurës në pixmap_path: \"%s\""
 
-#: gtk/gtkrc.c:3477
+#: gtk/gtkrc.c:3480
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
-msgstr "Pozicioni i elementit pixmap: \"%s\" duhet të jetë absolut, %s, rreshti %d"
+msgstr ""
+"Pozicioni i elementit pixmap: \"%s\" duhet të jetë absolut, %s, rreshti %d"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: gtk/gtkstock.c:286
@@ -2216,4 +2228,3 @@ msgstr "Metodë Futjeje për X"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "E pamundur marrja e informacioneve për file '%s': %s"
-

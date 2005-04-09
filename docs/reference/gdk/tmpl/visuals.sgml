@@ -51,9 +51,6 @@ then %GDK_VISUAL_STATIC_GRAY.
 #GdkImage, #GdkColormap, #GdkRGB
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GdkVisual ##### -->
 <para>
 The <type>GdkVisual</type> structure contains information about

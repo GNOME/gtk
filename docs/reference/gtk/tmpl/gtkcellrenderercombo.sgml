@@ -25,9 +25,6 @@ cell renderers can be added in a handler for the editing-started signal.
 
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkCellRendererCombo ##### -->
 <para>
 

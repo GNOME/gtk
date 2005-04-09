@@ -101,9 +101,6 @@ gdk_pixbuf_new_from_inline().
 #GdkPixbuf
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkImage ##### -->
 <para>
 This struct contain private data only and should be accessed by the functions

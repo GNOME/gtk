@@ -48,9 +48,6 @@ such a way that other interface elements give space to the widget.
 #GtkFileChooserDialog
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkFileChooserButton ##### -->
 <para>
 This should not be accessed directly.  Use the accessor functions below. 

@@ -33,9 +33,6 @@ It can be intersected to regions by using gdk_region_spans_intersect_foreach().
 
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GdkPoint ##### -->
 <para>
 Defines the x and y coordinates of a point.

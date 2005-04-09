@@ -24,9 +24,6 @@ The #GtkTree widget is a container that shows users a list of items, in a tree f
 #GtkScrolledWindow for details on how to scroll around a #GtkTree.
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkTree ##### -->
 <para>
 <programlisting>

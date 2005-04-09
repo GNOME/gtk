@@ -100,9 +100,6 @@ else
 
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkIconInfo ##### -->
 <para>
 Contains information found when looking up an icon in

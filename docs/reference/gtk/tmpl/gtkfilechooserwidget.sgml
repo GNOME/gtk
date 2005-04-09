@@ -24,9 +24,6 @@ File chooser widget that can be embedded in other widgets
       #GtkFileChooser, #GtkFileChooserDialog
     </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkFileChooserWidget ##### -->
 <para>
 

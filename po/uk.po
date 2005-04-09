@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-04-06 14:32+0300\n"
+"POT-Creation-Date: 2005-04-09 00:38-0400\n"
 "PO-Revision-Date: 2005-02-09 14:03+0300\n"
 "Last-Translator: Maxim Dziumanenko <mvd@mylinux.com.ua>\n"
 "Language-Team: Ukrainian <linux@linux.org.ua>\n"
@@ -196,15 +196,15 @@ msgstr "Зображення BMP має непідтримуваний розм�
 msgid "Topdown BMP images cannot be compressed"
 msgstr "Низхідні зображення формату BMP не можуть бути стиснені"
 
-#: gdk-pixbuf/io-bmp.c:1198
+#: gdk-pixbuf/io-bmp.c:1214
 msgid "Couldn't allocate memory for saving BMP file"
 msgstr "Не вдається виділити пам'ять для завантаження файлу BMP"
 
-#: gdk-pixbuf/io-bmp.c:1239
+#: gdk-pixbuf/io-bmp.c:1255
 msgid "Couldn't write to BMP file"
 msgstr "Не вдається записати файл BMP"
 
-#: gdk-pixbuf/io-bmp.c:1288
+#: gdk-pixbuf/io-bmp.c:1304
 msgid "The BMP image format"
 msgstr "Формат зображень BMP"
 
@@ -850,7 +850,7 @@ msgstr "COLORS"
 msgid "Make X calls synchronous"
 msgstr "Вимкнути синхронні виклики X"
 
-#: gtk/gtkaboutdialog.c:270 gtk/gtkaboutdialog.c:2023
+#: gtk/gtkaboutdialog.c:270 gtk/gtkaboutdialog.c:2025
 msgid "License"
 msgstr "Ліцензія"
 
@@ -864,32 +864,32 @@ msgid "_Credits"
 msgstr "_Подяки"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:500
+#: gtk/gtkaboutdialog.c:501
 msgid "_License"
 msgstr "_Ліцензія"
 
-#: gtk/gtkaboutdialog.c:729
+#: gtk/gtkaboutdialog.c:731
 #, c-format
 msgid "About %s"
 msgstr "Про %s"
 
-#: gtk/gtkaboutdialog.c:1951
+#: gtk/gtkaboutdialog.c:1953
 msgid "Credits"
 msgstr "Подяки"
 
-#: gtk/gtkaboutdialog.c:1977
+#: gtk/gtkaboutdialog.c:1979
 msgid "Written by"
 msgstr "Автор"
 
-#: gtk/gtkaboutdialog.c:1980
+#: gtk/gtkaboutdialog.c:1982
 msgid "Documented by"
 msgstr "Автор документації"
 
-#: gtk/gtkaboutdialog.c:1992
+#: gtk/gtkaboutdialog.c:1994
 msgid "Translated by"
 msgstr "Переклад"
 
-#: gtk/gtkaboutdialog.c:1996
+#: gtk/gtkaboutdialog.c:1998
 msgid "Artwork by"
 msgstr "Графіка"
 
@@ -940,6 +940,12 @@ msgstr "calendar:MY"
 #: gtk/gtkcalendar.c:710
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
+
+#. translators, strip the prefix up to and including the first |
+#: gtk/gtkcellrendererprogress.c:236 gtk/gtkcellrendererprogress.c:294
+#, c-format
+msgid "progress bar label|%d %%"
+msgstr ""
 
 #: gtk/gtkcolorbutton.c:220 gtk/gtkcolorbutton.c:574
 msgid "Pick a Color"
@@ -1625,7 +1631,7 @@ msgstr "_Гама-значення"
 msgid "Error loading icon: %s"
 msgstr "Помилка завантаження значка: %s"
 
-#: gtk/gtkicontheme.c:1258
+#: gtk/gtkicontheme.c:1259
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1638,7 +1644,7 @@ msgstr ""
 "Завантажити тему можна з:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1323
+#: gtk/gtkicontheme.c:1324
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Значок \"%s\" відсутній у темі"
@@ -1726,7 +1732,7 @@ msgstr "(невідомо)"
 msgid "clear"
 msgstr "очистити"
 
-#: gtk/gtklabel.c:3931
+#: gtk/gtklabel.c:3930
 msgid "Select All"
 msgstr "Виділити все"
 
@@ -1790,12 +1796,12 @@ msgstr "Кнопка-перемикач, до групи якої належит
 msgid "Unable to find include file: \"%s\""
 msgstr "Не вдається знайти файл, що включається: \"%s\""
 
-#: gtk/gtkrc.c:3039 gtk/gtkrc.c:3042
+#: gtk/gtkrc.c:3042 gtk/gtkrc.c:3045
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Файл із зображенням не знайдено в pixmap_path: \"%s\""
 
-#: gtk/gtkrc.c:3477
+#: gtk/gtkrc.c:3480
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Компонент шляху до зображення \"%s\" має бути абсолютним, %s, рядок %d"

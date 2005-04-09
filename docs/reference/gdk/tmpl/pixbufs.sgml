@@ -14,9 +14,6 @@ Functions for rendering pixbufs on drawables
 
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### FUNCTION gdk_pixbuf_render_threshold_alpha ##### -->
 <para>
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-04-04 20:35+0100\n"
+"POT-Creation-Date: 2005-04-09 00:38-0400\n"
 "PO-Revision-Date: 2005-04-04 20:35+0000\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
@@ -195,15 +195,15 @@ msgstr "Imagem BMP tem um tamanho de cabeçalho não suportado"
 msgid "Topdown BMP images cannot be compressed"
 msgstr "Incapaz de comprimir imagens BMP cima-para-baixo"
 
-#: gdk-pixbuf/io-bmp.c:1198
+#: gdk-pixbuf/io-bmp.c:1214
 msgid "Couldn't allocate memory for saving BMP file"
 msgstr "Incapaz de alocar memória para gravar o ficheiro BMP"
 
-#: gdk-pixbuf/io-bmp.c:1239
+#: gdk-pixbuf/io-bmp.c:1255
 msgid "Couldn't write to BMP file"
 msgstr "Incapaz de escrever no ficheiro BMP"
 
-#: gdk-pixbuf/io-bmp.c:1288
+#: gdk-pixbuf/io-bmp.c:1304
 msgid "The BMP image format"
 msgstr "O formato de imagem BMP"
 
@@ -841,7 +841,7 @@ msgstr "CORES"
 msgid "Make X calls synchronous"
 msgstr "Efectuar invocações X sincronamente"
 
-#: gtk/gtkaboutdialog.c:270 gtk/gtkaboutdialog.c:2023
+#: gtk/gtkaboutdialog.c:270 gtk/gtkaboutdialog.c:2025
 msgid "License"
 msgstr "Licença"
 
@@ -855,32 +855,32 @@ msgid "_Credits"
 msgstr "_Créditos"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:500
+#: gtk/gtkaboutdialog.c:501
 msgid "_License"
 msgstr "_Licença"
 
-#: gtk/gtkaboutdialog.c:729
+#: gtk/gtkaboutdialog.c:731
 #, c-format
 msgid "About %s"
 msgstr "Sobre %s"
 
-#: gtk/gtkaboutdialog.c:1951
+#: gtk/gtkaboutdialog.c:1953
 msgid "Credits"
 msgstr "Créditos"
 
-#: gtk/gtkaboutdialog.c:1977
+#: gtk/gtkaboutdialog.c:1979
 msgid "Written by"
 msgstr "Escrito por"
 
-#: gtk/gtkaboutdialog.c:1980
+#: gtk/gtkaboutdialog.c:1982
 msgid "Documented by"
 msgstr "Documentado por"
 
-#: gtk/gtkaboutdialog.c:1992
+#: gtk/gtkaboutdialog.c:1994
 msgid "Translated by"
 msgstr "Traduzido por"
 
-#: gtk/gtkaboutdialog.c:1996
+#: gtk/gtkaboutdialog.c:1998
 msgid "Artwork by"
 msgstr "Arte Gráfica por"
 
@@ -1621,7 +1621,7 @@ msgstr "Valor _Gama"
 msgid "Error loading icon: %s"
 msgstr "Erro ao ler o ícone: %s"
 
-#: gtk/gtkicontheme.c:1258
+#: gtk/gtkicontheme.c:1259
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1634,7 +1634,7 @@ msgstr ""
 "Poderá obter uma cópia em:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1323
+#: gtk/gtkicontheme.c:1324
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Ícone '%s' não existe no tema"
@@ -1722,7 +1722,7 @@ msgstr "(desconhecido)"
 msgid "clear"
 msgstr "limpar"
 
-#: gtk/gtklabel.c:3931
+#: gtk/gtklabel.c:3930
 msgid "Select All"
 msgstr "Seleccionar Tudo"
 
@@ -1786,12 +1786,12 @@ msgstr "O grupo de botão de ferramenta exclusivo a que este botão pertence."
 msgid "Unable to find include file: \"%s\""
 msgstr "Incapaz de encontrar ficheiro include: \"%s\""
 
-#: gtk/gtkrc.c:3039 gtk/gtkrc.c:3042
+#: gtk/gtkrc.c:3042 gtk/gtkrc.c:3045
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Incapaz de encontrar ficheiro de imagem na pixmap_path: \"%s\""
 
-#: gtk/gtkrc.c:3477
+#: gtk/gtkrc.c:3480
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Elemento de caminho pixmap: \"%s\" tem de ser absoluto, %s, linha %d"

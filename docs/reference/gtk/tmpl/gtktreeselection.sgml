@@ -40,9 +40,6 @@ selected row).
 #GtkTreeView, #GtkTreeViewColumn, #GtkTreeDnd, #GtkTreeModel, #GtkTreeSortable, #GtkTreeModelSort, #GtkListStore, #GtkTreeStore, #GtkCellRenderer, #GtkCellEditable, #GtkCellRendererPixbuf, #GtkCellRendererText, #GtkCellRendererToggle
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkTreeSelection ##### -->
 <para>
 

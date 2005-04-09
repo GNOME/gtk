@@ -15,9 +15,6 @@ subclasses #GtkHSeparator and #GtkVSeparator.
 
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkSeparator ##### -->
 <para>
 The #GtkSeparator-struct struct contains private data only.

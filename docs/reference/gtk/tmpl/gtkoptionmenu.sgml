@@ -29,9 +29,6 @@ As of GTK+ 2.4, #GtkOptionMenu has been deprecated in favor of #GtkComboBox.
 <!-- ##### SECTION See_Also ##### -->
 
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkOptionMenu ##### -->
 <para>
 The #GtkOptionMenu-struct struct contains private data only, and 

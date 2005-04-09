@@ -34,9 +34,6 @@ The important signal ('toggled') is also inherited from #GtkToggleButton.
 </variablelist>
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkCheckButton ##### -->
 <para>
 <structfield>toggle_button</structfield> is a #GtkToggleButton representing the actual toggle button that composes the check button.

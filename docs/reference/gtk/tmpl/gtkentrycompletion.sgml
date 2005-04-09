@@ -43,9 +43,6 @@ selected, the ::action-activated signal is emitted.
 
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkEntryCompletion ##### -->
 <para>
 The GtkEntryCompletion struct contains only private data.

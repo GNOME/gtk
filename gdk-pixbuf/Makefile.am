@@ -362,6 +362,8 @@ MAINTAINERCLEANFILES = 		\
 	gdk-pixbuf-enum-types.c \
 	gdk-pixbuf-marshal.h 	\
 	gdk-pixbuf-marshal.c 	\
+	gdk-pixbuf-alias.h	\
+	gdk-pixbuf-aliasdef.c	\
 	gdk-pixbuf.loaders
 
 #

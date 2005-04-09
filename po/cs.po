@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-03-31 04:52+0200\n"
+"POT-Creation-Date: 2005-04-09 00:38-0400\n"
 "PO-Revision-Date: 2005-03-31 10:56+0200\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -199,15 +199,15 @@ msgstr "Obrázek BMP má nepodporovanou velikost hlavičky"
 msgid "Topdown BMP images cannot be compressed"
 msgstr "Obrázky BMP shora dolů nelze komprimovat"
 
-#: gdk-pixbuf/io-bmp.c:1198
+#: gdk-pixbuf/io-bmp.c:1214
 msgid "Couldn't allocate memory for saving BMP file"
 msgstr "Nemohu alokovat paměť pro uložení souboru BMP"
 
-#: gdk-pixbuf/io-bmp.c:1239
+#: gdk-pixbuf/io-bmp.c:1255
 msgid "Couldn't write to BMP file"
 msgstr "Nemohu zapisovat do souboru BMP"
 
-#: gdk-pixbuf/io-bmp.c:1288
+#: gdk-pixbuf/io-bmp.c:1304
 msgid "The BMP image format"
 msgstr "Formát obrázku BMP"
 
@@ -839,7 +839,7 @@ msgstr "BARVY"
 msgid "Make X calls synchronous"
 msgstr "Volat X synchronně"
 
-#: gtk/gtkaboutdialog.c:270 gtk/gtkaboutdialog.c:2023
+#: gtk/gtkaboutdialog.c:270 gtk/gtkaboutdialog.c:2025
 msgid "License"
 msgstr "Licence"
 
@@ -853,32 +853,32 @@ msgid "_Credits"
 msgstr "_Kredity"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:500
+#: gtk/gtkaboutdialog.c:501
 msgid "_License"
 msgstr "_Licence"
 
-#: gtk/gtkaboutdialog.c:729
+#: gtk/gtkaboutdialog.c:731
 #, c-format
 msgid "About %s"
 msgstr "O %s"
 
-#: gtk/gtkaboutdialog.c:1951
+#: gtk/gtkaboutdialog.c:1953
 msgid "Credits"
 msgstr "Kredity"
 
-#: gtk/gtkaboutdialog.c:1977
+#: gtk/gtkaboutdialog.c:1979
 msgid "Written by"
 msgstr "Napsali"
 
-#: gtk/gtkaboutdialog.c:1980
+#: gtk/gtkaboutdialog.c:1982
 msgid "Documented by"
 msgstr "Zdokumentovali"
 
-#: gtk/gtkaboutdialog.c:1992
+#: gtk/gtkaboutdialog.c:1994
 msgid "Translated by"
 msgstr "Přeložili"
 
-#: gtk/gtkaboutdialog.c:1996
+#: gtk/gtkaboutdialog.c:1998
 msgid "Artwork by"
 msgstr "Grafika"
 
@@ -1613,7 +1613,7 @@ msgstr "Hodnota _gama"
 msgid "Error loading icon: %s"
 msgstr "Chyba při načítání ikony: %s"
 
-#: gtk/gtkicontheme.c:1258
+#: gtk/gtkicontheme.c:1259
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1626,7 +1626,7 @@ msgstr ""
 "Můžete ji získat z:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1323
+#: gtk/gtkicontheme.c:1324
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Ikona '%s' není obsažena v tématu"
@@ -1714,7 +1714,7 @@ msgstr "(neznámá)"
 msgid "clear"
 msgstr "vyčistit"
 
-#: gtk/gtklabel.c:3931
+#: gtk/gtklabel.c:3930
 msgid "Select All"
 msgstr "Vybrat vše"
 
@@ -1778,12 +1778,12 @@ msgstr "Přepínací tlačíko, do jehož skupiny patří toto tlačítko."
 msgid "Unable to find include file: \"%s\""
 msgstr "Nemohu nalézt vložený soubor: \"%s\""
 
-#: gtk/gtkrc.c:3039 gtk/gtkrc.c:3042
+#: gtk/gtkrc.c:3042 gtk/gtkrc.c:3045
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Nemohu nalézt soubor obrázku v pixmap_path: \"%s\""
 
-#: gtk/gtkrc.c:3477
+#: gtk/gtkrc.c:3480
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Element cesty k pixmapám: \"%s\" musí být absolutní, %s, řádek %d"

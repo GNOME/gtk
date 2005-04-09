@@ -56,9 +56,6 @@ a large chunk of deprecated 1.2 compatibility functions.
 
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkProgressBar ##### -->
 <para>
 The #GtkProgressBar-struct struct contains private data only, 

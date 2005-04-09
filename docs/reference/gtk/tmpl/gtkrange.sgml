@@ -14,9 +14,6 @@ Base class for widgets which visualize an adjustment
 
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkRange ##### -->
 <para>
 

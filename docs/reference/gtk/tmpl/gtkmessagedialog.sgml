@@ -57,9 +57,6 @@ You might do a non-modal #GtkMessageDialog as follows:
 #GtkDialog
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkMessageDialog ##### -->
 <para>
 

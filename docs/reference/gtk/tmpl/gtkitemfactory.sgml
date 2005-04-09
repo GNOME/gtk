@@ -14,9 +14,6 @@ As of GTK+ 2.4, #GtkItemFactory has been deprecated in favour of #GtkUIManager.
 
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkItemFactory ##### -->
 <para>
 

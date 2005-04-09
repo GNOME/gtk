@@ -41,9 +41,6 @@ draw the points of the curve freely, and they are not connected at all.
 
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkCurve ##### -->
 <para>
 The #GtkCurve-struct struct contains private data only, and

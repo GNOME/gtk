@@ -20,9 +20,6 @@ drop</link> interfaces.
 #GtkTreeModel, #GtkTreeStore
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkTreeStore ##### -->
 <para>
 

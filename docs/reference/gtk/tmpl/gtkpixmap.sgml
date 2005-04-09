@@ -27,9 +27,6 @@ in newly written code. Use #GtkImage instead.
 
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkPixmap ##### -->
 <para>
 The #GtkPixmap-struct struct contains private data only, and

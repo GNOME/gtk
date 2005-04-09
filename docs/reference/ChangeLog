@@ -1,3 +1,7 @@
+2005-04-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.6.5 ===
+
 2005-04-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkbbox.sgml: Document that GtkButtonBox ignores

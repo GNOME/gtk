@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-04-04 04:54+0200\n"
+"POT-Creation-Date: 2005-04-09 00:38-0400\n"
 "PO-Revision-Date: 2005-01-14 23:13+0800\n"
 "Last-Translator: Funda Wang <fundawang@linux.net.cn>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
@@ -186,15 +186,15 @@ msgstr "不支持的 BMP 图像头大小"
 msgid "Topdown BMP images cannot be compressed"
 msgstr "无法压缩自上而下的 BMP 图像"
 
-#: gdk-pixbuf/io-bmp.c:1198
+#: gdk-pixbuf/io-bmp.c:1214
 msgid "Couldn't allocate memory for saving BMP file"
 msgstr "无法分配内存来保存 BMP 文件"
 
-#: gdk-pixbuf/io-bmp.c:1239
+#: gdk-pixbuf/io-bmp.c:1255
 msgid "Couldn't write to BMP file"
 msgstr "无法写入 BMP 文件"
 
-#: gdk-pixbuf/io-bmp.c:1288
+#: gdk-pixbuf/io-bmp.c:1304
 msgid "The BMP image format"
 msgstr "BMP 图像格式"
 
@@ -816,7 +816,7 @@ msgstr "颜色"
 msgid "Make X calls synchronous"
 msgstr "同步调用 X"
 
-#: gtk/gtkaboutdialog.c:270 gtk/gtkaboutdialog.c:2023
+#: gtk/gtkaboutdialog.c:270 gtk/gtkaboutdialog.c:2025
 msgid "License"
 msgstr "许可"
 
@@ -830,32 +830,32 @@ msgid "_Credits"
 msgstr "致谢(_C)"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:500
+#: gtk/gtkaboutdialog.c:501
 msgid "_License"
 msgstr "许可(_L)"
 
-#: gtk/gtkaboutdialog.c:729
+#: gtk/gtkaboutdialog.c:731
 #, c-format
 msgid "About %s"
 msgstr "关于 %s"
 
-#: gtk/gtkaboutdialog.c:1951
+#: gtk/gtkaboutdialog.c:1953
 msgid "Credits"
 msgstr "致谢"
 
-#: gtk/gtkaboutdialog.c:1977
+#: gtk/gtkaboutdialog.c:1979
 msgid "Written by"
 msgstr "编写者"
 
-#: gtk/gtkaboutdialog.c:1980
+#: gtk/gtkaboutdialog.c:1982
 msgid "Documented by"
 msgstr "文档撰写者"
 
-#: gtk/gtkaboutdialog.c:1992
+#: gtk/gtkaboutdialog.c:1994
 msgid "Translated by"
 msgstr "翻译者"
 
-#: gtk/gtkaboutdialog.c:1996
+#: gtk/gtkaboutdialog.c:1998
 msgid "Artwork by"
 msgstr "美工"
 
@@ -1573,7 +1573,7 @@ msgstr "Gamma 值(_G)"
 msgid "Error loading icon: %s"
 msgstr "载入图标时出错：%s"
 
-#: gtk/gtkicontheme.c:1258
+#: gtk/gtkicontheme.c:1259
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1585,7 +1585,7 @@ msgstr ""
 "您可以从下面的位置获得一个副本：\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1323
+#: gtk/gtkicontheme.c:1324
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "图标“%s”未出现在主题中 "
@@ -1673,7 +1673,7 @@ msgstr "(未知)"
 msgid "clear"
 msgstr "清除"
 
-#: gtk/gtklabel.c:3931
+#: gtk/gtklabel.c:3930
 msgid "Select All"
 msgstr "全选"
 
@@ -1737,12 +1737,12 @@ msgstr "此按钮所属的单选钮组。"
 msgid "Unable to find include file: \"%s\""
 msgstr "找不到包含文件：“%s”"
 
-#: gtk/gtkrc.c:3039 gtk/gtkrc.c:3042
+#: gtk/gtkrc.c:3042 gtk/gtkrc.c:3045
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "无法在像素图路径中找到图像文件：“%s”"
 
-#: gtk/gtkrc.c:3477
+#: gtk/gtkrc.c:3480
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "像素图路径元素：“%s”必须为绝对路径，%s，第%d行"

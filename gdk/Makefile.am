@@ -195,7 +195,7 @@ lib_LTLIBRARIES = $(gdktargetlib)
 EXTRA_LTLIBRARIES = libgdk-x11-2.0.la libgdk-linux-fb-2.0.la libgdk-win32-2.0.la
 
 MAINTAINERCLEANFILES = gdkenumtypes.h stamp-gdkenumtypes.h gdkenumtypes.c \
-  gdkmarshalers.h gdkmarshalers.c
+  gdkmarshalers.h gdkmarshalers.c gdkalias.h gdkaliasdef.c
 EXTRA_HEADERS =
 
 #

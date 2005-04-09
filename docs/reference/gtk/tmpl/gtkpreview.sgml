@@ -25,9 +25,6 @@ approaches.
 </variablelist>
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkPreview ##### -->
 <para>
 The #GtkPreview-struct struct contains private data only, and

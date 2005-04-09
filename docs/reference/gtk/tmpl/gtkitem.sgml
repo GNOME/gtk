@@ -15,9 +15,6 @@ and #GtkTreeItem.
 
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkItem ##### -->
 <para>
 The #GtkItem-struct struct contains private data only, and

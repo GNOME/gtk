@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 317\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-03-31 20:16-0700\n"
+"POT-Creation-Date: 2005-04-09 00:39-0400\n"
 "PO-Revision-Date: 2004-11-17 21:21-0700\n"
 "Last-Translator: Steve Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <en@li.org>\n"
@@ -795,7 +795,7 @@ msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr "Gushyiraho i Akarango ni Kuri a Ikintu Bya"
 
-#: gtk/gtkbutton.c:244 gtk/gtkcombobox.c:678
+#: gtk/gtkbutton.c:244 gtk/gtkcombobox.c:682
 #, fuzzy
 msgid "Focus on click"
 msgstr "ku Kanda"
@@ -1093,11 +1093,11 @@ msgstr "Urugero"
 msgid "The model containing the possible values for the combo box"
 msgstr "Urugero i Uduciro kugirango i Agasanduku"
 
-#: gtk/gtkcellrenderercombo.c:109 gtk/gtkcomboboxentry.c:114
+#: gtk/gtkcellrenderercombo.c:109 gtk/gtkcomboboxentry.c:121
 msgid "Text Column"
 msgstr ""
 
-#: gtk/gtkcellrenderercombo.c:110 gtk/gtkcomboboxentry.c:115
+#: gtk/gtkcellrenderercombo.c:110 gtk/gtkcomboboxentry.c:122
 #, fuzzy
 msgid "A column in the data source model to get the strings from"
 msgstr ""
@@ -1771,86 +1771,86 @@ msgstr "in Urutonde"
 msgid "Whether entered values must already be present in the list"
 msgstr "Uduciro in i Urutonde"
 
-#: gtk/gtkcombobox.c:551
+#: gtk/gtkcombobox.c:555
 #, fuzzy
 msgid "ComboBox model"
 msgstr "Urugero"
 
-#: gtk/gtkcombobox.c:552
+#: gtk/gtkcombobox.c:556
 #, fuzzy
 msgid "The model for the combo box"
 msgstr "Urugero kugirango i Agasanduku"
 
-#: gtk/gtkcombobox.c:568
+#: gtk/gtkcombobox.c:572
 #, fuzzy
 msgid "Wrap width"
 msgstr "Ubugari"
 
-#: gtk/gtkcombobox.c:569
+#: gtk/gtkcombobox.c:573
 #, fuzzy
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Ubugari kugirango i in a Urusobetudirishya"
 
-#: gtk/gtkcombobox.c:591
+#: gtk/gtkcombobox.c:595
 #, fuzzy
 msgid "Row span column"
 msgstr "Inkingi"
 
-#: gtk/gtkcombobox.c:592
+#: gtk/gtkcombobox.c:596
 #, fuzzy
 msgid "TreeModel column containing the row span values"
 msgstr "Inkingi i Urubariro Uduciro"
 
-#: gtk/gtkcombobox.c:613
+#: gtk/gtkcombobox.c:617
 #, fuzzy
 msgid "Column span column"
 msgstr "Inkingi"
 
-#: gtk/gtkcombobox.c:614
+#: gtk/gtkcombobox.c:618
 #, fuzzy
 msgid "TreeModel column containing the column span values"
 msgstr "Inkingi i Inkingi Uduciro"
 
-#: gtk/gtkcombobox.c:634
+#: gtk/gtkcombobox.c:638
 #, fuzzy
 msgid "Active item"
 msgstr "Ikintu"
 
-#: gtk/gtkcombobox.c:635
+#: gtk/gtkcombobox.c:639
 #, fuzzy
 msgid "The item which is currently active"
 msgstr "Ikintu ni Gikora"
 
-#: gtk/gtkcombobox.c:654 gtk/gtkuimanager.c:228
+#: gtk/gtkcombobox.c:658 gtk/gtkuimanager.c:228
 #, fuzzy
 msgid "Add tearoffs to menus"
 msgstr "Kuri Ibikubiyemo"
 
-#: gtk/gtkcombobox.c:655
+#: gtk/gtkcombobox.c:659
 #, fuzzy
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "a Ibikubiyemo Ikintu"
 
-#: gtk/gtkcombobox.c:670 gtk/gtkentry.c:530
+#: gtk/gtkcombobox.c:674 gtk/gtkentry.c:530
 msgid "Has Frame"
 msgstr ""
 
-#: gtk/gtkcombobox.c:671
+#: gtk/gtkcombobox.c:675
 #, fuzzy
 msgid "Whether the combo box draws a frame around the child"
 msgstr "i Agasanduku a Ikadiri i"
 
-#: gtk/gtkcombobox.c:679
+#: gtk/gtkcombobox.c:683
 #, fuzzy
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "i Agasanduku Ryari: ni Na: i Imbeba"
 
-#: gtk/gtkcombobox.c:685
+#: gtk/gtkcombobox.c:689
 #, fuzzy
 msgid "Appears as list"
 msgstr "Nka Urutonde"
 
-#: gtk/gtkcombobox.c:686
+#: gtk/gtkcombobox.c:690
 #, fuzzy
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "nka Intonde Ibikubiyemo"
@@ -5650,4 +5650,3 @@ msgstr "IMISUSIRE"
 #, fuzzy
 msgid "How to draw the input method statusbar"
 msgstr "Kuri Gushushanya i Iyinjiza Uburyo"
-

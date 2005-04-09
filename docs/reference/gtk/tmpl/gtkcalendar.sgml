@@ -38,9 +38,6 @@ gtk_calendar_thaw().
 
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkCalendar ##### -->
 <para>
 <structfield>num_marked_dates</structfield> is an integer containing the

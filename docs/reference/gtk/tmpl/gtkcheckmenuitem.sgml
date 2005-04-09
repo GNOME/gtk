@@ -22,9 +22,6 @@ toggles the value.
 
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkCheckMenuItem ##### -->
 <para>
 The #GtkCheckMenuItem-struct struct contains the following fields.

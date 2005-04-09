@@ -20,9 +20,6 @@ prior to including the GTK+ header files. Use #GtkTreeView instead.
 
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkTreeItem ##### -->
 <para>
 

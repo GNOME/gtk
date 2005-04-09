@@ -78,7 +78,6 @@ Inside the "toggled" handler, gtk_toggle_button_get_active() can be used
 to determine if the button has been selected or deselected.
 </para>
 
-
 <!-- ##### SECTION See_Also ##### -->
 <para>
 <variablelist>

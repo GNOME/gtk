@@ -46,9 +46,6 @@ The message at the top of the stack can be removed using gtk_statusbar_pop(). A 
 </variablelist>
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkStatusbar ##### -->
 <para>
 Contains private data that should be modified with the functions described below.

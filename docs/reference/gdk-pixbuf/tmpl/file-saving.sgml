@@ -14,9 +14,6 @@ Saving a pixbuf to a file.
 
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### FUNCTION gdk_pixbuf_savev ##### -->
 <para>
 

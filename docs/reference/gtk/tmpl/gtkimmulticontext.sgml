@@ -14,9 +14,6 @@ An input method context supporting multiple, loadable input methods
 
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkIMMulticontext ##### -->
 <para>
 

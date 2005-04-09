@@ -16,9 +16,6 @@ have their own window.
 
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkEventBox ##### -->
 <para>
 The #GtkEventBox-struct struct contains private data only, and

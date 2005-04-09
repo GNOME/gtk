@@ -1466,6 +1466,34 @@ If the window shrinks automatically when widgets within it shrink.
 </para>
 
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+
+<!-- ##### FUNCTION gtk_about_dialog_get_artists ##### -->
+<para>
+
+</para>
+
+@about: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_about_dialog_get_authors ##### -->
+<para>
+
+</para>
+
+@about: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_about_dialog_get_documenters ##### -->
+<para>
+
+</para>
+
+@about: 
+@Returns: 
+
 <!-- ##### FUNCTION gtk_accel_group_add ##### -->
 <para>
 

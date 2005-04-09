@@ -41,9 +41,6 @@ associated information.
 
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkTargetEntry ##### -->
 <para>
 A #GtkTargetEntry structure represents a single type of

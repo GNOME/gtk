@@ -98,9 +98,6 @@ run on older versions of GTK+, it is worth keeping the iter around.
 #GtkTreeModel, #GtkTreeStore
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkListStore ##### -->
 <para>
 

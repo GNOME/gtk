@@ -27,9 +27,6 @@ gtk_widget_style_get_valist() to obtain the value of a style property.
 
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkWidget ##### -->
 <para>
 

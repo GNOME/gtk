@@ -453,6 +453,10 @@ status information, so the application does not need to do anything.
 @GDK_PIXBUF_ALPHA_BILEVEL: 
 @GDK_PIXBUF_ALPHA_FULL: 
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+
 <!-- ##### FUNCTION gdk_color_context_add_palette ##### -->
 <para>
 

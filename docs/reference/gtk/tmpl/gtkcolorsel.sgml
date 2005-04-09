@@ -18,9 +18,6 @@ color selection dialog box #GtkColorSelectionDialog.
 
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkColorSelection ##### -->
 <para>
 The #GtkColorSelection-struct struct contains private data only, 

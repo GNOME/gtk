@@ -14,9 +14,6 @@ Renders numbers as progress bars
 
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkCellRendererProgress ##### -->
 <para>
 

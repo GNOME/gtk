@@ -25,9 +25,6 @@ Loading a pixbuf from a file.
     #GdkPixbufLoader.
   </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### FUNCTION gdk_pixbuf_new_from_file ##### -->
 <para>
 

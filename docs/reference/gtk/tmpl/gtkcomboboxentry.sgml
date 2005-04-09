@@ -29,9 +29,6 @@ with gtk_combo_box_entry_new_text().
 #GtkComboBox
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkComboBoxEntry ##### -->
 <para>
 

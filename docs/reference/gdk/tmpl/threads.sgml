@@ -241,9 +241,6 @@ int main (int argc, char *argv[])
 
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### MACRO GDK_THREADS_ENTER ##### -->
 <para>
 This macro marks the beginning of a critical section in which GDK and GTK+

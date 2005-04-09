@@ -1,3 +1,9 @@
+2005-04-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.6.5 ===
+
+	* NEWS: Updates
+
 2005-04-08  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkimage.c (gtk_image_expose, gtk_image_calc_size): 

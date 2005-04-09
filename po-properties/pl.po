@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-03-01 11:34-0500\n"
+"POT-Creation-Date: 2005-04-09 00:39-0400\n"
 "PO-Revision-Date: 2003-11-14 17:38+0100\n"
 "Last-Translator: Gnome PL Team <translators@gnomepl.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -84,11 +84,11 @@ msgstr "Piksele"
 msgid "A pointer to the pixel data of the pixbuf"
 msgstr "Wskaźnik do danych pikseli bufora piksmapy"
 
-#: gdk/gdkdisplaymanager.c:127
+#: gdk/gdkdisplaymanager.c:129
 msgid "Default Display"
 msgstr "Ekran domyślny"
 
-#: gdk/gdkdisplaymanager.c:128
+#: gdk/gdkdisplaymanager.c:130
 msgid "The default display for GDK"
 msgstr "Ekran domyślny dla GDK"
 
@@ -629,7 +629,7 @@ msgstr "Odstępy"
 msgid "The amount of space between children"
 msgstr "Ilość miejsca pomiędzy widgetami potomnymi"
 
-#: gtk/gtkbox.c:140 gtk/gtknotebook.c:473 gtk/gtktoolbar.c:541
+#: gtk/gtkbox.c:140 gtk/gtknotebook.c:476 gtk/gtktoolbar.c:541
 msgid "Homogeneous"
 msgstr "Jednorodny"
 
@@ -674,7 +674,7 @@ msgstr ""
 msgid "Pack type"
 msgstr "Typ upakowania"
 
-#: gtk/gtkbox.c:170 gtk/gtknotebook.c:517
+#: gtk/gtkbox.c:170 gtk/gtknotebook.c:520
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -682,12 +682,12 @@ msgstr ""
 "Wartość GtkPackType określająca, czy widget potomny powinien być upakowywany "
 "wraz z odwołaniem do początku czy do końca widgetu nadrzędnego"
 
-#: gtk/gtkbox.c:176 gtk/gtknotebook.c:495 gtk/gtkpaned.c:240
+#: gtk/gtkbox.c:176 gtk/gtknotebook.c:498 gtk/gtkpaned.c:240
 #: gtk/gtkruler.c:140
 msgid "Position"
 msgstr "Pozycja"
 
-#: gtk/gtkbox.c:177 gtk/gtknotebook.c:496
+#: gtk/gtkbox.c:177 gtk/gtknotebook.c:499
 msgid "The index of the child in the parent"
 msgstr "Numer pozycji widgetu wśród potomków widgetu nadrzędnego"
 
@@ -722,7 +722,7 @@ msgstr ""
 "Określa, czy należy użyć etykiety do wyboru typowego elementu zamiast jej "
 "wyświetlenia."
 
-#: gtk/gtkbutton.c:244 gtk/gtkcombobox.c:678
+#: gtk/gtkbutton.c:244 gtk/gtkcombobox.c:682
 msgid "Focus on click"
 msgstr "Skupienie po kliknięciu"
 
@@ -994,11 +994,11 @@ msgstr "Model"
 msgid "The model containing the possible values for the combo box"
 msgstr "Model zawierający dopuszczalne wartości dla skrzynki typu combo"
 
-#: gtk/gtkcellrenderercombo.c:109 gtk/gtkcomboboxentry.c:114
+#: gtk/gtkcellrenderercombo.c:109 gtk/gtkcomboboxentry.c:121
 msgid "Text Column"
 msgstr "Kolumna tekstowa"
 
-#: gtk/gtkcellrenderercombo.c:110 gtk/gtkcomboboxentry.c:115
+#: gtk/gtkcellrenderercombo.c:110 gtk/gtkcomboboxentry.c:122
 msgid "A column in the data source model to get the strings from"
 msgstr "Kolumna w modelu źródłowym danych, z której pobierane są napisy"
 
@@ -1255,7 +1255,7 @@ msgstr ""
 "Preferowane miejsce przycięcia ciągu tekstowego, w przypadku gdy obiekt "
 "renderujący komórki nie ma miejsca na wyświetlenie go całego"
 
-#: gtk/gtkcellrenderertext.c:434 gtk/gtkfilechooserbutton.c:365
+#: gtk/gtkcellrenderertext.c:434 gtk/gtkfilechooserbutton.c:366
 #: gtk/gtklabel.c:453
 msgid "Width In Characters"
 msgstr "Szerokość w znakach"
@@ -1418,7 +1418,7 @@ msgstr "Stan radiowy"
 msgid "Draw the toggle button as a radio button"
 msgstr "Powoduje rysowanie przełączanego przycisku jako przycisku radiowego"
 
-#: gtk/gtkcheckbutton.c:100 gtk/gtkcheckmenuitem.c:141 gtk/gtkoptionmenu.c:201
+#: gtk/gtkcheckbutton.c:100 gtk/gtkcheckmenuitem.c:141 gtk/gtkoptionmenu.c:202
 msgid "Indicator Size"
 msgstr "Rozmiar wskaźnika"
 
@@ -1426,7 +1426,7 @@ msgstr "Rozmiar wskaźnika"
 msgid "Size of check or radio indicator"
 msgstr "Rozmiar wskaźnika przełączenia lub radiowego"
 
-#: gtk/gtkcheckbutton.c:108 gtk/gtkexpander.c:256 gtk/gtkoptionmenu.c:207
+#: gtk/gtkcheckbutton.c:108 gtk/gtkexpander.c:256 gtk/gtkoptionmenu.c:208
 msgid "Indicator Spacing"
 msgstr "Odstępy wskaźnika"
 
@@ -1467,7 +1467,7 @@ msgstr "Używanie kanału alfa"
 msgid "Whether or not to give the color an alpha value"
 msgstr "Określa czy należy nadawać kolorowi wartości alfa"
 
-#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:351
+#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:352
 #: gtk/gtkfontbutton.c:176 gtk/gtktreeviewcolumn.c:298
 msgid "Title"
 msgstr "Tytuł"
@@ -1574,72 +1574,72 @@ msgstr "Wartość na liście"
 msgid "Whether entered values must already be present in the list"
 msgstr "Określa, czy wprowadzane wartości muszą już znajdować się na liście"
 
-#: gtk/gtkcombobox.c:551
+#: gtk/gtkcombobox.c:555
 msgid "ComboBox model"
 msgstr "Model skrzynki typu combo"
 
-#: gtk/gtkcombobox.c:552
+#: gtk/gtkcombobox.c:556
 msgid "The model for the combo box"
 msgstr "Model dla skrzynki typu combo"
 
-#: gtk/gtkcombobox.c:568
+#: gtk/gtkcombobox.c:572
 msgid "Wrap width"
 msgstr "Szerokość zawijania"
 
-#: gtk/gtkcombobox.c:569
+#: gtk/gtkcombobox.c:573
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Szerokość zawijania przy wyrównywaniu elementów do siatki"
 
-#: gtk/gtkcombobox.c:591
+#: gtk/gtkcombobox.c:595
 msgid "Row span column"
 msgstr "Kolumna odstępów wierszowych"
 
-#: gtk/gtkcombobox.c:592
+#: gtk/gtkcombobox.c:596
 msgid "TreeModel column containing the row span values"
 msgstr "Kolumna drzewiasta zawierająca wartości odstępów wierszowych"
 
-#: gtk/gtkcombobox.c:613
+#: gtk/gtkcombobox.c:617
 msgid "Column span column"
 msgstr "Kolumna odstępów kolumnowych"
 
-#: gtk/gtkcombobox.c:614
+#: gtk/gtkcombobox.c:618
 msgid "TreeModel column containing the column span values"
 msgstr "Kolumna drzewiasta zawierająca wartości odstępów kolumnowych"
 
-#: gtk/gtkcombobox.c:634
+#: gtk/gtkcombobox.c:638
 msgid "Active item"
 msgstr "Aktywny element"
 
-#: gtk/gtkcombobox.c:635
+#: gtk/gtkcombobox.c:639
 msgid "The item which is currently active"
 msgstr "Aktualnie aktywny element"
 
-#: gtk/gtkcombobox.c:654 gtk/gtkuimanager.c:228
+#: gtk/gtkcombobox.c:658 gtk/gtkuimanager.c:228
 msgid "Add tearoffs to menus"
 msgstr "Dodawanie rozwijanych do menu"
 
-#: gtk/gtkcombobox.c:655
+#: gtk/gtkcombobox.c:659
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Określa, czy rozwijane menu powinny mieć element odłączania"
 
-#: gtk/gtkcombobox.c:670 gtk/gtkentry.c:530
+#: gtk/gtkcombobox.c:674 gtk/gtkentry.c:530
 msgid "Has Frame"
 msgstr "Z ramką"
 
-#: gtk/gtkcombobox.c:671
+#: gtk/gtkcombobox.c:675
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Określa, czy element typu combo box rysuje ramkę wokół potomka"
 
-#: gtk/gtkcombobox.c:679
+#: gtk/gtkcombobox.c:683
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr ""
 "Określa, czy element combo box przechwytuje skupienie po kliknięciu myszą"
 
-#: gtk/gtkcombobox.c:685
+#: gtk/gtkcombobox.c:689
 msgid "Appears as list"
 msgstr "Wygląd listy"
 
-#: gtk/gtkcombobox.c:686
+#: gtk/gtkcombobox.c:690
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "Określa, czy rowijne menu powinno wyglądać jak lista zamiast menu"
 
@@ -1882,19 +1882,19 @@ msgstr "Kolumna tekstowa"
 msgid "The column of the model containing the strings."
 msgstr "Kolumna modelu zawierająca napisy."
 
-#: gtk/gtkentrycompletion.c:313
+#: gtk/gtkentrycompletion.c:315
 msgid "Inline completion"
 msgstr "Uzupełnianie w linii"
 
-#: gtk/gtkentrycompletion.c:314
+#: gtk/gtkentrycompletion.c:316
 msgid "Whether the common prefix should be inserted automatically"
 msgstr "Określa, czy popularne przedrostki powinny być wstawiane automatycznie"
 
-#: gtk/gtkentrycompletion.c:328
+#: gtk/gtkentrycompletion.c:330
 msgid "Popup completion"
 msgstr "Uzupełnianie wyskakujące"
 
-#: gtk/gtkentrycompletion.c:329
+#: gtk/gtkentrycompletion.c:331
 msgid "Whether the completions should be shown in a popup window"
 msgstr "Określa, czy uzupełnienia powinny być wyświetlane w wyskakującym oknie"
 
@@ -2039,7 +2039,7 @@ msgstr "Aplikacja dostarczająca widget obsługujący dodatkowe opcje."
 msgid "Select Multiple"
 msgstr "Zaznaczanie wielu"
 
-#: gtk/gtkfilechooser.c:226 gtk/gtkfilesel.c:576
+#: gtk/gtkfilechooser.c:226 gtk/gtkfilesel.c:577
 msgid "Whether to allow multiple files to be selected"
 msgstr "Określa, czy dopuszczalne jest zaznaczanie wielu plików"
 
@@ -2051,49 +2051,49 @@ msgstr "Wyświetlanie ukrytych"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Określa, czy powinny być wyświetlane ukryte pliki i foldery"
 
-#: gtk/gtkfilechooserbutton.c:336
+#: gtk/gtkfilechooserbutton.c:337
 msgid "Dialog"
 msgstr "Okno dialogowe"
 
-#: gtk/gtkfilechooserbutton.c:337
+#: gtk/gtkfilechooserbutton.c:338
 msgid "The file chooser dialog to use."
 msgstr "Wykorzystywane okno dialogowe wyboru plików."
 
-#: gtk/gtkfilechooserbutton.c:352
+#: gtk/gtkfilechooserbutton.c:353
 msgid "The title of the file chooser dialog."
 msgstr "Tytuł okna dialogowego wyboru plików."
 
-#: gtk/gtkfilechooserbutton.c:366
+#: gtk/gtkfilechooserbutton.c:367
 msgid "The desired width of the button widget, in characters."
 msgstr "Żądana szerokość widgetu przycisku (w znakach)."
 
-#: gtk/gtkfilechooserdefault.c:622
+#: gtk/gtkfilechooserdefault.c:623
 msgid "Default file chooser backend"
 msgstr "Domyślne wsparcie wybierania plików"
 
-#: gtk/gtkfilechooserdefault.c:623
+#: gtk/gtkfilechooserdefault.c:624
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Nazwa domyślnie używanego wsparcia GtkFileChooser"
 
-#: gtk/gtkfilesel.c:560 gtk/gtkimage.c:190
+#: gtk/gtkfilesel.c:561 gtk/gtkimage.c:190
 msgid "Filename"
 msgstr "Nazwa pliku"
 
-#: gtk/gtkfilesel.c:561
+#: gtk/gtkfilesel.c:562
 msgid "The currently selected filename"
 msgstr "Aktualnie wybrana nazwa pliku"
 
-#: gtk/gtkfilesel.c:567
+#: gtk/gtkfilesel.c:568
 msgid "Show file operations"
 msgstr "Wyświetlanie operacji na plikach"
 
-#: gtk/gtkfilesel.c:568
+#: gtk/gtkfilesel.c:569
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr ""
 "Określa, czy powinny być wyświetlane przyciski, pozwalające na wykonywanie "
 "operacji na plikach lub na ich tworzenie"
 
-#: gtk/gtkfilesel.c:575
+#: gtk/gtkfilesel.c:576
 msgid "Select multiple"
 msgstr "Zaznaczanie wielu"
 
@@ -2724,7 +2724,7 @@ msgstr "Opóźnienie pojawienia się menu rozwijanego"
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "Opóźnienie pojawienia się podmenu paska menu"
 
-#: gtk/gtkmenutoolbutton.c:247 gtk/gtkoptionmenu.c:194
+#: gtk/gtkmenutoolbutton.c:247 gtk/gtkoptionmenu.c:195
 msgid "Menu"
 msgstr "Menu"
 
@@ -2791,77 +2791,77 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "Ilość miejsca w pikselach, dodawana powyżej i poniżej widgetu"
 
-#: gtk/gtknotebook.c:401
+#: gtk/gtknotebook.c:404
 msgid "Page"
 msgstr "Strona"
 
-#: gtk/gtknotebook.c:402
+#: gtk/gtknotebook.c:405
 msgid "The index of the current page"
 msgstr "Indeks bieżącej strony"
 
-#: gtk/gtknotebook.c:410
+#: gtk/gtknotebook.c:413
 msgid "Tab Position"
 msgstr "Położenie zakładek"
 
-#: gtk/gtknotebook.c:411
+#: gtk/gtknotebook.c:414
 msgid "Which side of the notebook holds the tabs"
 msgstr "Strona, po której notatnik umieszcza zakładki"
 
-#: gtk/gtknotebook.c:418
+#: gtk/gtknotebook.c:421
 msgid "Tab Border"
 msgstr "Krawędź zakładki"
 
-#: gtk/gtknotebook.c:419
+#: gtk/gtknotebook.c:422
 msgid "Width of the border around the tab labels"
 msgstr "Szerokość krawędzi wokół etykiet zakładek"
 
-#: gtk/gtknotebook.c:427
+#: gtk/gtknotebook.c:430
 msgid "Horizontal Tab Border"
 msgstr "Pozioma krawędź zakładki"
 
-#: gtk/gtknotebook.c:428
+#: gtk/gtknotebook.c:431
 msgid "Width of the horizontal border of tab labels"
 msgstr "Szerokość poziomych krawędzi wokół etykiet zakładek"
 
-#: gtk/gtknotebook.c:436
+#: gtk/gtknotebook.c:439
 msgid "Vertical Tab Border"
 msgstr "Pionowa krawędź zakładki"
 
-#: gtk/gtknotebook.c:437
+#: gtk/gtknotebook.c:440
 msgid "Width of the vertical border of tab labels"
 msgstr "Szerokość pionowych krawędzi wokół etykiet zakładek"
 
-#: gtk/gtknotebook.c:445
+#: gtk/gtknotebook.c:448
 msgid "Show Tabs"
 msgstr "Wyświetlanie zakładek"
 
-#: gtk/gtknotebook.c:446
+#: gtk/gtknotebook.c:449
 msgid "Whether tabs should be shown or not"
 msgstr "Określa, czy przy notatniku powinny być wyświetlane zakładki"
 
-#: gtk/gtknotebook.c:452
+#: gtk/gtknotebook.c:455
 msgid "Show Border"
 msgstr "Wyświetlanie krawędzi"
 
-#: gtk/gtknotebook.c:453
+#: gtk/gtknotebook.c:456
 msgid "Whether the border should be shown or not"
 msgstr "Określa, czy krawędź powinna być widoczna"
 
-#: gtk/gtknotebook.c:459
+#: gtk/gtknotebook.c:462
 msgid "Scrollable"
 msgstr "Przewijalny"
 
-#: gtk/gtknotebook.c:460
+#: gtk/gtknotebook.c:463
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr ""
 "Określa, czy w razie braku miejsca na zakładki powinny być wyświetlane "
 "strzałki przewijania"
 
-#: gtk/gtknotebook.c:466
+#: gtk/gtknotebook.c:469
 msgid "Enable Popup"
 msgstr "Menu podręczne"
 
-#: gtk/gtknotebook.c:467
+#: gtk/gtknotebook.c:470
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -2869,94 +2869,94 @@ msgstr ""
 "Określa, czy kliknięcie notatnika prawym przyciskiem powinno powodować "
 "wyświetlenie menu z wyborem strony."
 
-#: gtk/gtknotebook.c:474
+#: gtk/gtknotebook.c:477
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Określa, czy zakładki powinny być tych samych rozmiarów"
 
-#: gtk/gtknotebook.c:481
+#: gtk/gtknotebook.c:484
 msgid "Tab label"
 msgstr "Etykieta zakładki"
 
-#: gtk/gtknotebook.c:482
+#: gtk/gtknotebook.c:485
 msgid "The string displayed on the child's tab label"
 msgstr "Napis wyświetlany na etykiecie zakładki widgetu potomnego"
 
-#: gtk/gtknotebook.c:488
+#: gtk/gtknotebook.c:491
 msgid "Menu label"
 msgstr "Etykieta menu"
 
-#: gtk/gtknotebook.c:489
+#: gtk/gtknotebook.c:492
 msgid "The string displayed in the child's menu entry"
 msgstr "Napis wyświetlany na pozycji menu widgeta potomnego"
 
-#: gtk/gtknotebook.c:502
+#: gtk/gtknotebook.c:505
 msgid "Tab expand"
 msgstr "Rozwinięcie zakładki"
 
-#: gtk/gtknotebook.c:503
+#: gtk/gtknotebook.c:506
 msgid "Whether to expand the child's tab or not"
 msgstr "Określa, czy zakładka widgetu potomnego powinna być rozwinięta"
 
-#: gtk/gtknotebook.c:509
+#: gtk/gtknotebook.c:512
 msgid "Tab fill"
 msgstr "Wypełnienie zakładki"
 
-#: gtk/gtknotebook.c:510
+#: gtk/gtknotebook.c:513
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr ""
 "Określa, czy zakładka widgeta potomnego powinna wypełnić przydzielony obszar"
 
-#: gtk/gtknotebook.c:516
+#: gtk/gtknotebook.c:519
 msgid "Tab pack type"
 msgstr "Rodzaj zakładek"
 
-#: gtk/gtknotebook.c:532 gtk/gtkscrollbar.c:115
+#: gtk/gtknotebook.c:535 gtk/gtkscrollbar.c:115
 msgid "Secondary backward stepper"
 msgstr "Dodatkowy krok wstecz"
 
-#: gtk/gtknotebook.c:533
+#: gtk/gtknotebook.c:536
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr ""
 "Wyświetla dodatkowy przycisk ze strzałką wstecz po przeciwnej stronie "
 "obszaru zakładki"
 
-#: gtk/gtknotebook.c:549 gtk/gtkscrollbar.c:123
+#: gtk/gtknotebook.c:552 gtk/gtkscrollbar.c:123
 msgid "Secondary forward stepper"
 msgstr "Dodatkowy krok naprzód"
 
-#: gtk/gtknotebook.c:550
+#: gtk/gtknotebook.c:553
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr ""
 "Wyświetla dodatkowy przycisk ze strzałką naprzód po przeciwnej stronie "
 "obszaru zakładek"
 
-#: gtk/gtknotebook.c:565 gtk/gtkscrollbar.c:99
+#: gtk/gtknotebook.c:568 gtk/gtkscrollbar.c:99
 msgid "Backward stepper"
 msgstr "Krok wstecz"
 
-#: gtk/gtknotebook.c:566 gtk/gtkscrollbar.c:100
+#: gtk/gtknotebook.c:569 gtk/gtkscrollbar.c:100
 msgid "Display the standard backward arrow button"
 msgstr "Wyświetla standardowy przycisk ze strzałką wstecz"
 
-#: gtk/gtknotebook.c:581 gtk/gtkscrollbar.c:107
+#: gtk/gtknotebook.c:584 gtk/gtkscrollbar.c:107
 msgid "Forward stepper"
 msgstr "Krok naprzód"
 
-#: gtk/gtknotebook.c:582 gtk/gtkscrollbar.c:108
+#: gtk/gtknotebook.c:585 gtk/gtkscrollbar.c:108
 msgid "Display the standard forward arrow button"
 msgstr "Wyświetla standardowy przycisk ze strzałką naprzód"
 
-#: gtk/gtkoptionmenu.c:195
+#: gtk/gtkoptionmenu.c:196
 msgid "The menu of options"
 msgstr "Menu z opcjami"
 
-#: gtk/gtkoptionmenu.c:202
+#: gtk/gtkoptionmenu.c:203
 msgid "Size of dropdown indicator"
 msgstr "Rozmiar wskaźnika wyświetlającego opcje"
 
-#: gtk/gtkoptionmenu.c:208
+#: gtk/gtkoptionmenu.c:209
 msgid "Spacing around indicator"
 msgstr "Odstępy wokół wskaźnika"
 
@@ -3355,11 +3355,11 @@ msgstr ""
 "Wyświetla dodatkowy przycisk ze strzałką naprzód po przeciwnej stronie paska "
 "przewijania"
 
-#: gtk/gtkscrolledwindow.c:238 gtk/gtktext.c:603 gtk/gtktreeview.c:566
+#: gtk/gtkscrolledwindow.c:238 gtk/gtktext.c:605 gtk/gtktreeview.c:566
 msgid "Horizontal Adjustment"
 msgstr "Dopasowanie poziome"
 
-#: gtk/gtkscrolledwindow.c:245 gtk/gtktext.c:611 gtk/gtktreeview.c:574
+#: gtk/gtkscrolledwindow.c:245 gtk/gtktext.c:613 gtk/gtktreeview.c:574
 msgid "Vertical Adjustment"
 msgstr "Dopasowanie pionowe"
 
@@ -3778,27 +3778,27 @@ msgstr ""
 "Dodatkowa przestrzeń pomiędzy widgetem potomnym a jego górnymi i dolnymi "
 "sąsiadami, w pikselach"
 
-#: gtk/gtktext.c:604
+#: gtk/gtktext.c:606
 msgid "Horizontal adjustment for the text widget"
 msgstr "Poziome dopasowanie widgetu tekstowego"
 
-#: gtk/gtktext.c:612
+#: gtk/gtktext.c:614
 msgid "Vertical adjustment for the text widget"
 msgstr "Pionowe dopasowanie widgetu tekstowego"
 
-#: gtk/gtktext.c:619
+#: gtk/gtktext.c:621
 msgid "Line Wrap"
 msgstr "Zawijanie wierszy"
 
-#: gtk/gtktext.c:620
+#: gtk/gtktext.c:622
 msgid "Whether lines are wrapped at widget edges"
 msgstr "Określa, czy przy granicy widgetu wiersze powinny być zawijane."
 
-#: gtk/gtktext.c:627
+#: gtk/gtktext.c:629
 msgid "Word Wrap"
 msgstr "Zawijanie słów"
 
-#: gtk/gtktext.c:628
+#: gtk/gtktext.c:630
 msgid "Whether words are wrapped at widget edges"
 msgstr "Określa, czy przy granicy widgetu słowa powinny być zawijane."
 

@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-03-01 11:34-0500\n"
+"POT-Creation-Date: 2005-04-09 00:39-0400\n"
 "PO-Revision-Date: 2004-04-09 17:26+0300\n"
 "Last-Translator: Baris Cicek <baris@teamforce.name.tr>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
@@ -97,11 +97,11 @@ msgid "A pointer to the pixel data of the pixbuf"
 msgstr "pixbuf'un benek verisi için belirteç"
 
 # gtk/gtkbutton.c:239
-#: gdk/gdkdisplaymanager.c:127
+#: gdk/gdkdisplaymanager.c:129
 msgid "Default Display"
 msgstr "Öntanımlı Görüntü"
 
-#: gdk/gdkdisplaymanager.c:128
+#: gdk/gdkdisplaymanager.c:130
 msgid "The default display for GDK"
 msgstr "GDK için öntanımlı görüntü"
 
@@ -685,7 +685,7 @@ msgid "The amount of space between children"
 msgstr "Altlar arasındaki boşluk miktarı"
 
 # gtk/gtkbox.c:136 gtk/gtknotebook.c:396
-#: gtk/gtkbox.c:140 gtk/gtknotebook.c:473 gtk/gtktoolbar.c:541
+#: gtk/gtkbox.c:140 gtk/gtknotebook.c:476 gtk/gtktoolbar.c:541
 msgid "Homogeneous"
 msgstr "Eşdağılım"
 
@@ -730,7 +730,7 @@ msgstr "Altların, diğerleri ile arasında olacak boşluk, benek değerinde"
 msgid "Pack type"
 msgstr "Paket türü"
 
-#: gtk/gtkbox.c:170 gtk/gtknotebook.c:517
+#: gtk/gtkbox.c:170 gtk/gtknotebook.c:520
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -738,13 +738,13 @@ msgstr ""
 "Eğer alt, üstün sonuna veya başına yönlendirilmişse GtkPackTypebelirtmesi"
 
 # gtk/gtkpaned.c:116 gtk/gtkruler.c:138
-#: gtk/gtkbox.c:176 gtk/gtknotebook.c:495 gtk/gtkpaned.c:240
+#: gtk/gtkbox.c:176 gtk/gtknotebook.c:498 gtk/gtkpaned.c:240
 #: gtk/gtkruler.c:140
 msgid "Position"
 msgstr "Konum"
 
 # gtk/gtknotebook.c:325
-#: gtk/gtkbox.c:177 gtk/gtknotebook.c:496
+#: gtk/gtkbox.c:177 gtk/gtknotebook.c:499
 msgid "The index of the child in the parent"
 msgstr "Üstteki altların indeksi"
 
@@ -782,7 +782,7 @@ msgstr ""
 "Eğer seçiliyse, etiket gösterilen yerine bir depo öğesini seçmekte "
 "kullanılacak"
 
-#: gtk/gtkbutton.c:244 gtk/gtkcombobox.c:678
+#: gtk/gtkbutton.c:244 gtk/gtkcombobox.c:682
 msgid "Focus on click"
 msgstr "Tıklama ile odaklama"
 
@@ -1095,11 +1095,11 @@ msgstr "Kip"
 msgid "The model containing the possible values for the combo box"
 msgstr "Çoklu kutucuğun modeli"
 
-#: gtk/gtkcellrenderercombo.c:109 gtk/gtkcomboboxentry.c:114
+#: gtk/gtkcellrenderercombo.c:109 gtk/gtkcomboboxentry.c:121
 msgid "Text Column"
 msgstr "Metin Sütunu"
 
-#: gtk/gtkcellrenderercombo.c:110 gtk/gtkcomboboxentry.c:115
+#: gtk/gtkcellrenderercombo.c:110 gtk/gtkcomboboxentry.c:122
 msgid "A column in the data source model to get the strings from"
 msgstr "Veri kaynak modelinde dizgelerin alınacağı sütun"
 
@@ -1409,7 +1409,7 @@ msgid ""
 msgstr ""
 
 # gtk/gtkentry.c:435
-#: gtk/gtkcellrenderertext.c:434 gtk/gtkfilechooserbutton.c:365
+#: gtk/gtkcellrenderertext.c:434 gtk/gtkfilechooserbutton.c:366
 #: gtk/gtklabel.c:453
 #, fuzzy
 msgid "Width In Characters"
@@ -1612,7 +1612,7 @@ msgid "Draw the toggle button as a radio button"
 msgstr "Seçim düğmesini radyo düğmesi olarak çiz"
 
 # gtk/gtkcheckbutton.c:95 gtk/gtkoptionmenu.c:157
-#: gtk/gtkcheckbutton.c:100 gtk/gtkcheckmenuitem.c:141 gtk/gtkoptionmenu.c:201
+#: gtk/gtkcheckbutton.c:100 gtk/gtkcheckmenuitem.c:141 gtk/gtkoptionmenu.c:202
 msgid "Indicator Size"
 msgstr "Belirteç Boyutu"
 
@@ -1622,7 +1622,7 @@ msgid "Size of check or radio indicator"
 msgstr "Onay ya da radyo düğmesi belirtecinin boyutu"
 
 # gtk/gtkcheckbutton.c:103 gtk/gtkoptionmenu.c:163
-#: gtk/gtkcheckbutton.c:108 gtk/gtkexpander.c:256 gtk/gtkoptionmenu.c:207
+#: gtk/gtkcheckbutton.c:108 gtk/gtkexpander.c:256 gtk/gtkoptionmenu.c:208
 msgid "Indicator Spacing"
 msgstr "Belirteç Aralığı"
 
@@ -1670,7 +1670,7 @@ msgid "Whether or not to give the color an alpha value"
 msgstr "Renge alfa değerinin verilmesi"
 
 # gtk/gtktreeviewcolumn.c:218
-#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:351
+#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:352
 #: gtk/gtkfontbutton.c:176 gtk/gtktreeviewcolumn.c:298
 msgid "Title"
 msgstr "Başlık"
@@ -1785,84 +1785,84 @@ msgstr "Listedeki değer"
 msgid "Whether entered values must already be present in the list"
 msgstr "Girilen değerlerin listede zaten bulunma zorunluluğu"
 
-#: gtk/gtkcombobox.c:551
+#: gtk/gtkcombobox.c:555
 msgid "ComboBox model"
 msgstr "ComboBox modeli"
 
 # gtk/gtktreeview.c:458
-#: gtk/gtkcombobox.c:552
+#: gtk/gtkcombobox.c:556
 msgid "The model for the combo box"
 msgstr "Çoklu kutucuğun modeli"
 
 # gtk/gtklayout.c:435 gtk/gtktreeviewcolumn.c:188 gtk/gtkwidget.c:424
-#: gtk/gtkcombobox.c:568
+#: gtk/gtkcombobox.c:572
 msgid "Wrap width"
 msgstr "Satır bölme genişliği"
 
-#: gtk/gtkcombobox.c:569
+#: gtk/gtkcombobox.c:573
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Izagara içindeki öğelerin düzeni için satır bölme genişliği"
 
 # gtk/gtktable.c:174
-#: gtk/gtkcombobox.c:591
+#: gtk/gtkcombobox.c:595
 msgid "Row span column"
 msgstr "Satır atlama sütunu"
 
-#: gtk/gtkcombobox.c:592
+#: gtk/gtkcombobox.c:596
 msgid "TreeModel column containing the row span values"
 msgstr "Satır atlama sütunu değerlerini içeren TreeModel sütunu"
 
 # gtk/gtktable.c:183
-#: gtk/gtkcombobox.c:613
+#: gtk/gtkcombobox.c:617
 msgid "Column span column"
 msgstr "Sütun atlama sütunu"
 
-#: gtk/gtkcombobox.c:614
+#: gtk/gtkcombobox.c:618
 msgid "TreeModel column containing the column span values"
 msgstr "Sütun atlama sütunu değerlerini içeren TreeModel sütunu"
 
 # gtk/gtkcheckmenuitem.c:114 gtk/gtktogglebutton.c:144
-#: gtk/gtkcombobox.c:634
+#: gtk/gtkcombobox.c:638
 msgid "Active item"
 msgstr "Etkin öğe"
 
 # gtk/gtkfontsel.c:193
-#: gtk/gtkcombobox.c:635
+#: gtk/gtkcombobox.c:639
 msgid "The item which is currently active"
 msgstr "Şu an etkin olan öğe"
 
-#: gtk/gtkcombobox.c:654 gtk/gtkuimanager.c:228
+#: gtk/gtkcombobox.c:658 gtk/gtkuimanager.c:228
 msgid "Add tearoffs to menus"
 msgstr "Menülere ayraçları ekle"
 
 # gtk/gtknotebook.c:397
-#: gtk/gtkcombobox.c:655
+#: gtk/gtkcombobox.c:659
 #, fuzzy
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Sekmelerin aynı boyutlarda olmaları"
 
 # gtk/gtkcolorsel.c:1675
-#: gtk/gtkcombobox.c:670 gtk/gtkentry.c:530
+#: gtk/gtkcombobox.c:674 gtk/gtkentry.c:530
 msgid "Has Frame"
 msgstr "Çerçeveye Sahip"
 
 # gtk/gtkcellrenderertext.c:212 gtk/gtktexttag.c:277 gtk/gtktextview.c:553
-#: gtk/gtkcombobox.c:671
+#: gtk/gtkcombobox.c:675
 #, fuzzy
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Sütunun başlıklar etrafında sıralanabilirliği"
 
 # gtk/gtklabel.c:252
-#: gtk/gtkcombobox.c:679
+#: gtk/gtkcombobox.c:683
 #, fuzzy
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Düğmenin fare ile tıklandığında odağı yakalaması"
 
-#: gtk/gtkcombobox.c:685
+#: gtk/gtkcombobox.c:689
 msgid "Appears as list"
 msgstr "Liste olarak görünür"
 
-#: gtk/gtkcombobox.c:686
+#: gtk/gtkcombobox.c:690
 #, fuzzy
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "Çoklu kutu açılır listelerin menü yerine liste gibi görüntülenmesi"
@@ -2142,22 +2142,22 @@ msgstr "Metin Sütunu"
 msgid "The column of the model containing the strings."
 msgstr "Veri kaynak modelinde dizgelerin alınacağı sütun"
 
-#: gtk/gtkentrycompletion.c:313
+#: gtk/gtkentrycompletion.c:315
 msgid "Inline completion"
 msgstr ""
 
 # gtk/gtknotebook.c:376
-#: gtk/gtkentrycompletion.c:314
+#: gtk/gtkentrycompletion.c:316
 #, fuzzy
 msgid "Whether the common prefix should be inserted automatically"
 msgstr "Kenarlıkların gösterilmesi"
 
-#: gtk/gtkentrycompletion.c:328
+#: gtk/gtkentrycompletion.c:330
 msgid "Popup completion"
 msgstr ""
 
 # gtk/gtknotebook.c:376
-#: gtk/gtkentrycompletion.c:329
+#: gtk/gtkentrycompletion.c:331
 #, fuzzy
 msgid "Whether the completions should be shown in a popup window"
 msgstr "Kenarlıkların gösterilmesi"
@@ -2319,7 +2319,7 @@ msgstr "Ek özellikler için uygulama tarafından sağlanan parçacık."
 msgid "Select Multiple"
 msgstr "Çoklu Seç"
 
-#: gtk/gtkfilechooser.c:226 gtk/gtkfilesel.c:576
+#: gtk/gtkfilechooser.c:226 gtk/gtkfilesel.c:577
 msgid "Whether to allow multiple files to be selected"
 msgstr "Çoklu dosya seçimine izin verilmesi"
 
@@ -2333,54 +2333,54 @@ msgstr "Gizlileri Göster"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Gizli dosya ve klasörlerin gösterilmesi"
 
-#: gtk/gtkfilechooserbutton.c:336
+#: gtk/gtkfilechooserbutton.c:337
 msgid "Dialog"
 msgstr ""
 
-#: gtk/gtkfilechooserbutton.c:337
+#: gtk/gtkfilechooserbutton.c:338
 msgid "The file chooser dialog to use."
 msgstr ""
 
 # gtk/gtkwindow.c:333
-#: gtk/gtkfilechooserbutton.c:352
+#: gtk/gtkfilechooserbutton.c:353
 #, fuzzy
 msgid "The title of the file chooser dialog."
 msgstr "Yazıtipi seçim penceresinin başlığı"
 
-#: gtk/gtkfilechooserbutton.c:366
+#: gtk/gtkfilechooserbutton.c:367
 msgid "The desired width of the button widget, in characters."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:622
+#: gtk/gtkfilechooserdefault.c:623
 msgid "Default file chooser backend"
 msgstr "Öntanımlı dosya seçici temeli"
 
-#: gtk/gtkfilechooserdefault.c:623
+#: gtk/gtkfilechooserdefault.c:624
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Öntanımlı olarak kullanılacak GtkFileChooser temelinin adı"
 
 # gtk/gtkfilesel.c:502
-#: gtk/gtkfilesel.c:560 gtk/gtkimage.c:190
+#: gtk/gtkfilesel.c:561 gtk/gtkimage.c:190
 msgid "Filename"
 msgstr "Dosya adı"
 
 # gtk/gtkfilesel.c:503
-#: gtk/gtkfilesel.c:561
+#: gtk/gtkfilesel.c:562
 msgid "The currently selected filename"
 msgstr "Seçilmiş dosya adı"
 
 # gtk/gtkfilesel.c:509
-#: gtk/gtkfilesel.c:567
+#: gtk/gtkfilesel.c:568
 msgid "Show file operations"
 msgstr "Dosya işlemlerini göster"
 
 # gtk/gtkfilesel.c:510
-#: gtk/gtkfilesel.c:568
+#: gtk/gtkfilesel.c:569
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr "Dosyaları oluşturmak/değiştirmek için düğmelerin gösterilmesi"
 
 # gtk/gtklabel.c:251
-#: gtk/gtkfilesel.c:575
+#: gtk/gtkfilesel.c:576
 msgid "Select multiple"
 msgstr "Çoklu seç"
 
@@ -3114,7 +3114,7 @@ msgstr "Açılır menüler belirmeden önceki bekleme"
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "Menü cubuğunun altmenüleri belirmeden önceki bekleme"
 
-#: gtk/gtkmenutoolbutton.c:247 gtk/gtkoptionmenu.c:194
+#: gtk/gtkmenutoolbutton.c:247 gtk/gtkoptionmenu.c:195
 msgid "Menu"
 msgstr "Menü"
 
@@ -3192,92 +3192,92 @@ msgid ""
 msgstr "Parçacığın üstüne ve altına eklenecek alanın benek cinsinden değeri"
 
 # gtk/gtknotebook.c:324
-#: gtk/gtknotebook.c:401
+#: gtk/gtknotebook.c:404
 msgid "Page"
 msgstr "Sayfa"
 
 # gtk/gtknotebook.c:325
-#: gtk/gtknotebook.c:402
+#: gtk/gtknotebook.c:405
 msgid "The index of the current page"
 msgstr "Mevcut sayfanın indeksi"
 
 # gtk/gtknotebook.c:333
-#: gtk/gtknotebook.c:410
+#: gtk/gtknotebook.c:413
 msgid "Tab Position"
 msgstr "Sekme Konumu"
 
 # gtk/gtknotebook.c:334
-#: gtk/gtknotebook.c:411
+#: gtk/gtknotebook.c:414
 msgid "Which side of the notebook holds the tabs"
 msgstr "Defterin hangi tarafının sekmeleri tutacağı"
 
 # gtk/gtknotebook.c:341
-#: gtk/gtknotebook.c:418
+#: gtk/gtknotebook.c:421
 msgid "Tab Border"
 msgstr "Sekme Kenarlığı"
 
 # gtk/gtknotebook.c:342
-#: gtk/gtknotebook.c:419
+#: gtk/gtknotebook.c:422
 msgid "Width of the border around the tab labels"
 msgstr "Sekme etiketlerinin çevresindeki kenarlığın genişliği"
 
 # gtk/gtknotebook.c:350
-#: gtk/gtknotebook.c:427
+#: gtk/gtknotebook.c:430
 msgid "Horizontal Tab Border"
 msgstr "Yatay Sekme Kenarlığı"
 
 # gtk/gtknotebook.c:351
-#: gtk/gtknotebook.c:428
+#: gtk/gtknotebook.c:431
 msgid "Width of the horizontal border of tab labels"
 msgstr "Sekme etiketlerinin yatay kenarlıklarının genişliği"
 
 # gtk/gtknotebook.c:359
-#: gtk/gtknotebook.c:436
+#: gtk/gtknotebook.c:439
 msgid "Vertical Tab Border"
 msgstr "Düşey Sekme Kenarlığı"
 
 # gtk/gtknotebook.c:360
-#: gtk/gtknotebook.c:437
+#: gtk/gtknotebook.c:440
 msgid "Width of the vertical border of tab labels"
 msgstr "Sekme etiketlerinin düşey kenarlıklarının genişliği"
 
 # gtk/gtknotebook.c:368
-#: gtk/gtknotebook.c:445
+#: gtk/gtknotebook.c:448
 msgid "Show Tabs"
 msgstr "Sekmeleri Göster"
 
 # gtk/gtknotebook.c:369
-#: gtk/gtknotebook.c:446
+#: gtk/gtknotebook.c:449
 msgid "Whether tabs should be shown or not"
 msgstr "Sekmelerin gösterilmesi"
 
 # gtk/gtknotebook.c:375
-#: gtk/gtknotebook.c:452
+#: gtk/gtknotebook.c:455
 msgid "Show Border"
 msgstr "Kenarlık Göster"
 
 # gtk/gtknotebook.c:376
-#: gtk/gtknotebook.c:453
+#: gtk/gtknotebook.c:456
 msgid "Whether the border should be shown or not"
 msgstr "Kenarlıkların gösterilmesi"
 
 # gtk/gtknotebook.c:382
-#: gtk/gtknotebook.c:459
+#: gtk/gtknotebook.c:462
 msgid "Scrollable"
 msgstr "Kaydırılabilir"
 
 # gtk/gtknotebook.c:383
-#: gtk/gtknotebook.c:460
+#: gtk/gtknotebook.c:463
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr "Eğer seçiliyse, sekmeler kenara sığmadığında kaydırma okları eklenir"
 
 # gtk/gtknotebook.c:389
-#: gtk/gtknotebook.c:466
+#: gtk/gtknotebook.c:469
 msgid "Enable Popup"
 msgstr "Fare Menüsü Etkin"
 
 # gtk/gtknotebook.c:390
-#: gtk/gtknotebook.c:467
+#: gtk/gtknotebook.c:470
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -3286,106 +3286,106 @@ msgstr ""
 "seçerek ilgili sekmeye gidilebilir"
 
 # gtk/gtknotebook.c:397
-#: gtk/gtknotebook.c:474
+#: gtk/gtknotebook.c:477
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Sekmelerin aynı boyutlarda olmaları"
 
-#: gtk/gtknotebook.c:481
+#: gtk/gtknotebook.c:484
 msgid "Tab label"
 msgstr "Sekme etiketi"
 
-#: gtk/gtknotebook.c:482
+#: gtk/gtknotebook.c:485
 #, fuzzy
 msgid "The string displayed on the child's tab label"
 msgstr "Altların sekme etiketinde gösterilecek dizge"
 
-#: gtk/gtknotebook.c:488
+#: gtk/gtknotebook.c:491
 msgid "Menu label"
 msgstr "Menü etiketi"
 
-#: gtk/gtknotebook.c:489
+#: gtk/gtknotebook.c:492
 #, fuzzy
 msgid "The string displayed in the child's menu entry"
 msgstr "Altların menü girdisinde gösterilecek dizge"
 
 # gtk/gtkcellrenderer.c:146
-#: gtk/gtknotebook.c:502
+#: gtk/gtknotebook.c:505
 msgid "Tab expand"
 msgstr "Sekme genişlemesi"
 
 # gtk/gtknotebook.c:376
-#: gtk/gtknotebook.c:503
+#: gtk/gtknotebook.c:506
 #, fuzzy
 msgid "Whether to expand the child's tab or not"
 msgstr "Altların sekmelerinin genişletilmesi"
 
-#: gtk/gtknotebook.c:509
+#: gtk/gtknotebook.c:512
 msgid "Tab fill"
 msgstr "Sekme doldurması"
 
 # gtk/gtkbox.c:137
-#: gtk/gtknotebook.c:510
+#: gtk/gtknotebook.c:513
 #, fuzzy
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr "Alt sekmeleri tahsis edilen alanı doldurması"
 
-#: gtk/gtknotebook.c:516
+#: gtk/gtknotebook.c:519
 msgid "Tab pack type"
 msgstr "Sekme paket türü"
 
 # gtk/gtkscrollbar.c:109
-#: gtk/gtknotebook.c:532 gtk/gtkscrollbar.c:115
+#: gtk/gtknotebook.c:535 gtk/gtkscrollbar.c:115
 msgid "Secondary backward stepper"
 msgstr "İkincil geriye adımlayıcı"
 
 # gtk/gtkscrollbar.c:110
-#: gtk/gtknotebook.c:533
+#: gtk/gtknotebook.c:536
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr "Sekme alanının karşı ucunda ikincil geriye doğru ok düğmesi göster"
 
 # gtk/gtkscrollbar.c:117
-#: gtk/gtknotebook.c:549 gtk/gtkscrollbar.c:123
+#: gtk/gtknotebook.c:552 gtk/gtkscrollbar.c:123
 msgid "Secondary forward stepper"
 msgstr "İkincil ileri adımlayıcı"
 
 # gtk/gtkscrollbar.c:118
-#: gtk/gtknotebook.c:550
+#: gtk/gtknotebook.c:553
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr "Sekme alanının karşı ucunda ikincil ileriye doğru ok düğmesi göster"
 
 # gtk/gtkscrollbar.c:93
-#: gtk/gtknotebook.c:565 gtk/gtkscrollbar.c:99
+#: gtk/gtknotebook.c:568 gtk/gtkscrollbar.c:99
 msgid "Backward stepper"
 msgstr "Geriye adımlayıcı"
 
 # gtk/gtkscrollbar.c:94
-#: gtk/gtknotebook.c:566 gtk/gtkscrollbar.c:100
+#: gtk/gtknotebook.c:569 gtk/gtkscrollbar.c:100
 msgid "Display the standard backward arrow button"
 msgstr "Standart geri oku düğmesini göster"
 
 # gtk/gtkscrollbar.c:101
-#: gtk/gtknotebook.c:581 gtk/gtkscrollbar.c:107
+#: gtk/gtknotebook.c:584 gtk/gtkscrollbar.c:107
 msgid "Forward stepper"
 msgstr "İleriye adımlayıcı"
 
 # gtk/gtkscrollbar.c:102
-#: gtk/gtknotebook.c:582 gtk/gtkscrollbar.c:108
+#: gtk/gtknotebook.c:585 gtk/gtkscrollbar.c:108
 msgid "Display the standard forward arrow button"
 msgstr "Standart ileri ok düğmesini göster"
 
-#: gtk/gtkoptionmenu.c:195
+#: gtk/gtkoptionmenu.c:196
 msgid "The menu of options"
 msgstr "Seçenekler menüsü"
 
 # gtk/gtkoptionmenu.c:158
-#: gtk/gtkoptionmenu.c:202
+#: gtk/gtkoptionmenu.c:203
 msgid "Size of dropdown indicator"
 msgstr "Açılır menü belirtecinin boyutu"
 
 # gtk/gtkoptionmenu.c:164
-#: gtk/gtkoptionmenu.c:208
+#: gtk/gtkoptionmenu.c:209
 msgid "Spacing around indicator"
 msgstr "Belirteç etrafındaki alan"
 
@@ -3831,12 +3831,12 @@ msgstr ""
 "Kaydırma çubuğunun ucundaki geri düğmesinin yanında ileri düğmesi göster"
 
 # gtk/gtktext.c:594 gtk/gtktreeview.c:465
-#: gtk/gtkscrolledwindow.c:238 gtk/gtktext.c:603 gtk/gtktreeview.c:566
+#: gtk/gtkscrolledwindow.c:238 gtk/gtktext.c:605 gtk/gtktreeview.c:566
 msgid "Horizontal Adjustment"
 msgstr "Yatay Hizalama"
 
 # gtk/gtktext.c:602 gtk/gtktreeview.c:473
-#: gtk/gtkscrolledwindow.c:245 gtk/gtktext.c:611 gtk/gtktreeview.c:574
+#: gtk/gtkscrolledwindow.c:245 gtk/gtktext.c:613 gtk/gtktreeview.c:574
 msgid "Vertical Adjustment"
 msgstr "Düşey Hizalama"
 
@@ -4313,32 +4313,32 @@ msgstr ""
 "cinsinden değeri"
 
 # gtk/gtktext.c:595
-#: gtk/gtktext.c:604
+#: gtk/gtktext.c:606
 msgid "Horizontal adjustment for the text widget"
 msgstr "Metin parçacığı için yatay hizalama"
 
 # gtk/gtktext.c:603
-#: gtk/gtktext.c:612
+#: gtk/gtktext.c:614
 msgid "Vertical adjustment for the text widget"
 msgstr "Metin parçacığı için düşey hizalama"
 
 # gtk/gtktext.c:610
-#: gtk/gtktext.c:619
+#: gtk/gtktext.c:621
 msgid "Line Wrap"
 msgstr "Satırı Böl"
 
 # gtk/gtktext.c:611
-#: gtk/gtktext.c:620
+#: gtk/gtktext.c:622
 msgid "Whether lines are wrapped at widget edges"
 msgstr "Parçacık kenarlarında metinin alt satıra bölünmesi"
 
 # gtk/gtktext.c:618
-#: gtk/gtktext.c:627
+#: gtk/gtktext.c:629
 msgid "Word Wrap"
 msgstr "Sözcük Böl"
 
 # gtk/gtktext.c:619
-#: gtk/gtktext.c:628
+#: gtk/gtktext.c:630
 msgid "Whether words are wrapped at widget edges"
 msgstr "Parçacık kenarında sözcüğün alt satırda devam etmesi"
 

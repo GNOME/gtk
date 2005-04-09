@@ -16,9 +16,6 @@ the progress of a long running operation.
 
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkProgress ##### -->
 <para>
 The #GtkProgress-struct struct contains private data only.

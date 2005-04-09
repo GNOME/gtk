@@ -99,9 +99,6 @@ on all platforms supported by GTK+.
 </variablelist>
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkSocket ##### -->
 <para>
 The #GtkSocket structure contains the <structfield>plug_window</structfield>

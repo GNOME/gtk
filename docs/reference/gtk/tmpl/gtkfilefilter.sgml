@@ -32,9 +32,6 @@ to manually use a filter on a file with gtk_file_filter_filter().
 #GtkFileChooser
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkFileFilter ##### -->
 <para>
 The <structname>GtkFileFilter</structname> struct contains

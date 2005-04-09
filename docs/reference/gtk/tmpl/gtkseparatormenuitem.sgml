@@ -16,9 +16,6 @@ make it appear sunken into the interface.
 
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkSeparatorMenuItem ##### -->
 <para>
 The #GtkSeparatorMenuItem-struct struct contains private data only, and

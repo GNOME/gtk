@@ -15,9 +15,6 @@ managed at runtime.
 
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### TYPEDEF GtkType ##### -->
 <para>
 #GtkType is unique integer identifying the type.  The guts of the

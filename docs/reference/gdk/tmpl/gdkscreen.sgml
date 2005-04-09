@@ -22,9 +22,6 @@ form a large screen area.
 
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GdkScreen ##### -->
 <para>
 This is a currently just a placeholder typedef for the first argument of 

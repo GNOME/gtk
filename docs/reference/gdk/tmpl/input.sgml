@@ -31,9 +31,6 @@ callbacks.</para></listitem>
 </variablelist>
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### FUNCTION gdk_input_add_full ##### -->
 <para>
 Establish a callback when a condition becomes true on

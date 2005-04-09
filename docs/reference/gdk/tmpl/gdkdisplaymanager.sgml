@@ -16,9 +16,6 @@ changes.
 
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GdkDisplayManager ##### -->
 <para>
 The <structname>GdkDisplayManager</structname> struct has no interesting 

@@ -17,9 +17,6 @@ Utility and miscellaneous convenience functions.
     #GdkPixbuf
   </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### FUNCTION gdk_pixbuf_add_alpha ##### -->
 <para>
 

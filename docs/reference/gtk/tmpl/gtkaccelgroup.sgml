@@ -31,9 +31,6 @@ gtk_window_add_accel_group(), gtk_accel_map_change_entry(),
 gtk_item_factory_new(), gtk_label_new_with_mnemonic()
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkAccelGroup ##### -->
 <para>
 An object representing and maintaining a group of accelerators.

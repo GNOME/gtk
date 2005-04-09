@@ -16,9 +16,6 @@ you're linking against.
 
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### VARIABLE gdk_pixbuf_version ##### -->
 <para>
 Contains the full version of the &gdk-pixbuf; library as a string.

@@ -14,9 +14,6 @@ X backend-specific functions
 
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### MACRO GDK_ROOT_WINDOW ##### -->
 <para>
 Obtains the Xlib window id of the root window of the current screen. 

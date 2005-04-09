@@ -16,9 +16,6 @@ to sort the model.
 #GtkTreeModel, #GtkTreeView
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkTreeSortable ##### -->
 <para>
 

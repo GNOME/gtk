@@ -28,9 +28,6 @@ after changing the value and its bounds. This results in the emission of the
 
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkAdjustment ##### -->
 <para>
 The #GtkAdjustment-struct struct contains the following fields.

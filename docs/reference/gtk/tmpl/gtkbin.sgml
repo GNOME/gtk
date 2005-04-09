@@ -20,9 +20,6 @@ Many GTK+ widgets are subclasses of #GtkBin, including #GtkWindow, #GtkButton,
 
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkBin ##### -->
 <para>
 The #GtkBin-struct struct contains the following fields.

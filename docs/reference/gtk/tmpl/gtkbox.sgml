@@ -100,9 +100,6 @@ layouts.</para></listitem>
 
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkBox ##### -->
 <para>
 The #GtkBox-struct describes an instance of GtkBox and contains the following fields.

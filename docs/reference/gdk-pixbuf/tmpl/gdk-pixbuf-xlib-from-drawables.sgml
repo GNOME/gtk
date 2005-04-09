@@ -23,9 +23,6 @@ Getting parts of an X drawable's image data into a pixbuf.
 
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### FUNCTION gdk_pixbuf_xlib_get_from_drawable ##### -->
 <para>
 

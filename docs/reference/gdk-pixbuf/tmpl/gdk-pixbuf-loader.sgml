@@ -69,9 +69,6 @@ Application-driven progressive image loading.
     gdk_pixbuf_new_from_file(), gdk_pixbuf_animation_new_from_file()
   </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GdkPixbufLoader ##### -->
 <para>
 The <structname>GdkPixbufLoader</structname> struct contains only private

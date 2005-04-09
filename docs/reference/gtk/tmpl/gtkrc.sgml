@@ -585,9 +585,6 @@ same as for styles.
 
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkRcStyle ##### -->
 <para>
 The #GtkRcStyle structure is used to represent a set

@@ -117,9 +117,6 @@ selection_changed (GtkTreeSelection *selection, gpointer data)
 #GtkTreeModel, #GtkListStore, #GtkTreeStore, #GtkTreeSortable, #GtkTreeModelFilter
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkTreeModelSort ##### -->
 <para>
 This should not be accessed directly.  Use the accessor functions below.

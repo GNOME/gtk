@@ -20,9 +20,6 @@ Initializing the &gdk-pixbuf; Xlib library.
     XlibRGB
   </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### FUNCTION gdk_pixbuf_xlib_init ##### -->
 <para>
 

@@ -14,9 +14,6 @@ Base class for input method contexts
 
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkIMContext ##### -->
 <para>
 

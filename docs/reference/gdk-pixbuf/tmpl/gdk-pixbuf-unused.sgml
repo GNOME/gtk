@@ -567,6 +567,10 @@ End:
   </para>
 
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+
 <!-- ##### FUNCTION gdk_pixbuf_new_from_stream ##### -->
 <para>
 

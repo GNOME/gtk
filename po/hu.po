@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-04-03 04:53+0200\n"
+"POT-Creation-Date: 2005-04-09 00:38-0400\n"
 "PO-Revision-Date: 2005-04-03 14:58+0200\n"
 "Last-Translator: Gabor Kelemen <kelemeng@gnome.hu>\n"
 "Language-Team: Hungarian <gnome@gnome.hu>\n"
@@ -34,8 +34,10 @@ msgstr "A(z) '%s' képfájl nem tartalmaz adatokat"
 #: gdk-pixbuf/gdk-pixbuf-animation.c:208 gdk-pixbuf/gdk-pixbuf-io.c:887
 #: gdk-pixbuf/gdk-pixbuf-io.c:1109 tests/testfilechooser.c:244
 #, c-format
-msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr "Nem sikerült betölteni a(z) '%s' képet: ok ismeretlen, talán sérült a képfájl"
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr ""
+"Nem sikerült betölteni a(z) '%s' képet: ok ismeretlen, talán sérült a képfájl"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:241
 #, c-format
@@ -196,15 +198,15 @@ msgstr "A BMP-kép fejlécmérete nem támogatott"
 msgid "Topdown BMP images cannot be compressed"
 msgstr "A fentről-lefelé BMP képek nem tömöríthetőek"
 
-#: gdk-pixbuf/io-bmp.c:1198
+#: gdk-pixbuf/io-bmp.c:1214
 msgid "Couldn't allocate memory for saving BMP file"
 msgstr "Nem lehet memóriát foglalni a BMP fájl mentéséhez"
 
-#: gdk-pixbuf/io-bmp.c:1239
+#: gdk-pixbuf/io-bmp.c:1255
 msgid "Couldn't write to BMP file"
 msgstr "Nem sikerült írni a BMP fájlba"
 
-#: gdk-pixbuf/io-bmp.c:1288
+#: gdk-pixbuf/io-bmp.c:1304
 msgid "The BMP image format"
 msgstr "BMP képformátum"
 
@@ -356,7 +358,8 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:909
 #, c-format
-msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "A JPEG-minőség értékének 0 és 100 között kell lennie, a(z) '%d' érték nem "
 "megengedett."
@@ -460,7 +463,8 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "Végzetes hiba a PNG képfájl olvasásakor: %s"
 
 #: gdk-pixbuf/io-png.c:813
-msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid ""
+"Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 "A PNG szöveges darabok kulcsainak legalább 1 és legfeljebb 79 karakterből "
 "kell állniuk."
@@ -841,7 +845,7 @@ msgstr "COLORS"
 msgid "Make X calls synchronous"
 msgstr "Legyenek szinkron X-hívások"
 
-#: gtk/gtkaboutdialog.c:270 gtk/gtkaboutdialog.c:2023
+#: gtk/gtkaboutdialog.c:270 gtk/gtkaboutdialog.c:2025
 msgid "License"
 msgstr "Licenc"
 
@@ -855,32 +859,32 @@ msgid "_Credits"
 msgstr "_Köszönet"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:500
+#: gtk/gtkaboutdialog.c:501
 msgid "_License"
 msgstr "_Licenc"
 
-#: gtk/gtkaboutdialog.c:729
+#: gtk/gtkaboutdialog.c:731
 #, c-format
 msgid "About %s"
 msgstr "%s névjegye"
 
-#: gtk/gtkaboutdialog.c:1951
+#: gtk/gtkaboutdialog.c:1953
 msgid "Credits"
 msgstr "Köszönet"
 
-#: gtk/gtkaboutdialog.c:1977
+#: gtk/gtkaboutdialog.c:1979
 msgid "Written by"
 msgstr "Írta"
 
-#: gtk/gtkaboutdialog.c:1980
+#: gtk/gtkaboutdialog.c:1982
 msgid "Documented by"
 msgstr "Dokumentáció"
 
-#: gtk/gtkaboutdialog.c:1992
+#: gtk/gtkaboutdialog.c:1994
 msgid "Translated by"
 msgstr "Fordította"
 
-#: gtk/gtkaboutdialog.c:1996
+#: gtk/gtkaboutdialog.c:1998
 msgid "Artwork by"
 msgstr "Grafika"
 
@@ -1367,8 +1371,10 @@ msgstr "Fájl át_nevezése"
 
 #: gtk/gtkfilesel.c:1446
 #, c-format
-msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
-msgstr "A(z) \"%s\" mappanév fájlnevekben meg nem engedett szimbólumokat tartalmaz"
+msgid ""
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgstr ""
+"A(z) \"%s\" mappanév fájlnevekben meg nem engedett szimbólumokat tartalmaz"
 
 #: gtk/gtkfilesel.c:1448
 #, c-format
@@ -1403,7 +1409,8 @@ msgstr "Lét_rehozás"
 #: gtk/gtkfilesel.c:1573
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr "A(z) \"%s\" fájlnév fájlnevekben meg nem engedett szimbólumokat tartalmaz"
+msgstr ""
+"A(z) \"%s\" fájlnév fájlnevekben meg nem engedett szimbólumokat tartalmaz"
 
 #: gtk/gtkfilesel.c:1576
 #, c-format
@@ -1435,7 +1442,8 @@ msgstr "Fájl törlése"
 #: gtk/gtkfilesel.c:1681 gtk/gtkfilesel.c:1695
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
-msgstr "A(z) \"%s\" fájlnév fájlnevekben meg nem engedett szimbólumokat tartalmaz"
+msgstr ""
+"A(z) \"%s\" fájlnév fájlnevekben meg nem engedett szimbólumokat tartalmaz"
 
 #: gtk/gtkfilesel.c:1683
 #, c-format
@@ -1612,7 +1620,7 @@ msgstr "_Gamma érték"
 msgid "Error loading icon: %s"
 msgstr "Hiba az ikon betöltésekor: %s"
 
-#: gtk/gtkicontheme.c:1258
+#: gtk/gtkicontheme.c:1259
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1625,7 +1633,7 @@ msgstr ""
 "Beszerezhet egy másolatot a következő helyről:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1323
+#: gtk/gtkicontheme.c:1324
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "'%s' ikon nincs a témában"
@@ -1713,7 +1721,7 @@ msgstr "(ismeretlen)"
 msgid "clear"
 msgstr "törlés"
 
-#: gtk/gtklabel.c:3931
+#: gtk/gtklabel.c:3930
 msgid "Select All"
 msgstr "Mindent kijelöl"
 
@@ -1777,12 +1785,12 @@ msgstr "Az a rádiógomb-csoport, amelyhez ez a rádiógomb tartozik."
 msgid "Unable to find include file: \"%s\""
 msgstr "Include-fájl nem található: \"%s\""
 
-#: gtk/gtkrc.c:3039 gtk/gtkrc.c:3042
+#: gtk/gtkrc.c:3042 gtk/gtkrc.c:3045
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "A kép nem található a következő pixmap_path útvonalon: \"%s\""
 
-#: gtk/gtkrc.c:3477
+#: gtk/gtkrc.c:3480
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "A kép útvonalának eleme: \"%s\" abszolút kell legyen, %s, %d. sor"
@@ -2221,4 +2229,3 @@ msgstr "X Input Method"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Nem lehet információt szerezni a(z) '%s' fájlról: %s"
-

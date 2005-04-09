@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gnome 2.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-03-31 20:12-0700\n"
+"POT-Creation-Date: 2005-04-09 00:38-0400\n"
 "PO-Revision-Date: 2005-03-28 18:54-0700\n"
 "Last-Translator: Steve Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <translation-team-rw@lists.sourceforge.net>\n"
@@ -208,17 +208,17 @@ msgstr "Ishusho Umutwempangano Ingano"
 msgid "Topdown BMP images cannot be compressed"
 msgstr "Ishusho Byegeranijwe"
 
-#: gdk-pixbuf/io-bmp.c:1198
+#: gdk-pixbuf/io-bmp.c:1214
 #, fuzzy
 msgid "Couldn't allocate memory for saving BMP file"
 msgstr "Ububiko kugirango Mu kubika IDOSIYE"
 
-#: gdk-pixbuf/io-bmp.c:1239
+#: gdk-pixbuf/io-bmp.c:1255
 #, fuzzy
 msgid "Couldn't write to BMP file"
 msgstr "Kwandika Kuri IDOSIYE"
 
-#: gdk-pixbuf/io-bmp.c:1288
+#: gdk-pixbuf/io-bmp.c:1304
 #, fuzzy
 msgid "The BMP image format"
 msgstr "Ishusho Imiterere"
@@ -972,7 +972,7 @@ msgstr "Amabara"
 msgid "Make X calls synchronous"
 msgstr "Amahamagara:"
 
-#: gtk/gtkaboutdialog.c:270 gtk/gtkaboutdialog.c:2023
+#: gtk/gtkaboutdialog.c:270 gtk/gtkaboutdialog.c:2025
 msgid "License"
 msgstr ""
 
@@ -987,36 +987,36 @@ msgid "_Credits"
 msgstr ""
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:500
+#: gtk/gtkaboutdialog.c:501
 msgid "_License"
 msgstr ""
 
 # offmgr/source\offapp\intro\intro.hrc:TEXT_DEFAULTABOUT.text
-#: gtk/gtkaboutdialog.c:729
+#: gtk/gtkaboutdialog.c:731
 #, fuzzy, c-format
 msgid "About %s"
 msgstr "Ibyerekeye"
 
-#: gtk/gtkaboutdialog.c:1951
+#: gtk/gtkaboutdialog.c:1953
 msgid "Credits"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:1977
+#: gtk/gtkaboutdialog.c:1979
 #, fuzzy
 msgid "Written by"
 msgstr "ku"
 
-#: gtk/gtkaboutdialog.c:1980
+#: gtk/gtkaboutdialog.c:1982
 #, fuzzy
 msgid "Documented by"
 msgstr "ku"
 
-#: gtk/gtkaboutdialog.c:1992
+#: gtk/gtkaboutdialog.c:1994
 #, fuzzy
 msgid "Translated by"
 msgstr "ku"
 
-#: gtk/gtkaboutdialog.c:1996
+#: gtk/gtkaboutdialog.c:1998
 #, fuzzy
 msgid "Artwork by"
 msgstr "ku"
@@ -1071,6 +1071,12 @@ msgstr "Kalindari"
 #, fuzzy
 msgid "calendar:week_start:0"
 msgstr "Kalindari 0"
+
+#. translators, strip the prefix up to and including the first |
+#: gtk/gtkcellrendererprogress.c:236 gtk/gtkcellrendererprogress.c:294
+#, c-format
+msgid "progress bar label|%d %%"
+msgstr ""
 
 #: gtk/gtkcolorbutton.c:220 gtk/gtkcolorbutton.c:574
 #, fuzzy
@@ -1861,7 +1867,7 @@ msgstr "Agaciro"
 msgid "Error loading icon: %s"
 msgstr "Itangira... Agashushondanga"
 
-#: gtk/gtkicontheme.c:1258
+#: gtk/gtkicontheme.c:1259
 #, fuzzy, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1872,7 +1878,7 @@ msgstr ""
 "OYA Gushaka Agashushondanga OYA Byabonetse Kuri Kwinjiza porogaramu Kubona a "
 "Gukoporora Bivuye"
 
-#: gtk/gtkicontheme.c:1323
+#: gtk/gtkicontheme.c:1324
 #, fuzzy, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "OYA in"
@@ -1988,7 +1994,7 @@ msgid "clear"
 msgstr "Gusiba"
 
 # sfx2/sdi\sfxslots.src:SID_SELECTALL.text
-#: gtk/gtklabel.c:3931
+#: gtk/gtklabel.c:3930
 msgid "Select All"
 msgstr "Guhitamo Byose"
 
@@ -2071,12 +2077,12 @@ msgstr "Akabuto bya Itsinda iyi Akabuto Kuri"
 msgid "Unable to find include file: \"%s\""
 msgstr "Kuri Gushaka Gushyiramo IDOSIYE"
 
-#: gtk/gtkrc.c:3039 gtk/gtkrc.c:3042
+#: gtk/gtkrc.c:3042 gtk/gtkrc.c:3045
 #, fuzzy, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kuri Ishusho IDOSIYE in"
 
-#: gtk/gtkrc.c:3477
+#: gtk/gtkrc.c:3480
 #, fuzzy, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Inzira Ikigize: Umurongo"
@@ -2737,4 +2743,3 @@ msgstr ""
 #, fuzzy, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "OYA Kubona Ibisobanuro kugirango IDOSIYE"
-

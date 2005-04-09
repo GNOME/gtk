@@ -5,12 +5,11 @@
 # Mişu Moldovan <dumol@go.ro>, 2003, 2004, 2005.
 # „Lăsaţi orice speranţă voi, cei ce intraţi aici...”
 #
-
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties-2-4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-03-02 20:55+0100\n"
+"POT-Creation-Date: 2005-04-09 00:39-0400\n"
 "PO-Revision-Date: 2005-03-05 16:58+0200\n"
 "Last-Translator: Mişu Moldovan <dumol@go.ro>\n"
 "Language-Team: Română <gnomero-list@lists.sourceforge.net>\n"
@@ -84,11 +83,11 @@ msgstr "Pixeli"
 msgid "A pointer to the pixel data of the pixbuf"
 msgstr "Un pointer către datele pixel din „pixbuf”"
 
-#: gdk/gdkdisplaymanager.c:127
+#: gdk/gdkdisplaymanager.c:129
 msgid "Default Display"
 msgstr "Ecran implicit"
 
-#: gdk/gdkdisplaymanager.c:128
+#: gdk/gdkdisplaymanager.c:130
 msgid "The default display for GDK"
 msgstr "Ecranul implicit pentru GDK"
 
@@ -187,8 +186,7 @@ msgstr "Traducători"
 #: gtk/gtkaboutdialog.c:373
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
-msgstr ""
-"Lista traducătorilor. Acest string trebuie marcat ca traductibil"
+msgstr "Lista traducătorilor. Acest string trebuie marcat ca traductibil"
 
 #: gtk/gtkaboutdialog.c:388
 msgid "Logo"
@@ -619,7 +617,7 @@ msgstr "Spaţiere"
 msgid "The amount of space between children"
 msgstr "Cantitatea de spaţiu între copii"
 
-#: gtk/gtkbox.c:140 gtk/gtknotebook.c:473 gtk/gtktoolbar.c:541
+#: gtk/gtkbox.c:140 gtk/gtknotebook.c:476 gtk/gtktoolbar.c:541
 msgid "Homogeneous"
 msgstr "Omogen"
 
@@ -661,7 +659,7 @@ msgstr "Spaţiu în plus pentru a fi pus între copil şi vecinii săi, în pixe
 msgid "Pack type"
 msgstr "Tip împachetare"
 
-#: gtk/gtkbox.c:170 gtk/gtknotebook.c:517
+#: gtk/gtkbox.c:170 gtk/gtknotebook.c:520
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -669,12 +667,12 @@ msgstr ""
 "Un GtkPackType ce indică dacă un copil este împachetat cu referinţă la "
 "începutul sau sfârşitul părintelui"
 
-#: gtk/gtkbox.c:176 gtk/gtknotebook.c:495 gtk/gtkpaned.c:240
+#: gtk/gtkbox.c:176 gtk/gtknotebook.c:498 gtk/gtkpaned.c:240
 #: gtk/gtkruler.c:140
 msgid "Position"
 msgstr "Poziţie"
 
-#: gtk/gtkbox.c:177 gtk/gtknotebook.c:496
+#: gtk/gtkbox.c:177 gtk/gtknotebook.c:499
 msgid "The index of the child in the parent"
 msgstr "Indexul copilului în părinte"
 
@@ -710,7 +708,7 @@ msgstr ""
 "Dacă e setat, eticheta este utilizată pentru a alege un element standard în "
 "loc să fie afişată"
 
-#: gtk/gtkbutton.c:244 gtk/gtkcombobox.c:678
+#: gtk/gtkbutton.c:244 gtk/gtkcombobox.c:682
 msgid "Focus on click"
 msgstr "Focus la click"
 
@@ -978,11 +976,11 @@ msgstr "Model"
 msgid "The model containing the possible values for the combo box"
 msgstr "Model conţinând valorile posibile prntru acest „combo box”"
 
-#: gtk/gtkcellrenderercombo.c:109 gtk/gtkcomboboxentry.c:114
+#: gtk/gtkcellrenderercombo.c:109 gtk/gtkcomboboxentry.c:121
 msgid "Text Column"
 msgstr "Coloană text"
 
-#: gtk/gtkcellrenderercombo.c:110 gtk/gtkcomboboxentry.c:115
+#: gtk/gtkcellrenderercombo.c:110 gtk/gtkcomboboxentry.c:122
 msgid "A column in the data source model to get the strings from"
 msgstr "O coloană în modelul sursei de date din care se obţin datele"
 
@@ -992,8 +990,8 @@ msgstr "Are intrare"
 
 #: gtk/gtkcellrenderercombo.c:128
 msgid "If FALSE, don't allow to enter strings other than the chosen ones"
-msgstr "Dacă e FALSE, nu permite introducerea altor şiruri decât a celor "
-"precizate"
+msgstr ""
+"Dacă e FALSE, nu permite introducerea altor şiruri decât a celor precizate"
 
 #: gtk/gtkcellrendererpixbuf.c:136
 msgid "Pixbuf Object"
@@ -1239,7 +1237,7 @@ msgstr ""
 "Felul preferat de a prescurta un şir de caractere, dacă nu există destul loc "
 "în celulă pentru a afişa întregul şir, doar parţial"
 
-#: gtk/gtkcellrenderertext.c:434 gtk/gtkfilechooserbutton.c:365
+#: gtk/gtkcellrenderertext.c:434 gtk/gtkfilechooserbutton.c:366
 #: gtk/gtklabel.c:453
 msgid "Width In Characters"
 msgstr "Lăţime în caractere"
@@ -1402,7 +1400,7 @@ msgstr "Stare radio"
 msgid "Draw the toggle button as a radio button"
 msgstr "Desenează butonul de comutare ca un buton radio"
 
-#: gtk/gtkcheckbutton.c:100 gtk/gtkcheckmenuitem.c:141 gtk/gtkoptionmenu.c:201
+#: gtk/gtkcheckbutton.c:100 gtk/gtkcheckmenuitem.c:141 gtk/gtkoptionmenu.c:202
 msgid "Indicator Size"
 msgstr "Mărime indicator"
 
@@ -1410,7 +1408,7 @@ msgstr "Mărime indicator"
 msgid "Size of check or radio indicator"
 msgstr "Mărimea indicatorului radio sau de bifare"
 
-#: gtk/gtkcheckbutton.c:108 gtk/gtkexpander.c:256 gtk/gtkoptionmenu.c:207
+#: gtk/gtkcheckbutton.c:108 gtk/gtkexpander.c:256 gtk/gtkoptionmenu.c:208
 msgid "Indicator Spacing"
 msgstr "Spaţiere indicator"
 
@@ -1450,7 +1448,7 @@ msgstr "Utilizează Alpha"
 msgid "Whether or not to give the color an alpha value"
 msgstr "Dacă se va da culorii o valoare alpha"
 
-#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:351
+#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:352
 #: gtk/gtkfontbutton.c:176 gtk/gtktreeviewcolumn.c:298
 msgid "Title"
 msgstr "Titlu"
@@ -1556,71 +1554,72 @@ msgid "Whether entered values must already be present in the list"
 msgstr ""
 "Specifică dacă valorile introduse trebuie să fie prezente deja în listă"
 
-#: gtk/gtkcombobox.c:551
+#: gtk/gtkcombobox.c:555
 msgid "ComboBox model"
 msgstr "Model ComboBox"
 
-#: gtk/gtkcombobox.c:552
+#: gtk/gtkcombobox.c:556
 msgid "The model for the combo box"
 msgstr "Model pentru ComboBox"
 
-#: gtk/gtkcombobox.c:568
+#: gtk/gtkcombobox.c:572
 msgid "Wrap width"
 msgstr "Lăţime maximă"
 
-#: gtk/gtkcombobox.c:569
+#: gtk/gtkcombobox.c:573
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Lăţime maximă la aranjarea itemilor într-o grilă"
 
-#: gtk/gtkcombobox.c:591
+#: gtk/gtkcombobox.c:595
 msgid "Row span column"
 msgstr "Coloană cu înălţimea rândurilor"
 
-#: gtk/gtkcombobox.c:592
+#: gtk/gtkcombobox.c:596
 msgid "TreeModel column containing the row span values"
 msgstr "Coloană TreeModel ce conţine valorile înâlţimii rândurilor"
 
-#: gtk/gtkcombobox.c:613
+#: gtk/gtkcombobox.c:617
 msgid "Column span column"
 msgstr "Coloană cu lăţimea coloanelor"
 
-#: gtk/gtkcombobox.c:614
+#: gtk/gtkcombobox.c:618
 msgid "TreeModel column containing the column span values"
 msgstr "Coloană TreeModel ce conţine valorile laţimii coloanelor"
 
-#: gtk/gtkcombobox.c:634
+#: gtk/gtkcombobox.c:638
 msgid "Active item"
 msgstr "Item activ"
 
-#: gtk/gtkcombobox.c:635
+#: gtk/gtkcombobox.c:639
 msgid "The item which is currently active"
 msgstr "Itemul activ curent."
 
-#: gtk/gtkcombobox.c:654 gtk/gtkuimanager.c:228
+#: gtk/gtkcombobox.c:658 gtk/gtkuimanager.c:228
 msgid "Add tearoffs to menus"
 msgstr "Face posibilă desprinderea meniurilor"
 
-#: gtk/gtkcombobox.c:655
+#: gtk/gtkcombobox.c:659
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Specifică dacă meniurile „dropdown” ar trebui să aibă „tearoff”"
 
-#: gtk/gtkcombobox.c:670 gtk/gtkentry.c:530
+#: gtk/gtkcombobox.c:674 gtk/gtkentry.c:530
 msgid "Has Frame"
 msgstr "Are cadru"
 
-#: gtk/gtkcombobox.c:671
+#: gtk/gtkcombobox.c:675
 msgid "Whether the combo box draws a frame around the child"
-msgstr "Specifică dacă acest „combo box” desenează un cadru în jurul unui copil"
+msgstr ""
+"Specifică dacă acest „combo box” desenează un cadru în jurul unui copil"
 
-#: gtk/gtkcombobox.c:679
+#: gtk/gtkcombobox.c:683
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Specifică dacă acest „combo box” primeşte focus la un click de mouse"
 
-#: gtk/gtkcombobox.c:685
+#: gtk/gtkcombobox.c:689
 msgid "Appears as list"
 msgstr "Apare ca listă"
 
-#: gtk/gtkcombobox.c:686
+#: gtk/gtkcombobox.c:690
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "Dacă „combobox”-urile tip dropdown să arate ca liste şi nu ca meniuri"
 
@@ -1851,19 +1850,19 @@ msgstr "Coloană text"
 msgid "The column of the model containing the strings."
 msgstr "O coloană a modelului ce conţine şirurile de caractere."
 
-#: gtk/gtkentrycompletion.c:313
+#: gtk/gtkentrycompletion.c:315
 msgid "Inline completion"
 msgstr "Completare „inline”"
 
-#: gtk/gtkentrycompletion.c:314
+#: gtk/gtkentrycompletion.c:316
 msgid "Whether the common prefix should be inserted automatically"
 msgstr "Specifică dacă prefixul comun ar trebui inserat automat"
 
-#: gtk/gtkentrycompletion.c:328
+#: gtk/gtkentrycompletion.c:330
 msgid "Popup completion"
 msgstr "Completare „popup”"
 
-#: gtk/gtkentrycompletion.c:329
+#: gtk/gtkentrycompletion.c:331
 msgid "Whether the completions should be shown in a popup window"
 msgstr "Specifică dacă ar trebui arătate completările într-o fereastră „popup”"
 
@@ -2010,7 +2009,7 @@ msgstr "Widget furnizat de aplicaţie pentru opţiuni în plus."
 msgid "Select Multiple"
 msgstr "Selectare multiplă"
 
-#: gtk/gtkfilechooser.c:226 gtk/gtkfilesel.c:576
+#: gtk/gtkfilechooser.c:226 gtk/gtkfilesel.c:577
 msgid "Whether to allow multiple files to be selected"
 msgstr "Specifică dacă este permisă selectarea mai multor fişiere"
 
@@ -2022,49 +2021,49 @@ msgstr "Arată fişierele ascunse"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Specifică dacă fişierele ascunse ar trebui să fie afişate"
 
-#: gtk/gtkfilechooserbutton.c:336
+#: gtk/gtkfilechooserbutton.c:337
 msgid "Dialog"
 msgstr "Dialog"
 
-#: gtk/gtkfilechooserbutton.c:337
+#: gtk/gtkfilechooserbutton.c:338
 msgid "The file chooser dialog to use."
 msgstr "Dialogul de selectare fişiere de utilizat."
 
-#: gtk/gtkfilechooserbutton.c:352
+#: gtk/gtkfilechooserbutton.c:353
 msgid "The title of the file chooser dialog."
 msgstr "Titlul dialogului de selectare fişiere."
 
-#: gtk/gtkfilechooserbutton.c:366
+#: gtk/gtkfilechooserbutton.c:367
 msgid "The desired width of the button widget, in characters."
 msgstr "Lăţimea dorită a widget-ului buton în caractere."
 
-#: gtk/gtkfilechooserdefault.c:622
+#: gtk/gtkfilechooserdefault.c:623
 msgid "Default file chooser backend"
 msgstr "Suport implicit pentru selectorul de fişiere"
 
-#: gtk/gtkfilechooserdefault.c:623
+#: gtk/gtkfilechooserdefault.c:624
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Numele suportului GtkFileChooser de utilizat implicit"
 
-#: gtk/gtkfilesel.c:560 gtk/gtkimage.c:190
+#: gtk/gtkfilesel.c:561 gtk/gtkimage.c:190
 msgid "Filename"
 msgstr "Nume fişier"
 
-#: gtk/gtkfilesel.c:561
+#: gtk/gtkfilesel.c:562
 msgid "The currently selected filename"
 msgstr "Numele fişierului selectat curent."
 
-#: gtk/gtkfilesel.c:567
+#: gtk/gtkfilesel.c:568
 msgid "Show file operations"
 msgstr "Arată operaţiunile cu fişiere"
 
-#: gtk/gtkfilesel.c:568
+#: gtk/gtkfilesel.c:569
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr ""
 "Specifică dacă butoanele pentru crearea sau manipularea fişierelor ar trebui "
 "să fie afişate"
 
-#: gtk/gtkfilesel.c:575
+#: gtk/gtkfilesel.c:576
 msgid "Select multiple"
 msgstr "Selectare multiplă"
 
@@ -2388,8 +2387,9 @@ msgstr "Mărime iconiţe"
 
 #: gtk/gtkimage.c:216
 msgid "Symbolic size to use for stock icon, icon set or named icon"
-msgstr "Mărimea simbolică a iconiţei standard, a setului standard sau a "
-"iconiţei numite"
+msgstr ""
+"Mărimea simbolică a iconiţei standard, a setului standard sau a iconiţei "
+"numite"
 
 #: gtk/gtkimage.c:232
 msgid "Pixel size"
@@ -2698,7 +2698,7 @@ msgstr "Întârziere la deschiderea unui meniu"
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "Întârzierea la deschiderea submeniurilor barei de meniu"
 
-#: gtk/gtkmenutoolbutton.c:247 gtk/gtkoptionmenu.c:194
+#: gtk/gtkmenutoolbutton.c:247 gtk/gtkoptionmenu.c:195
 msgid "Menu"
 msgstr "Meniu"
 
@@ -2769,77 +2769,77 @@ msgid ""
 msgstr ""
 "Cantitatea de spaţiu de adăugat deasupra şi dedesubtul widget-ului, în pixeli"
 
-#: gtk/gtknotebook.c:401
+#: gtk/gtknotebook.c:404
 msgid "Page"
 msgstr "Pagină"
 
-#: gtk/gtknotebook.c:402
+#: gtk/gtknotebook.c:405
 msgid "The index of the current page"
 msgstr "Indexul paginii curente"
 
-#: gtk/gtknotebook.c:410
+#: gtk/gtknotebook.c:413
 msgid "Tab Position"
 msgstr "Poziţie taburi"
 
-#: gtk/gtknotebook.c:411
+#: gtk/gtknotebook.c:414
 msgid "Which side of the notebook holds the tabs"
 msgstr "În care parte a ferestrelor „notebook” apar taburile"
 
-#: gtk/gtknotebook.c:418
+#: gtk/gtknotebook.c:421
 msgid "Tab Border"
 msgstr "Margine tab"
 
-#: gtk/gtknotebook.c:419
+#: gtk/gtknotebook.c:422
 msgid "Width of the border around the tab labels"
 msgstr "Lăţimea marginii în jurul etichetelor taburilor"
 
-#: gtk/gtknotebook.c:427
+#: gtk/gtknotebook.c:430
 msgid "Horizontal Tab Border"
 msgstr "Margine orizontală tab"
 
-#: gtk/gtknotebook.c:428
+#: gtk/gtknotebook.c:431
 msgid "Width of the horizontal border of tab labels"
 msgstr "Lăţimea marginii orizontale a etichetelor taburilor"
 
-#: gtk/gtknotebook.c:436
+#: gtk/gtknotebook.c:439
 msgid "Vertical Tab Border"
 msgstr "Margine verticală tab"
 
-#: gtk/gtknotebook.c:437
+#: gtk/gtknotebook.c:440
 msgid "Width of the vertical border of tab labels"
 msgstr "Lăţimea marginii verticale a etichetelor tabului"
 
-#: gtk/gtknotebook.c:445
+#: gtk/gtknotebook.c:448
 msgid "Show Tabs"
 msgstr "Arată taburi"
 
-#: gtk/gtknotebook.c:446
+#: gtk/gtknotebook.c:449
 msgid "Whether tabs should be shown or not"
 msgstr "Specifică dacă ar trebui afişate taburile sau nu"
 
-#: gtk/gtknotebook.c:452
+#: gtk/gtknotebook.c:455
 msgid "Show Border"
 msgstr "Arată margini"
 
-#: gtk/gtknotebook.c:453
+#: gtk/gtknotebook.c:456
 msgid "Whether the border should be shown or not"
 msgstr "Specifică dacă ar trebui arătate marginile sau nu"
 
-#: gtk/gtknotebook.c:459
+#: gtk/gtknotebook.c:462
 msgid "Scrollable"
 msgstr "Defilabil"
 
-#: gtk/gtknotebook.c:460
+#: gtk/gtknotebook.c:463
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr ""
 "Dacă e „TRUE”, atunci se adaugă săgeţi de defilare dacă sunt prea multe "
 "taburi"
 
-#: gtk/gtknotebook.c:466
+#: gtk/gtknotebook.c:469
 msgid "Enable Popup"
 msgstr "Activează „popup”"
 
-#: gtk/gtknotebook.c:467
+#: gtk/gtknotebook.c:470
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -2847,92 +2847,92 @@ msgstr ""
 "Dacă e „TRUE”, atunci un click dreapta de mouse pe o fereastră „notebook” va "
 "deschide un meniu pentru comutarea între taburi"
 
-#: gtk/gtknotebook.c:474
+#: gtk/gtknotebook.c:477
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Specifică dacă taburile ar trebui să aibă mărimi identice"
 
-#: gtk/gtknotebook.c:481
+#: gtk/gtknotebook.c:484
 msgid "Tab label"
 msgstr "Etichetă tab"
 
-#: gtk/gtknotebook.c:482
+#: gtk/gtknotebook.c:485
 msgid "The string displayed on the child's tab label"
 msgstr "Şirul afişat în eticheta tabului copil"
 
-#: gtk/gtknotebook.c:488
+#: gtk/gtknotebook.c:491
 msgid "Menu label"
 msgstr "Etichetă meniu"
 
-#: gtk/gtknotebook.c:489
+#: gtk/gtknotebook.c:492
 msgid "The string displayed in the child's menu entry"
 msgstr "Şirul afişat în intrarea de meniu a copilului"
 
-#: gtk/gtknotebook.c:502
+#: gtk/gtknotebook.c:505
 msgid "Tab expand"
 msgstr "Desfăşurare tab"
 
-#: gtk/gtknotebook.c:503
+#: gtk/gtknotebook.c:506
 msgid "Whether to expand the child's tab or not"
 msgstr "Specifică dacă ar trebui desfăşurate taburile copilului sau nu"
 
-#: gtk/gtknotebook.c:509
+#: gtk/gtknotebook.c:512
 msgid "Tab fill"
 msgstr "Umplere tab"
 
-#: gtk/gtknotebook.c:510
+#: gtk/gtknotebook.c:513
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr "Daca taburile copilului ar trebui să umple zona alocată sau nu"
 
-#: gtk/gtknotebook.c:516
+#: gtk/gtknotebook.c:519
 msgid "Tab pack type"
 msgstr "Tipul împachetării taburilor"
 
-#: gtk/gtknotebook.c:532 gtk/gtkscrollbar.c:115
+#: gtk/gtknotebook.c:535 gtk/gtkscrollbar.c:115
 msgid "Secondary backward stepper"
 msgstr "Buton secundar de derulare înapoi"
 
-#: gtk/gtknotebook.c:533
+#: gtk/gtknotebook.c:536
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr ""
 "Arată un buton secundar de derulare înapoi la capătul opus al zonei taburilor"
 
-#: gtk/gtknotebook.c:549 gtk/gtkscrollbar.c:123
+#: gtk/gtknotebook.c:552 gtk/gtkscrollbar.c:123
 msgid "Secondary forward stepper"
 msgstr "Buton secundar de derulare înainte"
 
-#: gtk/gtknotebook.c:550
+#: gtk/gtknotebook.c:553
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr ""
 "Arată un buton secundar de derulare înainte la capătul opus al zonei "
 "taburilor"
 
-#: gtk/gtknotebook.c:565 gtk/gtkscrollbar.c:99
+#: gtk/gtknotebook.c:568 gtk/gtkscrollbar.c:99
 msgid "Backward stepper"
 msgstr "Buton de derulare înapoi"
 
-#: gtk/gtknotebook.c:566 gtk/gtkscrollbar.c:100
+#: gtk/gtknotebook.c:569 gtk/gtkscrollbar.c:100
 msgid "Display the standard backward arrow button"
 msgstr "Arată săgeata standard pentru butonul de derulare înapoi"
 
-#: gtk/gtknotebook.c:581 gtk/gtkscrollbar.c:107
+#: gtk/gtknotebook.c:584 gtk/gtkscrollbar.c:107
 msgid "Forward stepper"
 msgstr "Buton de derulare înainte"
 
-#: gtk/gtknotebook.c:582 gtk/gtkscrollbar.c:108
+#: gtk/gtknotebook.c:585 gtk/gtkscrollbar.c:108
 msgid "Display the standard forward arrow button"
 msgstr "Arată săgeata standard pentru butonul de derulare înainte"
 
-#: gtk/gtkoptionmenu.c:195
+#: gtk/gtkoptionmenu.c:196
 msgid "The menu of options"
 msgstr "Meniul opţiunilor"
 
-#: gtk/gtkoptionmenu.c:202
+#: gtk/gtkoptionmenu.c:203
 msgid "Size of dropdown indicator"
 msgstr "Mărime indicator „dropdown”"
 
-#: gtk/gtkoptionmenu.c:208
+#: gtk/gtkoptionmenu.c:209
 msgid "Spacing around indicator"
 msgstr "Spaţiere în jurul indicatorului"
 
@@ -3322,11 +3322,11 @@ msgstr ""
 "Arată un buton secundar de derulare înainte la capătul opus al barei de "
 "derulare"
 
-#: gtk/gtkscrolledwindow.c:238 gtk/gtktext.c:603 gtk/gtktreeview.c:566
+#: gtk/gtkscrolledwindow.c:238 gtk/gtktext.c:605 gtk/gtktreeview.c:566
 msgid "Horizontal Adjustment"
 msgstr "Ajustare orizontală"
 
-#: gtk/gtkscrolledwindow.c:245 gtk/gtktext.c:611 gtk/gtktreeview.c:574
+#: gtk/gtkscrolledwindow.c:245 gtk/gtktext.c:613 gtk/gtktreeview.c:574
 msgid "Vertical Adjustment"
 msgstr "Ajustare verticală"
 
@@ -3740,27 +3740,27 @@ msgid ""
 msgstr ""
 "Spaţiu în plus în pixeli între copil şi vecinii de deasupra şi de dedesubt"
 
-#: gtk/gtktext.c:604
+#: gtk/gtktext.c:606
 msgid "Horizontal adjustment for the text widget"
 msgstr "Ajustare orizontală pentru un widget text"
 
-#: gtk/gtktext.c:612
+#: gtk/gtktext.c:614
 msgid "Vertical adjustment for the text widget"
 msgstr "Ajustare verticală pentru un widget text"
 
-#: gtk/gtktext.c:619
+#: gtk/gtktext.c:621
 msgid "Line Wrap"
 msgstr "Formatare linii"
 
-#: gtk/gtktext.c:620
+#: gtk/gtktext.c:622
 msgid "Whether lines are wrapped at widget edges"
 msgstr "Specifică dacă liniile sunt aranjate la marginile widget-ului"
 
-#: gtk/gtktext.c:627
+#: gtk/gtktext.c:629
 msgid "Word Wrap"
 msgstr "Formatare cuvinte"
 
-#: gtk/gtktext.c:628
+#: gtk/gtktext.c:630
 msgid "Whether words are wrapped at widget edges"
 msgstr "Specifică dacă sunt formatate cuvintele la marginile widget-ului"
 
@@ -4987,4 +4987,3 @@ msgstr "Stil IM status"
 #: modules/input/gtkimcontextxim.c:340
 msgid "How to draw the input method statusbar"
 msgstr "Cum se va afişa bara de stare a metodei de intrare"
-

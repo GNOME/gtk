@@ -21,9 +21,6 @@ types related to the text widget and how they work together.
 
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkTextTagTable ##### -->
 <para>
 

@@ -138,9 +138,6 @@ aligns in its available space, see gtk_misc_set_alignment().
 
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkLabel ##### -->
 <para>
 This should not be accessed directly.  Use the accessor functions as

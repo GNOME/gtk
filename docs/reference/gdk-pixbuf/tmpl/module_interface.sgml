@@ -65,9 +65,6 @@ They are not covered by the same stability guarantees as the regular
 
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### FUNCTION gdk_pixbuf_set_option ##### -->
 <para>
 

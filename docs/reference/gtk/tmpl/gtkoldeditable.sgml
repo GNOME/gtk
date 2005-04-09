@@ -15,9 +15,6 @@ in newly written code. Use the #GtkEditable interface instead.
 
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkOldEditable ##### -->
 <para>
 

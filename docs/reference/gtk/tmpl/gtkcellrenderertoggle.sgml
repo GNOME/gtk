@@ -17,9 +17,6 @@ property. When activated, it emits the toggled signal.
 
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkCellRendererToggle ##### -->
 <para>
 

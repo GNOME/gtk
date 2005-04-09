@@ -34,9 +34,6 @@ to a straight line.
 
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkGammaCurve ##### -->
 <para>
 The #GtkGammaCurve struct contains private data only, and

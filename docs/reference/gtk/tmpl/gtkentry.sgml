@@ -25,9 +25,6 @@ position is visible.
 </variablelist>
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkEntry ##### -->
 <para>
 The #GtkEntry-struct struct contains only private data.

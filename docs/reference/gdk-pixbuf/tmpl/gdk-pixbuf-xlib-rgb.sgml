@@ -17,9 +17,6 @@ Rendering RGB buffers to X drawables.
     GdkRGB
   </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT XlibRgbCmap ##### -->
   <para>
     FIXME: Describe this.

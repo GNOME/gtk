@@ -96,9 +96,6 @@ changes, use gtk_widget_child_notify().
 
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkContainer ##### -->
 <para>
 

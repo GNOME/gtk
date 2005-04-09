@@ -27,9 +27,6 @@ area.
 #GtkDrawingArea, #GtkScrolledWindow
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkLayout ##### -->
 <para>
 

@@ -83,9 +83,6 @@ Information about the tooltip (if any) associated with an arbitrary widget can b
 </variablelist>
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkTooltips ##### -->
 <para>Holds information about a group of tooltips. Fields should be changed using the functions provided, rather than directly accessing the struct's members.
 </para>

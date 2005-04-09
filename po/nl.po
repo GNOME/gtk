@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-04-04 12:47+0200\n"
+"POT-Creation-Date: 2005-04-09 00:38-0400\n"
 "PO-Revision-Date: 2005-04-04 20:17+0200\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -212,15 +212,15 @@ msgstr "BMP-afbeelding heeft een niet-ondersteunde headergrootte"
 msgid "Topdown BMP images cannot be compressed"
 msgstr "Topdown BMP-afbeeldingen kunnen niet worden gecomprimeerd"
 
-#: gdk-pixbuf/io-bmp.c:1198
+#: gdk-pixbuf/io-bmp.c:1214
 msgid "Couldn't allocate memory for saving BMP file"
 msgstr "Kon geen geheugenruimte reserveren voor opslaan van BMP-bestand"
 
-#: gdk-pixbuf/io-bmp.c:1239
+#: gdk-pixbuf/io-bmp.c:1255
 msgid "Couldn't write to BMP file"
 msgstr "Kon niet naar BMP-bestand schrijven"
 
-#: gdk-pixbuf/io-bmp.c:1288
+#: gdk-pixbuf/io-bmp.c:1304
 msgid "The BMP image format"
 msgstr "Het BMP-bestandsformaat"
 
@@ -876,7 +876,7 @@ msgstr "KLEUREN"
 msgid "Make X calls synchronous"
 msgstr "Alle X-aanroepen synchroon maken"
 
-#: gtk/gtkaboutdialog.c:270 gtk/gtkaboutdialog.c:2023
+#: gtk/gtkaboutdialog.c:270 gtk/gtkaboutdialog.c:2025
 msgid "License"
 msgstr "Licentie"
 
@@ -890,32 +890,32 @@ msgid "_Credits"
 msgstr "Met _dank aan"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:500
+#: gtk/gtkaboutdialog.c:501
 msgid "_License"
 msgstr "_Licentie"
 
-#: gtk/gtkaboutdialog.c:729
+#: gtk/gtkaboutdialog.c:731
 #, c-format
 msgid "About %s"
 msgstr "Over %s"
 
-#: gtk/gtkaboutdialog.c:1951
+#: gtk/gtkaboutdialog.c:1953
 msgid "Credits"
 msgstr "Met dank aan"
 
-#: gtk/gtkaboutdialog.c:1977
+#: gtk/gtkaboutdialog.c:1979
 msgid "Written by"
 msgstr "Geschreven door"
 
-#: gtk/gtkaboutdialog.c:1980
+#: gtk/gtkaboutdialog.c:1982
 msgid "Documented by"
 msgstr "Gedocumenteerd door"
 
-#: gtk/gtkaboutdialog.c:1992
+#: gtk/gtkaboutdialog.c:1994
 msgid "Translated by"
 msgstr "Vertaald door"
 
-#: gtk/gtkaboutdialog.c:1996
+#: gtk/gtkaboutdialog.c:1998
 msgid "Artwork by"
 msgstr "Grafisch werk door"
 
@@ -1699,7 +1699,7 @@ msgstr "_Gammawaarde"
 msgid "Error loading icon: %s"
 msgstr "Fout bij laden van pictogram: %s"
 
-#: gtk/gtkicontheme.c:1258
+#: gtk/gtkicontheme.c:1259
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1712,7 +1712,7 @@ msgstr ""
 "U kunt een kopie verkrijgen bij:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1323
+#: gtk/gtkicontheme.c:1324
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Pictogram '%s' niet beschikbaar in dit thema"
@@ -1800,7 +1800,7 @@ msgstr "(onbekend)"
 msgid "clear"
 msgstr "wissen"
 
-#: gtk/gtklabel.c:3931
+#: gtk/gtklabel.c:3930
 msgid "Select All"
 msgstr "Alles selecteren"
 
@@ -1864,12 +1864,12 @@ msgstr "De radioknop aan wiens groep deze knop toebehoort."
 msgid "Unable to find include file: \"%s\""
 msgstr "Kan invoegbestand \"%s\" niet vinden"
 
-#: gtk/gtkrc.c:3039 gtk/gtkrc.c:3042
+#: gtk/gtkrc.c:3042 gtk/gtkrc.c:3045
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kan afbeelding in pixmap_pad: \"%s\" niet vinden"
 
-#: gtk/gtkrc.c:3477
+#: gtk/gtkrc.c:3480
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Pixmap pad-element: \"%s\" moet absoluut zijn, %s, lijn %d"
