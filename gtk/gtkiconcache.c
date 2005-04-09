@@ -223,8 +223,8 @@ _gtk_icon_cache_has_directory (GtkIconCache *cache,
 static guint
 icon_name_hash (gconstpointer key)
 {
-  const char *p = key;
-  guint h = *p;
+  const signed char *p = key;
+  guint32 h = *p;
 
   if (h)
     for (p += 1; *p != '\0'; p++)

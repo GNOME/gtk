@@ -1,3 +1,8 @@
+2005-04-08  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkiconcache.c (icon_name_hash): Use the same function 
+	as in updateiconcache.c.  (spotted by Morten Welinder)
+
 2005-04-08  Carl Worth  <cworth@cworth.org>
 
 	* gdk/gdkpango.c: (emboss_context): Simplify matrix manipulation
