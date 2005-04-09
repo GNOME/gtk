@@ -1,5 +1,8 @@
 2005-04-08  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkiconcache.c (icon_name_hash): Use the same function 
+	as in updateiconcache.c.  (spotted by Morten Welinder)
+
 	* gtk/gtkcombobox.c (gtk_combo_box_popdown): Make this
 	work when called from gtk_combo_box_destroy().  (#172999,
 	Christian Persch)
