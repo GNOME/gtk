@@ -1,5 +1,10 @@
 2005-04-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/x11/gdkinput-xfree.c:
+	* gdk/x11/gdkinput-none.c:
+	* gdk/gtk.symbols: Some more fixes necessary to 
+	make building with gcc 4 work.
+
 	Add 16x16 versions of the zoom icons and of 
 	GTK_STOCK_INDEX. Some of the images were taken from 
 	the hicolor icon theme, and were originally created 

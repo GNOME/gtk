@@ -127,5 +127,5 @@ gdk_device_set_mode (GdkDevice   *device,
   return FALSE;
 }
 
-#define __GDK_INPUT_X11_C__
+#define __GDK_INPUT_NONE_C__
 #include "gdkaliasdef.c"
