@@ -132,6 +132,9 @@ gtk/gtkuimanager.c
 gtk/gtkviewport.c
 gtk/gtkwidget.c
 gtk/gtkwindow.c
+gtk/gtkmenushell.c
+gtk/gtkradiomenuitem.c
+gtk/gtktoggletoolbutton.c
 modules/input/gtkimcontextxim.c
 modules/input/imam-et.c
 modules/input/imcedilla.c
