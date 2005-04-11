@@ -383,12 +383,14 @@ gdk_selection_convert (GdkWindow *requestor,
               if (GetClipboardFormatName (fmt, sFormat, 80) > 0 &&
 		  strcmp (sFormat, "UTF8_STRING"))
                 {
+		  GdkAtom atom;
+
 		  if (!has_bmp &&
 		      (!strcmp (sFormat, "image/bmp") ||
 		       !strcmp (sFormat, "image/x-bmp") ||
 		       !strcmp (sFormat, "image/x-MS-bmp")))
 		    has_bmp = TRUE;
-                  GdkAtom atom = gdk_atom_intern (sFormat, FALSE);
+                  atom = gdk_atom_intern (sFormat, FALSE);
                   data[i++] = atom;
                 }
             }

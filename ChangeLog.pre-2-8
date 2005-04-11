@@ -1,3 +1,13 @@
+2005-04-11  Ivan, Wong Yat Cheung  <email@ivanwong.info>
+
+	Fix #300218:
+
+	* gdk/win32/gdkselection-win32.c (gdk_selection_convert): Fix
+	C99ism.
+
+	* gtk/updateiconcache.c: Guard inclusion of unistd.h and
+	utime.h.
+
 2005-04-09  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/x11/gdkinput-xfree.c:

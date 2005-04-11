@@ -24,9 +24,15 @@
 #include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
+#endif
 #include <errno.h>
+#ifdef _MSC_VER
+#include <sys/utime.h>
+#else
 #include <utime.h>
+#endif
 
 #include <glib.h>
 #include <glib/gstdio.h>
