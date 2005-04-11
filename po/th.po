@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-04-09 00:38-0400\n"
+"POT-Creation-Date: 2005-04-10 23:43-0400\n"
 "PO-Revision-Date: 2005-02-09 00:46+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <L10n@opentle.net>\n"
@@ -1573,7 +1573,7 @@ msgstr "ค่าแ_กมมา"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1629
+#: gtk/gtkiconfactory.c:1644
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "ไม่สามารถโหลดไอคอน: %s"

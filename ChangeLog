@@ -1,3 +1,11 @@
+2005-04-10  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.6.6 ===
+
+	* gdk/abicheck.sh: Handle duplicate symbols.
+
+	* NEWS: Updates
+
 2005-04-09  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/x11/gdkinput-xfree.c:

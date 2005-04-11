@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-04-09 00:38-0400\n"
+"POT-Creation-Date: 2005-04-10 23:43-0400\n"
 "PO-Revision-Date: 2004-03-17 17:16+0100\n"
 "Last-Translator: Sanlig Badral <badral@openmn.org>\n"
 "Language-Team: Mongolian <openmn-gnome@lists.sf.net>\n"
@@ -1885,7 +1885,7 @@ msgstr "_Гамма утга"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1629
+#: gtk/gtkiconfactory.c:1644
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Дүрслэл дуудахад алдаа гарлаа: %s"

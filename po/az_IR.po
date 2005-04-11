@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ gtk-2-4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-04-09 00:38-0400\n"
+"POT-Creation-Date: 2005-04-10 23:43-0400\n"
 "PO-Revision-Date: 2004-09-27 14:58+0330\n"
 "Last-Translator: Amir Hedayaty <amir@bamdad.org>\n"
 "Language-Team: Iranian Azerbaijani <az-ir@lists.sharif.edu>\n"
@@ -1549,7 +1549,7 @@ msgstr ""
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1629
+#: gtk/gtkiconfactory.c:1644
 #, c-format
 msgid "Error loading icon: %s"
 msgstr ""

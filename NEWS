@@ -1,3 +1,10 @@
+Overview of Changes from GTK+ 2.6.5 to GTK+ 2.6.6
+=================================================
+* Add 16x16 versions for some stock icons [Vincent Noel]
+* Bug fixes [Tommi Komulainen, Roman Kagan, Ivan Wong,
+  Matthias Clasen, Jakub Jelinek, Arjan van de Ven]
+* New and improved translations (pl)
+
 Overview of Changes from GTK+ 2.6.4 to GTK+ 2.6.5
 =================================================
 * Fix compilation with gcc 4.0 [Matthias Clasen]
