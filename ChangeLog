@@ -1,5 +1,9 @@
 2005-04-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkactiongroup.c (gtk_action_group_add_action_with_accel): 
+	Revert the fix for #170727, since it causes problems
+	with user-specified accelerators. 
+
 	* gtk/gtkimage.c (gtk_image_calc_size, gtk_image_expose): 
 	Revert the changes to display broken images, since there
 	are applications which rely on the old behaviour.
@@ -114,7 +118,7 @@
 	* gdk/gdkpango.c (gdk_pango_layout_line_get_clip_region): 
 	Ignore regions which fall completely outside the line.  
 	(#165862, Felipe Heidrich)
-	
+
 2005-04-06  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/*.c, gdk/gdkdisplaymanager.c: s/G-OBJECT/G_OBJECT/g, 
