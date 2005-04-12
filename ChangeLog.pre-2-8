@@ -1,3 +1,9 @@
+2005-04-12  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkimage.c (gtk_image_calc_size, gtk_image_expose): 
+	Revert the changes to display broken images, since there
+	are applications which rely on the old behaviour.
+
 2005-04-11  Ivan, Wong Yat Cheung  <email@ivanwong.info>
 
 	Fix #300218:
