@@ -1,16 +1,16 @@
-# translation of eu3.po to 
+# translation of eu.po to Basque
 # translation of gtk+-properties.gtk-2-4.po to Basque
 # translation of gtk+-properties.gtk-2-4.eu-zuzenduta.po to Basque
 # Hizkuntza Politikarako Sailburuordetza <hps@ej-gv.es>, 2005.
 # Hizkuntza Politikarako Sailburuordetza <hizkpol@ej-gv.es>, 2005.
 msgid ""
 msgstr ""
-"Project-Id-Version: eu3\n"
+"Project-Id-Version: eu\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-04-13 13:04+0200\n"
-"PO-Revision-Date: 2005-04-13 19:26+0200\n"
-"Last-Translator: \n"
-"Language-Team:  <eu@li.org>\n"
+"PO-Revision-Date: 2005-04-13 20:22+0200\n"
+"Last-Translator: Hizkuntza Politikarako Sailburuordetza <hizkpol@ej-gv.es>\n"
+"Language-Team:  <itzulpena@euskalgnu.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -3638,11 +3638,11 @@ msgstr "Ikono-tamainen zerrenda (gtk-menu=16,16;gtk-button=20,20..."
 
 #: ../gtk/gtksettings.c:373
 msgid "GTK Modules"
-msgstr "GTK moduloak"
+msgstr "GTK moduluak"
 
 #: ../gtk/gtksettings.c:374
 msgid "List of currently active GTK modules"
-msgstr "Unean aktibatuta dauden GTK moduloen zerrenda"
+msgstr "Unean aktibatuta dauden GTK moduluen zerrenda"
 
 #: ../gtk/gtksettings.c:383
 msgid "Xft Antialias"
