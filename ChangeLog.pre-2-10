@@ -1,3 +1,11 @@
+2005-04-13  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkimage.c (gtk_image_calc_size, gtk_image_expose): 
+	Revert the fix for #169870, adjust the documentation instead. 
+
+	* gtk/gtkactiongroup.c (gtk_action_group_add_action_with_accel): 
+	Revert the fix for #170727.	
+
 2005-04-11  Ivan, Wong Yat Cheung  <email@ivanwong.info>
 
 	Fix #300218:
@@ -71,6 +79,7 @@
 	Enter the "user-resized" state of the column only if a drag
 	actually changes the column width, not on any click.
 
+>>>>>>> 1.6531
 2005-04-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkmenu.c (gtk_menu_paint): Allow setting background
