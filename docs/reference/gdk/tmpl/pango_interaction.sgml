@@ -129,6 +129,9 @@ g_object_unref (gc);
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GdkPangoRenderer ##### -->
 <para>
 

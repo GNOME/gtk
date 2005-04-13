@@ -27,6 +27,9 @@ The structs used for each type of event.
 </variablelist>
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### ENUM GdkEventType ##### -->
 <para>
 Specifies the type of the event.

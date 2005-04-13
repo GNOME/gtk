@@ -1,3 +1,9 @@
+Overview of Changes from GTK+ 2.6.6 to GTK+ 2.6.7
+=================================================
+* Revert two fixes from 2.6.5 which were causing
+  problems  [Crispin Flowerday]
+* New and updated translations (bg,ja,ko,ca)
+
 Overview of Changes from GTK+ 2.6.5 to GTK+ 2.6.6
 =================================================
 * Add 16x16 versions for some stock icons [Vincent Noel]

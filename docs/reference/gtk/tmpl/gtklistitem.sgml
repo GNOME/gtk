@@ -26,6 +26,9 @@ in newly written code. Use #GtkTreeView instead.
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkListItem ##### -->
 <para>
 The #GtkListItem struct contains private data only, and should

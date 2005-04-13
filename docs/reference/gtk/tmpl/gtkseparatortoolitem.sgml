@@ -34,6 +34,9 @@ to the ends of the toolbar.
   </variablelist>
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkSeparatorToolItem ##### -->
 <para>
 The #GtkSeparatorToolItem struct contains only private data and

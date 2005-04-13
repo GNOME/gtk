@@ -193,6 +193,9 @@ enum
 #GtkTreeView, #GtkTreeStore, #GtkListStore, <link linkend="gtk-GtkTreeView-drag-and-drop">GtkTreeDnd</link>, #GtkTreeSortable
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkTreeModel ##### -->
 <para>
 

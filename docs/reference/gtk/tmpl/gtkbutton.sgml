@@ -21,6 +21,9 @@ the #GtkLabel.
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkButton ##### -->
 <para>
 This should not be accessed directly.  Use the accessor functions below.

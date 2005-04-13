@@ -28,6 +28,9 @@ Controls the keyboard/mouse pointer grabs and a set of <type>GdkScreen</type>s
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GdkDisplay ##### -->
 <para>
 The <structname>GdkDisplay</structname> struct is the GDK representation

@@ -30,6 +30,9 @@ All children are allocated the same height.
 </variablelist>
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkHBox ##### -->
 
 

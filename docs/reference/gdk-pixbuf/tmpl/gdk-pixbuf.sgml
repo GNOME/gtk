@@ -90,6 +90,9 @@ put_pixel (GdkPixbuf *pixbuf, int x, int y, guchar red, guchar green, guchar blu
   <para>
   </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### ENUM GdkPixbufError ##### -->
 <para>
 An error code in the #GDK_PIXBUF_ERROR domain. Many &gdk-pixbuf;

@@ -41,6 +41,9 @@ See the #GtkToolbar class for a description of the toolbar widget.
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkToolItem ##### -->
 <para>
 The GtkToolItem struct contains only private data. It should only be

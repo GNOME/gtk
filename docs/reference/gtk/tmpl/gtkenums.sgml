@@ -14,6 +14,9 @@ Public enumerated types used throughout GTK+
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### ENUM GtkAccelFlags ##### -->
 <para>
 

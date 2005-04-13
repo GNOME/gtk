@@ -19,6 +19,9 @@ rubberband selection, which is controlled by dragging the pointer.
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkIconView ##### -->
 <para>
 The <structname>GtkIconView</structname> struct contains only

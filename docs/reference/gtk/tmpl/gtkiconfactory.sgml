@@ -40,6 +40,9 @@ looking up the icon to use for a given stock ID.
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkIconSource ##### -->
 <para>
 

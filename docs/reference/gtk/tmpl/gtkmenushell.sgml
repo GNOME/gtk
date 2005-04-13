@@ -22,6 +22,9 @@ allowing for nested hierarchical menus.
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkMenuShell ##### -->
 <para>
 The #GtkMenuShell-struct struct contains the following fields.

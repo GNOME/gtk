@@ -23,6 +23,9 @@ they work together.
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### ENUM GtkTreeViewColumnSizing ##### -->
 <para>
 The sizing method the column uses to determine its width.  Please note

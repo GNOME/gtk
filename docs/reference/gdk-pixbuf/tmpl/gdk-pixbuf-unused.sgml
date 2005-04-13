@@ -22,6 +22,10 @@ Getting parts of a drawable's image data into a pixbuf.
 Drawables to Pixbufs
 
 
+<!-- ##### SECTION ./tmpl/gdk-pixbuf-unused.sgml:Stability_Level ##### -->
+
+
+
 <!-- ##### SECTION ./tmpl/gnome-canvas-pixbuf.sgml:Long_Description ##### -->
   <para>
     This canvas item displays #GdkPixbuf images.  It handles full
@@ -565,10 +569,6 @@ End:
     linkend="GnomeCanvasPixbuf--x-set">x_set</link> argument.  The
     default is %FALSE.
   </para>
-
-
-<!-- ##### SECTION Stability_Level ##### -->
-
 
 
 <!-- ##### FUNCTION gdk_pixbuf_new_from_stream ##### -->

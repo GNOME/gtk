@@ -14,6 +14,9 @@ The #GtkMenuBar is a subclass of #GtkMenuShell which contains one to many #GtkMe
 #GtkMenuShell, #GtkMenu, #GtkMenuItem
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkMenuBar ##### -->
 <para>
 The #GtkMenuBar struct contains the following fields. (These fields should be considered read-only.  They should never be set by an application.)

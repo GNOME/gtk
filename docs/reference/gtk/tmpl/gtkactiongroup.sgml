@@ -33,6 +33,9 @@ sure that the correct shortcut is displayed next to the menu item.
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkActionGroup ##### -->
 <para>
 The <structname>GtkActionGroup</structname> struct contains only private 

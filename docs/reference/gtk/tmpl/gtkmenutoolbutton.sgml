@@ -34,6 +34,9 @@ A GtkToolItem containing a button with an additional dropdown menu
   </varlistentry>
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkMenuToolButton ##### -->
 <para>
   The #GtkMenuToolButton struct contains only private data and

@@ -16,6 +16,9 @@ provides a standard dialog for file selection.
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkColorSelectionDialog ##### -->
 <para>
 The #GtkColorSelectionDialog-struct struct contains the following fields.

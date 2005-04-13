@@ -15,6 +15,9 @@ utility functions.
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### FUNCTION gdk_init ##### -->
 <para>
 Initializes the GDK library and connects to the X server.

@@ -34,6 +34,9 @@ and keeps it around so that it can be shown again.
 #GTK_STOCK_ABOUT
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkAboutDialog ##### -->
 <para>
 The <structname>GtkAboutDialog</structname> struct contains

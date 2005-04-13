@@ -80,6 +80,9 @@ gdk_keymap_translate_keyboard_state() just to get the keyval.
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GdkKeymap ##### -->
 <para>
 A <structname>GdkKeymap</structname> defines the translation from keyboard state

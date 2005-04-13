@@ -43,6 +43,9 @@ gdk_color_change() will probably become aliases.
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GdkColor ##### -->
 <para>
 The #GdkColor structure is used to describe an 

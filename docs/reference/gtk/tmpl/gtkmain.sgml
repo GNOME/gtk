@@ -81,6 +81,9 @@ See the GLib manual, especially #GMainLoop and signal-related
 functions such as g_signal_connect().
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### FUNCTION gtk_set_locale ##### -->
 
 <para>

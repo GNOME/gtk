@@ -31,6 +31,9 @@ gtk_widget_create_pango_layout().
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GdkDrawable ##### -->
 <para>
 An opaque structure representing an object that can be

@@ -30,6 +30,9 @@ property is set to a pixbuf, it renders that one.
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkCellRendererPixbuf ##### -->
 <para>
 

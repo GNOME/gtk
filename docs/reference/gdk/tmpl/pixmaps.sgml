@@ -18,6 +18,9 @@ pixel can be either on or off).
 <para>
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GdkPixmap ##### -->
 <para>
 An opaque structure representing an offscreen drawable.

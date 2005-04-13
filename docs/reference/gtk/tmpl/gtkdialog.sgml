@@ -124,6 +124,9 @@ response from the user.</para></listitem>
 </variablelist>
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkDialog ##### -->
 <para>
 <structfield>vbox</structfield> is a #GtkVBox - the main part of the

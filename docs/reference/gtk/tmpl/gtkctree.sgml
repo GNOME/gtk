@@ -33,6 +33,9 @@ in newly written code. Use #GtkTreeView instead.
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkCTree ##### -->
 <para>
 The #GtkCTree-struct contains the following user-accessible fields.

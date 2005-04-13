@@ -1,5 +1,7 @@
 2005-04-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* === Releases 2.6.7 ====
+
 	* gtk/gtkactiongroup.c (gtk_action_group_add_action_with_accel): 
 	Revert the fix for #170727, since it causes problems
 	with user-specified accelerators. 

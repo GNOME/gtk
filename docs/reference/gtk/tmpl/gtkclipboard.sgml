@@ -84,6 +84,9 @@ Storing data on clipboards
 </variablelist>
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkClipboard ##### -->
 <para>
 
