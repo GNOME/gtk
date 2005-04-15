@@ -4605,11 +4605,13 @@ pending_select_paths_process (GtkFileChooserDefault *impl)
        * that case, the chooser's selection should be what the caller expects,
        * as the user can't see that something else got selected.  See bug #165264.
        *
-       * Also, we don't select the first file if we are in SAVE or CREATE_FOLDER
-       * modes.  Doing so would change the contents of the filename entry.
+       * Also, we don't select the first file if we are not in OPEN mode.  Doing
+       * so would change the contents of the filename entry for SAVE or
+       * CREATE_FOLDER, which is undesired; in SELECT_FOLDER, we don't want to
+       * select a *different* folder from the one into which the user just
+       * navigated.
        */
-      if (GTK_WIDGET_MAPPED (impl)
-	  && !(impl->action == GTK_FILE_CHOOSER_ACTION_SAVE || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER))
+      if (GTK_WIDGET_MAPPED (impl) && impl->action == GTK_FILE_CHOOSER_ACTION_OPEN)
 	browse_files_select_first_row (impl);
     }
 
