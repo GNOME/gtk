@@ -1,3 +1,14 @@
+2005-04-15  Federico Mena Quintero  <federico@ximian.com>
+
+	Merged from gtk-2-6:
+
+	* gtk/gtkfilechooserdefault.c (pending_select_paths_process):
+	Patch from Christian Neumair <chris@gnome-de.org>; only select the
+	first row if we are in OPEN mode.  The only other case we were
+	letting pass through was SELECT_FOLDER, but selecting the first
+	row when changing folders confuses people when folders are
+	actually being selected.  Fixes #171885.
+
 2005-04-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkimage.c (gtk_image_calc_size, gtk_image_expose): 
