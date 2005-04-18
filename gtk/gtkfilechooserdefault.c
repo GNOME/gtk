@@ -2049,7 +2049,6 @@ remove_selected_bookmarks (GtkFileChooserDefault *impl)
 {
   GtkTreeIter iter;
   gpointer col_data;
-  gboolean is_volume;
   GtkFilePath *path;
   gboolean removable;
   GError *error;
@@ -2059,11 +2058,9 @@ remove_selected_bookmarks (GtkFileChooserDefault *impl)
 
   gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), &iter,
 		      SHORTCUTS_COL_DATA, &col_data,
-		      SHORTCUTS_COL_IS_VOLUME, &is_volume,
 		      SHORTCUTS_COL_REMOVABLE, &removable,
 		      -1);
   g_assert (col_data != NULL);
-  g_assert (!is_volume);
 
   if (!removable)
     return;

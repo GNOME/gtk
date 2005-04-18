@@ -1,3 +1,11 @@
+2005-04-18  Federico Mena Quintero  <federico@ximian.com>
+
+	Merged from gtk-2-6:
+
+	* gtk/gtkfilechooserdefault.c (remove_selected_bookmarks): Remove
+	obsolete assertion that the selected row can't be a volume; this
+	is handled by the "removable" column now.  Fixes #301017.
+
 2005-04-18  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkstyle.c gtk/gtkcolorsel.c gtk/gtkhsv.c gtk/gtkiconview.c
