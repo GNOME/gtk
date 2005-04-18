@@ -1,3 +1,10 @@
+2005-04-18  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkstyle.c gtk/gtkcolorsel.c gtk/gtkhsv.c gtk/gtkiconview.c
+	* gdk/gdkcolor.c gdk/gdkwindow.c gdk/gdkpixbuf-render.c
+	gdk/gdkpango.c tests/testcairo.c: Update to new Cairo API for
+	setting color and opacity. (#301066, Vincent Noel)
+ 
 2005-04-15  Federico Mena Quintero  <federico@ximian.com>
 
 	Merged from gtk-2-6:

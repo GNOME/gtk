@@ -2124,15 +2124,22 @@ gtk_icon_view_paint_rubberband (GtkIconView     *icon_view,
   if (!fill_color_gdk)
     fill_color_gdk = gdk_color_copy (&GTK_WIDGET (icon_view)->style->base[GTK_STATE_SELECTED]);
 
-  gdk_cairo_set_source_color (cr, fill_color_gdk);
-  cairo_set_alpha (cr, fill_color_alpha / 255.);
+  cairo_set_source_rgba (cr,
+			 fill_color_gdk->red / 65535.,
+			 fill_color_gdk->green / 65535.,
+			 fill_color_gdk->blue / 65535.,
+			 fill_color_alpha / 255.);
 
   cairo_save (cr);
   cairo_rectangle (cr, rect.x, rect.y, rect.width, rect.height);
   cairo_clip (cr);
   cairo_fill (cr);
-  
-  cairo_set_alpha (cr, 1.0);
+
+  /* Draw the border without alpha */
+  cairo_set_source_rgb (cr,
+			fill_color_gdk->red / 65535.,
+			fill_color_gdk->green / 65535.,
+			fill_color_gdk->blue / 65535.);
   cairo_rectangle (cr, 
 		   rubber_rect.x + 0.5, rubber_rect.y + 0.5,
 		   rubber_rect.width - 1, rubber_rect.height - 1);

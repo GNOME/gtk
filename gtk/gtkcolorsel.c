@@ -413,11 +413,11 @@ color_sample_draw_sample (GtkColorSelection *colorsel, int which)
     {
       /* Draw checks in background */
 
-      cairo_set_rgb_color (cr, 0.5, 0.5, 0.5);
+      cairo_set_source_rgb (cr, 0.5, 0.5, 0.5);
       cairo_rectangle (cr, 0, 0, wid, heig);
       cairo_fill (cr);
 
-      cairo_set_rgb_color (cr, 0.75, 0.75, 0.75);
+      cairo_set_source_rgb (cr, 0.75, 0.75, 0.75);
       for (x = goff & -CHECK_SIZE; x < goff + wid; x += CHECK_SIZE)
 	for (y = 0; y < heig; y += CHECK_SIZE)
 	  if ((x / CHECK_SIZE + y / CHECK_SIZE) % 2 == 0)
@@ -427,21 +427,23 @@ color_sample_draw_sample (GtkColorSelection *colorsel, int which)
 
   if (which == 0)
     {
-      cairo_set_rgb_color (cr,
-			   priv->old_color[COLORSEL_RED], 
-			   priv->old_color[COLORSEL_GREEN], 
-			   priv->old_color[COLORSEL_BLUE]);
       if (priv->has_opacity)
-	cairo_set_alpha (cr, priv->old_color[COLORSEL_OPACITY]);
+	cairo_set_source_rgba (cr,
+			       priv->old_color[COLORSEL_RED], 
+			       priv->old_color[COLORSEL_GREEN], 
+			       priv->old_color[COLORSEL_BLUE],
+			       priv->has_opacity ?
+			          priv->old_color[COLORSEL_OPACITY] : 1.0);
     }
   else
     {
-      cairo_set_rgb_color (cr,
-			   priv->color[COLORSEL_RED], 
-			   priv->color[COLORSEL_GREEN], 
-			   priv->color[COLORSEL_BLUE]);
       if (priv->has_opacity)
-	cairo_set_alpha (cr, priv->color[COLORSEL_OPACITY]);
+	cairo_set_source_rgba (cr,
+			       priv->color[COLORSEL_RED], 
+			       priv->color[COLORSEL_GREEN], 
+			       priv->color[COLORSEL_BLUE],
+			       priv->has_opacity ?
+			          priv->color[COLORSEL_OPACITY] : 1.0);
     }
 
   cairo_rectangle (cr, 0, 0, wid, heig);
@@ -654,9 +656,9 @@ set_focus_line_attributes (GtkWidget *drawing_area,
   palette_get_color (drawing_area, color);
 
   if (INTENSITY (color[0], color[1], color[2]) > 0.5)
-    cairo_set_rgb_color (cr, 0., 0., 0.);
+    cairo_set_source_rgb (cr, 0., 0., 0.);
   else
-    cairo_set_rgb_color (cr, 1., 1., 1.);
+    cairo_set_source_rgb (cr, 1., 1., 1.);
 
   cairo_set_line_width (cr, *focus_width);
 

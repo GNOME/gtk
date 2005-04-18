@@ -383,10 +383,10 @@ void
 gdk_cairo_set_source_color (cairo_t  *cr,
 			    GdkColor *color)
 {
-  cairo_set_rgb_color (cr,
-		       color->red / 65535.,
-		       color->green / 65535.,
-		       color->blue / 65535.);
+  cairo_set_source_rgb (cr,
+			color->red / 65535.,
+			color->green / 65535.,
+			color->blue / 65535.);
 }
 
 #define __GDK_COLOR_C__

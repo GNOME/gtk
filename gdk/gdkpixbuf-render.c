@@ -433,7 +433,7 @@ gdk_pixbuf_set_as_cairo_source (GdkPixbuf *pixbuf,
   cairo_pattern_set_matrix (pattern, matrix);
   cairo_matrix_destroy (matrix);
 
-  cairo_set_pattern (cr, pattern);
+  cairo_set_source (cr, pattern);
   cairo_pattern_destroy (pattern);
 }
 

@@ -68,7 +68,7 @@ fill_checks (cairo_t *cr,
 #define CHECK_SIZE 32
 
   cairo_rectangle (cr, x, y, width, height);
-  cairo_set_rgb_color (cr, 0.4, 0.4, 0.4);
+  cairo_set_source_rgb (cr, 0.4, 0.4, 0.4);
   cairo_fill (cr);
 
   /* Only works for CHECK_SIZE a power of 2 */
@@ -82,7 +82,7 @@ fill_checks (cairo_t *cr,
 	  cairo_rectangle (cr, i, j, CHECK_SIZE, CHECK_SIZE);
     }
 
-  cairo_set_rgb_color (cr, 0.7, 0.7, 0.7);
+  cairo_set_source_rgb (cr, 0.7, 0.7, 0.7);
   cairo_fill (cr);
 }
 
@@ -92,25 +92,26 @@ fill_checks (cairo_t *cr,
 static void
 draw_3circles (cairo_t *cr,
                double xc, double yc,
-               double radius)
+               double radius,
+	       double alpha)
 {
   double subradius = radius * (2 / 3. - 0.1);
     
-  cairo_set_rgb_color (cr, 1., 0., 0.);
+  cairo_set_source_rgba (cr, 1., 0., 0., alpha);
   oval_path (cr,
 	     xc + radius / 3. * cos (G_PI * (0.5)),
 	     yc - radius / 3. * sin (G_PI * (0.5)),
 	     subradius, subradius);
   cairo_fill (cr);
     
-  cairo_set_rgb_color (cr, 0., 1., 0.);
+  cairo_set_source_rgba (cr, 0., 1., 0., alpha);
   oval_path (cr,
 	     xc + radius / 3. * cos (G_PI * (0.5 + 2/.3)),
 	     yc - radius / 3. * sin (G_PI * (0.5 + 2/.3)),
 	     subradius, subradius);
   cairo_fill (cr);
     
-  cairo_set_rgb_color (cr, 0., 0., 1.);
+  cairo_set_source_rgba (cr, 0., 0., 1., alpha);
   oval_path (cr,
 	     xc + radius / 3. * cos (G_PI * (0.5 + 4/.3)),
 	     yc - radius / 3. * sin (G_PI * (0.5 + 4/.3)),
@@ -156,7 +157,7 @@ draw (cairo_t *cr,
 
   /* Draw a black circle on the overlay
    */
-  cairo_set_rgb_color (cr, 0., 0., 0.);
+  cairo_set_source_rgb (cr, 0., 0., 0.);
   oval_path (cr, xc, yc, radius, radius);
   cairo_fill (cr);
 
@@ -166,7 +167,7 @@ draw (cairo_t *cr,
   /* Draw 3 circles to the punch surface, then cut
    * that out of the main circle in the overlay
    */
-  draw_3circles (cr, xc, yc, radius);
+  draw_3circles (cr, xc, yc, radius, 1.0);
 
   cairo_restore (cr);
 
@@ -180,9 +181,8 @@ draw (cairo_t *cr,
   cairo_save (cr);
   cairo_set_target_surface (cr, circles);
 
-  cairo_set_alpha (cr, 0.5);
   cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
-  draw_3circles (cr, xc, yc, radius);
+  draw_3circles (cr, xc, yc, radius, 0.5);
 
   cairo_restore (cr);
 

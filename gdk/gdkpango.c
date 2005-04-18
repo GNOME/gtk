@@ -129,7 +129,7 @@ emboss_context (cairo_t *cr)
   tmp_matrix.y0 += 1.0;
   cairo_set_matrix (cr, &tmp_matrix);
 
-  cairo_set_rgb_color (cr, 1.0, 1.0, 1.0);
+  cairo_set_source_rgb (cr, 1.0, 1.0, 1.0);
 }
 
 static void
@@ -141,10 +141,10 @@ set_part_color (GdkPangoRenderer *gdk_renderer,
 						part);
   if (color)
     {
-      cairo_set_rgb_color (cr,
-			   color->red / 65535.,
-			   color->green / 65535.,
-			   color->blue / 65535.);
+      cairo_set_source_rgb (cr,
+			    color->red / 65535.,
+			    color->green / 65535.,
+			    color->blue / 65535.);
     }
   else
     {
@@ -224,7 +224,7 @@ create_cairo_context (GdkPangoRenderer *gdk_renderer,
 	  cairo_matrix_destroy (matrix);
 	}
 
-      cairo_set_pattern (cr, pattern);
+      cairo_set_source (cr, pattern);
       cairo_pattern_destroy (pattern);
     }
   else

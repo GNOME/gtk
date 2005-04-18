@@ -4560,9 +4560,9 @@ gtk_default_draw_focus (GtkStyle      *style,
   cr = gdk_drawable_create_cairo_context (window);
   
   if (detail && !strcmp (detail, "colorwheel_light"))
-    cairo_set_rgb_color (cr, 0., 0., 0.);
+    cairo_set_source_rgb (cr, 0., 0., 0.);
   else if (detail && !strcmp (detail, "colorwheel_dark"))
-    cairo_set_rgb_color (cr, 1., 1., 1.);
+    cairo_set_source_rgb (cr, 1., 1., 1.);
   else
     gdk_cairo_set_source_color (cr, &style->fg[state_type]);
 

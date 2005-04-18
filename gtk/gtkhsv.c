@@ -933,7 +933,7 @@ set_source_surface (cairo_t         *cr,
   cairo_pattern_set_matrix (pattern, matrix);
   cairo_matrix_destroy (matrix);
 
-  cairo_set_pattern (cr, pattern);
+  cairo_set_source (cr, pattern);
   cairo_pattern_destroy (pattern);
 }
 
@@ -1027,9 +1027,9 @@ paint_ring (GtkHSV      *hsv,
   hsv_to_rgb (&r, &g, &b);
   
   if (INTENSITY (r, g, b) > 0.5)
-    cairo_set_rgb_color (source_cr, 0., 0., 0.);
+    cairo_set_source_rgb (source_cr, 0., 0., 0.);
   else
-    cairo_set_rgb_color (source_cr, 1., 1., 1.);
+    cairo_set_source_rgb (source_cr, 1., 1., 1.);
 
   cairo_move_to (source_cr, -x + center, - y + center);
   cairo_line_to (source_cr,
@@ -1245,12 +1245,12 @@ paint_triangle (GtkHSV      *hsv,
   if (INTENSITY (r, g, b) > 0.5)
     {
       detail = "colorwheel_light";
-      cairo_set_rgb_color (cr, 0., 0., 0.);
+      cairo_set_source_rgb (cr, 0., 0., 0.);
     }
   else
     {
       detail = "colorwheel_dark";
-      cairo_set_rgb_color (cr, 1., 1., 1.);
+      cairo_set_source_rgb (cr, 1., 1., 1.);
     }
 
 #define RADIUS 4

@@ -1755,7 +1755,7 @@ gdk_window_set_bg_pattern (GdkWindow      *window,
 	}
 
       cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
-      cairo_set_pattern (cr, pattern);
+      cairo_set_source (cr, pattern);
       cairo_pattern_destroy (pattern);
     }
   else
