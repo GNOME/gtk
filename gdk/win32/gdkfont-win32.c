@@ -1018,9 +1018,9 @@ gdk_font_load_internal (const gchar *font_name)
 	if (strcmp (point_size, "*") == 0)
 	  logfont.lfHeight = 0;
 	else
-	  logfont.lfHeight = (int) (((double) atoi (point_size))/720.*logpixelsy);
+	  logfont.lfHeight = -(int) (((double) atoi (point_size))/720.*logpixelsy);
       else
-	logfont.lfHeight = atoi (pixel_size);
+	logfont.lfHeight = -atoi (pixel_size);
 
       logfont.lfWidth = 0;
       logfont.lfEscapement = 0;

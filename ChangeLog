@@ -1,3 +1,8 @@
+2005-04-19  Ivan, Wong Yat Cheung  <email@ivanwong.info>
+
+	* gdk/win32/gdkfont-win32.c (gdk_font_load_internal): Match
+	character height instead of cell height. Fix #301228.
+
 2005-04-18  Federico Mena Quintero  <federico@ximian.com>
 
 	Merged from gtk-2-6:
