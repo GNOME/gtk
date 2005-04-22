@@ -1,3 +1,13 @@
+2005-04-22  Tor Lillqvist  <tml@novell.com>
+
+	* gtk/gtkmain.c: Initailize gettext before use. Calling
+	bindtextdomain() and bind_textdomain_codeset() in
+	do_post_parse_initialization() is too late. Put the calls in a new
+	function gettext_initialization(), and call that from
+	gtk_init_with_args() and gtk_parse_args(). Fixes #170948 for
+	GTK+'s part, but the same problem occurs also at least in
+	atk. Thanks do Robert Ögren, Daniel Atallah and Kevin Strange.
+
 2005-04-19  Ivan, Wong Yat Cheung  <email@ivanwong.info>
 
 	* gdk/win32/gdkfont-win32.c (gdk_font_load_internal): Match
