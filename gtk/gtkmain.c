@@ -464,15 +464,6 @@ do_post_parse_initialization (int    *argc,
   if (gtk_debug_flags & GTK_DEBUG_UPDATES)
     gdk_window_set_debug_updates (TRUE);
 
-#ifdef ENABLE_NLS
-  bindtextdomain (GETTEXT_PACKAGE, GTK_LOCALEDIR);
-  bindtextdomain (GETTEXT_PACKAGE "-properties", GTK_LOCALEDIR);
-#    ifdef HAVE_BIND_TEXTDOMAIN_CODESET
-  bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
-  bind_textdomain_codeset (GETTEXT_PACKAGE "-properties", "UTF-8");
-#    endif
-#endif  
-
   {
   /* Translate to default:RTL if you want your widgets
    * to be RTL, otherwise translate to default:LTR.
@@ -572,6 +563,19 @@ gtk_get_option_group (gboolean open_default_display)
   return group;
 }
 
+static void
+gettext_initialization (void)
+{
+#ifdef ENABLE_NLS
+  bindtextdomain (GETTEXT_PACKAGE, GTK_LOCALEDIR);
+  bindtextdomain (GETTEXT_PACKAGE "-properties", GTK_LOCALEDIR);
+#    ifdef HAVE_BIND_TEXTDOMAIN_CODESET
+  bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+  bind_textdomain_codeset (GETTEXT_PACKAGE "-properties", "UTF-8");
+#    endif
+#endif  
+}
+
 /**
  * gtk_init_with_args:
  * @argc: a pointer to the number of command line arguments.
@@ -614,6 +618,8 @@ gtk_init_with_args (int            *argc,
 
   if (!check_setugid ())
     return FALSE;
+
+  gettext_initialization ();
 
   gtk_group = gtk_get_option_group (TRUE);
   
@@ -659,6 +665,8 @@ gtk_parse_args (int    *argc,
 
   if (!check_setugid ())
     return FALSE;
+
+  gettext_initialization ();
 
   option_context = g_option_context_new (NULL);
   g_option_context_set_ignore_unknown_options (option_context, TRUE);
