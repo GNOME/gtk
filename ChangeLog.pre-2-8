@@ -6,7 +6,7 @@
 	function gettext_initialization(), and call that from
 	gtk_init_with_args() and gtk_parse_args(). Fixes #170948 for
 	GTK+'s part, but the same problem occurs also at least in
-	atk. Thanks do Robert Ögren, Daniel Atallah and Kevin Strange.
+	atk. Thanks to Robert Ögren, Daniel Atallah and Kevin Strange.
 
 2005-04-19  Ivan, Wong Yat Cheung  <email@ivanwong.info>
 
