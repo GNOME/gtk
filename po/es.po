@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-03-26 16:33+0100\n"
-"PO-Revision-Date: 2005-03-26 22:30+0100\n"
+"POT-Creation-Date: 2005-04-23 17:10+0200\n"
+"PO-Revision-Date: 2005-04-23 17:10+0200\n"
 "Last-Translator: Francisco Javier F. Serrador <serrador@cvs.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -192,32 +192,33 @@ msgstr "Porción malformada en la animación"
 msgid "The ANI image format"
 msgstr "El formato de imagen ANI"
 
-#: ../gdk-pixbuf/io-bmp.c:227 ../gdk-pixbuf/io-bmp.c:383
-msgid "Not enough memory to load bitmap image"
-msgstr "No existe memoria suficiente para cargar el mapa de bits"
-
-#: ../gdk-pixbuf/io-bmp.c:269
-msgid "BMP image has unsupported header size"
-msgstr "La imagen BMP tiene un tamaño de cabecera no soportado"
-
-#: ../gdk-pixbuf/io-bmp.c:288 ../gdk-pixbuf/io-bmp.c:320
-#: ../gdk-pixbuf/io-bmp.c:343 ../gdk-pixbuf/io-bmp.c:424
+#: ../gdk-pixbuf/io-bmp.c:228 ../gdk-pixbuf/io-bmp.c:301
+#: ../gdk-pixbuf/io-bmp.c:333 ../gdk-pixbuf/io-bmp.c:356
+#: ../gdk-pixbuf/io-bmp.c:437
 msgid "BMP image has bogus header data"
 msgstr "La imagen BMP tiene datos de cabecera erróneos"
 
-#: ../gdk-pixbuf/io-bmp.c:307
+#: ../gdk-pixbuf/io-bmp.c:239 ../gdk-pixbuf/io-bmp.c:396
+msgid "Not enough memory to load bitmap image"
+msgstr "No existe memoria suficiente para cargar el mapa de bits"
+
+#: ../gdk-pixbuf/io-bmp.c:282
+msgid "BMP image has unsupported header size"
+msgstr "La imagen BMP tiene un tamaño de cabecera no soportado"
+
+#: ../gdk-pixbuf/io-bmp.c:320
 msgid "Topdown BMP images cannot be compressed"
 msgstr "Las imágenes BMP «Topdown» no se pueden comprimir"
 
-#: ../gdk-pixbuf/io-bmp.c:1181
+#: ../gdk-pixbuf/io-bmp.c:1198
 msgid "Couldn't allocate memory for saving BMP file"
 msgstr "No se pudo asignar memoria para guardar el archivo BMP"
 
-#: ../gdk-pixbuf/io-bmp.c:1222
+#: ../gdk-pixbuf/io-bmp.c:1239
 msgid "Couldn't write to BMP file"
 msgstr "No se ha podido escribir en el archivo BMP"
 
-#: ../gdk-pixbuf/io-bmp.c:1271
+#: ../gdk-pixbuf/io-bmp.c:1288
 msgid "The BMP image format"
 msgstr "El formato de imagen BMP"
 
@@ -367,7 +368,9 @@ msgstr "No se puede asignar memoria para cargar el archivo JPG"
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
-msgstr "La calidad de un JPEG debe ser un valor entre 0 y 100; el valor «%s» no puede ser interpretado."
+msgstr ""
+"La calidad de un JPEG debe ser un valor entre 0 y 100; el valor «%s» no "
+"puede ser interpretado."
 
 #: ../gdk-pixbuf/io-jpeg.c:909
 #, c-format
@@ -478,7 +481,9 @@ msgstr "Error fatal leyendo el archivo gráfico PNG: %s"
 #: ../gdk-pixbuf/io-png.c:813
 msgid ""
 "Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr "Las claves para las porciones de texto PNG deben tener al menos entre 1 y un máximo de 79 caracteres."
+msgstr ""
+"Las claves para las porciones de texto PNG deben tener al menos entre 1 y un "
+"máximo de 79 caracteres."
 
 #: ../gdk-pixbuf/io-png.c:821
 msgid "Keys for PNG text chunks must be ASCII characters."
@@ -487,7 +492,9 @@ msgstr "Las claves para las porciones de texto PNG deben ser caracteres ASCII."
 #: ../gdk-pixbuf/io-png.c:854
 #, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr "El valor la porción de texto PNG %s no puede convertirse a la codificación ISO-8859-1."
+msgstr ""
+"El valor la porción de texto PNG %s no puede convertirse a la codificación "
+"ISO-8859-1."
 
 #: ../gdk-pixbuf/io-png.c:994
 msgid "The PNG image format"
@@ -591,61 +598,61 @@ msgstr "No hay memoria suficiente para cargar la imagen RAS"
 msgid "The Sun raster image format"
 msgstr "El formato de imagen Sun raster"
 
-#: ../gdk-pixbuf/io-tga.c:159
+#: ../gdk-pixbuf/io-tga.c:154
 msgid "Cannot allocate memory for IOBuffer struct"
 msgstr "No se puede asignar memoria para la estructura IOBuffer"
 
-#: ../gdk-pixbuf/io-tga.c:178
+#: ../gdk-pixbuf/io-tga.c:173
 msgid "Cannot allocate memory for IOBuffer data"
 msgstr "No se puede asignar memoria para los datos de IOBuffer"
 
-#: ../gdk-pixbuf/io-tga.c:189
+#: ../gdk-pixbuf/io-tga.c:184
 msgid "Cannot realloc IOBuffer data"
 msgstr "No se puede volver a reservar memoria para los datos de IOBuffer"
 
-#: ../gdk-pixbuf/io-tga.c:219
+#: ../gdk-pixbuf/io-tga.c:214
 msgid "Cannot allocate temporary IOBuffer data"
 msgstr "No se pueden asignar los datos temporales de IOBuffer"
 
-#: ../gdk-pixbuf/io-tga.c:353
+#: ../gdk-pixbuf/io-tga.c:348
 msgid "Cannot allocate new pixbuf"
 msgstr "No se puede asignar un nuevo pixbuf"
 
-#: ../gdk-pixbuf/io-tga.c:692
+#: ../gdk-pixbuf/io-tga.c:689
 msgid "Cannot allocate colormap structure"
 msgstr "No se puede asignar la estructura del mapa de colores"
 
-#: ../gdk-pixbuf/io-tga.c:699
+#: ../gdk-pixbuf/io-tga.c:696
 msgid "Cannot allocate colormap entries"
 msgstr "No se puede asignar las entradas del mapa de colores"
 
-#: ../gdk-pixbuf/io-tga.c:721
+#: ../gdk-pixbuf/io-tga.c:718
 msgid "Unexpected bitdepth for colormap entries"
 msgstr "Profundidad de color inesperada para las entradas del mapa de color"
 
-#: ../gdk-pixbuf/io-tga.c:739
+#: ../gdk-pixbuf/io-tga.c:736
 msgid "Cannot allocate TGA header memory"
 msgstr "No se puede asignar memoria para la cabecera TGA"
 
-#: ../gdk-pixbuf/io-tga.c:772
+#: ../gdk-pixbuf/io-tga.c:769
 msgid "TGA image has invalid dimensions"
 msgstr "La imagen TGA tiene dimensiones no válidas"
 
-#: ../gdk-pixbuf/io-tga.c:778 ../gdk-pixbuf/io-tga.c:787
-#: ../gdk-pixbuf/io-tga.c:797 ../gdk-pixbuf/io-tga.c:807
-#: ../gdk-pixbuf/io-tga.c:814
+#: ../gdk-pixbuf/io-tga.c:775 ../gdk-pixbuf/io-tga.c:784
+#: ../gdk-pixbuf/io-tga.c:794 ../gdk-pixbuf/io-tga.c:804
+#: ../gdk-pixbuf/io-tga.c:811
 msgid "TGA image type not supported"
 msgstr "El tipo de imagen TGA no está implementado"
 
-#: ../gdk-pixbuf/io-tga.c:861
+#: ../gdk-pixbuf/io-tga.c:858
 msgid "Cannot allocate memory for TGA context struct"
 msgstr "No se puede asignar memoria para la estructura context de TGA"
 
-#: ../gdk-pixbuf/io-tga.c:926
+#: ../gdk-pixbuf/io-tga.c:923
 msgid "Excess data in file"
 msgstr "Exceso de datos en el archivo"
 
-#: ../gdk-pixbuf/io-tga.c:995
+#: ../gdk-pixbuf/io-tga.c:992
 msgid "The Targa image format"
 msgstr "El formato de imagen Targa"
 
@@ -864,7 +871,7 @@ msgstr "COLORES"
 msgid "Make X calls synchronous"
 msgstr "Hacer llamadas a X síncronas"
 
-#: ../gtk/gtkaboutdialog.c:270 ../gtk/gtkaboutdialog.c:2023
+#: ../gtk/gtkaboutdialog.c:270 ../gtk/gtkaboutdialog.c:2025
 msgid "License"
 msgstr "Licencia"
 
@@ -878,32 +885,32 @@ msgid "C_redits"
 msgstr "_Créditos"
 
 #. Add the license button
-#: ../gtk/gtkaboutdialog.c:500
+#: ../gtk/gtkaboutdialog.c:501
 msgid "_License"
 msgstr "_Licencia"
 
-#: ../gtk/gtkaboutdialog.c:729
+#: ../gtk/gtkaboutdialog.c:731
 #, c-format
 msgid "About %s"
 msgstr "Acerca de %s"
 
-#: ../gtk/gtkaboutdialog.c:1951
+#: ../gtk/gtkaboutdialog.c:1953
 msgid "Credits"
 msgstr "Créditos"
 
-#: ../gtk/gtkaboutdialog.c:1977
+#: ../gtk/gtkaboutdialog.c:1979
 msgid "Written by"
 msgstr "Escrito por"
 
-#: ../gtk/gtkaboutdialog.c:1980
+#: ../gtk/gtkaboutdialog.c:1982
 msgid "Documented by"
 msgstr "Documentado por"
 
-#: ../gtk/gtkaboutdialog.c:1992
+#: ../gtk/gtkaboutdialog.c:1994
 msgid "Translated by"
 msgstr "Traducido por"
 
-#: ../gtk/gtkaboutdialog.c:1996
+#: ../gtk/gtkaboutdialog.c:1998
 msgid "Artwork by"
 msgstr "Arte por"
 
@@ -969,7 +976,7 @@ msgstr "Escoja un color"
 msgid "Received invalid color data\n"
 msgstr "Se recibió un dato de color no válido\n"
 
-#: ../gtk/gtkcolorsel.c:561
+#: ../gtk/gtkcolorsel.c:563
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -980,17 +987,19 @@ msgstr ""
 "o seleccionar este color como actual arrastrándolo al otro color a lo largo "
 "de la muestra."
 
-#: ../gtk/gtkcolorsel.c:566
+#: ../gtk/gtkcolorsel.c:568
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
-msgstr "El que color elegido. Puede arrastrar este color a la paleta y guardarla para usarla en el futuro."
+msgstr ""
+"El que color elegido. Puede arrastrar este color a la paleta y guardarla "
+"para usarla en el futuro."
 
-#: ../gtk/gtkcolorsel.c:958
+#: ../gtk/gtkcolorsel.c:960
 msgid "_Save color here"
 msgstr "_Guardar color aquí"
 
-#: ../gtk/gtkcolorsel.c:1163
+#: ../gtk/gtkcolorsel.c:1165
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -999,13 +1008,15 @@ msgstr ""
 "cambiar esta entrada, arrastre un color de muestra aquí o pulse con el botón "
 "derecho sobre éste y seleccione «Guardar color aquí»."
 
-#: ../gtk/gtkcolorsel.c:1920
+#: ../gtk/gtkcolorsel.c:1922
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
-msgstr "Seleccione el color que desea desde el anillo exterior. Seleccione la oscuridad o luminosidad de ese color usando el triángulo interior."
+msgstr ""
+"Seleccione el color que desea desde el anillo exterior. Seleccione la "
+"oscuridad o luminosidad de ese color usando el triángulo interior."
 
-#: ../gtk/gtkcolorsel.c:1945
+#: ../gtk/gtkcolorsel.c:1947
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
@@ -1013,67 +1024,67 @@ msgstr ""
 "Seleccione el gotero, luego pulse sobre cualquier color que haya en su "
 "pantalla para seleccionar ese color."
 
-#: ../gtk/gtkcolorsel.c:1954
+#: ../gtk/gtkcolorsel.c:1956
 msgid "_Hue:"
 msgstr "_Matiz:"
 
-#: ../gtk/gtkcolorsel.c:1955
+#: ../gtk/gtkcolorsel.c:1957
 msgid "Position on the color wheel."
 msgstr "Posición en la rueda de colores."
 
-#: ../gtk/gtkcolorsel.c:1957
+#: ../gtk/gtkcolorsel.c:1959
 msgid "_Saturation:"
 msgstr "_Saturación:"
 
-#: ../gtk/gtkcolorsel.c:1958
+#: ../gtk/gtkcolorsel.c:1960
 msgid "\"Deepness\" of the color."
 msgstr "«Profundidad» del color."
 
-#: ../gtk/gtkcolorsel.c:1959
+#: ../gtk/gtkcolorsel.c:1961
 msgid "_Value:"
 msgstr "_Valor:"
 
-#: ../gtk/gtkcolorsel.c:1960
+#: ../gtk/gtkcolorsel.c:1962
 msgid "Brightness of the color."
 msgstr "Brillo del color."
 
-#: ../gtk/gtkcolorsel.c:1961
+#: ../gtk/gtkcolorsel.c:1963
 msgid "_Red:"
 msgstr "_Rojo:"
 
-#: ../gtk/gtkcolorsel.c:1962
+#: ../gtk/gtkcolorsel.c:1964
 msgid "Amount of red light in the color."
 msgstr "Cantidad de luz roja en el color."
 
-#: ../gtk/gtkcolorsel.c:1963
+#: ../gtk/gtkcolorsel.c:1965
 msgid "_Green:"
 msgstr "_Verde:"
 
-#: ../gtk/gtkcolorsel.c:1964
+#: ../gtk/gtkcolorsel.c:1966
 msgid "Amount of green light in the color."
 msgstr "Cantidad de luz verde en el color."
 
-#: ../gtk/gtkcolorsel.c:1965
+#: ../gtk/gtkcolorsel.c:1967
 msgid "_Blue:"
 msgstr "_Azul:"
 
-#: ../gtk/gtkcolorsel.c:1966
+#: ../gtk/gtkcolorsel.c:1968
 msgid "Amount of blue light in the color."
 msgstr "Cantidad de luz azul en el color."
 
-#: ../gtk/gtkcolorsel.c:1969
+#: ../gtk/gtkcolorsel.c:1971
 msgid "_Opacity:"
 msgstr "_Opacidad:"
 
-#: ../gtk/gtkcolorsel.c:1977 ../gtk/gtkcolorsel.c:1988
+#: ../gtk/gtkcolorsel.c:1979 ../gtk/gtkcolorsel.c:1990
 msgid "Transparency of the color."
 msgstr "Transparencia del color."
 
-#: ../gtk/gtkcolorsel.c:1995
+#: ../gtk/gtkcolorsel.c:1997
 msgid "Color _Name:"
 msgstr "_Nombre del color:"
 
-#: ../gtk/gtkcolorsel.c:2010
+#: ../gtk/gtkcolorsel.c:2012
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
@@ -1081,11 +1092,11 @@ msgstr ""
 "Puede introducir en esta entrada un valor de color en estilo HTML "
 "hexadecimal, o simplemente un nombre de color como «orange»."
 
-#: ../gtk/gtkcolorsel.c:2029
+#: ../gtk/gtkcolorsel.c:2031
 msgid "_Palette"
 msgstr "_Paleta"
 
-#: ../gtk/gtkcolorsel.c:2061
+#: ../gtk/gtkcolorsel.c:2063
 msgid "Color Wheel"
 msgstr "Rueda de color"
 
@@ -1115,12 +1126,12 @@ msgstr "Nombre de archivo no válido: %s"
 msgid "Select A File"
 msgstr "Seleccione un archivo"
 
-#: ../gtk/gtkfilechooserbutton.c:68 ../gtk/gtkfilechooserdefault.c:1287
+#: ../gtk/gtkfilechooserbutton.c:68 ../gtk/gtkfilechooserdefault.c:1288
 #: ../gtk/gtkpathbar.c:996
 msgid "Home"
 msgstr "Inicio"
 
-#: ../gtk/gtkfilechooserbutton.c:69 ../gtk/gtkfilechooserdefault.c:1314
+#: ../gtk/gtkfilechooserbutton.c:69 ../gtk/gtkfilechooserdefault.c:1315
 #: ../gtk/gtkpathbar.c:998
 msgid "Desktop"
 msgstr "Escritorio"
@@ -1159,118 +1170,118 @@ msgstr "Nombre de archivo inválido"
 msgid "The folder contents could not be displayed"
 msgstr "No se pudo mostrar el contenido de la carpeta"
 
-#: ../gtk/gtkfilechooserdefault.c:1177
+#: ../gtk/gtkfilechooserdefault.c:1178
 #, c-format
 msgid "Could not get information about '%s': %s"
 msgstr "No se ha podido obtener información acerca de «%s» : %s"
 
-#: ../gtk/gtkfilechooserdefault.c:2208
+#: ../gtk/gtkfilechooserdefault.c:2206
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Añadir la carpeta «%s» a los marcadores"
 
-#: ../gtk/gtkfilechooserdefault.c:2249
+#: ../gtk/gtkfilechooserdefault.c:2247
 msgid "Add the current folder to the bookmarks"
 msgstr "Añadir la carpeta actual a los marcadores"
 
-#: ../gtk/gtkfilechooserdefault.c:2251
+#: ../gtk/gtkfilechooserdefault.c:2249
 msgid "Add the selected folders to the bookmarks"
 msgstr "Añadir las carpetas seleccionadas a los marcadores"
 
-#: ../gtk/gtkfilechooserdefault.c:2291
+#: ../gtk/gtkfilechooserdefault.c:2289
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Quitar el marcador «%s»"
 
-#: ../gtk/gtkfilechooserdefault.c:2722
+#: ../gtk/gtkfilechooserdefault.c:2720
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
 msgstr ""
 "No se pudo añadir un marcador para «%s» porque es un nombre de ruta inválido."
 
-#: ../gtk/gtkfilechooserdefault.c:2937
+#: ../gtk/gtkfilechooserdefault.c:2935
 msgid "Remove"
 msgstr "Quitar"
 
-#: ../gtk/gtkfilechooserdefault.c:2946
+#: ../gtk/gtkfilechooserdefault.c:2944
 msgid "Rename..."
 msgstr "Renombrar..."
 
-#: ../gtk/gtkfilechooserdefault.c:3069
+#: ../gtk/gtkfilechooserdefault.c:3067
 msgid "Shortcuts"
 msgstr "Atajos"
 
-#: ../gtk/gtkfilechooserdefault.c:3123
+#: ../gtk/gtkfilechooserdefault.c:3121
 msgid "Folder"
 msgstr "Carpeta"
 
-#: ../gtk/gtkfilechooserdefault.c:3179 ../gtk/gtkstock.c:317
+#: ../gtk/gtkfilechooserdefault.c:3177 ../gtk/gtkstock.c:317
 msgid "_Add"
 msgstr "_Añadir"
 
-#: ../gtk/gtkfilechooserdefault.c:3186
-msgid "Add the selected folder to the bookmarks"
+#: ../gtk/gtkfilechooserdefault.c:3184
+msgid "Add the selected folder to the Bookmarks"
 msgstr "Añadir la carpeta seleccionada a los marcadores"
 
-#: ../gtk/gtkfilechooserdefault.c:3191 ../gtk/gtkstock.c:395
+#: ../gtk/gtkfilechooserdefault.c:3189 ../gtk/gtkstock.c:395
 msgid "_Remove"
 msgstr "_Quitar"
 
-#: ../gtk/gtkfilechooserdefault.c:3198
+#: ../gtk/gtkfilechooserdefault.c:3196
 msgid "Remove the selected bookmark"
 msgstr "Quitar el marcador seleccionado"
 
-#: ../gtk/gtkfilechooserdefault.c:3301
-msgid "_Add to Shortcuts"
-msgstr "_Añadir a los enlaces"
+#: ../gtk/gtkfilechooserdefault.c:3299
+msgid "_Add to Bookmarks"
+msgstr "_Añadir a los marcadores"
 
-#: ../gtk/gtkfilechooserdefault.c:3311
+#: ../gtk/gtkfilechooserdefault.c:3309
 msgid "Open _Location"
 msgstr "Abrir _dirección"
 
-#: ../gtk/gtkfilechooserdefault.c:3323
+#: ../gtk/gtkfilechooserdefault.c:3321
 msgid "Show _Hidden Files"
 msgstr "Mostrar archivos _ocultos"
 
-#: ../gtk/gtkfilechooserdefault.c:3447 ../gtk/gtkfilesel.c:766
+#: ../gtk/gtkfilechooserdefault.c:3445 ../gtk/gtkfilesel.c:766
 msgid "Files"
 msgstr "Archivos"
 
-#: ../gtk/gtkfilechooserdefault.c:3478
+#: ../gtk/gtkfilechooserdefault.c:3476
 msgid "Name"
 msgstr "Nombre"
 
-#: ../gtk/gtkfilechooserdefault.c:3503
+#: ../gtk/gtkfilechooserdefault.c:3501
 msgid "Size"
 msgstr "Tamaño"
 
-#: ../gtk/gtkfilechooserdefault.c:3516
+#: ../gtk/gtkfilechooserdefault.c:3514
 msgid "Modified"
 msgstr "Modificado"
 
-#: ../gtk/gtkfilechooserdefault.c:3548
+#: ../gtk/gtkfilechooserdefault.c:3546
 msgid "Select which types of files are shown"
 msgstr "Seleccione qué tipos de archivos se muestran"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:3584
+#: ../gtk/gtkfilechooserdefault.c:3582
 msgid "Create Fo_lder"
 msgstr "Crear _carpeta"
 
 #. Name entry
-#: ../gtk/gtkfilechooserdefault.c:3705
+#: ../gtk/gtkfilechooserdefault.c:3703
 msgid "_Name:"
 msgstr "_Nombre:"
 
-#: ../gtk/gtkfilechooserdefault.c:3745
+#: ../gtk/gtkfilechooserdefault.c:3743
 msgid "_Browse for other folders"
 msgstr "_Buscar otras carpetas"
 
-#: ../gtk/gtkfilechooserdefault.c:3996
+#: ../gtk/gtkfilechooserdefault.c:3994
 msgid "Save in _folder:"
 msgstr "Guardar en una _carpeta:"
 
-#: ../gtk/gtkfilechooserdefault.c:3998
+#: ../gtk/gtkfilechooserdefault.c:3996
 msgid "Create in _folder:"
 msgstr "Crear en la _carpeta:"
 
@@ -1662,12 +1673,12 @@ msgstr "Valor _gamma"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: ../gtk/gtkiconfactory.c:1629
+#: ../gtk/gtkiconfactory.c:1644
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Ocurrió un error al cargar el icono: %s"
 
-#: ../gtk/gtkicontheme.c:1249
+#: ../gtk/gtkicontheme.c:1250
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1680,7 +1691,7 @@ msgstr ""
 "Puede obtener una copia desde:\n"
 "\t%s"
 
-#: ../gtk/gtkicontheme.c:1314
+#: ../gtk/gtkicontheme.c:1315
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "El icono «%s» no está presente en el tema"
@@ -1804,15 +1815,15 @@ msgstr "Flags de depuración GTK+ a quitar"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:482
+#: ../gtk/gtkmain.c:473
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmain.c:565
+#: ../gtk/gtkmain.c:556
 msgid "GTK+ Options"
 msgstr "Opciones GTK+"
 
-#: ../gtk/gtkmain.c:565
+#: ../gtk/gtkmain.c:556
 msgid "Show GTK+ Options"
 msgstr "Mostrar opciones GTK+"
 
@@ -1834,12 +1845,12 @@ msgstr "La herramienta de botón de radio a cuyo grupo pertenece este botón."
 msgid "Unable to find include file: \"%s\""
 msgstr "No se ha podido encontrar el archivo «include»: «%s»"
 
-#: ../gtk/gtkrc.c:3039 ../gtk/gtkrc.c:3042
+#: ../gtk/gtkrc.c:3042 ../gtk/gtkrc.c:3045
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Imposible encontrar un archivo imagen en pixmap_path: «%s»"
 
-#: ../gtk/gtkrc.c:3477
+#: ../gtk/gtkrc.c:3480
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "La ruta del elemento pixmap: «%s» debe ser absoluta, %s, línea %d"
