@@ -1,3 +1,7 @@
+2005-04-24  Hans Breuer  <hans@breuer.org>
+
+	* gtk/stock-icons/makefile.msc : updated
+
 2005-04-22  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/gtkmain.c: Initailize gettext before use. Calling
