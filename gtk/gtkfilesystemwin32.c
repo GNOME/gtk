@@ -613,33 +613,33 @@ gtk_file_system_win32_volume_get_display_name (GtkFileSystem       *file_system,
       volume->drive_type != DRIVE_REMOVABLE)
     {
       gchar *name = NULL;
-      if (G_WIN32_HAVE_WIDECHAR_API ()) 
-        {	      
-          gunichar2 *wdrive = g_utf8_to_utf16 (volume->drive, -1, NULL, NULL, NULL);
-          gunichar2 wname[80];
-          if (GetVolumeInformationW (wdrive,
-				 wname, G_N_ELEMENTS(wname), 
-				 NULL, /* serial number */
-				 NULL, /* max. component length */
-				 NULL, /* fs flags */
-				 NULL, 0) /* fs type like FAT, NTFS */ &&
-            wname[0])
-            {
-              name = g_utf16_to_utf8 (wname, -1, NULL, NULL, NULL);
-            }
-          g_free (wdrive);
+      if (G_WIN32_HAVE_WIDECHAR_API ())
+	{
+	  gunichar2 *wdrive = g_utf8_to_utf16 (volume->drive, -1, NULL, NULL, NULL);
+	  gunichar2 wname[80];
+	  if (GetVolumeInformationW (wdrive,
+				     wname, G_N_ELEMENTS(wname), 
+				     NULL, /* serial number */
+				     NULL, /* max. component length */
+				     NULL, /* fs flags */
+				     NULL, 0) /* fs type like FAT, NTFS */ &&
+	      wname[0])
+	    {
+	      name = g_utf16_to_utf8 (wname, -1, NULL, NULL, NULL);
+	    }
+	  g_free (wdrive);
 	}
       else
         {
           gchar *cpdrive = g_locale_from_utf8 (volume->drive, -1, NULL, NULL, NULL);
           gchar cpname[80];
           if (GetVolumeInformationA (cpdrive,
-				 cpname, G_N_ELEMENTS(cpname), 
-				 NULL, /* serial number */
-				 NULL, /* max. component length */
-				 NULL, /* fs flags */
-				 NULL, 0) /* fs type like FAT, NTFS */ &&
-            cpname[0])
+				     cpname, G_N_ELEMENTS(cpname), 
+				     NULL, /* serial number */
+				     NULL, /* max. component length */
+				     NULL, /* fs flags */
+				     NULL, 0) /* fs type like FAT, NTFS */ &&
+	      cpname[0])
             {
               name = g_locale_to_utf8 (cpname, -1, NULL, NULL, NULL);
             }
@@ -647,13 +647,13 @@ gtk_file_system_win32_volume_get_display_name (GtkFileSystem       *file_system,
         }
       if (name != NULL)
         {
-          real_display_name = g_strconcat (name, " (", volume->drive, ")", NULL);
-          g_free (name);
-        }
+	  real_display_name = g_strconcat (name, " (", volume->drive, ")", NULL);
+	  g_free (name);
+	}
       else
-        {
-          real_display_name = g_strdup (volume->drive);
-        }
+	{
+	  real_display_name = g_strdup (volume->drive);
+	}
     }
   else
     real_display_name = g_strdup (volume->drive);
