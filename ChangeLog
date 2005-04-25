@@ -1,3 +1,11 @@
+2005-04-25  Tor Lillqvist  <tml@novell.com>
+
+	* gtk/gtkfilesystemwin32.c
+	(gtk_file_system_win32_volume_get_display_name): Get volume name
+	also on Win9x. (#301798, Daniel Atallah)
+	(canonicalize_filename): Add explicit braces to silence compiler
+	warning.
+
 2005-04-22  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/gtkmain.c: Initailize gettext before use. Calling
