@@ -175,7 +175,6 @@ static void gtk_icon_view_destroy (GtkObject *object);
 /* GtkWidget signals */
 static void     gtk_icon_view_realize        (GtkWidget      *widget);
 static void     gtk_icon_view_unrealize      (GtkWidget      *widget);
-static void     gtk_icon_view_map            (GtkWidget      *widget);
 static void     gtk_icon_view_size_request   (GtkWidget      *widget,
 					      GtkRequisition *requisition);
 static void     gtk_icon_view_size_allocate  (GtkWidget      *widget,
@@ -303,7 +302,6 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
   
   widget_class->realize = gtk_icon_view_realize;
   widget_class->unrealize = gtk_icon_view_unrealize;
-  widget_class->map = gtk_icon_view_map;
   widget_class->size_request = gtk_icon_view_size_request;
   widget_class->size_allocate = gtk_icon_view_size_allocate;
   widget_class->expose_event = gtk_icon_view_expose;
@@ -906,6 +904,8 @@ gtk_icon_view_realize (GtkWidget *widget)
   widget->style = gtk_style_attach (widget->style, widget->window);
   gdk_window_set_background (icon_view->priv->bin_window, &widget->style->base[widget->state]);
   gdk_window_set_background (widget->window, &widget->style->base[widget->state]);
+
+  gdk_window_show (icon_view->priv->bin_window);
 }
 
 static void
@@ -922,19 +922,6 @@ gtk_icon_view_unrealize (GtkWidget *widget)
   /* GtkWidget::unrealize destroys children and widget->window */
   if (GTK_WIDGET_CLASS (parent_class)->unrealize)
     (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
-}
-
-static void
-gtk_icon_view_map (GtkWidget *widget)
-{
-  GtkIconView *icon_view;
-
-  icon_view = GTK_ICON_VIEW (widget);
-
-  GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
-
-  gdk_window_show (icon_view->priv->bin_window);
-  gdk_window_show (widget->window);
 }
 
 static void
