@@ -1,3 +1,9 @@
+2005-04-29  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktexttag.c (gtk_text_tag_class_init): Correct the documentation
+	of the rise property. String change, but it is more important to
+	be correct than to be translated.  (#301740)
+
 2005-04-25  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/gtkfilesystemwin32.c
