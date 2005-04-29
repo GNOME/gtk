@@ -11313,8 +11313,12 @@ gtk_tree_view_get_path_at_pos (GtkTreeView        *tree_view,
       GList *list;
       gint remaining_x = x;
       gboolean found = FALSE;
+      gboolean rtl;
 
-      for (list = tree_view->priv->columns; list; list = list->next)
+      rtl = (gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_RTL);
+      for (list = (rtl ? g_list_last (tree_view->priv->columns) : g_list_first (tree_view->priv->columns));
+	   list;
+	   list = (rtl ? list->prev : list->next))
 	{
 	  tmp_column = list->data;
 
