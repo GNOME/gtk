@@ -2070,7 +2070,6 @@ update_node (GtkUIManager *self,
   Node *info;
   GNode *child;
   GtkAction *action;
-  gchar *tooltip;
   const gchar *action_name;
   NodeUIReference *ref;
   
@@ -2455,9 +2454,7 @@ update_node (GtkUIManager *self,
 	       * tooltips on toolitems can't be set before the toolitem 
 	       * is added to the toolbar.
 	       */
-	      g_object_get (action, "tooltip", &tooltip, NULL);
-	      g_object_set (action, "tooltip", tooltip, NULL);
-	      g_free (tooltip);
+              g_object_notify (G_OBJECT (action), "tooltip");
 	    }
 	}
       else
