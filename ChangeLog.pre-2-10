@@ -136,7 +136,6 @@
 	Enter the "user-resized" state of the column only if a drag
 	actually changes the column width, not on any click.
 
->>>>>>> 1.6531
 2005-04-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkmenu.c (gtk_menu_paint): Allow setting background
