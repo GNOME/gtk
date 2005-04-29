@@ -3000,11 +3000,11 @@ static void
 gtk_icon_view_scroll_to_item (GtkIconView     *icon_view, 
 			      GtkIconViewItem *item)
 {
-  gint y, height;
+  gint x, y, width, height;
   gdouble value;
 
-  gdk_drawable_get_size (GDK_DRAWABLE (icon_view->priv->bin_window), NULL, &height);
-  gdk_window_get_position (icon_view->priv->bin_window, NULL, &y);
+  gdk_drawable_get_size (GDK_DRAWABLE (icon_view->priv->bin_window), &width, &height);
+  gdk_window_get_position (icon_view->priv->bin_window, &x, &y);
 
   if (y + item->y < 0)
     {
@@ -3015,7 +3015,21 @@ gtk_icon_view_scroll_to_item (GtkIconView     *icon_view,
     {
       value = icon_view->priv->vadjustment->value + y + item->y + item->height 
 	- GTK_WIDGET (icon_view)->allocation.height;
+      value = MIN (value, icon_view->priv->vadjustment->value + y + item->y);
       gtk_adjustment_set_value (icon_view->priv->vadjustment, value);
+    }
+
+  if (x + item->x < 0)
+    {
+      value = icon_view->priv->hadjustment->value + x + item->x;
+      gtk_adjustment_set_value (icon_view->priv->hadjustment, value);
+    }
+  else if (x + item->x + item->width > GTK_WIDGET (icon_view)->allocation.width)
+    {
+      value = icon_view->priv->hadjustment->value + x + item->x + item->width 
+	- GTK_WIDGET (icon_view)->allocation.width;
+      value = MIN (value, icon_view->priv->hadjustment->value + x + item->x);
+      gtk_adjustment_set_value (icon_view->priv->hadjustment, value);
     }
 }
 

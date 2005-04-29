@@ -1,5 +1,9 @@
 2005-04-29  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkiconview.c (gtk_icon_view_scroll_to_item): Also
+	scroll horizontally when necessary, and keep the northwest
+	corner of the item visible.  (#300913, Mathias Hasselmann)
+
 	* tests/testiconview.c: Add some more tests.
 
 	* gtk/gtkiconview.c (gtk_icon_view_select_path): Don't crash
