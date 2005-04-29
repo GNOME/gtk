@@ -424,7 +424,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    PROP_RISE,
                                    g_param_spec_int ("rise",
                                                      P_("Rise"),
-                                                     P_("Offset of text above the baseline (below the baseline if rise is negative) in pixels"),
+                                                     P_("Offset of text above the baseline (below the baseline if rise is negative) in Pango units"),
 						     G_MININT,
                                                      G_MAXINT,
                                                      0,
