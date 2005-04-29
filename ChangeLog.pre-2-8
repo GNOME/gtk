@@ -1,5 +1,8 @@
 2005-04-29  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkradiobutton.c (gtk_radio_button_focus): Don't 
+	grab focus to unrealized widgets.  (#302240, Philip Langdale)
+
 	* gtk/gtktreeview.c (gtk_tree_view_state_changed): Set
 	background upon state changes.  (#301651, Billy Biggs)
 	(gtk_tree_view_get_path_at_pos): Take RTL into account

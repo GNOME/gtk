@@ -510,7 +510,7 @@ gtk_radio_button_focus (GtkWidget         *widget,
 	    {
 	      GtkWidget *child = tmp_list->data;
 	      
-	      if (GTK_WIDGET_VISIBLE (child) && GTK_WIDGET_IS_SENSITIVE (child))
+	      if (GTK_WIDGET_REALIZED (child) && GTK_WIDGET_IS_SENSITIVE (child))
 		{
 		  new_focus = child;
 		  break;
@@ -528,7 +528,7 @@ gtk_radio_button_focus (GtkWidget         *widget,
 	    {
 	      GtkWidget *child = tmp_list->data;
 	      
-	      if (GTK_WIDGET_VISIBLE (child) && GTK_WIDGET_IS_SENSITIVE (child))
+	      if (GTK_WIDGET_REALIZED (child) && GTK_WIDGET_IS_SENSITIVE (child))
 		{
 		  new_focus = child;
 		  break;
