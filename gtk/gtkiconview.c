@@ -2836,10 +2836,10 @@ gtk_icon_view_move_cursor_up_down (GtkIconView *icon_view,
   if (!icon_view->priv->ctrl_pressed &&
       icon_view->priv->selection_mode != GTK_SELECTION_NONE)
     {
-      gtk_icon_view_unselect_all_internal (icon_view);
+      dirty = gtk_icon_view_unselect_all_internal (icon_view);
       dirty = gtk_icon_view_select_all_between (icon_view, 
 						icon_view->priv->anchor_item,
-						item);
+						item) || dirty;
     }
 
   gtk_icon_view_scroll_to_item (icon_view, item);
@@ -2888,10 +2888,10 @@ gtk_icon_view_move_cursor_page_up_down (GtkIconView *icon_view,
   if (!icon_view->priv->ctrl_pressed &&
       icon_view->priv->selection_mode != GTK_SELECTION_NONE)
     {
-      gtk_icon_view_unselect_all_internal (icon_view);
+      dirty = gtk_icon_view_unselect_all_internal (icon_view);
       dirty = gtk_icon_view_select_all_between (icon_view, 
 						icon_view->priv->anchor_item,
-						item);
+						item) || dirty;
     }
 
   gtk_icon_view_scroll_to_item (icon_view, item);
@@ -2940,10 +2940,10 @@ gtk_icon_view_move_cursor_left_right (GtkIconView *icon_view,
   if (!icon_view->priv->ctrl_pressed &&
       icon_view->priv->selection_mode != GTK_SELECTION_NONE)
     {
-      gtk_icon_view_unselect_all_internal (icon_view);
+      dirty = gtk_icon_view_unselect_all_internal (icon_view);
       dirty = gtk_icon_view_select_all_between (icon_view, 
 						icon_view->priv->anchor_item,
-						item);
+						item) || dirty;
     }
 
   gtk_icon_view_scroll_to_item (icon_view, item);
@@ -2984,10 +2984,10 @@ gtk_icon_view_move_cursor_start_end (GtkIconView *icon_view,
   if (!icon_view->priv->ctrl_pressed &&
       icon_view->priv->selection_mode != GTK_SELECTION_NONE)
     {
-      gtk_icon_view_unselect_all (icon_view);
+      dirty = gtk_icon_view_unselect_all_internal (icon_view);
       dirty = gtk_icon_view_select_all_between (icon_view, 
 						icon_view->priv->anchor_item,
-						item);
+						item) || dirty;
     }
 
   gtk_icon_view_scroll_to_item (icon_view, item);
