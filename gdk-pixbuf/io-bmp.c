@@ -1074,14 +1074,10 @@ gdk_pixbuf__bmp_image_load_increment(gpointer data,
 
 	gint BytesToCopy;
 
-	g_print ("load_inc\n");
 	if (context->read_state == READ_STATE_DONE)
 		return TRUE;
 	else if (context->read_state == READ_STATE_ERROR)
-	{
-		g_print ("ah\n");
 		return FALSE;
-	}
 
 	while (size > 0) {
 		if (context->BufferDone < context->BufferSize) {	/* We still
@@ -1107,37 +1103,25 @@ gdk_pixbuf__bmp_image_load_increment(gpointer data,
 			if (!DecodeHeader (context->buff,
 					   context->buff + 14, context,
 					   error))
-			{
-				g_print ("bla\n");
 				return FALSE;
-			}
 
 			break;
 
 		case READ_STATE_PALETTE:
 			if (!DecodeColormap (context->buff, context, error))
-			{
-				g_print ("bleh\n");
 				return FALSE;
-			}
 			break;
 
 		case READ_STATE_BITMASKS:
 			if (!decode_bitmasks (context->buff, context, error))
-			{
-				g_print ("blurb\n");
 				return FALSE;
-			}
 			break;
 
 		case READ_STATE_DATA:
 			if (context->Compressed == BI_RGB || context->Compressed == BI_BITFIELDS)
 				OneLine (context);
 			else if (!DoCompressed (context, error))
-			{
-				g_print ("blurb\n");
 				return FALSE;
-			}
 
 			break;
 		case READ_STATE_DONE:

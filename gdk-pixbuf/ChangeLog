@@ -1,3 +1,8 @@
+2005-04-29  Matthias Clasen  <mclasen@redhat.com>
+
+	* io-bmp.c (DecodeColormap): Remove debugging 
+	output.  (#302404, Frederic Crozat)
+
 2005-04-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Releases 2.6.7 ====
