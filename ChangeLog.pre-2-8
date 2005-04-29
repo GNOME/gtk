@@ -1,5 +1,7 @@
 2005-04-29  Matthias Clasen  <mclasen@redhat.com>
 
+	* tests/testtext.c: Add some more attribute tests.
+
 	* gtk/gtktexttag.c (gtk_text_tag_class_init): Correct the documentation
 	of the rise property. String change, but it is more important to
 	be correct than to be translated.  (#301740)

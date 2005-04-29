@@ -28,6 +28,10 @@ struct _Buffer
   GtkTextTag *invisible_tag;
   GtkTextTag *not_editable_tag;
   GtkTextTag *found_text_tag;
+  GtkTextTag *rise_tag;
+  GtkTextTag *large_tag;
+  GtkTextTag *indent_tag;
+  GtkTextTag *margin_tag;
   GtkTextTag *custom_tabs_tag;
   GSList *color_tags;
   guint color_cycle_timeout;
@@ -1034,6 +1038,114 @@ do_apply_invisible (gpointer callback_data,
 }
 
 static void
+do_apply_rise (gpointer callback_data,
+	       guint callback_action,
+	       GtkWidget *widget)
+{
+  View *view = view_from_widget (widget);
+  GtkTextIter start;
+  GtkTextIter end;
+  
+  if (gtk_text_buffer_get_selection_bounds (view->buffer->buffer,
+                                            &start, &end))
+    {
+      if (callback_action)
+        {
+          gtk_text_buffer_remove_tag (view->buffer->buffer,
+                                      view->buffer->rise_tag,
+                                      &start, &end);
+        }
+      else
+        {
+          gtk_text_buffer_apply_tag (view->buffer->buffer,
+                                     view->buffer->rise_tag,
+                                     &start, &end);
+        }
+    }
+}
+
+static void
+do_apply_large (gpointer callback_data,
+		guint callback_action,
+		GtkWidget *widget)
+{
+  View *view = view_from_widget (widget);
+  GtkTextIter start;
+  GtkTextIter end;
+  
+  if (gtk_text_buffer_get_selection_bounds (view->buffer->buffer,
+                                            &start, &end))
+    {
+      if (callback_action)
+        {
+          gtk_text_buffer_remove_tag (view->buffer->buffer,
+                                      view->buffer->large_tag,
+                                      &start, &end);
+        }
+      else
+        {
+          gtk_text_buffer_apply_tag (view->buffer->buffer,
+                                     view->buffer->large_tag,
+                                     &start, &end);
+        }
+    }
+}
+
+static void
+do_apply_indent (gpointer callback_data,
+		 guint callback_action,
+		 GtkWidget *widget)
+{
+  View *view = view_from_widget (widget);
+  GtkTextIter start;
+  GtkTextIter end;
+  
+  if (gtk_text_buffer_get_selection_bounds (view->buffer->buffer,
+                                            &start, &end))
+    {
+      if (callback_action)
+        {
+          gtk_text_buffer_remove_tag (view->buffer->buffer,
+                                      view->buffer->indent_tag,
+                                      &start, &end);
+        }
+      else
+        {
+          gtk_text_buffer_apply_tag (view->buffer->buffer,
+                                     view->buffer->indent_tag,
+                                     &start, &end);
+        }
+    }
+}
+
+static void
+do_apply_margin (gpointer callback_data,
+		 guint callback_action,
+		 GtkWidget *widget)
+{
+  View *view = view_from_widget (widget);
+  GtkTextIter start;
+  GtkTextIter end;
+  
+  if (gtk_text_buffer_get_selection_bounds (view->buffer->buffer,
+                                            &start, &end))
+    {
+      if (callback_action)
+        {
+          gtk_text_buffer_remove_tag (view->buffer->buffer,
+                                      view->buffer->margin_tag,
+                                      &start, &end);
+        }
+      else
+        {
+          gtk_text_buffer_apply_tag (view->buffer->buffer,
+                                     view->buffer->margin_tag,
+                                     &start, &end);
+        }
+    }
+}
+
+static void
 do_apply_tabs (gpointer callback_data,
                guint callback_action,
                GtkWidget *widget)
@@ -1555,6 +1667,10 @@ static GtkItemFactoryEntry menu_items[] =
   { "/Attributes/Not editable",   	  NULL,         do_apply_editable, FALSE, NULL },
   { "/Attributes/Invisible",   	  NULL,         do_apply_invisible, FALSE, NULL },
   { "/Attributes/Visible",   	  NULL,         do_apply_invisible, TRUE, NULL },
+  { "/Attributes/Rise",   	  NULL,         do_apply_rise, FALSE, NULL },
+  { "/Attributes/Large",   	  NULL,         do_apply_large, FALSE, NULL },
+  { "/Attributes/Indent",   	  NULL,         do_apply_indent, FALSE, NULL },
+  { "/Attributes/Margins",   	  NULL,         do_apply_margin, FALSE, NULL },
   { "/Attributes/Custom tabs",   	  NULL,         do_apply_tabs, FALSE, NULL },
   { "/Attributes/Default tabs",   	  NULL,         do_apply_tabs, TRUE, NULL },
   { "/Attributes/Color cycles",   	  NULL,         do_apply_colors, TRUE, NULL },
@@ -1746,7 +1862,7 @@ create_buffer (void)
       ++i;
     }
 
-#if 0  
+#if 1  
   buffer->invisible_tag = gtk_text_buffer_create_tag (buffer->buffer, NULL,
                                                       "invisible", TRUE, NULL);
 #endif  
@@ -1758,6 +1874,18 @@ create_buffer (void)
 
   buffer->found_text_tag = gtk_text_buffer_create_tag (buffer->buffer, NULL,
                                                        "foreground", "red", NULL);
+
+  buffer->rise_tag = gtk_text_buffer_create_tag (buffer->buffer, NULL,
+						 "rise", 10 * PANGO_SCALE, NULL);
+
+  buffer->large_tag = gtk_text_buffer_create_tag (buffer->buffer, NULL,
+						 "scale", PANGO_SCALE_X_LARGE, NULL);
+
+  buffer->indent_tag = gtk_text_buffer_create_tag (buffer->buffer, NULL,
+						   "indent", 20, NULL);
+
+  buffer->margin_tag = gtk_text_buffer_create_tag (buffer->buffer, NULL,
+						   "left_margin", 20, "right_margin", 20, NULL);
 
   tabs = pango_tab_array_new_with_positions (4,
                                              TRUE,
