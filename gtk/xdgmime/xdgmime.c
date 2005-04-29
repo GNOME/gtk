@@ -147,6 +147,7 @@ xdg_mime_init_from_directory (const char *directory)
 	  return FALSE;
 	}
     }
+  free (file_name);
 
   file_name = malloc (strlen (directory) + strlen ("/mime/globs") + 1);
   strcpy (file_name, directory); strcat (file_name, "/mime/globs");
@@ -563,6 +564,12 @@ xdg_mime_shutdown (void)
       _xdg_mime_alias_list_free (alias_list);
       alias_list = NULL;
     }
+
+  if (parent_list)
+    {
+      _xdg_mime_parent_list_free (parent_list);
+      parent_list = NULL;
+    }
   
   for (list = callback_list; list; list = list->next)
     (list->callback) (list->data);
@@ -668,7 +675,7 @@ xdg_mime_mime_type_subclass (const char *mime,
   /* We really want to handle text/ * in GtkFileFilter, so we just
    * turn on the supertype matching
    */
-#if 1
+#if 1  
   /* Handle supertypes */
   if (xdg_mime_is_super_type (ubase) &&
       xdg_mime_media_type_equal (umime, ubase))
