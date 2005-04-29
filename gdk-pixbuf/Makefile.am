@@ -19,8 +19,8 @@ install-libtool-import-lib:
 #	(Unfortunately the GNU linker doesn't yet understand the PRIVATE
 #	directive in .def files.)
 	for entry in `grep PRIVATE gdk_pixbuf.def | sed -e 's/PRIVATE//'`; do \
-	  file=`nm -A .libs/libgdk_pixbuf-$(GTK_API_VERSION).dll.a | tr -d '\r' | grep -E $$entry'$$' | head -n 1 | cut -d: -f2`; \
-	  ar d .libs/libgdk_pixbuf-$(GTK_API_VERSION).dll.a $$file; \
+	  file=`$(NM) -A .libs/libgdk_pixbuf-$(GTK_API_VERSION).dll.a | tr -d '\r' | grep -E $$entry'$$' | head -n 1 | cut -d: -f2`; \
+	  $(AR) d .libs/libgdk_pixbuf-$(GTK_API_VERSION).dll.a $$file; \
 	done
 	$(INSTALL) .libs/libgdk_pixbuf-$(GTK_API_VERSION).dll.a $(DESTDIR)$(libdir)
 uninstall-libtool-import-lib:
