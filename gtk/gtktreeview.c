@@ -193,6 +193,8 @@ static void     gtk_tree_view_style_set            (GtkWidget        *widget,
 						    GtkStyle         *previous_style);
 static void     gtk_tree_view_grab_notify          (GtkWidget        *widget,
 						    gboolean          was_grabbed);
+static void     gtk_tree_view_state_changed        (GtkWidget        *widget,
+						    GtkStateType      previous_state);
 
 /* container signals */
 static void     gtk_tree_view_remove               (GtkContainer     *container,
@@ -535,6 +537,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   widget_class->grab_focus = gtk_tree_view_grab_focus;
   widget_class->style_set = gtk_tree_view_style_set;
   widget_class->grab_notify = gtk_tree_view_grab_notify;
+  widget_class->state_changed = gtk_tree_view_state_changed;
 
   /* GtkContainer signals */
   container_class->remove = gtk_tree_view_remove;
@@ -13058,6 +13061,21 @@ gtk_tree_view_grab_notify (GtkWidget *widget,
 
   if (!was_grabbed)
     tree_view->priv->pressed_button = -1;
+}
+
+static void
+gtk_tree_view_state_changed (GtkWidget      *widget,
+		 	     GtkStateType    previous_state)
+{
+  GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
+
+  if (GTK_WIDGET_REALIZED (widget))
+    {
+      gdk_window_set_background (widget->window, &widget->style->base[widget->state]);
+      gdk_window_set_background (tree_view->priv->bin_window, &widget->style->base[widget->state]);
+    }
+
+  gtk_widget_queue_draw (widget);
 }
 
 #define __GTK_TREE_VIEW_C__
