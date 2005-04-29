@@ -1,3 +1,7 @@
+2005-04-29  Matthias Clasen  <mclasen@redhat.com>
+
+	* Sync to upstream.
+
 2005-04-08  Matthias Clasen  <mclasen@redhat.com>
 
 	* xdgmimecache.c (cache_magic_matchlet_compare_to_data) 
