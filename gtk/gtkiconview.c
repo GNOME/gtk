@@ -2546,6 +2546,8 @@ gtk_icon_view_rows_reordered (GtkTreeModel *model,
   g_list_free (icon_view->priv->items);
   icon_view->priv->items = items;
 
+  gtk_icon_view_queue_layout (icon_view);
+
   verify_items (icon_view);  
 }
 
