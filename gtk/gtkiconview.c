@@ -3480,19 +3480,17 @@ void
 gtk_icon_view_select_path (GtkIconView *icon_view,
 			   GtkTreePath *path)
 {
-  GtkIconViewItem *item;
-  
+  GList *l;
+
   g_return_if_fail (GTK_IS_ICON_VIEW (icon_view));
   g_return_if_fail (icon_view->priv->model != NULL);
   g_return_if_fail (path != NULL);
 
-  item = g_list_nth (icon_view->priv->items,
-		     gtk_tree_path_get_indices(path)[0])->data;
+  l = g_list_nth (icon_view->priv->items,
+		  gtk_tree_path_get_indices(path)[0]);
 
-  if (!item)
-    return;
-  
-  gtk_icon_view_select_item (icon_view, item);
+  if (l != NULL)
+    gtk_icon_view_select_item (icon_view, l->data);
 }
 
 /**
