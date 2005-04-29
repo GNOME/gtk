@@ -888,6 +888,8 @@ connect_proxy (GtkAction     *action,
     }
   else if (GTK_IS_TOOL_ITEM (proxy))
     {
+      GParamSpec *pspec;
+
       /* toolbar item specific synchronisers ... */
 
       g_object_set (proxy,
@@ -895,9 +897,11 @@ connect_proxy (GtkAction     *action,
 		    "visible_vertical",	  action->private_data->visible_vertical,
 		    "is_important", action->private_data->is_important,
 		    NULL);
-      /* FIXME: we should set the tooltip here, but the current api
-       * doesn't allow it before the item is added to a toolbar. 
-       */
+
+      pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (action),
+                                            "tooltip");
+      gtk_action_sync_tooltip (action, pspec, proxy);
+
       g_signal_connect_object (action, "notify::visible-horizontal",
 			       G_CALLBACK (gtk_action_sync_property), 
 			       proxy, 0);
@@ -925,9 +929,7 @@ connect_proxy (GtkAction     *action,
 			"use_underline", TRUE,
 			"stock_id", action->private_data->stock_id,
 			NULL);
-	  /* FIXME: we should set the tooltip here, but the current api
-	   * doesn't allow it before the item is added to a toolbar. 
-	   */
+
 	  g_signal_connect_object (action, "notify::short-label",
 				   G_CALLBACK (gtk_action_sync_short_label),
 				   proxy, 0);      

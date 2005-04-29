@@ -1,5 +1,11 @@
 2005-04-29  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkuimanager.c (update_node): Use g_object_notify() instead
+	of triggering a ::notify by re-setting the property.  (#300982,
+	Sven Neumann)
+
+	* gtk/gtkaction.c (connect_proxy): Use gtk_action_sync_tooltip().
+
 	* gtk/gtkiconview.c (gtk_icon_view_scroll_to_item): Also
 	scroll horizontally when necessary, and keep the northwest
 	corner of the item visible.  (#300913, Mathias Hasselmann)
