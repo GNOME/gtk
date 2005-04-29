@@ -63,7 +63,7 @@ fill_model (GtkTreeModel *model)
       g_free (str2);
       i++;
     }
-
+  
   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store), 2, GTK_SORT_ASCENDING);
 }
 
@@ -102,6 +102,21 @@ foreach_selected_remove (GtkWidget *button, GtkIconView *icon_list)
   g_list_free (selected);
 }
 
+
+static void
+swap_rows (GtkWidget *button, GtkIconView *icon_list)
+{
+  GtkTreeIter iter, iter2;
+  GtkTreeModel *model;
+
+  model = gtk_icon_view_get_model (icon_list);
+  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (model), -2, GTK_SORT_ASCENDING);
+
+  gtk_tree_model_get_iter_first (model, &iter);
+  iter2 = iter;
+  gtk_tree_model_iter_next (model, &iter2);
+  gtk_list_store_swap (GTK_LIST_STORE (model), &iter, &iter2);
+}
 
 static void
 add_n_items (GtkIconView *icon_list, gint n)
@@ -214,6 +229,15 @@ add_large (GtkWidget *button, GtkIconView *icon_list)
 static void
 select_all (GtkWidget *button, GtkIconView *icon_list)
 {
+  gtk_icon_view_select_all (icon_list);
+}
+
+static void
+select_nonexisting (GtkWidget *button, GtkIconView *icon_list)
+{  
+  GtkTreePath *path = gtk_tree_path_new_from_indices (999999, -1);
+  gtk_icon_view_select_path (icon_list, path);
+  gtk_tree_path_free (path);
   gtk_icon_view_select_all (icon_list);
 }
 
@@ -404,6 +428,10 @@ main (gint argc, gchar **argv)
   g_signal_connect (button, "clicked", G_CALLBACK (foreach_selected_remove), icon_list);
   gtk_box_pack_start_defaults (GTK_BOX (bbox), button);
 
+  button = gtk_button_new_with_label ("Swap");
+  g_signal_connect (button, "clicked", G_CALLBACK (swap_rows), icon_list);
+  gtk_box_pack_start_defaults (GTK_BOX (bbox), button);
+
   bbox = gtk_hbutton_box_new ();
   gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), GTK_BUTTONBOX_START);
   gtk_box_pack_start (GTK_BOX (vbox), bbox, FALSE, FALSE, 0);
@@ -416,6 +444,10 @@ main (gint argc, gchar **argv)
   g_signal_connect (button, "clicked", G_CALLBACK (unselect_all), icon_list);
   gtk_box_pack_start_defaults (GTK_BOX (bbox), button);
   
+  button = gtk_button_new_with_label ("Select nonexisting");
+  g_signal_connect (button, "clicked", G_CALLBACK (select_nonexisting), icon_list);
+  gtk_box_pack_start_defaults (GTK_BOX (bbox), button);
+
   gtk_paned_pack1 (GTK_PANED (paned), vbox, TRUE, FALSE);
 
   icon_list = gtk_icon_view_new ();

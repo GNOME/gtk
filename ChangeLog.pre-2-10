@@ -1,7 +1,11 @@
 2005-04-29  Matthias Clasen  <mclasen@redhat.com>
 
+	* tests/testiconview.c: Add some more tests.
+
 	* gtk/gtkiconview.c (gtk_icon_view_select_path): Don't crash
 	if the path does not point to a row in the model.  (#300909,
+	Mathias Hasselmann)
+	(gtk_icon_view_rows_reordered): Re-layout here.  (#301009, 
 	Mathias Hasselmann)
 
 	* tests/testtext.c: Add some more attribute tests.
