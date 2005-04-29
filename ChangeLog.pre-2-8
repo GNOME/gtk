@@ -1,5 +1,8 @@
 2005-04-29  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeview.c (gtk_tree_view_state_changed): Set
+	background upon state changes.  (#301651, Billy Biggs)
+	
 	* configure.in: Check for nm.
 
 	* gtk/Makefile.am: Use $(NM), not nm directly. (#301299, 
