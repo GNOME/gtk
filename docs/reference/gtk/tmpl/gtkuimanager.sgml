@@ -186,7 +186,7 @@ impossible to know in advance whether they will end up empty after merging.
 <listitem><para>add an insensitive "Empty" item
 </para></listitem>
 </itemizedlist>
-The behaviour is chosen based on the "is_important" property of the action 
+The behaviour is chosen based on the "hide_if_empty" property of the action 
 to which the submenu is associated.
 </para>
 </refsect2>
