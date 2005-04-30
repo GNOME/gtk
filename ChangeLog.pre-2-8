@@ -1,5 +1,8 @@
 2005-04-29  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkradioaction.c: Make the docs build.  (#302230,
+	Ali Akcaagac)
+
 	* gtk/gtkiconview.c (gtk_icon_view_map): Get rid of this
 	function, instead show the bin_window when it is created.
 

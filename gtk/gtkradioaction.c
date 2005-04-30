@@ -386,7 +386,7 @@ create_menu_item (GtkAction *action)
  *   while (/<!-- -->* more actions to add *<!-- -->/)
  *     {
  *        action = gtk_radio_action_new (...);
- *
+ *        
  *        gtk_radio_action_set_group (action, group);
  *        group = gtk_radio_action_get_group (action);
  *     }
