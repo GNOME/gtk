@@ -1,3 +1,8 @@
+2005-04-30  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkdnd-win32.c (gdk_dropfiles_filter): Take
+	multi-monitor offset into account. (#302525)
+
 2005-04-29  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkiconview.c (gtk_icon_view_map): Get rid of this
