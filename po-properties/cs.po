@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-04-09 05:50+0000\n"
-"PO-Revision-Date: 2005-04-09 18:34+0200\n"
+"POT-Creation-Date: 2005-04-30 05:53+0000\n"
+"PO-Revision-Date: 2005-04-30 16:34+0200\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -608,7 +608,7 @@ msgstr ""
 "Je-li TRUE, potomek se objeví v sekundární skupině potomků, vhodné např. pro "
 "tlačítka nápovědy."
 
-#: ../gtk/gtkbox.c:131 ../gtk/gtkexpander.c:230 ../gtk/gtkiconview.c:452
+#: ../gtk/gtkbox.c:131 ../gtk/gtkexpander.c:230 ../gtk/gtkiconview.c:450
 #: ../gtk/gtktreeviewcolumn.c:251
 msgid "Spacing"
 msgstr "Mezery"
@@ -1262,7 +1262,9 @@ msgstr "Režim zalamování"
 msgid ""
 "How to break the string into multiple lines, if the cell renderer does not "
 "have enough room to display the entire string"
-msgstr "Jak rozdělit řetězec na více řádek, pokud vykreslovač buňky nemá dost místa na zobrazení celého řetězce"
+msgstr ""
+"Jak rozdělit řetězec na více řádek, pokud vykreslovač buňky nemá dost místa "
+"na zobrazení celého řetězce"
 
 #: ../gtk/gtkcellrenderertext.c:494 ../gtk/gtkcombobox.c:573
 msgid "Wrap width"
@@ -1485,7 +1487,7 @@ msgstr "Titulek"
 msgid "The title of the color selection dialog"
 msgstr "Titulek dialogu výběru barvy"
 
-#: ../gtk/gtkcolorbutton.c:234 ../gtk/gtkcolorsel.c:1855
+#: ../gtk/gtkcolorbutton.c:234 ../gtk/gtkcolorsel.c:1857
 msgid "Current Color"
 msgstr "Aktuální barva"
 
@@ -1493,7 +1495,7 @@ msgstr "Aktuální barva"
 msgid "The selected color"
 msgstr "Vybraná barva"
 
-#: ../gtk/gtkcolorbutton.c:249 ../gtk/gtkcolorsel.c:1862
+#: ../gtk/gtkcolorbutton.c:249 ../gtk/gtkcolorsel.c:1864
 msgid "Current Alpha"
 msgstr "Aktuální Alfa"
 
@@ -1501,35 +1503,35 @@ msgstr "Aktuální Alfa"
 msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "Vybraná hodnota krytí (0 zcela průhledné, 65535 zcela neprůhledné)"
 
-#: ../gtk/gtkcolorsel.c:1841
+#: ../gtk/gtkcolorsel.c:1843
 msgid "Has Opacity Control"
 msgstr "Má ovládání stupně krytí"
 
-#: ../gtk/gtkcolorsel.c:1842
+#: ../gtk/gtkcolorsel.c:1844
 msgid "Whether the color selector should allow setting opacity"
 msgstr "Jestli má prvek pro výběr barvy povolit nastavení stupně krytí"
 
-#: ../gtk/gtkcolorsel.c:1848
+#: ../gtk/gtkcolorsel.c:1850
 msgid "Has palette"
 msgstr "Má paletu"
 
-#: ../gtk/gtkcolorsel.c:1849
+#: ../gtk/gtkcolorsel.c:1851
 msgid "Whether a palette should be used"
 msgstr "Jestli má být použita paleta"
 
-#: ../gtk/gtkcolorsel.c:1856
+#: ../gtk/gtkcolorsel.c:1858
 msgid "The current color"
 msgstr "Aktuální barva"
 
-#: ../gtk/gtkcolorsel.c:1863
+#: ../gtk/gtkcolorsel.c:1865
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "Aktuální hodnota krytí (0 zcela průhledné, 65535 zcela neprůhledné)"
 
-#: ../gtk/gtkcolorsel.c:1877
+#: ../gtk/gtkcolorsel.c:1879
 msgid "Custom palette"
 msgstr "Vlastní paleta"
 
-#: ../gtk/gtkcolorsel.c:1878
+#: ../gtk/gtkcolorsel.c:1880
 msgid "Palette to use in the color selector"
 msgstr "Paleta použitá v prvku pro výběr barev"
 
@@ -1853,7 +1855,7 @@ msgstr "Minimální délka klíče"
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Minimální délka hledaného klíče, aby se hledaly odpovídající položky"
 
-#: ../gtk/gtkentrycompletion.c:298 ../gtk/gtkiconview.c:373
+#: ../gtk/gtkentrycompletion.c:298 ../gtk/gtkiconview.c:371
 msgid "Text column"
 msgstr "Sloupec textu"
 
@@ -1883,7 +1885,8 @@ msgstr "Nastavit šířku vyskakovacího okna"
 
 #: ../gtk/gtkentrycompletion.c:350
 msgid "If TRUE, the popup window will have the same size as the entry"
-msgstr "Je-li TRUE, vyskakovací okno bude mít stejnou velikost jako vstupní pole"
+msgstr ""
+"Je-li TRUE, vyskakovací okno bude mít stejnou velikost jako vstupní pole"
 
 #: ../gtk/gtkeventbox.c:122
 msgid "Visible Window"
@@ -1941,11 +1944,11 @@ msgstr "Widget popisku"
 msgid "A widget to display in place of the usual expander label"
 msgstr "Widget zobrazovaný místo obvyklého popisku rozbalovače"
 
-#: ../gtk/gtkexpander.c:247 ../gtk/gtktreeview.c:705
+#: ../gtk/gtkexpander.c:247 ../gtk/gtktreeview.c:708
 msgid "Expander Size"
 msgstr "Velikost rozbalovače"
 
-#: ../gtk/gtkexpander.c:248 ../gtk/gtktreeview.c:706
+#: ../gtk/gtkexpander.c:248 ../gtk/gtktreeview.c:709
 msgid "Size of the expander arrow"
 msgstr "Velikost šipky rozbalovače"
 
@@ -2233,111 +2236,111 @@ msgstr ""
 "Jestli používat hodnotu vlastnosti snap_edge nebo hodnotu odvozenou z "
 "handle_position"
 
-#: ../gtk/gtkiconview.c:336
+#: ../gtk/gtkiconview.c:334
 msgid "Selection mode"
 msgstr "Režim výběru"
 
-#: ../gtk/gtkiconview.c:337
+#: ../gtk/gtkiconview.c:335
 msgid "The selection mode"
 msgstr "Režim výběru"
 
-#: ../gtk/gtkiconview.c:355
+#: ../gtk/gtkiconview.c:353
 msgid "Pixbuf column"
 msgstr "Sloupec pixbufu"
 
-#: ../gtk/gtkiconview.c:356
+#: ../gtk/gtkiconview.c:354
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr "Sloupec modelu používaný pro získání pixbufu ikony"
 
-#: ../gtk/gtkiconview.c:374
+#: ../gtk/gtkiconview.c:372
 msgid "Model column used to retrieve the text from"
 msgstr "Sloupec modelu používaný pro získání textu"
 
-#: ../gtk/gtkiconview.c:393
+#: ../gtk/gtkiconview.c:391
 msgid "Markup column"
 msgstr "Sloupec značek"
 
-#: ../gtk/gtkiconview.c:394
+#: ../gtk/gtkiconview.c:392
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr ""
 "Sloupec modelu používaný pro získání textu, pokud se používají značky Pango"
 
-#: ../gtk/gtkiconview.c:401
+#: ../gtk/gtkiconview.c:399
 msgid "Icon View Model"
 msgstr "Model ikonového pohledu"
 
-#: ../gtk/gtkiconview.c:402
+#: ../gtk/gtkiconview.c:400
 msgid "The model for the icon view"
 msgstr "Model pro ikonový pohled"
 
-#: ../gtk/gtkiconview.c:418
+#: ../gtk/gtkiconview.c:416
 msgid "Number of columns"
 msgstr "Počet sloupců"
 
-#: ../gtk/gtkiconview.c:419
+#: ../gtk/gtkiconview.c:417
 msgid "Number of columns to display"
 msgstr "Počet zobrazovaných sloupců"
 
-#: ../gtk/gtkiconview.c:436
+#: ../gtk/gtkiconview.c:434
 msgid "Width for each item"
 msgstr "Šířka každé položky"
 
-#: ../gtk/gtkiconview.c:437
+#: ../gtk/gtkiconview.c:435
 msgid "The width used for each item"
 msgstr "Šířka používaná pro každou položku"
 
-#: ../gtk/gtkiconview.c:453
+#: ../gtk/gtkiconview.c:451
 msgid "Space which is inserted between cells of an item"
 msgstr "Místo, které je vloženo mezi buňky položky"
 
-#: ../gtk/gtkiconview.c:468
+#: ../gtk/gtkiconview.c:466
 msgid "Row Spacing"
 msgstr "Rozestup řádků"
 
-#: ../gtk/gtkiconview.c:469
+#: ../gtk/gtkiconview.c:467
 msgid "Space which is inserted between grid rows"
 msgstr "Místo, které je vloženo mezi řádky mřížky"
 
-#: ../gtk/gtkiconview.c:484
+#: ../gtk/gtkiconview.c:482
 msgid "Column Spacing"
 msgstr "Rozestup sloupců"
 
 # FIXME: s/column/columns/
-#: ../gtk/gtkiconview.c:485
+#: ../gtk/gtkiconview.c:483
 msgid "Space which is inserted between grid column"
 msgstr "Místo, které je vloženo mezi sloupce mřížky"
 
-#: ../gtk/gtkiconview.c:500
+#: ../gtk/gtkiconview.c:498
 msgid "Margin"
 msgstr "Okraj"
 
-#: ../gtk/gtkiconview.c:501
+#: ../gtk/gtkiconview.c:499
 msgid "Space which is inserted at the edges of the icon view"
 msgstr "Místo, které je vloženo na okraje ikonového pohledu"
 
-#: ../gtk/gtkiconview.c:517 ../gtk/gtkprogressbar.c:153
+#: ../gtk/gtkiconview.c:515 ../gtk/gtkprogressbar.c:153
 #: ../gtk/gtktoolbar.c:508
 msgid "Orientation"
 msgstr "Orientace"
 
-#: ../gtk/gtkiconview.c:518
+#: ../gtk/gtkiconview.c:516
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr "Jak jsou text a ikony každé položky navzájem relativně umístěny"
 
-#: ../gtk/gtkiconview.c:526
+#: ../gtk/gtkiconview.c:524
 msgid "Selection Box Color"
 msgstr "Barva obdélníku výběru"
 
-#: ../gtk/gtkiconview.c:527
+#: ../gtk/gtkiconview.c:525
 msgid "Color of the selection box"
 msgstr "Barva obdélníku výběru"
 
-#: ../gtk/gtkiconview.c:533
+#: ../gtk/gtkiconview.c:531
 msgid "Selection Box Alpha"
 msgstr "Alfa obdélníku výběru"
 
-#: ../gtk/gtkiconview.c:534
+#: ../gtk/gtkiconview.c:532
 msgid "Opacity of the selection box"
 msgstr "Neprůhlednost obdélníku výběru"
 
@@ -2719,7 +2722,8 @@ msgstr "Vzít fokus"
 
 #: ../gtk/gtkmenushell.c:375
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
-msgstr "Booleovská hodnota, která určuje, jestli menu zachycuje fokus klávesnice"
+msgstr ""
+"Booleovská hodnota, která určuje, jestli menu zachycuje fokus klávesnice"
 
 #: ../gtk/gtkmenutoolbutton.c:248 ../gtk/gtkoptionmenu.c:196
 msgid "Menu"
@@ -3330,12 +3334,12 @@ msgid ""
 msgstr "Zobrazit tlačítko s druhou šipkou dopředu na opačném konci posuvníku"
 
 #: ../gtk/gtkscrolledwindow.c:239 ../gtk/gtktext.c:606
-#: ../gtk/gtktreeview.c:567
+#: ../gtk/gtktreeview.c:570
 msgid "Horizontal Adjustment"
 msgstr "Vodorovné zarovnání"
 
 #: ../gtk/gtkscrolledwindow.c:246 ../gtk/gtktext.c:614
-#: ../gtk/gtktreeview.c:575
+#: ../gtk/gtktreeview.c:578
 msgid "Vertical Adjustment"
 msgstr "Svislé zarovnání"
 
@@ -3560,7 +3564,9 @@ msgstr "Režim"
 msgid ""
 "The directions in which the size group affects the requested sizes of its "
 "component widgets"
-msgstr "Pravidla, podle kterých velikost skupiny ovlivňuje požadované velikosti jednotlivých widgetů"
+msgstr ""
+"Pravidla, podle kterých velikost skupiny ovlivňuje požadované velikosti "
+"jednotlivých widgetů"
 
 #: ../gtk/gtkspinbutton.c:244
 msgid "The adjustment that holds the value of the spinbutton"
@@ -3906,10 +3912,8 @@ msgstr "Velikost odsazení odstavce v pixelech"
 #: ../gtk/gtktexttag.c:427
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative) "
-"in pixels"
-msgstr ""
-"Posun textu nad základní čáru (pod základní čáru, pokud je hodnota záporná), "
-"v pixelech"
+"in Pango units"
+msgstr "Posun textu nad základní čáru (pod základní čáru, pokud je hodnota záporná) v jednotkách Pango"
 
 #: ../gtk/gtktexttag.c:436
 msgid "Pixels above lines"
@@ -4280,150 +4284,150 @@ msgstr "Model TreeModelSort"
 msgid "The model for the TreeModelSort to sort"
 msgstr "Model, který má TreeModelSort třídit"
 
-#: ../gtk/gtktreeview.c:559
+#: ../gtk/gtktreeview.c:562
 msgid "TreeView Model"
 msgstr "Model TreeView"
 
-#: ../gtk/gtktreeview.c:560
+#: ../gtk/gtktreeview.c:563
 msgid "The model for the tree view"
 msgstr "Model pro stromový pohled"
 
-#: ../gtk/gtktreeview.c:568
+#: ../gtk/gtktreeview.c:571
 msgid "Horizontal Adjustment for the widget"
 msgstr "Vodorovné zarovnání widgetu"
 
-#: ../gtk/gtktreeview.c:576
+#: ../gtk/gtktreeview.c:579
 msgid "Vertical Adjustment for the widget"
 msgstr "Vertikální zarovnání widgetu"
 
-#: ../gtk/gtktreeview.c:583
+#: ../gtk/gtktreeview.c:586
 msgid "Headers Visible"
 msgstr "Záhlaví viditelná"
 
-#: ../gtk/gtktreeview.c:584
+#: ../gtk/gtktreeview.c:587
 msgid "Show the column header buttons"
 msgstr "Zobrazovat tlačítka v záhlavích sloupců"
 
-#: ../gtk/gtktreeview.c:591
+#: ../gtk/gtktreeview.c:594
 msgid "Headers Clickable"
 msgstr "Kliknutelná záhlaví"
 
-#: ../gtk/gtktreeview.c:592
+#: ../gtk/gtktreeview.c:595
 msgid "Column headers respond to click events"
 msgstr "Záhlaví sloupců reagují na události kliknutí"
 
-#: ../gtk/gtktreeview.c:599
+#: ../gtk/gtktreeview.c:602
 msgid "Expander Column"
 msgstr "Sloupec rozbalovacího symbolu"
 
-#: ../gtk/gtktreeview.c:600
+#: ../gtk/gtktreeview.c:603
 msgid "Set the column for the expander column"
 msgstr "Nastaví sloupec pro rozbalovací sloupec"
 
-#: ../gtk/gtktreeview.c:607 ../gtk/gtktreeviewcolumn.c:342
+#: ../gtk/gtktreeview.c:610 ../gtk/gtktreeviewcolumn.c:342
 msgid "Reorderable"
 msgstr "Měnitelné pořadí"
 
-#: ../gtk/gtktreeview.c:608
+#: ../gtk/gtktreeview.c:611
 msgid "View is reorderable"
 msgstr "Je možná změna pořadí pohledu"
 
-#: ../gtk/gtktreeview.c:615
+#: ../gtk/gtktreeview.c:618
 msgid "Rules Hint"
 msgstr "Rada o pravidlech"
 
-#: ../gtk/gtktreeview.c:616
+#: ../gtk/gtktreeview.c:619
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
 "Nastaví radu pro podporu témat pro kreslení řádků ve střídavých barvách"
 
-#: ../gtk/gtktreeview.c:623
+#: ../gtk/gtktreeview.c:626
 msgid "Enable Search"
 msgstr "Povolit hledání"
 
-#: ../gtk/gtktreeview.c:624
+#: ../gtk/gtktreeview.c:627
 msgid "View allows user to search through columns interactively"
 msgstr "Pohled umožní uživateli interaktivně hledat ve sloupcích"
 
-#: ../gtk/gtktreeview.c:631
+#: ../gtk/gtktreeview.c:634
 msgid "Search Column"
 msgstr "Sloupec hledání"
 
-#: ../gtk/gtktreeview.c:632
+#: ../gtk/gtktreeview.c:635
 msgid "Model column to search through when searching through code"
 msgstr "Sloupec modelu, ve kterém se má hledat při hledání v kódu"
 
-#: ../gtk/gtktreeview.c:652
+#: ../gtk/gtktreeview.c:655
 msgid "Fixed Height Mode"
 msgstr "Režim pevné výšky"
 
-#: ../gtk/gtktreeview.c:653
+#: ../gtk/gtktreeview.c:656
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr "Urychlí GtkTreeView předpokladem, že všechny řádky jsou stejně vysoké"
 
-#: ../gtk/gtktreeview.c:673
+#: ../gtk/gtktreeview.c:676
 msgid "Hover Selection"
 msgstr "Výběr pohybem"
 
-#: ../gtk/gtktreeview.c:674
+#: ../gtk/gtktreeview.c:677
 msgid "Whether the selection should follow the pointer"
 msgstr "Jestli má výběr sledovat kurzor"
 
-#: ../gtk/gtktreeview.c:693
+#: ../gtk/gtktreeview.c:696
 msgid "Hover Expand"
 msgstr "Expandovat pohybem"
 
-#: ../gtk/gtktreeview.c:694
+#: ../gtk/gtktreeview.c:697
 msgid ""
 "Whether rows should be expanded/collapsed when the pointer moves over them"
 msgstr ""
 "Jestli mají být řádky rozbalovány/sbalovány, když se nad nimi pohybuje kurzor"
 
-#: ../gtk/gtktreeview.c:714
+#: ../gtk/gtktreeview.c:717
 msgid "Vertical Separator Width"
 msgstr "Šířka svislého oddělovače"
 
-#: ../gtk/gtktreeview.c:715
+#: ../gtk/gtktreeview.c:718
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "Svislý prostor mezi buňkami. Musí to být sudé číslo"
 
-#: ../gtk/gtktreeview.c:723
+#: ../gtk/gtktreeview.c:726
 msgid "Horizontal Separator Width"
 msgstr "Šířka vodorovného oddělovače"
 
-#: ../gtk/gtktreeview.c:724
+#: ../gtk/gtktreeview.c:727
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "Vodorovný prostor mezi buňkami. Musí to být sudé číslo"
 
-#: ../gtk/gtktreeview.c:732
+#: ../gtk/gtktreeview.c:735
 msgid "Allow Rules"
 msgstr "Povolit pravidla"
 
-#: ../gtk/gtktreeview.c:733
+#: ../gtk/gtktreeview.c:736
 msgid "Allow drawing of alternating color rows"
 msgstr "Povolit kreslení různobarevných řádků"
 
-#: ../gtk/gtktreeview.c:739
+#: ../gtk/gtktreeview.c:742
 msgid "Indent Expanders"
 msgstr "Odsadit rozbalovací symboly"
 
-#: ../gtk/gtktreeview.c:740
+#: ../gtk/gtktreeview.c:743
 msgid "Make the expanders indented"
 msgstr "Odsadit rozbalovací symboly"
 
-#: ../gtk/gtktreeview.c:746
+#: ../gtk/gtktreeview.c:749
 msgid "Even Row Color"
 msgstr "Barva sudého řádku"
 
-#: ../gtk/gtktreeview.c:747
+#: ../gtk/gtktreeview.c:750
 msgid "Color to use for even rows"
 msgstr "Barva používaná pro sudé řádky"
 
-#: ../gtk/gtktreeview.c:753
+#: ../gtk/gtktreeview.c:756
 msgid "Odd Row Color"
 msgstr "Barva lichého řádku"
 
-#: ../gtk/gtktreeview.c:754
+#: ../gtk/gtktreeview.c:757
 msgid "Color to use for odd rows"
 msgstr "Barva používaná pro liché řádky"
 
