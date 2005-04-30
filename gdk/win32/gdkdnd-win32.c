@@ -987,8 +987,8 @@ gdk_dropfiles_filter (GdkXEvent *xev,
       DragQueryPoint (hdrop, &pt);
       ClientToScreen (msg->hwnd, &pt);
 
-      event->dnd.x_root = pt.x;
-      event->dnd.y_root = pt.y;
+      event->dnd.x_root = pt.x + _gdk_offset_x;
+      event->dnd.y_root = pt.y + _gdk_offset_y;
       event->dnd.time = _gdk_win32_get_next_tick (msg->time);
 
       nfiles = DragQueryFile (hdrop, 0xFFFFFFFF, NULL, 0);
