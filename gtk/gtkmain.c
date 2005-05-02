@@ -452,6 +452,9 @@ static void
 do_post_parse_initialization (int    *argc,
 			      char ***argv)
 {
+  if (gtk_initialized)
+    return;
+
   if (g_fatal_warnings)
     {
       GLogLevelFlags fatal_mask;
