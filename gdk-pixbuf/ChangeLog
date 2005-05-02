@@ -1,4 +1,7 @@
 2005-04-09  Matthias Clasen  <mclasen@redhat.com>
+	
+	* Makefile.am: Use $(NM), not nm directly. (#301299, 
+	Nguyen Thai Ngoc Duy)
 
 	* io-bmp.c (gdk_pixbuf__bmp_image_save_to_callback): 
 	Don't overflow the stack.  (Jakub Jelinek, Arjan van de Ven)
