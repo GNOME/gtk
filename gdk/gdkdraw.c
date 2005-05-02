@@ -877,13 +877,10 @@ real_draw_glyphs (GdkDrawable      *drawable,
 		  gdouble           y,
 		  PangoGlyphString *glyphs)
 {
-  GdkColor color;
   cairo_t *cr;
 
   cr = gdk_drawable_create_cairo_context (drawable);
-  
-  _gdk_windowing_gc_get_foreground (gc, &color);
-  gdk_cairo_set_source_color (cr, &color);
+  _gdk_gc_update_context (gc, cr, NULL, NULL);
 
   if (matrix)
     {
@@ -999,7 +996,6 @@ gdk_draw_trapezoids (GdkDrawable    *drawable,
 		     GdkTrapezoid   *trapezoids,
 		     gint            n_trapezoids)
 {
-  GdkColor color;
   cairo_t *cr;
   int i;
 
@@ -1008,10 +1004,8 @@ gdk_draw_trapezoids (GdkDrawable    *drawable,
   g_return_if_fail (n_trapezoids == 0 || trapezoids != NULL);
 
   cr = gdk_drawable_create_cairo_context (drawable);
+  _gdk_gc_update_context (gc, cr, NULL, NULL);
   
-  _gdk_windowing_gc_get_foreground (gc, &color);
-  gdk_cairo_set_source_color (cr, &color);
-
   for (i = 0; i < n_trapezoids; i++)
     {
       cairo_move_to (cr, trapezoids[i].x11, trapezoids[i].y1);

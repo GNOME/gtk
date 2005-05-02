@@ -1800,15 +1800,11 @@ gdk_window_clear_backing_rect (GdkWindow *window,
 
   gdk_window_set_bg_pattern (window, cr, 0, 0);
 
-  cairo_save (cr);
-
   cairo_rectangle (cr, x, y, width, height);
   cairo_clip (cr);
 
   region_path (cr, paint->region);
   cairo_fill (cr);
-
-  cairo_restore (cr);
 
   cairo_destroy (cr);
 }

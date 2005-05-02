@@ -107,14 +107,6 @@ gdk_gc_x11_finalize (GObject *object)
 {
   GdkGCX11 *x11_gc = GDK_GC_X11 (object);
   
-  if (x11_gc->clip_region)
-    gdk_region_destroy (x11_gc->clip_region);
-  
-  if (x11_gc->stipple)
-    g_object_unref (x11_gc->stipple);
-  if (x11_gc->tile)
-    g_object_unref (x11_gc->tile);
-  
   XFreeGC (GDK_GC_XDISPLAY (x11_gc), GDK_GC_XGC (x11_gc));
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -140,9 +132,10 @@ _gdk_x11_gc_new (GdkDrawable      *drawable,
   gc = g_object_new (_gdk_gc_x11_get_type (), NULL);
   private = GDK_GC_X11 (gc);
 
+  _gdk_gc_init (gc, drawable, values, values_mask);
+
   private->dirty_mask = 0;
   private->have_clip_mask = FALSE;
-  private->clip_region = NULL;
     
   private->screen = GDK_DRAWABLE_IMPL_X11 (drawable)->screen;
 
@@ -160,29 +153,6 @@ _gdk_x11_gc_new (GdkDrawable      *drawable,
       private->dirty_mask |= GDK_GC_DIRTY_TS;
     }
 
-  if (values_mask & GDK_GC_FOREGROUND)
-    private->fg_pixel = values->foreground.pixel;
-
-  if (values_mask & GDK_GC_BACKGROUND)
-    private->bg_pixel = values->background.pixel;
-
-  if (values_mask & GDK_GC_FILL)
-    private->fill = values->fill;
-  
-  if (values_mask & GDK_GC_STIPPLE)
-    {
-      private->stipple = values->stipple;
-      if (private->stipple)
-	g_object_ref (private->stipple);
-    }
-  
-  if (values_mask & GDK_GC_TILE)
-    {
-      private->tile = values->tile;
-      if (private->tile)
-	g_object_ref (private->tile);
-    }
-  
   if ((values_mask & GDK_GC_CLIP_MASK) && values->clip_mask)
     private->have_clip_mask = TRUE;
 
@@ -211,7 +181,9 @@ _gdk_x11_gc_flush (GdkGC *gc)
 
   if (private->dirty_mask & GDK_GC_DIRTY_CLIP)
     {
-      if (!private->clip_region)
+      GdkRegion *clip_region = _gdk_gc_get_clip_region (gc);
+      
+      if (!clip_region)
 	XSetClipOrigin (xdisplay, xgc,
 			gc->clip_x_origin, gc->clip_y_origin);
       else
@@ -219,7 +191,7 @@ _gdk_x11_gc_flush (GdkGC *gc)
 	  XRectangle *rectangles;
           gint n_rects;
 
-          _gdk_region_get_xrectangles (private->clip_region,
+          _gdk_region_get_xrectangles (clip_region,
                                        gc->clip_x_origin,
                                        gc->clip_y_origin,
                                        &rectangles,
@@ -417,54 +389,10 @@ gdk_x11_gc_set_values (GdkGC           *gc,
 
   if (values_mask & GDK_GC_CLIP_MASK)
     {
-      if (x11_gc->clip_region)
-	{
-	  gdk_region_destroy (x11_gc->clip_region);
-	  x11_gc->clip_region = NULL;
-	}
-
+      x11_gc->have_clip_region = FALSE;
       x11_gc->have_clip_mask = values->clip_mask != NULL;
     }
 
-  if (values_mask & GDK_GC_FOREGROUND)
-    x11_gc->fg_pixel = values->foreground.pixel;
-
-  if (values_mask & GDK_GC_BACKGROUND)
-    {
-      if (x11_gc->bg_pixel != values->background.pixel)
-	x11_gc->bg_pixel = values->background.pixel;
-    }
-
-  if (values_mask & GDK_GC_FILL)
-    {
-      if (x11_gc->fill != values->fill)
-	x11_gc->fill = values->fill;
-    }
-  
-  if (values_mask & GDK_GC_STIPPLE)
-    {
-      if (x11_gc->stipple != values->stipple)
-	{
-	  if (x11_gc->stipple)
-	    g_object_unref (x11_gc->stipple);
-	  x11_gc->stipple = values->stipple;
-	  if (x11_gc->stipple)
-	    g_object_ref (x11_gc->stipple);
-	}
-    }
-  
-  if (values_mask & GDK_GC_TILE)
-    {
-      if (x11_gc->tile != values->tile)
-	{
-	  if (x11_gc->tile)
-	    g_object_unref (x11_gc->tile);
-	  x11_gc->tile = values->tile;
-	  if (x11_gc->tile)
-	    g_object_ref (x11_gc->tile);
-	}
-    }
-  
   gdk_x11_gc_values_to_xvalues (values, values_mask, &xvalues, &xvalues_mask);
 
   XChangeGC (GDK_GC_XDISPLAY (gc),
@@ -704,158 +632,42 @@ gdk_x11_gc_values_to_xvalues (GdkGCValues    *values,
 
 }
 
-/**
- * gdk_gc_set_clip_rectangle:
- * @gc: a #GdkGC.
- * @rectangle: the rectangle to clip to.
- * 
- * Sets the clip mask for a graphics context from a
- * rectangle. The clip mask is interpreted relative to the clip
- * origin. (See gdk_gc_set_clip_origin()).
- **/
 void
-gdk_gc_set_clip_rectangle (GdkGC	*gc,
-			   GdkRectangle *rectangle)
+_gdk_windowing_gc_set_clip_region (GdkGC     *gc,
+				   GdkRegion *region)
 {
-  GdkGCX11 *x11_gc;
-  gboolean had_region = FALSE;
-  
-  g_return_if_fail (GDK_IS_GC (gc));
-
-  x11_gc = GDK_GC_X11 (gc);
-
-  if (x11_gc->clip_region)
-    {
-      had_region = TRUE;
-      gdk_region_destroy (x11_gc->clip_region);
-    }
-
-  if (rectangle)
-    x11_gc->clip_region = gdk_region_rectangle (rectangle);
-  else
-    x11_gc->clip_region = NULL;
+  GdkGCX11 *x11_gc = GDK_GC_X11 (gc);
 
   /* Unset immediately, to make sure Xlib doesn't keep the
    * XID of an old clip mask cached
    */
-  if ((had_region && !rectangle) || x11_gc->have_clip_mask)
+  if ((x11_gc->have_clip_region && !region) || x11_gc->have_clip_mask)
     {
       XSetClipMask (GDK_GC_XDISPLAY (gc), GDK_GC_XGC (gc), None);
       x11_gc->have_clip_mask = FALSE;
     }
 
-  gc->clip_x_origin = 0;
-  gc->clip_y_origin = 0;
-  
-  x11_gc->dirty_mask |= GDK_GC_DIRTY_CLIP;
-}
-
-/**
- * gdk_gc_set_clip_region:
- * @gc: a #GdkGC.
- * @region: the #GdkRegion. 
- * 
- * Sets the clip mask for a graphics context from a region structure.
- * The clip mask is interpreted relative to the clip origin. (See
- * gdk_gc_set_clip_origin()).
- **/
-void
-gdk_gc_set_clip_region (GdkGC	  *gc,
-			GdkRegion *region)
-{
-  GdkGCX11 *x11_gc;
-  gboolean had_region = FALSE;
-
-  g_return_if_fail (GDK_IS_GC (gc));
-
-  x11_gc = GDK_GC_X11 (gc);
-
-  if (x11_gc->clip_region)
-    {
-      had_region = TRUE;
-      gdk_region_destroy (x11_gc->clip_region);
-    }
-
-  if (region)
-    x11_gc->clip_region = gdk_region_copy (region);
-  else
-    x11_gc->clip_region = NULL;    
-
-  /* Unset immediately, to make sure Xlib doesn't keep the
-   * XID of an old clip mask cached
-   */
-  if ((had_region && !region) || x11_gc->have_clip_mask)
-    {
-      XSetClipMask (GDK_GC_XDISPLAY (gc), GDK_GC_XGC (gc), None);
-      x11_gc->have_clip_mask = FALSE;
-    }
+  x11_gc->have_clip_region = region != NULL;
 
   gc->clip_x_origin = 0;
   gc->clip_y_origin = 0;
-  
+
   x11_gc->dirty_mask |= GDK_GC_DIRTY_CLIP;
 }
 
-
-/**
- * gdk_gc_copy:
- * @dst_gc: the destination graphics context.
- * @src_gc: the source graphics context.
- * 
- * Copy the set of values from one graphics context
- * onto another graphics context.
- **/
 void
-gdk_gc_copy (GdkGC *dst_gc, GdkGC *src_gc)
+_gdk_windowing_gc_copy (GdkGC *dst_gc,
+			GdkGC *src_gc)
 {
-  GdkGCX11 *x11_src_gc;
-  GdkGCX11 *x11_dst_gc;
-  
-  g_return_if_fail (GDK_IS_GC_X11 (dst_gc));
-  g_return_if_fail (GDK_IS_GC_X11 (src_gc));
+  GdkGCX11 *x11_src_gc = GDK_GC_X11 (src_gc);
+  GdkGCX11 *x11_dst_gc = GDK_GC_X11 (dst_gc);
 
-  x11_dst_gc = GDK_GC_X11 (dst_gc);
-  x11_src_gc = GDK_GC_X11 (src_gc);
-  
   XCopyGC (GDK_GC_XDISPLAY (src_gc), GDK_GC_XGC (src_gc), ~((~1) << GCLastBit),
 	   GDK_GC_XGC (dst_gc));
 
-  dst_gc->clip_x_origin = src_gc->clip_x_origin;
-  dst_gc->clip_y_origin = src_gc->clip_y_origin;
-  dst_gc->ts_x_origin = src_gc->ts_x_origin;
-  dst_gc->ts_y_origin = src_gc->ts_y_origin;
-
-  if (src_gc->colormap)
-    g_object_ref (src_gc->colormap);
-
-  if (dst_gc->colormap)
-    g_object_unref (dst_gc->colormap);
-
-  dst_gc->colormap = src_gc->colormap;
-
-  if (x11_dst_gc->clip_region)
-    gdk_region_destroy (x11_dst_gc->clip_region);
-
-  if (x11_src_gc->clip_region)
-    x11_dst_gc->clip_region = gdk_region_copy (x11_src_gc->clip_region);
-  else
-    x11_dst_gc->clip_region = NULL;
-
   x11_dst_gc->dirty_mask = x11_src_gc->dirty_mask;
-  x11_dst_gc->fg_pixel = x11_src_gc->fg_pixel;
-  x11_dst_gc->fill = x11_src_gc->fill;
-  
-  if (x11_dst_gc->stipple)
-    g_object_unref (x11_dst_gc->stipple);
-  x11_dst_gc->stipple = x11_src_gc->stipple;
-  if (x11_dst_gc->stipple)
-    g_object_ref (x11_dst_gc->stipple);
-  
-  if (x11_dst_gc->tile)
-    g_object_unref (x11_dst_gc->tile);
-  x11_dst_gc->tile = x11_src_gc->tile;
-  if (x11_dst_gc->tile)
-    g_object_ref (x11_dst_gc->tile);
+  x11_dst_gc->have_clip_region = x11_src_gc->have_clip_region;
+  x11_dst_gc->have_clip_mask = x11_src_gc->have_clip_mask;
 }
 
 /**
@@ -913,27 +725,6 @@ gdk_x11_gc_get_xgc (GdkGC *gc)
     _gdk_x11_gc_flush (gc);
 
   return gc_x11->xgc;
-}
-
-void
-_gdk_windowing_gc_get_foreground (GdkGC    *gc,
-				  GdkColor *color)
-{
-  GdkGCX11 *x11_gc;
-  GdkColormap *cmap;
-  
-  g_return_if_fail (GDK_IS_GC_X11 (gc));
-
-  x11_gc = GDK_GC_X11 (gc);
-
-  color->pixel = x11_gc->fg_pixel;
-
-  cmap = gdk_gc_get_colormap (gc);
-
-  if (cmap)
-    gdk_colormap_query_color (cmap, x11_gc->fg_pixel, color);
-  else
-    g_warning ("No colormap in _gdk_windowing_gc_get_foreground");
 }
 
 #define __GDK_GC_X11_C__

@@ -268,14 +268,8 @@ struct _GdkGCWin32
 
   GdkGCValuesMask values_mask;
 
-  gulong foreground;		/* Pixel values from GdkColor, */
-  gulong background;		/* not Win32 COLORREFs */
-
   GdkFont *font;
   gint rop2;
-  GdkFill fill_style;
-  GdkPixmap *tile;
-  GdkPixmap *stipple;
   GdkSubwindowMode subwindow_mode;
   gint graphics_exposures;
   gint pen_width;

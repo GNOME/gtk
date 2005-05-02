@@ -2905,7 +2905,6 @@ draw_arrow (GdkWindow     *window,
   
   if (area)
     {
-      cairo_save (cr);
       cairo_rectangle (cr, area->x, area->y, area->width, area->height);
       cairo_clip (cr);
       cairo_new_path (cr);
@@ -2938,9 +2937,6 @@ draw_arrow (GdkWindow     *window,
 
   cairo_close_path (cr);
   cairo_fill (cr);
-
-  if (area)
-    cairo_restore (cr);
 
   cairo_destroy (cr);
 }
@@ -3631,7 +3627,6 @@ gtk_default_draw_check (GtkStyle      *style,
       
   if (area)
     {
-      cairo_save (cr);
       cairo_rectangle (cr, area->x, area->y, area->width, area->height);
       cairo_clip (cr);
       cairo_new_path (cr);
@@ -3726,9 +3721,6 @@ gtk_default_draw_check (GtkStyle      *style,
       cairo_fill (cr);
     }
   
-  if (area)
-    cairo_restore (cr);
-  
   cairo_destroy (cr);
 }
 
@@ -3759,7 +3751,6 @@ gtk_default_draw_option (GtkStyle      *style,
       
   if (area)
     {
-      cairo_save (cr);
       cairo_rectangle (cr, area->x, area->y, area->width, area->height);
       cairo_clip (cr);
       cairo_new_path (cr);
@@ -3784,9 +3775,7 @@ gtk_default_draw_option (GtkStyle      *style,
 		 (exterior_size - 1) / 2.,
 		 0, 2 * G_PI);
 
-      cairo_save (cr);
-      cairo_fill (cr);
-      cairo_restore (cr);
+      cairo_fill_preserve (cr);
 
       if (type == BUTTON)
 	gdk_cairo_set_source_color (cr, &style->fg[state_type]);
@@ -3852,9 +3841,6 @@ gtk_default_draw_option (GtkStyle      *style,
 		       line_thickness);
       cairo_fill (cr);
     }
-  
-  if (area)
-    cairo_restore (cr);
   
   cairo_destroy (cr);
 }
@@ -4811,7 +4797,6 @@ gtk_default_draw_expander (GtkStyle        *style,
   
   if (area)
     {
-      cairo_save (cr);
       cairo_rectangle (cr, area->x, area->y, area->width, area->height);
       cairo_clip (cr);
       cairo_new_path (cr);
@@ -4888,7 +4873,6 @@ gtk_default_draw_expander (GtkStyle        *style,
   
   cairo_set_line_width (cr, line_width);
 
-  cairo_save (cr);
   if (state_type == GTK_STATE_PRELIGHT)
     gdk_cairo_set_source_color (cr,
 				&style->fg[GTK_STATE_PRELIGHT]);
@@ -4899,15 +4883,11 @@ gtk_default_draw_expander (GtkStyle        *style,
     gdk_cairo_set_source_color (cr,
 				&style->base[GTK_STATE_NORMAL]);
   
-  cairo_fill (cr);
-  cairo_restore (cr);
+  cairo_fill_preserve (cr);
   
   gdk_cairo_set_source_color (cr, &style->fg[state_type]);
   cairo_stroke (cr);
   
-  if (area)
-    cairo_restore (cr);
-
   cairo_destroy (cr);
 }
 

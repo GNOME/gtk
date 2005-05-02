@@ -59,17 +59,10 @@ struct _GdkGCX11
   
   GC xgc;
   GdkScreen *screen;
-  GdkRegion *clip_region;
   guint16 dirty_mask;
+  guint have_clip_region : 1;
   guint have_clip_mask : 1;
   guint depth : 8;
-
-  GdkFill fill;
-  GdkBitmap *stipple;
-  GdkPixmap *tile;
-
-  gulong fg_pixel;
-  gulong bg_pixel;
 };
 
 struct _GdkGCX11Class

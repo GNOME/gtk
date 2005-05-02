@@ -79,6 +79,8 @@ _gdk_fb_gc_new (GdkDrawable      *drawable,
 
   gc = g_object_new (gdk_gc_fb_get_type (), NULL);
 
+  _gdk_gc_init (gc, drawable, values, values_mask);
+
   private = (GdkGCFBData *)gc;
   
   private->depth = GDK_DRAWABLE_FBDATA (drawable)->depth;
@@ -103,14 +105,8 @@ gdk_fb_gc_finalize (GObject *obj)
 
   private = GDK_GC_FBDATA (gc);
 
-  if (private->clip_region)
-    gdk_region_destroy (private->clip_region);
   if (private->values.clip_mask)
     gdk_pixmap_unref (private->values.clip_mask);
-  if (private->values.stipple)
-    gdk_pixmap_unref (private->values.stipple);
-  if (private->values.tile)
-    gdk_pixmap_unref (private->values.tile);
 
   g_free (private->dash_list);
 
@@ -175,7 +171,7 @@ gdk_fb_gc_set_values (GdkGC           *gc,
       if (values->tile)
 	g_assert (GDK_DRAWABLE_IMPL_FBDATA (values->tile)->depth >= 8);
 
-      private->values.tile = values->tile ? gdk_pixmap_ref (values->tile) : NULL;
+      private->values.tile = values->tile;
       private->values_mask |= GDK_GC_TILE;
       if (oldpm)
 	gdk_pixmap_unref (oldpm);
@@ -186,7 +182,7 @@ gdk_fb_gc_set_values (GdkGC           *gc,
       oldpm = private->values.stipple;
       if (values->stipple)
 	g_assert (GDK_DRAWABLE_IMPL_FBDATA (values->stipple)->depth == 1);
-      private->values.stipple = values->stipple ? gdk_pixmap_ref (values->stipple) : NULL;
+      private->values.stipple = values->stipple;
       private->values_mask |= GDK_GC_STIPPLE;
       if (oldpm)
 	gdk_pixmap_unref (oldpm);
@@ -200,12 +196,6 @@ gdk_fb_gc_set_values (GdkGC           *gc,
       private->values_mask |= GDK_GC_CLIP_MASK;
       if (oldpm)
 	gdk_pixmap_unref (oldpm);
-
-      if (private->clip_region)
-	{
-	  gdk_region_destroy (private->clip_region);
-	  private->clip_region = NULL;
-	}
     }
 
   if (values_mask & GDK_GC_SUBWINDOW)
@@ -313,60 +303,13 @@ gc_unset_cmask(GdkGC *gc)
 }
 
 void
-gdk_gc_set_clip_rectangle (GdkGC	*gc,
-			   GdkRectangle *rectangle)
+_gdk_windowing_gc_set_clip_region (GdkGC     *gc,
+				   GdkRegion *region)
 {
-  GdkGC *private = (GdkGC *)gc;
-  GdkGCFBData *data;
+  GdkGCFBData *data = GDK_GC_FBDATA (gc);
 
-  g_return_if_fail (gc != NULL);
-
-  data = GDK_GC_FBDATA (gc);
-
-  if (data->clip_region)
-    {
-      gdk_region_destroy (data->clip_region);
-      data->clip_region = NULL;
-    }
-
-  if (rectangle)
-    data->clip_region = gdk_region_rectangle (rectangle);
-
-  private->clip_x_origin = 0;
-  private->clip_y_origin = 0;
-  data->values.clip_x_origin = 0;
-  data->values.clip_y_origin = 0;
-
-  gc_unset_cmask (gc);
-
-  _gdk_fb_gc_calc_state (gc, GDK_GC_CLIP_X_ORIGIN|GDK_GC_CLIP_Y_ORIGIN);
-} 
-
-void
-gdk_gc_set_clip_region (GdkGC	  *gc,
-			GdkRegion *region)
-{
-  GdkGC *private = (GdkGC *)gc;
-  GdkGCFBData *data;
-
-  g_return_if_fail (gc != NULL);
-
-  data = GDK_GC_FBDATA (gc);
-
-  if (region == data->clip_region)
-    return;
-
-  if (data->clip_region)
-    {
-      gdk_region_destroy (data->clip_region);
-      data->clip_region = NULL;
-    }
-
-  if (region)
-    data->clip_region = gdk_region_copy (region);
-  
-  private->clip_x_origin = 0;
-  private->clip_y_origin = 0;
+  gc->clip_x_origin = 0;
+  gc->clip_y_origin = 0;
   data->values.clip_x_origin = 0;
   data->values.clip_y_origin = 0;
 
@@ -377,49 +320,35 @@ gdk_gc_set_clip_region (GdkGC	  *gc,
 
 
 void
-gdk_gc_copy (GdkGC *dst_gc, GdkGC *src_gc)
+_gdk_windowing_gc_copy (GdkGC *dst_gc,
+			GdkGC *src_gc)
 {
-  GdkGCFBData *dst_private;
-  GdkGCFBData *src_private;
-
-  src_private = GDK_GC_FBDATA (dst_gc);
-  dst_private = GDK_GC_FBDATA (dst_gc);
-
-  g_return_if_fail (dst_gc != NULL);
-  g_return_if_fail (src_gc != NULL);
-
-  if (dst_private->clip_region)
-    gdk_region_destroy (dst_private->clip_region);
+  GdkGCFBData *dst_private = GDK_GC_FBDATA (dst_gc);
+  GdkGCFBData *src_private = GDK_GC_FBDATA (src_gc);
+  GdkGCValuesMask old_mask = dst_private->values_mask;
 
   if (dst_private->values_mask & GDK_GC_FONT)
     gdk_font_unref (dst_private->values.font);
-  if (dst_private->values_mask & GDK_GC_TILE)
-    gdk_pixmap_unref (dst_private->values.tile);
-  if (dst_private->values_mask & GDK_GC_STIPPLE)
-    gdk_pixmap_unref (dst_private->values.stipple);
   if (dst_private->values_mask & GDK_GC_CLIP_MASK)
-    gdk_pixmap_unref (dst_private->values.clip_mask);
+    g_object_unref (dst_private->values.clip_mask);
 
   g_free (dst_private->dash_list);
 
-  *dst_private = *src_private;
+  if (src_private->dash_list)
+    dst_private->dash_list = g_memdup (src_private->dash_list,
+				       src_private->dash_list_len);
+  
+  dst_private->values_mask = src_private->values_mask;
+  dst_private->values = src_private->values;
   if (dst_private->values_mask & GDK_GC_FONT)
     gdk_font_ref (dst_private->values.font);
-  if (dst_private->values_mask & GDK_GC_TILE)
-    gdk_pixmap_ref (dst_private->values.tile);
-  if (dst_private->values_mask & GDK_GC_STIPPLE)
-    gdk_pixmap_ref (dst_private->values.stipple);
   if (dst_private->values_mask & GDK_GC_CLIP_MASK)
-    gdk_pixmap_ref (dst_private->values.clip_mask);
-  
-  if (dst_private->clip_region)
-    dst_private->clip_region = gdk_region_copy (dst_private->clip_region);
-  
-  if (dst_private->dash_list)
-    {
-      dst_private->dash_list = g_malloc (dst_private->dash_list_len);
-      memcpy (dst_private->dash_list,
-	      src_private->dash_list,
-	      dst_private->dash_list_len);
-    }
+    g_object_ref (dst_private->values.clip_mask);
+
+  dst_private->dash_offset = src_private->dash_offset;
+  dst_private->alu = src_private->alu;
+
+  dst_private->set_pixel = src_private->set_pixel;
+
+  _gdk_fb_gc_calc_state (gc, old_mask | dst_private->values_mask);
 }

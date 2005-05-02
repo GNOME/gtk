@@ -28,52 +28,56 @@
 #include <string.h>
 
 #include "gdkgc.h"
+#include "gdkinternals.h"
+#include "gdkpixmap.h"
+#include "gdkregion-generic.h"
 #include "gdkrgb.h"
 #include "gdkprivate.h"
 #include "gdkalias.h"
 
-static void gdk_gc_class_init (GObjectClass *class);
 static void gdk_gc_finalize   (GObject      *object);
 
-static GObjectClass *parent_class;
+typedef struct _GdkGCPrivate GdkGCPrivate;
 
-GType
-gdk_gc_get_type (void)
+struct _GdkGCPrivate
 {
-  static GType object_type = 0;
+  GdkRegion *clip_region;
 
-  if (!object_type)
-    {
-      static const GTypeInfo object_info =
-      {
-        sizeof (GdkGCClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gdk_gc_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GdkGC),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) NULL,
-      };
-      
-      object_type = g_type_register_static (G_TYPE_OBJECT,
-                                            "GdkGC",
-                                            &object_info, 
-					    G_TYPE_FLAG_ABSTRACT);
-    }
+  GdkFill fill;
+  GdkBitmap *stipple;
+  GdkPixmap *tile;
   
-  return object_type;
+  guint32 fg_pixel;
+  guint32 bg_pixel;
+};
+
+#define GDK_GC_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GDK_TYPE_GC, GdkGCPrivate))
+
+G_DEFINE_TYPE (GdkGC, gdk_gc, G_TYPE_OBJECT);
+
+static void
+gdk_gc_class_init (GdkGCClass *class)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
+  
+  object_class->finalize = gdk_gc_finalize;
+
+  g_type_class_add_private (object_class, sizeof (GdkGCPrivate));
 }
 
 static void
-gdk_gc_class_init (GObjectClass *class)
+gdk_gc_init (GdkGC *gc)
 {
-  parent_class = g_type_class_peek_parent (class);
-  
-  class->finalize = gdk_gc_finalize;
-}
+  GdkGCPrivate *priv = GDK_GC_GET_PRIVATE (gc);
 
+  priv->fill = GDK_SOLID;
+
+  /* These are the default X11 value, which we match. They are clearly
+   * wrong for TrueColor displays, so apps have to change them.
+   */
+  priv->fg_pixel = 0;
+  priv->bg_pixel = 1;
+}
 
 /**
  * gdk_gc_new:
@@ -109,17 +113,39 @@ gdk_gc_new_with_values (GdkDrawable	*drawable,
 			GdkGCValues	*values,
 			GdkGCValuesMask	 values_mask)
 {
-  GdkGC *gc;
-
   g_return_val_if_fail (drawable != NULL, NULL);
 
-  gc = GDK_DRAWABLE_GET_CLASS (drawable)->create_gc (drawable,
-                                                     values,
-                                                     values_mask);
+  return GDK_DRAWABLE_GET_CLASS (drawable)->create_gc (drawable,
+						       values,
+						       values_mask);
+}
 
-  if (gc == NULL) /* This would mean the drawable was destroyed. */
-    return NULL;
-  
+/**
+ * _gdk_gc_init:
+ * @gc: a #GdkGC
+ * @drawable: a #GdkDrawable.
+ * @values: a structure containing initial values for the GC.
+ * @values_mask: a bit mask indicating which fields in @values
+ *   are set.
+ * 
+ * Does initialization of the generic portions of a #GdkGC
+ * created with the specified values and values_mask. This
+ * should be called out of the implementation of
+ * GdkDrawable.create_gc() immediately after creating the
+ * #GdkGC object.
+ **/
+void
+_gdk_gc_init (GdkGC           *gc,
+	      GdkDrawable     *drawable,
+	      GdkGCValues     *values,
+	      GdkGCValuesMask  values_mask)
+{
+  GdkGCPrivate *priv;
+
+  g_return_if_fail (GDK_IS_GC (gc));
+
+  priv = GDK_GC_GET_PRIVATE (gc);
+
   if (values_mask & GDK_GC_CLIP_X_ORIGIN)
     gc->clip_x_origin = values->clip_x_origin;
   if (values_mask & GDK_GC_CLIP_Y_ORIGIN)
@@ -128,29 +154,42 @@ gdk_gc_new_with_values (GdkDrawable	*drawable,
     gc->ts_x_origin = values->ts_x_origin;
   if (values_mask & GDK_GC_TS_Y_ORIGIN)
     gc->ts_y_origin = values->ts_y_origin;
-
-  /* gc->colormap will already be set if gdk_gc_new_with_values()
-   * recurses - as in GdkPixmap => impl object.
-   */
-  if (!gc->colormap)
+  if (values_mask & GDK_GC_FILL)
+    priv->fill = values->fill;
+  if (values_mask & GDK_GC_STIPPLE)
     {
-      gc->colormap = gdk_drawable_get_colormap (drawable);
-      if (gc->colormap)
-	g_object_ref (gc->colormap);
+      priv->stipple = values->stipple;
+      if (priv->stipple)
+	g_object_ref (priv->stipple);
     }
-  
-  return gc;
+  if (values_mask & GDK_GC_TILE)
+    {
+      priv->tile = values->tile;
+      if (priv->tile)
+	g_object_ref (priv->tile);
+    }
+  if (values_mask & GDK_GC_FOREGROUND)
+    priv->fg_pixel = values->foreground.pixel;
+  if (values_mask & GDK_GC_BACKGROUND)
+    priv->bg_pixel = values->background.pixel;
+
+  gc->colormap = gdk_drawable_get_colormap (drawable);
+  if (gc->colormap)
+    g_object_ref (gc->colormap);
 }
 
 static void
 gdk_gc_finalize (GObject *object)
 {
   GdkGC *gc = GDK_GC (object);
+  GdkGCPrivate *priv = GDK_GC_GET_PRIVATE (gc);
   
+  if (priv->clip_region)
+    gdk_region_destroy (priv->clip_region);
   if (gc->colormap)
     g_object_unref (gc->colormap);
 
-  parent_class->finalize (object);
+  G_OBJECT_CLASS (gdk_gc_parent_class)->finalize (object);
 }
 
 /**
@@ -219,8 +258,12 @@ gdk_gc_set_values (GdkGC           *gc,
 		   GdkGCValues	   *values,
 		   GdkGCValuesMask  values_mask)
 {
+  GdkGCPrivate *priv;
+
   g_return_if_fail (GDK_IS_GC (gc));
   g_return_if_fail (values != NULL);
+
+  priv = GDK_GC_GET_PRIVATE (gc);
 
   if (values_mask & GDK_GC_CLIP_X_ORIGIN)
     gc->clip_x_origin = values->clip_x_origin;
@@ -230,6 +273,43 @@ gdk_gc_set_values (GdkGC           *gc,
     gc->ts_x_origin = values->ts_x_origin;
   if (values_mask & GDK_GC_TS_Y_ORIGIN)
     gc->ts_y_origin = values->ts_y_origin;
+  if (values_mask & GDK_GC_CLIP_MASK)
+    {
+      GdkGCPrivate *priv = GDK_GC_GET_PRIVATE (gc);
+      if (priv->clip_region)
+	{
+	  gdk_region_destroy (priv->clip_region);
+	  priv->clip_region = NULL;
+	}
+    }
+  if (values_mask & GDK_GC_FILL)
+    priv->fill = values->fill;
+  if (values_mask & GDK_GC_STIPPLE)
+    {
+      if (priv->stipple != values->stipple)
+	{
+	  if (priv->stipple)
+	    g_object_unref (priv->stipple);
+	  priv->stipple = values->stipple;
+	  if (priv->stipple)
+	    g_object_ref (priv->stipple);
+	}
+    }
+  if (values_mask & GDK_GC_TILE)
+    {
+      if (priv->tile != values->tile)
+	{
+	  if (priv->tile)
+	    g_object_unref (priv->tile);
+	  priv->tile = values->tile;
+	  if (priv->tile)
+	    g_object_ref (priv->tile);
+	}
+    }
+  if (values_mask & GDK_GC_FOREGROUND)
+    priv->fg_pixel = values->foreground.pixel;
+  if (values_mask & GDK_GC_BACKGROUND)
+    priv->bg_pixel = values->background.pixel;
   
   GDK_GC_GET_CLASS (gc)->set_values (gc, values, values_mask);
 }
@@ -459,6 +539,169 @@ gdk_gc_set_clip_mask (GdkGC	*gc,
   gdk_gc_set_values (gc, &values, GDK_GC_CLIP_MASK);
 }
 
+static void
+_gdk_gc_set_clip_region_internal (GdkGC     *gc,
+				  GdkRegion *region)
+{
+  GdkGCPrivate *priv = GDK_GC_GET_PRIVATE (gc);
+
+  if (priv->clip_region)
+    gdk_region_destroy (priv->clip_region);
+
+  priv->clip_region = region;
+
+  _gdk_windowing_gc_set_clip_region (gc, region);
+}
+
+/**
+ * gdk_gc_set_clip_rectangle:
+ * @gc: a #GdkGC.
+ * @rectangle: the rectangle to clip to.
+ * 
+ * Sets the clip mask for a graphics context from a
+ * rectangle. The clip mask is interpreted relative to the clip
+ * origin. (See gdk_gc_set_clip_origin()).
+ **/
+void
+gdk_gc_set_clip_rectangle (GdkGC	*gc,
+			   GdkRectangle *rectangle)
+{
+  GdkRegion *region;
+  
+  g_return_if_fail (GDK_IS_GC (gc));
+
+  if (rectangle)
+    region = gdk_region_rectangle (rectangle);
+  else
+    region = NULL;
+
+  _gdk_gc_set_clip_region_internal (gc, region);
+}
+
+/**
+ * gdk_gc_set_clip_region:
+ * @gc: a #GdkGC.
+ * @region: the #GdkRegion. 
+ * 
+ * Sets the clip mask for a graphics context from a region structure.
+ * The clip mask is interpreted relative to the clip origin. (See
+ * gdk_gc_set_clip_origin()).
+ **/
+void
+gdk_gc_set_clip_region (GdkGC	  *gc,
+			GdkRegion *region)
+{
+  g_return_if_fail (GDK_IS_GC (gc));
+
+  if (region)
+    region = gdk_region_copy (region);
+  
+  _gdk_gc_set_clip_region_internal (gc, region);
+}
+
+/**
+ * _gdk_gc_get_clip_region:
+ * @gc: a #GdkGC
+ * 
+ * Gets the current clip region for @gc, if any.
+ * 
+ * Return value: the clip region for the GC, or %NULL.
+ *   (if a clip mask is set, the return will be %NULL)
+ *   This value is owned by the GC and must not be freed.
+ **/
+GdkRegion *
+_gdk_gc_get_clip_region (GdkGC *gc)
+{
+  g_return_val_if_fail (GDK_IS_GC (gc), NULL);
+
+  return GDK_GC_GET_PRIVATE (gc)->clip_region;
+}
+
+/**
+ * _gdk_gc_get_fill:
+ * @gc: a #GdkGC
+ * 
+ * Gets the current file style for the GC
+ * 
+ * Return value: the file style for the GC
+ **/
+GdkFill
+_gdk_gc_get_fill (GdkGC *gc)
+{
+  g_return_val_if_fail (GDK_IS_GC (gc), GDK_SOLID);
+
+  return GDK_GC_GET_PRIVATE (gc)->fill;
+}
+
+/**
+ * _gdk_gc_get_tile:
+ * @gc: a #GdkGC
+ * 
+ * Gets the tile pixmap for @gc, if any
+ * 
+ * Return value: the tile set on the GC, or %NULL. The
+ *   value is owned by the GC and must not be freed.
+ **/
+GdkPixmap *
+_gdk_gc_get_tile (GdkGC *gc)
+{
+  g_return_val_if_fail (GDK_IS_GC (gc), NULL);
+
+  return GDK_GC_GET_PRIVATE (gc)->tile;
+}
+
+/**
+ * _gdk_gc_get_stipple:
+ * @gc: a #GdkGC
+ * 
+ * Gets the stipple pixmap for @gc, if any
+ * 
+ * Return value: the stipple set on the GC, or %NULL. The
+ *   value is owned by the GC and must not be freed.
+ **/
+GdkBitmap *
+_gdk_gc_get_stipple (GdkGC *gc)
+{
+  g_return_val_if_fail (GDK_IS_GC (gc), NULL);
+
+  return GDK_GC_GET_PRIVATE (gc)->stipple;
+}
+
+/**
+ * _gdk_gc_get_fg_pixel:
+ * @gc: a #GdkGC
+ * 
+ * Gets the foreground pixel value for @gc. If the
+ * foreground pixel has never been set, returns the
+ * default value 0.
+ * 
+ * Return value: the foreground pixel value of the GC
+ **/
+guint32
+_gdk_gc_get_fg_pixel (GdkGC *gc)
+{
+  g_return_val_if_fail (GDK_IS_GC (gc), 0);
+  
+  return GDK_GC_GET_PRIVATE (gc)->fg_pixel;
+}
+
+/**
+ * _gdk_gc_get_bg_pixel:
+ * @gc: a #GdkGC
+ * 
+ * Gets the background pixel value for @gc.If the
+ * foreground pixel has never been set, returns the
+ * default value 1.
+ * 
+ * Return value: the foreground pixel value of the GC
+ **/
+guint32
+_gdk_gc_get_bg_pixel (GdkGC *gc)
+{
+  g_return_val_if_fail (GDK_IS_GC (gc), 0);
+  
+  return GDK_GC_GET_PRIVATE (gc)->bg_pixel;
+}
 
 /**
  * gdk_gc_set_subwindow:
@@ -599,6 +842,67 @@ gdk_gc_offset (GdkGC *gc,
 }
 
 /**
+ * gdk_gc_copy:
+ * @dst_gc: the destination graphics context.
+ * @src_gc: the source graphics context.
+ * 
+ * Copy the set of values from one graphics context
+ * onto another graphics context.
+ **/
+void
+gdk_gc_copy (GdkGC *dst_gc,
+	     GdkGC *src_gc)
+{
+  GdkGCPrivate *dst_priv, *src_priv;
+  
+  g_return_if_fail (GDK_IS_GC (dst_gc));
+  g_return_if_fail (GDK_IS_GC (src_gc));
+
+  dst_priv = GDK_GC_GET_PRIVATE (dst_gc);
+  src_priv = GDK_GC_GET_PRIVATE (src_gc);
+
+  _gdk_windowing_gc_copy (dst_gc, src_gc);
+
+  dst_gc->clip_x_origin = src_gc->clip_x_origin;
+  dst_gc->clip_y_origin = src_gc->clip_y_origin;
+  dst_gc->ts_x_origin = src_gc->ts_x_origin;
+  dst_gc->ts_y_origin = src_gc->ts_y_origin;
+
+  if (src_gc->colormap)
+    g_object_ref (src_gc->colormap);
+
+  if (dst_gc->colormap)
+    g_object_unref (dst_gc->colormap);
+
+  dst_gc->colormap = src_gc->colormap;
+
+  if (dst_priv->clip_region)
+    gdk_region_destroy (dst_priv->clip_region);
+
+  if (src_priv->clip_region)
+    dst_priv->clip_region = gdk_region_copy (src_priv->clip_region);
+  else
+    dst_priv->clip_region = NULL;
+  
+  dst_priv->fill = src_priv->fill;
+  
+  if (dst_priv->stipple)
+    g_object_unref (dst_priv->stipple);
+  dst_priv->stipple = src_priv->stipple;
+  if (dst_priv->stipple)
+    g_object_ref (dst_priv->stipple);
+  
+  if (dst_priv->tile)
+    g_object_unref (dst_priv->tile);
+  dst_priv->tile = src_priv->tile;
+  if (dst_priv->tile)
+    g_object_ref (dst_priv->tile);
+
+  dst_priv->fg_pixel = src_priv->fg_pixel;
+  dst_priv->bg_pixel = src_priv->bg_pixel;
+}
+
+/**
  * gdk_gc_set_colormap:
  * @gc: a #GdkGC
  * @colormap: a #GdkColormap
@@ -722,6 +1026,226 @@ gdk_gc_set_rgb_bg_color (GdkGC          *gc,
   tmp_color = *color;
   gdk_rgb_find_color (cmap, &tmp_color);
   gdk_gc_set_background (gc, &tmp_color);
+}
+
+static cairo_surface_t *
+make_stipple_tile_surface (cairo_t   *cr,
+			   GdkBitmap *stipple,
+			   GdkColor  *foreground,
+			   GdkColor  *background)
+{
+  cairo_t *tmp_cr;
+  cairo_surface_t *surface; 
+  cairo_surface_t *alpha_surface;
+  gint width, height;
+
+  gdk_drawable_get_size (stipple,
+			 &width, &height);
+  
+  alpha_surface = _gdk_drawable_ref_cairo_surface (stipple);
+  
+  surface = cairo_surface_create_similar (cairo_get_target_surface (cr),
+					  CAIRO_FORMAT_ARGB32,
+					  width, height);
+
+  tmp_cr = cairo_create ();
+  cairo_set_target_surface (tmp_cr, surface);
+  
+  cairo_set_operator (tmp_cr, CAIRO_OPERATOR_SRC);
+ 
+  if (background)
+      gdk_cairo_set_source_color (tmp_cr, background);
+  else
+      cairo_set_source_rgba (tmp_cr, 0, 0, 0 ,0);
+
+  cairo_paint (tmp_cr);
+
+  cairo_set_operator (tmp_cr, CAIRO_OPERATOR_OVER);
+
+  gdk_cairo_set_source_color (tmp_cr, foreground);
+  cairo_mask_surface (tmp_cr, alpha_surface, 0, 0);
+  
+  cairo_destroy (tmp_cr);
+  cairo_surface_destroy (alpha_surface);
+
+  return surface;
+}
+
+static void
+gc_get_foreground (GdkGC    *gc,
+		   GdkColor *color)
+{
+  GdkGCPrivate *priv = GDK_GC_GET_PRIVATE (gc);
+  
+  color->pixel = priv->bg_pixel;
+
+  if (gc->colormap)
+    gdk_colormap_query_color (gc->colormap, priv->bg_pixel, color);
+  else
+    g_warning ("No colormap in gc_get_background");
+}
+
+static void
+gc_get_background (GdkGC    *gc,
+		   GdkColor *color)
+{
+  GdkGCPrivate *priv = GDK_GC_GET_PRIVATE (gc);
+  
+  color->pixel = priv->bg_pixel;
+
+  if (gc->colormap)
+    gdk_colormap_query_color (gc->colormap, priv->bg_pixel, color);
+  else
+    g_warning ("No colormap in gc_get_background");
+}
+
+/**
+ * _gdk_gc_update_context:
+ * @gc: a #GdkGC
+ * @cr: a #cairo_t
+ * @override_foreground: a foreground color to use to override the
+ *   foreground color of the GC
+ * @override_stipple: a stipple pattern to use to override the
+ *   stipple from the GC. If this is present and the fill mode
+ *   of the GC isn't %GDK_STIPPLED or %GDK_OPAQUE_STIPPLED
+ *   the fill mode will be forced to %GDK_STIPPLED
+ * 
+ * Set the attributes of a cairo context to match those of a #GdkGC
+ * as far as possible. Some aspects of a #GdkGC, such as clip masks
+ * and functions other than %GDK_COPY are not currently handled.
+ **/
+void
+_gdk_gc_update_context (GdkGC     *gc,
+			cairo_t   *cr,
+			GdkColor  *override_foreground,
+			GdkBitmap *override_stipple)
+{
+  GdkGCPrivate *priv;
+  GdkFill fill;
+  GdkColor foreground;
+  GdkColor background;
+  cairo_surface_t *tile_surface = NULL;
+  GdkBitmap *stipple = NULL;
+
+  g_return_if_fail (GDK_IS_GC (gc));
+  g_return_if_fail (cr != NULL);
+  g_return_if_fail (override_stipple == NULL || GDK_IS_PIXMAP (override_stipple));
+
+  priv = GDK_GC_GET_PRIVATE (gc);
+
+  fill = priv->fill;
+  if (override_stipple && fill != GDK_OPAQUE_STIPPLED)
+    fill = GDK_STIPPLED;
+
+  if (fill != GDK_TILED)
+    {
+      if (override_foreground)
+	foreground = *override_foreground;
+      else
+	gc_get_foreground (gc, &foreground);
+    }
+
+  if (fill == GDK_OPAQUE_STIPPLED)
+    {
+      if (override_foreground)
+	foreground = *override_foreground;
+      else
+	gc_get_background (gc, &background);
+    }
+
+  switch (fill)
+    {
+    case GDK_SOLID:
+      break;
+    case GDK_TILED:
+      if (!priv->tile)
+	fill = GDK_SOLID;
+      break;
+    case GDK_STIPPLED:
+    case GDK_OPAQUE_STIPPLED:
+      if (override_stipple)
+	stipple = override_stipple;
+      else
+	stipple = priv->stipple;
+      
+      if (!stipple)
+	fill = GDK_SOLID;
+      break;
+    }
+  
+  switch (fill)
+    {
+    case GDK_SOLID:
+      gdk_cairo_set_source_color (cr, &foreground);
+      break;
+    case GDK_TILED:
+      tile_surface = _gdk_drawable_ref_cairo_surface (priv->tile);
+      break;
+    case GDK_STIPPLED:
+      tile_surface = make_stipple_tile_surface (cr, stipple, &foreground, NULL);
+      break;
+    case GDK_OPAQUE_STIPPLED:
+      tile_surface = make_stipple_tile_surface (cr, stipple, &foreground, &background);
+      break;
+    }
+
+  /* Tiles, stipples, and clip regions are all specified in device space,
+   * not user space. For the clip region, we can simply change the matrix,
+   * clip, then clip back, but for the source pattern, we need to
+   * compute the right matrix.
+   *
+   * What we want is:
+   *
+   *     CTM_inverse * Pattern_matrix = Translate(- ts_x, - ts_y)
+   *
+   * (So that ts_x, ts_y in device space is taken to 0,0 in pattern
+   * space). So, pattern_matrix = CTM * Translate(- ts_x, - tx_y);
+   */
+
+  if (tile_surface)
+    {
+      cairo_pattern_t *pattern = cairo_pattern_create_for_surface (tile_surface);
+      cairo_matrix_t user_to_device;
+      cairo_matrix_t user_to_pattern;
+      cairo_matrix_t device_to_pattern;
+
+      cairo_get_matrix (cr, &user_to_device);
+      cairo_matrix_init_translate (&device_to_pattern,
+				   - gc->ts_x_origin, - gc->ts_y_origin);
+      cairo_matrix_multiply (&user_to_pattern,
+			     &user_to_device, &device_to_pattern);
+      
+      cairo_pattern_set_matrix (pattern, &user_to_pattern);
+      cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
+      cairo_set_source (cr, pattern);
+      
+      cairo_surface_destroy (tile_surface);
+      cairo_pattern_destroy (pattern);
+    }
+
+  cairo_reset_clip (cr);
+  if (priv->clip_region)
+    {
+      GdkRegionBox *boxes = priv->clip_region->rects;
+      gint n_boxes = priv->clip_region->numRects;
+      int i;
+
+      cairo_save (cr);
+
+      cairo_identity_matrix (cr);
+      
+      cairo_new_path (cr);
+      for (i=0; i < n_boxes; i++)
+	cairo_rectangle (cr,
+			 boxes[i].x1 + gc->clip_x_origin,
+			 boxes[i].y1 + gc->clip_y_origin,
+			 boxes[i].x2 - boxes[i].x1,
+			 boxes[i].y2 - boxes[i].y1);
+
+      cairo_restore (cr);
+
+      cairo_clip (cr);
+    }
 }
 
 #define __GDK_GC_C__

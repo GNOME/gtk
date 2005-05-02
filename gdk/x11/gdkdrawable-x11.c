@@ -346,13 +346,13 @@ gdk_x11_drawable_update_picture_clip (GdkDrawable *drawable,
 {
   GdkDrawableImplX11 *impl = GDK_DRAWABLE_IMPL_X11 (drawable);
   Display *xdisplay = GDK_SCREEN_XDISPLAY (impl->screen);
-  GdkGCX11 *gc_private = gc ? GDK_GC_X11 (gc) : NULL;
   Picture picture = gdk_x11_drawable_get_picture (drawable);
+  GdkRegion *clip_region = gc ? _gdk_gc_get_clip_region (gc) : NULL;
 
-  if (gc && gc_private->clip_region)
+  if (clip_region)
     {
-      GdkRegionBox *boxes = gc_private->clip_region->rects;
-      gint n_boxes = gc_private->clip_region->numRects;
+      GdkRegionBox *boxes = clip_region->rects;
+      gint n_boxes = clip_region->numRects;
       XRectangle *rects = g_new (XRectangle, n_boxes);
       int i;
 

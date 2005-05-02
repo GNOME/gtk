@@ -579,11 +579,14 @@ gdk_gc_set_stipple
 gdk_gc_set_ts_origin
 gdk_gc_set_clip_origin
 gdk_gc_set_clip_mask
+gdk_gc_set_clip_rectangle
+gdk_gc_set_clip_region
 gdk_gc_set_subwindow
 gdk_gc_set_exposures
 gdk_gc_set_line_attributes
 gdk_gc_set_dashes
 gdk_gc_offset
+gdk_gc_copy
 gdk_gc_get_colormap
 gdk_gc_set_colormap
 gdk_gc_set_rgb_bg_color
@@ -593,10 +596,7 @@ gdk_gc_set_rgb_fg_color
 
 #if IN_HEADER(__GDK_GC_H__)
 #if IN_FILE(__GDK_GC_X11_C__)
-gdk_gc_copy
 gdk_gc_get_screen
-gdk_gc_set_clip_rectangle
-gdk_gc_set_clip_region
 #endif
 #endif
 

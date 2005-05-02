@@ -49,8 +49,10 @@ struct _GdkPangoRendererPrivate
   gboolean override_color_set[MAX_RENDER_PART + 1];
   
   GdkBitmap *stipple[MAX_RENDER_PART + 1];
-  cairo_surface_t *stipple_surface[MAX_RENDER_PART + 1];
   gboolean embossed;
+
+  cairo_t *cr;
+  PangoRenderPart last_part;
 
   /* Current target */
   GdkDrawable *drawable;
@@ -78,10 +80,6 @@ gdk_pango_renderer_finalize (GObject *object)
     g_object_unref (priv->base_gc);
   if (priv->drawable)
     g_object_unref (priv->drawable);
-
-  for (i = 0; i <= MAX_RENDER_PART; i++)
-    if (priv->stipple_surface[i])
-      cairo_surface_destroy (priv->stipple_surface[i]);
 
   for (i = 0; i <= MAX_RENDER_PART; i++)
     if (priv->stipple[i])
@@ -132,122 +130,56 @@ emboss_context (cairo_t *cr)
   cairo_set_source_rgb (cr, 1.0, 1.0, 1.0);
 }
 
-static void
-set_part_color (GdkPangoRenderer *gdk_renderer,
-		cairo_t          *cr,
-		PangoRenderPart   part)
-{
-  PangoColor *color = pango_renderer_get_color (PANGO_RENDERER (gdk_renderer),
-						part);
-  if (color)
-    {
-      cairo_set_source_rgb (cr,
-			    color->red / 65535.,
-			    color->green / 65535.,
-			    color->blue / 65535.);
-    }
-  else
-    {
-      GdkColor gc_color;
-      
-      _gdk_windowing_gc_get_foreground (gdk_renderer->priv->base_gc, &gc_color);
-      gdk_cairo_set_source_color (cr, &gc_color);
-    }
-}
-
-static cairo_surface_t *
-get_stipple_surface (GdkPangoRenderer *gdk_renderer,
-		     cairo_t          *cr,
-		     PangoRenderPart   part)
-{
-  if (!gdk_renderer->priv->stipple_surface[part])
-    {
-      cairo_t *tmp_cr;
-      cairo_surface_t *surface; 
-      cairo_surface_t *alpha_surface;
-      gint width, height;
-
-      gdk_drawable_get_size (gdk_renderer->priv->stipple[part],
-			     &width, &height);
-
-      alpha_surface = _gdk_drawable_ref_cairo_surface (gdk_renderer->priv->stipple[part]);
-
-      surface = cairo_surface_create_similar (cairo_get_target_surface (cr),
-					      CAIRO_FORMAT_ARGB32,
-					      width, height);
-
-      tmp_cr = cairo_create ();
-      cairo_set_target_surface (tmp_cr, surface);
-
-      cairo_set_operator (tmp_cr, CAIRO_OPERATOR_SRC);
-      cairo_show_surface (tmp_cr, alpha_surface, width, height);
-
-      set_part_color (gdk_renderer, tmp_cr, part);
-      cairo_set_operator (tmp_cr, CAIRO_OPERATOR_ATOP);
-      
-      cairo_rectangle (tmp_cr, 0, 0, width, height);
-      cairo_fill (tmp_cr);
-
-      cairo_destroy (tmp_cr);
-      cairo_surface_destroy (alpha_surface);
-
-      gdk_renderer->priv->stipple_surface[part] = surface;
-    }
-
-  return gdk_renderer->priv->stipple_surface[part];
-}
-
 static cairo_t *
-create_cairo_context (GdkPangoRenderer *gdk_renderer,
-		      PangoRenderPart   part)
+get_cairo_context (GdkPangoRenderer *gdk_renderer,
+		   PangoRenderPart   part)
 {
   PangoRenderer *renderer = PANGO_RENDERER (gdk_renderer);
-  const PangoMatrix *matrix;
-  cairo_t *cr = gdk_drawable_create_cairo_context (gdk_renderer->priv->drawable);
+  GdkPangoRendererPrivate *priv = gdk_renderer->priv;
 
-  if (gdk_renderer->priv->stipple[part])
+  if (!priv->cr)
     {
-      cairo_surface_t *surface = get_stipple_surface (gdk_renderer, cr, part);
-      cairo_pattern_t *pattern;
+      const PangoMatrix *matrix;
+      
+      priv->cr = gdk_drawable_create_cairo_context (priv->drawable);
 
-      pattern = cairo_pattern_create_for_surface (surface);
-      cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
-
-      if (gdk_renderer->priv->base_gc->ts_x_origin != 0 ||
-	  gdk_renderer->priv->base_gc->ts_y_origin != 0)
+      matrix = pango_renderer_get_matrix (renderer);
+      if (matrix)
 	{
-	  cairo_matrix_t *matrix = cairo_matrix_create ();
-	  cairo_matrix_translate (matrix,
-				  - gdk_renderer->priv->base_gc->ts_x_origin,
-				  - gdk_renderer->priv->base_gc->ts_y_origin);
-	  cairo_pattern_set_matrix (pattern, matrix);
-	  cairo_matrix_destroy (matrix);
+	  cairo_matrix_t cairo_matrix;
+	  
+	  cairo_matrix_init (&cairo_matrix,
+			     matrix->xx, matrix->yx,
+			     matrix->xy, matrix->yy,
+			     matrix->x0, matrix->y0);
+	  cairo_set_matrix (priv->cr, &cairo_matrix);
+	}
+    }
+  
+  priv->last_part = (PangoRenderPart)-1;
+  if (part != priv->last_part)
+    {
+      PangoColor *pango_color = pango_renderer_get_color (renderer,
+							  part);
+      GdkColor *color = NULL;
+      GdkColor tmp_color;
+      if (pango_color)
+	{
+	  tmp_color.red = pango_color->red;
+	  tmp_color.green = pango_color->green;
+	  tmp_color.blue = pango_color->blue;
+	  
+	  color = &tmp_color;
 	}
 
-      cairo_set_source (cr, pattern);
-      cairo_pattern_destroy (pattern);
-    }
-  else
-    {
-      set_part_color (gdk_renderer, cr, part);
-    }
-
-  matrix = pango_renderer_get_matrix (renderer);
-  if (matrix)
-    {
-      cairo_matrix_t *cairo_matrix;
-
-      cairo_matrix = cairo_matrix_create ();
-      cairo_matrix_set_affine (cairo_matrix,
-			       matrix->xx, matrix->yx,
-			       matrix->xy, matrix->yy,
-			       matrix->x0, matrix->y0);
-      
-      cairo_set_matrix (cr, cairo_matrix);
-      cairo_matrix_destroy (cairo_matrix);
+      _gdk_gc_update_context (priv->base_gc,
+			      priv->cr,
+			      color,
+			      priv->stipple[part]);
+      priv->last_part = part;
     }
 
-  return cr;
+  return priv->cr;
 }
 
 static void
@@ -261,8 +193,8 @@ gdk_pango_renderer_draw_glyphs (PangoRenderer    *renderer,
   GdkPangoRendererPrivate *priv = gdk_renderer->priv;
   cairo_t *cr;
 
-  cr = create_cairo_context (gdk_renderer, 
-			     PANGO_RENDER_PART_FOREGROUND);
+  cr = get_cairo_context (gdk_renderer, 
+			  PANGO_RENDER_PART_FOREGROUND);
 
   if (priv->embossed)
     {
@@ -275,8 +207,6 @@ gdk_pango_renderer_draw_glyphs (PangoRenderer    *renderer,
   
   cairo_move_to (cr, x / PANGO_SCALE, y / PANGO_SCALE);
   pango_cairo_show_glyph_string (cr, font, glyphs);
-  
-  cairo_destroy (cr);
 }
 
 /* Draws an error underline that looks like one of:
@@ -369,7 +299,7 @@ gdk_pango_renderer_draw_rectangle (PangoRenderer    *renderer,
   GdkPangoRendererPrivate *priv = gdk_renderer->priv;
   cairo_t *cr;
   
-  cr = create_cairo_context (gdk_renderer, part);
+  cr = get_cairo_context (gdk_renderer, part);
 
   if (priv->embossed && part != PANGO_RENDER_PART_BACKGROUND)
     {
@@ -387,8 +317,6 @@ gdk_pango_renderer_draw_rectangle (PangoRenderer    *renderer,
 		   (double)x / PANGO_SCALE, (double)y / PANGO_SCALE,
 		   (double)width / PANGO_SCALE, (double)height / PANGO_SCALE);
   cairo_fill (cr);
-  
-  cairo_destroy (cr);
 }
 
 static void
@@ -402,7 +330,7 @@ gdk_pango_renderer_draw_error_underline (PangoRenderer    *renderer,
   GdkPangoRendererPrivate *priv = gdk_renderer->priv;
   cairo_t *cr;
   
-  cr = create_cairo_context (gdk_renderer, PANGO_RENDER_PART_UNDERLINE);
+  cr = get_cairo_context (gdk_renderer, PANGO_RENDER_PART_UNDERLINE);
   
   if (priv->embossed)
     {
@@ -417,8 +345,6 @@ gdk_pango_renderer_draw_error_underline (PangoRenderer    *renderer,
   draw_error_underline (cr,
 			(double)x / PANGO_SCALE, (double)y / PANGO_SCALE,
 			(double)width / PANGO_SCALE, (double)height / PANGO_SCALE);
-  
-  cairo_destroy (cr);
 }
 
 static void
@@ -427,23 +353,35 @@ gdk_pango_renderer_part_changed (PangoRenderer   *renderer,
 {
   GdkPangoRenderer *gdk_renderer = GDK_PANGO_RENDERER (renderer);
 
-  if (gdk_renderer->priv->stipple_surface[part])
-    {
-      cairo_surface_destroy (gdk_renderer->priv->stipple_surface[part]);
-      gdk_renderer->priv->stipple_surface[part] = NULL;
-    }
+  if (gdk_renderer->priv->last_part == part)
+    gdk_renderer->priv->last_part = (PangoRenderPart)-1;
 }
 
-void
+static void
 gdk_pango_renderer_begin (PangoRenderer *renderer)
 {
   GdkPangoRenderer *gdk_renderer = GDK_PANGO_RENDERER (renderer);
-
-  if (!gdk_renderer->priv->drawable || !gdk_renderer->priv->base_gc)
+  GdkPangoRendererPrivate *priv = gdk_renderer->priv;
+  
+  if (!priv->drawable || !priv->base_gc)
     {
       g_warning ("gdk_pango_renderer_set_drawable() and gdk_pango_renderer_set_drawable()"
 		 "must be used to set the target drawable and GC before using the renderer\n");
     }
+}
+
+static void
+gdk_pango_renderer_end (PangoRenderer *renderer)
+{
+  GdkPangoRenderer *gdk_renderer = GDK_PANGO_RENDERER (renderer);
+  GdkPangoRendererPrivate *priv = gdk_renderer->priv;
+
+  if (priv->cr)
+    {
+      cairo_destroy (priv->cr);
+      priv->cr = NULL;
+    }
+  priv->last_part = (PangoRenderPart)-1;
 }
 
 static void
@@ -541,6 +479,8 @@ gdk_pango_renderer_init (GdkPangoRenderer *renderer)
   renderer->priv = G_TYPE_INSTANCE_GET_PRIVATE (renderer,
 						GDK_TYPE_PANGO_RENDERER,
 						GdkPangoRendererPrivate);
+
+  renderer->priv->last_part = (PangoRenderPart)-1;
 }
 
 static void
@@ -555,6 +495,7 @@ gdk_pango_renderer_class_init (GdkPangoRendererClass *klass)
   renderer_class->draw_error_underline = gdk_pango_renderer_draw_error_underline;
   renderer_class->part_changed = gdk_pango_renderer_part_changed;
   renderer_class->begin = gdk_pango_renderer_begin;
+  renderer_class->end = gdk_pango_renderer_end;
   renderer_class->prepare_run = gdk_pango_renderer_prepare_run;
 
   object_class->finalize = gdk_pango_renderer_finalize;

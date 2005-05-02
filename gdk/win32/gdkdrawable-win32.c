@@ -525,6 +525,7 @@ generic_draw (GdkDrawable    *drawable,
   GdkGCWin32 *gcwin32 = GDK_GC_WIN32 (gc);
   HDC hdc;
   va_list args;
+  GdkFillStyle *fill_style = _gdk_gc_get_fill (gc);
 
   va_start (args, region);
 
@@ -532,14 +533,14 @@ generic_draw (GdkDrawable    *drawable,
    */
 
   if (gcwin32->values_mask & GDK_GC_FILL &&
-      ((gcwin32->fill_style == GDK_TILED &&
+      ((fill_style == GDK_TILED &&
 	gcwin32->values_mask & GDK_GC_TILE &&
-	gcwin32->tile != NULL)
+	_gdk_gc_get_tile (gc) != NULL)
        ||
-       ((gcwin32->fill_style == GDK_OPAQUE_STIPPLED ||
-	 gcwin32->fill_style == GDK_STIPPLED) &&
+       ((fill_style == GDK_OPAQUE_STIPPLED ||
+	 fill_style == GDK_STIPPLED) &&
 	gcwin32->values_mask & GDK_GC_STIPPLE &&
-	gcwin32->stipple != NULL)))
+	_gdk_gc_get_stipple (gc) != NULL)))
     {
       const GdkGCValuesMask blitting_mask = 0;
       GdkGCValuesMask drawing_mask = GDK_GC_FOREGROUND;
@@ -614,11 +615,11 @@ generic_draw (GdkDrawable    *drawable,
 		   region->extents.x1, region->extents.y1, args);
       gdk_win32_hdc_release (mask_pixmap, mask_gc, drawing_mask);
 
-      if (gcwin32->fill_style == GDK_TILED)
+      if (fill_style == GDK_TILED)
 	{
 	  /* Tile pixmap with tile */
 	  draw_tiles (tile_pixmap, tile_gc, SRCCOPY,
-		      gcwin32->tile,
+		      _gdk_gc_get_tile (gc),
 		      0, 0, ts_x_origin, ts_y_origin,
 		      width, height);
 	}
@@ -632,14 +633,14 @@ generic_draw (GdkDrawable    *drawable,
 
 	  /* Tile stipple bitmap */
 	  draw_tiles (stipple_bitmap, stipple_gc, SRCCOPY,
-		      gcwin32->stipple,
+		      _gdk_gc_get_stipple (gc),
 		      0, 0, ts_x_origin, ts_y_origin,
 		      width, height);
 
-	  if (gcwin32->fill_style == GDK_OPAQUE_STIPPLED)
+	  if (fill_style == GDK_OPAQUE_STIPPLED)
 	    {
 	      /* Fill tile pixmap with background */
-	      fg.pixel = gcwin32->background;
+	      fg.pixel = _gdk_gc_get_bg_pixel (gc);
 	      gdk_gc_set_foreground (tile_gc, &fg);
 	      gdk_draw_rectangle (tile_pixmap, tile_gc, TRUE,
 				  0, 0, width, height);
@@ -658,8 +659,8 @@ generic_draw (GdkDrawable    *drawable,
       if ((old_tile_hbm = SelectObject (tile_hdc, GDK_PIXMAP_HBITMAP (tile_pixmap))) == NULL)
 	WIN32_GDI_FAILED ("SelectObject");
 
-      if (gcwin32->fill_style == GDK_STIPPLED ||
-	  gcwin32->fill_style == GDK_OPAQUE_STIPPLED)
+      if (fill_style == GDK_STIPPLED ||
+	  fill_style == GDK_OPAQUE_STIPPLED)
 	{
 	  HDC stipple_hdc;
 	  HGDIOBJ old_stipple_hbm;
@@ -676,7 +677,7 @@ generic_draw (GdkDrawable    *drawable,
 
 	  if ((fg_brush = CreateSolidBrush
 	       (_gdk_win32_colormap_color (impl->colormap,
-					   gcwin32->foreground))) == NULL)
+					   _gdk_gc_get_fg_pixel (gc)))) == NULL)
 	    WIN32_GDI_FAILED ("CreateSolidBrush");
 
 	  if ((old_tile_brush = SelectObject (tile_hdc, fg_brush)) == NULL)
@@ -701,7 +702,7 @@ generic_draw (GdkDrawable    *drawable,
 	  GDI_CALL (BitBlt, (tile_hdc, 0, 0, width, height,
 			     stipple_hdc, 0, 0, ROP3_DSPDxax));
 
-	  if (gcwin32->fill_style == GDK_STIPPLED)
+	  if (fill_style == GDK_STIPPLED)
 	    {
 	      /* Punch holes in mask where stipple is zero */
 	      GDI_CALL (BitBlt, (mask_hdc, 0, 0, width, height,
@@ -1549,8 +1550,8 @@ blit_from_pixmap (gboolean              use_fg_bg,
 	      
 	      if (use_fg_bg)
 		{
-		  bgix = gcwin32->background;
-		  fgix = gcwin32->foreground;
+		  bgix = _gdk_gc_get_bg_pixel (gc);
+		  fgix = _gdk_gc_get_fg_pixel (gc);
 		}
 	      else
 		{

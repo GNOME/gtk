@@ -1,3 +1,52 @@
+2005-04-28  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c: Add a draw-border style property to allow
+	themes to draw outside the widget's allocation.
+
+	* gdk/gdkwindow.c gtk/gtkstyle.c: Remove some save/restore pairs
+	that were working around the clip-leakage bug in Cairo.
+
+	* gtk/gtkstyle.c: Use cairo_fill_preserve() rathe than
+	save/fill/restore.
+
+	* gdk/gdkgc.c gdk/gdkinternals.h: Add _gdk_gc_update_context()
+	That updates a Cairo context to match a GC.
+
+	* gdk/gdkdraw.c: Use _gdk_gc_update_context() to add support
+	for tiles/stipples/clipping to gdk_draw_glyphs(), 
+	gdk_draw_trapezoids().
+
+	* gdk/gdkpango.c: Use _gdk_gc_update_context() instead of internal
+	implementation of stipples. Use one cairo_t across the entire
+	drawing operation. Replace cairo_matrix_create() with 
+	stack-allocated matrices.
+
+	* gdk/gdkgc.c gdk/gdkinternals.h gdk/x11/gdkgc-x11.c 
+	gdk/win32/gdkgc-win32.c: Save various aspects of the 
+	GC state (fill, tile, stipple, foreground, background, clip region)
+	in instance-private-data for future use. Add getters.
+	Get rid of _gdk_windowing_gc_get_foreground() function implemented 
+	by the backends.
+
+	* gdk/gdkgc.c gdk/gdkinternals.h gdk/x11/gdkgc-x11.c
+	gdk/win32/gdkgc-win32.c gdk/linux-fb/gdkgc-fb.c: Add
+	_gdk_gc_init() to do initial setup of the GC from values;
+	fixes some problems from drawable redirection.
+
+	* gdk/gdkgc.c gdk/gdkinternals.h gdk/x11/gdkgc-x11.c
+	gdk/win32/gdkgc-win32.c gdk/linux-fb/gdkgc-fb.c: Move 
+	gdk_gc_copy() and gdk_gc_set_clip_{region,rectangle}() into 
+	the generic code, add _gdk_windowing_gc_copy(), 
+	_gdk_windowing_gc_set_clip_region() to do backend specific
+	stuff.
+
+	* gdk/x11/{gdkprivate-x11.h,gdkgc-x11.c.c,gdkdrawable-x11.c}
+	gdk/win32/{gdkprivate-win32.h,gdkgc-x11.c.c,gdkdrawable-x11.c}
+	gdk/linux-fb/{gdkprivate-fb.h,gdkgc-fb.c.c,gdkdrawable-fb.c}:
+	Don't duplicate state that now is stored by the generic code.
+
+	* gdk/gdk.symbols Update
+
 2005-05-02  Matthias Clasen  <mclasen@redhat.com>
 
 	* tests/testiconview.c: Test cell renderers.

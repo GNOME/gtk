@@ -229,7 +229,6 @@ typedef void gdk_fb_draw_drawable_func (GdkDrawable *drawable,
 typedef struct {
   GdkGC parent_instance;
 
-  GdkRegion *clip_region;
   gchar *dash_list;
   GdkGCValuesMask values_mask;
   GdkGCValues values;

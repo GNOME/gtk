@@ -433,9 +433,11 @@ gdk_fb_clip_region (GdkDrawable *drawable,
 
   if (gc)
     {
-      if (GDK_GC_FBDATA (gc)->clip_region)
+      GdkRegion *gc = _gdk_gc_get_clip_region (gc);
+      
+      if (clip_region)
 	{
-	  tmpreg = gdk_region_copy (GDK_GC_FBDATA (gc)->clip_region);
+	  tmpreg = gdk_region_copy (clip_region);
 	  gdk_region_offset (tmpreg, private->abs_x + GDK_GC_P (gc)->clip_x_origin,
 			     private->abs_y + GDK_GC_P (gc)->clip_y_origin);
 	  gdk_region_intersect (real_clip_region, tmpreg);
