@@ -1,5 +1,7 @@
 2005-05-02  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkselection.c: Small doc fixes.
+
 	* gtk/gtkmenushell.c (gtk_menu_shell_set_take_focus): 
 	(gtk_menu_shell_get_take_focus): Fix up the docs a bit.
 

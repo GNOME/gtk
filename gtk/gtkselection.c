@@ -2553,26 +2553,26 @@ gtk_selection_default_handler (GtkWidget	*widget,
 
 /**
  * gtk_selection_data_copy:
- * @selection_data: a pointer to a #GtkSelectionData structure.
+ * @data: a pointer to a #GtkSelectionData structure.
  * 
  * Makes a copy of a #GtkSelectionData structure and its data.
  * 
  * Return value: a pointer to a copy of @data.
  **/
 GtkSelectionData*
-gtk_selection_data_copy (GtkSelectionData *selection_data)
+gtk_selection_data_copy (GtkSelectionData *data)
 {
   GtkSelectionData *new_data;
   
-  g_return_val_if_fail (selection_data != NULL, NULL);
+  g_return_val_if_fail (data != NULL, NULL);
   
   new_data = g_new (GtkSelectionData, 1);
   *new_data = *selection_data;
 
-  if (selection_data->data)
+  if (data->data)
     {
-      new_data->data = g_malloc (selection_data->length + 1);
-      memcpy (new_data->data, selection_data->data, selection_data->length + 1);
+      new_data->data = g_malloc (data->length + 1);
+      memcpy (new_data->data, data->data, data->length + 1);
     }
   
   return new_data;
