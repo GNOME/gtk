@@ -1,3 +1,10 @@
+2005-05-02  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkmain.c (do_post_parse_initialization): return silently if
+	"gtk_initialized" is TRUE. Re-enables calling GTK's init functions
+	multiple times when using gtk_get_option_group(), just as one can
+	call gtk_init() multiple times without doing any harm.
+
 2005-05-01  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktextview.c (gtk_text_view_expose_event): Propagate
