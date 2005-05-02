@@ -2567,7 +2567,7 @@ gtk_selection_data_copy (GtkSelectionData *data)
   g_return_val_if_fail (data != NULL, NULL);
   
   new_data = g_new (GtkSelectionData, 1);
-  *new_data = *selection_data;
+  *new_data = *data;
 
   if (data->data)
     {
