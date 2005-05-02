@@ -607,7 +607,7 @@ gtk_image_new_from_pixbuf (GdkPixbuf *pixbuf)
  * Creates a #GtkImage displaying a stock icon. Sample stock icon
  * names are #GTK_STOCK_OPEN, #GTK_STOCK_EXIT. Sample stock sizes
  * are #GTK_ICON_SIZE_MENU, #GTK_ICON_SIZE_SMALL_TOOLBAR. If the stock
- * icon name isn't known, a "broken image" icon will be displayed instead.
+ * icon name isn't known, the image will be empty.
  * You can register your own stock icon names, see
  * gtk_icon_factory_add_default() and gtk_icon_factory_add().
  * 
@@ -1656,12 +1656,8 @@ gtk_image_expose (GtkWidget      *widget,
           break;
 
         case GTK_IMAGE_STOCK:
-	  if (gtk_style_lookup_icon_set (widget->style, image->data.stock.stock_id))
-	    stock_id = image->data.stock.stock_id;
-	  else
-	    stock_id = GTK_STOCK_MISSING_IMAGE;
           pixbuf = gtk_widget_render_icon (widget,
-                                           stock_id,
+                                           image->data.stock.stock_id,
                                            image->icon_size,
                                            NULL);
           if (pixbuf)
@@ -1956,7 +1952,6 @@ gtk_image_calc_size (GtkImage *image)
 {
   GtkWidget *widget = GTK_WIDGET (image);
   GdkPixbuf *pixbuf = NULL;
-  gchar *stock_id;
   
   /* We update stock/icon set on every size request, because
    * the theme could have affected the size; for other kinds of
@@ -1966,12 +1961,8 @@ gtk_image_calc_size (GtkImage *image)
   switch (image->storage_type)
     {
     case GTK_IMAGE_STOCK:
-      if (gtk_style_lookup_icon_set (widget->style, image->data.stock.stock_id))
-	stock_id = image->data.stock.stock_id;
-      else
-	stock_id = GTK_STOCK_MISSING_IMAGE;
       pixbuf = gtk_widget_render_icon (widget,
-                                       stock_id,
+				       image->data.stock.stock_id,
                                        image->icon_size,
                                        NULL);
       break;
