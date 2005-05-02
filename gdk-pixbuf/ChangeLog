@@ -1,5 +1,8 @@
 2005-04-29  Matthias Clasen  <mclasen@redhat.com>
 
+	* Makefile.am: Use $(NM), not nm directly. (#301299, 
+	Nguyen Thai Ngoc Duy)
+
 	* io-bmp.c (DecodeColormap): Remove debugging 
 	output.  (#302404, Frederic Crozat)
 
