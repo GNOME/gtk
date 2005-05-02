@@ -1,3 +1,8 @@
+2005-05-02  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkmenushell.c (gtk_menu_shell_set_take_focus): 
+	(gtk_menu_shell_get_take_focus): Fix up the docs a bit.
+
 2005-05-02  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkmain.c (do_post_parse_initialization): return silently if

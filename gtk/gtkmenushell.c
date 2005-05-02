@@ -1467,9 +1467,9 @@ _gtk_menu_shell_remove_mnemonic (GtkMenuShell *menu_shell,
 
 /**
  * gtk_menu_shell_get_take_focus:
- * @menu: a #GtkMenuShell
+ * @menu_shell: a #GtkMenuShell
  *
- * @returns: %TRUE if the menu_shell will take the keyboard focus on popup.
+ * @returns: %TRUE if the menu shell will take the keyboard focus on popup.
  *
  * Since: 2.8
  **/
@@ -1487,11 +1487,11 @@ gtk_menu_shell_get_take_focus (GtkMenuShell *menu_shell)
 
 /**
  * gtk_menu_shell_set_take_focus:
- * @menu: a #GtkMenuShell
- * @take_focus: %TRUE if the menu_shell should take the keyboard focus on popup.
+ * @menu_shell: a #GtkMenuShell
+ * @take_focus: %TRUE if the menu shell should take the keyboard focus on popup.
  *
- * If @take_focus is %TRUE (the default) the menu will take the keyboard focus
- * so that it will receive all keyboard events which is needed to enable
+ * If @take_focus is %TRUE (the default) the menu shell will take the keyboard 
+ * focus so that it will receive all keyboard events which is needed to enable
  * keyboard navigation in menus.
  *
  * Setting @take_focus to %FALSE is useful only for special applications
