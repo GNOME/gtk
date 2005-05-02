@@ -4264,7 +4264,9 @@ gtk_text_view_expose_event (GtkWidget *widget, GdkEventExpose *event)
   if (event->window == widget->window)
     gtk_text_view_draw_focus (widget);
 
-  /* Propagate exposes to all children not in the buffer. */
+  /* Propagate exposes to all unanchored children. 
+   * Anchored children are handled in gtk_text_view_paint(). 
+   */
   tmp_list = GTK_TEXT_VIEW (widget)->children;
   while (tmp_list != NULL)
     {
@@ -4273,7 +4275,7 @@ gtk_text_view_expose_event (GtkWidget *widget, GdkEventExpose *event)
       /* propagate_expose checks that event->window matches
        * child->window
        */
-      if (vc->type != GTK_TEXT_WINDOW_TEXT)
+      if (!vc->anchor)
         gtk_container_propagate_expose (GTK_CONTAINER (widget),
                                         vc->widget,
                                         event);

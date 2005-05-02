@@ -1,3 +1,9 @@
+2005-05-01  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktextview.c (gtk_text_view_expose_event): Propagate
+	the event to unanchored children in the text window.  
+	(#302494, Stephen Kennedy)
+
 2005-04-30  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkdnd-win32.c (gdk_dropfiles_filter): Take
