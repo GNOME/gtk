@@ -1,5 +1,14 @@
 2005-05-02  Matthias Clasen  <mclasen@redhat.com>
 
+	* tests/testiconview.c: Test cell renderers.
+
+	* gtk/gtk.symbols: Add new functions.
+
+	* gtk/gtkiconview.[hc]: Implement GtkCellLayout and use
+	cell renderers for drawing and editing. (#148144, #160242)
+
+2005-05-02  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkcellrenderertext.c (get_size): Return a sufficient
 	width for cases where pango_layout_get_pixel_extents() returns
 	a rectangle with nonzero x. 

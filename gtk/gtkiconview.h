@@ -21,6 +21,7 @@
 
 #include <gtk/gtkcontainer.h>
 #include <gtk/gtktreemodel.h>
+#include <gtk/gtkcellrenderer.h>
 
 G_BEGIN_DECLS
 
@@ -69,54 +70,60 @@ struct _GtkIconViewClass
   gboolean (* activate_cursor_item)  (GtkIconView      *icon_view);
 };
 
-GType      gtk_icon_view_get_type       (void) G_GNUC_CONST;
-GtkWidget *gtk_icon_view_new            (void);
-GtkWidget *gtk_icon_view_new_with_model (GtkTreeModel *model);
+GType          gtk_icon_view_get_type          (void) G_GNUC_CONST;
+GtkWidget *    gtk_icon_view_new               (void);
+GtkWidget *    gtk_icon_view_new_with_model    (GtkTreeModel   *model);
 
-void          gtk_icon_view_set_model         (GtkIconView  *icon_view,
-					       GtkTreeModel *model);
-GtkTreeModel *gtk_icon_view_get_model         (GtkIconView  *icon_view);
-void          gtk_icon_view_set_text_column   (GtkIconView  *icon_view,
-					       gint          column);
-gint          gtk_icon_view_get_text_column   (GtkIconView  *icon_view);
-void          gtk_icon_view_set_markup_column (GtkIconView  *icon_view,
-					       gint          column);
-gint          gtk_icon_view_get_markup_column (GtkIconView  *icon_view);
-void          gtk_icon_view_set_pixbuf_column (GtkIconView  *icon_view,
-					       gint          column);
-gint          gtk_icon_view_get_pixbuf_column (GtkIconView  *icon_view);
+void           gtk_icon_view_set_model         (GtkIconView    *icon_view,
+ 					        GtkTreeModel   *model);
+GtkTreeModel * gtk_icon_view_get_model         (GtkIconView    *icon_view);
+void           gtk_icon_view_set_text_column   (GtkIconView    *icon_view,
+	 	 			        gint            column);
+gint           gtk_icon_view_get_text_column   (GtkIconView    *icon_view);
+void           gtk_icon_view_set_markup_column (GtkIconView    *icon_view,
+					        gint            column);
+gint           gtk_icon_view_get_markup_column (GtkIconView    *icon_view);
+void           gtk_icon_view_set_pixbuf_column (GtkIconView    *icon_view,
+					        gint            column);
+gint           gtk_icon_view_get_pixbuf_column (GtkIconView    *icon_view);
 
 void           gtk_icon_view_set_orientation   (GtkIconView    *icon_view,
 	   			                GtkOrientation  orientation);
 GtkOrientation gtk_icon_view_get_orientation   (GtkIconView    *icon_view);
-void          gtk_icon_view_set_columns        (GtkIconView    *icon_view,
-					        gint            columns);
-gint          gtk_icon_view_get_columns        (GtkIconView    *icon_view);
-void          gtk_icon_view_set_item_width     (GtkIconView    *icon_view,
+void           gtk_icon_view_set_columns       (GtkIconView    *icon_view,
+		 			        gint            columns);
+gint           gtk_icon_view_get_columns       (GtkIconView    *icon_view);
+void           gtk_icon_view_set_item_width    (GtkIconView    *icon_view,
 					        gint            item_width);
-gint          gtk_icon_view_get_item_width     (GtkIconView    *icon_view);
-void          gtk_icon_view_set_spacing        (GtkIconView    *icon_view, 
-					        gint            spacing);
-gint          gtk_icon_view_get_spacing        (GtkIconView    *icon_view);
-void          gtk_icon_view_set_row_spacing    (GtkIconView    *icon_view, 
+gint           gtk_icon_view_get_item_width    (GtkIconView    *icon_view);
+void           gtk_icon_view_set_spacing       (GtkIconView    *icon_view, 
+		 			        gint            spacing);
+gint           gtk_icon_view_get_spacing       (GtkIconView    *icon_view);
+void           gtk_icon_view_set_row_spacing   (GtkIconView    *icon_view, 
 					        gint            row_spacing);
-gint          gtk_icon_view_get_row_spacing    (GtkIconView    *icon_view);
-void          gtk_icon_view_set_column_spacing (GtkIconView    *icon_view, 
+gint           gtk_icon_view_get_row_spacing   (GtkIconView    *icon_view);
+void           gtk_icon_view_set_column_spacing (GtkIconView    *icon_view, 
 					        gint            column_spacing);
-gint          gtk_icon_view_get_column_spacing (GtkIconView    *icon_view);
-void          gtk_icon_view_set_margin         (GtkIconView    *icon_view, 
+gint           gtk_icon_view_get_column_spacing (GtkIconView    *icon_view);
+void           gtk_icon_view_set_margin        (GtkIconView    *icon_view, 
 					        gint            margin);
-gint          gtk_icon_view_get_margin         (GtkIconView    *icon_view);
+gint           gtk_icon_view_get_margin        (GtkIconView    *icon_view);
 
 
-GtkTreePath *    gtk_icon_view_get_path_at_pos    (GtkIconView            *icon_view,
-						   gint                    x,
-						   gint                    y);
-void             gtk_icon_view_selected_foreach   (GtkIconView            *icon_view,
-						   GtkIconViewForeachFunc  func,
-						   gpointer                data);
-void             gtk_icon_view_set_selection_mode (GtkIconView            *icon_view,
-						   GtkSelectionMode        mode);
+GtkTreePath *  gtk_icon_view_get_path_at_pos   (GtkIconView     *icon_view,
+						gint             x,
+						gint             y);
+gboolean       gtk_icon_view_get_item_at_pos   (GtkIconView     *icon_view,
+						gint              x,
+						gint              y,
+						GtkTreePath     **path,
+						GtkCellRenderer **cell);
+
+void           gtk_icon_view_selected_foreach   (GtkIconView            *icon_view,
+						 GtkIconViewForeachFunc  func,
+						 gpointer                data);
+void           gtk_icon_view_set_selection_mode (GtkIconView            *icon_view,
+						 GtkSelectionMode        mode);
 GtkSelectionMode gtk_icon_view_get_selection_mode (GtkIconView            *icon_view);
 void             gtk_icon_view_select_path        (GtkIconView            *icon_view,
 						   GtkTreePath            *path);
@@ -129,6 +136,14 @@ void             gtk_icon_view_select_all         (GtkIconView            *icon_
 void             gtk_icon_view_unselect_all       (GtkIconView            *icon_view);
 void             gtk_icon_view_item_activated     (GtkIconView            *icon_view,
 						   GtkTreePath            *path);
+void             gtk_icon_view_set_cursor         (GtkIconView            *icon_view,
+						   GtkTreePath            *path,
+						   GtkCellRenderer        *cell,
+						   gboolean                start_editing);
+gboolean         gtk_icon_view_get_cursor         (GtkIconView            *icon_view,
+						   GtkTreePath           **path,
+						   GtkCellRenderer       **cell);
+
 G_END_DECLS
 
 #endif /* __GTK_ICON_VIEW_H__ */
