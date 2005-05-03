@@ -910,6 +910,7 @@ gtk_dialog_add_action_widget
 gtk_dialog_add_button
 gtk_dialog_add_buttons G_GNUC_NULL_TERMINATED
 gtk_dialog_get_has_separator
+gtk_dialog_get_response_for_widget
 gtk_dialog_get_type G_GNUC_CONST
 gtk_dialog_new
 gtk_dialog_new_with_buttons G_GNUC_NULL_TERMINATED

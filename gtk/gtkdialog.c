@@ -552,7 +552,7 @@ action_widget_activated (GtkWidget *widget, GtkDialog *dialog)
 {
   gint response_id;
   
-  response_id = _gtk_dialog_get_response_for_widget (dialog, widget);
+  response_id = gtk_dialog_get_response_for_widget (dialog, widget);
 
   gtk_dialog_response (dialog, response_id);
 }
@@ -1049,9 +1049,22 @@ _gtk_dialog_set_ignore_separator (GtkDialog *dialog,
   priv->ignore_separator = ignore_separator;
 }
 
+/**
+ * gtk_dialog_get_response_for_widget:
+ * @dialog: a #GtkDialog
+ * @widget: a widget in the action area of @dialog
+ *
+ * Gets the response id of a widget in the action area
+ * of a dialog.
+ *
+ * Returns: the response id of @widget, or %GTK_RESPONSE_NONE
+ *  if @widget doesn't have a response id set.
+ *
+ * Since: 2.8
+ */
 gint
-_gtk_dialog_get_response_for_widget (GtkDialog *dialog,
-				     GtkWidget *widget)
+gtk_dialog_get_response_for_widget (GtkDialog *dialog,
+				    GtkWidget *widget)
 {
   ResponseData *rd;
 
