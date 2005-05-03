@@ -1,6 +1,5 @@
 #include <config.h>
 
-#include <mcheck.h>
 #include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -417,8 +416,6 @@ main (int argc, char **argv)
   int i;
   gboolean multiple = FALSE;
 
-  mtrace ();
-  
   gtk_init (&argc, &argv);
 
   /* to test rtl layout, set RTL=1 in the environment */

@@ -1,5 +1,7 @@
 2005-05-02  Federico Mena Quintero  <federico@ximian.com>
 
+	* tests/testfilechooser.c: Oops, remove mtrace() stuff.
+
 	Fixes #301068:
 
 	* gtk/gtkfilesystemunix.c (struct _GtkFileSystemUnix): Add fields
