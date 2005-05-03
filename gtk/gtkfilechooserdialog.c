@@ -184,7 +184,7 @@ file_chooser_widget_file_activated (GtkFileChooser       *chooser,
       int response_id;
 
       widget = GTK_WIDGET (l->data);
-      response_id = _gtk_dialog_get_response_for_widget (GTK_DIALOG (dialog), widget);
+      response_id = gtk_dialog_get_response_for_widget (GTK_DIALOG (dialog), widget);
       if (response_id == GTK_RESPONSE_ACCEPT
 	  || response_id == GTK_RESPONSE_OK
 	  || response_id == GTK_RESPONSE_YES
