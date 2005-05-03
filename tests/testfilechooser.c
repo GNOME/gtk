@@ -1,5 +1,6 @@
 #include <config.h>
 
+#include <mcheck.h>
 #include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -415,6 +416,8 @@ main (int argc, char **argv)
   GtkWidget *preview_vbox;
   int i;
   gboolean multiple = FALSE;
+
+  mtrace ();
   
   gtk_init (&argc, &argv);
 

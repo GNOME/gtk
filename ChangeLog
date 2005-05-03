@@ -1,3 +1,20 @@
+2005-05-02  Federico Mena Quintero  <federico@ximian.com>
+
+	Fixes #301068:
+
+	* gtk/gtkfilesystemunix.c (struct _GtkFileSystemUnix): Add fields
+	to store struct stat for /afs and /net, and boolean fields to say
+	whether these are valid.
+	(struct _GtkFileFolderUnix): Added a boolean is_network_dir field.
+	(gtk_file_system_unix_get_folder): Fill in the is_network_dir
+	field of the folder structure.
+	(fill_in_names): If the folder is a network directory, create a
+	fake struct stat for its entries.
+	(fill_in_stats): Don't stat() the children of network directories.
+
+	* gtk/gtkfilechooserdefault.c (list_mtime_data_func): If the mtime
+	is 0, use "Unknown" for the cell's displayed text.
+
 2005-05-02  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkmain.c (do_post_parse_initialization): return silently if
