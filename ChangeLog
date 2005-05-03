@@ -1,6 +1,10 @@
 2005-05-03  Matthias Clasen  <mclasen@redhat.com>
 
-	* gtk/gtk.symbols: 
+	* gtk/gtkscrolledwindow.h:
+	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_get_vscrollbar): 
+	* gtk/gtk.symbols: Add getters for the scrollbars.  (#167181,
+	Billy Biggs)	
+
 	* gtk/gtkdialog.h: 
 	* gtk/gtkdialog.c (gtk_dialog_get_response_for_widget): 
 	Make this function public.  (#170748, Morten Welinder)

@@ -495,6 +495,44 @@ gtk_scrolled_window_get_vadjustment (GtkScrolledWindow *scrolled_window)
 	  NULL);
 }
 
+/**
+ * gtk_scrolled_window_get_hscrollbar:
+ * @scrolled_window: a #GtkScrolledWindow
+ * 
+ * Returns the horizontal scrollbar of @scrolled_window.
+ *
+ * Returns: the horizontal scrollbar of the scrolled window, or 
+ *  %NULL if it does not have one.
+ *
+ * Since: 2.8
+ */
+GtkHScrollbar*
+gtk_scrolled_window_get_hscrollbar (GtkScrolledWindow *scrolled_window)
+{
+  g_return_val_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window), NULL);
+  
+  return scrolled_window->hscrollbar;
+}
+
+/**
+ * gtk_scrolled_window_get_vscrollbar:
+ * @scrolled_window: a #GtkScrolledWindow
+ * 
+ * Returns the vertical scrollbar of @scrolled_window.
+ *
+ * Returns: the vertical scrollbar of the scrolled window, or
+ *  %NULL if it does not have one.
+ *
+ * Since: 2.8
+ */
+GtkVScrollbar*
+gtk_scrolled_window_get_vscrollbar (GtkScrolledWindow *scrolled_window)
+{
+  g_return_val_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window), NULL);
+
+  return scrolled_window->vscrollbar;
+}
+
 void
 gtk_scrolled_window_set_policy (GtkScrolledWindow *scrolled_window,
 				GtkPolicyType      hscrollbar_policy,
