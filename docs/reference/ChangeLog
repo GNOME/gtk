@@ -1,6 +1,7 @@
 2005-05-03  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-sections.txt: Add gtk_dialog_get_response_for_widget.
+	Add new scrolled window getters.
 
 2005-05-02  Matthias Clasen  <mclasen@redhat.com>
 
