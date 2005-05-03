@@ -6300,28 +6300,34 @@ list_mtime_data_func (GtkTreeViewColumn *tree_column,
     }
 
   time_mtime = gtk_file_info_get_modification_time (info);
-  g_date_set_time (&mtime, (GTime) time_mtime);
 
-  time_now = (GTime ) time (NULL);
-  g_date_set_time (&now, (GTime) time_now);
-
-  days_diff = g_date_get_julian (&now) - g_date_get_julian (&mtime);
-
-  if (days_diff == 0)
-    strcpy (buf, _("Today"));
-  else if (days_diff == 1)
-    strcpy (buf, _("Yesterday"));
+  if (time_mtime == 0)
+    strcpy (buf, _("Unknown"));
   else
     {
-      char *format;
+      g_date_set_time (&mtime, (GTime) time_mtime);
 
-      if (days_diff > 1 && days_diff < 7)
-	format = "%A"; /* Days from last week */
+      time_now = (GTime ) time (NULL);
+      g_date_set_time (&now, (GTime) time_now);
+
+      days_diff = g_date_get_julian (&now) - g_date_get_julian (&mtime);
+
+      if (days_diff == 0)
+	strcpy (buf, _("Today"));
+      else if (days_diff == 1)
+	strcpy (buf, _("Yesterday"));
       else
-	format = "%x"; /* Any other date */
+	{
+	  char *format;
 
-      if (g_date_strftime (buf, sizeof (buf), format, &mtime) == 0)
-	strcpy (buf, _("Unknown"));
+	  if (days_diff > 1 && days_diff < 7)
+	    format = "%A"; /* Days from last week */
+	  else
+	    format = "%x"; /* Any other date */
+
+	  if (g_date_strftime (buf, sizeof (buf), format, &mtime) == 0)
+	    strcpy (buf, _("Unknown"));
+	}
     }
 
   if (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||

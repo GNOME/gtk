@@ -61,6 +61,13 @@ struct _GtkFileSystemUnix
   GObject parent_instance;
 
   GHashTable *folder_hash;
+
+  /* For /afs and /net */
+  struct stat afs_statbuf;
+  struct stat net_statbuf;
+
+  guint have_afs : 1;
+  guint have_net : 1;
 };
 
 /* Icon type, supplemented by MIME type
@@ -102,8 +109,9 @@ struct _GtkFileFolderUnix
   GtkFileInfoType types;
   gchar *filename;
   GHashTable *stat_info;
-  unsigned int have_stat : 1;
-  unsigned int have_mime_type : 1;
+  guint have_stat : 1;
+  guint have_mime_type : 1;
+  guint is_network_dir : 1;
   time_t asof;
 };
 
@@ -321,6 +329,16 @@ static void
 gtk_file_system_unix_init (GtkFileSystemUnix *system_unix)
 {
   system_unix->folder_hash = g_hash_table_new (g_str_hash, g_str_equal);
+
+  if (stat ("/afs", &system_unix->afs_statbuf) == 0)
+    system_unix->have_afs = TRUE;
+  else
+    system_unix->have_afs = FALSE;
+
+  if (stat ("/net", &system_unix->net_statbuf) == 0)
+    system_unix->have_net = TRUE;
+  else
+    system_unix->have_net = FALSE;
 }
 
 static void
@@ -416,6 +434,8 @@ gtk_file_system_unix_get_folder (GtkFileSystem     *file_system,
       int code;
       int my_errno;
 
+      code = my_errno = 0; /* shut up GCC */
+
       result = stat (filename, &statbuf);
 
       if (result == 0)
@@ -460,6 +480,16 @@ gtk_file_system_unix_get_folder (GtkFileSystem     *file_system,
       folder_unix->asof = now;
       folder_unix->have_mime_type = FALSE;
       folder_unix->have_stat = FALSE;
+
+      if ((system_unix->have_afs &&
+	   system_unix->afs_statbuf.st_dev == statbuf.st_dev &&
+	   system_unix->afs_statbuf.st_ino == statbuf.st_ino) ||
+	  (system_unix->have_net &&
+	   system_unix->net_statbuf.st_dev == statbuf.st_dev &&
+	   system_unix->net_statbuf.st_ino == statbuf.st_ino))
+	folder_unix->is_network_dir = TRUE;
+      else
+	folder_unix->is_network_dir = FALSE;
 
       g_hash_table_insert (system_unix->folder_hash,
 			   folder_unix->filename,
@@ -2096,13 +2126,20 @@ fill_in_names (GtkFileFolderUnix *folder_unix, GError **error)
 
   while (TRUE)
     {
-      const gchar *basename = g_dir_read_name (dir);
+      struct stat_info_entry *entry;
+      const gchar *basename;
+
+      basename = g_dir_read_name (dir);
       if (!basename)
 	break;
 
+      entry = g_new0 (struct stat_info_entry, 1);
+      if (folder_unix->is_network_dir)
+	entry->statbuf.st_mode = S_IFDIR;
+
       g_hash_table_insert (folder_unix->stat_info,
 			   g_strdup (basename),
-			   g_new0 (struct stat_info_entry, 1));
+			   entry);
     }
 
   g_dir_close (dir);
@@ -2140,9 +2177,10 @@ fill_in_stats (GtkFileFolderUnix *folder_unix)
   if (!fill_in_names (folder_unix, NULL))
     return;
 
-  g_hash_table_foreach_remove (folder_unix->stat_info,
-			       cb_fill_in_stats,
-			       folder_unix);
+  if (!folder_unix->is_network_dir)
+    g_hash_table_foreach_remove (folder_unix->stat_info,
+				 cb_fill_in_stats,
+				 folder_unix);
 
   folder_unix->have_stat = TRUE;
 }
