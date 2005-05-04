@@ -525,7 +525,7 @@ generic_draw (GdkDrawable    *drawable,
   GdkGCWin32 *gcwin32 = GDK_GC_WIN32 (gc);
   HDC hdc;
   va_list args;
-  GdkFillStyle *fill_style = _gdk_gc_get_fill (gc);
+  GdkFill fill_style = _gdk_gc_get_fill (gc);
 
   va_start (args, region);
 
@@ -1510,7 +1510,7 @@ blit_from_pixmap (gboolean              use_fg_bg,
 		  GdkDrawableImplWin32 *dest,
 		  HDC                   hdc,
 		  GdkPixmapImplWin32   *src,
-		  GdkGCWin32           *gcwin32,
+		  GdkGC                *gc,
 		  gint         	      	xsrc,
 		  gint         	      	ysrc,
 		  gint         	      	xdest,
@@ -1518,6 +1518,7 @@ blit_from_pixmap (gboolean              use_fg_bg,
 		  gint         	      	width,
 		  gint         	      	height)
 {
+  GdkGCWin32 *gcwin32 = GDK_GC_WIN32 (gc);
   HDC srcdc;
   HBITMAP holdbitmap;
   RGBQUAD oldtable[256], newtable[256];
@@ -1809,7 +1810,7 @@ _gdk_win32_blit (gboolean              use_fg_bg,
 
   if (GDK_IS_PIXMAP_IMPL_WIN32 (src_impl))
     blit_from_pixmap (use_fg_bg, draw_impl, hdc,
-		      (GdkPixmapImplWin32 *) src_impl, GDK_GC_WIN32 (gc),
+		      (GdkPixmapImplWin32 *) src_impl, gc,
 		      xsrc, ysrc, xdest, ydest, width, height);
   else if (draw_impl->handle == src_impl->handle)
     blit_inside_window (hdc, GDK_GC_WIN32 (gc), xsrc, ysrc, xdest, ydest, width, height);

@@ -125,14 +125,16 @@ gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
   if (mask & GDK_GC_FOREGROUND)
     {
       win32_gc->values_mask |= GDK_GC_FOREGROUND;
-      GDK_NOTE (GC, (g_print ("fg=%.06lx", values->,
+      GDK_NOTE (GC, (g_print ("fg=%.06x",
+			      _gdk_gc_get_fg_pixel (&win32_gc->parent_instance)),
 		     s = ","));
     }
   
   if (mask & GDK_GC_BACKGROUND)
     {
       win32_gc->values_mask |= GDK_GC_BACKGROUND;
-      GDK_NOTE (GC, (g_print ("%sbg=%.06lx", s, win32_gc->background),
+      GDK_NOTE (GC, (g_print ("%sbg=%.06x", s,
+			      _gdk_gc_get_bg_pixel (&win32_gc->parent_instance)),
 		     s = ","));
     }
 
@@ -419,7 +421,7 @@ gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
 GdkGC*
 _gdk_win32_gc_new (GdkDrawable	  *drawable,
 		   GdkGCValues	  *values,
-		   GdkGCValuesMask mask)
+		   GdkGCValuesMask values_mask)
 {
   GdkGC *gc;
   GdkGCWin32 *win32_gc;
@@ -451,7 +453,7 @@ _gdk_win32_gc_new (GdkDrawable	  *drawable,
   win32_gc->values_mask = GDK_GC_FUNCTION | GDK_GC_FILL;
 
   GDK_NOTE (GC, g_print ("_gdk_win32_gc_new: %p: ", win32_gc));
-  gdk_win32_gc_values_to_win32values (values, mask, win32_gc);
+  gdk_win32_gc_values_to_win32values (values, values_mask, win32_gc);
   GDK_NOTE (GC, g_print ("\n"));
 
   win32_gc->hdc = NULL;
@@ -587,8 +589,8 @@ gdk_win32_gc_set_dashes (GdkGC *gc,
 }
 
 void
-_gdk_windowing_set_clip_region (GdkGC	  *gc,
-				GdkRegion *region)
+_gdk_windowing_gc_set_clip_region (GdkGC	  *gc,
+				   GdkRegion *region)
 {
   GdkGCWin32 *win32_gc = GDK_GC_WIN32 (gc);
 
@@ -858,7 +860,7 @@ gdk_win32_hdc_get (GdkDrawable    *drawable,
       /* For drawing GDK_LINE_DOUBLE_DASH */
       if ((usage & GDK_GC_BACKGROUND) && win32_gc->pen_double_dash)
         {
-          bg = _gdk_win32_colormap_color (impl->colormap, win32_gc->background);
+          bg = _gdk_win32_colormap_color (impl->colormap, _gdk_gc_get_bg_pixel (gc));
           if ((win32_gc->pen_hbrbg = CreateSolidBrush (bg)) == NULL)
 	    WIN32_GDI_FAILED ("CreateSolidBrush"), ok = FALSE;
         }

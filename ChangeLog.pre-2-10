@@ -1,3 +1,11 @@
+2005-05-04  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkdrawable-win32.c (generic_draw, blit_from_pixmap)
+	* gdk/win32/gdkgc-win32.c (gdk_win32_gc_values_to_win32values,
+	_gdk_win32_gc_new, _gdk_windowing_gc_set_clip_region,
+	gdk_win32_hdc_get): Minor fixes to make Win32 backend compile
+	again.
+
 2005-05-03  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilesystem.c: 
