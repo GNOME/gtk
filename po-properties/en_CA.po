@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-04-05 14:11-0400\n"
-"PO-Revision-Date: 2005-04-05 22:53-0400\n"
+"POT-Creation-Date: 2005-05-04 01:35-0400\n"
+"PO-Revision-Date: 2005-05-04 22:53-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: Canadian English <adamw@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -91,11 +91,11 @@ msgstr "Default Display"
 msgid "The default display for GDK"
 msgstr "The default display for GDK"
 
-#: ../gdk/gdkpango.c:570 ../gtk/gtkinvisible.c:117 ../gtk/gtkwindow.c:537
+#: ../gdk/gdkpango.c:509 ../gtk/gtkinvisible.c:117 ../gtk/gtkwindow.c:537
 msgid "Screen"
 msgstr "Screen"
 
-#: ../gdk/gdkpango.c:571
+#: ../gdk/gdkpango.c:510
 msgid "the GdkScreen for the renderer"
 msgstr "the GdkScreen for the renderer"
 
@@ -331,7 +331,7 @@ msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr "When TRUE, empty menu proxies for this action are hidden."
 
 #: ../gtk/gtkaction.c:283 ../gtk/gtkactiongroup.c:142
-#: ../gtk/gtkcellrenderer.c:222 ../gtk/gtkwidget.c:450
+#: ../gtk/gtkcellrenderer.c:222 ../gtk/gtkwidget.c:452
 msgid "Sensitive"
 msgstr "Sensitive"
 
@@ -340,7 +340,7 @@ msgid "Whether the action is enabled."
 msgstr "Whether the action is enabled."
 
 #: ../gtk/gtkaction.c:290 ../gtk/gtkactiongroup.c:149
-#: ../gtk/gtktreeviewcolumn.c:226 ../gtk/gtkwidget.c:443
+#: ../gtk/gtktreeviewcolumn.c:226 ../gtk/gtkwidget.c:445
 msgid "Visible"
 msgstr "Visible"
 
@@ -605,7 +605,7 @@ msgstr ""
 "If TRUE, the child appears in a secondary group of children, suitable for, e."
 "g., help buttons"
 
-#: ../gtk/gtkbox.c:131 ../gtk/gtkexpander.c:230 ../gtk/gtkiconview.c:452
+#: ../gtk/gtkbox.c:131 ../gtk/gtkexpander.c:230 ../gtk/gtkiconview.c:553
 #: ../gtk/gtktreeviewcolumn.c:251
 msgid "Spacing"
 msgstr "Spacing"
@@ -703,7 +703,7 @@ msgid ""
 msgstr ""
 "If set, the label is used to pick a stock item instead of being displayed"
 
-#: ../gtk/gtkbutton.c:245 ../gtk/gtkcombobox.c:682
+#: ../gtk/gtkbutton.c:245 ../gtk/gtkcombobox.c:683
 msgid "Focus on click"
 msgstr "Focus on click"
 
@@ -971,11 +971,11 @@ msgstr "Model"
 msgid "The model containing the possible values for the combo box"
 msgstr "The model containing the possible values for the combo box"
 
-#: ../gtk/gtkcellrenderercombo.c:110 ../gtk/gtkcomboboxentry.c:120
+#: ../gtk/gtkcellrenderercombo.c:110 ../gtk/gtkcomboboxentry.c:122
 msgid "Text Column"
 msgstr "Text Column"
 
-#: ../gtk/gtkcellrenderercombo.c:111 ../gtk/gtkcomboboxentry.c:121
+#: ../gtk/gtkcellrenderercombo.c:111 ../gtk/gtkcomboboxentry.c:123
 msgid "A column in the data source model to get the strings from"
 msgstr "A column in the data source model to get the strings from"
 
@@ -1267,7 +1267,7 @@ msgstr ""
 "How to break the string into multiple lines, if the cell renderer does not "
 "have enough room to display the entire string"
 
-#: ../gtk/gtkcellrenderertext.c:494 ../gtk/gtkcombobox.c:572
+#: ../gtk/gtkcellrenderertext.c:494 ../gtk/gtkcombobox.c:573
 msgid "Wrap width"
 msgstr "Wrap width"
 
@@ -1488,7 +1488,7 @@ msgstr "Title"
 msgid "The title of the color selection dialog"
 msgstr "The title of the colour selection dialogue"
 
-#: ../gtk/gtkcolorbutton.c:234 ../gtk/gtkcolorsel.c:1855
+#: ../gtk/gtkcolorbutton.c:234 ../gtk/gtkcolorsel.c:1857
 msgid "Current Color"
 msgstr "Current colour"
 
@@ -1496,7 +1496,7 @@ msgstr "Current colour"
 msgid "The selected color"
 msgstr "The selected colour"
 
-#: ../gtk/gtkcolorbutton.c:249 ../gtk/gtkcolorsel.c:1862
+#: ../gtk/gtkcolorbutton.c:249 ../gtk/gtkcolorsel.c:1864
 msgid "Current Alpha"
 msgstr "Current Alpha"
 
@@ -1504,35 +1504,35 @@ msgstr "Current Alpha"
 msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 
-#: ../gtk/gtkcolorsel.c:1841
+#: ../gtk/gtkcolorsel.c:1843
 msgid "Has Opacity Control"
 msgstr "Has Opacity Control"
 
-#: ../gtk/gtkcolorsel.c:1842
+#: ../gtk/gtkcolorsel.c:1844
 msgid "Whether the color selector should allow setting opacity"
 msgstr "Whether the colour selector should allow setting opacity"
 
-#: ../gtk/gtkcolorsel.c:1848
+#: ../gtk/gtkcolorsel.c:1850
 msgid "Has palette"
 msgstr "Has palette"
 
-#: ../gtk/gtkcolorsel.c:1849
+#: ../gtk/gtkcolorsel.c:1851
 msgid "Whether a palette should be used"
 msgstr "Whether a palette should be used"
 
-#: ../gtk/gtkcolorsel.c:1856
+#: ../gtk/gtkcolorsel.c:1858
 msgid "The current color"
 msgstr "The current colour"
 
-#: ../gtk/gtkcolorsel.c:1863
+#: ../gtk/gtkcolorsel.c:1865
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "The current opacity value (0 fully transparent, 65535 fully opaque)"
 
-#: ../gtk/gtkcolorsel.c:1877
+#: ../gtk/gtkcolorsel.c:1879
 msgid "Custom palette"
 msgstr "Custom palette"
 
-#: ../gtk/gtkcolorsel.c:1878
+#: ../gtk/gtkcolorsel.c:1880
 msgid "Palette to use in the color selector"
 msgstr "Palette to use in the colour selector"
 
@@ -1576,67 +1576,67 @@ msgstr "Value in list"
 msgid "Whether entered values must already be present in the list"
 msgstr "Whether entered values must already be present in the list"
 
-#: ../gtk/gtkcombobox.c:555
+#: ../gtk/gtkcombobox.c:556
 msgid "ComboBox model"
 msgstr "ComboBox model"
 
-#: ../gtk/gtkcombobox.c:556
+#: ../gtk/gtkcombobox.c:557
 msgid "The model for the combo box"
 msgstr "The model for the combo box"
 
-#: ../gtk/gtkcombobox.c:573
+#: ../gtk/gtkcombobox.c:574
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Wrap width for layouting the items in a grid"
 
-#: ../gtk/gtkcombobox.c:595
+#: ../gtk/gtkcombobox.c:596
 msgid "Row span column"
 msgstr "Row span column"
 
-#: ../gtk/gtkcombobox.c:596
+#: ../gtk/gtkcombobox.c:597
 msgid "TreeModel column containing the row span values"
 msgstr "TreeModel column containing the row span values"
 
-#: ../gtk/gtkcombobox.c:617
+#: ../gtk/gtkcombobox.c:618
 msgid "Column span column"
 msgstr "Column span column"
 
-#: ../gtk/gtkcombobox.c:618
+#: ../gtk/gtkcombobox.c:619
 msgid "TreeModel column containing the column span values"
 msgstr "TreeModel column containing the column span values"
 
-#: ../gtk/gtkcombobox.c:638
+#: ../gtk/gtkcombobox.c:639
 msgid "Active item"
 msgstr "Active item"
 
-#: ../gtk/gtkcombobox.c:639
+#: ../gtk/gtkcombobox.c:640
 msgid "The item which is currently active"
 msgstr "The item which is currently active"
 
-#: ../gtk/gtkcombobox.c:658 ../gtk/gtkuimanager.c:230
+#: ../gtk/gtkcombobox.c:659 ../gtk/gtkuimanager.c:230
 msgid "Add tearoffs to menus"
 msgstr "Add tearoffs to menus"
 
-#: ../gtk/gtkcombobox.c:659
+#: ../gtk/gtkcombobox.c:660
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Whether dropdowns should have a tearoff menu item"
 
-#: ../gtk/gtkcombobox.c:674 ../gtk/gtkentry.c:531
+#: ../gtk/gtkcombobox.c:675 ../gtk/gtkentry.c:531
 msgid "Has Frame"
 msgstr "Has Frame"
 
-#: ../gtk/gtkcombobox.c:675
+#: ../gtk/gtkcombobox.c:676
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Whether the combo box draws a frame around the child"
 
-#: ../gtk/gtkcombobox.c:683
+#: ../gtk/gtkcombobox.c:684
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Whether the combo box grabs focus when it is clicked with the mouse"
 
-#: ../gtk/gtkcombobox.c:689
+#: ../gtk/gtkcombobox.c:690
 msgid "Appears as list"
 msgstr "Appears as list"
 
-#: ../gtk/gtkcombobox.c:690
+#: ../gtk/gtkcombobox.c:691
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "Whether dropdowns should look like lists rather than menus"
 
@@ -1859,7 +1859,7 @@ msgstr "Minimum Key Length"
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Minimum length of the search key in order to look up matches"
 
-#: ../gtk/gtkentrycompletion.c:298 ../gtk/gtkiconview.c:373
+#: ../gtk/gtkentrycompletion.c:298 ../gtk/gtkiconview.c:474
 msgid "Text column"
 msgstr "Text column"
 
@@ -1947,11 +1947,11 @@ msgstr "Label widget"
 msgid "A widget to display in place of the usual expander label"
 msgstr "A widget to display in place of the usual expander label"
 
-#: ../gtk/gtkexpander.c:247 ../gtk/gtktreeview.c:705
+#: ../gtk/gtkexpander.c:247 ../gtk/gtktreeview.c:708
 msgid "Expander Size"
 msgstr "Expander Size"
 
-#: ../gtk/gtkexpander.c:248 ../gtk/gtktreeview.c:706
+#: ../gtk/gtkexpander.c:248 ../gtk/gtktreeview.c:709
 msgid "Size of the expander arrow"
 msgstr "Size of the expander arrow"
 
@@ -2242,110 +2242,110 @@ msgstr ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
 
-#: ../gtk/gtkiconview.c:336
+#: ../gtk/gtkiconview.c:437
 msgid "Selection mode"
 msgstr "Selection mode"
 
-#: ../gtk/gtkiconview.c:337
+#: ../gtk/gtkiconview.c:438
 msgid "The selection mode"
 msgstr "The selection mode"
 
-#: ../gtk/gtkiconview.c:355
+#: ../gtk/gtkiconview.c:456
 msgid "Pixbuf column"
 msgstr "Pixbuf column"
 
-#: ../gtk/gtkiconview.c:356
+#: ../gtk/gtkiconview.c:457
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr "Model column used to retrieve the icon pixbuf from"
 
-#: ../gtk/gtkiconview.c:374
+#: ../gtk/gtkiconview.c:475
 msgid "Model column used to retrieve the text from"
 msgstr "Model column used to retrieve the text from"
 
-#: ../gtk/gtkiconview.c:393
+#: ../gtk/gtkiconview.c:494
 msgid "Markup column"
 msgstr "Markup column"
 
-#: ../gtk/gtkiconview.c:394
+#: ../gtk/gtkiconview.c:495
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr "Model column used to retrieve the text if using Pango markup"
 
-#: ../gtk/gtkiconview.c:401
+#: ../gtk/gtkiconview.c:502
 msgid "Icon View Model"
 msgstr "Icon View Model"
 
-#: ../gtk/gtkiconview.c:402
+#: ../gtk/gtkiconview.c:503
 msgid "The model for the icon view"
 msgstr "The model for the icon view"
 
-#: ../gtk/gtkiconview.c:418
+#: ../gtk/gtkiconview.c:519
 msgid "Number of columns"
 msgstr "Number of columns"
 
-#: ../gtk/gtkiconview.c:419
+#: ../gtk/gtkiconview.c:520
 msgid "Number of columns to display"
 msgstr "Number of columns to display"
 
-#: ../gtk/gtkiconview.c:436
+#: ../gtk/gtkiconview.c:537
 msgid "Width for each item"
 msgstr "Width for each item"
 
-#: ../gtk/gtkiconview.c:437
+#: ../gtk/gtkiconview.c:538
 msgid "The width used for each item"
 msgstr "The width used for each item"
 
-#: ../gtk/gtkiconview.c:453
+#: ../gtk/gtkiconview.c:554
 msgid "Space which is inserted between cells of an item"
 msgstr "Space which is inserted between cells of an item"
 
-#: ../gtk/gtkiconview.c:468
+#: ../gtk/gtkiconview.c:569
 msgid "Row Spacing"
 msgstr "Row Spacing"
 
-#: ../gtk/gtkiconview.c:469
+#: ../gtk/gtkiconview.c:570
 msgid "Space which is inserted between grid rows"
 msgstr "Space which is inserted between grid rows"
 
-#: ../gtk/gtkiconview.c:484
+#: ../gtk/gtkiconview.c:585
 msgid "Column Spacing"
 msgstr "Column Spacing"
 
-#: ../gtk/gtkiconview.c:485
+#: ../gtk/gtkiconview.c:586
 msgid "Space which is inserted between grid column"
 msgstr "Space which is inserted between grid column"
 
-#: ../gtk/gtkiconview.c:500
+#: ../gtk/gtkiconview.c:601
 msgid "Margin"
 msgstr "Margin"
 
-#: ../gtk/gtkiconview.c:501
+#: ../gtk/gtkiconview.c:602
 msgid "Space which is inserted at the edges of the icon view"
 msgstr "Space which is inserted at the edges of the icon view"
 
-#: ../gtk/gtkiconview.c:517 ../gtk/gtkprogressbar.c:153
+#: ../gtk/gtkiconview.c:618 ../gtk/gtkprogressbar.c:153
 #: ../gtk/gtktoolbar.c:508
 msgid "Orientation"
 msgstr "Orientation"
 
-#: ../gtk/gtkiconview.c:518
+#: ../gtk/gtkiconview.c:619
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr ""
 "How the text and icon of each item are positioned relative to each other"
 
-#: ../gtk/gtkiconview.c:526
+#: ../gtk/gtkiconview.c:627
 msgid "Selection Box Color"
 msgstr "Selection Box Colour"
 
-#: ../gtk/gtkiconview.c:527
+#: ../gtk/gtkiconview.c:628
 msgid "Color of the selection box"
 msgstr "Colour of the selection box"
 
-#: ../gtk/gtkiconview.c:533
+#: ../gtk/gtkiconview.c:634
 msgid "Selection Box Alpha"
 msgstr "Selection Box Alpha"
 
-#: ../gtk/gtkiconview.c:534
+#: ../gtk/gtkiconview.c:635
 msgid "Opacity of the selection box"
 msgstr "Opacity of the selection box"
 
@@ -3358,12 +3358,12 @@ msgstr ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 
 #: ../gtk/gtkscrolledwindow.c:239 ../gtk/gtktext.c:606
-#: ../gtk/gtktreeview.c:567
+#: ../gtk/gtktreeview.c:570
 msgid "Horizontal Adjustment"
 msgstr "Horizontal Adjustment"
 
 #: ../gtk/gtkscrolledwindow.c:246 ../gtk/gtktext.c:614
-#: ../gtk/gtktreeview.c:575
+#: ../gtk/gtktreeview.c:578
 msgid "Vertical Adjustment"
 msgstr "Vertical Adjustment"
 
@@ -3934,10 +3934,10 @@ msgstr "Amount to indent the paragraph, in pixels"
 #: ../gtk/gtktexttag.c:427
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative) "
-"in pixels"
+"in Pango units"
 msgstr ""
 "Offset of text above the baseline (below the baseline if rise is negative) "
-"in pixels"
+"in Pango units"
 
 #: ../gtk/gtktexttag.c:436
 msgid "Pixels above lines"
@@ -4307,149 +4307,149 @@ msgstr "TreeModelSort Model"
 msgid "The model for the TreeModelSort to sort"
 msgstr "The model for the TreeModelSort to sort"
 
-#: ../gtk/gtktreeview.c:559
+#: ../gtk/gtktreeview.c:562
 msgid "TreeView Model"
 msgstr "TreeView Model"
 
-#: ../gtk/gtktreeview.c:560
+#: ../gtk/gtktreeview.c:563
 msgid "The model for the tree view"
 msgstr "The model for the tree view"
 
-#: ../gtk/gtktreeview.c:568
+#: ../gtk/gtktreeview.c:571
 msgid "Horizontal Adjustment for the widget"
 msgstr "Horizontal Adjustment for the widget"
 
-#: ../gtk/gtktreeview.c:576
+#: ../gtk/gtktreeview.c:579
 msgid "Vertical Adjustment for the widget"
 msgstr "Vertical Adjustment for the widget"
 
-#: ../gtk/gtktreeview.c:583
+#: ../gtk/gtktreeview.c:586
 msgid "Headers Visible"
 msgstr "Headers Visible"
 
-#: ../gtk/gtktreeview.c:584
+#: ../gtk/gtktreeview.c:587
 msgid "Show the column header buttons"
 msgstr "Show the column header buttons"
 
-#: ../gtk/gtktreeview.c:591
+#: ../gtk/gtktreeview.c:594
 msgid "Headers Clickable"
 msgstr "Headers Clickable"
 
-#: ../gtk/gtktreeview.c:592
+#: ../gtk/gtktreeview.c:595
 msgid "Column headers respond to click events"
 msgstr "Column headers respond to click events"
 
-#: ../gtk/gtktreeview.c:599
+#: ../gtk/gtktreeview.c:602
 msgid "Expander Column"
 msgstr "Expander Column"
 
-#: ../gtk/gtktreeview.c:600
+#: ../gtk/gtktreeview.c:603
 msgid "Set the column for the expander column"
 msgstr "Set the column for the expander column"
 
-#: ../gtk/gtktreeview.c:607 ../gtk/gtktreeviewcolumn.c:342
+#: ../gtk/gtktreeview.c:610 ../gtk/gtktreeviewcolumn.c:342
 msgid "Reorderable"
 msgstr "Reorderable"
 
-#: ../gtk/gtktreeview.c:608
+#: ../gtk/gtktreeview.c:611
 msgid "View is reorderable"
 msgstr "View is reorderable"
 
-#: ../gtk/gtktreeview.c:615
+#: ../gtk/gtktreeview.c:618
 msgid "Rules Hint"
 msgstr "Rules Hint"
 
-#: ../gtk/gtktreeview.c:616
+#: ../gtk/gtktreeview.c:619
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr "Set a hint to the theme engine to draw rows in alternating colours"
 
-#: ../gtk/gtktreeview.c:623
+#: ../gtk/gtktreeview.c:626
 msgid "Enable Search"
 msgstr "Enable Search"
 
-#: ../gtk/gtktreeview.c:624
+#: ../gtk/gtktreeview.c:627
 msgid "View allows user to search through columns interactively"
 msgstr "View allows user to search through columns interactively"
 
-#: ../gtk/gtktreeview.c:631
+#: ../gtk/gtktreeview.c:634
 msgid "Search Column"
 msgstr "Search Column"
 
-#: ../gtk/gtktreeview.c:632
+#: ../gtk/gtktreeview.c:635
 msgid "Model column to search through when searching through code"
 msgstr "Model column to search through when searching through code"
 
-#: ../gtk/gtktreeview.c:652
+#: ../gtk/gtktreeview.c:655
 msgid "Fixed Height Mode"
 msgstr "Fixed Height Mode"
 
-#: ../gtk/gtktreeview.c:653
+#: ../gtk/gtktreeview.c:656
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr "Speeds up GtkTreeView by assuming that all rows have the same height"
 
-#: ../gtk/gtktreeview.c:673
+#: ../gtk/gtktreeview.c:676
 msgid "Hover Selection"
 msgstr "Hover Selection"
 
-#: ../gtk/gtktreeview.c:674
+#: ../gtk/gtktreeview.c:677
 msgid "Whether the selection should follow the pointer"
 msgstr "Whether the selection should follow the pointer"
 
-#: ../gtk/gtktreeview.c:693
+#: ../gtk/gtktreeview.c:696
 msgid "Hover Expand"
 msgstr "Hover Expand"
 
-#: ../gtk/gtktreeview.c:694
+#: ../gtk/gtktreeview.c:697
 msgid ""
 "Whether rows should be expanded/collapsed when the pointer moves over them"
 msgstr ""
 "Whether rows should be expanded/collapsed when the pointer moves over them"
 
-#: ../gtk/gtktreeview.c:714
+#: ../gtk/gtktreeview.c:717
 msgid "Vertical Separator Width"
 msgstr "Vertical Separator Width"
 
-#: ../gtk/gtktreeview.c:715
+#: ../gtk/gtktreeview.c:718
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "Vertical space between cells.  Must be an even number"
 
-#: ../gtk/gtktreeview.c:723
+#: ../gtk/gtktreeview.c:726
 msgid "Horizontal Separator Width"
 msgstr "Horizontal Separator Width"
 
-#: ../gtk/gtktreeview.c:724
+#: ../gtk/gtktreeview.c:727
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "Horizontal space between cells.  Must be an even number"
 
-#: ../gtk/gtktreeview.c:732
+#: ../gtk/gtktreeview.c:735
 msgid "Allow Rules"
 msgstr "Allow Rules"
 
-#: ../gtk/gtktreeview.c:733
+#: ../gtk/gtktreeview.c:736
 msgid "Allow drawing of alternating color rows"
 msgstr "Allow drawing of alternating colour rows"
 
-#: ../gtk/gtktreeview.c:739
+#: ../gtk/gtktreeview.c:742
 msgid "Indent Expanders"
 msgstr "Indent Expanders"
 
-#: ../gtk/gtktreeview.c:740
+#: ../gtk/gtktreeview.c:743
 msgid "Make the expanders indented"
 msgstr "Make the expanders indented"
 
-#: ../gtk/gtktreeview.c:746
+#: ../gtk/gtktreeview.c:749
 msgid "Even Row Color"
 msgstr "Even Row Colour"
 
-#: ../gtk/gtktreeview.c:747
+#: ../gtk/gtktreeview.c:750
 msgid "Color to use for even rows"
 msgstr "Colour to use for even rows"
 
-#: ../gtk/gtktreeview.c:753
+#: ../gtk/gtktreeview.c:756
 msgid "Odd Row Color"
 msgstr "Odd Row Colour"
 
-#: ../gtk/gtktreeview.c:754
+#: ../gtk/gtktreeview.c:757
 msgid "Color to use for odd rows"
 msgstr "Colour to use for odd rows"
 
@@ -4589,27 +4589,27 @@ msgstr ""
 msgid "Determines how the shadowed box around the viewport is drawn"
 msgstr "Determines how the shadowed box around the viewport is drawn"
 
-#: ../gtk/gtkwidget.c:410
+#: ../gtk/gtkwidget.c:412
 msgid "Widget name"
 msgstr "Widget name"
 
-#: ../gtk/gtkwidget.c:411
+#: ../gtk/gtkwidget.c:413
 msgid "The name of the widget"
 msgstr "The name of the widget"
 
-#: ../gtk/gtkwidget.c:417
+#: ../gtk/gtkwidget.c:419
 msgid "Parent widget"
 msgstr "Parent widget"
 
-#: ../gtk/gtkwidget.c:418
+#: ../gtk/gtkwidget.c:420
 msgid "The parent widget of this widget. Must be a Container widget"
 msgstr "The parent widget of this widget. Must be a Container widget"
 
-#: ../gtk/gtkwidget.c:425
+#: ../gtk/gtkwidget.c:427
 msgid "Width request"
 msgstr "Width request"
 
-#: ../gtk/gtkwidget.c:426
+#: ../gtk/gtkwidget.c:428
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
@@ -4617,11 +4617,11 @@ msgstr ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
 
-#: ../gtk/gtkwidget.c:434
+#: ../gtk/gtkwidget.c:436
 msgid "Height request"
 msgstr "Height request"
 
-#: ../gtk/gtkwidget.c:435
+#: ../gtk/gtkwidget.c:437
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
@@ -4629,83 +4629,83 @@ msgstr ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
 
-#: ../gtk/gtkwidget.c:444
+#: ../gtk/gtkwidget.c:446
 msgid "Whether the widget is visible"
 msgstr "Whether the widget is visible"
 
-#: ../gtk/gtkwidget.c:451
+#: ../gtk/gtkwidget.c:453
 msgid "Whether the widget responds to input"
 msgstr "Whether the widget responds to input"
 
-#: ../gtk/gtkwidget.c:457
+#: ../gtk/gtkwidget.c:459
 msgid "Application paintable"
 msgstr "Application paintable"
 
-#: ../gtk/gtkwidget.c:458
+#: ../gtk/gtkwidget.c:460
 msgid "Whether the application will paint directly on the widget"
 msgstr "Whether the application will paint directly on the widget"
 
-#: ../gtk/gtkwidget.c:464
+#: ../gtk/gtkwidget.c:466
 msgid "Can focus"
 msgstr "Can focus"
 
-#: ../gtk/gtkwidget.c:465
+#: ../gtk/gtkwidget.c:467
 msgid "Whether the widget can accept the input focus"
 msgstr "Whether the widget can accept the input focus"
 
-#: ../gtk/gtkwidget.c:471
+#: ../gtk/gtkwidget.c:473
 msgid "Has focus"
 msgstr "Has focus"
 
-#: ../gtk/gtkwidget.c:472
+#: ../gtk/gtkwidget.c:474
 msgid "Whether the widget has the input focus"
 msgstr "Whether the widget has the input focus"
 
-#: ../gtk/gtkwidget.c:478
+#: ../gtk/gtkwidget.c:480
 msgid "Is focus"
 msgstr "Is focus"
 
-#: ../gtk/gtkwidget.c:479
+#: ../gtk/gtkwidget.c:481
 msgid "Whether the widget is the focus widget within the toplevel"
 msgstr "Whether the widget is the focus widget within the toplevel"
 
-#: ../gtk/gtkwidget.c:485
+#: ../gtk/gtkwidget.c:487
 msgid "Can default"
 msgstr "Can default"
 
-#: ../gtk/gtkwidget.c:486
+#: ../gtk/gtkwidget.c:488
 msgid "Whether the widget can be the default widget"
 msgstr "Whether the widget can be the default widget"
 
-#: ../gtk/gtkwidget.c:492
+#: ../gtk/gtkwidget.c:494
 msgid "Has default"
 msgstr "Has default"
 
-#: ../gtk/gtkwidget.c:493
+#: ../gtk/gtkwidget.c:495
 msgid "Whether the widget is the default widget"
 msgstr "Whether the widget is the default widget"
 
-#: ../gtk/gtkwidget.c:499
+#: ../gtk/gtkwidget.c:501
 msgid "Receives default"
 msgstr "Receives default"
 
-#: ../gtk/gtkwidget.c:500
+#: ../gtk/gtkwidget.c:502
 msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr "If TRUE, the widget will receive the default action when it is focused"
 
-#: ../gtk/gtkwidget.c:506
+#: ../gtk/gtkwidget.c:508
 msgid "Composite child"
 msgstr "Composite child"
 
-#: ../gtk/gtkwidget.c:507
+#: ../gtk/gtkwidget.c:509
 msgid "Whether the widget is part of a composite widget"
 msgstr "Whether the widget is part of a composite widget"
 
-#: ../gtk/gtkwidget.c:513
+#: ../gtk/gtkwidget.c:515
 msgid "Style"
 msgstr "Style"
 
-#: ../gtk/gtkwidget.c:514
+#: ../gtk/gtkwidget.c:516
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
@@ -4713,75 +4713,75 @@ msgstr ""
 "The style of the widget, which contains information about how it will look "
 "(colours etc)"
 
-#: ../gtk/gtkwidget.c:520
+#: ../gtk/gtkwidget.c:522
 msgid "Events"
 msgstr "Events"
 
-#: ../gtk/gtkwidget.c:521
+#: ../gtk/gtkwidget.c:523
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr "The event mask that decides what kind of GdkEvents this widget gets"
 
-#: ../gtk/gtkwidget.c:528
+#: ../gtk/gtkwidget.c:530
 msgid "Extension events"
 msgstr "Extension events"
 
-#: ../gtk/gtkwidget.c:529
+#: ../gtk/gtkwidget.c:531
 msgid "The mask that decides what kind of extension events this widget gets"
 msgstr "The mask that decides what kind of extension events this widget gets"
 
-#: ../gtk/gtkwidget.c:536
+#: ../gtk/gtkwidget.c:538
 msgid "No show all"
 msgstr "No show all"
 
-#: ../gtk/gtkwidget.c:537
+#: ../gtk/gtkwidget.c:539
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr "Whether gtk_widget_show_all() should not affect this widget"
 
-#: ../gtk/gtkwidget.c:1417
+#: ../gtk/gtkwidget.c:1419
 msgid "Interior Focus"
 msgstr "Interior Focus"
 
-#: ../gtk/gtkwidget.c:1418
+#: ../gtk/gtkwidget.c:1420
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Whether to draw the focus indicator inside widgets"
 
-#: ../gtk/gtkwidget.c:1424
+#: ../gtk/gtkwidget.c:1426
 msgid "Focus linewidth"
 msgstr "Focus linewidth"
 
-#: ../gtk/gtkwidget.c:1425
+#: ../gtk/gtkwidget.c:1427
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Width, in pixels, of the focus indicator line"
 
-#: ../gtk/gtkwidget.c:1431
+#: ../gtk/gtkwidget.c:1433
 msgid "Focus line dash pattern"
 msgstr "Focus line dash pattern"
 
-#: ../gtk/gtkwidget.c:1432
+#: ../gtk/gtkwidget.c:1434
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "Dash pattern used to draw the focus indicator"
 
-#: ../gtk/gtkwidget.c:1437
+#: ../gtk/gtkwidget.c:1439
 msgid "Focus padding"
 msgstr "Focus padding"
 
-#: ../gtk/gtkwidget.c:1438
+#: ../gtk/gtkwidget.c:1440
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "Width, in pixels, between focus indicator and the widget 'box'"
 
-#: ../gtk/gtkwidget.c:1443
+#: ../gtk/gtkwidget.c:1445
 msgid "Cursor color"
 msgstr "Cursor colour"
 
-#: ../gtk/gtkwidget.c:1444
+#: ../gtk/gtkwidget.c:1446
 msgid "Color with which to draw insertion cursor"
 msgstr "Colour with which to draw insertion cursor"
 
-#: ../gtk/gtkwidget.c:1449
+#: ../gtk/gtkwidget.c:1451
 msgid "Secondary cursor color"
 msgstr "Secondary cursor colour"
 
-#: ../gtk/gtkwidget.c:1450
+#: ../gtk/gtkwidget.c:1452
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -4789,13 +4789,21 @@ msgstr ""
 "Colour with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
 
-#: ../gtk/gtkwidget.c:1455
+#: ../gtk/gtkwidget.c:1457
 msgid "Cursor line aspect ratio"
 msgstr "Cursor line aspect ratio"
 
-#: ../gtk/gtkwidget.c:1456
+#: ../gtk/gtkwidget.c:1458
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Aspect ratio with which to draw insertion cursor"
+
+#: ../gtk/gtkwidget.c:1463
+msgid "Draw Border"
+msgstr "Draw Border"
+
+#: ../gtk/gtkwidget.c:1464
+msgid "Size of areas outside the widget's allocation to draw"
+msgstr "Size of areas outside the widget's allocation to draw"
 
 #: ../gtk/gtkwindow.c:418
 msgid "Window Type"
