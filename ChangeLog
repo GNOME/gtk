@@ -1,3 +1,8 @@
+Wed May  4 13:21:41 2005  Søren Sandmann  <sandmann@redhat.com>
+
+	* tests/testcairo.c (draw): Replace cairo_show_surface() uses with
+	cairo_set_source_surface()/cairo_paint();
+
 2005-05-04  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkdrawable-win32.c (generic_draw, blit_from_pixmap)

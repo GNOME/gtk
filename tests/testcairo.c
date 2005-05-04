@@ -172,7 +172,8 @@ draw (cairo_t *cr,
   cairo_restore (cr);
 
   cairo_set_operator (cr, CAIRO_OPERATOR_OUT_REVERSE);
-  cairo_show_surface (cr, punch, width, height);
+  cairo_set_source_surface (cr, punch, 0, 0);
+  cairo_paint (cr);
 
   /* Now draw the 3 circles in a subgroup again
    * at half intensity, and use OperatorAdd to join up
@@ -187,11 +188,13 @@ draw (cairo_t *cr,
   cairo_restore (cr);
 
   cairo_set_operator (cr, CAIRO_OPERATOR_ADD);
-  cairo_show_surface (cr, circles, width, height);
+  cairo_set_source_surface (cr, circles, 0, 0);
+  cairo_paint (cr);
 
   cairo_restore (cr);
 
-  cairo_show_surface (cr, overlay, width, height);
+  cairo_set_source_surface (cr, overlay, 0, 0);
+  cairo_paint (cr);
 
   cairo_surface_destroy (overlay);
   cairo_surface_destroy (punch);
