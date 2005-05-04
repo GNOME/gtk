@@ -1,5 +1,7 @@
 2005-05-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilesystem.c: 
+	* gtk/gtkcelleditable.c: 
 	* gtk/gtktreemodel.c: Avoid getting the interface struct
 	twice in the same function.  (#300513, Billy Biggs)
 

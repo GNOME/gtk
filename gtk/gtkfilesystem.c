@@ -790,9 +790,9 @@ gtk_file_system_get_bookmark_label (GtkFileSystem     *file_system,
   g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
   g_return_val_if_fail (path != NULL, FALSE);
 
-  if (GTK_FILE_SYSTEM_GET_IFACE (file_system)->get_bookmark_label)
-    return GTK_FILE_SYSTEM_GET_IFACE (file_system)->get_bookmark_label (file_system, 
-									path);
+  GtkFileSystemIface *iface = GTK_FILE_SYSTEM_GET_IFACE (file_system);
+  if (iface->get_bookmark_label)
+    return iface->get_bookmark_label (file_system, path);
 
   return NULL;
 }
@@ -816,10 +816,9 @@ gtk_file_system_set_bookmark_label (GtkFileSystem     *file_system,
   g_return_if_fail (GTK_IS_FILE_SYSTEM (file_system));
   g_return_if_fail (path != NULL);
 
-  if (GTK_FILE_SYSTEM_GET_IFACE (file_system)->set_bookmark_label)
-    GTK_FILE_SYSTEM_GET_IFACE (file_system)->set_bookmark_label (file_system, 
-								 path,
-								 label);
+  GtkFileSystemIface *iface = GTK_FILE_SYSTEM_GET_IFACE (file_system);
+  if (iface->set_bookmark_label)
+    iface->set_bookmark_label (file_system, path, label);
 }
 
 /*****************************************
@@ -939,10 +938,11 @@ gtk_file_folder_is_finished_loading (GtkFileFolder *folder)
 {
   g_return_val_if_fail (GTK_IS_FILE_FOLDER (folder), TRUE);
 
-  if (!GTK_FILE_FOLDER_GET_IFACE (folder)->is_finished_loading)
+  GtkFileFolderIface *iface = GTK_FILE_FOLDER_GET_IFACE (folder);
+  if (!iface->is_finished_loading)
     return TRUE;
   else
-    return GTK_FILE_FOLDER_GET_IFACE (folder)->is_finished_loading (folder);
+    return iface->is_finished_loading (folder);
 }
 
 

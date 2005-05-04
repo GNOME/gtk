@@ -94,7 +94,6 @@ gtk_cell_editable_start_editing (GtkCellEditable *cell_editable,
 				 GdkEvent        *event)
 {
   g_return_if_fail (GTK_IS_CELL_EDITABLE (cell_editable));
-  g_return_if_fail (GTK_CELL_EDITABLE_GET_IFACE (cell_editable)->start_editing != NULL);
 
   (* GTK_CELL_EDITABLE_GET_IFACE (cell_editable)->start_editing) (cell_editable, event);
 }
