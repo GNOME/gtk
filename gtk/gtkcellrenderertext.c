@@ -1546,16 +1546,16 @@ get_size (GtkCellRenderer *cell,
       if (x_offset)
 	{
 	  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-	    *x_offset = (1.0 - cell->xalign) * (cell_area->width - (rect.x + rect.width + 2 * cell->xpad));
+	    *x_offset = (1.0 - cell->xalign) * (cell_area->width - (rect.x + rect.width + (2 * cell->xpad)));
 	  else 
-	    *x_offset = cell->xalign * (cell_area->width - (rect.x + rect.width + 2 * cell->xpad));
+	    *x_offset = cell->xalign * (cell_area->width - (rect.x + rect.width + (2 * cell->xpad)));
 
 	  if (priv->ellipsize_set || priv->wrap_width != -1)
 	    *x_offset = MAX(*x_offset, 0);
 	}
       if (y_offset)
 	{
-	  *y_offset = cell->yalign * (cell_area->height - (rect.height + 2 * cell->ypad));
+	  *y_offset = cell->yalign * (cell_area->height - (rect.height + (2 * cell->ypad)));
 	  *y_offset = MAX (*y_offset, 0);
 	}
     }
