@@ -5,10 +5,10 @@
  	has_focus_window directly. (#109246, Billy Biggs, Niko Tyni 
  	and others)
  
- 	* gdk/x11/gdkevents-x11.c: Also fix some extremely confusion
- 	that could happen in the case of no window manager + keyboard grabs,
- 	by moving to a more consistent model of when we pay attention
- 	to mode=NotifyGrab/NotifyUngrab events.
+ 	* gdk/x11/gdkevents-x11.c: Also fix some confusion that could
+	happen in the case of no window manager + keyboard grabs, by
+	moving to a more consistent model of when we pay attention to
+	mode=NotifyGrab/NotifyUngrab events.
 	
 	* docs/focus_tracking.txt: Extensive writeup about how to track
 	focus under X11.
