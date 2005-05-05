@@ -1,3 +1,8 @@
+2005-05-05  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtkmenutoolbutton.sgml: Trivial fix (#303168,
+	Masao Mutoh)
+
 2005-05-03  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-sections.txt: Add gtk_dialog_get_response_for_widget.

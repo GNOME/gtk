@@ -13,7 +13,7 @@ A GtkToolItem containing a button with an additional dropdown menu
 
 <para>
   Use gtk_menu_tool_button_new() to create a new
-  #GtkMenuToolButton. Use gtk_toggle_tool_button_new_from_stock() to
+  #GtkMenuToolButton. Use gtk_menu_tool_button_new_from_stock() to
   create a new #GtkMenuToolButton containing a stock item.
 </para>
 
@@ -33,6 +33,9 @@ A GtkToolItem containing a button with an additional dropdown menu
     </listitem>
   </varlistentry>
 </para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
 
 <!-- ##### STRUCT GtkMenuToolButton ##### -->
 <para>
