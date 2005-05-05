@@ -1,3 +1,15 @@
+2005-05-04  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkevents-x11.c gdk/x11/gdkwindow-x11.h: Fix a bug
+	in focus tracking when we move between has_pointer_focus and 
+	has_focus_window directly. (#109246, Billy Biggs, Niko Tyni 
+	and others)
+
+	* gdk/x11/gdkevents-x11.c: Also fix some extremely confusion
+	that could happen in the case of no window manager + keyboard grabs,
+	by moving to a more consistent model of when we pay attention
+	to mode=NotifyGrab/NotifyUngrab events.
+
 2005-05-02  Federico Mena Quintero  <federico@ximian.com>
 
 	* tests/testfilechooser.c: Oops, remove mtrace() stuff.
