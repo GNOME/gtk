@@ -1,5 +1,19 @@
 2005-05-06  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtknotebook.c (gtk_notebook_insert_page_menu): Always
+	initialize child-visible to FALSE, otherwise we may end up
+	with the wrong page visible initially.  (#302283, Patrik Fimml)
+
+	* gtk/gtktreeview.c (gtk_tree_view_draw_arrow): Make expanders
+	appear insensitive in insensitive treeviews. 
+
+2005-05-05  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktoolbar.c: Fix a typo in the docs.  (#303024, 
+	Morten Welinder)
+
+2005-05-06  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtk.symbols:
 	* gtk/gtkiconview.[hc]: Add DND support similar to the DND
 	support in the tree view.  (#150270)

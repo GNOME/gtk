@@ -4371,10 +4371,8 @@ gtk_notebook_insert_page_menu (GtkNotebook *notebook,
   if (!notebook->first_tab)
     notebook->first_tab = notebook->children;
 
-  if (!notebook->cur_page)
-    gtk_widget_set_child_visible (child, TRUE);
-  else
-    gtk_widget_set_child_visible (child, FALSE);
+  /* child visible will be turned on by switch_page below */
+  gtk_widget_set_child_visible (child, FALSE);
   
   if (tab_label)
     {
