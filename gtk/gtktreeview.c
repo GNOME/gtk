@@ -11884,7 +11884,7 @@ gtk_tree_view_get_drag_dest_row (GtkTreeView              *tree_view,
  * 
  * Determines the destination row for a given position.
  * 
- * Return value: whether there is a row at the given postiion,
+ * Return value: whether there is a row at the given position,
  **/
 gboolean
 gtk_tree_view_get_dest_row_at_pos (GtkTreeView             *tree_view,
