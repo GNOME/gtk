@@ -23,9 +23,7 @@
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtkdnd.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GTK_TYPE_TREE_DRAG_SOURCE            (gtk_tree_drag_source_get_type ())
 #define GTK_TREE_DRAG_SOURCE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TREE_DRAG_SOURCE, GtkTreeDragSource))
@@ -118,10 +116,6 @@ gboolean gtk_tree_get_row_drag_data            (GtkSelectionData  *selection_dat
 						GtkTreeModel     **tree_model,
 						GtkTreePath      **path);
 
-
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_TREE_DND_H__ */

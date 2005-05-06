@@ -35,10 +35,7 @@
 #include <gtk/gtksettings.h>
 #include <atk/atkobject.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 /* The flags that are used by GtkWidget on top of the
  * flags field of GtkObject.
@@ -787,9 +784,6 @@ void              _gtk_widget_propagate_screen_changed    (GtkWidget    *widget,
 
 GdkColormap* _gtk_widget_peek_colormap (void);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_WIDGET_H__ */

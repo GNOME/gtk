@@ -1,5 +1,8 @@
 2005-05-05  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreednd.h: 
+	* gtk/gtkwidget.h: Small cleanups.
+
 	* gtk/gtktreeview.c (gtk_tree_view_get_dest_row_at_pos): Fix
 	a typo.
 
