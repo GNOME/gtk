@@ -2135,7 +2135,10 @@ fill_in_names (GtkFileFolderUnix *folder_unix, GError **error)
 
       entry = g_new0 (struct stat_info_entry, 1);
       if (folder_unix->is_network_dir)
-	entry->statbuf.st_mode = S_IFDIR;
+	{
+	  entry->statbuf.st_mode = S_IFDIR;
+	  entry->mime_type = g_strdup ("x-directory/normal");
+	}
 
       g_hash_table_insert (folder_unix->stat_info,
 			   g_strdup (basename),
@@ -2214,9 +2217,10 @@ fill_in_mime_type (GtkFileFolderUnix *folder_unix)
 
   g_assert (folder_unix->stat_info != NULL);
 
-  g_hash_table_foreach_remove (folder_unix->stat_info,
-			       cb_fill_in_mime_type,
-			       folder_unix);
+  if (!folder_unix->is_network_dir)
+    g_hash_table_foreach_remove (folder_unix->stat_info,
+				 cb_fill_in_mime_type,
+				 folder_unix);
 
   folder_unix->have_mime_type = TRUE;
 }
