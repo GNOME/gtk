@@ -1,3 +1,9 @@
+2005-05-06  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk.symbols:
+	* gtk/gtkiconview.[hc]: Add DND support similar to the DND
+	support in the tree view.  (#150270)
+
 2005-05-05  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktreednd.h: 

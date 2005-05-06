@@ -22,6 +22,7 @@
 #include <gtk/gtkcontainer.h>
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtkcellrenderer.h>
+#include <gtk/gtkselection.h>
 
 G_BEGIN_DECLS
 
@@ -39,6 +40,16 @@ typedef struct _GtkIconViewPrivate    GtkIconViewPrivate;
 typedef void (* GtkIconViewForeachFunc)     (GtkIconView      *icon_view,
 					     GtkTreePath      *path,
 					     gpointer          data);
+
+typedef enum
+{
+  GTK_ICON_VIEW_NO_DROP,
+  GTK_ICON_VIEW_DROP_INTO,
+  GTK_ICON_VIEW_DROP_LEFT,
+  GTK_ICON_VIEW_DROP_RIGHT,
+  GTK_ICON_VIEW_DROP_ABOVE,
+  GTK_ICON_VIEW_DROP_BELOW
+} GtkIconViewDropPosition;
 
 struct _GtkIconView
 {
@@ -143,6 +154,39 @@ void             gtk_icon_view_set_cursor         (GtkIconView            *icon_
 gboolean         gtk_icon_view_get_cursor         (GtkIconView            *icon_view,
 						   GtkTreePath           **path,
 						   GtkCellRenderer       **cell);
+
+/* Drag-and-Drop support */
+void                   gtk_icon_view_enable_model_drag_source (GtkIconView              *icon_view,
+							       GdkModifierType           start_button_mask,
+							       const GtkTargetEntry     *targets,
+							       gint                      n_targets,
+							       GdkDragAction             actions);
+void                   gtk_icon_view_enable_model_drag_dest   (GtkIconView              *icon_view,
+							       const GtkTargetEntry     *targets,
+							       gint                      n_targets,
+							       GdkDragAction             actions);
+void                   gtk_icon_view_unset_model_drag_source  (GtkIconView              *icon_view);
+void                   gtk_icon_view_unset_model_drag_dest    (GtkIconView              *icon_view);
+void                   gtk_icon_view_set_reorderable          (GtkIconView              *icon_view,
+							       gboolean                  reorderable);
+gboolean               gtk_icon_view_get_reorderable          (GtkIconView              *icon_view);
+
+
+/* These are useful to implement your own custom stuff. */
+void                   gtk_icon_view_set_drag_dest_item       (GtkIconView              *icon_view,
+							       GtkTreePath              *path,
+							       GtkIconViewDropPosition   pos);
+void                   gtk_icon_view_get_drag_dest_item       (GtkIconView              *icon_view,
+							       GtkTreePath             **path,
+							       GtkIconViewDropPosition  *pos);
+gboolean               gtk_icon_view_get_dest_item_at_pos     (GtkIconView              *icon_view,
+							       gint                      drag_x,
+							       gint                      drag_y,
+							       GtkTreePath             **path,
+							       GtkIconViewDropPosition  *pos);
+GdkPixmap             *gtk_icon_view_create_drag_icon         (GtkIconView              *icon_view,
+							       GtkTreePath              *path);
+
 
 G_END_DECLS
 

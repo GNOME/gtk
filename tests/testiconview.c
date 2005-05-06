@@ -66,7 +66,7 @@ fill_model (GtkTreeModel *model)
       i++;
     }
   
-  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store), 2, GTK_SORT_ASCENDING);
+  //  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store), 2, GTK_SORT_ASCENDING);
 }
 
 static GtkTreeModel *
@@ -389,17 +389,22 @@ popup_menu_handler (GtkWidget *widget)
   do_popup_menu (widget, NULL);
   return TRUE;
 }
+
+static const GtkTargetEntry item_targets[] = {
+  { "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_APP, 0 }
+};
 	
 gint
 main (gint argc, gchar **argv)
 {
-  GtkWidget *paned;
+  GtkWidget *paned, *tv;
   GtkWidget *window, *icon_list, *scrolled_window;
   GtkWidget *vbox, *bbox;
   GtkWidget *button;
   GtkWidget *prop_editor;
   GtkTreeModel *model;
   GtkCellRenderer *cell;
+  GtkTreeViewColumn *tvc;
   
   gtk_init (&argc, &argv);
 
@@ -419,6 +424,10 @@ main (gint argc, gchar **argv)
   icon_list = gtk_icon_view_new ();
   gtk_icon_view_set_selection_mode (GTK_ICON_VIEW (icon_list), GTK_SELECTION_MULTIPLE);
 
+  tv = gtk_tree_view_new ();
+  tvc = gtk_tree_view_column_new ();
+  gtk_tree_view_append_column (GTK_TREE_VIEW (tv), tvc);
+
   g_signal_connect_after (icon_list, "button_press_event",
 			  G_CALLBACK (button_press_event_handler), NULL);
   g_signal_connect (icon_list, "selection_changed",
@@ -431,6 +440,7 @@ main (gint argc, gchar **argv)
   
   model = create_model ();
   gtk_icon_view_set_model (GTK_ICON_VIEW (icon_list), model);
+  gtk_tree_view_set_model (GTK_TREE_VIEW (tv), model);
   fill_model (model);
 
 #if 0
@@ -466,7 +476,52 @@ main (gint argc, gchar **argv)
   gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (icon_list),
 				  cell, "text", 1, NULL);
   g_signal_connect (cell, "edited", G_CALLBACK (edited), model);
+
+  /* now the tree view... */
+  cell = gtk_cell_renderer_toggle_new ();
+  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (tvc), cell, FALSE);
+  g_object_set (cell, "activatable", TRUE, NULL);
+  gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (tvc),
+				  cell, "active", 4, NULL);
+  g_signal_connect (cell, "toggled", G_CALLBACK (toggled), model);
+
+  cell = gtk_cell_renderer_pixbuf_new ();
+  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (tvc), cell, FALSE);
+  g_object_set (cell, 
+		"follow-state", TRUE, 
+		NULL);
+  gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (tvc),
+				  cell, "pixbuf", 0, NULL);
+
+  cell = gtk_cell_renderer_text_new ();
+  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (tvc), cell, FALSE);
+  g_object_set (cell, "editable", TRUE, NULL);
+  gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (tvc),
+				  cell, "text", 1, NULL);
+  g_signal_connect (cell, "edited", G_CALLBACK (edited), model);
 #endif
+  /* Allow DND between the icon view and the tree view */
+  
+  gtk_icon_view_enable_model_drag_source (icon_list,
+					  GDK_BUTTON1_MASK,
+					  item_targets,
+					  G_N_ELEMENTS (item_targets),
+					  GDK_ACTION_MOVE);
+  gtk_icon_view_enable_model_drag_dest (icon_list,
+					item_targets,
+					G_N_ELEMENTS (item_targets),
+					GDK_ACTION_MOVE);
+
+  gtk_tree_view_enable_model_drag_source (tv,
+					  GDK_BUTTON1_MASK,
+					  item_targets,
+					  G_N_ELEMENTS (item_targets),
+					  GDK_ACTION_MOVE);
+  gtk_tree_view_enable_model_drag_dest (tv,
+					item_targets,
+					G_N_ELEMENTS (item_targets),
+					GDK_ACTION_MOVE);
+
 			      
   prop_editor = create_prop_editor (G_OBJECT (icon_list), 0);
   gtk_widget_show_all (prop_editor);
@@ -477,6 +532,13 @@ main (gint argc, gchar **argv)
   				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
   gtk_paned_add1 (GTK_PANED (paned), scrolled_window);
+
+  scrolled_window = gtk_scrolled_window_new (NULL, NULL);
+  gtk_container_add (GTK_CONTAINER (scrolled_window), tv);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
+  				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+
+  gtk_paned_add2 (GTK_PANED (paned), scrolled_window);
 
   bbox = gtk_hbutton_box_new ();
   gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), GTK_BUTTONBOX_START);

@@ -1,3 +1,7 @@
+2005-05-06  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-sections.txt: Add new icon view API.
+
 2005-05-05  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkmenutoolbutton.sgml: Trivial fix (#303168,
