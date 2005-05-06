@@ -1,3 +1,10 @@
+2005-05-06  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilesystemunix.c (fill_in_mime_type): Don't fill the mime
+	types if this is an AFS directory.
+	(fill_in_names): If we are in an AFS directory, set the MIME type
+	blindly to "x-directory/normal".
+
 2005-05-06  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtknotebook.c (gtk_notebook_insert_page_menu): Always
