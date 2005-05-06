@@ -1,3 +1,12 @@
+2005-05-06  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtknotebook.c (gtk_notebook_insert_page_menu): Always
+	initialize child-visible to FALSE, otherwise we may end up
+	with the wrong page visible initially.  (#302283, Patrik Fimml)
+
+	* gtk/gtktreeview.c (gtk_tree_view_draw_arrow): Make expanders
+	appear insensitive in insensitive treeviews. 
+
 2005-05-04  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkevents-x11.c gdk/x11/gdkwindow-x11.h: Fix a bug

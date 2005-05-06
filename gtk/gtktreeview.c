@@ -3235,12 +3235,15 @@ gtk_tree_view_vertical_autoscroll (GtkTreeView *tree_view)
 
   /* see if we are near the edge. */
   offset = y - (visible_rect.y + 2 * SCROLL_EDGE_SIZE);
+  g_print ("offset1 %d\n", offset);
   if (offset > 0)
     {
       offset = y - (visible_rect.y + visible_rect.height - 2 * SCROLL_EDGE_SIZE);
+      g_print ("offset2 %d\n", offset);
       if (offset < 0)
 	return;
     }
+  g_print ("offset3 %d\n", offset);
 
   value = CLAMP (tree_view->priv->vadjustment->value + offset, 0.0,
 		 tree_view->priv->vadjustment->upper - tree_view->priv->vadjustment->page_size);
@@ -8316,7 +8319,11 @@ gtk_tree_view_draw_arrow (GtkTreeView *tree_view,
   area.width = expander_size + 2;
   area.height = MAX (CELL_HEIGHT (node, vertical_separator), (expander_size - vertical_separator));
 
-  if (node == tree_view->priv->button_pressed_node)
+  if (GTK_WIDGET_STATE (tree_view) == GTK_STATE_INSENSITIVE)
+    {
+      state = GTK_STATE_INSENSITIVE;
+    }
+  else if (node == tree_view->priv->button_pressed_node)
     {
       if (x >= area.x && x <= (area.x + area.width) &&
 	  y >= area.y && y <= (area.y + area.height))
