@@ -1,5 +1,10 @@
 2005-05-07  Owen Taylor  <otaylor@redhat.com>
 
+	* gdk/gdkgc.c (gc_get_foreground): Get the foreground color, not
+	the background color.
+
+2005-05-07  Owen Taylor  <otaylor@redhat.com>
+
 	* gdk/gdkpixbuf-render.c gdk/gdkpixbuf.h (gdk_pixbuf_set_as_cairo_source): 
 	Change prototype to match cairo_set_source_surface().
 
