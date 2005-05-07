@@ -917,26 +917,6 @@ gtk_hsv_motion (GtkWidget      *widget,
 
 /* Redrawing */
 
-static void
-set_source_surface (cairo_t         *cr,
-		    cairo_surface_t *surface)
-{
-  cairo_pattern_t *pattern;
-  cairo_matrix_t *matrix;
-  double x, y;
-
-  pattern = cairo_pattern_create_for_surface (surface);
-  
-  cairo_current_point (cr, &x, &y);
-  matrix = cairo_matrix_create ();
-  cairo_matrix_translate (matrix, -x, -y);
-  cairo_pattern_set_matrix (pattern, matrix);
-  cairo_matrix_destroy (matrix);
-
-  cairo_set_source (cr, pattern);
-  cairo_pattern_destroy (pattern);
-}
-
 /* Paints the hue ring */
 static void
 paint_ring (GtkHSV      *hsv,
@@ -1018,8 +998,7 @@ paint_ring (GtkHSV      *hsv,
   /* Now draw the value marker onto the source image, so that it
    * will get properly clipped at the edges of the ring
    */
-  source_cr = cairo_create ();
-  cairo_set_target_surface (source_cr, source);
+  source_cr = cairo_create (source);
   
   r = priv->h;
   g = 1.0;
@@ -1042,8 +1021,7 @@ paint_ring (GtkHSV      *hsv,
 
   cairo_save (cr);
     
-  cairo_move_to (cr, x, y);
-  set_source_surface (cr, source);
+  cairo_set_source_surface (cr, source, x, y);
   cairo_surface_destroy (source);
 
   cairo_set_line_width (cr, priv->ring_width);
@@ -1220,8 +1198,7 @@ paint_triangle (GtkHSV      *hsv,
   
   /* Draw a triangle with the image as a source */
 
-  cairo_move_to (cr, x, y);
-  set_source_surface (cr, source);
+  cairo_set_source_surface (cr, source, x, y);
   cairo_surface_destroy (source);
   
   cairo_move_to (cr, x1, y1);

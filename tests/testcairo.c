@@ -29,10 +29,7 @@ oval_path (cairo_t *cr,
            double xc, double yc,
            double xr, double yr)
 {
-  cairo_matrix_t *matrix;
-
-  matrix = cairo_matrix_create ();
-  cairo_current_matrix (cr, matrix);
+  cairo_save (cr);
 
   cairo_translate (cr, xc, yc);
   cairo_scale (cr, 1.0, yr / xr);
@@ -43,8 +40,7 @@ oval_path (cairo_t *cr,
 	     0, 2 * G_PI);
   cairo_close_path (cr);
 
-  cairo_set_matrix (cr, matrix);
-  cairo_matrix_destroy (matrix);
+  cairo_restore (cr);
 }
 
 /* Create a path that is a circular oval with radii xr, yr at xc,
@@ -125,25 +121,26 @@ draw (cairo_t *cr,
       int      height)
 {
   cairo_surface_t *overlay, *punch, *circles;
+  cairo_t *overlay_cr, *punch_cr, *circles_cr;
 
   /* Fill the background */
   double radius = 0.5 * (width < height ? width : height) - 10;
   double xc = width / 2.;
   double yc = height / 2.;
 
-  overlay = cairo_surface_create_similar (cairo_current_target_surface (cr),
+  overlay = cairo_surface_create_similar (cairo_get_target (cr),
 					  CAIRO_FORMAT_ARGB32,
 					  width, height);
   if (overlay == NULL)
     return;
 
-  punch = cairo_surface_create_similar (cairo_current_target_surface (cr),
+  punch = cairo_surface_create_similar (cairo_get_target (cr),
 					CAIRO_FORMAT_A8,
 					width, height);
   if (punch == NULL)
     return;
 
-  circles = cairo_surface_create_similar (cairo_current_target_surface (cr),
+  circles = cairo_surface_create_similar (cairo_get_target (cr),
 					  CAIRO_FORMAT_ARGB32,
 					  width, height);
   if (circles == NULL)
@@ -151,47 +148,39 @@ draw (cairo_t *cr,
     
   fill_checks (cr, 0, 0, width, height);
 
-  cairo_save (cr);
-  cairo_set_target_surface (cr, overlay);
-  cairo_identity_matrix (cr);
-
   /* Draw a black circle on the overlay
    */
-  cairo_set_source_rgb (cr, 0., 0., 0.);
-  oval_path (cr, xc, yc, radius, radius);
-  cairo_fill (cr);
-
-  cairo_save (cr);
-  cairo_set_target_surface (cr, punch);
+  overlay_cr = cairo_create (overlay);
+  cairo_set_source_rgb (overlay_cr, 0., 0., 0.);
+  oval_path (overlay_cr, xc, yc, radius, radius);
+  cairo_fill (overlay_cr);
 
   /* Draw 3 circles to the punch surface, then cut
    * that out of the main circle in the overlay
    */
-  draw_3circles (cr, xc, yc, radius, 1.0);
+  punch_cr = cairo_create (punch);
+  draw_3circles (punch_cr, xc, yc, radius, 1.0);
+  cairo_destroy (punch_cr);
 
-  cairo_restore (cr);
-
-  cairo_set_operator (cr, CAIRO_OPERATOR_OUT_REVERSE);
-  cairo_set_source_surface (cr, punch, 0, 0);
-  cairo_paint (cr);
+  cairo_set_operator (overlay_cr, CAIRO_OPERATOR_DEST_OUT);
+  cairo_set_source_surface (overlay_cr, punch, 0, 0);
+  cairo_paint (overlay_cr);
 
   /* Now draw the 3 circles in a subgroup again
    * at half intensity, and use OperatorAdd to join up
    * without seams.
    */
-  cairo_save (cr);
-  cairo_set_target_surface (cr, circles);
+  circles_cr = cairo_create (circles);
+  
+  cairo_set_operator (circles_cr, CAIRO_OPERATOR_OVER);
+  draw_3circles (circles_cr, xc, yc, radius, 0.5);
+  cairo_destroy (circles_cr);
 
-  cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
-  draw_3circles (cr, xc, yc, radius, 0.5);
+  cairo_set_operator (overlay_cr, CAIRO_OPERATOR_ADD);
+  cairo_set_source_surface (overlay_cr, circles, 0, 0);
+  cairo_paint (overlay_cr);
 
-  cairo_restore (cr);
-
-  cairo_set_operator (cr, CAIRO_OPERATOR_ADD);
-  cairo_set_source_surface (cr, circles, 0, 0);
-  cairo_paint (cr);
-
-  cairo_restore (cr);
+  cairo_destroy (overlay_cr);
 
   cairo_set_source_surface (cr, overlay, 0, 0);
   cairo_paint (cr);

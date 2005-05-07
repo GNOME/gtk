@@ -1,3 +1,11 @@
+2005-05-07  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkpixbuf-render.c gdk/gdkpixbuf.h (gdk_pixbuf_set_as_cairo_source): 
+	Change prototype to match cairo_set_source_surface().
+
+	* gdk/gdkdraw.c gdk/gdkgc.c gdk/gdkpixbuf-render.c gdk/gdkwindow.c
+	gtk/gtkhsv.c tests/testcairo.c.
+
 2005-05-06  Federico Mena Quintero  <federico@ximian.com>
 
 	Merged from gtk-2-6:

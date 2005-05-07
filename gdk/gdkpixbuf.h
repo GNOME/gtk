@@ -81,7 +81,9 @@ GdkPixbuf *gdk_pixbuf_get_from_image    (GdkPixbuf   *dest,
                                          int          height);
 
 void gdk_pixbuf_set_as_cairo_source (GdkPixbuf *pixbuf,
-				     cairo_t   *cr);
+				     cairo_t   *cr,
+				     double     pixbuf_x,
+				     double     pixbuf_y);
 
 G_END_DECLS
 

@@ -1748,10 +1748,9 @@ gdk_window_set_bg_pattern (GdkWindow      *window,
 
       if (x_offset != 0 || y_offset)
 	{
-	  cairo_matrix_t *matrix = cairo_matrix_create ();
-	  cairo_matrix_translate (matrix, x_offset, y_offset);
-	  cairo_pattern_set_matrix (pattern, matrix);
-	  cairo_matrix_destroy (matrix);
+	  cairo_matrix_t matrix;
+	  cairo_matrix_init_translate (&matrix, x_offset, y_offset);
+	  cairo_pattern_set_matrix (pattern, &matrix);
 	}
 
       cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
@@ -1795,8 +1794,7 @@ gdk_window_clear_backing_rect (GdkWindow *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  cr = cairo_create ();
-  cairo_set_target_surface (cr, paint->surface);
+  cr = cairo_create (paint->surface);
 
   gdk_window_set_bg_pattern (window, cr, 0, 0);
 

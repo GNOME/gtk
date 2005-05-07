@@ -1044,14 +1044,13 @@ make_stipple_tile_surface (cairo_t   *cr,
   
   alpha_surface = _gdk_drawable_ref_cairo_surface (stipple);
   
-  surface = cairo_surface_create_similar (cairo_get_target_surface (cr),
+  surface = cairo_surface_create_similar (cairo_get_target (cr),
 					  CAIRO_FORMAT_ARGB32,
 					  width, height);
 
-  tmp_cr = cairo_create ();
-  cairo_set_target_surface (tmp_cr, surface);
+  tmp_cr = cairo_create (surface);
   
-  cairo_set_operator (tmp_cr, CAIRO_OPERATOR_SRC);
+  cairo_set_operator (tmp_cr, CAIRO_OPERATOR_SOURCE);
  
   if (background)
       gdk_cairo_set_source_color (tmp_cr, background);

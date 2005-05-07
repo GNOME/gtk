@@ -333,14 +333,18 @@ gdk_pixbuf_render_pixmap_and_mask_for_colormap (GdkPixbuf   *pixbuf,
  * gdk_pixbuf_set_as_cairo_source:
  * @pixbuf: a #GdkPixbuf
  * @cr: a #Cairo context
+ * @pixbuf_x: X coordinate of location to place upper left corner of @pixbuf
+ * @pixbuf_y: Y coordinate of location to place upper left corner of @pixbuf
  * 
  * Sets the given pixbuf as the source pattern for the Cairo context.
  * The pattern has an extend mode of %CAIRO_EXTEND_NONE and is aligned
- * so that the origin of @pixbuf is at the current point.
+ * so that the origin of @pixbuf is @pixbuf_x, @pixbuf_y
  **/
 void
 gdk_pixbuf_set_as_cairo_source (GdkPixbuf *pixbuf,
-				cairo_t   *cr)
+				cairo_t   *cr,
+				double     pixbuf_x,
+				double     pixbuf_y)
 {
   gint width = gdk_pixbuf_get_width (pixbuf);
   gint height = gdk_pixbuf_get_height (pixbuf);
@@ -350,10 +354,7 @@ gdk_pixbuf_set_as_cairo_source (GdkPixbuf *pixbuf,
   guchar *cairo_pixels;
   cairo_format_t format;
   cairo_surface_t *surface;
-  cairo_pattern_t *pattern;
   static const cairo_user_data_key_t key;
-  cairo_matrix_t *matrix;
-  double x, y;
   int j;
 
   if (n_channels == 3)
@@ -424,17 +425,7 @@ gdk_pixbuf_set_as_cairo_source (GdkPixbuf *pixbuf,
       cairo_pixels += 4 * width;
     }
 
-  pattern = cairo_pattern_create_for_surface (surface);
-  cairo_surface_destroy (surface);
-  
-  cairo_current_point (cr, &x, &y);
-  matrix = cairo_matrix_create ();
-  cairo_matrix_translate (matrix, -x, -y);
-  cairo_pattern_set_matrix (pattern, matrix);
-  cairo_matrix_destroy (matrix);
-
-  cairo_set_source (cr, pattern);
-  cairo_pattern_destroy (pattern);
+  cairo_set_source_surface (cr, surface, pixbuf_x, pixbuf_y);
 }
 
 #define __GDK_PIXBUF_RENDER_C__

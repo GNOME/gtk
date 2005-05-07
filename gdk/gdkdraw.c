@@ -884,16 +884,16 @@ real_draw_glyphs (GdkDrawable      *drawable,
 
   if (matrix)
     {
-      cairo_matrix_t *cairo_matrix;
+      cairo_matrix_t cairo_matrix;
 
-      cairo_matrix = cairo_matrix_create ();
-      cairo_matrix_set_affine (cairo_matrix,
-			       matrix->xx, matrix->yx,
-			       matrix->xy, matrix->yy,
-			       matrix->x0, matrix->y0);
+      cairo_matrix.xx = matrix->xx;
+      cairo_matrix.yx = matrix->yx;
+      cairo_matrix.xy = matrix->xy;
+      cairo_matrix.yy = matrix->yy;
+      cairo_matrix.x0 = matrix->x0;
+      cairo_matrix.y0 = matrix->y0;
       
-      cairo_set_matrix (cr, cairo_matrix);
-      cairo_matrix_destroy (cairo_matrix);
+      cairo_set_matrix (cr, &cairo_matrix);
     }
 
   cairo_move_to (cr, x, y);
@@ -1304,11 +1304,9 @@ gdk_drawable_create_cairo_context (GdkDrawable *drawable)
     
   g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
 
-  cr = cairo_create ();
-
   surface = _gdk_drawable_ref_cairo_surface (drawable);
-  if (surface)
-    cairo_set_target_surface (cr, surface);
+  cr = cairo_create (surface);
+  cairo_surface_destroy (surface);
 
   return cr;
 }
