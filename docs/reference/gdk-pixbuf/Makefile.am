@@ -28,6 +28,7 @@ IGNORE_HFILES=				\
 	gdk-pixbuf-private.h		\
 	io-gif-animation.h		\
 	io-ani-animation.h		\
+	xpm-color-table.h		\
 	test-images.h
 
 INCLUDES = 			\

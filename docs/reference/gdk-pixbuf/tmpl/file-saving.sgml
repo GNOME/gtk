@@ -6,13 +6,20 @@ Saving a pixbuf to a file.
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+These functions allow to save a #GdkPixbuf in a number of 
+file formats. The formatted data can be written to a file
+or to a memory buffer. &gdk-pixbuf; can also call a user-defined
+callback on the data, which allows to e.g. write the image 
+to a socket or store it in a database.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
 
 </para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
 
 <!-- ##### FUNCTION gdk_pixbuf_savev ##### -->
 <para>

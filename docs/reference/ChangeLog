@@ -1,5 +1,14 @@
 2005-05-08  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk-pixbuf/tmpl/inline.sgml: 
+	* gdk-pixbuf/tmpl/file-saving.sgml: Add long descriptions.
+
+	* gdk-pixbuf/tmpl/module_interface.sgml: Small additions.
+
+	* gdk-pixbuf/gdk-pixbuf-sections.txt: Add a missing function.
+
+	* gdk-pixbuf/Makefile.am (IGNORE_HFILES): Add xpm-color-table.h
+
 	* gdk/Makefile.am (IGNORE_HFILES): Add keyname-table.h
 
 	* gdk/gdk-sections.txt: Add gdk_cairo_set_source_color,

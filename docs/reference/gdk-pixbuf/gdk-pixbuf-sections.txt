@@ -250,6 +250,7 @@ XlibRgbCmap
 XlibRgbDither
 xlib_rgb_init
 xlib_rgb_init_with_depth
+xlib_rgb_xpixel_from_rgb
 xlib_rgb_gc_set_foreground
 xlib_rgb_gc_set_background
 xlib_draw_rgb_image
