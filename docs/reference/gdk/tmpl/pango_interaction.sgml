@@ -14,7 +14,7 @@ stippling and embossing.
 <para>
 Creating a #PangoLayout object is the first step in rendering text,
 and requires getting a handle to a #PangoContext. For GTK+ programs,
-you'll usually want to use gtk_widget_get_context(), or
+you'll usually want to use gtk_widget_get_pango_context(), or
 gtk_widget_create_pango_layout(), rather than using the lowlevel
 gdk_pango_context_get_for_screen(). Once you have a #PangoLayout, you
 can set the text and attributes of it with Pango functions like

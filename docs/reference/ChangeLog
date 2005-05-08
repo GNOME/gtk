@@ -1,3 +1,8 @@
+2005-05-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/tmpl/pango_interaction.sgml: Fix a reference.
+	(#303403, Masao Mutoh)
+
 2005-05-06  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-sections.txt: Add new icon view API.
