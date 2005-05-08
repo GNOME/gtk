@@ -4,9 +4,7 @@
 #include <gdk/gdktypes.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GDK_TYPE_CURSOR (gdk_cursor_get_type ())
 
@@ -98,6 +96,7 @@ typedef enum
 struct _GdkCursor
 {
   GdkCursorType type;
+  /*< private >*/
   guint ref_count;
 };
 
@@ -129,8 +128,6 @@ void        gdk_cursor_unref             (GdkCursor       *cursor);
 #define gdk_cursor_destroy             gdk_cursor_unref
 #endif /* GDK_DISABLE_DEPRECATED */
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif /* __GDK_CURSOR_H__ */

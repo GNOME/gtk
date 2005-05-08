@@ -1,3 +1,12 @@
+2005-05-08  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/gdkcolor.c (gdk_cairo_set_source_color): 
+	* gdk/gdkimage.h: 
+	* gdk/gdkdraw.c: 
+	* gdk/gdkcolor.h: 
+	* gdk/gdkcursor.h: 
+	* gdk/x11/gdkcolor-x11.c: Small documentation additions.
+
 2005-05-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkscrolledwindow.h: 

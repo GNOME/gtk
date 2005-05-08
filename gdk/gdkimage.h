@@ -3,9 +3,7 @@
 
 #include <gdk/gdktypes.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 /* Types of images.
  *   Normal: Normal X image type. These are slow as they involve passing
@@ -52,7 +50,8 @@ struct _GdkImage
   gpointer	mem;
 
   GdkColormap  *colormap; /* read only. */
-  
+
+  /*< private >*/
   gpointer windowing_data; /* read only. */
 };
 
@@ -103,8 +102,6 @@ GdkImage* gdk_image_new_bitmap (GdkVisual     *visual,
 #define gdk_image_destroy              gdk_image_unref
 #endif /* GDK_DISABLE_DEPRECATED */
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif /* __GDK_IMAGE_H__ */

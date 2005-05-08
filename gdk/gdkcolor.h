@@ -4,9 +4,7 @@
 #include <cairo.h>
 #include <gdk/gdktypes.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 /* The color type.
  *   A color consists of red, green and blue values in the
@@ -39,6 +37,7 @@ typedef struct _GdkColormapClass GdkColormapClass;
 
 struct _GdkColormap
 {
+  /*< private >*/
   GObject parent_instance;
 
   /*< public >*/
@@ -144,8 +143,6 @@ void gdk_colors_free	 (GdkColormap	*colormap,
 			  gulong	 planes);
 #endif /* !GDK_DISABLE_DEPRECATED || GDK_COMPILATION */
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif /* __GDK_COLOR_H__ */

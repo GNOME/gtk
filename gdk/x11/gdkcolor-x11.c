@@ -569,7 +569,7 @@ gdk_colormap_change (GdkColormap *colormap,
  * For full documentation of the fields, see 
  * the Xlib documentation for <function>XAllocColorCells()</function>.
  * 
- * Return value: 
+ * Return value: %TRUE if the allocation was successful
  **/
 gboolean
 gdk_colors_alloc (GdkColormap   *colormap,

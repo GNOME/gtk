@@ -378,6 +378,8 @@ gdk_colormap_get_system (void)
  * 
  * Convenience function to set the specified GdkColor as the
  * source color of the given Cairo context.
+ *
+ * Since: 2.8
  **/
 void
 gdk_cairo_set_source_color (cairo_t  *cr,

@@ -1222,8 +1222,8 @@ gdk_drawable_real_get_composite_drawable (GdkDrawable *drawable,
  * but no area outside of this region will be affected by drawing
  * primitives.
  * 
- * Return value: a #GdkRegion. This must be freed with gdk_region_destroy()
- *               when you are done.
+ * Returns: a #GdkRegion. This must be freed with gdk_region_destroy()
+ *          when you are done.
  **/
 GdkRegion *
 gdk_drawable_get_clip_region (GdkDrawable *drawable)
@@ -1235,15 +1235,15 @@ gdk_drawable_get_clip_region (GdkDrawable *drawable)
 
 /**
  * gdk_drawable_get_visible_region:
- * @drawable: 
+ * @drawable: a #GdkDrawable
  * 
  * Computes the region of a drawable that is potentially visible.
  * This does not necessarily take into account if the window is
  * obscured by other windows, but no area outside of this region
  * is visible.
  * 
- * Return value: a #GdkRegion. This must be freed with gdk_region_destroy()
- *               when you are done.
+ * Returns: a #GdkRegion. This must be freed with gdk_region_destroy()
+ *          when you are done.
  **/
 GdkRegion *
 gdk_drawable_get_visible_region (GdkDrawable *drawable)
