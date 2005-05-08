@@ -1,5 +1,10 @@
 2005-05-07  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkscrolledwindow.h: 
+	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_get_hscrollbar): 
+	(gtk_scrolled_window_get_cscrollbar): Change the return 
+	type to GtkWidget*, proposed by Owen Taylor. 
+
 	* gdk/x11/gdkscreen-x11.c (gdk_screen_get_width_mm) 
 	(gdk_screen_get_height_mm): Fix typos in the docs.  (#303389,
 	Masao Mutoh)

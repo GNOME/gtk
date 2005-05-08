@@ -107,8 +107,8 @@ void           gtk_scrolled_window_set_vadjustment   (GtkScrolledWindow *scrolle
 						      GtkAdjustment     *hadjustment);
 GtkAdjustment* gtk_scrolled_window_get_hadjustment   (GtkScrolledWindow *scrolled_window);
 GtkAdjustment* gtk_scrolled_window_get_vadjustment   (GtkScrolledWindow *scrolled_window);
-GtkHScrollbar* gtk_scrolled_window_get_hscrollbar    (GtkScrolledWindow *scrolled_window);
-GtkVScrollbar* gtk_scrolled_window_get_vscrollbar    (GtkScrolledWindow *scrolled_window);
+GtkWidget*     gtk_scrolled_window_get_hscrollbar    (GtkScrolledWindow *scrolled_window);
+GtkWidget*     gtk_scrolled_window_get_vscrollbar    (GtkScrolledWindow *scrolled_window);
 void           gtk_scrolled_window_set_policy        (GtkScrolledWindow *scrolled_window,
 						      GtkPolicyType      hscrollbar_policy,
 						      GtkPolicyType      vscrollbar_policy);

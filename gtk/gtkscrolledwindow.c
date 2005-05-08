@@ -506,7 +506,7 @@ gtk_scrolled_window_get_vadjustment (GtkScrolledWindow *scrolled_window)
  *
  * Since: 2.8
  */
-GtkHScrollbar*
+GtkWidget*
 gtk_scrolled_window_get_hscrollbar (GtkScrolledWindow *scrolled_window)
 {
   g_return_val_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window), NULL);
@@ -525,7 +525,7 @@ gtk_scrolled_window_get_hscrollbar (GtkScrolledWindow *scrolled_window)
  *
  * Since: 2.8
  */
-GtkVScrollbar*
+GtkWidget*
 gtk_scrolled_window_get_vscrollbar (GtkScrolledWindow *scrolled_window)
 {
   g_return_val_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window), NULL);
