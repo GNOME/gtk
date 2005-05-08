@@ -1,3 +1,21 @@
+2005-05-08  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/Makefile.am (IGNORE_HFILES): Add keyname-table.h
+
+	* gdk/gdk-sections.txt: Add gdk_cairo_set_source_color,
+	gdk_drawable_create_cairo_context and
+	gdk_pixbuf_set_as_cairo_source, remove 
+	gdk_draw_rectangle_alpha_libgtk_only
+
+	* gdk/tmpl/pixbufs.sgml: 
+	* gdk/tmpl/cursors.sgml: Add long descriptions.
+	
+	* gdk/tmpl/events.sgml: 
+	* gdk/tmpl/dnd.sgml: 
+	* gdk/tmpl/windows.sgml: 
+	* gdk/tmpl/pixmaps.sgml: 
+	* gdk/tmpl/x_interaction.sgml: Small additions.
+
 2005-05-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/tmpl/pango_interaction.sgml: Fix a reference.

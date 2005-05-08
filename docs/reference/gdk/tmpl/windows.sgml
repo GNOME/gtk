@@ -18,6 +18,9 @@ For example, each #GtkButton has a #GdkWindow associated with it.
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GdkWindow ##### -->
 <para>
 An opaque structure representing an onscreen drawable.
@@ -273,7 +276,7 @@ corresponding flag in #GdkWindowAttributesType.
 Deprecated equivalent of g_object_ref()
 </para>
 
-@Returns: 
+@Returns: the window
 
 
 <!-- ##### MACRO gdk_window_unref ##### -->
@@ -1075,7 +1078,7 @@ Deprecated equivalent of gdk_drawable_get_size().
 Deprecated equivalent of gdk_drawable_get_visual().
 </para>
 
-@Returns: 
+@Returns: the #GdkVisual of the window
 
 
 <!-- ##### MACRO gdk_window_get_colormap ##### -->

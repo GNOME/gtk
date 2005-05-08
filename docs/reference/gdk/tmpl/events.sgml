@@ -27,6 +27,9 @@ The structs used for each type of event.
 </variablelist>
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### ENUM GdkEventType ##### -->
 <para>
 Specifies the type of the event.
@@ -81,9 +84,10 @@ has changed.
 @GDK_VISIBILITY_NOTIFY: the window visibility status has changed.
 @GDK_NO_EXPOSE: indicates that the source region was completely available
 when parts of a drawable were copied. This is not very useful.
-@GDK_SCROLL: 
-@GDK_WINDOW_STATE: 
-@GDK_SETTING: 
+@GDK_SCROLL: the scroll wheel was turned
+@GDK_WINDOW_STATE: the state of a window has changed. See #GdkWindowState
+for the possible window states
+@GDK_SETTING: a setting has been modified. 
 @GDK_OWNER_CHANGE: the owner of a selection has changed. This event type
   was added in 2.6
 

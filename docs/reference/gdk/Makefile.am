@@ -28,6 +28,7 @@ IGNORE_HFILES=			\
 	gdkprivate.h		\
 	gdkpoly-generic.h	\
 	gdkregion-generic.h	\
+	keyname-table.h		\
 	linux-fb 		\
 	nanox 			\
 	win32 			\

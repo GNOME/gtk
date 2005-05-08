@@ -14,6 +14,9 @@ X backend-specific functions
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### MACRO GDK_ROOT_WINDOW ##### -->
 <para>
 Obtains the Xlib window id of the root window of the current screen. 
@@ -59,10 +62,8 @@ Returns the X window belonging to a #GdkWindow.
 Returns the display of a #GdkPixmap.
 </para>
 
-@pix: 
+@pix: a #GdkPixmap.
 @Returns: an Xlib <type>Display*</type>.
-<!-- # Unused Parameters # -->
-@win: a #GdkPixmap.
 
 
 <!-- ##### MACRO GDK_PIXMAP_XID ##### -->
@@ -70,10 +71,8 @@ Returns the display of a #GdkPixmap.
 Returns the X pixmap belonging to a #GdkPixmap.
 </para>
 
-@pix: 
+@pix: a #GdkPixmap.
 @Returns: the Xlib <type>XPixmap</type> of @win.
-<!-- # Unused Parameters # -->
-@win: a #GdkPixmap.
 
 
 <!-- ##### MACRO GDK_DISPLAY_XDISPLAY ##### -->

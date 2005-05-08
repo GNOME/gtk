@@ -343,6 +343,7 @@ gdk_pixbuf_render_pixmap_and_mask
 gdk_pixbuf_render_pixmap_and_mask_for_colormap
 gdk_pixbuf_get_from_drawable
 gdk_pixbuf_get_from_image
+gdk_pixbuf_set_as_cairo_source
 </SECTION>
 
 <SECTION>
@@ -374,6 +375,7 @@ gdk_color_alloc
 gdk_color_change
 gdk_color_equal
 gdk_color_hash
+gdk_cairo_set_source_color
 
 <SUBSECTION Standard>
 GDK_COLORMAP
@@ -453,6 +455,7 @@ gdk_drawable_get_depth
 gdk_drawable_get_size
 gdk_drawable_get_clip_region
 gdk_drawable_get_visible_region
+gdk_drawable_create_cairo_context
 
 <SUBSECTION>
 gdk_draw_point
@@ -496,7 +499,6 @@ GDK_IS_DRAWABLE_CLASS
 <SUBSECTION Private>
 GdkDrawableClass
 gdk_draw_bitmap
-gdk_draw_rectangle_alpha_libgtk_only
 </SECTION>
 
 <SECTION>

@@ -6,13 +6,18 @@ Functions for rendering pixbufs on drawables
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+These functions allow to render pixbufs on drawables. Pixbufs are
+client-side images. For details on how to create and manipulate
+pixbufs, see the #GdkPixbuf API documentation.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
 
 </para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
 
 <!-- ##### FUNCTION gdk_pixbuf_render_threshold_alpha ##### -->
 <para>
@@ -124,5 +129,16 @@ Functions for rendering pixbufs on drawables
 @width: 
 @height: 
 @Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_set_as_cairo_source ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@cr: 
+@pixbuf_x: 
+@pixbuf_y: 
 
 
