@@ -1,3 +1,9 @@
+2005-05-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/x11/gdkscreen-x11.c (gdk_screen_get_width_mm) 
+	(gdk_screen_get_height_mm): Fix typos in the docs.  (#303389,
+	Masao Mutoh)
+
 2005-05-07  Matthias Clasen <mclasen@redhat.com>
 
 	* gtk/gtkiconview.c: Fix a copy-and-paste accident, spotted

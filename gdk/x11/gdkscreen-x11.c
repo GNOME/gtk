@@ -167,7 +167,7 @@ gdk_screen_get_height (GdkScreen *screen)
  * Gets the width of @screen in millimeters. 
  * Note that on some X servers this value will not be correct.
  * 
- * Returns: the width of @screen in pixels.
+ * Returns: the width of @screen in millimeters.
  *
  * Since: 2.2
  **/
@@ -186,7 +186,7 @@ gdk_screen_get_width_mm (GdkScreen *screen)
  * Returns the height of @screen in millimeters. 
  * Note that on some X servers this value will not be correct.
  * 
- * Returns: the heigth of @screen in pixels.
+ * Returns: the heigth of @screen in millimeters.
  *
  * Since: 2.2
  **/
