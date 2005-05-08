@@ -1,3 +1,8 @@
+2005-05-07  Matthias Clasen <mclasen@redhat.com>
+
+	* gtk/gtkiconview.c: Fix a copy-and-paste accident, spotted
+	by Owen Taylor.
+
 2005-05-07  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkgc.c (gc_get_foreground): Get the foreground color, not

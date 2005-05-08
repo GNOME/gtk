@@ -6370,17 +6370,7 @@ gtk_icon_view_get_drag_dest_item (GtkIconView              *icon_view,
  * 
  * Return value: whether there is an item at the given position.
  *
- * Since: 2.8/**
- * gtk_tree_view_get_dest_row_at_pos:
- * @tree_view: a #GtkTreeView
- * @drag_x: the position to determine the destination row for
- * @drag_y: the position to determine the destination row for
- * @path: Return location for the path of the highlighted row, or %NULL.
- * @pos: Return location for the drop position, or %NULL
- * 
- * Determines the destination row for a given position.
- * 
- * Return value: whether there is a row at the given position,
+ * Since: 2.8
  **/
 gboolean
 gtk_icon_view_get_dest_item_at_pos (GtkIconView              *icon_view,
