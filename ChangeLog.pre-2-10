@@ -1,3 +1,7 @@
+2005-05-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* autogen.sh: Revert accidental commit.
+
 2005-05-08  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/gdkcolor.c (gdk_cairo_set_source_color): 

@@ -98,26 +98,15 @@ $ACLOCAL $ACLOCAL_FLAGS || exit $?
 libtoolize --force || exit $?
 gtkdocize || exit $?
 
-echo START AUTOHEADER
 autoheader || exit $?
-echo END AUTOHEADER
 
-echo START AUTOMAKE
 $AUTOMAKE --add-missing || exit $?
-echo END AUTOMAKE
-echo START_AUTOCONF
-echo `which autoconf`
-set > /home/federico/kk
 autoconf || exit $?
-echo END_AUTOCONF
 cd $ORIGDIR || exit $?
 
 if test -z "$AUTOGEN_SUBDIR_MODE"; then
-echo START CONFIGURE
         $srcdir/configure --enable-maintainer-mode $AUTOGEN_CONFIGURE_ARGS "$@" || exit $?
-echo END CONFIGURE
+
         echo 
         echo "Now type 'make' to compile $PROJECT."
-else
-echo CONFIGURE NOT RUN
 fi
