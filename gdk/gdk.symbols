@@ -992,6 +992,8 @@ gdk_screen_get_default_colormap
 gdk_screen_set_default_colormap
 gdk_screen_get_n_monitors
 gdk_screen_get_monitor_geometry
+gdk_screen_get_rgba_colormap
+gdk_screen_get_rgba_visual
 gdk_screen_make_display_name
 #endif
 #endif

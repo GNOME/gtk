@@ -78,6 +78,22 @@ gdk_screen_get_monitor_geometry (GdkScreen    *screen,
   *dest = _gdk_monitors[num_monitor];
 }
 
+GdkColormap *
+gdk_screen_get_rgba_colormap (GdkScreen *screen)
+{
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+
+  return NULL;
+}
+  
+GdkVisual *
+gdk_screen_get_rgba_visual (GdkScreen *screen)
+{
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+
+  return NULL;
+}
+  
 gint
 gdk_screen_get_number (GdkScreen *screen)
 {

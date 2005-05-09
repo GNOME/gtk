@@ -148,6 +148,258 @@ destroy_tooltips (GtkWidget *widget, GtkWindow **window)
 
 
 /*
+ * Windows with an alpha channel
+ */
+
+
+static gboolean
+on_alpha_window_expose (GtkWidget      *widget,
+			GdkEventExpose *expose)
+{
+  cairo_t *cr;
+  cairo_pattern_t *pattern;
+  int radius;
+
+  cr = gdk_drawable_create_cairo_context (widget->window);
+
+  radius = MIN (widget->allocation.width, widget->allocation.height) / 2;
+  pattern = cairo_pattern_create_radial (widget->allocation.width / 2,
+					 widget->allocation.height / 2,
+					 0.0,
+					 widget->allocation.width / 2,
+					 widget->allocation.height / 2,
+					 radius * 1.33);
+
+  if (gdk_screen_get_rgba_colormap (gtk_widget_get_screen (widget)))
+    cairo_set_source_rgba (cr, 1.0, 1.0, 1.0, 0.0); /* transparent */
+  else
+    cairo_set_source_rgb (cr, 1.0, 1.0, 1.0); /* opaque white */
+    
+  cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+  cairo_paint (cr);
+  
+  cairo_pattern_add_color_stop_rgba (pattern, 0.0,
+				     1.0, 0.75, 0.0, 1.0); /* solid orange */
+  cairo_pattern_add_color_stop_rgba (pattern, 1.0,
+				     1.0, 0.75, 0.0, 0.0); /* transparent orange */
+
+  cairo_set_source (cr, pattern);
+  cairo_pattern_destroy (pattern);
+  
+  cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
+  cairo_paint (cr);
+
+  cairo_destroy (cr);
+
+  return FALSE;
+}
+
+static GtkWidget *
+build_alpha_widgets (void)
+{
+  GtkWidget *table;
+  GtkWidget *radio_button;
+  GtkWidget *hbox;
+  GtkWidget *label;
+  GtkWidget *entry;
+
+  table = gtk_table_new (1, 1, FALSE);
+
+  radio_button = gtk_radio_button_new_with_label (NULL, "Red");
+  gtk_table_attach (GTK_TABLE (table),
+		    radio_button,
+		    0, 1,                  0, 1,
+		    GTK_EXPAND | GTK_FILL, 0,
+		    0,                     0);
+
+  radio_button = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (radio_button), "Green");
+  gtk_table_attach (GTK_TABLE (table),
+		    radio_button,
+		    0, 1,                  1, 2,
+		    GTK_EXPAND | GTK_FILL, 0,
+		    0,                     0);
+
+  radio_button = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (radio_button), "Blue"),
+  gtk_table_attach (GTK_TABLE (table),
+		    radio_button,
+		    0, 1,                  2, 3,
+		    GTK_EXPAND | GTK_FILL, 0,
+		    0,                     0);
+
+  gtk_table_attach (GTK_TABLE (table),
+		    gtk_check_button_new_with_label ("Sedentary"),
+		    1, 2,                  0, 1,
+		    GTK_EXPAND | GTK_FILL, 0,
+		    0,                     0);
+  gtk_table_attach (GTK_TABLE (table),
+		    gtk_check_button_new_with_label ("Nocturnal"),
+		    1, 2,                  1, 2,
+		    GTK_EXPAND | GTK_FILL, 0,
+		    0,                     0);
+  gtk_table_attach (GTK_TABLE (table),
+		    gtk_check_button_new_with_label ("Compulsive"),
+		    1, 2,                  2, 3,
+		    GTK_EXPAND | GTK_FILL, 0,
+		    0,                     0);
+
+  radio_button = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (radio_button), "Green");
+  gtk_table_attach (GTK_TABLE (table),
+		    radio_button,
+		    0, 1,                  1, 2,
+		    GTK_EXPAND | GTK_FILL, 0,
+		    0,                     0);
+
+  radio_button = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (radio_button), "Blue"),
+  gtk_table_attach (GTK_TABLE (table),
+		    radio_button,
+		    0, 1,                  2, 3,
+		    GTK_EXPAND | GTK_FILL, 0,
+		    0,                     0);
+  
+  hbox = gtk_hbox_new (FALSE, 0);
+  label = gtk_label_new (NULL);
+  gtk_label_set_markup (GTK_LABEL (label), "<i>Entry: </i>");
+  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+  entry = gtk_entry_new ();
+  gtk_box_pack_start (GTK_BOX (hbox), entry, TRUE, TRUE, 0);
+  gtk_table_attach (GTK_TABLE (table),
+		    hbox,
+		    0, 1,                  3, 4,
+		    GTK_EXPAND | GTK_FILL, 0,
+		    0,                     0);
+  
+  return table;
+}
+
+static gboolean
+on_alpha_drawing_expose (GtkWidget      *widget,
+			 GdkEventExpose *expose)
+{
+  int x = widget->allocation.x;
+  int y = widget->allocation.y;
+  int width = widget->allocation.width;
+  int height = widget->allocation.height;
+  GdkPixbuf *pixbuf;
+  guchar *buffer;
+  guchar *p;
+  int i, j;
+
+  buffer = g_malloc (64 * 64 * 4);
+  
+  gdk_draw_rectangle (widget->window, widget->style->black_gc, FALSE,
+		      x,         y,
+		      width - 1, height - 1);
+
+  p = buffer;
+  for (i = 0; i < 64; i++) {
+    for (j = 0; j < 64; j++) {
+      *(p++) = i * 4 + 3;
+      *(p++) = 0;
+      *(p++) = j + 4 + 3;
+      *(p++) = MIN (255, ((32 - i) * (32 - i) + (32 - j) * (32 - j)) / 8);
+    }
+  }
+  p++;
+
+  gdk_draw_rgb_32_image (widget->window, widget->style->black_gc,
+			 x + 18, y + (height - 64) /2,
+			 64, 64, GDK_RGB_DITHER_NORMAL, buffer, 64 * 4);
+
+  pixbuf = gdk_pixbuf_new_from_data (buffer, GDK_COLORSPACE_RGB, TRUE,
+				     8, 64, 64, 4 * 64, NULL, NULL);
+
+  gdk_draw_pixbuf (widget->window, widget->style->black_gc, pixbuf,
+		   0, 0, x + width - 18 - 64, y + (height - 64) /2,
+		   64, 64, GDK_RGB_DITHER_NORMAL, 0, 0);
+
+  g_object_unref (pixbuf);
+
+  g_free (buffer);
+  
+  return FALSE;
+}
+
+static GtkWidget *
+build_alpha_drawing ()
+{
+  GtkWidget *hbox;
+
+  hbox = gtk_hbox_new (FALSE, 0);
+  gtk_widget_set_size_request (hbox, 100, 100);
+
+  g_signal_connect (hbox, "expose-event",
+		    G_CALLBACK (on_alpha_drawing_expose), NULL);
+
+  return hbox;
+}
+
+static void
+on_alpha_screen_changed (GtkWidget *widget,
+			 GdkScreen *old_screen,
+			 GtkWidget *label)
+{
+  GdkScreen *screen = gtk_widget_get_screen (widget);
+  GdkColormap *colormap = gdk_screen_get_rgba_colormap (screen);
+
+  if (!colormap)
+    {
+      colormap = gdk_screen_get_rgb_colormap (screen);
+      gtk_label_set_markup (GTK_LABEL (label), "<b>Screen doesn't support alpha</b>");
+    }
+  else
+    {
+      gtk_label_set_markup (GTK_LABEL (label), "<b>Screen supports alpha</b>");
+    }
+
+  gtk_widget_set_colormap (widget, colormap);
+}
+
+void
+create_alpha_window (GtkWidget *widget)
+{
+  static GtkWidget *window;
+
+  if (!window)
+    {
+      GtkWidget *vbox;
+      GtkWidget *label;
+      
+      window = gtk_dialog_new_with_buttons ("Alpha Window",
+					    GTK_WINDOW (gtk_widget_get_toplevel (widget)), 0,
+					    GTK_STOCK_CLOSE, 0,
+					    NULL);
+
+      gtk_widget_set_app_paintable (window, TRUE);
+      g_signal_connect (window, "expose-event",
+			G_CALLBACK (on_alpha_window_expose), NULL);
+      
+      vbox = gtk_vbox_new (FALSE, 8);
+      gtk_container_set_border_width (GTK_CONTAINER (vbox), 12);
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), vbox,
+			  TRUE, TRUE, 0);
+
+      label = gtk_label_new (NULL);
+      
+      gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), build_alpha_widgets (), TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), build_alpha_drawing (), TRUE, TRUE, 0);
+
+      on_alpha_screen_changed (window, NULL, label);
+      g_signal_connect (window, "screen-changed",
+			G_CALLBACK (on_alpha_screen_changed), label);
+      
+      g_signal_connect (window, "destroy",
+			G_CALLBACK (gtk_widget_destroyed),
+			&window);
+    }
+
+  if (!GTK_WIDGET_VISIBLE (window))
+    gtk_widget_show_all (window);
+  else
+    gtk_widget_destroy (window);
+}
+
+/*
  * Big windows and guffaw scrolling
  */
 
@@ -12860,6 +13112,7 @@ struct {
   gboolean do_not_benchmark;
 } buttons[] =
 {
+  { "alpha window", create_alpha_window },
 #ifdef G_OS_WIN32
   /* dog slow on NT, no working at all on 9x */
   { "big windows", create_big_windows, TRUE },

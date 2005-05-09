@@ -63,6 +63,9 @@ GdkColormap* gdk_screen_get_system_colormap   (GdkScreen   *screen);
 GdkVisual*   gdk_screen_get_system_visual     (GdkScreen   *screen);
 GdkColormap *gdk_screen_get_rgb_colormap      (GdkScreen   *screen);
 GdkVisual *  gdk_screen_get_rgb_visual        (GdkScreen   *screen);
+GdkColormap *gdk_screen_get_rgba_colormap     (GdkScreen   *screen);
+GdkVisual *  gdk_screen_get_rgba_visual       (GdkScreen   *screen);
+
 
 GdkWindow *  gdk_screen_get_root_window       (GdkScreen   *screen);
 GdkDisplay * gdk_screen_get_display           (GdkScreen   *screen);

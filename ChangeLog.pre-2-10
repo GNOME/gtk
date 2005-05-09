@@ -1,3 +1,30 @@
+2005-05-09  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkrgb.c (gdk_rgb_convert_0888_br, gdk_rgb_convert_8880_br): 
+	Fill in unused bits so they can be used for the depth-32 target case.
+	Rewrite so that that gives a marginal speedup rather than a
+	marginal slowdown. (on x86)
+
+	* gdk/gdkscreen.h gdk/x11/gdkscreen-x11.[ch] gdk/x11/gdkvisual-x11.c:
+	Add gdk_screen_get_rgba_colormap/visual to get a visual for
+	windows with an alpha channel, if one exists.
+
+	* gdk/win32/gdkscreen-win32.c gdk/linux-fb/gdkscreen-fb.c:
+	Stub out gdk_screen_get_rgba_colormap/visual.
+
+	* gdk/x11/gdkcolor-x11.c (gdk_colormap_alloc_colors): computation of
+	"unused" wasn't right for depth == 32, since it depended on
+	shifting by 32.
+
+	* gdk/gdkrgb.c: Fill in alpha bits with 1s. (Based on patch from
+	Keith Packard,
+	http://mail.gnome.org/archives/gtk-devel-list/2004-June/msg00080.html)
+
+	* gdk/x11/gdkdrawable-x11.c (gdk_x11_drawable_get_picture):
+	Implement again, without using Xft.
+
+	* tests/testgtk.c: Add a test for windows with an alpha channel.
+
 2005-05-09  Matthias Clasen  <mclasen@redhat.com>
 
 	* autogen.sh: Revert accidental commit.

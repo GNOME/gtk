@@ -337,7 +337,29 @@ _gdk_x11_have_render (GdkDisplay *display)
 static Picture
 gdk_x11_drawable_get_picture (GdkDrawable *drawable)
 {
-  return None;
+  GdkDrawableImplX11 *impl = GDK_DRAWABLE_IMPL_X11 (drawable);
+  
+  if (!impl->picture)
+    {
+      Display *xdisplay = GDK_SCREEN_XDISPLAY (impl->screen);
+      XRenderPictFormat *format;
+      
+      GdkVisual *visual = gdk_drawable_get_visual (GDK_DRAWABLE_IMPL_X11 (drawable)->wrapper);
+      if (!visual)
+	return None;
+
+      format = XRenderFindVisualFormat (xdisplay, GDK_VISUAL_XVISUAL (visual));
+      if (format)
+	{
+	  XRenderPictureAttributes attributes;
+	  attributes.graphics_exposures = False;
+	  
+	  impl->picture = XRenderCreatePicture (xdisplay, impl->xid, format,
+						CPGraphicsExposure, &attributes);
+	}
+    }
+  
+  return impl->picture;
 }
 
 static void
