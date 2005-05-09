@@ -1,3 +1,7 @@
+2005-05-08  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/tmpl/visuals.sgml: Fix a typo (#303473, Masao Mutoh)
+
 2005-05-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/tmpl/pango_interaction.sgml: Fix a reference.

@@ -132,7 +132,7 @@ values for display.
    <structfield>blue_mask</structfield> fields of the #GdkVisual
    structure describe how the components are assembled into a pixel value.
 @GDK_VISUAL_DIRECT_COLOR: Each pixel value contains red, green, and blue
-   components as for %GDK_TRUE_COLOR, but the components are mapped via a 
+   components as for %GDK_VISUAL_TRUE_COLOR, but the components are mapped via a 
    color table into the final output table instead of being converted directly.
 
 <!-- ##### ENUM GdkByteOrder ##### -->
