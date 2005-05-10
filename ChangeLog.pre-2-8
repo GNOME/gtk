@@ -1,3 +1,8 @@
+2005-05-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkalignment.c (gtk_alignment_size_allocate): Flip the
+	padding in RTL mode.  (#303572, Maciej Katafiasz)
+
 2005-05-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/x11/gdkscreen-x11.c (gdk_screen_get_width_mm) 

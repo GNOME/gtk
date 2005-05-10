@@ -478,7 +478,6 @@ gtk_alignment_size_allocate (GtkWidget     *widget,
   gint border_width;
   gint padding_horizontal, padding_vertical;
   GtkAlignmentPrivate *priv;
-  gfloat xalign;
 
   padding_horizontal = 0;
   padding_vertical = 0;
@@ -514,11 +513,11 @@ gtk_alignment_size_allocate (GtkWidget     *widget,
       else
 	child_allocation.height = height;
 
-      xalign = alignment->xalign;
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-	xalign = 1.0 - xalign;
+	child_allocation.x = (1.0 - alignment->xalign) * (width - child_allocation.width) + allocation->x + border_width + priv->padding_right;
+      else 
+	child_allocation.x = alignment->xalign * (width - child_allocation.width) + allocation->x + border_width + priv->padding_left;
 
-      child_allocation.x = xalign * (width - child_allocation.width) + allocation->x + border_width + priv->padding_left;
       child_allocation.y = alignment->yalign * (height - child_allocation.height) + allocation->y + border_width + priv->padding_top;
 
       gtk_widget_size_allocate (bin->child, &child_allocation);
