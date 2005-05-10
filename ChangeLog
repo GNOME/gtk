@@ -1,3 +1,10 @@
+2005-05-10  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkproperty-win32.c (gdk_screen_get_setting): Check
+	that GDK_IS_SCREEN(screen) (like the X11 backend does), not screen
+	== gdk_screen_get_default(), as that might return NULL when this
+	function is called.
+
 2005-05-09  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkalignment.c (gtk_alignment_size_allocate): Flip the
