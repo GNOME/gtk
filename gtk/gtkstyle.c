@@ -2900,14 +2900,13 @@ draw_arrow (GdkWindow     *window,
 	    gint           width,
 	    gint           height)
 {
-  cairo_t *cr = gdk_drawable_create_cairo_context (window);
+  cairo_t *cr = gdk_cairo_create (window);
   gdk_cairo_set_source_color (cr, color);
   
   if (area)
     {
-      cairo_rectangle (cr, area->x, area->y, area->width, area->height);
+      gdk_cairo_rectangle (cr, area);
       cairo_clip (cr);
-      cairo_new_path (cr);
     }
     
   if (arrow_type == GTK_ARROW_DOWN)
@@ -3611,7 +3610,7 @@ gtk_default_draw_check (GtkStyle      *style,
 			gint           width,
 			gint           height)
 {
-  cairo_t *cr = gdk_drawable_create_cairo_context (window);
+  cairo_t *cr = gdk_cairo_create (window);
   enum { BUTTON, MENU, CELL } type = BUTTON;
   int exterior_size;
   int interior_size;
@@ -3627,9 +3626,8 @@ gtk_default_draw_check (GtkStyle      *style,
       
   if (area)
     {
-      cairo_rectangle (cr, area->x, area->y, area->width, area->height);
+      gdk_cairo_rectangle (cr, area);
       cairo_clip (cr);
-      cairo_new_path (cr);
     }
   
   exterior_size = MIN (width, height);
@@ -3737,7 +3735,7 @@ gtk_default_draw_option (GtkStyle      *style,
 			 gint           width,
 			 gint           height)
 {
-  cairo_t *cr = gdk_drawable_create_cairo_context (window);
+  cairo_t *cr = gdk_cairo_create (window);
   enum { BUTTON, MENU, CELL } type = BUTTON;
   int exterior_size;
   
@@ -3751,9 +3749,8 @@ gtk_default_draw_option (GtkStyle      *style,
       
   if (area)
     {
-      cairo_rectangle (cr, area->x, area->y, area->width, area->height);
+      gdk_cairo_rectangle (cr, area);
       cairo_clip (cr);
-      cairo_new_path (cr);
     }
   
   exterior_size = MIN (width, height);
@@ -4543,7 +4540,7 @@ gtk_default_draw_focus (GtkStyle      *style,
 
   sanitize_size (window, &width, &height);
 
-  cr = gdk_drawable_create_cairo_context (window);
+  cr = gdk_cairo_create (window);
   
   if (detail && !strcmp (detail, "colorwheel_light"))
     cairo_set_source_rgb (cr, 0., 0., 0.);
@@ -4583,10 +4580,8 @@ gtk_default_draw_focus (GtkStyle      *style,
 
   if (area)
     {
-      cairo_rectangle (cr,
-		       area->x, area->y, area->width, area->height);
+      gdk_cairo_rectangle (cr, area);
       cairo_clip (cr);
-      cairo_new_path (cr);
     }
 
   cairo_rectangle (cr,
@@ -4793,13 +4788,12 @@ gtk_default_draw_expander (GtkStyle        *style,
   double x_double, y_double;
   gint degrees = 0;
 
-  cairo_t *cr = gdk_drawable_create_cairo_context (window);
+  cairo_t *cr = gdk_cairo_create (window);
   
   if (area)
     {
-      cairo_rectangle (cr, area->x, area->y, area->width, area->height);
+      gdk_cairo_rectangle (cr, area);
       cairo_clip (cr);
-      cairo_new_path (cr);
     }
 
   if (widget &&

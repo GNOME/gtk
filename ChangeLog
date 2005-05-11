@@ -1,3 +1,58 @@
+2005-05-11  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcolorbutton.c: Use a GtkAlignment rather than a GtkDrawingArea
+	to draw the swatch in to avoid having an extraneous window.
+	
+	* gtk/gtkcolorsel.c (color_sample_draw_sample): Actually se tthe
+	color when !has_opacity.
+
+2005-05-10  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkcairo.[ch] gdk/gdkcolor.[ch] gdk/Makefile.am: Add source
+	files for Cairo convenience functionality.
+
+	* gdk/gdkcairo.h (gdk_cairo_rectangle, gdk_cairo_region): Add a
+	convenience functions to add GdkRectangle, GdkRegion to a cairo path.
+
+	* gdk/gdkwindow.c gdk/gdkgc.c gtk/gtkcolorsel.c gtk/gtkiconview.c 
+	gtk/gtkstyle.c: Use gdk_cairo_rectangle/region().
+
+	* gdk/gdkcairo.[ch] gdk/gdkdrawable.h gdk/gdkdraw.c: Rename
+	gdk_drawable_create_cairo_context() to gdk_cairo_create().
+
+	* gdk/gdkcairo.c gdk/gdkpixbuf.h gdk/gdkpixbuf-render.c:
+	Rename gdk_pixbuf_set_as_cairo_source() to 
+	gdk_cairo_set_source_pixbuf().
+
+	* gdk/gdkdraw.c gdk/gdkpango.c gtk/gtkcolorsel.c gtk/gtkhruler.c
+	gtk/gtkhsv.c gtk/gtkiconview.c gtk/gtkstyle.c gtk/gtkvruler.c:
+	Adjust for renames.
+
+	* gdk/gdk.symbols: Update.
+
+	* gtk/gtkwidget.c (gtk_widget_queue_shallow_draw): Fix 
+	coordinate system problem that was causing the wrong portions
+	to be invalidated.
+
+	* gtk/gtkcellrenderer.c (gtk_cell_renderer_render)
+	gtk/gtkcellrendererpixbuf.c (gtk_cell_renderer_pixbuf_render)
+	gtk/gtkcellrendererprogress.c (gtk_cell_renderer_progress_render)
+	gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_render)
+	gtk/gtkcellview.c (gtk_cell_view_expose)
+	gtk/gtkdnd.c (gtk_drag_highlight_expose)
+	gtk/gtkentry.c (gtk_entry_draw_text) 
+	gtk/gtktextview.c (text_window_invalidate_rect): Some cairoization.
+
+	* gtk/gtkcalendar.[ch]: Beat into something roughly resembling
+	GTK+ style ... use instance-private data and standard names for
+	private structure, etc. Move function docs inline.
+
+	* gtk/gtkcalendar.[ch]: Switch to drawing everything in
+	expose. Switch drawing to Cairo.
+
+	* gtk/gtkcalendar.c (gtk_calendar_freeze): Deprecate
+	gtk_calendar_freeze/thaw
+
 2005-05-10  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkproperty-win32.c (gdk_screen_get_setting): Check

@@ -1250,7 +1250,7 @@ gtk_icon_view_expose (GtkWidget *widget,
   if (expose->window != icon_view->priv->bin_window)
     return FALSE;
 
-  cr = gdk_drawable_create_cairo_context (icon_view->priv->bin_window);
+  cr = gdk_cairo_create (icon_view->priv->bin_window);
   cairo_set_line_width (cr, 1.);
 
   gtk_icon_view_get_drag_dest_item (icon_view, &path, &dest_pos);
@@ -2899,7 +2899,7 @@ gtk_icon_view_paint_rubberband (GtkIconView     *icon_view,
 			 fill_color_alpha / 255.);
 
   cairo_save (cr);
-  cairo_rectangle (cr, rect.x, rect.y, rect.width, rect.height);
+  gdk_cairo_rectangle (cr, &rect);
   cairo_clip (cr);
   cairo_paint (cr);
 
@@ -6460,15 +6460,12 @@ gtk_icon_view_create_drag_icon (GtkIconView *icon_view,
 				     item->height + 2,
 				     -1);
 
-	  cr = gdk_drawable_create_cairo_context (drawable);
+	  cr = gdk_cairo_create (drawable);
 	  cairo_set_line_width (cr, 1.);
 
-	  gdk_draw_rectangle (drawable,
-			      widget->style->base_gc [GTK_WIDGET_STATE (widget)],
-			      TRUE,
-			      0, 0,
-			      item->width + 2,
-			      item->height + 2);
+	  gdk_cairo_set_source_color (cr, &widget->style->base_gc);
+	  cairo_rectangle (cr, 0, 0, item->width + 2, item->height + 2);
+	  cairo_fill (cr);
 
 	  area.x = 0;
 	  area.y = 0;
@@ -6476,15 +6473,11 @@ gtk_icon_view_create_drag_icon (GtkIconView *icon_view,
 	  area.height = item->height;
 
 	  gtk_icon_view_paint_item (icon_view, cr, item, &area, 
-				    drawable, 1, 1, FALSE); 
+ 				    drawable, 1, 1, FALSE); 
 
-
-	  gdk_draw_rectangle (drawable,
-			      widget->style->black_gc,
-			      FALSE,
-			      0, 0,
-			      item->width + 1,
-			      item->height + 1);
+	  cairo_set_source_rgb (cr, 0.0, 0.0, 0.0); /* black */
+	  cairo_rectangle (cr, 0.5, 0.5, item->width + 1, item->height + 1);
+	  cairo_stroke (cr);
 
 	  cairo_destroy (cr);
 

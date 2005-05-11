@@ -27,6 +27,7 @@
 #ifndef __GDK_H__
 #define __GDK_H__
 
+#include <gdk/gdkcairo.h>
 #include <gdk/gdkcolor.h>
 #include <gdk/gdkcursor.h>
 #include <gdk/gdkdisplay.h>

@@ -580,19 +580,13 @@ gtk_cell_renderer_render (GtkCellRenderer     *cell,
 
   if (cell->cell_background_set && !selected)
     {
-      GdkColor color;
-      GdkGC *gc;
+      cairo_t *cr = gdk_cairo_create (window);
 
-      color.red = priv->cell_background.red;
-      color.green = priv->cell_background.green;
-      color.blue = priv->cell_background.blue;
-
-      gc = gdk_gc_new (window);
-      gdk_gc_set_rgb_fg_color (gc, &color);
-      gdk_draw_rectangle (window, gc, TRUE,
-                          background_area->x, background_area->y,
-                          background_area->width, background_area->height);
-      g_object_unref (gc);
+      gdk_cairo_rectangle (cr, background_area);
+      gdk_cairo_set_source_color (cr, &priv->cell_background);
+      cairo_fill (cr);
+      
+      cairo_destroy (cr);
     }
 
   GTK_CELL_RENDERER_GET_CLASS (cell)->render (cell,

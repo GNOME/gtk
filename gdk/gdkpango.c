@@ -141,7 +141,7 @@ get_cairo_context (GdkPangoRenderer *gdk_renderer,
     {
       const PangoMatrix *matrix;
       
-      priv->cr = gdk_drawable_create_cairo_context (priv->drawable);
+      priv->cr = gdk_cairo_create (priv->drawable);
 
       matrix = pango_renderer_get_matrix (renderer);
       if (matrix)

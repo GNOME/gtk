@@ -27,10 +27,10 @@
 #include <config.h>
 #include <string.h>
 
+#include "gdkcairo.h"
 #include "gdkgc.h"
 #include "gdkinternals.h"
 #include "gdkpixmap.h"
-#include "gdkregion-generic.h"
 #include "gdkrgb.h"
 #include "gdkprivate.h"
 #include "gdkalias.h"
@@ -1225,21 +1225,13 @@ _gdk_gc_update_context (GdkGC     *gc,
   cairo_reset_clip (cr);
   if (priv->clip_region)
     {
-      GdkRegionBox *boxes = priv->clip_region->rects;
-      gint n_boxes = priv->clip_region->numRects;
-      int i;
-
       cairo_save (cr);
 
       cairo_identity_matrix (cr);
-      
+      cairo_translate (cr, gc->clip_x_origin, gc->clip_y_origin);
+
       cairo_new_path (cr);
-      for (i=0; i < n_boxes; i++)
-	cairo_rectangle (cr,
-			 boxes[i].x1 + gc->clip_x_origin,
-			 boxes[i].y1 + gc->clip_y_origin,
-			 boxes[i].x2 - boxes[i].x1,
-			 boxes[i].y2 - boxes[i].y1);
+      gdk_cairo_region (cr, priv->clip_region);
 
       cairo_restore (cr);
 

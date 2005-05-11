@@ -508,6 +508,7 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
   GdkPixbuf *colorized = NULL;
   GdkRectangle pix_rect;
   GdkRectangle draw_rect;
+  cairo_t *cr;
 
   priv = GTK_CELL_RENDERER_PIXBUF_GET_PRIVATE (cell);
 
@@ -588,18 +589,13 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
       pixbuf = colorized;
     }
 
-  gdk_draw_pixbuf (window,
-		   widget->style->black_gc,
-		   pixbuf,
-		   /* pixbuf 0, 0 is at pix_rect.x, pix_rect.y */
-		   draw_rect.x - pix_rect.x,
-		   draw_rect.y - pix_rect.y,
-		   draw_rect.x,
-		   draw_rect.y,
-		   draw_rect.width,
-		   draw_rect.height,
-		   GDK_RGB_DITHER_NORMAL,
-		   0, 0);
+  cr = gdk_cairo_create (window);
+  
+  gdk_cairo_set_source_pixbuf (cr, pixbuf, pix_rect.x, pix_rect.y);
+  gdk_cairo_rectangle (cr, &draw_rect);
+  cairo_fill (cr);
+
+  cairo_destroy (cr);
   
   if (invisible)
     g_object_unref (invisible);

@@ -288,6 +288,16 @@ gdk_fontset_load_for_display
 #endif
 #endif
 
+#if IN_HEADER(__GDK_CAIRO_H__)
+#if IN_FILE(__GDK_CAIRO_C__)
+gdk_cairo_create
+gdk_cairo_set_source_color
+gdk_cairo_set_source_pixbuf
+gdk_cairo_rectangle
+gdk_cairo_region
+#endif
+#endif
+
 #if IN_HEADER(__GDK_COLOR_H__)
 #if IN_FILE(__GDK_COLOR_C__)
 #ifndef GDK_DISABLE_DEPRECATED
@@ -301,7 +311,6 @@ gdk_color_equal
 gdk_color_free
 gdk_color_get_type G_GNUC_CONST
 gdk_color_hash
-gdk_cairo_set_source_color
 gdk_colormap_alloc_color
 gdk_colormap_get_system
 gdk_colormap_get_visual
@@ -510,7 +519,6 @@ gdk_drag_get_protocol
 
 #if IN_HEADER(__GDK_DRAWABLE_H__)
 #if IN_FILE(__GDK_DRAW_C__)
-gdk_drawable_create_cairo_context
 gdk_drawable_copy_to_image
 gdk_drawable_get_clip_region
 gdk_drawable_get_colormap
@@ -853,7 +861,6 @@ gdk_pixbuf_get_from_image
 gdk_pixbuf_render_pixmap_and_mask
 gdk_pixbuf_render_pixmap_and_mask_for_colormap
 gdk_pixbuf_render_threshold_alpha
-gdk_pixbuf_set_as_cairo_source
 #ifndef GDK_DISABLE_DEPRECATED
 gdk_pixbuf_render_to_drawable
 gdk_pixbuf_render_to_drawable_alpha

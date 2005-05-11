@@ -391,8 +391,6 @@ GdkImage *gdk_drawable_copy_to_image (GdkDrawable  *drawable,
 GdkRegion *gdk_drawable_get_clip_region    (GdkDrawable *drawable);
 GdkRegion *gdk_drawable_get_visible_region (GdkDrawable *drawable);
 
-cairo_t *gdk_drawable_create_cairo_context (GdkDrawable *drawable);
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

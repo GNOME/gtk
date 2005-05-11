@@ -111,9 +111,6 @@ gboolean  gdk_color_equal (const GdkColor *colora,
 
 GType     gdk_color_get_type (void) G_GNUC_CONST;
 
-void gdk_cairo_set_source_color (cairo_t  *cr,
-				 GdkColor *color);
-
 /* The following functions are deprecated */
 #ifndef GDK_DISABLE_DEPRECATED
 void gdk_colors_store	 (GdkColormap	*colormap,

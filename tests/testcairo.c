@@ -197,7 +197,7 @@ on_expose_event (GtkWidget      *widget,
 {
   cairo_t *cr;
 
-  cr = gdk_drawable_create_cairo_context (widget->window);
+  cr = gdk_cairo_create (widget->window);
 
   draw (cr, widget->allocation.width, widget->allocation.height);
 

@@ -1626,29 +1626,22 @@ gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
   if (celltext->background_set && 
       (flags & GTK_CELL_RENDERER_SELECTED) == 0)
     {
-      GdkColor color;
-      GdkGC *gc;
+      cairo_t *cr = gdk_cairo_create (window);
+
+      if (expose_area)
+	{
+	  gdk_cairo_rectangle (cr, expose_area);
+	  cairo_clip (cr);
+	}
+
+      gdk_cairo_rectangle (cr, background_area);
+      cairo_set_source_rgb (cr,
+			    celltext->background.red / 65535.,
+			    celltext->background.green / 65535.,
+			    celltext->background.blue / 65535.);
+      cairo_fill (cr);
       
-      color.red = celltext->background.red;
-      color.green = celltext->background.green;
-      color.blue = celltext->background.blue;
-
-      gc = gdk_gc_new (window);
-
-      gdk_gc_set_rgb_fg_color (gc, &color);
-
-      if (expose_area)               
-        gdk_gc_set_clip_rectangle (gc, expose_area);
-      gdk_draw_rectangle (window,
-                          gc,
-                          TRUE,
-                          background_area->x,
-                          background_area->y,
-                          background_area->width,
-                          background_area->height);
-      if (expose_area)               
-        gdk_gc_set_clip_rectangle (gc, NULL);
-      g_object_unref (gc);
+      cairo_destroy (cr);
     }
 
   if (priv->ellipsize_set)

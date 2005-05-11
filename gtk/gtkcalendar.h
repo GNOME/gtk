@@ -49,6 +49,8 @@ G_BEGIN_DECLS
 typedef struct _GtkCalendar	       GtkCalendar;
 typedef struct _GtkCalendarClass       GtkCalendarClass;
 
+typedef struct _GtkCalendarPrivate     GtkCalendarPrivate;
+
 typedef enum
 {
   GTK_CALENDAR_SHOW_HEADING		= 1 << 0,
@@ -77,8 +79,8 @@ struct _GtkCalendar
   GtkCalendarDisplayOptions  display_flags;
   GdkColor marked_date_color[31];
   
-  GdkGC *gc;
-  GdkGC *xor_gc;
+  GdkGC *gc;			/* unused */
+  GdkGC *xor_gc;		/* unused */
 
   gint focus_row;
   gint focus_col;
@@ -86,7 +88,7 @@ struct _GtkCalendar
   gint highlight_row;
   gint highlight_col;
   
-  gpointer private_data;
+  GtkCalendarPrivate *priv;
   gchar grow_space [32];
 
   /* Padding for future expansion */
@@ -141,9 +143,10 @@ void	   gtk_calendar_get_date	(GtkCalendar *calendar,
 					 guint	     *year,
 					 guint	     *month,
 					 guint	     *day);
+#ifndef GTK_DISABLE_DEPRECATED
 void	   gtk_calendar_freeze		(GtkCalendar *calendar);
 void	   gtk_calendar_thaw		(GtkCalendar *calendar);
-
+#endif
 
 G_END_DECLS
 

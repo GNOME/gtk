@@ -50,6 +50,7 @@ LDADD = \
 #
 gdk_public_h_sources =				\
 	gdk.h					\
+	gdkcairo.h				\
 	gdkcolor.h				\
 	gdkcursor.h				\
 	gdkdisplay.h				\
@@ -85,6 +86,7 @@ gdk_headers =                     \
 
 gdk_c_sources =                 \
 	gdk.c			\
+	gdkcairo.c		\
 	gdkcolor.c		\
 	gdkcursor.c		\
 	gdkdisplay.c		\
@@ -240,7 +242,7 @@ stamp-gdkenumtypes.h: @REBUILD@ $(gdk_public_h_sources) Makefile
 gdkenumtypes.c: @REBUILD@ $(gdk_public_h_sources) Makefile
 	( cd $(srcdir) && glib-mkenums \
 			--fhead "#define GDK_ENABLE_BROKEN\n#include \"gdk.h\"\n#include \"gdkalias.h\"\n" \
-  			--fprod "\n/* enumerations from \"@filename@\" */" \
+			--fprod "\n/* enumerations from \"@filename@\" */" \
 			--ftail "\n#define __GDK_ENUM_TYPES_C__\n#include \"gdkaliasdef.c\"\n" \
 			--vhead "GType\n@enum_name@_get_type (void)\n{\n  static GType etype = 0;\n  if (etype == 0) {\n    static const G@Type@Value values[] = {" \
 			--vprod "      { @VALUENAME@, \"@VALUENAME@\", \"@valuenick@\" }," \

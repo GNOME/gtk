@@ -3091,6 +3091,7 @@ gtk_entry_draw_text (GtkEntry *entry)
   if (GTK_WIDGET_DRAWABLE (entry))
     {
       PangoLayout *layout = gtk_entry_ensure_layout (entry, TRUE);
+      cairo_t *cr;
       gint x, y;
       gint start_pos, end_pos;
       
@@ -3098,57 +3099,53 @@ gtk_entry_draw_text (GtkEntry *entry)
       
       get_layout_position (entry, &x, &y);
 
-      gdk_draw_layout (entry->text_area, widget->style->text_gc [widget->state],       
-                       x, y,
-		       layout);
-      
+      cr = gdk_cairo_create (entry->text_area);
+
+      cairo_move_to (cr, x, y);
+      gdk_cairo_set_source_color (cr, &widget->style->text [widget->state]);
+      pango_cairo_show_layout (cr, layout);
+
       if (gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &start_pos, &end_pos))
 	{
 	  gint *ranges;
 	  gint n_ranges, i;
           PangoRectangle logical_rect;
-	  GdkGC *selection_gc, *text_gc;
-	  GdkRegion *clip_region;
+	  GdkColor *selection_color, *text_color;
 
 	  pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
 	  gtk_entry_get_pixel_ranges (entry, &ranges, &n_ranges);
 
 	  if (GTK_WIDGET_HAS_FOCUS (entry))
 	    {
-	      selection_gc = widget->style->base_gc [GTK_STATE_SELECTED];
-	      text_gc = widget->style->text_gc [GTK_STATE_SELECTED];
+	      selection_color = &widget->style->base [GTK_STATE_SELECTED];
+	      text_color = &widget->style->text [GTK_STATE_SELECTED];
 	    }
 	  else
 	    {
-	      selection_gc = widget->style->base_gc [GTK_STATE_ACTIVE];
-	      text_gc = widget->style->text_gc [GTK_STATE_ACTIVE];
+	      selection_color = &widget->style->base [GTK_STATE_ACTIVE];
+	      text_color = &widget->style->text [GTK_STATE_ACTIVE];
 	    }
-	  
-	  clip_region = gdk_region_new ();
+
 	  for (i = 0; i < n_ranges; ++i)
-	    {
-	      GdkRectangle rect;
+	    cairo_rectangle (cr,
+			     INNER_BORDER - entry->scroll_offset + ranges[2 * i],
+			     y,
+			     ranges[2 * i + 1],
+			     logical_rect.height);
 
-	      rect.x = INNER_BORDER - entry->scroll_offset + ranges[2 * i];
-	      rect.y = y;
-	      rect.width = ranges[2 * i + 1];
-	      rect.height = logical_rect.height;
-		
-	      gdk_draw_rectangle (entry->text_area, selection_gc, TRUE,
-				  rect.x, rect.y, rect.width, rect.height);
+	  cairo_clip (cr);
+	  
+	  gdk_cairo_set_source_color (cr, selection_color);
+	  cairo_paint (cr);
 
-	      gdk_region_union_with_rect (clip_region, &rect);
-	    }
+	  cairo_move_to (cr, x, y);
+	  gdk_cairo_set_source_color (cr, text_color);
+	  pango_cairo_show_layout (cr, layout);
 	  
-	  gdk_gc_set_clip_region (text_gc, clip_region);
-	  gdk_draw_layout (entry->text_area, text_gc, 
-			   x, y,
-			   layout);
-	  gdk_gc_set_clip_region (text_gc, NULL);
-	  
-	  gdk_region_destroy (clip_region);
 	  g_free (ranges);
 	}
+
+      cairo_destroy (cr);
     }
 }
 

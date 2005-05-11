@@ -879,7 +879,7 @@ real_draw_glyphs (GdkDrawable      *drawable,
 {
   cairo_t *cr;
 
-  cr = gdk_drawable_create_cairo_context (drawable);
+  cr = gdk_cairo_create (drawable);
   _gdk_gc_update_context (gc, cr, NULL, NULL);
 
   if (matrix)
@@ -1003,7 +1003,7 @@ gdk_draw_trapezoids (GdkDrawable    *drawable,
   g_return_if_fail (GDK_IS_GC (gc));
   g_return_if_fail (n_trapezoids == 0 || trapezoids != NULL);
 
-  cr = gdk_drawable_create_cairo_context (drawable);
+  cr = gdk_cairo_create (drawable);
   _gdk_gc_update_context (gc, cr, NULL, NULL);
   
   for (i = 0; i < n_trapezoids; i++)
@@ -1283,32 +1283,6 @@ _gdk_drawable_ref_cairo_surface (GdkDrawable *drawable)
   g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
 
   return GDK_DRAWABLE_GET_CLASS (drawable)->ref_cairo_surface (drawable);
-}
-
-/**
- * gdk_drawable_create_cairo_context:
- * @drawable: a #GdkDrawable
- * 
- * Creates a Cairo context for drawing to @drawable.
- *
- * Return value: A newly created Cairo context. Free with
- *  cairo_destroy() when you are done drawing.
- * 
- * Since: 2.10
- **/
-cairo_t *
-gdk_drawable_create_cairo_context (GdkDrawable *drawable)
-{
-  cairo_surface_t *surface;
-  cairo_t *cr;
-    
-  g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
-
-  surface = _gdk_drawable_ref_cairo_surface (drawable);
-  cr = cairo_create (surface);
-  cairo_surface_destroy (surface);
-
-  return cr;
 }
 
 static void

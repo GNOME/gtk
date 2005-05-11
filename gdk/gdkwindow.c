@@ -1764,23 +1764,6 @@ gdk_window_set_bg_pattern (GdkWindow      *window,
 }
 
 static void
-region_path (cairo_t   *cr,
-	     GdkRegion *region)
-{
-  GdkRectangle *rectangles;
-  int n_rectangles, i;
-  
-  gdk_region_get_rectangles (region, &rectangles, &n_rectangles);
-  for (i = 0; i < n_rectangles; i++)
-    {
-      cairo_rectangle (cr,
-		       rectangles[i].x, rectangles[i].y,
-		       rectangles[i].width, rectangles[i].height);
-    }
-  g_free (rectangles);
-}
-
-static void
 gdk_window_clear_backing_rect (GdkWindow *window,
 			       gint       x,
 			       gint       y,
@@ -1801,7 +1784,7 @@ gdk_window_clear_backing_rect (GdkWindow *window,
   cairo_rectangle (cr, x, y, width, height);
   cairo_clip (cr);
 
-  region_path (cr, paint->region);
+  gdk_cairo_region (cr, paint->region);
   cairo_fill (cr);
 
   cairo_destroy (cr);

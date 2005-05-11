@@ -401,7 +401,7 @@ color_sample_draw_sample (GtkColorSelection *colorsel, int which)
       goff =  priv->old_sample->allocation.width % 32;
     }
 
-  cr = gdk_drawable_create_cairo_context (da->window);
+  cr = gdk_cairo_create (da->window);
   
   wid = da->allocation.width;
   heig = da->allocation.height;
@@ -427,23 +427,21 @@ color_sample_draw_sample (GtkColorSelection *colorsel, int which)
 
   if (which == 0)
     {
-      if (priv->has_opacity)
-	cairo_set_source_rgba (cr,
-			       priv->old_color[COLORSEL_RED], 
-			       priv->old_color[COLORSEL_GREEN], 
-			       priv->old_color[COLORSEL_BLUE],
-			       priv->has_opacity ?
-			          priv->old_color[COLORSEL_OPACITY] : 1.0);
+      cairo_set_source_rgba (cr,
+			     priv->old_color[COLORSEL_RED], 
+			     priv->old_color[COLORSEL_GREEN], 
+			     priv->old_color[COLORSEL_BLUE],
+			     priv->has_opacity ?
+			        priv->old_color[COLORSEL_OPACITY] : 1.0);
     }
   else
     {
-      if (priv->has_opacity)
-	cairo_set_source_rgba (cr,
-			       priv->color[COLORSEL_RED], 
-			       priv->color[COLORSEL_GREEN], 
-			       priv->color[COLORSEL_BLUE],
-			       priv->has_opacity ?
-			          priv->color[COLORSEL_OPACITY] : 1.0);
+      cairo_set_source_rgba (cr,
+			     priv->color[COLORSEL_RED], 
+			     priv->color[COLORSEL_GREEN], 
+			     priv->color[COLORSEL_BLUE],
+			     priv->has_opacity ?
+			       priv->color[COLORSEL_OPACITY] : 1.0);
     }
 
   cairo_rectangle (cr, 0, 0, wid, heig);
@@ -615,11 +613,10 @@ palette_paint (GtkWidget    *drawing_area,
   if (drawing_area->window == NULL)
     return;
 
-  cr = gdk_drawable_create_cairo_context (drawing_area->window);
+  cr = gdk_cairo_create (drawing_area->window);
 
   gdk_cairo_set_source_color (cr, &drawing_area->style->bg[GTK_STATE_NORMAL]);
-  cairo_rectangle (cr,
-		   area->x, area->y, area->width, area->height);
+  gdk_cairo_rectangle (cr, area);
   cairo_fill (cr);
   
   if (GTK_WIDGET_HAS_FOCUS (drawing_area))

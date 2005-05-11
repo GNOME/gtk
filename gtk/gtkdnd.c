@@ -774,6 +774,8 @@ gtk_drag_highlight_expose (GtkWidget      *widget,
   
   if (GTK_WIDGET_DRAWABLE (widget))
     {
+      cairo_t *cr;
+      
       if (GTK_WIDGET_NO_WINDOW (widget))
 	{
 	  x = widget->allocation.x;
@@ -792,11 +794,15 @@ gtk_drag_highlight_expose (GtkWidget      *widget,
 		        GTK_STATE_NORMAL, GTK_SHADOW_OUT,
 		        NULL, widget, "dnd",
 			x, y, width, height);
-      
-      gdk_draw_rectangle (widget->window,
-			  widget->style->black_gc,
-			  FALSE,
-			  x, y, width - 1, height - 1);
+
+      cr = gdk_cairo_create (widget->window);
+      cairo_set_source_rgb (cr, 0.0, 0.0, 0.0); /* black */
+      cairo_set_line_width (cr, 1.0);
+      cairo_rectangle (cr,
+		       x + 0.5, y + 0.5,
+		       width - 1, height - 1);
+      cairo_stroke (cr);
+      cairo_destroy (cr);
     }
 
   return FALSE;

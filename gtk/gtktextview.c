@@ -7329,13 +7329,11 @@ text_window_invalidate_rect (GtkTextWindow *win,
 
 #if 0
   {
-    GdkColor color = { 0, 65535, 0, 0 };
-    GdkGC *gc = gdk_gc_new (win->bin_window);
-    gdk_gc_set_rgb_fg_color (gc, &color);
-    gdk_draw_rectangle (win->bin_window,
-                        gc, TRUE, window_rect.x, window_rect.y,
-                        window_rect.width, window_rect.height);
-    g_object_unref (gc);
+    cairo_t *cr = gdk_cairo_create (win->bin_window);
+    gdk_cairo_rectangle (cr, &window_rect);
+    cairo_set_source_rgb  (cr, 1.0, 0.0, 0.0);	/* red */
+    cairo_fill (cr);
+    cairo_destroy (cr);
   }
 #endif
 }

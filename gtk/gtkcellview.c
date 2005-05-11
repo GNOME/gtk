@@ -429,23 +429,16 @@ gtk_cell_view_expose (GtkWidget      *widget,
   /* "blank" background */
   if (cellview->priv->background_set)
     {
-      GdkGC *gc;
+      cairo_t *cr = gdk_cairo_create (GTK_WIDGET (cellview)->window);
 
-      gc = gdk_gc_new (GTK_WIDGET (cellview)->window);
-      gdk_gc_set_rgb_fg_color (gc, &cellview->priv->background);
+      gdk_cairo_rectangle (cr, &widget->allocation);
+      cairo_set_source_rgb (cr,
+			    cellview->priv->background.red / 65535.,
+			    cellview->priv->background.green / 65535.,
+			    cellview->priv->background.blue / 65535.);
+      cairo_fill (cr);
 
-      gdk_draw_rectangle (GTK_WIDGET (cellview)->window,
-                          gc,
-                          TRUE,
-
-                          /*0, 0,*/
-                          widget->allocation.x,
-                          widget->allocation.y,
-
-                          widget->allocation.width,
-                          widget->allocation.height);
-
-      g_object_unref (gc);
+      cairo_destroy (cr);
     }
 
   /* set cell data (if available) */

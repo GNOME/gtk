@@ -177,7 +177,7 @@ gtk_hruler_draw_ticks (GtkRuler *ruler)
 		 0, 0, 
 		 widget->allocation.width, widget->allocation.height);
 
-  cr = gdk_drawable_create_cairo_context (ruler->backing_store);
+  cr = gdk_cairo_create (ruler->backing_store);
   gdk_cairo_set_source_color (cr, &widget->style->fg[widget->state]);
  
   cairo_rectangle (cr, 
@@ -296,7 +296,7 @@ gtk_hruler_draw_pos (GtkRuler *ruler)
 
       if ((bs_width > 0) && (bs_height > 0))
 	{
-	  cairo_t *cr = gdk_drawable_create_cairo_context (widget->window);
+	  cairo_t *cr = gdk_cairo_create (widget->window);
       
 	  /*  If a backing store exists, restore the ruler  */
 	  if (ruler->backing_store)

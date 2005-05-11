@@ -2744,7 +2744,25 @@ gtk_widget_queue_shallow_draw (GtkWidget *widget)
   
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
+  if (!GTK_WIDGET_REALIZED (widget))
+    return;
+
   gtk_widget_get_draw_rectangle (widget, &rect);
+
+  /* get_draw_rectangle() gives us window coordinates, we
+   * need to convert to the coordinates that widget->allocation
+   * is in.
+   */
+  if (!GTK_WIDGET_NO_WINDOW (widget) && widget->parent)
+    {
+      int wx, wy;
+      
+      gdk_window_get_position (widget->window, &wx, &wy);
+      
+      rect.x += wx;
+      rect.y += wy;
+    }
+  
   region = gdk_region_rectangle (&rect);
   gtk_widget_invalidate_widget_windows (widget, region);
   gdk_region_destroy (region);
