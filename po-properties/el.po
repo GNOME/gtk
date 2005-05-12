@@ -533,7 +533,7 @@ msgstr "Δεξιό γέμισμα "
 #: gtk/gtkalignment.c:216
 msgid "The padding to insert at the right of the widget."
 msgstr ""
-"Το γέμισμα που θα εισάγεται στην δεξιά πλευρά ενός γραφικού συστατικού."
+"Το γέμισμα που θα εισάγεται στη δεξιά πλευρά ενός γραφικού συστατικού."
 
 #: gtk/gtkarrow.c:100
 msgid "Arrow direction"
@@ -1024,7 +1024,7 @@ msgstr "Στήλη κειμένου"
 
 #: gtk/gtkcellrenderercombo.c:110 gtk/gtkcomboboxentry.c:115
 msgid "A column in the data source model to get the strings from"
-msgstr "Μια στήλη στο μοντέλο πηγής δεδομένων για την λήψη αλφαριθμητικών"
+msgstr "Μια στήλη στο μοντέλο πηγής δεδομένων για τη λήψη αλφαριθμητικών"
 
 #: gtk/gtkcellrenderercombo.c:127
 msgid "Has Entry"
@@ -1610,7 +1610,7 @@ msgstr "Πλάτος αναδίπλωσης"
 
 #: gtk/gtkcombobox.c:569
 msgid "Wrap width for layouting the items in a grid"
-msgstr "Πλάτος αναδίπλωσης για την διάταξη των αντικειμένων σε πλέγμα"
+msgstr "Πλάτος αναδίπλωσης για τη διάταξη των αντικειμένων σε πλέγμα"
 
 #: gtk/gtkcombobox.c:591
 msgid "Row span column"
@@ -1900,7 +1900,7 @@ msgstr "Στήλη κειμένου"
 #: gtk/gtkentrycompletion.c:296
 #, fuzzy
 msgid "The column of the model containing the strings."
-msgstr "Μια στήλη στο μοντέλο πηγής δεδομένων για την λήψη αλφαριθμητικών"
+msgstr "Μια στήλη στο μοντέλο πηγής δεδομένων για τη λήψη αλφαριθμητικών"
 
 #: gtk/gtkentrycompletion.c:313
 msgid "Inline completion"
@@ -1930,7 +1930,7 @@ msgid ""
 "trap events."
 msgstr ""
 "Αν το κουτί γεγονότος θα είναι ορατό , σε αντίθεση με το αόρατο και "
-"χρησιμοποιείται για την σύλληψη γεγονότων."
+"χρησιμοποιείται για τη σύλληψη γεγονότων."
 
 #: gtk/gtkeventbox.c:128
 msgid "Above child"
@@ -2271,7 +2271,7 @@ msgid ""
 "handlebox"
 msgstr ""
 "Μέγεθος του κουτιού χειρισμού το οποίο ευθυγραμμίζεται με το σημείο σύνδεσης "
-"για την σύνδεση με το κουτί χειρισμού."
+"για τη σύνδεση με το κουτί χειρισμού."
 
 #: gtk/gtkhandlebox.c:234
 msgid "Snap edge set"
@@ -3784,7 +3784,7 @@ msgstr "Δεξί συνημμένο"
 
 #: gtk/gtktable.c:212
 msgid "The column number to attach the right side of a child widget to"
-msgstr "Ο αριθμός στήλης που επισυνάπτεται στην δεξιά πλευρά του θυγατρικού"
+msgstr "Ο αριθμός στήλης που επισυνάπτεται στη δεξιά πλευρά του θυγατρικού"
 
 #: gtk/gtktable.c:218
 msgid "Top attachment"
@@ -4488,7 +4488,7 @@ msgstr "Ανάπτυξη"
 #, fuzzy
 msgid ""
 "Whether rows should be expanded/collapsed when the pointer moves over them"
-msgstr "Αν το παράθυρο θα διακοσμείται από τον διαχειριστή παραθύρων"
+msgstr "Αν το παράθυρο θα διακοσμείται από το διαχειριστή παραθύρων"
 
 #: gtk/gtktreeview.c:713
 msgid "Vertical Separator Width"
@@ -5082,7 +5082,7 @@ msgstr "Διακοσμημένο"
 
 #: gtk/gtkwindow.c:620
 msgid "Whether the window should be decorated by the window manager"
-msgstr "Αν το παράθυρο θα διακοσμείται από τον διαχειριστή παραθύρων"
+msgstr "Αν το παράθυρο θα διακοσμείται από το διαχειριστή παραθύρων"
 
 #: gtk/gtkwindow.c:635
 msgid "Gravity"
