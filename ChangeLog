@@ -1,5 +1,11 @@
 2005-05-11  Owen Taylor  <otaylor@redhat.com>
 
+	* tests/testgtk.c (on_alpha_window_expose): Fix to use
+	gdk_cairo_create(). (create_alpha_window): Hook up "response"
+	to close the window.
+
+2005-05-11  Owen Taylor  <otaylor@redhat.com>
+
 	* gtk/gtkcolorbutton.c: Use a GtkAlignment rather than a GtkDrawingArea
 	to draw the swatch in to avoid having an extraneous window.
 	

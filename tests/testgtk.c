@@ -160,7 +160,7 @@ on_alpha_window_expose (GtkWidget      *widget,
   cairo_pattern_t *pattern;
   int radius;
 
-  cr = gdk_drawable_create_cairo_context (widget->window);
+  cr = gdk_cairo_create (widget->window);
 
   radius = MIN (widget->allocation.width, widget->allocation.height) / 2;
   pattern = cairo_pattern_create_radial (widget->allocation.width / 2,
@@ -391,6 +391,10 @@ create_alpha_window (GtkWidget *widget)
       g_signal_connect (window, "destroy",
 			G_CALLBACK (gtk_widget_destroyed),
 			&window);
+      
+      g_signal_connect (window, "response",
+                        G_CALLBACK (gtk_widget_destroy),
+                        NULL);
     }
 
   if (!GTK_WIDGET_VISIBLE (window))
