@@ -4,15 +4,18 @@
 # Amanpreet Singh Alam <amanlinux@netscape.net>, 2004.
 # Amanpreet Singh Alam <aalam@redhat.com>, 2004.
 # Amanpreet Singh Alam <amanpreetalam@yahoo.com>, 2005.
+# Amanpreet Singh Alam[ਆਲਮ] <amanpreetalam@yahoo.com>, 2005.
+# Amanpreet Singh Alam[ਆਲਮ] <amanpreetalam@yahoo.com>, 2005.
+# Amanpreet Singh Alam[ਆਲਮ] <amanpreetalam@yahoo.com>, 2005.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: pa\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-04-12 22:42-0400\n"
-"PO-Revision-Date: 2005-03-04 06:46+0530\n"
-"Last-Translator: Amanpreet Singh Alam <amanpreetalam@yahoo.com>\n"
-"Language-Team: Punjabi <fedora-trans-pa@redhat.com>\n"
+"PO-Revision-Date: 2005-05-13 20:24+0530\n"
+"Last-Translator: Amanpreet Singh Alam[ਆਲਮ] <amanpreetalam@yahoo.com>\n"
+"Language-Team: Punjabi <punlinux-i18n@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -33,8 +36,7 @@ msgstr "ਚਿੱਤਰ ਫਾਇਲ '%s' ਵਿੱਚ ਕੋਈ ਡਾਟਾ �
 #: gdk-pixbuf/gdk-pixbuf-animation.c:208 gdk-pixbuf/gdk-pixbuf-io.c:887
 #: gdk-pixbuf/gdk-pixbuf-io.c:1109 tests/testfilechooser.c:244
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "ਚਿੱਤਰ '%s' ਨੂੰ ਲੋਡ ਕਰਨ ਵਿੱਚ ਅਸਫਲ: ਕਾਰਨ ਜਾਣਿਆ ਨਹੀ ਜਾ ਸਕਿਆ ਹੈ, ਸੰਭਵ ਹੈ ਕਿ ਚਿੱਤਰ ਫਾਇਲ "
 "ਨਿਕਾਰਾ ਹੈ"
@@ -193,14 +195,12 @@ msgid "Topdown BMP images cannot be compressed"
 msgstr "ਉੱਪਰਹੇਠਾਂ BMP ਨਪੀੜਿਆ ਨਹੀਂ ਜਾ ਸਕਦਾ"
 
 #: gdk-pixbuf/io-bmp.c:1214
-#, fuzzy
 msgid "Couldn't allocate memory for saving BMP file"
-msgstr "JPEG ਫਾਇਲ ਲੋਡ ਕਰਨ ਲਈ ਮੈਮੋਰੀ ਜਾਰੀ ਨਹੀ ਕੀਤੀ ਜਾ ਸਕਦੀ ਹੈ"
+msgstr "BMP ਫਾਇਲ ਨੂੰ ਸੰਭਾਲਣ ਲਈ ਮੈਮੋਰੀ ਜਾਰੀ ਨਹੀ ਕੀਤੀ ਜਾ ਸਕਦੀ ਹੈ"
 
 #: gdk-pixbuf/io-bmp.c:1255
-#, fuzzy
 msgid "Couldn't write to BMP file"
-msgstr "ਫਾਇਲ ਨਾਂ ਤਬਦੀਲ ਨਹੀ ਹੋ ਸਕਿਆ"
+msgstr "BMP ਫਾਇਲ ਨੂੰ ਲਿਖਿਆ ਨਹੀਂ ਜਾ ਸਕਿਆ ਹੈ"
 
 #: gdk-pixbuf/io-bmp.c:1304
 msgid "The BMP image format"
@@ -262,8 +262,7 @@ msgstr "GIF ਫਾਇਲ ਫਾਰਮਿਟ ਦਾ ਵਰਜਨ %s ਸਹਾਇ�
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
-msgstr ""
-"GIF ਚਿੱਤਰ ਕੋਲ ਗਲੋਬਲ ਰੰਗ-ਨਕਸਾ ਨਹੀ ਅਤੇ ਇਸ ਦੇ ਫਰੇਮ ਅੰਦਰ ਆਪਣਾ ਕੋਈ ਸਥਾਨਕ ਰੰਗ-ਨਕਸ਼ਾ ਨਹੀ ਹੈ।"
+msgstr "GIF ਚਿੱਤਰ ਕੋਲ ਗਲੋਬਲ ਰੰਗ-ਨਕਸਾ ਨਹੀ ਅਤੇ ਇਸ ਦੇ ਫਰੇਮ ਅੰਦਰ ਆਪਣਾ ਕੋਈ ਸਥਾਨਕ ਰੰਗ-ਨਕਸ਼ਾ ਨਹੀ ਹੈ।"
 
 #: gdk-pixbuf/io-gif.c:1519
 msgid "GIF image was truncated or incomplete."
@@ -349,8 +348,7 @@ msgstr "JPEG ਗੁਣ ਦਾ ਮੁੱਲ 0 ਤੇ 100 ਹੋਣਾ ਜ਼ਰ�
 
 #: gdk-pixbuf/io-jpeg.c:909
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "JPEG ਗੁਣ ਦਾ ਮੁੱਲ 0 ਤੇ 100 ਹੋਣਾ ਜ਼ਰੂਰੀ ਹੈ; ਮੁੱਲ '%d' ਦੀ ਮਨਜ਼ੂਰੀ ਨਹੀ ਹੈ।"
 
 #: gdk-pixbuf/io-jpeg.c:1071
@@ -450,8 +448,7 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "PNG ਚਿੱਤਰ ਫਾਇਲ ਪੜ੍ਹਨ ਵਿੱਚ ਘਾਤਕ ਗਲਤੀ: %s"
 
 #: gdk-pixbuf/io-png.c:813
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "PNG ਵਿੱਚ ਪਾਠ ਹੋਣ ਲਈ ਅੱਖਰਾਂ ਦੀ ਗਿਣਤੀ ਨਿਊਨਤਮ 1 ਅਤੇ ਅਧਿਕਤਮ 79 ਹੋ ਸਕਦੀ ਹੈ।"
 
 #: gdk-pixbuf/io-png.c:821
@@ -1346,8 +1343,7 @@ msgstr "ਫਾਇਲ ਨਾਂ-ਤਬਦੀਲ(_R)"
 
 #: gtk/gtkfilesel.c:1446
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "ਫੋਲਡਰ ਨਾਂ \"%s\"  ਵਿੱਚ ਉਹ ਨਿਸ਼ਾਨ ਹਨ, ਜੋ ਕਿ ਫਾਇਲ ਨਾਂ ਵਿੱਚ ਨਹੀ ਹੋ ਸਕਦੇ"
 
 #: gtk/gtkfilesel.c:1448
@@ -1512,8 +1508,7 @@ msgstr "'%s' ਸਟਾਕ ਆਈਕਾਨ ਪ੍ਰਾਪਤ ਕਰਨ ਵਿੱ
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
 "Please use a different name."
-msgstr ""
-"ਨਾਂ \"%s\" ਜਾਇਜ ਨਹੀਂ ਹੈ, ਕਿਉਕਿ ਇਸ ਵਿੱਚ ਅੱਖਰ \"%s\" ਹੈ, ਕਿਰਪਾ ਕਰਕੇ ਵੱਖਰਾ ਨਾਂ ਵਰਤੋਂ।"
+msgstr "ਨਾਂ \"%s\" ਜਾਇਜ ਨਹੀਂ ਹੈ, ਕਿਉਕਿ ਇਸ ਵਿੱਚ ਅੱਖਰ \"%s\" ਹੈ, ਕਿਰਪਾ ਕਰਕੇ ਵੱਖਰਾ ਨਾਂ ਵਰਤੋਂ।"
 
 #: gtk/gtkfilesystemunix.c:1446 gtk/gtkfilesystemwin32.c:1007
 #, c-format
@@ -2200,3 +2195,4 @@ msgstr "X ਇੰਪੁੱਟ ਢੰਗ"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "ਫਾਇਲ '%s' ਲਈ ਜਾਣਕਾਰੀ ਪ੍ਰਾਪਤ ਕਰਨ ਵਿੱਚ ਅਸਫਲ਼: %s"
+
