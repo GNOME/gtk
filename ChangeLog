@@ -1,3 +1,17 @@
+Sat May 14 00:07:46 2005  Manish Singh  <yosh@gimp.org>
+
+	* gdk/gdkdraw.c
+	* gdk/gdkpango.c: #include gdkcairo.h for gdk_cairo_create()
+	declaration.
+
+	* gtk/gtkiconview.c (gtk_icon_view_create_drag_icon): actually
+	call gdk_cairo_set_source_color() with a color.
+
+	* gtk/gtkimage.c (gtk_image_expose): remove unused stock_id variable.
+
+	* tests/testiconview.c (main): cast args of drag functions to the
+	appropriate type.
+
 2005-05-13  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkdrawable-x11.c: Update for cairo-xlib API change.

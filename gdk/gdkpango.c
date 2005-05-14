@@ -20,6 +20,7 @@
 #include <config.h>
 #include <math.h>
 #include <pango/pangocairo.h>
+#include "gdkcairo.h"
 #include "gdkcolor.h"
 #include "gdkgc.h"
 #include "gdkinternals.h"

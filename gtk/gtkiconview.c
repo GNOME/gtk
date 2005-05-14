@@ -6463,7 +6463,8 @@ gtk_icon_view_create_drag_icon (GtkIconView *icon_view,
 	  cr = gdk_cairo_create (drawable);
 	  cairo_set_line_width (cr, 1.);
 
-	  gdk_cairo_set_source_color (cr, &widget->style->base_gc);
+	  gdk_cairo_set_source_color
+	    (cr, &widget->style->base[GTK_WIDGET_STATE (widget)]);
 	  cairo_rectangle (cr, 0, 0, item->width + 2, item->height + 2);
 	  cairo_fill (cr);
 

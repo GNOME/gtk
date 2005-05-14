@@ -502,22 +502,22 @@ main (gint argc, gchar **argv)
 #endif
   /* Allow DND between the icon view and the tree view */
   
-  gtk_icon_view_enable_model_drag_source (icon_list,
+  gtk_icon_view_enable_model_drag_source (GTK_ICON_VIEW (icon_list),
 					  GDK_BUTTON1_MASK,
 					  item_targets,
 					  G_N_ELEMENTS (item_targets),
 					  GDK_ACTION_MOVE);
-  gtk_icon_view_enable_model_drag_dest (icon_list,
+  gtk_icon_view_enable_model_drag_dest (GTK_ICON_VIEW (icon_list),
 					item_targets,
 					G_N_ELEMENTS (item_targets),
 					GDK_ACTION_MOVE);
 
-  gtk_tree_view_enable_model_drag_source (tv,
+  gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (tv),
 					  GDK_BUTTON1_MASK,
 					  item_targets,
 					  G_N_ELEMENTS (item_targets),
 					  GDK_ACTION_MOVE);
-  gtk_tree_view_enable_model_drag_dest (tv,
+  gtk_tree_view_enable_model_drag_dest (GTK_TREE_VIEW (tv),
 					item_targets,
 					G_N_ELEMENTS (item_targets),
 					GDK_ACTION_MOVE);

@@ -1547,9 +1547,7 @@ gtk_image_expose (GtkWidget      *widget,
       GdkBitmap *mask;
       GdkPixbuf *pixbuf;
       gboolean needs_state_transform;
-      gchar *stock_id;
-	  
-      
+
       image = GTK_IMAGE (widget);
       misc = GTK_MISC (widget);
 

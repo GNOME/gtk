@@ -27,6 +27,7 @@
 #include <config.h>
 #include <math.h>
 #include <pango/pangocairo.h>
+#include "gdkcairo.h"
 #include "gdkdrawable.h"
 #include "gdkinternals.h"
 #include "gdkwindow.h"
