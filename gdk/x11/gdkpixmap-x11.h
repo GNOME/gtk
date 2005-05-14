@@ -63,6 +63,8 @@ struct _GdkPixmapImplX11Class
 
 };
 
+GType gdk_pixmap_impl_x11_get_type (void);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

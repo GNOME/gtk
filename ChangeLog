@@ -1,3 +1,10 @@
+2005-05-13  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkdrawable-x11.c: Update for cairo-xlib API change.
+
+	* gdk/x11/gdkpixmap-x11.[ch] gdk/gdk.symbols: Export 
+	gdk_pixmap_impl_x11_get_type(), needed in gdkdrawable-x11.c.
+	
 2005-05-11  Owen Taylor  <otaylor@redhat.com>
 
 	* tests/testgtk.c (on_alpha_window_expose): Fix to use

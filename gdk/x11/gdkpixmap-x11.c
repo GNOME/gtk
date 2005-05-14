@@ -66,7 +66,7 @@ static void gdk_pixmap_impl_x11_finalize   (GObject            *object);
 
 static gpointer parent_class = NULL;
 
-static GType
+GType
 gdk_pixmap_impl_x11_get_type (void)
 {
   static GType object_type = 0;
