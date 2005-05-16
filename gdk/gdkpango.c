@@ -559,7 +559,7 @@ on_renderer_display_closed (GdkDisplay       *display,
  * by functions such as gdk_draw_layout().
  *
  * Before using the renderer, you need to call gdk_pango_renderer_set_drawable()
- * and gdk_pango_renderer_set_drawable() to set the drawable and graphics context
+ * and gdk_pango_renderer_set_gc() to set the drawable and graphics context
  * to use for drawing.
  * 
  * Return value: the default #PangoRenderer for @screen. The

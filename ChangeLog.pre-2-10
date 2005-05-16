@@ -1,5 +1,8 @@
 2005-05-16  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/gdkpango.c (gdk_pango_renderer_get_default): Fix a typo
+	in the docs.  (#303940, Masao Mutoh)
+
 	* configure.in (GTK_DOC_CHECK): Check for gtk-doc 1.4.
 
 	* gtk/gtktoggleaction.c (connect_proxy): Be more careful when
