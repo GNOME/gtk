@@ -4788,6 +4788,7 @@ cursor_blinks (GtkEntry *entry)
   gboolean blink;
 
   if (GTK_WIDGET_HAS_FOCUS (entry) &&
+      entry->editable &&
       entry->selection_bound == entry->current_pos)
     {
       g_object_get (settings, "gtk-cursor-blink", &blink, NULL);
