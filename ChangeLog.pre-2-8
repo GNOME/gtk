@@ -1,3 +1,8 @@
+2005-05-16  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkstatusbar.c (gtk_statusbar_size_allocate): Only shrink
+	the label if we need to.  (#169390, Felix Riemann)
+
 Sat May 14 00:07:46 2005  Manish Singh  <yosh@gimp.org>
 
 	* gdk/gdkdraw.c
