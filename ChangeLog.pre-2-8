@@ -1,5 +1,8 @@
 2005-05-16  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktoggleaction.c (connect_proxy): Be more careful when
+	casting.  (#304089, Philip Langdale)
+
 	* gtk/gtkstatusbar.c (gtk_statusbar_size_allocate): Only shrink
 	the label if we need to.  (#169390, Felix Riemann)
 
