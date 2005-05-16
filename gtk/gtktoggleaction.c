@@ -276,7 +276,7 @@ connect_proxy (GtkAction *action,
   toggle_action = GTK_TOGGLE_ACTION (action);
 
   /* do this before hand, so that we don't call the "activate" handler */
-  if (GTK_IS_MENU_ITEM (proxy))
+  if (GTK_IS_CHECK_MENU_ITEM (proxy))
     gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (proxy),
 				    toggle_action->private_data->active);
   else if (GTK_IS_TOGGLE_TOOL_BUTTON (proxy))
