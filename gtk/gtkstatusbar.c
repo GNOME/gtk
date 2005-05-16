@@ -849,13 +849,16 @@ gtk_statusbar_size_allocate  (GtkWidget     *widget,
 	}
       else
 	{
-	  /* shrink the label to make room for the grip */
-	  *allocation = statusbar->label->allocation;
-	  allocation->width -= rect.width;
-	  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL) 
-	    allocation->x += rect.width;
-	  
-	  gtk_widget_size_allocate (statusbar->label, allocation);
+	  if (statusbar->label->allocation.width + rect.width > statusbar->frame->allocation.width)
+	    {
+	      /* shrink the label to make room for the grip */
+	      *allocation = statusbar->label->allocation;
+	      allocation->width -= rect.width;
+	      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL) 
+		allocation->x += rect.width;
+	      
+	      gtk_widget_size_allocate (statusbar->label, allocation);
+	    }
 	}
     }
 }
