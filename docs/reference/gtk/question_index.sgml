@@ -96,22 +96,17 @@ from functions?
 <answer>
 
 <para>
-See the documentation for <link linkend="GObject">GObject</link> and
-<link linkend="GtkObject">GtkObject</link>. For <link
-linkend="GObject">GObject</link> note specifically <link
-linkend="g-object-ref">g_object_ref()</link> and <link
-linkend="g-object-unref">g_object_unref()</link>. <link
-linkend="GtkObject">GtkObject</link> is a subclass of <link
-linkend="GObject">GObject</link> so the same points apply, except that
-it has a "floating" state (explained in its documentation).
+See the documentation for #GObject and #GtkObject. For #GObject note specifically
+g_object_ref() and g_object_unref(). #GtkObject is a subclass of #GObject so the 
+same points apply, except that it has a "floating" state (explained in its 
+documentation).
 </para>
 
 <para>
-For strings returned from functions, they will be declared "const"
-(using <link linkend="G-CONST-RETURN-CAPS">G_CONST_RETURN</link>) if they
-should not be freed. Non-const strings should be freed with <link
-linkend="g-free">g_free()</link>. Arrays follow the same rule.  (If
-you find an exception to the rules, please report a bug to <ulink
+For strings returned from functions, they will be declared "const" (using 
+#G_CONST_RETURN) if they should not be freed. Non-const strings should be freed 
+with g_free(). Arrays follow the same rule.  (If you find an exception to the rules, 
+please report a bug to <ulink 
 url="http://bugzilla.gnome.org">http://bugzilla.gnome.org</ulink>.)
 </para>
 
@@ -193,12 +188,10 @@ or Linux system with gettext installed, type <literal>info
 gettext</literal> to read the documentation.
 </para>
 <para>
-The short checklist on how to use gettext is: call
-<function>bindtextdomain()</function> so gettext can find the files
-containing your translations, call <function>textdomain()</function>
-to set the default translation domain, then call
-<function>gettext()</function> to look up each string to be translated
-in the default domain. Conventionally, people define macros as
+The short checklist on how to use gettext is: call bindtextdomain() so gettext 
+can find the files containing your translations, call textdomain() to set the 
+default translation domain, then call gettext() to look up each string to be 
+translated in the default domain. Conventionally, people define macros as
 follows for convenience:
 <informalexample>
 <programlisting>
@@ -206,13 +199,10 @@ follows for convenience:
   #define N_(x)  x
 </programlisting>
 </informalexample>
-You use <function>N_()</function> (N stands for no-op) to mark 
-a string for translation in a context where a function call 
-to <function>gettext()</function> is not allowed, such as in 
-an array initializer. You eventually have to call
-<function>gettext()</function> on the string to actually fetch the
-translation.  <function>_()</function> both marks the string for 
-translation and actually translates it.
+You use N_() (N stands for no-op) to mark a string for translation in a context 
+where a function call to gettext() is not allowed, such as in an array initializer. 
+You eventually have to call gettext() on the string to actually fetch the
+translation.  _() both marks the string for translation and actually translates it.
 </para>
 <para>
 Code using these macros ends up looking like this:
@@ -238,14 +228,10 @@ Code using these macros ends up looking like this:
 </informalexample>
 </para>
 <para>
-Libraries using gettext should use <function>dgettext()</function>
-instead of <function>gettext()</function>, which allows
-them to specify the translation domain each time they 
-ask for a translation. Libraries should also avoid calling 
-<function>textdomain()</function>, since they'll be specifying 
-the domain instead of using the default.
-For <function>dgettext()</function> the <function>_()</function> macro
-can be defined as:
+Libraries using gettext should use dgettext() instead of gettext(), which allows
+them to specify the translation domain each time they ask for a translation. Libraries
+should also avoid calling textdomain(), since they'll be specifying the domain instead
+of using the default.For dgettext() the _() macro can be defined as:
 <informalexample>
 <programlisting>
   #define _(x) dgettext ("MyDomain", x)
@@ -285,9 +271,7 @@ The zero byte doesn't occur as part of a character, so that UTF-8 strings can
 More information about Unicode and UTF-8 can be found in the 
 <ulink url="http://www.cl.cam.ac.uk/~mgk25/unicode.html">UTF-8 and Unicode FAQ for Unix/Linux</ulink>.
 GLib provides functions for converting strings between UTF-8 and other
-	      encodings, see 
-<link linkend="g-locale-to-utf8">g_locale_to_utf8()</link> and <link
-		linkend="g-convert">g_convert()</link>.
+	      encodings, see g_locale_to_utf8() and g_convert().
 </para>
 <para>
 Text coming from external sources (e.g. files or user input), has to be
@@ -343,9 +327,8 @@ very convenient. Be careful when mixing hexadecimal escapes with ordinary text;
 <listitem><para>
 If the string literals can be represented in an encoding which your toolchain
 can handle (e.g. IS0-8859-1), you can write your source files in that encoding
-and use <link linkend="g-convert">g_convert()</link> to convert the strings to 
-UTF-8 at runtime. Note that this has some runtime overhead, so you may want to
-move the conversion out of inner loops.
+and use g_convert() to convert the strings to UTF-8 at runtime. Note that this has 
+some runtime overhead, so you may want to move the conversion out of inner loops.
 </para></listitem>
 </varlistentry>
 </variablelist>
@@ -429,28 +412,19 @@ How do I load an image or animation from a file?
 <answer>
 
 <para>
-To load an image file straight into a display widget, use <link
-linkend="gtk-image-new-from-file">gtk_image_new_from_file()</link>
-<footnote><para> If the file load fails, <link
-linkend="gtk-image-new-from-file">gtk_image_new_from_file()</link>
-will display a "broken image" graphic &mdash; to detect a failed load
-yourself, use <link
-linkend="gdk-pixbuf-new-from-file">gdk_pixbuf_new_from_file()</link>
-directly then <link
-linkend="gtk-image-new-from-pixbuf">gtk_image_new_from_pixbuf()</link>.
-</para></footnote>. To load an image for another purpose, use <link
-linkend="gdk-pixbuf-new-from-file">gdk_pixbuf_new_from_file()</link>.
-To load an animation, use <link
-linkend="gdk-pixbuf-animation-new-from-file">gdk_pixbuf_animation_new_from_file()</link>.
-<link
-linkend="gdk-pixbuf-animation-new-from-file">gdk_pixbuf_animation_new_from_file()</link>
-can also load non-animated images, so use it in combination with 
-<link
-      linkend="gdk-pixbuf-animation-is-static-image">gdk_pixbuf_animation_is_static_image()</link> to load a file of unknown type. 
+To load an image file straight into a display widget, use gtk_image_new_from_file()
+<footnote><para> If the file load fails, gtk_image_new_from_file() will display no
+image graphic &mdash; to detect a failed load yourself, use gdk_pixbuf_new_from_file()
+directly, then gtk_image_new_from_pixbuf().</para></footnote>. 
+To load an image for another purpose, use gdk_pixbuf_new_from_file(). To load an 
+animation, use gdk_pixbuf_animation_new_from_file().
+gdk_pixbuf_animation_new_from_file() can also load non-animated images, so use it 
+in combination with gdk_pixbuf_animation_is_static_image() to load a file of unknown 
+type. 
 </para>
 <para>
 To load an image or animation file asynchronously (without blocking), use 
-<link linkend="GdkPixbufLoader">GdkPixbufLoader</link>.
+#GdkPixbufLoader.
 </para>
 </answer>
 
@@ -463,8 +437,7 @@ How do I draw text ?
 
 <answer>
 <para>
-To draw a piece of text, use a Pango layout and 
-<link linkend="gdk-draw-layout">gdk_draw_layout()</link>, 
+To draw a piece of text, use a Pango layout and gdk_draw_layout(), 
 using code like the following:
 <informalexample>
 <programlisting>
@@ -476,7 +449,7 @@ using code like the following:
  g_object_unref (layout);
 </programlisting>
 </informalexample>
-Do not use the deprecated <link linkend="GdkFont">GdkFont</link> and <link linkend="gdk-draw-text">gdk_draw_text()</link>.
+Do not use the deprecated #GdkFont and gdk_draw_text().
 </para>
 
 <para>
@@ -498,9 +471,7 @@ How do I measure the size of a piece of text ?
 <answer>
 <para>
 To obtain the size of a piece of text, use a Pango layout and 
-<link
-		linkend="pango-layout-get-pixel-size">pango_layout_get_pixel_size()</link>, 
-using code like the following:
+pango_layout_get_pixel_size(), using code like the following:
 <informalexample>
 <programlisting>
  layout = gtk_widget_create_pango_layout (widget, text);
@@ -511,7 +482,7 @@ using code like the following:
  g_object_unref (layout);
 </programlisting>
 </informalexample>
-Do not use the deprecated function <link linkend="gdk-text-width">gdk_text_width()</link>.
+Do not use the deprecated function gdk_text_width().
 </para>
 
 <para>
@@ -558,12 +529,9 @@ volatile GType dummy = GTK_TYPE_BLAH;
 <answer>
 <para>
 See <link linkend="TreeWidget">tree widget overview</link> &mdash; you
-should use the <link linkend="GtkTreeView">GtkTreeView</link> widget.
-(A list is just a tree with no branches, so the tree widget is used
-for lists as well.) Do not use the deprecated widgets <link
-linkend="GtkTree">GtkTree</link> or <link
-linkend="GtkCList">GtkCList</link>/<link
-linkend="GtkCTree">GtkCTree</link> in newly-written code, they are
+should use the #GtkTreeView widget. (A list is just a tree with no branches, 
+so the tree widget is used for lists as well.) Do not use the deprecated 
+widgets #GtkTree or #GtkCList/#GtkCTree in newly-written code, they are
 less flexible and result in an inferior user interface.
 </para>
 </answer>
@@ -577,17 +545,13 @@ less flexible and result in an inferior user interface.
 <answer>
 <para>
 See <link linkend="TextWidget">text widget overview</link> &mdash; you
-should use the <link linkend="GtkTextView">GtkTextView</link> widget.
-Do not use the deprecated widget <link
-linkend="GtkText">GtkText</link> in newly-written code, it has a
-number of problems that are best avoided.
+should use the #GtkTextView widget. Do not use the deprecated widget #GtkText 
+in newly-written code, it has a number of problems that are best avoided.
 </para>
 <para>
-If you only have a small amount of text, <link
-linkend="GtkLabel">GtkLabel</link> may also be appropriate of course.
-It can be made selectable with <link linkend="gtk-label-set-selectable">
-gtk_label_set_selectable()</link>. For a single-line text entry, 
-see <link linkend="GtkEntry">GtkEntry</link>.
+If you only have a small amount of text, #GtkLabel may also be appropriate of course.
+It can be made selectable with gtk_label_set_selectable(). For a single-line text 
+entry, see #GtkEntry.
 </para>
 </answer>
 </qandaentry>
@@ -600,11 +564,9 @@ see <link linkend="GtkEntry">GtkEntry</link>.
 
 <answer>
 <para>
-<link linkend="GtkImage">GtkImage</link> can display images
-in just about any format GTK+ understands. You can also 
-use <link linkend="GtkDrawingArea">GtkDrawingArea</link> if you need 
-to do something more complex, such as draw text or graphics over the
-top of the image.
+#GtkImage can display images in just about any format GTK+ understands. You can also 
+use #GtkDrawingArea if you need to do something more complex, such as draw text or 
+graphics over the top of the image.
 </para>
 </answer>
 </qandaentry>
@@ -617,31 +579,16 @@ would use a combo box?
 
 <answer>
 <para>
-With GTK+, a <link linkend="GtkOptionMenu">GtkOptionMenu</link> is
-recommended instead of a combo box, if the user is selecting from a
-fixed set of options. That is, non-editable combo boxes are not
-encouraged. <link linkend="GtkOptionMenu">GtkOptionMenu</link> is
-much easier to use than <link linkend="GtkCombo">GtkCombo</link>
-as well. Use <link linkend="GtkCombo">GtkCombo</link> only when you 
-need the editable text entry.
-</para>
-<para>
-(As a future enhancement to GTK+, a new widget to replace <link
-linkend="GtkOptionMenu">GtkOptionMenu</link> and <link
-linkend="GtkCombo">GtkCombo</link> is planned.  This widget will be
-themeable to look like either a combo box or the current option menu,
-and will address some shortcomings in the <link
-linkend="GtkCombo">GtkCombo</link> API.  <ulink
-url="http://bugzilla.gnome.org/show_bug.cgi?id=50554">Bug
-50554</ulink> tracks this issue, if you want to check status or post
-comments.)
+With GTK+, a #GtkComboBox is the recommended widget to use for this use case.
+This widget looks like either a combo box or the current option menu, depending
+on the current theme. If you need an editable text entry, use #GtkComboBoxEntry.
 </para>
 </answer>
 </qandaentry>
 
 </qandadiv>
 
-<qandadiv><title><link linkend="GtkWidget">GtkWidget</link></title>
+<qandadiv><title>#GtkWidget</title>
 
 <qandaentry>
 <question><para>
@@ -649,23 +596,16 @@ How do I change the color of a widget?
 </para></question>
 
 <answer><para>
-See <link linkend="gtk-widget-modify-fg">gtk_widget_modify_fg()</link>,
-<link linkend="gtk-widget-modify-bg">gtk_widget_modify_bg()</link>,
-<link linkend="gtk-widget-modify-base">gtk_widget_modify_base()</link>,
-and <link
-linkend="gtk-widget-modify-text">gtk_widget_modify_text()</link>.  See
-<link linkend="gtk-Resource-Files">GTK+ resource files</link> for more
-discussion. You can also change widget color by installing a resource
-file and parsing it with <link
-linkend="gtk-rc-add-default-file">gtk_rc_add_default_file()</link>.
+See gtk_widget_modify_fg(), gtk_widget_modify_bg(), gtk_widget_modify_base(),
+and gtk_widget_modify_text().  See <link linkend="gtk-Resource-Files">GTK+ 
+resource files</link> for more discussion. You can also change widget color by 
+installing a resource file and parsing it with gtk_rc_add_default_file().
 The advantage of a resource file is that users can then override the
 color you've chosen.
 </para>
 
-<para>To change the background color for widgets such as <link
-linkend="GtkLabel">GtkLabel</link> that have no background, place them
-in a <link linkend="GtkEventBox">GtkEventBox</link> and set the
-background of the event box.  
+<para>To change the background color for widgets such as #GtkLabel that have no 
+background, place them in a #GtkEventBox and set the background of the event box.  
 </para></answer>
 </qandaentry>
 
@@ -675,36 +615,32 @@ How do I change the font of a widget?
 </para></question>
 
 <answer><para>
-This has several possible answers, depending on what exactly you want to
-achieve. One option is <link
-linkend="gtk-widget-modify-font">gtk_widget_modify_font()</link>. Note that this function can be used to change only the font size, as in the following example:
+This has several possible answers, depending on what exactly you want to achieve. 
+One option is gtk_widget_modify_font(). Note that this function can be used to 
+change only the font size, as in the following example:
 <programlisting>
- PangoFontDesc *font_desc = pango_font_description_new ();
+ PangoFontDesc *font_desc = pango_font_description_new (<!-- -->);
  pango_font_description_set_size (font_desc, 40);
  gtk_widget_modify_font (widget, font);
  pango_font_description_free (font_desc);
 </programlisting>
 </para>
 <para>
-If you want to make the text of a label larger, you can use <link
-linkend="gtk-label-set-markup">gtk_label_set_markup()</link>:
+If you want to make the text of a label larger, you can use gtk_label_set_markup():
 <programlisting>
 gtk_label_set_markup (label, "&lt;big&gt;big text&lt;/big&gt;");
 </programlisting>
 This is preferred for many apps because it's a relative size to the 
-user's chosen font size. See <link 
-linkend="g-markup-escape-text">g_markup_escape_text()</link> 
-if you are constructing such strings on the fly.
+user's chosen font size. See g_markup_escape_text() if you are constructing such 
+strings on the fly.
 </para>
 <para>
 You can also change the font of a widget by putting
 <programlisting>
  gtk-font-name = "Sans 30"
 </programlisting>
-in a resource file and parsing it with <link
-linkend="gtk-rc-add-default-file">gtk_rc_add_default_file()</link>.
-The advantage of a resource file is that users can then override the
-font you've chosen. See
+in a resource file and parsing it with gtk_rc_add_default_file(). The advantage of 
+a resource file is that users can then override the font you've chosen. See 
 <link linkend="gtk-Resource-Files">GTK+ resource files</link> for more
 discussion. 
 </para>
@@ -717,15 +653,14 @@ How do I disable/ghost/desensitize a widget?
 </para></question>
 
 <answer><para> In GTK+ a disabled widget is termed "insensitive." See
-<link
-linkend="gtk-widget-set-sensitive">gtk_widget_set_sensitive()</link>.
+gtk_widget_set_sensitive().
 </para></answer>
 </qandaentry>
 
 </qandadiv>
 
 
-<qandadiv><title><link linkend="GtkTextView">GtkTextView</link></title>
+<qandadiv><title>#GtkTextView</title>
 
 <qandaentry>
 <question><para>
@@ -733,13 +668,8 @@ How do I get the contents of the entire text widget as a string?
 </para></question>
 
 <answer><para>
-
-See <link
-          linkend="gtk-text-buffer-get-bounds">gtk_text_buffer_get_bounds()</link>
-          and <link
-          linkend="gtk-text-buffer-get-text">gtk_text_buffer_get_text()</link>
-or <link
-          linkend="gtk-text-iter-get-text">gtk_text_iter_get_text()</link>.
+See gtk_text_buffer_get_bounds() and gtk_text_buffer_get_text()
+or gtk_text_iter_get_text().
 </para>
 <para>
 <informalexample><programlisting>
@@ -762,12 +692,13 @@ How do I make a text widget display its complete contents in a specific font?
 </para></question>
 
 <answer><para>
-If you use <link
-	      linkend="gtk-text-buffer-insert-with-tags">gtk_text_buffer_insert_with_tags()</link> with appropriate tags to select the font, the inserted text will have the desired appearance, but text typed in by the user before or after the tagged block will appear in the default style. 
+If you use gtk_text_buffer_insert_with_tags() with appropriate tags to select the 
+font, the inserted text will have the desired appearance, but text typed in by the 
+user before or after the tagged block will appear in the default style. 
 </para>
 <para>
-To ensure that all text has the desired appearance, use <link
-		linkend="gtk-widget-modify-font">gtk_widget_modify_font()</link> to change the default font for the widget.
+To ensure that all text has the desired appearance, use gtk_widget_modify_font() 
+to change the default font for the widget.
 </para></answer>
 </qandaentry>
 
@@ -781,21 +712,17 @@ How do I make a text view scroll to the end of the buffer automatically ?
 <answer>
 <para>
 The "insert" <link linkend="GtkTextMark">mark</link> marks the insertion point
-where <link linkend="gtk-text-buffer-insert">gtk_text_buffer_insert()</link>
-inserts new text into the buffer. The text is inserted 
+where gtk_text_buffer_insert() inserts new text into the buffer. The text is inserted 
 <emphasis>before</emphasis> the "insert" mark, so that it generally stays 
 at the end of the buffer. If it gets explicitly moved to some other position, 
-e.g. when the user selects some text, 
-use <link linkend="gtk-text-buffer-move-mark">gtk_text_buffer_move_mark()</link>
-to set it to the desired location before inserting more text. 
-The "insert" mark of a buffer can be obtained with <link
-linkend="gtk-text-buffer-get-insert">gtk_text_buffer_get_insert()</link>.
+e.g. when the user selects some text, use gtk_text_buffer_move_mark() to set it to 
+the desired location before inserting more text. The "insert" mark of a buffer can be 
+obtained with gtk_text_buffer_get_insert().
 </para>
 
 <para> 
 To ensure that the end of the buffer remains visible, use
-<link
-		linkend="gtk-text-view-scroll-to-mark">gtk_text_view_scroll_to_mark()</link> to scroll to the "insert" mark after inserting new text.
+gtk_text_view_scroll_to_mark() to scroll to the "insert" mark after inserting new text.
 </para>
 </answer>
 </qandaentry>
@@ -803,7 +730,7 @@ To ensure that the end of the buffer remains visible, use
 
 
 
-<qandadiv><title><link linkend="GtkTreeView">GtkTreeView</link></title>
+<qandadiv><title>#GtkTreeView</title>
 
 <qandaentry>
 <question><para>
@@ -812,28 +739,25 @@ How do I associate some data with a row in the tree?
 
 <answer>
 <para>
-Remember that the <link linkend="GtkTreeModel">GtkTreeModel</link>
-columns don't necessarily have to be displayed. So you can put
-non-user-visible data in your model just like any other data, and
-retrieve it with <link
-linkend="gtk-tree-model-get">gtk_tree_model_get()</link>.
-See the <link linkend="TreeWidget">tree widget overview</link>.
+Remember that the #GtkTreeModel columns don't necessarily have to be displayed. 
+So you can put non-user-visible data in your model just like any other data, and
+retrieve it with gtk_tree_model_get(). See the 
+<link linkend="TreeWidget">tree widget overview</link>.
 </para>
 </answer>
 </qandaentry>
 
 <qandaentry>
 <question><para>
-What's the <link linkend="GtkTreeView">GtkTreeView</link> equivalent of 
-<link linkend="gtk-clist-find-row-from-data">gtk_clist_find_row_from_data()</link>?
+What's the #GtkTreeView equivalent of gtk_clist_find_row_from_data()?
 </para></question>
 
 <answer>
 <para>
-As there is no separate data column in the <link linkend="GtkTreeModel">GtkTreeModel</link>, there's no
+As there is no separate data column in the #GtkTreeModel, there's no
 built in function to find the iter from data.  You can write a custom
 searching function to walk the tree and find the data, or use
-<link linkend="gtk-tree-model-foreach">gtk_tree_model_foreach()</link>.
+gtk_tree_model_foreach().
 </para>
 </answer>
 </qandaentry>
@@ -845,53 +769,36 @@ How do I put an image and some text in the same column?
 
 <answer>
 <para>
-You can pack more than one <link
-linkend="GtkCellRenderer">GtkCellRenderer</link> into a single
-<link linkend="GtkTreeViewColumn">GtkTreeViewColumn</link> using
-<link
-      linkend="gtk-tree-view-column-pack-start">gtk_tree_view_column_pack_start()</link> or <link linkend="gtk-tree-view-column-pack-end">gtk_tree_view_column_pack_end()</link>. So pack both a <link
-linkend="GtkCellRendererPixbuf">GtkCellRendererPixbuf</link>
-and a <link
-linkend="GtkCellRendererText">GtkCellRendererText</link> into the
-column.
+You can pack more than one #GtkCellRenderer into a single #GtkTreeViewColumn using
+gtk_tree_view_column_pack_start() or gtk_tree_view_column_pack_end(). So pack both 
+a #GtkCellRendererPixbuf and a #GtkCellRendererText into the column.
 </para>
 </answer>
 </qandaentry>
 
 <qandaentry>
 <question><para>
-I can set data easily on my <link
-		linkend="GtkTreeStore">GtkTreeStore</link>/<link
-		linkend="GtkListStore">GtkListStore</link> models using  <link
-linkend="gtk-tree-model-get">gtk_list_store_set()</link> and <link
-linkend="gtk-tree-model-get">gtk_tree_store_set()</link>, but can't read
-	      it back?
+I can set data easily on my #GtkTreeStore/#GtkListStore models using 
+gtk_list_store_set() and gtk_tree_store_set(), but can't read it back?
 </para></question>
 
 <answer>
 <para>
-Both the <link
-		linkend="GtkTreeStore">GtkTreeStore</link> and the <link
-		linkend="GtkListStore">GtkListStore</link> implement the
-	      <link linkend="GtkTreeModel">GtkTreeModel</link>
-		interface.  Consequentially, the can use any function
-		this interface implements.  The easiest way to read a
-		set of data back is to use
- <link
-linkend="gtk-tree-model-get">gtk_tree_model_get()</link>.
+Both the #GtkTreeStore and the #GtkListStore implement the #GtkTreeModel
+interface.  Consequentially, the can use any function this interface implements.  
+The easiest way to read a set of data back is to use gtk_tree_model_get().
 </para>
 </answer>
 </qandaentry>
 
 <qandaentry>
 <question><para>
-How do I change the way that numbers are formatted by <link linkend="GtkTreeView">GtkTreeView</link>?
+How do I change the way that numbers are formatted by #GtkTreeView?
 </para></question>
 <answer><para>
-Use <link linkend="gtk-tree-view-insert-column-with-data-func">gtk_tree_view_insert_column_with_data_func()</link> 
-or <link linkend="gtk-tree-view-column-set-cell-data-func">gtk_tree_view_column_set_cell_data_func()</link>
-and do the conversion from number to string yourself (with, say, 
-<link linkend="g-strdup-printf">g_strdup_printf()</link>).
+Use gtk_tree_view_insert_column_with_data_func()
+or gtk_tree_view_column_set_cell_data_func() and do the conversion from number to 
+string yourself (with, say, g_strdup_printf()).
 </para>
 
 <para>
@@ -937,15 +844,15 @@ set_up_new_columns (GtkTreeView *myview)
   gtk_tree_view_set_model (myview, GTK_TREE_MODEL (mycolumns));
 
   /* Create a GtkCellRendererText */
-  renderer = gtk_cell_renderer_text_new ();
+  renderer = gtk_cell_renderer_text_new (<!-- -->);
 
   /* Create a new column that has a title ("Example column"),
    * uses the above created renderer that will render the double
    * value into text from the associated model's rows. 
    */
-  column = gtk_tree_view_column_new ();
+  column = gtk_tree_view_column_new (<!-- -->);
   gtk_tree_view_column_set_title  (column, "Example column");
-  renderer = gtk_cell_renderer_text_new ();
+  renderer = gtk_cell_renderer_text_new (<!-- -->);
   gtk_tree_view_column_pack_start (column, renderer, TRUE);
 
   /* Append the new column after the GtkTreeView's previous columns. */
@@ -972,7 +879,7 @@ How do I hide the expander arrows in my tree view ?
 
 <answer><para>
 Set the expander-column property of the tree view to a hidden column.
-See <link linkend="gtk-tree-view-set-expander-column">gtk_tree_view_set_expander_column()</link> and <link linkend="gtk-tree-view-column-set-visible">gtk_tree_view_column_set_visible()</link>.
+See gtk_tree_view_set_expander_column() and gtk_tree_view_column_set_visible().
 </para></answer>
 </qandaentry>
 

@@ -3,15 +3,13 @@
   <title>Migrating from GnomeAbout to GtkAboutDialog</title>
 
   <para>
-    Since version 2.6, GTK+ provides the <link 
-    linkend="GtkIconView">GtkAboutDialog</link> widget as a replacement for 
+    Since version 2.6, GTK+ provides the #GtkAboutDialog widget as a replacement for 
     the <structname>GnomeAbout</structname> dialog in the libgnomeui library.
   </para>
 
   <para>
-    <link linkend="GtkIconView">GtkAboutDialog</link> supports all features 
-    found in <structname>GnomeAbout</structname>. The 
-    <structname>GtkAboutDialog</structname> API is bigger, since it follows 
+    #GtkAboutDialog supports all features found in <structname>GnomeAbout</structname>.
+    The <structname>GtkAboutDialog</structname> API is bigger, since it follows 
     the GTK+ policy to have getters and setters for all widget properties, 
     but it isn't much more complex than <structname>GnomeAbout</structname>.
   </para>
@@ -56,9 +54,9 @@
                                      NULL);
     g_object_unref (pixbuf);
     </programlisting></informalexample>
-    If the <link linkend="g-object-new"><function>g_object_new()</function></link> construction scares you, 
-    you can also use <link linkend="g-object-new"><function>gtk_about_dialog_new()</function></link> to
-    construct the dialog and then use the setters for the individual properties.
+    If the g_object_new() construction scares you, you can also use 
+    gtk_about_dialog_new() to construct the dialog and then use the setters for 
+    the individual properties.
   </para>
 
   <para>
@@ -82,9 +80,8 @@
       </para></listitem>
       <listitem><para>
         If your credits contain email addresses or URLs, you can turn them 
-        into clickable links using 
-        <link linkend="gtk-about-dialog-set-email-hook"><function>gtk_about_dialog_set_email_hook()</function></link> and 
-        <link linkend="gtk-about-dialog-set-url-hook"><function>gtk_about_dialog_set_url_hook()</function></link>. 
+        into clickable links using gtk_about_dialog_set_email_hook() and 
+        gtk_about_dialog_set_url_hook(). 
       </para></listitem>   
     </itemizedlist>
   </para>

@@ -14,30 +14,20 @@
   <title>Migrating from GtkFileSelection to GtkFileChooser</title>
 
   <para>
-    <link linkend="GtkFileChooser">GtkFileChooser</link>, starting
-    with GTK+ 2.4, is the new set of APIs for file selection widgets
-    and dialogs.  Previous versions of GTK+ used <link
-    linkend="GtkFileSelection">GtkFileSelection</link>, which has
-    numerous problems.
+    #GtkFileChooser, starting with GTK+ 2.4, is the new set of APIs for file 
+    selection widgets and dialogs.  Previous versions of GTK+ used #GtkFileSelection, 
+    which has numerous problems.
   </para>
 
   <para>
-    <link linkend="GtkFileChooser">GtkFileChooser</link> is an
-    abstract interface that can be implemented by widgets that perform
-    file selection tasks.  Two widgets in GTK+ implement this
-    interface:  <link
-    linkend="GtkFileChooserDialog">GtkFileChooserDialog</link> and
-    <link linkend="GtkFileChooserWidget">GtkFileChooserWidget</link>.
-    Most applications simply need to use <link
-    linkend="GtkFileChooserDialog">GtkFileChooserDialog</link>, which
-    is a dialog box that allows the user to select existing files for
-    opening them, or to pick new filenames for saving documents.
-    <link linkend="GtkFileChooserWidget">GtkFileChooserWidget</link>
-    is for special applications that need to embed a file selection
-    widget inside a larger window.  In the context of GTK+, <link
-    linkend="GtkFileChooserDialog">GtkFileChooserDialog</link> is
-    simply a <link linkend="GtkDialog">GtkDialog</link> box with a
-    <link linkend="GtkFileChooserWidget">GtkFileChooserWidget</link>
+    #GtkFileChooser is an abstract interface that can be implemented by widgets 
+    that perform file selection tasks.  Two widgets in GTK+ implement this
+    interface:  #GtkFileChooserDialog and #GtkFileChooserWidget. Most applications 
+    simply need to use #GtkFileChooserDialog, which is a dialog box that allows the 
+    user to select existing files for opening them, or to pick new filenames for 
+    saving documents. #GtkFileChooserWidget is for special applications that need to 
+    embed a file selection widget inside a larger window.  In the context of GTK+, 
+    #GtkFileChooserDialog is simply a #GtkDialog box with a #GtkFileChooserWidget.
     inside.
   </para>
 
@@ -45,10 +35,8 @@
     <title>Creating a GtkFileChooserDialog</title>
 
     <para>
-      To create a <link
-      linkend="GtkFileChooserDialog">GtkFileChooserDialog</link>, you
-      simply call gtk_file_chooser_dialog_new().  This function is
-      similar to gtk_dialog_new() in that it takes parameters for the
+      To create a #GtkFileChooserDialog, you simply call gtk_file_chooser_dialog_new().
+      This function is similar to gtk_dialog_new() in that it takes parameters for the
       title of the dialog box and its transient parent, as well as its
       buttons.  In addition, it takes in an argument that determines
       whether the file chooser dialog will be used for opening
@@ -66,25 +54,21 @@
     <title>Selection Modes</title>
 
     <para>
-      <link linkend="GtkFileChooser">GtkFileChooser</link> can be used
-      in two modes, to select a single file at a time or to select a
-      set of more than one file.  To set this, use
+      #GtkFileChooser can be used in two modes, to select a single file at a 
+      time or to select a set of more than one file.  To set this, use
       gtk_file_chooser_set_select_multiple().  In single-selection
       mode, you can use gtk_file_chooser_get_filename() to get a file
       name from the local file system or gtk_file_chooser_get_uri() to
       get a full-formed URI.  In multiple-selection mode, you can use
-      gtk_file_chooser_get_filenames() to get a <link
-      linkend="GSList">GSList</link> of filename strings, or
+      gtk_file_chooser_get_filenames() to get a #GSList of filename strings, or
       gtk_file_chooser_get_uris() to get a list of URI strings.
     </para>
 
     <para>
-      Also, you can configure <link
-      linkend="GtkFileChooser">GtkFileChooser</link> to select files
+      Also, you can configure #GtkFileChooser to select files
       or folders.  Consider a backup program that needs to let the
       user select a folder that will be backed up along with its
-      subfolders.  To configure whether <link
-      linkend="GtkFileChooser">GtkFileChooser</link> is used to select
+      subfolders.  To configure whether #GtkFileChooser is used to select
       files or folders, use gtk_file_chooser_set_action().  In
       addition, this lets you configure whether the file chooser will
       be used to select existing files or folders (e.g. for
@@ -99,10 +83,8 @@
     <para>
       Many applications need to have a preview facility within their
       file chooser dialogs.  Previous to GTK+ 2.4, one needed to
-      access the <link
-      linkend="GtkFileSelection">GtkFileSelection</link> widget
-      hierarchy directly to hook in a preview widget.  With <link
-      linkend="GtkFileChooser">GtkFileChooser</link>, there is a
+      access the #GtkFileSelection widget hierarchy directly to hook in 
+      a preview widget.  With #GtkFileChooser, there is a
       dedicated API to do this.
     </para>
 
@@ -132,18 +114,15 @@
     <title>New features</title>
 
     <para>
-      New features in <link
-      linkend="GtkFileChooser">GtkFileChooser</link> include the
-      following:
+      New features in #GtkFileChooser include the following:
     </para>
 
     <itemizedlist>
       <listitem>
 	<para>
 	  Ability to select URIs rather than just local files.  You
-	  must use a <link
-	  linkend="GtkFileSystem">GtkFileSystem</link> implementation
-	  that supports this, for example the gnome-vfs backend.
+	  must use a #GtkFileSystem implementation that supports this, 
+          for example the gnome-vfs backend.
 	</para>
       </listitem>
 
@@ -166,9 +145,8 @@
     </itemizedlist>
 
     <para>
-      To see how to use these features, please consult the <link
-      linkend="GtkFileChooser">GtkFileChooser</link> reference
-      documentation.
+      To see how to use these features, please consult the #GtkFileChooser 
+      reference documentation.
     </para>
   </section>
 </chapter>

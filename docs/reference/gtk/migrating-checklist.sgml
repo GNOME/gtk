@@ -51,7 +51,7 @@ do_popup_menu (GtkWidget *my_widget, GdkEventButton *event)
   GtkWidget *menu;
   int button, event_time;
 
-  menu = gtk_menu_new ();
+  menu = gtk_menu_new (<!-- -->);
   g_signal_connect (menu, "deactivate", 
                     G_CALLBACK (gtk_widget_destroy), NULL);
 
@@ -65,7 +65,7 @@ do_popup_menu (GtkWidget *my_widget, GdkEventButton *event)
   else
     {
       button = 0;
-      event_time = gtk_get_current_event_time ();
+      event_time = gtk_get_current_event_time (<!-- -->);
     }
 
   gtk_menu_popup (GTK_MENU (popup), NULL, NULL, NULL, NULL, 
@@ -127,7 +127,7 @@ my_widget_popup_menu_handler (GtkWidget *widget)
 	in the case where the <parameter>event</parameter> is
 	<constant>NULL</constant>.  This function should compute the
 	desired position for a menu when it is invoked through the
-	keyboard.  For example, <xref linkend="GtkEntry"/> aligns the
+	keyboard.  For example, #GtkEntry aligns the
 	top edge of its popup menu with the bottom edge of the entry.
       </para>
     </note>
@@ -138,9 +138,8 @@ my_widget_popup_menu_handler (GtkWidget *widget)
 	able to take the keyboard focus.  In general, widgets should
 	be fully usable through the keyboard and not just the mouse.
 	The very first step of this is to ensure that your widget
-	turns on the <link
-	linkend="gtkwidgetflags"><constant>GTK_CAN_FOCUS</constant></link>
-	FLAG.
+	turns on the %GTK_CAN_FOCUS <link
+	linkend="gtkwidgetflags">flag</link>.
       </para>
     </note>
   </section>
@@ -218,7 +217,7 @@ my_widget_expose_event_handler (GtkWidget *widget, GdkEventExpose *event)
       <title>Why</title>
       <para>
 	With
-	<function>gtk_accelerator_get_default_mod_mask()</function>
+	gtk_accelerator_get_default_mod_mask()
 	you can test for modifier keys reliably; this way your key
 	event handlers will work correctly even if
 	<keycap>NumLock</keycap> or <keycap>CapsLock</keycap> are
@@ -233,8 +232,7 @@ my_widget_expose_event_handler (GtkWidget *widget, GdkEventExpose *event)
       Modifiers are keys like <keycap>Control</keycap> and
       <keycap>NumLock</keycap>.  When implementing a <link
       linkend="GtkWidget-key-press-event">GtkWidget::key_press_event</link>
-      handler, you should use
-      <function>gtk_accelerator_get_default_mod_mask()</function> to
+      handler, you should use gtk_accelerator_get_default_mod_mask() to
       test against modifier keys.  This function returns a bit mask
       which encompasses all the modifiers which the user may be
       actively pressing, such as <keycap>Control</keycap>,
@@ -254,7 +252,7 @@ my_widget_expose_event_handler (GtkWidget *widget, GdkEventExpose *event)
       <literal>GDK_CONTROL_MASK | GDK_LOCK_MASK</literal>, and the
       simple test will fail.  By taking the logical-and of
       <structfield>event->state</structfield> and
-      <function>gtk_accelerator_get_default_mod_mask()</function>, you
+      gtk_accelerator_get_default_mod_mask(), you
       can ignore the modifiers which are not actively pressed by the
       user at the same time as the base key.
     </para>
@@ -271,7 +269,7 @@ my_widget_key_press_event_handler (GtkWidget *widget, GdkEventKey *event)
 {
   guint modifiers;
 
-  modifiers = gtk_accelerator_get_default_mod_mask ();
+  modifiers = gtk_accelerator_get_default_mod_mask (<!-- -->);
 
   if (event-&gt;keysym == GDK_F10
       &amp;&amp; (event-&gt;state &amp; modifiers) == GDK_CONTROL_MASK)

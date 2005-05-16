@@ -3,10 +3,9 @@
   <title>Migrating from GnomeColorPicker to GtkColorButton</title>
 
   <para>
-    Since version 2.6, GTK+ provides the <link linkend="GtkColorButton">GtkColorButton</link>
+    Since version 2.6, GTK+ provides the #GtkColorButton
     widget as a replacement for the <structname>GnomeColorPicker</structname> 
-    widget in the libgnomeui 
-    library.
+    widget in the libgnomeui library.
   </para>
 
   <para>

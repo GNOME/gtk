@@ -175,7 +175,7 @@
 <!ENTITY visual-index SYSTEM "visual_index.xml">
 
 <!ENTITY index-Objects-Grouped SYSTEM "objects_grouped.sgml">
-<!ENTITY gtk-TextWidget SYSTEM "text_widget.sgml">
+<!ENTITY gtk-TextWidget SYSTEM "xml/text_widget.sgml">
 <!ENTITY gtk-TreeWidget SYSTEM "xml/tree_widget.sgml">
 <!ENTITY gtk-Compiling SYSTEM "compiling.sgml">
 <!ENTITY gtk-Building SYSTEM "building.sgml">
@@ -184,20 +184,20 @@
 <!ENTITY gtk-Windows SYSTEM "windows.sgml">
 <!ENTITY gtk-Framebuffer SYSTEM "framebuffer.sgml">
 <!ENTITY gtk-X11 SYSTEM "x11.sgml">
-<!ENTITY gtk-Questions SYSTEM "question_index.sgml">
+<!ENTITY gtk-Questions SYSTEM "xml/question_index.sgml">
 <!ENTITY gtk-Changes-1-2 SYSTEM "changes-1.2.sgml">
 <!ENTITY gtk-Changes-2-0 SYSTEM "changes-2.0.sgml">
-<!ENTITY gtk-migrating-checklist SYSTEM "migrating-checklist.sgml">
-<!ENTITY gtk-migrating-GtkFileChooser SYSTEM "migrating-GtkFileChooser.sgml">
-<!ENTITY gtk-migrating-GtkAction SYSTEM "migrating-GtkAction.sgml">
-<!ENTITY gtk-migrating-GtkComboBox SYSTEM "migrating-GtkComboBox.sgml">
-<!ENTITY gtk-migrating-GtkIconView SYSTEM "migrating-GtkIconView.sgml">
-<!ENTITY gtk-migrating-GtkAboutDialog SYSTEM "migrating-GtkAboutDialog.sgml">
-<!ENTITY gtk-migrating-GtkColorButton SYSTEM "migrating-GtkColorButton.sgml">
+<!ENTITY gtk-migrating-checklist SYSTEM "xml/migrating-checklist.sgml">
+<!ENTITY gtk-migrating-GtkFileChooser SYSTEM "xml/migrating-GtkFileChooser.sgml">
+<!ENTITY gtk-migrating-GtkAction SYSTEM "xml/migrating-GtkAction.sgml">
+<!ENTITY gtk-migrating-GtkComboBox SYSTEM "xml/migrating-GtkComboBox.sgml">
+<!ENTITY gtk-migrating-GtkIconView SYSTEM "xml/migrating-GtkIconView.sgml">
+<!ENTITY gtk-migrating-GtkAboutDialog SYSTEM "xml/migrating-GtkAboutDialog.sgml">
+<!ENTITY gtk-migrating-GtkColorButton SYSTEM "xml/migrating-GtkColorButton.sgml">
 <!ENTITY version SYSTEM "version.xml">
 <!ENTITY gtk-query-immodules SYSTEM "gtk-query-immodules-2.0.xml">
 <!ENTITY gtk-update-icon-cache SYSTEM "gtk-update-icon-cache.xml">
-<!ENTITY gtk-glossary SYSTEM "glossary.xml">
+<!ENTITY gtk-glossary SYSTEM "xml/glossary.xml">
 ]>
 <book id="index">
   <bookinfo>

@@ -6,7 +6,8 @@
 </refmeta>
 
 <refnamediv>
-<refname>Text Widget Overview</refname><refpurpose>Overview of <link linkend="GtkTextBuffer">GtkTextBuffer</link>, <link linkend="GtkTextView">GtkTextView</link>, and friends</refpurpose>
+<refname>Text Widget Overview</refname>
+<refpurpose>Overview of #GtkTextBuffer, #GtkTextView, and friends</refpurpose>
 </refnamediv>
 
 <refsect1>
@@ -14,11 +15,9 @@
 
 <para>
 GTK+ has an extremely powerful framework for multiline text editing.  The
-primary objects involved in the process are <link
-linkend="GtkTextBuffer">GtkTextBuffer</link>, which represents the text being
-edited, and <link linkend="GtkTextView">GtkTextView</link>, a widget which can
-display a <link linkend="GtkTextBuffer">GtkTextBuffer</link>. Each buffer can
-be displayed by any number of views.
+primary objects involved in the process are #GtkTextBuffer, which represents the 
+text being edited, and #GtkTextView, a widget which can display a #GtkTextBuffer. 
+Each buffer can be displayed by any number of views.
 </para>
 
 <para>
@@ -38,15 +37,12 @@ be called "bold" and make the text inside the tag bold. However, the tag
 concept is more general than that; tags don't have to affect appearance. They 
 can instead affect the behavior of mouse and key presses, "lock" a range of 
 text so the user can't edit it, or countless other things. A tag is 
-represented by a
-<link linkend="GtkTextTag">GtkTextTag</link> object. One <link
-linkend="GtkTextTag">GtkTextTag</link> can be applied to any number of text
-ranges in any number of buffers.
+represented by a #GtkTextTag object. One #GtkTextTag can be applied to any number 
+of text ranges in any number of buffers.
 </para>
 
 <para>
-Each tag is stored in a <link
-linkend="GtkTextTagTable">GtkTextTagTable</link>. A tag table defines a set of
+Each tag is stored in a #GtkTextTagTable. A tag table defines a set of
 tags that can be used together. Each buffer has one tag table associated with
 it; only tags from that tag table can be used with the buffer. A single tag
 table can be shared between multiple buffers, however.
@@ -60,9 +56,8 @@ is convenient if you're creating tags on-the-fly).
 
 <para>
 Most text manipulation is accomplished with <firstterm>iterators</firstterm>,
-represented by a <link linkend="GtkTextIter">GtkTextIter</link>. An iterator
-represents a position between two characters in the text buffer. <link
-linkend="GtkTextIter">GtkTextIter</link> is a struct designed to be allocated 
+represented by a #GtkTextIter. An iterator represents a position between two 
+characters in the text buffer. #GtkTextIter is a struct designed to be allocated 
 on the stack; it's guaranteed to be copiable by value and never contain any
 heap-allocated data. Iterators are not valid indefinitely; whenever the buffer
 is modified in a way that affects the number of characters in the buffer, all
@@ -73,11 +68,10 @@ number of characters you pass through a state with a different number).
 
 <para>
 Because of this, iterators can't be used to preserve positions across buffer
-modifications. To preserve a position, the <link
-linkend="GtkTextMark">GtkTextMark</link> object is ideal. You can think of a
-mark as an invisible cursor or insertion point; it floats in the buffer, saving
-a position. If the text surrounding the mark is deleted, the mark remains in 
-the position the text once occupied; if text is inserted at the mark, the 
+modifications. To preserve a position, the #GtkTextMark object is ideal. You can 
+think of a mark as an invisible cursor or insertion point; it floats in the buffer, 
+saving a position. If the text surrounding the mark is deleted, the mark remains 
+in the position the text once occupied; if text is inserted at the mark, the 
 mark ends up either to the left or to the right of the new text, depending on 
 its <firstterm>gravity</firstterm>. The standard text cursor in left-to-right
 languages is a mark with right gravity, because it stays to the right of
@@ -86,21 +80,18 @@ inserted text.
 
 <para>
 Like tags, marks can be either named or anonymous. There are two marks built-in
-to <link linkend="GtkTextBuffer">GtkTextBuffer</link>; these are named
-<literal>"insert"</literal> and <literal>"selection_bound"</literal> and refer
-to the insertion point and the boundary of the selection which is not the
-insertion point, respectively. If no text is selected, these two marks will be
-in the same position. You can manipulate what is selected and where the cursor
-appears by moving these marks around.
+to #GtkTextBuffer; these are named <literal>"insert"</literal> and 
+<literal>"selection_bound"</literal> and refer to the insertion point and the 
+boundary of the selection which is not the insertion point, respectively. If no 
+text is selected, these two marks will be in the same position. You can manipulate 
+what is selected and where the cursor appears by moving these marks around.
 
 <footnote>
 <para>
 If you want to place the cursor in response to a user action, be sure to use
-<link 
-linkend="gtk-text-buffer-place-cursor">gtk_text_buffer_place_cursor()</link>, 
-which moves both at once  
-without causing a temporary selection (moving one then the other temporarily 
-selects the range in between the old and new positions).
+gtk_text_buffer_place_cursor(), which moves both at once without causing a 
+temporary selection (moving one then the other temporarily selects the range in 
+between the old and new positions).
 </para>
 </footnote>
 </para>
@@ -123,13 +114,12 @@ considered a line separator.
 <title>Simple Example</title>
 
 <para>
-The simplest usage of <link linkend="GtkTextView">GtkTextView</link> 
-might look like this:
+The simplest usage of #GtkTextView  might look like this:
 <informalexample><programlisting>
   GtkWidget *view;
   GtkTextBuffer *buffer;
 
-  view = gtk_text_view_new ();
+  view = gtk_text_view_new (<!-- -->);
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
 
@@ -140,11 +130,10 @@ might look like this:
    * will be emitted, such as "changed", "insert_text", and so on.
    */
 </programlisting></informalexample>
-In many cases it's also convenient to first create the buffer with <link 
-linkend="gtk-text-buffer-new">gtk_text_buffer_new()</link>, then create a 
-widget for that buffer with <link linkend="gtk-text-view-new-with-buffer">gtk_text_view_new_with_buffer()</link>. 
-Or you can change the buffer the widget displays after the widget is created
-with <link linkend="gtk-text-view-set-buffer">gtk_text_view_set_buffer()</link>.
+In many cases it's also convenient to first create the buffer with 
+gtk_text_buffer_new(), then create a widget for that buffer with 
+gtk_text_view_new_with_buffer(). Or you can change the buffer the widget 
+displays after the widget is created with gtk_text_view_set_buffer().
 </para>
 
 </refsect1>
@@ -154,21 +143,13 @@ with <link linkend="gtk-text-view-set-buffer">gtk_text_view_set_buffer()</link>.
 
 <para>
 
-There are two ways to affect text attributes in 
-<link linkend="GtkTextView">GtkTextView</link>.
-You can change the default attributes for a given 
-<link linkend="GtkTextView">GtkTextView</link>, and you can 
-apply tags that change the attributes for a region of text.
-For text features that come from the theme &mdash; such as 
-font and foreground color &mdash; use standard 
-<link linkend="GtkWidget">GtkWidget</link>
-functions such as 
-<link linkend="gtk-widget-modify-font">gtk_widget_modify_font()</link>
-or 
-<link linkend="gtk-widget-modify-text">gtk_widget_modify_text()</link>.
-For other attributes there are dedicated methods on 
-<link linkend="GtkTextView">GtkTextView</link> such as 
-<link linkend="gtk-text-view-set-tabs">gtk_text_view_set_tabs()</link>.
+There are two ways to affect text attributes in #GtkTextView.
+You can change the default attributes for a given #GtkTextView, and you can 
+apply tags that change the attributes for a region of text.  For text features 
+that come from the theme &mdash; such as font and foreground color &mdash; use 
+standard #GtkWidget functions such as gtk_widget_modify_font() or 
+gtk_widget_modify_text(). For other attributes there are dedicated methods on 
+#GtkTextView such as gtk_text_view_set_tabs().
 
 <informalexample><programlisting>
   GtkWidget *view;
@@ -178,7 +159,7 @@ For other attributes there are dedicated methods on
   GdkColor color;
   GtkTextTag *tag;
 
-  view = gtk_text_view_new ();
+  view = gtk_text_view_new (<!-- -->);
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
 
@@ -208,8 +189,7 @@ For other attributes there are dedicated methods on
 
 <para>
 The <application>gtk-demo</application> application that comes with
-GTK+ contains more example code for <link
-linkend="GtkTextView">GtkTextView</link>.
+GTK+ contains more example code for #GtkTextView.
 </para>
 
 </refsect1>

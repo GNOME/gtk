@@ -3,10 +3,8 @@
   <title>Migrating from GnomeIconList to GtkIconView</title>
 
   <para>
-    Since version 2.6, GTK+ provides the <link 
-    linkend="GtkIconView">GtkIconView</link>
-    widget. It is similar in functionality to the 
-    <structname>GnomeIconList</structname> widget in the 
+    Since version 2.6, GTK+ provides the #GtkIconView widget. It is similar in 
+    functionality to the <structname>GnomeIconList</structname> widget in the 
     libgnomeui library, both widgets provide a way to lay out named icons in 
     a grid. The distinctive feature of the GTK+ widget is that it follows the 
     model-view pattern, allowing it to share the actual data (i.e. the names 
@@ -14,19 +12,17 @@
   </para>
 
   <para>
-    <link linkend="GtkIconView">GtkIconView</link> currently doesn't support 
-    some features found in <structname>GnomeIconList</structname>. Icons can 
-    not be positioned freely, the spacing is not customizable, and it is not 
-    possible to edit the names of icons. 
+    #GtkIconView currently doesn't support some features found in 
+    <structname>GnomeIconList</structname>. Icons can not be positioned freely, 
+    the spacing is not customizable, and it is not possible to edit the names of 
+    icons. 
   </para>
 
   <para>
     To convert an application that uses <structname>GnomeIconList</structname> 
-    to <link linkend="GtkIconView">GtkIconView</link>, the first step is to 
-    organize your data in a <link linkend="GtkTreeModel">GtkTreeModel</link>. 
+    to #GtkIconView, the first step is to organize your data in a #GtkTreeModel. 
     <structname>GnomeIconList</structname> lets you directly insert data with 
-    <function>gnome_icon_list_insert()</function> and 
-    <function>gnome_icon_list_insert_pixbuf()</function> and their
+    gnome_icon_list_insert() and gnome_icon_list_insert_pixbuf() and their
     append variants. So, if you previously had a function to fill your icon 
     list similar to this one:
     <informalexample><programlisting>
@@ -81,7 +77,7 @@
         /* do other initialization... */
 
         /* construct the GtkIconView */
-        icon_view = gtk_icon_view_new ();
+        icon_view = gtk_icon_view_new (<!-- -->);
         model = gtk_list_store_new (3, GDK_TYPE_PIXBUF, G_TYPE_STRING, G_TYPE_POINTER);
 
         gtk_icon_view_set_pixbuf_column (GTK_ICON_VIEW (icon_view), PIXBUF_COLUMN);
@@ -93,18 +89,15 @@
         /* ... */
       }
     </programlisting></informalexample>
-    This example uses a <link linkend="GtkListStore">GtkListStore</link> as
-    model, but part of the elegance of the model-view pattern is that you can 
-    easily use another tree model implementation, or even write your own 
-    custom tree model.
+    This example uses a #GtkListStore as model, but part of the elegance of the 
+    model-view pattern is that you can easily use another tree model implementation, 
+    or even write your own custom tree model.
   </para>
 
   <para>
     Your application may make use of extra data attached to the icons in the 
-    <structname>GnomeIconList</structname> via 
-    <function>gnome_icon_list_set_icon_data()</function> and 
-    <function>gnome_icon_list_get_icon_data()</function>. With 
-    <link linkend="GtkIconView">GtkIconView</link> such data is most 
+    <structname>GnomeIconList</structname> via gnome_icon_list_set_icon_data() and 
+    gnome_icon_list_get_icon_data(). With #GtkIconView such data is most 
     conveniently stored in an extra column in the tree model, so you would 
     call a function like
     <informalexample><programlisting>
@@ -124,7 +117,7 @@
     }
     </programlisting></informalexample>
     assuming that your tree model has a <literal>DATA_COLUMN</literal> of type 
-    <literal>G_TYPE_POINTER</literal>.
+    %G_TYPE_POINTER.
   </para>
 
   <para>
@@ -140,8 +133,7 @@
      <listitem><para>
        <structname>GtkIconView</structname> can not be frozen in the same 
        way as <structname>GnomeIconList</structname> can with 
-       <function>gnome_icon_list_freeze()</function> and 
-       <function>gnome_icon_list_thaw()</function>. Instead you can 
+       gnome_icon_list_freeze() and gnome_icon_list_thaw(). Instead you can 
        replace the whole model of a <structname>GtkIconView</structname>, 
        instead of doing many small changes to the existing model.
      </para></listitem>

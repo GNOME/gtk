@@ -111,7 +111,17 @@ content_files =					\
 	visual_index.xml
 
 expand_content_files = 				\
-	tree_widget.sgml		
+	glossary.xml				\
+	migrating-checklist.sgml		\
+	migrating-GtkAction.sgml		\
+	migrating-GtkComboBox.sgml		\
+	migrating-GtkFileChooser.sgml		\
+	migrating-GtkIconView.sgml		\
+	migrating-GtkAboutDialog.sgml		\
+	migrating-GtkColorButton.sgml		\
+	tree_widget.sgml			\
+	text_widget.sgml			\
+	question_index.sgml
 
 # Images to copy into HTML directory
 HTML_IMAGES = \
