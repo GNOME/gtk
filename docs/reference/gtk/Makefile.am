@@ -110,6 +110,9 @@ content_files =					\
 	gtk-update-icon-cache.xml		\
 	visual_index.xml
 
+expand_content_files = 				\
+	tree_widget.sgml		
+
 # Images to copy into HTML directory
 HTML_IMAGES = \
 	$(top_srcdir)/gtk/stock-icons/stock_about_24.png		\

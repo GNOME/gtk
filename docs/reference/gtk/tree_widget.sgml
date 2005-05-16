@@ -7,18 +7,15 @@
 
   <refnamediv>
     <refname>Tree and List Widget Overview</refname>
-    <refpurpose>Overview of <link
-    linkend="GtkTreeModel">GtkTreeModel</link>, <link
-    linkend="GtkTreeView">GtkTreeView</link>, and other associated widgets</refpurpose>
+    <refpurpose>Overview of #GtkTreeModel, #GtkTreeView, and other 
+    associated widgets</refpurpose>
   </refnamediv>
 
   <refsect1>
     <title>Overview</title>
     <para>
-      To create a tree or list in GTK+, use the <link
-      linkend="GtkTreeModel">GtkTreeModel</link> interface in
-      conjunction with the <link
-      linkend="GtkTreeView">GtkTreeView</link> widget.  This widget is
+      To create a tree or list in GTK+, use the #GtkTreeModel interface in
+      conjunction with the #GtkTreeView widget.  This widget is
       designed around a <firstterm>Model/View/Controller</firstterm>
       design and consists of four major parts:
       <simplelist>
@@ -46,13 +43,12 @@
   <refsect1>
     <title>Creating a model</title>
     <para>
-      GTK+ provides two simple models that can be used: the <link
-      linkend="GtkListStore">GtkListStore</link> and the <link
-      linkend="GtkTreeStore">GtkTreeStore</link>.  GtkListStore is used
-      to model list widgets, while the GtkTreeStore models trees.  It
-      is possible to develop a new type of model, but the existing
-      models should be satisfactory for all but the most specialized of
-      situations.  Creating the model is quite simple:
+      GTK+ provides two simple models that can be used: the #GtkListStore
+      and the #GtkTreeStore.  GtkListStore is used to model list widgets, 
+      while the GtkTreeStore models trees.  It is possible to develop a new 
+      type of model, but the existing models should be satisfactory for all 
+      but the most specialized of situations.  Creating the model is quite 
+      simple:
     </para>
       <informalexample><programlisting><![CDATA[
 GtkListStore *store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_BOOLEAN);
@@ -80,16 +76,15 @@ GtkTreeStore *store = gtk_tree_store_new (N_COLUMNS,       /* Total number of co
                                           G_TYPE_BOOLEAN); /* Is checked out?         */
 ]]></programlisting></informalexample>
     <para>
-      Adding data to the model is done using <link linkend="gtk-tree-store-set">
-      gtk_tree_store_set()</link> or <link linkend="gtk-list-store-set">
-      gtk_list_store_set()</link>, depending upon which sort of model was
-      created.  To do this, a <link linkend="GtkTreeIter">GtkTreeIter</link> must
-      be acquired.  The iterator points to the location where data will be added.
+      Adding data to the model is done using gtk_tree_store_set() or 
+      gtk_list_store_set(), depending upon which sort of model was
+      created.  To do this, a #GtkTreeIter must be acquired.  The iterator 
+      points to the location where data will be added.
     </para>
     <para>
-      Once an iterator has been acquired, <link linkend="gtk-tree-store-set">
-      gtk_tree_store_set()</link> is used to apply data to the part of the model
-      that the iterator points to.  Consider the following example:
+      Once an iterator has been acquired, gtk_tree_store_set() is used to
+      apply data to the part of the model that the iterator points to.  
+      Consider the following example:
     </para>
     <informalexample><programlisting><![CDATA[
 GtkTreeIter   iter;
@@ -110,7 +105,7 @@ gtk_tree_store_set (store, &iter,
     columns in a given row.
   </para>
   <para>
-    The third argument to <link linkend="gtk-tree-store-append">gtk_tree_store_append()</link> is the parent iterator.  It
+    The third argument to gtk_tree_store_append() is the parent iterator.  It
     is used to add a row to a GtkTreeStore as a child of an existing row.  This
     means that the new row will only be visible when its parent is visible and
     in its expanded state.  Consider the following example:
@@ -148,11 +143,9 @@ gtk_tree_store_set (store, &iter2,
     <para>
       While there are several different models to choose from, there is
       only one view widget to deal with.  It works with either the list
-      or the tree store.  Setting up a <link
-      linkend="GtkTreeView">GtkTreeView</link> is not a difficult
-      matter.  It needs a <link
-      linkend="GtkTreeModel">GtkTreeModel</link> to know where to
-      retrieve its data from.
+      or the tree store.  Setting up a #GtkTreeView is not a difficult
+      matter.  It needs a #GtkTreeModel to know where to retrieve its data 
+      from.
     </para>
     <informalexample><programlisting><![CDATA[
 GtkWidget *tree;
@@ -163,32 +156,27 @@ tree = gtk_tree_view_new_with_model (GTK_TREE_MODEL (store));
     <refsect2>
       <title>Columns and cell renderers</title>
       <para>
-	Once the <link linkend="GtkTreeView">GtkTreeView</link> widget
-	has a model, it will need to know how to display the model.  It
-	does this with columns and cell renderers.
+	Once the #GtkTreeView widget has a model, it will need to know how 
+        to display the model.  It does this with columns and cell renderers.
       </para>
       <para>
         Cell renderers are used to draw the data in the tree model in a
         way.  There are a number of cell renderers that come with GTK+ 2.x,
-        including the <link
-        linkend="GtkCellRendererText">GtkCellRendererText</link>, <link
-        linkend="GtkCellRendererPixbuf">GtkCellRendererPixbuf</link> and
-        the <link
-        linkend="GtkCellRendererToggle">GtkCellRendererToggle</link>.
+        including the #GtkCellRendererText, #GtkCellRendererPixbuf and
+        the #GtkCellRendererToggle.
         It is relatively easy to write a custom renderer.
       </para>
       <para>
-        A <link linkend="GtkTreeViewColumn">GtkTreeViewColumn</link> is the
-        object that GtkTreeView uses to organize the vertical columns in
-        the tree view.  It needs to know the name of the column to label
-        for the user, what type of cell renderer to use, and which piece of
-        data to retrieve from the model for a given row.
+        A #GtkTreeViewColumn is the object that GtkTreeView uses to organize 
+        the vertical columns in the tree view.  It needs to know the name of 
+        the column to label for the user, what type of cell renderer to use, 
+        and which piece of data to retrieve from the model for a given row.
       </para>
       <informalexample><programlisting><![CDATA[
 GtkCellRenderer *renderer;
 GtkTreeViewColumn *column;
 
-renderer = gtk_cell_renderer_text_new ();
+renderer = gtk_cell_renderer_text_new (<!-- -->);
 column = gtk_tree_view_column_new_with_attributes ("Author",
                                                    renderer,
                                                    "text", AUTHOR_COLUMN,
@@ -205,9 +193,9 @@ gtk_tree_view_append_column (GTK_TREE_VIEW (tree), column);
     <refsect2>
       <title>Selection handling</title>
       <para>
-        Most applications will need to not only deal with displaying data, but also
-        receiving input events from users.  To do this, simply get a reference to
-        a selection object and connect to the "changed" signal.
+        Most applications will need to not only deal with displaying data, but 
+        also receiving input events from users.  To do this, simply get a 
+        reference to a selection object and connect to the "changed" signal.
       </para>
       <informalexample><programlisting><![CDATA[
 /* Prototype for selection handler callback */
@@ -249,13 +237,11 @@ tree_selection_changed_cb (GtkTreeSelection *selection, gpointer data)
   <refsect1>
     <title>Simple Example</title>
     <para>
-      Here is a simple example of using a <link
-      linkend="GtkTreeView">GtkTreeView</link> widget in context of the
-      other widgets.  It simply creates a simple model and view, and
-      puts them together.  Note that the model is never populated with
-      data &mdash; that is left as an exercise for the reader.  More
-      information can be found on this in the <link
-      linkend="GtkTreeStore">GtkTreeModel</link> section.
+      Here is a simple example of using a #GtkTreeView widget in context 
+      of the other widgets.  It simply creates a simple model and view, 
+      and puts them together.  Note that the model is never populated 
+      with data &mdash; that is left as an exercise for the reader.  
+      More information can be found on this in the #GtkTreeModel section.
       <informalexample><programlisting><![CDATA[
 enum
 {
@@ -292,7 +278,7 @@ setup_tree (void)
 
    /* Create a cell render and arbitrarily make it red for demonstration
     * purposes */
-   renderer = gtk_cell_renderer_text_new ();
+   renderer = gtk_cell_renderer_text_new (<!-- -->);
    g_object_set (G_OBJECT (renderer),
                  "foreground", "red",
                  NULL);
@@ -307,7 +293,7 @@ setup_tree (void)
    gtk_tree_view_append_column (GTK_TREE_VIEW (tree), column);
 
    /* Second column.. title of the book. */
-   renderer = gtk_cell_renderer_text_new ();
+   renderer = gtk_cell_renderer_text_new (<!-- -->);
    column = gtk_tree_view_column_new_with_attributes ("Title",
                                                       renderer,
                                                       "text", TITLE_COLUMN,
@@ -315,7 +301,7 @@ setup_tree (void)
    gtk_tree_view_append_column (GTK_TREE_VIEW (tree), column);
 
    /* Last column.. whether a book is checked out. */
-   renderer = gtk_cell_renderer_toggle_new ();
+   renderer = gtk_cell_renderer_toggle_new (<!-- -->);
    column = gtk_tree_view_column_new_with_attributes ("Checked out",
                                                       renderer,
                                                       "active", CHECKED_COLUMN,

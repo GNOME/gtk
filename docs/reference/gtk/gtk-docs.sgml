@@ -176,7 +176,7 @@
 
 <!ENTITY index-Objects-Grouped SYSTEM "objects_grouped.sgml">
 <!ENTITY gtk-TextWidget SYSTEM "text_widget.sgml">
-<!ENTITY gtk-TreeWidget SYSTEM "tree_widget.sgml">
+<!ENTITY gtk-TreeWidget SYSTEM "xml/tree_widget.sgml">
 <!ENTITY gtk-Compiling SYSTEM "compiling.sgml">
 <!ENTITY gtk-Building SYSTEM "building.sgml">
 <!ENTITY gtk-Running SYSTEM "running.sgml">
