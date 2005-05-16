@@ -1,5 +1,10 @@
 2005-05-16  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/gdkpango.c (gdk_pango_renderer_get_default): Fix a typo
+	in the docs.  (#303940, Masao Mutoh)
+
+2005-05-16  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtktoggleaction.c (connect_proxy): Be more careful when
 	casting.  (#304089, Philip Langdale)
 
