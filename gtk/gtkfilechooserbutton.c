@@ -679,8 +679,12 @@ gtk_file_chooser_button_constructor (GType                  type,
 					combo_box_row_separator_func,
 					NULL, NULL);
 
-  update_label_and_image (GTK_FILE_CHOOSER_BUTTON (object));
-  update_combo_box (GTK_FILE_CHOOSER_BUTTON (object));
+  /* set up the action for a user-provided dialog, this also updates
+   * the label, image and combobox
+   */
+  g_object_set (object, 
+		"action", gtk_file_chooser_get_action (GTK_FILE_CHOOSER (priv->dialog)),
+		NULL);
 
   priv->fs_volumes_changed_id =
     g_signal_connect (priv->fs, "volumes-changed",
@@ -712,7 +716,6 @@ gtk_file_chooser_button_set_property (GObject      *object,
       gtk_file_chooser_button_set_width_chars (GTK_FILE_CHOOSER_BUTTON (object),
 					       g_value_get_int (value));
       break;
-
     case GTK_FILE_CHOOSER_PROP_ACTION:
       switch (g_value_get_enum (value))
 	{
