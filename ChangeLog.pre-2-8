@@ -1,5 +1,11 @@
 2005-05-16  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserbutton.c (gtk_file_chooser_button_constructor): 
+	Make sure the action of the button and the dialog are in sync,
+	when the dialog is provided by the app.  (#303987, David A Knight)
+
+2005-05-16  Matthias Clasen  <mclasen@redhat.com>
+
 	* gdk/gdkpango.c (gdk_pango_renderer_get_default): Fix a typo
 	in the docs.  (#303940, Masao Mutoh)
 
