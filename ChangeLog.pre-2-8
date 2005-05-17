@@ -1,5 +1,10 @@
 2005-05-16  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkscale.c (gtk_scale_class_init): Don't bind GDK_Page_Up 
+	and GDK_Page_Down twice.  (#168333, Hazael Maldonado Torres)
+
+2005-05-16  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkentry.c (cursor_blinks): Don't blink the cursor if 
 	the entry is not editable.  (#304171,Nikos Kouremenos)
 
