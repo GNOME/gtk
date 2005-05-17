@@ -1735,8 +1735,10 @@ gdk_window_set_bg_pattern (GdkWindow      *window,
 
   if (private->bg_pixmap == GDK_PARENT_RELATIVE_BG && private->parent)
     {
+      x_offset += private->x;
+      y_offset += private->y;
       gdk_window_set_bg_pattern (GDK_WINDOW (private->parent), cr,
-				 private->x, private->y);
+				 x_offset, y_offset);
     }
   else if (private->bg_pixmap && 
            private->bg_pixmap != GDK_PARENT_RELATIVE_BG && 
@@ -1746,7 +1748,7 @@ gdk_window_set_bg_pattern (GdkWindow      *window,
       cairo_pattern_t *pattern = cairo_pattern_create_for_surface (surface);
       cairo_surface_destroy (surface);
 
-      if (x_offset != 0 || y_offset)
+      if (x_offset != 0 || y_offset != 0)
 	{
 	  cairo_matrix_t matrix;
 	  cairo_matrix_init_translate (&matrix, x_offset, y_offset);
