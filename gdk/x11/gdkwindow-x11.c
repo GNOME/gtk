@@ -1735,6 +1735,7 @@ gdk_window_resize (GdkWindow *window,
 	{
 	  _gdk_window_move_resize_child (window, private->x, private->y,
 					 width, height);
+	  _gdk_x11_drawable_update_size (private->impl);
 	}
       else
 	{
@@ -1748,6 +1749,7 @@ gdk_window_resize (GdkWindow *window,
 	    {
 	      impl->width = width;
 	      impl->height = height;
+	      _gdk_x11_drawable_update_size (private->impl);
 	    }
 	  else
 	    {
@@ -1755,6 +1757,8 @@ gdk_window_resize (GdkWindow *window,
 		private->resize_count += 1;
 	    }
 	}
+
+      _gdk_x11_drawable_update_size (private->impl);
     }
 }
 
@@ -1795,6 +1799,7 @@ gdk_window_move_resize (GdkWindow *window,
       if (GDK_WINDOW_TYPE (private) == GDK_WINDOW_CHILD)
 	{
 	  _gdk_window_move_resize_child (window, x, y, width, height);
+	  _gdk_x11_drawable_update_size (private->impl);
 	}
       else
 	{
@@ -1809,6 +1814,8 @@ gdk_window_move_resize (GdkWindow *window,
 	      private->y = y;
 	      impl->width = width;
 	      impl->height = height;
+
+	      _gdk_x11_drawable_update_size (private->impl);
 	    }
 	  else
 	    {

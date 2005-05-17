@@ -93,6 +93,7 @@ void  _gdk_x11_convert_to_format      (guchar           *src_buf,
 
 /* Note that the following take GdkDrawableImplX11, not the wrapper drawable */
 void _gdk_x11_drawable_finish           (GdkDrawable  *drawable);
+void _gdk_x11_drawable_update_size      (GdkDrawable  *drawable);
 
 #ifdef __cplusplus
 }

@@ -246,6 +246,27 @@ _gdk_x11_drawable_finish (GdkDrawable *drawable)
     }
 }
 
+/**
+ * _gdk_x11_drawable_update_size:
+ * @drawable: a #GdkDrawableImplX11.
+ * 
+ * Updates the state of the drawable (in particular the drawable's
+ * cairo surface) when its size has changed.
+ **/
+void
+_gdk_x11_drawable_update_size (GdkDrawable *drawable)
+{
+  GdkDrawableImplX11 *impl = GDK_DRAWABLE_IMPL_X11 (drawable);
+  
+  if (impl->cairo_surface)
+    {
+      int width, height;
+      
+      gdk_drawable_get_size (drawable, &width, &height);
+      cairo_xlib_surface_set_size (impl->cairo_surface, width, height);
+    }
+}
+
 static void
 try_pixmap (Display *xdisplay,
 	    int      screen,
@@ -1450,17 +1471,21 @@ gdk_x11_ref_cairo_surface (GdkDrawable *drawable)
   if (!impl->cairo_surface)
     {
       GdkVisual *visual = NULL;
+      int width, height;
   
       visual = gdk_drawable_get_visual (drawable);
 
+      gdk_drawable_get_size (drawable, &width, &height);
+
       if (visual) 
-	impl->cairo_surface = cairo_xlib_surface_create_with_visual (GDK_SCREEN_XDISPLAY (impl->screen),
-								     impl->xid,
-								     GDK_VISUAL_XVISUAL (visual));
-      else if (gdk_drawable_get_depth (drawable) == 1)
 	impl->cairo_surface = cairo_xlib_surface_create (GDK_SCREEN_XDISPLAY (impl->screen),
 							 impl->xid,
-							 CAIRO_FORMAT_A1);
+							 GDK_VISUAL_XVISUAL (visual),
+							 width, height);
+      else if (gdk_drawable_get_depth (drawable) == 1)
+	impl->cairo_surface = cairo_xlib_surface_create_for_bitmap (GDK_SCREEN_XDISPLAY (impl->screen),
+								    impl->xid,
+								    width, height);
       else
 	{
 	  g_warning ("Using Cairo rendering requires the drawable argument to\n"
@@ -1469,12 +1494,6 @@ gdk_x11_ref_cairo_surface (GdkDrawable *drawable)
 		     "were created with a non-NULL window argument. Otherwise\n"
 		     "a colormap must be set on them with gdk_drawable_set_colormap");
 	  return NULL;
-	}
-
-      if (GDK_IS_PIXMAP_IMPL_X11 (drawable))
-	{
-	  GdkPixmapImplX11 *pix_impl = GDK_PIXMAP_IMPL_X11 (drawable);
-	  cairo_xlib_surface_set_size (impl->cairo_surface, pix_impl->width, pix_impl->height);
 	}
 
       cairo_surface_set_user_data (impl->cairo_surface, &gdk_x11_cairo_key,

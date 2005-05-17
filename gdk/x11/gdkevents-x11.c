@@ -1828,6 +1828,9 @@ gdk_event_translate (GdkDisplay *display,
 	  window_private->y = event->configure.y;
 	  window_impl->width = xevent->xconfigure.width;
 	  window_impl->height = xevent->xconfigure.height;
+	  
+	  _gdk_x11_drawable_update_size (window_private->impl);
+	  
 	  if (window_private->resize_count >= 1)
 	    {
 	      window_private->resize_count -= 1;

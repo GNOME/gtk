@@ -1,3 +1,16 @@
+2005-05-17  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkdrawable-x11.c (gdk_x11_ref_cairo_surface): 
+	Update to changed cairo interface.
+
+	* gdk/x11/gdkdrawable-x11.[ch]:
+	Add _gdk_x11_drawable_update_size()
+	
+	* gdk/x11/gdkwindow-x11.c (gdk_window_resize) 
+	(gdk_window_move_resize)
+	* gdk/x11/gdkevents-x11.c (gdk_event_translate): 
+	Call _gdk_x11_drawable_update_size().
+
 2005-05-17  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktextview.c (cursor_blinks): Don't blink the cursor
