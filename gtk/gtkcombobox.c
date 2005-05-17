@@ -3417,7 +3417,8 @@ gtk_combo_box_list_button_released (GtkWidget      *widget,
 
   if (ewidget != combo_box->priv->tree_view)
     {
-      if (ewidget == combo_box->priv->button &&
+      if ((ewidget == combo_box->priv->button || 
+	   ewidget == combo_box->priv->box) &&
           !popup_in_progress &&
           gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (combo_box->priv->button)))
         {
@@ -3426,7 +3427,8 @@ gtk_combo_box_list_button_released (GtkWidget      *widget,
         }
 
       /* released outside treeview */
-      if (ewidget != combo_box->priv->button)
+      if (ewidget != combo_box->priv->button && 
+	  ewidget != combo_box->priv->box)
         {
           gtk_combo_box_popdown (combo_box);
 

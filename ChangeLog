@@ -1,5 +1,10 @@
 2005-05-17  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcombobox.c (gtk_combo_box_list_button_released): Keep
+	the popup posted if the button is released over the cellview.
+	This matches the behaviour of other combo box implementations.  
+	(#171378)
+	
 	* gdk/gdkwindow.c (gdk_window_set_bg_pattern): Adjust offsets
 	when recursing.  (#153682, Felipe Heidrich)
 
