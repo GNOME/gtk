@@ -4444,8 +4444,13 @@ cursor_blinks (GtkTextView *text_view)
   if (gtk_debug_flags & GTK_DEBUG_UPDATES)
     return FALSE;
   
-  g_object_get (settings, "gtk-cursor-blink", &blink, NULL);
-  return blink;
+  if (text_view->editable)
+    {
+      g_object_get (settings, "gtk-cursor-blink", &blink, NULL);
+      return blink;
+    }
+  else
+    return FALSE;
 }
 
 static gint
