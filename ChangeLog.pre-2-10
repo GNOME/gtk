@@ -1,3 +1,8 @@
+2005-05-18  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/x11/gdkproperty-x11.c (gdk_property_get): Warn if
+	length overflows.  (#161520, Ian Wienand)
+
 2005-05-18  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkevents-win32.c

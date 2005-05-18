@@ -255,15 +255,14 @@ and %GDK_NONE will be stored in @actual_property_type.
 </para>
 <note>
 <para>
-The <function>XGetWindowProperty()</function>
-function that gdk_property_get()
-uses has a very confusing and complicated set of semantics.
+The XGetWindowProperty() function that gdk_property_get()
+uses has a very confusing and complicated set of semantics.  
 Unfortunately, gdk_property_get() makes the situation
 worse instead of better (the semantics should be considered
 undefined), and also prints warnings to stderr in cases where it
 should return a useful error to the program. You are advised to use 
-<function>XGetWindowProperty()</function>
-directly until a replacement function for gdk_property_get()
+XGetWindowProperty() directly until a replacement function for 
+gdk_property_get()
 is provided. 
 </para>
 </note>
@@ -276,18 +275,24 @@ is provided.
        be filled in, a warning will be printed to stderr
        and no data will be returned.
 @offset: the offset into the property at which to begin
-         retrieving data. (in 4 byte units!)
-@length: the length of the data to delete. (in bytes, but
-         the actual retrieved length will be the next
-         integer multiple multiple of four greater than 
-         this!)
+         retrieving data, in 4 byte units.
+@length: the length of the data to retrieve in bytes.  Data is
+         considered to be retrieved in 4 byte chunks, so @length 
+         will be rounded up to the next highest 4 byte boundary 
+         (so be careful not to pass a value that might overflow 
+          when rounded up).
 @pdelete: if %TRUE, delete the property after retrieving the
           data.
 @actual_property_type: location to store the actual type of 
                        the property.
-@actual_format: location to store the actual format of the data.
-@actual_length: location to store the length of the retrieved
-                data, in bytes.
+@actual_format: location to store the actual return format of the
+                data; either 8, 16 or 32 bits.
+@actual_length: location to store the length of the retrieved data, in
+                bytes.  Data returned in the 32 bit format is stored
+                in a long variable, so the actual number of 32 bit
+                elements should be be calculated via
+                @actual_length/sizeof(glong) to ensure portability to
+                64 bit systems.
 @data: location to store a pointer to the data. The retrieved
        data should be freed with g_free() when you are finished
        using it.
