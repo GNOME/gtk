@@ -1,3 +1,12 @@
+2005-05-18  Anders Carlsson  <andersca@imendio.com>
+
+	* gtk/gtktextview.c: (gtk_text_view_flush_scroll),
+	(gtk_text_view_update_adjustments), (gtk_text_view_value_changed):
+	* gtk/gtktextview.h:
+	If the horizontal adjustment changes because of a change in the
+	layout width, then do a complete redraw. This is because there
+	might be right-aligned or centered text that needs to be redrawn.
+	
 2005-05-18  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_add_events): Try harder to set

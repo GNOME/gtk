@@ -1728,7 +1728,7 @@ gtk_text_view_flush_scroll (GtkTextView *text_view)
                                          scroll->use_align,
                                          scroll->xalign,
                                          scroll->yalign);
-  
+
   free_pending_scroll (scroll);
 
   return retval;
@@ -1776,6 +1776,9 @@ gtk_text_view_update_adjustments (GtkTextView *text_view)
 
   if (text_view->width != width || text_view->height != height)
     {
+      if (text_view->width != width)
+	text_view->width_changed = TRUE;
+
       text_view->width = width;
       text_view->height = height;
 
@@ -6489,6 +6492,17 @@ gtk_text_view_value_changed (GtkAdjustment *adj,
     {
       dx = text_view->xoffset - (gint)adj->value;
       text_view->xoffset = adj->value;
+
+      /* If the change is due to a size change we need 
+       * to invalidate the entire text window because there might be
+       * right-aligned or centered text 
+       */
+      if (text_view->width_changed)
+	{
+	  gdk_window_invalidate_rect (text_view->text_window->bin_window, NULL, FALSE);
+	  
+	  text_view->width_changed = FALSE;
+	}
     }
   else if (adj == text_view->vadjustment)
     {
