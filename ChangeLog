@@ -1,3 +1,13 @@
+2005-05-18  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkevents-win32.c
+	* gdk/win32/gdkkeys-win32.c
+	* gdk/win32/gdkprivate-win32.h: Check the KF_EXTENDED bit in
+	lParam of WM_KEY* messages to distinguish between left and right
+	Control and Alt keys. Unfortunately, the right Shift key doesnt
+	set KF_EXTENDED, so to distinguish between left and right Shift
+	keys, check the scan code. (#304584)
+
 2005-05-18  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/x11/gdkproperty-x11.c (gdk_property_get): Warn if
