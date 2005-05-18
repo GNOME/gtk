@@ -846,7 +846,7 @@ gtk_tool_button_get_stock_id (GtkToolButton *button)
 /**
  * gtk_tool_button_set_icon_name
  * @button: a #GtkToolButton
- * @stock_id: the name of the themed icon
+ * @icon_name: the name of the themed icon
  * 
  * Sets the icon for the tool button from a named themed icon.
  * See the docs for #GtkIconTheme for more details.

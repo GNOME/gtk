@@ -1,5 +1,8 @@
 2005-05-18  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktoolbutton.c (gtk_tool_button_set_icon_name): Fix
+	parameter names to make gtk-doc happy.
+
 	* gtk/gtkscale.c (gtk_scale_class_init): Fix the default
 	values of draw-value and value-pos to be the values we
 	actually use in _init. (#304547, Mikael Hallendal)
