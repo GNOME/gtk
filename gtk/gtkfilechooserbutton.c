@@ -2165,6 +2165,8 @@ dialog_response_cb (GtkDialog *dialog,
 	  break;
 	}
     }
+  else
+    gtk_file_chooser_unselect_all (GTK_FILE_CHOOSER (dialog));
 
   if (priv->old_path)
     {
