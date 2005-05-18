@@ -2444,7 +2444,7 @@ widget_add_child_draw_rectangle (GtkWidget    *widget,
 {
   GdkRectangle child_rect;
   
-  if (!GTK_WIDGET_REALIZED (widget) ||
+  if (!GTK_WIDGET_MAPPED (widget) ||
       widget->window != widget->parent->window)
     return;
 

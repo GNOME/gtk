@@ -1,6 +1,12 @@
 2005-05-18  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_init): 
+	Remove the no longer needed workaround.
+
+	* gtk/gtkwidget.c (widget_add_child_draw_rectangle): Only collect
+	allocations of mapped children.
+
+	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_init): 
 	Add a bug reference.
 
 2005-05-18  Tor Lillqvist  <tml@novell.com>
