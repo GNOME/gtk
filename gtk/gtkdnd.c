@@ -30,6 +30,8 @@
 #include "gdk/gdkkeysyms.h"
 
 #include "gtkdnd.h"
+#include "gtkiconfactory.h"
+#include "gtkicontheme.h"
 #include "gtkimage.h"
 #include "gtkinvisible.h"
 #include "gtkmain.h"
@@ -68,6 +70,7 @@ struct _GtkDragSourceSite
     GtkImagePixmapData pixmap;
     GtkImagePixbufData pixbuf;
     GtkImageStockData stock;
+    GtkImageIconNameData name;
   } icon_data;
   GdkBitmap *icon_mask;
 
@@ -2046,6 +2049,11 @@ gtk_drag_begin_internal (GtkWidget         *widget,
 				     site->icon_data.stock.stock_id,
 				     -2, -2);
 	    break;
+	  case GTK_IMAGE_ICON_NAME:
+	    gtk_drag_set_icon_name (context,
+			    	    site->icon_data.name.icon_name,
+				    -2, -2);
+	    break;
 	  case GTK_IMAGE_EMPTY:
 	  default:
 	    g_assert_not_reached();
@@ -2355,6 +2363,9 @@ gtk_drag_source_unset_icon (GtkDragSourceSite *site)
     case GTK_IMAGE_STOCK:
       g_free (site->icon_data.stock.stock_id);
       break;
+    case GTK_IMAGE_ICON_NAME:
+      g_free (site->icon_data.name.icon_name);
+      break;
     default:
       g_assert_not_reached();
       break;
@@ -2460,6 +2471,34 @@ gtk_drag_source_set_icon_stock (GtkWidget   *widget,
 
   site->icon_type = GTK_IMAGE_STOCK;
   site->icon_data.stock.stock_id = g_strdup (stock_id);
+}
+
+/**
+ * gtk_drag_source_set_icon_name:
+ * @widget: a #GtkWidget
+ * @icon_name: name of icon to use
+ * 
+ * Sets the icon that will be used for drags from a particular source
+ * to a themed icon. See the docs for #GtkIconTheme for more details.
+ *
+ * Since: 2.8
+ **/
+void 
+gtk_drag_source_set_icon_name (GtkWidget   *widget,
+			       const gchar *icon_name)
+{
+  GtkDragSourceSite *site;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (icon_name != NULL);
+
+  site = g_object_get_data (G_OBJECT (widget), "gtk-site-data");
+  g_return_if_fail (site != NULL);
+
+  gtk_drag_source_unset_icon (site);
+
+  site->icon_type = GTK_IMAGE_ICON_NAME;
+  site->icon_data.name.icon_name = g_strdup (icon_name);
 }
 
 static void
@@ -2780,6 +2819,56 @@ gtk_drag_set_icon_pixmap (GdkDragContext    *context,
     gtk_widget_shape_combine_mask (window, mask, 0, 0);
 
   gtk_drag_set_icon_window (context, window, hot_x, hot_y, TRUE);
+}
+
+/**
+ * gtk_drag_set_icon_name:
+ * @context: the context for a drag. (This must be called 
+ *            with a context for the source side of a drag)
+ * @icon_name: name of icon to use
+ * @hot_x: the X offset of the hotspot within the icon
+ * @hot_y: the Y offset of the hotspot within the icon
+ * 
+ * Sets the icon for the window from a named themed icon. See
+ * the docs for #GtkIconTheme for more details. Note that the
+ * size of the icon depends on the icon theme (the icon is
+ * loaded at the symbolic size #GTK_ICON_SIZE_DND), thus 
+ * @hot_x and @hot_y have to be used with care.
+ *
+ * Since: 2.8
+ **/
+void 
+gtk_drag_set_icon_name (GdkDragContext *context,
+			const gchar    *icon_name,
+			gint            hot_x,
+			gint            hot_y)
+{
+  GdkScreen *screen;
+  GtkSettings *settings;
+  GtkIconTheme *icon_theme;
+  GdkPixbuf *pixbuf;
+  gint width, height, icon_size;
+
+  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
+  g_return_if_fail (context->is_source);
+  g_return_if_fail (icon_name != NULL);
+
+  screen = gdk_drawable_get_screen (context->source_window);
+  g_return_if_fail (screen != NULL);
+
+  settings = gtk_settings_get_for_screen (screen);
+  if (gtk_icon_size_lookup_for_settings (settings,
+					 GTK_ICON_SIZE_DND,
+					 &width, &height))
+    icon_size = MAX (width, height);
+  else 
+    icon_size = 32; /* default value for GTK_ICON_SIZE_DND */ 
+
+  icon_theme = gtk_icon_theme_get_for_screen (screen);
+
+  pixbuf = gtk_icon_theme_load_icon (icon_theme, icon_name,
+		  		     icon_size, 0, NULL);
+  set_icon_stock_pixbuf (context, NULL, pixbuf, hot_x, hot_y);
 }
 
 /**
