@@ -1,10 +1,15 @@
 2005-05-18  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcellrendererpixbuf.c: Support named icons in
+	cells by adding a icon-name property. (#165777, Anders
+	Carlsson)
+
 	* gtk/gtk.symbols:
 	* gtk/gtktoolbutton.h: 
 	* gtk/gtktoolbutton.c (gtk_tool_button_set_icon_name) 
 	(gtk_tool_button_get_icon_name): Support named icons in 
-	tool buttons by adding a icon-name property.
+	tool buttons by adding a icon-name property. (#116577, 
+	Christian Neumair)
 
 	* gtk/gtk.symbols: 
 	* gtk/gtkdnd.h: 

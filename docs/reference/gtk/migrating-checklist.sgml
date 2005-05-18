@@ -282,6 +282,26 @@ my_widget_key_press_event_handler (GtkWidget *widget, GdkEventKey *event)
 }
     </programlisting>
   </section>
+
+  <section id="checklist-named-icons">
+    <title>Use named icons</title>
+
+    <formalpara>
+      <title>Why</title>
+      <para>
+	Named icons automatically adapt to theme changes, giving your
+        application a much more integrated appearance.
+      </para>
+    </formalpara>
+
+    <para>
+      Since GTK+ 2.6, named icons can be used for window icons (see
+      gtk_window_set_icon_name()) and images (see gtk_image_set_icon_name()).
+      In GTK+ 2.8, you can also use named icons for drag-and-drop (see 
+      gtk_drag_source_set_icon_name()) and in treeview cells (see the
+      <link linkend="GtkCellRendererPixbuf--icon-name">icon_name</link>
+      property of #GtkCellRendererPixbuf).
+    </para>
 </chapter>
 
 <!--

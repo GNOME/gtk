@@ -1,5 +1,8 @@
 2005-05-18  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/migrating-checklist.sgml: Add a section about named
+	icons.
+
 	* gtk/gtk-sections.txt: Add new functions.
 
 2005-05-16  Matthias Clasen  <mclasen@redhat.com>
