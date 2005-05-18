@@ -1,3 +1,9 @@
+2005-05-18  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkscale.c (gtk_scale_class_init): Fix the default
+	values of draw-value and value-pos to be the values we
+	actually use in _init. (#304547, Mikael Hallendal)
+
 2005-05-17  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktextview.c (cursor_blinks): Don't blink the cursor
