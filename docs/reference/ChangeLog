@@ -1,5 +1,7 @@
 2005-05-18  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/tmpl/properties.sgml: Updates.
+
 	* gtk/migrating-checklist.sgml: Add a section about named
 	icons.
 

@@ -1,5 +1,8 @@
 2005-05-18  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/x11/gdkproperty-x11.c (gdk_property_get): Warn if
+	length overflows.  (#161520, Ian Wienand)
+
 	* gtk/gtktoolbutton.c (gtk_tool_button_set_icon_name): Fix
 	parameter names to make gtk-doc happy.
 
