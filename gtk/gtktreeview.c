@@ -4018,7 +4018,7 @@ gtk_tree_view_get_drop_column (GtkTreeView       *tree_view,
 		continue;
 	      }
 
-	    return cur_column;
+	    return left_column;
 	  }
 
 	if (!tree_view->priv->column_drop_func)
@@ -4069,7 +4069,7 @@ gtk_tree_view_get_drop_column (GtkTreeView       *tree_view,
 		continue;
 	      }
 
-	    return cur_column;
+	    return left_column;
 	  }
 
 	if (!tree_view->priv->column_drop_func)
@@ -8054,7 +8054,7 @@ gtk_tree_view_set_column_drag_info (GtkTreeView       *tree_view,
   /* Add the last one */
   if (tree_view->priv->column_drop_func == NULL ||
       ((left_column != column) &&
-       (* tree_view->priv->column_drop_func) (tree_view, column, left_column, cur_column, tree_view->priv->column_drop_func_data)))
+       (* tree_view->priv->column_drop_func) (tree_view, column, left_column, NULL, tree_view->priv->column_drop_func_data)))
     {
       reorder = g_new (GtkTreeViewColumnReorder, 1);
       reorder->left_column = left_column;
