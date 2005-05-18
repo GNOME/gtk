@@ -76,6 +76,9 @@ gboolean              gtk_tool_button_get_use_underline (GtkToolButton *button);
 void                  gtk_tool_button_set_stock_id      (GtkToolButton *button,
 							 const gchar   *stock_id);
 G_CONST_RETURN gchar *gtk_tool_button_get_stock_id      (GtkToolButton *button);
+void                  gtk_tool_button_set_icon_name     (GtkToolButton *button,
+							 const gchar   *icon_name);
+G_CONST_RETURN gchar *gtk_tool_button_get_icon_name     (GtkToolButton *button);
 void                  gtk_tool_button_set_icon_widget   (GtkToolButton *button,
 							 GtkWidget     *icon_widget);
 GtkWidget *           gtk_tool_button_get_icon_widget   (GtkToolButton *button);

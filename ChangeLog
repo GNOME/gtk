@@ -1,5 +1,11 @@
 2005-05-18  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk.symbols:
+	* gtk/gtktoolbutton.h: 
+	* gtk/gtktoolbutton.c (gtk_tool_button_set_icon_name) 
+	(gtk_tool_button_get_icon_name): Support named icons in 
+	tool buttons by adding a icon-name property.
+
 	* gtk/gtk.symbols: 
 	* gtk/gtkdnd.h: 
 	* gtk/gtkdnd.c (gtk_drag_source_set_icon_name) 

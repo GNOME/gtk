@@ -3219,6 +3219,7 @@ gtk_toolbar_unset_style
 
 #if IN_HEADER(__GTK_TOOL_BUTTON_H__)
 #if IN_FILE(__GTK_TOOL_BUTTON_C__)
+gtk_tool_button_get_icon_name
 gtk_tool_button_get_icon_widget
 gtk_tool_button_get_label
 gtk_tool_button_get_label_widget
@@ -3227,6 +3228,7 @@ gtk_tool_button_get_type G_GNUC_CONST
 gtk_tool_button_get_use_underline
 gtk_tool_button_new
 gtk_tool_button_new_from_stock
+gtk_tool_button_set_icon_name
 gtk_tool_button_set_icon_widget
 gtk_tool_button_set_label
 gtk_tool_button_set_label_widget

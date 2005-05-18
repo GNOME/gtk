@@ -51,6 +51,7 @@ enum {
   PROP_USE_UNDERLINE,
   PROP_LABEL_WIDGET,
   PROP_STOCK_ID,
+  PROP_ICON_NAME,
   PROP_ICON_WIDGET
 };
 
@@ -86,6 +87,7 @@ struct _GtkToolButtonPrivate
   GtkWidget *button;
 
   gchar *stock_id;
+  gchar *icon_name;
   gchar *label_text;
   GtkWidget *label_widget;
   GtkWidget *icon_widget;
@@ -148,14 +150,17 @@ gtk_tool_button_class_init (GtkToolButtonClass *klass)
    *          - if the tool button has an icon_widget, then that widget
    *            will be used as the icon. Otherwise, if the tool button
    *            has a stock id, the corresponding stock icon will be
-   *            used. Otherwise, the tool button will not have an icon.
+   *            used. Otherwise, if the tool button has an icon name,
+   *            the corresponding icon from the theme will be used.
+   *            Otherwise, the tool button will not have an icon.
    *
    *          - if the tool button has a label_widget then that widget
    *            will be used as the label. Otherwise, if the tool button
    *            has a label text, that text will be used as label. Otherwise,
    *            if the toolbutton has a stock id, the corresponding text
-   *            will be used as label. Otherwise, the toolbutton will
-   *            have an empty label.
+   *            will be used as label. Otherwise, if the tool button has
+   *            an icon name, the corresponding icon name from the theme will
+   *            be used. Otherwise, the toolbutton will have an empty label.
    *
    *	      - The use_underline property only has an effect when the label
    *            on the toolbutton comes from the label property (ie. not from
@@ -202,6 +207,23 @@ gtk_tool_button_class_init (GtkToolButtonClass *klass)
 				   g_param_spec_string ("stock-id",
 							P_("Stock Id"),
 							P_("The stock icon displayed on the item"),
+							NULL,
+							GTK_PARAM_READWRITE));
+
+  /**
+   * GtkToolButton:icon-name:
+   * 
+   * The name of the themed icon displayed on the item.
+   * This property only has an effect if not overridden by "label", 
+   * "icon_widget" or "stock_id" properties.
+   *
+   * Since: 2.8 
+   */
+  g_object_class_install_property (object_class,
+				   PROP_ICON_NAME,
+				   g_param_spec_string ("icon-name",
+							P_("Icon name"),
+							P_("The name of the themed icon displayed on the item"),
 							NULL,
 							GTK_PARAM_READWRITE));
   g_object_class_install_property (object_class,
@@ -358,6 +380,11 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
 	  icon = gtk_image_new_from_stock (button->priv->stock_id, icon_size);
 	  gtk_widget_show (icon);
 	}
+      else if (button->priv->icon_name)
+	{
+	  icon = gtk_image_new_from_icon_name (button->priv->icon_name, icon_size);
+	  gtk_widget_show (icon);
+	}
     }
 
   switch (style)
@@ -422,6 +449,9 @@ gtk_tool_button_set_property (GObject         *object,
     case PROP_STOCK_ID:
       gtk_tool_button_set_stock_id (button, g_value_get_string (value));
       break;
+    case PROP_ICON_NAME:
+      gtk_tool_button_set_icon_name (button, g_value_get_string (value));
+      break;
     case PROP_ICON_WIDGET:
       gtk_tool_button_set_icon_widget (button, g_value_get_object (value));
       break;
@@ -463,6 +493,9 @@ gtk_tool_button_get_property (GObject         *object,
     case PROP_STOCK_ID:
       g_value_set_string (value, button->priv->stock_id);
       break;
+    case PROP_ICON_NAME:
+      g_value_set_string (value, button->priv->icon_name);
+      break;
     case PROP_ICON_WIDGET:
       g_value_set_object (value, button->priv->icon_widget);
       break;
@@ -476,11 +509,9 @@ gtk_tool_button_finalize (GObject *object)
 {
   GtkToolButton *button = GTK_TOOL_BUTTON (object);
 
-  if (button->priv->stock_id)
-    g_free (button->priv->stock_id);
-
-  if (button->priv->label_text)
-    g_free (button->priv->label_text);
+  g_free (button->priv->stock_id);
+  g_free (button->priv->icon_name);
+  g_free (button->priv->label_text);
 
   if (button->priv->label_widget)
     g_object_unref (button->priv->label_widget);
@@ -810,6 +841,57 @@ gtk_tool_button_get_stock_id (GtkToolButton *button)
   g_return_val_if_fail (GTK_IS_TOOL_BUTTON (button), NULL);
 
   return button->priv->stock_id;
+}
+
+/**
+ * gtk_tool_button_set_icon_name
+ * @button: a #GtkToolButton
+ * @stock_id: the name of the themed icon
+ * 
+ * Sets the icon for the tool button from a named themed icon.
+ * See the docs for #GtkIconTheme for more details.
+ * The "icon_name" property only has an effect if not
+ * overridden by non-%NULL "label", "icon_widget" and "stock_id"
+ * properties.
+ * 
+ * Since: 2.8
+ **/
+void
+gtk_tool_button_set_icon_name (GtkToolButton *button,
+			       const gchar   *icon_name)
+{
+  gchar *old_icon_name;
+
+  g_return_if_fail (GTK_IS_TOOL_BUTTON (button));
+
+  old_icon_name = button->priv->icon_name;
+
+  button->priv->icon_name = g_strdup (icon_name);
+  gtk_tool_button_construct_contents (GTK_TOOL_ITEM (button));
+
+  g_object_notify (G_OBJECT (button), "icon-name");
+
+  g_free (old_icon_name);
+}
+
+/**
+ * gtk_tool_button_get_icon_name
+ * @button: a #GtkToolButton
+ * 
+ * Returns the name of the themed icon for the tool button,
+ * see gtk_tool_button_set_icon_name().
+ *
+ * Returns: the icon name or %NULL if the tool button has
+ * no themed icon
+ * 
+ * Since: 2.8
+ **/
+G_CONST_RETURN gchar*
+gtk_tool_button_get_icon_name (GtkToolButton *button)
+{
+  g_return_val_if_fail (GTK_IS_TOOL_BUTTON (button), NULL);
+
+  return button->priv->icon_name;
 }
 
 /**
