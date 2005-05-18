@@ -182,7 +182,7 @@ gtk_scale_class_init (GtkScaleClass *class)
                                    g_param_spec_boolean ("draw-value",
 							 P_("Draw Value"),
 							 P_("Whether the current value is displayed as a string next to the slider"),
-							 FALSE,
+							 TRUE,
 							 GTK_PARAM_READWRITE));
   
   g_object_class_install_property (gobject_class,
@@ -191,7 +191,7 @@ gtk_scale_class_init (GtkScaleClass *class)
 						      P_("Value Position"),
 						      P_("The position in which the current value is displayed"),
 						      GTK_TYPE_POSITION_TYPE,
-						      GTK_POS_LEFT,
+						      GTK_POS_TOP,
 						      GTK_PARAM_READWRITE));
 
   gtk_widget_class_install_style_property (widget_class,

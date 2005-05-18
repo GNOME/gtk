@@ -1,5 +1,9 @@
 2005-05-18  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkscale.c (gtk_scale_class_init): Fix the default
+	values of draw-value and value-pos to be the values we
+	actually use in _init. (#304547, Mikael Hallendal)
+
 	* gtk/gtkcellrendererpixbuf.c: Support named icons in
 	cells by adding a icon-name property. (#165777, Anders
 	Carlsson)
