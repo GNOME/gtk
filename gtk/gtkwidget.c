@@ -5772,6 +5772,32 @@ gtk_widget_set_events (GtkWidget *widget,
   g_object_notify (G_OBJECT (widget), "events");
 }
 
+static void
+gtk_widget_add_events_internal (GtkWidget *widget,
+				gint       events,
+				GList     *window_list)
+{
+  GList *l;
+
+  for (l = window_list; l != NULL; l = l->next)
+    {
+      GdkWindow *window = l->data;
+      gpointer user_data;
+
+      gdk_window_get_user_data (window, &user_data);
+      if (user_data == widget)
+	{
+	  GList *children;
+
+	  gdk_window_set_events (window, gdk_window_get_events (window) | events);
+
+	  children = gdk_window_get_children (window);
+	  gtk_widget_add_events_internal (widget, events, children);
+	  g_list_free (children);
+	}
+    }
+}
+
 /**
  * gtk_widget_add_events:
  * @widget: a #GtkWidget
@@ -5810,28 +5836,16 @@ gtk_widget_add_events (GtkWidget *widget,
 
   if (GTK_WIDGET_REALIZED (widget))
     {
+      GList *window_list;
+
       if (GTK_WIDGET_NO_WINDOW (widget))
-	{
-	  GList *children = gdk_window_get_children (widget->window);
-	  GList *tmp_list = children;
-
-	  while (tmp_list)
-	    {
-	      GdkWindow *window = tmp_list->data;
-	      gpointer user_data;
-
-	      gdk_window_get_user_data (window, &user_data);
-	      if (user_data == widget)
-		gdk_window_set_events (window, gdk_window_get_events (window) | events);
-	      tmp_list = tmp_list->next;
-	    }
-
-	  g_list_free (children);
-	}
+	window_list = gdk_window_get_children (widget->window);
       else
-	{
-	  gdk_window_set_events (widget->window, gdk_window_get_events (widget->window) | events);
-	}
+	window_list = g_list_prepend (NULL, widget->window);
+
+      gtk_widget_add_events_internal (widget, events, window_list);
+
+      g_list_free (window_list);
     }
 
   g_object_notify (G_OBJECT (widget), "events");

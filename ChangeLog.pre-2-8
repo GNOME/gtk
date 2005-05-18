@@ -1,5 +1,10 @@
 2005-05-18  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkwidget.c (gtk_widget_add_events): Try harder to set
+	the event masks of descendent windows.  (#169821, Tommi Komulainen)
+
+2005-05-18  Matthias Clasen  <mclasen@redhat.com>
+
 	* gdk/x11/gdkproperty-x11.c (gdk_property_get): Warn if
 	length overflows.  (#161520, Ian Wienand)
 
