@@ -1,5 +1,9 @@
 2005-05-18  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooser.c (gtk_file_chooser_remove_shortcut_folder_uri): 
+	Use the correct function to conver the uri to a path.  (#304565,
+	Ismael Juma)
+
 	* gtk/gtkfilechooserbutton.c (dialog_response_cb): Handle the
 	Cancel button properly.  (#304234, Sven Neumann)
 
