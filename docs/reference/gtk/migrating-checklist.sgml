@@ -302,6 +302,7 @@ my_widget_key_press_event_handler (GtkWidget *widget, GdkEventKey *event)
       <link linkend="GtkCellRendererPixbuf--icon-name">icon_name</link>
       property of #GtkCellRendererPixbuf).
     </para>
+  </section>
 </chapter>
 
 <!--
