@@ -1738,7 +1738,7 @@ gtk_file_chooser_remove_shortcut_folder_uri (GtkFileChooser    *chooser,
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
   g_return_val_if_fail (uri != NULL, FALSE);
 
-  path = gtk_file_system_filename_to_path (_gtk_file_chooser_get_file_system (chooser), uri);
+  path = gtk_file_system_uri_to_path (_gtk_file_chooser_get_file_system (chooser), uri);
   if (!path)
     {
       g_set_error (error,
