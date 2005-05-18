@@ -1,5 +1,8 @@
 2005-05-18  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkwidget.c (gtk_widget_add_events): Try harder to set
+	the event masks of descendent windows.  (#169821, Tommi Komulainen)
+
 	* gtk/gtktreeview.c (gtk_tree_view_get_drop_column) 
 	(gtk_tree_view_set_column_drag_info): Fix some errors in the
 	handling of drop columns.  (#143355, John Finlay)
