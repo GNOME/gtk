@@ -2441,6 +2441,26 @@ gdk_event_translate (GdkDisplay *display,
       event->key.string = NULL;
       event->key.length = 0;
       event->key.hardware_keycode = msg->wParam;
+      if (HIWORD (msg->lParam) & KF_EXTENDED)
+	{
+	  switch (msg->wParam)
+	    {
+	    case VK_CONTROL:
+	      event->key.hardware_keycode = VK_RCONTROL;
+	      break;
+	    case VK_SHIFT:	/* Actually, KF_EXTENDED is not set
+				 * for the right shift key.
+				 */
+	      event->key.hardware_keycode = VK_RSHIFT;
+	      break;
+	    case VK_MENU:
+	      event->key.hardware_keycode = VK_RMENU;
+	      break;
+	    }
+	}
+      else if (msg->wParam == VK_SHIFT &&
+	       LOBYTE (HIWORD (msg->lParam)) == _scancode_rshift)
+	event->key.hardware_keycode = VK_RSHIFT;
 
       API_CALL (GetKeyboardState, (key_state));
 

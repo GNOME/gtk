@@ -40,6 +40,8 @@
 
 guint _gdk_keymap_serial = 0;
 gboolean _gdk_keyboard_has_altgr = FALSE;
+guint _scancode_rshift = 0;
+
 static GdkModifierType gdk_shift_modifiers = GDK_SHIFT_MASK;
 
 static GdkKeymap *default_keymap = NULL;
@@ -356,6 +358,9 @@ update_keymap (void)
       else
 	{
 	  gint shift;
+
+	  if (vk == VK_RSHIFT)
+	    _scancode_rshift = scancode;
 
 	  key_state[vk] = 0x80;
 	  for (shift = 0; shift < 4; shift++)

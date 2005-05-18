@@ -475,6 +475,7 @@ extern UINT		 _gdk_input_codepage;
 
 extern guint		 _gdk_keymap_serial;
 extern gboolean		 _gdk_keyboard_has_altgr;
+extern guint		 _scancode_rshift;
 
 /* Registered clipboard formats */
 extern WORD		 _cf_rtf;
