@@ -1,5 +1,8 @@
 2005-05-18  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserbutton.c (dialog_response_cb): Handle the
+	Cancel button properly.  (#304234, Sven Neumann)
+
 	* gtk/gtkwidget.c (gtk_widget_add_events): Try harder to set
 	the event masks of descendent windows.  (#169821, Tommi Komulainen)
 
