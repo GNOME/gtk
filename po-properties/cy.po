@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-04-12 22:42-0400\n"
-"PO-Revision-Date: 2005-01-07 02:02+0000\n"
-"Last-Translator: Rhys Jones <rhys@sucs.org>\n"
+"POT-Creation-Date: 2005-05-18 23:11+0100\n"
+"PO-Revision-Date: 2005-05-18 23:12+0100\n"
+"Last-Translator: Rhys Jones <rhys@sgwarnog.com>\n"
 "Language-Team: Cymraeg <gnome-cy@pengwyn.linux.org.uk>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -339,7 +339,7 @@ msgstr "Yn ymateb"
 msgid "Whether the action is enabled."
 msgstr "A ydy'r weithred wedi ei alluogi"
 
-#: gtk/gtkaction.c:289 gtk/gtkactiongroup.c:149 gtk/gtktreeview.c:582
+#: gtk/gtkaction.c:289 gtk/gtkactiongroup.c:149 gtk/gtktreeview.c:585
 #: gtk/gtktreeviewcolumn.c:225 gtk/gtkwidget.c:443
 msgid "Visible"
 msgstr "Gweladwy"
@@ -607,7 +607,7 @@ msgstr ""
 "Os TRUE, fe fydd y plentyn yn ymddangos mewn grŵp eilaidd o blant, yn addas "
 "ar gyfer, e.e., botymau cymorth"
 
-#: gtk/gtkbox.c:130 gtk/gtkexpander.c:230 gtk/gtkiconview.c:449
+#: gtk/gtkbox.c:130 gtk/gtkexpander.c:230 gtk/gtkiconview.c:447
 #: gtk/gtktreeviewcolumn.c:250
 msgid "Spacing"
 msgstr "Bylchu"
@@ -1837,7 +1837,7 @@ msgstr "Hyd Allwedd Lleiaf"
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Hyd lleiaf y llinyn chwilio er mwyn edrych am gydweddiadau"
 
-#: gtk/gtkentrycompletion.c:295 gtk/gtkiconview.c:370
+#: gtk/gtkentrycompletion.c:295 gtk/gtkiconview.c:368
 msgid "Text column"
 msgstr "Colofn testun"
 
@@ -1917,11 +1917,11 @@ msgstr "Teclyn label"
 msgid "A widget to display in place of the usual expander label"
 msgstr "Teclyn i'w ddangos yn lle y label ehangydd arferol"
 
-#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:704
+#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:707
 msgid "Expander Size"
 msgstr "Maint yr Ehangwr"
 
-#: gtk/gtkexpander.c:248 gtk/gtktreeview.c:705
+#: gtk/gtkexpander.c:248 gtk/gtktreeview.c:708
 msgid "Size of the expander arrow"
 msgstr "Maint y saeth ehangu"
 
@@ -2216,112 +2216,112 @@ msgstr ""
 "A ddylid y gwerth o'r briodwedd snap_edge neu werth wedi ei seilio ar "
 "handle_position"
 
-#: gtk/gtkiconview.c:333
+#: gtk/gtkiconview.c:331
 msgid "Selection mode"
 msgstr "Modd dewis"
 
-#: gtk/gtkiconview.c:334
+#: gtk/gtkiconview.c:332
 msgid "The selection mode"
 msgstr "Y modd dewis"
 
-#: gtk/gtkiconview.c:352
+#: gtk/gtkiconview.c:350
 msgid "Pixbuf column"
 msgstr "Colofn pixbuf"
 
-#: gtk/gtkiconview.c:353
+#: gtk/gtkiconview.c:351
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr "Pa golofn o'r model i'w ddefnyddio i gyrchu'r eicon pixbuf"
 
-#: gtk/gtkiconview.c:371
+#: gtk/gtkiconview.c:369
 msgid "Model column used to retrieve the text from"
 msgstr "Pa golofn o'r model i'w ddefnyddio i gyrchu'r testun"
 
 # EFALLAI
-#: gtk/gtkiconview.c:390
+#: gtk/gtkiconview.c:388
 msgid "Markup column"
 msgstr "Colofn tagdestun"
 
 # EFALLAI
-#: gtk/gtkiconview.c:391
+#: gtk/gtkiconview.c:389
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr ""
 "Y golofn fodel ddefnyddir i gyrchu'r testun, os ddefnyddir tagdestun Pango"
 
-#: gtk/gtkiconview.c:398
+#: gtk/gtkiconview.c:396
 msgid "Icon View Model"
 msgstr "Model Golwg Eicon"
 
 # EFALLAI (golwg?)
-#: gtk/gtkiconview.c:399
+#: gtk/gtkiconview.c:397
 msgid "The model for the icon view"
 msgstr "Y model ar gyfer yr olwg eicon"
 
-#: gtk/gtkiconview.c:415
+#: gtk/gtkiconview.c:413
 msgid "Number of columns"
 msgstr "Nifer o golofnau"
 
-#: gtk/gtkiconview.c:416
+#: gtk/gtkiconview.c:414
 msgid "Number of columns to display"
 msgstr "Y nifer o golofnau i'w dangos"
 
-#: gtk/gtkiconview.c:433
+#: gtk/gtkiconview.c:431
 msgid "Width for each item"
 msgstr "Lled bob eitem"
 
-#: gtk/gtkiconview.c:434
+#: gtk/gtkiconview.c:432
 msgid "The width used for each item"
 msgstr "Y lled ddefnyddir ar gyfer bob eitem"
 
-#: gtk/gtkiconview.c:450
+#: gtk/gtkiconview.c:448
 msgid "Space which is inserted between cells of an item"
 msgstr "Y bwlch a fewnosodir rhwng celloedd eitem"
 
-#: gtk/gtkiconview.c:465
+#: gtk/gtkiconview.c:463
 msgid "Row Spacing"
 msgstr "Bylchiad Rhesi"
 
-#: gtk/gtkiconview.c:466
+#: gtk/gtkiconview.c:464
 msgid "Space which is inserted between grid rows"
 msgstr "Y bwlch a fewnosodir rhwng rhesi'r grid"
 
-#: gtk/gtkiconview.c:481
+#: gtk/gtkiconview.c:479
 msgid "Column Spacing"
 msgstr "Bylchad Colofnau"
 
-#: gtk/gtkiconview.c:482
+#: gtk/gtkiconview.c:480
 msgid "Space which is inserted between grid column"
 msgstr "Y bwlch a fewnosodir rhwng colofnau'r grid"
 
-#: gtk/gtkiconview.c:497
+#: gtk/gtkiconview.c:495
 msgid "Margin"
 msgstr "Ymyl"
 
-#: gtk/gtkiconview.c:498
+#: gtk/gtkiconview.c:496
 msgid "Space which is inserted at the edges of the icon view"
 msgstr "Y bwlch a fewnosodir ar ymylon y golwg eicon"
 
-#: gtk/gtkiconview.c:514 gtk/gtkprogressbar.c:152 gtk/gtktoolbar.c:507
+#: gtk/gtkiconview.c:512 gtk/gtkprogressbar.c:152 gtk/gtktoolbar.c:507
 msgid "Orientation"
 msgstr "Gogwydd"
 
-#: gtk/gtkiconview.c:515
+#: gtk/gtkiconview.c:513
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr "Sut y gosodir testun ac eicon bob eitem mewn perthynas â'i gilydd"
 
-#: gtk/gtkiconview.c:523
+#: gtk/gtkiconview.c:521
 msgid "Selection Box Color"
 msgstr "Lliw'r Blwch Dewis"
 
-#: gtk/gtkiconview.c:524
+#: gtk/gtkiconview.c:522
 msgid "Color of the selection box"
 msgstr "Lliw'r blwch dewis"
 
-#: gtk/gtkiconview.c:530
+#: gtk/gtkiconview.c:528
 msgid "Selection Box Alpha"
 msgstr "Alffa'r Blwch Dewis"
 
-#: gtk/gtkiconview.c:531
+#: gtk/gtkiconview.c:529
 msgid "Opacity of the selection box"
 msgstr "Didreiddedd y blwch dewis"
 
@@ -3312,11 +3312,11 @@ msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr "Dangos botwm tuag ymlaen eilaidd ar ochr cyferbyn y bar sgrolio"
 
-#: gtk/gtkscrolledwindow.c:238 gtk/gtktext.c:605 gtk/gtktreeview.c:566
+#: gtk/gtkscrolledwindow.c:238 gtk/gtktext.c:605 gtk/gtktreeview.c:569
 msgid "Horizontal Adjustment"
 msgstr "Addasydd Llorweddol"
 
-#: gtk/gtkscrolledwindow.c:245 gtk/gtktext.c:613 gtk/gtktreeview.c:574
+#: gtk/gtkscrolledwindow.c:245 gtk/gtktext.c:613 gtk/gtktreeview.c:577
 msgid "Vertical Adjustment"
 msgstr "Addasydd Fertigol"
 
@@ -3906,10 +3906,10 @@ msgstr "Faint i fewnoli'r paragraff, mewn picseli"
 #: gtk/gtktexttag.c:426
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative) "
-"in pixels"
+"in Pango units"
 msgstr ""
 "Atred y testun uwchben y llinell sail (islaw'r linell sail os yw'r esgyniad "
-"yn negyddol)"
+"yn negyddol) mewn unedau Pango"
 
 #: gtk/gtktexttag.c:435
 msgid "Pixels above lines"
@@ -4284,156 +4284,156 @@ msgstr "Model TreeModelSort"
 msgid "The model for the TreeModelSort to sort"
 msgstr "Y model i'r TreeSortModel ei drefnu"
 
-#: gtk/gtktreeview.c:558
+#: gtk/gtktreeview.c:561
 msgid "TreeView Model"
 msgstr "Model TreeView"
 
 # EFALLAI (golwg?)
-#: gtk/gtktreeview.c:559
+#: gtk/gtktreeview.c:562
 msgid "The model for the tree view"
 msgstr "Y model ar gyfer y golwg coeden"
 
 # EFALLAI
-#: gtk/gtktreeview.c:567
+#: gtk/gtktreeview.c:570
 msgid "Horizontal Adjustment for the widget"
 msgstr "Addasydd Llorweddol ar gyfer y teclyn"
 
 # EFALLAI
-#: gtk/gtktreeview.c:575
+#: gtk/gtktreeview.c:578
 msgid "Vertical Adjustment for the widget"
 msgstr "Addasydd Llorweddol ar gyfer y teclyn"
 
-#: gtk/gtktreeview.c:583
+#: gtk/gtktreeview.c:586
 msgid "Show the column header buttons"
 msgstr "Dangod botymau pennawd colofnau"
 
-#: gtk/gtktreeview.c:590
+#: gtk/gtktreeview.c:593
 msgid "Headers Clickable"
 msgstr "Pennawdau Gellir Eu Clicio"
 
-#: gtk/gtktreeview.c:591
+#: gtk/gtktreeview.c:594
 msgid "Column headers respond to click events"
 msgstr "Mae penawdau colofnau yn ymateb i ddigwyddiadau clicio"
 
-#: gtk/gtktreeview.c:598
+#: gtk/gtktreeview.c:601
 msgid "Expander Column"
 msgstr "Colofn Ehangu"
 
-#: gtk/gtktreeview.c:599
+#: gtk/gtktreeview.c:602
 msgid "Set the column for the expander column"
 msgstr "Gosod y golofn ar gyfer y golofn ehangu"
 
-#: gtk/gtktreeview.c:606 gtk/gtktreeviewcolumn.c:341
+#: gtk/gtktreeview.c:609 gtk/gtktreeviewcolumn.c:341
 msgid "Reorderable"
 msgstr "Gellir Aildrefnu"
 
 # EFALLAI (golwg?)
-#: gtk/gtktreeview.c:607
+#: gtk/gtktreeview.c:610
 msgid "View is reorderable"
 msgstr "Gellir aildrefnu'r golwg"
 
 # EFALLAI
-#: gtk/gtktreeview.c:614
+#: gtk/gtktreeview.c:617
 msgid "Rules Hint"
 msgstr "Awgrym Rheolau"
 
 # EFALLAI
-#: gtk/gtktreeview.c:615
+#: gtk/gtktreeview.c:618
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
 "Gosod awgrym i'r peiriant thema er mwyn arlunio rhesi mewn lliw gwahanol bob "
 "yn ail"
 
-#: gtk/gtktreeview.c:622
+#: gtk/gtktreeview.c:625
 msgid "Enable Search"
 msgstr "Galluogi Chwilio"
 
-#: gtk/gtktreeview.c:623
+#: gtk/gtktreeview.c:626
 msgid "View allows user to search through columns interactively"
 msgstr ""
 "Mae'r golwg yn caniatau i'r defnyddiwr chwilio drwy golofnau yn rhyngweithiol"
 
-#: gtk/gtktreeview.c:630
+#: gtk/gtktreeview.c:633
 msgid "Search Column"
 msgstr "Colofn Chwilio"
 
 # EFALLAI
 # msgstr "Colofn y model i'w chwilio drwodd tra'n chwilio drwy côd"
-#: gtk/gtktreeview.c:631
+#: gtk/gtktreeview.c:634
 msgid "Model column to search through when searching through code"
 msgstr "Y golofn i chwilio drwodd wrth chwilio yn rhyngweithiol"
 
-#: gtk/gtktreeview.c:651
+#: gtk/gtktreeview.c:654
 msgid "Fixed Height Mode"
 msgstr "Modd Uchder Gosodedig"
 
-#: gtk/gtktreeview.c:652
+#: gtk/gtktreeview.c:655
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr "Yn cyflymu GtkTreeView gan dybio fod gan bob rhes yr un uchder"
 
-#: gtk/gtktreeview.c:672
+#: gtk/gtktreeview.c:675
 msgid "Hover Selection"
 msgstr "Dewis drwy Hofran"
 
-#: gtk/gtktreeview.c:673
+#: gtk/gtktreeview.c:676
 msgid "Whether the selection should follow the pointer"
 msgstr "A ddylai'r dewis ddilyn y pwyntydd"
 
-#: gtk/gtktreeview.c:692
+#: gtk/gtktreeview.c:695
 msgid "Hover Expand"
 msgstr "Ehangu drwy Hofran"
 
-#: gtk/gtktreeview.c:693
+#: gtk/gtktreeview.c:696
 msgid ""
 "Whether rows should be expanded/collapsed when the pointer moves over them"
 msgstr "A ddylid ehangu/cwympo rhesi wrth i'r pwyntydd symud drostynt"
 
-#: gtk/gtktreeview.c:713
+#: gtk/gtktreeview.c:716
 msgid "Vertical Separator Width"
 msgstr "Maint Gwahanydd Fertigol"
 
-#: gtk/gtktreeview.c:714
+#: gtk/gtktreeview.c:717
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "Gofod fertigol rhwng celloedd. Rhaid ei fod yn rhif eilaidd."
 
-#: gtk/gtktreeview.c:722
+#: gtk/gtktreeview.c:725
 msgid "Horizontal Separator Width"
 msgstr "Lled Gwahanydd Llorweddol"
 
-#: gtk/gtktreeview.c:723
+#: gtk/gtktreeview.c:726
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "Gofod llorweddol rhwng celloedd. Rhaid ei fod yn rhif eilaidd."
 
 # EFALLAI
-#: gtk/gtktreeview.c:731
+#: gtk/gtktreeview.c:734
 msgid "Allow Rules"
 msgstr "Caniatau Rheolau"
 
-#: gtk/gtktreeview.c:732
+#: gtk/gtktreeview.c:735
 msgid "Allow drawing of alternating color rows"
 msgstr "Caniatau arlunio rhesi gyda lliwiau gwahanol bob yn ail"
 
-#: gtk/gtktreeview.c:738
+#: gtk/gtktreeview.c:741
 msgid "Indent Expanders"
 msgstr "Mewnoli Ehangwyr"
 
-#: gtk/gtktreeview.c:739
+#: gtk/gtktreeview.c:742
 msgid "Make the expanders indented"
 msgstr "Mewnoli ehangwyr"
 
-#: gtk/gtktreeview.c:745
+#: gtk/gtktreeview.c:748
 msgid "Even Row Color"
 msgstr "Lliw Rhesi Eilrifol"
 
-#: gtk/gtktreeview.c:746
+#: gtk/gtktreeview.c:749
 msgid "Color to use for even rows"
 msgstr "Y lliw i'w ddefnyddio ar gyfer rhesi eilrifol"
 
-#: gtk/gtktreeview.c:752
+#: gtk/gtktreeview.c:755
 msgid "Odd Row Color"
 msgstr "Lliw Rhesi Odrifol"
 
-#: gtk/gtktreeview.c:753
+#: gtk/gtktreeview.c:756
 msgid "Color to use for odd rows"
 msgstr "Y lliw i'w ddefnyddio ar gyfer rhesi odrifol"
 
