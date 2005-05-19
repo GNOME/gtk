@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-05-04 01:35-0400\n"
-"PO-Revision-Date: 2005-05-04 22:53-0400\n"
+"POT-Creation-Date: 2005-05-19 14:42-0400\n"
+"PO-Revision-Date: 2005-05-19 22:53-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: Canadian English <adamw@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -91,11 +91,11 @@ msgstr "Default Display"
 msgid "The default display for GDK"
 msgstr "The default display for GDK"
 
-#: ../gdk/gdkpango.c:509 ../gtk/gtkinvisible.c:117 ../gtk/gtkwindow.c:537
+#: ../gdk/gdkpango.c:510 ../gtk/gtkinvisible.c:117 ../gtk/gtkwindow.c:537
 msgid "Screen"
 msgstr "Screen"
 
-#: ../gdk/gdkpango.c:510
+#: ../gdk/gdkpango.c:511
 msgid "the GdkScreen for the renderer"
 msgstr "the GdkScreen for the renderer"
 
@@ -242,7 +242,7 @@ msgid "A unique name for the action."
 msgstr "A unique name for the action."
 
 #: ../gtk/gtkaction.c:205 ../gtk/gtkbutton.c:221 ../gtk/gtkexpander.c:206
-#: ../gtk/gtkframe.c:128 ../gtk/gtklabel.c:321 ../gtk/gtktoolbutton.c:182
+#: ../gtk/gtkframe.c:128 ../gtk/gtklabel.c:321 ../gtk/gtktoolbutton.c:187
 msgid "Label"
 msgstr "Label"
 
@@ -605,7 +605,7 @@ msgstr ""
 "If TRUE, the child appears in a secondary group of children, suitable for, e."
 "g., help buttons"
 
-#: ../gtk/gtkbox.c:131 ../gtk/gtkexpander.c:230 ../gtk/gtkiconview.c:553
+#: ../gtk/gtkbox.c:131 ../gtk/gtkexpander.c:230 ../gtk/gtkiconview.c:621
 #: ../gtk/gtktreeviewcolumn.c:251
 msgid "Spacing"
 msgstr "Spacing"
@@ -681,7 +681,7 @@ msgstr ""
 "widget"
 
 #: ../gtk/gtkbutton.c:229 ../gtk/gtkexpander.c:214 ../gtk/gtklabel.c:342
-#: ../gtk/gtktoolbutton.c:189
+#: ../gtk/gtktoolbutton.c:194
 msgid "Use underline"
 msgstr "Use underline"
 
@@ -795,27 +795,27 @@ msgstr "Show button images"
 msgid "Whether stock icons should be shown in buttons"
 msgstr "Whether stock icons should be shown in buttons"
 
-#: ../gtk/gtkcalendar.c:472
+#: ../gtk/gtkcalendar.c:419
 msgid "Year"
 msgstr "Year"
 
-#: ../gtk/gtkcalendar.c:473
+#: ../gtk/gtkcalendar.c:420
 msgid "The selected year"
 msgstr "The selected year"
 
-#: ../gtk/gtkcalendar.c:479
+#: ../gtk/gtkcalendar.c:426
 msgid "Month"
 msgstr "Month"
 
-#: ../gtk/gtkcalendar.c:480
+#: ../gtk/gtkcalendar.c:427
 msgid "The selected month (as a number between 0 and 11)"
 msgstr "The selected month (as a number between 0 and 11)"
 
-#: ../gtk/gtkcalendar.c:486
+#: ../gtk/gtkcalendar.c:433
 msgid "Day"
 msgstr "Day"
 
-#: ../gtk/gtkcalendar.c:487
+#: ../gtk/gtkcalendar.c:434
 msgid ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
@@ -823,35 +823,35 @@ msgstr ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
 
-#: ../gtk/gtkcalendar.c:501
+#: ../gtk/gtkcalendar.c:448
 msgid "Show Heading"
 msgstr "Show Heading"
 
-#: ../gtk/gtkcalendar.c:502
+#: ../gtk/gtkcalendar.c:449
 msgid "If TRUE, a heading is displayed"
 msgstr "If TRUE, a heading is displayed"
 
-#: ../gtk/gtkcalendar.c:516
+#: ../gtk/gtkcalendar.c:463
 msgid "Show Day Names"
 msgstr "Show Day Names"
 
-#: ../gtk/gtkcalendar.c:517
+#: ../gtk/gtkcalendar.c:464
 msgid "If TRUE, day names are displayed"
 msgstr "If TRUE, day names are displayed"
 
-#: ../gtk/gtkcalendar.c:530
+#: ../gtk/gtkcalendar.c:477
 msgid "No Month Change"
 msgstr "No Month Change"
 
-#: ../gtk/gtkcalendar.c:531
+#: ../gtk/gtkcalendar.c:478
 msgid "If TRUE, the selected month cannot be changed"
 msgstr "If TRUE, the selected month cannot be changed"
 
-#: ../gtk/gtkcalendar.c:545
+#: ../gtk/gtkcalendar.c:492
 msgid "Show Week Numbers"
 msgstr "Show Week Numbers"
 
-#: ../gtk/gtkcalendar.c:546
+#: ../gtk/gtkcalendar.c:493
 msgid "If TRUE, week numbers are displayed"
 msgstr "If TRUE, week numbers are displayed"
 
@@ -987,59 +987,68 @@ msgstr "Has Entry"
 msgid "If FALSE, don't allow to enter strings other than the chosen ones"
 msgstr "If FALSE, don't allow strings other than the chosen ones to be entered"
 
-#: ../gtk/gtkcellrendererpixbuf.c:139
+#: ../gtk/gtkcellrendererpixbuf.c:145
 msgid "Pixbuf Object"
 msgstr "Pixbuf Object"
 
-#: ../gtk/gtkcellrendererpixbuf.c:140
+#: ../gtk/gtkcellrendererpixbuf.c:146
 msgid "The pixbuf to render"
 msgstr "The pixbuf to render"
 
-#: ../gtk/gtkcellrendererpixbuf.c:147
+#: ../gtk/gtkcellrendererpixbuf.c:153
 msgid "Pixbuf Expander Open"
 msgstr "Pixbuf Expander Open"
 
-#: ../gtk/gtkcellrendererpixbuf.c:148
+#: ../gtk/gtkcellrendererpixbuf.c:154
 msgid "Pixbuf for open expander"
 msgstr "Pixbuf for open expander"
 
-#: ../gtk/gtkcellrendererpixbuf.c:155
+#: ../gtk/gtkcellrendererpixbuf.c:161
 msgid "Pixbuf Expander Closed"
 msgstr "Pixbuf Expander Closed"
 
-#: ../gtk/gtkcellrendererpixbuf.c:156
+#: ../gtk/gtkcellrendererpixbuf.c:162
 msgid "Pixbuf for closed expander"
 msgstr "Pixbuf for closed expander"
 
-#: ../gtk/gtkcellrendererpixbuf.c:163 ../gtk/gtkimage.c:201
+#: ../gtk/gtkcellrendererpixbuf.c:169 ../gtk/gtkimage.c:201
 msgid "Stock ID"
 msgstr "Stock ID"
 
-#: ../gtk/gtkcellrendererpixbuf.c:164
+#: ../gtk/gtkcellrendererpixbuf.c:170
 msgid "The stock ID of the stock icon to render"
 msgstr "The stock ID of the stock icon to render"
 
-#: ../gtk/gtkcellrendererpixbuf.c:171
+#: ../gtk/gtkcellrendererpixbuf.c:177
 msgid "Size"
 msgstr "Size"
 
-#: ../gtk/gtkcellrendererpixbuf.c:172
+#: ../gtk/gtkcellrendererpixbuf.c:178
 msgid "The GtkIconSize value that specifies the size of the rendered icon"
 msgstr "The GtkIconSize value that specifies the size of the rendered icon"
 
-#: ../gtk/gtkcellrendererpixbuf.c:181
+#: ../gtk/gtkcellrendererpixbuf.c:187
 msgid "Detail"
 msgstr "Detail"
 
-#: ../gtk/gtkcellrendererpixbuf.c:182
+#: ../gtk/gtkcellrendererpixbuf.c:188
 msgid "Render detail to pass to the theme engine"
 msgstr "Render detail to pass to the theme engine"
 
-#: ../gtk/gtkcellrendererpixbuf.c:197
+#: ../gtk/gtkcellrendererpixbuf.c:205 ../gtk/gtkimage.c:259
+#: ../gtk/gtkwindow.c:529
+msgid "Icon Name"
+msgstr "Icon Name"
+
+#: ../gtk/gtkcellrendererpixbuf.c:206 ../gtk/gtkimage.c:260
+msgid "The name of the icon from the icon theme"
+msgstr "The name of the icon from the icon theme"
+
+#: ../gtk/gtkcellrendererpixbuf.c:221
 msgid "Follow State"
 msgstr "Follow State"
 
-#: ../gtk/gtkcellrendererpixbuf.c:198
+#: ../gtk/gtkcellrendererpixbuf.c:222
 msgid "Whether the rendered pixbuf should be colorized according to the state"
 msgstr ""
 "Whether the rendered pixbuf should be colourized according to the state"
@@ -1488,7 +1497,7 @@ msgstr "Title"
 msgid "The title of the color selection dialog"
 msgstr "The title of the colour selection dialogue"
 
-#: ../gtk/gtkcolorbutton.c:234 ../gtk/gtkcolorsel.c:1857
+#: ../gtk/gtkcolorbutton.c:234 ../gtk/gtkcolorsel.c:1854
 msgid "Current Color"
 msgstr "Current colour"
 
@@ -1496,7 +1505,7 @@ msgstr "Current colour"
 msgid "The selected color"
 msgstr "The selected colour"
 
-#: ../gtk/gtkcolorbutton.c:249 ../gtk/gtkcolorsel.c:1864
+#: ../gtk/gtkcolorbutton.c:249 ../gtk/gtkcolorsel.c:1861
 msgid "Current Alpha"
 msgstr "Current Alpha"
 
@@ -1504,35 +1513,35 @@ msgstr "Current Alpha"
 msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 
-#: ../gtk/gtkcolorsel.c:1843
+#: ../gtk/gtkcolorsel.c:1840
 msgid "Has Opacity Control"
 msgstr "Has Opacity Control"
 
-#: ../gtk/gtkcolorsel.c:1844
+#: ../gtk/gtkcolorsel.c:1841
 msgid "Whether the color selector should allow setting opacity"
 msgstr "Whether the colour selector should allow setting opacity"
 
-#: ../gtk/gtkcolorsel.c:1850
+#: ../gtk/gtkcolorsel.c:1847
 msgid "Has palette"
 msgstr "Has palette"
 
-#: ../gtk/gtkcolorsel.c:1851
+#: ../gtk/gtkcolorsel.c:1848
 msgid "Whether a palette should be used"
 msgstr "Whether a palette should be used"
 
-#: ../gtk/gtkcolorsel.c:1858
+#: ../gtk/gtkcolorsel.c:1855
 msgid "The current color"
 msgstr "The current colour"
 
-#: ../gtk/gtkcolorsel.c:1865
+#: ../gtk/gtkcolorsel.c:1862
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "The current opacity value (0 fully transparent, 65535 fully opaque)"
 
-#: ../gtk/gtkcolorsel.c:1879
+#: ../gtk/gtkcolorsel.c:1876
 msgid "Custom palette"
 msgstr "Custom palette"
 
-#: ../gtk/gtkcolorsel.c:1880
+#: ../gtk/gtkcolorsel.c:1877
 msgid "Palette to use in the color selector"
 msgstr "Palette to use in the colour selector"
 
@@ -1859,7 +1868,7 @@ msgstr "Minimum Key Length"
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Minimum length of the search key in order to look up matches"
 
-#: ../gtk/gtkentrycompletion.c:298 ../gtk/gtkiconview.c:474
+#: ../gtk/gtkentrycompletion.c:298 ../gtk/gtkiconview.c:542
 msgid "Text column"
 msgstr "Text column"
 
@@ -1939,7 +1948,7 @@ msgstr "The text of the label includes XML markup. See pango_parse_markup()"
 msgid "Space to put between the label and the child"
 msgstr "Space to put between the label and the child"
 
-#: ../gtk/gtkexpander.c:240 ../gtk/gtkframe.c:170 ../gtk/gtktoolbutton.c:196
+#: ../gtk/gtkexpander.c:240 ../gtk/gtkframe.c:170 ../gtk/gtktoolbutton.c:201
 msgid "Label widget"
 msgstr "Label widget"
 
@@ -2242,110 +2251,119 @@ msgstr ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
 
-#: ../gtk/gtkiconview.c:437
+#: ../gtk/gtkiconview.c:505
 msgid "Selection mode"
 msgstr "Selection mode"
 
-#: ../gtk/gtkiconview.c:438
+#: ../gtk/gtkiconview.c:506
 msgid "The selection mode"
 msgstr "The selection mode"
 
-#: ../gtk/gtkiconview.c:456
+#: ../gtk/gtkiconview.c:524
 msgid "Pixbuf column"
 msgstr "Pixbuf column"
 
-#: ../gtk/gtkiconview.c:457
+#: ../gtk/gtkiconview.c:525
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr "Model column used to retrieve the icon pixbuf from"
 
-#: ../gtk/gtkiconview.c:475
+#: ../gtk/gtkiconview.c:543
 msgid "Model column used to retrieve the text from"
 msgstr "Model column used to retrieve the text from"
 
-#: ../gtk/gtkiconview.c:494
+#: ../gtk/gtkiconview.c:562
 msgid "Markup column"
 msgstr "Markup column"
 
-#: ../gtk/gtkiconview.c:495
+#: ../gtk/gtkiconview.c:563
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr "Model column used to retrieve the text if using Pango markup"
 
-#: ../gtk/gtkiconview.c:502
+#: ../gtk/gtkiconview.c:570
 msgid "Icon View Model"
 msgstr "Icon View Model"
 
-#: ../gtk/gtkiconview.c:503
+#: ../gtk/gtkiconview.c:571
 msgid "The model for the icon view"
 msgstr "The model for the icon view"
 
-#: ../gtk/gtkiconview.c:519
+#: ../gtk/gtkiconview.c:587
 msgid "Number of columns"
 msgstr "Number of columns"
 
-#: ../gtk/gtkiconview.c:520
+#: ../gtk/gtkiconview.c:588
 msgid "Number of columns to display"
 msgstr "Number of columns to display"
 
-#: ../gtk/gtkiconview.c:537
+#: ../gtk/gtkiconview.c:605
 msgid "Width for each item"
 msgstr "Width for each item"
 
-#: ../gtk/gtkiconview.c:538
+#: ../gtk/gtkiconview.c:606
 msgid "The width used for each item"
 msgstr "The width used for each item"
 
-#: ../gtk/gtkiconview.c:554
+#: ../gtk/gtkiconview.c:622
 msgid "Space which is inserted between cells of an item"
 msgstr "Space which is inserted between cells of an item"
 
-#: ../gtk/gtkiconview.c:569
+#: ../gtk/gtkiconview.c:637
 msgid "Row Spacing"
 msgstr "Row Spacing"
 
-#: ../gtk/gtkiconview.c:570
+#: ../gtk/gtkiconview.c:638
 msgid "Space which is inserted between grid rows"
 msgstr "Space which is inserted between grid rows"
 
-#: ../gtk/gtkiconview.c:585
+#: ../gtk/gtkiconview.c:653
 msgid "Column Spacing"
 msgstr "Column Spacing"
 
-#: ../gtk/gtkiconview.c:586
+#: ../gtk/gtkiconview.c:654
 msgid "Space which is inserted between grid column"
 msgstr "Space which is inserted between grid column"
 
-#: ../gtk/gtkiconview.c:601
+#: ../gtk/gtkiconview.c:669
 msgid "Margin"
 msgstr "Margin"
 
-#: ../gtk/gtkiconview.c:602
+#: ../gtk/gtkiconview.c:670
 msgid "Space which is inserted at the edges of the icon view"
 msgstr "Space which is inserted at the edges of the icon view"
 
-#: ../gtk/gtkiconview.c:618 ../gtk/gtkprogressbar.c:153
+#: ../gtk/gtkiconview.c:686 ../gtk/gtkprogressbar.c:153
 #: ../gtk/gtktoolbar.c:508
 msgid "Orientation"
 msgstr "Orientation"
 
-#: ../gtk/gtkiconview.c:619
+#: ../gtk/gtkiconview.c:687
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr ""
 "How the text and icon of each item are positioned relative to each other"
 
-#: ../gtk/gtkiconview.c:627
+#: ../gtk/gtkiconview.c:703 ../gtk/gtktreeview.c:610
+#: ../gtk/gtktreeviewcolumn.c:342
+msgid "Reorderable"
+msgstr "Reorderable"
+
+#: ../gtk/gtkiconview.c:704 ../gtk/gtktreeview.c:611
+msgid "View is reorderable"
+msgstr "View is reorderable"
+
+#: ../gtk/gtkiconview.c:711
 msgid "Selection Box Color"
 msgstr "Selection Box Colour"
 
-#: ../gtk/gtkiconview.c:628
+#: ../gtk/gtkiconview.c:712
 msgid "Color of the selection box"
 msgstr "Colour of the selection box"
 
-#: ../gtk/gtkiconview.c:634
+#: ../gtk/gtkiconview.c:718
 msgid "Selection Box Alpha"
 msgstr "Selection Box Alpha"
 
-#: ../gtk/gtkiconview.c:635
+#: ../gtk/gtkiconview.c:719
 msgid "Opacity of the selection box"
 msgstr "Opacity of the selection box"
 
@@ -2420,14 +2438,6 @@ msgstr "Animation"
 #: ../gtk/gtkimage.c:244
 msgid "GdkPixbufAnimation to display"
 msgstr "GdkPixbufAnimation to display"
-
-#: ../gtk/gtkimage.c:259 ../gtk/gtkwindow.c:529
-msgid "Icon Name"
-msgstr "Icon Name"
-
-#: ../gtk/gtkimage.c:260
-msgid "The name of the icon from the icon theme"
-msgstr "The name of the icon from the icon theme"
 
 #: ../gtk/gtkimage.c:267
 msgid "Storage type"
@@ -4259,11 +4269,11 @@ msgstr "Toolbar icon size"
 msgid "Size of icons in default toolbars"
 msgstr "Size of icons in default toolbars"
 
-#: ../gtk/gtktoolbutton.c:183
+#: ../gtk/gtktoolbutton.c:188
 msgid "Text to show in the item."
 msgstr "Text to show in the item."
 
-#: ../gtk/gtktoolbutton.c:190
+#: ../gtk/gtktoolbutton.c:195
 msgid ""
 "If set, an underline in the label property indicates that the next character "
 "should be used for the mnemonic accelerator key in the overflow menu"
@@ -4271,23 +4281,31 @@ msgstr ""
 "If set, an underline in the label property indicates that the next character "
 "should be used for the mnemonic accelerator key in the overflow menu"
 
-#: ../gtk/gtktoolbutton.c:197
+#: ../gtk/gtktoolbutton.c:202
 msgid "Widget to use as the item label"
 msgstr "Widget to use as the item label"
 
-#: ../gtk/gtktoolbutton.c:203
+#: ../gtk/gtktoolbutton.c:208
 msgid "Stock Id"
 msgstr "Stock Id"
 
-#: ../gtk/gtktoolbutton.c:204
+#: ../gtk/gtktoolbutton.c:209
 msgid "The stock icon displayed on the item"
 msgstr "The stock icon displayed on the item"
 
-#: ../gtk/gtktoolbutton.c:210
+#: ../gtk/gtktoolbutton.c:225
+msgid "Icon name"
+msgstr "Icon name"
+
+#: ../gtk/gtktoolbutton.c:226
+msgid "The name of the themed icon displayed on the item"
+msgstr "The name of the themed icon displayed on the item"
+
+#: ../gtk/gtktoolbutton.c:232
 msgid "Icon widget"
 msgstr "Icon widget"
 
-#: ../gtk/gtktoolbutton.c:211
+#: ../gtk/gtktoolbutton.c:233
 msgid "Icon widget to display in the item"
 msgstr "Icon widget to display in the item"
 
@@ -4346,14 +4364,6 @@ msgstr "Expander Column"
 #: ../gtk/gtktreeview.c:603
 msgid "Set the column for the expander column"
 msgstr "Set the column for the expander column"
-
-#: ../gtk/gtktreeview.c:610 ../gtk/gtktreeviewcolumn.c:342
-msgid "Reorderable"
-msgstr "Reorderable"
-
-#: ../gtk/gtktreeview.c:611
-msgid "View is reorderable"
-msgstr "View is reorderable"
 
 #: ../gtk/gtktreeview.c:618
 msgid "Rules Hint"
