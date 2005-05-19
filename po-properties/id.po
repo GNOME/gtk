@@ -7,36 +7,33 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-05-19 02:41+0300\n"
-"PO-Revision-Date: 2005-05-19 03:14+0300\n"
+"POT-Creation-Date: 2005-05-19 22:16+0300\n"
+"PO-Revision-Date: 2005-05-19 22:14+0300\n"
 "Last-Translator: Mohammad DAMT <mdamt@bisnisweb.com>\n"
 "Language-Team: Indonesia <sukarelawan@gnome.linux.or.id>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit"
+"Content-Transfer-Encoding: 8bit\n"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:110
 msgid "Number of Channels"
 msgstr "Jumlah Kanal"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:111
-#, fuzzy
 msgid "The number of samples per pixel"
-msgstr "File XPM ini memiliki jumlah karakter per pixel yang salah"
+msgstr "Jumlah contoh per piksel"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:120
-#, fuzzy
 msgid "Colorspace"
-msgstr "_Nama Warna:"
+msgstr "Ruang warna"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:121
 msgid "The colorspace in which the samples are interpreted"
 msgstr "Ruangwarna untuk menterjemahkan contoh"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:129
-#, fuzzy
 msgid "Has Alpha"
-msgstr "Gunakan markup"
+msgstr "Memiliki Alfa"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:130
 msgid "Whether the pixbuf has an alpha channel"
@@ -47,9 +44,8 @@ msgid "Bits per Sample"
 msgstr "Bit per Contoh"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:144
-#, fuzzy
 msgid "The number of bits per sample"
-msgstr "Jumlah baris dalam tabel"
+msgstr "Jumlah bit per contoh"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:153 ../gtk/gtklayout.c:651
 #: ../gtk/gtktreeviewcolumn.c:242
@@ -57,30 +53,25 @@ msgid "Width"
 msgstr "Lebar"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:154
-#, fuzzy
 msgid "The number of columns of the pixbuf"
-msgstr "Jumlah kolom dalam tabel"
+msgstr "Jumlah kolom dalam pixbuf"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:163 ../gtk/gtklayout.c:660
 msgid "Height"
 msgstr "Tinggi"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:164
-#, fuzzy
 msgid "The number of rows of the pixbuf"
-msgstr "Jumlah baris dalam tabel"
+msgstr "Jumlah baris dalam pixbuf"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:180
-#, fuzzy
 msgid "Rowstride"
-msgstr "Baris"
+msgstr ""
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:181
-#, fuzzy
 msgid ""
 "The number of bytes between the start of a row and the start of the next row"
-msgstr ""
-"Jumlah piksel yang ditempatkan antara scrollbar dengan window yang discroll"
+msgstr "Jumlah byte antara awal baris dan awal baris berikutnya"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:190
 msgid "Pixels"
@@ -103,31 +94,28 @@ msgid "Screen"
 msgstr "Layar"
 
 #: ../gdk/gdkpango.c:511
-#, fuzzy
 msgid "the GdkScreen for the renderer"
-msgstr "Model TreeView"
+msgstr "GdkScreen penggambar"
 
 #: ../gtk/gtkaboutdialog.c:204
-#, fuzzy
 msgid "Program name"
-msgstr "Nama tag"
+msgstr "Nama program"
 
 #: ../gtk/gtkaboutdialog.c:205
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
 msgstr ""
-"Nama program. Jika tidak ada isinya, maka mengacu pada "
-"g_get_application_name()"
+"Nama program. Jika tidak ada isinya, maka mengacu pada g_get_application_name"
+"()"
 
 #: ../gtk/gtkaboutdialog.c:219
 msgid "Program version"
 msgstr "Versi program"
 
 #: ../gtk/gtkaboutdialog.c:220
-#, fuzzy
 msgid "The version of the program"
-msgstr "Arah orientasi toolbar"
+msgstr "Versi program ini"
 
 #: ../gtk/gtkaboutdialog.c:234
 msgid "Copyright string"
@@ -138,9 +126,8 @@ msgid "Copyright information for the program"
 msgstr "Informasi hak cipta program"
 
 #: ../gtk/gtkaboutdialog.c:252
-#, fuzzy
 msgid "Comments string"
-msgstr "Jarak antar kolom"
+msgstr "Teks keterangan"
 
 #: ../gtk/gtkaboutdialog.c:253
 msgid "Comments about the program"
@@ -155,26 +142,24 @@ msgid "The URL for the link to the website of the program"
 msgstr "URL taut situs program ini"
 
 #: ../gtk/gtkaboutdialog.c:303
-#, fuzzy
 msgid "Website label"
-msgstr "Label tab"
+msgstr "Label situs web"
 
 #: ../gtk/gtkaboutdialog.c:304
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
 msgstr ""
-"Label yang digunakan untuk taut situs program ini. Jika tidak ada "
-"isinya, maka isinya akan dibuat sama dengan URL-nya"
+"Label yang digunakan untuk taut situs program ini. Jika tidak ada isinya, "
+"maka isinya akan dibuat sama dengan URL-nya"
 
 #: ../gtk/gtkaboutdialog.c:320
 msgid "Authors"
 msgstr "Penyusun"
 
 #: ../gtk/gtkaboutdialog.c:321
-#, fuzzy
 msgid "List of authors of the program"
-msgstr "Arah orientasi toolbar"
+msgstr "Daftar penyusun program ini"
 
 #: ../gtk/gtkaboutdialog.c:337
 msgid "Documenters"
@@ -209,22 +194,22 @@ msgstr "Lambang"
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
-msgstr "Lambang untuk kotak keterangan program. Jika tidak ada isinya, "
-"maka mengacu ke gtk_window_get_default_icon_list()"
+msgstr ""
+"Lambang untuk kotak keterangan program. Jika tidak ada isinya, maka mengacu "
+"ke gtk_window_get_default_icon_list()"
 
 #: ../gtk/gtkaboutdialog.c:404
-#, fuzzy
 msgid "Logo Icon Name"
-msgstr "Nama font"
+msgstr "Nama Ikon Lambang"
 
 #: ../gtk/gtkaboutdialog.c:405
 msgid "A named icon to use as the logo for the about box."
-msgstr "Nama ikon yang digunakan sebagai lambang pada kotak keterangan program."
+msgstr ""
+"Nama ikon yang digunakan sebagai lambang pada kotak keterangan program."
 
 #: ../gtk/gtkaboutdialog.c:412
-#, fuzzy
 msgid "Link Color"
-msgstr "Warna saat ini"
+msgstr "Warna Taut"
 
 #: ../gtk/gtkaboutdialog.c:413
 msgid "Color of hyperlinks"
@@ -247,9 +232,8 @@ msgid "The widget to be monitored for accelerator changes"
 msgstr "Widget yang dimonitor saat akselerator berubah"
 
 #: ../gtk/gtkaction.c:197 ../gtk/gtkactiongroup.c:135
-#, fuzzy
 msgid "Name"
-msgstr "Nama font"
+msgstr "Nama"
 
 #: ../gtk/gtkaction.c:198
 msgid "A unique name for the action."
@@ -262,12 +246,13 @@ msgstr "Label"
 
 #: ../gtk/gtkaction.c:206
 msgid "The label used for menu items and buttons that activate this action."
-msgstr "Label yang digunakan sebagai isian menu dan tombol yang akan mengaktifkan aksi ini."
+msgstr ""
+"Label yang digunakan sebagai isian menu dan tombol yang akan mengaktifkan "
+"aksi ini."
 
 #: ../gtk/gtkaction.c:213
-#, fuzzy
 msgid "Short label"
-msgstr "Label tab"
+msgstr "Label pendek"
 
 #: ../gtk/gtkaction.c:214
 msgid "A shorter label that may be used on toolbar buttons."
@@ -282,9 +267,8 @@ msgid "A tooltip for this action."
 msgstr "Kalimat bantuan pendek untuk aksi ini."
 
 #: ../gtk/gtkaction.c:227
-#, fuzzy
 msgid "Stock Icon"
-msgstr "ID stok"
+msgstr "Ikon Stok"
 
 #: ../gtk/gtkaction.c:228
 msgid "The stock icon displayed in widgets representing this action."
@@ -298,8 +282,9 @@ msgstr "Nampak pada kondisi horisontal"
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a horizontal "
 "orientation."
-msgstr "Menentukan apakah isi batang alat ditunjukkan pada saat batang alat "
-"dalam keadaan horisontal."
+msgstr ""
+"Menentukan apakah isi batang alat ditunjukkan pada saat batang alat dalam "
+"keadaan horisontal."
 
 #: ../gtk/gtkaction.c:251
 msgid "Visible when overflown"
@@ -309,8 +294,9 @@ msgstr "Nampak pada kondisi overflow"
 msgid ""
 "When TRUE, toolitem proxies for this action are represented in the toolbar "
 "overflow menu."
-msgstr "Jika diisi TRUE, maka proksi tooltiem untuk aksi ini dilambangkan dalam "
-"menu overflow pada batang alat."
+msgstr ""
+"Jika diisi TRUE, maka proksi tooltiem untuk aksi ini dilambangkan dalam menu "
+"overflow pada batang alat."
 
 #: ../gtk/gtkaction.c:259 ../gtk/gtktoolitem.c:167
 msgid "Visible when vertical"
@@ -320,8 +306,9 @@ msgstr "Nampak dalam kondisi vertikal"
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a vertical "
 "orientation."
-msgstr "Menentukan apakah isi batang alat ditunjukkan pada saat batang alat "
-"dalam keadaan vertikal."
+msgstr ""
+"Menentukan apakah isi batang alat ditunjukkan pada saat batang alat dalam "
+"keadaan vertikal."
 
 #: ../gtk/gtkaction.c:267 ../gtk/gtktoolitem.c:174
 msgid "Is important"
@@ -331,8 +318,10 @@ msgstr "Penting?"
 msgid ""
 "Whether the action is considered important. When TRUE, toolitem proxies for "
 "this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
-msgstr "Menentukan apakah aksi ini penting atau tidak. Jika diisi TRUE, proksi toolitem "
-"untuk aksi ini akan menampilkan teks pada moda GTK_TOOLBAR_BOTH_HORIZ."
+msgstr ""
+"Menentukan apakah aksi ini penting atau tidak. Jika diisi TRUE, proksi "
+"toolitem untuk aksi ini akan menampilkan teks pada moda "
+"GTK_TOOLBAR_BOTH_HORIZ."
 
 #: ../gtk/gtkaction.c:276
 msgid "Hide if empty"
@@ -340,7 +329,9 @@ msgstr "Sembunyikan bila kosong"
 
 #: ../gtk/gtkaction.c:277
 msgid "When TRUE, empty menu proxies for this action are hidden."
-msgstr "Jika diisi TRUE, maka proksi menu yang kosong untuk aksi ini akan disembunyikan"
+msgstr ""
+"Jika diisi TRUE, maka proksi menu yang kosong untuk aksi ini akan "
+"disembunyikan"
 
 #: ../gtk/gtkaction.c:283 ../gtk/gtkactiongroup.c:142
 #: ../gtk/gtkcellrenderer.c:222 ../gtk/gtkwidget.c:452
@@ -348,9 +339,8 @@ msgid "Sensitive"
 msgstr "Sensitif"
 
 #: ../gtk/gtkaction.c:284
-#, fuzzy
 msgid "Whether the action is enabled."
-msgstr "Menentukan apakah widget terlihat atau tidak"
+msgstr "Menentukan apkaah aksi diaktifkan"
 
 #: ../gtk/gtkaction.c:290 ../gtk/gtkactiongroup.c:149
 #: ../gtk/gtktreeviewcolumn.c:226 ../gtk/gtkwidget.c:445
@@ -358,35 +348,32 @@ msgid "Visible"
 msgstr "Terlihat"
 
 #: ../gtk/gtkaction.c:291
-#, fuzzy
 msgid "Whether the action is visible."
-msgstr "Menentukan apakah widget terlihat atau tidak"
+msgstr "Menentukan apakah aksi terlihat atau tidak"
 
 #: ../gtk/gtkaction.c:297
-#, fuzzy
 msgid "Action Group"
-msgstr "Fraksi"
+msgstr "Kelompok Aksi"
 
 #: ../gtk/gtkaction.c:298
 msgid ""
 "The GtkActionGroup this GtkAction is associated with, or NULL (for internal "
 "use)."
-msgstr "GtkActionGroup yang digunakan pada GtkAction ini, atau isi saja NULL "
-"(untuk keperluan internal)."
+msgstr ""
+"GtkActionGroup yang digunakan pada GtkAction ini, atau isi saja NULL (untuk "
+"keperluan internal)."
 
 #: ../gtk/gtkactiongroup.c:136
 msgid "A name for the action group."
 msgstr "Nama kelompok aksi ini."
 
 #: ../gtk/gtkactiongroup.c:143
-#, fuzzy
 msgid "Whether the action group is enabled."
-msgstr "Menentukan apakah widget terlihat atau tidak"
+msgstr "Menentukan apakah kelompok aksi aktif atau tidak"
 
 #: ../gtk/gtkactiongroup.c:150
-#, fuzzy
 msgid "Whether the action group is visible."
-msgstr "Menentukan apakah widget terlihat atau tidak"
+msgstr "Menentukan apakah kelompok aksi tampak atau tidak"
 
 #: ../gtk/gtkadjustment.c:116 ../gtk/gtkcellrendererprogress.c:116
 #: ../gtk/gtkspinbutton.c:304
@@ -394,39 +381,32 @@ msgid "Value"
 msgstr "Nilai"
 
 #: ../gtk/gtkadjustment.c:117
-#, fuzzy
 msgid "The value of the adjustment"
-msgstr "Nama widget"
+msgstr "Nilai penyesuaian"
 
 #: ../gtk/gtkadjustment.c:133
-#, fuzzy
 msgid "Minimum Value"
-msgstr "X Minimum"
+msgstr "Nilai Minimum"
 
 #: ../gtk/gtkadjustment.c:134
-#, fuzzy
 msgid "The minimum value of the adjustment"
-msgstr "Nama widget"
+msgstr "Nilai penyesuaian minimal"
 
 #: ../gtk/gtkadjustment.c:153
-#, fuzzy
 msgid "Maximum Value"
-msgstr "Panjang maksimum"
+msgstr "Nilai Maksimal"
 
 #: ../gtk/gtkadjustment.c:154
-#, fuzzy
 msgid "The maximum value of the adjustment"
-msgstr "Nama widget"
+msgstr "Nilai penyesuaian maksimal"
 
 #: ../gtk/gtkadjustment.c:170
-#, fuzzy
 msgid "Step Increment"
-msgstr "Layar"
+msgstr "Besar Kenaikan"
 
 #: ../gtk/gtkadjustment.c:171
-#, fuzzy
 msgid "The step increment of the adjustment"
-msgstr "Isi"
+msgstr "Besarnya kenaikan penyesuaian"
 
 #: ../gtk/gtkadjustment.c:187
 msgid "Page Increment"
@@ -811,8 +791,9 @@ msgstr "Fokus"
 msgid ""
 "Whether the child_displacement_x/_y properties should also affect the focus "
 "rectangle"
-msgstr "Menentukan apakah child_displacement_x/y_properties juga mempengaruhi "
-"fokus kotak"
+msgstr ""
+"Menentukan apakah child_displacement_x/y_properties juga mempengaruhi fokus "
+"kotak"
 
 #: ../gtk/gtkbutton.c:418
 msgid "Show button images"
@@ -1019,8 +1000,9 @@ msgstr "Ada Isinya"
 
 #: ../gtk/gtkcellrenderercombo.c:129
 msgid "If FALSE, don't allow to enter strings other than the chosen ones"
-msgstr "Jika diisi FALSE, maka jangan bolehkan untuk memasukkan kalimat "
-"selain yang sudah dipilih"
+msgstr ""
+"Jika diisi FALSE, maka jangan bolehkan untuk memasukkan kalimat selain yang "
+"sudah dipilih"
 
 #: ../gtk/gtkcellrendererpixbuf.c:145
 msgid "Pixbuf Object"
@@ -1292,9 +1274,9 @@ msgstr "Elipsis"
 msgid ""
 "The preferred place to ellipsize the string, if the cell renderer does not "
 "have enough room to display the entire string, if at all"
-msgstr "Tempat yang diinginkan untuk memasang elipsis pada saat "
-"kotak sel tidak memiliki cukup ruang untuk menampilkan keseluruhan "
-"teks"
+msgstr ""
+"Tempat yang diinginkan untuk memasang elipsis pada saat kotak sel tidak "
+"memiliki cukup ruang untuk menampilkan keseluruhan teks"
 
 #: ../gtk/gtkcellrenderertext.c:455 ../gtk/gtkfilechooserbutton.c:367
 #: ../gtk/gtklabel.c:454
@@ -1314,8 +1296,9 @@ msgstr "Mode potong"
 msgid ""
 "How to break the string into multiple lines, if the cell renderer does not "
 "have enough room to display the entire string"
-msgstr "Cara memecah kalimat dalam baris-baris pada saat kotak sel tidak "
-"memiliki cukup ruang untuk menampilkan keseluruhan teks"
+msgstr ""
+"Cara memecah kalimat dalam baris-baris pada saat kotak sel tidak memiliki "
+"cukup ruang untuk menampilkan keseluruhan teks"
 
 #: ../gtk/gtkcellrenderertext.c:494 ../gtk/gtkcombobox.c:573
 #, fuzzy
@@ -1967,7 +1950,9 @@ msgstr "Lebar garis fokus"
 
 #: ../gtk/gtkentrycompletion.c:350
 msgid "If TRUE, the popup window will have the same size as the entry"
-msgstr "Jika diisi TRUE, jendela popup akan memiliki ukuran yang sama dengan kotak isian"
+msgstr ""
+"Jika diisi TRUE, jendela popup akan memiliki ukuran yang sama dengan kotak "
+"isian"
 
 #: ../gtk/gtkeventbox.c:122
 #, fuzzy
@@ -1978,7 +1963,9 @@ msgstr "Terlihat"
 msgid ""
 "Whether the event box is visible, as opposed to invisible and only used to "
 "trap events."
-msgstr "Menentukan apakah kotak kejadian ditampilkan atau tidak, dan hanya digunakan untuk mencatat kejadian."
+msgstr ""
+"Menentukan apakah kotak kejadian ditampilkan atau tidak, dan hanya digunakan "
+"untuk mencatat kejadian."
 
 #: ../gtk/gtkeventbox.c:129
 #, fuzzy
@@ -1989,7 +1976,9 @@ msgstr "Obey child"
 msgid ""
 "Whether the event-trapping window of the eventbox is above the window of the "
 "child widget as opposed to below it."
-msgstr "Menentukan apakah jendela penjebak kejadian kotak kejadiannya berada di atas jendela widget anak"
+msgstr ""
+"Menentukan apakah jendela penjebak kejadian kotak kejadiannya berada di atas "
+"jendela widget anak"
 
 #: ../gtk/gtkexpander.c:198
 #, fuzzy
@@ -2099,7 +2088,9 @@ msgstr "Contoh teks"
 #: ../gtk/gtkfilechooser.c:209
 msgid ""
 "Whether the application supplied widget for custom previews should be shown."
-msgstr "Menentukan apakah widget aplikasi untuk pratilik tambahan ditampilkan atau tidak."
+msgstr ""
+"Menentukan apakah widget aplikasi untuk pratilik tambahan ditampilkan atau "
+"tidak."
 
 #: ../gtk/gtkfilechooser.c:214
 #, fuzzy
@@ -2108,7 +2099,8 @@ msgstr "Contoh teks"
 
 #: ../gtk/gtkfilechooser.c:215
 msgid "Whether to display a stock label with the name of the previewed file."
-msgstr "Menentukan apakah label stok berupa nama yang ditilik ditampilkan atau tidak."
+msgstr ""
+"Menentukan apakah label stok berupa nama yang ditilik ditampilkan atau tidak."
 
 #: ../gtk/gtkfilechooser.c:220
 #, fuzzy
@@ -2381,7 +2373,8 @@ msgstr "Markup"
 
 #: ../gtk/gtkiconview.c:563
 msgid "Model column used to retrieve the text if using Pango markup"
-msgstr "Kolom model yang digunakna untuk mengambil teks jika menggunakan markup Pango"
+msgstr ""
+"Kolom model yang digunakna untuk mengambil teks jika menggunakan markup Pango"
 
 #: ../gtk/gtkiconview.c:570
 #, fuzzy
@@ -2580,7 +2573,7 @@ msgstr "Menentukan apakah tab digambar atau tidak"
 
 #: ../gtk/gtkinvisible.c:118 ../gtk/gtkwindow.c:538
 msgid "The screen where this window will be displayed"
-msgstr "Layar tempat window hendak ditampilkan"
+msgstr "Layar tempat jendela hendak ditampilkan"
 
 #: ../gtk/gtklabel.c:322
 msgid "The text of the label"
@@ -2652,8 +2645,9 @@ msgstr "Widget yang diaktifkan saat tombol singkat ditekan"
 msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string, if at all"
-msgstr "Tempat yang diinginkan untuk meletakan elipsis pada teks pada saat "
-"label tidak memiliki cukup ruang untuk menampilkan keseluruhan isi teks"
+msgstr ""
+"Tempat yang diinginkan untuk meletakan elipsis pada teks pada saat label "
+"tidak memiliki cukup ruang untuk menampilkan keseluruhan isi teks"
 
 #: ../gtk/gtklabel.c:475
 #, fuzzy
@@ -2714,7 +2708,7 @@ msgstr "Judul saat disobek"
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
-msgstr "Judul yang ditampilkan window manager saat menu ini disobek"
+msgstr "Judul yang ditampilkan jendela manager saat menu ini disobek"
 
 #: ../gtk/gtkmenu.c:544
 #, fuzzy
@@ -2724,7 +2718,7 @@ msgstr "Judul saat disobek"
 #: ../gtk/gtkmenu.c:545
 #, fuzzy
 msgid "A boolean that indicates whether the menu is torn-off"
-msgstr "Judul yang ditampilkan window manager saat menu ini disobek"
+msgstr "Judul yang ditampilkan jendela manager saat menu ini disobek"
 
 #: ../gtk/gtkmenu.c:551
 #, fuzzy
@@ -2746,8 +2740,9 @@ msgstr "Skala vertikal"
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
-msgstr "Apabila menu ini berupa submenu, letakkan menu ini pada lokasi "
-"yang ditentukan angka ini (dalam piksel) secara vertikal"
+msgstr ""
+"Apabila menu ini berupa submenu, letakkan menu ini pada lokasi yang "
+"ditentukan angka ini (dalam piksel) secara vertikal"
 
 #: ../gtk/gtkmenu.c:569
 #, fuzzy
@@ -2758,8 +2753,9 @@ msgstr "Skala Horisontal"
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
-msgstr "Apabila menu ini berupa submenu, letakkan menu ini pada lokasi "
-"yang ditentukan angka ini (dalam piksel) secara horisontal"
+msgstr ""
+"Apabila menu ini berupa submenu, letakkan menu ini pada lokasi yang "
+"ditentukan angka ini (dalam piksel) secara horisontal"
 
 #: ../gtk/gtkmenu.c:580
 #, fuzzy
@@ -2877,7 +2873,7 @@ msgstr "Memiliki fokus"
 #: ../gtk/gtkmenushell.c:375
 #, fuzzy
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
-msgstr "Judul yang ditampilkan window manager saat menu ini disobek"
+msgstr "Judul yang ditampilkan jendela manager saat menu ini disobek"
 
 #: ../gtk/gtkmenutoolbutton.c:248 ../gtk/gtkoptionmenu.c:196
 msgid "Menu"
@@ -2903,7 +2899,9 @@ msgstr "Ada pembatas"
 #: ../gtk/gtkmessagedialog.c:143
 msgid ""
 "Whether to put a separator between the message dialog's text and the buttons"
-msgstr "Menentukan apakah ingin meletakkan pemisah antara teks pesan pada dialog dan tombol-tombol"
+msgstr ""
+"Menentukan apakah ingin meletakkan pemisah antara teks pesan pada dialog dan "
+"tombol-tombol"
 
 #: ../gtk/gtkmessagedialog.c:149
 msgid "Message Type"
@@ -3310,7 +3308,8 @@ msgstr "Teks yang ditampilkan pada progres bar"
 msgid ""
 "The preferred place to ellipsize the string, if the progressbar does not "
 "have enough room to display the entire string, if at all"
-msgstr "Lokasi untuk meletakkan elipsis pada teks apabila kotak indikator kemajuan "
+msgstr ""
+"Lokasi untuk meletakkan elipsis pada teks apabila kotak indikator kemajuan "
 "tidak memiliki cukup ruang untuk menampilkan keseluruhan isi teks"
 
 #: ../gtk/gtkradioaction.c:140
@@ -3322,7 +3321,8 @@ msgstr "Nama Tema"
 msgid ""
 "The value returned by gtk_radio_action_get_current_value() when this action "
 "is the current action of its group."
-msgstr "Nilai yang diberikan gtk_radio_action_get_current_valu() pada saat aksi ini "
+msgstr ""
+"Nilai yang diberikan gtk_radio_action_get_current_valu() pada saat aksi ini "
 "dijadikan aksi utama dalam kelompoknya."
 
 #: ../gtk/gtkradioaction.c:157 ../gtk/gtkradiobutton.c:114
@@ -3569,7 +3569,7 @@ msgstr "Jarak scrollbar"
 #: ../gtk/gtkscrolledwindow.c:287
 msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr ""
-"Jumlah piksel yang ditempatkan antara scrollbar dengan window yang discroll"
+"Jumlah piksel yang ditempatkan antara scrollbar dengan jendela yang discroll"
 
 #: ../gtk/gtkseparatortoolitem.c:137
 msgid "Draw"
@@ -3707,7 +3707,9 @@ msgstr "Antialias Xft"
 
 #: ../gtk/gtksettings.c:384
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
-msgstr "Menentukan apakah menggunakan huruf Xft antialias, 0=tidak, 1=ya, -1=bergantung kondisi awal"
+msgstr ""
+"Menentukan apakah menggunakan huruf Xft antialias, 0=tidak, 1=ya, -"
+"1=bergantung kondisi awal"
 
 #: ../gtk/gtksettings.c:393
 msgid "Xft Hinting"
@@ -3715,7 +3717,9 @@ msgstr "Hint Xft"
 
 #: ../gtk/gtksettings.c:394
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
-msgstr "Menentukan apakah menggunakan huruf Xft hint, 0=tidak, 1=ya, -1=bergantung kondisi awal"
+msgstr ""
+"Menentukan apakah menggunakan huruf Xft hint, 0=tidak, 1=ya, -1=bergantung "
+"kondisi awal"
 
 #: ../gtk/gtksettings.c:403
 msgid "Xft Hint Style"
@@ -3828,7 +3832,7 @@ msgstr "Gaya bevel disekeliling tombol spin"
 
 #: ../gtk/gtkstatusbar.c:178
 msgid "Has Resize Grip"
-msgstr ""
+msgstr "Memiliki Gagang Pengubah Ukuran"
 
 #: ../gtk/gtkstatusbar.c:179
 #, fuzzy
@@ -4323,11 +4327,11 @@ msgstr "Menentukan apakah teks yang dimasukkan menimpa isi yang ada sebelumnya"
 
 #: ../gtk/gtktextview.c:665
 msgid "Accepts tab"
-msgstr ""
+msgstr "Perbolehkan tab"
 
 #: ../gtk/gtktextview.c:666
 msgid "Whether Tab will result in a tab character being entered"
-msgstr ""
+msgstr "Menentukan apakah bila Tab ditekan maka akan menyisipkan karakter Tab"
 
 #: ../gtk/gtktextview.c:675
 #, fuzzy
@@ -4346,7 +4350,7 @@ msgstr "Menggambar tombol togel sebagai tombol radio"
 
 #: ../gtk/gtktoggleaction.c:132
 msgid "Whether the proxies for this action look like radio action proxies"
-msgstr ""
+msgstr "Menentukan apkah proksi aksi ini berupa proksi aksi radio"
 
 #: ../gtk/gtktogglebutton.c:136
 msgid "If the toggle button should be pressed in or not"
@@ -4388,7 +4392,7 @@ msgstr ""
 
 #: ../gtk/gtktoolbar.c:541
 msgid "Tooltips"
-msgstr ""
+msgstr "Kalimat bantu"
 
 #: ../gtk/gtktoolbar.c:542
 #, fuzzy
@@ -4512,6 +4516,9 @@ msgid ""
 "Whether the toolbar item is considered important. When TRUE, toolbar buttons "
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
 msgstr ""
+"Menentukan apakah isi batang alat ini penting atau tidak. Bila diisi TRUE, "
+"maka tombol dalam batang alat akan menampilkan teks dalam moda "
+"GTK_TOOLBAR_BOTH_HORIZ"
 
 #: ../gtk/gtktreemodelsort.c:331
 msgid "TreeModelSort Model"
@@ -4596,10 +4603,12 @@ msgstr "Tinggi tetap"
 #: ../gtk/gtktreeview.c:656
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr ""
+"Mempercepat kinerja GtkTreeView dengan mengasumsikan tinggi yang seragam "
+"untuk setiap barisnya"
 
 #: ../gtk/gtktreeview.c:676
 msgid "Hover Selection"
-msgstr ""
+msgstr "Warna Penyorot"
 
 #: ../gtk/gtktreeview.c:677
 #, fuzzy
@@ -4615,7 +4624,7 @@ msgstr "Ekspansi"
 #, fuzzy
 msgid ""
 "Whether rows should be expanded/collapsed when the pointer moves over them"
-msgstr "TRUE jika window tidak muncul pada pager"
+msgstr "TRUE jika jendela tidak muncul pada pager"
 
 #: ../gtk/gtktreeview.c:717
 msgid "Vertical Separator Width"
@@ -4683,7 +4692,7 @@ msgstr "Lebar kolom saat ini"
 
 #: ../gtk/gtktreeviewcolumn.c:252
 msgid "Space which is inserted between cells"
-msgstr ""
+msgstr "Ruangan yang disisipkan di antara sel"
 
 #: ../gtk/gtktreeviewcolumn.c:260
 msgid "Sizing"
@@ -4778,11 +4787,11 @@ msgstr "Apakah menu item sedang dipilih atau tidak"
 
 #: ../gtk/gtkuimanager.c:238
 msgid "Merged UI definition"
-msgstr ""
+msgstr "Gabungan definisi antarmuka pengguna"
 
 #: ../gtk/gtkuimanager.c:239
 msgid "An XML string describing the merged UI"
-msgstr ""
+msgstr "Teks XML mengenai gabungan antarmuka"
 
 #: ../gtk/gtkviewport.c:138
 msgid ""
@@ -4946,11 +4955,13 @@ msgstr ""
 
 #: ../gtk/gtkwidget.c:538
 msgid "No show all"
-msgstr ""
+msgstr "Jangan tampilkan semua"
 
 #: ../gtk/gtkwidget.c:539
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr ""
+"Menentukan apakah gtk_widget_show_all() tidak perlu mempengaruhi widget ini "
+"atau tidak"
 
 #: ../gtk/gtkwidget.c:1419
 msgid "Interior Focus"
@@ -5013,13 +5024,12 @@ msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Rasio aspek yang digunakan saat menggambar kursor pengisian teks"
 
 #: ../gtk/gtkwidget.c:1463
-#, fuzzy
 msgid "Draw Border"
-msgstr "Batas Tab"
+msgstr "Gambar Batas"
 
 #: ../gtk/gtkwidget.c:1464
 msgid "Size of areas outside the widget's allocation to draw"
-msgstr ""
+msgstr "Ukuran area di luar alokasi penggambaran widget"
 
 #: ../gtk/gtkwindow.c:418
 msgid "Window Type"
@@ -5043,7 +5053,7 @@ msgstr "Peranan Window"
 
 #: ../gtk/gtkwindow.c:436
 msgid "Unique identifier for the window to be used when restoring a session"
-msgstr "Nama unik window untuk digunakan saat mengembalikan kondisi sesi"
+msgstr "Nama unik jendela untuk digunakan saat mengembalikan kondisi sesi"
 
 #: ../gtk/gtkwindow.c:443
 msgid "Allow Shrink"
@@ -5055,7 +5065,7 @@ msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
 "time a bad idea"
 msgstr ""
-"Bila bernilai TRUE, window tidak memiliki ukuran minimum. Adalah suatu ide "
+"Bila bernilai TRUE, jendela tidak memiliki ukuran minimum. Adalah suatu ide "
 "buruk bila memberikan nilai TRUE pada properti ini"
 
 #: ../gtk/gtkwindow.c:452
@@ -5065,7 +5075,7 @@ msgstr "Dapat dibesarkan"
 #: ../gtk/gtkwindow.c:453
 msgid "If TRUE, users can expand the window beyond its minimum size"
 msgstr ""
-"Bila bernilai TRUE, pengguna dapat membesarkan window lebih besar dari "
+"Bila bernilai TRUE, pengguna dapat membesarkan jendela lebih besar dari "
 "ukuran minimalnya"
 
 #: ../gtk/gtkwindow.c:461
@@ -5081,8 +5091,8 @@ msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
 msgstr ""
-"Bila bernilai TRUE, window bersifat modal (window lain tidak dapat digunakan "
-"saat window yang ini ada di atasnya)"
+"Bila bernilai TRUE, jendela bersifat modal (window lain tidak dapat "
+"digunakan saat jendela yang ini ada di atasnya)"
 
 #: ../gtk/gtkwindow.c:476
 msgid "Window Position"
@@ -5116,7 +5126,7 @@ msgstr "Musnah dengan Bapak"
 #: ../gtk/gtkwindow.c:506
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr ""
-"Bila bapak window ini dimusnahkan, maka window ini juga harus dimusnahkan"
+"Bila bapak jendela ini dimusnahkan, maka jendela ini juga harus dimusnahkan"
 
 #: ../gtk/gtkwindow.c:513
 msgid "Icon"
@@ -5124,12 +5134,11 @@ msgstr "Ikon"
 
 #: ../gtk/gtkwindow.c:514
 msgid "Icon for this window"
-msgstr "Ikon yang digunakan pada window ini"
+msgstr "Ikon yang digunakan pada jendela ini"
 
 #: ../gtk/gtkwindow.c:530
-#, fuzzy
 msgid "Name of the themed icon for this window"
-msgstr "Ikon yang digunakan pada window ini"
+msgstr "Ikon tematik yang digunakan pada jendela ini"
 
 #: ../gtk/gtkwindow.c:545
 msgid "Is Active"
@@ -5137,7 +5146,7 @@ msgstr "Aktif"
 
 #: ../gtk/gtkwindow.c:546
 msgid "Whether the toplevel is the current active window"
-msgstr "Menentukan apakah pada tingkat atas adalah window aktif saat ini"
+msgstr "Menentukan apakah pada tingkat atas adalah jendela aktif saat ini"
 
 #: ../gtk/gtkwindow.c:553
 msgid "Focus in Toplevel"
@@ -5156,7 +5165,7 @@ msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
 msgstr ""
-"Petunjuk untuk membantu lingkungan desktop mengerti jenis window ini dan "
+"Petunjuk untuk membantu lingkungan desktop mengerti jenis jendela ini dan "
 "bagaimana melayaninya."
 
 #: ../gtk/gtkwindow.c:570
@@ -5165,7 +5174,7 @@ msgstr "Jangan pada taskbar"
 
 #: ../gtk/gtkwindow.c:571
 msgid "TRUE if the window should not be in the task bar."
-msgstr "Bernilai TRUE bila window tidak usah ada pada task bar."
+msgstr "Bernilai TRUE bila jendela tidak usah ada pada task bar."
 
 #: ../gtk/gtkwindow.c:578
 msgid "Skip pager"
@@ -5173,45 +5182,40 @@ msgstr "Jangan pada pager"
 
 #: ../gtk/gtkwindow.c:579
 msgid "TRUE if the window should not be in the pager."
-msgstr "TRUE jika window tidak muncul pada pager"
+msgstr "TRUE jika jendela tidak muncul pada pager"
 
 #: ../gtk/gtkwindow.c:593
-#, fuzzy
 msgid "Accept focus"
-msgstr "Fokus"
+msgstr "Terima fokus"
 
 #: ../gtk/gtkwindow.c:594
-#, fuzzy
 msgid "TRUE if the window should receive the input focus."
-msgstr "TRUE jika window tidak muncul pada pager"
+msgstr "TRUE jika jendela harus dapat menerima fokus masukan"
 
 #: ../gtk/gtkwindow.c:608
-#, fuzzy
 msgid "Focus on map"
-msgstr "Klik untuk membuat fokus"
+msgstr "Fokus pada pemetaan"
 
 #: ../gtk/gtkwindow.c:609
-#, fuzzy
 msgid "TRUE if the window should receive the input focus when mapped."
-msgstr "TRUE jika window tidak muncul pada pager"
+msgstr "TRUE jika jendela harus dapat menerima fokus pada saat dipetakan"
 
 #: ../gtk/gtkwindow.c:623
 msgid "Decorated"
-msgstr ""
+msgstr "Memiliki dekorasi"
 
 #: ../gtk/gtkwindow.c:624
-#, fuzzy
 msgid "Whether the window should be decorated by the window manager"
-msgstr "TRUE jika window tidak muncul pada pager"
+msgstr ""
+"Menentukan apakah jendela harus diberi dekorasi oleh program pengatur jendela"
 
 #: ../gtk/gtkwindow.c:639
 msgid "Gravity"
-msgstr ""
+msgstr "Gravitasi"
 
 #: ../gtk/gtkwindow.c:640
-#, fuzzy
 msgid "The window gravity of the window"
-msgstr "Jenis window"
+msgstr "Gravitasi jendela ini"
 
 #: ../modules/input/gtkimcontextxim.c:330
 msgid "IM Preedit style"
