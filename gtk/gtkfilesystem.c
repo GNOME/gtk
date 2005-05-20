@@ -787,10 +787,12 @@ gchar *
 gtk_file_system_get_bookmark_label (GtkFileSystem     *file_system,
 				    const GtkFilePath *path)
 {
+  GtkFileSystemIface *iface;
+
   g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
   g_return_val_if_fail (path != NULL, FALSE);
 
-  GtkFileSystemIface *iface = GTK_FILE_SYSTEM_GET_IFACE (file_system);
+  iface = GTK_FILE_SYSTEM_GET_IFACE (file_system);
   if (iface->get_bookmark_label)
     return iface->get_bookmark_label (file_system, path);
 
@@ -813,10 +815,12 @@ gtk_file_system_set_bookmark_label (GtkFileSystem     *file_system,
 				    const GtkFilePath *path,
 				    const gchar       *label)
 {
+  GtkFileSystemIface *iface;
+
   g_return_if_fail (GTK_IS_FILE_SYSTEM (file_system));
   g_return_if_fail (path != NULL);
 
-  GtkFileSystemIface *iface = GTK_FILE_SYSTEM_GET_IFACE (file_system);
+  iface = GTK_FILE_SYSTEM_GET_IFACE (file_system);
   if (iface->set_bookmark_label)
     iface->set_bookmark_label (file_system, path, label);
 }

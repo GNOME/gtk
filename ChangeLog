@@ -1,3 +1,8 @@
+2005-05-20  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilesystem.c: Remove C99-isms (#304879, 
+	Kazuki IWAMOTO)
+
 2005-05-18  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilechooser.c (gtk_file_chooser_remove_shortcut_folder_uri): 
