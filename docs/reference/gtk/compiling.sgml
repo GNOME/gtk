@@ -22,7 +22,8 @@ find the GTK+ header files and libraries. This is done with the
 </para>
 <para>
 The following interactive shell session demonstrates how
-<literal>pkg-config</literal> is used:
+<literal>pkg-config</literal> is used (the actual output on your 
+system may be different):
 <programlisting>
 $ pkg-config --cflags gtk+-2.0
  -I/usr/include/gtk-2.0 -I/usr/lib/gtk-2.0/include -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/usr/include/pango-1.0 -I/usr/X11R6/include -I/usr/include/freetype2 -I/usr/include/atk-1.0  
