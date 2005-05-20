@@ -1,3 +1,8 @@
+2005-05-20  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/migrating-GtkAction.sgml: Fix an example.  (#304808,
+	Ghorban M. Tavakoly)
+
 2005-05-18  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/tmpl/properties.sgml: Updates.
