@@ -286,7 +286,7 @@ static GtkActionEntry entries[] = {
   { "FileMenu", NULL, "_File" },
   { "ViewMenu", NULL, "_View" },
   { "Open", GTK_STOCK_OPEN, "_Open", "&lt;control&gt;O", "Open a file", open_action_callback },
-  { "Exit", GTK_STOCK_OPEN, "E_xit", "&lt;control&gt;Q", "Exit the program", exit_action_callback },
+  { "Exit", GTK_STOCK_QUIT, "E_xit", "&lt;control&gt;Q", "Exit the program", exit_action_callback },
   { "ZoomIn", GTK_STOCK_ZOOM_IN, "Zoom _In", "plus", "Zoom into the image", zoom_in_action_callback },
   { "ZoomOut", GTK_STOCK_ZOOM_OUT, "Zoom _Out", "minus", "Zoom away from the image", zoom_out_action_callback },
 };
