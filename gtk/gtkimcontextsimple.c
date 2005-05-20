@@ -1066,10 +1066,18 @@ check_table (GtkIMContextSimple    *context_simple,
 	     gint                   n_compose)
 {
   gint row_stride = table->max_seq_len + 2; 
-  guint16 *seq = bsearch (context_simple->compose_buffer,
-			  table->data, table->n_seqs,
-			  sizeof (guint16) *  row_stride, 
-			  compare_seq);
+  guint16 *seq;
+
+  /* Will never match, if the sequence in the compose buffer is longer
+   * than the sequences in the table.  Further, compare_seq (key, val)
+   * will overrun val if key is longer than val. */
+  if (n_compose > table->max_seq_len)
+    return FALSE;
+
+  seq = bsearch (context_simple->compose_buffer,
+		 table->data, table->n_seqs,
+		 sizeof (guint16) *  row_stride, 
+		 compare_seq);
 
   if (seq)
     {
