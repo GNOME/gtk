@@ -1,5 +1,8 @@
 2005-05-20  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkimcontextsimple.c (check_table): Avoid a possible
+	buffer overrun.  (#142444, Leonard Michlmayr)
+
 	* gtk/gtkfilesystem.c: Remove C99-isms (#304879, 
 	Kazuki IWAMOTO)
 
