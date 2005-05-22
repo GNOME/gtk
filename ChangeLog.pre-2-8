@@ -1,5 +1,8 @@
 2005-05-23  Tor Lillqvist  <tml@novell.com>
 
+	* gdk/win32/gdkkeys-win32.c (handle_special): Map VK_APPS to
+	GDK_Menu. (#172383, Ivan Wong)
+
 	* gdk/win32/gdkkeys-win32.c (handle_dead): If the keysym isn't one
 	of the special cases this function takes care of, use it as
 	such. This takes care of for instance the Bengali Virama, see bug
