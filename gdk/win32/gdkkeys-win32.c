@@ -267,7 +267,7 @@ reset_after_dead (guchar key_state[256])
     }
 }
 
-static gboolean
+static void
 handle_dead (guint  keysym,
 	     guint *ksymp)
 {
@@ -308,9 +308,12 @@ handle_dead (guint  keysym,
     case GDK_Greek_accentdieresis: /* 0x7ae */
       *ksymp = GDK_Greek_accentdieresis; break;
     default:
-      return FALSE;
+      /* By default use the keysym as such. This takes care of for
+       * instance the dead U+09CD (BENGALI VIRAMA) on the ekushey
+       * Bengali layout.
+       */
+      *ksymp = keysym; break;
     }
-  return TRUE;
 }
 
 static void
@@ -451,14 +454,7 @@ update_keymap (void)
 		      reset_after_dead (key_state);
 
 		      /* Use dead keysyms instead of "undead" ones */
-		      if (!handle_dead (keysym, ksymp))
-			GDK_NOTE (EVENTS,
-				  g_print ("Unhandled dead key cp:%d vk:%02x sc:%x ch:%02x wc:%04x keysym:%04x%s%s\n",
-					   _gdk_input_codepage, vk,
-					   scancode, chars[0],
-					   wcs[0], keysym,
-					   (shift&0x1 ? " shift" : ""),
-					   (shift&0x2 ? " altgr" : "")));
+		      handle_dead (keysym, ksymp);
 		    }
 		  else if (k == 0)
 		    {
