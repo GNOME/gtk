@@ -1,7 +1,7 @@
 2005-05-23  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkkeys-win32.c (handle_dead): If the keysym isn't one
-	of the special cases this function takes care of, us it as
+	of the special cases this function takes care of, use it as
 	such. This takes care of for instance the Bengali Virama, see bug
 	#165723.
 
