@@ -12722,7 +12722,6 @@ gtk_tree_view_search_init (GtkWidget   *entry,
   gint len;
   gint count = 0;
   const gchar *text;
-  GtkWidget *window;
   GtkTreeIter iter;
   GtkTreeModel *model;
   GtkTreeSelection *selection;
@@ -12730,7 +12729,6 @@ gtk_tree_view_search_init (GtkWidget   *entry,
   g_return_if_fail (GTK_IS_ENTRY (entry));
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
 
-  window = gtk_widget_get_parent (entry);
   text = gtk_entry_get_text (GTK_ENTRY (entry));
   len = strlen (text);
   model = gtk_tree_view_get_model (tree_view);
