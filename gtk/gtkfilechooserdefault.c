@@ -1842,6 +1842,8 @@ static GtkWidget *
 filter_create (GtkFileChooserDefault *impl)
 {
   impl->filter_combo = gtk_combo_box_new_text ();
+  gtk_combo_box_set_focus_on_click (GTK_COMBO_BOX (impl->filter_combo), FALSE);
+
   g_signal_connect (impl->filter_combo, "changed",
 		    G_CALLBACK (filter_combo_changed), impl);
 
