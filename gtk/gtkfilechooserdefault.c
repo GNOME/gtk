@@ -667,7 +667,7 @@ gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
   impl->load_state = LOAD_EMPTY;
   impl->pending_select_paths = NULL;
 
-  gtk_widget_set_redraw_on_allocate (GTK_WIDGET (impl), TRUE);
+//  gtk_widget_set_redraw_on_allocate (GTK_WIDGET (impl), TRUE);
   gtk_box_set_spacing (GTK_BOX (impl), 12);
 
   impl->tooltips = gtk_tooltips_new ();
@@ -1835,6 +1835,8 @@ static GtkWidget *
 filter_create (GtkFileChooserDefault *impl)
 {
   impl->filter_combo = gtk_combo_box_new_text ();
+  gtk_combo_box_set_focus_on_click (GTK_COMBO_BOX (impl->filter_combo), FALSE);
+
   g_signal_connect (impl->filter_combo, "changed",
 		    G_CALLBACK (filter_combo_changed), impl);
 
