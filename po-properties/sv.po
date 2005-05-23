@@ -1,7 +1,7 @@
 # Swedish messages for GTK+ properties.
-# Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004 Free Software Foundation, Inc.
+# Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005 Free Software Foundation, Inc.
 # Tomas Ögren <stric@ing.umu.se>, 1999.
-# Christian Rose <menthos@menthos.com>, 2000, 2001, 2002, 2003, 2004.
+# Christian Rose <menthos@menthos.com>, 2000, 2001, 2002, 2003, 2004, 2005.
 #
 # $Id$
 #
@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-04-12 22:42-0400\n"
-"PO-Revision-Date: 2004-12-18 15:10+0100\n"
+"POT-Creation-Date: 2005-05-23 23:54+0200\n"
+"PO-Revision-Date: 2005-05-23 23:54+0200\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -343,7 +343,7 @@ msgstr "Känslig"
 msgid "Whether the action is enabled."
 msgstr "Huruvida åtgärden är aktiverad."
 
-#: gtk/gtkaction.c:289 gtk/gtkactiongroup.c:149 gtk/gtktreeview.c:582
+#: gtk/gtkaction.c:289 gtk/gtkactiongroup.c:149 gtk/gtktreeview.c:585
 #: gtk/gtktreeviewcolumn.c:225 gtk/gtkwidget.c:443
 msgid "Visible"
 msgstr "Synlig"
@@ -611,7 +611,7 @@ msgstr ""
 "Om SANT kommer barnet att visas i en sekundär grupp med barn. Användbart "
 "exempelvis för hjälpknappar"
 
-#: gtk/gtkbox.c:130 gtk/gtkexpander.c:230 gtk/gtkiconview.c:449
+#: gtk/gtkbox.c:130 gtk/gtkexpander.c:230 gtk/gtkiconview.c:447
 #: gtk/gtktreeviewcolumn.c:250
 msgid "Spacing"
 msgstr "Mellanrum"
@@ -1843,7 +1843,7 @@ msgstr "Minsta nyckellängd"
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Minsta längd på söknyckeln för att hitta träffar"
 
-#: gtk/gtkentrycompletion.c:295 gtk/gtkiconview.c:370
+#: gtk/gtkentrycompletion.c:295 gtk/gtkiconview.c:368
 msgid "Text column"
 msgstr "Textkolumn"
 
@@ -1923,11 +1923,11 @@ msgstr "Etikettwidget"
 msgid "A widget to display in place of the usual expander label"
 msgstr "En widget att visa istället för den vanliga expanderaretiketten"
 
-#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:704
+#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:707
 msgid "Expander Size"
 msgstr "Storlek på expanderare"
 
-#: gtk/gtkexpander.c:248 gtk/gtktreeview.c:705
+#: gtk/gtkexpander.c:248 gtk/gtktreeview.c:708
 msgid "Size of the expander arrow"
 msgstr "Storlek på expanderarpilen"
 
@@ -2220,108 +2220,108 @@ msgstr ""
 "Huruvida värdet från egenskapen snap_edge eller ett värde härlett från "
 "handle_position ska användas"
 
-#: gtk/gtkiconview.c:333
+#: gtk/gtkiconview.c:331
 msgid "Selection mode"
 msgstr "Markeringsläge"
 
-#: gtk/gtkiconview.c:334
+#: gtk/gtkiconview.c:332
 msgid "The selection mode"
 msgstr "Markeringsläget"
 
-#: gtk/gtkiconview.c:352
+#: gtk/gtkiconview.c:350
 msgid "Pixbuf column"
 msgstr "Pixbufkolumn"
 
-#: gtk/gtkiconview.c:353
+#: gtk/gtkiconview.c:351
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr "Modellkolumn som används för att hämta ikonpixbufen från"
 
-#: gtk/gtkiconview.c:371
+#: gtk/gtkiconview.c:369
 msgid "Model column used to retrieve the text from"
 msgstr "Modellkolumn som används för att hämta texten från"
 
-#: gtk/gtkiconview.c:390
+#: gtk/gtkiconview.c:388
 msgid "Markup column"
 msgstr "Markupkolumn"
 
-#: gtk/gtkiconview.c:391
+#: gtk/gtkiconview.c:389
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr "Modellkolumn som används för att hämta texten om Pango-markup används"
 
-#: gtk/gtkiconview.c:398
+#: gtk/gtkiconview.c:396
 msgid "Icon View Model"
 msgstr "Ikonvymodell"
 
-#: gtk/gtkiconview.c:399
+#: gtk/gtkiconview.c:397
 msgid "The model for the icon view"
 msgstr "Modellen för ikonvyn"
 
-#: gtk/gtkiconview.c:415
+#: gtk/gtkiconview.c:413
 msgid "Number of columns"
 msgstr "Antal kolumner"
 
-#: gtk/gtkiconview.c:416
+#: gtk/gtkiconview.c:414
 msgid "Number of columns to display"
 msgstr "Antalet kolumner att visa"
 
-#: gtk/gtkiconview.c:433
+#: gtk/gtkiconview.c:431
 msgid "Width for each item"
 msgstr "Bredd på varje objekt"
 
-#: gtk/gtkiconview.c:434
+#: gtk/gtkiconview.c:432
 msgid "The width used for each item"
 msgstr "Bredden som används på varje objekt"
 
-#: gtk/gtkiconview.c:450
+#: gtk/gtkiconview.c:448
 msgid "Space which is inserted between cells of an item"
 msgstr "Mellanrum som infogas mellan cellerna i ett objekt"
 
-#: gtk/gtkiconview.c:465
+#: gtk/gtkiconview.c:463
 msgid "Row Spacing"
 msgstr "Radmellanrum"
 
-#: gtk/gtkiconview.c:466
+#: gtk/gtkiconview.c:464
 msgid "Space which is inserted between grid rows"
 msgstr "Mellanrum som infogas mellan rader i rutnät"
 
-#: gtk/gtkiconview.c:481
+#: gtk/gtkiconview.c:479
 msgid "Column Spacing"
 msgstr "Kolumnmellanrum"
 
-#: gtk/gtkiconview.c:482
+#: gtk/gtkiconview.c:480
 msgid "Space which is inserted between grid column"
 msgstr "Mellanrum som infogas mellan kolumn i rutnät"
 
-#: gtk/gtkiconview.c:497
+#: gtk/gtkiconview.c:495
 msgid "Margin"
 msgstr "Marginal"
 
-#: gtk/gtkiconview.c:498
+#: gtk/gtkiconview.c:496
 msgid "Space which is inserted at the edges of the icon view"
 msgstr "Mellanrum som infogas vid kanterna på ikonvyn"
 
-#: gtk/gtkiconview.c:514 gtk/gtkprogressbar.c:152 gtk/gtktoolbar.c:507
+#: gtk/gtkiconview.c:512 gtk/gtkprogressbar.c:152 gtk/gtktoolbar.c:507
 msgid "Orientation"
 msgstr "Orientering"
 
-#: gtk/gtkiconview.c:515
+#: gtk/gtkiconview.c:513
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr "Hur texten och ikonen för varje objekt positioneras relativt varandra"
 
-#: gtk/gtkiconview.c:523
+#: gtk/gtkiconview.c:521
 msgid "Selection Box Color"
 msgstr "Färg på markeringsruta"
 
-#: gtk/gtkiconview.c:524
+#: gtk/gtkiconview.c:522
 msgid "Color of the selection box"
 msgstr "Färgen på markeringsrutan"
 
-#: gtk/gtkiconview.c:530
+#: gtk/gtkiconview.c:528
 msgid "Selection Box Alpha"
 msgstr "Alfavärde för markeringsrutan"
 
-#: gtk/gtkiconview.c:531
+#: gtk/gtkiconview.c:529
 msgid "Opacity of the selection box"
 msgstr "Opacitet för markeringsrutan"
 
@@ -3305,11 +3305,11 @@ msgid ""
 msgstr ""
 "Visa en andra knapp med framlängespil på motsatt sida av rullningslisten"
 
-#: gtk/gtkscrolledwindow.c:238 gtk/gtktext.c:605 gtk/gtktreeview.c:566
+#: gtk/gtkscrolledwindow.c:238 gtk/gtktext.c:605 gtk/gtktreeview.c:569
 msgid "Horizontal Adjustment"
 msgstr "Horisontell justering"
 
-#: gtk/gtkscrolledwindow.c:245 gtk/gtktext.c:613 gtk/gtktreeview.c:574
+#: gtk/gtkscrolledwindow.c:245 gtk/gtktext.c:613 gtk/gtktreeview.c:577
 msgid "Vertical Adjustment"
 msgstr "Vertikal justering"
 
@@ -3880,10 +3880,10 @@ msgstr "Hur mycket stycket ska dras in, i bildpunkter"
 #: gtk/gtktexttag.c:426
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative) "
-"in pixels"
+"in Pango units"
 msgstr ""
 "Avstånd för texten ovanför baslinjen (nedanför baslinjen om höjning är "
-"negativt) i bildpunkter"
+"negativt) i Pango-enheter"
 
 #: gtk/gtktexttag.c:435
 msgid "Pixels above lines"
@@ -4255,144 +4255,144 @@ msgstr "Modell för TreeModelSort"
 msgid "The model for the TreeModelSort to sort"
 msgstr "Modell för TreeModelSort att sortera"
 
-#: gtk/gtktreeview.c:558
+#: gtk/gtktreeview.c:561
 msgid "TreeView Model"
 msgstr "Trädvymodell"
 
-#: gtk/gtktreeview.c:559
+#: gtk/gtktreeview.c:562
 msgid "The model for the tree view"
 msgstr "Modell för trädvyn"
 
-#: gtk/gtktreeview.c:567
+#: gtk/gtktreeview.c:570
 msgid "Horizontal Adjustment for the widget"
 msgstr "Horisontell justering för widgeten"
 
-#: gtk/gtktreeview.c:575
+#: gtk/gtktreeview.c:578
 msgid "Vertical Adjustment for the widget"
 msgstr "Vertikal justering för widgeten"
 
-#: gtk/gtktreeview.c:583
+#: gtk/gtktreeview.c:586
 msgid "Show the column header buttons"
 msgstr "Visa knappar i kolumnhuvuden"
 
-#: gtk/gtktreeview.c:590
+#: gtk/gtktreeview.c:593
 msgid "Headers Clickable"
 msgstr "Huvuden är klickbara"
 
-#: gtk/gtktreeview.c:591
+#: gtk/gtktreeview.c:594
 msgid "Column headers respond to click events"
 msgstr "Kolumnhuvuden svarar på klickhändelser"
 
-#: gtk/gtktreeview.c:598
+#: gtk/gtktreeview.c:601
 msgid "Expander Column"
 msgstr "Expanderarkolumn"
 
-#: gtk/gtktreeview.c:599
+#: gtk/gtktreeview.c:602
 msgid "Set the column for the expander column"
 msgstr "Ställ in kolumnen för expanderarkolumnen"
 
-#: gtk/gtktreeview.c:606 gtk/gtktreeviewcolumn.c:341
+#: gtk/gtktreeview.c:609 gtk/gtktreeviewcolumn.c:341
 msgid "Reorderable"
 msgstr "Omarrangeringsbar"
 
-#: gtk/gtktreeview.c:607
+#: gtk/gtktreeview.c:610
 msgid "View is reorderable"
 msgstr "Vyn är omarrangeringsbar"
 
-#: gtk/gtktreeview.c:614
+#: gtk/gtktreeview.c:617
 msgid "Rules Hint"
 msgstr "Regeltips"
 
-#: gtk/gtktreeview.c:615
+#: gtk/gtktreeview.c:618
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr "Ställ in ett tips för temamotorn att rita rader i alternerande färger"
 
-#: gtk/gtktreeview.c:622
+#: gtk/gtktreeview.c:625
 msgid "Enable Search"
 msgstr "Använd sökning"
 
-#: gtk/gtktreeview.c:623
+#: gtk/gtktreeview.c:626
 msgid "View allows user to search through columns interactively"
 msgstr "Vyn tillåter användaren att söka igenom kolumner interaktivt"
 
-#: gtk/gtktreeview.c:630
+#: gtk/gtktreeview.c:633
 msgid "Search Column"
 msgstr "Sök kolumn"
 
-#: gtk/gtktreeview.c:631
+#: gtk/gtktreeview.c:634
 msgid "Model column to search through when searching through code"
 msgstr "Modellkolumn att söka igenom vid kodgenomsökning"
 
-#: gtk/gtktreeview.c:651
+#: gtk/gtktreeview.c:654
 msgid "Fixed Height Mode"
 msgstr "Läge med fast höjd"
 
-#: gtk/gtktreeview.c:652
+#: gtk/gtktreeview.c:655
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr "Snabbar upp GtkTreeView genom att antaga att alla rader har samma höjd"
 
-#: gtk/gtktreeview.c:672
+#: gtk/gtktreeview.c:675
 msgid "Hover Selection"
 msgstr "Svävningsmarkering"
 
-#: gtk/gtktreeview.c:673
+#: gtk/gtktreeview.c:676
 msgid "Whether the selection should follow the pointer"
 msgstr "Huruvida markeringen ska följa pekaren"
 
-#: gtk/gtktreeview.c:692
+#: gtk/gtktreeview.c:695
 msgid "Hover Expand"
 msgstr "Svävningsexpansion"
 
-#: gtk/gtktreeview.c:693
+#: gtk/gtktreeview.c:696
 msgid ""
 "Whether rows should be expanded/collapsed when the pointer moves over them"
 msgstr "Huruvida rader ska fällas ut/fällas in då pekaren flyttas över dem"
 
-#: gtk/gtktreeview.c:713
+#: gtk/gtktreeview.c:716
 msgid "Vertical Separator Width"
 msgstr "Vertikal avskiljarbredd"
 
-#: gtk/gtktreeview.c:714
+#: gtk/gtktreeview.c:717
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "Vertikalt mellanrum mellan celler. Måste vara ett jämnt tal"
 
-#: gtk/gtktreeview.c:722
+#: gtk/gtktreeview.c:725
 msgid "Horizontal Separator Width"
 msgstr "Horisontell avskiljarbredd"
 
-#: gtk/gtktreeview.c:723
+#: gtk/gtktreeview.c:726
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "Horisontellt mellanrum mellan celler. Måsta vara ett jämnt tal"
 
-#: gtk/gtktreeview.c:731
+#: gtk/gtktreeview.c:734
 msgid "Allow Rules"
 msgstr "Tillåt linjaler"
 
-#: gtk/gtktreeview.c:732
+#: gtk/gtktreeview.c:735
 msgid "Allow drawing of alternating color rows"
 msgstr "Tillåt ritning av alternerande färgrader"
 
-#: gtk/gtktreeview.c:738
+#: gtk/gtktreeview.c:741
 msgid "Indent Expanders"
 msgstr "Indentera expanderare"
 
-#: gtk/gtktreeview.c:739
+#: gtk/gtktreeview.c:742
 msgid "Make the expanders indented"
 msgstr "Gör expanderarna indenterade"
 
-#: gtk/gtktreeview.c:745
+#: gtk/gtktreeview.c:748
 msgid "Even Row Color"
 msgstr "Färg på jämna rader"
 
-#: gtk/gtktreeview.c:746
+#: gtk/gtktreeview.c:749
 msgid "Color to use for even rows"
 msgstr "Färg som ska användas på jämna rader"
 
-#: gtk/gtktreeview.c:752
+#: gtk/gtktreeview.c:755
 msgid "Odd Row Color"
 msgstr "Färg på udda rader"
 
-#: gtk/gtktreeview.c:753
+#: gtk/gtktreeview.c:756
 msgid "Color to use for odd rows"
 msgstr "Färg som ska användas på udda rader"
 
@@ -4939,6 +4939,13 @@ msgstr "IM-statusstil"
 #: modules/input/gtkimcontextxim.c:340
 msgid "How to draw the input method statusbar"
 msgstr "Hur inmatningsmetodens statusrad ska ritas"
+
+#~ msgid ""
+#~ "Offset of text above the baseline (below the baseline if rise is "
+#~ "negative) in pixels"
+#~ msgstr ""
+#~ "Avstånd för texten ovanför baslinjen (nedanför baslinjen om höjning är "
+#~ "negativt) i bildpunkter"
 
 #~ msgid ""
 #~ "Whether rows should be expanded/collaped when the pointer moves over them"
