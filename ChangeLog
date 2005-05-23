@@ -1,5 +1,8 @@
 2005-05-23  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_init):
+	Revert an accidental commit.
+
 	* gtk/gtkfilechooserdefault.c (filter_create): Don't grab
 	the focus away from the file list when operating the filter
 	combo with the pointer.  (#304844, Sven Neumann)

@@ -667,7 +667,7 @@ gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
   impl->load_state = LOAD_EMPTY;
   impl->pending_select_paths = NULL;
 
-//  gtk_widget_set_redraw_on_allocate (GTK_WIDGET (impl), TRUE);
+  gtk_widget_set_redraw_on_allocate (GTK_WIDGET (impl), TRUE);
   gtk_box_set_spacing (GTK_BOX (impl), 12);
 
   impl->tooltips = gtk_tooltips_new ();
