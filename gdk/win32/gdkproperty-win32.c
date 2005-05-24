@@ -598,6 +598,12 @@ gdk_screen_get_setting (GdkScreen   *screen,
       g_value_set_boolean (value, FALSE);
       return TRUE;
     }
+  else if (strcmp ("gtk-alternative-button-order", name) == 0)
+    {
+      GDK_NOTE(MISC, g_print("gdk_screen_get_setting(\"%s\") : TRUE\n", name));
+      g_value_set_boolean (value, TRUE);
+      return TRUE;
+    }
 #if 0
   /*
    * With 'MS Sans Serif' as windows menu font (default on win98se) you'll get a 

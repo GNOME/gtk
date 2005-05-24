@@ -1,3 +1,8 @@
+2005-05-24  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkproperty-win32.c (gdk_screen_get_setting): Handle
+	gtk-alternative-button-order (setting it to TRUE).
+
 2005-05-23  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_search_init): Remove
