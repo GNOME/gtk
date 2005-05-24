@@ -1,3 +1,10 @@
+2005-05-24  Sven Neumann  <sven@gimp.org>
+
+	* io-png.c: allow to specify the PNG compression level by passing
+	a "compression" parameter to the PNG save function (bug #305337).
+
+	* gdk-pixbuf-io.c (gdk_pixbuf_save): document the new parameter.
+
 2005-04-09  Matthias Clasen  <mclasen@redhat.com>
 	
 	* Makefile.am: Use $(NM), not nm directly. (#301299, 

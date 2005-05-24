@@ -789,40 +789,69 @@ static gboolean real_save_png (GdkPixbuf        *pixbuf,
        int has_alpha;
        int bpc;
        int num_keys;
+       int compression = -1;
        gboolean success = TRUE;
        SaveToFunctionIoPtr to_callback_ioptr;
 
        num_keys = 0;
 
        if (keys && *keys) {
-               gchar **kiter;
-               gchar  *key;
-               int     len;
+               gchar **kiter = keys;
+               gchar **viter = values;
 
-               for (kiter = keys; *kiter; kiter++) {
-                       if (strncmp (*kiter, "tEXt::", 6) != 0) {
-                               g_warning ("Bad option name '%s' passed to PNG saver", *kiter);
-                               return FALSE;
-                       }
-                       key = *kiter + 6;
-                       len = strlen (key);
-                       if (len <= 1 || len > 79) {
-                               g_set_error (error,
-                                            GDK_PIXBUF_ERROR,
-                                            GDK_PIXBUF_ERROR_BAD_OPTION,
-                                            _("Keys for PNG text chunks must have at least 1 and at most 79 characters."));
-                               return FALSE;
-                       }
-                       for (i = 0; i < len; i++) {
-                               if ((guchar) key[i] > 127) {
+               while (*kiter) {
+                       if (strncmp (*kiter, "tEXt::", 6) == 0) {
+                               gchar  *key = *kiter + 6;
+                               int     len = strlen (key);
+                               if (len <= 1 || len > 79) {
                                        g_set_error (error,
                                                     GDK_PIXBUF_ERROR,
                                                     GDK_PIXBUF_ERROR_BAD_OPTION,
-                                                    _("Keys for PNG text chunks must be ASCII characters."));
+                                                    _("Keys for PNG text chunks must have at least 1 and at most 79 characters."));
                                        return FALSE;
                                }
+                               for (i = 0; i < len; i++) {
+                                       if ((guchar) key[i] > 127) {
+                                               g_set_error (error,
+                                                            GDK_PIXBUF_ERROR,
+                                                            GDK_PIXBUF_ERROR_BAD_OPTION,
+                                                            _("Keys for PNG text chunks must be ASCII characters."));
+                                               return FALSE;
+                                       }
+                               }
+                               num_keys++;
+                       } else if (strcmp (*kiter, "compression") == 0) {
+                               char *endptr = NULL;
+                               compression = strtol (*viter, &endptr, 10);
+
+                               if (endptr == *viter) {
+                                       g_set_error (error,
+                                                    GDK_PIXBUF_ERROR,
+                                                    GDK_PIXBUF_ERROR_BAD_OPTION,
+                                                    _("PNG compression level must be a value between 0 and 9; value '%s' could not be parsed."),
+                                                    *viter);
+                                       return FALSE;
+                               }
+                               if (compression < 0 || compression > 9) {
+                                       /* This is a user-visible error;
+                                        * lets people skip the range-checking
+                                        * in their app.
+                                        */
+                                       g_set_error (error,
+                                                    GDK_PIXBUF_ERROR,
+                                                    GDK_PIXBUF_ERROR_BAD_OPTION,
+                                                    _("PNG compression level must be a value between 0 and 9; value '%d' is not allowed."),
+                                                    compression);
+                                       return FALSE;
+                               }
+                       } else {
+                               g_warning ("Bad option name '%s' passed to PNG saver",
+                                          *kiter);
+                               return FALSE;
                        }
-                       num_keys++;
+
+                       ++kiter;
+                       ++viter;
                }
        }
 
@@ -899,6 +928,9 @@ static gboolean real_save_png (GdkPixbuf        *pixbuf,
        } else {
                png_init_io (png_ptr, f);
        }
+
+       if (compression >= 0)
+               png_set_compression_level (png_ptr, compression);
 
        if (has_alpha) {
                png_set_IHDR (png_ptr, info_ptr, w, h, bpc,

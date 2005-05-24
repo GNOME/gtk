@@ -1556,11 +1556,15 @@ gdk_pixbuf_real_save_to_callback (GdkPixbuf         *pixbuf,
  *                  "quality", "100", NULL);
  * </programlisting></informalexample>
  *
- * Currently only few parameters exist. JPEG images can be saved with a 
- * "quality" parameter; its value should be in the range [0,100]. 
+ * Currently only few parameters exist. JPEG images can be saved with a
+ * "quality" parameter; its value should be in the range [0,100].
+ *
  * Text chunks can be attached to PNG images by specifying parameters of
  * the form "tEXt::key", where key is an ASCII string of length 1-79.
- * The values are UTF-8 encoded strings. 
+ * The values are UTF-8 encoded strings. The PNG compression level can
+ * be specified using the "compression" parameter; it's value is in an
+ * integer in the range of [0,9].
+ *
  * ICO images can be saved in depth 16, 24, or 32, by using the "depth"
  * parameter. When the ICO saver is given "x_hot" and "y_hot" parameters,
  * it produces a CUR instead of an ICO.
