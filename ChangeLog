@@ -1,3 +1,16 @@
+2005-05-25  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtktextview.c (blink_cb): block the text_layout's "changed"
+	handler when changing cursor visibility because it would expose
+	the whole paragraph where the cursor is. Instead, expose the
+	cursors' areas manually. (#173047).
+
+	(text_window_invalidate_cursors): new function which exposes the
+	cursors.
+
+	* gtk/gtkstyle.c (draw_insertion_cursor): added comment that the
+	same cursor size calculation is in text_window_invalidate_cursors().
+
 2005-05-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* demos/gtk-demo/editable_cells.c (create_items_model): Also

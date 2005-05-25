@@ -408,6 +408,7 @@ static void           text_window_scroll          (GtkTextWindow     *win,
                                                    gint               dy);
 static void           text_window_invalidate_rect (GtkTextWindow     *win,
                                                    GdkRectangle      *rect);
+static void           text_window_invalidate_cursors (GtkTextWindow  *win);
 
 static gint           text_window_get_width       (GtkTextWindow     *win);
 static gint           text_window_get_height      (GtkTextWindow     *win);
@@ -4502,9 +4503,22 @@ blink_cb (gpointer data)
     text_view->blink_timeout = g_timeout_add (get_cursor_time (text_view) * CURSOR_ON_MULTIPLIER,
 					      blink_cb,
 					      text_view);
-  
-  gtk_text_layout_set_cursor_visible (text_view->layout,
-                                      !visible);
+
+  /* Block changed_handler while changing the layout's cursor visibility
+   * because it would expose the whole paragraph. Instead, we expose
+   * the cursor's area(s) manually below.
+   */
+  g_signal_handlers_block_by_func (text_view->layout,
+                                   changed_handler,
+                                   text_view);
+
+  gtk_text_layout_set_cursor_visible (text_view->layout, !visible);
+
+  g_signal_handlers_unblock_by_func (text_view->layout,
+                                     changed_handler,
+                                     text_view);
+
+  text_window_invalidate_cursors (text_view->text_window);
 
   GDK_THREADS_LEAVE ();
 
@@ -7355,6 +7369,71 @@ text_window_invalidate_rect (GtkTextWindow *win,
     cairo_destroy (cr);
   }
 #endif
+}
+
+static void
+text_window_invalidate_cursors (GtkTextWindow *win)
+{
+  GtkTextView *text_view = GTK_TEXT_VIEW (win->widget);
+  GtkTextIter  iter;
+  GdkRectangle strong;
+  GdkRectangle weak;
+  gboolean     draw_arrow;
+  gfloat       cursor_aspect_ratio;
+  gint         stem_width;
+  gint         arrow_width;
+
+  gtk_text_buffer_get_iter_at_mark (text_view->buffer, &iter,
+                                    gtk_text_buffer_get_insert (text_view->buffer));
+
+  gtk_text_layout_get_cursor_locations (text_view->layout, &iter,
+                                        &strong, &weak);
+
+  /* cursor width calculation as in gtkstyle.c:draw_insertion_cursor(),
+   * ignoring the text direction be exposing both sides of the cursor
+   */
+
+  draw_arrow = (strong.x != weak.x || strong.y != weak.y);
+
+  gtk_widget_style_get (win->widget,
+                        "cursor-aspect-ratio", &cursor_aspect_ratio,
+                        NULL);
+
+  stem_width = strong.height * cursor_aspect_ratio + 1;
+  arrow_width = stem_width + 1;
+
+  /* round up to the next even number */
+  if (stem_width & 1)
+    stem_width++;
+
+  strong.x     -= stem_width / 2;
+  strong.width += stem_width;
+
+  if (draw_arrow)
+    {
+      strong.x     -= arrow_width;
+      strong.width += arrow_width * 2;
+    }
+
+  text_window_invalidate_rect (win, &strong);
+
+  if (draw_arrow) /* == have weak */
+    {
+      stem_width = weak.height * cursor_aspect_ratio + 1;
+      arrow_width = stem_width + 1;
+
+      /* round up to the next even number */
+      if (stem_width & 1)
+        stem_width++;
+
+      weak.x     -= stem_width / 2;
+      weak.width += stem_width;
+
+      weak.x     -= arrow_width;
+      weak.width += arrow_width * 2;
+
+      text_window_invalidate_rect (win, &weak);
+    }
 }
 
 static gint

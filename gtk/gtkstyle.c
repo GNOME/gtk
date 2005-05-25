@@ -6628,7 +6628,11 @@ draw_insertion_cursor (GtkWidget        *widget,
   gint offset;
   
   g_return_if_fail (direction != GTK_TEXT_DIR_NONE);
-  
+
+  /* When changing the shape or size of the cursor here,
+   * propagate the changes to gtktextview.c:text_window_invalidate_cursors().
+   */
+
   gtk_widget_style_get (widget, "cursor-aspect-ratio", &cursor_aspect_ratio, NULL);
   
   stem_width = location->height * cursor_aspect_ratio + 1;
