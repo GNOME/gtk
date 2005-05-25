@@ -10,6 +10,7 @@ demos =						\
 	changedisplay.c				\
 	clipboard.c				\
 	colorsel.c				\
+	combobox.c				\
 	dialog.c				\
 	drawingarea.c				\
 	editable_cells.c			\

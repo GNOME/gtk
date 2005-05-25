@@ -1,6 +1,10 @@
 2005-05-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* demos/gtk-demo/Makefile.am (demos): 
+	* demos/gtk-demo/combobox.c: Add a demo showing combo box 
+	variations.
+
+	* demos/gtk-demo/Makefile.am (demos): 
 	* demos/gtk-demo/pickers.c: Add a demo showing all picker widgets.
 
 2005-05-24  Matthias Clasen  <mclasen@redhat.com>
