@@ -1,5 +1,8 @@
 2005-05-25  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilesystem.c (gtk_file_folder_is_finished_loading): 
+	Remove another C99ism.
+
 	* gtk/gtktreeview.c (gtk_tree_view_bin_expose): Draw the 
 	background of rows insensitive when the treeview is insensitive.
 	(pointed out by Billy Biggs)

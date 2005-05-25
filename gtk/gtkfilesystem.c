@@ -940,9 +940,11 @@ gtk_file_folder_get_info (GtkFileFolder     *folder,
 gboolean
 gtk_file_folder_is_finished_loading (GtkFileFolder *folder)
 {
+  GtkFileFolderIface *iface;
+
   g_return_val_if_fail (GTK_IS_FILE_FOLDER (folder), TRUE);
 
-  GtkFileFolderIface *iface = GTK_FILE_FOLDER_GET_IFACE (folder);
+  iface = GTK_FILE_FOLDER_GET_IFACE (folder);
   if (!iface->is_finished_loading)
     return TRUE;
   else
