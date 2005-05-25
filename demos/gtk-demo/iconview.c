@@ -331,7 +331,7 @@ do_iconview (GtkWidget *do_widget)
 	  g_signal_connect (home_button, "clicked",
 			    G_CALLBACK (home_clicked), store);
 	  
-	  /* We now set which model columns that correspont to the text
+	  /* We now set which model columns that correspond to the text
 	   * and pixbuf of each item
 	   */
 	  gtk_icon_view_set_text_column (GTK_ICON_VIEW (icon_view), COL_DISPLAY_NAME);
