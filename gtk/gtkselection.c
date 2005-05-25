@@ -362,6 +362,21 @@ gtk_target_list_add_image_targets (GtkTargetList *list,
 
   formats = gdk_pixbuf_get_formats ();
 
+  /* Make sure png comes first */
+  for (f = formats; f; f = f->next)
+    {
+      GdkPixbufFormat *fmt = f->data;
+      
+      if (strcmp (gdk_pixbuf_format_get_name (fmt), "png") == 0)
+	{
+	  formats = g_slist_delete_link (formats, f);
+	  formats = g_slist_prepend (formats, fmt);
+
+	  break;
+	}
+
+    }  
+
   for (f = formats; f; f = f->next)
     {
       GdkPixbufFormat *fmt = f->data;
