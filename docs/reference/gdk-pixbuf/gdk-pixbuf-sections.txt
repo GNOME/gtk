@@ -114,6 +114,8 @@ gdk_pixbuf_fill
 <FILE>animation</FILE>
 GdkPixbufAnimation
 GdkPixbufAnimationIter
+GdkPixbufAnimation
+GdkPixbufAnimationIter
 gdk_pixbuf_animation_new_from_file
 gdk_pixbuf_animation_ref
 gdk_pixbuf_animation_unref
@@ -126,6 +128,11 @@ gdk_pixbuf_animation_iter_advance
 gdk_pixbuf_animation_iter_get_delay_time
 gdk_pixbuf_animation_iter_on_currently_loading_frame
 gdk_pixbuf_animation_iter_get_pixbuf
+
+<SUBSECTION>
+GdkPixbufSimpleAnim
+gdk_pixbuf_simple_anim_new
+gdk_pixbuf_simple_anim_add_frame
 
 <SUBSECTION Standard>
 GDK_PIXBUF_ANIMATION
