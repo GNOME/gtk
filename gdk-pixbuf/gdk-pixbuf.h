@@ -33,6 +33,7 @@
 #include <gdk-pixbuf/gdk-pixbuf-core.h>
 #include <gdk-pixbuf/gdk-pixbuf-transform.h>
 #include <gdk-pixbuf/gdk-pixbuf-animation.h>
+#include <gdk-pixbuf/gdk-pixbuf-simple-anim.h>
 #include <gdk-pixbuf/gdk-pixbuf-io.h>
 #include <gdk-pixbuf/gdk-pixbuf-loader.h>
 #include <gdk-pixbuf/gdk-pixbuf-enum-types.h>

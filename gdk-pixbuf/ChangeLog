@@ -1,3 +1,14 @@
+2005-05-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* Makefile.am: Add new files. 
+
+	* gdk-pixbuf.symbols: Add new api.
+
+	* gdk-pixbuf.h: Include gdk-pixbuf-simple-anim.h here.
+
+	* gdk-pixbuf-simple-anim.[hc]: Add a way to construct
+	simple animations out of pixbufs.  (#135161, Dom Lachowicz)
+
 2005-05-24  Sven Neumann  <sven@gimp.org>
 
 	* io-png.c: allow to specify the PNG compression level by passing

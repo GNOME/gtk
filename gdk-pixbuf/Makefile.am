@@ -307,16 +307,17 @@ gdk_pixbuf_query_loaders_SOURCES = queryloaders.c
 # The GdkPixBuf library
 #
 libgdk_pixbufincludedir = $(includedir)/gtk-2.0/gdk-pixbuf
-libgdk_pixbuf_2_0_la_SOURCES =  \
-	gdk-pixbuf-i18n.h	\
-	gdk-pixbuf.c		\
-	gdk-pixbuf-animation.c	\
-	gdk-pixbuf-data.c	\
-	gdk-pixbuf-io.c		\
-	gdk-pixbuf-loader.c	\
-	gdk-pixbuf-scale.c	\
-	gdk-pixbuf-util.c	\
-	gdk-pixdata.c		\
+libgdk_pixbuf_2_0_la_SOURCES =   \
+	gdk-pixbuf-i18n.h	 \
+	gdk-pixbuf.c		 \
+	gdk-pixbuf-animation.c	 \
+	gdk-pixbuf-data.c	 \
+	gdk-pixbuf-io.c		 \
+	gdk-pixbuf-loader.c	 \
+	gdk-pixbuf-scale.c	 \
+	gdk-pixbuf-simple-anim.c \
+	gdk-pixbuf-util.c	 \
+	gdk-pixdata.c		 \
 	gdk-pixbuf-enum-types.c
 
 libgdk_pixbuf_2_0_la_LDFLAGS = \
@@ -335,6 +336,7 @@ gdk_pixbuf_headers = 			\
 	gdk-pixbuf-transform.h		\
 	gdk-pixbuf-io.h			\
 	gdk-pixbuf-animation.h		\
+	gdk-pixbuf-simple-anim.h	\
 	gdk-pixbuf-loader.h
 
 libgdk_pixbufinclude_HEADERS =  	\
