@@ -3661,7 +3661,9 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 
           g_assert (detail);
 
-	  if (flags & GTK_CELL_RENDERER_SELECTED)
+	  if (widget->state == GTK_STATE_INSENSITIVE)
+	    state = GTK_STATE_INSENSITIVE;	    
+	  else if (flags & GTK_CELL_RENDERER_SELECTED)
 	    state = GTK_STATE_SELECTED;
 	  else
 	    state = GTK_STATE_NORMAL;
