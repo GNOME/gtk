@@ -1,5 +1,8 @@
 2005-05-25  Matthias Clasen  <mclasen@redhat.com>
 
+	* demos/gtk-demo/appwindow.c (do_appwindow): Set the window
+	icon by name.
+
 	* gtk/gtkfilesystem.c (gtk_file_folder_is_finished_loading): 
 	Remove another C99ism.
 

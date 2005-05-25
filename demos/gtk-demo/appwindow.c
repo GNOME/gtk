@@ -406,6 +406,7 @@ do_appwindow (GtkWidget *do_widget)
       gtk_window_set_screen (GTK_WINDOW (window),
 			     gtk_widget_get_screen (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Application Window");
+      gtk_window_set_icon_name (GTK_WINDOW (window), "gtk-open");
 
       /* NULL window variable when window is closed */
       g_signal_connect (window, "destroy",
