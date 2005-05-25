@@ -1,3 +1,9 @@
+2005-05-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkselection.c (gtk_target_list_add_image_targets): 
+	Make sure png comes first, otherwise dnd may use bmp by
+	default, loosing transparency.
+
 2005-05-25  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtktextview.c (blink_cb): block the text_layout's "changed"
