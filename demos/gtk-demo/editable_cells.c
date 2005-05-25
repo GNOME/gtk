@@ -6,8 +6,8 @@
  * GtkCellRenderer::editing-started signal to do custom setup of the
  * editable widget.
  *
- * The cell renderers used in this demo are GtkCellRendererText and 
- * GtkCellRendererCombo.
+ * The cell renderers used in this demo are GtkCellRendererText, 
+ * GtkCellRendererCombo and GtkCellRendererProgress.
  */
 
 #include <gtk/gtk.h>
@@ -20,6 +20,7 @@ typedef struct
 {
   gint   number;
   gchar *product;
+  gint   yummy;
 }
 Item;
 
@@ -27,6 +28,7 @@ enum
 {
   COLUMN_ITEM_NUMBER,
   COLUMN_ITEM_PRODUCT,
+  COLUMN_ITEM_YUMMY,
   NUM_ITEM_COLUMNS
 };
 
@@ -47,22 +49,27 @@ add_items (void)
 
   foo.number = 3;
   foo.product = g_strdup ("bottles of coke");
+  foo.yummy = 20;
   g_array_append_vals (articles, &foo, 1);
 
   foo.number = 5;
   foo.product = g_strdup ("packages of noodles");
+  foo.yummy = 50;
   g_array_append_vals (articles, &foo, 1);
 
   foo.number = 2;
   foo.product = g_strdup ("packages of chocolate chip cookies");
+  foo.yummy = 90;
   g_array_append_vals (articles, &foo, 1);
 
   foo.number = 1;
   foo.product = g_strdup ("can vanilla ice cream");
+  foo.yummy = 60;
   g_array_append_vals (articles, &foo, 1);
 
   foo.number = 6;
   foo.product = g_strdup ("eggs");
+  foo.yummy = 10;
   g_array_append_vals (articles, &foo, 1);
 }
 
@@ -80,7 +87,7 @@ create_items_model (void)
 
   /* create list store */
   model = gtk_list_store_new (NUM_ITEM_COLUMNS, G_TYPE_INT, G_TYPE_STRING,
-			      G_TYPE_BOOLEAN);
+                              G_TYPE_INT, G_TYPE_BOOLEAN);
 
   /* add items */
   for (i = 0; i < articles->len; i++)
@@ -88,11 +95,13 @@ create_items_model (void)
       gtk_list_store_append (model, &iter);
 
       gtk_list_store_set (model, &iter,
-			  COLUMN_ITEM_NUMBER,
-			  g_array_index (articles, Item, i).number,
-			  COLUMN_ITEM_PRODUCT,
-			  g_array_index (articles, Item, i).product,
-			  -1);
+                          COLUMN_ITEM_NUMBER,
+                          g_array_index (articles, Item, i).number,
+                          COLUMN_ITEM_PRODUCT,
+                          g_array_index (articles, Item, i).product,
+                          COLUMN_ITEM_YUMMY,
+                          g_array_index (articles, Item, i).yummy,
+                          -1);
     }
 
   return GTK_TREE_MODEL (model);
@@ -117,8 +126,8 @@ create_numbers_model (void)
       gtk_list_store_append (model, &iter);
 
       gtk_list_store_set (model, &iter,
-			  COLUMN_NUMBER_TEXT, str,
-			  -1);
+                          COLUMN_NUMBER_TEXT, str,
+                          -1);
     }
 
   return GTK_TREE_MODEL (model);
@@ -137,13 +146,15 @@ add_item (GtkWidget *button, gpointer data)
 
   foo.number = 0;
   foo.product = g_strdup ("Description here");
+  foo.yummy = 50;
   g_array_append_vals (articles, &foo, 1);
 
   gtk_list_store_append (GTK_LIST_STORE (model), &iter);
   gtk_list_store_set (GTK_LIST_STORE (model), &iter,
-		      COLUMN_ITEM_NUMBER, foo.number,
-		      COLUMN_ITEM_PRODUCT, foo.product,
-		      -1);
+                      COLUMN_ITEM_NUMBER, foo.number,
+                      COLUMN_ITEM_PRODUCT, foo.product,
+                      COLUMN_ITEM_YUMMY, foo.yummy,
+                      -1);
 }
 
 static void
@@ -171,8 +182,8 @@ remove_item (GtkWidget *widget, gpointer data)
 
 static gboolean
 separator_row (GtkTreeModel *model,
-	       GtkTreeIter  *iter,
-	       gpointer      data)
+               GtkTreeIter  *iter,
+               gpointer      data)
 {
   GtkTreePath *path;
   gint idx;
@@ -187,19 +198,19 @@ separator_row (GtkTreeModel *model,
 
 static void
 editing_started (GtkCellRenderer *cell,
-		 GtkCellEditable *editable,
-		 const gchar     *path,
-		 gpointer         data)
+                 GtkCellEditable *editable,
+                 const gchar     *path,
+                 gpointer         data)
 {
   gtk_combo_box_set_row_separator_func (GTK_COMBO_BOX (editable), 
-					separator_row, NULL, NULL);
+                                        separator_row, NULL, NULL);
 }
 
 static void
 cell_edited (GtkCellRendererText *cell,
-	     const gchar         *path_string,
-	     const gchar         *new_text,
-	     gpointer             data)
+             const gchar         *path_string,
+             const gchar         *new_text,
+             gpointer             data)
 {
   GtkTreeModel *model = (GtkTreeModel *)data;
   GtkTreePath *path = gtk_tree_path_new_from_string (path_string);
@@ -213,29 +224,29 @@ cell_edited (GtkCellRendererText *cell,
     {
     case COLUMN_ITEM_NUMBER:
       {
-	gint i;
+        gint i;
 
-	i = gtk_tree_path_get_indices (path)[0];
-	g_array_index (articles, Item, i).number = atoi (new_text);
+        i = gtk_tree_path_get_indices (path)[0];
+        g_array_index (articles, Item, i).number = atoi (new_text);
 
-	gtk_list_store_set (GTK_LIST_STORE (model), &iter, column,
-			    g_array_index (articles, Item, i).number, -1);
+        gtk_list_store_set (GTK_LIST_STORE (model), &iter, column,
+                            g_array_index (articles, Item, i).number, -1);
       }
       break;
 
     case COLUMN_ITEM_PRODUCT:
       {
-	gint i;
-	gchar *old_text;
+        gint i;
+        gchar *old_text;
 
         gtk_tree_model_get (model, &iter, column, &old_text, -1);
-	g_free (old_text);
+        g_free (old_text);
 
-	i = gtk_tree_path_get_indices (path)[0];
-	g_free (g_array_index (articles, Item, i).product);
-	g_array_index (articles, Item, i).product = g_strdup (new_text);
+        i = gtk_tree_path_get_indices (path)[0];
+        g_free (g_array_index (articles, Item, i).product);
+        g_array_index (articles, Item, i).product = g_strdup (new_text);
 
-	gtk_list_store_set (GTK_LIST_STORE (model), &iter, column,
+        gtk_list_store_set (GTK_LIST_STORE (model), &iter, column,
                             g_array_index (articles, Item, i).product, -1);
       }
       break;
@@ -246,43 +257,54 @@ cell_edited (GtkCellRendererText *cell,
 
 static void
 add_columns (GtkTreeView  *treeview, 
-	     GtkTreeModel *items_model,
-	     GtkTreeModel *numbers_model)
+             GtkTreeModel *items_model,
+             GtkTreeModel *numbers_model)
 {
   GtkCellRenderer *renderer;
 
   /* number column */
   renderer = gtk_cell_renderer_combo_new ();
   g_object_set (renderer,
-		"model", numbers_model,
-		"text-column", COLUMN_NUMBER_TEXT,
-		"has-entry", FALSE,
-		"editable", TRUE,
-		NULL);
+                "model", numbers_model,
+                "text-column", COLUMN_NUMBER_TEXT,
+                "has-entry", FALSE,
+                "editable", TRUE,
+                NULL);
   g_signal_connect (renderer, "edited",
-		    G_CALLBACK (cell_edited), items_model);
+                    G_CALLBACK (cell_edited), items_model);
   g_signal_connect (renderer, "editing-started",
-		    G_CALLBACK (editing_started), NULL);
+                    G_CALLBACK (editing_started), NULL);
   g_object_set_data (G_OBJECT (renderer), "column", GINT_TO_POINTER (COLUMN_ITEM_NUMBER));
 
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (treeview),
-					       -1, "Number", renderer,
-					       "text", COLUMN_ITEM_NUMBER,
-					       NULL);
+                                               -1, "Number", renderer,
+                                               "text", COLUMN_ITEM_NUMBER,
+                                               NULL);
 
   /* product column */
   renderer = gtk_cell_renderer_text_new ();
   g_object_set (renderer,
-		"editable", TRUE,
-		NULL);
+                "editable", TRUE,
+                NULL);
   g_signal_connect (renderer, "edited",
-		    G_CALLBACK (cell_edited), items_model);
+                    G_CALLBACK (cell_edited), items_model);
   g_object_set_data (G_OBJECT (renderer), "column", GINT_TO_POINTER (COLUMN_ITEM_PRODUCT));
 
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (treeview),
-					       -1, "Product", renderer,
-					       "text", COLUMN_ITEM_PRODUCT,
-					       NULL);
+                                               -1, "Product", renderer,
+                                               "text", COLUMN_ITEM_PRODUCT,
+                                               NULL);
+
+  /* yummy column */
+  renderer = gtk_cell_renderer_progress_new ();
+  g_object_set_data (G_OBJECT (renderer), "column", GINT_TO_POINTER (COLUMN_ITEM_YUMMY));
+
+  gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (treeview),
+                                               -1, "Yummy", renderer,
+                                               "value", COLUMN_ITEM_YUMMY,
+                                               NULL);
+  
+
 }
 
 GtkWidget *
@@ -301,25 +323,25 @@ do_editable_cells (GtkWidget *do_widget)
       /* create window, etc */
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_screen (GTK_WINDOW (window),
-			     gtk_widget_get_screen (do_widget));
+                             gtk_widget_get_screen (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Shopping list");
       gtk_container_set_border_width (GTK_CONTAINER (window), 5);
       g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed), &window);
+                        G_CALLBACK (gtk_widget_destroyed), &window);
 
       vbox = gtk_vbox_new (FALSE, 5);
       gtk_container_add (GTK_CONTAINER (window), vbox);
 
       gtk_box_pack_start (GTK_BOX (vbox),
-			  gtk_label_new ("Shopping list (you can edit the cells!)"),
-			  FALSE, FALSE, 0);
+                          gtk_label_new ("Shopping list (you can edit the cells!)"),
+                          FALSE, FALSE, 0);
 
       sw = gtk_scrolled_window_new (NULL, NULL);
       gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw),
-					   GTK_SHADOW_ETCHED_IN);
+                                           GTK_SHADOW_ETCHED_IN);
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
-				      GTK_POLICY_AUTOMATIC,
-				      GTK_POLICY_AUTOMATIC);
+                                      GTK_POLICY_AUTOMATIC,
+                                      GTK_POLICY_AUTOMATIC);
       gtk_box_pack_start (GTK_BOX (vbox), sw, TRUE, TRUE, 0);
 
       /* create models */
@@ -330,7 +352,7 @@ do_editable_cells (GtkWidget *do_widget)
       treeview = gtk_tree_view_new_with_model (items_model);
       gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (treeview), TRUE);
       gtk_tree_selection_set_mode (gtk_tree_view_get_selection (GTK_TREE_VIEW (treeview)),
-				   GTK_SELECTION_SINGLE);
+                                   GTK_SELECTION_SINGLE);
 
       add_columns (GTK_TREE_VIEW (treeview), items_model, numbers_model);
 
@@ -345,12 +367,12 @@ do_editable_cells (GtkWidget *do_widget)
 
       button = gtk_button_new_with_label ("Add item");
       g_signal_connect (button, "clicked",
-			G_CALLBACK (add_item), items_model);
+                        G_CALLBACK (add_item), items_model);
       gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
 
       button = gtk_button_new_with_label ("Remove item");
       g_signal_connect (button, "clicked",
-			G_CALLBACK (remove_item), treeview);
+                        G_CALLBACK (remove_item), treeview);
       gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
 
       gtk_window_set_default_size (GTK_WINDOW (window), 320, 200);

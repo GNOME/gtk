@@ -1,5 +1,8 @@
 2005-05-25  Matthias Clasen  <mclasen@redhat.com>
 
+	* demos/gtk-demo/editable_cells.c (create_items_model): Also
+	demonstrate GtkCellRendererProgress.
+
 	* demos/gtk-demo/Makefile.am (demos): 
 	* demos/gtk-demo/combobox.c: Add a demo showing combo box 
 	variations.
