@@ -1,5 +1,9 @@
 2005-05-25  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk-pixbuf.symbols: 
+	* gdk-pixbuf-simple-anim.[hc]: No need to expose the iter
+	subclass at all in the headers.
+
 	* Makefile.am: Add new files. 
 
 	* gdk-pixbuf.symbols: Add new api.

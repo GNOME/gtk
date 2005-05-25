@@ -41,19 +41,6 @@ typedef struct _GdkPixbufSimpleAnimClass GdkPixbufSimpleAnimClass;
 
 GType gdk_pixbuf_simple_anim_get_type (void) G_GNUC_CONST;
 
-typedef struct _GdkPixbufSimpleAnimIter GdkPixbufSimpleAnimIter;
-typedef struct _GdkPixbufSimpleAnimIterClass GdkPixbufSimpleAnimIterClass;
-
-#define GDK_TYPE_PIXBUF_SIMPLE_ANIM_ITER              (gdk_pixbuf_simple_anim_iter_get_type ())
-#define GDK_PIXBUF_SIMPLE_ANIM_ITER(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_PIXBUF_SIMPLE_ANIM_ITER, GdkPixbufSimpleAnimIter))
-#define GDK_IS_PIXBUF_SIMPLE_ANIM_ITER(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_PIXBUF_SIMPLE_ANIM_ITER))
-
-#define GDK_PIXBUF_SIMPLE_ANIM_ITER_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_PIXBUF_SIMPLE_ANIM_ITER, GdkPixbufSimpleAnimIterClass))
-#define GDK_IS_PIXBUF_SIMPLE_ANIM_ITER_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_PIXBUF_SIMPLE_ANIM_ITER))
-#define GDK_PIXBUF_SIMPLE_ANIM_ITER_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_PIXBUF_SIMPLE_ANIM_ITER, GdkPixbufSimpleAnimIterClass))
-
-GType                gdk_pixbuf_simple_anim_iter_get_type (void) G_GNUC_CONST;
-
 GdkPixbufSimpleAnim *gdk_pixbuf_simple_anim_new           (gint   width, 
                                                            gint   height,
                                                            gfloat rate);
