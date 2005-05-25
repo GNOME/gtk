@@ -1,5 +1,8 @@
 2005-05-25  Matthias Clasen  <mclasen@redhat.com>
 
+	* demos/gtk-demo/clipboard.c: Demonstrate image copy-and-paste
+	and DND, and clipboard persistency.
+
 	* gtk/gtkselection.c (gtk_target_list_add_image_targets): 
 	Make sure png comes first, otherwise dnd may use bmp by
 	default, loosing transparency.
