@@ -1,5 +1,8 @@
 2005-05-25  Matthias Clasen  <mclasen@redhat.com>
 
+	* demos/gtk-demo/appwindow.c (do_appwindow): Set the window
+	icon by name.
+
 	* gtk/gtktreeview.c (gtk_tree_view_bin_expose): Draw the 
 	background of rows insensitive when the treeview is insensitive.
 	(pointed out by Billy Biggs)
