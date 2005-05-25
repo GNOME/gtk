@@ -21,6 +21,7 @@ demos =						\
 	list_store.c				\
 	menus.c					\
 	panes.c					\
+	pickers.c				\
 	pixbufs.c				\
 	rotated_text.c				\
 	sizegroup.c				\
