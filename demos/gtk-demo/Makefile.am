@@ -10,6 +10,7 @@ demos =						\
 	changedisplay.c				\
 	clipboard.c				\
 	colorsel.c				\
+	combobox.c				\
 	dialog.c				\
 	drawingarea.c				\
 	editable_cells.c			\
@@ -21,6 +22,7 @@ demos =						\
 	list_store.c				\
 	menus.c					\
 	panes.c					\
+	pickers.c				\
 	pixbufs.c				\
 	rotated_text.c				\
 	sizegroup.c				\

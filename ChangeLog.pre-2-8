@@ -1,3 +1,15 @@
+2005-05-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* demos/gtk-demo/editable_cells.c (create_items_model): Also
+	demonstrate GtkCellRendererProgress.
+
+	* demos/gtk-demo/Makefile.am (demos): 
+	* demos/gtk-demo/combobox.c: Add a demo showing combo box 
+	variations.
+
+	* demos/gtk-demo/Makefile.am (demos): 
+	* demos/gtk-demo/pickers.c: Add a demo showing all picker widgets.
+
 2005-05-23  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_init):
