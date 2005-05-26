@@ -1,3 +1,8 @@
+Thu May 26 16:43:27 2005 Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtkentrycompletion.h: Add declarations for
+	gtk_entry_completion_{get,set}_popup_single_match.
+
 2005-05-26  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk.symbols: 
