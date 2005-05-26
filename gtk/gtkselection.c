@@ -1361,17 +1361,20 @@ gtk_selection_data_set_pixbuf (GtkSelectionData *selection_data,
 	  if (selection_data->target == atom)
 	    {
 	      str = NULL;
-	      type = gdk_pixbuf_format_get_name (fmt),
+	      type = gdk_pixbuf_format_get_name (fmt);
 	      result = gdk_pixbuf_save_to_buffer (pixbuf, &str, &len,
-						  type, NULL, NULL);
-	      if (result) 
+						  type, NULL,
+                                                  ((strcmp (type, "png") == 0) ?
+                                                   "compression" : NULL), "2",
+                                                  NULL);
+	      if (result)
 		gtk_selection_data_set (selection_data,
 					atom, 8, (guchar *)str, len);
 	      g_free (type);
 	      g_free (str);
 	      g_strfreev (mimes);
 	      g_slist_free (formats);
-	      
+
 	      return result;
 	    }
 	}

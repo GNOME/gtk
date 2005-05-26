@@ -1,3 +1,8 @@
+2005-05-26  Sven Neumann  <sven@gimp.org>
+
+	* gtk/gtkselection.c (gtk_selection_data_set_pixbuf): use a less
+	aggressive PNG compression level (bug #305340).
+
 2005-05-26  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkdrawable-win32.c (_gdk_win32_blit): If blitting
