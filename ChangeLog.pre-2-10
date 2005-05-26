@@ -1,3 +1,9 @@
+2005-05-26  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkdrawable-win32.c (_gdk_win32_blit): If blitting
+	from the root window, take the multi-monitor offset into
+	account. (#305511)
+
 2005-05-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* demos/gtk-demo/appwindow.c (do_appwindow): Set the window
