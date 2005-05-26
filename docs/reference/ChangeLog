@@ -1,3 +1,7 @@
+2005-05-26  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-sections.txt: Add new entry completion functions.
+
 2005-05-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk-pixbuf/gdk-pixbuf-sections.txt: Add GdkPixbufSimplAnim
