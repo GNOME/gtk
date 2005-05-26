@@ -1856,6 +1856,16 @@ _gdk_win32_blit (gboolean              use_fg_bg,
 			   xdest, ydest,
 			   use_fg_bg));
 
+  /* If blitting from the root window, take the multi-monitor offset
+   * into account.
+   */
+  if (src == ((GdkWindowObject *)_gdk_parent_root)->impl)
+    {
+      GDK_NOTE (MISC, g_print ("... offsetting src coords\n"));
+      xsrc -= _gdk_offset_x;
+      ysrc -= _gdk_offset_y;
+    }
+
   draw_impl = (GdkDrawableImplWin32 *) drawable;
 
   if (GDK_IS_DRAWABLE_IMPL_WIN32 (src))
