@@ -3621,10 +3621,10 @@ gtk_combo_box_list_auto_scroll (GtkComboBox *combo_box,
 	  value = adj->value - (tree_view->allocation.y - y + 1);
 	  gtk_adjustment_set_value (adj, CLAMP (value, adj->lower, adj->upper - adj->page_size));
 	}
-      else if (y >= tree_view->allocation.y + tree_view->allocation.height &&
+      else if (y >= tree_view->allocation.height &&
 	       adj->upper - adj->page_size > adj->value)
 	{
-	  value = adj->value + (y - tree_view->allocation.y - tree_view->allocation.height + 1);
+	  value = adj->value + (y - tree_view->allocation.height + 1);
 	  gtk_adjustment_set_value (adj, CLAMP (value, 0.0, adj->upper - adj->page_size));
 	}
     }
