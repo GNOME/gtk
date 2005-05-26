@@ -18,7 +18,7 @@ position is visible.
 <variablelist>
 
 <varlistentry>
-<term>#GtkText</term>
+<term>#GtkTextView</term>
 <listitem><para>a widget for handling multi-line text entry.</para></listitem>
 </varlistentry>
 
