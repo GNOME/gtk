@@ -1975,6 +1975,8 @@ _gtk_text_btree_tag (const GtkTextIter *start_orig,
 
   segments_changed (tree);
 
+  queue_tag_redisplay (tree, tag, &start, &end);
+
   if (gtk_debug_flags & GTK_DEBUG_TEXT)
     _gtk_text_btree_check (tree);
 }
