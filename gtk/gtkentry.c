@@ -4934,6 +4934,7 @@ gtk_entry_completion_timeout (gpointer data)
       gint matches;
       gint actions;
       GtkTreeSelection *s;
+      gboolean popup_single;
 
       gtk_entry_completion_complete (completion);
       matches = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (completion->priv->filter_model), NULL);
@@ -4946,7 +4947,8 @@ gtk_entry_completion_timeout (gpointer data)
 
       actions = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (completion->priv->actions), NULL);
 
-      if (matches > 0 || actions > 0)
+      g_object_get (completion, "popup-single-match", &popup_single, NULL);
+      if ((matches > (popup_single ? 0: 1)) || actions > 0)
 	{ 
 	  if (GTK_WIDGET_VISIBLE (completion->priv->popup_window))
 	    _gtk_entry_completion_resize_popup (completion);

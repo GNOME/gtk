@@ -177,6 +177,7 @@ gtk_file_chooser_entry_init (GtkFileChooserEntry *chooser_entry)
   GtkCellRenderer *cell;
 
   comp = gtk_entry_completion_new ();
+  gtk_entry_completion_set_popup_single_match (comp, FALSE);
 
   gtk_entry_completion_set_match_func (comp,
 				       completion_match_func,
@@ -968,9 +969,25 @@ _gtk_file_chooser_entry_set_action (GtkFileChooserEntry *chooser_entry,
 {
   g_return_if_fail (GTK_IS_FILE_CHOOSER_ENTRY (chooser_entry));
   
-  if (  chooser_entry->action != action)
+  if (chooser_entry->action != action)
     {
+      GtkEntryCompletion *comp;
+
       chooser_entry->action = action;
+
+      comp = gtk_entry_get_completion (GTK_ENTRY (chooser_entry));
+
+      switch (action)
+	{
+	case GTK_FILE_CHOOSER_ACTION_OPEN:
+	case GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER:
+	  gtk_entry_completion_set_popup_single_match (comp, FALSE);
+	  break;
+	case GTK_FILE_CHOOSER_ACTION_SAVE:
+	case GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER:
+	  gtk_entry_completion_set_popup_single_match (comp, TRUE);
+	  break;
+	}
     }
 }
 

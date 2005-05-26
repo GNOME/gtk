@@ -1,5 +1,14 @@
 2005-05-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk.symbols: 
+	* gtk/gtkentrycompletion.c: Add a property to suppress the
+	popup for single matches.  (#154711)
+
+	* gtk/gtkentry.c (gtk_entry_completion_timeout): Respect it here.
+
+	* gtk/gtkfilechooserentry.c (_gtk_file_chooser_entry_set_action): 
+	Use it here.
+
 	* gtk/gtktextbtree.c (_gtk_text_btree_tag): Queue the 
 	redisplay after modifying the tag in the btree, otherwise 
 	we end up showing the old tags until the next redraw comes 

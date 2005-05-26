@@ -59,7 +59,8 @@ enum
   PROP_TEXT_COLUMN,
   PROP_INLINE_COMPLETION,
   PROP_POPUP_COMPLETION,
-  PROP_POPUP_SET_WIDTH
+  PROP_POPUP_SET_WIDTH,
+  PROP_POPUP_SINGLE_MATCH
 };
 
 #define GTK_ENTRY_COMPLETION_GET_PRIVATE(obj)(G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_ENTRY_COMPLETION, GtkEntryCompletionPrivate))
@@ -351,6 +352,25 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
  							 TRUE,
  							 GTK_PARAM_READWRITE));
 
+  /**
+   * GtkEntryCompletion:popup-single-match:
+   * 
+   * Determines whether the completions popup window will shown
+   * for a single possible completion. You probably want to set
+   * this to %FALSE if you are using 
+   * <link linkend="GtkEntryCompletion--inline-completion">inline 
+   * completion</link>.
+   *
+   * Since: 2.8
+   */
+  g_object_class_install_property (object_class,
+				   PROP_POPUP_SINGLE_MATCH,
+				   g_param_spec_boolean ("popup-single-match",
+ 							 P_("Popup single match"),
+ 							 P_("If TRUE, the popup window will appear for a single match."),
+ 							 TRUE,
+ 							 GTK_PARAM_READWRITE));
+
   g_type_class_add_private (object_class, sizeof (GtkEntryCompletionPrivate));
 }
 
@@ -383,6 +403,7 @@ gtk_entry_completion_init (GtkEntryCompletion *completion)
   priv->inline_completion = FALSE;
   priv->popup_completion = TRUE;
   priv->popup_set_width = TRUE;
+  priv->popup_single_match = TRUE;
 
   /* completions */
   priv->filter_model = NULL;
@@ -516,6 +537,10 @@ gtk_entry_completion_set_property (GObject      *object,
 	priv->popup_set_width = g_value_get_boolean (value);
         break;
 
+      case PROP_POPUP_SINGLE_MATCH:
+	priv->popup_single_match = g_value_get_boolean (value);
+        break;
+
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
         break;
@@ -555,6 +580,10 @@ gtk_entry_completion_get_property (GObject    *object,
 
       case PROP_POPUP_SET_WIDTH:
         g_value_set_boolean (value, gtk_entry_completion_get_popup_set_width (completion));
+        break;
+
+      case PROP_POPUP_SINGLE_MATCH:
+        g_value_set_boolean (value, gtk_entry_completion_get_popup_single_match (completion));
         break;
 
       default:
@@ -1685,6 +1714,56 @@ gtk_entry_completion_get_popup_set_width (GtkEntryCompletion *completion)
   g_return_val_if_fail (GTK_IS_ENTRY_COMPLETION (completion), TRUE);
   
   return completion->priv->popup_set_width;
+}
+
+
+/**
+ * gtk_entry_completion_set_popup_single_match:
+ * @completion: a #GtkEntryCompletion
+ * @popup_single_match: %TRUE if the popup should appear even for a single
+ *   match
+ *
+ * Sets whether the completion popup window will appear even if there is
+ * only a single match. You may want to set this to %FALSE if you
+ * are using <link linkend="GtkEntryCompletion--inline-completion">inline
+ * completion</link>.
+ *
+ * Since: 2.8
+ */
+void 
+gtk_entry_completion_set_popup_single_match (GtkEntryCompletion *completion,
+					     gboolean            popup_single_match)
+{
+  g_return_if_fail (GTK_IS_ENTRY_COMPLETION (completion));
+  
+  popup_single_match = popup_single_match != FALSE;
+
+  if (completion->priv->popup_single_match != popup_single_match)
+    {
+      completion->priv->popup_single_match = popup_single_match;
+
+      g_object_notify (G_OBJECT (completion), "popup-single-match");
+    }
+}
+
+/**
+ * gtk_entry_completion_get_popup_single_match:
+ * @completion: a #GtkEntryCompletion
+ * 
+ * Returns whether the completion popup window will appear even if there is
+ * only a single match. 
+ * 
+ * Return value: %TRUE if the popup window will appear regardless of the
+ *    number of matches.
+ * 
+ * Since: 2.8
+ **/
+gboolean
+gtk_entry_completion_get_popup_single_match (GtkEntryCompletion *completion)
+{
+  g_return_val_if_fail (GTK_IS_ENTRY_COMPLETION (completion), TRUE);
+  
+  return completion->priv->popup_single_match;
 }
 
 
