@@ -1,5 +1,8 @@
 2005-05-25  Matthias Clasen  <mclasen@redhat.com>
 
+	* demos/gtk-demo/clipboard.c: Demonstrate image copy-and-paste
+	and drag-and-drop.
+ 
 	* demos/gtk-demo/appwindow.c (do_appwindow): Set the window
 	icon by name.
 
