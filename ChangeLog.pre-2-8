@@ -1,3 +1,8 @@
+2005-05-26  Maciej Katafiasz  <email@mathrick.org>
+
+	* docs/reference/gtk/tmpl/gtkentry.sgml:
+	Point to GtkTextView instead of GtkText. Fixes bug #305535
+
 2005-05-26  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkdrawable-win32.c (_gdk_win32_blit): If blitting
