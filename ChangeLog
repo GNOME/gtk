@@ -1,5 +1,10 @@
 2005-05-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktextbtree.c (_gtk_text_btree_tag): Queue the 
+	redisplay after modifying the tag in the btree, otherwise 
+	we end up showing the old tags until the next redraw comes 
+	around.   (#143537, Gary Kramlich)
+
 	* gtk/gtkcombobox.c (gtk_combo_box_list_auto_scroll): Make 
 	autoscrolling work at the bottom of the screen.
 

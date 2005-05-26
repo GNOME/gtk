@@ -1766,8 +1766,6 @@ _gtk_text_btree_tag (const GtkTextIter *start_orig,
 
   tree = _gtk_text_iter_get_btree (&start);
 
-  queue_tag_redisplay (tree, tag, &start, &end);
-
   info = gtk_text_btree_get_tag_info (tree, tag);
 
   start_line = _gtk_text_iter_get_text_line (&start);
@@ -1974,6 +1972,8 @@ _gtk_text_btree_tag (const GtkTextIter *start_orig,
     }
 
   segments_changed (tree);
+
+  queue_tag_redisplay (tree, tag, &start, &end);
 
   if (gtk_debug_flags & GTK_DEBUG_TEXT)
     _gtk_text_btree_check (tree);
