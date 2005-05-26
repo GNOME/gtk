@@ -1,3 +1,8 @@
+2005-05-26  Maciej Katafiasz  <email@mathrick.org>
+
+	* docs/reference/gtk/tmpl/gtkentry.sgml:
+	Point to GtkTextView instead of GtkText. Fixes bug #305535
+
 2005-05-26  Sven Neumann  <sven@gimp.org>
 
 	* gtk/gtkselection.c (gtk_selection_data_set_pixbuf): use a less
