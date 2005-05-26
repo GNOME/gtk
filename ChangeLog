@@ -1,3 +1,8 @@
+2005-05-26  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_list_auto_scroll): Make 
+	autoscrolling work at the bottom of the screen.
+
 2005-05-26  Maciej Katafiasz  <email@mathrick.org>
 
 	* docs/reference/gtk/tmpl/gtkentry.sgml:
@@ -13,7 +18,7 @@
 
 	* demos/gtk-demo/clipboard.c: Demonstrate image copy-and-paste
 	and drag-and-drop.
- 
+
 	* demos/gtk-demo/appwindow.c (do_appwindow): Set the window
 	icon by name.
 
