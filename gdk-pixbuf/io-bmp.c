@@ -265,7 +265,12 @@ static gboolean DecodeHeader(unsigned char *BFH, unsigned char *BIH,
 #endif    
 
 	State->Header.size = lsb_32 (&BIH[0]);
-	if (State->Header.size == 40) {
+	if (State->Header.size == 108) {
+		State->Header.width = lsb_32 (&BIH[4]);
+		State->Header.height = lsb_32 (&BIH[8]);
+		State->Header.depth = lsb_16 (&BIH[14]);
+		State->Compressed = lsb_32 (&BIH[16]);
+	} else if (State->Header.size == 40) {
 		State->Header.width = lsb_32 (&BIH[4]);
 		State->Header.height = lsb_32 (&BIH[8]);
 		State->Header.depth = lsb_16 (&BIH[14]);

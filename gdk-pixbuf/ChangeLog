@@ -1,3 +1,7 @@
+2005-05-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* io-bmp.c: Accept the 108 byte header of BMP v4.  (#168799)
+
 2005-05-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk-pixbuf.symbols: 
