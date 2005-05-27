@@ -1,3 +1,7 @@
+2005-05-27  Funda Wang  <fundawang@linux.net.cn>
+
+	* zh_CN.po: Updated Simplified Chinese translation.
+
 2005-05-25  Kjartan Maraas  <kmaraas@gnome.org>
 
 	* nb.po: Update
@@ -72,11 +76,11 @@
 
 	* es.po: Updated Spanish translation.
 
-2005-04-13  Iñaki Larrañaga  <dooteo@euskalgnu.org>
+2005-04-13  Iaki Larraaga  <dooteo@euskalgnu.org>
 
         * eu.po: Fixed some typos.
 	
-2005-04-13  Iñaki Larrañaga  <dooteo@euskalgnu.org>
+2005-04-13  Iaki Larraaga  <dooteo@euskalgnu.org>
 
 	* eu.po: Updated Basque trasnlation.
 
