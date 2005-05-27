@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-05-19 14:42-0400\n"
-"PO-Revision-Date: 2005-05-19 22:53-0400\n"
+"POT-Creation-Date: 2005-05-27 14:23-0400\n"
+"PO-Revision-Date: 2005-05-27 22:53-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: Canadian English <adamw@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1131,12 +1131,12 @@ msgid "Foreground color as a GdkColor"
 msgstr "Foreground colour as a GdkColor"
 
 #: ../gtk/gtkcellrenderertext.c:285 ../gtk/gtkentry.c:506
-#: ../gtk/gtktexttag.c:276 ../gtk/gtktextview.c:577
+#: ../gtk/gtktexttag.c:276 ../gtk/gtktextview.c:578
 msgid "Editable"
 msgstr "Editable"
 
 #: ../gtk/gtkcellrenderertext.c:286 ../gtk/gtktexttag.c:277
-#: ../gtk/gtktextview.c:578
+#: ../gtk/gtktextview.c:579
 msgid "Whether the text can be modified by the user"
 msgstr "Whether the text can be modified by the user"
 
@@ -1852,53 +1852,61 @@ msgstr "Select on focus"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Whether to select the contents of an entry when it is focused"
 
-#: ../gtk/gtkentrycompletion.c:275
+#: ../gtk/gtkentrycompletion.c:276
 msgid "Completion Model"
 msgstr "Completion Model"
 
-#: ../gtk/gtkentrycompletion.c:276
+#: ../gtk/gtkentrycompletion.c:277
 msgid "The model to find matches in"
 msgstr "The model to find matches in"
 
-#: ../gtk/gtkentrycompletion.c:282
+#: ../gtk/gtkentrycompletion.c:283
 msgid "Minimum Key Length"
 msgstr "Minimum Key Length"
 
-#: ../gtk/gtkentrycompletion.c:283
+#: ../gtk/gtkentrycompletion.c:284
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Minimum length of the search key in order to look up matches"
 
-#: ../gtk/gtkentrycompletion.c:298 ../gtk/gtkiconview.c:542
+#: ../gtk/gtkentrycompletion.c:299 ../gtk/gtkiconview.c:542
 msgid "Text column"
 msgstr "Text column"
 
-#: ../gtk/gtkentrycompletion.c:299
+#: ../gtk/gtkentrycompletion.c:300
 msgid "The column of the model containing the strings."
 msgstr "The column of the model containing the strings."
 
-#: ../gtk/gtkentrycompletion.c:318
+#: ../gtk/gtkentrycompletion.c:319
 msgid "Inline completion"
 msgstr "Inline completion"
 
-#: ../gtk/gtkentrycompletion.c:319
+#: ../gtk/gtkentrycompletion.c:320
 msgid "Whether the common prefix should be inserted automatically"
 msgstr "Whether the common prefix should be inserted automatically"
 
-#: ../gtk/gtkentrycompletion.c:333
+#: ../gtk/gtkentrycompletion.c:334
 msgid "Popup completion"
 msgstr "Popup completion"
 
-#: ../gtk/gtkentrycompletion.c:334
+#: ../gtk/gtkentrycompletion.c:335
 msgid "Whether the completions should be shown in a popup window"
 msgstr "Whether the completions should be shown in a popup window"
 
-#: ../gtk/gtkentrycompletion.c:349
+#: ../gtk/gtkentrycompletion.c:350
 msgid "Popup set width"
 msgstr "Popup set width"
 
-#: ../gtk/gtkentrycompletion.c:350
+#: ../gtk/gtkentrycompletion.c:351
 msgid "If TRUE, the popup window will have the same size as the entry"
 msgstr "If TRUE, the popup window will have the same size as the entry"
+
+#: ../gtk/gtkentrycompletion.c:369
+msgid "Popup single match"
+msgstr "Pop up single match"
+
+#: ../gtk/gtkentrycompletion.c:370
+msgid "If TRUE, the popup window will appear for a single match."
+msgstr "If TRUE, the popup window will appear for a single match."
 
 #: ../gtk/gtkeventbox.c:122
 msgid "Visible Window"
@@ -2471,7 +2479,7 @@ msgstr "The text of the label"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "A list of style attributes to apply to the text of the label"
 
-#: ../gtk/gtklabel.c:350 ../gtk/gtktexttag.c:377 ../gtk/gtktextview.c:594
+#: ../gtk/gtklabel.c:350 ../gtk/gtktexttag.c:377 ../gtk/gtktextview.c:595
 msgid "Justification"
 msgstr "Justification"
 
@@ -3905,7 +3913,7 @@ msgstr ""
 "adapts to theme changes etc. so is recommended. Pango predefines some scales "
 "such as PANGO_SCALE_X_LARGE"
 
-#: ../gtk/gtktexttag.c:378 ../gtk/gtktextview.c:595
+#: ../gtk/gtktexttag.c:378 ../gtk/gtktextview.c:596
 msgid "Left, right, or center justification"
 msgstr "Left, right, or centre justification"
 
@@ -3921,7 +3929,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "Left margin"
 
-#: ../gtk/gtktexttag.c:395 ../gtk/gtktextview.c:604
+#: ../gtk/gtktexttag.c:395 ../gtk/gtktextview.c:605
 msgid "Width of the left margin in pixels"
 msgstr "Width of the left margin in pixels"
 
@@ -3929,15 +3937,15 @@ msgstr "Width of the left margin in pixels"
 msgid "Right margin"
 msgstr "Right margin"
 
-#: ../gtk/gtktexttag.c:405 ../gtk/gtktextview.c:614
+#: ../gtk/gtktexttag.c:405 ../gtk/gtktextview.c:615
 msgid "Width of the right margin in pixels"
 msgstr "Width of the right margin in pixels"
 
-#: ../gtk/gtktexttag.c:415 ../gtk/gtktextview.c:623
+#: ../gtk/gtktexttag.c:415 ../gtk/gtktextview.c:624
 msgid "Indent"
 msgstr "Indent"
 
-#: ../gtk/gtktexttag.c:416 ../gtk/gtktextview.c:624
+#: ../gtk/gtktexttag.c:416 ../gtk/gtktextview.c:625
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Amount to indent the paragraph, in pixels"
 
@@ -3953,7 +3961,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "Pixels above lines"
 
-#: ../gtk/gtktexttag.c:437 ../gtk/gtktextview.c:548
+#: ../gtk/gtktexttag.c:437 ../gtk/gtktextview.c:549
 msgid "Pixels of blank space above paragraphs"
 msgstr "Pixels of blank space above paragraphs"
 
@@ -3961,7 +3969,7 @@ msgstr "Pixels of blank space above paragraphs"
 msgid "Pixels below lines"
 msgstr "Pixels below lines"
 
-#: ../gtk/gtktexttag.c:447 ../gtk/gtktextview.c:558
+#: ../gtk/gtktexttag.c:447 ../gtk/gtktextview.c:559
 msgid "Pixels of blank space below paragraphs"
 msgstr "Pixels of blank space below paragraphs"
 
@@ -3969,21 +3977,21 @@ msgstr "Pixels of blank space below paragraphs"
 msgid "Pixels inside wrap"
 msgstr "Pixels inside wrap"
 
-#: ../gtk/gtktexttag.c:457 ../gtk/gtktextview.c:568
+#: ../gtk/gtktexttag.c:457 ../gtk/gtktextview.c:569
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Pixels of blank space between wrapped lines in a paragraph"
 
-#: ../gtk/gtktexttag.c:484 ../gtk/gtktextview.c:586
+#: ../gtk/gtktexttag.c:484 ../gtk/gtktextview.c:587
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 
-#: ../gtk/gtktexttag.c:493 ../gtk/gtktextview.c:633
+#: ../gtk/gtktexttag.c:493 ../gtk/gtktextview.c:634
 msgid "Tabs"
 msgstr "Tabs"
 
-#: ../gtk/gtktexttag.c:494 ../gtk/gtktextview.c:634
+#: ../gtk/gtktexttag.c:494 ../gtk/gtktextview.c:635
 msgid "Custom tabs for this text"
 msgstr "Custom tabs for this text"
 
@@ -4095,67 +4103,67 @@ msgstr "Invisible set"
 msgid "Whether this tag affects text visibility"
 msgstr "Whether this tag affects text visibility"
 
-#: ../gtk/gtktextview.c:547
+#: ../gtk/gtktextview.c:548
 msgid "Pixels Above Lines"
 msgstr "Pixels Above Lines"
 
-#: ../gtk/gtktextview.c:557
+#: ../gtk/gtktextview.c:558
 msgid "Pixels Below Lines"
 msgstr "Pixels Below Lines"
 
-#: ../gtk/gtktextview.c:567
+#: ../gtk/gtktextview.c:568
 msgid "Pixels Inside Wrap"
 msgstr "Pixels Inside Wrap"
 
-#: ../gtk/gtktextview.c:585
+#: ../gtk/gtktextview.c:586
 msgid "Wrap Mode"
 msgstr "Wrap Mode"
 
-#: ../gtk/gtktextview.c:603
+#: ../gtk/gtktextview.c:604
 msgid "Left Margin"
 msgstr "Left Margin"
 
-#: ../gtk/gtktextview.c:613
+#: ../gtk/gtktextview.c:614
 msgid "Right Margin"
 msgstr "Right Margin"
 
-#: ../gtk/gtktextview.c:641
+#: ../gtk/gtktextview.c:642
 msgid "Cursor Visible"
 msgstr "Cursor Visible"
 
-#: ../gtk/gtktextview.c:642
+#: ../gtk/gtktextview.c:643
 msgid "If the insertion cursor is shown"
 msgstr "If the insertion cursor is shown"
 
-#: ../gtk/gtktextview.c:649
+#: ../gtk/gtktextview.c:650
 msgid "Buffer"
 msgstr "Buffer"
 
-#: ../gtk/gtktextview.c:650
+#: ../gtk/gtktextview.c:651
 msgid "The buffer which is displayed"
 msgstr "The buffer which is displayed"
 
-#: ../gtk/gtktextview.c:657
+#: ../gtk/gtktextview.c:658
 msgid "Overwrite mode"
 msgstr "Overwrite mode"
 
-#: ../gtk/gtktextview.c:658
+#: ../gtk/gtktextview.c:659
 msgid "Whether entered text overwrites existing contents"
 msgstr "Whether entered text overwrites existing contents"
 
-#: ../gtk/gtktextview.c:665
+#: ../gtk/gtktextview.c:666
 msgid "Accepts tab"
 msgstr "Accepts tab"
 
-#: ../gtk/gtktextview.c:666
+#: ../gtk/gtktextview.c:667
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "Whether Tab will result in a tab character being entered"
 
-#: ../gtk/gtktextview.c:675
+#: ../gtk/gtktextview.c:676
 msgid "Error underline color"
 msgstr "Error underline colour"
 
-#: ../gtk/gtktextview.c:676
+#: ../gtk/gtktextview.c:677
 msgid "Color with which to draw error-indication underlines"
 msgstr "Colour with which to draw error-indication underlines"
 
