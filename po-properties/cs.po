@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-05-19 13:59+0000\n"
-"PO-Revision-Date: 2005-05-22 13:17+0200\n"
+"POT-Creation-Date: 2005-05-29 06:45+0000\n"
+"PO-Revision-Date: 2005-05-29 14:00+0200\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1130,12 +1130,12 @@ msgid "Foreground color as a GdkColor"
 msgstr "Barva popředí jako GdkColor"
 
 #: ../gtk/gtkcellrenderertext.c:285 ../gtk/gtkentry.c:506
-#: ../gtk/gtktexttag.c:276 ../gtk/gtktextview.c:577
+#: ../gtk/gtktexttag.c:276 ../gtk/gtktextview.c:578
 msgid "Editable"
 msgstr "Upravitelné"
 
 #: ../gtk/gtkcellrenderertext.c:286 ../gtk/gtktexttag.c:277
-#: ../gtk/gtktextview.c:578
+#: ../gtk/gtktextview.c:579
 msgid "Whether the text can be modified by the user"
 msgstr "Jestli uživatel může měnit text"
 
@@ -1848,54 +1848,62 @@ msgstr "Vybrat při fokusu"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Jestli vybrat obsah položky, pokud položka získá fokus"
 
-#: ../gtk/gtkentrycompletion.c:275
+#: ../gtk/gtkentrycompletion.c:276
 msgid "Completion Model"
 msgstr "Model doplňování"
 
-#: ../gtk/gtkentrycompletion.c:276
+#: ../gtk/gtkentrycompletion.c:277
 msgid "The model to find matches in"
 msgstr "Model, kde hledat odpovídající položky"
 
-#: ../gtk/gtkentrycompletion.c:282
+#: ../gtk/gtkentrycompletion.c:283
 msgid "Minimum Key Length"
 msgstr "Minimální délka klíče"
 
-#: ../gtk/gtkentrycompletion.c:283
+#: ../gtk/gtkentrycompletion.c:284
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Minimální délka hledaného klíče, aby se hledaly odpovídající položky"
 
-#: ../gtk/gtkentrycompletion.c:298 ../gtk/gtkiconview.c:542
+#: ../gtk/gtkentrycompletion.c:299 ../gtk/gtkiconview.c:542
 msgid "Text column"
 msgstr "Sloupec textu"
 
-#: ../gtk/gtkentrycompletion.c:299
+#: ../gtk/gtkentrycompletion.c:300
 msgid "The column of the model containing the strings."
 msgstr "Sloupec v modelu obsahující řetězce."
 
-#: ../gtk/gtkentrycompletion.c:318
+#: ../gtk/gtkentrycompletion.c:319
 msgid "Inline completion"
 msgstr "Doplňování na místě"
 
-#: ../gtk/gtkentrycompletion.c:319
+#: ../gtk/gtkentrycompletion.c:320
 msgid "Whether the common prefix should be inserted automatically"
 msgstr "Jestli má být automaticky vložena společná předpona"
 
-#: ../gtk/gtkentrycompletion.c:333
+#: ../gtk/gtkentrycompletion.c:334
 msgid "Popup completion"
 msgstr "Doplňování v okně"
 
-#: ../gtk/gtkentrycompletion.c:334
+#: ../gtk/gtkentrycompletion.c:335
 msgid "Whether the completions should be shown in a popup window"
 msgstr "Jestli má být společná předpona zobrazena v okně"
 
-#: ../gtk/gtkentrycompletion.c:349
+#: ../gtk/gtkentrycompletion.c:350
 msgid "Popup set width"
 msgstr "Nastavit šířku vyskakovacího okna"
 
-#: ../gtk/gtkentrycompletion.c:350
+#: ../gtk/gtkentrycompletion.c:351
 msgid "If TRUE, the popup window will have the same size as the entry"
 msgstr ""
 "Je-li TRUE, vyskakovací okno bude mít stejnou velikost jako vstupní pole"
+
+#: ../gtk/gtkentrycompletion.c:369
+msgid "Popup single match"
+msgstr "Zobrazit jeden výsledek"
+
+#: ../gtk/gtkentrycompletion.c:370
+msgid "If TRUE, the popup window will appear for a single match."
+msgstr "Je-li TRUE, vyskakovací okno bude zobrazeno pro jeden výsledek."
 
 #: ../gtk/gtkeventbox.c:122
 msgid "Visible Window"
@@ -2468,7 +2476,7 @@ msgstr "Text popisu"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Seznam atributů stylu, které použít na text popisu"
 
-#: ../gtk/gtklabel.c:350 ../gtk/gtktexttag.c:377 ../gtk/gtktextview.c:594
+#: ../gtk/gtklabel.c:350 ../gtk/gtktexttag.c:377 ../gtk/gtktextview.c:595
 msgid "Justification"
 msgstr "Zarovnání"
 
@@ -3882,7 +3890,7 @@ msgstr ""
 "Řádně se přizpůsobuje změnám tématu atd., takže je doporučená. Pango "
 "předdefinovává některé hodnoty, například PANGO_SCALE_X_LARGE"
 
-#: ../gtk/gtktexttag.c:378 ../gtk/gtktextview.c:595
+#: ../gtk/gtktexttag.c:378 ../gtk/gtktextview.c:596
 msgid "Left, right, or center justification"
 msgstr "Zarovnání vlevo, vpravo nebo na střed"
 
@@ -3899,7 +3907,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "Levý okraj"
 
-#: ../gtk/gtktexttag.c:395 ../gtk/gtktextview.c:604
+#: ../gtk/gtktexttag.c:395 ../gtk/gtktextview.c:605
 msgid "Width of the left margin in pixels"
 msgstr "Šířka levého okraje v pixelech"
 
@@ -3907,15 +3915,15 @@ msgstr "Šířka levého okraje v pixelech"
 msgid "Right margin"
 msgstr "Pravý okraj"
 
-#: ../gtk/gtktexttag.c:405 ../gtk/gtktextview.c:614
+#: ../gtk/gtktexttag.c:405 ../gtk/gtktextview.c:615
 msgid "Width of the right margin in pixels"
 msgstr "Šířka pravého okraje v pixelech"
 
-#: ../gtk/gtktexttag.c:415 ../gtk/gtktextview.c:623
+#: ../gtk/gtktexttag.c:415 ../gtk/gtktextview.c:624
 msgid "Indent"
 msgstr "Odsazení"
 
-#: ../gtk/gtktexttag.c:416 ../gtk/gtktextview.c:624
+#: ../gtk/gtktexttag.c:416 ../gtk/gtktextview.c:625
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Velikost odsazení odstavce v pixelech"
 
@@ -3931,7 +3939,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "Pixely nad řádky"
 
-#: ../gtk/gtktexttag.c:437 ../gtk/gtktextview.c:548
+#: ../gtk/gtktexttag.c:437 ../gtk/gtktextview.c:549
 msgid "Pixels of blank space above paragraphs"
 msgstr "Pixely prázdného prostoru nad odstavci"
 
@@ -3939,7 +3947,7 @@ msgstr "Pixely prázdného prostoru nad odstavci"
 msgid "Pixels below lines"
 msgstr "Pixely pod řádky"
 
-#: ../gtk/gtktexttag.c:447 ../gtk/gtktextview.c:558
+#: ../gtk/gtktexttag.c:447 ../gtk/gtktextview.c:559
 msgid "Pixels of blank space below paragraphs"
 msgstr "Pixely prázdného prostoru pod odstavci"
 
@@ -3947,20 +3955,20 @@ msgstr "Pixely prázdného prostoru pod odstavci"
 msgid "Pixels inside wrap"
 msgstr "Pixely v zalomení"
 
-#: ../gtk/gtktexttag.c:457 ../gtk/gtktextview.c:568
+#: ../gtk/gtktexttag.c:457 ../gtk/gtktextview.c:569
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Pixely prázdného prostoru mezi zalomenými řádky v odstavci"
 
-#: ../gtk/gtktexttag.c:484 ../gtk/gtktextview.c:586
+#: ../gtk/gtktexttag.c:484 ../gtk/gtktextview.c:587
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "Jestli jsou řádky zalamovány na hranicích slov, znaků, nebo vůbec ne"
 
-#: ../gtk/gtktexttag.c:493 ../gtk/gtktextview.c:633
+#: ../gtk/gtktexttag.c:493 ../gtk/gtktextview.c:634
 msgid "Tabs"
 msgstr "Tabelátory"
 
-#: ../gtk/gtktexttag.c:494 ../gtk/gtktextview.c:634
+#: ../gtk/gtktexttag.c:494 ../gtk/gtktextview.c:635
 msgid "Custom tabs for this text"
 msgstr "Vlastní tabelátory pro tento text"
 
@@ -4072,67 +4080,67 @@ msgstr "Neviditelný nastaveno"
 msgid "Whether this tag affects text visibility"
 msgstr "Jestli tento tag ovlivňuje viditelnost textu"
 
-#: ../gtk/gtktextview.c:547
+#: ../gtk/gtktextview.c:548
 msgid "Pixels Above Lines"
 msgstr "Pixely nad řádky"
 
-#: ../gtk/gtktextview.c:557
+#: ../gtk/gtktextview.c:558
 msgid "Pixels Below Lines"
 msgstr "Pixely pod řádky"
 
-#: ../gtk/gtktextview.c:567
+#: ../gtk/gtktextview.c:568
 msgid "Pixels Inside Wrap"
 msgstr "Pixely v zalomení"
 
-#: ../gtk/gtktextview.c:585
+#: ../gtk/gtktextview.c:586
 msgid "Wrap Mode"
 msgstr "Režim zalamování"
 
-#: ../gtk/gtktextview.c:603
+#: ../gtk/gtktextview.c:604
 msgid "Left Margin"
 msgstr "Levý okraj"
 
-#: ../gtk/gtktextview.c:613
+#: ../gtk/gtktextview.c:614
 msgid "Right Margin"
 msgstr "Pravý okraj"
 
-#: ../gtk/gtktextview.c:641
+#: ../gtk/gtktextview.c:642
 msgid "Cursor Visible"
 msgstr "Viditelný kurzor"
 
-#: ../gtk/gtktextview.c:642
+#: ../gtk/gtktextview.c:643
 msgid "If the insertion cursor is shown"
 msgstr "Jestli se zobrazuje kurzor pro vkládání"
 
-#: ../gtk/gtktextview.c:649
+#: ../gtk/gtktextview.c:650
 msgid "Buffer"
 msgstr "Vyrovnávací paměť"
 
-#: ../gtk/gtktextview.c:650
+#: ../gtk/gtktextview.c:651
 msgid "The buffer which is displayed"
 msgstr "Zobrazovaná vyrovnávací paměť"
 
-#: ../gtk/gtktextview.c:657
+#: ../gtk/gtktextview.c:658
 msgid "Overwrite mode"
 msgstr "Režim přepisování"
 
-#: ../gtk/gtktextview.c:658
+#: ../gtk/gtktextview.c:659
 msgid "Whether entered text overwrites existing contents"
 msgstr "Jestli zadávaný text přepisuje existující obsah"
 
-#: ../gtk/gtktextview.c:665
+#: ../gtk/gtktextview.c:666
 msgid "Accepts tab"
 msgstr "Přijímá tabelátor"
 
-#: ../gtk/gtktextview.c:666
+#: ../gtk/gtktextview.c:667
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "Jestli Tab způsobí zadání znaku tab"
 
-#: ../gtk/gtktextview.c:675
+#: ../gtk/gtktextview.c:676
 msgid "Error underline color"
 msgstr "Barva podtržení chyby"
 
-#: ../gtk/gtktextview.c:676
+#: ../gtk/gtktextview.c:677
 msgid "Color with which to draw error-indication underlines"
 msgstr "Barva, kterou kreslit podtržení indikující chybu"
 
