@@ -1,3 +1,9 @@
+2005-06-03  Dom Lachowicz <cinamod@hotmail.com>
+
+	* modules/engines/ms-windows/msw_style.c: Re-sync with gtk-wimp
+	* modules/engines/ms-windows/xp_theme.c: Ditto
+	* modules/engines/ms-windows/Theme/gtk-2.0/gtkrc: Ditto
+
 Thu May 26 16:43:27 2005 Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkentrycompletion.h: Add declarations for
