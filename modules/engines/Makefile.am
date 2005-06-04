@@ -1,4 +1,4 @@
-if PLATFORM_WIN32
+if USE_WIN32
 wimp = ms-windows
 endif
 

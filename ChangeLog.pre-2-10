@@ -1,3 +1,13 @@
+2005-06-05  Tor Lillqvist  <tml@novell.com>
+
+	* modules/engines/Makefile.am
+	* modules/input/Makefile.am: Decide whether to build the
+	ms-windows theme engine based on the GDK backend, not based on
+	platform. (I.e., if building for Cygwin with the X11 backend, we
+	shouldn't build the ms-windows engine, but if building for Cygwin
+	but with the Win32 backend, we should.) Ditto for the IME
+	(Windows) input module. (#305832)
+
 2005-06-04  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkcursor-win32.c
