@@ -1,5 +1,12 @@
 2005-06-04  Tor Lillqvist  <tml@novell.com>
 
+	* gdk/win32/gdkcursor-win32.c
+	* gdk/win32/gdkwindow-win32.c
+	* gdk/win32/gdkprivate-win32.h: Support full-colour cursors.
+	Support cursors with alpha on XP. Use code in common with the
+	support for alpha icons that already was present. (#306101, Tim
+	Evans)
+
 	* modules/engines/ms-windows/msw_style.c: Render insensitive icons
 	in a way that more closely matches Windows. (#305986, Tim Evans).
 

@@ -520,6 +520,15 @@ extern HGLOBAL		_delayed_rendering_data;
 HGLOBAL _gdk_win32_selection_convert_to_dib (HGLOBAL  hdata,
 					     GdkAtom  target);
 
+/* Convert a pixbuf to an HICON (or HCURSOR).  Supports alpha under
+ * Windows XP, thresholds alpha otherwise.
+ */
+HICON _gdk_win32_pixbuf_to_hicon   (GdkPixbuf *pixbuf);
+HICON _gdk_win32_pixbuf_to_hcursor (GdkPixbuf *pixbuf,
+				    gint       x_hotspot,
+				    gint       y_hotspot);
+gboolean _gdk_win32_pixbuf_to_hicon_supports_alpha (void);
+
 /* Initialization */
 void _gdk_windowing_window_init (void);
 void _gdk_root_window_size_init (void);
