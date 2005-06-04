@@ -1853,6 +1853,52 @@ draw_handle (GtkStyle        *style,
     }
 }
 
+static GdkPixbuf *
+render_icon (GtkStyle            *style,
+	     const GtkIconSource *source,
+             GtkTextDirection     direction,
+             GtkStateType         state,
+             GtkIconSize          size,
+             GtkWidget           *widget,
+             const gchar         *detail)
+{
+  if (gtk_icon_source_get_state_wildcarded (source) && state == GTK_STATE_INSENSITIVE)
+    {
+      GdkPixbuf *normal, *insensitive;
+      int i, j, w, h, rs;
+      guchar *pixels, *row;
+
+      normal = parent_class->render_icon (style, source, direction,
+					  GTK_STATE_NORMAL, size,
+					  widget, detail);
+      /* copy and add alpha channel at the same time */
+      insensitive = gdk_pixbuf_add_alpha (normal, FALSE, 0, 0, 0);
+      g_object_unref (normal);
+      /* remove all colour */
+      gdk_pixbuf_saturate_and_pixelate (insensitive, insensitive, 0.0, FALSE);
+      /* make partially transparent */
+      w = gdk_pixbuf_get_width (insensitive);
+      h = gdk_pixbuf_get_height (insensitive);
+      rs = gdk_pixbuf_get_rowstride (insensitive);
+      pixels = gdk_pixbuf_get_pixels (insensitive);
+      for (j=0; j<h; j++)
+	{
+	  row = pixels + j * rs;
+	  for (i=0; i<w; i++)
+	    {
+	      row[i*4 + 3] = (guchar)(row[i*4 + 3] * 0.6);
+	    }
+	}
+      return insensitive;
+    }
+  else
+    {
+      return parent_class->render_icon (style, source, direction,
+					state, size,
+					widget, detail);
+    }
+}
+
 static void
 msw_style_init_from_rc (GtkStyle * style, GtkRcStyle * rc_style)
 {
@@ -1884,6 +1930,7 @@ msw_style_class_init (MswStyleClass *klass)
   style_class->draw_vline = draw_vline;
   style_class->draw_handle = draw_handle;
   style_class->draw_resize_grip = draw_resize_grip;
+  style_class->render_icon = render_icon;
 }
 
 GType msw_type_style = 0;

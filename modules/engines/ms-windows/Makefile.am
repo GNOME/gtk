@@ -13,6 +13,7 @@ INCLUDES = \
 
 
 LDADDS = \
+	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-2.0.la	\
 	$(top_builddir)/gdk/$(gdktargetlib)		\
 	$(top_builddir)/gtk/$(gtktargetlib)		\
 	$(GTK_DEP_LIBS)
