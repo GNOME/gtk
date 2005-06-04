@@ -1546,65 +1546,64 @@ draw_box (GtkStyle      *style,
         }
     }
   else if (detail && (strcmp (detail, "vscrollbar") == 0 || strcmp (detail, "hscrollbar") == 0))
-  {
-       GtkScrollbar * scrollbar = GTK_SCROLLBAR(widget);
-	  if (shadow_type == GTK_SHADOW_IN)
-	  	shadow_type = GTK_SHADOW_ETCHED_IN;
-       if (scrollbar->range.adjustment->page_size >= (scrollbar->range.adjustment->upper-scrollbar->range.adjustment->lower))
-           shadow_type = GTK_SHADOW_OUT;
-  }
+    {
+      GtkScrollbar * scrollbar = GTK_SCROLLBAR(widget);
+      if (shadow_type == GTK_SHADOW_IN)
+	shadow_type = GTK_SHADOW_ETCHED_IN;
+      if (scrollbar->range.adjustment->page_size >= (scrollbar->range.adjustment->upper-scrollbar->range.adjustment->lower))
+	shadow_type = GTK_SHADOW_OUT;
+    }
   else if (detail && strcmp (detail, "handlebox_bin") == 0)
-  {
+    {
       if (xp_theme_draw(window, XP_THEME_ELEMENT_REBAR,
                         style, x, y, width, height, state_type, area))
         {
           return;
         }
-  }
+    }
   else
-  {
-	 const gchar * name = gtk_widget_get_name (widget);
-
-	  if (name && !strcmp (name, "gtk-tooltips")) {
-     	 if (xp_theme_draw (window, XP_THEME_ELEMENT_TOOLTIP, style, x, y, width, height, state_type, area))
-     	   {
-  			return;
-    	    }
-		else {
-    	 	HBRUSH brush;
-			gint xoff, yoff;
-			GdkDrawable *drawable;
-			RECT rect;
-    	 	HDC hdc;
-
-  			if (!GDK_IS_WINDOW(window))
-    		{
-      			xoff = 0;
-      			yoff = 0;
-      			drawable = window;
-    		}
-  			else
-  			{
-    			gdk_window_get_internal_paint_info(window, &drawable, &xoff, &yoff);
-   	 		}
-
-			rect.left = x - xoff;
-			rect.top = y - yoff;
-			rect.right = rect.left + width;
-			rect.bottom = rect.top + height;
-
-			hdc = gdk_win32_hdc_get(window, style->dark_gc[state_type], 0);
-	        brush = GetSysColorBrush(COLOR_3DDKSHADOW);
-			if (brush)
-         		FrameRect(hdc, &rect, brush);
-       		InflateRect(&rect, -1, -1);
-       		FillRect(hdc, &rect, (HBRUSH) (COLOR_INFOBK+1));
-
-       		return;
-		}
-
-   		}
-  }
+    {
+      const gchar * name = gtk_widget_get_name (widget);
+      
+      if (name && !strcmp (name, "gtk-tooltips")) {
+	if (xp_theme_draw (window, XP_THEME_ELEMENT_TOOLTIP, style, x, y, width, height, state_type, area))
+	  {
+	    return;
+	  }
+	else {
+	  HBRUSH brush;
+	  gint xoff, yoff;
+	  GdkDrawable *drawable;
+	  RECT rect;
+	  HDC hdc;
+	  
+	  if (!GDK_IS_WINDOW(window))
+	    {
+	      xoff = 0;
+	      yoff = 0;
+	      drawable = window;
+	    }
+	  else
+	    {
+	      gdk_window_get_internal_paint_info(window, &drawable, &xoff, &yoff);
+	    }
+	  
+	  rect.left = x - xoff;
+	  rect.top = y - yoff;
+	  rect.right = rect.left + width;
+	  rect.bottom = rect.top + height;
+	  
+	  hdc = gdk_win32_hdc_get(window, style->dark_gc[state_type], 0);
+	  brush = GetSysColorBrush(COLOR_3DDKSHADOW);
+	  if (brush)
+	    FrameRect(hdc, &rect, brush);
+	  InflateRect(&rect, -1, -1);
+	  FillRect(hdc, &rect, (HBRUSH) (COLOR_INFOBK+1));
+	  
+	  return;
+	}
+      }
+    }
 
   parent_class->draw_box (style, window, state_type, shadow_type, area,
 			  widget, detail, x, y, width, height);
@@ -1903,6 +1902,52 @@ draw_handle (GtkStyle        *style,
     }
 }
 
+static GdkPixbuf *
+render_icon (GtkStyle            *style,
+	     const GtkIconSource *source,
+             GtkTextDirection     direction,
+             GtkStateType         state,
+             GtkIconSize          size,
+             GtkWidget           *widget,
+             const gchar         *detail)
+{
+  if (gtk_icon_source_get_state_wildcarded (source) && state == GTK_STATE_INSENSITIVE)
+    {
+      GdkPixbuf *normal, *insensitive;
+      int i, j, w, h, rs;
+      guchar *pixels, *row;
+
+      normal = parent_class->render_icon (style, source, direction,
+					  GTK_STATE_NORMAL, size,
+					  widget, detail);
+      /* copy and add alpha channel at the same time */
+      insensitive = gdk_pixbuf_add_alpha (normal, FALSE, 0, 0, 0);
+      g_object_unref (normal);
+      /* remove all colour */
+      gdk_pixbuf_saturate_and_pixelate (insensitive, insensitive, 0.0, FALSE);
+      /* make partially transparent */
+      w = gdk_pixbuf_get_width (insensitive);
+      h = gdk_pixbuf_get_height (insensitive);
+      rs = gdk_pixbuf_get_rowstride (insensitive);
+      pixels = gdk_pixbuf_get_pixels (insensitive);
+      for (j=0; j<h; j++)
+	{
+	  row = pixels + j * rs;
+	  for (i=0; i<w; i++)
+	    {
+	      row[i*4 + 3] = (guchar)(row[i*4 + 3] * 0.6);
+	    }
+	}
+      return insensitive;
+    }
+  else
+    {
+      return parent_class->render_icon (style, source, direction,
+					state, size,
+					widget, detail);
+    }
+}
+
 static void
 msw_style_init_from_rc (GtkStyle * style, GtkRcStyle * rc_style)
 {
@@ -1934,6 +1979,7 @@ msw_style_class_init (MswStyleClass *klass)
   style_class->draw_vline = draw_vline;
   style_class->draw_handle = draw_handle;
   style_class->draw_resize_grip = draw_resize_grip;
+  style_class->render_icon = render_icon;
 }
 
 GType msw_type_style = 0;
