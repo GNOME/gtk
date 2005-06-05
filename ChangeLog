@@ -1,3 +1,11 @@
+2005-06-03  Dom Lachowicz <cinamod@hotmail.com>
+
+	Merge from HEAD:
+	
+	* modules/engines/ms-windows/msw_style.c: Re-sync with gtk-wimp
+	* modules/engines/ms-windows/xp_theme.c: Ditto
+	* modules/engines/ms-windows/Theme/gtk-2.0/gtkrc: Ditto
+
 2005-06-05  Tor Lillqvist  <tml@novell.com>
 
 	* modules/engines/Makefile.am

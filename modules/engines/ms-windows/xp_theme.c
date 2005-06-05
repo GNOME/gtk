@@ -129,6 +129,8 @@ typedef HRESULT (FAR PASCAL *DrawThemeBackgroundFunc)
 typedef HRESULT (FAR PASCAL *EnableThemeDialogTextureFunc)(HWND hwnd, DWORD dwFlags);
 typedef BOOL (FAR PASCAL *IsThemeActiveFunc)(VOID);
 typedef BOOL (FAR PASCAL *IsAppThemedFunc)(VOID);
+typedef BOOL (FAR PASCAL *IsThemeBackgroundPartiallyTransparentFunc)(HTHEME hTheme, int iPartId, int iStateId);
+typedef HRESULT (FAR PASCAL *DrawThemeParentBackgroundFunc)(HWND hwnd, HDC hdc, RECT *prc);
 
 static GetThemeSysFontFunc get_theme_sys_font_func = NULL;
 static GetThemeSysColorFunc get_theme_sys_color_func = NULL;
@@ -139,6 +141,8 @@ static DrawThemeBackgroundFunc draw_theme_background_func = NULL;
 static EnableThemeDialogTextureFunc enable_theme_dialog_texture_func = NULL;
 static IsThemeActiveFunc is_theme_active_func = NULL;
 static IsAppThemedFunc is_app_themed_func = NULL;
+static IsThemeBackgroundPartiallyTransparentFunc is_theme_partially_transparent_func = NULL;
+static DrawThemeParentBackgroundFunc draw_theme_parent_background_func = NULL;
 
 static void
 xp_theme_close_open_handles (void)
@@ -179,6 +183,8 @@ xp_theme_init (void)
 	  get_theme_sys_font_func = (GetThemeSysFontFunc) GetProcAddress(uxtheme_dll, "GetThemeSysFont");
 	  get_theme_sys_color_func = (GetThemeSysColorFunc) GetProcAddress(uxtheme_dll, "GetThemeSysColor");
 	  get_theme_sys_metric_func = (GetThemeSysSizeFunc) GetProcAddress(uxtheme_dll, "GetThemeSysSize");
+	  is_theme_partially_transparent_func = (IsThemeBackgroundPartiallyTransparentFunc) GetProcAddress(uxtheme_dll, "IsThemeBackgroundPartiallyTransparent");
+	  draw_theme_parent_background_func = (DrawThemeParentBackgroundFunc) GetProcAddress(uxtheme_dll, "DrawThemeParentBackground");
   }
 }
 
@@ -208,6 +214,8 @@ xp_theme_exit (void)
   get_theme_sys_font_func = NULL;
   get_theme_sys_color_func = NULL;
   get_theme_sys_metric_func = NULL;
+  is_theme_partially_transparent_func = NULL;
+  draw_theme_parent_background_func = NULL;
 }
 
 static HTHEME
@@ -325,7 +333,7 @@ xp_theme_get_handle_by_element (XpThemeElement element)
 static int
 xp_theme_map_gtk_state (XpThemeElement element, GtkStateType state)
 {
-  int ret;
+  int ret = 0;
 
   switch(element)
     {
@@ -334,6 +342,9 @@ xp_theme_map_gtk_state (XpThemeElement element, GtkStateType state)
       break;
 
     case XP_THEME_ELEMENT_REBAR:
+    	ret = 0;
+    	break;
+
     case XP_THEME_ELEMENT_REBAR_GRIPPER_H:
     case XP_THEME_ELEMENT_REBAR_GRIPPER_V:
       ret = CHEVS_NORMAL;
@@ -671,6 +682,7 @@ xp_theme_draw (GdkWindow *win, XpThemeElement element, GtkStyle *style,
     {
       gdk_window_get_internal_paint_info(win, &drawable, &xoff, &yoff);
     }
+
   rect.left = x - xoff;
   rect.top = y - yoff;
   rect.right = rect.left + width;
@@ -711,6 +723,12 @@ xp_theme_draw (GdkWindow *win, XpThemeElement element, GtkStyle *style,
       FillRect (dc, &rect, (HBRUSH) (COLOR_3DFACE+1));
     }
 #endif
+
+  if (is_theme_partially_transparent_func && draw_theme_parent_background_func &&
+  		is_theme_partially_transparent_func(theme, element_part_map[element], part_state))
+  {
+    draw_theme_parent_background_func(GDK_WINDOW_HWND(win), dc, pClip);
+  }
 
   draw_theme_background_func(theme, dc, element_part_map[element], part_state, &rect, pClip);
   gdk_win32_hdc_release(drawable, style->dark_gc[state_type], 0);

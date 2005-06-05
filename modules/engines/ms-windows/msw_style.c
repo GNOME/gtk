@@ -20,6 +20,13 @@
  * Boston, MA 02111-1307, USA.
  */
 
+/*
+ * Useful resources:
+ *
+ *  http://lxr.mozilla.org/mozilla/source/gfx/src/windows/nsNativeThemeWin.cpp
+ *  http://msdn.microsoft.com/library/default.asp?url=/library/en-us/shellcc/platform/commctls/userex/functions/drawthemebackground.asp
+ */
+
 #include "msw_style.h"
 #include "xp_theme.h"
 
@@ -148,7 +155,7 @@ get_system_font(XpThemeClass klazz, XpThemeFont type, LOGFONT *out_lf)
   return FALSE;
 }
 
-/***************************** STOLEN FROM PANGO *****************************/
+/***************************** BEGIN STOLEN FROM PANGO *****************************/
 
 /*
 	This code is stolen from Pango 1.4. It attempts to address the following problems:
@@ -200,7 +207,7 @@ struct name_record
   guint16 string_offset;
 };
 
-gboolean
+static gboolean
 pango_win32_get_name_header (HDC                 hdc,
 			     struct name_header *header)
 {
@@ -213,7 +220,7 @@ pango_win32_get_name_header (HDC                 hdc,
   return TRUE;
 }
 
-gboolean
+static gboolean
 pango_win32_get_name_record (HDC                 hdc,
 			     gint                i,
 			     struct name_record *record)
@@ -356,7 +363,7 @@ get_family_name (LOGFONT *lfp, HDC pango_win32_hdc)
   return g_locale_to_utf8 (lfp->lfFaceName, -1, NULL, NULL, NULL);
 }
 
-/***************************** STOLEN FROM PANGO *****************************/
+/***************************** END STOLEN FROM PANGO *****************************/
 
 static char *
 sys_font_to_pango_font (XpThemeClass klazz, XpThemeFont type, char * buf, size_t bufsiz)
@@ -485,14 +492,12 @@ msw_style_setup_system_settings (void)
   g_object_set (settings, "gtk-cursor-blink", cursor_blink_time > 0, NULL);
 
   if (cursor_blink_time > 0)
-  {
   	g_object_set (settings, "gtk-cursor-blink-time", 2*cursor_blink_time,
 		      NULL);
-  }
 
+  g_object_set (settings, "gtk-double-click-distance", GetSystemMetrics(SM_CXDOUBLECLK), NULL);
   g_object_set (settings, "gtk-double-click-time", GetDoubleClickTime(), NULL);
-  g_object_set (settings, "gtk-dnd-drag-threshold", GetSystemMetrics(SM_CXDRAG),
-		NULL);
+  g_object_set (settings, "gtk-dnd-drag-threshold", GetSystemMetrics(SM_CXDRAG), NULL);
 
   setup_menu_settings (settings);
 
@@ -627,7 +632,7 @@ setup_msw_rc_style(void)
 	     "style \"msw-menu-bar\" = \"msw-menu\"\n"
 	     "{\n"
 	     "bg[NORMAL] = { %d, %d, %d }\n"
-	     "GtkMenuBar::shadow-type = etched-in\n"
+	     "GtkMenuBar::shadow-type = out\n"
 	     "}widget_class \"*MenuBar*\" style \"msw-menu-bar\"\n",
 	     btn_face.red,
 	     btn_face.green,
@@ -1272,7 +1277,7 @@ draw_arrow (GtkStyle      *style,
 				return;
 	  }
 	  /* probably a gtk combo box on a toolbar */
-	  else if (widget->parent && GTK_IS_BUTTON (widget->parent))
+	  else if (0 /*widget->parent && GTK_IS_BUTTON (widget->parent)*/)
   		{
 		  	if (xp_theme_draw(window, XP_THEME_ELEMENT_COMBOBUTTON, style, x-3, widget->allocation.y+1,
                         width+5, widget->allocation.height-4, state, area))
@@ -1540,24 +1545,64 @@ draw_box (GtkStyle      *style,
         }
     }
   else if (detail && (strcmp (detail, "vscrollbar") == 0 || strcmp (detail, "hscrollbar") == 0))
-  {
-       GtkScrollbar * scrollbar = GTK_SCROLLBAR(widget);
-	  if (shadow_type == GTK_SHADOW_IN)
-	  	shadow_type = GTK_SHADOW_ETCHED_IN;
-       if (scrollbar->range.adjustment->page_size >= (scrollbar->range.adjustment->upper-scrollbar->range.adjustment->lower))
-           shadow_type = GTK_SHADOW_OUT;
-  }
+    {
+      GtkScrollbar * scrollbar = GTK_SCROLLBAR(widget);
+      if (shadow_type == GTK_SHADOW_IN)
+	shadow_type = GTK_SHADOW_ETCHED_IN;
+      if (scrollbar->range.adjustment->page_size >= (scrollbar->range.adjustment->upper-scrollbar->range.adjustment->lower))
+	shadow_type = GTK_SHADOW_OUT;
+    }
+  else if (detail && strcmp (detail, "handlebox_bin") == 0)
+    {
+      if (xp_theme_draw(window, XP_THEME_ELEMENT_REBAR,
+                        style, x, y, width, height, state_type, area))
+        {
+          return;
+        }
+    }
   else
-  {
-	 const gchar * name = gtk_widget_get_name (widget);
-
-	  if (name && !strcmp (name, "gtk-tooltips")) {
-     	 if (xp_theme_draw (window, XP_THEME_ELEMENT_TOOLTIP, style, x, y, width, height, state_type, area))
-     	   {
-  			return;
-    	    }
-   		}
-  }
+    {
+      const gchar * name = gtk_widget_get_name (widget);
+      
+      if (name && !strcmp (name, "gtk-tooltips")) {
+	if (xp_theme_draw (window, XP_THEME_ELEMENT_TOOLTIP, style, x, y, width, height, state_type, area))
+	  {
+	    return;
+	  }
+	else {
+	  HBRUSH brush;
+	  gint xoff, yoff;
+	  GdkDrawable *drawable;
+	  RECT rect;
+	  HDC hdc;
+	  
+	  if (!GDK_IS_WINDOW(window))
+	    {
+	      xoff = 0;
+	      yoff = 0;
+	      drawable = window;
+	    }
+	  else
+	    {
+	      gdk_window_get_internal_paint_info(window, &drawable, &xoff, &yoff);
+	    }
+	  
+	  rect.left = x - xoff;
+	  rect.top = y - yoff;
+	  rect.right = rect.left + width;
+	  rect.bottom = rect.top + height;
+	  
+	  hdc = gdk_win32_hdc_get(window, style->dark_gc[state_type], 0);
+	  brush = GetSysColorBrush(COLOR_3DDKSHADOW);
+	  if (brush)
+	    FrameRect(hdc, &rect, brush);
+	  InflateRect(&rect, -1, -1);
+	  FillRect(hdc, &rect, (HBRUSH) (COLOR_INFOBK+1));
+	  
+	  return;
+	}
+      }
+    }
 
   parent_class->draw_box (style, window, state_type, shadow_type, area,
 			  widget, detail, x, y, width, height);
@@ -1800,9 +1845,12 @@ draw_resize_grip (GtkStyle      *style,
                        gint           height)
 {
 	if (detail && !strcmp(detail, "statusbar")) {
+#if 0
+		/* DAL: TODO: find out why this regressed */
 		if (xp_theme_draw(window, XP_THEME_ELEMENT_STATUS_GRIPPER, style, x, y, width, height,
                            state_type, area))
 			return;
+#endif
 	}
 
 	parent_class->draw_resize_grip (style, window, state_type, area,
