@@ -106,11 +106,14 @@ gchar *
 _gdk_windowing_substitute_screen_number (const gchar *display_name,
 					 int          screen_number)
 {
+  if (screen_number != 0)
+    return NULL;
+
   return g_strdup (display_name);
 }
 
 gchar *
 gdk_screen_make_display_name (GdkScreen *screen)
 {
-  return g_strdup ("");
+  return gdk_display_get_name (_gdk_display);
 }

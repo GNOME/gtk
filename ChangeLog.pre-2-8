@@ -1,5 +1,11 @@
 2005-06-05  Tor Lillqvist  <tml@novell.com>
 
+	* gdk/win32/gdkscreen-win32.c
+	(_gdk_windowing_substitute_screen_number): Return NULL unless
+	screen number is zero. We have only one screen on Win32.
+	(gdk_screen_make_display_name): Call gdk_display_get_name() and
+	return that.
+	
 	* modules/engines/Makefile.am
 	* modules/input/Makefile.am: Decide whether to build the
 	ms-windows theme engine based on the GDK backend, not based on
