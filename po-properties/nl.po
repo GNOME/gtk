@@ -19,8 +19,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-05-14 05:56+0000\n"
-"PO-Revision-Date: 2005-05-14 16:18+0200\n"
+"POT-Creation-Date: 2005-06-05 05:56+0000\n"
+"PO-Revision-Date: 2005-06-05 08:25+0200\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
@@ -104,12 +104,12 @@ msgstr "Standaard display"
 msgid "The default display for GDK"
 msgstr "Het standaard display voor GDK"
 
-#: ../gdk/gdkpango.c:509 ../gtk/gtkinvisible.c:117 ../gtk/gtkwindow.c:537
+#: ../gdk/gdkpango.c:510 ../gtk/gtkinvisible.c:117 ../gtk/gtkwindow.c:537
 msgid "Screen"
 msgstr "Scherm"
 
 # technische termen
-#: ../gdk/gdkpango.c:510
+#: ../gdk/gdkpango.c:511
 msgid "the GdkScreen for the renderer"
 msgstr "het GdkScreen voor de renderer"
 
@@ -260,7 +260,7 @@ msgid "A unique name for the action."
 msgstr "Een unieke naar voor de actie."
 
 #: ../gtk/gtkaction.c:205 ../gtk/gtkbutton.c:221 ../gtk/gtkexpander.c:206
-#: ../gtk/gtkframe.c:128 ../gtk/gtklabel.c:321 ../gtk/gtktoolbutton.c:182
+#: ../gtk/gtkframe.c:128 ../gtk/gtklabel.c:321 ../gtk/gtktoolbutton.c:187
 msgid "Label"
 msgstr "Label"
 
@@ -708,7 +708,7 @@ msgstr ""
 "Tekst van het labelwidget op de knop, indien de knop een labelwidget bevat"
 
 #: ../gtk/gtkbutton.c:229 ../gtk/gtkexpander.c:214 ../gtk/gtklabel.c:342
-#: ../gtk/gtktoolbutton.c:189
+#: ../gtk/gtktoolbutton.c:194
 msgid "Use underline"
 msgstr "Gebruik onderstreping"
 
@@ -1023,60 +1023,69 @@ msgstr ""
 "Indien ONWAAR, kunnen geen andere tekenreeksen worden ingevoerd dan de "
 "voorgekozen tekenreeksen"
 
-#: ../gtk/gtkcellrendererpixbuf.c:139
+#: ../gtk/gtkcellrendererpixbuf.c:145
 msgid "Pixbuf Object"
 msgstr "Pixbuf-object"
 
-#: ../gtk/gtkcellrendererpixbuf.c:140
+#: ../gtk/gtkcellrendererpixbuf.c:146
 msgid "The pixbuf to render"
 msgstr "De te renderen pixbuf"
 
-#: ../gtk/gtkcellrendererpixbuf.c:147
+#: ../gtk/gtkcellrendererpixbuf.c:153
 msgid "Pixbuf Expander Open"
 msgstr "Open uitklapbare pixbuf"
 
-#: ../gtk/gtkcellrendererpixbuf.c:148
+#: ../gtk/gtkcellrendererpixbuf.c:154
 msgid "Pixbuf for open expander"
 msgstr "Pixbuf voor geopende uitklapbare item"
 
-#: ../gtk/gtkcellrendererpixbuf.c:155
+#: ../gtk/gtkcellrendererpixbuf.c:161
 msgid "Pixbuf Expander Closed"
 msgstr "gesloten uitklapbare pixbuf"
 
-#: ../gtk/gtkcellrendererpixbuf.c:156
+#: ../gtk/gtkcellrendererpixbuf.c:162
 msgid "Pixbuf for closed expander"
 msgstr "Pixbuf voor gesloten uitklapbare item"
 
-#: ../gtk/gtkcellrendererpixbuf.c:163 ../gtk/gtkimage.c:201
+#: ../gtk/gtkcellrendererpixbuf.c:169 ../gtk/gtkimage.c:201
 msgid "Stock ID"
 msgstr "Standaard-ID"
 
-#: ../gtk/gtkcellrendererpixbuf.c:164
+#: ../gtk/gtkcellrendererpixbuf.c:170
 msgid "The stock ID of the stock icon to render"
 msgstr "Het standaard-ID van het weer te geven standaardpictogram"
 
-#: ../gtk/gtkcellrendererpixbuf.c:171
+#: ../gtk/gtkcellrendererpixbuf.c:177
 msgid "Size"
 msgstr "Afmeting"
 
-#: ../gtk/gtkcellrendererpixbuf.c:172
+#: ../gtk/gtkcellrendererpixbuf.c:178
 msgid "The GtkIconSize value that specifies the size of the rendered icon"
 msgstr ""
 "De GtkIconSize waarde die de afmeting van het gebruikte pictogram geeft"
 
-#: ../gtk/gtkcellrendererpixbuf.c:181
+#: ../gtk/gtkcellrendererpixbuf.c:187
 msgid "Detail"
 msgstr "Detail"
 
-#: ../gtk/gtkcellrendererpixbuf.c:182
+#: ../gtk/gtkcellrendererpixbuf.c:188
 msgid "Render detail to pass to the theme engine"
 msgstr "Weergavedetail door te geven aan de thema-motor"
 
-#: ../gtk/gtkcellrendererpixbuf.c:197
+#: ../gtk/gtkcellrendererpixbuf.c:205 ../gtk/gtkimage.c:259
+#: ../gtk/gtkwindow.c:529
+msgid "Icon Name"
+msgstr "Pictogramnaam"
+
+#: ../gtk/gtkcellrendererpixbuf.c:206 ../gtk/gtkimage.c:260
+msgid "The name of the icon from the icon theme"
+msgstr "De naam van het pictogram uit het pictogramthema"
+
+#: ../gtk/gtkcellrendererpixbuf.c:221
 msgid "Follow State"
 msgstr "Status volgen"
 
-#: ../gtk/gtkcellrendererpixbuf.c:198
+#: ../gtk/gtkcellrendererpixbuf.c:222
 msgid "Whether the rendered pixbuf should be colorized according to the state"
 msgstr "Of de gerenderde pixbuf moet worden gekleurd volgens de status"
 
@@ -1163,12 +1172,12 @@ msgid "Foreground color as a GdkColor"
 msgstr "Voorgrondkleur als een GdkColor"
 
 #: ../gtk/gtkcellrenderertext.c:285 ../gtk/gtkentry.c:506
-#: ../gtk/gtktexttag.c:276 ../gtk/gtktextview.c:577
+#: ../gtk/gtktexttag.c:276 ../gtk/gtktextview.c:578
 msgid "Editable"
 msgstr "Wijzigbaar"
 
 #: ../gtk/gtkcellrenderertext.c:286 ../gtk/gtktexttag.c:277
-#: ../gtk/gtktextview.c:578
+#: ../gtk/gtktextview.c:579
 msgid "Whether the text can be modified by the user"
 msgstr "Of de tekst gewijzigd kan worden door de gebruiker"
 
@@ -1307,7 +1316,9 @@ msgstr "Regelterugloopmodus"
 msgid ""
 "How to break the string into multiple lines, if the cell renderer does not "
 "have enough room to display the entire string"
-msgstr "Hoe de tekenreeks in meerdere regels wordt gebroken wanneer de cel-renderer niet voldoende ruimte heeft om de gehele tekenreeks weer te geven."
+msgstr ""
+"Hoe de tekenreeks in meerdere regels wordt gebroken wanneer de cel-renderer "
+"niet voldoende ruimte heeft om de gehele tekenreeks weer te geven."
 
 #: ../gtk/gtkcellrenderertext.c:494 ../gtk/gtkcombobox.c:573
 msgid "Wrap width"
@@ -1906,53 +1917,63 @@ msgstr ""
 "Of de inhoud van een veld wordt geselecteerd als het veld de aandacht krijgt"
 
 # aanvullen / completering
-#: ../gtk/gtkentrycompletion.c:275
+#: ../gtk/gtkentrycompletion.c:276
 msgid "Completion Model"
 msgstr "Aanvullingsmodel"
 
-#: ../gtk/gtkentrycompletion.c:276
+#: ../gtk/gtkentrycompletion.c:277
 msgid "The model to find matches in"
 msgstr "Het model waarin overeenkomsten worden gezocht"
 
-#: ../gtk/gtkentrycompletion.c:282
+#: ../gtk/gtkentrycompletion.c:283
 msgid "Minimum Key Length"
 msgstr "Minimum sleutellengte"
 
-#: ../gtk/gtkentrycompletion.c:283
+#: ../gtk/gtkentrycompletion.c:284
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Minimum lengte van de zoeksleutel voor het opzoeken van overeenkomsten"
 
-#: ../gtk/gtkentrycompletion.c:298 ../gtk/gtkiconview.c:542
+#: ../gtk/gtkentrycompletion.c:299 ../gtk/gtkiconview.c:542
 msgid "Text column"
 msgstr "Tekstkolom"
 
-#: ../gtk/gtkentrycompletion.c:299
+#: ../gtk/gtkentrycompletion.c:300
 msgid "The column of the model containing the strings."
 msgstr "Een kolom van het model met de tekenreeksen."
 
-#: ../gtk/gtkentrycompletion.c:318
+#: ../gtk/gtkentrycompletion.c:319
 msgid "Inline completion"
 msgstr "Inlijns voltooiing"
 
-#: ../gtk/gtkentrycompletion.c:319
+#: ../gtk/gtkentrycompletion.c:320
 msgid "Whether the common prefix should be inserted automatically"
 msgstr "Of de standaard prefix automatisch moet worden ingevoegd"
 
-#: ../gtk/gtkentrycompletion.c:333
+#: ../gtk/gtkentrycompletion.c:334
 msgid "Popup completion"
 msgstr "Popup voltooiing"
 
-#: ../gtk/gtkentrycompletion.c:334
+#: ../gtk/gtkentrycompletion.c:335
 msgid "Whether the completions should be shown in a popup window"
 msgstr "Of de aanvullingen in een popup-venster getoond moeten worden"
 
-#: ../gtk/gtkentrycompletion.c:349
+#: ../gtk/gtkentrycompletion.c:350
 msgid "Popup set width"
 msgstr "Popup-ingestelde breedte"
 
-#: ../gtk/gtkentrycompletion.c:350
+#: ../gtk/gtkentrycompletion.c:351
 msgid "If TRUE, the popup window will have the same size as the entry"
-msgstr "Indien WAAR, zal het popup-venster dezelfde afmeting hebben als het invoerveld"
+msgstr ""
+"Indien WAAR, zal het popup-venster dezelfde afmeting hebben als het "
+"invoerveld"
+
+#: ../gtk/gtkentrycompletion.c:369
+msgid "Popup single match"
+msgstr "Enkel resultaat popup"
+
+#: ../gtk/gtkentrycompletion.c:370
+msgid "If TRUE, the popup window will appear for a single match."
+msgstr "Indien WAAR, zal het popup-venster verschijnen bij een enkele overeenkomst"
 
 #: ../gtk/gtkeventbox.c:122
 msgid "Visible Window"
@@ -2003,7 +2024,7 @@ msgstr "De tekst van het label bevat XML-opmaak. Bekijk pango_parse_markup()"
 msgid "Space to put between the label and the child"
 msgstr "Ruimte tussen het label en de dochter"
 
-#: ../gtk/gtkexpander.c:240 ../gtk/gtkframe.c:170 ../gtk/gtktoolbutton.c:196
+#: ../gtk/gtkexpander.c:240 ../gtk/gtkframe.c:170 ../gtk/gtktoolbutton.c:201
 msgid "Label widget"
 msgstr "Labelwidget"
 
@@ -2509,14 +2530,6 @@ msgstr "Animatie"
 msgid "GdkPixbufAnimation to display"
 msgstr "GdkPixbufAnimation om weer te geven"
 
-#: ../gtk/gtkimage.c:259 ../gtk/gtkwindow.c:529
-msgid "Icon Name"
-msgstr "Pictogramnaam"
-
-#: ../gtk/gtkimage.c:260
-msgid "The name of the icon from the icon theme"
-msgstr "De naam van het pictogram uit het pictogramthema"
-
 #: ../gtk/gtkimage.c:267
 msgid "Storage type"
 msgstr "Opslagtype"
@@ -2550,7 +2563,7 @@ msgid "A list of style attributes to apply to the text of the label"
 msgstr ""
 "Een lijst van stijlattributen om toe te passen op de tekst van het label"
 
-#: ../gtk/gtklabel.c:350 ../gtk/gtktexttag.c:377 ../gtk/gtktextview.c:594
+#: ../gtk/gtklabel.c:350 ../gtk/gtktexttag.c:377 ../gtk/gtktextview.c:595
 msgid "Justification"
 msgstr "Uitvulling"
 
@@ -4025,7 +4038,7 @@ msgstr ""
 "dus aanbevolen. Pango definieert vooraf enkele schalen zoals "
 "PANGO_SCALE_X_LARGE"
 
-#: ../gtk/gtktexttag.c:378 ../gtk/gtktextview.c:595
+#: ../gtk/gtktexttag.c:378 ../gtk/gtktextview.c:596
 msgid "Left, right, or center justification"
 msgstr "Links, rechts of centrale uitlijning"
 
@@ -4042,7 +4055,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "Linkermarge"
 
-#: ../gtk/gtktexttag.c:395 ../gtk/gtktextview.c:604
+#: ../gtk/gtktexttag.c:395 ../gtk/gtktextview.c:605
 msgid "Width of the left margin in pixels"
 msgstr "Breedte van de linkermarge in beeldpunten"
 
@@ -4050,15 +4063,15 @@ msgstr "Breedte van de linkermarge in beeldpunten"
 msgid "Right margin"
 msgstr "Rechtermarge"
 
-#: ../gtk/gtktexttag.c:405 ../gtk/gtktextview.c:614
+#: ../gtk/gtktexttag.c:405 ../gtk/gtktextview.c:615
 msgid "Width of the right margin in pixels"
 msgstr "Breedte van de rechtermarge in beeldpunten"
 
-#: ../gtk/gtktexttag.c:415 ../gtk/gtktextview.c:623
+#: ../gtk/gtktexttag.c:415 ../gtk/gtktextview.c:624
 msgid "Indent"
 msgstr "Inspringen"
 
-#: ../gtk/gtktexttag.c:416 ../gtk/gtktextview.c:624
+#: ../gtk/gtktexttag.c:416 ../gtk/gtktextview.c:625
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Hoeveelheid om de paragraaf te laten inspringen, in beeldpunten"
 
@@ -4066,13 +4079,15 @@ msgstr "Hoeveelheid om de paragraaf te laten inspringen, in beeldpunten"
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative) "
 "in Pango units"
-msgstr "Plaats van tekst boven de basislijn (onder de basislijn als verhoging negatief is), in Pango-eenheden"
+msgstr ""
+"Plaats van tekst boven de basislijn (onder de basislijn als verhoging "
+"negatief is), in Pango-eenheden"
 
 #: ../gtk/gtktexttag.c:436
 msgid "Pixels above lines"
 msgstr "Beeldpunten boven lijnen"
 
-#: ../gtk/gtktexttag.c:437 ../gtk/gtktextview.c:548
+#: ../gtk/gtktexttag.c:437 ../gtk/gtktextview.c:549
 msgid "Pixels of blank space above paragraphs"
 msgstr "Beeldpunten lege ruimte boven paragrafen"
 
@@ -4080,7 +4095,7 @@ msgstr "Beeldpunten lege ruimte boven paragrafen"
 msgid "Pixels below lines"
 msgstr "Beeldpunten onder lijnen"
 
-#: ../gtk/gtktexttag.c:447 ../gtk/gtktextview.c:558
+#: ../gtk/gtktexttag.c:447 ../gtk/gtktextview.c:559
 msgid "Pixels of blank space below paragraphs"
 msgstr "Beeldpunten lege ruimte onder paragrafen"
 
@@ -4088,22 +4103,22 @@ msgstr "Beeldpunten lege ruimte onder paragrafen"
 msgid "Pixels inside wrap"
 msgstr "Beeldpunten binnen regelterugloop"
 
-#: ../gtk/gtktexttag.c:457 ../gtk/gtktextview.c:568
+#: ../gtk/gtktexttag.c:457 ../gtk/gtktextview.c:569
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr ""
 "Beeldpunten lege ruimte tussen lijnen met regelterugloop in een paragraaf"
 
-#: ../gtk/gtktexttag.c:484 ../gtk/gtktextview.c:586
+#: ../gtk/gtktexttag.c:484 ../gtk/gtktextview.c:587
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 "Of lijnen nooit worden afgebroken, of op woordgrenzen of op tekengrenzen"
 
-#: ../gtk/gtktexttag.c:493 ../gtk/gtktextview.c:633
+#: ../gtk/gtktexttag.c:493 ../gtk/gtktextview.c:634
 msgid "Tabs"
 msgstr "Tabs"
 
-#: ../gtk/gtktexttag.c:494 ../gtk/gtktextview.c:634
+#: ../gtk/gtktexttag.c:494 ../gtk/gtktextview.c:635
 msgid "Custom tabs for this text"
 msgstr "Aangepaste tabs voor deze tekst"
 
@@ -4217,67 +4232,67 @@ msgstr "Onzichtbaar gebruiken"
 msgid "Whether this tag affects text visibility"
 msgstr "Of dit label zichtbaarheid van tekst beïnvloedt"
 
-#: ../gtk/gtktextview.c:547
+#: ../gtk/gtktextview.c:548
 msgid "Pixels Above Lines"
 msgstr "Beeldpunten boven lijnen"
 
-#: ../gtk/gtktextview.c:557
+#: ../gtk/gtktextview.c:558
 msgid "Pixels Below Lines"
 msgstr "Beeldpunten onder lijnen"
 
-#: ../gtk/gtktextview.c:567
+#: ../gtk/gtktextview.c:568
 msgid "Pixels Inside Wrap"
 msgstr "Beeldpunten binnen regelterugloop"
 
-#: ../gtk/gtktextview.c:585
+#: ../gtk/gtktextview.c:586
 msgid "Wrap Mode"
 msgstr "Regelterugloopmodus"
 
-#: ../gtk/gtktextview.c:603
+#: ../gtk/gtktextview.c:604
 msgid "Left Margin"
 msgstr "Linkermarge"
 
-#: ../gtk/gtktextview.c:613
+#: ../gtk/gtktextview.c:614
 msgid "Right Margin"
 msgstr "Rechtermarge"
 
-#: ../gtk/gtktextview.c:641
+#: ../gtk/gtktextview.c:642
 msgid "Cursor Visible"
 msgstr "Cursor zichtbaar"
 
-#: ../gtk/gtktextview.c:642
+#: ../gtk/gtktextview.c:643
 msgid "If the insertion cursor is shown"
 msgstr "Of de invoegcursor weergegeven wordt"
 
-#: ../gtk/gtktextview.c:649
+#: ../gtk/gtktextview.c:650
 msgid "Buffer"
 msgstr "Buffer"
 
-#: ../gtk/gtktextview.c:650
+#: ../gtk/gtktextview.c:651
 msgid "The buffer which is displayed"
 msgstr "De buffer die wordt weergegeven"
 
-#: ../gtk/gtktextview.c:657
+#: ../gtk/gtktextview.c:658
 msgid "Overwrite mode"
 msgstr "Overschrijven modus"
 
-#: ../gtk/gtktextview.c:658
+#: ../gtk/gtktextview.c:659
 msgid "Whether entered text overwrites existing contents"
 msgstr "Of de ingevoerde tekst de bestaande tekst overschrijft"
 
-#: ../gtk/gtktextview.c:665
+#: ../gtk/gtktextview.c:666
 msgid "Accepts tab"
 msgstr "Accepteert tab"
 
-#: ../gtk/gtktextview.c:666
+#: ../gtk/gtktextview.c:667
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "Of Tab resulteert in het in het invoeren van een tab-teken"
 
-#: ../gtk/gtktextview.c:675
+#: ../gtk/gtktextview.c:676
 msgid "Error underline color"
 msgstr "Foutkleur"
 
-#: ../gtk/gtktextview.c:676
+#: ../gtk/gtktextview.c:677
 msgid "Color with which to draw error-indication underlines"
 msgstr "Kleur waarmee fouten onderstreept worden"
 
@@ -4396,11 +4411,11 @@ msgstr "Pictogramgrootte op werkbalk"
 msgid "Size of icons in default toolbars"
 msgstr "Grootte van pictogrammen in de standaard werkbalk"
 
-#: ../gtk/gtktoolbutton.c:183
+#: ../gtk/gtktoolbutton.c:188
 msgid "Text to show in the item."
 msgstr "De tekst die in het item wordt getoond."
 
-#: ../gtk/gtktoolbutton.c:190
+#: ../gtk/gtktoolbutton.c:195
 msgid ""
 "If set, an underline in the label property indicates that the next character "
 "should be used for the mnemonic accelerator key in the overflow menu"
@@ -4408,23 +4423,31 @@ msgstr ""
 "Indien aangevinkt betekent een onderstreping in de labeleigenschap dat het "
 "volgende teken gebruikt moet worden voor de sneltoets in het overvloeimenu"
 
-#: ../gtk/gtktoolbutton.c:197
+#: ../gtk/gtktoolbutton.c:202
 msgid "Widget to use as the item label"
 msgstr "Het te gebruiken widget voor het item-label"
 
-#: ../gtk/gtktoolbutton.c:203
+#: ../gtk/gtktoolbutton.c:208
 msgid "Stock Id"
 msgstr "Standaard-ID"
 
-#: ../gtk/gtktoolbutton.c:204
+#: ../gtk/gtktoolbutton.c:209
 msgid "The stock icon displayed on the item"
 msgstr "Het standaard pictogram weergegeven op het item"
 
-#: ../gtk/gtktoolbutton.c:210
+#: ../gtk/gtktoolbutton.c:225
+msgid "Icon name"
+msgstr "Pictogramnaam"
+
+#: ../gtk/gtktoolbutton.c:226
+msgid "The name of the themed icon displayed on the item"
+msgstr "De naam van het thema-pictogram weergegeven op het item"
+
+#: ../gtk/gtktoolbutton.c:232
 msgid "Icon widget"
 msgstr "Pictogram-widget"
 
-#: ../gtk/gtktoolbutton.c:211
+#: ../gtk/gtktoolbutton.c:233
 msgid "Icon widget to display in the item"
 msgstr "Weer te geven pictogramwidget in het item"
 
