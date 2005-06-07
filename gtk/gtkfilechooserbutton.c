@@ -1827,6 +1827,8 @@ update_label_and_image (GtkFileChooserButton *button)
       folder = gtk_file_system_get_folder (priv->fs,
 					   parent_path ? parent_path : path,
 					   GTK_FILE_INFO_DISPLAY_NAME, NULL);
+      gtk_file_path_free (parent_path);
+
       if (folder)
 	{
 	  GtkFileInfo *info;
