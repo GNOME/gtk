@@ -1,3 +1,8 @@
+2005-06-07  Kjartan Maraas  <kmaraas@gnome.org>
+
+	* gtk/gtkfilechooserbutton.c: (update_label_and_image):
+	Merge leak fix from stable. Bug 306754.
+
 2005-06-05  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkscreen-win32.c
