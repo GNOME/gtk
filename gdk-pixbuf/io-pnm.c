@@ -245,7 +245,7 @@ pnm_read_next_value (PnmIOBuffer *inbuf, gint max_length, guint *value, GError *
 	
 	/* get the value */
 	result = strtol (buf, &endptr, 10);
-	if (*endptr != '\0' || result < 0) {
+	if (*endptr != '\0' || result < 0 || result > G_MAXUINT) {
 		g_set_error (error,
 			     GDK_PIXBUF_ERROR,
 			     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,

@@ -1,3 +1,8 @@
+2005-06-08  Matthias Clasen  <mclasen@redhat.com>
+
+	* io-pnm.c (pnm_read_next_value): Check for overflow.
+	(#306394, Morten Welinder)
+
 2005-04-29  Matthias Clasen  <mclasen@redhat.com>
 
 	* Makefile.am: Use $(NM), not nm directly. (#301299, 
