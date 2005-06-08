@@ -362,7 +362,6 @@ gtk_tree_path_new_from_string (const gchar *path)
   while (1)
     {
       i = strtol (path, &ptr, 10);
-      gtk_tree_path_append_index (retval, i);
 
       if (i < 0)
 	{
@@ -370,6 +369,9 @@ gtk_tree_path_new_from_string (const gchar *path)
 	  gtk_tree_path_free (retval);
 	  return NULL;
 	}
+
+      gtk_tree_path_append_index (retval, i);
+
       if (*ptr == '\000')
 	break;
       if (ptr == path || *ptr != ':')
