@@ -1,3 +1,8 @@
+2005-06-08  Matthias Clasen  <mclasen@redhat.com>
+
+	* io-pnm.c (pnm_read_next_value): Check for overflow.
+	(#306394, Morten Welinder)
+
 2005-05-27  Matthias Clasen  <mclasen@redhat.com>
 
 	* io-bmp.c: Accept the 108 byte header of BMP v4.  (#168799)
