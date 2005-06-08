@@ -119,9 +119,9 @@ gtk_file_info_get_display_name (const GtkFileInfo *info)
  * gtk_file_info_get_display_key:
  * @info: a #GtkFileInfo
  * 
- * Returns results of g_utf8_collate_key() on the display name
- * for @info. This is useful when sorting a bunch of #GtkFileInfo
- * structures since the collate key will be only computed once.
+ * Returns for the collation key for the display name for @info. 
+ * This is useful when sorting a bunch of #GtkFileInfo structures 
+ * since the collate key will be only computed once.
  * 
  * Return value: The collate key for the display name, or %NULL
  *   if the display name hasn't been set.
@@ -135,7 +135,7 @@ gtk_file_info_get_display_key (const GtkFileInfo *info)
     {
       /* Since info->display_key is only a cache, we cast off the const
        */
-      ((GtkFileInfo *)info)->display_key = g_utf8_collate_key (info->display_name, -1);
+      ((GtkFileInfo *)info)->display_key = g_utf8_collate_key_for_filename (info->display_name, -1);
     }
 	
   return info->display_key;
