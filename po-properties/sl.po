@@ -2736,43 +2736,43 @@ msgstr "Kazalo trenutne strani"
 
 #: ../gtk/gtknotebook.c:413
 msgid "Tab Position"
-msgstr "Položaj uhlja"
+msgstr "Položaj zavihka"
 
 #: ../gtk/gtknotebook.c:414
 msgid "Which side of the notebook holds the tabs"
-msgstr "Na kateri strani notesa so uhlji"
+msgstr "Na kateri strani notesa so zavihki"
 
 #: ../gtk/gtknotebook.c:421
 msgid "Tab Border"
-msgstr "Rob uhlja"
+msgstr "Rob zavihka"
 
 #: ../gtk/gtknotebook.c:422
 msgid "Width of the border around the tab labels"
-msgstr "Širina robu okoli oznake uhlja"
+msgstr "Širina robu okoli oznake zavihka"
 
 #: ../gtk/gtknotebook.c:430
 msgid "Horizontal Tab Border"
-msgstr "Vodoravni rob okoli uhlja"
+msgstr "Vodoravni rob okoli zavihka"
 
 #: ../gtk/gtknotebook.c:431
 msgid "Width of the horizontal border of tab labels"
-msgstr "Širina vodoravnega robu okoli uhlja"
+msgstr "Širina vodoravnega robu okoli zavihka"
 
 #: ../gtk/gtknotebook.c:439
 msgid "Vertical Tab Border"
-msgstr "Navpični rob okoli uhlja"
+msgstr "Navpični rob okoli zavihka"
 
 #: ../gtk/gtknotebook.c:440
 msgid "Width of the vertical border of tab labels"
-msgstr "Širina navpične robu okoli uhlja"
+msgstr "Širina navpične robu okoli zavihka"
 
 #: ../gtk/gtknotebook.c:448
 msgid "Show Tabs"
-msgstr "Kaži uhlje"
+msgstr "Kaži zavihke"
 
 #: ../gtk/gtknotebook.c:449
 msgid "Whether tabs should be shown or not"
-msgstr "Ali naj bodo uhlji prikazani ali ne"
+msgstr "Ali naj bodo zavihki prikazani ali ne"
 
 #: ../gtk/gtknotebook.c:455
 msgid "Show Border"
@@ -2789,7 +2789,7 @@ msgstr "Drsljiv"
 #: ../gtk/gtknotebook.c:463
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr ""
-"Če je RESNIČNO, se ob prevelikem številu uhljev za prihaz dodajo drsne "
+"Če je RESNIČNO, se ob prevelikem številu zavihkov za prihaz dodajo drsne "
 "puščice"
 
 #: ../gtk/gtknotebook.c:469
@@ -2806,15 +2806,15 @@ msgstr ""
 
 #: ../gtk/gtknotebook.c:477
 msgid "Whether tabs should have homogeneous sizes"
-msgstr "Ali naj imajo vsi uhlji enako velikost"
+msgstr "Ali naj imajo vsi zavihki enako velikost"
 
 #: ../gtk/gtknotebook.c:484
 msgid "Tab label"
-msgstr "Oznaka uhlja"
+msgstr "Oznaka zavihka"
 
 #: ../gtk/gtknotebook.c:485
 msgid "The string displayed on the child's tab label"
-msgstr "Niz prikazan v otrokovi oznaki uhlja"
+msgstr "Niz prikazan v otrokovi oznaki zavihka"
 
 #: ../gtk/gtknotebook.c:491
 msgid "Menu label"
@@ -2826,23 +2826,23 @@ msgstr "Niz prikazan v otrokovem predmetu menuja"
 
 #: ../gtk/gtknotebook.c:505
 msgid "Tab expand"
-msgstr "Raširitev uhljev."
+msgstr "Raširitev zavihkov."
 
 #: ../gtk/gtknotebook.c:506
 msgid "Whether to expand the child's tab or not"
-msgstr "Ali naj se razširi otrokov uhelj ali ne"
+msgstr "Ali naj se razširi otrokov zavihek ali ne"
 
 #: ../gtk/gtknotebook.c:512
 msgid "Tab fill"
-msgstr "Polnjenje uhlja"
+msgstr "Polnjenje zavihka"
 
 #: ../gtk/gtknotebook.c:513
 msgid "Whether the child's tab should fill the allocated area or not"
-msgstr "Ali naj otrokov uhelj napolni celotno rezervirano površino ali ne"
+msgstr "Ali naj otrokov zavihek napolni celotno rezervirano površino ali ne"
 
 #: ../gtk/gtknotebook.c:519
 msgid "Tab pack type"
-msgstr "Način zlaganja uhljev"
+msgstr "Način zlaganja zavihkov"
 
 #: ../gtk/gtknotebook.c:535 ../gtk/gtkscrollbar.c:115
 msgid "Secondary backward stepper"
@@ -3878,11 +3878,11 @@ msgstr "Ali naj se vrstice lomi nikoli, na meji mesed ali na meji znakov"
 
 #: ../gtk/gtktexttag.c:492 ../gtk/gtktextview.c:634
 msgid "Tabs"
-msgstr "Uhlji"
+msgstr "Zavihki"
 
 #: ../gtk/gtktexttag.c:493 ../gtk/gtktextview.c:635
 msgid "Custom tabs for this text"
-msgstr "Poljubni uhlji za to besedilo"
+msgstr "Poljubni zavihki za to besedilo"
 
 #: ../gtk/gtktexttag.c:500
 msgid "Invisible"
@@ -3979,11 +3979,11 @@ msgstr "Ali ta oznaka vpliva na način lomljenja"
 
 #: ../gtk/gtktexttag.c:610
 msgid "Tabs set"
-msgstr "Nastavi uhlje"
+msgstr "Nastavi zavihke"
 
 #: ../gtk/gtktexttag.c:611
 msgid "Whether this tag affects tabs"
-msgstr "Ali ta oznaka vpliva na uhlje"
+msgstr "Ali ta oznaka vpliva na zavihke"
 
 #: ../gtk/gtktexttag.c:614
 msgid "Invisible set"
