@@ -1733,6 +1733,8 @@ gtk_icon_view_set_cursor (GtkIconView     *icon_view,
     }
 
   gtk_icon_view_set_cursor_item (icon_view, item, cell_pos);
+  gtk_icon_view_scroll_to_item (icon_view, item);
+
   if (start_editing)
     gtk_icon_view_start_editing (icon_view, item, info, NULL);
 }

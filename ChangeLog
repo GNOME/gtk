@@ -1,5 +1,8 @@
 2005-06-08  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkiconview.c (gtk_icon_view_set_cursor): Scroll to the
+	item.  (#306839, Jonathan Blandford)
+
 	* gtk/gtktreemodel.c (gtk_tree_path_new_from_string): Check for
 	negative before appending the index, to avoid double error
 	message.  (#306393, Morten Welinder)
