@@ -1,5 +1,10 @@
 2005-06-08  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkimage.c: Make the file property readable.  
+	(#170674, Lorenzo Gil Sanchez)
+
+2005-06-08  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkfilesystem.c (gtk_file_info_get_display_key): Use
 	g_utf8_collate_key_for_filename().
 

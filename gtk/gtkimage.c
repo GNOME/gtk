@@ -41,6 +41,9 @@ typedef struct _GtkImagePrivate GtkImagePrivate;
 
 struct _GtkImagePrivate
 {
+  /* Only used with GTK_IMAGE_ANIMATION, GTK_IMAGE_PIXBUF */
+  gchar *filename;
+
   gint pixel_size;
 };
 
@@ -192,7 +195,7 @@ gtk_image_class_init (GtkImageClass *class)
                                                         P_("Filename"),
                                                         P_("Filename to load and display"),
                                                         NULL,
-                                                        GTK_PARAM_WRITABLE));
+                                                        GTK_PARAM_READWRITE));
   
 
   g_object_class_install_property (gobject_class,
@@ -285,6 +288,8 @@ gtk_image_init (GtkImage *image)
   image->mask = NULL;
 
   priv->pixel_size = -1;
+
+  priv->filename = NULL;
 }
 
 static void
@@ -349,8 +354,7 @@ gtk_image_set_property (GObject      *object,
         }
       break;
     case PROP_FILE:
-      gtk_image_set_from_file (image,
-                               g_value_get_string (value));
+      gtk_image_set_from_file (image, g_value_get_string (value));
       break;
     case PROP_STOCK:
       gtk_image_set_from_stock (image, g_value_get_string (value),
@@ -438,6 +442,9 @@ gtk_image_get_property (GObject     *object,
       else
         g_value_set_object (value,
                             image->data.image.image);
+      break;
+    case PROP_FILE:
+      g_value_set_string (value, priv->filename);
       break;
     case PROP_STOCK:
       if (image->storage_type != GTK_IMAGE_STOCK)
@@ -827,6 +834,7 @@ void
 gtk_image_set_from_file   (GtkImage    *image,
                            const gchar *filename)
 {
+  GtkImagePrivate *priv = GTK_IMAGE_GET_PRIVATE (image);
   GdkPixbufAnimation *anim;
   
   g_return_if_fail (GTK_IS_IMAGE (image));
@@ -837,10 +845,11 @@ gtk_image_set_from_file   (GtkImage    *image,
 
   if (filename == NULL)
     {
+      priv->filename = NULL;
       g_object_thaw_notify (G_OBJECT (image));
       return;
     }
-  
+
   anim = gdk_pixbuf_animation_new_from_file (filename, NULL);
 
   if (anim == NULL)
@@ -858,17 +867,15 @@ gtk_image_set_from_file   (GtkImage    *image,
    */
 
   if (gdk_pixbuf_animation_is_static_image (anim))
-    {
-      gtk_image_set_from_pixbuf (image,
-                                 gdk_pixbuf_animation_get_static_image (anim));
-    }
+    gtk_image_set_from_pixbuf (image,
+			       gdk_pixbuf_animation_get_static_image (anim));
   else
-    {
-      gtk_image_set_from_animation (image, anim);
-    }
+    gtk_image_set_from_animation (image, anim);
 
   g_object_unref (anim);
 
+  priv->filename = g_strdup (filename);
+  
   g_object_thaw_notify (G_OBJECT (image));
 }
 
@@ -1835,6 +1842,8 @@ gtk_image_expose (GtkWidget      *widget,
 static void
 gtk_image_clear (GtkImage *image)
 {
+  GtkImagePrivate *priv = GTK_IMAGE_GET_PRIVATE (image);
+
   g_object_freeze_notify (G_OBJECT (image));
   
   if (image->storage_type != GTK_IMAGE_EMPTY)
@@ -1928,6 +1937,13 @@ gtk_image_clear (GtkImage *image)
     default:
       break;
       
+    }
+
+  if (priv->filename)
+    {
+      g_free (priv->filename);
+      priv->filename = NULL;
+      g_object_notify (G_OBJECT (image), "file");
     }
 
   image->storage_type = GTK_IMAGE_EMPTY;
