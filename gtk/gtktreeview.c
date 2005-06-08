@@ -9011,7 +9011,8 @@ gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view,
   if (!tree_view->priv->enable_search && !keybinding)
     return FALSE;
 
-  if (GTK_WIDGET_VISIBLE (tree_view->priv->search_window))
+  if (tree_view->priv->search_window != NULL &&
+      GTK_WIDGET_VISIBLE (tree_view->priv->search_window))
     return TRUE;
 
   for (list = tree_view->priv->columns; list; list = list->next)

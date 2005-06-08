@@ -1,5 +1,9 @@
 2005-06-08  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeview.c (gtk_tree_view_real_start_interactive_search): 
+	Don't crash if search_window is NULL.  (#304914, Victor Osadci,
+	testcase by Olaf Vitters)
+
 	* gtk/gtkimage.c: Make the file property readable.  
 	(#170674, Lorenzo Gil Sanchez)
 
