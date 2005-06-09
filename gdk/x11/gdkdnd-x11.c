@@ -1741,6 +1741,8 @@ motif_drop_start (GdkEvent *event,
   event->dnd.x_root = x_root;
   event->dnd.y_root = y_root;
 
+  gdk_x11_window_set_user_time (event->any.window, timestamp);
+
   g_object_ref (new_context);
   display_x11->current_dest_drag = new_context;
 
@@ -2904,6 +2906,8 @@ xdnd_drop_filter (GdkXEvent *xev,
       event->dnd.time = time;
       event->dnd.x_root = private->last_x;
       event->dnd.y_root = private->last_y;
+
+      gdk_x11_window_set_user_time (event->any.window, time);
       
       return GDK_FILTER_TRANSLATE;
     }
