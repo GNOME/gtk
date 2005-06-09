@@ -2246,7 +2246,7 @@ gdk_wmspec_change_state (gboolean   add,
 /**
  * gdk_window_set_modal_hint:
  * @window: A toplevel #GdkWindow
- * @modal: TRUE if the window is modal, FALSE otherwise.
+ * @modal: %TRUE if the window is modal, %FALSE otherwise.
  *
  * The application can use this hint to tell the window manager
  * that a certain window has modal behaviour. The window manager
@@ -2254,7 +2254,7 @@ gdk_wmspec_change_state (gboolean   add,
  * way.
  *
  * You should only use this on windows for which you have
- * previously called #gdk_window_set_transient_for()
+ * previously called gdk_window_set_transient_for()
  **/
 void
 gdk_window_set_modal_hint (GdkWindow *window,
@@ -2286,9 +2286,9 @@ gdk_window_set_modal_hint (GdkWindow *window,
  * Toggles whether a window should appear in a task list or window
  * list. If a window's semantic type as specified with
  * gdk_window_set_type_hint() already fully describes the window, this
- * function should NOT be called in addition, instead you should allow
- * the window to be treated according to standard policy for its
- * semantic type.
+ * function should <emphasis>not</emphasis> be called in addition, 
+ * instead you should allow the window to be treated according to 
+ * standard policy for its semantic type.
  *
  * Since: 2.2
  **/
@@ -2323,9 +2323,10 @@ gdk_window_set_skip_taskbar_hint (GdkWindow *window,
  * switcher, or other desktop utility program that displays a small
  * thumbnail representation of the windows on the desktop). If a
  * window's semantic type as specified with gdk_window_set_type_hint()
- * already fully describes the window, this function should NOT be
- * called in addition, instead you should allow the window to be
- * treated according to standard policy for its semantic type.
+ * already fully describes the window, this function should 
+ * <emphasis>not<emphasis> be called in addition, instead you should 
+ * allow the window to be treated according to standard policy for 
+ * its semantic type.
  *
  * Since: 2.2
  **/
@@ -2370,7 +2371,7 @@ gdk_window_set_skip_pager_hint (GdkWindow *window,
  * gdk_window_move_resize().
  * 
  * Note that on X11, this effect has no effect on windows
- * of type GDK_WINDOW_TEMP or windows where override_redirect
+ * of type %GDK_WINDOW_TEMP or windows where override redirect
  * has been turned on via gdk_window_set_override_redirect()
  * since these windows are not resizable by the user.
  * 
