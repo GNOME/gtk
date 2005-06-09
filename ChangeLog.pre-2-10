@@ -1,3 +1,7 @@
+2005-06-09  Rodrigo Moya <rodrigo@novell.com>
+
+	* configure.in: added cairo to list of $GTK_PACKAGES.
+
 2005-06-09  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/x11/gdkdnd-x11.c (motif_drop_start, xdnd_drop_filter): Update
