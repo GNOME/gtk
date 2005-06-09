@@ -3881,6 +3881,84 @@ gtk_icon_view_move_cursor_start_end (GtkIconView *icon_view,
     g_signal_emit (icon_view, icon_view_signals[SELECTION_CHANGED], 0);
 }
 
+/**
+ * gtk_icon_view_scroll_to_path:
+ * @icon_view: A #GtkIconView.
+ * @path: The path of the item to move to.
+ * @use_align: whether to use alignment arguments, or %FALSE.
+ * @row_align: The vertical alignment of the item specified by @path.
+ * @col_align: The horizontal alignment of the item specified by @column.
+ *
+ * Moves the alignments of @icon_view to the position specified by @path.  
+ * @row_align determines where the row is placed, and @col_align determines where 
+ * @column is placed.  Both are expected to be between 0.0 and 1.0. 
+ * 0.0 means left/top alignment, 1.0 means right/bottom alignment, 0.5 means center.
+ *
+ * If @use_align is %FALSE, then the alignment arguments are ignored, and the
+ * tree does the minimum amount of work to scroll the item onto the screen.
+ * This means that the item will be scrolled to the edge closest to its current
+ * position.  If the item is currently visible on the screen, nothing is done.
+ *
+ * This function only works if the model is set, and @path is a valid row on the
+ * model.  If the model changes before the @tree_view is realized, the centered
+ * path will be modified to reflect this change.
+ *
+ * Since: 2.8
+ **/
+void
+gtk_icon_view_scroll_to_path (GtkIconView *icon_view,
+			      GtkTreePath *path,
+			      gboolean     use_align,
+			      gfloat       row_align,
+			      gfloat       col_align)
+{
+  GtkIconViewItem *item;
+
+  g_return_if_fail (GTK_IS_ICON_VIEW (icon_view));
+  g_return_if_fail (path != NULL);
+  g_return_if_fail (row_align >= 0.0 && row_align <= 1.0);
+  g_return_if_fail (col_align >= 0.0 && col_align <= 1.0);
+  
+  item = g_list_nth (icon_view->priv->items,
+		     gtk_tree_path_get_indices(path)[0])->data;
+  
+  if (!item)
+    return;
+  
+  if (use_align)
+    {
+      gint x, y, width, height;
+      gint focus_width;
+      gfloat offset, value;
+
+      gtk_widget_style_get (GTK_WIDGET (icon_view),
+			    "focus-line-width", &focus_width,
+			    NULL);
+      
+      gdk_window_get_position (icon_view->priv->bin_window, &x, &y);
+      
+      offset =  y + item->y - focus_width - 
+	row_align * (GTK_WIDGET (icon_view)->allocation.height - item->height);
+      value = CLAMP (icon_view->priv->vadjustment->value + offset, 
+		     icon_view->priv->vadjustment->lower,
+		     icon_view->priv->vadjustment->upper - icon_view->priv->vadjustment->page_size);
+      gtk_adjustment_set_value (icon_view->priv->vadjustment, value);
+
+      offset = x + item->x - focus_width - 
+	col_align * (GTK_WIDGET (icon_view)->allocation.width - item->width);
+      value = CLAMP (icon_view->priv->hadjustment->value + offset, 
+		     icon_view->priv->hadjustment->lower,
+		     icon_view->priv->hadjustment->upper - icon_view->priv->hadjustment->page_size);
+      gtk_adjustment_set_value (icon_view->priv->hadjustment, value);
+
+      gtk_adjustment_changed (icon_view->priv->hadjustment);
+      gtk_adjustment_changed (icon_view->priv->vadjustment);
+    }
+  else
+    gtk_icon_view_scroll_to_item (icon_view, item);    
+}
+
+
 static void     
 gtk_icon_view_scroll_to_item (GtkIconView     *icon_view, 
 			      GtkIconViewItem *item)

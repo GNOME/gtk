@@ -154,6 +154,11 @@ void             gtk_icon_view_set_cursor         (GtkIconView            *icon_
 gboolean         gtk_icon_view_get_cursor         (GtkIconView            *icon_view,
 						   GtkTreePath           **path,
 						   GtkCellRenderer       **cell);
+void             gtk_icon_view_scroll_to_path     (GtkIconView            *icon_view,
+                                                   GtkTreePath            *path,
+						   gboolean                use_align,
+						   gfloat                  row_align,
+                                                   gfloat                  col_align);
 
 /* Drag-and-Drop support */
 void                   gtk_icon_view_enable_model_drag_source (GtkIconView              *icon_view,

@@ -1,3 +1,10 @@
+2005-06-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk.symbols: 
+	* gtk/gtkiconview.h: 
+	* gtk/gtkiconview.c (gtk_icon_view_scroll_to_path): New function
+	to scroll to a path.  (#306838, Jonathan Blandford)
+
 2005-06-08  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkiconview.c (gtk_icon_view_set_cursor): Scroll to the
