@@ -2434,7 +2434,7 @@ _gtk_text_btree_char_is_invisible (const GtkTextIter *iter)
 {
   gboolean invisible = FALSE;  /* if nobody says otherwise, it's visible */
 
-  int deftagCnts[LOTSA_TAGS];
+  int deftagCnts[LOTSA_TAGS] = { 0, };
   int *tagCnts = deftagCnts;
   GtkTextTag *deftags[LOTSA_TAGS];
   GtkTextTag **tags = deftags;
@@ -2457,13 +2457,8 @@ _gtk_text_btree_char_is_invisible (const GtkTextIter *iter)
   /* almost always avoid malloc, so stay out of system calls */
   if (LOTSA_TAGS < numTags)
     {
-      tagCnts = g_new (int, numTags);
+      tagCnts = g_new0 (int, numTags);
       tags = g_new (GtkTextTag*, numTags);
-    }
-
-  for (i=0; i<numTags; i++)
-    {
-      tagCnts[i] = 0;
     }
 
   /*

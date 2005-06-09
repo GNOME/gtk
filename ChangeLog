@@ -1,3 +1,8 @@
+2005-06-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktextbtree.c (_gtk_text_btree_char_is_invisible): Small 
+	cleanup.  (#305539, Paolo Borelli)
+
 2005-06-09  Rodrigo Moya <rodrigo@novell.com>
 
 	* configure.in: added cairo to list of $GTK_PACKAGES.
