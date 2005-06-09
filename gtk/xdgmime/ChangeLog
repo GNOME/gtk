@@ -1,3 +1,8 @@
+2005-06-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* xdgmimemagic.c: Don't declare errno, including errno.h 
+	is enough.  (#304164, Joerg Sonnenberger)
+
 2005-05-20  Matthias Clasen  <mclasen@redhat.com>
 
 	* xdgmimecache.c: Don't rely on C99 
