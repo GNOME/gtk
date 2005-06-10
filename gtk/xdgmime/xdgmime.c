@@ -140,7 +140,7 @@ xdg_mime_init_from_directory (const char *directory)
 	  list->next = dir_time_list;
 	  dir_time_list = list;
 
-	  caches = realloc (caches, n_caches + 1);
+	  caches = realloc (caches, sizeof (XdgMimeCache *) * (n_caches + 1));
 	  caches[n_caches] = cache;
 	  n_caches++;
 
