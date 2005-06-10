@@ -1,5 +1,7 @@
 2005-06-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk-pixbuf/gdk-pixbuf-sections.txt: Add some symbols.
+
 	* gdk/gdk-sections.txt: 
 	* gdk/tmpl/cairo_interaction.sgml: 
 	* gdk/gdk-docs.sgml: Add a section for the Cairo functions.
