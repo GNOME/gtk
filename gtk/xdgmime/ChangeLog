@@ -1,3 +1,8 @@
+2005-05-28  Federico Mena Quintero  <federico@ximian.com>
+
+	* xdgmime.c (xdg_mime_init_from_directory): Pass the correct size
+	to realloc().  Fixes https://bugs.freedesktop.org/show_bug.cgi?id=3506.
+
 2005-06-09  Matthias Clasen  <mclasen@redhat.com>
 
 	* xdgmimemagic.c: Don't declare errno, including errno.h 
