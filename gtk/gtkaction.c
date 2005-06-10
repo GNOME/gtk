@@ -1491,6 +1491,25 @@ gtk_action_get_accel_path (GtkAction *action)
     return NULL;
 }
 
+/**
+ * gtk_action_get_accel_closure:
+ * @action: the action object
+ *
+ * Returns the accel closure for this action.
+ *
+ * Since: 2.8
+ *
+ * Returns: the accel closure for this action. The returned closure is
+ *          owned by GTK+ must and not be unrefed or modified.
+ */
+GClosure *
+gtk_action_get_accel_closure (GtkAction *action)
+{
+  g_return_val_if_fail (GTK_IS_ACTION (action), NULL);
+
+  return action->private_data->accel_closure;
+}
+
 
 /**
  * gtk_action_set_accel_group:

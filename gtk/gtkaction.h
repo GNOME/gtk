@@ -107,6 +107,7 @@ GSList*      gtk_action_get_proxies            (GtkAction     *action);
 void         gtk_action_connect_accelerator    (GtkAction     *action);
 void         gtk_action_disconnect_accelerator (GtkAction     *action);
 G_CONST_RETURN gchar *gtk_action_get_accel_path (GtkAction     *action);
+GClosure    *gtk_action_get_accel_closure      (GtkAction     *action);
 
 /* protected ... for use by child actions */
 void         gtk_action_block_activate_from    (GtkAction     *action,

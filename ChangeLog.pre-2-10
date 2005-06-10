@@ -1,3 +1,9 @@
+2005-06-10  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtk.symbols
+	* gtk/gtkaction.[ch] (gtk_action_get_accel_closure): new function
+	to get an action's accel_closure (Fixes #141750 and #148106).
+
 2005-06-10  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/gen-keyname-table.pl: Generate N_() calls for
