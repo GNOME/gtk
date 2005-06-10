@@ -15,6 +15,7 @@
 <!ENTITY gdk-Selections SYSTEM "xml/selections.xml">
 <!ENTITY gdk-Properties-and-Atoms SYSTEM "xml/properties.xml">
 <!ENTITY gdk-Pango-Interaction SYSTEM "xml/pango_interaction.xml">
+<!ENTITY gdk-Cairo-Interaction SYSTEM "xml/cairo_interaction.xml">
 <!ENTITY gdk-Points-Rectangles-and-Regions SYSTEM "xml/regions.xml">
 <!ENTITY gdk-Threads SYSTEM "xml/threads.xml">
 <!ENTITY gdk-Keys SYSTEM "xml/keys.xml">
@@ -81,7 +82,7 @@
     &gdk-Input-Devices;
 
     &gdk-Pango-Interaction;
-
+    &gdk-Cairo-Interaction;
     &gdk-X-Window-System-Interaction;
   </reference>
 

@@ -345,7 +345,6 @@ gdk_pixbuf_render_pixmap_and_mask
 gdk_pixbuf_render_pixmap_and_mask_for_colormap
 gdk_pixbuf_get_from_drawable
 gdk_pixbuf_get_from_image
-gdk_pixbuf_set_as_cairo_source
 </SECTION>
 
 <SECTION>
@@ -377,7 +376,6 @@ gdk_color_alloc
 gdk_color_change
 gdk_color_equal
 gdk_color_hash
-gdk_cairo_set_source_color
 
 <SUBSECTION Standard>
 GDK_COLORMAP
@@ -457,7 +455,6 @@ gdk_drawable_get_depth
 gdk_drawable_get_size
 gdk_drawable_get_clip_region
 gdk_drawable_get_visible_region
-gdk_drawable_create_cairo_context
 
 <SUBSECTION>
 gdk_draw_point
@@ -863,6 +860,16 @@ GDK_PANGO_RENDERER_GET_CLASS
 <SUBSECTION Private>
 gdk_pango_renderer_get_type
 GdkPangoRendererPrivate
+</SECTION>
+
+<SECTION>
+<TITLE>Cairo Interaction</TITLE>
+<FILE>cairo_interaction</FILE>
+gdk_cairo_create
+gdk_cairo_set_source_color
+gdk_cairo_set_source_pixbuf
+gdk_cairo_rectangle
+gdk_cairo_region
 </SECTION>
 
 <SECTION>

@@ -1,0 +1,65 @@
+<!-- ##### SECTION Title ##### -->
+Cairo Interaction
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gdk_cairo_create ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_cairo_set_source_color ##### -->
+<para>
+
+</para>
+
+@cr: 
+@color: 
+
+
+<!-- ##### FUNCTION gdk_cairo_set_source_pixbuf ##### -->
+<para>
+
+</para>
+
+@cr: 
+@pixbuf: 
+@pixbuf_x: 
+@pixbuf_y: 
+
+
+<!-- ##### FUNCTION gdk_cairo_rectangle ##### -->
+<para>
+
+</para>
+
+@cr: 
+@rectangle: 
+
+
+<!-- ##### FUNCTION gdk_cairo_region ##### -->
+<para>
+
+</para>
+
+@cr: 
+@region: 
+
+

@@ -1,5 +1,9 @@
 2005-06-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/gdk-sections.txt: 
+	* gdk/tmpl/cairo_interaction.sgml: 
+	* gdk/gdk-docs.sgml: Add a section for the Cairo functions.
+
 	* gtk/gtk-sections.txt: Add new icon view function.
 
 2005-05-26  Matthias Clasen  <mclasen@redhat.com>
