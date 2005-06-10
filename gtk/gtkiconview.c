@@ -5399,7 +5399,7 @@ gtk_icon_view_get_column_spacing (GtkIconView *icon_view)
 /**
  * gtk_icon_view_set_margin:
  * @icon_view: a #GtkIconView
- * @spacing: the margin
+ * @margin: the margin
  * 
  * Sets the ::margin property which specifies the space 
  * which is inserted at the top, bottom, left and right 
