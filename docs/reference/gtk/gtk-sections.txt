@@ -185,6 +185,7 @@ gtk_action_block_activate_from
 gtk_action_unblock_activate_from
 gtk_action_get_accel_path
 gtk_action_set_accel_path
+gtk_action_get_accel_closure
 gtk_action_set_accel_group
 <SUBSECTION Standard>
 GTK_TYPE_ACTION

@@ -1,3 +1,7 @@
+2005-06-10  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtk-sections.txt: Add gtk_action_get_accel_closure
+
 2005-06-10  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkclipboard.sgml: 
