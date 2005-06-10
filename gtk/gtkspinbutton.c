@@ -1693,7 +1693,7 @@ gtk_spin_button_set_adjustment (GtkSpinButton *spin_button,
 
 /**
  * gtk_spin_button_get_adjustment:
- * @spin_button: 
+ * @spin_button: a #GtkSpinButton
  * 
  * Get the adjustment associated with a #GtkSpinButton
  * 

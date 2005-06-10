@@ -2119,7 +2119,7 @@ gtk_tree_view_column_get_title (GtkTreeViewColumn *tree_column)
 /**
  * gtk_tree_view_column_set_expand:
  * @tree_column: A #GtkTreeViewColumn
- * @expand: 
+ * @expand: %TRUE if the column should take available extra space, %FALSE if not
  * 
  * Sets the column to take available extra space.  This space is shared equally
  * amongst all columns that have the expand set to %TRUE.  If no column has this
@@ -2151,7 +2151,7 @@ gtk_tree_view_column_set_expand (GtkTreeViewColumn *tree_column,
 
 /**
  * gtk_tree_view_column_get_expand:
- * @tree_column: 
+ * @tree_column: a #GtkTreeViewColumn
  * 
  * Return %TRUE if the column expands to take any available space.
  * 

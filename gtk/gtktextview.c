@@ -1305,7 +1305,10 @@ gtk_text_view_get_iter_at_location (GtkTextView *text_view,
  * gtk_text_view_get_iter_at_position:
  * @text_view: a #GtkTextView
  * @iter: a #GtkTextIter
- * @trailing: 
+ * @trailing: location to store an integer indicating where
+ *    in the grapheme the user clicked. It will either be
+ *    zero, or the number of characters in the grapheme. 
+ *    0 represents the trailing edge of the grapheme.
  * @x: x position, in buffer coordinates
  * @y: y position, in buffer coordinates
  *
@@ -1316,7 +1319,7 @@ gtk_text_view_get_iter_at_location (GtkTextView *text_view,
  * those to buffer coordinates with 
  * gtk_text_view_window_to_buffer_coords().
  *
- * Note that this is diffferent from gtk_text_view_get_iter_at_location(),
+ * Note that this is different from gtk_text_view_get_iter_at_location(),
  * which returns cursor locations, i.e. positions <emphasis>between</emphasis>
  * characters.
  *

@@ -415,6 +415,7 @@ static const GtkStockItem builtin_items [] =
 
 /**
  * gtk_stock_set_translate_func: 
+ * @domain: the translation domain for which @func shall be used
  * @func: a #GtkTranslateFunc 
  * @data: data to pass to @func
  * @notify: a #GtkDestroyNotify that is called when @data is 

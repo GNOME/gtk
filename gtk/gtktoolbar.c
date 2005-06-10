@@ -3009,9 +3009,9 @@ gtk_toolbar_set_show_arrow (GtkToolbar *toolbar,
  * @toolbar: a #GtkToolbar
  * 
  * Returns whether the toolbar has an overflow menu.
- * See gtk_toolbar_set_show_arrow()
+ * See gtk_toolbar_set_show_arrow().
  * 
- * Return value: 
+ * Return value: %TRUE if the toolbar has an overflow menu.
  * 
  * Since: 2.4
  **/

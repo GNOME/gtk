@@ -1469,7 +1469,9 @@ _gtk_menu_shell_remove_mnemonic (GtkMenuShell *menu_shell,
  * gtk_menu_shell_get_take_focus:
  * @menu_shell: a #GtkMenuShell
  *
- * @returns: %TRUE if the menu shell will take the keyboard focus on popup.
+ * Returns %TRUE if the menu shell will take the keyboard focus on popup.
+ *
+ * Returns: %TRUE if the menu shell will take the keyboard focus on popup.
  *
  * Since: 2.8
  **/

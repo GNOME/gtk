@@ -104,7 +104,7 @@ GtkWidget*     gtk_scrolled_window_new               (GtkAdjustment     *hadjust
 void           gtk_scrolled_window_set_hadjustment   (GtkScrolledWindow *scrolled_window,
 						      GtkAdjustment     *hadjustment);
 void           gtk_scrolled_window_set_vadjustment   (GtkScrolledWindow *scrolled_window,
-						      GtkAdjustment     *hadjustment);
+						      GtkAdjustment     *vadjustment);
 GtkAdjustment* gtk_scrolled_window_get_hadjustment   (GtkScrolledWindow *scrolled_window);
 GtkAdjustment* gtk_scrolled_window_get_vadjustment   (GtkScrolledWindow *scrolled_window);
 GtkWidget*     gtk_scrolled_window_get_hscrollbar    (GtkScrolledWindow *scrolled_window);
