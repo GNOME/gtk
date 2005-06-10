@@ -2324,7 +2324,7 @@ gdk_window_set_skip_taskbar_hint (GdkWindow *window,
  * thumbnail representation of the windows on the desktop). If a
  * window's semantic type as specified with gdk_window_set_type_hint()
  * already fully describes the window, this function should 
- * <emphasis>not<emphasis> be called in addition, instead you should 
+ * <emphasis>not</emphasis> be called in addition, instead you should 
  * allow the window to be treated according to standard policy for 
  * its semantic type.
  *
