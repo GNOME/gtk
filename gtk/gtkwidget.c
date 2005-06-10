@@ -4264,6 +4264,16 @@ gtk_widget_set_state (GtkWidget           *widget,
     }
 }
 
+
+/**
+ * gtk_widget_set_app_paintable:
+ * @widget: a #GtkWidget
+ * @app_paintable: %TRUE if the application will paint on the widget
+ *
+ * Sets the app-paintable property to indicate to the widget that the
+ * application intends to paint directly on the widget.
+ *
+ **/
 void
 gtk_widget_set_app_paintable (GtkWidget *widget,
 			      gboolean   app_paintable)

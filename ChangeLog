@@ -1,5 +1,8 @@
 2005-06-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkwidget.c (gtk_widget_set_app_paintable): Add docs.
+	(#306212, Steve Chaplin, docs provided by Billy Biggs)
+
 	* gtk/gtktextbtree.c (_gtk_text_btree_char_is_invisible): Small 
 	cleanup.  (#305539, Paolo Borelli)
 
