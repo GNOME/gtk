@@ -1,5 +1,8 @@
 2005-06-10  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/tmpl/gtkpaned.sgml: 
+	* gtk/tmpl/gtkmenu.sgml: 
+	
 	* gtk/tmpl/gtkmenubar.sgml: 
 	* gtk/tmpl/gtkimage.sgml: 
 	* gtk/tmpl/gtkfontsel.sgml: 

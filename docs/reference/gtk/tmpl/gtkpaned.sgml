@@ -68,6 +68,9 @@ gtk_widget_set_size_request (frame2, 50, -1);
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkPaned ##### -->
 <para>
 </para>
@@ -186,8 +189,8 @@ parameters. This is equivalent to
 Old name for gtk_paned_set_gutter_size().
 </para>
 
-@p: 
-@s: 
+@p: a paned widget
+@s: the width of the gutter in pixels
 
 
 <!-- ##### FUNCTION gtk_paned_pack1 ##### -->

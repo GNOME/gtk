@@ -76,6 +76,9 @@ my_popup_handler (GtkWidget *widget, GdkEvent *event)
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkMenu ##### -->
 <para>
 The #GtkMenu struct contains private data only, and
@@ -186,9 +189,7 @@ indicated by @position.
 
 @menu: a #GtkMenu.
 @child: The #GtkMenuItem to add.
-@pos: 
-<!-- # Unused Parameters # -->
-@position: The position in the item list where @child is added.
+@pos: The position in the item list where @child is added.
 Positions are numbered from 0 to n-1.
 
 
