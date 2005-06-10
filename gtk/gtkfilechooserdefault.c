@@ -951,6 +951,21 @@ error_creating_folder_dialog (GtkFileChooserDefault *impl,
 		path, error);
 }
 
+/* Shows an error about not being able to create a folder because a file with
+ * the same name is already there.
+ */
+static void
+error_creating_folder_over_existing_file_dialog (GtkFileChooserDefault *impl,
+						 const GtkFilePath     *path,
+						 GError                *error)
+{
+  error_dialog (impl,
+		_("The folder could not be created, as a file with the same name "
+		  "already exists.  Try using a different name for the folder, "
+		  "or rename the file first."),
+		path, error);
+}
+
 /* Shows an error dialog about not being able to create a filename */
 static void
 error_building_filename_dialog (GtkFileChooserDefault *impl,
@@ -3209,11 +3224,14 @@ trap_activate_cb (GtkWidget   *widget,
 		  gpointer     data)
 {
   GtkFileChooserDefault *impl;
+  int modifiers;
 
   impl = (GtkFileChooserDefault *) data;
+
+  modifiers = gtk_accelerator_get_default_mod_mask ();
   
   if (event->keyval == GDK_slash &&
-      ! (event->state & (~GDK_SHIFT_MASK & gtk_accelerator_get_default_mod_mask ())))
+      ! (event->state & (~GDK_SHIFT_MASK & modifiers)))
     {
       location_popup_handler (impl, "/");
       return TRUE;
@@ -3223,6 +3241,7 @@ trap_activate_cb (GtkWidget   *widget,
        || event->keyval == GDK_ISO_Enter
        || event->keyval == GDK_KP_Enter
        || event->keyval == GDK_space)
+      && ((event->state && modifiers) == 0)
       && !(impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
 	   impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER))
     {
@@ -4056,9 +4075,12 @@ gtk_file_chooser_default_set_property (GObject      *object,
 	  {
 	    gtk_file_chooser_default_unselect_all (GTK_FILE_CHOOSER (impl));
 	    
-	    if (action == GTK_FILE_CHOOSER_ACTION_SAVE && impl->select_multiple)
+	    if ((action == GTK_FILE_CHOOSER_ACTION_SAVE || action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
+		&& impl->select_multiple)
 	      {
-		g_warning ("Multiple selection mode is not allowed in Save mode");
+		g_warning ("Tried to change the file chooser action to SAVE or CREATE_FOLDER, but "
+			   "this is not allowed in multiple selection mode.  Resetting the file chooser "
+			   "to single selection mode.");
 		set_select_multiple (impl, FALSE, TRUE);
 	      }
 	    impl->action = action;
@@ -4096,9 +4118,12 @@ gtk_file_chooser_default_set_property (GObject      *object,
     case GTK_FILE_CHOOSER_PROP_SELECT_MULTIPLE:
       {
 	gboolean select_multiple = g_value_get_boolean (value);
-	if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE && select_multiple)
+	if ((impl->action == GTK_FILE_CHOOSER_ACTION_SAVE || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
+	    && select_multiple)
 	  {
-	    g_warning ("Multiple selection mode is not allowed in Save mode");
+	    g_warning ("Tried to set the file chooser to multiple selection mode, but this is "
+		       "not allowed in SAVE or CREATE_FOLDER modes.  Ignoring the change and "
+		       "leaving the file chooser in single selection mode.");
 	    return;
 	  }
 
@@ -4899,15 +4924,19 @@ update_chooser_entry (GtkFileChooserDefault *impl)
   const GtkFileInfo *info;
   GtkTreeIter iter;
   GtkTreeIter child_iter;
+  gboolean change_entry;
 
-  if (impl->action != GTK_FILE_CHOOSER_ACTION_SAVE)
+  if (!(impl->action == GTK_FILE_CHOOSER_ACTION_SAVE || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER))
     return;
 
   g_assert (!impl->select_multiple);
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
 
   if (!gtk_tree_selection_get_selected (selection, NULL, &iter))
-    return;
+    {
+      _gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (impl->save_file_name_entry), "");
+      return;
+    }
 
   gtk_tree_model_sort_convert_iter_to_child_iter (impl->sort_model,
 						  &child_iter,
@@ -4915,7 +4944,12 @@ update_chooser_entry (GtkFileChooserDefault *impl)
 
   info = _gtk_file_system_model_get_info (impl->browse_files_model, &child_iter);
 
-  if (!gtk_file_info_get_is_folder (info))
+  if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
+    change_entry = !gtk_file_info_get_is_folder (info); /* We don't want the name to change when clicking on a folder... */
+  else
+    change_entry = TRUE;                                /* ... unless we are in CREATE_FOLDER mode */
+
+  if (change_entry)
     _gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (impl->save_file_name_entry),
 					   gtk_file_info_get_display_name (info));
 }
@@ -5644,41 +5678,75 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
 
   if (current_focus == impl->browse_files_tree_view)
     {
+      /* The following array encodes what we do based on the impl->action and the
+       * number of files selected.
+       */
+      typedef enum {
+	NOOP,			/* Do nothing (don't respond) */
+	RESPOND,		/* Respond immediately */
+	RESPOND_OR_SWITCH,      /* Respond immediately if the selected item is a file; switch to it if it is a folder */
+	ALL_FILES,		/* Respond only if everything selected is a file */
+	ALL_FOLDERS,		/* Respond only if everything selected is a folder */
+	SAVE_ENTRY,		/* Go to the code for handling the save entry */
+	NOT_REACHED		/* Sanity check */
+      } ActionToTake;
+      static const ActionToTake what_to_do[4][3] = {
+	/*				  0 selected		1 selected		many selected */
+	/* ACTION_OPEN */		{ NOOP,			RESPOND_OR_SWITCH,	ALL_FILES   },
+	/* ACTION_SAVE */		{ SAVE_ENTRY,		RESPOND_OR_SWITCH,	NOT_REACHED },
+	/* ACTION_SELECT_FOLDER */	{ RESPOND,		ALL_FOLDERS,		ALL_FOLDERS },
+	/* ACTION_CREATE_FOLDER */	{ SAVE_ENTRY,		ALL_FOLDERS,		NOT_REACHED }
+      };
+
       int num_selected;
       gboolean all_files, all_folders;
+      int k;
+      ActionToTake action;
 
     file_list:
 
+      g_assert (impl->action >= GTK_FILE_CHOOSER_ACTION_OPEN && impl->action <= GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER);
+
       selection_check (impl, &num_selected, &all_files, &all_folders);
 
-      if (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
-	{
-	  if (num_selected != 1) 	 
-	    return TRUE; /* zero means current folder; more than one means use the whole selection */ 	 
-	  else if (current_focus != impl->browse_files_tree_view) 	 
-	    {
-	      /* a single folder is selected and a button was clicked */
-	      switch_to_selected_folder (impl); 	 
-	      return TRUE;
-	    }
-	}
-
-      if (num_selected == 0)
-	{
-	  if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
-	      || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
-	    goto save_entry; /* it makes sense to use the typed name */
-	  else
-	    return FALSE;
-	}
-
-      if (num_selected == 1 && all_folders)
-	{
-	  switch_to_selected_folder (impl);
-	  return FALSE;
-	}
+      if (num_selected > 2)
+	k = 2;
       else
-	return all_files;
+	k = num_selected;
+
+      action = what_to_do [impl->action] [k];
+
+      switch (action)
+	{
+	case NOOP:
+	  return FALSE;
+
+	case RESPOND:
+	  return TRUE;
+
+	case RESPOND_OR_SWITCH:
+	  g_assert (num_selected == 1);
+
+	  if (all_folders)
+	    {
+	      switch_to_selected_folder (impl);
+	      return FALSE;
+	    }
+	  else
+	    return TRUE;
+
+	case ALL_FILES:
+	  return all_files;
+
+	case ALL_FOLDERS:
+	  return all_folders;
+
+	case SAVE_ENTRY:
+	  goto save_entry;
+
+	default:
+	  g_assert_not_reached ();
+	}
     }
   else if (current_focus == impl->save_file_name_entry)
     {
@@ -5686,7 +5754,8 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
       gboolean is_valid, is_empty;
       gboolean is_folder;
       gboolean retval;
-      GtkFileChooserEntry *entry;  
+      GtkFileChooserEntry *entry;
+      GError *error;
 
     save_entry:
 
@@ -5696,32 +5765,67 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
       entry = GTK_FILE_CHOOSER_ENTRY (impl->save_file_name_entry);
       path = check_save_entry (impl, &is_valid, &is_empty);
 
-      if (!is_empty && !is_valid)
+      if (!is_valid)
 	return FALSE;
 
-      if (is_empty)
-	path = gtk_file_path_copy (_gtk_file_chooser_entry_get_current_folder (entry));
-      
-      is_folder = check_is_folder (impl->file_system, path, NULL);
+      g_assert (!is_empty);
+
+      error = NULL;
+      is_folder = check_is_folder (impl->file_system, path, &error);
       if (is_folder)
 	{
-	  _gtk_file_chooser_entry_set_file_part (entry, "");
-	  change_folder_and_display_error (impl, path);
-	  retval = FALSE;
-	}
-      else
-	{
-	  /* check that everything up to the last component exists */
-	  gtk_file_path_free (path);
-	  path = gtk_file_path_copy (_gtk_file_chooser_entry_get_current_folder (entry));
-	  is_folder = check_is_folder (impl->file_system, path, NULL);
-	  if (!is_folder)
+	  if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
 	    {
+	      _gtk_file_chooser_entry_set_file_part (entry, "");
 	      change_folder_and_display_error (impl, path);
 	      retval = FALSE;
 	    }
+	  else /* GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER */
+	    {
+	      retval = TRUE;
+	    }
+	}
+      else
+	{
+	  if (impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER
+	      && g_error_matches (error, GTK_FILE_SYSTEM_ERROR, GTK_FILE_SYSTEM_ERROR_NOT_FOLDER))
+	    {
+	      /* Oops, the user typed the name of an existing path which is not a folder */
+	      error_creating_folder_over_existing_file_dialog (impl, path, error);
+	      retval = FALSE;
+	    }
 	  else
-	    retval = TRUE;
+	    {
+	      GtkFilePath *parent_path;
+
+	      /* check that everything up to the last component exists */
+
+	      parent_path = gtk_file_path_copy (_gtk_file_chooser_entry_get_current_folder (entry));
+	      is_folder = check_is_folder (impl->file_system, parent_path, NULL);
+	      if (!is_folder)
+		{
+		  change_folder_and_display_error (impl, parent_path);
+		  retval = FALSE;
+		}
+	      else
+		{
+		  GError *create_error;
+
+		  create_error = NULL;
+		  if (gtk_file_system_create_folder (impl->file_system, path, &create_error))
+		    retval = TRUE;
+		  else
+		    {
+		      error_creating_folder_dialog (impl, path, create_error);
+		      retval = FALSE;
+		    }
+		}
+
+	      gtk_file_path_free (parent_path);
+	    }
+
+	  if (error != NULL)
+	    g_error_free (error);
 	}
 
       gtk_file_path_free (path);
