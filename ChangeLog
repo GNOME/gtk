@@ -1,3 +1,12 @@
+2005-06-10  Kjartan Maraas  <kmaraas@gnome.org>
+
+	* gdk/gdkcairo.c: (gdk_cairo_set_source_pixbuf): Destroy the
+	cairo surface when done with it. Plugs a fairly large leak in
+	some cases.
+	==6014== 1999824 (115640 direct, 1884184 indirect) bytes in
+	826 blocks are definitely lost in loss record 25239 of 25250
+	Like this from nautilus.
+
 2005-06-10  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtk.symbols

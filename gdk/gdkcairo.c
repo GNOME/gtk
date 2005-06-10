@@ -215,6 +215,7 @@ gdk_cairo_set_source_pixbuf (cairo_t   *cr,
     }
 
   cairo_set_source_surface (cr, surface, pixbuf_x, pixbuf_y);
+  cairo_surface_destroy (surface);
 }
 
 #define __GDK_CAIRO_C__
