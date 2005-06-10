@@ -34,6 +34,9 @@ and keeps it around so that it can be shown again.
 #GTK_STOCK_ABOUT
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkAboutDialog ##### -->
 <para>
 The <structname>GtkAboutDialog</structname> struct contains
@@ -361,7 +364,9 @@ link is activated.
 
 @about: the #GtkAboutDialog in which the link was activated
 @link: the URL or email address to whiche the activated link points
-@data: 
+@data: user data that was passed when the function was registered
+  with gtk_about_dialog_set_email_hook() or 
+  gtk_about_dialog_set_url_hook()
 
 
 <!-- ##### FUNCTION gtk_about_dialog_set_email_hook ##### -->

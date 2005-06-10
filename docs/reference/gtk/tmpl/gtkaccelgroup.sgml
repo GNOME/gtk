@@ -31,6 +31,9 @@ gtk_window_add_accel_group(), gtk_accel_map_change_entry(),
 gtk_item_factory_new(), gtk_label_new_with_mnemonic()
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkAccelGroup ##### -->
 <para>
 An object representing and maintaining a group of accelerators.
@@ -71,7 +74,7 @@ An object representing and maintaining a group of accelerators.
 Deprecated equivalent of g_object_ref().
 </para>
 
-@Returns: 
+@Returns: the accel group that was passed in
 
 
 <!-- ##### MACRO gtk_accel_group_unref ##### -->

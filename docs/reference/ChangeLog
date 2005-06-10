@@ -1,3 +1,13 @@
+2005-06-10  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtkmenubar.sgml: 
+	* gtk/tmpl/gtkimage.sgml: 
+	* gtk/tmpl/gtkfontsel.sgml: 
+	* gtk/tmpl/gtkbbox.sgml: 
+	* gtk/tmpl/gtkadjustment.sgml: 
+	* gtk/tmpl/gtkaccelgroup.sgml: 
+	* gtk/tmpl/gtkaboutdialog.sgml: Additions.
+
 2005-06-09  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk-pixbuf/gdk-pixbuf-sections.txt: Add some symbols.
