@@ -3383,7 +3383,7 @@ gtk_calendar_freeze (GtkCalendar *calendar)
 
 /**
  * gtk_calendar_thaw:
- * @calendar: 
+ * @calendar: a #GtkCalendar
  * 
  * Does nothing. Previously defrosted a calendar; all the changes made
  * since the last gtk_calendar_freeze() were displayed.

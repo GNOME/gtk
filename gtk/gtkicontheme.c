@@ -2535,7 +2535,7 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo *icon_info,
 /**
  * gtk_icon_info_load_icon:
  * @icon_info: a #GtkIconInfo structure from gtk_icon_theme_lookup_icon()
- * @error: 
+ * @error: location to store error information on failure, or %NULL.
  * 
  * Renders an icon previously looked up in an icon theme using
  * gtk_icon_theme_lookup_icon(); the size will be based on the size
