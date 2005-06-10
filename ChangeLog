@@ -1,3 +1,18 @@
+2005-06-10  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/gen-keyname-table.pl: Generate N_() calls for
+	translatable key names.
+
+	* gdk/keynames.txt: Mark some key names as translatable.
+	
+	* gdk/keyname-table.h: Regenerated.
+
+	* gtk/gtkaccellabel.c (gtk_accel_label_class_init): Add
+	some context to the msg ids for keyboard modifiers and
+	key names.
+	(_gtk_accel_label_class_get_accelerator_label): Try to
+	translate key names.  (#300224, Christian Rose)
+
 2005-06-10  Federico Mena Quintero  <federico@ximian.com>
 
 	Merged from gtk-2-6:

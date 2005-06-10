@@ -116,20 +116,23 @@ gtk_accel_label_class_init (GtkAccelLabelClass *class)
    * that use the shift key. If the text on this key isn't typically
    * translated on keyboards used for your language, don't translate
    * this.
+   * And do not translate the part before the |.
    */
-  class->mod_name_shift = g_strdup (_("Shift"));
+  class->mod_name_shift = g_strdup (Q_("keyboard label|Shift"));
   /* This is the text that should appear next to menu accelerators
    * that use the control key. If the text on this key isn't typically
    * translated on keyboards used for your language, don't translate
    * this.
+   * And do not translate the part before the |.
    */
-  class->mod_name_control = g_strdup (_("Ctrl"));
+  class->mod_name_control = g_strdup (Q_("keyboard label|Ctrl"));
   /* This is the text that should appear next to menu accelerators
    * that use the alt key. If the text on this key isn't typically
    * translated on keyboards used for your language, don't translate
    * this.
+   * And do not translate the part before the |.
    */
-  class->mod_name_alt = g_strdup (_("Alt"));
+  class->mod_name_alt = g_strdup (Q_("keyboard label|Alt"));
   class->mod_separator = g_strdup ("+");
   class->accel_seperator = g_strdup (" / ");
   class->latin1_to_char = TRUE;
@@ -570,10 +573,12 @@ _gtk_accel_label_class_get_accelerator_label (GtkAccelLabelClass *klass,
       switch (ch)
 	{
 	case ' ':
-	  g_string_append (gstring, "Space");
+	  /* do not translate the part before the | */
+	  g_string_append (gstring, Q_("keyboard label|Space"));
 	  break;
 	case '\\':
-	  g_string_append (gstring, "Backslash");
+	  /* do not translate the part before the | */
+	  g_string_append (gstring, Q_("keyboard label|Backslash"));
 	  break;
 	default:
 	  g_string_append_unichar (gstring, g_unichar_toupper (ch));
@@ -583,13 +588,22 @@ _gtk_accel_label_class_get_accelerator_label (GtkAccelLabelClass *klass,
   else
     {
       gchar *tmp;
-      
-      tmp = gtk_accelerator_name (accelerator_key, 0);
-      if (tmp[0] != 0 && tmp[1] == 0)
+
+      tmp = gdk_keyval_name (gdk_keyval_to_lower (accelerator_key));
+      if (tmp == NULL)
+	tmp = "";
+      else if (tmp[0] != 0 && tmp[1] == 0)
 	tmp[0] = g_ascii_toupper (tmp[0]);
-      substitute_underscores (tmp);
+      else 
+	{
+	  gchar msg[128];
+      
+	  strcpy (msg, "keyboard label|");
+	  g_strlcat (msg, tmp, 128);
+	  tmp = g_strip_context (msg, dgettext (GETTEXT_PACKAGE, msg));
+	  substitute_underscores (tmp);
+	}
       g_string_append (gstring, tmp);
-      g_free (tmp);
     }
 
   return g_string_free (gstring, FALSE);

@@ -7,13 +7,18 @@ if (@ARGV != 1) {
 open IN, $ARGV[0] || die "Cannot open $ARGV[0]: $!\n";
 
 @keys = ();
+@translate = ();
 while (defined($_ = <IN>)) {
     next if /^!/;
-    if (!/^\s*(0x[0-9a-f]+)\s+(.*\S)\s+$/) {
+    if (!/^\s*(0x[0-9a-f]+)\s+([\w_]*\S)\s+(1)?\s*$/) {
 	die "Cannot parse line $_";
     }
 
     push @keys, [$1, $2];
+
+    if (defined ($3)) {
+	push @translate, $2;
+    }
 }
 
 $offset = 0;
@@ -88,5 +93,22 @@ for $key (@keys) {
     $i++;
 }
 
-print "\n};\n";
+print <<EOT;
+};
+
+
+#if 0
+
+EOT
+
+for $key (@translate) {
+    print <<EOT;
+N_("keyboard label|$key")
+EOT
+} 
+
+print <<EOT;
+
+#endif
+EOT
 

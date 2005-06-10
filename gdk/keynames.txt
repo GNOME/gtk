@@ -1143,16 +1143,16 @@
 0x00fefb Pointer_DfltBtnNext
 0x00fefc Pointer_DfltBtnPrev
 0x00fefd Pointer_Drag5
-0x00ff08 BackSpace
-0x00ff09 Tab
+0x00ff08 BackSpace		1
+0x00ff09 Tab			1
 0x00ff0a Linefeed
 0x00ff0b Clear
-0x00ff0d Return
-0x00ff13 Pause
-0x00ff14 Scroll_Lock
-0x00ff15 Sys_Req
-0x00ff1b Escape
-0x00ff20 Multi_key
+0x00ff0d Return			1
+0x00ff13 Pause			1
+0x00ff14 Scroll_Lock		1
+0x00ff15 Sys_Req		1
+0x00ff1b Escape			1
+0x00ff20 Multi_key		1
 0x00ff21 Kanji
 0x00ff22 Muhenkan
 0x00ff23 Henkan
@@ -1185,21 +1185,21 @@
 0x00ff3d MultipleCandidate
 0x00ff3e PreviousCandidate
 0x00ff3f Hangul_Special
-0x00ff50 Home
+0x00ff50 Home			1
 0x00ff51 Left
 0x00ff52 Up
 0x00ff53 Right
 0x00ff54 Down
-0x00ff55 Page_Up
+0x00ff55 Page_Up		1
 0x00ff55 Prior
-0x00ff56 Page_Down
+0x00ff56 Page_Down		1
 0x00ff56 Next
-0x00ff57 End
-0x00ff58 Begin
+0x00ff57 End			1
+0x00ff58 Begin			1
 0x00ff60 Select
-0x00ff61 Print
+0x00ff61 Print			1
 0x00ff62 Execute
-0x00ff63 Insert
+0x00ff63 Insert			1
 0x00ff65 Undo
 0x00ff66 Redo
 0x00ff67 Menu
@@ -1215,27 +1215,27 @@
 0x00ff7e Mode_switch
 0x00ff7e kana_switch
 0x00ff7e script_switch
-0x00ff7f Num_Lock
-0x00ff80 KP_Space
-0x00ff89 KP_Tab
-0x00ff8d KP_Enter
+0x00ff7f Num_Lock		1
+0x00ff80 KP_Space		1
+0x00ff89 KP_Tab			1
+0x00ff8d KP_Enter		1
 0x00ff91 KP_F1
 0x00ff92 KP_F2
 0x00ff93 KP_F3
 0x00ff94 KP_F4
-0x00ff95 KP_Home
-0x00ff96 KP_Left
-0x00ff97 KP_Up
-0x00ff98 KP_Right
-0x00ff99 KP_Down
-0x00ff9a KP_Page_Up
-0x00ff9a KP_Prior
-0x00ff9b KP_Page_Down
-0x00ff9b KP_Next
-0x00ff9c KP_End
-0x00ff9d KP_Begin
-0x00ff9e KP_Insert
-0x00ff9f KP_Delete
+0x00ff95 KP_Home		1
+0x00ff96 KP_Left		1
+0x00ff97 KP_Up			1
+0x00ff98 KP_Right		1
+0x00ff99 KP_Down		1
+0x00ff9a KP_Page_Up		1
+0x00ff9a KP_Prior		1
+0x00ff9b KP_Page_Down		1
+0x00ff9b KP_Next		1
+0x00ff9c KP_End			1
+0x00ff9d KP_Begin		1
+0x00ff9e KP_Insert		1
+0x00ff9f KP_Delete		1
 0x00ffaa KP_Multiply
 0x00ffab KP_Add
 0x00ffac KP_Separator
@@ -1302,5 +1302,5 @@
 0x00ffec Super_R
 0x00ffed Hyper_L
 0x00ffee Hyper_R
-0x00ffff Delete
+0x00ffff Delete		1
 0xffffff VoidSymbol
