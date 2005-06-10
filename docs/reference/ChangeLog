@@ -1,5 +1,8 @@
 2005-06-10  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/tmpl/gtkclipboard.sgml: 
+	* gtk/gtk-sections.txt: Add GtkClipboardIamgeReceivedFunc
+
 	* gtk/tmpl/gtkpaned.sgml: 
 	* gtk/tmpl/gtkmenu.sgml: 
 	
