@@ -1,3 +1,35 @@
+2005-06-09  Federico Mena Quintero  <federico@ximian.com>
+
+	Fixes #162358:
+
+	* gtk/gtkfilechooserdefault.c (update_chooser_entry): Don't return
+	immediately if we are in CREATE_FOLDER mode, so that we can fill
+	the entry with the newly-selected folder.
+	(gtk_file_chooser_default_set_property): Warn against turning on
+	multiple selection for CREATE_FOLDER mode, or about setting that
+	action while multiple selection is on.
+	(update_chooser_entry): Change the entry's contents as well if we
+	are in CREATE_FOLDER mode.  If nothing is selected, clear the
+	chooser entry.
+	(trap_activate_cb): Don't trap enter/space if modifiers are
+	pressed.  This lets one use Ctrl-space to toggle rows in multiple
+	selection mode.
+	(gtk_file_chooser_default_should_respond): Clean up the if-chain
+	mess of special cases by using an array to determine what to do.
+	Also, for the save-entry case in CREATE_FOLDER mode, actually fix
+	the bug where the file chooser would switch to an existing folder
+	rather than confirming with it, and create the folder ourselves.
+	(error_creating_folder_over_existing_file_dialog): New function.
+
+	* gtk/gtkfilechooserentry.c (check_completion_callback): Only
+	insert the common prefix if we are in an "open" mode.  Use a
+	helper function.
+	(append_common_prefix): New helper function; code moved over from
+	check_completion_callback().
+	(find_common_prefix): New helper function.
+	(gtk_file_chooser_entry_focus): Append the common prefix if the
+	user requests it explicitly.
+
 2005-06-09  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/x11/gdkdnd-x11.c (motif_drop_start, xdnd_drop_filter): Update

@@ -383,28 +383,25 @@ maybe_append_separator_to_path (GtkFileChooserEntry *chooser_entry,
   return display_name;
 }
 
-static gboolean
-check_completion_callback (GtkFileChooserEntry *chooser_entry)
+/* Determines if the completion model has entries with a common prefix relative
+ * to the current contents of the entry.  Also, if there's one and only one such
+ * path, stores it in unique_path_ret.
+ */
+static void
+find_common_prefix (GtkFileChooserEntry *chooser_entry,
+		    gchar               **common_prefix_ret,
+		    GtkFilePath         **unique_path_ret)
 {
   GtkTreeIter iter;
-  gchar *common_prefix = NULL;
-  GtkFilePath *unique_path = NULL;
   gboolean valid;
 
-  GDK_THREADS_ENTER ();
-
-  g_assert (chooser_entry->file_part);
-
-  chooser_entry->check_completion_idle = NULL;
-
-  if (strcmp (chooser_entry->file_part, "") == 0)
-    goto done;
+  *common_prefix_ret = NULL;
+  *unique_path_ret = NULL;
 
   if (chooser_entry->completion_store == NULL)
-    goto done;
+    return;
 
-  valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (chooser_entry->completion_store),
-					 &iter);
+  valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (chooser_entry->completion_store), &iter);
 
   while (valid)
     {
@@ -419,14 +416,14 @@ check_completion_callback (GtkFileChooserEntry *chooser_entry)
 
       if (g_str_has_prefix (display_name, chooser_entry->file_part))
 	{
-	  if (!common_prefix)
+	  if (!*common_prefix_ret)
 	    {
-	      common_prefix = g_strdup (display_name);
-	      unique_path = gtk_file_path_copy (path);
+	      *common_prefix_ret = g_strdup (display_name);
+	      *unique_path_ret = gtk_file_path_copy (path);
 	    }
 	  else
 	    {
-	      gchar *p = common_prefix;
+	      gchar *p = *common_prefix_ret;
 	      const gchar *q = display_name;
 		  
 	      while (*p && *p == *q)
@@ -437,16 +434,26 @@ check_completion_callback (GtkFileChooserEntry *chooser_entry)
 		  
 	      *p = '\0';
 
-	      gtk_file_path_free (unique_path);
-	      unique_path = NULL;
+	      gtk_file_path_free (*unique_path_ret);
+	      *unique_path_ret = NULL;
 	    }
 	}
 
       g_free (display_name);
       gtk_file_path_free (path);
-      valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (chooser_entry->completion_store),
-					&iter);
+      valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (chooser_entry->completion_store), &iter);
     }
+}
+
+/* Finds a common prefix based on the contents of the entry and mandatorily appends it */
+static void
+append_common_prefix (GtkFileChooserEntry *chooser_entry,
+		      gboolean             highlight)
+{
+  gchar *common_prefix;
+  GtkFilePath *unique_path;
+
+  find_common_prefix (chooser_entry, &common_prefix, &unique_path);
 
   if (unique_path)
     {
@@ -454,19 +461,6 @@ check_completion_callback (GtkFileChooserEntry *chooser_entry)
 						      unique_path,
 						      common_prefix);
       gtk_file_path_free (unique_path);
-    }
-
-  switch (chooser_entry->action)
-    {
-    case GTK_FILE_CHOOSER_ACTION_SAVE:
-    case GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER:
-      if (common_prefix && !g_str_has_suffix (common_prefix, "/"))
-	{
-	  g_free (common_prefix);
-	  common_prefix = NULL;
-	}
-      break;
-    default: ;
     }
 
   if (common_prefix)
@@ -488,16 +482,40 @@ check_completion_callback (GtkFileChooserEntry *chooser_entry)
 	  gtk_editable_insert_text (GTK_EDITABLE (chooser_entry),
 				    common_prefix, -1, 
 				    &pos);
-	  gtk_editable_select_region (GTK_EDITABLE (chooser_entry),
-				      chooser_entry->file_part_pos + file_part_len,
-				      chooser_entry->file_part_pos + common_prefix_len);
 	  chooser_entry->in_change = FALSE;
 
-	  chooser_entry->has_completion = TRUE;
+	  if (highlight)
+	    {
+	      gtk_editable_select_region (GTK_EDITABLE (chooser_entry),
+					  chooser_entry->file_part_pos + file_part_len,
+					  chooser_entry->file_part_pos + common_prefix_len);
+	      chooser_entry->has_completion = TRUE;
+	    }
 	}
-	  
+
       g_free (common_prefix);
     }
+}
+
+static gboolean
+check_completion_callback (GtkFileChooserEntry *chooser_entry)
+{
+  GDK_THREADS_ENTER ();
+
+  g_assert (chooser_entry->file_part);
+
+  chooser_entry->check_completion_idle = NULL;
+
+  if (strcmp (chooser_entry->file_part, "") == 0)
+    goto done;
+
+  /* We only insert the common prefix without requiring the user to hit Tab in
+   * the "open" modes.  For "save" modes, the user must hit Tab to cause the prefix
+   * to be inserted.  That happens in gtk_file_chooser_entry_focus().
+   */
+  if (chooser_entry->action == GTK_FILE_CHOOSER_ACTION_OPEN
+      || chooser_entry->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
+    append_common_prefix (chooser_entry, TRUE);
 
  done:
 
@@ -659,12 +677,20 @@ static gboolean
 gtk_file_chooser_entry_focus (GtkWidget        *widget,
 			      GtkDirectionType  direction)
 {
-  GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (widget);
+  GtkFileChooserEntry *chooser_entry;
+  GtkEditable *editable;
+  GtkEntry *entry;
   GdkModifierType state;
-  gboolean control_pressed = FALSE;
+  gboolean control_pressed;
+
+  chooser_entry = GTK_FILE_CHOOSER_ENTRY (widget);
+  editable = GTK_EDITABLE (widget);
+  entry = GTK_ENTRY (widget);
 
   if (!chooser_entry->eat_tabs)
     return GTK_WIDGET_CLASS (parent_class)->focus (widget, direction);
+
+  control_pressed = FALSE;
 
   if (gtk_get_current_event_state (&state))
     {
@@ -680,13 +706,16 @@ gtk_file_chooser_entry_focus (GtkWidget        *widget,
     {
       gint pos = 0;
 
-      if (chooser_entry->has_completion)
-	gtk_editable_set_position (GTK_EDITABLE (widget),
-				   GTK_ENTRY (widget)->text_length);
+      if (!chooser_entry->has_completion
+	  && gtk_editable_get_position (editable) == entry->text_length)
+	append_common_prefix (chooser_entry, FALSE);
+
+      gtk_editable_set_position (editable, entry->text_length);
+
       /* Trigger the completion window to pop up again by a 
        * zero-length insertion, a bit of a hack.
        */
-      gtk_editable_insert_text (GTK_EDITABLE (widget), "", -1, &pos);
+      gtk_editable_insert_text (editable, "", -1, &pos);
 
       return TRUE;
     }
