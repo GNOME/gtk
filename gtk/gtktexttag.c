@@ -105,6 +105,8 @@ enum {
   PROP_LANGUAGE,
   PROP_TABS,
   PROP_INVISIBLE,
+  PROP_PARAGRAPH_BACKGROUND,
+  PROP_PARAGRAPH_BACKGROUND_GDK,
   
   /* Whether-a-style-arg-is-set args */
   PROP_BACKGROUND_SET,
@@ -134,6 +136,7 @@ enum {
   PROP_LANGUAGE_SET,
   PROP_TABS_SET,
   PROP_INVISIBLE_SET,
+  PROP_PARAGRAPH_BACKGROUND_SET,
 
   LAST_ARG
 };
@@ -503,6 +506,37 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                          FALSE,
                                                          GTK_PARAM_READWRITE));
 
+  /**
+   * GtkTextTag:paragraph-background:
+   *
+   * The paragraph background color as a string.
+   *
+   * Since: 2.8
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_PARAGRAPH_BACKGROUND,
+                                   g_param_spec_string ("paragraph-background",
+                                                        P_("Paragraph background color name"),
+                                                        P_("Paragraph background color as a string"),
+                                                        NULL,
+                                                        GTK_PARAM_WRITABLE));
+
+  /**
+   * GtkTextTag:paragraph-background-gdk:
+   *
+   * The paragraph background color as a as a (possibly unallocated) 
+   * #GdkColor.
+   *
+   * Since: 2.8
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_PARAGRAPH_BACKGROUND_GDK,
+                                   g_param_spec_boxed ("paragraph-background-gdk",
+                                                       P_("Paragraph background color"),
+                                                       P_("Paragraph background color as a (possibly unallocated) GdkColor"),
+                                                       GDK_TYPE_COLOR,
+                                                       GTK_PARAM_READWRITE));
+
   /* Style props are set or not */
 
 #define ADD_SET_PROP(propname, propval, nick, blurb) g_object_class_install_property (object_class, propval, g_param_spec_boolean (propname, nick, blurb, FALSE, GTK_PARAM_READWRITE))
@@ -615,6 +649,10 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                 P_("Invisible set"),
                 P_("Whether this tag affects text visibility"));
 
+  ADD_SET_PROP ("paragraph-background-set", PROP_PARAGRAPH_BACKGROUND_SET,
+                P_("Paragraph background set"),
+                P_("Whether this tag affects the paragraph background color"));
+  
   signals[EVENT] =
     g_signal_new ("event",
                   G_OBJECT_CLASS_TYPE (object_class),
@@ -722,6 +760,34 @@ set_fg_color (GtkTextTag *tag, GdkColor *color)
           tag->fg_color_set = FALSE;
           g_object_notify (G_OBJECT (tag), "foreground-set");
         }
+    }
+}
+
+static void
+set_pg_bg_color (GtkTextTag *tag, GdkColor *color)
+{
+  if (color)
+    {
+      if (!tag->pg_bg_color_set)
+        {
+          tag->pg_bg_color_set = TRUE;
+          g_object_notify (G_OBJECT (tag), "paragraph-background-set");
+        }
+      else
+	gdk_color_free (tag->values->pg_bg_color);
+
+      tag->values->pg_bg_color = gdk_color_copy (color);
+    }
+  else
+    {
+      if (tag->pg_bg_color_set)
+        {
+          tag->pg_bg_color_set = FALSE;
+          g_object_notify (G_OBJECT (tag), "paragraph-background-set");
+	  gdk_color_free (tag->values->pg_bg_color);
+        }
+
+      tag->values->pg_bg_color = NULL;
     }
 }
 
@@ -1197,6 +1263,27 @@ gtk_text_tag_set_property (GObject      *object,
       size_changed = TRUE;
       break;
       
+    case PROP_PARAGRAPH_BACKGROUND:
+      {
+        GdkColor color;
+
+        if (gdk_color_parse (g_value_get_string (value), &color))
+          set_pg_bg_color (text_tag, &color);
+        else
+          g_warning ("Don't know color `%s'", g_value_get_string (value));
+
+        g_object_notify (object, "paragraph-background-gdk");
+      }
+      break;
+
+    case PROP_PARAGRAPH_BACKGROUND_GDK:
+      {
+        GdkColor *color = g_value_get_boxed (value);
+
+        set_pg_bg_color (text_tag, color);
+      }
+      break;
+
       /* Whether the value should be used... */
 
     case PROP_BACKGROUND_SET:
@@ -1331,6 +1418,10 @@ gtk_text_tag_set_property (GObject      *object,
       size_changed = TRUE;
       break;
       
+    case PROP_PARAGRAPH_BACKGROUND_SET:
+      text_tag->pg_bg_color_set = g_value_get_boolean (value);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1519,6 +1610,10 @@ gtk_text_tag_get_property (GObject      *object,
       g_value_set_boolean (value, tag->values->invisible);
       break;
       
+    case PROP_PARAGRAPH_BACKGROUND_GDK:
+      g_value_set_boxed (value, tag->values->pg_bg_color);
+      break;
+
     case PROP_BACKGROUND_SET:
       g_value_set_boolean (value, tag->bg_color_set);
       break;
@@ -1617,9 +1712,14 @@ gtk_text_tag_get_property (GObject      *object,
       g_value_set_boolean (value, tag->invisible_set);
       break;
       
+    case PROP_PARAGRAPH_BACKGROUND_SET:
+      g_value_set_boolean (value, tag->pg_bg_color_set);
+      break;
+
     case PROP_BACKGROUND:
     case PROP_FOREGROUND:
-      g_warning ("'foreground' and 'background' properties are not readable, use 'foreground_gdk' and 'background_gdk'");
+    case PROP_PARAGRAPH_BACKGROUND:
+      g_warning ("'foreground', 'background' and 'paragraph_background' properties are not readable, use 'foreground_gdk', 'background_gdk' and 'paragraph_background_gdk'");
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1919,6 +2019,9 @@ gtk_text_attributes_copy_values (GtkTextAttributes *src,
   if (dest->font)
     dest->font = pango_font_description_copy (src->font);
   
+  if (src->pg_bg_color)
+    dest->pg_bg_color = gdk_color_copy (src->pg_bg_color);
+
   dest->refcount = orig_refcount;
   dest->realized = FALSE;
 }
@@ -1967,7 +2070,10 @@ gtk_text_attributes_unref (GtkTextAttributes *values)
 
       if (values->font)
 	pango_font_description_free (values->font);
-      
+
+      if (values->pg_bg_color)
+	gdk_color_free (values->pg_bg_color);
+
       g_free (values);
     }
 }
@@ -1990,6 +2096,11 @@ _gtk_text_attributes_realize (GtkTextAttributes *values,
                             &values->appearance.bg_color,
                             FALSE, TRUE);
 
+  if (values->pg_bg_color)
+    gdk_colormap_alloc_color (cmap,
+			      values->pg_bg_color,
+			      FALSE, TRUE);
+
   values->realized = TRUE;
 }
 
@@ -2011,6 +2122,13 @@ _gtk_text_attributes_unrealize (GtkTextAttributes *values,
 
   values->appearance.fg_color.pixel = 0;
   values->appearance.bg_color.pixel = 0;
+
+  if (values->pg_bg_color)
+    {
+      gdk_colormap_free_colors (cmap, values->pg_bg_color, 1);
+      
+      values->pg_bg_color->pixel = 0;
+    }
 
   values->realized = FALSE;
 }
@@ -2042,6 +2160,11 @@ _gtk_text_attributes_fill_from_tags (GtkTextAttributes *dest,
       if (tag->fg_color_set)
         dest->appearance.fg_color = vals->appearance.fg_color;
       
+      if (tag->pg_bg_color_set)
+        {
+          dest->pg_bg_color = gdk_color_copy (vals->pg_bg_color);
+        }
+
       if (tag->bg_stipple_set)
         {
           g_object_ref (vals->appearance.bg_stipple);
@@ -2164,7 +2287,8 @@ _gtk_text_tag_affects_nonsize_appearance (GtkTextTag *tag)
     tag->fg_color_set ||
     tag->fg_stipple_set ||
     tag->strikethrough_set ||
-    tag->bg_full_height_set;
+    tag->bg_full_height_set ||
+    tag->pg_bg_color_set;
 }
 
 #define __GTK_TEXT_TAG_C__

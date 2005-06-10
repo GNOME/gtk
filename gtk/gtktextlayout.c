@@ -1297,6 +1297,11 @@ set_para_values (GtkTextLayout      *layout,
     }
 
   display->total_width = MAX (layout->screen_width, layout->width) - display->left_margin - display->right_margin;
+  
+  if (style->pg_bg_color)
+    display->pg_bg_color = gdk_color_copy (style->pg_bg_color);
+  else
+    display->pg_bg_color = NULL;  
 }
 
 static PangoAttribute *
@@ -2155,6 +2160,9 @@ gtk_text_layout_free_line_display (GtkTextLayout      *layout,
           g_slist_free (display->cursors);
         }
       g_slist_free (display->shaped_objects);
+      
+      if (display->pg_bg_color)
+        gdk_color_free (display->pg_bg_color);
 
       g_free (display);
     }

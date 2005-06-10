@@ -1,3 +1,28 @@
+2005-06-10  Matthias Clasen  <mclasen@redhat.com>
+
+	Allow setting paragraph background.  (#81045, Gustavo
+	Carneiro, patch by Jeroen Zwartepoorte)
+	
+	* gtk/gtktextlayout.c (set_para_values): Propagate 
+	pg_bg_color to the display struct.
+	(gtk_text_layout_free_line_display): Free it here.
+
+	* gtk/gtktextdisplay.c (render_para): If pg_bg_color
+	is set, draw a rectangle in that color behind
+	the paragraph.
+
+	* gtk/gtktexttag.c (gtk_text_tag_class_init): Add 
+	paragraph-background, paragraph-background-gdk and
+	paragraph-background-set properties.
+	(set_pg_bg_color): A setter for paragraph-background.
+
+	* gtk/gtktextlayout.h (struct _GtkTextLineDisplay): Add
+	pg_bg_color.
+
+	* gtk/gtktexttag.h (struct _GtkTextAttributes): Add
+	pg_bg_color.
+	(struct _GtkTextTag): Add pg_bg_color_set.
+
 2005-06-10  Kjartan Maraas  <kmaraas@gnome.org>
 
 	* gdk/gdkcairo.c: (gdk_cairo_set_source_pixbuf): Destroy the

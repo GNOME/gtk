@@ -252,6 +252,8 @@ struct _GtkTextLineDisplay
 
   gboolean size_only;
   GtkTextLine *line;
+  
+  GdkColor *pg_bg_color;
 };
 
 extern PangoAttrType gtk_text_attr_appearance_type;

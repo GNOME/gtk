@@ -75,9 +75,9 @@ struct _GtkTextTag
   guint invisible_set : 1;
   guint editable_set : 1;
   guint language_set : 1;
+  guint pg_bg_color_set : 1;
   guint pad1 : 1;
   guint pad2 : 1;
-  guint pad3 : 1;
 };
 
 struct _GtkTextTagClass
@@ -192,10 +192,7 @@ struct _GtkTextAttributes
   PangoLanguage *language;
 
   /*< private >*/
-  /* I'm not sure this can really be used without breaking some things
-   * an app might do :-/
-   */
-  gpointer padding1;
+  GdkColor *pg_bg_color;
 
   /*< public >*/
   /* hide the text  */

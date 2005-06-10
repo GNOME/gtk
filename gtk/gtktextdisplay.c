@@ -532,6 +532,25 @@ render_para (GtkTextRenderer    *text_renderer,
         }
       else
         {
+          if (line_display->pg_bg_color)
+            {
+              GdkGC *bg_gc;
+              
+              bg_gc = gdk_gc_new (text_renderer->drawable);
+              gdk_gc_set_fill (bg_gc, GDK_SOLID);
+              gdk_gc_set_rgb_fg_color (bg_gc, line_display->pg_bg_color);
+            
+              gdk_draw_rectangle (text_renderer->drawable,
+                                  bg_gc,
+                                  TRUE,
+                                  x + line_display->left_margin,
+                                  selection_y,
+                                  screen_width,
+                                  selection_height);
+              
+              gdk_gc_unref (bg_gc);
+            }
+        
 	  text_renderer_set_selected (text_renderer, FALSE);
 	  pango_renderer_draw_layout_line (PANGO_RENDERER (text_renderer),
 					   line, 
