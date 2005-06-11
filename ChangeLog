@@ -1,5 +1,8 @@
 2005-06-11  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkwidget.c (gtk_widget_set_app_paintable): More docs
+	provided by Owen Taylor.
+
 	* gtk/gtk.symbols: 
 	* gtk/gtkiconview.h: 
 	* gtk/gtkiconview.c (gtk_icon_view_get_visible_range): 

@@ -4270,9 +4270,15 @@ gtk_widget_set_state (GtkWidget           *widget,
  * @widget: a #GtkWidget
  * @app_paintable: %TRUE if the application will paint on the widget
  *
- * Sets the app-paintable property to indicate to the widget that the
- * application intends to paint directly on the widget.
+ * Sets whether the application intends to draw on the widget in
+ * an ::expose-event handler. 
  *
+ * This is a hint to the widget and does not affect the behavior of 
+ * the GTK+ core; many widgets ignore this flag entirely. For widgets 
+ * that do pay attention to the flag, such as #GtkEventBox and #GtkWindow, 
+ * the effect is to suppress default themed drawing of the widget's 
+ * background. (Children of the widget will still be drawn.) The application 
+ * is then entirely responsible for drawing the widget background.
  **/
 void
 gtk_widget_set_app_paintable (GtkWidget *widget,
