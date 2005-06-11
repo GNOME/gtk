@@ -548,7 +548,7 @@ render_para (GtkTextRenderer    *text_renderer,
                                   screen_width,
                                   selection_height);
               
-              gdk_gc_unref (bg_gc);
+              g_object_unref (bg_gc);
             }
         
 	  text_renderer_set_selected (text_renderer, FALSE);

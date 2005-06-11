@@ -1,3 +1,8 @@
+Fri Jun 10 19:06:03 2005  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtktextdisplay.c (render_para): don't use deprecated
+	gdk_gc_unref function.
+
 2005-06-10  Matthias Clasen  <mclasen@redhat.com>
 
 	Allow setting paragraph background.  (#81045, Gustavo
