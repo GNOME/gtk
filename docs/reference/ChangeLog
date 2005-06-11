@@ -1,3 +1,7 @@
+2005-06-11  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-sections.txt: Add gtk_icon_view_get_visible_range
+
 2005-06-10  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtk-sections.txt: Add gtk_action_get_accel_closure
