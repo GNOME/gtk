@@ -129,6 +129,9 @@ gboolean       gtk_icon_view_get_item_at_pos   (GtkIconView     *icon_view,
 						gint              y,
 						GtkTreePath     **path,
 						GtkCellRenderer **cell);
+gboolean       gtk_icon_view_get_visible_range (GtkIconView      *icon_view,
+						GtkTreePath     **start_path,
+						GtkTreePath     **end_path);
 
 void           gtk_icon_view_selected_foreach   (GtkIconView            *icon_view,
 						 GtkIconViewForeachFunc  func,

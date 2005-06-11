@@ -1675,6 +1675,7 @@ gtk_icon_view_get_selection_mode
 gtk_icon_view_get_spacing
 gtk_icon_view_get_text_column
 gtk_icon_view_get_type G_GNUC_CONST
+gtk_icon_view_get_visible_range
 gtk_icon_view_item_activated
 gtk_icon_view_new
 gtk_icon_view_new_with_model

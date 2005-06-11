@@ -1,5 +1,11 @@
 2005-06-11  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk.symbols: 
+	* gtk/gtkiconview.h: 
+	* gtk/gtkiconview.c (gtk_icon_view_get_visible_range): 
+	Add a function to determine what parts of the model are
+	visible.  (#306726, Jonathan Blandford)
+
 	* gtk/gtkfilesystemunix.c (create_file_info): Treat backup
 	files the same way as hidden files, to be closer to what
 	Nautilus does.  (#136196, Sean Middleditch)

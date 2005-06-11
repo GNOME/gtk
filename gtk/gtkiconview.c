@@ -4373,6 +4373,62 @@ gtk_icon_view_get_item_at_pos (GtkIconView      *icon_view,
   return (item != NULL);
 }
 
+
+/**
+ * gtk_icon_view_get_visible_range:
+ * @icon_view: A #GtkIconView
+ * @start_path: Return location for start of region, or %NULL
+ * @end_path: Return location for end of region, or %NULL
+ * 
+ * Sets @start_path and @end_path to be the first and last visible path. 
+ * Note that there may be invisible paths in between.
+ * 
+ * Return value: %TRUE, if valid paths were placed in @start_path and @end_path
+ *
+ * Since: 2.8
+ **/
+gboolean
+gtk_icon_view_get_visible_range (GtkIconView  *icon_view,
+				 GtkTreePath **start_path,
+				 GtkTreePath **end_path)
+{
+  gint start_index = -1;
+  gint end_index = -1;
+  GtkIconViewItem *item;
+  GList *icons;
+
+  g_return_val_if_fail (GTK_IS_ICON_VIEW (icon_view), FALSE);
+
+  if (icon_view->priv->hadjustment == NULL ||
+      icon_view->priv->vadjustment == NULL)
+    return FALSE;
+
+  if (start_path == NULL && end_path == NULL)
+    return FALSE;
+  
+  for (icons = icon_view->priv->items; icons; icons = icons->next) 
+    {
+      GtkIconViewItem *item = icons->data;
+
+      if ((item->x + item->width >= (int)icon_view->priv->hadjustment->value) &&
+	  (item->y + item->height >= (int)icon_view->priv->vadjustment->value) &&
+	  (item->x <= (int) (icon_view->priv->hadjustment->value + icon_view->priv->hadjustment->page_size)) &&
+	  (item->y <= (int) (icon_view->priv->vadjustment->value + icon_view->priv->vadjustment->page_size)))
+	{
+	  if (start_index == -1)
+	    start_index = item->index;
+	  end_index = item->index;
+	}
+    }
+
+  if (start_path && start_index != -1)
+    *start_path = gtk_tree_path_new_from_indices (start_index, -1);
+  if (end_path && end_index != -1)
+    *end_path = gtk_tree_path_new_from_indices (end_index, -1);
+  
+  return start_index != -1;
+}
+
 /**
  * gtk_icon_view_selected_foreach:
  * @icon_view: A #GtkIconView.
