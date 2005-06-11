@@ -1,3 +1,46 @@
+Overview of Changes from GTK+ 2.6.7 to GTK+ 2.6.8
+=================================================
+* GtkFileChooser
+ - Don't select first row in SELECT_FOLDER mode [Christian
+   Neumair]
+ - Improve autocompletion behaviour [Federico Mena Quintero]
+ - Don't stat children of /afs or /net network directories [Federico]
+* GtkIconView
+ - Many fixes for scrolling and selection handling [Mathias Hasselmann]
+* GtkTreeView
+ - Fix insensitive appearance [Billy Biggs, Matthias Clasen]
+* GtkEntry 
+ - Don't blink the cursor if the entry is not editable [Nikos Kouremenos]
+* GtkTextView 
+ - Optimize cursor blinking [Michael Natterer]
+ - Don't blink the cursor if the entry is not editable [Nikos]
+* GtkAlignment
+ - Flip padding in RTL mode [Maciej Katafiasz]
+* Fix a bug in focus tracking that lead to problems between some
+  window managers and GTK+ applications. [Owen Taylor, Billy Biggs,
+  Niko Tyni]
+* gtk-demo
+ - Add demos for 2.6 features [Matthias]
+* Win32 changes
+ - Initialize gettext before use [Robert Ögren, Daniel Atallah, 
+   Kevin Stange]
+ - Fix DND on multi-monitor systems [Tor Lillqvist]
+ - Improve handling of special and dead keys [Tor, Ivan Wong Yat Cheung]
+ - Improve rendering of insensitive icons [Tim Evans]
+ - Support RGBA cursors [Tim]
+ - Bug fixes [Ivan, Hans Breuer, Tor, Daniel]
+* Other bug fixes [Federico, Sven Neumann, Nguyen Thai Ngoc Duy, 
+  Philip Langdale, Stephen Kennedy, Michael, Pattrick Fimml, 
+  Felix Riemann, David A. Knight, Hazael Maldonado Torres, 
+  Mikael Hallendal, Ian Wienand, Tommi Komulainen, Ismael Juma, 
+  Leonard Michlmayr, Matthias, Gary Kramlich, Peter Wainwright, 
+  Dom Lachowicz, Kjartan Maraas, Victor Osadci, Olaf Vitters, 
+  Morten Welinder, Alexander Hunziker, Elijah Newren, Frederic 
+  Crozat, Joerg Sonnenberger, John Ehresman]
+* Documentation improvements [Matthias, Masao Mutoh, Maciej,
+  Richard Hult, Ghorban M. Tavakoly]
+* New and updated translations (cy,da,en_GB,et,eu,gu,id,nn,ru,xh)
+
 Overview of Changes from GTK+ 2.6.6 to GTK+ 2.6.7
 =================================================
 * Revert two fixes from 2.6.5 which were causing
