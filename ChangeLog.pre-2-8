@@ -1,3 +1,9 @@
+2005-06-11  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilesystemunix.c (create_file_info): Treat backup
+	files the same way as hidden files, to be closer to what
+	Nautilus does.  (#136196, Sean Middleditch)
+
 2005-06-10  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkaccellabel.c (_gtk_accel_label_class_get_accelerator_label): 

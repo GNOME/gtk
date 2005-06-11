@@ -1936,7 +1936,10 @@ create_file_info (const char     *filename,
     }
 
   if (types & GTK_FILE_INFO_IS_HIDDEN)
-    gtk_file_info_set_is_hidden (info, basename[0] == '.');
+    {
+      if (basename[0] == '.' || basename[strlen (basename) - 1] == '~')
+	gtk_file_info_set_is_hidden (info, TRUE);
+    }
 
   if (types & GTK_FILE_INFO_IS_FOLDER)
     gtk_file_info_set_is_folder (info, S_ISDIR (statbuf->st_mode));
