@@ -597,12 +597,17 @@ _gtk_accel_label_class_get_accelerator_label (GtkAccelLabelClass *klass,
       else 
 	{
 	  gchar msg[128];
+	  gchar *str;
       
 	  strcpy (msg, "keyboard label|");
 	  g_strlcat (msg, tmp, 128);
-	  tmp = g_strip_context (msg, dgettext (GETTEXT_PACKAGE, msg));
-	  substitute_underscores (tmp);
+	  str = dgettext (GETTEXT_PACKAGE, msg);
+	  if (str == msg)
+	    substitute_underscores (tmp);
+	  else
+	    tmp = str;
 	}
+
       g_string_append (gstring, tmp);
     }
 

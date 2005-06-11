@@ -1,3 +1,8 @@
+2005-06-10  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkaccellabel.c (_gtk_accel_label_class_get_accelerator_label): 
+	Don't modify strings returned from gettext().
+
 Fri Jun 10 19:06:03 2005  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtktextdisplay.c (render_para): don't use deprecated
