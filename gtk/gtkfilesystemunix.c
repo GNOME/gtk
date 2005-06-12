@@ -43,6 +43,8 @@
 
 #define BOOKMARKS_FILENAME ".gtk-bookmarks"
 
+#define HIDDEN_FILENAME ".hidden"
+
 #define FOLDER_CACHE_LIFETIME 2 /* seconds */
 
 typedef struct _GtkFileSystemUnixClass GtkFileSystemUnixClass;
@@ -112,6 +114,7 @@ struct _GtkFileFolderUnix
   guint have_stat : 1;
   guint have_mime_type : 1;
   guint is_network_dir : 1;
+  guint have_hidden : 1;
   time_t asof;
 };
 
@@ -119,6 +122,7 @@ struct stat_info_entry {
   struct stat statbuf;
   char *mime_type;
   IconType icon_type;
+  gboolean hidden;
 };
 
 static const GtkFileInfoType STAT_NEEDED_MASK = (GTK_FILE_INFO_IS_FOLDER |
@@ -225,9 +229,13 @@ static GtkFilePath *filename_to_path   (const gchar       *filename);
 
 static gboolean     filename_is_root  (const char       *filename);
 
+static gboolean file_is_hidden (GtkFileFolderUnix *folder_unix,
+				const char        *basename);
+
 static gboolean fill_in_names (GtkFileFolderUnix *folder_unix, GError **error);
 static void fill_in_stats (GtkFileFolderUnix *folder_unix);
 static void fill_in_mime_type (GtkFileFolderUnix *folder_unix);
+static void fill_in_hidden (GtkFileFolderUnix *folder_unix);
 
 static char *       get_parent_dir    (const char       *filename);
 
@@ -421,6 +429,7 @@ gtk_file_system_unix_get_folder (GtkFileSystem     *file_system,
 	  folder_unix->stat_info = NULL;
 	  folder_unix->have_mime_type = FALSE;
 	  folder_unix->have_stat = FALSE;
+	  folder_unix->have_hidden = FALSE;
 	}
 
       g_object_ref (folder_unix);
@@ -480,6 +489,7 @@ gtk_file_system_unix_get_folder (GtkFileSystem     *file_system,
       folder_unix->asof = now;
       folder_unix->have_mime_type = FALSE;
       folder_unix->have_stat = FALSE;
+      folder_unix->have_hidden = FALSE;
 
       if ((system_unix->have_afs &&
 	   system_unix->afs_statbuf.st_dev == statbuf.st_dev &&
@@ -1918,11 +1928,12 @@ stat_with_error (const char   *filename,
 
 /* Creates a new GtkFileInfo from the specified data */
 static GtkFileInfo *
-create_file_info (const char     *filename,
-		  const char     *basename,
-		  GtkFileInfoType types,
-		  struct stat    *statbuf,
-		  const char     *mime_type)
+create_file_info (GtkFileFolderUnix *folder_unix,
+                  const char        *filename,
+		  const char        *basename,
+		  GtkFileInfoType    types,
+		  struct stat       *statbuf,
+		  const char        *mime_type)
 {
   GtkFileInfo *info;
 
@@ -1937,7 +1948,7 @@ create_file_info (const char     *filename,
 
   if (types & GTK_FILE_INFO_IS_HIDDEN)
     {
-      if (basename[0] == '.' || basename[strlen (basename) - 1] == '~')
+      if (file_is_hidden (folder_unix, basename))
 	gtk_file_info_set_is_hidden (info, TRUE);
     }
 
@@ -2038,7 +2049,7 @@ gtk_file_folder_unix_get_info (GtkFileFolder      *folder,
 	  entry = create_stat_info_entry_and_emit_add (folder_unix, filename, basename, &statbuf);
 	}
 
-      info = create_file_info (filename, basename, types, &entry->statbuf, entry->mime_type);
+      info = create_file_info (folder_unix, filename, basename, types, &entry->statbuf, entry->mime_type);
       g_free (basename);
       return info;
     }
@@ -2055,7 +2066,7 @@ gtk_file_folder_unix_get_info (GtkFileFolder      *folder,
       else
 	mime_type = NULL;
 
-      info = create_file_info (filename, basename, types, &statbuf, mime_type);
+      info = create_file_info (folder_unix, filename, basename, types, &statbuf, mime_type);
       g_free (basename);
       return info;
     }
@@ -2228,6 +2239,43 @@ fill_in_mime_type (GtkFileFolderUnix *folder_unix)
   folder_unix->have_mime_type = TRUE;
 }
 
+static void
+fill_in_hidden (GtkFileFolderUnix *folder_unix)
+{
+  gchar *hidden_file;
+  gchar *contents;
+  
+  if (folder_unix->have_hidden)
+    return;
+
+  hidden_file = g_build_filename (folder_unix->filename, HIDDEN_FILENAME, NULL);
+
+  if (g_file_get_contents (hidden_file, &contents, NULL, NULL))
+    {
+      gchar **lines; 
+      int i;
+      
+      lines = g_strsplit (contents, "\n", -1);
+      for (i = 0; lines[i]; i++)
+	{
+	  if (lines[i][0])
+	    {
+	      struct stat_info_entry *entry;
+	      
+	      entry = g_hash_table_lookup (folder_unix->stat_info, lines[i]);
+	      if (entry != NULL)
+		entry->hidden = TRUE;
+	    }
+	}
+      
+      g_strfreev (lines);
+      g_free (contents);
+    }
+
+  g_free (hidden_file);
+  folder_unix->have_hidden = TRUE;
+}
+
 static GtkFilePath *
 filename_to_path (const char *filename)
 {
@@ -2245,6 +2293,28 @@ filename_is_root (const char *filename)
   after_root = g_path_skip_root (filename);
 
   return (after_root != NULL && *after_root == '\0');
+}
+
+static gboolean
+file_is_hidden (GtkFileFolderUnix *folder_unix,
+		const char        *basename)
+{
+ struct stat_info_entry *entry;
+
+  if (basename[0] == '.' || basename[strlen (basename) - 1] == '~')
+    return TRUE;
+ 
+  if (folder_unix->have_stat)
+    {
+      fill_in_hidden (folder_unix);
+      
+      entry = g_hash_table_lookup (folder_unix->stat_info, basename);
+  
+      if (entry)
+	return entry->hidden;
+    }
+
+  return FALSE;
 }
 
 #define __GTK_FILE_SYSTEM_UNIX_C__

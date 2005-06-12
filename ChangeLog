@@ -1,3 +1,8 @@
+2005-06-12  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilesystemunix.c: Support .hidden files.  (#129170,
+	Sayamindu Dasgupta, patch by Jan Arne Petersen)
+
 2005-06-11  Matthias Clasen  <mclasen@redhat.com>
 
 	* NEWS: Updates.
