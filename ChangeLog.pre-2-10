@@ -1,3 +1,8 @@
+2005-06-12  Kjartan Maraas  <kmaraas@gnome.org>
+
+	* gdk/x11/gdkasync.c: (send_event_handler): Plug
+	a leak. Closes bug #307281.
+
 2005-06-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcalendar.c (calendar_paint_header): 
