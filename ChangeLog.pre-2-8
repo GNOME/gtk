@@ -1,5 +1,10 @@
 2005-06-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcalendar.c (calendar_paint_header): 
+	(gtk_calendar_size_request): Allow localization of the
+	format in which the year is displayed.  (#135451, Paisa 
+	Seeluangsawat)
+
 	* gdk/*.h: Cleanup.  (#169648, Fabricio Barros Cabral)
 
 	* gdk/gdkcairo.c: Small doc additions.

@@ -1535,16 +1535,21 @@ gtk_calendar_size_request (GtkWidget	  *widget,
 					       logical_rect.width + 8);
 	  max_header_height = MAX (max_header_height, logical_rect.height); 
 	}
+
       priv->max_year_width = 0;
-      for (i=0; i<10; i++)
-	{
-	  g_snprintf (buffer, sizeof (buffer), "%d%d%d%d", i,i,i,i);
-	  pango_layout_set_text (layout, buffer, -1);	  
-	  pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
-	  priv->max_year_width = MAX (priv->max_year_width,
-					      logical_rect.width + 8);
-	  max_header_height = MAX (max_header_height, logical_rect.height); 
-	}
+      /* Translators:  This is a text measurement template.
+       * Translate it to the widest year text. 
+       * 
+       * Don't include the prefix "year measurement template|" 
+       * in the translation.
+       *
+       * If you don't understand this, leave it as "2000"
+       */
+      pango_layout_set_text (layout, Q_("year measurement template|2000"), -1);	  
+      pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
+      priv->max_year_width = MAX (priv->max_year_width,
+				  logical_rect.width + 8);
+      max_header_height = MAX (max_header_height, logical_rect.height); 
     } 
   else 
     {
@@ -1780,6 +1785,9 @@ calendar_paint_header (GtkCalendar *calendar)
   PangoLayout *layout;
   PangoRectangle logical_rect;
   gboolean year_left;
+  time_t tmp_time;
+  struct tm *tm;
+  gchar *str;
 
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR) 
     year_left = priv->year_before;
@@ -1798,10 +1806,27 @@ calendar_paint_header (GtkCalendar *calendar)
 		    GTK_STATE_NORMAL, GTK_SHADOW_OUT,
 		    NULL, widget, "calendar",
 		    0, 0, header_width, priv->header_h);
+
+  tmp_time = 1;  /* Jan 1 1970, 00:00:01 UTC */
+  tm = gmtime (&tmp_time);
+  tm->tm_year = calendar->year - 1900;
+
+  /* Translators: This dictates how the year is displayed in
+   * gtkcalendar widget.  See strftime() manual for the format.
+   * Use only ASCII in the translation.
+   *
+   * Also look for the msgid "year measurement template|2000".  
+   * Translate that entry to a year with the widest output of this
+   * msgid. 
+   * 
+   * Don't include the prefix "calendar year format|" in the 
+   * translation. "%Y" is appropriate for most locales.
+   */
+  strftime (buffer, sizeof (buffer), Q_("calendar year format|%Y"), tm);
+  str = g_locale_to_utf8 (buffer, -1, NULL, NULL, NULL);
+  layout = gtk_widget_create_pango_layout (widget, str);
+  g_free (str);
   
-  
-  g_snprintf (buffer, sizeof (buffer), "%d", calendar->year);
-  layout = gtk_widget_create_pango_layout (widget, buffer);
   pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
   
   /* Draw title */
