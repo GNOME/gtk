@@ -30,9 +30,7 @@
 #include <gdk/win32/gdkdrawable-win32.h>
 #include <gdk/gdkpixmap.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 /* Pixmap implementation for Win32
  */
@@ -64,8 +62,6 @@ struct _GdkPixmapImplWin32Class
 
 GType _gdk_pixmap_impl_win32_get_type (void);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif /* __GDK_PIXMAP_WIN32_H__ */

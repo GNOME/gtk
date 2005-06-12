@@ -22,9 +22,7 @@
 
 #include <gdk/gdktypes.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 /* Pango interaction */
 
@@ -151,8 +149,6 @@ struct _GdkPangoAttrEmbossed
 PangoAttribute *gdk_pango_attr_stipple_new  (GdkBitmap *stipple);
 PangoAttribute *gdk_pango_attr_embossed_new (gboolean embossed);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif /* __GDK_FONT_H__ */

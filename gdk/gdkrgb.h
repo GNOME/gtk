@@ -29,9 +29,7 @@
 
 #include <gdk/gdktypes.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 typedef struct _GdkRgbCmap GdkRgbCmap;
 
@@ -140,9 +138,7 @@ gboolean     gdk_rgb_ditherable   (void);
 gboolean     gdk_rgb_colormap_ditherable (GdkColormap *cmap);
 #endif
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 
 #endif /* __GDK_RGB_H__ */

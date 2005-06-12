@@ -3,9 +3,7 @@
 
 #include <gdk/gdktypes.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 typedef enum
 {
@@ -90,8 +88,6 @@ gboolean gdk_utf8_to_compound_text_for_display   (GdkDisplay   *display,
 void gdk_free_text_list             (gchar        **list);
 void gdk_free_compound_text         (guchar        *ctext);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif /* __GDK_PROPERTY_H__ */

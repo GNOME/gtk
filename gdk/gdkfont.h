@@ -6,9 +6,7 @@
 #include <gdk/gdktypes.h>
 #include <pango/pango-font.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GDK_TYPE_FONT gdk_font_get_type ()
 
@@ -107,9 +105,7 @@ GdkDisplay * gdk_font_get_display (GdkFont *font);
 
 #endif /* GDK_DISABLE_DEPRECATED */
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif /* __GDK_FONT_H__ */
 

@@ -5,9 +5,7 @@
 #include <gdk/gdktypes.h>
 #include <gdk/gdkevents.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 typedef struct _GdkGeometry           GdkGeometry;
 typedef struct _GdkWindowAttr	      GdkWindowAttr;
@@ -587,8 +585,6 @@ GdkWindow *gdk_get_default_root_window (void);
    gdk_draw_pixmap(drawable,gc,source_drawable,source_x,source_y,x,y,width,height)
 #endif /* GDK_DISABLE_DEPRECATED */
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif /* __GDK_WINDOW_H__ */

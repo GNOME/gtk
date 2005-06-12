@@ -3,9 +3,7 @@
 
 #include <gdk/gdktypes.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 typedef struct _GdkDragContext        GdkDragContext;
 
@@ -138,8 +136,6 @@ void            gdk_drag_abort       (GdkDragContext *context,
 				      guint32         time_);
 gboolean        gdk_drag_drop_succeeded (GdkDragContext *context);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif /* __GDK_DND_H__ */

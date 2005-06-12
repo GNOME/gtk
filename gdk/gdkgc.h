@@ -4,9 +4,7 @@
 #include <gdk/gdkcolor.h>
 #include <gdk/gdktypes.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 typedef struct _GdkGCValues	      GdkGCValues;
 typedef struct _GdkGCClass	      GdkGCClass;
@@ -269,8 +267,6 @@ GdkScreen *  gdk_gc_get_screen	     (GdkGC          *gc);
 #define gdk_gc_destroy                 gdk_gc_unref
 #endif /* GDK_DISABLE_DEPRECATED */
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif /* __GDK_DRAWABLE_H__ */

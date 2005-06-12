@@ -3,9 +3,7 @@
 
 #include <gdk/gdktypes.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GDK_TYPE_DEVICE              (gdk_device_get_type ())
 #define GDK_DEVICE(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_DEVICE, GdkDevice))
@@ -142,8 +140,6 @@ void gdk_input_set_extension_events (GdkWindow        *window,
 GdkDevice *gdk_device_get_core_pointer (void);
 #endif
  
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif /* __GDK_INPUT_H__ */

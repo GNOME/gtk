@@ -56,9 +56,7 @@
 
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 
 /* Type definitions for the basic structures.
@@ -202,9 +200,7 @@ struct _GdkSpan
   gint width;
 };
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 
 #endif /* __GDK_TYPES_H__ */

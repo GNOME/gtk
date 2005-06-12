@@ -8,9 +8,7 @@
 
 #include <cairo.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 typedef struct _GdkDrawableClass GdkDrawableClass;
 typedef struct _GdkTrapezoid     GdkTrapezoid;
@@ -391,8 +389,6 @@ GdkImage *gdk_drawable_copy_to_image (GdkDrawable  *drawable,
 GdkRegion *gdk_drawable_get_clip_region    (GdkDrawable *drawable);
 GdkRegion *gdk_drawable_get_visible_region (GdkDrawable *drawable);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif /* __GDK_DRAWABLE_H__ */

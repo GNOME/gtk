@@ -6,9 +6,7 @@
 #include <gdk/gdkdnd.h>
 #include <gdk/gdkinput.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GDK_TYPE_EVENT          (gdk_event_get_type ())
 
@@ -512,8 +510,6 @@ gboolean gdk_setting_get (const gchar *name,
 			  GValue      *value); 
 #endif /* GDK_MULTIHEAD_SAFE */
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif /* __GDK_EVENTS_H__ */

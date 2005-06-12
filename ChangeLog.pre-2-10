@@ -1,5 +1,7 @@
 2005-06-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/*.h: Cleanup.  (#169648, Fabricio Barros Cabral)
+
 	* gdk/gdkcairo.c: Small doc additions.
 
 	* gtk/gtktreeview.c (gtk_tree_view_maybe_begin_dragging_row): 

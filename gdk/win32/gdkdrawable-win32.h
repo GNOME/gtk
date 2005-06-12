@@ -30,9 +30,7 @@
 #include <gdk/gdkdrawable.h>
 #include <gdk/win32/gdkwin32.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 /* Drawable implementation for Win32
  */
@@ -72,8 +70,6 @@ HDC  _gdk_win32_drawable_acquire_dc (GdkDrawable *drawable);
 void _gdk_win32_drawable_release_dc (GdkDrawable *drawable);
 void _gdk_win32_drawable_finish     (GdkDrawable *drawable);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif /* __GDK_DRAWABLE_WIN32_H__ */

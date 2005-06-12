@@ -36,9 +36,7 @@
 
 #include <X11/Xmd.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+G_BEGIN_DECLS
 
 typedef struct {
     unsigned long flags;
@@ -133,8 +131,6 @@ typedef PropMotifWmInfo PropMwmInfo;
 #define PROP_MOTIF_WM_INFO_ELEMENTS 2
 #define PROP_MWM_INFO_ELEMENTS PROP_MOTIF_WM_INFO_ELEMENTS
 
-#ifdef __cplusplus
-}
-#endif
+G_END_DECLS
 
 #endif /* MWMUTIL_H_INCLUDED */

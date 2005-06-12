@@ -383,8 +383,6 @@ void _gdk_windowing_gc_get_background (GdkGC    *gc,
 void _gdk_image_exit  (void);
 void _gdk_windowing_exit (void);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif /* __GDK_INTERNALS_H__ */

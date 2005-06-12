@@ -30,9 +30,7 @@
 #include <gdk/x11/gdkdrawable-x11.h>
 #include <gdk/gdkpixmap.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 /* Pixmap implementation for X11
  */
@@ -65,8 +63,6 @@ struct _GdkPixmapImplX11Class
 
 GType gdk_pixmap_impl_x11_get_type (void);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif /* __GDK_PIXMAP_X11_H__ */

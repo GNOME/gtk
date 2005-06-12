@@ -4,9 +4,7 @@
 #include <gdk/gdktypes.h>
 #include <gdk/gdkdrawable.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 typedef struct _GdkPixmapObject GdkPixmapObject;
 typedef struct _GdkPixmapObjectClass GdkPixmapObjectClass;
@@ -92,8 +90,6 @@ GdkPixmap*    gdk_pixmap_lookup_for_display      (GdkDisplay      *display,
 #define gdk_pixmap_unref               gdk_drawable_unref
 #endif /* GDK_DISABLE_DEPRECATED */
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif /* __GDK_PIXMAP_H__ */

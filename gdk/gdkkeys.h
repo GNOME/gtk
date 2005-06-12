@@ -29,9 +29,7 @@
 
 #include <gdk/gdktypes.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 typedef struct _GdkKeymapKey GdkKeymapKey;
 
@@ -120,8 +118,6 @@ guint32  gdk_keyval_to_unicode   (guint        keyval) G_GNUC_CONST;
 guint    gdk_unicode_to_keyval   (guint32      wc) G_GNUC_CONST;
 
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif /* __GDK_KEYS_H__ */

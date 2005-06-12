@@ -3,9 +3,7 @@
 
 #include <gdk/gdktypes.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 /* Predefined atoms relating to selections. In general, one will need to use
  * gdk_intern_atom
@@ -78,8 +76,6 @@ void       gdk_selection_send_notify_for_display (GdkDisplay *display,
 						  GdkAtom     property,
 						  guint32     time_);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif /* __GDK_SELECTION_H__ */

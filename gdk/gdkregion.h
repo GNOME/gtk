@@ -3,9 +3,7 @@
 
 #include <gdk/gdktypes.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 /* GC fill rule for polygons
  *  EvenOddRule
@@ -79,9 +77,7 @@ void gdk_region_spans_intersect_foreach (GdkRegion   *region,
 					 GdkSpanFunc  function,
 					 gpointer     data);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif /* __GDK_REGION_H__ */
 
