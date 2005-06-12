@@ -1,5 +1,9 @@
 2005-06-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeview.c (gtk_tree_view_maybe_begin_dragging_row): 
+	Check start_button_mask before starting a drag.  (#149058, 
+	Andreas Volz)
+
 	* gtk/gtkfilesystemunix.c: Support .hidden files.  (#129170,
 	Sayamindu Dasgupta, patch by Jan Arne Petersen)
 
