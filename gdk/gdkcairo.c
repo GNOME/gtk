@@ -32,7 +32,7 @@
  * Return value: A newly created Cairo context. Free with
  *  cairo_destroy() when you are done drawing.
  * 
- * Since: 2.10
+ * Since: 2.8
  **/
 cairo_t *
 gdk_cairo_create (GdkDrawable *drawable)
@@ -77,6 +77,8 @@ gdk_cairo_set_source_color (cairo_t  *cr,
  * @rectangle: a #GdkRectangle
  * 
  * Adds the given rectangle to the current path of @cr.
+ *
+ * Since: 2.8
  **/
 void
 gdk_cairo_rectangle (cairo_t      *cr,
@@ -96,6 +98,8 @@ gdk_cairo_rectangle (cairo_t      *cr,
  * @region: a #GdkRegion
  * 
  * Adds the given region to the current path of @cr.
+ *
+ * Since: 2.8
  **/
 void
 gdk_cairo_region (cairo_t   *cr,
@@ -128,6 +132,8 @@ gdk_cairo_region (cairo_t   *cr,
  * Sets the given pixbuf as the source pattern for the Cairo context.
  * The pattern has an extend mode of %CAIRO_EXTEND_NONE and is aligned
  * so that the origin of @pixbuf is @pixbuf_x, @pixbuf_y
+ *
+ * Since: 2.8
  **/
 void
 gdk_cairo_set_source_pixbuf (cairo_t   *cr,
