@@ -1,5 +1,7 @@
 2005-06-11  Matthias Clasen  <mclasen@redhat.com>
 
+	* NEWS: Updates.
+
 	* gtk/gtkwidget.c (gtk_widget_set_app_paintable): More docs
 	provided by Owen Taylor.
 
@@ -169,6 +171,9 @@ Fri Jun 10 19:06:03 2005  Manish Singh  <yosh@gimp.org>
 	* gtk/gtkimage.c: Make the file property readable.  
 	(#170674, Lorenzo Gil Sanchez)
 
+==================================================================
+==================================================================
+	
 2005-06-08  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilesystem.c (gtk_file_info_get_display_key): Use
@@ -1237,7 +1242,7 @@ Mon Apr  4 12:14:35 2005  Søren Sandmann  <sandmann@redhat.com>
 	* gtk/gtkradiobutton.c (gtk_radio_button_class_init): Fix
 	a typo in the docs.
 	(gtk_radio_button_set_group): Add change notification.
-
+	
 2005-04-01  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkselection.c: Move documentation inline, document

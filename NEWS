@@ -1,3 +1,131 @@
+Overview of Changes from GTK+ 2.6.x to GTK+ 2.7.0
+=================================================
+* GtkTreeView
+ - Allow to "unsort" columns. [Richard Hult]
+ - Support wrapping in GtkCellRendererText [Matthias Clasen]
+ - Support tinting in GtkCellRendererPixbuf [Jorn Baayen]
+ - Make enable-search control only typeahead search,
+   not C-f search. [Sven Neumann]
+ - Make double-click autosize treeview columns again [Matthias]
+ - Fix insensitive appearance [Billy Biggs, Matthias]
+* GtkFileChooser
+ - Don't select the first item in folder modes [Christian Neumair,
+   Federico Mena Quintero]
+ - Allow bookmarks to be renamed [Sean Middleditch]
+ - Ellipsize the preview label [Jeroen Zwartepoorte]
+ - Use smaller icons [Vincent Noel]
+ - Avoid a size allocation loop [Milosz Derzynski, Robert Ögren]
+ - Don't stat children of /afs or /net network directories [Federico]
+ - Improve sorting of filenames [Matthias]
+ - Treat backup files like hidden files [Sean Middleditch]
+* GtkIconView
+ - Many fixes for scrolling and selection handling [Mathias Hasselmann]
+ - Implement GtkCellLayout, use cell renderers [Matthias]
+ - Support editing [Matthias]
+ - Support DND [Matthias]
+ - Add API to determine the visible part of the 
+   model [Jonathan Blandford]
+* GtkAboutDialog
+ - Visual improvements, HIG compliance [Jorn Baayen]
+* GtkCalendar
+ - Use nl_langinfo() to determine the first day of week,
+   when it is available [Vincent Untz, Tommi Komulainen]
+* GtkEntry
+ - Allow completion popups to be wider than the entry [Ross Burton]
+ - Add a property to suppress the popup for single matches [Matthias]
+ - Don't blink the cursor if not editable [Nikos Kouremenos]
+* GtkTextView
+ - Add a GtkTextBuffer::text property [Johan Dahlin]
+ - Allow to set a paragraph background color [Gustavo Carneiro,
+   Jeroen Zwartepoorte]
+ - Don't blink the cursor if not editable [Nikos Kouremenos]
+* GtkAlignment
+ - Flip padding in RTL mode [Maciej Katafiasz]
+* GtkMenu
+ - Support vertical menubars [Matthias]
+ - Make scrolling more efficient [Jorn Baayen, Søren Sandmann]
+* GtkUIManager
+ - Support invisible, expanding separators [Christian Persch]
+* GtkIconCache
+ - Cache image data and metadata as well [Anders Carlsson]
+* GtkMenu
+ - Allow to pop up menus without grabbing the 
+   keyboard [Michael Natterer]
+ - Allow setting background images on menus [Benjamin Otte]
+* gtk-demo
+ - Add demos for 2.6 features [Matthias, Mark McLoughlin]
+* Allow custom translation function for stock labels. [Funda Wang,
+  Diego Gonzalez]
+* Add 16x16 versions for some some icons which were missing
+  them [Jakub Steiner, Tuomas Kuosmanen, Vincent Noel]
+* Move a lot of constant data to the .rodata section [Matthias]
+* Don't copy property names, nicks and blurbs [Matthias]
+* Use Cairo for most drawing [Owen]
+* Allow themes to draw outside the widget's allocation [Owen]
+* Allow key names to be translated [Christian Rose]
+* GDK
+ - Work with XRender < 0.4 [Albert Chin, Billy Biggs]
+ - Add API to warp the pointer [Matthias]
+ - Support _NET_VIRTUAL_ROOTS [Carsten Haitzler]
+ - Add API to obtain the last user interaction time [Elijah
+   Newren]
+ - Make some large arrays const [Ben Maurer, Tommi Komulainen]
+ - Support Cairo drawing [Owen, Carl Worth]
+ - Support Visuals with alpha channel [Owen, Keith Packard]
+* gdk-pixbuf
+ - Support saving BMP [Ivan Wong Yat Cheung]
+ - Allow to specify compression level when saving
+   in PNG format [Sven Neumann]
+ - Add a way to construct animations from frames [Dom Lachowicz]
+ - Accept BMP v4 [Matthias]
+* Win32 changes
+ - Improve keyboard handling [Tor Lillqvist]
+ - Improve clipboard handling [Ivan Wong]
+ - Do delayed rendering for transfering images 
+   through the clipboard [Ivan Wong]
+ - Improve tablet handling [Robert Ögren]
+ - Initialize input devices lazily [Robert Ögren]
+ - Make big windows work on NT [Ivan Wong]
+ - Implement dashed lines correctly [Ivan Wong, Hans Breuer]
+ - Handle 16 color display mode [Tor] 
+ - Support RGBA cursors [Tim Evans]
+ - Fix DND on multi-monitor systems [Tor]
+ - Use alternative button order [Tor]
+ - Build fixes [Hans]
+ - Bug fixes [Ivan Wong, Dave Neary, Daniel Atallah, Takuro Ashie, 
+   Robert Ögren, Kevin Stange, Tim Evans]  
+* Other bug fixes [Alexander Hunziker, Alexander Larsson, Anders
+  Carlsson, Arjan van de Ven, Billy Biggs, Chris Lee, Christian Persch,
+  Crispin Flowerday, Damon Chaplin, David A. Knight, David Costanzo,
+  Dennis Cranston, Diego Gonzalez, Dom Lachowicz, Doug Morgan, Doug
+  Quale, Elijah Newren, Federico, Felipe Heidrich, Felix Riemann, Frank 
+  Naumann, Frederic Crozat, Gary Kramlich, Gustavo Carneiro, Hans-Wolfgang 
+  Loidl, Hazael Maldonado Torres, Ian Wienand, Ismael Juma, Jaap A. Haitsma, 
+  Jacob Kroon, Jakub Jellinek, Jean Marie Favreau, Jeff Franks, Jens Finke, 
+  Joerg Sonnenberger, John Ellis, John Finlay, Jonathan, Kazuki Iwamoto, 
+  Kjartan Maraas, Leonard Michlmayr, Lorenzo Gil Sanchez, Manish 
+  Singh, Marc Meissner, Matthias, Michael Natterer, Mikael Hallendal, 
+  Milosz Derezynski, Morten Welinder, Murray Cumming, Niko Tyni, Nguyen Thai
+  Ngoc Duy, Olaf Vitters, Olivier Sessink, Owen, Paolo Borelli, Patrick 
+  Fimml, Peter Wainwright, Phil Blundell, Philipp Langdale, Priit Laes, 
+  Remus Draica, Richard Hult, Robert Staudinger, Rodney Dawes, Rodrigo Moya, 
+  Roman Kagan, Ryan Lortie, Samuel Hym, Seven Walter, Søren, Stepan Kasal,
+  Stephen Kennedy, Sven Neumann, Theerud Lawtrakul, Thomas Leonard,
+  Thomas Zajic, Tim-Philipp Müller, Tomislav Jonjic, Tommi Komulainen,
+  Tristan Van Berkom, Victor Osadci, Vincent Ladeuil, Vincent Noel,
+  Vincent Untz, Yury Puzis]
+* Documentation improvements [Alex Graveley, Ali Akcaagac, Bill
+  Haneman, Billy Biggs, Christian Persch, Christian Rose, Dan Winship,
+  George Kraft IV, Ghorban M. Tavakoly, Hubert Sokolowski, Jeff Franks,
+  Jianfei Wang, Johan Dahlin, Jon-Kare Hellan, Karel Kulhavy, Ken
+  Siersma, Maciej Katafiasz, Masao Mutoh, Mathias Hasselmann, Matthias,
+  Morten Welinder, Murray Cumming, Oliver Sessink, Owen, Richard Hult, 
+  Roger Light, Sebastian Bacher, Steve Chaplin, Sven Neumann, Torsten 
+  Schoenfeld, Vincent Untz, Worik Stanton]
+* New and improved translations (bg,ca,cs,cy,da,de,el,en_CA,en_GB,es,et,
+  eu,fa,fi,hu,id,ja,nb,ne,nl,nn,no,pl,pt,pt_BR,ro,ru,rw,sk,sq,sr,sr@Latn,
+  sv,uk,vi,xh,zh_CN,zh_TW)
+
 Overview of Changes from GTK+ 2.6.0 to GTK+ 2.6.1
 =================================================
 * GtkFileChooser
