@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-05-29 06:45+0000\n"
-"PO-Revision-Date: 2005-05-29 14:00+0200\n"
+"POT-Creation-Date: 2005-06-12 06:40+0000\n"
+"PO-Revision-Date: 2005-06-12 15:29+0200\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -220,19 +220,19 @@ msgstr "Barva odkazu"
 msgid "Color of hyperlinks"
 msgstr "Barva odkazů"
 
-#: ../gtk/gtkaccellabel.c:140
+#: ../gtk/gtkaccellabel.c:143
 msgid "Accelerator Closure"
 msgstr "Objekt akcelerátoru"
 
-#: ../gtk/gtkaccellabel.c:141
+#: ../gtk/gtkaccellabel.c:144
 msgid "The closure to be monitored for accelerator changes"
 msgstr "Objekt, který sledovat pro změny akcelerátoru"
 
-#: ../gtk/gtkaccellabel.c:147
+#: ../gtk/gtkaccellabel.c:150
 msgid "Accelerator Widget"
 msgstr "Widget akcelerátoru"
 
-#: ../gtk/gtkaccellabel.c:148
+#: ../gtk/gtkaccellabel.c:151
 msgid "The widget to be monitored for accelerator changes"
 msgstr "Widget, který sledovat pro změny akcelerátoru"
 
@@ -1011,7 +1011,7 @@ msgstr "Pixbuf zavřeného rozbalovače"
 msgid "Pixbuf for closed expander"
 msgstr "Pixbuf pro zavřený rozbalovač"
 
-#: ../gtk/gtkcellrendererpixbuf.c:169 ../gtk/gtkimage.c:201
+#: ../gtk/gtkcellrendererpixbuf.c:169 ../gtk/gtkimage.c:204
 msgid "Stock ID"
 msgstr "Standardní ID"
 
@@ -1035,12 +1035,12 @@ msgstr "Detail"
 msgid "Render detail to pass to the theme engine"
 msgstr "Detail zobrazení předávaný vykreslovači témat"
 
-#: ../gtk/gtkcellrendererpixbuf.c:205 ../gtk/gtkimage.c:259
+#: ../gtk/gtkcellrendererpixbuf.c:205 ../gtk/gtkimage.c:262
 #: ../gtk/gtkwindow.c:529
 msgid "Icon Name"
 msgstr "Název ikony"
 
-#: ../gtk/gtkcellrendererpixbuf.c:206 ../gtk/gtkimage.c:260
+#: ../gtk/gtkcellrendererpixbuf.c:206 ../gtk/gtkimage.c:263
 msgid "The name of the icon from the icon theme"
 msgstr "Název ikony z tématu ikon"
 
@@ -1095,17 +1095,17 @@ msgid "Whether or not to keep all text in a single paragraph"
 msgstr "Jestli udržovat všechen text v jednom odstavci"
 
 #: ../gtk/gtkcellrenderertext.c:252 ../gtk/gtkcellview.c:183
-#: ../gtk/gtktexttag.c:208
+#: ../gtk/gtktexttag.c:211
 msgid "Background color name"
 msgstr "Název barvy pozadí"
 
 #: ../gtk/gtkcellrenderertext.c:253 ../gtk/gtkcellview.c:184
-#: ../gtk/gtktexttag.c:209
+#: ../gtk/gtktexttag.c:212
 msgid "Background color as a string"
 msgstr "Barva pozadí jako řetězec"
 
 #: ../gtk/gtkcellrenderertext.c:260 ../gtk/gtkcellview.c:190
-#: ../gtk/gtktexttag.c:216
+#: ../gtk/gtktexttag.c:219
 msgid "Background color"
 msgstr "Barva pozadí"
 
@@ -1113,15 +1113,15 @@ msgstr "Barva pozadí"
 msgid "Background color as a GdkColor"
 msgstr "Barva pozadí jako GdkColor"
 
-#: ../gtk/gtkcellrenderertext.c:268 ../gtk/gtktexttag.c:242
+#: ../gtk/gtkcellrenderertext.c:268 ../gtk/gtktexttag.c:245
 msgid "Foreground color name"
 msgstr "Název barvy popředí"
 
-#: ../gtk/gtkcellrenderertext.c:269 ../gtk/gtktexttag.c:243
+#: ../gtk/gtkcellrenderertext.c:269 ../gtk/gtktexttag.c:246
 msgid "Foreground color as a string"
 msgstr "Název barvy popředí jako řetězec"
 
-#: ../gtk/gtkcellrenderertext.c:276 ../gtk/gtktexttag.c:250
+#: ../gtk/gtkcellrenderertext.c:276 ../gtk/gtktexttag.c:253
 msgid "Foreground color"
 msgstr "Barva popředí"
 
@@ -1130,17 +1130,17 @@ msgid "Foreground color as a GdkColor"
 msgstr "Barva popředí jako GdkColor"
 
 #: ../gtk/gtkcellrenderertext.c:285 ../gtk/gtkentry.c:506
-#: ../gtk/gtktexttag.c:276 ../gtk/gtktextview.c:578
+#: ../gtk/gtktexttag.c:279 ../gtk/gtktextview.c:578
 msgid "Editable"
 msgstr "Upravitelné"
 
-#: ../gtk/gtkcellrenderertext.c:286 ../gtk/gtktexttag.c:277
+#: ../gtk/gtkcellrenderertext.c:286 ../gtk/gtktexttag.c:280
 #: ../gtk/gtktextview.c:579
 msgid "Whether the text can be modified by the user"
 msgstr "Jestli uživatel může měnit text"
 
 #: ../gtk/gtkcellrenderertext.c:293 ../gtk/gtkcellrenderertext.c:301
-#: ../gtk/gtkfontsel.c:223 ../gtk/gtktexttag.c:284 ../gtk/gtktexttag.c:292
+#: ../gtk/gtkfontsel.c:223 ../gtk/gtktexttag.c:287 ../gtk/gtktexttag.c:295
 msgid "Font"
 msgstr "Písmo"
 
@@ -1148,52 +1148,52 @@ msgstr "Písmo"
 msgid "Font description as a string"
 msgstr "Popis písma jako řetězec"
 
-#: ../gtk/gtkcellrenderertext.c:302 ../gtk/gtktexttag.c:293
+#: ../gtk/gtkcellrenderertext.c:302 ../gtk/gtktexttag.c:296
 msgid "Font description as a PangoFontDescription struct"
 msgstr "Popis písma jako struktura PangoFontDescription"
 
-#: ../gtk/gtkcellrenderertext.c:310 ../gtk/gtktexttag.c:301
+#: ../gtk/gtkcellrenderertext.c:310 ../gtk/gtktexttag.c:304
 msgid "Font family"
 msgstr "Rodina písma"
 
-#: ../gtk/gtkcellrenderertext.c:311 ../gtk/gtktexttag.c:302
+#: ../gtk/gtkcellrenderertext.c:311 ../gtk/gtktexttag.c:305
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
 msgstr "Název rodiny písma, např. Sans, Helvetica, Times, Monospace"
 
 #: ../gtk/gtkcellrenderertext.c:318 ../gtk/gtkcellrenderertext.c:319
-#: ../gtk/gtktexttag.c:309
+#: ../gtk/gtktexttag.c:312
 msgid "Font style"
 msgstr "Styl písma"
 
 #: ../gtk/gtkcellrenderertext.c:327 ../gtk/gtkcellrenderertext.c:328
-#: ../gtk/gtktexttag.c:318
+#: ../gtk/gtktexttag.c:321
 msgid "Font variant"
 msgstr "Varianta písma"
 
 #: ../gtk/gtkcellrenderertext.c:336 ../gtk/gtkcellrenderertext.c:337
-#: ../gtk/gtktexttag.c:327
+#: ../gtk/gtktexttag.c:330
 msgid "Font weight"
 msgstr "Řez písma"
 
 #: ../gtk/gtkcellrenderertext.c:346 ../gtk/gtkcellrenderertext.c:347
-#: ../gtk/gtktexttag.c:338
+#: ../gtk/gtktexttag.c:341
 msgid "Font stretch"
 msgstr "Rozteč písma"
 
 #: ../gtk/gtkcellrenderertext.c:355 ../gtk/gtkcellrenderertext.c:356
-#: ../gtk/gtktexttag.c:347
+#: ../gtk/gtktexttag.c:350
 msgid "Font size"
 msgstr "Velikost písma"
 
-#: ../gtk/gtkcellrenderertext.c:365 ../gtk/gtktexttag.c:367
+#: ../gtk/gtkcellrenderertext.c:365 ../gtk/gtktexttag.c:370
 msgid "Font points"
 msgstr "Počet bodů písma"
 
-#: ../gtk/gtkcellrenderertext.c:366 ../gtk/gtktexttag.c:368
+#: ../gtk/gtkcellrenderertext.c:366 ../gtk/gtktexttag.c:371
 msgid "Font size in points"
 msgstr "Velikost písma v bodech"
 
-#: ../gtk/gtkcellrenderertext.c:375 ../gtk/gtktexttag.c:357
+#: ../gtk/gtkcellrenderertext.c:375 ../gtk/gtktexttag.c:360
 msgid "Font scale"
 msgstr "Škálování písma"
 
@@ -1201,7 +1201,7 @@ msgstr "Škálování písma"
 msgid "Font scaling factor"
 msgstr "Faktor škálování písma"
 
-#: ../gtk/gtkcellrenderertext.c:385 ../gtk/gtktexttag.c:426
+#: ../gtk/gtkcellrenderertext.c:385 ../gtk/gtktexttag.c:429
 msgid "Rise"
 msgstr "Zvýšení"
 
@@ -1211,23 +1211,23 @@ msgid ""
 msgstr ""
 "Posun textu nad základní čáru (pod základní čáru, pokud je hodnota záporná)"
 
-#: ../gtk/gtkcellrenderertext.c:397 ../gtk/gtktexttag.c:466
+#: ../gtk/gtkcellrenderertext.c:397 ../gtk/gtktexttag.c:469
 msgid "Strikethrough"
 msgstr "Přeškrtnuti"
 
-#: ../gtk/gtkcellrenderertext.c:398 ../gtk/gtktexttag.c:467
+#: ../gtk/gtkcellrenderertext.c:398 ../gtk/gtktexttag.c:470
 msgid "Whether to strike through the text"
 msgstr "Jestli je text přeškrtnutý"
 
-#: ../gtk/gtkcellrenderertext.c:405 ../gtk/gtktexttag.c:474
+#: ../gtk/gtkcellrenderertext.c:405 ../gtk/gtktexttag.c:477
 msgid "Underline"
 msgstr "Podtržení"
 
-#: ../gtk/gtkcellrenderertext.c:406 ../gtk/gtktexttag.c:475
+#: ../gtk/gtkcellrenderertext.c:406 ../gtk/gtktexttag.c:478
 msgid "Style of underline for this text"
 msgstr "Styl podtržení pro tento text"
 
-#: ../gtk/gtkcellrenderertext.c:414 ../gtk/gtktexttag.c:386
+#: ../gtk/gtkcellrenderertext.c:414 ../gtk/gtktexttag.c:389
 msgid "Language"
 msgstr "Jazyk"
 
@@ -1263,7 +1263,7 @@ msgstr "Šířka ve znacích"
 msgid "The desired width of the label, in characters"
 msgstr "Požadovaná šířka popisku ve znacích"
 
-#: ../gtk/gtkcellrenderertext.c:474 ../gtk/gtktexttag.c:483
+#: ../gtk/gtkcellrenderertext.c:474 ../gtk/gtktexttag.c:486
 msgid "Wrap mode"
 msgstr "Režim zalamování"
 
@@ -1284,116 +1284,116 @@ msgid "The width at which the text is wrapped"
 msgstr "Šíčka, na kterou je text zalamován"
 
 #: ../gtk/gtkcellrenderertext.c:507 ../gtk/gtkcellview.c:198
-#: ../gtk/gtktexttag.c:511
+#: ../gtk/gtktexttag.c:545
 msgid "Background set"
 msgstr "Pozadí nastaveno"
 
 #: ../gtk/gtkcellrenderertext.c:508 ../gtk/gtkcellview.c:199
-#: ../gtk/gtktexttag.c:512
+#: ../gtk/gtktexttag.c:546
 msgid "Whether this tag affects the background color"
 msgstr "Jestli tento tag ovlivňuje barvu pozadí"
 
-#: ../gtk/gtkcellrenderertext.c:511 ../gtk/gtktexttag.c:523
+#: ../gtk/gtkcellrenderertext.c:511 ../gtk/gtktexttag.c:557
 msgid "Foreground set"
 msgstr "Popředí nastaveno"
 
-#: ../gtk/gtkcellrenderertext.c:512 ../gtk/gtktexttag.c:524
+#: ../gtk/gtkcellrenderertext.c:512 ../gtk/gtktexttag.c:558
 msgid "Whether this tag affects the foreground color"
 msgstr "Jestli tento tag ovlivňuje barvu popředí"
 
-#: ../gtk/gtkcellrenderertext.c:515 ../gtk/gtktexttag.c:531
+#: ../gtk/gtkcellrenderertext.c:515 ../gtk/gtktexttag.c:565
 msgid "Editability set"
 msgstr "Možnost úprav nastavena"
 
-#: ../gtk/gtkcellrenderertext.c:516 ../gtk/gtktexttag.c:532
+#: ../gtk/gtkcellrenderertext.c:516 ../gtk/gtktexttag.c:566
 msgid "Whether this tag affects text editability"
 msgstr "Jestli tento tag ovlivňuje upravitelnost textu"
 
-#: ../gtk/gtkcellrenderertext.c:519 ../gtk/gtktexttag.c:535
+#: ../gtk/gtkcellrenderertext.c:519 ../gtk/gtktexttag.c:569
 msgid "Font family set"
 msgstr "Rodina písma nastavena"
 
-#: ../gtk/gtkcellrenderertext.c:520 ../gtk/gtktexttag.c:536
+#: ../gtk/gtkcellrenderertext.c:520 ../gtk/gtktexttag.c:570
 msgid "Whether this tag affects the font family"
 msgstr "Jestli tento tag ovlivňuje rodinu písma"
 
-#: ../gtk/gtkcellrenderertext.c:523 ../gtk/gtktexttag.c:539
+#: ../gtk/gtkcellrenderertext.c:523 ../gtk/gtktexttag.c:573
 msgid "Font style set"
 msgstr "Styl písma nastaven"
 
-#: ../gtk/gtkcellrenderertext.c:524 ../gtk/gtktexttag.c:540
+#: ../gtk/gtkcellrenderertext.c:524 ../gtk/gtktexttag.c:574
 msgid "Whether this tag affects the font style"
 msgstr "Jestli tento tag ovlivňuje styl písma"
 
-#: ../gtk/gtkcellrenderertext.c:527 ../gtk/gtktexttag.c:543
+#: ../gtk/gtkcellrenderertext.c:527 ../gtk/gtktexttag.c:577
 msgid "Font variant set"
 msgstr "Varianta písma nastavena"
 
-#: ../gtk/gtkcellrenderertext.c:528 ../gtk/gtktexttag.c:544
+#: ../gtk/gtkcellrenderertext.c:528 ../gtk/gtktexttag.c:578
 msgid "Whether this tag affects the font variant"
 msgstr "Jestli tento tag ovlivňuje variantu písma"
 
-#: ../gtk/gtkcellrenderertext.c:531 ../gtk/gtktexttag.c:547
+#: ../gtk/gtkcellrenderertext.c:531 ../gtk/gtktexttag.c:581
 msgid "Font weight set"
 msgstr "Váha písma nastavena"
 
-#: ../gtk/gtkcellrenderertext.c:532 ../gtk/gtktexttag.c:548
+#: ../gtk/gtkcellrenderertext.c:532 ../gtk/gtktexttag.c:582
 msgid "Whether this tag affects the font weight"
 msgstr "Jestli tento tag ovlivňuje váhu písma"
 
-#: ../gtk/gtkcellrenderertext.c:535 ../gtk/gtktexttag.c:551
+#: ../gtk/gtkcellrenderertext.c:535 ../gtk/gtktexttag.c:585
 msgid "Font stretch set"
 msgstr "Rozteč písma nastavena"
 
-#: ../gtk/gtkcellrenderertext.c:536 ../gtk/gtktexttag.c:552
+#: ../gtk/gtkcellrenderertext.c:536 ../gtk/gtktexttag.c:586
 msgid "Whether this tag affects the font stretch"
 msgstr "Jestli tento tag ovlivňuje rozteč písma"
 
-#: ../gtk/gtkcellrenderertext.c:539 ../gtk/gtktexttag.c:555
+#: ../gtk/gtkcellrenderertext.c:539 ../gtk/gtktexttag.c:589
 msgid "Font size set"
 msgstr "Velikost písma nastavena"
 
-#: ../gtk/gtkcellrenderertext.c:540 ../gtk/gtktexttag.c:556
+#: ../gtk/gtkcellrenderertext.c:540 ../gtk/gtktexttag.c:590
 msgid "Whether this tag affects the font size"
 msgstr "Jestli tento tag ovlivňuje velikost písma"
 
-#: ../gtk/gtkcellrenderertext.c:543 ../gtk/gtktexttag.c:559
+#: ../gtk/gtkcellrenderertext.c:543 ../gtk/gtktexttag.c:593
 msgid "Font scale set"
 msgstr "Škálování písma nastaveno"
 
-#: ../gtk/gtkcellrenderertext.c:544 ../gtk/gtktexttag.c:560
+#: ../gtk/gtkcellrenderertext.c:544 ../gtk/gtktexttag.c:594
 msgid "Whether this tag scales the font size by a factor"
 msgstr "Jestli tento tag škáluje velikost písma o daný faktor"
 
-#: ../gtk/gtkcellrenderertext.c:547 ../gtk/gtktexttag.c:579
+#: ../gtk/gtkcellrenderertext.c:547 ../gtk/gtktexttag.c:613
 msgid "Rise set"
 msgstr "Vyvýšení nastaveno"
 
-#: ../gtk/gtkcellrenderertext.c:548 ../gtk/gtktexttag.c:580
+#: ../gtk/gtkcellrenderertext.c:548 ../gtk/gtktexttag.c:614
 msgid "Whether this tag affects the rise"
 msgstr "Jestli tento tag ovlivňuje vyvýšení"
 
-#: ../gtk/gtkcellrenderertext.c:551 ../gtk/gtktexttag.c:595
+#: ../gtk/gtkcellrenderertext.c:551 ../gtk/gtktexttag.c:629
 msgid "Strikethrough set"
 msgstr "Přeškrtnutí nastaveno"
 
-#: ../gtk/gtkcellrenderertext.c:552 ../gtk/gtktexttag.c:596
+#: ../gtk/gtkcellrenderertext.c:552 ../gtk/gtktexttag.c:630
 msgid "Whether this tag affects strikethrough"
 msgstr "Jestli tento tag ovlivňuje přeškrtnutí"
 
-#: ../gtk/gtkcellrenderertext.c:555 ../gtk/gtktexttag.c:603
+#: ../gtk/gtkcellrenderertext.c:555 ../gtk/gtktexttag.c:637
 msgid "Underline set"
 msgstr "Podtržení nastaveno"
 
-#: ../gtk/gtkcellrenderertext.c:556 ../gtk/gtktexttag.c:604
+#: ../gtk/gtkcellrenderertext.c:556 ../gtk/gtktexttag.c:638
 msgid "Whether this tag affects underlining"
 msgstr "Jestli tento tag ovlivňuje podtržení"
 
-#: ../gtk/gtkcellrenderertext.c:559 ../gtk/gtktexttag.c:567
+#: ../gtk/gtkcellrenderertext.c:559 ../gtk/gtktexttag.c:601
 msgid "Language set"
 msgstr "Jazyk nastaven"
 
-#: ../gtk/gtkcellrenderertext.c:560 ../gtk/gtktexttag.c:568
+#: ../gtk/gtkcellrenderertext.c:560 ../gtk/gtktexttag.c:602
 msgid "Whether this tag affects the language the text is rendered as"
 msgstr "Jestli tento tag ovlivňuje jazyk, ve kterém je zobrazený text"
 
@@ -2078,7 +2078,7 @@ msgstr "Implicitní backend výběru souborů"
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Název backendu GtkFileChooser, který používat implicitně"
 
-#: ../gtk/gtkfilesel.c:561 ../gtk/gtkimage.c:192
+#: ../gtk/gtkfilesel.c:561 ../gtk/gtkimage.c:195
 msgid "Filename"
 msgstr "Název souboru"
 
@@ -2370,85 +2370,85 @@ msgstr "Alfa obdélníku výběru"
 msgid "Opacity of the selection box"
 msgstr "Neprůhlednost obdélníku výběru"
 
-#: ../gtk/gtkimage.c:160
+#: ../gtk/gtkimage.c:163
 msgid "Pixbuf"
 msgstr "Pixbuf"
 
-#: ../gtk/gtkimage.c:161
+#: ../gtk/gtkimage.c:164
 msgid "A GdkPixbuf to display"
 msgstr "Zobrazovaný GdkPixbuf"
 
-#: ../gtk/gtkimage.c:168
+#: ../gtk/gtkimage.c:171
 msgid "Pixmap"
 msgstr "Pixmapa"
 
-#: ../gtk/gtkimage.c:169
+#: ../gtk/gtkimage.c:172
 msgid "A GdkPixmap to display"
 msgstr "GdkPixmap, kterou zobrazovat"
 
-#: ../gtk/gtkimage.c:176
+#: ../gtk/gtkimage.c:179
 msgid "Image"
 msgstr "Obrázek"
 
-#: ../gtk/gtkimage.c:177
+#: ../gtk/gtkimage.c:180
 msgid "A GdkImage to display"
 msgstr "GdkImage, který zobrazovat"
 
-#: ../gtk/gtkimage.c:184
+#: ../gtk/gtkimage.c:187
 msgid "Mask"
 msgstr "Maska"
 
-#: ../gtk/gtkimage.c:185
+#: ../gtk/gtkimage.c:188
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr "Bitová maska pro použití s GdkImage nebo GdkPixmap"
 
-#: ../gtk/gtkimage.c:193
+#: ../gtk/gtkimage.c:196
 msgid "Filename to load and display"
 msgstr "Název souboru, který načíst a zobrazit"
 
-#: ../gtk/gtkimage.c:202
+#: ../gtk/gtkimage.c:205
 msgid "Stock ID for a stock image to display"
 msgstr "Standardní ID pro zobrazení standardního obrázku"
 
-#: ../gtk/gtkimage.c:209
+#: ../gtk/gtkimage.c:212
 msgid "Icon set"
 msgstr "Skupina ikon"
 
-#: ../gtk/gtkimage.c:210
+#: ../gtk/gtkimage.c:213
 msgid "Icon set to display"
 msgstr "Skupina ikon, kterou zobrazovat"
 
-#: ../gtk/gtkimage.c:217
+#: ../gtk/gtkimage.c:220
 msgid "Icon size"
 msgstr "Velikost ikony"
 
-#: ../gtk/gtkimage.c:218
+#: ../gtk/gtkimage.c:221
 msgid "Symbolic size to use for stock icon, icon set or named icon"
 msgstr ""
 "Symbolická velikost, kterou používat pro standardní ikonu, skupinu ikon nebo "
 "pojmenovanou ikonu"
 
-#: ../gtk/gtkimage.c:234
+#: ../gtk/gtkimage.c:237
 msgid "Pixel size"
 msgstr "Velikost v pixelech"
 
-#: ../gtk/gtkimage.c:235
+#: ../gtk/gtkimage.c:238
 msgid "Pixel size to use for named icon"
 msgstr "Velikost v pixelech, kterou používat pro pojmenovanou ikonu"
 
-#: ../gtk/gtkimage.c:243
+#: ../gtk/gtkimage.c:246
 msgid "Animation"
 msgstr "Animace"
 
-#: ../gtk/gtkimage.c:244
+#: ../gtk/gtkimage.c:247
 msgid "GdkPixbufAnimation to display"
 msgstr "GdkPixbufAnimation, kterou zobrazovat"
 
-#: ../gtk/gtkimage.c:267
+#: ../gtk/gtkimage.c:270
 msgid "Storage type"
 msgstr "Typ uložení"
 
-#: ../gtk/gtkimage.c:268
+#: ../gtk/gtkimage.c:271
 msgid "The representation being used for image data"
 msgstr "Reprezentace používaná pro data obrázku"
 
@@ -2476,7 +2476,7 @@ msgstr "Text popisu"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Seznam atributů stylu, které použít na text popisu"
 
-#: ../gtk/gtklabel.c:350 ../gtk/gtktexttag.c:377 ../gtk/gtktextview.c:595
+#: ../gtk/gtklabel.c:350 ../gtk/gtktexttag.c:380 ../gtk/gtktextview.c:595
 msgid "Justification"
 msgstr "Zarovnání"
 
@@ -3800,23 +3800,23 @@ msgstr "Tabulka značek v textu"
 msgid "Current text of the buffer"
 msgstr "Aktuální text bufferu"
 
-#: ../gtk/gtktexttag.c:198
+#: ../gtk/gtktexttag.c:201
 msgid "Tag name"
 msgstr "Název značky"
 
-#: ../gtk/gtktexttag.c:199
+#: ../gtk/gtktexttag.c:202
 msgid "Name used to refer to the text tag. NULL for anonymous tags"
 msgstr "Název použitý pro odkaz na značku v textu. NULL pro anonymní značky"
 
-#: ../gtk/gtktexttag.c:217
+#: ../gtk/gtktexttag.c:220
 msgid "Background color as a (possibly unallocated) GdkColor"
 msgstr "Barva pozadí jako (možná nepřidělená) GdkColor"
 
-#: ../gtk/gtktexttag.c:224
+#: ../gtk/gtktexttag.c:227
 msgid "Background full height"
 msgstr "Plná výška pozadí"
 
-#: ../gtk/gtktexttag.c:225
+#: ../gtk/gtktexttag.c:228
 msgid ""
 "Whether the background color fills the entire line height or only the height "
 "of the tagged characters"
@@ -3824,47 +3824,47 @@ msgstr ""
 "Jestli barva pozadí vyplňuje celou výšku řádku nebo pouze výšku označených "
 "znaků"
 
-#: ../gtk/gtktexttag.c:233
+#: ../gtk/gtktexttag.c:236
 msgid "Background stipple mask"
 msgstr "Maska pozadí"
 
-#: ../gtk/gtktexttag.c:234
+#: ../gtk/gtktexttag.c:237
 msgid "Bitmap to use as a mask when drawing the text background"
 msgstr "Bitmapa, kterou používat jako masku při kreslení pozadí textu"
 
-#: ../gtk/gtktexttag.c:251
+#: ../gtk/gtktexttag.c:254
 msgid "Foreground color as a (possibly unallocated) GdkColor"
 msgstr "Barva popředí jako (možná nepřidělená) GdkColor"
 
-#: ../gtk/gtktexttag.c:259
+#: ../gtk/gtktexttag.c:262
 msgid "Foreground stipple mask"
 msgstr "Maska popředí"
 
-#: ../gtk/gtktexttag.c:260
+#: ../gtk/gtktexttag.c:263
 msgid "Bitmap to use as a mask when drawing the text foreground"
 msgstr "Bitmapa, kterou používat jako masku při kreslení popředí textu"
 
-#: ../gtk/gtktexttag.c:267
+#: ../gtk/gtktexttag.c:270
 msgid "Text direction"
 msgstr "Směr textu"
 
-#: ../gtk/gtktexttag.c:268
+#: ../gtk/gtktexttag.c:271
 msgid "Text direction, e.g. right-to-left or left-to-right"
 msgstr "Směr textu, např. zprava doleva nebo zleva doprava"
 
-#: ../gtk/gtktexttag.c:285
+#: ../gtk/gtktexttag.c:288
 msgid "Font description as a string, e.g. \"Sans Italic 12\""
 msgstr "Popis písma jako řetězec, např. \"Sans Italic 12\""
 
-#: ../gtk/gtktexttag.c:310
+#: ../gtk/gtktexttag.c:313
 msgid "Font style as a PangoStyle, e.g. PANGO_STYLE_ITALIC"
 msgstr "Styl písma jako PangoStyle, např. PANGO_STYLE_ITALIC"
 
-#: ../gtk/gtktexttag.c:319
+#: ../gtk/gtktexttag.c:322
 msgid "Font variant as a PangoVariant, e.g. PANGO_VARIANT_SMALL_CAPS"
 msgstr "Varianta písma jako PangoVariant, např. PANGO_VARIANT_SMALL_CAPS"
 
-#: ../gtk/gtktexttag.c:328
+#: ../gtk/gtktexttag.c:331
 msgid ""
 "Font weight as an integer, see predefined values in PangoWeight; for "
 "example, PANGO_WEIGHT_BOLD"
@@ -3872,15 +3872,15 @@ msgstr ""
 "Řez písma jako celé číslo, viz předdefinované hodnoty v PangoWeight; "
 "například PANGO_WEIGHT_BOLD"
 
-#: ../gtk/gtktexttag.c:339
+#: ../gtk/gtktexttag.c:342
 msgid "Font stretch as a PangoStretch, e.g. PANGO_STRETCH_CONDENSED"
 msgstr "Rozteč písma jako PangoStretch, např. PANGO_STRETCH_CONDENSED"
 
-#: ../gtk/gtktexttag.c:348
+#: ../gtk/gtktexttag.c:351
 msgid "Font size in Pango units"
 msgstr "Velikost písma v jednotkách Pango"
 
-#: ../gtk/gtktexttag.c:358
+#: ../gtk/gtktexttag.c:361
 msgid ""
 "Font size as a scale factor relative to the default font size. This properly "
 "adapts to theme changes etc. so is recommended. Pango predefines some scales "
@@ -3890,11 +3890,11 @@ msgstr ""
 "Řádně se přizpůsobuje změnám tématu atd., takže je doporučená. Pango "
 "předdefinovává některé hodnoty, například PANGO_SCALE_X_LARGE"
 
-#: ../gtk/gtktexttag.c:378 ../gtk/gtktextview.c:596
+#: ../gtk/gtktexttag.c:381 ../gtk/gtktextview.c:596
 msgid "Left, right, or center justification"
 msgstr "Zarovnání vlevo, vpravo nebo na střed"
 
-#: ../gtk/gtktexttag.c:387
+#: ../gtk/gtktexttag.c:390
 msgid ""
 "The language this text is in, as an ISO code. Pango can use this as a hint "
 "when rendering the text. If not set, an appropriate default will be used."
@@ -3903,31 +3903,31 @@ msgstr ""
 "nápovědu při vykreslování textu. Není-li nastaven, bude použita vhodná "
 "implicitní hodnota."
 
-#: ../gtk/gtktexttag.c:394
+#: ../gtk/gtktexttag.c:397
 msgid "Left margin"
 msgstr "Levý okraj"
 
-#: ../gtk/gtktexttag.c:395 ../gtk/gtktextview.c:605
+#: ../gtk/gtktexttag.c:398 ../gtk/gtktextview.c:605
 msgid "Width of the left margin in pixels"
 msgstr "Šířka levého okraje v pixelech"
 
-#: ../gtk/gtktexttag.c:404
+#: ../gtk/gtktexttag.c:407
 msgid "Right margin"
 msgstr "Pravý okraj"
 
-#: ../gtk/gtktexttag.c:405 ../gtk/gtktextview.c:615
+#: ../gtk/gtktexttag.c:408 ../gtk/gtktextview.c:615
 msgid "Width of the right margin in pixels"
 msgstr "Šířka pravého okraje v pixelech"
 
-#: ../gtk/gtktexttag.c:415 ../gtk/gtktextview.c:624
+#: ../gtk/gtktexttag.c:418 ../gtk/gtktextview.c:624
 msgid "Indent"
 msgstr "Odsazení"
 
-#: ../gtk/gtktexttag.c:416 ../gtk/gtktextview.c:625
+#: ../gtk/gtktexttag.c:419 ../gtk/gtktextview.c:625
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Velikost odsazení odstavce v pixelech"
 
-#: ../gtk/gtktexttag.c:427
+#: ../gtk/gtktexttag.c:430
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative) "
 "in Pango units"
@@ -3935,150 +3935,174 @@ msgstr ""
 "Posun textu nad základní čáru (pod základní čáru, pokud je hodnota záporná) "
 "v jednotkách Pango"
 
-#: ../gtk/gtktexttag.c:436
+#: ../gtk/gtktexttag.c:439
 msgid "Pixels above lines"
 msgstr "Pixely nad řádky"
 
-#: ../gtk/gtktexttag.c:437 ../gtk/gtktextview.c:549
+#: ../gtk/gtktexttag.c:440 ../gtk/gtktextview.c:549
 msgid "Pixels of blank space above paragraphs"
 msgstr "Pixely prázdného prostoru nad odstavci"
 
-#: ../gtk/gtktexttag.c:446
+#: ../gtk/gtktexttag.c:449
 msgid "Pixels below lines"
 msgstr "Pixely pod řádky"
 
-#: ../gtk/gtktexttag.c:447 ../gtk/gtktextview.c:559
+#: ../gtk/gtktexttag.c:450 ../gtk/gtktextview.c:559
 msgid "Pixels of blank space below paragraphs"
 msgstr "Pixely prázdného prostoru pod odstavci"
 
-#: ../gtk/gtktexttag.c:456
+#: ../gtk/gtktexttag.c:459
 msgid "Pixels inside wrap"
 msgstr "Pixely v zalomení"
 
-#: ../gtk/gtktexttag.c:457 ../gtk/gtktextview.c:569
+#: ../gtk/gtktexttag.c:460 ../gtk/gtktextview.c:569
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Pixely prázdného prostoru mezi zalomenými řádky v odstavci"
 
-#: ../gtk/gtktexttag.c:484 ../gtk/gtktextview.c:587
+#: ../gtk/gtktexttag.c:487 ../gtk/gtktextview.c:587
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "Jestli jsou řádky zalamovány na hranicích slov, znaků, nebo vůbec ne"
 
-#: ../gtk/gtktexttag.c:493 ../gtk/gtktextview.c:634
+#: ../gtk/gtktexttag.c:496 ../gtk/gtktextview.c:634
 msgid "Tabs"
 msgstr "Tabelátory"
 
-#: ../gtk/gtktexttag.c:494 ../gtk/gtktextview.c:635
+#: ../gtk/gtktexttag.c:497 ../gtk/gtktextview.c:635
 msgid "Custom tabs for this text"
 msgstr "Vlastní tabelátory pro tento text"
 
-#: ../gtk/gtktexttag.c:501
+#: ../gtk/gtktexttag.c:504
 msgid "Invisible"
 msgstr "Neviditelný"
 
-#: ../gtk/gtktexttag.c:502
+#: ../gtk/gtktexttag.c:505
 msgid "Whether this text is hidden. Not implemented in GTK 2.0"
 msgstr "Jestli je tento text skryt. Není implementováno pro GTK 2.0"
 
-#: ../gtk/gtktexttag.c:515
+#: ../gtk/gtktexttag.c:519
+msgid "Paragraph background color name"
+msgstr "Název barvy pozadí odstavce"
+
+#: ../gtk/gtktexttag.c:520
+msgid "Paragraph background color as a string"
+msgstr "Barva pozadí odstavce jako řetězec"
+
+#: ../gtk/gtktexttag.c:535
+msgid "Paragraph background color"
+msgstr "Barva pozadí ostavce"
+
+#: ../gtk/gtktexttag.c:536
+msgid "Paragraph background color as a (possibly unallocated) GdkColor"
+msgstr "Barva pozadí odstavce jako (možná nepřidělená) GdkColor"
+
+#: ../gtk/gtktexttag.c:549
 msgid "Background full height set"
 msgstr "Plná výška pozadí nastavena"
 
-#: ../gtk/gtktexttag.c:516
+#: ../gtk/gtktexttag.c:550
 msgid "Whether this tag affects background height"
 msgstr "Jestli tento tag ovlivňuje výšku pozadí"
 
-#: ../gtk/gtktexttag.c:519
+#: ../gtk/gtktexttag.c:553
 msgid "Background stipple set"
 msgstr "Maska pozadí nastavena"
 
-#: ../gtk/gtktexttag.c:520
+#: ../gtk/gtktexttag.c:554
 msgid "Whether this tag affects the background stipple"
 msgstr "Jestli tento tag ovlivňuje masku pozadí"
 
-#: ../gtk/gtktexttag.c:527
+#: ../gtk/gtktexttag.c:561
 msgid "Foreground stipple set"
 msgstr "Maska popředí nastavena"
 
-#: ../gtk/gtktexttag.c:528
+#: ../gtk/gtktexttag.c:562
 msgid "Whether this tag affects the foreground stipple"
 msgstr "Jestli tento tag ovlivňuje masku popředí"
 
-#: ../gtk/gtktexttag.c:563
+#: ../gtk/gtktexttag.c:597
 msgid "Justification set"
 msgstr "Zarovnání nastaveno"
 
-#: ../gtk/gtktexttag.c:564
+#: ../gtk/gtktexttag.c:598
 msgid "Whether this tag affects paragraph justification"
 msgstr "Jestli tento tag ovlivňuje zarovnání odstavce"
 
-#: ../gtk/gtktexttag.c:571
+#: ../gtk/gtktexttag.c:605
 msgid "Left margin set"
 msgstr "Levý okraj nastaven"
 
-#: ../gtk/gtktexttag.c:572
+#: ../gtk/gtktexttag.c:606
 msgid "Whether this tag affects the left margin"
 msgstr "Jestli tento tag ovlivňuje levý okraj"
 
-#: ../gtk/gtktexttag.c:575
+#: ../gtk/gtktexttag.c:609
 msgid "Indent set"
 msgstr "Odsazení nastaveno"
 
-#: ../gtk/gtktexttag.c:576
+#: ../gtk/gtktexttag.c:610
 msgid "Whether this tag affects indentation"
 msgstr "Jestli tento tag ovlivňuje odsazení"
 
-#: ../gtk/gtktexttag.c:583
+#: ../gtk/gtktexttag.c:617
 msgid "Pixels above lines set"
 msgstr "Pixely nad řádky nastaveny"
 
-#: ../gtk/gtktexttag.c:584 ../gtk/gtktexttag.c:588
+#: ../gtk/gtktexttag.c:618 ../gtk/gtktexttag.c:622
 msgid "Whether this tag affects the number of pixels above lines"
 msgstr "Jestli tento tag ovlivňuje počet pixelů nad řádky"
 
-#: ../gtk/gtktexttag.c:587
+#: ../gtk/gtktexttag.c:621
 msgid "Pixels below lines set"
 msgstr "Pixely pod řádky nastaveny"
 
-#: ../gtk/gtktexttag.c:591
+#: ../gtk/gtktexttag.c:625
 msgid "Pixels inside wrap set"
 msgstr "Pixely v zalomení nastaveny"
 
-#: ../gtk/gtktexttag.c:592
+#: ../gtk/gtktexttag.c:626
 msgid "Whether this tag affects the number of pixels between wrapped lines"
 msgstr "Jestli tento tag ovlivňuje počet pixelů mezi zalomenými řádky"
 
-#: ../gtk/gtktexttag.c:599
+#: ../gtk/gtktexttag.c:633
 msgid "Right margin set"
 msgstr "Pravý okraj nastaven"
 
-#: ../gtk/gtktexttag.c:600
+#: ../gtk/gtktexttag.c:634
 msgid "Whether this tag affects the right margin"
 msgstr "Jestli tento tag ovlivňuje pravý okraj"
 
-#: ../gtk/gtktexttag.c:607
+#: ../gtk/gtktexttag.c:641
 msgid "Wrap mode set"
 msgstr "Režim zalamování nastaven"
 
-#: ../gtk/gtktexttag.c:608
+#: ../gtk/gtktexttag.c:642
 msgid "Whether this tag affects line wrap mode"
 msgstr "Jestli tento tag ovlivňuje režim zalamování řádků"
 
-#: ../gtk/gtktexttag.c:611
+#: ../gtk/gtktexttag.c:645
 msgid "Tabs set"
 msgstr "Tabelátory nastaveny"
 
-#: ../gtk/gtktexttag.c:612
+#: ../gtk/gtktexttag.c:646
 msgid "Whether this tag affects tabs"
 msgstr "Jestli tento tag ovlivňuje tabelátory"
 
-#: ../gtk/gtktexttag.c:615
+#: ../gtk/gtktexttag.c:649
 msgid "Invisible set"
 msgstr "Neviditelný nastaveno"
 
-#: ../gtk/gtktexttag.c:616
+#: ../gtk/gtktexttag.c:650
 msgid "Whether this tag affects text visibility"
 msgstr "Jestli tento tag ovlivňuje viditelnost textu"
+
+#: ../gtk/gtktexttag.c:653
+msgid "Paragraph background set"
+msgstr "Pozadí ostavce nastaveno"
+
+#: ../gtk/gtktexttag.c:654
+msgid "Whether this tag affects the paragraph background color"
+msgstr "Jestli tento tag ovlivňuje barvu pozadí odstavce"
 
 #: ../gtk/gtktextview.c:548
 msgid "Pixels Above Lines"

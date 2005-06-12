@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-05-29 06:45+0000\n"
-"PO-Revision-Date: 2005-05-29 13:59+0200\n"
+"POT-Creation-Date: 2005-06-12 06:39+0000\n"
+"PO-Revision-Date: 2005-06-12 15:29+0200\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -480,14 +480,17 @@ msgstr "Klíče pro kusy PNG text musí být znaky ASCII."
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%s' could not "
 "be parsed."
-msgstr "Úroveň komprese PNG musí být hodnota mezi 0 a 9; hodnotu '%s' nebylo možné zpracovat."
+msgstr ""
+"Úroveň komprese PNG musí být hodnota mezi 0 a 9; hodnotu '%s' nebylo možné "
+"zpracovat."
 
 #: ../gdk-pixbuf/io-png.c:843
 #, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%d' is not "
 "allowed."
-msgstr "Úroveň komprese PNG musí být hodnota mezi 0 a 9; hodnota '%d' není povolena."
+msgstr ""
+"Úroveň komprese PNG musí být hodnota mezi 0 a 9; hodnota '%d' není povolena."
 
 #: ../gdk-pixbuf/io-png.c:883
 #, c-format
@@ -826,6 +829,138 @@ msgstr "PŘÍZNAKY"
 msgid "Gdk debugging flags to unset"
 msgstr "Ladicí příznaky Gdk, jejichž nastavení zrušit"
 
+#: ../gdk/keyname-table.h:3940
+msgid "keyboard label|BackSpace"
+msgstr "Backspace"
+
+#: ../gdk/keyname-table.h:3941
+msgid "keyboard label|Tab"
+msgstr "Tab"
+
+#: ../gdk/keyname-table.h:3942
+msgid "keyboard label|Return"
+msgstr "Enter"
+
+#: ../gdk/keyname-table.h:3943
+msgid "keyboard label|Pause"
+msgstr "Pause"
+
+#: ../gdk/keyname-table.h:3944
+msgid "keyboard label|Scroll_Lock"
+msgstr "Scroll_Lock"
+
+#: ../gdk/keyname-table.h:3945
+msgid "keyboard label|Sys_Req"
+msgstr "Sys_Rq"
+
+#: ../gdk/keyname-table.h:3946
+msgid "keyboard label|Escape"
+msgstr "Escape"
+
+#: ../gdk/keyname-table.h:3947
+msgid "keyboard label|Multi_key"
+msgstr "Multi_key"
+
+#: ../gdk/keyname-table.h:3948
+msgid "keyboard label|Home"
+msgstr "Home"
+
+#: ../gdk/keyname-table.h:3949
+msgid "keyboard label|Page_Up"
+msgstr "Page_Up"
+
+#: ../gdk/keyname-table.h:3950
+msgid "keyboard label|Page_Down"
+msgstr "Page_Down"
+
+#: ../gdk/keyname-table.h:3951
+msgid "keyboard label|End"
+msgstr "End"
+
+#: ../gdk/keyname-table.h:3952
+msgid "keyboard label|Begin"
+msgstr "Begin"
+
+#: ../gdk/keyname-table.h:3953
+msgid "keyboard label|Print"
+msgstr "Print"
+
+#: ../gdk/keyname-table.h:3954
+msgid "keyboard label|Insert"
+msgstr "Insert"
+
+#: ../gdk/keyname-table.h:3955
+msgid "keyboard label|Num_Lock"
+msgstr "Num_Lock"
+
+#: ../gdk/keyname-table.h:3956
+msgid "keyboard label|KP_Space"
+msgstr "KP_Mezerník"
+
+#: ../gdk/keyname-table.h:3957
+msgid "keyboard label|KP_Tab"
+msgstr "KP_Tab"
+
+#: ../gdk/keyname-table.h:3958
+msgid "keyboard label|KP_Enter"
+msgstr "KP_Enter"
+
+#: ../gdk/keyname-table.h:3959
+msgid "keyboard label|KP_Home"
+msgstr "KP_Home"
+
+#: ../gdk/keyname-table.h:3960
+msgid "keyboard label|KP_Left"
+msgstr "KP_Doleva"
+
+#: ../gdk/keyname-table.h:3961
+msgid "keyboard label|KP_Up"
+msgstr "KP_Nahoru"
+
+#: ../gdk/keyname-table.h:3962
+msgid "keyboard label|KP_Right"
+msgstr "KP_Doprava"
+
+#: ../gdk/keyname-table.h:3963
+msgid "keyboard label|KP_Down"
+msgstr "KP_Dolů"
+
+#: ../gdk/keyname-table.h:3964
+msgid "keyboard label|KP_Page_Up"
+msgstr "KP_Page_Up"
+
+#: ../gdk/keyname-table.h:3965
+msgid "keyboard label|KP_Prior"
+msgstr "KP_Prior"
+
+#: ../gdk/keyname-table.h:3966
+msgid "keyboard label|KP_Page_Down"
+msgstr "KP_Page_Down"
+
+#: ../gdk/keyname-table.h:3967
+msgid "keyboard label|KP_Next"
+msgstr "KP_Next"
+
+#: ../gdk/keyname-table.h:3968
+msgid "keyboard label|KP_End"
+msgstr "KP_End"
+
+#: ../gdk/keyname-table.h:3969
+msgid "keyboard label|KP_Begin"
+msgstr "KP_Begin"
+
+#: ../gdk/keyname-table.h:3970
+msgid "keyboard label|KP_Insert"
+msgstr "KP_Insert"
+
+#: ../gdk/keyname-table.h:3971
+msgid "keyboard label|KP_Delete"
+msgstr "KP_Delete"
+
+#: ../gdk/keyname-table.h:3972
+msgid "keyboard label|Delete"
+msgstr "Delete"
+
 #. Description of --sync in --help output
 #: ../gdk/win32/gdkmain-win32.c:60
 msgid "Don't batch GDI requests"
@@ -908,28 +1043,41 @@ msgstr "Grafika"
 #. * that use the shift key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
+#. * And do not translate the part before the |.
 #.
-#: ../gtk/gtkaccellabel.c:120
-msgid "Shift"
+#: ../gtk/gtkaccellabel.c:121
+msgid "keyboard label|Shift"
 msgstr "Shift"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the control key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
+#. * And do not translate the part before the |.
 #.
-#: ../gtk/gtkaccellabel.c:126
-msgid "Ctrl"
+#: ../gtk/gtkaccellabel.c:128
+msgid "keyboard label|Ctrl"
 msgstr "Ctrl"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the alt key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
+#. * And do not translate the part before the |.
 #.
-#: ../gtk/gtkaccellabel.c:132
-msgid "Alt"
+#: ../gtk/gtkaccellabel.c:135
+msgid "keyboard label|Alt"
 msgstr "Alt"
+
+#. do not translate the part before the |
+#: ../gtk/gtkaccellabel.c:577
+msgid "keyboard label|Space"
+msgstr "Mezerník"
+
+#. do not translate the part before the |
+#: ../gtk/gtkaccellabel.c:581
+msgid "keyboard label|Backslash"
+msgstr "Obrácené lomítko"
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -1091,15 +1239,15 @@ msgstr "Barevné kolo"
 msgid "Color Selection"
 msgstr "Výběr barvy"
 
-#: ../gtk/gtkentry.c:4508 ../gtk/gtktextview.c:7065
+#: ../gtk/gtkentry.c:4508 ../gtk/gtktextview.c:7068
 msgid "Select _All"
 msgstr "Vybrat _vše"
 
-#: ../gtk/gtkentry.c:4518 ../gtk/gtktextview.c:7075
+#: ../gtk/gtkentry.c:4518 ../gtk/gtktextview.c:7078
 msgid "Input _Methods"
 msgstr "Vstupní _metody"
 
-#: ../gtk/gtkentry.c:4529 ../gtk/gtktextview.c:7086
+#: ../gtk/gtkentry.c:4529 ../gtk/gtktextview.c:7089
 msgid "_Insert Unicode Control Character"
 msgstr "_Vložit řídící znak Unicode"
 
@@ -1113,12 +1261,12 @@ msgstr "Neplatný název souboru: %s"
 msgid "Select A File"
 msgstr "Zvolte soubor"
 
-#: ../gtk/gtkfilechooserbutton.c:68 ../gtk/gtkfilechooserdefault.c:1287
+#: ../gtk/gtkfilechooserbutton.c:68 ../gtk/gtkfilechooserdefault.c:1302
 #: ../gtk/gtkpathbar.c:996
 msgid "Home"
 msgstr "Domov"
 
-#: ../gtk/gtkfilechooserbutton.c:69 ../gtk/gtkfilechooserdefault.c:1314
+#: ../gtk/gtkfilechooserbutton.c:69 ../gtk/gtkfilechooserdefault.c:1329
 #: ../gtk/gtkpathbar.c:998
 msgid "Desktop"
 msgstr "Pracovní plocha"
@@ -1147,147 +1295,153 @@ msgstr "Nemohu odstranit záložku"
 msgid "The folder could not be created"
 msgstr "Adresář nelze vytvořit"
 
-#: ../gtk/gtkfilechooserdefault.c:961
+#: ../gtk/gtkfilechooserdefault.c:963
+msgid ""
+"The folder could not be created, as a file with the same name already "
+"exists.  Try using a different name for the folder, or rename the file first."
+msgstr "Adresář nelze vytvořit, protože již existuje soubor se stejným názvem. Zkuste pro adresář použít jiný název nebo nejdřív přejmenovat soubor."
+
+#: ../gtk/gtkfilechooserdefault.c:976
 msgid "Invalid file name"
 msgstr "Neplatný název souboru"
 
-#: ../gtk/gtkfilechooserdefault.c:971
+#: ../gtk/gtkfilechooserdefault.c:986
 msgid "The folder contents could not be displayed"
 msgstr "Obsah adresáře nelze zobrazit"
 
-#: ../gtk/gtkfilechooserdefault.c:1177
+#: ../gtk/gtkfilechooserdefault.c:1192
 #, c-format
 msgid "Could not get information about '%s': %s"
 msgstr "Nemohu získat informace o '%s': %s"
 
-#: ../gtk/gtkfilechooserdefault.c:2207
+#: ../gtk/gtkfilechooserdefault.c:2222
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Přidat adresář '%s' mezi záložky"
 
-#: ../gtk/gtkfilechooserdefault.c:2248
+#: ../gtk/gtkfilechooserdefault.c:2263
 msgid "Add the current folder to the bookmarks"
 msgstr "Přidat aktuální adresář mezi záložky"
 
-#: ../gtk/gtkfilechooserdefault.c:2250
+#: ../gtk/gtkfilechooserdefault.c:2265
 msgid "Add the selected folders to the bookmarks"
 msgstr "Přidat zovlené adresáře mezi záložky"
 
-#: ../gtk/gtkfilechooserdefault.c:2290
+#: ../gtk/gtkfilechooserdefault.c:2305
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Odstranit záložku '%s'"
 
-#: ../gtk/gtkfilechooserdefault.c:2721
+#: ../gtk/gtkfilechooserdefault.c:2736
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
 msgstr "Nemohu přidat záložku pro '%s', protože je to neplatný název cesty."
 
-#: ../gtk/gtkfilechooserdefault.c:2936
+#: ../gtk/gtkfilechooserdefault.c:2951
 msgid "Remove"
 msgstr "Odstranit"
 
-#: ../gtk/gtkfilechooserdefault.c:2945
+#: ../gtk/gtkfilechooserdefault.c:2960
 msgid "Rename..."
 msgstr "Přejmenovat..."
 
-#: ../gtk/gtkfilechooserdefault.c:3068
+#: ../gtk/gtkfilechooserdefault.c:3083
 msgid "Shortcuts"
 msgstr "Zkratky"
 
-#: ../gtk/gtkfilechooserdefault.c:3122
+#: ../gtk/gtkfilechooserdefault.c:3137
 msgid "Folder"
 msgstr "Adresář"
 
-#: ../gtk/gtkfilechooserdefault.c:3178 ../gtk/gtkstock.c:317
+#: ../gtk/gtkfilechooserdefault.c:3193 ../gtk/gtkstock.c:317
 msgid "_Add"
 msgstr "_Přidat"
 
-#: ../gtk/gtkfilechooserdefault.c:3185
+#: ../gtk/gtkfilechooserdefault.c:3200
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Přidat zvolený adresář mezi záložky"
 
-#: ../gtk/gtkfilechooserdefault.c:3190 ../gtk/gtkstock.c:395
+#: ../gtk/gtkfilechooserdefault.c:3205 ../gtk/gtkstock.c:395
 msgid "_Remove"
 msgstr "_Odstranit"
 
-#: ../gtk/gtkfilechooserdefault.c:3197
+#: ../gtk/gtkfilechooserdefault.c:3212
 msgid "Remove the selected bookmark"
 msgstr "Odstranit zvolenou záložku"
 
-#: ../gtk/gtkfilechooserdefault.c:3300
+#: ../gtk/gtkfilechooserdefault.c:3319
 msgid "_Add to Bookmarks"
 msgstr "_Přidat mezi záložky"
 
-#: ../gtk/gtkfilechooserdefault.c:3310
+#: ../gtk/gtkfilechooserdefault.c:3329
 msgid "Open _Location"
 msgstr "Otevřít _umístění"
 
-#: ../gtk/gtkfilechooserdefault.c:3322
+#: ../gtk/gtkfilechooserdefault.c:3341
 msgid "Show _Hidden Files"
 msgstr "Zobrazovat _skryté soubory"
 
-#: ../gtk/gtkfilechooserdefault.c:3446 ../gtk/gtkfilesel.c:766
+#: ../gtk/gtkfilechooserdefault.c:3465 ../gtk/gtkfilesel.c:766
 msgid "Files"
 msgstr "Soubory"
 
-#: ../gtk/gtkfilechooserdefault.c:3477
+#: ../gtk/gtkfilechooserdefault.c:3496
 msgid "Name"
 msgstr "Název"
 
-#: ../gtk/gtkfilechooserdefault.c:3502
+#: ../gtk/gtkfilechooserdefault.c:3521
 msgid "Size"
 msgstr "Velikost"
 
-#: ../gtk/gtkfilechooserdefault.c:3515
+#: ../gtk/gtkfilechooserdefault.c:3534
 msgid "Modified"
 msgstr "Změněn"
 
-#: ../gtk/gtkfilechooserdefault.c:3547
+#: ../gtk/gtkfilechooserdefault.c:3566
 msgid "Select which types of files are shown"
 msgstr "Vyberte, které typy souborů zobrazovat"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:3583
+#: ../gtk/gtkfilechooserdefault.c:3602
 msgid "Create Fo_lder"
 msgstr "Vytvořit _adresář"
 
 #. Name entry
-#: ../gtk/gtkfilechooserdefault.c:3704
+#: ../gtk/gtkfilechooserdefault.c:3723
 msgid "_Name:"
 msgstr "_Název:"
 
-#: ../gtk/gtkfilechooserdefault.c:3744
+#: ../gtk/gtkfilechooserdefault.c:3763
 msgid "_Browse for other folders"
 msgstr "_Procházet jiné adresáře"
 
-#: ../gtk/gtkfilechooserdefault.c:3995
+#: ../gtk/gtkfilechooserdefault.c:4014
 msgid "Save in _folder:"
 msgstr "Uložit do _adresáře:"
 
-#: ../gtk/gtkfilechooserdefault.c:3997
+#: ../gtk/gtkfilechooserdefault.c:4016
 msgid "Create in _folder:"
 msgstr "Vytvořit v _adresáři:"
 
-#: ../gtk/gtkfilechooserdefault.c:4939
+#: ../gtk/gtkfilechooserdefault.c:4973
 msgid "Cannot change to folder because it is not local"
 msgstr "Nemohu přejít do adresáře, protože není místní"
 
-#: ../gtk/gtkfilechooserdefault.c:5455
+#: ../gtk/gtkfilechooserdefault.c:5489
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Zkratka %s neexistuje"
 
-#: ../gtk/gtkfilechooserdefault.c:5919
+#: ../gtk/gtkfilechooserdefault.c:6023
 #, c-format
 msgid "Could not mount %s"
 msgstr "Nemohu připojit %s"
 
-#: ../gtk/gtkfilechooserdefault.c:6212
+#: ../gtk/gtkfilechooserdefault.c:6316
 msgid "Type name of new folder"
 msgstr "Napište název nového adresáře"
 
-#: ../gtk/gtkfilechooserdefault.c:6254
+#: ../gtk/gtkfilechooserdefault.c:6358
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
@@ -1295,59 +1449,59 @@ msgstr[0] "%d bajt"
 msgstr[1] "%d bajty"
 msgstr[2] "%d bajtů"
 
-#: ../gtk/gtkfilechooserdefault.c:6256
+#: ../gtk/gtkfilechooserdefault.c:6360
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: ../gtk/gtkfilechooserdefault.c:6258
+#: ../gtk/gtkfilechooserdefault.c:6362
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: ../gtk/gtkfilechooserdefault.c:6260
+#: ../gtk/gtkfilechooserdefault.c:6364
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: ../gtk/gtkfilechooserdefault.c:6306 ../gtk/gtkfilechooserdefault.c:6330
+#: ../gtk/gtkfilechooserdefault.c:6410 ../gtk/gtkfilechooserdefault.c:6434
 msgid "Unknown"
 msgstr "Neznámé"
 
-#: ../gtk/gtkfilechooserdefault.c:6317
+#: ../gtk/gtkfilechooserdefault.c:6421
 msgid "Today"
 msgstr "Dnes"
 
-#: ../gtk/gtkfilechooserdefault.c:6319
+#: ../gtk/gtkfilechooserdefault.c:6423
 msgid "Yesterday"
 msgstr "Včera"
 
-#: ../gtk/gtkfilechooserdefault.c:6401
+#: ../gtk/gtkfilechooserdefault.c:6505
 msgid "Cannot change folder"
 msgstr "Nemohu změnit adresář"
 
-#: ../gtk/gtkfilechooserdefault.c:6402
+#: ../gtk/gtkfilechooserdefault.c:6506
 msgid "The folder you specified is an invalid path."
 msgstr "Určený adresář je neplatná cesta."
 
-#: ../gtk/gtkfilechooserdefault.c:6441
+#: ../gtk/gtkfilechooserdefault.c:6545
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr "Nemohu sestavit název souboru z '%s' a '%s'"
 
-#: ../gtk/gtkfilechooserdefault.c:6477
+#: ../gtk/gtkfilechooserdefault.c:6581
 msgid "Could not select item"
 msgstr "Nemohu vybrat položku"
 
-#: ../gtk/gtkfilechooserdefault.c:6517
+#: ../gtk/gtkfilechooserdefault.c:6621
 msgid "Open Location"
 msgstr "Otevřít umístění"
 
-#: ../gtk/gtkfilechooserdefault.c:6524
+#: ../gtk/gtkfilechooserdefault.c:6628
 msgid "Save in Location"
 msgstr "Uložit do umístění"
 
-#: ../gtk/gtkfilechooserdefault.c:6548
+#: ../gtk/gtkfilechooserdefault.c:6652
 msgid "_Location:"
 msgstr "_Umístění:"
 
@@ -1533,32 +1687,32 @@ msgstr "Nemohu převést název souboru"
 msgid "(Empty)"
 msgstr "(Prázdný)"
 
-#: ../gtk/gtkfilesystemunix.c:466 ../gtk/gtkfilesystemunix.c:668
-#: ../gtk/gtkfilesystemunix.c:1908 ../gtk/gtkfilesystemwin32.c:482
+#: ../gtk/gtkfilesystemunix.c:475 ../gtk/gtkfilesystemunix.c:678
+#: ../gtk/gtkfilesystemunix.c:1918 ../gtk/gtkfilesystemwin32.c:482
 #: ../gtk/gtkfilesystemwin32.c:495 ../gtk/gtkfilesystemwin32.c:1560
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "Chyba při získávání informací o '%s': %s"
 
-#: ../gtk/gtkfilesystemunix.c:537 ../gtk/gtkfilesystemwin32.c:537
+#: ../gtk/gtkfilesystemunix.c:547 ../gtk/gtkfilesystemwin32.c:537
 #, c-format
 msgid "Error creating directory '%s': %s"
 msgstr "Chyba při vytváření adresáře '%s': %s"
 
-#: ../gtk/gtkfilesystemunix.c:617 ../gtk/gtkfilesystemwin32.c:597
+#: ../gtk/gtkfilesystemunix.c:627 ../gtk/gtkfilesystemwin32.c:597
 msgid "This file system does not support mounting"
 msgstr "Tento systém souborů nepodporuje připojování"
 
-#: ../gtk/gtkfilesystemunix.c:625
+#: ../gtk/gtkfilesystemunix.c:635
 msgid "Filesystem"
 msgstr "Systém souborů"
 
-#: ../gtk/gtkfilesystemunix.c:782
+#: ../gtk/gtkfilesystemunix.c:792
 #, c-format
 msgid "Could not get a stock icon for %s"
 msgstr "Nemohu získat standardní ikonu pro %s"
 
-#: ../gtk/gtkfilesystemunix.c:877
+#: ../gtk/gtkfilesystemunix.c:887
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1567,22 +1721,22 @@ msgstr ""
 "Název \"%s\" není platný, protože obsahuje znak \"%s\". Použijte prosím jiný "
 "název."
 
-#: ../gtk/gtkfilesystemunix.c:1479
+#: ../gtk/gtkfilesystemunix.c:1489
 #, c-format
 msgid "Writing %s failed: %s"
 msgstr "Zapisování %s selhalo: %s"
 
-#: ../gtk/gtkfilesystemunix.c:1568
+#: ../gtk/gtkfilesystemunix.c:1578
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "'%s' již v seznamu záložek existuje"
 
-#: ../gtk/gtkfilesystemunix.c:1640
+#: ../gtk/gtkfilesystemunix.c:1650
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "'%s' neexistuje v seznamu záložek"
 
-#: ../gtk/gtkfilesystemunix.c:1868
+#: ../gtk/gtkfilesystemunix.c:1878
 #, c-format
 msgid "Error getting information for '/': %s"
 msgstr "Chyba při získávání informací o '/': %s"
