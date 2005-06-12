@@ -1,3 +1,10 @@
+2005-06-12  Matthias Clasen  <mclasen@redhat.com>
+
+	* pixbuf-render.c (theme_pixbuf_render): Try to
+	handle the situation that the borders are larger
+	than the area we are rendering.  (#169731,
+	Benjamin Otte)
+
 2005-01-08  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.6.1 ===

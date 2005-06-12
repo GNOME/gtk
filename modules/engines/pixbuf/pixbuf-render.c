@@ -696,6 +696,9 @@ theme_pixbuf_render (ThemePixbuf  *theme_pb,
 
   if (theme_pb->stretch)
     {
+      if (component_mask & COMPONENT_ALL)
+	component_mask = (COMPONENT_ALL - 1) & ~component_mask;
+
       src_x[0] = 0;
       src_x[1] = theme_pb->border_left;
       src_x[2] = pixbuf_width - theme_pb->border_right;
@@ -711,13 +714,24 @@ theme_pixbuf_render (ThemePixbuf  *theme_pb,
       dest_x[2] = x + width - theme_pb->border_right;
       dest_x[3] = x + width;
 
+      if (dest_x[1] > dest_x[2])
+	{
+	  component_mask &= ~(COMPONENT_NORTH | COMPONENT_SOUTH | COMPONENT_CENTER);
+	  dest_x[1] = dest_x[2] = (dest_x[1] + dest_x[2]) / 2;
+	}
+
       dest_y[0] = y;
       dest_y[1] = y + theme_pb->border_top;
       dest_y[2] = y + height - theme_pb->border_bottom;
       dest_y[3] = y + height;
 
-      if (component_mask & COMPONENT_ALL)
-	component_mask = (COMPONENT_ALL - 1) & ~component_mask;
+      if (dest_y[1] > dest_y[2])
+	{
+	  component_mask &= ~(COMPONENT_EAST | COMPONENT_WEST | COMPONENT_CENTER);
+	  dest_y[1] = dest_y[2] = (dest_y[1] + dest_y[2]) / 2;
+	}
+
+
 
 #define RENDER_COMPONENT(X1,X2,Y1,Y2)					         \
         pixbuf_render (pixbuf, theme_pb->hints[Y1][X1], window, mask, clip_rect, \
