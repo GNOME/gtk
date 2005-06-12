@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-06-11 10:49+0200\n"
-"PO-Revision-Date: 2005-06-11 10:51+0200\n"
+"PO-Revision-Date: 2005-06-12 15:41+0200\n"
 "Last-Translator: Martin Willemoes Hansen <mwh@sysrq.dk>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "MIME-Version: 1.0\n"
@@ -1309,7 +1309,7 @@ msgstr "Ombrydningsbredde"
 
 #: ../gtk/gtkcellrenderertext.c:495
 msgid "The width at which the text is wrapped"
-msgstr "Bredden for hvor tekstombrydningen sker"
+msgstr "Bredden hvor tekstombrydningen sker"
 
 # RETMIG: dette er vist suboptimalt
 #: ../gtk/gtkcellrenderertext.c:507 ../gtk/gtkcellview.c:198
@@ -2753,19 +2753,19 @@ msgstr ""
 
 #: ../gtk/gtkmenubar.c:201
 msgid "Pack direction"
-msgstr "Pakkeretning"
+msgstr "Pakningsretning"
 
 #: ../gtk/gtkmenubar.c:202
 msgid "The pack direction of the menubar"
-msgstr "Pakkeretningen for værktøjslinjen"
+msgstr "Pakningsretningen for værktøjslinjen"
 
 #: ../gtk/gtkmenubar.c:218
 msgid "Child Pack direction"
-msgstr "Retning for barnepakningen"
+msgstr "Pakningsretning for indeholdt kontrol"
 
 #: ../gtk/gtkmenubar.c:219
 msgid "The child pack direction of the menubar"
-msgstr "Retning for barnepakningen af værktøjslinjen"
+msgstr "Pakningsretningen for indeholdt kontrol af værktøjslinjen"
 
 #: ../gtk/gtkmenubar.c:228
 msgid "Style of bevel around the menubar"

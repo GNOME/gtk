@@ -32,8 +32,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-10 10:21+0200\n"
-"PO-Revision-Date: 2005-06-10 10:21+0200\n"
+"POT-Creation-Date: 2005-06-12 15:51+0200\n"
+"PO-Revision-Date: 2005-06-12 15:52+0200\n"
 "Last-Translator: Martin Willemoes Hansen <mwh@sysrq.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -1123,6 +1123,33 @@ msgstr "calendar:MY"
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
+#. Translators:  This is a text measurement template.
+#. * Translate it to the widest year text.
+#. *
+#. * Don't include the prefix "year measurement template|"
+#. * in the translation.
+#. *
+#. * If you don't understand this, leave it as "2000"
+#.
+#: ../gtk/gtkcalendar.c:1548
+msgid "year measurement template|2000"
+msgstr "2000"
+
+#. Translators: This dictates how the year is displayed in
+#. * gtkcalendar widget.  See strftime() manual for the format.
+#. * Use only ASCII in the translation.
+#. *
+#. * Also look for the msgid "year measurement template|2000".
+#. * Translate that entry to a year with the widest output of this
+#. * msgid.
+#. *
+#. * Don't include the prefix "calendar year format|" in the
+#. * translation. "%Y" is appropriate for most locales.
+#.
+#: ../gtk/gtkcalendar.c:1825
+msgid "calendar year format|%Y"
+msgstr "%Y"
+
 #. do not translate the part before the |
 #: ../gtk/gtkcellrendererprogress.c:237 ../gtk/gtkcellrendererprogress.c:295
 #, c-format
@@ -1712,32 +1739,32 @@ msgstr "Kunne ikke konvertere filnavnet"
 msgid "(Empty)"
 msgstr "(tom)"
 
-#: ../gtk/gtkfilesystemunix.c:466 ../gtk/gtkfilesystemunix.c:668
-#: ../gtk/gtkfilesystemunix.c:1908 ../gtk/gtkfilesystemwin32.c:482
+#: ../gtk/gtkfilesystemunix.c:475 ../gtk/gtkfilesystemunix.c:678
+#: ../gtk/gtkfilesystemunix.c:1918 ../gtk/gtkfilesystemwin32.c:482
 #: ../gtk/gtkfilesystemwin32.c:495 ../gtk/gtkfilesystemwin32.c:1560
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "Fejl ved indhentning af oplysninger om \"%s\": %s"
 
-#: ../gtk/gtkfilesystemunix.c:537 ../gtk/gtkfilesystemwin32.c:537
+#: ../gtk/gtkfilesystemunix.c:547 ../gtk/gtkfilesystemwin32.c:537
 #, c-format
 msgid "Error creating directory '%s': %s"
 msgstr "Fejl ved oprettelse af mappen \"%s\": %s"
 
-#: ../gtk/gtkfilesystemunix.c:617 ../gtk/gtkfilesystemwin32.c:597
+#: ../gtk/gtkfilesystemunix.c:627 ../gtk/gtkfilesystemwin32.c:597
 msgid "This file system does not support mounting"
 msgstr "Dette filsystem understøtter ikke montering"
 
-#: ../gtk/gtkfilesystemunix.c:625
+#: ../gtk/gtkfilesystemunix.c:635
 msgid "Filesystem"
 msgstr "Filsystemer"
 
-#: ../gtk/gtkfilesystemunix.c:782
+#: ../gtk/gtkfilesystemunix.c:792
 #, c-format
 msgid "Could not get a stock icon for %s"
 msgstr "Kunne ikke indhente et lagerikon for %s"
 
-#: ../gtk/gtkfilesystemunix.c:877
+#: ../gtk/gtkfilesystemunix.c:887
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1746,22 +1773,22 @@ msgstr ""
 "Navnet \"%s\" er ikke gyldigt fordi det indeholder tegnet \"%s\". Vælg "
 "venligst et andet navn."
 
-#: ../gtk/gtkfilesystemunix.c:1479
+#: ../gtk/gtkfilesystemunix.c:1489
 #, c-format
 msgid "Writing %s failed: %s"
 msgstr "Skrivning af %s mislykkedes: %s"
 
-#: ../gtk/gtkfilesystemunix.c:1568
+#: ../gtk/gtkfilesystemunix.c:1578
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "\"%s\" findes allerede i bogmærkelisten"
 
-#: ../gtk/gtkfilesystemunix.c:1640
+#: ../gtk/gtkfilesystemunix.c:1650
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "\"%s\" findes ikke i bogmærkelisten"
 
-#: ../gtk/gtkfilesystemunix.c:1868
+#: ../gtk/gtkfilesystemunix.c:1878
 #, c-format
 msgid "Error getting information for '/': %s"
 msgstr "Fejl ved indhentning af oplysninger om \"/\": %s"
@@ -2110,7 +2137,7 @@ msgstr "_Første"
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:338
 msgid "Navigation|_Last"
-msgstr "_Sidst"
+msgstr "_Sidste"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:340
@@ -2130,7 +2157,7 @@ msgstr "Ne_d"
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:346
 msgid "Navigation|_Forward"
-msgstr "_Fremad"
+msgstr "Frem_ad"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:348
@@ -2212,7 +2239,7 @@ msgstr "_Afspil"
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:375
 msgid "Media|Pre_vious"
-msgstr "_Forrige"
+msgstr "Fo_rrige"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:377
