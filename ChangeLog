@@ -1,3 +1,8 @@
+2005-06-12  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkselection.c (gtk_target_list_add_image_targets): 
+	Don't leak the format names.  (#307190, Morten Welinder)
+
 2005-06-12  Kjartan Maraas  <kmaraas@gnome.org>
 
 	* gdk/x11/gdkasync.c: (send_event_handler): Plug
