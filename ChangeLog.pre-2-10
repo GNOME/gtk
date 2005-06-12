@@ -1,3 +1,8 @@
+2005-06-12  Kjartan Maraas  <kmaraas@gnome.org>
+
+	* gdk/x11/gdkasync.c: (send_event_handler): Merge
+	fix for a leak from HEAD. Bug #307281.
+
 2005-06-10  Matthias Clasen  <mclasen@redhat.com>
 
 	* NEWS: Updates

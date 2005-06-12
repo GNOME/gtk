@@ -151,6 +151,8 @@ send_event_handler (Display *dpy,
 
       DeqAsyncHandler(state->dpy, &state->async);
 
+      g_free (state);
+
       return (rep->generic.type != X_Error);
     }
 
