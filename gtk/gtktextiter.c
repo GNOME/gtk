@@ -2719,6 +2719,162 @@ gtk_text_iter_backward_lines (GtkTextIter *iter, gint count)
     }
 }
 
+/**
+ * gtk_text_iter_forward_visible_line:
+ * @iter: an iterator
+ *
+ * Moves @iter to the start of the next visible line. Returns %TRUE if there
+ * was a next line to move to, and %FALSE if @iter was simply moved to
+ * the end of the buffer and is now not dereferenceable, or if @iter was
+ * already at the end of the buffer.
+ *
+ * Return value: whether @iter can be dereferenced
+ * 
+ * Since: 2.8
+ **/
+gboolean
+gtk_text_iter_forward_visible_line (GtkTextIter *iter)
+{
+  while (gtk_text_iter_forward_line (iter))
+    {
+      if (!_gtk_text_btree_char_is_invisible (iter))
+        return TRUE;
+      else
+        {
+          do
+            {
+              if (!gtk_text_iter_forward_char (iter))
+                return FALSE;
+          
+              if (!_gtk_text_btree_char_is_invisible (iter))
+                return TRUE;
+            }
+          while (!gtk_text_iter_ends_line (iter));
+        }
+    }
+    
+  return FALSE;
+}
+
+/**
+ * gtk_text_iter_backward_visible_line:
+ * @iter: an iterator
+ *
+ * Moves @iter to the start of the previous visible line. Returns %TRUE if
+ * @iter could be moved; i.e. if @iter was at character offset 0, this
+ * function returns %FALSE. Therefore if @iter was already on line 0,
+ * but not at the start of the line, @iter is snapped to the start of
+ * the line and the function returns %TRUE. (Note that this implies that
+ * in a loop calling this function, the line number may not change on
+ * every iteration, if your first iteration is on line 0.)
+ *
+ * Return value: whether @iter moved
+ *
+ * Since: 2.8
+ **/
+gboolean
+gtk_text_iter_backward_visible_line (GtkTextIter *iter)
+{
+  while (gtk_text_iter_backward_line (iter))
+    {
+      if (!_gtk_text_btree_char_is_invisible (iter))
+        return TRUE;
+      else
+        {
+          do
+            {
+              if (!gtk_text_iter_backward_char (iter))
+                return FALSE;
+          
+              if (!_gtk_text_btree_char_is_invisible (iter))
+                return TRUE;
+            }
+          while (!gtk_text_iter_starts_line (iter));
+        }
+    }
+    
+  return FALSE;
+}
+
+/**
+ * gtk_text_iter_forward_visible_lines:
+ * @iter: a #GtkTextIter
+ * @count: number of lines to move forward
+ *
+ * Moves @count visible lines forward, if possible (if @count would move
+ * past the start or end of the buffer, moves to the start or end of
+ * the buffer).  The return value indicates whether the iterator moved
+ * onto a dereferenceable position; if the iterator didn't move, or
+ * moved onto the end iterator, then %FALSE is returned. If @count is 0,
+ * the function does nothing and returns %FALSE. If @count is negative,
+ * moves backward by 0 - @count lines.
+ *
+ * Return value: whether @iter moved and is dereferenceable
+ * 
+ * Since: 2.8
+ **/
+gboolean
+gtk_text_iter_forward_visible_lines (GtkTextIter *iter,
+                                     gint         count)
+{
+  FIX_OVERFLOWS (count);
+  
+  if (count < 0)
+    return gtk_text_iter_backward_visible_lines (iter, 0 - count);
+  else if (count == 0)
+    return FALSE;
+  else if (count == 1)
+    {
+      check_invariants (iter);
+      return gtk_text_iter_forward_visible_line (iter);
+    }
+  else
+    {
+      while (gtk_text_iter_forward_visible_line (iter) && count > 0)
+        count--;
+      return count == 0;
+    }    
+}
+
+/**
+ * gtk_text_iter_backward_visible_lines:
+ * @iter: a #GtkTextIter
+ * @count: number of lines to move backward
+ *
+ * Moves @count visible lines backward, if possible (if @count would move
+ * past the start or end of the buffer, moves to the start or end of
+ * the buffer).  The return value indicates whether the iterator moved
+ * onto a dereferenceable position; if the iterator didn't move, or
+ * moved onto the end iterator, then %FALSE is returned. If @count is 0,
+ * the function does nothing and returns %FALSE. If @count is negative,
+ * moves forward by 0 - @count lines.
+ *
+ * Return value: whether @iter moved and is dereferenceable
+ *
+ * Since: 2.8
+ **/
+gboolean
+gtk_text_iter_backward_visible_lines (GtkTextIter *iter,
+                                      gint         count)
+{
+  FIX_OVERFLOWS (count);
+  
+  if (count < 0)
+    return gtk_text_iter_forward_visible_lines (iter, 0 - count);
+  else if (count == 0)
+    return FALSE;
+  else if (count == 1)
+    {
+      return gtk_text_iter_backward_visible_line (iter);
+    }
+  else
+    {
+      while (gtk_text_iter_backward_visible_line (iter) && count > 0)
+        count--;
+      return count == 0;
+    }
+}
+
 typedef gboolean (* FindLogAttrFunc) (const PangoLogAttr *attrs,
                                       gint                offset,
                                       gint                min_offset,

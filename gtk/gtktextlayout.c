@@ -2390,8 +2390,8 @@ gtk_text_layout_get_cursor_locations (GtkTextLayout  *layout,
     index += layout->preedit_cursor - layout->preedit_len;
   
   pango_layout_get_cursor_pos (display->layout, index,
-                               strong_pos ? &pango_strong_pos : NULL,
-                               weak_pos ? &pango_weak_pos : NULL);
+			       strong_pos ? &pango_strong_pos : NULL,
+			       weak_pos ? &pango_weak_pos : NULL);
 
   if (strong_pos)
     {
@@ -3117,6 +3117,7 @@ gtk_text_layout_move_iter_visually (GtkTextLayout *layout,
 {
   GtkTextLineDisplay *display = NULL;
   GtkTextIter orig;
+  GtkTextIter lineiter;
   
   g_return_val_if_fail (layout != NULL, FALSE);
   g_return_val_if_fail (iter != NULL, FALSE);
@@ -3174,10 +3175,17 @@ gtk_text_layout_move_iter_visually (GtkTextLayout *layout,
       
       if (new_index < 0 || (new_index == 0 && extra_back))
         {
-          line = _gtk_text_line_previous (line);
+          do
+            {
+              line = _gtk_text_line_previous (line);
 
-          if (!line)
-            goto done;
+              if (!line)
+                goto done;
+              
+              _gtk_text_btree_get_iter_at_line (_gtk_text_buffer_get_btree (layout->buffer),
+                                                &lineiter, line, 0);
+            }
+          while (totally_invisible_line (layout, line, &lineiter));
           
  	  gtk_text_layout_free_line_display (layout, display);
  	  display = gtk_text_layout_get_line_display (layout, line, FALSE);
@@ -3185,10 +3193,17 @@ gtk_text_layout_move_iter_visually (GtkTextLayout *layout,
         }
       else if (new_index > byte_count)
         {
-          line = _gtk_text_line_next_excluding_last (line);
-          if (!line)
-            goto done;
+          do
+            {
+              line = _gtk_text_line_next_excluding_last (line);
+              if (!line)
+                goto done;
 
+              _gtk_text_btree_get_iter_at_line (_gtk_text_buffer_get_btree (layout->buffer),
+                                                &lineiter, line, 0);
+            }
+          while (totally_invisible_line (layout, line, &lineiter));
+  
  	  gtk_text_layout_free_line_display (layout, display);
  	  display = gtk_text_layout_get_line_display (layout, line, FALSE);
           new_index = 0;

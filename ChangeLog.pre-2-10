@@ -1,3 +1,18 @@
+2005-06-13  Matthias Clasen  <mclasen@redhat.com>
+
+	Make invisible text work a bit better (#66194, patch by
+	Jeroen Zwartepoorte)
+	
+	* gtk/gtk.symbols:
+	* gtk/gtktextiter.[hc]: Add function to move by
+	visible lines.
+
+	* gtk/gtktextview.c (gtk_text_view_move_cursor_internal): 
+	Skip invisible text when moving by paragraphs.
+
+	* gtk/gtktextlayout.c (gtk_text_layout_move_iter_visually): 
+	Skip invisible lines here too.
+
 2005-06-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkselection.c (gtk_target_list_add_image_targets): 
