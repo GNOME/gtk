@@ -1,3 +1,9 @@
+2005-06-13  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilechooserbutton.c (model_update_current_folder): 
+	Free the data of the row before overwriting it.  (#307490,
+	Kjartan Maraas)	
+
 2005-06-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkselection.c (gtk_target_list_add_image_targets): 
