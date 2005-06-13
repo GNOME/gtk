@@ -2220,6 +2220,7 @@ calendar_paint_arrow (GtkCalendar *calendar,
 
       gdk_cairo_set_source_color (cr, &widget->style->bg[state]);
       cairo_paint (cr);
+      cairo_destroy (cr);
       
       gdk_drawable_get_size (window, &width, &height);
       if (arrow == ARROW_MONTH_LEFT || arrow == ARROW_YEAR_LEFT)

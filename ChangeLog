@@ -1,3 +1,8 @@
+2005-06-13  Kjartan Maraas  <kmaraas@gnome.org>
+
+	* gtk/gtkcalendar.c: (calendar_paint_arrow): Don't
+	leak the cairo context. Closes bug #307426.
+
 2005-06-13  Matthias Clasen  <mclasen@redhat.com>
 
 	Make invisible text work a bit better (#66194, patch by
