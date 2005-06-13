@@ -1,5 +1,7 @@
 2005-06-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk-sections.txt: Add new functions.
+
 	* gtk/tmpl/gtkfontsel.sgml: Some more details (#307384, Billy
 	Biggs)
 
