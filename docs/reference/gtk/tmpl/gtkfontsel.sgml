@@ -36,9 +36,6 @@ gtk_font_selection_set_preview_text().
 </variablelist>
 </para>
 
-<!-- ##### SECTION Stability_Level ##### -->
-
-
 <!-- ##### STRUCT GtkFontSelection ##### -->
 <para>
 The #GtkFontSelection struct contains private data only, and should
@@ -84,7 +81,10 @@ Gets the currently-selected font name.
 </para>
 
 @fontsel: a #GtkFontSelection.
-@Returns: the currently-selected font name
+@Returns: the name of the currently selected font, or %NULL if
+    no font is selected.  You should g_free() the returned font name
+    after you are done with it.
+A newly allocated string with the currently-se
 
 
 <!-- ##### FUNCTION gtk_font_selection_set_font_name ##### -->
