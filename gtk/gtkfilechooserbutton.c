@@ -1477,7 +1477,10 @@ model_update_current_folder (GtkFileChooserButton *button,
       button->priv->has_current_folder = TRUE;
     }
   else
-    gtk_tree_model_iter_nth_child (button->priv->model, &iter, NULL, pos);
+    {
+      gtk_tree_model_iter_nth_child (button->priv->model, &iter, NULL, pos);
+      model_free_row_data (button, &iter);
+    }
 
   pixbuf = gtk_file_system_render_icon (button->priv->fs, path,
 					GTK_WIDGET (button),
