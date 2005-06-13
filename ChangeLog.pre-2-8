@@ -1,5 +1,19 @@
 2005-06-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkpathbar.[hc]: Rework the way in which rerooting of the
+	path bar is done, implementing the following principles:
+	(#137289, patch by Benjamin Otte)
+	
+	1. Re-root only if $HOME is an ancestor of the current path.
+
+	2. When re-rooting, make sure the Left arrow appears in the path 
+	bar, so that you can navigate up from $HOME to /.  In that case, 
+	make sure the Right arrow doesn't appear if the sub-hierarchy from 
+	$HOME to the cwd fits in the window.
+
+	3. Make sure that hitting Alt-Up takes you always one folder up, 
+	even when the path bar is re-rooted.
+
 	* gtk/gtkaccellabel.c (_gtk_accel_label_class_get_accelerator_label): 
 	Try harder not to modify readonly strings. (#307541, Torsten Schoenfeld)
 

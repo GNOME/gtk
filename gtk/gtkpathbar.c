@@ -69,6 +69,11 @@ struct _ButtonData
   guint ignore_changes : 1;
   guint file_is_hidden : 1;
 };
+/* This macro is used to check if a button can be used as a fake root.
+ * All buttons in front of a fake root are automatically hidden when in a
+ * directory below a fake root and replaced with the "<" arrow button.
+ */
+#define BUTTON_IS_FAKE_ROOT(button) ((button)->type == HOME_BUTTON)
 
 G_DEFINE_TYPE (GtkPathBar,
 	       gtk_path_bar,
@@ -351,17 +356,26 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
   allocation_width = allocation->width - 2 * border_width;
 
   /* First, we check to see if we need the scrollbars. */
-  width = BUTTON_DATA (path_bar->button_list->data)->button->requisition.width;
-  for (list = path_bar->button_list->next; list; list = list->next)
+  if (path_bar->fake_root)
+    width = path_bar->spacing + path_bar->slider_width;
+  else
+      width = 0;
+
+  for (list = path_bar->button_list; list; list = list->next)
     {
       child = BUTTON_DATA (list->data)->button;
 
       width += child->requisition.width + path_bar->spacing;
+      if (list == path_bar->fake_root)
+	break;
     }
 
   if (width <= allocation_width)
     {
-      first_button = g_list_last (path_bar->button_list);
+      if (path_bar->fake_root)
+	first_button = path_bar->fake_root;
+      else
+	first_button = g_list_last (path_bar->button_list);
     }
   else
     {
@@ -388,6 +402,8 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
 	  if (width + child->requisition.width +
 	      path_bar->spacing + slider_space > allocation_width)
 	    reached_end = TRUE;
+	  else if (list == path_bar->fake_root)
+	    break;
 	  else
 	    width += child->requisition.width + path_bar->spacing;
 
@@ -396,7 +412,7 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
 
       /* Finally, we walk up, seeing how many of the previous buttons we can
        * add */
-      while (first_button->next && ! reached_end)
+      while (first_button->next && !reached_end)
 	{
 	  child = BUTTON_DATA (first_button->next->data)->button;
 
@@ -407,6 +423,8 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
 	  else
 	    {
 	      width += child->requisition.width + path_bar->spacing;
+	      if (first_button == path_bar->fake_root)
+		break;
 	      first_button = first_button->next;
 	    }
 	}
@@ -419,7 +437,7 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
   if (direction == GTK_TEXT_DIR_RTL)
     {
       child_allocation.x = allocation->x + allocation->width - border_width;
-      if (need_sliders)
+      if (need_sliders || path_bar->fake_root)
 	{
 	  child_allocation.x -= (path_bar->spacing + path_bar->slider_width);
 	  up_slider_offset = allocation->width - border_width - path_bar->slider_width;
@@ -428,7 +446,7 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
   else
     {
       child_allocation.x = allocation->x + border_width;
-      if (need_sliders)
+      if (need_sliders || path_bar->fake_root)
 	{
 	  up_slider_offset = border_width;
 	  child_allocation.x += (path_bar->spacing + path_bar->slider_width);
@@ -483,27 +501,30 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
       gtk_widget_set_child_visible (BUTTON_DATA (list->data)->button, FALSE);
     }
 
-  if (need_sliders)
+  if (need_sliders || path_bar->fake_root)
     {
       child_allocation.width = path_bar->slider_width;
-      
       child_allocation.x = up_slider_offset + allocation->x;
       gtk_widget_size_allocate (path_bar->up_slider_button, &child_allocation);
 
+      gtk_widget_set_child_visible (path_bar->up_slider_button, TRUE);
+      gtk_widget_show_all (path_bar->up_slider_button);
+    }
+  else
+    gtk_widget_set_child_visible (path_bar->up_slider_button, FALSE);
+      
+  if (need_sliders)
+    {
+      child_allocation.width = path_bar->slider_width;
       child_allocation.x = down_slider_offset + allocation->x;
       gtk_widget_size_allocate (path_bar->down_slider_button, &child_allocation);
 
-      gtk_widget_set_child_visible (path_bar->up_slider_button, TRUE);
       gtk_widget_set_child_visible (path_bar->down_slider_button, TRUE);
-      gtk_widget_show_all (path_bar->up_slider_button);
       gtk_widget_show_all (path_bar->down_slider_button);
       gtk_path_bar_update_slider_buttons (path_bar);
     }
   else
-    {
-      gtk_widget_set_child_visible (path_bar->up_slider_button, FALSE);
-      gtk_widget_set_child_visible (path_bar->down_slider_button, FALSE);
-    }
+    gtk_widget_set_child_visible (path_bar->down_slider_button, FALSE);
 }
 
 static void
@@ -694,6 +715,8 @@ gtk_path_bar_scroll_up (GtkWidget *button, GtkPathBar *path_bar)
     {
       if (list->prev && gtk_widget_get_child_visible (BUTTON_DATA (list->prev->data)->button))
 	{
+	  if (list->prev == path_bar->fake_root)
+	    path_bar->fake_root = NULL;
 	  path_bar->first_scrolled_button = list;
 	  return;
 	}
@@ -894,6 +917,7 @@ gtk_path_bar_clear_buttons (GtkPathBar *path_bar)
       gtk_container_remove (GTK_CONTAINER (path_bar), BUTTON_DATA (path_bar->button_list->data)->button);
     }
   path_bar->first_scrolled_button = NULL;
+  path_bar->fake_root = NULL;
 }
 
 static void
@@ -1199,6 +1223,7 @@ gtk_path_bar_check_parent_path (GtkPathBar         *path_bar,
 {
   GList *list;
   GList *current_path = NULL;
+  gboolean need_new_fake_root = FALSE;
 
   for (list = path_bar->button_list; list; list = list->next)
     {
@@ -1210,10 +1235,28 @@ gtk_path_bar_check_parent_path (GtkPathBar         *path_bar,
 	  current_path = list;
 	  break;
 	}
+      if (list == path_bar->fake_root)
+	need_new_fake_root = TRUE;
     }
 
   if (current_path)
     {
+      if (need_new_fake_root)
+	{
+	  path_bar->fake_root = NULL;
+	  for (list = current_path; list; list = list->next)
+	    {
+	      ButtonData *button_data;
+
+	      button_data = list->data;
+	      if (BUTTON_IS_FAKE_ROOT (button_data))
+		{
+		  path_bar->fake_root = list;
+		  break;
+		}
+	    }
+	}
+
       for (list = path_bar->button_list; list; list = list->next)
 	{
 	  gtk_path_bar_update_button_appearance (path_bar,
@@ -1241,6 +1284,7 @@ _gtk_path_bar_set_path (GtkPathBar         *path_bar,
   gboolean first_directory = TRUE;
   gboolean result;
   GList *new_buttons = NULL;
+  GList *fake_root = NULL;
 
   g_return_val_if_fail (GTK_IS_PATH_BAR (path_bar), FALSE);
   g_return_val_if_fail (file_path != NULL, FALSE);
@@ -1310,11 +1354,8 @@ _gtk_path_bar_set_path (GtkPathBar         *path_bar,
 
       new_buttons = g_list_prepend (new_buttons, button_data);
 
-      if (button_data->type != NORMAL_BUTTON)
-	{
-	  gtk_file_path_free (parent_path);
-	  break;
-	}
+      if (BUTTON_IS_FAKE_ROOT (button_data))
+	fake_root = new_buttons;
 
       path = parent_path;
       first_directory = FALSE;
@@ -1326,6 +1367,7 @@ _gtk_path_bar_set_path (GtkPathBar         *path_bar,
 
       gtk_path_bar_clear_buttons (path_bar);
       path_bar->button_list = g_list_reverse (new_buttons);
+      path_bar->fake_root = fake_root;
 
       for (l = path_bar->button_list; l; l = l->next)
 	{
