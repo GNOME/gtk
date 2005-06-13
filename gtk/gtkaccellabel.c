@@ -590,25 +590,27 @@ _gtk_accel_label_class_get_accelerator_label (GtkAccelLabelClass *klass,
       gchar *tmp;
 
       tmp = gdk_keyval_name (gdk_keyval_to_lower (accelerator_key));
-      if (tmp == NULL)
-	tmp = "";
-      else if (tmp[0] != 0 && tmp[1] == 0)
-	tmp[0] = g_ascii_toupper (tmp[0]);
-      else 
+      if (tmp != NULL)
 	{
-	  gchar msg[128];
-	  gchar *str;
-      
-	  strcpy (msg, "keyboard label|");
-	  g_strlcat (msg, tmp, 128);
-	  str = dgettext (GETTEXT_PACKAGE, msg);
-	  if (str == msg)
-	    substitute_underscores (tmp);
+	  if (tmp[0] != 0 && tmp[1] == 0)
+	    g_string_append_c (gstring, g_ascii_toupper (tmp[0]));
 	  else
-	    tmp = str;
+	    {
+	      gchar msg[128];
+	      gchar *str;
+	      
+	      strcpy (msg, "keyboard label|");
+	      g_strlcat (msg, tmp, 128);
+	      str = dgettext (GETTEXT_PACKAGE, msg);
+	      if (str == msg)
+		{
+		  g_string_append (gstring, tmp);
+		  substitute_underscores (gstring->str);
+		}
+	      else
+		g_string_append (gstring, str);
+	    }
 	}
-
-      g_string_append (gstring, tmp);
     }
 
   return g_string_free (gstring, FALSE);
