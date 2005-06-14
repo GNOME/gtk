@@ -1,3 +1,7 @@
+2005-06-14  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/gdk-sections.txt: Add new functions.
+
 2005-06-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-sections.txt: Add new functions.
