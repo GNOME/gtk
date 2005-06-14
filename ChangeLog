@@ -1,5 +1,8 @@
 2005-06-14  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcolorsel.c (make_picker_cursor): Use a named cursor
+	with the name "color-picker", when available.
+
 	* gdk/gdk.symbols: 
 	* gdk/gdkcursor.h: 
 	* gdk/x11/gdkcursor-x11.c (gdk_cursor_get_image) 
