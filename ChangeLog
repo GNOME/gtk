@@ -1,3 +1,20 @@
+2005-06-14  Federico Mena Quintero  <federico@ximian.com>
+
+	Merged from gtk-2-6:
+
+	Fixes #307640:
+
+	* gtk/gtkfilechooserdefault.c
+	(gtk_file_chooser_default_should_respond): Oops, I broke SAVE
+	mode.  If the parent path is a folder, only create a subfolder if
+	we are in CREATE_FOLDER mode; if we are in SAVE mode, just return
+	and respond.  Also, pick up the case where the user types
+	"dirname/" instead of "dirname".
+	(check_save_entry): Make the return type void.  Add some return
+	parameters so that we can do more thorough checking.
+	(gtk_file_chooser_default_get_paths): If the file part is empty
+	and we are in SAVE mode, return an empty selection.
+
 2005-06-15  Kristian Rietveld  <kris@gtk.org>
 
 	Patch for #163214 (reported by Tommi Komulainen) and fixes some

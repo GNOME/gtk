@@ -5183,11 +5183,21 @@ gtk_file_chooser_default_unselect_all (GtkFileChooser *chooser)
   gtk_tree_selection_unselect_all (selection);
 }
 
-/* Checks whether the filename entry for the Save modes contains a valid filename */
-static GtkFilePath *
+/* Checks whether the filename entry for the Save modes contains a well-formed filename.
+ *
+ * is_well_formed_ret - whether what the user typed passes gkt_file_system_make_path()
+ *
+ * is_empty_ret - whether the file entry is totally empty
+ *
+ * is_file_part_empty_ret - whether the file part is empty (will be if user types "foobar/", and
+ *                          the path will be "$cwd/foobar")
+ */
+static void
 check_save_entry (GtkFileChooserDefault *impl,
-		  gboolean              *is_valid,
-		  gboolean              *is_empty)
+		  GtkFilePath          **path_ret,
+		  gboolean              *is_well_formed_ret,
+		  gboolean              *is_empty_ret,
+		  gboolean              *is_file_part_empty_ret)
 {
   GtkFileChooserEntry *chooser_entry;
   const GtkFilePath *current_folder;
@@ -5200,17 +5210,31 @@ check_save_entry (GtkFileChooserDefault *impl,
 
   chooser_entry = GTK_FILE_CHOOSER_ENTRY (impl->save_file_name_entry);
 
+  if (strlen (gtk_entry_get_text (GTK_ENTRY (chooser_entry))) == 0)
+    {
+      *path_ret = NULL;
+      *is_well_formed_ret = TRUE;
+      *is_empty_ret = TRUE;
+      *is_file_part_empty_ret = TRUE;
+
+      return;
+    }
+
+  *is_empty_ret = FALSE;
+
   current_folder = _gtk_file_chooser_entry_get_current_folder (chooser_entry);
   file_part = _gtk_file_chooser_entry_get_file_part (chooser_entry);
 
   if (!file_part || file_part[0] == '\0')
     {
-      *is_valid = FALSE;
-      *is_empty = TRUE;
-      return NULL;
+      *path_ret = gtk_file_path_copy (current_folder);
+      *is_well_formed_ret = TRUE;
+      *is_file_part_empty_ret = TRUE;
+
+      return;
     }
 
-  *is_empty = FALSE;
+  *is_file_part_empty_ret = FALSE;
 
   error = NULL;
   path = gtk_file_system_make_path (impl->file_system, current_folder, file_part, &error);
@@ -5218,12 +5242,14 @@ check_save_entry (GtkFileChooserDefault *impl,
   if (!path)
     {
       error_building_filename_dialog (impl, current_folder, file_part, error);
-      *is_valid = FALSE;
-      return NULL;
+      *path_ret = NULL;
+      *is_well_formed_ret = FALSE;
+
+      return;
     }
 
-  *is_valid = TRUE;
-  return path;
+  *path_ret = path;
+  *is_well_formed_ret = TRUE;
 }
 
 struct get_paths_closure {
@@ -5269,11 +5295,21 @@ gtk_file_chooser_default_get_paths (GtkFileChooser *chooser)
   if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
       || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
     {
-      gboolean is_valid, is_empty;
+      gboolean is_well_formed, is_empty, is_file_part_empty;
 
-      info.path_from_entry = check_save_entry (impl, &is_valid, &is_empty);
-      if (!is_valid && !is_empty)
+      check_save_entry (impl, &info.path_from_entry, &is_well_formed, &is_empty, &is_file_part_empty);
+
+      if (!is_well_formed)
 	return NULL;
+
+      if (!is_empty)
+	{
+	  if (is_file_part_empty && impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
+	    {
+	      gtk_file_path_free (info.path_from_entry);
+	      return NULL;
+	    }
+	}
     }
 
   if (!info.path_from_entry || impl->select_multiple)
@@ -5751,7 +5787,7 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
   else if (current_focus == impl->save_file_name_entry)
     {
       GtkFilePath *path;
-      gboolean is_valid, is_empty;
+      gboolean is_well_formed, is_empty, is_file_part_empty;
       gboolean is_folder;
       gboolean retval;
       GtkFileChooserEntry *entry;
@@ -5763,12 +5799,12 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
 		|| impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER);
 
       entry = GTK_FILE_CHOOSER_ENTRY (impl->save_file_name_entry);
-      path = check_save_entry (impl, &is_valid, &is_empty);
+      check_save_entry (impl, &path, &is_well_formed, &is_empty, &is_file_part_empty);
 
-      if (!is_valid)
+      if (is_empty || !is_well_formed)
 	return FALSE;
 
-      g_assert (!is_empty);
+      g_assert (path != NULL);
 
       error = NULL;
       is_folder = check_is_folder (impl->file_system, path, &error);
@@ -5782,6 +5818,9 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
 	    }
 	  else /* GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER */
 	    {
+	      /* The folder already exists, so we do not need to create it.
+	       * Just respond to terminate the dialog.
+	       */
 	      retval = TRUE;
 	    }
 	}
@@ -5792,6 +5831,7 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
 	    {
 	      /* Oops, the user typed the name of an existing path which is not a folder */
 	      error_creating_folder_over_existing_file_dialog (impl, path, error);
+	      error = NULL; /* as it will be freed below for the general case */
 	      retval = FALSE;
 	    }
 	  else
@@ -5802,23 +5842,29 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
 
 	      parent_path = gtk_file_path_copy (_gtk_file_chooser_entry_get_current_folder (entry));
 	      is_folder = check_is_folder (impl->file_system, parent_path, NULL);
-	      if (!is_folder)
+	      if (is_folder)
 		{
-		  change_folder_and_display_error (impl, parent_path);
-		  retval = FALSE;
+		  if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
+		    retval = TRUE;
+		  else /* GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER */
+		    {
+		      GError *create_error;
+
+		      create_error = NULL;
+		      if (gtk_file_system_create_folder (impl->file_system, path, &create_error))
+			retval = TRUE;
+		      else
+			{
+			  error_creating_folder_dialog (impl, path, create_error);
+			  retval = FALSE;
+			}
+		    }
 		}
 	      else
 		{
-		  GError *create_error;
-
-		  create_error = NULL;
-		  if (gtk_file_system_create_folder (impl->file_system, path, &create_error))
-		    retval = TRUE;
-		  else
-		    {
-		      error_creating_folder_dialog (impl, path, create_error);
-		      retval = FALSE;
-		    }
+		  /* This will display an error, which is what we want */
+		  change_folder_and_display_error (impl, parent_path);
+		  retval = FALSE;
 		}
 
 	      gtk_file_path_free (parent_path);
