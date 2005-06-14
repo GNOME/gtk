@@ -1,3 +1,24 @@
+2005-06-15  Kristian Rietveld  <kris@gtk.org>
+
+	Patch for #163214 (reported by Tommi Komulainen) and fixes some
+	other scrolling/validation related bugs along the why.
+
+	* gtk/gtktreeview.c (gtk_tree_view_size_request): run
+	do_validate_rows once and don't queue a size request there,
+	(gtk_tree_view_size_allocate): don't update vadj value without
+	reason, sync top_row/dy after the window sizes and adjustments
+	are in sync again,
+	(validate_visible_area): always update dy when scrolling,
+	manually set top_row here after changing the vadj (don't depend
+	on _adjustment_changed and top_row/dy sync to do this), since we
+	now always set top_row here correctly, we can always free
+	scroll_to_path at the end which avoids infinite expose loops,
+	(do_validate_rows): add queue_resize boolean, remove top_row/dy
+	sync here, we cannot do it safely at this place since the
+	window sizes and adjustments are out of sync,
+	(validate_rows), (validate_rows_handler): update call to
+	do_validate_rows().
+
 2005-06-14  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/x11/gdkcursor-x11.c (gdk_cursor_new_from_name): Add a 
