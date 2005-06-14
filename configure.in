@@ -111,6 +111,17 @@ AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE")
 AC_CANONICAL_HOST
 
 MATH_LIB=-lm
+AC_MSG_CHECKING([for native MacOS X])
+case "$host" in
+  *-*-darwin*)
+    os_macosx=yes
+    ;;
+  *)
+    os_macosx=no
+    ;;
+esac
+AC_MSG_RESULT([$os_macosx])
+
 AC_MSG_CHECKING([for native Win32])
 case "$host" in
   *-*-mingw*)
@@ -130,6 +141,7 @@ case $host in
 esac
 dnl Initialize libtool
 AC_PROG_CC
+
 AM_DISABLE_STATIC
 
 if test "$os_win32" = "yes"; then
@@ -166,7 +178,22 @@ esac
 AC_MSG_RESULT([$platform_win32])
 AM_CONDITIONAL(PLATFORM_WIN32, test "$platform_win32" = "yes")
 
+
+AC_MSG_CHECKING([for some MacOS X platform])
+case "$host" in
+  *-*-darwin*|*-*-darwin*)
+    platform_macosx=yes
+    ;;
+  *)
+    platform_macosx=no
+    ;;
+esac
+AC_MSG_RESULT([$platform_macosx])
+AM_CONDITIONAL(PLATFORM_MACOSX, test "$platform_macosx" = "yes")
+
+
 AM_CONDITIONAL(OS_WIN32, test "$os_win32" = "yes")
+AM_CONDITIONAL(OS_MACOSX, test "$os_macosx" = "yes")
 AM_CONDITIONAL(OS_UNIX, test "$os_win32" != "yes")
 AM_CONDITIONAL(OS_LINUX, test "$os_linux" = "yes")
 
@@ -217,18 +244,29 @@ AC_ARG_WITH(ie55,
 GLIB_AC_DIVERT_BEFORE_HELP([
 if test "$platform_win32" = yes; then
   gdktarget=win32
+elif test "$platform_macosx" = yes; then
+  gdktarget=macosx
 else
   gdktarget=x11
 fi
 ])
+
+# this because the macro above is broken.... and doesn't work.
+if test "$platform_win32" = yes; then
+  gdktarget=win32
+elif test "$platform_macosx" = yes; then
+  gdktarget=macosx
+else
+  gdktarget=x11
+fi
 
 AC_ARG_WITH(gdktarget, [  --with-gdktarget=[[x11/linux-fb/win32]] select GDK target [default=$gdktarget]],
 	gdktarget=$with_gdktarget)
 
 AC_SUBST(gdktarget)
 case $gdktarget in
-  x11|linux-fb|win32) ;;
-  *) AC_MSG_ERROR([Invalid target for GDK: use x11, linux-fb or win32.]);;
+  x11|linux-fb|win32|macosx) ;;
+  *) AC_MSG_ERROR([Invalid target for GDK: use x11, linux-fb, win32 or macosx.]);;
 esac
 
 gdktargetlib=libgdk-$gdktarget-$GTK_API_VERSION.la
@@ -330,6 +368,15 @@ if test x"$os_win32" = xyes; then
     fi
   fi
 fi
+
+# objective-C
+OBJC="gcc"
+OBJCFLAGS=""
+AC_SUBST(OBJC)
+AC_SUBST(OBJCFLAGS)
+dnl Make Objective-C work with automake 1.7.x
+dnl see http://lists.gnu.org/archive/html/automake/2003-05/msg00027.html
+AM_CONDITIONAL([am__fastdepOBJC], false)
 
 # Honor aclocal flags
 ACLOCAL="$ACLOCAL $ACLOCAL_FLAGS"
@@ -1343,6 +1390,13 @@ else
   AM_CONDITIONAL(USE_WIN32, false)
 fi
 
+if test "x$gdktarget" = "xmacosx"; then 
+  GDK_EXTRA_LIBS="$GDK_EXTRA_LIBS -framework Cocoa -framework ApplicationServices"
+  AM_CONDITIONAL(USE_MACOSX, true)  
+else
+  AM_CONDITIONAL(USE_MACOSX, false)  
+fi
+
 GDK_PIXBUF_XLIB_PACKAGES=
 GDK_PIXBUF_XLIB_DEP_LIBS="`$PKG_CONFIG --libs $GDK_PIXBUF_PACKAGES $GDK_PIXBUF_XLIB_PACKAGES` $GDK_PIXBUF_XLIB_EXTRA_LIBS $GDK_PIXBUF_EXTRA_LIBS"
 GDK_PIXBUF_XLIB_DEP_CFLAGS="`$PKG_CONFIG --cflags  gthread-2.0 $GDK_PIXBUF_PACKAGES $GDK_PIXBUF_XLIB_PACKAGES` $GDK_PIXBUF_EXTRA_CFLAGS $GDK_PIXBUF_XLIB_EXTRA_CFLAGS"
@@ -1401,6 +1455,8 @@ if test "x$gdktarget" = "xx11"; then
 	if $PKG_CONFIG --exists pangox ; then
 		PANGO_PACKAGES="$PANGO_PACKAGES pangox"
 	fi
+elif test "x$gdktarget" = "xmacosx"; then
+        PANGO_PACKAGES=pangoft2
 elif test "x$gdktarget" = "xwin32"; then
         PANGO_PACKAGES=pangowin32
 elif test "x$gdktarget" = "xlinux-fb"; then
@@ -1614,6 +1670,10 @@ elif test "x$gdktarget" = "xlinux-fb" ; then
   gdk_windowing='
 #define GDK_WINDOWING_FB
 #define GDK_NATIVE_WINDOW_POINTER'
+elif test "x$gdktarget" = "xmacosx" ; then
+  gdk_windowing='
+#define GDK_WINDOWING_MACOSX
+#define GDK_NATIVE_WINDOW_POINTER'
 fi
 
 if test x$gdk_wchar_h = xyes; then
@@ -1673,6 +1733,8 @@ gdk/win32/Makefile
 gdk/win32/rc/Makefile
 gdk/win32/rc/gdk.rc
 gdk/linux-fb/Makefile
+gdk/macosx/Makefile
+gdk/test/Makefile
 gtk/Makefile
 gtk/makefile.msc
 gtk/gtkversion.h
