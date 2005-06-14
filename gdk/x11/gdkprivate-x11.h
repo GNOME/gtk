@@ -75,6 +75,7 @@ struct _GdkCursorPrivate
   GdkCursor cursor;
   Cursor xcursor;
   GdkDisplay *display;
+  gchar *name;
 };
 
 struct _GdkVisualPrivate
