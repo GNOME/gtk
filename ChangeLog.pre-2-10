@@ -1,5 +1,43 @@
 2005-06-14  Matthias Clasen  <mclasen@redhat.com>
 
+	Use named cursors for the DND cursors, the names are "dnd-none",
+	"dnd-copy", "dnd-link", "dnd-move" and "dnd-ask". Also use an RGBA 
+	cursor instead of cursor+window when possible. This saves 
+	roundtrips during the drag operation, and makes translucent icons 
+	possible.
+	
+	* gtk/gtkdndcursors.h: New file, containing inlined pixbufs
+	for the default dnd cursors.
+
+	* gtk/gtkdnd.c (struct _GtkDragSourceInfo): Store the cursors
+	used during the drag here, also store the icon pixbuf here. 
+
+	* gtk/gtkdnd.c (drag_cursors): Store the cursor names here. Also
+	switch the default cursors from xbm to inlined pixbufs. 
+
+	* gtk/gtkdnd.c (gtk_drag_get_cursor): This function now takes the
+	GtkDragSourceInfo as well, since it has to composite the 
+	drag-specific cursors. The cursors combined from the image of
+	the themed cursor and the icon_pixbuf stored in the info.
+
+	* gtk/gtkdnd.c (gtk_drag_begin_internal): Don't set the default
+	icon if there is an icon_pixbuf, which will be composited into
+	the cursor later.
+
+	* gtk/gtkdnd.c (set_icon_stock_pixbuf): If appropriate, store
+	the pixbuf in the info struct for later compositing into the
+	cursor instead of creating an icon window.
+	
+	* gtk/gtkdnd.c (gtk_drag_drop_finished): If we used an
+	RGBA cursor for the drag, and need to display the cancel
+	animation, construct the icon window here.
+
+	* gtk/gtkdnd.c (gtk_drag_source_info_destroy): Unref the 
+	drag-specific cursors and the icon_pixbuf when done with
+	the drag.
+
+2005-06-14  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkcolorsel.c (make_picker_cursor): Use a named cursor
 	with the name "color-picker", when available.
 

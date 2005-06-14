@@ -111,7 +111,10 @@ struct _GtkDragSourceInfo
   guint              destroy_icon : 1; /* If true, destroy icon_window
       				        */
   guint              have_grab : 1;    /* Do we still have the pointer grab
+
 					 */
+  GdkPixbuf         *icon_pixbuf;
+  GdkCursor         *drag_cursors[6];
 };
 
 struct _GtkDragDestSite 
@@ -191,7 +194,8 @@ static void          gtk_drag_get_event_actions (GdkEvent        *event,
 					         GdkDragAction   *suggested_action,
 					         GdkDragAction   *possible_actions);
 static GdkCursor *   gtk_drag_get_cursor         (GdkDisplay     *display,
-						  GdkDragAction   action);
+						  GdkDragAction   action,
+						  GtkDragSourceInfo *info);
 static GtkWidget    *gtk_drag_get_ipc_widget     (GdkScreen	 *screen);
 static void          gtk_drag_release_ipc_widget (GtkWidget      *widget);
 
@@ -279,91 +283,21 @@ static gint gtk_drag_abort_timeout             (gpointer           data);
  * Cursor and Icon data *
  ************************/
 
-#define action_ask_width 16
-#define action_ask_height 16
-static const guchar action_ask_bits[] = {
-  0x00, 0x00, 0xfe, 0x7f, 0xfe, 0x1f, 0x06, 0xc0, 0x76, 0xf8, 0xb6, 0xf7, 
-  0xd6, 0xec, 0x66, 0xdb, 0x66, 0xdb, 0x96, 0xec, 0x76, 0xf7, 0x76, 0xfb, 
-  0xf6, 0xfc, 0x72, 0xfb, 0x7a, 0xfb, 0xf8, 0xfc, };
-
-#define action_ask_mask_width 16
-#define action_ask_mask_height 16
-static const guchar action_ask_mask_bits[] = {
-  0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x3f, 0x8f, 0x07, 0xcf, 0x0f, 
-  0xef, 0x1f, 0xff, 0x3c, 0xff, 0x3c, 0x6f, 0x1f, 0x8f, 0x0f, 0x8f, 0x07, 
-  0x0f, 0x03, 0x8f, 0x07, 0x87, 0x07, 0x07, 0x03, };
-
-#define action_copy_width 16
-#define action_copy_height 16
-static const guchar action_copy_bits[] = {
-  0x00, 0x00, 0xfe, 0x7f, 0xfe, 0x1f, 0x06, 0xc0, 0x76, 0xfb, 0x76, 0xfb, 
-  0x76, 0xfb, 0x06, 0x83, 0xf6, 0xbf, 0xf6, 0xbf, 0x06, 0x83, 0x76, 0xfb, 
-  0x76, 0xfb, 0x72, 0xfb, 0x7a, 0xf8, 0xf8, 0xff, };
-
-#define action_copy_mask_width 16
-#define action_copy_mask_height 16
-static const guchar action_copy_mask_bits[] = {
-  0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x3f, 0x8f, 0x07, 0x8f, 0x07, 
-  0x8f, 0x07, 0xff, 0x7f, 0xff, 0x7f, 0xff, 0x7f, 0xff, 0x7f, 0x8f, 0x07, 
-  0x8f, 0x07, 0x8f, 0x07, 0x87, 0x07, 0x07, 0x00, };
-
-#define action_move_width 16
-#define action_move_height 16
-static const guchar action_move_bits[] = {
-  0x00, 0x00, 0xfe, 0x7f, 0xfe, 0x1f, 0x06, 0xc0, 0x96, 0xff, 0x26, 0xff, 
-  0xc6, 0xf8, 0xd6, 0xe3, 0x96, 0x8f, 0xb6, 0xbf, 0x36, 0xc3, 0x76, 0xfb, 
-  0x76, 0xfa, 0xf2, 0xfa, 0xfa, 0xf8, 0xf8, 0xff, };
-
-#define action_move_mask_width 16
-#define action_move_mask_height 16
-static const guchar action_move_mask_bits[] = {
-  0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x3f, 0x6f, 0x00, 0xff, 0x00, 
-  0xff, 0x07, 0xef, 0x1f, 0xef, 0x7f, 0xcf, 0x7f, 0xcf, 0x3f, 0x8f, 0x07, 
-  0x8f, 0x07, 0x0f, 0x07, 0x07, 0x07, 0x07, 0x00, };
-
-#define action_link_width 16
-#define action_link_height 16
-static const guchar action_link_bits[] = {
-  0x00, 0x00, 0xfe, 0x7f, 0xfe, 0x1f, 0x06, 0xc0, 0x36, 0xf8, 0xd6, 0xf7, 
-  0x66, 0xec, 0xa6, 0xe8, 0x26, 0xdf, 0xe6, 0xbd, 0xd6, 0xa7, 0xb6, 0xa8, 
-  0xb6, 0xb1, 0x72, 0xdf, 0xfa, 0xe0, 0xf8, 0xff, };
-
-#define action_link_mask_width 16
-#define action_link_mask_height 16
-static const guchar action_link_mask_bits[] = {
-  0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x3f, 0xcf, 0x07, 0xef, 0x0f, 
-  0xff, 0x1f, 0x7f, 0x1f, 0xff, 0x3f, 0xff, 0x7f, 0xef, 0x7f, 0xcf, 0x77, 
-  0xcf, 0x7f, 0x8f, 0x3f, 0x07, 0x1f, 0x07, 0x00, };
-
-#define action_none_width 16
-#define action_none_height 16
-static const guchar action_none_bits[] = {
-  0x00, 0x00, 0xfe, 0x7f, 0xfe, 0x1f, 0x06, 0xc0, 0xf6, 0xff, 0xf6, 0xff, 
-  0xf6, 0xff, 0xf6, 0xff, 0xf6, 0xff, 0xf6, 0xff, 0xf6, 0xff, 0xf6, 0xff, 
-  0xf6, 0xff, 0xf2, 0xff, 0xfa, 0xff, 0xf8, 0xff, };
-
-#define action_none_mask_width 16
-#define action_none_mask_height 16
-static const guchar action_none_mask_bits[] = {
-  0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x3f, 0x0f, 0x00, 0x0f, 0x00, 
-  0x0f, 0x00, 0x0f, 0x00, 0x0f, 0x00, 0x0f, 0x00, 0x0f, 0x00, 0x0f, 0x00, 
-  0x0f, 0x00, 0x0f, 0x00, 0x07, 0x00, 0x07, 0x00, };
-
-#define CURSOR_WIDTH 16
-#define CURSOR_HEIGHT 16
+#include "gtkdndcursors.h"
 
 static struct {
   GdkDragAction action;
-  const guchar *bits;
-  const guchar *mask;
+  const gchar  *name;
+  const guint8 *data;
+  GdkPixbuf    *pixbuf;
   GdkCursor    *cursor;
 } drag_cursors[] = {
   { GDK_ACTION_DEFAULT, NULL },
-  { GDK_ACTION_ASK,   action_ask_bits,  action_ask_mask_bits,  NULL },
-  { GDK_ACTION_COPY,  action_copy_bits, action_copy_mask_bits, NULL },
-  { GDK_ACTION_MOVE,  action_move_bits, action_move_mask_bits, NULL },
-  { GDK_ACTION_LINK,  action_link_bits, action_link_mask_bits, NULL },
-  { 0              ,  action_none_bits, action_none_mask_bits, NULL },
+  { GDK_ACTION_ASK,   "dnd-ask",  dnd_cursor_ask,  NULL, NULL },
+  { GDK_ACTION_COPY,  "dnd-copy", dnd_cursor_copy, NULL, NULL },
+  { GDK_ACTION_MOVE,  "dnd-move", dnd_cursor_move, NULL, NULL },
+  { GDK_ACTION_LINK,  "dnd-link", dnd_cursor_link, NULL, NULL },
+  { 0              ,  "dnd-none", dnd_cursor_none, NULL, NULL },
 };
 
 static const gint n_drag_cursors = sizeof (drag_cursors) / sizeof (drag_cursors[0]);
@@ -577,19 +511,61 @@ gtk_drag_get_event_actions (GdkEvent *event,
       else if (actions & GDK_ACTION_LINK)
 	*suggested_action = GDK_ACTION_LINK;
     }
+}
+
+static gboolean
+gtk_drag_can_use_rgba_cursor (GdkDisplay *display, 
+			      gint        width,
+			      gint        height)
+{
+  guint max_width, max_height;
   
-  return;
+  if (!gdk_display_supports_cursor_color (display))
+    return FALSE;
+
+  if (!gdk_display_supports_cursor_alpha (display))
+    return FALSE;
+
+  gdk_display_get_maximal_cursor_size (display, 
+                                       &max_width,
+                                       &max_height);
+  if (width > max_width || height > max_height)
+    {
+       /* can't use rgba cursor (too large) */
+      return FALSE;
+    }
+
+  return TRUE;
 }
 
 static GdkCursor *
-gtk_drag_get_cursor (GdkDisplay   *display,
-		     GdkDragAction action)
+gtk_drag_get_cursor (GdkDisplay        *display,
+		     GdkDragAction      action,
+		     GtkDragSourceInfo *info)
 {
-  gint i;
-  
+  gint i, j;
+
+  /* reconstruct the cursors for each new drag (thus !info),
+   * to catch cursor theme changes 
+   */ 
+  if (!info)
+    {
+      for (i = 0 ; i < n_drag_cursors - 1; i++)
+	if (drag_cursors[i].cursor != NULL)
+	  {
+	    gdk_cursor_unref (drag_cursors[i].cursor);
+	    drag_cursors[i].cursor = NULL;
+	  }
+    }
+ 
   for (i = 0 ; i < n_drag_cursors - 1; i++)
     if (drag_cursors[i].action == action)
       break;
+
+  if (drag_cursors[i].pixbuf == NULL)
+    drag_cursors[i].pixbuf = 
+      gdk_pixbuf_new_from_inline (-1, drag_cursors[i].data, FALSE, NULL);
+
   if (drag_cursors[i].cursor != NULL)
     {
       if (display != gdk_cursor_get_display (drag_cursors[i].cursor))
@@ -598,26 +574,155 @@ gtk_drag_get_cursor (GdkDisplay   *display,
 	  drag_cursors[i].cursor = NULL;
 	}
     }
-
+  
   if (drag_cursors[i].cursor == NULL)
+    drag_cursors[i].cursor = gdk_cursor_new_from_name (display, drag_cursors[i].name);
+  
+  if (drag_cursors[i].cursor == NULL)
+    drag_cursors[i].cursor = gdk_cursor_new_from_pixbuf (display, drag_cursors[i].pixbuf, 0, 0);
+
+  if (info && info->icon_pixbuf) 
     {
-      GdkColor bg = { 0, 0xffff, 0xffff, 0xffff };
-      GdkColor fg = { 0, 0x0000, 0x0000, 0x0000 };
-      GdkScreen *screen = gdk_display_get_default_screen (display);
-      GdkWindow *window = gdk_screen_get_root_window (screen);
+      gint cursor_width, cursor_height;
+      gint icon_width, icon_height;
+      gint width, height;
+      GdkPixbuf *cursor_pixbuf, *pixbuf;
+      GtkAnchorType icon_anchor;
+      gint hot_x, hot_y, icon_x, icon_y, ref_x, ref_y;
+      gboolean found;
 
-      GdkPixmap *pixmap = 
-	gdk_bitmap_create_from_data (window, (gchar *)drag_cursors[i].bits, CURSOR_WIDTH, CURSOR_HEIGHT);
+      if (info->drag_cursors[i] != NULL)
+        {
+          if (display == gdk_cursor_get_display (info->drag_cursors[i]))
+	    return info->drag_cursors[i];
+	  
+	  gdk_cursor_unref (info->drag_cursors[i]);
+	  info->drag_cursors[i] = NULL;
+        }
 
-      GdkPixmap *mask = 
-	gdk_bitmap_create_from_data (window, (gchar *)drag_cursors[i].mask, CURSOR_WIDTH, CURSOR_HEIGHT);
+      cursor_pixbuf = gdk_cursor_get_image (drag_cursors[i].cursor);
+      if (!cursor_pixbuf)
+	{
+	  cursor_pixbuf = g_object_ref (drag_cursors[i].pixbuf);
+	  hot_x = hot_y = 0;
+	  icon_anchor = GTK_ANCHOR_NORTH;
+	  icon_x = icon_y = -2;
+	}
+      else
+	{
+	  if (gdk_pixbuf_get_option (cursor_pixbuf, "x_hot"))
+	    hot_x = atoi (gdk_pixbuf_get_option (cursor_pixbuf, "x_hot"));
+	  
+	  if (gdk_pixbuf_get_option (cursor_pixbuf, "y_hot"))
+	    hot_y = atoi (gdk_pixbuf_get_option (cursor_pixbuf, "y_hot"));
 
-      drag_cursors[i].cursor = gdk_cursor_new_from_pixmap (pixmap, mask, &fg, &bg, 0, 0);
+	  found = FALSE;
+	  for (j = 0; j < 10; j++)
+	    {
+	      const gchar *opt;
+	      const gchar key[32];
+	      gchar **toks;
 
-      g_object_unref (pixmap);
-      g_object_unref (mask);
+	      g_snprintf (key, 32, "comment%d", j);
+	      opt = gdk_pixbuf_get_option (cursor_pixbuf, key);
+	      if (opt && g_str_has_prefix ("icon-attach:", opt))
+		{
+		  toks = g_strsplit (opt + strlen ("icon-attach:"), "'", -1);
+		  if (g_strv_length (toks) != 3)
+		    {
+		      g_strfreev (toks);
+		      break;
+		    }
+		  icon_anchor = atoi (toks[0]);
+		  icon_x = atoi (toks[1]);
+		  icon_y = atoi (toks[2]);
+
+		  g_strfreev (toks);
+		  found = TRUE;
+		  break;
+		}
+	    }
+	  if (!found)
+	    {
+	      icon_anchor = GTK_ANCHOR_NORTH_WEST;
+	      icon_x = (gint) -2 * gdk_pixbuf_get_width (cursor_pixbuf) / 16.0; 
+	      icon_y = (gint) -2 * gdk_pixbuf_get_height (cursor_pixbuf) / 16.0; 
+	    }
+	}
+      
+      icon_width = gdk_pixbuf_get_width (info->icon_pixbuf);
+      icon_height = gdk_pixbuf_get_height (info->icon_pixbuf);
+      cursor_width = gdk_pixbuf_get_width (cursor_pixbuf);
+      cursor_height = gdk_pixbuf_get_height (cursor_pixbuf);
+
+      switch (icon_anchor)
+	{
+	case GTK_ANCHOR_NORTH:
+	case GTK_ANCHOR_CENTER:
+	case GTK_ANCHOR_SOUTH:
+	  icon_x += icon_width / 2;
+	  break;
+	case GTK_ANCHOR_NORTH_EAST:
+	case GTK_ANCHOR_EAST:
+	case GTK_ANCHOR_SOUTH_EAST:
+	  icon_x += icon_width;
+	  break;
+	default: ;
+	}
+
+      switch (icon_anchor)
+	{
+	case GTK_ANCHOR_WEST:
+	case GTK_ANCHOR_CENTER:
+	case GTK_ANCHOR_EAST:
+	  icon_y += icon_height / 2;
+	  break;
+	case GTK_ANCHOR_SOUTH_WEST:
+	case GTK_ANCHOR_SOUTH:
+	case GTK_ANCHOR_SOUTH_EAST:
+	  icon_x += icon_height;
+	  break;
+	default: ;
+	}
+
+      ref_x = MAX (hot_x, icon_x);
+      ref_y = MAX (hot_y, icon_y);
+      width = ref_x + MAX (cursor_width - hot_x, icon_width - icon_x);
+      height = ref_y + MAX (cursor_height - hot_y, icon_height - icon_y);
+         
+      if (gtk_drag_can_use_rgba_cursor (display, width, height))
+	{
+	  pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8,
+				   width, height); 
+	  
+	  gdk_pixbuf_fill (pixbuf, 0xff000000);
+	  
+	  gdk_pixbuf_composite (info->icon_pixbuf, pixbuf,
+				ref_x - icon_x, ref_y - icon_y, 
+				icon_width, icon_height,
+				ref_x - icon_x, ref_y - icon_y, 
+				1.0, 1.0, 
+				GDK_INTERP_BILINEAR, 255);
+	  
+	  gdk_pixbuf_composite (cursor_pixbuf, pixbuf,
+				ref_x - hot_x, ref_y - hot_y, 
+				cursor_width, cursor_height,
+				ref_x - hot_x, ref_y - hot_y,
+				1.0, 1.0, 
+				GDK_INTERP_BILINEAR, 255);
+	  
+	  info->drag_cursors[i] = 
+	    gdk_cursor_new_from_pixbuf (display, pixbuf, 0, 0);
+	  
+	  g_object_unref (pixbuf);
+	}
+      
+      g_object_unref (cursor_pixbuf);
+      
+      if (info->drag_cursors[i] != NULL)
+	return info->drag_cursors[i];
     }
-
+ 
   return drag_cursors[i].cursor;
 }
 
@@ -1944,7 +2049,9 @@ gtk_drag_begin_internal (GtkWidget         *widget,
   gtk_drag_get_event_actions (event, button, actions,
 			      &suggested_action, &possible_actions);
   
-  cursor = gtk_drag_get_cursor (gtk_widget_get_display (widget), suggested_action);
+  cursor = gtk_drag_get_cursor (gtk_widget_get_display (widget), 
+			        suggested_action,
+				NULL);
   
   if (event)
     time = gdk_event_get_time (event);
@@ -2025,7 +2132,7 @@ gtk_drag_begin_internal (GtkWidget         *widget,
    * application may have set one in ::drag_begin, or it may
    * not have set one.
    */
-  if (!info->icon_window)
+  if (!info->icon_window && !info->icon_pixbuf)
     {
       if (!site || site->icon_type == GTK_IMAGE_EMPTY)
 	gtk_drag_set_icon_default (context);
@@ -2060,7 +2167,27 @@ gtk_drag_begin_internal (GtkWidget         *widget,
 	    break;
 	  }
     }
-	      
+
+  /* We need to composite the icon into the cursor, if we are
+   * not using an icon window.
+   */
+  if (info->icon_pixbuf)  
+    {
+      cursor = gtk_drag_get_cursor (gtk_widget_get_display (widget), 
+  			            suggested_action,
+			  	    info);
+  
+      if (cursor != info->cursor)
+        {
+	  gdk_pointer_grab (widget->window, FALSE,
+	 	            GDK_POINTER_MOTION_MASK |
+		  	    GDK_BUTTON_RELEASE_MASK,
+			    NULL,
+			    cursor, time);
+          info->cursor = cursor;
+        }
+    }
+    
   if (event && event->type == GDK_MOTION_NOTIFY)
     gtk_drag_motion_cb (info->ipc_widget, (GdkEventMotion *)event, info);
 
@@ -2576,7 +2703,7 @@ gtk_drag_update_icon (GtkDragSourceInfo *info)
       gtk_window_move (GTK_WINDOW (icon_window), 
 		       info->cur_x - hot_x, 
 		       info->cur_y - hot_y);
-      
+
       if (GTK_WIDGET_VISIBLE (icon_window))
 	gdk_window_raise (icon_window->window);
       else
@@ -2639,20 +2766,19 @@ icon_window_realize (GtkWidget *window,
 {
   GdkPixmap *pixmap;
   GdkPixmap *mask;
-  
+
   gdk_pixbuf_render_pixmap_and_mask_for_colormap (pixbuf,
 						  gtk_widget_get_colormap (window),
 						  &pixmap, &mask, 128);
   
   gdk_window_set_back_pixmap (window->window, pixmap, FALSE);
+  g_object_unref (pixmap);
   
   if (mask)
-    gtk_widget_shape_combine_mask (window, mask, 0, 0);
-
-  g_object_unref (pixmap);
-
-  if (mask)
-    g_object_unref (mask);
+    {
+      gtk_widget_shape_combine_mask (window, mask, 0, 0);
+      g_object_unref (mask);
+    }
 }
 
 static void
@@ -2660,16 +2786,18 @@ set_icon_stock_pixbuf (GdkDragContext    *context,
 		       const gchar       *stock_id,
 		       GdkPixbuf         *pixbuf,
 		       gint               hot_x,
-		       gint               hot_y)
+		       gint               hot_y,
+		       gboolean           force_window)
 {
   GtkWidget *window;
   gint width, height;
   GdkScreen *screen;
+  GdkDisplay *display;
 
   g_return_if_fail (context != NULL);
   g_return_if_fail (pixbuf != NULL || stock_id != NULL);
   g_return_if_fail (pixbuf == NULL || stock_id == NULL);
-  
+
   screen = gdk_drawable_get_screen (context->source_window);
 
   /* Push a NULL colormap to guard against gtk_widget_push_colormap() */
@@ -2681,7 +2809,7 @@ set_icon_stock_pixbuf (GdkDragContext    *context,
 
   gtk_widget_set_events (window, GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
   gtk_widget_set_app_paintable (GTK_WIDGET (window), TRUE);
-  
+
   if (stock_id)
     {
       pixbuf = gtk_widget_render_icon (window, stock_id,
@@ -2697,21 +2825,32 @@ set_icon_stock_pixbuf (GdkDragContext    *context,
     }
   else
     g_object_ref (pixbuf);
-  
+
+  display = gdk_drawable_get_display (context->source_window);
   width = gdk_pixbuf_get_width (pixbuf);
   height = gdk_pixbuf_get_width (pixbuf);
 
-  gtk_widget_set_size_request (window,
-			       gdk_pixbuf_get_width (pixbuf),
-			       gdk_pixbuf_get_height (pixbuf));
+  if (!force_window &&
+      gtk_drag_can_use_rgba_cursor (display, width + 2, height + 2))
+    {
+      GtkDragSourceInfo *info;
 
-  g_signal_connect_closure (window, "realize",
-			    g_cclosure_new (G_CALLBACK (icon_window_realize),
-					    pixbuf,
-					    (GClosureNotify)g_object_unref),
-			    FALSE);
+      gtk_widget_destroy (window);
+      info = gtk_drag_get_source_info (context, FALSE);
+      info->icon_pixbuf = pixbuf;
+    }
+  else
+    {
+      gtk_widget_set_size_request (window, width, height);
+
+      g_signal_connect_closure (window, "realize",
+  			        g_cclosure_new (G_CALLBACK (icon_window_realize),
+					        pixbuf,
+					        (GClosureNotify)g_object_unref),
+			        FALSE);
 		    
-  gtk_drag_set_icon_window (context, window, hot_x, hot_y, TRUE);
+      gtk_drag_set_icon_window (context, window, hot_x, hot_y, TRUE);
+   }
 }
 
 /**
@@ -2733,8 +2872,8 @@ gtk_drag_set_icon_pixbuf  (GdkDragContext *context,
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
   g_return_if_fail (context->is_source);
   g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
-  
-  set_icon_stock_pixbuf (context, NULL, pixbuf, hot_x, hot_y);
+
+  set_icon_stock_pixbuf (context, NULL, pixbuf, hot_x, hot_y, FALSE);
 }
 
 /**
@@ -2757,7 +2896,7 @@ gtk_drag_set_icon_stock  (GdkDragContext *context,
   g_return_if_fail (context->is_source);
   g_return_if_fail (stock_id != NULL);
   
-  set_icon_stock_pixbuf (context, stock_id, NULL, hot_x, hot_y);
+  set_icon_stock_pixbuf (context, stock_id, NULL, hot_x, hot_y, FALSE);
 }
 
 /**
@@ -2868,7 +3007,7 @@ gtk_drag_set_icon_name (GdkDragContext *context,
 
   pixbuf = gtk_icon_theme_load_icon (icon_theme, icon_name,
 		  		     icon_size, 0, NULL);
-  set_icon_stock_pixbuf (context, NULL, pixbuf, hot_x, hot_y);
+  set_icon_stock_pixbuf (context, NULL, pixbuf, hot_x, hot_y, FALSE);
 }
 
 /**
@@ -3000,7 +3139,8 @@ _gtk_drag_source_handle_event (GtkWidget *widget,
 	else if (info->have_grab)
 	  {
 	    cursor = gtk_drag_get_cursor (gtk_widget_get_display (widget),
-					  event->dnd.context->action);
+					  event->dnd.context->action,
+					  info);
 	    if (info->cursor != cursor)
 	      {
 		gdk_pointer_grab (widget->window, FALSE,
@@ -3127,6 +3267,11 @@ gtk_drag_drop_finished (GtkDragSourceInfo *info,
 	  anim->n_steps = CLAMP (anim->n_steps, ANIM_MIN_STEPS, ANIM_MAX_STEPS);
 
 	  info->cur_screen = gtk_widget_get_screen (info->widget);
+
+	  if (!info->icon_window)
+	    set_icon_stock_pixbuf (info->context, NULL, info->icon_pixbuf, 
+				   0, 0, TRUE);
+
 	  gtk_drag_update_icon (info);
 	  
 	  /* Mark the context as dead, so if the destination decides
@@ -3363,7 +3508,7 @@ gtk_drag_anim_timeout (gpointer data)
   gboolean retval;
 
   GDK_THREADS_ENTER ();
-
+  
   if (anim->step == anim->n_steps)
     {
       gtk_drag_source_info_destroy (anim->info);
@@ -3382,8 +3527,7 @@ gtk_drag_anim_timeout (gpointer data)
 	  GtkWidget *icon_window;
 	  gint hot_x, hot_y;
 	  
-	  gtk_drag_get_icon (anim->info, &icon_window, &hot_x, &hot_y);
-	  
+	  gtk_drag_get_icon (anim->info, &icon_window, &hot_x, &hot_y);	  
 	  gtk_window_move (GTK_WINDOW (icon_window), 
 			   x - hot_x, 
 			   y - hot_y);
@@ -3422,7 +3566,21 @@ gtk_drag_remove_icon (GtkDragSourceInfo *info)
 static void
 gtk_drag_source_info_destroy (GtkDragSourceInfo *info)
 {
+  gint i;
+
+  for (i = 0; i < n_drag_cursors; i++)
+    {
+      if (info->drag_cursors[i] != NULL)
+        {
+          gdk_cursor_unref (info->drag_cursors[i]);
+          info->drag_cursors[i] = NULL;
+        }
+    }
+
   gtk_drag_remove_icon (info);
+
+  if (info->icon_pixbuf)
+    g_object_unref (info->icon_pixbuf);
 
   if (!info->proxy_dest)
     g_signal_emit_by_name (info->widget, "drag_end", 
