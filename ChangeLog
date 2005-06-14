@@ -1,5 +1,8 @@
 2005-06-14  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/x11/gdkcursor-x11.c (gdk_cursor_new_from_name): Add a 
+	stub for the no-Xcursor case. (noticed by Luis Villa)
+
 	Use named cursors for the DND cursors, the names are "dnd-none",
 	"dnd-copy", "dnd-link", "dnd-move" and "dnd-ask". Also use an RGBA 
 	cursor instead of cursor+window when possible. This saves 

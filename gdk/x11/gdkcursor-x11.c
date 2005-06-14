@@ -312,6 +312,34 @@ gdk_cursor_get_display (GdkCursor *cursor)
 
 #if defined(HAVE_XCURSOR) && defined(HAVE_XFIXES) && XFIXES_MAJOR >= 2
 
+#if 0
+XcursorComments *
+load_comments (const char       *file, 
+	       const char       *theme)
+{
+    FILE	    *f = 0;
+    XcursorImages   *images = 0;
+    XcursorComments *comments = 0;
+
+    if (theme)
+	f = XcursorScanTheme (theme, file);
+    if (!f)
+      f = XcursorScanTheme ("default", file);
+    if (f == XCURSOR_SCAN_CORE)
+      return 0;
+    if (f)
+      {
+	XcursorFileLoad (f, &comments, &images);
+	fclose (f);
+
+	if (images)
+	  XcursorImagesDestroy (images);
+      }
+
+    return comments;
+}
+#endif
+
 /**
  * gdk_cursor_get_image:
  * @cursor: a #GdkCursor
@@ -333,13 +361,15 @@ gdk_cursor_get_image (GdkCursor *cursor)
   GdkCursorPrivate *private;
   XcursorImages *images = NULL;
   XcursorImage *image;
+  XcursorComments *comments;
   Atom atom;
   gint size;
   gchar buf[32];
   guchar *data;
   GdkPixbuf *pixbuf;
   gchar *theme;
-
+  gint i, j;
+  
   g_return_val_if_fail (cursor != NULL, NULL);
 
   private = (GdkCursorPrivate *) cursor;
@@ -376,7 +406,30 @@ gdk_cursor_get_image (GdkCursor *cursor)
   gdk_pixbuf_set_option (pixbuf, "x_hot", buf);
   g_snprintf (buf, 32, "%d", image->yhot);
   gdk_pixbuf_set_option (pixbuf, "y_hot", buf);
-  
+
+#if 0
+  comments = load_comments (images->name, theme);
+
+  j = 0;
+  for (i = 0; i < comments->ncomment; i++)
+    {
+      switch (comments->comments[i].comment_type)
+	{
+	case XCURSOR_COMMENT_COPYRIGHT:
+	  gdk_pixbuf_set_option (pixbuf, "copyright", comments->comments[i].comment);
+	  break;
+	case XCURSOR_COMMENT_LICENSE:
+	  gdk_pixbuf_set_option (pixbuf, "license", comments->comments[i].comment);
+	  break;
+	default:
+	  g_snprintf (buf, 32, "comment%d", j++);
+	  gdk_pixbuf_set_option (pixbuf, buf, comments->comments[i].comment);
+	  break;
+	}
+    }
+  XcursorCommentsDestroy (comments);
+#endif
+
   XcursorImagesDestroy (images);
 
   return pixbuf;
@@ -685,6 +738,15 @@ gdk_cursor_new_from_pixbuf (GdkDisplay *display,
   g_free (mask_data);
   
   return cursor;
+}
+
+GdkCursor*  
+gdk_cursor_new_from_name (GdkDisplay  *display,
+			  const gchar *name)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+
+  return NULL;
 }
 
 gboolean 
