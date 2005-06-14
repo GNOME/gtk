@@ -1,3 +1,7 @@
+2005-06-14  Martin Willemoes Hansen  <mwh@sysrq.dk>
+
+	* da.po: Updated Danish translation.
+
 2005-06-13  Theppitak Karoonboonyanan  <thep@linux.thai.net>
 
 	* th.po: Don't translate placeholders, to be consistent with other

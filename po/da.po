@@ -33,9 +33,9 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-06-12 15:51+0200\n"
-"PO-Revision-Date: 2005-06-12 15:52+0200\n"
+"PO-Revision-Date: 2005-06-14 11:11+0200\n"
 "Last-Translator: Martin Willemoes Hansen <mwh@sysrq.dk>\n"
-"Language-Team: Danish <dansk@klid.dk>\n"
+"Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -902,11 +902,11 @@ msgstr "End"
 
 #: ../gdk/keyname-table.h:3952
 msgid "keyboard label|Begin"
-msgstr "Begynd"
+msgstr "Begin"
 
 #: ../gdk/keyname-table.h:3953
 msgid "keyboard label|Print"
-msgstr "Udskriv"
+msgstr "Print"
 
 #: ../gdk/keyname-table.h:3954
 msgid "keyboard label|Insert"
