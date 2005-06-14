@@ -1,3 +1,11 @@
+2005-06-14  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/gdk.symbols: 
+	* gdk/gdkcursor.h: 
+	* gdk/x11/gdkcursor-x11.c (gdk_cursor_get_image) 
+	(gdk_cursor_new_from_name): New functions to construct named
+	cursors and to get the image used for a cursor.  
+
 2005-06-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkpathbar.[hc]: Rework the way in which rerooting of the

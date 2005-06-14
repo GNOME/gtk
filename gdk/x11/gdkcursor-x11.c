@@ -30,12 +30,17 @@
 #ifdef HAVE_XCURSOR
 #include <X11/Xcursor/Xcursor.h>
 #endif
+#ifdef HAVE_XFIXES
+#include <X11/extensions/Xfixes.h>
+#endif
+#include <string.h>
 
 #include "gdkprivate-x11.h"
 #include "gdkcursor.h"
 #include "gdkpixmap-x11.h"
 #include "gdkx.h"
 #include <gdk/gdkpixmap.h>
+#define GDK_PIXBUF_ENABLE_BACKEND
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include "gdkalias.h"
 
@@ -126,6 +131,7 @@ gdk_cursor_new_for_display (GdkDisplay    *display,
   private = g_new (GdkCursorPrivate, 1);
   private->display = display;
   private->xcursor = xcursor;
+  private->name = NULL;
   cursor = (GdkCursor *) private;
   cursor->type = cursor_type;
   cursor->ref_count = 1;
@@ -229,6 +235,7 @@ gdk_cursor_new_from_pixmap (GdkPixmap      *source,
   private = g_new (GdkCursorPrivate, 1);
   private->display = display;
   private->xcursor = xcursor;
+  private->name = NULL;
   cursor = (GdkCursor *) private;
   cursor->type = GDK_CURSOR_IS_PIXMAP;
   cursor->ref_count = 1;
@@ -248,6 +255,7 @@ _gdk_cursor_destroy (GdkCursor *cursor)
   if (!private->display->closed && private->xcursor)
     XFreeCursor (GDK_DISPLAY_XDISPLAY (private->display), private->xcursor);
 
+  g_free (private->name);
   g_free (private);
 }
 
@@ -302,6 +310,89 @@ gdk_cursor_get_display (GdkCursor *cursor)
   return ((GdkCursorPrivate *)cursor)->display;
 }
 
+#if defined(HAVE_XCURSOR) && defined(HAVE_XFIXES) && XFIXES_MAJOR >= 2
+
+/**
+ * gdk_cursor_get_image:
+ * @cursor: a #GdkCursor
+ *
+ * Returns a #GdkPixbuf with the image used to display the cursor.
+ *
+ * Note that depending on the capabilities of the windowing system and 
+ * on the cursor, GDK may not be able to obtain the image data. In this 
+ * case, %NULL is returned.
+ *
+ * Returns: a #GdkPixbuf representing @cursor, or %NULL
+ *
+ * Since: 2.8
+ */
+GdkPixbuf*  
+gdk_cursor_get_image (GdkCursor *cursor)
+{
+  Display *xdisplay;
+  GdkCursorPrivate *private;
+  XcursorImages *images = NULL;
+  XcursorImage *image;
+  Atom atom;
+  gint size;
+  gchar buf[32];
+  guchar *data;
+  GdkPixbuf *pixbuf;
+  gchar *theme;
+
+  g_return_val_if_fail (cursor != NULL, NULL);
+
+  private = (GdkCursorPrivate *) cursor;
+    
+  xdisplay = GDK_DISPLAY_XDISPLAY (private->display);
+
+  size = XcursorGetDefaultSize (xdisplay);
+  theme = XcursorGetTheme (xdisplay);
+
+  if (cursor->type == GDK_CURSOR_IS_PIXMAP)
+    {
+      if (private->name)
+	images = XcursorLibraryLoadImages (private->name, theme, size);
+    }
+  else 
+    images = XcursorShapeLoadImages (cursor->type, theme, size);
+
+  if (!images)
+    return NULL;
+  
+  image = images->images[0];
+
+  data = g_malloc (4 * image->width * image->height);
+  memcpy (data, image->pixels, 4 * image->width * image->height);
+
+  pixbuf = gdk_pixbuf_new_from_data (data, GDK_COLORSPACE_RGB, TRUE,
+				     8, image->width, image->height,
+				     4 * image->width, 
+				     (GdkPixbufDestroyNotify)g_free, NULL);
+
+  if (private->name)
+    gdk_pixbuf_set_option (pixbuf, "name", private->name);
+  g_snprintf (buf, 32, "%d", image->xhot);
+  gdk_pixbuf_set_option (pixbuf, "x_hot", buf);
+  g_snprintf (buf, 32, "%d", image->yhot);
+  gdk_pixbuf_set_option (pixbuf, "y_hot", buf);
+  
+  XcursorImagesDestroy (images);
+
+  return pixbuf;
+}
+
+#else
+
+GdkPixbuf*  
+gdk_cursor_get_image (GdkCursor *cursor)
+{
+  g_return_val_if_fail (cursor != NULL, NULL);
+  
+  return NULL;
+}
+
+#endif
 
 #ifdef HAVE_XCURSOR
 
@@ -412,6 +503,52 @@ gdk_cursor_new_from_pixbuf (GdkDisplay *display,
   private = g_new (GdkCursorPrivate, 1);
   private->display = display;
   private->xcursor = xcursor;
+  private->name = NULL;
+  cursor = (GdkCursor *) private;
+  cursor->type = GDK_CURSOR_IS_PIXMAP;
+  cursor->ref_count = 1;
+  
+  return cursor;
+}
+
+/**
+ * gdk_cursor_new_from_name:
+ * @display: the #GdkDisplay for which the cursor will be created
+ * @name: the name of the cursor
+ *
+ * Creates a new cursor by looking up @name in the current cursor
+ * theme. 
+ * 
+ * Returns: a new #GdkCursor, or %NULL if there is no cursor with 
+ *   the given name 
+ *
+ * Since: 2.8
+ */
+GdkCursor*  
+gdk_cursor_new_from_name (GdkDisplay  *display,
+			  const gchar *name)
+{
+  Cursor xcursor;
+  Display *xdisplay;
+  GdkCursorPrivate *private;
+  GdkCursor *cursor;
+
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+
+  if (display->closed)
+    xcursor = None;
+  else 
+    {
+      xdisplay = GDK_DISPLAY_XDISPLAY (display);
+      xcursor = XcursorLibraryLoadCursor (xdisplay, name);
+      if (xcursor == None)
+	return NULL;
+    }
+
+  private = g_new (GdkCursorPrivate, 1);
+  private->display = display;
+  private->xcursor = xcursor;
+  private->name = g_strdup (name);
   cursor = (GdkCursor *) private;
   cursor->type = GDK_CURSOR_IS_PIXMAP;
   cursor->ref_count = 1;
