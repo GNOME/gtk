@@ -1,5 +1,9 @@
 2005-06-14  Federico Mena Quintero  <federico@ximian.com>
 
+	* NEWS: Fill in with GtkFileChooser bugs.
+
+2005-06-14  Federico Mena Quintero  <federico@ximian.com>
+
 	Fix #302087:
 
 	* gtk/gtkfilechooserdefault.c (list_selection_changed): Emit

@@ -1,10 +1,16 @@
 Overview of Changes from GTK+ 2.6.7 to GTK+ 2.6.8
 =================================================
 * GtkFileChooser
- - Don't select first row in SELECT_FOLDER mode [Christian
+ - Don't select first row in SELECT_FOLDER mode - #171885 [Christian
    Neumair]
- - Improve autocompletion behaviour [Federico Mena Quintero]
- - Don't stat children of /afs or /net network directories [Federico]
+ - Improve autocompletion behaviour; fix CREATE_FOLDER mode - #162358
+   [Federico Mena Quintero]
+ - Don't stat children of /afs or /net network directories - #301068 [Federico]
+ - Fix set_current_name() and unselect_all() in the light of asynchronous 
+   selections - #302087 [Federico]
+ - GtkFileChooserButton fixes - #303987 [David A. Knight]
+ - Miscellaneous fixes - #301017, #304844, #306754, #307490, #307640
+   [Federico, Sven Neumann, Kjartan Maraas]
 * GtkIconView
  - Many fixes for scrolling and selection handling [Mathias Hasselmann]
 * GtkTreeView
