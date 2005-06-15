@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gtk+.gtk-2-6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-06-14 13:01+0000\n"
-"PO-Revision-Date: 2005-06-14 22:31+0200\n"
+"PO-Revision-Date: 2005-06-14 23:30+0200\n"
 "Last-Translator: Gabor Kelemen <kelemeng@gnome.hu>\n"
 "Language-Team: Hungarian <gnome@gnome.hu>\n"
 "MIME-Version: 1.0\n"
@@ -253,7 +253,7 @@ msgstr "Nincs elég memória a keretnek a GIF-fájlban való kiegészítéséhez
 
 #: ../gdk-pixbuf/io-gif.c:1116
 msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr "A GIF-kép hibás (nem megfelelő LZW-tömörítés)"
+msgstr "A GIF-kép hibás (helytelen LZW-tömörítés)"
 
 #: ../gdk-pixbuf/io-gif.c:1166
 msgid "File does not appear to be a GIF file"
