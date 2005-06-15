@@ -5890,6 +5890,30 @@ cursor_event (GtkWidget          *widget,
   return FALSE;
 }
 
+#ifdef GDK_WINDOWING_X11
+#include "x11/gdkx.h"
+
+static void
+change_cursor_theme (GtkWidget *widget,
+		     gpointer   data)
+{
+  const gchar *theme;
+  gint size;
+  GList *children;
+
+  children = gtk_container_get_children (GTK_CONTAINER (data));
+
+  theme = gtk_entry_get_text (GTK_ENTRY (children->next->data));
+  size = (gint) gtk_spin_button_get_value (GTK_SPIN_BUTTON (children->next->next->data));
+
+  g_list_free (children);
+
+  gdk_x11_display_set_cursor_theme (gtk_widget_get_display (widget),
+				    theme, size);
+}
+#endif
+
+
 static void
 create_cursors (GtkWidget *widget)
 {
@@ -5904,6 +5928,8 @@ create_cursors (GtkWidget *widget)
   GtkWidget *label;
   GtkWidget *any;
   GtkAdjustment *adj;
+  GtkWidget *entry;
+  GtkWidget *size;  
 
   if (!window)
     {
@@ -5930,10 +5956,33 @@ create_cursors (GtkWidget *widget)
 			"GtkWidget::visible", TRUE,
 			NULL);
 
+#ifdef GDK_WINDOWING_X11
       hbox = gtk_hbox_new (FALSE, 0);
       gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
       gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 0);
+
+      label = gtk_label_new ("Cursor Theme : ");
+      gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+      gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
+
+      entry = gtk_entry_new ();
+      gtk_entry_set_text (GTK_ENTRY (entry), "default");
+      gtk_box_pack_start (GTK_BOX (hbox), entry, FALSE, TRUE, 0);
+
+      size = gtk_spin_button_new_with_range (1.0, 64.0, 1.0);
+      gtk_spin_button_set_value (GTK_SPIN_BUTTON (size), 24.0);
+      gtk_box_pack_start (GTK_BOX (hbox), size, TRUE, TRUE, 0);
       
+      g_signal_connect (entry, "changed", 
+			G_CALLBACK (change_cursor_theme), hbox);
+      g_signal_connect (size, "changed", 
+			G_CALLBACK (change_cursor_theme), hbox);
+#endif
+
+      hbox = gtk_hbox_new (FALSE, 0);
+      gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
+      gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 0);
+
       label = gtk_label_new ("Cursor Value : ");
       gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
       gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);

@@ -2766,6 +2766,8 @@ static const struct
   { "Gtk/ButtonImages", "gtk-button-images" },
   { "Gtk/MenuImages", "gtk-menu-images" },
   { "Gtk/MenuBarAccel", "gtk-menu-bar-accel" },
+  { "Gtk/CursorThemeName", "gtk-cursor-theme-name" },
+  { "Gtk/CursorThemeSize", "gtk-cursor-theme-size" },
   { "Xft/Antialias", "gtk-xft-antialias" },
   { "Xft/Hinting", "gtk-xft-hinting" },
   { "Xft/HintStyle", "gtk-xft-hintstyle" },

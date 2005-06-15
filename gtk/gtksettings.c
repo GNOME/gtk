@@ -25,6 +25,14 @@
 #include "gtkprivate.h"
 #include "gtkalias.h"
 
+#ifdef GDK_WINDOWING_X11
+#include "x11/gdkx.h"
+#endif
+
+#if 0
+#include <pango/pangoxft.h>
+#endif
+
 typedef struct _GtkSettingsValuePrivate GtkSettingsValuePrivate;
 
 typedef enum
@@ -45,11 +53,6 @@ struct _GtkSettingsPropertyValue
   GValue value;
   GtkSettingsSource source;
 };
-
-#if 0
-#include <pango/pangoxft.h>
-#include <gdk/x11/gdkx.h>
-#endif
 
 enum {
   PROP_0,
@@ -72,6 +75,8 @@ enum {
   PROP_XFT_HINTSTYLE,
   PROP_XFT_RGBA,
   PROP_XFT_DPI,
+  PROP_CURSOR_THEME_NAME,
+  PROP_CURSOR_THEME_SIZE,
 #endif
   PROP_ALTERNATIVE_BUTTON_ORDER
 };
@@ -96,6 +101,10 @@ static guint	settings_install_property_parser (GtkSettingsClass      *class,
 						  GtkRcPropertyParser    parser);
 static void    settings_update_double_click      (GtkSettings           *settings);
 static void    settings_update_modules           (GtkSettings           *settings);
+
+#ifdef GDK_WINDOWING_X11
+static void    settings_update_cursor_theme      (GtkSettings           *settings);
+#endif
 
 
 
@@ -136,6 +145,7 @@ gtk_settings_get_type (void)
 
 #if 0
 static void
+	
 gtk_default_substitute (FcPattern *pattern,
 			gpointer   data)
 {
@@ -427,6 +437,26 @@ gtk_settings_class_init (GtkSettingsClass *class)
 					     NULL);
   
   g_assert (result == PROP_XFT_DPI);
+
+  result = settings_install_property_parser (class,
+                                             g_param_spec_string ("gtk-cursor-theme-name",
+								  P_("Cursor theme name"),
+								  P_("Name of the cursor theme to use"),
+								  NULL,
+								  GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_CURSOR_THEME_NAME);
+
+  result = settings_install_property_parser (class,
+					     g_param_spec_int ("gtk-cursor-theme-size",
+ 							       P_("Cursor theme size"),
+ 							       P_("Size to use for cursors"),
+ 							       0, 128, 24,
+ 							       GTK_PARAM_READWRITE),
+					     NULL);
+  
+  g_assert (result == PROP_CURSOR_THEME_SIZE);
+
 #endif  /* GDK_WINDOWING_X11 */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-alternative-button-order",
@@ -629,6 +659,12 @@ gtk_settings_notify (GObject    *object,
        * recomputation than necessary.
        */
       gtk_rc_reset_styles (GTK_SETTINGS (object));
+      break;
+#endif
+#ifdef GDK_WINDOWING_X11
+    case PROP_CURSOR_THEME_NAME:
+    case PROP_CURSOR_THEME_SIZE:
+      settings_update_cursor_theme (settings);
       break;
 #endif /* GDK_WINDOWING_X11 */
     }
@@ -1405,6 +1441,23 @@ settings_update_modules (GtkSettings *settings)
   
   g_free (modules);
 }
+
+#ifdef GDK_WINDOWING_X11
+static void
+settings_update_cursor_theme (GtkSettings *settings)
+{
+  GdkDisplay *display = gdk_screen_get_display (settings->screen);
+  gchar *theme = NULL;
+  gint size = 0;
+  
+  g_object_get (settings, 
+		"gtk-cursor-theme-name", &theme,
+		"gtk-cursor-theme-size", &size,
+		NULL);
+  
+  gdk_x11_display_set_cursor_theme (display, theme, size);
+}
+#endif
 
 #define __GTK_SETTINGS_C__
 #include "gtkaliasdef.c"

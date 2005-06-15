@@ -1,5 +1,16 @@
 2005-06-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtksettings.c: Add two new settings, 
+	gtk-cursor-theme-name and gtk-cursor-theme-size to
+	control the cursor theme.
+
+	* gdk/x11/gdkevents-x11.c: Add two new X settings,
+	Gtk/CursorThemeName and Gtk/CursorThemeSize, and map
+	these to the gtk settings.
+
+	* tests/testgtk.c (create_cursors): Add a cursor theme
+	testcase.
+
 	* gdk/x11/gdkwindow-x11.[hc]: Keep a reference to the 
 	GdkCursor and add a private getter for it, so that we can 
 	update the cursor when the cursor theme changes.
