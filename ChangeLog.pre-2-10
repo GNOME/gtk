@@ -1,3 +1,11 @@
+2005-06-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* NEWS: More updates, move bug numbers to my
+	separate list of bugs, which will get merged into
+	the announcement. For 2.8.0, I will try a somewhat
+	different style for the NEWS, and list bugs and
+	contributors separately from features.
+
 2005-06-14  Federico Mena Quintero  <federico@ximian.com>
 
 	* NEWS: Fill in with GtkFileChooser bugs.
