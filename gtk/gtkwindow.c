@@ -7045,13 +7045,13 @@ gtk_XParseGeometry (const char   *string,
  * 
  * <informalexample><programlisting>
  * #include &lt;gtk/gtk.h&gt;
- * 
+ *    
  * static void
  * fill_with_content (GtkWidget *vbox)
  * {
  *   /<!-- -->* fill with content... *<!-- -->/
  * }
- * 
+ *    
  * int
  * main (int argc, char *argv[])
  * {
@@ -7059,7 +7059,7 @@ gtk_XParseGeometry (const char   *string,
  *   GdkGeometry size_hints = {
  *     100, 50, 0, 0, 100, 50, 10, 10, 0.0, 0.0, GDK_GRAVITY_NORTH_WEST  
  *   };
- *   
+ *    
  *   gtk_init (&amp;argc, &amp;argv);
  *   
  *   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
