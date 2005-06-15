@@ -40,6 +40,7 @@ typedef struct _GdkPixbufSimpleAnimClass GdkPixbufSimpleAnimClass;
 #define GDK_PIXBUF_SIMPLE_ANIM_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_PIXBUF_SIMPLE_ANIM, GdkPixbufSimpleAnimClass))
 
 GType gdk_pixbuf_simple_anim_get_type (void) G_GNUC_CONST;
+GType gdk_pixbuf_simple_anim_iter_get_type (void) G_GNUC_CONST;
 
 GdkPixbufSimpleAnim *gdk_pixbuf_simple_anim_new           (gint   width, 
                                                            gint   height,

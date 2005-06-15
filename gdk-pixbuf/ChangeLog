@@ -1,3 +1,9 @@
+2005-06-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk-pixbuf.symbols:
+	* gdk-pixbuf-simple-anim.h: Add 
+	gdk_pixbuf_simple_anim_iter_get_type()
+
 2005-06-08  Matthias Clasen  <mclasen@redhat.com>
 
 	* io-pnm.c (pnm_read_next_value): Check for overflow.
