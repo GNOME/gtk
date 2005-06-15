@@ -1,5 +1,18 @@
 2005-06-14  Federico Mena Quintero  <federico@ximian.com>
 
+	Fix #302087:
+
+	* gtk/gtkfilechooserdefault.c (list_selection_changed): Emit
+	"selection-changed" and do the normal housekeeping even if we are
+	in SAVE mode and there is nothing selected.  We didn't emit that
+	signal if we were in SAVE mode and unselect_all() got called.
+	(gtk_file_chooser_default_unselect_all): Call
+	pending_select_paths_free() so that we cancel any asynchronous
+	selections.
+	(gtk_file_chooser_default_set_current_name): Likewise.
+
+2005-06-14  Federico Mena Quintero  <federico@ximian.com>
+
 	Fixes #307640:
 
 	* gtk/gtkfilechooserdefault.c
