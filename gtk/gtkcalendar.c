@@ -599,6 +599,7 @@ gtk_calendar_init (GtkCalendar *calendar)
 
   for (i=0;i<31;i++)
     calendar->marked_date[i] = FALSE;
+  calendar->num_marked_dates = 0;
   calendar->selected_day = tm->tm_mday;
   
   calendar->display_flags = ( GTK_CALENDAR_SHOW_HEADING | 
@@ -3316,6 +3317,8 @@ gtk_calendar_clear_marks (GtkCalendar *calendar)
       calendar->marked_date[day] = FALSE;
     }
 
+  calendar->num_marked_dates = 0;
+
   gtk_widget_queue_draw (GTK_WIDGET (calendar));
 }
 
@@ -3337,6 +3340,7 @@ gtk_calendar_mark_day (GtkCalendar *calendar,
   if (day >= 1 && day <= 31 && calendar->marked_date[day-1] == FALSE)
     {
       calendar->marked_date[day - 1] = TRUE;
+      calendar->num_marked_dates++;
       calendar_invalidate_day_num (calendar, day);
     }
   
@@ -3361,6 +3365,7 @@ gtk_calendar_unmark_day (GtkCalendar *calendar,
   if (day >= 1 && day <= 31 && calendar->marked_date[day-1] == TRUE)
     {
       calendar->marked_date[day - 1] = FALSE;
+      calendar->num_marked_dates--;
       calendar_invalidate_day_num (calendar, day);
     }
   

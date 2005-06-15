@@ -1,3 +1,8 @@
+2005-06-14  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcalendar.c: Update num_marked_dates as we
+	used to do.  (#307689, Thorsten Schoenfeld)
+ 
 2005-06-14  Federico Mena Quintero  <federico@ximian.com>
 
 	Merged from gtk-2-6:
