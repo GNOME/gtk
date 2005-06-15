@@ -75,6 +75,7 @@ struct _GdkWindowImplX11
   
   GdkXPositionInfo position_info;
   GdkToplevelX11 *toplevel;	/* Toplevel-specific information */
+  GdkCursor *cursor;
   gint8 toplevel_window_type;
   guint override_redirect : 1;
   guint use_synchronized_configure : 1;
@@ -157,6 +158,8 @@ void		_gdk_x11_window_tmp_unset_bg  (GdkWindow *window,
 void            _gdk_x11_window_tmp_reset_bg  (GdkWindow *window,
 					       gboolean   recurse);
 
+
+GdkCursor      *_gdk_x11_window_get_cursor    (GdkWindow *window);
 
 G_END_DECLS
 

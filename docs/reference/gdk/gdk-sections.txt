@@ -1262,6 +1262,7 @@ gdk_x11_cursor_get_xdisplay
 gdk_x11_display_get_xdisplay
 gdk_x11_display_grab
 gdk_x11_display_ungrab
+gdk_x11_display_set_cursor_theme
 gdk_x11_register_standard_event_type
 gdk_x11_drawable_get_xdisplay
 gdk_x11_drawable_get_xid

@@ -1,5 +1,14 @@
 2005-06-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/x11/gdkwindow-x11.[hc]: Keep a reference to the 
+	GdkCursor and add a private getter for it, so that we can 
+	update the cursor when the cursor theme changes.
+	
+	* gdk/gdk.symbols: 
+	* gdk/x11/gdkx.h: 
+	* gdk/x11/gdkcursor-x11.c (gdk_x11_display_set_cursor_theme): 
+	New function to change the cursor theme.
+
 	* gdk/x11/gdkwindow-x11.c: Remove a lot of pointless
 	g_return_if_fail() non-NULL checks.
 

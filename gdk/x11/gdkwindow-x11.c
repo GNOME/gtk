@@ -224,6 +224,9 @@ gdk_window_impl_x11_finalize (GObject *object)
   if (window_impl->toplevel)
     g_free (window_impl->toplevel);
 
+  if (window_impl->cursor)
+    gdk_cursor_unref (window_impl->cursor);
+
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -2854,12 +2857,22 @@ void
 gdk_window_set_cursor (GdkWindow *window,
 		       GdkCursor *cursor)
 {
+  GdkWindowObject *private;
+  GdkWindowImplX11 *impl;
   GdkCursorPrivate *cursor_private;
   Cursor xcursor;
   
   g_return_if_fail (GDK_IS_WINDOW (window));
     
+  private = (GdkWindowObject *)window;
+  impl = GDK_WINDOW_IMPL_X11 (private->impl);
   cursor_private = (GdkCursorPrivate*) cursor;
+
+  if (impl->cursor)
+    {
+      gdk_cursor_unref (impl->cursor);
+      impl->cursor = NULL;
+    }
 
   if (!cursor)
     xcursor = None;
@@ -2867,9 +2880,28 @@ gdk_window_set_cursor (GdkWindow *window,
     xcursor = cursor_private->xcursor;
   
   if (!GDK_WINDOW_DESTROYED (window))
-    XDefineCursor (GDK_WINDOW_XDISPLAY (window),
-		   GDK_WINDOW_XID (window),
-		   xcursor);
+    {
+      XDefineCursor (GDK_WINDOW_XDISPLAY (window),
+		     GDK_WINDOW_XID (window),
+		     xcursor);
+      
+      if (cursor)
+	impl->cursor = gdk_cursor_ref (cursor);
+    }
+}
+
+GdkCursor *
+_gdk_x11_window_get_cursor (GdkWindow *window)
+{
+  GdkWindowObject *private;
+  GdkWindowImplX11 *impl;
+  
+  g_return_if_fail (GDK_IS_WINDOW (window));
+    
+  private = (GdkWindowObject *)window;
+  impl = GDK_WINDOW_IMPL_X11 (private->impl);
+
+  return impl->cursor;
 }
 
 /**

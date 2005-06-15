@@ -1111,6 +1111,7 @@ gdkx_colormap_get
 #if IN_FILE(__GDK_CURSOR_X11_C__)
 gdk_x11_cursor_get_xcursor
 gdk_x11_cursor_get_xdisplay
+gdk_x11_display_set_cursor_theme
 #endif
 
 #if IN_FILE(__GDK_DISPLAY_X11_C__)

@@ -25,6 +25,9 @@
  */
 
 #include <config.h>
+
+#define GDK_PIXBUF_ENABLE_BACKEND
+
 #include <X11/Xlib.h>
 #include <X11/cursorfont.h>
 #ifdef HAVE_XCURSOR
@@ -40,7 +43,6 @@
 #include "gdkpixmap-x11.h"
 #include "gdkx.h"
 #include <gdk/gdkpixmap.h>
-#define GDK_PIXBUF_ENABLE_BACKEND
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include "gdkalias.h"
 
@@ -312,34 +314,6 @@ gdk_cursor_get_display (GdkCursor *cursor)
 
 #if defined(HAVE_XCURSOR) && defined(HAVE_XFIXES) && XFIXES_MAJOR >= 2
 
-#if 0
-XcursorComments *
-load_comments (const char       *file, 
-	       const char       *theme)
-{
-    FILE	    *f = 0;
-    XcursorImages   *images = 0;
-    XcursorComments *comments = 0;
-
-    if (theme)
-	f = XcursorScanTheme (theme, file);
-    if (!f)
-      f = XcursorScanTheme ("default", file);
-    if (f == XCURSOR_SCAN_CORE)
-      return 0;
-    if (f)
-      {
-	XcursorFileLoad (f, &comments, &images);
-	fclose (f);
-
-	if (images)
-	  XcursorImagesDestroy (images);
-      }
-
-    return comments;
-}
-#endif
-
 /**
  * gdk_cursor_get_image:
  * @cursor: a #GdkCursor
@@ -361,14 +335,11 @@ gdk_cursor_get_image (GdkCursor *cursor)
   GdkCursorPrivate *private;
   XcursorImages *images = NULL;
   XcursorImage *image;
-  XcursorComments *comments;
-  Atom atom;
   gint size;
   gchar buf[32];
   guchar *data;
   GdkPixbuf *pixbuf;
   gchar *theme;
-  gint i, j;
   
   g_return_val_if_fail (cursor != NULL, NULL);
 
@@ -407,32 +378,95 @@ gdk_cursor_get_image (GdkCursor *cursor)
   g_snprintf (buf, 32, "%d", image->yhot);
   gdk_pixbuf_set_option (pixbuf, "y_hot", buf);
 
-#if 0
-  comments = load_comments (images->name, theme);
-
-  j = 0;
-  for (i = 0; i < comments->ncomment; i++)
-    {
-      switch (comments->comments[i].comment_type)
-	{
-	case XCURSOR_COMMENT_COPYRIGHT:
-	  gdk_pixbuf_set_option (pixbuf, "copyright", comments->comments[i].comment);
-	  break;
-	case XCURSOR_COMMENT_LICENSE:
-	  gdk_pixbuf_set_option (pixbuf, "license", comments->comments[i].comment);
-	  break;
-	default:
-	  g_snprintf (buf, 32, "comment%d", j++);
-	  gdk_pixbuf_set_option (pixbuf, buf, comments->comments[i].comment);
-	  break;
-	}
-    }
-  XcursorCommentsDestroy (comments);
-#endif
-
   XcursorImagesDestroy (images);
 
   return pixbuf;
+}
+
+static void
+update_cursor (gpointer key,
+	       gpointer value,
+	       gpointer data)
+{
+  Display *xdisplay;
+  GdkWindow *window;
+  GdkCursor *cursor;
+  GdkCursorPrivate *private;
+  Cursor new_cursor = None;
+
+  if (!GDK_IS_WINDOW (value))
+    return;
+
+  cursor = _gdk_x11_window_get_cursor (GDK_WINDOW (value));
+
+  if (!cursor)
+    return;
+
+  private = (GdkCursorPrivate *) cursor;
+  xdisplay = (Display *)data;
+	  
+  if (private->xcursor != None)
+    {
+      if (cursor->type == GDK_CURSOR_IS_PIXMAP)
+	{
+	  if (private->name)
+	    new_cursor = XcursorLibraryLoadCursor (xdisplay, private->name);
+	}
+      else 
+	new_cursor = XcursorShapeLoadCursor (xdisplay, cursor->type);
+      
+      if (new_cursor != None)
+	XFixesChangeCursor (xdisplay, new_cursor, private->xcursor);
+    }
+}
+
+/**
+ * gdk_x11_display_set_cursor_theme:
+ * @display: a #GdkDisplay
+ * @theme: the name of the cursor theme to use
+ * @size: the cursor size to use
+ *
+ * Sets the cursor theme from which the images for cursor
+ * should be taken. 
+ * 
+ * If the windowing system supports it, existing cursors created 
+ * with gdk_cursor_new(), gdk_cursor_new_for_display() and 
+ * gdk_cursor_new_for_name() are updated to reflect the theme 
+ * change. Custom cursors constructed with gdk_cursor_new_from_pixmap() 
+ * or gdk_cursor_new_from_pixbuf() will have to be handled
+ * by the application (GTK+ applications can learn about 
+ * cursor theme changes by listening for change notification
+ * for the corresponding #GtkSetting).
+ *
+ * Since: 2.8
+ */
+void
+gdk_x11_display_set_cursor_theme (GdkDisplay  *display,
+				  const gchar *theme,
+				  const gint   size)
+{
+  GdkDisplayX11 *display_x11;
+  Display *xdisplay;
+  gchar *old_theme;
+  gint old_size;
+
+  g_return_if_fail (GDK_IS_DISPLAY (display));
+
+  display_x11 = GDK_DISPLAY_X11 (display);
+  xdisplay = GDK_DISPLAY_XDISPLAY (display);
+
+  old_theme = XcursorGetTheme (xdisplay);
+  old_size = XcursorGetDefaultSize (xdisplay);
+
+  if (old_size == size && 
+      old_theme && strcmp (old_theme, theme) == 0)
+    return;
+
+  XcursorSetTheme (xdisplay, theme);
+  XcursorSetDefaultSize (xdisplay, size);
+    
+  g_hash_table_foreach (display_x11->xid_ht, 
+			update_cursor, xdisplay);
 }
 
 #else
@@ -443,6 +477,16 @@ gdk_cursor_get_image (GdkCursor *cursor)
   g_return_val_if_fail (cursor != NULL, NULL);
   
   return NULL;
+}
+
+void
+gdk_x11_display_set_cursor_theme (GdkDisplay  *display,
+				  const gchar *theme,
+				  const gint   size)
+{
+  g_return_if_fail (GDK_IS_DISPLAY (display));
+
+  /* nothing to do */
 }
 
 #endif
