@@ -1,5 +1,8 @@
 2005-06-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/x11/gdkcursor-x11.c (gdk_cursor_get_image): Get
+	red and blue in place.
+
 	* gtk/gtkwindow.c (gtk_window_parse_geometry): Fox doc
 	formatting, pointed out by Kjartan Maraas.
 

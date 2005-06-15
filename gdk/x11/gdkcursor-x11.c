@@ -337,7 +337,7 @@ gdk_cursor_get_image (GdkCursor *cursor)
   XcursorImage *image;
   gint size;
   gchar buf[32];
-  guchar *data;
+  guchar *data, *p, tmp;
   GdkPixbuf *pixbuf;
   gchar *theme;
   
@@ -365,6 +365,13 @@ gdk_cursor_get_image (GdkCursor *cursor)
 
   data = g_malloc (4 * image->width * image->height);
   memcpy (data, image->pixels, 4 * image->width * image->height);
+
+  for (p = data; p < data + (4 * image->width * image->height); p += 4)
+    {
+      tmp = p[0];
+      p[0] = p[2];
+      p[2] = tmp;
+    }
 
   pixbuf = gdk_pixbuf_new_from_data (data, GDK_COLORSPACE_RGB, TRUE,
 				     8, image->width, image->height,
