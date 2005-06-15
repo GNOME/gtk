@@ -1,5 +1,10 @@
 2005-06-14  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkwindow.c (gtk_window_parse_geometry):
+	Fix up the example.  (#307699, Michal Suchanek)
+
+2005-06-14  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkcalendar.c: Update num_marked_dates as we
 	used to do.  (#307689, Thorsten Schoenfeld)
  

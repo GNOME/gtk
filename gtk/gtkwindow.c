@@ -7044,11 +7044,21 @@ gtk_XParseGeometry (const char   *string,
  * on the window.
  * 
  * <informalexample><programlisting>
+ * #include &lt;gtk/gtk.h&gt;
+ * 
+ * static void
+ * fill_with_content (GtkWidget *vbox)
+ * {
+ *   /<!-- -->* fill with content... *<!-- -->/
+ * }
+ * 
  * int
  * main (int argc, char *argv[])
  * {
- *   GtkWidget *window, vbox;
- *   GdkGeometry size_hints;
+ *   GtkWidget *window, *vbox;
+ *   GdkGeometry size_hints = {
+ *     100, 50, 0, 0, 100, 50, 10, 10, 0.0, 0.0, GDK_GRAVITY_NORTH_WEST  
+ *   };
  *   
  *   gtk_init (&amp;argc, &amp;argv);
  *   
@@ -7058,10 +7068,6 @@ gtk_XParseGeometry (const char   *string,
  *   gtk_container_add (GTK_CONTAINER (window), vbox);
  *   fill_with_content (vbox);
  *   gtk_widget_show_all (vbox);
- *   
- *   size_hints = {
- *     100, 50, 0, 0, 100, 50, 10, 10, 0.0, 0.0, GDK_GRAVITY_NORTH_WEST  
- *   };
  *   
  *   gtk_window_set_geometry_hints (GTK_WINDOW (window),
  * 	  			    window,
@@ -7076,10 +7082,10 @@ gtk_XParseGeometry (const char   *string,
  *         fprintf (stderr, "Failed to parse '&percnt;s'\n", argv[1]);
  *     }
  *    
- *    gtk_widget_show_all (window);
- *    gtk_main ();
+ *   gtk_widget_show_all (window);
+ *   gtk_main ();
  *    
- *    return 0;
+ *   return 0;
  * }
  * </programlisting></informalexample>
  *
