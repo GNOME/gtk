@@ -612,7 +612,7 @@ gdk_gc_get_screen
 
 #if IN_HEADER(__GDK_PIXMAP_X11_H__)
 #if IN_FILE(__GDK_PIXMAP_X11_C__)
-#ifdef GDK_PIXMAPING_X11
+#ifdef GDK_WINDOWING_X11
 gdk_pixmap_impl_x11_get_type G_GNUC_CONST
 #endif
 #endif

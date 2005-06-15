@@ -1,3 +1,8 @@
+2005-06-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/abicheck.sh: Use uniq to filter out duplicates.
+	* gdk/gdk.symbols: Fix a define.
+
 2005-06-14  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkwindow.c (gtk_window_parse_geometry):
