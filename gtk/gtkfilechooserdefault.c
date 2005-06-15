@@ -5043,6 +5043,7 @@ gtk_file_chooser_default_set_current_name (GtkFileChooser *chooser,
   g_return_if_fail (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
 		    || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER);
 
+  pending_select_paths_free (impl);
   _gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (impl->save_file_name_entry), name);
 }
 
@@ -5181,6 +5182,7 @@ gtk_file_chooser_default_unselect_all (GtkFileChooser *chooser)
   GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
 
   gtk_tree_selection_unselect_all (selection);
+  pending_select_paths_free (impl);
 }
 
 /* Checks whether the filename entry for the Save modes contains a well-formed filename.
@@ -6219,7 +6221,7 @@ list_selection_changed (GtkTreeSelection      *selection,
       g_assert (!impl->select_multiple);
       selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
       if (!gtk_tree_selection_get_selected (selection, NULL, &iter))
-	return;
+	goto out; /* normal processing */
 
       gtk_tree_model_sort_convert_iter_to_child_iter (impl->sort_model,
 						      &child_iter,
@@ -6229,6 +6231,8 @@ list_selection_changed (GtkTreeSelection      *selection,
       if (!info)
 	return; /* We are on the editable row for New Folder */
     }
+
+ out:
 
   update_chooser_entry (impl);
   check_preview_change (impl);
