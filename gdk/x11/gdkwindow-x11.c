@@ -2896,7 +2896,7 @@ _gdk_x11_window_get_cursor (GdkWindow *window)
   GdkWindowObject *private;
   GdkWindowImplX11 *impl;
   
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
     
   private = (GdkWindowObject *)window;
   impl = GDK_WINDOW_IMPL_X11 (private->impl);

@@ -1878,7 +1878,7 @@ button_new (GtkFileChooserDefault *impl,
 
   button = gtk_button_new_with_mnemonic (text);
   image = gtk_image_new_from_stock (stock_id, GTK_ICON_SIZE_BUTTON);
-  gtk_button_set_image (GTK_BUTTON (button), GTK_IMAGE (image));
+  gtk_button_set_image (GTK_BUTTON (button), image);
 
   gtk_widget_set_sensitive (button, sensitive);
   g_signal_connect (button, "clicked", callback, impl);

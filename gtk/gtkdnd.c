@@ -593,7 +593,8 @@ gtk_drag_get_cursor (GdkDisplay        *display,
       gint width, height;
       GdkPixbuf *cursor_pixbuf, *pixbuf;
       GtkAnchorType icon_anchor;
-      gint hot_x, hot_y, icon_x, icon_y, ref_x, ref_y;
+      gint hot_x = 0, hot_y = 0;
+      gint icon_x, icon_y, ref_x, ref_y;
       gboolean found;
 
       if (info->drag_cursors[i] != NULL)
@@ -609,7 +610,6 @@ gtk_drag_get_cursor (GdkDisplay        *display,
       if (!cursor_pixbuf)
 	{
 	  cursor_pixbuf = g_object_ref (drag_cursors[i].pixbuf);
-	  hot_x = hot_y = 0;
 	  icon_anchor = GTK_ANCHOR_NORTH;
 	  icon_x = icon_y = -2;
 	}

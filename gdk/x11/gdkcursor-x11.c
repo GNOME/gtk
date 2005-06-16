@@ -396,7 +396,6 @@ update_cursor (gpointer key,
 	       gpointer data)
 {
   Display *xdisplay;
-  GdkWindow *window;
   GdkCursor *cursor;
   GdkCursorPrivate *private;
   Cursor new_cursor = None;
