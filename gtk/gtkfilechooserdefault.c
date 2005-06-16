@@ -1874,28 +1874,14 @@ button_new (GtkFileChooserDefault *impl,
 	    GCallback   callback)
 {
   GtkWidget *button;
-  GtkWidget *hbox;
-  GtkWidget *widget;
-  GtkWidget *align;
+  GtkWidget *image;
 
-  button = gtk_button_new ();
-  hbox = gtk_hbox_new (FALSE, 2);
-  align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
-
-  gtk_container_add (GTK_CONTAINER (button), align);
-  gtk_container_add (GTK_CONTAINER (align), hbox);
-  widget = gtk_image_new_from_stock (stock_id, GTK_ICON_SIZE_BUTTON);
-
-  gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
-
-  widget = gtk_label_new_with_mnemonic (text);
-  gtk_label_set_mnemonic_widget (GTK_LABEL (widget), GTK_WIDGET (button));
-  gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
+  button = gtk_button_new_with_mnemonic (text);
+  image = gtk_image_new_from_stock (stock_id, GTK_ICON_SIZE_BUTTON);
+  gtk_button_set_image (GTK_BUTTON (button), GTK_IMAGE (image));
 
   gtk_widget_set_sensitive (button, sensitive);
   g_signal_connect (button, "clicked", callback, impl);
-
-  gtk_widget_show_all (align);
 
   if (show)
     gtk_widget_show (button);

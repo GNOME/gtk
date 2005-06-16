@@ -1,5 +1,9 @@
 2005-06-16  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserdefault.c (button_new): Simplify
+	the code and respect the show-button-images setting.
+	(#307941, Vincent Noel)
+
 	* gtk/gtkdnd.c: Update the RGBA cursor if an
 	icon is set after the cursor has been constructed.
 	Also handle repeated setting of icons correctly.
