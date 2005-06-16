@@ -1,5 +1,11 @@
 2005-06-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/gdkwindow.c (gdk_window_process_updates_internal):
+	Initialize all fields of the expose event.  (#151693,
+	Jim Evins)
+
+2005-06-15  Matthias Clasen  <mclasen@redhat.com>
+
 	* gdk/x11/gdkcursor-x11.c (gdk_cursor_get_image): Get
 	red and blue in place.
 

@@ -2210,6 +2210,7 @@ gdk_window_process_updates_internal (GdkWindow *window)
 	      
 	      event.expose.type = GDK_EXPOSE;
 	      event.expose.window = g_object_ref (window);
+	      event.expose.send_event = FALSE;
 	      event.expose.count = 0;
 	      event.expose.region = expose_region;
 	      gdk_region_get_clipbox (expose_region, &event.expose.area);
