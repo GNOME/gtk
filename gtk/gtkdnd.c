@@ -25,6 +25,10 @@
  */
 
 #include <config.h>
+
+#include <stdlib.h>
+#include <string.h>
+
 #include "gdkconfig.h"
 
 #include "gdk/gdkkeysyms.h"
@@ -196,6 +200,7 @@ static void          gtk_drag_get_event_actions (GdkEvent        *event,
 static GdkCursor *   gtk_drag_get_cursor         (GdkDisplay     *display,
 						  GdkDragAction   action,
 						  GtkDragSourceInfo *info);
+static void          gtk_drag_update_cursor      (GtkDragSourceInfo *info);
 static GtkWidget    *gtk_drag_get_ipc_widget     (GdkScreen	 *screen);
 static void          gtk_drag_release_ipc_widget (GtkWidget      *widget);
 
@@ -620,7 +625,7 @@ gtk_drag_get_cursor (GdkDisplay        *display,
 	  for (j = 0; j < 10; j++)
 	    {
 	      const gchar *opt;
-	      const gchar key[32];
+	      gchar key[32];
 	      gchar **toks;
 
 	      g_snprintf (key, 32, "comment%d", j);
@@ -724,6 +729,37 @@ gtk_drag_get_cursor (GdkDisplay        *display,
     }
  
   return drag_cursors[i].cursor;
+}
+
+static void
+gtk_drag_update_cursor (GtkDragSourceInfo *info)
+{
+  GdkCursor *cursor;
+  gint i;
+
+  if (!info->have_grab)
+    return;
+
+  for (i = 0 ; i < n_drag_cursors - 1; i++)
+    if (info->cursor == drag_cursors[i].cursor ||
+	info->cursor == info->drag_cursors[i])
+      break;
+  
+  if (i == n_drag_cursors)
+    return;
+
+  cursor = gtk_drag_get_cursor (gdk_cursor_get_display (info->cursor), 
+				i, info);
+  
+  if (cursor != info->cursor)
+    {
+      gdk_pointer_grab (info->ipc_widget->window, FALSE,
+			GDK_POINTER_MOTION_MASK |
+			GDK_BUTTON_RELEASE_MASK,
+			NULL,
+			cursor, info->grab_time);
+      info->cursor = cursor;
+    }
 }
 
 /********************
@@ -2125,8 +2161,7 @@ gtk_drag_begin_internal (GtkWidget         *widget,
 			       &info->cur_screen, &info->cur_x, &info->cur_y, NULL);
     }
 
-  g_signal_emit_by_name (widget, "drag_begin",
-			 info->context);
+  g_signal_emit_by_name (widget, "drag_begin", info->context);
 
   /* Ensure that we have an icon before we start the drag; the
    * application may have set one in ::drag_begin, or it may
@@ -2724,13 +2759,20 @@ gtk_drag_set_icon_window (GdkDragContext *context,
   gtk_drag_remove_icon (info);
 
   if (widget)
-    gtk_widget_ref (widget);
+    gtk_widget_ref (widget);  
   
   info->icon_window = widget;
   info->hot_x = hot_x;
   info->hot_y = hot_y;
   info->destroy_icon = destroy_on_release;
- 
+
+  if (widget && info->icon_pixbuf)
+    {
+      g_object_unref (info->icon_pixbuf);
+      info->icon_pixbuf = NULL;
+    }
+
+  gtk_drag_update_cursor (info);
   gtk_drag_update_icon (info);
 }
 
@@ -2836,8 +2878,14 @@ set_icon_stock_pixbuf (GdkDragContext    *context,
       GtkDragSourceInfo *info;
 
       gtk_widget_destroy (window);
+
       info = gtk_drag_get_source_info (context, FALSE);
+
+      if (info->icon_pixbuf)
+	g_object_unref (info->icon_pixbuf);
       info->icon_pixbuf = pixbuf;
+
+      gtk_drag_set_icon_window (context, NULL, hot_x, hot_y, TRUE);
     }
   else
     {
