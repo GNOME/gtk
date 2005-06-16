@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-04-12 22:42-0400\n"
+"POT-Creation-Date: 2005-06-15 23:46-0400\n"
 "PO-Revision-Date: 2005-04-06 08:05+0200\n"
 "Last-Translator: Данило Шеган <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <gnom@prevod.org>\n"
@@ -200,15 +200,15 @@ msgstr "BMP слика садржи заглавље неподржане вел
 msgid "Topdown BMP images cannot be compressed"
 msgstr "Одозго-надоле BMP слике се не могу компресовати"
 
-#: gdk-pixbuf/io-bmp.c:1214
+#: gdk-pixbuf/io-bmp.c:1198
 msgid "Couldn't allocate memory for saving BMP file"
 msgstr "Не могу обезбедити меморију за снимање BMP датотеке"
 
-#: gdk-pixbuf/io-bmp.c:1255
+#: gdk-pixbuf/io-bmp.c:1239
 msgid "Couldn't write to BMP file"
 msgstr "Не могу да пишем у BMP датотеку"
 
-#: gdk-pixbuf/io-bmp.c:1304
+#: gdk-pixbuf/io-bmp.c:1288
 msgid "The BMP image format"
 msgstr "BMP запис слике"
 
@@ -1094,15 +1094,15 @@ msgstr "Точак боја"
 msgid "Color Selection"
 msgstr "Избор боје"
 
-#: gtk/gtkentry.c:4510 gtk/gtktextview.c:7030
+#: gtk/gtkentry.c:4510 gtk/gtktextview.c:7051
 msgid "Select _All"
 msgstr "Изабери _све"
 
-#: gtk/gtkentry.c:4520 gtk/gtktextview.c:7040
+#: gtk/gtkentry.c:4520 gtk/gtktextview.c:7061
 msgid "Input _Methods"
 msgstr "_Начини уноса"
 
-#: gtk/gtkentry.c:4531 gtk/gtktextview.c:7051
+#: gtk/gtkentry.c:4531 gtk/gtktextview.c:7072
 msgid "_Insert Unicode Control Character"
 msgstr "_Убаци контролни Уникод знак"
 
@@ -1117,12 +1117,12 @@ msgid "Select A File"
 msgstr "Изабери датотеку"
 
 # ako je za "home directory", onda bi bilo dobro "licni direktorijum", ako je za "home page", onda za "licna stranica"
-#: gtk/gtkfilechooserbutton.c:67 gtk/gtkfilechooserdefault.c:1285
+#: gtk/gtkfilechooserbutton.c:67 gtk/gtkfilechooserdefault.c:1300
 #: gtk/gtkpathbar.c:996
 msgid "Home"
 msgstr "Лично"
 
-#: gtk/gtkfilechooserbutton.c:68 gtk/gtkfilechooserdefault.c:1312
+#: gtk/gtkfilechooserbutton.c:68 gtk/gtkfilechooserdefault.c:1327
 #: gtk/gtkpathbar.c:998
 msgid "Desktop"
 msgstr "Радна површ"
@@ -1131,7 +1131,7 @@ msgstr "Радна површ"
 msgid "(None)"
 msgstr "(ништа)"
 
-#: gtk/gtkfilechooserbutton.c:1516
+#: gtk/gtkfilechooserbutton.c:1522
 msgid "Other..."
 msgstr "Неки други..."
 
@@ -1151,141 +1151,147 @@ msgstr "Не могу да уклоним обележивач"
 msgid "The folder could not be created"
 msgstr "Не могу да направим директоријум"
 
-#: gtk/gtkfilechooserdefault.c:959
+#: gtk/gtkfilechooserdefault.c:961
+msgid ""
+"The folder could not be created, as a file with the same name already "
+"exists.  Try using a different name for the folder, or rename the file first."
+msgstr ""
+
+#: gtk/gtkfilechooserdefault.c:974
 msgid "Invalid file name"
 msgstr "Неисправно име датотеке"
 
-#: gtk/gtkfilechooserdefault.c:969
+#: gtk/gtkfilechooserdefault.c:984
 msgid "The folder contents could not be displayed"
 msgstr "Не могу да прикажем садржај директоријума"
 
-#: gtk/gtkfilechooserdefault.c:1175
+#: gtk/gtkfilechooserdefault.c:1190
 #, c-format
 msgid "Could not get information about '%s': %s"
 msgstr "Не могу да сазнам податке о %s: %s"
 
-#: gtk/gtkfilechooserdefault.c:2201
+#: gtk/gtkfilechooserdefault.c:2215
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Додај директоријум „%s“ у обележиваче"
 
-#: gtk/gtkfilechooserdefault.c:2242
+#: gtk/gtkfilechooserdefault.c:2256
 msgid "Add the current folder to the bookmarks"
 msgstr "Додај текући директоријум у обележиваче"
 
-#: gtk/gtkfilechooserdefault.c:2244
+#: gtk/gtkfilechooserdefault.c:2258
 msgid "Add the selected folders to the bookmarks"
 msgstr "Додај изабране директоријуме у обележиваче"
 
-#: gtk/gtkfilechooserdefault.c:2284
+#: gtk/gtkfilechooserdefault.c:2298
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Уклони обележивач „%s“"
 
-#: gtk/gtkfilechooserdefault.c:2697
+#: gtk/gtkfilechooserdefault.c:2711
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
 msgstr ""
 "Не могу да додам обележивач за „%s“ зато што представља неисправно име "
 "путање."
 
-#: gtk/gtkfilechooserdefault.c:2875
+#: gtk/gtkfilechooserdefault.c:2889
 msgid "Shortcuts"
 msgstr "Пречице"
 
-#: gtk/gtkfilechooserdefault.c:2929
+#: gtk/gtkfilechooserdefault.c:2943
 msgid "Folder"
 msgstr "Директоријум"
 
-#: gtk/gtkfilechooserdefault.c:2981 gtk/gtkstock.c:295
+#: gtk/gtkfilechooserdefault.c:2995 gtk/gtkstock.c:295
 msgid "_Add"
 msgstr "_Додај"
 
-#: gtk/gtkfilechooserdefault.c:2988
+#: gtk/gtkfilechooserdefault.c:3002
 msgid "Add the selected folder to the bookmarks"
 msgstr "Додај изабрани директоријум у обележиваче"
 
-#: gtk/gtkfilechooserdefault.c:2993 gtk/gtkstock.c:352
+#: gtk/gtkfilechooserdefault.c:3007 gtk/gtkstock.c:352
 msgid "_Remove"
 msgstr "_Уклони"
 
-#: gtk/gtkfilechooserdefault.c:3000
+#: gtk/gtkfilechooserdefault.c:3014
 msgid "Remove the selected bookmark"
 msgstr "Уклони изабрани обележивач"
 
-#: gtk/gtkfilechooserdefault.c:3103
+#: gtk/gtkfilechooserdefault.c:3121
 msgid "_Add to Shortcuts"
 msgstr "_Додај међу пречице"
 
-#: gtk/gtkfilechooserdefault.c:3113
+#: gtk/gtkfilechooserdefault.c:3131
 msgid "Open _Location"
 msgstr "Отвори _путању"
 
-#: gtk/gtkfilechooserdefault.c:3125
+#: gtk/gtkfilechooserdefault.c:3143
 msgid "Show _Hidden Files"
 msgstr "Прикажи са_кривене датотеке"
 
-#: gtk/gtkfilechooserdefault.c:3249 gtk/gtkfilesel.c:768
+#: gtk/gtkfilechooserdefault.c:3267 gtk/gtkfilesel.c:768
 msgid "Files"
 msgstr "Датотеке"
 
-#: gtk/gtkfilechooserdefault.c:3280
+#: gtk/gtkfilechooserdefault.c:3298
 msgid "Name"
 msgstr "Име:"
 
-#: gtk/gtkfilechooserdefault.c:3305
+#: gtk/gtkfilechooserdefault.c:3323
 msgid "Size"
 msgstr "Величина"
 
-#: gtk/gtkfilechooserdefault.c:3318
+#: gtk/gtkfilechooserdefault.c:3336
 msgid "Modified"
 msgstr "Измењен"
 
-#: gtk/gtkfilechooserdefault.c:3350
+#: gtk/gtkfilechooserdefault.c:3368
 msgid "Select which types of files are shown"
 msgstr "Изабери датотеке којих врста се приказују"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:3386
+#: gtk/gtkfilechooserdefault.c:3404
 msgid "Create Fo_lder"
 msgstr "Направи _директоријум"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3507
+#: gtk/gtkfilechooserdefault.c:3525
 msgid "_Name:"
 msgstr "_Име:"
 
-#: gtk/gtkfilechooserdefault.c:3547
+#: gtk/gtkfilechooserdefault.c:3565
 msgid "_Browse for other folders"
 msgstr "_Разгледај остале директоријуме"
 
-#: gtk/gtkfilechooserdefault.c:3797
+#: gtk/gtkfilechooserdefault.c:3815
 msgid "Save in _folder:"
 msgstr "Сачувај у _директоријуму:"
 
-#: gtk/gtkfilechooserdefault.c:3799
+#: gtk/gtkfilechooserdefault.c:3817
 msgid "Create in _folder:"
 msgstr "Направи у _директоријуму:"
 
-#: gtk/gtkfilechooserdefault.c:4739
+#: gtk/gtkfilechooserdefault.c:4774
 msgid "Cannot change to folder because it is not local"
 msgstr "Не могу да уђем у директоријум зато што није локални"
 
-#: gtk/gtkfilechooserdefault.c:5255
+#: gtk/gtkfilechooserdefault.c:5328
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Пречица %s не постоји"
 
-#: gtk/gtkfilechooserdefault.c:5719
+#: gtk/gtkfilechooserdefault.c:5872
 #, c-format
 msgid "Could not mount %s"
 msgstr "Не могу да прикључим %s"
 
-#: gtk/gtkfilechooserdefault.c:6012
+#: gtk/gtkfilechooserdefault.c:6167
 msgid "Type name of new folder"
 msgstr "Унесите име новог директоријума"
 
-#: gtk/gtkfilechooserdefault.c:6054
+#: gtk/gtkfilechooserdefault.c:6209
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
@@ -1293,59 +1299,59 @@ msgstr[0] "%d бајт"
 msgstr[1] "%d бајта"
 msgstr[2] "%d бајтова"
 
-#: gtk/gtkfilechooserdefault.c:6056
+#: gtk/gtkfilechooserdefault.c:6211
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:6058
+#: gtk/gtkfilechooserdefault.c:6213
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:6060
+#: gtk/gtkfilechooserdefault.c:6215
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:6112
-msgid "Today"
-msgstr "Данас"
-
-#: gtk/gtkfilechooserdefault.c:6114
-msgid "Yesterday"
-msgstr "Јуче"
-
-#: gtk/gtkfilechooserdefault.c:6125
+#: gtk/gtkfilechooserdefault.c:6261 gtk/gtkfilechooserdefault.c:6285
 msgid "Unknown"
 msgstr "Непознато"
 
-#: gtk/gtkfilechooserdefault.c:6195
+#: gtk/gtkfilechooserdefault.c:6272
+msgid "Today"
+msgstr "Данас"
+
+#: gtk/gtkfilechooserdefault.c:6274
+msgid "Yesterday"
+msgstr "Јуче"
+
+#: gtk/gtkfilechooserdefault.c:6356
 msgid "Cannot change folder"
 msgstr "Не могу да променим директоријум"
 
-#: gtk/gtkfilechooserdefault.c:6196
+#: gtk/gtkfilechooserdefault.c:6357
 msgid "The folder you specified is an invalid path."
 msgstr "Директоријум који сте навели представља неисправну путању."
 
-#: gtk/gtkfilechooserdefault.c:6235
+#: gtk/gtkfilechooserdefault.c:6396
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr "Не могу да саставим име датотеке из „%s“ и „%s“"
 
-#: gtk/gtkfilechooserdefault.c:6271
+#: gtk/gtkfilechooserdefault.c:6432
 msgid "Could not select item"
 msgstr "Не могу да изаберем ставку"
 
-#: gtk/gtkfilechooserdefault.c:6311
+#: gtk/gtkfilechooserdefault.c:6472
 msgid "Open Location"
 msgstr "Отвори путању"
 
-#: gtk/gtkfilechooserdefault.c:6318
+#: gtk/gtkfilechooserdefault.c:6479
 msgid "Save in Location"
 msgstr "Сачувај на путањи"
 
-#: gtk/gtkfilechooserdefault.c:6342
+#: gtk/gtkfilechooserdefault.c:6503
 msgid "_Location:"
 msgstr "_Путања: "
 
@@ -1529,32 +1535,32 @@ msgstr "Не могу претворити име датотеке"
 msgid "(Empty)"
 msgstr "(Празно)"
 
-#: gtk/gtkfilesystemunix.c:440 gtk/gtkfilesystemunix.c:632
-#: gtk/gtkfilesystemunix.c:1739 gtk/gtkfilesystemwin32.c:482
-#: gtk/gtkfilesystemwin32.c:495 gtk/gtkfilesystemwin32.c:1533
+#: gtk/gtkfilesystemunix.c:460 gtk/gtkfilesystemunix.c:662
+#: gtk/gtkfilesystemunix.c:1769 gtk/gtkfilesystemwin32.c:482
+#: gtk/gtkfilesystemwin32.c:495 gtk/gtkfilesystemwin32.c:1560
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "Грешка при добављању података о „%s“: %s"
 
-#: gtk/gtkfilesystemunix.c:501 gtk/gtkfilesystemwin32.c:537
+#: gtk/gtkfilesystemunix.c:531 gtk/gtkfilesystemwin32.c:537
 #, c-format
 msgid "Error creating directory '%s': %s"
 msgstr "Грешка при прављењу директоријума „%s“: %s"
 
-#: gtk/gtkfilesystemunix.c:581 gtk/gtkfilesystemwin32.c:597
+#: gtk/gtkfilesystemunix.c:611 gtk/gtkfilesystemwin32.c:597
 msgid "This file system does not support mounting"
 msgstr "Овај систем датотека не подржава прикључивање"
 
-#: gtk/gtkfilesystemunix.c:589
+#: gtk/gtkfilesystemunix.c:619
 msgid "Filesystem"
 msgstr "Систем датотека"
 
-#: gtk/gtkfilesystemunix.c:746
+#: gtk/gtkfilesystemunix.c:776
 #, c-format
 msgid "Could not get a stock icon for %s"
 msgstr "Не могу да учитам препоручену икону за %s"
 
-#: gtk/gtkfilesystemunix.c:841
+#: gtk/gtkfilesystemunix.c:871
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1562,22 +1568,22 @@ msgid ""
 msgstr ""
 "Име „%s“ није исправно зато што садржи знак „%s“. Користите неко друго име."
 
-#: gtk/gtkfilesystemunix.c:1446 gtk/gtkfilesystemwin32.c:1007
+#: gtk/gtkfilesystemunix.c:1476 gtk/gtkfilesystemwin32.c:1032
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Неуспешно снимање обележивача: %s"
 
-#: gtk/gtkfilesystemunix.c:1498
+#: gtk/gtkfilesystemunix.c:1528
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "„%s“ је већ међу обележивачима"
 
-#: gtk/gtkfilesystemunix.c:1560
+#: gtk/gtkfilesystemunix.c:1590
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "„%s“ није међу обележивачима"
 
-#: gtk/gtkfilesystemunix.c:1699
+#: gtk/gtkfilesystemunix.c:1729
 #, c-format
 msgid "Error getting information for '/': %s"
 msgstr "Грешка при добављању података за „/“: %s"
@@ -1774,19 +1780,19 @@ msgstr "Које Гтк+ опције за налажење грешака ис�
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:482
+#: gtk/gtkmain.c:476
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:565
+#: gtk/gtkmain.c:559
 msgid "GTK+ Options"
 msgstr "Гтк+ опције"
 
-#: gtk/gtkmain.c:565
+#: gtk/gtkmain.c:559
 msgid "Show GTK+ Options"
 msgstr "Прикажи Гтк+ опције"
 
-#: gtk/gtknotebook.c:2717 gtk/gtknotebook.c:5065
+#: gtk/gtknotebook.c:2717 gtk/gtknotebook.c:5063
 #, c-format
 msgid "Page %u"
 msgstr "Лист %u"
@@ -2195,7 +2201,7 @@ msgstr "Неочекивана почетна ознака „%s“ у %d. ре�
 msgid "Unexpected character data on line %d char %d"
 msgstr "Неочекивани знаковни подаци у %d. реду, %d. знак"
 
-#: gtk/gtkuimanager.c:2209
+#: gtk/gtkuimanager.c:2208
 msgid "Empty"
 msgstr "Празно"
 

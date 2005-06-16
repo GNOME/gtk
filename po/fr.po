@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-12 17:52+0200\n"
+"POT-Creation-Date: 2005-06-15 23:46-0400\n"
 "PO-Revision-Date: 2005-06-12 17:48+0200\n"
 "Last-Translator: Christophe Merlet (RedFox) <redfox@redfoxcenter.org>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
@@ -1127,7 +1127,7 @@ msgstr "Bureau"
 msgid "(None)"
 msgstr "(Aucun)"
 
-#: gtk/gtkfilechooserbutton.c:1519
+#: gtk/gtkfilechooserbutton.c:1522
 msgid "Other..."
 msgstr "Autre..."
 
@@ -1276,81 +1276,81 @@ msgstr "Créer dans le _dossier :"
 msgid "Cannot change to folder because it is not local"
 msgstr "Impossible d'aller au dossier car il n'est pas local"
 
-#: gtk/gtkfilechooserdefault.c:5290
+#: gtk/gtkfilechooserdefault.c:5328
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Le raccourci %s n'existe pas"
 
-#: gtk/gtkfilechooserdefault.c:5824
+#: gtk/gtkfilechooserdefault.c:5872
 #, c-format
 msgid "Could not mount %s"
 msgstr "Impossible de monter %s"
 
-#: gtk/gtkfilechooserdefault.c:6117
+#: gtk/gtkfilechooserdefault.c:6167
 msgid "Type name of new folder"
 msgstr "Saisissez le nom du nouveau dossier"
 
-#: gtk/gtkfilechooserdefault.c:6159
+#: gtk/gtkfilechooserdefault.c:6209
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d octet"
 msgstr[1] "%d octets"
 
-#: gtk/gtkfilechooserdefault.c:6161
+#: gtk/gtkfilechooserdefault.c:6211
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f k"
 
-#: gtk/gtkfilechooserdefault.c:6163
+#: gtk/gtkfilechooserdefault.c:6213
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:6165
+#: gtk/gtkfilechooserdefault.c:6215
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:6211 gtk/gtkfilechooserdefault.c:6235
+#: gtk/gtkfilechooserdefault.c:6261 gtk/gtkfilechooserdefault.c:6285
 msgid "Unknown"
 msgstr "Inconnu"
 
-#: gtk/gtkfilechooserdefault.c:6222
+#: gtk/gtkfilechooserdefault.c:6272
 msgid "Today"
 msgstr "Aujourd'hui"
 
-#: gtk/gtkfilechooserdefault.c:6224
+#: gtk/gtkfilechooserdefault.c:6274
 msgid "Yesterday"
 msgstr "Hier"
 
-#: gtk/gtkfilechooserdefault.c:6306
+#: gtk/gtkfilechooserdefault.c:6356
 msgid "Cannot change folder"
 msgstr "Impossible d'aller au dossier"
 
-#: gtk/gtkfilechooserdefault.c:6307
+#: gtk/gtkfilechooserdefault.c:6357
 msgid "The folder you specified is an invalid path."
 msgstr "Le dossier que vous avez spécifié a un chemin d'accès non valide."
 
-#: gtk/gtkfilechooserdefault.c:6346
+#: gtk/gtkfilechooserdefault.c:6396
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr ""
 "Impossible de construire le nom du fichier à partir de « %s » et « %s »"
 
-#: gtk/gtkfilechooserdefault.c:6382
+#: gtk/gtkfilechooserdefault.c:6432
 msgid "Could not select item"
 msgstr "Impossible de sélectionner l'élément"
 
-#: gtk/gtkfilechooserdefault.c:6422
+#: gtk/gtkfilechooserdefault.c:6472
 msgid "Open Location"
 msgstr "Ouvrir un emplacement"
 
-#: gtk/gtkfilechooserdefault.c:6429
+#: gtk/gtkfilechooserdefault.c:6479
 msgid "Save in Location"
 msgstr "Enregistrer dans un emplacement"
 
-#: gtk/gtkfilechooserdefault.c:6453
+#: gtk/gtkfilechooserdefault.c:6503
 msgid "_Location:"
 msgstr "_Emplacement :"
 

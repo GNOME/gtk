@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:gtk+.gtk-2-2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-04-12 22:42-0400\n"
+"POT-Creation-Date: 2005-06-15 23:46-0400\n"
 "PO-Revision-Date: 2003-07-05 10:29+0530\n"
 "Last-Translator: FSF-India <locale@gnu.org.in>\n"
 "Language-Team: Malayalam <locale@gnu.org.in>\n"
@@ -186,17 +186,17 @@ msgstr "BMP ഛായയില്‌ കൃത്രിമതലവാചകവ�
 msgid "Topdown BMP images cannot be compressed"
 msgstr ""
 
-#: gdk-pixbuf/io-bmp.c:1214
+#: gdk-pixbuf/io-bmp.c:1198
 #, fuzzy
 msgid "Couldn't allocate memory for saving BMP file"
 msgstr "JPEG ശേഖരം നിറയ‌ക്കുന്നതിനുവേണ്ട സ്ഥലം അനുവദിക്കാന് കഴിഞ്ഞില്ല‌"
 
-#: gdk-pixbuf/io-bmp.c:1255
+#: gdk-pixbuf/io-bmp.c:1239
 #, fuzzy
 msgid "Couldn't write to BMP file"
 msgstr "രചനാനാമം മാറ്റാന് കഴിയില്ല"
 
-#: gdk-pixbuf/io-bmp.c:1304
+#: gdk-pixbuf/io-bmp.c:1288
 msgid "The BMP image format"
 msgstr "BMP ഛായാരീതി"
 
@@ -1069,16 +1069,16 @@ msgstr "ചക്രം"
 msgid "Color Selection"
 msgstr "അക്ഷരരൂപം തെരഞ്ഞെടുക്കല്"
 
-#: gtk/gtkentry.c:4510 gtk/gtktextview.c:7030
+#: gtk/gtkentry.c:4510 gtk/gtktextview.c:7051
 #, fuzzy
 msgid "Select _All"
 msgstr "എല്ലാം തെരഞ്ഞെടുക്കുക"
 
-#: gtk/gtkentry.c:4520 gtk/gtktextview.c:7040
+#: gtk/gtkentry.c:4520 gtk/gtktextview.c:7061
 msgid "Input _Methods"
 msgstr "നിവേശക രീതി"
 
-#: gtk/gtkentry.c:4531 gtk/gtktextview.c:7051
+#: gtk/gtkentry.c:4531 gtk/gtktextview.c:7072
 msgid "_Insert Unicode Control Character"
 msgstr ""
 
@@ -1093,13 +1093,13 @@ msgstr "അസാധുവായ XBM ശേഖരം"
 msgid "Select A File"
 msgstr "രചന നീക്കംചെയ്യ‍ുക"
 
-#: gtk/gtkfilechooserbutton.c:67 gtk/gtkfilechooserdefault.c:1285
+#: gtk/gtkfilechooserbutton.c:67 gtk/gtkfilechooserdefault.c:1300
 #: gtk/gtkpathbar.c:996
 #, fuzzy
 msgid "Home"
 msgstr "ആസ്ഥാനം"
 
-#: gtk/gtkfilechooserbutton.c:68 gtk/gtkfilechooserdefault.c:1312
+#: gtk/gtkfilechooserbutton.c:68 gtk/gtkfilechooserdefault.c:1327
 #: gtk/gtkpathbar.c:998
 msgid "Desktop"
 msgstr ""
@@ -1109,7 +1109,7 @@ msgstr ""
 msgid "(None)"
 msgstr "ഒന്നും"
 
-#: gtk/gtkfilechooserbutton.c:1516
+#: gtk/gtkfilechooserbutton.c:1522
 msgid "Other..."
 msgstr ""
 
@@ -1130,216 +1130,222 @@ msgstr ""
 msgid "The folder could not be created"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:959
+#: gtk/gtkfilechooserdefault.c:961
+msgid ""
+"The folder could not be created, as a file with the same name already "
+"exists.  Try using a different name for the folder, or rename the file first."
+msgstr ""
+
+#: gtk/gtkfilechooserdefault.c:974
 #, fuzzy
 msgid "Invalid file name"
 msgstr "അസാധുവായ XBM ശേഖരം"
 
-#: gtk/gtkfilechooserdefault.c:969
+#: gtk/gtkfilechooserdefault.c:984
 msgid "The folder contents could not be displayed"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1175
+#: gtk/gtkfilechooserdefault.c:1190
 #, fuzzy, c-format
 msgid "Could not get information about '%s': %s"
 msgstr "തിരിച്ചറിയാനാവത്ത ഛായവിവരശേഖര രീതി %s"
 
-#: gtk/gtkfilechooserdefault.c:2201
+#: gtk/gtkfilechooserdefault.c:2215
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2242
+#: gtk/gtkfilechooserdefault.c:2256
 msgid "Add the current folder to the bookmarks"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2244
+#: gtk/gtkfilechooserdefault.c:2258
 msgid "Add the selected folders to the bookmarks"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2284
+#: gtk/gtkfilechooserdefault.c:2298
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2697
+#: gtk/gtkfilechooserdefault.c:2711
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2875
+#: gtk/gtkfilechooserdefault.c:2889
 msgid "Shortcuts"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2929
+#: gtk/gtkfilechooserdefault.c:2943
 #, fuzzy
 msgid "Folder"
 msgstr "കൂടുകള്"
 
-#: gtk/gtkfilechooserdefault.c:2981 gtk/gtkstock.c:295
+#: gtk/gtkfilechooserdefault.c:2995 gtk/gtkstock.c:295
 msgid "_Add"
 msgstr "ചേര്ക്കുക"
 
-#: gtk/gtkfilechooserdefault.c:2988
+#: gtk/gtkfilechooserdefault.c:3002
 msgid "Add the selected folder to the bookmarks"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2993 gtk/gtkstock.c:352
+#: gtk/gtkfilechooserdefault.c:3007 gtk/gtkstock.c:352
 msgid "_Remove"
 msgstr "നീക്കുക"
 
-#: gtk/gtkfilechooserdefault.c:3000
+#: gtk/gtkfilechooserdefault.c:3014
 msgid "Remove the selected bookmark"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:3103
+#: gtk/gtkfilechooserdefault.c:3121
 msgid "_Add to Shortcuts"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:3113
+#: gtk/gtkfilechooserdefault.c:3131
 #, fuzzy
 msgid "Open _Location"
 msgstr "തെരഞ്ഞെടുക്കുക:"
 
-#: gtk/gtkfilechooserdefault.c:3125
+#: gtk/gtkfilechooserdefault.c:3143
 msgid "Show _Hidden Files"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:3249 gtk/gtkfilesel.c:768
+#: gtk/gtkfilechooserdefault.c:3267 gtk/gtkfilesel.c:768
 msgid "Files"
 msgstr "രചനകള്"
 
-#: gtk/gtkfilechooserdefault.c:3280
+#: gtk/gtkfilechooserdefault.c:3298
 #, fuzzy
 msgid "Name"
 msgstr "നിറത്തിന്റെ പേര‍്:"
 
-#: gtk/gtkfilechooserdefault.c:3305
+#: gtk/gtkfilechooserdefault.c:3323
 msgid "Size"
 msgstr "വലിപ്പം"
 
-#: gtk/gtkfilechooserdefault.c:3318
+#: gtk/gtkfilechooserdefault.c:3336
 #, fuzzy
 msgid "Modified"
 msgstr "രീതി"
 
-#: gtk/gtkfilechooserdefault.c:3350
+#: gtk/gtkfilechooserdefault.c:3368
 msgid "Select which types of files are shown"
 msgstr ""
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:3386
+#: gtk/gtkfilechooserdefault.c:3404
 #, fuzzy
 msgid "Create Fo_lder"
 msgstr "പുതിയ കൂട്"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3507
+#: gtk/gtkfilechooserdefault.c:3525
 #, fuzzy
 msgid "_Name:"
 msgstr "നിറത്തിന്റെ പേര‍്:"
 
-#: gtk/gtkfilechooserdefault.c:3547
+#: gtk/gtkfilechooserdefault.c:3565
 msgid "_Browse for other folders"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:3797
+#: gtk/gtkfilechooserdefault.c:3815
 #, fuzzy
 msgid "Save in _folder:"
 msgstr "പുതിയ കൂട്"
 
-#: gtk/gtkfilechooserdefault.c:3799
+#: gtk/gtkfilechooserdefault.c:3817
 #, fuzzy
 msgid "Create in _folder:"
 msgstr "പുതിയ കൂട്"
 
-#: gtk/gtkfilechooserdefault.c:4739
+#: gtk/gtkfilechooserdefault.c:4774
 msgid "Cannot change to folder because it is not local"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:5255
+#: gtk/gtkfilechooserdefault.c:5328
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:5719
+#: gtk/gtkfilechooserdefault.c:5872
 #, fuzzy, c-format
 msgid "Could not mount %s"
 msgstr ""
 "കൂട് നി‌‌‌ര്മ്മിക്കുന്നതില്‌ തെറ്റ് \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:6012
+#: gtk/gtkfilechooserdefault.c:6167
 msgid "Type name of new folder"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:6054
+#: gtk/gtkfilechooserdefault.c:6209
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: gtk/gtkfilechooserdefault.c:6056
+#: gtk/gtkfilechooserdefault.c:6211
 #, c-format
 msgid "%.1f K"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:6058
+#: gtk/gtkfilechooserdefault.c:6213
 #, c-format
 msgid "%.1f M"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:6060
+#: gtk/gtkfilechooserdefault.c:6215
 #, c-format
 msgid "%.1f G"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:6112
-#, fuzzy
-msgid "Today"
-msgstr "മാതൃക"
-
-#: gtk/gtkfilechooserdefault.c:6114
-msgid "Yesterday"
-msgstr ""
-
-#: gtk/gtkfilechooserdefault.c:6125
+#: gtk/gtkfilechooserdefault.c:6261 gtk/gtkfilechooserdefault.c:6285
 #, fuzzy
 msgid "Unknown"
 msgstr "(അറിയാത്ത)"
 
-#: gtk/gtkfilechooserdefault.c:6195
+#: gtk/gtkfilechooserdefault.c:6272
+#, fuzzy
+msgid "Today"
+msgstr "മാതൃക"
+
+#: gtk/gtkfilechooserdefault.c:6274
+msgid "Yesterday"
+msgstr ""
+
+#: gtk/gtkfilechooserdefault.c:6356
 #, fuzzy
 msgid "Cannot change folder"
 msgstr "പുതിയ കൂട്"
 
-#: gtk/gtkfilechooserdefault.c:6196
+#: gtk/gtkfilechooserdefault.c:6357
 msgid "The folder you specified is an invalid path."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:6235
+#: gtk/gtkfilechooserdefault.c:6396
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:6271
+#: gtk/gtkfilechooserdefault.c:6432
 #, fuzzy
 msgid "Could not select item"
 msgstr ""
 "കൂട് നി‌‌‌ര്മ്മിക്കുന്നതില്‌ തെറ്റ് \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:6311
+#: gtk/gtkfilechooserdefault.c:6472
 msgid "Open Location"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:6318
+#: gtk/gtkfilechooserdefault.c:6479
 #, fuzzy
 msgid "Save in Location"
 msgstr "തെരഞ്ഞെടുക്കുക:"
 
-#: gtk/gtkfilechooserdefault.c:6342
+#: gtk/gtkfilechooserdefault.c:6503
 #, fuzzy
 msgid "_Location:"
 msgstr "തെരഞ്ഞെടുക്കുക:"
@@ -1518,55 +1524,55 @@ msgstr "രചനാനാമം മാറ്റാന് കഴിയില്�
 msgid "(Empty)"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:440 gtk/gtkfilesystemunix.c:632
-#: gtk/gtkfilesystemunix.c:1739 gtk/gtkfilesystemwin32.c:482
-#: gtk/gtkfilesystemwin32.c:495 gtk/gtkfilesystemwin32.c:1533
+#: gtk/gtkfilesystemunix.c:460 gtk/gtkfilesystemunix.c:662
+#: gtk/gtkfilesystemunix.c:1769 gtk/gtkfilesystemwin32.c:482
+#: gtk/gtkfilesystemwin32.c:495 gtk/gtkfilesystemwin32.c:1560
 #, fuzzy, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "കൂട് നി‌‌‌ര്മ്മിക്കുന്നതില്‌ തെറ്റ് \"%s\": %s\n"
 
-#: gtk/gtkfilesystemunix.c:501 gtk/gtkfilesystemwin32.c:537
+#: gtk/gtkfilesystemunix.c:531 gtk/gtkfilesystemwin32.c:537
 #, fuzzy, c-format
 msgid "Error creating directory '%s': %s"
 msgstr "കൂട് നി‌‌‌ര്മ്മിക്കുന്നതില്‌ തെറ്റ് \"%s\": %s\n"
 
-#: gtk/gtkfilesystemunix.c:581 gtk/gtkfilesystemwin32.c:597
+#: gtk/gtkfilesystemunix.c:611 gtk/gtkfilesystemwin32.c:597
 msgid "This file system does not support mounting"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:589
+#: gtk/gtkfilesystemunix.c:619
 #, fuzzy
 msgid "Filesystem"
 msgstr "രചനകള്"
 
-#: gtk/gtkfilesystemunix.c:746
+#: gtk/gtkfilesystemunix.c:776
 #, fuzzy, c-format
 msgid "Could not get a stock icon for %s"
 msgstr "തിരിച്ചറിയാനാവത്ത ഛായവിവരശേഖര രീതി %s"
 
-#: gtk/gtkfilesystemunix.c:841
+#: gtk/gtkfilesystemunix.c:871
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
 "Please use a different name."
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1446 gtk/gtkfilesystemwin32.c:1007
+#: gtk/gtkfilesystemunix.c:1476 gtk/gtkfilesystemwin32.c:1032
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1498
+#: gtk/gtkfilesystemunix.c:1528
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1560
+#: gtk/gtkfilesystemunix.c:1590
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1699
+#: gtk/gtkfilesystemunix.c:1729
 #, fuzzy, c-format
 msgid "Error getting information for '/': %s"
 msgstr "കൂട് നി‌‌‌ര്മ്മിക്കുന്നതില്‌ തെറ്റ് \"%s\": %s\n"
@@ -1759,19 +1765,19 @@ msgstr ""
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:482
+#: gtk/gtkmain.c:476
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:565
+#: gtk/gtkmain.c:559
 msgid "GTK+ Options"
 msgstr ""
 
-#: gtk/gtkmain.c:565
+#: gtk/gtkmain.c:559
 msgid "Show GTK+ Options"
 msgstr ""
 
-#: gtk/gtknotebook.c:2717 gtk/gtknotebook.c:5065
+#: gtk/gtknotebook.c:2717 gtk/gtknotebook.c:5063
 #, c-format
 msgid "Page %u"
 msgstr "താള് :%u"
@@ -2181,7 +2187,7 @@ msgstr ""
 msgid "Unexpected character data on line %d char %d"
 msgstr ""
 
-#: gtk/gtkuimanager.c:2209
+#: gtk/gtkuimanager.c:2208
 msgid "Empty"
 msgstr ""
 

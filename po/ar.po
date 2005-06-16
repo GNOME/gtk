@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.ar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-04-12 22:42-0400\n"
+"POT-Creation-Date: 2005-06-15 23:46-0400\n"
 "PO-Revision-Date: 2004-12-30 15:13+0100\n"
 "Last-Translator: \n"
 "Language-Team:  <en@li.org>\n"
@@ -198,17 +198,17 @@ msgstr "صورة BMP لها حجم ترويسة غير مدعوم"
 msgid "Topdown BMP images cannot be compressed"
 msgstr ""
 
-#: gdk-pixbuf/io-bmp.c:1214
+#: gdk-pixbuf/io-bmp.c:1198
 #, fuzzy
 msgid "Couldn't allocate memory for saving BMP file"
 msgstr "لم أستطع تخصيص ذاكرة لتحميل ملف JPEG"
 
-#: gdk-pixbuf/io-bmp.c:1255
+#: gdk-pixbuf/io-bmp.c:1239
 #, fuzzy
 msgid "Couldn't write to BMP file"
 msgstr "لم أستطع تحويل اسم الملف"
 
-#: gdk-pixbuf/io-bmp.c:1304
+#: gdk-pixbuf/io-bmp.c:1288
 msgid "The BMP image format"
 msgstr "تهيئة صورة BMP"
 
@@ -1104,15 +1104,15 @@ msgstr "عجلة اللّون"
 msgid "Color Selection"
 msgstr "اللون المنقى"
 
-#: gtk/gtkentry.c:4510 gtk/gtktextview.c:7030
+#: gtk/gtkentry.c:4510 gtk/gtktextview.c:7051
 msgid "Select _All"
 msgstr "اختيار ال_كلّ"
 
-#: gtk/gtkentry.c:4520 gtk/gtktextview.c:7040
+#: gtk/gtkentry.c:4520 gtk/gtktextview.c:7061
 msgid "Input _Methods"
 msgstr "طرق ال_إدخال"
 
-#: gtk/gtkentry.c:4531 gtk/gtktextview.c:7051
+#: gtk/gtkentry.c:4531 gtk/gtktextview.c:7072
 msgid "_Insert Unicode Control Character"
 msgstr "إ_دراج رمز تحكم يونيكود"
 
@@ -1127,12 +1127,12 @@ msgstr "اسم ملف غير سليم: %s"
 msgid "Select A File"
 msgstr "حذف ملف"
 
-#: gtk/gtkfilechooserbutton.c:67 gtk/gtkfilechooserdefault.c:1285
+#: gtk/gtkfilechooserbutton.c:67 gtk/gtkfilechooserdefault.c:1300
 #: gtk/gtkpathbar.c:996
 msgid "Home"
 msgstr "الدليل المنزلي"
 
-#: gtk/gtkfilechooserbutton.c:68 gtk/gtkfilechooserdefault.c:1312
+#: gtk/gtkfilechooserbutton.c:68 gtk/gtkfilechooserdefault.c:1327
 #: gtk/gtkpathbar.c:998
 msgid "Desktop"
 msgstr "المكتب"
@@ -1142,7 +1142,7 @@ msgstr "المكتب"
 msgid "(None)"
 msgstr "لا شيء"
 
-#: gtk/gtkfilechooserbutton.c:1516
+#: gtk/gtkfilechooserbutton.c:1522
 #, fuzzy
 msgid "Other..."
 msgstr "أخرى..."
@@ -1173,151 +1173,157 @@ msgstr ""
 msgid "The folder could not be created"
 msgstr "ليس"
 
-#: gtk/gtkfilechooserdefault.c:959
+#: gtk/gtkfilechooserdefault.c:961
+msgid ""
+"The folder could not be created, as a file with the same name already "
+"exists.  Try using a different name for the folder, or rename the file first."
+msgstr ""
+
+#: gtk/gtkfilechooserdefault.c:974
 #, fuzzy
 msgid "Invalid file name"
 msgstr "اسم ملف غير سليم: %s"
 
-#: gtk/gtkfilechooserdefault.c:969
+#: gtk/gtkfilechooserdefault.c:984
 #, fuzzy
 msgid "The folder contents could not be displayed"
 msgstr "ليس"
 
-#: gtk/gtkfilechooserdefault.c:1175
+#: gtk/gtkfilechooserdefault.c:1190
 #, fuzzy, c-format
 msgid "Could not get information about '%s': %s"
 msgstr "لم أستطع تلقي معلومات عن الملف '%s': %s"
 
-#: gtk/gtkfilechooserdefault.c:2201
+#: gtk/gtkfilechooserdefault.c:2215
 #, fuzzy, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "اضافة س"
 
-#: gtk/gtkfilechooserdefault.c:2242
+#: gtk/gtkfilechooserdefault.c:2256
 #, fuzzy
 msgid "Add the current folder to the bookmarks"
 msgstr "اضافة"
 
-#: gtk/gtkfilechooserdefault.c:2244
+#: gtk/gtkfilechooserdefault.c:2258
 #, fuzzy
 msgid "Add the selected folders to the bookmarks"
 msgstr "اضافة"
 
-#: gtk/gtkfilechooserdefault.c:2284
+#: gtk/gtkfilechooserdefault.c:2298
 #, fuzzy, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "حذف س"
 
-#: gtk/gtkfilechooserdefault.c:2697
+#: gtk/gtkfilechooserdefault.c:2711
 #, fuzzy, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
 msgstr "لم أستطع إضافة علامة موقع لـ %s لانه اسم مسار غير صحيح."
 
-#: gtk/gtkfilechooserdefault.c:2875
+#: gtk/gtkfilechooserdefault.c:2889
 msgid "Shortcuts"
 msgstr "اختصارات"
 
-#: gtk/gtkfilechooserdefault.c:2929
+#: gtk/gtkfilechooserdefault.c:2943
 msgid "Folder"
 msgstr "دليل"
 
-#: gtk/gtkfilechooserdefault.c:2981 gtk/gtkstock.c:295
+#: gtk/gtkfilechooserdefault.c:2995 gtk/gtkstock.c:295
 msgid "_Add"
 msgstr "إ_ضافة"
 
-#: gtk/gtkfilechooserdefault.c:2988
+#: gtk/gtkfilechooserdefault.c:3002
 #, fuzzy
 msgid "Add the selected folder to the bookmarks"
 msgstr "اضافة"
 
-#: gtk/gtkfilechooserdefault.c:2993 gtk/gtkstock.c:352
+#: gtk/gtkfilechooserdefault.c:3007 gtk/gtkstock.c:352
 msgid "_Remove"
 msgstr "_حذف"
 
-#: gtk/gtkfilechooserdefault.c:3000
+#: gtk/gtkfilechooserdefault.c:3014
 #, fuzzy
 msgid "Remove the selected bookmark"
 msgstr "حذف"
 
-#: gtk/gtkfilechooserdefault.c:3103
+#: gtk/gtkfilechooserdefault.c:3121
 #, fuzzy
 msgid "_Add to Shortcuts"
 msgstr "اختصارات"
 
-#: gtk/gtkfilechooserdefault.c:3113
+#: gtk/gtkfilechooserdefault.c:3131
 #, fuzzy
 msgid "Open _Location"
 msgstr "فتح الموقع"
 
-#: gtk/gtkfilechooserdefault.c:3125
+#: gtk/gtkfilechooserdefault.c:3143
 msgid "Show _Hidden Files"
 msgstr "عرض الملفات ال_مخفيّة."
 
-#: gtk/gtkfilechooserdefault.c:3249 gtk/gtkfilesel.c:768
+#: gtk/gtkfilechooserdefault.c:3267 gtk/gtkfilesel.c:768
 msgid "Files"
 msgstr "ملفات"
 
-#: gtk/gtkfilechooserdefault.c:3280
+#: gtk/gtkfilechooserdefault.c:3298
 msgid "Name"
 msgstr "الإ_سم"
 
-#: gtk/gtkfilechooserdefault.c:3305
+#: gtk/gtkfilechooserdefault.c:3323
 msgid "Size"
 msgstr "الحجم"
 
-#: gtk/gtkfilechooserdefault.c:3318
+#: gtk/gtkfilechooserdefault.c:3336
 msgid "Modified"
 msgstr "مغيَّر"
 
-#: gtk/gtkfilechooserdefault.c:3350
+#: gtk/gtkfilechooserdefault.c:3368
 #, fuzzy
 msgid "Select which types of files are shown"
 msgstr "انتقاء من"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:3386
+#: gtk/gtkfilechooserdefault.c:3404
 msgid "Create Fo_lder"
 msgstr "إنشاء _دليل"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3507
+#: gtk/gtkfilechooserdefault.c:3525
 msgid "_Name:"
 msgstr "الإ_سم:"
 
-#: gtk/gtkfilechooserdefault.c:3547
+#: gtk/gtkfilechooserdefault.c:3565
 msgid "_Browse for other folders"
 msgstr "_تصفّح لأدلّة أخرى"
 
-#: gtk/gtkfilechooserdefault.c:3797
+#: gtk/gtkfilechooserdefault.c:3815
 msgid "Save in _folder:"
 msgstr "حفظ في ال_دليل:"
 
-#: gtk/gtkfilechooserdefault.c:3799
+#: gtk/gtkfilechooserdefault.c:3817
 msgid "Create in _folder:"
 msgstr "إنشاء في ال _دليل:"
 
-#: gtk/gtkfilechooserdefault.c:4739
+#: gtk/gtkfilechooserdefault.c:4774
 #, fuzzy
 msgid "Cannot change to folder because it is not local"
 msgstr "لا يمكن التحويل إلى الدليل لأنه غير محلي."
 
-#: gtk/gtkfilechooserdefault.c:5255
+#: gtk/gtkfilechooserdefault.c:5328
 #, fuzzy, c-format
 msgid "Shortcut %s does not exist"
 msgstr "الاختصار %s غير موجود"
 
-#: gtk/gtkfilechooserdefault.c:5719
+#: gtk/gtkfilechooserdefault.c:5872
 #, fuzzy, c-format
 msgid "Could not mount %s"
 msgstr ""
 "لم أستطع إنتقاء %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:6012
+#: gtk/gtkfilechooserdefault.c:6167
 msgid "Type name of new folder"
 msgstr "اسم نوع الدليل الجديد"
 
-#: gtk/gtkfilechooserdefault.c:6054
+#: gtk/gtkfilechooserdefault.c:6209
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
@@ -1326,66 +1332,66 @@ msgstr[1] "%d ًبايتا"
 msgstr[2] "%d ًبايتا"
 msgstr[3] "%d ًبايتا"
 
-#: gtk/gtkfilechooserdefault.c:6056
+#: gtk/gtkfilechooserdefault.c:6211
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f كـ"
 
-#: gtk/gtkfilechooserdefault.c:6058
+#: gtk/gtkfilechooserdefault.c:6213
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f م"
 
-#: gtk/gtkfilechooserdefault.c:6060
+#: gtk/gtkfilechooserdefault.c:6215
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f غ"
 
-#: gtk/gtkfilechooserdefault.c:6112
-msgid "Today"
-msgstr "اليوم"
-
-#: gtk/gtkfilechooserdefault.c:6114
-msgid "Yesterday"
-msgstr "البارحة"
-
-#: gtk/gtkfilechooserdefault.c:6125
+#: gtk/gtkfilechooserdefault.c:6261 gtk/gtkfilechooserdefault.c:6285
 msgid "Unknown"
 msgstr "مجهول"
 
-#: gtk/gtkfilechooserdefault.c:6195
+#: gtk/gtkfilechooserdefault.c:6272
+msgid "Today"
+msgstr "اليوم"
+
+#: gtk/gtkfilechooserdefault.c:6274
+msgid "Yesterday"
+msgstr "البارحة"
+
+#: gtk/gtkfilechooserdefault.c:6356
 #, fuzzy
 msgid "Cannot change folder"
 msgstr "إنشاء في ال _دليل:"
 
-#: gtk/gtkfilechooserdefault.c:6196
+#: gtk/gtkfilechooserdefault.c:6357
 #, fuzzy
 msgid "The folder you specified is an invalid path."
 msgstr "لا أستطيع تغيير الدليل الذي حدّدته لأنّه مسار غير سليم."
 
-#: gtk/gtkfilechooserdefault.c:6235
+#: gtk/gtkfilechooserdefault.c:6396
 #, fuzzy, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr ""
 "لم أستطع بناء اسم الملف من '%s' و '%s':\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:6271
+#: gtk/gtkfilechooserdefault.c:6432
 #, fuzzy
 msgid "Could not select item"
 msgstr ""
 "لم أستطع إنتقاء %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:6311
+#: gtk/gtkfilechooserdefault.c:6472
 msgid "Open Location"
 msgstr "فتح الموقع"
 
-#: gtk/gtkfilechooserdefault.c:6318
+#: gtk/gtkfilechooserdefault.c:6479
 msgid "Save in Location"
 msgstr "حفظ في مكان"
 
-#: gtk/gtkfilechooserdefault.c:6342
+#: gtk/gtkfilechooserdefault.c:6503
 msgid "_Location:"
 msgstr "ال_موقع:"
 
@@ -1566,32 +1572,32 @@ msgstr "لم أستطع تحويل اسم الملف"
 msgid "(Empty)"
 msgstr "(فارغ)"
 
-#: gtk/gtkfilesystemunix.c:440 gtk/gtkfilesystemunix.c:632
-#: gtk/gtkfilesystemunix.c:1739 gtk/gtkfilesystemwin32.c:482
-#: gtk/gtkfilesystemwin32.c:495 gtk/gtkfilesystemwin32.c:1533
+#: gtk/gtkfilesystemunix.c:460 gtk/gtkfilesystemunix.c:662
+#: gtk/gtkfilesystemunix.c:1769 gtk/gtkfilesystemwin32.c:482
+#: gtk/gtkfilesystemwin32.c:495 gtk/gtkfilesystemwin32.c:1560
 #, fuzzy, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "خطأ في تلقي معلومات لـ '%s': %s"
 
-#: gtk/gtkfilesystemunix.c:501 gtk/gtkfilesystemwin32.c:537
+#: gtk/gtkfilesystemunix.c:531 gtk/gtkfilesystemwin32.c:537
 #, fuzzy, c-format
 msgid "Error creating directory '%s': %s"
 msgstr "خطأ عند إنشاء الدليل '%s': %s"
 
-#: gtk/gtkfilesystemunix.c:581 gtk/gtkfilesystemwin32.c:597
+#: gtk/gtkfilesystemunix.c:611 gtk/gtkfilesystemwin32.c:597
 msgid "This file system does not support mounting"
 msgstr "نظام الملفات هذا لا يدعم التجهيز"
 
-#: gtk/gtkfilesystemunix.c:589
+#: gtk/gtkfilesystemunix.c:619
 msgid "Filesystem"
 msgstr "نظام الملفات"
 
-#: gtk/gtkfilesystemunix.c:746
+#: gtk/gtkfilesystemunix.c:776
 #, c-format
 msgid "Could not get a stock icon for %s"
 msgstr "لم أستطع الحصول على أيقونة مخزنية لـ%s"
 
-#: gtk/gtkfilesystemunix.c:841
+#: gtk/gtkfilesystemunix.c:871
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1599,22 +1605,22 @@ msgid ""
 msgstr ""
 "الإسم \"%s\" غير صالح لانه يحتوي الرمز \"%s\". الرجاء استخدام اسم مختلف."
 
-#: gtk/gtkfilesystemunix.c:1446 gtk/gtkfilesystemwin32.c:1007
+#: gtk/gtkfilesystemunix.c:1476 gtk/gtkfilesystemwin32.c:1032
 #, fuzzy, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "فشل حفظ علامة الموقع (%s)"
 
-#: gtk/gtkfilesystemunix.c:1498
+#: gtk/gtkfilesystemunix.c:1528
 #, fuzzy, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "س موجود بوصة سرد"
 
-#: gtk/gtkfilesystemunix.c:1560
+#: gtk/gtkfilesystemunix.c:1590
 #, fuzzy, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "س ليس بوصة سرد"
 
-#: gtk/gtkfilesystemunix.c:1699
+#: gtk/gtkfilesystemunix.c:1729
 #, fuzzy, c-format
 msgid "Error getting information for '/': %s"
 msgstr "خطأ في تلقي معلومات لـ '%s': %s"
@@ -1812,21 +1818,21 @@ msgstr "تعليمات تنقيح GTK+ التي سيلغى ضبطها"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:482
+#: gtk/gtkmain.c:476
 msgid "default:LTR"
 msgstr "default:RTL"
 
-#: gtk/gtkmain.c:565
+#: gtk/gtkmain.c:559
 #, fuzzy
 msgid "GTK+ Options"
 msgstr "خيارات"
 
-#: gtk/gtkmain.c:565
+#: gtk/gtkmain.c:559
 #, fuzzy
 msgid "Show GTK+ Options"
 msgstr "عرض خيارات"
 
-#: gtk/gtknotebook.c:2717 gtk/gtknotebook.c:5065
+#: gtk/gtknotebook.c:2717 gtk/gtknotebook.c:5063
 #, c-format
 msgid "Page %u"
 msgstr "الصفحة %u"
@@ -2237,7 +2243,7 @@ msgstr "شارة بدء غير متوقّعة '%s' عند السطر %d الرم
 msgid "Unexpected character data on line %d char %d"
 msgstr "بيانات رمز غير متوقّعة عند السطر %d الرمز %d"
 
-#: gtk/gtkuimanager.c:2209
+#: gtk/gtkuimanager.c:2208
 msgid "Empty"
 msgstr "فارغ"
 

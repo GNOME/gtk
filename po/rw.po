@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gnome 2.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-04-12 22:42-0400\n"
+"POT-Creation-Date: 2005-06-15 23:46-0400\n"
 "PO-Revision-Date: 2005-03-28 18:54-0700\n"
 "Last-Translator: Steve Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <translation-team-rw@lists.sourceforge.net>\n"
@@ -208,17 +208,17 @@ msgstr "Ishusho Umutwempangano Ingano"
 msgid "Topdown BMP images cannot be compressed"
 msgstr "Ishusho Byegeranijwe"
 
-#: gdk-pixbuf/io-bmp.c:1214
+#: gdk-pixbuf/io-bmp.c:1198
 #, fuzzy
 msgid "Couldn't allocate memory for saving BMP file"
 msgstr "Ububiko kugirango Mu kubika IDOSIYE"
 
-#: gdk-pixbuf/io-bmp.c:1255
+#: gdk-pixbuf/io-bmp.c:1239
 #, fuzzy
 msgid "Couldn't write to BMP file"
 msgstr "Kwandika Kuri IDOSIYE"
 
-#: gdk-pixbuf/io-bmp.c:1304
+#: gdk-pixbuf/io-bmp.c:1288
 #, fuzzy
 msgid "The BMP image format"
 msgstr "Ishusho Imiterere"
@@ -1244,16 +1244,16 @@ msgstr "gutoranya ibara"
 # padmin/source\padialog.src:RID_FONTIMPORT_DIALOG.RID_FIMP_BTN_SELECTALL.text
 # #-#-#-#-#  padmin.pot (PACKAGE VERSION)  #-#-#-#-#
 # padmin/source\padialog.src:RID_ADDP_PAGE_OLDPRINTERS.RID_ADDP_OLD_BTN_SELECTALL.text
-#: gtk/gtkentry.c:4510 gtk/gtktextview.c:7030
+#: gtk/gtkentry.c:4510 gtk/gtktextview.c:7051
 #, fuzzy
 msgid "Select _All"
 msgstr "Hitamo byose"
 
-#: gtk/gtkentry.c:4520 gtk/gtktextview.c:7040
+#: gtk/gtkentry.c:4520 gtk/gtktextview.c:7061
 msgid "Input _Methods"
 msgstr ""
 
-#: gtk/gtkentry.c:4531 gtk/gtktextview.c:7051
+#: gtk/gtkentry.c:4531 gtk/gtktextview.c:7072
 msgid "_Insert Unicode Control Character"
 msgstr ""
 
@@ -1268,13 +1268,13 @@ msgstr "Izina ry'idosiye:"
 msgid "Select A File"
 msgstr "A Idosiye"
 
-#: gtk/gtkfilechooserbutton.c:67 gtk/gtkfilechooserdefault.c:1285
+#: gtk/gtkfilechooserbutton.c:67 gtk/gtkfilechooserdefault.c:1300
 #: gtk/gtkpathbar.c:996
 msgid "Home"
 msgstr "Home"
 
 # sfx2/source\explorer\explorer.src:STR_SFX_DESKTOP.text
-#: gtk/gtkfilechooserbutton.c:68 gtk/gtkfilechooserdefault.c:1312
+#: gtk/gtkfilechooserbutton.c:68 gtk/gtkfilechooserdefault.c:1327
 #: gtk/gtkpathbar.c:998
 msgid "Desktop"
 msgstr "Ibiro"
@@ -1288,7 +1288,7 @@ msgid "(None)"
 msgstr "(Ntacyo)"
 
 # sw/source\ui\ribbar\workctrl.src:RID_INSERT_FIELD_CTRL.FN_INSERT_FIELD.text
-#: gtk/gtkfilechooserbutton.c:1516
+#: gtk/gtkfilechooserbutton.c:1522
 msgid "Other..."
 msgstr "Ikindi..."
 
@@ -1312,61 +1312,67 @@ msgstr "OYA Gukuraho... Akamenyetso"
 msgid "The folder could not be created"
 msgstr "Ububiko OYA Byaremwe"
 
+#: gtk/gtkfilechooserdefault.c:961
+msgid ""
+"The folder could not be created, as a file with the same name already "
+"exists.  Try using a different name for the folder, or rename the file first."
+msgstr ""
+
 # svtools/source\misc\errtxt.src:RID_ERRHDL.ERRCODE_IO_MISPLACEDCHAR.text
-#: gtk/gtkfilechooserdefault.c:959
+#: gtk/gtkfilechooserdefault.c:974
 msgid "Invalid file name"
 msgstr "Izina ry'idosiye siryo"
 
-#: gtk/gtkfilechooserdefault.c:969
+#: gtk/gtkfilechooserdefault.c:984
 #, fuzzy
 msgid "The folder contents could not be displayed"
 msgstr "Ububiko Ibigize OYA"
 
-#: gtk/gtkfilechooserdefault.c:1175
+#: gtk/gtkfilechooserdefault.c:1190
 #, fuzzy, c-format
 msgid "Could not get information about '%s': %s"
 msgstr "OYA Kubona Ibisobanuro Ibyerekeye"
 
-#: gtk/gtkfilechooserdefault.c:2201
+#: gtk/gtkfilechooserdefault.c:2215
 #, fuzzy, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Ububiko Kuri Ibirango"
 
-#: gtk/gtkfilechooserdefault.c:2242
+#: gtk/gtkfilechooserdefault.c:2256
 #, fuzzy
 msgid "Add the current folder to the bookmarks"
 msgstr "KIGEZWEHO Ububiko Kuri Ibirango"
 
-#: gtk/gtkfilechooserdefault.c:2244
+#: gtk/gtkfilechooserdefault.c:2258
 #, fuzzy
 msgid "Add the selected folders to the bookmarks"
 msgstr "Byahiswemo Kuri Ibirango"
 
-#: gtk/gtkfilechooserdefault.c:2284
+#: gtk/gtkfilechooserdefault.c:2298
 #, fuzzy, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Akamenyetso"
 
-#: gtk/gtkfilechooserdefault.c:2697
+#: gtk/gtkfilechooserdefault.c:2711
 #, fuzzy, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
 msgstr "OYA Kongeramo a Akamenyetso kugirango ni Sibyo Inzira Izina:"
 
-#: gtk/gtkfilechooserdefault.c:2875
+#: gtk/gtkfilechooserdefault.c:2889
 msgid "Shortcuts"
 msgstr ""
 
 # sfx2/source\explorer\explorer.src:STR_SFX_FOLDER.text
-#: gtk/gtkfilechooserdefault.c:2929
+#: gtk/gtkfilechooserdefault.c:2943
 msgid "Folder"
 msgstr "Ububiko"
 
-#: gtk/gtkfilechooserdefault.c:2981 gtk/gtkstock.c:295
+#: gtk/gtkfilechooserdefault.c:2995 gtk/gtkstock.c:295
 #, fuzzy
 msgid "_Add"
 msgstr "Kongeramo"
 
-#: gtk/gtkfilechooserdefault.c:2988
+#: gtk/gtkfilechooserdefault.c:3002
 #, fuzzy
 msgid "Add the selected folder to the bookmarks"
 msgstr "Byahiswemo Ububiko Kuri Ibirango"
@@ -1375,35 +1381,35 @@ msgstr "Byahiswemo Ububiko Kuri Ibirango"
 # padmin/source\rtsetup.src:RID_RTS_FONTSUBSTPAGE.RID_RTS_FS_REMOVE_BTN.text
 # #-#-#-#-#  padmin.pot (PACKAGE VERSION)  #-#-#-#-#
 # padmin/source\rtsetup.src:RID_RTS_COMMANDPAGE.RID_RTS_CMD_BTN_REMOVE.text
-#: gtk/gtkfilechooserdefault.c:2993 gtk/gtkstock.c:352
+#: gtk/gtkfilechooserdefault.c:3007 gtk/gtkstock.c:352
 #, fuzzy
 msgid "_Remove"
 msgstr "Gukuraho"
 
-#: gtk/gtkfilechooserdefault.c:3000
+#: gtk/gtkfilechooserdefault.c:3014
 #, fuzzy
 msgid "Remove the selected bookmark"
 msgstr "Byahiswemo Akamenyetso"
 
-#: gtk/gtkfilechooserdefault.c:3103
+#: gtk/gtkfilechooserdefault.c:3121
 #, fuzzy
 msgid "_Add to Shortcuts"
 msgstr "Kuri"
 
-#: gtk/gtkfilechooserdefault.c:3113
+#: gtk/gtkfilechooserdefault.c:3131
 msgid "Open _Location"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:3125
+#: gtk/gtkfilechooserdefault.c:3143
 msgid "Show _Hidden Files"
 msgstr ""
 
 # scp/source\office\dir.lng:STR_DIR_DATEIEN.text
-#: gtk/gtkfilechooserdefault.c:3249 gtk/gtkfilesel.c:768
+#: gtk/gtkfilechooserdefault.c:3267 gtk/gtkfilesel.c:768
 msgid "Files"
 msgstr "Idosiye"
 
-#: gtk/gtkfilechooserdefault.c:3280
+#: gtk/gtkfilechooserdefault.c:3298
 msgid "Name"
 msgstr "Izina"
 
@@ -1411,75 +1417,75 @@ msgstr "Izina"
 # goodies/source\filter.vcl\eos2met\dlgeos2.src:DLG_EXPORT_EMET.GRP_SIZE.text
 # #-#-#-#-#  goodies.pot (PACKAGE VERSION)  #-#-#-#-#
 # goodies/source\filter.vcl\epict\dlgepct.src:DLG_EXPORT_EPCT.GRP_SIZE.text
-#: gtk/gtkfilechooserdefault.c:3305
+#: gtk/gtkfilechooserdefault.c:3323
 msgid "Size"
 msgstr "Ingano"
 
 # sc/source\ui\src\globstr.src:RID_GLOBSTR.STR_DOC_MODIFIED.text
-#: gtk/gtkfilechooserdefault.c:3318
+#: gtk/gtkfilechooserdefault.c:3336
 msgid "Modified"
 msgstr "Byahinduwe"
 
-#: gtk/gtkfilechooserdefault.c:3350
+#: gtk/gtkfilechooserdefault.c:3368
 #, fuzzy
 msgid "Select which types of files are shown"
 msgstr "Bya Idosiye"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:3386
+#: gtk/gtkfilechooserdefault.c:3404
 #, fuzzy
 msgid "Create Fo_lder"
 msgstr "Guhimba idosiye:%s"
 
 # basctl/source\basicide\moduldlg.src:RID_DLG_NEWLIB.RID_FT_NEWLIB.text
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3507
+#: gtk/gtkfilechooserdefault.c:3525
 #, fuzzy
 msgid "_Name:"
 msgstr "Izina:"
 
-#: gtk/gtkfilechooserdefault.c:3547
+#: gtk/gtkfilechooserdefault.c:3565
 #, fuzzy
 msgid "_Browse for other folders"
 msgstr "kugirango Ikindi"
 
-#: gtk/gtkfilechooserdefault.c:3797
+#: gtk/gtkfilechooserdefault.c:3815
 #, fuzzy
 msgid "Save in _folder:"
 msgstr "Kubika in Ububiko"
 
-#: gtk/gtkfilechooserdefault.c:3799
+#: gtk/gtkfilechooserdefault.c:3817
 #, fuzzy
 msgid "Create in _folder:"
 msgstr "in Ububiko"
 
-#: gtk/gtkfilechooserdefault.c:4739
+#: gtk/gtkfilechooserdefault.c:4774
 #, fuzzy
 msgid "Cannot change to folder because it is not local"
 msgstr "Guhindura>> Kuri Ububiko ni OYA"
 
-#: gtk/gtkfilechooserdefault.c:5255
+#: gtk/gtkfilechooserdefault.c:5328
 #, fuzzy, c-format
 msgid "Shortcut %s does not exist"
 msgstr "OYA"
 
-#: gtk/gtkfilechooserdefault.c:5719
+#: gtk/gtkfilechooserdefault.c:5872
 #, fuzzy, c-format
 msgid "Could not mount %s"
 msgstr "OYA"
 
-#: gtk/gtkfilechooserdefault.c:6012
+#: gtk/gtkfilechooserdefault.c:6167
 #, fuzzy
 msgid "Type name of new folder"
 msgstr "Izina: Bya Gishya Ububiko"
 
-#: gtk/gtkfilechooserdefault.c:6054
+#: gtk/gtkfilechooserdefault.c:6209
 #, fuzzy, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%dBayite"
 
-#: gtk/gtkfilechooserdefault.c:6056
+#: gtk/gtkfilechooserdefault.c:6211
 #, fuzzy, c-format
 msgid "%.1f K"
 msgstr ""
@@ -1492,7 +1498,7 @@ msgstr ""
 "X- Generator: KBabel 1. 0\n"
 "."
 
-#: gtk/gtkfilechooserdefault.c:6058
+#: gtk/gtkfilechooserdefault.c:6213
 #, fuzzy, c-format
 msgid "%.1f M"
 msgstr ""
@@ -1505,7 +1511,7 @@ msgstr ""
 "X- Generator: KBabel 1. 0\n"
 "."
 
-#: gtk/gtkfilechooserdefault.c:6060
+#: gtk/gtkfilechooserdefault.c:6215
 #, fuzzy, c-format
 msgid "%.1f G"
 msgstr ""
@@ -1518,51 +1524,51 @@ msgstr ""
 "X- Generator: KBabel 1. 0\n"
 "."
 
-# svtools/source\control\calendar.src:STR_SVT_CALENDAR_TODAY.text
-#: gtk/gtkfilechooserdefault.c:6112
-msgid "Today"
-msgstr "Uyumunsi"
-
-#: gtk/gtkfilechooserdefault.c:6114
-msgid "Yesterday"
-msgstr "Ejo"
-
 # filter/source\xsltdialog\xmlfilterdialogstrings.src:STR_UNKNOWN_APPLICATION.text
-#: gtk/gtkfilechooserdefault.c:6125
+#: gtk/gtkfilechooserdefault.c:6261 gtk/gtkfilechooserdefault.c:6285
 msgid "Unknown"
 msgstr "Kitazwi"
 
-#: gtk/gtkfilechooserdefault.c:6195
+# svtools/source\control\calendar.src:STR_SVT_CALENDAR_TODAY.text
+#: gtk/gtkfilechooserdefault.c:6272
+msgid "Today"
+msgstr "Uyumunsi"
+
+#: gtk/gtkfilechooserdefault.c:6274
+msgid "Yesterday"
+msgstr "Ejo"
+
+#: gtk/gtkfilechooserdefault.c:6356
 #, fuzzy
 msgid "Cannot change folder"
 msgstr "Guhindura>> Ububiko"
 
-#: gtk/gtkfilechooserdefault.c:6196
+#: gtk/gtkfilechooserdefault.c:6357
 #, fuzzy
 msgid "The folder you specified is an invalid path."
 msgstr "Ububiko ni Sibyo Inzira"
 
-#: gtk/gtkfilechooserdefault.c:6235
+#: gtk/gtkfilechooserdefault.c:6396
 #, fuzzy, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr "OYA IDOSIYE Izina: Bivuye Na"
 
-#: gtk/gtkfilechooserdefault.c:6271
+#: gtk/gtkfilechooserdefault.c:6432
 #, fuzzy
 msgid "Could not select item"
 msgstr "OYA Guhitamo Ikintu"
 
-#: gtk/gtkfilechooserdefault.c:6311
+#: gtk/gtkfilechooserdefault.c:6472
 msgid "Open Location"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:6318
+#: gtk/gtkfilechooserdefault.c:6479
 #, fuzzy
 msgid "Save in Location"
 msgstr "Kubika in"
 
 # padmin/source\padialog.src:RID_PADIALOG.RID_PA_TXT_LOCATION.text
-#: gtk/gtkfilechooserdefault.c:6342
+#: gtk/gtkfilechooserdefault.c:6503
 #, fuzzy
 msgid "_Location:"
 msgstr "Intaho:"
@@ -1749,55 +1755,55 @@ msgstr "GUHINDURA Izina ry'idosiye:"
 msgid "(Empty)"
 msgstr "(Kirimo ubusa)"
 
-#: gtk/gtkfilesystemunix.c:440 gtk/gtkfilesystemunix.c:632
-#: gtk/gtkfilesystemunix.c:1739 gtk/gtkfilesystemwin32.c:482
-#: gtk/gtkfilesystemwin32.c:495 gtk/gtkfilesystemwin32.c:1533
+#: gtk/gtkfilesystemunix.c:460 gtk/gtkfilesystemunix.c:662
+#: gtk/gtkfilesystemunix.c:1769 gtk/gtkfilesystemwin32.c:482
+#: gtk/gtkfilesystemwin32.c:495 gtk/gtkfilesystemwin32.c:1560
 #, fuzzy, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "Ibisobanuro kugirango"
 
-#: gtk/gtkfilesystemunix.c:501 gtk/gtkfilesystemwin32.c:537
+#: gtk/gtkfilesystemunix.c:531 gtk/gtkfilesystemwin32.c:537
 #, fuzzy, c-format
 msgid "Error creating directory '%s': %s"
 msgstr "bushyinguro"
 
-#: gtk/gtkfilesystemunix.c:581 gtk/gtkfilesystemwin32.c:597
+#: gtk/gtkfilesystemunix.c:611 gtk/gtkfilesystemwin32.c:597
 #, fuzzy
 msgid "This file system does not support mounting"
 msgstr "IDOSIYE Sisitemu OYA Gushigikira"
 
-#: gtk/gtkfilesystemunix.c:589
+#: gtk/gtkfilesystemunix.c:619
 msgid "Filesystem"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:746
+#: gtk/gtkfilesystemunix.c:776
 #, fuzzy, c-format
 msgid "Could not get a stock icon for %s"
 msgstr "OYA Kubona a Agashushondanga kugirango"
 
-#: gtk/gtkfilesystemunix.c:841
+#: gtk/gtkfilesystemunix.c:871
 #, fuzzy, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
 "Please use a different name."
 msgstr "Izina: ni OYA Byemewe Kirimo Inyuguti Gukoresha a Izina:"
 
-#: gtk/gtkfilesystemunix.c:1446 gtk/gtkfilesystemwin32.c:1007
+#: gtk/gtkfilesystemunix.c:1476 gtk/gtkfilesystemwin32.c:1032
 #, fuzzy, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Mu kubika Byanze"
 
-#: gtk/gtkfilesystemunix.c:1498
+#: gtk/gtkfilesystemunix.c:1528
 #, fuzzy, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "'%s'in Ibirango Urutonde"
 
-#: gtk/gtkfilesystemunix.c:1560
+#: gtk/gtkfilesystemunix.c:1590
 #, fuzzy, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "'%s'OYA in Ibirango Urutonde"
 
-#: gtk/gtkfilesystemunix.c:1699
+#: gtk/gtkfilesystemunix.c:1729
 #, fuzzy, c-format
 msgid "Error getting information for '/': %s"
 msgstr "Ibisobanuro kugirango"
@@ -2037,16 +2043,16 @@ msgstr "Amabendera Kuri"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:482
+#: gtk/gtkmain.c:476
 #, fuzzy
 msgid "default:LTR"
 msgstr "Mburabuzi"
 
-#: gtk/gtkmain.c:565
+#: gtk/gtkmain.c:559
 msgid "GTK+ Options"
 msgstr ""
 
-#: gtk/gtkmain.c:565
+#: gtk/gtkmain.c:559
 msgid "Show GTK+ Options"
 msgstr ""
 
@@ -2054,7 +2060,7 @@ msgstr ""
 # sc/source\ui\src\menue.src:RID_OBJECTMENU_CELLS.SID_FORMATPAGE.text
 # #-#-#-#-#  sc.pot (PACKAGE VERSION)  #-#-#-#-#
 # sc/source\ui\src\menue.src:RID_OBJECTMENU_EDIT.SID_FORMATPAGE.text
-#: gtk/gtknotebook.c:2717 gtk/gtknotebook.c:5065
+#: gtk/gtknotebook.c:2717 gtk/gtknotebook.c:5063
 #, fuzzy, c-format
 msgid "Page %u"
 msgstr "Ipaji..."
@@ -2685,7 +2691,7 @@ msgid "Unexpected character data on line %d char %d"
 msgstr "Inyuguti Ibyatanzwe ku Umurongo INYUGUTI"
 
 # 1980
-#: gtk/gtkuimanager.c:2209
+#: gtk/gtkuimanager.c:2208
 msgid "Empty"
 msgstr "kirimo ubusa"
 

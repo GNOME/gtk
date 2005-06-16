@@ -1,5 +1,9 @@
 2005-06-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* === Released 2.6.8 ===
+
+2005-06-15  Matthias Clasen  <mclasen@redhat.com>
+
 	* NEWS: More updates, move bug numbers to my
 	separate list of bugs, which will get merged into
 	the announcement. For 2.8.0, I will try a somewhat

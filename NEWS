@@ -43,7 +43,8 @@ Overview of Changes from GTK+ 2.6.7 to GTK+ 2.6.8
   Crozat, Joerg Sonnenberger, John Ehresman]
 * Documentation improvements [Matthias, Masao Mutoh, Maciej,
   Richard Hult, Ghorban M. Tavakoly]
-* New and updated translations (cs,cy,da,en_GB,et,eu,fr,gu,hu,id,nn,ru,xh)
+* New and updated translations (cs,cy,da,de,en_GB,et,eu,fr,gu,hu,id,
+  nn,ru,sv,th,xh,zh_CN)
 
 Overview of Changes from GTK+ 2.6.6 to GTK+ 2.6.7
 =================================================
