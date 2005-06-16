@@ -295,6 +295,7 @@ gtk_semi_private_h_sources =    \
 
 # GTK+ header files that don't get installed
 gtk_private_h_sources =		\
+	gtkdndcursors.h		\
 	gtkentryprivate.h	\
 	gtkfilechooserembed.h	\
 	gtkfilechooserentry.h	\
