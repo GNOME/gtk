@@ -290,13 +290,46 @@ _gtk_get_libdir (void)
   return gtk_libdir;
 }
 
+/* Lifted from HEAD GLib */
+static gchar *
+g_win32_locale_filename_from_utf8 (const gchar *utf8filename)
+{
+  gchar *retval = g_locale_from_utf8 (utf8filename, -1, NULL, NULL, NULL);
+
+  if (retval == NULL && G_WIN32_HAVE_WIDECHAR_API ())
+    {
+      /* Conversion failed, so convert to wide chars, check if there
+       * is a 8.3 version, and use that.
+       */
+      wchar_t *wname = g_utf8_to_utf16 (utf8filename, -1, NULL, NULL, NULL);
+      if (wname != NULL)
+	{
+	  wchar_t wshortname[MAX_PATH + 1];
+	  if (GetShortPathNameW (wname, wshortname, G_N_ELEMENTS (wshortname)))
+	    {
+	      gchar *tem = g_utf16_to_utf8 (wshortname, -1, NULL, NULL, NULL);
+	      retval = g_locale_from_utf8 (tem, -1, NULL, NULL, NULL);
+	      g_free (tem);
+	    }
+	  g_free (wname);
+	}
+    }
+  return retval;
+}
+
 const gchar *
 _gtk_get_localedir (void)
 {
   static char *gtk_localedir = NULL;
   if (gtk_localedir == NULL)
-    gtk_localedir = g_win32_get_package_installation_subdirectory
-      (GETTEXT_PACKAGE, dll_name, "lib\\locale");
+    {
+      gtk_localedir = g_win32_get_package_installation_subdirectory (GETTEXT_PACKAGE, dll_name, "lib\\locale");
+      if (gtk_localedir != NULL)
+	gtk_localedir = g_win32_locale_filename_from_utf8 (gtk_localedir);
+
+      if (gtk_localedir == NULL)
+	gtk_localedir = "\\";	/* Punt */
+    }
 
   return gtk_localedir;
 }

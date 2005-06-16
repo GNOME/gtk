@@ -1,3 +1,11 @@
+2005-06-16  Tor Lillqvist  <tml@novell.com>
+
+	* gtk/gtkmain.c (g_win32_locale_filename_from_utf8): [Win32]
+	Borrow this function from GLib HEAD.
+	(_gtk_get_localedir): [Win32] Make sure the run-time locale
+	directory is in system codepage, as it is passed to the
+	non-UTF8-aware gettext library.
+
 2005-06-15  Matthias Clasen  <mclasen@redhat.com>
 	
 	* configure.in: Bump version
