@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-15 23:46-0400\n"
+"POT-Creation-Date: 2005-06-17 00:20+0200\n"
 "PO-Revision-Date: 2005-01-20 17:14+0100\n"
 "Last-Translator: Frank Arnold <frank@scirocco-5v-turbo.de>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
@@ -3963,13 +3963,12 @@ msgid "Amount to indent the paragraph, in pixels"
 msgstr "Die Einrückungstiefe des Absatzes in Pixel"
 
 #: gtk/gtktexttag.c:426
-#, fuzzy
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative) "
 "in Pango units"
 msgstr ""
 "Das Hochstellen des Texts über der Grundlinie (Tiefstellen, wenn der Wert "
-"negativ ist) in Pixel"
+"negativ ist) in Pango-Einheiten"
 
 #: gtk/gtktexttag.c:435
 msgid "Pixels above lines"
