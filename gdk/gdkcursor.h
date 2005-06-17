@@ -7,6 +7,8 @@
 G_BEGIN_DECLS
 
 #define GDK_TYPE_CURSOR (gdk_cursor_get_type ())
+#define GDK_CURSOR(object)    (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_CURSOR, GdkCursor))
+#define GDK_IS_CURSOR(object) (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_CURSOR))
 
 /* Cursor types.
  */
