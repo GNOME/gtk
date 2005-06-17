@@ -4784,6 +4784,42 @@ validate_visible_area (GtkTreeView *tree_view)
 
   above_path = gtk_tree_path_copy (path);
 
+  /* if we do not validate any row above the new top_row, we will make sure
+   * that the row immediately above top_row has been validated. (if we do not
+   * do this, _gtk_rbtree_find_offset will find the row above top_row, because
+   * when invalidated that row's height will be zero. and this will mess up
+   * scrolling).
+   */
+  if (area_above == 0)
+    {
+      GtkRBTree *tree;
+      GtkRBNode *node;
+      GtkTreePath *tmppath;
+      GtkTreeIter iter;
+
+      _gtk_tree_view_find_node (tree_view, above_path, &tree, &node);
+
+      tmppath = gtk_tree_path_copy (above_path);
+
+      _gtk_rbtree_prev_full (tree, node, &tree, &node);
+      if (! gtk_tree_path_prev (tmppath) && node != NULL)
+        {
+          gtk_tree_path_free (tmppath);
+          tmppath = _gtk_tree_view_find_path (tree_view, tree, node);
+        }
+      gtk_tree_model_get_iter (tree_view->priv->model, &iter, tmppath);
+
+      if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_INVALID) ||
+          GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_COLUMN_INVALID))
+        {
+          need_redraw = TRUE;
+          if (validate_row (tree_view, tree, node, &iter, path))
+            size_changed = TRUE;
+        }
+
+      gtk_tree_path_free (tmppath);
+    }
+
   /* Now, we walk forwards and backwards, measuring rows. Unfortunately,
    * backwards is much slower then forward, as there is no iter_prev function.
    * We go forwards first in case we run out of tree.  Then we go backwards to

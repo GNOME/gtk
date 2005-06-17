@@ -1,3 +1,9 @@
+2005-06-17  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (validate_visible_area): make sure the row
+	above 'above_path' is always in a validated state, so it does
+	not mess up scrolling. (#303319, testcase from Billy Biggs).
+
 2005-06-17  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/x11/gdkprivate-x11.h: 
