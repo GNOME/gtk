@@ -1075,6 +1075,9 @@ gtk_entry_completion_complete (GtkEntryCompletion *completion)
   g_free (tmp);
 
   gtk_tree_model_filter_refilter (completion->priv->filter_model);
+
+  if (GTK_WIDGET_VISIBLE (completion->priv->popup_window))
+    _gtk_entry_completion_resize_popup (completion);
 }
 
 static void
