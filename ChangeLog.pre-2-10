@@ -1,3 +1,9 @@
+2005-06-17  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_real_set_focus): Queue a
+	draw on the old and new focus widgets, if their defaultness
+	changes.  (#305607, Billy Biggs)
+
 2005-06-16  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/gtkmain.c (g_win32_locale_filename_from_utf8): [Win32]
