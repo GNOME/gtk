@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-15 23:46-0400\n"
-"PO-Revision-Date: 2005-03-30 03:57-0400\n"
+"POT-Creation-Date: 2005-06-17 02:01-0400\n"
+"PO-Revision-Date: 2005-06-17 03:57-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: Canadian English <adamw@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -789,7 +789,7 @@ msgstr "Gdk debugging flags to set"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:129 gdk/gdk.c:132 gtk/gtkmain.c:405 gtk/gtkmain.c:408
+#: gdk/gdk.c:129 gdk/gdk.c:132 gtk/gtkmain.c:438 gtk/gtkmain.c:441
 msgid "FLAGS"
 msgstr "FLAGS"
 
@@ -1126,6 +1126,8 @@ msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
 msgstr ""
+"The folder could not be created because a file with the same name already "
+"exists.  Try using a different name for the folder, or rename the file first."
 
 #: gtk/gtkfilechooserdefault.c:974
 msgid "Invalid file name"
@@ -1718,27 +1720,27 @@ msgid "Select All"
 msgstr "Select All"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:398
+#: gtk/gtkmain.c:431
 msgid "Load additional GTK+ modules"
 msgstr "Load additional GTK+ modules"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:399
+#: gtk/gtkmain.c:432
 msgid "MODULES"
 msgstr "MODULES"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:401
+#: gtk/gtkmain.c:434
 msgid "Make all warnings fatal"
 msgstr "Make all warnings fatal"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:404
+#: gtk/gtkmain.c:437
 msgid "GTK+ debugging flags to set"
 msgstr "GTK+ debugging flags to set"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:407
+#: gtk/gtkmain.c:440
 msgid "GTK+ debugging flags to unset"
 msgstr "GTK+ debugging flags to unset"
 
@@ -1747,15 +1749,15 @@ msgstr "GTK+ debugging flags to unset"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:476
+#: gtk/gtkmain.c:509
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:559
+#: gtk/gtkmain.c:592
 msgid "GTK+ Options"
 msgstr "GTK+ Options"
 
-#: gtk/gtkmain.c:559
+#: gtk/gtkmain.c:592
 msgid "Show GTK+ Options"
 msgstr "Show GTK+ Options"
 
