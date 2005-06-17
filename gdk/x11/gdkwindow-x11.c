@@ -2877,7 +2877,10 @@ gdk_window_set_cursor (GdkWindow *window,
   if (!cursor)
     xcursor = None;
   else
-    xcursor = cursor_private->xcursor;
+    {
+      _gdk_x11_cursor_update_theme (cursor);
+      xcursor = cursor_private->xcursor;
+    }
   
   if (!GDK_WINDOW_DESTROYED (window))
     {

@@ -1,3 +1,20 @@
+2005-06-17  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/x11/gdkprivate-x11.h: 
+	* gdk/x11/gdkcursor-x11.c: Handle cursor theme changes
+	for cached cursors which are not associated with a window
+	at the time of the theme change, by storing a serial
+	number in each cursor, and updating the theme_serial 
+	counter whenever the cursor theme changes.
+	
+	* gdk/x11/gdkcursor-x11.c (_gdk_x11_cursor_update_theme): 
+	Private function to update a cursor to the current
+	cursor theme if necessary.
+
+	* gdk/x11/gdkmain-x11.c (gdk_pointer_grab): 
+	* gdk/x11/gdkwindow-x11.c (gdk_window_set_cursor): Call
+	_gdk_x11_cursor_update_theme() here.
+
 2005-06-17  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkcairo.c (gdk_cairo_set_source_pixbuf): Fix

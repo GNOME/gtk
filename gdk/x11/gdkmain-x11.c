@@ -194,8 +194,10 @@ gdk_pointer_grab (GdkWindow *	  window,
   if (!cursor)
     xcursor = None;
   else
-    xcursor = cursor_private->xcursor;
-  
+    {
+      _gdk_x11_cursor_update_theme (cursor);
+      xcursor = cursor_private->xcursor;
+    }
   
   xevent_mask = 0;
   for (i = 0; i < _gdk_nenvent_masks; i++)

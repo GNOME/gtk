@@ -76,6 +76,7 @@ struct _GdkCursorPrivate
   Cursor xcursor;
   GdkDisplay *display;
   gchar *name;
+  guint serial;
 };
 
 struct _GdkVisualPrivate
@@ -98,7 +99,7 @@ gint _gdk_send_xevent      (GdkDisplay *display,
 
 GType _gdk_gc_x11_get_type (void);
 
-gboolean _gdk_x11_have_render                 (GdkDisplay *display);
+gboolean _gdk_x11_have_render           (GdkDisplay *display);
 
 GdkGC *_gdk_x11_gc_new                  (GdkDrawable     *drawable,
 					 GdkGCValues     *values,
@@ -170,6 +171,8 @@ void _gdk_input_init            (GdkDisplay *display);
 
 PangoRenderer *_gdk_x11_renderer_get (GdkDrawable *drawable,
 				      GdkGC       *gc);
+
+void _gdk_x11_cursor_update_theme (GdkCursor *cursor);
 
 extern GdkDrawableClass  _gdk_x11_drawable_class;
 extern gboolean	         _gdk_use_xshm;
