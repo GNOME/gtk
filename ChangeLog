@@ -1,3 +1,8 @@
+2005-06-17  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkcairo.c (gdk_cairo_set_source_pixbuf): Fix
+	#if G_BYTE_ORDER == GDK_LSB_FIRST.
+
 2005-06-17  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (validate_visible_area): don't try to update

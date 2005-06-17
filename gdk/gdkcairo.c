@@ -175,10 +175,10 @@ gdk_cairo_set_source_pixbuf (cairo_t   *cr,
 	  
 	  while (p < end)
 	    {
-#if G_BYTE_ORDER == GDK_LSB_FIRST
+#if G_BYTE_ORDER == G_LITTLE_ENDIAN
 	      q[0] = p[2];
 	      q[1] = p[1];
-	      q[2] = p[2];
+	      q[2] = p[0];
 #else	  
 	      q[0] = p[0];
 	      q[1] = p[1];
