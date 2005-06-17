@@ -1,3 +1,12 @@
+2005-06-17  Kristian Rietveld  <kris@gtk.org>
+
+	Fix #160281, testcase from Peter Bloomfield.
+
+	* gtk/gtktreeview.c (do_presize_handler): always size request
+	and update adjustments in fixed height mode,
+	(gtk_tree_view_build_tree): if a fixed height is set, set this
+	height on newly added nodes.
+
 2005-06-17  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkdnd-win32.c (gdk_dropfiles_filter): Set the actions

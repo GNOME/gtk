@@ -5232,6 +5232,20 @@ do_presize_handler (GtkTreeView *tree_view)
     }
   validate_visible_area (tree_view);
   tree_view->priv->presize_handler_timer = 0;
+
+  if (tree_view->priv->fixed_height_mode)
+    {
+      GtkRequisition requisition;
+      gint height_old = tree_view->priv->height;
+
+      gtk_widget_size_request (GTK_WIDGET (tree_view), &requisition);
+
+      tree_view->priv->hadjustment->upper = MAX (tree_view->priv->hadjustment->upper, (gfloat)requisition.width);
+      tree_view->priv->vadjustment->upper = MAX (tree_view->priv->vadjustment->upper, (gfloat)requisition.height);
+      gtk_adjustment_changed (tree_view->priv->hadjustment);
+      gtk_adjustment_changed (tree_view->priv->vadjustment);
+      gtk_widget_queue_resize (GTK_WIDGET (tree_view));
+    }
 		   
   return FALSE;
 }
@@ -7638,6 +7652,12 @@ gtk_tree_view_build_tree (GtkTreeView *tree_view,
     {
       gtk_tree_model_ref_node (tree_view->priv->model, iter);
       temp = _gtk_rbtree_insert_after (tree, temp, 0, FALSE);
+
+      if (tree_view->priv->fixed_height > 0)
+        {
+          if (GTK_RBNODE_FLAG_SET (temp, GTK_RBNODE_INVALID))
+            _gtk_rbtree_node_set_height (tree, temp, tree_view->priv->fixed_height);
+        }
 
       if (is_list)
         continue;
