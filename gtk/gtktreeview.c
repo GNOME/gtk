@@ -4927,14 +4927,7 @@ validate_visible_area (GtkTreeView *tree_view)
 	dy = 0;
 
       gtk_adjustment_set_value (tree_view->priv->vadjustment, dy);
-
-      if (tree_view->priv->top_row)
-        {
-          gtk_tree_row_reference_free (tree_view->priv->top_row);
-          tree_view->priv->top_row = NULL;
-        }
-
-      tree_view->priv->top_row = gtk_tree_row_reference_new_proxy (G_OBJECT (tree_view), tree_view->priv->model, above_path);
+      gtk_tree_view_dy_to_top_row (tree_view);
 
       need_redraw = TRUE;
     }
@@ -10250,7 +10243,8 @@ gtk_tree_view_scroll_to_cell (GtkTreeView       *tree_view,
    * scrolling code, we short-circuit validate_visible_area's immplementation as
    * it is much slower than just going to the point.
    */
-  if (! GTK_WIDGET_REALIZED (tree_view) ||
+  if (! GTK_WIDGET_VISIBLE (tree_view) ||
+      GTK_WIDGET_ALLOC_NEEDED (tree_view) || 
       GTK_RBNODE_FLAG_SET (tree_view->priv->tree->root, GTK_RBNODE_DESCENDANTS_INVALID))
     {
       if (tree_view->priv->scroll_to_path)

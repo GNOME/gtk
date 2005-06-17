@@ -1,5 +1,14 @@
 2005-06-17  Kristian Rietveld  <kris@gtk.org>
 
+	* gtk/gtktreeview.c (validate_visible_area): don't try to update
+	the top_row rowref ourselves here, but just have _dy_to_top_row()
+	do it,
+	(gtk_tree_view_scroll_to_cell): handle scrolling via
+	validate_visible_area() if the treeview is not visible or needs
+	reallocation. (#165246, Nickolay V. Shmyrev).
+
+2005-06-17  Kristian Rietveld  <kris@gtk.org>
+
 	Fixes #307914 (Alexander Larsson), fixing some breakage caused
 	by my previous commit.
 
