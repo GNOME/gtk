@@ -309,6 +309,14 @@ gtk_button_class_init (GtkButtonClass *klass)
                                                         GTK_TYPE_WIDGET,
                                                         GTK_PARAM_READWRITE));
 
+  /**
+   * GtkButton::pressed:
+   * @button: the object that received the signal
+   *
+   * Emitted when the button is pressed.
+   * 
+   * @Deprecated: Use the GtkWidget::button-press-event signal.
+   */ 
   button_signals[PRESSED] =
     g_signal_new ("pressed",
 		  G_OBJECT_CLASS_TYPE (object_class),
@@ -317,6 +325,15 @@ gtk_button_class_init (GtkButtonClass *klass)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
+
+  /**
+   * GtkButton::released:
+   * @button: the object that received the signal
+   *
+   * Emitted when the button is released.
+   * 
+   * @Deprecated: Use the GtkWidget::button-release-event signal.
+   */ 
   button_signals[RELEASED] =
     g_signal_new ("released",
 		  G_OBJECT_CLASS_TYPE (object_class),
@@ -325,6 +342,13 @@ gtk_button_class_init (GtkButtonClass *klass)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
+
+  /**
+   * GtkButton::clicked:
+   * @button: the object that received the signal
+   *
+   * Emitted when the button has been activated (pressed and released).
+   */ 
   button_signals[CLICKED] =
     g_signal_new ("clicked",
 		  G_OBJECT_CLASS_TYPE (object_class),
@@ -333,6 +357,15 @@ gtk_button_class_init (GtkButtonClass *klass)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
+
+  /**
+   * GtkButton::enter:
+   * @button: the object that received the signal
+   *
+   * Emitted when the pointer enters the button.
+   * 
+   * @Deprecated: Use the GtkWidget::enter-notify-event signal.
+   */ 
   button_signals[ENTER] =
     g_signal_new ("enter",
 		  G_OBJECT_CLASS_TYPE (object_class),
@@ -341,6 +374,15 @@ gtk_button_class_init (GtkButtonClass *klass)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
+
+  /**
+   * GtkButton::leave:
+   * @button: the object that received the signal
+   *
+   * Emitted when the pointer leaves the button.
+   * 
+   * @Deprecated: Use the GtkWidget::leave-notify-event signal.
+   */ 
   button_signals[LEAVE] =
     g_signal_new ("leave",
 		  G_OBJECT_CLASS_TYPE (object_class),
