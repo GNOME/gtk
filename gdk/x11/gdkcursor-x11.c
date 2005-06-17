@@ -255,7 +255,7 @@ _gdk_cursor_destroy (GdkCursor *cursor)
 {
   GdkCursorPrivate *private;
 
-  g_return_if_fail (cursor != NULL);
+  g_return_if_fail (GDK_IS_CURSOR (cursor));
   g_return_if_fail (cursor->ref_count == 0);
 
   private = (GdkCursorPrivate *) cursor;
@@ -277,7 +277,7 @@ _gdk_cursor_destroy (GdkCursor *cursor)
 Display *
 gdk_x11_cursor_get_xdisplay (GdkCursor *cursor)
 {
-  g_return_val_if_fail (cursor != NULL, NULL);
+  g_return_val_if_fail (GDK_IS_CURSOR (cursor), NULL);
 
   return GDK_DISPLAY_XDISPLAY(((GdkCursorPrivate *)cursor)->display);
 }
@@ -293,7 +293,7 @@ gdk_x11_cursor_get_xdisplay (GdkCursor *cursor)
 Cursor
 gdk_x11_cursor_get_xcursor (GdkCursor *cursor)
 {
-  g_return_val_if_fail (cursor != NULL, None);
+  g_return_val_if_fail (GDK_IS_CURSOR (cursor), None);
 
   return ((GdkCursorPrivate *)cursor)->xcursor;
 }
@@ -312,7 +312,7 @@ gdk_x11_cursor_get_xcursor (GdkCursor *cursor)
 GdkDisplay *
 gdk_cursor_get_display (GdkCursor *cursor)
 {
-  g_return_val_if_fail (cursor != NULL, NULL);
+  g_return_val_if_fail (GDK_IS_CURSOR (cursor), NULL);
 
   return ((GdkCursorPrivate *)cursor)->display;
 }
@@ -346,7 +346,7 @@ gdk_cursor_get_image (GdkCursor *cursor)
   GdkPixbuf *pixbuf;
   gchar *theme;
   
-  g_return_val_if_fail (cursor != NULL, NULL);
+  g_return_val_if_fail (GDK_IS_CURSOR (cursor), NULL);
 
   private = (GdkCursorPrivate *) cursor;
     
@@ -498,7 +498,7 @@ gdk_x11_display_set_cursor_theme (GdkDisplay  *display,
 GdkPixbuf*  
 gdk_cursor_get_image (GdkCursor *cursor)
 {
-  g_return_val_if_fail (cursor != NULL, NULL);
+  g_return_val_if_fail (GDK_IS_CURSOR (cursor), NULL);
   
   return NULL;
 }
@@ -509,8 +509,12 @@ gdk_x11_display_set_cursor_theme (GdkDisplay  *display,
 				  const gint   size)
 {
   g_return_if_fail (GDK_IS_DISPLAY (display));
+}
 
-  /* nothing to do */
+void
+_gdk_x11_cursor_update_theme (GdkCursor *cursor)
+{
+  g_return_if_fail (GDK_IS_CURSOR (cursor));
 }
 
 #endif

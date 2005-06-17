@@ -1,5 +1,11 @@
 2005-06-17  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/x11/gdkcursor-x11.c: 
+	* gdk/gdkcursor.c: Improve some return_if_fail checks,
+	and add the missing non-Xcursor fallback for 
+	_gdk_x11_cursor_update_theme(), noticed by Jeroen 
+	Zwartepoorte.
+
 	* gtk/gtkbutton.c (gtk_button_class_init): Document
 	several button signals as not useful.
 
@@ -485,8 +491,6 @@ Fri Jun 10 19:06:03 2005  Manish Singh  <yosh@gimp.org>
 	* gtk/gtkimage.c: Make the file property readable.  
 	(#170674, Lorenzo Gil Sanchez)
 
-==================================================================
-==================================================================
 	
 2005-06-08  Matthias Clasen  <mclasen@redhat.com>
 
