@@ -1,3 +1,10 @@
+2005-06-17  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkdnd-win32.c (gdk_dropfiles_filter): Set the actions
+	and suggested_action fields in the GdkDragContext to
+	GDK_ACTION_COPY. Otherwise apps that check the suggested_action
+	field, like eog, won't accept dropped files.
+
 2005-06-17  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/gdkcursor.h: Define GDK_IS_CURSOR() and GDK_CURSOR().

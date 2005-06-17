@@ -978,6 +978,8 @@ gdk_dropfiles_filter (GdkXEvent *xev,
       /* WM_DROPFILES drops are always file names */
       context->targets =
 	g_list_append (NULL, GUINT_TO_POINTER (_text_uri_list));
+      context->actions = GDK_ACTION_COPY;
+      context->suggested_action = GDK_ACTION_COPY;
       current_dest_drag = context;
 
       event->dnd.type = GDK_DROP_START;
