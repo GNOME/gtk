@@ -4695,16 +4695,20 @@ gtk_window_real_set_focus (GtkWindow *window,
 {
   GtkWidget *old_focus = window->focus_widget;
   gboolean had_default = FALSE;
+  gboolean focus_had_default = FALSE;
+  gboolean old_focus_had_default = FALSE;
 
   if (old_focus)
     {
       g_object_ref (old_focus);
       g_object_freeze_notify (G_OBJECT (old_focus));
+      old_focus_had_default = GTK_WIDGET_HAS_DEFAULT (old_focus);
     }
   if (focus)
     {
       g_object_ref (focus);
       g_object_freeze_notify (G_OBJECT (focus));
+      focus_had_default = GTK_WIDGET_HAS_DEFAULT (focus);
     }
   
   if (window->default_widget)
@@ -4716,10 +4720,11 @@ gtk_window_real_set_focus (GtkWindow *window,
 	  (window->focus_widget != window->default_widget))
         {
 	  GTK_WIDGET_UNSET_FLAGS (window->focus_widget, GTK_HAS_DEFAULT);
-
+	  gtk_widget_queue_draw (window->focus_widget);
+	  
 	  if (window->default_widget)
 	    GTK_WIDGET_SET_FLAGS (window->default_widget, GTK_HAS_DEFAULT);
-        }
+	}
 
       window->focus_widget = NULL;
 
@@ -4761,14 +4766,20 @@ gtk_window_real_set_focus (GtkWindow *window,
   if (window->default_widget &&
       (had_default != GTK_WIDGET_HAS_DEFAULT (window->default_widget)))
     gtk_widget_queue_draw (window->default_widget);
-
+  
   if (old_focus)
     {
+      if (old_focus_had_default != GTK_WIDGET_HAS_DEFAULT (old_focus))
+	gtk_widget_queue_draw (old_focus);
+	
       g_object_thaw_notify (G_OBJECT (old_focus));
       g_object_unref (old_focus);
     }
   if (focus)
     {
+      if (focus_had_default != GTK_WIDGET_HAS_DEFAULT (focus))
+	gtk_widget_queue_draw (focus);
+
       g_object_thaw_notify (G_OBJECT (focus));
       g_object_unref (focus);
     }
