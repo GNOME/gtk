@@ -1,5 +1,8 @@
 2005-06-17  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkentrycompletion.c (gtk_entry_completion_complete): 
+	Resize the popup if necessary.  (#308076, Vincent Noel)
+
 	* gtk/gtkwindow.c (gtk_window_real_set_focus): Queue a
 	draw on the old and new focus widgets, if their defaultness
 	changes.  (#305607, Billy Biggs)
