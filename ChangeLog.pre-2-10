@@ -16,6 +16,25 @@
 
 2005-06-17  Matthias Clasen  <mclasen@redhat.com>
 
+	Support the ICCCM urgency hint.  (#61858, Havoc Pennington)
+	
+	* gtk/gtk.symbols: 
+	* gtk/gtkwindow.[hc]: Add a GtkWindow::urgency-hint property
+	with getter and setter.
+
+	* gdk/gdk.symbols: 
+	* gdk/gdkwindow.h: 
+	* gdk/x11/gdkwindow-x11.c (gdk_window_set_urgency_hint): 
+	Add a setter for the urgency hint.
+
+	* gdk/x11/gdkwindow-x11.h (struct _GdkToplevelX11): Store
+	urgency hint here.
+
+	* gdk/x11/gdkwindow-x11.c (update_wm_hints): Set the urgency
+	hint in the WM_HINTS property when appropriate.
+
+2005-06-17  Matthias Clasen  <mclasen@redhat.com>
+
 	* gdk/gdkcursor.h: Define GDK_IS_CURSOR() and GDK_CURSOR().
 
 	* gdk/x11/gdkcursor-x11.c: 

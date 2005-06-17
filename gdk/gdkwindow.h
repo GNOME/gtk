@@ -414,6 +414,8 @@ void gdk_window_set_skip_taskbar_hint (GdkWindow *window,
                                        gboolean   skips_taskbar);
 void gdk_window_set_skip_pager_hint   (GdkWindow *window,
                                        gboolean   skips_pager);
+void gdk_window_set_urgency_hint      (GdkWindow *window,
+				       gboolean   urgent);
 
 void          gdk_window_set_geometry_hints (GdkWindow        *window,
 					     GdkGeometry      *geometry,

@@ -111,6 +111,7 @@ struct _GdkToplevelX11
   /* Set if we are requesting these hints */
   guint skip_taskbar_hint : 1;
   guint skip_pager_hint : 1;
+  guint urgency_hint : 1;
 
   guint on_all_desktops : 1;   /* _NET_WM_STICKY == 0xFFFFFFFF */
 

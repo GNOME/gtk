@@ -204,6 +204,9 @@ gboolean   gtk_window_get_skip_taskbar_hint    (GtkWindow           *window);
 void       gtk_window_set_skip_pager_hint      (GtkWindow           *window,
                                                 gboolean             setting);
 gboolean   gtk_window_get_skip_pager_hint      (GtkWindow           *window);
+void       gtk_window_set_urgency_hint         (GtkWindow           *window,
+                                                gboolean             setting);
+gboolean   gtk_window_get_urgency_hint         (GtkWindow           *window);
 void       gtk_window_set_accept_focus         (GtkWindow           *window,
                                                 gboolean             setting);
 gboolean   gtk_window_get_accept_focus         (GtkWindow           *window);

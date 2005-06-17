@@ -1270,6 +1270,9 @@ update_wm_hints (GdkWindow *window,
     }
   else
     wm_hints.window_group = GDK_DISPLAY_X11 (display)->leader_window;
+
+  if (toplevel->urgency_hint)
+    wm_hints.flags |= XUrgencyHint;
   
   XSetWMHints (GDK_WINDOW_XDISPLAY (window),
 	       GDK_WINDOW_XID (window),
@@ -2340,6 +2343,34 @@ gdk_window_set_skip_pager_hint (GdkWindow *window,
     gdk_wmspec_change_state (skips_pager, window,
 			     gdk_atom_intern ("_NET_WM_STATE_SKIP_PAGER", FALSE), 
 			     NULL);
+}
+
+/**
+ * gdk_window_set_urgency_hint:
+ * @window: a toplevel #GdkWindow
+ * @urgent: %TRUE if the window is urgent
+ * 
+ * Toggles whether a window needs the user's
+ * urgent attention.
+ *
+ * Since: 2.8
+ **/
+void
+gdk_window_set_urgency_hint (GdkWindow *window,
+			     gboolean   urgent)
+{
+  GdkToplevelX11 *toplevel;
+    
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD);
+  
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  toplevel = _gdk_x11_window_get_toplevel (window);
+  toplevel->urgency_hint = urgent;
+  
+  update_wm_hints (window, FALSE);
 }
 
 /**

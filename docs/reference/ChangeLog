@@ -1,3 +1,8 @@
+2005-06-17  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-sections.txt: 
+	* gdk/gdk-sections.txt: Add urgency hint API.
+
 2005-06-14  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/gdk-sections.txt: Add new functions.
