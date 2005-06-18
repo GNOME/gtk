@@ -1,5 +1,9 @@
 2005-06-18  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcellrenderertoggle.c:
+	* gtk/gtktextview.c:
+	* gtk/gtktreeview.c: Typo fixes in comments.
+
 	* gtk/gtkpaned.c (gtk_paned_add): Barf if more than
 	2 children are added.  (#308111, Morten Welinder)
 

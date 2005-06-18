@@ -5522,7 +5522,7 @@ typedef enum
 
 /*
  * Move @start and @end to the boundaries of the selection unit (indicated by 
- * @granularity) which contained @start initially. Return wether @start was
+ * @granularity) which contained @start initially. Return whether @start was
  * contained in a selection unit at all (which may not be the case for words).
  */
 static gboolean 

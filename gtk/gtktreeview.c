@@ -12275,7 +12275,7 @@ gtk_tree_view_get_search_column (GtkTreeView *tree_view)
  * 
  * If the sort column is set, users can use the "start-interactive-search"
  * key binding to bring up search popup. The enable-search property controls
- * wether simply typing text will also start an interactive search.
+ * whether simply typing text will also start an interactive search.
  *
  * Note that @column refers to a column of the model. 
  */
