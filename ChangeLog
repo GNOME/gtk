@@ -1,3 +1,8 @@
+Sat Jun 18 04:21:58 2005  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtktreeview.c (do_presize_handler): remove unused variable
+	height_old.
+
 2005-06-18  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcellrenderertoggle.c:

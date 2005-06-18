@@ -5236,7 +5236,6 @@ do_presize_handler (GtkTreeView *tree_view)
   if (tree_view->priv->fixed_height_mode)
     {
       GtkRequisition requisition;
-      gint height_old = tree_view->priv->height;
 
       gtk_widget_size_request (GTK_WIDGET (tree_view), &requisition);
 
