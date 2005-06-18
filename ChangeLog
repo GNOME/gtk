@@ -1,3 +1,10 @@
+2005-06-18  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_bin_expose): undo merging
+	of the separate loop setting cell data with cell drawing loop
+	(introduced in revision 1.280), since this breaks focus handling
+	wrt special cells.
+
 Sat Jun 18 04:22:51 2005  Manish Singh  <yosh@gimp.org>
 
 	* gdk/gdkcursor.h: remove GDK_CURSOR and GDK_IS_CURSOR, instance

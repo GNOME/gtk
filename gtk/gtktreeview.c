@@ -3559,6 +3559,22 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 
       parity = _gtk_rbtree_node_find_parity (tree, node);
 
+      /* we *need* to set cell data on all cells before the call
+       * to _has_special_cell, else _has_special_cell() does not
+       * return a correct value.
+       */
+      for (list = (rtl ? g_list_last (tree_view->priv->columns) : g_list_first (tree_view->priv->columns));
+	   list;
+	   list = (rtl ? list->prev : list->next))
+        {
+	  GtkTreeViewColumn *column = list->data;
+	  gtk_tree_view_column_cell_set_cell_data (column,
+						   tree_view->priv->model,
+						   &iter,
+						   GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_PARENT),
+						   node->children?TRUE:FALSE);
+        }
+
       has_special_cell = gtk_tree_view_has_special_cell (tree_view);
 
       for (list = (rtl ? g_list_last (tree_view->priv->columns) : g_list_first (tree_view->priv->columns));
@@ -3603,12 +3619,6 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 	      cell_offset += column->width;
 	      continue;
 	    }
-
-	  gtk_tree_view_column_cell_set_cell_data (column,
-						   tree_view->priv->model,
-						   &iter,
-						   GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_PARENT),
-						   node->children?TRUE:FALSE);
 
           /* Select the detail for drawing the cell.  relevant
            * factors are parity, sortedness, and whether to
