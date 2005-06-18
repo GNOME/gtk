@@ -652,7 +652,7 @@ gtk_calendar_init (GtkCalendar *calendar)
 
 #ifdef HAVE__NL_TIME_FIRST_WEEKDAY
   week_start = nl_langinfo (_NL_TIME_FIRST_WEEKDAY);
-  priv->week_start = *((unsigned char *) week_start) % 7;
+  priv->week_start = *((unsigned char *) week_start) % 7 - 1;
 #else
   /* Translate to calendar:week_start:0 if you want Sunday to be the
    * first day of the week to calendar:week_start:1 if you want Monday
