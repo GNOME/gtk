@@ -53,7 +53,7 @@ gdk_cursor_get_type (void)
 GdkCursor*
 gdk_cursor_ref (GdkCursor *cursor)
 {
-  g_return_val_if_fail (GDK_IS_CURSOR (cursor), NULL);
+  g_return_val_if_fail (cursor != NULL, NULL);
   g_return_val_if_fail (cursor->ref_count > 0, NULL);
 
   cursor->ref_count += 1;
@@ -72,7 +72,7 @@ gdk_cursor_ref (GdkCursor *cursor)
 void
 gdk_cursor_unref (GdkCursor *cursor)
 {
-  g_return_if_fail (GDK_IS_CURSOR (cursor));
+  g_return_if_fail (cursor != NULL);
   g_return_if_fail (cursor->ref_count > 0);
 
   cursor->ref_count -= 1;

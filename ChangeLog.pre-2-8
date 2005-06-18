@@ -1,3 +1,12 @@
+Sat Jun 18 04:22:51 2005  Manish Singh  <yosh@gimp.org>
+
+	* gdk/gdkcursor.h: remove GDK_CURSOR and GDK_IS_CURSOR, instance
+	checks don't work on boxed types.
+
+	* gdk/x11/gdkcursor-x11.c: 
+	* gdk/gdkcursor.c: make return_if_fail checks != NULL instead of
+	GDK_IS_CURSOR.
+	
 Sat Jun 18 04:21:58 2005  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtktreeview.c (do_presize_handler): remove unused variable
