@@ -1,5 +1,8 @@
 2005-06-18  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkpaned.c (gtk_paned_add): Barf if more than
+	2 children are added.  (#308111, Morten Welinder)
+
 	* gtk/gtkcalendar.c (gtk_calendar_init): _NL_FIRST_WEEKDAY is
 	1-based.  (#163842, Pierre Ossman)
 

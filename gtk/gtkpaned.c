@@ -1007,6 +1007,8 @@ gtk_paned_add (GtkContainer *container,
     gtk_paned_add1 (paned, widget);
   else if (!paned->child2)
     gtk_paned_add2 (paned, widget);
+  else
+    g_warning ("GtkPaned cannot have more than 2 children\n");
 }
 
 static void
