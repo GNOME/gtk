@@ -1,3 +1,10 @@
+2005-06-18  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk.symbols: 
+	* gtk/gtkimage.h: 
+	* gtk/gtkimage.c (gtk_image_clear): Make this function
+	public.  (#64792, Havoc Pennington)
+
 2005-06-18  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_bin_expose): undo merging

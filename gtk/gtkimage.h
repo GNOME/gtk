@@ -162,6 +162,7 @@ GtkWidget* gtk_image_new_from_animation (GdkPixbufAnimation *animation);
 GtkWidget* gtk_image_new_from_icon_name (const gchar     *icon_name,
 					 GtkIconSize      size);
 
+void gtk_image_clear              (GtkImage        *image);
 void gtk_image_set_from_pixmap    (GtkImage        *image,
                                    GdkPixmap       *pixmap,
                                    GdkBitmap       *mask);

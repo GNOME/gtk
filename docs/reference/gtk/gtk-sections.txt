@@ -1727,6 +1727,7 @@ gtk_image_set_from_pixmap
 gtk_image_set_from_stock
 gtk_image_set_from_animation
 gtk_image_set_from_icon_name
+gtk_image_clear
 gtk_image_new
 gtk_image_set
 gtk_image_get

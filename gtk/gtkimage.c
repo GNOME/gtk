@@ -65,7 +65,6 @@ static void gtk_image_style_set    (GtkWidget      *widget,
 static void gtk_image_screen_changed (GtkWidget    *widget,
 				      GdkScreen    *prev_screen);
 static void gtk_image_destroy      (GtkObject      *object);
-static void gtk_image_clear        (GtkImage       *image);
 static void gtk_image_reset        (GtkImage       *image);
 static void gtk_image_calc_size    (GtkImage       *image);
 
@@ -1839,10 +1838,22 @@ gtk_image_expose (GtkWidget      *widget,
   return FALSE;
 }
 
-static void
+/**
+ * gtk_image_clear:
+ * @image: a #GtkImage
+ *
+ * Resets the image to be empty.
+ *
+ * Since: 2.8
+ */
+void
 gtk_image_clear (GtkImage *image)
 {
-  GtkImagePrivate *priv = GTK_IMAGE_GET_PRIVATE (image);
+  GtkImagePrivate *priv;
+
+  g_return_if_fail (GTK_IS_IMAGE (image));
+
+  priv = GTK_IMAGE_GET_PRIVATE (image);
 
   g_object_freeze_notify (G_OBJECT (image));
   
