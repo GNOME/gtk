@@ -1732,7 +1732,7 @@ gtk_ui_manager_add_ui (GtkUIManager        *self,
 
   if (node_type == NODE_TYPE_UNDECIDED)
     {
-      g_warning ("item type not suitable for adding at '%s'", 
+      g_warning ("item type %d not suitable for adding at '%s'", 
 		 type, path);
       return;
     }
