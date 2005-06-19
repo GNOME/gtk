@@ -127,6 +127,7 @@ static void        dirty_all_nodes                (GtkUIManager      *self);
 static void        mark_node_dirty                (GNode             *node);
 static GNode     * get_child_node                 (GtkUIManager      *self,
                                                    GNode             *parent,
+						   GNode             *sibling,
                                                    const gchar       *childname,
                                                    gint               childname_length,
                                                    NodeType           node_type,
@@ -403,7 +404,7 @@ gtk_ui_manager_init (GtkUIManager *self)
   self->private_data->add_tearoffs = FALSE;
 
   merge_id = gtk_ui_manager_new_merge_id (self);
-  node = get_child_node (self, NULL, "ui", 2,
+  node = get_child_node (self, NULL, NULL, "ui", 2,
 			 NODE_TYPE_ROOT, TRUE, FALSE);
   node_prepend_ui_reference (node, merge_id, 0);
 }
@@ -852,6 +853,7 @@ gtk_ui_manager_get_action (GtkUIManager *self,
 static GNode *
 get_child_node (GtkUIManager *self, 
 		GNode        *parent,
+		GNode        *sibling,
 		const gchar  *childname, 
 		gint          childname_length,
 		NodeType      node_type,
@@ -895,10 +897,22 @@ get_child_node (GtkUIManager *self,
 	  mnode->type = node_type;
 	  mnode->name = g_strndup (childname, childname_length);
 
-	  if (top)
-	    child = g_node_prepend_data (parent, mnode);
+	  if (sibling)
+	    {
+	      if (top)
+		child = g_node_insert_before (parent, sibling, 
+					      g_node_new (mnode));
+	      else
+		child = g_node_insert_after (parent, sibling, 
+					     g_node_new (mnode));
+	    }
 	  else
-	    child = g_node_append_data (parent, mnode);
+	    {
+	      if (top)
+		child = g_node_prepend_data (parent, mnode);
+	      else
+		child = g_node_append_data (parent, mnode);
+	    }
 
 	  mark_node_dirty (child);
 	}
@@ -957,7 +971,7 @@ get_node (GtkUIManager *self,
       else
 	length = strlen (pos);
 
-      node = get_child_node (self, parent, pos, length, NODE_TYPE_UNDECIDED,
+      node = get_child_node (self, parent, NULL, pos, length, NODE_TYPE_UNDECIDED,
 			     create, FALSE);
       if (!node)
 	return NULL;
@@ -1160,7 +1174,7 @@ start_element_handler (GMarkupParseContext *context,
       if (ctx->state == STATE_ROOT && !strcmp (element_name, "accelerator"))
 	{
 	  ctx->state = STATE_ACCELERATOR;
-	  ctx->current = get_child_node (self, ctx->current,
+	  ctx->current = get_child_node (self, ctx->current, NULL,
 					 node_name, strlen (node_name),
 					 NODE_TYPE_ACCELERATOR,
 					 TRUE, FALSE);
@@ -1186,7 +1200,7 @@ start_element_handler (GMarkupParseContext *context,
       if (ctx->state == STATE_ROOT && !strcmp (element_name, "menubar"))
 	{
 	  ctx->state = STATE_MENU;
-	  ctx->current = get_child_node (self, ctx->current,
+	  ctx->current = get_child_node (self, ctx->current, NULL,
 					 node_name, strlen (node_name),
 					 NODE_TYPE_MENUBAR,
 					 TRUE, FALSE);
@@ -1200,7 +1214,7 @@ start_element_handler (GMarkupParseContext *context,
 	}
       else if (ctx->state == STATE_MENU && !strcmp (element_name, "menu"))
 	{
-	  ctx->current = get_child_node (self, ctx->current,
+	  ctx->current = get_child_node (self, ctx->current, NULL,
 					 node_name, strlen (node_name),
 					 NODE_TYPE_MENU,
 					 TRUE, top);
@@ -1215,7 +1229,7 @@ start_element_handler (GMarkupParseContext *context,
 	{
 	  ctx->state = STATE_MENU;
 	  
-	  ctx->current = get_child_node (self, g_node_last_child (ctx->current),
+	  ctx->current = get_child_node (self, g_node_last_child (ctx->current), NULL,
 					 node_name, strlen (node_name),
 					 NODE_TYPE_MENU,
 					 TRUE, top);
@@ -1231,7 +1245,7 @@ start_element_handler (GMarkupParseContext *context,
 	  GNode *node;
 
 	  ctx->state = STATE_MENUITEM;
-	  node = get_child_node (self, ctx->current,
+	  node = get_child_node (self, ctx->current, NULL,
 				 node_name, strlen (node_name),
 				 NODE_TYPE_MENUITEM,
 				 TRUE, top);
@@ -1247,7 +1261,7 @@ start_element_handler (GMarkupParseContext *context,
       if (ctx->state == STATE_ROOT && !strcmp (element_name, "popup"))
 	{
 	  ctx->state = STATE_MENU;
-	  ctx->current = get_child_node (self, ctx->current,
+	  ctx->current = get_child_node (self, ctx->current, NULL,
 					 node_name, strlen (node_name),
 					 NODE_TYPE_POPUP,
 					 TRUE, FALSE);
@@ -1262,12 +1276,12 @@ start_element_handler (GMarkupParseContext *context,
 	       !strcmp (element_name, "placeholder"))
 	{
 	  if (ctx->state == STATE_TOOLBAR)
-	    ctx->current = get_child_node (self, ctx->current,
+	    ctx->current = get_child_node (self, ctx->current, NULL,
 					   node_name, strlen (node_name),
 					   NODE_TYPE_TOOLBAR_PLACEHOLDER,
 					   TRUE, top);
 	  else
-	    ctx->current = get_child_node (self, ctx->current,
+	    ctx->current = get_child_node (self, ctx->current, NULL,
 					   node_name, strlen (node_name),
 					   NODE_TYPE_MENU_PLACEHOLDER,
 					   TRUE, top);
@@ -1295,7 +1309,7 @@ start_element_handler (GMarkupParseContext *context,
 	    }
 	  else
 	    length = strlen (node_name);
-	  node = get_child_node (self, ctx->current,
+	  node = get_child_node (self, ctx->current, NULL,
 				 node_name, length,
 				 NODE_TYPE_SEPARATOR,
 				 TRUE, top);
@@ -1314,7 +1328,7 @@ start_element_handler (GMarkupParseContext *context,
       if (ctx->state == STATE_ROOT && !strcmp (element_name, "toolbar"))
 	{
 	  ctx->state = STATE_TOOLBAR;
-	  ctx->current = get_child_node (self, ctx->current,
+	  ctx->current = get_child_node (self, ctx->current, NULL,
 					 node_name, strlen (node_name),
 					 NODE_TYPE_TOOLBAR,
 					 TRUE, FALSE);
@@ -1330,7 +1344,7 @@ start_element_handler (GMarkupParseContext *context,
 	  GNode *node;
 
 	  ctx->state = STATE_TOOLITEM;
-	  node = get_child_node (self, ctx->current,
+	  node = get_child_node (self, ctx->current, NULL,
 				node_name, strlen (node_name),
 				 NODE_TYPE_TOOLITEM,
 				 TRUE, top);
@@ -1600,6 +1614,9 @@ gtk_ui_manager_add_ui_from_file (GtkUIManager *self,
  * separator if such an element can be inserted at the place determined by 
  * @path. Otherwise @type must indicate an element that can be inserted at 
  * the place determined by @path.
+ *
+ * If @path points to a menuitem or toolitem, the new element will be inserted
+ * before or after this item, depending on @top.
  * 
  * Since: 2.4
  **/
@@ -1613,6 +1630,7 @@ gtk_ui_manager_add_ui (GtkUIManager        *self,
 		       gboolean             top)
 {
   GNode *node;
+  GNode *sibling;
   GNode *child;
   NodeType node_type;
   GQuark action_quark = 0;
@@ -1622,14 +1640,22 @@ gtk_ui_manager_add_ui (GtkUIManager        *self,
   g_return_if_fail (name != NULL);
 
   node = get_node (self, path, NODE_TYPE_UNDECIDED, FALSE);
-  
+  sibling = NULL;
+
   if (node == NULL)
     return;
 
   node_type = NODE_TYPE_UNDECIDED;
 
+ reswitch:
   switch (NODE_INFO (node)->type) 
     {
+    case NODE_TYPE_SEPARATOR:
+    case NODE_TYPE_MENUITEM:
+    case NODE_TYPE_TOOLITEM:
+      sibling = node;
+      node = node->parent;
+      goto reswitch;
     case NODE_TYPE_MENUBAR:
     case NODE_TYPE_MENU:
     case NODE_TYPE_POPUP:
@@ -1705,9 +1731,13 @@ gtk_ui_manager_add_ui (GtkUIManager        *self,
     }
 
   if (node_type == NODE_TYPE_UNDECIDED)
-    return;
+    {
+      g_warning ("item type not suitable for adding at '%s'", 
+		 type, path);
+      return;
+    }
    
-  child = get_child_node (self, node,
+  child = get_child_node (self, node, sibling,
 			  name, strlen (name),
 			  node_type, TRUE, top);
 

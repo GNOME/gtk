@@ -105,8 +105,8 @@ delayed_toggle_dynamic (GtkUIManager *merge)
 			     "dyn1menu", "dyn1", GTK_UI_MANAGER_MENU, 0);
       gtk_ui_manager_add_ui (merge, merge_id, "/menubar/EditMenu/dyn1menu", 
 			     "dyn1", "dyn1", GTK_UI_MANAGER_MENUITEM, 0);
-      gtk_ui_manager_add_ui (merge, merge_id, "/menubar/EditMenu/dyn1menu", 
-			     "dyn2", "dyn2", GTK_UI_MANAGER_AUTO, TRUE);
+      gtk_ui_manager_add_ui (merge, merge_id, "/menubar/EditMenu/dyn1menu/dyn1", 
+			     "dyn2", "dyn2", GTK_UI_MANAGER_AUTO, FALSE);
     }
   else 
     {

@@ -1,5 +1,12 @@
 2005-06-18  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkuimanager.c (gtk_ui_manager_add_ui): Make this 
+	work for inserting before/after an existing menuitem or
+	toolitem.  (#155946, Christian Persch)
+
+	* tests/testmerge.c (delayed_toggle_dynamic): Test the 
+	"insert after" functionality of gtk_ui_manager_add_ui.
+
 	* gtk/gtkuimanager.c: Allow to construct menu tool buttons.
 	(#300678, Sven Neumann)
 	
