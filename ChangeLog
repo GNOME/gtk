@@ -1,5 +1,11 @@
 2005-06-19  Kristian Rietveld  <kris@gtk.org>
 
+	* gtk/gtktreeview.c (gtk_tree_view_size_allocate): set dy to zero
+	if treeview's height is smaller than the current page_size (just
+	like we do elsewhere).
+
+2005-06-19  Kristian Rietveld  <kris@gtk.org>
+
 	Make mousewheel scrolling possible in typeahead mode, suggestion
 	from Reinout van Schouwen (#307898).
 
