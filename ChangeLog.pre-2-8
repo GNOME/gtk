@@ -1,5 +1,11 @@
 2005-06-19  Kristian Rietveld  <kris@gtk.org>
 
+	* gtk/gtktreeview.c (gtk_tree_view_clamp_node_visible): added a
+	check which avoids processing updates on bin_window and scrolling
+	if the node is already visible. (#170600, Billy Biggs).
+
+2005-06-19  Kristian Rietveld  <kris@gtk.org>
+
 	* gtk/gtktreeview.c (validate_visible_area): only keep the
 	row at the same position if the full row is visible. (#304623,
 	Jorn Baayen).

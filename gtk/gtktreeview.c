@@ -4561,7 +4561,7 @@ validate_row (GtkTreeView *tree_view,
   gboolean retval = FALSE;
   gboolean is_separator = FALSE;
   gint focus_pad;
-      
+
   /* double check the row needs validating */
   if (! GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_INVALID) &&
       ! GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_COLUMN_INVALID))
@@ -7828,13 +7828,22 @@ gtk_tree_view_clamp_node_visible (GtkTreeView *tree_view,
 				  GtkRBTree   *tree,
 				  GtkRBNode   *node)
 {
+  gint node_dy, height;
   GtkTreePath *path = NULL;
 
   if (!GTK_WIDGET_REALIZED (tree_view))
     return;
 
-  path = _gtk_tree_view_find_path (tree_view, tree, node);
+  /* just return if the node is visible, avoiding a costly expose */
+  node_dy = _gtk_rbtree_node_find_offset (tree, node);
+  height = ROW_HEIGHT (tree_view, GTK_RBNODE_GET_HEIGHT (node));
+  if (! GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_INVALID)
+      && node_dy >= tree_view->priv->vadjustment->value
+      && node_dy + height <= (tree_view->priv->vadjustment->value
+                              + tree_view->priv->vadjustment->page_size))
+    return;
 
+  path = _gtk_tree_view_find_path (tree_view, tree, node);
   if (path)
     {
       /* We process updates because we want to clear old selected items when we scroll.
