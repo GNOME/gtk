@@ -1,5 +1,11 @@
 2005-06-19  Kristian Rietveld  <kris@gtk.org>
 
+	* gtk/gtktreeview.c (gtk_tree_view_search_button_press_event): pass
+	the event on to treeview, so it has a change of selecting a row, etc.
+	(#169677, Kirk Bridger).
+
+2005-06-19  Kristian Rietveld  <kris@gtk.org>
+
 	This commit includes a fix for #169463, Stefan Kost.
 
 	* gtk/gtkcellrendererprogress.c (gtk_cell_renderer_progress_get_size):

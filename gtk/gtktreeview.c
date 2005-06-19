@@ -12517,6 +12517,9 @@ gtk_tree_view_search_button_press_event (GtkWidget *widget,
 
   gtk_tree_view_search_dialog_hide (widget, tree_view);
 
+  if (event->window == tree_view->priv->bin_window)
+    gtk_tree_view_button_press (GTK_WIDGET (tree_view), event);
+
   return TRUE;
 }
 
