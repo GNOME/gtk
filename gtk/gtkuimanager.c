@@ -36,6 +36,7 @@
 #include "gtkmenu.h"
 #include "gtkmenubar.h"
 #include "gtkmenushell.h"
+#include "gtkmenutoolbutton.h"
 #include "gtkseparatormenuitem.h"
 #include "gtkseparatortoolitem.h"
 #include "gtktearoffmenuitem.h"
@@ -859,11 +860,6 @@ get_child_node (GtkUIManager *self,
 {
   GNode *child = NULL;
 
-  g_return_val_if_fail (parent == NULL ||
-			(NODE_INFO (parent)->type != NODE_TYPE_MENUITEM &&
-			 NODE_INFO (parent)->type != NODE_TYPE_TOOLITEM), 
-			NULL);
-
   if (parent)
     {
       if (childname)
@@ -1215,6 +1211,21 @@ start_element_handler (GMarkupParseContext *context,
 	  
 	  raise_error = FALSE;
 	}
+      else if (ctx->state == STATE_TOOLITEM && !strcmp (element_name, "menu"))
+	{
+	  ctx->state = STATE_MENU;
+	  
+	  ctx->current = get_child_node (self, g_node_last_child (ctx->current),
+					 node_name, strlen (node_name),
+					 NODE_TYPE_MENU,
+					 TRUE, top);
+	  if (NODE_INFO (ctx->current)->action_name == 0)
+	    NODE_INFO (ctx->current)->action_name = action_quark;
+
+	  node_prepend_ui_reference (ctx->current, ctx->merge_id, action_quark);
+	  
+	  raise_error = FALSE;
+	}
       else if (ctx->state == STATE_MENU && !strcmp (element_name, "menuitem"))
 	{
 	  GNode *node;
@@ -1373,6 +1384,11 @@ end_element_handler (GMarkupParseContext *context,
       ctx->current = ctx->current->parent;
       if (NODE_INFO (ctx->current)->type == NODE_TYPE_ROOT) 
 	ctx->state = STATE_ROOT;
+      else if (NODE_INFO (ctx->current)->type == NODE_TYPE_TOOLITEM)
+	{
+	  ctx->current = ctx->current->parent;
+	  ctx->state = STATE_TOOLITEM;
+	}
       /* else, stay in same state */
       break;
     case STATE_MENUITEM:
@@ -2141,7 +2157,10 @@ update_node (GtkUIManager *self,
 	  GtkWidget *menu;
 	  GList *siblings;
 	  
-	  menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (info->proxy));
+	  if (GTK_IS_MENU (info->proxy))
+	    menu = info->proxy;
+	  else
+	    menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (info->proxy));
 	  siblings = gtk_container_get_children (GTK_CONTAINER (menu));
 	  if (siblings != NULL && GTK_IS_TEAROFF_MENU_ITEM (siblings->data))
 	    {
@@ -2187,12 +2206,16 @@ update_node (GtkUIManager *self,
 	if (info->proxy &&  
 	    G_OBJECT_TYPE (info->proxy) != GTK_ACTION_GET_CLASS (action)->menu_item_type)
 	  {
-	    prev_submenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (info->proxy));
-	    if (prev_submenu)
+	    if (GTK_IS_MENU_ITEM (info->proxy))
 	      {
-		g_object_ref (prev_submenu);
-		gtk_menu_item_set_submenu (GTK_MENU_ITEM (info->proxy), NULL);
+		prev_submenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (info->proxy));
+		if (prev_submenu)
+		  {
+		    g_object_ref (prev_submenu);
+		    gtk_menu_item_set_submenu (GTK_MENU_ITEM (info->proxy), NULL);
+		}
 	      }
+
 	    gtk_action_disconnect_proxy (info->action, info->proxy);
 	    gtk_container_remove (GTK_CONTAINER (info->proxy->parent),
 				  info->proxy);
@@ -2205,16 +2228,13 @@ update_node (GtkUIManager *self,
 	    GtkWidget *menushell;
 	    gint pos;
 	    
-	    if (find_menu_position (node, &menushell, &pos))
+	    if (NODE_INFO (node->parent)->type == NODE_TYPE_TOOLITEM ||
+		find_menu_position (node, &menushell, &pos))
 	      {
 		GtkWidget *tearoff;
 		GtkWidget *filler;
 		
-		info->proxy = gtk_action_create_menu_item (action);
-		g_object_ref (info->proxy);
-		gtk_object_sink (GTK_OBJECT (info->proxy));
 		menu = gtk_menu_new ();
-		gtk_widget_set_name (info->proxy, info->name);
 		gtk_widget_set_name (menu, info->name);
 		tearoff = gtk_tearoff_menu_item_new ();
 		gtk_widget_set_no_show_all (tearoff, TRUE);
@@ -2226,10 +2246,27 @@ update_node (GtkUIManager *self,
 		gtk_widget_set_sensitive (filler, FALSE);
 		gtk_widget_set_no_show_all (filler, TRUE);
 		gtk_menu_shell_append (GTK_MENU_SHELL (menu), filler);
-		gtk_menu_item_set_submenu (GTK_MENU_ITEM (info->proxy), menu);
-		gtk_menu_shell_insert (GTK_MENU_SHELL (menushell), info->proxy, pos);
-		g_signal_connect (info->proxy, "notify::visible",
-				  G_CALLBACK (update_smart_separators), NULL);
+
+		if (NODE_INFO (node->parent)->type == NODE_TYPE_TOOLITEM)
+		  {
+		    info->proxy = menu;
+		    g_object_ref (info->proxy);
+		    gtk_object_sink (GTK_OBJECT (info->proxy));
+		    gtk_menu_tool_button_set_menu (GTK_MENU_TOOL_BUTTON (NODE_INFO (node->parent)->proxy),
+						   menu);
+		  }
+		else
+		  {
+		    info->proxy = gtk_action_create_menu_item (action);
+		    g_object_ref (info->proxy);
+		    gtk_object_sink (GTK_OBJECT (info->proxy));
+		    g_signal_connect (info->proxy, "notify::visible",
+				      G_CALLBACK (update_smart_separators), NULL);
+		    gtk_widget_set_name (info->proxy, info->name);
+		    
+		    gtk_menu_item_set_submenu (GTK_MENU_ITEM (info->proxy), menu);
+		    gtk_menu_shell_insert (GTK_MENU_SHELL (menushell), info->proxy, pos);
+		  }
 	      }
 	  }
 	else
@@ -2241,7 +2278,11 @@ update_node (GtkUIManager *self,
 				       prev_submenu);
 	    g_object_unref (prev_submenu);
 	  }
-	menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (info->proxy));
+	
+	if (GTK_IS_MENU (info->proxy))
+	  menu = info->proxy;
+	else
+	  menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (info->proxy));
 	siblings = gtk_container_get_children (GTK_CONTAINER (menu));
 	if (siblings != NULL && GTK_IS_TEAROFF_MENU_ITEM (siblings->data))
 	  {
@@ -2422,7 +2463,7 @@ update_node (GtkUIManager *self,
       break;
     case NODE_TYPE_TOOLITEM:
       /* remove the proxy if it is of the wrong type ... */
-      if (info->proxy &&  
+      if (info->proxy && 
 	  G_OBJECT_TYPE (info->proxy) != GTK_ACTION_GET_CLASS (action)->toolbar_item_type)
 	{
 	  g_signal_handlers_disconnect_by_func (info->proxy,
@@ -2454,7 +2495,7 @@ update_node (GtkUIManager *self,
 	       * tooltips on toolitems can't be set before the toolitem 
 	       * is added to the toolbar.
 	       */
-              g_object_notify (G_OBJECT (action), "tooltip");
+	      g_object_notify (G_OBJECT (action), "tooltip");
 	    }
 	}
       else
@@ -2560,9 +2601,11 @@ update_node (GtkUIManager *self,
   
   if (info->proxy) 
     {
-      if (info->type == NODE_TYPE_MENU) 
+      if (info->type == NODE_TYPE_MENU && GTK_IS_MENU_ITEM (info->proxy)) 
 	update_smart_separators (gtk_menu_item_get_submenu (GTK_MENU_ITEM (info->proxy)));
-      else if (info->type == NODE_TYPE_TOOLBAR || info->type == NODE_TYPE_POPUP) 
+      else if (info->type == NODE_TYPE_MENU || 
+	       info->type == NODE_TYPE_TOOLBAR || 
+	       info->type == NODE_TYPE_POPUP) 
 	update_smart_separators (info->proxy);
     }
   

@@ -1,6 +1,6 @@
 /* Application main window
  *
- * Demonstrates a typical application window, with menubar, toolbar, statusbar.
+ * Demonstrates a typical application window with menubar, toolbar, statusbar.
  */
 
 #include <gtk/gtk.h>
@@ -144,9 +144,32 @@ about_cb (GtkAction *action,
   g_object_unref (transparent);
 }
 
+typedef struct 
+{
+  GtkAction action;
+} ToolMenuAction;
+
+typedef struct 
+{
+  GtkActionClass parent_class;
+} ToolMenuActionClass;
+
+G_DEFINE_TYPE(ToolMenuAction, tool_menu_action, GTK_TYPE_ACTION);
+
+static void
+tool_menu_action_class_init (ToolMenuActionClass *class)
+{
+  GTK_ACTION_CLASS (class)->toolbar_item_type = GTK_TYPE_MENU_TOOL_BUTTON;
+}
+
+static void
+tool_menu_action_init (ToolMenuAction *action)
+{
+}
 
 static GtkActionEntry entries[] = {
   { "FileMenu", NULL, "_File" },               /* name, stock id, label */
+  { "OpenMenu", NULL, "_Open" },               /* name, stock id, label */
   { "PreferencesMenu", NULL, "_Preferences" }, /* name, stock id, label */
   { "ColorMenu", NULL, "_Color"  },            /* name, stock id, label */
   { "ShapeMenu", NULL, "_Shape" },             /* name, stock id, label */
@@ -155,9 +178,9 @@ static GtkActionEntry entries[] = {
     "_New", "<control>N",                      /* label, accelerator */
     "Create a new file",                       /* tooltip */ 
     G_CALLBACK (activate_action) },      
-  { "Open", GTK_STOCK_OPEN,                    /* name, stock id */
-    "_Open","<control>O",                      /* label, accelerator */     
-    "Open a file",                             /* tooltip */
+  { "File1", NULL,                             /* name, stock id */
+    "File1", NULL,                             /* label, accelerator */     
+    "Open first file",                         /* tooltip */
     G_CALLBACK (activate_action) }, 
   { "Save", GTK_STOCK_SAVE,                    /* name, stock id */
     "_Save","<control>S",                      /* label, accelerator */     
@@ -258,8 +281,12 @@ static const gchar *ui_info =
 "      <menuitem action='About'/>"
 "    </menu>"
 "  </menubar>"
-"  <toolbar  name='ToolBar'>"
-"    <toolitem action='Open'/>"
+"  <toolbar name='ToolBar'>"
+"    <toolitem action='Open'>"
+"      <menu action='OpenMenu'>"
+"        <menuitem action='File1'/>"
+"      </menu>"  
+"    </toolitem>"
 "    <toolitem action='Quit'/>"
 "    <separator action='Sep1'/>"
 "    <toolitem action='Logo'/>"
@@ -394,6 +421,7 @@ do_appwindow (GtkWidget *do_widget)
       GtkWidget *bar;
       GtkTextBuffer *buffer;
       GtkActionGroup *action_group;
+      GtkAction *open_action;
       GtkUIManager *merge;
       GError *error = NULL;
 
@@ -421,6 +449,13 @@ do_appwindow (GtkWidget *do_widget)
        */
       
       action_group = gtk_action_group_new ("AppWindowActions");
+      open_action = g_object_new (tool_menu_action_get_type (), 
+				  "name", "Open",
+				  "label", "_Open",
+				  "tooltip", "Open a file",
+				  "stock-id", GTK_STOCK_OPEN,
+				  NULL);
+      gtk_action_group_add_action (action_group, open_action);
       gtk_action_group_add_actions (action_group, 
 				    entries, n_entries, 
 				    window);

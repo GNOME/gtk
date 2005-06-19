@@ -22,7 +22,7 @@ roughly described by the following DTD.
 &lt;!ELEMENT toolbar     (toolitem|separator|placeholder)* &gt;
 &lt;!ELEMENT placeholder (menuitem|toolitem|separator|placeholder|menu)* &gt;
 &lt;!ELEMENT menuitem     EMPTY &gt;
-&lt;!ELEMENT toolitem     EMPTY &gt;
+&lt;!ELEMENT toolitem     (menu?) &gt;
 &lt;!ELEMENT separator    EMPTY &gt;
 &lt;!ELEMENT accelerator  EMPTY &gt;
 &lt;!ATTLIST menubar      name                  &num;IMPLIED 
@@ -115,7 +115,8 @@ action</para></listitem>
 </varlistentry>
 <varlistentry><term>toolitem</term>
 <listitem><para>a #GtkToolItem subclass, the exact type depends on the
-action</para></listitem> 
+action. Note that toolitem elements may contain a menu element, but only
+if their associated action specifies a #GtkMenuToolButton as proxy.</para></listitem> 
 </varlistentry>
 <varlistentry><term>separator</term>
 <listitem><para>a #GtkSeparatorMenuItem or
