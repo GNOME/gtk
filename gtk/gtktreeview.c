@@ -400,6 +400,9 @@ static gboolean gtk_tree_view_search_delete_event       (GtkWidget        *widge
 static gboolean gtk_tree_view_search_button_press_event (GtkWidget        *widget,
 							 GdkEventButton   *event,
 							 GtkTreeView      *tree_view);
+static gboolean gtk_tree_view_search_scroll_event       (GtkWidget        *entry,
+							 GdkEventScroll   *event,
+							 GtkTreeView      *tree_view);
 static gboolean gtk_tree_view_search_key_press_event    (GtkWidget        *entry,
 							 GdkEventKey      *event,
 							 GtkTreeView      *tree_view);
@@ -9026,6 +9029,9 @@ gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view)
   g_signal_connect (tree_view->priv->search_window, "button_press_event",
 		    G_CALLBACK (gtk_tree_view_search_button_press_event),
 		    tree_view);
+  g_signal_connect (tree_view->priv->search_window, "scroll_event",
+		    G_CALLBACK (gtk_tree_view_search_scroll_event),
+		    tree_view);
 
   frame = gtk_frame_new (NULL);
   gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_ETCHED_IN);
@@ -12521,6 +12527,27 @@ gtk_tree_view_search_button_press_event (GtkWidget *widget,
     gtk_tree_view_button_press (GTK_WIDGET (tree_view), event);
 
   return TRUE;
+}
+
+static gboolean
+gtk_tree_view_search_scroll_event (GtkWidget *widget,
+				   GdkEventScroll *event,
+				   GtkTreeView *tree_view)
+{
+  gboolean retval = FALSE;
+
+  if (event->direction == GDK_SCROLL_UP)
+    {
+      gtk_tree_view_search_move (widget, tree_view, TRUE);
+      retval = TRUE;
+    }
+  else if (event->direction == GDK_SCROLL_DOWN)
+    {
+      gtk_tree_view_search_move (widget, tree_view, FALSE);
+      retval = TRUE;
+    }
+
+  return retval;
 }
 
 static gboolean

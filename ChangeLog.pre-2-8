@@ -1,5 +1,14 @@
 2005-06-19  Kristian Rietveld  <kris@gtk.org>
 
+	Make mousewheel scrolling possible in typeahead mode, suggestion
+	from Reinout van Schouwen (#307898).
+
+	* gtk/gtktreeview.c (gtk_tree_view_ensure_interactive_directory):
+	connect treeview search window to scroll_event signal,
+	(gtk_tree_view_search_scroll_event): implement.
+
+2005-06-19  Kristian Rietveld  <kris@gtk.org>
+
 	* gtk/gtktreeview.c (gtk_tree_view_search_button_press_event): pass
 	the event on to treeview, so it has a change of selecting a row, etc.
 	(#169677, Kirk Bridger).
