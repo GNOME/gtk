@@ -1,7 +1,8 @@
 2005-06-18  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkuimanager.c: Allow to construct menu tool buttons.
-
+	(#300678, Sven Neumann)
+	
 	* demos/gtk-demo/appwindow.c: Demonstrate menu tool buttons
 	constructed with GtkUIManager.
 
