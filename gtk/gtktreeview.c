@@ -4703,8 +4703,8 @@ validate_visible_area (GtkTreeView *tree_view)
 	      dy = _gtk_rbtree_node_find_offset (tree, node);
 
 	      if (dy >= tree_view->priv->vadjustment->value &&
-		  dy < (tree_view->priv->vadjustment->value
-		        + tree_view->priv->vadjustment->page_size))
+		  dy + height <= (tree_view->priv->vadjustment->value
+		                  + tree_view->priv->vadjustment->page_size))
 	        {
 		  /* row visible: keep the row at the same position */
 		  area_above = dy - tree_view->priv->vadjustment->value;
