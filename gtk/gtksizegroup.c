@@ -27,7 +27,8 @@
 
 enum {
   PROP_0,
-  PROP_MODE
+  PROP_MODE,
+  PROP_IGNORE_HIDDEN
 };
 
 static void gtk_size_group_set_property (GObject      *object,
@@ -246,6 +247,23 @@ gtk_size_group_class_init (GtkSizeGroupClass *klass)
 						      GTK_TYPE_SIZE_GROUP_MODE,
 						      GTK_SIZE_GROUP_HORIZONTAL,
 						      GTK_PARAM_READWRITE));
+
+  /**
+   * GtkSizeGroup:ignore-hidden:
+   *
+   * If %TRUE, hidden widgets are ignored when determining 
+   * the size of the group.
+   *
+   * Since: 2.8
+   */
+  g_object_class_install_property (gobject_class,
+				   PROP_IGNORE_HIDDEN,
+				   g_param_spec_boolean ("ignore-hidden",
+							 P_("Ignore hidden"),
+							 P_("If TRUE, hidden widgets are ignored "
+							    "when determining the size of the group"),
+							 FALSE,
+							 GTK_PARAM_READWRITE));
 }
 
 static void
@@ -255,6 +273,7 @@ gtk_size_group_init (GtkSizeGroup *size_group)
   size_group->mode = GTK_SIZE_GROUP_HORIZONTAL;
   size_group->have_width = 0;
   size_group->have_height = 0;
+  size_group->ignore_hidden = 0;
 }
 
 GType
@@ -297,6 +316,9 @@ gtk_size_group_set_property (GObject      *object,
     case PROP_MODE:
       gtk_size_group_set_mode (size_group, g_value_get_enum (value));
       break;
+    case PROP_IGNORE_HIDDEN:
+      gtk_size_group_set_ignore_hidden (size_group, g_value_get_boolean (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -315,6 +337,9 @@ gtk_size_group_get_property (GObject      *object,
     {
     case PROP_MODE:
       g_value_set_enum (value, size_group->mode);
+      break;
+    case PROP_IGNORE_HIDDEN:
+      g_value_set_boolean (value, size_group->ignore_hidden);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -384,6 +409,51 @@ gtk_size_group_get_mode (GtkSizeGroup *size_group)
   g_return_val_if_fail (GTK_IS_SIZE_GROUP (size_group), GTK_SIZE_GROUP_BOTH);
 
   return size_group->mode;
+}
+
+/**
+ * gtk_size_group_set_ignore_hidden:
+ * @size_group: a #GtkSizeGroup
+ * @ignore_hidden: whether hidden widgets should be ignored
+ *   when calculating the size
+ * 
+ * Sets whether invisible widgets should be ignored when
+ * calculating the size.
+ *
+ * Since: 2.8 
+ */
+void
+gtk_size_group_set_ignore_hidden (GtkSizeGroup *size_group,
+				  gboolean      ignore_hidden)
+{
+  g_return_if_fail (GTK_IS_SIZE_GROUP (size_group));
+  
+  ignore_hidden = ignore_hidden != FALSE;
+
+  if (size_group->ignore_hidden != ignore_hidden)
+    {
+      size_group->ignore_hidden = ignore_hidden;
+
+      g_object_notify (G_OBJECT (size_group), "ignore-hidden");
+    }
+}
+
+/**
+ * gtk_size_group_get_ignore_hidden:
+ * @size_group: a #GtkSizeGroup
+ *
+ * Returns if invisible widgets are ignored when calculating the size.
+ *
+ * Returns: %TRUE if invisible widgets are ignored.
+ *
+ * Since: 2.8
+ */
+gboolean
+gtk_size_group_get_ignore_hidden (GtkSizeGroup *size_group)
+{
+  g_return_val_if_fail (GTK_IS_SIZE_GROUP (size_group), FALSE);
+
+  return size_group->ignore_hidden;
 }
 
 static void
@@ -542,9 +612,12 @@ compute_dimension (GtkWidget        *widget,
 
 	      gint dimension = compute_base_dimension (tmp_widget, mode);
 
-	      if (dimension > result)
-		result = dimension;
-	      
+	      if (GTK_WIDGET_VISIBLE (tmp_widget) || !group->ignore_hidden)
+		{
+		  if (dimension > result)
+		    result = dimension;
+		}
+
 	      tmp_list = tmp_list->next;
 	    }
 
