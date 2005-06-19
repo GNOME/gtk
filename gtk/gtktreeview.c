@@ -3771,7 +3771,6 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 	  GtkRBTree *tree = NULL;
 	  GtkRBNode *node = NULL;
 	  gint width;
-	  gint focus_line_width;
 
           switch (tree_view->priv->drag_dest_pos)
             {
@@ -3793,7 +3792,6 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 		break;
 	      gdk_drawable_get_size (tree_view->priv->bin_window,
 				     &width, NULL);
-	      gtk_widget_style_get (widget, "focus-line-width", &focus_line_width, NULL);
 	      gtk_paint_focus (widget->style,
 			       tree_view->priv->bin_window,
 			       GTK_WIDGET_STATE (widget),
@@ -4553,6 +4551,7 @@ validate_row (GtkTreeView *tree_view,
   GList *list;
   gint height = 0;
   gint horizontal_separator;
+  gint focus_line_width;
   gint depth = gtk_tree_path_get_depth (path);
   gboolean retval = FALSE;
   gboolean is_separator = FALSE;
@@ -4572,6 +4571,7 @@ validate_row (GtkTreeView *tree_view,
 
   gtk_widget_style_get (GTK_WIDGET (tree_view),
 			"focus-padding", &focus_pad,
+			"focus-line-width", &focus_line_width,
 			"horizontal-separator", &horizontal_separator,
 			NULL);
   
@@ -4597,6 +4597,9 @@ validate_row (GtkTreeView *tree_view,
 
       if (!is_separator)
 	{
+          tmp_width += 2 * focus_line_width;
+          tmp_height += 2 * focus_line_width;
+
 	  height = MAX (height, tmp_height);
 	  height = MAX (height, tree_view->priv->expander_size);
 	}

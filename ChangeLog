@@ -1,3 +1,20 @@
+2005-06-19  Kristian Rietveld  <kris@gtk.org>
+
+	This commit includes a fix for #169463, Stefan Kost.
+
+	* gtk/gtkcellrendererprogress.c (gtk_cell_renderer_progress_get_size):
+	when cell_area is set, return cell_area width/height as width/height,
+	so the focus rectangle will be drawn correctly.
+
+	* gtk/gtktreeview.c (gtk_tree_view_bin_expose): drop unneeded get
+	of focus-line-width property,
+	(validate_row): take focus_line_width into account.
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_cell_process_action):
+	also take focus_line_width into account when calculating the cell_area
+	y and height (before, we only took it into account when calculating
+	x and width).
+
 2005-06-19  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk.symbols:

@@ -2710,6 +2710,8 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
   real_background_area = *background_area;
 
   real_cell_area.x += focus_line_width;
+  real_cell_area.y += focus_line_width;
+  real_cell_area.height -= 2 * focus_line_width;
 
   /* Find out how much extra space we have to allocate */
   for (list = tree_column->cell_list; list; list = list->next)

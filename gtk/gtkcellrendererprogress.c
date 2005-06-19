@@ -302,10 +302,23 @@ gtk_cell_renderer_progress_get_size (GtkCellRenderer *cell,
   compute_dimensions (cell, widget, cellprogress->priv->label, &w, &h);
   
   if (width)
-      *width = MAX (cellprogress->priv->min_w, w);
+    *width = MAX (cellprogress->priv->min_w, w);
   
   if (height)
     *height = MIN (cellprogress->priv->min_h, h);
+
+  /* FIXME: at the moment cell_area is only set when we are requesting
+   * the size for drawing the focus rectangle. We now just return
+   * the last size we used for drawing the progress bar, which will
+   * work for now. Not a really nice solution though.
+   */
+  if (cell_area)
+    {
+      if (width)
+        *width = cell_area->width;
+      if (height)
+        *height = cell_area->height;
+    }
 }
 
 static void
