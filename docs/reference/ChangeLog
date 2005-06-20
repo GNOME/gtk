@@ -1,5 +1,7 @@
 2005-06-19  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/Makefile.am: Ignore some more headers.
+
 	* gtk/gtk-sections.txt: Updates.
 
 2005-06-18  Matthias Clasen  <mclasen@redhat.com>

@@ -27,6 +27,7 @@ IGNORE_HFILES=				\
 	fnmatch.h			\
 	gdk-pixbuf-loader.h		\
 	gtkdebug.h			\
+	gtkdndcursors.h			\
 	gtkentryprivate.h		\
 	gtkfilechooserdefault.h		\
 	gtkfilechooserembed.h		\
@@ -38,6 +39,7 @@ IGNORE_HFILES=				\
 	gtkfilesystemunix.h		\
 	gtkfilesystemwin32.h		\
 	gtkhsv.h			\
+	gtkiconcache.h			\
 	gtkiconthemeparser.h		\
 	gtkimmodule.h			\
 	gtkintl.h			\
@@ -46,6 +48,7 @@ IGNORE_HFILES=				\
 	gtkpathbar.h			\
 	gtkprivate.h			\
 	gtkrbtree.h			\
+	gtksequence.h			\
 	gtktreedatalist.h		\
 	gtktreeprivate.h		\
 	gtktextbtree.h			\
@@ -57,11 +60,11 @@ IGNORE_HFILES=				\
 	gtktexttagprivate.h		\
 	gtktexttypes.h			\
 	gtktextutil.h			\
+	gtktoggleactionprivate.h	\
 	gtktypebuiltins.h		\
 	gtkxembed.h			\
 	xdgmime				\
-	xembed.h			\
-	gtktoggleactionprivate.h
+	xembed.h
 
 # CFLAGS and LDFLAGS for compiling scan program. Only needed
 # if $(DOC_MODULE).types is non-empty.
