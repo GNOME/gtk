@@ -1,4 +1,6 @@
 2005-06-19  Matthias Clasen  <mclasen@redhat.com>
+	
+	* gtk/gtk.symbols: Add a forgotten symbol
 
 	* NEWS: Updates
 
