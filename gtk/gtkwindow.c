@@ -5999,10 +5999,42 @@ gtk_window_set_frame_dimensions (GtkWindow *window,
  * currently open, and the user chooses Preferences from the menu
  * a second time; use gtk_window_present() to move the already-open dialog
  * where the user can see it.
+ *
+ * If you are calling this function in response to a user interaction,
+ * it is preferable to use gdk_window_present_with_time().
  * 
  **/
 void
 gtk_window_present (GtkWindow *window)
+{
+  guint32 timestamp;
+#ifdef GDK_WINDOWING_X11
+  GdkDisplay *display;
+
+  display = gtk_widget_get_display (GTK_WIDGET (window));
+  timestamp = gdk_x11_display_get_user_time (display);
+#else
+  timestamp = gtk_get_current_event_time ();
+#endif
+  
+  gtk_window_present_with_time (window, timestamp);
+}
+
+/**
+ * gtk_window_present_with_time:
+ * @window: a #GtkWindow
+ * @timestamp: the timestamp of the user interaction (typically a 
+ *   button or key press event) which triggered this call
+ *
+ * Presents a window to the user in response to a user interaction.
+ * If you need to present a window without a timestamp, use 
+ * gtk_window_present(). See gtk_window_present() for details. 
+ * 
+ * Since: 2.8
+ **/
+void
+gtk_window_present_with_time (GtkWindow *window,
+			      guint32    timestamp)
 {
   GtkWidget *widget;
 
@@ -6019,13 +6051,7 @@ gtk_window_present (GtkWindow *window)
       /* note that gdk_window_focus() will also move the window to
        * the current desktop, for WM spec compliant window managers.
        */
-#ifdef GDK_WINDOWING_X11
-      gdk_window_focus (widget->window,
-			gdk_x11_display_get_user_time (gtk_widget_get_display (widget)));
-#else
-      gdk_window_focus (widget->window,
-                        gtk_get_current_event_time ());
-#endif
+      gdk_window_focus (widget->window, timestamp);
     }
   else
     {

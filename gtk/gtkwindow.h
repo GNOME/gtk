@@ -304,7 +304,9 @@ gboolean gtk_window_activate_key          (GtkWindow        *window,
 gboolean gtk_window_propagate_key_event   (GtkWindow        *window,
 					   GdkEventKey      *event);
 
-void     gtk_window_present       (GtkWindow *window);
+void     gtk_window_present            (GtkWindow *window);
+void     gtk_window_present_with_time  (GtkWindow *window,
+				        guint32    timestamp);
 void     gtk_window_iconify       (GtkWindow *window);
 void     gtk_window_deiconify     (GtkWindow *window);
 void     gtk_window_stick         (GtkWindow *window);

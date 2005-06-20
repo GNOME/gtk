@@ -4713,6 +4713,7 @@ gtk_window_get_focus
 gtk_window_set_focus
 gtk_window_set_default
 gtk_window_present
+gtk_window_present_with_time
 gtk_window_iconify
 gtk_window_deiconify
 gtk_window_stick
