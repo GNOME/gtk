@@ -36,6 +36,9 @@ fonts.</para></listitem>
 </variablelist>
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkFontSelectionDialog ##### -->
 
 

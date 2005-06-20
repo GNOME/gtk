@@ -87,7 +87,7 @@ when parts of a drawable were copied. This is not very useful.
 @GDK_SCROLL: the scroll wheel was turned
 @GDK_WINDOW_STATE: the state of a window has changed. See #GdkWindowState
 for the possible window states
-@GDK_SETTING: a setting has been modified. 
+@GDK_SETTING: a setting has been modified.
 @GDK_OWNER_CHANGE: the owner of a selection has changed. This event type
   was added in 2.6
 

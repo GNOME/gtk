@@ -124,6 +124,9 @@ response from the user.</para></listitem>
 </variablelist>
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkDialog ##### -->
 <para>
 <structfield>vbox</structfield> is a #GtkVBox - the main part of the
@@ -317,6 +320,16 @@ directly, but into the @vbox and @action_area, as described above.
 @dialog: 
 @response_id: 
 @setting: 
+
+
+<!-- ##### FUNCTION gtk_dialog_get_response_for_widget ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@widget: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_alternative_dialog_button_order ##### -->

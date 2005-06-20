@@ -14,6 +14,9 @@ Toplevel which can contain other widgets
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkWindow ##### -->
 <para>
 
@@ -172,6 +175,11 @@ Toplevel which can contain other widgets
 </para>
 
 <!-- ##### ARG GtkWindow:type-hint ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:urgency-hint ##### -->
 <para>
 
 </para>
@@ -555,6 +563,15 @@ Deprecated alias for gtk_window_set_position().
 @window: 
 
 
+<!-- ##### FUNCTION gtk_window_present_with_time ##### -->
+<para>
+
+</para>
+
+@window: 
+@timestamp: 
+
+
 <!-- ##### FUNCTION gtk_window_iconify ##### -->
 <para>
 
@@ -729,6 +746,15 @@ Deprecated alias for gtk_window_set_position().
 
 
 <!-- ##### FUNCTION gtk_window_set_skip_pager_hint ##### -->
+<para>
+
+</para>
+
+@window: 
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_window_set_urgency_hint ##### -->
 <para>
 
 </para>
@@ -926,6 +952,15 @@ Deprecated alias for gtk_window_set_position().
 
 
 <!-- ##### FUNCTION gtk_window_get_skip_pager_hint ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_get_urgency_hint ##### -->
 <para>
 
 </para>

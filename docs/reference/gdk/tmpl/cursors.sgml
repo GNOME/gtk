@@ -158,6 +158,16 @@ gdk_cursor_new_from_pixmap() or gdk_cursor_new_from_pixbuf()
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_cursor_new_from_name ##### -->
+<para>
+
+</para>
+
+@display: 
+@name: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_cursor_new_for_display ##### -->
 <para>
 
@@ -169,6 +179,15 @@ gdk_cursor_new_from_pixmap() or gdk_cursor_new_from_pixbuf()
 
 
 <!-- ##### FUNCTION gdk_cursor_get_display ##### -->
+<para>
+
+</para>
+
+@cursor: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_cursor_get_image ##### -->
 <para>
 
 </para>

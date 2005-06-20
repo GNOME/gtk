@@ -78,6 +78,9 @@ though it is almost always used to display just one accelerator key.
 </variablelist>
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkAccelLabel ##### -->
 <para>
 The #GtkAccelLabel-struct struct contains private data only, and

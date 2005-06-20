@@ -19,6 +19,9 @@ rubberband selection, which is controlled by dragging the pointer.
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkIconView ##### -->
 <para>
 The <structname>GtkIconView</structname> struct contains only
@@ -132,6 +135,11 @@ private fields and should not be directly accessed.
 </para>
 
 <!-- ##### ARG GtkIconView:pixbuf-column ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkIconView:reorderable ##### -->
 <para>
 
 </para>
@@ -282,6 +290,41 @@ selected rows.  It will be called on every selected row in the view.
 @icon_view: 
 @x: 
 @y: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_get_item_at_pos ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@x: 
+@y: 
+@path: 
+@cell: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_set_cursor ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@path: 
+@cell: 
+@start_editing: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_get_cursor ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@path: 
+@cell: 
 @Returns: 
 
 
@@ -499,5 +542,128 @@ selected rows.  It will be called on every selected row in the view.
 
 @icon_view: 
 @path: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_scroll_to_path ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@path: 
+@use_align: 
+@row_align: 
+@col_align: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_get_visible_range ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@start_path: 
+@end_path: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_enable_model_drag_source ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@start_button_mask: 
+@targets: 
+@n_targets: 
+@actions: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_enable_model_drag_dest ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@targets: 
+@n_targets: 
+@actions: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_unset_model_drag_source ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_unset_model_drag_dest ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_set_reorderable ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@reorderable: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_get_reorderable ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_set_drag_dest_item ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@path: 
+@pos: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_get_drag_dest_item ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@path: 
+@pos: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_get_dest_item_at_pos ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@drag_x: 
+@drag_y: 
+@path: 
+@pos: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_create_drag_icon ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@path: 
+@Returns: 
 
 

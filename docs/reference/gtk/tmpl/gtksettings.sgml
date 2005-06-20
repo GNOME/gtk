@@ -14,6 +14,9 @@ Sharing settings between applications
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkSettings ##### -->
 <para>
 
@@ -46,6 +49,16 @@ Sharing settings between applications
 </para>
 
 <!-- ##### ARG GtkSettings:gtk-cursor-blink-time ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-cursor-theme-name ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-cursor-theme-size ##### -->
 <para>
 
 </para>

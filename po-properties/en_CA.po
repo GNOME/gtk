@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-17 02:10-0400\n"
+"POT-Creation-Date: 2005-06-20 14:30-0400\n"
 "PO-Revision-Date: 2005-06-17 22:53-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: Canadian English <adamw@gnome.org>\n"
@@ -90,7 +90,7 @@ msgstr "Default Display"
 msgid "The default display for GDK"
 msgstr "The default display for GDK"
 
-#: gdk/gdkpango.c:510 gtk/gtkinvisible.c:117 gtk/gtkwindow.c:537
+#: gdk/gdkpango.c:510 gtk/gtkinvisible.c:117 gtk/gtkwindow.c:539
 msgid "Screen"
 msgstr "Screen"
 
@@ -734,19 +734,19 @@ msgstr "Image widget"
 msgid "Child widget to appear next to the button text"
 msgstr "Child widget to appear next to the button text"
 
-#: gtk/gtkbutton.c:374
+#: gtk/gtkbutton.c:416
 msgid "Default Spacing"
 msgstr "Default Spacing"
 
-#: gtk/gtkbutton.c:375
+#: gtk/gtkbutton.c:417
 msgid "Extra space to add for CAN_DEFAULT buttons"
 msgstr "Extra space to add for CAN_DEFAULT buttons"
 
-#: gtk/gtkbutton.c:381
+#: gtk/gtkbutton.c:423
 msgid "Default Outside Spacing"
 msgstr "Default Outside Spacing"
 
-#: gtk/gtkbutton.c:382
+#: gtk/gtkbutton.c:424
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
@@ -754,31 +754,31 @@ msgstr ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
 
-#: gtk/gtkbutton.c:387
+#: gtk/gtkbutton.c:429
 msgid "Child X Displacement"
 msgstr "Child X Displacement"
 
-#: gtk/gtkbutton.c:388
+#: gtk/gtkbutton.c:430
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
 msgstr ""
 "How far in the x direction to move the child when the button is depressed"
 
-#: gtk/gtkbutton.c:395
+#: gtk/gtkbutton.c:437
 msgid "Child Y Displacement"
 msgstr "Child Y Displacement"
 
-#: gtk/gtkbutton.c:396
+#: gtk/gtkbutton.c:438
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr ""
 "How far in the y direction to move the child when the button is depressed"
 
-#: gtk/gtkbutton.c:412
+#: gtk/gtkbutton.c:454
 msgid "Displace focus"
 msgstr "Displace focus"
 
-#: gtk/gtkbutton.c:413
+#: gtk/gtkbutton.c:455
 msgid ""
 "Whether the child_displacement_x/_y properties should also affect the focus "
 "rectangle"
@@ -786,11 +786,11 @@ msgstr ""
 "Whether the child_displacement_x/_y properties should also affect the focus "
 "rectangle"
 
-#: gtk/gtkbutton.c:418
+#: gtk/gtkbutton.c:460
 msgid "Show button images"
 msgstr "Show button images"
 
-#: gtk/gtkbutton.c:419
+#: gtk/gtkbutton.c:461
 msgid "Whether stock icons should be shown in buttons"
 msgstr "Whether stock icons should be shown in buttons"
 
@@ -1010,7 +1010,7 @@ msgstr "Pixbuf Expander Closed"
 msgid "Pixbuf for closed expander"
 msgstr "Pixbuf for closed expander"
 
-#: gtk/gtkcellrendererpixbuf.c:169 gtk/gtkimage.c:204
+#: gtk/gtkcellrendererpixbuf.c:169 gtk/gtkimage.c:203
 msgid "Stock ID"
 msgstr "Stock ID"
 
@@ -1034,11 +1034,11 @@ msgstr "Detail"
 msgid "Render detail to pass to the theme engine"
 msgstr "Render detail to pass to the theme engine"
 
-#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:262 gtk/gtkwindow.c:529
+#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:261 gtk/gtkwindow.c:531
 msgid "Icon Name"
 msgstr "Icon Name"
 
-#: gtk/gtkcellrendererpixbuf.c:206 gtk/gtkimage.c:263
+#: gtk/gtkcellrendererpixbuf.c:206 gtk/gtkimage.c:262
 msgid "The name of the icon from the icon theme"
 msgstr "The name of the icon from the icon theme"
 
@@ -1609,7 +1609,7 @@ msgstr "Active item"
 msgid "The item which is currently active"
 msgstr "The item which is currently active"
 
-#: gtk/gtkcombobox.c:659 gtk/gtkuimanager.c:230
+#: gtk/gtkcombobox.c:659 gtk/gtkuimanager.c:232
 msgid "Add tearoffs to menus"
 msgstr "Add tearoffs to menus"
 
@@ -1952,11 +1952,11 @@ msgstr "Label widget"
 msgid "A widget to display in place of the usual expander label"
 msgstr "A widget to display in place of the usual expander label"
 
-#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:710
+#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:713
 msgid "Expander Size"
 msgstr "Expander Size"
 
-#: gtk/gtkexpander.c:248 gtk/gtktreeview.c:711
+#: gtk/gtkexpander.c:248 gtk/gtktreeview.c:714
 msgid "Size of the expander arrow"
 msgstr "Size of the expander arrow"
 
@@ -2070,7 +2070,7 @@ msgstr "Default file chooser backend"
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Name of the GtkFileChooser backend to use by default"
 
-#: gtk/gtkfilesel.c:561 gtk/gtkimage.c:195
+#: gtk/gtkfilesel.c:561 gtk/gtkimage.c:194
 msgid "Filename"
 msgstr "Filename"
 
@@ -2337,11 +2337,11 @@ msgid ""
 msgstr ""
 "How the text and icon of each item are positioned relative to each other"
 
-#: gtk/gtkiconview.c:703 gtk/gtktreeview.c:612 gtk/gtktreeviewcolumn.c:342
+#: gtk/gtkiconview.c:703 gtk/gtktreeview.c:615 gtk/gtktreeviewcolumn.c:342
 msgid "Reorderable"
 msgstr "Reorderable"
 
-#: gtk/gtkiconview.c:704 gtk/gtktreeview.c:613
+#: gtk/gtkiconview.c:704 gtk/gtktreeview.c:616
 msgid "View is reorderable"
 msgstr "View is reorderable"
 
@@ -2361,83 +2361,83 @@ msgstr "Selection Box Alpha"
 msgid "Opacity of the selection box"
 msgstr "Opacity of the selection box"
 
-#: gtk/gtkimage.c:163
+#: gtk/gtkimage.c:162
 msgid "Pixbuf"
 msgstr "Pixbuf"
 
-#: gtk/gtkimage.c:164
+#: gtk/gtkimage.c:163
 msgid "A GdkPixbuf to display"
 msgstr "A GdkPixbuf to display"
 
-#: gtk/gtkimage.c:171
+#: gtk/gtkimage.c:170
 msgid "Pixmap"
 msgstr "Pixmap"
 
-#: gtk/gtkimage.c:172
+#: gtk/gtkimage.c:171
 msgid "A GdkPixmap to display"
 msgstr "A GdkPixmap to display"
 
-#: gtk/gtkimage.c:179
+#: gtk/gtkimage.c:178
 msgid "Image"
 msgstr "Image"
 
-#: gtk/gtkimage.c:180
+#: gtk/gtkimage.c:179
 msgid "A GdkImage to display"
 msgstr "A GdkImage to display"
 
-#: gtk/gtkimage.c:187
+#: gtk/gtkimage.c:186
 msgid "Mask"
 msgstr "Mask"
 
-#: gtk/gtkimage.c:188
+#: gtk/gtkimage.c:187
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr "Mask bitmap to use with GdkImage or GdkPixmap"
 
-#: gtk/gtkimage.c:196
+#: gtk/gtkimage.c:195
 msgid "Filename to load and display"
 msgstr "Filename to load and display"
 
-#: gtk/gtkimage.c:205
+#: gtk/gtkimage.c:204
 msgid "Stock ID for a stock image to display"
 msgstr "Stock ID for a stock image to display"
 
-#: gtk/gtkimage.c:212
+#: gtk/gtkimage.c:211
 msgid "Icon set"
 msgstr "Icon set"
 
-#: gtk/gtkimage.c:213
+#: gtk/gtkimage.c:212
 msgid "Icon set to display"
 msgstr "Icon set to display"
 
-#: gtk/gtkimage.c:220
+#: gtk/gtkimage.c:219
 msgid "Icon size"
 msgstr "Icon size"
 
-#: gtk/gtkimage.c:221
+#: gtk/gtkimage.c:220
 msgid "Symbolic size to use for stock icon, icon set or named icon"
 msgstr "Symbolic size to use for stock icon, icon set or named icon"
 
-#: gtk/gtkimage.c:237
+#: gtk/gtkimage.c:236
 msgid "Pixel size"
 msgstr "Pixel size"
 
-#: gtk/gtkimage.c:238
+#: gtk/gtkimage.c:237
 msgid "Pixel size to use for named icon"
 msgstr "Pixel size to use for named icon"
 
-#: gtk/gtkimage.c:246
+#: gtk/gtkimage.c:245
 msgid "Animation"
 msgstr "Animation"
 
-#: gtk/gtkimage.c:247
+#: gtk/gtkimage.c:246
 msgid "GdkPixbufAnimation to display"
 msgstr "GdkPixbufAnimation to display"
 
-#: gtk/gtkimage.c:270
+#: gtk/gtkimage.c:269
 msgid "Storage type"
 msgstr "Storage type"
 
-#: gtk/gtkimage.c:271
+#: gtk/gtkimage.c:270
 msgid "The representation being used for image data"
 msgstr "The representation being used for image data"
 
@@ -2453,7 +2453,7 @@ msgstr "Show menu images"
 msgid "Whether images should be shown in menus"
 msgstr "Whether images should be shown in menus"
 
-#: gtk/gtkinvisible.c:118 gtk/gtkwindow.c:538
+#: gtk/gtkinvisible.c:118 gtk/gtkwindow.c:540
 msgid "The screen where this window will be displayed"
 msgstr "The screen where this window will be displayed"
 
@@ -3360,11 +3360,11 @@ msgid ""
 msgstr ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 
-#: gtk/gtkscrolledwindow.c:239 gtk/gtktext.c:606 gtk/gtktreeview.c:572
+#: gtk/gtkscrolledwindow.c:239 gtk/gtktext.c:606 gtk/gtktreeview.c:575
 msgid "Horizontal Adjustment"
 msgstr "Horizontal Adjustment"
 
-#: gtk/gtkscrolledwindow.c:246 gtk/gtktext.c:614 gtk/gtktreeview.c:580
+#: gtk/gtkscrolledwindow.c:246 gtk/gtktext.c:614 gtk/gtktreeview.c:583
 msgid "Vertical Adjustment"
 msgstr "Vertical Adjustment"
 
@@ -3596,17 +3596,26 @@ msgstr "Alternative button order"
 msgid "Whether buttons in dialogs should use the alternative button order"
 msgstr "Whether buttons in dialogues should use the alternative button order"
 
-#: gtk/gtksizegroup.c:243
+#: gtk/gtksizegroup.c:244
 msgid "Mode"
 msgstr "Mode"
 
-#: gtk/gtksizegroup.c:244
+#: gtk/gtksizegroup.c:245
 msgid ""
 "The directions in which the size group affects the requested sizes of its "
 "component widgets"
 msgstr ""
 "The directions in which the size group affects the requested sizes of its "
 "component widgets"
+
+#: gtk/gtksizegroup.c:262
+msgid "Ignore hidden"
+msgstr ""
+
+#: gtk/gtksizegroup.c:263
+msgid ""
+"If TRUE, hidden widgets are ignored when determining the size of the group"
+msgstr ""
 
 #: gtk/gtkspinbutton.c:244
 msgid "The adjustment that holds the value of the spinbutton"
@@ -4356,141 +4365,141 @@ msgstr "TreeModelSort Model"
 msgid "The model for the TreeModelSort to sort"
 msgstr "The model for the TreeModelSort to sort"
 
-#: gtk/gtktreeview.c:564
+#: gtk/gtktreeview.c:567
 msgid "TreeView Model"
 msgstr "TreeView Model"
 
-#: gtk/gtktreeview.c:565
+#: gtk/gtktreeview.c:568
 msgid "The model for the tree view"
 msgstr "The model for the tree view"
 
-#: gtk/gtktreeview.c:573
+#: gtk/gtktreeview.c:576
 msgid "Horizontal Adjustment for the widget"
 msgstr "Horizontal Adjustment for the widget"
 
-#: gtk/gtktreeview.c:581
+#: gtk/gtktreeview.c:584
 msgid "Vertical Adjustment for the widget"
 msgstr "Vertical Adjustment for the widget"
 
-#: gtk/gtktreeview.c:588
+#: gtk/gtktreeview.c:591
 msgid "Headers Visible"
 msgstr "Headers Visible"
 
-#: gtk/gtktreeview.c:589
+#: gtk/gtktreeview.c:592
 msgid "Show the column header buttons"
 msgstr "Show the column header buttons"
 
-#: gtk/gtktreeview.c:596
+#: gtk/gtktreeview.c:599
 msgid "Headers Clickable"
 msgstr "Headers Clickable"
 
-#: gtk/gtktreeview.c:597
+#: gtk/gtktreeview.c:600
 msgid "Column headers respond to click events"
 msgstr "Column headers respond to click events"
 
-#: gtk/gtktreeview.c:604
+#: gtk/gtktreeview.c:607
 msgid "Expander Column"
 msgstr "Expander Column"
 
-#: gtk/gtktreeview.c:605
+#: gtk/gtktreeview.c:608
 msgid "Set the column for the expander column"
 msgstr "Set the column for the expander column"
 
-#: gtk/gtktreeview.c:620
+#: gtk/gtktreeview.c:623
 msgid "Rules Hint"
 msgstr "Rules Hint"
 
-#: gtk/gtktreeview.c:621
+#: gtk/gtktreeview.c:624
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr "Set a hint to the theme engine to draw rows in alternating colours"
 
-#: gtk/gtktreeview.c:628
+#: gtk/gtktreeview.c:631
 msgid "Enable Search"
 msgstr "Enable Search"
 
-#: gtk/gtktreeview.c:629
+#: gtk/gtktreeview.c:632
 msgid "View allows user to search through columns interactively"
 msgstr "View allows user to search through columns interactively"
 
-#: gtk/gtktreeview.c:636
+#: gtk/gtktreeview.c:639
 msgid "Search Column"
 msgstr "Search Column"
 
-#: gtk/gtktreeview.c:637
+#: gtk/gtktreeview.c:640
 msgid "Model column to search through when searching through code"
 msgstr "Model column to search through when searching through code"
 
-#: gtk/gtktreeview.c:657
+#: gtk/gtktreeview.c:660
 msgid "Fixed Height Mode"
 msgstr "Fixed Height Mode"
 
-#: gtk/gtktreeview.c:658
+#: gtk/gtktreeview.c:661
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr "Speeds up GtkTreeView by assuming that all rows have the same height"
 
-#: gtk/gtktreeview.c:678
+#: gtk/gtktreeview.c:681
 msgid "Hover Selection"
 msgstr "Hover Selection"
 
-#: gtk/gtktreeview.c:679
+#: gtk/gtktreeview.c:682
 msgid "Whether the selection should follow the pointer"
 msgstr "Whether the selection should follow the pointer"
 
-#: gtk/gtktreeview.c:698
+#: gtk/gtktreeview.c:701
 msgid "Hover Expand"
 msgstr "Hover Expand"
 
-#: gtk/gtktreeview.c:699
+#: gtk/gtktreeview.c:702
 msgid ""
 "Whether rows should be expanded/collapsed when the pointer moves over them"
 msgstr ""
 "Whether rows should be expanded/collapsed when the pointer moves over them"
 
-#: gtk/gtktreeview.c:719
+#: gtk/gtktreeview.c:722
 msgid "Vertical Separator Width"
 msgstr "Vertical Separator Width"
 
-#: gtk/gtktreeview.c:720
+#: gtk/gtktreeview.c:723
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "Vertical space between cells.  Must be an even number"
 
-#: gtk/gtktreeview.c:728
+#: gtk/gtktreeview.c:731
 msgid "Horizontal Separator Width"
 msgstr "Horizontal Separator Width"
 
-#: gtk/gtktreeview.c:729
+#: gtk/gtktreeview.c:732
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "Horizontal space between cells.  Must be an even number"
 
-#: gtk/gtktreeview.c:737
+#: gtk/gtktreeview.c:740
 msgid "Allow Rules"
 msgstr "Allow Rules"
 
-#: gtk/gtktreeview.c:738
+#: gtk/gtktreeview.c:741
 msgid "Allow drawing of alternating color rows"
 msgstr "Allow drawing of alternating colour rows"
 
-#: gtk/gtktreeview.c:744
+#: gtk/gtktreeview.c:747
 msgid "Indent Expanders"
 msgstr "Indent Expanders"
 
-#: gtk/gtktreeview.c:745
+#: gtk/gtktreeview.c:748
 msgid "Make the expanders indented"
 msgstr "Make the expanders indented"
 
-#: gtk/gtktreeview.c:751
+#: gtk/gtktreeview.c:754
 msgid "Even Row Color"
 msgstr "Even Row Colour"
 
-#: gtk/gtktreeview.c:752
+#: gtk/gtktreeview.c:755
 msgid "Color to use for even rows"
 msgstr "Colour to use for even rows"
 
-#: gtk/gtktreeview.c:758
+#: gtk/gtktreeview.c:761
 msgid "Odd Row Color"
 msgstr "Odd Row Colour"
 
-#: gtk/gtktreeview.c:759
+#: gtk/gtktreeview.c:762
 msgid "Color to use for odd rows"
 msgstr "Colour to use for odd rows"
 
@@ -4498,7 +4507,7 @@ msgstr "Colour to use for odd rows"
 msgid "Whether to display the column"
 msgstr "Whether to display the column"
 
-#: gtk/gtktreeviewcolumn.c:234 gtk/gtkwindow.c:460
+#: gtk/gtktreeviewcolumn.c:234 gtk/gtkwindow.c:462
 msgid "Resizable"
 msgstr "Resizable"
 
@@ -4598,15 +4607,15 @@ msgstr "Sort order"
 msgid "Sort direction the sort indicator should indicate"
 msgstr "Sort direction the sort indicator should indicate"
 
-#: gtk/gtkuimanager.c:231
+#: gtk/gtkuimanager.c:233
 msgid "Whether tearoff menu items should be added to menus"
 msgstr "Whether tearoff menu items should be added to menus"
 
-#: gtk/gtkuimanager.c:238
+#: gtk/gtkuimanager.c:240
 msgid "Merged UI definition"
 msgstr "Merged UI definition"
 
-#: gtk/gtkuimanager.c:239
+#: gtk/gtkuimanager.c:241
 msgid "An XML string describing the merged UI"
 msgstr "An XML string describing the merged UI"
 
@@ -4846,35 +4855,35 @@ msgstr "Draw Border"
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr "Size of areas outside the widget's allocation to draw"
 
-#: gtk/gtkwindow.c:418
+#: gtk/gtkwindow.c:420
 msgid "Window Type"
 msgstr "Window Type"
 
-#: gtk/gtkwindow.c:419
+#: gtk/gtkwindow.c:421
 msgid "The type of the window"
 msgstr "The type of the window"
 
-#: gtk/gtkwindow.c:427
+#: gtk/gtkwindow.c:429
 msgid "Window Title"
 msgstr "Window Title"
 
-#: gtk/gtkwindow.c:428
+#: gtk/gtkwindow.c:430
 msgid "The title of the window"
 msgstr "The title of the window"
 
-#: gtk/gtkwindow.c:435
+#: gtk/gtkwindow.c:437
 msgid "Window Role"
 msgstr "Window Role"
 
-#: gtk/gtkwindow.c:436
+#: gtk/gtkwindow.c:438
 msgid "Unique identifier for the window to be used when restoring a session"
 msgstr "Unique identifier for the window to be used when restoring a session"
 
-#: gtk/gtkwindow.c:443
+#: gtk/gtkwindow.c:445
 msgid "Allow Shrink"
 msgstr "Allow Shrink"
 
-#: gtk/gtkwindow.c:445
+#: gtk/gtkwindow.c:447
 #, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
@@ -4883,23 +4892,23 @@ msgstr ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
 "time a bad idea"
 
-#: gtk/gtkwindow.c:452
+#: gtk/gtkwindow.c:454
 msgid "Allow Grow"
 msgstr "Allow Grow"
 
-#: gtk/gtkwindow.c:453
+#: gtk/gtkwindow.c:455
 msgid "If TRUE, users can expand the window beyond its minimum size"
 msgstr "If TRUE, users can expand the window beyond its minimum size"
 
-#: gtk/gtkwindow.c:461
+#: gtk/gtkwindow.c:463
 msgid "If TRUE, users can resize the window"
 msgstr "If TRUE, users can resize the window"
 
-#: gtk/gtkwindow.c:468
+#: gtk/gtkwindow.c:470
 msgid "Modal"
 msgstr "Modal"
 
-#: gtk/gtkwindow.c:469
+#: gtk/gtkwindow.c:471
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
@@ -4907,74 +4916,74 @@ msgstr ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
 
-#: gtk/gtkwindow.c:476
+#: gtk/gtkwindow.c:478
 msgid "Window Position"
 msgstr "Window Position"
 
-#: gtk/gtkwindow.c:477
+#: gtk/gtkwindow.c:479
 msgid "The initial position of the window"
 msgstr "The initial position of the window"
 
-#: gtk/gtkwindow.c:485
+#: gtk/gtkwindow.c:487
 msgid "Default Width"
 msgstr "Default Width"
 
-#: gtk/gtkwindow.c:486
+#: gtk/gtkwindow.c:488
 msgid "The default width of the window, used when initially showing the window"
 msgstr ""
 "The default width of the window, used when initially showing the window"
 
-#: gtk/gtkwindow.c:495
+#: gtk/gtkwindow.c:497
 msgid "Default Height"
 msgstr "Default Height"
 
-#: gtk/gtkwindow.c:496
+#: gtk/gtkwindow.c:498
 msgid ""
 "The default height of the window, used when initially showing the window"
 msgstr ""
 "The default height of the window, used when initially showing the window"
 
-#: gtk/gtkwindow.c:505
+#: gtk/gtkwindow.c:507
 msgid "Destroy with Parent"
 msgstr "Destroy with Parent"
 
-#: gtk/gtkwindow.c:506
+#: gtk/gtkwindow.c:508
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "If this window should be destroyed when the parent is destroyed"
 
-#: gtk/gtkwindow.c:513
+#: gtk/gtkwindow.c:515
 msgid "Icon"
 msgstr "Icon"
 
-#: gtk/gtkwindow.c:514
+#: gtk/gtkwindow.c:516
 msgid "Icon for this window"
 msgstr "Icon for this window"
 
-#: gtk/gtkwindow.c:530
+#: gtk/gtkwindow.c:532
 msgid "Name of the themed icon for this window"
 msgstr "Name of the themed icon for this window"
 
-#: gtk/gtkwindow.c:545
+#: gtk/gtkwindow.c:547
 msgid "Is Active"
 msgstr "Is Active"
 
-#: gtk/gtkwindow.c:546
+#: gtk/gtkwindow.c:548
 msgid "Whether the toplevel is the current active window"
 msgstr "Whether the toplevel is the current active window"
 
-#: gtk/gtkwindow.c:553
+#: gtk/gtkwindow.c:555
 msgid "Focus in Toplevel"
 msgstr "Focus in Toplevel"
 
-#: gtk/gtkwindow.c:554
+#: gtk/gtkwindow.c:556
 msgid "Whether the input focus is within this GtkWindow"
 msgstr "Whether the input focus is within this GtkWindow"
 
-#: gtk/gtkwindow.c:561
+#: gtk/gtkwindow.c:563
 msgid "Type hint"
 msgstr "Type hint"
 
-#: gtk/gtkwindow.c:562
+#: gtk/gtkwindow.c:564
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
@@ -4982,51 +4991,60 @@ msgstr ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
 
-#: gtk/gtkwindow.c:570
+#: gtk/gtkwindow.c:572
 msgid "Skip taskbar"
 msgstr "Skip taskbar"
 
-#: gtk/gtkwindow.c:571
+#: gtk/gtkwindow.c:573
 msgid "TRUE if the window should not be in the task bar."
 msgstr "TRUE if the window should not be in the task bar."
 
-#: gtk/gtkwindow.c:578
+#: gtk/gtkwindow.c:580
 msgid "Skip pager"
 msgstr "Skip pager"
 
-#: gtk/gtkwindow.c:579
+#: gtk/gtkwindow.c:581
 msgid "TRUE if the window should not be in the pager."
 msgstr "TRUE if the window should not be in the pager."
 
-#: gtk/gtkwindow.c:593
+#: gtk/gtkwindow.c:588
+msgid "Urgent"
+msgstr ""
+
+#: gtk/gtkwindow.c:589
+#, fuzzy
+msgid "TRUE if the window should be brought to the user's attention."
+msgstr "TRUE if the window should not be in the pager."
+
+#: gtk/gtkwindow.c:603
 msgid "Accept focus"
 msgstr "Accept focus"
 
-#: gtk/gtkwindow.c:594
+#: gtk/gtkwindow.c:604
 msgid "TRUE if the window should receive the input focus."
 msgstr "TRUE if the window should receive the input focus."
 
-#: gtk/gtkwindow.c:608
+#: gtk/gtkwindow.c:618
 msgid "Focus on map"
 msgstr "Focus on map"
 
-#: gtk/gtkwindow.c:609
+#: gtk/gtkwindow.c:619
 msgid "TRUE if the window should receive the input focus when mapped."
 msgstr "TRUE if the window should receive the input focus when mapped."
 
-#: gtk/gtkwindow.c:623
+#: gtk/gtkwindow.c:633
 msgid "Decorated"
 msgstr "Decorated"
 
-#: gtk/gtkwindow.c:624
+#: gtk/gtkwindow.c:634
 msgid "Whether the window should be decorated by the window manager"
 msgstr "Whether the window should be decorated by the window manager"
 
-#: gtk/gtkwindow.c:639
+#: gtk/gtkwindow.c:649
 msgid "Gravity"
 msgstr "Gravity"
 
-#: gtk/gtkwindow.c:640
+#: gtk/gtkwindow.c:650
 msgid "The window gravity of the window"
 msgstr "The window gravity of the window"
 

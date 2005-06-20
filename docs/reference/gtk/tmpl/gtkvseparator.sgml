@@ -21,6 +21,9 @@ make it appear sunken into the interface.
 </variablelist>
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkVSeparator ##### -->
 <para>
 The #GtkVSeparator-struct struct contains private data only, and

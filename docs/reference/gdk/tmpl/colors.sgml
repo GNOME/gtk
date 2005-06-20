@@ -43,6 +43,9 @@ gdk_color_change() will probably become aliases.
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GdkColor ##### -->
 <para>
 The #GdkColor structure is used to describe an 
@@ -62,7 +65,6 @@ allocated or unallocated color.
 The colormap structure contains the following public fields.
 </para>
 
-@parent_instance: 
 @size: For pseudo-color colormaps, the number of colors
   in the colormap.
 @colors: An array containing the current values in the

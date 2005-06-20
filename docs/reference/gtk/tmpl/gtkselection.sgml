@@ -88,7 +88,7 @@ selection handling code.
 </para>
 
 @targets: 
-@ntargets:
+@ntargets: 
 @Returns: 
 
 
@@ -96,7 +96,7 @@ selection handling code.
 <para>
 </para>
 
-@list:
+@list: 
 
 
 <!-- ##### FUNCTION gtk_target_list_unref ##### -->
@@ -110,8 +110,8 @@ selection handling code.
 <para>
 </para>
 
-@list:
-@target:
+@list: 
+@target: 
 @flags: 
 @info: 
 
@@ -157,15 +157,15 @@ selection handling code.
 <para>
 </para>
 
-@list:
-@target:
+@list: 
+@target: 
 
 
 <!-- ##### FUNCTION gtk_target_list_find ##### -->
 <para>
 </para>
 
-@list:
+@list: 
 @target: 
 @info: 
 @Returns: 
@@ -197,7 +197,7 @@ selection handling code.
 <para>
 </para>
 
-@widget:
+@widget: 
 @selection: 
 @target: 
 @info: 
@@ -207,10 +207,10 @@ selection handling code.
 <para>
 </para>
 
-@widget:
-@selection:
+@widget: 
+@selection: 
 @targets: 
-@ntargets:
+@ntargets: 
 
 
 <!-- ##### FUNCTION gtk_selection_clear_targets ##### -->
@@ -226,7 +226,7 @@ selection handling code.
 <para>
 </para>
 
-@widget:
+@widget: 
 @selection: 
 @target: 
 @time_: 
@@ -239,7 +239,7 @@ selection handling code.
 
 @selection_data: 
 @type: 
-@format:
+@format: 
 @data: 
 @length: 
 
@@ -336,7 +336,7 @@ selection handling code.
 <para>
 </para>
 
-@widget:
+@widget: 
 
 
 <!-- ##### FUNCTION gtk_selection_clear ##### -->
@@ -352,14 +352,14 @@ selection handling code.
 <para>
 </para>
 
-@data:
-@Returns:
+@data: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_selection_data_free ##### -->
 <para>
 </para>
 
-@data:
+@data: 
 
 

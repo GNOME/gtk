@@ -27,6 +27,9 @@ have no effect.
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkAlignment ##### -->
 <para>
 The #GtkAlignment-struct struct contains private data only, and should

@@ -50,11 +50,19 @@ reached from the widget by a chain of size groups of type
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkSizeGroup ##### -->
 <para>
 
 </para>
 
+
+<!-- ##### ARG GtkSizeGroup:ignore-hidden ##### -->
+<para>
+
+</para>
 
 <!-- ##### ARG GtkSizeGroup:mode ##### -->
 <para>
@@ -92,6 +100,24 @@ reached from the widget by a chain of size groups of type
 
 
 <!-- ##### FUNCTION gtk_size_group_get_mode ##### -->
+<para>
+
+</para>
+
+@size_group: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_size_group_set_ignore_hidden ##### -->
+<para>
+
+</para>
+
+@size_group: 
+@ignore_hidden: 
+
+
+<!-- ##### FUNCTION gtk_size_group_get_ignore_hidden ##### -->
 <para>
 
 </para>

@@ -17,6 +17,9 @@ case one will be created for you. See #GtkAdjustment for details.
 #GtkScrollbar, #GtkScrolledWindow
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkVScrollbar ##### -->
 <para>
 The #GtkVScrollbar struct contains private data and should be accessed

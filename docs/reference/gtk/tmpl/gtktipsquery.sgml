@@ -40,6 +40,9 @@ start the query).
 </variablelist>
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkTipsQuery ##### -->
 <para>
 The #GtkTipsQuery-struct struct contains private data only, and

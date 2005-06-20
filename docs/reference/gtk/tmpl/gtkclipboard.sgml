@@ -129,6 +129,7 @@ Storing data on clipboards
 @data: the @user_data supplied to gtk_clipboard_request_image().
 @Since: 2.6
 
+
 <!-- ##### USER_FUNCTION GtkClipboardTargetsReceivedFunc ##### -->
 <para>
     A function to be called when the results of gtk_clipboard_request_targets()

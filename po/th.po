@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-13 23:35+0700\n"
+"POT-Creation-Date: 2005-06-20 14:30-0400\n"
 "PO-Revision-Date: 2005-06-13 23:39+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <L10n@opentle.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:153 gdk-pixbuf/gdk-pixbuf-io.c:838
 #: gdk-pixbuf/gdk-pixbuf-io.c:1068 tests/testfilechooser.c:199
@@ -155,14 +155,12 @@ msgstr "ไม่รู้จักชนิดของภาพเคลื่
 msgid "Invalid header in animation"
 msgstr "หัวข้อมูลของภาพเคลื่อนไหวเสีย"
 
-#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:382
-#: gdk-pixbuf/io-ani.c:441 gdk-pixbuf/io-ani.c:460
-#: gdk-pixbuf/io-ani.c:511 gdk-pixbuf/io-ani.c:583
+#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:382 gdk-pixbuf/io-ani.c:441
+#: gdk-pixbuf/io-ani.c:460 gdk-pixbuf/io-ani.c:511 gdk-pixbuf/io-ani.c:583
 msgid "Not enough memory to load animation"
 msgstr "หน่วยความจำไม่พอที่จะอ่านภาพเคลื่อนไหว"
 
-#: gdk-pixbuf/io-ani.c:400 gdk-pixbuf/io-ani.c:417
-#: gdk-pixbuf/io-ani.c:428
+#: gdk-pixbuf/io-ani.c:400 gdk-pixbuf/io-ani.c:417 gdk-pixbuf/io-ani.c:428
 msgid "Malformed chunk in animation"
 msgstr "ส่วนของภาพเคลื่อนไหวเสีย"
 
@@ -170,9 +168,8 @@ msgstr "ส่วนของภาพเคลื่อนไหวเสีย
 msgid "The ANI image format"
 msgstr "แฟ้มรูปชนิด ANI"
 
-#: gdk-pixbuf/io-bmp.c:228 gdk-pixbuf/io-bmp.c:306
-#: gdk-pixbuf/io-bmp.c:338 gdk-pixbuf/io-bmp.c:361
-#: gdk-pixbuf/io-bmp.c:442
+#: gdk-pixbuf/io-bmp.c:228 gdk-pixbuf/io-bmp.c:306 gdk-pixbuf/io-bmp.c:338
+#: gdk-pixbuf/io-bmp.c:361 gdk-pixbuf/io-bmp.c:442
 msgid "BMP image has bogus header data"
 msgstr "รูป BMP นี้มีหัวข้อมูลที่ใช้ไม่ได้"
 
@@ -205,8 +202,7 @@ msgstr "แฟ้มรูปชนิด BMP"
 msgid "Failure reading GIF: %s"
 msgstr "อ่านรูป GIF ไม่สำเร็จ: %s"
 
-#: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1463
-#: gdk-pixbuf/io-gif.c:1624
+#: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1463 gdk-pixbuf/io-gif.c:1624
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "แฟ้ม GIF นี้ขาดข้อมูลบางส่วน (อาจจะคัดลอกแฟ้มมาไม่ครบแฟ้ม)"
 
@@ -231,8 +227,8 @@ msgstr "พบโค้ดเสีย"
 msgid "Circular table entry in GIF file"
 msgstr "ตารางในแฟ้ม GIF มีรายการที่อ้างวกหลับมาถึงตัวเอง"
 
-#: gdk-pixbuf/io-gif.c:862 gdk-pixbuf/io-gif.c:1451
-#: gdk-pixbuf/io-gif.c:1497 gdk-pixbuf/io-gif.c:1612
+#: gdk-pixbuf/io-gif.c:862 gdk-pixbuf/io-gif.c:1451 gdk-pixbuf/io-gif.c:1497
+#: gdk-pixbuf/io-gif.c:1612
 msgid "Not enough memory to load GIF file"
 msgstr "หน่วยความจำไม่พอที่จะอ่านรูป GIF"
 
@@ -267,9 +263,8 @@ msgstr "แฟ้ม GIF ไม่สมบูรณ์"
 msgid "The GIF image format"
 msgstr "แฟ้มรูปชนิด GIF"
 
-#: gdk-pixbuf/io-ico.c:219 gdk-pixbuf/io-ico.c:271
-#: gdk-pixbuf/io-ico.c:340 gdk-pixbuf/io-ico.c:403
-#: gdk-pixbuf/io-ico.c:433
+#: gdk-pixbuf/io-ico.c:219 gdk-pixbuf/io-ico.c:271 gdk-pixbuf/io-ico.c:340
+#: gdk-pixbuf/io-ico.c:403 gdk-pixbuf/io-ico.c:433
 msgid "Not enough memory to load icon"
 msgstr "หน่วยความจำไม่พอที่จะอ่านรูปไอคอน"
 
@@ -330,8 +325,8 @@ msgstr "หน่วยความจำไม่พอสำหรับอ่
 msgid "Unsupported JPEG color space (%s)"
 msgstr "ไม่รองรับห้วงสีนี้สำหรับ JPEG (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:678
-#: gdk-pixbuf/io-jpeg.c:943 gdk-pixbuf/io-jpeg.c:952
+#: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:678 gdk-pixbuf/io-jpeg.c:943
+#: gdk-pixbuf/io-jpeg.c:952
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "หน่วยความจำไม่พอสำหรับอ่านรูป JPEG นี้"
 
@@ -508,8 +503,7 @@ msgstr "แฟ้ม PNM มีค่าจำนวนสีมากสุด�
 msgid "Cannot handle PNM files with maximum color values greater than 255"
 msgstr "ไม่รองรับแฟ้ม PNM มีค่าจำนวนสีมากสุดเกิน 255"
 
-#: gdk-pixbuf/io-pnm.c:438 gdk-pixbuf/io-pnm.c:466
-#: gdk-pixbuf/io-pnm.c:498
+#: gdk-pixbuf/io-pnm.c:438 gdk-pixbuf/io-pnm.c:466 gdk-pixbuf/io-pnm.c:498
 msgid "Raw PNM image type is invalid"
 msgstr "รูป Raw PNM เสีย"
 
@@ -610,9 +604,8 @@ msgstr "หน่วยความจำไม่พอสำหรับหั
 msgid "TGA image has invalid dimensions"
 msgstr "รูป TGA มีมิติที่ไม่ถูกต้อง"
 
-#: gdk-pixbuf/io-tga.c:775 gdk-pixbuf/io-tga.c:784
-#: gdk-pixbuf/io-tga.c:794 gdk-pixbuf/io-tga.c:804
-#: gdk-pixbuf/io-tga.c:811
+#: gdk-pixbuf/io-tga.c:775 gdk-pixbuf/io-tga.c:784 gdk-pixbuf/io-tga.c:794
+#: gdk-pixbuf/io-tga.c:804 gdk-pixbuf/io-tga.c:811
 msgid "TGA image type not supported"
 msgstr "ไม่รองรับรูปชนิด TGA"
 
@@ -644,8 +637,8 @@ msgstr "ความกว้างหรือสูงของรูปชน
 msgid "Dimensions of TIFF image too large"
 msgstr "รูป TIFF มีค่ามิติที่ใหญ่เกิน"
 
-#: gdk-pixbuf/io-tiff.c:225 gdk-pixbuf/io-tiff.c:237
-#: gdk-pixbuf/io-tiff.c:286 gdk-pixbuf/io-tiff.c:572
+#: gdk-pixbuf/io-tiff.c:225 gdk-pixbuf/io-tiff.c:237 gdk-pixbuf/io-tiff.c:286
+#: gdk-pixbuf/io-tiff.c:572
 msgid "Insufficient memory to open TIFF file"
 msgstr "หน่วยความจำไม่พอจะเปิดแฟ้ม TIFF"
 
@@ -729,8 +722,7 @@ msgstr "แฟ้ม XPM ตั้งค่าไบต์ต่อพิกเ�
 msgid "XPM file has invalid number of colors"
 msgstr "แฟ้ม XPM ตั้งค่าจำนวนสีที่ใช้ไม่ได้"
 
-#: gdk-pixbuf/io-xpm.c:519 gdk-pixbuf/io-xpm.c:528
-#: gdk-pixbuf/io-xpm.c:580
+#: gdk-pixbuf/io-xpm.c:519 gdk-pixbuf/io-xpm.c:528 gdk-pixbuf/io-xpm.c:580
 msgid "Cannot allocate memory for loading XPM image"
 msgstr "หน่วยความจำไม่พอสำหรับอ่านรูป XPM"
 
@@ -1063,7 +1055,7 @@ msgstr "Backslash"
 #. * so if you have a default text direction of RTL and YM, then
 #. * the year will appear on the right.
 #.
-#: gtk/gtkcalendar.c:646
+#: gtk/gtkcalendar.c:647
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -1071,7 +1063,7 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:660
+#: gtk/gtkcalendar.c:661
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:0"
 
@@ -1083,7 +1075,7 @@ msgstr "calendar:week_start:0"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1548
+#: gtk/gtkcalendar.c:1549
 msgid "year measurement template|2000"
 msgstr "2000"
 
@@ -1098,7 +1090,7 @@ msgstr "2000"
 #. * Don't include the prefix "calendar year format|" in the
 #. * translation. "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:1825
+#: gtk/gtkcalendar.c:1826
 msgid "calendar year format|%Y"
 msgstr "%Ey"
 
@@ -1141,89 +1133,89 @@ msgstr ""
 "คลิกถ้าจะใช้สีนี้  คุณสามารถบันทึกสีปัจจุบันลงในจานนี้โดยคลิกขวาแล้วเลือก \"บันทึกสีลงที่นี่\" "
 "หรือลากสีจากกรอบสีปัจจุบันทางด้านซ้ายมาลงที่นี่"
 
-#: gtk/gtkcolorsel.c:1919
+#: gtk/gtkcolorsel.c:1929
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
 msgstr "เลือกสี่ที่ต้องการจากวงแหวน แล้วเลือกความมืดหรือสว่างจากสามเหลี่ยม"
 
-#: gtk/gtkcolorsel.c:1944
+#: gtk/gtkcolorsel.c:1954
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr "คลิกที่หลอดตา แล้วคลิกสีที่ใหนก็ได้บนจอเพื่อคัดลอกมาเป็นสีปัจจุบัน"
 
-#: gtk/gtkcolorsel.c:1953
+#: gtk/gtkcolorsel.c:1963
 msgid "_Hue:"
 msgstr "ธาตุ_สี:"
 
-#: gtk/gtkcolorsel.c:1954
+#: gtk/gtkcolorsel.c:1964
 msgid "Position on the color wheel."
 msgstr "ตำแหน่งบนวงสี"
 
-#: gtk/gtkcolorsel.c:1956
+#: gtk/gtkcolorsel.c:1966
 msgid "_Saturation:"
 msgstr "ความส_ด:"
 
-#: gtk/gtkcolorsel.c:1957
+#: gtk/gtkcolorsel.c:1967
 msgid "\"Deepness\" of the color."
 msgstr "สีสดหรือจาง"
 
-#: gtk/gtkcolorsel.c:1958
+#: gtk/gtkcolorsel.c:1968
 msgid "_Value:"
 msgstr "ความสว่า_ง:"
 
-#: gtk/gtkcolorsel.c:1959
+#: gtk/gtkcolorsel.c:1969
 msgid "Brightness of the color."
 msgstr "สีสว่างหรือมืด"
 
-#: gtk/gtkcolorsel.c:1960
+#: gtk/gtkcolorsel.c:1970
 msgid "_Red:"
 msgstr "_แดง:"
 
-#: gtk/gtkcolorsel.c:1961
+#: gtk/gtkcolorsel.c:1971
 msgid "Amount of red light in the color."
 msgstr "ความสว่างของแม่สีแดง"
 
-#: gtk/gtkcolorsel.c:1962
+#: gtk/gtkcolorsel.c:1972
 msgid "_Green:"
 msgstr "เ_ขียว:"
 
-#: gtk/gtkcolorsel.c:1963
+#: gtk/gtkcolorsel.c:1973
 msgid "Amount of green light in the color."
 msgstr "ความสว่างของแม่สีเขียว"
 
-#: gtk/gtkcolorsel.c:1964
+#: gtk/gtkcolorsel.c:1974
 msgid "_Blue:"
 msgstr "_น้ำเงิน:"
 
-#: gtk/gtkcolorsel.c:1965
+#: gtk/gtkcolorsel.c:1975
 msgid "Amount of blue light in the color."
 msgstr "ความสว่างของแม่สีน้ำเงิน"
 
-#: gtk/gtkcolorsel.c:1968
+#: gtk/gtkcolorsel.c:1978
 msgid "_Opacity:"
 msgstr "ความ_ทึบแสง:"
 
-#: gtk/gtkcolorsel.c:1976 gtk/gtkcolorsel.c:1987
+#: gtk/gtkcolorsel.c:1986 gtk/gtkcolorsel.c:1997
 msgid "Transparency of the color."
 msgstr "มองผ่านได้หรือทึบแสง"
 
-#: gtk/gtkcolorsel.c:1994
+#: gtk/gtkcolorsel.c:2004
 msgid "Color _Name:"
 msgstr "_ชื่อสี:"
 
-#: gtk/gtkcolorsel.c:2009
+#: gtk/gtkcolorsel.c:2019
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
 msgstr "ค่าสีฐาน 16 (เช่น #FFA500) หรือชื่อสี (เช่น orange)"
 
-#: gtk/gtkcolorsel.c:2028
+#: gtk/gtkcolorsel.c:2038
 msgid "_Palette"
 msgstr "_จานสี"
 
-#: gtk/gtkcolorsel.c:2060
+#: gtk/gtkcolorsel.c:2070
 msgid "Color Wheel"
 msgstr "วงสี"
 
@@ -1231,15 +1223,15 @@ msgstr "วงสี"
 msgid "Color Selection"
 msgstr "เลือกสี"
 
-#: gtk/gtkentry.c:4524 gtk/gtktextview.c:7068
+#: gtk/gtkentry.c:4508 gtk/gtktextview.c:7068
 msgid "Select _All"
 msgstr "เลือกทั้ง_หมด"
 
-#: gtk/gtkentry.c:4534 gtk/gtktextview.c:7078
+#: gtk/gtkentry.c:4518 gtk/gtktextview.c:7078
 msgid "Input _Methods"
 msgstr "Input _Methods"
 
-#: gtk/gtkentry.c:4545 gtk/gtktextview.c:7089
+#: gtk/gtkentry.c:4529 gtk/gtktextview.c:7089
 msgid "_Insert Unicode Control Character"
 msgstr "แ_ทรกตัวอักษรควบคุมของยูนิโค้ด"
 
@@ -1254,12 +1246,12 @@ msgid "Select A File"
 msgstr "เลือกแฟ้ม"
 
 #: gtk/gtkfilechooserbutton.c:68 gtk/gtkfilechooserdefault.c:1302
-#: gtk/gtkpathbar.c:996
+#: gtk/gtkpathbar.c:1020
 msgid "Home"
 msgstr "บ้าน"
 
 #: gtk/gtkfilechooserbutton.c:69 gtk/gtkfilechooserdefault.c:1329
-#: gtk/gtkpathbar.c:998
+#: gtk/gtkpathbar.c:1022
 msgid "Desktop"
 msgstr "พื้นโต๊ะ"
 
@@ -1308,193 +1300,193 @@ msgstr "ไม่สามารถแสดงเนื้อหาของโ
 msgid "Could not get information about '%s': %s"
 msgstr "ไม่สามารถอ่านข้อมูลเกี่ยวกับ '%s': %s"
 
-#: gtk/gtkfilechooserdefault.c:2222
+#: gtk/gtkfilechooserdefault.c:2208
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "เพิ่มโฟลเดอร์ '%s' ลงในที่คั่นหน้า"
 
-#: gtk/gtkfilechooserdefault.c:2263
+#: gtk/gtkfilechooserdefault.c:2249
 msgid "Add the current folder to the bookmarks"
 msgstr "เพิ่มโฟลเดอร์ปัจจุบันลงในที่คั่นหน้า"
 
-#: gtk/gtkfilechooserdefault.c:2265
+#: gtk/gtkfilechooserdefault.c:2251
 msgid "Add the selected folders to the bookmarks"
 msgstr "เพิ่มโฟลเดอร์ที่เลือกอยู่ลงในที่คั่นหน้า"
 
-#: gtk/gtkfilechooserdefault.c:2305
+#: gtk/gtkfilechooserdefault.c:2291
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "ลบที่คั่นหน้า '%s'"
 
-#: gtk/gtkfilechooserdefault.c:2736
+#: gtk/gtkfilechooserdefault.c:2722
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
 msgstr "ไม่สามารถเพิ่มที่คั่นหน้าให้กับ '%s' ได้ เพราะไม่ใช่ตำแหน่งที่ใช้ได้"
 
-#: gtk/gtkfilechooserdefault.c:2951
+#: gtk/gtkfilechooserdefault.c:2937
 msgid "Remove"
 msgstr "เอา_ออก"
 
-#: gtk/gtkfilechooserdefault.c:2960
+#: gtk/gtkfilechooserdefault.c:2946
 msgid "Rename..."
 msgstr "เปลี่ยนชื่อ..."
 
-#: gtk/gtkfilechooserdefault.c:3083
+#: gtk/gtkfilechooserdefault.c:3069
 msgid "Shortcuts"
 msgstr "จุดเชื่อม"
 
-#: gtk/gtkfilechooserdefault.c:3137
+#: gtk/gtkfilechooserdefault.c:3123
 msgid "Folder"
 msgstr "โฟลเดอร์"
 
-#: gtk/gtkfilechooserdefault.c:3193 gtk/gtkstock.c:317
+#: gtk/gtkfilechooserdefault.c:3179 gtk/gtkstock.c:317
 msgid "_Add"
 msgstr "เ_พิ่ม"
 
-#: gtk/gtkfilechooserdefault.c:3200
+#: gtk/gtkfilechooserdefault.c:3186
 msgid "Add the selected folder to the Bookmarks"
 msgstr "เพิ่มโฟลเดอร์ที่เลือกอยู่ลงในที่คั่นหน้า"
 
-#: gtk/gtkfilechooserdefault.c:3205 gtk/gtkstock.c:395
+#: gtk/gtkfilechooserdefault.c:3191 gtk/gtkstock.c:395
 msgid "_Remove"
 msgstr "เ_อาออก"
 
-#: gtk/gtkfilechooserdefault.c:3212
+#: gtk/gtkfilechooserdefault.c:3198
 msgid "Remove the selected bookmark"
 msgstr "ลบที่คั่นหน้าที่เลือกอยู่"
 
-#: gtk/gtkfilechooserdefault.c:3319
+#: gtk/gtkfilechooserdefault.c:3305
 msgid "_Add to Bookmarks"
 msgstr "เ_พิ่มลงในที่คั่นหน้า"
 
-#: gtk/gtkfilechooserdefault.c:3329
+#: gtk/gtkfilechooserdefault.c:3315
 msgid "Open _Location"
 msgstr "เปิด_ตำแหน่ง"
 
-#: gtk/gtkfilechooserdefault.c:3341
+#: gtk/gtkfilechooserdefault.c:3327
 msgid "Show _Hidden Files"
 msgstr "แสดงแฟ้ม_ซ่อน"
 
-#: gtk/gtkfilechooserdefault.c:3465 gtk/gtkfilesel.c:766
+#: gtk/gtkfilechooserdefault.c:3451 gtk/gtkfilesel.c:766
 msgid "Files"
 msgstr "แฟ้ม"
 
-#: gtk/gtkfilechooserdefault.c:3496
+#: gtk/gtkfilechooserdefault.c:3482
 msgid "Name"
 msgstr "ชื่อ"
 
-#: gtk/gtkfilechooserdefault.c:3521
+#: gtk/gtkfilechooserdefault.c:3507
 msgid "Size"
 msgstr "ขนาด"
 
-#: gtk/gtkfilechooserdefault.c:3534
+#: gtk/gtkfilechooserdefault.c:3520
 msgid "Modified"
 msgstr "แก้ไขเมื่อ"
 
-#: gtk/gtkfilechooserdefault.c:3566
+#: gtk/gtkfilechooserdefault.c:3552
 msgid "Select which types of files are shown"
 msgstr "เลือกชนิดของแฟ้มที่จะแสดง"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:3602
+#: gtk/gtkfilechooserdefault.c:3588
 msgid "Create Fo_lder"
 msgstr "สร้างโฟ_ลเดอร์"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3723
+#: gtk/gtkfilechooserdefault.c:3709
 msgid "_Name:"
 msgstr "_ชื่อ:"
 
-#: gtk/gtkfilechooserdefault.c:3763
+#: gtk/gtkfilechooserdefault.c:3749
 msgid "_Browse for other folders"
 msgstr "เรียกดูโฟลเดอร์อื่น"
 
-#: gtk/gtkfilechooserdefault.c:4014
+#: gtk/gtkfilechooserdefault.c:4000
 msgid "Save in _folder:"
 msgstr "บันทึกในโ_ฟลเดอร์:"
 
-#: gtk/gtkfilechooserdefault.c:4016
+#: gtk/gtkfilechooserdefault.c:4002
 msgid "Create in _folder:"
 msgstr "สร้างในโ_ฟลเดอร์:"
 
-#: gtk/gtkfilechooserdefault.c:4973
+#: gtk/gtkfilechooserdefault.c:4959
 msgid "Cannot change to folder because it is not local"
 msgstr "ไปโฟลเดอร์ที่กำหนดไม่สำเร็จ เพราะไม่ใช่โฟลเดอร์ในเครื่องนี้"
 
-#: gtk/gtkfilechooserdefault.c:5489
+#: gtk/gtkfilechooserdefault.c:5513
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "จุดเชื่อม %s ไม่มีอยู่จริง"
 
-#: gtk/gtkfilechooserdefault.c:6023
+#: gtk/gtkfilechooserdefault.c:6057
 #, c-format
 msgid "Could not mount %s"
 msgstr "เมานท์ %s ไม่สำเร็จ"
 
-#: gtk/gtkfilechooserdefault.c:6316
+#: gtk/gtkfilechooserdefault.c:6352
 msgid "Type name of new folder"
 msgstr "พิมพ์ชื่อของโฟลเดอร์ใหม่"
 
-#: gtk/gtkfilechooserdefault.c:6358
+#: gtk/gtkfilechooserdefault.c:6394
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d ไบต์"
 msgstr[1] "%d ไบต์"
 
-#: gtk/gtkfilechooserdefault.c:6360
+#: gtk/gtkfilechooserdefault.c:6396
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:6362
+#: gtk/gtkfilechooserdefault.c:6398
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:6364
+#: gtk/gtkfilechooserdefault.c:6400
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:6410 gtk/gtkfilechooserdefault.c:6434
+#: gtk/gtkfilechooserdefault.c:6446 gtk/gtkfilechooserdefault.c:6470
 msgid "Unknown"
 msgstr "ไม่รู้จัก"
 
-#: gtk/gtkfilechooserdefault.c:6421
+#: gtk/gtkfilechooserdefault.c:6457
 msgid "Today"
 msgstr "วันนี้"
 
-#: gtk/gtkfilechooserdefault.c:6423
+#: gtk/gtkfilechooserdefault.c:6459
 msgid "Yesterday"
 msgstr "เมื่อวาน"
 
-#: gtk/gtkfilechooserdefault.c:6505
+#: gtk/gtkfilechooserdefault.c:6541
 msgid "Cannot change folder"
 msgstr "เปลี่ยนโฟลเดอร์ไม่สำเร็จ"
 
-#: gtk/gtkfilechooserdefault.c:6506
+#: gtk/gtkfilechooserdefault.c:6542
 msgid "The folder you specified is an invalid path."
 msgstr "โฟลเดอร์ที่กำหนด เป็นพาธที่ใช้ไม่ได้"
 
-#: gtk/gtkfilechooserdefault.c:6545
+#: gtk/gtkfilechooserdefault.c:6581
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr "ไม่สามารถสร้างชื่อแฟ้มจาก '%s' และ '%s'"
 
-#: gtk/gtkfilechooserdefault.c:6581
+#: gtk/gtkfilechooserdefault.c:6617
 msgid "Could not select item"
 msgstr "เลือกรายการไม่สำเร็จ"
 
-#: gtk/gtkfilechooserdefault.c:6621
+#: gtk/gtkfilechooserdefault.c:6657
 msgid "Open Location"
 msgstr "เปิดตำแหน่ง"
 
-#: gtk/gtkfilechooserdefault.c:6628
+#: gtk/gtkfilechooserdefault.c:6664
 msgid "Save in Location"
 msgstr "บันทึกลงในตำแหน่ง"
 
-#: gtk/gtkfilechooserdefault.c:6652
+#: gtk/gtkfilechooserdefault.c:6688
 msgid "_Location:"
 msgstr "ตำ_แหน่ง:"
 
@@ -2362,22 +2354,22 @@ msgstr "ไม่เจอเครื่องจัดการชุดตก
 msgid "--- No Tip ---"
 msgstr "--- ไม่มีข้อแนะนำ ---"
 
-#: gtk/gtkuimanager.c:1144
+#: gtk/gtkuimanager.c:1154
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr "ไม่รู้จักแอตทริบิวต์ '%s' บนบรรทัด %d ตัวอักษร %d"
 
-#: gtk/gtkuimanager.c:1346
+#: gtk/gtkuimanager.c:1371
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "ไม่ควรจะเจอแท็กเริ่มต้น '%s' บนบรรทัด %d ตัวอักษร %d"
 
-#: gtk/gtkuimanager.c:1431
+#: gtk/gtkuimanager.c:1461
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "ไม่ควรจะเจอข้อมูลตัวอักษร บนบรรทัด %d ตัวอักษร %d"
 
-#: gtk/gtkuimanager.c:2222
+#: gtk/gtkuimanager.c:2272
 msgid "Empty"
 msgstr "ว่าง"
 

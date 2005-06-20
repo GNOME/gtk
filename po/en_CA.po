@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-17 01:57-0400\n"
+"POT-Creation-Date: 2005-06-20 14:30-0400\n"
 "PO-Revision-Date: 2005-06-17 03:57-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: Canadian English <adamw@gnome.org>\n"
@@ -2391,22 +2391,22 @@ msgstr "Unable to locate theme engine in module_path: \"%s\","
 msgid "--- No Tip ---"
 msgstr "--- No Tip ---"
 
-#: gtk/gtkuimanager.c:1144
+#: gtk/gtkuimanager.c:1154
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr "Unknown attribute '%s' on line %d char %d"
 
-#: gtk/gtkuimanager.c:1346
+#: gtk/gtkuimanager.c:1371
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Unexpected start tag '%s' on line %d char %d"
 
-#: gtk/gtkuimanager.c:1431
+#: gtk/gtkuimanager.c:1461
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Unexpected character data on line %d char %d"
 
-#: gtk/gtkuimanager.c:2222
+#: gtk/gtkuimanager.c:2272
 msgid "Empty"
 msgstr "Empty"
 

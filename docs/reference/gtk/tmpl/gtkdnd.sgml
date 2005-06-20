@@ -24,6 +24,9 @@ in the #GtkWidget class.
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### ENUM GtkDestDefaults ##### -->
 <para>
 The #GtkDestDefaults enumeration specifies the various
@@ -282,6 +285,17 @@ a widget.
 @hot_y: 
 
 
+<!-- ##### FUNCTION gtk_drag_set_icon_name ##### -->
+<para>
+
+</para>
+
+@context: 
+@icon_name: 
+@hot_x: 
+@hot_y: 
+
+
 <!-- ##### FUNCTION gtk_drag_set_icon_default ##### -->
 <para>
 </para>
@@ -355,6 +369,15 @@ widget. The widget must have a window.
 
 @widget: 
 @stock_id: 
+
+
+<!-- ##### FUNCTION gtk_drag_source_set_icon_name ##### -->
+<para>
+
+</para>
+
+@widget: 
+@icon_name: 
 
 
 <!-- ##### FUNCTION gtk_drag_source_unset ##### -->

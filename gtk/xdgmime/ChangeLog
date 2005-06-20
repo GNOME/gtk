@@ -1,3 +1,7 @@
+2005-06-20  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.7.0 ===
+
 2005-06-10  Federico Mena Quintero  <federico@ximian.com>
 
 	* xdgmime.c (xdg_mime_init_from_directory): Pass the correct size

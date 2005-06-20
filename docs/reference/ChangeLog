@@ -1,5 +1,9 @@
 2005-06-20  Matthias Clasen  <mclasen@redhat.com>
 
+	* === Released 2.7.0 ===
+
+2005-06-20  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtk-sections.txt: Add gtk_window_present_with_time
 
 2005-06-19  Matthias Clasen  <mclasen@redhat.com>

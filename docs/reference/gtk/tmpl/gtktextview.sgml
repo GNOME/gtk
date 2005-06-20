@@ -20,6 +20,9 @@ types related to the text widget and how they work together.
 #GtkTextBuffer, #GtkTextIter
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkTextView ##### -->
 <para>
 

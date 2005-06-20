@@ -21,6 +21,9 @@ they work together.
 #GtkTreeViewColumn, #GtkTreeSelection, #GtkTreeDnd, #GtkTreeMode, #GtkTreeSortable, #GtkTreeModelSort, #GtkListStore, #GtkTreeStore, #GtkCellRenderer, #GtkCellEditable, #GtkCellRendererPixbuf, #GtkCellRendererText, #GtkCellRendererToggle
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkTreeView ##### -->
 <para>
 

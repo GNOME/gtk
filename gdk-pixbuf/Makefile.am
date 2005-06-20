@@ -348,7 +348,8 @@ libgdk_pixbufinclude_HEADERS =  	\
 
 noinst_HEADERS = 		\
 	gdk-pixbuf-alias.h	\
-	gdk-pixbuf-private.h
+	gdk-pixbuf-private.h	\
+	xpm-color-table.h
 
 BUILT_SOURCES = 		\
 	gdk-pixbuf-alias.h	\
@@ -360,6 +361,7 @@ BUILT_SOURCES = 		\
 
 CLEANFILES =
 MAINTAINERCLEANFILES = 		\
+	gdk-pixbuf-aliasdef.c	\
 	gdk-pixbuf-enum-types.h \
 	gdk-pixbuf-enum-types.c \
 	gdk-pixbuf-marshal.h 	\
@@ -453,7 +455,8 @@ EXTRA_DIST =					\
 	pixbufloader_tiff.def			\
 	pixbufloader_wbmp.def			\
 	pixbufloader_xbm.def			\
-	pixbufloader_tga.def
+	pixbufloader_tga.def			\
+	gen-color-table.pl
 
 if CROSS_COMPILING
 RUN_QUERY_LOADER_TEST=false

@@ -30,6 +30,9 @@ rulers.
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkHRuler ##### -->
 <para>
 The #GtkHRuler struct contains private data and should be accessed

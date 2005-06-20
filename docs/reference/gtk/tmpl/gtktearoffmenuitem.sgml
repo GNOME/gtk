@@ -36,6 +36,9 @@ menu window.
 </variablelist>
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkTearoffMenuItem ##### -->
 <para>
 The #GtkTearoffMenuItem-struct struct contains private data only, and

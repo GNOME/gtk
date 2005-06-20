@@ -20,16 +20,30 @@ Animated images.
     #GdkPixbufLoader
   </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GdkPixbufAnimation ##### -->
-  <para>
-    This object describes an animation.
-  </para>
+<para>
+
+</para>
 
 
 <!-- ##### STRUCT GdkPixbufAnimationIter ##### -->
 <para>
-A #GdkPixbufAnimationIter provides the necessary functionality to
-display an animation. See gdk_pixbuf_animation_get_iter().
+
+</para>
+
+
+<!-- ##### STRUCT GdkPixbufAnimation ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GdkPixbufAnimationIter ##### -->
+<para>
+
 </para>
 
 
@@ -141,5 +155,31 @@ display an animation. See gdk_pixbuf_animation_get_iter().
 
 @iter: 
 @Returns: 
+
+
+<!-- ##### STRUCT GdkPixbufSimpleAnim ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gdk_pixbuf_simple_anim_new ##### -->
+<para>
+
+</para>
+
+@width: 
+@height: 
+@rate: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_simple_anim_add_frame ##### -->
+<para>
+
+</para>
+
+@animation: 
+@pixbuf: 
 
 

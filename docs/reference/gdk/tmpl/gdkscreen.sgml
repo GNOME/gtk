@@ -22,6 +22,9 @@ form a large screen area.
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GdkScreen ##### -->
 <para>
 This is a currently just a placeholder typedef for the first argument of 
@@ -92,6 +95,24 @@ when GDK gets multihead support.
 
 
 <!-- ##### FUNCTION gdk_screen_get_rgb_visual ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_get_rgba_colormap ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_get_rgba_visual ##### -->
 <para>
 
 </para>

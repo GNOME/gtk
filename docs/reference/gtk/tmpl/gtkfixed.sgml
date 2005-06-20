@@ -64,6 +64,9 @@ widget. But you should be aware of the tradeoffs.
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkFixed ##### -->
 <para>
 The #GtkFixed-struct struct contains the following fields.

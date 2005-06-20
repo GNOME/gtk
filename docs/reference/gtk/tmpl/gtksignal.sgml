@@ -157,6 +157,9 @@ you might have to write a marshaller.
 </variablelist>
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### MACRO GTK_SIGNAL_OFFSET ##### -->
 <para>
 Use in place of <function>offsetof()</function>, which is used if it exists.

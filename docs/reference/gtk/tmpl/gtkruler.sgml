@@ -30,6 +30,9 @@ ruler. See #GtkHRuler to learn how to create a new horizontal ruler. See
 #GtkHRuler, #GtkVRuler
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkRuler ##### -->
 <para>
 All distances are in 1/72nd's of an inch. (According to Adobe thats a point, but
@@ -43,6 +46,11 @@ points are really 1/72.27 in.)
 </para>
 
 <!-- ##### ARG GtkRuler:max-size ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRuler:metric ##### -->
 <para>
 
 </para>

@@ -20,6 +20,9 @@ types related to the text widget and how they work together.
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkTextIter ##### -->
 <para>
 
@@ -654,6 +657,44 @@ types related to the text widget and how they work together.
 
 
 <!-- ##### FUNCTION gtk_text_iter_backward_visible_cursor_positions ##### -->
+<para>
+
+</para>
+
+@iter: 
+@count: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_forward_visible_line ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_backward_visible_line ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_forward_visible_lines ##### -->
+<para>
+
+</para>
+
+@iter: 
+@count: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_backward_visible_lines ##### -->
 <para>
 
 </para>

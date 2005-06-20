@@ -9,11 +9,12 @@ Cairo Interaction
 
 </para>
 
-
 <!-- ##### SECTION See_Also ##### -->
 <para>
 
 </para>
+
+<!-- ##### SECTION Stability_Level ##### -->
 
 
 <!-- ##### FUNCTION gdk_cairo_create ##### -->

@@ -422,6 +422,14 @@ functions), but they will all return %NULL values.
 @size: 
 
 
+<!-- ##### FUNCTION gtk_image_clear ##### -->
+<para>
+
+</para>
+
+@image: 
+
+
 <!-- ##### FUNCTION gtk_image_new ##### -->
 <para>
 

@@ -197,6 +197,9 @@ to which the submenu is associated.
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkUIManager ##### -->
 <para>
 The <structname>GtkUIManager</structname> struct contains only private

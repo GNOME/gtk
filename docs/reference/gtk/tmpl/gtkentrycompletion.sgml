@@ -43,6 +43,9 @@ selected, the ::action-activated signal is emitted.
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkEntryCompletion ##### -->
 <para>
 The GtkEntryCompletion struct contains only private data.
@@ -92,6 +95,16 @@ The GtkEntryCompletion struct contains only private data.
 </para>
 
 <!-- ##### ARG GtkEntryCompletion:popup-completion ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntryCompletion:popup-set-width ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntryCompletion:popup-single-match ##### -->
 <para>
 
 </para>
@@ -280,6 +293,42 @@ to the unmodified key via <literal>gtk_entry_get_text (GTK_ENTRY (gtk_entry_comp
 
 
 <!-- ##### FUNCTION gtk_entry_completion_get_popup_completion ##### -->
+<para>
+
+</para>
+
+@completion: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_completion_set_popup_set_width ##### -->
+<para>
+
+</para>
+
+@completion: 
+@popup_set_width: 
+
+
+<!-- ##### FUNCTION gtk_entry_completion_get_popup_set_width ##### -->
+<para>
+
+</para>
+
+@completion: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_completion_set_popup_single_match ##### -->
+<para>
+
+</para>
+
+@completion: 
+@popup_single_match: 
+
+
+<!-- ##### FUNCTION gtk_entry_completion_get_popup_single_match ##### -->
 <para>
 
 </para>

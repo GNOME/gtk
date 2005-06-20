@@ -11,6 +11,7 @@ EXTRA_DIST =			\
 	makefile.msc		\
 	gdk.symbols		\
 	makegdkalias.pl		\
+	gdkaliasdef.c		\
 	abicheck.sh
 
 INCLUDES =                              \
@@ -124,7 +125,7 @@ gdk_c_sources =                 \
 gdkincludedir = $(includedir)/gtk-2.0/gdk
 gdkinclude_HEADERS = $(gdk_headers)
 
-# gdkmarshalers.c is not here becuase it is currently an empty file
+# gdkmarshalers.c is not here because it is currently an empty file
 common_sources =                \
 	$(gdk_c_sources)	\
 	gdkenumtypes.c		\

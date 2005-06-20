@@ -35,6 +35,9 @@ on all platforms supported by GTK+.
 </variablelist>
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkPlug ##### -->
 <para>
 

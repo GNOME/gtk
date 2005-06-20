@@ -48,6 +48,9 @@ activate its action.
 #GtkActionGroup, #GtkUIManager
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkAction ##### -->
 <para>
 The <structname>GtkAction</structname> struct contains only private members
@@ -315,6 +318,15 @@ and should not be accessed directly.
 
 @action: 
 @accel_path: 
+
+
+<!-- ##### FUNCTION gtk_action_get_accel_closure ##### -->
+<para>
+
+</para>
+
+@action: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_action_set_accel_group ##### -->

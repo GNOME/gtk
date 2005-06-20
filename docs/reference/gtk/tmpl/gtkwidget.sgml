@@ -27,6 +27,9 @@ gtk_widget_style_get_valist() to obtain the value of a style property.
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkWidget ##### -->
 <para>
 
@@ -686,6 +689,11 @@ a widget changes from un-anchored to anchored or vice-versa.
 </para>
 
 <!-- ##### ARG GtkWidget:cursor-color ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:draw-border ##### -->
 <para>
 
 </para>

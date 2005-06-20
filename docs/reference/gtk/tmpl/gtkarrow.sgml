@@ -34,6 +34,9 @@ style of an arrow can be changed after creation by using gtk_arrow_set().
 </variablelist>
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkArrow ##### -->
 <para>
 The #GtkArrow-struct containes the following fields.

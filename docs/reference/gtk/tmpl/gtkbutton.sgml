@@ -21,6 +21,9 @@ the #GtkLabel.
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkButton ##### -->
 <para>
 This should not be accessed directly.  Use the accessor functions below.
@@ -330,5 +333,23 @@ Returns the current relief style of the given #GtkButton.
 @button: 
 @xalign: 
 @yalign: 
+
+
+<!-- ##### FUNCTION gtk_button_set_image ##### -->
+<para>
+
+</para>
+
+@button: 
+@image: 
+
+
+<!-- ##### FUNCTION gtk_button_get_image ##### -->
+<para>
+
+</para>
+
+@button: 
+@Returns: 
 
 

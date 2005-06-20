@@ -23,6 +23,9 @@ types related to the text widget and how they work together.
 #GtkTextView, #GtkTextIter, #GtkTextMark
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkTextBuffer ##### -->
 <para>
 
@@ -134,6 +137,11 @@ types related to the text widget and how they work together.
 @arg3: 
 
 <!-- ##### ARG GtkTextBuffer:tag-table ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextBuffer:text ##### -->
 <para>
 
 </para>

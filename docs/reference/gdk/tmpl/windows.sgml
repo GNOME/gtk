@@ -1037,6 +1037,15 @@ Deprecated equivalent to gdk_drawable_set_colormap()
 @skips_pager: 
 
 
+<!-- ##### FUNCTION gdk_window_set_urgency_hint ##### -->
+<para>
+
+</para>
+
+@window: 
+@urgent: 
+
+
 <!-- ##### FUNCTION gdk_window_get_position ##### -->
 <para>
 

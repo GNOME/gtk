@@ -17,6 +17,9 @@ Rendering RGB buffers to X drawables.
     GdkRGB
   </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT XlibRgbCmap ##### -->
   <para>
     FIXME: Describe this.
@@ -60,6 +63,15 @@ displays.
 @display: 
 @screen: 
 @prefDepth: 
+
+
+<!-- ##### FUNCTION xlib_rgb_xpixel_from_rgb ##### -->
+<para>
+
+</para>
+
+@rgb: 
+@Returns: 
 
 
 <!-- ##### FUNCTION xlib_rgb_gc_set_foreground ##### -->

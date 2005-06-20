@@ -20,6 +20,9 @@ in newly written code. Use #GtkTreeView instead.
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkCList ##### -->
 <para>
 This is the embodiment of the #GtkCList widget.  This structure contains

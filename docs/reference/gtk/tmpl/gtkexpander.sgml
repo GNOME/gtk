@@ -65,6 +65,9 @@ expander_callback (GObject    *object,
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkExpander ##### -->
 <para>
 

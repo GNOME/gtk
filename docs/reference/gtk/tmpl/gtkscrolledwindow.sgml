@@ -67,12 +67,17 @@ your own scrolling with #GtkScrollbar and for example a #GtkTable.
 #GtkViewport, #GtkAdjustment, #GtkWidgetClass
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkScrolledWindow ##### -->
 <para>
 There are no public fields in the #GtkScrolledWindow struct; it should 
 only be accessed using the functions below.
 </para>
 
+@hscrollbar: 
+@vscrollbar: 
 
 <!-- ##### SIGNAL GtkScrolledWindow::move-focus-out ##### -->
 <para>
@@ -162,6 +167,24 @@ functionality.
 @Returns: The vertical #GtkAdjustment.
 
 
+<!-- ##### FUNCTION gtk_scrolled_window_get_hscrollbar ##### -->
+<para>
+
+</para>
+
+@scrolled_window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_scrolled_window_get_vscrollbar ##### -->
+<para>
+
+</para>
+
+@scrolled_window: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_scrolled_window_set_policy ##### -->
 <para>
 Sets the scrollbar policy for the horizontal and vertical scrollbars. 
@@ -243,9 +266,9 @@ Sets the #GtkAdjustment for the vertical scrollbar.
 </para>
 
 @scrolled_window: A #GtkScrolledWindow.
-@hadjustment: 
-<!-- # Unused Parameters # -->
 @vadjustment: Vertical scroll adjustment.
+<!-- # Unused Parameters # -->
+@hadjustment: 
 
 
 <!-- ##### FUNCTION gtk_scrolled_window_get_placement ##### -->

@@ -32,6 +32,9 @@ planned to be implemented in future releases.
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkTextTag ##### -->
 <para>
 
@@ -195,6 +198,21 @@ planned to be implemented in future releases.
 </para>
 
 <!-- ##### ARG GtkTextTag:name ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:paragraph-background ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:paragraph-background-gdk ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:paragraph-background-set ##### -->
 <para>
 
 </para>

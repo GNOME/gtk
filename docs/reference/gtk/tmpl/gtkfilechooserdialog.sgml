@@ -111,6 +111,9 @@ dialog = gtk_file_chooser_dialog_new ("Open File",
       #GtkFileChooser, #GtkDialog
     </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkFileChooserDialog ##### -->
 <para>
 

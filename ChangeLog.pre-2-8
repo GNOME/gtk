@@ -1,5 +1,9 @@
 2005-06-20  Matthias Clasen  <mclasen@redhat.com>
 
+	* === Released 2.7.0 ===
+
+2005-06-20  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtk.symbols:
 	* gtk/gtkwindow.h:
 	* gtk/gtkwindow.c (gtk_window_present_with_time): Variant of

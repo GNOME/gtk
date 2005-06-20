@@ -30,6 +30,9 @@ will be a popup menu allowing the users to switch pages.
 </variablelist>
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkNotebook ##### -->
 <para>
 

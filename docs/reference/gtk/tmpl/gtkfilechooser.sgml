@@ -401,6 +401,9 @@ class "GtkFileChooserDefault" binding "my-own-gtkfilechooser-bindings"
       #GtkFileChooserDialog, #GtkFileChooserWidget, #GtkFileChooserButton
     </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkFileChooser ##### -->
 <para>
 

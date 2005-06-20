@@ -131,14 +131,3 @@ pixbufs, see the #GdkPixbuf API documentation.
 @Returns: 
 
 
-<!-- ##### FUNCTION gdk_pixbuf_set_as_cairo_source ##### -->
-<para>
-
-</para>
-
-@pixbuf: 
-@cr: 
-@pixbuf_x: 
-@pixbuf_y: 
-
-

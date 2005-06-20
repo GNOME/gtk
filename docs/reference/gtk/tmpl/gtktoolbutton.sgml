@@ -69,6 +69,9 @@ the button does not have a label.
 </variablelist>
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkToolButton ##### -->
 <para>
 The #GtkToolButton struct contains only private. It should only be
@@ -82,6 +85,11 @@ accessed with the function described below.
 </para>
 
 @toolbutton: the object which received the signal.
+
+<!-- ##### ARG GtkToolButton:icon-name ##### -->
+<para>
+
+</para>
 
 <!-- ##### ARG GtkToolButton:icon-widget ##### -->
 <para>
@@ -173,6 +181,24 @@ accessed with the function described below.
 
 
 <!-- ##### FUNCTION gtk_tool_button_get_stock_id ##### -->
+<para>
+
+</para>
+
+@button: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tool_button_set_icon_name ##### -->
+<para>
+
+</para>
+
+@button: 
+@icon_name: 
+
+
+<!-- ##### FUNCTION gtk_tool_button_get_icon_name ##### -->
 <para>
 
 </para>

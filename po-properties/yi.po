@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-08 02:01-0500\n"
+"POT-Creation-Date: 2005-06-20 14:30-0400\n"
 "PO-Revision-Date: 2003-02-11\n"
 "Last-Translator: Raphael Finkel <raphael@cs.uky.edu>\n"
 "Language-Team: None <>\n"
@@ -14,355 +14,355 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: gdk-pixbuf/gdk-pixbuf.c:108
+#: gdk-pixbuf/gdk-pixbuf.c:110
 msgid "Number of Channels"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf.c:109
+#: gdk-pixbuf/gdk-pixbuf.c:111
 #, fuzzy
 msgid "The number of samples per pixel"
 msgstr "XPM האָט אַן אומלעקסיקן צאָל שריפֿטצײכנס אין אַ בילדצעל"
 
-#: gdk-pixbuf/gdk-pixbuf.c:119
+#: gdk-pixbuf/gdk-pixbuf.c:120
 #, fuzzy
 msgid "Colorspace"
 msgstr "פֿאַרב נאָמען"
 
-#: gdk-pixbuf/gdk-pixbuf.c:120
+#: gdk-pixbuf/gdk-pixbuf.c:121
 msgid "The colorspace in which the samples are interpreted"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf.c:130
+#: gdk-pixbuf/gdk-pixbuf.c:129
 #, fuzzy
 msgid "Has Alpha"
 msgstr "ניץ פֿאַרצײַכענונג"
 
-#: gdk-pixbuf/gdk-pixbuf.c:131
+#: gdk-pixbuf/gdk-pixbuf.c:130
 msgid "Whether the pixbuf has an alpha channel"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf.c:145
+#: gdk-pixbuf/gdk-pixbuf.c:143
 msgid "Bits per Sample"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf.c:146
+#: gdk-pixbuf/gdk-pixbuf.c:144
 #, fuzzy
 msgid "The number of bits per sample"
 msgstr "די צאָל שורות אין דער טאַבעלע"
 
-#: gdk-pixbuf/gdk-pixbuf.c:156 gtk/gtklayout.c:651 gtk/gtktreeviewcolumn.c:241
+#: gdk-pixbuf/gdk-pixbuf.c:153 gtk/gtklayout.c:651 gtk/gtktreeviewcolumn.c:242
 msgid "Width"
 msgstr "ברײט"
 
-#: gdk-pixbuf/gdk-pixbuf.c:157
+#: gdk-pixbuf/gdk-pixbuf.c:154
 #, fuzzy
 msgid "The number of columns of the pixbuf"
 msgstr "די צאָל זײַלן אין דער טאַבעלע"
 
-#: gdk-pixbuf/gdk-pixbuf.c:167 gtk/gtklayout.c:660
+#: gdk-pixbuf/gdk-pixbuf.c:163 gtk/gtklayout.c:660
 msgid "Height"
 msgstr "הײך"
 
-#: gdk-pixbuf/gdk-pixbuf.c:168
+#: gdk-pixbuf/gdk-pixbuf.c:164
 #, fuzzy
 msgid "The number of rows of the pixbuf"
 msgstr "די צאָל שורות אין דער טאַבעלע"
 
-#: gdk-pixbuf/gdk-pixbuf.c:185
+#: gdk-pixbuf/gdk-pixbuf.c:180
 #, fuzzy
 msgid "Rowstride"
 msgstr "שורות"
 
-#: gdk-pixbuf/gdk-pixbuf.c:186
+#: gdk-pixbuf/gdk-pixbuf.c:181
 #, fuzzy
 msgid ""
 "The number of bytes between the start of a row and the start of the next row"
 msgstr "װיפֿל בילדצעלן ליגן צװישן דורכבלעטערערס און זײערע פֿענצטערס"
 
-#: gdk-pixbuf/gdk-pixbuf.c:196
+#: gdk-pixbuf/gdk-pixbuf.c:190
 msgid "Pixels"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf.c:197
+#: gdk-pixbuf/gdk-pixbuf.c:191
 msgid "A pointer to the pixel data of the pixbuf"
 msgstr ""
 
-#: gdk/gdkdisplaymanager.c:127
+#: gdk/gdkdisplaymanager.c:129
 msgid "Default Display"
 msgstr "געװײנטלעכע װײַזונג"
 
-#: gdk/gdkdisplaymanager.c:128
+#: gdk/gdkdisplaymanager.c:130
 msgid "The default display for GDK"
 msgstr "געװײנטלעכע װײַזונג"
 
-#: gdk/gdkpango.c:574 gtk/gtkinvisible.c:116 gtk/gtkwindow.c:533
+#: gdk/gdkpango.c:510 gtk/gtkinvisible.c:117 gtk/gtkwindow.c:539
 msgid "Screen"
 msgstr "עקראַן"
 
-#: gdk/gdkpango.c:575
+#: gdk/gdkpango.c:511
 #, fuzzy
 msgid "the GdkScreen for the renderer"
 msgstr "דער מאָדעל פֿאַר דעם בױם־געשטאַלט"
 
-#: gtk/gtkaboutdialog.c:195
+#: gtk/gtkaboutdialog.c:204
 #, fuzzy
 msgid "Program name"
 msgstr "הענטל נאָמען"
 
-#: gtk/gtkaboutdialog.c:196
+#: gtk/gtkaboutdialog.c:205
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:210
+#: gtk/gtkaboutdialog.c:219
 msgid "Program version"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:211
+#: gtk/gtkaboutdialog.c:220
 #, fuzzy
 msgid "The version of the program"
 msgstr "די אָריִענטירונג פֿון דעם מכשיר־װײַזער"
 
-#: gtk/gtkaboutdialog.c:225
+#: gtk/gtkaboutdialog.c:234
 msgid "Copyright string"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:226
+#: gtk/gtkaboutdialog.c:235
 msgid "Copyright information for the program"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:243
+#: gtk/gtkaboutdialog.c:252
 #, fuzzy
 msgid "Comments string"
 msgstr "זײַל אָפּרוקונג"
 
-#: gtk/gtkaboutdialog.c:244
+#: gtk/gtkaboutdialog.c:253
 msgid "Comments about the program"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:276
+#: gtk/gtkaboutdialog.c:286
 msgid "Website URL"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:277
+#: gtk/gtkaboutdialog.c:287
 msgid "The URL for the link to the website of the program"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:293
+#: gtk/gtkaboutdialog.c:303
 #, fuzzy
 msgid "Website label"
 msgstr "הענטל־עטיקעט"
 
-#: gtk/gtkaboutdialog.c:294
+#: gtk/gtkaboutdialog.c:304
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:310
+#: gtk/gtkaboutdialog.c:320
 msgid "Authors"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:311
+#: gtk/gtkaboutdialog.c:321
 #, fuzzy
 msgid "List of authors of the program"
 msgstr "די אָריִענטירונג פֿון דעם מכשיר־װײַזער"
 
-#: gtk/gtkaboutdialog.c:327
+#: gtk/gtkaboutdialog.c:337
 msgid "Documenters"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:328
+#: gtk/gtkaboutdialog.c:338
 msgid "List of people documenting the program"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:344
+#: gtk/gtkaboutdialog.c:354
 msgid "Artists"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:345
+#: gtk/gtkaboutdialog.c:355
 msgid "List of people who have contributed artwork to the program"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:362
+#: gtk/gtkaboutdialog.c:372
 msgid "Translator credits"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:363
+#: gtk/gtkaboutdialog.c:373
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:378
+#: gtk/gtkaboutdialog.c:388
 msgid "Logo"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:379
+#: gtk/gtkaboutdialog.c:389
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:394
+#: gtk/gtkaboutdialog.c:404
 #, fuzzy
 msgid "Logo Icon Name"
 msgstr "שריפֿט נאָמען"
 
-#: gtk/gtkaboutdialog.c:395
+#: gtk/gtkaboutdialog.c:405
 msgid "A named icon to use as the logo for the about box."
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:402
+#: gtk/gtkaboutdialog.c:412
 #, fuzzy
 msgid "Link Color"
 msgstr "איצטיקע פֿאַרב"
 
-#: gtk/gtkaboutdialog.c:403
+#: gtk/gtkaboutdialog.c:413
 msgid "Color of hyperlinks"
 msgstr ""
 
-#: gtk/gtkaccellabel.c:139
+#: gtk/gtkaccellabel.c:143
 msgid "Accelerator Closure"
 msgstr "פֿאַרגיכערער צומאַך"
 
-#: gtk/gtkaccellabel.c:140
+#: gtk/gtkaccellabel.c:144
 msgid "The closure to be monitored for accelerator changes"
 msgstr "צומאַך צו קאָנטראָלירן צוליב פֿאַרגיכערער ענדערונגען"
 
-#: gtk/gtkaccellabel.c:146
+#: gtk/gtkaccellabel.c:150
 msgid "Accelerator Widget"
 msgstr "פֿאַרגיכערער צעפּיכעסל"
 
-#: gtk/gtkaccellabel.c:147
+#: gtk/gtkaccellabel.c:151
 msgid "The widget to be monitored for accelerator changes"
 msgstr "דאָס צעפּיכעסל צו קאָנטראָלירן צוליב פֿאַרגיכערער ענדערונגען"
 
-#: gtk/gtkaction.c:196 gtk/gtkactiongroup.c:134
+#: gtk/gtkaction.c:197 gtk/gtkactiongroup.c:135
 #, fuzzy
 msgid "Name"
 msgstr "שריפֿט נאָמען"
 
-#: gtk/gtkaction.c:197
+#: gtk/gtkaction.c:198
 msgid "A unique name for the action."
 msgstr ""
 
-#: gtk/gtkaction.c:204 gtk/gtkbutton.c:220 gtk/gtkexpander.c:206
-#: gtk/gtkframe.c:127 gtk/gtklabel.c:320 gtk/gtktoolbutton.c:181
+#: gtk/gtkaction.c:205 gtk/gtkbutton.c:221 gtk/gtkexpander.c:206
+#: gtk/gtkframe.c:128 gtk/gtklabel.c:321 gtk/gtktoolbutton.c:187
 msgid "Label"
 msgstr "עטיקעט"
 
-#: gtk/gtkaction.c:205
+#: gtk/gtkaction.c:206
 msgid "The label used for menu items and buttons that activate this action."
 msgstr ""
 
-#: gtk/gtkaction.c:212
+#: gtk/gtkaction.c:213
 #, fuzzy
 msgid "Short label"
 msgstr "הענטל־עטיקעט"
 
-#: gtk/gtkaction.c:213
+#: gtk/gtkaction.c:214
 msgid "A shorter label that may be used on toolbar buttons."
 msgstr ""
 
-#: gtk/gtkaction.c:219
+#: gtk/gtkaction.c:220
 msgid "Tooltip"
 msgstr ""
 
-#: gtk/gtkaction.c:220
+#: gtk/gtkaction.c:221
 msgid "A tooltip for this action."
 msgstr ""
 
-#: gtk/gtkaction.c:226
+#: gtk/gtkaction.c:227
 #, fuzzy
 msgid "Stock Icon"
 msgstr "הורט אידענטיפֿיקאַציע"
 
-#: gtk/gtkaction.c:227
+#: gtk/gtkaction.c:228
 msgid "The stock icon displayed in widgets representing this action."
 msgstr ""
 
-#: gtk/gtkaction.c:234 gtk/gtktoolitem.c:159
+#: gtk/gtkaction.c:235 gtk/gtktoolitem.c:160
 msgid "Visible when horizontal"
 msgstr ""
 
-#: gtk/gtkaction.c:235 gtk/gtktoolitem.c:160
+#: gtk/gtkaction.c:236 gtk/gtktoolitem.c:161
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a horizontal "
 "orientation."
 msgstr ""
 
-#: gtk/gtkaction.c:250
+#: gtk/gtkaction.c:251
 #, fuzzy
 msgid "Visible when overflown"
 msgstr "זעעװדיק"
 
-#: gtk/gtkaction.c:251
+#: gtk/gtkaction.c:252
 msgid ""
 "When TRUE, toolitem proxies for this action are represented in the toolbar "
 "overflow menu."
 msgstr ""
 
-#: gtk/gtkaction.c:258 gtk/gtktoolitem.c:166
+#: gtk/gtkaction.c:259 gtk/gtktoolitem.c:167
 msgid "Visible when vertical"
 msgstr ""
 
-#: gtk/gtkaction.c:259 gtk/gtktoolitem.c:167
+#: gtk/gtkaction.c:260 gtk/gtktoolitem.c:168
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a vertical "
 "orientation."
 msgstr ""
 
-#: gtk/gtkaction.c:266 gtk/gtktoolitem.c:173
+#: gtk/gtkaction.c:267 gtk/gtktoolitem.c:174
 msgid "Is important"
 msgstr ""
 
-#: gtk/gtkaction.c:267
+#: gtk/gtkaction.c:268
 msgid ""
 "Whether the action is considered important. When TRUE, toolitem proxies for "
 "this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
 msgstr ""
 
-#: gtk/gtkaction.c:275
+#: gtk/gtkaction.c:276
 msgid "Hide if empty"
 msgstr ""
 
-#: gtk/gtkaction.c:276
+#: gtk/gtkaction.c:277
 msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr ""
 
-#: gtk/gtkaction.c:282 gtk/gtkactiongroup.c:142 gtk/gtkcellrenderer.c:222
-#: gtk/gtkwidget.c:450
+#: gtk/gtkaction.c:283 gtk/gtkactiongroup.c:142 gtk/gtkcellrenderer.c:222
+#: gtk/gtkwidget.c:452
 msgid "Sensitive"
 msgstr "סענסיטיװ"
 
-#: gtk/gtkaction.c:283
+#: gtk/gtkaction.c:284
 #, fuzzy
 msgid "Whether the action is enabled."
 msgstr "אױב דאָס צעפּיכעסל איז זעעװדיק"
 
-#: gtk/gtkaction.c:289 gtk/gtkactiongroup.c:149 gtk/gtktreeview.c:582
-#: gtk/gtktreeviewcolumn.c:225 gtk/gtkwidget.c:443
+#: gtk/gtkaction.c:290 gtk/gtkactiongroup.c:149 gtk/gtktreeviewcolumn.c:226
+#: gtk/gtkwidget.c:445
 msgid "Visible"
 msgstr "זעעװדיק"
 
-#: gtk/gtkaction.c:290
+#: gtk/gtkaction.c:291
 #, fuzzy
 msgid "Whether the action is visible."
 msgstr "אױב דאָס צעפּיכעסל איז זעעװדיק"
 
-#: gtk/gtkaction.c:296
+#: gtk/gtkaction.c:297
 #, fuzzy
 msgid "Action Group"
 msgstr "ברוכטײל"
 
-#: gtk/gtkaction.c:297
+#: gtk/gtkaction.c:298
 msgid ""
 "The GtkActionGroup this GtkAction is associated with, or NULL (for internal "
 "use)."
 msgstr ""
 
-#: gtk/gtkactiongroup.c:135
+#: gtk/gtkactiongroup.c:136
 msgid "A name for the action group."
 msgstr ""
 
@@ -376,70 +376,70 @@ msgstr "אױב דאָס צעפּיכעסל איז זעעװדיק"
 msgid "Whether the action group is visible."
 msgstr "אױב דאָס צעפּיכעסל איז זעעװדיק"
 
-#: gtk/gtkadjustment.c:115 gtk/gtkcellrendererprogress.c:115
-#: gtk/gtkspinbutton.c:303
+#: gtk/gtkadjustment.c:116 gtk/gtkcellrendererprogress.c:116
+#: gtk/gtkspinbutton.c:304
 msgid "Value"
 msgstr "באַטרעף"
 
-#: gtk/gtkadjustment.c:116
+#: gtk/gtkadjustment.c:117
 #, fuzzy
 msgid "The value of the adjustment"
 msgstr "דער נאָמען פֿון דעם צעפּיכעסל"
 
-#: gtk/gtkadjustment.c:132
+#: gtk/gtkadjustment.c:133
 #, fuzzy
 msgid "Minimum Value"
 msgstr "קלענסטע ה'"
 
-#: gtk/gtkadjustment.c:133
+#: gtk/gtkadjustment.c:134
 #, fuzzy
 msgid "The minimum value of the adjustment"
 msgstr "דער נאָמען פֿון דעם צעפּיכעסל"
 
-#: gtk/gtkadjustment.c:152
+#: gtk/gtkadjustment.c:153
 #, fuzzy
 msgid "Maximum Value"
 msgstr "גרעסטע לענג"
 
-#: gtk/gtkadjustment.c:153
+#: gtk/gtkadjustment.c:154
 #, fuzzy
 msgid "The maximum value of the adjustment"
 msgstr "דער נאָמען פֿון דעם צעפּיכעסל"
 
-#: gtk/gtkadjustment.c:169
+#: gtk/gtkadjustment.c:170
 #, fuzzy
 msgid "Step Increment"
 msgstr "עקראַן"
 
-#: gtk/gtkadjustment.c:170
+#: gtk/gtkadjustment.c:171
 #, fuzzy
 msgid "The step increment of the adjustment"
 msgstr "דער אינהאַלט פֿון אַרײַנשרײַב־אָרט"
 
-#: gtk/gtkadjustment.c:186
+#: gtk/gtkadjustment.c:187
 msgid "Page Increment"
 msgstr ""
 
-#: gtk/gtkadjustment.c:187
+#: gtk/gtkadjustment.c:188
 #, fuzzy
 msgid "The page increment of the adjustment"
 msgstr "דער אינהאַלט פֿון אַרײַנשרײַב־אָרט"
 
-#: gtk/gtkadjustment.c:206
+#: gtk/gtkadjustment.c:207
 #, fuzzy
 msgid "Page Size"
 msgstr "גרעסטע גרײס"
 
-#: gtk/gtkadjustment.c:207
+#: gtk/gtkadjustment.c:208
 #, fuzzy
 msgid "The page size of the adjustment"
 msgstr "פֿאַרקער דעם מצבֿ פֿונעם קנעפּל"
 
-#: gtk/gtkalignment.c:118
+#: gtk/gtkalignment.c:119
 msgid "Horizontal alignment"
 msgstr "האָריזאָנטאַלישע אױסגלײַכונג"
 
-#: gtk/gtkalignment.c:119 gtk/gtkbutton.c:271
+#: gtk/gtkalignment.c:120 gtk/gtkbutton.c:272
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
@@ -447,11 +447,11 @@ msgstr ""
 "האָריזאָנטאַלישע פּאָזיציע פֿון קינד אין רױם װאָס איז בנימצא.  0.0 מײנט אױסגלײַך צום "
 "לינקס, 1.0 מײנט אױסגלײַך צום רעכטס"
 
-#: gtk/gtkalignment.c:128
+#: gtk/gtkalignment.c:129
 msgid "Vertical alignment"
 msgstr "װערטיקאַלישע אױסגלײַכונג"
 
-#: gtk/gtkalignment.c:129 gtk/gtkbutton.c:290
+#: gtk/gtkalignment.c:130 gtk/gtkbutton.c:291
 msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
@@ -459,11 +459,11 @@ msgstr ""
 "װערטיקאַלישע פּאָזיציע פֿון קינד אין רױם װאָס איז בנימצא.  0.0 מײנט אױסגלײַך צום "
 "לינקס, 1.0 מײנט אױסגלײַך צום רעכטס"
 
-#: gtk/gtkalignment.c:137
+#: gtk/gtkalignment.c:138
 msgid "Horizontal scale"
 msgstr "האָריזאָנטאַלישע מאָס"
 
-#: gtk/gtkalignment.c:138
+#: gtk/gtkalignment.c:139
 msgid ""
 "If available horizontal space is bigger than needed for the child, how much "
 "of it to use for the child. 0.0 means none, 1.0 means all"
@@ -471,11 +471,11 @@ msgstr ""
 "אױב עס געפֿינט זיך מער האָריזאָנטאַליש אָרט װי דאָס קינד דאַרף, װיפֿל צו ניצן צוליב "
 "דעם קינד.  0.0 מײנט גאָרניט; 1.0 מײנט אַלץ"
 
-#: gtk/gtkalignment.c:146
+#: gtk/gtkalignment.c:147
 msgid "Vertical scale"
 msgstr "װערטיקאַלישע מאָס"
 
-#: gtk/gtkalignment.c:147
+#: gtk/gtkalignment.c:148
 msgid ""
 "If available vertical space is bigger than needed for the child, how much of "
 "it to use for the child. 0.0 means none, 1.0 means all"
@@ -483,92 +483,92 @@ msgstr ""
 "אױב עס געפֿינט זיך מער װערטיקאַליש אָרט װי דאָס קינד דאַרף, װיפֿל צו ניצן צוליב "
 "דעם קינד.  0.0 מײנט גאָרניט; 1.0 מײנט אַלץ"
 
-#: gtk/gtkalignment.c:164
+#: gtk/gtkalignment.c:165
 #, fuzzy
 msgid "Top Padding"
 msgstr "לײדיק אָרט"
 
-#: gtk/gtkalignment.c:165
+#: gtk/gtkalignment.c:166
 #, fuzzy
 msgid "The padding to insert at the top of the widget."
 msgstr "דער שורה־נומער װוּ דער קאָפּ פֿון קינד קלעפּט זיך צו"
 
-#: gtk/gtkalignment.c:181
+#: gtk/gtkalignment.c:182
 #, fuzzy
 msgid "Bottom Padding"
 msgstr "לײדיק אָרט"
 
-#: gtk/gtkalignment.c:182
+#: gtk/gtkalignment.c:183
 #, fuzzy
 msgid "The padding to insert at the bottom of the widget."
 msgstr "דער שורה־נומער װוּ דער פֿוס פֿון קינד קלעפּט זיך צו"
 
-#: gtk/gtkalignment.c:198
+#: gtk/gtkalignment.c:199
 #, fuzzy
 msgid "Left Padding"
 msgstr "לײדיק אָרט"
 
-#: gtk/gtkalignment.c:199
+#: gtk/gtkalignment.c:200
 #, fuzzy
 msgid "The padding to insert at the left of the widget."
 msgstr "דער זײַל־נומער װוּ די לינקע זײַט פֿון קינד קלעפּט זיך צו"
 
-#: gtk/gtkalignment.c:215
+#: gtk/gtkalignment.c:216
 #, fuzzy
 msgid "Right Padding"
 msgstr "רעכטער זאַפּאַס"
 
-#: gtk/gtkalignment.c:216
+#: gtk/gtkalignment.c:217
 #, fuzzy
 msgid "The padding to insert at the right of the widget."
 msgstr ""
 "װיפֿל לײדיק אָרט צוצולײגן צום לינקס און רעכטס פֿון דעם צעפּיכעסל, אין בילדצעלן"
 
-#: gtk/gtkarrow.c:100
+#: gtk/gtkarrow.c:101
 msgid "Arrow direction"
 msgstr "פֿײַל ריכטונג"
 
-#: gtk/gtkarrow.c:101
+#: gtk/gtkarrow.c:102
 msgid "The direction the arrow should point"
 msgstr "ריכטונג װוּ אַהין די פֿײַל זאָל װײַזן"
 
-#: gtk/gtkarrow.c:108
+#: gtk/gtkarrow.c:109
 msgid "Arrow shadow"
 msgstr "פֿײַלשאָטן"
 
-#: gtk/gtkarrow.c:109
+#: gtk/gtkarrow.c:110
 msgid "Appearance of the shadow surrounding the arrow"
 msgstr "געשטאַלט פֿון שאָטן װאָס אַרום דער פֿײַל"
 
-#: gtk/gtkaspectframe.c:110
+#: gtk/gtkaspectframe.c:111
 msgid "Horizontal Alignment"
 msgstr "האָריזאָנטאַלישע אױסגלײַכונג"
 
-#: gtk/gtkaspectframe.c:111
+#: gtk/gtkaspectframe.c:112
 msgid "X alignment of the child"
 msgstr "ה' אױסגלײַכונג פֿון קינד"
 
-#: gtk/gtkaspectframe.c:117
+#: gtk/gtkaspectframe.c:118
 msgid "Vertical Alignment"
 msgstr "װערטיקאַלישע אױסגלײַכונג"
 
-#: gtk/gtkaspectframe.c:118
+#: gtk/gtkaspectframe.c:119
 msgid "Y alignment of the child"
 msgstr "װ' אױסגלײַכונג פֿון קינד"
 
-#: gtk/gtkaspectframe.c:124
+#: gtk/gtkaspectframe.c:125
 msgid "Ratio"
 msgstr "פּראָפּאָרץ"
 
-#: gtk/gtkaspectframe.c:125
+#: gtk/gtkaspectframe.c:126
 msgid "Aspect ratio if obey_child is FALSE"
 msgstr "אַספּעקט פּראָפּאָרץ אױב מען פֿאָלגט ניט דאָס קינד"
 
-#: gtk/gtkaspectframe.c:131
+#: gtk/gtkaspectframe.c:132
 msgid "Obey child"
 msgstr "פֿאָלג דאָס קינד"
 
-#: gtk/gtkaspectframe.c:132
+#: gtk/gtkaspectframe.c:133
 msgid "Force aspect ratio to match that of the frame's child"
 msgstr "צװינג אַספּעקט פּראָפּאָרץ ער זאָל שטימען מיט דער ראָמס קינד"
 
@@ -627,56 +627,56 @@ msgstr ""
 "אױב יאָ, װײַזט זיך דאָס קינד אין אַ צװײטע גרופּע קינדער, פּאַסיק למשל פֿאַר "
 "געהילפֿס־קנעפּלעך"
 
-#: gtk/gtkbox.c:130 gtk/gtkexpander.c:230 gtk/gtkiconview.c:449
-#: gtk/gtktreeviewcolumn.c:250
+#: gtk/gtkbox.c:131 gtk/gtkexpander.c:230 gtk/gtkiconview.c:621
+#: gtk/gtktreeviewcolumn.c:251
 msgid "Spacing"
 msgstr "אָפּרוקונג"
 
-#: gtk/gtkbox.c:131
+#: gtk/gtkbox.c:132
 msgid "The amount of space between children"
 msgstr "באַטרעף פֿון אָפּרוקונג צװישן קינדער"
 
-#: gtk/gtkbox.c:140 gtk/gtknotebook.c:473 gtk/gtktoolbar.c:541
+#: gtk/gtkbox.c:141 gtk/gtknotebook.c:477 gtk/gtktoolbar.c:558
 msgid "Homogeneous"
 msgstr "האָמאָגען"
 
-#: gtk/gtkbox.c:141
+#: gtk/gtkbox.c:142
 msgid "Whether the children should all be the same size"
 msgstr "אױב די קינדער זאָלן אַלע האָבן אײן גרײס"
 
-#: gtk/gtkbox.c:148 gtk/gtkpreview.c:133 gtk/gtktoolbar.c:533
-#: gtk/gtktreeviewcolumn.c:306
+#: gtk/gtkbox.c:149 gtk/gtkpreview.c:134 gtk/gtktoolbar.c:550
+#: gtk/gtktreeviewcolumn.c:307
 msgid "Expand"
 msgstr "פֿאַרגרעסער"
 
-#: gtk/gtkbox.c:149
+#: gtk/gtkbox.c:150
 msgid "Whether the child should receive extra space when the parent grows"
 msgstr "אױב דאָס קינד זאָל באַקומען נאָך אָרט װען זײַן טאַטע־מאַמע װאַקסט"
 
-#: gtk/gtkbox.c:155
+#: gtk/gtkbox.c:156
 msgid "Fill"
 msgstr "דערפֿיל"
 
-#: gtk/gtkbox.c:156
+#: gtk/gtkbox.c:157
 msgid ""
 "Whether extra space given to the child should be allocated to the child or "
 "used as padding"
 msgstr ""
 "צי איבעריק אָרט געגעבן צום קינד זאָל זיך אױסטײלן צום קינד אָדער זאָל שטײן לײדיק"
 
-#: gtk/gtkbox.c:162
+#: gtk/gtkbox.c:163
 msgid "Padding"
 msgstr "לײדיק אָרט"
 
-#: gtk/gtkbox.c:163
+#: gtk/gtkbox.c:164
 msgid "Extra space to put between the child and its neighbors, in pixels"
 msgstr "איבעריק אָרט צו שטעלן צװישן דעם קינד און זײַנע שכנים, אין בילדצעלן"
 
-#: gtk/gtkbox.c:169
+#: gtk/gtkbox.c:170
 msgid "Pack type"
 msgstr "פּאַקן סטיל"
 
-#: gtk/gtkbox.c:170 gtk/gtknotebook.c:517
+#: gtk/gtkbox.c:171 gtk/gtknotebook.c:521
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -684,16 +684,16 @@ msgstr ""
 "אַ Gtk פּאַקן־סאָרט װאָס באַשטעטיקט אױב דאָס קינד פּאַקט זיך רעלאַטיװ צום אָנהײב אָדער "
 "סוף פֿון טאַטע־מאַמע"
 
-#: gtk/gtkbox.c:176 gtk/gtknotebook.c:495 gtk/gtkpaned.c:240
-#: gtk/gtkruler.c:140
+#: gtk/gtkbox.c:177 gtk/gtknotebook.c:499 gtk/gtkpaned.c:241
+#: gtk/gtkruler.c:142
 msgid "Position"
 msgstr "פּאָזיציע"
 
-#: gtk/gtkbox.c:177 gtk/gtknotebook.c:496
+#: gtk/gtkbox.c:178 gtk/gtknotebook.c:500
 msgid "The index of the child in the parent"
 msgstr "דער אינדעקס פֿונעם קינד אין זײַן טאַטע־מאַמע"
 
-#: gtk/gtkbutton.c:221
+#: gtk/gtkbutton.c:222
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
@@ -701,12 +701,12 @@ msgstr ""
 "טעקסט פֿון עטיקעט־צעפּיכעסל אין דרינען פֿון קנעפּל, אױב דאָס קנעפּל האָט אַן "
 "עטיקעט־צעפּיכעסל"
 
-#: gtk/gtkbutton.c:228 gtk/gtkexpander.c:214 gtk/gtklabel.c:341
-#: gtk/gtktoolbutton.c:188
+#: gtk/gtkbutton.c:229 gtk/gtkexpander.c:214 gtk/gtklabel.c:342
+#: gtk/gtktoolbutton.c:194
 msgid "Use underline"
 msgstr "שטריך אונטער"
 
-#: gtk/gtkbutton.c:229 gtk/gtkexpander.c:215 gtk/gtklabel.c:342
+#: gtk/gtkbutton.c:230 gtk/gtkexpander.c:215 gtk/gtklabel.c:343
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -714,64 +714,64 @@ msgstr ""
 "אױב יאָ, װעט אַן אונטערשטריך אין טעקסט באַדײַטן אַז דעם קומעדיקן שריפֿטצײכן ניצט "
 "מען װי אַ מנעמאָנישער פֿאַרגיכערער־קלאַװיש"
 
-#: gtk/gtkbutton.c:236
+#: gtk/gtkbutton.c:237
 msgid "Use stock"
 msgstr "ניצט הורט"
 
-#: gtk/gtkbutton.c:237
+#: gtk/gtkbutton.c:238
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr "אױב באַשטעטיקט, װעט דער עטיקעט קלײַבן אַ הורטזאַך אַנשטאָט זיך לאָזן װײַזן"
 
-#: gtk/gtkbutton.c:244 gtk/gtkcombobox.c:678
+#: gtk/gtkbutton.c:245 gtk/gtkcombobox.c:683
 msgid "Focus on click"
 msgstr ""
 
-#: gtk/gtkbutton.c:245
+#: gtk/gtkbutton.c:246
 #, fuzzy
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr "צי דער עטיקעט־טעקסט לאָזט זיך סעלעקטירן מיט דעם מײַזל"
 
-#: gtk/gtkbutton.c:252
+#: gtk/gtkbutton.c:253
 msgid "Border relief"
 msgstr "צאַמרינע רעליִעף"
 
-#: gtk/gtkbutton.c:253
+#: gtk/gtkbutton.c:254
 msgid "The border relief style"
 msgstr "דער סטיל פֿון צאַמרינע רעליִעף"
 
-#: gtk/gtkbutton.c:270
+#: gtk/gtkbutton.c:271
 #, fuzzy
 msgid "Horizontal alignment for child"
 msgstr "האָריזאָנטאַלישע אױסגלײַכונג"
 
-#: gtk/gtkbutton.c:289
+#: gtk/gtkbutton.c:290
 #, fuzzy
 msgid "Vertical alignment for child"
 msgstr "װערטיקאַלישע אױסגלײַכונג"
 
-#: gtk/gtkbutton.c:306 gtk/gtkimagemenuitem.c:131
+#: gtk/gtkbutton.c:307 gtk/gtkimagemenuitem.c:132
 msgid "Image widget"
 msgstr "בילד־צעפּיכעסל"
 
-#: gtk/gtkbutton.c:307
+#: gtk/gtkbutton.c:308
 #, fuzzy
 msgid "Child widget to appear next to the button text"
 msgstr "קינד צעפּיכעסל װאָס װײַזט זיך לעבן דעם מעניו־טעקסט"
 
-#: gtk/gtkbutton.c:373
+#: gtk/gtkbutton.c:416
 msgid "Default Spacing"
 msgstr "געװײנטלעכע אָפּרוקונג"
 
-#: gtk/gtkbutton.c:374
+#: gtk/gtkbutton.c:417
 msgid "Extra space to add for CAN_DEFAULT buttons"
 msgstr "איבעריקע אָפּרוקונג צוצולײגן פֿאַר CAN_DEFAULT קנעפּלעך"
 
-#: gtk/gtkbutton.c:380
+#: gtk/gtkbutton.c:423
 msgid "Default Outside Spacing"
 msgstr "געװײנטלעכע אױסערלעכע אָפּרוקונג"
 
-#: gtk/gtkbutton.c:381
+#: gtk/gtkbutton.c:424
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
@@ -779,112 +779,112 @@ msgstr ""
 "איבעריקע אָפּרוקונג צוצולײגן פֿאַר CAN_DEFAULT קנעפּלעך װאָס װײַזט זיך אַלע מאָל אין "
 "דרױסן פֿון צאַמרינע"
 
-#: gtk/gtkbutton.c:386
+#: gtk/gtkbutton.c:429
 msgid "Child X Displacement"
 msgstr "קינדס ה' פֿונאַנדעררוקונג"
 
-#: gtk/gtkbutton.c:387
+#: gtk/gtkbutton.c:430
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
 msgstr "װי װײַט אין ה' ריכטונג איבערצורוקן דאָס קינד װען מען דריקט דאָס קנעפּל"
 
-#: gtk/gtkbutton.c:394
+#: gtk/gtkbutton.c:437
 msgid "Child Y Displacement"
 msgstr "קינדס װ' פֿונאַנדעררוקונג"
 
-#: gtk/gtkbutton.c:395
+#: gtk/gtkbutton.c:438
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr "װי װײַט אין װ' ריכטונג איבערצורוקן דאָס קינד װען מען דריקט דאָס קנעפּל"
 
-#: gtk/gtkbutton.c:411
+#: gtk/gtkbutton.c:454
 #, fuzzy
 msgid "Displace focus"
 msgstr "איז פֿאָקוס"
 
-#: gtk/gtkbutton.c:412
+#: gtk/gtkbutton.c:455
 msgid ""
 "Whether the child_displacement_x/_y properties should also affect the focus "
 "rectangle"
 msgstr ""
 
-#: gtk/gtkbutton.c:417
+#: gtk/gtkbutton.c:460
 msgid "Show button images"
 msgstr ""
 
-#: gtk/gtkbutton.c:418
+#: gtk/gtkbutton.c:461
 #, fuzzy
 msgid "Whether stock icons should be shown in buttons"
 msgstr "אױב מען װיל אַז די הענטלעך זאָלן זיך װײַזן"
 
-#: gtk/gtkcalendar.c:468
+#: gtk/gtkcalendar.c:419
 #, fuzzy
 msgid "Year"
 msgstr "באַזײַטיק"
 
-#: gtk/gtkcalendar.c:469
+#: gtk/gtkcalendar.c:420
 #, fuzzy
 msgid "The selected year"
 msgstr "סעלעקטירטער טעקע־נאָמען"
 
-#: gtk/gtkcalendar.c:475
+#: gtk/gtkcalendar.c:426
 #, fuzzy
 msgid "Month"
 msgstr "שריפֿט"
 
-#: gtk/gtkcalendar.c:476
+#: gtk/gtkcalendar.c:427
 msgid "The selected month (as a number between 0 and 11)"
 msgstr ""
 
-#: gtk/gtkcalendar.c:482
+#: gtk/gtkcalendar.c:433
 msgid "Day"
 msgstr ""
 
-#: gtk/gtkcalendar.c:483
+#: gtk/gtkcalendar.c:434
 msgid ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
 msgstr ""
 
-#: gtk/gtkcalendar.c:497
+#: gtk/gtkcalendar.c:448
 #, fuzzy
 msgid "Show Heading"
 msgstr "שורה אָפּרוקונג"
 
-#: gtk/gtkcalendar.c:498
+#: gtk/gtkcalendar.c:449
 msgid "If TRUE, a heading is displayed"
 msgstr ""
 
-#: gtk/gtkcalendar.c:512
+#: gtk/gtkcalendar.c:463
 #, fuzzy
 msgid "Show Day Names"
 msgstr "װײַז הענטלעך"
 
-#: gtk/gtkcalendar.c:513
+#: gtk/gtkcalendar.c:464
 msgid "If TRUE, day names are displayed"
 msgstr ""
 
-#: gtk/gtkcalendar.c:526
+#: gtk/gtkcalendar.c:477
 msgid "No Month Change"
 msgstr ""
 
-#: gtk/gtkcalendar.c:527
+#: gtk/gtkcalendar.c:478
 msgid "If TRUE, the selected month cannot be changed"
 msgstr ""
 
-#: gtk/gtkcalendar.c:541
+#: gtk/gtkcalendar.c:492
 msgid "Show Week Numbers"
 msgstr ""
 
-#: gtk/gtkcalendar.c:542
+#: gtk/gtkcalendar.c:493
 msgid "If TRUE, week numbers are displayed"
 msgstr ""
 
-#: gtk/gtkcellrenderer.c:205
+#: gtk/gtkcellrenderer.c:206
 msgid "mode"
 msgstr "מאָדע"
 
-#: gtk/gtkcellrenderer.c:206
+#: gtk/gtkcellrenderer.c:207
 msgid "Editable mode of the CellRenderer"
 msgstr "רעדאַגיר־מאָדע פֿון צעלװײַזער"
 
@@ -909,340 +909,359 @@ msgstr "ה' אױסגלײַכונג"
 msgid "The x-align"
 msgstr "ה' אױסגלײַכונג"
 
-#: gtk/gtkcellrenderer.c:241
+#: gtk/gtkcellrenderer.c:240
 msgid "yalign"
 msgstr "װ' אױסגלײַכונג"
 
-#: gtk/gtkcellrenderer.c:242
+#: gtk/gtkcellrenderer.c:241
 msgid "The y-align"
 msgstr "די װ' אױסגלײַכונג"
 
-#: gtk/gtkcellrenderer.c:252
+#: gtk/gtkcellrenderer.c:250
 msgid "xpad"
 msgstr "ה' לײדיק אָרט"
 
-#: gtk/gtkcellrenderer.c:253
+#: gtk/gtkcellrenderer.c:251
 msgid "The xpad"
 msgstr "דאָס ה' לײדיק אָרט"
 
-#: gtk/gtkcellrenderer.c:263
+#: gtk/gtkcellrenderer.c:260
 msgid "ypad"
 msgstr "װ' לײדיק אָרט"
 
-#: gtk/gtkcellrenderer.c:264
+#: gtk/gtkcellrenderer.c:261
 msgid "The ypad"
 msgstr "דאָס װ' לײדיק אָרט"
 
-#: gtk/gtkcellrenderer.c:274
+#: gtk/gtkcellrenderer.c:270
 msgid "width"
 msgstr "ברײט"
 
-#: gtk/gtkcellrenderer.c:275
+#: gtk/gtkcellrenderer.c:271
 msgid "The fixed width"
 msgstr "די ברײט ניט צו ענדערן"
 
-#: gtk/gtkcellrenderer.c:285
+#: gtk/gtkcellrenderer.c:280
 msgid "height"
 msgstr "הײך"
 
-#: gtk/gtkcellrenderer.c:286
+#: gtk/gtkcellrenderer.c:281
 msgid "The fixed height"
 msgstr "די הײך ניט צו ענדערן"
 
-#: gtk/gtkcellrenderer.c:296
+#: gtk/gtkcellrenderer.c:290
 msgid "Is Expander"
 msgstr "איז אַ פֿאַרגרעסערער"
 
-#: gtk/gtkcellrenderer.c:297
+#: gtk/gtkcellrenderer.c:291
 msgid "Row has children"
 msgstr "שורה האָט קינדער"
 
-#: gtk/gtkcellrenderer.c:306
+#: gtk/gtkcellrenderer.c:299
 msgid "Is Expanded"
 msgstr "איז פֿאַרגרעסערט"
 
-#: gtk/gtkcellrenderer.c:307
+#: gtk/gtkcellrenderer.c:300
 msgid "Row is an expander row, and is expanded"
 msgstr "שורה האָט אַ פֿאַרגרעסער שורה און איז אַלײן פֿאַרגרעסערט"
 
-#: gtk/gtkcellrenderer.c:315
+#: gtk/gtkcellrenderer.c:307
 msgid "Cell background color name"
 msgstr "צעל הינטערפֿאַרב נאָמען"
 
-#: gtk/gtkcellrenderer.c:316
+#: gtk/gtkcellrenderer.c:308
 msgid "Cell background color as a string"
 msgstr "צעל הינטערפֿאַרב װי אַן אות־פֿאָדעם"
 
-#: gtk/gtkcellrenderer.c:323
+#: gtk/gtkcellrenderer.c:315
 msgid "Cell background color"
 msgstr "צעל הינטערפֿאַרב"
 
-#: gtk/gtkcellrenderer.c:324
+#: gtk/gtkcellrenderer.c:316
 msgid "Cell background color as a GdkColor"
 msgstr "צעל הינטערפֿאַרב װי אַ GdkColor"
 
-#: gtk/gtkcellrenderer.c:332
+#: gtk/gtkcellrenderer.c:324
 msgid "Cell background set"
 msgstr "צעל באַשטעטיק די הינטערפֿאַרב"
 
-#: gtk/gtkcellrenderer.c:333
+#: gtk/gtkcellrenderer.c:325
 msgid "Whether this tag affects the cell background color"
 msgstr "צי דאָס הענטל איז משפּיע דעם צעלס הינטערפֿאַרב"
 
-#: gtk/gtkcellrenderercombo.c:88
+#: gtk/gtkcellrenderercombo.c:89
 #, fuzzy
 msgid "Model"
 msgstr "מאָדע"
 
-#: gtk/gtkcellrenderercombo.c:89
+#: gtk/gtkcellrenderercombo.c:90
 #, fuzzy
 msgid "The model containing the possible values for the combo box"
 msgstr "דער מאָדעל פֿאַר דעם בױם־געשטאַלט"
 
-#: gtk/gtkcellrenderercombo.c:109 gtk/gtkcomboboxentry.c:114
+#: gtk/gtkcellrenderercombo.c:110 gtk/gtkcomboboxentry.c:122
 #, fuzzy
 msgid "Text Column"
 msgstr "זוכזײַל"
 
-#: gtk/gtkcellrenderercombo.c:110 gtk/gtkcomboboxentry.c:115
+#: gtk/gtkcellrenderercombo.c:111 gtk/gtkcomboboxentry.c:123
 msgid "A column in the data source model to get the strings from"
 msgstr ""
 
-#: gtk/gtkcellrenderercombo.c:127
+#: gtk/gtkcellrenderercombo.c:128
 msgid "Has Entry"
 msgstr ""
 
-#: gtk/gtkcellrenderercombo.c:128
+#: gtk/gtkcellrenderercombo.c:129
 msgid "If FALSE, don't allow to enter strings other than the chosen ones"
 msgstr ""
 
-#: gtk/gtkcellrendererpixbuf.c:136
+#: gtk/gtkcellrendererpixbuf.c:145
 msgid "Pixbuf Object"
 msgstr "בילדבאַהאַלט זאַך"
 
-#: gtk/gtkcellrendererpixbuf.c:137
+#: gtk/gtkcellrendererpixbuf.c:146
 msgid "The pixbuf to render"
 msgstr "דער בילדבאַהאַלט צו װײַזן."
 
-#: gtk/gtkcellrendererpixbuf.c:145
+#: gtk/gtkcellrendererpixbuf.c:153
 msgid "Pixbuf Expander Open"
 msgstr "בילדבאַהאַלט פֿאַרגרעסערער אָפֿן"
 
-#: gtk/gtkcellrendererpixbuf.c:146
+#: gtk/gtkcellrendererpixbuf.c:154
 msgid "Pixbuf for open expander"
 msgstr "בילדבאַהאַלט פֿאַר אָפֿענעם פֿאַרגרעסערער"
 
-#: gtk/gtkcellrendererpixbuf.c:154
+#: gtk/gtkcellrendererpixbuf.c:161
 msgid "Pixbuf Expander Closed"
 msgstr "בילדבאַהאַלט פֿאַרגרעסערער פֿאַרמאַכט"
 
-#: gtk/gtkcellrendererpixbuf.c:155
+#: gtk/gtkcellrendererpixbuf.c:162
 msgid "Pixbuf for closed expander"
 msgstr "בילדבאַהאַלט פֿאַר פֿאַרמאַכטן פֿאַרגרעסערער"
 
-#: gtk/gtkcellrendererpixbuf.c:163 gtk/gtkimage.c:199
+#: gtk/gtkcellrendererpixbuf.c:169 gtk/gtkimage.c:203
 msgid "Stock ID"
 msgstr "הורט אידענטיפֿיקאַציע"
 
-#: gtk/gtkcellrendererpixbuf.c:164
+#: gtk/gtkcellrendererpixbuf.c:170
 msgid "The stock ID of the stock icon to render"
 msgstr "די הורט־אידענטיפֿיקאַציע פֿון הורט־בילדל צו פֿאָרמירן"
 
-#: gtk/gtkcellrendererpixbuf.c:171
+#: gtk/gtkcellrendererpixbuf.c:177
 msgid "Size"
 msgstr "גרײס"
 
-#: gtk/gtkcellrendererpixbuf.c:172
+#: gtk/gtkcellrendererpixbuf.c:178
 #, fuzzy
 msgid "The GtkIconSize value that specifies the size of the rendered icon"
 msgstr "די גרײס פֿונעם פֿאָרמירטן בילדל"
 
-#: gtk/gtkcellrendererpixbuf.c:181
+#: gtk/gtkcellrendererpixbuf.c:187
 msgid "Detail"
 msgstr "פּרטים"
 
-#: gtk/gtkcellrendererpixbuf.c:182
+#: gtk/gtkcellrendererpixbuf.c:188
 msgid "Render detail to pass to the theme engine"
 msgstr "פֿאָרמיר פּרטים צו געבן צום טעמע־מאָטאָר"
 
-#: gtk/gtkcellrendererprogress.c:116
+#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:261 gtk/gtkwindow.c:531
+#, fuzzy
+msgid "Icon Name"
+msgstr "שריפֿט נאָמען"
+
+#: gtk/gtkcellrendererpixbuf.c:206 gtk/gtkimage.c:262
+#, fuzzy
+msgid "The name of the icon from the icon theme"
+msgstr "דער נאָמען פֿון דעם צעפּיכעסל"
+
+#: gtk/gtkcellrendererpixbuf.c:221
+msgid "Follow State"
+msgstr ""
+
+#: gtk/gtkcellrendererpixbuf.c:222
+#, fuzzy
+msgid "Whether the rendered pixbuf should be colorized according to the state"
+msgstr "אױב מען װיל אַז די צאַמרינע זאָל זיך װײַזן"
+
+#: gtk/gtkcellrendererprogress.c:117
 #, fuzzy
 msgid "Value of the progress bar"
 msgstr "טעקסט צו װײַזן אין דער פּראָגרעס־װירע"
 
-#: gtk/gtkcellrendererprogress.c:133 gtk/gtkcellrenderertext.c:213
-#: gtk/gtkentry.c:573 gtk/gtkprogressbar.c:220
+#: gtk/gtkcellrendererprogress.c:134 gtk/gtkcellrenderertext.c:219
+#: gtk/gtkentry.c:574 gtk/gtkprogressbar.c:221 gtk/gtktextbuffer.c:206
 msgid "Text"
 msgstr "טעקסט"
 
-#: gtk/gtkcellrendererprogress.c:134
+#: gtk/gtkcellrendererprogress.c:135
 #, fuzzy
 msgid "Text on the progress bar"
 msgstr "טעקסט צו װײַזן אין דער פּראָגרעס־װירע"
 
-#: gtk/gtkcellrenderertext.c:214
+#: gtk/gtkcellrenderertext.c:220
 msgid "Text to render"
 msgstr "טעקסט צו פֿאָרמירן"
 
-#: gtk/gtkcellrenderertext.c:221
+#: gtk/gtkcellrenderertext.c:227
 msgid "Markup"
 msgstr "פֿאַרצײַכענונג"
 
-#: gtk/gtkcellrenderertext.c:222
+#: gtk/gtkcellrenderertext.c:228
 msgid "Marked up text to render"
 msgstr "פֿאַרצײַכנטער טעקסט צו פֿאָרמירן"
 
-#: gtk/gtkcellrenderertext.c:229 gtk/gtklabel.c:327
+#: gtk/gtkcellrenderertext.c:235 gtk/gtklabel.c:328
 msgid "Attributes"
 msgstr "אַטריבוטן"
 
-#: gtk/gtkcellrenderertext.c:230
+#: gtk/gtkcellrenderertext.c:236
 msgid "A list of style attributes to apply to the text of the renderer"
 msgstr "אַ רשימה סטיל־אַטריבוטן צו אַפּליקירן צום טעקסט פֿון דעם פֿאָרמירער"
 
-#: gtk/gtkcellrenderertext.c:237
+#: gtk/gtkcellrenderertext.c:243
 msgid "Single Paragraph Mode"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:238
+#: gtk/gtkcellrenderertext.c:244
 msgid "Whether or not to keep all text in a single paragraph"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:246 gtk/gtkcellview.c:182 gtk/gtktexttag.c:207
+#: gtk/gtkcellrenderertext.c:252 gtk/gtkcellview.c:183 gtk/gtktexttag.c:211
 msgid "Background color name"
 msgstr "הינטערפֿאַרב נאָמען"
 
-#: gtk/gtkcellrenderertext.c:247 gtk/gtkcellview.c:183 gtk/gtktexttag.c:208
+#: gtk/gtkcellrenderertext.c:253 gtk/gtkcellview.c:184 gtk/gtktexttag.c:212
 msgid "Background color as a string"
 msgstr "הינטערפֿאַרב װי אַן אות־פֿאָדעם"
 
-#: gtk/gtkcellrenderertext.c:254 gtk/gtkcellview.c:189 gtk/gtktexttag.c:215
+#: gtk/gtkcellrenderertext.c:260 gtk/gtkcellview.c:190 gtk/gtktexttag.c:219
 msgid "Background color"
 msgstr "הינטערפֿאַרב"
 
-#: gtk/gtkcellrenderertext.c:255 gtk/gtkcellview.c:190
+#: gtk/gtkcellrenderertext.c:261 gtk/gtkcellview.c:191
 msgid "Background color as a GdkColor"
 msgstr "הינטערפֿאַרב װי אַ GdkColor"
 
-#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:241
+#: gtk/gtkcellrenderertext.c:268 gtk/gtktexttag.c:245
 msgid "Foreground color name"
 msgstr "פֿאַר־פֿאַרב נאָמען"
 
-#: gtk/gtkcellrenderertext.c:263 gtk/gtktexttag.c:242
+#: gtk/gtkcellrenderertext.c:269 gtk/gtktexttag.c:246
 msgid "Foreground color as a string"
 msgstr "פֿאַר־פֿאַרב װי אַן אות־פֿאָדעם"
 
-#: gtk/gtkcellrenderertext.c:270 gtk/gtktexttag.c:249
+#: gtk/gtkcellrenderertext.c:276 gtk/gtktexttag.c:253
 msgid "Foreground color"
 msgstr "פֿאַר־פֿאַרב"
 
-#: gtk/gtkcellrenderertext.c:271
+#: gtk/gtkcellrenderertext.c:277
 msgid "Foreground color as a GdkColor"
 msgstr "פֿאַר־פֿאַרב װי אַ GdkColor"
 
-#: gtk/gtkcellrenderertext.c:279 gtk/gtkentry.c:505 gtk/gtktexttag.c:275
-#: gtk/gtktextview.c:577
+#: gtk/gtkcellrenderertext.c:285 gtk/gtkentry.c:506 gtk/gtktexttag.c:279
+#: gtk/gtktextview.c:578
 msgid "Editable"
 msgstr "רעדאַגירעװדיק"
 
-#: gtk/gtkcellrenderertext.c:280 gtk/gtktexttag.c:276 gtk/gtktextview.c:578
+#: gtk/gtkcellrenderertext.c:286 gtk/gtktexttag.c:280 gtk/gtktextview.c:579
 msgid "Whether the text can be modified by the user"
 msgstr "צי דער ניצער מעג ענדערן דעם טעקסט"
 
-#: gtk/gtkcellrenderertext.c:287 gtk/gtkcellrenderertext.c:295
-#: gtk/gtkfontsel.c:222 gtk/gtktexttag.c:283 gtk/gtktexttag.c:291
+#: gtk/gtkcellrenderertext.c:293 gtk/gtkcellrenderertext.c:301
+#: gtk/gtkfontsel.c:223 gtk/gtktexttag.c:287 gtk/gtktexttag.c:295
 msgid "Font"
 msgstr "שריפֿט"
 
-#: gtk/gtkcellrenderertext.c:288
+#: gtk/gtkcellrenderertext.c:294
 msgid "Font description as a string"
 msgstr "שריפֿט באַשרײַבונג װי אַן אות־פֿאָדעם"
 
-#: gtk/gtkcellrenderertext.c:296 gtk/gtktexttag.c:292
+#: gtk/gtkcellrenderertext.c:302 gtk/gtktexttag.c:296
 msgid "Font description as a PangoFontDescription struct"
 msgstr "שריפֿט באַשרײַבונג װי אַ PangoFontDescription סטרוקטור"
 
-#: gtk/gtkcellrenderertext.c:304 gtk/gtktexttag.c:300
+#: gtk/gtkcellrenderertext.c:310 gtk/gtktexttag.c:304
 msgid "Font family"
 msgstr "שריפֿט משפּחה"
 
-#: gtk/gtkcellrenderertext.c:305 gtk/gtktexttag.c:301
+#: gtk/gtkcellrenderertext.c:311 gtk/gtktexttag.c:305
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
 msgstr "נאָמען פֿון שריפֿט משפּחה, װי למשל Sans, Helvetica, Times, Monospace"
 
-#: gtk/gtkcellrenderertext.c:312 gtk/gtkcellrenderertext.c:313
-#: gtk/gtktexttag.c:308
+#: gtk/gtkcellrenderertext.c:318 gtk/gtkcellrenderertext.c:319
+#: gtk/gtktexttag.c:312
 msgid "Font style"
 msgstr "שריפֿט סטיל"
 
-#: gtk/gtkcellrenderertext.c:321 gtk/gtkcellrenderertext.c:322
-#: gtk/gtktexttag.c:317
+#: gtk/gtkcellrenderertext.c:327 gtk/gtkcellrenderertext.c:328
+#: gtk/gtktexttag.c:321
 msgid "Font variant"
 msgstr "שריפֿט װאַריאַנט"
 
-#: gtk/gtkcellrenderertext.c:330 gtk/gtkcellrenderertext.c:331
-#: gtk/gtktexttag.c:326
+#: gtk/gtkcellrenderertext.c:336 gtk/gtkcellrenderertext.c:337
+#: gtk/gtktexttag.c:330
 msgid "Font weight"
 msgstr "שריפֿט װאָג"
 
-#: gtk/gtkcellrenderertext.c:340 gtk/gtkcellrenderertext.c:341
-#: gtk/gtktexttag.c:337
+#: gtk/gtkcellrenderertext.c:346 gtk/gtkcellrenderertext.c:347
+#: gtk/gtktexttag.c:341
 msgid "Font stretch"
 msgstr "שריפֿט סקאַלירונג"
 
-#: gtk/gtkcellrenderertext.c:349 gtk/gtkcellrenderertext.c:350
-#: gtk/gtktexttag.c:346
+#: gtk/gtkcellrenderertext.c:355 gtk/gtkcellrenderertext.c:356
+#: gtk/gtktexttag.c:350
 msgid "Font size"
 msgstr "שריפֿט גרײס"
 
-#: gtk/gtkcellrenderertext.c:359 gtk/gtktexttag.c:366
+#: gtk/gtkcellrenderertext.c:365 gtk/gtktexttag.c:370
 msgid "Font points"
 msgstr "שריפֿט פּונקטן"
 
-#: gtk/gtkcellrenderertext.c:360 gtk/gtktexttag.c:367
+#: gtk/gtkcellrenderertext.c:366 gtk/gtktexttag.c:371
 msgid "Font size in points"
 msgstr "שריפֿט גרײס אין פּונקטן"
 
-#: gtk/gtkcellrenderertext.c:369 gtk/gtktexttag.c:356
+#: gtk/gtkcellrenderertext.c:375 gtk/gtktexttag.c:360
 msgid "Font scale"
 msgstr "שריפֿט מאָס"
 
-#: gtk/gtkcellrenderertext.c:370
+#: gtk/gtkcellrenderertext.c:376
 msgid "Font scaling factor"
 msgstr "שריפֿט סקאַליר־פֿאַקטאָר"
 
-#: gtk/gtkcellrenderertext.c:379 gtk/gtktexttag.c:425
+#: gtk/gtkcellrenderertext.c:385 gtk/gtktexttag.c:429
 msgid "Rise"
 msgstr "הײב"
 
-#: gtk/gtkcellrenderertext.c:380
+#: gtk/gtkcellrenderertext.c:386
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative)"
 msgstr ""
 "צולײג פֿון טעקסט איבער דעם אונטערגרונט (אונטער דעם אונטערגרונט אױב דער הײב "
 "איז נעגאַטיװ)"
 
-#: gtk/gtkcellrenderertext.c:390 gtk/gtktexttag.c:465
+#: gtk/gtkcellrenderertext.c:397 gtk/gtktexttag.c:469
 msgid "Strikethrough"
 msgstr "דורכשטריך"
 
-#: gtk/gtkcellrenderertext.c:391 gtk/gtktexttag.c:466
+#: gtk/gtkcellrenderertext.c:398 gtk/gtktexttag.c:470
 msgid "Whether to strike through the text"
 msgstr "צי מען זאָל דורכשטריכן דעם טעקסט"
 
-#: gtk/gtkcellrenderertext.c:398 gtk/gtktexttag.c:473
+#: gtk/gtkcellrenderertext.c:405 gtk/gtktexttag.c:477
 msgid "Underline"
 msgstr "אונטערשטריך"
 
-#: gtk/gtkcellrenderertext.c:399 gtk/gtktexttag.c:474
+#: gtk/gtkcellrenderertext.c:406 gtk/gtktexttag.c:478
 msgid "Style of underline for this text"
 msgstr "סטיל פֿון אונטערשטריך אין דעם טעקסט"
 
-#: gtk/gtkcellrenderertext.c:407 gtk/gtktexttag.c:385
+#: gtk/gtkcellrenderertext.c:414 gtk/gtktexttag.c:389
 msgid "Language"
 msgstr "שפּראַך"
 
-#: gtk/gtkcellrenderertext.c:408
+#: gtk/gtkcellrenderertext.c:415
 msgid ""
 "The language this text is in, as an ISO code. Pango can use this as a hint "
 "when rendering the text. If you don't understand this parameter, you "
@@ -1252,153 +1271,173 @@ msgstr ""
 "פֿאָרמירט דעם טעקסט.  אױב דו פֿאַרשטײסט ניט דעם פּאַראַמעטער, איז מסתּמא דאַרפֿסטו אים "
 "אױף כּפּרות."
 
-#: gtk/gtkcellrenderertext.c:416 gtk/gtklabel.c:433 gtk/gtkprogressbar.c:242
+#: gtk/gtkcellrenderertext.c:435 gtk/gtklabel.c:434 gtk/gtkprogressbar.c:243
 msgid "Ellipsize"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:417
+#: gtk/gtkcellrenderertext.c:436
 msgid ""
 "The preferred place to ellipsize the string, if the cell renderer does not "
 "have enough room to display the entire string, if at all"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:434 gtk/gtkfilechooserbutton.c:365
-#: gtk/gtklabel.c:453
+#: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:367
+#: gtk/gtklabel.c:454
 #, fuzzy
 msgid "Width In Characters"
 msgstr "ברײט אין שריפֿטצײכנס"
 
-#: gtk/gtkcellrenderertext.c:435 gtk/gtklabel.c:454
+#: gtk/gtkcellrenderertext.c:456 gtk/gtklabel.c:455
 msgid "The desired width of the label, in characters"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:447 gtk/gtkcellview.c:197 gtk/gtktexttag.c:510
+#: gtk/gtkcellrenderertext.c:474 gtk/gtktexttag.c:486
+msgid "Wrap mode"
+msgstr "שאַר מאָדע"
+
+#: gtk/gtkcellrenderertext.c:475
+msgid ""
+"How to break the string into multiple lines, if the cell renderer does not "
+"have enough room to display the entire string"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:494 gtk/gtkcombobox.c:573
+#, fuzzy
+msgid "Wrap width"
+msgstr "ברײט"
+
+#: gtk/gtkcellrenderertext.c:495
+#, fuzzy
+msgid "The width at which the text is wrapped"
+msgstr "די פּאָזיציע װוּ דער איצטיקער באַטרעף װײַזט זיך"
+
+#: gtk/gtkcellrenderertext.c:507 gtk/gtkcellview.c:198 gtk/gtktexttag.c:545
 msgid "Background set"
 msgstr "באַשטעטיק די הינטערפֿאַרב"
 
-#: gtk/gtkcellrenderertext.c:448 gtk/gtkcellview.c:198 gtk/gtktexttag.c:511
+#: gtk/gtkcellrenderertext.c:508 gtk/gtkcellview.c:199 gtk/gtktexttag.c:546
 msgid "Whether this tag affects the background color"
 msgstr "צי דאָס הענטל איז משפּיע די הינטערפֿאַרב"
 
-#: gtk/gtkcellrenderertext.c:451 gtk/gtktexttag.c:522
+#: gtk/gtkcellrenderertext.c:511 gtk/gtktexttag.c:557
 msgid "Foreground set"
 msgstr "באַשטעטיק די פֿאַר־פֿאַרב"
 
-#: gtk/gtkcellrenderertext.c:452 gtk/gtktexttag.c:523
+#: gtk/gtkcellrenderertext.c:512 gtk/gtktexttag.c:558
 msgid "Whether this tag affects the foreground color"
 msgstr "צי דאָס הענטל איז משפּיע די פֿאַר־פֿאַרב"
 
-#: gtk/gtkcellrenderertext.c:455 gtk/gtktexttag.c:530
+#: gtk/gtkcellrenderertext.c:515 gtk/gtktexttag.c:565
 msgid "Editability set"
 msgstr "באַשטעטיק די רעדאַגירעװדיקײט"
 
-#: gtk/gtkcellrenderertext.c:456 gtk/gtktexttag.c:531
+#: gtk/gtkcellrenderertext.c:516 gtk/gtktexttag.c:566
 msgid "Whether this tag affects text editability"
 msgstr "צי דאָס הענטל איז משפּיע די טעקסט־רעדאַגירעװדיקײט"
 
-#: gtk/gtkcellrenderertext.c:459 gtk/gtktexttag.c:534
+#: gtk/gtkcellrenderertext.c:519 gtk/gtktexttag.c:569
 msgid "Font family set"
 msgstr "באַשטעטיק די שריפֿט משפּחה"
 
-#: gtk/gtkcellrenderertext.c:460 gtk/gtktexttag.c:535
+#: gtk/gtkcellrenderertext.c:520 gtk/gtktexttag.c:570
 msgid "Whether this tag affects the font family"
 msgstr "צי דאָס הענטל איז משפּיע די שריפֿט משפּחה"
 
-#: gtk/gtkcellrenderertext.c:463 gtk/gtktexttag.c:538
+#: gtk/gtkcellrenderertext.c:523 gtk/gtktexttag.c:573
 msgid "Font style set"
 msgstr "באַשטעטיק דעם שריפֿט סטיל"
 
-#: gtk/gtkcellrenderertext.c:464 gtk/gtktexttag.c:539
+#: gtk/gtkcellrenderertext.c:524 gtk/gtktexttag.c:574
 msgid "Whether this tag affects the font style"
 msgstr "צי דאָס הענטל איז משפּיע דעם שריפֿט סטיל"
 
-#: gtk/gtkcellrenderertext.c:467 gtk/gtktexttag.c:542
+#: gtk/gtkcellrenderertext.c:527 gtk/gtktexttag.c:577
 msgid "Font variant set"
 msgstr "באַשטעטיק דעם שריפֿט װאַריאַנט"
 
-#: gtk/gtkcellrenderertext.c:468 gtk/gtktexttag.c:543
+#: gtk/gtkcellrenderertext.c:528 gtk/gtktexttag.c:578
 msgid "Whether this tag affects the font variant"
 msgstr "צי דאָס הענטל איז משפּיע דעם שריפֿט װאַריאַנט"
 
-#: gtk/gtkcellrenderertext.c:471 gtk/gtktexttag.c:546
+#: gtk/gtkcellrenderertext.c:531 gtk/gtktexttag.c:581
 msgid "Font weight set"
 msgstr "באַשטעטיק די שריפֿט װאָג"
 
-#: gtk/gtkcellrenderertext.c:472 gtk/gtktexttag.c:547
+#: gtk/gtkcellrenderertext.c:532 gtk/gtktexttag.c:582
 msgid "Whether this tag affects the font weight"
 msgstr "צי דאָס הענטל איז משפּיע די שריפֿט װאָג"
 
-#: gtk/gtkcellrenderertext.c:475 gtk/gtktexttag.c:550
+#: gtk/gtkcellrenderertext.c:535 gtk/gtktexttag.c:585
 msgid "Font stretch set"
 msgstr "באַשטעטיק די שריפֿט סקאַלירונג"
 
-#: gtk/gtkcellrenderertext.c:476 gtk/gtktexttag.c:551
+#: gtk/gtkcellrenderertext.c:536 gtk/gtktexttag.c:586
 msgid "Whether this tag affects the font stretch"
 msgstr "צי דאָס הענטל איז משפּיע די שריפֿט סקאַלירונג"
 
-#: gtk/gtkcellrenderertext.c:479 gtk/gtktexttag.c:554
+#: gtk/gtkcellrenderertext.c:539 gtk/gtktexttag.c:589
 msgid "Font size set"
 msgstr "באַשטעטיק די שריפֿט גרײס"
 
-#: gtk/gtkcellrenderertext.c:480 gtk/gtktexttag.c:555
+#: gtk/gtkcellrenderertext.c:540 gtk/gtktexttag.c:590
 msgid "Whether this tag affects the font size"
 msgstr "צי דאָס הענטל איז משפּיע די שריפֿט גרײס"
 
-#: gtk/gtkcellrenderertext.c:483 gtk/gtktexttag.c:558
+#: gtk/gtkcellrenderertext.c:543 gtk/gtktexttag.c:593
 msgid "Font scale set"
 msgstr "באַשטעטיק די שריפֿט מאָס"
 
-#: gtk/gtkcellrenderertext.c:484 gtk/gtktexttag.c:559
+#: gtk/gtkcellrenderertext.c:544 gtk/gtktexttag.c:594
 msgid "Whether this tag scales the font size by a factor"
 msgstr "צי דאָס הענטל איז משפּיע די שריפֿט מאָס"
 
-#: gtk/gtkcellrenderertext.c:487 gtk/gtktexttag.c:578
+#: gtk/gtkcellrenderertext.c:547 gtk/gtktexttag.c:613
 msgid "Rise set"
 msgstr "באַשטעטיק דעם הײב"
 
-#: gtk/gtkcellrenderertext.c:488 gtk/gtktexttag.c:579
+#: gtk/gtkcellrenderertext.c:548 gtk/gtktexttag.c:614
 msgid "Whether this tag affects the rise"
 msgstr "צי דאָס הענטל איז משפּיע דעם הײב"
 
-#: gtk/gtkcellrenderertext.c:491 gtk/gtktexttag.c:594
+#: gtk/gtkcellrenderertext.c:551 gtk/gtktexttag.c:629
 msgid "Strikethrough set"
 msgstr "באַשטעטיק דעם דורכשטריך"
 
-#: gtk/gtkcellrenderertext.c:492 gtk/gtktexttag.c:595
+#: gtk/gtkcellrenderertext.c:552 gtk/gtktexttag.c:630
 msgid "Whether this tag affects strikethrough"
 msgstr "צי דאָס הענטל איז משפּיע דעם דורכשטריך"
 
-#: gtk/gtkcellrenderertext.c:495 gtk/gtktexttag.c:602
+#: gtk/gtkcellrenderertext.c:555 gtk/gtktexttag.c:637
 msgid "Underline set"
 msgstr "באַשטעטיק דעם אונטערשטריך"
 
-#: gtk/gtkcellrenderertext.c:496 gtk/gtktexttag.c:603
+#: gtk/gtkcellrenderertext.c:556 gtk/gtktexttag.c:638
 msgid "Whether this tag affects underlining"
 msgstr "צי דאָס הענטל איז משפּיע דעם אונטערשטריך"
 
-#: gtk/gtkcellrenderertext.c:499 gtk/gtktexttag.c:566
+#: gtk/gtkcellrenderertext.c:559 gtk/gtktexttag.c:601
 msgid "Language set"
 msgstr "באַשטעטיק שפּראַך"
 
-#: gtk/gtkcellrenderertext.c:500 gtk/gtktexttag.c:567
+#: gtk/gtkcellrenderertext.c:560 gtk/gtktexttag.c:602
 msgid "Whether this tag affects the language the text is rendered as"
 msgstr "אױב דאָס הענטל האָט אַן השפּעה איבער דער שפּראַך װי דער טעקסט פֿאָרמירט זיך"
 
-#: gtk/gtkcellrenderertext.c:503
+#: gtk/gtkcellrenderertext.c:563
 #, fuzzy
 msgid "Ellipsize set"
 msgstr "באַשטעטיק דעם הײב"
 
-#: gtk/gtkcellrenderertext.c:504
+#: gtk/gtkcellrenderertext.c:564
 #, fuzzy
 msgid "Whether this tag affects the ellipsize mode"
 msgstr "צי דאָס הענטל איז משפּיע דעם הײב"
 
-#: gtk/gtkcellrenderertoggle.c:142
+#: gtk/gtkcellrenderertoggle.c:143
 msgid "Toggle state"
 msgstr "פֿאַרקער מצבֿ"
 
-#: gtk/gtkcellrenderertoggle.c:143
+#: gtk/gtkcellrenderertoggle.c:144
 msgid "The toggle state of the button"
 msgstr "פֿאַרקער דעם מצבֿ פֿונעם קנעפּל"
 
@@ -1410,246 +1449,241 @@ msgstr "דער מצבֿ שטימט ניט"
 msgid "The inconsistent state of the button"
 msgstr "דער ניט־שטימענדיקער מצבֿ פֿונעם קנעפּל"
 
-#: gtk/gtkcellrenderertoggle.c:160
+#: gtk/gtkcellrenderertoggle.c:159
 msgid "Activatable"
 msgstr "אַקטיװירעװדיק"
 
-#: gtk/gtkcellrenderertoggle.c:161
+#: gtk/gtkcellrenderertoggle.c:160
 msgid "The toggle button can be activated"
 msgstr "דאָס פֿאַרקער־קנעפּל לאָזט זיך אַקטיװירן"
 
-#: gtk/gtkcellrenderertoggle.c:169
+#: gtk/gtkcellrenderertoggle.c:167
 msgid "Radio state"
 msgstr "ראַדיאָ מצבֿ"
 
-#: gtk/gtkcellrenderertoggle.c:170
+#: gtk/gtkcellrenderertoggle.c:168
 msgid "Draw the toggle button as a radio button"
 msgstr "צײכן דאָס פֿאַרקער־קנעפּל װי אַ ראַדיאָ קנעפּל"
 
-#: gtk/gtkcheckbutton.c:100 gtk/gtkcheckmenuitem.c:141 gtk/gtkoptionmenu.c:201
+#: gtk/gtkcheckbutton.c:101 gtk/gtkcheckmenuitem.c:142 gtk/gtkoptionmenu.c:203
 msgid "Indicator Size"
 msgstr "װײַזער גרײס"
 
-#: gtk/gtkcheckbutton.c:101 gtk/gtkcheckmenuitem.c:143
+#: gtk/gtkcheckbutton.c:102 gtk/gtkcheckmenuitem.c:144
 msgid "Size of check or radio indicator"
 msgstr "גרײס פֿון קאָנטראָליר אָדער ראַדיאָ װײַזער"
 
-#: gtk/gtkcheckbutton.c:108 gtk/gtkexpander.c:256 gtk/gtkoptionmenu.c:207
+#: gtk/gtkcheckbutton.c:109 gtk/gtkexpander.c:256 gtk/gtkoptionmenu.c:209
 msgid "Indicator Spacing"
 msgstr "װײַזער אָפּרוקונג"
 
-#: gtk/gtkcheckbutton.c:109
+#: gtk/gtkcheckbutton.c:110
 msgid "Spacing around check or radio indicator"
 msgstr "אָפּרוקונג אַרום דעם קאָנטראָליר אָדער ראַדיאָ װײַזער"
 
-#: gtk/gtkcheckmenuitem.c:118 gtk/gtktogglebutton.c:134
+#: gtk/gtkcheckmenuitem.c:119 gtk/gtktogglebutton.c:135
 msgid "Active"
 msgstr "אַקטיװ"
 
-#: gtk/gtkcheckmenuitem.c:119
+#: gtk/gtkcheckmenuitem.c:120
 msgid "Whether the menu item is checked"
 msgstr "צי די מעניו־אײנס האָט אַ פֿײגעלע"
 
-#: gtk/gtkcheckmenuitem.c:126 gtk/gtktogglebutton.c:142
+#: gtk/gtkcheckmenuitem.c:127 gtk/gtktogglebutton.c:143
 msgid "Inconsistent"
 msgstr "שטימט ניט"
 
-#: gtk/gtkcheckmenuitem.c:127
+#: gtk/gtkcheckmenuitem.c:128
 msgid "Whether to display an \"inconsistent\" state"
 msgstr "צי מען זאָל װײַזן אַ מצבֿ װאָס שטימט ניט"
 
-#: gtk/gtkcheckmenuitem.c:134
+#: gtk/gtkcheckmenuitem.c:135
 msgid "Draw as radio menu item"
 msgstr ""
 
-#: gtk/gtkcheckmenuitem.c:135
+#: gtk/gtkcheckmenuitem.c:136
 #, fuzzy
 msgid "Whether the menu item looks like a radio menu item"
 msgstr "צי די מעניו־אײנס האָט אַ פֿײגעלע"
 
-#: gtk/gtkcolorbutton.c:203
+#: gtk/gtkcolorbutton.c:204
 #, fuzzy
 msgid "Use alpha"
 msgstr "ניץ פֿאַרצײַכענונג"
 
-#: gtk/gtkcolorbutton.c:204
+#: gtk/gtkcolorbutton.c:205
 msgid "Whether or not to give the color an alpha value"
 msgstr ""
 
-#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:351
-#: gtk/gtkfontbutton.c:176 gtk/gtktreeviewcolumn.c:298
+#: gtk/gtkcolorbutton.c:219 gtk/gtkfilechooserbutton.c:353
+#: gtk/gtkfontbutton.c:177 gtk/gtktreeviewcolumn.c:299
 msgid "Title"
 msgstr "טיטל"
 
-#: gtk/gtkcolorbutton.c:219
+#: gtk/gtkcolorbutton.c:220
 #, fuzzy
 msgid "The title of the color selection dialog"
 msgstr "דער טיטל פֿונעם פֿענצטער"
 
-#: gtk/gtkcolorbutton.c:233 gtk/gtkcolorsel.c:1848
+#: gtk/gtkcolorbutton.c:234 gtk/gtkcolorsel.c:1864
 msgid "Current Color"
 msgstr "איצטיקע פֿאַרב"
 
-#: gtk/gtkcolorbutton.c:234
+#: gtk/gtkcolorbutton.c:235
 #, fuzzy
 msgid "The selected color"
 msgstr "די איצטיקע פֿאַרב"
 
-#: gtk/gtkcolorbutton.c:248 gtk/gtkcolorsel.c:1855
+#: gtk/gtkcolorbutton.c:249 gtk/gtkcolorsel.c:1871
 msgid "Current Alpha"
 msgstr "איצטיקע α"
 
-#: gtk/gtkcolorbutton.c:249
+#: gtk/gtkcolorbutton.c:250
 #, fuzzy
 msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "דער איצטיקער מאַט־באַטרעף (0 דורקזעיִק; 65535 מאַט)"
 
-#: gtk/gtkcolorsel.c:1834
+#: gtk/gtkcolorsel.c:1850
 msgid "Has Opacity Control"
 msgstr "האָט מאַטקײט קאָנטראָל"
 
-#: gtk/gtkcolorsel.c:1835
+#: gtk/gtkcolorsel.c:1851
 msgid "Whether the color selector should allow setting opacity"
 msgstr "צי דער פֿאַרב אױסקלײַבער זאָל לאָזן באַשטעטיקן מאַטקײט"
 
-#: gtk/gtkcolorsel.c:1841
+#: gtk/gtkcolorsel.c:1857
 msgid "Has palette"
 msgstr "האָט אַ פּאַליטרע"
 
-#: gtk/gtkcolorsel.c:1842
+#: gtk/gtkcolorsel.c:1858
 msgid "Whether a palette should be used"
 msgstr "צי מען זאָל ניצן אַ פּאַליטרע"
 
-#: gtk/gtkcolorsel.c:1849
+#: gtk/gtkcolorsel.c:1865
 msgid "The current color"
 msgstr "די איצטיקע פֿאַרב"
 
-#: gtk/gtkcolorsel.c:1856
+#: gtk/gtkcolorsel.c:1872
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "דער איצטיקער מאַט־באַטרעף (0 דורקזעיִק; 65535 מאַט)"
 
-#: gtk/gtkcolorsel.c:1870
+#: gtk/gtkcolorsel.c:1886
 msgid "Custom palette"
 msgstr "אײגענע פּאַליטרע"
 
-#: gtk/gtkcolorsel.c:1871
+#: gtk/gtkcolorsel.c:1887
 msgid "Palette to use in the color selector"
 msgstr "פּאַליטרע צו ניצן אין דעם פֿאַרב אױסקלײַבער"
 
-#: gtk/gtkcombo.c:145
+#: gtk/gtkcombo.c:146
 msgid "Enable arrow keys"
 msgstr "דערמעגלעך פֿײַל־קלאַװישן"
 
-#: gtk/gtkcombo.c:146
+#: gtk/gtkcombo.c:147
 msgid "Whether the arrow keys move through the list of items"
 msgstr "צי די פֿײַל־קלאַװישן רוקן זיך איבער דורך דער רשימה"
 
-#: gtk/gtkcombo.c:152
+#: gtk/gtkcombo.c:153
 msgid "Always enable arrows"
 msgstr "דערמעגלעך אַלעמאָל פֿײַל־קלאַװישן"
 
-#: gtk/gtkcombo.c:153
+#: gtk/gtkcombo.c:154
 msgid "Obsolete property, ignored"
 msgstr "נאַטור װעלכער איז מער ניט געשטיצט; איגנאָרירט"
 
-#: gtk/gtkcombo.c:159
+#: gtk/gtkcombo.c:160
 msgid "Case sensitive"
 msgstr "לױט אות־גרײס"
 
-#: gtk/gtkcombo.c:160
+#: gtk/gtkcombo.c:161
 msgid "Whether list item matching is case sensitive"
 msgstr "צי מען היט אָפּ אות־גרײס אין זוכן דורך דער רשימה"
 
-#: gtk/gtkcombo.c:167
+#: gtk/gtkcombo.c:168
 msgid "Allow empty"
 msgstr "לאָז בלײַבן לײדיק"
 
-#: gtk/gtkcombo.c:168
+#: gtk/gtkcombo.c:169
 msgid "Whether an empty value may be entered in this field"
 msgstr "צי מען מעג אַרײַנשרײַבן אַ לײדיקן באַטרעף אין דעם פֿעלד"
 
-#: gtk/gtkcombo.c:175
+#: gtk/gtkcombo.c:176
 msgid "Value in list"
 msgstr "באַטרעף אין דער רשימה"
 
-#: gtk/gtkcombo.c:176
+#: gtk/gtkcombo.c:177
 msgid "Whether entered values must already be present in the list"
 msgstr "צי באַטרעפֿן װאָס מען שרײַבן אַרײַן מוזן זײַן שױן בנימצא אין דער רשימה"
 
-#: gtk/gtkcombobox.c:551
+#: gtk/gtkcombobox.c:556
 msgid "ComboBox model"
 msgstr ""
 
-#: gtk/gtkcombobox.c:552
+#: gtk/gtkcombobox.c:557
 #, fuzzy
 msgid "The model for the combo box"
 msgstr "דער מאָדעל פֿאַר דעם בױם־געשטאַלט"
 
-#: gtk/gtkcombobox.c:568
-#, fuzzy
-msgid "Wrap width"
-msgstr "ברײט"
-
-#: gtk/gtkcombobox.c:569
+#: gtk/gtkcombobox.c:574
 msgid "Wrap width for layouting the items in a grid"
 msgstr ""
 
-#: gtk/gtkcombobox.c:591
+#: gtk/gtkcombobox.c:596
 #, fuzzy
 msgid "Row span column"
 msgstr "שורה אָפּרוקונג"
 
-#: gtk/gtkcombobox.c:592
+#: gtk/gtkcombobox.c:597
 msgid "TreeModel column containing the row span values"
 msgstr ""
 
-#: gtk/gtkcombobox.c:613
+#: gtk/gtkcombobox.c:618
 #, fuzzy
 msgid "Column span column"
 msgstr "זײַל אָפּרוקונג"
 
-#: gtk/gtkcombobox.c:614
+#: gtk/gtkcombobox.c:619
 msgid "TreeModel column containing the column span values"
 msgstr ""
 
-#: gtk/gtkcombobox.c:634
+#: gtk/gtkcombobox.c:639
 #, fuzzy
 msgid "Active item"
 msgstr "אַקטיװ"
 
-#: gtk/gtkcombobox.c:635
+#: gtk/gtkcombobox.c:640
 #, fuzzy
 msgid "The item which is currently active"
 msgstr "די איצטיקע־סעלעקטירטע Gdk שריפֿט"
 
-#: gtk/gtkcombobox.c:654 gtk/gtkuimanager.c:228
+#: gtk/gtkcombobox.c:659 gtk/gtkuimanager.c:232
 msgid "Add tearoffs to menus"
 msgstr ""
 
-#: gtk/gtkcombobox.c:655
+#: gtk/gtkcombobox.c:660
 #, fuzzy
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "אױב הענטלעך זאָלן האָבן אַלע אײן גרײס"
 
-#: gtk/gtkcombobox.c:670 gtk/gtkentry.c:530
+#: gtk/gtkcombobox.c:675 gtk/gtkentry.c:531
 msgid "Has Frame"
 msgstr "האָט אַ ראָם"
 
-#: gtk/gtkcombobox.c:671
+#: gtk/gtkcombobox.c:676
 #, fuzzy
 msgid "Whether the combo box draws a frame around the child"
 msgstr "אױב דער זײַל לאָזט זיך װידער סאָרטירן אַרום די קאָפּצעטלעך"
 
-#: gtk/gtkcombobox.c:679
+#: gtk/gtkcombobox.c:684
 #, fuzzy
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "צי דער עטיקעט־טעקסט לאָזט זיך סעלעקטירן מיט דעם מײַזל"
 
-#: gtk/gtkcombobox.c:685
+#: gtk/gtkcombobox.c:690
 msgid "Appears as list"
 msgstr ""
 
-#: gtk/gtkcombobox.c:686
+#: gtk/gtkcombobox.c:691
 #, fuzzy
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "אױב פּראָגרעס לאָזט זיך װײַזן װי טעקסט"
@@ -1678,11 +1712,11 @@ msgstr "קינד"
 msgid "Can be used to add a new child to the container"
 msgstr "נוצלעך אין צולײגן אַ נײַ קינד צום פּעקל"
 
-#: gtk/gtkcurve.c:123
+#: gtk/gtkcurve.c:124
 msgid "Curve type"
 msgstr "סאָרט פֿון בײג"
 
-#: gtk/gtkcurve.c:124
+#: gtk/gtkcurve.c:125
 msgid "Is this curve linear, spline interpolated, or free-form"
 msgstr "צי איז דער בײג גלײַך, אינטערפּאָלירט, אָדער פֿרײַ־פֿאָרעמדיק"
 
@@ -1694,124 +1728,124 @@ msgstr "קלענסטע ה'"
 msgid "Minimum possible value for X"
 msgstr "קלענסטער מעגלעכער באַטרעף פֿאַר ה'"
 
-#: gtk/gtkcurve.c:142
+#: gtk/gtkcurve.c:141
 msgid "Maximum X"
 msgstr "גרעסטער ה'"
 
-#: gtk/gtkcurve.c:143
+#: gtk/gtkcurve.c:142
 msgid "Maximum possible X value"
 msgstr "גרעסטער מעגלעכער באַטרעף פֿאַר ה'"
 
-#: gtk/gtkcurve.c:152
+#: gtk/gtkcurve.c:150
 msgid "Minimum Y"
 msgstr "קלענסטע װ'"
 
-#: gtk/gtkcurve.c:153
+#: gtk/gtkcurve.c:151
 msgid "Minimum possible value for Y"
 msgstr "קלענסטער מעגלעכער באַטרעף פֿאַר װ'"
 
-#: gtk/gtkcurve.c:162
+#: gtk/gtkcurve.c:159
 msgid "Maximum Y"
 msgstr "גרעסטער װ'"
 
-#: gtk/gtkcurve.c:163
+#: gtk/gtkcurve.c:160
 msgid "Maximum possible value for Y"
 msgstr "גרעסטער מעגלעכער באַטרעף פֿאַר װ'"
 
-#: gtk/gtkdialog.c:148
+#: gtk/gtkdialog.c:149
 msgid "Has separator"
 msgstr "האָט אַ צעשײדער"
 
-#: gtk/gtkdialog.c:149
+#: gtk/gtkdialog.c:150
 msgid "The dialog has a separator bar above its buttons"
 msgstr "דער דיִאַלאָג־פֿענצטער האָט אַ צעשײד־װירע איבער די קנעפּלעך"
 
-#: gtk/gtkdialog.c:174
+#: gtk/gtkdialog.c:175
 msgid "Content area border"
 msgstr "אינהאַלט־שטח צאַמרינע"
 
-#: gtk/gtkdialog.c:175
+#: gtk/gtkdialog.c:176
 msgid "Width of border around the main dialog area"
 msgstr "ברײט פֿון צאַמרינע אַרום דיִאַלאָג־שטח בראָש"
 
-#: gtk/gtkdialog.c:182
+#: gtk/gtkdialog.c:183
 msgid "Button spacing"
 msgstr "קנעפּל אָפּרוקונג"
 
-#: gtk/gtkdialog.c:183
+#: gtk/gtkdialog.c:184
 msgid "Spacing between buttons"
 msgstr "אָפּרוקונג צװישן קנעפּלעך"
 
-#: gtk/gtkdialog.c:191
+#: gtk/gtkdialog.c:192
 msgid "Action area border"
 msgstr "אַקציע־שטח צאַמרינע"
 
-#: gtk/gtkdialog.c:192
+#: gtk/gtkdialog.c:193
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "ברײט פֿון צאַמרינע אַרום קנעפּל־שטח צום פֿוס פֿון דיִאַלאָג"
 
-#: gtk/gtkentry.c:485 gtk/gtklabel.c:398
+#: gtk/gtkentry.c:486 gtk/gtklabel.c:399
 msgid "Cursor Position"
 msgstr "לױפֿער פּאָזיציע"
 
-#: gtk/gtkentry.c:486 gtk/gtklabel.c:399
+#: gtk/gtkentry.c:487 gtk/gtklabel.c:400
 msgid "The current position of the insertion cursor in chars"
 msgstr "איצטיקע פּאָזיציע פֿון אַרײַנלײג־לױפֿער אין שריפֿטצײכנס"
 
-#: gtk/gtkentry.c:495 gtk/gtklabel.c:408
+#: gtk/gtkentry.c:496 gtk/gtklabel.c:409
 msgid "Selection Bound"
 msgstr "סעלעקציע גרענעץ"
 
-#: gtk/gtkentry.c:496 gtk/gtklabel.c:409
+#: gtk/gtkentry.c:497 gtk/gtklabel.c:410
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr ""
 "די פּאָזיציע פֿון דער צװײטער עק פֿון סעלעקציע, מעסטנדיק פֿון לױפֿער, אין שריפֿטצײכנס"
 
-#: gtk/gtkentry.c:506
+#: gtk/gtkentry.c:507
 msgid "Whether the entry contents can be edited"
 msgstr "צי מען מעג רעדאַגירן די אַרײַנשרײַב אינהאַלט"
 
-#: gtk/gtkentry.c:513
+#: gtk/gtkentry.c:514
 msgid "Maximum length"
 msgstr "גרעסטע לענג"
 
-#: gtk/gtkentry.c:514
+#: gtk/gtkentry.c:515
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr ""
 "גרעסטע צאָל פֿון שריפֿטצײכנס פֿאַר דעם דאָזיקן אַרײַנשרײַב־אָרט; נול אױב ניט "
 "פֿאַרגרענעצט."
 
-#: gtk/gtkentry.c:522
+#: gtk/gtkentry.c:523
 msgid "Visibility"
 msgstr "זעעװדיקײט"
 
-#: gtk/gtkentry.c:523
+#: gtk/gtkentry.c:524
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
 msgstr ""
 "\"פֿאַלש\" װײַזט אַן אומזעעװדיקן שריפֿטצײכן אַנשטאָט דעם טעקסט גופֿא (שפּריכװאָרט מאָדע"
 
-#: gtk/gtkentry.c:531
+#: gtk/gtkentry.c:532
 msgid "FALSE removes outside bevel from entry"
 msgstr "\"פֿאַלש\" נעמט אַװעק אױסערלעכער שרעגפֿלאַך פֿון אַרײַנשרײַב־אָרט"
 
-#: gtk/gtkentry.c:538
+#: gtk/gtkentry.c:539
 msgid "Invisible character"
 msgstr "אומזעעװדיקער שריפֿטצײכן"
 
-#: gtk/gtkentry.c:539
+#: gtk/gtkentry.c:540
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 "דער שריפֿטצײכן צו נוצן װען מען מאַסקירט די אַרײַנשרײַב־אָרט אינהאַלט (װי אין "
 "שפּריכװאָרט מאָדע"
 
-#: gtk/gtkentry.c:546
+#: gtk/gtkentry.c:547
 msgid "Activates default"
 msgstr "אַקטיװירט דעם געװײנטלעכן מצבֿ"
 
-#: gtk/gtkentry.c:547
+#: gtk/gtkentry.c:548
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
@@ -1819,109 +1853,126 @@ msgstr ""
 "צי מען זאָל אַקטיװירן דאָס געװײנטלעכע צעפּיכעסל (למשל, דאָס געװײנטלעך קנעפּל אין אַ "
 "דיִאַלאָג) װען מען דריקט Enter"
 
-#: gtk/gtkentry.c:553
+#: gtk/gtkentry.c:554
 msgid "Width in chars"
 msgstr "ברײט אין שריפֿטצײכנס"
 
-#: gtk/gtkentry.c:554
+#: gtk/gtkentry.c:555
 msgid "Number of characters to leave space for in the entry"
 msgstr "װיפֿל שריפֿטצײכנס צו לאָזן אָרט פֿאַר זײ אין דער פּאָזיציע"
 
-#: gtk/gtkentry.c:563
+#: gtk/gtkentry.c:564
 msgid "Scroll offset"
 msgstr "דורכבלעטער צולײג"
 
-#: gtk/gtkentry.c:564
+#: gtk/gtkentry.c:565
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr ""
 "װיפֿל בילדצעלן פֿון אַרײַנשרײַב־אָרט זײַנען דורכגעבלעטערט אַװעק פֿון דעם עקראַן אױף "
 "לינקס"
 
-#: gtk/gtkentry.c:574
+#: gtk/gtkentry.c:575
 msgid "The contents of the entry"
 msgstr "דער אינהאַלט פֿון אַרײַנשרײַב־אָרט"
 
-#: gtk/gtkentry.c:589 gtk/gtkmisc.c:100
+#: gtk/gtkentry.c:590 gtk/gtkmisc.c:101
 msgid "X align"
 msgstr "ה' אױסגלײַכונג"
 
-#: gtk/gtkentry.c:590 gtk/gtkmisc.c:101
+#: gtk/gtkentry.c:591 gtk/gtkmisc.c:102
 #, fuzzy
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
 msgstr "די האָריזאָנטאַלישע אױסגלײַכונג, פֿון 0 (לינקס) ביז 1 (רעכטס)"
 
-#: gtk/gtkentry.c:828
+#: gtk/gtkentry.c:829
 msgid "Select on focus"
 msgstr "קלײַב אױס װען פֿאָקוסירט"
 
-#: gtk/gtkentry.c:829
+#: gtk/gtkentry.c:830
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "צי מען װיל סעלעקטירן דעם אינהאַלט פֿון אַ פּאָזיציע װען זי איז פֿאָקוסירט"
 
-#: gtk/gtkentrycompletion.c:272
+#: gtk/gtkentrycompletion.c:276
 msgid "Completion Model"
 msgstr ""
 
-#: gtk/gtkentrycompletion.c:273
+#: gtk/gtkentrycompletion.c:277
 #, fuzzy
 msgid "The model to find matches in"
 msgstr "דער מאָדעל פֿאַר דעם בױם־געשטאַלט"
 
-#: gtk/gtkentrycompletion.c:279
+#: gtk/gtkentrycompletion.c:283
 #, fuzzy
 msgid "Minimum Key Length"
 msgstr "קלענסטע גליטשער לענג"
 
-#: gtk/gtkentrycompletion.c:280
+#: gtk/gtkentrycompletion.c:284
 msgid "Minimum length of the search key in order to look up matches"
 msgstr ""
 
-#: gtk/gtkentrycompletion.c:295 gtk/gtkiconview.c:370
+#: gtk/gtkentrycompletion.c:299 gtk/gtkiconview.c:542
 #, fuzzy
 msgid "Text column"
 msgstr "זוכזײַל"
 
-#: gtk/gtkentrycompletion.c:296
+#: gtk/gtkentrycompletion.c:300
 msgid "The column of the model containing the strings."
 msgstr ""
 
-#: gtk/gtkentrycompletion.c:313
+#: gtk/gtkentrycompletion.c:319
 msgid "Inline completion"
 msgstr ""
 
-#: gtk/gtkentrycompletion.c:314
+#: gtk/gtkentrycompletion.c:320
 #, fuzzy
 msgid "Whether the common prefix should be inserted automatically"
 msgstr "אױב מען װיל אַז די צאַמרינע זאָל זיך װײַזן"
 
-#: gtk/gtkentrycompletion.c:328
+#: gtk/gtkentrycompletion.c:334
 msgid "Popup completion"
 msgstr ""
 
-#: gtk/gtkentrycompletion.c:329
+#: gtk/gtkentrycompletion.c:335
 #, fuzzy
 msgid "Whether the completions should be shown in a popup window"
 msgstr "אױב מען װיל אַז די צאַמרינע זאָל זיך װײַזן"
 
-#: gtk/gtkeventbox.c:121
+#: gtk/gtkentrycompletion.c:350
+#, fuzzy
+msgid "Popup set width"
+msgstr "פֿאָקוס ליניע־ברײט"
+
+#: gtk/gtkentrycompletion.c:351
+msgid "If TRUE, the popup window will have the same size as the entry"
+msgstr ""
+
+#: gtk/gtkentrycompletion.c:369
+msgid "Popup single match"
+msgstr ""
+
+#: gtk/gtkentrycompletion.c:370
+msgid "If TRUE, the popup window will appear for a single match."
+msgstr ""
+
+#: gtk/gtkeventbox.c:122
 #, fuzzy
 msgid "Visible Window"
 msgstr "זעעװדיק"
 
-#: gtk/gtkeventbox.c:122
+#: gtk/gtkeventbox.c:123
 msgid ""
 "Whether the event box is visible, as opposed to invisible and only used to "
 "trap events."
 msgstr ""
 
-#: gtk/gtkeventbox.c:128
+#: gtk/gtkeventbox.c:129
 #, fuzzy
 msgid "Above child"
 msgstr "פֿאָלג דאָס קינד"
 
-#: gtk/gtkeventbox.c:129
+#: gtk/gtkeventbox.c:130
 msgid ""
 "Whether the event-trapping window of the eventbox is above the window of the "
 "child widget as opposed to below it."
@@ -1942,11 +1993,11 @@ msgstr "אױב דאָס צעפּיכעסל קען װערן דאָס געװײנט
 msgid "Text of the expander's label"
 msgstr "טעקסט פֿון דער ראָמס עטיקעט"
 
-#: gtk/gtkexpander.c:222 gtk/gtklabel.c:334
+#: gtk/gtkexpander.c:222 gtk/gtklabel.c:335
 msgid "Use markup"
 msgstr "ניץ פֿאַרצײַכענונג"
 
-#: gtk/gtkexpander.c:223 gtk/gtklabel.c:335
+#: gtk/gtkexpander.c:223 gtk/gtklabel.c:336
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr ""
 "דער טעקסט פֿון דער עטיקעט איז כּולל XML פֿאַרצײַכענונג; זע pango_parse_markup()."
@@ -1956,7 +2007,7 @@ msgstr ""
 msgid "Space to put between the label and the child"
 msgstr "איבעריק אָרט צו שטעלן צװישן דעם קינד און זײַנע שכנים, אין בילדצעלן"
 
-#: gtk/gtkexpander.c:240 gtk/gtkframe.c:171 gtk/gtktoolbutton.c:195
+#: gtk/gtkexpander.c:240 gtk/gtkframe.c:170 gtk/gtktoolbutton.c:201
 msgid "Label widget"
 msgstr "עטיקעט צעפּיכעסל"
 
@@ -1965,11 +2016,11 @@ msgstr "עטיקעט צעפּיכעסל"
 msgid "A widget to display in place of the usual expander label"
 msgstr "דאָס צעפּיכעסל צו װײַזן אַנשטאָט דער געװײנטלעכע ראָם עטיקעט"
 
-#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:704
+#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:713
 msgid "Expander Size"
 msgstr "פֿאַרגרעסער גרײס"
 
-#: gtk/gtkexpander.c:248 gtk/gtktreeview.c:705
+#: gtk/gtkexpander.c:248 gtk/gtktreeview.c:714
 msgid "Size of the expander arrow"
 msgstr "גרײס פֿון דער פֿאַרגרעסער־פֿײַל"
 
@@ -1978,139 +2029,139 @@ msgstr "גרײס פֿון דער פֿאַרגרעסער־פֿײַל"
 msgid "Spacing around expander arrow"
 msgstr "אָפּרוקונג אַרום דעם װײַזער"
 
-#: gtk/gtkfilechooser.c:176
+#: gtk/gtkfilechooser.c:177
 #, fuzzy
 msgid "Action"
 msgstr "ברוכטײל"
 
-#: gtk/gtkfilechooser.c:177
+#: gtk/gtkfilechooser.c:178
 msgid "The type of operation that the file selector is performing"
 msgstr ""
 
-#: gtk/gtkfilechooser.c:183
+#: gtk/gtkfilechooser.c:184
 #, fuzzy
 msgid "File System Backend"
 msgstr "טעקעס"
 
-#: gtk/gtkfilechooser.c:184
+#: gtk/gtkfilechooser.c:185
 #, fuzzy
 msgid "Name of file system backend to use"
 msgstr "נאָמען פֿון דער געװײנטלעכער שריפֿט"
 
-#: gtk/gtkfilechooser.c:189
+#: gtk/gtkfilechooser.c:190
 #, fuzzy
 msgid "Filter"
 msgstr "טעקעס"
 
-#: gtk/gtkfilechooser.c:190
+#: gtk/gtkfilechooser.c:191
 #, fuzzy
 msgid "The current filter for selecting which files are displayed"
 msgstr "דער עקראַן װוּ דער פֿענצטער װעט זיך װײַזן"
 
-#: gtk/gtkfilechooser.c:195
+#: gtk/gtkfilechooser.c:196
 msgid "Local Only"
 msgstr ""
 
-#: gtk/gtkfilechooser.c:196
+#: gtk/gtkfilechooser.c:197
 #, fuzzy
 msgid "Whether the selected file(s) should be limited to local file: URLs"
 msgstr "אױב פּראָגרעס לאָזט זיך װײַזן װי טעקסט"
 
-#: gtk/gtkfilechooser.c:201
+#: gtk/gtkfilechooser.c:202
 #, fuzzy
 msgid "Preview widget"
 msgstr "טעקסט פֿאָרױסװײַז"
 
-#: gtk/gtkfilechooser.c:202
+#: gtk/gtkfilechooser.c:203
 msgid "Application supplied widget for custom previews."
 msgstr ""
 
-#: gtk/gtkfilechooser.c:207
+#: gtk/gtkfilechooser.c:208
 #, fuzzy
 msgid "Preview Widget Active"
 msgstr "טעקסט פֿאָרױסװײַז"
 
-#: gtk/gtkfilechooser.c:208
+#: gtk/gtkfilechooser.c:209
 msgid ""
 "Whether the application supplied widget for custom previews should be shown."
 msgstr ""
 
-#: gtk/gtkfilechooser.c:213
+#: gtk/gtkfilechooser.c:214
 #, fuzzy
 msgid "Use Preview Label"
 msgstr "טעקסט פֿאָרױסװײַז"
 
-#: gtk/gtkfilechooser.c:214
+#: gtk/gtkfilechooser.c:215
 msgid "Whether to display a stock label with the name of the previewed file."
 msgstr ""
 
-#: gtk/gtkfilechooser.c:219
+#: gtk/gtkfilechooser.c:220
 #, fuzzy
 msgid "Extra widget"
 msgstr "בילד־צעפּיכעסל"
 
-#: gtk/gtkfilechooser.c:220
+#: gtk/gtkfilechooser.c:221
 msgid "Application supplied widget for extra options."
 msgstr ""
 
-#: gtk/gtkfilechooser.c:225
+#: gtk/gtkfilechooser.c:226
 #, fuzzy
 msgid "Select Multiple"
 msgstr "קלײַב עטלעכע אױס"
 
-#: gtk/gtkfilechooser.c:226 gtk/gtkfilesel.c:576
+#: gtk/gtkfilechooser.c:227 gtk/gtkfilesel.c:576
 msgid "Whether to allow multiple files to be selected"
 msgstr "צי מער װי אײן טעקע לאָזט זיך סעלעקטירן"
 
-#: gtk/gtkfilechooser.c:232
+#: gtk/gtkfilechooser.c:233
 #, fuzzy
 msgid "Show Hidden"
 msgstr "װײַז טעקסט"
 
-#: gtk/gtkfilechooser.c:233
+#: gtk/gtkfilechooser.c:234
 #, fuzzy
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "צי די קנעפּלעך װאָס שאַפֿן און אָפּערירן אױף טעקעס זאָלן זיך לאָזן װײַזן"
 
-#: gtk/gtkfilechooserbutton.c:336
+#: gtk/gtkfilechooserbutton.c:338
 msgid "Dialog"
 msgstr ""
 
-#: gtk/gtkfilechooserbutton.c:337
+#: gtk/gtkfilechooserbutton.c:339
 msgid "The file chooser dialog to use."
 msgstr ""
 
-#: gtk/gtkfilechooserbutton.c:352
+#: gtk/gtkfilechooserbutton.c:354
 #, fuzzy
 msgid "The title of the file chooser dialog."
 msgstr "דער טיטל פֿונעם פֿענצטער"
 
-#: gtk/gtkfilechooserbutton.c:366
+#: gtk/gtkfilechooserbutton.c:368
 msgid "The desired width of the button widget, in characters."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:625
+#: gtk/gtkfilechooserdefault.c:626
 msgid "Default file chooser backend"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:626
+#: gtk/gtkfilechooserdefault.c:627
 #, fuzzy
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "נאָמען פֿון דער געװײנטלעכער שריפֿט"
 
-#: gtk/gtkfilesel.c:560 gtk/gtkimage.c:190
+#: gtk/gtkfilesel.c:561 gtk/gtkimage.c:194
 msgid "Filename"
 msgstr "נאָמען פֿון טעקע"
 
-#: gtk/gtkfilesel.c:561
+#: gtk/gtkfilesel.c:562
 msgid "The currently selected filename"
 msgstr "סעלעקטירטער טעקע־נאָמען"
 
-#: gtk/gtkfilesel.c:567
+#: gtk/gtkfilesel.c:568
 msgid "Show file operations"
 msgstr "װײַז טעקע אָפּעראַציעס"
 
-#: gtk/gtkfilesel.c:568
+#: gtk/gtkfilesel.c:569
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr "צי די קנעפּלעך װאָס שאַפֿן און אָפּערירן אױף טעקעס זאָלן זיך לאָזן װײַזן"
 
@@ -2118,45 +2169,45 @@ msgstr "צי די קנעפּלעך װאָס שאַפֿן און אָפּעריר
 msgid "Select multiple"
 msgstr "קלײַב עטלעכע אױס"
 
-#: gtk/gtkfixed.c:122 gtk/gtklayout.c:615
+#: gtk/gtkfixed.c:123 gtk/gtklayout.c:615
 msgid "X position"
 msgstr "ה' פּאָזיציע"
 
-#: gtk/gtkfixed.c:123 gtk/gtklayout.c:616
+#: gtk/gtkfixed.c:124 gtk/gtklayout.c:616
 msgid "X position of child widget"
 msgstr "ה' פּאָזיציע פֿון קינד־צעפּיכעסל"
 
-#: gtk/gtkfixed.c:132 gtk/gtklayout.c:625
+#: gtk/gtkfixed.c:133 gtk/gtklayout.c:625
 msgid "Y position"
 msgstr "װ' פּאָזיציע"
 
-#: gtk/gtkfixed.c:133 gtk/gtklayout.c:626
+#: gtk/gtkfixed.c:134 gtk/gtklayout.c:626
 msgid "Y position of child widget"
 msgstr "װ' פּאָזיציע פֿון קינד־צעפּיכעסל"
 
-#: gtk/gtkfontbutton.c:177
+#: gtk/gtkfontbutton.c:178
 #, fuzzy
 msgid "The title of the font selection dialog"
 msgstr "דער טיטל פֿונעם פֿענצטער"
 
-#: gtk/gtkfontbutton.c:192 gtk/gtkfontsel.c:215
+#: gtk/gtkfontbutton.c:193 gtk/gtkfontsel.c:216
 msgid "Font name"
 msgstr "שריפֿט נאָמען"
 
-#: gtk/gtkfontbutton.c:193
+#: gtk/gtkfontbutton.c:194
 #, fuzzy
 msgid "The name of the selected font"
 msgstr "דער נאָמען פֿון דעם צעפּיכעסל"
 
-#: gtk/gtkfontbutton.c:194
+#: gtk/gtkfontbutton.c:195
 msgid "Sans 12"
 msgstr ""
 
-#: gtk/gtkfontbutton.c:208
+#: gtk/gtkfontbutton.c:209
 msgid "Use font in label"
 msgstr ""
 
-#: gtk/gtkfontbutton.c:209
+#: gtk/gtkfontbutton.c:210
 #, fuzzy
 msgid "Whether the label is drawn in the selected font"
 msgstr "צי דער עטיקעט־טעקסט לאָזט זיך סעלעקטירן מיט דעם מײַזל"
@@ -2170,51 +2221,51 @@ msgstr ""
 msgid "Whether the label is drawn with the selected font size"
 msgstr "צי דער עטיקעט־טעקסט לאָזט זיך סעלעקטירן מיט דעם מײַזל"
 
-#: gtk/gtkfontbutton.c:241
+#: gtk/gtkfontbutton.c:240
 #, fuzzy
 msgid "Show style"
 msgstr "שאָטן־סאָרט"
 
-#: gtk/gtkfontbutton.c:242
+#: gtk/gtkfontbutton.c:241
 #, fuzzy
 msgid "Whether the selected font style is shown in the label"
 msgstr "אױב פּראָגרעס לאָזט זיך װײַזן װי טעקסט"
 
-#: gtk/gtkfontbutton.c:257
+#: gtk/gtkfontbutton.c:255
 #, fuzzy
 msgid "Show size"
 msgstr "װײַז טעקסט"
 
-#: gtk/gtkfontbutton.c:258
+#: gtk/gtkfontbutton.c:256
 #, fuzzy
 msgid "Whether selected font size is shown in the label"
 msgstr "אױב פּראָגרעס לאָזט זיך װײַזן װי טעקסט"
 
-#: gtk/gtkfontsel.c:216
+#: gtk/gtkfontsel.c:217
 msgid "The X string that represents this font"
 msgstr "די X אות־פֿאָדעם װאָס רעפּרעזענטירט די־אָ שריפֿט"
 
-#: gtk/gtkfontsel.c:223
+#: gtk/gtkfontsel.c:224
 msgid "The GdkFont that is currently selected"
 msgstr "די איצטיקע־סעלעקטירטע Gdk שריפֿט"
 
-#: gtk/gtkfontsel.c:229
+#: gtk/gtkfontsel.c:230
 msgid "Preview text"
 msgstr "טעקסט פֿאָרױסװײַז"
 
-#: gtk/gtkfontsel.c:230
+#: gtk/gtkfontsel.c:231
 msgid "The text to display in order to demonstrate the selected font"
 msgstr "טעקסט פֿאָרױסצוּװײַזן כּדי צו דעמאָנסטרירן די סעלעקטירטע שריפֿט"
 
-#: gtk/gtkframe.c:128
+#: gtk/gtkframe.c:129
 msgid "Text of the frame's label"
 msgstr "טעקסט פֿון דער ראָמס עטיקעט"
 
-#: gtk/gtkframe.c:135
+#: gtk/gtkframe.c:136
 msgid "Label xalign"
 msgstr "עטיקעט ה' אױסגלײַכונג"
 
-#: gtk/gtkframe.c:136
+#: gtk/gtkframe.c:137
 msgid "The horizontal alignment of the label"
 msgstr "האָריזאָנטאַלישע אױסגלײַכונג פֿון עטיקעט"
 
@@ -2226,44 +2277,44 @@ msgstr "עטיקעט װ' אױסגלײַכונג"
 msgid "The vertical alignment of the label"
 msgstr "װערטיקאַלישע אױסגלײַכונג פֿון עטיקעט"
 
-#: gtk/gtkframe.c:155 gtk/gtkhandlebox.c:200
+#: gtk/gtkframe.c:154 gtk/gtkhandlebox.c:201
 msgid "Deprecated property, use shadow_type instead"
 msgstr "ניט־רעקאָמענדירטע נאַטור; בעסער צו ניצן שאָטן־סאָרט"
 
-#: gtk/gtkframe.c:162
+#: gtk/gtkframe.c:161
 msgid "Frame shadow"
 msgstr "ראָם שאָטן"
 
-#: gtk/gtkframe.c:163
+#: gtk/gtkframe.c:162
 msgid "Appearance of the frame border"
 msgstr "געשטאַלט פֿון ראָם צאַמרינע"
 
-#: gtk/gtkframe.c:172
+#: gtk/gtkframe.c:171
 msgid "A widget to display in place of the usual frame label"
 msgstr "דאָס צעפּיכעסל צו װײַזן אַנשטאָט דער געװײנטלעכע ראָם עטיקעט"
 
-#: gtk/gtkhandlebox.c:207 gtk/gtkmenubar.c:157 gtk/gtkstatusbar.c:204
-#: gtk/gtktoolbar.c:582 gtk/gtkviewport.c:152
+#: gtk/gtkhandlebox.c:208 gtk/gtkmenubar.c:227 gtk/gtkstatusbar.c:205
+#: gtk/gtktoolbar.c:599 gtk/gtkviewport.c:153
 msgid "Shadow type"
 msgstr "שאָטן־סאָרט"
 
-#: gtk/gtkhandlebox.c:208
+#: gtk/gtkhandlebox.c:209
 msgid "Appearance of the shadow that surrounds the container"
 msgstr "געשטאַלט פֿון דעם שאָטן װאָס רינגלט דעם פּעקל אַרום"
 
-#: gtk/gtkhandlebox.c:216
+#: gtk/gtkhandlebox.c:217
 msgid "Handle position"
 msgstr "הענטל פּאָזיציע"
 
-#: gtk/gtkhandlebox.c:217
+#: gtk/gtkhandlebox.c:218
 msgid "Position of the handle relative to the child widget"
 msgstr "הענטל־פּאָזיציע רעלאַטיװ צו דעם קינד־צעפּיכעסל"
 
-#: gtk/gtkhandlebox.c:225
+#: gtk/gtkhandlebox.c:226
 msgid "Snap edge"
 msgstr "ראַנד פֿון אױטאָמאַטישע באַװעגונג"
 
-#: gtk/gtkhandlebox.c:226
+#: gtk/gtkhandlebox.c:227
 msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
 "handlebox"
@@ -2271,11 +2322,11 @@ msgstr ""
 "זײַט פֿון הענטל־קעסטל װאָס גלײַכט זיך אױס מיט דעם דאָקירן־פּונקט כּדי צו דאָקירן דאָס "
 "הענטל־קעסטל"
 
-#: gtk/gtkhandlebox.c:234
+#: gtk/gtkhandlebox.c:235
 msgid "Snap edge set"
 msgstr "באַשטעטיק ראַנד פֿון אױטאָמאַטישע באַװעגונג"
 
-#: gtk/gtkhandlebox.c:235
+#: gtk/gtkhandlebox.c:236
 msgid ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
@@ -2283,251 +2334,249 @@ msgstr ""
 "צי ניצט מען דעם באַװעגונג פֿון דער אױטאָמאַטישע באַװעגונג נאַטור, אָדער אַ באַטרעף "
 "װעלכער קומט פֿון אַ הענטל־פּאָזיציע"
 
-#: gtk/gtkiconview.c:333
+#: gtk/gtkiconview.c:505
 #, fuzzy
 msgid "Selection mode"
 msgstr "סעלעקציע גרענעץ"
 
-#: gtk/gtkiconview.c:334
+#: gtk/gtkiconview.c:506
 #, fuzzy
 msgid "The selection mode"
 msgstr "סעלעקטירטער טעקע־נאָמען"
 
-#: gtk/gtkiconview.c:352
+#: gtk/gtkiconview.c:524
 #, fuzzy
 msgid "Pixbuf column"
 msgstr "זוכזײַל"
 
-#: gtk/gtkiconview.c:353
+#: gtk/gtkiconview.c:525
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr ""
 
-#: gtk/gtkiconview.c:371
+#: gtk/gtkiconview.c:543
 msgid "Model column used to retrieve the text from"
 msgstr ""
 
-#: gtk/gtkiconview.c:390
+#: gtk/gtkiconview.c:562
 #, fuzzy
 msgid "Markup column"
 msgstr "פֿאַרצײַכענונג"
 
-#: gtk/gtkiconview.c:391
+#: gtk/gtkiconview.c:563
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr ""
 
-#: gtk/gtkiconview.c:398
+#: gtk/gtkiconview.c:570
 #, fuzzy
 msgid "Icon View Model"
 msgstr "בױם־געשטאַלט מאָדעל"
 
-#: gtk/gtkiconview.c:399
+#: gtk/gtkiconview.c:571
 #, fuzzy
 msgid "The model for the icon view"
 msgstr "דער מאָדעל פֿאַר דעם בױם־געשטאַלט"
 
-#: gtk/gtkiconview.c:415
+#: gtk/gtkiconview.c:587
 #, fuzzy
 msgid "Number of columns"
 msgstr "די צאָל זײַלן אין דער טאַבעלע"
 
-#: gtk/gtkiconview.c:416
+#: gtk/gtkiconview.c:588
 #, fuzzy
 msgid "Number of columns to display"
 msgstr "װיפֿל דעצימאַלע ציפֿערן צו װײַזן"
 
-#: gtk/gtkiconview.c:433
+#: gtk/gtkiconview.c:605
 #, fuzzy
 msgid "Width for each item"
 msgstr "ברײט פֿון דער צאַמרינע אַרום די הענטל עטיקעטן"
 
-#: gtk/gtkiconview.c:434
+#: gtk/gtkiconview.c:606
 msgid "The width used for each item"
 msgstr ""
 
-#: gtk/gtkiconview.c:450
+#: gtk/gtkiconview.c:622
 msgid "Space which is inserted between cells of an item"
 msgstr ""
 
-#: gtk/gtkiconview.c:465
+#: gtk/gtkiconview.c:637
 #, fuzzy
 msgid "Row Spacing"
 msgstr "שורה אָפּרוקונג"
 
-#: gtk/gtkiconview.c:466
+#: gtk/gtkiconview.c:638
 msgid "Space which is inserted between grid rows"
 msgstr ""
 
-#: gtk/gtkiconview.c:481
+#: gtk/gtkiconview.c:653
 #, fuzzy
 msgid "Column Spacing"
 msgstr "זײַל אָפּרוקונג"
 
-#: gtk/gtkiconview.c:482
+#: gtk/gtkiconview.c:654
 msgid "Space which is inserted between grid column"
 msgstr ""
 
-#: gtk/gtkiconview.c:497
+#: gtk/gtkiconview.c:669
 #, fuzzy
 msgid "Margin"
 msgstr "לינקער זאַפּאַס"
 
-#: gtk/gtkiconview.c:498
+#: gtk/gtkiconview.c:670
 msgid "Space which is inserted at the edges of the icon view"
 msgstr ""
 
-#: gtk/gtkiconview.c:514 gtk/gtkprogressbar.c:152 gtk/gtktoolbar.c:507
+#: gtk/gtkiconview.c:686 gtk/gtkprogressbar.c:153 gtk/gtktoolbar.c:508
 msgid "Orientation"
 msgstr "אָריִענטירונג"
 
-#: gtk/gtkiconview.c:515
+#: gtk/gtkiconview.c:687
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr ""
 
-#: gtk/gtkiconview.c:523
+#: gtk/gtkiconview.c:703 gtk/gtktreeview.c:615 gtk/gtktreeviewcolumn.c:342
+msgid "Reorderable"
+msgstr "װידער־סאָרטירעװדיק"
+
+#: gtk/gtkiconview.c:704 gtk/gtktreeview.c:616
+msgid "View is reorderable"
+msgstr "דער געשטאַלט איז װידער־סאָרטירעװדיק"
+
+#: gtk/gtkiconview.c:711
 #, fuzzy
 msgid "Selection Box Color"
 msgstr "סעלעקציע גרענעץ"
 
-#: gtk/gtkiconview.c:524
+#: gtk/gtkiconview.c:712
 #, fuzzy
 msgid "Color of the selection box"
 msgstr "דער טיטל פֿונעם פֿענצטער"
 
-#: gtk/gtkiconview.c:530
+#: gtk/gtkiconview.c:718
 #, fuzzy
 msgid "Selection Box Alpha"
 msgstr "סעלעקציע גרענעץ"
 
-#: gtk/gtkiconview.c:531
+#: gtk/gtkiconview.c:719
 #, fuzzy
 msgid "Opacity of the selection box"
 msgstr "דער טיטל פֿונעם פֿענצטער"
 
-#: gtk/gtkimage.c:158
+#: gtk/gtkimage.c:162
 msgid "Pixbuf"
 msgstr "בילדבאַהאַלט"
 
-#: gtk/gtkimage.c:159
+#: gtk/gtkimage.c:163
 msgid "A GdkPixbuf to display"
 msgstr "דער Gdk בילדבאַהאַלט צו װײַזן"
 
-#: gtk/gtkimage.c:166
+#: gtk/gtkimage.c:170
 msgid "Pixmap"
 msgstr "בילדבאַהאַלט"
 
-#: gtk/gtkimage.c:167
+#: gtk/gtkimage.c:171
 msgid "A GdkPixmap to display"
 msgstr "דער Gdk בילדבאַהאַלט צו װײַזן"
 
-#: gtk/gtkimage.c:174
+#: gtk/gtkimage.c:178
 msgid "Image"
 msgstr "בילד"
 
-#: gtk/gtkimage.c:175
+#: gtk/gtkimage.c:179
 msgid "A GdkImage to display"
 msgstr "דער Gdk בילדבאַהאַלט צו װײַזן"
 
-#: gtk/gtkimage.c:182
+#: gtk/gtkimage.c:186
 msgid "Mask"
 msgstr "מאַסקע"
 
-#: gtk/gtkimage.c:183
+#: gtk/gtkimage.c:187
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr "מאַסקע־ביטמאַפּע צו ניצן מיט GdkImage אָדער GdkPixmap"
 
-#: gtk/gtkimage.c:191
+#: gtk/gtkimage.c:195
 msgid "Filename to load and display"
 msgstr "טעקע־נאָמען אַרײַנצושטעלן און װײַזן"
 
-#: gtk/gtkimage.c:200
+#: gtk/gtkimage.c:204
 msgid "Stock ID for a stock image to display"
 msgstr "הורט אידענטיפֿיקאַציע פֿאַר אַ הורט־בילד צו װײַזן"
 
-#: gtk/gtkimage.c:207
+#: gtk/gtkimage.c:211
 msgid "Icon set"
 msgstr "בילדל געזעמל"
 
-#: gtk/gtkimage.c:208
+#: gtk/gtkimage.c:212
 msgid "Icon set to display"
 msgstr "בילדל געזעמל צו װײַזן"
 
-#: gtk/gtkimage.c:215
+#: gtk/gtkimage.c:219
 msgid "Icon size"
 msgstr "בילדל גרײס"
 
-#: gtk/gtkimage.c:216
+#: gtk/gtkimage.c:220
 #, fuzzy
 msgid "Symbolic size to use for stock icon, icon set or named icon"
 msgstr "גרײס צו ניצן פֿאַר הורט־בילדל אָדער בילדל געזעמל"
 
-#: gtk/gtkimage.c:232
+#: gtk/gtkimage.c:236
 #, fuzzy
 msgid "Pixel size"
 msgstr "גליטשער גרײס ניט צו ענדערן"
 
-#: gtk/gtkimage.c:233
+#: gtk/gtkimage.c:237
 #, fuzzy
 msgid "Pixel size to use for named icon"
 msgstr "גרײס צו ניצן פֿאַר הורט־בילדל אָדער בילדל געזעמל"
 
-#: gtk/gtkimage.c:241
+#: gtk/gtkimage.c:245
 msgid "Animation"
 msgstr "אַנימאַציע"
 
-#: gtk/gtkimage.c:242
+#: gtk/gtkimage.c:246
 msgid "GdkPixbufAnimation to display"
 msgstr "Gdk בילדבאַהאַלט אַנימאַציע צו װײַזן"
 
-#: gtk/gtkimage.c:257 gtk/gtkwindow.c:525
-#, fuzzy
-msgid "Icon Name"
-msgstr "שריפֿט נאָמען"
-
-#: gtk/gtkimage.c:258
-#, fuzzy
-msgid "The name of the icon from the icon theme"
-msgstr "דער נאָמען פֿון דעם צעפּיכעסל"
-
-#: gtk/gtkimage.c:265
+#: gtk/gtkimage.c:269
 msgid "Storage type"
 msgstr "מאַגאַזין־סאָרט"
 
-#: gtk/gtkimage.c:266
+#: gtk/gtkimage.c:270
 msgid "The representation being used for image data"
 msgstr "די רעפּרעזענטאַציע פֿאַר בילדדאַטן"
 
-#: gtk/gtkimagemenuitem.c:132
+#: gtk/gtkimagemenuitem.c:133
 msgid "Child widget to appear next to the menu text"
 msgstr "קינד צעפּיכעסל װאָס װײַזט זיך לעבן דעם מעניו־טעקסט"
 
-#: gtk/gtkimagemenuitem.c:137
+#: gtk/gtkimagemenuitem.c:138
 #, fuzzy
 msgid "Show menu images"
 msgstr "װײַז הענטלעך"
 
-#: gtk/gtkimagemenuitem.c:138
+#: gtk/gtkimagemenuitem.c:139
 #, fuzzy
 msgid "Whether images should be shown in menus"
 msgstr "אױב מען װיל אַז די הענטלעך זאָלן זיך װײַזן"
 
-#: gtk/gtkinvisible.c:117 gtk/gtkwindow.c:534
+#: gtk/gtkinvisible.c:118 gtk/gtkwindow.c:540
 msgid "The screen where this window will be displayed"
 msgstr "דער עקראַן װוּ דער פֿענצטער װעט זיך װײַזן"
 
-#: gtk/gtklabel.c:321
+#: gtk/gtklabel.c:322
 msgid "The text of the label"
 msgstr "דער טעקסט פֿון דער עטיקעט"
 
-#: gtk/gtklabel.c:328
+#: gtk/gtklabel.c:329
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "אַ רשימה פֿון סטיל־אַטריבוטן צו אַפּליקירן צום טעקסט פֿון דער עטיקעט"
 
-#: gtk/gtklabel.c:349 gtk/gtktexttag.c:376 gtk/gtktextview.c:594
+#: gtk/gtklabel.c:350 gtk/gtktexttag.c:380 gtk/gtktextview.c:595
 msgid "Justification"
 msgstr "אױסגלײַכונג"
 
-#: gtk/gtklabel.c:350
+#: gtk/gtklabel.c:351
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
@@ -2537,11 +2586,11 @@ msgstr ""
 "דאָס באַשטעטיקט ניט די אױסגלײַכונג פֿון דער עטיקעט גופֿא בנוגע איר אױסטײל; זע "
 "GtkMisc::xalign צוליב דעם."
 
-#: gtk/gtklabel.c:358
+#: gtk/gtklabel.c:359
 msgid "Pattern"
 msgstr "ציל"
 
-#: gtk/gtklabel.c:359
+#: gtk/gtklabel.c:360
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline"
@@ -2549,84 +2598,84 @@ msgstr ""
 "אַן אות־פֿאָדעם מיט _ שריפֿטצײכנס אין פּאָזיציעס װאָס קאָרעספּאָנדירן מיט שריפֿטצײכנס "
 "אין דעם טעקסט אונטערצושטריקן"
 
-#: gtk/gtklabel.c:366
+#: gtk/gtklabel.c:367
 msgid "Line wrap"
 msgstr "שורה־שאַר"
 
-#: gtk/gtklabel.c:367
+#: gtk/gtklabel.c:368
 msgid "If set, wrap lines if the text becomes too wide"
 msgstr "אױב באַשטעטיקט, שאַר שורות אױב דער טעקסט װערט צו ברײט"
 
-#: gtk/gtklabel.c:373
+#: gtk/gtklabel.c:374
 msgid "Selectable"
 msgstr "סעלעקטירעװדיק"
 
-#: gtk/gtklabel.c:374
+#: gtk/gtklabel.c:375
 msgid "Whether the label text can be selected with the mouse"
 msgstr "צי דער עטיקעט־טעקסט לאָזט זיך סעלעקטירן מיט דעם מײַזל"
 
-#: gtk/gtklabel.c:380
+#: gtk/gtklabel.c:381
 msgid "Mnemonic key"
 msgstr "מנעמאָנישער קלאַװיש"
 
-#: gtk/gtklabel.c:381
+#: gtk/gtklabel.c:382
 msgid "The mnemonic accelerator key for this label"
 msgstr "דער מנעמאָנישער פֿאַרגיכערער־קלאַװיש פֿאַר דער עטיקעט"
 
-#: gtk/gtklabel.c:389
+#: gtk/gtklabel.c:390
 msgid "Mnemonic widget"
 msgstr "מנעמאָנישער צעפּיכעסל"
 
-#: gtk/gtklabel.c:390
+#: gtk/gtklabel.c:391
 msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr "דאָס צעפּיכעסל צו אַקטיװירן װען מען דריקט דער עטיקעטס מנעמאָנישן קלאַװיש"
 
-#: gtk/gtklabel.c:434
+#: gtk/gtklabel.c:435
 msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string, if at all"
 msgstr ""
 
-#: gtk/gtklabel.c:474
+#: gtk/gtklabel.c:475
 #, fuzzy
 msgid "Single Line Mode"
 msgstr "סעלעקציע גרענעץ"
 
-#: gtk/gtklabel.c:475
+#: gtk/gtklabel.c:476
 #, fuzzy
 msgid "Whether the label is in single line mode"
 msgstr "צי דער עטיקעט־טעקסט לאָזט זיך סעלעקטירן מיט דעם מײַזל"
 
-#: gtk/gtklabel.c:492
+#: gtk/gtklabel.c:493
 msgid "Angle"
 msgstr ""
 
-#: gtk/gtklabel.c:493
+#: gtk/gtklabel.c:494
 msgid "Angle at which the label is rotated"
 msgstr ""
 
-#: gtk/gtklabel.c:513
+#: gtk/gtklabel.c:514
 #, fuzzy
 msgid "Maximum Width In Characters"
 msgstr "ברײט אין שריפֿטצײכנס"
 
-#: gtk/gtklabel.c:514
+#: gtk/gtklabel.c:515
 msgid "The desired maximum width of the label, in characters"
 msgstr ""
 
-#: gtk/gtklayout.c:635 gtk/gtkviewport.c:136
+#: gtk/gtklayout.c:635 gtk/gtkviewport.c:137
 msgid "Horizontal adjustment"
 msgstr "האָריזאָנטאַלישע צופּאַסונג"
 
-#: gtk/gtklayout.c:636 gtk/gtkscrolledwindow.c:239
+#: gtk/gtklayout.c:636 gtk/gtkscrolledwindow.c:240
 msgid "The GtkAdjustment for the horizontal position"
 msgstr "די Gtk צופּאַסונג פֿאַר דער האָריזאָנטאַלישער פּאָזיציע"
 
-#: gtk/gtklayout.c:643 gtk/gtkviewport.c:144
+#: gtk/gtklayout.c:643 gtk/gtkviewport.c:145
 msgid "Vertical adjustment"
 msgstr "װערטיקאַלישע צופּאַסונג"
 
-#: gtk/gtklayout.c:644 gtk/gtkscrolledwindow.c:246
+#: gtk/gtklayout.c:644 gtk/gtkscrolledwindow.c:247
 msgid "The GtkAdjustment for the vertical position"
 msgstr "די Gtk צופּאַסונג פֿאַר דער װערטיקאַלישער פּאָזיציע"
 
@@ -2638,125 +2687,125 @@ msgstr "די ברײט פֿון דעם מאָדעל"
 msgid "The height of the layout"
 msgstr "די הײך פֿון דעם מאָדעל"
 
-#: gtk/gtkmenu.c:526
+#: gtk/gtkmenu.c:529
 msgid "Tearoff Title"
 msgstr "אָפּרײַסעװדיקער טיטל"
 
-#: gtk/gtkmenu.c:527
+#: gtk/gtkmenu.c:530
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr ""
 "אַ טיטל װאָס דער פֿענצטער־אַדמיניסטראַטאָר קען װײַזן װען מען רײַסט אָפּ דעם מעניו"
 
-#: gtk/gtkmenu.c:541
+#: gtk/gtkmenu.c:544
 #, fuzzy
 msgid "Tearoff State"
 msgstr "אָפּרײַסעװדיקער טיטל"
 
-#: gtk/gtkmenu.c:542
+#: gtk/gtkmenu.c:545
 #, fuzzy
 msgid "A boolean that indicates whether the menu is torn-off"
 msgstr ""
 "אַ טיטל װאָס דער פֿענצטער־אַדמיניסטראַטאָר קען װײַזן װען מען רײַסט אָפּ דעם מעניו"
 
-#: gtk/gtkmenu.c:548
+#: gtk/gtkmenu.c:551
 #, fuzzy
 msgid "Vertical Padding"
 msgstr "װערטיקאַליש לײדיק אָרט"
 
-#: gtk/gtkmenu.c:549
+#: gtk/gtkmenu.c:552
 #, fuzzy
 msgid "Extra space at the top and bottom of the menu"
 msgstr "װיפֿל לײדיק אָרט צוצולײגן צום קאָפּ און פֿוס פֿון דעם צעפּיכעסל, אין בילדצעלן"
 
-#: gtk/gtkmenu.c:557
+#: gtk/gtkmenu.c:560
 #, fuzzy
 msgid "Vertical Offset"
 msgstr "װערטיקאַלישע מאָס"
 
-#: gtk/gtkmenu.c:558
+#: gtk/gtkmenu.c:561
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr ""
 
-#: gtk/gtkmenu.c:566
+#: gtk/gtkmenu.c:569
 #, fuzzy
 msgid "Horizontal Offset"
 msgstr "האָריזאָנטאַלישע מאָס"
 
-#: gtk/gtkmenu.c:567
+#: gtk/gtkmenu.c:570
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 msgstr ""
 
-#: gtk/gtkmenu.c:577
+#: gtk/gtkmenu.c:580
 #, fuzzy
 msgid "Left Attach"
 msgstr "לינקער צוקלעפּעניש"
 
-#: gtk/gtkmenu.c:578 gtk/gtktable.c:205
+#: gtk/gtkmenu.c:581 gtk/gtktable.c:206
 msgid "The column number to attach the left side of the child to"
 msgstr "דער זײַל־נומער װוּ די לינקע זײַט פֿון קינד קלעפּט זיך צו"
 
-#: gtk/gtkmenu.c:585
+#: gtk/gtkmenu.c:588
 #, fuzzy
 msgid "Right Attach"
 msgstr "רעכטער צוקלעפּעניש"
 
-#: gtk/gtkmenu.c:586
+#: gtk/gtkmenu.c:589
 #, fuzzy
 msgid "The column number to attach the right side of the child to"
 msgstr "דער זײַל־נומער װוּ די לינקע זײַט פֿון קינד קלעפּט זיך צו"
 
-#: gtk/gtkmenu.c:593
+#: gtk/gtkmenu.c:596
 #, fuzzy
 msgid "Top Attach"
 msgstr "קאָפּ צוקלעפּעניש"
 
-#: gtk/gtkmenu.c:594
+#: gtk/gtkmenu.c:597
 #, fuzzy
 msgid "The row number to attach the top of the child to"
 msgstr "דער שורה־נומער װוּ דער פֿוס פֿון קינד קלעפּט זיך צו"
 
-#: gtk/gtkmenu.c:601
+#: gtk/gtkmenu.c:604
 #, fuzzy
 msgid "Bottom Attach"
 msgstr "פֿוס צוקלעפּעניש"
 
-#: gtk/gtkmenu.c:602 gtk/gtktable.c:226
+#: gtk/gtkmenu.c:605 gtk/gtktable.c:227
 msgid "The row number to attach the bottom of the child to"
 msgstr "דער שורה־נומער װוּ דער פֿוס פֿון קינד קלעפּט זיך צו"
 
-#: gtk/gtkmenu.c:689
+#: gtk/gtkmenu.c:692
 msgid "Can change accelerators"
 msgstr "מען קען פֿאַרבײַטן פֿאַרגיכערערס"
 
-#: gtk/gtkmenu.c:690
+#: gtk/gtkmenu.c:693
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "צי מעניו־פֿאַרגיכערערס לאָזן זיך פֿאַרבײַטן דורך דריקן אַ קלאַװיש איבער דעם "
 "מעניו־אײנס"
 
-#: gtk/gtkmenu.c:695
+#: gtk/gtkmenu.c:698
 msgid "Delay before submenus appear"
 msgstr "געדױער אײדער אַן אונטערמעניו װײַזט זיך"
 
-#: gtk/gtkmenu.c:696
+#: gtk/gtkmenu.c:699
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "דער קלענסטער געדױער אין װעלכן דער לױפֿער מוז זיך האַלטן איבער אַ מעניו־אײנס "
 "אײדער דער אונטערמעניו װײַזט זיך"
 
-#: gtk/gtkmenu.c:703
+#: gtk/gtkmenu.c:706
 msgid "Delay before hiding a submenu"
 msgstr "געדױער אײדער אַן אונטערמעניו באַהאַלט זיך"
 
-#: gtk/gtkmenu.c:704
+#: gtk/gtkmenu.c:707
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -2764,166 +2813,196 @@ msgstr ""
 "דער געדױער אײדער אַן אונטערמעניו באַהאַלט זיך בשעת דער לױפֿער האַלט אין זיך קערן "
 "צו דעם אונטערמעניו"
 
-#: gtk/gtkmenubar.c:158
+#: gtk/gtkmenubar.c:201
+#, fuzzy
+msgid "Pack direction"
+msgstr "טעקסט ריכטונג"
+
+#: gtk/gtkmenubar.c:202
+#, fuzzy
+msgid "The pack direction of the menubar"
+msgstr "די אָריִענטירונג פֿון דעם מכשיר־װײַזער"
+
+#: gtk/gtkmenubar.c:218
+msgid "Child Pack direction"
+msgstr ""
+
+#: gtk/gtkmenubar.c:219
+#, fuzzy
+msgid "The child pack direction of the menubar"
+msgstr "די אָריִענטירונג פֿון דעם מכשיר־װײַזער"
+
+#: gtk/gtkmenubar.c:228
 msgid "Style of bevel around the menubar"
 msgstr "סטיל פֿון שרעגפֿלאַך אַרום דעם מעניו־װירע"
 
-#: gtk/gtkmenubar.c:165 gtk/gtktoolbar.c:558
+#: gtk/gtkmenubar.c:235 gtk/gtktoolbar.c:575
 msgid "Internal padding"
 msgstr "אינערלעך לײדיק אָרט"
 
-#: gtk/gtkmenubar.c:166
+#: gtk/gtkmenubar.c:236
 msgid "Amount of border space between the menubar shadow and the menu items"
 msgstr "װיפֿל צאַמרינע ליגט צװישן דעם מעניו־װירע שאָטן און די מעניו־אײנסן"
 
-#: gtk/gtkmenubar.c:173
+#: gtk/gtkmenubar.c:243
 msgid "Delay before drop down menus appear"
 msgstr "געדױער אײדער אָפּשפּרינג־מעניוס װײַזן זיך"
 
-#: gtk/gtkmenubar.c:174
+#: gtk/gtkmenubar.c:244
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "געדױער אײדער די אונטערמעניוס פֿון אַ מעניו־װירע װײַזן זיך"
 
-#: gtk/gtkmenutoolbutton.c:247 gtk/gtkoptionmenu.c:194
+#: gtk/gtkmenushell.c:374
+#, fuzzy
+msgid "Take Focus"
+msgstr "האָט פֿאָקוס"
+
+#: gtk/gtkmenushell.c:375
+#, fuzzy
+msgid "A boolean that determines whether the menu grabs the keyboard focus"
+msgstr ""
+"אַ טיטל װאָס דער פֿענצטער־אַדמיניסטראַטאָר קען װײַזן װען מען רײַסט אָפּ דעם מעניו"
+
+#: gtk/gtkmenutoolbutton.c:248 gtk/gtkoptionmenu.c:196
 msgid "Menu"
 msgstr "מעניו"
 
-#: gtk/gtkmenutoolbutton.c:248
+#: gtk/gtkmenutoolbutton.c:249
 msgid "The dropdown menu"
 msgstr ""
 
-#: gtk/gtkmessagedialog.c:124
+#: gtk/gtkmessagedialog.c:126
 msgid "Image/label border"
 msgstr "בילד אָדער עטיקעט צאַמרינע"
 
-#: gtk/gtkmessagedialog.c:125
+#: gtk/gtkmessagedialog.c:127
 msgid "Width of border around the label and image in the message dialog"
 msgstr "ברײט פֿון צאַמרינע אַרום דער עטיקעט און בילד אין דעם דיִאַלאָג־פֿענצטער"
 
-#: gtk/gtkmessagedialog.c:140
+#: gtk/gtkmessagedialog.c:142
 #, fuzzy
 msgid "Use separator"
 msgstr "האָט אַ צעשײדער"
 
-#: gtk/gtkmessagedialog.c:141
+#: gtk/gtkmessagedialog.c:143
 msgid ""
 "Whether to put a separator between the message dialog's text and the buttons"
 msgstr ""
 
-#: gtk/gtkmessagedialog.c:147
+#: gtk/gtkmessagedialog.c:149
 msgid "Message Type"
 msgstr "אָנזאָג־סאָרט"
 
-#: gtk/gtkmessagedialog.c:148
+#: gtk/gtkmessagedialog.c:150
 msgid "The type of message"
 msgstr "דער סאָרט פֿון אָנזאָג"
 
-#: gtk/gtkmessagedialog.c:155
+#: gtk/gtkmessagedialog.c:157
 msgid "Message Buttons"
 msgstr "אָנזאָג קנעפּלעך"
 
-#: gtk/gtkmessagedialog.c:156
+#: gtk/gtkmessagedialog.c:158
 msgid "The buttons shown in the message dialog"
 msgstr "די קנעפּלעך װאָס װײַזן זיך אין דעם דיִאַלאָג־פֿענצטער"
 
-#: gtk/gtkmisc.c:110
+#: gtk/gtkmisc.c:111
 msgid "Y align"
 msgstr "װ' אױסגלײַכונג"
 
-#: gtk/gtkmisc.c:111
+#: gtk/gtkmisc.c:112
 msgid "The vertical alignment, from 0 (top) to 1 (bottom)"
 msgstr "די װערטיקאַלישע אױסגלײַכונג, פֿון 0 (לינקס) ביז 1 (רעכטס)"
 
-#: gtk/gtkmisc.c:120
+#: gtk/gtkmisc.c:121
 msgid "X pad"
 msgstr "ה' לײדיק אָרט"
 
-#: gtk/gtkmisc.c:121
+#: gtk/gtkmisc.c:122
 msgid ""
 "The amount of space to add on the left and right of the widget, in pixels"
 msgstr ""
 "װיפֿל לײדיק אָרט צוצולײגן צום לינקס און רעכטס פֿון דעם צעפּיכעסל, אין בילדצעלן"
 
-#: gtk/gtkmisc.c:130
+#: gtk/gtkmisc.c:131
 msgid "Y pad"
 msgstr "װ' לײדיק אָרט"
 
-#: gtk/gtkmisc.c:131
+#: gtk/gtkmisc.c:132
 msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "װיפֿל לײדיק אָרט צוצולײגן צום קאָפּ און פֿוס פֿון דעם צעפּיכעסל, אין בילדצעלן"
 
-#: gtk/gtknotebook.c:401
+#: gtk/gtknotebook.c:405
 msgid "Page"
 msgstr "זײַט"
 
-#: gtk/gtknotebook.c:402
+#: gtk/gtknotebook.c:406
 msgid "The index of the current page"
 msgstr "דער אינדעקס פֿון איצטיקער זײַט"
 
-#: gtk/gtknotebook.c:410
+#: gtk/gtknotebook.c:414
 msgid "Tab Position"
 msgstr "הענטל פּאָזיציע"
 
-#: gtk/gtknotebook.c:411
+#: gtk/gtknotebook.c:415
 msgid "Which side of the notebook holds the tabs"
 msgstr "װאָסער זײַט פֿון העפֿט האַלט די הענטלעך"
 
-#: gtk/gtknotebook.c:418
+#: gtk/gtknotebook.c:422
 msgid "Tab Border"
 msgstr "הענטל צאַמרינע"
 
-#: gtk/gtknotebook.c:419
+#: gtk/gtknotebook.c:423
 msgid "Width of the border around the tab labels"
 msgstr "ברײט פֿון דער צאַמרינע אַרום די הענטל עטיקעטן"
 
-#: gtk/gtknotebook.c:427
+#: gtk/gtknotebook.c:431
 msgid "Horizontal Tab Border"
 msgstr "האָריזאָנטאַלישע הענטל־צאַמרינע"
 
-#: gtk/gtknotebook.c:428
+#: gtk/gtknotebook.c:432
 msgid "Width of the horizontal border of tab labels"
 msgstr "ברײט פֿון דער האָריזאָנטאַלישער צאַמרינע פֿון די הענטל עטיקעטן"
 
-#: gtk/gtknotebook.c:436
+#: gtk/gtknotebook.c:440
 msgid "Vertical Tab Border"
 msgstr "װערטיקאַלישע הענטל־צאַמרינע"
 
-#: gtk/gtknotebook.c:437
+#: gtk/gtknotebook.c:441
 msgid "Width of the vertical border of tab labels"
 msgstr "ברײט פֿון דער װערטיקאַלישער צאַמרינע פֿון די הענטל עטיקעטן"
 
-#: gtk/gtknotebook.c:445
+#: gtk/gtknotebook.c:449
 msgid "Show Tabs"
 msgstr "װײַז הענטלעך"
 
-#: gtk/gtknotebook.c:446
+#: gtk/gtknotebook.c:450
 msgid "Whether tabs should be shown or not"
 msgstr "אױב מען װיל אַז די הענטלעך זאָלן זיך װײַזן"
 
-#: gtk/gtknotebook.c:452
+#: gtk/gtknotebook.c:456
 msgid "Show Border"
 msgstr "װײַז צאַמרינע"
 
-#: gtk/gtknotebook.c:453
+#: gtk/gtknotebook.c:457
 msgid "Whether the border should be shown or not"
 msgstr "אױב מען װיל אַז די צאַמרינע זאָל זיך װײַזן"
 
-#: gtk/gtknotebook.c:459
+#: gtk/gtknotebook.c:463
 msgid "Scrollable"
 msgstr "דורכבלעטערעװדיק"
 
-#: gtk/gtknotebook.c:460
+#: gtk/gtknotebook.c:464
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr ""
 "אױב „יאָ“, װעט מען צולײגן דורקבלעטערער פֿײַלן אױב עס זײַנען דאָ צופֿיל הענטלעך צו "
 "פּאַסן"
 
-#: gtk/gtknotebook.c:466
+#: gtk/gtknotebook.c:470
 msgid "Enable Popup"
 msgstr "דערמעגלעך אױפֿשפּרינג־מעניו"
 
-#: gtk/gtknotebook.c:467
+#: gtk/gtknotebook.c:471
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -2931,167 +3010,167 @@ msgstr ""
 "אױב „יאָ“, װעט דאָס דריקן דאָס רעכטע מײַזל־קנעפּל אױף דער העפֿט זאָלן אױפֿשפּרינגען אַ "
 "מעניו װאָס דו קענסט ניצן צו גײן צו אַ זײַט"
 
-#: gtk/gtknotebook.c:474
+#: gtk/gtknotebook.c:478
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "אױב הענטלעך זאָלן האָבן אַלע אײן גרײס"
 
-#: gtk/gtknotebook.c:481
+#: gtk/gtknotebook.c:485
 msgid "Tab label"
 msgstr "הענטל־עטיקעט"
 
-#: gtk/gtknotebook.c:482
+#: gtk/gtknotebook.c:486
 #, fuzzy
 msgid "The string displayed on the child's tab label"
 msgstr "דער אות־פֿאָדעם װאָס װײַזט זיך אױף דעם קינדס הענטל־עטיקעט"
 
-#: gtk/gtknotebook.c:488
+#: gtk/gtknotebook.c:492
 msgid "Menu label"
 msgstr "מעניו עטיקעט"
 
-#: gtk/gtknotebook.c:489
+#: gtk/gtknotebook.c:493
 #, fuzzy
 msgid "The string displayed in the child's menu entry"
 msgstr "דער אות־פֿאָדעם װאָס װײַזט זיך אױף דעם קינדס מעניו אײנס"
 
-#: gtk/gtknotebook.c:502
+#: gtk/gtknotebook.c:506
 msgid "Tab expand"
 msgstr "טאַבוליר פֿאַרגרעסער"
 
-#: gtk/gtknotebook.c:503
+#: gtk/gtknotebook.c:507
 #, fuzzy
 msgid "Whether to expand the child's tab or not"
 msgstr "צי מען קינדס הענטלעך פֿאַרגרעסערן זיך"
 
-#: gtk/gtknotebook.c:509
+#: gtk/gtknotebook.c:513
 msgid "Tab fill"
 msgstr "הענטל־אײַנפֿיל"
 
-#: gtk/gtknotebook.c:510
+#: gtk/gtknotebook.c:514
 #, fuzzy
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr "צי דעם קינדס הענטל זאָל אײַנפֿילן דעם פֿאַרטײלטן אָרט"
 
-#: gtk/gtknotebook.c:516
+#: gtk/gtknotebook.c:520
 msgid "Tab pack type"
 msgstr "הענטל־פּאַקיר סאָרט"
 
-#: gtk/gtknotebook.c:532 gtk/gtkscrollbar.c:115
+#: gtk/gtknotebook.c:536 gtk/gtkscrollbar.c:116
 msgid "Secondary backward stepper"
 msgstr "צװײטע צוריקװעגס־צוגעבער"
 
-#: gtk/gtknotebook.c:533
+#: gtk/gtknotebook.c:537
 #, fuzzy
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr "װײַז אַ צװײטע צוריקװעגס־פֿײַל אױף דער צװײטער עק פֿונעם דורכבלעטערער"
 
-#: gtk/gtknotebook.c:549 gtk/gtkscrollbar.c:123
+#: gtk/gtknotebook.c:553 gtk/gtkscrollbar.c:124
 msgid "Secondary forward stepper"
 msgstr "צװײטע פֿאָרױס צוגעבער"
 
-#: gtk/gtknotebook.c:550
+#: gtk/gtknotebook.c:554
 #, fuzzy
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr "װײַז אַ צװײטע פֿאָרױס־פֿײַל אױף דער צװײטער עק פֿונעם דורכבלעטערער"
 
-#: gtk/gtknotebook.c:565 gtk/gtkscrollbar.c:99
+#: gtk/gtknotebook.c:569 gtk/gtkscrollbar.c:100
 msgid "Backward stepper"
 msgstr "צוריקװעגס צוגעבער"
 
-#: gtk/gtknotebook.c:566 gtk/gtkscrollbar.c:100
+#: gtk/gtknotebook.c:570 gtk/gtkscrollbar.c:101
 msgid "Display the standard backward arrow button"
 msgstr "װײַז דאָס געװײנטלעכע צוריקװעגס־פֿײַל קנעפּל"
 
-#: gtk/gtknotebook.c:581 gtk/gtkscrollbar.c:107
+#: gtk/gtknotebook.c:585 gtk/gtkscrollbar.c:108
 msgid "Forward stepper"
 msgstr "פֿאָרױס צוגעבער"
 
-#: gtk/gtknotebook.c:582 gtk/gtkscrollbar.c:108
+#: gtk/gtknotebook.c:586 gtk/gtkscrollbar.c:109
 msgid "Display the standard forward arrow button"
 msgstr "װײַז דאָס געװײנטלעכע פֿאָרױס־פֿײַל קנעפּל"
 
-#: gtk/gtkoptionmenu.c:195
+#: gtk/gtkoptionmenu.c:197
 msgid "The menu of options"
 msgstr "דער אָפּציע־מעניו"
 
-#: gtk/gtkoptionmenu.c:202
+#: gtk/gtkoptionmenu.c:204
 msgid "Size of dropdown indicator"
 msgstr "גרײס פֿון אַראָפּשפּרינג װײַזער"
 
-#: gtk/gtkoptionmenu.c:208
+#: gtk/gtkoptionmenu.c:210
 msgid "Spacing around indicator"
 msgstr "אָפּרוקונג אַרום דעם װײַזער"
 
-#: gtk/gtkpaned.c:241
+#: gtk/gtkpaned.c:242
 msgid ""
 "Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr ""
 "פּאָזיציע פֿון טאַפֿליע אָפּרוקער, אין בילדצעלן (0 מײנט צו דעם ראַנד אױף לינקס אָדער "
 "אױבן)"
 
-#: gtk/gtkpaned.c:249
+#: gtk/gtkpaned.c:250
 msgid "Position Set"
 msgstr "באַשטעטיק פּאָזיציע"
 
-#: gtk/gtkpaned.c:250
+#: gtk/gtkpaned.c:251
 msgid "TRUE if the Position property should be used"
 msgstr "אױב „יאָ“, װעט מען ניצן די באַשטעטיקטע פּאָזיציע"
 
-#: gtk/gtkpaned.c:256
+#: gtk/gtkpaned.c:257
 msgid "Handle Size"
 msgstr "הענטל גרײס"
 
-#: gtk/gtkpaned.c:257
+#: gtk/gtkpaned.c:258
 msgid "Width of handle"
 msgstr "הענטל ברײט"
 
-#: gtk/gtkpaned.c:273
+#: gtk/gtkpaned.c:274
 #, fuzzy
 msgid "Minimal Position"
 msgstr "באַטרעף־פּאָזיציע"
 
-#: gtk/gtkpaned.c:274
+#: gtk/gtkpaned.c:275
 msgid "Smallest possible value for the \"position\" property"
 msgstr ""
 
-#: gtk/gtkpaned.c:291
+#: gtk/gtkpaned.c:292
 #, fuzzy
 msgid "Maximal Position"
 msgstr "באַטרעף־פּאָזיציע"
 
-#: gtk/gtkpaned.c:292
+#: gtk/gtkpaned.c:293
 msgid "Largest possible value for the \"position\" property"
 msgstr ""
 
-#: gtk/gtkpaned.c:309
+#: gtk/gtkpaned.c:310
 #, fuzzy
 msgid "Resize"
 msgstr "גרײס־סטרױערעװדיק"
 
-#: gtk/gtkpaned.c:310
+#: gtk/gtkpaned.c:311
 msgid "If TRUE, the child expands and shrinks along with the paned widget"
 msgstr ""
 
-#: gtk/gtkpaned.c:325
+#: gtk/gtkpaned.c:326
 #, fuzzy
 msgid "Shrink"
 msgstr "דערלאָז שרימפּן"
 
-#: gtk/gtkpaned.c:326
+#: gtk/gtkpaned.c:327
 msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr ""
 
-#: gtk/gtkpreview.c:134
+#: gtk/gtkpreview.c:135
 msgid ""
 "Whether the preview widget should take up the entire space it is allocated"
 msgstr "אױב די פֿאָרױסװײַז־צעפּיכעסל זאָל אָקופּירן זײַן גאַנצע אױסגעטײלטע אָרט"
 
-#: gtk/gtkprogress.c:131
+#: gtk/gtkprogress.c:132
 msgid "Activity mode"
 msgstr "אַקטיװיטעט־מאָדע"
 
-#: gtk/gtkprogress.c:132
+#: gtk/gtkprogress.c:133
 msgid ""
 "If TRUE the GtkProgress is in activity mode, meaning that it signals "
 "something is happening, but not how much of the activity is finished. This "
@@ -3101,19 +3180,19 @@ msgstr ""
 "זיך, אָבער װײַזט ניט װיפֿל פֿון אַקטיװיטעט איז שױן אַריבער.  מען ניצט דעם סימן װען "
 "מען טוט עפּעס מיט אַן אומבאַװוּסטן געדױער."
 
-#: gtk/gtkprogress.c:139
+#: gtk/gtkprogress.c:140
 msgid "Show text"
 msgstr "װײַז טעקסט"
 
-#: gtk/gtkprogress.c:140
+#: gtk/gtkprogress.c:141
 msgid "Whether the progress is shown as text"
 msgstr "אױב פּראָגרעס לאָזט זיך װײַזן װי טעקסט"
 
-#: gtk/gtkprogress.c:147
+#: gtk/gtkprogress.c:148
 msgid "Text x alignment"
 msgstr "טעקסט ה' אױסגלײַכונג"
 
-#: gtk/gtkprogress.c:148
+#: gtk/gtkprogress.c:149
 msgid ""
 "A number between 0.0 and 1.0 specifying the horizontal alignment of the text "
 "in the progress widget"
@@ -3121,11 +3200,11 @@ msgstr ""
 "אַ נומער צװישן 0.0 און 1.0 װאָס װײַזט אָן די האָריזאָנטאַלישע אױסגלײַכונג פֿונעם "
 "טעקסט אין דעם פּראָגרעס־צעפּיכעסל"
 
-#: gtk/gtkprogress.c:156
+#: gtk/gtkprogress.c:157
 msgid "Text y alignment"
 msgstr "טעקסט װ' אױסגלײַכונג"
 
-#: gtk/gtkprogress.c:157
+#: gtk/gtkprogress.c:158
 msgid ""
 "A number between 0.0 and 1.0 specifying the vertical alignment of the text "
 "in the progress widget"
@@ -3133,40 +3212,40 @@ msgstr ""
 "אַ נומער צװישן 0.0 און 1.0 װאָס װײַזט אָן די װערטיקאַלישע אױסגלײַכונג פֿונעם טעקסט "
 "אין דעם פּראָגרעס־צעפּיכעסל"
 
-#: gtk/gtkprogressbar.c:144 gtk/gtkrange.c:334 gtk/gtkspinbutton.c:242
+#: gtk/gtkprogressbar.c:145 gtk/gtkrange.c:335 gtk/gtkspinbutton.c:243
 msgid "Adjustment"
 msgstr "צופּאַסונג"
 
-#: gtk/gtkprogressbar.c:145
+#: gtk/gtkprogressbar.c:146
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
 msgstr "די GtkAdjustment צוגעבונדן צו דער פּראָגרעס־װירע (ניט רעקאָמענדירט)"
 
-#: gtk/gtkprogressbar.c:153
+#: gtk/gtkprogressbar.c:154
 msgid "Orientation and growth direction of the progress bar"
 msgstr "אָריִענטירונג און װוּקס־ריכטונג פֿון דער פּראָגרעס־װירע"
 
-#: gtk/gtkprogressbar.c:161
+#: gtk/gtkprogressbar.c:162
 msgid "Bar style"
 msgstr "װירע־סטיל"
 
-#: gtk/gtkprogressbar.c:162
+#: gtk/gtkprogressbar.c:163
 msgid "Specifies the visual style of the bar in percentage mode (Deprecated)"
 msgstr ""
 "באַשטעטיקט דעם װיזועלן סטיל פֿון דער װירע אין פּראָצענט־מאָדע (ניט רעקאָמענדירט)"
 
-#: gtk/gtkprogressbar.c:170
+#: gtk/gtkprogressbar.c:171
 msgid "Activity Step"
 msgstr "אַקטיװיטעט־צוגאָב"
 
-#: gtk/gtkprogressbar.c:171
+#: gtk/gtkprogressbar.c:172
 msgid "The increment used for each iteration in activity mode (Deprecated)"
 msgstr "דער צוגאָב צו יעדן איבערחזר אין אַקטיװיטעט־מאָדע (ניט רעקאָמענדירט)"
 
-#: gtk/gtkprogressbar.c:180
+#: gtk/gtkprogressbar.c:181
 msgid "Activity Blocks"
 msgstr "אַקטיװיטעט־בלאָקן"
 
-#: gtk/gtkprogressbar.c:181
+#: gtk/gtkprogressbar.c:182
 msgid ""
 "The number of blocks which can fit in the progress bar area in activity mode "
 "(Deprecated)"
@@ -3174,296 +3253,306 @@ msgstr ""
 "װיפֿל בלאָקן פּאַסן נעט אין דער פּראָגרעס־װירע אין אַקטיװיטעט־בלאָקן מאָדע (ניט "
 "רעקאָמענדירט)"
 
-#: gtk/gtkprogressbar.c:190
+#: gtk/gtkprogressbar.c:191
 msgid "Discrete Blocks"
 msgstr "דיסקרעטע בלאָקן"
 
-#: gtk/gtkprogressbar.c:191
+#: gtk/gtkprogressbar.c:192
 msgid ""
 "The number of discrete blocks in a progress bar (when shown in the discrete "
 "style)"
 msgstr ""
 "װיפֿל דיסקרעטע בלאָקן אין אַ פּראָגרעס־װירע (װען געװעזן אין דער דיסקרעטער מאָדע)"
 
-#: gtk/gtkprogressbar.c:200
+#: gtk/gtkprogressbar.c:201
 msgid "Fraction"
 msgstr "ברוכטײל"
 
-#: gtk/gtkprogressbar.c:201
+#: gtk/gtkprogressbar.c:202
 msgid "The fraction of total work that has been completed"
 msgstr "די ברוכטײל פֿון דער גאַנצער אַרבעט װאָס איז שױן געענדיקט"
 
-#: gtk/gtkprogressbar.c:210
+#: gtk/gtkprogressbar.c:211
 msgid "Pulse Step"
 msgstr "פּולסיר־צוגאָב"
 
-#: gtk/gtkprogressbar.c:211
+#: gtk/gtkprogressbar.c:212
 msgid "The fraction of total progress to move the bouncing block when pulsed"
 msgstr ""
 "די ברוכטײל פֿון דער גאַנצער פּראָגרעס צו באַװעגן דעם אָפּשפּרינגנדיקן בלאָק װען "
 "פּולסירט"
 
-#: gtk/gtkprogressbar.c:221
+#: gtk/gtkprogressbar.c:222
 msgid "Text to be displayed in the progress bar"
 msgstr "טעקסט צו װײַזן אין דער פּראָגרעס־װירע"
 
-#: gtk/gtkprogressbar.c:243
+#: gtk/gtkprogressbar.c:244
 msgid ""
 "The preferred place to ellipsize the string, if the progressbar does not "
 "have enough room to display the entire string, if at all"
 msgstr ""
 
-#: gtk/gtkradioaction.c:139
+#: gtk/gtkradioaction.c:140
 #, fuzzy
 msgid "The value"
 msgstr "טעמע נאָמען"
 
-#: gtk/gtkradioaction.c:140
+#: gtk/gtkradioaction.c:141
 msgid ""
 "The value returned by gtk_radio_action_get_current_value() when this action "
 "is the current action of its group."
 msgstr ""
 
-#: gtk/gtkradioaction.c:156 gtk/gtkradiobutton.c:113
+#: gtk/gtkradioaction.c:157 gtk/gtkradiobutton.c:114
 msgid "Group"
 msgstr "גרופּע"
 
-#: gtk/gtkradioaction.c:157
+#: gtk/gtkradioaction.c:158
 #, fuzzy
 msgid "The radio action whose group this action belongs to."
 msgstr "דאָס ראַדיאָ־קנעפּל װעלכעס גרופּע איז כּולל דאָס צעפּיכעסל"
 
-#: gtk/gtkradiobutton.c:114
+#: gtk/gtkradiobutton.c:115
 #, fuzzy
 msgid "The radio button whose group this widget belongs to."
 msgstr "דאָס ראַדיאָ־קנעפּל װעלכעס גרופּע איז כּולל דאָס צעפּיכעסל"
 
-#: gtk/gtkrange.c:325
+#: gtk/gtkrange.c:326
 msgid "Update policy"
 msgstr "דערהײַנטיקונג־פּאָליטיק"
 
-#: gtk/gtkrange.c:326
+#: gtk/gtkrange.c:327
 msgid "How the range should be updated on the screen"
 msgstr "װי צו דערהײַנטיקן די גאַמע אױף דער עקראַן"
 
-#: gtk/gtkrange.c:335
+#: gtk/gtkrange.c:336
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr "די GtkAdjustment װאָס איז כּולל דעם איצטיקן באַטרעף פֿון דעם גאַמע־אָביעקט"
 
-#: gtk/gtkrange.c:342
+#: gtk/gtkrange.c:343
 msgid "Inverted"
 msgstr "קאַפּױר"
 
-#: gtk/gtkrange.c:343
+#: gtk/gtkrange.c:344
 msgid "Invert direction slider moves to increase range value"
 msgstr "קאַפּױרער ריכטונג־גליטשער באַװעגט זיך צו פֿאַרגרעסערן דעם גאַמע־באַטרעף"
 
-#: gtk/gtkrange.c:349
+#: gtk/gtkrange.c:350
 msgid "Slider Width"
 msgstr "גליטשער ברײט"
 
-#: gtk/gtkrange.c:350
+#: gtk/gtkrange.c:351
 msgid "Width of scrollbar or scale thumb"
 msgstr "ברײט פֿון דורכבלעטערער אָדער סקאַליר־פֿינגער"
 
-#: gtk/gtkrange.c:357
+#: gtk/gtkrange.c:358
 msgid "Trough Border"
 msgstr "מולטער צאַמרינע"
 
-#: gtk/gtkrange.c:358
+#: gtk/gtkrange.c:359
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr "אָפּרוקונג צװישן פֿינגער/צוגעבערס און אױסערלעכער מולטער־שרעגפֿלאַך"
 
-#: gtk/gtkrange.c:365
+#: gtk/gtkrange.c:366
 msgid "Stepper Size"
 msgstr "צוגעבער גרײס"
 
-#: gtk/gtkrange.c:366
+#: gtk/gtkrange.c:367
 msgid "Length of step buttons at ends"
 msgstr "לענג פֿון צוגאָב־קנעפּלעך בײַ די עקן"
 
-#: gtk/gtkrange.c:373
+#: gtk/gtkrange.c:374
 msgid "Stepper Spacing"
 msgstr "צוגעבער אָפּרוקונג"
 
-#: gtk/gtkrange.c:374
+#: gtk/gtkrange.c:375
 msgid "Spacing between step buttons and thumb"
 msgstr "אָפּרוקונג צװישן צוגאָב־קנעפּלעך און פֿינגער"
 
-#: gtk/gtkrange.c:381
+#: gtk/gtkrange.c:382
 msgid "Arrow X Displacement"
 msgstr "פֿײַל ה' פֿונאַנדעררוקונג"
 
-#: gtk/gtkrange.c:382
+#: gtk/gtkrange.c:383
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
 msgstr "װי װײַט ה' צו באַװעגן די פֿײַל װען מען דריקט דאָס קנעפּל"
 
-#: gtk/gtkrange.c:389
+#: gtk/gtkrange.c:390
 msgid "Arrow Y Displacement"
 msgstr "פֿײַל װ' פֿונאַנדעררוקונג"
 
-#: gtk/gtkrange.c:390
+#: gtk/gtkrange.c:391
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "װי װײַט װ' צו באַװעגן די פֿײַל װען מען דריקט דאָס קנעפּל"
 
-#: gtk/gtkruler.c:120
+#: gtk/gtkruler.c:122
 msgid "Lower"
 msgstr "אונטערשטע"
 
-#: gtk/gtkruler.c:121
+#: gtk/gtkruler.c:123
 msgid "Lower limit of ruler"
 msgstr "אונטערשטער װירע־גרענעץ"
 
-#: gtk/gtkruler.c:130
+#: gtk/gtkruler.c:132
 msgid "Upper"
 msgstr "אױבערשטע"
 
-#: gtk/gtkruler.c:131
+#: gtk/gtkruler.c:133
 msgid "Upper limit of ruler"
 msgstr "אױבערשטער װירע־גרענעץ"
 
-#: gtk/gtkruler.c:141
+#: gtk/gtkruler.c:143
 msgid "Position of mark on the ruler"
 msgstr "פּאָזיציע פֿון שטרײַך אױף דער װירע"
 
-#: gtk/gtkruler.c:150
+#: gtk/gtkruler.c:152
 msgid "Max Size"
 msgstr "גרעסטע גרײס"
 
-#: gtk/gtkruler.c:151
+#: gtk/gtkruler.c:153
 msgid "Maximum size of the ruler"
 msgstr "גרעסטע גרײס פֿון דער װירע"
 
-#: gtk/gtkscale.c:172 gtk/gtkspinbutton.c:260
+#: gtk/gtkruler.c:168
+#, fuzzy
+msgid "Metric"
+msgstr "נומעריש"
+
+#: gtk/gtkruler.c:169
+#, fuzzy
+msgid "The metric used for the ruler"
+msgstr "דער מאָדעל פֿאַר דעם בױם־געשטאַלט"
+
+#: gtk/gtkscale.c:173 gtk/gtkspinbutton.c:261
 msgid "Digits"
 msgstr "ציפֿערן"
 
-#: gtk/gtkscale.c:173
+#: gtk/gtkscale.c:174
 msgid "The number of decimal places that are displayed in the value"
 msgstr "װיפֿל דעצימאַלע ציפֿערן װאָס װײַזן זיך אין דעם באַטרעף "
 
-#: gtk/gtkscale.c:182
+#: gtk/gtkscale.c:183
 msgid "Draw Value"
 msgstr "װײַז באַטרעף"
 
-#: gtk/gtkscale.c:183
+#: gtk/gtkscale.c:184
 msgid "Whether the current value is displayed as a string next to the slider"
 msgstr "אױב דער איצטיקער באַטרעף װײַזט זיך װי אַן אות־פֿאָדעם לעבן דעם גליטשער"
 
-#: gtk/gtkscale.c:190
+#: gtk/gtkscale.c:191
 msgid "Value Position"
 msgstr "באַטרעף־פּאָזיציע"
 
-#: gtk/gtkscale.c:191
+#: gtk/gtkscale.c:192
 msgid "The position in which the current value is displayed"
 msgstr "די פּאָזיציע װוּ דער איצטיקער באַטרעף װײַזט זיך"
 
-#: gtk/gtkscale.c:198
+#: gtk/gtkscale.c:199
 msgid "Slider Length"
 msgstr "גליטשער לענג"
 
-#: gtk/gtkscale.c:199
+#: gtk/gtkscale.c:200
 msgid "Length of scale's slider"
 msgstr "די לענג פֿון אַ מאָס גליטשער"
 
-#: gtk/gtkscale.c:207
+#: gtk/gtkscale.c:208
 msgid "Value spacing"
 msgstr "באַטרעף אָפּרוקונג"
 
-#: gtk/gtkscale.c:208
+#: gtk/gtkscale.c:209
 msgid "Space between value text and the slider/trough area"
 msgstr "אָפּרוקונג צװישן באַטרעף־טעקסט און דעם גליטשער/מולטער שטח"
 
-#: gtk/gtkscrollbar.c:82
+#: gtk/gtkscrollbar.c:83
 msgid "Minimum Slider Length"
 msgstr "קלענסטע גליטשער לענג"
 
-#: gtk/gtkscrollbar.c:83
+#: gtk/gtkscrollbar.c:84
 msgid "Minimum length of scrollbar slider"
 msgstr "קלענסטע לענג פֿון דעם דורכבלעטערער גליטשער"
 
-#: gtk/gtkscrollbar.c:91
+#: gtk/gtkscrollbar.c:92
 msgid "Fixed slider size"
 msgstr "גליטשער גרײס ניט צו ענדערן"
 
-#: gtk/gtkscrollbar.c:92
+#: gtk/gtkscrollbar.c:93
 msgid "Don't change slider size, just lock it to the minimum length"
 msgstr "ענדער ניט די גליטשער גרעסטע; שליס זי צו דער קלענסטער לענג"
 
-#: gtk/gtkscrollbar.c:116
+#: gtk/gtkscrollbar.c:117
 msgid ""
 "Display a second backward arrow button on the opposite end of the scrollbar"
 msgstr "װײַז אַ צװײטע צוריקװעגס־פֿײַל אױף דער צװײטער עק פֿונעם דורכבלעטערער"
 
-#: gtk/gtkscrollbar.c:124
+#: gtk/gtkscrollbar.c:125
 msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr "װײַז אַ צװײטע פֿאָרױס־פֿײַל אױף דער צװײטער עק פֿונעם דורכבלעטערער"
 
-#: gtk/gtkscrolledwindow.c:238 gtk/gtktext.c:603 gtk/gtktreeview.c:566
+#: gtk/gtkscrolledwindow.c:239 gtk/gtktext.c:606 gtk/gtktreeview.c:575
 msgid "Horizontal Adjustment"
 msgstr "האָריזאָנטאַלישע צופּאַסונג"
 
-#: gtk/gtkscrolledwindow.c:245 gtk/gtktext.c:611 gtk/gtktreeview.c:574
+#: gtk/gtkscrolledwindow.c:246 gtk/gtktext.c:614 gtk/gtktreeview.c:583
 msgid "Vertical Adjustment"
 msgstr "װערטיקאַליש צופּאַסונג"
 
-#: gtk/gtkscrolledwindow.c:252
+#: gtk/gtkscrolledwindow.c:253
 msgid "Horizontal Scrollbar Policy"
 msgstr "האָריזאָנטאַלישע דורכבלעטערער פּאָליטיק"
 
-#: gtk/gtkscrolledwindow.c:253
+#: gtk/gtkscrolledwindow.c:254
 msgid "When the horizontal scrollbar is displayed"
 msgstr "װען דער האָריזאָנטאַלישער דורכבלעטערער װײַזט זיך"
 
-#: gtk/gtkscrolledwindow.c:260
+#: gtk/gtkscrolledwindow.c:261
 msgid "Vertical Scrollbar Policy"
 msgstr "װערטיקאַלישע דורכבלעטערער פּאָליטיק"
 
-#: gtk/gtkscrolledwindow.c:261
+#: gtk/gtkscrolledwindow.c:262
 msgid "When the vertical scrollbar is displayed"
 msgstr "װען דער װערטיקאַלישער  דורכבלעטערער װײַזט זיך"
 
-#: gtk/gtkscrolledwindow.c:269
+#: gtk/gtkscrolledwindow.c:270
 msgid "Window Placement"
 msgstr "פֿענצטער־פּאָזיציע"
 
-#: gtk/gtkscrolledwindow.c:270
+#: gtk/gtkscrolledwindow.c:271
 msgid "Where the contents are located with respect to the scrollbars"
 msgstr "װוּ דער אינהאַלט געפֿינט זיך בנוגע די דורכבלעטערערס"
 
-#: gtk/gtkscrolledwindow.c:277
+#: gtk/gtkscrolledwindow.c:278
 msgid "Shadow Type"
 msgstr "שאָטן־סאָרט"
 
-#: gtk/gtkscrolledwindow.c:278
+#: gtk/gtkscrolledwindow.c:279
 msgid "Style of bevel around the contents"
 msgstr "סאָרט פֿון שרעגפֿלאַך אַרום דעם אינהאַלט"
 
-#: gtk/gtkscrolledwindow.c:285
+#: gtk/gtkscrolledwindow.c:286
 msgid "Scrollbar spacing"
 msgstr "דורקבלעטערער אָפּרוקונג"
 
-#: gtk/gtkscrolledwindow.c:286
+#: gtk/gtkscrolledwindow.c:287
 msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr "װיפֿל בילדצעלן ליגן צװישן דורכבלעטערערס און זײערע פֿענצטערס"
 
-#: gtk/gtkseparatortoolitem.c:136
+#: gtk/gtkseparatortoolitem.c:137
 msgid "Draw"
 msgstr ""
 
-#: gtk/gtkseparatortoolitem.c:137
+#: gtk/gtkseparatortoolitem.c:138
 #, fuzzy
 msgid "Whether the separator is drawn, or just blank"
 msgstr "אױב אָפּרוקערס װײַזן זיך װי װערטיקאַלישע ליניעס אָדער לײדיק אָרט"
 
-#: gtk/gtksettings.c:270
+#: gtk/gtksettings.c:281
 msgid "Double Click Time"
 msgstr "טאָפּל־קליק צײַט"
 
-#: gtk/gtksettings.c:271
+#: gtk/gtksettings.c:282
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
@@ -3471,12 +3560,12 @@ msgstr ""
 "גרעסטע צײַט צװישן צװײ קליקס, מען זאָל זײ אָננעמען װי אַ טאָפּל־קליק (אין "
 "מיליסעקונדען)"
 
-#: gtk/gtksettings.c:278
+#: gtk/gtksettings.c:289
 #, fuzzy
 msgid "Double Click Distance"
 msgstr "טאָפּל־קליק צײַט"
 
-#: gtk/gtksettings.c:279
+#: gtk/gtksettings.c:290
 #, fuzzy
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
@@ -3485,180 +3574,210 @@ msgstr ""
 "גרעסטע צײַט צװישן צװײ קליקס, מען זאָל זײ אָננעמען װי אַ טאָפּל־קליק (אין "
 "מיליסעקונדען)"
 
-#: gtk/gtksettings.c:286
+#: gtk/gtksettings.c:297
 msgid "Cursor Blink"
 msgstr "לױפֿער בליצלען"
 
-#: gtk/gtksettings.c:287
+#: gtk/gtksettings.c:298
 msgid "Whether the cursor should blink"
 msgstr "אױב דער לױפֿער זאָל בליצלען"
 
-#: gtk/gtksettings.c:294
+#: gtk/gtksettings.c:305
 msgid "Cursor Blink Time"
 msgstr "לױפֿער־בליצלען צײַט"
 
-#: gtk/gtksettings.c:295
+#: gtk/gtksettings.c:306
 msgid "Length of the cursor blink cycle, in milleseconds"
 msgstr "די לענג פֿון אַ לױפֿער־בליצלען ציקל, אין מיליסעקונדען"
 
-#: gtk/gtksettings.c:302
+#: gtk/gtksettings.c:313
 msgid "Split Cursor"
 msgstr "צעשפּאַלטענער לױפֿער"
 
-#: gtk/gtksettings.c:303
+#: gtk/gtksettings.c:314
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
 msgstr "אױב צװײ לױפֿערס זאָלן זיך װײַזן אין פֿאַלן פֿון בײד־ריכטונגדיקן טעקסט"
 
-#: gtk/gtksettings.c:310
+#: gtk/gtksettings.c:321
 msgid "Theme Name"
 msgstr "טעמע נאָמען"
 
-#: gtk/gtksettings.c:311
+#: gtk/gtksettings.c:322
 msgid "Name of theme RC file to load"
 msgstr "נאָמען פֿון טעמע RC טעקע אַרײַנצושטעלן"
 
-#: gtk/gtksettings.c:318
+#: gtk/gtksettings.c:329
 #, fuzzy
 msgid "Icon Theme Name"
 msgstr "טעמע נאָמען"
 
-#: gtk/gtksettings.c:319
+#: gtk/gtksettings.c:330
 #, fuzzy
 msgid "Name of icon theme to use"
 msgstr "נאָמען פֿון דער געװײנטלעכער שריפֿט"
 
-#: gtk/gtksettings.c:327
+#: gtk/gtksettings.c:338
 msgid "Key Theme Name"
 msgstr "שליסל־טעמע נאָמען"
 
-#: gtk/gtksettings.c:328
+#: gtk/gtksettings.c:339
 msgid "Name of key theme RC file to load"
 msgstr "נאָמען פֿון שליסל־טעמע RC טעקע אַרײַנצושטעלן"
 
-#: gtk/gtksettings.c:336
+#: gtk/gtksettings.c:347
 msgid "Menu bar accelerator"
 msgstr "מעניו־װירע פֿאַרגיכערער"
 
-#: gtk/gtksettings.c:337
+#: gtk/gtksettings.c:348
 msgid "Keybinding to activate the menu bar"
 msgstr "קלאַװיש־צובינד צו אַקטיװירן די מעניו־װירע"
 
-#: gtk/gtksettings.c:345
+#: gtk/gtksettings.c:356
 msgid "Drag threshold"
 msgstr "שלעפּ שװעל"
 
-#: gtk/gtksettings.c:346
+#: gtk/gtksettings.c:357
 msgid "Number of pixels the cursor can move before dragging"
 msgstr "מיט װיפֿל בילדצעלן דער לױפֿער קען זיך איבעררוקן אײדער ער הײבט אָן שלעפּן"
 
-#: gtk/gtksettings.c:354
+#: gtk/gtksettings.c:365
 msgid "Font Name"
 msgstr "שריפֿט נאָמען"
 
-#: gtk/gtksettings.c:355
+#: gtk/gtksettings.c:366
 msgid "Name of default font to use"
 msgstr "נאָמען פֿון דער געװײנטלעכער שריפֿט"
 
-#: gtk/gtksettings.c:363
+#: gtk/gtksettings.c:374
 msgid "Icon Sizes"
 msgstr "בילדל גרײסן"
 
-#: gtk/gtksettings.c:364
+#: gtk/gtksettings.c:375
 msgid "List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."
 msgstr "רשימה פֿון בילדל גרײסן (gtk-menu=16,16;gtk-button=20,20...)"
 
-#: gtk/gtksettings.c:372
+#: gtk/gtksettings.c:383
 msgid "GTK Modules"
 msgstr ""
 
-#: gtk/gtksettings.c:373
+#: gtk/gtksettings.c:384
 msgid "List of currently active GTK modules"
 msgstr ""
 
-#: gtk/gtksettings.c:382
+#: gtk/gtksettings.c:393
 msgid "Xft Antialias"
 msgstr ""
 
-#: gtk/gtksettings.c:383
+#: gtk/gtksettings.c:394
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr ""
 
-#: gtk/gtksettings.c:392
+#: gtk/gtksettings.c:403
 msgid "Xft Hinting"
 msgstr ""
 
-#: gtk/gtksettings.c:393
+#: gtk/gtksettings.c:404
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
 msgstr ""
 
-#: gtk/gtksettings.c:402
+#: gtk/gtksettings.c:413
 msgid "Xft Hint Style"
 msgstr ""
 
-#: gtk/gtksettings.c:403
+#: gtk/gtksettings.c:414
 msgid "What degree of hinting to use; none, slight, medium, or full"
 msgstr ""
 
-#: gtk/gtksettings.c:412
+#: gtk/gtksettings.c:423
 msgid "Xft RGBA"
 msgstr ""
 
-#: gtk/gtksettings.c:413
+#: gtk/gtksettings.c:424
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
 msgstr ""
 
-#: gtk/gtksettings.c:422
+#: gtk/gtksettings.c:433
 msgid "Xft DPI"
 msgstr ""
 
-#: gtk/gtksettings.c:423
+#: gtk/gtksettings.c:434
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
 msgstr ""
 
-#: gtk/gtksettings.c:432
+#: gtk/gtksettings.c:443
+#, fuzzy
+msgid "Cursor theme name"
+msgstr "טעמע נאָמען"
+
+#: gtk/gtksettings.c:444
+#, fuzzy
+msgid "Name of the cursor theme to use"
+msgstr "נאָמען פֿון דער געװײנטלעכער שריפֿט"
+
+#: gtk/gtksettings.c:452
+#, fuzzy
+msgid "Cursor theme size"
+msgstr "זעעװדיקער לױפֿער"
+
+#: gtk/gtksettings.c:453
+#, fuzzy
+msgid "Size to use for cursors"
+msgstr "פֿאַרב צו ניצן אין אומציפֿער־שורות"
+
+#: gtk/gtksettings.c:463
 msgid "Alternative button order"
 msgstr ""
 
-#: gtk/gtksettings.c:433
+#: gtk/gtksettings.c:464
 #, fuzzy
 msgid "Whether buttons in dialogs should use the alternative button order"
 msgstr "אױב מען װיל אַז די הענטלעך זאָלן זיך װײַזן"
 
-#: gtk/gtksizegroup.c:243
+#: gtk/gtksizegroup.c:244
 msgid "Mode"
 msgstr "מאָדע"
 
-#: gtk/gtksizegroup.c:244
+#: gtk/gtksizegroup.c:245
+#, fuzzy
 msgid ""
-"The directions in which the size group effects the requested sizes of its "
+"The directions in which the size group affects the requested sizes of its "
 "component widgets"
 msgstr ""
 "די ריכטונגען מיט װעלכע די גרײסגרופּע איז משפּיע די געװוּנטשענע גרײסן פֿון זײַנע "
 "קאָמפּאָנענט־צעפּיכעסלעך"
 
-#: gtk/gtkspinbutton.c:243
+#: gtk/gtksizegroup.c:262
+msgid "Ignore hidden"
+msgstr ""
+
+#: gtk/gtksizegroup.c:263
+msgid ""
+"If TRUE, hidden widgets are ignored when determining the size of the group"
+msgstr ""
+
+#: gtk/gtkspinbutton.c:244
 msgid "The adjustment that holds the value of the spinbutton"
 msgstr "די צופּאַסונג װאָס האַלט דעם באַטרעף פֿון דעם דרײקנעפּל"
 
-#: gtk/gtkspinbutton.c:250
+#: gtk/gtkspinbutton.c:251
 msgid "Climb Rate"
 msgstr "שטײַג פֿלינקײט"
 
-#: gtk/gtkspinbutton.c:251
+#: gtk/gtkspinbutton.c:252
 msgid "The acceleration rate when you hold down a button"
 msgstr "די אַקצעלעראַציע װען מען האַלט געדריקט אַ קנעפּל"
 
-#: gtk/gtkspinbutton.c:261
+#: gtk/gtkspinbutton.c:262
 msgid "The number of decimal places to display"
 msgstr "װיפֿל דעצימאַלע ציפֿערן צו װײַזן"
 
-#: gtk/gtkspinbutton.c:270
+#: gtk/gtkspinbutton.c:271
 msgid "Snap to Ticks"
 msgstr "באַװעג אױטאָמאַטיש צו אַפּאָסטראָפֿן"
 
-#: gtk/gtkspinbutton.c:271
+#: gtk/gtkspinbutton.c:272
 msgid ""
 "Whether erroneous values are automatically changed to a spin button's "
 "nearest step increment"
@@ -3666,141 +3785,141 @@ msgstr ""
 "אױב אומלעקסיקע באַטרעפֿן װערן אױטאָמאַטיש פֿאַרװאַנדלט צו דעם נעענטסטן צוגאָב פֿון אַ "
 "דרײקנעפּל"
 
-#: gtk/gtkspinbutton.c:278
+#: gtk/gtkspinbutton.c:279
 msgid "Numeric"
 msgstr "נומעריש"
 
-#: gtk/gtkspinbutton.c:279
+#: gtk/gtkspinbutton.c:280
 msgid "Whether non-numeric characters should be ignored"
 msgstr "אױב ניט־נומערישע שריפֿטצײכנס זאָלן זיך איגנאָרירן"
 
-#: gtk/gtkspinbutton.c:286
+#: gtk/gtkspinbutton.c:287
 msgid "Wrap"
 msgstr "שאַר"
 
-#: gtk/gtkspinbutton.c:287
+#: gtk/gtkspinbutton.c:288
 msgid "Whether a spin button should wrap upon reaching its limits"
 msgstr "אױב אַ דרײקנעפּל זאָל זיך שאַרן װען עס דערגרײכט זײַנע גרענעצן"
 
-#: gtk/gtkspinbutton.c:294
+#: gtk/gtkspinbutton.c:295
 msgid "Update Policy"
 msgstr "דערהײַנטיק פּאָליטיק"
 
-#: gtk/gtkspinbutton.c:295
+#: gtk/gtkspinbutton.c:296
 msgid ""
 "Whether the spin button should update always, or only when the value is legal"
 msgstr ""
 "אױב דאָס דרײקנעפּל זאָל זיך דערהײַנטיקן אַלעמאָל אָדער בלױז װען דער באַטרעף איז "
 "לעקסיק"
 
-#: gtk/gtkspinbutton.c:304
+#: gtk/gtkspinbutton.c:305
 msgid "Reads the current value, or sets a new value"
 msgstr "לײענט דעם איצטיקן באַטרעף אָדער באַשטעטיקט אַ נײַעם באַטרעף"
 
-#: gtk/gtkspinbutton.c:313
+#: gtk/gtkspinbutton.c:314
 #, fuzzy
 msgid "Style of bevel around the spin button"
 msgstr "סאָרט פֿון שרעגפֿלאַך אַרום דעם אינהאַלט"
 
-#: gtk/gtkstatusbar.c:177
+#: gtk/gtkstatusbar.c:178
 msgid "Has Resize Grip"
 msgstr ""
 
-#: gtk/gtkstatusbar.c:178
+#: gtk/gtkstatusbar.c:179
 #, fuzzy
 msgid "Whether the statusbar has a grip for resizing the toplevel"
 msgstr "צי דאָס צעפּיכעסל איז דאָס פֿאָקוס־צעפּיכעסל אין דער העכסטער מדרגה"
 
-#: gtk/gtkstatusbar.c:205
+#: gtk/gtkstatusbar.c:206
 msgid "Style of bevel around the statusbar text"
 msgstr "סטיל פֿון שרעגפֿלאַך אַרום דעם סטאַטוס־װײַזער טעקסט"
 
-#: gtk/gtktable.c:160
+#: gtk/gtktable.c:161
 msgid "Rows"
 msgstr "שורות"
 
-#: gtk/gtktable.c:161
+#: gtk/gtktable.c:162
 msgid "The number of rows in the table"
 msgstr "די צאָל שורות אין דער טאַבעלע"
 
-#: gtk/gtktable.c:169
+#: gtk/gtktable.c:170
 msgid "Columns"
 msgstr "זײַלן"
 
-#: gtk/gtktable.c:170
+#: gtk/gtktable.c:171
 msgid "The number of columns in the table"
 msgstr "די צאָל זײַלן אין דער טאַבעלע"
 
-#: gtk/gtktable.c:178
+#: gtk/gtktable.c:179
 msgid "Row spacing"
 msgstr "שורה אָפּרוקונג"
 
-#: gtk/gtktable.c:179
+#: gtk/gtktable.c:180
 msgid "The amount of space between two consecutive rows"
 msgstr "װיפֿל אָרט ליגט צװישן צװײ קאָנסעקוטיװע שורות"
 
-#: gtk/gtktable.c:187
+#: gtk/gtktable.c:188
 msgid "Column spacing"
 msgstr "זײַל אָפּרוקונג"
 
-#: gtk/gtktable.c:188
+#: gtk/gtktable.c:189
 msgid "The amount of space between two consecutive columns"
 msgstr "װיפֿל אָרט ליגט צװישן צװײ קאָנסעקוטיװע זײַלן"
 
-#: gtk/gtktable.c:196
+#: gtk/gtktable.c:197
 msgid "Homogenous"
 msgstr "האָמאָגען"
 
-#: gtk/gtktable.c:197
+#: gtk/gtktable.c:198
 msgid "If TRUE this means the table cells are all the same width/height"
 msgstr "אױב „יאָ“, האָבן די אַלע צעלן פֿון טאַבעלע אין ברײט/הײך"
 
-#: gtk/gtktable.c:204
+#: gtk/gtktable.c:205
 msgid "Left attachment"
 msgstr "לינקער צוקלעפּעניש"
 
-#: gtk/gtktable.c:211
+#: gtk/gtktable.c:212
 msgid "Right attachment"
 msgstr "רעכטער צוקלעפּעניש"
 
-#: gtk/gtktable.c:212
+#: gtk/gtktable.c:213
 #, fuzzy
 msgid "The column number to attach the right side of a child widget to"
 msgstr "דער זײַל־נומער װוּ די רעכטע זײַט פֿון קינד קלעפּט זיך צו"
 
-#: gtk/gtktable.c:218
+#: gtk/gtktable.c:219
 msgid "Top attachment"
 msgstr "קאָפּ צוקלעפּעניש"
 
-#: gtk/gtktable.c:219
+#: gtk/gtktable.c:220
 msgid "The row number to attach the top of a child widget to"
 msgstr "דער שורה־נומער װוּ דער קאָפּ פֿון קינד קלעפּט זיך צו"
 
-#: gtk/gtktable.c:225
+#: gtk/gtktable.c:226
 msgid "Bottom attachment"
 msgstr "פֿוס צוקלעפּעניש"
 
-#: gtk/gtktable.c:232
+#: gtk/gtktable.c:233
 msgid "Horizontal options"
 msgstr "האָריזאָנטאַלישע אָפּציעס"
 
-#: gtk/gtktable.c:233
+#: gtk/gtktable.c:234
 msgid "Options specifying the horizontal behaviour of the child"
 msgstr "אָפּציעס װאָס באַשטעטיקט װי דאָס קינד האַלט זיך האָריזאָנטאַליש"
 
-#: gtk/gtktable.c:239
+#: gtk/gtktable.c:240
 msgid "Vertical options"
 msgstr "װערטיקאַלישע אָפּציעס"
 
-#: gtk/gtktable.c:240
+#: gtk/gtktable.c:241
 msgid "Options specifying the vertical behaviour of the child"
 msgstr "אָפּציעס װאָס באַשטעטיקט װי דאָס קינד האַלט זיך װערטיקאַליש"
 
-#: gtk/gtktable.c:246
+#: gtk/gtktable.c:247
 msgid "Horizontal padding"
 msgstr "האָריזאָנטאַליש לײדיק אָרט"
 
-#: gtk/gtktable.c:247
+#: gtk/gtktable.c:248
 msgid ""
 "Extra space to put between the child and its left and right neighbors, in "
 "pixels"
@@ -3808,11 +3927,11 @@ msgstr ""
 "איבעריקע לײדיקע אָרט צוצולײגן צװישן אַ קינד און זײַנע שכנים אױף לינקס און "
 "רעכטס, אין בילדצעלן"
 
-#: gtk/gtktable.c:253
+#: gtk/gtktable.c:254
 msgid "Vertical padding"
 msgstr "װערטיקאַליש לײדיק אָרט"
 
-#: gtk/gtktable.c:254
+#: gtk/gtktable.c:255
 msgid ""
 "Extra space to put between the child and its upper and lower neighbors, in "
 "pixels"
@@ -3820,56 +3939,61 @@ msgstr ""
 "איבעריקע לײדיקע אָרט צוצולײגן צװישן אַ קינד און זײַנע שכנים צום קאָפּ און פֿוס, "
 "אין בילדצעלן"
 
-#: gtk/gtktext.c:604
+#: gtk/gtktext.c:607
 msgid "Horizontal adjustment for the text widget"
 msgstr "האָריזאָנטאַלישע צופּאַסונג פֿאַר דעם טעקסט־צעפּיכעסל"
 
-#: gtk/gtktext.c:612
+#: gtk/gtktext.c:615
 msgid "Vertical adjustment for the text widget"
 msgstr "װערטיקאַלישע צופּאַסונג פֿאַר דעם טעקסט־צעפּיכעסל"
 
-#: gtk/gtktext.c:619
+#: gtk/gtktext.c:622
 msgid "Line Wrap"
 msgstr "שורה־שאַר"
 
-#: gtk/gtktext.c:620
+#: gtk/gtktext.c:623
 msgid "Whether lines are wrapped at widget edges"
 msgstr "אױב שורות שאַרן זיך צו די ראַנדן פֿון אַ צעפּיכעסל"
 
-#: gtk/gtktext.c:627
+#: gtk/gtktext.c:630
 msgid "Word Wrap"
 msgstr "װאָרט־שאַר"
 
-#: gtk/gtktext.c:628
+#: gtk/gtktext.c:631
 msgid "Whether words are wrapped at widget edges"
 msgstr "אױב װערטער שאַרן זיך צו די ראַנדן פֿון אַ צעפּיכעסל"
 
-#: gtk/gtktextbuffer.c:184
+#: gtk/gtktextbuffer.c:188
 msgid "Tag Table"
 msgstr "הענטל טאַבעלע"
 
-#: gtk/gtktextbuffer.c:185
+#: gtk/gtktextbuffer.c:189
 msgid "Text Tag Table"
 msgstr "טעקסט־הענטל טאַבעלע"
 
-#: gtk/gtktexttag.c:197
+#: gtk/gtktextbuffer.c:207
+#, fuzzy
+msgid "Current text of the buffer"
+msgstr "דער טעקסט פֿון דער עטיקעט"
+
+#: gtk/gtktexttag.c:201
 msgid "Tag name"
 msgstr "הענטל נאָמען"
 
-#: gtk/gtktexttag.c:198
+#: gtk/gtktexttag.c:202
 msgid "Name used to refer to the text tag. NULL for anonymous tags"
 msgstr ""
 "נאָמען װאָס מען ניצט צו רעדן װעגן דעם טעקסט הענטל; נוליק פֿאַר אַנאָנימע הענטלעך"
 
-#: gtk/gtktexttag.c:216
+#: gtk/gtktexttag.c:220
 msgid "Background color as a (possibly unallocated) GdkColor"
 msgstr "הינטער־פֿאַרב װי אַ Gdk פֿאַרב (אפֿשר אַ ניט־אױסגעטײלטע)"
 
-#: gtk/gtktexttag.c:223
+#: gtk/gtktexttag.c:227
 msgid "Background full height"
 msgstr "הינטערגרונט פֿולע הײך"
 
-#: gtk/gtktexttag.c:224
+#: gtk/gtktexttag.c:228
 msgid ""
 "Whether the background color fills the entire line height or only the height "
 "of the tagged characters"
@@ -3877,47 +4001,47 @@ msgstr ""
 "אױב די הינטער־פֿאַרב פֿילט אָן די גאַנצע הײך אָדער בלױז די הײך פֿון די שריפֿטצײכנס "
 "מיט צוגעלײגטע הענטלעך"
 
-#: gtk/gtktexttag.c:232
+#: gtk/gtktexttag.c:236
 msgid "Background stipple mask"
 msgstr "הינטערגרונט פּילקעדיקע מאַסקע"
 
-#: gtk/gtktexttag.c:233
+#: gtk/gtktexttag.c:237
 msgid "Bitmap to use as a mask when drawing the text background"
 msgstr "ביטמאַפּע צו ניצן װי אַ מאַסקע בשעת מען צײכנט דעם טעקסט־הינטערגרונט"
 
-#: gtk/gtktexttag.c:250
+#: gtk/gtktexttag.c:254
 msgid "Foreground color as a (possibly unallocated) GdkColor"
 msgstr "פֿאַר־פֿאַרב װי אַ Gdk פֿאַרב (אפֿשר אַ ניט־אױסגעטײלטע)"
 
-#: gtk/gtktexttag.c:258
+#: gtk/gtktexttag.c:262
 msgid "Foreground stipple mask"
 msgstr "פֿאַרגרונט פּילקעדיקע מאַסקע"
 
-#: gtk/gtktexttag.c:259
+#: gtk/gtktexttag.c:263
 msgid "Bitmap to use as a mask when drawing the text foreground"
 msgstr "ביטמאַפּע צו ניצן װי אַ מאַסקע בשעת מען צײכנט דעם טעקסט־פֿאַרגרונט"
 
-#: gtk/gtktexttag.c:266
+#: gtk/gtktexttag.c:270
 msgid "Text direction"
 msgstr "טעקסט ריכטונג"
 
-#: gtk/gtktexttag.c:267
+#: gtk/gtktexttag.c:271
 msgid "Text direction, e.g. right-to-left or left-to-right"
 msgstr "טעקסט ריכטונג, דאָס הײסט, אָדער רעכטס־ביז־לינקס אָדער לינקס־ביז־רעכטס"
 
-#: gtk/gtktexttag.c:284
+#: gtk/gtktexttag.c:288
 msgid "Font description as a string, e.g. \"Sans Italic 12\""
 msgstr "שריפֿט באַשרײַבונג װי אַן אות־פֿאָדעם, װי למשל \"Sans Italic 12\""
 
-#: gtk/gtktexttag.c:309
+#: gtk/gtktexttag.c:313
 msgid "Font style as a PangoStyle, e.g. PANGO_STYLE_ITALIC"
 msgstr "שריפֿט־סטיל װי אַ PangoStyle, װי למשל PANGO_STYLE_ITALIC"
 
-#: gtk/gtktexttag.c:318
+#: gtk/gtktexttag.c:322
 msgid "Font variant as a PangoVariant, e.g. PANGO_VARIANT_SMALL_CAPS"
 msgstr "שריפֿט־װאַריאַנט װי אַ PangoVariant, װי למשל PANGO_VARIANT_SMALL_CAPS"
 
-#: gtk/gtktexttag.c:327
+#: gtk/gtktexttag.c:331
 msgid ""
 "Font weight as an integer, see predefined values in PangoWeight; for "
 "example, PANGO_WEIGHT_BOLD"
@@ -3925,15 +4049,15 @@ msgstr ""
 "שריפֿט־װאָג װי אַ גאַנצער נומער; זע די פֿאָרױס־דעפֿינירטע באַטרעפֿן אין PangoWeight, "
 "װי למשל PANGO_WEIGHT_BOLD"
 
-#: gtk/gtktexttag.c:338
+#: gtk/gtktexttag.c:342
 msgid "Font stretch as a PangoStretch, e.g. PANGO_STRETCH_CONDENSED"
 msgstr "שריפֿט־שטרעק װי אַ PangoStretch, װי למשל PANGO_STRETCH_CONDENSED"
 
-#: gtk/gtktexttag.c:347
+#: gtk/gtktexttag.c:351
 msgid "Font size in Pango units"
 msgstr "שריפֿט גרײס אין Pango אײנסן"
 
-#: gtk/gtktexttag.c:357
+#: gtk/gtktexttag.c:361
 msgid ""
 "Font size as a scale factor relative to the default font size. This properly "
 "adapts to theme changes etc. so is recommended. Pango predefines some scales "
@@ -3943,11 +4067,11 @@ msgstr ""
 "גרײס אַדאַפּטירט צו טעמע־ענדערונגען, און איז רעקאָמענדירט.  Pango דעפֿינירט פֿאָרױס "
 "עטלעכע מאָסן װי למשל PANGO_SCALE_X_LARGE"
 
-#: gtk/gtktexttag.c:377 gtk/gtktextview.c:595
+#: gtk/gtktexttag.c:381 gtk/gtktextview.c:596
 msgid "Left, right, or center justification"
 msgstr "לינקע, רעכטע, אָדער צענטראַלע אױסגלײַכונג"
 
-#: gtk/gtktexttag.c:386
+#: gtk/gtktexttag.c:390
 #, fuzzy
 msgid ""
 "The language this text is in, as an ISO code. Pango can use this as a hint "
@@ -3957,367 +4081,403 @@ msgstr ""
 "פֿאָרמירט דעם טעקסט.  אױב דו פֿאַרשטײסט ניט דעם פּאַראַמעטער, איז מסתּמא דאַרפֿסטו אים "
 "אױף כּפּרות."
 
-#: gtk/gtktexttag.c:393
+#: gtk/gtktexttag.c:397
 msgid "Left margin"
 msgstr "לינקער זאַפּאַס"
 
-#: gtk/gtktexttag.c:394 gtk/gtktextview.c:604
+#: gtk/gtktexttag.c:398 gtk/gtktextview.c:605
 msgid "Width of the left margin in pixels"
 msgstr "ברײט פֿונעם לינקן זאַפּאַס, אין בילדצעלן"
 
-#: gtk/gtktexttag.c:403
+#: gtk/gtktexttag.c:407
 msgid "Right margin"
 msgstr "רעכטער זאַפּאַס"
 
-#: gtk/gtktexttag.c:404 gtk/gtktextview.c:614
+#: gtk/gtktexttag.c:408 gtk/gtktextview.c:615
 msgid "Width of the right margin in pixels"
 msgstr "ברײט פֿונעם רעכטן זאַפּאַס, אין בילדצעלן"
 
-#: gtk/gtktexttag.c:414 gtk/gtktextview.c:623
+#: gtk/gtktexttag.c:418 gtk/gtktextview.c:624
 msgid "Indent"
 msgstr "אײַנצײנדלונג"
 
-#: gtk/gtktexttag.c:415 gtk/gtktextview.c:624
+#: gtk/gtktexttag.c:419 gtk/gtktextview.c:625
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "װיפֿל אײַנצוצײנדלען דעם פּאַראַגראַף, אין בילדצעלן"
 
-#: gtk/gtktexttag.c:426
+#: gtk/gtktexttag.c:430
+#, fuzzy
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative) "
-"in pixels"
+"in Pango units"
 msgstr ""
 "צולײג פֿון טעקסט איבער דעם אונטערגרונט (אונטער דעם אונטערגרונט אױב דער הײב "
 "איז נעגאַטיװ)"
 
-#: gtk/gtktexttag.c:435
+#: gtk/gtktexttag.c:439
 msgid "Pixels above lines"
 msgstr "בילדצעלן איבער די שורות"
 
-#: gtk/gtktexttag.c:436 gtk/gtktextview.c:548
+#: gtk/gtktexttag.c:440 gtk/gtktextview.c:549
 msgid "Pixels of blank space above paragraphs"
 msgstr "בילדצעלן פֿון לײדיקן אָרט איבער די פּאַראַגראַפֿן"
 
-#: gtk/gtktexttag.c:445
+#: gtk/gtktexttag.c:449
 msgid "Pixels below lines"
 msgstr "בילדצעלן אונטער די שורות"
 
-#: gtk/gtktexttag.c:446 gtk/gtktextview.c:558
+#: gtk/gtktexttag.c:450 gtk/gtktextview.c:559
 msgid "Pixels of blank space below paragraphs"
 msgstr "בילדצעלן פֿון לײדיקן אָרט אונטער די פּאַראַגראַפֿן"
 
-#: gtk/gtktexttag.c:455
+#: gtk/gtktexttag.c:459
 msgid "Pixels inside wrap"
 msgstr "בילדצעלן אינערלעכער שאַר"
 
-#: gtk/gtktexttag.c:456 gtk/gtktextview.c:568
+#: gtk/gtktexttag.c:460 gtk/gtktextview.c:569
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "בילדצעלן פֿון לײדיקן אָרט צװישן געשאַרטע שורות אין אַ פּאַראַגראַף"
 
-#: gtk/gtktexttag.c:482
-msgid "Wrap mode"
-msgstr "שאַר מאָדע"
-
-#: gtk/gtktexttag.c:483 gtk/gtktextview.c:586
+#: gtk/gtktexttag.c:487 gtk/gtktextview.c:587
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "אױב שורות שאַרן זיך קײן מאָל, בײַ װאָרט־ראַנדן, אָדער בײַ שריפֿטצײכן־ראַנדן"
 
-#: gtk/gtktexttag.c:492 gtk/gtktextview.c:633
+#: gtk/gtktexttag.c:496 gtk/gtktextview.c:634
 msgid "Tabs"
 msgstr "טאַבוליר גרענעצן"
 
-#: gtk/gtktexttag.c:493 gtk/gtktextview.c:634
+#: gtk/gtktexttag.c:497 gtk/gtktextview.c:635
 msgid "Custom tabs for this text"
 msgstr "פֿאַראײגנטע טאַבוליר־גרענעצן פֿאַר דעם־אָ טעקסט"
 
-#: gtk/gtktexttag.c:500
+#: gtk/gtktexttag.c:504
 msgid "Invisible"
 msgstr "אומזעעװדיק"
 
-#: gtk/gtktexttag.c:501
+#: gtk/gtktexttag.c:505
 msgid "Whether this text is hidden. Not implemented in GTK 2.0"
 msgstr "אױב דער טעקסט איז באַהאַלטן.  ניט רעאַליזירט אין GTK 2.0"
 
-#: gtk/gtktexttag.c:514
+#: gtk/gtktexttag.c:519
+#, fuzzy
+msgid "Paragraph background color name"
+msgstr "צעל הינטערפֿאַרב נאָמען"
+
+#: gtk/gtktexttag.c:520
+#, fuzzy
+msgid "Paragraph background color as a string"
+msgstr "הינטערפֿאַרב װי אַן אות־פֿאָדעם"
+
+#: gtk/gtktexttag.c:535
+#, fuzzy
+msgid "Paragraph background color"
+msgstr "צעל הינטערפֿאַרב"
+
+#: gtk/gtktexttag.c:536
+#, fuzzy
+msgid "Paragraph background color as a (possibly unallocated) GdkColor"
+msgstr "הינטער־פֿאַרב װי אַ Gdk פֿאַרב (אפֿשר אַ ניט־אױסגעטײלטע)"
+
+#: gtk/gtktexttag.c:549
 msgid "Background full height set"
 msgstr "באַשטעטיק הינטערגרונט פֿולע הײך"
 
-#: gtk/gtktexttag.c:515
+#: gtk/gtktexttag.c:550
 msgid "Whether this tag affects background height"
 msgstr "אױב דאָס הענטל האָט אַן השפּעה איבער הינטערגרונט־הײך"
 
-#: gtk/gtktexttag.c:518
+#: gtk/gtktexttag.c:553
 msgid "Background stipple set"
 msgstr "באַשטעטיק הינטערגרונט פּילקעדיקײַט"
 
-#: gtk/gtktexttag.c:519
+#: gtk/gtktexttag.c:554
 msgid "Whether this tag affects the background stipple"
 msgstr "אױב דאָס הענטל האָט אַן השפּעה איבער דער הינטערגרונט־פּילקעדיקײַט"
 
-#: gtk/gtktexttag.c:526
+#: gtk/gtktexttag.c:561
 msgid "Foreground stipple set"
 msgstr "פֿאַרגרונט הינטערגרונט פּילקעדיקײַט"
 
-#: gtk/gtktexttag.c:527
+#: gtk/gtktexttag.c:562
 msgid "Whether this tag affects the foreground stipple"
 msgstr "אױב דאָס הענטל האָט אַן השפּעה איבער דער פֿאַרגרונט־פּילקעדיקײַט"
 
-#: gtk/gtktexttag.c:562
+#: gtk/gtktexttag.c:597
 msgid "Justification set"
 msgstr "באַשטעטיק אױסגלײַכונג"
 
-#: gtk/gtktexttag.c:563
+#: gtk/gtktexttag.c:598
 msgid "Whether this tag affects paragraph justification"
 msgstr "אױב דאָס הענטל האָט אַן השפּעה איבער פּאַראַגראַף־אױסגלײַכונג"
 
-#: gtk/gtktexttag.c:570
+#: gtk/gtktexttag.c:605
 msgid "Left margin set"
 msgstr "באַשטעטיק לינקן זאַפּאַס"
 
-#: gtk/gtktexttag.c:571
+#: gtk/gtktexttag.c:606
 msgid "Whether this tag affects the left margin"
 msgstr "אױב דאָס הענטל האָט אַן השפּעה איבער דעם לינקן זאַפּאַס"
 
-#: gtk/gtktexttag.c:574
+#: gtk/gtktexttag.c:609
 msgid "Indent set"
 msgstr "באַשטעטיק אײַנצײנדלונג"
 
-#: gtk/gtktexttag.c:575
+#: gtk/gtktexttag.c:610
 msgid "Whether this tag affects indentation"
 msgstr "אױב דאָס הענטל האָט אַן השפּעה איבער דער אײַנצײנדלונג"
 
-#: gtk/gtktexttag.c:582
+#: gtk/gtktexttag.c:617
 msgid "Pixels above lines set"
 msgstr "באַשטעטיק בילדצעלן איבער שורות"
 
-#: gtk/gtktexttag.c:583 gtk/gtktexttag.c:587
+#: gtk/gtktexttag.c:618 gtk/gtktexttag.c:622
 msgid "Whether this tag affects the number of pixels above lines"
 msgstr "אױב דאָס הענטל האָט אַן השפּעה איבער דער צאָל בילדצעלן איבער די שורות"
 
-#: gtk/gtktexttag.c:586
+#: gtk/gtktexttag.c:621
 msgid "Pixels below lines set"
 msgstr "באַשטעטיק בילדצעלן אונטער שורות"
 
-#: gtk/gtktexttag.c:590
+#: gtk/gtktexttag.c:625
 msgid "Pixels inside wrap set"
 msgstr "באַשטעטיק בילדצעלן אינערלעכן שאַר"
 
-#: gtk/gtktexttag.c:591
+#: gtk/gtktexttag.c:626
 msgid "Whether this tag affects the number of pixels between wrapped lines"
 msgstr "אױב דאָס הענטל האָט אַן השפּעה איבער דער צאָל בילדצעלן צװישן געשאַרטע שורות"
 
-#: gtk/gtktexttag.c:598
+#: gtk/gtktexttag.c:633
 msgid "Right margin set"
 msgstr "באַשטעטיק רעכטן זאַפּאַס"
 
-#: gtk/gtktexttag.c:599
+#: gtk/gtktexttag.c:634
 msgid "Whether this tag affects the right margin"
 msgstr "אױב דאָס הענטל האָט אַן השפּעה איבער דעם רעכטן זאַפּאַס"
 
-#: gtk/gtktexttag.c:606
+#: gtk/gtktexttag.c:641
 msgid "Wrap mode set"
 msgstr "באַשטעטיק שאַר־מאָדע"
 
-#: gtk/gtktexttag.c:607
+#: gtk/gtktexttag.c:642
 msgid "Whether this tag affects line wrap mode"
 msgstr "אױב דאָס הענטל האָט אַן השפּעה איבער דער שאַר־מאָדע"
 
-#: gtk/gtktexttag.c:610
+#: gtk/gtktexttag.c:645
 msgid "Tabs set"
 msgstr "באַשטעטיק טאַבוליר־גרענעצן"
 
-#: gtk/gtktexttag.c:611
+#: gtk/gtktexttag.c:646
 msgid "Whether this tag affects tabs"
 msgstr "אױב דאָס הענטל האָט אַן השפּעה איבער די טאַבוליר־גרענעצן"
 
-#: gtk/gtktexttag.c:614
+#: gtk/gtktexttag.c:649
 msgid "Invisible set"
 msgstr "באַשטעטיק אומזעעװדיקײט"
 
-#: gtk/gtktexttag.c:615
+#: gtk/gtktexttag.c:650
 msgid "Whether this tag affects text visibility"
 msgstr "אױב דאָס הענטל האָט אַן השפּעה איבער אומזעעװדיקײט"
 
-#: gtk/gtktextview.c:547
+#: gtk/gtktexttag.c:653
+#, fuzzy
+msgid "Paragraph background set"
+msgstr "צעל באַשטעטיק די הינטערפֿאַרב"
+
+#: gtk/gtktexttag.c:654
+#, fuzzy
+msgid "Whether this tag affects the paragraph background color"
+msgstr "צי דאָס הענטל איז משפּיע די הינטערפֿאַרב"
+
+#: gtk/gtktextview.c:548
 msgid "Pixels Above Lines"
 msgstr "בילדצעלן איבער די שורות"
 
-#: gtk/gtktextview.c:557
+#: gtk/gtktextview.c:558
 msgid "Pixels Below Lines"
 msgstr "בילדצעלן אונטער די שורות"
 
-#: gtk/gtktextview.c:567
+#: gtk/gtktextview.c:568
 msgid "Pixels Inside Wrap"
 msgstr "בילדצעלן אין דרינען פֿון שאַר"
 
-#: gtk/gtktextview.c:585
+#: gtk/gtktextview.c:586
 msgid "Wrap Mode"
 msgstr "שאַר־מאָדע"
 
-#: gtk/gtktextview.c:603
+#: gtk/gtktextview.c:604
 msgid "Left Margin"
 msgstr "לינקער זאַפּאַס"
 
-#: gtk/gtktextview.c:613
+#: gtk/gtktextview.c:614
 msgid "Right Margin"
 msgstr "רעכטער זאַפּאַס"
 
-#: gtk/gtktextview.c:641
+#: gtk/gtktextview.c:642
 msgid "Cursor Visible"
 msgstr "זעעװדיקער לױפֿער"
 
-#: gtk/gtktextview.c:642
+#: gtk/gtktextview.c:643
 msgid "If the insertion cursor is shown"
 msgstr "אױב די אַרײַנשרײַב־לױפֿער װײַזט זיך"
 
-#: gtk/gtktextview.c:649
+#: gtk/gtktextview.c:650
 msgid "Buffer"
 msgstr ""
 
-#: gtk/gtktextview.c:650
+#: gtk/gtktextview.c:651
 msgid "The buffer which is displayed"
 msgstr ""
 
-#: gtk/gtktextview.c:657
+#: gtk/gtktextview.c:658
 #, fuzzy
 msgid "Overwrite mode"
 msgstr "מאָדע פֿון גרײס־סטרױער"
 
-#: gtk/gtktextview.c:658
+#: gtk/gtktextview.c:659
 msgid "Whether entered text overwrites existing contents"
 msgstr ""
 
-#: gtk/gtktextview.c:665
+#: gtk/gtktextview.c:666
 msgid "Accepts tab"
 msgstr ""
 
-#: gtk/gtktextview.c:666
+#: gtk/gtktextview.c:667
 msgid "Whether Tab will result in a tab character being entered"
 msgstr ""
 
-#: gtk/gtktextview.c:675
+#: gtk/gtktextview.c:676
 #, fuzzy
 msgid "Error underline color"
 msgstr "פֿאַר־פֿאַרב"
 
-#: gtk/gtktextview.c:676
+#: gtk/gtktextview.c:677
 #, fuzzy
 msgid "Color with which to draw error-indication underlines"
 msgstr "פֿאַרב מיט װעלכער די אַרײַנלײג־לױפֿער צײכנט זיך"
 
-#: gtk/gtktoggleaction.c:130
+#: gtk/gtktoggleaction.c:131
 #, fuzzy
 msgid "Create the same proxies as a radio action"
 msgstr "צײכן דאָס פֿאַרקער־קנעפּל װי אַ ראַדיאָ קנעפּל"
 
-#: gtk/gtktoggleaction.c:131
+#: gtk/gtktoggleaction.c:132
 msgid "Whether the proxies for this action look like radio action proxies"
 msgstr ""
 
-#: gtk/gtktogglebutton.c:135
+#: gtk/gtktogglebutton.c:136
 msgid "If the toggle button should be pressed in or not"
 msgstr "אױב דאָס פֿאַרקער־קנעפּל זאָל זײַן אײַנגעדרוקט צי נישט"
 
-#: gtk/gtktogglebutton.c:143
+#: gtk/gtktogglebutton.c:144
 msgid "If the toggle button is in an \"in between\" state"
 msgstr "אױב דאָס פֿאַרקער־קנעפּל איז אין אַ צושטאַנד פֿון ניט אַהער און ניט אַהין"
 
-#: gtk/gtktogglebutton.c:150
+#: gtk/gtktogglebutton.c:151
 msgid "Draw Indicator"
 msgstr "צײכן װײַזער"
 
-#: gtk/gtktogglebutton.c:151
+#: gtk/gtktogglebutton.c:152
 msgid "If the toggle part of the button is displayed"
 msgstr "אױב די פֿאַרקער־טײל פֿון קנעפּל װײַזט זיך"
 
-#: gtk/gtktoolbar.c:508
+#: gtk/gtktoolbar.c:509
 msgid "The orientation of the toolbar"
 msgstr "די אָריִענטירונג פֿון דעם מכשיר־װײַזער"
 
-#: gtk/gtktoolbar.c:516
+#: gtk/gtktoolbar.c:517
 msgid "Toolbar Style"
 msgstr "מכשיר־װײַזער סטיל"
 
-#: gtk/gtktoolbar.c:517
+#: gtk/gtktoolbar.c:518
 msgid "How to draw the toolbar"
 msgstr "װי צו צײכענען דעם מכשיר־װײַזער"
 
-#: gtk/gtktoolbar.c:524
+#: gtk/gtktoolbar.c:525
 #, fuzzy
 msgid "Show Arrow"
 msgstr "װײַז צאַמרינע"
 
-#: gtk/gtktoolbar.c:525
+#: gtk/gtktoolbar.c:526
 msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr ""
 
-#: gtk/gtktoolbar.c:534
+#: gtk/gtktoolbar.c:541
+msgid "Tooltips"
+msgstr ""
+
+#: gtk/gtktoolbar.c:542
+#, fuzzy
+msgid "If the tooltips of the toolbar should be active or not"
+msgstr "אױב דאָס פֿאַרקער־קנעפּל זאָל זײַן אײַנגעדרוקט צי נישט"
+
+#: gtk/gtktoolbar.c:551
 #, fuzzy
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr "אױב דאָס קינד זאָל באַקומען נאָך אָרט װען זײַן טאַטע־מאַמע װאַקסט"
 
-#: gtk/gtktoolbar.c:542
+#: gtk/gtktoolbar.c:559
 #, fuzzy
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr "אױב די קינדער זאָלן אַלע האָבן אײן גרײס"
 
-#: gtk/gtktoolbar.c:549
+#: gtk/gtktoolbar.c:566
 msgid "Spacer size"
 msgstr "אָפּרוקער גרײס"
 
-#: gtk/gtktoolbar.c:550
+#: gtk/gtktoolbar.c:567
 msgid "Size of spacers"
 msgstr "גרײס פֿון אָפּרוקערס"
 
-#: gtk/gtktoolbar.c:559
+#: gtk/gtktoolbar.c:576
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr "װיפֿל ראַנד־אָרט ליגט צװישן דעם מכשיר־װײַזער שאָטן און די קנעפּלעך"
 
-#: gtk/gtktoolbar.c:567
+#: gtk/gtktoolbar.c:584
 msgid "Space style"
 msgstr "אָפּרוקער סטיל"
 
-#: gtk/gtktoolbar.c:568
+#: gtk/gtktoolbar.c:585
 msgid "Whether spacers are vertical lines or just blank"
 msgstr "אױב אָפּרוקערס װײַזן זיך װי װערטיקאַלישע ליניעס אָדער לײדיק אָרט"
 
-#: gtk/gtktoolbar.c:575
+#: gtk/gtktoolbar.c:592
 msgid "Button relief"
 msgstr "קנעפּל רעליִעף"
 
-#: gtk/gtktoolbar.c:576
+#: gtk/gtktoolbar.c:593
 msgid "Type of bevel around toolbar buttons"
 msgstr "סטיל פֿון שרעגפֿלאַך אַרום מכשיר־װײַזער קנעפּלעך"
 
-#: gtk/gtktoolbar.c:583
+#: gtk/gtktoolbar.c:600
 msgid "Style of bevel around the toolbar"
 msgstr "סטיל פֿון שרעגפֿלאַך אַרום דעם מכשיר־װײַזער"
 
-#: gtk/gtktoolbar.c:589
+#: gtk/gtktoolbar.c:606
 msgid "Toolbar style"
 msgstr "מכשיר־װײַזער סטיל"
 
-#: gtk/gtktoolbar.c:590
+#: gtk/gtktoolbar.c:607
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 "אױב געװײנטלעכע מכשיר־װײַזערס האָבן בלױז טעקסט, טעקסט מיט בילדעלעך, בלױז "
 "בילדעלעך, אאַ”װ"
 
-#: gtk/gtktoolbar.c:596
+#: gtk/gtktoolbar.c:613
 msgid "Toolbar icon size"
 msgstr "מכשיר־װײַזער בילדל גרײס"
 
-#: gtk/gtktoolbar.c:597
+#: gtk/gtktoolbar.c:614
 msgid "Size of icons in default toolbars"
 msgstr "גרײס פֿון בילדעלעך אין געװײנטלעכע מכשיר־װײַזערס"
 
-#: gtk/gtktoolbutton.c:182
+#: gtk/gtktoolbutton.c:188
 #, fuzzy
 msgid "Text to show in the item."
 msgstr "די צאָל שורות אין דער טאַבעלע"
 
-#: gtk/gtktoolbutton.c:189
+#: gtk/gtktoolbutton.c:195
 #, fuzzy
 msgid ""
 "If set, an underline in the label property indicates that the next character "
@@ -4326,308 +4486,315 @@ msgstr ""
 "אױב יאָ, װעט אַן אונטערשטריך אין טעקסט באַדײַטן אַז דעם קומעדיקן שריפֿטצײכן ניצט "
 "מען װי אַ מנעמאָנישער פֿאַרגיכערער־קלאַװיש"
 
-#: gtk/gtktoolbutton.c:196
+#: gtk/gtktoolbutton.c:202
 #, fuzzy
 msgid "Widget to use as the item label"
 msgstr "ברײט פֿון דער צאַמרינע אַרום די הענטל עטיקעטן"
 
-#: gtk/gtktoolbutton.c:202
+#: gtk/gtktoolbutton.c:208
 #, fuzzy
 msgid "Stock Id"
 msgstr "הורט אידענטיפֿיקאַציע"
 
-#: gtk/gtktoolbutton.c:203
+#: gtk/gtktoolbutton.c:209
 #, fuzzy
 msgid "The stock icon displayed on the item"
 msgstr "דער אות־פֿאָדעם װאָס װײַזט זיך אױף דעם קינדס הענטל־עטיקעט"
 
-#: gtk/gtktoolbutton.c:209
+#: gtk/gtktoolbutton.c:225
+#, fuzzy
+msgid "Icon name"
+msgstr "שריפֿט נאָמען"
+
+#: gtk/gtktoolbutton.c:226
+#, fuzzy
+msgid "The name of the themed icon displayed on the item"
+msgstr "דער אות־פֿאָדעם װאָס װײַזט זיך אױף דעם קינדס הענטל־עטיקעט"
+
+#: gtk/gtktoolbutton.c:232
 #, fuzzy
 msgid "Icon widget"
 msgstr "בילדל געזעמל"
 
-#: gtk/gtktoolbutton.c:210
+#: gtk/gtktoolbutton.c:233
 #, fuzzy
 msgid "Icon widget to display in the item"
 msgstr "בילדל געזעמל צו װײַזן"
 
-#: gtk/gtktoolitem.c:174
+#: gtk/gtktoolitem.c:175
 msgid ""
 "Whether the toolbar item is considered important. When TRUE, toolbar buttons "
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
 msgstr ""
 
-#: gtk/gtktreemodelsort.c:330
+#: gtk/gtktreemodelsort.c:331
 msgid "TreeModelSort Model"
 msgstr "בױם־מאָדעל סאָרטירונג"
 
-#: gtk/gtktreemodelsort.c:331
+#: gtk/gtktreemodelsort.c:332
 msgid "The model for the TreeModelSort to sort"
 msgstr "דער מאָדעל װאָס אַ בױם־מאָדעל זאָל סאָרטירן"
 
-#: gtk/gtktreeview.c:558
+#: gtk/gtktreeview.c:567
 msgid "TreeView Model"
 msgstr "בױם־געשטאַלט מאָדעל"
 
-#: gtk/gtktreeview.c:559
+#: gtk/gtktreeview.c:568
 msgid "The model for the tree view"
 msgstr "דער מאָדעל פֿאַר דעם בױם־געשטאַלט"
 
-#: gtk/gtktreeview.c:567
+#: gtk/gtktreeview.c:576
 msgid "Horizontal Adjustment for the widget"
 msgstr "האָריזאָנטאַלישע צופּאַסונג פֿאַר דעם צעפּיכעסל"
 
-#: gtk/gtktreeview.c:575
+#: gtk/gtktreeview.c:584
 msgid "Vertical Adjustment for the widget"
 msgstr "װערטיקאַלישע צופּאַסונג פֿאַר דעם צעפּיכעסל"
 
-#: gtk/gtktreeview.c:583
+#: gtk/gtktreeview.c:591
+#, fuzzy
+msgid "Headers Visible"
+msgstr "קאָפּצעטלעך קליקעװדיק"
+
+#: gtk/gtktreeview.c:592
 msgid "Show the column header buttons"
 msgstr "װײַז די זײַל קאָפּצעטל קנעפּלעך"
 
-#: gtk/gtktreeview.c:590
+#: gtk/gtktreeview.c:599
 msgid "Headers Clickable"
 msgstr "קאָפּצעטלעך קליקעװדיק"
 
-#: gtk/gtktreeview.c:591
+#: gtk/gtktreeview.c:600
 msgid "Column headers respond to click events"
 msgstr "קאָפּצעטלעך באַהאַנדלען קליקן"
 
-#: gtk/gtktreeview.c:598
+#: gtk/gtktreeview.c:607
 msgid "Expander Column"
 msgstr "פֿאַרגרעסער־זײַל"
 
-#: gtk/gtktreeview.c:599
+#: gtk/gtktreeview.c:608
 msgid "Set the column for the expander column"
 msgstr "באַשטעטיק דעם זײַל פֿאַר דעם פֿאַרגרעסער־זײַל"
 
-#: gtk/gtktreeview.c:606 gtk/gtktreeviewcolumn.c:341
-msgid "Reorderable"
-msgstr "װידער־סאָרטירעװדיק"
-
-#: gtk/gtktreeview.c:607
-msgid "View is reorderable"
-msgstr "דער געשטאַלט איז װידער־סאָרטירעװדיק"
-
-#: gtk/gtktreeview.c:614
+#: gtk/gtktreeview.c:623
 msgid "Rules Hint"
 msgstr "כּללים־רמז"
 
-#: gtk/gtktreeview.c:615
+#: gtk/gtktreeview.c:624
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr "באַשטעטיק אַ רמז מיט דעם טעמע־מאָטאָר צו צײכענען שורות אין װעקסלדיקע פֿאַרבן"
 
-#: gtk/gtktreeview.c:622
+#: gtk/gtktreeview.c:631
 msgid "Enable Search"
 msgstr "דערמעגלעך זוכן"
 
-#: gtk/gtktreeview.c:623
+#: gtk/gtktreeview.c:632
 msgid "View allows user to search through columns interactively"
 msgstr "דער געשטאַלט לאָזט אינטעראַקטיװ זוכן דורך זײַלן"
 
-#: gtk/gtktreeview.c:630
+#: gtk/gtktreeview.c:639
 msgid "Search Column"
 msgstr "זוכזײַל"
 
-#: gtk/gtktreeview.c:631
+#: gtk/gtktreeview.c:640
 msgid "Model column to search through when searching through code"
 msgstr "מוסטערזײַל אַדורכצוזוכן בשעת מען זוכט דורך קאָדירונג"
 
-#: gtk/gtktreeview.c:651
+#: gtk/gtktreeview.c:660
 #, fuzzy
 msgid "Fixed Height Mode"
 msgstr "די הײך ניט צו ענדערן"
 
-#: gtk/gtktreeview.c:652
+#: gtk/gtktreeview.c:661
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr ""
 
-#: gtk/gtktreeview.c:672
+#: gtk/gtktreeview.c:681
 msgid "Hover Selection"
 msgstr ""
 
-#: gtk/gtktreeview.c:673
+#: gtk/gtktreeview.c:682
 #, fuzzy
 msgid "Whether the selection should follow the pointer"
 msgstr "צי דער פֿאַרב אױסקלײַבער זאָל לאָזן באַשטעטיקן מאַטקײט"
 
-#: gtk/gtktreeview.c:692
+#: gtk/gtktreeview.c:701
 #, fuzzy
 msgid "Hover Expand"
 msgstr "פֿאַרגרעסער"
 
-#: gtk/gtktreeview.c:693
+#: gtk/gtktreeview.c:702
 #, fuzzy
 msgid ""
 "Whether rows should be expanded/collapsed when the pointer moves over them"
 msgstr "אױב „יאָ“, טאָר דער פֿענצטער ניט זײַן אינעם בלעטערער"
 
-#: gtk/gtktreeview.c:713
+#: gtk/gtktreeview.c:722
 msgid "Vertical Separator Width"
 msgstr "װערטיקאַלישע צעשײד־ברײט"
 
-#: gtk/gtktreeview.c:714
+#: gtk/gtktreeview.c:723
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "דאָס װערטיקאַלישע לײדיק אָרט צװישן צעלן.  מוז זײַן אַ גראָדציפֿער."
 
-#: gtk/gtktreeview.c:722
+#: gtk/gtktreeview.c:731
 msgid "Horizontal Separator Width"
 msgstr "האָריזאָנטאַלישע צעשײד־ברײט"
 
-#: gtk/gtktreeview.c:723
+#: gtk/gtktreeview.c:732
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "דאָס האָריזאָנטאַלישע לײדיק אָרט צװישן צעלן.  מוז זײַן אַ גראָדציפֿער."
 
-#: gtk/gtktreeview.c:731
+#: gtk/gtktreeview.c:740
 msgid "Allow Rules"
 msgstr "דערלאָז כּללים"
 
-#: gtk/gtktreeview.c:732
+#: gtk/gtktreeview.c:741
 msgid "Allow drawing of alternating color rows"
 msgstr "דערלאָז צײכענען װעקסלדיק־פֿאַרב שורות"
 
-#: gtk/gtktreeview.c:738
+#: gtk/gtktreeview.c:747
 msgid "Indent Expanders"
 msgstr "צײנדל אײַן פֿאַרגרעסערס"
 
-#: gtk/gtktreeview.c:739
+#: gtk/gtktreeview.c:748
 msgid "Make the expanders indented"
 msgstr "די פֿאַרגרעסערס זאָלן זײַן אײַנגעצײנדלט"
 
-#: gtk/gtktreeview.c:745
+#: gtk/gtktreeview.c:754
 msgid "Even Row Color"
 msgstr "גראָדציפֿער־שורה פֿאַרב"
 
-#: gtk/gtktreeview.c:746
+#: gtk/gtktreeview.c:755
 msgid "Color to use for even rows"
 msgstr "פֿאַרב צו ניצן אין גראָדציפֿער־שורות"
 
-#: gtk/gtktreeview.c:752
+#: gtk/gtktreeview.c:761
 msgid "Odd Row Color"
 msgstr "אומציפֿער־שורה פֿאַרב"
 
-#: gtk/gtktreeview.c:753
+#: gtk/gtktreeview.c:762
 msgid "Color to use for odd rows"
 msgstr "פֿאַרב צו ניצן אין אומציפֿער־שורות"
 
-#: gtk/gtktreeviewcolumn.c:226
+#: gtk/gtktreeviewcolumn.c:227
 msgid "Whether to display the column"
 msgstr "אױב מען װײַזט דעם זײַל"
 
-#: gtk/gtktreeviewcolumn.c:233 gtk/gtkwindow.c:456
+#: gtk/gtktreeviewcolumn.c:234 gtk/gtkwindow.c:462
 msgid "Resizable"
 msgstr "גרײס־סטרױערעװדיק"
 
-#: gtk/gtktreeviewcolumn.c:234
+#: gtk/gtktreeviewcolumn.c:235
 msgid "Column is user-resizable"
 msgstr "דער ניצער קען סטרױערן די גרײס"
 
-#: gtk/gtktreeviewcolumn.c:242
+#: gtk/gtktreeviewcolumn.c:243
 msgid "Current width of the column"
 msgstr "איצטיקע ברײט פֿון דעם זײַל"
 
-#: gtk/gtktreeviewcolumn.c:251
+#: gtk/gtktreeviewcolumn.c:252
 msgid "Space which is inserted between cells"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:259
+#: gtk/gtktreeviewcolumn.c:260
 msgid "Sizing"
 msgstr "גרײס"
 
-#: gtk/gtktreeviewcolumn.c:260
+#: gtk/gtktreeviewcolumn.c:261
 msgid "Resize mode of the column"
 msgstr "גרײס־סטרױער מאָדע פֿון דעם זײַל"
 
-#: gtk/gtktreeviewcolumn.c:268
+#: gtk/gtktreeviewcolumn.c:269
 msgid "Fixed Width"
 msgstr "ברײט ניט צו ענדערן"
 
-#: gtk/gtktreeviewcolumn.c:269
+#: gtk/gtktreeviewcolumn.c:270
 msgid "Current fixed width of the column"
 msgstr "איצטיקע ברײט פֿון דעם זײַל, ניט צו ענדערן"
 
-#: gtk/gtktreeviewcolumn.c:278
+#: gtk/gtktreeviewcolumn.c:279
 msgid "Minimum Width"
 msgstr "קלענסטע ברײט"
 
-#: gtk/gtktreeviewcolumn.c:279
+#: gtk/gtktreeviewcolumn.c:280
 msgid "Minimum allowed width of the column"
 msgstr "קלענסטע דערלױבטע ברײט פֿון דעם זײַל"
 
-#: gtk/gtktreeviewcolumn.c:288
+#: gtk/gtktreeviewcolumn.c:289
 msgid "Maximum Width"
 msgstr "גרעסטע ברײט"
 
-#: gtk/gtktreeviewcolumn.c:289
+#: gtk/gtktreeviewcolumn.c:290
 msgid "Maximum allowed width of the column"
 msgstr "גרעסטע דערלױבטע ברײט פֿון דעם זײַל"
 
-#: gtk/gtktreeviewcolumn.c:299
+#: gtk/gtktreeviewcolumn.c:300
 msgid "Title to appear in column header"
 msgstr "טיטל װאָס װײַזט זיך אין זײַל קאָפּצעטל"
 
-#: gtk/gtktreeviewcolumn.c:307
+#: gtk/gtktreeviewcolumn.c:308
 msgid "Column gets share of extra width allocated to the widget"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:314
+#: gtk/gtktreeviewcolumn.c:315
 msgid "Clickable"
 msgstr "קליקעװדיק"
 
-#: gtk/gtktreeviewcolumn.c:315
+#: gtk/gtktreeviewcolumn.c:316
 msgid "Whether the header can be clicked"
 msgstr "אױב דאָס קאָפּצעטל לאָזט זיך קליקן"
 
-#: gtk/gtktreeviewcolumn.c:323
+#: gtk/gtktreeviewcolumn.c:324
 msgid "Widget"
 msgstr "צעפּיכעסל"
 
-#: gtk/gtktreeviewcolumn.c:324
+#: gtk/gtktreeviewcolumn.c:325
 msgid "Widget to put in column header button instead of column title"
 msgstr "צעפּיכעסל צו לײגן אין זײַל קאָפּצעטל קנעפּל אַנשטאָט זײַלטיטל"
 
-#: gtk/gtktreeviewcolumn.c:331
+#: gtk/gtktreeviewcolumn.c:332
 msgid "Alignment"
 msgstr "אױסגלײַכונג"
 
-#: gtk/gtktreeviewcolumn.c:332
+#: gtk/gtktreeviewcolumn.c:333
 msgid "X Alignment of the column header text or widget"
 msgstr "ה' אױסגלײַכונג פֿון דעם זײַל קאָפּצעטל טעקסט אָדער צעפּיכעסל"
 
-#: gtk/gtktreeviewcolumn.c:342
+#: gtk/gtktreeviewcolumn.c:343
 msgid "Whether the column can be reordered around the headers"
 msgstr "אױב דער זײַל לאָזט זיך װידער סאָרטירן אַרום די קאָפּצעטלעך"
 
-#: gtk/gtktreeviewcolumn.c:349
+#: gtk/gtktreeviewcolumn.c:350
 msgid "Sort indicator"
 msgstr "סאָרטיר סימן"
 
-#: gtk/gtktreeviewcolumn.c:350
+#: gtk/gtktreeviewcolumn.c:351
 msgid "Whether to show a sort indicator"
 msgstr "אױב אַ סאָרטיר סימן זאָל זיך װײַזן"
 
-#: gtk/gtktreeviewcolumn.c:357
+#: gtk/gtktreeviewcolumn.c:358
 msgid "Sort order"
 msgstr "סאָרטירונג־סדר"
 
-#: gtk/gtktreeviewcolumn.c:358
+#: gtk/gtktreeviewcolumn.c:359
 msgid "Sort direction the sort indicator should indicate"
 msgstr "סאָרטירונג־ריכטונג װאָס דער סאָרטיר סימן זאָל װײַזן"
 
-#: gtk/gtkuimanager.c:229
+#: gtk/gtkuimanager.c:233
 #, fuzzy
 msgid "Whether tearoff menu items should be added to menus"
 msgstr "צי די מעניו־אײנס האָט אַ פֿײגעלע"
 
-#: gtk/gtkuimanager.c:236
+#: gtk/gtkuimanager.c:240
 msgid "Merged UI definition"
 msgstr ""
 
-#: gtk/gtkuimanager.c:237
+#: gtk/gtkuimanager.c:241
 msgid "An XML string describing the merged UI"
 msgstr ""
 
-#: gtk/gtkviewport.c:137
+#: gtk/gtkviewport.c:138
 msgid ""
 "The GtkAdjustment that determines the values of the horizontal position for "
 "this viewport"
@@ -4635,7 +4802,7 @@ msgstr ""
 "די GtkAdjustment װאָס שטעלט פֿעסט די באַטרעפֿן פֿון האָריזאָנטאַלישער פּאָזיציע פֿאַר "
 "דעם געשטאַלט־פֿענצטער"
 
-#: gtk/gtkviewport.c:145
+#: gtk/gtkviewport.c:146
 msgid ""
 "The GtkAdjustment that determines the values of the vertical position for "
 "this viewport"
@@ -4643,31 +4810,31 @@ msgstr ""
 "די GtkAdjustment װאָס שטעלט פֿעסט די באַטרעפֿן פֿון װערטיקאַלישער פּאָזיציע פֿאַר דעם "
 "געשטאַלט־פֿענצטער"
 
-#: gtk/gtkviewport.c:153
+#: gtk/gtkviewport.c:154
 msgid "Determines how the shadowed box around the viewport is drawn"
 msgstr "שטעלט פֿעסט װי דאָס פֿאַרשאָטנטע קעסטל אַרום דעם געשטאַלט־פֿענצטער צײכנט זיך"
 
-#: gtk/gtkwidget.c:410
+#: gtk/gtkwidget.c:412
 msgid "Widget name"
 msgstr "צעפּיכעסל נאָמען"
 
-#: gtk/gtkwidget.c:411
+#: gtk/gtkwidget.c:413
 msgid "The name of the widget"
 msgstr "דער נאָמען פֿון דעם צעפּיכעסל"
 
-#: gtk/gtkwidget.c:417
+#: gtk/gtkwidget.c:419
 msgid "Parent widget"
 msgstr "טאַטע־מאַמע צעפּיכעסל"
 
-#: gtk/gtkwidget.c:418
+#: gtk/gtkwidget.c:420
 msgid "The parent widget of this widget. Must be a Container widget"
 msgstr "דער טאַטע־מאַמע פֿון דעם צעפּיכעסל.  מוז זײַן אַ פּעקל צעפּיכעסל."
 
-#: gtk/gtkwidget.c:425
+#: gtk/gtkwidget.c:427
 msgid "Width request"
 msgstr "ברײט בקשה"
 
-#: gtk/gtkwidget.c:426
+#: gtk/gtkwidget.c:428
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
@@ -4675,11 +4842,11 @@ msgstr ""
 "דער בײַקום איבער דער ברײט בקשה פֿון דעם צעפּיכעסל, אָדער -1 אָנצונעמען די "
 "נאַטירלעכע בקשה"
 
-#: gtk/gtkwidget.c:434
+#: gtk/gtkwidget.c:436
 msgid "Height request"
 msgstr "הײך בקשה"
 
-#: gtk/gtkwidget.c:435
+#: gtk/gtkwidget.c:437
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
@@ -4687,84 +4854,84 @@ msgstr ""
 "דער בײַקום איבער דער הײך בקשה פֿון דעם צעפּיכעסל, אָדער -1 אָנצונעמען די "
 "נאַטירלעכע בקשה"
 
-#: gtk/gtkwidget.c:444
+#: gtk/gtkwidget.c:446
 msgid "Whether the widget is visible"
 msgstr "אױב דאָס צעפּיכעסל איז זעעװדיק"
 
-#: gtk/gtkwidget.c:451
+#: gtk/gtkwidget.c:453
 msgid "Whether the widget responds to input"
 msgstr "אױב דאָס צעפּיכעסל ענטפֿערט אױף אַרײַנשרײַב"
 
-#: gtk/gtkwidget.c:457
+#: gtk/gtkwidget.c:459
 msgid "Application paintable"
 msgstr "אַפּליקאַציע מאָלעװדיק"
 
-#: gtk/gtkwidget.c:458
+#: gtk/gtkwidget.c:460
 msgid "Whether the application will paint directly on the widget"
 msgstr "אױב די אַפּליקאַציע װעט מאָלן דירעקט אױף דעם צעפּיכעסל"
 
-#: gtk/gtkwidget.c:464
+#: gtk/gtkwidget.c:466
 msgid "Can focus"
 msgstr "קען פֿאָקוסירן"
 
-#: gtk/gtkwidget.c:465
+#: gtk/gtkwidget.c:467
 msgid "Whether the widget can accept the input focus"
 msgstr "אױב דאָס צעפּיכעסל קען אָננעמען דעם אַרײַנשרײַב־פֿאָקוס"
 
-#: gtk/gtkwidget.c:471
+#: gtk/gtkwidget.c:473
 msgid "Has focus"
 msgstr "האָט פֿאָקוס"
 
-#: gtk/gtkwidget.c:472
+#: gtk/gtkwidget.c:474
 msgid "Whether the widget has the input focus"
 msgstr "אױב דאָס צעפּיכעסל האָט דעם אַרײַנשרײַב־פֿאָקוס"
 
-#: gtk/gtkwidget.c:478
+#: gtk/gtkwidget.c:480
 msgid "Is focus"
 msgstr "איז פֿאָקוס"
 
-#: gtk/gtkwidget.c:479
+#: gtk/gtkwidget.c:481
 msgid "Whether the widget is the focus widget within the toplevel"
 msgstr "צי דאָס צעפּיכעסל איז דאָס פֿאָקוס־צעפּיכעסל אין דער העכסטער מדרגה"
 
-#: gtk/gtkwidget.c:485
+#: gtk/gtkwidget.c:487
 msgid "Can default"
 msgstr "קען זײַן געװײנטלעך"
 
-#: gtk/gtkwidget.c:486
+#: gtk/gtkwidget.c:488
 msgid "Whether the widget can be the default widget"
 msgstr "אױב דאָס צעפּיכעסל קען װערן דאָס געװײנטלעכע צעפּיכעסל"
 
-#: gtk/gtkwidget.c:492
+#: gtk/gtkwidget.c:494
 msgid "Has default"
 msgstr "איז געװײנטלעך"
 
-#: gtk/gtkwidget.c:493
+#: gtk/gtkwidget.c:495
 msgid "Whether the widget is the default widget"
 msgstr "אױב דאָס צעפּיכעסל איז דאָס געװײנטלעכע צעפּיכעסל"
 
-#: gtk/gtkwidget.c:499
+#: gtk/gtkwidget.c:501
 msgid "Receives default"
 msgstr "באַקומט געװײנטלעך"
 
-#: gtk/gtkwidget.c:500
+#: gtk/gtkwidget.c:502
 msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr ""
 "אױב „יאָ“, װעט דאָס צעפּיכעסל באַקומען די געװײנטלעכע אַקציע װען עס האָט פֿאָקוס"
 
-#: gtk/gtkwidget.c:506
+#: gtk/gtkwidget.c:508
 msgid "Composite child"
 msgstr "קאָמפּאָזיטע קינד"
 
-#: gtk/gtkwidget.c:507
+#: gtk/gtkwidget.c:509
 msgid "Whether the widget is part of a composite widget"
 msgstr "אױב דאָס צעפּיכעסל איז אַ טײל פֿון אַ קאָמפּאָזיט צעפּיכעסל"
 
-#: gtk/gtkwidget.c:513
+#: gtk/gtkwidget.c:515
 msgid "Style"
 msgstr "סטיל"
 
-#: gtk/gtkwidget.c:514
+#: gtk/gtkwidget.c:516
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
@@ -4772,76 +4939,76 @@ msgstr ""
 "דער סטיל פֿון דעם צעפּיכעסל, װאָס פֿאַרמאָגט אינפֿאָרמאַציע װעגן זײַן געשטאַלט (פֿאַרבן "
 "אד”ג)."
 
-#: gtk/gtkwidget.c:520
+#: gtk/gtkwidget.c:522
 msgid "Events"
 msgstr "טרעפֿענישן"
 
-#: gtk/gtkwidget.c:521
+#: gtk/gtkwidget.c:523
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr "די מאַסקע װאָס שטעלט פֿעסט װאָסערע Gdk טרעפֿענישן דאָס צעפּיכעסל באַקומט"
 
-#: gtk/gtkwidget.c:528
+#: gtk/gtkwidget.c:530
 msgid "Extension events"
 msgstr "צוגעגעבענע טרעפֿענישן"
 
-#: gtk/gtkwidget.c:529
+#: gtk/gtkwidget.c:531
 msgid "The mask that decides what kind of extension events this widget gets"
 msgstr ""
 "די מאַסקע װאָס שטעלט פֿעסט װאָסערע צוגעגעבענע טרעפֿענישן דאָס צעפּיכעסל באַקומט"
 
-#: gtk/gtkwidget.c:536
+#: gtk/gtkwidget.c:538
 msgid "No show all"
 msgstr ""
 
-#: gtk/gtkwidget.c:537
+#: gtk/gtkwidget.c:539
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr ""
 
-#: gtk/gtkwidget.c:1407
+#: gtk/gtkwidget.c:1419
 msgid "Interior Focus"
 msgstr "אינערלעכער פֿאָקוס"
 
-#: gtk/gtkwidget.c:1408
+#: gtk/gtkwidget.c:1420
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "אױב אַ פֿאָקוס־סימן זאָל זיך צײכענען אין דרינען פֿון צעפּיכעסלעך"
 
-#: gtk/gtkwidget.c:1414
+#: gtk/gtkwidget.c:1426
 msgid "Focus linewidth"
 msgstr "פֿאָקוס ליניע־ברײט"
 
-#: gtk/gtkwidget.c:1415
+#: gtk/gtkwidget.c:1427
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "ברײט, אין בילדצעלן, פֿון דער פֿאָקוס־סימן ליניע"
 
-#: gtk/gtkwidget.c:1421
+#: gtk/gtkwidget.c:1433
 msgid "Focus line dash pattern"
 msgstr "פֿאָקוס־ליניע מקף־סכעמע"
 
-#: gtk/gtkwidget.c:1422
+#: gtk/gtkwidget.c:1434
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "די מקף־סכעמע מיט װעלכער די פֿאָקוס־סימן צײכנט זיך"
 
-#: gtk/gtkwidget.c:1427
+#: gtk/gtkwidget.c:1439
 msgid "Focus padding"
 msgstr "פֿאָקוס לײדיק אָרט"
 
-#: gtk/gtkwidget.c:1428
+#: gtk/gtkwidget.c:1440
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "ברײט, אין בילדצעלן, צװישן דעם פֿאָקוס־סימן און דעם צעפּיכעסל „קאַסטן”"
 
-#: gtk/gtkwidget.c:1433
+#: gtk/gtkwidget.c:1445
 msgid "Cursor color"
 msgstr "לױפֿער פֿאַרב"
 
-#: gtk/gtkwidget.c:1434
+#: gtk/gtkwidget.c:1446
 msgid "Color with which to draw insertion cursor"
 msgstr "פֿאַרב מיט װעלכער די אַרײַנלײג־לױפֿער צײכנט זיך"
 
-#: gtk/gtkwidget.c:1439
+#: gtk/gtkwidget.c:1451
 msgid "Secondary cursor color"
 msgstr "צװײטע לױפֿערפֿאַרב"
 
-#: gtk/gtkwidget.c:1440
+#: gtk/gtkwidget.c:1452
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -4849,44 +5016,53 @@ msgstr ""
 "פֿאַרב מיט װעלכער דער צװײטער אַרײַנלײג־לױפֿער צײכנט זיך װען מען רעדאַגירט "
 "בײד־ריכטונגדיקן טעקסט"
 
-#: gtk/gtkwidget.c:1445
+#: gtk/gtkwidget.c:1457
 msgid "Cursor line aspect ratio"
 msgstr "לױפֿער ליניע אַספּעקט־פּראָפּאָרץ"
 
-#: gtk/gtkwidget.c:1446
+#: gtk/gtkwidget.c:1458
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "די אַספּעקט־פּראָפּאָרץ מיט װעלכער דער אַרײַנלײג־לױפֿער צײכנט זיך"
 
-#: gtk/gtkwindow.c:414
+#: gtk/gtkwidget.c:1463
+#, fuzzy
+msgid "Draw Border"
+msgstr "הענטל צאַמרינע"
+
+#: gtk/gtkwidget.c:1464
+msgid "Size of areas outside the widget's allocation to draw"
+msgstr ""
+
+#: gtk/gtkwindow.c:420
 msgid "Window Type"
 msgstr "פֿענצטער סאָרט"
 
-#: gtk/gtkwindow.c:415
+#: gtk/gtkwindow.c:421
 msgid "The type of the window"
 msgstr "דער סאָרט פֿונעם פֿענצטער"
 
-#: gtk/gtkwindow.c:423
+#: gtk/gtkwindow.c:429
 msgid "Window Title"
 msgstr "פֿענצטער טיטל"
 
-#: gtk/gtkwindow.c:424
+#: gtk/gtkwindow.c:430
 msgid "The title of the window"
 msgstr "דער טיטל פֿונעם פֿענצטער"
 
-#: gtk/gtkwindow.c:431
+#: gtk/gtkwindow.c:437
 #, fuzzy
 msgid "Window Role"
 msgstr "פֿענצטער טיטל"
 
-#: gtk/gtkwindow.c:432
+#: gtk/gtkwindow.c:438
 msgid "Unique identifier for the window to be used when restoring a session"
 msgstr ""
 
-#: gtk/gtkwindow.c:439
+#: gtk/gtkwindow.c:445
 msgid "Allow Shrink"
 msgstr "דערלאָז שרימפּן"
 
-#: gtk/gtkwindow.c:441
+#: gtk/gtkwindow.c:447
 #, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
@@ -4895,23 +5071,23 @@ msgstr ""
 "אױב „יאָ”, האָט דער פֿענצטער ניט קײן קלענסטע גרײס.  באַשטעטיקן װי „יאָ” איז כּמעט "
 "קײן מאָל קײן פּלאַן ניט."
 
-#: gtk/gtkwindow.c:448
+#: gtk/gtkwindow.c:454
 msgid "Allow Grow"
 msgstr "דערלאָז װאַקסן"
 
-#: gtk/gtkwindow.c:449
+#: gtk/gtkwindow.c:455
 msgid "If TRUE, users can expand the window beyond its minimum size"
 msgstr "אױב „יאָ”, קענען ניצערס פֿאַרגרעסערן דעם פֿענצטער איבער זײַן קלענסטער גרײס"
 
-#: gtk/gtkwindow.c:457
+#: gtk/gtkwindow.c:463
 msgid "If TRUE, users can resize the window"
 msgstr "אױב „יאָ”, קענען ניצערס סטרױערן די פֿענצטערגרײס"
 
-#: gtk/gtkwindow.c:464
+#: gtk/gtkwindow.c:470
 msgid "Modal"
 msgstr "מאָדאַל"
 
-#: gtk/gtkwindow.c:465
+#: gtk/gtkwindow.c:471
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
@@ -4919,73 +5095,73 @@ msgstr ""
 "אױב „יאָ”, איז דער פֿענצטער „מאָדאַל”: אַנדערע פֿענצטערס קען מען ניט ניצן בשעת דער "
 "דאָזיקער װײַזט זיך"
 
-#: gtk/gtkwindow.c:472
+#: gtk/gtkwindow.c:478
 msgid "Window Position"
 msgstr "פֿענצטער פּאָזיציע"
 
-#: gtk/gtkwindow.c:473
+#: gtk/gtkwindow.c:479
 msgid "The initial position of the window"
 msgstr "די אָנהײב־פּאָזיציע פֿונעם פֿענצטער"
 
-#: gtk/gtkwindow.c:481
+#: gtk/gtkwindow.c:487
 msgid "Default Width"
 msgstr "געװײנטלעכע ברײט"
 
-#: gtk/gtkwindow.c:482
+#: gtk/gtkwindow.c:488
 msgid "The default width of the window, used when initially showing the window"
 msgstr "די געװײנטלעכע ברײט פֿונעם פֿענצטער װען ער װײַזט זיך צוערשטנס"
 
-#: gtk/gtkwindow.c:491
+#: gtk/gtkwindow.c:497
 msgid "Default Height"
 msgstr "געװײנטלעכע הײך"
 
-#: gtk/gtkwindow.c:492
+#: gtk/gtkwindow.c:498
 msgid ""
 "The default height of the window, used when initially showing the window"
 msgstr "די געװײנטלעכע הײך פֿונעם פֿענצטער װען ער װײַזט זיך צוערשטנס"
 
-#: gtk/gtkwindow.c:501
+#: gtk/gtkwindow.c:507
 msgid "Destroy with Parent"
 msgstr "פֿאַרטיליק מיט טאַטע־מאַמע"
 
-#: gtk/gtkwindow.c:502
+#: gtk/gtkwindow.c:508
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "אױב דער פֿענצטער זאָל זיך פֿאַרטיליקן װען זײַן טאַטע־מאַמע איז פֿאַרטיליקט"
 
-#: gtk/gtkwindow.c:509
+#: gtk/gtkwindow.c:515
 msgid "Icon"
 msgstr "בילדל"
 
-#: gtk/gtkwindow.c:510
+#: gtk/gtkwindow.c:516
 msgid "Icon for this window"
 msgstr "דאָס בילדל פֿאַר דעם פֿענצטער"
 
-#: gtk/gtkwindow.c:526
+#: gtk/gtkwindow.c:532
 #, fuzzy
 msgid "Name of the themed icon for this window"
 msgstr "דאָס בילדל פֿאַר דעם פֿענצטער"
 
-#: gtk/gtkwindow.c:541
+#: gtk/gtkwindow.c:547
 msgid "Is Active"
 msgstr "אַקטיװ"
 
-#: gtk/gtkwindow.c:542
+#: gtk/gtkwindow.c:548
 msgid "Whether the toplevel is the current active window"
 msgstr "צי דאָס קאָפּ־מדרגה צעפּיכעסל איז דער איצט־אַקטיװער פֿענצטער"
 
-#: gtk/gtkwindow.c:549
+#: gtk/gtkwindow.c:555
 msgid "Focus in Toplevel"
 msgstr "פֿאָקוס אין קאָפּ־מדרגה צעפּיכעסל"
 
-#: gtk/gtkwindow.c:550
+#: gtk/gtkwindow.c:556
 msgid "Whether the input focus is within this GtkWindow"
 msgstr "צי דער אַרײַנשרײַב פֿאָקוס איז אין דעם־אָ Gtk פֿענצטער"
 
-#: gtk/gtkwindow.c:557
+#: gtk/gtkwindow.c:563
 msgid "Type hint"
 msgstr "סאָרט רמז"
 
-#: gtk/gtkwindow.c:558
+#: gtk/gtkwindow.c:564
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
@@ -4993,56 +5169,65 @@ msgstr ""
 "רמז צו העלפֿן דעם עקראַנפֿלאַך־סבֿיבֿה פֿאַרשטײן װאָס פֿאַר אַ פֿענצטער ער זאָל זײַן און װי "
 "אים צו באַהאַנדלען"
 
-#: gtk/gtkwindow.c:566
+#: gtk/gtkwindow.c:572
 msgid "Skip taskbar"
 msgstr "היפּער איבער אַרבעט־װירע"
 
-#: gtk/gtkwindow.c:567
+#: gtk/gtkwindow.c:573
 msgid "TRUE if the window should not be in the task bar."
 msgstr "אױב „יאָ“, טאָר דער פֿענצטער ניט זײַן אין דער אַרבעט־װירע"
 
-#: gtk/gtkwindow.c:574
+#: gtk/gtkwindow.c:580
 msgid "Skip pager"
 msgstr "היפּער איבער בלעטערער"
 
-#: gtk/gtkwindow.c:575
+#: gtk/gtkwindow.c:581
 msgid "TRUE if the window should not be in the pager."
 msgstr "אױב „יאָ“, טאָר דער פֿענצטער ניט זײַן אינעם בלעטערער"
 
+#: gtk/gtkwindow.c:588
+msgid "Urgent"
+msgstr ""
+
 #: gtk/gtkwindow.c:589
+#, fuzzy
+msgid "TRUE if the window should be brought to the user's attention."
+msgstr "אױב „יאָ“, טאָר דער פֿענצטער ניט זײַן אינעם בלעטערער"
+
+#: gtk/gtkwindow.c:603
 #, fuzzy
 msgid "Accept focus"
 msgstr "איז פֿאָקוס"
 
-#: gtk/gtkwindow.c:590
+#: gtk/gtkwindow.c:604
 #, fuzzy
 msgid "TRUE if the window should receive the input focus."
 msgstr "אױב „יאָ“, טאָר דער פֿענצטער ניט זײַן אינעם בלעטערער"
 
-#: gtk/gtkwindow.c:604
+#: gtk/gtkwindow.c:618
 #, fuzzy
 msgid "Focus on map"
 msgstr "פֿאָקוס אין קאָפּ־מדרגה צעפּיכעסל"
 
-#: gtk/gtkwindow.c:605
+#: gtk/gtkwindow.c:619
 #, fuzzy
 msgid "TRUE if the window should receive the input focus when mapped."
 msgstr "אױב „יאָ“, טאָר דער פֿענצטער ניט זײַן אינעם בלעטערער"
 
-#: gtk/gtkwindow.c:619
+#: gtk/gtkwindow.c:633
 msgid "Decorated"
 msgstr ""
 
-#: gtk/gtkwindow.c:620
+#: gtk/gtkwindow.c:634
 #, fuzzy
 msgid "Whether the window should be decorated by the window manager"
 msgstr "אױב „יאָ“, טאָר דער פֿענצטער ניט זײַן אינעם בלעטערער"
 
-#: gtk/gtkwindow.c:635
+#: gtk/gtkwindow.c:649
 msgid "Gravity"
 msgstr ""
 
-#: gtk/gtkwindow.c:636
+#: gtk/gtkwindow.c:650
 #, fuzzy
 msgid "The window gravity of the window"
 msgstr "דער סאָרט פֿונעם פֿענצטער"
