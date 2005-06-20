@@ -9,10 +9,10 @@
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 2.6.8\n"
+"Project-Id-Version: gtk+ 2.6.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-15 23:46-0400\n"
-"PO-Revision-Date: 2005-06-12 17:48+0200\n"
+"POT-Creation-Date: 2005-06-20 22:49+0200\n"
+"PO-Revision-Date: 2005-06-20 22:49+0200\n"
 "Last-Translator: Christophe Merlet (RedFox) <redfox@redfoxcenter.org>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "MIME-Version: 1.0\n"
@@ -812,7 +812,7 @@ msgstr "Drapeaux de débogage Gdk à définir"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:129 gdk/gdk.c:132 gtk/gtkmain.c:405 gtk/gtkmain.c:408
+#: gdk/gdk.c:129 gdk/gdk.c:132 gtk/gtkmain.c:438 gtk/gtkmain.c:441
 msgid "FLAGS"
 msgstr "DRAPEAUX"
 
@@ -951,7 +951,7 @@ msgstr "calendar:week_start:1"
 #: gtk/gtkcellrendererprogress.c:236 gtk/gtkcellrendererprogress.c:294
 #, c-format
 msgid "progress bar label|%d %%"
-msgstr "étiquette de la barre de progression|%d %%"
+msgstr "%d %%"
 
 #: gtk/gtkcolorbutton.c:220 gtk/gtkcolorbutton.c:574
 msgid "Pick a Color"
@@ -1758,27 +1758,27 @@ msgid "Select All"
 msgstr "Tout sélectionner"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:398
+#: gtk/gtkmain.c:431
 msgid "Load additional GTK+ modules"
 msgstr "Charger des modules GTK+ additionnels"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:399
+#: gtk/gtkmain.c:432
 msgid "MODULES"
 msgstr "MODULES"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:401
+#: gtk/gtkmain.c:434
 msgid "Make all warnings fatal"
 msgstr "Rend tous les avertissements fatals"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:404
+#: gtk/gtkmain.c:437
 msgid "GTK+ debugging flags to set"
 msgstr "Drapeaux de débogage GTK+ à définir"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:407
+#: gtk/gtkmain.c:440
 msgid "GTK+ debugging flags to unset"
 msgstr "Drapeaux de débogage GTK+ à ne pas définir"
 
@@ -1787,15 +1787,15 @@ msgstr "Drapeaux de débogage GTK+ à ne pas définir"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:476
+#: gtk/gtkmain.c:509
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:559
+#: gtk/gtkmain.c:592
 msgid "GTK+ Options"
 msgstr "Options GTK+"
 
-#: gtk/gtkmain.c:559
+#: gtk/gtkmain.c:592
 msgid "Show GTK+ Options"
 msgstr "Afficher les options GTK+"
 
