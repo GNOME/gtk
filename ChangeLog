@@ -1,3 +1,8 @@
+2005-06-20  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkiconcache.c: Handle missing MAP_FAILED.  (#308449, Georg
+	Schwarz) 
+
 2005-06-17  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkdnd-win32.c (gdk_dropfiles_filter): Set the actions

@@ -41,6 +41,10 @@
 #define _O_BINARY 0
 #endif
 
+#ifndef MAP_FAILED
+#define MAP_FAILED ((void *) -1)
+#endif
+
 #define MAJOR_VERSION 1
 #define MINOR_VERSION 0
 
