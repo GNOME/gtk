@@ -1576,11 +1576,9 @@ gtk_image_expose (GtkWidget      *widget,
 	xalign = 1.0 - misc->xalign;
   
       x = floor (widget->allocation.x + misc->xpad
-		 + ((widget->allocation.width - widget->requisition.width) * xalign)
-		 + 0.5);
+		 + ((widget->allocation.width - widget->requisition.width) * xalign));
       y = floor (widget->allocation.y + misc->ypad 
-		 + ((widget->allocation.height - widget->requisition.height) * misc->yalign)
-		 + 0.5);
+		 + ((widget->allocation.height - widget->requisition.height) * misc->yalign));
       mask_x = x;
       mask_y = y;
       

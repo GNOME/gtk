@@ -1,5 +1,14 @@
 2005-06-21  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkarrow.c:
+	* gtk/gtkimage.c:
+	* gtk/gtklabel.c:
+	* gtk/gtkpixmap.c: Modify all of the GtkMisc widgets to round down
+	on centering calculations to match the behaviour of other parts
+	of GTK+. (#307419, Ryan Lortie)
+
+2005-06-21  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkdnd.c (gtk_drag_source_set): Connect to 
 	button-release-event as well, to handle touchscreen 
 	scenarios better.  (#171490, Markku Vire)

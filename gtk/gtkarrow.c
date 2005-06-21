@@ -260,11 +260,9 @@ gtk_arrow_expose (GtkWidget      *widget,
 	}
 
       x = floor (widget->allocation.x + misc->xpad
-		 + ((widget->allocation.width - extent) * xalign)
-		 + 0.5);
+		 + ((widget->allocation.width - extent) * xalign));
       y = floor (widget->allocation.y + misc->ypad 
-		 + ((widget->allocation.height - extent) * misc->yalign)
-		 + 0.5);
+		 + ((widget->allocation.height - extent) * misc->yalign));
       
       shadow_type = arrow->shadow_type;
 

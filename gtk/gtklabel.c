@@ -2177,8 +2177,7 @@ get_layout_location (GtkLabel  *label,
     req_width = widget->requisition.width;
 
   x = floor (widget->allocation.x + (gint)misc->xpad +
-	      xalign * (widget->allocation.width - req_width)
-	      + 0.5);
+	      xalign * (widget->allocation.width - req_width));
 
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
     x = MAX (x, widget->allocation.x + misc->xpad);
@@ -2188,8 +2187,8 @@ get_layout_location (GtkLabel  *label,
 	     req_width - misc->xpad);
 
   y = floor (widget->allocation.y + (gint)misc->ypad 
-             + MAX (((widget->allocation.height - widget->requisition.height) * misc->yalign)
-		    + 0.5, 0));
+             + MAX (((widget->allocation.height - widget->requisition.height) * misc->yalign),
+	     0));
 
   if (xp)
     *xp = x;
