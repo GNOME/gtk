@@ -1,3 +1,9 @@
+2005-06-21  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkdnd.c (gtk_drag_source_set): Connect to 
+	button-release-event as well, to handle touchscreen 
+	scenarios better.  (#171490, Markku Vire)
+
 2005-06-20  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkiconcache.c: Handle missing MAP_FAILED.  (#308449, Georg

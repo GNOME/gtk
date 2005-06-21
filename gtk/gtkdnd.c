@@ -2145,6 +2145,9 @@ gtk_drag_source_set (GtkWidget            *widget,
       g_signal_connect (widget, "button_press_event",
 			G_CALLBACK (gtk_drag_source_event_cb),
 			site);
+      g_signal_connect (widget, "button_release_event",
+			G_CALLBACK (gtk_drag_source_event_cb),
+			site);
       g_signal_connect (widget, "motion_notify_event",
 			G_CALLBACK (gtk_drag_source_event_cb),
 			site);
@@ -2180,9 +2183,6 @@ gtk_drag_source_unset (GtkWidget        *widget)
 
   if (site)
     {
-      g_signal_handlers_disconnect_by_func (widget,
-					    gtk_drag_source_event_cb,
-					    site);
       g_signal_handlers_disconnect_by_func (widget,
 					    gtk_drag_source_event_cb,
 					    site);
