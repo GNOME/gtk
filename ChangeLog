@@ -1,5 +1,8 @@
 2005-06-21  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtklabel.h: Consistently use gchar.  (#303455, 
+	Benoit Carpentier)
+
 	* gdk/gdk.symbols: 
 	* gdk/gdkwindow.h: 
 	* gdk/x11/gdkgeometry-x11.c (gdk_window_move_region): New

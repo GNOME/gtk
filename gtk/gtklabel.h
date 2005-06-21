@@ -95,10 +95,10 @@ struct _GtkLabelClass
 };
 
 GType                 gtk_label_get_type          (void) G_GNUC_CONST;
-GtkWidget*            gtk_label_new               (const char    *str);
-GtkWidget*            gtk_label_new_with_mnemonic (const char    *str);
+GtkWidget*            gtk_label_new               (const gchar   *str);
+GtkWidget*            gtk_label_new_with_mnemonic (const gchar   *str);
 void                  gtk_label_set_text          (GtkLabel      *label,
-						   const char    *str);
+						   const gchar   *str);
 G_CONST_RETURN gchar* gtk_label_get_text          (GtkLabel      *label);
 void                  gtk_label_set_attributes    (GtkLabel      *label,
 						   PangoAttrList *attrs);
@@ -166,7 +166,7 @@ gboolean     gtk_label_get_single_line_mode  (GtkLabel *label);
 
 #define  gtk_label_set           gtk_label_set_text
 void       gtk_label_get           (GtkLabel          *label,
-                                    char             **str);
+                                    gchar            **str);
 
 /* Convenience function to set the name and pattern by parsing
  * a string with embedded underscores, and return the appropriate
