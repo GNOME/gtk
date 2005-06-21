@@ -22,9 +22,8 @@
 
 #include <gtk/gtkcellrenderer.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+
+G_BEGIN_DECLS
 
 
 #define GTK_TYPE_CELL_RENDERER_PIXBUF			(gtk_cell_renderer_pixbuf_get_type ())
@@ -61,8 +60,8 @@ struct _GtkCellRendererPixbufClass
 GType            gtk_cell_renderer_pixbuf_get_type (void) G_GNUC_CONST;
 GtkCellRenderer *gtk_cell_renderer_pixbuf_new      (void);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+
+G_END_DECLS
+
 
 #endif /* __GTK_CELL_RENDERER_PIXBUF_H__ */

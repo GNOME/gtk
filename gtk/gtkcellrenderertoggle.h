@@ -22,9 +22,8 @@
 
 #include <gtk/gtkcellrenderer.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+
+G_BEGIN_DECLS
 
 
 #define GTK_TYPE_CELL_RENDERER_TOGGLE			(gtk_cell_renderer_toggle_get_type ())
@@ -72,9 +71,8 @@ gboolean        gtk_cell_renderer_toggle_get_active (GtkCellRendererToggle *togg
 void            gtk_cell_renderer_toggle_set_active (GtkCellRendererToggle *toggle,
                                                      gboolean               setting);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+
+G_END_DECLS
 
 
 #endif /* __GTK_CELL_RENDERER_TOGGLE_H__ */

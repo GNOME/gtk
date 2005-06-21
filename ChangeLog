@@ -1,7 +1,7 @@
 2005-06-21  Matthias Clasen  <mclasen@redhat.com>
 
-	* gtk/gtklabel.h: Consistently use gchar.  (#303455, 
-	Benoit Carpentier)
+	* gtk/*.h: Trivial cleanups. (#169647, #303455, 
+	Fabricio Barros Cabral, Benoit Carpentier)
 
 	* gdk/gdk.symbols: 
 	* gdk/gdkwindow.h: 

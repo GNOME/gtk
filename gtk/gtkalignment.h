@@ -32,10 +32,7 @@
 #include <gtk/gtkbin.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 #define GTK_TYPE_ALIGNMENT                  (gtk_alignment_get_type ())
 #define GTK_ALIGNMENT(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_ALIGNMENT, GtkAlignment))
@@ -88,9 +85,7 @@ void       gtk_alignment_get_padding (GtkAlignment      *alignment,
 				      guint             *padding_left,
 				      guint             *padding_right);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 
 #endif /* __GTK_ALIGNMENT_H__ */

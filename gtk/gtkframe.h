@@ -32,9 +32,7 @@
 #include <gtk/gtkbin.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 
 #define GTK_TYPE_FRAME                  (gtk_frame_get_type ())
@@ -88,9 +86,8 @@ void       gtk_frame_set_shadow_type  (GtkFrame      *frame,
 				       GtkShadowType  type);
 GtkShadowType gtk_frame_get_shadow_type (GtkFrame    *frame);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+
+G_END_DECLS
 
 
 #endif /* __GTK_FRAME_H__ */

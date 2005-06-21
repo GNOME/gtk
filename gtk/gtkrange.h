@@ -33,9 +33,7 @@
 #include <gtk/gtkwidget.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 
 #define GTK_TYPE_RANGE            (gtk_range_get_type ())
@@ -155,9 +153,8 @@ gdouble        gtk_range_get_value         (GtkRange      *range);
 gdouble	      _gtk_range_get_wheel_delta   (GtkRange           *range,
 					    GdkScrollDirection  direction);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+
+G_END_DECLS
 
 
 #endif /* __GTK_RANGE_H__ */

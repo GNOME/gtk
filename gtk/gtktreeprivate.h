@@ -21,9 +21,8 @@
 #define __GTK_TREE_PRIVATE_H__
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
+
 
 #include <gtk/gtktreeview.h>
 #include <gtk/gtktreeselection.h>
@@ -391,9 +390,7 @@ void              _gtk_tree_view_column_get_neighbor_sizes (GtkTreeViewColumn *c
 							    gint              *right);
 
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 
 #endif /* __GTK_TREE_PRIVATE_H__ */

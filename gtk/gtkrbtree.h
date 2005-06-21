@@ -22,9 +22,9 @@
 #ifndef __GTK_RBTREE_H__
 #define __GTK_RBTREE_H__
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+
+G_BEGIN_DECLS
+
 
 #include <glib.h>
 typedef enum
@@ -177,8 +177,8 @@ void       _gtk_rbtree_test             (const gchar            *where,
 void       _gtk_rbtree_debug_spew       (GtkRBTree              *tree);
 #endif
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+
+G_END_DECLS
+
 
 #endif /* __GTK_RBTREE_H__ */

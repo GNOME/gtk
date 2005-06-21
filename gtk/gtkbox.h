@@ -32,9 +32,7 @@
 #include <gtk/gtkcontainer.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 
 #define GTK_TYPE_BOX            (gtk_box_get_type ())
@@ -113,10 +111,7 @@ void	   gtk_box_set_child_packing   (GtkBox	     *box,
 					GtkPackType   pack_type);
 
 
-
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 
 #endif /* __GTK_BOX_H__ */

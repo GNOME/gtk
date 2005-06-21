@@ -32,9 +32,7 @@
 #include <gtk/gtkdialog.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 
 #define GTK_TYPE_FILE_SELECTION            (gtk_file_selection_get_type ())
@@ -118,9 +116,8 @@ void       gtk_file_selection_set_select_multiple (GtkFileSelection *filesel,
 						   gboolean          select_multiple);
 gboolean   gtk_file_selection_get_select_multiple (GtkFileSelection *filesel);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+
+G_END_DECLS
 
 
 #endif /* __GTK_FILESEL_H__ */

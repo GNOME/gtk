@@ -23,9 +23,8 @@
 #include <pango/pango.h>
 #include <gtk/gtkcellrenderer.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+
+G_BEGIN_DECLS
 
 
 #define GTK_TYPE_CELL_RENDERER_TEXT		(gtk_cell_renderer_text_get_type ())
@@ -97,9 +96,7 @@ void             gtk_cell_renderer_text_set_fixed_height_from_font (GtkCellRende
 								    gint                 number_of_rows);
 
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 
 #endif /* __GTK_CELL_RENDERER_TEXT_H__ */

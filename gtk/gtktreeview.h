@@ -25,9 +25,9 @@
 #include <gtk/gtktreeviewcolumn.h>
 #include <gtk/gtkdnd.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+
+G_BEGIN_DECLS
+
 
 typedef enum
 {
@@ -332,9 +332,8 @@ void                        gtk_tree_view_set_row_separator_func (GtkTreeView   
 								  gpointer                    data,
 								  GtkDestroyNotify            destroy);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+
+G_END_DECLS
 
 
 #endif /* __GTK_TREE_VIEW_H__ */

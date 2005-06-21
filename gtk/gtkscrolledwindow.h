@@ -34,9 +34,7 @@
 #include <gtk/gtkviewport.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 
 #define GTK_TYPE_SCROLLED_WINDOW            (gtk_scrolled_window_get_type ())
@@ -126,9 +124,8 @@ void	       gtk_scrolled_window_add_with_viewport (GtkScrolledWindow *scrolled_w
 
 gint _gtk_scrolled_window_get_scrollbar_spacing (GtkScrolledWindow *scrolled_window);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+
+G_END_DECLS
 
 
 #endif /* __GTK_SCROLLED_WINDOW_H__ */

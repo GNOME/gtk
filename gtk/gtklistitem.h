@@ -34,9 +34,7 @@
 #include <gtk/gtkitem.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 
 #define GTK_TYPE_LIST_ITEM              (gtk_list_item_get_type ())
@@ -87,10 +85,7 @@ void       gtk_list_item_deselect       (GtkListItem      *list_item);
 
 
 
-
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 
 #endif /* __GTK_LIST_ITEM_H__ */

@@ -23,9 +23,9 @@
 
 #include <gtk/gtksettings.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+
+G_BEGIN_DECLS
+
 
 /* Functions for use within GTK+
  */
@@ -43,8 +43,8 @@ typedef void	 (*GtkModuleInitFunc)        (gint	  *argc,
 					      gchar      ***argv);
 typedef void	 (*GtkModuleDisplayInitFunc) (GdkDisplay   *display);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+
+G_END_DECLS
+
 
 #endif /* __GTK_MODULES_H__ */

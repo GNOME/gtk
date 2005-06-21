@@ -23,9 +23,9 @@
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtktreesortable.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+
+G_BEGIN_DECLS
+
 
 #define GTK_TYPE_LIST_STORE	       (gtk_list_store_get_type ())
 #define GTK_LIST_STORE(obj)	       (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_LIST_STORE, GtkListStore))
@@ -131,9 +131,7 @@ void          gtk_list_store_move_before      (GtkListStore *store,
                                                GtkTreeIter  *position);
 
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 
 #endif /* __GTK_LIST_STORE_H__ */

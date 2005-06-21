@@ -32,9 +32,7 @@
 #include <gtk/gtkmenushell.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 
 /* This is a private uninstalled header shared between GtkTextView and GtkEntry */
@@ -46,9 +44,7 @@ void _gtk_text_util_append_special_char_menuitems (GtkMenuShell              *me
                                                    gpointer                   data);
 
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 
 #endif /* __GTK_TEXT_UTIL_H__ */

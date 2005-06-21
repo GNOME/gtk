@@ -33,9 +33,7 @@
 #include <gtk/gtkbin.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 
 #define GTK_TYPE_VIEWPORT            (gtk_viewport_get_type ())
@@ -84,9 +82,7 @@ void           gtk_viewport_set_shadow_type (GtkViewport   *viewport,
 GtkShadowType  gtk_viewport_get_shadow_type (GtkViewport   *viewport);
 
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 
 #endif /* __GTK_VIEWPORT_H__ */

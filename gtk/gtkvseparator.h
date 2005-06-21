@@ -32,9 +32,7 @@
 #include <gtk/gtkseparator.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 
 #define GTK_TYPE_VSEPARATOR                  (gtk_vseparator_get_type ())
@@ -63,9 +61,7 @@ GType      gtk_vseparator_get_type (void) G_GNUC_CONST;
 GtkWidget* gtk_vseparator_new      (void);
 
 
+G_END_DECLS
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
 
 #endif /* __GTK_SEPARATOR_H__ */

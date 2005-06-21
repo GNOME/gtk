@@ -42,9 +42,7 @@
 #include <gtk/gtkruler.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 
 #define GTK_TYPE_VRULER            (gtk_vruler_get_type ())
@@ -73,9 +71,7 @@ GType      gtk_vruler_get_type (void) G_GNUC_CONST;
 GtkWidget* gtk_vruler_new      (void);
 
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 
 #endif /* __GTK_VRULER_H__ */

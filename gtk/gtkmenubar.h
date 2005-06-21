@@ -32,9 +32,7 @@
 #include <gtk/gtkmenushell.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 
 #define	GTK_TYPE_MENU_BAR               (gtk_menu_bar_get_type ())
@@ -84,9 +82,8 @@ void             gtk_menu_bar_set_child_pack_direction (GtkMenuBar       *menuba
 void _gtk_menu_bar_cycle_focus (GtkMenuBar       *menubar,
 				GtkDirectionType  dir);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+
+G_END_DECLS
 
 
 #endif /* __GTK_MENU_BAR_H__ */

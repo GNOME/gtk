@@ -31,9 +31,7 @@
 #include <gtk/gtkbbox.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 
 #define GTK_TYPE_VBUTTON_BOX            (gtk_vbutton_box_get_type ())
@@ -72,9 +70,7 @@ void gtk_vbutton_box_set_layout_default (GtkButtonBoxStyle layout);
 #endif
 
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 
 #endif /* __GTK_VBUTTON_BOX_H__ */

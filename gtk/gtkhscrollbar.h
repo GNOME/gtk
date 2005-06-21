@@ -32,9 +32,7 @@
 #include <gtk/gtkscrollbar.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 
 #define GTK_TYPE_HSCROLLBAR            (gtk_hscrollbar_get_type ())
@@ -63,9 +61,7 @@ GType      gtk_hscrollbar_get_type (void) G_GNUC_CONST;
 GtkWidget* gtk_hscrollbar_new      (GtkAdjustment *adjustment);
 
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 
 #endif /* __GTK_HSCROLLBAR_H__ */

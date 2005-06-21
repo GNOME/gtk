@@ -32,9 +32,7 @@
 #include <gtk/gtkbox.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 
 #define GTK_TYPE_VBOX		 (gtk_vbox_get_type ())
@@ -64,9 +62,7 @@ GtkWidget* gtk_vbox_new	     (gboolean homogeneous,
 			      gint spacing);
 
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 
 #endif /* __GTK_VBOX_H__ */

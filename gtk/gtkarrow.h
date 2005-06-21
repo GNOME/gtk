@@ -32,9 +32,7 @@
 #include <gtk/gtkmisc.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 
 #define GTK_TYPE_ARROW                  (gtk_arrow_get_type ())
@@ -70,9 +68,7 @@ void       gtk_arrow_set        (GtkArrow      *arrow,
 				 GtkShadowType  shadow_type);
 
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 
 #endif /* __GTK_ARROW_H__ */

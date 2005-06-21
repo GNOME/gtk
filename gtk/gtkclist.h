@@ -39,9 +39,9 @@
 #include <gtk/gtkvscrollbar.h>
 #include <gtk/gtkenums.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+
+G_BEGIN_DECLS
+
 
 /* clist flags */
 enum {
@@ -785,9 +785,9 @@ PangoLayout *_gtk_clist_create_cell_layout (GtkCList       *clist,
 					    GtkCListRow    *clist_row,
 					    gint            column);
 
-#ifdef __cplusplus
-}
-#endif				/* __cplusplus */
+
+G_END_DECLS
+
 
 #endif				/* __GTK_CLIST_H__ */
 
