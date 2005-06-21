@@ -1,5 +1,9 @@
 2005-06-21  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkdnd.c (gtk_drag_source_set): Connect to 
+	button-release-event as well, to handle touchscreen 
+	scenarios better.  (#171490, Markku Vire)
+
 	* gtk/*.h: Trivial cleanups. (#169647, #303455, 
 	Fabricio Barros Cabral, Benoit Carpentier)
 
