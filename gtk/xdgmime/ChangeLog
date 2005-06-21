@@ -1,5 +1,10 @@
 2005-06-20  Matthias Clasen  <mclasen@redhat.com>
 
+	* xdgmimecache.c: Handle missing MAP_FAILED.  (#308449, Georg
+	Schwarz)
+
+2005-06-20  Matthias Clasen  <mclasen@redhat.com>
+
 	* === Released 2.7.0 ===
 
 2005-06-10  Federico Mena Quintero  <federico@ximian.com>
