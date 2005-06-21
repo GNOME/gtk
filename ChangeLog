@@ -1,3 +1,8 @@
+2005-06-22  Kjartan Maraas  <kmaraas@gnome.org>
+
+	* gtk/gtkhsv.c: (gtk_hsv_expose): Don't leak the cairo context
+	Closes bug #308581.
+
 2005-06-21  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkarrow.c:

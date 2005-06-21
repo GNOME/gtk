@@ -1305,7 +1305,8 @@ gtk_hsv_expose (GtkWidget      *widget,
 	 dest.x - widget->allocation.x,
 	 dest.y - widget->allocation.y,
 	 dest.width, dest.height);
-  
+  cairo_destroy (cr);
+
   if (GTK_WIDGET_HAS_FOCUS (hsv) && priv->focus_on_ring)
     gtk_paint_focus (widget->style, widget->window,
 		     GTK_WIDGET_STATE (widget),
