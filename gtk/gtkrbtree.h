@@ -22,11 +22,12 @@
 #ifndef __GTK_RBTREE_H__
 #define __GTK_RBTREE_H__
 
+#include <glib.h>
+
 
 G_BEGIN_DECLS
 
 
-#include <glib.h>
 typedef enum
 {
   GTK_RBNODE_BLACK = 1 << 0,
