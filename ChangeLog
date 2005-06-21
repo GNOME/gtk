@@ -1,3 +1,11 @@
+2005-06-21  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/gdk.symbols: 
+	* gdk/gdkwindow.h: 
+	* gdk/x11/gdkgeometry-x11.c (gdk_window_move_region): New
+	function which can be used to implement scrolling in 
+	non-window widgets.  (#135165, Søren Sandmann)
+
 2005-06-20  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkiconcache.c: Handle MAP_FAILED.  (#308449, Georg

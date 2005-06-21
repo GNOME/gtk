@@ -155,6 +155,7 @@ struct _GdkWindowQueueItem
   GdkWindowQueueType type;
   union {
     struct {
+      GdkRegion *area;
       gint dx;
       gint dy;
     } translate;
@@ -183,6 +184,7 @@ static void gdk_window_premove            (GdkWindow          *window,
 static void gdk_window_postmove           (GdkWindow          *window,
 					   GdkWindowParentPos *parent_pos);
 static void gdk_window_queue_translation  (GdkWindow          *window,
+					   GdkRegion	      *area,
 					   gint                dx,
 					   gint                dy);
 static void gdk_window_clip_changed       (GdkWindow          *window,
@@ -231,8 +233,8 @@ gdk_window_copy_area_scroll (GdkWindow    *window,
 
       gc = _gdk_drawable_get_scratch_gc (window, TRUE);
       
-      gdk_window_queue_translation (window, dx, dy);
-
+      gdk_window_queue_translation (window, NULL, dx, dy);
+   
       XCopyArea (GDK_WINDOW_XDISPLAY (window),
 		 GDK_WINDOW_XID (window),
 		 GDK_WINDOW_XID (window),
@@ -327,7 +329,7 @@ gdk_window_guffaw_scroll (GdkWindow    *window,
   _gdk_x11_window_tmp_unset_bg (window, FALSE);;
 
   if (dx > 0 || dy > 0)
-    gdk_window_queue_translation (window, MAX (dx, 0), MAX (dy, 0));
+    gdk_window_queue_translation (window, NULL, MAX (dx, 0), MAX (dy, 0));
 	
   gdk_window_set_static_gravities (window, TRUE);
 
@@ -353,7 +355,7 @@ gdk_window_guffaw_scroll (GdkWindow    *window,
 	       new_position.x - d_xoffset, new_position.y - d_yoffset);
   
   if (dx < 0 || dy < 0)
-    gdk_window_queue_translation (window, MIN (dx, 0), MIN (dy, 0));
+    gdk_window_queue_translation (window, NULL, MIN (dx, 0), MIN (dy, 0));
   
   XMoveResizeWindow (GDK_WINDOW_XDISPLAY (window),
 		     GDK_WINDOW_XID (window),
@@ -461,6 +463,115 @@ gdk_window_scroll (GdkWindow *window,
     gdk_window_guffaw_scroll (window, dx, dy);
 }
 
+/**
+ * gdk_window_move_region:
+ * @window: a #GdkWindow
+ * @region: The #GdkRegion to move
+ * @dx: Amount to move in the X direction
+ * @dy: Amount to move in the Y direction
+ * 
+ * Move the part of @window indicated by @region by @dy pixels in the Y 
+ * direction and @dx pixels in the X direction. The portions of @region 
+ * that not covered by the new position of @region are invalidated.
+ * 
+ * Child windows are not moved.
+ * 
+ * Since: 2.8
+ **/
+void
+gdk_window_move_region (GdkWindow *window,
+			GdkRegion *region,
+			gint       dx,
+			gint       dy)
+{
+  GdkWindowImplX11 *impl;
+  GdkWindowObject *private;
+  GdkRegion *window_clip;
+  GdkRegion *src_region;
+  GdkRegion *brought_in;
+  GdkRegion *dest_region;
+  GdkRegion *moving_invalid_region;
+  GdkRectangle dest_extents;
+  GdkGC *gc;
+  
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (region != NULL);
+  
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+  
+  private = GDK_WINDOW_OBJECT (window);
+  impl = GDK_WINDOW_IMPL_X11 (private->impl);  
+
+  if (dx == 0 && dy == 0)
+    return;
+
+  window_clip = gdk_region_rectangle (&impl->position_info.clip_rect);
+
+  /* compute source regions */
+  src_region = gdk_region_copy (region);
+  brought_in = gdk_region_copy (region);
+  gdk_region_intersect (src_region, window_clip);
+
+  gdk_region_subtract (brought_in, src_region);
+  gdk_region_offset (brought_in, dx, dy);
+
+  /* compute destination regions */
+  dest_region = gdk_region_copy (src_region);
+  gdk_region_offset (dest_region, dx, dy);
+  gdk_region_intersect (dest_region, window_clip);
+  gdk_region_get_clipbox (dest_region, &dest_extents);
+
+  gdk_region_destroy (window_clip);
+
+  /* calculating moving part of current invalid area */
+  moving_invalid_region = NULL;
+  if (private->update_area)
+    {
+      moving_invalid_region = gdk_region_copy (private->update_area);
+      gdk_region_intersect (moving_invalid_region, src_region);
+      gdk_region_offset (moving_invalid_region, dx, dy);
+    }
+  
+  /* invalidate all of the src region */
+  gdk_window_invalidate_region (window, src_region, FALSE);
+
+  /* un-invalidate destination region */
+  if (private->update_area)
+    gdk_region_subtract (private->update_area, dest_region);
+  
+  /* invalidate moving parts of existing update area */
+  if (moving_invalid_region)
+    {
+      gdk_window_invalidate_region (window, moving_invalid_region, FALSE);
+      gdk_region_destroy (moving_invalid_region);
+    }
+
+  /* invalidate area brought in from off-screen */
+  gdk_window_invalidate_region (window, brought_in, FALSE);
+  gdk_region_destroy (brought_in);
+
+  /* Actually do the moving */
+  gdk_window_queue_translation (window, src_region, dx, dy);
+
+  gc = _gdk_drawable_get_scratch_gc (window, TRUE);
+  gdk_gc_set_clip_region (gc, dest_region);
+  
+  XCopyArea (GDK_WINDOW_XDISPLAY (window),
+	     GDK_WINDOW_XID (window),
+	     GDK_WINDOW_XID (window),
+	     GDK_GC_XGC (gc),
+	     dest_extents.x - dx, dest_extents.y - dy,
+	     dest_extents.width, dest_extents.height,
+	     dest_extents.x, dest_extents.y);
+
+  /* Unset clip region of cached GC */
+  gdk_gc_set_clip_region (gc, NULL);
+  
+  gdk_region_destroy (src_region);
+  gdk_region_destroy (dest_region);
+}
+
 void
 _gdk_window_move_resize_child (GdkWindow *window,
 			       gint       x,
@@ -520,7 +631,7 @@ _gdk_window_move_resize_child (GdkWindow *window,
       gdk_window_set_static_gravities (window, TRUE);
 
       if (d_xoffset < 0 || d_yoffset < 0)
-	gdk_window_queue_translation (window, MIN (d_xoffset, 0), MIN (d_yoffset, 0));
+	gdk_window_queue_translation (window, NULL, MIN (d_xoffset, 0), MIN (d_yoffset, 0));
 
       compute_intermediate_position (&impl->position_info, &new_info, d_xoffset, d_yoffset,
 				     &new_position);
@@ -541,7 +652,7 @@ _gdk_window_move_resize_child (GdkWindow *window,
 		   new_position.x + dx, new_position.y + dy);
       
       if (d_xoffset > 0 || d_yoffset > 0)
-	gdk_window_queue_translation (window, MAX (d_xoffset, 0), MAX (d_yoffset, 0));
+	gdk_window_queue_translation (window, NULL, MAX (d_xoffset, 0), MAX (d_yoffset, 0));
       
       XMoveResizeWindow (GDK_WINDOW_XDISPLAY (window),
 			 GDK_WINDOW_XID (window),
@@ -797,7 +908,7 @@ gdk_window_premove (GdkWindow          *window,
       GdkRectangle new_position;
 
       if (d_xoffset < 0 || d_yoffset < 0)
-	gdk_window_queue_translation (window, MIN (d_xoffset, 0), MIN (d_yoffset, 0));
+	gdk_window_queue_translation (window, NULL, MIN (d_xoffset, 0), MIN (d_yoffset, 0));
 
       compute_intermediate_position (&impl->position_info, &new_info, d_xoffset, d_yoffset,
 				     &new_position);
@@ -843,7 +954,7 @@ gdk_window_postmove (GdkWindow          *window,
   if (d_xoffset != 0 || d_yoffset != 0)
     {
       if (d_xoffset > 0 || d_yoffset > 0)
-	gdk_window_queue_translation (window, MAX (d_xoffset, 0), MAX (d_yoffset, 0));
+	gdk_window_queue_translation (window, NULL, MAX (d_xoffset, 0), MAX (d_yoffset, 0));
 	
       XMoveResizeWindow (GDK_DRAWABLE_XDISPLAY (window),
 			 GDK_DRAWABLE_XID (window),
@@ -917,6 +1028,11 @@ queue_item_free (GdkWindowQueueItem *item)
   
   if (item->type == GDK_WINDOW_QUEUE_ANTIEXPOSE)
     gdk_region_destroy (item->u.antiexpose.area);
+  else
+    {
+      if (item->u.translate.area)
+	gdk_region_destroy (item->u.translate.area);
+    }
   
   g_free (item);
 }
@@ -990,11 +1106,13 @@ gdk_window_queue (GdkWindow          *window,
 
 static void
 gdk_window_queue_translation (GdkWindow *window,
+			      GdkRegion *area,
 			      gint       dx,
 			      gint       dy)
 {
   GdkWindowQueueItem *item = g_new (GdkWindowQueueItem, 1);
   item->type = GDK_WINDOW_QUEUE_TRANSLATE;
+  item->u.translate.area = area ? gdk_region_copy (area) : NULL;
   item->u.translate.dx = dx;
   item->u.translate.dy = dy;
 
@@ -1024,7 +1142,7 @@ _gdk_window_process_expose (GdkWindow    *window,
   GdkRegion *clip_region;
   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (GDK_WINDOW_DISPLAY (window));
   impl = GDK_WINDOW_IMPL_X11 (GDK_WINDOW_OBJECT (window)->impl);
-      
+
   if (display_x11->translate_queue)
     {
       GList *tmp_list = display_x11->translate_queue->head;
@@ -1039,9 +1157,25 @@ _gdk_window_process_expose (GdkWindow    *window,
 	      if (item->window == window)
 		{
 		  if (item->type == GDK_WINDOW_QUEUE_TRANSLATE)
-		    gdk_region_offset (invalidate_region, item->u.translate.dx, item->u.translate.dy);
+		    {
+		      if (item->u.translate.area)
+			{
+			  GdkRegion *intersection;
+			  
+			  intersection = gdk_region_copy (invalidate_region);
+			  gdk_region_intersect (intersection, item->u.translate.area);
+			  gdk_region_subtract (invalidate_region, intersection);
+			  gdk_region_offset (intersection, item->u.translate.dx, item->u.translate.dy);
+			  gdk_region_union (invalidate_region, intersection);
+			  gdk_region_destroy (intersection);
+			}
+		      else
+			gdk_region_offset (invalidate_region, item->u.translate.dx, item->u.translate.dy);
+		    }
 		  else		/* anti-expose */
-		    gdk_region_subtract (invalidate_region, item->u.antiexpose.area);
+		    {
+		      gdk_region_subtract (invalidate_region, item->u.antiexpose.area);
+		    }
 		}
 	    }
 	  else

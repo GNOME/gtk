@@ -680,6 +680,7 @@ gdk_window_register_dnd
 #if IN_HEADER(__GDK_WINDOW_H__)
 #if IN_FILE(__GDK_GEOMETRY_X11_C__)
 gdk_window_scroll
+gdk_window_move_region
 #endif
 #endif
 

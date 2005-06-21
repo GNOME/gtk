@@ -331,6 +331,10 @@ void          gdk_window_remove_filter         (GdkWindow     *window,
 void          gdk_window_scroll                (GdkWindow *window,
                                                 gint       dx,
                                                 gint       dy);
+void	      gdk_window_move_region           (GdkWindow *window,
+						GdkRegion *region,
+						gint       dx,
+						gint       dy);
 
 /* 
  * This allows for making shaped (partially transparent) windows

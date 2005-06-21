@@ -643,6 +643,7 @@ gdk_window_move
 gdk_window_resize
 gdk_window_move_resize
 gdk_window_scroll
+gdk_window_move_region
 gdk_window_reparent
 gdk_window_clear
 gdk_window_clear_area
