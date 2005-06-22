@@ -1,3 +1,8 @@
+2005-06-22  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilesystemunix.c: Ignore everything after the
+	first space in lines from the .gtk-bookmarks file.
+
 2005-06-21  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkdnd.c (gtk_drag_source_set): Connect to 

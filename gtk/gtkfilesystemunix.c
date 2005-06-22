@@ -1517,10 +1517,19 @@ gtk_file_system_unix_insert_bookmark (GtkFileSystem     *file_system,
 
   for (l = bookmarks; l; l = l->next)
     {
-      const char *bookmark;
+      char *bookmark, *space;
 
       bookmark = l->data;
-      if (strcmp (bookmark, uri) == 0)
+      
+      space = strchr (bookmark, ' ');
+      if (space)
+	*space = '\0';
+      if (strcmp (bookmark, uri) != 0)
+	{
+	  if (space)
+	    *space = ' ';
+	}
+      else
 	{
 	  g_set_error (error,
 		       GTK_FILE_SYSTEM_ERROR,
@@ -1565,10 +1574,19 @@ gtk_file_system_unix_remove_bookmark (GtkFileSystem     *file_system,
 
   for (l = bookmarks; l; l = l->next)
     {
-      const char *bookmark;
+      char *bookmark, *space;
 
-      bookmark = l->data;
-      if (strcmp (bookmark, uri) == 0)
+      bookmark = (char *)l->data;
+      space = strchr (bookmark, ' ');
+      if (space)
+	*space = '\0';
+
+      if (strcmp (bookmark, uri) != 0)
+	{
+	  if (space)
+	    *space = ' ';
+	}
+      else
 	{
 	  g_free (l->data);
 	  bookmarks = g_slist_remove_link (bookmarks, l);
@@ -1612,12 +1630,15 @@ gtk_file_system_unix_list_bookmarks (GtkFileSystem *file_system)
 
   for (l = bookmarks; l; l = l->next)
     {
-      const char *name;
+      char *bookmark, *space;
 
-      name = l->data;
+      bookmark = (char *)l->data;
+      space = strchr (bookmark, ' ');
+      if (space)
+	*space = '\0';
 
-      if (is_local_uri (name))
-	result = g_slist_prepend (result, gtk_file_system_unix_uri_to_path (file_system, name));
+      if (is_local_uri (bookmark))
+	result = g_slist_prepend (result, gtk_file_system_unix_uri_to_path (file_system, bookmark));
     }
 
   bookmark_list_free (bookmarks);
