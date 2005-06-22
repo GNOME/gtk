@@ -2034,6 +2034,8 @@ xdnd_finished_filter (GdkXEvent *xev,
       event->dnd.context = context;
       g_object_ref (context);
 
+      event->dnd.time = GDK_CURRENT_TIME; /* FIXME? */
+
       return GDK_FILTER_TRANSLATE;
     }
 

@@ -1,5 +1,8 @@
 2005-06-22  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/x11/gdkdnd-x11.c (xdnd_finished_filter): Set the
+	time field in the event.  (#308573, Morten Welinder)
+
 	* gtk/gtkfilesystemunix.c: Remove gratitious differences
 	between the stable branch and HEAD, which sneaked in with
 	the bookmark renaming.  
