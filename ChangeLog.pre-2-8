@@ -1,3 +1,9 @@
+2005-06-22  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilesystemunix.c: Remove gratitious differences
+	between the stable branch and HEAD, which sneaked in with
+	the bookmark renaming.  
+
 2005-06-22  Kjartan Maraas  <kmaraas@gnome.org>
 
 	* gtk/gtkhsv.c: (gtk_hsv_expose): Don't leak the cairo context

@@ -42,6 +42,7 @@
 #include <time.h>
 
 #define BOOKMARKS_FILENAME ".gtk-bookmarks"
+#define BOOKMARKS_TMP_FILENAME ".gtk-bookmarks-XXXXXX"
 
 #define HIDDEN_FILENAME ".hidden"
 
@@ -1346,7 +1347,7 @@ gtk_file_system_unix_render_icon (GtkFileSystem     *file_system,
 }
 
 static void
-string_list_free (GSList *list)
+bookmark_list_free (GSList *list)
 {
   GSList *l;
 
@@ -1376,25 +1377,25 @@ is_local_uri (const char *uri)
 }
 
 static char *
-bookmark_get_filename (void)
+bookmark_get_filename (gboolean tmp_file)
 {
   char *filename;
 
-  filename = g_build_filename (g_get_home_dir (), BOOKMARKS_FILENAME, NULL);
-
+  filename = g_build_filename (g_get_home_dir (), 
+			       tmp_file ? BOOKMARKS_TMP_FILENAME : BOOKMARKS_FILENAME, 
+			       NULL);
   g_assert (filename != NULL);
-
   return filename;
 }
 
 static gboolean
-string_list_read (const gchar  *filename, 
-		  GSList      **bookmarks, 
-		  GError      **error)
+bookmark_list_read (GSList **bookmarks, GError **error)
 {
+  gchar *filename;
   gchar *contents;
   gboolean result = FALSE;
 
+  filename = bookmark_get_filename (FALSE);
   *bookmarks = NULL;
 
   if (g_file_get_contents (filename, &contents, NULL, error))
@@ -1422,22 +1423,25 @@ string_list_read (const gchar  *filename,
       result = TRUE;
     }
 
+  g_free (filename);
+
   return result;
 }
 
 static gboolean
-string_list_write (gchar   *filename,
-		   GSList  *bookmarks, 
-		   GError **error)
+bookmark_list_write (GSList *bookmarks, GError **error)
 {
   char *tmp_filename;
+  char *filename;
   gboolean result = TRUE;
   FILE *file;
   int fd;
   int saved_errno;
 
-  /* First, write a temporary file */  
-  tmp_filename = g_strdup_printf ("%s-XXXXXX", filename);
+  /* First, write a temporary file */
+
+  tmp_filename = bookmark_get_filename (TRUE);
+  filename = bookmark_get_filename (FALSE);
 
   fd = g_mkstemp (tmp_filename);
   if (fd == -1)
@@ -1486,8 +1490,7 @@ string_list_write (gchar   *filename,
   g_set_error (error,
 	       GTK_FILE_SYSTEM_ERROR,
 	       GTK_FILE_SYSTEM_ERROR_FAILED,
-	       _("Writing %s failed: %s"),
-	       filename,
+	       _("Bookmark saving failed: %s"),
 	       g_strerror (saved_errno));
   result = FALSE;
 
@@ -1496,36 +1499,9 @@ string_list_write (gchar   *filename,
 
  out:
 
+  g_free (filename);
   g_free (tmp_filename);
 
-  return result;
-}
-
-static gboolean
-bookmark_list_read (GSList **bookmarks, 
-		    GError **error)
-{
-  gchar *filename;
-  gboolean result;
-
-  filename = bookmark_get_filename ();
-  result = string_list_read (filename, bookmarks, error);
-  g_free (filename);
-
-  return result;
-}
-
-static gboolean
-bookmark_list_write (GSList  *bookmarks, 
-		     GError **error)
-{
-  gchar *filename;
-  gboolean result;
-
-  filename = bookmark_get_filename ();
-  result = string_list_write (filename, bookmarks, error);
-  g_free (filename);
-  
   return result;
 }
 
@@ -1591,7 +1567,7 @@ gtk_file_system_unix_insert_bookmark (GtkFileSystem     *file_system,
  out:
 
   g_free (uri);
-  string_list_free (bookmarks);
+  bookmark_list_free (bookmarks);
 
   return result;
 }
@@ -1653,7 +1629,7 @@ gtk_file_system_unix_remove_bookmark (GtkFileSystem     *file_system,
  out:
 
   g_free (uri);
-  string_list_free (bookmarks);
+  bookmark_list_free (bookmarks);
 
   return result;
 }
@@ -1683,7 +1659,7 @@ gtk_file_system_unix_list_bookmarks (GtkFileSystem *file_system)
 	result = g_slist_prepend (result, gtk_file_system_unix_uri_to_path (file_system, bookmark));
     }
 
-  string_list_free (bookmarks);
+  bookmark_list_free (bookmarks);
 
   result = g_slist_reverse (result);
   return result;
@@ -1717,7 +1693,7 @@ gtk_file_system_unix_get_bookmark_label (GtkFileSystem     *file_system,
 	label = g_strdup (space + 1);
     }
 
-  string_list_free (labels);
+  bookmark_list_free (labels);
   g_free (uri);
 
   return label;
@@ -1771,7 +1747,7 @@ gtk_file_system_unix_set_bookmark_label (GtkFileSystem     *file_system,
 	g_signal_emit_by_name (file_system, "bookmarks-changed", 0);
     }
   
-  string_list_free (labels);
+  bookmark_list_free (labels);
   g_free (uri);
 }
 
