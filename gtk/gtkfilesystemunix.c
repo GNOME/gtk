@@ -42,7 +42,6 @@
 #include <time.h>
 
 #define BOOKMARKS_FILENAME ".gtk-bookmarks"
-#define BOOKMARKS_TMP_FILENAME ".gtk-bookmarks-XXXXXX"
 
 #define HIDDEN_FILENAME ".hidden"
 
@@ -1377,13 +1376,12 @@ is_local_uri (const char *uri)
 }
 
 static char *
-bookmark_get_filename (gboolean tmp_file)
+bookmark_get_filename (void)
 {
   char *filename;
 
   filename = g_build_filename (g_get_home_dir (), 
-			       tmp_file ? BOOKMARKS_TMP_FILENAME : BOOKMARKS_FILENAME, 
-			       NULL);
+			       BOOKMARKS_FILENAME, NULL);
   g_assert (filename != NULL);
   return filename;
 }
@@ -1395,7 +1393,7 @@ bookmark_list_read (GSList **bookmarks, GError **error)
   gchar *contents;
   gboolean result = FALSE;
 
-  filename = bookmark_get_filename (FALSE);
+  filename = bookmark_get_filename ();
   *bookmarks = NULL;
 
   if (g_file_get_contents (filename, &contents, NULL, error))
@@ -1429,78 +1427,40 @@ bookmark_list_read (GSList **bookmarks, GError **error)
 }
 
 static gboolean
-bookmark_list_write (GSList *bookmarks, GError **error)
+bookmark_list_write (GSList  *bookmarks, 
+		     GError **error)
 {
-  char *tmp_filename;
+  GSList *l;
+  GString *string;
   char *filename;
-  gboolean result = TRUE;
-  FILE *file;
-  int fd;
-  int saved_errno;
+  GError *tmp_error = NULL;
+  gboolean result;
 
-  /* First, write a temporary file */
+  string = g_string_new ("");
 
-  tmp_filename = bookmark_get_filename (TRUE);
-  filename = bookmark_get_filename (FALSE);
-
-  fd = g_mkstemp (tmp_filename);
-  if (fd == -1)
+  for (l = bookmarks; l; l = l->next)
     {
-      saved_errno = errno;
-      goto io_error;
+      g_string_append (string, l->data);
+      g_string_append_c (string, '\n');
     }
 
-  if ((file = fdopen (fd, "w")) != NULL)
-    {
-      GSList *l;
+  filename = bookmark_get_filename ();
 
-      for (l = bookmarks; l; l = l->next)
-	if (fputs (l->data, file) == EOF
-	    || fputs ("\n", file) == EOF)
-	  {
-	    saved_errno = errno;
-	    goto io_error;
-	  }
-
-      if (fclose (file) == EOF)
-	{
-	  saved_errno = errno;
-	  goto io_error;
-	}
-
-      if (rename (tmp_filename, filename) == -1)
-	{
-	  saved_errno = errno;
-	  goto io_error;
-	}
-
-      result = TRUE;
-      goto out;
-    }
-  else
-    {
-      saved_errno = errno;
-
-      /* fdopen() failed, so we can't do much error checking here anyway */
-      close (fd);
-    }
-
- io_error:
-
-  g_set_error (error,
-	       GTK_FILE_SYSTEM_ERROR,
-	       GTK_FILE_SYSTEM_ERROR_FAILED,
-	       _("Bookmark saving failed: %s"),
-	       g_strerror (saved_errno));
-  result = FALSE;
-
-  if (fd != -1)
-    unlink (tmp_filename); /* again, not much error checking we can do here */
-
- out:
+  result = g_file_set_contents (filename, string->str, -1, &tmp_error);
 
   g_free (filename);
-  g_free (tmp_filename);
+  g_string_free (string, TRUE);
+
+  if (!result)
+    {
+      g_set_error (error,
+		   GTK_FILE_SYSTEM_ERROR,
+		   GTK_FILE_SYSTEM_ERROR_FAILED,
+		   _("Bookmark saving failed: %s"),
+		   tmp_error->message);
+      
+      g_error_free (tmp_error);
+    }
 
   return result;
 }

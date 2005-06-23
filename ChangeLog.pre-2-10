@@ -1,3 +1,8 @@
+2005-06-23  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilesystemunix.c (bookmark_list_write): Use
+	g_file_set_contents().  (#308722, Morten Welinder)
+
 2005-06-22  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/x11/gdkdnd-x11.c (xdnd_finished_filter): Set the
