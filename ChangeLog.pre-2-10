@@ -1,5 +1,9 @@
 2005-06-23  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilesystemunix.c (gtk_file_system_unix_get_folder): 
+	Fix an error in the cache timeout logic.  (#166601, Morten
+	Welinder)
+
 	* gtk/gtktreeview.c (gtk_tree_view_key_press): Change the
 	keynav for header reordering and resizing to Alt-arrows and
 	Shift-Alt-arrows, following a proposal by the keynav 
