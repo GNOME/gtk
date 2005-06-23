@@ -1,3 +1,8 @@
+2005-06-23  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkiconcache.c (_gtk_icon_cache_new_for_path): Remove
+	a leftover debugging envvar.  
+
 2005-06-23  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkcairo.c (gdk_cairo_set_source_pixbuf): Fix the
