@@ -18,6 +18,7 @@
 #define N_(String) (String)
 #define textdomain(String) (String)
 #define gettext(String) (String)
+#define ngettext(String,Plural,Count) (String)
 #define dgettext(Domain,String) (String)
 #define dcgettext(Domain,String,Type) (String)
 #define bindtextdomain(Domain,Directory) (Domain) 
