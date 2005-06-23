@@ -180,9 +180,9 @@ gdk_cairo_set_source_pixbuf (cairo_t   *cr,
 	      q[1] = p[1];
 	      q[2] = p[0];
 #else	  
-	      q[0] = p[0];
-	      q[1] = p[1];
-	      q[2] = p[2];
+	      q[1] = p[0];
+	      q[2] = p[1];
+	      q[3] = p[2];
 #endif
 	      p += 3;
 	      q += 4;

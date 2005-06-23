@@ -1,3 +1,9 @@
+2005-06-23  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkcairo.c (gdk_cairo_set_source_pixbuf): Fix the
+	big endian case for 3-channel source. (Reported by
+	David Zeuthen)
+
 2005-06-23  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkbutton.c (gtk_button_construct_child): Don't
