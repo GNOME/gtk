@@ -1,5 +1,9 @@
 2005-06-23  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilesystemunix.c (gtk_file_system_unix_get_folder): 
+	Fix an error in the cache timeout logic.  (#166601, Morten
+	Welinder)
+
 	* gtk/gtkiconcache.c (_gtk_icon_cache_new_for_path): Remove
 	a leftover debugging envvar.  
 

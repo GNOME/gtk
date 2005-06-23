@@ -391,7 +391,7 @@ gtk_file_system_unix_get_folder (GtkFileSystem     *file_system,
   GtkFileFolderUnix *folder_unix;
   const char *filename;
   char *filename_copy;
-  time_t now = time (NULL);
+  gboolean set_asof = FALSE;
 
   system_unix = GTK_FILE_SYSTEM_UNIX (file_system);
 
@@ -405,8 +405,8 @@ gtk_file_system_unix_get_folder (GtkFileSystem     *file_system,
   if (folder_unix)
     {
       g_free (filename_copy);
-      if (now - folder_unix->asof >= FOLDER_CACHE_LIFETIME &&
-	  folder_unix->stat_info)
+      if (folder_unix->stat_info &&
+	  time (NULL) - folder_unix->asof >= FOLDER_CACHE_LIFETIME)
 	{
 #if 0
 	  g_print ("Cleaning out cached directory %s\n", filename);
@@ -415,6 +415,7 @@ gtk_file_system_unix_get_folder (GtkFileSystem     *file_system,
 	  folder_unix->stat_info = NULL;
 	  folder_unix->have_mime_type = FALSE;
 	  folder_unix->have_stat = FALSE;
+	  set_asof = TRUE;
 	}
 
       g_object_ref (folder_unix);
@@ -471,9 +472,9 @@ gtk_file_system_unix_get_folder (GtkFileSystem     *file_system,
       folder_unix->filename = filename_copy;
       folder_unix->types = types;
       folder_unix->stat_info = NULL;
-      folder_unix->asof = now;
       folder_unix->have_mime_type = FALSE;
       folder_unix->have_stat = FALSE;
+      set_asof = TRUE;
 
       if ((system_unix->have_afs &&
 	   system_unix->afs_statbuf.st_dev == statbuf.st_dev &&
@@ -495,6 +496,9 @@ gtk_file_system_unix_get_folder (GtkFileSystem     *file_system,
 
   if ((types & GTK_FILE_INFO_MIME_TYPE) != 0)
     fill_in_mime_type (folder_unix);
+
+  if (set_asof)
+    folder_unix->asof = time (NULL);
 
   return GTK_FILE_FOLDER (folder_unix);
 }
