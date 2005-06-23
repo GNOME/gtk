@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-20 14:30-0400\n"
-"PO-Revision-Date: 2005-06-17 22:53-0400\n"
+"POT-Creation-Date: 2005-06-23 19:44-0400\n"
+"PO-Revision-Date: 2005-06-23 22:53-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: Canadian English <adamw@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -3610,12 +3610,13 @@ msgstr ""
 
 #: gtk/gtksizegroup.c:262
 msgid "Ignore hidden"
-msgstr ""
+msgstr "Ignore hidden"
 
 #: gtk/gtksizegroup.c:263
 msgid ""
 "If TRUE, hidden widgets are ignored when determining the size of the group"
 msgstr ""
+"If TRUE, hidden widgets are ignored when determining the size of the group"
 
 #: gtk/gtkspinbutton.c:244
 msgid "The adjustment that holds the value of the spinbutton"
@@ -5009,12 +5010,11 @@ msgstr "TRUE if the window should not be in the pager."
 
 #: gtk/gtkwindow.c:588
 msgid "Urgent"
-msgstr ""
+msgstr "Urgent"
 
 #: gtk/gtkwindow.c:589
-#, fuzzy
 msgid "TRUE if the window should be brought to the user's attention."
-msgstr "TRUE if the window should not be in the pager."
+msgstr "TRUE if the window should be brought to the user's attention."
 
 #: gtk/gtkwindow.c:603
 msgid "Accept focus"
