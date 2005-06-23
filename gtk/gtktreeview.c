@@ -4207,9 +4207,10 @@ gtk_tree_view_key_press (GtkWidget   *widget,
       return TRUE;
     }
 
-  if (tree_view->priv->columns && (event->state & GDK_SHIFT_MASK)
-      && (event->keyval == GDK_Left || event->keyval == GDK_KP_Left
-          || event->keyval == GDK_Right || event->keyval == GDK_KP_Right))
+  if (tree_view->priv->columns && 
+      (event->state & GDK_SHIFT_MASK) && (event->state & GDK_MOD1_MASK) &&
+      (event->keyval == GDK_Left || event->keyval == GDK_KP_Left
+       || event->keyval == GDK_Right || event->keyval == GDK_KP_Right))
     {
       list = tree_view->priv->columns;
       while (list)
@@ -4259,7 +4260,7 @@ gtk_tree_view_key_press (GtkWidget   *widget,
 	}
     }
 
-  if (tree_view->priv->columns && (event->state & GDK_CONTROL_MASK) &&
+  if (tree_view->priv->columns && (event->state & GDK_MOD1_MASK) &&
       (event->keyval == GDK_Left || event->keyval == GDK_KP_Left
        || event->keyval == GDK_Right || event->keyval == GDK_KP_Right
        || event->keyval == GDK_Home || event->keyval == GDK_KP_Home

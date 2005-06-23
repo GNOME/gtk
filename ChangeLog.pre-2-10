@@ -1,5 +1,10 @@
 2005-06-23  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeview.c (gtk_tree_view_key_press): Change the
+	keynav for header reordering and resizing to Alt-arrows and
+	Shift-Alt-arrows, following a proposal by the keynav 
+	authority. (#308666, Calum Benson)
+
 	* gtk/gtkiconcache.c (_gtk_icon_cache_new_for_path): Remove
 	a leftover debugging envvar.  
 
