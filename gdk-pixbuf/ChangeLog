@@ -1,3 +1,7 @@
+2005-06-22  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk-pixbuf-i18n.h: Use glib-i18n.h
+
 2005-06-20  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.7.0 ===
