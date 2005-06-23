@@ -103,9 +103,6 @@ _gtk_icon_cache_new_for_path (const gchar *path)
   HANDLE handle = NULL;
 #endif
 
-  if (g_getenv ("GTK_NO_ICON_CACHE"))
-    return NULL;
-
   /* Check if we have a cache file */
   cache_filename = g_build_filename (path, "icon-theme.cache", NULL);
 

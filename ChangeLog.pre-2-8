@@ -1,4 +1,12 @@
+2005-06-23  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkiconcache.c (_gtk_icon_cache_new_for_path): Remove
+	a leftover debugging envvar.  
+
 2005-06-22  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/x11/gdkdnd-x11.c (xdnd_finished_filter): Set the
+	time field in the event.  (#308573, Morten Welinder)
 
 	* gtk/gtkbutton.c (gtk_button_construct_child): Don't
 	trigger warnings if there are extra references to the
