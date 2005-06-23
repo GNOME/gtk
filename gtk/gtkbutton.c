@@ -644,7 +644,11 @@ gtk_button_construct_child (GtkButton *button)
   if (GTK_BIN (button)->child)
     {
       if (priv->image && !priv->image_is_stock)
-	image = g_object_ref (priv->image);
+	{
+	  image = g_object_ref (priv->image);
+	  if (image->parent)
+	    gtk_container_remove (GTK_CONTAINER (image->parent), image);
+	}
 
       gtk_container_remove (GTK_CONTAINER (button),
   			    GTK_BIN (button)->child);
