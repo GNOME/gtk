@@ -280,10 +280,12 @@ struct _GdkGCWin32
   gint graphics_exposures;
   gint pen_width;
   DWORD pen_style;
+  GdkLineStyle line_style;
+  GdkCapStyle cap_style;
+  GdkJoinStyle join_style;
   DWORD *pen_dashes;		/* use for PS_USERSTYLE or step-by-step rendering */
   gint pen_num_dashes;
   gint pen_dash_offset;
-  gboolean pen_double_dash;
   HBRUSH pen_hbrbg;
 
   /* Following fields are valid while the GC exists as a Windows DC */
