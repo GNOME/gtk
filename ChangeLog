@@ -1,3 +1,10 @@
+2005-06-24  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkrgb.c (gdk_rgb_select_conv): Fix up selection of
+	conversion functions for MSB machines: convert_0888[_br]
+	now work on bytes so are endian independent. 
+	(Reported by David Zeuthen)
+
 2005-06-24  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktextview.c (gtk_text_view_scroll_hpages): Don't
