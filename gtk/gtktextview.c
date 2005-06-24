@@ -5021,7 +5021,8 @@ gtk_text_view_scroll_hpages (GtkTextView *text_view,
   else if (count > 0 && adj->value >= (adj->upper - adj->page_size - 1e-12))
     {
       /* already at far right, just be sure we are at the end */
-      gtk_text_iter_forward_to_line_end (&new_insert);
+      if (!gtk_text_iter_ends_line (&new_insert))
+	gtk_text_iter_forward_to_line_end (&new_insert);
       move_cursor (text_view, &new_insert, extend_selection);
     }
   else

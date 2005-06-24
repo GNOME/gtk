@@ -1,3 +1,8 @@
+2005-06-24  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktextview.c (gtk_text_view_scroll_hpages): Don't
+	jump to the next line if we are at the end of the line.  
+
 2005-06-23  Tor Lillqvist  <tml@novell.com>
 
 	Improve and simplify line segment rendering on Win32, especially
