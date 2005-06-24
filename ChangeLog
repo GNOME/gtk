@@ -1,3 +1,57 @@
+2005-06-23  Tor Lillqvist  <tml@novell.com>
+
+	Improve and simplify line segment rendering on Win32, especially
+	the implementation of GDK_CAP_NOT_LAST, and dashed lines. Fixes
+	bug #306396.
+
+	* gdk/win32/gdkprivate-win32.h (GdkGCWin32): Save the GdkGC's
+	line_style, cap_style and join_style as such in the
+	GdkGCWin32. Don't need to keep the pen_double_dash flag, we can
+	check the line_style.
+
+	* gdk/win32/gdkgc-win32.c (fixup_pen): New internal function. Sets
+	up the GDI pen type, style, end cap and join attributes to use
+	based on the pen width, GDK line style, end cap style, and join
+	style.
+
+	For a narrow (zero-width) GDK pen with the GDK_CAP_NOT_LAST end
+	cap style, which typically are used for XOR drawing where it is
+	essential that the last pixel is not drawn, use a GDI cosmetic
+	pen. Only for a cosmetic pen does GDI not draw the last pixel. I
+	deduced this by experimetation, the documentation is rather vague.
+
+	For other GDK pens use a geometric GDI pen. If the width is 0 or 1
+	and the GDK end cap style is GDK_CAP_BUTT, and the line style is
+	GDK_LINE_SOLID, use PS_ENDCAP_ROUND. This ensures that also
+	single-pixel length lines are drawn. (For sngle-pixel width lines
+	roundness as such is of course irrelevant.) For dashed lines, use
+	PS_ENDCAP_FLAT.
+
+	For wide lines use PS_ENDCAP_FLAT, _ROUND or _SQUARE,
+	respectively, for GDK_CAP_BUTT, GDK_CAP_ROUND and GDK_CAP_PROJECTING.
+
+	For one pixel on-off dashed lines, use PS_ALTERNATE, it seems to
+	work better than PS_USERSTYLE. For other dashed lines, use
+	PS_USERSTYLE and the dashes as set by the user (or the default
+	four-pixel on-off style).
+
+	(gdk_win32_gc_values_to_win32values, gdk_win32_gc_set_dashes):
+	Call fixup_pen() to do the pen settings after modifying some of
+	the GDK GC attributes that affect pens.
+
+	* gdk/win32/gdkdrawable-win32.c (render_line_horizontal,
+	render_line_vertical, draw_segments): Check GdkGCWin32::line_style
+	instead of the the removed pen_double_dash member. Don't use
+	PATCOPY unconditionally in the PatBlt() call, use a raster ope
+	code that depends on the GC function in use.
+
+	(draw_rectangle, draw_segments, draw_lines): Be more careful in
+	deciding when to do the manual dash rendering.
+
+	(draw_segments): Don't do any manual "last point" drawing at
+	all. The above changes takes care of narrow line segments being
+	drawn correctly in most cases, at least on NT-based Windows.
+
 2005-06-23  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilesystemunix.c (gtk_file_system_unix_get_folder): 

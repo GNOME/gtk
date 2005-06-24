@@ -114,6 +114,115 @@ gdk_gc_win32_finalize (GObject *object)
 }
 
 static void
+fixup_pen (GdkGCWin32 *win32_gc)
+{
+  win32_gc->pen_style = 0;
+
+  /* First look at GDK width and end cap style, set GDI pen type and
+   * end cap.
+   */
+  if (win32_gc->pen_width == 0 &&
+      win32_gc->cap_style == GDK_CAP_NOT_LAST)
+    {
+      /* Use a cosmetic pen, always width 1 */
+      win32_gc->pen_style |= PS_COSMETIC;
+    }
+  else if (win32_gc->pen_width <= 1 &&
+	   win32_gc->cap_style == GDK_CAP_BUTT)
+    {
+      /* For 1 pixel wide lines PS_ENDCAP_ROUND means draw both ends,
+       * even for one pixel length lines. But if we are drawing dashed
+       * lines we can't use PS_ENDCAP_ROUND.
+       */
+      if (win32_gc->line_style == GDK_LINE_SOLID)
+	win32_gc->pen_style |= PS_GEOMETRIC | PS_ENDCAP_ROUND;
+      else
+	win32_gc->pen_style |= PS_GEOMETRIC | PS_ENDCAP_FLAT;
+    }
+  else
+    {
+      win32_gc->pen_style |= PS_GEOMETRIC;
+      switch (win32_gc->cap_style)
+	{
+	/* For non-zero-width lines X11's CapNotLast works like CapButt */
+	case GDK_CAP_NOT_LAST:
+	case GDK_CAP_BUTT:
+	  win32_gc->pen_style |= PS_ENDCAP_FLAT;
+	  break;
+	case GDK_CAP_ROUND:
+	  win32_gc->pen_style |= PS_ENDCAP_ROUND;
+	  break;
+	case GDK_CAP_PROJECTING:
+	  win32_gc->pen_style |= PS_ENDCAP_SQUARE;
+	  break;
+	}
+    }
+
+  /* Next look at GDK line style, set GDI pen style attribute */
+  switch (win32_gc->line_style)
+    {
+    case GDK_LINE_SOLID:
+      win32_gc->pen_style |= PS_SOLID;
+      break;
+    case GDK_LINE_ON_OFF_DASH:
+    case GDK_LINE_DOUBLE_DASH:
+      if (win32_gc->pen_dashes == NULL)
+	{
+	  win32_gc->pen_dashes = g_new (DWORD, 1);
+	  win32_gc->pen_dashes[0] = 4;
+	  win32_gc->pen_num_dashes = 1;
+	}
+      if (G_WIN32_IS_NT_BASED ())
+	{
+	  if (!(win32_gc->pen_style & PS_TYPE_MASK) == PS_GEOMETRIC &&
+	      win32_gc->pen_dashes[0] == 1 &&
+	      (win32_gc->pen_num_dashes == 1 ||
+	       (win32_gc->pen_num_dashes == 2 && win32_gc->pen_dashes[0] == 1)))
+	    win32_gc->pen_style |= PS_ALTERNATE;
+	  else
+	    win32_gc->pen_style |= PS_USERSTYLE;
+	}
+      else
+	{
+	  /* Render "short" on-off dashes drawn with R2_COPYPEN and a
+	   * cosmetic pen using PS_DOT
+	   */
+	  if (win32_gc->line_style == GDK_LINE_ON_OFF_DASH &&
+	      win32_gc->rop2 == R2_COPYPEN &&
+	      (win32_gc->pen_style & PS_TYPE_MASK) == PS_COSMETIC &&
+	      win32_gc->pen_dashes[0] <= 2 &&
+	      (win32_gc->pen_num_dashes == 1 ||
+	       (win32_gc->pen_num_dashes == 2 && win32_gc->pen_dashes[1] <= 2)))
+	    win32_gc->pen_style |= PS_DOT;
+	  else
+	    /* Otherwise render opaque lines solid, horizontal or
+	     * vertical ones will be dashed manually, see
+	     * gdkdrawable-win32.c.
+	     */
+	    win32_gc->pen_style |= PS_SOLID;
+	}
+     break;
+    }
+
+  /* Last, for if the GDI pen is geometric, set the join attribute */
+  if ((win32_gc->pen_style & PS_TYPE_MASK) == PS_GEOMETRIC)
+    {
+      switch (win32_gc->join_style)
+	{
+	case GDK_JOIN_MITER:
+	  win32_gc->pen_style |= PS_JOIN_MITER;
+	  break;
+	case GDK_JOIN_ROUND:
+	  win32_gc->pen_style |= PS_JOIN_ROUND;
+	  break;
+	case GDK_JOIN_BEVEL:
+	  win32_gc->pen_style |= PS_JOIN_BEVEL;
+	  break;
+	}
+    }
+}
+
+static void
 gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
 				    GdkGCValuesMask mask,
 				    GdkGCWin32     *win32_gc)
@@ -217,45 +326,6 @@ gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
     {
       if (values->stipple != NULL)
 	{
-#if 0 /* HB: this size limitation is disabled to make radio and check
-       * buttons work. I got the impression from the API docs, that
-       * it shouldn't be necessary at all, but win9x would do the clipping
-       *
-       * This code will need some work if reenabled since the stipple is
-       * now stored in the backend-independent code.
-       */
-          gint sw, sh;
-	  
-	  gdk_drawable_get_size (values->stipple, &sw, &sh);
-
-	  if (   (sw != 8 || sh != 8)
-	      && !G_WIN32_IS_NT_BASED ()) /* HB: the MSDN says it's a Win95 limitation */
-	    {
-	      /* It seems that it *must* be 8x8, at least on my machine. 
-	       * Thus, tile an 8x8 bitmap with the stipple in case it is
-	       * smaller, or simply use just the top left 8x8 in case it is
-	       * larger.
-	       */
-	      gchar dummy[8];
-	      GdkPixmap *bm = gdk_bitmap_create_from_data (NULL, dummy, 8, 8);
-	      GdkGC *gc = gdk_gc_new (bm);
-	      gint i, j;
-
-	      i = 0;
-	      while (i < 8)
-		{
-		  j = 0;
-		  while (j < 8)
-		    {
-		      gdk_draw_drawable (bm, gc, values->stipple, 0, 0, i, j, sw, sh);
-		      j += sh;
-		    }
-		  i += sw;
-		}
-	      win32_gc->stipple = bm;
-	      gdk_gc_unref (gc);
-	    }
-#endif
 	  win32_gc->values_mask |= GDK_GC_STIPPLE;
 	  GDK_NOTE (GC,
 		    (g_print ("%sstipple=%p", s,
@@ -343,78 +413,32 @@ gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
 
   if (mask & GDK_GC_LINE_STYLE)
     {
-      switch (values->line_style)
-	{
-	case GDK_LINE_SOLID:
-	  if (win32_gc->pen_dashes)
-	    {
-	      g_free (win32_gc->pen_dashes);
-	      win32_gc->pen_dashes = NULL;
-	      win32_gc->pen_num_dashes = 0;
-	    }
-          win32_gc->pen_style &= ~(PS_STYLE_MASK);
-	  win32_gc->pen_style |= PS_SOLID;
-	  win32_gc->pen_double_dash = FALSE;
-	  break;
-	case GDK_LINE_ON_OFF_DASH:
-	case GDK_LINE_DOUBLE_DASH: 
-	  if (!win32_gc->pen_dashes)
-	    {
-            /* setting to PS_DASH probably isn't correct. If I understand the
-             * xlib docs correctly it should influence the handling of
-             * line endings ? --hb
-             */
-            win32_gc->pen_style &= ~(PS_STYLE_MASK);
-	    win32_gc->pen_style |= PS_DASH;
-          }
-	  win32_gc->pen_double_dash = values->line_style == GDK_LINE_DOUBLE_DASH;
-	  break;
-	}
-      GDK_NOTE (GC, (g_print ("%sps|=PS_STYLE_%s", s, _gdk_win32_psstyle_to_string (win32_gc->pen_style)),
-		     s = ","));
+      win32_gc->line_style = values->line_style;
       win32_gc->values_mask |= GDK_GC_LINE_STYLE;
     }
 
   if (mask & GDK_GC_CAP_STYLE)
     {
-      win32_gc->pen_style &= ~(PS_ENDCAP_MASK);
-      switch (values->cap_style)
-	{
-	case GDK_CAP_NOT_LAST:	/* ??? */
-	case GDK_CAP_BUTT:
-	  win32_gc->pen_style |= PS_ENDCAP_FLAT;
-	  break;
-	case GDK_CAP_ROUND:
-	  win32_gc->pen_style |= PS_ENDCAP_ROUND;
-	  break;
-	case GDK_CAP_PROJECTING:
-	  win32_gc->pen_style |= PS_ENDCAP_SQUARE;
-	  break;
-	}
-      GDK_NOTE (GC, (g_print ("%sps|=PS_ENDCAP_%s", s, _gdk_win32_psendcap_to_string (win32_gc->pen_style)),
-		     s = ","));
+      win32_gc->cap_style = values->cap_style;
       win32_gc->values_mask |= GDK_GC_CAP_STYLE;
     }
 
   if (mask & GDK_GC_JOIN_STYLE)
     {
-      win32_gc->pen_style &= ~(PS_JOIN_MASK);
-      switch (values->join_style)
-	{
-	case GDK_JOIN_MITER:
-	  win32_gc->pen_style |= PS_JOIN_MITER;
-	  break;
-	case GDK_JOIN_ROUND:
-	  win32_gc->pen_style |= PS_JOIN_ROUND;
-	  break;
-	case GDK_JOIN_BEVEL:
-	  win32_gc->pen_style |= PS_JOIN_BEVEL;
-	  break;
-	}
-      GDK_NOTE (GC, (g_print ("%sps|=PS_JOIN_%s", s, _gdk_win32_psjoin_to_string (win32_gc->pen_style)),
-		     s = ","));
+      win32_gc->join_style = values->join_style;
       win32_gc->values_mask |= GDK_GC_JOIN_STYLE;
     }
+
+  if (mask & (GDK_GC_LINE_WIDTH|GDK_GC_LINE_STYLE|GDK_GC_CAP_STYLE|GDK_GC_JOIN_STYLE))
+    {
+      fixup_pen (win32_gc);
+      GDK_NOTE (GC, (g_print ("%sps|=PS_STYLE_%s|PS_ENDCAP_%s|PS_JOIN_%s", s,
+			      _gdk_win32_psstyle_to_string (win32_gc->pen_style),
+			      _gdk_win32_psendcap_to_string (win32_gc->pen_style),
+			      _gdk_win32_psjoin_to_string (win32_gc->pen_style)),
+		     s = ","));
+    }
+
   GDK_NOTE (GC, g_print ("} mask=(%s)", _gdk_win32_gcvalues_mask_to_string (win32_gc->values_mask)));
 }
 
@@ -443,11 +467,17 @@ _gdk_win32_gc_new (GdkDrawable	  *drawable,
   win32_gc->subwindow_mode = GDK_CLIP_BY_CHILDREN;
   win32_gc->graphics_exposures = TRUE;
   win32_gc->pen_width = 0;
-  win32_gc->pen_style = PS_GEOMETRIC|PS_ENDCAP_FLAT|PS_JOIN_MITER;
+  /* Don't get confused by the PS_ENDCAP_ROUND. For narrow GDI pens
+   * (width == 1), PS_GEOMETRIC|PS_ENDCAP_ROUND works like X11's
+   * CapButt.
+   */
+  win32_gc->pen_style = PS_GEOMETRIC|PS_ENDCAP_ROUND|PS_JOIN_MITER;
+  win32_gc->line_style = GDK_LINE_SOLID;
+  win32_gc->cap_style = GDK_CAP_BUTT;
+  win32_gc->join_style = GDK_JOIN_MITER;
   win32_gc->pen_dashes = NULL;
   win32_gc->pen_num_dashes = 0;
   win32_gc->pen_dash_offset = 0;
-  win32_gc->pen_double_dash = FALSE;
   win32_gc->pen_hbrbg = NULL;
 
   win32_gc->values_mask = GDK_GC_FUNCTION | GDK_GC_FILL;
@@ -522,29 +552,9 @@ gdk_win32_gc_get_values (GdkGC       *gc,
   values->graphics_exposures = win32_gc->graphics_exposures;
   values->line_width = win32_gc->pen_width;
   
-  if (win32_gc->pen_style & PS_SOLID)
-    values->line_style = GDK_LINE_SOLID;
-  else if (win32_gc->pen_style & PS_DASH)
-    values->line_style = win32_gc->pen_double_dash ? GDK_LINE_DOUBLE_DASH :
-						     GDK_LINE_ON_OFF_DASH;
-  else
-    values->line_style = GDK_LINE_SOLID;
-
-  /* PS_ENDCAP_ROUND is zero */
-  if (win32_gc->pen_style & PS_ENDCAP_FLAT)
-    values->cap_style = GDK_CAP_BUTT;
-  else if (win32_gc->pen_style & PS_ENDCAP_SQUARE)
-    values->cap_style = GDK_CAP_PROJECTING;
-  else
-    values->cap_style = GDK_CAP_ROUND;
-    
-  /* PS_JOIN_ROUND is zero */
-  if (win32_gc->pen_style & PS_JOIN_MITER)
-    values->join_style = GDK_JOIN_MITER;
-  else if (win32_gc->pen_style & PS_JOIN_BEVEL)
-    values->join_style = GDK_JOIN_BEVEL;
-  else
-    values->join_style = GDK_JOIN_ROUND;
+  values->line_style = win32_gc->line_style;
+  values->cap_style = win32_gc->cap_style;
+  values->join_style = win32_gc->join_style;
 }
 
 static void
@@ -573,19 +583,13 @@ gdk_win32_gc_set_dashes (GdkGC *gc,
 
   win32_gc = GDK_GC_WIN32 (gc);
 
-  /* mark as set, see gdk_win32_gc_values_to_win32values () for the reason */
-  win32_gc->values_mask |= GDK_GC_LINE_STYLE;
-
-  win32_gc->pen_style &= ~(PS_STYLE_MASK);
-
-  win32_gc->pen_style |= (PS_GEOMETRIC | PS_USERSTYLE);
   win32_gc->pen_num_dashes = n;
-  if (win32_gc->pen_dashes != NULL)
-    g_free (win32_gc->pen_dashes);
+  g_free (win32_gc->pen_dashes);
   win32_gc->pen_dashes = g_new (DWORD, n);
   for (i = 0; i < n; i++)
     win32_gc->pen_dashes[i] = dash_list[i];
   win32_gc->pen_dash_offset = dash_offset;
+  fixup_pen (win32_gc);
 }
 
 void
@@ -659,13 +663,16 @@ _gdk_windowing_gc_copy (GdkGC *dst_gc,
   dst_win32_gc->graphics_exposures = src_win32_gc->graphics_exposures;
   dst_win32_gc->pen_width = src_win32_gc->pen_width;
   dst_win32_gc->pen_style = src_win32_gc->pen_style;
-  dst_win32_gc->pen_dashes = src_win32_gc->pen_dashes;
-  if (dst_win32_gc->pen_dashes)
+  dst_win32_gc->line_style = src_win32_gc->line_style;
+  dst_win32_gc->cap_style = src_win32_gc->cap_style;
+  dst_win32_gc->join_style = src_win32_gc->join_style;
+  if (src_win32_gc->pen_dashes)
     dst_win32_gc->pen_dashes = g_memdup (src_win32_gc->pen_dashes, 
                                          sizeof (DWORD) * src_win32_gc->pen_num_dashes);
+  else
+    dst_win32_gc->pen_dashes = NULL;
   dst_win32_gc->pen_num_dashes = src_win32_gc->pen_num_dashes;
   dst_win32_gc->pen_dash_offset = src_win32_gc->pen_dash_offset;
-  dst_win32_gc->pen_double_dash = src_win32_gc->pen_double_dash;
 
 
   dst_win32_gc->hdc = NULL;
@@ -825,7 +832,6 @@ gdk_win32_hdc_get (GdkDrawable    *drawable,
   GdkDrawableImplWin32 *impl = NULL;
   gboolean ok = TRUE;
   COLORREF fg = RGB (0, 0, 0), bg = RGB (255, 255, 255);
-  LOGBRUSH logbrush;
   HPEN hpen;
   HBRUSH hbr;
 
@@ -858,7 +864,7 @@ gdk_win32_hdc_get (GdkDrawable    *drawable,
   if (ok && (usage & LINE_ATTRIBUTES))
     {
       /* For drawing GDK_LINE_DOUBLE_DASH */
-      if ((usage & GDK_GC_BACKGROUND) && win32_gc->pen_double_dash)
+      if ((usage & GDK_GC_BACKGROUND) && win32_gc->line_style == GDK_LINE_DOUBLE_DASH)
         {
           bg = _gdk_win32_colormap_color (impl->colormap, _gdk_gc_get_bg_pixel (gc));
           if ((win32_gc->pen_hbrbg = CreateSolidBrush (bg)) == NULL)
@@ -867,33 +873,26 @@ gdk_win32_hdc_get (GdkDrawable    *drawable,
 
       if (ok)
         {
+	  LOGBRUSH logbrush;
+	  DWORD style_count = 0;
+	  const DWORD *style = NULL;
+
 	  /* Create and select pen */
 	  logbrush.lbStyle = BS_SOLID;
 	  logbrush.lbColor = fg;
 	  logbrush.lbHatch = 0;
-	  
-	  if (win32_gc->pen_num_dashes > 0 && !G_WIN32_IS_NT_BASED ())
+
+	  if ((win32_gc->pen_style & PS_STYLE_MASK) == PS_USERSTYLE)
 	    {
-	      /* The Win9x GDI is rather limited so we either draw dashed
-	       * lines ourselves (only horizontal and vertical) or let them be
-	       * drawn solid to avoid implementing a whole line renderer.
-	       */
-	      if ((hpen = ExtCreatePen (
-					(win32_gc->pen_style & ~(PS_STYLE_MASK)) | PS_SOLID,
-					MAX (win32_gc->pen_width, 1),
-					&logbrush, 
-					0, NULL)) == NULL)
-		WIN32_GDI_FAILED ("ExtCreatePen"), ok = FALSE;
+	      style_count = win32_gc->pen_num_dashes;
+	      style = win32_gc->pen_dashes;
 	    }
-	  else
-	    {
-	      if ((hpen = ExtCreatePen (win32_gc->pen_style,
-					MAX (win32_gc->pen_width, 1),
-					&logbrush, 
-					win32_gc->pen_num_dashes,
-					win32_gc->pen_dashes)) == NULL)
-		WIN32_GDI_FAILED ("ExtCreatePen"), ok = FALSE;
-	    }
+
+	  if ((hpen = ExtCreatePen (win32_gc->pen_style,
+				    MAX (win32_gc->pen_width, 1),
+				    &logbrush, 
+				    style_count, style)) == NULL)
+	    WIN32_GDI_FAILED ("ExtCreatePen"), ok = FALSE;
 	  
 	  if (ok && SelectObject (win32_gc->hdc, hpen) == NULL)
 	    WIN32_GDI_FAILED ("SelectObject"), ok = FALSE;
