@@ -4752,8 +4752,6 @@ gtk_text_view_move_cursor_internal (GtkTextView     *text_view,
       break;
 
     case GTK_MOVEMENT_PARAGRAPHS:
-      g_print ("move paragraphs: %d %d\n", 
-	       count, gtk_text_iter_get_line_offset (&newplace));
       if (count > 0)
         {
           if (!gtk_text_iter_ends_line (&newplace))
@@ -4767,10 +4765,7 @@ gtk_text_view_move_cursor_internal (GtkTextView     *text_view,
       else if (count < 0)
         {
           if (gtk_text_iter_get_line_offset (&newplace) > 0)
-            {
-              gtk_text_iter_set_line_offset (&newplace, 0);
-              ++count;
-            }
+	    gtk_text_iter_set_line_offset (&newplace, 0);
           gtk_text_iter_forward_visible_lines (&newplace, count);
           gtk_text_iter_set_line_offset (&newplace, 0);
         }

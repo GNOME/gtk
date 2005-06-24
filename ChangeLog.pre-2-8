@@ -9,6 +9,8 @@
 
 	* gtk/gtktextview.c (gtk_text_view_scroll_hpages): Don't
 	jump to the next line if we are at the end of the line.  
+	(gtk_text_view_move_cursor_internal): Make movement by
+	paragraphs up/down symmetric.  (#307055, Behnam Esfahbod)
 
 2005-06-23  Tor Lillqvist  <tml@novell.com>
 
