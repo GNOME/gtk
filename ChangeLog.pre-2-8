@@ -2,7 +2,7 @@
 
 	Improve and simplify line segment rendering on Win32, especially
 	the implementation of GDK_CAP_NOT_LAST, and dashed lines. Fixes
-	bug #306396.
+	bugs #306396 and #308413.
 
 	* gdk/win32/gdkprivate-win32.h (GdkGCWin32): Save the GdkGC's
 	line_style, cap_style and join_style as such in the
@@ -42,7 +42,7 @@
 	* gdk/win32/gdkdrawable-win32.c (render_line_horizontal,
 	render_line_vertical, draw_segments): Check GdkGCWin32::line_style
 	instead of the the removed pen_double_dash member. Don't use
-	PATCOPY unconditionally in the PatBlt() call, use a raster ope
+	PATCOPY unconditionally in the PatBlt() call, use a raster op
 	code that depends on the GC function in use.
 
 	(draw_rectangle, draw_segments, draw_lines): Be more careful in
