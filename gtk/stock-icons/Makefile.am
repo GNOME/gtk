@@ -57,6 +57,8 @@ IMAGES = \
 	stock_first_24.png 		\
 	stock_font_16.png		\
 	stock_font_24.png 		\
+	stock_fullscreen_16.png		\
+	stock_fullscreen_24.png		\
 	stock_harddisk_16.png		\
 	stock_harddisk_24.png 		\
 	stock_help_16.png		\
@@ -65,12 +67,16 @@ IMAGES = \
 	stock_home_24.png 		\
 	stock_index_16.png 		\
 	stock_index_24.png 		\
+	stock_info_16.png 		\
+	stock_info_24.png 		\
 	stock_jump_to_16.png		\
 	stock_jump_to_24.png 		\
 	stock_jump_to_rtl_16.png	\
 	stock_jump_to_rtl_24.png 	\
 	stock_last_16.png		\
 	stock_last_24.png 		\
+	stock_leave_fullscreen_16.png	\
+	stock_leave_fullscreen_24.png	\
 	stock_left_arrow_16.png		\
 	stock_left_arrow_24.png 	\
 	stock_media_forward_16.png	\
@@ -234,6 +240,8 @@ VARIABLES2 = \
         stock_font_16		$(srcdir)/stock_font_16.png
 VARIABLES3 = \
 	stock_font_24		$(srcdir)/stock_font_24.png            	\
+	stock_fullscreen_16	$(srcdir)/stock_fullscreen_16.png	\
+	stock_fullscreen_24	$(srcdir)/stock_fullscreen_24.png	\
 	stock_help_16		$(srcdir)/stock_help_16.png		\
 	stock_help_24		$(srcdir)/stock_help_24.png            	\
 	stock_harddisk_16		$(srcdir)/stock_harddisk_16.png	\
@@ -242,12 +250,16 @@ VARIABLES3 = \
 	stock_home_24		$(srcdir)/stock_home_24.png		\
 	stock_index_16		$(srcdir)/stock_index_16.png		\
 	stock_index_24		$(srcdir)/stock_index_24.png		\
+	stock_info_16		$(srcdir)/stock_info_16.png		\
+	stock_info_24		$(srcdir)/stock_info_24.png		\
 	stock_jump_to_16	$(srcdir)/stock_jump_to_16.png		\
 	stock_jump_to_24	$(srcdir)/stock_jump_to_24.png		\
 	stock_jump_to_rtl_16	$(srcdir)/stock_jump_to_rtl_16.png	\
 	stock_jump_to_rtl_24	$(srcdir)/stock_jump_to_rtl_24.png	\
 	stock_last_16		$(srcdir)/stock_last_16.png		\
 	stock_last_24		$(srcdir)/stock_last_24.png            	\
+	stock_leave_fullscreen_16 $(srcdir)/stock_leave_fullscreen_16.png \
+	stock_leave_fullscreen_24 $(srcdir)/stock_leave_fullscreen_24.png \
 	stock_left_arrow_16	$(srcdir)/stock_left_arrow_16.png	\
 	stock_left_arrow_24	$(srcdir)/stock_left_arrow_24.png	\
 	stock_missing_image_16	$(srcdir)/stock_broken_image_16.png	\

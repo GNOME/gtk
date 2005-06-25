@@ -544,6 +544,14 @@ get_default_icons (GtkIconFactory *factory)
 	     16, stock_font_16,
 	     24, stock_font_24);
 
+  add_icon2 (factory, GTK_STOCK_FULLSCREEN,
+	     16, stock_fullscreen_16,
+	     24, stock_fullscreen_24);
+
+  add_icon2 (factory, GTK_STOCK_LEAVE_FULLSCREEN,
+	     16, stock_leave_fullscreen_16,
+	     24, stock_leave_fullscreen_24);
+
   add_icon2 (factory, GTK_STOCK_HARDDISK,
 	     16, stock_harddisk_16,
 	     24, stock_harddisk_24);
@@ -555,6 +563,10 @@ get_default_icons (GtkIconFactory *factory)
   add_icon2 (factory, GTK_STOCK_HOME,
 	     16, stock_home_16,
 	     24, stock_home_24);
+
+  add_icon2 (factory, GTK_STOCK_INFO,
+	     16, stock_info_16,
+	     24, stock_info_24);
 
   add_icon_bidi2 (factory, GTK_STOCK_JUMP_TO,
 		  16, stock_jump_to_16, stock_jump_to_rtl_16,

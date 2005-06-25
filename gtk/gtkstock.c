@@ -330,6 +330,8 @@ static const GtkStockItem builtin_items [] =
   { GTK_STOCK_FIND, N_("_Find"), GDK_CONTROL_MASK, 'f', GETTEXT_PACKAGE },
   { GTK_STOCK_FIND_AND_REPLACE, N_("Find and _Replace"), GDK_CONTROL_MASK, 'r', GETTEXT_PACKAGE },
   { GTK_STOCK_FLOPPY, N_("_Floppy"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_FULLSCREEN, N_("_Fullscreen"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_LEAVE_FULLSCREEN, N_("_Leave Fullscreen"), 0, 0, GETTEXT_PACKAGE },
   /* translators, strip the prefix up to and including the first | */
   { GTK_STOCK_GOTO_BOTTOM, N_("Navigation|_Bottom"), 0, 0, GETTEXT_PACKAGE },
   /* translators, strip the prefix up to and including the first | */
@@ -352,6 +354,7 @@ static const GtkStockItem builtin_items [] =
   { GTK_STOCK_INDENT, N_("Increase Indent"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_UNINDENT, N_("Decrease Indent"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_INDEX, N_("_Index"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_INFO, N_("_Information"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_ITALIC, N_("_Italic"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_JUMP_TO, N_("_Jump to"), 0, 0, GETTEXT_PACKAGE },
   /* translators, strip the prefix up to and including the first | */
