@@ -33,6 +33,7 @@ typedef struct _GdkEventClient	    GdkEventClient;
 typedef struct _GdkEventDND         GdkEventDND;
 typedef struct _GdkEventWindowState GdkEventWindowState;
 typedef struct _GdkEventSetting     GdkEventSetting;
+typedef struct _GdkEventGrabBroken  GdkEventGrabBroken;
 
 typedef union  _GdkEvent	    GdkEvent;
 
@@ -118,7 +119,8 @@ typedef enum
   GDK_SCROLL            = 31,
   GDK_WINDOW_STATE      = 32,
   GDK_SETTING           = 33,
-  GDK_OWNER_CHANGE      = 34
+  GDK_OWNER_CHANGE      = 34,
+  GDK_GRAB_BROKEN       = 35
 } GdkEventType;
 
 /* Event masks. (Used to select what types of events a window
@@ -429,6 +431,13 @@ struct _GdkEventWindowState
   GdkWindowState new_window_state;
 };
 
+struct _GdkEventGrabBroken {
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+  gboolean keyboard;
+};
+
 /* Event types for DND */
 
 struct _GdkEventDND {
@@ -463,6 +472,7 @@ union _GdkEvent
   GdkEventDND               dnd;
   GdkEventWindowState       window_state;
   GdkEventSetting           setting;
+  GdkEventGrabBroken        grab_broken;
 };
 
 GType     gdk_event_get_type            (void) G_GNUC_CONST;

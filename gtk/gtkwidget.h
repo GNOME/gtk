@@ -403,8 +403,11 @@ struct _GtkWidgetClass
   gboolean     (*can_activate_accel) (GtkWidget *widget,
                                       guint      signal_id);
 
+  /* Sent when a grab is broken. */
+  gboolean (*grab_broken_event) (GtkWidget	     *widget,
+                                 GdkEventGrabBroken  *event);
+
   /* Padding for future expansion */
-  void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
   void (*_gtk_reserved4) (void);
   void (*_gtk_reserved5) (void);

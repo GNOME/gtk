@@ -424,6 +424,22 @@ only available if the X server supports the XFIXES extension.
 @selection_time: the time at which the selection ownership was taken over
 @Since: 2.6
 
+<!-- ##### STRUCT GdkEventGrabBroken ##### -->
+<para>
+Generated when a pointer or keyboard grab is broken. On X11, this happens
+when the grab window becomes unviewable (i.e. it or one of its ancestors 
+is unmapped), or if the same application grabs the pointer or keyboard
+again.
+</para>
+
+@type: the type of the event (%GDK_GRAB_BROKEN) 
+@window: the window which received the event, i.e. the window
+ that previously owned the grab
+@send_event: %TRUE if the event was sent explicitly (e.g. using <function>XSendEvent</function>).
+@keyboard: %TRUE if a keyboard grab was broken, %FALSE if a pointer 
+  grab was broken
+@Since: 2.8
+
 <!-- ##### ENUM GdkScrollDirection ##### -->
 <para>
 Specifies the direction for #GdkEventScroll. 

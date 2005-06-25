@@ -1,5 +1,38 @@
 2005-06-25  Matthias Clasen  <mclasen@redhat.com>
 
+	Add a GrabBroken event to GDK, and a grab-broken-event
+	signal to GtkWidget.  (#107320, Simon Cooke, initial patch 
+	by John Ehresman)
+
+	* gdk/gdkevents.h: Add a GDK_GRAB_BROKEN event type,
+	define a GdkEventGrabBroken event struct.
+
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate): 
+	Generate GrabBroken events in response to WM_KILLFOCUS.
+
+	* gdk/x11/gdkmain-x11.c: Generate GrabBroken events
+	when a grab is broken by the window becoming unviewable,
+	or by another grab from the same client.
+	
+	* gtk/gtkwidget.h (GtkWidgetClass): Add grab_broken_event.
+
+	* gtk/gtkwidget.c (gtk_widget_event_internal): Translate
+	GrabBroken events into grab_broken_event signals.
+
+	* gtk/gtkmain.c (gtk_main_do_event): Propagate GrabBroken
+	events.
+
+	* gtk/gtkmenushell.c (gtk_menu_shell_grab_broken): Deactivate
+	the menu when the grab is broken.
+
+	* gtk/gtkcolorsel.c (gtk_color_selection_grab_broken): Stop 
+	the color picker if the grab is broken.
+
+	* gtk/gtkpaned.c (gtk_paned_grab_broken): Stop the drag if
+	the grab is broken.
+
+2005-06-25  Matthias Clasen  <mclasen@redhat.com>
+
 	Add some new stock items.  (#166480, Kristof Vansant)
 	
 	* gtk/stock-icons/stock_fullscreen_16.png: 

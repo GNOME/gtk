@@ -1101,6 +1101,7 @@ GdkEventNoExpose
 GdkEventWindowState
 GdkEventSetting
 GdkEventOwnerChange
+GdkEventGrabBroken
 
 <SUBSECTION>
 GdkScrollDirection

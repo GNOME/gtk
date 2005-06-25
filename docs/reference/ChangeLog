@@ -1,3 +1,7 @@
+2005-06-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/gdk-sections.txt: Add GdkEventGrabBroken.
+
 2005-06-21  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/gdk-sections.txt: Add gdk_window_move_region

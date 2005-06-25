@@ -166,6 +166,8 @@ static gint gtk_menu_shell_leave_notify      (GtkWidget         *widget,
 					      GdkEventCrossing  *event);
 static void gtk_menu_shell_screen_changed    (GtkWidget         *widget,
 					      GdkScreen         *previous_screen);
+static gboolean gtk_menu_shell_grab_broken       (GtkWidget         *widget,
+					      GdkEventGrabBroken *event);
 static void gtk_menu_shell_add               (GtkContainer      *container,
 					      GtkWidget         *widget);
 static void gtk_menu_shell_remove            (GtkContainer      *container,
@@ -254,6 +256,7 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
   widget_class->realize = gtk_menu_shell_realize;
   widget_class->button_press_event = gtk_menu_shell_button_press;
   widget_class->button_release_event = gtk_menu_shell_button_release;
+  widget_class->grab_broken_event = gtk_menu_shell_grab_broken;
   widget_class->key_press_event = gtk_menu_shell_key_press;
   widget_class->enter_notify_event = gtk_menu_shell_enter_notify;
   widget_class->leave_notify_event = gtk_menu_shell_leave_notify;
@@ -599,6 +602,27 @@ gtk_menu_shell_button_press (GtkWidget      *widget,
 	  gtk_menu_shell_deactivate (menu_shell);
 	  g_signal_emit (menu_shell, menu_shell_signals[SELECTION_DONE], 0);
 	}
+    }
+
+  return TRUE;
+}
+
+static gboolean
+gtk_menu_shell_grab_broken (GtkWidget          *widget,
+			    GdkEventGrabBroken *event)
+{
+  GtkMenuShell *menu_shell;
+  GtkWidget *menu_item;
+  gint deactivate;
+
+  g_return_val_if_fail (GTK_IS_MENU_SHELL (widget), FALSE);
+  g_return_val_if_fail (event != NULL, FALSE);
+
+  menu_shell = GTK_MENU_SHELL (widget);
+  if (menu_shell->active)
+    {
+      gtk_menu_shell_deactivate (menu_shell);
+      g_signal_emit (menu_shell, menu_shell_signals[SELECTION_DONE], 0);
     }
 
   return TRUE;

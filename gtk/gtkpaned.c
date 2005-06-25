@@ -99,6 +99,8 @@ static gboolean gtk_paned_motion                (GtkWidget        *widget,
 						 GdkEventMotion   *event);
 static gboolean gtk_paned_focus                 (GtkWidget        *widget,
 						 GtkDirectionType  direction);
+static gboolean gtk_paned_grab_broken           (GtkWidget          *widget,
+						 GdkEventGrabBroken *event);
 static void     gtk_paned_add                   (GtkContainer     *container,
 						 GtkWidget        *widget);
 static void     gtk_paned_remove                (GtkContainer     *container,
@@ -127,7 +129,7 @@ static gboolean gtk_paned_accept_position       (GtkPaned         *paned);
 static gboolean gtk_paned_cancel_position       (GtkPaned         *paned);
 static gboolean gtk_paned_toggle_handle_focus   (GtkPaned         *paned);
 
-static GType    gtk_paned_child_type             (GtkContainer     *container);
+static GType    gtk_paned_child_type            (GtkContainer     *container);
 
 static GtkContainerClass *parent_class = NULL;
 
@@ -135,6 +137,7 @@ struct _GtkPanedPrivate
 {
   GtkWidget *saved_focus;
   GtkPaned *first_paned;
+  guint32 grab_time;
 };
 
 GType
@@ -219,6 +222,7 @@ gtk_paned_class_init (GtkPanedClass *class)
   widget_class->button_press_event = gtk_paned_button_press;
   widget_class->button_release_event = gtk_paned_button_release;
   widget_class->motion_notify_event = gtk_paned_motion;
+  widget_class->grab_broken_event = gtk_paned_grab_broken;
   
   container_class->add = gtk_paned_add;
   container_class->remove = gtk_paned_remove;
@@ -882,18 +886,20 @@ gtk_paned_button_press (GtkWidget      *widget,
   if (!paned->in_drag &&
       (event->window == paned->handle) && (event->button == 1))
     {
-      paned->in_drag = TRUE;
-
       /* We need a server grab here, not gtk_grab_add(), since
        * we don't want to pass events on to the widget's children */
-      gdk_pointer_grab (paned->handle, FALSE,
-			GDK_POINTER_MOTION_HINT_MASK
-			| GDK_BUTTON1_MOTION_MASK
-			| GDK_BUTTON_RELEASE_MASK
-			| GDK_ENTER_NOTIFY_MASK
-			| GDK_LEAVE_NOTIFY_MASK,
-			NULL, NULL,
-			event->time);
+      if (gdk_pointer_grab (paned->handle, FALSE,
+			    GDK_POINTER_MOTION_HINT_MASK
+			    | GDK_BUTTON1_MOTION_MASK
+			    | GDK_BUTTON_RELEASE_MASK
+			    | GDK_ENTER_NOTIFY_MASK
+			    | GDK_LEAVE_NOTIFY_MASK,
+			    NULL, NULL,
+			    event->time) != GDK_GRAB_SUCCESS)
+	return FALSE;
+
+      paned->in_drag = TRUE;
+      paned->priv->grab_time = event->time;
 
       if (paned->orientation == GTK_ORIENTATION_HORIZONTAL)
 	paned->drag_pos = event->y;
@@ -904,6 +910,17 @@ gtk_paned_button_press (GtkWidget      *widget,
     }
 
   return FALSE;
+}
+
+static gboolean
+gtk_paned_grab_broken (GtkWidget          *widget,
+		       GdkEventGrabBroken *event)
+{
+  GtkPaned *paned = GTK_PANED (widget);
+
+  paned->in_drag = FALSE;
+  paned->drag_pos = -1;
+  paned->position_set = TRUE;
 }
 
 static gboolean
@@ -918,7 +935,7 @@ gtk_paned_button_release (GtkWidget      *widget,
       paned->drag_pos = -1;
       paned->position_set = TRUE;
       gdk_display_pointer_ungrab (gtk_widget_get_display (widget),
-				  event->time);
+				  paned->priv->grab_time);
       return TRUE;
     }
 

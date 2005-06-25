@@ -90,6 +90,8 @@ for the possible window states
 @GDK_SETTING: a setting has been modified.
 @GDK_OWNER_CHANGE: the owner of a selection has changed. This event type
   was added in 2.6
+@GDK_GRAB_BROKEN: a pointer or keyboard grab was broken. This event type
+  was added in 2.8.
 
 <!-- ##### ENUM GdkEventMask ##### -->
 <para>

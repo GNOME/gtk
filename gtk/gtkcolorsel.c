@@ -139,6 +139,8 @@ struct _ColorSelectionPrivate
 
   /* Window for grabbing on */
   GtkWidget *dropper_grab_widget;
+  guint32    grab_time;
+  gboolean   has_grab;
 
   /* Connection to settings */
   gulong settings_connection;
@@ -162,6 +164,8 @@ static void gtk_color_selection_get_property    (GObject                 *object
 static void gtk_color_selection_realize         (GtkWidget               *widget);
 static void gtk_color_selection_unrealize       (GtkWidget               *widget);
 static void gtk_color_selection_show_all        (GtkWidget               *widget);
+static gboolean gtk_color_selection_grab_broken (GtkWidget               *widget,
+						 GdkEventGrabBroken      *event);
 
 static void     gtk_color_selection_set_palette_color   (GtkColorSelection *colorsel,
                                                          gint               index,
@@ -1248,14 +1252,27 @@ shutdown_eyedropper (GtkWidget *widget)
   GtkColorSelection *colorsel;
   ColorSelectionPrivate *priv;
   GdkDisplay *display = gtk_widget_get_display (widget);
-  guint32 time = gtk_get_current_event_time ();
 
   colorsel = GTK_COLOR_SELECTION (widget);
   priv = colorsel->private_data;    
 
-  gdk_display_keyboard_ungrab (display, time);
-  gdk_display_pointer_ungrab (display, time);
-  gtk_grab_remove (priv->dropper_grab_widget);
+  if (priv->has_grab)
+    {
+      gdk_display_keyboard_ungrab (display, priv->grab_time);
+      gdk_display_pointer_ungrab (display, priv->grab_time);
+      gtk_grab_remove (priv->dropper_grab_widget);
+
+      priv->has_grab = FALSE;
+    }
+}
+
+static gboolean 
+gtk_color_selection_grab_broken (GtkWidget          *widget,
+				 GdkEventGrabBroken *event)
+{
+  shutdown_eyedropper (widget);
+
+  return TRUE;
 }
 
 static void
@@ -1410,6 +1427,7 @@ get_screen_color (GtkWidget *button)
   GdkScreen *screen = gtk_widget_get_screen (GTK_WIDGET (button));
   GdkCursor *picker_cursor;
   GdkGrabStatus grab_status;
+  guint32 time = gtk_get_current_event_time ();
   
   if (priv->dropper_grab_widget == NULL)
     {
@@ -1419,11 +1437,14 @@ get_screen_color (GtkWidget *button)
                              GDK_BUTTON_RELEASE_MASK | GDK_BUTTON_PRESS_MASK | GDK_POINTER_MOTION_MASK);
       
       gtk_widget_show (priv->dropper_grab_widget);
+
+      gdk_window_set_user_data (priv->dropper_grab_widget->window, colorsel);
+      gdk_window_reparent (priv->dropper_grab_widget->window, 
+			   GTK_WIDGET (colorsel)->window, 0, 0);
     }
 
   if (gdk_keyboard_grab (priv->dropper_grab_widget->window,
-                         FALSE,
-                         gtk_get_current_event_time ()) != GDK_GRAB_SUCCESS)
+                         FALSE, time) != GDK_GRAB_SUCCESS)
     return;
   
   picker_cursor = make_picker_cursor (screen);
@@ -1432,16 +1453,18 @@ get_screen_color (GtkWidget *button)
 				  GDK_BUTTON_RELEASE_MASK | GDK_BUTTON_PRESS_MASK | GDK_POINTER_MOTION_MASK,
 				  NULL,
 				  picker_cursor,
-				  gtk_get_current_event_time ());
+				  time);
   gdk_cursor_unref (picker_cursor);
   
   if (grab_status != GDK_GRAB_SUCCESS)
     {
-      gdk_display_keyboard_ungrab (gtk_widget_get_display (button), GDK_CURRENT_TIME);
+      gdk_display_keyboard_ungrab (gtk_widget_get_display (button), time);
       return;
     }
 
   gtk_grab_add (priv->dropper_grab_widget);
+  priv->grab_time = time;
+  priv->has_grab = TRUE;
   
   g_signal_connect (priv->dropper_grab_widget, "button_press_event",
                     G_CALLBACK (mouse_press), colorsel);
@@ -1843,6 +1866,7 @@ gtk_color_selection_class_init (GtkColorSelectionClass *klass)
   widget_class->realize = gtk_color_selection_realize;
   widget_class->unrealize = gtk_color_selection_unrealize;
   widget_class->show_all = gtk_color_selection_show_all;
+  widget_class->grab_broken_event = gtk_color_selection_grab_broken;
   
   g_object_class_install_property (gobject_class,
                                    PROP_HAS_OPACITY_CONTROL,

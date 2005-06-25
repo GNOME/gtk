@@ -2919,8 +2919,29 @@ gdk_event_translate (GdkDisplay *display,
 	 }
        break;
 
-    case WM_SETFOCUS:
     case WM_KILLFOCUS:
+      if (p_grab_window != NULL && !GDK_WINDOW_DESTROYED (p_grab_window))
+	{
+	  event = gdk_event_new (GDK_GRAB_BROKEN);
+	  event->grab_broken.window = p_grab_window;
+	  event->grab_broken.send_event = 0;
+	  event->grab_broken.keyboard = FALSE;
+	  
+          append_event (display, event);
+	}
+      if (k_grab_window != NULL && !GDK_WINDOW_DESTROYED (k_grab_window) 
+	  && k_grab_window != p_grab_window)
+	{
+	  event = gdk_event_new (GDK_GRAB_BROKEN);
+	  event->grab_broken.window = k_grab_window;
+	  event->grab_broken.send_event = 0;
+	  event->grab_broken.keyboard = TRUE;
+
+          append_event (display, event);
+	}
+
+      /* fallthrough */
+    case WM_SETFOCUS:
       if (k_grab_window != NULL && !k_grab_owner_events)
 	break;
 

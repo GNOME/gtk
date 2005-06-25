@@ -120,6 +120,7 @@ enum {
   ACCEL_CLOSURES_CHANGED,
   SCREEN_CHANGED,
   CAN_ACTIVATE_ACCEL,
+  GRAB_BROKEN,
   LAST_SIGNAL
 };
 
@@ -398,6 +399,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->drag_data_received = NULL;
   klass->screen_changed = NULL;
   klass->can_activate_accel = gtk_widget_real_can_activate_accel;
+  klass->grab_broken_event = NULL;
 
   klass->show_help = gtk_widget_real_show_help;
   
@@ -1320,6 +1322,32 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, window_state_event),
+		  _gtk_boolean_handled_accumulator, NULL,
+		  _gtk_marshal_BOOLEAN__BOXED,
+		  G_TYPE_BOOLEAN, 1,
+		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+  /**
+   * GtkWidget::grab-broken:
+   * @widget: the object which received the signal
+   * @event: the #GdkEventGrabBroken event
+   *
+   * Emitted when a pointer or keyboard grab on a window belonging 
+   * to @widget gets broken. 
+   * 
+   * On X11, this happens when the grab window becomes unviewable 
+   * (i.e. it or one of its ancestors is unmapped), or if the same 
+   * application grabs the pointer or keyboard again.
+   *
+   * Returns: %TRUE to stop other handlers from being invoked for the event. 
+   *   %FALSE to propagate the event further.
+   *
+   * Since: 2.8
+   */
+  widget_signals[GRAB_BROKEN] =
+    g_signal_new ("grab_broken_event",
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, grab_broken_event),
 		  _gtk_boolean_handled_accumulator, NULL,
 		  _gtk_marshal_BOOLEAN__BOXED,
 		  G_TYPE_BOOLEAN, 1,
@@ -3693,6 +3721,9 @@ gtk_widget_event_internal (GtkWidget *widget,
 	  break;
 	case GDK_VISIBILITY_NOTIFY:
 	  signal_num = VISIBILITY_NOTIFY_EVENT;
+	  break;
+	case GDK_GRAB_BROKEN:
+	  signal_num = GRAB_BROKEN;
 	  break;
 	default:
 	  g_warning ("gtk_widget_event(): unhandled event type: %d", event->type);
