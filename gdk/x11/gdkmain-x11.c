@@ -251,9 +251,13 @@ gdk_pointer_grab (GdkWindow *	  window,
   if (return_val == GrabSuccess)
     {
       GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (GDK_WINDOW_DISPLAY (window));
+#if 0
       if (display_x11->pointer_xgrab_window != NULL)
-	generate_grab_broken_event (GDK_WINDOW (display_x11->pointer_xgrab_window),
-				    FALSE);
+	{
+	  generate_grab_broken_event (GDK_WINDOW (display_x11->pointer_xgrab_window),
+				      FALSE);
+	}
+#endif
 
       display_x11->pointer_xgrab_window = (GdkWindowObject *)window;
       display_x11->pointer_xgrab_serial = serial;
@@ -352,11 +356,13 @@ gdk_keyboard_grab (GdkWindow *	   window,
   if (return_val == GrabSuccess)
     {
       GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (gdk_drawable_get_display (window));
-
+#if 0
       if (display_x11->keyboard_xgrab_window != NULL)
-	generate_grab_broken_event (GDK_WINDOW (display_x11->keyboard_xgrab_window),
-				    TRUE);
-
+	{
+	  generate_grab_broken_event (GDK_WINDOW (display_x11->keyboard_xgrab_window),
+				      TRUE);
+	}
+#endif
       display_x11->keyboard_xgrab_window = (GdkWindowObject *)window;
       display_x11->keyboard_xgrab_serial = serial;
       display_x11->keyboard_xgrab_owner_events = owner_events;

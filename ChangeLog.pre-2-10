@@ -1,5 +1,11 @@
 2005-06-25  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/x11/gdkmain-x11.c (gdk_keyboard_grab, gdk_pointer_grab):
+	Don't emit grab-broken for overgrabbing, until we figure
+	out how to do that without breaking the menu code.
+
+2005-06-25  Matthias Clasen  <mclasen@redhat.com>
+
 	Add a GrabBroken event to GDK, and a grab-broken-event
 	signal to GtkWidget.  (#107320, Simon Cooke, initial patch 
 	by John Ehresman)
