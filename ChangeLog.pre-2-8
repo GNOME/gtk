@@ -1,3 +1,13 @@
+Sun Jun 26 00:04:36 2005  Manish Singh  <yosh@gimp.org>
+
+	* gdk/gdkevents.c (gdk_event_get_time, gdk_event_get_state): add
+	GDK_GRAB_BROKEN to the switch cases.
+
+	* gtk/gtkmenushell.c (gtk_menu_shell_grab_broken): remove unused
+	variables.
+
+	* gtk/gtkpaned.c (gtk_paned_grab_broken): return TRUE.
+
 2005-06-26  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_grab_broken): Stop column

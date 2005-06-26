@@ -612,8 +612,6 @@ gtk_menu_shell_grab_broken (GtkWidget          *widget,
 			    GdkEventGrabBroken *event)
 {
   GtkMenuShell *menu_shell;
-  GtkWidget *menu_item;
-  gint deactivate;
 
   g_return_val_if_fail (GTK_IS_MENU_SHELL (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);

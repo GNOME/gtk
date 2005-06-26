@@ -921,6 +921,8 @@ gtk_paned_grab_broken (GtkWidget          *widget,
   paned->in_drag = FALSE;
   paned->drag_pos = -1;
   paned->position_set = TRUE;
+
+  return TRUE;
 }
 
 static gboolean
