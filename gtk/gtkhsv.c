@@ -106,6 +106,8 @@ static gint     gtk_hsv_motion         (GtkWidget        *widget,
 					GdkEventMotion   *event);
 static gint     gtk_hsv_expose         (GtkWidget        *widget,
 					GdkEventExpose   *event);
+static gboolean gtk_hsv_grab_broken    (GtkWidget          *widget,
+					GdkEventGrabBroken *event);
 static gboolean gtk_hsv_focus          (GtkWidget        *widget,
 					GtkDirectionType  direction);
 static void     gtk_hsv_move           (GtkHSV           *hsv,
@@ -177,6 +179,7 @@ gtk_hsv_class_init (GtkHSVClass *class)
   widget_class->motion_notify_event = gtk_hsv_motion;
   widget_class->expose_event = gtk_hsv_expose;
   widget_class->focus = gtk_hsv_focus;
+  widget_class->grab_broken_event = gtk_hsv_grab_broken;
   
   hsv_class->move = gtk_hsv_move;
   
@@ -771,6 +774,20 @@ set_cross_grab (GtkHSV *hsv,
 		    cursor,
 		    time);
   gdk_cursor_unref (cursor);
+}
+
+static gboolean 
+gtk_hsv_grab_broken (GtkWidget          *widget,
+		     GdkEventGrabBroken *event)
+{
+  GtkHSV *hsv = GTK_HSV (widget);
+  HSVPrivate *priv;
+  
+  priv = hsv->priv;
+  
+  priv->mode = DRAG_NONE;
+  
+  return TRUE;
 }
 
 /* Button_press_event handler for the HSV color selector */

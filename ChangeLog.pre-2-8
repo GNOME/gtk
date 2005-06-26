@@ -1,5 +1,8 @@
 2005-06-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkhsv.c (gtk_hsv_grab_broken): Stop the drag if
+	the grab is broken.
+
 	* gtk/gtkcombobox.c (gtk_combo_box_popdown): Don't do 
 	explicitly ungrab pointer and keyboard. We're unmapping
 	the grab window anyway. 
