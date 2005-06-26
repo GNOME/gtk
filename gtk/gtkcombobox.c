@@ -318,8 +318,6 @@ static void     gtk_combo_box_list_position        (GtkComboBox      *combo_box,
 static void     gtk_combo_box_list_setup           (GtkComboBox      *combo_box);
 static void     gtk_combo_box_list_destroy         (GtkComboBox      *combo_box);
 
-static void     gtk_combo_box_list_remove_grabs    (GtkComboBox      *combo_box);
-
 static gboolean gtk_combo_box_list_button_released (GtkWidget        *widget,
                                                     GdkEventButton   *event,
                                                     gpointer          data);
@@ -1574,6 +1572,31 @@ gtk_combo_box_menu_popup (GtkComboBox *combo_box,
 		  button, activate_time);
 }
 
+static gboolean
+popup_grab_on_window (GdkWindow *window,
+		      guint32    activate_time,
+		      gboolean   grab_keyboard)
+{
+  if ((gdk_pointer_grab (window, TRUE,
+			 GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
+			 GDK_POINTER_MOTION_MASK,
+			 NULL, NULL, activate_time) == 0))
+    {
+      if (!grab_keyboard ||
+	  gdk_keyboard_grab (window, TRUE,
+			     activate_time) == 0)
+	return TRUE;
+      else
+	{
+	  gdk_display_pointer_ungrab (gdk_drawable_get_display (window),
+				      activate_time);
+	  return FALSE;
+	}
+    }
+
+  return FALSE;
+}
+
 /**
  * gtk_combo_box_popup:
  * @combo_box: a #GtkComboBox
@@ -1640,18 +1663,16 @@ gtk_combo_box_popup (GtkComboBox *combo_box)
                                 TRUE);
 
   if (!GTK_WIDGET_HAS_FOCUS (combo_box->priv->tree_view))
+    gtk_widget_grab_focus (combo_box->priv->tree_view);
+
+  if (!popup_grab_on_window (combo_box->priv->popup_window->window,
+			     GDK_CURRENT_TIME, TRUE))
     {
-      gdk_keyboard_grab (combo_box->priv->popup_window->window,
-                         FALSE, GDK_CURRENT_TIME);
-      gtk_widget_grab_focus (combo_box->priv->tree_view);
+      gtk_widget_hide (combo_box->priv->popup_window);
+      return;
     }
 
   gtk_grab_add (combo_box->priv->popup_window);
-  gdk_pointer_grab (combo_box->priv->popup_window->window, TRUE,
-                    GDK_BUTTON_PRESS_MASK |
-                    GDK_BUTTON_RELEASE_MASK |
-                    GDK_POINTER_MOTION_MASK,
-                    NULL, NULL, GDK_CURRENT_TIME);
 }
 
 /**
@@ -1679,8 +1700,7 @@ gtk_combo_box_popdown (GtkComboBox *combo_box)
   if (!GTK_WIDGET_REALIZED (GTK_WIDGET (combo_box)))
     return;
 
-  gtk_combo_box_list_remove_grabs (combo_box);
-
+  gtk_grab_remove (combo_box->priv->popup_window);
   gtk_widget_hide_all (combo_box->priv->popup_window);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (combo_box->priv->button),
                                 FALSE);
@@ -3338,17 +3358,6 @@ gtk_combo_box_list_destroy (GtkComboBox *combo_box)
 }
 
 /* callbacks */
-static void
-gtk_combo_box_list_remove_grabs (GtkComboBox *combo_box)
-{
-  if (combo_box->priv->popup_window &&
-      GTK_WIDGET_HAS_GRAB (combo_box->priv->popup_window))
-    {
-      gtk_grab_remove (combo_box->priv->popup_window);
-      gdk_keyboard_ungrab (GDK_CURRENT_TIME);
-      gdk_pointer_ungrab (GDK_CURRENT_TIME);
-    }
-}
 
 static gboolean
 gtk_combo_box_list_button_pressed (GtkWidget      *widget,

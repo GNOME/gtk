@@ -1,3 +1,10 @@
+2005-06-26  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_popdown): Don't do 
+	explicitly ungrab pointer and keyboard. We're unmapping
+	the grab window anyway. 
+	(gtk_combo_box_popup): Handle grab failures.
+
 2005-06-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/x11/gdkmain-x11.c (gdk_keyboard_grab, gdk_pointer_grab):
