@@ -1,5 +1,8 @@
 2005-06-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeview.c (gtk_tree_view_grab_broken): Stop column
+	header drag operations if the grab is broken.
+
 	* gtk/gtkhsv.c (gtk_hsv_grab_broken): Stop the drag if
 	the grab is broken.
 

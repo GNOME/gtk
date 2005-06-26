@@ -177,6 +177,8 @@ static gboolean gtk_tree_view_button_press         (GtkWidget        *widget,
 						    GdkEventButton   *event);
 static gboolean gtk_tree_view_button_release       (GtkWidget        *widget,
 						    GdkEventButton   *event);
+static gboolean gtk_tree_view_grab_broken          (GtkWidget          *widget,
+						    GdkEventGrabBroken *event);
 #if 0
 static gboolean gtk_tree_view_configure            (GtkWidget         *widget,
 						    GdkEventConfigure *event);
@@ -522,6 +524,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   widget_class->size_allocate = gtk_tree_view_size_allocate;
   widget_class->button_press_event = gtk_tree_view_button_press;
   widget_class->button_release_event = gtk_tree_view_button_release;
+  widget_class->grab_broken_event = gtk_tree_view_grab_broken;
   /*widget_class->configure_event = gtk_tree_view_configure;*/
   widget_class->motion_notify_event = gtk_tree_view_motion;
   widget_class->expose_event = gtk_tree_view_expose;
@@ -2665,6 +2668,26 @@ gtk_tree_view_button_release (GtkWidget      *widget,
       tree_view->priv->button_pressed_tree = NULL;
       tree_view->priv->button_pressed_node = NULL;
     }
+
+  return TRUE;
+}
+
+static gboolean
+gtk_tree_view_grab_broken (GtkWidget          *widget,
+			   GdkEventGrabBroken *event)
+{
+  GtkTreeView *tree_view;
+
+  g_return_val_if_fail (GTK_IS_TREE_VIEW (widget), FALSE);
+  g_return_val_if_fail (event != NULL, FALSE);
+
+  tree_view = GTK_TREE_VIEW (widget);
+
+  if (GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_IN_COLUMN_DRAG))
+    gtk_tree_view_button_release_drag_column (widget, (GdkEventButton *)event);
+
+  if (GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_IN_COLUMN_RESIZE))
+    gtk_tree_view_button_release_column_resize (widget, (GdkEventButton *)event);
 
   return TRUE;
 }
