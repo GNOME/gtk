@@ -6,7 +6,7 @@ no_undefined = -no-undefined
 endif
 
 if OS_WIN32
-gdk_pixbuf_def = gdk_pixbuf.def
+gdk_pixbuf_def = $(srcdir)/gdk_pixbuf.def
 gdk_pixbuf_symbols = -export-symbols $(gdk_pixbuf_def)
 
 gdk_pixbuf_win32res_lo = gdk_pixbuf-win32res.lo
@@ -14,20 +14,13 @@ gdk_pixbuf_win32res_lo = gdk_pixbuf-win32res.lo
 gdk_pixbuf-win32res.lo : gdk_pixbuf.rc
 	$(top_srcdir)/build/win32/lt-compile-resource gdk_pixbuf.rc gdk_pixbuf-win32res.lo
 
-install-libtool-import-lib:
-# 	Don't put the binary compatibility entries in the import lib!
-#	(Unfortunately the GNU linker doesn't yet understand the PRIVATE
-#	directive in .def files.)
-	for entry in `grep PRIVATE gdk_pixbuf.def | sed -e 's/PRIVATE//'`; do \
-	  file=`$(NM) -A .libs/libgdk_pixbuf-$(GTK_API_VERSION).dll.a | tr -d '\r' | grep -E $$entry'$$' | head -n 1 | cut -d: -f2`; \
-	  $(AR) d .libs/libgdk_pixbuf-$(GTK_API_VERSION).dll.a $$file; \
-	done
-	$(INSTALL) .libs/libgdk_pixbuf-$(GTK_API_VERSION).dll.a $(DESTDIR)$(libdir)
-uninstall-libtool-import-lib:
-	-rm $(DESTDIR)$(libdir)/libgdk_pixbuf-$(GTK_API_VERSION).dll.a
+install-def-file:
+	$(INSTALL) $(gdk_pixbuf_def) $(DESTDIR)$(libdir)/gdk_pixbuf-2.0.def
+uninstall-def-file:
+	-rm $(DESTDIR)$(libdir)/gdk_pixbuf-2.0.def
 else
-install-libtool-import-lib:
-uninstall-libtool-import-lib:
+install-def-file:
+uninstall-def-file:
 endif
 
 if MS_LIB_AVAILABLE
@@ -470,7 +463,7 @@ endif
 # that makes the install target for the loader libraries a dependency on
 # install-data-am, and not install-exec-am. We need to ensure this gets run
 # after the libraries are installed in their final locations.
-install-data-hook: install-ms-lib install-libtool-import-lib
+install-data-hook: install-ms-lib install-def-file
 	@if $(RUN_QUERY_LOADER_TEST) ; then \
 	  $(mkinstalldirs) $(DESTDIR)$(sysconfdir)/gtk-2.0 ; \
 	  $(top_builddir)/gdk-pixbuf/gdk-pixbuf-query-loaders > $(DESTDIR)$(sysconfdir)/gtk-2.0/gdk-pixbuf.loaders ; \
@@ -483,7 +476,7 @@ install-data-hook: install-ms-lib install-libtool-import-lib
 	  echo "***" ; \
 	fi
 
-uninstall-local: uninstall-ms-lib uninstall-libtool-import-lib
+uninstall-local: uninstall-ms-lib uninstall-def-file
 	rm -f $(DESTDIR)$(sysconfdir)/gtk-2.0/gdk-pixbuf.loaders
 
 if CROSS_COMPILING

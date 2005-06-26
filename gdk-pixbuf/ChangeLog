@@ -1,3 +1,10 @@
+2005-06-26  Tor Lillqvist  <tml@novell.com>
+
+	* Makefile.am: Current GNU tools do understand the PRIVATE
+	keyword, so no need to remove those entries from the import
+	library. libtool installs the .dll.a import library itself, so no
+	need to do it here. Do install the .def file.
+
 2005-06-22  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk-pixbuf-i18n.h: Use glib-i18n.h
