@@ -154,13 +154,13 @@ libgdk_win32_2_0_la_LIBADD += -Lwin32 -lie55uuid
 endif
 
 if OS_WIN32
-install-libtool-import-lib:
-	$(INSTALL) .libs/libgdk-win32-$(GTK_API_VERSION).dll.a $(DESTDIR)$(libdir)
-uninstall-libtool-import-lib:
-	-rm $(DESTDIR)$(libdir)/libgdk-win32-$(GTK_API_VERSION).dll.a
+install-def-file: gdk.def
+	$(INSTALL) gdk.def $(DESTDIR)$(libdir)/gdk-win32-2.0.def
+uninstall-def-file:
+	-rm $(DESTDIR)$(libdir)/gdk-win32-2.0.def
 else
-install-libtool-import-lib:
-uninstall-libtool-import-lib:
+install-def-file:
+uninstall-def-file:
 endif
 
 if MS_LIB_AVAILABLE
@@ -273,9 +273,9 @@ stamp-gc-h: $(top_builddir)/config.status
 
 DISTCLEANFILES = gdkconfig.h stamp-gc-h
 
-install-data-local: install-ms-lib install-libtool-import-lib
+install-data-local: install-ms-lib install-def-file
 
-uninstall-local: uninstall-ms-lib uninstall-libtool-import-lib
+uninstall-local: uninstall-ms-lib uninstall-def-file
 	rm -f $(DESTDIR)$(configexecincludedir)/gdkconfig.h
 
 # if srcdir!=builddir, clean out maintainer-clean files from builddir

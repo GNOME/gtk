@@ -1,3 +1,11 @@
+2005-06-26  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/Makefile.am
+	* gtk/Makefile.am: Current GNU tools do understand the PRIVATE
+	keyword, so no need to remove those entries from the import
+	library. libtool installs the .dll.a import library itself, so no
+	need to do it here. Install the .def file.
+
 Sun Jun 26 00:04:36 2005  Manish Singh  <yosh@gimp.org>
 
 	* gdk/gdkevents.c (gdk_event_get_time, gdk_event_get_state): add

@@ -45,17 +45,13 @@ gtk_win32res_lo = gtk-win32res.lo
 gtk-win32res.lo : gtk-win32.rc
 	$(top_srcdir)/build/win32/lt-compile-resource gtk-win32.rc gtk-win32res.lo
 
-install-libtool-import-lib:
-	for entry in `grep PRIVATE gtk.def | sed -e 's/PRIVATE//'`; do \
-	  file=`$(NM) -A .libs/libgtk-win32-$(GTK_API_VERSION).dll.a | tr -d '\r' | grep -E $$entry'$$' | head -n 1 | cut -d: -f2`; \
-	  $(AR) d .libs/libgtk-win32-$(GTK_API_VERSION).dll.a $$file; \
-	done
-	$(INSTALL) .libs/libgtk-win32-$(GTK_API_VERSION).dll.a $(DESTDIR)$(libdir)
-uninstall-libtool-import-lib:
-	-rm $(DESTDIR)$(libdir)/libtk-win32-$(GTK_API_VERSION).dll.a
+install-def-file: gtk.def
+	$(INSTALL) $(gtk_def) $(DESTDIR)$(libdir)/gtk-win32-2.0.def
+uninstall-def-file:
+	-rm $(DESTDIR)$(libdir)/gtk-win32-2.0.def
 else
-install-libtool-import-lib:
-uninstall-libtool-import-lib:
+install-def-file:
+uninstall-def-file:
 endif
 
 if MS_LIB_AVAILABLE
@@ -680,7 +676,7 @@ if DISABLE_EXPLICIT_DEPS
 endif
 
 # Install a RC file for the default GTK+ theme, and key themes
-install-data-local: install-ms-lib install-libtool-import-lib
+install-data-local: install-ms-lib install-def-file
 	$(mkinstalldirs) $(DESTDIR)$(datadir)/themes/Default/gtk-2.0
 	$(INSTALL_DATA) $(srcdir)/gtkrc.default $(DESTDIR)$(datadir)/themes/Default/gtk-2.0/gtkrc
 	$(mkinstalldirs) $(DESTDIR)$(datadir)/themes/Default/gtk-2.0-key
@@ -688,7 +684,7 @@ install-data-local: install-ms-lib install-libtool-import-lib
 	$(mkinstalldirs) $(DESTDIR)$(datadir)/themes/Emacs/gtk-2.0-key
 	$(INSTALL_DATA) $(srcdir)/gtkrc.key.emacs $(DESTDIR)$(datadir)/themes/Emacs/gtk-2.0-key/gtkrc
 
-uninstall-local: uninstall-ms-lib uninstall-libtool-import-lib
+uninstall-local: uninstall-ms-lib uninstall-def-file
 	rm -f $(DESTDIR)$(datadir)/themes/Default/gtk-2.0/gtkrc
 	rm -f $(DESTDIR)$(datadir)/themes/Default/gtk-2.0-key/gtkrc
 	rm -f $(DESTDIR)$(datadir)/themes/Emacs/gtk-2.0-key/gtkrc
