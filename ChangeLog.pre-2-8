@@ -1,12 +1,39 @@
 2005-06-27  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkmenushell.c (gtk_menu_shell_grab_broken): Ignore
+	GrabBroken events which are caused by overgrabbing inside
+	the application; menus rely on these for their operation.
+	
+	* gdk/gdkevents.h (struct _GdkEventGrabBroken): Add a 
+	grab_window field.
+
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate): Set
+	grab_window to NULL when generating GrabBroken events for
+	WM_KILLFOCUS messages.
+
+	* gdk/x11/gdkmain-x11.c (_gdk_xgrab_check_unmap) 
+	(_gdk_xgrab_check_destroy): Set grab_window to NULL when
+	generating GrabBroken events when the grab window becomes
+	unviewable or is destroyed.
+
+	* gdk/x11/gdkmain-x11.c (gdk_pointer_grab, gdk_keyboard_grab): 
+	Generate GrabBroken events when overriding a grab inside
+	the application. In this case, set grab_window to the new
+	grab_window.
+	
+2005-06-27  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkbutton.c (gtk_real_button_activate): Continue
 	to activate even if we can't grab the keyboard.
 	(gtk_button_finish_activate): Only ungrab when we have
 	a keyboard grab.  (#172998, William Jon McCann)
 
+2005-06-27  Matthias Clasen  <mclasen@redhat.com>
+
 	* modules/input/gtkimcontextxim.c (gtk_im_context_xim_finalize): 
 	Avoid a segfault. (#309054)
+
+2005-06-27  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/x11/gdkdisplay-x11.h (struct _GdkDisplayX11): Add
 	fields for grab timestamps.

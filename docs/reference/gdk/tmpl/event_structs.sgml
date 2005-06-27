@@ -438,6 +438,9 @@ again.
 @send_event: %TRUE if the event was sent explicitly (e.g. using <function>XSendEvent</function>).
 @keyboard: %TRUE if a keyboard grab was broken, %FALSE if a pointer 
   grab was broken
+@grab_window: If this event is caused by another grab in the same 
+  application, @grab_window contains the new grab window. Otherwise
+  @grab_window id %NULL.
 @Since: 2.8
 
 <!-- ##### ENUM GdkScrollDirection ##### -->

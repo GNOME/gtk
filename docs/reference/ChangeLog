@@ -1,3 +1,7 @@
+2005-06-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/tmpl/event_structs.sgml: Update docs.
+
 2005-06-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/gdk-sections.txt: Add GdkEventGrabBroken.

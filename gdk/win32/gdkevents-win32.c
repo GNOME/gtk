@@ -2926,6 +2926,7 @@ gdk_event_translate (GdkDisplay *display,
 	  event->grab_broken.window = p_grab_window;
 	  event->grab_broken.send_event = 0;
 	  event->grab_broken.keyboard = FALSE;
+	  event->grab_broken.grab_window = NULL;
 	  
           append_event (display, event);
 	}
@@ -2936,6 +2937,7 @@ gdk_event_translate (GdkDisplay *display,
 	  event->grab_broken.window = k_grab_window;
 	  event->grab_broken.send_event = 0;
 	  event->grab_broken.keyboard = TRUE;
+	  event->grab_broken.grab_window = NULL;
 
           append_event (display, event);
 	}

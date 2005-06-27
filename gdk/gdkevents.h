@@ -436,6 +436,7 @@ struct _GdkEventGrabBroken {
   GdkWindow *window;
   gint8 send_event;
   gboolean keyboard;
+  GdkWindow *grab_window;
 };
 
 /* Event types for DND */

@@ -611,14 +611,15 @@ static gboolean
 gtk_menu_shell_grab_broken (GtkWidget          *widget,
 			    GdkEventGrabBroken *event)
 {
-  GtkMenuShell *menu_shell;
+  GtkMenuShell *menu_shell = GTK_MENU_SHELL (widget);
 
-  g_return_val_if_fail (GTK_IS_MENU_SHELL (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  menu_shell = GTK_MENU_SHELL (widget);
-  if (menu_shell->active)
+  if (menu_shell->have_xgrab && event->grab_window == NULL)
     {
+      /* Unset the active menu item so gtk_menu_popdown() doesn't see it.
+       */
+      
+      gtk_menu_shell_deselect (menu_shell);
+      
       gtk_menu_shell_deactivate (menu_shell);
       g_signal_emit (menu_shell, menu_shell_signals[SELECTION_DONE], 0);
     }
