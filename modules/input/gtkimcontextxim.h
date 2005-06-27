@@ -23,10 +23,7 @@
 #include <gtk/gtkimcontext.h>
 #include "x11/gdkx.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 extern GType gtk_type_im_context_xim;
 
@@ -51,9 +48,7 @@ GtkIMContext *gtk_im_context_xim_new (void);
 
 void gtk_im_context_xim_shutdown (void);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 
 #endif /* __GTK_IM_CONTEXT_XIM_H__ */
