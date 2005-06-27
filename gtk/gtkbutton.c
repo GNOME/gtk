@@ -81,6 +81,8 @@ struct _GtkButtonPrivate
   GtkWidget   *image;
   guint        align_set : 1;
   guint        image_is_stock : 1;
+  guint        has_grab : 1;
+  guint32      grab_time;
 };
 
 static void gtk_button_class_init     (GtkButtonClass   *klass);
@@ -1360,21 +1362,29 @@ static void
 gtk_real_button_activate (GtkButton *button)
 {
   GtkWidget *widget = GTK_WIDGET (button);
-  
+  GtkButtonPrivate *priv;
+  guint32 time;
+
+  priv = GTK_BUTTON_GET_PRIVATE (button);
+
   if (GTK_WIDGET_REALIZED (button) && !button->activate_timeout)
     {
-      if (gdk_keyboard_grab (button->event_window, TRUE,
-			     gtk_get_current_event_time ()) == 0)
+      time = gtk_get_current_event_time ();
+      if (gdk_keyboard_grab (button->event_window, TRUE, time) == 
+	  GDK_GRAB_SUCCESS)
 	{
-	  gtk_grab_add (widget);
-	  
-	  button->activate_timeout = g_timeout_add (ACTIVATE_TIMEOUT,
-						    button_activate_timeout,
-						    button);
-	  button->button_down = TRUE;
-	  gtk_button_update_state (button);
-	  gtk_widget_queue_draw (GTK_WIDGET (button));
+	  priv->has_grab = TRUE;
+	  priv->grab_time = time;
 	}
+
+      gtk_grab_add (widget);
+      
+      button->activate_timeout = g_timeout_add (ACTIVATE_TIMEOUT,
+						button_activate_timeout,
+						button);
+      button->button_down = TRUE;
+      gtk_button_update_state (button);
+      gtk_widget_queue_draw (GTK_WIDGET (button));
     }
 }
 
@@ -1383,12 +1393,18 @@ gtk_button_finish_activate (GtkButton *button,
 			    gboolean   do_it)
 {
   GtkWidget *widget = GTK_WIDGET (button);
+  GtkButtonPrivate *priv;
   
+  priv = GTK_BUTTON_GET_PRIVATE (button);
+
   g_source_remove (button->activate_timeout);
   button->activate_timeout = 0;
 
-  gdk_display_keyboard_ungrab (gtk_widget_get_display (widget),
-			       gtk_get_current_event_time ());
+  if (priv->has_grab)
+    {
+      gdk_display_keyboard_ungrab (gtk_widget_get_display (widget),
+				   priv->grab_time);
+    }
   gtk_grab_remove (widget);
 
   button->button_down = FALSE;
