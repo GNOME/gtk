@@ -191,7 +191,8 @@ gtk_vruler_draw_ticks (GtkRuler *ruler)
   lower = ruler->lower / ruler->metric->pixels_per_unit;
 
   if ((upper - lower) == 0)
-    return;
+goto out;
+
   increment = (gdouble) width / (upper - lower);
 
   /* determine the scale
@@ -273,6 +274,7 @@ gtk_vruler_draw_ticks (GtkRuler *ruler)
     }
 
   cairo_fill (cr);
+out:
   cairo_destroy (cr);
 
   g_object_unref (layout);
