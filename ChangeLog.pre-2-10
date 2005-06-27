@@ -1,3 +1,9 @@
+2005-06-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkmenu.c (gtk_menu_grab_notify): Cancel menus when 
+	they are grab-shadowed by something thats not a 
+	submenu.  (#145416, Euan MacGregor)
+
 2005-06-27  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtk[hv]ruler.c (gtk_[hv]ruler_draw_ticks): 
