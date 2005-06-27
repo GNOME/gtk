@@ -567,20 +567,26 @@ gtk_im_context_xim_finalize (GObject *obj)
 
   if (context_xim->im_info) 
     {
-      GdkDisplay *display;
-      XIMCallback im_destroy_callback;
+      if (context_xim->im_info->reconnecting)
+	{
+	  GdkDisplay *display;
 
-      display = gdk_screen_get_display (context_xim->im_info->screen);
-      XUnregisterIMInstantiateCallback (GDK_DISPLAY_XDISPLAY (display),
-					NULL, NULL, NULL,
-					xim_instantiate_callback,
-					(XPointer)context_xim->im_info);
+	  display = gdk_screen_get_display (context_xim->im_info->screen);
+	  XUnregisterIMInstantiateCallback (GDK_DISPLAY_XDISPLAY (display),
+					    NULL, NULL, NULL,
+					    xim_instantiate_callback,
+					    (XPointer)context_xim->im_info);
+	}
+      else
+	{
+	  XIMCallback im_destroy_callback;
 
-      im_destroy_callback.client_data = NULL;
-      im_destroy_callback.callback = NULL;
-      XSetIMValues (context_xim->im_info->im,
-		    XNDestroyCallback, &im_destroy_callback,
-		    NULL);
+	  im_destroy_callback.client_data = NULL;
+	  im_destroy_callback.callback = NULL;
+	  XSetIMValues (context_xim->im_info->im,
+			XNDestroyCallback, &im_destroy_callback,
+			NULL);
+	}
     }
 
   set_ic_client_window (context_xim, NULL);

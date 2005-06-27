@@ -488,6 +488,11 @@ _gdk_x11_display_is_root_window (GdkDisplay *display,
   return FALSE;
 }
 
+#define XSERVER_TIME_IS_LATER(time1, time2)                        \
+  ( (( time1 > time2 ) && ( time1 - time2 < ((guint32)-1)/2 )) ||  \
+    (( time1 < time2 ) && ( time2 - time1 > ((guint32)-1)/2 ))     \
+  )
+
 /**
  * gdk_display_pointer_ungrab:
  * @display: a #GdkDisplay.
@@ -502,16 +507,21 @@ gdk_display_pointer_ungrab (GdkDisplay *display,
 			    guint32     time)
 {
   Display *xdisplay;
-  
+  GdkDisplayX11 *display_x11;
+
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
+  display_x11 = GDK_DISPLAY_X11 (display);
   xdisplay = GDK_DISPLAY_XDISPLAY (display);
   
   _gdk_input_ungrab_pointer (display, time);
   XUngrabPointer (xdisplay, time);
   XFlush (xdisplay);
-  
-  GDK_DISPLAY_X11 (display)->pointer_xgrab_window = NULL;
+
+  if (time == GDK_CURRENT_TIME || 
+      display_x11->pointer_xgrab_time == GDK_CURRENT_TIME ||
+      !XSERVER_TIME_IS_LATER (display_x11->pointer_xgrab_time, time))
+    display_x11->pointer_xgrab_window = NULL;
 }
 
 /**
@@ -546,15 +556,20 @@ gdk_display_keyboard_ungrab (GdkDisplay *display,
 			     guint32     time)
 {
   Display *xdisplay;
+  GdkDisplayX11 *display_x11;
   
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
+  display_x11 = GDK_DISPLAY_X11 (display);
   xdisplay = GDK_DISPLAY_XDISPLAY (display);
   
   XUngrabKeyboard (xdisplay, time);
   XFlush (xdisplay);
   
-  GDK_DISPLAY_X11 (display)->keyboard_xgrab_window = NULL;
+  if (time == GDK_CURRENT_TIME || 
+      display_x11->keyboard_xgrab_time == GDK_CURRENT_TIME ||
+      !XSERVER_TIME_IS_LATER (display_x11->keyboard_xgrab_time, time))
+    display_x11->keyboard_xgrab_window = NULL;
 }
 
 /**

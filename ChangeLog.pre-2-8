@@ -1,5 +1,18 @@
 2005-06-27  Matthias Clasen  <mclasen@redhat.com>
 
+	* modules/input/gtkimcontextxim.c (gtk_im_context_xim_finalize): 
+	Avoid a segfault. (#309054)
+
+	* gdk/x11/gdkdisplay-x11.h (struct _GdkDisplayX11): Add
+	fields for grab timestamps.
+
+	* gdk/x11/gdkmain-x11.c (gdk_pointer_grab, gdk_keyboard_grab): 
+	Store grab timestamps when grabbing.
+	
+	* gdk/x11/gdkdisplay-x11.c (gdk_display_keyboard_ungrab) 
+	(gdk_display_pointer_ungrab): Don't unset the grab_window
+	if the timestamps indicate that the ungrab will fails.
+
 	* gtk/gtkmenu.c (gtk_menu_grab_notify): Cancel menus when 
 	they are grab-shadowed by something thats not a 
 	submenu.  (#145416, Euan MacGregor)

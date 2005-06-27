@@ -251,17 +251,19 @@ gdk_pointer_grab (GdkWindow *	  window,
   if (return_val == GrabSuccess)
     {
       GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (GDK_WINDOW_DISPLAY (window));
-#if 0
       if (display_x11->pointer_xgrab_window != NULL)
 	{
+	  g_print ("overgrab pointer\n");
+#if 0
 	  generate_grab_broken_event (GDK_WINDOW (display_x11->pointer_xgrab_window),
 				      FALSE);
-	}
 #endif
+	}
 
       display_x11->pointer_xgrab_window = (GdkWindowObject *)window;
       display_x11->pointer_xgrab_serial = serial;
       display_x11->pointer_xgrab_owner_events = owner_events;
+      display_x11->pointer_xgrab_time = time;
     }
 
   return gdk_x11_convert_grab_status (return_val);
@@ -356,16 +358,18 @@ gdk_keyboard_grab (GdkWindow *	   window,
   if (return_val == GrabSuccess)
     {
       GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (gdk_drawable_get_display (window));
-#if 0
       if (display_x11->keyboard_xgrab_window != NULL)
 	{
+	  g_print ("overgrab keyboard\n");
+#if 0
 	  generate_grab_broken_event (GDK_WINDOW (display_x11->keyboard_xgrab_window),
 				      TRUE);
-	}
 #endif
+	}
       display_x11->keyboard_xgrab_window = (GdkWindowObject *)window;
       display_x11->keyboard_xgrab_serial = serial;
       display_x11->keyboard_xgrab_owner_events = owner_events;
+      display_x11->keyboard_xgrab_time = time;      
     }
 
   return gdk_x11_convert_grab_status (return_val);
@@ -435,6 +439,7 @@ _gdk_xgrab_check_unmap (GdkWindow *window,
 
       if (tmp)
 	{	  
+	  g_print ("pointer grab broken from check unmap\n");
 	  generate_grab_broken_event (GDK_WINDOW (display_x11->pointer_xgrab_window),
 				      FALSE);
 	  display_x11->pointer_xgrab_window = NULL;  
@@ -453,6 +458,7 @@ _gdk_xgrab_check_unmap (GdkWindow *window,
 
       if (tmp)
 	{
+	  g_print ("keyboard grab broken from check unmap\n");
 	  generate_grab_broken_event (GDK_WINDOW (display_x11->keyboard_xgrab_window),
 				      TRUE);
 	  display_x11->keyboard_xgrab_window = NULL;  
@@ -474,6 +480,7 @@ _gdk_xgrab_check_destroy (GdkWindow *window)
   
   if ((GdkWindowObject *)window == display_x11->pointer_xgrab_window)
     {
+      g_print ("pointer grab broken from check destroy\n");
       generate_grab_broken_event (GDK_WINDOW (display_x11->pointer_xgrab_window),
 				  FALSE);
       display_x11->pointer_xgrab_window = NULL;
@@ -481,6 +488,7 @@ _gdk_xgrab_check_destroy (GdkWindow *window)
 
   if ((GdkWindowObject *)window ==  display_x11->keyboard_xgrab_window)
     {
+	  g_print ("keyboard grab broken from check destroy\n");
       generate_grab_broken_event (GDK_WINDOW (display_x11->keyboard_xgrab_window),
 				  TRUE);
       display_x11->keyboard_xgrab_window = NULL;

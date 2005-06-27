@@ -88,10 +88,12 @@ struct _GdkDisplayX11
   GdkWindowObject *pointer_xgrab_window;
   gulong pointer_xgrab_serial;
   gboolean pointer_xgrab_owner_events;
+  guint32 pointer_xgrab_time;
 
   GdkWindowObject *keyboard_xgrab_window;
   gulong keyboard_xgrab_serial;
   gboolean keyboard_xgrab_owner_events;
+  guint32 keyboard_xgrab_time;
 
   /* drag and drop information */
   GdkDragContext *current_dest_drag;
