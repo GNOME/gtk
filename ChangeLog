@@ -1,3 +1,8 @@
+2005-06-27  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtk[hv]ruler.c (gtk_[hv]ruler_draw_ticks): 
+	Fix indentation.
+
 2005-06-27  Kjartan Maraas  <kmaraas@gnome.org>
 
 	* gtk/gtkhruler.c: (gtk_hruler_draw_ticks): Fix leaks

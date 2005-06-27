@@ -190,7 +190,7 @@ gtk_hruler_draw_ticks (GtkRuler *ruler)
   lower = ruler->lower / ruler->metric->pixels_per_unit;
 
   if ((upper - lower) == 0) 
-goto out;
+    goto out;
 
   increment = (gdouble) width / (upper - lower);
 
