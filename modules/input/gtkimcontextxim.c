@@ -565,6 +565,24 @@ gtk_im_context_xim_finalize (GObject *obj)
 
   context_xim->finalizing = TRUE;
 
+  if (context_xim->im_info) 
+    {
+      GdkDisplay *display;
+      XIMCallback im_destroy_callback;
+
+      display = gdk_screen_get_display (context_xim->im_info->screen);
+      XUnregisterIMInstantiateCallback (GDK_DISPLAY_XDISPLAY (display),
+					NULL, NULL, NULL,
+					xim_instantiate_callback,
+					(XPointer)context_xim->im_info);
+
+      im_destroy_callback.client_data = NULL;
+      im_destroy_callback.callback = NULL;
+      XSetIMValues (context_xim->im_info->im,
+		    XNDestroyCallback, &im_destroy_callback,
+		    NULL);
+    }
+
   set_ic_client_window (context_xim, NULL);
 
   g_free (context_xim->locale);
