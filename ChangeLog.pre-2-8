@@ -1,3 +1,9 @@
+2005-06-26  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkmenu.c (gtk_menu_paint): Pay attention to the
+	scroll offset when drawing the box.  (#308834, Tom von 
+	Schwerdtner)
+
 2005-06-26  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/Makefile.am

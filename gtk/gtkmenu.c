@@ -1289,7 +1289,7 @@ gtk_menu_popup (GtkMenu		    *menu,
   GtkMenuPrivate *priv;
 
   g_return_if_fail (GTK_IS_MENU (menu));
-  
+
   widget = GTK_WIDGET (menu);
   menu_shell = GTK_MENU_SHELL (menu);
   priv = gtk_menu_get_private (menu);
@@ -2502,7 +2502,8 @@ gtk_menu_paint (GtkWidget      *widget,
 		     GTK_STATE_NORMAL,
 		     GTK_SHADOW_OUT,
 		     NULL, widget, "menu",
-		     -border_x, -border_y, width, height);
+		     - border_x, menu->scroll_offset - border_y, 
+		     width, height);
     }
 }
 
