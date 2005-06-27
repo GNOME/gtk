@@ -174,6 +174,8 @@ static gboolean gtk_menu_leave_notify      (GtkWidget        *widget,
 					    GdkEventCrossing *event);
 static void     gtk_menu_scroll_to         (GtkMenu          *menu,
 					    gint              offset);
+static void     gtk_menu_grab_notify       (GtkWidget        *widget,
+					    gboolean          was_grabbed);
 
 static void     gtk_menu_stop_scrolling        (GtkMenu  *menu);
 static void     gtk_menu_remove_scroll_timeout (GtkMenu  *menu);
@@ -500,6 +502,7 @@ gtk_menu_class_init (GtkMenuClass *class)
   widget_class->style_set = gtk_menu_style_set;
   widget_class->focus = gtk_menu_focus;
   widget_class->can_activate_accel = gtk_menu_real_can_activate_accel;
+  widget_class->grab_notify = gtk_menu_grab_notify;
 
   container_class->remove = gtk_menu_remove;
   container_class->get_child_property = gtk_menu_get_child_property;
@@ -4376,6 +4379,17 @@ gtk_menu_get_for_attach_widget (GtkWidget *widget)
   
   list = g_object_get_data (G_OBJECT (widget), ATTACHED_MENUS);
   return list;
+}
+
+static void
+gtk_menu_grab_notify (GtkWidget *widget,
+		      gboolean   was_grabbed)
+{
+  if (!was_grabbed)
+    {
+      if (!GTK_IS_MENU (gtk_grab_get_current ()))
+	gtk_menu_shell_cancel (GTK_MENU_SHELL (widget));
+    }
 }
 
 #define __GTK_MENU_C__
