@@ -1,3 +1,9 @@
+2005-06-28  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkiconview.c (gtk_icon_view_calculate_item_size2): 
+	Make sure that cell boxes are always completely inside
+	the item area. 
+
 2005-06-27  Matthias Clasen  <mclasen@redhat.com>
 
 	* demos/gtk-demo/main.c (create_tree): Make the list of

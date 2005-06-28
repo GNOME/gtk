@@ -2662,7 +2662,7 @@ gtk_icon_view_calculate_item_size2 (GtkIconView     *icon_view,
 
       if (icon_view->priv->orientation == GTK_ORIENTATION_HORIZONTAL)
 	{
-	  cell_area.width = item->box[i].width;
+	  cell_area.width = item->box[info->position].width;
 	  cell_area.height = item->height;
 	}
       else
@@ -2673,21 +2673,26 @@ gtk_icon_view_calculate_item_size2 (GtkIconView     *icon_view,
 
       gtk_cell_renderer_get_size (info->cell, GTK_WIDGET (icon_view), 
 				  &cell_area,
-				  &item->box[i].x, &item->box[i].y,
-				  &item->box[i].width, &item->box[i].height);
-      item->box[i].x += cell_area.x;
-      item->box[i].y += cell_area.y;
+				  &item->box[info->position].x, &item->box[info->position].y,
+				  &item->box[info->position].width, &item->box[info->position].height);
 
+      item->box[info->position].x += cell_area.x;
+      item->box[info->position].y += cell_area.y;
       if (icon_view->priv->orientation == GTK_ORIENTATION_HORIZONTAL)
 	{
-	  item->before[i] = item->box[i].x - cell_area.x;
-	  item->after[i] = cell_area.width - item->box[i].width - item->before[i];
+	  item->before[info->position] = item->box[info->position].x - cell_area.x;
+	  item->after[info->position] = cell_area.width - item->box[info->position].width - item->before[info->position];
 	  cell_area.x += cell_area.width + spacing;
 	}
       else
 	{
-	  item->before[i] = item->box[i].y - cell_area.y;
-	  item->after[i] = cell_area.height - item->box[i].height - item->before[i];
+	  if (item->box[info->position].width > item->width)
+	    {
+	      item->width = item->box[info->position].width;
+	      cell_area.width = item->width;
+	    }
+	  item->before[info->position] = item->box[info->position].y - cell_area.y;
+	  item->after[info->position] = cell_area.height - item->box[info->position].height - item->before[info->position];
 	  cell_area.y += cell_area.height + spacing;
 	}
     }
@@ -2814,7 +2819,7 @@ gtk_icon_view_paint_item (GtkIconView     *icon_view,
 			  cell_area.width, cell_area.height);
 
       gtk_icon_view_get_cell_box (icon_view, item, info, &box);
-
+	  
       gdk_draw_rectangle (drawable,
 			  GTK_WIDGET (icon_view)->style->black_gc,
 			  FALSE,
