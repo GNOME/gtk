@@ -1,3 +1,7 @@
+2005-06-28  Ross Burton  <ross@burtonini.com>
+
+	* gtk/tmpl/gtkcomboboxentry.sgml: Clarify.
+
 2005-06-27  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/tmpl/event_structs.sgml: Update docs.
