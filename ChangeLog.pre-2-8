@@ -1,5 +1,11 @@
 2005-06-27  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktextlayout.c (gtk_text_layout_move_iter_to_line_end): 
+	Fix positioning at the end of the line for lines ending
+	in invisible characters.
+	(gtk_text_layout_get_line_display): Set display->layout 
+	to a PangoLayout, even for totally invisible lines. 
+
 	* gtk/gtkmenushell.c (gtk_menu_shell_grab_broken): Ignore
 	GrabBroken events which are caused by overgrabbing inside
 	the application; menus rely on these for their operation.

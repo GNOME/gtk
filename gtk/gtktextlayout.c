@@ -1847,7 +1847,14 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
    * with sequences of invisible lines.
    */
   if (totally_invisible_line (layout, line, &iter))
-    return display;
+    {
+      if (display->direction == GTK_TEXT_DIR_RTL)
+	display->layout = pango_layout_new (layout->rtl_context);
+      else
+	display->layout = pango_layout_new (layout->ltr_context);
+      
+      return display;
+    }
 
   /* Find the bidi base direction */
   base_dir = line->dir_propagated_forward;
@@ -2955,9 +2962,10 @@ gtk_text_layout_move_iter_to_line_end (GtkTextLayout *layout,
 	   * are inside a paragraph to avoid going to next line on a
 	   * forced break not at whitespace. Real fix is to keep track
 	   * of whether marks are at leading or trailing edge?  */
-          if (direction > 0 && layout_line->length > 0 && !gtk_text_iter_ends_line (iter))
+          if (direction > 0 && layout_line->length > 0 && 
+	      !gtk_text_iter_ends_line (iter) && 
+	      !_gtk_text_btree_char_is_invisible (iter))
             gtk_text_iter_backward_char (iter);
-
           break;
         }
       
