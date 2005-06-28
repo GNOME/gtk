@@ -696,6 +696,7 @@ create_tree (void)
   GtkTreeViewColumn *column;
   GtkTreeStore *model;
   GtkTreeIter iter;
+  GtkWidget *box, *label, *scrolled_window;
 
   Demo *d = testgtk_demos;
 
@@ -763,11 +764,29 @@ create_tree (void)
   gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view),
 			       GTK_TREE_VIEW_COLUMN (column));
 
+  gtk_tree_model_get_iter_first (GTK_TREE_MODEL (model), &iter);
+  gtk_tree_selection_select_iter (GTK_TREE_SELECTION (selection), &iter);
+
   g_signal_connect (selection, "changed", G_CALLBACK (selection_cb), model);
   g_signal_connect (tree_view, "row_activated", G_CALLBACK (row_activated_cb), model);
 
-  gtk_tree_view_expand_all (GTK_TREE_VIEW (tree_view));
-  return tree_view;
+  gtk_tree_view_collapse_all (GTK_TREE_VIEW (tree_view));
+  gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (tree_view), FALSE);
+  				    
+  scrolled_window = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
+				  GTK_POLICY_NEVER,
+				  GTK_POLICY_AUTOMATIC);
+  gtk_container_add (GTK_CONTAINER (scrolled_window), tree_view);
+
+  label = gtk_label_new ("Widget (double click for demo)");
+
+  box = gtk_notebook_new ();
+  gtk_notebook_append_page (GTK_NOTEBOOK (box), scrolled_window, label);
+
+  gtk_widget_grab_focus (tree_view);
+
+  return box;
 }
 
 static void
