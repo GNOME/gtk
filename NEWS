@@ -1,3 +1,32 @@
+Overview of Changes from GTK+ 2.7.0 to GTK+ 2.7.1
+=================================================
+* GtkTreeView
+ - Change the keynav for header reordering and resizing 
+   to Alt-arrows and Shift-Alt-arrows  [Calum Benson]
+* GtkTextView
+ - Make movement by paragraphs up/down symmetric [Behnam 
+   Esfahbod]
+ - Improve invisible text support [Matthias Clasen]
+* Some new stock items: GTK_STOCK_INFO, GTK_STOCK_FULLSCREEN,
+  GTK_STOCK_LEAVE_FULLSCREEN [Kristof Vansant]
+* Handle broken grabs in many places [John Ehresman, Matthias]
+* GDK
+ - Add a function to move a region [Søren Sandmann]
+ - Fix endianness issues in the pixbuf drawing 
+   code [David Zeuthen, Owen Taylor]
+ - Add a GrabBroken event that is emitted when grabs
+   are broken [Simon Cooke, John Ehresman, Matthias]
+ - Track implicit grabs [Matthias]
+* Win32 
+ - Improve and simplify line segment rendering [Tor Lillqvist] 
+* Bug fixes [Georg Schwarz, Fabricio Barros Cabral, 
+  Benoit Carpentier, Markku Vire, Ryan Lortie, Matthias,
+  Morten Welinder, Dan Winship, Manish Singh, Tom von
+  Schwerdtner, Kjartan Maraas, Euan MacGregor, William Jon 
+  McCann]
+* Documentation improvements [Matthias, Ross Burton]
+* New and improved translations (es,et,nl,sk,th,zh_TW)
+
 Overview of Changes from GTK+ 2.6.x to GTK+ 2.7.0
 =================================================
 * GtkTreeView
