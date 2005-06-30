@@ -1,5 +1,8 @@
 2005-06-30  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/x11/gdkvisual-x11.c (gdk_visual_decompose_mask): Avoid
+	infinite loop if a mask is zero.  (#309222, David Saxton)
+
 	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_fetch_child): 
 	Clarify the code, gcc 4 complains about predecrement in  MAX().
 
