@@ -1,3 +1,9 @@
+Thu Jun 30 14:17:24 2005  Manish Singh  <yosh@gimp.org>
+
+	* gdk/x11/gdkprivate-x11.h: declare _gdk_xgrab_check_button_event.
+
+	* gtk/gtkbutton.c: fix signature of gtk_button_grab_broken.
+
 2005-06-30  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/x11/gdkvisual-x11.c (gdk_visual_decompose_mask): Avoid

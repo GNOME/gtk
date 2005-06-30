@@ -85,50 +85,50 @@ struct _GtkButtonPrivate
   guint32      grab_time;
 };
 
-static void gtk_button_class_init     (GtkButtonClass   *klass);
-static void gtk_button_init           (GtkButton        *button);
-static void gtk_button_destroy        (GtkObject        *object);
-static void gtk_button_set_property   (GObject         *object,
-                                       guint            prop_id,
-                                       const GValue    *value,
-                                       GParamSpec      *pspec);
-static void gtk_button_get_property   (GObject         *object,
-                                       guint            prop_id,
-                                       GValue          *value,
-                                       GParamSpec      *pspec);
-static void gtk_button_screen_changed (GtkWidget        *widget,
-				       GdkScreen        *previous_screen);
-static void gtk_button_realize        (GtkWidget        *widget);
-static void gtk_button_unrealize      (GtkWidget        *widget);
-static void gtk_button_map            (GtkWidget        *widget);
-static void gtk_button_unmap          (GtkWidget        *widget);
-static void gtk_button_size_request   (GtkWidget        *widget,
-				       GtkRequisition   *requisition);
-static void gtk_button_size_allocate  (GtkWidget        *widget,
-				       GtkAllocation    *allocation);
-static gint gtk_button_expose         (GtkWidget        *widget,
-				       GdkEventExpose   *event);
-static gint gtk_button_button_press   (GtkWidget        *widget,
-				       GdkEventButton   *event);
-static gint gtk_button_button_release (GtkWidget        *widget,
-				       GdkEventButton   *event);
-static gint gtk_button_grab_broken    (GtkWidget        *widget,
-				       GdkEventAny      *event);
-static gint gtk_button_key_release    (GtkWidget        *widget,
-				       GdkEventKey      *event);
-static gint gtk_button_enter_notify   (GtkWidget        *widget,
-				       GdkEventCrossing *event);
-static gint gtk_button_leave_notify   (GtkWidget        *widget,
-				       GdkEventCrossing *event);
-static void gtk_real_button_pressed   (GtkButton        *button);
-static void gtk_real_button_released  (GtkButton        *button);
-static void gtk_real_button_activate  (GtkButton         *button);
-static void gtk_button_update_state   (GtkButton        *button);
-static void gtk_button_add            (GtkContainer   *container,
-			               GtkWidget      *widget);
-static GType gtk_button_child_type    (GtkContainer     *container);
-static void gtk_button_finish_activate (GtkButton *button,
-					gboolean   do_it);
+static void gtk_button_class_init     (GtkButtonClass     *klass);
+static void gtk_button_init           (GtkButton          *button);
+static void gtk_button_destroy        (GtkObject          *object);
+static void gtk_button_set_property   (GObject            *object,
+                                       guint               prop_id,
+                                       const GValue       *value,
+                                       GParamSpec         *pspec);
+static void gtk_button_get_property   (GObject            *object,
+                                       guint               prop_id,
+                                       GValue             *value,
+                                       GParamSpec         *pspec);
+static void gtk_button_screen_changed (GtkWidget          *widget,
+				       GdkScreen          *previous_screen);
+static void gtk_button_realize        (GtkWidget          *widget);
+static void gtk_button_unrealize      (GtkWidget          *widget);
+static void gtk_button_map            (GtkWidget          *widget);
+static void gtk_button_unmap          (GtkWidget          *widget);
+static void gtk_button_size_request   (GtkWidget          *widget,
+				       GtkRequisition     *requisition);
+static void gtk_button_size_allocate  (GtkWidget          *widget,
+				       GtkAllocation      *allocation);
+static gint gtk_button_expose         (GtkWidget          *widget,
+				       GdkEventExpose     *event);
+static gint gtk_button_button_press   (GtkWidget          *widget,
+				       GdkEventButton     *event);
+static gint gtk_button_button_release (GtkWidget          *widget,
+				       GdkEventButton     *event);
+static gint gtk_button_grab_broken    (GtkWidget          *widget,
+				       GdkEventGrabBroken *event);
+static gint gtk_button_key_release    (GtkWidget          *widget,
+				       GdkEventKey        *event);
+static gint gtk_button_enter_notify   (GtkWidget          *widget,
+				       GdkEventCrossing   *event);
+static gint gtk_button_leave_notify   (GtkWidget          *widget,
+				       GdkEventCrossing   *event);
+static void gtk_real_button_pressed   (GtkButton          *button);
+static void gtk_real_button_released  (GtkButton          *button);
+static void gtk_real_button_activate  (GtkButton          *button);
+static void gtk_button_update_state   (GtkButton          *button);
+static void gtk_button_add            (GtkContainer       *container,
+			               GtkWidget          *widget);
+static GType gtk_button_child_type    (GtkContainer       *container);
+static void gtk_button_finish_activate (GtkButton         *button,
+					gboolean           do_it);
 
 static GObject*	gtk_button_constructor (GType                  type,
 					guint                  n_construct_properties,
@@ -1266,8 +1266,8 @@ gtk_button_button_release (GtkWidget      *widget,
 }
 
 static gboolean
-gtk_button_grab_broken (GtkWidget   *widget,
-			GdkEventAny *event)
+gtk_button_grab_broken (GtkWidget          *widget,
+			GdkEventGrabBroken *event)
 {
   GtkButton *button = GTK_BUTTON (widget);
   gboolean save_in;

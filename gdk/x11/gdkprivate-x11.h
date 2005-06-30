@@ -148,9 +148,11 @@ GC _gdk_x11_gc_flush (GdkGC *gc);
 
 void _gdk_x11_initialize_locale (void);
 
-void _gdk_xgrab_check_unmap   (GdkWindow *window,
-			       gulong     serial);
-void _gdk_xgrab_check_destroy (GdkWindow *window);
+void _gdk_xgrab_check_unmap        (GdkWindow *window,
+				    gulong     serial);
+void _gdk_xgrab_check_destroy      (GdkWindow *window);
+void _gdk_xgrab_check_button_event (GdkWindow *window,
+				    XEvent    *xevent);
 
 gboolean _gdk_x11_display_is_root_window (GdkDisplay *display,
 					  Window      xroot_window);
