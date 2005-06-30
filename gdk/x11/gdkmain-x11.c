@@ -139,8 +139,9 @@ gdk_x11_convert_grab_status (gint status)
 
 static void
 generate_grab_broken_event (GdkWindow *window,
-			    GdkWindow *grab_window,
-			    gboolean   keyboard)
+			    gboolean   keyboard,
+			    gboolean   implicit,
+			    GdkWindow *grab_window)
 {
   GdkEvent event;
   
@@ -148,6 +149,7 @@ generate_grab_broken_event (GdkWindow *window,
   event.grab_broken.window = window;
   event.grab_broken.send_event = 0;
   event.grab_broken.keyboard = keyboard;
+  event.grab_broken.implicit = implicit;
   event.grab_broken.grab_window = grab_window;
 
   gdk_event_put (&event);
@@ -254,14 +256,16 @@ gdk_pointer_grab (GdkWindow *	  window,
     {
       GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (GDK_WINDOW_DISPLAY (window));
       if (display_x11->pointer_xgrab_window != NULL &&
-	  display_x11->pointer_xgrab_window != window)
+	  display_x11->pointer_xgrab_window != (GdkWindowObject *)window)
 	generate_grab_broken_event (GDK_WINDOW (display_x11->pointer_xgrab_window),
-				    window, FALSE);
+				    FALSE, display_x11->pointer_xgrab_implicit,
+				    window);
 
       display_x11->pointer_xgrab_window = (GdkWindowObject *)window;
       display_x11->pointer_xgrab_serial = serial;
       display_x11->pointer_xgrab_owner_events = owner_events;
       display_x11->pointer_xgrab_time = time;
+      display_x11->pointer_xgrab_implicit = FALSE;
     }
 
   return gdk_x11_convert_grab_status (return_val);
@@ -357,9 +361,9 @@ gdk_keyboard_grab (GdkWindow *	   window,
     {
       GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (gdk_drawable_get_display (window));
       if (display_x11->keyboard_xgrab_window != NULL &&
-	  display_x11->keyboard_xgrab_window != window)
+	  display_x11->keyboard_xgrab_window != (GdkWindowObject *)window)
 	generate_grab_broken_event (GDK_WINDOW (display_x11->keyboard_xgrab_window),
-				    window, TRUE);
+				    TRUE, FALSE, window);
       
       display_x11->keyboard_xgrab_window = (GdkWindowObject *)window;
       display_x11->keyboard_xgrab_serial = serial;
@@ -435,7 +439,8 @@ _gdk_xgrab_check_unmap (GdkWindow *window,
       if (tmp)
 	{	  
 	  generate_grab_broken_event (GDK_WINDOW (display_x11->pointer_xgrab_window),
-				      NULL, FALSE);
+				      FALSE, display_x11->pointer_xgrab_implicit, 
+				      NULL);
 	  display_x11->pointer_xgrab_window = NULL;  
 	}
     }
@@ -453,7 +458,7 @@ _gdk_xgrab_check_unmap (GdkWindow *window,
       if (tmp)
 	{
 	  generate_grab_broken_event (GDK_WINDOW (display_x11->keyboard_xgrab_window),
-				      NULL, TRUE);
+				      TRUE, FALSE, NULL);
 	  display_x11->keyboard_xgrab_window = NULL;  
 	}
     }
@@ -474,15 +479,55 @@ _gdk_xgrab_check_destroy (GdkWindow *window)
   if ((GdkWindowObject *)window == display_x11->pointer_xgrab_window)
     {
       generate_grab_broken_event (GDK_WINDOW (display_x11->pointer_xgrab_window),
-				  NULL, FALSE);
+				  FALSE, display_x11->pointer_xgrab_implicit,
+				  NULL);
       display_x11->pointer_xgrab_window = NULL;
     }
 
   if ((GdkWindowObject *)window ==  display_x11->keyboard_xgrab_window)
     {
       generate_grab_broken_event (GDK_WINDOW (display_x11->keyboard_xgrab_window),
-				  NULL, TRUE);
+				  TRUE, FALSE, NULL);
       display_x11->keyboard_xgrab_window = NULL;
+    }
+}
+
+/**
+ * _gdk_xgrab_check_button_event:
+ * @window: a #GdkWindow
+ * @event: an XEvent of type ButtonPress or ButtonRelease
+ * 
+ * Checks to see if a button event starts or ends an implicit grab.
+ **/
+void
+_gdk_xgrab_check_button_event (GdkWindow *window, 
+			       XEvent *xevent)
+{
+  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (gdk_drawable_get_display (window));
+  
+  /* track implicit grabs for button presses */
+  switch (xevent->type)
+    {
+    case ButtonPress:
+      if (!display_x11->pointer_xgrab_window)
+	{
+	  display_x11->pointer_xgrab_window = (GdkWindowObject *)window;
+	  display_x11->pointer_xgrab_serial = xevent->xany.serial;
+	  display_x11->pointer_xgrab_owner_events = FALSE;
+	  display_x11->pointer_xgrab_time = xevent->xbutton.time;
+	  display_x11->pointer_xgrab_implicit = TRUE;	  
+	}
+      break;
+    case ButtonRelease:
+      if (display_x11->pointer_xgrab_window &&
+	  display_x11->pointer_xgrab_implicit &&
+	  (xevent->xbutton.state & ~(GDK_BUTTON1_MASK << (xevent->xbutton.button - 1))) == 0)
+	{
+	  display_x11->pointer_xgrab_window = NULL;
+	}
+      break;
+    default:
+      g_assert_not_reached ();
     }
 }
 

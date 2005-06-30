@@ -1,3 +1,4 @@
+
 #ifndef __GDK_EVENTS_H__
 #define __GDK_EVENTS_H__
 
@@ -436,6 +437,7 @@ struct _GdkEventGrabBroken {
   GdkWindow *window;
   gint8 send_event;
   gboolean keyboard;
+  gboolean implicit;
   GdkWindow *grab_window;
 };
 

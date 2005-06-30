@@ -1,3 +1,27 @@
+2005-06-29  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkbutton.c (gtk_button_grab_broken): Handle broken
+	grabs.
+
+	* gtk/gtkrange.c (gtk_range_grab_broken): Handle broken 
+	grabs.
+
+	* gdk/gdkevents.h: Add a boolean to specify wether the broken
+	grab was implicit.
+
+	* gdk/x11/gdkdisplay-x11.c (gdk_display_pointer_is_grabbed): 
+	As the documentation states, don't return TRUE for
+	implicit grabs.
+
+	* gdk/x11/gdkdisplay-x11.h (struct _GdkDisplayX11): Add
+	a boolean field to store wether a pointer grab is implicit.
+
+	* gdk/x11/gdkmain-x11.c (_gdk_xgrab_check_button_event): 
+	Track implicit grabs.
+
+	* gdk/x11/gdkevents-x11.c (gdk_event_translate): Call
+	_gdk_xgrab_check_button_event for button events.
+
 2005-06-28  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkiconview.c (gtk_icon_view_calculate_item_size2): 

@@ -1132,6 +1132,8 @@ gdk_event_translate (GdkDisplay *display,
 	}
 
       set_user_time (window, event);
+
+      _gdk_xgrab_check_button_event (window, xevent);
       break;
       
     case ButtonRelease:
@@ -1170,7 +1172,8 @@ gdk_event_translate (GdkDisplay *display,
       event->button.device = display->core_pointer;
 
       set_screen_from_root (display, event, xevent->xbutton.root);
-      
+
+      _gdk_xgrab_check_button_event (window, xevent);
       break;
       
     case MotionNotify:

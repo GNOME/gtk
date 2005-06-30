@@ -124,6 +124,8 @@ static gint gtk_range_enter_notify   (GtkWidget        *widget,
                                       GdkEventCrossing *event);
 static gint gtk_range_leave_notify   (GtkWidget        *widget,
                                       GdkEventCrossing *event);
+static gboolean gtk_range_grab_broken (GtkWidget          *widget,
+				       GdkEventGrabBroken *event);
 static void gtk_range_grab_notify    (GtkWidget          *widget,
 				      gboolean            was_grabbed);
 static void gtk_range_state_changed  (GtkWidget          *widget,
@@ -244,6 +246,7 @@ gtk_range_class_init (GtkRangeClass *class)
   widget_class->scroll_event = gtk_range_scroll_event;
   widget_class->enter_notify_event = gtk_range_enter_notify;
   widget_class->leave_notify_event = gtk_range_leave_notify;
+  widget_class->grab_broken_event = gtk_range_grab_broken;
   widget_class->grab_notify = gtk_range_grab_notify;
   widget_class->state_changed = gtk_range_state_changed;
   widget_class->style_set = gtk_range_style_set;
@@ -1376,6 +1379,25 @@ stop_scrolling (GtkRange *range)
    * so no point optimizing the button deactivate case
    */
   gtk_widget_queue_draw (GTK_WIDGET (range));
+}
+
+static gboolean
+gtk_range_grab_broken (GtkWidget          *widget,
+		       GdkEventGrabBroken *event)
+{
+  GtkRange *range = GTK_RANGE (widget);
+
+  if (range->layout->grab_location != MOUSE_OUTSIDE)
+    {
+      if (range->layout->grab_location == MOUSE_SLIDER)
+	update_slider_position (range, range->layout->mouse_x, range->layout->mouse_y);
+      
+      stop_scrolling (range);
+      
+      return TRUE;
+    }
+  
+  return FALSE;
 }
 
 static gint

@@ -539,7 +539,8 @@ gdk_display_pointer_is_grabbed (GdkDisplay * display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), TRUE);
   
-  return (GDK_DISPLAY_X11 (display)->pointer_xgrab_window != NULL);
+  return (GDK_DISPLAY_X11 (display)->pointer_xgrab_window != NULL &&
+	  !GDK_DISPLAY_X11 (display)->pointer_xgrab_implicit);
 }
 
 /**

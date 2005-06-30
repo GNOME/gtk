@@ -88,6 +88,7 @@ struct _GdkDisplayX11
   GdkWindowObject *pointer_xgrab_window;
   gulong pointer_xgrab_serial;
   gboolean pointer_xgrab_owner_events;
+  gboolean pointer_xgrab_implicit;
   guint32 pointer_xgrab_time;
 
   GdkWindowObject *keyboard_xgrab_window;

@@ -112,6 +112,8 @@ static gint gtk_button_button_press   (GtkWidget        *widget,
 				       GdkEventButton   *event);
 static gint gtk_button_button_release (GtkWidget        *widget,
 				       GdkEventButton   *event);
+static gint gtk_button_grab_broken    (GtkWidget        *widget,
+				       GdkEventAny      *event);
 static gint gtk_button_key_release    (GtkWidget        *widget,
 				       GdkEventKey      *event);
 static gint gtk_button_enter_notify   (GtkWidget        *widget,
@@ -201,6 +203,7 @@ gtk_button_class_init (GtkButtonClass *klass)
   widget_class->expose_event = gtk_button_expose;
   widget_class->button_press_event = gtk_button_button_press;
   widget_class->button_release_event = gtk_button_button_release;
+  widget_class->grab_broken_event = gtk_button_grab_broken;
   widget_class->key_release_event = gtk_button_key_release;
   widget_class->enter_notify_event = gtk_button_enter_notify;
   widget_class->leave_notify_event = gtk_button_leave_notify;
@@ -1257,6 +1260,29 @@ gtk_button_button_release (GtkWidget      *widget,
     {
       button = GTK_BUTTON (widget);
       gtk_button_released (button);
+    }
+
+  return TRUE;
+}
+
+static gboolean
+gtk_button_grab_broken (GtkWidget   *widget,
+			GdkEventAny *event)
+{
+  GtkButton *button = GTK_BUTTON (widget);
+  gboolean save_in;
+  
+  /* Simulate a button release without the pointer in the button */
+  if (button->button_down)
+    {
+      save_in = button->in_button;
+      button->in_button = FALSE;
+      gtk_button_released (button);
+      if (save_in != button->in_button)
+	{
+	  button->in_button = save_in;
+	  gtk_button_update_state (button);
+	}
     }
 
   return TRUE;
