@@ -45,6 +45,7 @@ IGNORE_HFILES=				\
 	gtkintl.h			\
 	gtkkeyhash.h			\
 	gtkmarshal.h			\
+	gtkmnemonichash.h		\
 	gtkpathbar.h			\
 	gtkprivate.h			\
 	gtkrbtree.h			\

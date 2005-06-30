@@ -239,8 +239,8 @@ in memory as 0x00, 0xcc, 0xee, 0xff.
 Deprecated equivalent of g_object_ref().
 </para>
 
-@v: 
-@Returns: 
+@v: a #GdkVisual
+@Returns: the same visual
 
 
 <!-- ##### MACRO gdk_visual_unref ##### -->
@@ -248,7 +248,7 @@ Deprecated equivalent of g_object_ref().
 Deprecated equivalent of g_object_unref().
 </para>
 
-@v: 
+@v: a #GdkVisual
 
 
 <!-- ##### FUNCTION gdk_visual_get_screen ##### -->

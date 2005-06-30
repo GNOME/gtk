@@ -101,7 +101,7 @@ gdk_device_set_mode(), gdk_device_set_key() and gdk_device_set_axis_use()
 to configure various aspects of the device.
 </para>
 
-@parent_instance: 
+@parent_instance: the parent instance
 @name: the name of this device.
 @source: the type of this device.
 @mode: the mode of this device

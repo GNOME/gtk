@@ -179,7 +179,7 @@ A <structname>GdkDragContext</structname> holds information about a
 drag in progress. It is used on both source and destination sides.
 </para>
 
-@parent_instance: 
+@parent_instance: the parent instance
 @protocol: the DND protocol which governs this drag.
 @is_source: %TRUE if the context is used on the source side.
 @source_window: the source of this drag.

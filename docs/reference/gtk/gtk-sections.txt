@@ -448,6 +448,7 @@ GTK_CALENDAR_CLASS
 GTK_IS_CALENDAR_CLASS
 GTK_CALENDAR_GET_CLASS
 <SUBSECTION Private>
+GtkCalendarPrivate
 gtk_calendar_get_type
 </SECTION>
 
@@ -1633,7 +1634,6 @@ gtk_hseparator_get_type
 <FILE>gtkiconview</FILE>
 <TITLE>GtkIconView</TITLE>
 GtkIconView
-GtkIconViewPrivate
 GtkIconViewForeachFunc
 gtk_icon_view_new
 gtk_icon_view_new_with_model
@@ -1676,6 +1676,7 @@ gtk_icon_view_item_activated
 gtk_icon_view_scroll_to_path
 gtk_icon_view_get_visible_range
 <SUBSECTION Dnd>
+GtkIconViewDropPosition
 gtk_icon_view_enable_model_drag_source
 gtk_icon_view_enable_model_drag_dest
 gtk_icon_view_unset_model_drag_source
@@ -1696,6 +1697,7 @@ GTK_TYPE_ICON_VIEW
 GTK_ICON_VIEW
 <SUBSECTION Private>
 gtk_icon_view_get_type
+GtkIconViewPrivate
 </SECTION>
 
 <SECTION>

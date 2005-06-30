@@ -1,3 +1,17 @@
+2005-06-29  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/tmpl/images.sgml: 
+	* gdk/tmpl/dnd.sgml: 
+	* gdk/tmpl/events.sgml: 
+	* gdk/tmpl/windows.sgml:
+	* gdk/tmpl/visuals.sgml: 
+	* gdk/tmpl/cairo_interaction.sgml: 
+	* gdk/tmpl/event_structs.sgml: 
+	* gdk/tmpl/input_devices.sgml: 
+	* gtk/gtk-sections.txt: 
+	* gtk/Makefile.am (IGNORE_HFILES):
+	* gtk/tmpl/gtkstock.sgml: Updates.
+
 2005-06-28  Ross Burton  <ross@burtonini.com>
 
 	* gtk/tmpl/gtkcomboboxentry.sgml: Clarify.

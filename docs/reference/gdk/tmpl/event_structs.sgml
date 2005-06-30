@@ -429,15 +429,17 @@ only available if the X server supports the XFIXES extension.
 Generated when a pointer or keyboard grab is broken. On X11, this happens
 when the grab window becomes unviewable (i.e. it or one of its ancestors 
 is unmapped), or if the same application grabs the pointer or keyboard
-again.
+again. Note that implicit grabs (which are initiated by button presses)
+can also cause #GdkEventGrabBroken events.
 </para>
 
-@type: the type of the event (%GDK_GRAB_BROKEN) 
+@type: the type of the event (%GDK_GRAB_BROKEN)
 @window: the window which received the event, i.e. the window
  that previously owned the grab
 @send_event: %TRUE if the event was sent explicitly (e.g. using <function>XSendEvent</function>).
 @keyboard: %TRUE if a keyboard grab was broken, %FALSE if a pointer 
   grab was broken
+@implicit: %TRUE if the broken grab was implicit
 @grab_window: If this event is caused by another grab in the same 
   application, @grab_window contains the new grab window. Otherwise
   @grab_window id %NULL.
@@ -492,7 +494,7 @@ full details of crossing event generation.
    which are not ancestors of each other and the window is part of
    the ancestor chain between one of these windows and their least
    common ancestor.
-@GDK_NOTIFY_UNKNOWN: 
+@GDK_NOTIFY_UNKNOWN: an unknown type of enter/leave event occurred.
 
 <!-- ##### ENUM GdkPropertyState ##### -->
 <para>
