@@ -565,7 +565,7 @@ gtk_im_context_xim_finalize (GObject *obj)
 
   context_xim->finalizing = TRUE;
 
-  if (context_xim->im_info) 
+  if (context_xim->im_info && !context_xim->im_info->ics->next) 
     {
       if (context_xim->im_info->reconnecting)
 	{
