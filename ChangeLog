@@ -1,3 +1,8 @@
+2005-07-01  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilesel.c (cmpl_init_state): Prevent an infinite
+	loop when G_FILENAME_ENCODING is invalid.  (#309280, Padraig Brady)
+
 Thu Jun 30 14:17:24 2005  Manish Singh  <yosh@gimp.org>
 
 	* gdk/x11/gdkprivate-x11.h: declare _gdk_xgrab_check_button_event.
