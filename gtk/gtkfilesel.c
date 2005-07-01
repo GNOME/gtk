@@ -2673,13 +2673,14 @@ cmpl_init_state (void)
 {
   gchar *utf8_cwd;
   CompletionState *new_state;
+  gint tries = 0;
 
   new_state = g_new (CompletionState, 1);
 
   utf8_cwd = get_current_dir_utf8 ();
 
 tryagain:
-
+  tries++;
   new_state->reference_dir = NULL;
   new_state->completion_dir = NULL;
   new_state->active_completion_dir = NULL;
@@ -2699,7 +2700,8 @@ tryagain:
     {
       /* Directories changing from underneath us, grumble */
       strcpy (utf8_cwd, G_DIR_SEPARATOR_S);
-      goto tryagain;
+      if (tries < 2)
+	goto tryagain;
     }
 
   g_free (utf8_cwd);

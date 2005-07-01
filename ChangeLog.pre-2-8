@@ -1,3 +1,8 @@
+2005-07-01  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilesel.c (cmpl_init_state): Prevent an infinite
+	loop when G_FILENAME_ENCODING is invalid.  (#309280, Padraig Brady)
+
 2005-06-30  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/x11/gdkvisual-x11.c (gdk_visual_decompose_mask): Avoid
