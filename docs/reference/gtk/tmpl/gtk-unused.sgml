@@ -372,6 +372,30 @@ Turns off certain object flags.  (Private)
 </para>
 
 
+<!-- ##### MACRO GTK_STOCK_FULLSCREEN ##### -->
+<para>
+The "Fullscreen" item.
+<inlinegraphic fileref="stock_fullscreen_24.png" format="PNG"></inlinegraphic>
+</para>
+
+@Since: 2.8
+
+<!-- ##### MACRO GTK_STOCK_INFO ##### -->
+<para>
+The "Info" item.
+<inlinegraphic fileref="stock_info_24.png" format="PNG"></inlinegraphic>
+</para>
+
+@Since: 2.8
+
+<!-- ##### MACRO GTK_STOCK_LEAVE_FULLSCREEN ##### -->
+<para>
+The "Leave Fullscreen" item.
+<inlinegraphic fileref="stock_leave_fullscreen_24.png" format="PNG"></inlinegraphic>
+</para>
+
+@Since: 2.8
+
 <!-- ##### MACRO GTK_TIPS_QUERY ##### -->
 <para>
 
@@ -881,6 +905,12 @@ the #GtkAdjustment which sets the range of the scale.
 
 
 <!-- ##### ARG GtkHScrollbar:adjustment ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GtkIconViewPrivate ##### -->
 <para>
 
 </para>

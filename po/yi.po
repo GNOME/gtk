@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-20 14:30-0400\n"
+"POT-Creation-Date: 2005-07-01 14:31-0400\n"
 "PO-Revision-Date: 2003-02-11\n"
 "Last-Translator: Raphael Finkel <raphael@cs.uky.edu>\n"
 "Language-Team: None <>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:153 gdk-pixbuf/gdk-pixbuf-io.c:838
-#: gdk-pixbuf/gdk-pixbuf-io.c:1068 tests/testfilechooser.c:199
+#: gdk-pixbuf/gdk-pixbuf-io.c:1089 tests/testfilechooser.c:199
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "ניט געקענט עפֿענען טעקע '%s': %s"
@@ -26,7 +26,7 @@ msgid "Image file '%s' contains no data"
 msgstr "בילדטעקע '%s' האָט קײן דאַטן ניט"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:208 gdk-pixbuf/gdk-pixbuf-io.c:887
-#: gdk-pixbuf/gdk-pixbuf-io.c:1109 tests/testfilechooser.c:244
+#: gdk-pixbuf/gdk-pixbuf-io.c:1130 tests/testfilechooser.c:244
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -76,38 +76,38 @@ msgstr "ניט דערקענט בילד־טעקע פֿאָרמאַטירונג"
 msgid "Failed to load image '%s': %s"
 msgstr "ניט געקענט אַרײַנשטעלן בילד '%s': %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1336
+#: gdk-pixbuf/gdk-pixbuf-io.c:1357
 #, fuzzy, c-format
 msgid "Error writing to image file: %s"
 msgstr "טעות אין באַשײדן JPEG בילדטעקע (%s)"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1382 gdk-pixbuf/gdk-pixbuf-io.c:1511
+#: gdk-pixbuf/gdk-pixbuf-io.c:1403 gdk-pixbuf/gdk-pixbuf-io.c:1532
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr ""
 "דער געבױ פֿון gdk-pixbuf שטיצט ניט אונטער אױפֿהיט פֿון בילד פֿאָרמאַטירונג: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1416
+#: gdk-pixbuf/gdk-pixbuf-io.c:1437
 #, fuzzy
 msgid "Insufficient memory to save image to callback"
 msgstr "ניט גענוג זכּרון אַרײַנשטעלן XBM בילדטעקע"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1428
+#: gdk-pixbuf/gdk-pixbuf-io.c:1449
 #, fuzzy
 msgid "Failed to open temporary file"
 msgstr "דורכפֿאַל אין עפֿענען TIFF בילד"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1453
+#: gdk-pixbuf/gdk-pixbuf-io.c:1474
 #, fuzzy
 msgid "Failed to read from temporary file"
 msgstr "דורכפֿאַל אין שרײַבן צײַטװײַליקע טעקע בשעת אַרײַנשטעלן XBM בילד"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1687
+#: gdk-pixbuf/gdk-pixbuf-io.c:1708
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "ניט געקענט עפֿענען '%s' צו שרײַבן: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1711
+#: gdk-pixbuf/gdk-pixbuf-io.c:1732
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -116,7 +116,7 @@ msgstr ""
 "ניט געקענט פֿאַרמאַכן '%s' בשעת שרײַבן די בילד; קען זײַן אַז ניט אױפֿגעהיט אַלע "
 "דאַטן: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1931 gdk-pixbuf/gdk-pixbuf-io.c:1981
+#: gdk-pixbuf/gdk-pixbuf-io.c:1952 gdk-pixbuf/gdk-pixbuf-io.c:2002
 #, fuzzy
 msgid "Insufficient memory to save image into a buffer"
 msgstr "ניט גענוג זכּרון אַרײַנשטעלן XBM בילדטעקע"
@@ -1161,7 +1161,7 @@ msgstr ""
 msgid "Received invalid color data\n"
 msgstr ""
 
-#: gtk/gtkcolorsel.c:561
+#: gtk/gtkcolorsel.c:565
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -1171,7 +1171,7 @@ msgstr ""
 "אױסקלײַבן.  דו קענסט שלעפּן די פֿאַרב צו אַ פּאַליטרע פּאָזיציע, אָדער אױסקלײַבן די "
 "פֿאַרב װי די איצטיקע דורך זי שלעפּן צו דער דערבײַיִקער פֿאַרב מוסטער."
 
-#: gtk/gtkcolorsel.c:566
+#: gtk/gtkcolorsel.c:570
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -1179,11 +1179,11 @@ msgstr ""
 "די פֿאַרב װאָס דו האָסט אױסגעקליבן.  דאָ קענסט שלעפּן די פֿאַרב צו אַ פּאַליטרע פּאָזיציע "
 "זי אױפֿצוהיטן צו ניצן אין דער צוקונפֿט."
 
-#: gtk/gtkcolorsel.c:957
+#: gtk/gtkcolorsel.c:961
 msgid "_Save color here"
 msgstr "היט אױף די פֿאַרב דאָ"
 
-#: gtk/gtkcolorsel.c:1162
+#: gtk/gtkcolorsel.c:1166
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -1192,7 +1192,7 @@ msgstr ""
 "די פּאַליטרע פּאָזיציע, שלעפּ אַ פֿאַרבמוסטער אַהער אָדער געב אַ קליק מיט דעם רעכטן "
 "קנעפּל און קלײַב אױס \"היט אױף די פֿאַרב דאָ\"."
 
-#: gtk/gtkcolorsel.c:1929
+#: gtk/gtkcolorsel.c:1953
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
@@ -1200,7 +1200,7 @@ msgstr ""
 "קלײַב אױס די פֿאַרב װאָס דו װילסט פֿון דעם אױסערלעכן קײַקל.  קלײַב אױס די טונקלקײט "
 "אָדער ליכטיקײט פֿון דער־אָ פֿאַרב מיט דעם אינערלעכן דרײַעק."
 
-#: gtk/gtkcolorsel.c:1954
+#: gtk/gtkcolorsel.c:1978
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
@@ -1208,68 +1208,68 @@ msgstr ""
 "געב אַ קליק אױף דעם טראָפּירער, און דערנאָך געב אַ קליק אױף אַ פֿאַרב װוּ־ניט־איז אױף "
 "דעם עקראַן אױסצוקלײַבן די־אָ פֿאַרב."
 
-#: gtk/gtkcolorsel.c:1963
+#: gtk/gtkcolorsel.c:1987
 msgid "_Hue:"
 msgstr "שאַטירונג"
 
-#: gtk/gtkcolorsel.c:1964
+#: gtk/gtkcolorsel.c:1988
 msgid "Position on the color wheel."
 msgstr "פּאָזיציע אױף דער פֿאַרבראָד"
 
-#: gtk/gtkcolorsel.c:1966
+#: gtk/gtkcolorsel.c:1990
 msgid "_Saturation:"
 msgstr "דורכװײק"
 
-#: gtk/gtkcolorsel.c:1967
+#: gtk/gtkcolorsel.c:1991
 msgid "\"Deepness\" of the color."
 msgstr "\"טיפֿקײט\" פֿון דער פֿאַרב"
 
-#: gtk/gtkcolorsel.c:1968
+#: gtk/gtkcolorsel.c:1992
 msgid "_Value:"
 msgstr "באַטרעף"
 
-#: gtk/gtkcolorsel.c:1969
+#: gtk/gtkcolorsel.c:1993
 msgid "Brightness of the color."
 msgstr "ליכטיקײט פֿון דער פֿאַרב"
 
-#: gtk/gtkcolorsel.c:1970
+#: gtk/gtkcolorsel.c:1994
 msgid "_Red:"
 msgstr "רױט"
 
-#: gtk/gtkcolorsel.c:1971
+#: gtk/gtkcolorsel.c:1995
 msgid "Amount of red light in the color."
 msgstr "באַטרעף פֿון רױטן ליכט אין דער פֿאַרב"
 
-#: gtk/gtkcolorsel.c:1972
+#: gtk/gtkcolorsel.c:1996
 msgid "_Green:"
 msgstr "גרין"
 
-#: gtk/gtkcolorsel.c:1973
+#: gtk/gtkcolorsel.c:1997
 msgid "Amount of green light in the color."
 msgstr "באַטרעף פֿון גרינעם ליכט אין דער פֿאַרב"
 
-#: gtk/gtkcolorsel.c:1974
+#: gtk/gtkcolorsel.c:1998
 msgid "_Blue:"
 msgstr "בלױ"
 
-#: gtk/gtkcolorsel.c:1975
+#: gtk/gtkcolorsel.c:1999
 msgid "Amount of blue light in the color."
 msgstr "באַטרעף פֿון בלױען ליכט אין דער פֿאַרב"
 
-#: gtk/gtkcolorsel.c:1978
+#: gtk/gtkcolorsel.c:2002
 msgid "_Opacity:"
 msgstr "מאַטקײט"
 
-#: gtk/gtkcolorsel.c:1986 gtk/gtkcolorsel.c:1997
+#: gtk/gtkcolorsel.c:2010 gtk/gtkcolorsel.c:2021
 #, fuzzy
 msgid "Transparency of the color."
 msgstr "דורקזעיִקײט פֿון איצט־אױסגעקליבענער פֿאַרב"
 
-#: gtk/gtkcolorsel.c:2004
+#: gtk/gtkcolorsel.c:2028
 msgid "Color _Name:"
 msgstr "פֿאַרב נאָמען"
 
-#: gtk/gtkcolorsel.c:2019
+#: gtk/gtkcolorsel.c:2043
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
@@ -1277,11 +1277,11 @@ msgstr ""
 "מען קען אַרײַנשרײַבן אַ פֿאַרב־באַטרעף אױף העקסידעצימאַל (װי אין HTML), אָדער פּשוט אַ "
 "פֿאַרב נאָמען װי 'פּורפּור' (אָבער אױף ענגליש!) אין דער פּאָזיציע."
 
-#: gtk/gtkcolorsel.c:2038
+#: gtk/gtkcolorsel.c:2062
 msgid "_Palette"
 msgstr "פּאַליטרע"
 
-#: gtk/gtkcolorsel.c:2070
+#: gtk/gtkcolorsel.c:2094
 #, fuzzy
 msgid "Color Wheel"
 msgstr "ראָד"
@@ -1291,16 +1291,16 @@ msgstr "ראָד"
 msgid "Color Selection"
 msgstr "שריפֿט סעלעקציע"
 
-#: gtk/gtkentry.c:4508 gtk/gtktextview.c:7068
+#: gtk/gtkentry.c:4508 gtk/gtktextview.c:7066
 #, fuzzy
 msgid "Select _All"
 msgstr "קלײַב אַלץ אױס"
 
-#: gtk/gtkentry.c:4518 gtk/gtktextview.c:7078
+#: gtk/gtkentry.c:4518 gtk/gtktextview.c:7076
 msgid "Input _Methods"
 msgstr "אַרײַנשרײַב־מיטלען"
 
-#: gtk/gtkentry.c:4529 gtk/gtktextview.c:7089
+#: gtk/gtkentry.c:4529 gtk/gtktextview.c:7087
 #, fuzzy
 msgid "_Insert Unicode Control Character"
 msgstr "לײג אַרײַן אוניקאָד קאָנטראָל־שריפֿטצײכן"
@@ -1423,7 +1423,7 @@ msgstr "לײג צו"
 msgid "Add the selected folder to the Bookmarks"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:3191 gtk/gtkstock.c:395
+#: gtk/gtkfilechooserdefault.c:3191 gtk/gtkstock.c:398
 msgid "_Remove"
 msgstr "נעם אַװעק"
 
@@ -1737,7 +1737,7 @@ msgstr "פֿאַרװאַנדל נאָמען"
 msgid "_Selection: "
 msgstr "סעלעקציע: "
 
-#: gtk/gtkfilesel.c:3151
+#: gtk/gtkfilesel.c:3153
 #, fuzzy, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
@@ -1746,16 +1746,16 @@ msgstr ""
 "טעקע־נעמען %s האָט זיך ניט געלאָזט פֿאַרװאַנדלען אין UTF-8.  פּרוּװ באַשטעטיקן דעם "
 "סבֿיבֿה־װאַריאַבל G_BROKEN_FILENAMES: %s"
 
-#: gtk/gtkfilesel.c:3154
+#: gtk/gtkfilesel.c:3156
 #, fuzzy
 msgid "Invalid UTF-8"
 msgstr "אומלעקסיקע UTF-8 קאָדירונג"
 
-#: gtk/gtkfilesel.c:4031
+#: gtk/gtkfilesel.c:4033
 msgid "Name too long"
 msgstr "נאָמען צו לאַנג"
 
-#: gtk/gtkfilesel.c:4033
+#: gtk/gtkfilesel.c:4035
 msgid "Couldn't convert filename"
 msgstr "ניט געקענט איבערמאַכן טעקע־נאָמען"
 
@@ -1763,55 +1763,55 @@ msgstr "ניט געקענט איבערמאַכן טעקע־נאָמען"
 msgid "(Empty)"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:475 gtk/gtkfilesystemunix.c:678
-#: gtk/gtkfilesystemunix.c:1918 gtk/gtkfilesystemwin32.c:482
+#: gtk/gtkfilesystemunix.c:476 gtk/gtkfilesystemunix.c:682
+#: gtk/gtkfilesystemunix.c:1858 gtk/gtkfilesystemwin32.c:482
 #: gtk/gtkfilesystemwin32.c:495 gtk/gtkfilesystemwin32.c:1560
 #, fuzzy, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "דורכפֿאַל אין שאַפֿן פּאַפּקע %s: %s\n"
 
-#: gtk/gtkfilesystemunix.c:547 gtk/gtkfilesystemwin32.c:537
+#: gtk/gtkfilesystemunix.c:551 gtk/gtkfilesystemwin32.c:537
 #, fuzzy, c-format
 msgid "Error creating directory '%s': %s"
 msgstr "דורכפֿאַל אין שאַפֿן פּאַפּקע %s: %s\n"
 
-#: gtk/gtkfilesystemunix.c:627 gtk/gtkfilesystemwin32.c:597
+#: gtk/gtkfilesystemunix.c:631 gtk/gtkfilesystemwin32.c:597
 msgid "This file system does not support mounting"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:635
+#: gtk/gtkfilesystemunix.c:639
 #, fuzzy
 msgid "Filesystem"
 msgstr "טעקעס"
 
-#: gtk/gtkfilesystemunix.c:792
+#: gtk/gtkfilesystemunix.c:796
 #, fuzzy, c-format
 msgid "Could not get a stock icon for %s"
 msgstr "ניט געקענט דערקענען בילד־טעקע פֿאָרמאַטירונג אין טעקע '%s'"
 
-#: gtk/gtkfilesystemunix.c:887
+#: gtk/gtkfilesystemunix.c:891
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
 "Please use a different name."
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1489
-#, fuzzy, c-format
-msgid "Writing %s failed: %s"
-msgstr "טעות אין באַשײדן JPEG בילדטעקע (%s)"
+#: gtk/gtkfilesystemunix.c:1463 gtk/gtkfilesystemwin32.c:1032
+#, c-format
+msgid "Bookmark saving failed: %s"
+msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1578
+#: gtk/gtkfilesystemunix.c:1518
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1650
+#: gtk/gtkfilesystemunix.c:1590
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1878
+#: gtk/gtkfilesystemunix.c:1818
 #, fuzzy, c-format
 msgid "Error getting information for '/': %s"
 msgstr "דורכפֿאַל אין שאַפֿן פּאַפּקע %s: %s\n"
@@ -1824,11 +1824,6 @@ msgstr ""
 #: gtk/gtkfilesystemwin32.c:650
 #, c-format
 msgid "%s (%s)"
-msgstr ""
-
-#: gtk/gtkfilesystemwin32.c:1032
-#, c-format
-msgid "Bookmark saving failed: %s"
 msgstr ""
 
 #: gtk/gtkfontbutton.c:179 gtk/gtkfontbutton.c:292
@@ -1882,7 +1877,7 @@ msgstr "γ (גאַמאַ)"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1644
+#: gtk/gtkiconfactory.c:1656
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "דורכפֿאַל אין אַרײַנשטעלן בילדל %s"
@@ -1986,7 +1981,7 @@ msgstr "(ניט באַקאַנט)"
 msgid "clear"
 msgstr "באַזײַטיק"
 
-#: gtk/gtklabel.c:3935
+#: gtk/gtklabel.c:3934
 msgid "Select All"
 msgstr "קלײַב אַלץ אױס"
 
@@ -2144,269 +2139,282 @@ msgstr "זוך און פֿאַרבײַט"
 msgid "_Floppy"
 msgstr "בײגעװדיק"
 
-#. translators, strip the prefix up to and including the first |
+#: gtk/gtkstock.c:333
+msgid "_Fullscreen"
+msgstr ""
+
 #: gtk/gtkstock.c:334
-msgid "Navigation|_Bottom"
+msgid "_Leave Fullscreen"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:336
-msgid "Navigation|_First"
+msgid "Navigation|_Bottom"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:338
-msgid "Navigation|_Last"
+msgid "Navigation|_First"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:340
-msgid "Navigation|_Top"
+msgid "Navigation|_Last"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:342
-msgid "Navigation|_Back"
+msgid "Navigation|_Top"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:344
-msgid "Navigation|_Down"
+msgid "Navigation|_Back"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:346
-msgid "Navigation|_Forward"
+msgid "Navigation|_Down"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:348
+msgid "Navigation|_Forward"
+msgstr ""
+
+#. translators, strip the prefix up to and including the first |
+#: gtk/gtkstock.c:350
 msgid "Navigation|_Up"
 msgstr ""
 
-#: gtk/gtkstock.c:349
+#: gtk/gtkstock.c:351
 msgid "_Harddisk"
 msgstr ""
 
-#: gtk/gtkstock.c:350
+#: gtk/gtkstock.c:352
 msgid "_Help"
 msgstr "געהילף"
 
-#: gtk/gtkstock.c:351
+#: gtk/gtkstock.c:353
 msgid "_Home"
 msgstr "אַהײם"
 
-#: gtk/gtkstock.c:352
+#: gtk/gtkstock.c:354
 msgid "Increase Indent"
 msgstr ""
 
-#: gtk/gtkstock.c:353
+#: gtk/gtkstock.c:355
 msgid "Decrease Indent"
 msgstr ""
 
-#: gtk/gtkstock.c:354
+#: gtk/gtkstock.c:356
 msgid "_Index"
 msgstr "אינדעקס"
 
-#: gtk/gtkstock.c:355
+#: gtk/gtkstock.c:357
+#, fuzzy
+msgid "_Information"
+msgstr "אינפֿאָרמאַציע"
+
+#: gtk/gtkstock.c:358
 msgid "_Italic"
 msgstr "קורסיװ"
 
-#: gtk/gtkstock.c:356
+#: gtk/gtkstock.c:359
 msgid "_Jump to"
 msgstr "צום אָרט"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:358
+#: gtk/gtkstock.c:361
 #, fuzzy
 msgid "Justify|_Center"
 msgstr "אין מיטן"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:360
+#: gtk/gtkstock.c:363
 msgid "Justify|_Fill"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:362
+#: gtk/gtkstock.c:365
 msgid "Justify|_Left"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:364
+#: gtk/gtkstock.c:367
 #, fuzzy
 msgid "Justify|_Right"
 msgstr "רעכטס"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:367
+#: gtk/gtkstock.c:370
 #, fuzzy
 msgid "Media|_Forward"
 msgstr "פֿאָרױס"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:369
+#: gtk/gtkstock.c:372
 #, fuzzy
 msgid "Media|_Next"
 msgstr "נײַ"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:371
+#: gtk/gtkstock.c:374
 #, fuzzy
 msgid "Media|P_ause"
 msgstr "קלעפּ"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:373
+#: gtk/gtkstock.c:376
 msgid "Media|_Play"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:375
+#: gtk/gtkstock.c:378
 #, fuzzy
 msgid "Media|Pre_vious"
 msgstr "פֿאָרױסװײַז"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:377
+#: gtk/gtkstock.c:380
 #, fuzzy
 msgid "Media|_Record"
 msgstr "רױט"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:379
+#: gtk/gtkstock.c:382
 #, fuzzy
 msgid "Media|R_ewind"
 msgstr "געפֿין"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:381
+#: gtk/gtkstock.c:384
 #, fuzzy
 msgid "Media|_Stop"
 msgstr "ענדיק"
 
-#: gtk/gtkstock.c:382
+#: gtk/gtkstock.c:385
 #, fuzzy
 msgid "_Network"
 msgstr "נײַ"
 
-#: gtk/gtkstock.c:383
+#: gtk/gtkstock.c:386
 msgid "_New"
 msgstr "נײַ"
 
-#: gtk/gtkstock.c:384
+#: gtk/gtkstock.c:387
 msgid "_No"
 msgstr "נײן"
 
-#: gtk/gtkstock.c:385
+#: gtk/gtkstock.c:388
 msgid "_OK"
 msgstr "גוט"
 
-#: gtk/gtkstock.c:386
+#: gtk/gtkstock.c:389
 msgid "_Open"
 msgstr "עפֿן"
 
-#: gtk/gtkstock.c:387
+#: gtk/gtkstock.c:390
 msgid "_Paste"
 msgstr "קלעפּ"
 
-#: gtk/gtkstock.c:388
+#: gtk/gtkstock.c:391
 msgid "_Preferences"
 msgstr "פּרעפֿערענצן"
 
-#: gtk/gtkstock.c:389
+#: gtk/gtkstock.c:392
 msgid "_Print"
 msgstr "דרוק"
 
-#: gtk/gtkstock.c:390
+#: gtk/gtkstock.c:393
 msgid "Print Pre_view"
 msgstr "דרוק פֿאָרױסװײַז"
 
-#: gtk/gtkstock.c:391
+#: gtk/gtkstock.c:394
 msgid "_Properties"
 msgstr "נאַטורן"
 
-#: gtk/gtkstock.c:392
+#: gtk/gtkstock.c:395
 msgid "_Quit"
 msgstr "הער אױף"
 
-#: gtk/gtkstock.c:393
+#: gtk/gtkstock.c:396
 msgid "_Redo"
 msgstr "איבער־פֿאַרקער"
 
-#: gtk/gtkstock.c:394
+#: gtk/gtkstock.c:397
 msgid "_Refresh"
 msgstr "דערהײַנטיק"
 
-#: gtk/gtkstock.c:396
+#: gtk/gtkstock.c:399
 msgid "_Revert"
 msgstr "װי פֿריִער"
 
-#: gtk/gtkstock.c:397
+#: gtk/gtkstock.c:400
 msgid "_Save"
 msgstr "היט אױף"
 
-#: gtk/gtkstock.c:398
+#: gtk/gtkstock.c:401
 msgid "Save _As"
 msgstr "היט אױף װי"
 
-#: gtk/gtkstock.c:399
+#: gtk/gtkstock.c:402
 msgid "_Color"
 msgstr "פֿאַרב"
 
-#: gtk/gtkstock.c:400
+#: gtk/gtkstock.c:403
 msgid "_Font"
 msgstr "שריפֿט"
 
-#: gtk/gtkstock.c:401
+#: gtk/gtkstock.c:404
 msgid "_Ascending"
 msgstr "אַרױף־צו"
 
-#: gtk/gtkstock.c:402
+#: gtk/gtkstock.c:405
 msgid "_Descending"
 msgstr "אַראָפּ־צו"
 
-#: gtk/gtkstock.c:403
+#: gtk/gtkstock.c:406
 msgid "_Spell Check"
 msgstr "אױסלײג קאָנטראָל"
 
-#: gtk/gtkstock.c:404
+#: gtk/gtkstock.c:407
 msgid "_Stop"
 msgstr "ענדיק"
 
-#: gtk/gtkstock.c:405
+#: gtk/gtkstock.c:408
 msgid "_Strikethrough"
 msgstr "שטריך אַדורך"
 
-#: gtk/gtkstock.c:406
+#: gtk/gtkstock.c:409
 msgid "_Undelete"
 msgstr "לײג צוריק"
 
-#: gtk/gtkstock.c:407
+#: gtk/gtkstock.c:410
 msgid "_Underline"
 msgstr "אונטער־שורה"
 
-#: gtk/gtkstock.c:408
+#: gtk/gtkstock.c:411
 msgid "_Undo"
 msgstr "פֿאַרקער"
 
-#: gtk/gtkstock.c:409
+#: gtk/gtkstock.c:412
 msgid "_Yes"
 msgstr "יאָ"
 
-#: gtk/gtkstock.c:410
+#: gtk/gtkstock.c:413
 msgid "_Normal Size"
 msgstr ""
 
-#: gtk/gtkstock.c:411
+#: gtk/gtkstock.c:414
 msgid "Best _Fit"
 msgstr ""
 
-#: gtk/gtkstock.c:412
+#: gtk/gtkstock.c:415
 msgid "Zoom _In"
 msgstr "פֿאַרגרעסער"
 
-#: gtk/gtkstock.c:413
+#: gtk/gtkstock.c:416
 msgid "Zoom _Out"
 msgstr "פֿאַרקלענער"
 
@@ -2533,6 +2541,10 @@ msgstr "X אַרײַנשרײַב־אופֿן"
 #, fuzzy, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "ניט געקענט דערקענען בילד־טעקע פֿאָרמאַטירונג אין טעקע '%s'"
+
+#, fuzzy
+#~ msgid "Writing %s failed: %s"
+#~ msgstr "טעות אין באַשײדן JPEG בילדטעקע (%s)"
 
 #~ msgid "Shift"
 #~ msgstr "Shift"

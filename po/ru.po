@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-20 14:30-0400\n"
+"POT-Creation-Date: 2005-07-01 14:31-0400\n"
 "PO-Revision-Date: 2005-04-22 23:51+0400\n"
 "Last-Translator: Dan Korostelev <nadako@gmail.com>\n"
 "Language-Team: <gnome-cyr@gnome.org>\n"
@@ -23,7 +23,7 @@ msgstr ""
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:153 gdk-pixbuf/gdk-pixbuf-io.c:838
-#: gdk-pixbuf/gdk-pixbuf-io.c:1068 tests/testfilechooser.c:199
+#: gdk-pixbuf/gdk-pixbuf-io.c:1089 tests/testfilechooser.c:199
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Произошёл сбой при открытии файла \"%s\": %s"
@@ -34,7 +34,7 @@ msgid "Image file '%s' contains no data"
 msgstr "Файл изображения \"%s\" не содержит никаких данных"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:208 gdk-pixbuf/gdk-pixbuf-io.c:887
-#: gdk-pixbuf/gdk-pixbuf-io.c:1109 tests/testfilechooser.c:244
+#: gdk-pixbuf/gdk-pixbuf-io.c:1130 tests/testfilechooser.c:244
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -84,36 +84,36 @@ msgstr "Формат файла изображения не распознан"
 msgid "Failed to load image '%s': %s"
 msgstr "Произошёл сбой при загрузке изображения \"%s\": %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1336
+#: gdk-pixbuf/gdk-pixbuf-io.c:1357
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "Произошла ошибка при записи файла изображения: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1382 gdk-pixbuf/gdk-pixbuf-io.c:1511
+#: gdk-pixbuf/gdk-pixbuf-io.c:1403 gdk-pixbuf/gdk-pixbuf-io.c:1532
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr ""
 "Эта сборка подсистемы \"gdk-pixbuf\" не поддерживает сохранение изображений "
 "в таком формате: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1416
+#: gdk-pixbuf/gdk-pixbuf-io.c:1437
 msgid "Insufficient memory to save image to callback"
 msgstr "Недостаточно памяти для сохранения файла изображения"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1428
+#: gdk-pixbuf/gdk-pixbuf-io.c:1449
 msgid "Failed to open temporary file"
 msgstr "Произошёл сбой при открытии временного файла"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1453
+#: gdk-pixbuf/gdk-pixbuf-io.c:1474
 msgid "Failed to read from temporary file"
 msgstr "Произошёл сбой при чтении из временного файла"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1687
+#: gdk-pixbuf/gdk-pixbuf-io.c:1708
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "Произошёл сбой при открытии файла \"%s\" для записи: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1711
+#: gdk-pixbuf/gdk-pixbuf-io.c:1732
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -122,7 +122,7 @@ msgstr ""
 "Произошёл сбой при закрытии файла \"%s\" во время записи изображения, не все "
 "данные могли быть сохранены: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1931 gdk-pixbuf/gdk-pixbuf-io.c:1981
+#: gdk-pixbuf/gdk-pixbuf-io.c:1952 gdk-pixbuf/gdk-pixbuf-io.c:2002
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Недостаточно памяти для сохранения изображения в буфер"
 
@@ -1165,7 +1165,7 @@ msgstr "Выберите цвет"
 msgid "Received invalid color data\n"
 msgstr "Недопустимые данные цвета получены\n"
 
-#: gtk/gtkcolorsel.c:561
+#: gtk/gtkcolorsel.c:565
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -1175,7 +1175,7 @@ msgstr ""
 "перетащить этот цвет в палитру или выбрать этот цвет текущим, перетащив его "
 "в расположенный сбоку образец."
 
-#: gtk/gtkcolorsel.c:566
+#: gtk/gtkcolorsel.c:570
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -1183,11 +1183,11 @@ msgstr ""
 "Цвет, который вы выбрали. Вы можете перетащить его в палитру, чтобы "
 "сохранить для последующего использования."
 
-#: gtk/gtkcolorsel.c:957
+#: gtk/gtkcolorsel.c:961
 msgid "_Save color here"
 msgstr "Со_хранить цвет здесь"
 
-#: gtk/gtkcolorsel.c:1162
+#: gtk/gtkcolorsel.c:1166
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -1196,7 +1196,7 @@ msgstr ""
 "изменить этот элемент, перетащите сюда образец цвета или щёлкните правой "
 "клавишей и выберите \"Сохранить цвет здесь\""
 
-#: gtk/gtkcolorsel.c:1929
+#: gtk/gtkcolorsel.c:1953
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
@@ -1204,7 +1204,7 @@ msgstr ""
 "Выберите желаемый цвет на внешнем круге. Выберите более тёмный или более "
 "светлый оттенки, используя внутренний треугольник."
 
-#: gtk/gtkcolorsel.c:1954
+#: gtk/gtkcolorsel.c:1978
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
@@ -1212,67 +1212,67 @@ msgstr ""
 "Щелкните на пипетке, затем щёлкните на цвете в любом месте экрана, чтобы "
 "выбрать этот цвет."
 
-#: gtk/gtkcolorsel.c:1963
+#: gtk/gtkcolorsel.c:1987
 msgid "_Hue:"
 msgstr "То_н:"
 
-#: gtk/gtkcolorsel.c:1964
+#: gtk/gtkcolorsel.c:1988
 msgid "Position on the color wheel."
 msgstr "Положение цветового круга."
 
-#: gtk/gtkcolorsel.c:1966
+#: gtk/gtkcolorsel.c:1990
 msgid "_Saturation:"
 msgstr "Нас_ыщенность:"
 
-#: gtk/gtkcolorsel.c:1967
+#: gtk/gtkcolorsel.c:1991
 msgid "\"Deepness\" of the color."
 msgstr "\"Глубина\" цвета."
 
-#: gtk/gtkcolorsel.c:1968
+#: gtk/gtkcolorsel.c:1992
 msgid "_Value:"
 msgstr "Зна_чение:"
 
-#: gtk/gtkcolorsel.c:1969
+#: gtk/gtkcolorsel.c:1993
 msgid "Brightness of the color."
 msgstr "Яркость цвета."
 
-#: gtk/gtkcolorsel.c:1970
+#: gtk/gtkcolorsel.c:1994
 msgid "_Red:"
 msgstr "_Красный:"
 
-#: gtk/gtkcolorsel.c:1971
+#: gtk/gtkcolorsel.c:1995
 msgid "Amount of red light in the color."
 msgstr "Количество красного оттенка в цвете."
 
-#: gtk/gtkcolorsel.c:1972
+#: gtk/gtkcolorsel.c:1996
 msgid "_Green:"
 msgstr "_Зеленый:"
 
-#: gtk/gtkcolorsel.c:1973
+#: gtk/gtkcolorsel.c:1997
 msgid "Amount of green light in the color."
 msgstr "Количество зелёного оттенка в цвете."
 
-#: gtk/gtkcolorsel.c:1974
+#: gtk/gtkcolorsel.c:1998
 msgid "_Blue:"
 msgstr "С_иний:"
 
-#: gtk/gtkcolorsel.c:1975
+#: gtk/gtkcolorsel.c:1999
 msgid "Amount of blue light in the color."
 msgstr "Количество синего оттенка в цвете."
 
-#: gtk/gtkcolorsel.c:1978
+#: gtk/gtkcolorsel.c:2002
 msgid "_Opacity:"
 msgstr "Не_прозрачность:"
 
-#: gtk/gtkcolorsel.c:1986 gtk/gtkcolorsel.c:1997
+#: gtk/gtkcolorsel.c:2010 gtk/gtkcolorsel.c:2021
 msgid "Transparency of the color."
 msgstr "Прозрачность цвета."
 
-#: gtk/gtkcolorsel.c:2004
+#: gtk/gtkcolorsel.c:2028
 msgid "Color _Name:"
 msgstr "Наи_менование цвета:"
 
-#: gtk/gtkcolorsel.c:2019
+#: gtk/gtkcolorsel.c:2043
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
@@ -1280,11 +1280,11 @@ msgstr ""
 "Вы можете ввести в этой строке или шестнадцатеричное значение цвета (в стиле "
 "HTML), или название цвета, например \"orange\"."
 
-#: gtk/gtkcolorsel.c:2038
+#: gtk/gtkcolorsel.c:2062
 msgid "_Palette"
 msgstr "Па_литра"
 
-#: gtk/gtkcolorsel.c:2070
+#: gtk/gtkcolorsel.c:2094
 msgid "Color Wheel"
 msgstr "Цветовой круг"
 
@@ -1292,15 +1292,15 @@ msgstr "Цветовой круг"
 msgid "Color Selection"
 msgstr "Выбор цвета"
 
-#: gtk/gtkentry.c:4508 gtk/gtktextview.c:7068
+#: gtk/gtkentry.c:4508 gtk/gtktextview.c:7066
 msgid "Select _All"
 msgstr "Выделить вс_е"
 
-#: gtk/gtkentry.c:4518 gtk/gtktextview.c:7078
+#: gtk/gtkentry.c:4518 gtk/gtktextview.c:7076
 msgid "Input _Methods"
 msgstr "Использовать _методы ввода"
 
-#: gtk/gtkentry.c:4529 gtk/gtktextview.c:7089
+#: gtk/gtkentry.c:4529 gtk/gtktextview.c:7087
 msgid "_Insert Unicode Control Character"
 msgstr "Вст_авить управляющий символ набора Юникод"
 
@@ -1417,7 +1417,7 @@ msgstr "_Добавить"
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Добавить выбранную папку к закладкам"
 
-#: gtk/gtkfilechooserdefault.c:3191 gtk/gtkstock.c:395
+#: gtk/gtkfilechooserdefault.c:3191 gtk/gtkstock.c:398
 msgid "_Remove"
 msgstr "_Удалить"
 
@@ -1715,7 +1715,7 @@ msgstr "_Переименовать"
 msgid "_Selection: "
 msgstr "_Выбор: "
 
-#: gtk/gtkfilesel.c:3151
+#: gtk/gtkfilesel.c:3153
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
@@ -1724,15 +1724,15 @@ msgstr ""
 "Имя файла \"%s\" нельзя преобразовать в кодировку UTF-8 (попробуйте задать "
 "переменную среды G_FILENAME_ENCODING): %s"
 
-#: gtk/gtkfilesel.c:3154
+#: gtk/gtkfilesel.c:3156
 msgid "Invalid UTF-8"
 msgstr "Данная последовательность UTF-8 недопустима"
 
-#: gtk/gtkfilesel.c:4031
+#: gtk/gtkfilesel.c:4033
 msgid "Name too long"
 msgstr "Имя слишком длинно"
 
-#: gtk/gtkfilesel.c:4033
+#: gtk/gtkfilesel.c:4035
 msgid "Couldn't convert filename"
 msgstr "Не удалось преобразовать имя файла"
 
@@ -1740,32 +1740,32 @@ msgstr "Не удалось преобразовать имя файла"
 msgid "(Empty)"
 msgstr "(Пусто)"
 
-#: gtk/gtkfilesystemunix.c:475 gtk/gtkfilesystemunix.c:678
-#: gtk/gtkfilesystemunix.c:1918 gtk/gtkfilesystemwin32.c:482
+#: gtk/gtkfilesystemunix.c:476 gtk/gtkfilesystemunix.c:682
+#: gtk/gtkfilesystemunix.c:1858 gtk/gtkfilesystemwin32.c:482
 #: gtk/gtkfilesystemwin32.c:495 gtk/gtkfilesystemwin32.c:1560
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "Произошла ошибка при получении информации о \"%s\": %s"
 
-#: gtk/gtkfilesystemunix.c:547 gtk/gtkfilesystemwin32.c:537
+#: gtk/gtkfilesystemunix.c:551 gtk/gtkfilesystemwin32.c:537
 #, c-format
 msgid "Error creating directory '%s': %s"
 msgstr "Произошла ошибка при создании папки \"%s\": %s"
 
-#: gtk/gtkfilesystemunix.c:627 gtk/gtkfilesystemwin32.c:597
+#: gtk/gtkfilesystemunix.c:631 gtk/gtkfilesystemwin32.c:597
 msgid "This file system does not support mounting"
 msgstr "Эта файловая система не поддерживает подсоединение"
 
-#: gtk/gtkfilesystemunix.c:635
+#: gtk/gtkfilesystemunix.c:639
 msgid "Filesystem"
 msgstr "Файловая система"
 
-#: gtk/gtkfilesystemunix.c:792
+#: gtk/gtkfilesystemunix.c:796
 #, c-format
 msgid "Could not get a stock icon for %s"
 msgstr "Не удалось получить встроенный значок для \"%s\""
 
-#: gtk/gtkfilesystemunix.c:887
+#: gtk/gtkfilesystemunix.c:891
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1774,22 +1774,22 @@ msgstr ""
 "Имя \"%s\" не является допустимым, поскольку содержит символ \"%s\". "
 "Используйте другое имя."
 
-#: gtk/gtkfilesystemunix.c:1489
-#, fuzzy, c-format
-msgid "Writing %s failed: %s"
+#: gtk/gtkfilesystemunix.c:1463 gtk/gtkfilesystemwin32.c:1032
+#, c-format
+msgid "Bookmark saving failed: %s"
 msgstr "Произошёл сбой при сохранении закладки: %s"
 
-#: gtk/gtkfilesystemunix.c:1578
+#: gtk/gtkfilesystemunix.c:1518
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "\"%s\" уже в списке закладок"
 
-#: gtk/gtkfilesystemunix.c:1650
+#: gtk/gtkfilesystemunix.c:1590
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "\"%s\" отсутствует в списке закладок"
 
-#: gtk/gtkfilesystemunix.c:1878
+#: gtk/gtkfilesystemunix.c:1818
 #, fuzzy, c-format
 msgid "Error getting information for '/': %s"
 msgstr "Произошла ошибка при получении информации о \"%s\": %s"
@@ -1803,11 +1803,6 @@ msgstr ""
 #, fuzzy, c-format
 msgid "%s (%s)"
 msgstr "%s: %s"
-
-#: gtk/gtkfilesystemwin32.c:1032
-#, c-format
-msgid "Bookmark saving failed: %s"
-msgstr "Произошёл сбой при сохранении закладки: %s"
 
 #: gtk/gtkfontbutton.c:179 gtk/gtkfontbutton.c:292
 msgid "Pick a Font"
@@ -1860,7 +1855,7 @@ msgstr "_Гамма-значение"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1644
+#: gtk/gtkiconfactory.c:1656
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Произошла ошибка загрузки значка: %s"
@@ -1966,7 +1961,7 @@ msgstr "(неизвестен)"
 msgid "clear"
 msgstr "очистить"
 
-#: gtk/gtklabel.c:3935
+#: gtk/gtklabel.c:3934
 msgid "Select All"
 msgstr "Выделить все"
 
@@ -2124,269 +2119,282 @@ msgstr "Найти и _заменить"
 msgid "_Floppy"
 msgstr "_Дискета"
 
-#. translators, strip the prefix up to and including the first |
+#: gtk/gtkstock.c:333
+msgid "_Fullscreen"
+msgstr ""
+
 #: gtk/gtkstock.c:334
-msgid "Navigation|_Bottom"
+msgid "_Leave Fullscreen"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:336
-msgid "Navigation|_First"
+msgid "Navigation|_Bottom"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:338
-msgid "Navigation|_Last"
+msgid "Navigation|_First"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:340
-msgid "Navigation|_Top"
+msgid "Navigation|_Last"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:342
-msgid "Navigation|_Back"
+msgid "Navigation|_Top"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:344
-msgid "Navigation|_Down"
+msgid "Navigation|_Back"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:346
-msgid "Navigation|_Forward"
+msgid "Navigation|_Down"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:348
+msgid "Navigation|_Forward"
+msgstr ""
+
+#. translators, strip the prefix up to and including the first |
+#: gtk/gtkstock.c:350
 msgid "Navigation|_Up"
 msgstr ""
 
-#: gtk/gtkstock.c:349
+#: gtk/gtkstock.c:351
 msgid "_Harddisk"
 msgstr "_Жёсткий диск"
 
-#: gtk/gtkstock.c:350
+#: gtk/gtkstock.c:352
 msgid "_Help"
 msgstr "_Справка"
 
-#: gtk/gtkstock.c:351
+#: gtk/gtkstock.c:353
 msgid "_Home"
 msgstr "_Домой"
 
-#: gtk/gtkstock.c:352
+#: gtk/gtkstock.c:354
 msgid "Increase Indent"
 msgstr "Увеличить отступ"
 
-#: gtk/gtkstock.c:353
+#: gtk/gtkstock.c:355
 msgid "Decrease Indent"
 msgstr "Уменьшить отступ"
 
-#: gtk/gtkstock.c:354
+#: gtk/gtkstock.c:356
 msgid "_Index"
 msgstr "_Индекс"
 
-#: gtk/gtkstock.c:355
+#: gtk/gtkstock.c:357
+#, fuzzy
+msgid "_Information"
+msgstr "Информация"
+
+#: gtk/gtkstock.c:358
 msgid "_Italic"
 msgstr "_Курсив"
 
-#: gtk/gtkstock.c:356
+#: gtk/gtkstock.c:359
 msgid "_Jump to"
 msgstr "Перейти _к"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:358
+#: gtk/gtkstock.c:361
 #, fuzzy
 msgid "Justify|_Center"
 msgstr "По _центру"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:360
+#: gtk/gtkstock.c:363
 msgid "Justify|_Fill"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:362
+#: gtk/gtkstock.c:365
 msgid "Justify|_Left"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:364
+#: gtk/gtkstock.c:367
 #, fuzzy
 msgid "Justify|_Right"
 msgstr "По _правому краю"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:367
+#: gtk/gtkstock.c:370
 #, fuzzy
 msgid "Media|_Forward"
 msgstr "_Далее"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:369
+#: gtk/gtkstock.c:372
 #, fuzzy
 msgid "Media|_Next"
 msgstr "_Далее"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:371
+#: gtk/gtkstock.c:374
 #, fuzzy
 msgid "Media|P_ause"
 msgstr "П_ауза"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:373
+#: gtk/gtkstock.c:376
 #, fuzzy
 msgid "Media|_Play"
 msgstr "_Воспр."
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:375
+#: gtk/gtkstock.c:378
 #, fuzzy
 msgid "Media|Pre_vious"
 msgstr "Пре_д."
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:377
+#: gtk/gtkstock.c:380
 #, fuzzy
 msgid "Media|_Record"
 msgstr "_Запись"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:379
+#: gtk/gtkstock.c:382
 #, fuzzy
 msgid "Media|R_ewind"
 msgstr "_Назад"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:381
+#: gtk/gtkstock.c:384
 #, fuzzy
 msgid "Media|_Stop"
 msgstr "_Стоп"
 
-#: gtk/gtkstock.c:382
+#: gtk/gtkstock.c:385
 msgid "_Network"
 msgstr "_Сеть"
 
-#: gtk/gtkstock.c:383
+#: gtk/gtkstock.c:386
 msgid "_New"
 msgstr "_Создать"
 
-#: gtk/gtkstock.c:384
+#: gtk/gtkstock.c:387
 msgid "_No"
 msgstr "_Нет"
 
-#: gtk/gtkstock.c:385
+#: gtk/gtkstock.c:388
 msgid "_OK"
 msgstr "_OK"
 
-#: gtk/gtkstock.c:386
+#: gtk/gtkstock.c:389
 msgid "_Open"
 msgstr "_Открыть"
 
-#: gtk/gtkstock.c:387
+#: gtk/gtkstock.c:390
 msgid "_Paste"
 msgstr "Вст_авить"
 
-#: gtk/gtkstock.c:388
+#: gtk/gtkstock.c:391
 msgid "_Preferences"
 msgstr "_Параметры"
 
-#: gtk/gtkstock.c:389
+#: gtk/gtkstock.c:392
 msgid "_Print"
 msgstr "Пе_чать"
 
-#: gtk/gtkstock.c:390
+#: gtk/gtkstock.c:393
 msgid "Print Pre_view"
 msgstr "Пред_варительный просмотр"
 
-#: gtk/gtkstock.c:391
+#: gtk/gtkstock.c:394
 msgid "_Properties"
 msgstr "_Свойства"
 
-#: gtk/gtkstock.c:392
+#: gtk/gtkstock.c:395
 msgid "_Quit"
 msgstr "В_ыйти"
 
-#: gtk/gtkstock.c:393
+#: gtk/gtkstock.c:396
 msgid "_Redo"
 msgstr "Ве_рнуть"
 
-#: gtk/gtkstock.c:394
+#: gtk/gtkstock.c:397
 msgid "_Refresh"
 msgstr "Об_новить"
 
-#: gtk/gtkstock.c:396
+#: gtk/gtkstock.c:399
 msgid "_Revert"
 msgstr "_Восстановить"
 
-#: gtk/gtkstock.c:397
+#: gtk/gtkstock.c:400
 msgid "_Save"
 msgstr "Со_хранить"
 
-#: gtk/gtkstock.c:398
+#: gtk/gtkstock.c:401
 msgid "Save _As"
 msgstr "Сохранить _как"
 
-#: gtk/gtkstock.c:399
+#: gtk/gtkstock.c:402
 msgid "_Color"
 msgstr "_Цвет"
 
-#: gtk/gtkstock.c:400
+#: gtk/gtkstock.c:403
 msgid "_Font"
 msgstr "_Шрифт"
 
-#: gtk/gtkstock.c:401
+#: gtk/gtkstock.c:404
 msgid "_Ascending"
 msgstr "По воз_растанию"
 
-#: gtk/gtkstock.c:402
+#: gtk/gtkstock.c:405
 msgid "_Descending"
 msgstr "По _убыванию"
 
-#: gtk/gtkstock.c:403
+#: gtk/gtkstock.c:406
 msgid "_Spell Check"
 msgstr "Проверить право_писание"
 
-#: gtk/gtkstock.c:404
+#: gtk/gtkstock.c:407
 msgid "_Stop"
 msgstr "_Стоп"
 
-#: gtk/gtkstock.c:405
+#: gtk/gtkstock.c:408
 msgid "_Strikethrough"
 msgstr "Пере_черкивание"
 
-#: gtk/gtkstock.c:406
+#: gtk/gtkstock.c:409
 msgid "_Undelete"
 msgstr "Вос_становить удалённое"
 
-#: gtk/gtkstock.c:407
+#: gtk/gtkstock.c:410
 msgid "_Underline"
 msgstr "По_дчёркивание"
 
-#: gtk/gtkstock.c:408
+#: gtk/gtkstock.c:411
 msgid "_Undo"
 msgstr "_Отменить"
 
-#: gtk/gtkstock.c:409
+#: gtk/gtkstock.c:412
 msgid "_Yes"
 msgstr "_Да"
 
-#: gtk/gtkstock.c:410
+#: gtk/gtkstock.c:413
 msgid "_Normal Size"
 msgstr "В обы_чном размере"
 
-#: gtk/gtkstock.c:411
+#: gtk/gtkstock.c:414
 msgid "Best _Fit"
 msgstr "Наилучшее _заполнение"
 
-#: gtk/gtkstock.c:412
+#: gtk/gtkstock.c:415
 msgid "Zoom _In"
 msgstr "У_величить"
 
-#: gtk/gtkstock.c:413
+#: gtk/gtkstock.c:416
 msgid "Zoom _Out"
 msgstr "У_меньшить"
 
@@ -2512,6 +2520,10 @@ msgstr "Метод XInput"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Не удалось получить информацию о файле \"%s\": %s"
+
+#, fuzzy
+#~ msgid "Writing %s failed: %s"
+#~ msgstr "Произошёл сбой при сохранении закладки: %s"
 
 #~ msgid "_Credits"
 #~ msgstr "_Благодарности"

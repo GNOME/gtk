@@ -283,6 +283,15 @@ gtk_widget_style_get_valist() to obtain the value of a style property.
 @event: 
 @Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
 
+<!-- ##### SIGNAL GtkWidget::grab-broken-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: 
+
 <!-- ##### SIGNAL GtkWidget::grab-focus ##### -->
 <para>
 

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-20 14:30-0400\n"
+"POT-Creation-Date: 2005-07-01 14:31-0400\n"
 "PO-Revision-Date: 2004-03-21 09:20+CET\n"
 "Last-Translator: auto\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:153 gdk-pixbuf/gdk-pixbuf-io.c:838
-#: gdk-pixbuf/gdk-pixbuf-io.c:1068 tests/testfilechooser.c:199
+#: gdk-pixbuf/gdk-pixbuf-io.c:1089 tests/testfilechooser.c:199
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Greška pri otvaranju datoteke '%s': %s"
@@ -28,7 +28,7 @@ msgid "Image file '%s' contains no data"
 msgstr "Slika \"%s\" ne sadrži podatke"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:208 gdk-pixbuf/gdk-pixbuf-io.c:887
-#: gdk-pixbuf/gdk-pixbuf-io.c:1109 tests/testfilechooser.c:244
+#: gdk-pixbuf/gdk-pixbuf-io.c:1130 tests/testfilechooser.c:244
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -77,34 +77,34 @@ msgstr "Nepoznat način zapisa slike"
 msgid "Failed to load image '%s': %s"
 msgstr "Ne mogu učitati sliku \"%s\": %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1336
+#: gdk-pixbuf/gdk-pixbuf-io.c:1357
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "Greška pri interpretiranju JPEG slike (%s)"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1382 gdk-pixbuf/gdk-pixbuf-io.c:1511
+#: gdk-pixbuf/gdk-pixbuf-io.c:1403 gdk-pixbuf/gdk-pixbuf-io.c:1532
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "Ovo izdanje programa gdk-pixbuf ne podržava ovu sliku vrste %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1416
+#: gdk-pixbuf/gdk-pixbuf-io.c:1437
 msgid "Insufficient memory to save image to callback"
 msgstr "Nema dovoljno memorije za spremanje slike u originalno mjesto"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1428
+#: gdk-pixbuf/gdk-pixbuf-io.c:1449
 msgid "Failed to open temporary file"
 msgstr "Nisam uspio otvoriti privremenu datoteku"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1453
+#: gdk-pixbuf/gdk-pixbuf-io.c:1474
 msgid "Failed to read from temporary file"
 msgstr "Nisam uspio čitati iz privremene datoteke"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1687
+#: gdk-pixbuf/gdk-pixbuf-io.c:1708
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "Ne mogu otvoriti '%s' za pisanje: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1711
+#: gdk-pixbuf/gdk-pixbuf-io.c:1732
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -113,7 +113,7 @@ msgstr ""
 "Ne može da zatvori \"%s\" pri upisu slike, moguće je da nisu spremljeni svi "
 "podaci: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1931 gdk-pixbuf/gdk-pixbuf-io.c:1981
+#: gdk-pixbuf/gdk-pixbuf-io.c:1952 gdk-pixbuf/gdk-pixbuf-io.c:2002
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Nema dovoljno memorije za spremanje slike u međuspremnik"
 
@@ -1151,7 +1151,7 @@ msgstr "Odaberi boju"
 msgid "Received invalid color data\n"
 msgstr "Primio je neispravne podatke o bojama\n"
 
-#: gtk/gtkcolorsel.c:561
+#: gtk/gtkcolorsel.c:565
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -1161,7 +1161,7 @@ msgstr ""
 "možete odvući na stavku palete, ili odabrati ovu boju kao tekuću odvlačeći "
 "je na pregled trenutno odabrane boje."
 
-#: gtk/gtkcolorsel.c:566
+#: gtk/gtkcolorsel.c:570
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -1169,11 +1169,11 @@ msgstr ""
 "Boja koju ste odabrali. Možete odvući ovu boju na stavku palete kako bi je "
 "sačuvali za naknadnu upotrebu."
 
-#: gtk/gtkcolorsel.c:957
+#: gtk/gtkcolorsel.c:961
 msgid "_Save color here"
 msgstr "Ovdje _spremi boju"
 
-#: gtk/gtkcolorsel.c:1162
+#: gtk/gtkcolorsel.c:1166
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -1182,7 +1182,7 @@ msgstr ""
 "ove stavke,  dovucite ovdje boju ili kliknite desnom tipkom miša i odaberite "
 "\"Spremi ovu boju\"."
 
-#: gtk/gtkcolorsel.c:1929
+#: gtk/gtkcolorsel.c:1953
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
@@ -1190,7 +1190,7 @@ msgstr ""
 "Odaberite boju koju želite iz vanjskog prstena. Odaberite osvijetljenost ili "
 "zatamnjenost te boje pomoću unutrašnjeg prstena."
 
-#: gtk/gtkcolorsel.c:1954
+#: gtk/gtkcolorsel.c:1978
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
@@ -1198,67 +1198,67 @@ msgstr ""
 "Kliknite na kapaljku a onda kliknite na neku boju bilo gdje na vašem zaslonu "
 "za odabir te boje."
 
-#: gtk/gtkcolorsel.c:1963
+#: gtk/gtkcolorsel.c:1987
 msgid "_Hue:"
 msgstr "_Nijansa:"
 
-#: gtk/gtkcolorsel.c:1964
+#: gtk/gtkcolorsel.c:1988
 msgid "Position on the color wheel."
 msgstr "Mjesto na krugu boja."
 
-#: gtk/gtkcolorsel.c:1966
+#: gtk/gtkcolorsel.c:1990
 msgid "_Saturation:"
 msgstr "_Zasićenje:"
 
-#: gtk/gtkcolorsel.c:1967
+#: gtk/gtkcolorsel.c:1991
 msgid "\"Deepness\" of the color."
 msgstr "\"Dubina\" boja."
 
-#: gtk/gtkcolorsel.c:1968
+#: gtk/gtkcolorsel.c:1992
 msgid "_Value:"
 msgstr "_Vrijednost:"
 
-#: gtk/gtkcolorsel.c:1969
+#: gtk/gtkcolorsel.c:1993
 msgid "Brightness of the color."
 msgstr "Osvijetljenost boje."
 
-#: gtk/gtkcolorsel.c:1970
+#: gtk/gtkcolorsel.c:1994
 msgid "_Red:"
 msgstr "_Crvena:"
 
-#: gtk/gtkcolorsel.c:1971
+#: gtk/gtkcolorsel.c:1995
 msgid "Amount of red light in the color."
 msgstr "Količina crvene svjetlosti u boji."
 
-#: gtk/gtkcolorsel.c:1972
+#: gtk/gtkcolorsel.c:1996
 msgid "_Green:"
 msgstr "Zelena:"
 
-#: gtk/gtkcolorsel.c:1973
+#: gtk/gtkcolorsel.c:1997
 msgid "Amount of green light in the color."
 msgstr "Količina zelene svjetlosti u boji."
 
-#: gtk/gtkcolorsel.c:1974
+#: gtk/gtkcolorsel.c:1998
 msgid "_Blue:"
 msgstr "_Plavo:"
 
-#: gtk/gtkcolorsel.c:1975
+#: gtk/gtkcolorsel.c:1999
 msgid "Amount of blue light in the color."
 msgstr "Količina plave svjetlosti u boji."
 
-#: gtk/gtkcolorsel.c:1978
+#: gtk/gtkcolorsel.c:2002
 msgid "_Opacity:"
 msgstr "_Prozirnost:"
 
-#: gtk/gtkcolorsel.c:1986 gtk/gtkcolorsel.c:1997
+#: gtk/gtkcolorsel.c:2010 gtk/gtkcolorsel.c:2021
 msgid "Transparency of the color."
 msgstr "Prozirnost boje."
 
-#: gtk/gtkcolorsel.c:2004
+#: gtk/gtkcolorsel.c:2028
 msgid "Color _Name:"
 msgstr "_Ime boje:"
 
-#: gtk/gtkcolorsel.c:2019
+#: gtk/gtkcolorsel.c:2043
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
@@ -1266,11 +1266,11 @@ msgstr ""
 "Možete upisati boju na HTML način kao heksadecimalnu vrijednost ili "
 "jednostavno englesko ime boje kao što je 'orange'."
 
-#: gtk/gtkcolorsel.c:2038
+#: gtk/gtkcolorsel.c:2062
 msgid "_Palette"
 msgstr "_Paleta"
 
-#: gtk/gtkcolorsel.c:2070
+#: gtk/gtkcolorsel.c:2094
 #, fuzzy
 msgid "Color Wheel"
 msgstr "Kotačić"
@@ -1279,15 +1279,15 @@ msgstr "Kotačić"
 msgid "Color Selection"
 msgstr "Odabir boja"
 
-#: gtk/gtkentry.c:4508 gtk/gtktextview.c:7068
+#: gtk/gtkentry.c:4508 gtk/gtktextview.c:7066
 msgid "Select _All"
 msgstr "Označi _sve"
 
-#: gtk/gtkentry.c:4518 gtk/gtktextview.c:7078
+#: gtk/gtkentry.c:4518 gtk/gtktextview.c:7076
 msgid "Input _Methods"
 msgstr "_Ulazne metode"
 
-#: gtk/gtkentry.c:4529 gtk/gtktextview.c:7089
+#: gtk/gtkentry.c:4529 gtk/gtktextview.c:7087
 msgid "_Insert Unicode Control Character"
 msgstr "_Ubaciti Unicode kontrolni znak"
 
@@ -1418,7 +1418,7 @@ msgstr "_Dodaj"
 msgid "Add the selected folder to the Bookmarks"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:3191 gtk/gtkstock.c:395
+#: gtk/gtkfilechooserdefault.c:3191 gtk/gtkstock.c:398
 msgid "_Remove"
 msgstr "_Ukloni"
 
@@ -1732,7 +1732,7 @@ msgstr "_Promijeni ime"
 msgid "_Selection: "
 msgstr "_Odabir: "
 
-#: gtk/gtkfilesel.c:3151
+#: gtk/gtkfilesel.c:3153
 #, fuzzy, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
@@ -1741,15 +1741,15 @@ msgstr ""
 "Ime datoteke \"%s\" se ne može pretvoriti u UTF-8 (pokušajte postaviti "
 "promjenljivu okruženja G_BROKEN_FILENAMES): %s"
 
-#: gtk/gtkfilesel.c:3154
+#: gtk/gtkfilesel.c:3156
 msgid "Invalid UTF-8"
 msgstr "Neispravan UTF-8"
 
-#: gtk/gtkfilesel.c:4031
+#: gtk/gtkfilesel.c:4033
 msgid "Name too long"
 msgstr "Predugo ime"
 
-#: gtk/gtkfilesel.c:4033
+#: gtk/gtkfilesel.c:4035
 msgid "Couldn't convert filename"
 msgstr "Ne mogu konvertirati ime datoteke"
 
@@ -1757,54 +1757,54 @@ msgstr "Ne mogu konvertirati ime datoteke"
 msgid "(Empty)"
 msgstr "(Prazno)"
 
-#: gtk/gtkfilesystemunix.c:475 gtk/gtkfilesystemunix.c:678
-#: gtk/gtkfilesystemunix.c:1918 gtk/gtkfilesystemwin32.c:482
+#: gtk/gtkfilesystemunix.c:476 gtk/gtkfilesystemunix.c:682
+#: gtk/gtkfilesystemunix.c:1858 gtk/gtkfilesystemwin32.c:482
 #: gtk/gtkfilesystemwin32.c:495 gtk/gtkfilesystemwin32.c:1560
 #, fuzzy, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "Greška kod dohvaćanja informacje za '%s': %s"
 
-#: gtk/gtkfilesystemunix.c:547 gtk/gtkfilesystemwin32.c:537
+#: gtk/gtkfilesystemunix.c:551 gtk/gtkfilesystemwin32.c:537
 #, fuzzy, c-format
 msgid "Error creating directory '%s': %s"
 msgstr "Greška kod stvaranja mape '%s': %s"
 
-#: gtk/gtkfilesystemunix.c:627 gtk/gtkfilesystemwin32.c:597
+#: gtk/gtkfilesystemunix.c:631 gtk/gtkfilesystemwin32.c:597
 msgid "This file system does not support mounting"
 msgstr "Ovaj datotečni sustav ne podržava montiranje."
 
-#: gtk/gtkfilesystemunix.c:635
+#: gtk/gtkfilesystemunix.c:639
 msgid "Filesystem"
 msgstr "Datotečni sustav"
 
-#: gtk/gtkfilesystemunix.c:792
+#: gtk/gtkfilesystemunix.c:796
 #, fuzzy, c-format
 msgid "Could not get a stock icon for %s"
 msgstr "Nisam mogao dohvatiti podatak za datoteku '%s': %s"
 
-#: gtk/gtkfilesystemunix.c:887
+#: gtk/gtkfilesystemunix.c:891
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
 "Please use a different name."
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1489
+#: gtk/gtkfilesystemunix.c:1463 gtk/gtkfilesystemwin32.c:1032
 #, fuzzy, c-format
-msgid "Writing %s failed: %s"
+msgid "Bookmark saving failed: %s"
 msgstr "Nije uspjelo spremanje knjižnih oznaka (%s)"
 
-#: gtk/gtkfilesystemunix.c:1578
+#: gtk/gtkfilesystemunix.c:1518
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1650
+#: gtk/gtkfilesystemunix.c:1590
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1878
+#: gtk/gtkfilesystemunix.c:1818
 #, fuzzy, c-format
 msgid "Error getting information for '/': %s"
 msgstr "Greška kod dohvaćanja informacje za '%s': %s"
@@ -1818,11 +1818,6 @@ msgstr ""
 #, fuzzy, c-format
 msgid "%s (%s)"
 msgstr "%s: %s"
-
-#: gtk/gtkfilesystemwin32.c:1032
-#, fuzzy, c-format
-msgid "Bookmark saving failed: %s"
-msgstr "Nije uspjelo spremanje knjižnih oznaka (%s)"
 
 #: gtk/gtkfontbutton.c:179 gtk/gtkfontbutton.c:292
 msgid "Pick a Font"
@@ -1875,7 +1870,7 @@ msgstr "_Gama vrijednost"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1644
+#: gtk/gtkiconfactory.c:1656
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Greška pri učitavanju sličice: %s"
@@ -1981,7 +1976,7 @@ msgstr "(nepoznato)"
 msgid "clear"
 msgstr "očisti"
 
-#: gtk/gtklabel.c:3935
+#: gtk/gtklabel.c:3934
 msgid "Select All"
 msgstr "Označi sve"
 
@@ -2139,267 +2134,280 @@ msgstr "_Nađi i Zamjeni"
 msgid "_Floppy"
 msgstr "_Disketa"
 
-#. translators, strip the prefix up to and including the first |
+#: gtk/gtkstock.c:333
+msgid "_Fullscreen"
+msgstr ""
+
 #: gtk/gtkstock.c:334
-msgid "Navigation|_Bottom"
+msgid "_Leave Fullscreen"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:336
-msgid "Navigation|_First"
+msgid "Navigation|_Bottom"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:338
-msgid "Navigation|_Last"
+msgid "Navigation|_First"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:340
-msgid "Navigation|_Top"
+msgid "Navigation|_Last"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:342
-msgid "Navigation|_Back"
+msgid "Navigation|_Top"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:344
-msgid "Navigation|_Down"
+msgid "Navigation|_Back"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:346
-msgid "Navigation|_Forward"
+msgid "Navigation|_Down"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:348
+msgid "Navigation|_Forward"
+msgstr ""
+
+#. translators, strip the prefix up to and including the first |
+#: gtk/gtkstock.c:350
 msgid "Navigation|_Up"
 msgstr ""
 
-#: gtk/gtkstock.c:349
+#: gtk/gtkstock.c:351
 msgid "_Harddisk"
 msgstr "_Tvrdi disk"
 
-#: gtk/gtkstock.c:350
+#: gtk/gtkstock.c:352
 msgid "_Help"
 msgstr "_Pomoć"
 
-#: gtk/gtkstock.c:351
+#: gtk/gtkstock.c:353
 msgid "_Home"
 msgstr "_Početna stranica"
 
-#: gtk/gtkstock.c:352
+#: gtk/gtkstock.c:354
 msgid "Increase Indent"
 msgstr "Povećaj uvlaku"
 
-#: gtk/gtkstock.c:353
+#: gtk/gtkstock.c:355
 msgid "Decrease Indent"
 msgstr "Smanji uvlaku"
 
-#: gtk/gtkstock.c:354
+#: gtk/gtkstock.c:356
 msgid "_Index"
 msgstr "_Indeks"
 
-#: gtk/gtkstock.c:355
+#: gtk/gtkstock.c:357
+#, fuzzy
+msgid "_Information"
+msgstr "Informacije"
+
+#: gtk/gtkstock.c:358
 msgid "_Italic"
 msgstr "_Ukošeno"
 
-#: gtk/gtkstock.c:356
+#: gtk/gtkstock.c:359
 msgid "_Jump to"
 msgstr "_Skoči na"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:358
+#: gtk/gtkstock.c:361
 #, fuzzy
 msgid "Justify|_Center"
 msgstr "_Centrirano"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:360
+#: gtk/gtkstock.c:363
 msgid "Justify|_Fill"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:362
+#: gtk/gtkstock.c:365
 msgid "Justify|_Left"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:364
+#: gtk/gtkstock.c:367
 #, fuzzy
 msgid "Justify|_Right"
 msgstr "_Desno"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:367
+#: gtk/gtkstock.c:370
 #, fuzzy
 msgid "Media|_Forward"
 msgstr "_Naprijed"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:369
+#: gtk/gtkstock.c:372
 #, fuzzy
 msgid "Media|_Next"
 msgstr "_Novi"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:371
+#: gtk/gtkstock.c:374
 #, fuzzy
 msgid "Media|P_ause"
 msgstr "_Zalijepi"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:373
+#: gtk/gtkstock.c:376
 msgid "Media|_Play"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:375
+#: gtk/gtkstock.c:378
 msgid "Media|Pre_vious"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:377
+#: gtk/gtkstock.c:380
 #, fuzzy
 msgid "Media|_Record"
 msgstr "_Crvena:"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:379
+#: gtk/gtkstock.c:382
 #, fuzzy
 msgid "Media|R_ewind"
 msgstr "_Nađi"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:381
+#: gtk/gtkstock.c:384
 #, fuzzy
 msgid "Media|_Stop"
 msgstr "_Zaustavi"
 
-#: gtk/gtkstock.c:382
+#: gtk/gtkstock.c:385
 msgid "_Network"
 msgstr "_Mreža"
 
-#: gtk/gtkstock.c:383
+#: gtk/gtkstock.c:386
 msgid "_New"
 msgstr "_Novi"
 
-#: gtk/gtkstock.c:384
+#: gtk/gtkstock.c:387
 msgid "_No"
 msgstr "_Ne"
 
-#: gtk/gtkstock.c:385
+#: gtk/gtkstock.c:388
 msgid "_OK"
 msgstr "_U redu"
 
-#: gtk/gtkstock.c:386
+#: gtk/gtkstock.c:389
 msgid "_Open"
 msgstr "_Otvori"
 
-#: gtk/gtkstock.c:387
+#: gtk/gtkstock.c:390
 msgid "_Paste"
 msgstr "_Zalijepi"
 
-#: gtk/gtkstock.c:388
+#: gtk/gtkstock.c:391
 msgid "_Preferences"
 msgstr "_Podešenja"
 
-#: gtk/gtkstock.c:389
+#: gtk/gtkstock.c:392
 msgid "_Print"
 msgstr "_Ispis"
 
-#: gtk/gtkstock.c:390
+#: gtk/gtkstock.c:393
 msgid "Print Pre_view"
 msgstr "_Pregled prije ispisa"
 
-#: gtk/gtkstock.c:391
+#: gtk/gtkstock.c:394
 msgid "_Properties"
 msgstr "_Svojstva"
 
-#: gtk/gtkstock.c:392
+#: gtk/gtkstock.c:395
 msgid "_Quit"
 msgstr "_Završi"
 
-#: gtk/gtkstock.c:393
+#: gtk/gtkstock.c:396
 msgid "_Redo"
 msgstr "_Ponovi"
 
-#: gtk/gtkstock.c:394
+#: gtk/gtkstock.c:397
 msgid "_Refresh"
 msgstr "_Osvježi"
 
-#: gtk/gtkstock.c:396
+#: gtk/gtkstock.c:399
 msgid "_Revert"
 msgstr "_Vrati"
 
-#: gtk/gtkstock.c:397
+#: gtk/gtkstock.c:400
 msgid "_Save"
 msgstr "_Spremi"
 
-#: gtk/gtkstock.c:398
+#: gtk/gtkstock.c:401
 msgid "Save _As"
 msgstr "Spremi _kao"
 
-#: gtk/gtkstock.c:399
+#: gtk/gtkstock.c:402
 msgid "_Color"
 msgstr "_Boja"
 
-#: gtk/gtkstock.c:400
+#: gtk/gtkstock.c:403
 msgid "_Font"
 msgstr "_Pismo"
 
-#: gtk/gtkstock.c:401
+#: gtk/gtkstock.c:404
 msgid "_Ascending"
 msgstr "_Rastuće"
 
-#: gtk/gtkstock.c:402
+#: gtk/gtkstock.c:405
 msgid "_Descending"
 msgstr "_Silazno"
 
-#: gtk/gtkstock.c:403
+#: gtk/gtkstock.c:406
 msgid "_Spell Check"
 msgstr "_Provjera pravopisa"
 
-#: gtk/gtkstock.c:404
+#: gtk/gtkstock.c:407
 msgid "_Stop"
 msgstr "_Zaustavi"
 
-#: gtk/gtkstock.c:405
+#: gtk/gtkstock.c:408
 msgid "_Strikethrough"
 msgstr "_Precrtano"
 
-#: gtk/gtkstock.c:406
+#: gtk/gtkstock.c:409
 msgid "_Undelete"
 msgstr "_Vrati obrisano"
 
-#: gtk/gtkstock.c:407
+#: gtk/gtkstock.c:410
 msgid "_Underline"
 msgstr "_Podvučeno"
 
-#: gtk/gtkstock.c:408
+#: gtk/gtkstock.c:411
 msgid "_Undo"
 msgstr "_Vrati"
 
-#: gtk/gtkstock.c:409
+#: gtk/gtkstock.c:412
 msgid "_Yes"
 msgstr "_Da"
 
-#: gtk/gtkstock.c:410
+#: gtk/gtkstock.c:413
 msgid "_Normal Size"
 msgstr "_Normalna Veličina"
 
-#: gtk/gtkstock.c:411
+#: gtk/gtkstock.c:414
 msgid "Best _Fit"
 msgstr "_Najbolje pristajanje"
 
-#: gtk/gtkstock.c:412
+#: gtk/gtkstock.c:415
 msgid "Zoom _In"
 msgstr "U_većaj"
 
-#: gtk/gtkstock.c:413
+#: gtk/gtkstock.c:416
 msgid "Zoom _Out"
 msgstr "U_manji"
 
@@ -2526,6 +2534,10 @@ msgstr "X način unosa (XIM)"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Nisam mogao dohvatiti podatak za datoteku '%s': %s"
+
+#, fuzzy
+#~ msgid "Writing %s failed: %s"
+#~ msgstr "Nije uspjelo spremanje knjižnih oznaka (%s)"
 
 #~ msgid "Shift"
 #~ msgstr "Shift"

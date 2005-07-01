@@ -7,17 +7,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-28 16:58+0700\n"
+"POT-Creation-Date: 2005-07-01 14:31-0400\n"
 "PO-Revision-Date: 2005-06-28 17:11+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <L10n@opentle.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:153 gdk-pixbuf/gdk-pixbuf-io.c:838
-#: gdk-pixbuf/gdk-pixbuf-io.c:1068 tests/testfilechooser.c:199
+#: gdk-pixbuf/gdk-pixbuf-io.c:1089 tests/testfilechooser.c:199
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "เปิดแฟ้ม '%s' ไม่สำเร็จ: %s"
@@ -28,7 +28,7 @@ msgid "Image file '%s' contains no data"
 msgstr "แฟ้มรูป '%s' ไม่มีข้อมูล"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:208 gdk-pixbuf/gdk-pixbuf-io.c:887
-#: gdk-pixbuf/gdk-pixbuf-io.c:1109 tests/testfilechooser.c:244
+#: gdk-pixbuf/gdk-pixbuf-io.c:1130 tests/testfilechooser.c:244
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -74,41 +74,41 @@ msgstr "ไม่รู้จักชนิดของแฟ้มรูป"
 msgid "Failed to load image '%s': %s"
 msgstr "ไม่สามารถเปิดรูป '%s': %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1336
+#: gdk-pixbuf/gdk-pixbuf-io.c:1357
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "เกิดข้อผิดพลาด ขณะเขียนแฟ้มรูป: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1382 gdk-pixbuf/gdk-pixbuf-io.c:1511
+#: gdk-pixbuf/gdk-pixbuf-io.c:1403 gdk-pixbuf/gdk-pixbuf-io.c:1532
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "คนคอมไพล์ gdk-pixbuf ไม่ได้เลือกรองรับการบันทึกแฟ้มชนิด: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1416
+#: gdk-pixbuf/gdk-pixbuf-io.c:1437
 msgid "Insufficient memory to save image to callback"
 msgstr "หน่วยความจำไม่พอสำหรับบันทึกข้อมูลภาพผ่านฟังก์ชันเรียกกลับ"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1428
+#: gdk-pixbuf/gdk-pixbuf-io.c:1449
 msgid "Failed to open temporary file"
 msgstr "เปิดแฟ้มชั่วคราวไม่สำเร็จ"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1453
+#: gdk-pixbuf/gdk-pixbuf-io.c:1474
 msgid "Failed to read from temporary file"
 msgstr "อ่านแฟ้มชั่วคราวไม่สำเร็จ"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1687
+#: gdk-pixbuf/gdk-pixbuf-io.c:1708
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "เปิดเขียน '%s' ไม่สำเร็จ: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1711
+#: gdk-pixbuf/gdk-pixbuf-io.c:1732
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
 msgstr "ไม่สามารถปิดแฟ้ม '%s' ขณะเขียนรูป ข้อมูลอาจจะไม่ถูกบันทึก: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1931 gdk-pixbuf/gdk-pixbuf-io.c:1981
+#: gdk-pixbuf/gdk-pixbuf-io.c:1952 gdk-pixbuf/gdk-pixbuf-io.c:2002
 msgid "Insufficient memory to save image into a buffer"
 msgstr "หน่วยความจำไม่พอที่จะอ่านรูปลงในบัฟเฟอร์"
 
@@ -155,14 +155,12 @@ msgstr "ไม่รู้จักชนิดของภาพเคลื่
 msgid "Invalid header in animation"
 msgstr "หัวข้อมูลของภาพเคลื่อนไหวเสีย"
 
-#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:382
-#: gdk-pixbuf/io-ani.c:441 gdk-pixbuf/io-ani.c:460
-#: gdk-pixbuf/io-ani.c:511 gdk-pixbuf/io-ani.c:583
+#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:382 gdk-pixbuf/io-ani.c:441
+#: gdk-pixbuf/io-ani.c:460 gdk-pixbuf/io-ani.c:511 gdk-pixbuf/io-ani.c:583
 msgid "Not enough memory to load animation"
 msgstr "หน่วยความจำไม่พอที่จะอ่านภาพเคลื่อนไหว"
 
-#: gdk-pixbuf/io-ani.c:400 gdk-pixbuf/io-ani.c:417
-#: gdk-pixbuf/io-ani.c:428
+#: gdk-pixbuf/io-ani.c:400 gdk-pixbuf/io-ani.c:417 gdk-pixbuf/io-ani.c:428
 msgid "Malformed chunk in animation"
 msgstr "ส่วนของภาพเคลื่อนไหวเสีย"
 
@@ -170,9 +168,8 @@ msgstr "ส่วนของภาพเคลื่อนไหวเสีย
 msgid "The ANI image format"
 msgstr "แฟ้มรูปชนิด ANI"
 
-#: gdk-pixbuf/io-bmp.c:228 gdk-pixbuf/io-bmp.c:306
-#: gdk-pixbuf/io-bmp.c:338 gdk-pixbuf/io-bmp.c:361
-#: gdk-pixbuf/io-bmp.c:442
+#: gdk-pixbuf/io-bmp.c:228 gdk-pixbuf/io-bmp.c:306 gdk-pixbuf/io-bmp.c:338
+#: gdk-pixbuf/io-bmp.c:361 gdk-pixbuf/io-bmp.c:442
 msgid "BMP image has bogus header data"
 msgstr "รูป BMP นี้มีหัวข้อมูลที่ใช้ไม่ได้"
 
@@ -205,8 +202,7 @@ msgstr "แฟ้มรูปชนิด BMP"
 msgid "Failure reading GIF: %s"
 msgstr "อ่านรูป GIF ไม่สำเร็จ: %s"
 
-#: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1463
-#: gdk-pixbuf/io-gif.c:1624
+#: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1463 gdk-pixbuf/io-gif.c:1624
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "แฟ้ม GIF นี้ขาดข้อมูลบางส่วน (อาจจะคัดลอกแฟ้มมาไม่ครบแฟ้ม)"
 
@@ -231,8 +227,8 @@ msgstr "พบโค้ดเสีย"
 msgid "Circular table entry in GIF file"
 msgstr "ตารางในแฟ้ม GIF มีรายการที่อ้างวกหลับมาถึงตัวเอง"
 
-#: gdk-pixbuf/io-gif.c:862 gdk-pixbuf/io-gif.c:1451
-#: gdk-pixbuf/io-gif.c:1497 gdk-pixbuf/io-gif.c:1612
+#: gdk-pixbuf/io-gif.c:862 gdk-pixbuf/io-gif.c:1451 gdk-pixbuf/io-gif.c:1497
+#: gdk-pixbuf/io-gif.c:1612
 msgid "Not enough memory to load GIF file"
 msgstr "หน่วยความจำไม่พอที่จะอ่านรูป GIF"
 
@@ -267,9 +263,8 @@ msgstr "แฟ้ม GIF ไม่สมบูรณ์"
 msgid "The GIF image format"
 msgstr "แฟ้มรูปชนิด GIF"
 
-#: gdk-pixbuf/io-ico.c:219 gdk-pixbuf/io-ico.c:271
-#: gdk-pixbuf/io-ico.c:340 gdk-pixbuf/io-ico.c:403
-#: gdk-pixbuf/io-ico.c:433
+#: gdk-pixbuf/io-ico.c:219 gdk-pixbuf/io-ico.c:271 gdk-pixbuf/io-ico.c:340
+#: gdk-pixbuf/io-ico.c:403 gdk-pixbuf/io-ico.c:433
 msgid "Not enough memory to load icon"
 msgstr "หน่วยความจำไม่พอที่จะอ่านรูปไอคอน"
 
@@ -330,8 +325,8 @@ msgstr "หน่วยความจำไม่พอสำหรับอ่
 msgid "Unsupported JPEG color space (%s)"
 msgstr "ไม่รองรับห้วงสีนี้สำหรับ JPEG (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:678
-#: gdk-pixbuf/io-jpeg.c:943 gdk-pixbuf/io-jpeg.c:952
+#: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:678 gdk-pixbuf/io-jpeg.c:943
+#: gdk-pixbuf/io-jpeg.c:952
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "หน่วยความจำไม่พอสำหรับอ่านรูป JPEG นี้"
 
@@ -508,8 +503,7 @@ msgstr "แฟ้ม PNM มีค่าจำนวนสีมากสุด�
 msgid "Cannot handle PNM files with maximum color values greater than 255"
 msgstr "ไม่รองรับแฟ้ม PNM มีค่าจำนวนสีมากสุดเกิน 255"
 
-#: gdk-pixbuf/io-pnm.c:438 gdk-pixbuf/io-pnm.c:466
-#: gdk-pixbuf/io-pnm.c:498
+#: gdk-pixbuf/io-pnm.c:438 gdk-pixbuf/io-pnm.c:466 gdk-pixbuf/io-pnm.c:498
 msgid "Raw PNM image type is invalid"
 msgstr "รูป Raw PNM เสีย"
 
@@ -610,9 +604,8 @@ msgstr "หน่วยความจำไม่พอสำหรับหั
 msgid "TGA image has invalid dimensions"
 msgstr "รูป TGA มีมิติที่ไม่ถูกต้อง"
 
-#: gdk-pixbuf/io-tga.c:775 gdk-pixbuf/io-tga.c:784
-#: gdk-pixbuf/io-tga.c:794 gdk-pixbuf/io-tga.c:804
-#: gdk-pixbuf/io-tga.c:811
+#: gdk-pixbuf/io-tga.c:775 gdk-pixbuf/io-tga.c:784 gdk-pixbuf/io-tga.c:794
+#: gdk-pixbuf/io-tga.c:804 gdk-pixbuf/io-tga.c:811
 msgid "TGA image type not supported"
 msgstr "ไม่รองรับรูปชนิด TGA"
 
@@ -644,8 +637,8 @@ msgstr "ความกว้างหรือสูงของรูปชน
 msgid "Dimensions of TIFF image too large"
 msgstr "รูป TIFF มีค่ามิติที่ใหญ่เกิน"
 
-#: gdk-pixbuf/io-tiff.c:225 gdk-pixbuf/io-tiff.c:237
-#: gdk-pixbuf/io-tiff.c:286 gdk-pixbuf/io-tiff.c:572
+#: gdk-pixbuf/io-tiff.c:225 gdk-pixbuf/io-tiff.c:237 gdk-pixbuf/io-tiff.c:286
+#: gdk-pixbuf/io-tiff.c:572
 msgid "Insufficient memory to open TIFF file"
 msgstr "หน่วยความจำไม่พอจะเปิดแฟ้ม TIFF"
 
@@ -729,8 +722,7 @@ msgstr "แฟ้ม XPM ตั้งค่าไบต์ต่อพิกเ�
 msgid "XPM file has invalid number of colors"
 msgstr "แฟ้ม XPM ตั้งค่าจำนวนสีที่ใช้ไม่ได้"
 
-#: gdk-pixbuf/io-xpm.c:519 gdk-pixbuf/io-xpm.c:528
-#: gdk-pixbuf/io-xpm.c:580
+#: gdk-pixbuf/io-xpm.c:519 gdk-pixbuf/io-xpm.c:528 gdk-pixbuf/io-xpm.c:580
 msgid "Cannot allocate memory for loading XPM image"
 msgstr "หน่วยความจำไม่พอสำหรับอ่านรูป XPM"
 
@@ -1231,15 +1223,15 @@ msgstr "วงสี"
 msgid "Color Selection"
 msgstr "เลือกสี"
 
-#: gtk/gtkentry.c:4524 gtk/gtktextview.c:7066
+#: gtk/gtkentry.c:4508 gtk/gtktextview.c:7066
 msgid "Select _All"
 msgstr "เลือกทั้ง_หมด"
 
-#: gtk/gtkentry.c:4534 gtk/gtktextview.c:7076
+#: gtk/gtkentry.c:4518 gtk/gtktextview.c:7076
 msgid "Input _Methods"
 msgstr "Input _Methods"
 
-#: gtk/gtkentry.c:4545 gtk/gtktextview.c:7087
+#: gtk/gtkentry.c:4529 gtk/gtktextview.c:7087
 msgid "_Insert Unicode Control Character"
 msgstr "แ_ทรกตัวอักษรควบคุมของยูนิโค้ด"
 
@@ -1650,7 +1642,7 @@ msgstr "เ_ปลี่ยนชื่อ"
 msgid "_Selection: "
 msgstr "_สิ่งที่เลือก: "
 
-#: gtk/gtkfilesel.c:3151
+#: gtk/gtkfilesel.c:3153
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
@@ -1659,15 +1651,15 @@ msgstr ""
 "แปลงชื่อแฟ้ม \"%s\" ไปเป็น UTF-8 ไม่สำเร็จ (ลองตั้งตัวแปรสภาพแวดล้อม "
 "G_BROKEN_FILENAMES): %s"
 
-#: gtk/gtkfilesel.c:3154
+#: gtk/gtkfilesel.c:3156
 msgid "Invalid UTF-8"
 msgstr "นี่ไม่ใช่ UTF-8"
 
-#: gtk/gtkfilesel.c:4031
+#: gtk/gtkfilesel.c:4033
 msgid "Name too long"
 msgstr "ชื่อยาวเกินไป"
 
-#: gtk/gtkfilesel.c:4033
+#: gtk/gtkfilesel.c:4035
 msgid "Couldn't convert filename"
 msgstr "แปลงชื่อแฟ้มไม่สำเร็จ"
 

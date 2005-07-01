@@ -127,7 +127,7 @@ asks for more, by calling gdk_window_get_pointer().
 @GDK_STRUCTURE_MASK: receive events about window configuration change
 @GDK_PROPERTY_CHANGE_MASK: receive property change events
 @GDK_VISIBILITY_NOTIFY_MASK: receive visibility change events
-@GDK_PROXIMITY_IN_MASK: receive proximity in events 
+@GDK_PROXIMITY_IN_MASK: receive proximity in events
 @GDK_PROXIMITY_OUT_MASK: receive proximity out events
 @GDK_SUBSTRUCTURE_MASK: receive events about window configuration changes of 
   child windows

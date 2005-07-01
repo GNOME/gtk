@@ -174,12 +174,6 @@ private fields and should not be directly accessed.
 
 </para>
 
-<!-- ##### STRUCT GtkIconViewPrivate ##### -->
-<para>
-
-</para>
-
-
 <!-- ##### USER_FUNCTION GtkIconViewForeachFunc ##### -->
 <para>
 A function used by gtk_icon_view_selected_foreach() to map all
@@ -566,6 +560,18 @@ selected rows.  It will be called on every selected row in the view.
 @end_path: 
 @Returns: 
 
+
+<!-- ##### ENUM GtkIconViewDropPosition ##### -->
+<para>
+
+</para>
+
+@GTK_ICON_VIEW_NO_DROP: 
+@GTK_ICON_VIEW_DROP_INTO: 
+@GTK_ICON_VIEW_DROP_LEFT: 
+@GTK_ICON_VIEW_DROP_RIGHT: 
+@GTK_ICON_VIEW_DROP_ABOVE: 
+@GTK_ICON_VIEW_DROP_BELOW: 
 
 <!-- ##### FUNCTION gtk_icon_view_enable_model_drag_source ##### -->
 <para>

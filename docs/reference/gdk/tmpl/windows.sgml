@@ -142,6 +142,7 @@ ratio.
 
 @min_width: minimum width of window (or -1 to use requisition, with #GtkWindow only)
 @min_height minimum height of window (or -1 to use requisition, with #GtkWindow only)
+@min_height: 
 @max_width: maximum width of window (or -1 to use requisition, with #GtkWindow only)
 @max_height: maximum height of window (or -1 to use requisition, with #GtkWindow only)
 @base_width: allowed window widths are @base_width + @width_inc * N where N is any integer (-1 allowed with #GtkWindow)
@@ -548,16 +549,17 @@ Deprecated equivalent to gdk_draw_drawable(), see that function for docs
 
 @drawable: a #GdkDrawable
 @gc: a #GdkGC sharing the drawable's visual and colormap
-@drawable: a #GdkDrawable
 @x: X position in @drawable where the rectangle should be drawn
 @y: Y position in @drawable where the rectangle should be drawn
 @source_drawable: the source #GdkDrawable, which may be the same as @drawable
 @source_x: X position in @src of rectangle to draw
 @source_y: Y position in @src of rectangle to draw
-@xdest: X position in @drawable where the rectangle should be drawn
-@ydest: Y position in @drawable where the rectangle should be drawn
 @width: width of rectangle to draw, or -1 for entire @src width
 @height: height of rectangle to draw, or -1 for entire @src height
+<!-- # Unused Parameters # -->
+@drawable: a #GdkDrawable
+@xdest: X position in @drawable where the rectangle should be drawn
+@ydest: Y position in @drawable where the rectangle should be drawn
 
 
 <!-- ##### FUNCTION gdk_window_raise ##### -->
@@ -1185,7 +1187,7 @@ Like the X Window System, GDK supports 8 modifier keys and 5 mouse buttons.
 @GDK_BUTTON5_MASK: the fifth mouse button.
 @GDK_RELEASE_MASK: not used in GDK itself. GTK+ uses it to differentiate 
   between (keyval, modifiers) pairs from key press and release events.
-@GDK_MODIFIER_MASK: a mask covering all modifier types. 
+@GDK_MODIFIER_MASK: a mask covering all modifier types.
 
 <!-- ##### FUNCTION gdk_window_get_parent ##### -->
 <para>
