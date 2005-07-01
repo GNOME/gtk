@@ -1,3 +1,9 @@
+2005-07-01  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk-pixbuf-io.c (gdk_pixbuf_new_from_file_at_scale): Allow
+	-1 for width/height and interpret them as "not constrained".
+	(#309258, Mark McLoughlin)
+
 2005-06-26  Tor Lillqvist  <tml@novell.com>
 
 	* Makefile.am: Current GNU tools do understand the PRIVATE

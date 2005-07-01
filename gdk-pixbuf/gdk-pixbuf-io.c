@@ -939,9 +939,20 @@ size_prepared_cb (GdkPixbufLoader *loader,
 
 	g_return_if_fail (width > 0 && height > 0);
 
-	if(info->preserve_aspect_ratio) {
-		if ((double)height * (double)info->width >
-		    (double)width * (double)info->height) {
+	if (info->preserve_aspect_ratio && 
+	    (info->width > 0 || info->height > 0)) {
+		if (info->width < 0)
+		{
+			width = width * (double)info->height/(double)height;
+			height = info->height;
+		}
+		else if (info->height < 0)
+		{
+			height = height * (double)info->width/(double)width;
+			width = info->width;
+		}
+		else if ((double)height * (double)info->width >
+			 (double)width * (double)info->height) {
 			width = 0.5 + (double)width * (double)info->height / (double)height;
 			height = info->height;
 		} else {
@@ -949,8 +960,10 @@ size_prepared_cb (GdkPixbufLoader *loader,
 			width = info->width;
 		}
 	} else {
-		width = info->width;
-		height = info->height;
+		if (info->width > 0)
+			width = info->width;
+		if (info->height > 0)
+			height = info->height;
 	}
 	
 	gdk_pixbuf_loader_set_size (loader, width, height);
@@ -959,8 +972,8 @@ size_prepared_cb (GdkPixbufLoader *loader,
 /**
  * gdk_pixbuf_new_from_file_at_size:
  * @filename: Name of file to load, in the GLib file name encoding
- * @width: The width the image should have
- * @height: The height the image should have
+ * @width: The width the image should have or -1 to not constrain the width
+ * @height: The height the image should have or -1 to not constrain the height
  * @error: Return location for an error
  *
  * Creates a new pixbuf by loading an image from a file.  The file format is
@@ -1018,8 +1031,8 @@ gdk_pixbuf_new_from_file_at_size (const char *filename,
 /**
  * gdk_pixbuf_new_from_file_at_scale:
  * @filename: Name of file to load, in the GLib file name encoding
- * @width: The width the image should have
- * @height: The height the image should have
+ * @width: The width the image should have or -1 to not constrain the width
+ * @height: The height the image should have or -1 to not constrain the height
  * @preserve_aspect_ratio: %TRUE to preserve the image's aspect ratio
  * @error: Return location for an error
  *
@@ -1027,7 +1040,14 @@ gdk_pixbuf_new_from_file_at_size (const char *filename,
  * detected automatically. If %NULL is returned, then @error will be set.
  * Possible errors are in the #GDK_PIXBUF_ERROR and #G_FILE_ERROR domains.
  * The image will be scaled to fit in the requested size, optionally preserving
- * the image's aspect ratio.
+ * the image's aspect ratio. 
+ *
+ * When preserving the aspect ratio, a @width of -1 will cause the image
+ * to be scaled to the exact given height, and a @height of -1 will cause
+ * the image to be scaled to the exact given width. When not preserving
+ * aspect ratio, a @width or @height of -1 means to not scale the image 
+ * at all in that dimension. Negative values for @width and @height are 
+ * allowed since 2.8.
  *
  * Return value: A newly-created pixbuf with a reference count of 1, or %NULL 
  * if any of several error conditions occurred:  the file could not be opened,
@@ -1057,7 +1077,8 @@ gdk_pixbuf_new_from_file_at_scale (const char *filename,
 	} info;
 
 	g_return_val_if_fail (filename != NULL, NULL);
-        g_return_val_if_fail (width > 0 && height > 0, NULL);
+        g_return_val_if_fail (width > 0 || width == -1, NULL);
+        g_return_val_if_fail (height > 0 || height == -1, NULL);
 
 	f = g_fopen (filename, "rb");
 	if (!f) {
