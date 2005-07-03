@@ -3235,15 +3235,12 @@ gtk_tree_view_vertical_autoscroll (GtkTreeView *tree_view)
 
   /* see if we are near the edge. */
   offset = y - (visible_rect.y + 2 * SCROLL_EDGE_SIZE);
-  g_print ("offset1 %d\n", offset);
   if (offset > 0)
     {
       offset = y - (visible_rect.y + visible_rect.height - 2 * SCROLL_EDGE_SIZE);
-      g_print ("offset2 %d\n", offset);
       if (offset < 0)
 	return;
     }
-  g_print ("offset3 %d\n", offset);
 
   value = CLAMP (tree_view->priv->vadjustment->value + offset, 0.0,
 		 tree_view->priv->vadjustment->upper - tree_view->priv->vadjustment->page_size);

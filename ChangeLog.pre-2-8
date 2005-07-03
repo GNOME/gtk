@@ -1,3 +1,8 @@
+2005-07-03  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_vertical_autoscroll): remove
+	stray debugging g_prints.
+
 2005-07-01  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilesel.c (cmpl_init_state): Prevent an infinite
