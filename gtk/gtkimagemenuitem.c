@@ -31,6 +31,7 @@
 #include "gtkstock.h"
 #include "gtkiconfactory.h"
 #include "gtkimage.h"
+#include "gtkmenubar.h"
 #include "gtkcontainer.h"
 #include "gtkwindow.h"
 #include "gtkprivate.h"
@@ -208,24 +209,35 @@ gtk_image_menu_item_toggle_size_request (GtkMenuItem *menu_item,
 					 gint        *requisition)
 {
   GtkImageMenuItem *image_menu_item = GTK_IMAGE_MENU_ITEM (menu_item);
+  GtkPackDirection pack_dir;
+  
+  if (GTK_IS_MENU_BAR (GTK_WIDGET (menu_item)->parent))
+    pack_dir = gtk_menu_bar_get_child_pack_direction (GTK_MENU_BAR (GTK_WIDGET (menu_item)->parent));
+  else
+    pack_dir = GTK_PACK_DIRECTION_LTR;
 
   *requisition = 0;
 
   if (image_menu_item->image && show_image (image_menu_item))
     {
       GtkRequisition image_requisition;
-
+      guint toggle_spacing;
       gtk_widget_get_child_requisition (image_menu_item->image,
                                         &image_requisition);
 
-      if (image_requisition.width > 0)
+      gtk_widget_style_get (GTK_WIDGET (menu_item),
+			    "toggle-spacing", &toggle_spacing,
+			    NULL);
+      
+      if (pack_dir == GTK_PACK_DIRECTION_LTR || pack_dir == GTK_PACK_DIRECTION_RTL)
 	{
-	  guint toggle_spacing;
-	  gtk_widget_style_get (GTK_WIDGET (menu_item),
-				"toggle-spacing", &toggle_spacing,
-				NULL);
-
-	  *requisition = image_requisition.width + toggle_spacing;
+	  if (image_requisition.width > 0)
+	    *requisition = image_requisition.width + toggle_spacing;
+	}
+      else
+	{
+	  if (image_requisition.height > 0)
+	    *requisition = image_requisition.height + toggle_spacing;
 	}
     }
 }
@@ -236,8 +248,15 @@ gtk_image_menu_item_size_request (GtkWidget      *widget,
                                   GtkRequisition *requisition)
 {
   GtkImageMenuItem *image_menu_item;
+  gint child_width = 0;
   gint child_height = 0;
+  GtkPackDirection pack_dir;
   
+  if (GTK_IS_MENU_BAR (widget->parent))
+    pack_dir = gtk_menu_bar_get_child_pack_direction (GTK_MENU_BAR (widget->parent));
+  else
+    pack_dir = GTK_PACK_DIRECTION_LTR;
+
   image_menu_item = GTK_IMAGE_MENU_ITEM (widget);
   
   if (image_menu_item->image && 
@@ -249,6 +268,7 @@ gtk_image_menu_item_size_request (GtkWidget      *widget,
       gtk_widget_size_request (image_menu_item->image,
                                &child_requisition);
 
+      child_width = child_requisition.width;
       child_height = child_requisition.height;
     }
   
@@ -257,7 +277,11 @@ gtk_image_menu_item_size_request (GtkWidget      *widget,
   /* not done with height since that happens via the
    * toggle_size_request
    */
-  requisition->height = MAX (requisition->height, child_height);
+  if (pack_dir == GTK_PACK_DIRECTION_LTR || pack_dir == GTK_PACK_DIRECTION_RTL)
+    requisition->height = MAX (requisition->height, child_height);
+  else
+    requisition->width = MAX (requisition->width, child_width);
+    
   
   /* Note that GtkMenuShell always size requests before
    * toggle_size_request, so toggle_size_request will be able to use
@@ -270,6 +294,12 @@ gtk_image_menu_item_size_allocate (GtkWidget     *widget,
                                    GtkAllocation *allocation)
 {
   GtkImageMenuItem *image_menu_item;
+  GtkPackDirection pack_dir;
+  
+  if (GTK_IS_MENU_BAR (widget->parent))
+    pack_dir = gtk_menu_bar_get_child_pack_direction (GTK_MENU_BAR (widget->parent));
+  else
+    pack_dir = GTK_PACK_DIRECTION_LTR;
   
   image_menu_item = GTK_IMAGE_MENU_ITEM (widget);  
   
@@ -294,25 +324,44 @@ gtk_image_menu_item_size_allocate (GtkWidget     *widget,
       gtk_widget_get_child_requisition (image_menu_item->image,
                                         &child_requisition);
 
-      offset = GTK_CONTAINER (image_menu_item)->border_width +
-	widget->style->xthickness;
-
-      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR) 
+      if (pack_dir == GTK_PACK_DIRECTION_LTR ||
+	  pack_dir == GTK_PACK_DIRECTION_RTL)
 	{
-	  x = offset + horizontal_padding +
+	  offset = GTK_CONTAINER (image_menu_item)->border_width +
+	    widget->style->xthickness;
+	  
+	  if ((gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR) ==
+	      (pack_dir == GTK_PACK_DIRECTION_LTR))
+	    x = offset + horizontal_padding +
 	      (GTK_MENU_ITEM (image_menu_item)->toggle_size -
 	       toggle_spacing - child_requisition.width) / 2;
-	}
-      else
-	{
-	  x = widget->allocation.width - offset - horizontal_padding -
+	  else
+	    x = widget->allocation.width - offset - horizontal_padding -
 	      GTK_MENU_ITEM (image_menu_item)->toggle_size + toggle_spacing +
 	      (GTK_MENU_ITEM (image_menu_item)->toggle_size -
 	       toggle_spacing - child_requisition.width) / 2;
+	  
+	  y = (widget->allocation.height - child_requisition.height) / 2;
 	}
+      else
+	{
+	  offset = GTK_CONTAINER (image_menu_item)->border_width +
+	    widget->style->ythickness;
+	  
+	  if ((gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR) ==
+	      (pack_dir == GTK_PACK_DIRECTION_TTB))
+	    y = offset + horizontal_padding +
+	      (GTK_MENU_ITEM (image_menu_item)->toggle_size -
+	       toggle_spacing - child_requisition.height) / 2;
+	  else
+	    y = widget->allocation.height - offset - horizontal_padding -
+	      GTK_MENU_ITEM (image_menu_item)->toggle_size + toggle_spacing +
+	      (GTK_MENU_ITEM (image_menu_item)->toggle_size -
+	       toggle_spacing - child_requisition.height) / 2;
 
-      y = (widget->allocation.height - child_requisition.height) / 2;
-
+	  x = (widget->allocation.width - child_requisition.width) / 2;
+	}
+      
       child_allocation.width = child_requisition.width;
       child_allocation.height = child_requisition.height;
       child_allocation.x = widget->allocation.x + MAX (x, 0);

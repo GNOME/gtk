@@ -1,5 +1,9 @@
 2005-07-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkimagemenuitem.c: Hmm, when committing my vertical
+	menubar patch, I forgot the GtkImageMenuItem changes. And I
+	managed to do 2 releases without noticing that...
+
 	* gtk/gtksettings.c (gtk_settings_class_init): Correct the 
 	blurb for the icon-sizes setting. String change.  
 	(#309355, Benjamin Berg)
