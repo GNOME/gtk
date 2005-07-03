@@ -372,7 +372,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-icon-sizes",
 								   P_("Icon Sizes"),
-								   P_("List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."),
+								   P_("List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."),
 								  NULL,
 								  GTK_PARAM_READWRITE),
                                              NULL);
