@@ -4858,7 +4858,7 @@ gtk_default_draw_expander (GtkStyle        *style,
   y_double = y + 0.5;
   
   cairo_translate (cr, x_double, y_double);
-  cairo_rotate (cr, degrees * M_PI / 180);
+  cairo_rotate (cr, degrees * G_PI / 180);
 
   cairo_move_to (cr, - radius / 2., - radius);
   cairo_line_to (cr,   radius / 2.,   0);

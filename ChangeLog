@@ -1,3 +1,20 @@
+2005-07-03  Hans Breuer  <hans@breuer.org>
+
+	* **/makefile.msc[.in] : updated
+	* gtk/gtkiconcache.c : <io.h> for open()
+	* gtk/gtkstyle.c : use G_PI instead of M_PI
+
+	* gdk/win32/gdkcursor-win32.c : implement gdk_cursor_new_from_name()
+	by mapping the lower case win32 api name to the respective cursor.
+	E.g. pass "wait" to get the IDC_WAIT cursor. Also allows to load
+	cursors from named resources in the executable.
+	(gdk_cursor_get_image) : just return NULL for now.
+
+	* gdk/win32/gdkgeometry-win32.c : implement gdk_window_move_region()
+	by delegation to ScollWindowEx(), untested.
+
+	* gdk/win32/gdkwindow-win32.c : stub for gdk_window_set_urgency_hint()
+
 2005-07-03  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkimagemenuitem.c: Hmm, when committing my vertical

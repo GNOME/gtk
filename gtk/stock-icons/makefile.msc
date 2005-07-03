@@ -57,13 +57,18 @@ VARIABLES = \
 	stock_first_24		stock_first_24.png	\
 	stock_font_16		stock_font_16.png	\
 	stock_font_24		stock_font_24.png	\
+	stock_fullscreen_16	stock_fullscreen_16.png \
+	stock_fullscreen_24	stock_fullscreen_24.png \
 	stock_harddisk_16		stock_harddisk_16.png	\
 	stock_harddisk_24		stock_harddisk_24.png	\
 	stock_help_16		stock_help_16.png	\
 	stock_help_24		stock_help_24.png	\
 	stock_home_16		stock_home_16.png	\
 	stock_home_24		stock_home_24.png	\
+	stock_index_16		stock_index_16.png \
 	stock_index_24		stock_index_24.png	\
+	stock_info_16		stock_info_16.png \
+	stock_info_24		stock_info_24.png \
 	stock_insert_image_16		stock_insert_image_16.png	\
 	stock_insert_image_24		stock_insert_image_24.png	\
 	stock_insert_object_16		stock_insert_object_16.png	\
@@ -74,6 +79,8 @@ VARIABLES = \
 	stock_jump_to_rtl_24		stock_jump_to_rtl_24.png	\
 	stock_last_16		stock_last_16.png	\
 	stock_last_24		stock_last_24.png	\
+	stock_leave_fullscreen_16	stock_leave_fullscreen_16.png \
+	stock_leave_fullscreen_24	stock_leave_fullscreen_24.png \
 	stock_left_arrow_16		stock_left_arrow_16.png	\
 	stock_left_arrow_24		stock_left_arrow_24.png	\
 	stock_media_forward_16		stock_media_forward_16.png	\
@@ -172,9 +179,13 @@ VARIABLES2 = \
 	stock_up_arrow_24		stock_up_arrow_24.png	\
 	stock_wizard_24		stock_wizard_24.png	\
 	stock_yes_20		stock_yes_20.png	\
+	stock_zoom_1_16		stock_zoom_1_16.png \
 	stock_zoom_1_24		stock_zoom_1_24.png	\
+	stock_zoom_fit_16		stock_zoom_fit_16.png	\
 	stock_zoom_fit_24		stock_zoom_fit_24.png	\
+	stock_zoom_in_16		stock_zoom_in_16.png \
 	stock_zoom_in_24		stock_zoom_in_24.png	\
+	stock_zoom_out_16		stock_zoom_out_16.png	\
 	stock_zoom_out_24		stock_zoom_out_24.png	\
 
 

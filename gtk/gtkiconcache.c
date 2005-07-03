@@ -27,6 +27,9 @@
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
+#ifdef G_OS_WIN32
+#include <io.h>
+#endif
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>

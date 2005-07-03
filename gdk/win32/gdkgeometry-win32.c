@@ -178,6 +178,84 @@ gdk_window_scroll (GdkWindow *window,
 }
 
 void
+gdk_window_move_region (GdkWindow *window,
+			GdkRegion *region,
+			gint       dx,
+			gint       dy)
+{
+  GdkRegion *invalidate_region;
+  GdkWindowImplWin32 *impl;
+  GdkWindowObject *obj;
+  GdkRectangle src_rect, dest_rect;
+  HRGN hrgn;
+  RECT clipRect, destRect;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+  
+  obj = GDK_WINDOW_OBJECT (window);
+  impl = GDK_WINDOW_IMPL_WIN32 (obj->impl);  
+
+  if (dx == 0 && dy == 0)
+    return;
+  
+  /* Move the current invalid region */
+  if (obj->update_area)
+    gdk_region_offset (obj->update_area, dx, dy);
+  
+  /* impl->position_info.clip_rect isn't meaningful for toplevels */
+  if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_CHILD)
+    src_rect = impl->position_info.clip_rect;
+  else
+    {
+      src_rect.x = 0;
+      src_rect.y = 0;
+      src_rect.width = impl->width;
+      src_rect.height = impl->height;
+    }
+  
+  invalidate_region = gdk_region_rectangle (&src_rect);
+
+  dest_rect = src_rect;
+  dest_rect.x += dx;
+  dest_rect.y += dy;
+  gdk_rectangle_intersect (&dest_rect, &src_rect, &dest_rect);
+
+  if (dest_rect.width > 0 && dest_rect.height > 0)
+    {
+      GdkRegion *tmp_region;
+
+      tmp_region = gdk_region_rectangle (&dest_rect);
+      gdk_region_subtract (invalidate_region, tmp_region);
+      gdk_region_destroy (tmp_region);
+    }
+  
+  /* no guffaw scroll on win32 */
+  hrgn = _gdk_win32_gdkregion_to_hrgn(invalidate_region, 0, 0);
+  gdk_region_destroy (invalidate_region);
+  destRect.left = dest_rect.y;
+  destRect.top = dest_rect.x;
+  destRect.right = dest_rect.x + dest_rect.width;
+  destRect.bottom = dest_rect.y + dest_rect.height;
+  clipRect.left = src_rect.y;
+  clipRect.top = src_rect.x;
+  clipRect.right = src_rect.x + src_rect.width;
+  clipRect.bottom = src_rect.y + src_rect.height;
+
+  g_print ("ScrollWindowEx(%d, %d, ...) - if you see this work, remove trace;)\n", dx, dy);
+  API_CALL(ScrollWindowEx, (GDK_WINDOW_HWND (window),
+                       dx, dy, /* in: scroll offsets */
+                       NULL, /* in: scroll rect, NULL == entire client area */
+                       &clipRect, /* in: restrict to */
+                       hrgn, /* in: update region */
+                       NULL, /* out: update rect */
+                       SW_INVALIDATE));
+  API_CALL(DeleteObject, (hrgn));
+}
+
+void
 _gdk_window_move_resize_child (GdkWindow *window,
 			       gint       x,
 			       gint       y,

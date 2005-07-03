@@ -1567,6 +1567,19 @@ gdk_window_set_hints (GdkWindow *window,
     }
 }
 
+void
+gdk_window_set_urgency_hint (GdkWindow *window,
+			     gboolean   urgent)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD);
+  
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  g_warning ("gdk_window_set_urgency_hint() not implemented yet.");
+}
+
 void 
 gdk_window_set_geometry_hints (GdkWindow      *window,
 			       GdkGeometry    *geometry,

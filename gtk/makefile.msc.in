@@ -436,7 +436,7 @@ gtk_extra_sources = \
 GENERATED = \
 	gtktypebuiltins.h gtktypebuiltins.c \
 	gtkmarshal.h gtkmarshal.c gtkmarshalers.h gtkmarshalers.c \
-	gtk.def gtkalias.h
+	gtk.def gtkalias.h gtkaliasdef.c
 
 #
 # Generated source files:
@@ -446,10 +446,13 @@ generated : $(GENERATED)
 
 gtk.def: gtk.symbols makefile.msc
 	echo EXPORTS > gtk.def
-	cl /EP -DINCLUDE_VARIABLES -DG_OS_WIN32 gtk.symbols >> gtk.def
+	cl /EP -DINCLUDE_VARIABLES -DG_OS_WIN32 -DALL_FILES gtk.symbols >> gtk.def
 
 gtkalias.h: gtk.symbols
 	cl /EP -DG_OS_WIN32 -DGTK_WINDOWING_WIN32 -DINCLUDE_INTERNAL_SYMBOLS gtk.symbols | $(PERL) makegtkalias.pl > gtkalias.h
+
+gtkaliasdef.c: gtk.symbols
+	 perl makegtkalias.pl -def < gtk.symbols > gtkaliasdef.c
 
 # generate type identifier header (GTK_TYPE_WIDGET_FLAGS)
 # use 'echo' to work around 'command line too long'
@@ -502,6 +505,7 @@ gtk-win32.res : gtk-win32.rc
 libgtk-win32-$(GTK_VER)-0.dll : $(gtk_OBJECTS) gtk.def gtk-win32.res
 	$(CC) $(CFLAGS) -LD -Fm -Fe$@ $(gtk_OBJECTS) gtk-win32.res \
 	$(GDK_LIBS) $(GDK_PIXBUF_LIBS) $(PANGO_LIBS) $(INTL_LIBS) $(GLIB_LIBS) $(GMODULE_LIBS) \
+	$(CAIRO_LIBS) $(PANGOCAIRO_LIBS) \
 	gdi32.lib user32.lib advapi32.lib wsock32.lib shell32.lib ole32.lib \
 	$(LDFLAGS) /implib:gtk-win32-$(GTK_VER).lib /def:gtk.def
 

@@ -73,6 +73,7 @@ all: \
 
 gdk_OBJECTS = \
 	gdk.obj \
+	gdkcairo.obj \
 	gdkcolor.obj \
 	gdkcursor.obj \
 	gdkdisplay.obj \

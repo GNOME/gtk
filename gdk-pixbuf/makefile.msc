@@ -44,6 +44,7 @@ OBJECTS = \
 	gdk-pixbuf-scale.obj \
 	gdk-pixbuf-util.obj \
 	gdk-pixbuf.obj \
+	gdk-pixbuf-simple-anim.obj \
 	gdk-pixdata.obj \
 	io-bmp.obj \
 	io-wbmp.obj \

@@ -322,6 +322,49 @@ gdk_cursor_new_from_pixmap (GdkPixmap      *source,
   return _gdk_win32_cursor_new_from_hcursor (hcursor, GDK_CURSOR_IS_PIXMAP);
 }
 
+static struct {
+  char *name;
+  char *id;
+} _default_cursors[] = {
+  { "appstarting", IDC_APPSTARTING },
+  { "arrow", IDC_ARROW },
+  { "cross", IDC_CROSS },
+#if 0 /* in the SDK docs but not the headers ? */
+  { "hand",  IDC_HAND },
+#endif
+  { "help",  IDC_HELP },
+  { "ibeam", IDC_IBEAM },
+  { "sizeall", IDC_SIZEALL },
+  { "sizenesw", IDC_SIZENESW },
+  { "sizens", IDC_SIZENS },
+  { "sizenwse", IDC_SIZENWSE },
+  { "sizewe", IDC_SIZEWE },
+  { "uparrow", IDC_UPARROW },
+  { "wait", IDC_WAIT }
+};
+
+GdkCursor*  
+gdk_cursor_new_from_name (GdkDisplay  *display,
+			  const gchar *name)
+{
+  HCURSOR hcursor = NULL;
+  int i;
+
+  for (i = 0; i < G_N_ELEMENTS(_default_cursors); i++)
+    {
+      if (0 == strcmp(_default_cursors[i].name, name))
+        hcursor = LoadCursor (NULL, _default_cursors[i].id);
+    }
+  /* allow to load named cursor resources linked into the executable */
+  if (!hcursor)
+    hcursor = LoadCursor (_gdk_app_hmodule, name);
+
+  if (hcursor)
+    return _gdk_win32_cursor_new_from_hcursor (hcursor, GDK_X_CURSOR);
+
+  return NULL;
+}
+
 void
 _gdk_cursor_destroy (GdkCursor *cursor)
 {
@@ -346,6 +389,13 @@ GdkDisplay *
 gdk_cursor_get_display (GdkCursor *cursor)
 {
   return gdk_display_get_default ();
+}
+
+GdkPixbuf*  
+gdk_cursor_get_image (GdkCursor *cursor)
+{
+  /* could certainly be implmented but from docs may also */
+  return NULL;
 }
 
 GdkCursor *
