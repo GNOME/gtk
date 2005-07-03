@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-01 14:32-0400\n"
-"PO-Revision-Date: 2005-06-23 22:53-0400\n"
+"POT-Creation-Date: 2005-07-03 18:35-0400\n"
+"PO-Revision-Date: 2005-07-03 22:53-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: Canadian English <adamw@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -726,7 +726,7 @@ msgstr "Horizontal alignment for child"
 msgid "Vertical alignment for child"
 msgstr "Vertical alignment for child"
 
-#: gtk/gtkbutton.c:312 gtk/gtkimagemenuitem.c:132
+#: gtk/gtkbutton.c:312 gtk/gtkimagemenuitem.c:133
 msgid "Image widget"
 msgstr "Image widget"
 
@@ -2441,15 +2441,15 @@ msgstr "Storage type"
 msgid "The representation being used for image data"
 msgstr "The representation being used for image data"
 
-#: gtk/gtkimagemenuitem.c:133
+#: gtk/gtkimagemenuitem.c:134
 msgid "Child widget to appear next to the menu text"
 msgstr "Child widget to appear next to the menu text"
 
-#: gtk/gtkimagemenuitem.c:138
+#: gtk/gtkimagemenuitem.c:139
 msgid "Show menu images"
 msgstr "Show menu images"
 
-#: gtk/gtkimagemenuitem.c:139
+#: gtk/gtkimagemenuitem.c:140
 msgid "Whether images should be shown in menus"
 msgstr "Whether images should be shown in menus"
 
@@ -3521,8 +3521,8 @@ msgid "Icon Sizes"
 msgstr "Icon Sizes"
 
 #: gtk/gtksettings.c:375
-msgid "List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."
-msgstr "List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."
+msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
+msgstr "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
 
 #: gtk/gtksettings.c:383
 msgid "GTK Modules"
