@@ -892,6 +892,7 @@ void gtk_menu_bar_set_pack_direction (GtkMenuBar       *menubar,
 				      GtkPackDirection  pack_dir)
 {
   GtkMenuBarPrivate *priv;
+  GList *l;
 
   g_return_if_fail (GTK_IS_MENU_BAR (menubar));
 
@@ -902,6 +903,10 @@ void gtk_menu_bar_set_pack_direction (GtkMenuBar       *menubar,
       priv->pack_direction = pack_dir;
 
       gtk_widget_queue_resize (GTK_WIDGET (menubar));
+
+      for (l = GTK_MENU_SHELL (menubar)->children; l; l = l->next)
+	gtk_widget_queue_resize (GTK_WIDGET (l->data));
+
       g_object_notify (G_OBJECT (menubar), "pack-direction");
     }
 }
@@ -943,6 +948,7 @@ void gtk_menu_bar_set_child_pack_direction (GtkMenuBar       *menubar,
 					    GtkPackDirection  child_pack_dir)
 {
   GtkMenuBarPrivate *priv;
+  GList *l;
 
   g_return_if_fail (GTK_IS_MENU_BAR (menubar));
 
@@ -953,6 +959,10 @@ void gtk_menu_bar_set_child_pack_direction (GtkMenuBar       *menubar,
       priv->child_pack_direction = child_pack_dir;
 
       gtk_widget_queue_resize (GTK_WIDGET (menubar));
+
+      for (l = GTK_MENU_SHELL (menubar)->children; l; l = l->next)
+	gtk_widget_queue_resize (GTK_WIDGET (l->data));
+
       g_object_notify (G_OBJECT (menubar), "child-pack-direction");
     }
 }

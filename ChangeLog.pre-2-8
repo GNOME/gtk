@@ -1,3 +1,11 @@
+2005-07-04  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkmenubar.c (gtk_menu_bar_set_pack_direction) 
+	(gtk_menu_bar_set_child_pack_direction): Queue a resize
+	on the contained menuitems as well.  
+
+	* demos/gtk-demo/appwindow.c: Break some overlong lines. 
+
 2005-07-03  Hans Breuer  <hans@breuer.org>
 
 	* **/makefile.msc[.in] : updated
