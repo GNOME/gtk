@@ -1,3 +1,7 @@
+2005-07-04  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/framebuffer.sgml: Add a warning.
+
 2005-07-01  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.7.1 ===

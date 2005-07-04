@@ -15,6 +15,13 @@ Linux framebuffer aspects of using GTK+
 <refsect1>
 <title>GTK+ for the Linux Framebuffer</title>
 
+<note><para>
+The linux-fb GDK target is unmaintained and may not work or even
+compile. The information below may still be helpful; also there are
+several patches in bugzilla which may help with making the linux-fb
+code compilable.
+</para></note>
+
 <para>
 The linux-fb port of GTK+, also known as GtkFB is an implementation of
 GDK (and therefore GTK+) that runs on the Linux framebuffer. It runs in
