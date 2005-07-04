@@ -4,19 +4,18 @@
 # Karsten Weiss <karsten@addx.au.s.shuttle.de>, 1999.
 # Matthias Warkus <mawarkus@gnome.org>, 2001, 2002.
 # Christian Neumair <chris@gnome-de.org>, 2002-2004.
-# Hendrik Richter <hendrik@gnome-de.org>, 2004.
+# Hendrik Richter <hendrik@gnome-de.org>, 2004, 2005.
 # Hendrik Brandt <heb@gnome-de.org>
+#
 # IM = Input method => Eingabemethode
-# Hendrik Richter <hendrik@gnome-de.org>, 2004.
-# 
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-07-01 14:32-0400\n"
-"PO-Revision-Date: 2004-12-18 15:04+0100\n"
-"Last-Translator: Hendrik Brandt <heb@gnome-de.org>\n"
+"PO-Revision-Date: 2005-07-04 19:16+0200\n"
+"Last-Translator: Hendrik Richter <hendi@gnome-de.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1960,7 +1959,7 @@ msgid ""
 "Whether the event box is visible, as opposed to invisible and only used to "
 "trap events."
 msgstr ""
-"Ist das Ereignisfeld sichtbar? Andernfalls ist es unsichbar und wird nur zum "
+"Ist das Ereignisfeld sichtbar? Andernfalls ist es unsichtbar und wird nur zum "
 "Einfangen von Ereignissen verwendet."
 
 #: gtk/gtkeventbox.c:129
@@ -3648,7 +3647,7 @@ msgstr "Xft-Kantenglättung"
 #: gtk/gtksettings.c:394
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr ""
-"Sollen die Kanten von Xft-Schriten geglättet werden? 0: nein, 1: ja, -1: "
+"Sollen die Kanten von Xft-Schriften geglättet werden? 0: nein, 1: ja, -1: "
 "Vorgabe"
 
 #: gtk/gtksettings.c:403
@@ -3658,7 +3657,7 @@ msgstr "Xft-Hinting"
 #: gtk/gtksettings.c:404
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
 msgstr ""
-"Soll für Xft-Schriten Hinting verwendet werden? 0: nein, 1: ja, -1: Vorgabe"
+"Soll für Xft-Schriften Hinting verwendet werden? 0: nein, 1: ja, -1: Vorgabe"
 
 #: gtk/gtksettings.c:413
 msgid "Xft Hint Style"
