@@ -48,7 +48,8 @@ activate_radio_action (GtkAction *action, GtkRadioAction *current)
 				       GTK_DIALOG_DESTROY_WITH_PARENT,
 				       GTK_MESSAGE_INFO,
 				       GTK_BUTTONS_CLOSE,
-				       "You activated radio action: \"%s\" of type \"%s\".\nCurrent value: %d",
+				       "You activated radio action: \"%s\" of type \"%s\".\n"
+				       "Current value: %d",
 				       name, typename, value);
 
       /* Close dialog on user response */
@@ -371,7 +372,9 @@ update_statusbar (GtkTextBuffer *buffer,
   gint count;
   GtkTextIter iter;
   
-  gtk_statusbar_pop (statusbar, 0); /* clear any previous message, underflow is allowed */
+  gtk_statusbar_pop (statusbar, 0); /* clear any previous message, 
+				     * underflow is allowed 
+				     */
 
   count = gtk_text_buffer_get_char_count (buffer);
 
@@ -404,8 +407,15 @@ update_resize_grip (GtkWidget           *widget,
 		    GdkEventWindowState *event,
 		    GtkStatusbar        *statusbar)
 {
-  if (event->changed_mask & (GDK_WINDOW_STATE_MAXIMIZED | GDK_WINDOW_STATE_FULLSCREEN))
-    gtk_statusbar_set_has_resize_grip (statusbar, !(event->new_window_state & (GDK_WINDOW_STATE_MAXIMIZED | GDK_WINDOW_STATE_FULLSCREEN)));
+  if (event->changed_mask & (GDK_WINDOW_STATE_MAXIMIZED | 
+			     GDK_WINDOW_STATE_FULLSCREEN))
+    {
+      gboolean maximized;
+
+      maximized = event->new_window_state & (GDK_WINDOW_STATE_MAXIMIZED | 
+					     GDK_WINDOW_STATE_FULLSCREEN);
+      gtk_statusbar_set_has_resize_grip (statusbar, !maximized);
+    }
 }
 		    
 
@@ -474,7 +484,8 @@ do_appwindow (GtkWidget *do_widget)
 					  NULL);
 
       merge = gtk_ui_manager_new ();
-      g_object_set_data_full (G_OBJECT (window), "ui-manager", merge, g_object_unref);
+      g_object_set_data_full (G_OBJECT (window), "ui-manager", merge, 
+			      g_object_unref);
       gtk_ui_manager_insert_action_group (merge, action_group, 0);
       gtk_window_add_accel_group (GTK_WINDOW (window), 
 				  gtk_ui_manager_get_accel_group (merge));
