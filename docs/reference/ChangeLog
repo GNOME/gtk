@@ -1,3 +1,7 @@
+2005-07-05  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-sections.txt: Add new api.
+
 2005-07-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/framebuffer.sgml: Add a warning.

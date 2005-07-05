@@ -84,6 +84,7 @@ struct _GtkAboutDialogPrivate
   GdkCursor *hand_cursor;
   GdkCursor *regular_cursor;
   gboolean hovering_over_link;
+  gboolean wrap_license;
 };
 
 #define GTK_ABOUT_DIALOG_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_ABOUT_DIALOG, GtkAboutDialogPrivate))
@@ -104,7 +105,8 @@ enum
   PROP_TRANSLATOR_CREDITS,
   PROP_ARTISTS,
   PROP_LOGO,
-  PROP_LOGO_ICON_NAME
+  PROP_LOGO_ICON_NAME,
+  PROP_WRAP_LICENSE
 };
 
 static void                 gtk_about_dialog_finalize       (GObject            *object);
@@ -259,8 +261,9 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    *
    * The license of the program. This string is displayed in a 
    * text view in a secondary dialog, therefore it is fine to use
-   * a long multi-paragraph text. Note that the text is not wrapped
-   * in the text view, thus it must contain the intended linebreaks.
+   * a long multi-paragraph text. Note that the text is only wrapped
+   * in the text view if the "wrap-license" property is set to %TRUE;
+   * otherwise the text itself must contain the intended linebreaks.
    *
    * Since: 2.6
    */  
@@ -405,6 +408,20 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
 							P_("A named icon to use as the logo for the about box."),
 							NULL,
 							GTK_PARAM_READWRITE));
+  /**
+   * GtkAboutDialog:wrap-license:
+   *
+   * Whether to wrap the text in the license dialog.
+   *
+   * Since: 2.6
+   */  
+  g_object_class_install_property (object_class,
+				   PROP_WRAP_LICENSE,
+				   g_param_spec_boolean ("wrap-license",
+							 P_("Wrap license"),
+							 P_("Whether to wrap the license text."),
+							 FALSE,
+							 GTK_PARAM_READWRITE));
 
   /* Style properties */
   gtk_widget_class_install_style_property (widget_class,
@@ -442,6 +459,7 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   priv->hand_cursor = gdk_cursor_new (GDK_HAND2);
   priv->regular_cursor = gdk_cursor_new (GDK_XTERM);
   priv->hovering_over_link = FALSE;
+  priv->wrap_license = FALSE;
 
   gtk_dialog_set_has_separator (GTK_DIALOG (about), FALSE);
   
@@ -551,6 +569,7 @@ gtk_about_dialog_set_property (GObject      *object,
 			       GParamSpec   *pspec)
 {
   GtkAboutDialog *about = GTK_ABOUT_DIALOG (object);
+  GtkAboutDialogPrivate *priv = (GtkAboutDialogPrivate *)about->private_data;
 
   switch (prop_id) 
     {
@@ -592,6 +611,9 @@ gtk_about_dialog_set_property (GObject      *object,
       break;
     case PROP_LOGO_ICON_NAME:
       gtk_about_dialog_set_logo_icon_name (about, g_value_get_string (value));
+      break;
+    case PROP_WRAP_LICENSE:
+      priv->wrap_license = g_value_get_boolean (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -659,6 +681,9 @@ gtk_about_dialog_get_property (GObject    *object,
 	}
       else
 	g_value_set_string (value, NULL);
+      break;
+    case PROP_WRAP_LICENSE:
+      g_value_set_boolean (value, priv->wrap_license);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1009,6 +1034,59 @@ gtk_about_dialog_set_license (GtkAboutDialog *about,
   g_free (tmp);
 
   g_object_notify (G_OBJECT (about), "license");
+}
+
+/**
+ * gtk_about_dialog_get_wrap_license:
+ * @about: a #GtkAboutDialog
+ *
+ * Returns whether the license text in @about is 
+ * automatically wrapped.
+ *
+ * Returns: %TRUE if the license text is wrapped 
+ *
+ * Since: 2.8
+ */
+gboolean
+gtk_about_dialog_get_wrap_license (GtkAboutDialog *about)
+{
+  GtkAboutDialogPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_ABOUT_DIALOG (about), FALSE);
+
+  priv = (GtkAboutDialogPrivate *)about->private_data;
+
+  return priv->wrap_license;
+}
+
+/**
+ * gtk_about_dialog_set_wrap_license:
+ * @about: a #GtkAboutDialog
+ * @wrap_license: whether to wrap the license
+ *
+ * Sets whether the license text in @about is 
+ * automatically wrapped.
+ * 
+ * Since: 2.8
+ */
+void
+gtk_about_dialog_set_wrap_license (GtkAboutDialog *about,
+                                   gboolean        wrap_license)
+{
+  GtkAboutDialogPrivate *priv;
+
+  g_return_if_fail (GTK_IS_ABOUT_DIALOG (about));
+
+  priv = (GtkAboutDialogPrivate *)about->private_data;
+
+  wrap_license = wrap_license != FALSE;
+  
+  if (priv->wrap_license != wrap_license)
+    {
+       priv->wrap_license = wrap_license;
+
+       g_object_notify (G_OBJECT (about), "wrap-license");
+    }
 }
 
 /**
@@ -2053,6 +2131,8 @@ display_license_dialog (GtkWidget *button,
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), sw, TRUE, TRUE, 0);
 
   view = gtk_text_view_new ();
+  gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (view), 
+			       priv->wrap_license ? GTK_WRAP_WORD : GTK_WRAP_NONE);
   gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (view)), 
 			    priv->license, -1);
 

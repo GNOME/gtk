@@ -79,6 +79,11 @@ void                   gtk_about_dialog_set_comments           (GtkAboutDialog  
 G_CONST_RETURN gchar  *gtk_about_dialog_get_license            (GtkAboutDialog  *about);
 void                   gtk_about_dialog_set_license            (GtkAboutDialog  *about,
 								const gchar     *license);
+
+gboolean               gtk_about_dialog_get_wrap_license       (GtkAboutDialog  *about);
+void                   gtk_about_dialog_set_wrap_license       (GtkAboutDialog  *about,
+                                                                gboolean         wrap_license);
+
 G_CONST_RETURN gchar  *gtk_about_dialog_get_website            (GtkAboutDialog  *about);
 void                   gtk_about_dialog_set_website            (GtkAboutDialog  *about,
 								const gchar     *website);

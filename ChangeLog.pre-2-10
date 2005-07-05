@@ -1,5 +1,12 @@
 2005-07-05  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk.symbols:
+	* gtk/gtkaboutdialog.[hc]: Add a wrap-license property
+	with getter and setter.  (#165012, Christian Rose,
+	based on a patch by Christian Persch)
+
+2005-07-05  Matthias Clasen  <mclasen@redhat.com>
+
 	* gdk/Makefile.am: Distribute the keyname-table.h header 
 	and the files that are used to construct it.  (#309421,
 	J. Ali Harlow)
