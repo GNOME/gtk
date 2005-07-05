@@ -4,6 +4,9 @@ SUBDIRS = $(gdktarget)
 DIST_SUBDIRS = linux-fb win32 x11
 
 EXTRA_DIST =			\
+	keynames.txt		\
+	keyname-table.h		\
+	gen-keyname-table.pl	\
 	gdkconfig.h.win32 	\
 	gdk.def 		\
 	gdkmarshalers.list	\
