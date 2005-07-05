@@ -851,6 +851,7 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_combo_box ());
   retval = g_list_prepend (retval, create_combo_box_entry ());
   retval = g_list_prepend (retval, create_entry ());
+  retval = g_list_prepend (retval, create_file_button ());
   retval = g_list_prepend (retval, create_font_button ());
   retval = g_list_prepend (retval, create_frame ());
   retval = g_list_prepend (retval, create_icon_view ());
