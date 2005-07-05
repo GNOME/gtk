@@ -1,6 +1,7 @@
 2005-07-05  Matthias Clasen  <mclasen@redhat.com>
 
-	* gtk/images/file-button.png: Update
+	* gtk/images/file-button.png: Update (#309409,
+	Peter van den Bosch)
 
 2005-07-05  Matthias Clasen  <mclasen@redhat.com>
 
