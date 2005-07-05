@@ -1,5 +1,7 @@
 2005-07-05  Matthias Clasen  <mclasen@redhat.com>
 
+	* demos/gtk-demo/menus.c: Demonstrate vertical menubars.
+
 	* gtk/gtk.symbols:
 	* gtk/gtkaboutdialog.[hc]: Add a wrap-license property
 	with getter and setter.  (#165012, Christian Rose,

@@ -1,12 +1,12 @@
 /* Menus
  *
  * There are several widgets involved in displaying menus. The
- * GtkMenuBar widget is a horizontal menu bar, which normally appears
- * at the top of an application. The GtkMenu widget is the actual menu
- * that pops up. Both GtkMenuBar and GtkMenu are subclasses of
- * GtkMenuShell; a GtkMenuShell contains menu items
- * (GtkMenuItem). Each menu item contains text and/or images and can
- * be selected by the user.
+ * GtkMenuBar widget is a menu bar, which normally appears horizontally
+ * at the top of an application, but can also be layed out vertically. 
+ * The GtkMenu widget is the actual menu that pops up. Both GtkMenuBar 
+ * and GtkMenu are subclasses of GtkMenuShell; a GtkMenuShell contains 
+ * menu items (GtkMenuItem). Each menu item contains text and/or images 
+ * and can be selected by the user.
  *
  * There are several kinds of menu item, including plain GtkMenuItem,
  * GtkCheckMenuItem which can be checked/unchecked, GtkRadioMenuItem
@@ -70,10 +70,59 @@ create_menu (gint     depth,
   return menu;
 }
 
+static gboolean
+change_orientation (GtkWidget *button,
+                    GtkWidget *menubar)
+{
+  GtkWidget *parent;
+  GtkWidget *box = NULL;
+
+  parent = gtk_widget_get_parent (menubar);
+
+  if (GTK_IS_VBOX (parent))
+    {
+      box = gtk_widget_get_parent (parent);
+
+      g_object_ref (menubar);
+      gtk_container_remove (GTK_CONTAINER (parent), menubar);
+      gtk_container_add (GTK_CONTAINER (box), menubar);
+      gtk_box_reorder_child (GTK_BOX (box), menubar, 0);
+      g_object_unref (menubar);
+      g_object_set (menubar, 
+		    "pack-direction", GTK_PACK_DIRECTION_TTB,
+		    NULL);
+    }
+  else
+    {
+      GList *children, *l;
+
+      children = gtk_container_get_children (GTK_CONTAINER (parent));
+      for (l = children; l; l = l->next)
+	{
+	  if (GTK_IS_VBOX (l->data))
+	    {
+	      box = l->data;
+	      break;
+	    }
+	}
+      g_list_free (children);
+
+      g_object_ref (menubar);
+      gtk_container_remove (GTK_CONTAINER (parent), menubar);
+      gtk_container_add (GTK_CONTAINER (box), menubar);
+      gtk_box_reorder_child (GTK_BOX (box), menubar, 0);
+      g_object_unref (menubar);
+      g_object_set (menubar, 
+		    "pack-direction", GTK_PACK_DIRECTION_LTR,
+		    NULL);
+    }
+}
+
 GtkWidget *
 do_menus (GtkWidget *do_widget)
 {
   static GtkWidget *window = NULL;
+  GtkWidget *box;
   GtkWidget *box1;
   GtkWidget *box2;
   GtkWidget *button;
@@ -84,6 +133,7 @@ do_menus (GtkWidget *do_widget)
       GtkWidget *menu;
       GtkWidget *menuitem;
       GtkAccelGroup *accel_group;
+      GdkEventMask events;
       
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_screen (GTK_WINDOW (window),
@@ -99,9 +149,13 @@ do_menus (GtkWidget *do_widget)
       gtk_window_set_title (GTK_WINDOW (window), "menus");
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);
       
-      
+            
+      box = gtk_hbox_new (FALSE, 0);
+      gtk_container_add (GTK_CONTAINER (window), box);
+      gtk_widget_show (box);
+
       box1 = gtk_vbox_new (FALSE, 0);
-      gtk_container_add (GTK_CONTAINER (window), box1);
+      gtk_container_add (GTK_CONTAINER (box), box1);
       gtk_widget_show (box1);
       
       menubar = gtk_menu_bar_new ();
@@ -131,7 +185,13 @@ do_menus (GtkWidget *do_widget)
       gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
       gtk_widget_show (box2);
 
-      button = gtk_button_new_with_label ("close");
+      button = gtk_button_new_with_label ("Flip");
+      g_signal_connect (button, "clicked",
+			G_CALLBACK (change_orientation), menubar);
+      gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
+      gtk_widget_show (button);
+
+      button = gtk_button_new_with_label ("Close");
       g_signal_connect_swapped (button, "clicked",
 				G_CALLBACK(gtk_widget_destroy), window);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
