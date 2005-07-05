@@ -84,6 +84,9 @@ void          gdk_win32_selection_add_targets (GdkWindow  *owner,
 					       gint	   n_targets,
 					       GdkAtom    *targets);
 
+/* For internal GTK use only */
+GdkPixbuf *   gdk_win32_icon_to_pixbuf_libgtk_only (HICON hicon);
+
 G_END_DECLS
 
 #endif /* __GDK_WIN32_H__ */

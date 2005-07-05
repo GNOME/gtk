@@ -19,6 +19,7 @@
  */
 
 #include <config.h>
+#define GDK_PIXBUF_ENABLE_BACKEND /* Ugly? */
 #include "gdkdisplay.h"
 #include "gdkscreen.h"
 #include "gdkcursor.h"
@@ -322,6 +323,20 @@ gdk_cursor_new_from_pixmap (GdkPixmap      *source,
   return _gdk_win32_cursor_new_from_hcursor (hcursor, GDK_CURSOR_IS_PIXMAP);
 }
 
+/* The named cursors below are presumably not really useful, as the
+ * names are Win32-specific. No GTK+ application developed on Unix
+ * (and most cross-platform GTK+ apps are developed on Unix) is going
+ * to look for cursors under these Win32 names anyway.
+ *
+ * Would the following make any sense: The ms-windows theme engine
+ * calls some (to-be-defined private) API here in gdk/win32 to
+ * register the relevant cursors used by the currently active XP
+ * visual style under the names that libgtk uses to look for them
+ * ("color-picker", "dnd-ask", "dnd-copy", etc), and then when libgtk
+ * asks for those we return the ones registered by the ms-windows
+ * theme engine, if any.
+ */
+
 static struct {
   char *name;
   char *id;
@@ -329,7 +344,7 @@ static struct {
   { "appstarting", IDC_APPSTARTING },
   { "arrow", IDC_ARROW },
   { "cross", IDC_CROSS },
-#if 0 /* in the SDK docs but not the headers ? */
+#ifdef IDC_HAND
   { "hand",  IDC_HAND },
 #endif
   { "help",  IDC_HELP },
@@ -349,6 +364,8 @@ gdk_cursor_new_from_name (GdkDisplay  *display,
 {
   HCURSOR hcursor = NULL;
   int i;
+
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
   for (i = 0; i < G_N_ELEMENTS(_default_cursors); i++)
     {
@@ -391,11 +408,106 @@ gdk_cursor_get_display (GdkCursor *cursor)
   return gdk_display_get_default ();
 }
 
+GdkPixbuf *
+gdk_win32_icon_to_pixbuf_libgtk_only (HICON hicon)
+{
+  GdkPixbuf *pixbuf = NULL;
+  ICONINFO ii;
+  struct
+  {
+    BITMAPINFOHEADER bi;
+    RGBQUAD colors[2];
+  } bmi;
+  HDC hdc;
+  gchar *pixels, *bits, buf[32];
+  gint rowstride, x, y, w, h;
+  gboolean no_alpha;
+
+  if (!GDI_CALL (GetIconInfo, (hicon, &ii)))
+    return NULL;
+
+  memset (&bmi, 0, sizeof (bmi));
+  bmi.bi.biSize = sizeof (bmi.bi);
+  if (!(hdc = CreateCompatibleDC (NULL)))
+    {
+      WIN32_GDI_FAILED ("CreateCompatibleDC");
+      goto out0;
+    }
+
+  if (!GDI_CALL (GetDIBits, (hdc, ii.hbmColor, 0, 1, NULL, (BITMAPINFO *)&bmi, DIB_RGB_COLORS)))
+    goto out1;
+
+  w = bmi.bi.biWidth;
+  h = bmi.bi.biHeight;
+      
+  bmi.bi.biBitCount = 32;
+  bmi.bi.biCompression = BI_RGB;
+  bmi.bi.biHeight = -h;
+  pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8, w, h);
+  bits = g_malloc0 (4 * w * h);
+      
+  /* color data */
+  if (!GDI_CALL (GetDIBits, (hdc, ii.hbmColor, 0, h, bits, (BITMAPINFO *)&bmi, DIB_RGB_COLORS)))
+    goto out2;
+  
+  pixels = gdk_pixbuf_get_pixels (pixbuf);
+  rowstride = gdk_pixbuf_get_rowstride (pixbuf);
+  no_alpha = TRUE;
+  for (y = 0; y < h; y++)
+    {
+      for (x = 0; x < w; x++)
+	{
+	  pixels[2] = bits[(x+y*w) * 4];
+	  pixels[1] = bits[(x+y*w) * 4 + 1];
+	  pixels[0] = bits[(x+y*w) * 4 + 2];
+	  pixels[3] = bits[(x+y*w) * 4 + 3];
+	  if (no_alpha && pixels[3] > 0)
+	    no_alpha = FALSE;
+	  pixels += 4;
+	}
+      pixels += (w * 4 - rowstride);
+    }
+
+  /* mask */
+  if (no_alpha &&
+      GDI_CALL (GetDIBits, (hdc, ii.hbmMask, 0, h, bits, (BITMAPINFO *)&bmi, DIB_RGB_COLORS)))
+    {
+      pixels = gdk_pixbuf_get_pixels (pixbuf);
+      for (y = 0; y < h; y++)
+	{
+	  for (x = 0; x < w; x++)
+	    {
+	      pixels[3] = 255 - bits[(x + y * w) * 4];
+	      pixels += 4;
+	    }
+	  pixels += (w * 4 - rowstride);
+	}
+    }
+
+  g_snprintf (buf, sizeof (buf), "%ld", ii.xHotspot);
+  gdk_pixbuf_set_option (pixbuf, "x_hot", buf);
+
+  g_snprintf (buf, sizeof (buf), "%ld", ii.yHotspot);
+  gdk_pixbuf_set_option (pixbuf, "y_hot", buf);
+
+  /* release temporary resources */
+ out2:
+  g_free (bits);
+ out1:
+  DeleteDC (hdc);
+ out0:
+  DeleteObject (ii.hbmColor);
+  DeleteObject (ii.hbmMask);
+
+  return pixbuf;
+}
+
 GdkPixbuf*  
 gdk_cursor_get_image (GdkCursor *cursor)
 {
-  /* could certainly be implmented but from docs may also */
-  return NULL;
+  g_return_val_if_fail (cursor != NULL, NULL);
+
+  return gdk_win32_icon_to_pixbuf_libgtk_only (((GdkCursorPrivate *) cursor)->hcursor);
 }
 
 GdkCursor *

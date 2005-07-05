@@ -1,3 +1,18 @@
+2005-07-06  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkcursor-win32.c: Add comment about the current named
+	cursor implementation, and what it maybe really should do.
+	(gdk_win32_icon_to_pixbuf_libgtk_only): New function, code moved
+	here from gtk/gtkfilesystemwin32.c:extract_icon().
+	(gdk_cursor_get_image): Use
+	gdk_win32_icon_to_pixbuf_libgtk_only().
+
+	* gdk/gdk.symbols
+	* gdk/win32/gdkwin32.h: Declare gdk_win32_icon_to_pixbuf_libgtk_only().
+
+	* gtk/gtkfilesystemwin32.c (extract_icon): Use
+	gdk_win32_icon_to_pixbuf_libgtk_only().
+
 2005-07-05  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkmenu.c (gtk_menu_grab_notify): Take window

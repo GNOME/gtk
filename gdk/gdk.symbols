@@ -1069,6 +1069,12 @@ gdk_win32_handle_table_lookup
 #endif
 
 #if IN_HEADER(__GDK_WIN32_H__)
+#if IN_FILE(__GDK_CURSOR_WIN32_C__)
+gdk_win32_icon_to_pixbuf_libgtk_only
+#endif
+#endif
+
+#if IN_HEADER(__GDK_WIN32_H__)
 #if IN_FILE(__GDK_DRAWABLE_WIN32_C__)
 gdk_win32_drawable_get_handle
 #endif

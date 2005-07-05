@@ -38,12 +38,12 @@
 #ifdef G_OS_WIN32
 #define WIN32_LEAN_AND_MEAN
 #define STRICT
-#include <windows.h>
+#include "gdk/win32/gdkwin32.h"
 #undef STRICT
 #include <shlobj.h>
 #include <shellapi.h>
 #else
-#error "The implementation is win32 only."
+#error "The implementation is Win32 only."
 #endif /* G_OS_WIN32 */
 
 typedef struct _GtkFileSystemWin32Class GtkFileSystemWin32Class;
@@ -1042,7 +1042,6 @@ extract_icon (const char* filename)
 {
   GdkPixbuf *pixbuf = NULL;
   HICON hicon;
-  ICONINFO ii;
   
   if (!filename || !filename[0])
     return NULL;
@@ -1125,79 +1124,7 @@ extract_icon (const char* filename)
     }
 #endif
   
-  if (GetIconInfo (hicon, &ii))
-    {
-      struct
-      {
-	BITMAPINFOHEADER bi;
-	RGBQUAD colors[2];
-      } bmi;
-      HDC hdc;
-      
-      memset (&bmi, 0, sizeof (bmi));
-      bmi.bi.biSize = sizeof (bmi.bi);
-      hdc = CreateCompatibleDC (NULL);
-      
-      if (GetDIBits (hdc, ii.hbmColor, 0, 1, NULL, (BITMAPINFO *)&bmi, DIB_RGB_COLORS))
-	{
-	  gchar *pixels, *bits;
-	  gint rowstride, x, y, w = bmi.bi.biWidth, h = bmi.bi.biHeight;
-	  gboolean no_alpha;
-	  
-	  bmi.bi.biBitCount = 32;
-	  bmi.bi.biCompression = BI_RGB;
-	  bmi.bi.biHeight = -h;
-	  pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8, w, h);
-	  bits = g_malloc0 (4 * w * h);
-	  
-	  /* color data */
-	  if (!GetDIBits (hdc, ii.hbmColor, 0, h, bits, (BITMAPINFO *)&bmi, DIB_RGB_COLORS))
-	    g_warning (G_STRLOC ": Failed to get dibits");
-	  
-	  pixels = gdk_pixbuf_get_pixels (pixbuf);
-	  rowstride = gdk_pixbuf_get_rowstride (pixbuf);
-	  no_alpha = TRUE;
-	  for (y = 0; y < h; y++)
-	    {
-	      for (x = 0; x < w; x++)
-		{
-		  pixels[2] = bits[(x+y*w) * 4];
-		  pixels[1] = bits[(x+y*w) * 4 + 1];
-		  pixels[0] = bits[(x+y*w) * 4 + 2];
-		  pixels[3] = bits[(x+y*w) * 4 + 3];
-		  if (no_alpha && pixels[3] > 0) no_alpha = FALSE;
-		  pixels += 4;
-		}
-	      pixels += (w * 4 - rowstride);
-	    }
-	  /* mask */
-	  if (no_alpha) {
-	    if (!GetDIBits (hdc, ii.hbmMask, 0, h, bits, (BITMAPINFO *)&bmi, DIB_RGB_COLORS))
-	      g_warning (G_STRLOC ": Failed to get dibits");
-	    pixels = gdk_pixbuf_get_pixels (pixbuf);
-	    for (y = 0; y < h; y++)
-	      {
-		for (x = 0; x < w; x++)
-		  {
-		    pixels[3] = 255 - bits[(x + y * w) * 4];
-		    pixels += 4;
-		  }
-		pixels += (w * 4 - rowstride);
-	      }
-	    
-	    /* release temporary resources */
-	    g_free (bits);
-	    if (!DeleteObject (ii.hbmColor) || !DeleteObject (ii.hbmMask))
-	      g_warning (G_STRLOC ": Leaking Icon Bitmaps ?");
-	  }
-	}
-      else
-	g_warning (G_STRLOC ": GetDIBits () failed, %s", g_win32_error_message (GetLastError ()));
-      
-      DeleteDC (hdc);
-    }
-  else
-    g_warning (G_STRLOC ": GetIconInfo failed: %s\n", g_win32_error_message (GetLastError ())); 
+  pixbuf = gdk_win32_icon_to_pixbuf_libgtk_only (hicon);
   
   if (!DestroyIcon (hicon))
     g_warning (G_STRLOC ": DestroyIcon failed: %s\n", g_win32_error_message (GetLastError ()));
