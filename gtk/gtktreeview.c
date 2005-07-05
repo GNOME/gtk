@@ -3648,6 +3648,12 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 	      continue;
 	    }
 
+	  gtk_tree_view_column_cell_set_cell_data (column,
+						   tree_view->priv->model,
+						   &iter,
+						   GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_PARENT),
+						   node->children?TRUE:FALSE);
+
           /* Select the detail for drawing the cell.  relevant
            * factors are parity, sortedness, and whether to
            * display rules.
