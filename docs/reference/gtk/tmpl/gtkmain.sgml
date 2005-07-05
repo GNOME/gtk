@@ -387,7 +387,7 @@ keyboard events are delivered to this widget.
 
 <!-- ##### FUNCTION gtk_grab_get_current ##### -->
 <para>
-Queries the current grab. 
+Queries the current grab of the default window group. 
 </para>
 
 @Returns: The widget which currently has the grab or %NULL if no grab is active.

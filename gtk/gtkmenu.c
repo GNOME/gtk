@@ -4387,8 +4387,7 @@ gtk_menu_set_monitor (GtkMenu *menu,
 /**
  * gtk_menu_get_for_attach_widget:
  * @widget: a #GtkWidget
- *
- * Returns a list of the menus which are attached to this widget.
+ * * Returns a list of the menus which are attached to this widget.
  * This list is owned by GTK+ and must not be modified.
  *
  * Return value: the list of menus attached to his widget.
@@ -4410,10 +4409,18 @@ static void
 gtk_menu_grab_notify (GtkWidget *widget,
 		      gboolean   was_grabbed)
 {
+  GtkWidget *toplevel;
+  GtkWindowGroup *group;
+  GtkWidget *grab;
+
+  toplevel = gtk_widget_get_toplevel (widget);
+  group = _gtk_window_get_group (GTK_WINDOW (toplevel));
+  grab = _gtk_window_group_get_current_grab (group); 
+
   if (!was_grabbed)
     {
-      if (!GTK_IS_MENU (gtk_grab_get_current ()))
-	gtk_menu_shell_cancel (GTK_MENU_SHELL (widget));
+      if (!GTK_IS_MENU_SHELL (grab))
+        gtk_menu_shell_cancel (GTK_MENU_SHELL (widget));
     }
 }
 
