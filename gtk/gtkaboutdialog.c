@@ -413,7 +413,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    *
    * Whether to wrap the text in the license dialog.
    *
-   * Since: 2.6
+   * Since: 2.8
    */  
   g_object_class_install_property (object_class,
 				   PROP_WRAP_LICENSE,
