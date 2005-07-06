@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-01-15 12:29+0100\n"
-"PO-Revision-Date: 2005-02-20 21:58+0200\n"
+"PO-Revision-Date: 2005-07-06 00:29+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee> \n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -1434,7 +1434,7 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:1849
 msgid "The current color"
-msgstr ""
+msgstr "Käesolev värvus"
 
 #: gtk/gtkcolorsel.c:1856
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
@@ -1442,7 +1442,7 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:1870
 msgid "Custom palette"
-msgstr ""
+msgstr "Kohandatud palett"
 
 #: gtk/gtkcolorsel.c:1871
 msgid "Palette to use in the color selector"
@@ -1698,11 +1698,13 @@ msgstr ""
 
 #: gtk/gtkentry.c:538
 msgid "Invisible character"
-msgstr ""
+msgstr "Nähtamatu märk"
 
 #: gtk/gtkentry.c:539
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
+"Märk, mida kasutatakse välja sisu peitmiseks (nö \"paroolisisestamise "
+"režiimis\")"
 
 #: gtk/gtkentry.c:546
 msgid "Activates default"
@@ -1862,17 +1864,15 @@ msgstr "Tegevus"
 
 #: gtk/gtkfilechooser.c:177
 msgid "The type of operation that the file selector is performing"
-msgstr ""
+msgstr "Failivalija poolt teostatava operatsiooni tüüp."
 
 #: gtk/gtkfilechooser.c:183
-#, fuzzy
 msgid "File System Backend"
-msgstr "Failisüsteem"
+msgstr ""
 
 #: gtk/gtkfilechooser.c:184
-#, fuzzy
 msgid "Name of file system backend to use"
-msgstr "Vaikimisi kasutatava kirjatüübi nimi"
+msgstr ""
 
 #: gtk/gtkfilechooser.c:189
 msgid "Filter"
@@ -1942,7 +1942,7 @@ msgstr "Kas näidata peidetud faile ja katalooge või mitte"
 
 #: gtk/gtkfilechooserbutton.c:336
 msgid "Dialog"
-msgstr ""
+msgstr "Dialoog"
 
 #: gtk/gtkfilechooserbutton.c:337
 msgid "The file chooser dialog to use."
@@ -1988,19 +1988,19 @@ msgstr "Mitmikvalik"
 
 #: gtk/gtkfixed.c:122 gtk/gtklayout.c:615
 msgid "X position"
-msgstr ""
+msgstr "X-positsioon"
 
 #: gtk/gtkfixed.c:123 gtk/gtklayout.c:616
 msgid "X position of child widget"
-msgstr ""
+msgstr "Asukoht lapsvidina X-teljel"
 
 #: gtk/gtkfixed.c:132 gtk/gtklayout.c:625
 msgid "Y position"
-msgstr ""
+msgstr "Y-positsioon"
 
 #: gtk/gtkfixed.c:133 gtk/gtklayout.c:626
 msgid "Y position of child widget"
-msgstr ""
+msgstr "Asukoht lapsvidina Y-teljel"
 
 #: gtk/gtkfontbutton.c:177
 msgid "The title of the font selection dialog"
@@ -2140,14 +2140,12 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkiconview.c:333
-#, fuzzy
 msgid "Selection mode"
-msgstr "Mitmikvalik"
+msgstr "Valikurežiim"
 
 #: gtk/gtkiconview.c:334
-#, fuzzy
 msgid "The selection mode"
-msgstr "Valitud aasta"
+msgstr "Valikurežiim"
 
 #: gtk/gtkiconview.c:352
 msgid "Pixbuf column"
@@ -2171,22 +2169,19 @@ msgstr ""
 
 #: gtk/gtkiconview.c:398
 msgid "Icon View Model"
-msgstr ""
+msgstr "Ikoonivaate mudel"
 
 #: gtk/gtkiconview.c:399
-#, fuzzy
 msgid "The model for the icon view"
-msgstr "Akna tüüp"
+msgstr "Ikoonivaate mudel"
 
 #: gtk/gtkiconview.c:415
-#, fuzzy
 msgid "Number of columns"
-msgstr "Akna pealkiri"
+msgstr "Tulpade arv"
 
 #: gtk/gtkiconview.c:416
-#, fuzzy
 msgid "Number of columns to display"
-msgstr "Akna pealkiri"
+msgstr "Kuvatavate tulpade arv"
 
 #: gtk/gtkiconview.c:433
 msgid "Width for each item"
@@ -2326,9 +2321,8 @@ msgid "GdkPixbufAnimation to display"
 msgstr ""
 
 #: gtk/gtkimage.c:257 gtk/gtkwindow.c:525
-#, fuzzy
 msgid "Icon Name"
-msgstr "Kirjatüübi nimi"
+msgstr "Ikooni nimi"
 
 #: gtk/gtkimage.c:258
 #, fuzzy
@@ -3489,7 +3483,7 @@ msgstr "Read"
 
 #: gtk/gtktable.c:161
 msgid "The number of rows in the table"
-msgstr ""
+msgstr "Ridade arv tabelis"
 
 #: gtk/gtktable.c:169
 msgid "Columns"
@@ -3497,7 +3491,7 @@ msgstr "Veerud"
 
 #: gtk/gtktable.c:170
 msgid "The number of columns in the table"
-msgstr ""
+msgstr "Veergude arv tabelis"
 
 #: gtk/gtktable.c:178
 msgid "Row spacing"
@@ -3781,11 +3775,11 @@ msgstr ""
 
 #: gtk/gtktexttag.c:500
 msgid "Invisible"
-msgstr ""
+msgstr "Nähtamatu"
 
 #: gtk/gtktexttag.c:501
 msgid "Whether this text is hidden. Not implemented in GTK 2.0"
-msgstr ""
+msgstr "Kas see tekst on peidetud. GTK 2.0 versioonis pole see teostatud."
 
 #: gtk/gtktexttag.c:514
 msgid "Background full height set"
@@ -4116,7 +4110,7 @@ msgstr ""
 
 #: gtk/gtktreeview.c:583
 msgid "Show the column header buttons"
-msgstr ""
+msgstr "Nuppude kuvamine veerupäises"
 
 #: gtk/gtktreeview.c:590
 msgid "Headers Clickable"
@@ -4765,5 +4759,4 @@ msgstr ""
 
 #: modules/input/gtkimcontextxim.c:340
 msgid "How to draw the input method statusbar"
-msgstr ""
-
+msgstr "Kuidas peab sisendmeetodi olekuriba joonistama"
