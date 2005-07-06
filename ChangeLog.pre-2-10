@@ -1,3 +1,9 @@
+2005-07-06  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkcursor-win32.c
+	(gdk_win32_icon_to_pixbuf_libgtk_only): Don't create the GdkPixbuf
+	until we know that we have something to put in it.
+
 2005-07-05  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkspinbutton.c (gtk_spin_button_new_with_range): Add some

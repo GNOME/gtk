@@ -426,13 +426,14 @@ gdk_win32_icon_to_pixbuf_libgtk_only (HICON hicon)
   if (!GDI_CALL (GetIconInfo, (hicon, &ii)))
     return NULL;
 
-  memset (&bmi, 0, sizeof (bmi));
-  bmi.bi.biSize = sizeof (bmi.bi);
   if (!(hdc = CreateCompatibleDC (NULL)))
     {
       WIN32_GDI_FAILED ("CreateCompatibleDC");
       goto out0;
     }
+
+  memset (&bmi, 0, sizeof (bmi));
+  bmi.bi.biSize = sizeof (bmi.bi);
 
   if (!GDI_CALL (GetDIBits, (hdc, ii.hbmColor, 0, 1, NULL, (BITMAPINFO *)&bmi, DIB_RGB_COLORS)))
     goto out1;
@@ -443,13 +444,14 @@ gdk_win32_icon_to_pixbuf_libgtk_only (HICON hicon)
   bmi.bi.biBitCount = 32;
   bmi.bi.biCompression = BI_RGB;
   bmi.bi.biHeight = -h;
-  pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8, w, h);
+
   bits = g_malloc0 (4 * w * h);
       
   /* color data */
   if (!GDI_CALL (GetDIBits, (hdc, ii.hbmColor, 0, h, bits, (BITMAPINFO *)&bmi, DIB_RGB_COLORS)))
     goto out2;
   
+  pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8, w, h);
   pixels = gdk_pixbuf_get_pixels (pixbuf);
   rowstride = gdk_pixbuf_get_rowstride (pixbuf);
   no_alpha = TRUE;
