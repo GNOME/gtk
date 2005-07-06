@@ -1597,6 +1597,10 @@ gtk_spin_button_new (GtkAdjustment *adjustment,
  * initially set to the minimum value and a page increment of 10 * @step
  * is the default. The precision of the spin button is equivalent to the 
  * precision of @step.
+ *
+ * Note that the way in which the precision is derived works best if @step 
+ * is a power of ten. If the resulting precision is not suitable for your 
+ * needs, use gtk_spin_button_set_digits() to correct it. 
  * 
  * Return value: The new spin button as a #GtkWidget.
  **/

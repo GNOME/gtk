@@ -1,5 +1,10 @@
 2005-07-05  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkspinbutton.c (gtk_spin_button_new_with_range): Add some
+	additional docs on precision.  (#309238, Steve Chaplin)
+
+2005-07-05  Matthias Clasen  <mclasen@redhat.com>
+
 	* modules/input/imime.c: Fix includes.  (#309462, Kazuki IWAMOTO)
 
 2005-07-03  Manish Singh  <yosh@gimp.org>
