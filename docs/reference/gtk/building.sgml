@@ -251,6 +251,14 @@ How to compile GTK+ itself
 	  backend is needed by many applications.
 	</para>
       </listitem>
+      <listitem>
+	<para>
+	  The <ulink url="http://www.cairographics.org">Cairo</ulink>
+          is a graphics library that supports vector graphics and image 
+          compositing. Both Pango and GTK+ use Cairo for much of their
+          drawing.
+        </para>
+      </listitem>
     </itemizedlist>
   </refsect1>
   <refsect1 id="building">

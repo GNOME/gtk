@@ -1,5 +1,8 @@
 2005-07-05  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/building.sgml: Document Cairo as a 
+	dependency.
+
 	* gtk/images/file-button.png: Update (#309409,
 	Peter van den Bosch)
 
