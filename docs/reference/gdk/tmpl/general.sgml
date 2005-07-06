@@ -215,6 +215,11 @@ press and release events in pairs.
 It is equivalent to a pointer grab on the window with @owner_events set to
 %TRUE.
 </para>
+<para>
+If you set up anything at the time you take the grab that needs to be cleaned
+up when the grab ends, you should handle the #GdkEventGrabBroken events that
+are emitted when the grab ends unvoluntarily.
+</para>
 
 @window: the #GdkWindow which will own the grab (the grab window).
 @owner_events: if %FALSE then all pointer events are reported with respect to
@@ -282,6 +287,11 @@ success or the reason for the failure of the grab attempt.
 Grabs the keyboard so that all events are passed to this
 application until the keyboard is ungrabbed with gdk_keyboard_ungrab().
 This overrides any previous keyboard grab by this client.
+</para>
+<para>
+If you set up anything at the time you take the grab that needs to be cleaned
+up when the grab ends, you should handle the #GdkEventGrabBroken events that
+are emitted when the grab ends unvoluntarily.
 </para>
 
 @window: the #GdkWindow which will own the grab (the grab window).
