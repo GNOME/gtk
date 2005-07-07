@@ -48,19 +48,19 @@
       };
  
       void 
-      fill_model (GtkListStore *model)
+      fill_model (GtkListStore *store)
       {
         GtkTreeIter iter;
         GdkPixbuf *pixbuf;
 
-        gtk_list_store_append (model, &amp;iter);
+        gtk_list_store_append (store, &amp;iter);
         pixbuf = gdk_pixbuf_new_from_file ("file1.png", NULL);
-        gtk_list_store_set (model, &amp;iter, PIXBUF_COLUMN, pixbuf, TEXT_COLUMN, "Icon 1", -1);
+        gtk_list_store_set (store, &amp;iter, PIXBUF_COLUMN, pixbuf, TEXT_COLUMN, "Icon 1", -1);
         g_object_unref (pixbuf);
 
-        gtk_list_store_append (model, &amp;iter);
+        gtk_list_store_append (store, &amp;iter);
         pixbuf = gdk_pixbuf_new_from_file ("file2.png", NULL);
-        gnome_icon_list_append (icon_list, PIXBUF_COLUMN, pixbuf, TEXT_COLUMN, "Icon 2", -1);
+        gtk_list_store_set (store, &amp;iter, PIXBUF_COLUMN, pixbuf, TEXT_COLUMN, "Icon 2", -1);
         g_object_unref (pixbuf);
 
         /* more icons ... */ 
@@ -70,7 +70,7 @@
       main (int argc, char *argv[])
       {
         GtkWidget *icon_view;
-        GtkTreeModel *model;
+        GtkListStore *store;
 
         gtk_init (&amp;argc, &amp;argv);
 
@@ -78,13 +78,13 @@
 
         /* construct the GtkIconView */
         icon_view = gtk_icon_view_new (<!-- -->);
-        model = gtk_list_store_new (3, GDK_TYPE_PIXBUF, G_TYPE_STRING, G_TYPE_POINTER);
+        store = gtk_list_store_new (3, GDK_TYPE_PIXBUF, G_TYPE_STRING, G_TYPE_POINTER);
 
         gtk_icon_view_set_pixbuf_column (GTK_ICON_VIEW (icon_view), PIXBUF_COLUMN);
         gtk_icon_view_set_text_column (GTK_ICON_VIEW (icon_view), TEXT_COLUMN);
-        gtk_icon_view_set_model GTK_ICON_VIEW (icon_view), model);
+        gtk_icon_view_set_model (GTK_ICON_VIEW (icon_view), GTK_TREE_MODEL (store));
 
-        fill_model (model);
+        fill_model (store);
 
         /* ... */
       }
