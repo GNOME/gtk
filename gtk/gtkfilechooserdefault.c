@@ -310,6 +310,10 @@ static void     gtk_file_chooser_default_screen_changed (GtkWidget             *
 static gboolean       gtk_file_chooser_default_set_current_folder 	   (GtkFileChooser    *chooser,
 									    const GtkFilePath *path,
 									    GError           **error);
+static gboolean       gtk_file_chooser_default_update_current_folder 	   (GtkFileChooser    *chooser,
+									    const GtkFilePath *path,
+									    gboolean           keep_trail,
+									    GError           **error);
 static GtkFilePath *  gtk_file_chooser_default_get_current_folder 	   (GtkFileChooser    *chooser);
 static void           gtk_file_chooser_default_set_current_name   	   (GtkFileChooser    *chooser,
 									    const gchar       *name);
@@ -1006,7 +1010,7 @@ change_folder_and_display_error (GtkFileChooserDefault *impl,
   path_copy = gtk_file_path_copy (path);
 
   error = NULL;
-  result = _gtk_file_chooser_set_current_folder_path (GTK_FILE_CHOOSER (impl), path_copy, &error);
+  result = gtk_file_chooser_default_update_current_folder (GTK_FILE_CHOOSER (impl), path_copy, TRUE, &error);
 
   if (!result)
     error_changing_folder_dialog (impl, path_copy, error);
@@ -4760,6 +4764,15 @@ gtk_file_chooser_default_set_current_folder (GtkFileChooser    *chooser,
 					     const GtkFilePath *path,
 					     GError           **error)
 {
+  return gtk_file_chooser_default_update_current_folder (chooser, path, FALSE, error);
+}
+
+static gboolean
+gtk_file_chooser_default_update_current_folder (GtkFileChooser    *chooser,
+						const GtkFilePath *path,
+						gboolean           keep_trail,
+						GError           **error)
+{
   GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (chooser);
   gboolean result;
 
@@ -4780,7 +4793,7 @@ gtk_file_chooser_default_set_current_folder (GtkFileChooser    *chooser,
   if (!check_is_folder (impl->file_system, path, error))
     return FALSE;
 
-  if (!_gtk_path_bar_set_path (GTK_PATH_BAR (impl->browse_path_bar), path, error))
+  if (!_gtk_path_bar_set_path (GTK_PATH_BAR (impl->browse_path_bar), path, keep_trail, error))
     return FALSE;
 
   if (impl->current_folder != path)

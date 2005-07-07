@@ -1,3 +1,18 @@
+2005-07-07  Matthias Clasen  <mclasen@redhat.com>
+
+	Fix #157787, reported by Jonathan Blandford: 
+	
+	* gtk/gtkfilechooserdefault.c 
+	(gtk_file_chooser_default_set_current_folder): Don't leave a 
+	"trail" behind when set_current_folder is called explicitly.
+	(gtk_file_chooser_default_update_current_folder): New function
+	that is called to update the current folder in response to
+	user actions.
+
+	* gtk/gtkpathbar.c (_gtk_path_bar_set_path): Add a boolean
+	keep_trail argument, and don't leave a "trail" behind unless
+	it is set.
+
 2005-07-05  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkspinbutton.c (gtk_spin_button_new_with_range): Add some
