@@ -1278,6 +1278,7 @@ gtk_path_bar_check_parent_path (GtkPathBar         *path_bar,
 gboolean
 _gtk_path_bar_set_path (GtkPathBar         *path_bar,
 			const GtkFilePath  *file_path,
+			const gboolean      keep_trail,     
 			GError            **error)
 {
   GtkFilePath *path;
@@ -1294,7 +1295,8 @@ _gtk_path_bar_set_path (GtkPathBar         *path_bar,
   /* Check whether the new path is already present in the pathbar as buttons.
    * This could be a parent directory or a previous selected subdirectory.
    */
-  if (gtk_path_bar_check_parent_path (path_bar, file_path, path_bar->file_system))
+  if (keep_trail &&
+      gtk_path_bar_check_parent_path (path_bar, file_path, path_bar->file_system))
     return TRUE;
 
   path = gtk_file_path_copy (file_path);
@@ -1394,7 +1396,6 @@ _gtk_path_bar_set_path (GtkPathBar         *path_bar,
 
   return result;
 }
-
 
 /* FIXME: This should be a construct-only property */
 void
