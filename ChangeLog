@@ -1,5 +1,14 @@
 2005-07-07  Matthias Clasen  <mclasen@redhat.com>
 
+	Implement Drag-and-Drop to the file list.  (#145121, Sven Neumann)
+	
+	* gtk/gtkfilechooserdefault.c (file_list_drag_data_received_cb) 
+	(file_list_drag_drop_cb, file_list_drag_motion_cb): New functions
+	to handle drag-and-drop on the file list.
+	(create_file_list): Set up drag-and-drop handlers on the file list.
+
+2005-07-07  Matthias Clasen  <mclasen@redhat.com>
+
 	Fix #157787, reported by Jonathan Blandford: 
 	
 	* gtk/gtkfilechooserdefault.c 
