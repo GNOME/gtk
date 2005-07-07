@@ -1,3 +1,8 @@
+2005-07-06  Manish Singh  <yosh@gimp.org>
+
+	* demos/gtk-demo/menus.c: change_orientation() should return void,
+	remove unused variable in do_menus().
+
 2005-07-06  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkcursor-win32.c

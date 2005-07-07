@@ -70,7 +70,7 @@ create_menu (gint     depth,
   return menu;
 }
 
-static gboolean
+static void
 change_orientation (GtkWidget *button,
                     GtkWidget *menubar)
 {
@@ -133,7 +133,6 @@ do_menus (GtkWidget *do_widget)
       GtkWidget *menu;
       GtkWidget *menuitem;
       GtkAccelGroup *accel_group;
-      GdkEventMask events;
       
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_screen (GTK_WINDOW (window),
