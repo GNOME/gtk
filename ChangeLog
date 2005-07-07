@@ -1,5 +1,8 @@
 2005-07-07  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/x11/gdkmain-x11.c (generate_grab_broken_event): Don't
+	generate events on destroyed windows.
+
 	Implement Drag-and-Drop to the file list.  (#145121, Sven Neumann)
 	
 	* gtk/gtkfilechooserdefault.c (file_list_drag_data_received_cb) 

@@ -143,16 +143,19 @@ generate_grab_broken_event (GdkWindow *window,
 			    gboolean   implicit,
 			    GdkWindow *grab_window)
 {
-  GdkEvent event;
+  if (!GDK_WINDOW_DESTROYED (window))
+    {
+      GdkEvent event;
   
-  event.type = GDK_GRAB_BROKEN;
-  event.grab_broken.window = window;
-  event.grab_broken.send_event = 0;
-  event.grab_broken.keyboard = keyboard;
-  event.grab_broken.implicit = implicit;
-  event.grab_broken.grab_window = grab_window;
-
-  gdk_event_put (&event);
+      event.type = GDK_GRAB_BROKEN;
+      event.grab_broken.window = window;
+      event.grab_broken.send_event = 0;
+      event.grab_broken.keyboard = keyboard;
+      event.grab_broken.implicit = implicit;
+      event.grab_broken.grab_window = grab_window;
+      
+      gdk_event_put (&event);
+    }
 }
 
 /*
