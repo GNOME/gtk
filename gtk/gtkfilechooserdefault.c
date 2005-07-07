@@ -261,6 +261,15 @@ static const GtkTargetEntry file_list_source_targets[] = {
 static const int num_file_list_source_targets = (sizeof (file_list_source_targets)
 						 / sizeof (file_list_source_targets[0]));
 
+/* Target types for dropping into the file list */
+static const GtkTargetEntry file_list_dest_targets[] = {
+  { "text/uri-list", 0, TEXT_URI_LIST }
+};
+
+static const int num_file_list_dest_targets = (sizeof (file_list_dest_targets)
+					       / sizeof (file_list_dest_targets[0]));
+
+
 /* Interesting places in the shortcuts bar */
 typedef enum {
   SHORTCUTS_HOME,
@@ -442,6 +451,7 @@ static const GtkFileInfo *get_list_file_info (GtkFileChooserDefault *impl,
 					      GtkTreeIter           *iter);
 
 static void load_remove_timer (GtkFileChooserDefault *impl);
+static void browse_files_center_selected_row (GtkFileChooserDefault *impl);
 
 static GObjectClass *parent_class;
 
@@ -3108,6 +3118,127 @@ show_hidden_toggled_cb (GtkCheckMenuItem      *item,
 		NULL);
 }
 
+/* Shows an error dialog about not being able to select a dragged file */
+static void
+error_selecting_dragged_file_dialog (GtkFileChooserDefault *impl,
+				     const GtkFilePath     *path,
+				     GError                *error)
+{
+  error_dialog (impl,
+		_("Could not select file"),
+		path, error);
+}
+
+static void
+file_list_drag_data_received_cb (GtkWidget          *widget,
+				 GdkDragContext     *context,
+				 gint                x,
+				 gint                y,
+				 GtkSelectionData   *selection_data,
+				 guint               info,
+				 guint               time_,
+				 gpointer            data)
+{
+  GtkFileChooserDefault *impl;
+  GtkFileChooser *chooser;
+  gchar **uris;
+  char *uri;
+  GtkFilePath *path;
+  GError *error = NULL;
+  gint i;
+ 
+  impl = GTK_FILE_CHOOSER_DEFAULT (data);
+  chooser = GTK_FILE_CHOOSER (data);
+  
+  /* Parse the text/uri-list string, navigate to the first one */
+  uris = g_uri_list_extract_uris (selection_data->data);
+  if (uris[0]) 
+    {
+      uri = uris[0];
+      path = gtk_file_system_uri_to_path (impl->file_system, uri);
+      
+      if (path)
+	{
+	  if ((impl->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
+	       impl->action == GTK_FILE_CHOOSER_ACTION_SAVE) &&
+	      uris[1] == 0 &&
+	      check_is_folder (impl->file_system, path, NULL))
+	    change_folder_and_display_error (impl, path);
+          else
+            {
+              gtk_file_chooser_default_unselect_all (chooser);
+              gtk_file_chooser_default_select_path (chooser, path, &error);
+              if (error)
+		error_selecting_dragged_file_dialog (impl, path, error);
+	      else
+		browse_files_center_selected_row (impl);
+            }
+
+	  gtk_file_path_free (path);
+	}
+      else
+	{
+ 	  g_set_error (&error,
+ 		       GTK_FILE_CHOOSER_ERROR,
+ 		       GTK_FILE_CHOOSER_ERROR_BAD_FILENAME,
+ 		       _("Could not select file '%s' "
+ 			 "because it is an invalid path name."),
+ 		       uri);
+	  error_selecting_dragged_file_dialog (impl, NULL, error);
+	}
+
+      
+      if (impl->select_multiple)
+	{
+	  for (i = 1; uris[i]; i++)
+	    {
+	      uri = uris[i];
+	      path = gtk_file_system_uri_to_path (impl->file_system, uri);
+	      
+	      if (path)
+		{
+		  gtk_file_chooser_default_select_path (chooser, path, &error);
+		  if (error)
+		    error_selecting_dragged_file_dialog (impl, path, error);
+
+		  gtk_file_path_free (path);
+		}
+	    }
+	}
+    }
+
+  g_strfreev (uris);
+
+  g_signal_stop_emission_by_name (widget, "drag-data-received");
+}
+
+/* Don't do anything with the drag_drop signal */
+static gboolean
+file_list_drag_drop_cb (GtkWidget             *widget,
+			GdkDragContext        *context,
+			gint                   x,
+			gint                   y,
+			guint                  time_,
+			GtkFileChooserDefault *impl)
+{
+  g_signal_stop_emission_by_name (widget, "drag-drop");
+  return TRUE;
+}
+
+/* Disable the normal tree drag motion handler, it makes it look like you're
+   dropping the dragged item onto a tree item */
+static gboolean
+file_list_drag_motion_cb (GtkWidget             *widget,
+                          GdkDragContext        *context,
+                          gint                   x,
+                          gint                   y,
+                          guint                  time_,
+                          GtkFileChooserDefault *impl)
+{
+  g_signal_stop_emission_by_name (widget, "drag-motion");
+  return TRUE;
+}
+
 /* Constructs the popup menu for the file list if needed */
 static void
 file_list_build_popup_menu (GtkFileChooserDefault *impl)
@@ -3272,6 +3403,13 @@ create_file_list (GtkFileChooserDefault *impl)
 
   gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (impl->browse_files_tree_view), TRUE);
   gtk_container_add (GTK_CONTAINER (swin), impl->browse_files_tree_view);
+
+  gtk_drag_dest_set (impl->browse_files_tree_view,
+                     GTK_DEST_DEFAULT_ALL,
+                     file_list_dest_targets,
+                     num_file_list_dest_targets,
+                     GDK_ACTION_COPY | GDK_ACTION_MOVE);
+  
   g_signal_connect (impl->browse_files_tree_view, "row-activated",
 		    G_CALLBACK (list_row_activated), impl);
   g_signal_connect (impl->browse_files_tree_view, "key-press-event",
@@ -3280,6 +3418,13 @@ create_file_list (GtkFileChooserDefault *impl)
 		    G_CALLBACK (list_popup_menu_cb), impl);
   g_signal_connect (impl->browse_files_tree_view, "button-press-event",
 		    G_CALLBACK (list_button_press_event_cb), impl);
+
+  g_signal_connect (impl->browse_files_tree_view, "drag-data-received",
+                    G_CALLBACK (file_list_drag_data_received_cb), impl);
+  g_signal_connect (impl->browse_files_tree_view, "drag-drop",
+                    G_CALLBACK (file_list_drag_drop_cb), impl);
+  g_signal_connect (impl->browse_files_tree_view, "drag-motion",
+                    G_CALLBACK (file_list_drag_motion_cb), impl);
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
   gtk_tree_selection_set_select_function (selection,
