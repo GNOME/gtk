@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-06-20 07:07+0000\n"
-"PO-Revision-Date: 2005-07-06 00:29+0300\n"
+"PO-Revision-Date: 2005-07-06 23:24+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee> \n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -105,7 +105,7 @@ msgstr ""
 
 #: ../gtk/gtkaboutdialog.c:204
 msgid "Program name"
-msgstr ""
+msgstr "Programmi nimi"
 
 #: ../gtk/gtkaboutdialog.c:205
 msgid ""
@@ -115,7 +115,7 @@ msgstr ""
 
 #: ../gtk/gtkaboutdialog.c:219
 msgid "Program version"
-msgstr ""
+msgstr "Programmi versioon"
 
 #: ../gtk/gtkaboutdialog.c:220
 msgid "The version of the program"
@@ -123,19 +123,19 @@ msgstr "Programmi versioon"
 
 #: ../gtk/gtkaboutdialog.c:234
 msgid "Copyright string"
-msgstr ""
+msgstr "Autoriõiguste string"
 
 #: ../gtk/gtkaboutdialog.c:235
 msgid "Copyright information for the program"
-msgstr ""
+msgstr "Programmi kohta kehtivate autoriõiguste string"
 
 #: ../gtk/gtkaboutdialog.c:252
 msgid "Comments string"
-msgstr ""
+msgstr "Kommentaaristring"
 
 #: ../gtk/gtkaboutdialog.c:253
 msgid "Comments about the program"
-msgstr ""
+msgstr "Programmi kohta käivad kommentaarid"
 
 #: ../gtk/gtkaboutdialog.c:286
 msgid "Website URL"
@@ -190,7 +190,7 @@ msgstr ""
 
 #: ../gtk/gtkaboutdialog.c:388
 msgid "Logo"
-msgstr ""
+msgstr "Logo"
 
 #: ../gtk/gtkaboutdialog.c:389
 msgid ""
@@ -236,7 +236,7 @@ msgstr "Nimi"
 
 #: ../gtk/gtkaction.c:198
 msgid "A unique name for the action."
-msgstr ""
+msgstr "Toimingu unikaalne nimi"
 
 #: ../gtk/gtkaction.c:205 ../gtk/gtkbutton.c:221 ../gtk/gtkexpander.c:206
 #: ../gtk/gtkframe.c:128 ../gtk/gtklabel.c:321 ../gtk/gtktoolbutton.c:187
@@ -249,7 +249,7 @@ msgstr ""
 
 #: ../gtk/gtkaction.c:213
 msgid "Short label"
-msgstr ""
+msgstr "Lühike silt"
 
 #: ../gtk/gtkaction.c:214
 msgid "A shorter label that may be used on toolbar buttons."
@@ -386,7 +386,7 @@ msgstr ""
 
 #: ../gtk/gtkadjustment.c:170
 msgid "Step Increment"
-msgstr ""
+msgstr "Suurenduse samm"
 
 #: ../gtk/gtkadjustment.c:171
 msgid "The step increment of the adjustment"
@@ -490,7 +490,7 @@ msgstr ""
 
 #: ../gtk/gtkarrow.c:109
 msgid "Arrow shadow"
-msgstr ""
+msgstr "Noole vari"
 
 #: ../gtk/gtkarrow.c:110
 msgid "Appearance of the shadow surrounding the arrow"
@@ -999,9 +999,8 @@ msgid "Icon Name"
 msgstr "Ikooni nimi"
 
 #: ../gtk/gtkcellrendererpixbuf.c:206 ../gtk/gtkimage.c:262
-#, fuzzy
 msgid "The name of the icon from the icon theme"
-msgstr "Valitud kirjatüübi nimi"
+msgstr ""
 
 #: ../gtk/gtkcellrendererpixbuf.c:221
 msgid "Follow State"
@@ -1039,7 +1038,7 @@ msgstr ""
 
 #: ../gtk/gtkcellrenderertext.c:235 ../gtk/gtklabel.c:328
 msgid "Attributes"
-msgstr ""
+msgstr "Atribuudid"
 
 #: ../gtk/gtkcellrenderertext.c:236
 msgid "A list of style attributes to apply to the text of the renderer"
@@ -1588,9 +1587,8 @@ msgid "Whether the combo box draws a frame around the child"
 msgstr ""
 
 #: ../gtk/gtkcombobox.c:684
-#, fuzzy
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
-msgstr "Kas nupp saab fookuse, kui teda hiirega klõpsatakse, või mitte"
+msgstr ""
 
 #: ../gtk/gtkcombobox.c:690
 msgid "Appears as list"
@@ -1602,11 +1600,11 @@ msgstr ""
 
 #: ../gtk/gtkcontainer.c:205
 msgid "Resize mode"
-msgstr ""
+msgstr "Suuruse muutmise režiim"
 
 #: ../gtk/gtkcontainer.c:206
 msgid "Specify how resize events are handled"
-msgstr ""
+msgstr "Kuidas suuruse muutumise sündmusi käsitletakse"
 
 #: ../gtk/gtkcontainer.c:213
 msgid "Border width"
@@ -1634,35 +1632,35 @@ msgstr ""
 
 #: ../gtk/gtkcurve.c:132
 msgid "Minimum X"
-msgstr ""
+msgstr "Väikseim X"
 
 #: ../gtk/gtkcurve.c:133
 msgid "Minimum possible value for X"
-msgstr ""
+msgstr "X'i väikseim võimalik väärtus"
 
 #: ../gtk/gtkcurve.c:141
 msgid "Maximum X"
-msgstr ""
+msgstr "Suurim X"
 
 #: ../gtk/gtkcurve.c:142
 msgid "Maximum possible X value"
-msgstr ""
+msgstr "X'i suurim võimalik väärtus"
 
 #: ../gtk/gtkcurve.c:150
 msgid "Minimum Y"
-msgstr ""
+msgstr "Väikseim Y"
 
 #: ../gtk/gtkcurve.c:151
 msgid "Minimum possible value for Y"
-msgstr ""
+msgstr "Y'i väikseim võimalik väärtus"
 
 #: ../gtk/gtkcurve.c:159
 msgid "Maximum Y"
-msgstr ""
+msgstr "Suurim Y"
 
 #: ../gtk/gtkcurve.c:160
 msgid "Maximum possible value for Y"
-msgstr ""
+msgstr "Y'i suurim võimalik väärtus"
 
 #: ../gtk/gtkdialog.c:149
 msgid "Has separator"
@@ -1719,11 +1717,12 @@ msgstr ""
 
 #: ../gtk/gtkentry.c:514
 msgid "Maximum length"
-msgstr ""
+msgstr "Suurim pikkus"
 
 #: ../gtk/gtkentry.c:515
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr ""
+"Suurim märkide arv sellel väljal. Null tähendab, et pikkus pole piiratud"
 
 #: ../gtk/gtkentry.c:523
 msgid "Visibility"
@@ -1967,9 +1966,8 @@ msgid ""
 msgstr ""
 
 #: ../gtk/gtkfilechooser.c:214
-#, fuzzy
 msgid "Use Preview Label"
-msgstr "Näidistekst"
+msgstr ""
 
 #: ../gtk/gtkfilechooser.c:215
 msgid "Whether to display a stock label with the name of the previewed file."
@@ -2008,9 +2006,8 @@ msgid "The file chooser dialog to use."
 msgstr ""
 
 #: ../gtk/gtkfilechooserbutton.c:354
-#, fuzzy
 msgid "The title of the file chooser dialog."
-msgstr "Kirjatüübi valiku dialoogiakna pealkiri"
+msgstr "Failivalimise dialoogi pealkiri"
 
 #: ../gtk/gtkfilechooserbutton.c:368
 msgid "The desired width of the button widget, in characters."
@@ -2021,9 +2018,8 @@ msgid "Default file chooser backend"
 msgstr ""
 
 #: ../gtk/gtkfilechooserdefault.c:627
-#, fuzzy
 msgid "Name of the GtkFileChooser backend to use by default"
-msgstr "Vaikimisi kasutatava kirjatüübi nimi"
+msgstr ""
 
 #: ../gtk/gtkfilesel.c:561 ../gtk/gtkimage.c:194
 msgid "Filename"
@@ -2255,9 +2251,8 @@ msgid "Space which is inserted between cells of an item"
 msgstr ""
 
 #: ../gtk/gtkiconview.c:637
-#, fuzzy
 msgid "Row Spacing"
-msgstr "Näita päist"
+msgstr ""
 
 #: ../gtk/gtkiconview.c:638
 msgid "Space which is inserted between grid rows"
@@ -2300,21 +2295,19 @@ msgstr ""
 
 #: ../gtk/gtkiconview.c:711
 msgid "Selection Box Color"
-msgstr ""
+msgstr "Valikukasti värv"
 
 #: ../gtk/gtkiconview.c:712
-#, fuzzy
 msgid "Color of the selection box"
-msgstr "Kirjatüübi valiku dialoogiakna pealkiri"
+msgstr "Valikukasti värv"
 
 #: ../gtk/gtkiconview.c:718
 msgid "Selection Box Alpha"
-msgstr ""
+msgstr "Valikukasti alfa"
 
 #: ../gtk/gtkiconview.c:719
-#, fuzzy
 msgid "Opacity of the selection box"
-msgstr "Kirjatüübi valiku dialoogiakna pealkiri"
+msgstr "Valikukasti läbipaistmatus"
 
 #: ../gtk/gtkimage.c:162
 msgid "Pixbuf"
@@ -2373,9 +2366,8 @@ msgid "Symbolic size to use for stock icon, icon set or named icon"
 msgstr ""
 
 #: ../gtk/gtkimage.c:236
-#, fuzzy
 msgid "Pixel size"
-msgstr "Pikslid"
+msgstr "Piksli suurus"
 
 #: ../gtk/gtkimage.c:237
 msgid "Pixel size to use for named icon"
@@ -2434,7 +2426,7 @@ msgstr ""
 
 #: ../gtk/gtklabel.c:359
 msgid "Pattern"
-msgstr ""
+msgstr "Muster"
 
 #: ../gtk/gtklabel.c:360
 msgid ""
@@ -2481,27 +2473,24 @@ msgid ""
 msgstr ""
 
 #: ../gtk/gtklabel.c:475
-#, fuzzy
 msgid "Single Line Mode"
-msgstr "Mitmikvalik"
+msgstr ""
 
 #: ../gtk/gtklabel.c:476
-#, fuzzy
 msgid "Whether the label is in single line mode"
-msgstr "Kas sildi teksti saab hiirega märkida või mitte"
+msgstr ""
 
 #: ../gtk/gtklabel.c:493
 msgid "Angle"
-msgstr ""
+msgstr "Nurk"
 
 #: ../gtk/gtklabel.c:494
 msgid "Angle at which the label is rotated"
-msgstr ""
+msgstr "Nurk, millega silti pööratakse"
 
 #: ../gtk/gtklabel.c:514
-#, fuzzy
 msgid "Maximum Width In Characters"
-msgstr "Maksimaalne laius"
+msgstr "Maksimaalne laius märkides"
 
 #: ../gtk/gtklabel.c:515
 msgid "The desired maximum width of the label, in characters"
@@ -2642,18 +2631,16 @@ msgid "Pack direction"
 msgstr ""
 
 #: ../gtk/gtkmenubar.c:202
-#, fuzzy
 msgid "The pack direction of the menubar"
-msgstr "Valitud kirjatüübi nimi"
+msgstr ""
 
 #: ../gtk/gtkmenubar.c:218
 msgid "Child Pack direction"
 msgstr ""
 
 #: ../gtk/gtkmenubar.c:219
-#, fuzzy
 msgid "The child pack direction of the menubar"
-msgstr "Akna algne asukoht"
+msgstr ""
 
 #: ../gtk/gtkmenubar.c:228
 msgid "Style of bevel around the menubar"
@@ -2685,19 +2672,19 @@ msgstr ""
 
 #: ../gtk/gtkmenutoolbutton.c:248 ../gtk/gtkoptionmenu.c:196
 msgid "Menu"
-msgstr ""
+msgstr "Menüü"
 
 #: ../gtk/gtkmenutoolbutton.c:249
 msgid "The dropdown menu"
-msgstr ""
+msgstr "Rippmenüü"
 
 #: ../gtk/gtkmessagedialog.c:126
 msgid "Image/label border"
-msgstr ""
+msgstr "Pildi/sildi raam"
 
 #: ../gtk/gtkmessagedialog.c:127
 msgid "Width of border around the label and image in the message dialog"
-msgstr ""
+msgstr "Sõnumidialoogis oleva pildi või sildi raami laius"
 
 #: ../gtk/gtkmessagedialog.c:142
 msgid "Use separator"
@@ -2857,9 +2844,8 @@ msgid "Tab fill"
 msgstr ""
 
 #: ../gtk/gtknotebook.c:514
-#, fuzzy
 msgid "Whether the child's tab should fill the allocated area or not"
-msgstr "Kas laps saab rohkem ruumi, kui tema vanem suureneb"
+msgstr ""
 
 #: ../gtk/gtknotebook.c:520
 msgid "Tab pack type"
@@ -3085,7 +3071,7 @@ msgstr ""
 
 #: ../gtk/gtkradioaction.c:140
 msgid "The value"
-msgstr ""
+msgstr "Väärtus"
 
 #: ../gtk/gtkradioaction.c:141
 msgid ""
@@ -3095,7 +3081,7 @@ msgstr ""
 
 #: ../gtk/gtkradioaction.c:157 ../gtk/gtkradiobutton.c:114
 msgid "Group"
-msgstr ""
+msgstr "Grupp"
 
 #: ../gtk/gtkradioaction.c:158
 msgid "The radio action whose group this action belongs to."
@@ -3208,9 +3194,8 @@ msgid "Metric"
 msgstr ""
 
 #: ../gtk/gtkruler.c:169
-#, fuzzy
 msgid "The metric used for the ruler"
-msgstr "Sildi tekst"
+msgstr ""
 
 #: ../gtk/gtkscale.c:173 ../gtk/gtkspinbutton.c:261
 msgid "Digits"
@@ -3440,11 +3425,11 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:383
 msgid "GTK Modules"
-msgstr ""
+msgstr "GTK moodulid"
 
 #: ../gtk/gtksettings.c:384
 msgid "List of currently active GTK modules"
-msgstr ""
+msgstr "Nimekiri hetkel aktiivsetest GTK moodulitest"
 
 #: ../gtk/gtksettings.c:393
 msgid "Xft Antialias"
@@ -3488,11 +3473,11 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:443
 msgid "Cursor theme name"
-msgstr ""
+msgstr "Kursoriteema nimi"
 
 #: ../gtk/gtksettings.c:444
 msgid "Name of the cursor theme to use"
-msgstr "Kasutatava kursoritüübi teema nimi"
+msgstr "Kasutatava kursoriteema nimi"
 
 #: ../gtk/gtksettings.c:452
 msgid "Cursor theme size"
@@ -3557,7 +3542,7 @@ msgstr ""
 
 #: ../gtk/gtkspinbutton.c:279
 msgid "Numeric"
-msgstr ""
+msgstr "Numbriline"
 
 #: ../gtk/gtkspinbutton.c:280
 msgid "Whether non-numeric characters should be ignored"
@@ -3733,9 +3718,8 @@ msgid "Text Tag Table"
 msgstr ""
 
 #: ../gtk/gtktextbuffer.c:207
-#, fuzzy
 msgid "Current text of the buffer"
-msgstr "Sildi tekst"
+msgstr ""
 
 #: ../gtk/gtktexttag.c:201
 msgid "Tag name"
@@ -4227,14 +4211,12 @@ msgid "The stock icon displayed on the item"
 msgstr ""
 
 #: ../gtk/gtktoolbutton.c:225
-#, fuzzy
 msgid "Icon name"
-msgstr "Kirjatüübi nimi"
+msgstr "Ikooni nimi"
 
 #: ../gtk/gtktoolbutton.c:226
-#, fuzzy
 msgid "The name of the themed icon displayed on the item"
-msgstr "Valitud kirjatüübi nimi"
+msgstr ""
 
 #: ../gtk/gtktoolbutton.c:232
 msgid "Icon widget"
@@ -4335,9 +4317,8 @@ msgid "Hover Selection"
 msgstr ""
 
 #: ../gtk/gtktreeview.c:682
-#, fuzzy
 msgid "Whether the selection should follow the pointer"
-msgstr "Kas tegevus on lubatud või mitte."
+msgstr ""
 
 #: ../gtk/gtktreeview.c:701
 msgid "Hover Expand"
@@ -4837,9 +4818,8 @@ msgid "Icon for this window"
 msgstr "Selle akna ikoon"
 
 #: ../gtk/gtkwindow.c:532
-#, fuzzy
 msgid "Name of the themed icon for this window"
-msgstr "Selle akna ikoon"
+msgstr "Sellele aknale määratud temaatiline ikoon"
 
 #: ../gtk/gtkwindow.c:547
 msgid "Is Active"
