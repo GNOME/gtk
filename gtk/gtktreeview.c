@@ -5088,7 +5088,7 @@ initialize_fixed_height_mode (GtkTreeView *tree_view)
     }
 
    _gtk_rbtree_set_fixed_height (tree_view->priv->tree,
-                                 tree_view->priv->fixed_height);
+                                 tree_view->priv->fixed_height, TRUE);
 }
 
 /* Our strategy for finding nodes to validate is a little convoluted.  We find
@@ -5206,7 +5206,7 @@ do_validate_rows (GtkTreeView *tree_view, gboolean queue_resize)
   if (!tree_view->priv->fixed_height_check)
    {
      if (fixed_height)
-       _gtk_rbtree_set_fixed_height (tree_view->priv->tree, prev_height);
+       _gtk_rbtree_set_fixed_height (tree_view->priv->tree, prev_height, FALSE);
 
      tree_view->priv->fixed_height_check = 1;
    }
@@ -7309,11 +7309,15 @@ gtk_tree_view_row_inserted (GtkTreeModel *model,
     {
       tmpnode = _gtk_rbtree_find_count (tree, indices[depth - 1]);
       _gtk_rbtree_insert_after (tree, tmpnode, height, FALSE);
-    } 
+    }
 
  done:
   if (height > 0)
-    gtk_widget_queue_resize (GTK_WIDGET (tree_view));
+    {
+      if (tree)
+        _gtk_rbtree_node_mark_valid (tree, tmpnode);
+      gtk_widget_queue_resize (GTK_WIDGET (tree_view));
+    }
   else
     install_presize_handler (tree_view);
   if (free_path)
@@ -7703,7 +7707,10 @@ gtk_tree_view_build_tree (GtkTreeView *tree_view,
       if (tree_view->priv->fixed_height > 0)
         {
           if (GTK_RBNODE_FLAG_SET (temp, GTK_RBNODE_INVALID))
-            _gtk_rbtree_node_set_height (tree, temp, tree_view->priv->fixed_height);
+	    {
+              _gtk_rbtree_node_set_height (tree, temp, tree_view->priv->fixed_height);
+	      _gtk_rbtree_node_mark_valid (tree, temp);
+	    }
         }
 
       if (is_list)

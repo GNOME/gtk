@@ -1,3 +1,19 @@
+2005-07-08  Kristian Rietveld  <kris@gtk.org>
+
+	Fixes #165034, reported by Jorn Baayen.
+
+	* gtk/gtkrbtree.[ch] (_gtk_rbtree_set_fixed_height): add a
+	mark_valid parameter (so we can mark all nodes as valid when we
+	are setting them to the fixed height).
+
+	* gtk/gtktreeview.c (initialized_fixed_height_mode): mark all
+	nodes as valid when setting the fixed height,
+	(do_validate_rows): update call to _set_fixed_height,
+	(gtk_tree_view_row_inserted): mark node as valid when fixed
+	height mode is enabled and a height has been set,
+	(gtk_tree_view_build_tree): if fixed height mode is enabled,
+	mark new nodes as valid in addition to setting the height.
+
 2005-07-08  Matthias Clasen  <mclasen@redhat.com>
 	
 	* === Released 2.7.2 ===
