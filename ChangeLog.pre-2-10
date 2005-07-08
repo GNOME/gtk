@@ -1,5 +1,8 @@
 2005-07-07  Matthias Clasen  <mclasen@redhat.com>
 
+	* configure.in: Add -DHPPEX -DSHMLINK to CFLAGS for HP-UX.  
+	(#162979, Paul Cornett)
+
 	* gtk/gtkhscale.c (gtk_hscale_new_with_range): 
 	(gtk_vscale_new_with_range): Add some additional docs on 
 	precision here too.  (#309238, Steve Chaplin)
