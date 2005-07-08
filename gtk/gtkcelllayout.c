@@ -61,6 +61,8 @@ gtk_cell_layout_get_type (void)
  * then the @cell is allocated no more space than it needs. Any unused space
  * is divided evenly between cells for which @expand is %TRUE.
  *
+ * Note that reusing the same cell renderer is not supported. 
+ *
  * Since: 2.4
  */
 void
@@ -85,6 +87,8 @@ gtk_cell_layout_pack_start (GtkCellLayout   *cell_layout,
  * Adds the @cell to the end of @cell_layout. If @expand is %FALSE, then the
  * @cell is allocated no more space than it needs. Any unused space is
  * divided evenly between cells for which @expand is %TRUE.
+ *
+ * Note that reusing the same cell renderer is not supported. 
  *
  * Since: 2.4
  */

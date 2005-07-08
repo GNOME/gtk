@@ -109,6 +109,11 @@ only private fields and should not be directly accessed.
 
 </para>
 
+<!-- ##### ARG GtkAboutDialog:wrap-license ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkAboutDialog:link-color ##### -->
 <para>
 
@@ -210,6 +215,24 @@ only private fields and should not be directly accessed.
 
 @about: 
 @license: 
+
+
+<!-- ##### FUNCTION gtk_about_dialog_get_wrap_license ##### -->
+<para>
+
+</para>
+
+@about: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_about_dialog_set_wrap_license ##### -->
+<para>
+
+</para>
+
+@about: 
+@wrap_license: 
 
 
 <!-- ##### FUNCTION gtk_about_dialog_get_website ##### -->

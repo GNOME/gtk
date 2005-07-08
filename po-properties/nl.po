@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-01 14:32-0400\n"
+"POT-Creation-Date: 2005-07-08 14:01-0400\n"
 "PO-Revision-Date: 2005-06-22 01:43+0200\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -113,11 +113,11 @@ msgid "the GdkScreen for the renderer"
 msgstr "het GdkScreen voor de renderer"
 
 # Naam programma
-#: gtk/gtkaboutdialog.c:204
+#: gtk/gtkaboutdialog.c:206
 msgid "Program name"
 msgstr "Programmanaam"
 
-#: gtk/gtkaboutdialog.c:205
+#: gtk/gtkaboutdialog.c:207
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
@@ -125,44 +125,44 @@ msgstr ""
 "De naam van het programma. Als dit niet is ingesteld wordt standaard "
 "g_get_application_name() gebruikt"
 
-#: gtk/gtkaboutdialog.c:219
+#: gtk/gtkaboutdialog.c:221
 msgid "Program version"
 msgstr "Programmaversie"
 
-#: gtk/gtkaboutdialog.c:220
+#: gtk/gtkaboutdialog.c:222
 msgid "The version of the program"
 msgstr "De versie van het programma"
 
-#: gtk/gtkaboutdialog.c:234
+#: gtk/gtkaboutdialog.c:236
 msgid "Copyright string"
 msgstr "Copyright-tekenreeks"
 
-#: gtk/gtkaboutdialog.c:235
+#: gtk/gtkaboutdialog.c:237
 msgid "Copyright information for the program"
 msgstr "Copyright-informatie over het programma"
 
-#: gtk/gtkaboutdialog.c:252
+#: gtk/gtkaboutdialog.c:254
 msgid "Comments string"
 msgstr "Opmerking-tekenreeks"
 
-#: gtk/gtkaboutdialog.c:253
+#: gtk/gtkaboutdialog.c:255
 msgid "Comments about the program"
 msgstr "Opmerkingen over het programma"
 
 # webstek
-#: gtk/gtkaboutdialog.c:286
+#: gtk/gtkaboutdialog.c:289
 msgid "Website URL"
 msgstr "Website URL"
 
-#: gtk/gtkaboutdialog.c:287
+#: gtk/gtkaboutdialog.c:290
 msgid "The URL for the link to the website of the program"
 msgstr "De URL voor de link naar de website van het programma"
 
-#: gtk/gtkaboutdialog.c:303
+#: gtk/gtkaboutdialog.c:306
 msgid "Website label"
 msgstr "Website-label"
 
-#: gtk/gtkaboutdialog.c:304
+#: gtk/gtkaboutdialog.c:307
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
@@ -170,46 +170,46 @@ msgstr ""
 "De label voor de link naar de website van het programma. Als dit niet is "
 "ingesteld wordt standaard de URL gebruikt"
 
-#: gtk/gtkaboutdialog.c:320
+#: gtk/gtkaboutdialog.c:323
 msgid "Authors"
 msgstr "Auteurs"
 
-#: gtk/gtkaboutdialog.c:321
+#: gtk/gtkaboutdialog.c:324
 msgid "List of authors of the program"
 msgstr "Lijst met de makers van het programma"
 
-#: gtk/gtkaboutdialog.c:337
+#: gtk/gtkaboutdialog.c:340
 msgid "Documenters"
 msgstr "Documentalisten"
 
-#: gtk/gtkaboutdialog.c:338
+#: gtk/gtkaboutdialog.c:341
 msgid "List of people documenting the program"
 msgstr "Lijst van degenen die het programma hebben gedocumenteerd"
 
-#: gtk/gtkaboutdialog.c:354
+#: gtk/gtkaboutdialog.c:357
 msgid "Artists"
 msgstr "Artiesten"
 
-#: gtk/gtkaboutdialog.c:355
+#: gtk/gtkaboutdialog.c:358
 msgid "List of people who have contributed artwork to the program"
 msgstr ""
 "Lijst van degenen die hebben bijgedragen aan het grafische werk van het "
 "programma"
 
-#: gtk/gtkaboutdialog.c:372
+#: gtk/gtkaboutdialog.c:375
 msgid "Translator credits"
 msgstr "Vertalers"
 
-#: gtk/gtkaboutdialog.c:373
+#: gtk/gtkaboutdialog.c:376
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr "De vertalers. Deze tekenreeks moet als vertaalbaar worden gemarkeerd"
 
-#: gtk/gtkaboutdialog.c:388
+#: gtk/gtkaboutdialog.c:391
 msgid "Logo"
 msgstr "Logo"
 
-#: gtk/gtkaboutdialog.c:389
+#: gtk/gtkaboutdialog.c:392
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -217,20 +217,30 @@ msgstr ""
 "Een logo voor het info-dialoogvenster. Als er geen logo is gegeven wordt "
 "standaard gtk_window_het_default_icon_list() gebruikt."
 
-#: gtk/gtkaboutdialog.c:404
+#: gtk/gtkaboutdialog.c:407
 msgid "Logo Icon Name"
 msgstr "Logo-pictogram"
 
 # dat als logo wordt gebruikt in het info-venster.
-#: gtk/gtkaboutdialog.c:405
+#: gtk/gtkaboutdialog.c:408
 msgid "A named icon to use as the logo for the about box."
 msgstr "Een pictogram met naam voor een logo in het info-venster."
 
-#: gtk/gtkaboutdialog.c:412
+#: gtk/gtkaboutdialog.c:421
+#, fuzzy
+msgid "Wrap license"
+msgstr "Regelterugloopmodus gebruiken"
+
+#: gtk/gtkaboutdialog.c:422
+#, fuzzy
+msgid "Whether to wrap the license text."
+msgstr "Of de tekst doorstreept moet worden"
+
+#: gtk/gtkaboutdialog.c:429
 msgid "Link Color"
 msgstr "Link-kleur"
 
-#: gtk/gtkaboutdialog.c:413
+#: gtk/gtkaboutdialog.c:430
 msgid "Color of hyperlinks"
 msgstr "De kleur van hyperlinks"
 
@@ -754,7 +764,7 @@ msgstr "Horizontale uitlijning voor dochter"
 msgid "Vertical alignment for child"
 msgstr "Verticale uitlijning voor dochter"
 
-#: gtk/gtkbutton.c:312 gtk/gtkimagemenuitem.c:132
+#: gtk/gtkbutton.c:312 gtk/gtkimagemenuitem.c:133
 msgid "Image widget"
 msgstr "Afbeeldingswidget"
 
@@ -2106,7 +2116,7 @@ msgstr "Widget door toepassing geleverd voor extra opties."
 msgid "Select Multiple"
 msgstr "Meerdere selecteren"
 
-#: gtk/gtkfilechooser.c:227 gtk/gtkfilesel.c:576
+#: gtk/gtkfilechooser.c:227 gtk/gtkfilesel.c:573
 msgid "Whether to allow multiple files to be selected"
 msgstr "Of meerdere bestanden tegelijk mogen worden geselecteerd"
 
@@ -2134,33 +2144,33 @@ msgstr "De titel van het bestandsselectie-dialoogvenster."
 msgid "The desired width of the button widget, in characters."
 msgstr "De gewenste breedte van het knop-widget, in lettertekens."
 
-#: gtk/gtkfilechooserdefault.c:626
+#: gtk/gtkfilechooserdefault.c:640
 msgid "Default file chooser backend"
 msgstr "Standaard backend bestandkiezer"
 
-#: gtk/gtkfilechooserdefault.c:627
+#: gtk/gtkfilechooserdefault.c:641
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Naam van de gebruikte backend voor de bestandkiezer"
 
-#: gtk/gtkfilesel.c:561 gtk/gtkimage.c:194
+#: gtk/gtkfilesel.c:558 gtk/gtkimage.c:194
 msgid "Filename"
 msgstr "Bestandsnaam"
 
 # momenteel
-#: gtk/gtkfilesel.c:562
+#: gtk/gtkfilesel.c:559
 msgid "The currently selected filename"
 msgstr "De nu geselecteerde bestandsnaam"
 
-#: gtk/gtkfilesel.c:568
+#: gtk/gtkfilesel.c:565
 msgid "Show file operations"
 msgstr "Weergeven van bestandsbewerkingen"
 
-#: gtk/gtkfilesel.c:569
+#: gtk/gtkfilesel.c:566
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr ""
 "Of knoppen voor het maken/wijzigen van bestanden weergegeven moeten worden"
 
-#: gtk/gtkfilesel.c:575
+#: gtk/gtkfilesel.c:572
 msgid "Select multiple"
 msgstr "Selecteer meerdere"
 
@@ -2525,15 +2535,15 @@ msgstr "Opslagtype"
 msgid "The representation being used for image data"
 msgstr "De te gebruiken representatie voor afbeeldingsdata"
 
-#: gtk/gtkimagemenuitem.c:133
+#: gtk/gtkimagemenuitem.c:134
 msgid "Child widget to appear next to the menu text"
 msgstr "Dochterwidget dat naast de menutekst verschijnt"
 
-#: gtk/gtkimagemenuitem.c:138
+#: gtk/gtkimagemenuitem.c:139
 msgid "Show menu images"
 msgstr "Menu-afbeeldingen tonen"
 
-#: gtk/gtkimagemenuitem.c:139
+#: gtk/gtkimagemenuitem.c:140
 msgid "Whether images should be shown in menus"
 msgstr "Of afbeeldingen in menus worden getoond"
 
@@ -3634,7 +3644,8 @@ msgid "Icon Sizes"
 msgstr "Pictogramafmetingen"
 
 #: gtk/gtksettings.c:375
-msgid "List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."
+#, fuzzy
+msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
 msgstr "Lijst van pictogramafmetingen (gtk-menu=16; gtk-knop=20,20..."
 
 #: gtk/gtksettings.c:383

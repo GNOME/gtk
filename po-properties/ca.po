@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-01 14:32-0400\n"
+"POT-Creation-Date: 2005-07-08 14:01-0400\n"
 "PO-Revision-Date: 2005-04-11 02:41+0200\n"
 "Last-Translator: Jordi Mallach <jordi@sindominio.net>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
@@ -99,11 +99,11 @@ msgstr "Pantalla"
 msgid "the GdkScreen for the renderer"
 msgstr "el GdkScreen per al representador"
 
-#: gtk/gtkaboutdialog.c:204
+#: gtk/gtkaboutdialog.c:206
 msgid "Program name"
 msgstr "Nom del programa"
 
-#: gtk/gtkaboutdialog.c:205
+#: gtk/gtkaboutdialog.c:207
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
@@ -111,43 +111,43 @@ msgstr ""
 "El nom del programa. Si no està definit, per defecte serà el valor de "
 "g_get_application_name()"
 
-#: gtk/gtkaboutdialog.c:219
+#: gtk/gtkaboutdialog.c:221
 msgid "Program version"
 msgstr "Versió del programa"
 
-#: gtk/gtkaboutdialog.c:220
+#: gtk/gtkaboutdialog.c:222
 msgid "The version of the program"
 msgstr "La versió del programa"
 
-#: gtk/gtkaboutdialog.c:234
+#: gtk/gtkaboutdialog.c:236
 msgid "Copyright string"
 msgstr "Cadena del copyright"
 
-#: gtk/gtkaboutdialog.c:235
+#: gtk/gtkaboutdialog.c:237
 msgid "Copyright information for the program"
 msgstr "Informació de copyright per al programa"
 
-#: gtk/gtkaboutdialog.c:252
+#: gtk/gtkaboutdialog.c:254
 msgid "Comments string"
 msgstr "Cadena de comentaris"
 
-#: gtk/gtkaboutdialog.c:253
+#: gtk/gtkaboutdialog.c:255
 msgid "Comments about the program"
 msgstr "Comentaris quant al vostre programa"
 
-#: gtk/gtkaboutdialog.c:286
+#: gtk/gtkaboutdialog.c:289
 msgid "Website URL"
 msgstr "URL del lloc web"
 
-#: gtk/gtkaboutdialog.c:287
+#: gtk/gtkaboutdialog.c:290
 msgid "The URL for the link to the website of the program"
 msgstr "La URL per a l'enllaç al lloc web del programa"
 
-#: gtk/gtkaboutdialog.c:303
+#: gtk/gtkaboutdialog.c:306
 msgid "Website label"
 msgstr "Etiqueta del lloc web"
 
-#: gtk/gtkaboutdialog.c:304
+#: gtk/gtkaboutdialog.c:307
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
@@ -155,44 +155,44 @@ msgstr ""
 "L'etiqueta per a l'enllaç al lloc web del programa. Si no està definida, "
 "s'usa el valor de la URL"
 
-#: gtk/gtkaboutdialog.c:320
+#: gtk/gtkaboutdialog.c:323
 msgid "Authors"
 msgstr "Autors"
 
-#: gtk/gtkaboutdialog.c:321
+#: gtk/gtkaboutdialog.c:324
 msgid "List of authors of the program"
 msgstr "Llista d'autors del programa"
 
-#: gtk/gtkaboutdialog.c:337
+#: gtk/gtkaboutdialog.c:340
 msgid "Documenters"
 msgstr "Documentadors"
 
-#: gtk/gtkaboutdialog.c:338
+#: gtk/gtkaboutdialog.c:341
 msgid "List of people documenting the program"
 msgstr "Llista de gent que documenta el programa"
 
-#: gtk/gtkaboutdialog.c:354
+#: gtk/gtkaboutdialog.c:357
 msgid "Artists"
 msgstr "Artistes"
 
-#: gtk/gtkaboutdialog.c:355
+#: gtk/gtkaboutdialog.c:358
 msgid "List of people who have contributed artwork to the program"
 msgstr "Llista de gent que ha contribuït amb imatges al programa"
 
-#: gtk/gtkaboutdialog.c:372
+#: gtk/gtkaboutdialog.c:375
 msgid "Translator credits"
 msgstr "Traductors"
 
-#: gtk/gtkaboutdialog.c:373
+#: gtk/gtkaboutdialog.c:376
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr "El nom dels traductors. Aquesta cadena s'ha de marcar com a traduïble"
 
-#: gtk/gtkaboutdialog.c:388
+#: gtk/gtkaboutdialog.c:391
 msgid "Logo"
 msgstr "Logotipus"
 
-#: gtk/gtkaboutdialog.c:389
+#: gtk/gtkaboutdialog.c:392
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -200,19 +200,29 @@ msgstr ""
 "Un logotipus per a la caixa d'informació de l'aplicació. Si no està definit, "
 "es fa servir el valor de gtk_window_get_default_icon_list()"
 
-#: gtk/gtkaboutdialog.c:404
+#: gtk/gtkaboutdialog.c:407
 msgid "Logo Icon Name"
 msgstr "Nom de la icona del logotip"
 
-#: gtk/gtkaboutdialog.c:405
+#: gtk/gtkaboutdialog.c:408
 msgid "A named icon to use as the logo for the about box."
 msgstr "Una icona amb nom per a usar com a logotipus a la caixa d'informació"
 
-#: gtk/gtkaboutdialog.c:412
+#: gtk/gtkaboutdialog.c:421
+#, fuzzy
+msgid "Wrap license"
+msgstr "Conjunt mode ajust"
+
+#: gtk/gtkaboutdialog.c:422
+#, fuzzy
+msgid "Whether to wrap the license text."
+msgstr "Si s'ha de ratllar el text"
+
+#: gtk/gtkaboutdialog.c:429
 msgid "Link Color"
 msgstr "Color de l'enllaç"
 
-#: gtk/gtkaboutdialog.c:413
+#: gtk/gtkaboutdialog.c:430
 msgid "Color of hyperlinks"
 msgstr "Color dels hiperenllaços"
 
@@ -722,7 +732,7 @@ msgstr "Alineació horitzontal per al fill"
 msgid "Vertical alignment for child"
 msgstr "Alineació vertical per al fill"
 
-#: gtk/gtkbutton.c:312 gtk/gtkimagemenuitem.c:132
+#: gtk/gtkbutton.c:312 gtk/gtkimagemenuitem.c:133
 msgid "Image widget"
 msgstr "Element d'imatge"
 
@@ -2055,7 +2065,7 @@ msgstr "Giny proporcionat per l'aplicació per a opcions extres."
 msgid "Select Multiple"
 msgstr "Selecció múltiple"
 
-#: gtk/gtkfilechooser.c:227 gtk/gtkfilesel.c:576
+#: gtk/gtkfilechooser.c:227 gtk/gtkfilesel.c:573
 msgid "Whether to allow multiple files to be selected"
 msgstr "Si s'ha permetre que fitxers múltiples siguin seleccionats"
 
@@ -2083,31 +2093,31 @@ msgstr "El títol del diàleg de selecció de fitxers."
 msgid "The desired width of the button widget, in characters."
 msgstr "L'amplada desitjada del giny botó, en caràcters."
 
-#: gtk/gtkfilechooserdefault.c:626
+#: gtk/gtkfilechooserdefault.c:640
 msgid "Default file chooser backend"
 msgstr "Rerefons predeterminat del selector de fitxers"
 
-#: gtk/gtkfilechooserdefault.c:627
+#: gtk/gtkfilechooserdefault.c:641
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Nom del rerefons del GtkFileChooser predeterminat"
 
-#: gtk/gtkfilesel.c:561 gtk/gtkimage.c:194
+#: gtk/gtkfilesel.c:558 gtk/gtkimage.c:194
 msgid "Filename"
 msgstr "Nom del fitxer"
 
-#: gtk/gtkfilesel.c:562
+#: gtk/gtkfilesel.c:559
 msgid "The currently selected filename"
 msgstr "El nom del fitxer seleccionat actualment"
 
-#: gtk/gtkfilesel.c:568
+#: gtk/gtkfilesel.c:565
 msgid "Show file operations"
 msgstr "Mostra les operacions de fitxer"
 
-#: gtk/gtkfilesel.c:569
+#: gtk/gtkfilesel.c:566
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr "Si s'han de visualitzar els botons per crear/manipular fitxers"
 
-#: gtk/gtkfilesel.c:575
+#: gtk/gtkfilesel.c:572
 msgid "Select multiple"
 msgstr "Selecció múltiple"
 
@@ -2464,15 +2474,15 @@ msgstr "Tipus d'emmagatzemament"
 msgid "The representation being used for image data"
 msgstr "La representació utilitzada per les dades de la imatge"
 
-#: gtk/gtkimagemenuitem.c:133
+#: gtk/gtkimagemenuitem.c:134
 msgid "Child widget to appear next to the menu text"
 msgstr "Giny fill que apareix pròxim al text del menú"
 
-#: gtk/gtkimagemenuitem.c:138
+#: gtk/gtkimagemenuitem.c:139
 msgid "Show menu images"
 msgstr "Mostra imatges del menú"
 
-#: gtk/gtkimagemenuitem.c:139
+#: gtk/gtkimagemenuitem.c:140
 msgid "Whether images should be shown in menus"
 msgstr "Si s'han de mostrar imatges en els menús."
 
@@ -3573,7 +3583,8 @@ msgid "Icon Sizes"
 msgstr "Mides d'icona"
 
 #: gtk/gtksettings.c:375
-msgid "List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."
+#, fuzzy
+msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
 msgstr "Llista de mides d'icona (gtk-menu=16,16;gtk-button=20,20..."
 
 #: gtk/gtksettings.c:383

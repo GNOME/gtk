@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-07 20:03-0400\n"
+"POT-Creation-Date: 2005-07-08 14:01-0400\n"
 "PO-Revision-Date: 2005-07-07 03:57-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: Canadian English <adamw@gnome.org>\n"
@@ -1408,7 +1408,7 @@ msgstr "Open _Location"
 msgid "Show _Hidden Files"
 msgstr "Show _Hidden Files"
 
-#: gtk/gtkfilechooserdefault.c:3586 gtk/gtkfilesel.c:766
+#: gtk/gtkfilechooserdefault.c:3586 gtk/gtkfilesel.c:763
 msgid "Files"
 msgstr "Files"
 
@@ -1531,24 +1531,24 @@ msgstr "Save in Location"
 msgid "_Location:"
 msgstr "_Location:"
 
-#: gtk/gtkfilesel.c:730
+#: gtk/gtkfilesel.c:727
 msgid "Folders"
 msgstr "Folders"
 
-#: gtk/gtkfilesel.c:734
+#: gtk/gtkfilesel.c:731
 msgid "Fol_ders"
 msgstr "Fol_ders"
 
-#: gtk/gtkfilesel.c:770
+#: gtk/gtkfilesel.c:767
 msgid "_Files"
 msgstr "_Files"
 
-#: gtk/gtkfilesel.c:858 gtk/gtkfilesel.c:2248
+#: gtk/gtkfilesel.c:855 gtk/gtkfilesel.c:2242
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Folder unreadable: %s"
 
-#: gtk/gtkfilesel.c:989
+#: gtk/gtkfilesel.c:984
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -1559,26 +1559,26 @@ msgstr ""
 "available to this program.\n"
 "Are you sure that you want to select it?"
 
-#: gtk/gtkfilesel.c:1120
+#: gtk/gtkfilesel.c:1114
 msgid "_New Folder"
 msgstr "_New Folder"
 
-#: gtk/gtkfilesel.c:1131
+#: gtk/gtkfilesel.c:1125
 msgid "De_lete File"
 msgstr "De_lete File"
 
-#: gtk/gtkfilesel.c:1142
+#: gtk/gtkfilesel.c:1136
 msgid "_Rename File"
 msgstr "_Rename File"
 
-#: gtk/gtkfilesel.c:1444
+#: gtk/gtkfilesel.c:1438
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 
-#: gtk/gtkfilesel.c:1446
+#: gtk/gtkfilesel.c:1440
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -1587,33 +1587,33 @@ msgstr ""
 "Error creating folder \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1447 gtk/gtkfilesel.c:1683
+#: gtk/gtkfilesel.c:1441 gtk/gtkfilesel.c:1677
 msgid "You probably used symbols not allowed in filenames."
 msgstr "You probably used symbols not allowed in filenames."
 
-#: gtk/gtkfilesel.c:1455
+#: gtk/gtkfilesel.c:1449
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "Error creating folder \"%s\": %s\n"
 
-#: gtk/gtkfilesel.c:1489
+#: gtk/gtkfilesel.c:1483
 msgid "New Folder"
 msgstr "New Folder"
 
-#: gtk/gtkfilesel.c:1504
+#: gtk/gtkfilesel.c:1498
 msgid "_Folder name:"
 msgstr "_Folder name:"
 
-#: gtk/gtkfilesel.c:1528
+#: gtk/gtkfilesel.c:1522
 msgid "C_reate"
 msgstr "C_reate"
 
-#: gtk/gtkfilesel.c:1571
+#: gtk/gtkfilesel.c:1565
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "The filename \"%s\" contains symbols that are not allowed in filenames"
 
-#: gtk/gtkfilesel.c:1574
+#: gtk/gtkfilesel.c:1568
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -1622,31 +1622,31 @@ msgstr ""
 "Error deleting file \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1576 gtk/gtkfilesel.c:1697
+#: gtk/gtkfilesel.c:1570 gtk/gtkfilesel.c:1691
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "It probably contains symbols not allowed in filenames."
 
-#: gtk/gtkfilesel.c:1585
+#: gtk/gtkfilesel.c:1579
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "Error deleting file \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1628
+#: gtk/gtkfilesel.c:1622
 #, c-format
 msgid "Really delete file \"%s\"?"
 msgstr "Really delete file \"%s\"?"
 
-#: gtk/gtkfilesel.c:1633
+#: gtk/gtkfilesel.c:1627
 msgid "Delete File"
 msgstr "Delete File"
 
-#: gtk/gtkfilesel.c:1679 gtk/gtkfilesel.c:1693
+#: gtk/gtkfilesel.c:1673 gtk/gtkfilesel.c:1687
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "The file name \"%s\" contains symbols that are not allowed in filenames"
 
-#: gtk/gtkfilesel.c:1681
+#: gtk/gtkfilesel.c:1675
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -1655,7 +1655,7 @@ msgstr ""
 "Error renaming file to \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1695
+#: gtk/gtkfilesel.c:1689
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -1664,29 +1664,29 @@ msgstr ""
 "Error renaming file \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1705
+#: gtk/gtkfilesel.c:1699
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Error renaming file \"%s\" to \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1752
+#: gtk/gtkfilesel.c:1746
 msgid "Rename File"
 msgstr "Rename File"
 
-#: gtk/gtkfilesel.c:1767
+#: gtk/gtkfilesel.c:1761
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Rename file \"%s\" to:"
 
-#: gtk/gtkfilesel.c:1796
+#: gtk/gtkfilesel.c:1790
 msgid "_Rename"
 msgstr "_Rename"
 
-#: gtk/gtkfilesel.c:2228
+#: gtk/gtkfilesel.c:2222
 msgid "_Selection: "
 msgstr "_Selection: "
 
-#: gtk/gtkfilesel.c:3153
+#: gtk/gtkfilesel.c:3147
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
@@ -1695,15 +1695,15 @@ msgstr ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
 "environment variable G_FILENAME_ENCODING): %s"
 
-#: gtk/gtkfilesel.c:3156
+#: gtk/gtkfilesel.c:3150
 msgid "Invalid UTF-8"
 msgstr "Invalid UTF-8"
 
-#: gtk/gtkfilesel.c:4033
+#: gtk/gtkfilesel.c:4027
 msgid "Name too long"
 msgstr "Name too long"
 
-#: gtk/gtkfilesel.c:4035
+#: gtk/gtkfilesel.c:4029
 msgid "Couldn't convert filename"
 msgstr "Couldn't convert filename"
 

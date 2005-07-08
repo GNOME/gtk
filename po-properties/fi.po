@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-01 14:32-0400\n"
+"POT-Creation-Date: 2005-07-08 14:01-0400\n"
 "PO-Revision-Date: 2005-04-28 12:44+0300\n"
 "Last-Translator: Tommi Vainikainen <Tommi.Vainikainen@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
@@ -100,11 +100,11 @@ msgstr "Näyttö"
 msgid "the GdkScreen for the renderer"
 msgstr "GdkScreen renderöijälle"
 
-#: gtk/gtkaboutdialog.c:204
+#: gtk/gtkaboutdialog.c:206
 msgid "Program name"
 msgstr "Ohjelman nimi"
 
-#: gtk/gtkaboutdialog.c:205
+#: gtk/gtkaboutdialog.c:207
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
@@ -112,86 +112,86 @@ msgstr ""
 "Ohjelman nimi. Jos tätä ei ole asetettu, oletuksena on g_get_application_name"
 "()"
 
-#: gtk/gtkaboutdialog.c:219
+#: gtk/gtkaboutdialog.c:221
 msgid "Program version"
 msgstr "Ohjelman versio"
 
-#: gtk/gtkaboutdialog.c:220
+#: gtk/gtkaboutdialog.c:222
 msgid "The version of the program"
 msgstr "Ohjelman versio"
 
-#: gtk/gtkaboutdialog.c:234
+#: gtk/gtkaboutdialog.c:236
 msgid "Copyright string"
 msgstr "Tekijänoikeustiedot"
 
-#: gtk/gtkaboutdialog.c:235
+#: gtk/gtkaboutdialog.c:237
 msgid "Copyright information for the program"
 msgstr "Ohjelman tekijänoikeuksien tiedot"
 
-#: gtk/gtkaboutdialog.c:252
+#: gtk/gtkaboutdialog.c:254
 msgid "Comments string"
 msgstr "Kommentti"
 
-#: gtk/gtkaboutdialog.c:253
+#: gtk/gtkaboutdialog.c:255
 msgid "Comments about the program"
 msgstr "Kommentit ohjelmasta"
 
-#: gtk/gtkaboutdialog.c:286
+#: gtk/gtkaboutdialog.c:289
 msgid "Website URL"
 msgstr "Kotisivun URL"
 
-#: gtk/gtkaboutdialog.c:287
+#: gtk/gtkaboutdialog.c:290
 msgid "The URL for the link to the website of the program"
 msgstr "URL-linkki ohjelman kotisivulle"
 
-#: gtk/gtkaboutdialog.c:303
+#: gtk/gtkaboutdialog.c:306
 msgid "Website label"
 msgstr "Kotisivun nimiö"
 
-#: gtk/gtkaboutdialog.c:304
+#: gtk/gtkaboutdialog.c:307
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
 msgstr "Nimiö ohjelman kotisivulinkkiin. Oletuksena on URL"
 
-#: gtk/gtkaboutdialog.c:320
+#: gtk/gtkaboutdialog.c:323
 msgid "Authors"
 msgstr "Tekijät"
 
-#: gtk/gtkaboutdialog.c:321
+#: gtk/gtkaboutdialog.c:324
 msgid "List of authors of the program"
 msgstr "Luettelo ohjelman tekijöistä"
 
-#: gtk/gtkaboutdialog.c:337
+#: gtk/gtkaboutdialog.c:340
 msgid "Documenters"
 msgstr "Dokumentoijat"
 
-#: gtk/gtkaboutdialog.c:338
+#: gtk/gtkaboutdialog.c:341
 msgid "List of people documenting the program"
 msgstr "Luettelo ohjelman dokumentoijista"
 
-#: gtk/gtkaboutdialog.c:354
+#: gtk/gtkaboutdialog.c:357
 msgid "Artists"
 msgstr "Taiteilijat"
 
-#: gtk/gtkaboutdialog.c:355
+#: gtk/gtkaboutdialog.c:358
 msgid "List of people who have contributed artwork to the program"
 msgstr "Luettelo ohjelman kuvamateriaalia tehneistä henkilöistä"
 
-#: gtk/gtkaboutdialog.c:372
+#: gtk/gtkaboutdialog.c:375
 msgid "Translator credits"
 msgstr "Kääntäjäkiitokset"
 
-#: gtk/gtkaboutdialog.c:373
+#: gtk/gtkaboutdialog.c:376
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr "Kiitokset kääntäjille. Tämä pitää merkitä käännettäväksi"
 
-#: gtk/gtkaboutdialog.c:388
+#: gtk/gtkaboutdialog.c:391
 msgid "Logo"
 msgstr "Logo"
 
-#: gtk/gtkaboutdialog.c:389
+#: gtk/gtkaboutdialog.c:392
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -199,19 +199,29 @@ msgstr ""
 "Logo tietoja-laatikkoon. Jos ei asetettu, oletuksena on "
 "gtk_window_get_default_icon_list()"
 
-#: gtk/gtkaboutdialog.c:404
+#: gtk/gtkaboutdialog.c:407
 msgid "Logo Icon Name"
 msgstr "Logokuvakkeen nimi"
 
-#: gtk/gtkaboutdialog.c:405
+#: gtk/gtkaboutdialog.c:408
 msgid "A named icon to use as the logo for the about box."
 msgstr "Nimetty kuvake, jota käytetään logona tietoja-laatikossa."
 
-#: gtk/gtkaboutdialog.c:412
+#: gtk/gtkaboutdialog.c:421
+#, fuzzy
+msgid "Wrap license"
+msgstr "Rivitystila asetettu"
+
+#: gtk/gtkaboutdialog.c:422
+#, fuzzy
+msgid "Whether to wrap the license text."
+msgstr "Piirtyykö tekstin yli viiva"
+
+#: gtk/gtkaboutdialog.c:429
 msgid "Link Color"
 msgstr "Linkkiväri"
 
-#: gtk/gtkaboutdialog.c:413
+#: gtk/gtkaboutdialog.c:430
 msgid "Color of hyperlinks"
 msgstr "Hyperlinkkien väri"
 
@@ -721,7 +731,7 @@ msgstr "Vaakakohdistus lapselle"
 msgid "Vertical alignment for child"
 msgstr "Pystykohdistus lapselle"
 
-#: gtk/gtkbutton.c:312 gtk/gtkimagemenuitem.c:132
+#: gtk/gtkbutton.c:312 gtk/gtkimagemenuitem.c:133
 msgid "Image widget"
 msgstr "Kuvasäädin"
 
@@ -2026,7 +2036,7 @@ msgstr "Sovelluksen säädin muita toimintoja varten."
 msgid "Select Multiple"
 msgstr "Valitse useita"
 
-#: gtk/gtkfilechooser.c:227 gtk/gtkfilesel.c:576
+#: gtk/gtkfilechooser.c:227 gtk/gtkfilesel.c:573
 msgid "Whether to allow multiple files to be selected"
 msgstr "Voiko useita tiedostoja valita"
 
@@ -2054,31 +2064,31 @@ msgstr "Tiedostonvalintaikkunan otsikko."
 msgid "The desired width of the button widget, in characters."
 msgstr "Haluttu painikesäätimen leveys merkkeinä."
 
-#: gtk/gtkfilechooserdefault.c:626
+#: gtk/gtkfilechooserdefault.c:640
 msgid "Default file chooser backend"
 msgstr "Tiedostovalitsimen oletustaustaosa"
 
-#: gtk/gtkfilechooserdefault.c:627
+#: gtk/gtkfilechooserdefault.c:641
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Oletuksena käytettävän GtkFileChooser-taustaosan nimi"
 
-#: gtk/gtkfilesel.c:561 gtk/gtkimage.c:194
+#: gtk/gtkfilesel.c:558 gtk/gtkimage.c:194
 msgid "Filename"
 msgstr "Tiedostonimi"
 
-#: gtk/gtkfilesel.c:562
+#: gtk/gtkfilesel.c:559
 msgid "The currently selected filename"
 msgstr "Nyt valittu tiedostonimi"
 
-#: gtk/gtkfilesel.c:568
+#: gtk/gtkfilesel.c:565
 msgid "Show file operations"
 msgstr "Näytä tiedostotoiminnot"
 
-#: gtk/gtkfilesel.c:569
+#: gtk/gtkfilesel.c:566
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr "Näkyvätkö tiedostojen luonti- ja muokkauspainikkeet"
 
-#: gtk/gtkfilesel.c:575
+#: gtk/gtkfilesel.c:572
 msgid "Select multiple"
 msgstr "Valitse useita"
 
@@ -2431,15 +2441,15 @@ msgstr "Säilötyyppi"
 msgid "The representation being used for image data"
 msgstr "Kuvadatan esitysmuoto"
 
-#: gtk/gtkimagemenuitem.c:133
+#: gtk/gtkimagemenuitem.c:134
 msgid "Child widget to appear next to the menu text"
 msgstr "Lapsisäädin, joka näkyy valikon tekstin vieressä"
 
-#: gtk/gtkimagemenuitem.c:138
+#: gtk/gtkimagemenuitem.c:139
 msgid "Show menu images"
 msgstr "Näytä kuvat valikossa"
 
-#: gtk/gtkimagemenuitem.c:139
+#: gtk/gtkimagemenuitem.c:140
 msgid "Whether images should be shown in menus"
 msgstr "Näkyvätkö kuvat valikoissa"
 
@@ -3510,7 +3520,8 @@ msgid "Icon Sizes"
 msgstr "Kuvakekoot"
 
 #: gtk/gtksettings.c:375
-msgid "List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."
+#, fuzzy
+msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
 msgstr "Luettelo kuvakeko'oista (gtk-menu=16,16;gtk-button=20,20..."
 
 #: gtk/gtksettings.c:383

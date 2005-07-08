@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-01 14:32-0400\n"
+"POT-Creation-Date: 2005-07-08 14:01-0400\n"
 "PO-Revision-Date: 2005-02-11 13:51+0100\n"
 "Last-Translator: Данило Шеган <danilo@gnome.org>\n"
 "Language-Team: Serbian (sr) <gnom@prevod.org>\n"
@@ -103,11 +103,11 @@ msgstr "Екран"
 msgid "the GdkScreen for the renderer"
 msgstr "GdkScreen за исцртавач"
 
-#: gtk/gtkaboutdialog.c:204
+#: gtk/gtkaboutdialog.c:206
 msgid "Program name"
 msgstr "Име програма"
 
-#: gtk/gtkaboutdialog.c:205
+#: gtk/gtkaboutdialog.c:207
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
@@ -115,43 +115,43 @@ msgstr ""
 "Име програма. Уколико није постављено, подразумева се g_get_application_name"
 "()"
 
-#: gtk/gtkaboutdialog.c:219
+#: gtk/gtkaboutdialog.c:221
 msgid "Program version"
 msgstr "Издање програма"
 
-#: gtk/gtkaboutdialog.c:220
+#: gtk/gtkaboutdialog.c:222
 msgid "The version of the program"
 msgstr "Издање програма"
 
-#: gtk/gtkaboutdialog.c:234
+#: gtk/gtkaboutdialog.c:236
 msgid "Copyright string"
 msgstr "Текст за ауторска права"
 
-#: gtk/gtkaboutdialog.c:235
+#: gtk/gtkaboutdialog.c:237
 msgid "Copyright information for the program"
 msgstr "Подаци о ауторским правима за програм"
 
-#: gtk/gtkaboutdialog.c:252
+#: gtk/gtkaboutdialog.c:254
 msgid "Comments string"
 msgstr "Текст са примедбама"
 
-#: gtk/gtkaboutdialog.c:253
+#: gtk/gtkaboutdialog.c:255
 msgid "Comments about the program"
 msgstr "Примедбе о програму"
 
-#: gtk/gtkaboutdialog.c:286
+#: gtk/gtkaboutdialog.c:289
 msgid "Website URL"
 msgstr "Адреса веб страна"
 
-#: gtk/gtkaboutdialog.c:287
+#: gtk/gtkaboutdialog.c:290
 msgid "The URL for the link to the website of the program"
 msgstr "Адреса за везу ка веб странама програма"
 
-#: gtk/gtkaboutdialog.c:303
+#: gtk/gtkaboutdialog.c:306
 msgid "Website label"
 msgstr "Ознака веб страна"
 
-#: gtk/gtkaboutdialog.c:304
+#: gtk/gtkaboutdialog.c:307
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
@@ -159,44 +159,44 @@ msgstr ""
 "Ознака за везу ка веб странама програма. Уколико није постављено, користи се "
 "сама адреса"
 
-#: gtk/gtkaboutdialog.c:320
+#: gtk/gtkaboutdialog.c:323
 msgid "Authors"
 msgstr "Аутори"
 
-#: gtk/gtkaboutdialog.c:321
+#: gtk/gtkaboutdialog.c:324
 msgid "List of authors of the program"
 msgstr "Списак аутора програма"
 
-#: gtk/gtkaboutdialog.c:337
+#: gtk/gtkaboutdialog.c:340
 msgid "Documenters"
 msgstr "Документација"
 
-#: gtk/gtkaboutdialog.c:338
+#: gtk/gtkaboutdialog.c:341
 msgid "List of people documenting the program"
 msgstr "Списак особа које су документовале програм"
 
-#: gtk/gtkaboutdialog.c:354
+#: gtk/gtkaboutdialog.c:357
 msgid "Artists"
 msgstr "Графика"
 
-#: gtk/gtkaboutdialog.c:355
+#: gtk/gtkaboutdialog.c:358
 msgid "List of people who have contributed artwork to the program"
 msgstr "Списак особа које су израдиле графику за програм"
 
-#: gtk/gtkaboutdialog.c:372
+#: gtk/gtkaboutdialog.c:375
 msgid "Translator credits"
 msgstr "Превод"
 
-#: gtk/gtkaboutdialog.c:373
+#: gtk/gtkaboutdialog.c:376
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr "Заслуге преводиоца. Ова ниска треба да буде назначена за превод"
 
-#: gtk/gtkaboutdialog.c:388
+#: gtk/gtkaboutdialog.c:391
 msgid "Logo"
 msgstr "Логотип"
 
-#: gtk/gtkaboutdialog.c:389
+#: gtk/gtkaboutdialog.c:392
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -204,19 +204,29 @@ msgstr ""
 "Логотип за прозорче о програму. Уколико није постављено, подразумева се "
 "gtk_window_get_default_icon_list()"
 
-#: gtk/gtkaboutdialog.c:404
+#: gtk/gtkaboutdialog.c:407
 msgid "Logo Icon Name"
 msgstr "Име логотип слике"
 
-#: gtk/gtkaboutdialog.c:405
+#: gtk/gtkaboutdialog.c:408
 msgid "A named icon to use as the logo for the about box."
 msgstr "Именована икона за логотип у прозорчету о програму."
 
-#: gtk/gtkaboutdialog.c:412
+#: gtk/gtkaboutdialog.c:421
+#, fuzzy
+msgid "Wrap license"
+msgstr "Постављен прелом"
+
+#: gtk/gtkaboutdialog.c:422
+#, fuzzy
+msgid "Whether to wrap the license text."
+msgstr "Да ли прецртати текст уздужном линијом"
+
+#: gtk/gtkaboutdialog.c:429
 msgid "Link Color"
 msgstr "Боја везе"
 
-#: gtk/gtkaboutdialog.c:413
+#: gtk/gtkaboutdialog.c:430
 msgid "Color of hyperlinks"
 msgstr "Боја хипервеза"
 
@@ -731,7 +741,7 @@ msgstr "Водоравно поравнање за садржани елемен
 msgid "Vertical alignment for child"
 msgstr "Усправно поравнање за садржани елемент"
 
-#: gtk/gtkbutton.c:312 gtk/gtkimagemenuitem.c:132
+#: gtk/gtkbutton.c:312 gtk/gtkimagemenuitem.c:133
 msgid "Image widget"
 msgstr "Елемент за слику"
 
@@ -2045,7 +2055,7 @@ msgstr "Елемент који обезбеђује програм за доп�
 msgid "Select Multiple"
 msgstr "Вишеструки избор"
 
-#: gtk/gtkfilechooser.c:227 gtk/gtkfilesel.c:576
+#: gtk/gtkfilechooser.c:227 gtk/gtkfilesel.c:573
 msgid "Whether to allow multiple files to be selected"
 msgstr "Да ли је дозвољен избор више датотека"
 
@@ -2073,31 +2083,31 @@ msgstr "Наслов прозорчета за избор датотека."
 msgid "The desired width of the button widget, in characters."
 msgstr "Жељена ширина дугмета, као број знакова."
 
-#: gtk/gtkfilechooserdefault.c:626
+#: gtk/gtkfilechooserdefault.c:640
 msgid "Default file chooser backend"
 msgstr "Подразумевана подршка за избор датотека"
 
-#: gtk/gtkfilechooserdefault.c:627
+#: gtk/gtkfilechooserdefault.c:641
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Име подршке коју подразумевано користи GtkFileChooser"
 
-#: gtk/gtkfilesel.c:561 gtk/gtkimage.c:194
+#: gtk/gtkfilesel.c:558 gtk/gtkimage.c:194
 msgid "Filename"
 msgstr "Име датотеке"
 
-#: gtk/gtkfilesel.c:562
+#: gtk/gtkfilesel.c:559
 msgid "The currently selected filename"
 msgstr "Тренутно изабрано име датотеке"
 
-#: gtk/gtkfilesel.c:568
+#: gtk/gtkfilesel.c:565
 msgid "Show file operations"
 msgstr "Прикажи операције са датотекама"
 
-#: gtk/gtkfilesel.c:569
+#: gtk/gtkfilesel.c:566
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr "Да ли приказати дугмиће за прављење/баратање датотекама"
 
-#: gtk/gtkfilesel.c:575
+#: gtk/gtkfilesel.c:572
 msgid "Select multiple"
 msgstr "Изабери више"
 
@@ -2451,15 +2461,15 @@ msgstr "Врста смештаја"
 msgid "The representation being used for image data"
 msgstr "Начин записа који се користи за податке за слику"
 
-#: gtk/gtkimagemenuitem.c:133
+#: gtk/gtkimagemenuitem.c:134
 msgid "Child widget to appear next to the menu text"
 msgstr "Садржани елемент који се појављује поред текста за мени"
 
-#: gtk/gtkimagemenuitem.c:138
+#: gtk/gtkimagemenuitem.c:139
 msgid "Show menu images"
 msgstr "Прикажи слике у менију"
 
-#: gtk/gtkimagemenuitem.c:139
+#: gtk/gtkimagemenuitem.c:140
 msgid "Whether images should be shown in menus"
 msgstr "Да ли се приказују слике у менију"
 
@@ -3534,7 +3544,8 @@ msgid "Icon Sizes"
 msgstr "Величине икона"
 
 #: gtk/gtksettings.c:375
-msgid "List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."
+#, fuzzy
+msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
 msgstr "Списак величина икона (gtk-menu=16,16;gtk-button=20,20...)"
 
 #: gtk/gtksettings.c:383

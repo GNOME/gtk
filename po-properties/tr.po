@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-01 14:32-0400\n"
+"POT-Creation-Date: 2005-07-08 14:01-0400\n"
 "PO-Revision-Date: 2004-04-09 17:26+0300\n"
 "Last-Translator: Baris Cicek <baris@teamforce.name.tr>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
@@ -117,126 +117,138 @@ msgid "the GdkScreen for the renderer"
 msgstr "Ağaç görünümü için model"
 
 # gtk/gtktexttag.c:198
-#: gtk/gtkaboutdialog.c:204
+#: gtk/gtkaboutdialog.c:206
 #, fuzzy
 msgid "Program name"
 msgstr "Etiket ismi"
 
-#: gtk/gtkaboutdialog.c:205
+#: gtk/gtkaboutdialog.c:207
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:219
+#: gtk/gtkaboutdialog.c:221
 msgid "Program version"
 msgstr ""
 
 # gtk/gtktoolbar.c:224
-#: gtk/gtkaboutdialog.c:220
+#: gtk/gtkaboutdialog.c:222
 #, fuzzy
 msgid "The version of the program"
 msgstr "Araç çubuğu yönü"
 
-#: gtk/gtkaboutdialog.c:234
+#: gtk/gtkaboutdialog.c:236
 msgid "Copyright string"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:235
+#: gtk/gtkaboutdialog.c:237
 msgid "Copyright information for the program"
 msgstr ""
 
 # gtk/gtktable.c:183
-#: gtk/gtkaboutdialog.c:252
+#: gtk/gtkaboutdialog.c:254
 #, fuzzy
 msgid "Comments string"
 msgstr "Sütun aralığı"
 
-#: gtk/gtkaboutdialog.c:253
+#: gtk/gtkaboutdialog.c:255
 msgid "Comments about the program"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:286
+#: gtk/gtkaboutdialog.c:289
 msgid "Website URL"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:287
+#: gtk/gtkaboutdialog.c:290
 msgid "The URL for the link to the website of the program"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:303
+#: gtk/gtkaboutdialog.c:306
 #, fuzzy
 msgid "Website label"
 msgstr "Etikette boyut kullan"
 
-#: gtk/gtkaboutdialog.c:304
+#: gtk/gtkaboutdialog.c:307
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:320
+#: gtk/gtkaboutdialog.c:323
 msgid "Authors"
 msgstr ""
 
 # gtk/gtktoolbar.c:224
-#: gtk/gtkaboutdialog.c:321
+#: gtk/gtkaboutdialog.c:324
 #, fuzzy
 msgid "List of authors of the program"
 msgstr "Araç çubuğu yönü"
 
-#: gtk/gtkaboutdialog.c:337
+#: gtk/gtkaboutdialog.c:340
 msgid "Documenters"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:338
+#: gtk/gtkaboutdialog.c:341
 msgid "List of people documenting the program"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:354
+#: gtk/gtkaboutdialog.c:357
 msgid "Artists"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:355
+#: gtk/gtkaboutdialog.c:358
 msgid "List of people who have contributed artwork to the program"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:372
+#: gtk/gtkaboutdialog.c:375
 msgid "Translator credits"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:373
+#: gtk/gtkaboutdialog.c:376
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:388
+#: gtk/gtkaboutdialog.c:391
 msgid "Logo"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:389
+#: gtk/gtkaboutdialog.c:392
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
 msgstr ""
 
 # gtk/gtkfontsel.c:185
-#: gtk/gtkaboutdialog.c:404
+#: gtk/gtkaboutdialog.c:407
 #, fuzzy
 msgid "Logo Icon Name"
 msgstr "Yazıtipi İsmi"
 
-#: gtk/gtkaboutdialog.c:405
+#: gtk/gtkaboutdialog.c:408
 msgid "A named icon to use as the logo for the about box."
 msgstr ""
 
+# gtk/gtktexttag.c:607
+#: gtk/gtkaboutdialog.c:421
+#, fuzzy
+msgid "Wrap license"
+msgstr "Bölme kipi ayarı"
+
+# gtk/gtkcellrenderertext.c:324 gtk/gtktexttag.c:467
+#: gtk/gtkaboutdialog.c:422
+#, fuzzy
+msgid "Whether to wrap the license text."
+msgstr "Metnin üzerinin çizilmesi"
+
 # gtk/gtkcolorsel.c:1682
-#: gtk/gtkaboutdialog.c:412
+#: gtk/gtkaboutdialog.c:429
 #, fuzzy
 msgid "Link Color"
 msgstr "Şu anki Renk"
 
-#: gtk/gtkaboutdialog.c:413
+#: gtk/gtkaboutdialog.c:430
 msgid "Color of hyperlinks"
 msgstr ""
 
@@ -812,7 +824,7 @@ msgid "Vertical alignment for child"
 msgstr "Alt için düşey hizalama"
 
 # gtk/gtkimagemenuitem.c:124
-#: gtk/gtkbutton.c:312 gtk/gtkimagemenuitem.c:132
+#: gtk/gtkbutton.c:312 gtk/gtkimagemenuitem.c:133
 msgid "Image widget"
 msgstr "Resim parçacığı"
 
@@ -2375,7 +2387,7 @@ msgstr "Ek özellikler için uygulama tarafından sağlanan parçacık."
 msgid "Select Multiple"
 msgstr "Çoklu Seç"
 
-#: gtk/gtkfilechooser.c:227 gtk/gtkfilesel.c:576
+#: gtk/gtkfilechooser.c:227 gtk/gtkfilesel.c:573
 msgid "Whether to allow multiple files to be selected"
 msgstr "Çoklu dosya seçimine izin verilmesi"
 
@@ -2407,36 +2419,36 @@ msgstr "Yazıtipi seçim penceresinin başlığı"
 msgid "The desired width of the button widget, in characters."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:626
+#: gtk/gtkfilechooserdefault.c:640
 msgid "Default file chooser backend"
 msgstr "Öntanımlı dosya seçici temeli"
 
-#: gtk/gtkfilechooserdefault.c:627
+#: gtk/gtkfilechooserdefault.c:641
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Öntanımlı olarak kullanılacak GtkFileChooser temelinin adı"
 
 # gtk/gtkfilesel.c:502
-#: gtk/gtkfilesel.c:561 gtk/gtkimage.c:194
+#: gtk/gtkfilesel.c:558 gtk/gtkimage.c:194
 msgid "Filename"
 msgstr "Dosya adı"
 
 # gtk/gtkfilesel.c:503
-#: gtk/gtkfilesel.c:562
+#: gtk/gtkfilesel.c:559
 msgid "The currently selected filename"
 msgstr "Seçilmiş dosya adı"
 
 # gtk/gtkfilesel.c:509
-#: gtk/gtkfilesel.c:568
+#: gtk/gtkfilesel.c:565
 msgid "Show file operations"
 msgstr "Dosya işlemlerini göster"
 
 # gtk/gtkfilesel.c:510
-#: gtk/gtkfilesel.c:569
+#: gtk/gtkfilesel.c:566
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr "Dosyaları oluşturmak/değiştirmek için düğmelerin gösterilmesi"
 
 # gtk/gtklabel.c:251
-#: gtk/gtkfilesel.c:575
+#: gtk/gtkfilesel.c:572
 msgid "Select multiple"
 msgstr "Çoklu seç"
 
@@ -2865,16 +2877,16 @@ msgid "The representation being used for image data"
 msgstr "Resim verisi için kullanılan sunum"
 
 # gtk/gtkimagemenuitem.c:125
-#: gtk/gtkimagemenuitem.c:133
+#: gtk/gtkimagemenuitem.c:134
 msgid "Child widget to appear next to the menu text"
 msgstr "Menü metninden sonra görünecek alt parçaçığı"
 
-#: gtk/gtkimagemenuitem.c:138
+#: gtk/gtkimagemenuitem.c:139
 msgid "Show menu images"
 msgstr "Menü resimlerini göster"
 
 # gtk/gtknotebook.c:369
-#: gtk/gtkimagemenuitem.c:139
+#: gtk/gtkimagemenuitem.c:140
 msgid "Whether images should be shown in menus"
 msgstr "Menüleride resimlerin gösterilmesi"
 
@@ -4123,7 +4135,8 @@ msgid "Icon Sizes"
 msgstr "Simge Boyutları"
 
 #: gtk/gtksettings.c:375
-msgid "List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."
+#, fuzzy
+msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
 msgstr "Simge boyutları listesi (gtk-menu=16,16;gtk-button=20,20..."
 
 #: gtk/gtksettings.c:383

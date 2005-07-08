@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-01 14:32-0400\n"
+"POT-Creation-Date: 2005-07-08 14:01-0400\n"
 "PO-Revision-Date: 2005-04-13 20:22+0200\n"
 "Last-Translator: Hizkuntza Politikarako Sailburuordetza <hizkpol@ej-gv.es>\n"
 "Language-Team:  <itzulpena@euskalgnu.org>\n"
@@ -104,11 +104,11 @@ msgstr "Pantaila"
 msgid "the GdkScreen for the renderer"
 msgstr "GdkScreen errendatzailearentzako"
 
-#: gtk/gtkaboutdialog.c:204
+#: gtk/gtkaboutdialog.c:206
 msgid "Program name"
 msgstr "Programa-izena"
 
-#: gtk/gtkaboutdialog.c:205
+#: gtk/gtkaboutdialog.c:207
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
@@ -116,43 +116,43 @@ msgstr ""
 "Programaren izena. Ez badago ezarrita, g_get_application_name() jarriko da "
 "lehenetsi gisa."
 
-#: gtk/gtkaboutdialog.c:219
+#: gtk/gtkaboutdialog.c:221
 msgid "Program version"
 msgstr "Programa-bertsioa"
 
-#: gtk/gtkaboutdialog.c:220
+#: gtk/gtkaboutdialog.c:222
 msgid "The version of the program"
 msgstr "Programaren bertsioa"
 
-#: gtk/gtkaboutdialog.c:234
+#: gtk/gtkaboutdialog.c:236
 msgid "Copyright string"
 msgstr "Copyright-aren katea"
 
-#: gtk/gtkaboutdialog.c:235
+#: gtk/gtkaboutdialog.c:237
 msgid "Copyright information for the program"
 msgstr "Programaren Copyright informazioa"
 
-#: gtk/gtkaboutdialog.c:252
+#: gtk/gtkaboutdialog.c:254
 msgid "Comments string"
 msgstr "Iruzkin-katea"
 
-#: gtk/gtkaboutdialog.c:253
+#: gtk/gtkaboutdialog.c:255
 msgid "Comments about the program"
 msgstr "Programari buruzko iruzkinak"
 
-#: gtk/gtkaboutdialog.c:286
+#: gtk/gtkaboutdialog.c:289
 msgid "Website URL"
 msgstr "Web gunearen URLa"
 
-#: gtk/gtkaboutdialog.c:287
+#: gtk/gtkaboutdialog.c:290
 msgid "The URL for the link to the website of the program"
 msgstr "Programaren web gunearen estekaren URLa"
 
-#: gtk/gtkaboutdialog.c:303
+#: gtk/gtkaboutdialog.c:306
 msgid "Website label"
 msgstr "Web guneko etiketa"
 
-#: gtk/gtkaboutdialog.c:304
+#: gtk/gtkaboutdialog.c:307
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
@@ -160,44 +160,44 @@ msgstr ""
 "Programaren web gunearen estekarentzako etiketa. Ez bada ezartzen, "
 "lehenetsitako URLa erabiliko da."
 
-#: gtk/gtkaboutdialog.c:320
+#: gtk/gtkaboutdialog.c:323
 msgid "Authors"
 msgstr "Egileak"
 
-#: gtk/gtkaboutdialog.c:321
+#: gtk/gtkaboutdialog.c:324
 msgid "List of authors of the program"
 msgstr "Programaren egileen zerrenda"
 
-#: gtk/gtkaboutdialog.c:337
+#: gtk/gtkaboutdialog.c:340
 msgid "Documenters"
 msgstr "Dokumentalistak"
 
-#: gtk/gtkaboutdialog.c:338
+#: gtk/gtkaboutdialog.c:341
 msgid "List of people documenting the program"
 msgstr "Programarako informazioa bildu duten pertsonen zerrenda"
 
-#: gtk/gtkaboutdialog.c:354
+#: gtk/gtkaboutdialog.c:357
 msgid "Artists"
 msgstr "Artistak"
 
-#: gtk/gtkaboutdialog.c:355
+#: gtk/gtkaboutdialog.c:358
 msgid "List of people who have contributed artwork to the program"
 msgstr "Programako artelanak egin dituzten pertsonen zerrenda"
 
-#: gtk/gtkaboutdialog.c:372
+#: gtk/gtkaboutdialog.c:375
 msgid "Translator credits"
 msgstr "Itzultzaileen kredituak"
 
-#: gtk/gtkaboutdialog.c:373
+#: gtk/gtkaboutdialog.c:376
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr "Itzultzaileen kredituak. Kate haut itzulgai gisa markatu behar da"
 
-#: gtk/gtkaboutdialog.c:388
+#: gtk/gtkaboutdialog.c:391
 msgid "Logo"
 msgstr "Logotipoa"
 
-#: gtk/gtkaboutdialog.c:389
+#: gtk/gtkaboutdialog.c:392
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -205,20 +205,31 @@ msgstr ""
 "'Honi buruzko' kutxaren logotipoa. Ez bada ezartzen, "
 "gtk_window_get_default_icon_list() erabiliko da lehenetsi gisa."
 
-#: gtk/gtkaboutdialog.c:404
+#: gtk/gtkaboutdialog.c:407
 msgid "Logo Icon Name"
 msgstr "Logotipoaren ikonoaren izena"
 
-#: gtk/gtkaboutdialog.c:405
+#: gtk/gtkaboutdialog.c:408
 msgid "A named icon to use as the logo for the about box."
 msgstr "'Honi buruz' kutxako logotipoan erabiliko den ikonoaren izena"
 
 #
-#: gtk/gtkaboutdialog.c:412
+#: gtk/gtkaboutdialog.c:421
+#, fuzzy
+msgid "Wrap license"
+msgstr "Itzulbiratze-moduaren ezarpena"
+
+#: gtk/gtkaboutdialog.c:422
+#, fuzzy
+msgid "Whether to wrap the license text."
+msgstr "Testua marratuko den ala ez adierazten du"
+
+#
+#: gtk/gtkaboutdialog.c:429
 msgid "Link Color"
 msgstr "Estekaren kolorea"
 
-#: gtk/gtkaboutdialog.c:413
+#: gtk/gtkaboutdialog.c:430
 msgid "Color of hyperlinks"
 msgstr "Hiperesteken kolorea"
 
@@ -750,7 +761,7 @@ msgid "Vertical alignment for child"
 msgstr "Umearentzako lerrokatze bertikala"
 
 #
-#: gtk/gtkbutton.c:312 gtk/gtkimagemenuitem.c:132
+#: gtk/gtkbutton.c:312 gtk/gtkimagemenuitem.c:133
 msgid "Image widget"
 msgstr "Ikono-trepeta"
 
@@ -2138,7 +2149,7 @@ msgstr "Aplikazioak aukera osagarrietarako trepeta eskaintzen du."
 msgid "Select Multiple"
 msgstr "Hautatu hainbat"
 
-#: gtk/gtkfilechooser.c:227 gtk/gtkfilesel.c:576
+#: gtk/gtkfilechooser.c:227 gtk/gtkfilesel.c:573
 msgid "Whether to allow multiple files to be selected"
 msgstr "Hainbat fitxategi hautatzen utziko duen ala ez adierazten du"
 
@@ -2170,35 +2181,35 @@ msgstr ""
 msgid "The desired width of the button widget, in characters."
 msgstr "Botoi-trepetak edukiko duen zabalera, karaktereetan."
 
-#: gtk/gtkfilechooserdefault.c:626
+#: gtk/gtkfilechooserdefault.c:640
 msgid "Default file chooser backend"
 msgstr "Fitxategi-hautatzailearen motor lehenetsia"
 
-#: gtk/gtkfilechooserdefault.c:627
+#: gtk/gtkfilechooserdefault.c:641
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Lehenespenez erabili beharreko GtkFileChooser motorraren izena"
 
 #
-#: gtk/gtkfilesel.c:561 gtk/gtkimage.c:194
+#: gtk/gtkfilesel.c:558 gtk/gtkimage.c:194
 msgid "Filename"
 msgstr "Fitxategi-izena"
 
-#: gtk/gtkfilesel.c:562
+#: gtk/gtkfilesel.c:559
 msgid "The currently selected filename"
 msgstr "Unean hautatutako fitxategi-izena"
 
-#: gtk/gtkfilesel.c:568
+#: gtk/gtkfilesel.c:565
 msgid "Show file operations"
 msgstr "Erakutsi fitxategi-eragiketak"
 
-#: gtk/gtkfilesel.c:569
+#: gtk/gtkfilesel.c:566
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr ""
 "Fitxategiak sortzeko/manipulatzeko botoiak bistaratu behar diren ala ez "
 "adierazten du"
 
 #
-#: gtk/gtkfilesel.c:575
+#: gtk/gtkfilesel.c:572
 msgid "Select multiple"
 msgstr "Hautatu hainbat"
 
@@ -2577,15 +2588,15 @@ msgstr "Biltegi-mota"
 msgid "The representation being used for image data"
 msgstr "Irudien datuentzat erabiltzen den adierazpidea"
 
-#: gtk/gtkimagemenuitem.c:133
+#: gtk/gtkimagemenuitem.c:134
 msgid "Child widget to appear next to the menu text"
 msgstr "Menuaren testuaren ondoan agertu beharreko trepeta umea"
 
-#: gtk/gtkimagemenuitem.c:138
+#: gtk/gtkimagemenuitem.c:139
 msgid "Show menu images"
 msgstr "Erakutsi menuko irudiak"
 
-#: gtk/gtkimagemenuitem.c:139
+#: gtk/gtkimagemenuitem.c:140
 msgid "Whether images should be shown in menus"
 msgstr "Irudiak menuetan erakutsi behar diren ala ez adierazten du"
 
@@ -3696,7 +3707,8 @@ msgid "Icon Sizes"
 msgstr "Ikonoen tamainak"
 
 #: gtk/gtksettings.c:375
-msgid "List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."
+#, fuzzy
+msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
 msgstr "Ikono-tamainen zerrenda (gtk-menu=16,16;gtk-button=20,20..."
 
 #: gtk/gtksettings.c:383

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-01 14:32-0400\n"
+"POT-Creation-Date: 2005-07-08 14:01-0400\n"
 "PO-Revision-Date: 2005-05-15 15:47+0545\n"
 "Last-Translator: Ganesh Ghimire <gghimire@gmail.com>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -94,97 +94,97 @@ msgstr "पर्दा"
 msgid "the GdkScreen for the renderer"
 msgstr "रेण्डरकर्ताका लागि जिडिके स्क्रिन"
 
-#: gtk/gtkaboutdialog.c:204
+#: gtk/gtkaboutdialog.c:206
 msgid "Program name"
 msgstr "कार्यक्रमको नाम"
 
-#: gtk/gtkaboutdialog.c:205
+#: gtk/gtkaboutdialog.c:207
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
 msgstr ""
 "कार्यक्रमको नाम. यदि सेट भएको छैन भने यो पूर्व निर्धारित हुन्छ g_get_application_name()"
 
-#: gtk/gtkaboutdialog.c:219
+#: gtk/gtkaboutdialog.c:221
 msgid "Program version"
 msgstr "कार्यक्रमको संस्करण"
 
-#: gtk/gtkaboutdialog.c:220
+#: gtk/gtkaboutdialog.c:222
 msgid "The version of the program"
 msgstr "कार्यक्रमको संस्करण"
 
-#: gtk/gtkaboutdialog.c:234
+#: gtk/gtkaboutdialog.c:236
 msgid "Copyright string"
 msgstr "प्रतिलिपि अधिकार स्ट्रिङ"
 
-#: gtk/gtkaboutdialog.c:235
+#: gtk/gtkaboutdialog.c:237
 msgid "Copyright information for the program"
 msgstr "कार्यक्रमका लागि प्रतिलिपि अधिकार सूचना"
 
-#: gtk/gtkaboutdialog.c:252
+#: gtk/gtkaboutdialog.c:254
 msgid "Comments string"
 msgstr "प्रतिकृया स्ट्रिङ"
 
-#: gtk/gtkaboutdialog.c:253
+#: gtk/gtkaboutdialog.c:255
 msgid "Comments about the program"
 msgstr "कार्यक्रमका बारेको प्रतिकृया"
 
-#: gtk/gtkaboutdialog.c:286
+#: gtk/gtkaboutdialog.c:289
 msgid "Website URL"
 msgstr "वेबसाइट युआरएल"
 
-#: gtk/gtkaboutdialog.c:287
+#: gtk/gtkaboutdialog.c:290
 msgid "The URL for the link to the website of the program"
 msgstr "कर्यक्रमको वेबसाइट लिङ्कका लागि युआरएल"
 
-#: gtk/gtkaboutdialog.c:303
+#: gtk/gtkaboutdialog.c:306
 msgid "Website label"
 msgstr "वेबसाइट लेबल"
 
-#: gtk/gtkaboutdialog.c:304
+#: gtk/gtkaboutdialog.c:307
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
 msgstr "कर्यक्रमको वेबसाइट लिङ्कका लागि लेबल। यदि सेट छैन भने युआरएलमा पूर्वनिर्धारित हुन्छ"
 
-#: gtk/gtkaboutdialog.c:320
+#: gtk/gtkaboutdialog.c:323
 msgid "Authors"
 msgstr "लेखकहरू"
 
-#: gtk/gtkaboutdialog.c:321
+#: gtk/gtkaboutdialog.c:324
 msgid "List of authors of the program"
 msgstr "कर्यक्रमका लेखकहरूको सूची"
 
-#: gtk/gtkaboutdialog.c:337
+#: gtk/gtkaboutdialog.c:340
 msgid "Documenters"
 msgstr "संकलकहरू"
 
-#: gtk/gtkaboutdialog.c:338
+#: gtk/gtkaboutdialog.c:341
 msgid "List of people documenting the program"
 msgstr "कार्यक्रम डकुमेण्ट गर्ने मानिसहरूको सूची"
 
-#: gtk/gtkaboutdialog.c:354
+#: gtk/gtkaboutdialog.c:357
 msgid "Artists"
 msgstr "कलाकारहरू"
 
-#: gtk/gtkaboutdialog.c:355
+#: gtk/gtkaboutdialog.c:358
 msgid "List of people who have contributed artwork to the program"
 msgstr "कार्यक्रममा कलाकारिता सहयोग गर्ने मानिसहरूको सूची"
 
-#: gtk/gtkaboutdialog.c:372
+#: gtk/gtkaboutdialog.c:375
 msgid "Translator credits"
 msgstr "अनुवादक बिश्वास"
 
-#: gtk/gtkaboutdialog.c:373
+#: gtk/gtkaboutdialog.c:376
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr "अनुवादकहरूलाई क्रेडिट दिन्छ। यस स्ट्रिङलाई अनुवाद गर्न सकिने छिन्ह दिनु पर्दछ"
 
-#: gtk/gtkaboutdialog.c:388
+#: gtk/gtkaboutdialog.c:391
 msgid "Logo"
 msgstr "लोगो"
 
-#: gtk/gtkaboutdialog.c:389
+#: gtk/gtkaboutdialog.c:392
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -192,19 +192,29 @@ msgstr ""
 "जानकारी बाकसका लागि लोगो। यदि सेट भएको छैन भने, यो "
 "gtk_window_get_default_icon_list() मा पूर्वनिर्धारित हुन्छ"
 
-#: gtk/gtkaboutdialog.c:404
+#: gtk/gtkaboutdialog.c:407
 msgid "Logo Icon Name"
 msgstr "लोगो प्रतिमाको नाम"
 
-#: gtk/gtkaboutdialog.c:405
+#: gtk/gtkaboutdialog.c:408
 msgid "A named icon to use as the logo for the about box."
 msgstr "जानकारी बाकसका लागि लोगोको रूपमा नामांकित प्रतिमाको प्रयोग"
 
-#: gtk/gtkaboutdialog.c:412
+#: gtk/gtkaboutdialog.c:421
+#, fuzzy
+msgid "Wrap license"
+msgstr "लपेट्ने मोडको समूह"
+
+#: gtk/gtkaboutdialog.c:422
+#, fuzzy
+msgid "Whether to wrap the license text."
+msgstr "जहाँ पाठको अक्षरलाई बीचमा काटिन्छ"
+
+#: gtk/gtkaboutdialog.c:429
 msgid "Link Color"
 msgstr "लिङ्क रङ्ग"
 
-#: gtk/gtkaboutdialog.c:413
+#: gtk/gtkaboutdialog.c:430
 msgid "Color of hyperlinks"
 msgstr "हाइपरलिङ्कहरूको रङ्ग"
 
@@ -703,7 +713,7 @@ msgstr "शाखाको लागि क्षितिजीय मिला
 msgid "Vertical alignment for child"
 msgstr "शाखाको लागि उर्ध्व पंक्तिबद्ध"
 
-#: gtk/gtkbutton.c:312 gtk/gtkimagemenuitem.c:132
+#: gtk/gtkbutton.c:312 gtk/gtkimagemenuitem.c:133
 msgid "Image widget"
 msgstr "छबि विजेट"
 
@@ -1995,7 +2005,7 @@ msgstr "अतिरिक्त विकल्पका लागि आपु
 msgid "Select Multiple"
 msgstr "बहुउद्देश्यिय छनौट"
 
-#: gtk/gtkfilechooser.c:227 gtk/gtkfilesel.c:576
+#: gtk/gtkfilechooser.c:227 gtk/gtkfilesel.c:573
 msgid "Whether to allow multiple files to be selected"
 msgstr "जब विविध फाइल चयन गर्न अनुमति मिल्छ"
 
@@ -2023,31 +2033,31 @@ msgstr "फाइल छनोटकर्ताको वार्ताला�
 msgid "The desired width of the button widget, in characters."
 msgstr "बटन विजेटको आबस्यक चौडाई, क्यारेक्टरहरूमा"
 
-#: gtk/gtkfilechooserdefault.c:626
+#: gtk/gtkfilechooserdefault.c:640
 msgid "Default file chooser backend"
 msgstr "पूर्वनिर्धारित लेखपत्र छनौटकर्ताको मेरुदण्ड"
 
-#: gtk/gtkfilechooserdefault.c:627
+#: gtk/gtkfilechooserdefault.c:641
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "जीटीके फाइल चयकको नाम पछाडि पारेर पूर्वनिर्धारित प्रयोग गर्न"
 
-#: gtk/gtkfilesel.c:561 gtk/gtkimage.c:194
+#: gtk/gtkfilesel.c:558 gtk/gtkimage.c:194
 msgid "Filename"
 msgstr "फाइलनाम"
 
-#: gtk/gtkfilesel.c:562
+#: gtk/gtkfilesel.c:559
 msgid "The currently selected filename"
 msgstr "हालसालै चयन गरिएको फाइलनाम"
 
-#: gtk/gtkfilesel.c:568
+#: gtk/gtkfilesel.c:565
 msgid "Show file operations"
 msgstr "संचालनहरुका लेखपत्र देखाऊ"
 
-#: gtk/gtkfilesel.c:569
+#: gtk/gtkfilesel.c:566
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr "फाइलहरू निर्माण गर्न/चलाउन देखाउने बटनहरू "
 
-#: gtk/gtkfilesel.c:575
+#: gtk/gtkfilesel.c:572
 msgid "Select multiple"
 msgstr "बहुप्रयोग छान्नुस्"
 
@@ -2398,15 +2408,15 @@ msgstr "संग्रहगर्ने प्रकार"
 msgid "The representation being used for image data"
 msgstr "छविचित्र डाटाका लागि प्रयोग गरिएको प्रतिनिधित्व"
 
-#: gtk/gtkimagemenuitem.c:133
+#: gtk/gtkimagemenuitem.c:134
 msgid "Child widget to appear next to the menu text"
 msgstr "अर्को मेनुपाठमा देखाउनलाई दोस्रोतहको औजार"
 
-#: gtk/gtkimagemenuitem.c:138
+#: gtk/gtkimagemenuitem.c:139
 msgid "Show menu images"
 msgstr "सूचीका चित्रहरु देखाऊ"
 
-#: gtk/gtkimagemenuitem.c:139
+#: gtk/gtkimagemenuitem.c:140
 msgid "Whether images should be shown in menus"
 msgstr "जब मेनुहरूमा छविचित्र देखाइन्छ"
 
@@ -3441,7 +3451,8 @@ msgid "Icon Sizes"
 msgstr "छविचित्रको आकार"
 
 #: gtk/gtksettings.c:375
-msgid "List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."
+#, fuzzy
+msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
 msgstr "आइकनको आकारहरुको सूची"
 
 #: gtk/gtksettings.c:383

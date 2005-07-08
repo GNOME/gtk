@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 317\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-01 14:32-0400\n"
+"POT-Creation-Date: 2005-07-08 14:01-0400\n"
 "PO-Revision-Date: 2004-11-17 21:21-0700\n"
 "Last-Translator: Steve Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <en@li.org>\n"
@@ -116,63 +116,63 @@ msgstr "Ikirahuri"
 msgid "the GdkScreen for the renderer"
 msgstr "i kugirango i"
 
-#: gtk/gtkaboutdialog.c:204
+#: gtk/gtkaboutdialog.c:206
 #, fuzzy
 msgid "Program name"
 msgstr "Izina:"
 
-#: gtk/gtkaboutdialog.c:205
+#: gtk/gtkaboutdialog.c:207
 #, fuzzy
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
 msgstr "Izina: Bya i Porogaramu iyi ni OYA Gushyiraho Kuri"
 
-#: gtk/gtkaboutdialog.c:219
+#: gtk/gtkaboutdialog.c:221
 #, fuzzy
 msgid "Program version"
 msgstr "Verisiyo"
 
-#: gtk/gtkaboutdialog.c:220
+#: gtk/gtkaboutdialog.c:222
 #, fuzzy
 msgid "The version of the program"
 msgstr "Verisiyo Bya i Porogaramu"
 
-#: gtk/gtkaboutdialog.c:234
+#: gtk/gtkaboutdialog.c:236
 #, fuzzy
 msgid "Copyright string"
 msgstr "Ikurikiranyanyuguti"
 
-#: gtk/gtkaboutdialog.c:235
+#: gtk/gtkaboutdialog.c:237
 #, fuzzy
 msgid "Copyright information for the program"
 msgstr "Ibisobanuro kugirango i Porogaramu"
 
-#: gtk/gtkaboutdialog.c:252
+#: gtk/gtkaboutdialog.c:254
 #, fuzzy
 msgid "Comments string"
 msgstr "Ikurikiranyanyuguti"
 
-#: gtk/gtkaboutdialog.c:253
+#: gtk/gtkaboutdialog.c:255
 #, fuzzy
 msgid "Comments about the program"
 msgstr "Ibyerekeye i Porogaramu"
 
-#: gtk/gtkaboutdialog.c:286
+#: gtk/gtkaboutdialog.c:289
 msgid "Website URL"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:287
+#: gtk/gtkaboutdialog.c:290
 #, fuzzy
 msgid "The URL for the link to the website of the program"
 msgstr "kugirango i Ihuza Kuri i Webu Bya i Porogaramu"
 
-#: gtk/gtkaboutdialog.c:303
+#: gtk/gtkaboutdialog.c:306
 #, fuzzy
 msgid "Website label"
 msgstr "Akarango"
 
-#: gtk/gtkaboutdialog.c:304
+#: gtk/gtkaboutdialog.c:307
 #, fuzzy
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
@@ -181,48 +181,48 @@ msgstr ""
 "Akarango kugirango i Ihuza Kuri i Webu Bya i Porogaramu iyi ni OYA "
 "Gushyiraho Kuri i"
 
-#: gtk/gtkaboutdialog.c:320
+#: gtk/gtkaboutdialog.c:323
 msgid "Authors"
 msgstr "Abahanzi"
 
-#: gtk/gtkaboutdialog.c:321
+#: gtk/gtkaboutdialog.c:324
 #, fuzzy
 msgid "List of authors of the program"
 msgstr "Bya Abahanzi Bya i Porogaramu"
 
-#: gtk/gtkaboutdialog.c:337
+#: gtk/gtkaboutdialog.c:340
 msgid "Documenters"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:338
+#: gtk/gtkaboutdialog.c:341
 #, fuzzy
 msgid "List of people documenting the program"
 msgstr "Bya Abantu i Porogaramu"
 
-#: gtk/gtkaboutdialog.c:354
+#: gtk/gtkaboutdialog.c:357
 msgid "Artists"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:355
+#: gtk/gtkaboutdialog.c:358
 #, fuzzy
 msgid "List of people who have contributed artwork to the program"
 msgstr "Bya Abantu Kuri i Porogaramu"
 
-#: gtk/gtkaboutdialog.c:372
+#: gtk/gtkaboutdialog.c:375
 msgid "Translator credits"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:373
+#: gtk/gtkaboutdialog.c:376
 #, fuzzy
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr "Kuri i Ikurikiranyanyuguti cy/ byagarajwe Nka"
 
-#: gtk/gtkaboutdialog.c:388
+#: gtk/gtkaboutdialog.c:391
 msgid "Logo"
 msgstr "ikirango"
 
-#: gtk/gtkaboutdialog.c:389
+#: gtk/gtkaboutdialog.c:392
 #, fuzzy
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
@@ -230,22 +230,32 @@ msgid ""
 msgstr ""
 "A ikirango kugirango i Ibyerekeye Agasanduku iyi ni OYA Gushyiraho Kuri"
 
-#: gtk/gtkaboutdialog.c:404
+#: gtk/gtkaboutdialog.c:407
 msgid "Logo Icon Name"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:405
+#: gtk/gtkaboutdialog.c:408
 #, fuzzy
 msgid "A named icon to use as the logo for the about box."
 msgstr ""
 "A Agashushondanga Kuri Gukoresha Nka i ikirango kugirango i Ibyerekeye "
 "Agasanduku"
 
-#: gtk/gtkaboutdialog.c:412
+#: gtk/gtkaboutdialog.c:421
+#, fuzzy
+msgid "Wrap license"
+msgstr "Ubwoko Gushyiraho"
+
+#: gtk/gtkaboutdialog.c:422
+#, fuzzy
+msgid "Whether to wrap the license text."
+msgstr "Kuri Gihinguranya i Umwandiko"
+
+#: gtk/gtkaboutdialog.c:429
 msgid "Link Color"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:413
+#: gtk/gtkaboutdialog.c:430
 #, fuzzy
 msgid "Color of hyperlinks"
 msgstr "Bya Amahuzanyobora"
@@ -825,7 +835,7 @@ msgstr "Itunganya kugirango"
 msgid "Vertical alignment for child"
 msgstr "Itunganya kugirango"
 
-#: gtk/gtkbutton.c:312 gtk/gtkimagemenuitem.c:132
+#: gtk/gtkbutton.c:312 gtk/gtkimagemenuitem.c:133
 msgid "Image widget"
 msgstr ""
 
@@ -2345,7 +2355,7 @@ msgstr "kugirango Birenga Amahitamo"
 msgid "Select Multiple"
 msgstr ""
 
-#: gtk/gtkfilechooser.c:227 gtk/gtkfilesel.c:576
+#: gtk/gtkfilechooser.c:227 gtk/gtkfilesel.c:573
 #, fuzzy
 msgid "Whether to allow multiple files to be selected"
 msgstr "Kuri Kwemerera Igikubo Idosiye Kuri Byahiswemo"
@@ -2378,36 +2388,36 @@ msgstr "Umutwe Bya i IDOSIYE Ikiganiro"
 msgid "The desired width of the button widget, in characters."
 msgstr "Ubugari Bya i Akabuto in Inyuguti"
 
-#: gtk/gtkfilechooserdefault.c:626
+#: gtk/gtkfilechooserdefault.c:640
 #, fuzzy
 msgid "Default file chooser backend"
 msgstr "IDOSIYE"
 
-#: gtk/gtkfilechooserdefault.c:627
+#: gtk/gtkfilechooserdefault.c:641
 #, fuzzy
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Bya i Kuri Gukoresha ku Mburabuzi"
 
-#: gtk/gtkfilesel.c:561 gtk/gtkimage.c:194
+#: gtk/gtkfilesel.c:558 gtk/gtkimage.c:194
 msgid "Filename"
 msgstr "Izina ry'idosiye"
 
-#: gtk/gtkfilesel.c:562
+#: gtk/gtkfilesel.c:559
 #, fuzzy
 msgid "The currently selected filename"
 msgstr "Byahiswemo Izina ry'idosiye:"
 
-#: gtk/gtkfilesel.c:568
+#: gtk/gtkfilesel.c:565
 #, fuzzy
 msgid "Show file operations"
 msgstr "IDOSIYE Ibikorwa:"
 
-#: gtk/gtkfilesel.c:569
+#: gtk/gtkfilesel.c:566
 #, fuzzy
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr "Utubuto kugirango Idosiye"
 
-#: gtk/gtkfilesel.c:575
+#: gtk/gtkfilesel.c:572
 #, fuzzy
 msgid "Select multiple"
 msgstr "Igikubo"
@@ -2834,17 +2844,17 @@ msgstr "Ubwoko"
 msgid "The representation being used for image data"
 msgstr "kugirango Ishusho Ibyatanzwe"
 
-#: gtk/gtkimagemenuitem.c:133
+#: gtk/gtkimagemenuitem.c:134
 #, fuzzy
 msgid "Child widget to appear next to the menu text"
 msgstr "Kuri Kugaragara Komeza>> Kuri i Ibikubiyemo Umwandiko"
 
-#: gtk/gtkimagemenuitem.c:138
+#: gtk/gtkimagemenuitem.c:139
 #, fuzzy
 msgid "Show menu images"
 msgstr "Ibikubiyemo Ishusho"
 
-#: gtk/gtkimagemenuitem.c:139
+#: gtk/gtkimagemenuitem.c:140
 #, fuzzy
 msgid "Whether images should be shown in menus"
 msgstr "Ishusho in Ibikubiyemo"
@@ -4060,7 +4070,7 @@ msgstr ""
 
 #: gtk/gtksettings.c:375
 #, fuzzy
-msgid "List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."
+msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
 msgstr "Bya Agashushondanga Ibikubiyemo Akabuto 20 20"
 
 #: gtk/gtksettings.c:383

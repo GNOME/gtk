@@ -1,3 +1,27 @@
+Overview of Changes from GTK+ 2.7.1 to GTK+ 2.7.2
+=================================================
+* GtkAboutDialog
+ - Clean up the "trail" in the path bar when set_current_folder
+   is called explicitly [Jonathan Blandford, Matthias Clasen]
+ - Accept dropped files and directories on the file list [Sven 
+   Neumann, Matthias]
+* GtkTreeView
+ - Make reusing cell renders work as well as it did in 2.6,
+   but document it as being unsupported. [Kristian Rietveld]
+* GtkAboutDialog
+ - Optionally wrap the license [Christian Rose, Christian Persch]
+* Menu
+ - Make image menu items work in vertical menubars [Matthias]
+ - Make orientation changes of menubars work [Matthias]
+* Win32
+ - Implement named cursors and other new GDK apis [Hans Breuer]
+ - Implement getting cursor images [Tor Lillqvist]
+* Bug fixes [J. Ali Harlow, Matthias, Diego Gonzalez, 
+  Kazuki IWAMOTO, Paul Cornett, Sebastian Bacher, Tor]
+* Documentation improvements [Benjamin Berg, Matthias,
+  Steve Chaplin, Peter van den Bosch, Tim-Philipp Müller]
+* New and updated translations (en_CA,sr,sr@Latn)
+
 Overview of Changes from GTK+ 2.7.0 to GTK+ 2.7.1
 =================================================
 * GtkTreeView

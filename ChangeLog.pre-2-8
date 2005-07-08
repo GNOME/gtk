@@ -1,4 +1,12 @@
 2005-07-08  Matthias Clasen  <mclasen@redhat.com>
+	
+	* === Released 2.7.2 ===
+
+	* NEWS: Updates
+
+	* gtk/gtkcelllayout.c (gtk_cell_layout_pack_start): 
+	(gtk_cell_layout_pack_end): Add a note about reusing cell
+	renderers.
 
 	* gtk/gtkdnd.c (gtk_drag_update_cursor): Pass a GdkDragAction to
 	gtk_drag_get_cursor.  (#309784, Sebastian Bacher)

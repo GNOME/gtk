@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-01 14:31-0400\n"
+"POT-Creation-Date: 2005-07-08 14:01-0400\n"
 "PO-Revision-Date: 2005-06-29 01:36+0800\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: Chinese (traditional) <community@linuxhall.org>\n"
@@ -968,46 +968,46 @@ msgstr "顏色"
 msgid "Make X calls synchronous"
 msgstr "使用同步方式調用 X 函式"
 
-#: gtk/gtkaboutdialog.c:270 gtk/gtkaboutdialog.c:2025
+#: gtk/gtkaboutdialog.c:273 gtk/gtkaboutdialog.c:2103
 msgid "License"
 msgstr "許可證"
 
-#: gtk/gtkaboutdialog.c:271
+#: gtk/gtkaboutdialog.c:274
 msgid "The license of the program"
 msgstr "程式的許可證"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:491
+#: gtk/gtkaboutdialog.c:509
 msgid "C_redits"
 msgstr "鳴謝(_R)"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:501
+#: gtk/gtkaboutdialog.c:519
 msgid "_License"
 msgstr "許可證(_L)"
 
-#: gtk/gtkaboutdialog.c:731
+#: gtk/gtkaboutdialog.c:756
 #, c-format
 msgid "About %s"
 msgstr "關於 %s"
 
-#: gtk/gtkaboutdialog.c:1953
+#: gtk/gtkaboutdialog.c:2031
 msgid "Credits"
 msgstr "鳴謝"
 
-#: gtk/gtkaboutdialog.c:1979
+#: gtk/gtkaboutdialog.c:2057
 msgid "Written by"
 msgstr "程式編寫"
 
-#: gtk/gtkaboutdialog.c:1982
+#: gtk/gtkaboutdialog.c:2060
 msgid "Documented by"
 msgstr "文件編寫"
 
-#: gtk/gtkaboutdialog.c:1994
+#: gtk/gtkaboutdialog.c:2072
 msgid "Translated by"
 msgstr "翻譯"
 
-#: gtk/gtkaboutdialog.c:1998
+#: gtk/gtkaboutdialog.c:2076
 msgid "Artwork by"
 msgstr "美工設計"
 
@@ -1255,12 +1255,12 @@ msgstr "無效的檔案名稱：%s"
 msgid "Select A File"
 msgstr "選取檔案"
 
-#: gtk/gtkfilechooserbutton.c:68 gtk/gtkfilechooserdefault.c:1302
+#: gtk/gtkfilechooserbutton.c:68 gtk/gtkfilechooserdefault.c:1316
 #: gtk/gtkpathbar.c:1020
 msgid "Home"
 msgstr "個人資料夾"
 
-#: gtk/gtkfilechooserbutton.c:69 gtk/gtkfilechooserdefault.c:1329
+#: gtk/gtkfilechooserbutton.c:69 gtk/gtkfilechooserdefault.c:1343
 #: gtk/gtkpathbar.c:1022
 msgid "Desktop"
 msgstr "桌面"
@@ -1273,23 +1273,23 @@ msgstr "(沒有)"
 msgid "Other..."
 msgstr "其它..."
 
-#: gtk/gtkfilechooserdefault.c:917
+#: gtk/gtkfilechooserdefault.c:931
 msgid "Could not retrieve information about the file"
 msgstr "無法取得關於檔案的資訊"
 
-#: gtk/gtkfilechooserdefault.c:928
+#: gtk/gtkfilechooserdefault.c:942
 msgid "Could not add a bookmark"
 msgstr "無法加入書籤"
 
-#: gtk/gtkfilechooserdefault.c:939
+#: gtk/gtkfilechooserdefault.c:953
 msgid "Could not remove bookmark"
 msgstr "無法移除書籤"
 
-#: gtk/gtkfilechooserdefault.c:950
+#: gtk/gtkfilechooserdefault.c:964
 msgid "The folder could not be created"
 msgstr "無法建立資料夾"
 
-#: gtk/gtkfilechooserdefault.c:963
+#: gtk/gtkfilechooserdefault.c:977
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -1297,226 +1297,236 @@ msgstr ""
 "此資料夾無法建立，因為已有相同名稱的檔案存在。試著使用不同的資料夾名稱，或者"
 "先重新命名該檔案。"
 
-#: gtk/gtkfilechooserdefault.c:976
+#: gtk/gtkfilechooserdefault.c:990
 msgid "Invalid file name"
 msgstr "無效的檔案名稱"
 
-#: gtk/gtkfilechooserdefault.c:986
+#: gtk/gtkfilechooserdefault.c:1000
 msgid "The folder contents could not be displayed"
 msgstr "無法顯示資料夾內容"
 
-#: gtk/gtkfilechooserdefault.c:1192
+#: gtk/gtkfilechooserdefault.c:1206
 #, c-format
 msgid "Could not get information about '%s': %s"
 msgstr "無法取得關於‘%s’的資訊：%s"
 
-#: gtk/gtkfilechooserdefault.c:2208
+#: gtk/gtkfilechooserdefault.c:2222
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "將資料夾‘%s’加入書籤"
 
-#: gtk/gtkfilechooserdefault.c:2249
+#: gtk/gtkfilechooserdefault.c:2263
 msgid "Add the current folder to the bookmarks"
 msgstr "將目前的資料夾加入書籤"
 
-#: gtk/gtkfilechooserdefault.c:2251
+#: gtk/gtkfilechooserdefault.c:2265
 msgid "Add the selected folders to the bookmarks"
 msgstr "將已選的資料夾加入書籤"
 
-#: gtk/gtkfilechooserdefault.c:2291
+#: gtk/gtkfilechooserdefault.c:2305
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "移除書籤‘%s’"
 
-#: gtk/gtkfilechooserdefault.c:2722
+#: gtk/gtkfilechooserdefault.c:2736
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
 msgstr "無法加入‘%s’為書籤，因為它是無效的路徑名稱。"
 
-#: gtk/gtkfilechooserdefault.c:2937
+#: gtk/gtkfilechooserdefault.c:2951
 msgid "Remove"
 msgstr "移除"
 
-#: gtk/gtkfilechooserdefault.c:2946
+#: gtk/gtkfilechooserdefault.c:2960
 msgid "Rename..."
 msgstr "更改名稱..."
 
-#: gtk/gtkfilechooserdefault.c:3069
+#: gtk/gtkfilechooserdefault.c:3083
 msgid "Shortcuts"
 msgstr "捷徑"
 
-#: gtk/gtkfilechooserdefault.c:3123
+#: gtk/gtkfilechooserdefault.c:3137
 msgid "Folder"
 msgstr "資料夾"
 
-#: gtk/gtkfilechooserdefault.c:3179 gtk/gtkstock.c:317
+#: gtk/gtkfilechooserdefault.c:3193 gtk/gtkstock.c:317
 msgid "_Add"
 msgstr "新增(_A)"
 
-#: gtk/gtkfilechooserdefault.c:3186
+#: gtk/gtkfilechooserdefault.c:3200
 msgid "Add the selected folder to the Bookmarks"
 msgstr "將已選的資料夾加入書籤"
 
-#: gtk/gtkfilechooserdefault.c:3191 gtk/gtkstock.c:398
+#: gtk/gtkfilechooserdefault.c:3205 gtk/gtkstock.c:398
 msgid "_Remove"
 msgstr "移除(_R)"
 
-#: gtk/gtkfilechooserdefault.c:3198
+#: gtk/gtkfilechooserdefault.c:3212
 msgid "Remove the selected bookmark"
 msgstr "移除已選的書籤"
 
-#: gtk/gtkfilechooserdefault.c:3305
+#: gtk/gtkfilechooserdefault.c:3312
+#, fuzzy
+msgid "Could not select file"
+msgstr "無法選取項目"
+
+#: gtk/gtkfilechooserdefault.c:3368
+#, fuzzy, c-format
+msgid "Could not select file '%s' because it is an invalid path name."
+msgstr "無法加入‘%s’為書籤，因為它是無效的路徑名稱。"
+
+#: gtk/gtkfilechooserdefault.c:3440
 msgid "_Add to Bookmarks"
 msgstr "加入書籤(_A)"
 
-#: gtk/gtkfilechooserdefault.c:3315
+#: gtk/gtkfilechooserdefault.c:3450
 msgid "Open _Location"
 msgstr "開啟位置(_L)"
 
-#: gtk/gtkfilechooserdefault.c:3327
+#: gtk/gtkfilechooserdefault.c:3462
 msgid "Show _Hidden Files"
 msgstr "顯示隱藏檔案(_H)"
 
-#: gtk/gtkfilechooserdefault.c:3451 gtk/gtkfilesel.c:766
+#: gtk/gtkfilechooserdefault.c:3586 gtk/gtkfilesel.c:763
 msgid "Files"
 msgstr "檔案"
 
-#: gtk/gtkfilechooserdefault.c:3482
+#: gtk/gtkfilechooserdefault.c:3631
 msgid "Name"
 msgstr "名稱"
 
-#: gtk/gtkfilechooserdefault.c:3507
+#: gtk/gtkfilechooserdefault.c:3656
 msgid "Size"
 msgstr "大小"
 
-#: gtk/gtkfilechooserdefault.c:3520
+#: gtk/gtkfilechooserdefault.c:3669
 msgid "Modified"
 msgstr "最後更改"
 
-#: gtk/gtkfilechooserdefault.c:3552
+#: gtk/gtkfilechooserdefault.c:3701
 msgid "Select which types of files are shown"
 msgstr "選擇顯示那種類型的檔案"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:3588
+#: gtk/gtkfilechooserdefault.c:3737
 msgid "Create Fo_lder"
 msgstr "建立資料夾(_L)"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3709
+#: gtk/gtkfilechooserdefault.c:3858
 msgid "_Name:"
 msgstr "名稱(_N):"
 
-#: gtk/gtkfilechooserdefault.c:3749
+#: gtk/gtkfilechooserdefault.c:3898
 msgid "_Browse for other folders"
 msgstr "瀏覽其他資料夾(_B)"
 
-#: gtk/gtkfilechooserdefault.c:4000
+#: gtk/gtkfilechooserdefault.c:4149
 msgid "Save in _folder:"
 msgstr "儲存於資料夾(_F):"
 
-#: gtk/gtkfilechooserdefault.c:4002
+#: gtk/gtkfilechooserdefault.c:4151
 msgid "Create in _folder:"
 msgstr "新增於資料夾(_F):"
 
-#: gtk/gtkfilechooserdefault.c:4959
+#: gtk/gtkfilechooserdefault.c:5117
 msgid "Cannot change to folder because it is not local"
 msgstr "無法切換資料夾，因為其不是本地資料夾"
 
-#: gtk/gtkfilechooserdefault.c:5513
+#: gtk/gtkfilechooserdefault.c:5671
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "捷徑 %s 不存在"
 
-#: gtk/gtkfilechooserdefault.c:6057
+#: gtk/gtkfilechooserdefault.c:6215
 #, c-format
 msgid "Could not mount %s"
 msgstr "無法掛載 %s"
 
-#: gtk/gtkfilechooserdefault.c:6352
+#: gtk/gtkfilechooserdefault.c:6510
 msgid "Type name of new folder"
 msgstr "請輸入新資料夾名稱"
 
-#: gtk/gtkfilechooserdefault.c:6394
+#: gtk/gtkfilechooserdefault.c:6552
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d 位元組"
 
-#: gtk/gtkfilechooserdefault.c:6396
+#: gtk/gtkfilechooserdefault.c:6554
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:6398
+#: gtk/gtkfilechooserdefault.c:6556
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:6400
+#: gtk/gtkfilechooserdefault.c:6558
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:6446 gtk/gtkfilechooserdefault.c:6470
+#: gtk/gtkfilechooserdefault.c:6604 gtk/gtkfilechooserdefault.c:6628
 msgid "Unknown"
 msgstr "未知"
 
-#: gtk/gtkfilechooserdefault.c:6457
+#: gtk/gtkfilechooserdefault.c:6615
 msgid "Today"
 msgstr "今天"
 
-#: gtk/gtkfilechooserdefault.c:6459
+#: gtk/gtkfilechooserdefault.c:6617
 msgid "Yesterday"
 msgstr "昨天"
 
-#: gtk/gtkfilechooserdefault.c:6541
+#: gtk/gtkfilechooserdefault.c:6699
 msgid "Cannot change folder"
 msgstr "無法切換資料夾"
 
-#: gtk/gtkfilechooserdefault.c:6542
+#: gtk/gtkfilechooserdefault.c:6700
 msgid "The folder you specified is an invalid path."
 msgstr "您所指定的資料夾的路徑無效。"
 
-#: gtk/gtkfilechooserdefault.c:6581
+#: gtk/gtkfilechooserdefault.c:6739
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr "無法從‘%s’及‘%s’建立檔案名稱"
 
-#: gtk/gtkfilechooserdefault.c:6617
+#: gtk/gtkfilechooserdefault.c:6775
 msgid "Could not select item"
 msgstr "無法選取項目"
 
-#: gtk/gtkfilechooserdefault.c:6657
+#: gtk/gtkfilechooserdefault.c:6815
 msgid "Open Location"
 msgstr "開啟位置"
 
-#: gtk/gtkfilechooserdefault.c:6664
+#: gtk/gtkfilechooserdefault.c:6822
 msgid "Save in Location"
 msgstr "存入位置"
 
-#: gtk/gtkfilechooserdefault.c:6688
+#: gtk/gtkfilechooserdefault.c:6846
 msgid "_Location:"
 msgstr "位置(_L):"
 
-#: gtk/gtkfilesel.c:730
+#: gtk/gtkfilesel.c:727
 msgid "Folders"
 msgstr "資料夾"
 
-#: gtk/gtkfilesel.c:734
+#: gtk/gtkfilesel.c:731
 msgid "Fol_ders"
 msgstr "資料夾(_D)"
 
-#: gtk/gtkfilesel.c:770
+#: gtk/gtkfilesel.c:767
 msgid "_Files"
 msgstr "檔案(_F)"
 
-#: gtk/gtkfilesel.c:858 gtk/gtkfilesel.c:2248
+#: gtk/gtkfilesel.c:855 gtk/gtkfilesel.c:2242
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "無法讀取資料夾：%s"
 
-#: gtk/gtkfilesel.c:989
+#: gtk/gtkfilesel.c:984
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -1526,25 +1536,25 @@ msgstr ""
 "檔案“%s”存放在另一部電腦 (稱為 %s) 之中，本程式可能無法存取該檔案。\n"
 "是否確定選取該檔案？"
 
-#: gtk/gtkfilesel.c:1120
+#: gtk/gtkfilesel.c:1114
 msgid "_New Folder"
 msgstr "新增資料夾(_N)"
 
-#: gtk/gtkfilesel.c:1131
+#: gtk/gtkfilesel.c:1125
 msgid "De_lete File"
 msgstr "刪除檔案(_L)"
 
-#: gtk/gtkfilesel.c:1142
+#: gtk/gtkfilesel.c:1136
 msgid "_Rename File"
 msgstr "更改檔案名稱(_R)"
 
-#: gtk/gtkfilesel.c:1444
+#: gtk/gtkfilesel.c:1438
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "資料夾名稱“%s”中含有檔案名稱中不應出現的符號"
 
-#: gtk/gtkfilesel.c:1446
+#: gtk/gtkfilesel.c:1440
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -1553,33 +1563,33 @@ msgstr ""
 "建立資料夾“%s”時發生錯誤：%s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1447 gtk/gtkfilesel.c:1683
+#: gtk/gtkfilesel.c:1441 gtk/gtkfilesel.c:1677
 msgid "You probably used symbols not allowed in filenames."
 msgstr "您可能使用了檔案名稱中不應出現的符號。"
 
-#: gtk/gtkfilesel.c:1455
+#: gtk/gtkfilesel.c:1449
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "建立資料夾“%s”時發生錯誤：%s\n"
 
-#: gtk/gtkfilesel.c:1489
+#: gtk/gtkfilesel.c:1483
 msgid "New Folder"
 msgstr "新增資料夾"
 
-#: gtk/gtkfilesel.c:1504
+#: gtk/gtkfilesel.c:1498
 msgid "_Folder name:"
 msgstr "資料夾名稱(_F):"
 
-#: gtk/gtkfilesel.c:1528
+#: gtk/gtkfilesel.c:1522
 msgid "C_reate"
 msgstr "建立(_R)"
 
-#: gtk/gtkfilesel.c:1571
+#: gtk/gtkfilesel.c:1565
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "檔案名稱“%s”中含有不允許存在於檔案名稱的符號"
 
-#: gtk/gtkfilesel.c:1574
+#: gtk/gtkfilesel.c:1568
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -1588,30 +1598,30 @@ msgstr ""
 "刪除檔案“%s”時發生錯誤：%s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1576 gtk/gtkfilesel.c:1697
+#: gtk/gtkfilesel.c:1570 gtk/gtkfilesel.c:1691
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "它可能含有不允許存在於檔案名稱的符號。"
 
-#: gtk/gtkfilesel.c:1585
+#: gtk/gtkfilesel.c:1579
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "刪除檔案“%s”時發生錯誤：%s"
 
-#: gtk/gtkfilesel.c:1628
+#: gtk/gtkfilesel.c:1622
 #, c-format
 msgid "Really delete file \"%s\"?"
 msgstr "是否確定刪除檔案“%s”？"
 
-#: gtk/gtkfilesel.c:1633
+#: gtk/gtkfilesel.c:1627
 msgid "Delete File"
 msgstr "刪除檔案"
 
-#: gtk/gtkfilesel.c:1679 gtk/gtkfilesel.c:1693
+#: gtk/gtkfilesel.c:1673 gtk/gtkfilesel.c:1687
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "檔案名稱“%s”含有不允許存在於檔案名稱的符號"
 
-#: gtk/gtkfilesel.c:1681
+#: gtk/gtkfilesel.c:1675
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -1620,7 +1630,7 @@ msgstr ""
 "更改檔案名稱至“%s”時發生錯誤：%s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1695
+#: gtk/gtkfilesel.c:1689
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -1629,29 +1639,29 @@ msgstr ""
 "更改檔案“%s”的名稱時發生錯誤：%s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1705
+#: gtk/gtkfilesel.c:1699
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "更改檔案“%s”的名稱為“%s”時發生錯誤：%s"
 
-#: gtk/gtkfilesel.c:1752
+#: gtk/gtkfilesel.c:1746
 msgid "Rename File"
 msgstr "更改檔案名稱"
 
-#: gtk/gtkfilesel.c:1767
+#: gtk/gtkfilesel.c:1761
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "將檔案‘%s’的名稱更改為："
 
-#: gtk/gtkfilesel.c:1796
+#: gtk/gtkfilesel.c:1790
 msgid "_Rename"
 msgstr "更改名稱(_R)"
 
-#: gtk/gtkfilesel.c:2228
+#: gtk/gtkfilesel.c:2222
 msgid "_Selection: "
 msgstr "選取檔案(_S):"
 
-#: gtk/gtkfilesel.c:3153
+#: gtk/gtkfilesel.c:3147
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
@@ -1659,15 +1669,15 @@ msgid ""
 msgstr ""
 "檔案名稱“%s”無法轉換至 UTF-8 (請嘗試設定環境變數 G_FILENAME_ENCODING)：%s"
 
-#: gtk/gtkfilesel.c:3156
+#: gtk/gtkfilesel.c:3150
 msgid "Invalid UTF-8"
 msgstr "無效的 UTF-8 資料"
 
-#: gtk/gtkfilesel.c:4033
+#: gtk/gtkfilesel.c:4027
 msgid "Name too long"
 msgstr "名稱過長"
 
-#: gtk/gtkfilesel.c:4035
+#: gtk/gtkfilesel.c:4029
 msgid "Couldn't convert filename"
 msgstr "無法轉換檔案名稱"
 
@@ -1677,7 +1687,7 @@ msgstr "(空的)"
 
 #: gtk/gtkfilesystemunix.c:476 gtk/gtkfilesystemunix.c:682
 #: gtk/gtkfilesystemunix.c:1858 gtk/gtkfilesystemwin32.c:482
-#: gtk/gtkfilesystemwin32.c:495 gtk/gtkfilesystemwin32.c:1560
+#: gtk/gtkfilesystemwin32.c:495 gtk/gtkfilesystemwin32.c:1487
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "取得‘%s’的資訊時發生錯誤：%s"
