@@ -51,9 +51,6 @@
 #include <windows.h>
 #undef STRICT
 #endif /* G_PLATFORM_WIN32 */
-#ifdef G_OS_WIN32
-#include <winsock.h>		/* For gethostname */
-#endif
 
 #include "gdk/gdkkeysyms.h"
 #include "gtkbutton.h"
@@ -940,8 +937,7 @@ filenames_dropped (GtkWidget        *widget,
   char *uri = NULL;
   char *filename = NULL;
   char *hostname;
-  char this_hostname[257];
-  int res;
+  const char *this_hostname;
   GError *error = NULL;
 	
   if (!selection_data->data)
@@ -963,11 +959,10 @@ filenames_dropped (GtkWidget        *widget,
       return;
     }
 
-  res = gethostname (this_hostname, 256);
-  this_hostname[256] = 0;
+  this_hostname = g_get_host_name ();
   
   if ((hostname == NULL) ||
-      (res == 0 && strcmp (hostname, this_hostname) == 0) ||
+      (strcmp (hostname, this_hostname) == 0) ||
       (strcmp (hostname, "localhost") == 0))
     gtk_file_selection_set_filename (GTK_FILE_SELECTION (widget),
 				     filename);
@@ -1023,8 +1018,7 @@ filenames_drag_get (GtkWidget        *widget,
 {
   const gchar *file;
   gchar *uri_list;
-  char hostname[256];
-  int res;
+  const char *hostname;
   GError *error;
 
   file = gtk_file_selection_get_filename (filesel);
@@ -1033,10 +1027,10 @@ filenames_drag_get (GtkWidget        *widget,
     {
       if (info == TARGET_URILIST)
 	{
-	  res = gethostname (hostname, 256);
+	  hostname = g_get_host_name ();
 	  
 	  error = NULL;
-	  uri_list = g_filename_to_uri (file, (!res)?hostname:NULL, &error);
+	  uri_list = g_filename_to_uri (file, hostname, &error);
 	  if (!uri_list)
 	    {
 	      g_warning ("Error getting filename: %s\n",
