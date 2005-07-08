@@ -1,5 +1,9 @@
 2005-07-07  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkhscale.c (gtk_hscale_new_with_range): 
+	(gtk_vscale_new_with_range): Add some additional docs on 
+	precision here too.  (#309238, Steve Chaplin)
+
 	* gdk/x11/gdkmain-x11.c (generate_grab_broken_event): Don't
 	generate events on destroyed windows.
 
