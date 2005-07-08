@@ -1,3 +1,8 @@
+2005-07-08  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkdnd.c (gtk_drag_update_cursor): Pass a GdkDragAction to
+	gtk_drag_get_cursor.  (#309784, Sebastian Bacher)
+
 2005-07-08  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/gtkfilesel.c: Use g_get_host_name().

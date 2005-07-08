@@ -749,7 +749,7 @@ gtk_drag_update_cursor (GtkDragSourceInfo *info)
     return;
 
   cursor = gtk_drag_get_cursor (gdk_cursor_get_display (info->cursor), 
-				i, info);
+				drag_cursors[i].action, info);
   
   if (cursor != info->cursor)
     {
