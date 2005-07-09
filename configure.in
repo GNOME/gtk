@@ -1674,9 +1674,6 @@ gtk+-2.0-uninstalled.pc
 m4macros/Makefile
 po/Makefile.in
 po-properties/Makefile.in
-build/Makefile
-build/win32/Makefile
-build/win32/dirent/Makefile
 demos/Makefile
 demos/gtk-demo/Makefile
 demos/gtk-demo/geninclude.pl

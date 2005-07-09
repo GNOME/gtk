@@ -1,6 +1,9 @@
 2005-07-09  Tor Lillqvist  <tml@novell.com>
 
-	* configure.in: Look for windres on Win32.
+	* configure.in: Look for windres on Win32. Drop build/* from
+	AC_CONFIG_FILES.
+
+	* Makefile.am: Drop build from SUBDIRS. 
 
 	* gdk/win32/rc/Makefile.am
 	* gdk/Makefile.am
