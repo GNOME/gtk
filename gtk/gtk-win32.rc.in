@@ -1,7 +1,7 @@
 #include <winver.h>
 
 VS_VERSION_INFO VERSIONINFO
-  FILEVERSION @GTK_MAJOR_VERSION@,@GTK_MINOR_VERSION@,@GTK_MICRO_VERSION@,BUILDNUMBER
+  FILEVERSION @GTK_MAJOR_VERSION@,@GTK_MINOR_VERSION@,@GTK_MICRO_VERSION@,0
   PRODUCTVERSION @GTK_MAJOR_VERSION@,@GTK_MINOR_VERSION@,@GTK_MICRO_VERSION@,0
   FILEFLAGSMASK 0
   FILEFLAGS 0
@@ -15,9 +15,9 @@ VS_VERSION_INFO VERSIONINFO
       BEGIN
 	VALUE "CompanyName", "The GTK developer community"
 	VALUE "FileDescription", "GIMP Toolkit"
-	VALUE "FileVersion", "@GTK_VERSION@.BUILDNUMBER"
+	VALUE "FileVersion", "@GTK_VERSION@.0"
 	VALUE "InternalName", "libgtk-win32-@GTK_API_VERSION@-@LT_CURRENT_MINUS_AGE@"
-	VALUE "LegalCopyright", "Copyright © 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald. Modified by the GTK+ Team and others 1997-2000."
+	VALUE "LegalCopyright", "Copyright © 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald. Modified by the GTK+ Team and others 1997-2005."
 	VALUE "OriginalFilename", "libgtk-win32-@GTK_API_VERSION@-@LT_CURRENT_MINUS_AGE@.dll"
 	VALUE "ProductName", "GTK+"
 	VALUE "ProductVersion", "@GTK_VERSION@"

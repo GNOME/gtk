@@ -40,10 +40,11 @@ if OS_WIN32
 gtk_def = gtk.def
 gtk_win32_symbols = -export-symbols $(gtk_def)
 
-gtk_win32res_lo = gtk-win32res.lo
+gtk_win32_res = gtk-win32-res.o
+gtk_win32_res_ldflag = -Wl,$(gtk_win32_res)
 
-gtk-win32res.lo : gtk-win32.rc
-	$(top_srcdir)/build/win32/lt-compile-resource gtk-win32.rc gtk-win32res.lo
+gtk-win32-res.o : gtk-win32.rc
+	$(WINDRES) gtk-win32.rc $@
 
 install-def-file: gtk.def
 	$(INSTALL) $(gtk_def) $(DESTDIR)$(libdir)/gtk-win32-2.0.def
@@ -662,11 +663,11 @@ libgtk_win32_2_0_la_LDFLAGS = $(libtool_opts)
 
 libgtk_x11_2_0_la_LIBADD = $(libadd)
 libgtk_linux_fb_2_0_la_LIBADD = $(libadd)
-libgtk_win32_2_0_la_LIBADD = $(libadd) $(gtk_win32res_lo)
-libgtk_win32_2_0_la_DEPENDENCIES = $(gtk_def) $(gtk_win32res_lo)
+libgtk_win32_2_0_la_LIBADD = $(libadd) -lole32
+libgtk_win32_2_0_la_DEPENDENCIES = $(gtk_def) $(gtk_win32_res)
 
 if USE_WIN32
-libgtk_target_ldflags = $(gtk_win32_symbols) -lole32 -lwsock32
+libgtk_target_ldflags = $(gtk_win32_res_ldflag) $(gtk_win32_symbols)
 endif
 EXTRA_LTLIBRARIES = libgtk-x11-2.0.la libgtk-linux-fb-2.0.la libgtk-win32-2.0.la
 

@@ -1,3 +1,19 @@
+2005-07-09  Tor Lillqvist  <tml@novell.com>
+
+	* configure.in: Look for windres on Win32.
+
+	* gdk/win32/rc/Makefile.am
+	* gdk/Makefile.am
+	* gtk/Makefile.am: Don't use the scripts in build/win32 to compile
+	the rc files into resource object files. (This means we lose the
+	build number increment magic, but I doubt it was that useful
+	anyway.) Instead use windres directly. To pass a normal .o file
+	produced by windres through libtool, which would want a .lo file,
+	pass it directly to the linker using a -Wl option.
+
+	* gdk/win32/rc/gdk.rc.in
+	* gtk/gtk-win32.rc.in: Replace BUILDNUMBER with 0.
+
 2005-07-08  Kristian Rietveld  <kris@gtk.org>
 
 	Fixes #165034, reported by Jorn Baayen.

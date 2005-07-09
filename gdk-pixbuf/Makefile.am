@@ -9,10 +9,11 @@ if OS_WIN32
 gdk_pixbuf_def = $(srcdir)/gdk_pixbuf.def
 gdk_pixbuf_symbols = -export-symbols $(gdk_pixbuf_def)
 
-gdk_pixbuf_win32res_lo = gdk_pixbuf-win32res.lo
+gdk_pixbuf_win32_res = gdk_pixbuf-win32-res.o
+gdk_pixbuf_win32_res_ldflag = -Wl,$(gdk_pixbuf_win32_res)
 
-gdk_pixbuf-win32res.lo : gdk_pixbuf.rc
-	$(top_srcdir)/build/win32/lt-compile-resource gdk_pixbuf.rc gdk_pixbuf-win32res.lo
+gdk_pixbuf-win32-res.o : gdk_pixbuf.rc
+	$(WINDRES) gdk_pixbuf.rc $@
 
 install-def-file:
 	$(INSTALL) $(gdk_pixbuf_def) $(DESTDIR)$(libdir)/gdk_pixbuf-2.0.def
@@ -314,14 +315,15 @@ libgdk_pixbuf_2_0_la_SOURCES =   \
 	gdk-pixbuf-enum-types.c
 
 libgdk_pixbuf_2_0_la_LDFLAGS = \
+	$(gdk_pixbuf_win32_res_ldflag)		\
 	-version-info $(LT_VERSION_INFO)	\
 	$(LIBTOOL_EXPORT_OPTIONS)		\
 	$(no_undefined)				\
 	$(gdk_pixbuf_symbols)
 
 
-libgdk_pixbuf_2_0_la_LIBADD = pixops/libpixops.la $(builtin_objs) $(gdk_pixbuf_win32res_lo) $(GDK_PIXBUF_DEP_LIBS)
-libgdk_pixbuf_2_0_la_DEPENDENCIES = pixops/libpixops.la $(builtin_objs) $(gdk_pixbuf_def) $(gdk_pixbuf_win32res_lo)
+libgdk_pixbuf_2_0_la_LIBADD = pixops/libpixops.la $(builtin_objs) $(GDK_PIXBUF_DEP_LIBS)
+libgdk_pixbuf_2_0_la_DEPENDENCIES = pixops/libpixops.la $(builtin_objs) $(gdk_pixbuf_def) $(gdk_pixbuf_win32_res)
 
 gdk_pixbuf_headers = 			\
 	gdk-pixbuf.h			\
