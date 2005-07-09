@@ -1,5 +1,17 @@
 2005-07-09  Kristian Rietveld  <kris@gtk.org>
 
+	Fix #305737, patch from Tomislav Jonjic. This makes the
+	gtk_tree_store_insert* family of functions emit row_has_child_toggled
+	when needed (they didn't do that before).
+
+	* gtk/gtktreestore.c (gtk_tree_store_insert): emit
+	row_has_child_toggled when needed,
+	(gtk_tree_store_insert_before): fix a possible memleak,
+	emit row_has_child_toggled when needed,
+	(gtk_tree_store_insert_after): ditto.
+
+2005-07-09  Kristian Rietveld  <kris@gtk.org>
+
 	* gtk/gtktreeview.c (gtk_tree_view_real_expand_row): when
 	open_all is TRUE, traverse the newly built tree to emit
 	row_expanded for the subitems. (rev 1.444, patch in #172319
