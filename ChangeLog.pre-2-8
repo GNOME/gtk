@@ -1,3 +1,10 @@
+2005-07-09  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_real_expand_row): when
+	open_all is TRUE, traverse the newly built tree to emit
+	row_expanded for the subitems. (rev 1.444, patch in #172319
+	broke this). Fixes #305582, reported by Billy Biggs.
+
 2005-07-09  Tor Lillqvist  <tml@novell.com>
 
 	* configure.in: Look for windres on Win32. Drop build/* from
