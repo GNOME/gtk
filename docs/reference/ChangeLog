@@ -1,3 +1,8 @@
+2005-07-10  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/tmpl/windows.sgml: Update links to the EWMH.  (#309910,
+	Park Ji-In)
+
 2005-07-08  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.7.2 ===
