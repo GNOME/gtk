@@ -8617,6 +8617,7 @@ gtk_tree_view_move_cursor_page_up_down (GtkTreeView *tree_view,
   GtkRBNode *cursor_node = NULL;
   GtkTreePath *cursor_path = NULL;
   gint y;
+  gint window_y;
   gint vertical_separator;
 
   if (! GTK_WIDGET_HAS_FOCUS (tree_view))
@@ -8640,22 +8641,24 @@ gtk_tree_view_move_cursor_page_up_down (GtkTreeView *tree_view,
   g_return_if_fail (cursor_node != NULL);
 
   y = _gtk_rbtree_node_find_offset (cursor_tree, cursor_node);
-  y += count * tree_view->priv->vadjustment->page_size;
-  if (count > 0)
-    y -= ROW_HEIGHT (tree_view, GTK_RBNODE_GET_HEIGHT (cursor_node));
-  else if (count < 0)
-    y += ROW_HEIGHT (tree_view, GTK_RBNODE_GET_HEIGHT (cursor_node));
+  window_y = RBTREE_Y_TO_TREE_WINDOW_Y (tree_view, y);
+  y += count * (int)tree_view->priv->vadjustment->page_increment;
   y = CLAMP (y, (gint)tree_view->priv->vadjustment->lower,  (gint)tree_view->priv->vadjustment->upper - vertical_separator);
 
   if (y >= tree_view->priv->height)
     y = tree_view->priv->height - 1;
 
-  _gtk_rbtree_find_offset (tree_view->priv->tree, y, &cursor_tree, &cursor_node);
+  y -= _gtk_rbtree_find_offset (tree_view->priv->tree, y, &cursor_tree, &cursor_node);
   cursor_path = _gtk_tree_view_find_path (tree_view, cursor_tree, cursor_node);
   g_return_if_fail (cursor_path != NULL);
-  gtk_tree_view_real_set_cursor (tree_view, cursor_path, TRUE, TRUE);
-  gtk_tree_view_clamp_node_visible (tree_view, cursor_tree, cursor_node);
+  gtk_tree_view_real_set_cursor (tree_view, cursor_path, TRUE, FALSE);
   gtk_tree_path_free (cursor_path);
+
+  if (window_y < 0)
+    window_y = 0;
+  y -= window_y;
+
+  gtk_tree_view_scroll_to_point (tree_view, -1, y);
 }
 
 static void
