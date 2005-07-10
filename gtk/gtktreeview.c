@@ -8654,10 +8654,7 @@ gtk_tree_view_move_cursor_page_up_down (GtkTreeView *tree_view,
   gtk_tree_view_real_set_cursor (tree_view, cursor_path, TRUE, FALSE);
   gtk_tree_path_free (cursor_path);
 
-  if (window_y < 0)
-    window_y = 0;
   y -= window_y;
-
   gtk_tree_view_scroll_to_point (tree_view, -1, y);
 }
 
