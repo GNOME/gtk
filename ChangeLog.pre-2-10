@@ -1,5 +1,10 @@
 2005-07-10  Kristian Rietveld  <kris@gtk.org>
 
+	* gtk/gtktreeview.c (gtk_tree_view_search_key_press_event): also move
+	to the next match when ctrl+g is pressed. (#156657, Matt T. Proud).
+
+2005-07-10  Kristian Rietveld  <kris@gtk.org>
+
 	* gtk/gtktreeview.c (gtk_tree_view_move_cursor_page_up_down): rework
 	function to make page up/down behave the same as in GtkTextView.
 	(Fixes #101220, Owen Taylor).
