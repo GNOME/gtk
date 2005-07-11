@@ -6007,17 +6007,7 @@ gtk_window_set_frame_dimensions (GtkWindow *window,
 void
 gtk_window_present (GtkWindow *window)
 {
-  guint32 timestamp;
-#ifdef GDK_WINDOWING_X11
-  GdkDisplay *display;
-
-  display = gtk_widget_get_display (GTK_WIDGET (window));
-  timestamp = gdk_x11_display_get_user_time (display);
-#else
-  timestamp = gtk_get_current_event_time ();
-#endif
-  
-  gtk_window_present_with_time (window, timestamp);
+  gtk_window_present_with_time (window, GDK_CURRENT_TIME);
 }
 
 /**
@@ -6048,9 +6038,22 @@ gtk_window_present_with_time (GtkWindow *window,
       
       gdk_window_show (widget->window);
 
-      /* note that gdk_window_focus() will also move the window to
-       * the current desktop, for WM spec compliant window managers.
-       */
+      /* Translate a timestamp of GDK_CURRENT_TIME appropriately */
+      if (timestamp == GDK_CURRENT_TIME)
+        {
+#ifdef GDK_WINDOWING_X11
+          GdkDisplay *display;
+
+          display = gtk_widget_get_display (GTK_WIDGET (window));
+          timestamp = gdk_x11_display_get_user_time (display);
+#else
+          timestamp = gtk_get_current_event_time ();
+#endif
+        }
+
+#ifdef GDK_WINDOWING_X11
+      gdk_x11_window_move_to_current_desktop (widget->window);
+#endif
       gdk_window_focus (widget->window, timestamp);
     }
   else

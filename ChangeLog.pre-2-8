@@ -1,5 +1,19 @@
 2005-07-11  Matthias Clasen  <mclasen@redhat.com>
 
+	Make gdk_window_present() move the window to the current
+	desktop, instead of letting the WM change the current
+	desktop to where the window is.  (#166379, Elijah Newren)
+	
+	* gdk/gdk.symbols: 
+	* gdk/x11/gdkx.h: 
+	* gdk/x11/gdkwindow-x11.c (gdk_x11_window_move_to_current_desktop): 
+	New function to move a window to the current desktop.
+	
+	* gtk/gtkwindow.c (gtk_window_present_with_time): Move the
+	window to the current desktop before giving it focus.  
+
+2005-07-11  Matthias Clasen  <mclasen@redhat.com>
+
 	When dragging text, use a drag icon showing the (ellipsized)
 	text that is being dragged: (#161132, Kevin Duffus, patch
 	by Carlos Garnacho Parro)

@@ -1181,6 +1181,7 @@ gdkx_visual_get
 
 #if IN_FILE(__GDK_WINDOW_X11_C__)
 gdk_x11_window_set_user_time
+gdk_x11_window_move_to_current_desktop
 #endif
 
 #if IN_FILE(__GDK_XID_C__)

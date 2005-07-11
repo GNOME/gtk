@@ -2021,13 +2021,78 @@ gdk_window_lower (GdkWindow *window)
 }
 
 /**
+ * gdk_x11_window_move_to_current_desktop:
+ * @window: a #GdkWindow
+ * 
+ * Moves the window to the correct workspace when running under a 
+ * window manager that supports multiple workspaces, as described
+ * in the <ulink url="http://www.freedesktop.org/Standards/wm-spec">Extended 
+ * Window Manager Hints</ulink>.
+ * 
+ * Since: 2.8
+ */
+void
+gdk_x11_window_move_to_current_desktop (GdkWindow *window)
+{
+  if (gdk_x11_screen_supports_net_wm_hint (GDK_WINDOW_SCREEN (window),
+					   gdk_atom_intern ("_NET_WM_DESKTOP", FALSE)))
+    {
+      XEvent xev;
+      Atom type;
+      gint format;
+      gulong nitems;
+      gulong bytes_after;
+      guchar *data;
+      gulong *current_desktop;
+      GdkDisplay *display;
+      
+      display = gdk_drawable_get_display (window);
+
+      /* Get current desktop, then set it; this is a race, but not
+       * one that matters much in practice.
+       */
+      XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), 
+                          GDK_WINDOW_XROOTWIN (window),
+			  gdk_x11_get_xatom_by_name_for_display (display, "_NET_CURRENT_DESKTOP"),
+                          0, G_MAXLONG,
+                          False, XA_CARDINAL, &type, &format, &nitems,
+                          &bytes_after, &data);
+
+      if (type == XA_CARDINAL)
+        {
+	  current_desktop = (gulong *)data;
+	  
+          xev.xclient.type = ClientMessage;
+          xev.xclient.serial = 0;
+          xev.xclient.send_event = True;
+          xev.xclient.window = GDK_WINDOW_XWINDOW (window);
+	  xev.xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_DESKTOP");
+          xev.xclient.format = 32;
+
+          xev.xclient.data.l[0] = *current_desktop;
+          xev.xclient.data.l[1] = 0;
+          xev.xclient.data.l[2] = 0;
+          xev.xclient.data.l[3] = 0;
+          xev.xclient.data.l[4] = 0;
+      
+          XSendEvent (GDK_DISPLAY_XDISPLAY (display), 
+                      GDK_WINDOW_XROOTWIN (window), 
+                      False,
+                      SubstructureRedirectMask | SubstructureNotifyMask,
+                      &xev);
+
+          XFree (current_desktop);
+        }
+    }
+}
+
+/**
  * gdk_window_focus:
  * @window: a #GdkWindow
  * @timestamp: timestamp of the event triggering the window focus
  *
- * Sets keyboard focus to @window. If @window is not onscreen this
- * will not work. In most cases, gtk_window_present() should be used on
- * a #GtkWindow, rather than calling this function.
+ * Sets keyboard focus to @window. In most cases, gtk_window_present() 
+ * should be used on a #GtkWindow, rather than calling this function.
  * 
  **/
 void
@@ -5785,9 +5850,8 @@ emulate_move_drag (GdkWindow     *window,
  * Begins a window resize operation (for a toplevel window).
  * You might use this function to implement a "window resize grip," for
  * example; in fact #GtkStatusbar uses it. The function works best
- * with window managers that support the Extended Window Manager Hints spec
- * (see http://www.freedesktop.org), but has a fallback implementation
- * for other window managers.
+ * with window managers that support the <ulink url="http://www.freedesktop.org/Standards/wm-spec">Extended Window Manager Hints</ulink>, but has a 
+ * fallback implementation for other window managers.
  * 
  **/
 void
@@ -5821,8 +5885,8 @@ gdk_window_begin_resize_drag (GdkWindow     *window,
  * Begins a window move operation (for a toplevel window).  You might
  * use this function to implement a "window move grip," for
  * example. The function works best with window managers that support
- * the Extended Window Manager Hints spec (see
- * http://www.freedesktop.org), but has a fallback implementation for
+ * the <ulink url="http://www.freedesktop.org/Standards/wm-spec">Extended 
+ * Window Manager Hints</ulink>, but has a fallback implementation for
  * other window managers.
  * 
  **/
