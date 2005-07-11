@@ -1,3 +1,7 @@
+2005-07-11  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/gdk-sections.txt: Add new api.
+
 2005-07-10  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/tmpl/windows.sgml: Update links to the EWMH.  (#309910,
