@@ -1,3 +1,8 @@
+2005-07-11  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkiconview.c: Documentation improvements.  (#309946, 
+	Torsten Schoenfeld)
+
 2005-07-10  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_move_cursor_page_up_down): remove

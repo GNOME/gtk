@@ -4388,6 +4388,8 @@ gtk_icon_view_get_item_at_pos (GtkIconView      *icon_view,
  * Sets @start_path and @end_path to be the first and last visible path. 
  * Note that there may be invisible paths in between.
  * 
+ * Both paths should be freed with gtk_tree_path_free() after use.
+ * 
  * Return value: %TRUE, if valid paths were placed in @start_path and @end_path
  *
  * Since: 2.8
@@ -6639,7 +6641,7 @@ gtk_icon_view_create_drag_icon (GtkIconView *icon_view,
  *
  * Return value: %TRUE if the list can be reordered.
  *
- * Since: 3.8
+ * Since: 2.8
  **/
 gboolean
 gtk_icon_view_get_reorderable (GtkIconView *icon_view)
