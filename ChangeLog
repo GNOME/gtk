@@ -1,3 +1,9 @@
+2005-07-11  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktextview.c (gtk_text_view_move_cursor_internal): Don't
+	ever go unconditionally to the buffer ends; that doesn't work
+	if the initial or final portion of the buffer are invisible.
+
 2005-07-11  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_class_init): add binding entry

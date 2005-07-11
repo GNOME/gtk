@@ -1,4 +1,3 @@
-/* -*- Mode: C; tab-width: 8; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /* GTK - The GIMP Toolkit
  * gtktextview.c Copyright (C) 2000 Red Hat, Inc.
  *
@@ -4720,7 +4719,7 @@ gtk_text_view_move_cursor_internal (GtkTextView     *text_view,
       else if (count > 0) 
 	{
 	  if (!gtk_text_iter_forward_visible_word_ends (&newplace, count))
-	    gtk_text_iter_forward_to_end (&newplace);
+	    gtk_text_iter_forward_to_line_end (&newplace);
 	}
       break;
 
@@ -4730,15 +4729,14 @@ gtk_text_view_move_cursor_internal (GtkTextView     *text_view,
         if (gtk_text_view_move_iter_by_lines (text_view, &newplace, count))
           gtk_text_layout_move_iter_to_x (text_view->layout, &newplace, cursor_x_pos);
         else
-          /* we currently do not have a backward_to_start, use offset */
-          gtk_text_iter_set_offset (&newplace, 0);
+          gtk_text_iter_set_line_offset (&newplace, 0);
       }
       if (count > 0)
       {
         if (gtk_text_view_move_iter_by_lines (text_view, &newplace, count))
           gtk_text_layout_move_iter_to_x (text_view->layout, &newplace, cursor_x_pos);
         else
-          gtk_text_iter_forward_to_end (&newplace);
+          gtk_text_iter_forward_to_line_end (&newplace);
       }
       break;
 
@@ -4808,9 +4806,7 @@ gtk_text_view_move_cursor_internal (GtkTextView     *text_view,
                                                                     "insert"));
 
       if (step == GTK_MOVEMENT_DISPLAY_LINES)
-        {
-          gtk_text_view_set_virtual_cursor_pos (text_view, cursor_x_pos, -1);
-        }
+        gtk_text_view_set_virtual_cursor_pos (text_view, cursor_x_pos, -1);
     }
 
   gtk_text_view_pend_cursor_blink (text_view);
