@@ -1,5 +1,9 @@
 2005-07-11  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktextview.c (extend_selection): Make double-clicking
+	between words select whitespace.  (#309860, Mike Miller, patch
+	by Paolo Borelli)
+
 	* gtk/gtkiconview.c: Documentation improvements.  (#309946, 
 	Torsten Schoenfeld)
 

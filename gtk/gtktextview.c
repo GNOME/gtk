@@ -5520,17 +5520,17 @@ typedef enum
 
 /*
  * Move @start and @end to the boundaries of the selection unit (indicated by 
- * @granularity) which contained @start initially. Return whether @start was
- * contained in a selection unit at all (which may not be the case for words).
+ * @granularity) which contained @start initially.
+ * If the selction unit is SELECT_WORDS and @start is not contained in a word
+ * the selection is extended to all the white spaces between the end of the 
+ * word preceding @start and the start of the one following.
  */
-static gboolean 
+static void
 extend_selection (GtkTextView *text_view, 
 		  SelectionGranularity granularity, 
 		  GtkTextIter *start, 
 		  GtkTextIter *end)
 {
-  gboolean extend = TRUE;
-
   *end = *start;
 
   if (granularity == SELECT_WORDS) 
@@ -5547,7 +5547,30 @@ extend_selection (GtkTextView *text_view,
 	    }
 	}
       else
-	extend = FALSE;
+	{
+	  GtkTextIter tmp;
+
+	  tmp = *start;
+	  if (gtk_text_iter_backward_visible_word_start (&tmp))
+	    gtk_text_iter_forward_visible_word_end (&tmp);
+
+	  if (gtk_text_iter_get_line (&tmp) == gtk_text_iter_get_line (start))
+	    *start = tmp;
+	  else
+	    gtk_text_iter_set_line_offset (start, 0);
+
+	  tmp = *end;
+	  if (!gtk_text_iter_forward_visible_word_end (&tmp))
+	    gtk_text_iter_forward_to_end (&tmp);
+
+	  if (gtk_text_iter_ends_word (&tmp))
+	    gtk_text_iter_backward_visible_word_start (&tmp);
+
+	  if (gtk_text_iter_get_line (&tmp) == gtk_text_iter_get_line (end))
+	    *end = tmp;
+	  else
+	    gtk_text_iter_forward_to_line_end (end);
+	}
     }
   else if (granularity == SELECT_LINES) 
     {
@@ -5570,8 +5593,6 @@ extend_selection (GtkTextView *text_view,
 	    gtk_text_view_forward_display_line_end (text_view, end);
 	}
     }
-  
-  return extend;
 }
  
 static gint
@@ -5602,63 +5623,59 @@ selection_motion_event_handler (GtkTextView *text_view, GdkEventMotion *event, g
 					 event->x + text_view->xoffset,
 					 event->y + text_view->yoffset); 
       
-      if (extend_selection (text_view, granularity, &start, &end)) 
-	{
-	  /* Extend selection */
-	  gtk_text_buffer_get_iter_at_mark (buffer, 
-					    &ins, 
-					    gtk_text_buffer_get_insert (buffer));
-	  gtk_text_buffer_get_iter_at_mark (buffer, 
+      extend_selection (text_view, granularity, &start, &end);
+
+      /* Extend selection */
+      gtk_text_buffer_get_iter_at_mark (buffer, 
+					&ins, 
+					gtk_text_buffer_get_insert (buffer));
+      gtk_text_buffer_get_iter_at_mark (buffer, 
 					    &bound,
 					    gtk_text_buffer_get_selection_bound (buffer));
 
-	  if (gtk_text_iter_compare (&ins, &bound) < 0) 
-	    {
-	      old_start = ins;
-	      old_end = bound;
-	    }
-	  else
-	    {
-	      old_start = bound;
-	      old_end = ins;
-	    }
-
-	  if (gtk_text_iter_compare (&start, &old_start) < 0) 
-	    {
-	      /* newly selected unit before the current selection */
-	      ins = start;
-	      bound = old_end;
-	    }
-	  else if (gtk_text_iter_compare (&old_end, &end) < 0)
-	    {
-	      /* newly selected unit after the current selection */
-	      ins = end;
-	      bound = old_start;
-	    }
-	  else if (gtk_text_iter_equal (&ins, &old_start)) 
-	    {
-	      /* newly selected unit inside the current selection 
-		 at the start */
-	      if (!gtk_text_iter_equal (&ins, &start)) 
-		ins = end;
-	    }
-	  else
-	    {
-	      /* newly selected unit inside the current selection 
-		 at the end */
-	      if (!gtk_text_iter_equal (&ins, &end)) 
-		  ins = start;
-	    }
-
-	  gtk_text_buffer_select_range (buffer, &ins, &bound);
+      if (gtk_text_iter_compare (&ins, &bound) < 0) 
+	{
+	  old_start = ins;
+	  old_end = bound;
 	}
+      else
+	{
+	  old_start = bound;
+	  old_end = ins;
+	}
+
+      if (gtk_text_iter_compare (&start, &old_start) < 0) 
+	{
+	  /* newly selected unit before the current selection */
+	  ins = start;
+	  bound = old_end;
+	}
+      else if (gtk_text_iter_compare (&old_end, &end) < 0)
+	{
+	  /* newly selected unit after the current selection */
+	  ins = end;
+	  bound = old_start;
+	}
+      else if (gtk_text_iter_equal (&ins, &old_start)) 
+	{
+	  /* newly selected unit inside the current selection at the start */
+	  if (!gtk_text_iter_equal (&ins, &start))
+	    ins = end;
+	}
+      else
+	{
+	  /* newly selected unit inside the current selection at the end */
+	  if (!gtk_text_iter_equal (&ins, &end))
+	    ins = start;
+	}
+
+      gtk_text_buffer_select_range (buffer, &ins, &bound);
 
       gtk_text_view_scroll_mark_onscreen (text_view, 
 					  gtk_text_buffer_get_mark (buffer,
 								    "insert"));
     }
 
-  
   /* If we had to scroll offscreen, insert a timeout to do so
    * again. Note that in the timeout, even if the mouse doesn't
    * move, due to this scroll xoffset/yoffset will have changed
