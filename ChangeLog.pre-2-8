@@ -1,5 +1,10 @@
 2005-07-11  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktexttag.c (gtk_text_tag_class_init) 
+	(gtk_text_tag_set_property): Remove the runtime warning about 
+	the invisible property, add a warning about possible remaining
+	problems to the documentation of the property.  (#66194)
+
 	* gtk/gtktextview.c (gtk_text_view_move_cursor_internal): Don't
 	ever go unconditionally to the buffer ends; that doesn't work
 	if the initial or final portion of the buffer are invisible.

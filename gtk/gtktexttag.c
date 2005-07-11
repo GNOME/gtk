@@ -498,11 +498,22 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                        PANGO_TYPE_TAB_ARRAY,
                                                        GTK_PARAM_READWRITE));
   
+  /**
+   * GtkTextTag:invisible:
+   *
+   * Whether this text is hidden.
+   *
+   * Note that there may still be problems with the support for invisible 
+   * text, in particular when navigating programmatically inside a buffer
+   * containing invisible segments. 
+   *
+   * Since: 2.8
+   */
   g_object_class_install_property (object_class,
                                    PROP_INVISIBLE,
                                    g_param_spec_boolean ("invisible",
                                                          P_("Invisible"),
-                                                         P_("Whether this text is hidden. Not implemented in GTK 2.0"),
+                                                         P_("Whether this text is hidden."),
                                                          FALSE,
                                                          GTK_PARAM_READWRITE));
 
@@ -1256,7 +1267,6 @@ gtk_text_tag_set_property (GObject      *object,
       break;
 
     case PROP_INVISIBLE:
-      g_warning ("The \"invisible\" property on GtkTextTag is not supported for GTK 2.0, it will be added in a future release. see http://bugzilla.gnome.org bug #66194 for status.");
       text_tag->invisible_set = TRUE;
       text_tag->values->invisible = g_value_get_boolean (value);
       g_object_notify (object, "invisible-set");
