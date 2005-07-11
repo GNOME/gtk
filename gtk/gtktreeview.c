@@ -1131,6 +1131,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 				G_TYPE_BOOLEAN, TRUE);
 
   gtk_binding_entry_add_signal (binding_set, GDK_BackSpace, 0, "select_cursor_parent", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_BackSpace, GDK_CONTROL_MASK, "select_cursor_parent", 0);
 
   gtk_binding_entry_add_signal (binding_set, GDK_f, GDK_CONTROL_MASK, "start_interactive_search", 0);
 
@@ -8960,6 +8961,7 @@ gtk_tree_view_real_select_cursor_parent (GtkTreeView *tree_view)
   GtkRBTree *cursor_tree = NULL;
   GtkRBNode *cursor_node = NULL;
   GtkTreePath *cursor_path = NULL;
+  GdkModifierType state;
 
   if (! GTK_WIDGET_HAS_FOCUS (tree_view))
     return FALSE;
@@ -8979,6 +8981,12 @@ gtk_tree_view_real_select_cursor_parent (GtkTreeView *tree_view)
       return FALSE;
     }
 
+  if (gtk_get_current_event_state (&state))
+    {
+      if ((state & GDK_CONTROL_MASK) == GDK_CONTROL_MASK)
+        tree_view->priv->ctrl_pressed = TRUE;
+    }
+
   if (cursor_tree->parent_node)
     {
       gtk_tree_view_queue_draw_path (tree_view, cursor_path, NULL);
@@ -8986,14 +8994,8 @@ gtk_tree_view_real_select_cursor_parent (GtkTreeView *tree_view)
       cursor_tree = cursor_tree->parent_tree;
 
       gtk_tree_path_up (cursor_path);
-      gtk_tree_row_reference_free (tree_view->priv->cursor);
-      tree_view->priv->cursor = gtk_tree_row_reference_new_proxy (G_OBJECT (tree_view), tree_view->priv->model, cursor_path);
-      _gtk_tree_selection_internal_select_node (tree_view->priv->selection,
-						cursor_node,
-						cursor_tree,
-						cursor_path,
-                                                0,
-						FALSE);
+
+      gtk_tree_view_real_set_cursor (tree_view, cursor_path, TRUE, FALSE);
     }
 
   gtk_tree_view_clamp_node_visible (tree_view, cursor_tree, cursor_node);
@@ -9001,6 +9003,8 @@ gtk_tree_view_real_select_cursor_parent (GtkTreeView *tree_view)
   gtk_widget_grab_focus (GTK_WIDGET (tree_view));
   gtk_tree_view_queue_draw_path (tree_view, cursor_path, NULL);
   gtk_tree_path_free (cursor_path);
+
+  tree_view->priv->ctrl_pressed = FALSE;
 
   return TRUE;
 }

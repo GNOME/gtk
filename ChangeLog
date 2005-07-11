@@ -1,3 +1,11 @@
+2005-07-11  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_class_init): add binding entry
+	for ctrl + backspace (move focus to parent without affecting
+	selection),
+	(gtk_tree_view_real_select_cursor_parent): implement ctrl+backspace
+	and simplify the function a bit. (#309296, Kathy Fernandes).
+
 2005-07-11  Matthias Clasen  <mclasen@redhat.com>
 
 	Make gdk_window_present() move the window to the current
