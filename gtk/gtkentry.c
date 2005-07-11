@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /* GTK - The GIMP Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
@@ -1649,6 +1650,49 @@ gtk_entry_button_release (GtkWidget      *widget,
   return TRUE;
 }
 
+static gchar *
+_gtk_entry_get_selected_text (GtkEntry *entry)
+{
+  GtkEditable *editable = GTK_EDITABLE (entry);
+  gint         start_text, end_text;
+  gchar       *text = NULL;
+
+  if (gtk_editable_get_selection_bounds (editable, &start_text, &end_text))
+    text = gtk_editable_get_chars (editable, start_text, end_text);
+
+  return text;
+}
+
+static void
+drag_begin_cb (GtkWidget      *widget,
+               GdkDragContext *context,
+               gpointer        data)
+{
+  GtkEntry *entry;
+  gchar *text;
+  GdkPixmap *pixmap = NULL;
+
+  g_signal_handlers_disconnect_by_func (widget, drag_begin_cb, NULL);
+
+  entry = GTK_ENTRY (widget);
+
+  text = _gtk_entry_get_selected_text (entry);
+  pixmap = _gtk_text_util_create_drag_icon (widget, text, -1);
+
+  if (entry->visible && pixmap)
+    gtk_drag_set_icon_pixmap (context,
+                              gdk_drawable_get_colormap (pixmap),
+                              pixmap,
+                              NULL,
+                              -2, -2);
+  else
+    gtk_drag_set_icon_default (context);
+  
+  if (pixmap)
+    g_object_unref (pixmap);
+  g_free (text);
+}
+
 static gint
 gtk_entry_motion_notify (GtkWidget      *widget,
 			 GdkEventMotion *event)
@@ -1678,25 +1722,25 @@ gtk_entry_motion_notify (GtkWidget      *widget,
   if (entry->in_drag)
     {
       if (gtk_drag_check_threshold (widget,
-				    entry->drag_start_x, entry->drag_start_y,
-				    event->x + entry->scroll_offset, event->y))
-	{
-	  GdkDragContext *context;
-	  GtkTargetList *target_list = gtk_target_list_new (NULL, 0);
-	  guint actions = entry->editable ? GDK_ACTION_COPY | GDK_ACTION_MOVE : GDK_ACTION_COPY;
+                                    entry->drag_start_x, entry->drag_start_y,
+                                    event->x + entry->scroll_offset, event->y))
+        {
+          GdkDragContext *context;
+          GtkTargetList  *target_list = gtk_target_list_new (NULL, 0);
+          guint actions = entry->editable ? GDK_ACTION_COPY | GDK_ACTION_MOVE : GDK_ACTION_COPY;
 
-	  gtk_target_list_add_text_targets (target_list, 0);
+          gtk_target_list_add_text_targets (target_list, 0);
 
-	  context = gtk_drag_begin (widget, target_list, actions,
-			  entry->button, (GdkEvent *)event);
+          g_signal_connect (widget, "drag-begin", 
+                            G_CALLBACK (drag_begin_cb), NULL);
+          context = gtk_drag_begin (widget, target_list, actions,
+                                    entry->button, (GdkEvent *)event);
 
+          entry->in_drag = FALSE;
+          entry->button = 0;
 	  
-	  entry->in_drag = FALSE;
-	  entry->button = 0;
-	  
-	  gtk_target_list_unref (target_list);
-	  gtk_drag_set_icon_default (context);
-	}
+          gtk_target_list_unref (target_list);
+        }
     }
   else
     {
@@ -3549,9 +3593,9 @@ gtk_entry_move_forward_word (GtkEntry *entry,
 
       pango_layout_get_log_attrs (layout, &log_attrs, &n_attrs);
       
-      /* Find the next word end */
+      /* Find the next word boundary */
       new_pos++;
-      while (new_pos < n_attrs && !log_attrs[new_pos].is_word_end)
+      while (new_pos < n_attrs && !(log_attrs[new_pos].is_word_start || log_attrs[new_pos].is_word_end))
 	new_pos++;
 
       g_free (log_attrs);
@@ -3582,8 +3626,8 @@ gtk_entry_move_backward_word (GtkEntry *entry,
 
       new_pos = start - 1;
 
-      /* Find the previous word beginning */
-      while (new_pos > 0 && !log_attrs[new_pos].is_word_start)
+      /* Find the previous word boundary */
+      while (new_pos > 0 && !(log_attrs[new_pos].is_word_start || log_attrs[new_pos].is_word_end))
 	new_pos--;
 
       g_free (log_attrs);

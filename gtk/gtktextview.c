@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /* GTK - The GIMP Toolkit
  * gtktextview.c Copyright (C) 2000 Red Hat, Inc.
  *
@@ -5977,9 +5978,54 @@ gtk_text_view_reset_im_context (GtkTextView *text_view)
     }
 }
 
+static gchar*
+_gtk_text_view_get_selected_text (GtkTextView *text_view)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter    start, end;
+  gchar         *text = NULL;
+
+  buffer = gtk_text_view_get_buffer (text_view);
+
+  if (gtk_text_buffer_get_selection_bounds (buffer, &start, &end))
+    text = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
+
+  return text;
+}
+
 /*
  * DND feature
  */
+
+static void
+drag_begin_cb (GtkWidget      *widget,
+               GdkDragContext *context,
+               gpointer        data)
+{
+  GtkTextView *text_view;
+  gchar *text;
+  GdkPixmap *pixmap = NULL;
+
+  g_signal_handlers_disconnect_by_func (widget, drag_begin_cb, NULL);
+
+  text_view = GTK_TEXT_VIEW (widget);
+
+  text   = _gtk_text_view_get_selected_text (text_view);
+  pixmap = _gtk_text_util_create_drag_icon (widget, text, -1);
+
+  if (pixmap)
+    gtk_drag_set_icon_pixmap (context,
+                              gdk_drawable_get_colormap (pixmap),
+                              pixmap,
+                              NULL,
+                              -2, -2);
+  else
+    gtk_drag_set_icon_default (context);
+  
+  if (pixmap)
+    g_object_unref (pixmap);
+  g_free (text);
+}
 
 static void
 gtk_text_view_start_selection_dnd (GtkTextView       *text_view,
@@ -5987,7 +6033,7 @@ gtk_text_view_start_selection_dnd (GtkTextView       *text_view,
                                    GdkEventMotion    *event)
 {
   GdkDragContext *context;
-  GtkTargetList *target_list;
+  GtkTargetList  *target_list;
 
   text_view->drag_start_x = -1;
   text_view->drag_start_y = -1;
@@ -5997,13 +6043,13 @@ gtk_text_view_start_selection_dnd (GtkTextView       *text_view,
                                      G_N_ELEMENTS (target_table));
   gtk_target_list_add_text_targets (target_list, 0);
 
+  g_signal_connect (text_view, "drag-begin", 
+                    G_CALLBACK (drag_begin_cb), NULL);
   context = gtk_drag_begin (GTK_WIDGET (text_view), target_list,
                             GDK_ACTION_COPY | GDK_ACTION_MOVE,
                             1, (GdkEvent*)event);
 
   gtk_target_list_unref (target_list);
-
-  gtk_drag_set_icon_default (context);
 }
 
 static void

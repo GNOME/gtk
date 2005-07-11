@@ -37,6 +37,7 @@
 #include "gtkimagemenuitem.h"
 #include "gtkintl.h"
 #include "gtkseparatormenuitem.h"
+#include "gtktextutil.h"
 #include "gtkmenuitem.h"
 #include "gtknotebook.h"
 #include "gtkstock.h"
@@ -2832,6 +2833,56 @@ gtk_label_button_release (GtkWidget      *widget,
   return TRUE;
 }
 
+static void
+drag_begin_cb (GtkWidget      *widget,
+               GdkDragContext *context,
+               gpointer        data)
+{
+  GtkLabel *label;
+  GdkPixmap *pixmap = NULL;
+
+  g_signal_handlers_disconnect_by_func (widget, drag_begin_cb, NULL);
+
+  label = GTK_LABEL (widget);
+
+  if ((label->select_info->selection_anchor !=
+       label->select_info->selection_end) &&
+      label->text)
+    {
+      gint start, end;
+      gint len;
+      
+      start = MIN (label->select_info->selection_anchor,
+                   label->select_info->selection_end);
+      end = MAX (label->select_info->selection_anchor,
+                 label->select_info->selection_end);
+      
+      len = strlen (label->text);
+      
+      if (end > len)
+        end = len;
+      
+      if (start > len)
+        start = len;
+      
+      pixmap = _gtk_text_util_create_drag_icon (widget, 
+						label->text + start,
+						end - start);
+    }
+
+  if (pixmap)
+    gtk_drag_set_icon_pixmap (context,
+                              gdk_drawable_get_colormap (pixmap),
+                              pixmap,
+                              NULL,
+                              -2, -2);
+  else
+    gtk_drag_set_icon_default (context);
+  
+  if (pixmap)
+    g_object_unref (pixmap);
+}
+
 static gboolean
 gtk_label_motion (GtkWidget      *widget,
                   GdkEventMotion *event)
@@ -2863,16 +2914,16 @@ gtk_label_motion (GtkWidget      *widget,
 	  GtkTargetList *target_list = gtk_target_list_new (NULL, 0);
 
 	  gtk_target_list_add_text_targets (target_list, 0);
-
+	  
+          g_signal_connect (widget, "drag-begin", 
+                            G_CALLBACK (drag_begin_cb), NULL);
 	  context = gtk_drag_begin (widget, target_list, 
 				    GDK_ACTION_COPY,
 				    1, (GdkEvent *)event);
-
 	  
 	  label->select_info->in_drag = FALSE;
 	  
 	  gtk_target_list_unref (target_list);
-	  gtk_drag_set_icon_default (context);
 	}
     }
   else

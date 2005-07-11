@@ -1,5 +1,24 @@
 2005-07-11  Matthias Clasen  <mclasen@redhat.com>
 
+	When dragging text, use a drag icon showing the (ellipsized)
+	text that is being dragged: (#161132, Kevin Duffus, patch
+	by Carlos Garnacho Parro)
+	
+	* gtk/gtktextutil.h: 
+	* gtk/gtktextutil.c (_gtk_text_util_create_drag_icon): Add
+	a function to create a pixmap for use when dragging text.
+
+	* gtk/gtktextview.c (gtk_text_view_start_selection_dnd): 
+	* gtk/gtklabel.c (gtk_label_motion): 
+	* gtk/gtkentry.c (gtk_entry_motion_notify): Use a drag icon
+	showing the text being dragged.  
+
+2005-07-11  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_move_forward_word) 
+	(gtk_entry_move_backward_word): Match the text view change
+	to allow selecting whitespace with double-click.
+
 	* gtk/gtktextview.c (extend_selection): Make double-clicking
 	between words select whitespace.  (#309860, Mike Miller, patch
 	by Paolo Borelli)
