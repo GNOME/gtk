@@ -76,5 +76,3 @@ libgdk_win32_la_SOURCES = \
 
 libgdkinclude_HEADERS =		\
 	gdkwin32.h
-
-libgdk_win32_la_LIBADD = rc/gdk-win32res.lo
