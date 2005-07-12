@@ -1,5 +1,9 @@
 2005-07-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* demos/gtk-demo/geninclude.pl.in: Accept dashes in demo titles.
+
+2005-07-12  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/theme-bits/decompose-bits.c: 
 	* gtk/gtkfilechooserembed.c: 
 	* gtk/gtktextmarkprivate.h: 

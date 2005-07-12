@@ -35,7 +35,7 @@ for $file (@ARGV) {
 
 # generate a list of 'parent names'
 foreach $href (@demos) {
-    if ($href->{"title"} =~ m|^([\w\s]+)/[\w\s]+$|) {
+    if ($href->{"title"} =~ m|^([-\w\s]+)/[-\w\s]+$|) {
 	my $parent_name = $1;
 	my $do_next = 0;
 
@@ -77,7 +77,7 @@ if (defined @parents) {
 		next;
 	    }
 	    
-	    if ($demos[$j]{"title"} =~ m|^$parents[$i]/([\w\s]+)$|) {
+	    if ($demos[$j]{"title"} =~ m|^$parents[$i]/([-\w\s]+)$|) {
 		if ($first) {
 		    $first = 0;
 		} else {
