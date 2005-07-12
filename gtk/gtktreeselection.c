@@ -620,7 +620,7 @@ gtk_tree_selection_selected_foreach (GtkTreeSelection            *selection,
   GtkTreeIter iter;
 
   guint inserted_id, deleted_id, reordered_id;
-  gboolean stop = FALSE, has_next = TRUE, has_parent = TRUE;
+  gboolean stop = FALSE;
 
   g_return_if_fail (GTK_IS_TREE_SELECTION (selection));
   g_return_if_fail (selection->tree_view != NULL);
@@ -665,59 +665,46 @@ gtk_tree_selection_selected_foreach (GtkTreeSelection            *selection,
 
   /* find the node internally */
   path = gtk_tree_path_new_first ();
-  gtk_tree_model_get_iter (selection->tree_view->priv->model,
-			   &iter, path);
 
   do
     {
       if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED))
-	(* func) (selection->tree_view->priv->model, path, &iter, data);
+        {
+          gtk_tree_model_get_iter (selection->tree_view->priv->model,
+                                   &iter, path);
+	  (* func) (selection->tree_view->priv->model, path, &iter, data);
+        }
 
       if (stop)
 	goto out;
 
       if (node->children)
 	{
-	  gboolean has_child;
-	  GtkTreeIter tmp;
-
 	  tree = node->children;
 	  node = tree->root;
+
 	  while (node->left != tree->nil)
 	    node = node->left;
-	  tmp = iter;
-	  has_child = gtk_tree_model_iter_children (selection->tree_view->priv->model, &iter, &tmp);
-	  gtk_tree_path_append_index (path, 0);
 
-	  /* we do the sanity check at the bottom of this function */
-	  if (!has_child)
-	    goto out;
+	  gtk_tree_path_append_index (path, 0);
 	}
       else
 	{
 	  gboolean done = FALSE;
+
 	  do
 	    {
 	      node = _gtk_rbtree_next (tree, node);
 	      if (node != NULL)
 		{
-		  gboolean has_next;
-
-		  has_next = gtk_tree_model_iter_next (selection->tree_view->priv->model, &iter);
 		  done = TRUE;
 		  gtk_tree_path_next (path);
-
-		  /* we do the sanity check at the bottom of this function */
-		  if (!has_next)
-		    goto out;
 		}
 	      else
 		{
-		  gboolean has_parent;
-		  GtkTreeIter tmp_iter = iter;
-
 		  node = tree->parent_node;
 		  tree = tree->parent_tree;
+
 		  if (tree == NULL)
 		    {
 		      /* we've run out of tree */
@@ -726,12 +713,7 @@ gtk_tree_selection_selected_foreach (GtkTreeSelection            *selection,
 		      goto out;
 		    }
 
-		  has_parent = gtk_tree_model_iter_parent (selection->tree_view->priv->model, &iter, &tmp_iter);
 		  gtk_tree_path_up (path);
-
-		  /* we do the sanity check at the bottom of this function */
-		  if (!has_parent)
-		    goto out;
 		}
 	    }
 	  while (!done);
@@ -751,10 +733,6 @@ out:
                                reordered_id);
 
   /* check if we have to spew a scary message */
-  if (!has_next)
-    TREE_VIEW_INTERNAL_ASSERT_VOID (has_next);
-  if (!has_parent)
-    TREE_VIEW_INTERNAL_ASSERT_VOID (has_parent);
   if (stop)
     g_warning
       ("The model has been modified from within gtk_tree_selection_selected_foreach.\n"

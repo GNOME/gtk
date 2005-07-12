@@ -1,3 +1,12 @@
+2005-07-13  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeselection.c (gtk_tree_selection_selected_foreach): quit
+	maintaining the iter on every iteration, only get the iter when
+	we are about to call the foreach_func. Gives us a 10x speedup,
+	since maintaining iters is a lot more expensive than maintaining
+	paths. We lose a bit of sanity checking though. Thanks go to
+	Billy Biggs for pointing this out.
+
 2005-07-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* tests/testcairo.c (draw): Fix the same confusion here, too.
