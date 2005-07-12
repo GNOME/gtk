@@ -1045,7 +1045,7 @@ make_stipple_tile_surface (cairo_t   *cr,
   alpha_surface = _gdk_drawable_ref_cairo_surface (stipple);
   
   surface = cairo_surface_create_similar (cairo_get_target (cr),
-					  CAIRO_FORMAT_ARGB32,
+					  CAIRO_CONTENT_COLOR_ALPHA,
 					  width, height);
 
   tmp_cr = cairo_create (surface);

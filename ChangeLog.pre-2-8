@@ -1,5 +1,9 @@
 2005-07-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/gdkgc.c (make_stipple_tile_surface): Fix 
+	cairo_content_t <-> cairo_format_t confusion.  (#310086,
+	Carlos Garnacho Parro)
+
 	* gtk/gtkfilesystemunix.c 
 	(gtk_file_system_unix_volume_get_display_name): Follow
 	the Nautilus change and rename "Filesystem" to "File System",
