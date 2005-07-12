@@ -1,5 +1,12 @@
 2005-07-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/theme-bits/decompose-bits.c: 
+	* gtk/gtkfilechooserembed.c: 
+	* gtk/gtktextmarkprivate.h: 
+	* gtk/gtktexttagtable.h: 
+	* gtk/gtktexttagtable.c: 
+	* gtk/gtkrc.key.emacs: Add Copyright/License information.
+
 	* gdk/linux-fb/gdkrender-fb.c: 
 	* gdk/linux-fb/gdkpango-fb.c: 
 	* gdk/linux-fb/gdkdrawable-fb2.c: 
