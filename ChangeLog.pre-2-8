@@ -1,5 +1,7 @@
 2005-07-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* tests/testcairo.c (draw): Fix the same confusion here, too.
+
 	* gdk/gdkgc.c (make_stipple_tile_surface): Fix 
 	cairo_content_t <-> cairo_format_t confusion.  (#310086,
 	Carlos Garnacho Parro)
