@@ -1,5 +1,11 @@
 2005-07-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/linux-fb/gdkrender-fb.c: 
+	* gdk/linux-fb/gdkpango-fb.c: 
+	* gdk/linux-fb/gdkdrawable-fb2.c: 
+	* gdk/linux-fb/gdkgc-fb.c: 
+	* gdk/linux-fb/gdkfbswitch.c: Add Copyright/License information.
+
 	* gdk/gdkwindow.h: 
 	* gdk/gdkvisual.h: 
 	* gdk/gdkselection.h: 
