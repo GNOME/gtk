@@ -636,7 +636,7 @@ static gchar *
 gtk_file_system_unix_volume_get_display_name (GtkFileSystem       *file_system,
 					      GtkFileSystemVolume *volume)
 {
-  return g_strdup (_("Filesystem")); /* Same as Nautilus */
+  return g_strdup (_("File System")); /* Same as Nautilus */
 }
 
 static IconType

@@ -1,5 +1,12 @@
 2005-07-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilesystemunix.c 
+	(gtk_file_system_unix_volume_get_display_name): Follow
+	the Nautilus change and rename "Filesystem" to "File System",
+	string change.  (#310047, Vincent Noel)
+	
+2005-07-12  Matthias Clasen  <mclasen@redhat.com>
+
 	* demos/gtk-demo/iconview.c: Rename this demo.
 
 	* demos/gtk-demo/iconview_edit.c: Add a demo for icon view
