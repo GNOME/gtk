@@ -141,7 +141,7 @@ draw (cairo_t *cr,
     return;
 
   circles = cairo_surface_create_similar (cairo_get_target (cr),
-					  CAIRO_FORMAT_COLOR_ALPHA,
+					  CAIRO_CONTENT_COLOR_ALPHA,
 					  width, height);
   if (circles == NULL)
     return;
