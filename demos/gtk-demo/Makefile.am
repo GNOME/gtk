@@ -18,6 +18,7 @@ demos =						\
 	expander.c  				\
 	hypertext.c				\
 	iconview.c				\
+	iconview_edit.c				\
 	images.c				\
 	list_store.c				\
 	menus.c					\

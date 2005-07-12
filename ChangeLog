@@ -1,5 +1,10 @@
 2005-07-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* demos/gtk-demo/iconview.c: Rename this demo.
+
+	* demos/gtk-demo/iconview_edit.c: Add a demo for icon view
+	editing and drag-and-drop.
+
 	* demos/gtk-demo/geninclude.pl.in: Accept dashes in demo titles.
 
 2005-07-12  Matthias Clasen  <mclasen@redhat.com>

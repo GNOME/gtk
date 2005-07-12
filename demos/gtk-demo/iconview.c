@@ -1,8 +1,8 @@
-/* Icon View
+/* Icon View/Icon View Basics
  *
- * The GtkIconView widget is used to display and manipulate icons.  It
- * uses a GtkTreeModel for data storage, so the list store example
- * might be helpful.
+ * The GtkIconView widget is used to display and manipulate icons.  
+ * It uses a GtkTreeModel for data storage, so the list store 
+ * example might be helpful.
  */
 
 #include <gtk/gtk.h>
@@ -147,7 +147,7 @@ sort_func (GtkTreeModel *model,
   return ret;
 }
 
-GtkListStore *
+static GtkListStore *
 create_store (void)
 {
   GtkListStore *store;
