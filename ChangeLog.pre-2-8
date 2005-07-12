@@ -1,3 +1,24 @@
+2005-07-12  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/gdkwindow.h: 
+	* gdk/gdkvisual.h: 
+	* gdk/gdkselection.h: 
+	* gdk/gdkselection.c: 
+	* gdk/gdkregion.h: 
+	* gdk/gdkproperty.h: 
+	* gdk/gdkpixmap.h: 
+	* gdk/gdkpixbuf.h: 
+	* gdk/gdkkeyuni.c: 
+	* gdk/gdkintl.h: 
+	* gdk/gdkinput.h: 
+	* gdk/gdkimage.h: 
+	* gdk/gdkgc.h: 
+	* gdk/gdkfont.h: 
+	* gdk/gdkevents.h: 
+	* gdk/gdkdnd.h: 
+	* gdk/gdkcursor.h: 
+	* gdk/gdkcolor.h: Add Copyright/License information.
+
 2005-07-11  Matthias Clasen  <mclasen@redhat.com>
 
 	* modules/input/imm-extra.h: Add Copyright/License information.
