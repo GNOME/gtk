@@ -1,5 +1,9 @@
 2005-07-11  Matthias Clasen  <mclasen@redhat.com>
 
+	* modules/input/imm-extra.h: Add Copyright/License information.
+
+2005-07-11  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtktexttag.c (gtk_text_tag_class_init) 
 	(gtk_text_tag_set_property): Remove the runtime warning about 
 	the invisible property, add a warning about possible remaining

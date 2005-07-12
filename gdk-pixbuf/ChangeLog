@@ -1,3 +1,8 @@
+2005-07-12  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk-pixbuf-i18n.h: 
+	* pixops/*: Add copyright and license information.
+
 2005-07-09  Tor Lillqvist  <tml@novell.com>
 
 	* Makefile.am: Don't use the scripts in build/win32 to compile the
