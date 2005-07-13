@@ -34,6 +34,7 @@ m4_define([gtk_binary_version], [2.4.0])
 m4_define([glib_required_version], [2.7.1])
 m4_define([pango_required_version], [1.9.0])
 m4_define([atk_required_version], [1.0.1])
+m4_define([cairo_required_version], [0.5.1-head])
 
 
 AC_INIT([gtk+], [gtk_version],
@@ -344,7 +345,8 @@ ACLOCAL="$ACLOCAL $ACLOCAL_FLAGS"
 PKG_CHECK_MODULES(BASE_DEPENDENCIES,
   [glib-2.0 >= glib_required_version dnl
    atk >= atk_required_version dnl
-   pango >= pango_required_version])
+   pango >= pango_required_version dnl
+   cairo >= cairo_required_version])
 
 if test "$os_win32" != yes; then
     # libtool option to control which symbols are exported

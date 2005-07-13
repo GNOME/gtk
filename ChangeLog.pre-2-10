@@ -1,3 +1,7 @@
+2005-07-13  Matthias Clasen  <mclasen@redhat.com>
+
+	* configure.in: Check that we have a new enough Cairo.
+
 2005-07-13  Robert Ögren  <gtk@roboros.com>
 
 	Fix handling of Aiptek and Aiptek-like graphical tablets such as Trust
