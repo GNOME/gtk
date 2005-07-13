@@ -1,3 +1,7 @@
+2005-07-13  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/win32/bdfcursor.c: Add Copyright/License information.
+	
 2005-07-13  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (validate_row): when !separator, don't add
