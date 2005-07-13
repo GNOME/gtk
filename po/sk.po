@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-09 00:14+0200\n"
-"PO-Revision-Date: 2005-07-09 00:15+0200\n"
+"POT-Creation-Date: 2005-07-13 07:04+0200\n"
+"PO-Revision-Date: 2005-07-13 07:05+0200\n"
 "Last-Translator: Marcel Telka <marcel@telka.sk>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
 "MIME-Version: 1.0\n"
@@ -1268,15 +1268,15 @@ msgstr "Farebné koleso"
 msgid "Color Selection"
 msgstr "Výber farby"
 
-#: ../gtk/gtkentry.c:4508 ../gtk/gtktextview.c:7066
+#: ../gtk/gtkentry.c:4552 ../gtk/gtktextview.c:7125
 msgid "Select _All"
 msgstr "Vybrať _všetko"
 
-#: ../gtk/gtkentry.c:4518 ../gtk/gtktextview.c:7076
+#: ../gtk/gtkentry.c:4562 ../gtk/gtktextview.c:7135
 msgid "Input _Methods"
 msgstr "_Metódy vstupu"
 
-#: ../gtk/gtkentry.c:4529 ../gtk/gtktextview.c:7087
+#: ../gtk/gtkentry.c:4573 ../gtk/gtktextview.c:7146
 msgid "_Insert Unicode Control Character"
 msgstr "_Vložiť ovládací znak Unicode"
 
@@ -1409,8 +1409,7 @@ msgstr "Nepodarilo sa vybrať súbor"
 #: ../gtk/gtkfilechooserdefault.c:3368
 #, c-format
 msgid "Could not select file '%s' because it is an invalid path name."
-msgstr ""
-"Nepodarilo sa vybrať súbor '%s', pretože je to neplatné meno cesty."
+msgstr "Nepodarilo sa vybrať súbor '%s', pretože je to neplatné meno cesty."
 
 #: ../gtk/gtkfilechooserdefault.c:3440
 msgid "_Add to Bookmarks"
@@ -1745,7 +1744,7 @@ msgid "This file system does not support mounting"
 msgstr "Tento systém súborov nepodporuje pripojenie"
 
 #: ../gtk/gtkfilesystemunix.c:639
-msgid "Filesystem"
+msgid "File System"
 msgstr "Súborový systém"
 
 #: ../gtk/gtkfilesystemunix.c:796
@@ -1949,7 +1948,7 @@ msgstr "(neznámy)"
 msgid "clear"
 msgstr "Vyčistiť"
 
-#: ../gtk/gtklabel.c:3934
+#: ../gtk/gtklabel.c:3985
 msgid "Select All"
 msgstr "Vybrať všetko"
 
@@ -2375,43 +2374,43 @@ msgstr "Z_väčšiť"
 msgid "Zoom _Out"
 msgstr "Z_menšiť"
 
-#: ../gtk/gtktextutil.c:48
+#: ../gtk/gtktextutil.c:54
 msgid "LRM _Left-to-right mark"
 msgstr "LRM značka _Left-to-right"
 
-#: ../gtk/gtktextutil.c:49
+#: ../gtk/gtktextutil.c:55
 msgid "RLM _Right-to-left mark"
 msgstr "RLM značka _Right-to-left"
 
-#: ../gtk/gtktextutil.c:50
+#: ../gtk/gtktextutil.c:56
 msgid "LRE Left-to-right _embedding"
 msgstr "LRE Left-to-right _vkladanie"
 
-#: ../gtk/gtktextutil.c:51
+#: ../gtk/gtktextutil.c:57
 msgid "RLE Right-to-left e_mbedding"
 msgstr "RLE Right-to-left v_kladanie"
 
-#: ../gtk/gtktextutil.c:52
+#: ../gtk/gtktextutil.c:58
 msgid "LRO Left-to-right _override"
 msgstr "LRO Left-to-right _prepisovanie"
 
-#: ../gtk/gtktextutil.c:53
+#: ../gtk/gtktextutil.c:59
 msgid "RLO Right-to-left o_verride"
 msgstr "RLO Right-to-left pr_episovanie"
 
-#: ../gtk/gtktextutil.c:54
+#: ../gtk/gtktextutil.c:60
 msgid "PDF _Pop directional formatting"
 msgstr "PDF Smerované formátovanie _pop"
 
-#: ../gtk/gtktextutil.c:55
+#: ../gtk/gtktextutil.c:61
 msgid "ZWS _Zero width space"
 msgstr "ZWS _Nulová šírka medzery"
 
-#: ../gtk/gtktextutil.c:56
+#: ../gtk/gtktextutil.c:62
 msgid "ZWJ Zero width _joiner"
 msgstr "ZWJ Nulová šírka _so spojením"
 
-#: ../gtk/gtktextutil.c:57
+#: ../gtk/gtktextutil.c:63
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "ZWNJ Nulová šírka _bez spojenia"
 
