@@ -9229,7 +9229,7 @@ gtk_tree_view_new_column_width (GtkTreeView *tree_view,
     width = MAX (column->min_width,
 		 width);
   if (column->max_width != -1)
-    width = MIN (width, column->max_width != -1);
+    width = MIN (width, column->max_width);
 
   *x = rtl ? (column->button->allocation.x + column->button->allocation.width - width) : (column->button->allocation.x + width);
  
