@@ -81,7 +81,6 @@ struct _GtkIconThemePrivate
    */
   GList *themes;
   GHashTable *unthemed_icons;
-  GList *unthemed_icons_caches;
   
   /* Note: The keys of this hashtable are owned by the
    * themedir and unthemed hashtables.
@@ -571,7 +570,6 @@ gtk_icon_theme_init (GtkIconTheme *icon_theme)
   priv->themes_valid = FALSE;
   priv->themes = NULL;
   priv->unthemed_icons = NULL;
-  priv->unthemed_icons_caches = NULL;
   
   priv->pixbuf_supports_svg = pixbuf_supports_svg ();
 }
@@ -604,16 +602,6 @@ do_theme_change (GtkIconTheme *icon_theme)
     }
 }
 
-static void 
-free_cache (gpointer data, 
-	    gpointer user_data)
-{
-  GtkIconCache *cache = (GtkIconCache *)data;
-
-  if (cache)
-    _gtk_icon_cache_unref (cache);
-}
-
 static void
 blow_themes (GtkIconTheme *icon_theme)
 {
@@ -627,13 +615,9 @@ blow_themes (GtkIconTheme *icon_theme)
       g_list_foreach (priv->dir_mtimes, (GFunc)free_dir_mtime, NULL);
       g_list_free (priv->dir_mtimes);
       g_hash_table_destroy (priv->unthemed_icons);
-      if (priv->unthemed_icons_caches)
-	g_list_foreach (priv->unthemed_icons_caches, free_cache, NULL);
-      g_list_free (priv->unthemed_icons_caches);
     }
   priv->themes = NULL;
   priv->unthemed_icons = NULL;
-  priv->unthemed_icons_caches = NULL;
   priv->dir_mtimes = NULL;
   priv->all_icons = NULL;
   priv->themes_valid = FALSE;
@@ -1001,6 +985,8 @@ load_themes (GtkIconTheme *icon_theme)
   UnthemedIcon *unthemed_icon;
   IconSuffix old_suffix, new_suffix;
   GTimeVal tv;
+  IconThemeDirMtime *dir_mtime;
+  struct stat stat_buf;
   
   priv = icon_theme->priv;
 
@@ -1018,18 +1004,21 @@ load_themes (GtkIconTheme *icon_theme)
 
   for (base = 0; base < icon_theme->priv->search_path_len; base++)
     {
-      GtkIconCache *cache;
       dir = icon_theme->priv->search_path[base];
 
-      cache = _gtk_icon_cache_new_for_path (dir);
+      dir_mtime = g_new (IconThemeDirMtime, 1);
+      dir_mtime->cache = _gtk_icon_cache_new_for_path (dir);
+      dir_mtime->dir = g_strdup (dir);
+      if (g_stat (dir, &stat_buf) == 0 && S_ISDIR (stat_buf.st_mode))
+	dir_mtime->mtime = stat_buf.st_mtime;
+      else
+	dir_mtime->mtime = 0;
 
-      if (cache != NULL)
-	{
-	  priv->unthemed_icons_caches = g_list_prepend (priv->unthemed_icons_caches, cache);
+      priv->dir_mtimes = g_list_append (priv->dir_mtimes, dir_mtime);
 
-	  continue;
-	}
-	   
+      if (dir_mtime->cache != NULL)
+	continue;
+
       gdir = g_dir_open (dir, 0, NULL);
 
       if (gdir == NULL)
@@ -1354,14 +1343,6 @@ gtk_icon_theme_has_icon (GtkIconTheme *icon_theme,
       GtkIconCache *cache = dir_mtime->cache;
       
       if (cache && _gtk_icon_cache_has_icon (cache, icon_name))
-	return TRUE;
-    }
-
-  for (l = priv->unthemed_icons_caches; l; l = l->next)
-    {
-      GtkIconCache *cache = (GtkIconCache *)l->data;
-
-      if (_gtk_icon_cache_has_icon (cache, icon_name))
 	return TRUE;
     }
 

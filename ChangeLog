@@ -1,5 +1,11 @@
 2005-07-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkicontheme.c (load_themes): Don't keep the caches
+	for unthemed directories in a separate list, instead append
+	them at the end of the dir_mtimes list, so that we can check
+	them for staleness like the other caches.  (#310221, Mark 
+	McLoughlin)
+
 	* configure.in: Check that we have a new enough Cairo.
 
 2005-07-13  Robert Ögren  <gtk@roboros.com>
