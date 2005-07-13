@@ -43,14 +43,6 @@
 #define PACKETMODE (PK_BUTTONS)
 #include <pktdef.h>
 
-/* If USE_SYSCONTEXT is on, we open the Wintab device (hmm, what if
- * there are several?) as a system pointing device, i.e. it controls
- * the normal Windows cursor. This seems much more natural.
- */
-#define USE_SYSCONTEXT 1	/* The code for the other choice is not
-				 * good at all.
-				 */
-
 #define DEBUG_WINTAB 1		/* Verbose debug messages enabled */
 
 #endif
@@ -62,10 +54,6 @@
 #define TWOPI (2.*G_PI)
 
 /* Forward declarations */
-
-#if !USE_SYSCONTEXT
-static GdkInputWindow *gdk_input_window_find_within (GdkWindow *window);
-#endif
 
 #ifdef HAVE_WINTAB
 
@@ -211,7 +199,6 @@ _gdk_input_wintab_init_check (void)
   GdkDevicePrivate *gdkdev;
   GdkWindowAttr wa;
   WORD specversion;
-  LOGCONTEXT defcontext;
   HCTX *hctx;
   UINT ndevices, ncursors, ncsrtypes, firstcsr, hardware;
   BOOL active;
@@ -219,6 +206,7 @@ _gdk_input_wintab_init_check (void)
   int i, k;
   int devix, cursorix;
   char devname[100], csrname[100];
+  BOOL defcontext_done;
 
   if (wintab_initialized)
     return;
@@ -233,17 +221,6 @@ _gdk_input_wintab_init_check (void)
       WTInfo (WTI_INTERFACE, IFC_SPECVERSION, &specversion);
       GDK_NOTE (INPUT, g_print ("Wintab interface version %d.%d\n",
 			       HIBYTE (specversion), LOBYTE (specversion)));
-#if USE_SYSCONTEXT
-      WTInfo (WTI_DEFSYSCTX, 0, &defcontext);
-#if DEBUG_WINTAB
-      GDK_NOTE (INPUT, (g_print("DEFSYSCTX:\n"), print_lc(&defcontext)));
-#endif
-#else
-      WTInfo (WTI_DEFCONTEXT, 0, &defcontext);
-#if DEBUG_WINTAB
-      GDK_NOTE (INPUT, (g_print("DEFCONTEXT:\n"), print_lc(&defcontext)));
-#endif
-#endif
       WTInfo (WTI_INTERFACE, IFC_NDEVICES, &ndevices);
       WTInfo (WTI_INTERFACE, IFC_NCURSORS, &ncursors);
 #if DEBUG_WINTAB
@@ -268,6 +245,11 @@ _gdk_input_wintab_init_check (void)
       for (devix = 0; devix < ndevices; devix++)
 	{
 	  LOGCONTEXT lc;
+	  
+	  /* We open the Wintab device (hmm, what if there are several?) as a
+	   * system pointing device, i.e. it controls the normal Windows
+	   * cursor. This seems much more natural.
+	   */
 
 	  WTInfo (WTI_DEVICES + devix, DVC_NAME, devname);
       
@@ -279,65 +261,39 @@ _gdk_input_wintab_init_check (void)
 	  WTInfo (WTI_DEVICES + devix, DVC_NPRESSURE, &axis_npressure);
 	  WTInfo (WTI_DEVICES + devix, DVC_ORIENTATION, axis_or);
 
+	  defcontext_done = FALSE;
 	  if (HIBYTE (specversion) > 1 || LOBYTE (specversion) >= 1)
 	    {
-	      WTInfo (WTI_DDCTXS + devix, CTX_NAME, lc.lcName);
-	      WTInfo (WTI_DDCTXS + devix, CTX_OPTIONS, &lc.lcOptions);
-	      lc.lcOptions |= CXO_MESSAGES;
-#if USE_SYSCONTEXT
-	      lc.lcOptions |= CXO_SYSTEM;
-#endif
-	      lc.lcStatus = 0;
-	      WTInfo (WTI_DDCTXS + devix, CTX_LOCKS, &lc.lcLocks);
-	      lc.lcMsgBase = WT_DEFBASE;
-	      lc.lcDevice = devix;
-	      lc.lcPktRate = 50;
-	      lc.lcPktData = PACKETDATA;
-	      lc.lcPktMode = PK_BUTTONS; /* We want buttons in relative mode */
-	      lc.lcMoveMask = PACKETDATA;
-	      lc.lcBtnDnMask = lc.lcBtnUpMask = ~0;
-	      WTInfo (WTI_DDCTXS + devix, CTX_INORGX, &lc.lcInOrgX);
-	      WTInfo (WTI_DDCTXS + devix, CTX_INORGY, &lc.lcInOrgY);
-	      WTInfo (WTI_DDCTXS + devix, CTX_INORGZ, &lc.lcInOrgZ);
-	      WTInfo (WTI_DDCTXS + devix, CTX_INEXTX, &lc.lcInExtX);
-	      WTInfo (WTI_DDCTXS + devix, CTX_INEXTY, &lc.lcInExtY);
-	      WTInfo (WTI_DDCTXS + devix, CTX_INEXTZ, &lc.lcInExtZ);
-	      lc.lcOutOrgX = axis_x.axMin;
-	      lc.lcOutOrgY = axis_y.axMin;
-	      lc.lcOutExtX = axis_x.axMax - axis_x.axMin;
-	      lc.lcOutExtY = axis_y.axMax - axis_y.axMin;
-	      lc.lcOutExtY = -lc.lcOutExtY; /* We want Y growing downward */
-	      WTInfo (WTI_DDCTXS + devix, CTX_SENSX, &lc.lcSensX);
-	      WTInfo (WTI_DDCTXS + devix, CTX_SENSY, &lc.lcSensY);
-	      WTInfo (WTI_DDCTXS + devix, CTX_SENSZ, &lc.lcSensZ);
-	      WTInfo (WTI_DDCTXS + devix, CTX_SYSMODE, &lc.lcSysMode);
-	      WTInfo (WTI_DDCTXS + devix, CTX_SYSORGX, &lc.lcSysOrgX);
-	      WTInfo (WTI_DDCTXS + devix, CTX_SYSORGY, &lc.lcSysOrgY);
-	      WTInfo (WTI_DDCTXS + devix, CTX_SYSEXTX, &lc.lcSysExtX);
-	      WTInfo (WTI_DDCTXS + devix, CTX_SYSEXTY, &lc.lcSysExtY);
-	      WTInfo (WTI_DDCTXS + devix, CTX_SYSSENSX, &lc.lcSysSensX);
-	      WTInfo (WTI_DDCTXS + devix, CTX_SYSSENSY, &lc.lcSysSensY);
-	    }
-	  else
-	    {
-	      lc = defcontext;
-	      lc.lcOptions |= CXO_MESSAGES;
-	      lc.lcMsgBase = WT_DEFBASE;
-	      lc.lcPktRate = 50;
-	      lc.lcPktData = PACKETDATA;
-	      lc.lcPktMode = PACKETMODE;
-	      lc.lcMoveMask = PACKETDATA;
-	      lc.lcBtnUpMask = lc.lcBtnDnMask = ~0;
-#if 0
-	      lc.lcOutExtY = -lc.lcOutExtY; /* Y grows downward */
-#else
-	      lc.lcOutOrgX = axis_x.axMin;
-	      lc.lcOutOrgY = axis_y.axMin;
-	      lc.lcOutExtX = axis_x.axMax - axis_x.axMin;
-	      lc.lcOutExtY = axis_y.axMax - axis_y.axMin;
-	      lc.lcOutExtY = -lc.lcOutExtY; /* We want Y growing downward */
+	      /* Try to get device-specific default context */
+	      /* Some drivers, e.g. Aiptek, don't provide this info */
+	      if (WTInfo (WTI_DSCTXS + devix, 0, &lc) > 0)
+		defcontext_done = TRUE;
+#if DEBUG_WINTAB
+	      if (defcontext_done)
+		GDK_NOTE (INPUT, (g_print("Using device-specific default context\n")));
+	      else
+		GDK_NOTE (INPUT, (g_print("Note: Driver did not provide device specific default context info despite claiming to support version 1.1\n")));
 #endif
 	    }
+
+	  if (!defcontext_done)
+	    WTInfo (WTI_DEFSYSCTX, 0, &lc);
+#if DEBUG_WINTAB
+	  GDK_NOTE (INPUT, (g_print("Default context:\n"), print_lc(&lc)));
+#endif
+	  lc.lcOptions |= CXO_MESSAGES;
+	  lc.lcStatus = 0;
+	  lc.lcMsgBase = WT_DEFBASE;
+	  lc.lcPktRate = 50;
+	  lc.lcPktData = PACKETDATA;
+	  lc.lcPktMode = PACKETMODE;
+	  lc.lcMoveMask = PACKETDATA;
+	  lc.lcBtnUpMask = lc.lcBtnDnMask = ~0;
+	  lc.lcOutOrgX = axis_x.axMin;
+	  lc.lcOutOrgY = axis_y.axMin;
+	  lc.lcOutExtX = axis_x.axMax - axis_x.axMin;
+	  lc.lcOutExtY = axis_y.axMax - axis_y.axMin;
+	  lc.lcOutExtY = -lc.lcOutExtY; /* We want Y growing downward */
 #if DEBUG_WINTAB
 	  GDK_NOTE (INPUT, (g_print("context for device %d:\n", devix),
 			   print_lc(&lc)));
@@ -386,11 +342,7 @@ _gdk_input_wintab_init_check (void)
 	      gdkdev->info.name = g_strconcat (devname, " ", csrname, NULL);
 	      gdkdev->info.source = GDK_SOURCE_PEN;
 	      gdkdev->info.mode = GDK_MODE_SCREEN;
-#if USE_SYSCONTEXT
 	      gdkdev->info.has_cursor = TRUE;
-#else
-	      gdkdev->info.has_cursor = FALSE;
-#endif
 	      gdkdev->hctx = *hctx;
 	      gdkdev->cursor = cursorix;
 	      WTInfo (WTI_CURSORS + cursorix, CSR_PKTDATA, &gdkdev->pktdata);
@@ -526,32 +478,6 @@ decode_tilt (gint   *axis_data,
   /* Y tilt */
   axis_data[1] = sin (az) * cos (el) * 1000;
 }
-
-#if !USE_SYSCONTEXT
-
-static GdkInputWindow *
-gdk_input_window_find_within (GdkWindow *window)
-{
-  GList *list;
-  GdkWindow *tmpw;
-  GdkInputWindow *candidate = NULL;
-
-  for (list = _gdk_input_windows; list != NULL; list = list->next)
-    {
-      tmpw = ((GdkInputWindow *) (tmp_list->data))->window;
-      if (tmpw == window
-	  || IsChild (GDK_WINDOW_HWND (window), GDK_WINDOW_HWND (tmpw)))
-	{
-	  if (candidate)
-	    return NULL;		/* Multiple hits */
-	  candidate = (GdkInputWindow *) (list->data);
-	}
-    }
-
-  return candidate;
-}
-
-#endif /* USE_SYSCONTEXT */
 
 #endif /* HAVE_WINTAB */
 
@@ -732,9 +658,6 @@ _gdk_input_other_event (GdkEvent  *event,
 			GdkWindow *window)
 {
 #ifdef HAVE_WINTAB
-#if !USE_SYSCONTEXT
-  GdkWindow *current_window;
-#endif
   GdkDisplay *display;
   GdkWindowObject *obj, *grab_obj;
   GdkInputWindow *input_window;
@@ -753,7 +676,6 @@ _gdk_input_other_event (GdkEvent  *event,
       return FALSE;
     }
 
-#if USE_SYSCONTEXT
   window = gdk_window_at_pointer (&x, &y);
   if (window == NULL)
     window = _gdk_parent_root;
@@ -765,17 +687,6 @@ _gdk_input_other_event (GdkEvent  *event,
 	    g_print ("gdk_input_win32_other_event: window=%p (%d,%d)\n",
 		     GDK_WINDOW_HWND (window), x, y));
   
-#else
-  /* ??? This code is pretty bogus */
-  current_window = gdk_win32_handle_table_lookup (GetActiveWindow ());
-  if (current_window == NULL)
-    return FALSE;
-  
-  input_window = gdk_input_window_find_within (current_window);
-  if (input_window == NULL)
-    return FALSE;
-#endif
-
   if (msg->message == WT_PACKET)
     {
       if (!WTPacket ((HCTX) msg->lParam, msg->wParam, &packet))
@@ -925,13 +836,6 @@ _gdk_input_other_event (GdkEvent  *event,
 	  event->button.time = _gdk_win32_get_next_tick (msg->time);
 	  event->button.device = &gdkdev->info;
 	  
-#if 0
-#if USE_SYSCONTEXT
-	  /* Buttons 1 to 3 will come in as WM_[LMR]BUTTON{DOWN,UP} */
-	  if (event->button.button <= 3)
-	    return FALSE;
-#endif
-#endif
 	  event->button.axes = g_new(gdouble, gdkdev->info.num_axes);
 
 	  gdk_input_translate_coordinates (gdkdev, input_window,

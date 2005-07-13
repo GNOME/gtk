@@ -1,3 +1,19 @@
+2005-07-13  Robert Ögren  <gtk@roboros.com>
+
+	Fix handling of Aiptek and Aiptek-like graphical tablets such as Trust
+	on Windows. (#167004, thanks to	"pnohant" for testing)
+
+	Code cleanup: Remove the unused and unmaintained code for using a
+	non-system tablet context (USE_SYSCONTEXT ifdef:s), suggested
+	by Tor Lillqvist.
+
+	* gdk/win32/gdkinput-win32.c (_gdk_input_wintab_init_check): Handle
+	tablet drivers that don't support WTI_DDCTXS/WTI_DSCTXS gracefully.
+	Sligthly reorganize and simplify the code to support this.
+	(_gdk_input_wintab_init_check, _gdk_input_other_event): Remove
+	USE_SYSCONTEXT ifdef:s and the code for the case it was not defined.
+	(gdk_input_window_find_within): Removed.
+
 2005-07-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Add -DHPPEX -DSHMLINK to CFLAGS for HP-UX.  
