@@ -3458,6 +3458,7 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
   guint flags;
   gint highlight_x;
   gint bin_window_width;
+  gint bin_window_height;
   GtkTreePath *cursor_path;
   GtkTreePath *drag_dest_path;
   GList *last_column;
@@ -3501,6 +3502,21 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
   if (new_y < 0)
     new_y = 0;
   y_offset = -_gtk_rbtree_find_offset (tree_view->priv->tree, new_y, &tree, &node);
+  gdk_drawable_get_size (tree_view->priv->bin_window,
+                         &bin_window_width, &bin_window_height);
+
+  if (tree_view->priv->height < bin_window_height)
+    {
+      gtk_paint_flat_box (widget->style,
+                          event->window,
+                          widget->state,
+                          GTK_SHADOW_NONE,
+                          &event->area,
+                          widget,
+                          "cell_even",
+                          0, tree_view->priv->height,
+                          bin_window_width, bin_window_height);
+    }
 
   if (node == NULL)
     return TRUE;
@@ -3531,9 +3547,6 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
   if (drag_dest_path)
     _gtk_tree_view_find_node (tree_view, drag_dest_path,
                               &drag_highlight_tree, &drag_highlight);
-
-  gdk_drawable_get_size (tree_view->priv->bin_window,
-                         &bin_window_width, NULL);
 
   
   n_visible_columns = 0;

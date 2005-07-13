@@ -1,3 +1,13 @@
+2005-07-13  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_bin_expose): paint a flat box
+	on the area the treeview got allocated extra vertically (fixes
+	#142063, reported by Brian Bober).
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_cell_process_action):
+	make this function calculate real_cell_area and real_background_area
+	correctly. (fixes #309249, reported by Bernd Demian).
+
 2005-07-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcalendar.c (calendar_realize_arrows): Fix an 
