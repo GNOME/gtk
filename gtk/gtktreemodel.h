@@ -161,6 +161,7 @@ GtkTreeRowReference *gtk_tree_row_reference_new_proxy (GObject             *prox
 						       GtkTreeModel        *model,
 						       GtkTreePath         *path);
 GtkTreePath         *gtk_tree_row_reference_get_path  (GtkTreeRowReference *reference);
+GtkTreeModel        *gtk_tree_row_reference_get_model (GtkTreeRowReference *reference);
 gboolean             gtk_tree_row_reference_valid     (GtkTreeRowReference *reference);
 GtkTreeRowReference *gtk_tree_row_reference_copy      (GtkTreeRowReference *reference);
 void                 gtk_tree_row_reference_free      (GtkTreeRowReference *reference);

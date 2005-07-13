@@ -1,5 +1,10 @@
 2005-07-13  Kristian Rietveld  <kris@gtk.org>
 
+	* gtk/gtktreemodel.[ch] (gtk_tree_row_reference_get_model): new
+	function. (#160879, Stefan Kost).
+
+2005-07-13  Kristian Rietveld  <kris@gtk.org>
+
 	* gtk/gtktreeview.c (gtk_tree_view_bin_expose): paint a flat box
 	on the area the treeview got allocated extra vertically (fixes
 	#142063, reported by Brian Bober).

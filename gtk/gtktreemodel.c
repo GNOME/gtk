@@ -1943,6 +1943,25 @@ gtk_tree_row_reference_get_path (GtkTreeRowReference *reference)
 }
 
 /**
+ * gtk_tree_row_reference_get_model:
+ * @reference: A #GtkTreeRowReference
+ *
+ * Returns the model which @reference is monitoring in order to appropriately
+ * the path.
+ *
+ * Return value: The model, or %NULL.
+ *
+ * Since: 2.8
+ */
+GtkTreeModel *
+gtk_tree_row_reference_get_model (GtkTreeRowReference *reference)
+{
+  g_return_val_if_fail (reference != NULL, NULL);
+
+  return reference->model;
+}
+
+/**
  * gtk_tree_row_reference_valid:
  * @reference: A #GtkTreeRowReference, or NULL
  * 
