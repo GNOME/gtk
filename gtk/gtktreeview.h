@@ -262,6 +262,9 @@ void                   gtk_tree_view_tree_to_widget_coords         (GtkTreeView 
 								    gint                       ty,
 								    gint                      *wx,
 								    gint                      *wy);
+gboolean               gtk_tree_view_get_visible_range             (GtkTreeView               *tree_view,
+								    GtkTreePath              **start_path,
+								    GtkTreePath              **end_path);
 
 /* Drag-and-Drop support */
 void                   gtk_tree_view_enable_model_drag_source      (GtkTreeView               *tree_view,

@@ -11768,6 +11768,53 @@ gtk_tree_view_tree_to_widget_coords (GtkTreeView *tree_view,
     *wy = ty - tree_view->priv->dy;
 }
 
+/**
+ * gtk_tree_view_get_visible_range:
+ * @tree_view: A #GtkTreeView
+ * @start_path: Return location for start of region, or %NULL.
+ * @end_path: Return location for end of region, or %NULL.
+ *
+ * Sets @start_path and @end_path to be the first and last visible path.
+ * Note that there may be invisible paths in between.
+ *
+ * Returns: %TRUE, if valid paths were placed in @start_path and @end_path.
+ *
+ * Since: 2.8
+ **/
+gboolean
+gtk_tree_view_get_visible_range (GtkTreeView  *tree_view,
+                                 GtkTreePath **start_path,
+                                 GtkTreePath **end_path)
+{
+  GtkRBTree *tree;
+  GtkRBNode *node;
+
+  g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), FALSE);
+
+  if (start_path)
+    {
+      _gtk_rbtree_find_offset (tree_view->priv->tree,
+                               TREE_WINDOW_Y_TO_RBTREE_Y (tree_view, 0),
+                               &tree, &node);
+      *start_path = _gtk_tree_view_find_path (tree_view, tree, node);
+    }
+
+  if (end_path)
+    {
+      gint y;
+
+      if (tree_view->priv->height < tree_view->priv->vadjustment->page_size)
+        y = tree_view->priv->height - 1;
+      else
+        y = TREE_WINDOW_Y_TO_RBTREE_Y (tree_view, tree_view->priv->vadjustment->page_size) - 1;
+
+      _gtk_rbtree_find_offset (tree_view->priv->tree, y, &tree, &node);
+      *end_path = _gtk_tree_view_find_path (tree_view, tree, node);
+    }
+
+  return TRUE;
+}
+
 static void
 unset_reorderable (GtkTreeView *tree_view)
 {
