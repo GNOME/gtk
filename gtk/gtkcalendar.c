@@ -1256,7 +1256,7 @@ calendar_realize_arrows (GtkCalendar *calendar)
 	  attributes.x = rect.x;
 	  attributes.y = rect.y;
 	  attributes.width = rect.width;
-	  attributes.height = rect.width;
+	  attributes.height = rect.height;
 	  priv->arrow_win[i] = gdk_window_new (priv->header_win,
 					       &attributes, 
 					       attributes_mask);

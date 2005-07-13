@@ -1,3 +1,8 @@
+2005-07-13  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcalendar.c (calendar_realize_arrows): Fix an 
+	unintentional case of width-for-height... (#310133, Luis Villa)
+
 2005-07-13  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_new_column_width): let's take
