@@ -1,4 +1,4 @@
-/* gtktextchild.c - child pixmaps and widgets
+/* gtktextchildprivate.h - child pixmaps and widgets
  *
  * Copyright (c) 1994 The Regents of the University of California.
  * Copyright (c) 1994-1997 Sun Microsystems, Inc.

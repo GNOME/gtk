@@ -1,3 +1,24 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 2 -*- */
+/* testsocket.c
+ * Copyright (C) 2001 Red Hat, Inc
+ * Author: Owen Taylor
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
+
 #undef GTK_DISABLE_DEPRECATED
 
 #include <config.h>
@@ -269,6 +290,45 @@ add_local_passive_child (GtkWidget *window)
   gtk_socket_add_id (GTK_SOCKET (socket->socket), xid);
 }
 
+static const char *
+grab_string (int status)
+{
+  switch (status) {
+  case GDK_GRAB_SUCCESS:          return "GrabSuccess";
+  case GDK_GRAB_ALREADY_GRABBED:  return "AlreadyGrabbed";
+  case GDK_GRAB_INVALID_TIME:     return "GrabInvalidTime";
+  case GDK_GRAB_NOT_VIEWABLE:     return "GrabNotViewable";
+  case GDK_GRAB_FROZEN:           return "GrabFrozen";
+  default:
+    {
+      static char foo [255];
+      sprintf (foo, "unknown status: %d", status);
+      return foo;
+    }
+  }
+}
+
+static void
+grab_window_toggled (GtkToggleButton *button,
+		     GtkWidget       *widget)
+{
+
+  if (gtk_toggle_button_get_active (button))
+    {
+      int status;
+
+      status = gdk_keyboard_grab (widget->window, FALSE, GDK_CURRENT_TIME);
+
+      if (status != GDK_GRAB_SUCCESS)
+	g_warning ("Could not grab keyboard!  (%s)", grab_string (status));
+
+    } 
+  else 
+    {
+      gdk_keyboard_ungrab (GDK_CURRENT_TIME);
+    }
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -276,6 +336,7 @@ main (int argc, char *argv[])
   GtkWidget *hbox;
   GtkWidget *vbox;
   GtkWidget *entry;
+  GtkWidget *checkbutton;
   GtkAccelGroup *accel_group;
   GtkItemFactory *item_factory;
 
@@ -333,6 +394,13 @@ main (int argc, char *argv[])
 
   g_signal_connect_swapped (button, "clicked",
 			    G_CALLBACK (remove_child), vbox);
+
+  checkbutton = gtk_check_button_new_with_label ("Grab keyboard");
+  gtk_box_pack_start (GTK_BOX (vbox), checkbutton, FALSE, FALSE, 0);
+
+  g_signal_connect (checkbutton, "toggled",
+		    G_CALLBACK (grab_window_toggled),
+		    window);
 
   hbox = gtk_hbox_new (FALSE, 0);
   gtk_box_pack_start (GTK_BOX(vbox), hbox, FALSE, FALSE, 0);

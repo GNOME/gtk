@@ -1,5 +1,40 @@
 2005-07-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* tests/treestoretest.c: 
+	* tests/testxinerama.c: 
+	* tests/testtreeview.c: 
+	* tests/testtreefocus.c: 
+	* tests/testtreeflow.c:
+	* tests/testtreeedit.c: 
+	* tests/testtreecolumns.c: 
+	* tests/testtext.c: 
+	* tests/testtextbuffer.c: 
+	* tests/testspinbutton.c: 
+	* tests/testsocket_common.c: 
+	* tests/testsocket_child.c: 
+	* tests/testsocket.c: 
+	* tests/testmultiscreen.c: 
+	* tests/testmultidisplay.c: 
+	* tests/testmerge.c: 
+	* tests/testmenus.c: 
+	* tests/testmenubars.c: 
+	* tests/testicontheme.c: 
+	* tests/testfilechooser.c: 
+	* tests/testentrycompletion.c: 
+	* tests/testdnd.c: 
+	* tests/testcombochange.c: 
+	* tests/testactions.c: 
+	* tests/testcombo.c: 
+	* tests/simple.c: 
+	* gtk/gtktextutil.c: 
+	* gtk/gtktexttypes.h: 
+	* gtk/gtktexttypes.c: 
+	* gtk/gtktexttagprivate.h: 
+	* gtk/gtktextsegment.h: 
+	* gtk/gtktextiterprivate.h: 
+	* gtk/gtktextchildprivate.h: 
+	* gtk/gtktextbtree.h: Add Copyright/License information.
+
 	* gtk/gtkicontheme.c (gtk_icon_theme_get_default) 
 	(gtk_icon_theme_get_for_screen): Add a warning about
 	unreffing icon themes.  (#310163, Rodney Dawes)
