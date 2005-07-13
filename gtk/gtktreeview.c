@@ -4587,6 +4587,7 @@ validate_row (GtkTreeView *tree_view,
   GList *list;
   gint height = 0;
   gint horizontal_separator;
+  gint vertical_separator;
   gint focus_line_width;
   gint depth = gtk_tree_path_get_depth (path);
   gboolean retval = FALSE;
@@ -4609,6 +4610,7 @@ validate_row (GtkTreeView *tree_view,
 			"focus-padding", &focus_pad,
 			"focus-line-width", &focus_line_width,
 			"horizontal-separator", &horizontal_separator,
+			"vertical-separator", &vertical_separator,
 			NULL);
   
   for (list = tree_view->priv->columns; list; list = list->next)
@@ -4633,9 +4635,7 @@ validate_row (GtkTreeView *tree_view,
 
       if (!is_separator)
 	{
-          tmp_width += 2 * focus_line_width;
-          tmp_height += 2 * focus_line_width;
-
+          tmp_height += vertical_separator;
 	  height = MAX (height, tmp_height);
 	  height = MAX (height, tree_view->priv->expander_size);
 	}

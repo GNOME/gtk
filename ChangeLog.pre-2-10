@@ -1,3 +1,13 @@
+2005-07-13  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (validate_row): when !separator, don't add
+	the focus_line_width to width/height (happens in
+	_column_cell_get_size), but do add the vertical-separator to height,
+	we weren't taking this into account before.
+
+	* gtk/gtkentrycompletion.c (_gtk_entry_completion_resize_popup):
+	take vertical-separator into account. (#309137, Ross Burton).
+
 2005-07-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* tests/treestoretest.c: 
