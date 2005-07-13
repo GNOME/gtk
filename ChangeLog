@@ -1,3 +1,7 @@
+2005-07-13  Manish Singh  <yosh@gimp.org>
+
+	* demos/gtk-demo/iconview_edit.c: remove unused variable.
+
 2005-07-13  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreemodel.[ch] (gtk_tree_row_reference_get_model): new
