@@ -287,7 +287,7 @@ gtk_icon_theme_new (void)
  * Return value: A unique #GtkIconTheme associated with
  *  the default screen. This icon theme is associated with
  *  the screen and can be used as long as the screen
- *  is open.
+ *  is open. Do not ref or unref it.
  *
  * Since: 2.4
  **/
@@ -313,7 +313,7 @@ gtk_icon_theme_get_default (void)
  * Return value: A unique #GtkIconTheme associated with
  *  the given screen. This icon theme is associated with
  *  the screen and can be used as long as the screen
- *  is open.
+ *  is open. Do not ref or unref it.
  *
  * Since: 2.4
  **/

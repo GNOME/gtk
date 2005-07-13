@@ -1,3 +1,9 @@
+2005-07-13  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkicontheme.c (gtk_icon_theme_get_default) 
+	(gtk_icon_theme_get_for_screen): Add a warning about
+	unreffing icon themes.  (#310163, Rodney Dawes)
+
 2005-07-13  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeselection.c (gtk_tree_selection_selected_foreach): quit
