@@ -1,5 +1,11 @@
 2005-07-14  Tor Lillqvist  <tml@novell.com>
 
+	* gtk/gtkfilesystemwin32.c (filename_get_info): Implement getting
+	the MIME type of a file. Look it up in the Registry. Bug reported
+	by Hans Oesterholt.
+
+2005-07-14  Tor Lillqvist  <tml@novell.com>
+
 	* configure.in (GDK_EXTRA_LIBS): Don't need -luuid on Win32. It
 	was some leftover, and in fact occasionally caused issues with
 	libtool as it made its way into the libgdk-win32-2.0.la file and
