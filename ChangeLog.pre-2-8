@@ -1,5 +1,10 @@
 2005-07-14  Kristian Rietveld  <kris@gtk.org>
 
+	* gtk/gtktreeviewcolumn.[ch] (gtk_tree_view_column_queue_resize): new
+	function (fixes #169961, reported by Morten Welinder).
+
+2005-07-14  Kristian Rietveld  <kris@gtk.org>
+
 	* gtk/gtktreeview.[ch] (gtk_tree_view_get_visible_range): new
 	function. (fixes #105252, suggestion from Mikael Hallendal).
 

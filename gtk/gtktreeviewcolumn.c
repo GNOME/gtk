@@ -3661,5 +3661,23 @@ gtk_tree_view_column_cell_get_position (GtkTreeViewColumn *tree_column,
   return found_cell;
 }
 
+/**
+ * gtk_tree_view_column_queue_resize:
+ * @tree_column: A #GtkTreeViewColumn
+ *
+ * Flags the column, and the cell renderers added to this column, to have
+ * their sizes renegotiated.
+ *
+ * Since: 2.8
+ **/
+void
+gtk_tree_view_column_queue_resize (GtkTreeViewColumn *tree_column)
+{
+  g_return_if_fail (tree_column != NULL);
+
+  if (tree_column->tree_view)
+    _gtk_tree_view_column_cell_set_dirty (tree_column, TRUE);
+}
+
 #define __GTK_TREE_VIEW_COLUMN_C__
 #include "gtkaliasdef.c"

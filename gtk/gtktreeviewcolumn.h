@@ -230,6 +230,7 @@ gboolean                gtk_tree_view_column_cell_get_position   (GtkTreeViewCol
 					                          GtkCellRenderer         *cell_renderer,
 					                          gint                    *start_pos,
 					                          gint                    *width);
+void                    gtk_tree_view_column_queue_resize        (GtkTreeViewColumn       *tree_column);
 
 
 G_END_DECLS
