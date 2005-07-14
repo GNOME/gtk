@@ -1,5 +1,9 @@
 2005-07-14  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/x11/gdkevents-x11.c (set_screen_from_root): Don't assert if 
+	the xrootwin is invalid.  (#309997, Barbie LeVille)
+	(gdk_event_translate): Ignore events with an invalid root field.
+
 	* configure.in: Set interface age to 0.
 
 	* gtk/gtkimmodule.h: Move G_BEGIN_DECLS to the right spot, noticed
