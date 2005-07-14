@@ -1,3 +1,12 @@
+2005-07-14  Tor Lillqvist  <tml@novell.com>
+
+	* configure.in (GDK_EXTRA_LIBS): Don't need -luuid on Win32. It
+	was some leftover, and in fact occasionally caused issues with
+	libtool as it made its way into the libgdk-win32-2.0.la file and
+	that way into the .la files of all libraries that depend on
+	GDK. (This happened only when building from CVS and not using a
+	full "make install" which would run the sanitize-la.sh script.)
+
 2005-07-14  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/x11/gdkevents-x11.c (set_screen_from_root): Don't assert if 

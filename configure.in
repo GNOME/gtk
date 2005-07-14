@@ -1366,7 +1366,7 @@ if test "x$gdktarget" = "xwin32"; then
     AC_SUBST(GDK_WIN32_EXTRA_CFLAGS)
   fi
 
-  GDK_EXTRA_LIBS="$GDK_EXTRA_LIBS -lgdi32 -user32 -limm32 -lshell32 -lole32 -luuid"
+  GDK_EXTRA_LIBS="$GDK_EXTRA_LIBS -lgdi32 -user32 -limm32 -lshell32 -lole32"
   AM_CONDITIONAL(USE_WIN32, true)
 else
   AM_CONDITIONAL(USE_WIN32, false)
