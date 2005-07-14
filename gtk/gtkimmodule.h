@@ -21,10 +21,9 @@
 #define __GTK_IM_MODULE_H__
 
 
-G_BEGIN_DECLS
-
-
 #include <gtk/gtkimcontext.h>
+
+G_BEGIN_DECLS
 
 typedef struct _GtkIMContextInfo GtkIMContextInfo;
 

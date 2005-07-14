@@ -1,3 +1,10 @@
+2005-07-14  Matthias Clasen  <mclasen@redhat.com>
+
+	* configure.in: Set interface age to 0.
+
+	* gtk/gtkimmodule.h: Move G_BEGIN_DECLS to the right spot, noticed
+	by Akira Tagoh.
+
 2005-07-14  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeviewcolumn.[ch] (gtk_tree_view_column_queue_resize): new
