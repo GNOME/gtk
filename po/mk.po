@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: mk\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-07-08 14:01-0400\n"
-"PO-Revision-Date: 2005-07-13 00:16+0200\n"
+"PO-Revision-Date: 2005-07-14 10:34+0200\n"
 "Last-Translator: Tomislav Markovski <herrera@users.sourceforge.net>\n"
 "Language-Team: Macedonian <ossm-members@hedona.on.net.mk>\n"
 "MIME-Version: 1.0\n"
@@ -34,6 +34,7 @@ msgstr "Датотеката слика '%s' не содржи податоци"
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
+"Не успеав да ја вчитам сликата '%s': причината не е позната, најверојатно се работи за расипана слика"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:241
 #, c-format
@@ -45,7 +46,7 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf-io.c:444
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
-msgstr ""
+msgstr "Не успеав да го вчитам модулот за вчитување на слики: %s: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:459
 #, c-format
@@ -57,21 +58,21 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf-io.c:628 gdk-pixbuf/gdk-pixbuf-io.c:680
 #, c-format
 msgid "Image type '%s' is not supported"
-msgstr ""
+msgstr "Типот на слика '%s' не е поддржан"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:720
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
-msgstr ""
+msgstr "Не можам да го препознаам датотечниот формат на датотеката '%s'"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:728
 msgid "Unrecognized image file format"
-msgstr ""
+msgstr "Непознат датотечен формат на слика"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:896
 #, c-format
 msgid "Failed to load image '%s': %s"
-msgstr ""
+msgstr "Не успеав да ја вчитам сликата '%s': %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1357
 #, c-format
@@ -89,16 +90,16 @@ msgstr ""
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1449
 msgid "Failed to open temporary file"
-msgstr ""
+msgstr "Не успеав да ја отворам привремената датотека"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1474
 msgid "Failed to read from temporary file"
-msgstr ""
+msgstr "Не успеав да прочитам од привремената датотека"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1708
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
-msgstr ""
+msgstr "Не успеав да го отворам '%s' за запишување: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1732
 #, c-format
@@ -106,6 +107,8 @@ msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
 msgstr ""
+"Не успеав да го затворам '%s' додека ја снимав сликата, можно е да не се зачувани сите податоци: %"
+"s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1952 gdk-pixbuf/gdk-pixbuf-io.c:2002
 msgid "Insufficient memory to save image into a buffer"
@@ -146,11 +149,11 @@ msgstr ""
 
 #: gdk-pixbuf/io-ani.c:337
 msgid "Unsupported animation type"
-msgstr ""
+msgstr "Неподдржан тип на анимација"
 
 #: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:538
 msgid "Invalid header in animation"
-msgstr ""
+msgstr "Невалидно заглавје во анимацијата"
 
 #: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:382 gdk-pixbuf/io-ani.c:441
 #: gdk-pixbuf/io-ani.c:460 gdk-pixbuf/io-ani.c:511 gdk-pixbuf/io-ani.c:583
@@ -163,7 +166,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-ani.c:676
 msgid "The ANI image format"
-msgstr ""
+msgstr "ANI формат на слика"
 
 #: gdk-pixbuf/io-bmp.c:228 gdk-pixbuf/io-bmp.c:306 gdk-pixbuf/io-bmp.c:338
 #: gdk-pixbuf/io-bmp.c:361 gdk-pixbuf/io-bmp.c:442
@@ -188,16 +191,16 @@ msgstr ""
 
 #: gdk-pixbuf/io-bmp.c:1244
 msgid "Couldn't write to BMP file"
-msgstr ""
+msgstr "Не можам да запишам во BMP датотека"
 
 #: gdk-pixbuf/io-bmp.c:1293
 msgid "The BMP image format"
-msgstr ""
+msgstr "BMP формат на слика"
 
 #: gdk-pixbuf/io-gif.c:220
 #, c-format
 msgid "Failure reading GIF: %s"
-msgstr ""
+msgstr "Грешка при читањето на GIF-от: %s"
 
 #: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1463 gdk-pixbuf/io-gif.c:1624
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
@@ -239,12 +242,12 @@ msgstr ""
 
 #: gdk-pixbuf/io-gif.c:1166
 msgid "File does not appear to be a GIF file"
-msgstr ""
+msgstr "Датотеката изгледа дека не е GIF датотека"
 
 #: gdk-pixbuf/io-gif.c:1178
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
-msgstr ""
+msgstr "Верзијата %s од датотечниот формат GIF не е поддржана"
 
 #: gdk-pixbuf/io-gif.c:1287
 msgid ""
@@ -267,7 +270,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-ico.c:256 gdk-pixbuf/io-ico.c:330
 msgid "Invalid header in icon"
-msgstr ""
+msgstr "Невалидно заглавје во иконата"
 
 #: gdk-pixbuf/io-ico.c:293
 msgid "Icon has zero width"
@@ -316,6 +319,8 @@ msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
 msgstr ""
+"Недоволно меморија за да се вчита сликата, пробајте да исклучите некои "
+"од апликациите за да ослободите меморија"
 
 #: gdk-pixbuf/io-jpeg.c:383 gdk-pixbuf/io-jpeg.c:749
 #, c-format
@@ -333,6 +338,8 @@ msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
 msgstr ""
+"Квалитетот на JPEG мора да биде помеѓу 0 и 100; вредноста '%s' не може да "
+"биде парсирана."
 
 #: gdk-pixbuf/io-jpeg.c:909
 #, c-format
@@ -407,7 +414,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-png.c:162
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr ""
+msgstr "Трансформираната PNG содржи неподдржани канали, мораат да биде 3 или 4."
 
 #: gdk-pixbuf/io-png.c:183
 #, c-format
@@ -464,7 +471,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-png.c:1026
 msgid "The PNG image format"
-msgstr ""
+msgstr "PNG форматот на слика"
 
 #: gdk-pixbuf/io-pnm.c:252
 msgid "PNM loader expected to find an integer, but didn't"
@@ -596,12 +603,12 @@ msgstr ""
 
 #: gdk-pixbuf/io-tga.c:769
 msgid "TGA image has invalid dimensions"
-msgstr ""
+msgstr "TGA сликата има невалидни димензии"
 
 #: gdk-pixbuf/io-tga.c:775 gdk-pixbuf/io-tga.c:784 gdk-pixbuf/io-tga.c:794
 #: gdk-pixbuf/io-tga.c:804 gdk-pixbuf/io-tga.c:811
 msgid "TGA image type not supported"
-msgstr ""
+msgstr "TGA сликата не е поддржана"
 
 #: gdk-pixbuf/io-tga.c:858
 msgid "Cannot allocate memory for TGA context struct"
@@ -613,7 +620,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-tga.c:992
 msgid "The Targa image format"
-msgstr ""
+msgstr "Targa форматот на слика"
 
 #: gdk-pixbuf/io-tiff.c:173
 msgid "Could not get image width (bad TIFF file)"
@@ -654,7 +661,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-tiff.c:610
 msgid "The TIFF image format"
-msgstr ""
+msgstr "TIFF форматот на слика"
 
 #: gdk-pixbuf/io-wbmp.c:246
 msgid "Image has zero width"
@@ -674,7 +681,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-wbmp.c:368
 msgid "The WBMP image format"
-msgstr ""
+msgstr "WBMP форматот на слика"
 
 #: gdk-pixbuf/io-xbm.c:287
 msgid "Invalid XBM file"
@@ -690,15 +697,15 @@ msgstr ""
 
 #: gdk-pixbuf/io-xbm.c:476
 msgid "The XBM image format"
-msgstr ""
+msgstr "XBM форматот на слика"
 
 #: gdk-pixbuf/io-xpm.c:467
 msgid "No XPM header found"
-msgstr ""
+msgstr "Не е пронајдено заглавје за XPM"
 
 #: gdk-pixbuf/io-xpm.c:476
 msgid "Invalid XPM header"
-msgstr ""
+msgstr "Невалидно заглавје на XPM"
 
 #: gdk-pixbuf/io-xpm.c:484
 msgid "XPM file has image width <= 0"
@@ -1051,7 +1058,7 @@ msgstr "keyboard label|Backslash"
 #.
 #: gtk/gtkcalendar.c:647
 msgid "calendar:MY"
-msgstr ""
+msgstr "calendar:MY"
 
 #. Translate to calendar:week_start:0 if you want Sunday to be the
 #. * first day of the week to calendar:week_start:1 if you want Monday
@@ -1059,7 +1066,7 @@ msgstr ""
 #.
 #: gtk/gtkcalendar.c:661
 msgid "calendar:week_start:0"
-msgstr ""
+msgstr "calendar:week_start:0"
 
 #. Translators:  This is a text measurement template.
 #. * Translate it to the widest year text.
@@ -1071,7 +1078,7 @@ msgstr ""
 #.
 #: gtk/gtkcalendar.c:1549
 msgid "year measurement template|2000"
-msgstr ""
+msgstr "year measurement template|2000"
 
 #. Translators: This dictates how the year is displayed in
 #. * gtkcalendar widget.  See strftime() manual for the format.
@@ -1086,13 +1093,13 @@ msgstr ""
 #.
 #: gtk/gtkcalendar.c:1826
 msgid "calendar year format|%Y"
-msgstr ""
+msgstr "календарски формат на годината|%Y"
 
 #. do not translate the part before the |
 #: gtk/gtkcellrendererprogress.c:237 gtk/gtkcellrendererprogress.c:295
 #, c-format
 msgid "progress bar label|%d %%"
-msgstr ""
+msgstr "ознака за лента за прогрес|%d %%"
 
 #: gtk/gtkcolorbutton.c:221 gtk/gtkcolorbutton.c:576
 msgid "Pick a Color"
@@ -1114,6 +1121,8 @@ msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
 msgstr ""
+"Бојата што ја одбравте. Можете да ја влечете оваа боја до палетата за да ја "
+"зачувате за користење во иднина."
 
 #: gtk/gtkcolorsel.c:961
 msgid "_Save color here"
@@ -1143,7 +1152,7 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:1988
 msgid "Position on the color wheel."
-msgstr ""
+msgstr "Положба на бојата во тркалото на бои."
 
 #: gtk/gtkcolorsel.c:1990
 msgid "_Saturation:"
@@ -1151,39 +1160,39 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:1991
 msgid "\"Deepness\" of the color."
-msgstr ""
+msgstr "„Длабочина“ на бојата."
 
 #: gtk/gtkcolorsel.c:1992
 msgid "_Value:"
-msgstr ""
+msgstr "_Вредност:"
 
 #: gtk/gtkcolorsel.c:1993
 msgid "Brightness of the color."
-msgstr ""
+msgstr "Светлост на бојата."
 
 #: gtk/gtkcolorsel.c:1994
 msgid "_Red:"
-msgstr ""
+msgstr "_Црвена:"
 
 #: gtk/gtkcolorsel.c:1995
 msgid "Amount of red light in the color."
-msgstr ""
+msgstr "Износ на црвена светлина во бојата."
 
 #: gtk/gtkcolorsel.c:1996
 msgid "_Green:"
-msgstr ""
+msgstr "_Зелена:"
 
 #: gtk/gtkcolorsel.c:1997
 msgid "Amount of green light in the color."
-msgstr ""
+msgstr "Износ на зелена светлина во бојата."
 
 #: gtk/gtkcolorsel.c:1998
 msgid "_Blue:"
-msgstr ""
+msgstr "_Сина:"
 
 #: gtk/gtkcolorsel.c:1999
 msgid "Amount of blue light in the color."
-msgstr ""
+msgstr "Износ на сина светлина во бојата."
 
 #: gtk/gtkcolorsel.c:2002
 msgid "_Opacity:"
@@ -1335,7 +1344,7 @@ msgstr "_Додај"
 
 #: gtk/gtkfilechooserdefault.c:3200
 msgid "Add the selected folder to the Bookmarks"
-msgstr ""
+msgstr "Додај ја избраната папка во обележувачите"
 
 #: gtk/gtkfilechooserdefault.c:3205 gtk/gtkstock.c:398
 msgid "_Remove"
@@ -1415,7 +1424,7 @@ msgstr ""
 #: gtk/gtkfilechooserdefault.c:5671
 #, c-format
 msgid "Shortcut %s does not exist"
-msgstr ""
+msgstr "Кратенката %s не постои"
 
 #: gtk/gtkfilechooserdefault.c:6215
 #, c-format
@@ -1536,6 +1545,8 @@ msgid ""
 "Error creating folder \"%s\": %s\n"
 "%s"
 msgstr ""
+"Грешка при креирање на папката \"%s\": %s\n"
+"%s"
 
 #: gtk/gtkfilesel.c:1441 gtk/gtkfilesel.c:1677
 msgid "You probably used symbols not allowed in filenames."
@@ -1544,7 +1555,7 @@ msgstr ""
 #: gtk/gtkfilesel.c:1449
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
-msgstr ""
+msgstr "Грешка при креирање на папката \"%s\": %s\n"
 
 #: gtk/gtkfilesel.c:1483
 msgid "New Folder"
@@ -1561,7 +1572,7 @@ msgstr "С_оздади"
 #: gtk/gtkfilesel.c:1565
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
+msgstr "Датотеката \"%s\" содржи симболи кои што не се дозволени во име на датотека"
 
 #: gtk/gtkfilesel.c:1568
 #, c-format
@@ -1569,6 +1580,8 @@ msgid ""
 "Error deleting file \"%s\": %s\n"
 "%s"
 msgstr ""
+"Грешка при бришење на датотеката \"%s\": %s\n"
+"%s"
 
 #: gtk/gtkfilesel.c:1570 gtk/gtkfilesel.c:1691
 msgid "It probably contains symbols not allowed in filenames."
@@ -1577,16 +1590,16 @@ msgstr ""
 #: gtk/gtkfilesel.c:1579
 #, c-format
 msgid "Error deleting file \"%s\": %s"
-msgstr ""
+msgstr "Грешка при бришење на датотеката \"%s\": %s"
 
 #: gtk/gtkfilesel.c:1622
 #, c-format
 msgid "Really delete file \"%s\"?"
-msgstr ""
+msgstr "Стварно да избришам датотека „%s“?"
 
 #: gtk/gtkfilesel.c:1627
 msgid "Delete File"
-msgstr ""
+msgstr "Избриши датотека"
 
 #: gtk/gtkfilesel.c:1673 gtk/gtkfilesel.c:1687
 #, c-format
@@ -1599,6 +1612,8 @@ msgid ""
 "Error renaming file to \"%s\": %s\n"
 "%s"
 msgstr ""
+"Грешка при реименување на датотеката во \"%s\": %s\n"
+"%s"
 
 #: gtk/gtkfilesel.c:1689
 #, c-format
@@ -1606,11 +1621,13 @@ msgid ""
 "Error renaming file \"%s\": %s\n"
 "%s"
 msgstr ""
+"Грешка при реименување на датотеката \"%s\": %s\n"
+"%s"
 
 #: gtk/gtkfilesel.c:1699
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
-msgstr ""
+msgstr "Грешка при реименување на датотеката \"%s\" во \"%s\": %s"
 
 #: gtk/gtkfilesel.c:1746
 msgid "Rename File"
@@ -1642,11 +1659,11 @@ msgstr "Невалиден UTF-8"
 
 #: gtk/gtkfilesel.c:4027
 msgid "Name too long"
-msgstr ""
+msgstr "Името е предолго"
 
 #: gtk/gtkfilesel.c:4029
 msgid "Couldn't convert filename"
-msgstr ""
+msgstr "Не можам да го конвертирам името на датотеката"
 
 #: gtk/gtkfilesystemmodel.c:1267
 msgid "(Empty)"
@@ -1687,22 +1704,22 @@ msgstr ""
 #: gtk/gtkfilesystemunix.c:1463 gtk/gtkfilesystemwin32.c:1032
 #, c-format
 msgid "Bookmark saving failed: %s"
-msgstr ""
+msgstr "Зачувувањето на обележувачот е неуспешно: %s"
 
 #: gtk/gtkfilesystemunix.c:1518
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
-msgstr ""
+msgstr "'%s' веќе постои во листата на обележувачи"
 
 #: gtk/gtkfilesystemunix.c:1590
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
-msgstr ""
+msgstr "'%s' не постои во листата на обележувачи"
 
 #: gtk/gtkfilesystemunix.c:1818
 #, c-format
 msgid "Error getting information for '/': %s"
-msgstr ""
+msgstr "Грешка при добивање на информации за '/': %s"
 
 #: gtk/gtkfilesystemwin32.c:611
 #, c-format
@@ -1712,7 +1729,7 @@ msgstr "Мрежен уред (%s)"
 #: gtk/gtkfilesystemwin32.c:650
 #, c-format
 msgid "%s (%s)"
-msgstr ""
+msgstr "%s (%s)"
 
 #: gtk/gtkfontbutton.c:179 gtk/gtkfontbutton.c:292
 msgid "Pick a Font"
@@ -1760,7 +1777,7 @@ msgstr "Гама"
 
 #: gtk/gtkgamma.c:411
 msgid "_Gamma value"
-msgstr ""
+msgstr "_Вредност за гама"
 
 #. Remove this icon source so we don't keep trying to
 #. * load it.
@@ -1836,7 +1853,7 @@ msgstr "Y"
 
 #: gtk/gtkinputdialog.c:564
 msgid "Pressure"
-msgstr ""
+msgstr "Притисок"
 
 #: gtk/gtkinputdialog.c:565
 msgid "X Tilt"
@@ -1911,7 +1928,7 @@ msgstr "Опции за GTK+"
 
 #: gtk/gtkmain.c:559
 msgid "Show GTK+ Options"
-msgstr ""
+msgstr "Покажи опции за GTK+"
 
 #: gtk/gtknotebook.c:2718 gtk/gtknotebook.c:5064
 #, c-format
@@ -1929,7 +1946,7 @@ msgstr ""
 #: gtk/gtkrc.c:2400
 #, c-format
 msgid "Unable to find include file: \"%s\""
-msgstr ""
+msgstr "Не можам да ја најдам датотеката: \"%s\""
 
 #: gtk/gtkrc.c:3042 gtk/gtkrc.c:3045
 #, c-format
@@ -1983,7 +2000,7 @@ msgstr "_CD-Rom"
 
 #: gtk/gtkstock.c:322
 msgid "_Clear"
-msgstr ""
+msgstr "_Исчисти"
 
 #: gtk/gtkstock.c:323
 msgid "_Close"
@@ -2147,12 +2164,12 @@ msgstr "Медиум|П_ауза"
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:376
 msgid "Media|_Play"
-msgstr ""
+msgstr "Медиа|_Пушти"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:378
 msgid "Media|Pre_vious"
-msgstr ""
+msgstr "Медиа|Прет_ходно"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:380
@@ -2203,7 +2220,7 @@ msgstr "_Печати"
 
 #: gtk/gtkstock.c:393
 msgid "Print Pre_view"
-msgstr ""
+msgstr "Преглед за пе_чатење"
 
 #: gtk/gtkstock.c:394
 msgid "_Properties"
@@ -2251,7 +2268,7 @@ msgstr "_Опаѓачки"
 
 #: gtk/gtkstock.c:406
 msgid "_Spell Check"
-msgstr ""
+msgstr "_Правопис"
 
 #: gtk/gtkstock.c:407
 msgid "_Stop"
@@ -2259,11 +2276,11 @@ msgstr "_Стоп"
 
 #: gtk/gtkstock.c:408
 msgid "_Strikethrough"
-msgstr ""
+msgstr "_Прешкртано"
 
 #: gtk/gtkstock.c:409
 msgid "_Undelete"
-msgstr ""
+msgstr "_Врати избришано"
 
 #: gtk/gtkstock.c:410
 msgid "_Underline"
@@ -2295,27 +2312,27 @@ msgstr "Одзумирај"
 
 #: gtk/gtktextutil.c:48
 msgid "LRM _Left-to-right mark"
-msgstr ""
+msgstr "LRM _Left-to-right mark"
 
 #: gtk/gtktextutil.c:49
 msgid "RLM _Right-to-left mark"
-msgstr ""
+msgstr "RLM _Right-to-left mark"
 
 #: gtk/gtktextutil.c:50
 msgid "LRE Left-to-right _embedding"
-msgstr ""
+msgstr "LRE Left-to-right _embedding"
 
 #: gtk/gtktextutil.c:51
 msgid "RLE Right-to-left e_mbedding"
-msgstr ""
+msgstr "RLE Right-to-left e_mbedding"
 
 #: gtk/gtktextutil.c:52
 msgid "LRO Left-to-right _override"
-msgstr ""
+msgstr "LRO Left-to-right _override"
 
 #: gtk/gtktextutil.c:53
 msgid "RLO Right-to-left o_verride"
-msgstr ""
+msgstr "RLO Right-to-left o_verride"
 
 #: gtk/gtktextutil.c:54
 msgid "PDF _Pop directional formatting"
@@ -2364,12 +2381,12 @@ msgstr "Празно"
 #. ID
 #: modules/input/imam-et.c:454
 msgid "Amharic (EZ+)"
-msgstr ""
+msgstr "Amharic (EZ+)"
 
 #. ID
 #: modules/input/imcedilla.c:91
 msgid "Cedilla"
-msgstr ""
+msgstr "Cedilla"
 
 #. ID
 #: modules/input/imcyrillic-translit.c:217
@@ -2379,42 +2396,42 @@ msgstr "Кирилица (Transliterated)"
 #. ID
 #: modules/input/iminuktitut.c:127
 msgid "Inuktitut (Transliterated)"
-msgstr ""
+msgstr "Inuktitut (Transliterated)"
 
 #. ID
 #: modules/input/imipa.c:145
 msgid "IPA"
-msgstr ""
+msgstr "IPA"
 
 #. ID
 #: modules/input/imthai-broken.c:178
 msgid "Thai (Broken)"
-msgstr ""
+msgstr "Thai (Broken)"
 
 #. ID
 #: modules/input/imti-er.c:453
 msgid "Tigrigna-Eritrean (EZ+)"
-msgstr ""
+msgstr "Tigrigna-Eritrean (EZ+)"
 
 #. ID
 #: modules/input/imti-et.c:453
 msgid "Tigrigna-Ethiopian (EZ+)"
-msgstr ""
+msgstr "Tigrigna-Ethiopian (EZ+)"
 
 #. ID
 #: modules/input/imviqr.c:244
 msgid "Vietnamese (VIQR)"
-msgstr ""
+msgstr "Vietnamese (VIQR)"
 
 #. ID
 #: modules/input/imxim.c:28
 msgid "X Input Method"
-msgstr ""
+msgstr "Метод на запис за X"
 
 #: tests/testfilechooser.c:186
 #, c-format
 msgid "Could not get information for file '%s': %s"
-msgstr ""
+msgstr "Не можам да добијам информација за датотеката '%s': %s"
 
 #~ msgid "Shift"
 #~ msgstr "Shift"
