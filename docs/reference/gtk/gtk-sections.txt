@@ -3750,6 +3750,7 @@ gtk_tree_path_is_ancestor
 gtk_tree_path_is_descendant
 gtk_tree_row_reference_new
 gtk_tree_row_reference_new_proxy
+gtk_tree_row_reference_get_model
 gtk_tree_row_reference_get_path
 gtk_tree_row_reference_valid
 gtk_tree_row_reference_free
@@ -4029,6 +4030,7 @@ gtk_tree_view_column_cell_get_size
 gtk_tree_view_column_cell_get_position
 gtk_tree_view_column_cell_is_visible
 gtk_tree_view_column_focus_cell
+gtk_tree_view_column_queue_resize
 <SUBSECTION Standard>
 GTK_TREE_VIEW_COLUMN
 GTK_IS_TREE_VIEW_COLUMN
@@ -4094,6 +4096,7 @@ gtk_tree_view_get_path_at_pos
 gtk_tree_view_get_cell_area
 gtk_tree_view_get_background_area
 gtk_tree_view_get_visible_rect
+gtk_tree_view_get_visible_range
 gtk_tree_view_get_bin_window
 gtk_tree_view_widget_to_tree_coords
 gtk_tree_view_tree_to_widget_coords
