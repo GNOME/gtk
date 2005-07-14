@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-05 14:16+0000\n"
-"PO-Revision-Date: 2005-07-10 14:32+0200\n"
+"POT-Creation-Date: 2005-07-13 14:27+0000\n"
+"PO-Revision-Date: 2005-07-14 10:49+0200\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -103,54 +103,54 @@ msgstr "Obrazovka"
 msgid "the GdkScreen for the renderer"
 msgstr "GdkScreen pro vykreslovač"
 
-#: ../gtk/gtkaboutdialog.c:204
+#: ../gtk/gtkaboutdialog.c:206
 msgid "Program name"
 msgstr "Název programu"
 
-#: ../gtk/gtkaboutdialog.c:205
+#: ../gtk/gtkaboutdialog.c:207
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
 msgstr ""
 "Název programu. Pokud není nastaven, je implicitně g_get_application_name()"
 
-#: ../gtk/gtkaboutdialog.c:219
+#: ../gtk/gtkaboutdialog.c:221
 msgid "Program version"
 msgstr "Verze programu"
 
-#: ../gtk/gtkaboutdialog.c:220
+#: ../gtk/gtkaboutdialog.c:222
 msgid "The version of the program"
 msgstr "Verze programu"
 
-#: ../gtk/gtkaboutdialog.c:234
+#: ../gtk/gtkaboutdialog.c:236
 msgid "Copyright string"
 msgstr "Řetězec copyrightu"
 
-#: ../gtk/gtkaboutdialog.c:235
+#: ../gtk/gtkaboutdialog.c:237
 msgid "Copyright information for the program"
 msgstr "Informace o copyrightu na program"
 
-#: ../gtk/gtkaboutdialog.c:252
+#: ../gtk/gtkaboutdialog.c:254
 msgid "Comments string"
 msgstr "Řetězec poznámek"
 
-#: ../gtk/gtkaboutdialog.c:253
+#: ../gtk/gtkaboutdialog.c:255
 msgid "Comments about the program"
 msgstr "Poznámky o programu"
 
-#: ../gtk/gtkaboutdialog.c:286
+#: ../gtk/gtkaboutdialog.c:289
 msgid "Website URL"
 msgstr "URL WWW stránek"
 
-#: ../gtk/gtkaboutdialog.c:287
+#: ../gtk/gtkaboutdialog.c:290
 msgid "The URL for the link to the website of the program"
 msgstr "URL pro odkaz na WWW stránky programu"
 
-#: ../gtk/gtkaboutdialog.c:303
+#: ../gtk/gtkaboutdialog.c:306
 msgid "Website label"
 msgstr "Popisek WWW stránek"
 
-#: ../gtk/gtkaboutdialog.c:304
+#: ../gtk/gtkaboutdialog.c:307
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
@@ -158,45 +158,45 @@ msgstr ""
 "Popisek pro odkaz na WWW stránky programu. Není-li nastaven, je implicitně "
 "roven URL"
 
-#: ../gtk/gtkaboutdialog.c:320
+#: ../gtk/gtkaboutdialog.c:323
 msgid "Authors"
 msgstr "Autoři"
 
-#: ../gtk/gtkaboutdialog.c:321
+#: ../gtk/gtkaboutdialog.c:324
 msgid "List of authors of the program"
 msgstr "Seznam autorů programu"
 
-#: ../gtk/gtkaboutdialog.c:337
+#: ../gtk/gtkaboutdialog.c:340
 msgid "Documenters"
 msgstr "Dokumentátoři"
 
-#: ../gtk/gtkaboutdialog.c:338
+#: ../gtk/gtkaboutdialog.c:341
 msgid "List of people documenting the program"
 msgstr "Seznam lidí dokumentujících program"
 
-#: ../gtk/gtkaboutdialog.c:354
+#: ../gtk/gtkaboutdialog.c:357
 msgid "Artists"
 msgstr "Umělci"
 
-#: ../gtk/gtkaboutdialog.c:355
+#: ../gtk/gtkaboutdialog.c:358
 msgid "List of people who have contributed artwork to the program"
 msgstr "Seznam lidí, kteří pro program tvořili grafiku"
 
-#: ../gtk/gtkaboutdialog.c:372
+#: ../gtk/gtkaboutdialog.c:375
 msgid "Translator credits"
 msgstr "Kredity překladatelů"
 
-#: ../gtk/gtkaboutdialog.c:373
+#: ../gtk/gtkaboutdialog.c:376
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr ""
 "Kredity překladatelů. Tento řetězec by měl být označen jako přeložitelný"
 
-#: ../gtk/gtkaboutdialog.c:388
+#: ../gtk/gtkaboutdialog.c:391
 msgid "Logo"
 msgstr "Logo"
 
-#: ../gtk/gtkaboutdialog.c:389
+#: ../gtk/gtkaboutdialog.c:392
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -204,19 +204,27 @@ msgstr ""
 "Logo pro dialog o aplikaci. Pokud není nastaveno, je implicitně "
 "gtk_window_get_default_icon_list()"
 
-#: ../gtk/gtkaboutdialog.c:404
+#: ../gtk/gtkaboutdialog.c:407
 msgid "Logo Icon Name"
 msgstr "Název ikony s logem"
 
-#: ../gtk/gtkaboutdialog.c:405
+#: ../gtk/gtkaboutdialog.c:408
 msgid "A named icon to use as the logo for the about box."
 msgstr "Pojmenovaná ikona, kterou použávat jako logo pro dialog o aplikaci."
 
-#: ../gtk/gtkaboutdialog.c:412
+#: ../gtk/gtkaboutdialog.c:421
+msgid "Wrap license"
+msgstr "Zalamovat licenci"
+
+#: ../gtk/gtkaboutdialog.c:422
+msgid "Whether to wrap the license text."
+msgstr "Jestli zalamovat text licence."
+
+#: ../gtk/gtkaboutdialog.c:429
 msgid "Link Color"
 msgstr "Barva odkazu"
 
-#: ../gtk/gtkaboutdialog.c:413
+#: ../gtk/gtkaboutdialog.c:430
 msgid "Color of hyperlinks"
 msgstr "Barva odkazů"
 
@@ -245,7 +253,7 @@ msgid "A unique name for the action."
 msgstr "Jedinečný název akce."
 
 #: ../gtk/gtkaction.c:205 ../gtk/gtkbutton.c:226 ../gtk/gtkexpander.c:206
-#: ../gtk/gtkframe.c:128 ../gtk/gtklabel.c:321 ../gtk/gtktoolbutton.c:187
+#: ../gtk/gtkframe.c:128 ../gtk/gtklabel.c:322 ../gtk/gtktoolbutton.c:187
 msgid "Label"
 msgstr "Popis"
 
@@ -681,12 +689,12 @@ msgid ""
 "widget"
 msgstr "Text widgetu popisu v tlačítku, pokud tlačítko obsahuje widget popisu"
 
-#: ../gtk/gtkbutton.c:234 ../gtk/gtkexpander.c:214 ../gtk/gtklabel.c:342
+#: ../gtk/gtkbutton.c:234 ../gtk/gtkexpander.c:214 ../gtk/gtklabel.c:343
 #: ../gtk/gtktoolbutton.c:194
 msgid "Use underline"
 msgstr "Používat podtržítko"
 
-#: ../gtk/gtkbutton.c:235 ../gtk/gtkexpander.c:215 ../gtk/gtklabel.c:343
+#: ../gtk/gtkbutton.c:235 ../gtk/gtkexpander.c:215 ../gtk/gtklabel.c:344
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -1057,7 +1065,7 @@ msgid "Value of the progress bar"
 msgstr "Hodnota pruhu průběhu"
 
 #: ../gtk/gtkcellrendererprogress.c:134 ../gtk/gtkcellrenderertext.c:219
-#: ../gtk/gtkentry.c:574 ../gtk/gtkprogressbar.c:221
+#: ../gtk/gtkentry.c:575 ../gtk/gtkprogressbar.c:221
 #: ../gtk/gtktextbuffer.c:206
 msgid "Text"
 msgstr "Text"
@@ -1078,7 +1086,7 @@ msgstr "Značky"
 msgid "Marked up text to render"
 msgstr "Zobrazovaný text se značkami"
 
-#: ../gtk/gtkcellrenderertext.c:235 ../gtk/gtklabel.c:328
+#: ../gtk/gtkcellrenderertext.c:235 ../gtk/gtklabel.c:329
 msgid "Attributes"
 msgstr "Atributy"
 
@@ -1129,7 +1137,7 @@ msgstr "Barva popředí"
 msgid "Foreground color as a GdkColor"
 msgstr "Barva popředí jako GdkColor"
 
-#: ../gtk/gtkcellrenderertext.c:285 ../gtk/gtkentry.c:506
+#: ../gtk/gtkcellrenderertext.c:285 ../gtk/gtkentry.c:507
 #: ../gtk/gtktexttag.c:279 ../gtk/gtktextview.c:578
 msgid "Editable"
 msgstr "Upravitelné"
@@ -1241,7 +1249,7 @@ msgstr ""
 "jako pomocnou informaci při vykreslování textu. Pokud tomuto parametru "
 "nerozumíte, pravděpodobně jej nepotřebujete."
 
-#: ../gtk/gtkcellrenderertext.c:435 ../gtk/gtklabel.c:434
+#: ../gtk/gtkcellrenderertext.c:435 ../gtk/gtklabel.c:435
 #: ../gtk/gtkprogressbar.c:243
 msgid "Ellipsize"
 msgstr "Zkrátit"
@@ -1255,11 +1263,11 @@ msgstr ""
 "místa na zobrazení celého řetězce, pokud vůbec nečeho"
 
 #: ../gtk/gtkcellrenderertext.c:455 ../gtk/gtkfilechooserbutton.c:367
-#: ../gtk/gtklabel.c:454
+#: ../gtk/gtklabel.c:455
 msgid "Width In Characters"
 msgstr "Šířka ve znacích"
 
-#: ../gtk/gtkcellrenderertext.c:456 ../gtk/gtklabel.c:455
+#: ../gtk/gtkcellrenderertext.c:456 ../gtk/gtklabel.c:456
 msgid "The desired width of the label, in characters"
 msgstr "Požadovaná šířka popisku ve znacích"
 
@@ -1284,116 +1292,116 @@ msgid "The width at which the text is wrapped"
 msgstr "Šíčka, na kterou je text zalamován"
 
 #: ../gtk/gtkcellrenderertext.c:507 ../gtk/gtkcellview.c:198
-#: ../gtk/gtktexttag.c:545
+#: ../gtk/gtktexttag.c:556
 msgid "Background set"
 msgstr "Pozadí nastaveno"
 
 #: ../gtk/gtkcellrenderertext.c:508 ../gtk/gtkcellview.c:199
-#: ../gtk/gtktexttag.c:546
+#: ../gtk/gtktexttag.c:557
 msgid "Whether this tag affects the background color"
 msgstr "Jestli tento tag ovlivňuje barvu pozadí"
 
-#: ../gtk/gtkcellrenderertext.c:511 ../gtk/gtktexttag.c:557
+#: ../gtk/gtkcellrenderertext.c:511 ../gtk/gtktexttag.c:568
 msgid "Foreground set"
 msgstr "Popředí nastaveno"
 
-#: ../gtk/gtkcellrenderertext.c:512 ../gtk/gtktexttag.c:558
+#: ../gtk/gtkcellrenderertext.c:512 ../gtk/gtktexttag.c:569
 msgid "Whether this tag affects the foreground color"
 msgstr "Jestli tento tag ovlivňuje barvu popředí"
 
-#: ../gtk/gtkcellrenderertext.c:515 ../gtk/gtktexttag.c:565
+#: ../gtk/gtkcellrenderertext.c:515 ../gtk/gtktexttag.c:576
 msgid "Editability set"
 msgstr "Možnost úprav nastavena"
 
-#: ../gtk/gtkcellrenderertext.c:516 ../gtk/gtktexttag.c:566
+#: ../gtk/gtkcellrenderertext.c:516 ../gtk/gtktexttag.c:577
 msgid "Whether this tag affects text editability"
 msgstr "Jestli tento tag ovlivňuje upravitelnost textu"
 
-#: ../gtk/gtkcellrenderertext.c:519 ../gtk/gtktexttag.c:569
+#: ../gtk/gtkcellrenderertext.c:519 ../gtk/gtktexttag.c:580
 msgid "Font family set"
 msgstr "Rodina písma nastavena"
 
-#: ../gtk/gtkcellrenderertext.c:520 ../gtk/gtktexttag.c:570
+#: ../gtk/gtkcellrenderertext.c:520 ../gtk/gtktexttag.c:581
 msgid "Whether this tag affects the font family"
 msgstr "Jestli tento tag ovlivňuje rodinu písma"
 
-#: ../gtk/gtkcellrenderertext.c:523 ../gtk/gtktexttag.c:573
+#: ../gtk/gtkcellrenderertext.c:523 ../gtk/gtktexttag.c:584
 msgid "Font style set"
 msgstr "Styl písma nastaven"
 
-#: ../gtk/gtkcellrenderertext.c:524 ../gtk/gtktexttag.c:574
+#: ../gtk/gtkcellrenderertext.c:524 ../gtk/gtktexttag.c:585
 msgid "Whether this tag affects the font style"
 msgstr "Jestli tento tag ovlivňuje styl písma"
 
-#: ../gtk/gtkcellrenderertext.c:527 ../gtk/gtktexttag.c:577
+#: ../gtk/gtkcellrenderertext.c:527 ../gtk/gtktexttag.c:588
 msgid "Font variant set"
 msgstr "Varianta písma nastavena"
 
-#: ../gtk/gtkcellrenderertext.c:528 ../gtk/gtktexttag.c:578
+#: ../gtk/gtkcellrenderertext.c:528 ../gtk/gtktexttag.c:589
 msgid "Whether this tag affects the font variant"
 msgstr "Jestli tento tag ovlivňuje variantu písma"
 
-#: ../gtk/gtkcellrenderertext.c:531 ../gtk/gtktexttag.c:581
+#: ../gtk/gtkcellrenderertext.c:531 ../gtk/gtktexttag.c:592
 msgid "Font weight set"
 msgstr "Váha písma nastavena"
 
-#: ../gtk/gtkcellrenderertext.c:532 ../gtk/gtktexttag.c:582
+#: ../gtk/gtkcellrenderertext.c:532 ../gtk/gtktexttag.c:593
 msgid "Whether this tag affects the font weight"
 msgstr "Jestli tento tag ovlivňuje váhu písma"
 
-#: ../gtk/gtkcellrenderertext.c:535 ../gtk/gtktexttag.c:585
+#: ../gtk/gtkcellrenderertext.c:535 ../gtk/gtktexttag.c:596
 msgid "Font stretch set"
 msgstr "Rozteč písma nastavena"
 
-#: ../gtk/gtkcellrenderertext.c:536 ../gtk/gtktexttag.c:586
+#: ../gtk/gtkcellrenderertext.c:536 ../gtk/gtktexttag.c:597
 msgid "Whether this tag affects the font stretch"
 msgstr "Jestli tento tag ovlivňuje rozteč písma"
 
-#: ../gtk/gtkcellrenderertext.c:539 ../gtk/gtktexttag.c:589
+#: ../gtk/gtkcellrenderertext.c:539 ../gtk/gtktexttag.c:600
 msgid "Font size set"
 msgstr "Velikost písma nastavena"
 
-#: ../gtk/gtkcellrenderertext.c:540 ../gtk/gtktexttag.c:590
+#: ../gtk/gtkcellrenderertext.c:540 ../gtk/gtktexttag.c:601
 msgid "Whether this tag affects the font size"
 msgstr "Jestli tento tag ovlivňuje velikost písma"
 
-#: ../gtk/gtkcellrenderertext.c:543 ../gtk/gtktexttag.c:593
+#: ../gtk/gtkcellrenderertext.c:543 ../gtk/gtktexttag.c:604
 msgid "Font scale set"
 msgstr "Škálování písma nastaveno"
 
-#: ../gtk/gtkcellrenderertext.c:544 ../gtk/gtktexttag.c:594
+#: ../gtk/gtkcellrenderertext.c:544 ../gtk/gtktexttag.c:605
 msgid "Whether this tag scales the font size by a factor"
 msgstr "Jestli tento tag škáluje velikost písma o daný faktor"
 
-#: ../gtk/gtkcellrenderertext.c:547 ../gtk/gtktexttag.c:613
+#: ../gtk/gtkcellrenderertext.c:547 ../gtk/gtktexttag.c:624
 msgid "Rise set"
 msgstr "Vyvýšení nastaveno"
 
-#: ../gtk/gtkcellrenderertext.c:548 ../gtk/gtktexttag.c:614
+#: ../gtk/gtkcellrenderertext.c:548 ../gtk/gtktexttag.c:625
 msgid "Whether this tag affects the rise"
 msgstr "Jestli tento tag ovlivňuje vyvýšení"
 
-#: ../gtk/gtkcellrenderertext.c:551 ../gtk/gtktexttag.c:629
+#: ../gtk/gtkcellrenderertext.c:551 ../gtk/gtktexttag.c:640
 msgid "Strikethrough set"
 msgstr "Přeškrtnutí nastaveno"
 
-#: ../gtk/gtkcellrenderertext.c:552 ../gtk/gtktexttag.c:630
+#: ../gtk/gtkcellrenderertext.c:552 ../gtk/gtktexttag.c:641
 msgid "Whether this tag affects strikethrough"
 msgstr "Jestli tento tag ovlivňuje přeškrtnutí"
 
-#: ../gtk/gtkcellrenderertext.c:555 ../gtk/gtktexttag.c:637
+#: ../gtk/gtkcellrenderertext.c:555 ../gtk/gtktexttag.c:648
 msgid "Underline set"
 msgstr "Podtržení nastaveno"
 
-#: ../gtk/gtkcellrenderertext.c:556 ../gtk/gtktexttag.c:638
+#: ../gtk/gtkcellrenderertext.c:556 ../gtk/gtktexttag.c:649
 msgid "Whether this tag affects underlining"
 msgstr "Jestli tento tag ovlivňuje podtržení"
 
-#: ../gtk/gtkcellrenderertext.c:559 ../gtk/gtktexttag.c:601
+#: ../gtk/gtkcellrenderertext.c:559 ../gtk/gtktexttag.c:612
 msgid "Language set"
 msgstr "Jazyk nastaven"
 
-#: ../gtk/gtkcellrenderertext.c:560 ../gtk/gtktexttag.c:602
+#: ../gtk/gtkcellrenderertext.c:560 ../gtk/gtktexttag.c:613
 msgid "Whether this tag affects the language the text is rendered as"
 msgstr "Jestli tento tag ovlivňuje jazyk, ve kterém je zobrazený text"
 
@@ -1628,7 +1636,7 @@ msgstr "Přidat odtrhávátka do menu"
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Jestli mají rozbalené comboboxy mít položku pro odtržení"
 
-#: ../gtk/gtkcombobox.c:673 ../gtk/gtkentry.c:531
+#: ../gtk/gtkcombobox.c:673 ../gtk/gtkentry.c:532
 msgid "Has Frame"
 msgstr "Má rám"
 
@@ -1744,63 +1752,63 @@ msgstr "Okraj plochy s akcemi"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Šířka okraje okolo tlačítek v dolní části dialogu"
 
-#: ../gtk/gtkentry.c:486 ../gtk/gtklabel.c:399
+#: ../gtk/gtkentry.c:487 ../gtk/gtklabel.c:400
 msgid "Cursor Position"
 msgstr "Pozice kurzoru"
 
-#: ../gtk/gtkentry.c:487 ../gtk/gtklabel.c:400
+#: ../gtk/gtkentry.c:488 ../gtk/gtklabel.c:401
 msgid "The current position of the insertion cursor in chars"
 msgstr "Aktuální pozice kurzoru pro vkládání ve znacích"
 
-#: ../gtk/gtkentry.c:496 ../gtk/gtklabel.c:409
+#: ../gtk/gtkentry.c:497 ../gtk/gtklabel.c:410
 msgid "Selection Bound"
 msgstr "Okraj výběru"
 
-#: ../gtk/gtkentry.c:497 ../gtk/gtklabel.c:410
+#: ../gtk/gtkentry.c:498 ../gtk/gtklabel.c:411
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "Pozice druhého konce výběru od kurzoru ve znacích"
 
-#: ../gtk/gtkentry.c:507
+#: ../gtk/gtkentry.c:508
 msgid "Whether the entry contents can be edited"
 msgstr "Jestli je možné upravovat obsah položky"
 
-#: ../gtk/gtkentry.c:514
+#: ../gtk/gtkentry.c:515
 msgid "Maximum length"
 msgstr "Maximální délka"
 
-#: ../gtk/gtkentry.c:515
+#: ../gtk/gtkentry.c:516
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr "Maximální počet znaků této položky. Nula znamená bez omezení"
 
-#: ../gtk/gtkentry.c:523
+#: ../gtk/gtkentry.c:524
 msgid "Visibility"
 msgstr "Viditelnost"
 
-#: ../gtk/gtkentry.c:524
+#: ../gtk/gtkentry.c:525
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
 msgstr ""
 "FALSE zobrazí místo zadaného textu \"neviditelný znak\" (režim pro hesla)"
 
-#: ../gtk/gtkentry.c:532
+#: ../gtk/gtkentry.c:533
 msgid "FALSE removes outside bevel from entry"
 msgstr "FALSE odstraní vnější rám okolo položky"
 
-#: ../gtk/gtkentry.c:539
+#: ../gtk/gtkentry.c:540
 msgid "Invisible character"
 msgstr "Neviditelný znak"
 
-#: ../gtk/gtkentry.c:540
+#: ../gtk/gtkentry.c:541
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr "Znak používaný pro skrytí obsahu pole (v \"režimu pro hesla\")"
 
-#: ../gtk/gtkentry.c:547
+#: ../gtk/gtkentry.c:548
 msgid "Activates default"
 msgstr "Aktivuje implicitní"
 
-#: ../gtk/gtkentry.c:548
+#: ../gtk/gtkentry.c:549
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
@@ -1808,31 +1816,31 @@ msgstr ""
 "Jestli aktivovat implicitní widget (například implicitní tlačítko dialogu) "
 "při stisku Enter"
 
-#: ../gtk/gtkentry.c:554
+#: ../gtk/gtkentry.c:555
 msgid "Width in chars"
 msgstr "Šířka ve znacích"
 
-#: ../gtk/gtkentry.c:555
+#: ../gtk/gtkentry.c:556
 msgid "Number of characters to leave space for in the entry"
 msgstr "Počet znaků, na které se má nechat prostor v položce"
 
-#: ../gtk/gtkentry.c:564
+#: ../gtk/gtkentry.c:565
 msgid "Scroll offset"
 msgstr "Posun"
 
-#: ../gtk/gtkentry.c:565
+#: ../gtk/gtkentry.c:566
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "Počet pixelů, o které je položka posunuta mimo obrazovku vlevo"
 
-#: ../gtk/gtkentry.c:575
+#: ../gtk/gtkentry.c:576
 msgid "The contents of the entry"
 msgstr "Obsah pole pro vkládání"
 
-#: ../gtk/gtkentry.c:590 ../gtk/gtkmisc.c:101
+#: ../gtk/gtkentry.c:591 ../gtk/gtkmisc.c:101
 msgid "X align"
 msgstr "Zarovnání X"
 
-#: ../gtk/gtkentry.c:591 ../gtk/gtkmisc.c:102
+#: ../gtk/gtkentry.c:592 ../gtk/gtkmisc.c:102
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
@@ -1840,11 +1848,11 @@ msgstr ""
 "Vodorovné zarovnání, od 0 (vlevo) do 1 (vpravo). Obráceně pro rozložení "
 "zprava doleva."
 
-#: ../gtk/gtkentry.c:829
+#: ../gtk/gtkentry.c:830
 msgid "Select on focus"
 msgstr "Vybrat při fokusu"
 
-#: ../gtk/gtkentry.c:830
+#: ../gtk/gtkentry.c:831
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Jestli vybrat obsah položky, pokud položka získá fokus"
 
@@ -1941,11 +1949,11 @@ msgstr "Jestli byl rozbalovač otevřen a zobrazuje widget potomka"
 msgid "Text of the expander's label"
 msgstr "Text popisku rozbalovače"
 
-#: ../gtk/gtkexpander.c:222 ../gtk/gtklabel.c:335
+#: ../gtk/gtkexpander.c:222 ../gtk/gtklabel.c:336
 msgid "Use markup"
 msgstr "Používat značky"
 
-#: ../gtk/gtkexpander.c:223 ../gtk/gtklabel.c:336
+#: ../gtk/gtkexpander.c:223 ../gtk/gtklabel.c:337
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "Text popisu obsahuje značky XML. Viz pango_parse_markup()"
 
@@ -2042,7 +2050,7 @@ msgstr "Aplikací dodaný widget pro další možnosti."
 msgid "Select Multiple"
 msgstr "Vícenásobný výběr"
 
-#: ../gtk/gtkfilechooser.c:227 ../gtk/gtkfilesel.c:576
+#: ../gtk/gtkfilechooser.c:227 ../gtk/gtkfilesel.c:573
 msgid "Whether to allow multiple files to be selected"
 msgstr "Jestli umožnit výběr více souborů"
 
@@ -2070,31 +2078,31 @@ msgstr "Titulek dialogu výběru souborů."
 msgid "The desired width of the button widget, in characters."
 msgstr "Požadovaná šířka widgetu tlačítka ve znacích."
 
-#: ../gtk/gtkfilechooserdefault.c:626
+#: ../gtk/gtkfilechooserdefault.c:640
 msgid "Default file chooser backend"
 msgstr "Implicitní backend výběru souborů"
 
-#: ../gtk/gtkfilechooserdefault.c:627
+#: ../gtk/gtkfilechooserdefault.c:641
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Název backendu GtkFileChooser, který používat implicitně"
 
-#: ../gtk/gtkfilesel.c:561 ../gtk/gtkimage.c:194
+#: ../gtk/gtkfilesel.c:558 ../gtk/gtkimage.c:194
 msgid "Filename"
 msgstr "Název souboru"
 
-#: ../gtk/gtkfilesel.c:562
+#: ../gtk/gtkfilesel.c:559
 msgid "The currently selected filename"
 msgstr "Právě vybraný název souboru"
 
-#: ../gtk/gtkfilesel.c:568
+#: ../gtk/gtkfilesel.c:565
 msgid "Show file operations"
 msgstr "Zobrazovat operace se soubory"
 
-#: ../gtk/gtkfilesel.c:569
+#: ../gtk/gtkfilesel.c:566
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr "Jestli se mají zobrazovat tlačítka pro vytváření/práci se soubory"
 
-#: ../gtk/gtkfilesel.c:575
+#: ../gtk/gtkfilesel.c:572
 msgid "Select multiple"
 msgstr "Vícenásobný výběr"
 
@@ -2468,19 +2476,19 @@ msgstr "Jestli se mají v menu zobrazovat obrázky"
 msgid "The screen where this window will be displayed"
 msgstr "Obrazovka, kde se toto okno zobrazí"
 
-#: ../gtk/gtklabel.c:322
+#: ../gtk/gtklabel.c:323
 msgid "The text of the label"
 msgstr "Text popisu"
 
-#: ../gtk/gtklabel.c:329
+#: ../gtk/gtklabel.c:330
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Seznam atributů stylu, které použít na text popisu"
 
-#: ../gtk/gtklabel.c:350 ../gtk/gtktexttag.c:380 ../gtk/gtktextview.c:595
+#: ../gtk/gtklabel.c:351 ../gtk/gtktexttag.c:380 ../gtk/gtktextview.c:595
 msgid "Justification"
 msgstr "Zarovnání"
 
-#: ../gtk/gtklabel.c:351
+#: ../gtk/gtklabel.c:352
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
@@ -2489,50 +2497,50 @@ msgstr ""
 "Zarovnaní řádků v textu relativně k sobe navzájem. Toto NEOVLIVŇUJE "
 "zarovnání popisu v jeho přiřazeném místu. Takovou funkci plní GtkMisc::xalign"
 
-#: ../gtk/gtklabel.c:359
+#: ../gtk/gtklabel.c:360
 msgid "Pattern"
 msgstr "Vzorek"
 
-#: ../gtk/gtklabel.c:360
+#: ../gtk/gtklabel.c:361
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline"
 msgstr ""
 "Řetězec se znaky _ v pozicích odpovídajících znakům v textu, které podtrhnout"
 
-#: ../gtk/gtklabel.c:367
+#: ../gtk/gtklabel.c:368
 msgid "Line wrap"
 msgstr "Zalamovaní řádků"
 
-#: ../gtk/gtklabel.c:368
+#: ../gtk/gtklabel.c:369
 msgid "If set, wrap lines if the text becomes too wide"
 msgstr "Je-li nastaveno, zalamovat řádky, pokud bude text moc široký"
 
-#: ../gtk/gtklabel.c:374
+#: ../gtk/gtklabel.c:375
 msgid "Selectable"
 msgstr "Vybratelný"
 
-#: ../gtk/gtklabel.c:375
+#: ../gtk/gtklabel.c:376
 msgid "Whether the label text can be selected with the mouse"
 msgstr "Jestli je možné vybrat text v popisu myší"
 
-#: ../gtk/gtklabel.c:381
+#: ../gtk/gtklabel.c:382
 msgid "Mnemonic key"
 msgstr "Klávesová zkratka"
 
-#: ../gtk/gtklabel.c:382
+#: ../gtk/gtklabel.c:383
 msgid "The mnemonic accelerator key for this label"
 msgstr "Mnemonická klávesová zkratka pro tento popis"
 
-#: ../gtk/gtklabel.c:390
+#: ../gtk/gtklabel.c:391
 msgid "Mnemonic widget"
 msgstr "Widget akcelerátoru"
 
-#: ../gtk/gtklabel.c:391
+#: ../gtk/gtklabel.c:392
 msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr "Widget aktivovaný při stisku klávesové zkratky popisu"
 
-#: ../gtk/gtklabel.c:435
+#: ../gtk/gtklabel.c:436
 msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string, if at all"
@@ -2540,27 +2548,27 @@ msgstr ""
 "Preferované místo, kde zkrátit řetězec, pokud popisek nemá dost místa pro "
 "zobrazení celého řetězce, pokud vůbec něčeho"
 
-#: ../gtk/gtklabel.c:475
+#: ../gtk/gtklabel.c:476
 msgid "Single Line Mode"
 msgstr "Režim jednoho řádku"
 
-#: ../gtk/gtklabel.c:476
+#: ../gtk/gtklabel.c:477
 msgid "Whether the label is in single line mode"
 msgstr "Jestli je popisek v režimu jednoho řádku"
 
-#: ../gtk/gtklabel.c:493
+#: ../gtk/gtklabel.c:494
 msgid "Angle"
 msgstr "Úhel"
 
-#: ../gtk/gtklabel.c:494
+#: ../gtk/gtklabel.c:495
 msgid "Angle at which the label is rotated"
 msgstr "Úhel, o který je popisek rotován"
 
-#: ../gtk/gtklabel.c:514
+#: ../gtk/gtklabel.c:515
 msgid "Maximum Width In Characters"
 msgstr "Maximální šířka ve znacích"
 
-#: ../gtk/gtklabel.c:515
+#: ../gtk/gtklabel.c:516
 msgid "The desired maximum width of the label, in characters"
 msgstr "Požadovaná maximální šířka popisku ve znacích"
 
@@ -3610,7 +3618,8 @@ msgstr "Ignorovat skryté"
 #: ../gtk/gtksizegroup.c:263
 msgid ""
 "If TRUE, hidden widgets are ignored when determining the size of the group"
-msgstr "Je-li TRUE, skryté widgety jsou ignorovány při určování velikosti skupiny"
+msgstr ""
+"Je-li TRUE, skryté widgety jsou ignorovány při určování velikosti skupiny"
 
 #: ../gtk/gtkspinbutton.c:244
 msgid "The adjustment that holds the value of the spinbutton"
@@ -3998,135 +4007,135 @@ msgstr "Tabelátory"
 msgid "Custom tabs for this text"
 msgstr "Vlastní tabelátory pro tento text"
 
-#: ../gtk/gtktexttag.c:504
+#: ../gtk/gtktexttag.c:515
 msgid "Invisible"
 msgstr "Neviditelný"
 
-#: ../gtk/gtktexttag.c:505
-msgid "Whether this text is hidden. Not implemented in GTK 2.0"
-msgstr "Jestli je tento text skryt. Není implementováno pro GTK 2.0"
+#: ../gtk/gtktexttag.c:516
+msgid "Whether this text is hidden."
+msgstr "Jestli je tento text skryt."
 
-#: ../gtk/gtktexttag.c:519
+#: ../gtk/gtktexttag.c:530
 msgid "Paragraph background color name"
 msgstr "Název barvy pozadí odstavce"
 
-#: ../gtk/gtktexttag.c:520
+#: ../gtk/gtktexttag.c:531
 msgid "Paragraph background color as a string"
 msgstr "Barva pozadí odstavce jako řetězec"
 
-#: ../gtk/gtktexttag.c:535
+#: ../gtk/gtktexttag.c:546
 msgid "Paragraph background color"
 msgstr "Barva pozadí ostavce"
 
-#: ../gtk/gtktexttag.c:536
+#: ../gtk/gtktexttag.c:547
 msgid "Paragraph background color as a (possibly unallocated) GdkColor"
 msgstr "Barva pozadí odstavce jako (možná nepřidělená) GdkColor"
 
-#: ../gtk/gtktexttag.c:549
+#: ../gtk/gtktexttag.c:560
 msgid "Background full height set"
 msgstr "Plná výška pozadí nastavena"
 
-#: ../gtk/gtktexttag.c:550
+#: ../gtk/gtktexttag.c:561
 msgid "Whether this tag affects background height"
 msgstr "Jestli tento tag ovlivňuje výšku pozadí"
 
-#: ../gtk/gtktexttag.c:553
+#: ../gtk/gtktexttag.c:564
 msgid "Background stipple set"
 msgstr "Maska pozadí nastavena"
 
-#: ../gtk/gtktexttag.c:554
+#: ../gtk/gtktexttag.c:565
 msgid "Whether this tag affects the background stipple"
 msgstr "Jestli tento tag ovlivňuje masku pozadí"
 
-#: ../gtk/gtktexttag.c:561
+#: ../gtk/gtktexttag.c:572
 msgid "Foreground stipple set"
 msgstr "Maska popředí nastavena"
 
-#: ../gtk/gtktexttag.c:562
+#: ../gtk/gtktexttag.c:573
 msgid "Whether this tag affects the foreground stipple"
 msgstr "Jestli tento tag ovlivňuje masku popředí"
 
-#: ../gtk/gtktexttag.c:597
+#: ../gtk/gtktexttag.c:608
 msgid "Justification set"
 msgstr "Zarovnání nastaveno"
 
-#: ../gtk/gtktexttag.c:598
+#: ../gtk/gtktexttag.c:609
 msgid "Whether this tag affects paragraph justification"
 msgstr "Jestli tento tag ovlivňuje zarovnání odstavce"
 
-#: ../gtk/gtktexttag.c:605
+#: ../gtk/gtktexttag.c:616
 msgid "Left margin set"
 msgstr "Levý okraj nastaven"
 
-#: ../gtk/gtktexttag.c:606
+#: ../gtk/gtktexttag.c:617
 msgid "Whether this tag affects the left margin"
 msgstr "Jestli tento tag ovlivňuje levý okraj"
 
-#: ../gtk/gtktexttag.c:609
+#: ../gtk/gtktexttag.c:620
 msgid "Indent set"
 msgstr "Odsazení nastaveno"
 
-#: ../gtk/gtktexttag.c:610
+#: ../gtk/gtktexttag.c:621
 msgid "Whether this tag affects indentation"
 msgstr "Jestli tento tag ovlivňuje odsazení"
 
-#: ../gtk/gtktexttag.c:617
+#: ../gtk/gtktexttag.c:628
 msgid "Pixels above lines set"
 msgstr "Pixely nad řádky nastaveny"
 
-#: ../gtk/gtktexttag.c:618 ../gtk/gtktexttag.c:622
+#: ../gtk/gtktexttag.c:629 ../gtk/gtktexttag.c:633
 msgid "Whether this tag affects the number of pixels above lines"
 msgstr "Jestli tento tag ovlivňuje počet pixelů nad řádky"
 
-#: ../gtk/gtktexttag.c:621
+#: ../gtk/gtktexttag.c:632
 msgid "Pixels below lines set"
 msgstr "Pixely pod řádky nastaveny"
 
-#: ../gtk/gtktexttag.c:625
+#: ../gtk/gtktexttag.c:636
 msgid "Pixels inside wrap set"
 msgstr "Pixely v zalomení nastaveny"
 
-#: ../gtk/gtktexttag.c:626
+#: ../gtk/gtktexttag.c:637
 msgid "Whether this tag affects the number of pixels between wrapped lines"
 msgstr "Jestli tento tag ovlivňuje počet pixelů mezi zalomenými řádky"
 
-#: ../gtk/gtktexttag.c:633
+#: ../gtk/gtktexttag.c:644
 msgid "Right margin set"
 msgstr "Pravý okraj nastaven"
 
-#: ../gtk/gtktexttag.c:634
+#: ../gtk/gtktexttag.c:645
 msgid "Whether this tag affects the right margin"
 msgstr "Jestli tento tag ovlivňuje pravý okraj"
 
-#: ../gtk/gtktexttag.c:641
+#: ../gtk/gtktexttag.c:652
 msgid "Wrap mode set"
 msgstr "Režim zalamování nastaven"
 
-#: ../gtk/gtktexttag.c:642
+#: ../gtk/gtktexttag.c:653
 msgid "Whether this tag affects line wrap mode"
 msgstr "Jestli tento tag ovlivňuje režim zalamování řádků"
 
-#: ../gtk/gtktexttag.c:645
+#: ../gtk/gtktexttag.c:656
 msgid "Tabs set"
 msgstr "Tabelátory nastaveny"
 
-#: ../gtk/gtktexttag.c:646
+#: ../gtk/gtktexttag.c:657
 msgid "Whether this tag affects tabs"
 msgstr "Jestli tento tag ovlivňuje tabelátory"
 
-#: ../gtk/gtktexttag.c:649
+#: ../gtk/gtktexttag.c:660
 msgid "Invisible set"
 msgstr "Neviditelný nastaveno"
 
-#: ../gtk/gtktexttag.c:650
+#: ../gtk/gtktexttag.c:661
 msgid "Whether this tag affects text visibility"
 msgstr "Jestli tento tag ovlivňuje viditelnost textu"
 
-#: ../gtk/gtktexttag.c:653
+#: ../gtk/gtktexttag.c:664
 msgid "Paragraph background set"
 msgstr "Pozadí ostavce nastaveno"
 
-#: ../gtk/gtktexttag.c:654
+#: ../gtk/gtktexttag.c:665
 msgid "Whether this tag affects the paragraph background color"
 msgstr "Jestli tento tag ovlivňuje barvu pozadí odstavce"
 
