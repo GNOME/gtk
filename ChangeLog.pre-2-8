@@ -1,3 +1,9 @@
+2005-07-14  Tor Lillqvist  <tml@novell.com>
+
+	* gtk/gtkfilesystemwin32.c (filename_get_info): Implement getting
+	the MIME type of a file. Look it up in the Registry. Bug reported
+	by Hans Oesterholt.
+
 2005-07-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkicontheme.c (load_themes): Don't keep the caches

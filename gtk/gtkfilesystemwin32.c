@@ -1613,23 +1613,37 @@ filename_get_info (const gchar     *filename,
     }
 #endif
 
-  if ((types & GTK_FILE_INFO_MIME_TYPE)
-#if 0 /* it's dead in gtkfilesystemunix.c, too */
-      || ((types & GTK_FILE_INFO_ICON) && icon_type == GTK_FILE_ICON_REGULAR)
-#endif
-     )
+  if (types & GTK_FILE_INFO_MIME_TYPE)
     {
-#if 0
-      const char *mime_type = xdg_mime_get_mime_type_for_file (filename);
-      gtk_file_info_set_mime_type (info, mime_type);
+      if (g_file_test (filename, G_FILE_TEST_IS_EXECUTABLE))
+	gtk_file_info_set_mime_type (info, "application/x-executable");
+      else
+	{
+	  const char *extension = strrchr (filename, '.');
+	  HKEY key = NULL;
+	  DWORD type, nbytes = 0;
+	  char *value;
 
-      if ((types & GTK_FILE_INFO_ICON) && icon_type == GTK_FILE_ICON_REGULAR &&
-	  (statbuf.st_mode & (S_IXUSR | S_IXGRP | S_IXOTH)) &&
-	  (strcmp (mime_type, XDG_MIME_TYPE_UNKNOWN) == 0 ||
-	   strcmp (mime_type, "application/x-executable") == 0 ||
-	   strcmp (mime_type, "application/x-shellscript") == 0))
-	gtk_file_info_set_icon_type (info, GTK_FILE_ICON_EXECUTABLE);
-#endif
+	  if (extension != NULL &&
+	      extension[1] != '\0' &&
+	      RegOpenKeyEx (HKEY_CLASSES_ROOT, extension, 0,
+			    KEY_QUERY_VALUE, &key) == ERROR_SUCCESS &&
+	      RegQueryValueEx (key, "Content Type", 0,
+			       &type, NULL, &nbytes) == ERROR_SUCCESS &&
+	      type == REG_SZ &&
+	      (value = g_try_malloc (nbytes + 1)) &&
+	      RegQueryValueEx (key, "Content Type", 0,
+			       &type, value, &nbytes) == ERROR_SUCCESS)
+	    {
+	      value[nbytes] = '\0';
+	      gtk_file_info_set_mime_type (info, value);
+	      g_free (value);
+	    }
+	  else
+	    gtk_file_info_set_mime_type (info, "application/octet-stream");
+	  if (key != NULL)
+	    RegCloseKey (key);
+	}
     }
 
   if (types & GTK_FILE_INFO_MODIFICATION_TIME)
