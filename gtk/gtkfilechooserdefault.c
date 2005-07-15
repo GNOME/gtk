@@ -194,6 +194,7 @@ struct _GtkFileChooserDefault
   guint use_preview_label : 1;
   guint select_multiple : 1;
   guint show_hidden : 1;
+  guint do_overwrite_confirmation : 1;
   guint list_sort_ascending : 1;
   guint changing_folder : 1;
   guint shortcuts_current_folder_active : 1;
@@ -4227,29 +4228,37 @@ gtk_file_chooser_default_set_property (GObject      *object,
 					      action);
       }
       break;
+
     case GTK_FILE_CHOOSER_PROP_FILE_SYSTEM_BACKEND:
       set_file_system_backend (impl, g_value_get_string (value));
       break;
+
     case GTK_FILE_CHOOSER_PROP_FILTER:
       set_current_filter (impl, g_value_get_object (value));
       break;
+
     case GTK_FILE_CHOOSER_PROP_LOCAL_ONLY:
       set_local_only (impl, g_value_get_boolean (value));
       break;
+
     case GTK_FILE_CHOOSER_PROP_PREVIEW_WIDGET:
       set_preview_widget (impl, g_value_get_object (value));
       break;
+
     case GTK_FILE_CHOOSER_PROP_PREVIEW_WIDGET_ACTIVE:
       impl->preview_widget_active = g_value_get_boolean (value);
       update_preview_widget_visibility (impl);
       break;
+
     case GTK_FILE_CHOOSER_PROP_USE_PREVIEW_LABEL:
       impl->use_preview_label = g_value_get_boolean (value);
       update_preview_widget_visibility (impl);
       break;
+
     case GTK_FILE_CHOOSER_PROP_EXTRA_WIDGET:
       set_extra_widget (impl, g_value_get_object (value));
       break;
+
     case GTK_FILE_CHOOSER_PROP_SELECT_MULTIPLE:
       {
 	gboolean select_multiple = g_value_get_boolean (value);
@@ -4265,6 +4274,7 @@ gtk_file_chooser_default_set_property (GObject      *object,
 	set_select_multiple (impl, select_multiple, FALSE);
       }
       break;
+
     case GTK_FILE_CHOOSER_PROP_SHOW_HIDDEN:
       {
 	gboolean show_hidden = g_value_get_boolean (value);
@@ -4277,6 +4287,14 @@ gtk_file_chooser_default_set_property (GObject      *object,
 	  }
       }
       break;
+
+    case GTK_FILE_CHOOSER_PROP_DO_OVERWRITE_CONFIRMATION:
+      {
+	gboolean do_overwrite_confirmation = g_value_get_boolean (value);
+	impl->do_overwrite_confirmation = do_overwrite_confirmation;
+      }
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -4296,30 +4314,43 @@ gtk_file_chooser_default_get_property (GObject    *object,
     case GTK_FILE_CHOOSER_PROP_ACTION:
       g_value_set_enum (value, impl->action);
       break;
+
     case GTK_FILE_CHOOSER_PROP_FILTER:
       g_value_set_object (value, impl->current_filter);
       break;
+
     case GTK_FILE_CHOOSER_PROP_LOCAL_ONLY:
       g_value_set_boolean (value, impl->local_only);
       break;
+
     case GTK_FILE_CHOOSER_PROP_PREVIEW_WIDGET:
       g_value_set_object (value, impl->preview_widget);
       break;
+
     case GTK_FILE_CHOOSER_PROP_PREVIEW_WIDGET_ACTIVE:
       g_value_set_boolean (value, impl->preview_widget_active);
       break;
+
     case GTK_FILE_CHOOSER_PROP_USE_PREVIEW_LABEL:
       g_value_set_boolean (value, impl->use_preview_label);
       break;
+
     case GTK_FILE_CHOOSER_PROP_EXTRA_WIDGET:
       g_value_set_object (value, impl->extra_widget);
       break;
+
     case GTK_FILE_CHOOSER_PROP_SELECT_MULTIPLE:
       g_value_set_boolean (value, impl->select_multiple);
       break;
+
     case GTK_FILE_CHOOSER_PROP_SHOW_HIDDEN:
       g_value_set_boolean (value, impl->show_hidden);
       break;
+
+    case GTK_FILE_CHOOSER_PROP_DO_OVERWRITE_CONFIRMATION:
+      g_value_set_boolean (value, impl->do_overwrite_confirmation);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -5843,6 +5874,142 @@ switch_to_selected_folder (GtkFileChooserDefault *impl)
   change_folder_and_display_error (impl, closure.path);
 }
 
+/* Gets the GtkFileInfo for the selected row in the file list; assumes single
+ * selection mode.
+ */
+static const GtkFileInfo *
+get_selected_file_info_from_file_list (GtkFileChooserDefault *impl,
+				       gboolean              *had_selection)
+{
+  GtkTreeSelection *selection;
+  GtkTreeIter iter, child_iter;
+  const GtkFileInfo *info;
+
+  g_assert (!impl->select_multiple);
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
+  if (!gtk_tree_selection_get_selected (selection, NULL, &iter))
+    {
+      *had_selection = FALSE;
+      return NULL;
+    }
+
+  *had_selection = TRUE;
+
+  gtk_tree_model_sort_convert_iter_to_child_iter (impl->sort_model,
+						  &child_iter,
+						  &iter);
+
+  info = _gtk_file_system_model_get_info (impl->browse_files_model, &child_iter);
+  return info;
+}
+
+/* Gets the display name of the selected file in the file list; assumes single
+ * selection mode and that something is selected.
+ */
+static const gchar *
+get_display_name_from_file_list (GtkFileChooserDefault *impl)
+{
+  const GtkFileInfo *info;
+  gboolean had_selection;
+
+  info = get_selected_file_info_from_file_list (impl, &had_selection);
+  g_assert (had_selection);
+  g_assert (info != NULL);
+
+  return gtk_file_info_get_display_name (info);
+}
+
+static void
+add_custom_button_to_dialog (GtkDialog   *dialog,
+			     const gchar *mnemonic_label,
+			     const gchar *stock_id,
+			     gint         response_id)
+{
+  GtkWidget *button;
+
+  button = gtk_button_new_with_mnemonic (mnemonic_label);
+  GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+  gtk_button_set_image (GTK_BUTTON (button),
+			gtk_image_new_from_stock (stock_id, GTK_ICON_SIZE_BUTTON));
+  gtk_widget_show (button);
+
+  gtk_dialog_add_action_widget (GTK_DIALOG (dialog), button, response_id);
+}
+
+/* Presents an overwrite confirmation dialog; returns whether we should accept
+ * the filename.
+ */
+static gboolean
+confirm_dialog_should_accept_filename (GtkFileChooserDefault *impl,
+				       const gchar           *file_part)
+{
+  GtkWindow *toplevel;
+  GtkWidget *dialog;
+  int response;
+
+  toplevel = get_toplevel (GTK_WIDGET (impl));
+
+  dialog = gtk_message_dialog_new (toplevel,
+				   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+				   GTK_MESSAGE_QUESTION,
+				   GTK_BUTTONS_NONE,
+				   _("A file named \"%s\" already exists."),
+				   file_part);
+  gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+					    _("Do you want to replace it with the one you are saving?"));
+
+  add_custom_button_to_dialog (GTK_DIALOG (dialog), _("_Select another file"), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+  add_custom_button_to_dialog (GTK_DIALOG (dialog), _("_Replace existing file"), GTK_STOCK_REFRESH, GTK_RESPONSE_ACCEPT);
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
+  
+  response = gtk_dialog_run (GTK_DIALOG (dialog));
+
+  gtk_widget_destroy (dialog);
+
+  return (response == GTK_RESPONSE_ACCEPT);
+}
+
+/* Does overwrite confirmation if appropriate, and returns whether the dialog
+ * should respond.  Can get the file part from the file list or the save entry.
+ */
+static gboolean
+should_respond_after_confirm_overwrite (GtkFileChooserDefault *impl,
+					gboolean               get_file_part_from_file_list)
+{
+  GtkFileChooserConfirmation conf;
+  const gchar *file_part;
+
+  if (!impl->do_overwrite_confirmation)
+    return TRUE;
+
+  if (get_file_part_from_file_list)
+    file_part = get_display_name_from_file_list (impl);
+  else
+    file_part = _gtk_file_chooser_entry_get_file_part (GTK_FILE_CHOOSER_ENTRY (impl->save_file_name_entry));
+
+  g_assert (file_part != NULL);
+
+  conf = GTK_FILE_CHOOSER_CONFIRMATION_CONFIRM;
+
+  g_signal_emit_by_name (impl, "confirm-overwrite", &conf);
+
+  switch (conf)
+    {
+    case GTK_FILE_CHOOSER_CONFIRMATION_CONFIRM:
+      return confirm_dialog_should_accept_filename (impl, file_part);
+
+    case GTK_FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME:
+      return TRUE;
+
+    case GTK_FILE_CHOOSER_CONFIRMATION_SELECT_AGAIN:
+      return FALSE;
+
+    default:
+      g_assert_not_reached ();
+      return FALSE;
+    }
+}
+
 /* Implementation for GtkFileChooserEmbed::should_respond() */
 static gboolean
 gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
@@ -5914,6 +6081,8 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
 	      switch_to_selected_folder (impl);
 	      return FALSE;
 	    }
+	  else if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
+	    return should_respond_after_confirm_overwrite (impl, TRUE);
 	  else
 	    return TRUE;
 
@@ -5991,7 +6160,11 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
 	      if (is_folder)
 		{
 		  if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
-		    retval = TRUE;
+		    {
+		      g_assert (!is_file_part_empty);
+
+		      retval = should_respond_after_confirm_overwrite (impl, FALSE);
+		    }
 		  else /* GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER */
 		    {
 		      GError *create_error;
@@ -6358,20 +6531,13 @@ list_selection_changed (GtkTreeSelection      *selection,
   /* See if we are in the new folder editable row for Save mode */
   if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
     {
-      GtkTreeSelection *selection;
-      GtkTreeIter iter, child_iter;
       const GtkFileInfo *info;
+      gboolean had_selection;
 
-      g_assert (!impl->select_multiple);
-      selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
-      if (!gtk_tree_selection_get_selected (selection, NULL, &iter))
+      info = get_selected_file_info_from_file_list (impl, &had_selection);
+      if (!had_selection)
 	goto out; /* normal processing */
 
-      gtk_tree_model_sort_convert_iter_to_child_iter (impl->sort_model,
-						      &child_iter,
-						      &iter);
-
-      info = _gtk_file_system_model_get_info (impl->browse_files_model, &child_iter);
       if (!info)
 	return; /* We are on the editable row for New Folder */
     }

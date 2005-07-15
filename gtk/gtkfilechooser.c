@@ -25,6 +25,7 @@
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
+#include "gtkmarshalers.h"
 #include "gtkalias.h"
 
 static void gtk_file_chooser_class_init (gpointer g_iface);
@@ -54,6 +55,22 @@ gtk_file_chooser_get_type (void)
     }
 
   return file_chooser_type;
+}
+
+static gboolean
+confirm_overwrite_accumulator (GSignalInvocationHint *ihint,
+			       GValue                *return_accu,
+			       const GValue          *handler_return,
+			       gpointer               dummy)
+{
+  gboolean continue_emission;
+  GtkFileChooserConfirmation conf;
+
+  conf = g_value_get_enum (handler_return);
+  g_value_set_enum (return_accu, conf);
+  continue_emission = (conf == GTK_FILE_CHOOSER_CONFIRMATION_CONFIRM);
+
+  return continue_emission;
 }
 
 static void
@@ -171,6 +188,20 @@ gtk_file_chooser_class_init (gpointer g_iface)
 		NULL, NULL,
 		g_cclosure_marshal_VOID__VOID,
 		G_TYPE_NONE, 0);
+
+  /**
+   * GtkFileChooser::confirm-overwrite
+   * @chooser: the object which received the signal.
+   *
+   * FIXME
+   */
+  g_signal_new ("confirm-overwrite",
+		iface_type,
+		G_SIGNAL_RUN_LAST,
+		G_STRUCT_OFFSET (GtkFileChooserIface, confirm_overwrite),
+		confirm_overwrite_accumulator, NULL,
+		_gtk_marshal_ENUM__VOID,
+		GTK_TYPE_FILE_CHOOSER_CONFIRMATION, 0);
   
   g_object_interface_install_property (g_iface,
 				       g_param_spec_enum ("action",
@@ -232,6 +263,15 @@ gtk_file_chooser_class_init (gpointer g_iface)
 				       g_param_spec_boolean ("show-hidden",
 							     P_("Show Hidden"),
 							     P_("Whether the hidden files and folders should be displayed"),
+							     FALSE,
+							     GTK_PARAM_READWRITE));
+
+  g_object_interface_install_property (g_iface,
+				       g_param_spec_boolean ("do-overwrite-confirmation",
+							     P_("Do overwrite confirmation"),
+							     P_("Whether a file chooser in GTK_FILE_CHOOSER_ACTION_SAVE "
+								"will present an overwrite confirmation dialog if the user "
+								"selects a file name that already exists."),
 							     FALSE,
 							     GTK_PARAM_READWRITE));
 }
@@ -1830,6 +1870,54 @@ gtk_file_chooser_get_show_hidden (GtkFileChooser *chooser)
   g_object_get (chooser, "show-hidden", &show_hidden, NULL);
 
   return show_hidden;
+}
+
+/**
+ * gtk_file_chooser_set_do_overwrite_confirmation:
+ * @chooser: a #GtkFileChooser
+ * @do_overwrite_confirmation: whether to confirm overwriting in save mode
+ * 
+ * Sets whether a file chooser in GTK_FILE_CHOOSER_ACTION_SAVE mode will present
+ * a confirmation dialog if the user types a file name that already exists.  This
+ * is %FALSE by default.
+ *
+ * Regardless of this setting, the @chooser will emit the "confirm-overwrite"
+ * signal when appropriate.
+ *
+ * If all you need is the stock confirmation dialog, set this property to %TRUE.
+ * You can override the way confirmation is done by actually handling the
+ * "confirm-overwrite" signal; please refer to its documentation for the
+ * details.
+ **/
+void
+gtk_file_chooser_set_do_overwrite_confirmation (GtkFileChooser *chooser,
+						gboolean        do_overwrite_confirmation)
+{
+  g_return_if_fail (GTK_IS_FILE_CHOOSER (chooser));
+
+  g_object_set (chooser, "do-overwrite-confirmation", do_overwrite_confirmation, NULL);
+}
+
+/**
+ * gtk_file_chooser_get_do_overwrite_confirmation:
+ * @chooser: a #GtkFileChooser
+ * 
+ * Queries whether a file chooser is set to confirm for overwriting when the user
+ * types a file name that already exists.
+ * 
+ * Return value: %TRUE if the file chooser will present a confirmation dialog;
+ * %FALSE otherwise.
+ **/
+gboolean
+gtk_file_chooser_get_do_overwrite_confirmation (GtkFileChooser *chooser)
+{
+  gboolean do_overwrite_confirmation;
+
+  g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
+
+  g_object_get (chooser, "do-overwrite-confirmation", &do_overwrite_confirmation, NULL);
+
+  return do_overwrite_confirmation;
 }
 
 #ifdef G_OS_WIN32

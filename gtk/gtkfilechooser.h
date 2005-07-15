@@ -40,6 +40,13 @@ typedef enum
   GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER
 } GtkFileChooserAction;
 
+typedef enum
+{
+  GTK_FILE_CHOOSER_CONFIRMATION_CONFIRM,
+  GTK_FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME,
+  GTK_FILE_CHOOSER_CONFIRMATION_SELECT_AGAIN
+} GtkFileChooserConfirmation;
+
 GType gtk_file_chooser_get_type (void) G_GNUC_CONST;
 
 /* GError enumeration for GtkFileChooser */
@@ -67,6 +74,10 @@ gboolean             gtk_file_chooser_get_select_multiple (GtkFileChooser       
 void                 gtk_file_chooser_set_show_hidden     (GtkFileChooser       *chooser,
 							   gboolean              show_hidden);
 gboolean             gtk_file_chooser_get_show_hidden     (GtkFileChooser       *chooser);
+
+void                 gtk_file_chooser_set_do_overwrite_confirmation (GtkFileChooser *chooser,
+								     gboolean        do_overwrite_confirmation);
+gboolean             gtk_file_chooser_get_do_overwrite_confirmation (GtkFileChooser *chooser);
 
 /* Suggested name for the Save-type actions
  */

@@ -161,7 +161,7 @@ gtk_file_chooser_widget_constructor (GType                  type,
   current_folder = g_get_current_dir ();
   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (priv->impl), current_folder);
   g_free (current_folder);
-  
+
   _gtk_file_chooser_set_delegate (GTK_FILE_CHOOSER (object),
 				  GTK_FILE_CHOOSER (priv->impl));
 

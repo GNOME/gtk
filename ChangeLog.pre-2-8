@@ -1,3 +1,39 @@
+2005-07-14  Federico Mena Quintero  <federico@ximian.com>
+
+	Add overwrite confirmation for SAVE mode.  Fixes bug #152850:
+
+	* gtk/gtkfilechooser.h: Add prototypes for
+	gtk_file_chooser_set/get_do_overwrite_confirmation().
+	(GtkFileChooserConfirmation): New enum for the result of the
+	"confirm-overwrite" signal.
+
+	* gtk/gtkmarshalers.list: Add ENUM:VOID.
+
+	* gtk/gtkfilechooser.c (gtk_file_chooser_class_init): Add a
+	"do-overwrite-confirmation" boolean property.
+	(gtk_file_chooser_set_do_overwrite_confirmation): Implement.
+	(gtk_file_chooser_get_do_overwrite_confirmation): Implement.
+	(confirm_overwrite_accumulator): New accumulator for the signal.
+
+	* gtk/gtkfilechooserutils.h (GtkFileChooserProp): Add
+	GTK_FILE_CHOOSER_PROP_DO_OVERWRITE_CONFIRMATION.
+
+	* gtk/gtkfilechooserutils.c
+	(_gtk_file_chooser_install_properties): Override the
+	do-overwrite-confirmation property.
+
+	* gtk/gtkfilechooserprivate.h (struct _GtkFileChooserIface): Add a
+	confirm_overwrite signal to the vtable.
+
+	* gtk/gtkfilechooserdefault.c
+	(gtk_file_chooser_default_set_property): Handle the new property.
+	(gtk_file_chooser_default_get_property): Likewise.
+	(get_selected_file_info_from_file_list): New helper function; code
+	taken from list_selection_changed().
+	(list_selection_changed): Use get_selected_file_info_from_file_list().
+	(should_respond_after_confirm_overwrite): New function.
+	(gtk_file_chooser_default_should_respond): Confirm when necessary.
+
 2005-07-14  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk.symbols: Add new exported symbols.
