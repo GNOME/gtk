@@ -1,5 +1,7 @@
 2005-07-15  Federico Mena Quintero  <federico@ximian.com>
 
+	* gtk/gtk.symbols: Add the new functions.
+
 	* tests/testfilechooser.c (confirm_overwrite_cb): Add a test for
 	the confirm-overwrite signal.
 

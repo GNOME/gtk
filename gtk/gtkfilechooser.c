@@ -189,12 +189,7 @@ gtk_file_chooser_class_init (gpointer g_iface)
 		g_cclosure_marshal_VOID__VOID,
 		G_TYPE_NONE, 0);
 
-  /**
-   * GtkFileChooser::confirm-overwrite
-   * @chooser: the object which received the signal.
-   *
-   * FIXME
-   */
+  /* Documented in the docbook files */
   g_signal_new ("confirm-overwrite",
 		iface_type,
 		G_SIGNAL_RUN_LAST,
@@ -1888,6 +1883,8 @@ gtk_file_chooser_get_show_hidden (GtkFileChooser *chooser)
  * You can override the way confirmation is done by actually handling the
  * "confirm-overwrite" signal; please refer to its documentation for the
  * details.
+ *
+ * Since: 2.8
  **/
 void
 gtk_file_chooser_set_do_overwrite_confirmation (GtkFileChooser *chooser,
@@ -1907,6 +1904,8 @@ gtk_file_chooser_set_do_overwrite_confirmation (GtkFileChooser *chooser,
  * 
  * Return value: %TRUE if the file chooser will present a confirmation dialog;
  * %FALSE otherwise.
+ *
+ * Since: 2.8
  **/
 gboolean
 gtk_file_chooser_get_do_overwrite_confirmation (GtkFileChooser *chooser)
