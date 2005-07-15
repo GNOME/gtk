@@ -1,6 +1,13 @@
 2005-07-15  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserdefault.c
+	(should_respond_after_confirm_overwrite): Take the parent folder
+	path instead of the display name, to avoid doing duplicated work
+	in gtk_file_chooser_default_should_respond().
+
+2005-07-15  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c
 	(confirm_dialog_should_accept_filename): Take the display name of
 	the folder as well so that we can present a better message.  Use a
 	stock cancel button, "_Replace", and GTK_STOCK_SAVE_AS.
