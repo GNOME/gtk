@@ -1,5 +1,9 @@
 2005-07-15  Federico Mena Quintero  <federico@ximian.com>
 
+	* gtk/tmpl/gtkfilechooser.sgml: Add "Since 2.8" to the signal and enum.
+
+2005-07-15  Federico Mena Quintero  <federico@ximian.com>
+
 	* gtk/tmpl/gtkfilechooserdialog.sgml: Add a "save" example to the
 	typical usage.
 

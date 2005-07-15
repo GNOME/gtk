@@ -483,6 +483,10 @@ gtk_widget_destroy (chooser);
 @Returns: #GtkFileChooserConfirmation value that indicates which
     action to take after emitting the signal.
 
+    <para>
+      Since 2.8
+    </para>
+
 <!-- ##### SIGNAL GtkFileChooser::current-folder-changed ##### -->
 <para>
 
@@ -600,6 +604,10 @@ gtk_widget_destroy (chooser);
     terminate and accept the user's choice of a file name.
 @GTK_FILE_CHOOSER_CONFIRMATION_SELECT_AGAIN: The file chooser will
     continue running, so as to let the user select another file name.
+
+    <para>
+      Since 2.8
+    </para>
 
 <!-- ##### MACRO GTK_FILE_CHOOSER_ERROR ##### -->
     <para>
