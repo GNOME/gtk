@@ -1,5 +1,9 @@
 2005-07-15  Federico Mena Quintero  <federico@ximian.com>
 
+	* gtk/gtkfilechooserdefault.c
+	(confirm_dialog_should_accept_filename): Use header capitalization
+	for the buttons, per the HIG.
+
 	* gtk/gtk.symbols: Add the new functions.
 
 	* tests/testfilechooser.c (confirm_overwrite_cb): Add a test for

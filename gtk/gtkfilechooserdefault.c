@@ -5958,8 +5958,8 @@ confirm_dialog_should_accept_filename (GtkFileChooserDefault *impl,
   gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
 					    _("Do you want to replace it with the one you are saving?"));
 
-  add_custom_button_to_dialog (GTK_DIALOG (dialog), _("_Select another file"), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
-  add_custom_button_to_dialog (GTK_DIALOG (dialog), _("_Replace existing file"), GTK_STOCK_REFRESH, GTK_RESPONSE_ACCEPT);
+  add_custom_button_to_dialog (GTK_DIALOG (dialog), _("_Select Another File"), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+  add_custom_button_to_dialog (GTK_DIALOG (dialog), _("_Replace Existing File"), GTK_STOCK_REFRESH, GTK_RESPONSE_ACCEPT);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
   
   response = gtk_dialog_run (GTK_DIALOG (dialog));
