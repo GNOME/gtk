@@ -1,6 +1,16 @@
 2005-07-15  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserdefault.c
+	(confirm_dialog_should_accept_filename): Take the display name of
+	the folder as well so that we can present a better message.  Use a
+	stock cancel button, "_Replace", and GTK_STOCK_SAVE_AS.
+	(gtk_file_chooser_default_should_respond): Pass the file part and
+	folder display name directly to the function above.  Oops, only do
+	the confirmation dialog if the file exists.
+
+2005-07-15  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c
 	(confirm_dialog_should_accept_filename): Use header capitalization
 	for the buttons, per the HIG.
 

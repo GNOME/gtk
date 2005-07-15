@@ -5941,7 +5941,8 @@ add_custom_button_to_dialog (GtkDialog   *dialog,
  */
 static gboolean
 confirm_dialog_should_accept_filename (GtkFileChooserDefault *impl,
-				       const gchar           *file_part)
+				       const gchar           *file_part,
+				       const gchar           *folder_display_name)
 {
   GtkWindow *toplevel;
   GtkWidget *dialog;
@@ -5953,14 +5954,16 @@ confirm_dialog_should_accept_filename (GtkFileChooserDefault *impl,
 				   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
 				   GTK_MESSAGE_QUESTION,
 				   GTK_BUTTONS_NONE,
-				   _("A file named \"%s\" already exists."),
+				   _("A file named \"%s\" already exists.  Do you want to replace it?"),
 				   file_part);
   gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-					    _("Do you want to replace it with the one you are saving?"));
+					    _("The file already exists in \"%s\".  Replacing it will "
+					      "overwrite its contents."),
+					    folder_display_name);
 
-  add_custom_button_to_dialog (GTK_DIALOG (dialog), _("_Select Another File"), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
-  add_custom_button_to_dialog (GTK_DIALOG (dialog), _("_Replace Existing File"), GTK_STOCK_REFRESH, GTK_RESPONSE_ACCEPT);
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
+  gtk_dialog_add_button (GTK_DIALOG (dialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+  add_custom_button_to_dialog (GTK_DIALOG (dialog), _("_Replace"), GTK_STOCK_SAVE_AS, GTK_RESPONSE_ACCEPT);
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
   
   response = gtk_dialog_run (GTK_DIALOG (dialog));
 
@@ -5974,20 +5977,16 @@ confirm_dialog_should_accept_filename (GtkFileChooserDefault *impl,
  */
 static gboolean
 should_respond_after_confirm_overwrite (GtkFileChooserDefault *impl,
-					gboolean               get_file_part_from_file_list)
+					const gchar           *file_part,
+					const gchar           *folder_display_name)
 {
   GtkFileChooserConfirmation conf;
-  const gchar *file_part;
 
   if (!impl->do_overwrite_confirmation)
     return TRUE;
 
-  if (get_file_part_from_file_list)
-    file_part = get_display_name_from_file_list (impl);
-  else
-    file_part = _gtk_file_chooser_entry_get_file_part (GTK_FILE_CHOOSER_ENTRY (impl->save_file_name_entry));
-
   g_assert (file_part != NULL);
+  g_assert (folder_display_name != NULL);
 
   conf = GTK_FILE_CHOOSER_CONFIRMATION_CONFIRM;
 
@@ -5996,7 +5995,7 @@ should_respond_after_confirm_overwrite (GtkFileChooserDefault *impl,
   switch (conf)
     {
     case GTK_FILE_CHOOSER_CONFIRMATION_CONFIRM:
-      return confirm_dialog_should_accept_filename (impl, file_part);
+      return confirm_dialog_should_accept_filename (impl, file_part, folder_display_name);
 
     case GTK_FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME:
       return TRUE;
@@ -6008,6 +6007,50 @@ should_respond_after_confirm_overwrite (GtkFileChooserDefault *impl,
       g_assert_not_reached ();
       return FALSE;
     }
+}
+
+static char *
+get_display_name_for_folder (GtkFileChooserDefault *impl,
+			     const GtkFilePath     *path)
+{
+  char *display_name;
+  GtkFilePath *parent_path;
+  GtkFileFolder *parent_folder;
+  GtkFileInfo *info;
+
+  display_name = NULL;
+  parent_path = NULL;
+  parent_folder = NULL;
+  info = NULL;
+
+  if (!gtk_file_system_get_parent (impl->file_system, path, &parent_path, NULL))
+    goto out;
+
+  parent_folder = gtk_file_system_get_folder (impl->file_system,
+					      parent_path ? parent_path : path,
+					      GTK_FILE_INFO_DISPLAY_NAME,
+					      NULL);
+  if (!parent_folder)
+    goto out;
+
+  info = gtk_file_folder_get_info (parent_folder, parent_path ? path : NULL, NULL);
+  if (!info)
+    goto out;
+
+  display_name = g_strdup (gtk_file_info_get_display_name (info));
+
+ out:
+
+  if (parent_path)
+    gtk_file_path_free (parent_path);
+
+  if (parent_folder)
+    g_object_unref (parent_folder);
+
+  if (info)
+    gtk_file_info_free (info);
+
+  return display_name;
 }
 
 /* Implementation for GtkFileChooserEmbed::should_respond() */
@@ -6082,7 +6125,23 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
 	      return FALSE;
 	    }
 	  else if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
-	    return should_respond_after_confirm_overwrite (impl, TRUE);
+	    {
+	      const char *file_part;
+	      char *folder_display_name;
+	      gboolean retval;
+
+	      file_part = get_display_name_from_file_list (impl);
+	      g_assert (file_part != NULL);
+
+	      folder_display_name = get_display_name_for_folder (impl, impl->current_folder);
+	      if (folder_display_name != NULL)
+		{
+		  retval = should_respond_after_confirm_overwrite (impl, file_part, folder_display_name);
+		  g_free (folder_display_name);
+		}
+	      else
+		retval = TRUE; /* Huh?  Did the folder disappear?  Let the caller deal with it */
+	    }
 	  else
 	    return TRUE;
 
@@ -6141,8 +6200,11 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
 	}
       else
 	{
-	  if (impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER
-	      && g_error_matches (error, GTK_FILE_SYSTEM_ERROR, GTK_FILE_SYSTEM_ERROR_NOT_FOLDER))
+	  gboolean file_exists_and_is_not_folder;
+
+	  file_exists_and_is_not_folder = g_error_matches (error, GTK_FILE_SYSTEM_ERROR, GTK_FILE_SYSTEM_ERROR_NOT_FOLDER);
+
+	  if (impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER && file_exists_and_is_not_folder)
 	    {
 	      /* Oops, the user typed the name of an existing path which is not a folder */
 	      error_creating_folder_over_existing_file_dialog (impl, path, error);
@@ -6152,18 +6214,36 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
 	  else
 	    {
 	      GtkFilePath *parent_path;
+	      gboolean parent_is_folder;
 
 	      /* check that everything up to the last component exists */
 
 	      parent_path = gtk_file_path_copy (_gtk_file_chooser_entry_get_current_folder (entry));
-	      is_folder = check_is_folder (impl->file_system, parent_path, NULL);
-	      if (is_folder)
+	      parent_is_folder = check_is_folder (impl->file_system, parent_path, NULL);
+	      if (parent_is_folder)
 		{
 		  if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
 		    {
-		      g_assert (!is_file_part_empty);
+		      if (file_exists_and_is_not_folder)
+			{
+			  const char *file_part;
+			  char *folder_display_name;
 
-		      retval = should_respond_after_confirm_overwrite (impl, FALSE);
+			  g_assert (!is_file_part_empty);
+
+			  file_part = _gtk_file_chooser_entry_get_file_part (GTK_FILE_CHOOSER_ENTRY (impl->save_file_name_entry));
+			  g_assert (file_part != NULL);
+
+			  folder_display_name = get_display_name_for_folder (impl, parent_path);
+			  if (folder_display_name != NULL)
+			    {
+			      retval = should_respond_after_confirm_overwrite (impl, file_part, folder_display_name);
+			      g_free (folder_display_name);
+			    }
+			  else
+			    retval = TRUE; /* Huh?  Did the folder disappear?  Let the caller deal with it */
+			} else
+			  retval = TRUE;
 		    }
 		  else /* GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER */
 		    {
