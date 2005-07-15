@@ -1,3 +1,14 @@
+2005-07-15  Federico Mena Quintero  <federico@ximian.com>
+
+	* tests/testfilechooser.c (confirm_overwrite_cb): Add a test for
+	the confirm-overwrite signal.
+
+	* gtk/gtkfilechooser.c (gtk_file_chooser_class_init): Remove the
+	stub documentation for the "confirm-overwrite" signal.
+	(gtk_file_chooser_set_do_overwrite_confirmation): Add "Since: 2.8"
+	to the docs.
+	(gtk_file_chooser_get_do_overwrite_confirmation): Likewise.
+
 2005-07-14  Federico Mena Quintero  <federico@ximian.com>
 
 	Add overwrite confirmation for SAVE mode.  Fixes bug #152850:

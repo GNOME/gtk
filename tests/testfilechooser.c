@@ -159,7 +159,7 @@ format_size (gint64 size)
 #define _(s) (s)
 
 static void
-size_prepared_cb (GdkPixbufLoader *loader, 
+size_prepared_cb (GdkPixbufLoader *loader,
 		  int              width,
 		  int              height,
 		  int             *data)
@@ -182,7 +182,7 @@ size_prepared_cb (GdkPixbufLoader *loader,
 
 GdkPixbuf *
 my_new_from_file_at_size (const char *filename,
-			  int         width, 
+			  int         width,
 			  int         height,
 			  GError    **error)
 {
@@ -219,7 +219,7 @@ my_new_from_file_at_size (const char *filename,
                              filename, g_strerror (errno));
 		return NULL;
         }
-	
+
 	loader = gdk_pixbuf_loader_new ();
 #ifdef DONT_PRESERVE_ASPECT
 	gdk_pixbuf_loader_set_size (loader, width, height);
@@ -227,7 +227,7 @@ my_new_from_file_at_size (const char *filename,
 	info[0] = width;
 	info[1] = height;
 	g_signal_connect (loader, "size-prepared", G_CALLBACK (size_prepared_cb), info);
-#endif	
+#endif
 
 	while (!feof (f)) {
 		length = fread (buffer, 1, sizeof (buffer), f);
@@ -277,7 +277,7 @@ update_preview_cb (GtkFileChooser *chooser)
 {
   gchar *filename = gtk_file_chooser_get_preview_filename (chooser);
   gboolean have_preview = FALSE;
-  
+
   if (filename)
     {
       GdkPixbuf *pixbuf;
@@ -300,10 +300,10 @@ update_preview_cb (GtkFileChooser *chooser)
 	      gchar *preview_text;
 	      gchar *size_str;
 	      gchar *modified_time;
-	      
+
 	      size_str = format_size (buf.st_size);
 	      modified_time = format_time (buf.st_mtime);
-	      
+
 	      preview_text = g_strdup_printf ("<i>Modified:</i>\t%s\n"
 					      "<i>Size:</i>\t%s\n",
 					      modified_time,
@@ -312,13 +312,13 @@ update_preview_cb (GtkFileChooser *chooser)
 	      g_free (modified_time);
 	      g_free (size_str);
 	      g_free (preview_text);
-	      
+
 	      gtk_widget_hide (preview_image);
 	      gtk_widget_show (preview_label);
 	      have_preview = TRUE;
 	    }
 	}
-      
+
       g_free (filename);
 
       if (error)
@@ -417,8 +417,57 @@ notify_multiple_cb (GtkWidget  *dialog,
   gboolean multiple;
 
   multiple = gtk_file_chooser_get_select_multiple (GTK_FILE_CHOOSER (dialog));
-  
+
   gtk_widget_set_sensitive (button, multiple);
+}
+
+static GtkFileChooserConfirmation
+confirm_overwrite_cb (GtkFileChooser *chooser,
+		      gpointer        data)
+{
+  GtkWidget *dialog;
+  GtkWidget *button;
+  int response;
+  GtkFileChooserConfirmation conf;
+
+  dialog = gtk_message_dialog_new (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (chooser))),
+				   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+				   GTK_MESSAGE_QUESTION,
+				   GTK_BUTTONS_NONE,
+				   "What do you want to do?");
+
+  button = gtk_button_new_with_label ("Use the stock confirmation dialog");
+  gtk_widget_show (button);
+  gtk_dialog_add_action_widget (GTK_DIALOG (dialog), button, 1);
+
+  button = gtk_button_new_with_label ("Type a new file name");
+  gtk_widget_show (button);
+  gtk_dialog_add_action_widget (GTK_DIALOG (dialog), button, 2);
+
+  button = gtk_button_new_with_label ("Accept the file name");
+  gtk_widget_show (button);
+  gtk_dialog_add_action_widget (GTK_DIALOG (dialog), button, 3);
+
+  response = gtk_dialog_run (GTK_DIALOG (dialog));
+
+  switch (response)
+    {
+    case 1:
+      conf = GTK_FILE_CHOOSER_CONFIRMATION_CONFIRM;
+      break;
+
+    case 3:
+      conf = GTK_FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME;
+      break;
+
+    default:
+      conf = GTK_FILE_CHOOSER_CONFIRMATION_SELECT_AGAIN;
+      break;
+    }
+
+  gtk_widget_destroy (dialog);
+
+  return conf;
 }
 
 int
@@ -434,13 +483,13 @@ main (int argc, char **argv)
   GtkWidget *preview_vbox;
   int i;
   gboolean multiple = FALSE;
-  
+
   gtk_init (&argc, &argv);
 
   /* to test rtl layout, set RTL=1 in the environment */
   if (g_getenv ("RTL"))
     gtk_widget_set_default_direction (GTK_TEXT_DIR_RTL);
-  
+
   action = GTK_FILE_CHOOSER_ACTION_OPEN;
 
   /* lame-o arg parsing */
@@ -483,20 +532,22 @@ main (int argc, char **argv)
       break;
     }
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-  
+
   g_signal_connect (dialog, "selection-changed",
 		    G_CALLBACK (print_selected), NULL);
   g_signal_connect (dialog, "current-folder-changed",
 		    G_CALLBACK (print_current_folder), NULL);
   g_signal_connect (dialog, "response",
 		    G_CALLBACK (response_cb), NULL);
+  g_signal_connect (dialog, "confirm-overwrite",
+		    G_CALLBACK (confirm_overwrite_cb), NULL);
 
   /* Filters */
   filter = gtk_file_filter_new ();
   gtk_file_filter_set_name (filter, "All Files");
   gtk_file_filter_add_pattern (filter, "*");
   gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
-  
+
   filter = gtk_file_filter_new ();
   gtk_file_filter_set_name (filter, "No backup files");
   gtk_file_filter_add_custom (filter, GTK_FILE_FILTER_DISPLAY_NAME,
@@ -504,12 +555,12 @@ main (int argc, char **argv)
   gtk_file_filter_add_mime_type (filter, "image/png");
   gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
 
-  g_signal_connect (dialog, "notify::filter", 
+  g_signal_connect (dialog, "notify::filter",
 		    G_CALLBACK (filter_changed), NULL);
 
   /* Make this filter the default */
   gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), filter);
-  
+
   filter = gtk_file_filter_new ();
   gtk_file_filter_set_name (filter, "PNG and JPEG");
   gtk_file_filter_add_mime_type (filter, "image/jpeg");
@@ -520,21 +571,21 @@ main (int argc, char **argv)
   gtk_file_filter_set_name (filter, "Images");
   gtk_file_filter_add_pixbuf_formats (filter);
   gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
-  
+
   /* Preview widget */
   /* THIS IS A TERRIBLE PREVIEW WIDGET, AND SHOULD NOT BE COPIED AT ALL.
    */
   preview_vbox = gtk_vbox_new (0, FALSE);
   /*gtk_file_chooser_set_preview_widget (GTK_FILE_CHOOSER (dialog), preview_vbox);*/
-  
+
   preview_label = gtk_label_new (NULL);
   gtk_box_pack_start (GTK_BOX (preview_vbox), preview_label, TRUE, TRUE, 0);
   gtk_misc_set_padding (GTK_MISC (preview_label), 6, 6);
-  
+
   preview_image = gtk_image_new ();
   gtk_box_pack_start (GTK_BOX (preview_vbox), preview_image, TRUE, TRUE, 0);
   gtk_misc_set_padding (GTK_MISC (preview_image), 6, 6);
-  
+
   update_preview_cb (GTK_FILE_CHOOSER (dialog));
   g_signal_connect (dialog, "update-preview",
 		    G_CALLBACK (update_preview_cb), NULL);
@@ -559,7 +610,7 @@ main (int argc, char **argv)
   prop_editor = create_prop_editor (G_OBJECT (dialog), GTK_TYPE_FILE_CHOOSER);
 
   control_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  
+
   vbbox = gtk_vbutton_box_new ();
   gtk_container_add (GTK_CONTAINER (control_window), vbbox);
 
@@ -568,9 +619,9 @@ main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (vbbox), button);
   g_signal_connect_swapped (button, "clicked",
 			    G_CALLBACK (gtk_file_chooser_select_all), dialog);
-  g_signal_connect (dialog, "notify::select-multiple", 
+  g_signal_connect (dialog, "notify::select-multiple",
 		    G_CALLBACK (notify_multiple_cb), button);
-  
+
   button = gtk_button_new_with_mnemonic ("_Unselect all");
   gtk_container_add (GTK_CONTAINER (vbbox), button);
   g_signal_connect_swapped (button, "clicked",
