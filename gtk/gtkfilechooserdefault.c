@@ -5972,43 +5972,6 @@ confirm_dialog_should_accept_filename (GtkFileChooserDefault *impl,
   return (response == GTK_RESPONSE_ACCEPT);
 }
 
-/* Does overwrite confirmation if appropriate, and returns whether the dialog
- * should respond.  Can get the file part from the file list or the save entry.
- */
-static gboolean
-should_respond_after_confirm_overwrite (GtkFileChooserDefault *impl,
-					const gchar           *file_part,
-					const gchar           *folder_display_name)
-{
-  GtkFileChooserConfirmation conf;
-
-  if (!impl->do_overwrite_confirmation)
-    return TRUE;
-
-  g_assert (file_part != NULL);
-  g_assert (folder_display_name != NULL);
-
-  conf = GTK_FILE_CHOOSER_CONFIRMATION_CONFIRM;
-
-  g_signal_emit_by_name (impl, "confirm-overwrite", &conf);
-
-  switch (conf)
-    {
-    case GTK_FILE_CHOOSER_CONFIRMATION_CONFIRM:
-      return confirm_dialog_should_accept_filename (impl, file_part, folder_display_name);
-
-    case GTK_FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME:
-      return TRUE;
-
-    case GTK_FILE_CHOOSER_CONFIRMATION_SELECT_AGAIN:
-      return FALSE;
-
-    default:
-      g_assert_not_reached ();
-      return FALSE;
-    }
-}
-
 static char *
 get_display_name_for_folder (GtkFileChooserDefault *impl,
 			     const GtkFilePath     *path)
@@ -6051,6 +6014,53 @@ get_display_name_for_folder (GtkFileChooserDefault *impl,
     gtk_file_info_free (info);
 
   return display_name;
+}
+
+/* Does overwrite confirmation if appropriate, and returns whether the dialog
+ * should respond.  Can get the file part from the file list or the save entry.
+ */
+static gboolean
+should_respond_after_confirm_overwrite (GtkFileChooserDefault *impl,
+					const gchar           *file_part,
+					const GtkFilePath     *parent_path)
+{
+  GtkFileChooserConfirmation conf;
+
+  if (!impl->do_overwrite_confirmation)
+    return TRUE;
+
+  conf = GTK_FILE_CHOOSER_CONFIRMATION_CONFIRM;
+
+  g_signal_emit_by_name (impl, "confirm-overwrite", &conf);
+
+  switch (conf)
+    {
+    case GTK_FILE_CHOOSER_CONFIRMATION_CONFIRM:
+      {
+	char *parent_display_name;
+	gboolean retval;
+
+	g_assert (file_part != NULL);
+
+	parent_display_name = get_display_name_for_folder (impl, parent_path);
+	if (!parent_display_name)
+	  return TRUE; /* Huh?  Did the folder disappear?  Let the caller deal with it */
+
+	retval = confirm_dialog_should_accept_filename (impl, file_part, parent_display_name);
+	g_free (parent_display_name);
+	return retval;
+      }
+
+    case GTK_FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME:
+      return TRUE;
+
+    case GTK_FILE_CHOOSER_CONFIRMATION_SELECT_AGAIN:
+      return FALSE;
+
+    default:
+      g_assert_not_reached ();
+      return FALSE;
+    }
 }
 
 /* Implementation for GtkFileChooserEmbed::should_respond() */
@@ -6125,23 +6135,9 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
 	      return FALSE;
 	    }
 	  else if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
-	    {
-	      const char *file_part;
-	      char *folder_display_name;
-	      gboolean retval;
-
-	      file_part = get_display_name_from_file_list (impl);
-	      g_assert (file_part != NULL);
-
-	      folder_display_name = get_display_name_for_folder (impl, impl->current_folder);
-	      if (folder_display_name != NULL)
-		{
-		  retval = should_respond_after_confirm_overwrite (impl, file_part, folder_display_name);
-		  g_free (folder_display_name);
-		}
-	      else
-		retval = TRUE; /* Huh?  Did the folder disappear?  Let the caller deal with it */
-	    }
+	    return should_respond_after_confirm_overwrite (impl,
+							   get_display_name_from_file_list (impl),
+							   impl->current_folder);
 	  else
 	    return TRUE;
 
@@ -6227,23 +6223,12 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
 		      if (file_exists_and_is_not_folder)
 			{
 			  const char *file_part;
-			  char *folder_display_name;
-
-			  g_assert (!is_file_part_empty);
 
 			  file_part = _gtk_file_chooser_entry_get_file_part (GTK_FILE_CHOOSER_ENTRY (impl->save_file_name_entry));
-			  g_assert (file_part != NULL);
-
-			  folder_display_name = get_display_name_for_folder (impl, parent_path);
-			  if (folder_display_name != NULL)
-			    {
-			      retval = should_respond_after_confirm_overwrite (impl, file_part, folder_display_name);
-			      g_free (folder_display_name);
-			    }
-			  else
-			    retval = TRUE; /* Huh?  Did the folder disappear?  Let the caller deal with it */
-			} else
-			  retval = TRUE;
+			  retval = should_respond_after_confirm_overwrite (impl, file_part, parent_path);
+			}
+		      else
+			retval = TRUE;
 		    }
 		  else /* GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER */
 		    {
