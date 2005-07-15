@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 317\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-08 14:01-0400\n"
+"POT-Creation-Date: 2005-07-15 14:36-0400\n"
 "PO-Revision-Date: 2004-11-17 21:21-0700\n"
 "Last-Translator: Steve Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <en@li.org>\n"
@@ -288,7 +288,7 @@ msgid "A unique name for the action."
 msgstr "A Cyo nyine Izina: kugirango i Igikorwa"
 
 #: gtk/gtkaction.c:205 gtk/gtkbutton.c:226 gtk/gtkexpander.c:206
-#: gtk/gtkframe.c:128 gtk/gtklabel.c:321 gtk/gtktoolbutton.c:187
+#: gtk/gtkframe.c:128 gtk/gtklabel.c:322 gtk/gtktoolbutton.c:187
 msgid "Label"
 msgstr "Akayobozi"
 
@@ -780,13 +780,13 @@ msgid ""
 "widget"
 msgstr "Bya i Akarango Mo Imbere i Akabuto NIBA i Akabuto Kirimo a Akarango"
 
-#: gtk/gtkbutton.c:234 gtk/gtkexpander.c:214 gtk/gtklabel.c:342
+#: gtk/gtkbutton.c:234 gtk/gtkexpander.c:214 gtk/gtklabel.c:343
 #: gtk/gtktoolbutton.c:194
 #, fuzzy
 msgid "Use underline"
 msgstr "Gucaho umurongo"
 
-#: gtk/gtkbutton.c:235 gtk/gtkexpander.c:215 gtk/gtklabel.c:343
+#: gtk/gtkbutton.c:235 gtk/gtkexpander.c:215 gtk/gtklabel.c:344
 #, fuzzy
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
@@ -1201,7 +1201,7 @@ msgid "Value of the progress bar"
 msgstr "Bya i Aho bigeze"
 
 #: gtk/gtkcellrendererprogress.c:134 gtk/gtkcellrenderertext.c:219
-#: gtk/gtkentry.c:574 gtk/gtkprogressbar.c:221 gtk/gtktextbuffer.c:206
+#: gtk/gtkentry.c:577 gtk/gtkprogressbar.c:221 gtk/gtktextbuffer.c:206
 msgid "Text"
 msgstr "Amagambo"
 
@@ -1224,7 +1224,7 @@ msgstr ""
 msgid "Marked up text to render"
 msgstr "Hejuru Umwandiko Kuri"
 
-#: gtk/gtkcellrenderertext.c:235 gtk/gtklabel.c:328
+#: gtk/gtkcellrenderertext.c:235 gtk/gtklabel.c:329
 msgid "Attributes"
 msgstr "ibiranga"
 
@@ -1283,7 +1283,7 @@ msgstr "Ibara rya mbugambanza"
 msgid "Foreground color as a GdkColor"
 msgstr "Ibara Nka a"
 
-#: gtk/gtkcellrenderertext.c:285 gtk/gtkentry.c:506 gtk/gtktexttag.c:279
+#: gtk/gtkcellrenderertext.c:285 gtk/gtkentry.c:509 gtk/gtktexttag.c:279
 #: gtk/gtktextview.c:578
 msgid "Editable"
 msgstr ""
@@ -1415,7 +1415,7 @@ msgstr ""
 "Ururimi iyi Umwandiko ni in Nka ITEGEKONGENGA Gukoresha iyi Nka a Ryari: "
 "Isubizwa i Umwandiko iyi"
 
-#: gtk/gtkcellrenderertext.c:435 gtk/gtklabel.c:434 gtk/gtkprogressbar.c:243
+#: gtk/gtkcellrenderertext.c:435 gtk/gtklabel.c:435 gtk/gtkprogressbar.c:243
 msgid "Ellipsize"
 msgstr ""
 
@@ -1429,11 +1429,11 @@ msgstr ""
 "Ikurikiranyanyuguti NIBA ku Byose"
 
 #: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:367
-#: gtk/gtklabel.c:454
+#: gtk/gtklabel.c:455
 msgid "Width In Characters"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:456 gtk/gtklabel.c:455
+#: gtk/gtkcellrenderertext.c:456 gtk/gtklabel.c:456
 #, fuzzy
 msgid "The desired width of the label, in characters"
 msgstr "Ubugari Bya i Akarango in Inyuguti"
@@ -1462,142 +1462,142 @@ msgstr "Ubugari"
 msgid "The width at which the text is wrapped"
 msgstr "Ubugari ku i Umwandiko ni"
 
-#: gtk/gtkcellrenderertext.c:507 gtk/gtkcellview.c:198 gtk/gtktexttag.c:545
+#: gtk/gtkcellrenderertext.c:507 gtk/gtkcellview.c:198 gtk/gtktexttag.c:556
 #, fuzzy
 msgid "Background set"
 msgstr "Gushyiraho"
 
-#: gtk/gtkcellrenderertext.c:508 gtk/gtkcellview.c:199 gtk/gtktexttag.c:546
+#: gtk/gtkcellrenderertext.c:508 gtk/gtkcellview.c:199 gtk/gtktexttag.c:557
 #, fuzzy
 msgid "Whether this tag affects the background color"
 msgstr "iyi Itagi: i Mbuganyuma Ibara"
 
-#: gtk/gtkcellrenderertext.c:511 gtk/gtktexttag.c:557
+#: gtk/gtkcellrenderertext.c:511 gtk/gtktexttag.c:568
 #, fuzzy
 msgid "Foreground set"
 msgstr "Gushyiraho"
 
-#: gtk/gtkcellrenderertext.c:512 gtk/gtktexttag.c:558
+#: gtk/gtkcellrenderertext.c:512 gtk/gtktexttag.c:569
 #, fuzzy
 msgid "Whether this tag affects the foreground color"
 msgstr "iyi Itagi: i Ibara"
 
-#: gtk/gtkcellrenderertext.c:515 gtk/gtktexttag.c:565
+#: gtk/gtkcellrenderertext.c:515 gtk/gtktexttag.c:576
 #, fuzzy
 msgid "Editability set"
 msgstr "Gushyiraho"
 
-#: gtk/gtkcellrenderertext.c:516 gtk/gtktexttag.c:566
+#: gtk/gtkcellrenderertext.c:516 gtk/gtktexttag.c:577
 #, fuzzy
 msgid "Whether this tag affects text editability"
 msgstr "iyi Itagi: Umwandiko"
 
-#: gtk/gtkcellrenderertext.c:519 gtk/gtktexttag.c:569
+#: gtk/gtkcellrenderertext.c:519 gtk/gtktexttag.c:580
 #, fuzzy
 msgid "Font family set"
 msgstr "Gushyiraho"
 
-#: gtk/gtkcellrenderertext.c:520 gtk/gtktexttag.c:570
+#: gtk/gtkcellrenderertext.c:520 gtk/gtktexttag.c:581
 #, fuzzy
 msgid "Whether this tag affects the font family"
 msgstr "iyi Itagi: i Intego- nyuguti"
 
-#: gtk/gtkcellrenderertext.c:523 gtk/gtktexttag.c:573
+#: gtk/gtkcellrenderertext.c:523 gtk/gtktexttag.c:584
 #, fuzzy
 msgid "Font style set"
 msgstr "IMISUSIRE Gushyiraho"
 
-#: gtk/gtkcellrenderertext.c:524 gtk/gtktexttag.c:574
+#: gtk/gtkcellrenderertext.c:524 gtk/gtktexttag.c:585
 #, fuzzy
 msgid "Whether this tag affects the font style"
 msgstr "iyi Itagi: i Intego- nyuguti IMISUSIRE"
 
-#: gtk/gtkcellrenderertext.c:527 gtk/gtktexttag.c:577
+#: gtk/gtkcellrenderertext.c:527 gtk/gtktexttag.c:588
 #, fuzzy
 msgid "Font variant set"
 msgstr "Gushyiraho"
 
-#: gtk/gtkcellrenderertext.c:528 gtk/gtktexttag.c:578
+#: gtk/gtkcellrenderertext.c:528 gtk/gtktexttag.c:589
 #, fuzzy
 msgid "Whether this tag affects the font variant"
 msgstr "iyi Itagi: i Intego- nyuguti"
 
-#: gtk/gtkcellrenderertext.c:531 gtk/gtktexttag.c:581
+#: gtk/gtkcellrenderertext.c:531 gtk/gtktexttag.c:592
 #, fuzzy
 msgid "Font weight set"
 msgstr "Uburemere Gushyiraho"
 
-#: gtk/gtkcellrenderertext.c:532 gtk/gtktexttag.c:582
+#: gtk/gtkcellrenderertext.c:532 gtk/gtktexttag.c:593
 #, fuzzy
 msgid "Whether this tag affects the font weight"
 msgstr "iyi Itagi: i Intego- nyuguti Uburemere"
 
-#: gtk/gtkcellrenderertext.c:535 gtk/gtktexttag.c:585
+#: gtk/gtkcellrenderertext.c:535 gtk/gtktexttag.c:596
 #, fuzzy
 msgid "Font stretch set"
 msgstr "Kurambura Gushyiraho"
 
-#: gtk/gtkcellrenderertext.c:536 gtk/gtktexttag.c:586
+#: gtk/gtkcellrenderertext.c:536 gtk/gtktexttag.c:597
 #, fuzzy
 msgid "Whether this tag affects the font stretch"
 msgstr "iyi Itagi: i Intego- nyuguti Kurambura"
 
-#: gtk/gtkcellrenderertext.c:539 gtk/gtktexttag.c:589
+#: gtk/gtkcellrenderertext.c:539 gtk/gtktexttag.c:600
 #, fuzzy
 msgid "Font size set"
 msgstr "Ingano Gushyiraho"
 
-#: gtk/gtkcellrenderertext.c:540 gtk/gtktexttag.c:590
+#: gtk/gtkcellrenderertext.c:540 gtk/gtktexttag.c:601
 #, fuzzy
 msgid "Whether this tag affects the font size"
 msgstr "iyi Itagi: i Intego- nyuguti Ingano"
 
-#: gtk/gtkcellrenderertext.c:543 gtk/gtktexttag.c:593
+#: gtk/gtkcellrenderertext.c:543 gtk/gtktexttag.c:604
 #, fuzzy
 msgid "Font scale set"
 msgstr "Gupima Gushyiraho"
 
-#: gtk/gtkcellrenderertext.c:544 gtk/gtktexttag.c:594
+#: gtk/gtkcellrenderertext.c:544 gtk/gtktexttag.c:605
 #, fuzzy
 msgid "Whether this tag scales the font size by a factor"
 msgstr "iyi Itagi: i Intego- nyuguti Ingano ku a Umubarwa"
 
-#: gtk/gtkcellrenderertext.c:547 gtk/gtktexttag.c:613
+#: gtk/gtkcellrenderertext.c:547 gtk/gtktexttag.c:624
 #, fuzzy
 msgid "Rise set"
 msgstr "Gushyiraho"
 
-#: gtk/gtkcellrenderertext.c:548 gtk/gtktexttag.c:614
+#: gtk/gtkcellrenderertext.c:548 gtk/gtktexttag.c:625
 #, fuzzy
 msgid "Whether this tag affects the rise"
 msgstr "iyi Itagi: i"
 
-#: gtk/gtkcellrenderertext.c:551 gtk/gtktexttag.c:629
+#: gtk/gtkcellrenderertext.c:551 gtk/gtktexttag.c:640
 #, fuzzy
 msgid "Strikethrough set"
 msgstr "Gushyiraho"
 
-#: gtk/gtkcellrenderertext.c:552 gtk/gtktexttag.c:630
+#: gtk/gtkcellrenderertext.c:552 gtk/gtktexttag.c:641
 #, fuzzy
 msgid "Whether this tag affects strikethrough"
 msgstr "iyi Itagi: Icishamokarongo"
 
-#: gtk/gtkcellrenderertext.c:555 gtk/gtktexttag.c:637
+#: gtk/gtkcellrenderertext.c:555 gtk/gtktexttag.c:648
 #, fuzzy
 msgid "Underline set"
 msgstr "Gushyiraho"
 
-#: gtk/gtkcellrenderertext.c:556 gtk/gtktexttag.c:638
+#: gtk/gtkcellrenderertext.c:556 gtk/gtktexttag.c:649
 #, fuzzy
 msgid "Whether this tag affects underlining"
 msgstr "iyi Itagi: Gucaho umurongo"
 
-#: gtk/gtkcellrenderertext.c:559 gtk/gtktexttag.c:601
+#: gtk/gtkcellrenderertext.c:559 gtk/gtktexttag.c:612
 #, fuzzy
 msgid "Language set"
 msgstr "Gushyiraho"
 
-#: gtk/gtkcellrenderertext.c:560 gtk/gtktexttag.c:602
+#: gtk/gtkcellrenderertext.c:560 gtk/gtktexttag.c:613
 #, fuzzy
 msgid "Whether this tag affects the language the text is rendered as"
 msgstr "iyi Itagi: i Ururimi i Umwandiko ni Nka"
@@ -1878,7 +1878,7 @@ msgstr "Kuri Ibikubiyemo"
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "a Ibikubiyemo Ikintu"
 
-#: gtk/gtkcombobox.c:673 gtk/gtkentry.c:531
+#: gtk/gtkcombobox.c:673 gtk/gtkentry.c:534
 msgid "Has Frame"
 msgstr ""
 
@@ -2017,73 +2017,73 @@ msgstr "Ubuso Imbibi"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Bya Imbibi i Akabuto Ubuso ku i Hasi: Bya i Ikiganiro"
 
-#: gtk/gtkentry.c:486 gtk/gtklabel.c:399
+#: gtk/gtkentry.c:489 gtk/gtklabel.c:400
 msgid "Cursor Position"
 msgstr ""
 
-#: gtk/gtkentry.c:487 gtk/gtklabel.c:400
+#: gtk/gtkentry.c:490 gtk/gtklabel.c:401
 #, fuzzy
 msgid "The current position of the insertion cursor in chars"
 msgstr "KIGEZWEHO Ibirindiro Bya i Iyinjizamo indanga in"
 
-#: gtk/gtkentry.c:496 gtk/gtklabel.c:409
+#: gtk/gtkentry.c:499 gtk/gtklabel.c:410
 msgid "Selection Bound"
 msgstr ""
 
-#: gtk/gtkentry.c:497 gtk/gtklabel.c:410
+#: gtk/gtkentry.c:500 gtk/gtklabel.c:411
 #, fuzzy
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "Ibirindiro Bya i Impera Bya i Ihitamo Bivuye i indanga in"
 
-#: gtk/gtkentry.c:507
+#: gtk/gtkentry.c:510
 #, fuzzy
 msgid "Whether the entry contents can be edited"
 msgstr "i Icyinjijwe Ibigize"
 
-#: gtk/gtkentry.c:514
+#: gtk/gtkentry.c:517
 #, fuzzy
 msgid "Maximum length"
 msgstr "Uburebure ntarengwa:"
 
-#: gtk/gtkentry.c:515
+#: gtk/gtkentry.c:518
 #, fuzzy
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr "Umubare Bya Inyuguti kugirango iyi Icyinjijwe NIBA Oya Kinini"
 
-#: gtk/gtkentry.c:523
+#: gtk/gtkentry.c:526
 msgid "Visibility"
 msgstr "igaragara"
 
-#: gtk/gtkentry.c:524
+#: gtk/gtkentry.c:527
 #, fuzzy
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
 msgstr "i Kitagaragara INYUGUTI Bya i Umwandiko Ijambobanga... Ubwoko"
 
-#: gtk/gtkentry.c:532
+#: gtk/gtkentry.c:535
 #, fuzzy
 msgid "FALSE removes outside bevel from entry"
 msgstr "Hanze Bivuye Icyinjijwe"
 
-#: gtk/gtkentry.c:539
+#: gtk/gtkentry.c:542
 #, fuzzy
 msgid "Invisible character"
 msgstr "Inyuguti"
 
-#: gtk/gtkentry.c:540
+#: gtk/gtkentry.c:543
 #, fuzzy
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 "Inyuguti Kuri Gukoresha Ryari: Icyinjijwe Ibigize in Ijambobanga... Ubwoko"
 
-#: gtk/gtkentry.c:547
+#: gtk/gtkentry.c:550
 #, fuzzy
 msgid "Activates default"
 msgstr "Mburabuzi"
 
-#: gtk/gtkentry.c:548
+#: gtk/gtkentry.c:551
 #, fuzzy
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
@@ -2092,37 +2092,37 @@ msgstr ""
 "Kuri Kureka bigakora i Mburabuzi Nka i Mburabuzi Akabuto in a Ikiganiro "
 "Ryari: ni"
 
-#: gtk/gtkentry.c:554
+#: gtk/gtkentry.c:557
 #, fuzzy
 msgid "Width in chars"
 msgstr "in"
 
-#: gtk/gtkentry.c:555
+#: gtk/gtkentry.c:558
 #, fuzzy
 msgid "Number of characters to leave space for in the entry"
 msgstr "Bya Inyuguti Kuri Umwanya kugirango in i Icyinjijwe"
 
-#: gtk/gtkentry.c:564
+#: gtk/gtkentry.c:567
 #, fuzzy
 msgid "Scroll offset"
 msgstr "Nta- boneza"
 
-#: gtk/gtkentry.c:565
+#: gtk/gtkentry.c:568
 #, fuzzy
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "Bya Pigiseli Bya i Icyinjijwe Bidakora i Mugaragaza Kuri i Ibumoso:"
 
-#: gtk/gtkentry.c:575
+#: gtk/gtkentry.c:578
 #, fuzzy
 msgid "The contents of the entry"
 msgstr "Ibigize Bya i Icyinjijwe"
 
-#: gtk/gtkentry.c:590 gtk/gtkmisc.c:101
+#: gtk/gtkentry.c:593 gtk/gtkmisc.c:101
 #, fuzzy
 msgid "X align"
 msgstr "Gutondeka"
 
-#: gtk/gtkentry.c:591 gtk/gtkmisc.c:102
+#: gtk/gtkentry.c:594 gtk/gtkmisc.c:102
 #, fuzzy
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
@@ -2131,12 +2131,12 @@ msgstr ""
 "Gitambitse Itunganya Bivuye 0 Ibumoso: Kuri 1. Iburyo: kugirango "
 "Imigaragarire"
 
-#: gtk/gtkentry.c:829
+#: gtk/gtkentry.c:832
 #, fuzzy
 msgid "Select on focus"
 msgstr "ku"
 
-#: gtk/gtkentry.c:830
+#: gtk/gtkentry.c:833
 #, fuzzy
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Kuri Guhitamo i Ibigize Bya Icyinjijwe Ryari: ni"
@@ -2240,11 +2240,11 @@ msgstr "i Kuri i"
 msgid "Text of the expander's label"
 msgstr "Bya i Akarango"
 
-#: gtk/gtkexpander.c:222 gtk/gtklabel.c:335
+#: gtk/gtkexpander.c:222 gtk/gtklabel.c:336
 msgid "Use markup"
 msgstr ""
 
-#: gtk/gtkexpander.c:223 gtk/gtklabel.c:336
+#: gtk/gtkexpander.c:223 gtk/gtklabel.c:337
 #, fuzzy
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "Umwandiko Bya i Akarango"
@@ -2277,97 +2277,108 @@ msgstr "Bya i Akambi"
 msgid "Spacing around expander arrow"
 msgstr "Akambi"
 
-#: gtk/gtkfilechooser.c:177
+#: gtk/gtkfilechooser.c:203
 msgid "Action"
 msgstr "igikorwa"
 
-#: gtk/gtkfilechooser.c:178
+#: gtk/gtkfilechooser.c:204
 #, fuzzy
 msgid "The type of operation that the file selector is performing"
 msgstr "Ubwoko Bya i IDOSIYE ni"
 
-#: gtk/gtkfilechooser.c:184
+#: gtk/gtkfilechooser.c:210
 #, fuzzy
 msgid "File System Backend"
 msgstr "Idosiye"
 
-#: gtk/gtkfilechooser.c:185
+#: gtk/gtkfilechooser.c:211
 #, fuzzy
 msgid "Name of file system backend to use"
 msgstr "Bya IDOSIYE Sisitemu Kuri Gukoresha"
 
-#: gtk/gtkfilechooser.c:190
+#: gtk/gtkfilechooser.c:216
 msgid "Filter"
 msgstr "muyunguruzi"
 
-#: gtk/gtkfilechooser.c:191
+#: gtk/gtkfilechooser.c:217
 #, fuzzy
 msgid "The current filter for selecting which files are displayed"
 msgstr "KIGEZWEHO Muyunguruzi... kugirango Idosiye"
 
-#: gtk/gtkfilechooser.c:196
+#: gtk/gtkfilechooser.c:222
 msgid "Local Only"
 msgstr ""
 
-#: gtk/gtkfilechooser.c:197
+#: gtk/gtkfilechooser.c:223
 #, fuzzy
 msgid "Whether the selected file(s) should be limited to local file: URLs"
 msgstr "i Byahiswemo IDOSIYE S Kuri IDOSIYE"
 
-#: gtk/gtkfilechooser.c:202
+#: gtk/gtkfilechooser.c:228
 msgid "Preview widget"
 msgstr ""
 
-#: gtk/gtkfilechooser.c:203
+#: gtk/gtkfilechooser.c:229
 #, fuzzy
 msgid "Application supplied widget for custom previews."
 msgstr "kugirango Kunoza"
 
-#: gtk/gtkfilechooser.c:208
+#: gtk/gtkfilechooser.c:234
 msgid "Preview Widget Active"
 msgstr ""
 
-#: gtk/gtkfilechooser.c:209
+#: gtk/gtkfilechooser.c:235
 #, fuzzy
 msgid ""
 "Whether the application supplied widget for custom previews should be shown."
 msgstr "i Porogaramu kugirango Kunoza"
 
-#: gtk/gtkfilechooser.c:214
+#: gtk/gtkfilechooser.c:240
 msgid "Use Preview Label"
 msgstr ""
 
-#: gtk/gtkfilechooser.c:215
+#: gtk/gtkfilechooser.c:241
 #, fuzzy
 msgid "Whether to display a stock label with the name of the previewed file."
 msgstr "Kuri Kugaragaza a Akarango Na: i Izina: Bya i IDOSIYE"
 
-#: gtk/gtkfilechooser.c:220
+#: gtk/gtkfilechooser.c:246
 msgid "Extra widget"
 msgstr ""
 
-#: gtk/gtkfilechooser.c:221
+#: gtk/gtkfilechooser.c:247
 #, fuzzy
 msgid "Application supplied widget for extra options."
 msgstr "kugirango Birenga Amahitamo"
 
-#: gtk/gtkfilechooser.c:226
+#: gtk/gtkfilechooser.c:252
 msgid "Select Multiple"
 msgstr ""
 
-#: gtk/gtkfilechooser.c:227 gtk/gtkfilesel.c:573
+#: gtk/gtkfilechooser.c:253 gtk/gtkfilesel.c:573
 #, fuzzy
 msgid "Whether to allow multiple files to be selected"
 msgstr "Kuri Kwemerera Igikubo Idosiye Kuri Byahiswemo"
 
-#: gtk/gtkfilechooser.c:233
+#: gtk/gtkfilechooser.c:259
 msgid "Show Hidden"
 msgstr ""
 
-#: gtk/gtkfilechooser.c:234
+#: gtk/gtkfilechooser.c:260
 #, fuzzy
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "i gihishwe Idosiye Na"
+
+#: gtk/gtkfilechooser.c:266
+msgid "Do overwrite confirmation"
+msgstr ""
+
+#: gtk/gtkfilechooser.c:267
+msgid ""
+"Whether a file chooser in GTK_FILE_CHOOSER_ACTION_SAVE will present an "
+"overwrite confirmation dialog if the user selects a file name that already "
+"exists."
+msgstr ""
 
 #: gtk/gtkfilechooserbutton.c:338
 msgid "Dialog"
@@ -2388,12 +2399,12 @@ msgstr "Umutwe Bya i IDOSIYE Ikiganiro"
 msgid "The desired width of the button widget, in characters."
 msgstr "Ubugari Bya i Akabuto in Inyuguti"
 
-#: gtk/gtkfilechooserdefault.c:640
+#: gtk/gtkfilechooserdefault.c:641
 #, fuzzy
 msgid "Default file chooser backend"
 msgstr "IDOSIYE"
 
-#: gtk/gtkfilechooserdefault.c:641
+#: gtk/gtkfilechooserdefault.c:642
 #, fuzzy
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Bya i Kuri Gukoresha ku Mburabuzi"
@@ -2864,23 +2875,23 @@ msgstr "Ishusho in Ibikubiyemo"
 msgid "The screen where this window will be displayed"
 msgstr "Mugaragaza iyi Idirishya"
 
-#: gtk/gtklabel.c:322
+#: gtk/gtklabel.c:323
 #, fuzzy
 msgid "The text of the label"
 msgstr "Umwandiko Bya i Akarango"
 
-#: gtk/gtklabel.c:329
+#: gtk/gtklabel.c:330
 #, fuzzy
 msgid "A list of style attributes to apply to the text of the label"
 msgstr ""
 "A Urutonde Bya IMISUSIRE Ibiranga Kuri Gukurikiza Kuri i Umwandiko Bya i "
 "Akarango"
 
-#: gtk/gtklabel.c:350 gtk/gtktexttag.c:380 gtk/gtktextview.c:595
+#: gtk/gtklabel.c:351 gtk/gtktexttag.c:380 gtk/gtktextview.c:595
 msgid "Justification"
 msgstr ""
 
-#: gtk/gtklabel.c:351
+#: gtk/gtklabel.c:352
 #, fuzzy
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
@@ -2890,11 +2901,11 @@ msgstr ""
 "Itunganya Bya i Imirongo in i Umwandiko Bya i Akarango Bifitanye isano Kuri "
 "Ikindi i Itunganya Bya i Akarango muri kugirango"
 
-#: gtk/gtklabel.c:359
+#: gtk/gtklabel.c:360
 msgid "Pattern"
 msgstr "uburyombonera"
 
-#: gtk/gtklabel.c:360
+#: gtk/gtklabel.c:361
 #, fuzzy
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
@@ -2903,45 +2914,45 @@ msgstr ""
 "A Ikurikiranyanyuguti Na: Inyuguti in imyanya Kuri Inyuguti in i Umwandiko "
 "Kuri Gucaho umurongo"
 
-#: gtk/gtklabel.c:367
+#: gtk/gtklabel.c:368
 #, fuzzy
 msgid "Line wrap"
 msgstr "Gufunika"
 
-#: gtk/gtklabel.c:368
+#: gtk/gtklabel.c:369
 #, fuzzy
 msgid "If set, wrap lines if the text becomes too wide"
 msgstr "Gushyiraho Gufunika Imirongo NIBA i Umwandiko"
 
-#: gtk/gtklabel.c:374
+#: gtk/gtklabel.c:375
 msgid "Selectable"
 msgstr ""
 
-#: gtk/gtklabel.c:375
+#: gtk/gtklabel.c:376
 #, fuzzy
 msgid "Whether the label text can be selected with the mouse"
 msgstr "i Akarango Umwandiko Byahiswemo Na: i Imbeba"
 
-#: gtk/gtklabel.c:381
+#: gtk/gtklabel.c:382
 #, fuzzy
 msgid "Mnemonic key"
 msgstr "Urufunguzo"
 
-#: gtk/gtklabel.c:382
+#: gtk/gtklabel.c:383
 #, fuzzy
 msgid "The mnemonic accelerator key for this label"
 msgstr "Urufunguzo kugirango iyi Akarango"
 
-#: gtk/gtklabel.c:390
+#: gtk/gtklabel.c:391
 msgid "Mnemonic widget"
 msgstr ""
 
-#: gtk/gtklabel.c:391
+#: gtk/gtklabel.c:392
 #, fuzzy
 msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr "Kuri Ryari: i Urufunguzo ni"
 
-#: gtk/gtklabel.c:435
+#: gtk/gtklabel.c:436
 #, fuzzy
 msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
@@ -2950,30 +2961,30 @@ msgstr ""
 "Bikunzwe Kuri i Ikurikiranyanyuguti NIBA i Akarango OYA Kuri Kugaragaza i "
 "Ikurikiranyanyuguti NIBA ku Byose"
 
-#: gtk/gtklabel.c:475
+#: gtk/gtklabel.c:476
 msgid "Single Line Mode"
 msgstr ""
 
-#: gtk/gtklabel.c:476
+#: gtk/gtklabel.c:477
 #, fuzzy
 msgid "Whether the label is in single line mode"
 msgstr "i Akarango ni in UMWE Umurongo Ubwoko"
 
 # officecfg/registry\schema\org\openoffice\Office\Common.xcs:....Image.Color.RotationAngle.text
-#: gtk/gtklabel.c:493
+#: gtk/gtklabel.c:494
 msgid "Angle"
 msgstr "Imfuruka"
 
-#: gtk/gtklabel.c:494
+#: gtk/gtklabel.c:495
 #, fuzzy
 msgid "Angle at which the label is rotated"
 msgstr "ku i Akarango ni"
 
-#: gtk/gtklabel.c:514
+#: gtk/gtklabel.c:515
 msgid "Maximum Width In Characters"
 msgstr ""
 
-#: gtk/gtklabel.c:515
+#: gtk/gtklabel.c:516
 #, fuzzy
 msgid "The desired maximum width of the label, in characters"
 msgstr "Kinini Ubugari Bya i Akarango in Inyuguti"
@@ -4619,166 +4630,166 @@ msgstr "isimbuka"
 msgid "Custom tabs for this text"
 msgstr "Kugena Amasimbuka kugirango iyi Umwandiko"
 
-#: gtk/gtktexttag.c:504
+#: gtk/gtktexttag.c:515
 msgid "Invisible"
 msgstr "Kitagaragara"
 
-#: gtk/gtktexttag.c:505
+#: gtk/gtktexttag.c:516
 #, fuzzy
-msgid "Whether this text is hidden. Not implemented in GTK 2.0"
-msgstr "iyi Umwandiko ni gihishwe in 2. 0"
+msgid "Whether this text is hidden."
+msgstr "iyi Itagi: i"
 
-#: gtk/gtktexttag.c:519
+#: gtk/gtktexttag.c:530
 #, fuzzy
 msgid "Paragraph background color name"
 msgstr "Mbuganyuma Ibara Izina:"
 
-#: gtk/gtktexttag.c:520
+#: gtk/gtktexttag.c:531
 #, fuzzy
 msgid "Paragraph background color as a string"
 msgstr "Ibara Nka a Ikurikiranyanyuguti"
 
-#: gtk/gtktexttag.c:535
+#: gtk/gtktexttag.c:546
 #, fuzzy
 msgid "Paragraph background color"
 msgstr "Ibara y'Imbuganyuma y'akadirishya"
 
-#: gtk/gtktexttag.c:536
+#: gtk/gtktexttag.c:547
 #, fuzzy
 msgid "Paragraph background color as a (possibly unallocated) GdkColor"
 msgstr "Ibara Nka a"
 
-#: gtk/gtktexttag.c:549
+#: gtk/gtktexttag.c:560
 #, fuzzy
 msgid "Background full height set"
 msgstr "Ubuhagarike Gushyiraho"
 
-#: gtk/gtktexttag.c:550
+#: gtk/gtktexttag.c:561
 #, fuzzy
 msgid "Whether this tag affects background height"
 msgstr "iyi Itagi: Mbuganyuma Ubuhagarike"
 
-#: gtk/gtktexttag.c:553
+#: gtk/gtktexttag.c:564
 #, fuzzy
 msgid "Background stipple set"
 msgstr "Gushyiraho"
 
-#: gtk/gtktexttag.c:554
+#: gtk/gtktexttag.c:565
 #, fuzzy
 msgid "Whether this tag affects the background stipple"
 msgstr "iyi Itagi: i Mbuganyuma"
 
-#: gtk/gtktexttag.c:561
+#: gtk/gtktexttag.c:572
 #, fuzzy
 msgid "Foreground stipple set"
 msgstr "Gushyiraho"
 
-#: gtk/gtktexttag.c:562
+#: gtk/gtktexttag.c:573
 #, fuzzy
 msgid "Whether this tag affects the foreground stipple"
 msgstr "iyi Itagi: i"
 
-#: gtk/gtktexttag.c:597
+#: gtk/gtktexttag.c:608
 #, fuzzy
 msgid "Justification set"
 msgstr "Gushyiraho"
 
-#: gtk/gtktexttag.c:598
+#: gtk/gtktexttag.c:609
 #, fuzzy
 msgid "Whether this tag affects paragraph justification"
 msgstr "iyi Itagi: Igika"
 
-#: gtk/gtktexttag.c:605
+#: gtk/gtktexttag.c:616
 #, fuzzy
 msgid "Left margin set"
 msgstr "Marije Gushyiraho"
 
-#: gtk/gtktexttag.c:606
+#: gtk/gtktexttag.c:617
 #, fuzzy
 msgid "Whether this tag affects the left margin"
 msgstr "iyi Itagi: i Ibumoso: Marije"
 
-#: gtk/gtktexttag.c:609
+#: gtk/gtktexttag.c:620
 #, fuzzy
 msgid "Indent set"
 msgstr "Gushyiraho"
 
-#: gtk/gtktexttag.c:610
+#: gtk/gtktexttag.c:621
 #, fuzzy
 msgid "Whether this tag affects indentation"
 msgstr "iyi Itagi:"
 
-#: gtk/gtktexttag.c:617
+#: gtk/gtktexttag.c:628
 #, fuzzy
 msgid "Pixels above lines set"
 msgstr "hejuru Imirongo Gushyiraho"
 
-#: gtk/gtktexttag.c:618 gtk/gtktexttag.c:622
+#: gtk/gtktexttag.c:629 gtk/gtktexttag.c:633
 #, fuzzy
 msgid "Whether this tag affects the number of pixels above lines"
 msgstr "iyi Itagi: i Umubare Bya Pigiseli hejuru Imirongo"
 
-#: gtk/gtktexttag.c:621
+#: gtk/gtktexttag.c:632
 #, fuzzy
 msgid "Pixels below lines set"
 msgstr "munsi Imirongo Gushyiraho"
 
-#: gtk/gtktexttag.c:625
+#: gtk/gtktexttag.c:636
 #, fuzzy
 msgid "Pixels inside wrap set"
 msgstr "Mo Imbere Gufunika Gushyiraho"
 
-#: gtk/gtktexttag.c:626
+#: gtk/gtktexttag.c:637
 #, fuzzy
 msgid "Whether this tag affects the number of pixels between wrapped lines"
 msgstr "iyi Itagi: i Umubare Bya Pigiseli hagati Imirongo"
 
-#: gtk/gtktexttag.c:633
+#: gtk/gtktexttag.c:644
 #, fuzzy
 msgid "Right margin set"
 msgstr "Marije Gushyiraho"
 
-#: gtk/gtktexttag.c:634
+#: gtk/gtktexttag.c:645
 #, fuzzy
 msgid "Whether this tag affects the right margin"
 msgstr "iyi Itagi: i Iburyo: Marije"
 
-#: gtk/gtktexttag.c:641
+#: gtk/gtktexttag.c:652
 #, fuzzy
 msgid "Wrap mode set"
 msgstr "Ubwoko Gushyiraho"
 
-#: gtk/gtktexttag.c:642
+#: gtk/gtktexttag.c:653
 #, fuzzy
 msgid "Whether this tag affects line wrap mode"
 msgstr "iyi Itagi: Umurongo Gufunika Ubwoko"
 
-#: gtk/gtktexttag.c:645
+#: gtk/gtktexttag.c:656
 #, fuzzy
 msgid "Tabs set"
 msgstr "Gushyiraho"
 
-#: gtk/gtktexttag.c:646
+#: gtk/gtktexttag.c:657
 #, fuzzy
 msgid "Whether this tag affects tabs"
 msgstr "iyi Itagi: Amasimbuka"
 
-#: gtk/gtktexttag.c:649
+#: gtk/gtktexttag.c:660
 #, fuzzy
 msgid "Invisible set"
 msgstr "Gushyiraho"
 
-#: gtk/gtktexttag.c:650
+#: gtk/gtktexttag.c:661
 #, fuzzy
 msgid "Whether this tag affects text visibility"
 msgstr "iyi Itagi: Umwandiko Ukugaragara"
 
-#: gtk/gtktexttag.c:653
+#: gtk/gtktexttag.c:664
 #, fuzzy
 msgid "Paragraph background set"
 msgstr "Mbuganyuma Gushyiraho"
 
-#: gtk/gtktexttag.c:654
+#: gtk/gtktexttag.c:665
 #, fuzzy
 msgid "Whether this tag affects the paragraph background color"
 msgstr "iyi Itagi: i Mbuganyuma Ibara"
@@ -5844,3 +5855,7 @@ msgstr "IMISUSIRE"
 #, fuzzy
 msgid "How to draw the input method statusbar"
 msgstr "Kuri Gushushanya i Iyinjiza Uburyo"
+
+#, fuzzy
+#~ msgid "Whether this text is hidden. Not implemented in GTK 2.0"
+#~ msgstr "iyi Umwandiko ni gihishwe in 2. 0"

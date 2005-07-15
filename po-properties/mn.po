@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-08 14:01-0400\n"
+"POT-Creation-Date: 2005-07-15 14:36-0400\n"
 "PO-Revision-Date: 2004-03-09 12:13+0100\n"
 "Last-Translator: Sanlig Badral <badral@openmn.org>\n"
 "Language-Team: Mongolian <openmn-core@lists.sf.net>\n"
@@ -277,7 +277,7 @@ msgstr "Үйлдлийн давтагдашгүй нэр."
 
 # gtk/gtkbutton.c:189 gtk/gtkframe.c:125 gtk/gtklabel.c:280
 #: gtk/gtkaction.c:205 gtk/gtkbutton.c:226 gtk/gtkexpander.c:206
-#: gtk/gtkframe.c:128 gtk/gtklabel.c:321 gtk/gtktoolbutton.c:187
+#: gtk/gtkframe.c:128 gtk/gtklabel.c:322 gtk/gtktoolbutton.c:187
 msgid "Label"
 msgstr "Бичээс"
 
@@ -761,13 +761,13 @@ msgid ""
 msgstr "Товч нь бичээстэй бол бичээс текст товчин дотор (дээр) байрлана."
 
 # gtk/gtkbutton.c:197 gtk/gtklabel.c:301
-#: gtk/gtkbutton.c:234 gtk/gtkexpander.c:214 gtk/gtklabel.c:342
+#: gtk/gtkbutton.c:234 gtk/gtkexpander.c:214 gtk/gtklabel.c:343
 #: gtk/gtktoolbutton.c:194
 msgid "Use underline"
 msgstr "Доогуур зураасыг ашиглах"
 
 # gtk/gtkbutton.c:198 gtk/gtklabel.c:302
-#: gtk/gtkbutton.c:235 gtk/gtkexpander.c:215 gtk/gtklabel.c:343
+#: gtk/gtkbutton.c:235 gtk/gtkexpander.c:215 gtk/gtklabel.c:344
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -1190,7 +1190,7 @@ msgstr "Процессийн индикаторт дүрслэгдэх текс�
 
 # gtk/gtkcellrenderertext.c:174 gtk/gtkentry.c:523 gtk/gtkprogressbar.c:207
 #: gtk/gtkcellrendererprogress.c:134 gtk/gtkcellrenderertext.c:219
-#: gtk/gtkentry.c:574 gtk/gtkprogressbar.c:221 gtk/gtktextbuffer.c:206
+#: gtk/gtkentry.c:577 gtk/gtkprogressbar.c:221 gtk/gtktextbuffer.c:206
 msgid "Text"
 msgstr "Текст"
 
@@ -1214,7 +1214,7 @@ msgstr "Тэмдэглэгээ"
 msgid "Marked up text to render"
 msgstr "Текстийг харагдуулах тэмдэглэгээ"
 
-#: gtk/gtkcellrenderertext.c:235 gtk/gtklabel.c:328
+#: gtk/gtkcellrenderertext.c:235 gtk/gtklabel.c:329
 msgid "Attributes"
 msgstr "Шинж чанар"
 
@@ -1272,7 +1272,7 @@ msgstr "GdkColor шиг тэмдэгтийн өнгө "
 
 # gtk/gtkcellrenderertext.c:231 gtk/gtkentry.c:455 gtk/gtktexttag.c:277
 # gtk/gtktextview.c:568
-#: gtk/gtkcellrenderertext.c:285 gtk/gtkentry.c:506 gtk/gtktexttag.c:279
+#: gtk/gtkcellrenderertext.c:285 gtk/gtkentry.c:509 gtk/gtktexttag.c:279
 #: gtk/gtktextview.c:578
 msgid "Editable"
 msgstr "Засварлах"
@@ -1410,7 +1410,7 @@ msgstr ""
 "сануулга болгон ашигладаг. Хэрэв та энэ параметрийг  ойлгохгүй байвал энийг "
 "хэрэглэх шаардлагагүй"
 
-#: gtk/gtkcellrenderertext.c:435 gtk/gtklabel.c:434 gtk/gtkprogressbar.c:243
+#: gtk/gtkcellrenderertext.c:435 gtk/gtklabel.c:435 gtk/gtkprogressbar.c:243
 msgid "Ellipsize"
 msgstr ""
 
@@ -1422,12 +1422,12 @@ msgstr ""
 
 # gtk/gtkentry.c:503
 #: gtk/gtkcellrenderertext.c:455 gtk/gtkfilechooserbutton.c:367
-#: gtk/gtklabel.c:454
+#: gtk/gtklabel.c:455
 #, fuzzy
 msgid "Width In Characters"
 msgstr "Тэмдэгийн өргөн"
 
-#: gtk/gtkcellrenderertext.c:456 gtk/gtklabel.c:455
+#: gtk/gtkcellrenderertext.c:456 gtk/gtklabel.c:456
 msgid "The desired width of the label, in characters"
 msgstr ""
 
@@ -1454,122 +1454,122 @@ msgid "The width at which the text is wrapped"
 msgstr "Одоогийн утга дүрслэгдэх байрлал"
 
 # gtk/gtkcellrenderertext.c:361 gtk/gtktexttag.c:512
-#: gtk/gtkcellrenderertext.c:507 gtk/gtkcellview.c:198 gtk/gtktexttag.c:545
+#: gtk/gtkcellrenderertext.c:507 gtk/gtkcellview.c:198 gtk/gtktexttag.c:556
 msgid "Background set"
 msgstr "Дэвсгэр өнгө тогтоох "
 
-#: gtk/gtkcellrenderertext.c:508 gtk/gtkcellview.c:199 gtk/gtktexttag.c:546
+#: gtk/gtkcellrenderertext.c:508 gtk/gtkcellview.c:199 gtk/gtktexttag.c:557
 msgid "Whether this tag affects the background color"
 msgstr "Дэвсгэр өнгөнд энэ тэг нөлөөлөх үү, эсвэл "
 
 # gtk/gtkcellrenderertext.c:365 gtk/gtktexttag.c:524
-#: gtk/gtkcellrenderertext.c:511 gtk/gtktexttag.c:557
+#: gtk/gtkcellrenderertext.c:511 gtk/gtktexttag.c:568
 msgid "Foreground set"
 msgstr "Тэмдэгтийн өнгө тогтоох "
 
-#: gtk/gtkcellrenderertext.c:512 gtk/gtktexttag.c:558
+#: gtk/gtkcellrenderertext.c:512 gtk/gtktexttag.c:569
 msgid "Whether this tag affects the foreground color"
 msgstr "Тэмдэгтийн өнгөнд энэ таг нөлөөлөх эсэх"
 
 # gtk/gtkcellrenderertext.c:369 gtk/gtktexttag.c:532
-#: gtk/gtkcellrenderertext.c:515 gtk/gtktexttag.c:565
+#: gtk/gtkcellrenderertext.c:515 gtk/gtktexttag.c:576
 msgid "Editability set"
 msgstr "Засварлахыг тогтоох"
 
-#: gtk/gtkcellrenderertext.c:516 gtk/gtktexttag.c:566
+#: gtk/gtkcellrenderertext.c:516 gtk/gtktexttag.c:577
 msgid "Whether this tag affects text editability"
 msgstr "Засварлахад энэ таг нөлөөлөх эсэх"
 
 # gtk/gtkcellrenderertext.c:373 gtk/gtktexttag.c:536
-#: gtk/gtkcellrenderertext.c:519 gtk/gtktexttag.c:569
+#: gtk/gtkcellrenderertext.c:519 gtk/gtktexttag.c:580
 msgid "Font family set"
 msgstr "Фонт бүлийг тогтоох"
 
-#: gtk/gtkcellrenderertext.c:520 gtk/gtktexttag.c:570
+#: gtk/gtkcellrenderertext.c:520 gtk/gtktexttag.c:581
 msgid "Whether this tag affects the font family"
 msgstr "Нэг төрлийн фонтонд энэ таг нөлөөлөх эсэх"
 
 # gtk/gtkcellrenderertext.c:377 gtk/gtktexttag.c:540
-#: gtk/gtkcellrenderertext.c:523 gtk/gtktexttag.c:573
+#: gtk/gtkcellrenderertext.c:523 gtk/gtktexttag.c:584
 msgid "Font style set"
 msgstr "Бичгийн хэлбэрийг тогтоох"
 
-#: gtk/gtkcellrenderertext.c:524 gtk/gtktexttag.c:574
+#: gtk/gtkcellrenderertext.c:524 gtk/gtktexttag.c:585
 msgid "Whether this tag affects the font style"
 msgstr "Нэг төрлийн фонтонд энэ тэг нөлөөлөх үү, эсвэл "
 
 # gtk/gtkcellrenderertext.c:381 gtk/gtktexttag.c:544
-#: gtk/gtkcellrenderertext.c:527 gtk/gtktexttag.c:577
+#: gtk/gtkcellrenderertext.c:527 gtk/gtktexttag.c:588
 msgid "Font variant set"
 msgstr "Бичигт хувилбар тогтоох "
 
-#: gtk/gtkcellrenderertext.c:528 gtk/gtktexttag.c:578
+#: gtk/gtkcellrenderertext.c:528 gtk/gtktexttag.c:589
 msgid "Whether this tag affects the font variant"
 msgstr "Бичгийн хувилбарт энэ тэг нөлөөлөх эсвэх"
 
 # gtk/gtkcellrenderertext.c:385 gtk/gtktexttag.c:548
-#: gtk/gtkcellrenderertext.c:531 gtk/gtktexttag.c:581
+#: gtk/gtkcellrenderertext.c:531 gtk/gtktexttag.c:592
 msgid "Font weight set"
 msgstr "Фонтийг бүдүүрүүлэх "
 
-#: gtk/gtkcellrenderertext.c:532 gtk/gtktexttag.c:582
+#: gtk/gtkcellrenderertext.c:532 gtk/gtktexttag.c:593
 msgid "Whether this tag affects the font weight"
 msgstr "Фонтыг бүдүүрүүлэхэд энэ тэг нөлөөлөх үү, эсвэл "
 
-#: gtk/gtkcellrenderertext.c:535 gtk/gtktexttag.c:585
+#: gtk/gtkcellrenderertext.c:535 gtk/gtktexttag.c:596
 msgid "Font stretch set"
 msgstr "Бичгийн дүүргэлт  "
 
-#: gtk/gtkcellrenderertext.c:536 gtk/gtktexttag.c:586
+#: gtk/gtkcellrenderertext.c:536 gtk/gtktexttag.c:597
 msgid "Whether this tag affects the font stretch"
 msgstr "Фонтыг дүүргэхэд энэ тэг нөлөөлөх үү, эсвэл "
 
 # gtk/gtkcellrenderertext.c:393 gtk/gtktexttag.c:556
-#: gtk/gtkcellrenderertext.c:539 gtk/gtktexttag.c:589
+#: gtk/gtkcellrenderertext.c:539 gtk/gtktexttag.c:600
 msgid "Font size set"
 msgstr "Бичгийн хэмжээг тогтоох "
 
-#: gtk/gtkcellrenderertext.c:540 gtk/gtktexttag.c:590
+#: gtk/gtkcellrenderertext.c:540 gtk/gtktexttag.c:601
 msgid "Whether this tag affects the font size"
 msgstr "Бичгийн хэмжээнд энэ тэг нөлөөлөх үү, эсвэл "
 
-#: gtk/gtkcellrenderertext.c:543 gtk/gtktexttag.c:593
+#: gtk/gtkcellrenderertext.c:543 gtk/gtktexttag.c:604
 msgid "Font scale set"
 msgstr "Бичгийн масштабыг тогтоох "
 
-#: gtk/gtkcellrenderertext.c:544 gtk/gtktexttag.c:594
+#: gtk/gtkcellrenderertext.c:544 gtk/gtktexttag.c:605
 msgid "Whether this tag scales the font size by a factor"
 msgstr "Бичгийн хэмжээг үндэслэгч масштэбад энэ тэг нөлөөлөх үү, эсвэл "
 
-#: gtk/gtkcellrenderertext.c:547 gtk/gtktexttag.c:613
+#: gtk/gtkcellrenderertext.c:547 gtk/gtktexttag.c:624
 msgid "Rise set"
 msgstr "Өсөлтийг тогтоох "
 
-#: gtk/gtkcellrenderertext.c:548 gtk/gtktexttag.c:614
+#: gtk/gtkcellrenderertext.c:548 gtk/gtktexttag.c:625
 msgid "Whether this tag affects the rise"
 msgstr "Өсөлтөнд энэ тэг нөлөөлөх үү, эсвэл "
 
-#: gtk/gtkcellrenderertext.c:551 gtk/gtktexttag.c:629
+#: gtk/gtkcellrenderertext.c:551 gtk/gtktexttag.c:640
 msgid "Strikethrough set"
 msgstr "Хаялтыг тогтоох "
 
-#: gtk/gtkcellrenderertext.c:552 gtk/gtktexttag.c:630
+#: gtk/gtkcellrenderertext.c:552 gtk/gtktexttag.c:641
 msgid "Whether this tag affects strikethrough"
 msgstr "Хаялтанд энэ тэг нөлөөлөх үү, эсвэл "
 
-#: gtk/gtkcellrenderertext.c:555 gtk/gtktexttag.c:637
+#: gtk/gtkcellrenderertext.c:555 gtk/gtktexttag.c:648
 msgid "Underline set"
 msgstr "Доогуур зураас тогтоох "
 
-#: gtk/gtkcellrenderertext.c:556 gtk/gtktexttag.c:638
+#: gtk/gtkcellrenderertext.c:556 gtk/gtktexttag.c:649
 msgid "Whether this tag affects underlining"
 msgstr "Доогуур зурахад энэ тэг нөлөөлөх үү, эсвэл "
 
-#: gtk/gtkcellrenderertext.c:559 gtk/gtktexttag.c:601
+#: gtk/gtkcellrenderertext.c:559 gtk/gtktexttag.c:612
 msgid "Language set"
 msgstr "Хэлний суулгац"
 
-#: gtk/gtkcellrenderertext.c:560 gtk/gtktexttag.c:602
+#: gtk/gtkcellrenderertext.c:560 gtk/gtktexttag.c:613
 msgid "Whether this tag affects the language the text is rendered as"
 msgstr "Таг нь тайлбар текстийн хэлэнд нөлөөлөх эсэх"
 
@@ -1847,7 +1847,7 @@ msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Tab - уудын хэмжээ ижил байх эсэх"
 
 # gtk/gtkentry.c:480
-#: gtk/gtkcombobox.c:673 gtk/gtkentry.c:531
+#: gtk/gtkcombobox.c:673 gtk/gtkentry.c:534
 msgid "Has Frame"
 msgstr "Кадртай"
 
@@ -1987,47 +1987,47 @@ msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Харилцах цонхны доод хэсэг дэх товчны талбайн орчмын хүрээн өргөн"
 
 # gtk/gtkentry.c:435 gtk/gtklabel.c:358
-#: gtk/gtkentry.c:486 gtk/gtklabel.c:399
+#: gtk/gtkentry.c:489 gtk/gtklabel.c:400
 msgid "Cursor Position"
 msgstr "Түүчээын байрлал"
 
 # gtk/gtkentry.c:436 gtk/gtklabel.c:359
-#: gtk/gtkentry.c:487 gtk/gtklabel.c:400
+#: gtk/gtkentry.c:490 gtk/gtklabel.c:401
 msgid "The current position of the insertion cursor in chars"
 msgstr "Тэмдэгтийн оруулах түүчээын байрлал."
 
 # gtk/gtkentry.c:445 gtk/gtklabel.c:368
-#: gtk/gtkentry.c:496 gtk/gtklabel.c:409
+#: gtk/gtkentry.c:499 gtk/gtklabel.c:410
 msgid "Selection Bound"
 msgstr "Сонгогдсоны хязгаар"
 
 # gtk/gtkentry.c:446 gtk/gtklabel.c:369
-#: gtk/gtkentry.c:497 gtk/gtklabel.c:410
+#: gtk/gtkentry.c:500 gtk/gtklabel.c:411
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "Тэмдэгтийн түүчээоос сонгогдсоны харалдаа төгсгөлийн байрлал."
 
 # gtk/gtkentry.c:456
-#: gtk/gtkentry.c:507
+#: gtk/gtkentry.c:510
 msgid "Whether the entry contents can be edited"
 msgstr "Бүртгэлийн агуулга засварлагдах эсэх"
 
 # gtk/gtkentry.c:463
-#: gtk/gtkentry.c:514
+#: gtk/gtkentry.c:517
 msgid "Maximum length"
 msgstr "Максимум урт"
 
 # gtk/gtkentry.c:464
-#: gtk/gtkentry.c:515
+#: gtk/gtkentry.c:518
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr "Энэ бүртгэлийн тэмдэгтийн тооны хамгийн их. Хамгийн ихгүй бол \"0\"."
 
 # gtk/gtkentry.c:472
-#: gtk/gtkentry.c:523
+#: gtk/gtkentry.c:526
 msgid "Visibility"
 msgstr "Харагдац"
 
-#: gtk/gtkentry.c:524
+#: gtk/gtkentry.c:527
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
@@ -2035,24 +2035,24 @@ msgstr ""
 "Бодит текстийн оронд \"үл харагдах тэмдэгт\" хауулах нь ХУДАЛ  (нууц үгийн "
 "горим)"
 
-#: gtk/gtkentry.c:532
+#: gtk/gtkentry.c:535
 msgid "FALSE removes outside bevel from entry"
 msgstr "Агуулгаас илүү гарсныг устгах нь ХУДАЛ."
 
 # gtk/gtkentry.c:488
-#: gtk/gtkentry.c:539
+#: gtk/gtkentry.c:542
 msgid "Invisible character"
 msgstr "Үл харагдах тэмдэгт"
 
-#: gtk/gtkentry.c:540
+#: gtk/gtkentry.c:543
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr "Агуулгыг нууцлах үед хэрэглэх тэмдэгт (\"нууц үгийн горим\"-д)"
 
-#: gtk/gtkentry.c:547
+#: gtk/gtkentry.c:550
 msgid "Activates default"
 msgstr "Анхдагч утгуудыг идэвхжүүлэх"
 
-#: gtk/gtkentry.c:548
+#: gtk/gtkentry.c:551
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
@@ -2061,35 +2061,35 @@ msgstr ""
 "харилцахцонхны анхдагч товч)."
 
 # gtk/gtkentry.c:503
-#: gtk/gtkentry.c:554
+#: gtk/gtkentry.c:557
 msgid "Width in chars"
 msgstr "Тэмдэгийн өргөн"
 
 # gtk/gtkentry.c:504
-#: gtk/gtkentry.c:555
+#: gtk/gtkentry.c:558
 msgid "Number of characters to leave space for in the entry"
 msgstr "Бүртгэлд зайг зөвшөөрөх тэмдэгтийн тоо."
 
-#: gtk/gtkentry.c:564
+#: gtk/gtkentry.c:567
 msgid "Scroll offset"
 msgstr "Нөхөн гүйлгэлт"
 
-#: gtk/gtkentry.c:565
+#: gtk/gtkentry.c:568
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "Бүртгэлийн цэгийг дэлгэцийн зүүн тийш шилжүүлэхийг хаах тоо"
 
 # gtk/gtkentry.c:524
-#: gtk/gtkentry.c:575
+#: gtk/gtkentry.c:578
 msgid "The contents of the entry"
 msgstr "Бүртгэлийн агуулга"
 
 # gtk/gtkmisc.c:97
-#: gtk/gtkentry.c:590 gtk/gtkmisc.c:101
+#: gtk/gtkentry.c:593 gtk/gtkmisc.c:101
 msgid "X align"
 msgstr "X-зэрэгцүүлэлт"
 
 # gtk/gtkmisc.c:98
-#: gtk/gtkentry.c:591 gtk/gtkmisc.c:102
+#: gtk/gtkentry.c:594 gtk/gtkmisc.c:102
 #, fuzzy
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
@@ -2099,12 +2099,12 @@ msgstr ""
 "нөөцлөгдсөн"
 
 # gtk/gtkentry.c:728
-#: gtk/gtkentry.c:829
+#: gtk/gtkentry.c:832
 msgid "Select on focus"
 msgstr "Фокус дахь сонголт"
 
 # gtk/gtkentry.c:729
-#: gtk/gtkentry.c:830
+#: gtk/gtkentry.c:833
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Голлуулах үед бүртгэлийн агуулгыг сонгох эсэх."
 
@@ -2211,12 +2211,12 @@ msgid "Text of the expander's label"
 msgstr "Кадрын нэрийн текст"
 
 # gtk/gtklabel.c:294
-#: gtk/gtkexpander.c:222 gtk/gtklabel.c:335
+#: gtk/gtkexpander.c:222 gtk/gtklabel.c:336
 msgid "Use markup"
 msgstr "Тэмдэглэгээ хэрэглэх"
 
 # gtk/gtklabel.c:295
-#: gtk/gtkexpander.c:223 gtk/gtklabel.c:336
+#: gtk/gtkexpander.c:223 gtk/gtklabel.c:337
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr ""
 "бичээс -ийн текст XML тэмдэглэгээг агуулна. Үүний талаар : pango_parse_markup"
@@ -2249,94 +2249,105 @@ msgid "Spacing around expander arrow"
 msgstr "Индикаторын сум орчимийн зай"
 
 # gtk/gtkprogressbar.c:187
-#: gtk/gtkfilechooser.c:177
+#: gtk/gtkfilechooser.c:203
 msgid "Action"
 msgstr "Үйлдэл"
 
-#: gtk/gtkfilechooser.c:178
+#: gtk/gtkfilechooser.c:204
 msgid "The type of operation that the file selector is performing"
 msgstr "Файл сонгогч хийх үйлдлийн төрөл"
 
 # gtk/gtkfilesel.c:742
-#: gtk/gtkfilechooser.c:184
+#: gtk/gtkfilechooser.c:210
 msgid "File System Backend"
 msgstr "Файл систем Бакэнд"
 
 # gtk/gtksettings.c:216
-#: gtk/gtkfilechooser.c:185
+#: gtk/gtkfilechooser.c:211
 msgid "Name of file system backend to use"
 msgstr "Хэрэглэх бакэнд файлын системтийн нэр"
 
 # gtk/gtkfilesel.c:742
-#: gtk/gtkfilechooser.c:190
+#: gtk/gtkfilechooser.c:216
 msgid "Filter"
 msgstr "Шүүлтүүр"
 
-#: gtk/gtkfilechooser.c:191
+#: gtk/gtkfilechooser.c:217
 msgid "The current filter for selecting which files are displayed"
 msgstr "Ямар файлууд харуулахыг сонгох идэвхитэй шүүлтүүр"
 
-#: gtk/gtkfilechooser.c:196
+#: gtk/gtkfilechooser.c:222
 msgid "Local Only"
 msgstr "Зөвхөн локал"
 
-#: gtk/gtkfilechooser.c:197
+#: gtk/gtkfilechooser.c:223
 msgid "Whether the selected file(s) should be limited to local file: URLs"
 msgstr "Сонгосон файлууд локал файлаар хязгаарлагдах эсэх: URLs"
 
-#: gtk/gtkfilechooser.c:202
+#: gtk/gtkfilechooser.c:228
 msgid "Preview widget"
 msgstr "Тольдолт харагдац"
 
-#: gtk/gtkfilechooser.c:203
+#: gtk/gtkfilechooser.c:229
 msgid "Application supplied widget for custom previews."
 msgstr "Програм хэвшмэл тольдолтуудын хувьд виджет нийлүүлнэ."
 
-#: gtk/gtkfilechooser.c:208
+#: gtk/gtkfilechooser.c:234
 msgid "Preview Widget Active"
 msgstr "Тольдолт харагдац идэвхтэй"
 
-#: gtk/gtkfilechooser.c:209
+#: gtk/gtkfilechooser.c:235
 msgid ""
 "Whether the application supplied widget for custom previews should be shown."
 msgstr "Харуулах хэвшмэл тольдолтуудын хувьд програм виджет нийлүүлнэ."
 
-#: gtk/gtkfilechooser.c:214
+#: gtk/gtkfilechooser.c:240
 msgid "Use Preview Label"
 msgstr "Тольдолт бичээст хэрэглэх"
 
-#: gtk/gtkfilechooser.c:215
+#: gtk/gtkfilechooser.c:241
 msgid "Whether to display a stock label with the name of the previewed file."
 msgstr "Тольдсон файлын нэртэй дүрст бичээсийг харуулах эсэх."
 
 # gtk/gtkimagemenuitem.c:124
-#: gtk/gtkfilechooser.c:220
+#: gtk/gtkfilechooser.c:246
 msgid "Extra widget"
 msgstr "Тусгай элемент"
 
-#: gtk/gtkfilechooser.c:221
+#: gtk/gtkfilechooser.c:247
 msgid "Application supplied widget for extra options."
 msgstr "Програм тусгай сонголтууд дээр виджет нийлүүлнэ."
 
 # gtk/gtkfilesel.c:551
-#: gtk/gtkfilechooser.c:226
+#: gtk/gtkfilechooser.c:252
 msgid "Select Multiple"
 msgstr "Олон сонголт"
 
 # gtk/gtkfilesel.c:552
-#: gtk/gtkfilechooser.c:227 gtk/gtkfilesel.c:573
+#: gtk/gtkfilechooser.c:253 gtk/gtkfilesel.c:573
 msgid "Whether to allow multiple files to be selected"
 msgstr "Олон файл сонгогдож болох эсэх."
 
 # gtk/gtknotebook.c:413
-#: gtk/gtkfilechooser.c:233
+#: gtk/gtkfilechooser.c:259
 msgid "Show Hidden"
 msgstr "Далдласанг харуулах"
 
 # gtk/gtkfilesel.c:544
-#: gtk/gtkfilechooser.c:234
+#: gtk/gtkfilechooser.c:260
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Далдласан файл эсвэл лавлахуудыг харуулах эсэх"
+
+#: gtk/gtkfilechooser.c:266
+msgid "Do overwrite confirmation"
+msgstr ""
+
+#: gtk/gtkfilechooser.c:267
+msgid ""
+"Whether a file chooser in GTK_FILE_CHOOSER_ACTION_SAVE will present an "
+"overwrite confirmation dialog if the user selects a file name that already "
+"exists."
+msgstr ""
 
 #: gtk/gtkfilechooserbutton.c:338
 msgid "Dialog"
@@ -2356,12 +2367,12 @@ msgstr "Бичиг сонгогч цонхны гарчиг"
 msgid "The desired width of the button widget, in characters."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:640
+#: gtk/gtkfilechooserdefault.c:641
 msgid "Default file chooser backend"
 msgstr "Стандарт файл сонгогч"
 
 # gtk/gtksettings.c:216
-#: gtk/gtkfilechooserdefault.c:641
+#: gtk/gtkfilechooserdefault.c:642
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Стандартаар хэрэглэх GtkFileChooser· бакэндын нэр"
 
@@ -2826,20 +2837,20 @@ msgid "The screen where this window will be displayed"
 msgstr "Уг цонх дүрслэгдэх дэлгэц."
 
 # gtk/gtklabel.c:281
-#: gtk/gtklabel.c:322
+#: gtk/gtklabel.c:323
 msgid "The text of the label"
 msgstr "бичээс-ийн текст."
 
-#: gtk/gtklabel.c:329
+#: gtk/gtklabel.c:330
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "бичээс -ийн текстэнд хэрэглэгдэх загварын жагсаалтын аттрибутууд."
 
 # gtk/gtklabel.c:309 gtk/gtktexttag.c:378 gtk/gtktextview.c:585
-#: gtk/gtklabel.c:350 gtk/gtktexttag.c:380 gtk/gtktextview.c:595
+#: gtk/gtklabel.c:351 gtk/gtktexttag.c:380 gtk/gtktextview.c:595
 msgid "Justification"
 msgstr "Тэнцүүлэх"
 
-#: gtk/gtklabel.c:351
+#: gtk/gtklabel.c:352
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
@@ -2850,11 +2861,11 @@ msgstr ""
 "- ийг хар."
 
 # gtk/gtklabel.c:318
-#: gtk/gtklabel.c:359
+#: gtk/gtklabel.c:360
 msgid "Pattern"
 msgstr "Загвар"
 
-#: gtk/gtklabel.c:360
+#: gtk/gtklabel.c:361
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline"
@@ -2863,73 +2874,73 @@ msgstr ""
 "тавигдана."
 
 # gtk/gtklabel.c:326
-#: gtk/gtklabel.c:367
+#: gtk/gtklabel.c:368
 msgid "Line wrap"
 msgstr "Мөр шилжүүлэлт"
 
 # gtk/gtklabel.c:327
-#: gtk/gtklabel.c:368
+#: gtk/gtklabel.c:369
 msgid "If set, wrap lines if the text becomes too wide"
 msgstr "Хэрэв сонгогдсон бол хэтэрхий өргөн текстийг мөр шилжүүлэлт хийх"
 
 # gtk/gtklabel.c:333
-#: gtk/gtklabel.c:374
+#: gtk/gtklabel.c:375
 msgid "Selectable"
 msgstr "Сонгогдох"
 
 # gtk/gtklabel.c:334
-#: gtk/gtklabel.c:375
+#: gtk/gtklabel.c:376
 msgid "Whether the label text can be selected with the mouse"
 msgstr "Текст хулганаар сонгогдож чадах эсэх"
 
-#: gtk/gtklabel.c:381
+#: gtk/gtklabel.c:382
 msgid "Mnemonic key"
 msgstr "Мнемоник товч"
 
-#: gtk/gtklabel.c:382
+#: gtk/gtklabel.c:383
 msgid "The mnemonic accelerator key for this label"
 msgstr "Мнемоник товч - уг бичээсийн хурдасгагч товч."
 
-#: gtk/gtklabel.c:390
+#: gtk/gtklabel.c:391
 msgid "Mnemonic widget"
 msgstr "Удирдлагын мнемоник элемент."
 
-#: gtk/gtklabel.c:391
+#: gtk/gtklabel.c:392
 msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr "Бичээсийн мнемоник товч дарагдсан үед идэвхижих удирдлагын элемент."
 
-#: gtk/gtklabel.c:435
+#: gtk/gtklabel.c:436
 msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string, if at all"
 msgstr ""
 
-#: gtk/gtklabel.c:475
+#: gtk/gtklabel.c:476
 #, fuzzy
 msgid "Single Line Mode"
 msgstr "Дан догол мөрийн горим"
 
 # gtk/gtklabel.c:334
-#: gtk/gtklabel.c:476
+#: gtk/gtklabel.c:477
 #, fuzzy
 msgid "Whether the label is in single line mode"
 msgstr "Бичээс сонгогдсон бичгээр зурагдах эсэх"
 
-#: gtk/gtklabel.c:493
+#: gtk/gtklabel.c:494
 msgid "Angle"
 msgstr ""
 
-#: gtk/gtklabel.c:494
+#: gtk/gtklabel.c:495
 msgid "Angle at which the label is rotated"
 msgstr ""
 
 # gtk/gtkentry.c:503
-#: gtk/gtklabel.c:514
+#: gtk/gtklabel.c:515
 #, fuzzy
 msgid "Maximum Width In Characters"
 msgstr "Тэмдэгийн өргөн"
 
-#: gtk/gtklabel.c:515
+#: gtk/gtklabel.c:516
 msgid "The desired maximum width of the label, in characters"
 msgstr ""
 
@@ -4523,148 +4534,148 @@ msgid "Custom tabs for this text"
 msgstr "Энэхүү текстэнд зориулсан хэрэглэгчийн ТАВ"
 
 # gtk/gtktexttag.c:502
-#: gtk/gtktexttag.c:504
+#: gtk/gtktexttag.c:515
 msgid "Invisible"
 msgstr "Үл үзэгдэх"
 
-# gtk/gtktexttag.c:503
-#: gtk/gtktexttag.c:505
-msgid "Whether this text is hidden. Not implemented in GTK 2.0"
-msgstr "Энэхүү текст нь үл үзэгдэх горимд байна"
+#: gtk/gtktexttag.c:516
+#, fuzzy
+msgid "Whether this text is hidden."
+msgstr "Өсөлтөнд энэ тэг нөлөөлөх үү, эсвэл "
 
 # gtk/gtkcellrenderertext.c:198 gtk/gtktexttag.c:209
-#: gtk/gtktexttag.c:519
+#: gtk/gtktexttag.c:530
 #, fuzzy
 msgid "Paragraph background color name"
 msgstr "Нүдний дэвсгэр өнгө (нэрээр)"
 
 # gtk/gtkcellrenderertext.c:199 gtk/gtktexttag.c:210
-#: gtk/gtktexttag.c:520
+#: gtk/gtktexttag.c:531
 #, fuzzy
 msgid "Paragraph background color as a string"
 msgstr "Дэвсгэрийн өнгө нэрээрээ"
 
 # gtk/gtkcellrenderertext.c:206 gtk/gtktexttag.c:217
-#: gtk/gtktexttag.c:535
+#: gtk/gtktexttag.c:546
 #, fuzzy
 msgid "Paragraph background color"
 msgstr "Нүдний дэвсгэр өнгө"
 
 # gtk/gtkcellrenderertext.c:207 gtk/gtktexttag.c:218
-#: gtk/gtktexttag.c:536
+#: gtk/gtktexttag.c:547
 #, fuzzy
 msgid "Paragraph background color as a (possibly unallocated) GdkColor"
 msgstr " GdkColor дэвсгэрийн өнгө"
 
-#: gtk/gtktexttag.c:549
+#: gtk/gtktexttag.c:560
 msgid "Background full height set"
 msgstr "Бүрэн дэвсгэрийн өндөрийн тогтоох"
 
-#: gtk/gtktexttag.c:550
+#: gtk/gtktexttag.c:561
 msgid "Whether this tag affects background height"
 msgstr "Энэхүү таг нь арын дэвсгэрийн өндөрт нөлөөлөх эсэх"
 
-#: gtk/gtktexttag.c:553
+#: gtk/gtktexttag.c:564
 msgid "Background stipple set"
 msgstr "Арын дэвсгэрийн суулгац"
 
-#: gtk/gtktexttag.c:554
+#: gtk/gtktexttag.c:565
 msgid "Whether this tag affects the background stipple"
 msgstr "Энэхүү таг нь арын дэвсгэрийнх"
 
-#: gtk/gtktexttag.c:561
+#: gtk/gtktexttag.c:572
 msgid "Foreground stipple set"
 msgstr "Урд дэвсгэрийн суулгац"
 
-#: gtk/gtktexttag.c:562
+#: gtk/gtktexttag.c:573
 msgid "Whether this tag affects the foreground stipple"
 msgstr "Энэхүү таг нь урд дэвсгэрийнх"
 
-#: gtk/gtktexttag.c:597
+#: gtk/gtktexttag.c:608
 msgid "Justification set"
 msgstr "Зэрэгцүүлэх "
 
-#: gtk/gtktexttag.c:598
+#: gtk/gtktexttag.c:609
 msgid "Whether this tag affects paragraph justification"
 msgstr "Таг нь догол мөр авахад нөлөөлөх үү"
 
-#: gtk/gtktexttag.c:605
+#: gtk/gtktexttag.c:616
 msgid "Left margin set"
 msgstr "Зүүн хязгаарын суулгац"
 
-#: gtk/gtktexttag.c:606
+#: gtk/gtktexttag.c:617
 msgid "Whether this tag affects the left margin"
 msgstr "Таг нь зүүн хязгаарт нөлөөлөх эсэх"
 
-#: gtk/gtktexttag.c:609
+#: gtk/gtktexttag.c:620
 msgid "Indent set"
 msgstr "Шүдний суулгац"
 
-#: gtk/gtktexttag.c:610
+#: gtk/gtktexttag.c:621
 msgid "Whether this tag affects indentation"
 msgstr "Энэхүү таг нь шүдэнд нөлөөлөх эсэх"
 
-#: gtk/gtktexttag.c:617
+#: gtk/gtktexttag.c:628
 msgid "Pixels above lines set"
 msgstr "Шугамын дээрх цэгүүдийн суулгац"
 
-#: gtk/gtktexttag.c:618 gtk/gtktexttag.c:622
+#: gtk/gtktexttag.c:629 gtk/gtktexttag.c:633
 msgid "Whether this tag affects the number of pixels above lines"
 msgstr "Таг нь шугамын дээрх цэгүүдийн тоонд нөлөөлөх эсэх"
 
-#: gtk/gtktexttag.c:621
+#: gtk/gtktexttag.c:632
 msgid "Pixels below lines set"
 msgstr "Шугамын доорх цэгүүдийн суулгац"
 
-#: gtk/gtktexttag.c:625
+#: gtk/gtktexttag.c:636
 msgid "Pixels inside wrap set"
 msgstr "Зөөвөрлөх байдал дахь цэгүүд "
 
-#: gtk/gtktexttag.c:626
+#: gtk/gtktexttag.c:637
 msgid "Whether this tag affects the number of pixels between wrapped lines"
 msgstr ""
 "Энэхүү таг нь зөөвөрлөгдсөн шугамууд болон цэгүүдийн тооны хооронд нөлөөлөх "
 "эсэх"
 
-#: gtk/gtktexttag.c:633
+#: gtk/gtktexttag.c:644
 msgid "Right margin set"
 msgstr "Баруун хязгаарын суулгац"
 
-#: gtk/gtktexttag.c:634
+#: gtk/gtktexttag.c:645
 msgid "Whether this tag affects the right margin"
 msgstr "Таг нь баруун хязгаарт нөлөөлөх үү"
 
-#: gtk/gtktexttag.c:641
+#: gtk/gtktexttag.c:652
 msgid "Wrap mode set"
 msgstr "Зөөвөрлөх тогтолцооны байдал"
 
-#: gtk/gtktexttag.c:642
+#: gtk/gtktexttag.c:653
 msgid "Whether this tag affects line wrap mode"
 msgstr "Энэхүү таг нь зөөвөрлөх тогтолцоонд нөлөөлөх эсэх"
 
-#: gtk/gtktexttag.c:645
+#: gtk/gtktexttag.c:656
 msgid "Tabs set"
 msgstr "Шилжүүлэлтийн байдал"
 
-#: gtk/gtktexttag.c:646
+#: gtk/gtktexttag.c:657
 msgid "Whether this tag affects tabs"
 msgstr "Таг нь шилжүүлэлтэнд нөлөөлөх эсэх"
 
-#: gtk/gtktexttag.c:649
+#: gtk/gtktexttag.c:660
 msgid "Invisible set"
 msgstr "Харагдахгүй байдал"
 
-#: gtk/gtktexttag.c:650
+#: gtk/gtktexttag.c:661
 msgid "Whether this tag affects text visibility"
 msgstr "Энэхүү таг нь текстийн харагдацад нөлөөлөх эсэх"
 
 # gtk/gtkcellrenderertext.c:361 gtk/gtktexttag.c:512
-#: gtk/gtktexttag.c:653
+#: gtk/gtktexttag.c:664
 #, fuzzy
 msgid "Paragraph background set"
 msgstr "Нүдний дэвсгэр тавих"
 
-#: gtk/gtktexttag.c:654
+#: gtk/gtktexttag.c:665
 #, fuzzy
 msgid "Whether this tag affects the paragraph background color"
 msgstr "Дэвсгэр өнгөнд энэ тэг нөлөөлөх үү, эсвэл "
@@ -5702,6 +5713,10 @@ msgstr "IM төлөвийн хэлбэр"
 #: modules/input/gtkimcontextxim.c:340
 msgid "How to draw the input method statusbar"
 msgstr "Төлөвийн самбарыг оруулах аргыг хэрхэн үзүүлэх"
+
+# gtk/gtktexttag.c:503
+#~ msgid "Whether this text is hidden. Not implemented in GTK 2.0"
+#~ msgstr "Энэхүү текст нь үл үзэгдэх горимд байна"
 
 # gtk/gtkentry.c:503
 #, fuzzy

@@ -632,9 +632,9 @@ gdk_draw_text_wc (GdkDrawable	 *drawable,
  * colormap, or errors will result. (On X11, failure to match
  * visual/colormap results in a BadMatch error from the X server.)
  * A common cause of this problem is an attempt to draw a bitmap to
- * a color drawable. The way to draw a bitmap is to set the
- * bitmap as a clip mask on your #GdkGC, then use gdk_draw_rectangle()
- * to draw a rectangle clipped to the bitmap.
+ * a color drawable. The way to draw a bitmap is to set the bitmap as 
+ * the stipple on the #GdkGC, set the fill mode to %GDK_STIPPLED, and 
+ * then draw the rectangle.
  **/
 void
 gdk_draw_drawable (GdkDrawable *drawable,

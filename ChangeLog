@@ -1,5 +1,12 @@
 2005-07-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* === Released 2.7.3 ===
+	
+	* gdk/gdkdraw.c (gdk_draw_drawable): Add better docs.  
+	(#310192, Owen Taylor)
+
+2005-07-15  Matthias Clasen  <mclasen@redhat.com>
+
 	* NEWS: Updates
 
 	* gtk/gtkentry.c (gtk_entry_move_forward_word): 
