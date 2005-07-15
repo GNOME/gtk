@@ -439,6 +439,14 @@ Since: 2.2
 @timestamp: 
 
 
+<!-- ##### FUNCTION gdk_x11_window_move_to_current_desktop ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
 <!-- ##### FUNCTION gdk_x11_display_get_user_time ##### -->
 <para>
 

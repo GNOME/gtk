@@ -794,6 +794,17 @@ has some similarity to strcmp() returning 0 for equal strings.
 @visible_rect: 
 
 
+<!-- ##### FUNCTION gtk_tree_view_get_visible_range ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@start_path: 
+@end_path: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_tree_view_get_bin_window ##### -->
 <para>
 

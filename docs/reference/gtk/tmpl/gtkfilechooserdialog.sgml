@@ -24,8 +24,8 @@ A file chooser dialog, suitable for "File/Open" or "File/Save" commands
       <title>Typical usage</title>
 
       <para>
-	In the simplest of cases, you can use #GtkFileChooserDialog
-	as in the following code:
+	In the simplest of cases, you can the following code to use
+	#GtkFileChooserDialog to select a file for opening:
       </para>
 
       <programlisting>
@@ -44,6 +44,33 @@ if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
 
     filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
     open_file (filename);
+    g_free (filename);
+  }
+
+gtk_widget_destroy (dialog);
+      </programlisting>
+
+      <para>
+        To use a dialog for saving, you can use this:
+      </para>
+
+      <programlisting>
+GtkWidget *dialog;
+
+dialog = gtk_file_chooser_dialog_new ("Save File",
+				      parent_window,
+				      GTK_FILE_CHOOSER_ACTION_SAVE,
+				      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+				      GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
+				      NULL);
+gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
+
+if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
+  {
+    char *filename;
+
+    filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+    save_to_file (filename);
     g_free (filename);
   }
 

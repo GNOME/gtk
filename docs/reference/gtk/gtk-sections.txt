@@ -1195,6 +1195,7 @@ GtkExpanderPrivate
 <TITLE>GtkFileChooser</TITLE>
 GtkFileChooser
 GtkFileChooserAction
+GtkFileChooserConfirmation
 GTK_FILE_CHOOSER_ERROR
 GtkFileChooserError
 gtk_file_chooser_error_quark
@@ -1206,6 +1207,8 @@ gtk_file_chooser_set_select_multiple
 gtk_file_chooser_get_select_multiple
 gtk_file_chooser_set_show_hidden
 gtk_file_chooser_get_show_hidden
+gtk_file_chooser_set_do_overwrite_confirmation
+gtk_file_chooser_get_do_overwrite_confirmation
 gtk_file_chooser_set_current_name
 gtk_file_chooser_get_filename
 gtk_file_chooser_set_filename

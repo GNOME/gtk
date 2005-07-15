@@ -607,3 +607,11 @@ calling gtk_tree_view_column_set_cell_data_func()
 @cell: 
 
 
+<!-- ##### FUNCTION gtk_tree_view_column_queue_resize ##### -->
+<para>
+
+</para>
+
+@tree_column: 
+
+

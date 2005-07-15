@@ -514,6 +514,15 @@ compatibility reasons.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_tree_row_reference_get_model ##### -->
+<para>
+
+</para>
+
+@reference: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_tree_row_reference_get_path ##### -->
 <para>
 
