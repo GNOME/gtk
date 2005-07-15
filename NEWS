@@ -1,3 +1,41 @@
+Overview of Changes from GTK+ 2.7.2 to GTK+ 2.7.3
+=================================================
+* Make sure that gtk_window_present() moves the window to the 
+  current desktop [Elijah Newren]
+* GtkFileChooser
+ - Add overwrite confirmation for SAVE mode [Federico Mena Quintero]
+* GtkTreeView
+ - Add gtk_tree_view_get_visible_range() [Mikael Hallendal]
+ - Add gtk_tree_view_column_queue_resize() [Morten Welinder]
+ - Add gtk_tree_row_reference_get_model() [Stefan Kost]
+ - Make page up/down behave as in the text view [Owen Taylor]
+ - In typeahead search, allow Ctrl-G to move to the
+   next match.  [Matt T. Proud]
+ - Interpret Ctrl-Backspace as "Move focus to parent [Kathy
+   Fernandes]
+ - Speed up gtk_tree_selection_selected_foreach [Kristian Rietveld]
+* GtkTextView 
+ - Make double-clicking between words select whitespace [Mike 
+   Miller, Paolo Borelli]
+ - Show dragged text in drag icon [Kevin Duffus, Carlos 
+   Garnacho Parro]
+ - Make invisible text work well enough to remove the
+   remove the warning about it being unsupported.  [Matthias]
+* GtkEntry
+ - Make double-clicking between words select whitespace [Matthias]
+ - Show dragged text in drag icon [Kevin Duffus, Carlos Garnacho Parro]
+ - Fix the sizing of the entry completion popup [Ross Burton, Kris]
+* Win32
+ - Build fixes [Tor Lillqvist]
+ - Fix handlink of Aiptek tablets [Robert Ögren]
+* Bug fixes [Kris, Jorn Baayen, Billy Biggs, Tomislav Jonjic, 
+  Owen Taylor, Vincent Noel, Carlos Garnacho Parro, Mark McLoughlin. 
+  Mikael Magnusson, Luis Villa, Brian Bober, Bernd Demian, Manish 
+  Singh, Akira Tagoh, Barbie LeVille, Hans Oesterholt]
+* Documentation improvements [Torsten Schoenfeld, Rodney Dawes,
+  Park Ji-In]
+* New and updated translations (cs,es,et,he,hu,nb,nl,no,sk)
+
 Overview of Changes from GTK+ 2.7.1 to GTK+ 2.7.2
 =================================================
 * GtkAboutDialog

@@ -1,5 +1,7 @@
 2005-07-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* NEWS: Updates
+
 	* gtk/gtkentry.c (gtk_entry_move_forward_word): 
 	(gtk_entry_move_backward_word): Don't treat whitespace as
 	words for keynav, pointed out by Owen Taylor.
@@ -315,7 +317,7 @@
 
 2005-07-11  Matthias Clasen  <mclasen@redhat.com>
 
-	Make gdk_window_present() move the window to the current
+	Make gtk_window_present() move the window to the current
 	desktop, instead of letting the WM change the current
 	desktop to where the window is.  (#166379, Elijah Newren)
 	
