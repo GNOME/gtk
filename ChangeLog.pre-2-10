@@ -1,3 +1,9 @@
+2005-07-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_move_forward_word): 
+	(gtk_entry_move_backward_word): Don't treat whitespace as
+	words for keynav, pointed out by Owen Taylor.
+
 2005-07-15  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserdefault.c

@@ -296,9 +296,11 @@ static gint         gtk_entry_move_logically           (GtkEntry       *entry,
 							gint            start,
 							gint            count);
 static gint         gtk_entry_move_forward_word        (GtkEntry       *entry,
-							gint            start);
+							gint            start,
+                                                        gboolean        allow_whitespace);
 static gint         gtk_entry_move_backward_word       (GtkEntry       *entry,
-							gint            start);
+							gint            start,
+                                                        gboolean        allow_whitespace);
 static void         gtk_entry_delete_whitespace        (GtkEntry       *entry);
 static void         gtk_entry_select_word              (GtkEntry       *entry);
 static void         gtk_entry_select_line              (GtkEntry       *entry);
@@ -1669,28 +1671,11 @@ drag_begin_cb (GtkWidget      *widget,
                gpointer        data)
 {
   GtkEntry *entry;
-  gchar *text;
-  GdkPixmap *pixmap = NULL;
 
   g_signal_handlers_disconnect_by_func (widget, drag_begin_cb, NULL);
 
   entry = GTK_ENTRY (widget);
 
-  text = _gtk_entry_get_selected_text (entry);
-  pixmap = _gtk_text_util_create_drag_icon (widget, text, -1);
-
-  if (entry->visible && pixmap)
-    gtk_drag_set_icon_pixmap (context,
-                              gdk_drawable_get_colormap (pixmap),
-                              pixmap,
-                              NULL,
-                              -2, -2);
-  else
-    gtk_drag_set_icon_default (context);
-  
-  if (pixmap)
-    g_object_unref (pixmap);
-  g_free (text);
 }
 
 static gint
@@ -1728,13 +1713,32 @@ gtk_entry_motion_notify (GtkWidget      *widget,
           GdkDragContext *context;
           GtkTargetList  *target_list = gtk_target_list_new (NULL, 0);
           guint actions = entry->editable ? GDK_ACTION_COPY | GDK_ACTION_MOVE : GDK_ACTION_COPY;
+          gchar *text = NULL;
+          GdkPixmap *pixmap = NULL;
 
           gtk_target_list_add_text_targets (target_list, 0);
 
-          g_signal_connect (widget, "drag-begin", 
-                            G_CALLBACK (drag_begin_cb), NULL);
+          if (entry->visible)
+            {
+              text = _gtk_entry_get_selected_text (entry);
+              pixmap = _gtk_text_util_create_drag_icon (widget, text, -1);
+            }
+
           context = gtk_drag_begin (widget, target_list, actions,
                                     entry->button, (GdkEvent *)event);
+          
+          if (pixmap)
+            gtk_drag_set_icon_pixmap (context,
+                                      gdk_drawable_get_colormap (pixmap),
+                                      pixmap,
+                                      NULL,
+                                      -2, -2);
+          else
+            gtk_drag_set_icon_default (context);
+          
+          if (pixmap)
+            g_object_unref (pixmap);
+          g_free (text);
 
           entry->in_drag = FALSE;
           entry->button = 0;
@@ -1760,8 +1764,8 @@ gtk_entry_motion_notify (GtkWidget      *widget,
 	  gint old_min, old_max;
 	  gint pos, bound;
 	  
-	  min = gtk_entry_move_backward_word (entry, tmp_pos);
-	  max = gtk_entry_move_forward_word (entry, tmp_pos);
+	  min = gtk_entry_move_backward_word (entry, tmp_pos, TRUE);
+	  max = gtk_entry_move_forward_word (entry, tmp_pos, TRUE);
 	  
 	  pos = entry->current_pos;
 	  bound = entry->selection_bound;
@@ -2435,12 +2439,12 @@ gtk_entry_move_cursor (GtkEntry       *entry,
 	case GTK_MOVEMENT_WORDS:
 	  while (count > 0)
 	    {
-	      new_pos = gtk_entry_move_forward_word (entry, new_pos);
+	      new_pos = gtk_entry_move_forward_word (entry, new_pos, FALSE);
 	      count--;
 	    }
 	  while (count < 0)
 	    {
-	      new_pos = gtk_entry_move_backward_word (entry, new_pos);
+	      new_pos = gtk_entry_move_backward_word (entry, new_pos, FALSE);
 	      count++;
 	    }
 	  break;
@@ -2511,26 +2515,26 @@ gtk_entry_delete_from_cursor (GtkEntry       *entry,
       if (count < 0)
 	{
 	  /* Move to end of current word, or if not on a word, end of previous word */
-	  end_pos = gtk_entry_move_backward_word (entry, end_pos);
-	  end_pos = gtk_entry_move_forward_word (entry, end_pos);
+	  end_pos = gtk_entry_move_backward_word (entry, end_pos, TRUE);
+	  end_pos = gtk_entry_move_forward_word (entry, end_pos, TRUE);
 	}
       else if (count > 0)
 	{
 	  /* Move to beginning of current word, or if not on a word, begining of next word */
-	  start_pos = gtk_entry_move_forward_word (entry, start_pos);
-	  start_pos = gtk_entry_move_backward_word (entry, start_pos);
+	  start_pos = gtk_entry_move_forward_word (entry, start_pos, TRUE);
+	  start_pos = gtk_entry_move_backward_word (entry, start_pos, TRUE);
 	}
 	
       /* Fall through */
     case GTK_DELETE_WORD_ENDS:
       while (count < 0)
 	{
-	  start_pos = gtk_entry_move_backward_word (entry, start_pos);
+	  start_pos = gtk_entry_move_backward_word (entry, start_pos, TRUE);
 	  count++;
 	}
       while (count > 0)
 	{
-	  end_pos = gtk_entry_move_forward_word (entry, end_pos);
+	  end_pos = gtk_entry_move_forward_word (entry, end_pos, TRUE);
 	  count--;
 	}
       gtk_editable_delete_text (editable, start_pos, end_pos);
@@ -3576,7 +3580,8 @@ gtk_entry_move_logically (GtkEntry *entry,
 
 static gint
 gtk_entry_move_forward_word (GtkEntry *entry,
-			     gint      start)
+			     gint      start,
+                             gboolean  allow_whitespace)
 {
   gint new_pos = start;
 
@@ -3595,7 +3600,8 @@ gtk_entry_move_forward_word (GtkEntry *entry,
       
       /* Find the next word boundary */
       new_pos++;
-      while (new_pos < n_attrs && !(log_attrs[new_pos].is_word_start || log_attrs[new_pos].is_word_end))
+      while (new_pos < n_attrs && !(log_attrs[new_pos].is_word_end ||
+                                    (log_attrs[new_pos].is_word_start && allow_whitespace)))
 	new_pos++;
 
       g_free (log_attrs);
@@ -3607,7 +3613,8 @@ gtk_entry_move_forward_word (GtkEntry *entry,
 
 static gint
 gtk_entry_move_backward_word (GtkEntry *entry,
-			      gint      start)
+			      gint      start,
+                              gboolean  allow_whitespace)
 {
   gint new_pos = start;
 
@@ -3627,7 +3634,8 @@ gtk_entry_move_backward_word (GtkEntry *entry,
       new_pos = start - 1;
 
       /* Find the previous word boundary */
-      while (new_pos > 0 && !(log_attrs[new_pos].is_word_start || log_attrs[new_pos].is_word_end))
+      while (new_pos > 0 && !(log_attrs[new_pos].is_word_start || 
+                              (log_attrs[new_pos].is_word_end && allow_whitespace)))
 	new_pos--;
 
       g_free (log_attrs);
@@ -3664,8 +3672,8 @@ gtk_entry_delete_whitespace (GtkEntry *entry)
 static void
 gtk_entry_select_word (GtkEntry *entry)
 {
-  gint start_pos = gtk_entry_move_backward_word (entry, entry->current_pos);
-  gint end_pos = gtk_entry_move_forward_word (entry, entry->current_pos);
+  gint start_pos = gtk_entry_move_backward_word (entry, entry->current_pos, TRUE);
+  gint end_pos = gtk_entry_move_forward_word (entry, entry->current_pos, TRUE);
 
   gtk_editable_select_region (GTK_EDITABLE (entry), start_pos, end_pos);
 }
