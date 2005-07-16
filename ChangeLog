@@ -1,3 +1,8 @@
+2005-07-16  Tor Lillqvist  <tml@novell.com>
+
+	* configure.in (GDK_EXTRA_LIBS): [Win32] Put -luuid back, it is
+	needed in case one builds without the ie55 stuff. (#310582)
+
 2005-07-15  Matthias Clasen  <mclasen@redhat.com>
 	
 	* configure.in: Bump version
