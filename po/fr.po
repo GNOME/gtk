@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-15 14:36-0400\n"
-"PO-Revision-Date: 2005-06-20 22:49+0200\n"
+"POT-Creation-Date: 2005-07-17 16:26+0200\n"
+"PO-Revision-Date: 2005-07-17 16:06+0200\n"
 "Last-Translator: Christophe Merlet (RedFox) <redfox@redfoxcenter.org>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "MIME-Version: 1.0\n"
@@ -1421,15 +1421,14 @@ msgid "Remove the selected bookmark"
 msgstr "Supprimer le signet sélectionné"
 
 #: gtk/gtkfilechooserdefault.c:3313
-#, fuzzy
 msgid "Could not select file"
-msgstr "Impossible de sélectionner l'élément"
+msgstr "Impossible de sélectionner le fichier"
 
 #: gtk/gtkfilechooserdefault.c:3369
-#, fuzzy, c-format
+#, c-format
 msgid "Could not select file '%s' because it is an invalid path name."
 msgstr ""
-"Impossible d'ajouter un signet pour « %s » car ce n'est pas un chemin "
+"Impossible de sélectionner le fichier « %s » car il n'a pas de chemin "
 "d'accès valide."
 
 #: gtk/gtkfilechooserdefault.c:3441
@@ -2555,10 +2554,6 @@ msgstr "Méthode de saisie X"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Impossible d'obtenir les informations du fichier « %s » : %s"
-
-#, fuzzy
-#~ msgid "Writing %s failed: %s"
-#~ msgstr "L'enregistrement du signet a échoué : %s"
 
 #~ msgid "_Credits"
 #~ msgstr "_Crédits"
