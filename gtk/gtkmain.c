@@ -649,13 +649,13 @@ gtk_init_with_args (int            *argc,
   GOptionGroup *gtk_group;
   gboolean retval;
 
+  gettext_initialization ();
+
   if (gtk_initialized)
     return TRUE;
 
   if (!check_setugid ())
     return FALSE;
-
-  gettext_initialization ();
 
   gtk_group = gtk_get_option_group (TRUE);
   
@@ -696,13 +696,13 @@ gtk_parse_args (int    *argc,
   GOptionContext *option_context;
   GOptionGroup *gtk_group;
   
+  gettext_initialization ();
+
   if (gtk_initialized)
     return TRUE;
 
   if (!check_setugid ())
     return FALSE;
-
-  gettext_initialization ();
 
   option_context = g_option_context_new (NULL);
   g_option_context_set_ignore_unknown_options (option_context, TRUE);
