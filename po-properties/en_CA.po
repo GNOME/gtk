@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-15 14:36-0400\n"
-"PO-Revision-Date: 2005-07-06 22:53-0400\n"
+"POT-Creation-Date: 2005-07-18 04:56-0400\n"
+"PO-Revision-Date: 2005-07-18 22:53-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: Canadian English <adamw@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -2056,7 +2056,7 @@ msgstr "Whether the hidden files and folders should be displayed"
 
 #: gtk/gtkfilechooser.c:266
 msgid "Do overwrite confirmation"
-msgstr ""
+msgstr "Do overwrite confirmation"
 
 #: gtk/gtkfilechooser.c:267
 msgid ""
@@ -2064,6 +2064,9 @@ msgid ""
 "overwrite confirmation dialog if the user selects a file name that already "
 "exists."
 msgstr ""
+"Whether a file chooser in GTK_FILE_CHOOSER_ACTION_SAVE will present an "
+"overwrite confirmation dialogue if the user selects a file name that already "
+"exists."
 
 #: gtk/gtkfilechooserbutton.c:338
 msgid "Dialog"
@@ -4028,9 +4031,8 @@ msgid "Invisible"
 msgstr "Invisible"
 
 #: gtk/gtktexttag.c:516
-#, fuzzy
 msgid "Whether this text is hidden."
-msgstr "Whether this tag affects the rise"
+msgstr "Whether this text is hidden."
 
 #: gtk/gtktexttag.c:530
 msgid "Paragraph background color name"
@@ -5083,6 +5085,3 @@ msgstr "IM Status style"
 #: modules/input/gtkimcontextxim.c:340
 msgid "How to draw the input method statusbar"
 msgstr "How to draw the input method statusbar"
-
-#~ msgid "Whether this text is hidden. Not implemented in GTK 2.0"
-#~ msgstr "Whether this text is hidden. Not implemented in GTK 2.0"

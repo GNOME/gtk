@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-15 14:36-0400\n"
-"PO-Revision-Date: 2005-07-07 03:57-0400\n"
+"POT-Creation-Date: 2005-07-18 04:55-0400\n"
+"PO-Revision-Date: 2005-07-18 03:57-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: Canadian English <adamw@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1462,18 +1462,18 @@ msgstr "Shortcut %s does not exist"
 #: gtk/gtkfilechooserdefault.c:5957
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
-msgstr ""
+msgstr "A file named \"%s\" already exists.  Do you want to replace it?"
 
 #: gtk/gtkfilechooserdefault.c:5960
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
+"The file already exists in \"%s\".  Replacing it will overwrite its contents."
 
 #: gtk/gtkfilechooserdefault.c:5965
-#, fuzzy
 msgid "_Replace"
-msgstr "_Rename"
+msgstr "_Replace"
 
 #: gtk/gtkfilechooserdefault.c:6453
 #, c-format
@@ -1744,9 +1744,8 @@ msgid "This file system does not support mounting"
 msgstr "This file system does not support mounting"
 
 #: gtk/gtkfilesystemunix.c:639
-#, fuzzy
 msgid "File System"
-msgstr "Filesystem"
+msgstr "File System"
 
 #: gtk/gtkfilesystemunix.c:796
 #, c-format
