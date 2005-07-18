@@ -2783,8 +2783,6 @@ gtk_combo_box_model_row_inserted (GtkTreeModel     *model,
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (user_data);
 
-  gtk_tree_row_reference_inserted (G_OBJECT (user_data), path);
-    
   if (combo_box->priv->tree_view)
     gtk_combo_box_list_popup_resize (combo_box);
   else
@@ -2798,19 +2796,9 @@ gtk_combo_box_model_row_deleted (GtkTreeModel     *model,
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (user_data);
 
-  gtk_tree_row_reference_deleted (G_OBJECT (combo_box), path);
-
   if (combo_box->priv->cell_view)
     {
-      if (gtk_tree_row_reference_valid (combo_box->priv->active_row))
-	{
-	  GtkTreePath *path;
-
-	  path = gtk_tree_row_reference_get_path (combo_box->priv->active_row);
-	  gtk_cell_view_set_displayed_row (GTK_CELL_VIEW (combo_box->priv->cell_view), path);	  
-	  gtk_tree_path_free (path);
-	}
-      else
+      if (!gtk_tree_row_reference_valid (combo_box->priv->active_row))
 	gtk_cell_view_set_displayed_row (GTK_CELL_VIEW (combo_box->priv->cell_view), NULL);
     }
   

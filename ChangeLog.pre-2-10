@@ -1,5 +1,10 @@
 2005-07-18  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcombobox.c (gtk_combo_box_model_row_deleted) 
+	(gtk_combo_box_model_row_inserted): Remove useless calls
+	to gtk_tree_row_reference_inserted/deleted, since we
+	don't use manual row references here. 
+
 	* gtk/gtkmain.c (gtk_parse_args, gtk_init_with_args): Call
 	gettext_initialization before checking gtk_initialized, otherwise
 	there are scenarios where it is not called at all. For an
