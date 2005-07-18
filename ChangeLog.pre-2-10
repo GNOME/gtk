@@ -1,5 +1,8 @@
 2005-07-18  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcombobox.c (gtk_combo_box_set_focus_on_click): Propagate
+	the focus-on-click value to the button.  (#310543, Christian Persch)
+
 	* gtk/gtkwidget.c (gtk_widget_set_double_buffered): Add a note
 	about the need to handle expose events. We really need a chapter
 	on the GTK+ drawing model that we can refer to here... (#310765,

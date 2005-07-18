@@ -775,7 +775,8 @@ gtk_combo_box_set_property (GObject      *object,
         break;
 
       case PROP_FOCUS_ON_CLICK:
-        combo_box->priv->focus_on_click = g_value_get_boolean (value);
+	gtk_combo_box_set_focus_on_click (combo_box, 
+					  g_value_get_boolean (value));
         break;
 
       default:
@@ -2389,6 +2390,8 @@ gtk_combo_box_menu_setup (GtkComboBox *combo_box,
   if (combo_box->priv->cell_view)
     {
       combo_box->priv->button = gtk_toggle_button_new ();
+      gtk_button_set_focus_on_click (GTK_BUTTON (combo_box->priv->button),
+				     combo_box->priv->focus_on_click);
 
       g_signal_connect (combo_box->priv->button, "toggled",
                         G_CALLBACK (gtk_combo_box_button_toggled), combo_box);
@@ -2415,6 +2418,9 @@ gtk_combo_box_menu_setup (GtkComboBox *combo_box,
   else
     {
       combo_box->priv->button = gtk_toggle_button_new ();
+      gtk_button_set_focus_on_click (GTK_BUTTON (combo_box->priv->button),
+				     combo_box->priv->focus_on_click);
+
       g_signal_connect (combo_box->priv->button, "toggled",
                         G_CALLBACK (gtk_combo_box_button_toggled), combo_box);
       g_signal_connect_after (combo_box, "key_press_event",
@@ -5148,18 +5154,22 @@ gtk_combo_box_set_row_separator_func (GtkComboBox                 *combo_box,
  * Since: 2.6
  **/
 void
-gtk_combo_box_set_focus_on_click (GtkComboBox *combo,
+gtk_combo_box_set_focus_on_click (GtkComboBox *combo_box,
 				  gboolean     focus_on_click)
 {
-  g_return_if_fail (GTK_IS_COMBO_BOX (combo));
+  g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
   
   focus_on_click = focus_on_click != FALSE;
 
-  if (combo->priv->focus_on_click != focus_on_click)
+  if (combo_box->priv->focus_on_click != focus_on_click)
     {
-      combo->priv->focus_on_click = focus_on_click;
+      combo_box->priv->focus_on_click = focus_on_click;
+
+      if (combo_box->priv->button)
+	gtk_button_set_focus_on_click (GTK_BUTTON (combo_box->priv->button),
+				       focus_on_click);
       
-      g_object_notify (G_OBJECT (combo), "focus-on-click");
+      g_object_notify (G_OBJECT (combo_box), "focus-on-click");
     }
 }
 
@@ -5176,11 +5186,11 @@ gtk_combo_box_set_focus_on_click (GtkComboBox *combo,
  * Since: 2.6
  **/
 gboolean
-gtk_combo_box_get_focus_on_click (GtkComboBox *combo)
+gtk_combo_box_get_focus_on_click (GtkComboBox *combo_box)
 {
-  g_return_val_if_fail (GTK_IS_COMBO_BOX (combo), FALSE);
+  g_return_val_if_fail (GTK_IS_COMBO_BOX (combo_box), FALSE);
   
-  return combo->priv->focus_on_click;
+  return combo_box->priv->focus_on_click;
 }
 
 
