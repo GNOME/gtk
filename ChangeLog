@@ -1,3 +1,11 @@
+2005-07-18  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkmain.c (gtk_parse_args, gtk_init_with_args): Call
+	gettext_initialization before checking gtk_initialized, otherwise
+	there are scenarios where it is not called at all. For an
+	example, see tests/testfilechooserbutton.c.  (#310323, 
+	Arkady L. Shane)
+
 2005-07-18  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkgc-win32.c (gdk_win32_hdc_get): Be sure to remove
