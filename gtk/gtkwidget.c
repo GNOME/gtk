@@ -4352,6 +4352,11 @@ gtk_widget_set_app_paintable (GtkWidget *widget,
  * so you would only use this function to turn off double buffering
  * if you had special needs and really knew what you were doing.
  * 
+ * Note: if you turn off double-buffering, you have to handle
+ * expose events, since even the clearing to the background color or 
+ * pixmap will not happen automatically (as it is done in 
+ * gdk_window_begin_paint()).
+ * 
  **/
 void
 gtk_widget_set_double_buffered (GtkWidget *widget,

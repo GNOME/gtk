@@ -1,3 +1,10 @@
+2005-07-18  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_set_double_buffered): Add a note
+	about the need to handle expose events. We really need a chapter
+	on the GTK+ drawing model that we can refer to here... (#310765,
+	Steve Chaplin)
+
 2005-07-16  Tor Lillqvist  <tml@novell.com>
 
 	* configure.in (GDK_EXTRA_LIBS): [Win32] Put -luuid back, it is
