@@ -1,3 +1,12 @@
+2005-07-18  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkgc-win32.c (gdk_win32_hdc_get): Be sure to remove
+	any possible leftover clipping region in the DC if we don't want
+	any clipping. Thanks to Robert Ögren. (#309823)
+
+	* configure.in (GDK_EXTRA_LIBS): [Win32] Bypass libtool, use
+	-Wl,-luuid. This avoids a libtool warning as libuuid is static.
+
 2005-07-18  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_set_focus_on_click): Propagate
@@ -180,7 +189,7 @@
 
 	* configure.in: Check that we have a new enough Cairo.
 
-2005-07-13  Robert �gren  <gtk@roboros.com>
+2005-07-13  Robert Ögren  <gtk@roboros.com>
 
 	Fix handling of Aiptek and Aiptek-like graphical tablets such as Trust
 	on Windows. (#167004, thanks to	"pnohant" for testing)

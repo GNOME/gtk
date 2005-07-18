@@ -925,6 +925,8 @@ gdk_win32_hdc_get (GdkDrawable    *drawable,
 	    win32_gc->values_mask & GDK_GC_CLIP_Y_ORIGIN ? gc->clip_y_origin : 0) == ERROR)
 	WIN32_API_FAILED ("OffsetClipRgn"), ok = FALSE;
     }
+  else if (ok)
+    SelectClipRgn (win32_gc->hdc, NULL);
 
   GDK_NOTE (GC, (g_print ("gdk_win32_hdc_get: %p (%s): ",
 			  win32_gc, _gdk_win32_gcvalues_mask_to_string (usage)),
