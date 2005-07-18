@@ -200,7 +200,7 @@ gdk_pixbuf_render_to_drawable (GdkPixbuf   *pixbuf,
  *
  * Renders a rectangular portion of a pixbuf to a drawable.  The destination
  * drawable must have a colormap. All windows have a colormap, however, pixmaps
- * only have colormap by default if they were created with a non-NULL window argument.
+ * only have colormap by default if they were created with a non-%NULL window argument.
  * Otherwise a colormap must be set on them with gdk_drawable_set_colormap.
  *
  * On older X servers, rendering pixbufs with an alpha channel involves round trips
@@ -242,10 +242,10 @@ gdk_pixbuf_render_to_drawable_alpha (GdkPixbuf   *pixbuf,
  * The pixmap that is created is created for the colormap returned
  * by gdk_rgb_get_colormap(). You normally will want to instead use
  * the actual colormap for a widget, and use
- * gdk_pixbuf_render_pixmap_and_mask_for_colormap.
+ * gdk_pixbuf_render_pixmap_and_mask_for_colormap().
  *
  * If the pixbuf does not have an alpha channel, then *@mask_return will be set
- * to NULL.
+ * to %NULL.
  **/
 void
 gdk_pixbuf_render_pixmap_and_mask (GdkPixbuf  *pixbuf,
@@ -280,7 +280,7 @@ gdk_pixbuf_render_pixmap_and_mask (GdkPixbuf  *pixbuf,
  * will eventually be used or an error will result.
  *
  * If the pixbuf does not have an alpha channel, then *@mask_return will be set
- * to NULL.
+ * to %NULL.
  **/
 void
 gdk_pixbuf_render_pixmap_and_mask_for_colormap (GdkPixbuf   *pixbuf,

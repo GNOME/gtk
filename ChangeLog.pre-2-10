@@ -1,5 +1,7 @@
 2005-07-18  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/gdkpixbuf-render.c: Small formatting fixes in doc comments. 
+
 	* gtk/gtkcombobox.c (gtk_combo_box_model_row_deleted) 
 	(gtk_combo_box_model_row_inserted): Remove useless calls
 	to gtk_tree_row_reference_inserted/deleted, since we
