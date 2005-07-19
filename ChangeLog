@@ -1,3 +1,9 @@
+2005-07-19  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkentry.c (gtk_entry_move_forward_word): don't iterate
+	past the end of the string, so pango_layout_get_cursor_pos() won't
+	complain. (#309211, Tommi Komulainen).
+
 2005-07-19  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/gtkmain.c (check_sizeof_GtkWindow, check_sizeof_GtkBox):
