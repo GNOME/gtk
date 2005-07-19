@@ -1,3 +1,9 @@
+2005-07-19  Tor Lillqvist  <tml@novell.com>
+
+	* gtk/gtkmain.c (check_sizeof_GtkWindow, check_sizeof_GtkBox):
+	Don't bother mentioning the -fnative-struct (used by GCC 2) switch
+	in the error message any longer.
+
 2005-07-18  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/gdkpixbuf-render.c: Small formatting fixes in doc comments. 
