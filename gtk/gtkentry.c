@@ -3553,7 +3553,7 @@ gtk_entry_move_forward_word (GtkEntry *entry,
       
       /* Find the next word end */
       new_pos++;
-      while (new_pos < n_attrs && !log_attrs[new_pos].is_word_end)
+      while (new_pos < n_attrs - 1 && !log_attrs[new_pos].is_word_end)
 	new_pos++;
 
       g_free (log_attrs);
