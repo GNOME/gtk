@@ -115,8 +115,7 @@ struct _GtkDragSourceInfo
   guint              destroy_icon : 1; /* If true, destroy icon_window
       				        */
   guint              have_grab : 1;    /* Do we still have the pointer grab
-
-					 */
+				        */
   GdkPixbuf         *icon_pixbuf;
   GdkCursor         *drag_cursors[6];
 };
@@ -2095,18 +2094,14 @@ gtk_drag_begin_internal (GtkWidget         *widget,
   if (gdk_pointer_grab (ipc_widget->window, FALSE,
 			GDK_POINTER_MOTION_MASK |
 			GDK_BUTTON_RELEASE_MASK, NULL,
-			cursor, time) != 0)
+			cursor, time) != GDK_GRAB_SUCCESS)
     {
       gtk_drag_release_ipc_widget (ipc_widget);
       return NULL;
     }
 
-  if (gdk_keyboard_grab (ipc_widget->window, FALSE, time) != 0)
-    {
-      gtk_drag_release_ipc_widget (ipc_widget);
-      return NULL;
-    }
-
+  gdk_keyboard_grab (ipc_widget->window, FALSE, time);
+    
   /* We use a GTK grab here to override any grabs that the widget
    * we are dragging from might have held
    */

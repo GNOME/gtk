@@ -1,5 +1,8 @@
 2005-07-20  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkdnd.c (gtk_drag_begin_internal): Don't fail if we
+	can't get a keyboard grab.  (#168351)
+
 	* gtk/gtkfilechooserbutton.c (gtk_file_chooser_button_[sg]et_property):
 	Add GTK_FILE_CHOOSER_PROP_DO_OVERWRITE_CONFIRMATION. 
 
