@@ -1949,11 +1949,7 @@ gtk_drag_begin_internal (GtkWidget         *widget,
       return NULL;
     }
 
-  if (gdk_keyboard_grab (ipc_widget->window, FALSE, time) != 0)
-    {
-      gtk_drag_release_ipc_widget (ipc_widget);
-      return NULL;
-    }
+  gdk_keyboard_grab (ipc_widget->window, FALSE, time);
 
   /* We use a GTK grab here to override any grabs that the widget
    * we are dragging from might have held

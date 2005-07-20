@@ -1,3 +1,8 @@
+2005-07-20  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkdnd.c (gtk_drag_begin_internal): Don't fail if we
+	can't get a keyboard grab.  (#168351)
+
 2005-07-19  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkentry.c (gtk_entry_move_forward_word): don't iterate
