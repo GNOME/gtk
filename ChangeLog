@@ -1,3 +1,8 @@
+2005-07-20  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilechooserbutton.c (gtk_file_chooser_button_[sg]et_property):
+	Add GTK_FILE_CHOOSER_PROP_DO_OVERWRITE_CONFIRMATION. 
+
 2005-07-19  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserdefault.c: Added a few utility functions for
