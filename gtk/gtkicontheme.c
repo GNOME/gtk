@@ -2371,7 +2371,10 @@ load_svg_at_size (const gchar *filename,
 			    &contents, &length, error))
     goto bail;
   
-  loader = gdk_pixbuf_loader_new ();
+  loader = gdk_pixbuf_loader_new_with_type ("svg", error);
+  if (loader == NULL)
+    goto bail;
+
   gdk_pixbuf_loader_set_size (loader, size, size);
   
   if (!gdk_pixbuf_loader_write (loader, contents, length, error))

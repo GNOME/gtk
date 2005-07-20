@@ -1,5 +1,10 @@
 2005-07-20  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkicontheme.c (load_svg_at_size): Explicitly use the 
+	svg loader, if available. This should help with the fact that
+	svg is not reliably sniffable with the current gdk-pixbuf sniffing
+	code. 
+
 	* gtk/gtkstyle.c (gtk_default_draw_expander): Make sure expanded
 	expanders are not fuzzy.  (#310172, reported by Alexander Larsson,
 	patch by Owen Taylor)
