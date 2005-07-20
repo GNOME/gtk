@@ -1,3 +1,8 @@
+2005-07-19  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c: Added a few utility functions for
+	profiling; instrument the code, make it conditional.
+
 2005-07-19  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkentry.c (gtk_entry_move_forward_word): don't iterate
