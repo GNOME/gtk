@@ -1,5 +1,9 @@
 2005-07-20  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkstyle.c (gtk_default_draw_expander): Make sure expanded
+	expanders are not fuzzy.  (#310172, reported by Alexander Larsson,
+	patch by Owen Taylor)
+
 	* gtk/gtkdnd.c (gtk_drag_begin_internal): Don't fail if we
 	can't get a keyboard grab.  (#168351)
 

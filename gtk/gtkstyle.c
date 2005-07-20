@@ -4785,6 +4785,9 @@ gtk_default_draw_expander (GtkStyle        *style,
   double vertical_overshoot;
   int diameter;
   double radius;
+  double interp;		/* interpolation factor for center position */
+  double x_double_horz, y_double_horz;
+  double x_double_vert, y_double_vert;
   double x_double, y_double;
   gint degrees = 0;
 
@@ -4813,15 +4816,19 @@ gtk_default_draw_expander (GtkStyle        *style,
     {
     case GTK_EXPANDER_COLLAPSED:
       degrees = (get_direction (widget) == GTK_TEXT_DIR_RTL) ? 180 : 0;
+      interp = 0.0;
       break;
     case GTK_EXPANDER_SEMI_COLLAPSED:
       degrees = (get_direction (widget) == GTK_TEXT_DIR_RTL) ? 150 : 30;
+      interp = 0.25;
       break;
     case GTK_EXPANDER_SEMI_EXPANDED:
       degrees = (get_direction (widget) == GTK_TEXT_DIR_RTL) ? 120 : 60;
+      interp = 0.75;
       break;
     case GTK_EXPANDER_EXPANDED:
       degrees = 90;
+      interp = 1.0;
       break;
     default:
       g_assert_not_reached ();
@@ -4845,17 +4852,26 @@ gtk_default_draw_expander (GtkStyle        *style,
   diameter = MAX (3, expander_size - 2 * vertical_overshoot);
 
   /* If the line width is odd, we want the diameter to be even,
-   * and vice versa, so force the sum to be odd
+   * and vice versa, so force the sum to be odd. This relationship
+   * makes the point of the triangle look right.
    */
   diameter -= (1 - (diameter + line_width) % 2);
   
   radius = diameter / 2.;
 
   /* Adjust the center so that the stroke is properly aligned with
-   * the pixel grid
+   * the pixel grid. The center adjustment is different for the
+   * horizontal and vertical orientations. For intermediate positions
+   * we interpolate between the two.
    */
-  x_double = floor (x - (radius + line_width) / 2.) + (radius + line_width) / 2.;
-  y_double = y + 0.5;
+  x_double_vert = floor (x - (radius + line_width) / 2.) + (radius + line_width) / 2.;
+  y_double_vert = y - 0.5;
+
+  x_double_horz = x - 0.5;
+  y_double_horz = floor (y - (radius + line_width) / 2.) + (radius + line_width) / 2.;
+
+  x_double = x_double_vert * (1 - interp) + x_double_horz * interp;
+  y_double = y_double_vert * (1 - interp) + y_double_horz * interp;
   
   cairo_translate (cr, x_double, y_double);
   cairo_rotate (cr, degrees * G_PI / 180);
