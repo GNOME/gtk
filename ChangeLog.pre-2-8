@@ -14,6 +14,9 @@
 
 2005-07-21  Tor Lillqvist  <tml@novell.com>
 
+	Make GtkPlug/Socket cross-platform: Add Win32 implementation,
+	splice out X11 implementation to separate files. (#58541)
+	    
 	* gtk/gtk.symbols: Make GtkPlug/Socket API available with all
 	backends.
 
