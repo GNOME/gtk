@@ -1,5 +1,15 @@
 2005-07-21  Tor Lillqvist  <tml@novell.com>
 
+	* gtk/gtksocket-stub.c
+	* gtk/gtkplug-stub.c
+	* gtk/gtksocket-x11.c
+	* gtk/gtkplug-x11.c
+	* gtk/gtksocket-win32.c
+	* gtk/gtkplug-win32.c
+	* gtk/gtkwin32embed.h
+	* gtk/gtkwin32embed.c: New files, containing the backend-specific
+	parts of GtkPlug/Socket.
+
 	* gtk/gtkxembed.h
 	* gtk/gtkxembed.c (_gtk_xembed_message_name): New function, used
 	in error messages and debugging output.
