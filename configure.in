@@ -34,7 +34,7 @@ m4_define([gtk_binary_version], [2.4.0])
 m4_define([glib_required_version], [2.7.1])
 m4_define([pango_required_version], [1.9.0])
 m4_define([atk_required_version], [1.0.1])
-m4_define([cairo_required_version], [0.5.1-head])
+m4_define([cairo_required_version], [0.5.2-head])
 
 
 AC_INIT([gtk+], [gtk_version],

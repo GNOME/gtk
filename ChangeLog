@@ -1,3 +1,9 @@
+2005-07-21  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk.symbols: mark gtk_socket_steal as deprecated.
+
+	* configure.in: Bump the cairo requirement.
+
 2005-07-19  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtksettings.c gtk/gtkwidget.c: Change machinery for
