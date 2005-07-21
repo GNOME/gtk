@@ -1,3 +1,7 @@
+2005-07-21  Christian Rose  <menthos@menthos.com>
+
+	* configure.in: Added "hy" to ALL_LINGUAS.
+
 2005-07-21  Matthias Clasen  <mclasen@redhat.com>
 
 	* NEWS: Updates
