@@ -751,8 +751,8 @@ gtk_statusbar_expose_event (GtkWidget      *widget,
 }
 
 static void
-gtk_statusbar_size_request   (GtkWidget      *widget,
-                              GtkRequisition *requisition)
+gtk_statusbar_size_request (GtkWidget      *widget,
+			    GtkRequisition *requisition)
 {
   GtkStatusbar *statusbar;
   GtkShadowType shadow_type;
@@ -826,7 +826,7 @@ gtk_statusbar_size_allocate  (GtkWidget     *widget,
 	    allocation->x += rect.width;
 	}
     }
-      
+
   /* chain up normally */
   GTK_WIDGET_CLASS (parent_class)->size_allocate (widget, allocation);
 
@@ -854,10 +854,10 @@ gtk_statusbar_size_allocate  (GtkWidget     *widget,
 	    {
 	      /* shrink the label to make room for the grip */
 	      *allocation = statusbar->label->allocation;
-	      allocation->width -= rect.width;
+	      allocation->width = MAX (1, allocation->width - rect.width);
 	      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL) 
-		allocation->x += rect.width;
-	  
+		allocation->x += statusbar->label->allocation.width - allocation->width;
+
 	      gtk_widget_size_allocate (statusbar->label, allocation);
 	    }
 	}
