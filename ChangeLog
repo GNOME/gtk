@@ -1,5 +1,7 @@
 2005-07-21  Matthias Clasen  <mclasen@redhat.com>
 
+	* NEWS: Updates
+
 	* gtk/gtkstatusbar.c (gtk_statusbar_size_allocate): Be
 	a bit more careful to not shrink the label to a negative
 	width.  (#311175, Thomas Vander Stichele)

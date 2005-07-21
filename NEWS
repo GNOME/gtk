@@ -1,3 +1,20 @@
+Overview of Changes from GTK+ 2.7.3 to GTK+ 2.7.4
+=================================================
+* Make svg icon themes work better [Matthias]
+* GtkPlug/GtkSocket: Make these cross-platform
+  and implement them for Win32 [Tor]
+* Make font rendering xsettings work with
+  pangocairo [Owen]
+* Win32 
+ - Build fixes [Tor Lillqvist]
+ - Fix clipping issues [Robert Ögren]
+ - Bug fixes [Peter Zelezny]
+* Other bug fixes [Christian Persch, Arkady L. Shane, 
+  Matthias, Tommi Komulainen, Alexander Larsson, Owen,
+  Thomas Vander Stichele]
+* Documentation improvements [Steve Chaplin, Matthias]
+* New and updated translations (en_CA,fr,lt,nl,sk,th,zh_CN)
+
 Overview of Changes from GTK+ 2.7.2 to GTK+ 2.7.3
 =================================================
 * Make sure that gtk_window_present() moves the window to the 
