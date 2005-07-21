@@ -1,8 +1,13 @@
 2005-07-21  Tor Lillqvist  <tml@novell.com>
 
-	* gtk/gtk.symbols: Make GtkPlug/Socket API available on all platforms.
+	* gtk/gtkwindow.c (gtk_window_show): No need for ifdef, can now
+	use GTK_IS_PLUG() with all backends.
 
-	* gtk/Makefile.am: Changes to build GtkPlug/Socket on all platforms.
+	* gtk/gtk.symbols: Make GtkPlug/Socket API available with all
+	backends.
+
+	* gtk/Makefile.am: Changes to build GtkPlug/Socket with all
+	backends.
 
 	* gtk/gtksocket.c
 	* gtk/gtkplug.c: Splice out backend-dependend parts to separate

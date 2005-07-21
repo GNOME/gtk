@@ -30,6 +30,8 @@
 #include "gdk/gdk.h"
 #include "gdk/gdkkeysyms.h"
 
+#include "gtkintl.h"
+
 #include "gtkprivate.h"
 #include "gtkrc.h"
 #include "gtkwindow.h"
@@ -40,7 +42,6 @@
 #include "gtkmnemonichash.h"
 #include "gtkiconfactory.h"
 #include "gtkicontheme.h"
-#include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkplug.h"
 #include "gtkalias.h"
@@ -3935,11 +3936,7 @@ gtk_window_show (GtkWidget *widget)
 
   /* Try to make sure that we have some focused widget
    */
-#ifdef GDK_WINDOWING_X11
   if (!window->focus_widget && !GTK_IS_PLUG (window))
-#else
-  if (!window->focus_widget)
-#endif
     gtk_window_move_focus (window, GTK_DIR_TAB_FORWARD);
   
   if (window->modal)
