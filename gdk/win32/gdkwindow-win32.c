@@ -1595,11 +1595,11 @@ void
 gdk_window_set_title (GdkWindow   *window,
 		      const gchar *title)
 {
-  char *mbtitle;
-
-  g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (title != NULL);
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
 
   /* Empty window titles not allowed, so set it to just a period. */
   if (!title[0])
@@ -1608,14 +1608,17 @@ gdk_window_set_title (GdkWindow   *window,
   GDK_NOTE (MISC, g_print ("gdk_window_set_title: %p: %s\n",
 			   GDK_WINDOW_HWND (window), title));
   
-  if (!GDK_WINDOW_DESTROYED (window))
+  if (G_WIN32_HAVE_WIDECHAR_API ())
     {
-      /* As the title is in UTF-8 we must translate it
-       * to the system codepage.
-       */
-      mbtitle = g_locale_from_utf8 (title, -1, NULL, NULL, NULL);
-      API_CALL (SetWindowText, (GDK_WINDOW_HWND (window), mbtitle));
-      g_free (mbtitle);
+      wchar_t *wtitle = g_utf8_to_utf16 (title, -1, NULL, NULL, NULL);
+      API_CALL (SetWindowTextW, (GDK_WINDOW_HWND (window), wtitle));
+      g_free (wtitle);
+    }
+  else
+    {
+      char *cptitle = g_locale_from_utf8 (title, -1, NULL, NULL, NULL);
+      API_CALL (SetWindowTextA, (GDK_WINDOW_HWND (window), cptitle));
+      g_free (cptitle);
     }
 }
 

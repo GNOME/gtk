@@ -1,3 +1,8 @@
+2005-07-21  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_set_title): Use
+	wide-char API when available. (#311079, Peter Zelezny)
+
 2005-07-20  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkdnd.c (gtk_drag_begin_internal): Don't fail if we
