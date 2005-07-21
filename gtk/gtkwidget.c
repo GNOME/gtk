@@ -2343,6 +2343,18 @@ gtk_widget_realize (GtkWidget *widget)
     }
 }
 
+static void
+check_window (gpointer window,
+	      gpointer widget)
+{
+  gpointer data;
+
+  gdk_window_get_user_data (GDK_WINDOW (window), &data);
+
+  if (data == widget)
+    g_warning ("Faulty widget implementation: unrealize failed to clear window");
+}
+
 /**
  * gtk_widget_unrealize:
  * @widget: a #GtkWidget
@@ -2367,6 +2379,11 @@ gtk_widget_unrealize (GtkWidget *widget)
       GTK_WIDGET_UNSET_FLAGS (widget, GTK_REALIZED | GTK_MAPPED);
       g_object_unref (widget);
     }
+
+#ifdef GDK_WINDOWING_X11
+  gdk_x11_display_foreach_window (gtk_widget_get_display (widget),
+				  check_window, widget);
+#endif
 }
 
 /*****************************************
@@ -4801,7 +4818,14 @@ gtk_widget_modify_fg (GtkWidget      *widget,
  * 
  * Sets the background color for a widget in a particular state.  All
  * other style values are left untouched. See also
- * gtk_widget_modify_style().
+ * gtk_widget_modify_style(). 
+ *
+ * Note that "no window" widgets (which have the %GTK_NO_WINDOW flag set)
+ * draw on their parent container's window and thus may not draw any background
+ * themselves. This is the case for e.g. #GtkLabel. To modify the background
+ * of such widgets, you have to set the background color on their parent; if you want 
+ * to set the background of a rectangular area around a label, try placing the 
+ * label in a #GtkEventBox widget and setting the background color on that.
  **/
 void
 gtk_widget_modify_bg (GtkWidget      *widget,
@@ -4852,6 +4876,13 @@ gtk_widget_modify_text (GtkWidget      *widget,
  * is the background color used along with the text color
  * (see gtk_widget_modify_text()) for widgets such as #GtkEntry
  * and #GtkTextView. See also gtk_widget_modify_style().
+ *
+ * Note that "no window" widgets (which have the %GTK_NO_WINDOW flag set)
+ * draw on their parent container's window and thus may not draw any background
+ * themselves. This is the case for e.g. #GtkLabel. To modify the background
+ * of such widgets, you have to set the base color on their parent; if you want 
+ * to set the background of a rectangular area around a label, try placing the 
+ * label in a #GtkEventBox widget and setting the base color on that.
  **/
 void
 gtk_widget_modify_base (GtkWidget      *widget,

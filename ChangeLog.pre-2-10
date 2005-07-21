@@ -1,3 +1,9 @@
+2005-07-21  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_modify_bg, gtk_widget_modify_base): 
+	Add hints on how to handle "no window" widgets.  (#136347)
+	
+
 2005-07-20  Keith Packard  <keithp@keithp.com>
 
 	* gdk/x11/gdkdrawable-x11.c: (gdk_x11_ref_cairo_surface):
