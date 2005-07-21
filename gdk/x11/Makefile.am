@@ -49,6 +49,7 @@ libgdk_x11_la_SOURCES =    	\
 	gdkvisual-x11.c	   	\
 	gdkwindow-x11.c    	\
 	gdkwindow-x11.h		\
+	gdkxftdefaults.c	\
 	gdkxid.c	   	\
 	gdkx.h		   	\
 	gdkprivate-x11.h   	\

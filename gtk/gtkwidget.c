@@ -204,6 +204,7 @@ static gboolean		gtk_widget_real_focus_out_event   	(GtkWidget        *widget,
 static gboolean		gtk_widget_real_focus			(GtkWidget        *widget,
 								 GtkDirectionType  direction);
 static PangoContext*	gtk_widget_peek_pango_context		(GtkWidget	  *widget);
+static void     	gtk_widget_update_pango_context		(GtkWidget	  *widget);
 static void		gtk_widget_propagate_state		(GtkWidget	  *widget,
 								 GtkStateData 	  *data);
 static void             gtk_widget_reset_rc_style               (GtkWidget        *widget);
@@ -4932,13 +4933,6 @@ gtk_widget_set_style_internal (GtkWidget *widget,
   g_object_ref (widget);
   g_object_freeze_notify (G_OBJECT (widget));
 
-  if (widget->style != style || initial_emission)
-    {
-      PangoContext *context = gtk_widget_peek_pango_context (widget);
-      if (context)
-	pango_context_set_font_description (context, style->font_desc);
-    }
-  
   if (widget->style != style)
     {
       GtkStyle *previous_style;
@@ -4956,6 +4950,7 @@ gtk_widget_set_style_internal (GtkWidget *widget,
       if (GTK_WIDGET_REALIZED (widget))
 	widget->style = gtk_style_attach (widget->style, widget->window);
 
+      gtk_widget_update_pango_context (widget);
       g_signal_emit (widget,
 		     widget_signals[STYLE_SET],
 		     0,
@@ -4966,10 +4961,13 @@ gtk_widget_set_style_internal (GtkWidget *widget,
 	gtk_widget_queue_resize (widget);
     }
   else if (initial_emission)
-    g_signal_emit (widget,
-		   widget_signals[STYLE_SET],
-		   0,
-		   NULL);
+    {
+      gtk_widget_update_pango_context (widget);
+      g_signal_emit (widget,
+		     widget_signals[STYLE_SET],
+		     0,
+		     NULL);
+    }
   g_object_notify (G_OBJECT (widget), "style");
   g_object_thaw_notify (G_OBJECT (widget));
   g_object_unref (widget);
@@ -5195,6 +5193,101 @@ gtk_widget_get_pango_context (GtkWidget *widget)
   return context;
 }
 
+static void
+update_pango_context (GtkWidget    *widget,
+		      PangoContext *context)
+{
+#ifdef GDK_WINDOWING_X11
+  GtkSettings *settings;
+  gint hinting;
+  char *hint_style_str;
+  cairo_hint_style_t hint_style = CAIRO_HINT_STYLE_DEFAULT;
+  gint antialias;
+  cairo_antialias_t antialias_mode = CAIRO_ANTIALIAS_DEFAULT;
+  char *rgba_str;
+  cairo_subpixel_order_t subpixel_order = CAIRO_SUBPIXEL_ORDER_DEFAULT;
+  int dpi;
+  cairo_font_options_t *options;
+#endif
+      
+  pango_context_set_font_description (context, widget->style->font_desc);
+  pango_context_set_base_dir (context,
+			      gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR ?
+			      PANGO_DIRECTION_LTR : PANGO_DIRECTION_RTL);
+  
+#ifdef GDK_WINDOWING_X11
+  settings = gtk_widget_get_settings (widget);
+  g_object_get (settings,
+		"gtk-xft-antialias", &antialias,
+		"gtk-xft-hinting", &hinting,
+		"gtk-xft-hintstyle", &hint_style_str,
+		"gtk-xft-rgba", &rgba_str,
+		"gtk-xft-dpi", &dpi,
+		NULL);
+
+  if (dpi > 0)
+    pango_cairo_context_set_resolution (context, dpi / 1024.);
+  else
+    pango_cairo_context_set_resolution (context, -1.);
+
+  options = cairo_font_options_create ();
+  
+  if (hinting >= 0 && !hinting)
+    {
+      hint_style = CAIRO_HINT_STYLE_NONE;
+    }
+  else if (hint_style_str)
+    {
+      if (strcmp (hint_style_str, "hintnone") == 0)
+	hint_style = CAIRO_HINT_STYLE_NONE;
+      else if (strcmp (hint_style_str, "hintslight") == 0)
+	hint_style = CAIRO_HINT_STYLE_SLIGHT;
+      else if (strcmp (hint_style_str, "hintmedium") == 0)
+	hint_style = CAIRO_HINT_STYLE_MEDIUM;
+      else if (strcmp (hint_style_str, "hintfull") == 0)
+	hint_style = CAIRO_HINT_STYLE_FULL;
+    }
+
+  cairo_font_options_set_hint_style (options, hint_style);
+
+  if (rgba_str)
+    {
+      if (strcmp (rgba_str, "rgb") == 0)
+	subpixel_order = CAIRO_SUBPIXEL_ORDER_RGB;
+      else if (strcmp (rgba_str, "bgr") == 0)
+	subpixel_order = CAIRO_SUBPIXEL_ORDER_BGR;
+      else if (strcmp (rgba_str, "vrgb") == 0)
+	subpixel_order = CAIRO_SUBPIXEL_ORDER_VRGB;
+      else if (strcmp (rgba_str, "vbgr") == 0)
+	subpixel_order = CAIRO_SUBPIXEL_ORDER_VBGR;
+    }
+
+  cairo_font_options_set_subpixel_order (options, subpixel_order);
+  
+  if (antialias >= 0 && !antialias)
+    antialias_mode = CAIRO_ANTIALIAS_NONE;
+  else if (subpixel_order != CAIRO_SUBPIXEL_ORDER_DEFAULT)
+    antialias_mode = CAIRO_ANTIALIAS_SUBPIXEL;
+  else if (antialias >= 0)
+    antialias_mode = CAIRO_ANTIALIAS_GRAY;
+  
+  cairo_font_options_set_antialias (options, antialias_mode);
+
+  pango_cairo_context_set_font_options (context, options);
+  
+  cairo_font_options_destroy (options);
+#endif  
+}
+
+static void
+gtk_widget_update_pango_context (GtkWidget *widget)
+{
+  PangoContext *context = gtk_widget_peek_pango_context (widget);
+  
+  if (context)
+    update_pango_context (widget, context);
+}
+
 /**
  * gtk_widget_create_pango_context:
  * @widget: a #GtkWidget
@@ -5224,10 +5317,7 @@ gtk_widget_create_pango_context (GtkWidget *widget)
 
   context = gdk_pango_context_get_for_screen (screen);
 
-  pango_context_set_base_dir (context,
-			      gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR ?
-			        PANGO_DIRECTION_LTR : PANGO_DIRECTION_RTL);
-  pango_context_set_font_description (context, widget->style->font_desc);
+  update_pango_context (widget, context);
   pango_context_set_language (context, gtk_get_default_language ());
 
   return context;
@@ -6476,12 +6566,7 @@ static void
 gtk_widget_emit_direction_changed (GtkWidget        *widget,
 				   GtkTextDirection  old_dir)
 {
-  PangoContext *context = gtk_widget_peek_pango_context (widget);
-
-  if (context)
-    pango_context_set_base_dir (context,
-				gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR ?
-				  PANGO_DIRECTION_LTR : PANGO_DIRECTION_RTL);
+  gtk_widget_update_pango_context (widget);
   
   g_signal_emit (widget, widget_signals[DIRECTION_CHANGED], 0, old_dir);
 }

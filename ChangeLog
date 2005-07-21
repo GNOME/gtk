@@ -1,3 +1,17 @@
+2005-07-19  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtksettings.c gtk/gtkwidget.c: Change machinery for
+	following font rendering xsettings to set cairo font
+	options on PangoContext
+
+	* gdk/x11/gdkxftdefaults.c gdk/x11/gdkevents-x11.c gdkscreen-x11.h
+	gdkprivate-x11.h: Get default values for rendering options
+	(such as antialiasing, dpi) from the Xft resources for the
+	display, borrowing a bit of code from Xft.
+
+	* gtk/gtksettings.c (gtk_settings_class_init): Fix docs for
+	values of gtk-xft-hintstyle.
+
 2005-07-21  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/gtk.symbols: Make GtkPlug/Socket API available with all

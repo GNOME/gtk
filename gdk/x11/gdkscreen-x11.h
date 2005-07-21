@@ -93,6 +93,16 @@ struct _GdkScreenX11
 
   /* Pango renderer object singleton */
   PangoRenderer *renderer;
+
+  /* Xft resources for the display, used for default values for
+   * the Xft/ XSETTINGS
+   */
+  gboolean xft_init;		/* Whether we've intialized these values yet */
+  gboolean xft_antialias;
+  gboolean xft_hinting;
+  gint xft_hintstyle;
+  gint xft_rgba;
+  gint xft_dpi;
 };
   
 struct _GdkScreenX11Class

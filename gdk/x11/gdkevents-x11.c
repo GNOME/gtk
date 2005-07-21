@@ -2895,7 +2895,7 @@ gdk_screen_get_setting (GdkScreen   *screen,
 
   const char *xsettings_name = NULL;
   XSettingsResult result;
-  XSettingsSetting *setting;
+  XSettingsSetting *setting = NULL;
   GdkScreenX11 *screen_x11;
   gboolean success = FALSE;
   gint i;
@@ -2913,12 +2913,12 @@ gdk_screen_get_setting (GdkScreen   *screen,
       }
 
   if (!xsettings_name)
-    return FALSE;
+    goto out;
 
   result = xsettings_client_get_setting (screen_x11->xsettings_client, 
 					 xsettings_name, &setting);
   if (result != XSETTINGS_SUCCESS)
-    return FALSE;
+    goto out;
 
   switch (setting->type)
     {
@@ -2965,9 +2965,14 @@ gdk_screen_get_setting (GdkScreen   *screen,
   
   g_value_unset (&tmp_val);
 
-  xsettings_setting_free (setting);
+ out:
+  if (setting)
+    xsettings_setting_free (setting);
 
-  return success;
+  if (success)
+    return TRUE;
+  else
+    return _gdk_x11_get_xft_setting (screen, name, value);
 }
 
 static GdkFilterReturn 
