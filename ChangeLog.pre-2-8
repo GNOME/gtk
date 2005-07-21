@@ -1,5 +1,11 @@
 2005-07-21  Tor Lillqvist  <tml@novell.com>
 
+	* gtk/gtkxembed.h
+	* gtk/gtkxembed.c (_gtk_xembed_message_name): New function, used
+	in error messages and debugging output.
+	
+2005-07-21  Tor Lillqvist  <tml@novell.com>
+
 	* gdk/win32/gdkwindow-win32.c (gdk_window_set_title): Use
 	wide-char API when available. (#311079, Peter Zelezny)
 

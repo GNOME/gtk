@@ -38,10 +38,11 @@ void _gtk_xembed_send_focus_message (GdkWindow         *recipient,
 				     XEmbedMessageType  message,
 				     glong              detail);
 
-void     _gtk_xembed_push_message       (XEvent    *xevent);
-void     _gtk_xembed_pop_message        (void);
-void     _gtk_xembed_set_focus_wrapped  (void);
-gboolean _gtk_xembed_get_focus_wrapped  (void);
+void        _gtk_xembed_push_message       (XEvent    *xevent);
+void        _gtk_xembed_pop_message        (void);
+void        _gtk_xembed_set_focus_wrapped  (void);
+gboolean    _gtk_xembed_get_focus_wrapped  (void);
+const char *_gtk_xembed_message_name       (XEmbedMessageType message);
 
 G_END_DECLS
 
