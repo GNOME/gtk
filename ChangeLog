@@ -1,5 +1,14 @@
 2005-07-21  Tor Lillqvist  <tml@novell.com>
 
+	* gtk/gtksocket.c
+	* gtk/gtkplug.c: Splice out backend-dependend parts to separate
+	files, see below.
+
+	* gtk/gtksocketprivate.h
+	* gtk/gtkplugprivate.h: New files. Declare the backend-specific
+	functions, and the private backend-independent functions they call
+	back to.
+
 	* gtk/gtksocket-stub.c
 	* gtk/gtkplug-stub.c
 	* gtk/gtksocket-x11.c
