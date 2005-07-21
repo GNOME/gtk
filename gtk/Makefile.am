@@ -303,8 +303,10 @@ gtk_private_h_sources =		\
 	gtkfilesystemmodel.h	\
 	gtkiconcache.h		\
 	gtkpathbar.h		\
+	gtkplugprivate.h	\
 	gtkrbtree.h		\
 	gtksequence.h		\
+	gtksocketprivate.h	\
 	gtktextbtree.h		\
 	gtktextchildprivate.h	\
 	gtktextsegment.h	\
@@ -439,6 +441,7 @@ gtk_c_sources =                 \
 	gtkpaned.c		\
 	gtkpathbar.c		\
 	gtkpixmap.c		\
+	gtkplug.c		\
 	gtkpreview.c		\
 	gtkprogress.c		\
 	gtkprogressbar.c	\
@@ -461,6 +464,7 @@ gtk_c_sources =                 \
 	gtksettings.c		\
 	gtksignal.c		\
 	gtksizegroup.c		\
+	gtksocket.c		\
 	gtkspinbutton.c		\
 	gtkstatusbar.c		\
 	gtkstock.c		\
@@ -530,11 +534,17 @@ gtk_private_h_sources += gtkfilesystemwin32.h
 gtk_c_sources +=         gtkfilesystemwin32.c
 endif
 
-gtk_plug_c_sources =            \
-	gtkplug.c		\
-	gtksocket.c		\
-	gtkxembed.c		\
-	gtkxembed.h
+if USE_X11
+gtk_private_h_sources += gtkxembed.h
+gtk_c_sources +=         gtkplug-x11.c gtksocket-x11.c gtkxembed.c
+else
+if USE_WIN32
+gtk_private_h_sources += gtkwin32embed.h
+gtk_c_sources +=         gtkplug-win32.c gtksocket-win32.c gtkwin32embed.c
+else
+gtk_c_sources +=         gtkplug-stub.c gtksocket-stub.c
+endif
+endif
 
 # we use our own built_sources variable rules to avoid automake's
 # BUILT_SOURCES oddities
@@ -653,7 +663,7 @@ lib_LTLIBRARIES = $(gtktargetlib)
 gtkincludedir = $(includedir)/gtk-2.0/gtk
 gtkinclude_HEADERS = $(gtk_public_h_sources) $(gtk_semi_private_h_sources) $(gtk_built_public_sources) gtkversion.h
 
-libgtk_x11_2_0_la_SOURCES = $(gtk_c_sources) $(gtk_plug_c_sources)
+libgtk_x11_2_0_la_SOURCES = $(gtk_c_sources)
 libgtk_linux_fb_2_0_la_SOURCES = $(gtk_c_sources)
 libgtk_win32_2_0_la_SOURCES = $(gtk_c_sources)
 
@@ -663,7 +673,7 @@ libgtk_win32_2_0_la_LDFLAGS = $(libtool_opts)
 
 libgtk_x11_2_0_la_LIBADD = $(libadd)
 libgtk_linux_fb_2_0_la_LIBADD = $(libadd)
-libgtk_win32_2_0_la_LIBADD = $(libadd) -lole32
+libgtk_win32_2_0_la_LIBADD = $(libadd) -lole32 -lgdi32
 libgtk_win32_2_0_la_DEPENDENCIES = $(gtk_def) $(gtk_win32_res)
 
 if USE_WIN32

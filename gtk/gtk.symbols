@@ -1,11 +1,13 @@
 /* This list defines the GTK+ ABI. It is used to generate the gtk.def
  * file and the gtkalias.h header. 
+ *
  * Variables must be put into ifdef INCLUDE_VARIABLES ... endif sections. 
- * Internal symbols (ie those in gtkinternals.h) must be protected by
- * ifdef INCLUDE_INTERNAL_SYMBOLS. Symbols which occur only on Windows, 
- * or only on Unix, or only with the X11 backend must be included in 
- * similar ifdefs, using the symbols G_OS_WIN32, G_OS_UNIX and 
- * GTK_WINDOWING_X11. 
+ *
+ * Internal symbols must be protected by ifdef INCLUDE_INTERNAL_SYMBOLS. 
+ *
+ * Symbols which occur only on Windows, or only on Unix, or only with
+ * the X11 backend must be included in similar ifdefs, using the
+ * symbols G_OS_WIN32, G_OS_UNIX and GTK_WINDOWING_X11.
  * 
  * Every symbol must be included in the right
  * #ifdef IN_HEADER(sym) #endif and
@@ -2326,14 +2328,12 @@ gtk_pixmap_set_build_insensitive
 
 #if IN_HEADER(__GTK_PLUG_H__)
 #if IN_FILE(__GTK_PLUG_C__)
-#ifdef GTK_WINDOWING_X11
 gtk_plug_construct
 gtk_plug_construct_for_display
 gtk_plug_get_id
 gtk_plug_get_type G_GNUC_CONST
 gtk_plug_new
 gtk_plug_new_for_display
-#endif
 #endif
 #endif
 
@@ -2676,13 +2676,11 @@ gtk_size_group_set_mode
 
 #if IN_HEADER(__GTK_SOCKET_H__)
 #if IN_FILE(__GTK_SOCKET_C__)
-#ifdef GTK_WINDOWING_X11
 gtk_socket_add_id
 gtk_socket_get_id
 gtk_socket_get_type G_GNUC_CONST
 gtk_socket_new
 gtk_socket_steal
-#endif
 #endif
 #endif
 
