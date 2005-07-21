@@ -2343,18 +2343,6 @@ gtk_widget_realize (GtkWidget *widget)
     }
 }
 
-static void
-check_window (gpointer window,
-	      gpointer widget)
-{
-  gpointer data;
-
-  gdk_window_get_user_data (GDK_WINDOW (window), &data);
-
-  if (data == widget)
-    g_warning ("Faulty widget implementation: unrealize failed to clear window");
-}
-
 /**
  * gtk_widget_unrealize:
  * @widget: a #GtkWidget
@@ -2379,11 +2367,6 @@ gtk_widget_unrealize (GtkWidget *widget)
       GTK_WIDGET_UNSET_FLAGS (widget, GTK_REALIZED | GTK_MAPPED);
       g_object_unref (widget);
     }
-
-#ifdef GDK_WINDOWING_X11
-  gdk_x11_display_foreach_window (gtk_widget_get_display (widget),
-				  check_window, widget);
-#endif
 }
 
 /*****************************************
