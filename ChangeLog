@@ -1,8 +1,5 @@
 2005-07-21  Tor Lillqvist  <tml@novell.com>
 
-	* gtk/gtkwindow.c (gtk_window_show): No need for ifdef, can now
-	use GTK_IS_PLUG() with all backends.
-
 	* gtk/gtk.symbols: Make GtkPlug/Socket API available with all
 	backends.
 
@@ -32,6 +29,11 @@
 	* gtk/gtkxembed.c (_gtk_xembed_message_name): New function, used
 	in error messages and debugging output.
 	
+	* gtk/gtkwindow.c (gtk_window_show): No need for ifdef, can now
+	use GTK_IS_PLUG() with all backends.
+
+	* tests/testsocket_common.c: Make it work on Win32, too.
+
 2005-07-21  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkwindow-win32.c (gdk_window_set_title): Use

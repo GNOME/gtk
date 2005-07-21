@@ -21,8 +21,12 @@
 #undef GTK_DISABLE_DEPRECATED
 
 #include <config.h>
-#include "x11/gdkx.h"
 #include <gtk/gtk.h>
+#if defined (GDK_WINDOWING_X11)
+#include "x11/gdkx.h"
+#elif defined (GDK_WINDOWING_WIN32)
+#include "win32/gdkwin32.h"
+#endif
 
 enum
 {
@@ -264,7 +268,11 @@ create_child_plug (guint32  xid,
   gtk_widget_show_all (window);
 
   if (GTK_WIDGET_REALIZED (window))
+#if defined (GDK_WINDOWING_X11)
     return GDK_WINDOW_XID (window->window);
+#elif defined (GDK_WINDOWING_WIN32)
+    return (guint32) GDK_WINDOW_HWND (window->window);
+#endif
   else
     return 0;
 }
