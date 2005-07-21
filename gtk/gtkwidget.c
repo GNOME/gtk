@@ -5200,13 +5200,13 @@ update_pango_context (GtkWidget    *widget,
 #ifdef GDK_WINDOWING_X11
   GtkSettings *settings;
   gint hinting;
-  char *hint_style_str;
+  gchar *hint_style_str;
   cairo_hint_style_t hint_style = CAIRO_HINT_STYLE_DEFAULT;
   gint antialias;
   cairo_antialias_t antialias_mode = CAIRO_ANTIALIAS_DEFAULT;
-  char *rgba_str;
+  gchar *rgba_str;
   cairo_subpixel_order_t subpixel_order = CAIRO_SUBPIXEL_ORDER_DEFAULT;
-  int dpi;
+  gint dpi;
   cairo_font_options_t *options;
 #endif
       
@@ -5248,6 +5248,9 @@ update_pango_context (GtkWidget    *widget,
 	hint_style = CAIRO_HINT_STYLE_FULL;
     }
 
+  if (hint_style_str)
+    g_free (hint_style_str);
+
   cairo_font_options_set_hint_style (options, hint_style);
 
   if (rgba_str)
@@ -5260,6 +5263,8 @@ update_pango_context (GtkWidget    *widget,
 	subpixel_order = CAIRO_SUBPIXEL_ORDER_VRGB;
       else if (strcmp (rgba_str, "vbgr") == 0)
 	subpixel_order = CAIRO_SUBPIXEL_ORDER_VBGR;
+
+      g_free (rgba_str);
     }
 
   cairo_font_options_set_subpixel_order (options, subpixel_order);
