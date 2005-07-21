@@ -1485,6 +1485,7 @@ gdk_x11_ref_cairo_surface (GdkDrawable *drawable)
       else if (gdk_drawable_get_depth (drawable) == 1)
 	impl->cairo_surface = cairo_xlib_surface_create_for_bitmap (GDK_SCREEN_XDISPLAY (impl->screen),
 								    impl->xid,
+								    GDK_SCREEN_XSCREEN (impl->screen),
 								    width, height);
       else
 	{

@@ -1,3 +1,10 @@
+2005-07-20  Keith Packard  <keithp@keithp.com>
+
+	* gdk/x11/gdkdrawable-x11.c: (gdk_x11_ref_cairo_surface):
+
+	Follow change in cairo API to add Screen* to
+	cairo_xlib_create_surface_for_bitmap
+
 2005-07-20  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkicontheme.c (load_svg_at_size): Explicitly use the 
