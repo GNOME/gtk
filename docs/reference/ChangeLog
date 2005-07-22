@@ -1,3 +1,9 @@
+2005-07-21  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/tmpl/gtkfilechooserdialog.sgml (dialog): Expand the Save
+	example to point out the correct usage of _set_current_folder()
+	and _set_current_name(), versus _set_filename() alone.
+
 2005-07-15  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.7.3 ===
