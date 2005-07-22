@@ -1,3 +1,15 @@
+2005-07-21  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooser.c (gtk_file_chooser_set_filename): Clarify
+	the usage of this function.
+	(gtk_file_chooser_set_uri): Likewise.
+	(gtk_file_chooser_set_current_name): Likewise.
+
+	* gtk/gtkfilechooserdefault.c (set_file_system_backend):
+	Instrument this function for profiling as well.
+	(gtk_file_chooser_default_init): Likewise; just to have a marker
+	of where instance initialization begins.
+
 2005-07-21  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c (update_pango_context): Fix a couple of leaks.

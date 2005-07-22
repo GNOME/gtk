@@ -83,7 +83,7 @@
 
 /* Profiling stuff */
 
-#undef PROFILE_FILE_CHOOSER
+#define PROFILE_FILE_CHOOSER
 #ifdef PROFILE_FILE_CHOOSER
 #include <unistd.h>
 
@@ -726,6 +726,8 @@ gtk_file_chooser_embed_default_iface_init (GtkFileChooserEmbedIface *iface)
 static void
 gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
 {
+  profile_start ("start", NULL);
+
   impl->local_only = TRUE;
   impl->preview_widget_active = TRUE;
   impl->use_preview_label = TRUE;
@@ -740,6 +742,8 @@ gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
   impl->tooltips = gtk_tooltips_new ();
   g_object_ref (impl->tooltips);
   gtk_object_sink (GTK_OBJECT (impl->tooltips));
+
+  profile_end ("end", NULL);
 }
 
 /* Frees the data columns for the specified iter in the shortcuts model*/
@@ -4191,6 +4195,8 @@ static void
 set_file_system_backend (GtkFileChooserDefault *impl,
 			 const char *backend)
 {
+  profile_start ("start for backend", backend ? backend : "default");
+
   if (impl->file_system)
     {
       g_signal_handler_disconnect (impl->file_system, impl->volumes_changed_id);
@@ -4236,6 +4242,8 @@ set_file_system_backend (GtkFileChooserDefault *impl,
 						     G_CALLBACK (bookmarks_changed_cb),
 						     impl);
     }
+
+  profile_end ("end", NULL);
 }
 
 /* This function is basically a do_all function.
