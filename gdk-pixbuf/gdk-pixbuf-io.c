@@ -51,21 +51,21 @@ format_check (GdkPixbufModule *module, guchar *buffer, int size)
 	int i, j;
 	gchar m;
 	GdkPixbufModulePattern *pattern;
-	gboolean unanchored;
+	gboolean anchored;
 	guchar *prefix, *mask;
 
 	for (pattern = module->info->signature; pattern->prefix; pattern++) {
 		if (pattern->mask && pattern->mask[0] == '*') {
 			prefix = pattern->prefix + 1;
 			mask = pattern->mask + 1;
-			unanchored = TRUE;
+			anchored = FALSE;
 		}
 		else {
 			prefix = pattern->prefix;
 			mask = pattern->mask;
-			unanchored = FALSE;
+			anchored = TRUE;
 		}
-		for (i = 0; unanchored && i < size; i++) {
+		for (i = 0; i < size; i++) {
 			for (j = 0; i + j < size && prefix[j] != 0; j++) {
 				m = mask ? mask[j] : ' ';
 				if (m == ' ') {
@@ -85,8 +85,12 @@ format_check (GdkPixbufModule *module, guchar *buffer, int size)
 						break;
 				}
 			} 
+
 			if (prefix[j] == 0) 
 				return pattern->relevance;
+
+			if (anchored)
+				break;
 		}
 	}
 	return 0;

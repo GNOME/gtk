@@ -1,5 +1,10 @@
 2005-07-22  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk-pixbuf-io.c (format_check): Make anchored patterns work 
+	as they did before.
+
+2005-07-22  Matthias Clasen  <mclasen@redhat.com>
+
 	* gdk-pixbuf-io.c (format_check): Interpret patterns where
 	the first byte of the mask is '*' as unanchored.  (#311011)
 	(gdk_pixbuf_new_from_file): Use the first 256 bytes for
