@@ -1,3 +1,8 @@
+2005-07-22  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkmessagedialog.c (gtk_message_dialog_format_secondary_markup): 
+	Point out escaping oversight.  (#311260, Owen Taylor)
+
 2005-07-21  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_list_destroy): Cleanup

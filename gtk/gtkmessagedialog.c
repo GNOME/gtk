@@ -599,6 +599,18 @@ gtk_message_dialog_format_secondary_text (GtkMessageDialog *message_dialog,
  * Note that setting a secondary text makes the primary text become
  * bold, unless you have provided explicit markup.
  *
+ * Due to an oversight, this function does not escape special XML characters
+ * like gtk_message_dialog_new_with_markup() does. Thus, if the arguments 
+ * may contain special XML characters, you should use g_markup_printf_escaped()
+ * to escape it.
+ * <informalexample><programlisting>
+ * gchar *msg;
+ * 
+ * msg = g_markup_printf_escaped (message_format, ...);
+ * gtk_message_dialog_format_secondary_markup (message_dialog, "&percnt;s", msg);
+ * g_free (msg);
+ * </programlisting></informalexample>
+ *
  * Since: 2.6
  **/
 void
