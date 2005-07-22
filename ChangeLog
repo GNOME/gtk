@@ -1,3 +1,14 @@
+2005-07-21  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_list_destroy): Cleanup
+	a possible resize idle.  (#311141, Robert Ögren)
+
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_row_changed): 
+	(gtk_tree_model_sort_sort_level): Ref the level while using it,
+	otherwise it may get nuked by gtk_tree_model_sort_increment_stamp.
+	(gtk_tree_model_sort_row_deleted): Don't leak the root level 
+	here.  (#300089, James Bramford, Markku Vire)
+
 2005-07-21  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooser.c (gtk_file_chooser_set_filename): Clarify
@@ -92,7 +103,7 @@
 
 	* gtk/gtkwidget.c (gtk_widget_modify_bg, gtk_widget_modify_base): 
 	Add hints on how to handle "no window" widgets.  (#136347)
-	
+
 2005-07-20  Keith Packard  <keithp@keithp.com>
 
 	* gdk/x11/gdkdrawable-x11.c: (gdk_x11_ref_cairo_surface):

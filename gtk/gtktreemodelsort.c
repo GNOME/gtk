@@ -494,6 +494,8 @@ gtk_tree_model_sort_row_changed (GtkTreeModel *s_model,
   level = iter.user_data;
   elt = iter.user_data2;
 
+  level->ref_count++;
+
   if (level->array->len < 2 ||
       (tree_model_sort->sort_column_id == GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID &&
        tree_model_sort->default_sort_func == NO_SORT_FUNC))
@@ -505,9 +507,11 @@ gtk_tree_model_sort_row_changed (GtkTreeModel *s_model,
 
       gtk_tree_path_free (path);
 
+      level->ref_count--;
+
       return;
     }
-
+  
   if (!GTK_TREE_MODEL_SORT_CACHE_CHILD_ITERS (tree_model_sort))
     {
       gtk_tree_model_get_iter (tree_model_sort->child_model,
@@ -609,6 +613,8 @@ gtk_tree_model_sort_row_changed (GtkTreeModel *s_model,
       gtk_tree_path_free (tmppath);
       g_free (new_order);
     }
+
+  level->ref_count--;
 
   /* emit row_changed signal (at new location) */
   gtk_tree_model_get_iter (GTK_TREE_MODEL (data), &iter, path);
@@ -810,12 +816,18 @@ gtk_tree_model_sort_row_deleted (GtkTreeModel *s_model,
 
   if (level->ref_count == 0)
     {
-      /* This will prune the level, so I can just emit the signal and not worry
-       * about cleaning this level up. */
+      /* This will prune the level, so I can just emit the signal and 
+       * not worry about cleaning this level up. 
+       * Careful, root level is not cleaned up in increment stamp.
+       */
       gtk_tree_model_sort_increment_stamp (tree_model_sort);
       gtk_tree_path_free (path);
       if (level == tree_model_sort->root)
-	tree_model_sort->root = NULL;
+	{
+	  gtk_tree_model_sort_free_level (tree_model_sort, 
+					  tree_model_sort->root);
+	  tree_model_sort->root = NULL;
+	}
       return;
     }
 
@@ -1620,6 +1632,8 @@ gtk_tree_model_sort_sort_level (GtkTreeModelSort *tree_model_sort,
   if (level->array->len < 1 && !((SortElt *)level->array->data)->children)
     return;
 
+  level->ref_count++;
+
   /* Set up data */
   data.tree_model_sort = tree_model_sort;
   if (level->parent_elt)
@@ -1741,6 +1755,8 @@ gtk_tree_model_sort_sort_level (GtkTreeModelSort *tree_model_sort,
     }
 
   g_free (new_order);
+
+  level->ref_count--;
 }
 
 static void

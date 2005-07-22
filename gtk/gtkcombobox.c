@@ -104,6 +104,7 @@ struct _GtkComboBoxPrivate
   guint changed_id;
   guint popup_idle_id;
   guint scroll_timer;
+  guint resize_idle_id;
 
   gint width;
   GSList *cells;
@@ -221,7 +222,8 @@ static void     gtk_combo_box_get_property         (GObject         *object,
                                                     GParamSpec      *spec);
 
 static void     gtk_combo_box_state_changed        (GtkWidget        *widget,
-			                            GtkStateType      previous);static void     gtk_combo_box_grab_focus           (GtkWidget       *widget);
+			                            GtkStateType      previous);
+static void     gtk_combo_box_grab_focus           (GtkWidget       *widget);
 static void     gtk_combo_box_style_set            (GtkWidget       *widget,
                                                     GtkStyle        *previous);
 static void     gtk_combo_box_button_toggled       (GtkWidget       *widget,
@@ -2867,6 +2869,8 @@ list_popup_resize_idle (gpointer user_data)
       gtk_window_move (GTK_WINDOW (combo_box->priv->popup_window), x, y);
     }
 
+  combo_box->priv->resize_idle_id = 0;
+
   GDK_THREADS_LEAVE ();
 
   return FALSE;
@@ -2875,7 +2879,9 @@ list_popup_resize_idle (gpointer user_data)
 static void
 gtk_combo_box_list_popup_resize (GtkComboBox *combo_box)
 {
-  g_idle_add (list_popup_resize_idle, combo_box);
+  if (!combo_box->priv->resize_idle_id)
+    combo_box->priv->resize_idle_id = 
+      g_idle_add (list_popup_resize_idle, combo_box);
 }
 
 static void
@@ -3343,6 +3349,12 @@ gtk_combo_box_list_destroy (GtkComboBox *combo_box)
     {
       g_source_remove (combo_box->priv->scroll_timer);
       combo_box->priv->scroll_timer = 0;
+    }
+
+  if (combo_box->priv->resize_idle_id)
+    {
+      g_source_remove (combo_box->priv->resize_idle_id);
+      combo_box->priv->resize_idle_id = 0;
     }
 
   gtk_widget_destroy (combo_box->priv->tree_view);
@@ -4951,7 +4963,9 @@ popup_idle (gpointer data)
   /* we unset this if a menu item is activated */
   combo_box->priv->editing_canceled = TRUE;
   gtk_combo_box_popup (combo_box);
-  
+
+  combo_box->priv->popup_idle_id = 0;
+
   GDK_THREADS_LEAVE ();
 
   return FALSE;
