@@ -1,7 +1,7 @@
 2005-07-22  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk-pixbuf-io.c (format_check): Make anchored patterns work 
-	as they did before.
+	as they did before.  (#311011, William Jon McCann)
 
 2005-07-22  Matthias Clasen  <mclasen@redhat.com>
 
