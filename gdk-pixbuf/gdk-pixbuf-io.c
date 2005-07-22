@@ -48,32 +48,46 @@
 static gint 
 format_check (GdkPixbufModule *module, guchar *buffer, int size)
 {
-	int j;
+	int i, j;
 	gchar m;
 	GdkPixbufModulePattern *pattern;
+	gboolean unanchored;
+	guchar *prefix, *mask;
 
 	for (pattern = module->info->signature; pattern->prefix; pattern++) {
-		for (j = 0; j < size && pattern->prefix[j] != 0; j++) {
-			m = pattern->mask ? pattern->mask[j] : ' ';
-			if (m == ' ') {
-				if (buffer[j] != pattern->prefix[j])
-					break;
-			}
-			else if (m == '!') {
-				if (buffer[j] == pattern->prefix[j])
-					break;
-			}
-			else if (m == 'z') {
-				if (buffer[j] != 0)
-					break;
-			}
-			else if (m == 'n') {
-				if (buffer[j] == 0)
-					break;
-			}
-		} 
-		if (pattern->prefix[j] == 0) 
-			return pattern->relevance;
+		if (pattern->mask && pattern->mask[0] == '*') {
+			prefix = pattern->prefix + 1;
+			mask = pattern->mask + 1;
+			unanchored = TRUE;
+		}
+		else {
+			prefix = pattern->prefix;
+			mask = pattern->mask;
+			unanchored = FALSE;
+		}
+		for (i = 0; unanchored && i < size; i++) {
+			for (j = 0; i + j < size && prefix[j] != 0; j++) {
+				m = mask ? mask[j] : ' ';
+				if (m == ' ') {
+					if (buffer[i + j] != prefix[j])
+						break;
+				}
+				else if (m == '!') {
+					if (buffer[i + j] == prefix[j])
+						break;
+				}
+				else if (m == 'z') {
+					if (buffer[i + j] != 0)
+						break;
+				}
+				else if (m == 'n') {
+					if (buffer[i + j] == 0)
+						break;
+				}
+			} 
+			if (prefix[j] == 0) 
+				return pattern->relevance;
+		}
 	}
 	return 0;
 }
@@ -821,7 +835,7 @@ gdk_pixbuf_new_from_file (const char *filename,
 	GdkPixbuf *pixbuf;
 	int size;
 	FILE *f;
-	guchar buffer [128];
+	guchar buffer[256];
 	GdkPixbufModule *image_module;
 	gchar *display_name;
 
