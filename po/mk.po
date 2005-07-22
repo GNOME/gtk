@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: mk\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-07-20 14:35+0000\n"
-"PO-Revision-Date: 2005-07-20 20:25+0200\n"
+"PO-Revision-Date: 2005-07-22 13:11+0200\n"
 "Last-Translator: Арангел Ангов <ufo@linux.net.mk>\n"
 "Language-Team: Macedonian <ossm-members@hedona.on.net.mk>\n"
 "MIME-Version: 1.0\n"
@@ -176,7 +176,7 @@ msgstr "Нема доволно меморија за да се вчита ан�
 #: ../gdk-pixbuf/io-ani.c:400 ../gdk-pixbuf/io-ani.c:417
 #: ../gdk-pixbuf/io-ani.c:428
 msgid "Malformed chunk in animation"
-msgstr ""
+msgstr "Деформирано парче во анимацијата"
 
 #: ../gdk-pixbuf/io-ani.c:676
 msgid "The ANI image format"
@@ -198,7 +198,7 @@ msgstr "BMP сликата има неподдржана големина на �
 
 #: ../gdk-pixbuf/io-bmp.c:325
 msgid "Topdown BMP images cannot be compressed"
-msgstr ""
+msgstr "BMP сликата не може да биде компресирана"
 
 #: ../gdk-pixbuf/io-bmp.c:1203
 msgid "Couldn't allocate memory for saving BMP file"
@@ -400,7 +400,7 @@ msgstr "Не можам да алоцирам меморија за подато
 
 #: ../gdk-pixbuf/io-pcx.c:663
 msgid "Couldn't allocate memory for paletted data"
-msgstr ""
+msgstr "Не можам да алоцирам меморија за податоците во палетата"
 
 #: ../gdk-pixbuf/io-pcx.c:710
 msgid "Didn't get all lines of PCX image"
@@ -449,6 +449,8 @@ msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
 "applications to reduce memory usage"
 msgstr ""
+"Нема доволно меморија за да се складира %ld од %ld сликата; пробајте да "
+"исклучите неколку апликации за да се намали употребата на меморијата"
 
 #: ../gdk-pixbuf/io-png.c:669
 msgid "Fatal error reading PNG image file"
@@ -457,15 +459,15 @@ msgstr "Фатална грешка при вчитување на PNG слик�
 #: ../gdk-pixbuf/io-png.c:718
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
-msgstr ""
+msgstr "Фатлна грешка при читањето на PNG сликата: %s"
 
 #: ../gdk-pixbuf/io-png.c:810
 msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr ""
+msgstr "Копчињата за текстот на PNG мора да бидат помеѓу 1 и 70 букви или броеви."
 
 #: ../gdk-pixbuf/io-png.c:818
 msgid "Keys for PNG text chunks must be ASCII characters."
-msgstr ""
+msgstr "Копчињата за текстот за PNG мораат да бидат во ASCII букви или броеви."
 
 #: ../gdk-pixbuf/io-png.c:831
 #, c-format
@@ -473,6 +475,8 @@ msgid ""
 "PNG compression level must be a value between 0 and 9; value '%s' could not "
 "be parsed."
 msgstr ""
+"Нивото на компресија на PNG сликата мора да биде помеѓу 0 и 9; вредноста '%s' "
+"не може да биде парсирана."
 
 #: ../gdk-pixbuf/io-png.c:843
 #, c-format
@@ -480,11 +484,13 @@ msgid ""
 "PNG compression level must be a value between 0 and 9; value '%d' is not "
 "allowed."
 msgstr ""
+"Нивото на компресија на PNG сликата мора да биде помеѓу 0 и 9; вредноста '%d' "
+"не е дозволена."
 
 #: ../gdk-pixbuf/io-png.c:883
 #, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr ""
+msgstr "Вредноста на текстот за PNG %s не може да биде конвертирана во енкодингот ISO-8859-1."
 
 #: ../gdk-pixbuf/io-png.c:1026
 msgid "The PNG image format"
@@ -492,132 +498,132 @@ msgstr "PNG форматот на слика"
 
 #: ../gdk-pixbuf/io-pnm.c:252
 msgid "PNM loader expected to find an integer, but didn't"
-msgstr ""
+msgstr "Вчитувачот на PNM очекуваше да најде цело број, но не најде"
 
 #: ../gdk-pixbuf/io-pnm.c:284
 msgid "PNM file has an incorrect initial byte"
-msgstr ""
+msgstr "PNM датотеката има неточен почетен бајт"
 
 #: ../gdk-pixbuf/io-pnm.c:314
 msgid "PNM file is not in a recognized PNM subformat"
-msgstr ""
+msgstr "PNМ датотеката не е препозната како PNM подформат"
 
 #: ../gdk-pixbuf/io-pnm.c:339
 msgid "PNM file has an image width of 0"
-msgstr ""
+msgstr "PNM датотеката има слика со широчина од 0"
 
 #: ../gdk-pixbuf/io-pnm.c:360
 msgid "PNM file has an image height of 0"
-msgstr ""
+msgstr "PNM датотеката има слика со височина од 0"
 
 #: ../gdk-pixbuf/io-pnm.c:383
 msgid "Maximum color value in PNM file is 0"
-msgstr ""
+msgstr "Максимална вредност на боја во PNM датотека е 0"
 
 #: ../gdk-pixbuf/io-pnm.c:391
 msgid "Maximum color value in PNM file is too large"
-msgstr ""
+msgstr "Максималната вредност на боја во PNM датотеката е преголема"
 
 #: ../gdk-pixbuf/io-pnm.c:399
 msgid "Cannot handle PNM files with maximum color values greater than 255"
-msgstr ""
+msgstr "Не можам да се справам со PNM датотеки со максимален број на боја со вредност поголема од 255"
 
 #: ../gdk-pixbuf/io-pnm.c:438 ../gdk-pixbuf/io-pnm.c:466
 #: ../gdk-pixbuf/io-pnm.c:498
 msgid "Raw PNM image type is invalid"
-msgstr ""
+msgstr "Грубиот тип на PNM слика е невалиден"
 
 #: ../gdk-pixbuf/io-pnm.c:562 ../gdk-pixbuf/io-pnm.c:604
 msgid "PNM image format is invalid"
-msgstr ""
+msgstr "PNM форматот на слика е невалиден"
 
 #: ../gdk-pixbuf/io-pnm.c:663
 msgid "PNM image loader does not support this PNM subformat"
-msgstr ""
+msgstr "Вчитувачот на PNM слики не го поддржувам овој подформат на PNM"
 
 #: ../gdk-pixbuf/io-pnm.c:718
 msgid "Premature end-of-file encountered"
-msgstr ""
+msgstr "Преран крај на датотеката"
 
 #: ../gdk-pixbuf/io-pnm.c:750 ../gdk-pixbuf/io-pnm.c:981
 msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr ""
+msgstr "Груби PNM формати бараат точно едно бело место пред податоците"
 
 #: ../gdk-pixbuf/io-pnm.c:777
 msgid "Cannot allocate memory for loading PNM image"
-msgstr ""
+msgstr "Не можам да алоцирам меморија за вчитување на PNM сликата"
 
 #: ../gdk-pixbuf/io-pnm.c:827
 msgid "Insufficient memory to load PNM context struct"
-msgstr ""
+msgstr "Нема доволно меморија за да се вчитам PNM контекстот"
 
 #: ../gdk-pixbuf/io-pnm.c:878
 msgid "Unexpected end of PNM image data"
-msgstr ""
+msgstr "Неочекуван крај на податоците за PNM сликата"
 
 #: ../gdk-pixbuf/io-pnm.c:1010
 msgid "Insufficient memory to load PNM file"
-msgstr ""
+msgstr "Нема доволно меморија за вчитување на PNM датотеката"
 
 #: ../gdk-pixbuf/io-pnm.c:1089
 msgid "The PNM/PBM/PGM/PPM image format family"
-msgstr ""
+msgstr "PNM/PBM/PGM/PPM фамилија на формати на слики"
 
 #: ../gdk-pixbuf/io-ras.c:126
 msgid "RAS image has bogus header data"
-msgstr ""
+msgstr "RAS сликата има погрешни податоци во заглавјето"
 
 #: ../gdk-pixbuf/io-ras.c:148
 msgid "RAS image has unknown type"
-msgstr ""
+msgstr "RAS сликата и од непознат тип"
 
 #: ../gdk-pixbuf/io-ras.c:156
 msgid "unsupported RAS image variation"
-msgstr ""
+msgstr "неподдржана варијација на RAS слика"
 
 #: ../gdk-pixbuf/io-ras.c:171 ../gdk-pixbuf/io-ras.c:200
 msgid "Not enough memory to load RAS image"
-msgstr ""
+msgstr "Нема доволно меморија за вчитување на RAS сликата"
 
 #: ../gdk-pixbuf/io-ras.c:543
 msgid "The Sun raster image format"
-msgstr ""
+msgstr "Формат на слика Sun raster"
 
 #: ../gdk-pixbuf/io-tga.c:154
 msgid "Cannot allocate memory for IOBuffer struct"
-msgstr ""
+msgstr "Не можам да алоцирам меморија за IOBuffer"
 
 #: ../gdk-pixbuf/io-tga.c:173
 msgid "Cannot allocate memory for IOBuffer data"
-msgstr ""
+msgstr "Не можам да алоцирам меморија за податоците на IOBuffer"
 
 #: ../gdk-pixbuf/io-tga.c:184
 msgid "Cannot realloc IOBuffer data"
-msgstr ""
+msgstr "Не можам да реалоцирам податоци за IOBuffer"
 
 #: ../gdk-pixbuf/io-tga.c:214
 msgid "Cannot allocate temporary IOBuffer data"
-msgstr ""
+msgstr "Не можам да алоцирам привремени податоци за IOBuffer"
 
 #: ../gdk-pixbuf/io-tga.c:348
 msgid "Cannot allocate new pixbuf"
-msgstr ""
+msgstr "Не можам да алоцирам нов pixbuf"
 
 #: ../gdk-pixbuf/io-tga.c:689
 msgid "Cannot allocate colormap structure"
-msgstr ""
+msgstr "Не можам да алоцирам структура на мапа за бои"
 
 #: ../gdk-pixbuf/io-tga.c:696
 msgid "Cannot allocate colormap entries"
-msgstr ""
+msgstr "Не можам да алоцирам записи за мапа на бои"
 
 #: ../gdk-pixbuf/io-tga.c:718
 msgid "Unexpected bitdepth for colormap entries"
-msgstr ""
+msgstr "Неочекувана длабочиња на бит за записит за мапата на бои"
 
 #: ../gdk-pixbuf/io-tga.c:736
 msgid "Cannot allocate TGA header memory"
-msgstr ""
+msgstr "Не можам да алоцирам меморија во заглавјето на TGA"
 
 #: ../gdk-pixbuf/io-tga.c:769
 msgid "TGA image has invalid dimensions"
@@ -631,11 +637,11 @@ msgstr "TGA сликата не е поддржана"
 
 #: ../gdk-pixbuf/io-tga.c:858
 msgid "Cannot allocate memory for TGA context struct"
-msgstr ""
+msgstr "Не можам да алоцирам меморија во TGA контекстот"
 
 #: ../gdk-pixbuf/io-tga.c:923
 msgid "Excess data in file"
-msgstr ""
+msgstr "Поголемо количество на податоци во датотеката"
 
 #: ../gdk-pixbuf/io-tga.c:992
 msgid "The Targa image format"
@@ -643,28 +649,28 @@ msgstr "Targa форматот на слика"
 
 #: ../gdk-pixbuf/io-tiff.c:173
 msgid "Could not get image width (bad TIFF file)"
-msgstr ""
+msgstr "Не можам да ја добијам широчината на сликата (лоша TIFF датотека)"
 
 #: ../gdk-pixbuf/io-tiff.c:180
 msgid "Could not get image height (bad TIFF file)"
-msgstr ""
+msgstr "Не можам да ја добијам височината на сликата (лоша TIFF датотека)"
 
 #: ../gdk-pixbuf/io-tiff.c:188
 msgid "Width or height of TIFF image is zero"
-msgstr ""
+msgstr "Височината или широчината на TIFF сликата е нула"
 
 #: ../gdk-pixbuf/io-tiff.c:197 ../gdk-pixbuf/io-tiff.c:206
 msgid "Dimensions of TIFF image too large"
-msgstr ""
+msgstr "Димензиите на TIFF сликате се преголеми"
 
 #: ../gdk-pixbuf/io-tiff.c:225 ../gdk-pixbuf/io-tiff.c:237
 #: ../gdk-pixbuf/io-tiff.c:286 ../gdk-pixbuf/io-tiff.c:572
 msgid "Insufficient memory to open TIFF file"
-msgstr ""
+msgstr "Нема доволно меморија за отворање на TIFF датотеката"
 
 #: ../gdk-pixbuf/io-tiff.c:251 ../gdk-pixbuf/io-tiff.c:294
 msgid "Failed to load RGB data from TIFF file"
-msgstr ""
+msgstr "Не успеав да ги вчитам податоците за RGB за TIFF датотеката"
 
 #: ../gdk-pixbuf/io-tiff.c:361
 msgid "Failed to open TIFF image"
@@ -672,7 +678,7 @@ msgstr "Не успеав да ја отворам TIFF сликата"
 
 #: ../gdk-pixbuf/io-tiff.c:373
 msgid "TIFFClose operation failed"
-msgstr ""
+msgstr "Операцијата за затворање на TIFF не успеа"
 
 #: ../gdk-pixbuf/io-tiff.c:504 ../gdk-pixbuf/io-tiff.c:517
 msgid "Failed to load TIFF image"
@@ -736,7 +742,7 @@ msgstr "XPM датотеката има височина <= 0"
 
 #: ../gdk-pixbuf/io-xpm.c:500
 msgid "XPM has invalid number of chars per pixel"
-msgstr ""
+msgstr "XPM има невалиден број на промеливи по пиксел"
 
 #: ../gdk-pixbuf/io-xpm.c:507
 msgid "XPM file has invalid number of colors"
@@ -802,7 +808,7 @@ msgstr "ЕКРАН"
 #. Description of --gdk-debug=FLAGS in --help output
 #: ../gdk/gdk.c:128
 msgid "Gdk debugging flags to set"
-msgstr ""
+msgstr "Поставување на Gdk знамиња за дебагирање"
 
 #. Placeholder in --gdk-debug=FLAGS in --help output
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
@@ -815,7 +821,7 @@ msgstr "ЗНАМИЊА"
 #. Description of --gdk-no-debug=FLAGS in --help output
 #: ../gdk/gdk.c:131
 msgid "Gdk debugging flags to unset"
-msgstr ""
+msgstr "Отстранување на Gdk знамиња за дебагирање"
 
 #: ../gdk/keyname-table.h:3940
 msgid "keyboard label|BackSpace"
@@ -952,12 +958,12 @@ msgstr "keyboard label|Delete"
 #. Description of --sync in --help output
 #: ../gdk/win32/gdkmain-win32.c:60
 msgid "Don't batch GDI requests"
-msgstr ""
+msgstr "Не автоматизирај GDI барања"
 
 #. Description of --no-wintab in --help output
 #: ../gdk/win32/gdkmain-win32.c:62
 msgid "Don't use the Wintab API for tablet support"
-msgstr ""
+msgstr "Не користи Wintab API за поддршка за теблетни уреди"
 
 #. Description of --ignore-wintab in --help output
 #: ../gdk/win32/gdkmain-win32.c:64
@@ -967,12 +973,12 @@ msgstr "Исто со --no-wintab"
 #. Description of --use-wintab in --help output
 #: ../gdk/win32/gdkmain-win32.c:66
 msgid "Do use the Wintab API [default]"
-msgstr ""
+msgstr "Користи Wintab API [стандардно]"
 
 #. Description of --max-colors=COLORS in --help output
 #: ../gdk/win32/gdkmain-win32.c:68
 msgid "Size of the palette in 8 bit mode"
-msgstr ""
+msgstr "Големина на палетата во 8 битен режим"
 
 #. Placeholder in --max-colors=COLORS in --help output
 #: ../gdk/win32/gdkmain-win32.c:69
@@ -982,7 +988,7 @@ msgstr "БОИ"
 #. Description of --sync in --help output
 #: ../gdk/x11/gdkmain-x11.c:92
 msgid "Make X calls synchronous"
-msgstr ""
+msgstr "Прави ги повиците кон X синхрони"
 
 #: ../gtk/gtkaboutdialog.c:273 ../gtk/gtkaboutdialog.c:2103
 msgid "License"
@@ -1135,6 +1141,9 @@ msgid ""
 "now. You can drag this color to a palette entry, or select this color as "
 "current by dragging it to the other color swatch alongside."
 msgstr ""
+"Претходно избраната боја за споредба со бојата која што ја избравте сега. "
+"Можете да ја влечете бојата до палетата или да изберете боја како моментална "
+"со влечење на бојата до другата боја од страна."
 
 #: ../gtk/gtkcolorsel.c:570
 msgid ""
@@ -1153,22 +1162,28 @@ msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr ""
+"Кликнете ја оваа палета за да направите нова боја. За да го смените овој запис "
+"довлечете ја бојата овде или пак кликнете го десното копче на глувчето и изберете \"Зачувај боја тука.\""
 
 #: ../gtk/gtkcolorsel.c:1953
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
 msgstr ""
+"Изберете боја за надворешниот прстен. Изберете посветла или потемна "
+"боја од онаа во внатрешниот триаголник."
 
 #: ../gtk/gtkcolorsel.c:1978
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr ""
+"Кликнете на алатката за распознавање на боја па потоа кликнете врз бојата на "
+"екранот за да ја изберете таа боја."
 
 #: ../gtk/gtkcolorsel.c:1987
 msgid "_Hue:"
-msgstr ""
+msgstr "_Изглед:"
 
 #: ../gtk/gtkcolorsel.c:1988
 msgid "Position on the color wheel."
@@ -1176,7 +1191,7 @@ msgstr "Положба на бојата во тркалото на бои."
 
 #: ../gtk/gtkcolorsel.c:1990
 msgid "_Saturation:"
-msgstr ""
+msgstr "_Заситување:"
 
 #: ../gtk/gtkcolorsel.c:1991
 msgid "\"Deepness\" of the color."
@@ -1231,6 +1246,8 @@ msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
 msgstr ""
+"Можете да внесете HTML или хекседецимална вредност за боја или пак едноставно "
+"име на бојата како на пример 'портокалова'."
 
 #: ../gtk/gtkcolorsel.c:2062
 msgid "_Palette"
@@ -1305,6 +1322,8 @@ msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
 msgstr ""
+"Папката не може да биде креирана бидејќи веќе постои датотека со "
+"истото име.  Пробајте со поинакво име за папката или пак реименувајте ја датотеката."
 
 #: ../gtk/gtkfilechooserdefault.c:1041
 msgid "Invalid file name"
@@ -1340,7 +1359,7 @@ msgstr "Отстрани го обележувачот: '%s'"
 #: ../gtk/gtkfilechooserdefault.c:2844
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
-msgstr ""
+msgstr "Не можам да додадам обележувач за '%s' бидејќи името на патеката е невалидно."
 
 #: ../gtk/gtkfilechooserdefault.c:3059
 msgid "Remove"
