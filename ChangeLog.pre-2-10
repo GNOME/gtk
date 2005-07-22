@@ -1,5 +1,7 @@
 2005-07-22  Matthias Clasen  <mclasen@redhat.com>
 
+	* === Released 2.7.4 === 
+
 	* NEWS: Updates
 
 	* gtk/gtkmessagedialog.c (gtk_message_dialog_format_secondary_markup): 

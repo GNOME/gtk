@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk20 1.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-15 14:36-0400\n"
+"POT-Creation-Date: 2005-07-22 14:14-0400\n"
 "PO-Revision-Date: 2004-05-03 14:21+0200\n"
 "Last-Translator: Pablo Saratxaga <pablo@walon.org>\n"
 "Language-Team: Walloon <linux-wa@walon.org>\n"
@@ -94,7 +94,7 @@ msgstr "Prémetou håynaedje"
 msgid "The default display for GDK"
 msgstr "Li prémetou håynaedje po GDK"
 
-#: gdk/gdkpango.c:510 gtk/gtkinvisible.c:117 gtk/gtkwindow.c:539
+#: gdk/gdkpango.c:510 gtk/gtkinvisible.c:117 gtk/gtkwindow.c:540
 msgid "Screen"
 msgstr "Waitroûle"
 
@@ -336,7 +336,7 @@ msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr ""
 
 #: gtk/gtkaction.c:283 gtk/gtkactiongroup.c:142 gtk/gtkcellrenderer.c:222
-#: gtk/gtkwidget.c:454
+#: gtk/gtkwidget.c:455
 msgid "Sensitive"
 msgstr ""
 
@@ -345,7 +345,7 @@ msgid "Whether the action is enabled."
 msgstr ""
 
 #: gtk/gtkaction.c:290 gtk/gtkactiongroup.c:149 gtk/gtktreeviewcolumn.c:226
-#: gtk/gtkwidget.c:447
+#: gtk/gtkwidget.c:448
 msgid "Visible"
 msgstr "Veyåve"
 
@@ -685,7 +685,7 @@ msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
 
-#: gtk/gtkbutton.c:250 gtk/gtkcombobox.c:681
+#: gtk/gtkbutton.c:250 gtk/gtkcombobox.c:683
 msgid "Focus on click"
 msgstr ""
 
@@ -1011,7 +1011,7 @@ msgstr "Detay"
 msgid "Render detail to pass to the theme engine"
 msgstr ""
 
-#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:261 gtk/gtkwindow.c:531
+#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:261 gtk/gtkwindow.c:532
 #, fuzzy
 msgid "Icon Name"
 msgstr "No del fonte"
@@ -1242,7 +1242,7 @@ msgid ""
 "have enough room to display the entire string"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:494 gtk/gtkcombobox.c:571
+#: gtk/gtkcellrenderertext.c:494 gtk/gtkcombobox.c:573
 msgid "Wrap width"
 msgstr ""
 
@@ -1549,67 +1549,67 @@ msgstr ""
 msgid "Whether entered values must already be present in the list"
 msgstr ""
 
-#: gtk/gtkcombobox.c:554
+#: gtk/gtkcombobox.c:556
 msgid "ComboBox model"
 msgstr ""
 
-#: gtk/gtkcombobox.c:555
+#: gtk/gtkcombobox.c:557
 msgid "The model for the combo box"
 msgstr ""
 
-#: gtk/gtkcombobox.c:572
+#: gtk/gtkcombobox.c:574
 msgid "Wrap width for layouting the items in a grid"
 msgstr ""
 
-#: gtk/gtkcombobox.c:594
+#: gtk/gtkcombobox.c:596
 msgid "Row span column"
 msgstr ""
 
-#: gtk/gtkcombobox.c:595
+#: gtk/gtkcombobox.c:597
 msgid "TreeModel column containing the row span values"
 msgstr ""
 
-#: gtk/gtkcombobox.c:616
+#: gtk/gtkcombobox.c:618
 msgid "Column span column"
 msgstr ""
 
-#: gtk/gtkcombobox.c:617
+#: gtk/gtkcombobox.c:619
 msgid "TreeModel column containing the column span values"
 msgstr ""
 
-#: gtk/gtkcombobox.c:637
+#: gtk/gtkcombobox.c:639
 msgid "Active item"
 msgstr "Cayet do moumint"
 
-#: gtk/gtkcombobox.c:638
+#: gtk/gtkcombobox.c:640
 msgid "The item which is currently active"
 msgstr ""
 
-#: gtk/gtkcombobox.c:657 gtk/gtkuimanager.c:232
+#: gtk/gtkcombobox.c:659 gtk/gtkuimanager.c:232
 msgid "Add tearoffs to menus"
 msgstr ""
 
-#: gtk/gtkcombobox.c:658
+#: gtk/gtkcombobox.c:660
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr ""
 
-#: gtk/gtkcombobox.c:673 gtk/gtkentry.c:534
+#: gtk/gtkcombobox.c:675 gtk/gtkentry.c:534
 msgid "Has Frame"
 msgstr ""
 
-#: gtk/gtkcombobox.c:674
+#: gtk/gtkcombobox.c:676
 msgid "Whether the combo box draws a frame around the child"
 msgstr ""
 
-#: gtk/gtkcombobox.c:682
+#: gtk/gtkcombobox.c:684
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr ""
 
-#: gtk/gtkcombobox.c:688
+#: gtk/gtkcombobox.c:690
 msgid "Appears as list"
 msgstr ""
 
-#: gtk/gtkcombobox.c:689
+#: gtk/gtkcombobox.c:691
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr ""
 
@@ -2041,11 +2041,11 @@ msgstr "Li tite do purnea di tchoezixhaedje del fonte"
 msgid "The desired width of the button widget, in characters."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:641
+#: gtk/gtkfilechooserdefault.c:691
 msgid "Default file chooser backend"
 msgstr "Prémetou moteur tchoezixheu di fitchîs"
 
-#: gtk/gtkfilechooserdefault.c:642
+#: gtk/gtkfilechooserdefault.c:692
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Li no do prémetou moteur di tchoezixheu di fitchîs a-z eployî"
 
@@ -2441,7 +2441,7 @@ msgstr "Mostrer les imådjes ezès menus"
 msgid "Whether images should be shown in menus"
 msgstr "Po decider si les imådjes si dvént håyner ezès menus"
 
-#: gtk/gtkinvisible.c:118 gtk/gtkwindow.c:540
+#: gtk/gtkinvisible.c:118 gtk/gtkwindow.c:541
 msgid "The screen where this window will be displayed"
 msgstr ""
 
@@ -3367,11 +3367,11 @@ msgstr "Dessiné"
 msgid "Whether the separator is drawn, or just blank"
 msgstr "Si l' separateu est dessiné, ou leyî vude"
 
-#: gtk/gtksettings.c:281
+#: gtk/gtksettings.c:199
 msgid "Double Click Time"
 msgstr "Tins pol dobe clitchaedje"
 
-#: gtk/gtksettings.c:282
+#: gtk/gtksettings.c:200
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
@@ -3379,11 +3379,11 @@ msgstr ""
 "Tins macsimom inte deus clitchs po k' i soeyexhe veyous come on dobe "
 "clitchaedje (e milisegondes)"
 
-#: gtk/gtksettings.c:289
+#: gtk/gtksettings.c:207
 msgid "Double Click Distance"
 msgstr "Distance pol dobe clitchaedje"
 
-#: gtk/gtksettings.c:290
+#: gtk/gtksettings.c:208
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
@@ -3391,160 +3391,161 @@ msgstr ""
 "Distance macsimom inte deus clitchs po k' i soeyexhe veyous come on dobe "
 "clitchaedje (e picsels)"
 
-#: gtk/gtksettings.c:297
+#: gtk/gtksettings.c:215
 msgid "Cursor Blink"
 msgstr "Gligntant cursoe"
 
-#: gtk/gtksettings.c:298
+#: gtk/gtksettings.c:216
 msgid "Whether the cursor should blink"
 msgstr ""
 
-#: gtk/gtksettings.c:305
+#: gtk/gtksettings.c:223
 msgid "Cursor Blink Time"
 msgstr "Tins di gligntaedje do cursoe"
 
-#: gtk/gtksettings.c:306
+#: gtk/gtksettings.c:224
 msgid "Length of the cursor blink cycle, in milleseconds"
 msgstr ""
 
-#: gtk/gtksettings.c:313
+#: gtk/gtksettings.c:231
 msgid "Split Cursor"
 msgstr ""
 
-#: gtk/gtksettings.c:314
+#: gtk/gtksettings.c:232
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
 msgstr ""
 
-#: gtk/gtksettings.c:321
+#: gtk/gtksettings.c:239
 msgid "Theme Name"
 msgstr "No do tinme"
 
-#: gtk/gtksettings.c:322
+#: gtk/gtksettings.c:240
 msgid "Name of theme RC file to load"
 msgstr "No do fitchî RC (apontiaedje di tinmes po gtk) a tcherdjî"
 
-#: gtk/gtksettings.c:329
+#: gtk/gtksettings.c:247
 msgid "Icon Theme Name"
 msgstr "No do tinme des imådjetes"
 
-#: gtk/gtksettings.c:330
+#: gtk/gtksettings.c:248
 msgid "Name of icon theme to use"
 msgstr "No do tinme des imådjetes a-z eployî"
 
-#: gtk/gtksettings.c:338
+#: gtk/gtksettings.c:256
 msgid "Key Theme Name"
 msgstr "No do tinme di tapes"
 
-#: gtk/gtksettings.c:339
+#: gtk/gtksettings.c:257
 msgid "Name of key theme RC file to load"
 msgstr "No do fitchî RC (apontiaedje di tinme) di tapes a tcherdjî"
 
-#: gtk/gtksettings.c:347
+#: gtk/gtksettings.c:265
 msgid "Menu bar accelerator"
 msgstr ""
 
-#: gtk/gtksettings.c:348
+#: gtk/gtksettings.c:266
 msgid "Keybinding to activate the menu bar"
 msgstr ""
 
-#: gtk/gtksettings.c:356
+#: gtk/gtksettings.c:274
 msgid "Drag threshold"
 msgstr ""
 
-#: gtk/gtksettings.c:357
+#: gtk/gtksettings.c:275
 msgid "Number of pixels the cursor can move before dragging"
 msgstr ""
 
-#: gtk/gtksettings.c:365
+#: gtk/gtksettings.c:283
 msgid "Font Name"
 msgstr "No del fonte"
 
-#: gtk/gtksettings.c:366
+#: gtk/gtksettings.c:284
 msgid "Name of default font to use"
 msgstr "No del prémetowe fonte a-z eployî"
 
-#: gtk/gtksettings.c:374
+#: gtk/gtksettings.c:292
 msgid "Icon Sizes"
 msgstr "Grandeu des imådjetes"
 
-#: gtk/gtksettings.c:375
+#: gtk/gtksettings.c:293
 msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
 msgstr ""
 
-#: gtk/gtksettings.c:383
+#: gtk/gtksettings.c:301
 msgid "GTK Modules"
 msgstr ""
 
-#: gtk/gtksettings.c:384
+#: gtk/gtksettings.c:302
 msgid "List of currently active GTK modules"
 msgstr ""
 
-#: gtk/gtksettings.c:393
+#: gtk/gtksettings.c:311
 msgid "Xft Antialias"
 msgstr ""
 
-#: gtk/gtksettings.c:394
+#: gtk/gtksettings.c:312
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr ""
 
-#: gtk/gtksettings.c:403
+#: gtk/gtksettings.c:321
 msgid "Xft Hinting"
 msgstr ""
 
-#: gtk/gtksettings.c:404
+#: gtk/gtksettings.c:322
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
 msgstr ""
 
-#: gtk/gtksettings.c:413
+#: gtk/gtksettings.c:331
 msgid "Xft Hint Style"
 msgstr ""
 
-#: gtk/gtksettings.c:414
-msgid "What degree of hinting to use; none, slight, medium, or full"
+#: gtk/gtksettings.c:332
+msgid ""
+"What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"
 msgstr ""
 
-#: gtk/gtksettings.c:423
+#: gtk/gtksettings.c:341
 msgid "Xft RGBA"
 msgstr ""
 
-#: gtk/gtksettings.c:424
+#: gtk/gtksettings.c:342
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
 msgstr ""
 
-#: gtk/gtksettings.c:433
+#: gtk/gtksettings.c:351
 msgid "Xft DPI"
 msgstr ""
 
-#: gtk/gtksettings.c:434
+#: gtk/gtksettings.c:352
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
 msgstr ""
 
-#: gtk/gtksettings.c:443
+#: gtk/gtksettings.c:361
 #, fuzzy
 msgid "Cursor theme name"
 msgstr "No do tinme des imådjetes"
 
-#: gtk/gtksettings.c:444
+#: gtk/gtksettings.c:362
 #, fuzzy
 msgid "Name of the cursor theme to use"
 msgstr "No do tinme des imådjetes a-z eployî"
 
-#: gtk/gtksettings.c:452
+#: gtk/gtksettings.c:370
 #, fuzzy
 msgid "Cursor theme size"
 msgstr "Veyåve cursoe"
 
-#: gtk/gtksettings.c:453
+#: gtk/gtksettings.c:371
 msgid "Size to use for cursors"
 msgstr ""
 
-#: gtk/gtksettings.c:463
+#: gtk/gtksettings.c:381
 msgid "Alternative button order"
 msgstr ""
 
-#: gtk/gtksettings.c:464
+#: gtk/gtksettings.c:382
 msgid "Whether buttons in dialogs should use the alternative button order"
 msgstr ""
 
@@ -4453,7 +4454,7 @@ msgstr ""
 msgid "Whether to display the column"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:234 gtk/gtkwindow.c:462
+#: gtk/gtktreeviewcolumn.c:234 gtk/gtkwindow.c:463
 msgid "Resizable"
 msgstr ""
 
@@ -4581,193 +4582,193 @@ msgstr ""
 msgid "Determines how the shadowed box around the viewport is drawn"
 msgstr ""
 
-#: gtk/gtkwidget.c:414
+#: gtk/gtkwidget.c:415
 msgid "Widget name"
 msgstr "No d' l' ahesse"
 
-#: gtk/gtkwidget.c:415
+#: gtk/gtkwidget.c:416
 msgid "The name of the widget"
 msgstr "Li no d' l' ahesse"
 
-#: gtk/gtkwidget.c:421
+#: gtk/gtkwidget.c:422
 msgid "Parent widget"
 msgstr "Ahesse parint"
 
-#: gtk/gtkwidget.c:422
+#: gtk/gtkwidget.c:423
 msgid "The parent widget of this widget. Must be a Container widget"
 msgstr "L' ahesse parint di ciste ahesse chal. Doet esse ene ahesse contneu."
 
-#: gtk/gtkwidget.c:429
+#: gtk/gtkwidget.c:430
 msgid "Width request"
 msgstr "Dimande di lårdjeu"
 
-#: gtk/gtkwidget.c:430
+#: gtk/gtkwidget.c:431
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
 msgstr ""
 
-#: gtk/gtkwidget.c:438
+#: gtk/gtkwidget.c:439
 msgid "Height request"
 msgstr "Dimande di hôteu"
 
-#: gtk/gtkwidget.c:439
+#: gtk/gtkwidget.c:440
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
 msgstr ""
 
-#: gtk/gtkwidget.c:448
+#: gtk/gtkwidget.c:449
 msgid "Whether the widget is visible"
 msgstr ""
 
-#: gtk/gtkwidget.c:455
+#: gtk/gtkwidget.c:456
 msgid "Whether the widget responds to input"
 msgstr ""
 
-#: gtk/gtkwidget.c:461
+#: gtk/gtkwidget.c:462
 msgid "Application paintable"
 msgstr ""
 
-#: gtk/gtkwidget.c:462
+#: gtk/gtkwidget.c:463
 msgid "Whether the application will paint directly on the widget"
 msgstr ""
 
-#: gtk/gtkwidget.c:468
+#: gtk/gtkwidget.c:469
 msgid "Can focus"
 msgstr ""
 
-#: gtk/gtkwidget.c:469
+#: gtk/gtkwidget.c:470
 msgid "Whether the widget can accept the input focus"
 msgstr ""
 
-#: gtk/gtkwidget.c:475
+#: gtk/gtkwidget.c:476
 msgid "Has focus"
 msgstr ""
 
-#: gtk/gtkwidget.c:476
+#: gtk/gtkwidget.c:477
 msgid "Whether the widget has the input focus"
 msgstr ""
 
-#: gtk/gtkwidget.c:482
+#: gtk/gtkwidget.c:483
 msgid "Is focus"
 msgstr ""
 
-#: gtk/gtkwidget.c:483
+#: gtk/gtkwidget.c:484
 msgid "Whether the widget is the focus widget within the toplevel"
 msgstr ""
 
-#: gtk/gtkwidget.c:489
+#: gtk/gtkwidget.c:490
 msgid "Can default"
 msgstr "Pout esse prémetou"
 
-#: gtk/gtkwidget.c:490
+#: gtk/gtkwidget.c:491
 msgid "Whether the widget can be the default widget"
 msgstr ""
 
-#: gtk/gtkwidget.c:496
+#: gtk/gtkwidget.c:497
 msgid "Has default"
 msgstr "Est l' prémetou"
 
-#: gtk/gtkwidget.c:497
+#: gtk/gtkwidget.c:498
 msgid "Whether the widget is the default widget"
 msgstr ""
 
-#: gtk/gtkwidget.c:503
+#: gtk/gtkwidget.c:504
 msgid "Receives default"
 msgstr ""
 
-#: gtk/gtkwidget.c:504
+#: gtk/gtkwidget.c:505
 msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr ""
 
-#: gtk/gtkwidget.c:510
+#: gtk/gtkwidget.c:511
 msgid "Composite child"
 msgstr ""
 
-#: gtk/gtkwidget.c:511
+#: gtk/gtkwidget.c:512
 msgid "Whether the widget is part of a composite widget"
 msgstr ""
 
-#: gtk/gtkwidget.c:517
+#: gtk/gtkwidget.c:518
 msgid "Style"
 msgstr "Stîle"
 
-#: gtk/gtkwidget.c:518
+#: gtk/gtkwidget.c:519
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
 msgstr ""
 
-#: gtk/gtkwidget.c:524
+#: gtk/gtkwidget.c:525
 msgid "Events"
 msgstr "Evenmints"
 
-#: gtk/gtkwidget.c:525
+#: gtk/gtkwidget.c:526
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr ""
 
-#: gtk/gtkwidget.c:532
+#: gtk/gtkwidget.c:533
 msgid "Extension events"
 msgstr ""
 
-#: gtk/gtkwidget.c:533
+#: gtk/gtkwidget.c:534
 msgid "The mask that decides what kind of extension events this widget gets"
 msgstr ""
 
-#: gtk/gtkwidget.c:540
+#: gtk/gtkwidget.c:541
 msgid "No show all"
 msgstr ""
 
-#: gtk/gtkwidget.c:541
+#: gtk/gtkwidget.c:542
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr ""
 
-#: gtk/gtkwidget.c:1447
+#: gtk/gtkwidget.c:1448
 msgid "Interior Focus"
 msgstr ""
 
-#: gtk/gtkwidget.c:1448
+#: gtk/gtkwidget.c:1449
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr ""
 
-#: gtk/gtkwidget.c:1454
+#: gtk/gtkwidget.c:1455
 msgid "Focus linewidth"
 msgstr ""
 
-#: gtk/gtkwidget.c:1455
+#: gtk/gtkwidget.c:1456
 msgid "Width, in pixels, of the focus indicator line"
 msgstr ""
 
-#: gtk/gtkwidget.c:1461
+#: gtk/gtkwidget.c:1462
 msgid "Focus line dash pattern"
 msgstr ""
 
-#: gtk/gtkwidget.c:1462
+#: gtk/gtkwidget.c:1463
 msgid "Dash pattern used to draw the focus indicator"
 msgstr ""
 
-#: gtk/gtkwidget.c:1467
+#: gtk/gtkwidget.c:1468
 msgid "Focus padding"
 msgstr ""
 
-#: gtk/gtkwidget.c:1468
+#: gtk/gtkwidget.c:1469
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr ""
 
-#: gtk/gtkwidget.c:1473
+#: gtk/gtkwidget.c:1474
 msgid "Cursor color"
 msgstr "Coleur do cursoe"
 
-#: gtk/gtkwidget.c:1474
+#: gtk/gtkwidget.c:1475
 msgid "Color with which to draw insertion cursor"
 msgstr "Coleur do cursoe di stitchaedje"
 
-#: gtk/gtkwidget.c:1479
+#: gtk/gtkwidget.c:1480
 msgid "Secondary cursor color"
 msgstr "Deujhinme coleur do cursoe"
 
-#: gtk/gtkwidget.c:1480
+#: gtk/gtkwidget.c:1481
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -4775,52 +4776,52 @@ msgstr ""
 "Coleur pol deujhinme cursoe di stitchaedje, po l' aspougnaedje di tecse ki "
 "maxhe les sins droete-a-hintche eyet hintche-a-droete"
 
-#: gtk/gtkwidget.c:1485
+#: gtk/gtkwidget.c:1486
 msgid "Cursor line aspect ratio"
 msgstr ""
 
-#: gtk/gtkwidget.c:1486
+#: gtk/gtkwidget.c:1487
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr ""
 
-#: gtk/gtkwidget.c:1491
+#: gtk/gtkwidget.c:1492
 #, fuzzy
 msgid "Draw Border"
 msgstr "Boirds des linwetes"
 
-#: gtk/gtkwidget.c:1492
+#: gtk/gtkwidget.c:1493
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr ""
 
-#: gtk/gtkwindow.c:420
+#: gtk/gtkwindow.c:421
 msgid "Window Type"
 msgstr "Sôre do purnea"
 
-#: gtk/gtkwindow.c:421
+#: gtk/gtkwindow.c:422
 msgid "The type of the window"
 msgstr "Li sôre do purnea"
 
-#: gtk/gtkwindow.c:429
+#: gtk/gtkwindow.c:430
 msgid "Window Title"
 msgstr "Tite do purnea"
 
-#: gtk/gtkwindow.c:430
+#: gtk/gtkwindow.c:431
 msgid "The title of the window"
 msgstr "Li tite do purnea"
 
-#: gtk/gtkwindow.c:437
+#: gtk/gtkwindow.c:438
 msgid "Window Role"
 msgstr ""
 
-#: gtk/gtkwindow.c:438
+#: gtk/gtkwindow.c:439
 msgid "Unique identifier for the window to be used when restoring a session"
 msgstr ""
 
-#: gtk/gtkwindow.c:445
+#: gtk/gtkwindow.c:446
 msgid "Allow Shrink"
 msgstr ""
 
-#: gtk/gtkwindow.c:447
+#: gtk/gtkwindow.c:448
 #, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
@@ -4829,23 +4830,23 @@ msgstr ""
 "Si metou a VRAIY, li purnea n' a pont d' grandeu minimom. Mete çouci a VRAIY "
 "est 99% des côps ene måle idêye"
 
-#: gtk/gtkwindow.c:454
+#: gtk/gtkwindow.c:455
 msgid "Allow Grow"
 msgstr ""
 
-#: gtk/gtkwindow.c:455
+#: gtk/gtkwindow.c:456
 msgid "If TRUE, users can expand the window beyond its minimum size"
 msgstr ""
 
-#: gtk/gtkwindow.c:463
+#: gtk/gtkwindow.c:464
 msgid "If TRUE, users can resize the window"
 msgstr "Si VRAIY, les uzeus polèt candjî l' grandeu des purneas"
 
-#: gtk/gtkwindow.c:470
+#: gtk/gtkwindow.c:471
 msgid "Modal"
 msgstr "Modå"
 
-#: gtk/gtkwindow.c:471
+#: gtk/gtkwindow.c:472
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
@@ -4853,136 +4854,136 @@ msgstr ""
 "Si VRAIY, li purnea est modå (les ôtes purneas n' ont nén l' focusse tant "
 "k' ci-chal est en alaedje)"
 
-#: gtk/gtkwindow.c:478
+#: gtk/gtkwindow.c:479
 msgid "Window Position"
 msgstr "Eplaeçmint do purnea"
 
-#: gtk/gtkwindow.c:479
+#: gtk/gtkwindow.c:480
 msgid "The initial position of the window"
 msgstr "L' eplaeçmint do purnea cwand il est drovou"
 
-#: gtk/gtkwindow.c:487
+#: gtk/gtkwindow.c:488
 msgid "Default Width"
 msgstr "Lårdjeu prémetowe"
 
-#: gtk/gtkwindow.c:488
+#: gtk/gtkwindow.c:489
 msgid "The default width of the window, used when initially showing the window"
 msgstr "Li prémetowe lårdjeu do purnea, pol prumî côp k' il est håyné"
 
-#: gtk/gtkwindow.c:497
+#: gtk/gtkwindow.c:498
 msgid "Default Height"
 msgstr "Hôteu prémetowe"
 
-#: gtk/gtkwindow.c:498
+#: gtk/gtkwindow.c:499
 msgid ""
 "The default height of the window, used when initially showing the window"
 msgstr "Li prémetowe hôteu do purnea, pol prumî côp k' il est håyné"
 
-#: gtk/gtkwindow.c:507
+#: gtk/gtkwindow.c:508
 msgid "Destroy with Parent"
 msgstr "Distrure avou l' parint"
 
-#: gtk/gtkwindow.c:508
+#: gtk/gtkwindow.c:509
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr ""
 "Definixhe ci ç' purnea chal ooet esse distrût cwand l' parint est distrût"
 
-#: gtk/gtkwindow.c:515
+#: gtk/gtkwindow.c:516
 msgid "Icon"
 msgstr "Imådjete"
 
-#: gtk/gtkwindow.c:516
+#: gtk/gtkwindow.c:517
 msgid "Icon for this window"
 msgstr "L' imådjete po ci purnea chal"
 
-#: gtk/gtkwindow.c:532
+#: gtk/gtkwindow.c:533
 #, fuzzy
 msgid "Name of the themed icon for this window"
 msgstr "L' imådjete po ci purnea chal"
 
-#: gtk/gtkwindow.c:547
+#: gtk/gtkwindow.c:548
 msgid "Is Active"
 msgstr ""
 
-#: gtk/gtkwindow.c:548
+#: gtk/gtkwindow.c:549
 msgid "Whether the toplevel is the current active window"
 msgstr ""
 
-#: gtk/gtkwindow.c:555
+#: gtk/gtkwindow.c:556
 msgid "Focus in Toplevel"
 msgstr ""
 
-#: gtk/gtkwindow.c:556
+#: gtk/gtkwindow.c:557
 msgid "Whether the input focus is within this GtkWindow"
 msgstr ""
 
-#: gtk/gtkwindow.c:563
+#: gtk/gtkwindow.c:564
 msgid "Type hint"
 msgstr ""
 
-#: gtk/gtkwindow.c:564
+#: gtk/gtkwindow.c:565
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
 msgstr ""
 
-#: gtk/gtkwindow.c:572
+#: gtk/gtkwindow.c:573
 msgid "Skip taskbar"
 msgstr "Passer houte del bår des bouyes"
 
-#: gtk/gtkwindow.c:573
+#: gtk/gtkwindow.c:574
 msgid "TRUE if the window should not be in the task bar."
 msgstr "VRAIY si l' purnea èn doet nén esse el bår des bouyes."
 
-#: gtk/gtkwindow.c:580
+#: gtk/gtkwindow.c:581
 msgid "Skip pager"
 msgstr "Passer houte do padjeu"
 
-#: gtk/gtkwindow.c:581
+#: gtk/gtkwindow.c:582
 msgid "TRUE if the window should not be in the pager."
 msgstr "VRAIY si l' purnea èn doet nén esse sol pådjeu."
 
-#: gtk/gtkwindow.c:588
+#: gtk/gtkwindow.c:589
 msgid "Urgent"
 msgstr ""
 
-#: gtk/gtkwindow.c:589
+#: gtk/gtkwindow.c:590
 #, fuzzy
 msgid "TRUE if the window should be brought to the user's attention."
 msgstr "VRAIY si l' purnea èn doet nén esse sol pådjeu."
 
-#: gtk/gtkwindow.c:603
+#: gtk/gtkwindow.c:604
 msgid "Accept focus"
 msgstr "Accepter l' focusse"
 
-#: gtk/gtkwindow.c:604
+#: gtk/gtkwindow.c:605
 msgid "TRUE if the window should receive the input focus."
 msgstr "VRAIY si l' prunea doet rçure li focusse d' intrêye"
 
-#: gtk/gtkwindow.c:618
+#: gtk/gtkwindow.c:619
 msgid "Focus on map"
 msgstr ""
 
-#: gtk/gtkwindow.c:619
+#: gtk/gtkwindow.c:620
 #, fuzzy
 msgid "TRUE if the window should receive the input focus when mapped."
 msgstr "VRAIY si l' prunea doet rçure li focusse d' intrêye"
 
-#: gtk/gtkwindow.c:633
+#: gtk/gtkwindow.c:634
 msgid "Decorated"
 msgstr "Gåyoté"
 
-#: gtk/gtkwindow.c:634
+#: gtk/gtkwindow.c:635
 msgid "Whether the window should be decorated by the window manager"
 msgstr ""
 "Definixhe si les gåyotaedjes des purneas dvént esse manaedjîs po manaedjeu "
 "di purneas"
 
-#: gtk/gtkwindow.c:649
+#: gtk/gtkwindow.c:650
 msgid "Gravity"
 msgstr "Gravité"
 
-#: gtk/gtkwindow.c:650
+#: gtk/gtkwindow.c:651
 msgid "The window gravity of the window"
 msgstr "Li gravité do prunea"
 

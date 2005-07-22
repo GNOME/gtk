@@ -81,7 +81,7 @@ loader_sanity_check (const char *path, GdkPixbufFormat *info, GdkPixbufModule *v
 				
 				goto error;
 			}
-			if (strspn (pattern->mask, " !xzn") < mask_len) 
+			if (strspn (pattern->mask, " !xzn*") < mask_len) 
 			{
 				error = "bad char in mask";
 				

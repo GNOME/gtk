@@ -1,5 +1,9 @@
 2005-07-22  Matthias Clasen  <mclasen@redhat.com>
 
+	* === Released 2.7.4 === 
+
+2005-07-22  Matthias Clasen  <mclasen@redhat.com>
+
 	* gdk-pixbuf/tmpl/module_interface.sgml: Document unanchored 
 	patterns.
 

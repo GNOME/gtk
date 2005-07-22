@@ -1,5 +1,12 @@
 2005-07-22  Matthias Clasen  <mclasen@redhat.com>
 
+	* === Released 2.7.4 === 
+
+2005-07-22  Matthias Clasen  <mclasen@redhat.com>
+		
+	* queryloaders.c: Accept '*' in masks. (pointed out
+	by William Jon McCann)
+
 	* gdk-pixbuf-io.c (format_check): Make anchored patterns work 
 	as they did before.  (#311011, William Jon McCann)
 
