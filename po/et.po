@@ -1,5 +1,5 @@
-# GTK+ eesti keele tõlge
-# Estonian translation of GTK+
+# GTK+ eesti keele tõlge.
+# Estonian translation of GTK+.
 #
 # Copyright (C) 1999-2005 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gtk package.
@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-07-08 13:18+0000\n"
-"PO-Revision-Date: 2005-07-08 18:19+0300\n"
+"PO-Revision-Date: 2005-07-22 10:02+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -411,7 +411,7 @@ msgstr ""
 
 #: ../gdk-pixbuf/io-pcx.c:717
 msgid "No palette found at end of PCX data"
-msgstr ""
+msgstr "PCX andmete lõpust ei leitud paletti"
 
 #: ../gdk-pixbuf/io-pcx.c:758
 msgid "The PCX image format"
@@ -453,7 +453,8 @@ msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
 "applications to reduce memory usage"
 msgstr ""
-"%ldx%ld suurusega pildi salvestamiseks pole piisavalt mälu. Mälukasutuse vähendamiseks võid sa proovida mõnede rakenduste sulgemist"
+"%ldx%ld suurusega pildi salvestamiseks pole piisavalt mälu. Mälukasutuse "
+"vähendamiseks võid sa proovida mõnede rakenduste sulgemist"
 
 #: ../gdk-pixbuf/io-png.c:669
 msgid "Fatal error reading PNG image file"
@@ -529,7 +530,7 @@ msgstr "PNM pildivormingu laadija ei toeta seda PNM'i alamvormingut"
 
 #: ../gdk-pixbuf/io-pnm.c:718
 msgid "Premature end-of-file encountered"
-msgstr ""
+msgstr "Faili lõpp tuli enneaegselt"
 
 #: ../gdk-pixbuf/io-pnm.c:750 ../gdk-pixbuf/io-pnm.c:981
 msgid "Raw PNM formats require exactly one whitespace before sample data"
@@ -589,7 +590,7 @@ msgstr ""
 
 #: ../gdk-pixbuf/io-tga.c:214
 msgid "Cannot allocate temporary IOBuffer data"
-msgstr "IOBuffer"
+msgstr "IOBuffer andmetele pole võimalik mälu eraldada"
 
 #: ../gdk-pixbuf/io-tga.c:348
 msgid "Cannot allocate new pixbuf"
@@ -635,11 +636,11 @@ msgstr "Targa pildivorming"
 
 #: ../gdk-pixbuf/io-tiff.c:173
 msgid "Could not get image width (bad TIFF file)"
-msgstr "Ei suuda saada pildi laiust (vigane TIFF fail)"
+msgstr "Pildi laiust pole võimalik tuvastada (vigane TIFF fail)"
 
 #: ../gdk-pixbuf/io-tiff.c:180
 msgid "Could not get image height (bad TIFF file)"
-msgstr "Ei suuda saada pildi kõrgust (vigane TIFF fail)"
+msgstr "Pildi kõrgust pole võimalik tuvastada (vigane TIFF fail)"
 
 #: ../gdk-pixbuf/io-tiff.c:188
 msgid "Width or height of TIFF image is zero"
@@ -684,11 +685,11 @@ msgstr "Pildi kõrgus on null"
 
 #: ../gdk-pixbuf/io-wbmp.c:275
 msgid "Not enough memory to load image"
-msgstr "Ebapiisav mälu pildi laadimiseks"
+msgstr "Pildi laadimiseks pole piisavalt mälu"
 
 #: ../gdk-pixbuf/io-wbmp.c:334
 msgid "Couldn't save the rest"
-msgstr ""
+msgstr "Ülejäänud pole võimalik salvestada"
 
 #: ../gdk-pixbuf/io-wbmp.c:368
 msgid "The WBMP image format"
@@ -947,7 +948,7 @@ msgstr "Vali värv"
 
 #: ../gtk/gtkcolorbutton.c:466
 msgid "Received invalid color data\n"
-msgstr ""
+msgstr "Võesti vastu vigased värviandmed\n"
 
 #: ../gtk/gtkcolorsel.c:576
 msgid ""
@@ -1100,7 +1101,7 @@ msgstr "Töölaud"
 
 #: ../gtk/gtkfilechooserbutton.c:69
 msgid "(None)"
-msgstr ""
+msgstr "(puudub)"
 
 #: ../gtk/gtkfilechooserbutton.c:1522
 msgid "Other..."
@@ -1227,7 +1228,7 @@ msgstr "Muudetud"
 
 #: ../gtk/gtkfilechooserdefault.c:3517
 msgid "Select which types of files are shown"
-msgstr ""
+msgstr "Vali, milliseid failitüüpe näidata"
 
 #. Create Folder
 #: ../gtk/gtkfilechooserdefault.c:3553
@@ -1434,11 +1435,11 @@ msgstr "Viga faili \"%s\" kustutamisel: %s"
 #: ../gtk/gtkfilesel.c:1630
 #, c-format
 msgid "Really delete file \"%s\"?"
-msgstr "Kas kindlasti kustutadata fail \"%s\"?"
+msgstr "Kas kustutadata fail \"%s\"?"
 
 #: ../gtk/gtkfilesel.c:1635
 msgid "Delete File"
-msgstr "Kustuta fail"
+msgstr "Faili kustutamine"
 
 #: ../gtk/gtkfilesel.c:1681 ../gtk/gtkfilesel.c:1695
 #, c-format
@@ -1470,12 +1471,12 @@ msgstr "Viga faili \"%s\" ümbernimetamisel \"%s\"-ks: %s"
 
 #: ../gtk/gtkfilesel.c:1754
 msgid "Rename File"
-msgstr "Nimeta ümber"
+msgstr "Ümbernimetamine"
 
 #: ../gtk/gtkfilesel.c:1769
 #, c-format
 msgid "Rename file \"%s\" to:"
-msgstr "Nimeta fail \"%s\" ümber:"
+msgstr "Faili \"%s\" ümbernimetamine:"
 
 #: ../gtk/gtkfilesel.c:1798
 msgid "_Rename"
@@ -1504,7 +1505,7 @@ msgstr "Nimi on liiga pikk"
 
 #: ../gtk/gtkfilesel.c:4037
 msgid "Couldn't convert filename"
-msgstr "Ei saa failinime ümber kodeerida"
+msgstr "Failinime pole võimalik teisendada"
 
 #: ../gtk/gtkfilesystemmodel.c:1267
 msgid "(Empty)"
