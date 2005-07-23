@@ -1,3 +1,27 @@
+Overview of Changes from GTK+ 2.6.8 to GTK+ 2.6.9
+=================================================
+* GtkFileChooser
+ - Don't leave a "trail" when then current folder
+   is explicitly set [Jonathan Blandford]
+ - Accept file drops on the file list [Sven Neumann]
+* Accept GTK+ 2.8 .gtk-bookmarks files [Matthias]
+* Make paragraph up/down keynav in GtkTextView
+  symmetric [Behnam Esfahbod]
+* Win32 
+ - Bug fixes [Tor Lillqvist, Kazuki Iwamoto, Peter
+   Zelezny]
+ - Improve and simply line segment rendering [Tor]
+ - Fix handling of Aiptek tablets [Robert  Ögren]
+* Other bug fixes [Billy Biggs, Vincent Noel, 
+  Georg Schwarz, Markku Vire, Dan Winship, Morten 
+  Welinder, Matthias, Euan MacGregor, David Saxton, 
+  Padraig Brady, Paul Cornett, Mark McLoughlin, 
+  Hans Oesterholt, Arkady L. Shane, Tommi Komulainen, 
+  Peter S. Mazinger]
+* Documentation improvements [Steve Chaplin, Matthias]
+* New and updated translations (cs,cy,da,de,en_CA,et,
+  fr,gl,hu,hy,ja,ko,nl,sq,sr,sr@Latn,sv,zh_CN,zh_TW)
+
 Overview of Changes from GTK+ 2.6.7 to GTK+ 2.6.8
 =================================================
 * GtkFileChooser
