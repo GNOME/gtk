@@ -1726,7 +1726,7 @@ msgstr "名称“%s”无效，因为其中包含字符“%s”。请使用不�
 #: gtk/gtkfilesystemunix.c:1463 gtk/gtkfilesystemwin32.c:1032
 #, c-format
 msgid "Bookmark saving failed: %s"
-msgstr "书签保存失败(%s)：%s"
+msgstr "书签保存失败：%s"
 
 #: gtk/gtkfilesystemunix.c:1518
 #, c-format
