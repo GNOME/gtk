@@ -128,7 +128,7 @@ GtkWidget* gtk_dialog_new_with_buttons (const gchar     *title,
                                         GtkWindow       *parent,
                                         GtkDialogFlags   flags,
                                         const gchar     *first_button_text,
-                                        ...) G_GNUC_NULL_TERMINATED;
+                                        ...);
 
 void       gtk_dialog_add_action_widget (GtkDialog   *dialog,
                                          GtkWidget   *child,

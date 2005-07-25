@@ -920,7 +920,7 @@ gtk_dialog_get_has_separator
 gtk_dialog_get_response_for_widget
 gtk_dialog_get_type G_GNUC_CONST
 gtk_dialog_new
-gtk_dialog_new_with_buttons G_GNUC_NULL_TERMINATED
+gtk_dialog_new_with_buttons
 gtk_dialog_response
 gtk_dialog_run
 gtk_alternative_dialog_button_order
@@ -1255,8 +1255,8 @@ gtk_file_chooser_unselect_uri
 #if IN_HEADER(__GTK_FILE_CHOOSER_DIALOG_H__)
 #if IN_FILE(__GTK_FILE_CHOOSER_DIALOG_C__)
 gtk_file_chooser_dialog_get_type G_GNUC_CONST
-gtk_file_chooser_dialog_new G_GNUC_NULL_TERMINATED
-gtk_file_chooser_dialog_new_with_backend G_GNUC_NULL_TERMINATED
+gtk_file_chooser_dialog_new
+gtk_file_chooser_dialog_new_with_backend
 #endif
 #endif
 
@@ -2254,7 +2254,7 @@ gtk_object_set G_GNUC_NULL_TERMINATED
 gtk_object_get_data
 gtk_object_get_data_by_id
 gtk_object_get_user_data
-gtk_object_new G_GNUC_NULL_TERMINATED
+gtk_object_new
 gtk_object_remove_data
 gtk_object_remove_data_by_id
 gtk_object_remove_no_notify

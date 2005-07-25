@@ -126,7 +126,7 @@ void gtk_object_destroy	  (GtkObject *object);
 
 GtkObject*	gtk_object_new		  (GtkType	       type,
 					   const gchar	      *first_property_name,
-					   ...) G_GNUC_NULL_TERMINATED;
+					   ...);
 GtkObject*	gtk_object_ref		  (GtkObject	      *object);
 void		gtk_object_unref	  (GtkObject	      *object);
 void gtk_object_weakref	  (GtkObject	    *object,
