@@ -1,5 +1,8 @@
 2005-07-25 Matthias Clasen <mclasen@redhat.com>
 
+	* Makefile.in.in: Call msgfmt with -c to catch
+	format string errors.
+
 	* ar.po: Add a missing Plural-Forms declaration, copied
 	from ar.po in nautilus.
 
