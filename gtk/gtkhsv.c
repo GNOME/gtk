@@ -1097,7 +1097,7 @@ paint_triangle (GtkHSV      *hsv,
   gint x2, y2, r2, g2, b2; /* Second vertex */
   gint x3, y3, r3, g3, b3; /* Third vertex */
   gint t;
-  guint32 *buf, *p;
+  guint32 *buf, *p, c;
   gint xl, xr, rl, rr, gl, gr, bl, br; /* Scanline data */
   gint xx, yy;
   gint x_interp, y_interp;
@@ -1196,8 +1196,11 @@ paint_triangle (GtkHSV      *hsv,
 	x_start = MAX (xl - PAD, x);
 	x_end = MIN (xr + PAD, x + width);
 
-	p += (x_start - x);
+	c = (rl << 16) | (gl << 8) | bl;
 
+	for (xx = x; xx < x_start; xx++)
+	  *p++ = c;
+	  
 	for (xx = x_start; xx < x_end; xx++)
 	  {
 	    x_interp = CLAMP (xx, xl, xr);
@@ -1206,6 +1209,11 @@ paint_triangle (GtkHSV      *hsv,
 		    (LERP (gl, gr, xl, xr, x_interp) << 8) |
 		    LERP (bl, br, xl, xr, x_interp));
 	  }
+
+	c = (rr << 16) | (gr << 8) | br;
+
+	for (xx = x_end; xx < x + width; xx++)
+	  *p++ = c;
       }
     }
 

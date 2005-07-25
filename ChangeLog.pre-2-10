@@ -1,5 +1,8 @@
 2005-07-25  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkhsv.c (paint_triangle): Pad out the full width, in 
+	an attempt to work around bug #311225. 
+
 	* gtk/gtktreemodelsort.c: Trivial doc fixes.
 
 	* gtk/gtktreesortable.c: Talk about comparison functions, not
