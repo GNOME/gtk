@@ -1,3 +1,8 @@
+2005-07-22  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/migrating-checklist.sgml: Call gtk_menu_attach_to_widget()
+	in the example for the ::popup-menu signal.
+
 2005-07-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtktreemodelsort.sgml: Note that the sorting 
