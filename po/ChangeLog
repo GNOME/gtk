@@ -1,7 +1,9 @@
 2005-07-25 Matthias Clasen <mclasen@redhat.com>
 
-	* zh_CN.po: fix a format string error
-	discovered by msgfmt -c.
+	* ar.po: Add a missing Plural-Forms declaration, copied
+	from ar.po in nautilus.
+
+	* zh_CN.po: fix a format string error discovered by msgfmt -c.
 
 2005-07-25 Ankit Patel <ankit644@yahoo.com>
 
