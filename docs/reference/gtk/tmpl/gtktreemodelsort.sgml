@@ -11,7 +11,8 @@ interface.  It does not hold any data itself, but rather is created with
 a child model and proxies its data.  It has identical column types to
 this child model, and the changes in the child are propagated.  The
 primary purpose of this model is to provide a way to sort a different
-model without modifying it.
+model without modifying it. Note that the sort function used by
+#GtkTreeModelSort is not guaranteed to be stable.
 </para>
 <para>
 The use of this is best demonstrated through an example.  In the

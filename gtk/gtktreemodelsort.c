@@ -375,7 +375,7 @@ gtk_tree_model_sort_drag_source_init (GtkTreeDragSourceIface *iface)
  * gtk_tree_model_sort_new_with_model:
  * @child_model: A #GtkTreeModel
  *
- * Creates a new #GtkTreeModel, with @child_model as the child_model.
+ * Creates a new #GtkTreeModel, with @child_model as the child model.
  *
  * Return value: A new #GtkTreeModel.
  */
@@ -1941,11 +1941,12 @@ gtk_tree_model_sort_elt_get_path (SortLevel *level,
 /**
  * gtk_tree_model_sort_set_model:
  * @tree_model_sort: The #GtkTreeModelSort.
- * @child_model: A #GtkTreeModel, or NULL.
+ * @child_model: A #GtkTreeModel, or %NULL.
  *
- * Sets the model of @tree_model_sort to be @model.  If @model is NULL, then the
- * old model is unset.  The sort function is unset as a result of this call.
- * The model will be in an unsorted state until a sort function is set.
+ * Sets the model of @tree_model_sort to be @model.  If @model is %NULL, 
+ * then the old model is unset.  The sort function is unset as a result 
+ * of this call. The model will be in an unsorted state until a sort 
+ * function is set.
  **/
 static void
 gtk_tree_model_sort_set_model (GtkTreeModelSort *tree_model_sort,
@@ -2107,8 +2108,8 @@ gtk_real_tree_model_sort_convert_child_path_to_path (GtkTreeModelSort *tree_mode
  * 
  * Converts @child_path to a path relative to @tree_model_sort.  That is,
  * @child_path points to a path in the child model.  The returned path will
- * point to the same row in the sorted model.  If @child_path isn't a valid path
- * on the child model, then %NULL is returned.
+ * point to the same row in the sorted model.  If @child_path isn't a valid 
+ * path on the child model, then %NULL is returned.
  * 
  * Return value: A newly allocated #GtkTreePath, or %NULL
  **/
@@ -2162,10 +2163,11 @@ gtk_tree_model_sort_convert_child_iter_to_iter (GtkTreeModelSort *tree_model_sor
  * @tree_model_sort: A #GtkTreeModelSort
  * @sorted_path: A #GtkTreePath to convert
  * 
- * Converts @sorted_path to a path on the child model of @tree_model_sort.  That
- * is, @sorted_path points to a location in @tree_model_sort.  The returned path
- * will point to the same location in the model not being sorted.  If @sorted_path 
- * does not point to a location in the child model, %NULL is returned.
+ * Converts @sorted_path to a path on the child model of @tree_model_sort.  
+ * That is, @sorted_path points to a location in @tree_model_sort.  The 
+ * returned path will point to the same location in the model not being 
+ * sorted.  If @sorted_path does not point to a location in the child model, 
+ * %NULL is returned.
  * 
  * Return value: A newly allocated #GtkTreePath, or %NULL
  **/
@@ -2497,8 +2499,9 @@ gtk_tree_model_sort_iter_is_valid_helper (GtkTreeIter *iter,
  * @tree_model_sort: A #GtkTreeModelSort.
  * @iter: A #GtkTreeIter.
  *
- * WARNING: This function is slow. Only use it for debugging and/or testing
- * purposes.
+ * <warning><para>
+ * This function is slow. Only use it for debugging and/or testing purposes.
+ * </para></warning>
  *
  * Checks if the given iter is a valid iter for this #GtkTreeModelSort.
  *

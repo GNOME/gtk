@@ -151,8 +151,8 @@ gtk_tree_sortable_set_sort_column_id (GtkTreeSortable  *sortable,
  * gtk_tree_sortable_set_sort_func:
  * @sortable: A #GtkTreeSortable
  * @sort_column_id: the sort column id to set the function for
- * @sort_func: The sorting function
- * @user_data: User data to pass to the sort func, or %NULL
+ * @sort_func: The comparison function
+ * @user_data: User data to pass to @sort_func, or %NULL
  * @destroy: Destroy notifier of @user_data, or %NULL
  * 
  * Sets the comparison function used when sorting to be @sort_func.  If the
@@ -182,13 +182,14 @@ gtk_tree_sortable_set_sort_func (GtkTreeSortable        *sortable,
 /**
  * gtk_tree_sortable_set_default_sort_func:
  * @sortable: A #GtkTreeSortable
- * @sort_func: The sorting function
- * @user_data: User data to pass to the sort func, or %NULL
+ * @sort_func: The comparison function
+ * @user_data: User data to pass to @sort_func, or %NULL
  * @destroy: Destroy notifier of @user_data, or %NULL
  * 
- * Sets the default comparison function used when sorting to be @sort_func.  If
- * the current sort column id of @sortable is
- * %GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID, then the model will sort using this function.
+ * Sets the default comparison function used when sorting to be @sort_func.  
+ * If the current sort column id of @sortable is
+ * %GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID, then the model will sort using 
+ * this function.
  *
  * If @sort_func is %NULL, then there will be no default comparison function.
  * This means that once the model  has been sorted, it can't go back to the

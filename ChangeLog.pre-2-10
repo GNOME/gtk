@@ -1,5 +1,10 @@
 2005-07-25  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreemodelsort.c: Trivial doc fixes.
+
+	* gtk/gtktreesortable.c: Talk about comparison functions, not
+	sort functions in some places.  (#311398, Fabrice Bauzac)
+
 	* gtk/gtk.symbols: 
 	* gtk/gtkobject.[hc]: 
 	* gtk/gtkfilechooserdialog.[hc] 

@@ -1,3 +1,9 @@
+2005-07-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtktreemodelsort.sgml: Note that the sorting 
+	function is not guaranteed to be stable.  (#311398, 
+	Fabrice Bauzac)
+
 2005-07-22  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.7.4 === 
