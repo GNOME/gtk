@@ -1,5 +1,9 @@
 2005-07-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkimcontextsimple.c: Add ISO_Level3_Shift to 
+	the list of keysyms to ignore for composition, since
+	AltGr keys produce it in some keyboard layouts.  (#307283)
+
 	* gtk/gtkwidget.h: 
 	* gtk/gtk.symbols: Remove G_GNUC_NULL_TERMINATED from
 	gtk_widget_new as well, pointed out by Kjartan Maraas.
