@@ -1,3 +1,12 @@
+2005-07-26  Federico Mena Quintero  <federico@ximian.com>
+
+	* perf/: New directory with the start of a framework for testing
+	performance in GTK+.
+
+	* Makefile.am (SRC_SUBDIRS): Added the perf directory.
+
+	* configure.in (AC_OUTPUT): Generate perf/Makefile.
+
 2005-07-26  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilechooserdefault.c: Fix up includes on Win32.  

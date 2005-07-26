@@ -1,0 +1,127 @@
+README for gtk+/perf
+--------------------
+
+This is a framework for testing performance in GTK+.   For GTK+, being
+performant does not only mean "paint widgets fast".  It also means
+things like the time needed to set up widgets, to map and draw a
+window for the first time, and emitting/propagating signals.
+
+The following is accurate as of 2005/07/26.
+
+
+Using the framework
+-------------------
+
+Right now the framework is very simple; it just has utility functions
+to time widget creation, drawing, and destruction.  To run such a
+test, you use the functions in timers.h.  You can call this:
+
+  timer_time_widget (create_func, report_func, user_data);
+
+You must provide the create_funcn and report_func callbacks.
+
+The create_func:
+
+  This simply creates a toplevel window with some widgets inside it.
+  It is important that you do not show any of the widgets; the
+  framework will call gtk_widget_show_all() on the toplevel window
+  automatically at the right time.
+
+The report_func:
+
+  This function will get called when timer_time_widget() reaches an
+  interesting point in the lifecycle of your widget.  See timers.h and
+  the TimerReport enumeration; this is what gets passed as the
+  "report" argument to your report_func.  Right now, your function
+  will be called three times for each call to timer_time_widget():
+
+     1. With report = TIMER_REPORT_WIDGET_CREATION.  A timer gets
+        started right before timer_time_widget() calls create_func,
+        and it gets stopped when your create_func returns.  This
+        measures the time it takes to set up a toplevel window (but
+        not show it).
+
+     2. With report = TIMER_REPORT_WIDGET_SHOW.  A timer gets started
+        right before timer_time_widget() calls gtk_widget_show_all()
+        on your toplevel window, and it gets stopped when the window
+        has been fully shown and painted to the screen.
+
+     3. With report = TIMER_REPORT_WIDGET_DESTRUCTION.  A timer gets
+        started right before timer_time_widget() calls
+        gtk_widget_destroy() on your toplevel window, and it gets
+        stopped when gtk_widget_destroy() returns.
+
+As a very basic example of using timer_time_widget(), you can use
+something like this:
+
+----------------------------------------------------------------------
+#include <stdio.h>
+#include <gtk/gtk.h>
+#include "timers.h"
+
+#define ITERS 20
+
+static GtkWidget *
+create_cb (gpointer data)
+{
+  GtkWidget *window;
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  /* ... fill the window with widgets, and don't show them ... */
+
+  return window;
+}
+
+static void
+report_cb (TimerReport report, gdouble elapsed, gpointer data)
+{
+  const char *type;
+
+  switch (report) {
+  case TIMER_REPORT_WIDGET_CREATION:
+    type = "widget creation";
+    break;
+
+  case TIMER_REPORT_WIDGET_SHOW:
+    type = "widget show";
+    break;
+
+  case TIMER_REPORT_WIDGET_DESTRUCTION:
+    type = "widget destruction";
+    break;
+  }
+
+  fprintf (stderr, "%s: %g sec\n", type, elapsed);
+}
+
+int
+main (int argc, char **argv)
+{
+  int i;
+
+  gtk_init (&argc, &argv);
+
+  for (i = 0; i < ITERS; i++)
+    timer_time_widget (create_cb, report_cb, NULL);
+  
+  return 0;
+} 
+----------------------------------------------------------------------
+
+
+Getting meaningful results
+--------------------------
+
+Getting times for widget creation/drawing/destruction is interesting,
+but how do you actually find the places that need optimizing?
+
+Why, you run the tests under a profiler, of course.
+
+FIXME: document how to do this.
+
+
+Feedback
+--------
+
+Please mail your feedback to Federico Mena-Quintero <federico@novell.com>.
+This performance framework is a work in progress.

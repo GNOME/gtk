@@ -1715,6 +1715,7 @@ modules/engines/pixbuf/Makefile
 modules/engines/ms-windows/Makefile
 modules/engines/ms-windows/Theme/Makefile
 modules/engines/ms-windows/Theme/gtk-2.0/Makefile
+perf/Makefile
 contrib/Makefile
 contrib/gdk-pixbuf-xlib/Makefile
 contrib/gdk-pixbuf-xlib/gdk-pixbuf-xlib-2.0.pc
