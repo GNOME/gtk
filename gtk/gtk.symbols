@@ -3823,7 +3823,7 @@ gtk_widget_modify_fg
 gtk_widget_modify_font
 gtk_widget_modify_style
 gtk_widget_modify_text
-gtk_widget_new G_GNUC_NULL_TERMINATED
+gtk_widget_new 
 gtk_widget_path
 gtk_widget_pop_colormap
 gtk_widget_pop_composite_child

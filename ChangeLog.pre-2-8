@@ -1,3 +1,9 @@
+2005-07-26  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkwidget.h: 
+	* gtk/gtk.symbols: Remove G_GNUC_NULL_TERMINATED from
+	gtk_widget_new as well, pointed out by Kjartan Maraas.
+
 2005-07-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkhsv.c (paint_triangle): Pad out the full width, in 
