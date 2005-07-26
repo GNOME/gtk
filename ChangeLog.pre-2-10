@@ -1,3 +1,8 @@
+2005-07-26  Tor Lillqvist  <tml@novell.com>
+
+	* gtk/gtkplug-win32.c: Declare GetAncestor() and define GA_PARENT
+	if missing (MSVC6). (#311633)
+
 2005-07-26  Federico Mena Quintero  <federico@ximian.com>
 
 	* perf/: New directory with the start of a framework for testing

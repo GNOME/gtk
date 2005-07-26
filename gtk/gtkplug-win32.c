@@ -34,6 +34,13 @@
 
 #include "gtkwin32embed.h"
 
+#if defined(_MSC_VER) && (WINVER < 0x0500)
+#ifndef GA_PARENT
+#define GA_PARENT 1
+#endif
+WINUSERAPI HWND WINAPI GetAncestor(HWND,UINT);
+#endif
+
 GdkNativeWindow
 _gtk_plug_windowing_get_id (GtkPlug *plug)
 {
