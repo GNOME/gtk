@@ -1,5 +1,8 @@
 2005-07-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserdefault.c: Fix up includes on Win32.  
+	(#311630, Kazuki Iwamoto)
+
 	* gtk/gtkimcontextsimple.c: Add ISO_Level3_Shift to 
 	the list of keysyms to ignore for composition, since
 	AltGr keys produce it in some keyboard layouts.  (#307283)

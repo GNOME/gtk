@@ -85,7 +85,17 @@
 
 #define PROFILE_FILE_CHOOSER
 #ifdef PROFILE_FILE_CHOOSER
+
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
+#endif
+#ifdef G_OS_WIN32
+#include <io.h>
+#endif
+
+#ifndef F_OK 
+#define F_OK 0
+#endif
 
 #define PROFILE_INDENT 4
 static int profile_indent;
