@@ -1,3 +1,12 @@
+2005-07-26  Elijah Newren  <newren@gmail.com>
+
+	Revert part of patch from #166379; don't have gtk_window_present()
+	change a window's desktop, but rather leave it up to the WM.
+	(#311653)
+	
+	* gtk/gtkwindow.c (gtk_window_present_with_time): Don't change a
+	window's workspace
+
 2005-07-26  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/gtkplug-win32.c: Declare GetAncestor() and define GA_PARENT

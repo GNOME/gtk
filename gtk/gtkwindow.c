@@ -6048,9 +6048,6 @@ gtk_window_present_with_time (GtkWindow *window,
 #endif
         }
 
-#ifdef GDK_WINDOWING_X11
-      gdk_x11_window_move_to_current_desktop (widget->window);
-#endif
       gdk_window_focus (widget->window, timestamp);
     }
   else
