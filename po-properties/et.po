@@ -1,5 +1,5 @@
 # GTK+-properties eesti keele tõlge.
-# Estonian translation of GTK+-properties
+# Estonian translation of GTK+-properties.
 #
 # Copyright (C) 1999-2005 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gtk package.
@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-01-15 12:29+0100\n"
-"PO-Revision-Date: 2005-07-06 00:29+0300\n"
+"PO-Revision-Date: 2005-07-27 10:12+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee> \n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -172,20 +172,20 @@ msgstr "Programmi dokumenteerijate nimekiri"
 
 #: gtk/gtkaboutdialog.c:344
 msgid "Artists"
-msgstr ""
+msgstr "Kunstnikud"
 
 #: gtk/gtkaboutdialog.c:345
 msgid "List of people who have contributed artwork to the program"
-msgstr ""
+msgstr "Programmile tehtud kunstiloomingu autorite nimekiri"
 
 #: gtk/gtkaboutdialog.c:362
 msgid "Translator credits"
-msgstr ""
+msgstr "Tõlkijad"
 
 #: gtk/gtkaboutdialog.c:363
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
-msgstr ""
+msgstr "Tõlkijate nimekiri. See string peaks olema märgitud tõlgitavaks"
 
 #: gtk/gtkaboutdialog.c:378
 msgid "Logo"
@@ -203,7 +203,7 @@ msgstr "Logoikooni nimi"
 
 #: gtk/gtkaboutdialog.c:395
 msgid "A named icon to use as the logo for the about box."
-msgstr "Nimeline ikoon, mida kasutatakse programmi lähema teabe kastis."
+msgstr "Nimeline ikoon, mida kasutatakse programmi andmete kastis."
 
 #: gtk/gtkaboutdialog.c:402
 msgid "Link Color"
@@ -302,13 +302,16 @@ msgstr ""
 
 #: gtk/gtkaction.c:266 gtk/gtktoolitem.c:173
 msgid "Is important"
-msgstr ""
+msgstr "On tähtis"
 
 #: gtk/gtkaction.c:267
 msgid ""
 "Whether the action is considered important. When TRUE, toolitem proxies for "
 "this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
 msgstr ""
+"Kas see toiming on hinnatud tähtsaks. Kui see valik on märgitud, siis selle "
+"toimingu puhul kuvavad tööriistakirjete proksid teksti "
+"GTK_TOOLBAR_BOTH_HORIZ režiimis."
 
 #: gtk/gtkaction.c:275
 msgid "Hide if empty"
@@ -321,7 +324,7 @@ msgstr ""
 #: gtk/gtkaction.c:282 gtk/gtkactiongroup.c:142 gtk/gtkcellrenderer.c:222
 #: gtk/gtkwidget.c:450
 msgid "Sensitive"
-msgstr ""
+msgstr "Tundlik"
 
 #: gtk/gtkaction.c:283
 msgid "Whether the action is enabled."
@@ -1498,7 +1501,7 @@ msgstr ""
 
 #: gtk/gtkcombobox.c:568
 msgid "Wrap width"
-msgstr ""
+msgstr "Murdmise laius"
 
 #: gtk/gtkcombobox.c:569
 msgid "Wrap width for layouting the items in a grid"
@@ -2210,11 +2213,11 @@ msgstr ""
 
 #: gtk/gtkiconview.c:497
 msgid "Margin"
-msgstr ""
+msgstr "Ääris"
 
 #: gtk/gtkiconview.c:498
 msgid "Space which is inserted at the edges of the icon view"
-msgstr ""
+msgstr "Ikoonivaates servadele lisatav ruum"
 
 #: gtk/gtkiconview.c:514 gtk/gtkprogressbar.c:152 gtk/gtktoolbar.c:507
 msgid "Orientation"
@@ -3746,7 +3749,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:482
 msgid "Wrap mode"
-msgstr ""
+msgstr "Murdmisrežiim"
 
 #: gtk/gtktexttag.c:483 gtk/gtktextview.c:586
 msgid ""
@@ -3887,11 +3890,11 @@ msgstr ""
 
 #: gtk/gtktextview.c:603
 msgid "Left Margin"
-msgstr ""
+msgstr "Vasakääris"
 
 #: gtk/gtktextview.c:613
 msgid "Right Margin"
-msgstr ""
+msgstr "Paremääris"
 
 #: gtk/gtktextview.c:641
 msgid "Cursor Visible"
