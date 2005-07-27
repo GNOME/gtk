@@ -1,3 +1,11 @@
+2005-07-27  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkmain-win32.c (_gdk_win32_psstyle_to_string): Handle
+	PS_ALTERNATE, too.
+
+	* gdk/win32/gdkmain-win32.c (gdk_screen_get_height_mm): Fix for
+	multi-monitor cases. (#311677, Tim Evans)
+
 2005-07-26  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtknotebook.c (gtk_notebook_page_allocate): Fix to be
