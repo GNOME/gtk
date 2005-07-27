@@ -187,13 +187,13 @@ gdk_screen_get_height (GdkScreen *screen)
 gint
 gdk_screen_get_width_mm (GdkScreen *screen)
 {
-  return (double) GetDeviceCaps (_gdk_display_hdc, HORZRES) / GetDeviceCaps (_gdk_display_hdc, LOGPIXELSX) * 25.4;
+  return (double) gdk_screen_get_width (screen) / GetDeviceCaps (_gdk_display_hdc, LOGPIXELSX) * 25.4;
 }
 
 gint
 gdk_screen_get_height_mm (GdkScreen *screen)
 {
-  return (double) GetDeviceCaps (_gdk_display_hdc, VERTRES) / GetDeviceCaps (_gdk_display_hdc, LOGPIXELSY) * 25.4;
+  return (double) gdk_screen_get_height (screen) / GetDeviceCaps (_gdk_display_hdc, LOGPIXELSY) * 25.4;
 }
 
 void
@@ -622,14 +622,15 @@ _gdk_win32_psstyle_to_string (DWORD pen_style)
   switch (pen_style & PS_STYLE_MASK)
     {
 #define CASE(x) case PS_##x: return #x
+      CASE (ALTERNATE);
+      CASE (SOLID);
       CASE (DASH);
+      CASE (DOT);
       CASE (DASHDOT);
       CASE (DASHDOTDOT);
-      CASE (DOT);
-      CASE (INSIDEFRAME);
       CASE (NULL);
-      CASE (SOLID);
       CASE (USERSTYLE);
+      CASE (INSIDEFRAME);
 #undef CASE
     default: return static_printf ("illegal_%d", pen_style & PS_STYLE_MASK);
     }
@@ -643,9 +644,9 @@ _gdk_win32_psendcap_to_string (DWORD pen_style)
   switch (pen_style & PS_ENDCAP_MASK)
     {
 #define CASE(x) case PS_ENDCAP_##x: return #x
-      CASE (FLAT);
       CASE (ROUND);
       CASE (SQUARE);
+      CASE (FLAT);
 #undef CASE
     default: return static_printf ("illegal_%d", pen_style & PS_ENDCAP_MASK);
     }
@@ -659,9 +660,9 @@ _gdk_win32_psjoin_to_string (DWORD pen_style)
   switch (pen_style & PS_JOIN_MASK)
     {
 #define CASE(x) case PS_JOIN_##x: return #x
+      CASE (ROUND);
       CASE (BEVEL);
       CASE (MITER);
-      CASE (ROUND);
 #undef CASE
     default: return static_printf ("illegal_%d", pen_style & PS_JOIN_MASK);
     }
