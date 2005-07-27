@@ -3611,14 +3611,12 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
 	case GTK_POS_TOP:
 	  page->allocation.y += ythickness;
 	case GTK_POS_BOTTOM:
-	  if (page->allocation.height >= ythickness)
-	    page->allocation.height -= ythickness;
+	  page->allocation.height = MAX (1, page->allocation.height - ythickness);
 	  break;
 	case GTK_POS_LEFT:
 	  page->allocation.x += xthickness;
 	case GTK_POS_RIGHT:
-	  if (page->allocation.width >= xthickness)
-	    page->allocation.width -= xthickness;
+	  page->allocation.width = MAX (1, page->allocation.width - xthickness);
 	  break;
 	}
     }

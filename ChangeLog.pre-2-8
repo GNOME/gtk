@@ -1,8 +1,7 @@
 2005-07-26  Owen Taylor  <otaylor@redhat.com>
 
-	* gtk/gtknotebook.c (gtk_notebook_page_allocate): Use
-	>= not > in deciding whether to subtract out x/ythickness.
-	(#308145, Morten Welinder)
+	* gtk/gtknotebook.c (gtk_notebook_page_allocate): Fix to be
+	monotonic in the original size (#308145, Morten Welinder)
 
 2005-07-26  Elijah Newren  <newren@gmail.com>
 
