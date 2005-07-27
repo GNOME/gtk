@@ -501,7 +501,7 @@ msgid ""
 "PNG compression level must be a value between 0 and 9; value '%d' is not "
 "allowed."
 msgstr ""
-"Die PNG-Kompressionsstufe muss ein Wert zwischen 0 und 9 sein; Wert »%s« ist "
+"Die PNG-Kompressionsstufe muss ein Wert zwischen 0 und 9 sein; Wert »%d« ist "
 "nicht erlaubt."
 
 #: ../gdk-pixbuf/io-png.c:883
