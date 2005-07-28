@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: mk\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-07-27 14:37+0000\n"
-"PO-Revision-Date: 2005-07-27 23:15+0200\n"
+"PO-Revision-Date: 2005-07-28 23:29+0200\n"
 "Last-Translator: Арангел Ангов <ufo@linux.net.mk>\n"
 "Language-Team: Macedonian <ossm-members@hedona.on.net.mk>\n"
 "MIME-Version: 1.0\n"
@@ -1389,7 +1389,7 @@ msgstr ""
 #: ../gtk/gtkcheckbutton.c:101 ../gtk/gtkcheckmenuitem.c:142
 #: ../gtk/gtkoptionmenu.c:203
 msgid "Indicator Size"
-msgstr ""
+msgstr "Големина на индикаторот"
 
 #: ../gtk/gtkcheckbutton.c:102 ../gtk/gtkcheckmenuitem.c:144
 msgid "Size of check or radio indicator"
@@ -1410,11 +1410,11 @@ msgstr "Активен"
 
 #: ../gtk/gtkcheckmenuitem.c:120
 msgid "Whether the menu item is checked"
-msgstr ""
+msgstr "Дали е штиклиран предметот за мени"
 
 #: ../gtk/gtkcheckmenuitem.c:127 ../gtk/gtktogglebutton.c:143
 msgid "Inconsistent"
-msgstr ""
+msgstr "Неконзистентно"
 
 #: ../gtk/gtkcheckmenuitem.c:128
 msgid "Whether to display an \"inconsistent\" state"
@@ -1430,7 +1430,7 @@ msgstr ""
 
 #: ../gtk/gtkcolorbutton.c:204
 msgid "Use alpha"
-msgstr ""
+msgstr "Користи алфа"
 
 #: ../gtk/gtkcolorbutton.c:205
 msgid "Whether or not to give the color an alpha value"
@@ -1447,15 +1447,15 @@ msgstr ""
 
 #: ../gtk/gtkcolorbutton.c:234 ../gtk/gtkcolorsel.c:1888
 msgid "Current Color"
-msgstr ""
+msgstr "Моментална боја"
 
 #: ../gtk/gtkcolorbutton.c:235
 msgid "The selected color"
-msgstr ""
+msgstr "Избраната боја"
 
 #: ../gtk/gtkcolorbutton.c:249 ../gtk/gtkcolorsel.c:1895
 msgid "Current Alpha"
-msgstr ""
+msgstr "Тековна алфа"
 
 #: ../gtk/gtkcolorbutton.c:250
 msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
@@ -1471,15 +1471,15 @@ msgstr ""
 
 #: ../gtk/gtkcolorsel.c:1881
 msgid "Has palette"
-msgstr ""
+msgstr "Има палета"
 
 #: ../gtk/gtkcolorsel.c:1882
 msgid "Whether a palette should be used"
-msgstr ""
+msgstr "Дали да се користи палета"
 
 #: ../gtk/gtkcolorsel.c:1889
 msgid "The current color"
-msgstr ""
+msgstr "Моменталната боја"
 
 #: ../gtk/gtkcolorsel.c:1896
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
@@ -1487,31 +1487,31 @@ msgstr ""
 
 #: ../gtk/gtkcolorsel.c:1910
 msgid "Custom palette"
-msgstr ""
+msgstr "Сопствена палета"
 
 #: ../gtk/gtkcolorsel.c:1911
 msgid "Palette to use in the color selector"
-msgstr ""
+msgstr "Палета што ќе се користи како избирач за боја"
 
 #: ../gtk/gtkcombo.c:146
 msgid "Enable arrow keys"
-msgstr ""
+msgstr "Вклучи копчиња со стрелки"
 
 #: ../gtk/gtkcombo.c:147
 msgid "Whether the arrow keys move through the list of items"
-msgstr ""
+msgstr "Дали копчињата со стрелки се поместуваат на листата на предмети"
 
 #: ../gtk/gtkcombo.c:153
 msgid "Always enable arrows"
-msgstr ""
+msgstr "Секогаш вклучувај стрелки"
 
 #: ../gtk/gtkcombo.c:154
 msgid "Obsolete property, ignored"
-msgstr ""
+msgstr "Застарено својство, се игнорира"
 
 #: ../gtk/gtkcombo.c:160
 msgid "Case sensitive"
-msgstr "Осетлив случај"
+msgstr "Големина на букви"
 
 #: ../gtk/gtkcombo.c:161
 msgid "Whether list item matching is case sensitive"
@@ -1519,19 +1519,19 @@ msgstr ""
 
 #: ../gtk/gtkcombo.c:168
 msgid "Allow empty"
-msgstr ""
+msgstr "Дозволи празно"
 
 #: ../gtk/gtkcombo.c:169
 msgid "Whether an empty value may be entered in this field"
-msgstr ""
+msgstr "Дали во полето смее да биде внесена празна вредност"
 
 #: ../gtk/gtkcombo.c:176
 msgid "Value in list"
-msgstr ""
+msgstr "Вредност во листата"
 
 #: ../gtk/gtkcombo.c:177
 msgid "Whether entered values must already be present in the list"
-msgstr ""
+msgstr "Дали внесената вредност мора да биде присутна на листата"
 
 #: ../gtk/gtkcombobox.c:556
 msgid "ComboBox model"
@@ -1567,7 +1567,7 @@ msgstr "Активен предмет"
 
 #: ../gtk/gtkcombobox.c:640
 msgid "The item which is currently active"
-msgstr ""
+msgstr "Предметот кој што е моментално активен"
 
 #: ../gtk/gtkcombobox.c:659 ../gtk/gtkuimanager.c:232
 msgid "Add tearoffs to menus"
@@ -1579,7 +1579,7 @@ msgstr ""
 
 #: ../gtk/gtkcombobox.c:675 ../gtk/gtkentry.c:534
 msgid "Has Frame"
-msgstr ""
+msgstr "Има рамка"
 
 #: ../gtk/gtkcombobox.c:676
 msgid "Whether the combo box draws a frame around the child"
@@ -1591,7 +1591,7 @@ msgstr ""
 
 #: ../gtk/gtkcombobox.c:690
 msgid "Appears as list"
-msgstr ""
+msgstr "Се појавува на листата"
 
 #: ../gtk/gtkcombobox.c:691
 msgid "Whether dropdowns should look like lists rather than menus"
@@ -1599,15 +1599,15 @@ msgstr ""
 
 #: ../gtk/gtkcontainer.c:205
 msgid "Resize mode"
-msgstr ""
+msgstr "Режим на менување на големина"
 
 #: ../gtk/gtkcontainer.c:206
 msgid "Specify how resize events are handled"
-msgstr ""
+msgstr "Одредете како се справуваат настани за менување на големина"
 
 #: ../gtk/gtkcontainer.c:213
 msgid "Border width"
-msgstr ""
+msgstr "Широчина на границата"
 
 #: ../gtk/gtkcontainer.c:214
 msgid "The width of the empty border outside the containers children"
@@ -1623,7 +1623,7 @@ msgstr ""
 
 #: ../gtk/gtkcurve.c:124
 msgid "Curve type"
-msgstr ""
+msgstr "Тип на кривина"
 
 #: ../gtk/gtkcurve.c:125
 msgid "Is this curve linear, spline interpolated, or free-form"
@@ -1631,39 +1631,39 @@ msgstr ""
 
 #: ../gtk/gtkcurve.c:132
 msgid "Minimum X"
-msgstr ""
+msgstr "Минумук X"
 
 #: ../gtk/gtkcurve.c:133
 msgid "Minimum possible value for X"
-msgstr ""
+msgstr "Минимум можна вредност за X"
 
 #: ../gtk/gtkcurve.c:141
 msgid "Maximum X"
-msgstr ""
+msgstr "Максимум X"
 
 #: ../gtk/gtkcurve.c:142
 msgid "Maximum possible X value"
-msgstr ""
+msgstr "Максимум можна вредност за X"
 
 #: ../gtk/gtkcurve.c:150
 msgid "Minimum Y"
-msgstr ""
+msgstr "Максимум Y"
 
 #: ../gtk/gtkcurve.c:151
 msgid "Minimum possible value for Y"
-msgstr ""
+msgstr "Минимум можна вредност за Y"
 
 #: ../gtk/gtkcurve.c:159
 msgid "Maximum Y"
-msgstr ""
+msgstr "Максимум Y"
 
 #: ../gtk/gtkcurve.c:160
 msgid "Maximum possible value for Y"
-msgstr ""
+msgstr "Максимум можна вредност за Y"
 
 #: ../gtk/gtkdialog.c:149
 msgid "Has separator"
-msgstr ""
+msgstr "Има разделувач"
 
 #: ../gtk/gtkdialog.c:150
 msgid "The dialog has a separator bar above its buttons"
@@ -1683,7 +1683,7 @@ msgstr ""
 
 #: ../gtk/gtkdialog.c:184
 msgid "Spacing between buttons"
-msgstr ""
+msgstr "Простор помеѓу копчиња"
 
 #: ../gtk/gtkdialog.c:192
 msgid "Action area border"
@@ -1695,7 +1695,7 @@ msgstr ""
 
 #: ../gtk/gtkentry.c:489 ../gtk/gtklabel.c:400
 msgid "Cursor Position"
-msgstr "Позиција на Курсорот"
+msgstr "Позиција на стрелката"
 
 #: ../gtk/gtkentry.c:490 ../gtk/gtklabel.c:401
 msgid "The current position of the insertion cursor in chars"
@@ -1711,11 +1711,11 @@ msgstr ""
 
 #: ../gtk/gtkentry.c:510
 msgid "Whether the entry contents can be edited"
-msgstr ""
+msgstr "Дали внесената содржина може да биде уредувана"
 
 #: ../gtk/gtkentry.c:517
 msgid "Maximum length"
-msgstr ""
+msgstr "Максимална должина"
 
 #: ../gtk/gtkentry.c:518
 msgid "Maximum number of characters for this entry. Zero if no maximum"
@@ -1723,7 +1723,7 @@ msgstr ""
 
 #: ../gtk/gtkentry.c:526
 msgid "Visibility"
-msgstr ""
+msgstr "Видливост"
 
 #: ../gtk/gtkentry.c:527
 msgid ""
@@ -1737,7 +1737,7 @@ msgstr ""
 
 #: ../gtk/gtkentry.c:542
 msgid "Invisible character"
-msgstr ""
+msgstr "Невидлив знак"
 
 #: ../gtk/gtkentry.c:543
 msgid "The character to use when masking entry contents (in \"password mode\")"
@@ -1745,7 +1745,7 @@ msgstr ""
 
 #: ../gtk/gtkentry.c:550
 msgid "Activates default"
-msgstr ""
+msgstr "Го активира стандардното"
 
 #: ../gtk/gtkentry.c:551
 msgid ""
@@ -1759,7 +1759,7 @@ msgstr ""
 
 #: ../gtk/gtkentry.c:558
 msgid "Number of characters to leave space for in the entry"
-msgstr ""
+msgstr "Број на знаци за кои што треба да биде оставено место во записот"
 
 #: ../gtk/gtkentry.c:567
 msgid "Scroll offset"
@@ -1771,7 +1771,7 @@ msgstr ""
 
 #: ../gtk/gtkentry.c:578
 msgid "The contents of the entry"
-msgstr ""
+msgstr "Содржината на записот"
 
 #: ../gtk/gtkentry.c:593 ../gtk/gtkmisc.c:101
 msgid "X align"
@@ -1785,15 +1785,15 @@ msgstr ""
 
 #: ../gtk/gtkentry.c:832
 msgid "Select on focus"
-msgstr ""
+msgstr "Избери при фокусирање"
 
 #: ../gtk/gtkentry.c:833
 msgid "Whether to select the contents of an entry when it is focused"
-msgstr ""
+msgstr "Дали да ја избере содржината на записот кога истиот е фокусиран"
 
 #: ../gtk/gtkentrycompletion.c:276
 msgid "Completion Model"
-msgstr ""
+msgstr "Модел на довршување"
 
 #: ../gtk/gtkentrycompletion.c:277
 msgid "The model to find matches in"
@@ -1801,7 +1801,7 @@ msgstr ""
 
 #: ../gtk/gtkentrycompletion.c:283
 msgid "Minimum Key Length"
-msgstr ""
+msgstr "Минимална должина на клуч"
 
 #: ../gtk/gtkentrycompletion.c:284
 msgid "Minimum length of the search key in order to look up matches"
@@ -1933,11 +1933,11 @@ msgstr "Филтер"
 
 #: ../gtk/gtkfilechooser.c:217
 msgid "The current filter for selecting which files are displayed"
-msgstr ""
+msgstr "Моменталниот филтер за избирање на прикажаните датотеки"
 
 #: ../gtk/gtkfilechooser.c:222
 msgid "Local Only"
-msgstr ""
+msgstr "Само локално"
 
 #: ../gtk/gtkfilechooser.c:223
 msgid "Whether the selected file(s) should be limited to local file: URLs"
@@ -1945,7 +1945,7 @@ msgstr ""
 
 #: ../gtk/gtkfilechooser.c:228
 msgid "Preview widget"
-msgstr ""
+msgstr "Преглед на копче"
 
 #: ../gtk/gtkfilechooser.c:229
 msgid "Application supplied widget for custom previews."
@@ -1961,7 +1961,7 @@ msgstr ""
 
 #: ../gtk/gtkfilechooser.c:240
 msgid "Use Preview Label"
-msgstr ""
+msgstr "Користи ознака за преглед"
 
 #: ../gtk/gtkfilechooser.c:241
 msgid "Whether to display a stock label with the name of the previewed file."
@@ -1973,7 +1973,7 @@ msgstr "Додатно копче"
 
 #: ../gtk/gtkfilechooser.c:247
 msgid "Application supplied widget for extra options."
-msgstr ""
+msgstr "Апликацијата нуди копчиња за додатни опции"
 
 #: ../gtk/gtkfilechooser.c:252
 msgid "Select Multiple"
