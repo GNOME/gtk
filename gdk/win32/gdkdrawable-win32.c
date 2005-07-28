@@ -1737,17 +1737,17 @@ blit_from_pixmap (gboolean              use_fg_bg,
 }
 
 static void
-blit_inside_window (HDC      	hdc,
-		    GdkGCWin32 *gcwin32,
-		    gint     	xsrc,
-		    gint     	ysrc,
-		    gint     	xdest,
-		    gint     	ydest,
-		    gint     	width,
-		    gint     	height)
+blit_inside_drawable (HDC      	hdc,
+		      GdkGCWin32 *gcwin32,
+		      gint     	xsrc,
+		      gint     	ysrc,
+		      gint     	xdest,
+		      gint     	ydest,
+		      gint     	width,
+		      gint     	height)
 
 {
-  GDK_NOTE (MISC, g_print ("blit_inside_window\n"));
+  GDK_NOTE (MISC, g_print ("blit_inside_drawable\n"));
 
   GDI_CALL (BitBlt, (hdc, xdest, ydest, width, height,
 		     hdc, xsrc, ysrc, rop2_to_rop3 (gcwin32->rop2)));
@@ -1801,7 +1801,7 @@ blit_from_window (HDC                   hdc,
 
 void
 _gdk_win32_blit (gboolean              use_fg_bg,
-		 GdkDrawableImplWin32 *drawable,
+		 GdkDrawableImplWin32 *draw_impl,
 		 GdkGC       	      *gc,
 		 GdkDrawable 	      *src,
 		 gint        	       xsrc,
@@ -1814,7 +1814,6 @@ _gdk_win32_blit (gboolean              use_fg_bg,
   HDC hdc;
   HRGN src_rgn, draw_rgn, outside_rgn;
   RECT r;
-  GdkDrawableImplWin32 *draw_impl;
   GdkDrawableImplWin32 *src_impl = NULL;
   gint src_width, src_height;
   
@@ -1822,7 +1821,7 @@ _gdk_win32_blit (gboolean              use_fg_bg,
 			   "                 dst:%s @+%d+%d use_fg_bg=%d\n",
 			   _gdk_win32_drawable_description (src),
 			   width, height, xsrc, ysrc,
-			   _gdk_win32_drawable_description ((GdkDrawable *) drawable),
+			   _gdk_win32_drawable_description (&draw_impl->parent_instance),
 			   xdest, ydest,
 			   use_fg_bg));
 
@@ -1836,8 +1835,6 @@ _gdk_win32_blit (gboolean              use_fg_bg,
       ysrc -= _gdk_offset_y;
     }
 
-  draw_impl = (GdkDrawableImplWin32 *) drawable;
-
   if (GDK_IS_DRAWABLE_IMPL_WIN32 (src))
     src_impl = (GdkDrawableImplWin32 *) src;
   else if (GDK_IS_WINDOW (src))
@@ -1847,7 +1844,7 @@ _gdk_win32_blit (gboolean              use_fg_bg,
   else
     g_assert_not_reached ();
 
-  hdc = gdk_win32_hdc_get ((GdkDrawable *) drawable, gc, GDK_GC_FOREGROUND);
+  hdc = gdk_win32_hdc_get (&draw_impl->parent_instance, gc, GDK_GC_FOREGROUND);
 
   gdk_drawable_get_size (src, &src_width, &src_height);
 
@@ -1913,15 +1910,15 @@ _gdk_win32_blit (gboolean              use_fg_bg,
       GDI_CALL (DeleteObject, (draw_rgn));
     }
 
-  if (GDK_IS_PIXMAP_IMPL_WIN32 (src_impl))
+  if (draw_impl->handle == src_impl->handle)
+    blit_inside_drawable (hdc, GDK_GC_WIN32 (gc), xsrc, ysrc, xdest, ydest, width, height);
+  else if (GDK_IS_PIXMAP_IMPL_WIN32 (src_impl))
     blit_from_pixmap (use_fg_bg, draw_impl, hdc,
 		      (GdkPixmapImplWin32 *) src_impl, GDK_GC_WIN32 (gc),
 		      xsrc, ysrc, xdest, ydest, width, height);
-  else if (draw_impl->handle == src_impl->handle)
-    blit_inside_window (hdc, GDK_GC_WIN32 (gc), xsrc, ysrc, xdest, ydest, width, height);
   else
     blit_from_window (hdc, GDK_GC_WIN32 (gc), src_impl, xsrc, ysrc, xdest, ydest, width, height);
-  gdk_win32_hdc_release ((GdkDrawable *) drawable, gc, GDK_GC_FOREGROUND);
+  gdk_win32_hdc_release (&draw_impl->parent_instance, gc, GDK_GC_FOREGROUND);
 }
 
 static void

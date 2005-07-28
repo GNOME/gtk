@@ -1,3 +1,14 @@
+2005-07-29  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkdrawable-win32.c (blit_inside_drawable): Rename
+	from blit_inside_window(), as it now does blitting inside a
+	bitmap, too. No code change, still just call BitBlt().
+	(_gdk_win32_blit): Check for source equalling destination
+	first. (#169508, #131977) 
+	Do away with the superfluous local draw_impl variable, the
+	parameter to this function is already a GdkDrawableImplWin32*, no
+	need to copy and cast it.
+
 2005-07-28  Robert Ögren  <gtk@roboros.com>
 
 	Avoid spurious core pointer events when the tablet pen is lifted.
