@@ -1,3 +1,13 @@
+2005-07-28  Robert Ögren  <gtk@roboros.com>
+
+	Avoid spurious core pointer events when the tablet pen is lifted.
+	(#167000)
+
+	* gdk/win32/gdkinput-win32.c (set_ignore_core): New static function,
+	handles delayed unsetting of _gdk_input_ignore_core.
+	(_gdk_input_other_event): Call set_ignore_core instead of setting
+	_gdk_input_ignore_core directly.
+
 2005-07-28  Dom Lachowicz <cinamod@hotmail.com>
 
 	* modules/engines/ms-windows/*: Re-sync with gtk-wimp CVS. Notable
