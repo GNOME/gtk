@@ -45,6 +45,8 @@
 
 #define DEBUG_WINTAB 1		/* Verbose debug messages enabled */
 
+#define PROXIMITY_OUT_DELAY 200 /* In milliseconds, see set_ignore_core */
+
 #endif
 
 #if defined(HAVE_WINTAB) || defined(HAVE_WHATEVER_OTHER)
@@ -652,6 +654,47 @@ get_modifier_key_state (void)
   return state;
 }
 
+#ifdef HAVE_WINTAB
+
+static guint ignore_core_timer = 0;
+
+static gboolean
+ignore_core_timefunc (gpointer data)
+{
+  /* The delay has passed */
+  _gdk_input_ignore_core = FALSE;
+  ignore_core_timer = 0;
+
+  return FALSE; /* remove timeout */
+}
+
+/*
+ * Set or unset the _gdk_input_ignore_core variable that tells GDK
+ * to ignore events for the core pointer when the tablet is in proximity
+ * The unsetting is delayed slightly so that if a tablet event arrives
+ * just after proximity out, it does not cause a core pointer event
+ * which e.g. causes GIMP to switch tools.
+ */
+static void
+set_ignore_core (gboolean ignore)
+{
+  if (ignore)
+    {
+      _gdk_input_ignore_core = TRUE;
+      /* Remove any pending clear */
+      if (ignore_core_timer)
+        {
+	  g_source_remove (ignore_core_timer);
+	  ignore_core_timer = 0;
+	}
+    }
+  else
+    if (!ignore_core_timer)
+      ignore_core_timer = g_timeout_add (PROXIMITY_OUT_DELAY,
+					 ignore_core_timefunc, NULL);
+}
+#endif /* HAVE_WINTAB */
+
 gboolean 
 _gdk_input_other_event (GdkEvent  *event,
 			MSG       *msg,
@@ -934,12 +977,12 @@ _gdk_input_other_event (GdkEvent  *event,
       if (LOWORD (msg->lParam) == 0)
 	{
 	  event->proximity.type = GDK_PROXIMITY_OUT;
-	  _gdk_input_ignore_core = FALSE;
+	  set_ignore_core (FALSE);
 	}
       else
 	{
 	  event->proximity.type = GDK_PROXIMITY_IN;
-	  _gdk_input_ignore_core = TRUE;
+	  set_ignore_core (TRUE);
 	}
       event->proximity.time = _gdk_win32_get_next_tick (msg->time);
       event->proximity.device = &gdkdev->info;

@@ -1,3 +1,13 @@
+2005-07-28  Robert Ögren  <gtk@roboros.com>
+
+	Avoid spurious core pointer events when the tablet pen is lifted.
+	(#167000)
+
+	* gdk/win32/gdkinput-win32.c (set_ignore_core): New static function,
+	handles delayed unsetting of _gdk_input_ignore_core.
+	(_gdk_input_other_event): Call set_ignore_core instead of setting
+	_gdk_input_ignore_core directly.
+
 2005-07-27  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkmain-win32.c (_gdk_win32_psstyle_to_string): Handle
@@ -52,7 +62,7 @@
 	them for staleness like the other caches.  (#310221, Mark 
 	McLoughlin)
 
-2005-07-13  Robert �gren  <gtk@roboros.com>
+2005-07-13  Robert Ögren  <gtk@roboros.com>
 
 	Fix handling of Aiptek and Aiptek-like graphical tablets such as Trust
 	on Windows. (#167004, thanks to	"pnohant" for testing)
