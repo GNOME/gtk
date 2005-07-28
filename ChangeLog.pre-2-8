@@ -1,5 +1,18 @@
 2005-07-29  Tor Lillqvist  <tml@novell.com>
 
+	* gdk/win32/gdkevents-win32.c (generate_grab_broken_event): New
+	static function to generate and append the GDK_GRAB_BROKEN events.
+
+	(gdk_pointer_grab, gdk_keyboard_grab): Generate grab broken events
+	when overriding a grab inside the application, like in the X11
+	backend. Final bits of the fix for #107320, hopefully.
+
+	(print_event): Handle also GDK_SETTING, GDK_OWNER_CHANGE and
+	GDK_GRAB_BROKEN events.
+
+	(gdk_event_translate): Call generate_grab_broken_event() in place
+	of inline code.
+	
 	* gdk/win32/gdkdrawable-win32.c (blit_inside_drawable): Rename
 	from blit_inside_window(), as it now does blitting inside a
 	bitmap, too. No code change, still just call BitBlt().

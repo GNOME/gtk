@@ -246,6 +246,22 @@ generate_focus_event (GdkWindow *window,
   append_event (gdk_drawable_get_display (window), event);
 }
 
+static void
+generate_grab_broken_event (GdkWindow *window,
+			    gboolean   keyboard,
+			    GdkWindow *grab_window)
+{
+  GdkEvent *event = gdk_event_new (GDK_GRAB_BROKEN);
+
+  event->grab_broken.window = window;
+  event->grab_broken.send_event = 0;
+  event->grab_broken.keyboard = keyboard;
+  event->grab_broken.implicit = FALSE;
+  event->grab_broken.grab_window = grab_window;
+	  
+  append_event (gdk_drawable_get_display (window), event);
+}
+
 static LRESULT 
 inner_window_procedure (HWND   hwnd,
 			UINT   message,
@@ -581,6 +597,10 @@ gdk_pointer_grab (GdkWindow    *window,
   if (return_val == GDK_GRAB_SUCCESS)
     {
       GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) window)->impl);
+
+      if (p_grab_window != NULL && p_grab_window != window)
+	generate_grab_broken_event (p_grab_window, FALSE, window);
+      
       p_grab_window = window;
 
       if (p_grab_cursor != NULL)
@@ -752,6 +772,9 @@ gdk_keyboard_grab (GdkWindow *window,
 
   if (return_val == GDK_GRAB_SUCCESS)
     {
+      if (k_grab_window != NULL && k_grab_window != window)
+	generate_grab_broken_event (k_grab_window, TRUE, window);
+
       k_grab_window = window;
 
       if (!k_grab_owner_events)
@@ -1077,6 +1100,8 @@ print_event (GdkEvent *event)
     CASE (GDK_SCROLL);
     CASE (GDK_WINDOW_STATE);
     CASE (GDK_SETTING);
+    CASE (GDK_OWNER_CHANGE);
+    CASE (GDK_GRAB_BROKEN);
 #undef CASE
     default: g_assert_not_reached ();
     }
@@ -1165,6 +1190,18 @@ print_event (GdkEvent *event)
       g_print ("%s: %s",
 	       _gdk_win32_window_state_to_string (event->window_state.changed_mask),
 	       _gdk_win32_window_state_to_string (event->window_state.new_window_state));
+    case GDK_SETTING:
+      g_print ("%s: %s",
+	       (event->setting.action == GDK_SETTING_ACTION_NEW ? "NEW" :
+		(event->setting.action == GDK_SETTING_ACTION_CHANGED ? "CHANGED" :
+		 (event->setting.action == GDK_SETTING_ACTION_DELETED ? "DELETED" :
+		  "???"))),
+	       (event->setting.name ? event->setting.name : "NULL"));
+    case GDK_GRAB_BROKEN:
+      g_print ("%s %s %p",
+	       (event->grab_broken.keyboard ? "KEYBOARD" : "POINTER"),
+	       (event->grab_broken.implicit ? "IMPLICIT" : "EXPLICIT"),
+	       (event->grab_broken.grab_window ? GDK_WINDOW_HWND (event->grab_broken.grab_window) : 0));
     default:
       /* Nothing */
       break;
@@ -2921,26 +2958,11 @@ gdk_event_translate (GdkDisplay *display,
 
     case WM_KILLFOCUS:
       if (p_grab_window != NULL && !GDK_WINDOW_DESTROYED (p_grab_window))
-	{
-	  event = gdk_event_new (GDK_GRAB_BROKEN);
-	  event->grab_broken.window = p_grab_window;
-	  event->grab_broken.send_event = 0;
-	  event->grab_broken.keyboard = FALSE;
-	  event->grab_broken.grab_window = NULL;
-	  
-          append_event (display, event);
-	}
+	generate_grab_broken_event (p_grab_window, FALSE, NULL);
+
       if (k_grab_window != NULL && !GDK_WINDOW_DESTROYED (k_grab_window) 
 	  && k_grab_window != p_grab_window)
-	{
-	  event = gdk_event_new (GDK_GRAB_BROKEN);
-	  event->grab_broken.window = k_grab_window;
-	  event->grab_broken.send_event = 0;
-	  event->grab_broken.keyboard = TRUE;
-	  event->grab_broken.grab_window = NULL;
-
-          append_event (display, event);
-	}
+	generate_grab_broken_event (k_grab_window, TRUE, NULL);
 
       /* fallthrough */
     case WM_SETFOCUS:
