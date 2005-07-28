@@ -1,3 +1,13 @@
+2005-07-28  Dom Lachowicz <cinamod@hotmail.com>
+
+	* modules/engines/ms-windows/*: Re-sync with gtk-wimp CVS. Notable
+	changes include: menu/toolbars have a gradient applied to them; better
+	handling of menu/toolbar shadows, tracking theme settings;
+	sliders/scales now use XP theming; status bar grippies drawn properly;
+	convincing toolbar grippies are drawn for the Win2k theme; notebook
+	tabs now have that orange stripe across their top; a host of scrollbar
+	bugs are fixed
+	
 2005-07-27  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkmain-win32.c (_gdk_win32_psstyle_to_string): Handle

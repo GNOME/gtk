@@ -51,6 +51,35 @@
 #define TMT_MSGBOXFONT 805
 #endif
 
+#define GP_LINEHORZ 2
+#define GP_LINEVERT 3
+#define TP_SEPARATOR           5
+#define TP_SEPARATORVERT       6
+
+/* GLOBALS LINEHORZ states */
+#define LHS_FLAT   1
+#define LHS_RAISED 2
+#define LHS_SUNKEN 3
+
+/* GLOBAL LINEVERT states */
+#define LVS_FLAT   1
+#define LVS_RAISED 2
+#define LVS_SUNKEN 3
+
+/* TRACKBAR parts */
+#define TKP_TRACK       1
+#define TKP_TRACKVERT   2
+#define TKP_THUMB       3
+#define TKP_THUMBBOTTOM 4
+#define TKP_THUMBTOP    5
+#define TKP_THUMBVERT   6
+#define TKP_THUMBLEFT   7
+#define TKP_THUMBRIGHT  8
+#define TKP_TICS        9
+#define TKP_TICSVERT    10
+
+#define TRS_NORMAL 1
+
 static const LPCWSTR class_descriptors[] =
 {
   L"Scrollbar", /* XP_THEME_CLASS_SCROLLBAR */
@@ -68,7 +97,8 @@ static const LPCWSTR class_descriptors[] =
   L"Globals",   /* XP_THEME_CLASS_GLOBALS */
   L"Menu",      /* XP_THEME_CLASS_MENU */
   L"Window",    /* XP_THEME_CLASS_WINDOW */
-  L"Status"     /* XP_THEME_CLASS_STATUS */
+  L"Status",    /* XP_THEME_CLASS_STATUS */
+  L"Trackbar"   /* XP_THEME_CLASS_TRACKBAR */
 };
 
 static const short element_part_map[]=
@@ -105,7 +135,7 @@ static const short element_part_map[]=
   PP_BAR,
   PP_BARVERT,
   TTP_STANDARD,
-  RP_BAND,
+  0 /*RP_BAND*/,
   RP_GRIPPER,
   RP_GRIPPERVERT,
   RP_CHEVRON,
@@ -113,7 +143,17 @@ static const short element_part_map[]=
   MP_MENUITEM,
   MP_SEPARATOR,
   SP_GRIPPER,
-  SP_PANE
+  SP_PANE,
+  GP_LINEHORZ,
+  GP_LINEVERT,
+  TP_SEPARATOR,
+  TP_SEPARATORVERT,
+  TKP_TRACK,
+  TKP_TRACKVERT,
+  TKP_THUMB,
+  TKP_THUMBVERT,
+  TKP_TICS,
+  TKP_TICSVERT
 };
 
 static HINSTANCE uxtheme_dll = NULL;
@@ -172,9 +212,8 @@ xp_theme_init (void)
   memset(open_themes, 0, sizeof(open_themes));
 
   uxtheme_dll = LoadLibrary("uxtheme.dll");
-  if (!uxtheme_dll) {
+  if (!uxtheme_dll)
 	  return;
-  }
 
   is_app_themed_func = (IsAppThemedFunc) GetProcAddress(uxtheme_dll, "IsAppThemed");
 
@@ -251,12 +290,23 @@ xp_theme_get_handle_by_element (XpThemeElement element)
       klazz = XP_THEME_CLASS_REBAR;
       break;
 
+    case XP_THEME_ELEMENT_SCALE_TROUGH_H:
+    case XP_THEME_ELEMENT_SCALE_TROUGH_V:
+    case XP_THEME_ELEMENT_SCALE_SLIDER_H:
+    case XP_THEME_ELEMENT_SCALE_SLIDER_V:
+    case XP_THEME_ELEMENT_SCALE_TICS_H:
+    case XP_THEME_ELEMENT_SCALE_TICS_V:
+		klazz = XP_THEME_CLASS_TRACKBAR;
+    	break;
+
     case XP_THEME_ELEMENT_STATUS_GRIPPER:
     case XP_THEME_ELEMENT_STATUS_PANE:
       klazz = XP_THEME_CLASS_STATUS;
       break;
 
 	case XP_THEME_ELEMENT_TOOLBAR_BUTTON:
+	case XP_THEME_ELEMENT_TOOLBAR_SEPARATOR_H:
+    case XP_THEME_ELEMENT_TOOLBAR_SEPARATOR_V:
       klazz = XP_THEME_CLASS_TOOLBAR;
       break;
 
@@ -323,6 +373,11 @@ xp_theme_get_handle_by_element (XpThemeElement element)
       klazz = XP_THEME_CLASS_TREEVIEW;
       break;
 
+	case XP_THEME_ELEMENT_LINE_H:
+	case XP_THEME_ELEMENT_LINE_V:
+		klazz = XP_THEME_CLASS_GLOBALS;
+		break;
+
     default:
       break;
     }
@@ -351,7 +406,7 @@ xp_theme_map_gtk_state (XpThemeElement element, GtkStateType state)
 
     case XP_THEME_ELEMENT_REBAR_GRIPPER_H:
     case XP_THEME_ELEMENT_REBAR_GRIPPER_V:
-      ret = CHEVS_NORMAL;
+      ret = 0;
       break;
 
 	case XP_THEME_ELEMENT_STATUS_GRIPPER:
@@ -373,6 +428,11 @@ xp_theme_map_gtk_state (XpThemeElement element, GtkStateType state)
           ret =  CHEVS_NORMAL;
 	}
       break;
+
+	case XP_THEME_ELEMENT_TOOLBAR_SEPARATOR_H:
+    case XP_THEME_ELEMENT_TOOLBAR_SEPARATOR_V:
+		ret = TS_NORMAL;
+		break;
 
 	case XP_THEME_ELEMENT_TOOLBAR_BUTTON:
 		switch (state)
@@ -430,10 +490,13 @@ xp_theme_map_gtk_state (XpThemeElement element, GtkStateType state)
         }
       break;
 
-    case XP_THEME_ELEMENT_SCROLLBAR_H:
-    case XP_THEME_ELEMENT_SCROLLBAR_V:
     case XP_THEME_ELEMENT_TROUGH_H:
     case XP_THEME_ELEMENT_TROUGH_V:
+		ret = SCRBS_NORMAL;
+		break;
+
+    case XP_THEME_ELEMENT_SCROLLBAR_H:
+    case XP_THEME_ELEMENT_SCROLLBAR_V:
       switch(state)
         {
         case GTK_STATE_SELECTED:
@@ -635,6 +698,27 @@ xp_theme_map_gtk_state (XpThemeElement element, GtkStateType state)
 		}
 		break;
 
+	case XP_THEME_ELEMENT_LINE_H:
+		switch(state) {
+			/* LHS_FLAT, LHS_RAISED, LHS_SUNKEN */
+			ret = LHS_RAISED;
+			break;
+		}
+		break;
+
+	case XP_THEME_ELEMENT_LINE_V:
+		switch(state) {
+			/* LVS_FLAT, LVS_RAISED, LVS_SUNKEN */
+			ret = LVS_RAISED;
+			break;
+		}
+		break;
+
+    case XP_THEME_ELEMENT_SCALE_TROUGH_H:
+    case XP_THEME_ELEMENT_SCALE_TROUGH_V:
+		ret = TRS_NORMAL;
+    	break;
+
     default:
       switch(state)
         {
@@ -713,34 +797,13 @@ xp_theme_draw (GdkWindow *win, XpThemeElement element, GtkStyle *style,
 
   part_state = xp_theme_map_gtk_state(element, state_type);
 
-#ifdef GNATS_HACK
-  if (element == XP_THEME_ELEMENT_REBAR_GRIPPER_V
-      || element == XP_THEME_ELEMENT_REBAR_GRIPPER_H)
-    {
-      /* Hack alert: when XP draws a gripper, it does not seem to fill
-         up the whole rectangle. It only fills the gripper line
-         itself. Therefore we manually fill up the background here
-         ourselves. I still have to look into this a bit further, as
-         tests with GNAT Programming System show some awkward
-         interference between this FillRect and the subsequent
-         DrawThemeBackground(). */
-      FillRect (dc, &rect, (HBRUSH) (COLOR_3DFACE+1));
-    }
-#endif
-
-  if (is_theme_partially_transparent_func && draw_theme_parent_background_func &&
-  		is_theme_partially_transparent_func(theme, element_part_map[element], part_state))
-  {
-    draw_theme_parent_background_func(GDK_WINDOW_HWND(win), dc, pClip);
-  }
-
   draw_theme_background_func(theme, dc, element_part_map[element], part_state, &rect, pClip);
   gdk_win32_hdc_release(drawable, style->dark_gc[state_type], 0);
 
   return TRUE;
 }
 
-static gboolean
+gboolean
 xp_theme_is_active (void)
 {
   gboolean active = FALSE;
@@ -768,13 +831,13 @@ xp_theme_is_drawable (XpThemeElement element)
 }
 
 gboolean
-xp_theme_get_system_font (XpThemeClass klazz, XpThemeFont fontId, LOGFONT *lf)
+xp_theme_get_system_font (XpThemeClass klazz, XpThemeFont fontId, OUT LOGFONT *lf)
 {
-  int themeFont;
-
-  if (get_theme_sys_font_func != NULL)
+  if (xp_theme_is_active () && get_theme_sys_font_func != NULL)
     {
       HTHEME theme = xp_theme_get_handle_by_class(klazz);
+	  int themeFont;
+
       if (!theme)
         return FALSE;
 
@@ -797,9 +860,9 @@ xp_theme_get_system_font (XpThemeClass klazz, XpThemeFont fontId, LOGFONT *lf)
 }
 
 gboolean
-xp_theme_get_system_color (XpThemeClass klazz, int colorId, DWORD * pColor)
+xp_theme_get_system_color (XpThemeClass klazz, int colorId, OUT DWORD * pColor)
 {
-  if (get_theme_sys_color_func != NULL)
+  if (xp_theme_is_active () && get_theme_sys_color_func != NULL)
     {
       HTHEME theme = xp_theme_get_handle_by_class(klazz);
 
@@ -811,9 +874,9 @@ xp_theme_get_system_color (XpThemeClass klazz, int colorId, DWORD * pColor)
 }
 
 gboolean
-xp_theme_get_system_metric (XpThemeClass klazz, int metricId, int * pVal)
+xp_theme_get_system_metric (XpThemeClass klazz, int metricId, OUT int * pVal)
 {
-  if (get_theme_sys_metric_func != NULL)
+  if (xp_theme_is_active () && get_theme_sys_metric_func != NULL)
     {
       HTHEME theme = xp_theme_get_handle_by_class(klazz);
 

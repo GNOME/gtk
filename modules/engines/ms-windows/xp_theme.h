@@ -43,6 +43,7 @@ typedef enum
   XP_THEME_CLASS_MENU,
   XP_THEME_CLASS_WINDOW,
   XP_THEME_CLASS_STATUS,
+  XP_THEME_CLASS_TRACKBAR,
   XP_THEME_CLASS__SIZEOF
 } XpThemeClass;
 
@@ -89,6 +90,16 @@ typedef enum
   XP_THEME_ELEMENT_MENU_SEPARATOR,
   XP_THEME_ELEMENT_STATUS_GRIPPER,
   XP_THEME_ELEMENT_STATUS_PANE,
+  XP_THEME_ELEMENT_LINE_H,
+  XP_THEME_ELEMENT_LINE_V,
+  XP_THEME_ELEMENT_TOOLBAR_SEPARATOR_H,
+  XP_THEME_ELEMENT_TOOLBAR_SEPARATOR_V,
+  XP_THEME_ELEMENT_SCALE_TROUGH_H,
+  XP_THEME_ELEMENT_SCALE_TROUGH_V,
+  XP_THEME_ELEMENT_SCALE_SLIDER_H,
+  XP_THEME_ELEMENT_SCALE_SLIDER_V,
+  XP_THEME_ELEMENT_SCALE_TICS_H,
+  XP_THEME_ELEMENT_SCALE_TICS_V,
   XP_THEME_ELEMENT__SIZEOF
 } XpThemeElement;
 
@@ -108,8 +119,10 @@ gboolean xp_theme_draw (GdkWindow *win, XpThemeElement element,
                         int height, GtkStateType state_type,
                         GdkRectangle *area);
 gboolean xp_theme_is_drawable (XpThemeElement element);
-gboolean xp_theme_get_system_font (XpThemeClass klazz, XpThemeFont fontId, LOGFONT *lf);
-gboolean xp_theme_get_system_color (XpThemeClass klazz, int colorId, DWORD * pColor);
-gboolean xp_theme_get_system_metric (XpThemeClass klazz, int metricId, int * pVal);
+gboolean xp_theme_get_system_font (XpThemeClass klazz, XpThemeFont fontId, OUT LOGFONT *lf);
+gboolean xp_theme_get_system_color (XpThemeClass klazz, int colorId, OUT DWORD * pColor);
+gboolean xp_theme_get_system_metric (XpThemeClass klazz, int metricId, OUT int * pVal);
+
+gboolean xp_theme_is_active (void);
 
 #endif /* XP_THEME_H */
