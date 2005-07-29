@@ -2,8 +2,8 @@
 
 	* gdk/win32/gdkevents-win32.c: Remove ifdeffed out code relating
 	to the gdk-ping message. Use the global _gdk_display instead of
-	calling gdk_display_get_default() which would return _gdk_display
-	anyway.
+	calling gdk_display_get_default() or gdk_drawable_get_display()
+	which would return _gdk_display anyway.
 
 	(append_event, apply_filters, gdk_event_translate): Drop any
 	GdkDisplay parameter as we only have one display anyway. Use

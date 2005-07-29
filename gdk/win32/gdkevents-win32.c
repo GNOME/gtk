@@ -2089,7 +2089,7 @@ handle_wm_paint (MSG        *msg,
     {
       if (!GDK_WINDOW_DESTROYED (window))
 	{
-	  GList *list = gdk_drawable_get_display (window)->queued_events;
+	  GList *list = _gdk_display->queued_events;
 
 	  *event = gdk_event_new (GDK_EXPOSE);
 	  (*event)->expose.window = window;
@@ -2221,15 +2221,13 @@ gdk_event_translate (MSG  *msg,
     {
       /* Apply global filters */
 
-      GdkFilterReturn result =
-	apply_filters (NULL, msg, _gdk_default_filters);
+      GdkFilterReturn result = apply_filters (NULL, msg, _gdk_default_filters);
       
       /* If result is GDK_FILTER_CONTINUE, we continue as if nothing
        * happened. If it is GDK_FILTER_REMOVE or GDK_FILTER_TRANSLATE,
        * we return TRUE, and DefWindowProc() will not be called.
        */
-      if (result == GDK_FILTER_REMOVE ||
-	  result == GDK_FILTER_TRANSLATE)
+      if (result == GDK_FILTER_REMOVE || result == GDK_FILTER_TRANSLATE)
 	return TRUE;
     }
 
@@ -2283,8 +2281,7 @@ gdk_event_translate (MSG  *msg,
     {
       /* Apply per-window filters */
 
-      GdkFilterReturn result =
-	apply_filters (window, msg, ((GdkWindowObject *) window)->filters);
+      GdkFilterReturn result = apply_filters (window, msg, ((GdkWindowObject *) window)->filters);
 
       if (result == GDK_FILTER_REMOVE || result == GDK_FILTER_TRANSLATE)
 	{
@@ -2369,8 +2366,7 @@ gdk_event_translate (MSG  *msg,
 	    }
 	}
 
-      if (result == GDK_FILTER_REMOVE ||
-	  result == GDK_FILTER_TRANSLATE)
+      if (result == GDK_FILTER_REMOVE || result == GDK_FILTER_TRANSLATE)
 	{
 	  return_val = TRUE;
 	  goto done;
@@ -2864,7 +2860,6 @@ gdk_event_translate (MSG  *msg,
       event->scroll.window = window;
       event->scroll.direction = (((short) HIWORD (msg->wParam)) > 0) ?
 	GDK_SCROLL_UP : GDK_SCROLL_DOWN;
-      event->scroll.window = window;
       event->scroll.time = _gdk_win32_get_next_tick (msg->time);
       _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
       event->scroll.x = (gint16) point.x + xoffset;
