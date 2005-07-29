@@ -749,6 +749,7 @@ EXTRA_DIST +=                   \
 	gtk.def			\
 	gtk-win32.rc		\
 	gtk-win32.rc.in		\
+	gtkwin32embed.h		\
 	gtkfilesystemwin32.h	\
 	gtkfilesystemwin32.c	\
 	gtkrc.default		\

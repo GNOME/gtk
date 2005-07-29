@@ -1,3 +1,8 @@
+2005-07-29  J. Ali Harlow  <ali@juiblex.co.uk>
+
+	* gtk/Makefile.am: Include gtkwin32embed.h in EXTRA_DIST
+	unconditionally. Fixes #311972.
+
 2005-07-28  Federico Mena Quintero  <federico@ximian.com>
 
 	* perf/README: Update for the new API of the profiler.
