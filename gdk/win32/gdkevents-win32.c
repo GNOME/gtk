@@ -93,17 +93,12 @@
  * Private function declarations
  */
 
-static GdkFilterReturn
-		 gdk_event_apply_filters(MSG      *msg,
-					 GdkEvent *event,
-					 GList    *filters);
-static gboolean  gdk_event_translate	(GdkDisplay *display,
-					 MSG	    *msg,
-					 gint       *ret_valp);
-static void      handle_wm_paint        (MSG        *msg,
-					 GdkWindow  *window,
-					 gboolean    return_exposes,
-					 GdkEvent  **event);
+static gboolean gdk_event_translate (MSG        *msg,
+				     gint       *ret_valp);
+static void     handle_wm_paint     (MSG        *msg,
+				     GdkWindow  *window,
+				     gboolean    return_exposes,
+				     GdkEvent  **event);
 
 static gboolean gdk_event_prepare  (GSource     *source,
 				    gint        *timeout);
@@ -112,8 +107,7 @@ static gboolean gdk_event_dispatch (GSource     *source,
 				    GSourceFunc  callback,
 				    gpointer     user_data);
 
-static void append_event (GdkDisplay *display,
-			  GdkEvent   *event);
+static void append_event (GdkEvent *event);
 
 /* Private variable declarations
  */
@@ -146,9 +140,6 @@ GPollFD event_poll_fd;
 
 static GdkWindow *current_window = NULL;
 static gint current_x, current_y;
-#if 0
-static UINT gdk_ping_msg;
-#endif
 static UINT msh_mousewheel;
 static UINT client_message;
 
@@ -243,7 +234,7 @@ generate_focus_event (GdkWindow *window,
   event->focus_change.window = window;
   event->focus_change.in = in;
 
-  append_event (gdk_drawable_get_display (window), event);
+  append_event (event);
 }
 
 static void
@@ -259,7 +250,7 @@ generate_grab_broken_event (GdkWindow *window,
   event->grab_broken.implicit = FALSE;
   event->grab_broken.grab_window = grab_window;
 	  
-  append_event (gdk_drawable_get_display (window), event);
+  append_event (event);
 }
 
 static LRESULT 
@@ -268,7 +259,6 @@ inner_window_procedure (HWND   hwnd,
 			WPARAM wparam,
 			LPARAM lparam)
 {
-  GdkDisplay *display = gdk_display_get_default ();
   MSG msg;
   DWORD pos;
 #ifdef HAVE_DIMM_H
@@ -285,7 +275,7 @@ inner_window_procedure (HWND   hwnd,
   msg.pt.x = GET_X_LPARAM (pos);
   msg.pt.y = GET_Y_LPARAM (pos);
 
-  if (gdk_event_translate (display, &msg, &ret_val))
+  if (gdk_event_translate (&msg, &ret_val))
     {
       /* If gdk_event_translate() returns TRUE, we return ret_val from
        * the window procedure.
@@ -380,11 +370,6 @@ _gdk_events_init (void)
   };
 #endif
 
-#if 0
-  gdk_ping_msg = RegisterWindowMessage ("gdk-ping");
-  GDK_NOTE (EVENTS, g_print ("gdk-ping = %#x\n", gdk_ping_msg));
-#endif
-
   /* This is the string MSH_MOUSEWHEEL from zmouse.h,
    * http://www.microsoft.com/mouse/intellimouse/sdk/zmouse.h
    * This message is used by mouse drivers than cannot generate WM_MOUSEWHEEL
@@ -476,9 +461,7 @@ gboolean
 gdk_events_pending (void)
 {
   MSG msg;
-  GdkDisplay *display = gdk_display_get_default ();
-
-  return (_gdk_event_queue_find_first (display) ||
+  return (_gdk_event_queue_find_first (_gdk_display) ||
 	  PeekMessage (&msg, NULL, 0, 0, PM_NOREMOVE));
 }
 
@@ -645,7 +628,7 @@ void
 gdk_display_pointer_ungrab (GdkDisplay *display,
                             guint32     time)
 {
-  g_return_if_fail (display == gdk_display_get_default ());
+  g_return_if_fail (display == _gdk_display);
 
   GDK_NOTE (EVENTS, g_print ("%sgdk_display_pointer_ungrab%s",
 			     (debug_indent > 0 ? "\n" : ""),
@@ -721,7 +704,7 @@ find_window_for_mouse_event (GdkWindow* reported_window,
 gboolean
 gdk_display_pointer_is_grabbed (GdkDisplay *display)
 {
-  g_return_val_if_fail (display == gdk_display_get_default (), FALSE);
+  g_return_val_if_fail (display == _gdk_display, FALSE);
   GDK_NOTE (EVENTS, g_print ("gdk_pointer_is_grabbed: %s\n",
 			     p_grab_window != NULL ? "TRUE" : "FALSE"));
   return p_grab_window != NULL;
@@ -732,7 +715,7 @@ gdk_pointer_grab_info_libgtk_only (GdkDisplay *display,
 				   GdkWindow **grab_window,
 				   gboolean   *owner_events)
 {
-  g_return_val_if_fail (display == gdk_display_get_default (), FALSE);
+  g_return_val_if_fail (display == _gdk_display, FALSE);
 
   if (p_grab_window != NULL)
     {
@@ -809,7 +792,7 @@ gdk_display_keyboard_ungrab (GdkDisplay *display,
 {
   GdkWindow *real_focus_window, *grab_focus_window;
 
-  g_return_if_fail (display == gdk_display_get_default ());
+  g_return_if_fail (display == _gdk_display);
 
   GDK_NOTE (EVENTS, g_print ("gdk_keyboard_ungrab\n"));
 
@@ -848,7 +831,7 @@ gdk_keyboard_grab_info_libgtk_only (GdkDisplay *display,
 				    GdkWindow **grab_window,
 				    gboolean   *owner_events)
 {
-  g_return_val_if_fail (display == gdk_display_get_default (), FALSE);
+  g_return_val_if_fail (display == _gdk_display, FALSE);
 
   if (k_grab_window)
     {
@@ -861,31 +844,6 @@ gdk_keyboard_grab_info_libgtk_only (GdkDisplay *display,
     }
   else
     return FALSE;
-}
-
-static GdkFilterReturn
-gdk_event_apply_filters (MSG      *msg,
-			 GdkEvent *event,
-			 GList    *filters)
-{
-  GdkEventFilter *filter;
-  GList *tmp_list;
-  GdkFilterReturn result;
-  
-  tmp_list = filters;
-  
-  while (tmp_list)
-    {
-      filter = (GdkEventFilter *) tmp_list->data;
-      
-      result = (*filter->function) (msg, event, filter->data);
-      if (result !=  GDK_FILTER_CONTINUE)
-	return result;
-      
-      tmp_list = tmp_list->next;
-    }
-  
-  return GDK_FILTER_CONTINUE;
 }
 
 void 
@@ -1243,11 +1201,10 @@ fixup_event (GdkEvent *event)
 }
 
 static void
-append_event (GdkDisplay *display,
-	      GdkEvent   *event)
+append_event (GdkEvent *event)
 {
   fixup_event (event);
-  _gdk_event_queue_append (display, event);
+  _gdk_event_queue_append (_gdk_display, event);
   GDK_NOTE (EVENTS, print_event (event));
 }
 
@@ -1319,33 +1276,40 @@ fill_key_event_string (GdkEvent *event)
 }
 
 static GdkFilterReturn
-apply_filters (GdkDisplay *display,
-	       GdkWindow  *window,
+apply_filters (GdkWindow  *window,
 	       MSG        *msg,
 	       GList      *filters)
 {
-  GdkFilterReturn result;
-  GdkEvent *event = gdk_event_new (GDK_NOTHING);
+  GdkFilterReturn result = GDK_FILTER_CONTINUE;
+  GdkEvent *event;
   GList *node;
+  GList *tmp_list;
 
+  event = gdk_event_new (GDK_NOTHING);
   if (window != NULL)
-    {
-      event->any.window = window;
-      g_object_ref (window);
-    }
+    event->any.window = g_object_ref (window);
   ((GdkEventPrivate *)event)->flags |= GDK_EVENT_PENDING;
 
   /* I think GdkFilterFunc semantics require the passed-in event
    * to already be in the queue. The filter func can generate
    * more events and append them after it if it likes.
    */
-  node = _gdk_event_queue_append (display, event);
+  node = _gdk_event_queue_append (_gdk_display, event);
   
-  result = gdk_event_apply_filters (msg, event, filters);
+  tmp_list = filters;
+  while (tmp_list)
+    {
+      GdkEventFilter *filter = (GdkEventFilter *) tmp_list->data;
       
+      tmp_list = tmp_list->next;
+      result = filter->function (msg, event, filter->data);
+      if (result !=  GDK_FILTER_CONTINUE)
+	break;
+    }
+
   if (result == GDK_FILTER_CONTINUE || result == GDK_FILTER_REMOVE)
     {
-      _gdk_event_queue_remove_link (display, node);
+      _gdk_event_queue_remove_link (_gdk_display, node);
       g_list_free_1 (node);
       gdk_event_free (event);
     }
@@ -1395,7 +1359,7 @@ synthesize_enter_or_leave_event (GdkWindow    	*window,
   event->crossing.focus = TRUE; /* FIXME: Set correctly */
   event->crossing.state = 0;	/* FIXME: Set correctly */
   
-  append_event (gdk_drawable_get_display (window), event);
+  append_event (event);
   
   if (type == GDK_ENTER_NOTIFY &&
       ((GdkWindowObject *) window)->extension_events != 0)
@@ -1607,7 +1571,7 @@ synthesize_expose_events (GdkWindow *window)
 	  event->expose.region = gdk_region_rectangle (&(event->expose.area));
 	  event->expose.count = 0;
   
-	  append_event (gdk_drawable_get_display (window), event);
+	  append_event (event);
 	}
       GDI_CALL (ReleaseDC, (impl->handle, hdc));
     }
@@ -1871,7 +1835,7 @@ handle_configure_event (MSG       *msg,
       event->configure.x = point.x;
       event->configure.y = point.y;
 
-      append_event (gdk_drawable_get_display (window), event);
+      append_event (event);
     }
 }
 
@@ -2189,10 +2153,41 @@ handle_display_change (void)
   g_signal_emit_by_name (_gdk_screen, "size_changed");
 }
 
+static void
+generate_button_event (GdkEventType type,
+		       gint         button,
+		       GdkWindow   *window,
+		       GdkWindow   *orig_window,
+		       MSG         *msg)
+{
+  GdkEvent *event = gdk_event_new (type);
+  gint xoffset, yoffset;
+
+  event->button.window = window;
+  event->button.time = _gdk_win32_get_next_tick (msg->time);
+  if (window != orig_window)
+    translate_mouse_coords (orig_window, window, msg);
+  event->button.x = current_x = (gint16) GET_X_LPARAM (msg->lParam);
+  event->button.y = current_y = (gint16) GET_Y_LPARAM (msg->lParam);
+  _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
+  event->button.x += xoffset;
+  event->button.y += yoffset;
+  event->button.x_root = msg->pt.x + _gdk_offset_x;
+  event->button.y_root = msg->pt.y + _gdk_offset_y;
+  event->button.axes = NULL;
+  event->button.state = build_pointer_event_state (msg);
+  event->button.button = button;
+  event->button.device = _gdk_display->core_pointer;
+
+  append_event (event);
+
+  if (type == GDK_BUTTON_PRESS)
+    _gdk_event_button_generate (_gdk_display, event);
+}
+
 static gboolean
-gdk_event_translate (GdkDisplay *display,
-		     MSG        *msg,
-		     gint       *ret_valp)
+gdk_event_translate (MSG  *msg,
+		     gint *ret_valp)
 {
   RECT rect, *drag, orig_drag;
   POINT point;
@@ -2227,7 +2222,7 @@ gdk_event_translate (GdkDisplay *display,
       /* Apply global filters */
 
       GdkFilterReturn result =
-	apply_filters (display, NULL, msg, _gdk_default_filters);
+	apply_filters (NULL, msg, _gdk_default_filters);
       
       /* If result is GDK_FILTER_CONTINUE, we continue as if nothing
        * happened. If it is GDK_FILTER_REMOVE or GDK_FILTER_TRANSLATE,
@@ -2289,10 +2284,9 @@ gdk_event_translate (GdkDisplay *display,
       /* Apply per-window filters */
 
       GdkFilterReturn result =
-	apply_filters (display, window, msg, ((GdkWindowObject *) window)->filters);
+	apply_filters (window, msg, ((GdkWindowObject *) window)->filters);
 
-      if (result == GDK_FILTER_REMOVE ||
-	  result == GDK_FILTER_TRANSLATE)
+      if (result == GDK_FILTER_REMOVE || result == GDK_FILTER_TRANSLATE)
 	{
 	  return_val = TRUE;
 	  goto done;
@@ -2303,7 +2297,7 @@ gdk_event_translate (GdkDisplay *display,
     {
       GDK_NOTE (EVENTS, g_print (" (MSH_MOUSEWHEEL)"));
       
-      /* MSG_MOUSEWHEEL is delivered to the foreground window.  Work
+      /* MSH_MOUSEWHEEL is delivered to the foreground window.  Work
        * around that. Also, the position is in screen coordinates, not
        * client coordinates as with the button messages.
        */
@@ -2339,9 +2333,9 @@ gdk_event_translate (GdkDisplay *display,
       event->scroll.x_root = (gint16) GET_X_LPARAM (msg->lParam) + _gdk_offset_x;
       event->scroll.y_root = (gint16) GET_Y_LPARAM (msg->lParam) + _gdk_offset_y;
       event->scroll.state = 0;	/* No state information with MSH_MOUSEWHEEL */
-      event->scroll.device = display->core_pointer;
+      event->scroll.device = _gdk_display->core_pointer;
 
-      append_event (display, event);
+      append_event (event);
 
       return_val = TRUE;
       goto done;
@@ -2366,7 +2360,7 @@ gdk_event_translate (GdkDisplay *display,
 	      
 	      GDK_NOTE (EVENTS, g_print (" (match)"));
 
-	      result = apply_filters (display, window, msg, filter_list);
+	      result = apply_filters (window, msg, filter_list);
 
 	      g_list_free (filter_list);
 
@@ -2393,7 +2387,7 @@ gdk_event_translate (GdkDisplay *display,
 	  for (i = 1; i < 5; i++)
 	    event->client.data.l[i] = 0;
 	  
-	  append_event (display, event);
+	  append_event (event);
 	  
 	  return_val = TRUE;
 	  goto done;
@@ -2515,7 +2509,7 @@ gdk_event_translate (GdkDisplay *display,
       if (msg->wParam == VK_MENU)
 	event->key.state &= ~GDK_MOD1_MASK;
 
-      append_event (display, event);
+      append_event (event);
 
       return_val = TRUE;
       break;
@@ -2586,7 +2580,7 @@ gdk_event_translate (GdkDisplay *display,
 	      event->key.window = window;
 	      build_wm_ime_composition_event (event, msg, wbuf[i], key_state);
 
-	      append_event (display, event);
+	      append_event (event);
 	    }
 	  
 	  if (((GdkWindowObject *) window)->event_mask & GDK_KEY_RELEASE_MASK)
@@ -2596,7 +2590,7 @@ gdk_event_translate (GdkDisplay *display,
 	      event->key.window = window;
 	      build_wm_ime_composition_event (event, msg, wbuf[i], key_state);
 
-	      append_event (display, event);
+	      append_event (event);
 	    }
 	}
       return_val = TRUE;
@@ -2660,26 +2654,8 @@ gdk_event_translate (GdkDisplay *display,
 	  p_grab_automatic = TRUE;
 	}
 
-      event = gdk_event_new (GDK_BUTTON_PRESS);
-      event->button.window = window;
-      event->button.time = _gdk_win32_get_next_tick (msg->time);
-      if (window != orig_window)
-	translate_mouse_coords (orig_window, window, msg);
-      event->button.x = current_x = (gint16) GET_X_LPARAM (msg->lParam);
-      event->button.y = current_y = (gint16) GET_Y_LPARAM (msg->lParam);
-      _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
-      event->button.x += xoffset;
-      event->button.y += yoffset;
-      event->button.x_root = msg->pt.x + _gdk_offset_x;
-      event->button.y_root = msg->pt.y + _gdk_offset_y;
-      event->button.axes = NULL;
-      event->button.state = build_pointer_event_state (msg);
-      event->button.button = button;
-      event->button.device = display->core_pointer;
-
-      append_event (display, event);
-
-      _gdk_event_button_generate (display, event);
+      generate_button_event (GDK_BUTTON_PRESS, button,
+			     window, orig_window, msg);
 
       return_val = TRUE;
       break;
@@ -2738,24 +2714,8 @@ gdk_event_translate (GdkDisplay *display,
 	}
       else if (!GDK_WINDOW_DESTROYED (window))
 	{
-	  event = gdk_event_new (GDK_BUTTON_RELEASE);
-	  event->button.window = window;
-	  event->button.time = _gdk_win32_get_next_tick (msg->time);
-	  if (window != orig_window)
-	    translate_mouse_coords (orig_window, window, msg);
-	  event->button.x = current_x = (gint16) GET_X_LPARAM (msg->lParam);
-	  event->button.y = current_y = (gint16) GET_Y_LPARAM (msg->lParam);
-	  _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
-	  event->button.x += xoffset;
-	  event->button.y += yoffset;
-	  event->button.x_root = msg->pt.x + _gdk_offset_x;
-	  event->button.y_root = msg->pt.y + _gdk_offset_y;
-	  event->button.axes = NULL;
-	  event->button.state = build_pointer_event_state (msg);
-	  event->button.button = button;
-	  event->button.device = display->core_pointer;
-
-	  append_event (display, event);
+	  generate_button_event (GDK_BUTTON_RELEASE, button,
+				 window, orig_window, msg);
 	}
 
       if (p_grab_window != NULL &&
@@ -2823,9 +2783,9 @@ gdk_event_translate (GdkDisplay *display,
       event->motion.axes = NULL;
       event->motion.state = build_pointer_event_state (msg);
       event->motion.is_hint = FALSE;
-      event->motion.device = display->core_pointer;
+      event->motion.device = _gdk_display->core_pointer;
 
-      append_event (display, event);
+      append_event (event);
 
       return_val = TRUE;
       break;
@@ -2912,9 +2872,9 @@ gdk_event_translate (GdkDisplay *display,
       event->scroll.x_root = (gint16) GET_X_LPARAM (msg->lParam) + _gdk_offset_x;
       event->scroll.y_root = (gint16) GET_Y_LPARAM (msg->lParam) + _gdk_offset_y;
       event->scroll.state = build_pointer_event_state (msg);
-      event->scroll.device = display->core_pointer;
+      event->scroll.device = _gdk_display->core_pointer;
 
-      append_event (display, event);
+      append_event (event);
       
       return_val = TRUE;
       break;
@@ -3033,7 +2993,7 @@ gdk_event_translate (GdkDisplay *display,
       event = gdk_event_new (msg->wParam ? GDK_MAP : GDK_UNMAP);
       event->any.window = window;
 
-      append_event (display, event);
+      append_event (event);
       
       if (event->any.type == GDK_UNMAP &&
 	  p_grab_window == window)
@@ -3166,7 +3126,7 @@ gdk_event_translate (GdkDisplay *display,
 #else /* Calling append_event() is slower, but guarantees that events won't
        * get reordered, I think.
        */
-	      append_event (display, event);
+	      append_event (event);
 #endif
 	      
 	      /* Dispatch main loop - to realize resizes... */
@@ -3383,7 +3343,7 @@ gdk_event_translate (GdkDisplay *display,
       event = gdk_event_new (GDK_DELETE);
       event->any.window = window;
 
-      append_event (display, event);
+      append_event (event);
 
       return_val = TRUE;
       break;
@@ -3407,7 +3367,7 @@ gdk_event_translate (GdkDisplay *display,
       event = gdk_event_new (GDK_DESTROY);
       event->any.window = window;
 
-      append_event (display, event);
+      append_event (event);
 
       return_val = TRUE;
       break;
@@ -3423,7 +3383,7 @@ gdk_event_translate (GdkDisplay *display,
 	  event->selection.window = window;
 	  event->selection.selection = GDK_SELECTION_CLIPBOARD;
 	  event->selection.time = _gdk_win32_get_next_tick (msg->time);
-          append_event (display, event);
+          append_event (event);
 	}
       else
 	return_val = TRUE;
@@ -3521,7 +3481,7 @@ gdk_event_translate (GdkDisplay *display,
       event->any.window = window;
       g_object_ref (window);
       if (_gdk_input_other_event (event, msg, window))
-	append_event (display, event);
+	append_event (event);
       else
 	gdk_event_free (event);
       break;
@@ -3556,13 +3516,12 @@ gdk_event_prepare (GSource *source,
 {
   MSG msg;
   gboolean retval;
-  GdkDisplay *display = gdk_display_get_default ();
-  
+
   GDK_THREADS_ENTER ();
 
   *timeout = -1;
 
-  retval = (_gdk_event_queue_find_first (display) != NULL ||
+  retval = (_gdk_event_queue_find_first (_gdk_display) != NULL ||
 	    PeekMessage (&msg, NULL, 0, 0, PM_NOREMOVE));
 
   GDK_THREADS_LEAVE ();
@@ -3575,12 +3534,11 @@ gdk_event_check (GSource *source)
 {
   MSG msg;
   gboolean retval;
-  GdkDisplay *display = gdk_display_get_default ();
   
   GDK_THREADS_ENTER ();
 
   if (event_poll_fd.revents & G_IO_IN)
-    retval = (_gdk_event_queue_find_first (display) != NULL ||
+    retval = (_gdk_event_queue_find_first (_gdk_display) != NULL ||
 	      PeekMessage (&msg, NULL, 0, 0, PM_NOREMOVE));
   else
     retval = FALSE;
@@ -3596,12 +3554,11 @@ gdk_event_dispatch (GSource     *source,
 		    gpointer     user_data)
 {
   GdkEvent *event;
-  GdkDisplay *display = gdk_display_get_default ();
  
   GDK_THREADS_ENTER ();
 
-  _gdk_events_queue (display);
-  event = _gdk_event_unqueue (display);
+  _gdk_events_queue (_gdk_display);
+  event = _gdk_event_unqueue (_gdk_display);
 
   if (event)
     {
@@ -3671,7 +3628,7 @@ gdk_display_sync (GdkDisplay * display)
 {
   MSG msg;
 
-  g_return_if_fail (display == gdk_display_get_default ());
+  g_return_if_fail (display == _gdk_display);
 
   /* Process all messages currently available */
   while (PeekMessage (&msg, NULL, 0, 0, PM_REMOVE))
@@ -3681,7 +3638,7 @@ gdk_display_sync (GdkDisplay * display)
 void
 gdk_display_flush (GdkDisplay * display)
 {
-  g_return_if_fail (display == gdk_display_get_default ());
+  g_return_if_fail (display == _gdk_display);
 
   /* Nothing */
 }

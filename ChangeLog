@@ -1,5 +1,23 @@
 2005-07-29  Tor Lillqvist  <tml@novell.com>
 
+	* gdk/win32/gdkevents-win32.c: Remove ifdeffed out code relating
+	to the gdk-ping message. Use the global _gdk_display instead of
+	calling gdk_display_get_default() which would return _gdk_display
+	anyway.
+
+	(append_event, apply_filters, gdk_event_translate): Drop any
+	GdkDisplay parameter as we only have one display anyway. Use
+	_gdk_display where needed.
+
+	(gdk_event_apply_filters): Delete, move the code into its only
+	caller, apply_filters().
+
+	(generate_button_event): Factor out code from two places in
+	gdk_event_translate().
+
+	(gdk_event_translate): Call generate_button_event() in place of
+	inline code.
+
 	* gdk/win32/gdkevents-win32.c (generate_grab_broken_event): New
 	static function to generate and append the GDK_GRAB_BROKEN events.
 
