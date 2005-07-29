@@ -263,7 +263,7 @@ static GnomeUIInfo menubar[] = {
 
       <programlisting>
 /* Normal items */
-static GtkActionEntry entries[] = {
+static const GtkActionEntry entries[] = {
   { "FileMenu", NULL, "_File" },
   { "ViewMenu", NULL, "_View" },
   { "Open", GTK_STOCK_OPEN, "_Open", "&lt;control&gt;O", "Open a file", open_action_callback },
@@ -273,12 +273,12 @@ static GtkActionEntry entries[] = {
 };
 
 /* Toggle items */
-static GtkToggleActionEntry toggle_entries[] = {
+static const GtkToggleActionEntry toggle_entries[] = {
   { "FullScreen", NULL, "_Full Screen", "F11", "Switch between full screen and windowed mode", full_screen_action_callback, FALSE }
 };
 
 /* Radio items */
-static GtkRadioActionEntry radio_entries[] = {
+static const GtkRadioActionEntry radio_entries[] = {
   { "HighQuality", "my-stock-high-quality", "_High Quality", NULL, "Display images in high quality, slow mode", 0 },
   { "NormalQuality", "my-stock-normal-quality", "_Normal Quality", NULL, "Display images in normal quality", 1 },
   { "LowQuality", "my-stock-low-quality", "_Low Quality", NULL, "Display images in low quality, fast mode", 2 }

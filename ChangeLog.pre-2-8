@@ -1,3 +1,8 @@
+2005-07-29  Claudio Saavedra  <csaavedra@alumnos.utalca.cl>
+
+	* docs/reference/gtk/migrating-GtkAction.sgml: Declaring the 
+	GtkActionEntry arrays static const. Fixes #301612.
+
 2005-07-29  J. Ali Harlow  <ali@juiblex.co.uk>
 
 	* gtk/Makefile.am: Include gtkwin32embed.h in EXTRA_DIST
