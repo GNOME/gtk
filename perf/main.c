@@ -1,31 +1,35 @@
 #include <stdio.h>
 #include <gtk/gtk.h>
-#include "appwindow.h"
-#include "timers.h"
+#include "gtkwidgetprofiler.h"
+#include "widgets.h"
 
-#define ITERS 20
+#define ITERS 10
 
 static GtkWidget *
-create_cb (gpointer data)
+create_widget_cb (GtkWidgetProfiler *profiler, gpointer data)
 {
   return appwindow_new ();
 }
 
 static void
-report_cb (TimerReport report, gdouble elapsed, gpointer data)
+report_cb (GtkWidgetProfiler *profiler, GtkWidgetProfilerReport report, GtkWidget *widget, gdouble elapsed, gpointer data)
 {
   const char *type;
 
   switch (report) {
-  case TIMER_REPORT_WIDGET_CREATION:
+  case GTK_WIDGET_PROFILER_REPORT_CREATE:
     type = "widget creation";
     break;
 
-  case TIMER_REPORT_WIDGET_SHOW:
-    type = "widget show";
+  case GTK_WIDGET_PROFILER_REPORT_MAP:
+    type = "widget map";
     break;
 
-  case TIMER_REPORT_WIDGET_DESTRUCTION:
+  case GTK_WIDGET_PROFILER_REPORT_EXPOSE:
+    type = "widget expose";
+    break;
+
+  case GTK_WIDGET_PROFILER_REPORT_DESTROY:
     type = "widget destruction";
     break;
 
@@ -36,19 +40,25 @@ report_cb (TimerReport report, gdouble elapsed, gpointer data)
 
   fprintf (stderr, "%s: %g sec\n", type, elapsed);
 
-  if (report == TIMER_REPORT_WIDGET_DESTRUCTION)
+  if (report == GTK_WIDGET_PROFILER_REPORT_DESTROY)
     fputs ("\n", stderr);
 }
 
 int
 main (int argc, char **argv)
 {
-  int i;
+  GtkWidgetProfiler *profiler;
 
   gtk_init (&argc, &argv);
 
-  for (i = 0; i < ITERS; i++)
-    timer_time_widget (create_cb, report_cb, NULL);
+  profiler = gtk_widget_profiler_new ();
+  g_signal_connect (profiler, "create-widget",
+		    G_CALLBACK (create_widget_cb), NULL);
+  g_signal_connect (profiler, "report",
+		    G_CALLBACK (report_cb), NULL);
+
+  gtk_widget_profiler_set_num_iterations (profiler, ITERS);
+  gtk_widget_profiler_profile_boot (profiler);
   
   return 0;
 }

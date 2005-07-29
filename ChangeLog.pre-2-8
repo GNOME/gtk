@@ -1,3 +1,39 @@
+2005-07-28  Federico Mena Quintero  <federico@ximian.com>
+
+	* perf/README: Update for the new API of the profiler.
+
+	* perf/gtkwidgetprofiler.[ch]: New files with a widget profiler
+	object.  This is the old content of timers.[ch] turned into a nice
+	object, with signals for creation and reporting.  The profiler
+	needs to maintain some state when reusing the widget, so it's
+	useful to turn it into a real object.
+
+	Break down timing show_all into GTK_WIDGET_PROFILER_REPORT_MAP and
+	GTK_WIDGET_PROFILER_REPORT_EXPOSE.
+
+	* perf/main.c: Refactor to use GtkWidgetProfiler.
+
+	* perf/appwindow.c (content_area_new): Make this just create a
+	notebook, instead of a complex arrangement of panes.
+
+	* perf/widgets.h: New header file for all the "create a widget"
+	utility functions.
+
+	* perf/treeview.c: New file.  Moved the tree view part from
+	appwindow.c over to here; GtkTreeView really needs its own tests.
+	(tree_view_new): Set the shadow type to IN.
+
+	* perf/textview.c: Likewise moved over from appwindow.c, but for
+	GtkTextView.
+	(text_view_new): Set the shadow type to IN.
+
+	* perf/Makefile.am (testperf_SOURCES): Add the new source files;
+	remove appwindow.h and timers.[ch].
+
+	* perf/timers.[ch]: Removed.
+
+	* perf/appwindow.h: Removed.
+
 2005-07-29  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkevents-win32.c: Remove ifdeffed out code relating
