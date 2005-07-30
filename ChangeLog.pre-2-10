@@ -1,3 +1,7 @@
+2005-07-30  Hans Breuer  <hans@breuer.org>
+
+	* gtk/makefile.msc.in : updated
+
 2005-07-29  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkdrawable-win32.c (blit_inside_drawable): Rename

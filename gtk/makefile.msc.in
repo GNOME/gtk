@@ -436,7 +436,7 @@ gtk_extra_sources = \
 GENERATED = \
 	gtktypebuiltins.h gtktypebuiltins.c \
 	gtkmarshal.h gtkmarshal.c gtkmarshalers.h gtkmarshalers.c \
-	gtk.def gtkalias.h
+	gtk.def gtkalias.h gtkaliasdef.c
 
 #
 # Generated source files:
