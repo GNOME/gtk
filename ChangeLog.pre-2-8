@@ -1,3 +1,8 @@
+2005-07-30  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/gtkctree.c (gtk_ctree_class_init): Do not use | 
+	G_PARAM_STATIC_NAME in the type field, makes subclassing possible.
+
 2005-07-29  Claudio Saavedra  <csaavedra@alumnos.utalca.cl>
 
 	* docs/reference/gtk/migrating-GtkAction.sgml: Declaring the 

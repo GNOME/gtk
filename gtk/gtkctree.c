@@ -429,7 +429,7 @@ gtk_ctree_class_init (GtkCTreeClass *klass)
 			   GTK_ARG_READWRITE | G_PARAM_STATIC_NAME,
 			   ARG_LINE_STYLE);
   gtk_object_add_arg_type ("GtkCTree::expander-style",
-			   GTK_TYPE_CTREE_EXPANDER_STYLE | G_PARAM_STATIC_NAME,
+			   GTK_TYPE_CTREE_EXPANDER_STYLE,
 			   GTK_ARG_READWRITE | G_PARAM_STATIC_NAME,
 			   ARG_EXPANDER_STYLE);
 
