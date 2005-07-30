@@ -9,9 +9,9 @@ TOP = ..\..
 
 ################################################################
 
-# Possibly override versions from build/win32/module.defs
-GTK_VER = @GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@
-GDK_PIXBUF_VER = @GDK_PIXBUF_MAJOR@.@GDK_PIXBUF_MINOR@
+# Not the real version but the one used in the DLL names
+GTK_VER = 2,0
+GDK_PIXBUF_VER = 2.0
 
 
 GDK_LIBS = ../gdk/gdk-win32-$(GTK_VER).lib
@@ -169,7 +169,8 @@ gtk_OBJECTS = 					\
 	gtkpaned.obj				\
 	gtkpathbar.obj				\
 	gtkpixmap.obj				\
-#	gtkplug.obj				\
+	gtkplug.obj				\
+	gtkplug-win32.obj				\
 	gtkpreview.obj				\
 	gtkprogress.obj				\
 	gtkprogressbar.obj			\
@@ -192,7 +193,8 @@ gtk_OBJECTS = 					\
 	gtksettings.obj \
 	gtksignal.obj				\
 	gtksizegroup.obj \
-#	gtksocket.obj				\
+	gtksocket.obj				\
+	gtksocket-win32.obj				\
 	gtkspinbutton.obj			\
 	gtkstyle.obj				\
 	gtkstatusbar.obj			\
@@ -246,6 +248,7 @@ gtk_OBJECTS = 					\
 	gtkvscrollbar.obj			\
 	gtkvseparator.obj			\
 	gtkwidget.obj				\
+	gtkwin32embed.obj			\
 	gtkwindow.obj				\
 	gtkwindow-decorate.obj
 

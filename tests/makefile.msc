@@ -29,6 +29,7 @@ TOUCH = copy makefile.msc+nul
 all :	\
 	..\config.h	\
 	prop-editor.obj \
+	testsocket_common.obj \
 	all-test-apps
 
 ..\config.h : ..\config.h.win32
@@ -79,6 +80,14 @@ EXTRA_OBJETCS = prop-editor.obj
 
 !IFDEF EXTRA_testiconview
 EXTRA_OBJETCS = prop-editor.obj
+!ENDIF
+
+!IFDEF EXTRA_testsocket
+EXTRA_OBJETCS = testsocket_common.obj
+!ENDIF
+
+!IFDEF EXTRA_testsocket_child
+EXTRA_OBJETCS = testsocket_common.obj
 !ENDIF
 
 !IFDEF EXTRA_testtreeview
