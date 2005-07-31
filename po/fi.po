@@ -1,5 +1,5 @@
 # gtk+ Finnish translation
-# Suomennos: http://gnome-fi.org/
+# Suomennos: http://gnome.fi/
 #
 # Copyright (C) 2003 Free Software Foundation, Inc.
 # Mikko Rauhala <mjr@iki.fi>, 1999
