@@ -5,14 +5,15 @@
 # Mikko Rauhala <mjr@iki.fi>, 1999
 # Sami Pesonen <sampeson@iki.fi> 2004
 # Pauli Virtanen, 2000-2005
+# Ilkka Tuohela <hile@iki.fi>, 2005
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-28 19:02+0300\n"
-"PO-Revision-Date: 2005-02-06 03:48+0200\n"
-"Last-Translator: Pauli Virtanen <pauli.virtanen@hut.fi>\n"
+"POT-Creation-Date: 2005-07-31 12:41+0300\n"
+"PO-Revision-Date: 2005-07-31 14:30+0300\n"
+"Last-Translator: Ilkka Tuohela <hile@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -486,8 +487,8 @@ msgid ""
 "PNG compression level must be a value between 0 and 9; value '%d' is not "
 "allowed."
 msgstr ""
-"PNG-tiedoston pakkaustason tulee olla arvo väliltä 0-9. Arvo \"%d\" ei "
-"ole sallittu."
+"PNG-tiedoston pakkaustason tulee olla arvo väliltä 0-9. Arvo \"%d\" ei ole "
+"sallittu."
 
 #: ../gdk-pixbuf/io-png.c:883
 #, c-format
@@ -828,135 +829,135 @@ msgstr "Käytöstä poistettavat Gdk-vianjäljitysvalinnat"
 
 #: ../gdk/keyname-table.h:3940
 msgid "keyboard label|BackSpace"
-msgstr ""
+msgstr "Askelpalautin"
 
 #: ../gdk/keyname-table.h:3941
 msgid "keyboard label|Tab"
-msgstr ""
+msgstr "Sarkain"
 
 #: ../gdk/keyname-table.h:3942
 msgid "keyboard label|Return"
-msgstr ""
+msgstr "Return"
 
 #: ../gdk/keyname-table.h:3943
 msgid "keyboard label|Pause"
-msgstr ""
+msgstr "Tauko"
 
 #: ../gdk/keyname-table.h:3944
 msgid "keyboard label|Scroll_Lock"
-msgstr ""
+msgstr "Scroll_Lock"
 
 #: ../gdk/keyname-table.h:3945
 msgid "keyboard label|Sys_Req"
-msgstr ""
+msgstr "Sys_Req"
 
 #: ../gdk/keyname-table.h:3946
 msgid "keyboard label|Escape"
-msgstr ""
+msgstr "Esc"
 
 #: ../gdk/keyname-table.h:3947
 msgid "keyboard label|Multi_key"
-msgstr ""
+msgstr "Multi_näppäin"
 
 #: ../gdk/keyname-table.h:3948
 msgid "keyboard label|Home"
-msgstr ""
+msgstr "Home"
 
 #: ../gdk/keyname-table.h:3949
 msgid "keyboard label|Page_Up"
-msgstr ""
+msgstr "Page_Up"
 
 #: ../gdk/keyname-table.h:3950
 msgid "keyboard label|Page_Down"
-msgstr ""
+msgstr "Page_Down"
 
 #: ../gdk/keyname-table.h:3951
 msgid "keyboard label|End"
-msgstr ""
+msgstr "End"
 
 #: ../gdk/keyname-table.h:3952
 msgid "keyboard label|Begin"
-msgstr ""
+msgstr "Begin"
 
 #: ../gdk/keyname-table.h:3953
 msgid "keyboard label|Print"
-msgstr ""
+msgstr "Print"
 
 #: ../gdk/keyname-table.h:3954
 msgid "keyboard label|Insert"
-msgstr ""
+msgstr "Insert"
 
 #: ../gdk/keyname-table.h:3955
 msgid "keyboard label|Num_Lock"
-msgstr ""
+msgstr "Num_Lock"
 
 #: ../gdk/keyname-table.h:3956
 msgid "keyboard label|KP_Space"
-msgstr ""
+msgstr "KP_Välilyönti"
 
 #: ../gdk/keyname-table.h:3957
 msgid "keyboard label|KP_Tab"
-msgstr ""
+msgstr "KP_Sarkain"
 
 #: ../gdk/keyname-table.h:3958
 msgid "keyboard label|KP_Enter"
-msgstr ""
+msgstr "KP_Enter"
 
 #: ../gdk/keyname-table.h:3959
 msgid "keyboard label|KP_Home"
-msgstr ""
+msgstr "KP_Home"
 
 #: ../gdk/keyname-table.h:3960
 msgid "keyboard label|KP_Left"
-msgstr ""
+msgstr "KP_Vaihto"
 
 #: ../gdk/keyname-table.h:3961
 msgid "keyboard label|KP_Up"
-msgstr ""
+msgstr "KP_Ylös"
 
 #: ../gdk/keyname-table.h:3962
 msgid "keyboard label|KP_Right"
-msgstr ""
+msgstr "KP_Oikea"
 
 #: ../gdk/keyname-table.h:3963
 msgid "keyboard label|KP_Down"
-msgstr ""
+msgstr "KP_Alas"
 
 #: ../gdk/keyname-table.h:3964
 msgid "keyboard label|KP_Page_Up"
-msgstr ""
+msgstr "KP_Page_Up"
 
 #: ../gdk/keyname-table.h:3965
 msgid "keyboard label|KP_Prior"
-msgstr ""
+msgstr "KP_Edellinen"
 
 #: ../gdk/keyname-table.h:3966
 msgid "keyboard label|KP_Page_Down"
-msgstr ""
+msgstr "KP_Page_Down"
 
 #: ../gdk/keyname-table.h:3967
 msgid "keyboard label|KP_Next"
-msgstr ""
+msgstr "KP_Seuraava"
 
 #: ../gdk/keyname-table.h:3968
 msgid "keyboard label|KP_End"
-msgstr ""
+msgstr "KP_End"
 
 #: ../gdk/keyname-table.h:3969
 msgid "keyboard label|KP_Begin"
-msgstr ""
+msgstr "KP_Begin"
 
 #: ../gdk/keyname-table.h:3970
 msgid "keyboard label|KP_Insert"
-msgstr ""
+msgstr "KP_Insert"
 
 #: ../gdk/keyname-table.h:3971
 msgid "keyboard label|KP_Delete"
-msgstr ""
+msgstr "KP_Delete"
 
 #: ../gdk/keyname-table.h:3972
 msgid "keyboard label|Delete"
-msgstr ""
+msgstr "Delete"
 
 #. Description of --sync in --help output
 #: ../gdk/win32/gdkmain-win32.c:60
@@ -1044,7 +1045,7 @@ msgstr "Graafinen ulkoasu"
 #.
 #: ../gtk/gtkaccellabel.c:121
 msgid "keyboard label|Shift"
-msgstr ""
+msgstr "Vaihto"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the control key. If the text on this key isn't typically
@@ -1054,7 +1055,7 @@ msgstr ""
 #.
 #: ../gtk/gtkaccellabel.c:128
 msgid "keyboard label|Ctrl"
-msgstr ""
+msgstr "Ctrl"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the alt key. If the text on this key isn't typically
@@ -1064,17 +1065,17 @@ msgstr ""
 #.
 #: ../gtk/gtkaccellabel.c:135
 msgid "keyboard label|Alt"
-msgstr ""
+msgstr "Alt"
 
 #. do not translate the part before the |
 #: ../gtk/gtkaccellabel.c:577
 msgid "keyboard label|Space"
-msgstr ""
+msgstr "Välilyönti"
 
 #. do not translate the part before the |
 #: ../gtk/gtkaccellabel.c:581
 msgid "keyboard label|Backslash"
-msgstr ""
+msgstr "Takakeno"
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -1326,8 +1327,8 @@ msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
 msgstr ""
-"Kansiota ei voitu luoda, koska samanniminen tiedosto on jo olemassa. "
-"Käytä toista nimeä kansiolle tai nimeä tiedosto ensin uudelleen."
+"Kansiota ei voitu luoda, koska samanniminen tiedosto on jo olemassa. Käytä "
+"toista nimeä kansiolle tai nimeä tiedosto ensin uudelleen."
 
 #: ../gtk/gtkfilechooserdefault.c:1055
 msgid "Invalid file name"
@@ -2511,4 +2512,3 @@ msgstr "X-syöttötapa"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Tiedoston \"%s\" tietojen saaminen epäonnistui: %s"
-
