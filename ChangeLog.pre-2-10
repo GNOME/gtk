@@ -1,3 +1,7 @@
+2005-08-01  Dom Lachowicz <cinamod@hotmail.com>
+
+	* modules/engines/ms-windows/Theme/gtk-2.0/gtkrc: Part of #168326
+
 2005-08-01  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkclipboard.c (gtk_clipboard_set_image) 
