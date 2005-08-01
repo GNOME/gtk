@@ -1,3 +1,9 @@
 Makefile
 Makefile.in
 testperf
+marshalers.c
+marshalers.h
+typebuiltins.c
+typebuiltins.h
+stamp-marshalers.h
+stamp-typebuiltins.h
