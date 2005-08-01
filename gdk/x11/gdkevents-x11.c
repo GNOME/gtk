@@ -409,7 +409,7 @@ do_net_wm_state_changes (GdkWindow *window)
     }
   else
     {
-      if (toplevel->have_sticky && toplevel->on_all_desktops)
+      if (toplevel->have_sticky || toplevel->on_all_desktops)
         gdk_synthesize_window_state (window,
                                      0,
                                      GDK_WINDOW_STATE_STICKY);
@@ -459,33 +459,29 @@ gdk_check_wm_desktop_changed (GdkWindow *window)
   gint format;
   gulong nitems;
   gulong bytes_after;
+  guchar *data;
+  gulong *desktop;
 
-  if (toplevel->have_sticky)
+  type = None;
+  gdk_error_trap_push ();
+  XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), 
+                      GDK_WINDOW_XID (window),
+                      gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_DESKTOP"),
+                      0, G_MAXLONG, False, XA_CARDINAL, &type, 
+                      &format, &nitems,
+                      &bytes_after, &data);
+  gdk_error_trap_pop ();
+
+  if (type != None)
     {
-      guchar *data;
-      gulong *desktop;
-      
-      type = None;
-      gdk_error_trap_push ();
-      XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), 
-			  GDK_WINDOW_XID (window),
-                          gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_DESKTOP"),
-			  0, G_MAXLONG, False, XA_CARDINAL, &type, 
-			  &format, &nitems,
-                          &bytes_after, &data);
-      gdk_error_trap_pop ();
-
-      if (type != None)
-        {
-	  desktop = (gulong *)data;
-          toplevel->on_all_desktops = (*desktop == 0xFFFFFFFF);
-          XFree (desktop);
-        }
-      else
-	toplevel->on_all_desktops = FALSE;
-      
-      do_net_wm_state_changes (window);
+      desktop = (gulong *)data;
+      toplevel->on_all_desktops = (*desktop == 0xFFFFFFFF);
+      XFree (desktop);
     }
+  else
+    toplevel->on_all_desktops = FALSE;
+      
+  do_net_wm_state_changes (window);
 }
 
 static void

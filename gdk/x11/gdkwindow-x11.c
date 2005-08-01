@@ -2027,13 +2027,20 @@ gdk_window_lower (GdkWindow *window)
  * Moves the window to the correct workspace when running under a 
  * window manager that supports multiple workspaces, as described
  * in the <ulink url="http://www.freedesktop.org/Standards/wm-spec">Extended 
- * Window Manager Hints</ulink>.
+ * Window Manager Hints</ulink>.  Will not do anything if the
+ * window is already on all workspaces.
  * 
  * Since: 2.8
  */
 void
 gdk_x11_window_move_to_current_desktop (GdkWindow *window)
 {
+  GdkToplevelX11 *toplevel;
+  toplevel = _gdk_x11_window_get_toplevel (window);
+
+  if (toplevel->on_all_desktops)
+    return;
+
   if (gdk_x11_screen_supports_net_wm_hint (GDK_WINDOW_SCREEN (window),
 					   gdk_atom_intern ("_NET_WM_DESKTOP", FALSE)))
     {
