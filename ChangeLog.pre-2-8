@@ -1,3 +1,8 @@
+2005-08-01  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_set_urgency_hint):
+	Implement using FlashWindowEx(). (#309423)
+
 2005-07-30  Hans Breuer  <hans@breuer.org>
 
 	* gtk/makefile.msc.in tests/makefile.msc : updated

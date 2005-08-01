@@ -29,6 +29,9 @@
 #include <config.h>
 #include <stdlib.h>
 
+#define _WIN32_WINNT 0x0500
+#define WINVER _WIN32_WINNT
+
 #include "gdk.h" /* gdk_rectangle_intersect */
 #include "gdkevents.h"
 #include "gdkpixmap.h"
@@ -1571,13 +1574,24 @@ void
 gdk_window_set_urgency_hint (GdkWindow *window,
 			     gboolean   urgent)
 {
+  FLASHWINFO flashwinfo;
+
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD);
   
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  g_warning ("gdk_window_set_urgency_hint() not implemented yet.");
+  flashwinfo.cbSize = sizeof (flashwinfo);
+  flashwinfo.hwnd = GDK_WINDOW_HWND (window);
+  if (urgent)
+    flashwinfo.dwFlags = FLASHW_ALL | FLASHW_TIMER;
+  else
+    flashwinfo.dwFlags = FLASHW_STOP;
+  flashwinfo.uCount = 0;
+  flashwinfo.dwTimeout = 0;
+
+  FlashWindowEx (&flashwinfo);
 }
 
 void 
