@@ -43,6 +43,13 @@
 
 #include <fontconfig/fontconfig.h>
 
+#ifndef FC_HINT_STYLE
+#define FC_HINT_NONE        0
+#define FC_HINT_SLIGHT      1
+#define FC_HINT_MEDIUM      2
+#define FC_HINT_FULL        3
+#endif
+
 #include <gdkscreen-x11.h>
 #include <gdkx.h>
 

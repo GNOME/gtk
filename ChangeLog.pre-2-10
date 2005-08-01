@@ -1,5 +1,8 @@
 2005-08-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/x11/gdkxftdefaults.c: Define the hint styles to make
+	building against fc < 2.2.92 work.  (#311839, Damien Carbery)
+
 	* gdk/x11/gdkevents-x11.c (gdk_check_wm_desktop_changed): Make
 	tracking the on_all_desktops state work better.
 
