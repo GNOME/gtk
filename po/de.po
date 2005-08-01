@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: GTK+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-07-26 21:38+0200\n"
-"PO-Revision-Date: 2005-07-26 22:20+0200\n"
+"PO-Revision-Date: 2005-08-01 17:58+0200\n"
 "Last-Translator: Hendrik Brandt <heb@gnome-de.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1155,7 +1155,7 @@ msgstr "%Y"
 #: ../gtk/gtkcellrendererprogress.c:237 ../gtk/gtkcellrendererprogress.c:295
 #, c-format
 msgid "progress bar label|%d %%"
-msgstr "Titel des Fortschrittsbalkens|%d %%"
+msgstr "progress bar label|%d %%"
 
 #: ../gtk/gtkcolorbutton.c:221 ../gtk/gtkcolorbutton.c:576
 msgid "Pick a Color"

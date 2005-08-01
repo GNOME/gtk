@@ -1,3 +1,7 @@
+2005-08-01  Martin Kretzschmar  <martink@gnome.org>
+
+	* de.po: untranslate translation context of progress cell renderer
+
 2005-07-31  Ilkka Tuohela  <hile@iki.fi>
 
 	* fi.po: Bulk updates to Finnish translation
