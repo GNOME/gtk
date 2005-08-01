@@ -290,7 +290,7 @@ void gtk_text_buffer_remove_all_tags       (GtkTextBuffer     *buffer,
 GtkTextTag    *gtk_text_buffer_create_tag (GtkTextBuffer *buffer,
                                            const gchar   *tag_name,
                                            const gchar   *first_property_name,
-                                           ...) G_GNUC_NULL_TERMINATED;
+                                           ...);
 
 /* Obtain iterators pointed at various places, then you can move the
  * iterator around using the GtkTextIter operators

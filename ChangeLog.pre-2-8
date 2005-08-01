@@ -1,5 +1,9 @@
 2005-08-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktextbuffer.h: 
+	* gtk/gtk.symbols: Remove G_GNUC_NULL_TERMINATED here
+	as well.
+
 	* gtk/gtkuimanager.c (update_node): Update tooltips when 
 	reconnecting toolitems.  (#312173, Alex Graveley)
 
