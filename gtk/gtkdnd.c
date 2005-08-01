@@ -2865,7 +2865,7 @@ set_icon_stock_pixbuf (GdkDragContext    *context,
 
   display = gdk_drawable_get_display (context->source_window);
   width = gdk_pixbuf_get_width (pixbuf);
-  height = gdk_pixbuf_get_width (pixbuf);
+  height = gdk_pixbuf_get_height (pixbuf);
 
   if (!force_window &&
       gtk_drag_can_use_rgba_cursor (display, width + 2, height + 2))

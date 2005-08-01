@@ -1,5 +1,8 @@
 2005-08-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkdnd.c (set_icon_stock_pixbuf): Create the icon window
+	with the correct dimensions.  (#312256, Mike Morrison)
+
 	* gtk/gtktextbuffer.h: 
 	* gtk/gtk.symbols: Remove G_GNUC_NULL_TERMINATED here
 	as well.
