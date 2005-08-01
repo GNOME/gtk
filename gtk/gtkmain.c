@@ -482,11 +482,26 @@ do_pre_parse_initialization (int    *argc,
 }
 
 static void
+gettext_initialization (void)
+{
+#ifdef ENABLE_NLS
+  bindtextdomain (GETTEXT_PACKAGE, GTK_LOCALEDIR);
+  bindtextdomain (GETTEXT_PACKAGE "-properties", GTK_LOCALEDIR);
+#    ifdef HAVE_BIND_TEXTDOMAIN_CODESET
+  bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+  bind_textdomain_codeset (GETTEXT_PACKAGE "-properties", "UTF-8");
+#    endif
+#endif  
+}
+
+static void
 do_post_parse_initialization (int    *argc,
 			      char ***argv)
 {
   if (gtk_initialized)
     return;
+
+  gettext_initialization ();
 
   if (g_fatal_warnings)
     {
@@ -599,19 +614,6 @@ gtk_get_option_group (gboolean open_default_display)
   return group;
 }
 
-static void
-gettext_initialization (void)
-{
-#ifdef ENABLE_NLS
-  bindtextdomain (GETTEXT_PACKAGE, GTK_LOCALEDIR);
-  bindtextdomain (GETTEXT_PACKAGE "-properties", GTK_LOCALEDIR);
-#    ifdef HAVE_BIND_TEXTDOMAIN_CODESET
-  bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
-  bind_textdomain_codeset (GETTEXT_PACKAGE "-properties", "UTF-8");
-#    endif
-#endif  
-}
-
 /**
  * gtk_init_with_args:
  * @argc: a pointer to the number of command line arguments.
@@ -649,10 +651,10 @@ gtk_init_with_args (int            *argc,
   GOptionGroup *gtk_group;
   gboolean retval;
 
-  gettext_initialization ();
-
   if (gtk_initialized)
     return TRUE;
+
+  gettext_initialization ();
 
   if (!check_setugid ())
     return FALSE;
@@ -696,10 +698,10 @@ gtk_parse_args (int    *argc,
   GOptionContext *option_context;
   GOptionGroup *gtk_group;
   
-  gettext_initialization ();
-
   if (gtk_initialized)
     return TRUE;
+
+  gettext_initialization ();
 
   if (!check_setugid ())
     return FALSE;
