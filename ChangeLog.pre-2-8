@@ -1,5 +1,8 @@
 2005-08-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkuimanager.c (update_node): Update tooltips when 
+	reconnecting toolitems.  (#312173, Alex Graveley)
+
 	* gdk/x11/gdkxftdefaults.c: Define the hint styles to make
 	building against fc < 2.2.92 work.  (#311839, Damien Carbery)
 
