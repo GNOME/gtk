@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.gtk-2-6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-15 23:46-0400\n"
+"POT-Creation-Date: 2005-08-01 12:31-0400\n"
 "PO-Revision-Date: 2005-06-14 22:27+0200\n"
 "Last-Translator: Gabor Kelemen <kelemeng@gnome.hu>\n"
 "Language-Team: Hungarian <gnome@gnome.hu>\n"
@@ -2039,11 +2039,11 @@ msgstr "A fájlválasztó párbeszédablak címe."
 msgid "The desired width of the button widget, in characters."
 msgstr "A gomb felületi elem kívánt szélessége, karakterekben megadva."
 
-#: gtk/gtkfilechooserdefault.c:623
+#: gtk/gtkfilechooserdefault.c:637
 msgid "Default file chooser backend"
 msgstr "Alapértelmezett fájlválasztó háttér"
 
-#: gtk/gtkfilechooserdefault.c:624
+#: gtk/gtkfilechooserdefault.c:638
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Az alapértelmezés szerint használandó GtkFileChooser háttér neve"
 
@@ -2560,37 +2560,37 @@ msgstr "Az elrendezés szélessége"
 msgid "The height of the layout"
 msgstr "Az elrendezés magassága"
 
-#: gtk/gtkmenu.c:528
+#: gtk/gtkmenu.c:531
 msgid "Tearoff Title"
 msgstr "Leválasztó címe"
 
-#: gtk/gtkmenu.c:529
+#: gtk/gtkmenu.c:532
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr "Az ablakkezelő által megjeleníthető cím, ha a menü le van választva"
 
-#: gtk/gtkmenu.c:543
+#: gtk/gtkmenu.c:546
 msgid "Tearoff State"
 msgstr "Leválasztó állapota"
 
-#: gtk/gtkmenu.c:544
+#: gtk/gtkmenu.c:547
 msgid "A boolean that indicates whether the menu is torn-off"
 msgstr "Egy logikai érték, azt jelzi, a menü le van-e választva"
 
-#: gtk/gtkmenu.c:550
+#: gtk/gtkmenu.c:553
 msgid "Vertical Padding"
 msgstr "Függőleges térköz"
 
-#: gtk/gtkmenu.c:551
+#: gtk/gtkmenu.c:554
 msgid "Extra space at the top and bottom of the menu"
 msgstr "Extra terület a menü tetején és alján"
 
-#: gtk/gtkmenu.c:559
+#: gtk/gtkmenu.c:562
 msgid "Vertical Offset"
 msgstr "Függőleges eltolás"
 
-#: gtk/gtkmenu.c:560
+#: gtk/gtkmenu.c:563
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
@@ -2598,11 +2598,11 @@ msgstr ""
 "Ha a menü egy almenü, akkor a képpontok száma, amellyel függőlegesen "
 "eltolásra kerül"
 
-#: gtk/gtkmenu.c:568
+#: gtk/gtkmenu.c:571
 msgid "Horizontal Offset"
 msgstr "Vízszintes eltolás"
 
-#: gtk/gtkmenu.c:569
+#: gtk/gtkmenu.c:572
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
@@ -2610,65 +2610,65 @@ msgstr ""
 "Ha a menü egy almenü, akkor a képpontok száma, amellyel vízszintesen "
 "eltolásra kerül"
 
-#: gtk/gtkmenu.c:579
+#: gtk/gtkmenu.c:582
 msgid "Left Attach"
 msgstr "Bal csatolás"
 
-#: gtk/gtkmenu.c:580 gtk/gtktable.c:205
+#: gtk/gtkmenu.c:583 gtk/gtktable.c:205
 msgid "The column number to attach the left side of the child to"
 msgstr "Az oszlop száma, amelyhez a gyermek bal széle csatolásra kerül."
 
-#: gtk/gtkmenu.c:587
+#: gtk/gtkmenu.c:590
 msgid "Right Attach"
 msgstr "Jobb csatolás"
 
-#: gtk/gtkmenu.c:588
+#: gtk/gtkmenu.c:591
 msgid "The column number to attach the right side of the child to"
 msgstr "Az oszlop száma, amelyhez a gyermek jobb széle csatolásra kerül."
 
-#: gtk/gtkmenu.c:595
+#: gtk/gtkmenu.c:598
 msgid "Top Attach"
 msgstr "Felső csatolás"
 
-#: gtk/gtkmenu.c:596
+#: gtk/gtkmenu.c:599
 msgid "The row number to attach the top of the child to"
 msgstr "A sor száma, amelyhez a gyermek felső széle csatolásra kerül."
 
-#: gtk/gtkmenu.c:603
+#: gtk/gtkmenu.c:606
 msgid "Bottom Attach"
 msgstr "Alsó csatolás"
 
-#: gtk/gtkmenu.c:604 gtk/gtktable.c:226
+#: gtk/gtkmenu.c:607 gtk/gtktable.c:226
 msgid "The row number to attach the bottom of the child to"
 msgstr "A sor száma, amelyhez a gyermek alsó széle csatolásra kerül."
 
-#: gtk/gtkmenu.c:691
+#: gtk/gtkmenu.c:694
 msgid "Can change accelerators"
 msgstr "Gyorsbillentyűk módosíthatók"
 
-#: gtk/gtkmenu.c:692
+#: gtk/gtkmenu.c:695
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "A menü gyorsbillentyűi módosíthatók-e egy billentyű lenyomásával a menüelem "
 "felett"
 
-#: gtk/gtkmenu.c:697
+#: gtk/gtkmenu.c:700
 msgid "Delay before submenus appear"
 msgstr "Késleltetés az almenük megjelenítése előtt"
 
-#: gtk/gtkmenu.c:698
+#: gtk/gtkmenu.c:701
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Minimális idő, ameddig a mutatónak a menüelem felett kell állnia, hogy "
 "megjelenjen az almenü"
 
-#: gtk/gtkmenu.c:705
+#: gtk/gtkmenu.c:708
 msgid "Delay before hiding a submenu"
 msgstr "Késleltetés egy almenü elrejtése előtt"
 
-#: gtk/gtkmenu.c:706
+#: gtk/gtkmenu.c:709
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"

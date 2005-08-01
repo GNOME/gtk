@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-15 23:46-0400\n"
+"POT-Creation-Date: 2005-08-01 12:31-0400\n"
 "PO-Revision-Date: 2003-05-28 17:57+0000\n"
 "Last-Translator: Mathieu van Woerkom <mathieu.brabants.org>\n"
 "Language-Team: Limburgish <li.org>\n"
@@ -2102,11 +2102,11 @@ msgstr "De tittel van 't vinster"
 msgid "The desired width of the button widget, in characters."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:623
+#: gtk/gtkfilechooserdefault.c:637
 msgid "Default file chooser backend"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:624
+#: gtk/gtkfilechooserdefault.c:638
 #, fuzzy
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Naam van 't sjtanderd booksjtaaftiep"
@@ -2655,11 +2655,11 @@ msgstr "De breide van de opmaak"
 msgid "The height of the layout"
 msgstr "De huugde van de opmaak"
 
-#: gtk/gtkmenu.c:528
+#: gtk/gtkmenu.c:531
 msgid "Tearoff Title"
 msgstr "Aafsjeur-Tittel"
 
-#: gtk/gtkmenu.c:529
+#: gtk/gtkmenu.c:532
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
@@ -2667,117 +2667,117 @@ msgstr ""
 "Eine tittel die getuind kèn waere door de windowmanager wen dit menu "
 "losgesjeurd weurt"
 
-#: gtk/gtkmenu.c:543
+#: gtk/gtkmenu.c:546
 #, fuzzy
 msgid "Tearoff State"
 msgstr "Aafsjeur-Tittel"
 
-#: gtk/gtkmenu.c:544
+#: gtk/gtkmenu.c:547
 #, fuzzy
 msgid "A boolean that indicates whether the menu is torn-off"
 msgstr ""
 "Eine tittel die getuind kèn waere door de windowmanager wen dit menu "
 "losgesjeurd weurt"
 
-#: gtk/gtkmenu.c:550
+#: gtk/gtkmenu.c:553
 #, fuzzy
 msgid "Vertical Padding"
 msgstr "Vertikale opvölling"
 
-#: gtk/gtkmenu.c:551
+#: gtk/gtkmenu.c:554
 #, fuzzy
 msgid "Extra space at the top and bottom of the menu"
 msgstr "De toe te veuge ruumde baove en ónger ein widget, in pixels"
 
-#: gtk/gtkmenu.c:559
+#: gtk/gtkmenu.c:562
 #, fuzzy
 msgid "Vertical Offset"
 msgstr "Vertikale sjaal"
 
-#: gtk/gtkmenu.c:560
+#: gtk/gtkmenu.c:563
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr ""
 
-#: gtk/gtkmenu.c:568
+#: gtk/gtkmenu.c:571
 #, fuzzy
 msgid "Horizontal Offset"
 msgstr "Horizontale sjaal"
 
-#: gtk/gtkmenu.c:569
+#: gtk/gtkmenu.c:572
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 msgstr ""
 
-#: gtk/gtkmenu.c:579
+#: gtk/gtkmenu.c:582
 #, fuzzy
 msgid "Left Attach"
 msgstr "Linker verbènjing"
 
-#: gtk/gtkmenu.c:580 gtk/gtktable.c:205
+#: gtk/gtkmenu.c:583 gtk/gtktable.c:205
 msgid "The column number to attach the left side of the child to"
 msgstr ""
 "'t kelómnómmer woemit de linkerkantj van 't dochterwidget weurt verbónje"
 
-#: gtk/gtkmenu.c:587
+#: gtk/gtkmenu.c:590
 #, fuzzy
 msgid "Right Attach"
 msgstr "Rechter verbènjing"
 
-#: gtk/gtkmenu.c:588
+#: gtk/gtkmenu.c:591
 #, fuzzy
 msgid "The column number to attach the right side of the child to"
 msgstr ""
 "'t kelómnómmer woemit de linkerkantj van 't dochterwidget weurt verbónje"
 
-#: gtk/gtkmenu.c:595
+#: gtk/gtkmenu.c:598
 #, fuzzy
 msgid "Top Attach"
 msgstr "Baoveverbènjing"
 
-#: gtk/gtkmenu.c:596
+#: gtk/gtkmenu.c:599
 #, fuzzy
 msgid "The row number to attach the top of the child to"
 msgstr "'t riejnómmer woemit de óngerkantj van 't dochterwidget weurt verbónje"
 
-#: gtk/gtkmenu.c:603
+#: gtk/gtkmenu.c:606
 #, fuzzy
 msgid "Bottom Attach"
 msgstr "Óngerverbènjing"
 
-#: gtk/gtkmenu.c:604 gtk/gtktable.c:226
+#: gtk/gtkmenu.c:607 gtk/gtktable.c:226
 msgid "The row number to attach the bottom of the child to"
 msgstr "'t riejnómmer woemit de óngerkantj van 't dochterwidget weurt verbónje"
 
-#: gtk/gtkmenu.c:691
+#: gtk/gtkmenu.c:694
 msgid "Can change accelerators"
 msgstr "Kèn sjnaktósj verangere"
 
-#: gtk/gtkmenu.c:692
+#: gtk/gtkmenu.c:695
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Of sjnaktósje verangerd kènne waere door 't drökke van ein tósj euver 't "
 "menu-item"
 
-#: gtk/gtkmenu.c:697
+#: gtk/gtkmenu.c:700
 msgid "Delay before submenus appear"
 msgstr "Vertraging ierdet submenus versjiene"
 
-#: gtk/gtkmenu.c:698
+#: gtk/gtkmenu.c:701
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Minimumtied die de moesaanwiezer baove ein menu-item moot sjtaon ierdet 't "
 "submenu versjient"
 
-#: gtk/gtkmenu.c:705
+#: gtk/gtkmenu.c:708
 msgid "Delay before hiding a submenu"
 msgstr "Vertraging ierdet ein submenu verdwient"
 
-#: gtk/gtkmenu.c:706
+#: gtk/gtkmenu.c:709
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"

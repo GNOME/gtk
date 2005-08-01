@@ -9,7 +9,7 @@ Overview of Changes from GTK+ 2.6.8 to GTK+ 2.6.9
   symmetric [Behnam Esfahbod]
 * Win32 
  - Bug fixes [Tor Lillqvist, Kazuki Iwamoto, Peter
-   Zelezny]
+   Zelezny, Tim Evans, Hans Breuer]
  - Improve and simply line segment rendering [Tor]
  - Fix handling of Aiptek tablets [Robert  Ögren]
 * Other bug fixes [Billy Biggs, Vincent Noel, 
@@ -17,10 +17,11 @@ Overview of Changes from GTK+ 2.6.8 to GTK+ 2.6.9
   Welinder, Matthias, Euan MacGregor, David Saxton, 
   Padraig Brady, Paul Cornett, Mark McLoughlin, 
   Hans Oesterholt, Arkady L. Shane, Tommi Komulainen, 
-  Peter S. Mazinger]
+  Peter S. Mazinger, Dan Winship, Peter Zelezny,
+  Alex Graveley]
 * Documentation improvements [Steve Chaplin, Matthias]
-* New and updated translations (cs,cy,da,de,en_CA,et,
-  fr,gl,hu,hy,ja,ko,nl,sq,sr,sr@Latn,sv,zh_CN,zh_TW)
+* New and updated translations (cs,cy,da,de,en_CA,es,et,
+  fr,gl,gu,hu,hy,ja,ko,nl,sq,sr,sr@Latn,sv,zh_CN,zh_TW)
 
 Overview of Changes from GTK+ 2.6.7 to GTK+ 2.6.8
 =================================================

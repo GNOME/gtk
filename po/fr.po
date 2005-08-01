@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-17 16:10+0200\n"
+"POT-Creation-Date: 2005-08-01 12:30-0400\n"
 "PO-Revision-Date: 2005-07-17 16:06+0200\n"
 "Last-Translator: Christophe Merlet (RedFox) <redfox@redfoxcenter.org>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
@@ -1798,15 +1798,15 @@ msgstr "Drapeaux de débogage GTK+ à ne pas définir"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:509
+#: gtk/gtkmain.c:524
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:592
+#: gtk/gtkmain.c:607
 msgid "GTK+ Options"
 msgstr "Options GTK+"
 
-#: gtk/gtkmain.c:592
+#: gtk/gtkmain.c:607
 msgid "Show GTK+ Options"
 msgstr "Afficher les options GTK+"
 

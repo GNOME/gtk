@@ -1,3 +1,7 @@
+2005-08-01  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.6.9 ===
+
 2005-06-22  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk-pixbuf-i18n.h: Define ngettext() in the non-NLS

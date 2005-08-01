@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-07 20:02-0400\n"
+"POT-Creation-Date: 2005-08-01 12:30-0400\n"
 "PO-Revision-Date: 2005-07-07 03:57-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: Canadian English <adamw@gnome.org>\n"
@@ -1623,7 +1623,7 @@ msgstr "_Gamma value"
 msgid "Error loading icon: %s"
 msgstr "Error loading icon: %s"
 
-#: gtk/gtkicontheme.c:1259
+#: gtk/gtkicontheme.c:1248
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1636,7 +1636,7 @@ msgstr ""
 "You can get a copy from:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1324
+#: gtk/gtkicontheme.c:1313
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Icon '%s' not present in theme"
@@ -1758,15 +1758,15 @@ msgstr "GTK+ debugging flags to unset"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:509
+#: gtk/gtkmain.c:524
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:592
+#: gtk/gtkmain.c:607
 msgid "GTK+ Options"
 msgstr "GTK+ Options"
 
-#: gtk/gtkmain.c:592
+#: gtk/gtkmain.c:607
 msgid "Show GTK+ Options"
 msgstr "Show GTK+ Options"
 

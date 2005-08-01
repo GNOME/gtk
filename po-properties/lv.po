@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-15 23:46-0400\n"
+"POT-Creation-Date: 2005-08-01 12:31-0400\n"
 "PO-Revision-Date: 2002-12-19 16:10+0200\n"
 "Last-Translator: Artis Trops <hornet@navigator.lv>\n"
 "Language-Team: Latvian <ll10nt@os.lv>\n"
@@ -2085,11 +2085,11 @@ msgstr "Loga visraksts"
 msgid "The desired width of the button widget, in characters."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:623
+#: gtk/gtkfilechooserdefault.c:637
 msgid "Default file chooser backend"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:624
+#: gtk/gtkfilechooserdefault.c:638
 #, fuzzy
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Noklusētā fonta nosaukums"
@@ -2634,126 +2634,126 @@ msgstr "Izkārtojuma platums"
 msgid "The height of the layout"
 msgstr "Izkārtojuma augstums"
 
-#: gtk/gtkmenu.c:528
+#: gtk/gtkmenu.c:531
 msgid "Tearoff Title"
 msgstr "Izslēgšanas Virsraksts"
 
-#: gtk/gtkmenu.c:529
+#: gtk/gtkmenu.c:532
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr ""
 "Virsraksts, ko var parādīt logu pārvaldnieks, kad šī izvēlne ir izslēgta"
 
-#: gtk/gtkmenu.c:543
+#: gtk/gtkmenu.c:546
 #, fuzzy
 msgid "Tearoff State"
 msgstr "Izslēgšanas Virsraksts"
 
-#: gtk/gtkmenu.c:544
+#: gtk/gtkmenu.c:547
 #, fuzzy
 msgid "A boolean that indicates whether the menu is torn-off"
 msgstr ""
 "Virsraksts, ko var parādīt logu pārvaldnieks, kad šī izvēlne ir izslēgta"
 
-#: gtk/gtkmenu.c:550
+#: gtk/gtkmenu.c:553
 #, fuzzy
 msgid "Vertical Padding"
 msgstr "Vertikālā papildināšana"
 
-#: gtk/gtkmenu.c:551
+#: gtk/gtkmenu.c:554
 #, fuzzy
 msgid "Extra space at the top and bottom of the menu"
 msgstr ""
 "Atstarpes apmērs, kādu pievienot uz augšu un apakšu no logdaļas, pikseļos"
 
-#: gtk/gtkmenu.c:559
+#: gtk/gtkmenu.c:562
 #, fuzzy
 msgid "Vertical Offset"
 msgstr "Vertikālais mērogs"
 
-#: gtk/gtkmenu.c:560
+#: gtk/gtkmenu.c:563
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr ""
 
-#: gtk/gtkmenu.c:568
+#: gtk/gtkmenu.c:571
 #, fuzzy
 msgid "Horizontal Offset"
 msgstr "Horizontālais mērogs"
 
-#: gtk/gtkmenu.c:569
+#: gtk/gtkmenu.c:572
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 msgstr ""
 
-#: gtk/gtkmenu.c:579
+#: gtk/gtkmenu.c:582
 #, fuzzy
 msgid "Left Attach"
 msgstr "Kreisā piesaiste"
 
-#: gtk/gtkmenu.c:580 gtk/gtktable.c:205
+#: gtk/gtkmenu.c:583 gtk/gtktable.c:205
 msgid "The column number to attach the left side of the child to"
 msgstr "Kolonnas numurs, ko piesaistīt bērnam kreisajā pusē"
 
-#: gtk/gtkmenu.c:587
+#: gtk/gtkmenu.c:590
 #, fuzzy
 msgid "Right Attach"
 msgstr "Labā piesaiste"
 
-#: gtk/gtkmenu.c:588
+#: gtk/gtkmenu.c:591
 #, fuzzy
 msgid "The column number to attach the right side of the child to"
 msgstr "Kolonnas numurs, ko piesaistīt bērnam kreisajā pusē"
 
-#: gtk/gtkmenu.c:595
+#: gtk/gtkmenu.c:598
 #, fuzzy
 msgid "Top Attach"
 msgstr "Augšas piesaiste"
 
-#: gtk/gtkmenu.c:596
+#: gtk/gtkmenu.c:599
 #, fuzzy
 msgid "The row number to attach the top of the child to"
 msgstr "Rindas numurs, ko piesaistīt bērna apagšas logdaļai"
 
-#: gtk/gtkmenu.c:603
+#: gtk/gtkmenu.c:606
 #, fuzzy
 msgid "Bottom Attach"
 msgstr "Apakšas piesaiste"
 
-#: gtk/gtkmenu.c:604 gtk/gtktable.c:226
+#: gtk/gtkmenu.c:607 gtk/gtktable.c:226
 msgid "The row number to attach the bottom of the child to"
 msgstr "Rindas numurs, ko piesaistīt bērna apagšas logdaļai"
 
-#: gtk/gtkmenu.c:691
+#: gtk/gtkmenu.c:694
 msgid "Can change accelerators"
 msgstr "Var mainīt paātrinātājus"
 
-#: gtk/gtkmenu.c:692
+#: gtk/gtkmenu.c:695
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Vai izvēlņu paātrinātāji var tikt mainīti, nospiežot taustiņu virs izvēlnes "
 "priekšmeta"
 
-#: gtk/gtkmenu.c:697
+#: gtk/gtkmenu.c:700
 msgid "Delay before submenus appear"
 msgstr "Aizture pirms parādās apakšizvēlne"
 
-#: gtk/gtkmenu.c:698
+#: gtk/gtkmenu.c:701
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Minimums laika, cik ilgi kursoram jāatrodas uz izvēlnes pirms parādās "
 "apakšizvēlne"
 
-#: gtk/gtkmenu.c:705
+#: gtk/gtkmenu.c:708
 msgid "Delay before hiding a submenu"
 msgstr "Aizture pirms apakšizvēlnes paslēpšanas"
 
-#: gtk/gtkmenu.c:706
+#: gtk/gtkmenu.c:709
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"

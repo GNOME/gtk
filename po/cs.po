@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-13 21:15+0000\n"
+"POT-Creation-Date: 2005-08-01 12:30-0400\n"
 "PO-Revision-Date: 2005-07-14 10:48+0200\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -21,19 +21,19 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: ../gdk-pixbuf/gdk-pixbuf-animation.c:153 ../gdk-pixbuf/gdk-pixbuf-io.c:838
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1068 ../tests/testfilechooser.c:199
+#: gdk-pixbuf/gdk-pixbuf-animation.c:153 gdk-pixbuf/gdk-pixbuf-io.c:838
+#: gdk-pixbuf/gdk-pixbuf-io.c:1068 tests/testfilechooser.c:199
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Nemohu otevřít soubor '%s': %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-animation.c:166 ../gdk-pixbuf/gdk-pixbuf-io.c:850
+#: gdk-pixbuf/gdk-pixbuf-animation.c:166 gdk-pixbuf/gdk-pixbuf-io.c:850
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "Soubor obrázku '%s' neobsahuje data"
 
-#: ../gdk-pixbuf/gdk-pixbuf-animation.c:208 ../gdk-pixbuf/gdk-pixbuf-io.c:887
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1109 ../tests/testfilechooser.c:244
+#: gdk-pixbuf/gdk-pixbuf-animation.c:208 gdk-pixbuf/gdk-pixbuf-io.c:887
+#: gdk-pixbuf/gdk-pixbuf-io.c:1109 tests/testfilechooser.c:244
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -41,7 +41,7 @@ msgstr ""
 "Nemohu načíst obrázek '%s': důvod není znám, pravděpodobně poškozený soubor "
 "obrázku"
 
-#: ../gdk-pixbuf/gdk-pixbuf-animation.c:241
+#: gdk-pixbuf/gdk-pixbuf-animation.c:241
 #, c-format
 msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
@@ -50,12 +50,12 @@ msgstr ""
 "Nemohu načíst animaci '%s': důvod není znám, pravděpodobně poškozený soubor "
 "animace"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:444
+#: gdk-pixbuf/gdk-pixbuf-io.c:444
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr "Nemohu načíst modul pro čtení obrázků: %s: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:459
+#: gdk-pixbuf/gdk-pixbuf-io.c:459
 #, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
@@ -64,53 +64,53 @@ msgstr ""
 "Modul pro čtení obrázků %s neexportuje správné rozhraní; možná je z jiné "
 "verze GTK?"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:628 ../gdk-pixbuf/gdk-pixbuf-io.c:680
+#: gdk-pixbuf/gdk-pixbuf-io.c:628 gdk-pixbuf/gdk-pixbuf-io.c:680
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "Typ obrázku '%s' není podporován"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:720
+#: gdk-pixbuf/gdk-pixbuf-io.c:720
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "Nemohu rozpoznat formát souboru obrázku u souboru '%s'"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:728
+#: gdk-pixbuf/gdk-pixbuf-io.c:728
 msgid "Unrecognized image file format"
 msgstr "Nerozpoznaný formát souboru obrázku"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:896
+#: gdk-pixbuf/gdk-pixbuf-io.c:896
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "Nemohu načíst obrázek '%s': %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1336
+#: gdk-pixbuf/gdk-pixbuf-io.c:1336
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "Chyba při zápisu do souboru obrázku: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1382 ../gdk-pixbuf/gdk-pixbuf-io.c:1511
+#: gdk-pixbuf/gdk-pixbuf-io.c:1382 gdk-pixbuf/gdk-pixbuf-io.c:1511
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "Toto sestavení gdk-pixbuf nepodporuje ukládání obrázku ve formátu: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1416
+#: gdk-pixbuf/gdk-pixbuf-io.c:1416
 msgid "Insufficient memory to save image to callback"
 msgstr "Nedostatek paměti pro uložení obrázku pro callback"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1428
+#: gdk-pixbuf/gdk-pixbuf-io.c:1428
 msgid "Failed to open temporary file"
 msgstr "Nemohu otevřít dočasný soubor"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1453
+#: gdk-pixbuf/gdk-pixbuf-io.c:1453
 msgid "Failed to read from temporary file"
 msgstr "Nemohu číst z dočasného souboru"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1683
+#: gdk-pixbuf/gdk-pixbuf-io.c:1683
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "Nemohu otevřít '%s' pro zápis: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1707
+#: gdk-pixbuf/gdk-pixbuf-io.c:1707
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -119,16 +119,16 @@ msgstr ""
 "Nemohu se zavřít '%s' během zápisu obrázku, možná nejsou uložena všechna "
 "data: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1927 ../gdk-pixbuf/gdk-pixbuf-io.c:1977
+#: gdk-pixbuf/gdk-pixbuf-io.c:1927 gdk-pixbuf/gdk-pixbuf-io.c:1977
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Nedostatek paměti pro uložení obrázku do bufferu"
 
-#: ../gdk-pixbuf/gdk-pixbuf-loader.c:383
+#: gdk-pixbuf/gdk-pixbuf-loader.c:383
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
 msgstr "Postupné načítání obrázku typu '%s' není podporováno"
 
-#: ../gdk-pixbuf/gdk-pixbuf-loader.c:411 ../gdk-pixbuf/gdk-pixbuf-loader.c:513
+#: gdk-pixbuf/gdk-pixbuf-loader.c:411 gdk-pixbuf/gdk-pixbuf-loader.c:513
 #, c-format
 msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
@@ -137,19 +137,19 @@ msgstr ""
 "Interní chyba: Modulu pro načítání obrázku '%s' nezačal načítat obrázek, ale "
 "pro toto selhání neudal důvod"
 
-#: ../gdk-pixbuf/gdk-pixdata.c:147
+#: gdk-pixbuf/gdk-pixdata.c:147
 msgid "Image header corrupt"
 msgstr "Hlavička obrázku je poškozena"
 
-#: ../gdk-pixbuf/gdk-pixdata.c:152
+#: gdk-pixbuf/gdk-pixdata.c:152
 msgid "Image format unknown"
 msgstr "Neznámý formát obrázku"
 
-#: ../gdk-pixbuf/gdk-pixdata.c:157 ../gdk-pixbuf/gdk-pixdata.c:487
+#: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:487
 msgid "Image pixel data corrupt"
 msgstr "Data pixelů obrázku jsou poškozena"
 
-#: ../gdk-pixbuf/gdk-pixdata.c:431
+#: gdk-pixbuf/gdk-pixdata.c:431
 #, c-format
 msgid "failed to allocate image buffer of %u byte"
 msgid_plural "failed to allocate image buffer of %u bytes"
@@ -157,117 +157,113 @@ msgstr[0] "nemohu alokovat paměť pro obrázek o velikosti %u bajt"
 msgstr[1] "nemohu alokovat paměť pro obrázek o velikosti %u bajty"
 msgstr[2] "nemohu alokovat paměť pro obrázek o velikosti %u bajtů"
 
-#: ../gdk-pixbuf/io-ani.c:244
+#: gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
 msgstr "Neočekávaný kus ikona v animaci"
 
-#: ../gdk-pixbuf/io-ani.c:337
+#: gdk-pixbuf/io-ani.c:337
 msgid "Unsupported animation type"
 msgstr "Nepodporovaný typ animace"
 
-#: ../gdk-pixbuf/io-ani.c:348 ../gdk-pixbuf/io-ani.c:538
+#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:538
 msgid "Invalid header in animation"
 msgstr "Neplatná hlavička v animaci"
 
-#: ../gdk-pixbuf/io-ani.c:358 ../gdk-pixbuf/io-ani.c:382
-#: ../gdk-pixbuf/io-ani.c:441 ../gdk-pixbuf/io-ani.c:460
-#: ../gdk-pixbuf/io-ani.c:511 ../gdk-pixbuf/io-ani.c:583
+#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:382 gdk-pixbuf/io-ani.c:441
+#: gdk-pixbuf/io-ani.c:460 gdk-pixbuf/io-ani.c:511 gdk-pixbuf/io-ani.c:583
 msgid "Not enough memory to load animation"
 msgstr "Nedostatek paměti pro načtení animace"
 
-#: ../gdk-pixbuf/io-ani.c:400 ../gdk-pixbuf/io-ani.c:417
-#: ../gdk-pixbuf/io-ani.c:428
+#: gdk-pixbuf/io-ani.c:400 gdk-pixbuf/io-ani.c:417 gdk-pixbuf/io-ani.c:428
 msgid "Malformed chunk in animation"
 msgstr "Špatně vytvořený kus v animaci"
 
-#: ../gdk-pixbuf/io-ani.c:676
+#: gdk-pixbuf/io-ani.c:676
 msgid "The ANI image format"
 msgstr "Formát obrázku ANI"
 
-#: ../gdk-pixbuf/io-bmp.c:228 ../gdk-pixbuf/io-bmp.c:301
-#: ../gdk-pixbuf/io-bmp.c:333 ../gdk-pixbuf/io-bmp.c:356
-#: ../gdk-pixbuf/io-bmp.c:437
+#: gdk-pixbuf/io-bmp.c:228 gdk-pixbuf/io-bmp.c:301 gdk-pixbuf/io-bmp.c:333
+#: gdk-pixbuf/io-bmp.c:356 gdk-pixbuf/io-bmp.c:437
 msgid "BMP image has bogus header data"
 msgstr "Obrázek formátu BMP má neplatná data v hlavičce"
 
-#: ../gdk-pixbuf/io-bmp.c:239 ../gdk-pixbuf/io-bmp.c:396
+#: gdk-pixbuf/io-bmp.c:239 gdk-pixbuf/io-bmp.c:396
 msgid "Not enough memory to load bitmap image"
 msgstr "Nedostatek paměti pro načtení bitmapového obrázku"
 
-#: ../gdk-pixbuf/io-bmp.c:282
+#: gdk-pixbuf/io-bmp.c:282
 msgid "BMP image has unsupported header size"
 msgstr "Obrázek BMP má nepodporovanou velikost hlavičky"
 
-#: ../gdk-pixbuf/io-bmp.c:320
+#: gdk-pixbuf/io-bmp.c:320
 msgid "Topdown BMP images cannot be compressed"
 msgstr "Obrázky BMP shora dolů nelze komprimovat"
 
-#: ../gdk-pixbuf/io-bmp.c:1198
+#: gdk-pixbuf/io-bmp.c:1198
 msgid "Couldn't allocate memory for saving BMP file"
 msgstr "Nemohu alokovat paměť pro uložení souboru BMP"
 
-#: ../gdk-pixbuf/io-bmp.c:1239
+#: gdk-pixbuf/io-bmp.c:1239
 msgid "Couldn't write to BMP file"
 msgstr "Nemohu zapisovat do souboru BMP"
 
-#: ../gdk-pixbuf/io-bmp.c:1288
+#: gdk-pixbuf/io-bmp.c:1288
 msgid "The BMP image format"
 msgstr "Formát obrázku BMP"
 
-#: ../gdk-pixbuf/io-gif.c:220
+#: gdk-pixbuf/io-gif.c:220
 #, c-format
 msgid "Failure reading GIF: %s"
 msgstr "Chyba při čtení GIF: %s"
 
-#: ../gdk-pixbuf/io-gif.c:492 ../gdk-pixbuf/io-gif.c:1463
-#: ../gdk-pixbuf/io-gif.c:1624
+#: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1463 gdk-pixbuf/io-gif.c:1624
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "V souboru GIF chybí některá data (možná byl nějak uříznut?)"
 
-#: ../gdk-pixbuf/io-gif.c:501
+#: gdk-pixbuf/io-gif.c:501
 #, c-format
 msgid "Internal error in the GIF loader (%s)"
 msgstr "Interní chyba v načítači GIF (%s)"
 
-#: ../gdk-pixbuf/io-gif.c:575
+#: gdk-pixbuf/io-gif.c:575
 msgid "Stack overflow"
 msgstr "Přetečení zásobníku"
 
-#: ../gdk-pixbuf/io-gif.c:635
+#: gdk-pixbuf/io-gif.c:635
 msgid "GIF image loader cannot understand this image."
 msgstr "Načítač obrázků GIF nerozumí tomuto obrázku."
 
-#: ../gdk-pixbuf/io-gif.c:664
+#: gdk-pixbuf/io-gif.c:664
 msgid "Bad code encountered"
 msgstr "Nalezen chybný kód"
 
-#: ../gdk-pixbuf/io-gif.c:674
+#: gdk-pixbuf/io-gif.c:674
 msgid "Circular table entry in GIF file"
 msgstr "Cyklická položka tabulky v souboru GIF"
 
-#: ../gdk-pixbuf/io-gif.c:862 ../gdk-pixbuf/io-gif.c:1451
-#: ../gdk-pixbuf/io-gif.c:1497 ../gdk-pixbuf/io-gif.c:1612
+#: gdk-pixbuf/io-gif.c:862 gdk-pixbuf/io-gif.c:1451 gdk-pixbuf/io-gif.c:1497
+#: gdk-pixbuf/io-gif.c:1612
 msgid "Not enough memory to load GIF file"
 msgstr "Nedostatek paměti pro načtení obrázku ve formátu GIF"
 
-#: ../gdk-pixbuf/io-gif.c:947
+#: gdk-pixbuf/io-gif.c:947
 msgid "Not enough memory to composite a frame in GIF file"
 msgstr "Nedostatek paměti pro složení obrázku v souboru GIF"
 
-#: ../gdk-pixbuf/io-gif.c:1116
+#: gdk-pixbuf/io-gif.c:1116
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "Obrázek GIF je poškozen (chybná komprese LZW)"
 
-#: ../gdk-pixbuf/io-gif.c:1166
+#: gdk-pixbuf/io-gif.c:1166
 msgid "File does not appear to be a GIF file"
 msgstr "Soubor nevypadá jako soubor GIF"
 
-#: ../gdk-pixbuf/io-gif.c:1178
+#: gdk-pixbuf/io-gif.c:1178
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "Verze %s formátu souborů GIF není podporována"
 
-#: ../gdk-pixbuf/io-gif.c:1287
+#: gdk-pixbuf/io-gif.c:1287
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
@@ -275,67 +271,66 @@ msgstr ""
 "Obrázek GIF neobsahuje globální mapu barev a políčko v něm neobsahuje "
 "lokální mapu."
 
-#: ../gdk-pixbuf/io-gif.c:1519
+#: gdk-pixbuf/io-gif.c:1519
 msgid "GIF image was truncated or incomplete."
 msgstr "Obrázek GIF byl zkrácen nebo není úplný."
 
-#: ../gdk-pixbuf/io-gif.c:1671
+#: gdk-pixbuf/io-gif.c:1671
 msgid "The GIF image format"
 msgstr "Formát obrázku GIF"
 
-#: ../gdk-pixbuf/io-ico.c:219 ../gdk-pixbuf/io-ico.c:271
-#: ../gdk-pixbuf/io-ico.c:340 ../gdk-pixbuf/io-ico.c:403
-#: ../gdk-pixbuf/io-ico.c:433
+#: gdk-pixbuf/io-ico.c:219 gdk-pixbuf/io-ico.c:271 gdk-pixbuf/io-ico.c:340
+#: gdk-pixbuf/io-ico.c:403 gdk-pixbuf/io-ico.c:433
 msgid "Not enough memory to load icon"
 msgstr "Nedostatek paměti pro načtení ikony"
 
-#: ../gdk-pixbuf/io-ico.c:256 ../gdk-pixbuf/io-ico.c:330
+#: gdk-pixbuf/io-ico.c:256 gdk-pixbuf/io-ico.c:330
 msgid "Invalid header in icon"
 msgstr "Neplatná hlavička ikony"
 
-#: ../gdk-pixbuf/io-ico.c:293
+#: gdk-pixbuf/io-ico.c:293
 msgid "Icon has zero width"
 msgstr "Ikona má nulovou šířku"
 
-#: ../gdk-pixbuf/io-ico.c:303
+#: gdk-pixbuf/io-ico.c:303
 msgid "Icon has zero height"
 msgstr "Ikona má nulovou výšku"
 
-#: ../gdk-pixbuf/io-ico.c:355
+#: gdk-pixbuf/io-ico.c:355
 msgid "Compressed icons are not supported"
 msgstr "Komprimované ikony nejsou podporovány"
 
-#: ../gdk-pixbuf/io-ico.c:388
+#: gdk-pixbuf/io-ico.c:388
 msgid "Unsupported icon type"
 msgstr "Nepodporovaný typ ikony"
 
-#: ../gdk-pixbuf/io-ico.c:482
+#: gdk-pixbuf/io-ico.c:482
 msgid "Not enough memory to load ICO file"
 msgstr "Nedostatek paměti pro načtení souboru ICO"
 
-#: ../gdk-pixbuf/io-ico.c:947
+#: gdk-pixbuf/io-ico.c:947
 msgid "Image too large to be saved as ICO"
 msgstr "Obrázek je příliš velký, aby mohl být uložen jako ICO"
 
-#: ../gdk-pixbuf/io-ico.c:958
+#: gdk-pixbuf/io-ico.c:958
 msgid "Cursor hotspot outside image"
 msgstr "Aktivní bod kurzoru mimo obrázek"
 
-#: ../gdk-pixbuf/io-ico.c:981
+#: gdk-pixbuf/io-ico.c:981
 #, c-format
 msgid "Unsupported depth for ICO file: %d"
 msgstr "Nepodporovaná hloubka souboru ICO: %d"
 
-#: ../gdk-pixbuf/io-ico.c:1210
+#: gdk-pixbuf/io-ico.c:1210
 msgid "The ICO image format"
 msgstr "Formát obrázku ICO"
 
-#: ../gdk-pixbuf/io-jpeg.c:114
+#: gdk-pixbuf/io-jpeg.c:114
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
 msgstr "Chyba při interpretaci souboru obrázku JPEG (%s)"
 
-#: ../gdk-pixbuf/io-jpeg.c:349
+#: gdk-pixbuf/io-jpeg.c:349
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
@@ -343,17 +338,17 @@ msgstr ""
 "Nedostatek paměti pro načtení obrázku, zkuste uvolnit paměť ukončením "
 "několika aplikací"
 
-#: ../gdk-pixbuf/io-jpeg.c:383 ../gdk-pixbuf/io-jpeg.c:749
+#: gdk-pixbuf/io-jpeg.c:383 gdk-pixbuf/io-jpeg.c:749
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Nepodporovaný prostor barev JPEG (%s)"
 
-#: ../gdk-pixbuf/io-jpeg.c:481 ../gdk-pixbuf/io-jpeg.c:678
-#: ../gdk-pixbuf/io-jpeg.c:943 ../gdk-pixbuf/io-jpeg.c:952
+#: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:678 gdk-pixbuf/io-jpeg.c:943
+#: gdk-pixbuf/io-jpeg.c:952
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Nemohu alokovat paměť pro načtení souboru JPEG"
 
-#: ../gdk-pixbuf/io-jpeg.c:894
+#: gdk-pixbuf/io-jpeg.c:894
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -362,93 +357,93 @@ msgstr ""
 "Kvalita JPEG musí být hodnota mezi 0 a 100; hodnotu '%s' nebylo možné "
 "zpracovat."
 
-#: ../gdk-pixbuf/io-jpeg.c:909
+#: gdk-pixbuf/io-jpeg.c:909
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "Kvalita JPEG musí být hodnota mezi 0 a 100; hodnota '%d' není povolena."
 
-#: ../gdk-pixbuf/io-jpeg.c:1071
+#: gdk-pixbuf/io-jpeg.c:1071
 msgid "The JPEG image format"
 msgstr "Formát obrázku JPEG"
 
-#: ../gdk-pixbuf/io-pcx.c:191
+#: gdk-pixbuf/io-pcx.c:191
 msgid "Couldn't allocate memory for header"
 msgstr "Nemohu alokovat paměť pro hlavičku"
 
-#: ../gdk-pixbuf/io-pcx.c:206 ../gdk-pixbuf/io-pcx.c:566
+#: gdk-pixbuf/io-pcx.c:206 gdk-pixbuf/io-pcx.c:566
 msgid "Couldn't allocate memory for context buffer"
 msgstr "Nemohu alokovat paměť pro vyrovnávací paměť kontextu"
 
-#: ../gdk-pixbuf/io-pcx.c:607
+#: gdk-pixbuf/io-pcx.c:607
 msgid "Image has invalid width and/or height"
 msgstr "Obrázek má nulovou šířku a/nebo výšku"
 
-#: ../gdk-pixbuf/io-pcx.c:619 ../gdk-pixbuf/io-pcx.c:680
+#: gdk-pixbuf/io-pcx.c:619 gdk-pixbuf/io-pcx.c:680
 msgid "Image has unsupported bpp"
 msgstr "Obrázek má nepodporované bpp"
 
-#: ../gdk-pixbuf/io-pcx.c:624 ../gdk-pixbuf/io-pcx.c:632
+#: gdk-pixbuf/io-pcx.c:624 gdk-pixbuf/io-pcx.c:632
 #, c-format
 msgid "Image has unsupported number of %d-bit planes"
 msgstr "Obrázek má nepodporovaný počet %d-bitových rovin"
 
-#: ../gdk-pixbuf/io-pcx.c:648
+#: gdk-pixbuf/io-pcx.c:648
 msgid "Couldn't create new pixbuf"
 msgstr "Nemohu vytvořit nový pixbuf"
 
-#: ../gdk-pixbuf/io-pcx.c:656
+#: gdk-pixbuf/io-pcx.c:656
 msgid "Couldn't allocate memory for line data"
 msgstr "Nemohu alokovat paměť pro data řádků"
 
-#: ../gdk-pixbuf/io-pcx.c:663
+#: gdk-pixbuf/io-pcx.c:663
 msgid "Couldn't allocate memory for paletted data"
 msgstr "Nemohu alokovat paměť pro data palety"
 
-#: ../gdk-pixbuf/io-pcx.c:710
+#: gdk-pixbuf/io-pcx.c:710
 msgid "Didn't get all lines of PCX image"
 msgstr "Nedostal jsem všechny řádky obrázku PCX"
 
-#: ../gdk-pixbuf/io-pcx.c:717
+#: gdk-pixbuf/io-pcx.c:717
 msgid "No palette found at end of PCX data"
 msgstr "Na konci dat PCX nenalezena paleta"
 
-#: ../gdk-pixbuf/io-pcx.c:758
+#: gdk-pixbuf/io-pcx.c:758
 msgid "The PCX image format"
 msgstr "Formát obrázku PCX"
 
-#: ../gdk-pixbuf/io-png.c:55
+#: gdk-pixbuf/io-png.c:55
 msgid "Bits per channel of PNG image is invalid."
 msgstr "Počet bitů na kanál obrázku PNG není platný."
 
-#: ../gdk-pixbuf/io-png.c:136
+#: gdk-pixbuf/io-png.c:136
 msgid "Transformed PNG has zero width or height."
 msgstr "Transformovaný obrázek PNG má nulovou výšku nebo šířku."
 
-#: ../gdk-pixbuf/io-png.c:144
+#: gdk-pixbuf/io-png.c:144
 msgid "Bits per channel of transformed PNG is not 8."
 msgstr "Počet bitů na kanál transformovaného obrázku PNG není 8."
 
-#: ../gdk-pixbuf/io-png.c:153
+#: gdk-pixbuf/io-png.c:153
 msgid "Transformed PNG not RGB or RGBA."
 msgstr "Transformovaný obrázek PNG není RGB nebo RGBA."
 
-#: ../gdk-pixbuf/io-png.c:162
+#: gdk-pixbuf/io-png.c:162
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
 msgstr ""
 "Transformovaný obrázek PNG má nepodporovaný počet kanálů, musí být 3 nebo 4."
 
-#: ../gdk-pixbuf/io-png.c:183
+#: gdk-pixbuf/io-png.c:183
 #, c-format
 msgid "Fatal error in PNG image file: %s"
 msgstr "Fatální chyba v souboru obrázku PNG: %s"
 
-#: ../gdk-pixbuf/io-png.c:301
+#: gdk-pixbuf/io-png.c:301
 msgid "Insufficient memory to load PNG file"
 msgstr "Nedostatek paměti pro načtení souboru PNG"
 
-#: ../gdk-pixbuf/io-png.c:618
+#: gdk-pixbuf/io-png.c:618
 #, c-format
 msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
@@ -457,345 +452,342 @@ msgstr ""
 "Nedostatek paměti pro uložení obrázku %ld krát %ld; zkuste uvolnit paměť "
 "ukončením několika aplikací"
 
-#: ../gdk-pixbuf/io-png.c:669
+#: gdk-pixbuf/io-png.c:669
 msgid "Fatal error reading PNG image file"
 msgstr "Fatální chyba při čtení souboru obrázku PNG"
 
-#: ../gdk-pixbuf/io-png.c:718
+#: gdk-pixbuf/io-png.c:718
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
 msgstr "Fatální chyba při čtení souboru obrázku PNG: %s"
 
-#: ../gdk-pixbuf/io-png.c:813
+#: gdk-pixbuf/io-png.c:813
 msgid ""
 "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "Klíče pro kusy PNG text musí mít alespoň 1 a nejvýše 79 znaků."
 
-#: ../gdk-pixbuf/io-png.c:821
+#: gdk-pixbuf/io-png.c:821
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "Klíče pro kusy PNG text musí být znaky ASCII."
 
-#: ../gdk-pixbuf/io-png.c:854
+#: gdk-pixbuf/io-png.c:854
 #, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
 msgstr "Hodnotu pro kus PNG text %s nelze převést do kódování ISO-8859-1."
 
-#: ../gdk-pixbuf/io-png.c:994
+#: gdk-pixbuf/io-png.c:994
 msgid "The PNG image format"
 msgstr "Formát obrázku PNG"
 
-#: ../gdk-pixbuf/io-pnm.c:252
+#: gdk-pixbuf/io-pnm.c:252
 msgid "PNM loader expected to find an integer, but didn't"
 msgstr "Načítač PNM očekával celé číslo, ale nenašel ho"
 
-#: ../gdk-pixbuf/io-pnm.c:284
+#: gdk-pixbuf/io-pnm.c:284
 msgid "PNM file has an incorrect initial byte"
 msgstr "Soubor PNM obsahuje nesprávný počáteční bajt"
 
-#: ../gdk-pixbuf/io-pnm.c:314
+#: gdk-pixbuf/io-pnm.c:314
 msgid "PNM file is not in a recognized PNM subformat"
 msgstr "Soubor PNM není v rozpoznaném podformátu PNM"
 
-#: ../gdk-pixbuf/io-pnm.c:339
+#: gdk-pixbuf/io-pnm.c:339
 msgid "PNM file has an image width of 0"
 msgstr "Soubor PNM má šířku obrázku 0"
 
-#: ../gdk-pixbuf/io-pnm.c:360
+#: gdk-pixbuf/io-pnm.c:360
 msgid "PNM file has an image height of 0"
 msgstr "Soubor PNM má výšku obrázku 0"
 
-#: ../gdk-pixbuf/io-pnm.c:383
+#: gdk-pixbuf/io-pnm.c:383
 msgid "Maximum color value in PNM file is 0"
 msgstr "Maximální hodnota barvy v souboru PNM je 0"
 
-#: ../gdk-pixbuf/io-pnm.c:391
+#: gdk-pixbuf/io-pnm.c:391
 msgid "Maximum color value in PNM file is too large"
 msgstr "Maximální hodnota barvy v souboru PNM je příliš vysoká"
 
-#: ../gdk-pixbuf/io-pnm.c:399
+#: gdk-pixbuf/io-pnm.c:399
 msgid "Cannot handle PNM files with maximum color values greater than 255"
 msgstr ""
 "Neumím zpracovávat soubory PNM s maximální hodnotou barvy větší než 255"
 
-#: ../gdk-pixbuf/io-pnm.c:438 ../gdk-pixbuf/io-pnm.c:466
-#: ../gdk-pixbuf/io-pnm.c:498
+#: gdk-pixbuf/io-pnm.c:438 gdk-pixbuf/io-pnm.c:466 gdk-pixbuf/io-pnm.c:498
 msgid "Raw PNM image type is invalid"
 msgstr "Typ obrázku raw PNM není platný"
 
-#: ../gdk-pixbuf/io-pnm.c:562 ../gdk-pixbuf/io-pnm.c:604
+#: gdk-pixbuf/io-pnm.c:562 gdk-pixbuf/io-pnm.c:604
 msgid "PNM image format is invalid"
 msgstr "Formát obrázku PNM není platný"
 
-#: ../gdk-pixbuf/io-pnm.c:663
+#: gdk-pixbuf/io-pnm.c:663
 msgid "PNM image loader does not support this PNM subformat"
 msgstr "Načítač obrázků PNM nepodporuje tento podformát PNM"
 
-#: ../gdk-pixbuf/io-pnm.c:718
+#: gdk-pixbuf/io-pnm.c:718
 msgid "Premature end-of-file encountered"
 msgstr "Nalezen předčasný konec souboru"
 
-#: ../gdk-pixbuf/io-pnm.c:750 ../gdk-pixbuf/io-pnm.c:981
+#: gdk-pixbuf/io-pnm.c:750 gdk-pixbuf/io-pnm.c:981
 msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr "Formáty raw PNM vyžadují přesně jednu mezeru před daty vzorků"
 
-#: ../gdk-pixbuf/io-pnm.c:777
+#: gdk-pixbuf/io-pnm.c:777
 msgid "Cannot allocate memory for loading PNM image"
 msgstr "Nemohu alokovat paměť pro načtení obrázku PNM"
 
-#: ../gdk-pixbuf/io-pnm.c:827
+#: gdk-pixbuf/io-pnm.c:827
 msgid "Insufficient memory to load PNM context struct"
 msgstr "Nedostatek paměti pro načtení struktury kontextu PNM"
 
-#: ../gdk-pixbuf/io-pnm.c:878
+#: gdk-pixbuf/io-pnm.c:878
 msgid "Unexpected end of PNM image data"
 msgstr "Neočekávaný konec dat obrázku PNM"
 
-#: ../gdk-pixbuf/io-pnm.c:1010
+#: gdk-pixbuf/io-pnm.c:1010
 msgid "Insufficient memory to load PNM file"
 msgstr "Nedostatek paměti pro načtení souboru PNM"
 
-#: ../gdk-pixbuf/io-pnm.c:1089
+#: gdk-pixbuf/io-pnm.c:1089
 msgid "The PNM/PBM/PGM/PPM image format family"
 msgstr "Rodina formátů obrázků PNM/PBM/PGM/PPM"
 
-#: ../gdk-pixbuf/io-ras.c:126
+#: gdk-pixbuf/io-ras.c:126
 msgid "RAS image has bogus header data"
 msgstr "Obrázek RAS má neplatná data v hlavičce"
 
-#: ../gdk-pixbuf/io-ras.c:148
+#: gdk-pixbuf/io-ras.c:148
 msgid "RAS image has unknown type"
 msgstr "Obrázek RAS má neznámý typ"
 
-#: ../gdk-pixbuf/io-ras.c:156
+#: gdk-pixbuf/io-ras.c:156
 msgid "unsupported RAS image variation"
 msgstr "nepodporovaná variace obrázku RAS"
 
-#: ../gdk-pixbuf/io-ras.c:171 ../gdk-pixbuf/io-ras.c:200
+#: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
 msgid "Not enough memory to load RAS image"
 msgstr "Nedostatek paměti pro načtení obrázku RAS"
 
-#: ../gdk-pixbuf/io-ras.c:543
+#: gdk-pixbuf/io-ras.c:543
 msgid "The Sun raster image format"
 msgstr "Formát obrázku Sun raster"
 
-#: ../gdk-pixbuf/io-tga.c:154
+#: gdk-pixbuf/io-tga.c:154
 msgid "Cannot allocate memory for IOBuffer struct"
 msgstr "Nemohu alokovat paměť pro strukturu IOBuffer"
 
-#: ../gdk-pixbuf/io-tga.c:173
+#: gdk-pixbuf/io-tga.c:173
 msgid "Cannot allocate memory for IOBuffer data"
 msgstr "Nemohu alokovat paměť pro data IOBuffer"
 
-#: ../gdk-pixbuf/io-tga.c:184
+#: gdk-pixbuf/io-tga.c:184
 msgid "Cannot realloc IOBuffer data"
 msgstr "Nemohu realloc data IOBuffer"
 
-#: ../gdk-pixbuf/io-tga.c:214
+#: gdk-pixbuf/io-tga.c:214
 msgid "Cannot allocate temporary IOBuffer data"
 msgstr "Nemohu alokovat dočasná data pro IOBuffer"
 
-#: ../gdk-pixbuf/io-tga.c:348
+#: gdk-pixbuf/io-tga.c:348
 msgid "Cannot allocate new pixbuf"
 msgstr "Nemohu alokovat nový pixbuf"
 
-#: ../gdk-pixbuf/io-tga.c:689
+#: gdk-pixbuf/io-tga.c:689
 msgid "Cannot allocate colormap structure"
 msgstr "Nemohu alokovat strukturu pro mapu barev"
 
-#: ../gdk-pixbuf/io-tga.c:696
+#: gdk-pixbuf/io-tga.c:696
 msgid "Cannot allocate colormap entries"
 msgstr "Nemohu alokovat položky mapy barev"
 
-#: ../gdk-pixbuf/io-tga.c:718
+#: gdk-pixbuf/io-tga.c:718
 msgid "Unexpected bitdepth for colormap entries"
 msgstr "Neočekávaná bitová hloubka pro položky mapy barev"
 
-#: ../gdk-pixbuf/io-tga.c:736
+#: gdk-pixbuf/io-tga.c:736
 msgid "Cannot allocate TGA header memory"
 msgstr "Nemohu alokovat paměť pro hlavičku TGA"
 
-#: ../gdk-pixbuf/io-tga.c:769
+#: gdk-pixbuf/io-tga.c:769
 msgid "TGA image has invalid dimensions"
 msgstr "Obrázek TGA má neplatné rozměry"
 
-#: ../gdk-pixbuf/io-tga.c:775 ../gdk-pixbuf/io-tga.c:784
-#: ../gdk-pixbuf/io-tga.c:794 ../gdk-pixbuf/io-tga.c:804
-#: ../gdk-pixbuf/io-tga.c:811
+#: gdk-pixbuf/io-tga.c:775 gdk-pixbuf/io-tga.c:784 gdk-pixbuf/io-tga.c:794
+#: gdk-pixbuf/io-tga.c:804 gdk-pixbuf/io-tga.c:811
 msgid "TGA image type not supported"
 msgstr "Typ obrázku TGA není podporován"
 
-#: ../gdk-pixbuf/io-tga.c:858
+#: gdk-pixbuf/io-tga.c:858
 msgid "Cannot allocate memory for TGA context struct"
 msgstr "Nemohu alokovat paměť pro strukturu kontextu TGA"
 
-#: ../gdk-pixbuf/io-tga.c:923
+#: gdk-pixbuf/io-tga.c:923
 msgid "Excess data in file"
 msgstr "V souboru jsou data navíc"
 
-#: ../gdk-pixbuf/io-tga.c:992
+#: gdk-pixbuf/io-tga.c:992
 msgid "The Targa image format"
 msgstr "Formát obrázku Targa"
 
-#: ../gdk-pixbuf/io-tiff.c:173
+#: gdk-pixbuf/io-tiff.c:173
 msgid "Could not get image width (bad TIFF file)"
 msgstr "Nemohu získat šířku obrázku (špatný soubor TIFF)"
 
-#: ../gdk-pixbuf/io-tiff.c:180
+#: gdk-pixbuf/io-tiff.c:180
 msgid "Could not get image height (bad TIFF file)"
 msgstr "Nemohu získat výšku obrázku (špatný soubor TIFF)"
 
-#: ../gdk-pixbuf/io-tiff.c:188
+#: gdk-pixbuf/io-tiff.c:188
 msgid "Width or height of TIFF image is zero"
 msgstr "Výška nebo šířka obrázku TIFF je 0"
 
-#: ../gdk-pixbuf/io-tiff.c:197 ../gdk-pixbuf/io-tiff.c:206
+#: gdk-pixbuf/io-tiff.c:197 gdk-pixbuf/io-tiff.c:206
 msgid "Dimensions of TIFF image too large"
 msgstr "Rozměry obrázku TIFF jsou příliš velké"
 
-#: ../gdk-pixbuf/io-tiff.c:225 ../gdk-pixbuf/io-tiff.c:237
-#: ../gdk-pixbuf/io-tiff.c:286 ../gdk-pixbuf/io-tiff.c:572
+#: gdk-pixbuf/io-tiff.c:225 gdk-pixbuf/io-tiff.c:237 gdk-pixbuf/io-tiff.c:286
+#: gdk-pixbuf/io-tiff.c:572
 msgid "Insufficient memory to open TIFF file"
 msgstr "Nedostatek paměti pro otevření souboru TIFF"
 
-#: ../gdk-pixbuf/io-tiff.c:251 ../gdk-pixbuf/io-tiff.c:294
+#: gdk-pixbuf/io-tiff.c:251 gdk-pixbuf/io-tiff.c:294
 msgid "Failed to load RGB data from TIFF file"
 msgstr "Nemohu načíst data RGB ze souboru TIFF"
 
-#: ../gdk-pixbuf/io-tiff.c:361
+#: gdk-pixbuf/io-tiff.c:361
 msgid "Failed to open TIFF image"
 msgstr "Nemohu otevřít obrázek TIFF"
 
-#: ../gdk-pixbuf/io-tiff.c:373
+#: gdk-pixbuf/io-tiff.c:373
 msgid "TIFFClose operation failed"
 msgstr "Operace TIFFClose selhala"
 
-#: ../gdk-pixbuf/io-tiff.c:504 ../gdk-pixbuf/io-tiff.c:517
+#: gdk-pixbuf/io-tiff.c:504 gdk-pixbuf/io-tiff.c:517
 msgid "Failed to load TIFF image"
 msgstr "Nemohu načíst obrázek TIFF"
 
-#: ../gdk-pixbuf/io-tiff.c:610
+#: gdk-pixbuf/io-tiff.c:610
 msgid "The TIFF image format"
 msgstr "Formát obrázku TIFF"
 
-#: ../gdk-pixbuf/io-wbmp.c:246
+#: gdk-pixbuf/io-wbmp.c:246
 msgid "Image has zero width"
 msgstr "Obrázek má nulovou šířku"
 
-#: ../gdk-pixbuf/io-wbmp.c:264
+#: gdk-pixbuf/io-wbmp.c:264
 msgid "Image has zero height"
 msgstr "Obrázek má nulovou výšku"
 
-#: ../gdk-pixbuf/io-wbmp.c:275
+#: gdk-pixbuf/io-wbmp.c:275
 msgid "Not enough memory to load image"
 msgstr "Nedostatek paměti pro načtení obrázku"
 
-#: ../gdk-pixbuf/io-wbmp.c:334
+#: gdk-pixbuf/io-wbmp.c:334
 msgid "Couldn't save the rest"
 msgstr "Nemohu uložit zbytek"
 
-#: ../gdk-pixbuf/io-wbmp.c:368
+#: gdk-pixbuf/io-wbmp.c:368
 msgid "The WBMP image format"
 msgstr "Formát obrázku WBMP"
 
-#: ../gdk-pixbuf/io-xbm.c:287
+#: gdk-pixbuf/io-xbm.c:287
 msgid "Invalid XBM file"
 msgstr "Neplatný soubor XBM"
 
-#: ../gdk-pixbuf/io-xbm.c:297
+#: gdk-pixbuf/io-xbm.c:297
 msgid "Insufficient memory to load XBM image file"
 msgstr "Nedostatek paměti pro načtení souboru obrázku XBM"
 
-#: ../gdk-pixbuf/io-xbm.c:441
+#: gdk-pixbuf/io-xbm.c:441
 msgid "Failed to write to temporary file when loading XBM image"
 msgstr "Nemohu psát do dočasného souboru při načítání obrázku XBM"
 
-#: ../gdk-pixbuf/io-xbm.c:476
+#: gdk-pixbuf/io-xbm.c:476
 msgid "The XBM image format"
 msgstr "Formát obrázku XBM"
 
-#: ../gdk-pixbuf/io-xpm.c:1229
+#: gdk-pixbuf/io-xpm.c:1229
 msgid "No XPM header found"
 msgstr "Nebyla nalezena hlavička XPM"
 
-#: ../gdk-pixbuf/io-xpm.c:1238
+#: gdk-pixbuf/io-xpm.c:1238
 msgid "Invalid XPM header"
 msgstr "Neplatná hlavička XPM"
 
-#: ../gdk-pixbuf/io-xpm.c:1246
+#: gdk-pixbuf/io-xpm.c:1246
 msgid "XPM file has image width <= 0"
 msgstr "Soubor XPM má šířku obrázku <= 0"
 
-#: ../gdk-pixbuf/io-xpm.c:1254
+#: gdk-pixbuf/io-xpm.c:1254
 msgid "XPM file has image height <= 0"
 msgstr "Soubor XPM má výšku obrázku <= 0"
 
-#: ../gdk-pixbuf/io-xpm.c:1262
+#: gdk-pixbuf/io-xpm.c:1262
 msgid "XPM has invalid number of chars per pixel"
 msgstr "XPM obsahuje neplatný počet znaků na pixel"
 
-#: ../gdk-pixbuf/io-xpm.c:1269
+#: gdk-pixbuf/io-xpm.c:1269
 msgid "XPM file has invalid number of colors"
 msgstr "Soubor XPM má neplatný počet barev"
 
-#: ../gdk-pixbuf/io-xpm.c:1281 ../gdk-pixbuf/io-xpm.c:1290
-#: ../gdk-pixbuf/io-xpm.c:1342
+#: gdk-pixbuf/io-xpm.c:1281 gdk-pixbuf/io-xpm.c:1290 gdk-pixbuf/io-xpm.c:1342
 msgid "Cannot allocate memory for loading XPM image"
 msgstr "Nemohu alokovat paměť pro načtení obrázku XPM"
 
-#: ../gdk-pixbuf/io-xpm.c:1304
+#: gdk-pixbuf/io-xpm.c:1304
 msgid "Cannot read XPM colormap"
 msgstr "Nemohu načíst mapu barev XPM"
 
-#: ../gdk-pixbuf/io-xpm.c:1533
+#: gdk-pixbuf/io-xpm.c:1533
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "Nemohu psát do dočasného souboru při načítání obrázku XPM"
 
-#: ../gdk-pixbuf/io-xpm.c:1568
+#: gdk-pixbuf/io-xpm.c:1568
 msgid "The XPM image format"
 msgstr "Formát obrázku XPM"
 
 #. Description of --class=CLASS in --help output
-#: ../gdk/gdk.c:115
+#: gdk/gdk.c:115
 msgid "Program class as used by the window manager"
 msgstr "Třída programu používaná správcem oken"
 
 #. Placeholder in --class=CLASS in --help output
-#: ../gdk/gdk.c:116
+#: gdk/gdk.c:116
 msgid "CLASS"
 msgstr "TŘÍDA"
 
 #. Description of --name=NAME in --help output
-#: ../gdk/gdk.c:118
+#: gdk/gdk.c:118
 msgid "Program name as used by the window manager"
 msgstr "Název programu používaný správcem oken"
 
 #. Placeholder in --name=NAME in --help output
-#: ../gdk/gdk.c:119
+#: gdk/gdk.c:119
 msgid "NAME"
 msgstr "NÁZEV"
 
 #. Description of --display=DISPLAY in --help output
-#: ../gdk/gdk.c:121
+#: gdk/gdk.c:121
 msgid "X display to use"
 msgstr "Displej X, který používat"
 
 #. Placeholder in --display=DISPLAY in --help output
-#: ../gdk/gdk.c:122
+#: gdk/gdk.c:122
 msgid "DISPLAY"
 msgstr "DISPLEJ"
 
 #. Description of --screen=SCREEN in --help output
-#: ../gdk/gdk.c:124
+#: gdk/gdk.c:124
 msgid "X screen to use"
 msgstr "Obrazovka X, kterou používat"
 
 #. Placeholder in --screen=SCREEN in --help output
-#: ../gdk/gdk.c:125
+#: gdk/gdk.c:125
 msgid "SCREEN"
 msgstr "OBRAZOVKA"
 
 #. Description of --gdk-debug=FLAGS in --help output
-#: ../gdk/gdk.c:128
+#: gdk/gdk.c:128
 msgid "Gdk debugging flags to set"
 msgstr "Ladicí příznaky Gdk, které nastavit"
 
@@ -803,90 +795,90 @@ msgstr "Ladicí příznaky Gdk, které nastavit"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:129 ../gdk/gdk.c:132 ../gtk/gtkmain.c:438 ../gtk/gtkmain.c:441
+#: gdk/gdk.c:129 gdk/gdk.c:132 gtk/gtkmain.c:438 gtk/gtkmain.c:441
 msgid "FLAGS"
 msgstr "PŘÍZNAKY"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:131
+#: gdk/gdk.c:131
 msgid "Gdk debugging flags to unset"
 msgstr "Ladicí příznaky Gdk, jejichž nastavení zrušit"
 
 #. Description of --sync in --help output
-#: ../gdk/win32/gdkmain-win32.c:60
+#: gdk/win32/gdkmain-win32.c:60
 msgid "Don't batch GDI requests"
 msgstr "Nedávkovat požadavky GDI"
 
 #. Description of --no-wintab in --help output
-#: ../gdk/win32/gdkmain-win32.c:62
+#: gdk/win32/gdkmain-win32.c:62
 msgid "Don't use the Wintab API for tablet support"
 msgstr "Nepoužívat API Wintab pro podporu tabletů"
 
 #. Description of --ignore-wintab in --help output
-#: ../gdk/win32/gdkmain-win32.c:64
+#: gdk/win32/gdkmain-win32.c:64
 msgid "Same as --no-wintab"
 msgstr "Totéž jako --no-wintab"
 
 #. Description of --use-wintab in --help output
-#: ../gdk/win32/gdkmain-win32.c:66
+#: gdk/win32/gdkmain-win32.c:66
 msgid "Do use the Wintab API [default]"
 msgstr "Používat API Wintab [implicitní]"
 
 #. Description of --max-colors=COLORS in --help output
-#: ../gdk/win32/gdkmain-win32.c:68
+#: gdk/win32/gdkmain-win32.c:68
 msgid "Size of the palette in 8 bit mode"
 msgstr "Velikost palety v osmibitovém režimu"
 
 #. Placeholder in --max-colors=COLORS in --help output
-#: ../gdk/win32/gdkmain-win32.c:69
+#: gdk/win32/gdkmain-win32.c:69
 msgid "COLORS"
 msgstr "BARVY"
 
 #. Description of --sync in --help output
-#: ../gdk/x11/gdkmain-x11.c:92
+#: gdk/x11/gdkmain-x11.c:92
 msgid "Make X calls synchronous"
 msgstr "Volat X synchronně"
 
-#: ../gtk/gtkaboutdialog.c:270 ../gtk/gtkaboutdialog.c:2025
+#: gtk/gtkaboutdialog.c:270 gtk/gtkaboutdialog.c:2025
 msgid "License"
 msgstr "Licence"
 
-#: ../gtk/gtkaboutdialog.c:271
+#: gtk/gtkaboutdialog.c:271
 msgid "The license of the program"
 msgstr "Licence programu"
 
 #. Add the credits button
-#: ../gtk/gtkaboutdialog.c:491
+#: gtk/gtkaboutdialog.c:491
 msgid "_Credits"
 msgstr "_Kredity"
 
 #. Add the license button
-#: ../gtk/gtkaboutdialog.c:501
+#: gtk/gtkaboutdialog.c:501
 msgid "_License"
 msgstr "_Licence"
 
-#: ../gtk/gtkaboutdialog.c:731
+#: gtk/gtkaboutdialog.c:731
 #, c-format
 msgid "About %s"
 msgstr "O %s"
 
-#: ../gtk/gtkaboutdialog.c:1953
+#: gtk/gtkaboutdialog.c:1953
 msgid "Credits"
 msgstr "Kredity"
 
-#: ../gtk/gtkaboutdialog.c:1979
+#: gtk/gtkaboutdialog.c:1979
 msgid "Written by"
 msgstr "Napsali"
 
-#: ../gtk/gtkaboutdialog.c:1982
+#: gtk/gtkaboutdialog.c:1982
 msgid "Documented by"
 msgstr "Zdokumentovali"
 
-#: ../gtk/gtkaboutdialog.c:1994
+#: gtk/gtkaboutdialog.c:1994
 msgid "Translated by"
 msgstr "Přeložili"
 
-#: ../gtk/gtkaboutdialog.c:1998
+#: gtk/gtkaboutdialog.c:1998
 msgid "Artwork by"
 msgstr "Grafika"
 
@@ -895,7 +887,7 @@ msgstr "Grafika"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:119
+#: gtk/gtkaccellabel.c:119
 msgid "Shift"
 msgstr "Shift"
 
@@ -904,7 +896,7 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:125
+#: gtk/gtkaccellabel.c:125
 msgid "Ctrl"
 msgstr "Ctrl"
 
@@ -913,7 +905,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:131
+#: gtk/gtkaccellabel.c:131
 msgid "Alt"
 msgstr "Alt"
 
@@ -926,7 +918,7 @@ msgstr "Alt"
 #. * so if you have a default text direction of RTL and YM, then
 #. * the year will appear on the right.
 #.
-#: ../gtk/gtkcalendar.c:700
+#: gtk/gtkcalendar.c:700
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -934,25 +926,25 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: ../gtk/gtkcalendar.c:710
+#: gtk/gtkcalendar.c:710
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkcellrendererprogress.c:236 ../gtk/gtkcellrendererprogress.c:294
+#: gtk/gtkcellrendererprogress.c:236 gtk/gtkcellrendererprogress.c:294
 #, c-format
 msgid "progress bar label|%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkcolorbutton.c:220 ../gtk/gtkcolorbutton.c:574
+#: gtk/gtkcolorbutton.c:220 gtk/gtkcolorbutton.c:574
 msgid "Pick a Color"
 msgstr "Vyberte barvu"
 
-#: ../gtk/gtkcolorbutton.c:466
+#: gtk/gtkcolorbutton.c:466
 msgid "Received invalid color data\n"
 msgstr "Přijata neplatná data barvy\n"
 
-#: ../gtk/gtkcolorsel.c:576
+#: gtk/gtkcolorsel.c:576
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -962,7 +954,7 @@ msgstr ""
 "barvu můžete přetáhnout do položky palety nebo vybrat jako aktuální "
 "přetažením na ukazatel druhé barvy."
 
-#: ../gtk/gtkcolorsel.c:581
+#: gtk/gtkcolorsel.c:581
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -970,11 +962,11 @@ msgstr ""
 "Barva, kterou jste vybrali. Tuto barvu můžete přetáhnout do položky palety a "
 "tím ji uložit pro budoucí použití."
 
-#: ../gtk/gtkcolorsel.c:942
+#: gtk/gtkcolorsel.c:942
 msgid "_Save color here"
 msgstr "_Uložit barvu zde"
 
-#: ../gtk/gtkcolorsel.c:1147
+#: gtk/gtkcolorsel.c:1147
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -983,7 +975,7 @@ msgstr ""
 "palety změnit, přetáhněte na její místo jinou barvu, nebo klikněte pravým "
 "tlačítkem myši a vyberte \"Uložit barvu zde\"."
 
-#: ../gtk/gtkcolorsel.c:1913
+#: gtk/gtkcolorsel.c:1913
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
@@ -991,73 +983,73 @@ msgstr ""
 "Vyberte požadovanou barvu z vnějšího kruhu. Tmavost nebo světlost barvy "
 "vyberte pomocí vnitřního trojúhelníku."
 
-#: ../gtk/gtkcolorsel.c:1938
+#: gtk/gtkcolorsel.c:1938
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr "Klikněte na kapátko, pak vyberte barvu kliknutím kdekoli na obrazovce."
 
-#: ../gtk/gtkcolorsel.c:1947
+#: gtk/gtkcolorsel.c:1947
 msgid "_Hue:"
 msgstr "_Odstín:"
 
-#: ../gtk/gtkcolorsel.c:1948
+#: gtk/gtkcolorsel.c:1948
 msgid "Position on the color wheel."
 msgstr "Pozice na barevném kotouči."
 
-#: ../gtk/gtkcolorsel.c:1950
+#: gtk/gtkcolorsel.c:1950
 msgid "_Saturation:"
 msgstr "_Sytost:"
 
-#: ../gtk/gtkcolorsel.c:1951
+#: gtk/gtkcolorsel.c:1951
 msgid "\"Deepness\" of the color."
 msgstr "\"Hloubka\" barvy."
 
-#: ../gtk/gtkcolorsel.c:1952
+#: gtk/gtkcolorsel.c:1952
 msgid "_Value:"
 msgstr "_Hodnota:"
 
-#: ../gtk/gtkcolorsel.c:1953
+#: gtk/gtkcolorsel.c:1953
 msgid "Brightness of the color."
 msgstr "Jas barvy."
 
-#: ../gtk/gtkcolorsel.c:1954
+#: gtk/gtkcolorsel.c:1954
 msgid "_Red:"
 msgstr "Če_rvená:"
 
-#: ../gtk/gtkcolorsel.c:1955
+#: gtk/gtkcolorsel.c:1955
 msgid "Amount of red light in the color."
 msgstr "Množství červeného světla v barvě."
 
-#: ../gtk/gtkcolorsel.c:1956
+#: gtk/gtkcolorsel.c:1956
 msgid "_Green:"
 msgstr "_Zelená:"
 
-#: ../gtk/gtkcolorsel.c:1957
+#: gtk/gtkcolorsel.c:1957
 msgid "Amount of green light in the color."
 msgstr "Množství zeleného světla v barvě."
 
-#: ../gtk/gtkcolorsel.c:1958
+#: gtk/gtkcolorsel.c:1958
 msgid "_Blue:"
 msgstr "_Modrá:"
 
-#: ../gtk/gtkcolorsel.c:1959
+#: gtk/gtkcolorsel.c:1959
 msgid "Amount of blue light in the color."
 msgstr "Množství modrého světla v barvě."
 
-#: ../gtk/gtkcolorsel.c:1962
+#: gtk/gtkcolorsel.c:1962
 msgid "_Opacity:"
 msgstr "Stup_eň krytí:"
 
-#: ../gtk/gtkcolorsel.c:1970 ../gtk/gtkcolorsel.c:1981
+#: gtk/gtkcolorsel.c:1970 gtk/gtkcolorsel.c:1981
 msgid "Transparency of the color."
 msgstr "Průhlednost barvy."
 
-#: ../gtk/gtkcolorsel.c:1988
+#: gtk/gtkcolorsel.c:1988
 msgid "Color _Name:"
 msgstr "_Název barvy: "
 
-#: ../gtk/gtkcolorsel.c:2003
+#: gtk/gtkcolorsel.c:2003
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
@@ -1065,75 +1057,75 @@ msgstr ""
 "Můžete sem zadat hexadecimální hodnotu barvy ve stylu HTML nebo prostě název "
 "barvy, například 'orange'."
 
-#: ../gtk/gtkcolorsel.c:2022
+#: gtk/gtkcolorsel.c:2022
 msgid "_Palette"
 msgstr "_Paleta"
 
-#: ../gtk/gtkcolorsel.c:2054
+#: gtk/gtkcolorsel.c:2054
 msgid "Color Wheel"
 msgstr "Barevné kolo"
 
-#: ../gtk/gtkcolorseldialog.c:123
+#: gtk/gtkcolorseldialog.c:123
 msgid "Color Selection"
 msgstr "Výběr barvy"
 
-#: ../gtk/gtkentry.c:4510 ../gtk/gtktextview.c:7049
+#: gtk/gtkentry.c:4510 gtk/gtktextview.c:7049
 msgid "Select _All"
 msgstr "Vybrat _vše"
 
-#: ../gtk/gtkentry.c:4520 ../gtk/gtktextview.c:7059
+#: gtk/gtkentry.c:4520 gtk/gtktextview.c:7059
 msgid "Input _Methods"
 msgstr "Vstupní _metody"
 
-#: ../gtk/gtkentry.c:4531 ../gtk/gtktextview.c:7070
+#: gtk/gtkentry.c:4531 gtk/gtktextview.c:7070
 msgid "_Insert Unicode Control Character"
 msgstr "_Vložit řídící znak Unicode"
 
-#: ../gtk/gtkfilechooser.c:1584 ../gtk/gtkfilechooser.c:1628
-#: ../gtk/gtkfilechooser.c:1703 ../gtk/gtkfilechooser.c:1747
+#: gtk/gtkfilechooser.c:1584 gtk/gtkfilechooser.c:1628
+#: gtk/gtkfilechooser.c:1703 gtk/gtkfilechooser.c:1747
 #, c-format
 msgid "Invalid filename: %s"
 msgstr "Neplatný název souboru: %s"
 
-#: ../gtk/gtkfilechooserbutton.c:66
+#: gtk/gtkfilechooserbutton.c:66
 msgid "Select A File"
 msgstr "Zvolte soubor"
 
-#: ../gtk/gtkfilechooserbutton.c:67 ../gtk/gtkfilechooserdefault.c:1314
-#: ../gtk/gtkpathbar.c:996
+#: gtk/gtkfilechooserbutton.c:67 gtk/gtkfilechooserdefault.c:1314
+#: gtk/gtkpathbar.c:996
 msgid "Home"
 msgstr "Domov"
 
-#: ../gtk/gtkfilechooserbutton.c:68 ../gtk/gtkfilechooserdefault.c:1341
-#: ../gtk/gtkpathbar.c:998
+#: gtk/gtkfilechooserbutton.c:68 gtk/gtkfilechooserdefault.c:1341
+#: gtk/gtkpathbar.c:998
 msgid "Desktop"
 msgstr "Pracovní plocha"
 
-#: ../gtk/gtkfilechooserbutton.c:69
+#: gtk/gtkfilechooserbutton.c:69
 msgid "(None)"
 msgstr "(Žádný)"
 
-#: ../gtk/gtkfilechooserbutton.c:1522
+#: gtk/gtkfilechooserbutton.c:1522
 msgid "Other..."
 msgstr "Jiné..."
 
-#: ../gtk/gtkfilechooserdefault.c:929
+#: gtk/gtkfilechooserdefault.c:929
 msgid "Could not retrieve information about the file"
 msgstr "Nemohu získat informace o souboru"
 
-#: ../gtk/gtkfilechooserdefault.c:940
+#: gtk/gtkfilechooserdefault.c:940
 msgid "Could not add a bookmark"
 msgstr "Nemohu přidat záložku"
 
-#: ../gtk/gtkfilechooserdefault.c:951
+#: gtk/gtkfilechooserdefault.c:951
 msgid "Could not remove bookmark"
 msgstr "Nemohu odstranit záložku"
 
-#: ../gtk/gtkfilechooserdefault.c:962
+#: gtk/gtkfilechooserdefault.c:962
 msgid "The folder could not be created"
 msgstr "Adresář nelze vytvořit"
 
-#: ../gtk/gtkfilechooserdefault.c:975
+#: gtk/gtkfilechooserdefault.c:975
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -1141,148 +1133,148 @@ msgstr ""
 "Adresář nelze vytvořit, protože již existuje soubor se stejným názvem. "
 "Zkuste použít pro adresář jiný název nebo soubor nejprve přejmenujte."
 
-#: ../gtk/gtkfilechooserdefault.c:988
+#: gtk/gtkfilechooserdefault.c:988
 msgid "Invalid file name"
 msgstr "Neplatný název souboru"
 
-#: ../gtk/gtkfilechooserdefault.c:998
+#: gtk/gtkfilechooserdefault.c:998
 msgid "The folder contents could not be displayed"
 msgstr "Obsah adresáře nelze zobrazit"
 
-#: ../gtk/gtkfilechooserdefault.c:1204
+#: gtk/gtkfilechooserdefault.c:1204
 #, c-format
 msgid "Could not get information about '%s': %s"
 msgstr "Nemohu získat informace o '%s': %s"
 
-#: ../gtk/gtkfilechooserdefault.c:2229
+#: gtk/gtkfilechooserdefault.c:2229
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Přidat adresář '%s' mezi záložky"
 
-#: ../gtk/gtkfilechooserdefault.c:2270
+#: gtk/gtkfilechooserdefault.c:2270
 msgid "Add the current folder to the bookmarks"
 msgstr "Přidat aktuální adresář mezi záložky"
 
-#: ../gtk/gtkfilechooserdefault.c:2272
+#: gtk/gtkfilechooserdefault.c:2272
 msgid "Add the selected folders to the bookmarks"
 msgstr "Přidat zovlené adresáře mezi záložky"
 
-#: ../gtk/gtkfilechooserdefault.c:2312
+#: gtk/gtkfilechooserdefault.c:2312
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Odstranit záložku '%s'"
 
-#: ../gtk/gtkfilechooserdefault.c:2725
+#: gtk/gtkfilechooserdefault.c:2725
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
 msgstr "Nemohu přidat záložku pro '%s', protože je to neplatný název cesty."
 
-#: ../gtk/gtkfilechooserdefault.c:2903
+#: gtk/gtkfilechooserdefault.c:2903
 msgid "Shortcuts"
 msgstr "Zkratky"
 
-#: ../gtk/gtkfilechooserdefault.c:2957
+#: gtk/gtkfilechooserdefault.c:2957
 msgid "Folder"
 msgstr "Adresář"
 
-#: ../gtk/gtkfilechooserdefault.c:3009 ../gtk/gtkstock.c:295
+#: gtk/gtkfilechooserdefault.c:3009 gtk/gtkstock.c:295
 msgid "_Add"
 msgstr "_Přidat"
 
-#: ../gtk/gtkfilechooserdefault.c:3016
+#: gtk/gtkfilechooserdefault.c:3016
 msgid "Add the selected folder to the bookmarks"
 msgstr "Přidat zvolený adresář mezi záložky"
 
-#: ../gtk/gtkfilechooserdefault.c:3021 ../gtk/gtkstock.c:352
+#: gtk/gtkfilechooserdefault.c:3021 gtk/gtkstock.c:352
 msgid "_Remove"
 msgstr "_Odstranit"
 
-#: ../gtk/gtkfilechooserdefault.c:3028
+#: gtk/gtkfilechooserdefault.c:3028
 msgid "Remove the selected bookmark"
 msgstr "Odstranit zvolenou záložku"
 
-#: ../gtk/gtkfilechooserdefault.c:3128
+#: gtk/gtkfilechooserdefault.c:3128
 msgid "Could not select file"
 msgstr "Nemohu vybrat soubor"
 
-#: ../gtk/gtkfilechooserdefault.c:3184
+#: gtk/gtkfilechooserdefault.c:3184
 #, c-format
 msgid "Could not select file '%s' because it is an invalid path name."
 msgstr "Nemohu vybrat soubor '%s', protože je to neplatný název cesty."
 
-#: ../gtk/gtkfilechooserdefault.c:3256
+#: gtk/gtkfilechooserdefault.c:3256
 msgid "_Add to Shortcuts"
 msgstr "_Přidat mezi záložky"
 
-#: ../gtk/gtkfilechooserdefault.c:3266
+#: gtk/gtkfilechooserdefault.c:3266
 msgid "Open _Location"
 msgstr "Otevřít _umístění"
 
-#: ../gtk/gtkfilechooserdefault.c:3278
+#: gtk/gtkfilechooserdefault.c:3278
 msgid "Show _Hidden Files"
 msgstr "Zobrazovat _skryté soubory"
 
-#: ../gtk/gtkfilechooserdefault.c:3402 ../gtk/gtkfilesel.c:768
+#: gtk/gtkfilechooserdefault.c:3402 gtk/gtkfilesel.c:768
 msgid "Files"
 msgstr "Soubory"
 
-#: ../gtk/gtkfilechooserdefault.c:3447
+#: gtk/gtkfilechooserdefault.c:3447
 msgid "Name"
 msgstr "Název"
 
-#: ../gtk/gtkfilechooserdefault.c:3472
+#: gtk/gtkfilechooserdefault.c:3472
 msgid "Size"
 msgstr "Velikost"
 
-#: ../gtk/gtkfilechooserdefault.c:3485
+#: gtk/gtkfilechooserdefault.c:3485
 msgid "Modified"
 msgstr "Změněn"
 
-#: ../gtk/gtkfilechooserdefault.c:3517
+#: gtk/gtkfilechooserdefault.c:3517
 msgid "Select which types of files are shown"
 msgstr "Vyberte, které typy souborů zobrazovat"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:3553
+#: gtk/gtkfilechooserdefault.c:3553
 msgid "Create Fo_lder"
 msgstr "Vytvořit _adresář"
 
 #. Name entry
-#: ../gtk/gtkfilechooserdefault.c:3674
+#: gtk/gtkfilechooserdefault.c:3674
 msgid "_Name:"
 msgstr "_Název:"
 
-#: ../gtk/gtkfilechooserdefault.c:3714
+#: gtk/gtkfilechooserdefault.c:3714
 msgid "_Browse for other folders"
 msgstr "_Procházet jiné adresáře"
 
-#: ../gtk/gtkfilechooserdefault.c:3964
+#: gtk/gtkfilechooserdefault.c:3964
 msgid "Save in _folder:"
 msgstr "Uložit do _adresáře:"
 
-#: ../gtk/gtkfilechooserdefault.c:3966
+#: gtk/gtkfilechooserdefault.c:3966
 msgid "Create in _folder:"
 msgstr "Vytvořit v _adresáři:"
 
-#: ../gtk/gtkfilechooserdefault.c:4932
+#: gtk/gtkfilechooserdefault.c:4932
 msgid "Cannot change to folder because it is not local"
 msgstr "Nemohu přejít do adresáře, protože není místní"
 
-#: ../gtk/gtkfilechooserdefault.c:5486
+#: gtk/gtkfilechooserdefault.c:5486
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Zkratka %s neexistuje"
 
-#: ../gtk/gtkfilechooserdefault.c:6030
+#: gtk/gtkfilechooserdefault.c:6030
 #, c-format
 msgid "Could not mount %s"
 msgstr "Nemohu připojit %s"
 
-#: ../gtk/gtkfilechooserdefault.c:6325
+#: gtk/gtkfilechooserdefault.c:6325
 msgid "Type name of new folder"
 msgstr "Napište název nového adresáře"
 
-#: ../gtk/gtkfilechooserdefault.c:6367
+#: gtk/gtkfilechooserdefault.c:6367
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
@@ -1290,80 +1282,80 @@ msgstr[0] "%d bajt"
 msgstr[1] "%d bajty"
 msgstr[2] "%d bajtů"
 
-#: ../gtk/gtkfilechooserdefault.c:6369
+#: gtk/gtkfilechooserdefault.c:6369
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: ../gtk/gtkfilechooserdefault.c:6371
+#: gtk/gtkfilechooserdefault.c:6371
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: ../gtk/gtkfilechooserdefault.c:6373
+#: gtk/gtkfilechooserdefault.c:6373
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: ../gtk/gtkfilechooserdefault.c:6419 ../gtk/gtkfilechooserdefault.c:6443
+#: gtk/gtkfilechooserdefault.c:6419 gtk/gtkfilechooserdefault.c:6443
 msgid "Unknown"
 msgstr "Neznámé"
 
-#: ../gtk/gtkfilechooserdefault.c:6430
+#: gtk/gtkfilechooserdefault.c:6430
 msgid "Today"
 msgstr "Dnes"
 
-#: ../gtk/gtkfilechooserdefault.c:6432
+#: gtk/gtkfilechooserdefault.c:6432
 msgid "Yesterday"
 msgstr "Včera"
 
-#: ../gtk/gtkfilechooserdefault.c:6514
+#: gtk/gtkfilechooserdefault.c:6514
 msgid "Cannot change folder"
 msgstr "Nemohu změnit adresář"
 
-#: ../gtk/gtkfilechooserdefault.c:6515
+#: gtk/gtkfilechooserdefault.c:6515
 msgid "The folder you specified is an invalid path."
 msgstr "Určený adresář je neplatná cesta."
 
-#: ../gtk/gtkfilechooserdefault.c:6554
+#: gtk/gtkfilechooserdefault.c:6554
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr "Nemohu sestavit název souboru z '%s' a '%s'"
 
-#: ../gtk/gtkfilechooserdefault.c:6590
+#: gtk/gtkfilechooserdefault.c:6590
 msgid "Could not select item"
 msgstr "Nemohu vybrat položku"
 
-#: ../gtk/gtkfilechooserdefault.c:6630
+#: gtk/gtkfilechooserdefault.c:6630
 msgid "Open Location"
 msgstr "Otevřít umístění"
 
-#: ../gtk/gtkfilechooserdefault.c:6637
+#: gtk/gtkfilechooserdefault.c:6637
 msgid "Save in Location"
 msgstr "Uložit do umístění"
 
-#: ../gtk/gtkfilechooserdefault.c:6661
+#: gtk/gtkfilechooserdefault.c:6661
 msgid "_Location:"
 msgstr "_Umístění:"
 
-#: ../gtk/gtkfilesel.c:732
+#: gtk/gtkfilesel.c:732
 msgid "Folders"
 msgstr "Adresáře"
 
-#: ../gtk/gtkfilesel.c:736
+#: gtk/gtkfilesel.c:736
 msgid "Fol_ders"
 msgstr "_Adresáře"
 
-#: ../gtk/gtkfilesel.c:772
+#: gtk/gtkfilesel.c:772
 msgid "_Files"
 msgstr "_Soubory"
 
-#: ../gtk/gtkfilesel.c:860 ../gtk/gtkfilesel.c:2250
+#: gtk/gtkfilesel.c:860 gtk/gtkfilesel.c:2250
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Adresář nečitelný: %s"
 
-#: ../gtk/gtkfilesel.c:991
+#: gtk/gtkfilesel.c:991
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -1374,19 +1366,19 @@ msgstr ""
 "pro tento program.\n"
 "Opravdu jej chcete vybrat?"
 
-#: ../gtk/gtkfilesel.c:1122
+#: gtk/gtkfilesel.c:1122
 msgid "_New Folder"
 msgstr "_Nový adresář"
 
-#: ../gtk/gtkfilesel.c:1133
+#: gtk/gtkfilesel.c:1133
 msgid "De_lete File"
 msgstr "_Odstranit soubor"
 
-#: ../gtk/gtkfilesel.c:1144
+#: gtk/gtkfilesel.c:1144
 msgid "_Rename File"
 msgstr "_Přejmenovat soubor"
 
-#: ../gtk/gtkfilesel.c:1446
+#: gtk/gtkfilesel.c:1446
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
@@ -1394,7 +1386,7 @@ msgstr ""
 "Název adresáře \"%s\" obsahuje znaky, které nejsou v názvech souborů "
 "povoleny."
 
-#: ../gtk/gtkfilesel.c:1448
+#: gtk/gtkfilesel.c:1448
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -1403,34 +1395,34 @@ msgstr ""
 "Chyba při vytváření adresáře \"%s\": %s\n"
 "%s"
 
-#: ../gtk/gtkfilesel.c:1449 ../gtk/gtkfilesel.c:1685
+#: gtk/gtkfilesel.c:1449 gtk/gtkfilesel.c:1685
 msgid "You probably used symbols not allowed in filenames."
 msgstr "Pravděpodobně jste použili znaky nepovolené v názvech souborů."
 
-#: ../gtk/gtkfilesel.c:1457
+#: gtk/gtkfilesel.c:1457
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "Chyba při vytváření adresáře \"%s\": %s\n"
 
-#: ../gtk/gtkfilesel.c:1491
+#: gtk/gtkfilesel.c:1491
 msgid "New Folder"
 msgstr "Nový adresář"
 
-#: ../gtk/gtkfilesel.c:1506
+#: gtk/gtkfilesel.c:1506
 msgid "_Folder name:"
 msgstr "Název _adresáře:"
 
-#: ../gtk/gtkfilesel.c:1530
+#: gtk/gtkfilesel.c:1530
 msgid "C_reate"
 msgstr "_Vytvořit"
 
-#: ../gtk/gtkfilesel.c:1573
+#: gtk/gtkfilesel.c:1573
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "Název souboru \"%s\" obsahuje znaky, které nejsou v názvech souborů povoleny"
 
-#: ../gtk/gtkfilesel.c:1576
+#: gtk/gtkfilesel.c:1576
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -1439,31 +1431,31 @@ msgstr ""
 "Chyba při odstraňování souboru \"%s\": %s\n"
 "%s"
 
-#: ../gtk/gtkfilesel.c:1578 ../gtk/gtkfilesel.c:1699
+#: gtk/gtkfilesel.c:1578 gtk/gtkfilesel.c:1699
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "Pravděpodobně obsahuje znaky nepovolené v názvech souborů."
 
-#: ../gtk/gtkfilesel.c:1587
+#: gtk/gtkfilesel.c:1587
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "Chyba při odstraňování souboru \"%s\": %s"
 
-#: ../gtk/gtkfilesel.c:1630
+#: gtk/gtkfilesel.c:1630
 #, c-format
 msgid "Really delete file \"%s\"?"
 msgstr "Opravdu odstranit soubor \"%s\"?"
 
-#: ../gtk/gtkfilesel.c:1635
+#: gtk/gtkfilesel.c:1635
 msgid "Delete File"
 msgstr "Odstranit soubor"
 
-#: ../gtk/gtkfilesel.c:1681 ../gtk/gtkfilesel.c:1695
+#: gtk/gtkfilesel.c:1681 gtk/gtkfilesel.c:1695
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "Název souboru \"%s\" obsahuje znaky, které nejsou povoleny v názvech souborů."
 
-#: ../gtk/gtkfilesel.c:1683
+#: gtk/gtkfilesel.c:1683
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -1472,7 +1464,7 @@ msgstr ""
 "Chyba při přejmenovávání souboru na \"%s\": %s\n"
 "%s"
 
-#: ../gtk/gtkfilesel.c:1697
+#: gtk/gtkfilesel.c:1697
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -1481,29 +1473,29 @@ msgstr ""
 "Chyba při přejmenovávání souboru \"%s\": %s\n"
 "%s"
 
-#: ../gtk/gtkfilesel.c:1707
+#: gtk/gtkfilesel.c:1707
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Chyba při přejmenovávání souboru \"%s\" na \"%s\": %s"
 
-#: ../gtk/gtkfilesel.c:1754
+#: gtk/gtkfilesel.c:1754
 msgid "Rename File"
 msgstr "Přejmenovat soubor"
 
-#: ../gtk/gtkfilesel.c:1769
+#: gtk/gtkfilesel.c:1769
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Přejmenovat soubor \"%s\" na:"
 
-#: ../gtk/gtkfilesel.c:1798
+#: gtk/gtkfilesel.c:1798
 msgid "_Rename"
 msgstr "Pře_jmenovat"
 
-#: ../gtk/gtkfilesel.c:2230
+#: gtk/gtkfilesel.c:2230
 msgid "_Selection: "
 msgstr "_Výběr: "
 
-#: ../gtk/gtkfilesel.c:3155
+#: gtk/gtkfilesel.c:3155
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
@@ -1512,48 +1504,48 @@ msgstr ""
 "Název souboru \"%s\" nemohl být převeden do UTF-8. (zkuste nastavit "
 "proměnnou prostředí G_FILENAME_ENCODING): %s"
 
-#: ../gtk/gtkfilesel.c:3158
+#: gtk/gtkfilesel.c:3158
 msgid "Invalid UTF-8"
 msgstr "Neplatné UTF-8"
 
-#: ../gtk/gtkfilesel.c:4035
+#: gtk/gtkfilesel.c:4035
 msgid "Name too long"
 msgstr "Název příliš dlouhý"
 
-#: ../gtk/gtkfilesel.c:4037
+#: gtk/gtkfilesel.c:4037
 msgid "Couldn't convert filename"
 msgstr "Nemohu převést název souboru"
 
-#: ../gtk/gtkfilesystemmodel.c:1267
+#: gtk/gtkfilesystemmodel.c:1267
 msgid "(Empty)"
 msgstr "(Prázdný)"
 
-#: ../gtk/gtkfilesystemunix.c:461 ../gtk/gtkfilesystemunix.c:666
-#: ../gtk/gtkfilesystemunix.c:1794 ../gtk/gtkfilesystemwin32.c:482
-#: ../gtk/gtkfilesystemwin32.c:495 ../gtk/gtkfilesystemwin32.c:1560
+#: gtk/gtkfilesystemunix.c:461 gtk/gtkfilesystemunix.c:666
+#: gtk/gtkfilesystemunix.c:1794 gtk/gtkfilesystemwin32.c:482
+#: gtk/gtkfilesystemwin32.c:495 gtk/gtkfilesystemwin32.c:1560
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "Chyba při získávání informací o '%s': %s"
 
-#: ../gtk/gtkfilesystemunix.c:535 ../gtk/gtkfilesystemwin32.c:537
+#: gtk/gtkfilesystemunix.c:535 gtk/gtkfilesystemwin32.c:537
 #, c-format
 msgid "Error creating directory '%s': %s"
 msgstr "Chyba při vytváření adresáře '%s': %s"
 
-#: ../gtk/gtkfilesystemunix.c:615 ../gtk/gtkfilesystemwin32.c:597
+#: gtk/gtkfilesystemunix.c:615 gtk/gtkfilesystemwin32.c:597
 msgid "This file system does not support mounting"
 msgstr "Tento systém souborů nepodporuje připojování"
 
-#: ../gtk/gtkfilesystemunix.c:623
+#: gtk/gtkfilesystemunix.c:623
 msgid "Filesystem"
 msgstr "Systém souborů"
 
-#: ../gtk/gtkfilesystemunix.c:780
+#: gtk/gtkfilesystemunix.c:780
 #, c-format
 msgid "Could not get a stock icon for %s"
 msgstr "Nemohu získat standardní ikonu pro %s"
 
-#: ../gtk/gtkfilesystemunix.c:875
+#: gtk/gtkfilesystemunix.c:875
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1562,83 +1554,83 @@ msgstr ""
 "Název \"%s\" není platný, protože obsahuje znak \"%s\". Použijte prosím jiný "
 "název."
 
-#: ../gtk/gtkfilesystemunix.c:1480 ../gtk/gtkfilesystemwin32.c:1032
+#: gtk/gtkfilesystemunix.c:1480 gtk/gtkfilesystemwin32.c:1032
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Ukládání záložek selhalo: %s"
 
-#: ../gtk/gtkfilesystemunix.c:1541
+#: gtk/gtkfilesystemunix.c:1541
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "'%s' již v seznamu záložek existuje"
 
-#: ../gtk/gtkfilesystemunix.c:1612
+#: gtk/gtkfilesystemunix.c:1612
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "'%s' neexistuje v seznamu záložek"
 
-#: ../gtk/gtkfilesystemunix.c:1754
+#: gtk/gtkfilesystemunix.c:1754
 #, c-format
 msgid "Error getting information for '/': %s"
 msgstr "Chyba při získávání informací o '/': %s"
 
-#: ../gtk/gtkfontbutton.c:178 ../gtk/gtkfontbutton.c:295
+#: gtk/gtkfontbutton.c:178 gtk/gtkfontbutton.c:295
 msgid "Pick a Font"
 msgstr "Vyberte písmo"
 
 #. Initialize fields
-#: ../gtk/gtkfontbutton.c:289
+#: gtk/gtkfontbutton.c:289
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: ../gtk/gtkfontbutton.c:807
+#: gtk/gtkfontbutton.c:807
 msgid "Font"
 msgstr "Písmo"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
-#: ../gtk/gtkfontsel.c:73
+#: gtk/gtkfontsel.c:73
 msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "přikrášlený žluťoučký kůň PŘIKRÁŠLENÝ ŽLUŤOUČKÝ KŮŇ"
 
-#: ../gtk/gtkfontsel.c:360
+#: gtk/gtkfontsel.c:360
 msgid "_Family:"
 msgstr "_Rodina:"
 
-#: ../gtk/gtkfontsel.c:366
+#: gtk/gtkfontsel.c:366
 msgid "_Style:"
 msgstr "_Styl:"
 
-#: ../gtk/gtkfontsel.c:372
+#: gtk/gtkfontsel.c:372
 msgid "Si_ze:"
 msgstr "_Velikost:"
 
 #. create the text entry widget
-#: ../gtk/gtkfontsel.c:548
+#: gtk/gtkfontsel.c:548
 msgid "_Preview:"
 msgstr "_Náhled:"
 
-#: ../gtk/gtkfontsel.c:1382
+#: gtk/gtkfontsel.c:1382
 msgid "Font Selection"
 msgstr "Výběr písma"
 
-#: ../gtk/gtkgamma.c:401
+#: gtk/gtkgamma.c:401
 msgid "Gamma"
 msgstr "Gama"
 
-#: ../gtk/gtkgamma.c:411
+#: gtk/gtkgamma.c:411
 msgid "_Gamma value"
 msgstr "Hodnota _gama"
 
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: ../gtk/gtkiconfactory.c:1644
+#: gtk/gtkiconfactory.c:1644
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Chyba při načítání ikony: %s"
 
-#: ../gtk/gtkicontheme.c:1248
+#: gtk/gtkicontheme.c:1248
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1651,120 +1643,120 @@ msgstr ""
 "Můžete ji získat z:\n"
 "\t%s"
 
-#: ../gtk/gtkicontheme.c:1313
+#: gtk/gtkicontheme.c:1313
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Ikona '%s' není obsažena v tématu"
 
-#: ../gtk/gtkimmodule.c:427
+#: gtk/gtkimmodule.c:427
 msgid "Default"
 msgstr "Implicitní"
 
-#: ../gtk/gtkinputdialog.c:235
+#: gtk/gtkinputdialog.c:235
 msgid "Input"
 msgstr "Vstup"
 
-#: ../gtk/gtkinputdialog.c:244
+#: gtk/gtkinputdialog.c:244
 msgid "No extended input devices"
 msgstr "Nejsou rozšířená vstupní zařízení"
 
-#: ../gtk/gtkinputdialog.c:256
+#: gtk/gtkinputdialog.c:256
 msgid "_Device:"
 msgstr "_Zařízení:"
 
-#: ../gtk/gtkinputdialog.c:273
+#: gtk/gtkinputdialog.c:273
 msgid "Disabled"
 msgstr "Vypnuto"
 
-#: ../gtk/gtkinputdialog.c:280
+#: gtk/gtkinputdialog.c:280
 msgid "Screen"
 msgstr "Obrazovka"
 
-#: ../gtk/gtkinputdialog.c:287
+#: gtk/gtkinputdialog.c:287
 msgid "Window"
 msgstr "Okno"
 
-#: ../gtk/gtkinputdialog.c:294
+#: gtk/gtkinputdialog.c:294
 msgid "_Mode: "
 msgstr "_Režim: "
 
 #. The axis listbox
-#: ../gtk/gtkinputdialog.c:325
+#: gtk/gtkinputdialog.c:325
 msgid "_Axes"
 msgstr "_Osy"
 
 #. Keys listbox
-#: ../gtk/gtkinputdialog.c:342
+#: gtk/gtkinputdialog.c:342
 msgid "_Keys"
 msgstr "_Klávesy"
 
-#: ../gtk/gtkinputdialog.c:562
+#: gtk/gtkinputdialog.c:562
 msgid "X"
 msgstr "X"
 
-#: ../gtk/gtkinputdialog.c:563
+#: gtk/gtkinputdialog.c:563
 msgid "Y"
 msgstr "Y"
 
-#: ../gtk/gtkinputdialog.c:564
+#: gtk/gtkinputdialog.c:564
 msgid "Pressure"
 msgstr "Tlak"
 
-#: ../gtk/gtkinputdialog.c:565
+#: gtk/gtkinputdialog.c:565
 msgid "X Tilt"
 msgstr "Sklon X"
 
-#: ../gtk/gtkinputdialog.c:566
+#: gtk/gtkinputdialog.c:566
 msgid "Y Tilt"
 msgstr "Sklon Y"
 
-#: ../gtk/gtkinputdialog.c:567
+#: gtk/gtkinputdialog.c:567
 msgid "Wheel"
 msgstr "Kolečko"
 
-#: ../gtk/gtkinputdialog.c:607
+#: gtk/gtkinputdialog.c:607
 msgid "none"
 msgstr "žádný"
 
-#: ../gtk/gtkinputdialog.c:643 ../gtk/gtkinputdialog.c:679
+#: gtk/gtkinputdialog.c:643 gtk/gtkinputdialog.c:679
 msgid "(disabled)"
 msgstr "(vypnuto)"
 
-#: ../gtk/gtkinputdialog.c:672
+#: gtk/gtkinputdialog.c:672
 msgid "(unknown)"
 msgstr "(neznámá)"
 
 #. and clear button
-#: ../gtk/gtkinputdialog.c:759
+#: gtk/gtkinputdialog.c:759
 msgid "clear"
 msgstr "vyčistit"
 
-#: ../gtk/gtklabel.c:3930
+#: gtk/gtklabel.c:3930
 msgid "Select All"
 msgstr "Vybrat vše"
 
 #. Description of --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:431
+#: gtk/gtkmain.c:431
 msgid "Load additional GTK+ modules"
 msgstr "Načíst přídavné moduly GTK+"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:432
+#: gtk/gtkmain.c:432
 msgid "MODULES"
 msgstr "MODULY"
 
 #. Description of --g-fatal-warnings in --help output
-#: ../gtk/gtkmain.c:434
+#: gtk/gtkmain.c:434
 msgid "Make all warnings fatal"
 msgstr "Učinit všechna varování fatální"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:437
+#: gtk/gtkmain.c:437
 msgid "GTK+ debugging flags to set"
 msgstr "Ladicí příznaky GTK+, které nastavit"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:440
+#: gtk/gtkmain.c:440
 msgid "GTK+ debugging flags to unset"
 msgstr "Ladicí příznaky GTK+, jejichž nastavení zrušit"
 
@@ -1773,477 +1765,477 @@ msgstr "Ladicí příznaky GTK+, jejichž nastavení zrušit"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:509
+#: gtk/gtkmain.c:524
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmain.c:592
+#: gtk/gtkmain.c:607
 msgid "GTK+ Options"
 msgstr "Přepínače GTK+"
 
-#: ../gtk/gtkmain.c:592
+#: gtk/gtkmain.c:607
 msgid "Show GTK+ Options"
 msgstr "Zobrazit přepínače GTK+"
 
-#: ../gtk/gtknotebook.c:2717 ../gtk/gtknotebook.c:5063
+#: gtk/gtknotebook.c:2717 gtk/gtknotebook.c:5063
 #, c-format
 msgid "Page %u"
 msgstr "Strana %u"
 
-#: ../gtk/gtkradiotoolbutton.c:91
+#: gtk/gtkradiotoolbutton.c:91
 msgid "Group"
 msgstr "Skupina"
 
-#: ../gtk/gtkradiotoolbutton.c:92
+#: gtk/gtkradiotoolbutton.c:92
 msgid "The radio tool button whose group this button belongs to."
 msgstr "Přepínací tlačíko, do jehož skupiny patří toto tlačítko."
 
-#: ../gtk/gtkrc.c:2400
+#: gtk/gtkrc.c:2400
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Nemohu nalézt vložený soubor: \"%s\""
 
-#: ../gtk/gtkrc.c:3042 ../gtk/gtkrc.c:3045
+#: gtk/gtkrc.c:3042 gtk/gtkrc.c:3045
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Nemohu nalézt soubor obrázku v pixmap_path: \"%s\""
 
-#: ../gtk/gtkrc.c:3480
+#: gtk/gtkrc.c:3480
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Element cesty k pixmapám: \"%s\" musí být absolutní, %s, řádek %d"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
-#: ../gtk/gtkstock.c:286
+#: gtk/gtkstock.c:286
 msgid "Information"
 msgstr "Informace"
 
-#: ../gtk/gtkstock.c:287
+#: gtk/gtkstock.c:287
 msgid "Warning"
 msgstr "Varování"
 
-#: ../gtk/gtkstock.c:288
+#: gtk/gtkstock.c:288
 msgid "Error"
 msgstr "Chyba"
 
-#: ../gtk/gtkstock.c:289
+#: gtk/gtkstock.c:289
 msgid "Question"
 msgstr "Otázka"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: ../gtk/gtkstock.c:294
+#: gtk/gtkstock.c:294
 msgid "_About"
 msgstr "O _aplikaci"
 
-#: ../gtk/gtkstock.c:296
+#: gtk/gtkstock.c:296
 msgid "_Apply"
 msgstr "_Použít"
 
-#: ../gtk/gtkstock.c:297
+#: gtk/gtkstock.c:297
 msgid "_Bold"
 msgstr "_Tučné"
 
-#: ../gtk/gtkstock.c:298
+#: gtk/gtkstock.c:298
 msgid "_Cancel"
 msgstr "_Zrušit"
 
-#: ../gtk/gtkstock.c:299
+#: gtk/gtkstock.c:299
 msgid "_CD-Rom"
 msgstr "_CD-ROM"
 
-#: ../gtk/gtkstock.c:300
+#: gtk/gtkstock.c:300
 msgid "_Clear"
 msgstr "Vy_mazat"
 
-#: ../gtk/gtkstock.c:301
+#: gtk/gtkstock.c:301
 msgid "_Close"
 msgstr "_Zavřít"
 
-#: ../gtk/gtkstock.c:302
+#: gtk/gtkstock.c:302
 msgid "_Convert"
 msgstr "_Převést"
 
-#: ../gtk/gtkstock.c:303
+#: gtk/gtkstock.c:303
 msgid "_Copy"
 msgstr "_Kopírovat"
 
-#: ../gtk/gtkstock.c:304
+#: gtk/gtkstock.c:304
 msgid "Cu_t"
 msgstr "_Vyjmout"
 
-#: ../gtk/gtkstock.c:305
+#: gtk/gtkstock.c:305
 msgid "_Delete"
 msgstr "_Odstranit"
 
-#: ../gtk/gtkstock.c:306
+#: gtk/gtkstock.c:306
 msgid "_Execute"
 msgstr "_Spustit"
 
-#: ../gtk/gtkstock.c:307
+#: gtk/gtkstock.c:307
 msgid "_Edit"
 msgstr "_Upravit"
 
-#: ../gtk/gtkstock.c:308
+#: gtk/gtkstock.c:308
 msgid "_Find"
 msgstr "_Hledat"
 
-#: ../gtk/gtkstock.c:309
+#: gtk/gtkstock.c:309
 msgid "Find and _Replace"
 msgstr "Hledat a nah_radit"
 
-#: ../gtk/gtkstock.c:310
+#: gtk/gtkstock.c:310
 msgid "_Floppy"
 msgstr "_Disketa"
 
-#: ../gtk/gtkstock.c:311
+#: gtk/gtkstock.c:311
 msgid "_Bottom"
 msgstr "_Dole"
 
-#: ../gtk/gtkstock.c:312
+#: gtk/gtkstock.c:312
 msgid "_First"
 msgstr "P_rvní"
 
-#: ../gtk/gtkstock.c:313
+#: gtk/gtkstock.c:313
 msgid "_Last"
 msgstr "_Poslední"
 
-#: ../gtk/gtkstock.c:314
+#: gtk/gtkstock.c:314
 msgid "_Top"
 msgstr "_Nahoru"
 
-#: ../gtk/gtkstock.c:315
+#: gtk/gtkstock.c:315
 msgid "_Back"
 msgstr "_Zpět"
 
-#: ../gtk/gtkstock.c:316
+#: gtk/gtkstock.c:316
 msgid "_Down"
 msgstr "_Dolů"
 
-#: ../gtk/gtkstock.c:317 ../gtk/gtkstock.c:331
+#: gtk/gtkstock.c:317 gtk/gtkstock.c:331
 msgid "_Forward"
 msgstr "_Vpřed"
 
-#: ../gtk/gtkstock.c:318
+#: gtk/gtkstock.c:318
 msgid "_Up"
 msgstr "_Nahoru"
 
-#: ../gtk/gtkstock.c:319
+#: gtk/gtkstock.c:319
 msgid "_Harddisk"
 msgstr "_Pevný disk"
 
-#: ../gtk/gtkstock.c:320
+#: gtk/gtkstock.c:320
 msgid "_Help"
 msgstr "_Nápověda"
 
-#: ../gtk/gtkstock.c:321
+#: gtk/gtkstock.c:321
 msgid "_Home"
 msgstr "_Domů"
 
-#: ../gtk/gtkstock.c:322
+#: gtk/gtkstock.c:322
 msgid "Increase Indent"
 msgstr "Zvětšit odsazení"
 
-#: ../gtk/gtkstock.c:323
+#: gtk/gtkstock.c:323
 msgid "Decrease Indent"
 msgstr "Zmenšit odsazení"
 
-#: ../gtk/gtkstock.c:324
+#: gtk/gtkstock.c:324
 msgid "_Index"
 msgstr "_Index"
 
-#: ../gtk/gtkstock.c:325
+#: gtk/gtkstock.c:325
 msgid "_Italic"
 msgstr "_Kurzíva"
 
-#: ../gtk/gtkstock.c:326
+#: gtk/gtkstock.c:326
 msgid "_Jump to"
 msgstr "_Přejít na"
 
-#: ../gtk/gtkstock.c:327
+#: gtk/gtkstock.c:327
 msgid "_Center"
 msgstr "Na _střed"
 
-#: ../gtk/gtkstock.c:328
+#: gtk/gtkstock.c:328
 msgid "_Fill"
 msgstr "Vyp_lnit"
 
-#: ../gtk/gtkstock.c:329
+#: gtk/gtkstock.c:329
 msgid "_Left"
 msgstr "Do_leva"
 
-#: ../gtk/gtkstock.c:330
+#: gtk/gtkstock.c:330
 msgid "_Right"
 msgstr "Do_prava"
 
-#: ../gtk/gtkstock.c:332
+#: gtk/gtkstock.c:332
 msgid "_Next"
 msgstr "_Následující"
 
-#: ../gtk/gtkstock.c:333
+#: gtk/gtkstock.c:333
 msgid "P_ause"
 msgstr "_Pozastavit"
 
-#: ../gtk/gtkstock.c:334
+#: gtk/gtkstock.c:334
 msgid "_Play"
 msgstr "_Přerávat"
 
-#: ../gtk/gtkstock.c:335
+#: gtk/gtkstock.c:335
 msgid "Pre_vious"
 msgstr "_Předchozí"
 
-#: ../gtk/gtkstock.c:336
+#: gtk/gtkstock.c:336
 msgid "_Record"
 msgstr "_Zaznamenávat"
 
-#: ../gtk/gtkstock.c:337
+#: gtk/gtkstock.c:337
 msgid "R_ewind"
 msgstr "_Přetočit"
 
-#: ../gtk/gtkstock.c:338 ../gtk/gtkstock.c:361
+#: gtk/gtkstock.c:338 gtk/gtkstock.c:361
 msgid "_Stop"
 msgstr "Za_stavit"
 
-#: ../gtk/gtkstock.c:339
+#: gtk/gtkstock.c:339
 msgid "_Network"
 msgstr "_Síť"
 
-#: ../gtk/gtkstock.c:340
+#: gtk/gtkstock.c:340
 msgid "_New"
 msgstr "_Nový"
 
-#: ../gtk/gtkstock.c:341
+#: gtk/gtkstock.c:341
 msgid "_No"
 msgstr "_Ne"
 
-#: ../gtk/gtkstock.c:342
+#: gtk/gtkstock.c:342
 msgid "_OK"
 msgstr "_Budiž"
 
-#: ../gtk/gtkstock.c:343
+#: gtk/gtkstock.c:343
 msgid "_Open"
 msgstr "_Otevřít"
 
-#: ../gtk/gtkstock.c:344
+#: gtk/gtkstock.c:344
 msgid "_Paste"
 msgstr "V_ložit"
 
-#: ../gtk/gtkstock.c:345
+#: gtk/gtkstock.c:345
 msgid "_Preferences"
 msgstr "_Nastavení"
 
-#: ../gtk/gtkstock.c:346
+#: gtk/gtkstock.c:346
 msgid "_Print"
 msgstr "_Tisk"
 
-#: ../gtk/gtkstock.c:347
+#: gtk/gtkstock.c:347
 msgid "Print Pre_view"
 msgstr "Ná_hled tisku"
 
-#: ../gtk/gtkstock.c:348
+#: gtk/gtkstock.c:348
 msgid "_Properties"
 msgstr "_Vlastnosti"
 
-#: ../gtk/gtkstock.c:349
+#: gtk/gtkstock.c:349
 msgid "_Quit"
 msgstr "U_končit"
 
-#: ../gtk/gtkstock.c:350
+#: gtk/gtkstock.c:350
 msgid "_Redo"
 msgstr "Zn_ovu"
 
-#: ../gtk/gtkstock.c:351
+#: gtk/gtkstock.c:351
 msgid "_Refresh"
 msgstr "Ob_novit"
 
-#: ../gtk/gtkstock.c:353
+#: gtk/gtkstock.c:353
 msgid "_Revert"
 msgstr "_Vrátit"
 
-#: ../gtk/gtkstock.c:354
+#: gtk/gtkstock.c:354
 msgid "_Save"
 msgstr "_Uložit"
 
-#: ../gtk/gtkstock.c:355
+#: gtk/gtkstock.c:355
 msgid "Save _As"
 msgstr "Uložit _jako"
 
-#: ../gtk/gtkstock.c:356
+#: gtk/gtkstock.c:356
 msgid "_Color"
 msgstr "_Barva"
 
-#: ../gtk/gtkstock.c:357
+#: gtk/gtkstock.c:357
 msgid "_Font"
 msgstr "_Písmo"
 
-#: ../gtk/gtkstock.c:358
+#: gtk/gtkstock.c:358
 msgid "_Ascending"
 msgstr "_Vzestupně"
 
-#: ../gtk/gtkstock.c:359
+#: gtk/gtkstock.c:359
 msgid "_Descending"
 msgstr "_Sestupně"
 
-#: ../gtk/gtkstock.c:360
+#: gtk/gtkstock.c:360
 msgid "_Spell Check"
 msgstr "_Kontrola pravopisu"
 
-#: ../gtk/gtkstock.c:362
+#: gtk/gtkstock.c:362
 msgid "_Strikethrough"
 msgstr "_Přeškrtnuté"
 
-#: ../gtk/gtkstock.c:363
+#: gtk/gtkstock.c:363
 msgid "_Undelete"
 msgstr "_Zrušit odstranění"
 
-#: ../gtk/gtkstock.c:364
+#: gtk/gtkstock.c:364
 msgid "_Underline"
 msgstr "Po_dtržené"
 
-#: ../gtk/gtkstock.c:365
+#: gtk/gtkstock.c:365
 msgid "_Undo"
 msgstr "_Zpět"
 
-#: ../gtk/gtkstock.c:366
+#: gtk/gtkstock.c:366
 msgid "_Yes"
 msgstr "_Ano"
 
-#: ../gtk/gtkstock.c:367
+#: gtk/gtkstock.c:367
 msgid "_Normal Size"
 msgstr "_Normální velikost"
 
-#: ../gtk/gtkstock.c:368
+#: gtk/gtkstock.c:368
 msgid "Best _Fit"
 msgstr "Při_způsobit velikost"
 
-#: ../gtk/gtkstock.c:369
+#: gtk/gtkstock.c:369
 msgid "Zoom _In"
 msgstr "Z_většit"
 
-#: ../gtk/gtkstock.c:370
+#: gtk/gtkstock.c:370
 msgid "Zoom _Out"
 msgstr "Z_menšit"
 
-#: ../gtk/gtktextutil.c:48
+#: gtk/gtktextutil.c:48
 msgid "LRM _Left-to-right mark"
 msgstr "LRM značka _Left-to-right"
 
-#: ../gtk/gtktextutil.c:49
+#: gtk/gtktextutil.c:49
 msgid "RLM _Right-to-left mark"
 msgstr "RLM značka _Right-to-left"
 
-#: ../gtk/gtktextutil.c:50
+#: gtk/gtktextutil.c:50
 msgid "LRE Left-to-right _embedding"
 msgstr "LRE Left-to-right _zapouzdření"
 
-#: ../gtk/gtktextutil.c:51
+#: gtk/gtktextutil.c:51
 msgid "RLE Right-to-left e_mbedding"
 msgstr "RLE Right-to-left z_apouzdření"
 
-#: ../gtk/gtktextutil.c:52
+#: gtk/gtktextutil.c:52
 msgid "LRO Left-to-right _override"
 msgstr "LRO Left-to-right _přepisování"
 
-#: ../gtk/gtktextutil.c:53
+#: gtk/gtktextutil.c:53
 msgid "RLO Right-to-left o_verride"
 msgstr "RLO Right-to-left př_episování"
 
-#: ../gtk/gtktextutil.c:54
+#: gtk/gtktextutil.c:54
 msgid "PDF _Pop directional formatting"
 msgstr "PDF Směrované formátování _pop"
 
-#: ../gtk/gtktextutil.c:55
+#: gtk/gtktextutil.c:55
 msgid "ZWS _Zero width space"
 msgstr "ZWS Mezera _nulové šířky"
 
-#: ../gtk/gtktextutil.c:56
+#: gtk/gtktextutil.c:56
 msgid "ZWJ Zero width _joiner"
 msgstr "ZWJ _Spojovatel nulové šířky"
 
-#: ../gtk/gtktextutil.c:57
+#: gtk/gtktextutil.c:57
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "ZWNJ nespojovatel nulové šířky"
 
-#: ../gtk/gtkthemes.c:71
+#: gtk/gtkthemes.c:71
 #, c-format
 msgid "Unable to locate theme engine in module_path: \"%s\","
 msgstr "Nemohu nalézt knihovnu pro témata v module_path: \"%s\","
 
-#: ../gtk/gtktipsquery.c:186
+#: gtk/gtktipsquery.c:186
 msgid "--- No Tip ---"
 msgstr "--- Bez rady ---"
 
-#: ../gtk/gtkuimanager.c:1132
+#: gtk/gtkuimanager.c:1132
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr "Neznámý atribut '%s' na řádku %d znak %d"
 
-#: ../gtk/gtkuimanager.c:1332
+#: gtk/gtkuimanager.c:1332
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Neočekávaný počáteční tag '%s' na řádku %d znak %d"
 
-#: ../gtk/gtkuimanager.c:1417
+#: gtk/gtkuimanager.c:1417
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Neočekávaná data znaků na řádku %d znak %d"
 
-#: ../gtk/gtkuimanager.c:2208
+#: gtk/gtkuimanager.c:2208
 msgid "Empty"
 msgstr "Prázdný"
 
 #. ID
-#: ../modules/input/imam-et.c:454
+#: modules/input/imam-et.c:454
 msgid "Amharic (EZ+)"
 msgstr "Amharicky (EZ+)"
 
 #. ID
-#: ../modules/input/imcedilla.c:91
+#: modules/input/imcedilla.c:91
 msgid "Cedilla"
 msgstr "Cedilla"
 
 #. ID
-#: ../modules/input/imcyrillic-translit.c:217
+#: modules/input/imcyrillic-translit.c:217
 msgid "Cyrillic (Transliterated)"
 msgstr "Azbuka (Transliterovaná)"
 
 #. ID
-#: ../modules/input/iminuktitut.c:127
+#: modules/input/iminuktitut.c:127
 msgid "Inuktitut (Transliterated)"
 msgstr "Inuktitut (Transliterovaný)"
 
 #. ID
-#: ../modules/input/imipa.c:145
+#: modules/input/imipa.c:145
 msgid "IPA"
 msgstr "IPA"
 
 #. ID
-#: ../modules/input/imthai-broken.c:178
+#: modules/input/imthai-broken.c:178
 msgid "Thai (Broken)"
 msgstr "Thajsky (Nefunkční)"
 
 #. ID
-#: ../modules/input/imti-er.c:453
+#: modules/input/imti-er.c:453
 msgid "Tigrigna-Eritrean (EZ+)"
 msgstr "Tigrigna-Eritrejsky (EZ+)"
 
 #. ID
-#: ../modules/input/imti-et.c:453
+#: modules/input/imti-et.c:453
 msgid "Tigrigna-Ethiopian (EZ+)"
 msgstr "Tigrigna-Etiopsky (EZ+)"
 
 #. ID
-#: ../modules/input/imviqr.c:244
+#: modules/input/imviqr.c:244
 msgid "Vietnamese (VIQR)"
 msgstr "Vietnamsky (VIQR)"
 
 #. ID
-#: ../modules/input/imxim.c:28
+#: modules/input/imxim.c:28
 msgid "X Input Method"
 msgstr "Vstupní metoda X"
 
-#: ../tests/testfilechooser.c:186
+#: tests/testfilechooser.c:186
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Nemohu získat informace o souboru '%s': %s"

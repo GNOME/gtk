@@ -44,7 +44,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.hi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-15 23:46-0400\n"
+"POT-Creation-Date: 2005-08-01 12:31-0400\n"
 "PO-Revision-Date: 2004-07-19 21:37+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@yahoo.com>\n"
 "Language-Team: Hindi <indlinux-hindi@lists.sourceforge.net>\n"
@@ -2170,12 +2170,12 @@ msgstr "फ़ॉन्ट चयन संवाद का शीर्षक"
 msgid "The desired width of the button widget, in characters."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:623
+#: gtk/gtkfilechooserdefault.c:637
 #, fuzzy
 msgid "Default file chooser backend"
 msgstr "इस फ़ाइल हेतु डिफ़ॉल्ट"
 
-#: gtk/gtkfilechooserdefault.c:624
+#: gtk/gtkfilechooserdefault.c:638
 #, fuzzy
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr ""
@@ -2719,121 +2719,121 @@ msgstr "अभिन्यास की चौड़ाई"
 msgid "The height of the layout"
 msgstr "अभिन्यास की ऊंचाई"
 
-#: gtk/gtkmenu.c:528
+#: gtk/gtkmenu.c:531
 #, fuzzy
 msgid "Tearoff Title"
 msgstr "विन्डो शीर्षक"
 
-#: gtk/gtkmenu.c:529
+#: gtk/gtkmenu.c:532
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr ""
 "जब इस मेनू का प्रदर्शन बंद किया जाएगा तब विंडो प्रबंधक द्वारा शीर्षक प्रदर्शित किया जाएगा"
 
-#: gtk/gtkmenu.c:543
+#: gtk/gtkmenu.c:546
 #, fuzzy
 msgid "Tearoff State"
 msgstr "विन्डो शीर्षक"
 
-#: gtk/gtkmenu.c:544
+#: gtk/gtkmenu.c:547
 #, fuzzy
 msgid "A boolean that indicates whether the menu is torn-off"
 msgstr ""
 "जब इस मेनू का प्रदर्शन बंद किया जाएगा तब विंडो प्रबंधक द्वारा शीर्षक प्रदर्शित किया जाएगा"
 
-#: gtk/gtkmenu.c:550
+#: gtk/gtkmenu.c:553
 msgid "Vertical Padding"
 msgstr "आंतरिक रिक्त स्थान"
 
-#: gtk/gtkmenu.c:551
+#: gtk/gtkmenu.c:554
 msgid "Extra space at the top and bottom of the menu"
 msgstr "विज़ेट के ऊपर नीचे जोड़ी जाने वाले रिक्त स्थान की मात्रा पिक्सल में"
 
-#: gtk/gtkmenu.c:559
+#: gtk/gtkmenu.c:562
 msgid "Vertical Offset"
 msgstr "उर्ध्वाधर पैमाना"
 
-#: gtk/gtkmenu.c:560
+#: gtk/gtkmenu.c:563
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr ""
 
-#: gtk/gtkmenu.c:568
+#: gtk/gtkmenu.c:571
 msgid "Horizontal Offset"
 msgstr "छैतिज पैमाना"
 
-#: gtk/gtkmenu.c:569
+#: gtk/gtkmenu.c:572
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 msgstr ""
 
-#: gtk/gtkmenu.c:579
+#: gtk/gtkmenu.c:582
 #, fuzzy
 msgid "Left Attach"
 msgstr "फाइल जोड़ें"
 
-#: gtk/gtkmenu.c:580 gtk/gtktable.c:205
+#: gtk/gtkmenu.c:583 gtk/gtktable.c:205
 msgid "The column number to attach the left side of the child to"
 msgstr ""
 
-#: gtk/gtkmenu.c:587
+#: gtk/gtkmenu.c:590
 #, fuzzy
 msgid "Right Attach"
 msgstr "फाइल जोड़ें"
 
-#: gtk/gtkmenu.c:588
+#: gtk/gtkmenu.c:591
 #, fuzzy
 msgid "The column number to attach the right side of the child to"
 msgstr "विज़ेट के बांयी तथा दांयी ओर जोड़ी जाने वाली रिक्त स्थान की मात्रा पिक्सल में"
 
-#: gtk/gtkmenu.c:595
+#: gtk/gtkmenu.c:598
 #, fuzzy
 msgid "Top Attach"
 msgstr "फाइल जोड़ें"
 
-#: gtk/gtkmenu.c:596
+#: gtk/gtkmenu.c:599
 #, fuzzy
 msgid "The row number to attach the top of the child to"
 msgstr "चाइल्ड पाइप (%s) से पढ़ने में असफल"
 
-#: gtk/gtkmenu.c:603
+#: gtk/gtkmenu.c:606
 #, fuzzy
 msgid "Bottom Attach"
 msgstr "फाइल जोड़ें"
 
-#: gtk/gtkmenu.c:604 gtk/gtktable.c:226
+#: gtk/gtkmenu.c:607 gtk/gtktable.c:226
 #, fuzzy
 msgid "The row number to attach the bottom of the child to"
 msgstr "चाइल्ड पाइप (%s) से पढ़ने में असफल"
 
-#: gtk/gtkmenu.c:691
+#: gtk/gtkmenu.c:694
 msgid "Can change accelerators"
 msgstr "त्वरक को परिवर्तित बदला जा सकता है"
 
-#: gtk/gtkmenu.c:692
+#: gtk/gtkmenu.c:695
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr "क्या मेनू पर एक कुंजी दबाने पर मेनू त्वरकों को बदला जा सकता है?"
 
-#: gtk/gtkmenu.c:697
+#: gtk/gtkmenu.c:700
 #, fuzzy
 msgid "Delay before submenus appear"
 msgstr "-- कमांड चलाने से पहले प्रामाणीकरण करें"
 
-#: gtk/gtkmenu.c:698
+#: gtk/gtkmenu.c:701
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 
-#: gtk/gtkmenu.c:705
+#: gtk/gtkmenu.c:708
 #, fuzzy
 msgid "Delay before hiding a submenu"
 msgstr "-- कमांड चलाने से पहले प्रामाणीकरण करें"
 
-#: gtk/gtkmenu.c:706
+#: gtk/gtkmenu.c:709
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"

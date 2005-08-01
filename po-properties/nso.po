@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 2.8-branch\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-15 23:46-0400\n"
+"POT-Creation-Date: 2005-08-01 12:31-0400\n"
 "PO-Revision-Date: 2004-11-30 15:02+0200\n"
 "Last-Translator: Zuza Software Foundation <info@translate.org.za>\n"
 "Language-Team: Northern Sotho <translate-discuss-nso@lists.sourceforge.net>\n"
@@ -2102,11 +2102,11 @@ msgstr "Sehlogo sa poledišano ka kgetho ya fonto"
 msgid "The desired width of the button widget, in characters."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:623
+#: gtk/gtkfilechooserdefault.c:637
 msgid "Default file chooser backend"
 msgstr "Dira gore mafelelo a sekgethi sa faele a hlaelele"
 
-#: gtk/gtkfilechooserdefault.c:624
+#: gtk/gtkfilechooserdefault.c:638
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Leina la mafelelo la GtkFileChooser leo le tla dirišwago ke tlhaelelo"
 
@@ -2658,11 +2658,11 @@ msgstr "Bophara bja go bea"
 msgid "The height of the layout"
 msgstr "Bophagamo bja go bea"
 
-#: gtk/gtkmenu.c:528
+#: gtk/gtkmenu.c:531
 msgid "Tearoff Title"
 msgstr "Sehlogo sa go Kgeila"
 
-#: gtk/gtkmenu.c:529
+#: gtk/gtkmenu.c:532
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
@@ -2670,31 +2670,31 @@ msgstr ""
 "Sehlogo seo se ka bontšhwago ka molaodi wa lefesetere ge lelokelelo le la "
 "dikagare le kgeitšwe"
 
-#: gtk/gtkmenu.c:543
+#: gtk/gtkmenu.c:546
 #, fuzzy
 msgid "Tearoff State"
 msgstr "Sehlogo sa go Kgeila"
 
-#: gtk/gtkmenu.c:544
+#: gtk/gtkmenu.c:547
 #, fuzzy
 msgid "A boolean that indicates whether the menu is torn-off"
 msgstr ""
 "Sehlogo seo se ka bontšhwago ka molaodi wa lefesetere ge lelokelelo le la "
 "dikagare le kgeitšwe"
 
-#: gtk/gtkmenu.c:550
+#: gtk/gtkmenu.c:553
 msgid "Vertical Padding"
 msgstr "Go Aletša mo go Tsepamego"
 
-#: gtk/gtkmenu.c:551
+#: gtk/gtkmenu.c:554
 msgid "Extra space at the top and bottom of the menu"
 msgstr "Sekgoba se oketšegilego godimo le ka tlase ga lelokelelo la dikagare"
 
-#: gtk/gtkmenu.c:559
+#: gtk/gtkmenu.c:562
 msgid "Vertical Offset"
 msgstr "Go Leka-lekanywa mo go Tsepamego"
 
-#: gtk/gtkmenu.c:560
+#: gtk/gtkmenu.c:563
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
@@ -2703,11 +2703,11 @@ msgstr ""
 "dikarolwaneng tše tše mmalwa tše bopago seswantšho bo leka-lekanywa ka mo go "
 "tsepamego"
 
-#: gtk/gtkmenu.c:568
+#: gtk/gtkmenu.c:571
 msgid "Horizontal Offset"
 msgstr "Go Leka-lekanywa mo go Rapamego"
 
-#: gtk/gtkmenu.c:569
+#: gtk/gtkmenu.c:572
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
@@ -2716,73 +2716,73 @@ msgstr ""
 "dikarolwana tše mmalwa tše bopago seswantšho bo swanetše go leka-lekanywa ka "
 "mo go rapamego"
 
-#: gtk/gtkmenu.c:579
+#: gtk/gtkmenu.c:582
 msgid "Left Attach"
 msgstr "Kgokaganya go Lanngele"
 
-#: gtk/gtkmenu.c:580 gtk/gtktable.c:205
+#: gtk/gtkmenu.c:583 gtk/gtktable.c:205
 msgid "The column number to attach the left side of the child to"
 msgstr ""
 "Nomoro ya kholomo yeo go swanetšego go kgokaganywa lehlakore lanngele la "
 "ngwana go yona"
 
-#: gtk/gtkmenu.c:587
+#: gtk/gtkmenu.c:590
 msgid "Right Attach"
 msgstr "Kgokaganya go Lagoja"
 
-#: gtk/gtkmenu.c:588
+#: gtk/gtkmenu.c:591
 msgid "The column number to attach the right side of the child to"
 msgstr ""
 "Nomoro ya kholomo yeo go swanetšego go kgokaganywa lehlakore lagoja la "
 "ngwana go yona"
 
-#: gtk/gtkmenu.c:595
+#: gtk/gtkmenu.c:598
 msgid "Top Attach"
 msgstr "Kgokaganya Godimo"
 
-#: gtk/gtkmenu.c:596
+#: gtk/gtkmenu.c:599
 msgid "The row number to attach the top of the child to"
 msgstr ""
 "Nomoro ya mothalo yeo go swanetšego go kgokaganya bokagodimo bja ngwana go "
 "wona"
 
-#: gtk/gtkmenu.c:603
+#: gtk/gtkmenu.c:606
 msgid "Bottom Attach"
 msgstr "Kgokaganya ka Tlase"
 
-#: gtk/gtkmenu.c:604 gtk/gtktable.c:226
+#: gtk/gtkmenu.c:607 gtk/gtktable.c:226
 msgid "The row number to attach the bottom of the child to"
 msgstr ""
 "Nomoro ya mothalo yeo go swanetšego go kgokaganywa bokatlase bja ngwana go "
 "wona"
 
-#: gtk/gtkmenu.c:691
+#: gtk/gtkmenu.c:694
 msgid "Can change accelerators"
 msgstr "E ka fetola diakgofiši"
 
-#: gtk/gtkmenu.c:692
+#: gtk/gtkmenu.c:695
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Ge eba diakgofiši tša lelokelelo la dikagare di ka fetolwa ka go gatela "
 "senotlelo selong sa lelokelelo la dikagare"
 
-#: gtk/gtkmenu.c:697
+#: gtk/gtkmenu.c:700
 msgid "Delay before submenus appear"
 msgstr "Diega pele ga ge dika-lelokelelo la dikagare di tšwelela"
 
-#: gtk/gtkmenu.c:698
+#: gtk/gtkmenu.c:701
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Nako e nyenyane yeo selaetši se swanetšego go dula godimo ga selo sa "
 "lelokelelo la dikagare pele ga ge seka-lelokelelo la dikagare se tšwelela"
 
-#: gtk/gtkmenu.c:705
+#: gtk/gtkmenu.c:708
 msgid "Delay before hiding a submenu"
 msgstr "Diega pele ga ge o uta seka-lelokelelo la dikagare"
 
-#: gtk/gtkmenu.c:706
+#: gtk/gtkmenu.c:709
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"

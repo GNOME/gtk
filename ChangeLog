@@ -1,5 +1,14 @@
 2005-08-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* === Released 2.6.9 ===
+
+	* gtk/gtkuimanager.c (update_node): Update tooltips when 
+	reconnecting toolitems.  (#312173, Alex Graveley)
+
+	* gtk/gtkclipboard.c (gtk_clipboard_set_image) 
+	(gtk_clipboard_set_text): Don't leak atom names.  (#311933,
+	Peter Zelezny)
+
 	* gtk/gtkmain.c (do_post_parse_initialization): Call
 	gettext_initialization() here as well.  (#311612, Dan Winship)
 

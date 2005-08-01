@@ -765,6 +765,8 @@ gtk_clipboard_set_text (GtkClipboard *clipboard,
 			       g_strndup (text, len));
   gtk_clipboard_set_can_store (clipboard, NULL, 0);
 
+  for (i = 0; i < n_targets; i++)
+    g_free (targets[i].target);
   g_free (targets);
   gtk_target_list_unref (list);
 }
@@ -826,6 +828,8 @@ gtk_clipboard_set_image (GtkClipboard *clipboard,
 			       g_object_ref (pixbuf));
   gtk_clipboard_set_can_store (clipboard, NULL, 0);
 
+  for (i = 0; i < n_targets; i++)
+    g_free (targets[i].target);
   g_free (targets);
   gtk_target_list_unref (list);
 }
