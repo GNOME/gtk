@@ -1,5 +1,9 @@
 2005-08-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/Makefile.am (install-data-local): 
+	* gtk/gtksettings.c (gtk_settings_class_init): Rename the 
+	default theme to "Raleigh".  (#312254, Thomas Wood)
+
 	* gtk/gtkdnd.c (set_icon_stock_pixbuf): Create the icon window
 	with the correct dimensions.  (#312256, Mike Morrison)
 
