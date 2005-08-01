@@ -1,5 +1,7 @@
 2005-08-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* configure.in: Bump version
+
 	* === Released 2.6.9 ===
 
 	* gtk/gtkuimanager.c (update_node): Update tooltips when 
