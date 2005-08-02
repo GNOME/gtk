@@ -1,3 +1,25 @@
+Overview of Changes from GTK+ 2.7.4 to GTK+ 2.7.5
+=================================================
+* Rename the default theme to "Raleigh" [Thomas Wood]
+* Add a permformance testing framework [Federico Mena Quintero]
+* Catch format errors in translations. This may cause 
+  "make check" to fail when using older versions
+  of gettext [Matthias]
+* Win32
+ - Implement the urgency hint [Tor Lillqvist]
+ - Update ms-windows theme [Dom Lachowicz]
+ - Improve tablet handling [Robert Ögren]
+ - Bug fixes [Kazuki Iwamoto, Tor Lillqvist, Tim Evans, 
+   J. Ali Harlow, Hans Breuer]
+* Other bug fixes [Callum McKenzie, Matthias, Kjartan Maraas, 
+  Elijah Newren, Morten Welinder, Owen Taylor, Johan Dahlin,
+  Peter Zelezny, Dan Winship, Damien Carbery, Alex Graveley,
+  Mike Morrison, David Odin]
+* Documentation improvements [Fabrice Bauzac, Claudio Saavedra,
+  Federico Mena Quintero]
+* New and updated translation (ar,bg,cs,de,fi,gu,ja,nb,nl,no,
+  pl,pt,sq,zh_CN,zh_TW)
+
 Overview of Changes from GTK+ 2.7.3 to GTK+ 2.7.4
 =================================================
 * Make svg icon themes work better [Matthias]

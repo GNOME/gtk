@@ -1,3 +1,7 @@
+2005-08-02  Matthias Clasen  <mclasen@redhat.com>
+
+	* NEWS: Updates
+
 2005-08-01  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfixed.c (gtk_fixed_put): Fix a typo, spotted by
