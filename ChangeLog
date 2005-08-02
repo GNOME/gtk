@@ -871,7 +871,7 @@
 	renderers.
 
 	* gtk/gtkdnd.c (gtk_drag_update_cursor): Pass a GdkDragAction to
-	gtk_drag_get_cursor.  (#309784, Sebastian Bacher)
+	gtk_drag_get_cursor.  (#309784, Sebastien Bacher)
 
 2005-07-08  Tor Lillqvist  <tml@novell.com>
 

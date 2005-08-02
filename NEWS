@@ -98,7 +98,7 @@ Overview of Changes from GTK+ 2.7.1 to GTK+ 2.7.2
  - Implement named cursors and other new GDK apis [Hans Breuer]
  - Implement getting cursor images [Tor Lillqvist]
 * Bug fixes [J. Ali Harlow, Matthias, Diego Gonzalez, 
-  Kazuki IWAMOTO, Paul Cornett, Sebastian Bacher, Tor]
+  Kazuki IWAMOTO, Paul Cornett, Sebastien Bacher, Tor]
 * Documentation improvements [Benjamin Berg, Matthias,
   Steve Chaplin, Peter van den Bosch, Tim-Philipp Müller]
 * New and updated translations (en_CA,sr,sr@Latn)
