@@ -98,3 +98,10 @@ EXTRA_DIST = 		\
 	README		\
 	marshalers.list	\
 	$(BUILT_SOURCES)
+
+# if srcdir!=builddir, clean out maintainer-clean files from builddir
+# this allows dist to pass.
+distclean-local:
+	if test $(srcdir) != .; then \
+	  rm -f $(MAINTAINERCLEANFILES); \
+	fi
