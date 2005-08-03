@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-03 16:52+0200\n"
-"PO-Revision-Date: 2005-08-03 16:45+0200\n"
+"POT-Creation-Date: 2005-08-03 18:25+0200\n"
+"PO-Revision-Date: 2005-08-03 18:25+0200\n"
 "Last-Translator: Hendrik Brandt <heb@gnome-de.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -855,135 +855,135 @@ msgstr "Nicht zu übergebende GDK-Fehlerdiagnoseoptionen"
 
 #: ../gdk/keyname-table.h:3940
 msgid "keyboard label|BackSpace"
-msgstr "keyboard label|Rücktaste"
+msgstr "Rücktaste"
 
 #: ../gdk/keyname-table.h:3941
 msgid "keyboard label|Tab"
-msgstr "keyboard label|Tabulator"
+msgstr "Tabulator"
 
 #: ../gdk/keyname-table.h:3942
 msgid "keyboard label|Return"
-msgstr "keyboard label|Eingabe"
+msgstr "Eingabe"
 
 #: ../gdk/keyname-table.h:3943
 msgid "keyboard label|Pause"
-msgstr "keyboard label|Pause"
+msgstr "Pause"
 
 #: ../gdk/keyname-table.h:3944
 msgid "keyboard label|Scroll_Lock"
-msgstr "keyboard label|Ro_llen"
+msgstr "Ro_llen"
 
 #: ../gdk/keyname-table.h:3945
 msgid "keyboard label|Sys_Req"
-msgstr "keyboard label|Sys_Req"
+msgstr "Sys_Req"
 
 #: ../gdk/keyname-table.h:3946
 msgid "keyboard label|Escape"
-msgstr "keyboard label|Escape"
+msgstr "Esc"
 
 #: ../gdk/keyname-table.h:3947
 msgid "keyboard label|Multi_key"
-msgstr "keyboard label|Multifunktionstaste"
+msgstr "Multifunktionstaste"
 
 #: ../gdk/keyname-table.h:3948
 msgid "keyboard label|Home"
-msgstr "keyboard label|Pos1"
+msgstr "Pos1"
 
 #: ../gdk/keyname-table.h:3949
 msgid "keyboard label|Page_Up"
-msgstr "keyboard label|Bild_Hoch"
+msgstr "Bild_Hoch"
 
 #: ../gdk/keyname-table.h:3950
 msgid "keyboard label|Page_Down"
-msgstr "keyboard label|Bild_Runter"
+msgstr "Bild_Runter"
 
 #: ../gdk/keyname-table.h:3951
 msgid "keyboard label|End"
-msgstr "keyboard label|Ende"
+msgstr "Ende"
 
 #: ../gdk/keyname-table.h:3952
 msgid "keyboard label|Begin"
-msgstr "keyboard label|Pos1"
+msgstr "Pos1"
 
 #: ../gdk/keyname-table.h:3953
 msgid "keyboard label|Print"
-msgstr "keyboard label|Drucken"
+msgstr "Drucken"
 
 #: ../gdk/keyname-table.h:3954
 msgid "keyboard label|Insert"
-msgstr "keyboard label|Einfg"
+msgstr "Einfg"
 
 #: ../gdk/keyname-table.h:3955
 msgid "keyboard label|Num_Lock"
-msgstr "keyboard label|Num_Lock"
+msgstr "Num_Lock"
 
 #: ../gdk/keyname-table.h:3956
 msgid "keyboard label|KP_Space"
-msgstr "keyboard label|NB_Leertaste"
+msgstr "NB_Leertaste"
 
 #: ../gdk/keyname-table.h:3957
 msgid "keyboard label|KP_Tab"
-msgstr "keyboard label|NB_Tabulator"
+msgstr "NB_Tabulator"
 
 #: ../gdk/keyname-table.h:3958
 msgid "keyboard label|KP_Enter"
-msgstr "keyboard label|NB_Eingabe"
+msgstr "NB_Eingabe"
 
 #: ../gdk/keyname-table.h:3959
 msgid "keyboard label|KP_Home"
-msgstr "keyboard label|NB_Pos1"
+msgstr "NB_Pos1"
 
 #: ../gdk/keyname-table.h:3960
 msgid "keyboard label|KP_Left"
-msgstr "keyboard label|NB_Links"
+msgstr "NB_Links"
 
 #: ../gdk/keyname-table.h:3961
 msgid "keyboard label|KP_Up"
-msgstr "keyboard label|NB_Hoch"
+msgstr "NB_Hoch"
 
 #: ../gdk/keyname-table.h:3962
 msgid "keyboard label|KP_Right"
-msgstr "keyboard label|NB_Rechts"
+msgstr "NB_Rechts"
 
 #: ../gdk/keyname-table.h:3963
 msgid "keyboard label|KP_Down"
-msgstr "keyboard label|NB_Runter"
+msgstr "NB_Runter"
 
 #: ../gdk/keyname-table.h:3964
 msgid "keyboard label|KP_Page_Up"
-msgstr "keyboard label|NB_Bild_Hoch"
+msgstr "NB_Bild_Hoch"
 
 #: ../gdk/keyname-table.h:3965
 msgid "keyboard label|KP_Prior"
-msgstr "keyboard label|NB_Zurück"
+msgstr "NB_Zurück"
 
 #: ../gdk/keyname-table.h:3966
 msgid "keyboard label|KP_Page_Down"
-msgstr "keyboard label|NB_Bild_Runter"
+msgstr "NB_Bild_Runter"
 
 #: ../gdk/keyname-table.h:3967
 msgid "keyboard label|KP_Next"
-msgstr "keyboard label|NB_Vor"
+msgstr "NB_Vor"
 
 #: ../gdk/keyname-table.h:3968
 msgid "keyboard label|KP_End"
-msgstr "keyboard label|NB_Ende"
+msgstr "NB_Ende"
 
 #: ../gdk/keyname-table.h:3969
 msgid "keyboard label|KP_Begin"
-msgstr "keyboard label|KNB_Anfang"
+msgstr "NB_Anfang"
 
 #: ../gdk/keyname-table.h:3970
 msgid "keyboard label|KP_Insert"
-msgstr "keyboard label|NB_Einfügen"
+msgstr "NB_Einfügen"
 
 #: ../gdk/keyname-table.h:3971
 msgid "keyboard label|KP_Delete"
-msgstr "keyboard label|NB_Löschen"
+msgstr "NB_Löschen"
 
 #: ../gdk/keyname-table.h:3972
 msgid "keyboard label|Delete"
-msgstr "keyboard label|Entfernen"
+msgstr "Entfernen"
 
 #. Description of --sync in --help output
 #: ../gdk/win32/gdkmain-win32.c:60
@@ -1071,7 +1071,7 @@ msgstr "Grafiken von"
 #.
 #: ../gtk/gtkaccellabel.c:121
 msgid "keyboard label|Shift"
-msgstr "keyboard label|Umschalttaste"
+msgstr "Umschalttaste"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the control key. If the text on this key isn't typically
@@ -1081,7 +1081,7 @@ msgstr "keyboard label|Umschalttaste"
 #.
 #: ../gtk/gtkaccellabel.c:128
 msgid "keyboard label|Ctrl"
-msgstr "keyboard label|Strg"
+msgstr "Strg"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the alt key. If the text on this key isn't typically
@@ -1091,17 +1091,17 @@ msgstr "keyboard label|Strg"
 #.
 #: ../gtk/gtkaccellabel.c:135
 msgid "keyboard label|Alt"
-msgstr "keyboard label|Alt"
+msgstr "Alt"
 
 #. do not translate the part before the |
 #: ../gtk/gtkaccellabel.c:577
 msgid "keyboard label|Space"
-msgstr "keyboard label|Leertaste"
+msgstr "Leertaste"
 
 #. do not translate the part before the |
 #: ../gtk/gtkaccellabel.c:581
 msgid "keyboard label|Backslash"
-msgstr "keyboard label|Backslash"
+msgstr "Backslash"
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -2249,65 +2249,65 @@ msgstr "_Springe zu"
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:361
 msgid "Justify|_Center"
-msgstr "Justify|_Zentrieren"
+msgstr "_Zentrieren"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:363
 msgid "Justify|_Fill"
-msgstr "Justify|_Ausfüllen"
+msgstr "_Ausfüllen"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:365
 msgid "Justify|_Left"
-msgstr "Justify|_Links"
+msgstr "_Links"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:367
 msgid "Justify|_Right"
-msgstr "Justify|_Rechts"
+msgstr "_Rechts"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:370
 msgid "Media|_Forward"
-msgstr "Media|_Vor"
+msgstr "_Vor"
 
 # CHECK
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:372
 msgid "Media|_Next"
-msgstr "Media|_Nächster"
+msgstr "_Nächster"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:374
 msgid "Media|P_ause"
-msgstr "Media|P_ause"
+msgstr "P_ause"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:376
 msgid "Media|_Play"
-msgstr "Media|_Wiedergabe"
+msgstr "_Wiedergabe"
 
 # CHECK
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:378
 msgid "Media|Pre_vious"
-msgstr "Media|_Vorheriger"
+msgstr "_Vorheriger"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:380
 msgid "Media|_Record"
-msgstr "Media|_Aufnahme"
+msgstr "_Aufnahme"
 
 # CHECK
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:382
 msgid "Media|R_ewind"
-msgstr "Media|_Zurückspulen"
+msgstr "_Zurückspulen"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:384
 msgid "Media|_Stop"
-msgstr "Media|_Stopp"
+msgstr "_Stopp"
 
 #: ../gtk/gtkstock.c:385
 msgid "_Network"

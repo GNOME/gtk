@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-26 22:20+0200\n"
+"POT-Creation-Date: 2005-08-03 18:25+0200\n"
 "PO-Revision-Date: 2005-07-26 22:19+0200\n"
 "Last-Translator: Hendrik Brandt <heb@gnome-de.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
@@ -2156,11 +2156,11 @@ msgstr "Der Titel des Dateiwählers."
 msgid "The desired width of the button widget, in characters."
 msgstr "Die gewünschte Breite des Knopfes in Zeichen"
 
-#: ../gtk/gtkfilechooserdefault.c:691
+#: ../gtk/gtkfilechooserdefault.c:701
 msgid "Default file chooser backend"
 msgstr "Vorgabe-Backend des Dateiwählers"
 
-#: ../gtk/gtkfilechooserdefault.c:692
+#: ../gtk/gtkfilechooserdefault.c:702
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Der Name des per Vorgabe zu verwendenden GtkFileChooser-Backends"
 

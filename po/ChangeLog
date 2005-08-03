@@ -1,6 +1,7 @@
 2005-08-03  Hendrik Brandt  <heb@gnome-de.org>
 
 	* de.po: Remove translation context of progress cell renderer.
+	* de.po: Remove translation context from keyboard labels.
 
 2005-08-01  Martin Kretzschmar  <martink@gnome.org>
 
