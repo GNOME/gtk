@@ -1,3 +1,9 @@
+2005-08-04  Tor Lillqvist  <tml@novell.com>
+
+	* gtk-zip.sh.in: Reflect the change of the default theme's name to
+	"Raleigh". Include the MS-Windows theme's gtkrc file. Include the
+	theme engine DLLs.
+
 2005-08-02  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump version
