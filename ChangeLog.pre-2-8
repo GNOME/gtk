@@ -1,3 +1,7 @@
+2005-08-04  Matthias Clasen  <mclasen@redhat.com>
+
+	* configure.in: Require cairo 0.6
+
 2005-08-04  Christian Persch  <chpe@cvs.gnome.org>
 
 	* configure.in: Remove "te" since it breaks the build.
