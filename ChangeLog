@@ -1,3 +1,7 @@
+2005-08-04  Christian Persch  <chpe@cvs.gnome.org>
+
+	* configure.in: Remove "te" since it breaks the build.
+
 2005-08-04  Sunil Mohan Adapa  <sunil@atc.tcs.co.in>
 
 	* configure.in: Added "te" to ALL_LINGUAS.
