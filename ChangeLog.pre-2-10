@@ -1,3 +1,10 @@
+Fri Aug  5 16:54:19 2005  Søren Sandmann  <sandmann@redhat.com>
+
+	* gtk/gtkmenutoolbutton.c
+	(gtk_menu_tool_button_construct_contents): Set the relief of the
+	arrow button to the value returned by
+	gtk_tool_item_get_relief_style(). Patch from Benjamin Berg.
+
 2005-08-01  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump version
