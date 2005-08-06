@@ -1,5 +1,7 @@
 2005-08-06  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/Makefile.am: Add new stock images.
+
 	* gtk/gtk-sections.txt: 
 	* gtk/Makefile.am: 
 	* gdk-pixbuf/gdk-pixbuf-sections.txt: 

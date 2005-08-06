@@ -227,6 +227,9 @@ HTML_IMAGES = \
 	$(top_srcdir)/gtk/stock-icons/stock_media_record_24.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_media_rewind_24.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_media_stop_24.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_fullscreen_24.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_leave_fullscreen_24.png	\
+	$(top_srcdir)/gtk/stock-icons/stock_info_24.png			\
 	$(srcdir)/images/accel-label.png				\
 	$(srcdir)/images/button.png					\
 	$(srcdir)/images/check-button.png				\
