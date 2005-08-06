@@ -1,3 +1,10 @@
+2005-08-06  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-sections.txt: 
+	* gtk/Makefile.am: 
+	* gdk-pixbuf/gdk-pixbuf-sections.txt: 
+	* gdk/tmpl/images.sgml: Small fixes
+
 2005-08-02  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.7.5 ===

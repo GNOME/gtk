@@ -47,9 +47,11 @@ IGNORE_HFILES=				\
 	gtkmarshal.h			\
 	gtkmnemonichash.h		\
 	gtkpathbar.h			\
+	gtkplugprivate.h		\
 	gtkprivate.h			\
 	gtkrbtree.h			\
 	gtksequence.h			\
+	gtksocketprivate.h		\
 	gtktreedatalist.h		\
 	gtktreeprivate.h		\
 	gtktextbtree.h			\
@@ -64,6 +66,7 @@ IGNORE_HFILES=				\
 	gtktoggleactionprivate.h	\
 	gtktypebuiltins.h		\
 	gtkxembed.h			\
+	gtkwin32embed.h			\
 	xdgmime				\
 	xembed.h
 

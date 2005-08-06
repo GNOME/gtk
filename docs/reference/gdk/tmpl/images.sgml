@@ -88,7 +88,7 @@ then use %GDK_IMAGE_NORMAL.
 @visual: the #GdkVisual to use for the image.
 @width: the width of the image in pixels.
 @height: the height of the image in pixels.
-@Returns: a new #GdkImage, or NULL if the image could not be created.
+@Returns: a new #GdkImage, or %NULL if the image could not be created.
 
 
 <!-- ##### ENUM GdkImageType ##### -->
