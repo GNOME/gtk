@@ -1,5 +1,8 @@
 2005-08-07  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/gdk.symbols: Add the gdk_display variable.
+
+	* gdk/abicheck.sh:
 	* gtk/abicheck.sh: Also check exported variables.
 
 Fri Aug  5 16:54:19 2005  Søren Sandmann  <sandmann@redhat.com>
