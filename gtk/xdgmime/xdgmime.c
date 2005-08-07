@@ -56,8 +56,9 @@ static XdgAliasList *alias_list = NULL;
 static XdgParentList *parent_list = NULL;
 static XdgDirTimeList *dir_time_list = NULL;
 static XdgCallbackList *callback_list = NULL;
-XdgMimeCache **caches = NULL;
-int n_caches = 0;
+
+XdgMimeCache **_caches = NULL;
+static int n_caches = 0;
 
 const char *xdg_mime_type_unknown = "application/octet-stream";
 
@@ -140,8 +141,9 @@ xdg_mime_init_from_directory (const char *directory)
 	  list->next = dir_time_list;
 	  dir_time_list = list;
 
-	  caches = realloc (caches, sizeof (XdgMimeCache *) * (n_caches + 1));
-	  caches[n_caches] = cache;
+	  _caches = realloc (_caches, sizeof (XdgMimeCache *) * (n_caches + 2));
+	  _caches[n_caches] = cache;
+          _caches[n_caches + 1] = NULL;
 	  n_caches++;
 
 	  return FALSE;
@@ -433,7 +435,7 @@ xdg_mime_get_mime_type_for_data (const void *data,
 
   xdg_mime_init ();
 
-  if (caches)
+  if (_caches)
     return _xdg_mime_cache_get_mime_type_for_data (data, len);
 
   mime_type = _xdg_mime_magic_lookup_data (global_magic, data, len);
@@ -462,7 +464,7 @@ xdg_mime_get_mime_type_for_file (const char *file_name)
 
   xdg_mime_init ();
 
-  if (caches)
+  if (_caches)
     return _xdg_mime_cache_get_mime_type_for_file (file_name);
 
   base_name = _xdg_get_base_name (file_name);
@@ -518,7 +520,7 @@ xdg_mime_get_mime_type_from_file_name (const char *file_name)
 
   xdg_mime_init ();
 
-  if (caches)
+  if (_caches)
     return _xdg_mime_cache_get_mime_type_from_file_name (file_name);
 
   mime_type = _xdg_glob_hash_lookup_file_name (global_hash, file_name);
@@ -582,7 +584,7 @@ xdg_mime_get_max_buffer_extents (void)
 {
   xdg_mime_init ();
   
-  if (caches)
+  if (_caches)
     return _xdg_mime_cache_get_max_buffer_extents ();
 
   return _xdg_mime_magic_get_buffer_extents (global_magic);
@@ -595,7 +597,7 @@ xdg_mime_unalias_mime_type (const char *mime_type)
 
   xdg_mime_init ();
 
-  if (caches)
+  if (_caches)
     return _xdg_mime_cache_unalias_mime_type (mime_type);
 
   if ((lookup = _xdg_mime_alias_list_lookup (alias_list, mime_type)) != NULL)
@@ -663,7 +665,7 @@ xdg_mime_mime_type_subclass (const char *mime,
 
   xdg_mime_init ();
 
-  if (caches)
+  if (_caches)
     return _xdg_mime_cache_mime_type_subclass (mime, base);
 
   umime = xdg_mime_unalias_mime_type (mime);
@@ -707,7 +709,7 @@ xdg_mime_list_mime_parents (const char *mime)
   char **result;
   int i, n;
 
-  if (caches)
+  if (_caches)
     return _xdg_mime_cache_list_mime_parents (mime);
 
   parents = xdg_mime_get_mime_parents (mime);

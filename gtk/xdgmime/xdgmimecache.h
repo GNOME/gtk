@@ -37,6 +37,8 @@ typedef struct _XdgMimeCache XdgMimeCache;
 #define _xdg_mime_cache_unref                XDG_ENTRY(cache_unref)
 #endif
 
+extern XdgMimeCache **_caches;
+
 XdgMimeCache *_xdg_mime_cache_new_from_file (const char   *file_name);
 XdgMimeCache *_xdg_mime_cache_ref           (XdgMimeCache *cache);
 void          _xdg_mime_cache_unref         (XdgMimeCache *cache);
