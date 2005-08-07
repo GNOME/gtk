@@ -1,3 +1,7 @@
+2005-08-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/abicheck.sh: Also check exported variables.
+
 Fri Aug  5 16:54:19 2005  Søren Sandmann  <sandmann@redhat.com>
 
 	* gtk/gtkmenutoolbutton.c
