@@ -111,11 +111,9 @@ gtk_menu_tool_button_set_tooltip (GtkToolItem *tool_item,
 static void
 gtk_menu_tool_button_construct_contents (GtkMenuToolButton *button)
 {
-  GtkMenuToolButtonPrivate *priv;
+  GtkMenuToolButtonPrivate *priv = button->priv;
   GtkWidget *box;
   GtkOrientation orientation;
-
-  priv = GTK_MENU_TOOL_BUTTON_GET_PRIVATE (button);
 
   orientation = gtk_tool_item_get_orientation (GTK_TOOL_ITEM (button));
 
@@ -261,15 +259,13 @@ button_state_changed_cb (GtkWidget         *widget,
                          GtkStateType       previous_state,
                          GtkMenuToolButton *button)
 {
-  GtkMenuToolButtonPrivate *priv;
+  GtkMenuToolButtonPrivate *priv = button->priv;
   GtkWidget *other;
   GtkStateType state = GTK_WIDGET_STATE (widget);
 
   if (state == GTK_STATE_INSENSITIVE)
     return;
   
-  priv = GTK_MENU_TOOL_BUTTON_GET_PRIVATE (button);
-
   other = (widget == priv->arrow_button) ? priv->button : priv->arrow_button;
 
   g_signal_handlers_block_by_func (other,
@@ -307,13 +303,11 @@ menu_position_func (GtkMenu           *menu,
                     gboolean          *push_in,
                     GtkMenuToolButton *button)
 {
-  GtkMenuToolButtonPrivate *priv;
+  GtkMenuToolButtonPrivate *priv = button->priv;
   GtkRequisition req;
   GtkRequisition menu_req;
   GtkOrientation orientation;
   GtkTextDirection direction;
-
-  priv = GTK_MENU_TOOL_BUTTON_GET_PRIVATE (button);
 
   gdk_window_get_origin (GTK_BUTTON (priv->arrow_button)->event_window, x, y);
   gtk_widget_size_request (priv->arrow_button, &req);
@@ -366,9 +360,7 @@ static void
 arrow_button_toggled_cb (GtkToggleButton   *togglebutton,
                          GtkMenuToolButton *button)
 {
-  GtkMenuToolButtonPrivate *priv;
-
-  priv = GTK_MENU_TOOL_BUTTON_GET_PRIVATE (button);
+  GtkMenuToolButtonPrivate *priv = button->priv;
 
   if (!priv->menu)
     return;

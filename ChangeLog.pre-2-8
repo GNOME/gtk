@@ -1,3 +1,13 @@
+2005-08-08  Christian Persch  <chpe@cvs.gnome.org>
+
+	* gtk/gtkmenutoolbutton.c:
+	(gtk_menu_tool_button_construct_contents),
+	(button_state_changed_cb), (menu_position_func),
+	(arrow_button_toggled_cb):
+
+	Use ->priv instead of GTK_MENU_TOOL_BUTTON_GET_PRIVATE.
+	Surviving part of bug #310589.
+
 2005-08-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/gdk.symbols: Add the gdk_display variable.
