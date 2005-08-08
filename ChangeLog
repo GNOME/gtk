@@ -1,3 +1,7 @@
+2005-08-08  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/gdk.symbols: Make the last change compile.
+
 2005-08-08  Christian Persch  <chpe@cvs.gnome.org>
 
 	* gtk/gtkmenutoolbutton.c:

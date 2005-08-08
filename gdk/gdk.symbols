@@ -1195,7 +1195,10 @@ gdk_xid_table_lookup_for_display
 gdk_threads_mutex
 gdk_threads_lock
 gdk_threads_unlock
+#endif
+
 #ifdef GDK_WINDOWING_X11
+#ifdef INCLUDE_VARIABLES
 gdk_display
 #endif
 #endif
