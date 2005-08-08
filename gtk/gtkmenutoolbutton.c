@@ -176,6 +176,19 @@ gtk_menu_tool_button_toolbar_reconfigured (GtkToolItem *toolitem)
 }
 
 static void
+gtk_menu_tool_button_state_changed (GtkWidget    *widget,
+				    GtkStateType  previous_state)
+{
+  GtkMenuToolButton *button = GTK_MENU_TOOL_BUTTON (widget);
+  GtkMenuToolButtonPrivate *priv = button->priv;
+
+  if (!GTK_WIDGET_IS_SENSITIVE (widget) && priv->menu)
+    {
+      gtk_menu_shell_deactivate (GTK_MENU_SHELL (priv->menu));
+    }
+}
+
+static void
 gtk_menu_tool_button_set_property (GObject      *object,
                                    guint         prop_id,
                                    const GValue *value,
@@ -219,18 +232,21 @@ static void
 gtk_menu_tool_button_class_init (GtkMenuToolButtonClass *klass)
 {
   GObjectClass *object_class;
+  GtkWidgetClass *widget_class;
   GtkToolItemClass *toolitem_class;
   GtkToolButtonClass *toolbutton_class;
 
   parent_class = g_type_class_peek_parent (klass);
 
   object_class = (GObjectClass *)klass;
+  widget_class = (GtkWidgetClass *)klass;
   toolitem_class = (GtkToolItemClass *)klass;
   toolbutton_class = (GtkToolButtonClass *)klass;
 
   object_class->set_property = gtk_menu_tool_button_set_property;
   object_class->get_property = gtk_menu_tool_button_get_property;
   object_class->finalize = gtk_menu_tool_button_finalize;
+  widget_class->state_changed = gtk_menu_tool_button_state_changed;
   toolitem_class->set_tooltip = gtk_menu_tool_button_set_tooltip;
   toolitem_class->toolbar_reconfigured = gtk_menu_tool_button_toolbar_reconfigured;
 
@@ -252,48 +268,6 @@ gtk_menu_tool_button_class_init (GtkMenuToolButtonClass *klass)
                                                         GTK_PARAM_READWRITE));
 
   g_type_class_add_private (object_class, sizeof (GtkMenuToolButtonPrivate));
-}
-
-static void
-button_state_changed_cb (GtkWidget         *widget,
-                         GtkStateType       previous_state,
-                         GtkMenuToolButton *button)
-{
-  GtkMenuToolButtonPrivate *priv = button->priv;
-  GtkWidget *other;
-  GtkStateType state = GTK_WIDGET_STATE (widget);
-
-  if (state == GTK_STATE_INSENSITIVE)
-    return;
-  
-  other = (widget == priv->arrow_button) ? priv->button : priv->arrow_button;
-
-  g_signal_handlers_block_by_func (other,
-                                   G_CALLBACK (button_state_changed_cb),
-                                   button);
-
-  if (state == GTK_STATE_PRELIGHT)
-    {
-      gtk_widget_set_state (other, state);
-    }
-  else if (state == GTK_STATE_NORMAL)
-    {
-      gtk_widget_set_state (other, state);
-    }
-  else if (state == GTK_STATE_ACTIVE ||
-           (state == GTK_STATE_INSENSITIVE && other == priv->arrow_button))
-    {
-      gtk_widget_set_state (other, GTK_STATE_NORMAL);
-    }
-
-  if (state == GTK_STATE_INSENSITIVE && other == priv->arrow_button && button->priv->menu)
-    {
-      gtk_menu_shell_deactivate (GTK_MENU_SHELL (button->priv->menu));
-    }
-
-  g_signal_handlers_unblock_by_func (other,
-                                     G_CALLBACK (button_state_changed_cb),
-                                     button);
 }
 
 static void
@@ -340,9 +314,7 @@ static void
 popup_menu_under_arrow (GtkMenuToolButton *button,
                         GdkEventButton    *event)
 {
-  GtkMenuToolButtonPrivate *priv;
-
-  priv = GTK_MENU_TOOL_BUTTON_GET_PRIVATE (button);
+  GtkMenuToolButtonPrivate *priv = button->priv;
 
   g_signal_emit (button, signals[SHOW_MENU], 0);
 
@@ -431,12 +403,6 @@ gtk_menu_tool_button_init (GtkMenuToolButton *button)
   button->priv->arrow_button = arrow_button;
   button->priv->box = box;
 
-#if 0
-  g_signal_connect (real_button, "state_changed",
-                    G_CALLBACK (button_state_changed_cb), button);
-  g_signal_connect (arrow_button, "state_changed",
-                    G_CALLBACK (button_state_changed_cb), button);
-#endif
   g_signal_connect (arrow_button, "toggled",
                     G_CALLBACK (arrow_button_toggled_cb), button);
   g_signal_connect (arrow_button, "button_press_event",
