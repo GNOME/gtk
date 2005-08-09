@@ -254,7 +254,7 @@ _gtk_plug_add_to_socket (GtkPlug   *plug,
 
   gtk_widget_set_parent (widget, GTK_WIDGET (socket));
 
-  g_signal_emit_by_name (socket, "plug_added", 0);
+  g_signal_emit_by_name (socket, "plug_added");
 }
 
 /**

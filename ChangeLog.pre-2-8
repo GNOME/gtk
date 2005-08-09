@@ -1,3 +1,11 @@
+2005-08-09  Mark McLoughlin  <mark@skynet.ie>
+
+	Fixes "notification area leaks space" (bug #312687)
+
+	* gtk/gtksocket-x11.c: (_gtk_socket_windowing_filter_func):
+	  gtk/gtkplug.c: (_gtk_plug_add_to_socket): don't pass a 
+	detail to g_signal_emit_by_name()
+
 2005-08-09  Matthias Clasen  <mclasen@redhat.com>
 
 	* NEWS: Updates

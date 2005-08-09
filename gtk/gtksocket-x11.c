@@ -494,7 +494,7 @@ _gtk_socket_windowing_filter_func (GdkXEvent *gdk_xevent,
 	    _gtk_socket_end_embedding (socket);
 
 	    g_object_ref (widget);
-	    g_signal_emit_by_name (widget, "plug_removed", 0, &result);
+	    g_signal_emit_by_name (widget, "plug_removed", &result);
 	    if (!result)
 	      gtk_widget_destroy (widget);
 	    g_object_unref (widget);
