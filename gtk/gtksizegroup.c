@@ -56,7 +56,7 @@ static GSList *
 get_size_groups (GtkWidget *widget)
 {
   if (!size_groups_quark)
-    size_groups_quark = g_quark_from_string (size_groups_tag);
+    size_groups_quark = g_quark_from_static_string (size_groups_tag);
   
   return g_object_get_qdata (G_OBJECT (widget), size_groups_quark);
 }
@@ -66,7 +66,7 @@ set_size_groups (GtkWidget *widget,
 		 GSList    *groups)
 {
   if (!size_groups_quark)
-    size_groups_quark = g_quark_from_string (size_groups_tag);
+    size_groups_quark = g_quark_from_static_string (size_groups_tag);
 
   g_object_set_qdata (G_OBJECT (widget), size_groups_quark, groups);
 }
