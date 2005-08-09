@@ -1,5 +1,9 @@
 2005-08-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* NEWS: Updates
+
+2005-08-09  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtksizegroup.c (get_size_groups, set_size_groups): Use
 	g_quark_from_static_string here. 
 

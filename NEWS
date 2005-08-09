@@ -1,3 +1,11 @@
+Overview of Changes from GTK+ 2.7.5 to GTK+ 2.8.0
+=================================================
+* Require cairo 0.6 [Matthias]
++ Extend ABI checks to cover exported variables [Matthias]
+* Bug fixes [Benjamin Berg, Christian Persch]
+* Documentation improvements [Matthias]
+* New and updated translation (de,id,te)
+
 Overview of Changes from GTK+ 2.7.4 to GTK+ 2.7.5
 =================================================
 * Rename the default theme to "Raleigh" [Thomas Wood]
