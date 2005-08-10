@@ -1,5 +1,10 @@
 2005-08-09  Owen Taylor  <otaylor@redhat.com>
 
+	* gdk/gdkwindow.c (gdk_window_ref_cairo_surface): Remove superfluous
+	call to gdk_window_get_offsets (). (#313051, Bertram Felgenhauer)
+
+2005-08-09  Owen Taylor  <otaylor@redhat.com>
+
 	* configure.in: Strip out all Xft, FreeType, and pangoxft checking.
 	Rewrite X checks to use pkg-config as much as possible.
 

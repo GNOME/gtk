@@ -2109,9 +2109,6 @@ gdk_window_ref_cairo_surface (GdkDrawable *drawable)
 {
   GdkWindowObject *private = (GdkWindowObject*) drawable;
   cairo_surface_t *surface;
-  gint x_offset, y_offset;
-  
-  gdk_window_get_offsets (GDK_WINDOW (drawable), &x_offset, &y_offset);
 
   if (private->paint_stack)
     {
