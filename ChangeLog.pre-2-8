@@ -1,3 +1,8 @@
+2005-08-10  James Henstridge  <james@jamesh.id.au>
+
+	* configure.in: fix definition of GDK_DEP_CFLAGS so that it
+	doesn't cause build failures if $X_PACKAGES is not empty.
+
 2005-08-09  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkwindow.c (gdk_window_ref_cairo_surface): Remove superfluous
