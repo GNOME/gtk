@@ -1,5 +1,10 @@
 2005-08-10  J. Ali Harlow  <ali@juiblex.co.uk>
 
+	* configure.in: Revert to linking against pangowin32 under win32
+	platform (Owen Taylor).
+
+2005-08-10  J. Ali Harlow  <ali@juiblex.co.uk>
+
 	* gdk/win32/gdkfont-win32.c (gdk_font_from_description_for_display): Make
 	the last change compile.
 

@@ -1344,7 +1344,11 @@ fi
 
 # Check for Pango flags
 
-PANGO_PACKAGES="pango pangocairo"
+if test "x$gdktarget" = "xwin32"; then
+	PANGO_PACKAGES="pangowin32 pangocairo"
+else
+	PANGO_PACKAGES="pango pangocairo"
+fi
 
 AC_MSG_CHECKING(Pango flags)
 if $PKG_CONFIG --exists $PANGO_PACKAGES ; then
