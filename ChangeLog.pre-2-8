@@ -1,3 +1,9 @@
+2005-08-10  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_row_deleted) 
+	(gtk_tree_model_filter_remove_node): Remove ambiguities pointed
+	out by gcc.
+
 2005-08-10  James Henstridge  <james@jamesh.id.au>
 
 	* configure.in: fix definition of GDK_DEP_CFLAGS so that it

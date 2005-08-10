@@ -906,7 +906,8 @@ gtk_tree_model_filter_remove_node (GtkTreeModelFilter *filter,
         {
           g_array_remove_index (level->array, i);
 
-          for (i = MAX (--i, 0); i < level->array->len; i++)
+	  i--;
+          for (i = MAX (i, 0); i < level->array->len; i++)
             {
               /* NOTE: here we do *not* decrease offsets, because the node was
                * not removed from the child model
@@ -1594,7 +1595,8 @@ gtk_tree_model_filter_row_deleted (GtkTreeModel *c_model,
       offset = tmp->offset;
       g_array_remove_index (level->array, i);
 
-      for (i = MAX (--i, 0); i < level->array->len; i++)
+      i--;
+      for (i = MAX (i, 0); i < level->array->len; i++)
         {
           elt = &g_array_index (level->array, FilterElt, i);
           if (elt->offset > offset)
