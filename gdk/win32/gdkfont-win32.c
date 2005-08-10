@@ -30,8 +30,6 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-#include <pango/pangowin32.h>
-
 #include "gdkfont.h"
 #include "gdkpango.h" /* gdk_pango_context_get() */
 #include "gdkdisplay.h"
@@ -1239,27 +1237,31 @@ GdkFont*
 gdk_font_from_description_for_display (GdkDisplay           *display,
                                        PangoFontDescription *font_desc)
 {
-  PangoFontMap *font_map;
-  PangoFont *font;
   GdkFont *result = NULL;
+  LOGFONT logfont;
+  int size;
 
   g_return_val_if_fail (font_desc != NULL, NULL);
   g_return_val_if_fail (display == gdk_display_get_default (), NULL);
 
-  font_map = pango_win32_font_map_for_display ();
-  font = pango_font_map_load_font (font_map, gdk_pango_context_get (), font_desc);
+  size = PANGO_PIXELS (pango_font_description_get_size (font_desc));
 
-  if (font)
-    {
-      LOGFONT *lfp =
-	pango_win32_font_logfont (font);
-      result = gdk_font_from_one_singlefont (gdk_font_load_logfont (lfp));
-      g_free (lfp);
+  logfont.lfHeight = - MulDiv (PointSize, GetDeviceCaps (hDC, LOGPIXELSY), 72);
+  logfont.lfWidth = 0;
+  logfont.lfEscapement = 0;
+  logfont.lfOrientation = 0;
+  logfont.lfWeight = FW_DONTCARE;
+  logfont.lfItalic = FALSE;
+  logfont.lfUnderline = FALSE;
+  logfont.lfStrikeOut = FALSE;
+  logfont.lfCharSet = ANSI_CHARSET;
+  logfont.lfOutPrecision = OUT_TT_ONLY_PRECIS;
+  logfont.lfClipPrecision = CLIP_DEFAULT_PRECIS;
+  logfont.lfQuality = PROOF_QUALITY;
+  logfont.lfPitchAndFamily = DEFAULT_PITCH;
+  strcpy (logfont.lfFaceName, "Arial");
 
-      g_object_unref (font);
-    }
-
-  return result;
+  return gdk_font_from_one_singlefont (gdk_font_load_logfont (&logfont));
 }
 
 GdkFont*

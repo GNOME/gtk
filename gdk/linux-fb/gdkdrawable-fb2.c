@@ -152,12 +152,6 @@ static void         gdk_shadow_fb_draw_text_wc       (GdkDrawable      *drawable
 						      gint              y,
 						      const GdkWChar   *text,
 						      gint              text_length);
-static void         gdk_shadow_fb_draw_glyphs        (GdkDrawable      *drawable,
-						      GdkGC            *gc,
-						      PangoFont        *font,
-						      gint              x,
-						      gint              y,
-						      PangoGlyphString *glyphs);
 static void         gdk_shadow_fb_draw_drawable      (GdkDrawable      *drawable,
 						      GdkGC            *gc,
 						      GdkPixmap        *src,
@@ -224,7 +218,6 @@ gdk_drawable_impl_fb_class_init (GdkDrawableFBClass *klass)
   drawable_class->draw_points = gdk_shadow_fb_draw_points;
   drawable_class->draw_segments = gdk_shadow_fb_draw_segments;
   drawable_class->draw_lines = gdk_shadow_fb_draw_lines;
-  drawable_class->draw_glyphs = gdk_shadow_fb_draw_glyphs;
   drawable_class->draw_image = gdk_shadow_fb_draw_image;
 #else
   drawable_class->draw_rectangle = gdk_fb_draw_rectangle;
@@ -236,7 +229,6 @@ gdk_drawable_impl_fb_class_init (GdkDrawableFBClass *klass)
   drawable_class->draw_points = gdk_fb_draw_points;
   drawable_class->draw_segments = gdk_fb_draw_segments;
   drawable_class->draw_lines = gdk_fb_draw_lines;
-  drawable_class->draw_glyphs = gdk_fb_draw_glyphs;
   drawable_class->draw_image = gdk_fb_draw_image;
 #endif
   
@@ -853,6 +845,7 @@ gdk_fb_draw_text(GdkDrawable    *drawable,
 		 gint            text_length)
 {
   GdkFontPrivateFB *private;
+  GdkDrawableFBData *drawable_private;
   guchar *utf8, *utf8_end;
   PangoGlyphString *glyphs = pango_glyph_string_new ();
   PangoEngineShape *shaper, *last_shaper;
@@ -865,6 +858,7 @@ gdk_fb_draw_text(GdkDrawable    *drawable,
   g_return_if_fail (text != NULL);
 
   private = (GdkFontPrivateFB*) font;
+  drawable_private = GDK_DRAWABLE_FBDATA (drawable);
 
   utf8 = alloca (text_length*2);
 
@@ -906,9 +900,10 @@ gdk_fb_draw_text(GdkDrawable    *drawable,
 	  
 	  pango_shape (start, p - start, &analysis, glyphs);
 
-	  gdk_fb_draw_glyphs (drawable, gc, private->pango_font,
-			      x + PANGO_PIXELS (x_offset), y,
-			      glyphs);
+	  gdk_draw_glyphs (drawable_private->wrapper,
+			   gc, private->pango_font,
+			   x + PANGO_PIXELS (x_offset), y,
+			   glyphs);
 	  
 	  for (i = 0; i < glyphs->num_glyphs; i++)
 	    x_offset += glyphs->glyphs[i].geometry.width;
@@ -928,9 +923,10 @@ gdk_fb_draw_text(GdkDrawable    *drawable,
       
       pango_shape (start, p - start, &analysis, glyphs);
       
-      gdk_fb_draw_glyphs (drawable, gc, private->pango_font,
-			  x + PANGO_PIXELS (x_offset), y,
-			  glyphs);
+      gdk_draw_glyphs (drawable_private->wrapper,
+		       gc, private->pango_font,
+		       x + PANGO_PIXELS (x_offset), y,
+		       glyphs);
     }
   
   pango_glyph_string_free (glyphs);
@@ -1205,93 +1201,6 @@ gdk_fb_drawable_clear (GdkDrawable *d)
 }
 
 static void
-_gdk_fb_draw_glyphs (GdkDrawable      *drawable,
-		     GdkGC	     *gc,
-		     PangoFont        *font,
-		     gint              x,
-		     gint              y,
-		     PangoGlyphString *glyphs,
-		     GdkRectangle     *bbox)
-{
-  GdkFBDrawingContext fbdc;
-  GdkPixmapFBData pixmap;
-  PangoGlyphInfo *gi;
-  FT_Face face;
-  FT_UInt glyph_index;
-  int i, xpos;
-  int maxy, miny;
-  int topy;
-
-  g_return_if_fail (font);
-
-  gdk_fb_drawing_context_init (&fbdc, drawable, gc, FALSE, TRUE);
-
-  /* Fake its existence as a pixmap */
-
-  ((GTypeInstance *)&pixmap)->g_class = g_type_class_peek (_gdk_pixmap_impl_get_type ());
-  pixmap.drawable_data.abs_x = 0;
-  pixmap.drawable_data.abs_y = 0;
-  pixmap.drawable_data.depth = 78;
-
-  maxy = miny = 0;
-  
-  gi = glyphs->glyphs;
-  for (i = 0, xpos = 0; i < glyphs->num_glyphs; i++, gi++)
-    {
-      if (gi->glyph)
-	{
-	  glyph_index = gi->glyph;
-	  face = pango_ft2_font_get_face (font);
-
-	  if (face)
-	    {
-	      /* Draw glyph */
-	      FT_Load_Glyph (face, glyph_index, FT_LOAD_DEFAULT);
-	      if (face->glyph->format != ft_glyph_format_bitmap)
-		FT_Render_Glyph (face->glyph, ft_render_mode_normal);
-
-	      pixmap.drawable_data.mem = face->glyph->bitmap.buffer;
-	      pixmap.drawable_data.rowstride = face->glyph->bitmap.pitch;
-	      pixmap.drawable_data.width = face->glyph->bitmap.width;
-	      pixmap.drawable_data.height = face->glyph->bitmap.rows;
-
-	      topy = y - face->glyph->bitmap_top + 1;
-	      miny = MIN (miny, topy);
-	      maxy = MAX (maxy, topy + face->glyph->bitmap.rows);
-	      gdk_fb_draw_drawable_3 (drawable, gc, (GdkPixmap *)&pixmap,
-				      &fbdc,
-				      0, 0,
-				      x + PANGO_PIXELS (xpos) + face->glyph->bitmap_left,
-				      topy,
-				      face->glyph->bitmap.width, face->glyph->bitmap.rows);
-	    }
-	}
-      xpos += glyphs->glyphs[i].geometry.width;
-    }
-
-  gdk_fb_drawing_context_finalize (&fbdc);
-
-  if (bbox)
-    {
-      bbox->x = x;
-      bbox->y = miny;
-      bbox->width = xpos;
-      bbox->height = maxy - miny;
-    }
-}
-
-static void
-gdk_fb_draw_glyphs (GdkDrawable      *drawable,
-		    GdkGC	     *gc,
-		    PangoFont        *font,
-		    gint              x,
-		    gint              y,
-		    PangoGlyphString *glyphs)
-{
-  _gdk_fb_draw_glyphs (drawable, gc, font, x, y, glyphs, NULL);
-}
-
-static void
 gdk_fb_draw_image (GdkDrawable *drawable,
 		   GdkGC       *gc,
 		   GdkImage    *image,
@@ -1489,25 +1398,6 @@ gdk_shadow_fb_draw_text_wc (GdkDrawable      *drawable,
 			    gint              text_length)
 {
   gdk_fb_draw_text_wc (drawable, font, gc, x, y, text, text_length);
-}
-
-static void
-gdk_shadow_fb_draw_glyphs (GdkDrawable      *drawable,
-			   GdkGC            *gc,
-			   PangoFont        *font,
-			   gint              x,
-			   gint              y,
-			   PangoGlyphString *glyphs)
-{
-  GdkDrawableFBData *private;
-  GdkRectangle bbox;
-  
-  _gdk_fb_draw_glyphs (drawable, gc, font, x, y, glyphs, &bbox);
-  
-  private = GDK_DRAWABLE_FBDATA (drawable);
-  if (GDK_IS_WINDOW (private->wrapper))
-    gdk_shadow_fb_update (bbox.x + private->abs_x, bbox.y + private->abs_y,
-			  bbox.x + private->abs_x + bbox.width, bbox.y + private->abs_y + bbox.height);
 }
 
 static void
