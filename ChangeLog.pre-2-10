@@ -1,3 +1,8 @@
+2005-08-10  J. Ali Harlow  <ali@juiblex.co.uk>
+
+	* gdk/win32/gdkfont-win32.c (gdk_font_from_description_for_display): Make
+	the last change compile.
+
 2005-08-10  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_row_deleted) 

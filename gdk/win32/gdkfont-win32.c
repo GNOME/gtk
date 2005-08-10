@@ -1237,7 +1237,6 @@ GdkFont*
 gdk_font_from_description_for_display (GdkDisplay           *display,
                                        PangoFontDescription *font_desc)
 {
-  GdkFont *result = NULL;
   LOGFONT logfont;
   int size;
 
@@ -1246,7 +1245,9 @@ gdk_font_from_description_for_display (GdkDisplay           *display,
 
   size = PANGO_PIXELS (pango_font_description_get_size (font_desc));
 
-  logfont.lfHeight = - MulDiv (PointSize, GetDeviceCaps (hDC, LOGPIXELSY), 72);
+  logfont.lfHeight = - MulDiv (size,
+  			       GetDeviceCaps (_gdk_display_hdc, LOGPIXELSY),
+			       72);
   logfont.lfWidth = 0;
   logfont.lfEscapement = 0;
   logfont.lfOrientation = 0;
