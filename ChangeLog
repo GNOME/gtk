@@ -1,3 +1,9 @@
+2005-08-11  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_size_allocate_columns): queue
+	a draw for the entire widget if any column changes width. (Fixes
+	#311026, reported by Frederic Crozat).
+
 2005-08-10  J. Ali Harlow  <ali@juiblex.co.uk>
 
 	* configure.in: Revert to linking against pangowin32 under win32

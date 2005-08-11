@@ -1907,6 +1907,7 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget)
   gint extra, extra_per_column;
   gint full_requested_width = 0;
   gint number_of_expand_columns = 0;
+  gboolean column_changed = FALSE;
   gboolean rtl;
   
   tree_view = GTK_TREE_VIEW (widget);
@@ -2009,7 +2010,7 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget)
       width += column->width;
 
       if (column->width > old_width)
-	invalidate_column (tree_view, column);
+        column_changed = TRUE;
 
       gtk_widget_size_allocate (column->button, &allocation);
 
@@ -2019,6 +2020,9 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget)
 				allocation.y,
                                 TREE_VIEW_DRAG_WIDTH, allocation.height);
     }
+
+  if (column_changed)
+    gtk_widget_queue_draw (GTK_WIDGET (tree_view));
 }
 
 
