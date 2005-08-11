@@ -74,6 +74,8 @@ static void gtk_list_store_set_column_type (GtkListStore *list_store,
 					    gint          column,
 					    GType         type);
 
+static void gtk_list_store_increment_stamp (GtkListStore *list_store);
+
 
 /* Drag and Drop */
 static gboolean real_gtk_list_store_row_draggable (GtkTreeDragSource *drag_source,
@@ -1121,6 +1123,16 @@ gtk_list_store_append (GtkListStore *list_store,
   gtk_list_store_insert (list_store, iter, _gtk_sequence_get_length (list_store->seq));
 }
 
+static void
+gtk_list_store_increment_stamp (GtkListStore *list_store)
+{
+  do
+    {
+      list_store->stamp++;
+    }
+  while (list_store->stamp == 0);
+}
+
 /**
  * gtk_list_store_clear:
  * @list_store: a #GtkListStore.
@@ -1140,6 +1152,8 @@ gtk_list_store_clear (GtkListStore *list_store)
       iter.user_data = _gtk_sequence_get_begin_ptr (list_store->seq);
       gtk_list_store_remove (list_store, &iter);
     }
+
+  gtk_list_store_increment_stamp (list_store);
 }
 
 /**

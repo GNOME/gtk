@@ -1,5 +1,15 @@
 2005-08-11  Kristian Rietveld  <kris@gtk.org>
 
+	Fix for #312924, by John Finlay.
+
+	* gtk/gtkliststore.c (gtk_list_store_increment_stamp),
+	(gtk_list_store_clear): increment stamp on store clearance.
+
+	* gtk/gtktreestore.c (gtk_tree_store_increment_stamp),
+	(gtk_tree_store_clear): ditto.
+
+2005-08-11  Kristian Rietveld  <kris@gtk.org>
+
 	* gtk/gtktreeview.c (gtk_tree_view_size_allocate_columns): queue
 	a draw for the entire widget if any column changes width. (Fixes
 	#311026, reported by Frederic Crozat).

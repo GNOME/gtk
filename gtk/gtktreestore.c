@@ -74,6 +74,8 @@ static void gtk_tree_store_set_column_type (GtkTreeStore *tree_store,
 					    gint          column,
 					    GType         type);
 
+static void gtk_tree_store_increment_stamp (GtkTreeStore  *tree_store);
+
 
 /* DND interfaces */
 static gboolean real_gtk_tree_store_row_draggable   (GtkTreeDragSource *drag_source,
@@ -1541,6 +1543,16 @@ gtk_tree_store_clear_traverse (GNode *node,
   return FALSE;
 }
 
+static void
+gtk_tree_store_increment_stamp (GtkTreeStore *tree_store)
+{
+  do
+    {
+      tree_store->stamp++;
+    }
+  while (tree_store->stamp == 0);
+}
+
 /**
  * gtk_tree_store_clear:
  * @tree_store: a #GtkTreeStore
@@ -1553,6 +1565,7 @@ gtk_tree_store_clear (GtkTreeStore *tree_store)
   g_return_if_fail (GTK_IS_TREE_STORE (tree_store));
 
   gtk_tree_store_clear_traverse (tree_store->root, tree_store);
+  gtk_tree_store_increment_stamp (tree_store);
 }
 
 static gboolean
