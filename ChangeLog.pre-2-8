@@ -1,3 +1,10 @@
+2005-08-12  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/linux-fb/gdkwindow-fb.c (gdk_window_set_back_pixmap)
+	* gdk/win32/gdkwindow-win32.c (gdk_window_set_back_pixmap) 
+	* gdk/x11/gdkwindow-x11.c (gdk_window_set_back_pixmap): Warn if
+	gdk_drawable_get_colormap (pixmap) is NULL and return.
+
 2005-08-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump version to 2.8.0
