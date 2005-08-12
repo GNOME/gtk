@@ -1075,6 +1075,8 @@ change_folder_and_display_error (GtkFileChooserDefault *impl,
   gboolean result;
   GtkFilePath *path_copy;
 
+  g_return_val_if_fail (path != NULL, FALSE);
+
   profile_start ("start", (char *) path);
 
   /* We copy the path because of this case:
@@ -2060,8 +2062,8 @@ shortcut_find_position (GtkFileChooserDefault *impl,
 	      volume = col_data;
 	      base_path = gtk_file_system_volume_get_base_path (impl->file_system, volume);
 
-	      exists = strcmp (gtk_file_path_get_string (path),
-			       gtk_file_path_get_string (base_path)) == 0;
+	      exists = base_path && strcmp (gtk_file_path_get_string (path),
+					    gtk_file_path_get_string (base_path)) == 0;
 	      g_free (base_path);
 
 	      if (exists)
@@ -2092,6 +2094,8 @@ shortcuts_add_bookmark_from_path (GtkFileChooserDefault *impl,
 {
   GError *error;
 
+  g_return_val_if_fail (path != NULL, FALSE);
+ 
   if (shortcut_find_position (impl, path) != -1)
     return FALSE;
 

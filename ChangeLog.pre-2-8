@@ -1,3 +1,10 @@
+2005-08-11  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilechooserdefault.c: Work around some problems
+	with the gnome-vfs backends which could lead to crashes
+	in the bookmark handling.  (#310270, Diego Gonzalez, patch
+	by Michael Meeks)
+
 2005-08-11  Kristian Rietveld  <kris@gtk.org>
 
 	Fix for #312924, by John Finlay.
