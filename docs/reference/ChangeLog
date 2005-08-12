@@ -1,3 +1,7 @@
+2005-08-11  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/building.sgml: Updates.
+
 2005-08-06  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/Makefile.am: Add new stock images.

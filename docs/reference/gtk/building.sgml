@@ -239,23 +239,14 @@ How to compile GTK+ itself
 	<para>
 	  The <ulink url="http://www.fontconfig.org">fontconfig</ulink>
 	  library provides Pango with a standard way of locating
-	  fonts and matching them against font names. The 
-          <ulink url="http://www.freedesktop.org/wiki/Software/Xft">Xft2</ulink>
-	  library, distributed with fontconfig, provides support for
-	  scalable and antialiased fonts on X. Pango includes two
-	  backends that work on top of fontconfig: an Xft2 backend
-	  and a backend that uses fontconfig and the underlying
-	  <ulink url="http://www.freetype.org">FreeType</ulink>
-	  library directly. Neither backend is mandatory, but the
-	  Xft2 backend is the preferred backend for X and the FreeType
-	  backend is needed by many applications.
+	  fonts and matching them against font names. 
 	</para>
       </listitem>
       <listitem>
 	<para>
-	  The <ulink url="http://www.cairographics.org">Cairo</ulink>
+	  <ulink url="http://www.cairographics.org">Cairo</ulink>
           is a graphics library that supports vector graphics and image 
-          compositing. Both Pango and GTK+ use Cairo for much of their
+          compositing. Both Pango and GTK+ use cairo for much of their
           drawing.
         </para>
       </listitem>
