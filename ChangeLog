@@ -1,3 +1,12 @@
+2005-08-12  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkicontheme.c: When changing the icon theme, defer
+	the resetting of rc styles to an idle, so that it does
+	not happen e.g during expose handling (which is problematic,
+	since some widgets, like the toolbar, are changing the
+	hierarchy in response to style changes).  (#300539, reported
+	by many people, analyzed by Owen Taylor)
+
 2005-08-12  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/linux-fb/gdkwindow-fb.c (gdk_window_set_back_pixmap)
