@@ -1,5 +1,8 @@
 2005-08-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcheckmenuitem.c (gtk_real_check_menu_item_draw_indicator): 
+	Remove a line without effect.
+
 	* gtk/gtkicontheme.c: When changing the icon theme, defer
 	the resetting of rc styles to an idle, so that it does
 	not happen e.g during expose handling (which is problematic,
