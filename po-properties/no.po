@@ -8,14 +8,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nb\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-05 21:50+0200\n"
-"PO-Revision-Date: 2005-08-05 21:49+0200\n"
+"POT-Creation-Date: 2005-08-12 13:40+0200\n"
+"PO-Revision-Date: 2005-08-12 13:40+0200\n"
 "Last-Translator: Terance Edward Sola <terance@lyse.net>\n"
 "Language-Team: Norwegian Bokmal <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: KBabel 1.10\n"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:110
 msgid "Number of Channels"
@@ -1251,13 +1252,15 @@ msgstr ""
 #: ../gtk/gtkcellrenderertext.c:435 ../gtk/gtklabel.c:435
 #: ../gtk/gtkprogressbar.c:243
 msgid "Ellipsize"
-msgstr ""
+msgstr "Forkort"
 
 #: ../gtk/gtkcellrenderertext.c:436
 msgid ""
 "The preferred place to ellipsize the string, if the cell renderer does not "
 "have enough room to display the entire string, if at all"
 msgstr ""
+"Det prioriterte stedet å forkorte strengen hvis celletegneren ikke har nok "
+"plass til å vise hele strengen, hvis i det hele tatt"
 
 #: ../gtk/gtkcellrenderertext.c:455 ../gtk/gtkfilechooserbutton.c:367
 #: ../gtk/gtklabel.c:455
@@ -1404,7 +1407,7 @@ msgstr "Om denne merkingen påvirker språket teksten skal rendres som"
 
 #: ../gtk/gtkcellrenderertext.c:563
 msgid "Ellipsize set"
-msgstr ""
+msgstr "Forkort sett"
 
 #: ../gtk/gtkcellrenderertext.c:564
 #, fuzzy
@@ -1636,7 +1639,7 @@ msgstr "Legg til avrivningsfelt til menyer"
 
 #: ../gtk/gtkcombobox.c:660
 msgid "Whether dropdowns should have a tearoff menu item"
-msgstr ""
+msgstr "Om nedtrekksmenyer skal ha et element som kan dras av"
 
 #: ../gtk/gtkcombobox.c:675 ../gtk/gtkentry.c:534
 msgid "Has Frame"
@@ -1903,7 +1906,7 @@ msgstr "Om fullføringen skal bli vist i et oppsprettsvindu"
 
 #: ../gtk/gtkentrycompletion.c:350
 msgid "Popup set width"
-msgstr ""
+msgstr "Sprett opp sett bredde"
 
 #: ../gtk/gtkentrycompletion.c:351
 msgid "If TRUE, the popup window will have the same size as the entry"
@@ -1911,7 +1914,7 @@ msgstr "Hvis «TRUE» vil oppsprettvinduet ha samme størrelsen som oppføringen
 
 #: ../gtk/gtkentrycompletion.c:369
 msgid "Popup single match"
-msgstr ""
+msgstr "Sprett opp enslig treff"
 
 #: ../gtk/gtkentrycompletion.c:370
 msgid "If TRUE, the popup window will appear for a single match."
@@ -2070,7 +2073,7 @@ msgstr "Om skjulte filer og mapper skal vises"
 
 #: ../gtk/gtkfilechooser.c:266
 msgid "Do overwrite confirmation"
-msgstr ""
+msgstr "Vis overskrivingsbekreftelse"
 
 #: ../gtk/gtkfilechooser.c:267
 msgid ""
@@ -2078,6 +2081,9 @@ msgid ""
 "overwrite confirmation dialog if the user selects a file name that already "
 "exists."
 msgstr ""
+"Om filvelger i GTK_FILE_CHOOSER_ACTION_SAVE vil presentere en "
+"bekreftelsedialog for overskriving hvis brukeren velger et filnavn som "
+"allerede eksisterer."
 
 #: ../gtk/gtkfilechooserbutton.c:338
 msgid "Dialog"
@@ -2565,6 +2571,8 @@ msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string, if at all"
 msgstr ""
+"Det prioriterte stedet å forkorte strengen hvis etiketten ikke har nok plass "
+"til å vise hele strengen, hvis i det hele tatt"
 
 #: ../gtk/gtklabel.c:476
 msgid "Single Line Mode"
@@ -2778,11 +2786,11 @@ msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr ""
 "En tittel som skal vises av vindushåndtereren når denne menyen er avrevet"
 
-#: ../gtk/gtkmenutoolbutton.c:248 ../gtk/gtkoptionmenu.c:196
+#: ../gtk/gtkmenutoolbutton.c:265 ../gtk/gtkoptionmenu.c:196
 msgid "Menu"
 msgstr "Meny"
 
-#: ../gtk/gtkmenutoolbutton.c:249
+#: ../gtk/gtkmenutoolbutton.c:266
 msgid "The dropdown menu"
 msgstr "Hurtigmenyen"
 
@@ -3192,6 +3200,8 @@ msgid ""
 "The preferred place to ellipsize the string, if the progressbar does not "
 "have enough room to display the entire string, if at all"
 msgstr ""
+"Det prioriterte stedet å forkorte strengen hvis framdriftsviseren ikke har "
+"nok plass til å vise hele strengen, hvis i det hele tatt"
 
 #: ../gtk/gtkradioaction.c:140
 msgid "The value"
@@ -3648,12 +3658,14 @@ msgstr ""
 
 #: ../gtk/gtksizegroup.c:262
 msgid "Ignore hidden"
-msgstr ""
+msgstr "Ignorer gjemt"
 
 #: ../gtk/gtksizegroup.c:263
 msgid ""
 "If TRUE, hidden widgets are ignored when determining the size of the group"
 msgstr ""
+"Hvis «TRUE» blir gjemte skjermelementer ignorert når størrelsen til gruppen "
+"skal bli bestemt"
 
 #: ../gtk/gtkspinbutton.c:244
 msgid "The adjustment that holds the value of the spinbutton"
@@ -4051,7 +4063,7 @@ msgstr "Om denne teksten er gjemt."
 
 #: ../gtk/gtktexttag.c:530
 msgid "Paragraph background color name"
-msgstr ""
+msgstr "Bakgrunnsfargenavn for avsnitt"
 
 #: ../gtk/gtktexttag.c:531
 msgid "Paragraph background color as a string"
@@ -5050,7 +5062,7 @@ msgstr "SANN hvis vinduet ikke skal være i vindulisten."
 
 #: ../gtk/gtkwindow.c:589
 msgid "Urgent"
-msgstr ""
+msgstr "Viktig"
 
 #: ../gtk/gtkwindow.c:590
 msgid "TRUE if the window should be brought to the user's attention."
@@ -5066,12 +5078,11 @@ msgstr "SANN hvis vinduet skal motta fokus for inndata."
 
 #: ../gtk/gtkwindow.c:619
 msgid "Focus on map"
-msgstr ""
+msgstr "Fokuser på kart"
 
 #: ../gtk/gtkwindow.c:620
-#, fuzzy
 msgid "TRUE if the window should receive the input focus when mapped."
-msgstr "TRUE hvis vinduet skal motta fokus for inndata."
+msgstr "«TRUE» hvis vinduet skal få inndatafokus når kartlagt."
 
 #: ../gtk/gtkwindow.c:634
 msgid "Decorated"
