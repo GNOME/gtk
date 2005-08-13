@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-02 17:42-0400\n"
+"POT-Creation-Date: 2005-08-13 10:24-0400\n"
 "PO-Revision-Date: 2003-03-31 07:40+0300\n"
 "Last-Translator: Ales Nyakhaychyk <nab@mail.by>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -2895,11 +2895,11 @@ msgstr ""
 "Загаловак, які можа адлюстроўвацца аконным кіраўніком, пасля таго, як мэню "
 "будзе выключана."
 
-#: gtk/gtkmenutoolbutton.c:248 gtk/gtkoptionmenu.c:196
+#: gtk/gtkmenutoolbutton.c:265 gtk/gtkoptionmenu.c:196
 msgid "Menu"
 msgstr "Мэню"
 
-#: gtk/gtkmenutoolbutton.c:249
+#: gtk/gtkmenutoolbutton.c:266
 msgid "The dropdown menu"
 msgstr ""
 

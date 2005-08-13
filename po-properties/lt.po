@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-02 17:42-0400\n"
+"POT-Creation-Date: 2005-08-13 10:24-0400\n"
 "PO-Revision-Date: 2005-01-06 19:45+0200\n"
 "Last-Translator: Žygimantas Beručka <uid0@akl.lt>\n"
 "Language-Team: Lithuanian <komp_lt@konferencijos.lt>\n"
@@ -2768,11 +2768,11 @@ msgstr "Turi fokusavimą"
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "Loginė reikšmė, nurodanti ar meniu yra atkabinamas"
 
-#: gtk/gtkmenutoolbutton.c:248 gtk/gtkoptionmenu.c:196
+#: gtk/gtkmenutoolbutton.c:265 gtk/gtkoptionmenu.c:196
 msgid "Menu"
 msgstr "Meniu"
 
-#: gtk/gtkmenutoolbutton.c:249
+#: gtk/gtkmenutoolbutton.c:266
 msgid "The dropdown menu"
 msgstr "Žemyn išskleidžiamas meniu"
 

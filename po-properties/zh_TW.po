@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 2.6.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-02 17:42-0400\n"
+"POT-Creation-Date: 2005-08-13 10:24-0400\n"
 "PO-Revision-Date: 2005-06-17 20:04+0800\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: Chinese/Traditional <community@linuxhall.org>\n"
@@ -2698,11 +2698,11 @@ msgstr "獲得焦點"
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "指出該選單是否分離的布林值"
 
-#: gtk/gtkmenutoolbutton.c:248 gtk/gtkoptionmenu.c:196
+#: gtk/gtkmenutoolbutton.c:265 gtk/gtkoptionmenu.c:196
 msgid "Menu"
 msgstr "選單"
 
-#: gtk/gtkmenutoolbutton.c:249
+#: gtk/gtkmenutoolbutton.c:266
 msgid "The dropdown menu"
 msgstr "下拉式選單"
 

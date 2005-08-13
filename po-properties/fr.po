@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+_properties 2.3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-02 17:42-0400\n"
+"POT-Creation-Date: 2005-08-13 10:24-0400\n"
 "PO-Revision-Date: 2004-02-24 19:01+0100\n"
 "Last-Translator: Christophe Merlet (RedFox) <redfox@redfoxcenter.org>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
@@ -2861,11 +2861,11 @@ msgstr ""
 "Un titre que le gestionnaire de fenêtres peut afficher lorsque le menu est "
 "détaché"
 
-#: gtk/gtkmenutoolbutton.c:248 gtk/gtkoptionmenu.c:196
+#: gtk/gtkmenutoolbutton.c:265 gtk/gtkoptionmenu.c:196
 msgid "Menu"
 msgstr "Menu"
 
-#: gtk/gtkmenutoolbutton.c:249
+#: gtk/gtkmenutoolbutton.c:266
 msgid "The dropdown menu"
 msgstr ""
 

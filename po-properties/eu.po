@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-02 17:42-0400\n"
+"POT-Creation-Date: 2005-08-13 10:24-0400\n"
 "PO-Revision-Date: 2005-04-13 20:22+0200\n"
 "Last-Translator: Hizkuntza Politikarako Sailburuordetza <hizkpol@ej-gv.es>\n"
 "Language-Team:  <itzulpena@euskalgnu.org>\n"
@@ -2900,11 +2900,11 @@ msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr ""
 "Menuak teklatuaren fokua hartuko duen ala ez zehazten duen balio boolearra"
 
-#: gtk/gtkmenutoolbutton.c:248 gtk/gtkoptionmenu.c:196
+#: gtk/gtkmenutoolbutton.c:265 gtk/gtkoptionmenu.c:196
 msgid "Menu"
 msgstr "Menua"
 
-#: gtk/gtkmenutoolbutton.c:249
+#: gtk/gtkmenutoolbutton.c:266
 msgid "The dropdown menu"
 msgstr "Goitibeherako menua"
 

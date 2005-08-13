@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pa\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-02 17:42-0400\n"
+"POT-Creation-Date: 2005-08-13 10:24-0400\n"
 "PO-Revision-Date: 2004-07-22 13:55+0530\n"
 "Last-Translator: Amanpreet Singh Alam <aalam@redhat.com>\n"
 "Language-Team: Punjabi <pa@li.org>\n"
@@ -2750,11 +2750,11 @@ msgstr "ਕੇਦਰਿਤ ਹੈ"
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "ਜਦੋ ਸੂਚੀ ਨੂੰ ਹਟਾਇਆ ਜਾਵੇ ਤਾਂ ਝਰੋਖਾ ਪ੍ਰਬੰਧਕ ਦਾ ਉਪਲੱਬਧ ਸਿਰਲੇਖ ਜੋ ਕਿ ਦਿੱਸ ਸਕਦਾ ਹੈ"
 
-#: gtk/gtkmenutoolbutton.c:248 gtk/gtkoptionmenu.c:196
+#: gtk/gtkmenutoolbutton.c:265 gtk/gtkoptionmenu.c:196
 msgid "Menu"
 msgstr "ਮੇਨੂ-ਸੂਚੀ"
 
-#: gtk/gtkmenutoolbutton.c:249
+#: gtk/gtkmenutoolbutton.c:266
 msgid "The dropdown menu"
 msgstr ""
 

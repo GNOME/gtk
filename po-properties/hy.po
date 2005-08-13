@@ -49,7 +49,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.hy\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-02 17:42-0400\n"
+"POT-Creation-Date: 2005-08-13 10:24-0400\n"
 "PO-Revision-Date: 2005-07-19 17:50+0500\n"
 "Last-Translator: \n"
 "Language-Team:  <en@li.org>\n"
@@ -2791,11 +2791,11 @@ msgstr ""
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr ""
 
-#: gtk/gtkmenutoolbutton.c:248 gtk/gtkoptionmenu.c:196
+#: gtk/gtkmenutoolbutton.c:265 gtk/gtkoptionmenu.c:196
 msgid "Menu"
 msgstr ""
 
-#: gtk/gtkmenutoolbutton.c:249
+#: gtk/gtkmenutoolbutton.c:266
 msgid "The dropdown menu"
 msgstr ""
 

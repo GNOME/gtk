@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-02 17:42-0400\n"
+"POT-Creation-Date: 2005-08-13 10:24-0400\n"
 "PO-Revision-Date: 2004-03-18 10:45+0600\n"
 "Last-Translator: Progga <progga@BengaLinux.Org>\n"
 "Language-Team: Bangla <gnome-translation@BengaLinux.Org>\n"
@@ -2810,11 +2810,11 @@ msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr ""
 "এই মেনুটি বিচ্ছিন্ন (???) থাকলে উইন্ডো ম্যানেজার যে শিরোনামটি প্রদর্শন করতে পারবে"
 
-#: gtk/gtkmenutoolbutton.c:248 gtk/gtkoptionmenu.c:196
+#: gtk/gtkmenutoolbutton.c:265 gtk/gtkoptionmenu.c:196
 msgid "Menu"
 msgstr "মেনু"
 
-#: gtk/gtkmenutoolbutton.c:249
+#: gtk/gtkmenutoolbutton.c:266
 msgid "The dropdown menu"
 msgstr ""
 

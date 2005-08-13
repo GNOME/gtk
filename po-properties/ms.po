@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+ 1.3.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-02 17:42-0400\n"
+"POT-Creation-Date: 2005-08-13 10:24-0400\n"
 "PO-Revision-Date: 2004-01-20 00:57+0730\n"
 "Last-Translator: Hasbullah Bin Pit <sebol@ikhlas.com>\n"
 "Language-Team: Projek Gabai <gabai-penyumbang@list.sourceforge.net>\n"
@@ -2806,11 +2806,11 @@ msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr ""
 "Tajuk yang mungkin dipaparkan oleh pengurus tetingkap bila menu dikoyakkan"
 
-#: gtk/gtkmenutoolbutton.c:248 gtk/gtkoptionmenu.c:196
+#: gtk/gtkmenutoolbutton.c:265 gtk/gtkoptionmenu.c:196
 msgid "Menu"
 msgstr "Menu"
 
-#: gtk/gtkmenutoolbutton.c:249
+#: gtk/gtkmenutoolbutton.c:266
 msgid "The dropdown menu"
 msgstr ""
 

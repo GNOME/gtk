@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties-2-4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-02 17:42-0400\n"
+"POT-Creation-Date: 2005-08-13 10:24-0400\n"
 "PO-Revision-Date: 2005-03-05 16:58+0200\n"
 "Last-Translator: Mişu Moldovan <dumol@go.ro>\n"
 "Language-Team: Română <gnomero-list@lists.sourceforge.net>\n"
@@ -2800,11 +2800,11 @@ msgstr "Are focus"
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "Valoare booleană ce indică dacă un meniu este desprins"
 
-#: gtk/gtkmenutoolbutton.c:248 gtk/gtkoptionmenu.c:196
+#: gtk/gtkmenutoolbutton.c:265 gtk/gtkoptionmenu.c:196
 msgid "Menu"
 msgstr "Meniu"
 
-#: gtk/gtkmenutoolbutton.c:249
+#: gtk/gtkmenutoolbutton.c:266
 msgid "The dropdown menu"
 msgstr "Meniu „dropdown”"
 

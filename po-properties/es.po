@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK-2.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-02 17:42-0400\n"
+"POT-Creation-Date: 2005-08-13 10:24-0400\n"
 "PO-Revision-Date: 2005-07-24 18:47+0200\n"
 "Last-Translator: Francisco Javier F. Serrador <serrador@gnome.org>\n"
 "Language-Team:  <traductores@es.gnome.org>\n"
@@ -2822,11 +2822,11 @@ msgstr "Toma foco"
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "Un booleano que indica si el menú toma el foco del teclado"
 
-#: gtk/gtkmenutoolbutton.c:248 gtk/gtkoptionmenu.c:196
+#: gtk/gtkmenutoolbutton.c:265 gtk/gtkoptionmenu.c:196
 msgid "Menu"
 msgstr "Menú"
 
-#: gtk/gtkmenutoolbutton.c:249
+#: gtk/gtkmenutoolbutton.c:266
 msgid "The dropdown menu"
 msgstr "El menú desplegable"
 

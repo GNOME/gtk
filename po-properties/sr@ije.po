@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-02 17:42-0400\n"
+"POT-Creation-Date: 2005-08-13 10:24-0400\n"
 "PO-Revision-Date: 2004-03-09 05:28+0100\n"
 "Last-Translator: Bojan Suzic <bojans@teol.net>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
@@ -2807,11 +2807,11 @@ msgstr "У жижи је"
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "Наслов који може приказати управник прозора када се овај мени отцјепи"
 
-#: gtk/gtkmenutoolbutton.c:248 gtk/gtkoptionmenu.c:196
+#: gtk/gtkmenutoolbutton.c:265 gtk/gtkoptionmenu.c:196
 msgid "Menu"
 msgstr "Мени"
 
-#: gtk/gtkmenutoolbutton.c:249
+#: gtk/gtkmenutoolbutton.c:266
 msgid "The dropdown menu"
 msgstr ""
 

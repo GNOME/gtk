@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-02 17:42-0400\n"
+"POT-Creation-Date: 2005-08-13 10:24-0400\n"
 "PO-Revision-Date: 2004-03-09 12:13+0100\n"
 "Last-Translator: Sanlig Badral <badral@openmn.org>\n"
 "Language-Team: Mongolian <openmn-core@lists.sf.net>\n"
@@ -3137,11 +3137,11 @@ msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "Энэ цэс буусан үед цонхны удирдагчаар харуулагдах боломтой гарчиг"
 
 # gtk/gtkoptionmenu.c:188
-#: gtk/gtkmenutoolbutton.c:248 gtk/gtkoptionmenu.c:196
+#: gtk/gtkmenutoolbutton.c:265 gtk/gtkoptionmenu.c:196
 msgid "Menu"
 msgstr "Цэс"
 
-#: gtk/gtkmenutoolbutton.c:249
+#: gtk/gtkmenutoolbutton.c:266
 msgid "The dropdown menu"
 msgstr ""
 

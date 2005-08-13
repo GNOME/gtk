@@ -92,7 +92,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-02 17:42-0400\n"
+"POT-Creation-Date: 2005-08-13 10:24-0400\n"
 "PO-Revision-Date: 2005-07-27 12:16+0530\n"
 "Last-Translator: Ankit Patel <ankit644@yahoo.com>\n"
 "Language-Team: Gujarati <indianoss-gujarati@lists.sourceforge.net>\n"
@@ -2794,11 +2794,11 @@ msgstr "ફોકસ કરો"
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "બુલિયન કે જે નક્કી કરે છે કે શું મેનુ કીબોર્ડ ટુંકાણો મેળવે છે"
 
-#: gtk/gtkmenutoolbutton.c:248 gtk/gtkoptionmenu.c:196
+#: gtk/gtkmenutoolbutton.c:265 gtk/gtkoptionmenu.c:196
 msgid "Menu"
 msgstr "મેનુ"
 
-#: gtk/gtkmenutoolbutton.c:249
+#: gtk/gtkmenutoolbutton.c:266
 msgid "The dropdown menu"
 msgstr "નીચે આવતુ મેનુ"
 

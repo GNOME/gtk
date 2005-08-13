@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.sq\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-02 17:42-0400\n"
+"POT-Creation-Date: 2005-08-13 10:24-0400\n"
 "PO-Revision-Date: 2005-07-28 11:09+0200\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: Albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
@@ -2796,11 +2796,11 @@ msgstr "Merr fokus"
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "Një boolean që tregon se kur menuja merr fokusin e tastierës"
 
-#: gtk/gtkmenutoolbutton.c:248 gtk/gtkoptionmenu.c:196
+#: gtk/gtkmenutoolbutton.c:265 gtk/gtkoptionmenu.c:196
 msgid "Menu"
 msgstr "Menu"
 
-#: gtk/gtkmenutoolbutton.c:249
+#: gtk/gtkmenutoolbutton.c:266
 msgid "The dropdown menu"
 msgstr "Menuja në formë tende"
 

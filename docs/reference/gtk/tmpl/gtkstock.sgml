@@ -352,6 +352,15 @@ The "Floppy" item.
 
 
 
+<!-- ##### MACRO GTK_STOCK_FULLSCREEN ##### -->
+<para>
+The "Fullscreen" item.
+<inlinegraphic fileref="stock_fullscreen_24.png" format="PNG"></inlinegraphic>
+</para>
+
+@Since: 2.8
+
+
 <!-- ##### MACRO GTK_STOCK_GOTO_BOTTOM ##### -->
 <para>
 The "Bottom" item.
@@ -466,6 +475,15 @@ The "Index" item.
 
 
 
+<!-- ##### MACRO GTK_STOCK_INFO ##### -->
+<para>
+The "Info" item.
+<inlinegraphic fileref="stock_info_24.png" format="PNG"></inlinegraphic>
+</para>
+
+@Since: 2.8
+
+
 <!-- ##### MACRO GTK_STOCK_ITALIC ##### -->
 <para>
 The "Italic" item.
@@ -514,6 +532,15 @@ The "Right" item.
 <inlinegraphic fileref="stock_align_right_24.png" format="PNG"></inlinegraphic>
 </para>
 
+
+
+<!-- ##### MACRO GTK_STOCK_LEAVE_FULLSCREEN ##### -->
+<para>
+The "Leave Fullscreen" item.
+<inlinegraphic fileref="stock_leave_fullscreen_24.png" format="PNG"></inlinegraphic>
+</para>
+
+@Since: 2.8
 
 
 <!-- ##### MACRO GTK_STOCK_MEDIA_FORWARD ##### -->

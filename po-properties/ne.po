@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-02 17:42-0400\n"
+"POT-Creation-Date: 2005-08-13 10:24-0400\n"
 "PO-Revision-Date: 2005-05-15 15:47+0545\n"
 "Last-Translator: Ganesh Ghimire <gghimire@gmail.com>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -2704,11 +2704,11 @@ msgstr "केन्द्र लिनुहोस्"
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "यो मेनुले कुञ्जीपाटी केन्द्र समाउँदाँदा बुलियनले निर्धारण गर्छ"
 
-#: gtk/gtkmenutoolbutton.c:248 gtk/gtkoptionmenu.c:196
+#: gtk/gtkmenutoolbutton.c:265 gtk/gtkoptionmenu.c:196
 msgid "Menu"
 msgstr "मेनु"
 
-#: gtk/gtkmenutoolbutton.c:249
+#: gtk/gtkmenutoolbutton.c:266
 msgid "The dropdown menu"
 msgstr "ड्रपडाउन मेनु"
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-02 17:42-0400\n"
+"POT-Creation-Date: 2005-08-13 10:24-0400\n"
 "PO-Revision-Date: 2004-03-02 22:17+0100\n"
 "Last-Translator: Alessio Dessi <alessiodessi@tiscali.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
@@ -2866,11 +2866,11 @@ msgstr ""
 "Titolo che può essere visualizzato dal gestore di finestre se il menu viene "
 "staccato"
 
-#: gtk/gtkmenutoolbutton.c:248 gtk/gtkoptionmenu.c:196
+#: gtk/gtkmenutoolbutton.c:265 gtk/gtkoptionmenu.c:196
 msgid "Menu"
 msgstr "Menu"
 
-#: gtk/gtkmenutoolbutton.c:249
+#: gtk/gtkmenutoolbutton.c:266
 msgid "The dropdown menu"
 msgstr ""
 

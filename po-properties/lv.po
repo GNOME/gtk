@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-02 17:42-0400\n"
+"POT-Creation-Date: 2005-08-13 10:24-0400\n"
 "PO-Revision-Date: 2002-12-19 16:10+0200\n"
 "Last-Translator: Artis Trops <hornet@navigator.lv>\n"
 "Language-Team: Latvian <ll10nt@os.lv>\n"
@@ -2880,11 +2880,11 @@ msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr ""
 "Virsraksts, ko var parādīt logu pārvaldnieks, kad šī izvēlne ir izslēgta"
 
-#: gtk/gtkmenutoolbutton.c:248 gtk/gtkoptionmenu.c:196
+#: gtk/gtkmenutoolbutton.c:265 gtk/gtkoptionmenu.c:196
 msgid "Menu"
 msgstr "Izvēlne"
 
-#: gtk/gtkmenutoolbutton.c:249
+#: gtk/gtkmenutoolbutton.c:266
 msgid "The dropdown menu"
 msgstr ""
 

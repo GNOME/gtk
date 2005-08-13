@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-02 17:42-0400\n"
+"POT-Creation-Date: 2005-08-13 10:24-0400\n"
 "PO-Revision-Date: 2005-07-26 22:19+0200\n"
 "Last-Translator: Hendrik Brandt <heb@gnome-de.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
@@ -2841,11 +2841,11 @@ msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr ""
 "Ein Boolscher Wert der anzeigt, ob das Menü den Tastaturfokus an sich nimmt"
 
-#: gtk/gtkmenutoolbutton.c:248 gtk/gtkoptionmenu.c:196
+#: gtk/gtkmenutoolbutton.c:265 gtk/gtkoptionmenu.c:196
 msgid "Menu"
 msgstr "Menü"
 
-#: gtk/gtkmenutoolbutton.c:249
+#: gtk/gtkmenutoolbutton.c:266
 msgid "The dropdown menu"
 msgstr "Herabklapper-Menü"
 
