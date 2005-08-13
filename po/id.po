@@ -1107,7 +1107,7 @@ msgstr "calendar:week_start:0"
 #.
 #: ../gtk/gtkcalendar.c:1549
 msgid "year measurement template|2000"
-msgstr "year measurement template|2000"
+msgstr "2000"
 
 #. Translators: This dictates how the year is displayed in
 #. * gtkcalendar widget.  See strftime() manual for the format.
@@ -1122,7 +1122,7 @@ msgstr "year measurement template|2000"
 #.
 #: ../gtk/gtkcalendar.c:1826
 msgid "calendar year format|%Y"
-msgstr "calendar year format|%Y"
+msgstr "%Y"
 
 #. do not translate the part before the |
 #: ../gtk/gtkcellrendererprogress.c:237 ../gtk/gtkcellrendererprogress.c:295
