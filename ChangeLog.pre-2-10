@@ -1,3 +1,7 @@
+2005-08-13  Matthias Clasen  <mclasen@redhat.com>
+
+	* configure.in: Require cairo 0.9.2
+
 2005-08-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcheckmenuitem.c (gtk_real_check_menu_item_draw_indicator): 
