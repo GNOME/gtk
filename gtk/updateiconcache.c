@@ -33,7 +33,6 @@
 #else
 #include <utime.h>
 #endif
-#include <libgen.h>
 
 #include <glib.h>
 #include <glib/gstdio.h>
@@ -343,12 +342,13 @@ follow_links (const gchar *path)
       
       if (target)
 	{
-	  if (target[0] == '/')
-	    path2 =  target;
+	  if (g_path_is_absolute (target))
+	    path2 = target;
 	  else
 	    {
-	      d = dirname (path2);
-	      s = g_build_path ("/", d, target, NULL);
+	      d = g_path_get_dirname (path2);
+	      s = g_build_filename (d, target, NULL);
+	      g_free (d);
 	      g_free (target);
 	      g_free (path2);
 	      path2 = s;

@@ -1,3 +1,8 @@
+2005-08-15  Tor Lillqvist  <tml@novell.com>
+
+	* gtk/updateiconcache.c: Use g_path_get_dirname() instead of
+	the nonportable <libgen.h> and dirname().
+
 2005-08-15  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtksizegroup.c: Use object data to mark widgets and
