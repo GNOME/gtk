@@ -33,6 +33,7 @@
 #else
 #include <utime.h>
 #endif
+#include <libgen.h>
 
 #include <glib.h>
 #include <glib/gstdio.h>
@@ -87,13 +88,23 @@ is_cache_up_to_date (const gchar *path)
   return cache_stat.st_mtime >= path_stat.st_mtime;
 }
 
+typedef struct 
+{
+  gboolean has_pixdata;
+  GdkPixdata pixdata;
+  guint32 offset;
+  guint pixel_data_size;
+} ImageData;
+
+static GHashTable *image_data_hash = NULL;
+
 typedef struct
 {
   int flags;
   int dir_index;
 
-  gboolean has_pixdata;
-  GdkPixdata pixdata;
+  ImageData *image_data;
+  guint pixel_data_size;
 
   int has_embedded_rect;
   int x0, y0, x1, y1;
@@ -245,20 +256,177 @@ load_icon_data (Image *image, const char *path)
   g_key_file_free (icon_file);
 }
 
+/*
+ * This function was copied from gtkfilesystemunix.c, it should
+ * probably go to GLib
+ */
 static void
-maybe_cache_image_data (Image *image, const gchar *path)
+canonicalize_filename (gchar *filename)
 {
-  if (CAN_CACHE_IMAGE_DATA(image->flags) && !image->has_pixdata) 
+  gchar *p, *q;
+  gboolean last_was_slash = FALSE;
+
+  p = filename;
+  q = filename;
+
+  while (*p)
+    {
+      if (*p == G_DIR_SEPARATOR)
+	{
+	  if (!last_was_slash)
+	    *q++ = G_DIR_SEPARATOR;
+
+	  last_was_slash = TRUE;
+	}
+      else
+	{
+	  if (last_was_slash && *p == '.')
+	    {
+	      if (*(p + 1) == G_DIR_SEPARATOR ||
+		  *(p + 1) == '\0')
+		{
+		  if (*(p + 1) == '\0')
+		    break;
+
+		  p += 1;
+		}
+	      else if (*(p + 1) == '.' &&
+		       (*(p + 2) == G_DIR_SEPARATOR ||
+			*(p + 2) == '\0'))
+		{
+		  if (q > filename + 1)
+		    {
+		      q--;
+		      while (q > filename + 1 &&
+			     *(q - 1) != G_DIR_SEPARATOR)
+			q--;
+		    }
+
+		  if (*(p + 2) == '\0')
+		    break;
+
+		  p += 2;
+		}
+	      else
+		{
+		  *q++ = *p;
+		  last_was_slash = FALSE;
+		}
+	    }
+	  else
+	    {
+	      *q++ = *p;
+	      last_was_slash = FALSE;
+	    }
+	}
+
+      p++;
+    }
+
+  if (q > filename + 1 && *(q - 1) == G_DIR_SEPARATOR)
+    q--;
+
+  *q = '\0';
+}
+
+static gchar *
+follow_links (const gchar *path)
+{
+  gchar *target;
+  gchar *d, *s;
+  gchar *path2 = NULL;
+
+  path2 = g_strdup (path);
+  while (g_file_test (path2, G_FILE_TEST_IS_SYMLINK))
+    {
+      target = g_file_read_link (path2, NULL);
+      
+      if (target)
+	{
+	  if (target[0] == '/')
+	    path2 =  target;
+	  else
+	    {
+	      d = dirname (path2);
+	      s = g_build_path ("/", d, target, NULL);
+	      g_free (target);
+	      g_free (path2);
+	      path2 = s;
+	    }
+	}
+      else
+	break;
+    }
+
+  if (strcmp (path, path2) == 0)
+    {
+      g_free (path2);
+      path2 = NULL;
+    }
+
+  return path2;
+}
+
+static void
+maybe_cache_image_data (Image       *image, 
+			const gchar *path)
+{
+  if (CAN_CACHE_IMAGE_DATA(image->flags) && !image->image_data) 
     {
       GdkPixbuf *pixbuf;
-      
-      pixbuf = gdk_pixbuf_new_from_file (path, NULL);
-      
-      if (pixbuf) 
+      ImageData *idata;
+      gchar *path2;
+
+      idata = g_hash_table_lookup (image_data_hash, path);
+
+      path2 = follow_links (path);
+
+      if (path2)
 	{
-	  image->has_pixdata = TRUE;
-	  gdk_pixdata_from_pixbuf (&image->pixdata, pixbuf, FALSE);
+	  ImageData *idata2;
+
+	  canonicalize_filename (path2);
+  
+	  idata2 = g_hash_table_lookup (image_data_hash, path2);
+
+	  if (idata && idata2 && idata != idata2)
+	    g_error ("different idatas found for symlinked '%s' and '%s'\n",
+		     path, path2);
+
+	  if (idata && !idata2)
+	    g_hash_table_insert (image_data_hash, g_strdup (path2), idata);
+
+	  if (!idata && idata2)
+	    {
+	      g_hash_table_insert (image_data_hash, g_strdup (path), idata2);
+	      idata = idata2;
+	    }
 	}
+      
+      if (!idata)
+	{
+	  idata = g_new0 (ImageData, 1);
+	  g_hash_table_insert (image_data_hash, g_strdup (path), idata);
+	  if (path2)
+	    g_hash_table_insert (image_data_hash, g_strdup (path2), idata);  
+	}
+
+      if (!idata->has_pixdata)
+	{
+	  pixbuf = gdk_pixbuf_new_from_file (path, NULL);
+	  
+	  if (pixbuf) 
+	    {
+	      gdk_pixdata_from_pixbuf (&idata->pixdata, pixbuf, FALSE);
+	      idata->pixel_data_size = idata->pixdata.length + 8;
+	      idata->has_pixdata = TRUE;
+	    }
+	}
+
+      image->image_data = idata;
+
+      if (path2)
+	g_free (path2);
     }
 }
 
@@ -312,7 +480,6 @@ scan_directory (const gchar *base_path,
 	}
 
       retval = g_file_test (path, G_FILE_TEST_IS_REGULAR);
-
       if (retval)
 	{
 	  if (g_str_has_suffix (name, ".png"))
@@ -366,7 +533,6 @@ scan_directory (const gchar *base_path,
 	}
 
       g_free (path);
-
     }
 
   g_dir_close (dir);
@@ -474,9 +640,8 @@ gboolean
 write_pixdata (FILE *cache, GdkPixdata *pixdata)
 {
   guint8 *s;
-  int len;
-  int i;
-
+  guint len;
+  gint i;
 
   /* Type 0 is GdkPixdata */
   if (!write_card32 (cache, 0))
@@ -537,10 +702,17 @@ get_image_meta_data_size (Image *image)
 guint
 get_image_pixel_data_size (Image *image)
 {
-  if (image->has_pixdata)
-    return image->pixdata.length + 8;
+  if (image->pixel_data_size == 0)
+    {
+      if (image->image_data && 
+	  image->image_data->has_pixdata)
+	{
+	  image->pixel_data_size = image->image_data->pixel_data_size;
+	  image->image_data->pixel_data_size = 0;
+	}
+    }
 
-  return 0;
+  return image->pixel_data_size;
 }
 
 guint
@@ -553,7 +725,7 @@ get_image_data_size (Image *image)
   len += get_image_pixel_data_size (image);
   len += get_image_meta_data_size (image);
   
-  if (len > 0)
+  if (len > 0 || (image->image_data && image->image_data->has_pixdata))
     len += 8;
 
   return len;
@@ -579,7 +751,7 @@ get_single_node_size (HashNode *node, gboolean include_image_data)
     for (list = node->image_list; list; list = list->next)
       {
 	Image *image = list->data;
-	
+
 	len += get_image_data_size (image);
       }
   
@@ -590,7 +762,6 @@ guint
 get_bucket_size (HashNode *node)
 {
   int len = 0;
-
   while (node)
     {
       len += get_single_node_size (node, TRUE);
@@ -652,7 +823,7 @@ write_bucket (FILE *cache, HashNode *node, int *offset)
 	{
 	  Image *image = list->data;
 	  int image_data_size = get_image_data_size (image);
-	  
+
 	  /* Directory index */
 	  if (!write_card16 (cache, image->dir_index))
 	    return FALSE;
@@ -668,7 +839,7 @@ write_bucket (FILE *cache, HashNode *node, int *offset)
 		return FALSE;
 	      data_offset += image_data_size;
 	    }
-	  else
+	  else 
 	    {
 	      if (!write_card32 (cache, 0))
 		return FALSE;
@@ -685,7 +856,7 @@ write_bucket (FILE *cache, HashNode *node, int *offset)
 	  int pixel_data_size = get_image_pixel_data_size (image);
 	  int meta_data_size = get_image_meta_data_size (image);
 
-	  if (meta_data_size + pixel_data_size == 0)
+	  if (get_image_data_size (image) == 0)
 	    continue;
 
 	  /* Pixel data */
@@ -693,10 +864,12 @@ write_bucket (FILE *cache, HashNode *node, int *offset)
 	    {
 	      if (!write_card32 (cache, image_data_offset + 8))
 		return FALSE;
+
+	      image->image_data->offset = image_data_offset + 8;
 	    }
 	  else
 	    {
-	      if (!write_card32 (cache, 0))
+	      if (!write_card32 (cache, image->image_data->offset))
 		return FALSE;
 	    }
 
@@ -713,7 +886,7 @@ write_bucket (FILE *cache, HashNode *node, int *offset)
 
 	  if (pixel_data_size > 0)
 	    {
-	      if (!write_pixdata (cache, &image->pixdata))
+	      if (!write_pixdata (cache, &image->image_data->pixdata))
 		return FALSE;
 	    }
 	  
@@ -961,6 +1134,7 @@ build_cache (const gchar *path)
     }
 
   files = g_hash_table_new (g_str_hash, g_str_equal);
+  image_data_hash = g_hash_table_new (g_str_hash, g_str_equal);
   
   directories = scan_directory (path, NULL, files, NULL, 0);
 
@@ -1038,6 +1212,6 @@ main (int argc, char **argv)
 
   g_type_init ();
   build_cache (path);
-  
+
   return 0;
 }

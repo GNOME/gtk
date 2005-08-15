@@ -1,3 +1,15 @@
+2005-08-14  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/updateiconcache.c: Store only one copy of the pixel data
+	for symlinked icons. To achieve this, maintain a hashtable 
+	mapping pathnames to pixel data, and share the pixel data for
+	all symlinks resolving to the same pathname. When writing out
+	the image data, write out the pixel data only the first time
+	it is met, and store the offset pointing to the first copy
+	for use in all later cases.
+	This reduces the size of the Bluecurve icon cache from 40
+	to 13MB. (#312972)
+
 2005-08-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump version
