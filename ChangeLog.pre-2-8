@@ -1,3 +1,9 @@
+2005-08-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkicontheme.c (gtk_icon_theme_lookup_icon): Correct the 
+	download location for the hicolor icon theme. (#313475, Olexiy 
+	Avramchenko)
+
 2005-08-15  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/linux-fb/gdkwindow-fb.c (gdk_window_set_back_pixmap): 
