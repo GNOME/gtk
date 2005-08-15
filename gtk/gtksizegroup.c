@@ -52,12 +52,12 @@ static void add_widget_to_closure (GtkWidget         *widget,
 static GQuark size_groups_quark;
 static const gchar size_groups_tag[] = "gtk-size-groups";
 
+static GQuark visited_quark;
+static const gchar visited_tag[] = "gtk-size-group-visited";
+
 static GSList *
 get_size_groups (GtkWidget *widget)
 {
-  if (!size_groups_quark)
-    size_groups_quark = g_quark_from_static_string (size_groups_tag);
-  
   return g_object_get_qdata (G_OBJECT (widget), size_groups_quark);
 }
 
@@ -65,10 +65,25 @@ static void
 set_size_groups (GtkWidget *widget,
 		 GSList    *groups)
 {
-  if (!size_groups_quark)
-    size_groups_quark = g_quark_from_static_string (size_groups_tag);
-
   g_object_set_qdata (G_OBJECT (widget), size_groups_quark, groups);
+}
+
+static void
+mark_visited (gpointer object)
+{
+  g_object_set_qdata (object, visited_quark, "visited");
+}
+
+static void
+mark_unvisited (gpointer object)
+{
+  g_object_set_qdata (object, visited_quark, NULL);
+}
+
+static gboolean
+is_visited (gpointer object)
+{
+  return g_object_get_qdata (object, visited_quark) != NULL;
 }
 
 static void
@@ -80,13 +95,14 @@ add_group_to_closure (GtkSizeGroup    *group,
   GSList *tmp_widgets;
   
   *groups = g_slist_prepend (*groups, group);
+  mark_visited (group);
 
   tmp_widgets = group->widgets;
   while (tmp_widgets)
     {
       GtkWidget *tmp_widget = tmp_widgets->data;
       
-      if (!g_slist_find (*widgets, tmp_widget))
+      if (!is_visited (tmp_widget))
 	add_widget_to_closure (tmp_widget, mode, groups, widgets);
       
       tmp_widgets = tmp_widgets->next;
@@ -102,6 +118,7 @@ add_widget_to_closure (GtkWidget       *widget,
   GSList *tmp_groups;
 
   *widgets = g_slist_prepend (*widgets, widget);
+  mark_visited (widget);
 
   tmp_groups = get_size_groups (widget);
   while (tmp_groups)
@@ -109,7 +126,7 @@ add_widget_to_closure (GtkWidget       *widget,
       GtkSizeGroup *tmp_group = tmp_groups->data;
       
       if ((tmp_group->mode == GTK_SIZE_GROUP_BOTH || tmp_group->mode == mode) &&
-	  !g_slist_find (*groups, tmp_group))
+	  !is_visited (tmp_group))
 	add_group_to_closure (tmp_group, mode, groups, widgets);
 
       tmp_groups = tmp_groups->next;
@@ -177,6 +194,9 @@ queue_resize_on_widget (GtkWidget *widget,
       widgets = NULL;
 	  
       add_widget_to_closure (parent, GTK_SIZE_GROUP_HORIZONTAL, &groups, &widgets);
+      g_slist_foreach (widgets, (GFunc)mark_unvisited, NULL);
+      g_slist_foreach (groups, (GFunc)mark_unvisited, NULL);
+
       reset_group_sizes (groups);
 	      
       tmp_list = widgets;
@@ -200,6 +220,9 @@ queue_resize_on_widget (GtkWidget *widget,
       widgets = NULL;
 	      
       add_widget_to_closure (parent, GTK_SIZE_GROUP_VERTICAL, &groups, &widgets);
+      g_slist_foreach (widgets, (GFunc)mark_unvisited, NULL);
+      g_slist_foreach (groups, (GFunc)mark_unvisited, NULL);
+
       reset_group_sizes (groups);
 	      
       tmp_list = widgets;
@@ -264,6 +287,9 @@ gtk_size_group_class_init (GtkSizeGroupClass *klass)
 							    "when determining the size of the group"),
 							 FALSE,
 							 GTK_PARAM_READWRITE));
+
+  size_groups_quark = g_quark_from_static_string (size_groups_tag);
+  visited_quark = g_quark_from_string (visited_tag);
 }
 
 static void
@@ -589,6 +615,9 @@ compute_dimension (GtkWidget        *widget,
 
   add_widget_to_closure (widget, mode, &groups, &widgets);
 
+  g_slist_foreach (widgets, (GFunc)mark_unvisited, NULL);
+  g_slist_foreach (groups, (GFunc)mark_unvisited, NULL);
+  
   g_slist_foreach (widgets, (GFunc)g_object_ref, NULL);
   
   if (!groups)
@@ -643,7 +672,7 @@ compute_dimension (GtkWidget        *widget,
     }
 
   g_slist_foreach (widgets, (GFunc)g_object_unref, NULL);
-  
+
   g_slist_free (widgets);
   g_slist_free (groups);
 
@@ -659,6 +688,9 @@ get_dimension (GtkWidget        *widget,
   gint result = 0;
 
   add_widget_to_closure (widget, mode, &groups, &widgets);
+
+  g_slist_foreach (widgets, (GFunc)mark_unvisited, NULL);
+  g_slist_foreach (groups, (GFunc)mark_unvisited, NULL);  
 
   if (!groups)
     {

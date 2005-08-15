@@ -1,8 +1,15 @@
 2005-08-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtksizegroup.c: Use object data to mark widgets and
+	groups as visited, so that we avoid constant extra list
+	traversals. Also allocate quarks in class_init.  (#311618,
+	Michael Natterer)
+
 	* gtk/gtkicontheme.c (gtk_icon_theme_lookup_icon): Correct the 
 	download location for the hicolor icon theme. (#313475, Olexiy 
 	Avramchenko)
+
+	* gtk/gtkicontheme.c: Remove debug spew. 
 
 2005-08-15  Owen Taylor  <otaylor@redhat.com>
 
