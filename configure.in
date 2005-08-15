@@ -1023,8 +1023,8 @@ AC_SUBST(GDK_PIXBUF_DEP_CFLAGS)
 GDK_PIXBUF_XLIB_PACKAGES=
 GDK_PIXBUF_XLIB_EXTRA_CFLAGS=
 GDK_PIXBUF_XLIB_EXTRA_LIBS=
-
-X_PACKAGES=
+	
+X_PACKAGES=fontconfig
 GDK_EXTRA_LIBS="$GDK_WLIBS"
 GDK_EXTRA_CFLAGS=
 	
@@ -1034,11 +1034,20 @@ GTK_DEP_LIBS_FOR_X=
 
 if test "x$gdktarget" = "xx11"; then
   #
+  # We use fontconfig very peripherally when decoding the default
+  # settings.
+  #
+  if $PKG_CONFIG --exists fontconfig; then : ; else
+    AC_MSG_ERROR([
+*** fontconfig (http://www.fontconfig.org) is required by the X11 backend.])
+  fi
+
+  #
   # Check for basic X packages; we use pkg-config if available
   #
   if $PKG_CONFIG --exists x11 xext; then
     have_base_x_pc=true
-    X_PACKAGES="x11 xext"
+    X_PACKAGES="$X_PACKAGES x11 xext"
     x_libs="`pkg-config --libs x11 xext`"
     
     # Strip out any .la files that pkg-config might give us (this happens
@@ -1285,7 +1294,7 @@ if test "x$gdktarget" = "xx11"; then
     X_PACKAGES="$X_PACKAGES xfixes"
   fi
 
-  if $have_base_pc ; then
+  if $have_base_x_pc ; then
     GDK_EXTRA_LIBS="$x_extra_libs"
   else
     GDK_EXTRA_LIBS="$X_LIBS $x_extra_libs -lX11 $GDK_EXTRA_LIBS"

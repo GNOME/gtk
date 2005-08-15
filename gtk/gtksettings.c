@@ -29,10 +29,6 @@
 #include "x11/gdkx.h"
 #endif
 
-#if 0
-#include <pango/pangoxft.h>
-#endif
-
 typedef struct _GtkSettingsValuePrivate GtkSettingsValuePrivate;
 
 typedef enum

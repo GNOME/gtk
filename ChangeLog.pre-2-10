@@ -1,3 +1,13 @@
+2005-08-15  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in: Fix have_base_pc / have_base_x_pc typo.
+
+	* gdk/x11/gdkdrawable-x11.c gtk/gtksettings.c: Remove panoxft.h includes.
+	(#313417, James Andrewartha)
+
+	* configure.in: Add fontconfig to X_PACKAGES, since we use it for
+	FcNameConstant(). (More of #313417)
+
 2005-08-15  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilechooserdefault.c: When using gtk_dialog_run() for

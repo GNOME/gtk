@@ -29,8 +29,6 @@
 #include "gdkx.h"
 #include "gdkregion-generic.h"
 
-#include <pango/pangoxft.h>
-
 #include <cairo-xlib.h>
 
 #include <stdlib.h>
