@@ -869,7 +869,14 @@ write_bucket (FILE *cache, HashNode *node, int *offset)
 	    }
 	  else
 	    {
-	      if (!write_card32 (cache, image->image_data->offset))
+	      gint offset;
+
+	      if (image->image_data)
+		offset = image->image_data->offset;
+	      else
+		offset = 0;
+
+	      if (!write_card32 (cache, offset))
 		return FALSE;
 	    }
 
