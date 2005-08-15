@@ -1,3 +1,9 @@
+2005-08-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* io-jpeg.c (fatal_error_handler): Pay attention to the 
+	libjpeg error code and report OOM errors as such.  (#312674,
+	Tommi Komulainen)
+
 2005-08-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.8.0 ===

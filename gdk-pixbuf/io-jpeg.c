@@ -33,6 +33,7 @@
 #include <string.h>
 #include <setjmp.h>
 #include <jpeglib.h>
+#include <jerror.h>
 #include "gdk-pixbuf-private.h"
 #include "gdk-pixbuf-io.h"
 
@@ -110,7 +111,9 @@ fatal_error_handler (j_common_ptr cinfo)
         if (errmgr->error && *errmgr->error == NULL) {
                 g_set_error (errmgr->error,
                              GDK_PIXBUF_ERROR,
-                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                             cinfo->err->msg_code == JERR_OUT_OF_MEMORY 
+			     ? GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY 
+			     : GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
                              _("Error interpreting JPEG image file (%s)"),
                              buffer);
         }
