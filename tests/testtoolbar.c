@@ -488,6 +488,15 @@ timeout_cb (GtkWidget *widget)
   return TRUE;
 }
 
+static gboolean
+timeout_cb1 (GtkWidget *widget)
+{
+	static gboolean sensitive = TRUE;
+	sensitive = !sensitive;
+	gtk_widget_set_sensitive (widget, sensitive);
+	return TRUE;
+}
+
 gint
 main (gint argc, gchar **argv)
 {
@@ -603,16 +612,36 @@ main (gint argc, gchar **argv)
   gtk_tool_item_set_expand (item, TRUE);
 
   menu = gtk_menu_new ();
-  menuitem = gtk_menu_item_new_with_label ("foo.txt");
-  gtk_widget_show (menuitem);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-  menuitem = gtk_menu_item_new_with_label ("bar.txt");
-  gtk_widget_show (menuitem);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+  for (i = 0; i < 20; i++)
+    {
+      char *text;
+      text = g_strdup_printf ("Menuitem %d", i);
+      menuitem = gtk_menu_item_new_with_label (text);
+      g_free (text);
+      gtk_widget_show (menuitem);
+      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+    }
 
   item = gtk_menu_tool_button_new_from_stock (GTK_STOCK_OPEN);
   gtk_menu_tool_button_set_menu (GTK_MENU_TOOL_BUTTON (item), menu);
   add_item_to_list (store, item, "Open");
+  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+  g_timeout_add (3000, (GSourceFunc) timeout_cb1, item);
+ 
+  menu = gtk_menu_new ();
+  for (i = 0; i < 20; i++)
+    {
+      char *text;
+      text = g_strdup_printf ("A%d", i);
+      menuitem = gtk_menu_item_new_with_label (text);
+      g_free (text);
+      gtk_widget_show (menuitem);
+      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+    }
+
+  item = gtk_menu_tool_button_new_from_stock (GTK_STOCK_GO_BACK);
+  gtk_menu_tool_button_set_menu (GTK_MENU_TOOL_BUTTON (item), menu);
+  add_item_to_list (store, item, "BackWithHistory");
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
  
   item = gtk_separator_tool_item_new ();

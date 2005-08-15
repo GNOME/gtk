@@ -1,3 +1,12 @@
+2005-08-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* tests/testtoolbar.c: Add some more tests for menu placement.
+
+	* gtk/gtkmenutoolbutton.c (menu_position_func): 
+	* gtk/gtktoolbar.c (menu_position_func): Improve positioning
+	of toolbutton menus and of the overflow menu.  (#312937, 
+	#153870, Christian Persch, Paolo Borelli)
+
 2005-08-15  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/updateiconcache.c: Use g_path_get_dirname() instead of
