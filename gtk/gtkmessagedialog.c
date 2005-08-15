@@ -372,11 +372,11 @@ gtk_message_dialog_font_size_change (GtkWidget *widget,
 
 /**
  * gtk_message_dialog_new:
- * @parent: transient parent, or NULL for none 
+ * @parent: transient parent, or %NULL for none 
  * @flags: flags
  * @type: type of message
  * @buttons: set of buttons to use
- * @message_format: printf()-style format string, or NULL
+ * @message_format: printf()-style format string, or %NULL
  * @Varargs: arguments for @message_format
  * 
  * Creates a new message dialog, which is a simple dialog with an icon

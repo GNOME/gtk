@@ -936,6 +936,10 @@ error_message_with_parent (GtkWindow  *parent,
 				   msg);
   gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
 					    "%s", detail);
+
+  if (parent->group)
+    gtk_window_group_add_window (parent->group, GTK_WINDOW (dialog));
+
   gtk_dialog_run (GTK_DIALOG (dialog));
   gtk_widget_destroy (dialog);
 }
@@ -6138,6 +6142,9 @@ confirm_dialog_should_accept_filename (GtkFileChooserDefault *impl,
   add_custom_button_to_dialog (GTK_DIALOG (dialog), _("_Replace"), GTK_STOCK_SAVE_AS, GTK_RESPONSE_ACCEPT);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
   
+  if (toplevel->group)
+    gtk_window_group_add_window (toplevel->group, GTK_WINDOW (dialog));
+
   response = gtk_dialog_run (GTK_DIALOG (dialog));
 
   gtk_widget_destroy (dialog);
@@ -7237,6 +7244,9 @@ location_popup_handler (GtkFileChooserDefault *impl,
 					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 					accept_stock, GTK_RESPONSE_ACCEPT,
 					NULL);
+  if (toplevel->group)
+    gtk_window_group_add_window (toplevel->group, GTK_WINDOW (dialog));
+  
   gtk_window_set_default_size (GTK_WINDOW (dialog), 300, -1);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
   gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->vbox), 2);

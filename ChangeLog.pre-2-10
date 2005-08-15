@@ -1,5 +1,13 @@
 2005-08-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserdefault.c: When using gtk_dialog_run() for
+	modal dialogs, make sure to inherit the window group from 
+	the parent, since we don't inherit window groups across
+	transient parents currently.  (#312918, Christian Persch)
+
+	* gtk/gtkmessagedialog.c (gtk_message_dialog_new): 
+	* gtk/gtkdialog.c (gtk_dialog_run): Slight update to the docs. 
+
 	* gtk/gtkiconview.c (gtk_icon_view_select_path) 
 	(gtk_icon_view_scroll_to_path): Handle paths of depth 0
 	gracefully.  (#312796, Jonathan Blandford)
