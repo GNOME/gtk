@@ -1,3 +1,8 @@
+2005-08-15  Tor Lillqvist  <tml@novell.com>
+
+	* gtk/gtkicontheme.c (theme_lookup_icon): Put debugging printout
+	inside GTK_NOTE.
+
 2005-08-15  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in: Fix have_base_pc / have_base_x_pc typo.

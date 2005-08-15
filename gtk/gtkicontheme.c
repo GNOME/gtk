@@ -1181,7 +1181,8 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *icon_theme,
 
   priv = icon_theme->priv;
 
-  g_print ("gtk_icon_theme_lookup_icon %s\n", icon_name);
+  GTK_NOTE (ICONTHEME, 
+	    g_print ("gtk_icon_theme_lookup_icon %s\n", icon_name));
   if (flags & GTK_ICON_LOOKUP_NO_SVG)
     allow_svg = FALSE;
   else if (flags & GTK_ICON_LOOKUP_FORCE_SVG)
@@ -1776,7 +1777,8 @@ theme_dir_get_icon_suffix (IconThemeDir *dir,
   else
       suffix = GPOINTER_TO_UINT (g_hash_table_lookup (dir->icons, icon_name));
 
-  g_print ("get_icon_suffix%s %d\n", dir->cache ? " (cached)" : "", suffix);
+  GTK_NOTE (ICONTHEME, 
+	    g_print ("get_icon_suffix%s %d\n", dir->cache ? " (cached)" : "", suffix));
 
   return suffix;
 }
@@ -1818,7 +1820,8 @@ theme_lookup_icon (IconTheme          *theme,
     {
       dir = l->data;
 
-      g_print ("theme_lookup_icon dir %s\n", dir->dir);
+      GTK_NOTE (ICONTHEME, 
+		g_print ("theme_lookup_icon dir %s\n", dir->dir));
       suffix = theme_dir_get_icon_suffix (dir, icon_name, NULL);
       if (best_suffix (suffix, allow_svg) != ICON_SUFFIX_NONE)
 	{
