@@ -1,5 +1,9 @@
 2005-08-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkiconview.c (gtk_icon_view_select_path) 
+	(gtk_icon_view_scroll_to_path): Handle paths of depth 0
+	gracefully.  (#312796, Jonathan Blandford)
+
 	* tests/testtoolbar.c: Add some more tests for menu placement.
 
 	* gtk/gtkmenutoolbutton.c (menu_position_func): 
