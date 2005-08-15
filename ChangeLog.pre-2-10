@@ -1,3 +1,14 @@
+2005-08-15  Matthias Clasen  <mclasen@redhat.com>
+
+	Backported fix from 2.8:
+	
+	* gtk/gtkicontheme.c: When changing the icon theme, defer
+	the resetting of rc styles to an idle, so that it does
+	not happen e.g during expose handling (which is problematic,
+	since some widgets, like the toolbar, are changing the
+	hierarchy in response to style changes).  (#300539, reported
+	by many people, analyzed by Owen Taylor)
+
 Fri Aug  5 16:54:19 2005  Søren Sandmann  <sandmann@redhat.com>
 
 	* gtk/gtkmenutoolbutton.c

@@ -96,6 +96,8 @@ struct _GtkIconThemePrivate
   /* time when we last stat:ed for theme changes */
   long last_stat_time;
   GList *dir_mtimes;
+
+  gulong reset_styles_idle;
 };
 
 struct _GtkIconInfo
@@ -595,6 +597,30 @@ free_dir_mtime (IconThemeDirMtime *dir_mtime)
 
 }
 
+static gboolean
+reset_styles_idle (gpointer user_data)
+{
+  GtkIconTheme *icon_theme;
+  GtkIconThemePrivate *priv;
+
+  GDK_THREADS_ENTER ();
+
+  icon_theme = GTK_ICON_THEME (user_data);
+  priv = icon_theme->priv;
+
+  if (priv->screen && priv->is_screen_singleton)
+    {
+      GtkSettings *settings = gtk_settings_get_for_screen (priv->screen);
+      gtk_rc_reset_styles (settings);
+    }
+
+  priv->reset_styles_idle = 0;
+
+  GDK_THREADS_LEAVE ();
+
+  return FALSE;
+}
+
 static void
 do_theme_change (GtkIconTheme *icon_theme)
 {
@@ -605,11 +631,9 @@ do_theme_change (GtkIconTheme *icon_theme)
   blow_themes (icon_theme);
   g_signal_emit (icon_theme, signal_changed, 0);
   
-  if (priv->screen && priv->is_screen_singleton)
-    {
-      GtkSettings *settings = gtk_settings_get_for_screen (priv->screen);
-      gtk_rc_reset_styles (settings);
-    }
+  if (!priv->reset_styles_idle)
+    priv->reset_styles_idle = 
+      g_idle_add (reset_styles_idle, icon_theme);
 }
 
 static void
@@ -642,6 +666,12 @@ gtk_icon_theme_finalize (GObject *object)
 
   icon_theme = GTK_ICON_THEME (object);
   priv = icon_theme->priv;
+
+  if (priv->reset_styles_idle)
+    {
+      g_source_remove (priv->reset_styles_idle);
+      priv->reset_styles_idle = 0;
+    }
 
   unset_screen (icon_theme);
 
