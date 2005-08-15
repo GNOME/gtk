@@ -1,7 +1,13 @@
 2005-08-15  Matthias Clasen  <mclasen@redhat.com>
 
-	Backported fix from 2.8:
+	Backported fixes from 2.8:
 	
+	* gtk/gtkmenu.c (gtk_menu_grab_notify): Take window
+	groups into account.  (#309473, Diego Gonzalez)
+
+	* gtk/gtkwindow.[hc]: Add a non-exported function to
+	get the grab widget of a window group.
+
 	* gtk/gtkicontheme.c: When changing the icon theme, defer
 	the resetting of rc styles to an idle, so that it does
 	not happen e.g during expose handling (which is problematic,

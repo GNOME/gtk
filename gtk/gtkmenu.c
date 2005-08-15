@@ -4385,6 +4385,14 @@ static void
 gtk_menu_grab_notify (GtkWidget *widget,
 		      gboolean   was_grabbed)
 {
+  GtkWidget *toplevel;
+  GtkWindowGroup *group;
+  GtkWidget *grab;
+
+  toplevel = gtk_widget_get_toplevel (widget);
+  group = _gtk_window_get_group (GTK_WINDOW (toplevel));
+  grab = _gtk_window_group_get_current_grab (group); 
+
   if (!was_grabbed)
     {
       if (!GTK_IS_MENU (gtk_grab_get_current ()))

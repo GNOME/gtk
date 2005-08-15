@@ -6844,6 +6844,15 @@ _gtk_window_get_group (GtkWindow *window)
     }
 }
 
+/* Return the current grab widget of the given group 
+ */
+GtkWidget *
+_gtk_window_group_get_current_grab (GtkWindowGroup *window_group)
+{
+  if (window_group->grabs)
+    return GTK_WIDGET (window_group->grabs->data);
+  return NULL;
+}
 
 /*
   Derived from XParseGeometry() in XFree86  
