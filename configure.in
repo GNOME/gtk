@@ -1297,7 +1297,7 @@ if test "x$gdktarget" = "xx11"; then
   if $have_base_x_pc ; then
     GDK_EXTRA_LIBS="$x_extra_libs"
   else
-    GDK_EXTRA_LIBS="$X_LIBS $x_extra_libs -lX11 $GDK_EXTRA_LIBS"
+    GDK_EXTRA_LIBS="$X_LIBS $x_extra_libs -lXext -lX11 $GDK_EXTRA_LIBS"
   fi
 
   CPPFLAGS="$gtk_save_cppflags"

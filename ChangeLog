@@ -1,3 +1,8 @@
+2005-08-15  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in: Add -lXext to GDK_EXTRA_LIBS in absence of pkg-config
+	files for x11/xext. (Jonas Bonn)
+
 2005-08-15  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/gtkicontheme.c (theme_lookup_icon): Put debugging printout
