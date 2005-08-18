@@ -1,3 +1,8 @@
+2005-08-18  Matthias Clasen  <mclasen@redhat.com>
+
+	* io-ico.c (DecodeHeader): Check for overflow in one more
+	place.  (#313818, Tommi Komulainen)
+
 2005-08-15  Matthias Clasen  <mclasen@redhat.com>
 
 	* io-jpeg.c (fatal_error_handler): Pay attention to the 
