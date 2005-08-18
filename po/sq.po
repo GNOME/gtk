@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-6.sq\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-01 12:30-0400\n"
+"POT-Creation-Date: 2005-08-18 12:10-0400\n"
 "PO-Revision-Date: 2005-07-15 15:42+0200\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: Albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
@@ -1637,7 +1637,7 @@ msgstr "Vlera _gamma"
 msgid "Error loading icon: %s"
 msgstr "Gabim gjatë ngarkimit të ikonës: %s"
 
-#: gtk/gtkicontheme.c:1248
+#: gtk/gtkicontheme.c:1278
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1650,7 +1650,7 @@ msgstr ""
 "Mund të merrni një kopje nga:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1313
+#: gtk/gtkicontheme.c:1343
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Ikonë '%s' jo e pranishme në temë"

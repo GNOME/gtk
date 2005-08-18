@@ -49,7 +49,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.hy\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-01 12:30-0400\n"
+"POT-Creation-Date: 2005-08-18 12:10-0400\n"
 "PO-Revision-Date: 2005-07-19 17:50+0500\n"
 "Last-Translator: \n"
 "Language-Team:  <en@li.org>\n"
@@ -1697,7 +1697,7 @@ msgstr "_Գամմա արժեք"
 msgid "Error loading icon: %s"
 msgstr "Սխալ է տեղի ունեցել: %s պատկերակը բեռնելիս"
 
-#: gtk/gtkicontheme.c:1248
+#: gtk/gtkicontheme.c:1278
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1710,7 +1710,7 @@ msgstr ""
 "Դրա օրինակը կարող եք ձեռք բերել այստեղից.\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1313
+#: gtk/gtkicontheme.c:1343
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "'%s' պատկերակը թեմայում չկա"

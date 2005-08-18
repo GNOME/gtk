@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.8-branch\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-01 12:30-0400\n"
+"POT-Creation-Date: 2005-08-18 12:10-0400\n"
 "PO-Revision-Date: 2004-11-30 16:02+0200\n"
 "Last-Translator: Zuza Software Foundation <info@translate.org.za>\n"
 "Language-Team: Northern Sotho <translate-discuss-nso@lists.sourceforge.net>\n"
@@ -1706,7 +1706,7 @@ msgstr "_Boleng bja Gamma"
 msgid "Error loading icon: %s"
 msgstr "Phošo ya go laiša leswao: %s"
 
-#: gtk/gtkicontheme.c:1248
+#: gtk/gtkicontheme.c:1278
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1719,7 +1719,7 @@ msgstr ""
 "O ka hwetša kopi go:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1313
+#: gtk/gtkicontheme.c:1343
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Leswao la '%s' ga le gona sehlogong"

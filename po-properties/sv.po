@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-01 12:31-0400\n"
+"POT-Creation-Date: 2005-08-18 12:10-0400\n"
 "PO-Revision-Date: 2005-05-23 23:54+0200\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -2686,11 +2686,11 @@ msgstr "Fördröjning innan utfällningsmenyer visas"
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "Fördröjning innan undermenyer till en menyrad visas"
 
-#: gtk/gtkmenutoolbutton.c:247 gtk/gtkoptionmenu.c:195
+#: gtk/gtkmenutoolbutton.c:250 gtk/gtkoptionmenu.c:195
 msgid "Menu"
 msgstr "Meny"
 
-#: gtk/gtkmenutoolbutton.c:248
+#: gtk/gtkmenutoolbutton.c:251
 msgid "The dropdown menu"
 msgstr "Nedfällningsmenyn"
 

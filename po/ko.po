@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-01 12:30-0400\n"
+"POT-Creation-Date: 2005-08-18 12:10-0400\n"
 "PO-Revision-Date: 2005-06-20 01:32+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Gnome Korea <gnome-kr-hackers@lists.kldp.net>\n"
@@ -1624,7 +1624,7 @@ msgstr "감마 값(_G)"
 msgid "Error loading icon: %s"
 msgstr "아이콘 읽는 중 오류: %s"
 
-#: gtk/gtkicontheme.c:1248
+#: gtk/gtkicontheme.c:1278
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1637,7 +1637,7 @@ msgstr ""
 "다음에서 테마를 구할 수 있습니다:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1313
+#: gtk/gtkicontheme.c:1343
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "테마에 '%s' 아이콘이 없습니다"

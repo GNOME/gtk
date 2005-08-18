@@ -1,3 +1,11 @@
+Overview of Changes from GTK+ 2.6.9 to GTK+ 2.6.10
+==================================================
+* Fix an crasher bug when using submenus together
+  with window groups. This bug affected epiphany.
+* Fix bug that can lead to segfaults when icon 
+  themes are updated.
+* Updated translations (et,ne)
+
 Overview of Changes from GTK+ 2.6.8 to GTK+ 2.6.9
 =================================================
 * GtkFileChooser

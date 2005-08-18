@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.gtk-2-6.pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-01 12:31-0400\n"
+"POT-Creation-Date: 2005-08-18 12:10-0400\n"
 "PO-Revision-Date: 2005-02-15 00:02-0200\n"
 "Last-Translator: Afonso Celso Medina <medina@maua.br>\n"
 "Language-Team: Português/Brasil <gnome-l10n-br@listas.cipsga.org.br>\n"
@@ -2693,11 +2693,11 @@ msgstr "Tempo de espera antes de menus drop down aparecerem"
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "Tempo de espera antes que os submenus de uma barra de menus aparaçam"
 
-#: gtk/gtkmenutoolbutton.c:247 gtk/gtkoptionmenu.c:195
+#: gtk/gtkmenutoolbutton.c:250 gtk/gtkoptionmenu.c:195
 msgid "Menu"
 msgstr "Menu"
 
-#: gtk/gtkmenutoolbutton.c:248
+#: gtk/gtkmenutoolbutton.c:251
 msgid "The dropdown menu"
 msgstr "O menu de rolagem"
 

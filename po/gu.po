@@ -68,7 +68,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-6.gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-01 12:30-0400\n"
+"POT-Creation-Date: 2005-08-18 12:10-0400\n"
 "PO-Revision-Date: 2005-07-29 12:58+0530\n"
 "Last-Translator: Ankit Patel <ankit644@yahoo.com>\n"
 "Language-Team: Gujarati <indianoss-gujarati@lists.sourceforge.net>\n"
@@ -1681,7 +1681,7 @@ msgstr "ગામાની કિંમત(_G)"
 msgid "Error loading icon: %s"
 msgstr "ચિહ્ન લાવવામાં ભૂલ: %s"
 
-#: gtk/gtkicontheme.c:1248
+#: gtk/gtkicontheme.c:1278
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1694,7 +1694,7 @@ msgstr ""
 "તમે માંથી નકલ મેળવી શકો છો:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1313
+#: gtk/gtkicontheme.c:1343
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "ચિહ્ન '%s' થીમમાં હાજર નથી"

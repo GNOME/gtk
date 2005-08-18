@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-01 12:30-0400\n"
+"POT-Creation-Date: 2005-08-18 12:10-0400\n"
 "PO-Revision-Date: 2005-07-23 14:55+0800\n"
 "Last-Translator: Funda Wang <fundawang@linux.net.cn>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
@@ -1517,7 +1517,7 @@ msgstr "名称“%s”无效，因为其中包含字符“%s”。请使用不�
 #: gtk/gtkfilesystemunix.c:1480 gtk/gtkfilesystemwin32.c:1032
 #, c-format
 msgid "Bookmark saving failed: %s"
-msgstr "书签保存失败(%s)：%s"
+msgstr "书签保存失败：%s"
 
 #: gtk/gtkfilesystemunix.c:1541
 #, c-format
@@ -1590,7 +1590,7 @@ msgstr "Gamma 值(_G)"
 msgid "Error loading icon: %s"
 msgstr "载入图标时出错：%s"
 
-#: gtk/gtkicontheme.c:1248
+#: gtk/gtkicontheme.c:1278
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1602,7 +1602,7 @@ msgstr ""
 "您可以从下面的位置获得一个副本：\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1313
+#: gtk/gtkicontheme.c:1343
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "图标“%s”未出现在主题中 "

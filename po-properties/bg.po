@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+-properties 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-01 12:31-0400\n"
+"POT-Creation-Date: 2005-08-18 12:10-0400\n"
 "PO-Revision-Date: 2005-04-11 09:27+0300\n"
 "Last-Translator: Vladimir Petkov <vpetkov@i-space.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -2706,11 +2706,11 @@ msgstr "Закъснение преди появяване на падащи м�
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "Закъснението преди появяване на подменютата"
 
-#: gtk/gtkmenutoolbutton.c:247 gtk/gtkoptionmenu.c:195
+#: gtk/gtkmenutoolbutton.c:250 gtk/gtkoptionmenu.c:195
 msgid "Menu"
 msgstr "Меню"
 
-#: gtk/gtkmenutoolbutton.c:248
+#: gtk/gtkmenutoolbutton.c:251
 msgid "The dropdown menu"
 msgstr "Падащо меню"
 

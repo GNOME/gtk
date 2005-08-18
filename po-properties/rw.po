@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 317\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-01 12:31-0400\n"
+"POT-Creation-Date: 2005-08-18 12:10-0400\n"
 "PO-Revision-Date: 2004-11-17 21:21-0700\n"
 "Last-Translator: Steve Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <en@li.org>\n"
@@ -3094,11 +3094,11 @@ msgstr "Mbere Hasi Ibikubiyemo Kugaragara"
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "Mbere i Bya a Ibikubiyemo Kugaragara"
 
-#: gtk/gtkmenutoolbutton.c:247 gtk/gtkoptionmenu.c:195
+#: gtk/gtkmenutoolbutton.c:250 gtk/gtkoptionmenu.c:195
 msgid "Menu"
 msgstr "ibikubiyemo"
 
-#: gtk/gtkmenutoolbutton.c:248
+#: gtk/gtkmenutoolbutton.c:251
 #, fuzzy
 msgid "The dropdown menu"
 msgstr "Kugushahasi Ibikubiyemo"

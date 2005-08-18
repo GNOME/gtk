@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-01 12:31-0400\n"
+"POT-Creation-Date: 2005-08-18 12:10-0400\n"
 "PO-Revision-Date: 2005-02-15 01:21+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian (bokmål) <i18n-nb@lister.ping.uio.no>\n"
@@ -2680,11 +2680,11 @@ msgstr "Pause før nedtrekksmenyer vises"
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "Pause før undermenyene i en menylinje vises"
 
-#: gtk/gtkmenutoolbutton.c:247 gtk/gtkoptionmenu.c:195
+#: gtk/gtkmenutoolbutton.c:250 gtk/gtkoptionmenu.c:195
 msgid "Menu"
 msgstr "Meny"
 
-#: gtk/gtkmenutoolbutton.c:248
+#: gtk/gtkmenutoolbutton.c:251
 msgid "The dropdown menu"
 msgstr ""
 

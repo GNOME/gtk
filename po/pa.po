@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-01 12:30-0400\n"
+"POT-Creation-Date: 2005-08-18 12:10-0400\n"
 "PO-Revision-Date: 2005-07-08 09:22+0530\n"
 "Last-Translator: Amanpreet Singh Alam[ਆਲਮ] <amanpreetalam@yahoo.com>\n"
 "Language-Team: Panjabi <fedora-trans-pa@redhat.com>\n"
@@ -1615,7 +1615,7 @@ msgstr "ਗਾਮਾ ਮੁੱਲ(_G)"
 msgid "Error loading icon: %s"
 msgstr "ਗਲਤੀ ਆਈਕਾਨ ਲੋਡ ਕਰਨ ਵਿੱਚ: %s"
 
-#: gtk/gtkicontheme.c:1248
+#: gtk/gtkicontheme.c:1278
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1628,7 +1628,7 @@ msgstr ""
 "ਤੁਸੀਂ ਇਸ ਦੀ ਨਕਲ ਇਥੋਂ ਪ੍ਰਾਪਤ ਕਰ ਸਕਦੇ ਹੋ:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1313
+#: gtk/gtkicontheme.c:1343
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "ਸਰੂਪ ਵਿੱਚ ਆਈਕਾਨ '%s' ਮੌਜੂਦ ਨਹੀ ਹੈ"

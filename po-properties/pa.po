@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.gtk-2-6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-01 12:31-0400\n"
+"POT-Creation-Date: 2005-08-18 12:10-0400\n"
 "PO-Revision-Date: 2005-05-13 20:18+0530\n"
 "Last-Translator: Amanpreet Singh Alam[ਆਲਮ] <amanpreetalam@yahoo.com>\n"
 "Language-Team: Punjabi <punlinux-i18n@lists.sourceforge.net>\n"
@@ -2605,11 +2605,11 @@ msgstr "ਹੇਠ-ਉਭਰਨ ਵਾਲੀ ਸੂਚੀ ਦੇ ਉਪਲੱਬ�
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "ਸੂਚੀ-ਪੱਟੀ ਦੀ ਸਬ-ਸੂਚੀ ਦੇ ਉਪਲੱਬਧ ਹੋਣ ਦੇਰੀ"
 
-#: gtk/gtkmenutoolbutton.c:247 gtk/gtkoptionmenu.c:195
+#: gtk/gtkmenutoolbutton.c:250 gtk/gtkoptionmenu.c:195
 msgid "Menu"
 msgstr "ਮੇਨੂ"
 
-#: gtk/gtkmenutoolbutton.c:248
+#: gtk/gtkmenutoolbutton.c:251
 msgid "The dropdown menu"
 msgstr "ਲਟਕਦੀ-ਸੂਚੀ ਮੇਨੂ"
 

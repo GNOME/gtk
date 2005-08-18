@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-01 12:31-0400\n"
+"POT-Creation-Date: 2005-08-18 12:10-0400\n"
 "PO-Revision-Date: 2005-05-01 15:23+0200\n"
 "Last-Translator: \n"
 "Language-Team:  <es@li.org>\n"
@@ -2734,11 +2734,11 @@ msgstr "Retraso antes de los menús colgantes aparezcan"
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "Retardo antes de que los submenús de una barra de menús aparezcan"
 
-#: gtk/gtkmenutoolbutton.c:247 gtk/gtkoptionmenu.c:195
+#: gtk/gtkmenutoolbutton.c:250 gtk/gtkoptionmenu.c:195
 msgid "Menu"
 msgstr "Menú"
 
-#: gtk/gtkmenutoolbutton.c:248
+#: gtk/gtkmenutoolbutton.c:251
 msgid "The dropdown menu"
 msgstr "El menú desplegable"
 
