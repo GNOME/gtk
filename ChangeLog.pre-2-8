@@ -1,3 +1,8 @@
+2005-08-18  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkmenutoolbutton.c (gtk_menu_tool_button_destroy): Disconnect
+	signal handlers on destroy, not on finalize.  (#313759, Brett Atoms)
+
 2005-08-15  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in: Add -lXext to GDK_EXTRA_LIBS in absence of pkg-config

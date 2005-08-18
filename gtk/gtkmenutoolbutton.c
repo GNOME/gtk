@@ -45,7 +45,10 @@ struct _GtkMenuToolButtonPrivate
 
 static void gtk_menu_tool_button_init       (GtkMenuToolButton      *button);
 static void gtk_menu_tool_button_class_init (GtkMenuToolButtonClass *klass);
-static void gtk_menu_tool_button_finalize   (GObject                *object);
+static void gtk_menu_tool_button_destroy    (GtkObject              *object);
+
+static int  menu_deactivate_cb              (GtkMenuShell           *menu_shell,
+					     GtkMenuToolButton      *button);
 
 enum
 {
@@ -232,6 +235,7 @@ static void
 gtk_menu_tool_button_class_init (GtkMenuToolButtonClass *klass)
 {
   GObjectClass *object_class;
+  GtkObjectClass *gtk_object_class;
   GtkWidgetClass *widget_class;
   GtkToolItemClass *toolitem_class;
   GtkToolButtonClass *toolbutton_class;
@@ -239,13 +243,14 @@ gtk_menu_tool_button_class_init (GtkMenuToolButtonClass *klass)
   parent_class = g_type_class_peek_parent (klass);
 
   object_class = (GObjectClass *)klass;
+  gtk_object_class = (GtkObjectClass *)klass;
   widget_class = (GtkWidgetClass *)klass;
   toolitem_class = (GtkToolItemClass *)klass;
   toolbutton_class = (GtkToolButtonClass *)klass;
 
   object_class->set_property = gtk_menu_tool_button_set_property;
   object_class->get_property = gtk_menu_tool_button_get_property;
-  object_class->finalize = gtk_menu_tool_button_finalize;
+  gtk_object_class->destroy = gtk_menu_tool_button_destroy;
   widget_class->state_changed = gtk_menu_tool_button_state_changed;
   toolitem_class->set_tooltip = gtk_menu_tool_button_set_tooltip;
   toolitem_class->toolbar_reconfigured = gtk_menu_tool_button_toolbar_reconfigured;
@@ -429,22 +434,36 @@ gtk_menu_tool_button_init (GtkMenuToolButton *button)
   button->priv->box = box;
 
   g_signal_connect (arrow_button, "toggled",
-                    G_CALLBACK (arrow_button_toggled_cb), button);
+		    G_CALLBACK (arrow_button_toggled_cb), button);
   g_signal_connect (arrow_button, "button_press_event",
-                    G_CALLBACK (arrow_button_button_press_event_cb), button);
+		    G_CALLBACK (arrow_button_button_press_event_cb), button);
 }
 
 static void
-gtk_menu_tool_button_finalize (GObject *object)
+gtk_menu_tool_button_destroy (GtkObject *object)
 {
   GtkMenuToolButton *button;
 
   button = GTK_MENU_TOOL_BUTTON (object);
 
   if (button->priv->menu)
-    g_object_unref (button->priv->menu);
+    {
+      g_signal_handlers_disconnect_by_func (button->priv->menu, 
+					    menu_deactivate_cb, 
+					    button);
+      g_object_unref (button->priv->menu);
+      button->priv->menu = NULL;
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+      g_signal_handlers_disconnect_by_func (button->priv->arrow_button,
+					    arrow_button_toggled_cb, 
+					    button);
+      g_signal_handlers_disconnect_by_func (button->priv->arrow_button, 
+					    arrow_button_button_press_event_cb, 
+					    button);
+    }
+  
+  if (GTK_OBJECT_CLASS (parent_class)->destroy)
+    (*GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
 
 /**
@@ -544,7 +563,12 @@ gtk_menu_tool_button_set_menu (GtkMenuToolButton *button,
         gtk_menu_shell_deactivate (GTK_MENU_SHELL (priv->menu));
 
       if (priv->menu)
-        g_object_unref (priv->menu);
+	{
+          g_signal_handlers_disconnect_by_func (priv->menu, 
+						menu_deactivate_cb, 
+						button);
+	  g_object_unref (priv->menu);
+	}
 
       priv->menu = GTK_MENU (menu);
 
