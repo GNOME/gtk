@@ -1,5 +1,8 @@
 2005-08-19  Matthias Clasen  <mclasen@redhat.com>
 
+	* modules/engines/ms-windows/msw_style.c (setup_system_styles): 
+	Fix a typo. 
+
 	* gtk/gtkfilechooserbutton.c (change_icon_theme) 
 	(model_add_special, model_add_special, model_add_volumes):
 	Handle pixbuf being NULL without warnings. Also, don't

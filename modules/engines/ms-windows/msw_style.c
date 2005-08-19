@@ -782,7 +782,7 @@ setup_system_styles(GtkStyle *style)
   sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON,  COLOR_BTNTEXT,       &style->text[GTK_STATE_ACTIVE]);
   sys_color_to_gtk_color(XP_THEME_CLASS_WINDOW,  COLOR_WINDOWTEXT,    &style->text[GTK_STATE_PRELIGHT]);
 
-  /* Default forgeground */
+  /* Default foreground */
   sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON,  COLOR_BTNTEXT,       &style->fg[GTK_STATE_NORMAL]);
   sys_color_to_gtk_color(XP_THEME_CLASS_TEXT,    COLOR_HIGHLIGHTTEXT, &style->fg[GTK_STATE_SELECTED]);
   sys_color_to_gtk_color(XP_THEME_CLASS_TEXT,    COLOR_GRAYTEXT,      &style->fg[GTK_STATE_INSENSITIVE]);
