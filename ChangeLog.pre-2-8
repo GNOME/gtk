@@ -1,5 +1,13 @@
 2005-08-19  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/x11/gdkdnd-x11.c (_gdk_drag_get_protocol_for_display) 
+	(xdnd_read_actions, get_client_window_at_coords_recurse): 
+	Free data returned from XGetWindowProperty. 
+
+	* gdk/x11/gdkevents-x11.c (fetch_net_wm_check_window) 
+	Free data returned from XGetWindowProperty.  (313867, Kjartan
+	Maraas)
+	
 	* gdk/x11/gdkdnd-x11.c (get_client_window_at_coords_recurse): Free
 	children in all cases.  (#313862, Kjartan Maraas)
 

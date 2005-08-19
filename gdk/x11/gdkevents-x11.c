@@ -2555,13 +2555,18 @@ fetch_net_wm_check_window (GdkScreen *screen)
   if (screen_x11->wmspec_check_window != None)
     return; /* already have it */
   
+  data = NULL;
   XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), screen_x11->xroot_window,
 		      gdk_x11_get_xatom_by_name_for_display (display, "_NET_SUPPORTING_WM_CHECK"),
 		      0, G_MAXLONG, False, XA_WINDOW, &type, &format, 
 		      &n_items, &bytes_after, &data);
   
   if (type != XA_WINDOW)
-    return;
+    {
+      if (data)
+        XFree (data);
+      return;
+    }
 
   xwindow = (Window *)data;
 
@@ -2574,14 +2579,14 @@ fetch_net_wm_check_window (GdkScreen *screen)
   if (gdk_error_trap_pop () == Success)
     {
       screen_x11->wmspec_check_window = *xwindow;
-      XFree (xwindow);
-      
       screen_x11->need_refetch_net_supported = TRUE;
       screen_x11->need_refetch_wm_name = TRUE;
       
       /* Careful, reentrancy */
       _gdk_x11_screen_window_manager_changed (GDK_SCREEN (screen_x11));
     }
+
+  XFree (xwindow);    
 }
 
 /**

@@ -2485,6 +2485,7 @@ xdnd_read_actions (GdkDragContext *context)
       
       gdk_error_trap_push ();
       
+      data = NULL;
       if (XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display),
 			      GDK_DRAWABLE_XID (context->source_window),
 			      gdk_x11_get_xatom_by_name_for_display (display, "XdndActionList"),
@@ -2520,8 +2521,10 @@ xdnd_read_actions (GdkDragContext *context)
 	    }
 #endif /* G_ENABLE_DEBUG */
 	  
-	  XFree(atoms);
 	}
+
+      if (data)
+	XFree (data);
       
       gdk_error_trap_pop ();
     }
@@ -2739,6 +2742,10 @@ xdnd_enter_filter (GdkXEvent *xev,
       if (gdk_error_trap_pop () || (format != 32) || (type != XA_ATOM))
 	{
 	  g_object_unref (new_context);
+
+	  if (data)
+	    XFree (data);
+
 	  return GDK_FILTER_REMOVE;
 	}
 
@@ -3086,7 +3093,10 @@ _gdk_drag_get_protocol_for_display (GdkDisplay      *display,
 				  0, 0, False, AnyPropertyType,
 				  &type, &format, &nitems, &data) &&
 	      type != None)
-	    rootwin = TRUE;
+	    {
+	      XFree (data);
+	      rootwin = TRUE;
+	    }
 	}
 #endif      
 
