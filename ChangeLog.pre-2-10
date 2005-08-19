@@ -1,3 +1,10 @@
+2005-08-19  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkicontheme.c (theme_lookup_icon): Store GtkIconData structs 
+	in the per-directory hash, even if they come from the icon cache. 
+	We tried to avoid that before, but as a result leaked icon data
+	structs.  (#313852, Kjartan Maraas)
+
 2005-08-18  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkmenutoolbutton.c (gtk_menu_tool_button_destroy): Disconnect

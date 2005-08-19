@@ -208,10 +208,10 @@ static void         do_theme_change   (GtkIconTheme     *icon_theme);
 
 static void  blow_themes               (GtkIconTheme    *icon_themes);
 
-static void  icon_data_free            (GtkIconData          *icon_data);
-static void load_icon_data (IconThemeDir *dir,
-			    const char   *path,
-			    const char   *name);
+static void  icon_data_free            (GtkIconData     *icon_data);
+static void load_icon_data             (IconThemeDir    *dir,
+			                const char      *path,
+			                const char      *name);
 
 static IconSuffix theme_dir_get_icon_suffix (IconThemeDir *dir,
 					     const gchar  *icon_name,
@@ -1880,11 +1880,21 @@ theme_lookup_icon (IconTheme          *theme,
       
       if (min_dir->icon_data != NULL)
 	icon_info->data = g_hash_table_lookup (min_dir->icon_data, icon_name);
-      else if (min_dir->cache != NULL)
-	icon_info->data = _gtk_icon_cache_get_icon_data (min_dir->cache, icon_name, min_dir->subdir);
 
-      if (icon_info->data == NULL &&
-	  min_dir->cache && has_icon_file)
+      if (icon_info->data == NULL && min_dir->cache != NULL)
+	{
+	  icon_info->data = _gtk_icon_cache_get_icon_data (min_dir->cache, icon_name, min_dir->subdir);
+	  if (icon_info->data)
+	    {
+	      if (min_dir->icon_data == NULL)
+		min_dir->icon_data = g_hash_table_new_full (g_str_hash, g_str_equal,
+							    g_free, (GDestroyNotify)icon_data_free);
+
+	      g_hash_table_replace (min_dir->icon_data, g_strdup (icon_name), icon_info->data);
+	    }
+	}
+
+      if (icon_info->data == NULL && has_icon_file)
 	{
 	  gchar *icon_file_name, *icon_file_path;
 
@@ -1893,7 +1903,7 @@ theme_lookup_icon (IconTheme          *theme,
 
 	  if (g_file_test (icon_file_path, G_FILE_TEST_IS_REGULAR))
 	    {
-	      if (min_dir->icon_data == NULL)
+	      if (min_dir->icon_data == NULL)	
 		min_dir->icon_data = g_hash_table_new_full (g_str_hash, g_str_equal,
 							    g_free, (GDestroyNotify)icon_data_free);
 	      load_icon_data (min_dir, icon_file_path, icon_file_name);
@@ -2315,7 +2325,7 @@ gtk_icon_info_free (GtkIconInfo *icon_info)
     g_object_unref (icon_info->pixbuf);
   if (icon_info->cache_pixbuf)
     g_object_unref (icon_info->cache_pixbuf);
-  
+
   g_free (icon_info);
 }
 
