@@ -1,5 +1,8 @@
 2005-08-19  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkhsv.c (paint_triangle): Avoid a buffer overrun.  
+	(#313900, Sebastien Bacher)
+
 	* gtk/gtktreeview.c (gtk_tree_view_get_visible_range): Return
 	FALSE if the tree is empty.  (#313891, Guillaume Cottenceau)
 

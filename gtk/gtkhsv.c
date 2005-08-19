@@ -1201,7 +1201,7 @@ paint_triangle (GtkHSV      *hsv,
 	for (xx = x; xx < x_start; xx++)
 	  *p++ = c;
 	  
-	for (xx = x_start; xx < x_end; xx++)
+	for (; xx < x_end; xx++)
 	  {
 	    x_interp = CLAMP (xx, xl, xr);
 		
@@ -1212,7 +1212,7 @@ paint_triangle (GtkHSV      *hsv,
 
 	c = (rr << 16) | (gr << 8) | br;
 
-	for (xx = x_end; xx < x + width; xx++)
+	for (; xx < x + width; xx++)
 	  *p++ = c;
       }
     }
