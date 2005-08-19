@@ -1,5 +1,11 @@
 2005-08-19  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkmain.c (gtk_get_event_widget): Don't access
+	the user data on destroyed windows, since at best
+	it can be a stale pointer.  (#313953, Robin Green)	
+
+2005-08-19  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkhsv.c (paint_triangle): Avoid a buffer overrun.  
 	(#313900, Sebastien Bacher)
 

@@ -69,6 +69,8 @@
 #include "gtkdebug.h"
 #include "gtkalias.h"
 
+#include "gdk/gdkprivate.h" /* for GDK_WINDOW_DESTROYED */
+
 /* Private type definitions
  */
 typedef struct _GtkInitFunction		 GtkInitFunction;
@@ -2041,7 +2043,8 @@ gtk_get_event_widget (GdkEvent *event)
   GtkWidget *widget;
 
   widget = NULL;
-  if (event && event->any.window)
+  if (event && event->any.window && 
+      !GDK_WINDOW_DESTROYED (event->any.window))
     gdk_window_get_user_data (event->any.window, (void**) &widget);
   
   return widget;
