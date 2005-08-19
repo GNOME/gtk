@@ -2485,7 +2485,6 @@ xdnd_read_actions (GdkDragContext *context)
       
       gdk_error_trap_push ();
       
-      data = NULL;
       if (XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display),
 			      GDK_DRAWABLE_XID (context->source_window),
 			      gdk_x11_get_xatom_by_name_for_display (display, "XdndActionList"),
