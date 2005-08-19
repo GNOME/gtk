@@ -11795,6 +11795,9 @@ gtk_tree_view_get_visible_range (GtkTreeView  *tree_view,
 
   g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), FALSE);
 
+  if (!tree_view->priv->tree)
+    return FALSE;
+
   if (start_path)
     {
       _gtk_rbtree_find_offset (tree_view->priv->tree,

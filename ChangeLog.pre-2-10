@@ -1,5 +1,8 @@
 2005-08-19  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeview.c (gtk_tree_view_get_visible_range): Return
+	FALSE if the tree is empty.  (#313891, Guillaume Cottenceau)
+
 	* gdk/x11/gdkdnd-x11.c (_gdk_drag_get_protocol_for_display) 
 	(xdnd_read_actions, get_client_window_at_coords_recurse): 
 	Free data returned from XGetWindowProperty. 
