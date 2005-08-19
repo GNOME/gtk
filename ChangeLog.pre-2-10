@@ -1,5 +1,10 @@
 2005-08-19  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserbutton.c (change_icon_theme) 
+	(model_add_special, model_add_special, model_add_volumes):
+	Handle pixbuf being NULL without warnings. Also, don't
+	leak pixbuf references when the icon theme is changed.
+
 	* gtk/gtkmain.c (gtk_get_event_widget): Don't access
 	the user data on destroyed windows, since at best
 	it can be a stale pointer.  (#313953, Robin Green)	

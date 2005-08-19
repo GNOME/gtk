@@ -1109,6 +1109,9 @@ change_icon_theme (GtkFileChooserButton *button)
       gtk_list_store_set (GTK_LIST_STORE (priv->model), &iter,
 			  ICON_COLUMN, pixbuf,
 			  -1);
+
+      if (pixbuf)
+	g_object_unref (pixbuf);
     }
   while (gtk_tree_model_iter_next (priv->model, &iter));
 
@@ -1311,7 +1314,8 @@ model_add_special (GtkFileChooserButton *button)
 			  DATA_COLUMN, path,
 			  -1);
 
-      g_object_unref (pixbuf);
+      if (pixbuf)
+	g_object_unref (pixbuf);
       button->priv->n_special++;
 
 #ifndef G_OS_WIN32
@@ -1339,7 +1343,8 @@ model_add_special (GtkFileChooserButton *button)
 			  DATA_COLUMN, path,
 			  -1);
 
-      g_object_unref (pixbuf);
+      if (pixbuf)
+	g_object_unref (pixbuf);
       button->priv->n_special++;
     }
 }
@@ -1379,7 +1384,8 @@ model_add_volumes (GtkFileChooserButton *button,
 			  DATA_COLUMN, volumes->data,
 			  -1);
 
-      g_object_unref (pixbuf);
+      if (pixbuf)
+	g_object_unref (pixbuf);
       g_free (display_name);
 
       button->priv->n_volumes++;
