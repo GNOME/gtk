@@ -548,7 +548,11 @@ get_client_window_at_coords_recurse (GdkDisplay *display,
     return None;
 
   if (has_wm_state)
-    return win;
+    {
+      g_free (children);
+
+      return win;
+    }
 
   for (i = nchildren - 1; (i >= 0) && !found_child; i--)
     {

@@ -1,5 +1,8 @@
 2005-08-19  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/x11/gdkdnd-x11.c (get_client_window_at_coords_recurse): Free
+	children in all cases.  (#313862, Kjartan Maraas)
+
 	* gtk/gtkicontheme.c (theme_lookup_icon): Store GtkIconData structs 
 	in the per-directory hash, even if they come from the icon cache. 
 	We tried to avoid that before, but as a result leaked icon data
