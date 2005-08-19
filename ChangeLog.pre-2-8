@@ -1,5 +1,8 @@
 2005-08-19  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeitem.c: Remove duplicate lines.  (#313344,
+	Benoit Carpentier)
+
 	* modules/engines/ms-windows/msw_style.c (setup_system_styles): 
 	Fix a typo. 
 

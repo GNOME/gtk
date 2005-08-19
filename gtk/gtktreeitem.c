@@ -86,8 +86,6 @@ static void gtk_real_tree_item_deselect (GtkItem          *item);
 static void gtk_real_tree_item_toggle   (GtkItem          *item);
 static void gtk_real_tree_item_expand   (GtkTreeItem      *item);
 static void gtk_real_tree_item_collapse (GtkTreeItem      *item);
-static void gtk_real_tree_item_expand   (GtkTreeItem      *item);
-static void gtk_real_tree_item_collapse (GtkTreeItem      *item);
 static void gtk_tree_item_destroy        (GtkObject *object);
 static gint gtk_tree_item_subtree_button_click (GtkWidget *widget);
 static void gtk_tree_item_subtree_button_changed_state (GtkWidget *widget);
