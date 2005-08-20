@@ -1564,14 +1564,42 @@ gtk_range_state_changed (GtkWidget    *widget,
     stop_scrolling (GTK_RANGE (widget));
 }
 
+#define check_rectangle(rectangle1, rectangle2)              \
+  {                                                          \
+    if (rectangle1.x != rectangle2.x) return TRUE;           \
+    if (rectangle1.y != rectangle2.y) return TRUE;           \
+    if (rectangle1.width  != rectangle2.width)  return TRUE; \
+    if (rectangle1.height != rectangle2.height) return TRUE; \
+  }
+
+static gboolean
+layout_changed (GtkRangeLayout *layout1, 
+		GtkRangeLayout *layout2)
+{
+  check_rectangle (layout1->slider, layout2->slider);
+  check_rectangle (layout1->trough, layout2->trough);
+  check_rectangle (range->layout1->stepper_a, layout2->stepper_a);
+  check_rectangle (range->layout1->stepper_d, layout2->stepper_d);
+  check_rectangle (range->layout1->stepper_b, layout2->stepper_b);
+  check_rectangle (range->layout1->stepper_c, layout2->stepper_c);
+
+  return FALSE;
+}
+
 static void
 gtk_range_adjustment_changed (GtkAdjustment *adjustment,
 			      gpointer       data)
 {
   GtkRange *range = GTK_RANGE (data);
+  /* create a copy of the layout */
+  GtkRangeLayout layout = *range->layout;
 
   range->need_recalc = TRUE;
-  gtk_widget_queue_draw (GTK_WIDGET (range));
+  gtk_range_calc_layout (range, range->adjustment->value);
+  
+  /* now check whether the layout changed  */
+  if (layout_changed (range->layout, &layout))
+    gtk_widget_queue_draw (GTK_WIDGET (range));
 
   /* Note that we don't round off to range->round_digits here.
    * that's because it's really broken to change a value
@@ -1587,13 +1615,21 @@ gtk_range_adjustment_value_changed (GtkAdjustment *adjustment,
 				    gpointer       data)
 {
   GtkRange *range = GTK_RANGE (data);
+  /* create a copy of the layout */
+  GtkRangeLayout layout = *range->layout;
 
   range->need_recalc = TRUE;
-
-  gtk_widget_queue_draw (GTK_WIDGET (range));
-  /* This is so we don't lag the widget being scrolled. */
-  if (GTK_WIDGET_REALIZED (range))
-    gdk_window_process_updates (GTK_WIDGET (range)->window, FALSE);
+  gtk_range_calc_layout (range, range->adjustment->value);
+  
+  /* now check whether the layout changed  */
+  if (layout_changed (range->layout, &layout))
+    {
+      gtk_widget_queue_draw (GTK_WIDGET (range));
+      
+      /* This is so we don't lag the widget being scrolled. */
+      if (GTK_WIDGET_REALIZED (range))
+        gdk_window_process_updates (GTK_WIDGET (range)->window, FALSE);
+    }
   
   /* Note that we don't round off to range->round_digits here.
    * that's because it's really broken to change a value

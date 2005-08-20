@@ -1,3 +1,9 @@
+2005-08-20  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkrange.c (gtk_range_adjustment_changed) 
+	(gtk_range_adjustment_value_changed):  Don't queue a draw
+	if the layout has not changed.  (#313991, Benjamin Berg)
+
 2005-08-19  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktreeitem.c: Remove duplicate lines.  (#313344,
