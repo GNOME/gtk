@@ -9444,6 +9444,12 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
   if (model == tree_view->priv->model)
     return;
 
+  if (tree_view->priv->scroll_to_path)
+    {
+      gtk_tree_row_reference_free (tree_view->priv->scroll_to_path);
+      tree_view->priv->scroll_to_path = NULL;
+    }
+
   if (tree_view->priv->model)
     {
       GList *tmplist = tree_view->priv->columns;

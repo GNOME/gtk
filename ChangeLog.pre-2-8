@@ -1,3 +1,15 @@
+Sat Aug 20 16:12:14 2005  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_set_model): clear
+	scroll_to_path if the model changes.
+
+	* gtk/gtkiconview.c: (gtk_icon_view_destroy),
+	(gtk_icon_view_size_allocate), (gtk_icon_view_set_cursor),
+	(gtk_icon_view_scroll_to_path): Handle scrolling to a path before
+	we're realized, #312798
+	(gtk_icon_view_set_model): clear scroll_to_path if the model
+	changes.
+
 2005-08-20  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkrange.c (gtk_range_adjustment_changed) 

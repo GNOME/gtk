@@ -74,6 +74,7 @@ struct _GtkIconViewItem
 
   guint selected : 1;
   guint selected_before_rubberbanding : 1;
+
 };
 
 typedef struct _GtkIconViewCellInfo GtkIconViewCellInfo;
@@ -171,6 +172,12 @@ struct _GtkIconViewPrivate
 
   GtkTreeRowReference *dest_item;
   GtkIconViewDropPosition dest_pos;
+
+  /* scroll to */
+  GtkTreeRowReference *scroll_to_path;
+  gfloat scroll_to_row_align;
+  gfloat scroll_to_col_align;
+  guint scroll_to_use_align : 1;
 
   guint source_set : 1;
   guint dest_set : 1;
@@ -923,7 +930,16 @@ gtk_icon_view_destroy (GtkObject *object)
   gtk_icon_view_set_model (icon_view, NULL);
   
   if (icon_view->priv->layout_idle_id != 0)
-    g_source_remove (icon_view->priv->layout_idle_id);
+    {
+      g_source_remove (icon_view->priv->layout_idle_id);
+      icon_view->priv->layout_idle_id = 0;
+    }
+
+  if (icon_view->priv->scroll_to_path != NULL)
+    {
+      gtk_tree_row_reference_free (icon_view->priv->scroll_to_path);
+      icon_view->priv->scroll_to_path = NULL;
+    }
 
   remove_scroll_timeout (icon_view);
   
@@ -1229,8 +1245,25 @@ gtk_icon_view_size_allocate (GtkWidget      *widget,
   if (vadjustment->value > vadjustment->upper - vadjustment->page_size)
     gtk_adjustment_set_value (vadjustment, MAX (0, vadjustment->upper - vadjustment->page_size));
 
-  gtk_adjustment_changed (hadjustment);
-  gtk_adjustment_changed (vadjustment);
+  if (GTK_WIDGET_REALIZED (widget) &&
+      icon_view->priv->scroll_to_path)
+    {
+      GtkTreePath *path;
+      path = gtk_tree_row_reference_get_path (icon_view->priv->scroll_to_path);
+      gtk_tree_row_reference_free (icon_view->priv->scroll_to_path);
+      icon_view->priv->scroll_to_path = NULL;
+
+      gtk_icon_view_scroll_to_path (icon_view, path,
+				    icon_view->priv->scroll_to_use_align,
+				    icon_view->priv->scroll_to_row_align,
+				    icon_view->priv->scroll_to_col_align);
+      gtk_tree_path_free (path);
+    }
+  else
+    {
+      gtk_adjustment_changed (hadjustment);
+      gtk_adjustment_changed (vadjustment);
+    }
 }
 
 static gboolean
@@ -1711,9 +1744,10 @@ gtk_icon_view_set_cursor (GtkIconView     *icon_view,
   g_return_if_fail (cell == NULL || GTK_IS_CELL_RENDERER (cell));
 
   gtk_icon_view_stop_editing (icon_view, TRUE);
-  
-  item = g_list_nth (icon_view->priv->items,
-		     gtk_tree_path_get_indices(path)[0])->data;
+
+  if (gtk_tree_path_get_depth (path) == 1)
+    item = g_list_nth (icon_view->priv->items,
+		       gtk_tree_path_get_indices(path)[0])->data;
   
   if (!item)
     return;
@@ -1733,7 +1767,11 @@ gtk_icon_view_set_cursor (GtkIconView     *icon_view,
     }
 
   gtk_icon_view_set_cursor_item (icon_view, item, cell_pos);
-  gtk_icon_view_scroll_to_item (icon_view, item);
+  if (FALSE && GTK_WIDGET_REALIZED (icon_view))
+    gtk_icon_view_scroll_to_item (icon_view, item);
+  else
+    gtk_icon_view_scroll_to_path (icon_view, path,
+				  FALSE, 0.0, 0.0);
 
   if (start_editing)
     gtk_icon_view_start_editing (icon_view, item, info, NULL);
@@ -3905,7 +3943,7 @@ gtk_icon_view_move_cursor_start_end (GtkIconView *icon_view,
  * position.  If the item is currently visible on the screen, nothing is done.
  *
  * This function only works if the model is set, and @path is a valid row on the
- * model.  If the model changes before the @tree_view is realized, the centered
+ * model.  If the model changes before the @icon_view is realized, the centered
  * path will be modified to reflect this change.
  *
  * Since: 2.8
@@ -3923,14 +3961,31 @@ gtk_icon_view_scroll_to_path (GtkIconView *icon_view,
   g_return_if_fail (path != NULL);
   g_return_if_fail (row_align >= 0.0 && row_align <= 1.0);
   g_return_if_fail (col_align >= 0.0 && col_align <= 1.0);
-  
+
+  if (! GTK_WIDGET_REALIZED (icon_view))
+    {
+      if (icon_view->priv->scroll_to_path)
+	gtk_tree_row_reference_free (icon_view->priv->scroll_to_path);
+
+      icon_view->priv->scroll_to_path = NULL;
+
+      if (path)
+	icon_view->priv->scroll_to_path = gtk_tree_row_reference_new_proxy (G_OBJECT (icon_view), icon_view->priv->model, path);
+
+      icon_view->priv->scroll_to_use_align = use_align;
+      icon_view->priv->scroll_to_row_align = row_align;
+      icon_view->priv->scroll_to_col_align = col_align;
+
+      return;
+    }
+
   if (gtk_tree_path_get_depth (path) > 0)
     item = g_list_nth_data (icon_view->priv->items,
 			    gtk_tree_path_get_indices(path)[0]);
   
   if (!item)
     return;
-  
+
   if (use_align)
     {
       gint x, y, width, height;
@@ -3961,7 +4016,7 @@ gtk_icon_view_scroll_to_path (GtkIconView *icon_view,
       gtk_adjustment_changed (icon_view->priv->vadjustment);
     }
   else
-    gtk_icon_view_scroll_to_item (icon_view, item);    
+    gtk_icon_view_scroll_to_item (icon_view, item);
 }
 
 
@@ -4533,6 +4588,12 @@ gtk_icon_view_set_model (GtkIconView *icon_view,
   
   if (icon_view->priv->model == model)
     return;
+
+  if (icon_view->priv->scroll_to_path)
+    {
+      gtk_tree_row_reference_free (icon_view->priv->scroll_to_path);
+      icon_view->priv->scroll_to_path = NULL;
+    }
 
   gtk_icon_view_stop_editing (icon_view, TRUE);
 
