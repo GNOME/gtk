@@ -1578,10 +1578,10 @@ layout_changed (GtkRangeLayout *layout1,
 {
   check_rectangle (layout1->slider, layout2->slider);
   check_rectangle (layout1->trough, layout2->trough);
-  check_rectangle (range->layout1->stepper_a, layout2->stepper_a);
-  check_rectangle (range->layout1->stepper_d, layout2->stepper_d);
-  check_rectangle (range->layout1->stepper_b, layout2->stepper_b);
-  check_rectangle (range->layout1->stepper_c, layout2->stepper_c);
+  check_rectangle (layout1->stepper_a, layout2->stepper_a);
+  check_rectangle (layout1->stepper_d, layout2->stepper_d);
+  check_rectangle (layout1->stepper_b, layout2->stepper_b);
+  check_rectangle (layout1->stepper_c, layout2->stepper_c);
 
   return FALSE;
 }
