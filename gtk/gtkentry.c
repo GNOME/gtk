@@ -4221,8 +4221,8 @@ gtk_entry_get_has_frame (GtkEntry *entry)
  * Gets the #PangoLayout used to display the entry.
  * The layout is useful to e.g. convert text positions to
  * pixel positions, in combination with gtk_entry_get_layout_offsets().
- * The returned layout is owned by the entry so need not be
- * freed by the caller.
+ * The returned layout is owned by the entry and must not be 
+ * modified or freed by the caller.
  *
  * Keep in mind that the layout text may contain a preedit string, so
  * gtk_entry_layout_index_to_text_index() and

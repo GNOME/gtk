@@ -1,3 +1,8 @@
+2005-08-20  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_get_layout): Clarify that the
+	returned layout must not be modified.
+
 Sat Aug 20 16:12:14 2005  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_set_model): clear
