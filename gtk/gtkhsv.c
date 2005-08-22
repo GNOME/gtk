@@ -1195,6 +1195,7 @@ paint_triangle (GtkHSV      *hsv,
 
 	x_start = MAX (xl - PAD, x);
 	x_end = MIN (xr + PAD, x + width);
+	x_start = MIN (x_start, x_end);
 
 	c = (rl << 16) | (gl << 8) | bl;
 

@@ -1,3 +1,8 @@
+2005-08-22  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkhsv.c (paint_triangle): One more fix to prevent buffer
+	overruns.  (#314081, Hans Breuer)
+
 2005-08-20  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkentry.c (gtk_entry_get_layout): Clarify that the
