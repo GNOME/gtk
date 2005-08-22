@@ -1,5 +1,8 @@
 2005-08-22  Matthias Clasen  <mclasen@redhat.com>
 
+	* docs/tools/Makefile.am (LDADDS): Add GTK_DEP_LIBS, in order 
+	to link against Xext.  (#314062)
+
 	* gtk/gtkhsv.c (paint_triangle): One more fix to prevent buffer
 	overruns.  (#314081, Hans Breuer)
 
