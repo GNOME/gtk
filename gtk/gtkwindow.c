@@ -218,12 +218,10 @@ static void gtk_window_real_activate_focus   (GtkWindow         *window);
 static void gtk_window_move_focus            (GtkWindow         *window,
                                               GtkDirectionType   dir);
 static void gtk_window_keys_changed          (GtkWindow         *window);
-static void gtk_window_read_rcfiles       (GtkWidget         *widget,
-					   GdkEventClient    *event);
-static void gtk_window_paint              (GtkWidget         *widget,
-					   GdkRectangle      *area);
-static gint gtk_window_expose             (GtkWidget         *widget,
-				           GdkEventExpose    *event);
+static void gtk_window_paint                 (GtkWidget         *widget,
+					      GdkRectangle      *area);
+static gint gtk_window_expose                (GtkWidget         *widget,
+					      GdkEventExpose    *event);
 static void gtk_window_unset_transient_for         (GtkWindow  *window);
 static void gtk_window_transient_parent_realized   (GtkWidget  *parent,
 						    GtkWidget  *window);

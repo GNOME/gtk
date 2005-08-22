@@ -1,3 +1,9 @@
+2005-08-22  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtkicontheme.h: add declaration for _gtk_icon_theme_check_reload.
+
+	* gtk/gtkwindow.c: remove declaration of gtk_window_read_rcfiles.
+
 2005-08-22  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkwindow.c (gtk_window_client_event): 
