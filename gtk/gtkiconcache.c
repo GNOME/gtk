@@ -326,7 +326,16 @@ _gtk_icon_cache_has_icon (GtkIconCache *cache,
 
   return FALSE;
 }
-			  
+
+static void
+pixbuf_destroy_cb (guchar   *pixels, 
+		   gpointer  data)
+{
+  GtkIconCache *cache = data;
+
+  _gtk_icon_cache_unref (cache);
+}
+
 GdkPixbuf *
 _gtk_icon_cache_get_icon (GtkIconCache *cache,
 			  const gchar  *icon_name,
@@ -371,6 +380,11 @@ _gtk_icon_cache_get_icon (GtkIconCache *cache,
 
   pixbuf = gdk_pixbuf_from_pixdata (&pixdata, FALSE, &error);
 
+  pixbuf = gdk_pixbuf_new_from_data (pixdata.pixel_data, GDK_COLORSPACE_RGB,
+				     (pixdata.pixdata_type & GDK_PIXDATA_COLOR_TYPE_MASK) == GDK_PIXDATA_COLOR_TYPE_RGBA,
+				     8, pixdata.width, pixdata.height, pixdata.rowstride,
+				     (GdkPixbufDestroyNotify)pixbuf_destroy_cb, 
+				     cache);
   if (!pixbuf)
     {
       GTK_NOTE (ICONTHEME,
@@ -379,6 +393,8 @@ _gtk_icon_cache_get_icon (GtkIconCache *cache,
 
       return NULL;
     }
+
+  _gtk_icon_cache_ref (cache);
 
   return pixbuf;
 }

@@ -1304,6 +1304,14 @@ gtk_icon_theme_error_quark (void)
  * and renders it into a pixbuf. This is a convenience function;
  * if more details about the icon are needed, use
  * gtk_icon_theme_lookup_icon() followed by gtk_icon_info_load_icon().
+ *
+ * Note that you probably want to listen for icon theme changes and
+ * update the icon. This is usually done by connecting to the 
+ * GtkWidget::style-set signal. If for some reason you do not want to
+ * update the icon when the icon theme changes, you should consider
+ * using gdk_pixbuf_copy() to make a private copy of the pixbuf
+ * returned by this function. Otherwise GTK+ may need to keep the old 
+ * icon theme loaded, which would be a waste of memory.
  * 
  * Return value: the rendered icon; this may be a newly created icon
  *  or a new reference to an internal icon, so you must not modify

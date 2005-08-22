@@ -1,5 +1,14 @@
 2005-08-22  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkicontheme.c (gtk_icon_theme_load_icon): Add a note
+	regarding icon theme changes.
+
+	* gtk/gtkiconcache.c (_gtk_icon_cache_get_icon): When returning
+	pixbufs which are backed by the mmapped memory of an icon cache,
+	increase the refcount of the icon cache, so that the memory is not
+	munmapped away underneath the pixbuf upon icon theme changes.  
+	(#314170, Kjartan Maraas)
+
 	* docs/tools/Makefile.am (LDADDS): Add GTK_DEP_LIBS, in order 
 	to link against Xext.  (#314062)
 
