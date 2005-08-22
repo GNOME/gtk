@@ -1,5 +1,16 @@
 2005-08-22  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkwindow.c (gtk_window_client_event): 
+	* gtk/gtkicontheme.c (ensure_valid_themes) 
+	(_gtk_icon_theme_check_reload): Implement a clientmessage based
+	scheme for makeing sure that all GTK+ applications notice if an
+	icon theme has been updated. This should prevent multiple versions
+	of an icon theme cache to be mapped in memory at the same time,
+	which can cause excessive memory consumption.  (#313156, Chris 
+	Lahey)
+
+2005-08-22  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkicontheme.c (gtk_icon_theme_load_icon): Add a note
 	regarding icon theme changes.
 

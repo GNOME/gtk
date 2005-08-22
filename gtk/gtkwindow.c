@@ -4648,10 +4648,11 @@ gtk_window_focus_out_event (GtkWidget     *widget,
 }
 
 static GdkAtom atom_rcfiles = GDK_NONE;
+static GdkAtom atom_iconthemes = GDK_NONE;
 
 static void
-gtk_window_read_rcfiles (GtkWidget *widget,
-			 GdkEventClient *event)
+send_client_message_to_embedded_windows (GtkWidget *widget,
+					 GdkAtom    message_type)
 {
   GList *embedded_windows;
 
@@ -4664,7 +4665,7 @@ gtk_window_read_rcfiles (GtkWidget *widget,
       for (i = 0; i < 5; i++)
 	send_event->client.data.l[i] = 0;
       send_event->client.data_format = 32;
-      send_event->client.message_type = atom_rcfiles;
+      send_event->client.message_type = message_type;
       
       while (embedded_windows)
 	{
@@ -4675,8 +4676,6 @@ gtk_window_read_rcfiles (GtkWidget *widget,
 
       gdk_event_free (send_event);
     }
-
-  gtk_rc_reparse_all_for_settings (gtk_widget_get_settings (widget), FALSE);
 }
 
 static gint
@@ -4684,10 +4683,22 @@ gtk_window_client_event (GtkWidget	*widget,
 			 GdkEventClient	*event)
 {
   if (!atom_rcfiles)
-    atom_rcfiles = gdk_atom_intern ("_GTK_READ_RCFILES", FALSE);
+    {
+      atom_rcfiles = gdk_atom_intern ("_GTK_READ_RCFILES", FALSE);
+      atom_iconthemes = gdk_atom_intern ("_GTK_LOAD_ICONTHEMES", FALSE);
+    }
 
   if (event->message_type == atom_rcfiles) 
-    gtk_window_read_rcfiles (widget, event);    
+    {
+      send_client_message_to_embedded_windows (widget, atom_rcfiles);
+      gtk_rc_reparse_all_for_settings (gtk_widget_get_settings (widget), FALSE);
+    }
+
+  if (event->message_type == atom_iconthemes) 
+    {
+      send_client_message_to_embedded_windows (widget, atom_iconthemes);
+      _gtk_icon_theme_check_reload (gtk_widget_get_display (widget));    
+    }
 
   return FALSE;
 }

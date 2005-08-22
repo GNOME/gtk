@@ -96,6 +96,8 @@ struct _GtkIconThemePrivate
   GList *dir_mtimes;
 
   gulong reset_styles_idle;
+
+  gboolean check_reload;
 };
 
 struct _GtkIconInfo
@@ -1128,7 +1130,7 @@ ensure_valid_themes (GtkIconTheme *icon_theme)
 {
   GtkIconThemePrivate *priv = icon_theme->priv;
   GTimeVal tv;
-  
+
   if (priv->themes_valid)
     {
       g_get_current_time (&tv);
@@ -1138,7 +1140,26 @@ ensure_valid_themes (GtkIconTheme *icon_theme)
     }
   
   if (!priv->themes_valid)
-    load_themes (icon_theme);
+    {
+      load_themes (icon_theme);
+      
+      if (!priv->check_reload)
+	{	  
+	  static GdkAtom atom_iconthemes = GDK_NONE;
+	  GdkEvent *event = gdk_event_new (GDK_CLIENT_EVENT);
+	  int i;
+
+	  if (!atom_iconthemes)
+	    atom_iconthemes = gdk_atom_intern ("_GTK_LOAD_ICONTHEMES", FALSE);
+
+	  for (i = 0; i < 5; i++)
+	    event->client.data.l[i] = 0;
+	  event->client.data_format = 32;
+	  event->client.message_type = atom_iconthemes;
+
+	  gdk_screen_broadcast_client_message (priv->screen, event);
+	}
+    }
 }
 
 /**
@@ -2935,6 +2956,29 @@ find_builtin_icon (const gchar *icon_name,
     *has_larger_p = has_larger;
 
   return min_icon;
+}
+
+void
+_gtk_icon_theme_check_reload (GdkDisplay *display)
+{
+  gint n_screens, i;
+  GdkScreen *screen;
+  GtkIconTheme *icon_theme;
+
+  n_screens = gdk_display_get_n_screens (display);
+  
+  for (i = 0; i < n_screens; i++)
+    {
+      screen = gdk_display_get_screen (display, i);
+
+      icon_theme = g_object_get_data (G_OBJECT (screen), "gtk-icon-theme");
+      if (icon_theme)
+	{
+	  icon_theme->priv->check_reload = TRUE;
+	  ensure_valid_themes (icon_theme);
+	  icon_theme->priv->check_reload = FALSE;
+	}
+    }
 }
 
 #ifdef G_OS_WIN32
