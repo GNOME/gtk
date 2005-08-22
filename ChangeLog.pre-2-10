@@ -1,3 +1,10 @@
+2005-08-22  Matthias Clasen  <mclasen@redhat.com>
+
+	Backport from 2.8.
+	
+	* gtk/gtkcombobox.c (gtk_combo_box_list_destroy): Cleanup
+	a possible resize idle.  (#311141, Robert Ögren)
+
 2005-08-18  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump version

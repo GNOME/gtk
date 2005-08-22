@@ -103,6 +103,7 @@ struct _GtkComboBoxPrivate
   guint changed_id;
   guint popup_idle_id;
   guint scroll_timer;
+  guint resize_idle_id;
 
   gint width;
   GSList *cells;
@@ -2852,6 +2853,8 @@ list_popup_resize_idle (gpointer user_data)
       gtk_window_move (GTK_WINDOW (combo_box->priv->popup_window), x, y);
     }
 
+  combo_box->priv->resize_idle_id = 0;
+
   GDK_THREADS_LEAVE ();
 
   return FALSE;
@@ -2860,7 +2863,9 @@ list_popup_resize_idle (gpointer user_data)
 static void
 gtk_combo_box_list_popup_resize (GtkComboBox *combo_box)
 {
-  g_idle_add (list_popup_resize_idle, combo_box);
+  if (!combo_box->priv->resize_idle_id)
+    combo_box->priv->resize_idle_id = 
+      g_idle_add (list_popup_resize_idle, combo_box);
 }
 
 static void
@@ -3328,6 +3333,12 @@ gtk_combo_box_list_destroy (GtkComboBox *combo_box)
     {
       g_source_remove (combo_box->priv->scroll_timer);
       combo_box->priv->scroll_timer = 0;
+    }
+
+  if (combo_box->priv->resize_idle_id)
+    {
+      g_source_remove (combo_box->priv->resize_idle_id);
+      combo_box->priv->resize_idle_id = 0;
     }
 
   gtk_widget_destroy (combo_box->priv->tree_view);
