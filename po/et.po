@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-07-22 06:41+0000\n"
-"PO-Revision-Date: 2005-08-15 22:13+0300\n"
+"PO-Revision-Date: 2005-08-23 09:19+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -68,16 +68,16 @@ msgstr ""
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:642 ../gdk-pixbuf/gdk-pixbuf-io.c:694
 #, c-format
 msgid "Image type '%s' is not supported"
-msgstr "'%s' pilditüüp ei ole toetatud"
+msgstr "'%s' pilditüüp pole toetatud"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:734
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "Pildifaili '%s' vormingut ei ole võimalik ära tunda."
+msgstr "Pildifaili '%s' vormingut pole võimalik ära tunda."
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:742
 msgid "Unrecognized image file format"
-msgstr "Tundmatu pildifaili vorming"
+msgstr "Pildifaili vorming pole äratuntav"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:910
 #, c-format
@@ -162,7 +162,7 @@ msgstr ""
 
 #: ../gdk-pixbuf/io-ani.c:337
 msgid "Unsupported animation type"
-msgstr "Animatsioonitüüp ei ole toetatud"
+msgstr "Animatsioonitüüp pole toetatud"
 
 #: ../gdk-pixbuf/io-ani.c:348 ../gdk-pixbuf/io-ani.c:538
 msgid "Invalid header in animation"
@@ -172,7 +172,7 @@ msgstr "Vigane päis animatsioonis"
 #: ../gdk-pixbuf/io-ani.c:441 ../gdk-pixbuf/io-ani.c:460
 #: ../gdk-pixbuf/io-ani.c:511 ../gdk-pixbuf/io-ani.c:583
 msgid "Not enough memory to load animation"
-msgstr "Animatsiooni laadimiseks ei ole piisavalt mälu"
+msgstr "Animatsiooni laadimiseks pole piisavalt mälu"
 
 #: ../gdk-pixbuf/io-ani.c:400 ../gdk-pixbuf/io-ani.c:417
 #: ../gdk-pixbuf/io-ani.c:428
@@ -187,7 +187,7 @@ msgstr "ANI pildivorming"
 #: ../gdk-pixbuf/io-bmp.c:338 ../gdk-pixbuf/io-bmp.c:361
 #: ../gdk-pixbuf/io-bmp.c:442
 msgid "BMP image has bogus header data"
-msgstr "BMP pilt omas võltse päiseandmeid"
+msgstr "BMP-pildi päises on võltsandmed"
 
 #: ../gdk-pixbuf/io-bmp.c:239 ../gdk-pixbuf/io-bmp.c:401
 msgid "Not enough memory to load bitmap image"
@@ -195,19 +195,19 @@ msgstr "Rastergraafikapildi laadimiseks pole piisavalt mälu"
 
 #: ../gdk-pixbuf/io-bmp.c:287
 msgid "BMP image has unsupported header size"
-msgstr "BMP pilt omas toetamata suurusega päist"
+msgstr "BMP-pilt omas toetamata suurusega päist"
 
 #: ../gdk-pixbuf/io-bmp.c:325
 msgid "Topdown BMP images cannot be compressed"
-msgstr "Ülalt-alla BMP pilte pole võimalik pakkida"
+msgstr "Ülalt-alla suunaga BMP-pilte pole võimalik pakkida"
 
 #: ../gdk-pixbuf/io-bmp.c:1203
 msgid "Couldn't allocate memory for saving BMP file"
-msgstr "BMP faili salvestamiseks pole võimalik mälu eraldada"
+msgstr "BMP-faili salvestamiseks pole võimalik mälu eraldada"
 
 #: ../gdk-pixbuf/io-bmp.c:1244
 msgid "Couldn't write to BMP file"
-msgstr "BMP faili pole võimalik kirjutada"
+msgstr "BMP-faili pole võimalik kirjutada"
 
 #: ../gdk-pixbuf/io-bmp.c:1293
 msgid "The BMP image format"
@@ -216,12 +216,12 @@ msgstr "BMP pildivorming"
 #: ../gdk-pixbuf/io-gif.c:220
 #, c-format
 msgid "Failure reading GIF: %s"
-msgstr "Viga GIF faili lugemisel: %s"
+msgstr "Viga GIF-faili lugemisel: %s"
 
 #: ../gdk-pixbuf/io-gif.c:492 ../gdk-pixbuf/io-gif.c:1463
 #: ../gdk-pixbuf/io-gif.c:1624
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr "GIF failis on mõningad andmed puudu (kas seda on kuidagi tükeldatud?)"
+msgstr "GIF-failis on mõningad andmed puudu (kas seda on kuidagi tükeldatud?)"
 
 #: ../gdk-pixbuf/io-gif.c:501
 #, c-format
@@ -234,7 +234,7 @@ msgstr "Pinu ületäituvus"
 
 #: ../gdk-pixbuf/io-gif.c:635
 msgid "GIF image loader cannot understand this image."
-msgstr "GIF pildifaili laadija ei saa sellest pildist aru. "
+msgstr "GIF-pildifaili laadija ei saa sellest pildist aru. "
 
 #: ../gdk-pixbuf/io-gif.c:664
 msgid "Bad code encountered"
@@ -247,45 +247,45 @@ msgstr ""
 #: ../gdk-pixbuf/io-gif.c:862 ../gdk-pixbuf/io-gif.c:1451
 #: ../gdk-pixbuf/io-gif.c:1497 ../gdk-pixbuf/io-gif.c:1612
 msgid "Not enough memory to load GIF file"
-msgstr "GIF faili laadimiseks ei ole piisavalt mälu"
+msgstr "GIF-faili laadimiseks pole piisavalt mälu"
 
 #: ../gdk-pixbuf/io-gif.c:947
 msgid "Not enough memory to composite a frame in GIF file"
-msgstr ""
+msgstr "GIF-failis liitraami loomiseks pole piisavalt mälu"
 
 #: ../gdk-pixbuf/io-gif.c:1116
 msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr "GIF pilt on rikutud (mittekorrektne LZW pakkimine)"
+msgstr "GIF-pilt on rikutud (mittekorrektne LZW pakkimine)"
 
 #: ../gdk-pixbuf/io-gif.c:1166
 msgid "File does not appear to be a GIF file"
-msgstr "Fail ei tundu olevat GIF fail"
+msgstr "Fail ei tundu olevat GIF-fail"
 
 #: ../gdk-pixbuf/io-gif.c:1178
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
-msgstr "GIF failiformaadi %s versioon ei ole toetatud"
+msgstr "GIF-failivormingu versioon %s pole toetatud"
 
 #: ../gdk-pixbuf/io-gif.c:1287
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
 msgstr ""
-"GIF pildil puudub üldine värvikaart ja raami sees pole kohalikku värvikaarti."
+"GIF-pildil puudub üldine värvikaart ja raami sees pole kohalikku värvikaarti."
 
 #: ../gdk-pixbuf/io-gif.c:1519
 msgid "GIF image was truncated or incomplete."
-msgstr "GIF pilt pole täielik või on seda tükeldatud."
+msgstr "GIF-pilt pole täielik või on seda tükeldatud."
 
 #: ../gdk-pixbuf/io-gif.c:1671
 msgid "The GIF image format"
-msgstr "GIF failivorming"
+msgstr "GIF-failivorming"
 
 #: ../gdk-pixbuf/io-ico.c:219 ../gdk-pixbuf/io-ico.c:271
 #: ../gdk-pixbuf/io-ico.c:340 ../gdk-pixbuf/io-ico.c:403
 #: ../gdk-pixbuf/io-ico.c:433
 msgid "Not enough memory to load icon"
-msgstr "Ikooni laadimiseks ei ole piisavalt mälu"
+msgstr "Ikooni laadimiseks pole piisavalt mälu"
 
 #: ../gdk-pixbuf/io-ico.c:256 ../gdk-pixbuf/io-ico.c:330
 msgid "Invalid header in icon"
@@ -301,7 +301,7 @@ msgstr "Ikoonil on null-kõrgus"
 
 #: ../gdk-pixbuf/io-ico.c:355
 msgid "Compressed icons are not supported"
-msgstr "Pakitud ikoonid ei ole toetatud"
+msgstr "Pakitud ikoonid pole toetatud"
 
 #: ../gdk-pixbuf/io-ico.c:388
 msgid "Unsupported icon type"
@@ -309,11 +309,11 @@ msgstr "Toetamata ikoonitüüp"
 
 #: ../gdk-pixbuf/io-ico.c:482
 msgid "Not enough memory to load ICO file"
-msgstr "ICO faili laadimiseks ei ole piisavalt mälu"
+msgstr "ICO-faili laadimiseks pole piisavalt mälu"
 
 #: ../gdk-pixbuf/io-ico.c:947
 msgid "Image too large to be saved as ICO"
-msgstr "Pilt on ICO vormingus salvestamiseks liiga suur"
+msgstr "Pilt on ICO-vormingus salvestamiseks liiga suur"
 
 #: ../gdk-pixbuf/io-ico.c:958
 msgid "Cursor hotspot outside image"
@@ -322,7 +322,7 @@ msgstr ""
 #: ../gdk-pixbuf/io-ico.c:981
 #, c-format
 msgid "Unsupported depth for ICO file: %d"
-msgstr "Toetamata värvisügavus %d ICO faili jaoks."
+msgstr "Toetamata värvisügavus %d ICO-faili jaoks."
 
 #: ../gdk-pixbuf/io-ico.c:1210
 msgid "The ICO image format"
@@ -331,7 +331,7 @@ msgstr "ICO pildivorming"
 #: ../gdk-pixbuf/io-jpeg.c:114
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
-msgstr "Viga JPEG pildifaili (%s) tõlgendamisel"
+msgstr "Viga JPEG-pildifaili (%s) tõlgendamisel"
 
 #: ../gdk-pixbuf/io-jpeg.c:349
 msgid ""
@@ -349,7 +349,7 @@ msgstr "Toetamata JPEG värvituum (%s)"
 #: ../gdk-pixbuf/io-jpeg.c:481 ../gdk-pixbuf/io-jpeg.c:678
 #: ../gdk-pixbuf/io-jpeg.c:943 ../gdk-pixbuf/io-jpeg.c:952
 msgid "Couldn't allocate memory for loading JPEG file"
-msgstr "JPEG faili laadimiseks pole võimalik mälu eraldada"
+msgstr "JPEG-faili laadimiseks pole võimalik mälu eraldada"
 
 #: ../gdk-pixbuf/io-jpeg.c:894
 #, c-format
@@ -357,7 +357,7 @@ msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
 msgstr ""
-"JPEG kvaliteedi väärtus peab olema 0 ja 100 vahel; väärtust '%s' ei ole "
+"JPEG kvaliteedi väärtus peab olema 0 ja 100 vahel; väärtust '%s' pole "
 "võimalik analüüsida."
 
 #: ../gdk-pixbuf/io-jpeg.c:909
@@ -365,7 +365,7 @@ msgstr ""
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
-"JPEG kvaliteedi väärtus peab olema 0 ja 100 vahel; väärtus '%d' ei ole "
+"JPEG kvaliteedi väärtus peab olema 0 ja 100 vahel; väärtus '%d' pole "
 "lubatud."
 
 #: ../gdk-pixbuf/io-jpeg.c:1071
@@ -419,7 +419,7 @@ msgstr "PCX pildivorming"
 
 #: ../gdk-pixbuf/io-png.c:55
 msgid "Bits per channel of PNG image is invalid."
-msgstr "Bittide arv PNG faili kanalis on vigane."
+msgstr "Bittide arv PNG-faili kanalis on vigane."
 
 #: ../gdk-pixbuf/io-png.c:136
 msgid "Transformed PNG has zero width or height."
@@ -427,11 +427,11 @@ msgstr "Transformeeritud PNG laius või kõrgus on null."
 
 #: ../gdk-pixbuf/io-png.c:144
 msgid "Bits per channel of transformed PNG is not 8."
-msgstr "Bittide arv transformeeritud PNG kanali kohta ei ole 8."
+msgstr "Bittide arv transformeeritud PNG kanali kohta pole 8."
 
 #: ../gdk-pixbuf/io-png.c:153
 msgid "Transformed PNG not RGB or RGBA."
-msgstr "Transformeeritud PNG ei ole RGB ega RGBA."
+msgstr "Transformeeritud PNG pole RGB ega RGBA."
 
 #: ../gdk-pixbuf/io-png.c:162
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
@@ -441,11 +441,11 @@ msgstr ""
 #: ../gdk-pixbuf/io-png.c:183
 #, c-format
 msgid "Fatal error in PNG image file: %s"
-msgstr "Saatuslik viga PNG pildifailis: %s"
+msgstr "Saatuslik viga PNG-pildifailis: %s"
 
 #: ../gdk-pixbuf/io-png.c:301
 msgid "Insufficient memory to load PNG file"
-msgstr "PNG faili laadimiseks pole piisavalt mälu"
+msgstr "PNG-faili laadimiseks pole piisavalt mälu"
 
 #: ../gdk-pixbuf/io-png.c:618
 #, c-format
@@ -458,12 +458,12 @@ msgstr ""
 
 #: ../gdk-pixbuf/io-png.c:669
 msgid "Fatal error reading PNG image file"
-msgstr "Saatuslik viga PNG pildifaili lugemisel"
+msgstr "Saatuslik viga PNG-pildifaili lugemisel"
 
 #: ../gdk-pixbuf/io-png.c:718
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
-msgstr "Saatuslik viga PNG pildifaili lugemisel: %s"
+msgstr "Saatuslik viga PNG-pildifaili lugemisel: %s"
 
 #: ../gdk-pixbuf/io-png.c:810
 msgid ""
@@ -505,44 +505,44 @@ msgstr "PNM laadur lootis leida täisarvu, kuid ei leidnud"
 
 #: ../gdk-pixbuf/io-pnm.c:284
 msgid "PNM file has an incorrect initial byte"
-msgstr "PNM failil on ebakorrektne algbait"
+msgstr "PNM-failil on ebakorrektne algbait"
 
 #: ../gdk-pixbuf/io-pnm.c:314
 msgid "PNM file is not in a recognized PNM subformat"
-msgstr "PNM fail ei ole äratuntavas PNM alamvormingus"
+msgstr "PNM-fail pole äratuntavas PNM-alamvormingus"
 
 #: ../gdk-pixbuf/io-pnm.c:339
 msgid "PNM file has an image width of 0"
-msgstr "PNM failil on pildi laius 0"
+msgstr "PNM-failil on pildi laius 0"
 
 #: ../gdk-pixbuf/io-pnm.c:360
 msgid "PNM file has an image height of 0"
-msgstr "PNM failil on pildi kõrgus 0"
+msgstr "PNM-failil on pildi kõrgus 0"
 
 #: ../gdk-pixbuf/io-pnm.c:383
 msgid "Maximum color value in PNM file is 0"
-msgstr "Maksimaalne suurim värvi väärtus PNM failis on 0"
+msgstr "Maksimaalne suurim värvi väärtus PNM-failis on 0"
 
 #: ../gdk-pixbuf/io-pnm.c:391
 msgid "Maximum color value in PNM file is too large"
-msgstr "Maksimaalne suurim värvi väärtus PNM failis on liiga suur"
+msgstr "Maksimaalne suurim värvi väärtus PNM-failis on liiga suur"
 
 #: ../gdk-pixbuf/io-pnm.c:399
 msgid "Cannot handle PNM files with maximum color values greater than 255"
-msgstr "PNM faile rohkem kui 255 värviga pole võimalik käsitleda"
+msgstr "PNM-faile rohkem kui 255 värviga pole võimalik käsitleda"
 
 #: ../gdk-pixbuf/io-pnm.c:438 ../gdk-pixbuf/io-pnm.c:466
 #: ../gdk-pixbuf/io-pnm.c:498
 msgid "Raw PNM image type is invalid"
-msgstr "Toore PNM faili tüüp on vigane"
+msgstr "Toore PNM-faili tüüp on vigane"
 
 #: ../gdk-pixbuf/io-pnm.c:562 ../gdk-pixbuf/io-pnm.c:604
 msgid "PNM image format is invalid"
-msgstr "PNM pildivorming on vigane"
+msgstr "PNM-pildivorming on vigane"
 
 #: ../gdk-pixbuf/io-pnm.c:663
 msgid "PNM image loader does not support this PNM subformat"
-msgstr "PNM pildivormingu laadija ei toeta seda PNM'i alamvormingut"
+msgstr "PNM-pildivormingu laadija ei toeta seda PNM-alamvormingut"
 
 #: ../gdk-pixbuf/io-pnm.c:718
 msgid "Premature end-of-file encountered"
@@ -554,7 +554,7 @@ msgstr ""
 
 #: ../gdk-pixbuf/io-pnm.c:777
 msgid "Cannot allocate memory for loading PNM image"
-msgstr "PNM faili laadimiseks pole võimalik mälu eraldada"
+msgstr "PNM-faili laadimiseks pole võimalik mälu eraldada"
 
 #: ../gdk-pixbuf/io-pnm.c:827
 msgid "Insufficient memory to load PNM context struct"
@@ -562,31 +562,31 @@ msgstr "PNM kontekstistruktuuri laadimiseks pole piisavalt mälu"
 
 #: ../gdk-pixbuf/io-pnm.c:878
 msgid "Unexpected end of PNM image data"
-msgstr "Ootamatu PNM pildi andmete lõpp"
+msgstr "Ootamatu PNM-pildi andmete lõpp"
 
 #: ../gdk-pixbuf/io-pnm.c:1010
 msgid "Insufficient memory to load PNM file"
-msgstr "PNM faili laadimiseks pole piisavalt mälu"
+msgstr "PNM-faili laadimiseks pole piisavalt mälu"
 
 #: ../gdk-pixbuf/io-pnm.c:1089
 msgid "The PNM/PBM/PGM/PPM image format family"
-msgstr "PNM/PBM/PGM/PPM pildivormingu perekond"
+msgstr "PNM/PBM/PGM/PPM-pildivormingu perekond"
 
 #: ../gdk-pixbuf/io-ras.c:126
 msgid "RAS image has bogus header data"
-msgstr ""
+msgstr "RAS-pildi päises on võltsandmed"
 
 #: ../gdk-pixbuf/io-ras.c:148
 msgid "RAS image has unknown type"
-msgstr "RAS pildil on tundmatu tüüp"
+msgstr "RAS-pildil on tundmatu tüüp"
 
 #: ../gdk-pixbuf/io-ras.c:156
 msgid "unsupported RAS image variation"
-msgstr ""
+msgstr "RAS-pildi toetamata variatsioon"
 
 #: ../gdk-pixbuf/io-ras.c:171 ../gdk-pixbuf/io-ras.c:200
 msgid "Not enough memory to load RAS image"
-msgstr "Ebapiisav mälu RAS pildi laadimiseks"
+msgstr "RAS-pildi laadimiseks pole piisavalt mälu"
 
 #: ../gdk-pixbuf/io-ras.c:543
 msgid "The Sun raster image format"
@@ -630,13 +630,13 @@ msgstr "TGA päisele pole võimalik mälu eraldada"
 
 #: ../gdk-pixbuf/io-tga.c:769
 msgid "TGA image has invalid dimensions"
-msgstr "TGA pildil on vigane suurus"
+msgstr "TGA-pildil on vigane suurus"
 
 #: ../gdk-pixbuf/io-tga.c:775 ../gdk-pixbuf/io-tga.c:784
 #: ../gdk-pixbuf/io-tga.c:794 ../gdk-pixbuf/io-tga.c:804
 #: ../gdk-pixbuf/io-tga.c:811
 msgid "TGA image type not supported"
-msgstr "TGA pilditüüp ei ole toetatud"
+msgstr "TGA-pilditüüp pole toetatud"
 
 #: ../gdk-pixbuf/io-tga.c:858
 msgid "Cannot allocate memory for TGA context struct"
@@ -652,24 +652,24 @@ msgstr "Targa pildivorming"
 
 #: ../gdk-pixbuf/io-tiff.c:173
 msgid "Could not get image width (bad TIFF file)"
-msgstr "Pildi laiust pole võimalik tuvastada (vigane TIFF fail)"
+msgstr "Pildi laiust pole võimalik tuvastada (vigane TIFF-fail)"
 
 #: ../gdk-pixbuf/io-tiff.c:180
 msgid "Could not get image height (bad TIFF file)"
-msgstr "Pildi kõrgust pole võimalik tuvastada (vigane TIFF fail)"
+msgstr "Pildi kõrgust pole võimalik tuvastada (vigane TIFF-fail)"
 
 #: ../gdk-pixbuf/io-tiff.c:188
 msgid "Width or height of TIFF image is zero"
-msgstr "TIFF pildi laius või kõrgus on null"
+msgstr "TIFF-pildi laius või kõrgus on null"
 
 #: ../gdk-pixbuf/io-tiff.c:197 ../gdk-pixbuf/io-tiff.c:206
 msgid "Dimensions of TIFF image too large"
-msgstr "TIFF pildi mõõtmed on liiga suured"
+msgstr "TIFF-pildi mõõtmed on liiga suured"
 
 #: ../gdk-pixbuf/io-tiff.c:225 ../gdk-pixbuf/io-tiff.c:237
 #: ../gdk-pixbuf/io-tiff.c:286 ../gdk-pixbuf/io-tiff.c:572
 msgid "Insufficient memory to open TIFF file"
-msgstr "TIFF faili avamiseks pole piisavalt mälu"
+msgstr "TIFF-faili avamiseks pole piisavalt mälu"
 
 #: ../gdk-pixbuf/io-tiff.c:251 ../gdk-pixbuf/io-tiff.c:294
 msgid "Failed to load RGB data from TIFF file"
@@ -677,7 +677,7 @@ msgstr ""
 
 #: ../gdk-pixbuf/io-tiff.c:361
 msgid "Failed to open TIFF image"
-msgstr "Tõrge TIFF faili avamisel"
+msgstr "Tõrge TIFF-faili avamisel"
 
 #: ../gdk-pixbuf/io-tiff.c:373
 msgid "TIFFClose operation failed"
@@ -685,11 +685,11 @@ msgstr "TIFFSulgemisoperatsioon nurjus"
 
 #: ../gdk-pixbuf/io-tiff.c:504 ../gdk-pixbuf/io-tiff.c:517
 msgid "Failed to load TIFF image"
-msgstr "Tõrge TIFF faili laadimisel"
+msgstr "Tõrge TIFF-faili laadimisel"
 
 #: ../gdk-pixbuf/io-tiff.c:610
 msgid "The TIFF image format"
-msgstr "TIFF pildivorming"
+msgstr "TIFF-pildivorming"
 
 #: ../gdk-pixbuf/io-wbmp.c:246
 msgid "Image has zero width"
@@ -709,19 +709,19 @@ msgstr "Ülejäänud pole võimalik salvestada"
 
 #: ../gdk-pixbuf/io-wbmp.c:368
 msgid "The WBMP image format"
-msgstr "WBMP pildivorming"
+msgstr "WBMP-pildivorming"
 
 #: ../gdk-pixbuf/io-xbm.c:287
 msgid "Invalid XBM file"
-msgstr "Vigane XBM fail"
+msgstr "Vigane XBM-fail"
 
 #: ../gdk-pixbuf/io-xbm.c:297
 msgid "Insufficient memory to load XBM image file"
-msgstr "XBM pildifaili laadimiseks pole piisavalt mälu"
+msgstr "XBM-pildifaili laadimiseks pole piisavalt mälu"
 
 #: ../gdk-pixbuf/io-xbm.c:441
 msgid "Failed to write to temporary file when loading XBM image"
-msgstr "Tõrge XBM pildi laadimise käigus ajutisse faili kirjutamisel"
+msgstr "Tõrge XBM-pildi laadimise käigus ajutisse faili kirjutamisel"
 
 #: ../gdk-pixbuf/io-xbm.c:476
 msgid "The XBM image format"
@@ -737,11 +737,11 @@ msgstr "Vigane XPM päis"
 
 #: ../gdk-pixbuf/io-xpm.c:484
 msgid "XPM file has image width <= 0"
-msgstr "XPM failil on pildi laius <= 0 "
+msgstr "XPM-failil on pildi laius <= 0 "
 
 #: ../gdk-pixbuf/io-xpm.c:492
 msgid "XPM file has image height <= 0"
-msgstr "XPM failil on pildi kõrgus <= 0 "
+msgstr "XPM-failil on pildi kõrgus <= 0 "
 
 #: ../gdk-pixbuf/io-xpm.c:500
 msgid "XPM has invalid number of chars per pixel"
@@ -749,12 +749,12 @@ msgstr "XPM sisaldab vigast \"sümboleid piksli kohta\" numbrit"
 
 #: ../gdk-pixbuf/io-xpm.c:507
 msgid "XPM file has invalid number of colors"
-msgstr "XPM fail sisaldab vigast värvide arvu"
+msgstr "XPM-fail sisaldab vigast värvide arvu"
 
 #: ../gdk-pixbuf/io-xpm.c:519 ../gdk-pixbuf/io-xpm.c:528
 #: ../gdk-pixbuf/io-xpm.c:580
 msgid "Cannot allocate memory for loading XPM image"
-msgstr "XPM faili laadimiseks pole võimalik mälu eraldada"
+msgstr "XPM-faili laadimiseks pole võimalik mälu eraldada"
 
 #: ../gdk-pixbuf/io-xpm.c:542
 msgid "Cannot read XPM colormap"
@@ -762,7 +762,7 @@ msgstr "XPM värvikaarti ei suudeta lugeda"
 
 #: ../gdk-pixbuf/io-xpm.c:771
 msgid "Failed to write to temporary file when loading XPM image"
-msgstr "Tõrge ajutise faili kirjutamisel XPM pildi laadimisel"
+msgstr "Tõrge ajutise faili kirjutamisel XPM-pildi laadimisel"
 
 #: ../gdk-pixbuf/io-xpm.c:806
 msgid "The XPM image format"
@@ -1144,12 +1144,17 @@ msgid ""
 "now. You can drag this color to a palette entry, or select this color as "
 "current by dragging it to the other color swatch alongside."
 msgstr ""
+"Eelnevalt valitud värv võrdlemaks praegu valitava värviga. Sa saad selle "
+"värvi lohistada paletikirjetesse või määrata värvi käesolevaks värviks "
+"lohistades selle kõrvalasuvale värviproovile."
 
 #: ../gtk/gtkcolorsel.c:570
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
 msgstr ""
+"Sinu poolt valitud värv. Sa saad selle värvi lohistada paletikirjetesse, et "
+"kasutada seda hõlpsasti ka tulevikus."
 
 #: ../gtk/gtkcolorsel.c:961
 msgid "_Save color here"
@@ -1160,6 +1165,9 @@ msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr ""
+"Klõpsa sellel paletikirjel, et määrata see värv käesolevaks värviks. Selle "
+"kirje salvestamiseks lohista värviproov siia või vali parema hiireklõpsu alt "
+"\"Salvesta värv siia\"."
 
 #: ../gtk/gtkcolorsel.c:1953
 msgid ""
@@ -1174,6 +1182,8 @@ msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr ""
+"Pipeti abil on võimalik valida värvi ekraani suvalisest punktist. Klõpsa "
+"pipetil ja siis klõpsa soovitud värvil."
 
 #: ../gtk/gtkcolorsel.c:1987
 msgid "_Hue:"
@@ -1754,7 +1764,7 @@ msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
 "Please use a different name."
 msgstr ""
-"Nimi \"%s\" ei ole lubatud kuna see sisaldab sümbolit \"%s\". Palun kasuta "
+"Nimi \"%s\" pole lubatud kuna see sisaldab sümbolit \"%s\". Palun kasuta "
 "mõnda muud nime."
 
 #: ../gtk/gtkfilesystemunix.c:1463 ../gtk/gtkfilesystemwin32.c:1032
@@ -1770,7 +1780,7 @@ msgstr "'%s' on juba järjehoidjate loendis olemas"
 #: ../gtk/gtkfilesystemunix.c:1590
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
-msgstr "'%s' ei ole järjehoidjate loendis olemas"
+msgstr "'%s' pole järjehoidjate loendis olemas"
 
 #: ../gtk/gtkfilesystemunix.c:1818
 #, c-format
@@ -1855,7 +1865,7 @@ msgstr ""
 #: ../gtk/gtkicontheme.c:1304
 #, c-format
 msgid "Icon '%s' not present in theme"
-msgstr "Ikooni '%s' ei ole teemas"
+msgstr "Ikoon '%s' ei sisaldu teemas"
 
 #: ../gtk/gtkimmodule.c:427
 msgid "Default"
@@ -2413,7 +2423,7 @@ msgstr "Ei leia teemamootorit otsingurajalt 'module_path': \"%s\","
 
 #: ../gtk/gtktipsquery.c:186
 msgid "--- No Tip ---"
-msgstr "--- Vihjet ei ole ---"
+msgstr "--- Vihje puudub ---"
 
 #: ../gtk/gtkuimanager.c:1154
 #, c-format
@@ -2487,7 +2497,7 @@ msgstr "X Sisestusmeetod"
 #: ../tests/testfilechooser.c:205
 #, c-format
 msgid "Could not get information for file '%s': %s"
-msgstr "Infot faili '%s' ei õnnestunud saada: %s"
+msgstr "Faili '%s' kohta pole võimalik andmeid hankida: %s"
 
 #~ msgid "Shift"
 #~ msgstr "Shift"
