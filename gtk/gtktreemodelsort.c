@@ -728,6 +728,12 @@ gtk_tree_model_sort_row_inserted (GtkTreeModel          *s_model,
   if (!parent_level)
     goto done;
 
+  if (level->ref_count == 0 && level != tree_model_sort->root)
+    {
+      gtk_tree_model_sort_free_level (tree_model_sort, level);
+      goto done;
+    }
+
   if (!gtk_tree_model_sort_insert_value (tree_model_sort,
 					 parent_level,
 					 s_path,

@@ -1,3 +1,9 @@
+2005-08-23  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_row_inserted): don't
+	bother inserting new rows in a level with a zero refcount and
+	immediately free the level. (Fixes #312350, reported by Markku Vire).
+
 2005-08-23  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/updateiconcache.c: Complain when there is no index.theme file
