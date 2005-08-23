@@ -40,6 +40,7 @@
 
 static gboolean force_update = FALSE;
 static gboolean quiet = FALSE;
+static gboolean index_only = FALSE;
 
 #define CACHE_NAME "icon-theme.cache"
 
@@ -48,7 +49,7 @@ static gboolean quiet = FALSE;
 #define HAS_SUFFIX_PNG (1 << 2)
 #define HAS_ICON_FILE  (1 << 3)
 
-#define CAN_CACHE_IMAGE_DATA(flags) (((flags) & HAS_SUFFIX_PNG) || ((flags) & HAS_SUFFIX_XPM))
+#define CAN_CACHE_IMAGE_DATA(flags) (!index_only && (((flags) & HAS_SUFFIX_PNG) || ((flags) & HAS_SUFFIX_XPM)))
 
 #define MAJOR_VERSION 1
 #define MINOR_VERSION 0
@@ -86,6 +87,22 @@ is_cache_up_to_date (const gchar *path)
   /* Check mtime */
   return cache_stat.st_mtime >= path_stat.st_mtime;
 }
+
+gboolean
+has_theme_index (const gchar *path)
+{
+  gboolean result;
+  gchar *index_path;
+
+  index_path = g_build_filename (path, "index.theme", NULL);
+
+  result = g_file_test (index_path, G_FILE_TEST_IS_REGULAR);
+  
+  g_free (index_path);
+
+  return result;
+}
+
 
 typedef struct 
 {
@@ -1191,6 +1208,7 @@ build_cache (const gchar *path)
 
 static GOptionEntry args[] = {
   { "force", 'f', 0, G_OPTION_ARG_NONE, &force_update, "Overwrite an existing cache, even if uptodate", NULL },
+  { "index-only", 'i', 0, G_OPTION_ARG_NONE, &index_only, "Don't include image data in the cache", NULL },
   { "quiet", 'q', 0, G_OPTION_ARG_NONE, &quiet, "Turn off verbose output", NULL },
   { NULL }
 };
@@ -1213,6 +1231,13 @@ main (int argc, char **argv)
 #ifdef G_OS_WIN32
   path = g_locale_to_utf8 (path, -1, NULL, NULL, NULL);
 #endif
+  
+  if (!force_update && !has_theme_index (path))
+    {
+      g_printerr ("No theme index file in '%s'.\n"
+		  "If you really want to create an icon cache here, use --force.\n", path);
+      return 1;
+    }
   
   if (!force_update && is_cache_up_to_date (path))
     return 0;

@@ -1,5 +1,9 @@
 2005-08-23  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/updateiconcache.c: Complain when there is no index.theme file
+	in the specified directory, unless --force is used. Also add an
+	--index-only option to create caches without image data.
+
 	* gtk/gtkfilechooserdefault.c (shortcuts_append_desktop): Fix a
 	C99ism.  (#314262, Robert Jeff Mitchell)
 	
