@@ -1434,6 +1434,7 @@ static void
 shortcuts_append_desktop (GtkFileChooserDefault *impl)
 {
   char *name;
+  const char *home;
   GtkFilePath *path;
 
   profile_start ("start", NULL);
@@ -1441,7 +1442,7 @@ shortcuts_append_desktop (GtkFileChooserDefault *impl)
 #ifdef G_OS_WIN32
   name = _gtk_file_system_win32_get_desktop ();
 #else
-  const char *home = g_get_home_dir ();
+  home = g_get_home_dir ();
   if (home == NULL)
     {
       profile_end ("end - no home directory!?", NULL);

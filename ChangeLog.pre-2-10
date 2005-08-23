@@ -1,3 +1,8 @@
+2005-08-23  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_append_desktop): Fix a
+	C99ism.  (#314262, Robert Jeff Mitchell)
+	
 2005-08-22  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkicontheme.h: add declaration for _gtk_icon_theme_check_reload.
