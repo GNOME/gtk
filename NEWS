@@ -1,3 +1,10 @@
+Overview of Changes from GTK+ 2.8.1 to GTK+ 2.8.2
+=================================================
+* Fix a crash with custom icon themes, which affected
+  the gnome-theme-manager. [Kjartan Maraas]
+* Make sure font and cursor settings are propaged down
+  to the screen initially. [Frederic Crozat]
+
 Overview of Changes from GTK+ 2.8.0 to GTK+ 2.8.1
 =================================================
 * gtk-update-icon-cache no longer stores copies of symlinked
