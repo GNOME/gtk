@@ -1,5 +1,9 @@
 2005-08-24  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtksettings.c (gtk_settings_get_for_screen): Make sure font
+	and cursor settings get propagated down to the screen initially.
+	Pointed out by Frederic Crozat.
+
 	* gtk/gtkicontheme.c (ensure_valid_themes): Don't try to send a client
 	message if the screen is NULL. Noticed by Kjartan Maraas.
 
