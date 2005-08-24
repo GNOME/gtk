@@ -1143,7 +1143,7 @@ ensure_valid_themes (GtkIconTheme *icon_theme)
     {
       load_themes (icon_theme);
       
-      if (!priv->check_reload)
+      if (!priv->check_reload && priv->screen)
 	{	  
 	  static GdkAtom atom_iconthemes = GDK_NONE;
 	  GdkEvent *event = gdk_event_new (GDK_CLIENT_EVENT);

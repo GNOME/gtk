@@ -1,5 +1,10 @@
 2005-08-24  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkicontheme.c (ensure_valid_themes): Don't try to send a client
+	message if the screen is NULL. Noticed by Kjartan Maraas.
+
+2005-08-24  Matthias Clasen  <mclasen@redhat.com>
+
 	* Bump version
 
 	* === Released 2.8.1 ===
