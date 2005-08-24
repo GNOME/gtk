@@ -1,3 +1,7 @@
+2005-08-24  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.8.1 ===
+
 2005-08-18  Matthias Clasen  <mclasen@redhat.com>
 
 	* io-ico.c (DecodeHeader): Check for overflow in one more

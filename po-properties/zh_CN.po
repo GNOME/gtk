@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-13 10:24-0400\n"
+"POT-Creation-Date: 2005-08-24 01:39-0400\n"
 "PO-Revision-Date: 2005-07-23 15:01+0800\n"
 "Last-Translator: Funda Wang <fundawang@linux.net.cn>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
@@ -92,7 +92,7 @@ msgstr "默认显示"
 msgid "The default display for GDK"
 msgstr "GDK 的默认显示"
 
-#: gdk/gdkpango.c:510 gtk/gtkinvisible.c:117 gtk/gtkwindow.c:540
+#: gdk/gdkpango.c:510 gtk/gtkinvisible.c:117 gtk/gtkwindow.c:538
 msgid "Screen"
 msgstr "屏幕"
 
@@ -592,7 +592,7 @@ msgid ""
 "g., help buttons"
 msgstr "若为 TRUE，子部件将会出现在子部件的二级组中，适用于像帮助这样的按钮。"
 
-#: gtk/gtkbox.c:131 gtk/gtkexpander.c:230 gtk/gtkiconview.c:621
+#: gtk/gtkbox.c:131 gtk/gtkexpander.c:230 gtk/gtkiconview.c:628
 #: gtk/gtktreeviewcolumn.c:251
 msgid "Spacing"
 msgstr "间距"
@@ -1005,7 +1005,7 @@ msgstr "细节"
 msgid "Render detail to pass to the theme engine"
 msgstr "传递给主题引擎的渲染细节"
 
-#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:261 gtk/gtkwindow.c:532
+#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:261 gtk/gtkwindow.c:530
 msgid "Icon Name"
 msgstr "图标名称"
 
@@ -1816,7 +1816,7 @@ msgstr "最小键长度"
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "查阅匹配项时搜索关键字的最小长度"
 
-#: gtk/gtkentrycompletion.c:299 gtk/gtkiconview.c:542
+#: gtk/gtkentrycompletion.c:299 gtk/gtkiconview.c:549
 msgid "Text column"
 msgstr "文字列"
 
@@ -2211,116 +2211,116 @@ msgid ""
 "handle_position"
 msgstr "是使用咬合边属性的值还是使用句柄位置派生的值"
 
-#: gtk/gtkiconview.c:505
+#: gtk/gtkiconview.c:512
 msgid "Selection mode"
 msgstr "选中模式"
 
-#: gtk/gtkiconview.c:506
+#: gtk/gtkiconview.c:513
 msgid "The selection mode"
 msgstr "选中模式"
 
-#: gtk/gtkiconview.c:524
+#: gtk/gtkiconview.c:531
 msgid "Pixbuf column"
 msgstr "像素缓冲列"
 
-#: gtk/gtkiconview.c:525
+#: gtk/gtkiconview.c:532
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr "用于获取图标像素缓冲列的模型列"
 
-#: gtk/gtkiconview.c:543
+#: gtk/gtkiconview.c:550
 msgid "Model column used to retrieve the text from"
 msgstr "用于获取文字的模型列"
 
-#: gtk/gtkiconview.c:562
+#: gtk/gtkiconview.c:569
 msgid "Markup column"
 msgstr "标记列"
 
-#: gtk/gtkiconview.c:563
+#: gtk/gtkiconview.c:570
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr "在使用 Pango 标记的情况下获取文字的模型列"
 
-#: gtk/gtkiconview.c:570
+#: gtk/gtkiconview.c:577
 msgid "Icon View Model"
 msgstr "图标视图模型"
 
-#: gtk/gtkiconview.c:571
+#: gtk/gtkiconview.c:578
 msgid "The model for the icon view"
 msgstr "图标视图的模型"
 
-#: gtk/gtkiconview.c:587
+#: gtk/gtkiconview.c:594
 msgid "Number of columns"
 msgstr "列数"
 
-#: gtk/gtkiconview.c:588
+#: gtk/gtkiconview.c:595
 msgid "Number of columns to display"
 msgstr "要显示的列数"
 
-#: gtk/gtkiconview.c:605
+#: gtk/gtkiconview.c:612
 msgid "Width for each item"
 msgstr "每项的宽度"
 
-#: gtk/gtkiconview.c:606
+#: gtk/gtkiconview.c:613
 msgid "The width used for each item"
 msgstr "每项所使用的宽度"
 
-#: gtk/gtkiconview.c:622
+#: gtk/gtkiconview.c:629
 msgid "Space which is inserted between cells of an item"
 msgstr "每项单元格之间插入的间隔"
 
-#: gtk/gtkiconview.c:637
+#: gtk/gtkiconview.c:644
 msgid "Row Spacing"
 msgstr "行距"
 
-#: gtk/gtkiconview.c:638
+#: gtk/gtkiconview.c:645
 msgid "Space which is inserted between grid rows"
 msgstr "网格行之间插入的间隔"
 
-#: gtk/gtkiconview.c:653
+#: gtk/gtkiconview.c:660
 msgid "Column Spacing"
 msgstr "列距"
 
-#: gtk/gtkiconview.c:654
+#: gtk/gtkiconview.c:661
 msgid "Space which is inserted between grid column"
 msgstr "网格列之间插入的间隔"
 
-#: gtk/gtkiconview.c:669
+#: gtk/gtkiconview.c:676
 msgid "Margin"
 msgstr "边距"
 
-#: gtk/gtkiconview.c:670
+#: gtk/gtkiconview.c:677
 msgid "Space which is inserted at the edges of the icon view"
 msgstr "图标视图边缘插入的间隔"
 
-#: gtk/gtkiconview.c:686 gtk/gtkprogressbar.c:153 gtk/gtktoolbar.c:508
+#: gtk/gtkiconview.c:693 gtk/gtkprogressbar.c:153 gtk/gtktoolbar.c:508
 msgid "Orientation"
 msgstr "方向"
 
-#: gtk/gtkiconview.c:687
+#: gtk/gtkiconview.c:694
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr "每项的文字和图标的相对位置"
 
-#: gtk/gtkiconview.c:703 gtk/gtktreeview.c:618 gtk/gtktreeviewcolumn.c:342
+#: gtk/gtkiconview.c:710 gtk/gtktreeview.c:618 gtk/gtktreeviewcolumn.c:342
 msgid "Reorderable"
 msgstr "可重新排列"
 
-#: gtk/gtkiconview.c:704 gtk/gtktreeview.c:619
+#: gtk/gtkiconview.c:711 gtk/gtktreeview.c:619
 msgid "View is reorderable"
 msgstr "视图可以重新排列"
 
-#: gtk/gtkiconview.c:711
+#: gtk/gtkiconview.c:718
 msgid "Selection Box Color"
 msgstr "选中框颜色"
 
-#: gtk/gtkiconview.c:712
+#: gtk/gtkiconview.c:719
 msgid "Color of the selection box"
 msgstr "选中框的颜色"
 
-#: gtk/gtkiconview.c:718
+#: gtk/gtkiconview.c:725
 msgid "Selection Box Alpha"
 msgstr "选中框的 Alpha"
 
-#: gtk/gtkiconview.c:719
+#: gtk/gtkiconview.c:726
 msgid "Opacity of the selection box"
 msgstr "选中框的不透明度"
 
@@ -2416,7 +2416,7 @@ msgstr "显示菜单图像"
 msgid "Whether images should be shown in menus"
 msgstr "是否要在菜单中显示图像"
 
-#: gtk/gtkinvisible.c:118 gtk/gtkwindow.c:541
+#: gtk/gtkinvisible.c:118 gtk/gtkwindow.c:539
 msgid "The screen where this window will be displayed"
 msgstr "此窗口要显示的屏幕"
 
@@ -2688,11 +2688,11 @@ msgstr "获得焦点"
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "表明菜单是否获得键盘焦点的布尔值"
 
-#: gtk/gtkmenutoolbutton.c:265 gtk/gtkoptionmenu.c:196
+#: gtk/gtkmenutoolbutton.c:270 gtk/gtkoptionmenu.c:196
 msgid "Menu"
 msgstr "菜单"
 
-#: gtk/gtkmenutoolbutton.c:266
+#: gtk/gtkmenutoolbutton.c:271
 msgid "The dropdown menu"
 msgstr "下拉菜单"
 
@@ -3341,198 +3341,198 @@ msgstr "绘制"
 msgid "Whether the separator is drawn, or just blank"
 msgstr "是要绘制分隔线，还是只是空白"
 
-#: gtk/gtksettings.c:199
+#: gtk/gtksettings.c:200
 msgid "Double Click Time"
 msgstr "双击间隔时间"
 
-#: gtk/gtksettings.c:200
+#: gtk/gtksettings.c:201
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
 msgstr "把两次单击鼠标视作双击所允许的最大时间间隔(以毫秒计)"
 
-#: gtk/gtksettings.c:207
+#: gtk/gtksettings.c:208
 msgid "Double Click Distance"
 msgstr "双击距离"
 
-#: gtk/gtksettings.c:208
+#: gtk/gtksettings.c:209
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
 msgstr "把两次单击鼠标视作双击所允许的最大距离(以像素计)"
 
-#: gtk/gtksettings.c:215
+#: gtk/gtksettings.c:216
 msgid "Cursor Blink"
 msgstr "光标闪烁"
 
-#: gtk/gtksettings.c:216
+#: gtk/gtksettings.c:217
 msgid "Whether the cursor should blink"
 msgstr "光标是否闪烁"
 
-#: gtk/gtksettings.c:223
+#: gtk/gtksettings.c:224
 msgid "Cursor Blink Time"
 msgstr "光标闪烁间隔时间"
 
-#: gtk/gtksettings.c:224
+#: gtk/gtksettings.c:225
 msgid "Length of the cursor blink cycle, in milleseconds"
 msgstr "光标闪烁的周期，以毫秒计"
 
-#: gtk/gtksettings.c:231
+#: gtk/gtksettings.c:232
 msgid "Split Cursor"
 msgstr "分开光标"
 
-#: gtk/gtksettings.c:232
+#: gtk/gtksettings.c:233
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
 msgstr "当左至右和右至左的文字混合出现时是否应显示两个光标"
 
-#: gtk/gtksettings.c:239
+#: gtk/gtksettings.c:240
 msgid "Theme Name"
 msgstr "主题名称"
 
-#: gtk/gtksettings.c:240
+#: gtk/gtksettings.c:241
 msgid "Name of theme RC file to load"
 msgstr "要载入的布景主题文件名"
 
-#: gtk/gtksettings.c:247
+#: gtk/gtksettings.c:248
 msgid "Icon Theme Name"
 msgstr "图标主题名称"
 
-#: gtk/gtksettings.c:248
+#: gtk/gtksettings.c:249
 msgid "Name of icon theme to use"
 msgstr "要使用的图标主题名称"
 
-#: gtk/gtksettings.c:256
+#: gtk/gtksettings.c:257
 msgid "Key Theme Name"
 msgstr "关键主题名称"
 
-#: gtk/gtksettings.c:257
+#: gtk/gtksettings.c:258
 msgid "Name of key theme RC file to load"
 msgstr "要载入的关键主题文件名"
 
-#: gtk/gtksettings.c:265
+#: gtk/gtksettings.c:266
 msgid "Menu bar accelerator"
 msgstr "菜单栏快捷键"
 
-#: gtk/gtksettings.c:266
+#: gtk/gtksettings.c:267
 msgid "Keybinding to activate the menu bar"
 msgstr "激活菜单栏的键盘关联"
 
-#: gtk/gtksettings.c:274
+#: gtk/gtksettings.c:275
 msgid "Drag threshold"
 msgstr "拖动阀值"
 
-#: gtk/gtksettings.c:275
+#: gtk/gtksettings.c:276
 msgid "Number of pixels the cursor can move before dragging"
 msgstr "光标在拖动前要移动的像素数"
 
-#: gtk/gtksettings.c:283
+#: gtk/gtksettings.c:284
 msgid "Font Name"
 msgstr "字体名称"
 
-#: gtk/gtksettings.c:284
+#: gtk/gtksettings.c:285
 msgid "Name of default font to use"
 msgstr "要使用的默认字体的名称"
 
-#: gtk/gtksettings.c:292
+#: gtk/gtksettings.c:293
 msgid "Icon Sizes"
 msgstr "图标大小"
 
-#: gtk/gtksettings.c:293
+#: gtk/gtksettings.c:294
 msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
 msgstr "图标大小的列表(gtk-menu=16,16:gtk-button=20,20..."
 
-#: gtk/gtksettings.c:301
+#: gtk/gtksettings.c:302
 msgid "GTK Modules"
 msgstr "GTK 模块"
 
-#: gtk/gtksettings.c:302
+#: gtk/gtksettings.c:303
 msgid "List of currently active GTK modules"
 msgstr "列出目前激活的 GTK 模块"
 
-#: gtk/gtksettings.c:311
+#: gtk/gtksettings.c:312
 msgid "Xft Antialias"
 msgstr "Xft 边缘平滑"
 
-#: gtk/gtksettings.c:312
+#: gtk/gtksettings.c:313
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr "是否要对 Xft 字体边缘平滑；0=否，1=是，-1=默认"
 
-#: gtk/gtksettings.c:321
+#: gtk/gtksettings.c:322
 msgid "Xft Hinting"
 msgstr "Xft 微调"
 
-#: gtk/gtksettings.c:322
+#: gtk/gtksettings.c:323
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
 msgstr "是否要对 Xft 字体微调；0=否，1=是，-1=默认"
 
-#: gtk/gtksettings.c:331
+#: gtk/gtksettings.c:332
 msgid "Xft Hint Style"
 msgstr "Xft 微调样式"
 
-#: gtk/gtksettings.c:332
+#: gtk/gtksettings.c:333
 msgid ""
 "What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"
 msgstr ""
 "要使用的微调程度；hintnone(无)、hintslight(轻微)、hintmedium(中等)或 hintfull"
 "(完全)"
 
-#: gtk/gtksettings.c:341
+#: gtk/gtksettings.c:342
 msgid "Xft RGBA"
 msgstr "Xft RGBA"
 
-#: gtk/gtksettings.c:342
+#: gtk/gtksettings.c:343
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
 msgstr "次像素平滑的类型；无、rgb、bgr、vrgb、vbgr"
 
-#: gtk/gtksettings.c:351
+#: gtk/gtksettings.c:352
 msgid "Xft DPI"
 msgstr "Xft DPI"
 
-#: gtk/gtksettings.c:352
+#: gtk/gtksettings.c:353
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
 msgstr "Xft 的解析度，以 1024*每英寸点数为单位。-1 代表使用默认值"
 
-#: gtk/gtksettings.c:361
+#: gtk/gtksettings.c:362
 msgid "Cursor theme name"
 msgstr "光标主题名称"
 
-#: gtk/gtksettings.c:362
+#: gtk/gtksettings.c:363
 msgid "Name of the cursor theme to use"
 msgstr "要使用的光标主题名称"
 
-#: gtk/gtksettings.c:370
+#: gtk/gtksettings.c:371
 msgid "Cursor theme size"
 msgstr "光标主题大小"
 
-#: gtk/gtksettings.c:371
+#: gtk/gtksettings.c:372
 msgid "Size to use for cursors"
 msgstr "光标所使用的颜色"
 
-#: gtk/gtksettings.c:381
+#: gtk/gtksettings.c:382
 msgid "Alternative button order"
 msgstr "备选按钮次序"
 
-#: gtk/gtksettings.c:382
+#: gtk/gtksettings.c:383
 msgid "Whether buttons in dialogs should use the alternative button order"
 msgstr "对话框中的按钮是否要使用备选按钮次序"
 
-#: gtk/gtksizegroup.c:244
+#: gtk/gtksizegroup.c:267
 msgid "Mode"
 msgstr "模式"
 
-#: gtk/gtksizegroup.c:245
+#: gtk/gtksizegroup.c:268
 msgid ""
 "The directions in which the size group affects the requested sizes of its "
 "component widgets"
 msgstr "大小组影响其组成部件的请求大小的方向"
 
-#: gtk/gtksizegroup.c:262
+#: gtk/gtksizegroup.c:285
 msgid "Ignore hidden"
 msgstr "忽略隐藏"
 
-#: gtk/gtksizegroup.c:263
+#: gtk/gtksizegroup.c:286
 msgid ""
 "If TRUE, hidden widgets are ignored when determining the size of the group"
 msgstr "如果为 TRUE，则在确定组大小时忽略隐藏部件"
@@ -4409,7 +4409,7 @@ msgstr "奇数行所使用的颜色"
 msgid "Whether to display the column"
 msgstr "是否显示列"
 
-#: gtk/gtktreeviewcolumn.c:234 gtk/gtkwindow.c:463
+#: gtk/gtktreeviewcolumn.c:234 gtk/gtkwindow.c:461
 msgid "Resizable"
 msgstr "可改变大小"
 
@@ -4745,187 +4745,187 @@ msgstr "绘制边框"
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr "部件外要绘制的区域大小"
 
-#: gtk/gtkwindow.c:421
+#: gtk/gtkwindow.c:419
 msgid "Window Type"
 msgstr "窗口类型"
 
-#: gtk/gtkwindow.c:422
+#: gtk/gtkwindow.c:420
 msgid "The type of the window"
 msgstr "窗口的类型"
 
-#: gtk/gtkwindow.c:430
+#: gtk/gtkwindow.c:428
 msgid "Window Title"
 msgstr "窗口标题"
 
-#: gtk/gtkwindow.c:431
+#: gtk/gtkwindow.c:429
 msgid "The title of the window"
 msgstr "窗口的标题"
 
-#: gtk/gtkwindow.c:438
+#: gtk/gtkwindow.c:436
 msgid "Window Role"
 msgstr "窗口角色"
 
-#: gtk/gtkwindow.c:439
+#: gtk/gtkwindow.c:437
 msgid "Unique identifier for the window to be used when restoring a session"
 msgstr "恢复会话时要使用的窗口唯一标识符"
 
-#: gtk/gtkwindow.c:446
+#: gtk/gtkwindow.c:444
 msgid "Allow Shrink"
 msgstr "可缩小"
 
-#: gtk/gtkwindow.c:448
+#: gtk/gtkwindow.c:446
 #, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
 "time a bad idea"
 msgstr "若为 TRUE，则窗口将没有最小尺寸。选中此设置十之八九会有问题"
 
-#: gtk/gtkwindow.c:455
+#: gtk/gtkwindow.c:453
 msgid "Allow Grow"
 msgstr "可放大"
 
-#: gtk/gtkwindow.c:456
+#: gtk/gtkwindow.c:454
 msgid "If TRUE, users can expand the window beyond its minimum size"
 msgstr "若为 TRUE，则用户可以将窗口放大至超过最小尺寸"
 
-#: gtk/gtkwindow.c:464
+#: gtk/gtkwindow.c:462
 msgid "If TRUE, users can resize the window"
 msgstr "若为 TRUE，则用户可以改变窗口的大小"
 
-#: gtk/gtkwindow.c:471
+#: gtk/gtkwindow.c:469
 msgid "Modal"
 msgstr "模态"
 
-#: gtk/gtkwindow.c:472
+#: gtk/gtkwindow.c:470
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
 msgstr "若为 TRUE，则窗口为模态的(此窗口弹出后其他窗口不可用)"
 
-#: gtk/gtkwindow.c:479
+#: gtk/gtkwindow.c:477
 msgid "Window Position"
 msgstr "窗口位置"
 
-#: gtk/gtkwindow.c:480
+#: gtk/gtkwindow.c:478
 msgid "The initial position of the window"
 msgstr "窗口的初始位置"
 
-#: gtk/gtkwindow.c:488
+#: gtk/gtkwindow.c:486
 msgid "Default Width"
 msgstr "默认宽度"
 
-#: gtk/gtkwindow.c:489
+#: gtk/gtkwindow.c:487
 msgid "The default width of the window, used when initially showing the window"
 msgstr "默认的窗口宽度，在初次显示窗口时使用"
 
-#: gtk/gtkwindow.c:498
+#: gtk/gtkwindow.c:496
 msgid "Default Height"
 msgstr "默认高度"
 
-#: gtk/gtkwindow.c:499
+#: gtk/gtkwindow.c:497
 msgid ""
 "The default height of the window, used when initially showing the window"
 msgstr "默认的窗口高度，在初次显示窗口时使用"
 
-#: gtk/gtkwindow.c:508
+#: gtk/gtkwindow.c:506
 msgid "Destroy with Parent"
 msgstr "随主窗口关闭"
 
-#: gtk/gtkwindow.c:509
+#: gtk/gtkwindow.c:507
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "当关闭主窗口时是否连此窗口也一起关闭"
 
-#: gtk/gtkwindow.c:516
+#: gtk/gtkwindow.c:514
 msgid "Icon"
 msgstr "图标"
 
-#: gtk/gtkwindow.c:517
+#: gtk/gtkwindow.c:515
 msgid "Icon for this window"
 msgstr "窗口的图标"
 
-#: gtk/gtkwindow.c:533
+#: gtk/gtkwindow.c:531
 msgid "Name of the themed icon for this window"
 msgstr "此窗口的主题图标名称"
 
-#: gtk/gtkwindow.c:548
+#: gtk/gtkwindow.c:546
 msgid "Is Active"
 msgstr "为激活"
 
-#: gtk/gtkwindow.c:549
+#: gtk/gtkwindow.c:547
 msgid "Whether the toplevel is the current active window"
 msgstr "顶级是否为当前激活窗口"
 
-#: gtk/gtkwindow.c:556
+#: gtk/gtkwindow.c:554
 msgid "Focus in Toplevel"
 msgstr "聚焦顶级窗口"
 
-#: gtk/gtkwindow.c:557
+#: gtk/gtkwindow.c:555
 msgid "Whether the input focus is within this GtkWindow"
 msgstr "输入焦点是否位于此 GtkWindow"
 
-#: gtk/gtkwindow.c:564
+#: gtk/gtkwindow.c:562
 msgid "Type hint"
 msgstr "类型提示"
 
-#: gtk/gtkwindow.c:565
+#: gtk/gtkwindow.c:563
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
 msgstr "帮助环境环境理解这是哪种类型的窗口以及如何对待它。"
 
-#: gtk/gtkwindow.c:573
+#: gtk/gtkwindow.c:571
 msgid "Skip taskbar"
 msgstr "跳过任务栏"
 
-#: gtk/gtkwindow.c:574
+#: gtk/gtkwindow.c:572
 msgid "TRUE if the window should not be in the task bar."
 msgstr "窗口是否要显示在任务栏上。"
 
-#: gtk/gtkwindow.c:581
+#: gtk/gtkwindow.c:579
 msgid "Skip pager"
 msgstr "跳过桌面选择器"
 
-#: gtk/gtkwindow.c:582
+#: gtk/gtkwindow.c:580
 msgid "TRUE if the window should not be in the pager."
 msgstr "窗口是否要显示在桌面选择器上。"
 
-#: gtk/gtkwindow.c:589
+#: gtk/gtkwindow.c:587
 msgid "Urgent"
 msgstr "紧急"
 
-#: gtk/gtkwindow.c:590
+#: gtk/gtkwindow.c:588
 msgid "TRUE if the window should be brought to the user's attention."
 msgstr "如果窗口要引起用户注意，则为 TRUE。"
 
-#: gtk/gtkwindow.c:604
+#: gtk/gtkwindow.c:602
 msgid "Accept focus"
 msgstr "接受焦点"
 
-#: gtk/gtkwindow.c:605
+#: gtk/gtkwindow.c:603
 msgid "TRUE if the window should receive the input focus."
 msgstr "窗口是否要接受输入焦点。"
 
-#: gtk/gtkwindow.c:619
+#: gtk/gtkwindow.c:617
 msgid "Focus on map"
 msgstr "映射时获得焦点"
 
-#: gtk/gtkwindow.c:620
+#: gtk/gtkwindow.c:618
 msgid "TRUE if the window should receive the input focus when mapped."
 msgstr "窗口是否要在映射时接受输入焦点。"
 
-#: gtk/gtkwindow.c:634
+#: gtk/gtkwindow.c:632
 msgid "Decorated"
 msgstr "装饰"
 
-#: gtk/gtkwindow.c:635
+#: gtk/gtkwindow.c:633
 msgid "Whether the window should be decorated by the window manager"
 msgstr "窗口是否要由窗口管理器装饰"
 
-#: gtk/gtkwindow.c:650
+#: gtk/gtkwindow.c:648
 msgid "Gravity"
 msgstr "重力"
 
-#: gtk/gtkwindow.c:651
+#: gtk/gtkwindow.c:649
 msgid "The window gravity of the window"
 msgstr "窗口的窗口重力"
 

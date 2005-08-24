@@ -1,3 +1,26 @@
+Overview of Changes from GTK+ 2.8.0 to GTK+ 2.8.1
+=================================================
+* gtk-update-icon-cache no longer stores copies of symlinked
+  icons, and it has a --index-only option to omit image data
+  from the cache [Matthias]
+* Make large GtkSizeGroups more efficient [Michael Natterer]
+* Improve positioning of menus in GtkToolbar [Christian Persch,
+  Paolo Borelli]
+* Make scrolling work on unrealized icon views [Jonathan Blandford]
+* Avoid unnecessary redraws on range widgets [Benjamin Berg]
+* Make sure that all GTK+ applications reload icon themes
+  promptly. [Chris Lahey]
+* Ensure that gdk_pango_get_context() and gtk_widget_get_pango_context()
+  use the same font options and dpi value [Michael Reinsch, Owen]
+* Multiple memory leak fixes [Kjartan Maraas, Matthias]
+* Other bug fixes [Owen, Allin Cottrell, Tor Lillqvist, Jonathan
+  Blandford, Christian Persch, Jonas Bonn, Brett Atoms, Guillaume 
+  Cottenceau, Sebastien Bacher, Robin Green, Benoit Carpentier,
+  Hans Breuer, Kjartan Maraas, Manish Singh, Robert Jeff Mitchell,
+  Markku Vire, Kristian Rietveld, Tommi Komulainen]
+* Documentation improvements [Olexiy Avramchenko, Matthias]
+* Updated translations (es,et,hu,ko,lt,ro,uk)
+
 Overview of Changes from GTK+ 2.7.5 to GTK+ 2.8.0
 =================================================
 * Require cairo 0.9.2 [Matthias]

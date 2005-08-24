@@ -1,5 +1,11 @@
 2005-08-24  Matthias Clasen  <mclasen@redhat.com>
 
+	* === Released 2.8.1 ===
+
+	* NEWS: Updates
+	
+2005-08-24  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_visible): Protect
 	against lazy filterers which return values other than TRUE or
 	FALSE from their visible func.  (#314335)
