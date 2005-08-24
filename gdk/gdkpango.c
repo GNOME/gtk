@@ -230,6 +230,7 @@ gdk_pango_renderer_draw_glyphs (PangoRenderer    *renderer,
  */
 #define HEIGHT_SQUARES 2.5
 
+/* Cut-and-pasted between here and pango/pango/pangocairo-render.c */
 static void
 draw_error_underline (cairo_t *cr,
 		      double  x,

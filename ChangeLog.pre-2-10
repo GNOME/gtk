@@ -1,3 +1,8 @@
+2005-08-24  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkpango.c (draw_error_underline): Add a note about
+	cut-and-paste between here and Pango.
+
 2005-08-24  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.8.2 ===
