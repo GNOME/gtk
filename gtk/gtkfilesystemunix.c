@@ -808,7 +808,7 @@ gtk_file_system_unix_volume_render_icon (GtkFileSystem        *file_system,
 {
   GdkPixbuf *pixbuf;
 
-  pixbuf = get_cached_icon (widget, "gnome-fs-blockdev", pixel_size);
+  pixbuf = get_cached_icon (widget, "gnome-dev-harddisk", pixel_size);
   if (pixbuf)
     return pixbuf;
 

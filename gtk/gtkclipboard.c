@@ -1004,6 +1004,7 @@ request_image_received_func (GtkClipboard     *clipboard,
     {
       /* If we asked for image/png and didn't get it, try image/jpeg;
        * if we asked for image/jpeg and didn't get it, try image/gif;
+       * if we asked for image/gif and didn't get it, try image/bmp;
        * If we asked for anything else and didn't get it, give up.
        */
       if (selection_data->target == gdk_atom_intern ("image/png", FALSE))
@@ -1017,7 +1018,14 @@ request_image_received_func (GtkClipboard     *clipboard,
 	{
 	  gtk_clipboard_request_contents (clipboard,
 					  gdk_atom_intern ("image/gif", FALSE), 
-					  request_text_received_func, info);
+					  request_image_received_func, info);
+	  return;
+	}
+      else if (selection_data->target == gdk_atom_intern ("image/gif", FALSE))
+	{
+	  gtk_clipboard_request_contents (clipboard,
+					  gdk_atom_intern ("image/bmp", FALSE), 
+					  request_image_received_func, info);
 	  return;
 	}
     }
