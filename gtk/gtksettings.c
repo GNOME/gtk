@@ -17,6 +17,9 @@
  */
 
 #include <config.h>
+
+#include <string.h>
+
 #include "gtkmodules.h"
 #include "gtksettings.h"
 #include "gtkrc.h"
@@ -100,6 +103,8 @@ static void    settings_update_modules           (GtkSettings           *setting
 
 #ifdef GDK_WINDOWING_X11
 static void    settings_update_cursor_theme      (GtkSettings           *settings);
+static void    settings_update_resolution        (GtkSettings           *settings);
+static void    settings_update_font_options      (GtkSettings           *settings);
 #endif
 
 
@@ -425,9 +430,11 @@ gtk_settings_get_for_screen (GdkScreen *screen)
 
       gtk_rc_reparse_all_for_settings (settings, TRUE);
       settings_update_double_click (settings);
+#ifdef GDK_WINDOWING_X11
       settings_update_cursor_theme (settings);
-      settings_update_font_options (settings);
       settings_update_resolution (settings);
+      settings_update_font_options (settings);
+#endif
     }
   
   return settings;
@@ -556,14 +563,18 @@ gtk_settings_notify (GObject    *object,
       break;
 #ifdef GDK_WINDOWING_X11
     case PROP_XFT_DPI:
-    case PROP_XFT_ANTIALIAS:
-    case PROP_XFT_HINTING:
-    case PROP_XFT_HINTSTYLE:
-    case PROP_XFT_RGBA:
+      settings_update_resolution (settings);
       /* This is a hack because with gtk_rc_reset_styles() doesn't get
        * widgets with gtk_widget_style_set(), and also causes more
        * recomputation than necessary.
        */
+      gtk_rc_reset_styles (GTK_SETTINGS (object));
+      break;
+    case PROP_XFT_ANTIALIAS:
+    case PROP_XFT_HINTING:
+    case PROP_XFT_HINTSTYLE:
+    case PROP_XFT_RGBA:
+      settings_update_font_options (settings);
       gtk_rc_reset_styles (GTK_SETTINGS (object));
       break;
     case PROP_CURSOR_THEME_NAME:
@@ -1360,6 +1371,104 @@ settings_update_cursor_theme (GtkSettings *settings)
 		NULL);
   
   gdk_x11_display_set_cursor_theme (display, theme, size);
+}
+
+static void
+settings_update_font_options (GtkSettings *settings)
+{
+  gint hinting;
+  gchar *hint_style_str;
+  cairo_hint_style_t hint_style = CAIRO_HINT_STYLE_DEFAULT;
+  gint antialias;
+  cairo_antialias_t antialias_mode = CAIRO_ANTIALIAS_DEFAULT;
+  gchar *rgba_str;
+  cairo_subpixel_order_t subpixel_order = CAIRO_SUBPIXEL_ORDER_DEFAULT;
+  gint dpi_int;
+  double dpi;
+  cairo_font_options_t *options;
+  
+  g_object_get (settings,
+		"gtk-xft-antialias", &antialias,
+		"gtk-xft-hinting", &hinting,
+		"gtk-xft-hintstyle", &hint_style_str,
+		"gtk-xft-rgba", &rgba_str,
+		"gtk-xft-dpi", &dpi_int,
+		NULL);
+
+  if (dpi_int > 0)
+    dpi = dpi_int / 1024.;
+  else
+    dpi = -1.;
+
+  options = cairo_font_options_create ();
+  
+  if (hinting >= 0 && !hinting)
+    {
+      hint_style = CAIRO_HINT_STYLE_NONE;
+    }
+  else if (hint_style_str)
+    {
+      if (strcmp (hint_style_str, "hintnone") == 0)
+	hint_style = CAIRO_HINT_STYLE_NONE;
+      else if (strcmp (hint_style_str, "hintslight") == 0)
+	hint_style = CAIRO_HINT_STYLE_SLIGHT;
+      else if (strcmp (hint_style_str, "hintmedium") == 0)
+	hint_style = CAIRO_HINT_STYLE_MEDIUM;
+      else if (strcmp (hint_style_str, "hintfull") == 0)
+	hint_style = CAIRO_HINT_STYLE_FULL;
+    }
+
+  if (hint_style_str)
+    g_free (hint_style_str);
+
+  cairo_font_options_set_hint_style (options, hint_style);
+
+  if (rgba_str)
+    {
+      if (strcmp (rgba_str, "rgb") == 0)
+	subpixel_order = CAIRO_SUBPIXEL_ORDER_RGB;
+      else if (strcmp (rgba_str, "bgr") == 0)
+	subpixel_order = CAIRO_SUBPIXEL_ORDER_BGR;
+      else if (strcmp (rgba_str, "vrgb") == 0)
+	subpixel_order = CAIRO_SUBPIXEL_ORDER_VRGB;
+      else if (strcmp (rgba_str, "vbgr") == 0)
+	subpixel_order = CAIRO_SUBPIXEL_ORDER_VBGR;
+
+      g_free (rgba_str);
+    }
+
+  cairo_font_options_set_subpixel_order (options, subpixel_order);
+  
+  if (antialias >= 0 && !antialias)
+    antialias_mode = CAIRO_ANTIALIAS_NONE;
+  else if (subpixel_order != CAIRO_SUBPIXEL_ORDER_DEFAULT)
+    antialias_mode = CAIRO_ANTIALIAS_SUBPIXEL;
+  else if (antialias >= 0)
+    antialias_mode = CAIRO_ANTIALIAS_GRAY;
+  
+  cairo_font_options_set_antialias (options, antialias_mode);
+
+  gdk_screen_set_font_options_libgtk_only (settings->screen, options);
+  
+  cairo_font_options_destroy (options);
+}
+
+static void
+settings_update_resolution (GtkSettings *settings)
+{
+  gint dpi_int;
+  double dpi;
+  
+  g_object_get (settings,
+		"gtk-xft-dpi", &dpi_int,
+		NULL);
+
+  if (dpi_int > 0)
+    dpi = dpi_int / 1024.;
+  else
+    dpi = -1.;
+
+  gdk_screen_set_resolution_libgtk_only (settings->screen, dpi);
 }
 #endif
 
