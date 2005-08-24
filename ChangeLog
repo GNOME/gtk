@@ -1,3 +1,9 @@
+2005-08-24  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_visible): Protect
+	against lazy filterers which return values other than TRUE or
+	FALSE from their visible func.  (#314335)
+
 2005-08-23  Owen Taylor  <otaylor@redhat.com>
 
 	Fix for #314004, reported by Michael Reinsch:
