@@ -689,7 +689,7 @@ gtk_tree_model_filter_visible (GtkTreeModelFilter *filter,
       return filter->priv->visible_func (filter->priv->child_model,
 					 child_iter,
 					 filter->priv->visible_data)
-	? TRUE : FALSE:
+	? TRUE : FALSE;
     }
   else if (filter->priv->visible_column >= 0)
    {
