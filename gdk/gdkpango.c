@@ -1333,6 +1333,12 @@ gdk_pango_layout_get_clip_region (PangoLayout *layout,
  * instead of this function, to get the appropriate context for
  * the widget you intend to render text onto.
  * 
+ * The newly created context will have the default font options (see
+ * #cairo_font_options_t) for the default screen; if these options
+ * change it will not be updated. Using gtk_widget_get_pango_context()
+ * is more convenient if you want to keep a context around and track
+ * changes to the screen's font rendering settings.
+ *
  * Return value: a new #PangoContext for the default display
  **/
 PangoContext *
@@ -1353,6 +1359,12 @@ gdk_pango_context_get (void)
  * instead of this function, to get the appropriate context for
  * the widget you intend to render text onto.
  * 
+ * The newly created context will have the default font options
+ * (see #cairo_font_options_t) for the screen; if these options
+ * change it will not be updated. Using gtk_widget_get_pango_context()
+ * is more convenient if you want to keep a context around and track
+ * changes to the screen's font rendering settings.
+ * 
  * Return value: a new #PangoContext for @screen
  *
  * Since: 2.2
@@ -1361,12 +1373,23 @@ PangoContext *
 gdk_pango_context_get_for_screen (GdkScreen *screen)
 {
   PangoFontMap *fontmap;
+  PangoContext *context;
+  const cairo_font_options_t *options;
+  double dpi;
   
   g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
 
   fontmap = pango_cairo_font_map_get_default ();
   
-  return pango_cairo_font_map_create_context (PANGO_CAIRO_FONT_MAP (fontmap));
+  context = pango_cairo_font_map_create_context (PANGO_CAIRO_FONT_MAP (fontmap));
+
+  options = gdk_screen_get_font_options_libgtk_only (screen);
+  pango_cairo_context_set_font_options (context, options);
+
+  dpi = gdk_screen_get_resolution_libgtk_only (screen);
+  pango_cairo_context_set_resolution (context, dpi);
+
+  return context;
 }
 
 #define __GDK_PANGO_C__

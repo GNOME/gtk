@@ -5197,91 +5197,10 @@ static void
 update_pango_context (GtkWidget    *widget,
 		      PangoContext *context)
 {
-#ifdef GDK_WINDOWING_X11
-  GtkSettings *settings;
-  gint hinting;
-  gchar *hint_style_str;
-  cairo_hint_style_t hint_style = CAIRO_HINT_STYLE_DEFAULT;
-  gint antialias;
-  cairo_antialias_t antialias_mode = CAIRO_ANTIALIAS_DEFAULT;
-  gchar *rgba_str;
-  cairo_subpixel_order_t subpixel_order = CAIRO_SUBPIXEL_ORDER_DEFAULT;
-  gint dpi;
-  cairo_font_options_t *options;
-#endif
-      
   pango_context_set_font_description (context, widget->style->font_desc);
   pango_context_set_base_dir (context,
 			      gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR ?
 			      PANGO_DIRECTION_LTR : PANGO_DIRECTION_RTL);
-  
-#ifdef GDK_WINDOWING_X11
-  settings = gtk_widget_get_settings (widget);
-  g_object_get (settings,
-		"gtk-xft-antialias", &antialias,
-		"gtk-xft-hinting", &hinting,
-		"gtk-xft-hintstyle", &hint_style_str,
-		"gtk-xft-rgba", &rgba_str,
-		"gtk-xft-dpi", &dpi,
-		NULL);
-
-  if (dpi > 0)
-    pango_cairo_context_set_resolution (context, dpi / 1024.);
-  else
-    pango_cairo_context_set_resolution (context, -1.);
-
-  options = cairo_font_options_create ();
-  
-  if (hinting >= 0 && !hinting)
-    {
-      hint_style = CAIRO_HINT_STYLE_NONE;
-    }
-  else if (hint_style_str)
-    {
-      if (strcmp (hint_style_str, "hintnone") == 0)
-	hint_style = CAIRO_HINT_STYLE_NONE;
-      else if (strcmp (hint_style_str, "hintslight") == 0)
-	hint_style = CAIRO_HINT_STYLE_SLIGHT;
-      else if (strcmp (hint_style_str, "hintmedium") == 0)
-	hint_style = CAIRO_HINT_STYLE_MEDIUM;
-      else if (strcmp (hint_style_str, "hintfull") == 0)
-	hint_style = CAIRO_HINT_STYLE_FULL;
-    }
-
-  if (hint_style_str)
-    g_free (hint_style_str);
-
-  cairo_font_options_set_hint_style (options, hint_style);
-
-  if (rgba_str)
-    {
-      if (strcmp (rgba_str, "rgb") == 0)
-	subpixel_order = CAIRO_SUBPIXEL_ORDER_RGB;
-      else if (strcmp (rgba_str, "bgr") == 0)
-	subpixel_order = CAIRO_SUBPIXEL_ORDER_BGR;
-      else if (strcmp (rgba_str, "vrgb") == 0)
-	subpixel_order = CAIRO_SUBPIXEL_ORDER_VRGB;
-      else if (strcmp (rgba_str, "vbgr") == 0)
-	subpixel_order = CAIRO_SUBPIXEL_ORDER_VBGR;
-
-      g_free (rgba_str);
-    }
-
-  cairo_font_options_set_subpixel_order (options, subpixel_order);
-  
-  if (antialias >= 0 && !antialias)
-    antialias_mode = CAIRO_ANTIALIAS_NONE;
-  else if (subpixel_order != CAIRO_SUBPIXEL_ORDER_DEFAULT)
-    antialias_mode = CAIRO_ANTIALIAS_SUBPIXEL;
-  else if (antialias >= 0)
-    antialias_mode = CAIRO_ANTIALIAS_GRAY;
-  
-  cairo_font_options_set_antialias (options, antialias_mode);
-
-  pango_cairo_context_set_font_options (context, options);
-  
-  cairo_font_options_destroy (options);
-#endif  
 }
 
 static void
@@ -5290,7 +5209,20 @@ gtk_widget_update_pango_context (GtkWidget *widget)
   PangoContext *context = gtk_widget_peek_pango_context (widget);
   
   if (context)
-    update_pango_context (widget, context);
+    {
+      GdkScreen *screen;
+
+      update_pango_context (widget, context);
+
+      screen = gtk_widget_get_screen_unchecked (widget);
+      if (screen)
+	{
+	  pango_cairo_context_set_resolution (context,
+					      gdk_screen_get_resolution_libgtk_only (screen));
+	  pango_cairo_context_set_font_options (context,
+						gdk_screen_get_font_options_libgtk_only (screen));
+	}
+    }
 }
 
 /**

@@ -1,3 +1,21 @@
+2005-08-23  Owen Taylor  <otaylor@redhat.com>
+
+	Fix for #314004, reported by Michael Reinsch:
+
+	* gdk/gdk.symbols:
+	* gdk/gdkscreen.[ch]: Add gdk_screen_get/set_font_options_libgtk_only()
+	Add gdk_screen_get/set_resolution_libgtk_only()
+
+	* gdk/gdkpango.c (gdk_pango_context_get_for_screen): Set
+	the options for the screen on the newly created context.
+
+	* gtk/gtksettings.c (settings_update_font_options/dpi) gtkwidget.c: 
+	Move font options and dpi code from gtkwidget.c to gtksettings.c, set
+	the font options on the screen.
+
+	* gtk/gtkwidget.c (gtk_widget_update_pango_context): Just get
+	the font options from the screen and set them on the context.
+
 2005-08-23  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_row_inserted): don't

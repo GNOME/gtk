@@ -962,6 +962,10 @@ gdk_draw_rgb_image_dithalign
 gdk_screen_get_type G_GNUC_CONST
 gdk_screen_get_monitor_at_point
 gdk_screen_get_monitor_at_window
+gdk_screen_set_font_options_libgtk_only
+gdk_screen_get_font_options_libgtk_only
+gdk_screen_set_resolution_libgtk_only
+gdk_screen_get_resolution_libgtk_only
 #endif
 #endif
 

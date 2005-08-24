@@ -29,7 +29,9 @@
 #include "gdkalias.h"
 
 static void gdk_screen_class_init  (GdkScreenClass *klass);
+static void gdk_screen_init        (GdkScreen      *screen);
 static void gdk_screen_dispose     (GObject        *object);
+static void gdk_screen_finalize    (GObject        *object);
 
 enum
 {
@@ -51,7 +53,7 @@ gdk_screen_get_type (void)
       static const GTypeInfo object_info =
 	{
 	  sizeof (GdkScreenClass),
-	  (GBaseInitFunc) NULL,
+	  (GBaseInitFunc) gdk_screen_init,
 	  (GBaseFinalizeFunc) NULL,
 	  (GClassInitFunc) gdk_screen_class_init,
 	  NULL,			/* class_finalize */
@@ -76,6 +78,7 @@ gdk_screen_class_init (GdkScreenClass *klass)
   parent_class = g_type_class_peek_parent (klass);
   
   object_class->dispose = gdk_screen_dispose;
+  object_class->finalize = gdk_screen_finalize;
   
   /**
    * GdkScreen::size-changed:
@@ -98,6 +101,12 @@ gdk_screen_class_init (GdkScreenClass *klass)
 }
 
 static void
+gdk_screen_init (GdkScreen *screen)
+{
+    screen->resolution = -1;
+}
+
+static void
 gdk_screen_dispose (GObject *object)
 {
   GdkScreen *screen = GDK_SCREEN (object);
@@ -113,6 +122,17 @@ gdk_screen_dispose (GObject *object)
     }
 
   G_OBJECT_CLASS (parent_class)->dispose (object);
+}
+
+static void
+gdk_screen_finalize (GObject *object)
+{
+  GdkScreen *screen = GDK_SCREEN (object);
+
+  if (screen->font_options)
+      cairo_font_options_destroy (screen->font_options);
+
+  G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 void 
@@ -315,6 +335,97 @@ gint
 gdk_screen_height_mm (void)
 {
   return gdk_screen_get_height_mm (gdk_screen_get_default ());
+}
+
+/**
+ * gdk_screen_set_font_options_libgtk_only:
+ * @screen: a #GdkScreen
+ * @options: a #cairo_font_options_t, or %NULL to unset any
+ *   previously set default font options.
+ *
+ * Sets the default font options for the screen. These
+ * options will be set on any #PangoContext's newly created
+ * with gdk_pango_context_get_for_screen(). Changing the
+ * default set of font options does not affect contexts that
+ * have already been created.
+ * 
+ * This function is not part of the GDK public API and is only
+ * for use by GTK+.
+ **/
+void
+gdk_screen_set_font_options_libgtk_only (GdkScreen                  *screen,
+					 const cairo_font_options_t *options)
+{
+    g_return_if_fail (GDK_IS_SCREEN (screen));
+
+    if (screen->font_options)
+	cairo_font_options_destroy (screen->font_options);
+
+    if (options)
+	screen->font_options = cairo_font_options_copy (options);
+    else
+	screen->font_options = NULL;
+}
+
+/**
+ * gdk_screen_get_font_options_libgtk_only:
+ * @screen: a #GdkScreen
+ * 
+ * Gets any options previously set with gdk_screen_set_font_options_libgtk_only().
+ * 
+ * Return value: the current font options, or %NULL if no default
+ *  font options have been set.
+ **/
+const cairo_font_options_t *
+gdk_screen_get_font_options_libgtk_only (GdkScreen *screen)
+{
+    g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+
+    return screen->font_options;
+}
+
+/**
+ * gdk_screen_set_resolution_libgtk_only:
+ * @screen: a #GdkScreen
+ * @dpi: the resolution in "dots per inch". (Physical inches aren't actually
+ *   involved; the terminology is conventional.)
+ 
+ * Sets the resolution for font handling on the screen. This is a
+ * scale factor between points specified in a #PangoFontDescription
+ * and cairo units. The default value is 96, meaning that a 10 point
+ * font will be 13 units high. (10 * 96. / 72. = 13.3).
+ *
+ * This function is not part of the GDK public API and is only
+ * for use by GTK+.
+ **/
+void
+gdk_screen_set_resolution_libgtk_only (GdkScreen *screen,
+				       gdouble    dpi)
+{
+    g_return_if_fail (GDK_IS_SCREEN (screen));
+
+    if (dpi >= 0)
+	screen->resolution = dpi;
+    else
+	screen->resolution = -1;
+}
+
+/**
+ * gdk_screen_get_resolution_libgtk_only:
+ * @screen: a #GdkScreen
+ * 
+ * Gets the resolution for font handling on the screen; see
+ * gdk_screen_set_resolution_libgtk_only() for full details.
+ * 
+ * Return value: the current resolution, or -1 if no resolution
+ * has been set.
+ **/
+gdouble
+gdk_screen_get_resolution_libgtk_only (GdkScreen *screen)
+{
+    g_return_val_if_fail (GDK_IS_SCREEN (screen), -1);
+
+    return screen->resolution;
 }
 
 #define __GDK_SCREEN_C__
