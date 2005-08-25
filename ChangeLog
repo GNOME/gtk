@@ -1,3 +1,8 @@
+2005-08-25  Owen Taylor  <otaylor@redhat.com>
+ 
+ 	* gdk/x11/gdkcursor-x11.c (gdk_x11_display_set_cursor_theme): 
+ 	Handle theme == NULL.
+ 
 2005-08-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkmenutoolbutton.c (menu_position_func): Take widget
