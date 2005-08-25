@@ -1,10 +1,10 @@
 2005-08-25  Owen Taylor  <otaylor@redhat.com>
  
- 	* gdk/gdkscreen.c (gdk_screen_get_type): Use gdk_screen_init
- 	as instance_init, not base_init! (Fix from Frederic Crozat,
- 	reported by Joe Marcus Clarke). Trivial cleanup: use -1.
- 	rather than -1 for a negative flag value.
- 
+	* gdk/gdkscreen.c (gdk_screen_get_type): Use gdk_screen_init
+	as instance_init, not base_init! (#314452, Fix from Frederic
+	Crozat,	reported by Joe Marcus Clarke). Trivial cleanup: use -1.
+	rather than 1 for a negative flag value.
+
 2005-08-24  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.8.2 ===
