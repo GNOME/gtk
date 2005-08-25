@@ -1,3 +1,9 @@
+2005-08-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkmenutoolbutton.c (menu_position_func): Take widget
+	y offset into account when positioning the popup.  (#314470,
+	Christian Persch)
+
 2005-08-25  Owen Taylor  <otaylor@redhat.com>
  
 	* gdk/gdkscreen.c (gdk_screen_get_type): Use gdk_screen_init

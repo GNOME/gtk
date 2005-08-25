@@ -307,6 +307,7 @@ menu_position_func (GtkMenu           *menu,
     {
       gdk_window_get_origin (widget->window, x, y);
       *x += widget->allocation.x;
+      *y += widget->allocation.y;
 
       if (direction == GTK_TEXT_DIR_LTR)
 	*x += MAX (widget->allocation.width - menu_req.width, 0);
