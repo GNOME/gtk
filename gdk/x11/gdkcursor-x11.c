@@ -446,7 +446,8 @@ update_cursor (gpointer key,
 /**
  * gdk_x11_display_set_cursor_theme:
  * @display: a #GdkDisplay
- * @theme: the name of the cursor theme to use
+ * @theme: the name of the cursor theme to use, or %NULL to unset
+ *         a previously set value
  * @size: the cursor size to use
  *
  * Sets the cursor theme from which the images for cursor
@@ -481,8 +482,9 @@ gdk_x11_display_set_cursor_theme (GdkDisplay  *display,
   old_theme = XcursorGetTheme (xdisplay);
   old_size = XcursorGetDefaultSize (xdisplay);
 
-  if (old_size == size && 
-      old_theme && strcmp (old_theme, theme) == 0)
+  if (old_size == size &&
+      (old_theme == theme ||
+       (old_theme && theme && strcmp (old_theme, theme) == 0)))
     return;
 
   theme_serial++;
