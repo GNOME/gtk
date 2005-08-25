@@ -53,14 +53,14 @@ gdk_screen_get_type (void)
       static const GTypeInfo object_info =
 	{
 	  sizeof (GdkScreenClass),
-	  (GBaseInitFunc) gdk_screen_init,
+	  (GBaseInitFunc) NULL,
 	  (GBaseFinalizeFunc) NULL,
 	  (GClassInitFunc) gdk_screen_class_init,
 	  NULL,			/* class_finalize */
 	  NULL,			/* class_data */
 	  sizeof (GdkScreen),
 	  0,			/* n_preallocs */
-	  (GInstanceInitFunc) NULL,
+	  (GInstanceInitFunc) gdk_screen_init,
 	};
       
       object_type = g_type_register_static (G_TYPE_OBJECT,
@@ -103,7 +103,7 @@ gdk_screen_class_init (GdkScreenClass *klass)
 static void
 gdk_screen_init (GdkScreen *screen)
 {
-    screen->resolution = -1;
+    screen->resolution = -1.;
 }
 
 static void
@@ -407,7 +407,7 @@ gdk_screen_set_resolution_libgtk_only (GdkScreen *screen,
     if (dpi >= 0)
 	screen->resolution = dpi;
     else
-	screen->resolution = -1;
+	screen->resolution = -1.;
 }
 
 /**
@@ -423,7 +423,7 @@ gdk_screen_set_resolution_libgtk_only (GdkScreen *screen,
 gdouble
 gdk_screen_get_resolution_libgtk_only (GdkScreen *screen)
 {
-    g_return_val_if_fail (GDK_IS_SCREEN (screen), -1);
+    g_return_val_if_fail (GDK_IS_SCREEN (screen), -1.);
 
     return screen->resolution;
 }
