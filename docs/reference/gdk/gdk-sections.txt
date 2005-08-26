@@ -215,6 +215,10 @@ gdk_screen_get_monitor_at_point
 gdk_screen_get_monitor_at_window
 gdk_screen_broadcast_client_message
 gdk_screen_get_setting
+gdk_screen_get_font_options
+gdk_screen_set_font_options
+gdk_screen_get_resolution
+gdk_screen_set_resolution
 <SUBSECTION Spawning>
 gdk_spawn_on_screen
 gdk_spawn_on_screen_with_pipes

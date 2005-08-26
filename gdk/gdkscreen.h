@@ -102,13 +102,13 @@ gboolean   gdk_screen_get_setting (GdkScreen   *screen,
 				   const gchar *name,
 				   GValue      *value);
 
-void                        gdk_screen_set_font_options_libgtk_only (GdkScreen                  *screen,
-								     const cairo_font_options_t *options);
-const cairo_font_options_t *gdk_screen_get_font_options_libgtk_only (GdkScreen                  *screen);
+void                        gdk_screen_set_font_options (GdkScreen                  *screen,
+							 const cairo_font_options_t *options);
+const cairo_font_options_t *gdk_screen_get_font_options (GdkScreen                  *screen);
 
-void    gdk_screen_set_resolution_libgtk_only (GdkScreen *screen,
-					       gdouble    dpi);
-gdouble gdk_screen_get_resolution_libgtk_only (GdkScreen *screen);
+void    gdk_screen_set_resolution (GdkScreen *screen,
+				   gdouble    dpi);
+gdouble gdk_screen_get_resolution (GdkScreen *screen);
 
 G_END_DECLS
 

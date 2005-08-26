@@ -5218,9 +5218,9 @@ gtk_widget_update_pango_context (GtkWidget *widget)
       if (screen)
 	{
 	  pango_cairo_context_set_resolution (context,
-					      gdk_screen_get_resolution_libgtk_only (screen));
+					      gdk_screen_get_resolution (screen));
 	  pango_cairo_context_set_font_options (context,
-						gdk_screen_get_font_options_libgtk_only (screen));
+						gdk_screen_get_font_options (screen));
 	}
     }
 }

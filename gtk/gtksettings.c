@@ -1448,7 +1448,7 @@ settings_update_font_options (GtkSettings *settings)
   
   cairo_font_options_set_antialias (options, antialias_mode);
 
-  gdk_screen_set_font_options_libgtk_only (settings->screen, options);
+  gdk_screen_set_font_options (settings->screen, options);
   
   cairo_font_options_destroy (options);
 }
@@ -1468,7 +1468,7 @@ settings_update_resolution (GtkSettings *settings)
   else
     dpi = -1.;
 
-  gdk_screen_set_resolution_libgtk_only (settings->screen, dpi);
+  gdk_screen_set_resolution (settings->screen, dpi);
 }
 #endif
 

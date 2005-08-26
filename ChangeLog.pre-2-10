@@ -1,5 +1,19 @@
 2005-08-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/gdk.symbols: 
+	* gdk/gdkscreen.h: 
+	* gdk/gdkscreen.c: Make the GdkScreen font options api
+	public, and add properties GdkScreen::font-options and
+	GdkScreen::resolution.  (#314004)
+
+	* gdk/gdkpango.c:
+	* gtk/gtksettings.c:
+	* gtk/gtkwidget.c: Adjust all callers.
+	
+	* gdk/gdkintl.h: Simplify and use glib/gi18n-lib.h.
+	* gdk/gdkpango.c: Include gdkintl.h, not gtkintl.h.
+	* gdk/gdkscreen.c: Include gdkintl.h.
+
 	* gtk/gtkicontheme.c (theme_lookup_icon): Avoid an uninitialized
 	variable warning, pointed out by Colin Walters. (#314585)
 

@@ -30,8 +30,7 @@
 #include "gdkscreen.h"
 #include "gdkalias.h"
 
-/* This is for P_() ... a bit non-kosher, but works fine */
-#include "gtk/gtkintl.h"
+#include "gdkintl.h"
 
 #define GDK_INFO_KEY "gdk-info"
 
@@ -1384,10 +1383,10 @@ gdk_pango_context_get_for_screen (GdkScreen *screen)
   
   context = pango_cairo_font_map_create_context (PANGO_CAIRO_FONT_MAP (fontmap));
 
-  options = gdk_screen_get_font_options_libgtk_only (screen);
+  options = gdk_screen_get_font_options (screen);
   pango_cairo_context_set_font_options (context, options);
 
-  dpi = gdk_screen_get_resolution_libgtk_only (screen);
+  dpi = gdk_screen_get_resolution (screen);
   pango_cairo_context_set_resolution (context, dpi);
 
   return context;
