@@ -1804,7 +1804,7 @@ theme_dir_get_icon_suffix (IconThemeDir *dir,
       suffix = suffix & ~HAS_ICON_FILE;
     }
   else
-      suffix = GPOINTER_TO_UINT (g_hash_table_lookup (dir->icons, icon_name));
+    suffix = GPOINTER_TO_UINT (g_hash_table_lookup (dir->icons, icon_name));
 
   GTK_NOTE (ICONTHEME, 
 	    g_print ("get_icon_suffix%s %d\n", dir->cache ? " (cached)" : "", suffix));
@@ -1893,7 +1893,7 @@ theme_lookup_icon (IconTheme          *theme,
   if (min_dir)
     {
       GtkIconInfo *icon_info = icon_info_new ();
-      gboolean has_icon_file;
+      gboolean has_icon_file = FALSE;
       
       suffix = theme_dir_get_icon_suffix (min_dir, icon_name, &has_icon_file);
       suffix = best_suffix (suffix, allow_svg);
