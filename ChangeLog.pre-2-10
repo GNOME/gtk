@@ -1,3 +1,9 @@
+2005-08-26  Tor Lillqvist  <tml@novell.com>
+
+	* gtk/gtkfilesystemwin32.c: Remove some ifdeffed out debugging
+	printouts.
+	(gtk_file_system_win32_parse): Don't mishandle UNC paths. (#314519)
+
 2005-08-26  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcalendar.c (gtk_calendar_init): Fix the calculation
