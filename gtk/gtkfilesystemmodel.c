@@ -685,10 +685,14 @@ root_folder_finished_loading_cb (GtkFileFolder      *folder,
 static gboolean
 idle_finished_loading_cb (GtkFileSystemModel *model)
 {
+  GDK_THREADS_ENTER ();
+
   g_signal_emit (model, file_system_model_signals[FINISHED_LOADING], 0);
 
   g_source_destroy (model->idle_finished_loading_source);
   model->idle_finished_loading_source = NULL;
+
+  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }

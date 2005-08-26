@@ -1,3 +1,8 @@
+2005-08-25  Thomas Fitzsimmons  <fitzsim@redhat.com>
+
+	* gtk/gtkfilesystemmodel.c (idle_finished_loading_cb): Acquire GDK
+	lock.  (#314533, Thomas Fitzsimmons)
+
 2005-08-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktoolbar.c (_gtk_toolbar_elide_underscores): Handle
