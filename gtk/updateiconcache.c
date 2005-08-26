@@ -39,6 +39,7 @@
 #include <gdk-pixbuf/gdk-pixdata.h>
 
 static gboolean force_update = FALSE;
+static gboolean ignore_theme_index = FALSE;
 static gboolean quiet = FALSE;
 static gboolean index_only = FALSE;
 
@@ -1208,6 +1209,7 @@ build_cache (const gchar *path)
 
 static GOptionEntry args[] = {
   { "force", 'f', 0, G_OPTION_ARG_NONE, &force_update, "Overwrite an existing cache, even if uptodate", NULL },
+  { "ignore-theme-index", 't', 0, G_OPTION_ARG_NONE, &ignore_theme_index, "Don't check for the existence of index.theme", NULL },
   { "index-only", 'i', 0, G_OPTION_ARG_NONE, &index_only, "Don't include image data in the cache", NULL },
   { "quiet", 'q', 0, G_OPTION_ARG_NONE, &quiet, "Turn off verbose output", NULL },
   { NULL }
@@ -1232,10 +1234,10 @@ main (int argc, char **argv)
   path = g_locale_to_utf8 (path, -1, NULL, NULL, NULL);
 #endif
   
-  if (!force_update && !has_theme_index (path))
+  if (!ignore_theme_index && !has_theme_index (path))
     {
       g_printerr ("No theme index file in '%s'.\n"
-		  "If you really want to create an icon cache here, use --force.\n", path);
+		  "If you really want to create an icon cache here, use --ignore-theme-index.\n", path);
       return 1;
     }
   

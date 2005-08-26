@@ -1,5 +1,10 @@
 2005-08-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk-update-icon-cache.xml: 
+	* gtk/gtk-update-icon-cache.1: Updates.
+
+2005-08-26  Matthias Clasen  <mclasen@redhat.com>
+
 	* gdk-pixbuf/gdk-pixbuf.sgml: 
 	* gdk/gdk-docs.sgml: 
 	* gtk/gtk-docs.sgml: Add indices for new
