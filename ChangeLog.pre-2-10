@@ -1,5 +1,8 @@
 2005-08-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/updateiconcache.c: Add a separate --ignore-theme-index option
+	to avoid overloading --force.  (JP Rosevaar)
+
 	* gtk/gtkicontheme.c (theme_lookup_icon): Avoid an uninitialized
 	variable warning, pointed out by Colin Walters. (#314585)
 

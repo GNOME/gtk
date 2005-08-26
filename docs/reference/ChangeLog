@@ -1,3 +1,8 @@
+2005-08-26  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-update-icon-cache.xml: 
+	* gtk/gtk-update-icon-cache.1: Updates.
+
 2005-08-24  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.8.2 ===
