@@ -1893,7 +1893,7 @@ theme_lookup_icon (IconTheme          *theme,
   if (min_dir)
     {
       GtkIconInfo *icon_info = icon_info_new ();
-      gboolean has_icon_file;
+      gboolean has_icon_file = FALSE;
       
       suffix = theme_dir_get_icon_suffix (min_dir, icon_name, &has_icon_file);
       suffix = best_suffix (suffix, allow_svg);

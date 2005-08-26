@@ -1,3 +1,8 @@
+2005-08-26  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkicontheme.c (theme_lookup_icon): Avoid an uninitialized
+	variable warning, pointed out by Colin Walters. (#314585)
+
 2005-08-26  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/gtkfilesystemwin32.c: Remove some ifdeffed out debugging
