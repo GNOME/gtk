@@ -291,9 +291,6 @@ check_volumes (gpointer data)
 
   g_return_val_if_fail (system_win32, FALSE);
 
-#if 0
-  printf("check_volumes: system_win32=%p\n", system_win32);
-#endif
   if (system_win32->drives != GetLogicalDrives())
     g_signal_emit_by_name (system_win32, "volumes-changed", 0);
 
@@ -303,10 +300,6 @@ check_volumes (gpointer data)
 static void
 gtk_file_system_win32_init (GtkFileSystemWin32 *system_win32)
 {
-#if 0
-  printf("gtk_file_system_win32_init: %p\n", system_win32);
-#endif
-
   /* set up an idle handler for volume changes, every second should be enough */
   system_win32->timeout = g_timeout_add_full (0, 1000, check_volumes, system_win32, NULL);
 
@@ -319,10 +312,6 @@ gtk_file_system_win32_finalize (GObject *object)
   GtkFileSystemWin32 *system_win32;
 
   system_win32 = GTK_FILE_SYSTEM_WIN32 (object);
-
-#if 0
-  printf("gtk_file_system_win32_finalize: %p\n", system_win32);
-#endif
 
   g_source_remove (system_win32->timeout);
 
@@ -726,7 +715,9 @@ gtk_file_system_win32_get_parent (GtkFileSystem     *file_system,
       *parent = filename_to_path (parent_filename);
       g_free (parent_filename);
     }
-
+#if DEBUGGING_OUTPUT
+  printf ("%s: %s => %s\n", __FUNCTION__, (char*)path, (*parent)?(char*)*parent:"NULL"), fflush(stdout);
+#endif
   return TRUE;
 }
 
@@ -762,8 +753,8 @@ canonicalize_filename (gchar *filename)
   gchar *past_root;
   gboolean last_was_slash = FALSE;
 
-#if 0
-  printf("canonicalize_filename: %s ", filename);
+#if DEBUGGING_OUTPUT
+  printf("%s: %s ", __FUNCTION__, filename), fflush (stdout);
 #endif
 
   past_root = (gchar *) g_path_skip_root (filename);
@@ -775,7 +766,7 @@ canonicalize_filename (gchar *filename)
       if (G_IS_DIR_SEPARATOR (*p))
 	{
 	  if (!last_was_slash)
-	    *q++ = G_DIR_SEPARATOR;
+	    *q++ = '\\';
 
 	  last_was_slash = TRUE;
 	}
@@ -828,8 +819,9 @@ canonicalize_filename (gchar *filename)
     q--;
 
   *q = '\0';
-#if 0
-  printf(" => %s\n", filename);
+
+#if DEBUGGING_OUTPUT
+  printf(" => %s\n", filename), fflush (stdout);
 #endif
 }
 
@@ -845,15 +837,15 @@ gtk_file_system_win32_parse (GtkFileSystem     *file_system,
   gchar *last_backslash, *last_slash;
   gboolean result = FALSE;
 
-#if 0
-  printf("gtk_file_system_win32_parse: base_path=%s str=%s\n",(char*)base_path,str);
+#if DEBUGGING_OUTPUT
+  printf("%s: base_path=%s str=%s\n",__FUNCTION__,(char*)base_path,str),fflush(stdout);
 #endif
 
   base_filename = gtk_file_path_get_string (base_path);
   g_return_val_if_fail (base_filename != NULL, FALSE);
   g_return_val_if_fail (g_path_is_absolute (base_filename), FALSE);
   
-  last_backslash = strrchr (str, G_DIR_SEPARATOR);
+  last_backslash = strrchr (str, '\\');
   last_slash = strrchr (str, '/');
   if (last_slash == NULL ||
       (last_backslash != NULL && last_backslash > last_slash))
@@ -874,18 +866,25 @@ gtk_file_system_win32_parse (GtkFileSystem     *file_system,
 	{
 	  if (g_ascii_isalpha (base_filename[0]) &&
 	      base_filename[1] == ':')
-	    folder_part = g_strdup_printf ("%c:" G_DIR_SEPARATOR_S, base_filename[0]);
+	    folder_part = g_strdup_printf ("%c:\\", base_filename[0]);
 	  else
-	    folder_part = g_strdup (G_DIR_SEPARATOR_S);
+	    folder_part = g_strdup ("\\");
 	}
       else if (g_ascii_isalpha (str[0]) &&
 	       str[1] == ':' &&
-	       G_IS_DIR_SEPARATOR (str[2]))
+	       last_slash == str + 2)
 	folder_part = g_strndup (str, last_slash - str + 1);
+#if 0
+      /* Hmm, what the heck was this case supposed to do? It splits up
+       * \\server\share\foo\bar into folder_part
+       * \\server\share\foo\bar and file_path bar. Not good. As far as
+       * I can see, this isn't needed.
+       */
       else if (G_IS_DIR_SEPARATOR (str[0]) &&
 	       G_IS_DIR_SEPARATOR (str[1]) &&
 	       (!str[2] || !G_IS_DIR_SEPARATOR (str[2])))
 	folder_part = g_strdup (str);
+#endif
       else
 	folder_part = g_strndup (str, last_slash - str);
 
@@ -909,8 +908,8 @@ gtk_file_system_win32_parse (GtkFileSystem     *file_system,
       result = TRUE;
     }
 
-#if 0
-  printf("gtk_file_system_win32_parse:returning folder=%s file_part=%s\n",(*folder?(char*)*folder:"NULL"),*file_part);
+#if DEBUGGING_OUTPUT
+  printf ("%s:returning folder=%s file_part=%s\n", __FUNCTION__, (*folder?(char*)*folder:"NULL"), *file_part), fflush(stdout);
 #endif
 
   return result;
@@ -936,6 +935,11 @@ gtk_file_system_win32_uri_to_path (GtkFileSystem     *file_system,
 {
   GtkFilePath *path = NULL;
   gchar *filename = g_filename_from_uri (uri, NULL, NULL);
+
+#if DEBUGGING_OUTPUT
+  printf ("%s: %s -> %s\n", __FUNCTION__, uri, filename?filename:"NULL"), fflush (stdout);
+#endif
+
   if (filename)
     {
       path = filename_to_path (filename);
@@ -1422,6 +1426,11 @@ gtk_file_folder_win32_list_children (GtkFileFolder  *folder,
   *children = NULL;
 
   dir = g_dir_open (folder_win32->filename, 0, error);
+
+#if DEBUGGING_OUTPUT
+  printf ("%s: %s: %s\n", __FUNCTION__, folder_win32->filename, dir?"OK":"FAIL"), fflush (stdout);
+#endif
+
   if (!dir)
     return FALSE;
 
@@ -1654,14 +1663,8 @@ filename_is_server_share (const char *filename)
 static gboolean
 filename_is_some_root (const char *filename)
 {
-#if 0
-  return ((G_IS_DIR_SEPARATOR (filename[0]) && filename[1] == '\0') ||
-	  filename_is_server_share (filename) ||
-	  filename_is_drive_root (filename));
-#else
   return (g_path_is_absolute (filename) &&
 	  *(g_path_skip_root (filename)) == '\0');
-#endif
 }    
 
 int
