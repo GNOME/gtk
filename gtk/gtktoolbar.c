@@ -4784,6 +4784,9 @@ _gtk_toolbar_elide_underscores (const gchar *original)
   const gchar *p;
   gboolean last_underscore;
   
+  if (!original)
+    return NULL;
+
   q = result = g_malloc (strlen (original) + 1);
   last_underscore = FALSE;
   
