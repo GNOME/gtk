@@ -1,5 +1,7 @@
 2005-08-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* configure.in: Bump version to 2.9.0
+
 	* gdk/gdk.symbols: 
 	* gdk/gdkscreen.h: 
 	* gdk/gdkscreen.c: Make the GdkScreen font options api
