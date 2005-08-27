@@ -239,7 +239,7 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
 				   g_param_spec_string ("ui",
  							P_("Merged UI definition"),
 							P_("An XML string describing the merged UI"),
-							NULL,
+							"<ui>\n</ui>",
 							GTK_PARAM_READABLE));
 
 

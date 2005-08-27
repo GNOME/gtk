@@ -1,5 +1,8 @@
 2005-08-27  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkuimanager.c (gtk_ui_manager_class_init): Fix the default
+	value of the ui property. (#314532, Yong Wang)
+
 	* gdk/x11/gdkproperty-x11.c (gdk_property_get): Don't warn
 	when G_MAXLONG is passed as length.  
 
