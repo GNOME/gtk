@@ -530,11 +530,8 @@ gdk_property_get (GdkWindow   *window,
    */
   get_length = length + 3;
   if (get_length > G_MAXLONG)
-    {
-      g_warning ("gdk_property_get(): length value has wrapped in calculation "
-		 "(did you pass G_MAXLONG?)");
-      get_length = G_MAXLONG;
-    }
+    get_length = G_MAXLONG;
+
   /* To fail, either the user passed 0 or G_MAXULONG */
   get_length = get_length / 4;
   if (get_length == 0)
