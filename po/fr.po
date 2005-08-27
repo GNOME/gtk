@@ -9,10 +9,10 @@
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 2.6.9\n"
+"Project-Id-Version: gtk+ 2.8.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-24 13:34-0400\n"
-"PO-Revision-Date: 2005-07-17 16:06+0200\n"
+"POT-Creation-Date: 2005-08-27 14:08+0200\n"
+"PO-Revision-Date: 2005-08-27 13:34+0200\n"
 "Last-Translator: Christophe Merlet (RedFox) <redfox@redfoxcenter.org>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "MIME-Version: 1.0\n"
@@ -478,22 +478,22 @@ msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "Les clés pour les chunks texte PNG doivent être des caractères ASCII."
 
 #: gdk-pixbuf/io-png.c:831
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%s' could not "
 "be parsed."
 msgstr ""
-"La qualité JPEG doit être une valeur entre 0 et 100 ; la valeur « %s » n'est "
-"pas interprétable."
+"Le niveau de compression PNG doit être une valeur entre 0 et 9 ; la valeur "
+"« %s » n'est pas interprétable."
 
 #: gdk-pixbuf/io-png.c:843
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%d' is not "
 "allowed."
 msgstr ""
-"La qualité JPEG doit être une valeur entre 0 et 100 ; la valeur « %d » n'est "
-"pas autorisée."
+"La niveau de compression PNG doit être une valeur entre 0 et 9 ; la valeur "
+"« %d » n'est pas autorisée."
 
 #: gdk-pixbuf/io-png.c:883
 #, c-format
@@ -841,135 +841,135 @@ msgstr "Drapeaux de débogage Gdk à ne pas définir"
 
 #: gdk/keyname-table.h:3940
 msgid "keyboard label|BackSpace"
-msgstr ""
+msgstr "Effacement"
 
 #: gdk/keyname-table.h:3941
 msgid "keyboard label|Tab"
-msgstr ""
+msgstr "Tabulation"
 
 #: gdk/keyname-table.h:3942
 msgid "keyboard label|Return"
-msgstr ""
+msgstr "Entrée"
 
 #: gdk/keyname-table.h:3943
 msgid "keyboard label|Pause"
-msgstr ""
+msgstr "Pause"
 
 #: gdk/keyname-table.h:3944
 msgid "keyboard label|Scroll_Lock"
-msgstr ""
+msgstr "Arrêt défil"
 
 #: gdk/keyname-table.h:3945
 msgid "keyboard label|Sys_Req"
-msgstr ""
+msgstr "Syst"
 
 #: gdk/keyname-table.h:3946
 msgid "keyboard label|Escape"
-msgstr ""
+msgstr "Échap"
 
 #: gdk/keyname-table.h:3947
 msgid "keyboard label|Multi_key"
-msgstr ""
+msgstr "Touche multi"
 
 #: gdk/keyname-table.h:3948
 msgid "keyboard label|Home"
-msgstr ""
+msgstr "Accueil"
 
 #: gdk/keyname-table.h:3949
 msgid "keyboard label|Page_Up"
-msgstr ""
+msgstr "Page Haut"
 
 #: gdk/keyname-table.h:3950
 msgid "keyboard label|Page_Down"
-msgstr ""
+msgstr "Page Bas"
 
 #: gdk/keyname-table.h:3951
 msgid "keyboard label|End"
-msgstr ""
+msgstr "Fin"
 
 #: gdk/keyname-table.h:3952
 msgid "keyboard label|Begin"
-msgstr ""
+msgstr "Début"
 
 #: gdk/keyname-table.h:3953
 msgid "keyboard label|Print"
-msgstr ""
+msgstr "Impr"
 
 #: gdk/keyname-table.h:3954
 msgid "keyboard label|Insert"
-msgstr ""
+msgstr "Inser"
 
 #: gdk/keyname-table.h:3955
 msgid "keyboard label|Num_Lock"
-msgstr ""
+msgstr "Num_Verr"
 
 #: gdk/keyname-table.h:3956
 msgid "keyboard label|KP_Space"
-msgstr ""
+msgstr "Num_Espace"
 
 #: gdk/keyname-table.h:3957
 msgid "keyboard label|KP_Tab"
-msgstr ""
+msgstr "Num_Tab"
 
 #: gdk/keyname-table.h:3958
 msgid "keyboard label|KP_Enter"
-msgstr ""
+msgstr "Num_Entrée"
 
 #: gdk/keyname-table.h:3959
 msgid "keyboard label|KP_Home"
-msgstr ""
+msgstr "Num_Accueil"
 
 #: gdk/keyname-table.h:3960
 msgid "keyboard label|KP_Left"
-msgstr ""
+msgstr "Num_Gauche"
 
 #: gdk/keyname-table.h:3961
 msgid "keyboard label|KP_Up"
-msgstr ""
+msgstr "Num_Haut"
 
 #: gdk/keyname-table.h:3962
 msgid "keyboard label|KP_Right"
-msgstr ""
+msgstr "Num_Droite"
 
 #: gdk/keyname-table.h:3963
 msgid "keyboard label|KP_Down"
-msgstr ""
+msgstr "Num_Bas"
 
 #: gdk/keyname-table.h:3964
 msgid "keyboard label|KP_Page_Up"
-msgstr ""
+msgstr "Num_Page Haut"
 
 #: gdk/keyname-table.h:3965
 msgid "keyboard label|KP_Prior"
-msgstr ""
+msgstr "Num_Préc"
 
 #: gdk/keyname-table.h:3966
 msgid "keyboard label|KP_Page_Down"
-msgstr ""
+msgstr "Num_Page Bas"
 
 #: gdk/keyname-table.h:3967
 msgid "keyboard label|KP_Next"
-msgstr ""
+msgstr "Num_Suiv"
 
 #: gdk/keyname-table.h:3968
 msgid "keyboard label|KP_End"
-msgstr ""
+msgstr "Num_Fin"
 
 #: gdk/keyname-table.h:3969
 msgid "keyboard label|KP_Begin"
-msgstr ""
+msgstr "Num_Début"
 
 #: gdk/keyname-table.h:3970
 msgid "keyboard label|KP_Insert"
-msgstr ""
+msgstr "Num_Inser"
 
 #: gdk/keyname-table.h:3971
 msgid "keyboard label|KP_Delete"
-msgstr ""
+msgstr "Num_Suppr"
 
 #: gdk/keyname-table.h:3972
 msgid "keyboard label|Delete"
-msgstr ""
+msgstr "Suppr"
 
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:60
@@ -1016,9 +1016,8 @@ msgstr "La licence du programme"
 
 #. Add the credits button
 #: gtk/gtkaboutdialog.c:509
-#, fuzzy
 msgid "C_redits"
-msgstr "Crédits"
+msgstr "C_rédits"
 
 #. Add the license button
 #: gtk/gtkaboutdialog.c:519
@@ -1058,7 +1057,7 @@ msgstr "Graphisme par"
 #.
 #: gtk/gtkaccellabel.c:121
 msgid "keyboard label|Shift"
-msgstr ""
+msgstr "Shift"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the control key. If the text on this key isn't typically
@@ -1068,7 +1067,7 @@ msgstr ""
 #.
 #: gtk/gtkaccellabel.c:128
 msgid "keyboard label|Ctrl"
-msgstr ""
+msgstr "Ctrl"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the alt key. If the text on this key isn't typically
@@ -1078,17 +1077,17 @@ msgstr ""
 #.
 #: gtk/gtkaccellabel.c:135
 msgid "keyboard label|Alt"
-msgstr ""
+msgstr "Alt"
 
 #. do not translate the part before the |
 #: gtk/gtkaccellabel.c:577
 msgid "keyboard label|Space"
-msgstr ""
+msgstr "Espace"
 
 #. do not translate the part before the |
 #: gtk/gtkaccellabel.c:581
 msgid "keyboard label|Backslash"
-msgstr ""
+msgstr "Antislash"
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -1121,7 +1120,7 @@ msgstr "calendar:week_start:1"
 #.
 #: gtk/gtkcalendar.c:1549
 msgid "year measurement template|2000"
-msgstr ""
+msgstr "2000"
 
 #. Translators: This dictates how the year is displayed in
 #. * gtkcalendar widget.  See strftime() manual for the format.
@@ -1136,7 +1135,7 @@ msgstr ""
 #.
 #: gtk/gtkcalendar.c:1826
 msgid "calendar year format|%Y"
-msgstr ""
+msgstr "%Y"
 
 #. do not translate the part before the |
 #: gtk/gtkcellrendererprogress.c:237 gtk/gtkcellrendererprogress.c:295
@@ -1386,14 +1385,12 @@ msgstr ""
 "d'accès valide."
 
 #: gtk/gtkfilechooserdefault.c:3082
-#, fuzzy
 msgid "Remove"
-msgstr "_Enlever"
+msgstr "Enlever"
 
 #: gtk/gtkfilechooserdefault.c:3091
-#, fuzzy
 msgid "Rename..."
-msgstr "_Renommer"
+msgstr "Renommer..."
 
 #: gtk/gtkfilechooserdefault.c:3214
 msgid "Shortcuts"
@@ -1408,7 +1405,6 @@ msgid "_Add"
 msgstr "A_jouter"
 
 #: gtk/gtkfilechooserdefault.c:3331
-#, fuzzy
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Ajouter le dossier sélectionné aux signets"
 
@@ -1432,9 +1428,8 @@ msgstr ""
 "d'accès valide."
 
 #: gtk/gtkfilechooserdefault.c:3571
-#, fuzzy
 msgid "_Add to Bookmarks"
-msgstr "A_jouter aux raccourcis"
+msgstr "A_jouter aux signets"
 
 #: gtk/gtkfilechooserdefault.c:3581
 msgid "Open _Location"
@@ -1498,18 +1493,17 @@ msgstr "Le raccourci %s n'existe pas"
 #: gtk/gtkfilechooserdefault.c:6135
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
-msgstr ""
+msgstr "Un fichier nommé « %s » existe déjà. Voulez-vous le remplacer ?"
 
 #: gtk/gtkfilechooserdefault.c:6138
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
-msgstr ""
+msgstr "Le fichier existe déjà dans « %s ». Le remplacer écrasera son contenu."
 
 #: gtk/gtkfilechooserdefault.c:6143
-#, fuzzy
 msgid "_Replace"
-msgstr "_Renommer"
+msgstr "_Remplacer"
 
 #: gtk/gtkfilechooserdefault.c:6634
 #, c-format
@@ -1767,28 +1761,27 @@ msgstr "Nom trop long"
 msgid "Couldn't convert filename"
 msgstr "Impossible de convertir le nom du fichier"
 
-#: gtk/gtkfilesystemmodel.c:1267
+#: gtk/gtkfilesystemmodel.c:1271
 msgid "(Empty)"
 msgstr "(Vide)"
 
 #: gtk/gtkfilesystemunix.c:476 gtk/gtkfilesystemunix.c:682
-#: gtk/gtkfilesystemunix.c:1858 gtk/gtkfilesystemwin32.c:482
-#: gtk/gtkfilesystemwin32.c:495 gtk/gtkfilesystemwin32.c:1487
+#: gtk/gtkfilesystemunix.c:1858 gtk/gtkfilesystemwin32.c:471
+#: gtk/gtkfilesystemwin32.c:484 gtk/gtkfilesystemwin32.c:1496
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "Erreur lors de l'obtention des informations de « %s » : %s"
 
-#: gtk/gtkfilesystemunix.c:551 gtk/gtkfilesystemwin32.c:537
+#: gtk/gtkfilesystemunix.c:551 gtk/gtkfilesystemwin32.c:526
 #, c-format
 msgid "Error creating directory '%s': %s"
 msgstr "Erreur lors de la création du répertoire « %s » : %s"
 
-#: gtk/gtkfilesystemunix.c:631 gtk/gtkfilesystemwin32.c:597
+#: gtk/gtkfilesystemunix.c:631 gtk/gtkfilesystemwin32.c:586
 msgid "This file system does not support mounting"
 msgstr "Ce système de fichiers ne supporte pas le montage"
 
 #: gtk/gtkfilesystemunix.c:639
-#, fuzzy
 msgid "File System"
 msgstr "Système de fichiers"
 
@@ -1806,7 +1799,7 @@ msgstr ""
 "Le nom « %s » n'est pas valide car il contient le caractère « %s ». Veuillez "
 "utiliser un nom différent."
 
-#: gtk/gtkfilesystemunix.c:1463 gtk/gtkfilesystemwin32.c:1032
+#: gtk/gtkfilesystemunix.c:1463 gtk/gtkfilesystemwin32.c:1036
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "L'enregistrement du signet a échoué : %s"
@@ -1826,15 +1819,15 @@ msgstr "« %s » n'existe pas dans la liste des signets"
 msgid "Error getting information for '/': %s"
 msgstr "Erreur lors de l'obtention des informations de « / » : %s"
 
-#: gtk/gtkfilesystemwin32.c:611
+#: gtk/gtkfilesystemwin32.c:600
 #, c-format
 msgid "Network Drive (%s)"
-msgstr ""
+msgstr "Lecteur réseau (%s)"
 
-#: gtk/gtkfilesystemwin32.c:650
+#: gtk/gtkfilesystemwin32.c:639
 #, c-format
 msgid "%s (%s)"
-msgstr ""
+msgstr "%s (%s)"
 
 #: gtk/gtkfontbutton.c:179 gtk/gtkfontbutton.c:292
 msgid "Pick a Font"
@@ -2155,51 +2148,51 @@ msgstr "_Disquette"
 
 #: gtk/gtkstock.c:333
 msgid "_Fullscreen"
-msgstr ""
+msgstr "_Plain écran"
 
 #: gtk/gtkstock.c:334
 msgid "_Leave Fullscreen"
-msgstr ""
+msgstr "_Quitter le plein écran"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:336
 msgid "Navigation|_Bottom"
-msgstr ""
+msgstr "_Bas"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:338
 msgid "Navigation|_First"
-msgstr ""
+msgstr "_Premier"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:340
 msgid "Navigation|_Last"
-msgstr ""
+msgstr "_Dernier"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:342
 msgid "Navigation|_Top"
-msgstr ""
+msgstr "_Haut"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:344
 msgid "Navigation|_Back"
-msgstr ""
+msgstr "_Retour"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:346
 msgid "Navigation|_Down"
-msgstr ""
+msgstr "_Vers le bas"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:348
 msgid "Navigation|_Forward"
-msgstr ""
+msgstr "_Avant"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:350
 msgid "Navigation|_Up"
-msgstr ""
+msgstr "_Vers le haut"
 
 #: gtk/gtkstock.c:351
 msgid "_Harddisk"
@@ -2226,9 +2219,8 @@ msgid "_Index"
 msgstr "_Index"
 
 #: gtk/gtkstock.c:357
-#, fuzzy
 msgid "_Information"
-msgstr "Information"
+msgstr "_Information"
 
 #: gtk/gtkstock.c:358
 msgid "_Italic"
@@ -2240,71 +2232,61 @@ msgstr "A_ller à"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:361
-#, fuzzy
 msgid "Justify|_Center"
-msgstr "_Centre"
+msgstr "_Centrer"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:363
 msgid "Justify|_Fill"
-msgstr ""
+msgstr "_Remplir"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:365
 msgid "Justify|_Left"
-msgstr ""
+msgstr "À _gauche"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:367
-#, fuzzy
 msgid "Justify|_Right"
-msgstr "_Droite"
+msgstr "À _droite"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:370
-#, fuzzy
 msgid "Media|_Forward"
-msgstr "_Suivant"
+msgstr "_Avance"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:372
-#, fuzzy
 msgid "Media|_Next"
 msgstr "_Suivant"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:374
-#, fuzzy
 msgid "Media|P_ause"
 msgstr "_Pause"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:376
-#, fuzzy
 msgid "Media|_Play"
 msgstr "_Lecture"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:378
-#, fuzzy
 msgid "Media|Pre_vious"
 msgstr "_Précédent"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:380
-#, fuzzy
 msgid "Media|_Record"
 msgstr "_Enregistrer"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:382
-#, fuzzy
 msgid "Media|R_ewind"
 msgstr "_Rembobiner"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkstock.c:384
-#, fuzzy
 msgid "Media|_Stop"
 msgstr "_Arrêter"
 
@@ -2554,42 +2536,3 @@ msgstr "Méthode de saisie X"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Impossible d'obtenir les informations du fichier « %s » : %s"
-
-#~ msgid "_Credits"
-#~ msgstr "_Crédits"
-
-#~ msgid "Shift"
-#~ msgstr "Shift"
-
-#~ msgid "Ctrl"
-#~ msgstr "Ctrl"
-
-#~ msgid "Alt"
-#~ msgstr "Alt"
-
-#~ msgid "_Bottom"
-#~ msgstr "_Bas"
-
-#~ msgid "_First"
-#~ msgstr "_Premier"
-
-#~ msgid "_Last"
-#~ msgstr "_Dernier"
-
-#~ msgid "_Top"
-#~ msgstr "_Haut"
-
-#~ msgid "_Back"
-#~ msgstr "_Précédent"
-
-#~ msgid "_Down"
-#~ msgstr "_Descendre"
-
-#~ msgid "_Up"
-#~ msgstr "_Monter"
-
-#~ msgid "_Fill"
-#~ msgstr "_Remplir"
-
-#~ msgid "_Left"
-#~ msgstr "_Gauche"
