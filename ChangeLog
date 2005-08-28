@@ -1,3 +1,8 @@
+2005-08-28  Matthias Clasen  <mclasen@redhat.com>
+
+	* po/POTFILES.in, po-properties/POTFILES.in:
+	Add gdk/gdkscreen.c
+
 2005-08-27  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkuimanager.c (gtk_ui_manager_class_init): Fix the default
