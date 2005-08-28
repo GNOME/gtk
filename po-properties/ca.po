@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-27 14:09+0200\n"
-"PO-Revision-Date: 2005-04-11 02:41+0200\n"
+"POT-Creation-Date: 2005-08-28 09:34+0200\n"
+"PO-Revision-Date: 2005-08-28 10:01+0200\n"
 "Last-Translator: Jordi Mallach <jordi@sindominio.net>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "MIME-Version: 1.0\n"
@@ -99,6 +99,22 @@ msgstr "Pantalla"
 #: ../gdk/gdkpango.c:511
 msgid "the GdkScreen for the renderer"
 msgstr "el GdkScreen per al representador"
+
+#: ../gdk/gdkscreen.c:104
+msgid "Font options"
+msgstr "Opcions del tipus de lletra"
+
+#: ../gdk/gdkscreen.c:105
+msgid "The default font options for the screen"
+msgstr "Les opcions per defecte del tipus de lletra de la pantalla"
+
+#: ../gdk/gdkscreen.c:111
+msgid "Font resolution"
+msgstr "Resolució del tipus de lletra"
+
+#: ../gdk/gdkscreen.c:112
+msgid "The resolution for fonts on the screen"
+msgstr "La resolució per a tipus de lletra a la pantalla"
 
 #: ../gtk/gtkaboutdialog.c:206
 msgid "Program name"
@@ -329,8 +345,8 @@ msgid ""
 "Whether the action is considered important. When TRUE, toolitem proxies for "
 "this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
 msgstr ""
-"Si aquesta acció es considera important. Quan valgui CERT, els apoderats del "
-"elements d'eina per a aquesta acció mostren el text en mode "
+"Si aquesta acció es considera important. Quan rebi el valor CERT, els "
+"apoderats del elements d'eina per a aquesta acció mostraran el text en mode "
 "GTK_TOOLBAR_BOTH_HORIZ."
 
 #: ../gtk/gtkaction.c:276
@@ -340,7 +356,8 @@ msgstr "Amaga si és buit"
 #: ../gtk/gtkaction.c:277
 msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr ""
-"Quan sigui CERT, els apoderats de menú per a aquesta acció estan amagats."
+"Quan rebi el valor CERT, els apoderats de menú per a aquesta acció estaran "
+"amagats."
 
 #: ../gtk/gtkaction.c:283 ../gtk/gtkactiongroup.c:142
 #: ../gtk/gtkcellrenderer.c:222 ../gtk/gtkwidget.c:455
@@ -453,7 +470,7 @@ msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
 msgstr ""
-"Posició vertical del fill en espai disponible. 0.0 s'alinea a dalt, 1.0 "
+"Posició vertical del fill en l'espai disponible. 0.0 s'alinea a dalt, 1.0 "
 "s'alinea a baix"
 
 #: ../gtk/gtkalignment.c:138
@@ -466,7 +483,7 @@ msgid ""
 "of it to use for the child. 0.0 means none, 1.0 means all"
 msgstr ""
 "Si l'espai horitzontal disponible és més gran que el necessari per al fill, "
-"quant se n'ha d'utilitzar per al fill. 0.0 vol dir res, 1.0 vol dir tot"
+"quant se n'ha d'utilitzar per al fill. 0.0 vol dir gens, 1.0 vol dir tot"
 
 #: ../gtk/gtkalignment.c:147
 msgid "Vertical scale"
@@ -478,7 +495,7 @@ msgid ""
 "it to use for the child. 0.0 means none, 1.0 means all"
 msgstr ""
 "Si l'espai vertical disponible és més gran que el necessari per al fill, "
-"quant se n'ha d'utilitzar per al fill. 0.0 vol dir res, 1.0 vol dir tot"
+"quant se n'ha d'utilitzar per al fill. 0.0 vol dir gens, 1.0 vol dir tot"
 
 #: ../gtk/gtkalignment.c:165
 msgid "Top Padding"
@@ -841,7 +858,7 @@ msgstr "Mostra la capçalera"
 
 #: ../gtk/gtkcalendar.c:449
 msgid "If TRUE, a heading is displayed"
-msgstr "Si val cert, es mostra una capçalera"
+msgstr "Si rep el valor CERT, es mostrarà una capçalera"
 
 #: ../gtk/gtkcalendar.c:463
 msgid "Show Day Names"
@@ -849,7 +866,7 @@ msgstr "Mostra el nom dels dies"
 
 #: ../gtk/gtkcalendar.c:464
 msgid "If TRUE, day names are displayed"
-msgstr "Si val cert, es mostra els noms dels dies"
+msgstr "Si rep el valor CERT, es mostraran els noms dels dies"
 
 #: ../gtk/gtkcalendar.c:477
 msgid "No Month Change"
@@ -857,7 +874,7 @@ msgstr "No canviïs el mes"
 
 #: ../gtk/gtkcalendar.c:478
 msgid "If TRUE, the selected month cannot be changed"
-msgstr "Si val cert, no es pot canviar el mes seleccionat"
+msgstr "Si rep el valor CERT, no es podrà canviar el mes seleccionat"
 
 #: ../gtk/gtkcalendar.c:492
 msgid "Show Week Numbers"
@@ -865,7 +882,7 @@ msgstr "Mostra els números de la setmana"
 
 #: ../gtk/gtkcalendar.c:493
 msgid "If TRUE, week numbers are displayed"
-msgstr "Si val cert, es mostre els números de la setmana"
+msgstr "Si rep el valor CERT, es mostraran els números de la setmana"
 
 #: ../gtk/gtkcellrenderer.c:206
 msgid "mode"
@@ -998,7 +1015,8 @@ msgstr "Té una entrada"
 #: ../gtk/gtkcellrenderercombo.c:129
 msgid "If FALSE, don't allow to enter strings other than the chosen ones"
 msgstr ""
-"Si és fals, no es permet introduir cadenes que no siguin les seleccionables"
+"Si rep el valor FALS, no es permetrà introduir cadenes que no siguin les "
+"seleccionables"
 
 #: ../gtk/gtkcellrendererpixbuf.c:145
 msgid "Pixbuf Object"
@@ -1106,7 +1124,7 @@ msgstr "Mode de paràgraf senzill"
 
 #: ../gtk/gtkcellrenderertext.c:244
 msgid "Whether or not to keep all text in a single paragraph"
-msgstr "Si s'ha presentar el text en un únic paràgraf"
+msgstr "Si s'ha de presentar el text en un sol paràgraf"
 
 #: ../gtk/gtkcellrenderertext.c:252 ../gtk/gtkcellview.c:183
 #: ../gtk/gtktexttag.c:211
@@ -1133,15 +1151,15 @@ msgstr "Nom del color de primer pla"
 
 #: ../gtk/gtkcellrenderertext.c:269 ../gtk/gtktexttag.c:246
 msgid "Foreground color as a string"
-msgstr "Color de primer pla com a cadena"
+msgstr "Color del primer pla com a cadena"
 
 #: ../gtk/gtkcellrenderertext.c:276 ../gtk/gtktexttag.c:253
 msgid "Foreground color"
-msgstr "Color de primer pla"
+msgstr "Color del primer pla"
 
 #: ../gtk/gtkcellrenderertext.c:277
 msgid "Foreground color as a GdkColor"
-msgstr "Color de primer pla com a GdkColor"
+msgstr "Color del primer pla com a GdkColor"
 
 #: ../gtk/gtkcellrenderertext.c:285 ../gtk/gtkentry.c:509
 #: ../gtk/gtktexttag.c:279 ../gtk/gtktextview.c:578
@@ -1151,7 +1169,7 @@ msgstr "Editable"
 #: ../gtk/gtkcellrenderertext.c:286 ../gtk/gtktexttag.c:280
 #: ../gtk/gtktextview.c:579
 msgid "Whether the text can be modified by the user"
-msgstr "Si el text pot ser modificat per l'usuari"
+msgstr "Si l'usuari pot modificar el text"
 
 #: ../gtk/gtkcellrenderertext.c:293 ../gtk/gtkcellrenderertext.c:301
 #: ../gtk/gtkfontsel.c:223 ../gtk/gtktexttag.c:287 ../gtk/gtktexttag.c:295
@@ -1254,9 +1272,9 @@ msgid ""
 "when rendering the text. If you don't understand this parameter, you "
 "probably don't need it"
 msgstr ""
-"En quin idioma està el text, com a codi ISO. Pango ho pot utilitzar com a "
-"pista en representar el text. Si no enteneu aquest paràmetre, probablement "
-"no el necessitareu"
+"L'idioma del text com a codi ISO. Pango ho pot utilitzar com a pista en "
+"representar el text. Si no enteneu aquest paràmetre, probablement no el "
+"necessiteu"
 
 #: ../gtk/gtkcellrenderertext.c:435 ../gtk/gtklabel.c:435
 #: ../gtk/gtkprogressbar.c:243
@@ -1268,7 +1286,7 @@ msgid ""
 "The preferred place to ellipsize the string, if the cell renderer does not "
 "have enough room to display the entire string, if at all"
 msgstr ""
-"El lloc preferit de la cadena per inserir els punts suspensius, si el "
+"El lloc preferit de la cadena on inserir els punts suspensius, si el "
 "representador de cadenes no conté espai suficient per mostrar tota la cadena"
 
 #: ../gtk/gtkcellrenderertext.c:455 ../gtk/gtkfilechooserbutton.c:367
@@ -1298,7 +1316,7 @@ msgstr "Ajusta l'amplada"
 
 #: ../gtk/gtkcellrenderertext.c:495
 msgid "The width at which the text is wrapped"
-msgstr "A quina amplada s'ajusta el text"
+msgstr "A quina amplada s'ajustarà el text"
 
 #: ../gtk/gtkcellrenderertext.c:507 ../gtk/gtkcellview.c:198
 #: ../gtk/gtktexttag.c:556
@@ -1793,7 +1811,7 @@ msgstr "Llargada màxima"
 
 #: ../gtk/gtkentry.c:518
 msgid "Maximum number of characters for this entry. Zero if no maximum"
-msgstr "Nombre màxim de caràcters per aquesta entrada. Zero si no té màxim"
+msgstr "Nombre màxim de caràcters d'aquesta entrada. Zero si no té màxim"
 
 #: ../gtk/gtkentry.c:526
 msgid "Visibility"
@@ -1804,12 +1822,12 @@ msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
 msgstr ""
-"FALS mostra el \"caràcter d'invisibilitat\" en lloc del text actual (mode de "
-"contrasenya)"
+"Si rep el valor FALS, mostrarà el \"caràcter d'invisibilitat\" en lloc del "
+"text actual (mode de contrasenya)"
 
 #: ../gtk/gtkentry.c:535
 msgid "FALSE removes outside bevel from entry"
-msgstr "FALS treu el bisell exterior de l'entrada"
+msgstr "Si rep el valor FALS, treurà el bisell exterior de l'entrada"
 
 #: ../gtk/gtkentry.c:542
 msgid "Invisible character"
@@ -1831,7 +1849,7 @@ msgid ""
 "dialog) when Enter is pressed"
 msgstr ""
 "Si s'ha d'activar el giny per defecte (com a botó per defecte en un diàleg) "
-"quan es prem Retorn"
+"quan es premi Retorn"
 
 #: ../gtk/gtkentry.c:557
 msgid "Width in chars"
@@ -1872,7 +1890,7 @@ msgstr "Selecciona en enfocar"
 
 #: ../gtk/gtkentry.c:833
 msgid "Whether to select the contents of an entry when it is focused"
-msgstr "Si s'ha de seleccionar els continguts d'una entrada quan s'enfoca"
+msgstr "Si s'han de seleccionar els continguts d'una entrada quan s'enfoca"
 
 #: ../gtk/gtkentrycompletion.c:276
 msgid "Completion Model"
@@ -1920,7 +1938,9 @@ msgstr "Amplada del menú emergent"
 
 #: ../gtk/gtkentrycompletion.c:351
 msgid "If TRUE, the popup window will have the same size as the entry"
-msgstr "Si és CERT, la finestra emergent tindrà la mateixa mida que l'entrada"
+msgstr ""
+"Si rep el valor CERT, la finestra emergent tindrà la mateixa mida que "
+"l'entrada"
 
 #: ../gtk/gtkentrycompletion.c:369
 msgid "Popup single match"
@@ -1929,7 +1949,8 @@ msgstr "Amplada d'una coincidència"
 #: ../gtk/gtkentrycompletion.c:370
 msgid "If TRUE, the popup window will appear for a single match."
 msgstr ""
-"Si és CERT, la finestra emergent apareixerà amb només una coincidència."
+"Si rep el valor CERT, la finestra emergent apareixerà amb només una "
+"coincidència."
 
 #: ../gtk/gtkeventbox.c:122
 msgid "Visible Window"
@@ -2077,7 +2098,7 @@ msgstr "Selecció múltiple"
 
 #: ../gtk/gtkfilechooser.c:253 ../gtk/gtkfilesel.c:573
 msgid "Whether to allow multiple files to be selected"
-msgstr "Si s'ha permetre que fitxers múltiples siguin seleccionats"
+msgstr "Si s'ha permetre que es puguin seleccionar múltiples fitxers"
 
 #: ../gtk/gtkfilechooser.c:259
 msgid "Show Hidden"
@@ -2247,7 +2268,7 @@ msgstr "L'alineació vertical de l'etiqueta"
 
 #: ../gtk/gtkframe.c:154 ../gtk/gtkhandlebox.c:201
 msgid "Deprecated property, use shadow_type instead"
-msgstr "Propietat obsoleta, utilitzeu  _tipus d'ombra en el seu lloc"
+msgstr "Propietat obsoleta, utilitzeu shadow_type en el seu lloc"
 
 #: ../gtk/gtkframe.c:161
 msgid "Frame shadow"
