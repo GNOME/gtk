@@ -4557,7 +4557,7 @@ popup_targets_received (GtkClipboard     *clipboard,
       gtk_widget_show (menuitem);
       gtk_menu_shell_append (GTK_MENU_SHELL (entry->popup_menu), menuitem);
       
-      menuitem = gtk_menu_item_new_with_mnemonic (_("Select _All"));
+      menuitem = gtk_menu_item_new_from_stock (GTK_STOCK_SELECT_ALL, NULL);
       g_signal_connect_swapped (menuitem, "activate",
 			        G_CALLBACK (gtk_entry_select_all), entry);
       gtk_widget_show (menuitem);

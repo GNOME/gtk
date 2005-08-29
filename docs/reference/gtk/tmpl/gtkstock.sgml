@@ -773,6 +773,13 @@ The "Save As" item.
 </para>
 
 
+<!-- ##### MACRO GTK_STOCK_SELECT_ALL ##### -->
+<para>
+The "Select All" item.
+<inlinegraphic fileref="stock_select_all_24.png" format="PNG"></inlinegraphic>
+</para>
+
+@Since: 2.10
 
 <!-- ##### MACRO GTK_STOCK_SELECT_COLOR ##### -->
 <para>

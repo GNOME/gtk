@@ -137,6 +137,8 @@ IMAGES = \
 	stock_search_24.png 		\
 	stock_search_replace_16.png	\
 	stock_search_replace_24.png 	\
+	stock_select_all_16.png		\
+	stock_select_all_24.png		\
 	stock_sort_ascending_16.png 	\
 	stock_sort_ascending_24.png 	\
 	stock_sort_descending_16.png 	\
@@ -324,6 +326,8 @@ VARIABLES5 = \
 	stock_search_24		$(srcdir)/stock_search_24.png		\
 	stock_search_replace_16	$(srcdir)/stock_search_replace_16.png	\
 	stock_search_replace_24	$(srcdir)/stock_search_replace_24.png	\
+	stock_select_all_16 	$(srcdir)/stock_select_all_16.png	\
+	stock_select_all_24 	$(srcdir)/stock_select_all_24.png	\
 	stock_sort_ascending_16	$(srcdir)/stock_sort_ascending_16.png	\
 	stock_sort_ascending_24	$(srcdir)/stock_sort_ascending_24.png	\
 	stock_sort_descending_16  $(srcdir)/stock_sort_descending_16.png  \

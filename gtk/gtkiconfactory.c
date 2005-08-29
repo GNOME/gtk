@@ -792,6 +792,10 @@ get_default_icons (GtkIconFactory *factory)
 	     16, stock_zoom_fit_16,
 	     24, stock_zoom_fit_24);
 
+  add_icon2 (factory, GTK_STOCK_SELECT_ALL, 
+	     16, stock_select_all_16,
+	     24, stock_select_all_24);
+
   /* Generic size only */
 
   add_icon (factory, GTK_STOCK_CLEAR, 24, stock_clear_24);

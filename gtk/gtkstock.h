@@ -146,6 +146,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
 #define GTK_STOCK_REVERT_TO_SAVED  "gtk-revert-to-saved"
 #define GTK_STOCK_SAVE             "gtk-save"
 #define GTK_STOCK_SAVE_AS          "gtk-save-as"
+#define GTK_STOCK_SELECT_ALL       "gtk-select-all"
 #define GTK_STOCK_SELECT_COLOR     "gtk-select-color"
 #define GTK_STOCK_SELECT_FONT      "gtk-select-font"
 #define GTK_STOCK_SORT_ASCENDING   "gtk-sort-ascending"

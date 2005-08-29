@@ -200,6 +200,7 @@ HTML_IMAGES = \
 	$(top_srcdir)/gtk/stock-icons/stock_revert_rtl_24.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_save_24.png			\
 	$(top_srcdir)/gtk/stock-icons/stock_save_as_24.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_select_all_24.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_colorselector_24.png	\
 	$(top_srcdir)/gtk/stock-icons/stock_color_picker_25.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_font_24.png			\

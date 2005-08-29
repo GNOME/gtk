@@ -1,5 +1,16 @@
 2005-08-29  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktextview.c (popup_targets_received): 
+	* gtk/gtkentry.c (popup_targets_received): Construct
+	the "Select All" menuitem from stock.
+
+	* gtk/stock-icons/stock_select_all_{16,24}.png:
+	* gtk/stock-icons/Makefile.am: 
+	* gtk/gtkiconfactory.c:
+	* gtk/gtkstock.h: 
+	* gtk/gtkstock.c: Add a "Select All" stock item.  (#78545,
+	Calum Benson)
+
 	* gtk/gtktrayicon.c: Add a pointer to the spec.
 
 	* gtk/gtkstatusicon-x11.c: Add docs.
