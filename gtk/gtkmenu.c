@@ -4419,7 +4419,7 @@ gtk_menu_grab_notify (GtkWidget *widget,
 
   if (!was_grabbed)
     {
-      if (!GTK_IS_MENU_SHELL (grab))
+      if (GTK_MENU_SHELL (widget)->active && !GTK_IS_MENU_SHELL (grab))
         gtk_menu_shell_cancel (GTK_MENU_SHELL (widget));
     }
 }
