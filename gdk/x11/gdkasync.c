@@ -626,6 +626,9 @@ _gdk_x11_get_window_child_info (GdkDisplay       *display,
   else
     wm_state_atom = None;
 
+  state.children = NULL;
+  state.nchildren = 0;
+
   gdk_error_trap_push ();
   result = list_children_and_wm_state (dpy, window,
 				       win_has_wm_state ? wm_state_atom : None,
@@ -633,12 +636,16 @@ _gdk_x11_get_window_child_info (GdkDisplay       *display,
 				       &state.children, &state.nchildren);
   gdk_error_trap_pop ();
   if (!result)
-    return FALSE;
+    {
+      g_free (state.children);
+      return FALSE;
+    }
 
   if (has_wm_state)
     {
       if (win_has_wm_state)
 	*win_has_wm_state = TRUE;
+      g_free (state.children);
       return TRUE;
     }
   else
