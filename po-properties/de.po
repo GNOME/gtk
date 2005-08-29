@@ -2713,7 +2713,7 @@ msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr ""
-"Wenn das Menü ein Untermenü ist, wird es vertikal um soviele Pixel versetzt"
+"Wenn das Menü ein Untermenü ist, wird es vertikal um so viele Pixel versetzt"
 
 #: gtk/gtkmenu.c:572
 msgid "Horizontal Offset"
@@ -2724,7 +2724,7 @@ msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 msgstr ""
-"Wenn das Menü ein Untermenü ist, wird es horizontal um soviele Pixel versetzt"
+"Wenn das Menü ein Untermenü ist, wird es horizontal um so viele Pixel versetzt"
 
 #: gtk/gtkmenu.c:583
 msgid "Left Attach"
