@@ -1,5 +1,7 @@
 2005-08-29  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktrayicon.c: Add a pointer to the spec.
+
 	* gtk/gtkstatusicon-x11.c: Add docs.
 
 	* gtk/gtkstatusicon.h: Fix a typo.

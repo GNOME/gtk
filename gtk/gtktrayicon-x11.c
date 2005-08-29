@@ -17,6 +17,11 @@
  * Boston, MA 02111-1307, USA.
  */
 
+/*
+ * This is an implementation of the freedesktop.org "system tray" spec,
+ * http://www.freedesktop.org/wiki/Standards/systemtray-spec
+ */
+
 #include <config.h>
 #include <string.h>
 #include <libintl.h>
