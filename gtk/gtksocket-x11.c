@@ -41,6 +41,10 @@
 
 #include "x11/gdkx.h"
 
+#ifdef HAVE_XFIXES
+#include <X11/extensions/Xfixes.h>
+#endif
+
 #include "gtkxembed.h"
 #include "gtkalias.h"
 
@@ -263,6 +267,13 @@ _gtk_socket_windowing_embed_get_info (GtkSocket *socket)
 void
 _gtk_socket_windowing_embed_notify (GtkSocket *socket)
 {
+#ifdef HAVE_XFIXES
+  GdkDisplay *display = gtk_widget_get_display (GTK_WIDGET (socket);
+
+  XFixesChangeSaveSet (GDK_DISPLAY_XDISPLAY (display)),
+		       GDK_WINDOW_XWINDOW (socket->plug_window),
+		       SetModeInsert, SaveSetRoot, SaveSetUnmap);
+#endif
   _gtk_xembed_send_message (socket->plug_window,
 			    XEMBED_EMBEDDED_NOTIFY, 0,
 			    GDK_WINDOW_XWINDOW (GTK_WIDGET (socket)->window),

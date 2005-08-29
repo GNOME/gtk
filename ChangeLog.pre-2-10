@@ -1,5 +1,8 @@
 2005-08-29  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtksocket-x11.c (_gtk_socket_windowing_embed_notify): 
+	Use XFixesChangeSaveSet if available.  (#314682)
+
 	* gtk/gtkmenu.c (gtk_menu_grab_notify):  Only cancel if the menu
 	was active.  (#314298, Christian Persch, analysis by Mark McLoughlin)
 
