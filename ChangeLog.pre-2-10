@@ -1,3 +1,8 @@
+2005-08-29  Christopher Aillon  <caillon@redhat.com>
+
+	* gtk/gtkstock.c: Add builtin GtkStockItems for GTK_STOCK_CONNECT
+	and GTK_STOCK_DISCONNECT
+
 2005-08-29  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtksocket-x11.c (_gtk_socket_windowing_embed_notify): 
