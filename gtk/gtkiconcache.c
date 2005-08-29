@@ -378,8 +378,6 @@ _gtk_icon_cache_get_icon (GtkIconCache *cache,
       return NULL;
     }
 
-  pixbuf = gdk_pixbuf_from_pixdata (&pixdata, FALSE, &error);
-
   pixbuf = gdk_pixbuf_new_from_data (pixdata.pixel_data, GDK_COLORSPACE_RGB,
 				     (pixdata.pixdata_type & GDK_PIXDATA_COLOR_TYPE_MASK) == GDK_PIXDATA_COLOR_TYPE_RGBA,
 				     8, pixdata.width, pixdata.height, pixdata.rowstride,
