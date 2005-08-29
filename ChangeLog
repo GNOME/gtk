@@ -1,5 +1,10 @@
 2005-08-29  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkmenu.c (gtk_menu_grab_notify):  Only cancel if the menu
+	was active.  (#314298, Christian Persch, analysis by Mark McLoughlin)
+
+2005-08-29  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkiconcache.c (_gtk_icon_cache_get_icon): Remove an
 	accidentally leftover duplicate pixbuf creation.  (#314700,
 	Kjartan Maraas)
