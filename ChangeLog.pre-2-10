@@ -1,5 +1,7 @@
 2005-08-29  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtksocket-x11.c, gtk/gtkstatusicon-x11.c: Fix typos.
+
 	* gtk/gtkstatusicon-x11.c (gtk_status_icon_new_from_stock): 
 	* gtk/gtkimage.c (gtk_image_new_from_stock): Don't
 	refer to nonexisting stock ids.

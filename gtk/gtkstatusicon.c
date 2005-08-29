@@ -811,7 +811,7 @@ gtk_status_icon_set_from_pixbuf (GtkStatusIcon *status_icon,
   gtk_status_icon_set_image (status_icon, GTK_IMAGE_PIXBUF,
       			     (gpointer) pixbuf);
 }
-v
+
 /**
  * gtk_status_icon_set_from_file:
  * @status_icon: a #GtkStatusIcon
