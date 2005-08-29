@@ -1,0 +1,217 @@
+<!-- ##### SECTION Title ##### -->
+GtkStatusIcon
+
+<!-- ##### SECTION Short_Description ##### -->
+Display an icon in the system tray
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The "system tray" or notification area is normally used for transient icons 
+that indicate some special state. For example, a system tray icon might 
+appear to tell the user that they have new mail, or have an incoming instant 
+message, or something along those lines. The basic idea is that creating an 
+icon in the notification area is less annoying than popping up a dialog. 
+</para>
+
+<para>
+A #GtkStatusIcon object can be used to display an icon in a "system tray".
+The icon can have a tooltip, and the user can interact with it by
+activating it or popping up a context menu. Critical information should
+not solely be displayed in a #GtkStatusIcon, since it may not be
+visible (e.g. when the user doesn't have a notification area on his panel).
+This can be checked with gtk_status_icon_is_embedded().
+</para>
+
+<para>
+On X11, the implementation follows the freedesktop.org "System Tray" 
+<ulink url="http://www.freedesktop.org/wiki/Standards/systemtray-spec">specification</ulink>. Implementations of the "tray" side of this specification can
+be found e.g. in the GNOME and KDE panel applications.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### FUNCTION gtk_status_icon_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_status_icon_new_from_pixbuf ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_status_icon_new_from_file ##### -->
+<para>
+
+</para>
+
+@filename: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_status_icon_new_from_stock ##### -->
+<para>
+
+</para>
+
+@stock_id: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_status_icon_new_from_icon_name ##### -->
+<para>
+
+</para>
+
+@icon_name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_status_icon_set_from_pixbuf ##### -->
+<para>
+
+</para>
+
+@status_icon: 
+@pixbuf: 
+
+
+<!-- ##### FUNCTION gtk_status_icon_set_from_file ##### -->
+<para>
+
+</para>
+
+@status_icon: 
+@filename: 
+
+
+<!-- ##### FUNCTION gtk_status_icon_set_from_stock ##### -->
+<para>
+
+</para>
+
+@status_icon: 
+@stock_id: 
+
+
+<!-- ##### FUNCTION gtk_status_icon_set_from_icon_name ##### -->
+<para>
+
+</para>
+
+@status_icon: 
+@icon_name: 
+
+
+<!-- ##### FUNCTION gtk_status_icon_get_storage_type ##### -->
+<para>
+
+</para>
+
+@status_icon: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_status_icon_get_pixbuf ##### -->
+<para>
+
+</para>
+
+@status_icon: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_status_icon_get_stock ##### -->
+<para>
+
+</para>
+
+@status_icon: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_status_icon_get_icon_name ##### -->
+<para>
+
+</para>
+
+@status_icon: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_status_icon_get_size ##### -->
+<para>
+
+</para>
+
+@status_icon: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_status_icon_set_tooltip ##### -->
+<para>
+
+</para>
+
+@status_icon: 
+@tooltip_text: 
+
+
+<!-- ##### FUNCTION gtk_status_icon_set_visible ##### -->
+<para>
+
+</para>
+
+@status_icon: 
+@visible: 
+
+
+<!-- ##### FUNCTION gtk_status_icon_get_visible ##### -->
+<para>
+
+</para>
+
+@status_icon: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_status_icon_set_blinking ##### -->
+<para>
+
+</para>
+
+@status_icon: 
+@blinking: 
+
+
+<!-- ##### FUNCTION gtk_status_icon_get_blinking ##### -->
+<para>
+
+</para>
+
+@status_icon: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_status_icon_is_embedded ##### -->
+<para>
+
+</para>
+
+@status_icon: 
+@Returns: 
+
+
