@@ -1,8 +1,32 @@
+2005-08-29  Matthias Clasen  <mclasen@redhat.com>
+
+	Add a cross-platform "tray icon" API, by
+	porting EggStatusIcon/EggTrayIcon (#105101)
+	
+	* gtk/gtkstatusicon.h: A GtkStatusIcon is an object which
+	displays an icon in a notification area.
+
+	* gtk/gtkstatusicon-x11.c: GtkStatusIcon implementation for
+	X11, using GtkTrayIcon.
+
+	* gtk/gtktrayicon.h: 
+	* gtk/gtktrayicon.c: An implementation of the freedesktop.org
+	system tray specification, not public API.
+
+	* gtk/gtk.symbols: Add new exported functions.
+
+	* gtk/gtk.h: Include gtkstatusicon.h.
+
+	* gtk/Makefile.am: Add new files.
+
+	* tests/Makefile.am:
+	* tests/teststatusicon.c: Test for GtkStatusIcon.
+
 2005-08-29  Christopher Aillon  <caillon@redhat.com>
 
 	* gtk/gtkstock.c: Add builtin GtkStockItems for GTK_STOCK_CONNECT
 	and GTK_STOCK_DISCONNECT
-
+	
 2005-08-29  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtksocket-x11.c (_gtk_socket_windowing_embed_notify): 

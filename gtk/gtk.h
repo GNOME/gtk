@@ -150,6 +150,7 @@
 #include <gtk/gtksocket.h>
 #include <gtk/gtkspinbutton.h>
 #include <gtk/gtkstatusbar.h>
+#include <gtk/gtkstatusicon.h>
 #include <gtk/gtkstock.h>
 #include <gtk/gtkstyle.h>
 #include <gtk/gtktable.h>

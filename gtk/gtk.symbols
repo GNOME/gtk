@@ -973,6 +973,32 @@ gtk_drag_unhighlight
 #endif
 #endif
 
+#if IN_HEADER(__GTK_STATUS_ICON_H__)
+#if IN_FILE(__GTK_STATUS_ICON_C__)
+gtk_status_icon_get_type G_GNUC_CONST
+gtk_status_icon_new
+gtk_status_icon_new_from_pixbuf
+gtk_status_icon_new_from_file
+gtk_status_icon_new_from_stock
+gtk_status_icon_new_from_icon_name
+gtk_status_icon_set_from_pixbuf
+gtk_status_icon_set_from_file
+gtk_status_icon_set_from_stock
+gtk_status_icon_set_from_icon_name
+gtk_status_icon_get_storage_type
+gtk_status_icon_get_pixbuf
+gtk_status_icon_get_stock
+gtk_status_icon_get_icon_name
+gtk_status_icon_get_size
+gtk_status_icon_set_tooltip
+gtk_status_icon_set_visible
+gtk_status_icon_get_visible
+gtk_status_icon_set_blinking
+gtk_status_icon_get_blinking
+gtk_status_icon_is_embedded
+#endif
+#endif
+
 #if IN_HEADER(__GTK_STYLE_H__)
 #if IN_FILE(__GTK_STYLE_C__)
 #ifndef GTK_DISABLE_DEPRECATED

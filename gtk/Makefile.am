@@ -239,6 +239,7 @@ gtk_public_h_sources =          \
 	gtksocket.h		\
 	gtkspinbutton.h		\
 	gtkstatusbar.h		\
+	gtkstatusicon.h		\
 	gtkstock.h		\
 	gtkstyle.h		\
 	gtktable.h		\
@@ -535,8 +536,13 @@ gtk_c_sources +=         gtkfilesystemwin32.c
 endif
 
 if USE_X11
-gtk_private_h_sources += gtkxembed.h
-gtk_c_sources +=         gtkplug-x11.c gtksocket-x11.c gtkxembed.c
+gtk_private_h_sources += gtkxembed.h gtktrayicon.h
+gtk_c_sources += \
+	gtkplug-x11.c   \
+	gtksocket-x11.c \
+	gtkxembed.c     \
+	gtktrayicon.c   \
+	gtkstatusicon-x11.c
 else
 if USE_WIN32
 gtk_private_h_sources += gtkwin32embed.h

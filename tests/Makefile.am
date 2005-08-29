@@ -50,6 +50,7 @@ noinst_PROGRAMS =			\
 	testselection			\
 	$(testsocket_programs)		\
 	testspinbutton			\
+	teststatusicon			\
 	testtext			\
         testtextbuffer			\
 	testtoolbar			\
@@ -95,6 +96,7 @@ testselection_DEPENDENCIES = $(TEST_DEPS)
 testsocket_DEPENDENCIES = $(DEPS)
 testsocket_child_DEPENDENCIES = $(DEPS)
 testspinbutton_DEPENDENCIES = $(TEST_DEPS)
+teststatusicon_DEPENDENCIES = $(TEST_DEPS)
 testtext_DEPENDENCIES = $(TEST_DEPS)
 testtextbuffer_DEPENDENCIES = $(TEST_DEPS)
 testtreeedit_DEPENDENCIES = $(DEPS)
@@ -133,6 +135,7 @@ testselection_LDADD = $(LDADDS)
 testsocket_LDADD = $(LDADDS)
 testsocket_child_LDADD = $(LDADDS)
 testspinbutton_LDADD = $(LDADDS)
+teststatusicon_LDADD = $(LDADDS)
 testtextbuffer_LDADD = $(LDADDS)
 testtoolbar_LDADD = $(LDADDS)
 stresstest_toolbar_LDADD = $(LDADDS)
@@ -194,6 +197,9 @@ testsocket_child_SOURCES =    	\
 
 testspinbutton_SOURCES =    	\
 	testspinbutton.c
+
+teststatusicon_SOURCES =    	\
+	teststatusicon.c
 
 testmerge_SOURCES = 		\
 	testmerge.c
