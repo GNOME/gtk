@@ -1,5 +1,8 @@
 2005-08-29  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtksettings.c (settings_update_cursor_theme): Don't 
+	leak the cursor theme name.  (#314693, Kjartan Maraas)
+
 	* gdk/x11/gdkasync.c (_gdk_x11_get_window_child_info): Free 
 	state.children in all cases.  (#313862, Kjartan Maraas)
 

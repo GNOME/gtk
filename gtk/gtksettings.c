@@ -1371,6 +1371,8 @@ settings_update_cursor_theme (GtkSettings *settings)
 		NULL);
   
   gdk_x11_display_set_cursor_theme (display, theme, size);
+
+  g_free (theme);
 }
 
 static void
