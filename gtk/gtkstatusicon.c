@@ -452,7 +452,7 @@ gtk_status_icon_new_from_file (const gchar *filename)
  * @stock_id: a stock icon id
  * 
  * Creates a status icon displaying a stock icon. Sample stock icon
- * names are #GTK_STOCK_OPEN, #GTK_STOCK_EXIT. You can register your 
+ * names are #GTK_STOCK_OPEN, #GTK_STOCK_QUIT. You can register your 
  * own stock icon names, see gtk_icon_factory_add_default() and 
  * gtk_icon_factory_add(). 
  *
