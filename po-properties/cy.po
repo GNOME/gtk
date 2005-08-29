@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-24 13:34-0400\n"
-"PO-Revision-Date: 2005-08-09 22:45+0100\n"
+"POT-Creation-Date: 2005-08-28 22:54+0100\n"
+"PO-Revision-Date: 2005-08-29 13:19+0100\n"
 "Last-Translator: Rhys Jones <rhys@sucs.org>\n"
 "Language-Team: Cymraeg <gnome-cy@pengwyn.linux.org.uk>\n"
 "MIME-Version: 1.0\n"
@@ -97,6 +97,24 @@ msgstr "Sgrin"
 #: gdk/gdkpango.c:511
 msgid "the GdkScreen for the renderer"
 msgstr "y GdkScreen ar gyfer y llunydd"
+
+#: gdk/gdkscreen.c:104
+msgid "Font options"
+msgstr "Opsiynau ffont"
+
+#: gdk/gdkscreen.c:105
+msgid "The default font options for the screen"
+msgstr "Opsiynau ffont rhagosodedig ar gyfer y sgrîn"
+
+#: gdk/gdkscreen.c:111
+#, fuzzy
+msgid "Font resolution"
+msgstr "Pwyntiau'r ffont"
+
+#: gdk/gdkscreen.c:112
+#, fuzzy
+msgid "The resolution for fonts on the screen"
+msgstr "Sut dylid diweddaru'r cyfwng ar y sgrin"
 
 #: gtk/gtkaboutdialog.c:206
 msgid "Program name"
