@@ -1,7 +1,12 @@
+2005-08-29  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/x11/gdkasync.c (_gdk_x11_get_window_child_info): Free 
+	state.children in all cases.  (#313862, Kjartan Maraas)
+
 2005-08-27  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkuimanager.c (gtk_ui_manager_class_init): Fix the default
-	value of the ui property.
+	value of the ui property. (#314532, Yong Wang)
 
 	* gdk/x11/gdkproperty-x11.c (gdk_property_get): Don't warn
 	when G_MAXLONG is passed as length.  
