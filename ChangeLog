@@ -1,5 +1,9 @@
 2005-08-29  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkiconcache.c (_gtk_icon_cache_get_icon): Remove an
+	accidentally leftover duplicate pixbuf creation.  (#314700,
+	Kjartan Maraas)
+
 	* gtk/gtksettings.c (settings_update_cursor_theme): Don't 
 	leak the cursor theme name.  (#314693, Kjartan Maraas)
 
