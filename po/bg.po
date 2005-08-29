@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-24 13:34-0400\n"
+"POT-Creation-Date: 2005-08-29 13:41-0400\n"
 "PO-Revision-Date: 2005-07-25 10:02+0300\n"
 "Last-Translator: Vladimir Petkov <vpetkov@i-space.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -1735,23 +1735,23 @@ msgstr "Името е твърде дълго"
 msgid "Couldn't convert filename"
 msgstr "Името на файла не може да бъде конвертирано"
 
-#: gtk/gtkfilesystemmodel.c:1267
+#: gtk/gtkfilesystemmodel.c:1271
 msgid "(Empty)"
 msgstr "(Празно)"
 
 #: gtk/gtkfilesystemunix.c:476 gtk/gtkfilesystemunix.c:682
-#: gtk/gtkfilesystemunix.c:1858 gtk/gtkfilesystemwin32.c:482
-#: gtk/gtkfilesystemwin32.c:495 gtk/gtkfilesystemwin32.c:1487
+#: gtk/gtkfilesystemunix.c:1858 gtk/gtkfilesystemwin32.c:471
+#: gtk/gtkfilesystemwin32.c:484 gtk/gtkfilesystemwin32.c:1496
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "Грешка при получаването на информация за \"%s\": %s"
 
-#: gtk/gtkfilesystemunix.c:551 gtk/gtkfilesystemwin32.c:537
+#: gtk/gtkfilesystemunix.c:551 gtk/gtkfilesystemwin32.c:526
 #, c-format
 msgid "Error creating directory '%s': %s"
 msgstr "Грешка при създаването на папка \"%s\": %s"
 
-#: gtk/gtkfilesystemunix.c:631 gtk/gtkfilesystemwin32.c:597
+#: gtk/gtkfilesystemunix.c:631 gtk/gtkfilesystemwin32.c:586
 msgid "This file system does not support mounting"
 msgstr "Тази файлова система не поддържа монтиране"
 
@@ -1773,7 +1773,7 @@ msgstr ""
 "Името \"%s\" е невалидно защото съдържа знакът \"%s\".·Моля, използвайте "
 "различно име."
 
-#: gtk/gtkfilesystemunix.c:1463 gtk/gtkfilesystemwin32.c:1032
+#: gtk/gtkfilesystemunix.c:1463 gtk/gtkfilesystemwin32.c:1036
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Запазването на отметката беше неуспешно: %s"
@@ -1793,12 +1793,12 @@ msgstr "\"%s\" не съществува в списъка с отметки"
 msgid "Error getting information for '/': %s"
 msgstr "Грешка при получаването на информация за \"/\": %s"
 
-#: gtk/gtkfilesystemwin32.c:611
+#: gtk/gtkfilesystemwin32.c:600
 #, c-format
 msgid "Network Drive (%s)"
 msgstr "Мрежово устройство (%s)"
 
-#: gtk/gtkfilesystemwin32.c:650
+#: gtk/gtkfilesystemwin32.c:639
 #, c-format
 msgid "%s (%s)"
 msgstr "%s (%s)"

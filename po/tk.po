@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-24 13:34-0400\n"
+"POT-Creation-Date: 2005-08-29 13:41-0400\n"
 "PO-Revision-Date: 2004-05-25 17:46+0330\n"
 "Last-Translator: Gurban Mühemmet Tewekgeli <gmtavakkoli@yahoo.com>\n"
 "Language-Team: Turkmen <kakilikgroup@yahoo.com>\n"
@@ -1685,23 +1685,23 @@ msgstr "Ad beter uzyn"
 msgid "Couldn't convert filename"
 msgstr ""
 
-#: gtk/gtkfilesystemmodel.c:1267
+#: gtk/gtkfilesystemmodel.c:1271
 msgid "(Empty)"
 msgstr "(Puç)"
 
 #: gtk/gtkfilesystemunix.c:476 gtk/gtkfilesystemunix.c:682
-#: gtk/gtkfilesystemunix.c:1858 gtk/gtkfilesystemwin32.c:482
-#: gtk/gtkfilesystemwin32.c:495 gtk/gtkfilesystemwin32.c:1487
+#: gtk/gtkfilesystemunix.c:1858 gtk/gtkfilesystemwin32.c:471
+#: gtk/gtkfilesystemwin32.c:484 gtk/gtkfilesystemwin32.c:1496
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:551 gtk/gtkfilesystemwin32.c:537
+#: gtk/gtkfilesystemunix.c:551 gtk/gtkfilesystemwin32.c:526
 #, fuzzy, c-format
 msgid "Error creating directory '%s': %s"
 msgstr "Faýlyň adyny \"%s\"-den \"%s\"-e ewez etmede bu hata doredi: %s"
 
-#: gtk/gtkfilesystemunix.c:631 gtk/gtkfilesystemwin32.c:597
+#: gtk/gtkfilesystemunix.c:631 gtk/gtkfilesystemwin32.c:586
 msgid "This file system does not support mounting"
 msgstr ""
 
@@ -1722,7 +1722,7 @@ msgid ""
 "Please use a different name."
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1463 gtk/gtkfilesystemwin32.c:1032
+#: gtk/gtkfilesystemunix.c:1463 gtk/gtkfilesystemwin32.c:1036
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr ""
@@ -1742,12 +1742,12 @@ msgstr ""
 msgid "Error getting information for '/': %s"
 msgstr "Faýlyň adyny \"%s\"-den \"%s\"-e ewez etmede bu hata doredi: %s"
 
-#: gtk/gtkfilesystemwin32.c:611
+#: gtk/gtkfilesystemwin32.c:600
 #, c-format
 msgid "Network Drive (%s)"
 msgstr ""
 
-#: gtk/gtkfilesystemwin32.c:650
+#: gtk/gtkfilesystemwin32.c:639
 #, fuzzy, c-format
 msgid "%s (%s)"
 msgstr "%s: %s"

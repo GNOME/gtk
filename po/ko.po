@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-24 13:34-0400\n"
+"POT-Creation-Date: 2005-08-29 13:41-0400\n"
 "PO-Revision-Date: 2005-08-22 23:04+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Gnome Korea <gnome-kr-hackers@lists.kldp.net>\n"
@@ -1714,23 +1714,23 @@ msgstr "너무 긴 이름"
 msgid "Couldn't convert filename"
 msgstr "파일이름 변환할 수 없음"
 
-#: gtk/gtkfilesystemmodel.c:1267
+#: gtk/gtkfilesystemmodel.c:1271
 msgid "(Empty)"
 msgstr "(빈 파일)"
 
 #: gtk/gtkfilesystemunix.c:476 gtk/gtkfilesystemunix.c:682
-#: gtk/gtkfilesystemunix.c:1858 gtk/gtkfilesystemwin32.c:482
-#: gtk/gtkfilesystemwin32.c:495 gtk/gtkfilesystemwin32.c:1487
+#: gtk/gtkfilesystemunix.c:1858 gtk/gtkfilesystemwin32.c:471
+#: gtk/gtkfilesystemwin32.c:484 gtk/gtkfilesystemwin32.c:1496
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "'%s'에 대한 정보를 가져오는 데 오류가 발생했습니다: %s"
 
-#: gtk/gtkfilesystemunix.c:551 gtk/gtkfilesystemwin32.c:537
+#: gtk/gtkfilesystemunix.c:551 gtk/gtkfilesystemwin32.c:526
 #, c-format
 msgid "Error creating directory '%s': %s"
 msgstr "'%s' 디렉토리를 만드는 데 오류가 발생했습니다: %s"
 
-#: gtk/gtkfilesystemunix.c:631 gtk/gtkfilesystemwin32.c:597
+#: gtk/gtkfilesystemunix.c:631 gtk/gtkfilesystemwin32.c:586
 msgid "This file system does not support mounting"
 msgstr "이 파일 시스템은 마운트를 지원하지 않습니다"
 
@@ -1752,7 +1752,7 @@ msgstr ""
 "\"%s\"(이)라는 이름은 쓸 수 없습니다. 이름에 \"%s\" 문자가 들어 있습니다. 다"
 "른 이름을 사용하십시오."
 
-#: gtk/gtkfilesystemunix.c:1463 gtk/gtkfilesystemwin32.c:1032
+#: gtk/gtkfilesystemunix.c:1463 gtk/gtkfilesystemwin32.c:1036
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "책갈피 저장이 실패했습니다: %s"
@@ -1772,12 +1772,12 @@ msgstr "책갈피 목록에 '%s'이(가) 없습니다"
 msgid "Error getting information for '/': %s"
 msgstr "'/'에 대한 정보를 가져오는 데 오류가 발생했습니다: %s"
 
-#: gtk/gtkfilesystemwin32.c:611
+#: gtk/gtkfilesystemwin32.c:600
 #, c-format
 msgid "Network Drive (%s)"
 msgstr "네트워크 드라이브 (%s)"
 
-#: gtk/gtkfilesystemwin32.c:650
+#: gtk/gtkfilesystemwin32.c:639
 #, c-format
 msgid "%s (%s)"
 msgstr "%s (%s)"

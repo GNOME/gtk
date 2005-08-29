@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ gtk-2-4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-24 13:34-0400\n"
+"POT-Creation-Date: 2005-08-29 13:41-0400\n"
 "PO-Revision-Date: 2004-09-27 14:58+0330\n"
 "Last-Translator: Amir Hedayaty <amir@bamdad.org>\n"
 "Language-Team: Iranian Azerbaijani <az-ir@lists.sharif.edu>\n"
@@ -1666,23 +1666,23 @@ msgstr ""
 msgid "Couldn't convert filename"
 msgstr ""
 
-#: gtk/gtkfilesystemmodel.c:1267
+#: gtk/gtkfilesystemmodel.c:1271
 msgid "(Empty)"
 msgstr ""
 
 #: gtk/gtkfilesystemunix.c:476 gtk/gtkfilesystemunix.c:682
-#: gtk/gtkfilesystemunix.c:1858 gtk/gtkfilesystemwin32.c:482
-#: gtk/gtkfilesystemwin32.c:495 gtk/gtkfilesystemwin32.c:1487
+#: gtk/gtkfilesystemunix.c:1858 gtk/gtkfilesystemwin32.c:471
+#: gtk/gtkfilesystemwin32.c:484 gtk/gtkfilesystemwin32.c:1496
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:551 gtk/gtkfilesystemwin32.c:537
+#: gtk/gtkfilesystemunix.c:551 gtk/gtkfilesystemwin32.c:526
 #, c-format
 msgid "Error creating directory '%s': %s"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:631 gtk/gtkfilesystemwin32.c:597
+#: gtk/gtkfilesystemunix.c:631 gtk/gtkfilesystemwin32.c:586
 msgid "This file system does not support mounting"
 msgstr ""
 
@@ -1702,7 +1702,7 @@ msgid ""
 "Please use a different name."
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1463 gtk/gtkfilesystemwin32.c:1032
+#: gtk/gtkfilesystemunix.c:1463 gtk/gtkfilesystemwin32.c:1036
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr ""
@@ -1722,12 +1722,12 @@ msgstr ""
 msgid "Error getting information for '/': %s"
 msgstr ""
 
-#: gtk/gtkfilesystemwin32.c:611
+#: gtk/gtkfilesystemwin32.c:600
 #, c-format
 msgid "Network Drive (%s)"
 msgstr ""
 
-#: gtk/gtkfilesystemwin32.c:650
+#: gtk/gtkfilesystemwin32.c:639
 #, c-format
 msgid "%s (%s)"
 msgstr ""

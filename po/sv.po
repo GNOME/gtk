@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-24 13:34-0400\n"
+"POT-Creation-Date: 2005-08-29 13:41-0400\n"
 "PO-Revision-Date: 2005-01-23 16:55+0100\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -1740,23 +1740,23 @@ msgstr "Namnet är för långt"
 msgid "Couldn't convert filename"
 msgstr "Kunde inte konvertera filnamn"
 
-#: gtk/gtkfilesystemmodel.c:1267
+#: gtk/gtkfilesystemmodel.c:1271
 msgid "(Empty)"
 msgstr "(Tom)"
 
 #: gtk/gtkfilesystemunix.c:476 gtk/gtkfilesystemunix.c:682
-#: gtk/gtkfilesystemunix.c:1858 gtk/gtkfilesystemwin32.c:482
-#: gtk/gtkfilesystemwin32.c:495 gtk/gtkfilesystemwin32.c:1487
+#: gtk/gtkfilesystemunix.c:1858 gtk/gtkfilesystemwin32.c:471
+#: gtk/gtkfilesystemwin32.c:484 gtk/gtkfilesystemwin32.c:1496
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "Fel vid hämtning av information för \"%s\": %s"
 
-#: gtk/gtkfilesystemunix.c:551 gtk/gtkfilesystemwin32.c:537
+#: gtk/gtkfilesystemunix.c:551 gtk/gtkfilesystemwin32.c:526
 #, c-format
 msgid "Error creating directory '%s': %s"
 msgstr "Fel vid skapande av katalogen \"%s\": %s"
 
-#: gtk/gtkfilesystemunix.c:631 gtk/gtkfilesystemwin32.c:597
+#: gtk/gtkfilesystemunix.c:631 gtk/gtkfilesystemwin32.c:586
 msgid "This file system does not support mounting"
 msgstr "Detta filsystem stöder inte montering"
 
@@ -1779,7 +1779,7 @@ msgstr ""
 "Namnet \"%s\" är inte giltigt eftersom det innehåller tecknet \"%s\". Använd "
 "ett annat namn."
 
-#: gtk/gtkfilesystemunix.c:1463 gtk/gtkfilesystemwin32.c:1032
+#: gtk/gtkfilesystemunix.c:1463 gtk/gtkfilesystemwin32.c:1036
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Bokmärkessparande misslyckades: %s"
@@ -1799,12 +1799,12 @@ msgstr "\"%s\" finns inte i bokmärkeslistan"
 msgid "Error getting information for '/': %s"
 msgstr "Fel vid hämtning av information för \"/\": %s"
 
-#: gtk/gtkfilesystemwin32.c:611
+#: gtk/gtkfilesystemwin32.c:600
 #, c-format
 msgid "Network Drive (%s)"
 msgstr "Nätverksenhet (%s)"
 
-#: gtk/gtkfilesystemwin32.c:650
+#: gtk/gtkfilesystemwin32.c:639
 #, c-format
 msgid "%s (%s)"
 msgstr "%s (%s)"

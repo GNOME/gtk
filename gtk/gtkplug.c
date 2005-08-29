@@ -259,7 +259,7 @@ _gtk_plug_add_to_socket (GtkPlug   *plug,
 
 /**
  * _gtk_plug_send_delete_event:
- * widget: a #GtkWidget
+ * @widget: a #GtkWidget
  *
  * Send a GDK_DELETE event to the @widget and destroy it if
  * necessary. Internal GTK function, called from this file or the

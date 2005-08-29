@@ -68,7 +68,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pa\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-24 13:34-0400\n"
+"POT-Creation-Date: 2005-08-29 13:41-0400\n"
 "PO-Revision-Date: 2005-08-22 12:58+0530\n"
 "Last-Translator: Amanpreet Singh Brar <amanpreetalam@yahoo.com>\n"
 "Language-Team: Punjabi <fedora-trans-pa@redhat.com>\n"
@@ -1764,23 +1764,23 @@ msgstr "ਨਾਂ ਬਹੁਤ ਲੰਮਾ ਹੈ"
 msgid "Couldn't convert filename"
 msgstr "ਫਾਇਲ ਨਾਂ ਤਬਦੀਲ ਨਹੀ ਹੋ ਸਕਿਆ"
 
-#: gtk/gtkfilesystemmodel.c:1267
+#: gtk/gtkfilesystemmodel.c:1271
 msgid "(Empty)"
 msgstr "(ਖਾਲੀ)"
 
 #: gtk/gtkfilesystemunix.c:476 gtk/gtkfilesystemunix.c:682
-#: gtk/gtkfilesystemunix.c:1858 gtk/gtkfilesystemwin32.c:482
-#: gtk/gtkfilesystemwin32.c:495 gtk/gtkfilesystemwin32.c:1487
+#: gtk/gtkfilesystemunix.c:1858 gtk/gtkfilesystemwin32.c:471
+#: gtk/gtkfilesystemwin32.c:484 gtk/gtkfilesystemwin32.c:1496
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "'%s' ਲਈ ਜਾਣਕਾਰੀ ਲੈਣ ਵਿੱਚ ਅਸਫਲ: %s"
 
-#: gtk/gtkfilesystemunix.c:551 gtk/gtkfilesystemwin32.c:537
+#: gtk/gtkfilesystemunix.c:551 gtk/gtkfilesystemwin32.c:526
 #, c-format
 msgid "Error creating directory '%s': %s"
 msgstr "ਡਾਇਰੈਕਟਰੀ '%s' ਬਣਾਉਣ ਵਿੱਚ ਗਲਤੀ: %s"
 
-#: gtk/gtkfilesystemunix.c:631 gtk/gtkfilesystemwin32.c:597
+#: gtk/gtkfilesystemunix.c:631 gtk/gtkfilesystemwin32.c:586
 msgid "This file system does not support mounting"
 msgstr "ਇਹ ਫਾਇਲ ਸਿਸਟਮ ਮਾਊਟਿੰਗ ਲਈ ਸਹਾਇਕ ਨਹੀ ਹੈ"
 
@@ -1801,7 +1801,7 @@ msgid ""
 msgstr ""
 "ਨਾਂ \"%s\" ਜਾਇਜ ਨਹੀਂ ਹੈ, ਕਿਉਕਿ ਇਸ ਵਿੱਚ ਅੱਖਰ \"%s\" ਹੈ। ਕਿਰਪਾ ਕਰਕੇ ਵੱਖਰਾ ਨਾਂ ਵਰਤੋਂ।"
 
-#: gtk/gtkfilesystemunix.c:1463 gtk/gtkfilesystemwin32.c:1032
+#: gtk/gtkfilesystemunix.c:1463 gtk/gtkfilesystemwin32.c:1036
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "ਬੁੱਕਮਾਰਕ ਸੰਭਾਲਣ 'ਚ ਅਸਫਲ: %s"
@@ -1821,12 +1821,12 @@ msgstr "'%s' ਬੁੱਕਮਾਰਕ ਸੂਚੀ ਵਿੱਚ ਮੌਜੂਦ 
 msgid "Error getting information for '/': %s"
 msgstr "'/' ਲਈ ਜਾਣਕਾਰੀ ਪ੍ਰਾਪਤ ਕਰਨ ਵਿੱਚ ਅਸਫਲ: %s"
 
-#: gtk/gtkfilesystemwin32.c:611
+#: gtk/gtkfilesystemwin32.c:600
 #, c-format
 msgid "Network Drive (%s)"
 msgstr "ਨੈਟਵਰਕ ਡਰਾਇਵ (%s)"
 
-#: gtk/gtkfilesystemwin32.c:650
+#: gtk/gtkfilesystemwin32.c:639
 #, c-format
 msgid "%s (%s)"
 msgstr "%s (%s)"

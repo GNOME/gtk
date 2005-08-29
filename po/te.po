@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-24 13:34-0400\n"
+"POT-Creation-Date: 2005-08-29 13:41-0400\n"
 "PO-Revision-Date: 2004-10-17 12:50+0100\n"
 "Last-Translator: Prajasakti Localisation Team <localisation@prajasakti.com>\n"
 "Language-Team: Prajasakti Localisation Team <localisation@prajasakti.com>\n"
@@ -1738,23 +1738,23 @@ msgstr "చాలా పొడవైన నామము"
 msgid "Couldn't convert filename"
 msgstr "దస్త్రనామము మార్చలేము"
 
-#: gtk/gtkfilesystemmodel.c:1267
+#: gtk/gtkfilesystemmodel.c:1271
 msgid "(Empty)"
 msgstr "(ఖాళీ)"
 
 #: gtk/gtkfilesystemunix.c:476 gtk/gtkfilesystemunix.c:682
-#: gtk/gtkfilesystemunix.c:1858 gtk/gtkfilesystemwin32.c:482
-#: gtk/gtkfilesystemwin32.c:495 gtk/gtkfilesystemwin32.c:1487
+#: gtk/gtkfilesystemunix.c:1858 gtk/gtkfilesystemwin32.c:471
+#: gtk/gtkfilesystemwin32.c:484 gtk/gtkfilesystemwin32.c:1496
 #, fuzzy, c-format
 msgid "Error getting information for '%s': %s"
 msgstr " '%s':కు సమాచారం తెచ్చుటలో దోషం %s"
 
-#: gtk/gtkfilesystemunix.c:551 gtk/gtkfilesystemwin32.c:537
+#: gtk/gtkfilesystemunix.c:551 gtk/gtkfilesystemwin32.c:526
 #, fuzzy, c-format
 msgid "Error creating directory '%s': %s"
 msgstr " '%s':డైరెక్టరీని సృష్టించుటలో దోషము %s"
 
-#: gtk/gtkfilesystemunix.c:631 gtk/gtkfilesystemwin32.c:597
+#: gtk/gtkfilesystemunix.c:631 gtk/gtkfilesystemwin32.c:586
 msgid "This file system does not support mounting"
 msgstr "ఈ దస్త్ర వ్యవస్థ ్దదస్త్రములను ప్రోగుచేయుటకు సహకరించుటలేదు."
 
@@ -1777,7 +1777,7 @@ msgstr ""
 " \"%s\" నామము చెల్లదు. ఎందుకంటే అది  \"%s\"అక్షరాన్ని కలిగివుంది.. దయచేసి మరొక నామాన్ని "
 "ఉపయోగించండి.."
 
-#: gtk/gtkfilesystemunix.c:1463 gtk/gtkfilesystemwin32.c:1032
+#: gtk/gtkfilesystemunix.c:1463 gtk/gtkfilesystemwin32.c:1036
 #, fuzzy, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "గుర్తింపు దాచుట విఫలమైంది. (%s)"
@@ -1797,12 +1797,12 @@ msgstr ""
 msgid "Error getting information for '/': %s"
 msgstr " '%s':కు సమాచారం తెచ్చుటలో దోషం %s"
 
-#: gtk/gtkfilesystemwin32.c:611
+#: gtk/gtkfilesystemwin32.c:600
 #, c-format
 msgid "Network Drive (%s)"
 msgstr ""
 
-#: gtk/gtkfilesystemwin32.c:650
+#: gtk/gtkfilesystemwin32.c:639
 #, c-format
 msgid "%s (%s)"
 msgstr ""

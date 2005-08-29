@@ -1,3 +1,16 @@
+Overview of Changes from GTK+ 2.8.2 to GTK+ 2.8.3
+=================================================
+* Fix problems with the handling of initial settings
+  for font options and cursor themes [Frederic Crozat, 
+  Joe Markus Clarke, Owen Taylor, Kjartan Maraas]
+* Add a --ignore-theme-index option to 
+  gtk-update-icon-cache [JP Rosevaar]
+* Other bug fixes [Christian Persch, Owen Taylor,
+  Ed Catmur, Thomas Fitzsimmons, JP Rosevaar, Tor
+  Lillqvist, Colin Walters, Yong Wang, Matthias,
+  Kjartan Maraas, Christian Persch, Mark McLoughlin]
+* Updated translations (ca,es,fr,pt_BR)
+
 Overview of Changes from GTK+ 2.8.1 to GTK+ 2.8.2
 =================================================
 * Fix a crash with custom icon themes, which affected

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-24 13:34-0400\n"
+"POT-Creation-Date: 2005-08-29 13:41-0400\n"
 "PO-Revision-Date: 2005-07-16 21:28+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <L10n@opentle.net>\n"
@@ -1687,23 +1687,23 @@ msgstr "ชื่อยาวเกินไป"
 msgid "Couldn't convert filename"
 msgstr "แปลงชื่อแฟ้มไม่สำเร็จ"
 
-#: gtk/gtkfilesystemmodel.c:1267
+#: gtk/gtkfilesystemmodel.c:1271
 msgid "(Empty)"
 msgstr "(ว่าง)"
 
 #: gtk/gtkfilesystemunix.c:476 gtk/gtkfilesystemunix.c:682
-#: gtk/gtkfilesystemunix.c:1858 gtk/gtkfilesystemwin32.c:482
-#: gtk/gtkfilesystemwin32.c:495 gtk/gtkfilesystemwin32.c:1487
+#: gtk/gtkfilesystemunix.c:1858 gtk/gtkfilesystemwin32.c:471
+#: gtk/gtkfilesystemwin32.c:484 gtk/gtkfilesystemwin32.c:1496
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "เกิดข้อผิดพลาดขณะเรียกข้อมูลสำหรับ '%s': %s"
 
-#: gtk/gtkfilesystemunix.c:551 gtk/gtkfilesystemwin32.c:537
+#: gtk/gtkfilesystemunix.c:551 gtk/gtkfilesystemwin32.c:526
 #, c-format
 msgid "Error creating directory '%s': %s"
 msgstr "เกิดข้อผิดพลาดขณะสร้างโฟลเดอร์ '%s': %s"
 
-#: gtk/gtkfilesystemunix.c:631 gtk/gtkfilesystemwin32.c:597
+#: gtk/gtkfilesystemunix.c:631 gtk/gtkfilesystemwin32.c:586
 msgid "This file system does not support mounting"
 msgstr "ระบบแฟ้มนี้ไม่รองรับการเมานท์"
 
@@ -1723,7 +1723,7 @@ msgid ""
 "Please use a different name."
 msgstr "ชื่อ \"%s\" ใช้ไม่ได้ เพราะมีอักขระ \"%s\" อยู่  กรุณาใช้ชื่ออื่น"
 
-#: gtk/gtkfilesystemunix.c:1463 gtk/gtkfilesystemwin32.c:1032
+#: gtk/gtkfilesystemunix.c:1463 gtk/gtkfilesystemwin32.c:1036
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "ไม่สามารถบันทึกข้อมูลที่คั่นหน้า: %s"
@@ -1743,12 +1743,12 @@ msgstr "'%s' ไม่มีอยู่ในรายการที่คั�
 msgid "Error getting information for '/': %s"
 msgstr "เกิดข้อผิดพลาดขณะเรียกข้อมูลสำหรับ '/': %s"
 
-#: gtk/gtkfilesystemwin32.c:611
+#: gtk/gtkfilesystemwin32.c:600
 #, c-format
 msgid "Network Drive (%s)"
 msgstr "ไดรฟ์เครือข่าย (%s)"
 
-#: gtk/gtkfilesystemwin32.c:650
+#: gtk/gtkfilesystemwin32.c:639
 #, c-format
 msgid "%s (%s)"
 msgstr "%s (%s)"
