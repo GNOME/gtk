@@ -1,3 +1,11 @@
+2005-08-29  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk.types: Add gtk_status_icon_get_type
+
+	* gtk/gtk-docs.sgml: Add GtkStatusIcon
+
+	* gtk/gtk-sections.txt: Add GtkStatusIcon
+
 2005-08-26  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-update-icon-cache.xml: 

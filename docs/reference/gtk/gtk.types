@@ -117,6 +117,7 @@ gtk_size_group_get_type
 gtk_socket_get_type
 gtk_spin_button_get_type
 gtk_statusbar_get_type
+gtk_status_icon_get_type
 gtk_style_get_type
 gtk_table_get_type
 gtk_tearoff_menu_item_get_type

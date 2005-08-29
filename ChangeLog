@@ -1,5 +1,9 @@
 2005-08-29  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkstatusicon-x11.c: Add docs.
+
+	* gtk/gtkstatusicon.h: Fix a typo.
+
 	Add a cross-platform "tray icon" API, by
 	porting EggStatusIcon/EggTrayIcon (#105101)
 	

@@ -100,6 +100,7 @@
 <!ENTITY GtkSocket SYSTEM "xml/gtksocket.xml">
 <!ENTITY GtkSpinButton SYSTEM "xml/gtkspinbutton.xml">
 <!ENTITY GtkStatusbar SYSTEM "xml/gtkstatusbar.xml">
+<!ENTITY GtkStatusIcon SYSTEM "xml/gtkstatusicon.xml">
 <!ENTITY GtkTable SYSTEM "xml/gtktable.xml">
 <!ENTITY GtkTearoffMenuItem SYSTEM "xml/gtktearoffmenuitem.xml">
 <!ENTITY GtkText SYSTEM "xml/gtktext.xml">
@@ -354,6 +355,7 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
         &GtkLabel;
         &GtkProgressBar;
         &GtkStatusbar;
+        &GtkStatusIcon;
     </chapter>
 
     <chapter id="ButtonWidgets">

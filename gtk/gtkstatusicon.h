@@ -52,7 +52,7 @@ struct _GtkStatusIconClass
 
   void     (* activate)     (GtkStatusIcon *status_icon);
   void     (* popup_menu)   (GtkStatusIcon *status_icon,
-			     guint          buttton,
+			     guint          button,
 			     guint32        activate_time);
   gboolean (* size_changed) (GtkStatusIcon *status_icon,
 			     gint           size);
