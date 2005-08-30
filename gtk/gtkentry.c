@@ -1378,7 +1378,7 @@ gtk_entry_draw_frame (GtkWidget *widget)
       
       gtk_paint_focus (widget->style, widget->window, GTK_WIDGET_STATE (widget), 
 		       NULL, widget, "entry",
-		       0, 0, width, height);
+		       x, y, width, height);
     }
 }
 
