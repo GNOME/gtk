@@ -155,6 +155,7 @@ gboolean gtk_selection_data_get_targets          (GtkSelectionData  *selection_d
 gboolean gtk_selection_data_targets_include_text (GtkSelectionData  *selection_data);
 gboolean gtk_selection_data_targets_include_image (GtkSelectionData  *selection_data,
 						   gboolean           writable);
+gboolean gtk_selection_data_targets_include_uri  (GtkSelectionData  *selection_data);
 
 /* Called when a widget is destroyed */
 

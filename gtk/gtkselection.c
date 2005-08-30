@@ -1587,6 +1587,8 @@ gtk_selection_data_targets_include_text (GtkSelectionData *selection_data)
   gint i;
   gboolean result = FALSE;
 
+  /* Keep in sync with gtk_target_list_add_text_targets()
+   */
   init_atoms ();
 
   if (gtk_selection_data_get_targets (selection_data, &targets, &n_targets))
@@ -1638,6 +1640,8 @@ gtk_selection_data_targets_include_image (GtkSelectionData *selection_data,
   GtkTargetList *list;
   GList *l;
 
+  /* Keep in sync with gtk_target_list_add_image_targets()
+   */
   init_atoms ();
 
   if (gtk_selection_data_get_targets (selection_data, &targets, &n_targets))
@@ -1659,6 +1663,49 @@ gtk_selection_data_targets_include_image (GtkSelectionData *selection_data,
 
   return result;
 }
+
+/**
+ * gtk_selection_data_targets_include_uri:
+ * @selection_data: a #GtkSelectionData object
+ * 
+ * Given a #GtkSelectionData object holding a list of targets,
+ * determines if any of the targets in @targets can be used to
+ * provide a list or URIs.
+ * 
+ * Return value: %TRUE if @selection_data holds a list of targets,
+ *   and a suitable target for text is included, otherwise %FALSE.
+ *
+ * Since: 2.10
+ **/
+gboolean
+gtk_selection_data_targets_include_uri (GtkSelectionData *selection_data)
+{
+  GdkAtom *targets;
+  gint n_targets;
+  gint i;
+  gboolean result = FALSE;
+
+  /* Keep in sync with gtk_target_list_add_uri_targets()
+   */
+  init_atoms ();
+
+  if (gtk_selection_data_get_targets (selection_data, &targets, &n_targets))
+    {
+      for (i=0; i < n_targets; i++)
+	{
+	  if (targets[i] == text_uri_list_atom)
+	    {
+	      result = TRUE;
+	      break;
+	    }
+	}
+
+      g_free (targets);
+    }
+
+  return result;
+}
+
 	  
 /*************************************************************
  * gtk_selection_init:
