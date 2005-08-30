@@ -1,3 +1,16 @@
+2005-08-30  Matthias Clasen  <mclasen@redhat.com>
+
+	* io-png.c (png_save_to_callback_write_func): Add a cast
+	to avoid compiler warnings.
+
+	* pixops/timescale.c (main): Declare src_buf, dest_buf as
+	unsigned to avoid compiler warnings.
+
+	* gdk-pixbuf-io.h: Declare the prefix and mask members of
+	GdkPixbufModulePattern as char*, to avoid compiler warnings.
+
+	* io-ani.c (ani_load_chunk): Use g_try_new() in some places.
+
 2005-08-24  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.8.2 ===

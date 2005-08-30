@@ -75,8 +75,8 @@ typedef void (* GdkPixbufModuleUpdatedFunc)  (GdkPixbuf *pixbuf,
 
 typedef struct _GdkPixbufModulePattern GdkPixbufModulePattern;
 struct _GdkPixbufModulePattern {
-	unsigned char *prefix;
-	unsigned char *mask;
+	char *prefix;
+	char *mask;
 	int relevance;
 };
 

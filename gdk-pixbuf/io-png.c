@@ -754,7 +754,7 @@ png_save_to_callback_write_func (png_structp png_ptr,
 {
         SaveToFunctionIoPtr *ioptr = png_get_io_ptr (png_ptr);
 
-        if (!ioptr->save_func (data, length, ioptr->error, ioptr->user_data)) {
+        if (!ioptr->save_func ((gchar *)data, length, ioptr->error, ioptr->user_data)) {
                 /* If save_func has already set an error, which it
                    should have done, this won't overwrite it. */
                 png_error (png_ptr, "write function failed");

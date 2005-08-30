@@ -366,12 +366,10 @@ ani_load_chunk (AniLoaderContext *context, GError **error)
 		context->animation->width = 0;
 		context->animation->height = 0;
 
-		context->animation->pixbufs = (GdkPixbuf**) g_try_malloc (sizeof (GdkPixbuf*) * context->NumFrames);
-		if (context->animation->pixbufs) 
-			memset (context->animation->pixbufs, 0, sizeof (GdkPixbuf*) * context->NumFrames);
-                                                
-		context->animation->delay = (guint32*) g_try_malloc (sizeof (guint32) * context->NumSteps);
-		context->animation->sequence = (guint32*) g_try_malloc (sizeof (guint32) * context->NumSteps);
+		context->animation->pixbufs = g_try_new0 (GdkPixbuf*, context->NumFrames);
+		context->animation->delay = g_try_new (gint, context->NumSteps);
+		context->animation->sequence = g_try_new (gint, context->NumSteps);
+
 		if (!context->animation->pixbufs || 
 		    !context->animation->delay || 
 		    !context->animation->sequence) 
@@ -442,7 +440,7 @@ ani_load_chunk (AniLoaderContext *context, GError **error)
 			return FALSE;
 		}
 		context->title[context->chunk_size] = 0;
-		read_int8 (context, context->title, context->chunk_size);
+		read_int8 (context, (guchar *)context->title, context->chunk_size);
 #ifdef DEBUG_ANI
 		g_print ("INAM %s\n", context->title);
 #endif
@@ -461,7 +459,7 @@ ani_load_chunk (AniLoaderContext *context, GError **error)
 			return FALSE;
 		}
 		context->author[context->chunk_size] = 0;
-		read_int8 (context, context->author, context->chunk_size);
+		read_int8 (context, (guchar *)context->author, context->chunk_size);
 #ifdef DEBUG_ANI
 		g_print ("IART %s\n", context->author);
 #endif

@@ -118,7 +118,7 @@ dump_array (double times[3][3][4])
 int main (int argc, char **argv)
 {
   int src_width, src_height, dest_width, dest_height;
-  char *src_buf, *dest_buf;
+  unsigned char *src_buf, *dest_buf;
   int src_index, dest_index;
   int i;
   double scale_times[3][3][4];
