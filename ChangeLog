@@ -1,6 +1,12 @@
 2005-08-30  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk.symbols: 
+	* gtk/gtkselection.h:
+	* gtk/gtkselection.c (gtk_selection_data_targets_include_uri): 
+	Add a function to check wether targets include uri.  
+	(#314092, Mark Wielaard)
+	
+	* gtk/gtk.symbols: 
 	* gtk/gtkwindow.h: 
 	* gtk/gtkwindow.c: Add a deletable property with getter
 	and setter, to control the close button in the window 
