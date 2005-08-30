@@ -1,5 +1,7 @@
 2005-08-30  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk-pixbuf-io.c (format_check): Make this work again.
+
 	* io-png.c (png_save_to_callback_write_func): Add a cast
 	to avoid compiler warnings.
 

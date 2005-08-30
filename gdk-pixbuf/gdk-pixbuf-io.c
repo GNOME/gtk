@@ -52,16 +52,17 @@ format_check (GdkPixbufModule *module, guchar *buffer, int size)
 	gchar m;
 	GdkPixbufModulePattern *pattern;
 	gboolean anchored;
-	gchar *prefix, *mask;
+	guchar *prefix;
+	gchar *mask;
 
 	for (pattern = module->info->signature; pattern->prefix; pattern++) {
 		if (pattern->mask && pattern->mask[0] == '*') {
-			prefix = pattern->prefix + 1;
+			prefix = (guchar *)pattern->prefix + 1;
 			mask = pattern->mask + 1;
 			anchored = FALSE;
 		}
 		else {
-			prefix = pattern->prefix;
+			prefix = (guchar *)pattern->prefix;
 			mask = pattern->mask;
 			anchored = TRUE;
 		}
