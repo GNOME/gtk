@@ -1,5 +1,9 @@
 2005-08-30  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkentry.c (gtk_entry_class_init): Add key bindings to
+	make C-/ select all and C-\ unselect all.  (#309301,
+	Kathy Fernandez)
+
 	* gtk/gtkimcontextsimple.c: Change the compose sequence for
 	soft hyphen to be multi_key-minus-minus-space, and add
 	compose sequences multi_key-minus-minus-period and 

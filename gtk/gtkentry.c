@@ -763,8 +763,25 @@ gtk_entry_class_init (GtkEntryClass *class)
                                 "move_cursor", 3,
                                 GTK_TYPE_MOVEMENT_STEP, GTK_MOVEMENT_BUFFER_ENDS,
                                 G_TYPE_INT, 1,
-				G_TYPE_BOOLEAN, TRUE);
+				G_TYPE_BOOLEAN, TRUE);  
 
+  gtk_binding_entry_add_signal (binding_set, GDK_slash, GDK_CONTROL_MASK,
+                                "move_cursor", 3,
+                                GTK_TYPE_MOVEMENT_STEP, GTK_MOVEMENT_BUFFER_ENDS,
+                                G_TYPE_INT, -1,
+				G_TYPE_BOOLEAN, FALSE);
+  gtk_binding_entry_add_signal (binding_set, GDK_slash, GDK_CONTROL_MASK,
+                                "move_cursor", 3,
+                                GTK_TYPE_MOVEMENT_STEP, GTK_MOVEMENT_BUFFER_ENDS,
+                                G_TYPE_INT, 1,
+				G_TYPE_BOOLEAN, TRUE);  
+  /* Unselect all 
+   */
+  gtk_binding_entry_add_signal (binding_set, GDK_backslash, GDK_CONTROL_MASK,
+                                "move_cursor", 3,
+                                GTK_TYPE_MOVEMENT_STEP, GTK_MOVEMENT_VISUAL_POSITIONS,
+                                G_TYPE_INT, 0,
+				G_TYPE_BOOLEAN, FALSE);
 
   /* Activate
    */
@@ -1378,7 +1395,7 @@ gtk_entry_draw_frame (GtkWidget *widget)
       
       gtk_paint_focus (widget->style, widget->window, GTK_WIDGET_STATE (widget), 
 		       NULL, widget, "entry",
-		       x, y, width, height);
+		       0, 0, width, height);
     }
 }
 
@@ -2400,9 +2417,9 @@ gtk_entry_move_cursor (GtkEntry       *entry,
 	    gint current_x = get_better_cursor_x (entry, entry->current_pos);
 	    gint bound_x = get_better_cursor_x (entry, entry->selection_bound);
 
-	    if (count < 0)
+	    if (count <= 0)
 	      new_pos = current_x < bound_x ? entry->current_pos : entry->selection_bound;
-	    else
+	    else 
 	      new_pos = current_x > bound_x ? entry->current_pos : entry->selection_bound;
 
 	    break;
