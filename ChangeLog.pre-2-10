@@ -1,5 +1,10 @@
 2005-08-30  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkuimanager.c (gtk_ui_manager_class_init): Another
+	fix for the default value of the "ui" property.
+
+2005-08-30  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtk.symbols: 
 	* gtk/gtkselection.h:
 	* gtk/gtkselection.c: Add functions which look for text, image
