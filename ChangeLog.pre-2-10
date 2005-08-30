@@ -1,5 +1,11 @@
 2005-08-30  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkimcontextsimple.c: Change the compose sequence for
+	soft hyphen to be multi_key-minus-minus-space, and add
+	compose sequences multi_key-minus-minus-period and 
+	multi_key-minus-minus-minus for en dash and em dash.
+	(#172653, Christian Lohmaier)
+
 	* gtk/gtkentry.c (gtk_entry_draw_frame): Fix some unused
 	code.  (#313946, Christian Persch)
 

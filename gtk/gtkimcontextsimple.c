@@ -391,7 +391,9 @@ static const guint16 gtk_compose_seqs[] = {
   GDK_Multi_key,	GDK_minus,	GDK_parenright,	0,	0,	0x007D,	/* RIGHT_CURLY_BRACKET */
   GDK_Multi_key,	GDK_minus,	GDK_plus,	0,	0,	0x00B1,	/* PLUSxMINUS_SIGN */
   GDK_Multi_key,	GDK_minus,	GDK_comma,	0,	0,	0x00AC,	/* NOT_SIGN */
-  GDK_Multi_key,	GDK_minus,	GDK_minus,	0,	0,	0x00AD,	/* SOFT_HYPHEN */
+  GDK_Multi_key,	GDK_minus,	GDK_minus,	GDK_space,	0,	0x00AD,	/* SOFT_HYPHEN */
+  GDK_Multi_key,	GDK_minus,	GDK_minus,	GDK_minus,	0,	0x2014,	/* EM DASH */
+  GDK_Multi_key,	GDK_minus,	GDK_minus,	GDK_period,	0,	0x2014,	/* EN DASH */
   GDK_Multi_key,	GDK_minus,	GDK_colon,	0,	0,	0x00F7,	/* DIVISION_SIGN */
   GDK_Multi_key,	GDK_minus,	GDK_A,	0,	0,	0x00C3,	/* LATIN_CAPITAL_LETTER_A_WITH_TILDE */
   GDK_Multi_key,	GDK_minus,	GDK_D,	0,	0,	0x0110,	/* LATIN_CAPITAL_LETTER_D_WITH_STROKE */
