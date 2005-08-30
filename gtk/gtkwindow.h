@@ -257,6 +257,9 @@ void       gtk_window_get_frame_dimensions     (GtkWindow *window,
 void       gtk_window_set_decorated            (GtkWindow *window,
                                                 gboolean   setting);
 gboolean   gtk_window_get_decorated            (GtkWindow *window);
+void       gtk_window_set_deletable            (GtkWindow *window,
+                                                gboolean   setting);
+gboolean   gtk_window_get_deletable            (GtkWindow *window);
 
 void       gtk_window_set_icon_list                (GtkWindow  *window,
                                                     GList      *list);

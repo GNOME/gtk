@@ -87,6 +87,7 @@ enum {
   PROP_ACCEPT_FOCUS,
   PROP_FOCUS_ON_MAP,
   PROP_DECORATED,
+  PROP_DELETABLE,
   PROP_GRAVITY,
   
   /* Readonly properties */
@@ -170,6 +171,7 @@ struct _GtkWindowPrivate
   guint urgent : 1;
   guint accept_focus : 1;
   guint focus_on_map : 1;
+  guint deletable : 1;
 };
 
 static void gtk_window_class_init         (GtkWindowClass    *klass);
@@ -635,6 +637,22 @@ gtk_window_class_init (GtkWindowClass *klass)
 							 GTK_PARAM_READWRITE));
 
   /**
+   * GtkWindow:deletable:
+   *
+   * Whether the window frame should have a close button.
+   *
+   * Since: 2.10
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_DELETABLE,
+                                   g_param_spec_boolean ("deletable",
+							 P_("Deletable"),
+							 P_("Whether the window frame should have a close button"),
+							 TRUE,
+							 GTK_PARAM_READWRITE));
+
+
+  /**
    * GtkWindow:gravity:
    *
    * The window gravity of the window. See gtk_window_move() and #GdkGravity for
@@ -783,6 +801,7 @@ gtk_window_init (GtkWindow *window)
 
   priv->accept_focus = TRUE;
   priv->focus_on_map = TRUE;
+  priv->deletable = TRUE;
 
   colormap = _gtk_widget_peek_colormap ();
   if (colormap)
@@ -892,6 +911,9 @@ gtk_window_set_property (GObject      *object,
     case PROP_DECORATED:
       gtk_window_set_decorated (window, g_value_get_boolean (value));
       break;
+    case PROP_DELETABLE:
+      gtk_window_set_deletable (window, g_value_get_boolean (value));
+      break;
     case PROP_GRAVITY:
       gtk_window_set_gravity (window, g_value_get_enum (value));
       break;
@@ -995,6 +1017,9 @@ gtk_window_get_property (GObject      *object,
       break;
     case PROP_DECORATED:
       g_value_set_boolean (value, gtk_window_get_decorated (window));
+      break;
+    case PROP_DELETABLE:
+      g_value_set_boolean (value, gtk_window_get_deletable (window));
       break;
     case PROP_GRAVITY:
       g_value_set_enum (value, gtk_window_get_gravity (window));
@@ -2430,6 +2455,74 @@ gtk_window_get_decorated (GtkWindow *window)
   g_return_val_if_fail (GTK_IS_WINDOW (window), TRUE);
 
   return window->decorated;
+}
+
+/**
+ * @window: a #GtkWindow
+ * @setting: %TRUE to decorate the window as deletable
+ *
+ * By default, windows have a close button in the window frame. Some 
+ * <link linkend="gtk-X11-arch">window managers</link> allow GTK+ to 
+ * disable this button. If you set the deletable property to %FALSE
+ * using this function, GTK+ will do its best to convince the window
+ * manager not to show a close button. Depending on the system, this
+ * function may not have any effect when called on a window that is
+ * already visible, so you should call it before calling gtk_window_show().
+ *
+ * On Windows, this function always works, since there's no window manager
+ * policy involved.
+ *
+ * Since: 2.10
+ */
+void
+gtk_window_set_deletable (GtkWindow *window,
+			  gboolean   setting)
+{
+  GtkWindowPrivate *priv;
+
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  priv = GTK_WINDOW_GET_PRIVATE (window);
+
+  setting = setting != FALSE;
+
+  if (setting == priv->deletable)
+    return;
+
+  priv->deletable = setting;
+  
+  if (GTK_WIDGET (window)->window)
+    {
+      if (priv->deletable)
+        gdk_window_set_functions (GTK_WIDGET (window)->window,
+				  GDK_FUNC_ALL);
+      else
+        gdk_window_set_functions (GTK_WIDGET (window)->window,
+				  GDK_FUNC_ALL | GDK_FUNC_CLOSE);
+    }
+
+  g_object_notify (G_OBJECT (window), "deletable");  
+}
+
+/**
+ * gtk_window_get_deletable:
+ * @window: a #GtkWindow
+ *
+ * Returns whether the window has been set to have a close button
+ * via gtk_window_set_deletable().
+ *
+ * Return value: %TRUE if the window has been set to have a close button
+ **/
+gboolean
+gtk_window_get_deletable (GtkWindow *window)
+{
+  GtkWindowPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_WINDOW (window), TRUE);
+
+  priv = GTK_WINDOW_GET_PRIVATE (window);
+
+  return priv->deletable;
 }
 
 static GtkWindowIconInfo*
@@ -4058,8 +4151,11 @@ gtk_window_realize (GtkWidget *widget)
   GdkWindow *parent_window;
   GdkWindowAttr attributes;
   gint attributes_mask;
+  GtkWindowPrivate *priv;
   
   window = GTK_WINDOW (widget);
+
+  priv = GTK_WINDOW_GET_PRIVATE (window);
 
   /* ensure widget tree is properly size allocated */
   if (widget->allocation.x == -1 &&
@@ -4181,6 +4277,9 @@ gtk_window_realize (GtkWidget *widget)
   
   if (!window->decorated)
     gdk_window_set_decorations (widget->window, 0);
+
+  if (!priv->deletable)
+    gdk_window_set_functions (widget->window, GDK_FUNC_ALL | GDK_FUNC_CLOSE);
 
   gdk_window_set_type_hint (widget->window, window->type_hint);
 

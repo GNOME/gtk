@@ -1,3 +1,11 @@
+2005-08-30  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk.symbols: 
+	* gtk/gtkwindow.h: 
+	* gtk/gtkwindow.c: Add a deletable property with getter
+	and setter, to control the close button in the window 
+	frame.  (#59718, Havoc Pennington)
+
 2005-08-29  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkrc.key.emacs: Add C-n/C-p/C-f/C-b as alternatives

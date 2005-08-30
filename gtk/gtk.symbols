@@ -3930,6 +3930,7 @@ gtk_window_deiconify
 gtk_window_fullscreen
 gtk_window_get_accept_focus
 gtk_window_get_decorated
+gtk_window_get_deletable
 gtk_window_get_default_icon_list
 gtk_window_get_default_size
 gtk_window_get_destroy_with_parent
@@ -3979,6 +3980,7 @@ gtk_window_resize
 gtk_window_set_accept_focus
 gtk_window_set_auto_startup_notification
 gtk_window_set_decorated
+gtk_window_set_deletable
 gtk_window_set_default
 gtk_window_set_default_icon
 gtk_window_set_default_icon_from_file PRIVATE
