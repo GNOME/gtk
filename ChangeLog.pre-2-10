@@ -1,5 +1,8 @@
 2005-08-29  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkrc.key.emacs: Add C-n/C-p/C-f/C-b as alternatives
+	to the arrow keys for menu navigation.  (#162825, Carl Worth)
+
 	* gtk/gtkentry.c, gtk/gtktextview.c: More typo fixes
 
 	* gtk/gtksocket-x11.c, gtk/gtkstatusicon-x11.c: Fix typos.

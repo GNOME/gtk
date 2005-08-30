@@ -95,7 +95,19 @@ binding "gtk-emacs-tree-view"
   bind "<ctrl>b" { "move-cursor" (logical-positions, -1) }
 }
 
+#
+# Bindings for menus
+#
+binding "gtk-emacs-menu"
+{
+  bind "<ctrl>n" { "move-current" (next) }
+  bind "<ctrl>p" { "move-current" (prev) }
+  bind "<ctrl>f" { "move-current" (child) }
+  bind "<ctrl>b" { "move-current" (parent) }
+}
+
 class "GtkEntry" binding "gtk-emacs-text-entry"
 class "GtkTextView" binding "gtk-emacs-text-entry"
 class "GtkTextView" binding "gtk-emacs-text-view"
 class "GtkTreeView" binding "gtk-emacs-tree-view"
+class "GtkMenuShell" binding "gtk-emacs-menu"
