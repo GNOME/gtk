@@ -2,6 +2,11 @@
 
 	* gtk/gtk.symbols: 
 	* gtk/gtkselection.h:
+	* gtk/gtkselection.c: Add functions which look for text, image
+	or uri targets in an array of atoms.   (#314089, Mark Wielaard)
+
+	* gtk/gtk.symbols: 
+	* gtk/gtkselection.h:
 	* gtk/gtkselection.c (gtk_selection_data_targets_include_uri): 
 	Add a function to check wether targets include uri.  
 	(#314092, Mark Wielaard)

@@ -1569,6 +1569,46 @@ gtk_selection_data_get_targets (GtkSelectionData  *selection_data,
 }
 
 /**
+ * gtk_targets_include_text:
+ * @targets: an array of #GdkAtom<!-- -->s
+ * @n_targets: the length of @targets
+ * 
+ * Determines if any of the targets in @targets can be used to
+ * provide text.
+ * 
+ * Return value: %TRUE if @targets include a suitable target for text,
+ *   otherwise %FALSE.
+ *
+ * Since: 2.10
+ **/
+gboolean 
+gtk_targets_include_text (GdkAtom *targets,
+			   gint     n_targets)
+{
+  gint i;
+  gboolean result = FALSE;
+
+  /* Keep in sync with gtk_target_list_add_text_targets()
+   */
+  for (i = 0; i < n_targets; i++)
+    {
+      if (targets[i] == utf8_atom ||
+	  targets[i] == text_atom ||
+	  targets[i] == GDK_TARGET_STRING ||
+	  targets[i] == ctext_atom ||
+	  targets[i] == text_plain_atom ||
+	  targets[i] == text_plain_utf8_atom ||
+	  targets[i] == text_plain_locale_atom)
+	{
+	  result = TRUE;
+	  break;
+	}
+    }
+  
+  return result;
+}
+				    
+/**
  * gtk_selection_data_targets_include_text:
  * @selection_data: a #GtkSelectionData object
  * 
@@ -1584,36 +1624,63 @@ gtk_selection_data_targets_include_text (GtkSelectionData *selection_data)
 {
   GdkAtom *targets;
   gint n_targets;
-  gint i;
   gboolean result = FALSE;
 
-  /* Keep in sync with gtk_target_list_add_text_targets()
-   */
   init_atoms ();
 
   if (gtk_selection_data_get_targets (selection_data, &targets, &n_targets))
     {
-      for (i=0; i < n_targets; i++)
-	{
-	  if (targets[i] == utf8_atom ||
-	      targets[i] == text_atom ||
-	      targets[i] == GDK_TARGET_STRING ||
-	      targets[i] == ctext_atom ||
-	      targets[i] == text_plain_atom ||
-	      targets[i] == text_plain_utf8_atom ||
-	      targets[i] == text_plain_locale_atom)
-	    {
-	      result = TRUE;
-	      break;
-	    }
-	}
-
+      result = gtk_targets_include_text (targets, n_targets);
       g_free (targets);
     }
 
   return result;
 }
 
+/**
+ * gtk_targets_include_image:
+ * @targets: an array of #GdkAtom<!-- -->s
+ * @n_targets: the length of @targets
+ * @writable: whether to accept only targets for which GTK+ knows
+ *   how to convert a pixbuf into the format
+ * 
+ * Determines if any of the targets in @targets can be used to
+ * provide a #GdkPixbuf.
+ * 
+ * Return value: %TRUE if @targets include a suitable target for images,
+ *   otherwise %FALSE.
+ *
+ * Since: 2.10
+ **/
+gboolean 
+gtk_targets_include_image (GdkAtom *targets,
+			   gint     n_targets,
+			   gboolean writable)
+{
+  GtkTargetList *list;
+  GList *l;
+  gint i;
+  gboolean result = FALSE;
+
+  list = gtk_target_list_new (NULL, 0);
+  gtk_target_list_add_image_targets (list, 0, writable);
+  for (i = 0; i < n_targets && !result; i++)
+    {
+      for (l = list->list; l; l = l->next)
+	{
+	  GtkTargetPair *pair = (GtkTargetPair *)l->data;
+	  if (pair->target == targets[i])
+	    {
+	      result = TRUE;
+	      break;
+	    }
+	}
+    }
+  gtk_target_list_unref (list);
+
+  return result;
+}
+				    
 /**
  * gtk_selection_data_targets_include_image:
  * @selection_data: a #GtkSelectionData object
@@ -1635,32 +1702,50 @@ gtk_selection_data_targets_include_image (GtkSelectionData *selection_data,
 {
   GdkAtom *targets;
   gint n_targets;
-  gint i;
   gboolean result = FALSE;
-  GtkTargetList *list;
-  GList *l;
 
-  /* Keep in sync with gtk_target_list_add_image_targets()
-   */
   init_atoms ();
 
   if (gtk_selection_data_get_targets (selection_data, &targets, &n_targets))
     {
-      list = gtk_target_list_new (NULL, 0);
-      gtk_target_list_add_image_targets (list, 0, writable);
-      for (i=0; i < n_targets && !result; i++)
-	{
-	  for (l = list->list; l && !result; l = l->next)
-	    {
-	      GtkTargetPair *pair = (GtkTargetPair *)l->data;
-	      if (pair->target == targets[i])
-		result = TRUE;
-	    }
-	}
-      gtk_target_list_unref (list);
+      result = gtk_targets_include_image (targets, n_targets, writable);
       g_free (targets);
     }
 
+  return result;
+}
+
+/**
+ * gtk_targets_include_uri:
+ * @targets: an array of #GdkAtom<!-- -->s
+ * @n_targets: the length of @targets
+ * 
+ * Determines if any of the targets in @targets can be used to
+ * provide an uri list.
+ * 
+ * Return value: %TRUE if @targets include a suitable target for uri lists,
+ *   otherwise %FALSE.
+ *
+ * Since: 2.10
+ **/
+gboolean 
+gtk_targets_include_uri (GdkAtom *targets,
+			 gint     n_targets)
+{
+  gint i;
+  gboolean result = FALSE;
+
+  /* Keep in sync with gtk_target_list_add_uri_targets()
+   */
+  for (i = 0; i < n_targets; i++)
+    {
+      if (targets[i] == text_uri_list_atom)
+	{
+	  result = TRUE;
+	  break;
+	}
+    }
+  
   return result;
 }
 
@@ -1682,24 +1767,13 @@ gtk_selection_data_targets_include_uri (GtkSelectionData *selection_data)
 {
   GdkAtom *targets;
   gint n_targets;
-  gint i;
   gboolean result = FALSE;
 
-  /* Keep in sync with gtk_target_list_add_uri_targets()
-   */
   init_atoms ();
 
   if (gtk_selection_data_get_targets (selection_data, &targets, &n_targets))
     {
-      for (i=0; i < n_targets; i++)
-	{
-	  if (targets[i] == text_uri_list_atom)
-	    {
-	      result = TRUE;
-	      break;
-	    }
-	}
-
+      result = gtk_targets_include_uri (targets, n_targets);
       g_free (targets);
     }
 
