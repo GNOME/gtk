@@ -59,7 +59,7 @@ gtk_file_info_get_type (void)
   static GType our_type = 0;
   
   if (our_type == 0)
-    our_type = g_boxed_type_register_static ("GtkFileInfo",
+    our_type = g_boxed_type_register_static (g_intern_static_string ("GtkFileInfo"),
 					     (GBoxedCopyFunc) gtk_file_info_copy,
 					     (GBoxedFreeFunc) gtk_file_info_free);
 
@@ -269,7 +269,7 @@ gtk_file_system_get_type (void)
       };
 
       file_system_type = g_type_register_static (G_TYPE_INTERFACE,
-						 "GtkFileSystem",
+						 g_intern_static_string ("GtkFileSystem"),
 						 &file_system_info, 0);
 
       g_type_interface_add_prerequisite (file_system_type, G_TYPE_OBJECT);
@@ -843,7 +843,7 @@ gtk_file_folder_get_type (void)
       };
 
       file_folder_type = g_type_register_static (G_TYPE_INTERFACE,
-						 "GtkFileFolder",
+						 g_intern_static_string ("GtkFileFolder"),
 						 &file_folder_info, 0);
       
       g_type_interface_add_prerequisite (file_folder_type, G_TYPE_OBJECT);
@@ -976,7 +976,7 @@ gtk_file_path_get_type (void)
   static GType our_type = 0;
   
   if (our_type == 0)
-    our_type = g_boxed_type_register_static ("GtkFilePath",
+    our_type = g_boxed_type_register_static (g_intern_static_string ("GtkFilePath"),
 					     (GBoxedCopyFunc) gtk_file_path_real_copy,
 					     (GBoxedFreeFunc) gtk_file_path_real_free);
 

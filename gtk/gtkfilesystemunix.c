@@ -270,7 +270,7 @@ gtk_file_system_unix_get_type (void)
       };
 
       file_system_unix_type = g_type_register_static (G_TYPE_OBJECT,
-						      "GtkFileSystemUnix",
+						      g_intern_static_string ("GtkFileSystemUnix"),
 						      &file_system_unix_info, 0);
       g_type_add_interface_static (file_system_unix_type,
 				   GTK_TYPE_FILE_SYSTEM,
@@ -1746,7 +1746,7 @@ gtk_file_folder_unix_get_type (void)
       };
 
       file_folder_unix_type = g_type_register_static (G_TYPE_OBJECT,
-						      "GtkFileFolderUnix",
+						      g_intern_static_string ("GtkFileFolderUnix"),
 						      &file_folder_unix_info, 0);
       g_type_add_interface_static (file_folder_unix_type,
 				   GTK_TYPE_FILE_FOLDER,

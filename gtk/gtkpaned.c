@@ -161,7 +161,7 @@ gtk_paned_get_type (void)
 	NULL,		/* value_table */
       };
 
-      paned_type = g_type_register_static (GTK_TYPE_CONTAINER, "GtkPaned",
+      paned_type = g_type_register_static (GTK_TYPE_CONTAINER, g_intern_static_string ("GtkPaned"),
 					   &paned_info, G_TYPE_FLAG_ABSTRACT);
     }
   

@@ -175,7 +175,7 @@ gtk_text_tag_get_type (void)
         (GInstanceInitFunc) gtk_text_tag_init
       };
 
-      our_type = g_type_register_static (G_TYPE_OBJECT, "GtkTextTag",
+      our_type = g_type_register_static (G_TYPE_OBJECT, g_intern_static_string ("GtkTextTag"),
                                          &our_info, 0);
     }
 
@@ -1971,7 +1971,7 @@ gtk_text_attributes_get_type (void)
   static GType our_type = 0;
   
   if (our_type == 0)
-    our_type = g_boxed_type_register_static ("GtkTextAttributes",
+    our_type = g_boxed_type_register_static (g_intern_static_string ("GtkTextAttributes"),
 					     (GBoxedCopyFunc) gtk_text_attributes_ref,
 					     (GBoxedFreeFunc) gtk_text_attributes_unref);
 

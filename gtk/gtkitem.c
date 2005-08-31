@@ -71,7 +71,7 @@ gtk_item_get_type (void)
 	NULL,		/* value_table */
       };
 
-      item_type = g_type_register_static (GTK_TYPE_BIN, "GtkItem",
+      item_type = g_type_register_static (GTK_TYPE_BIN, g_intern_static_string ("GtkItem"),
 					  &item_info, G_TYPE_FLAG_ABSTRACT);
     }
 

@@ -166,7 +166,7 @@ gtk_list_store_get_type (void)
 	NULL
       };
 
-      list_store_type = g_type_register_static (G_TYPE_OBJECT, "GtkListStore",
+      list_store_type = g_type_register_static (G_TYPE_OBJECT, g_intern_static_string ("GtkListStore"),
 						&list_store_info, 0);
 
       g_type_add_interface_static (list_store_type,

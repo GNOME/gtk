@@ -60,7 +60,7 @@ gtk_radio_tool_button_get_type (void)
 	};
 
       type = g_type_register_static (GTK_TYPE_TOGGLE_TOOL_BUTTON,
-				     "GtkRadioToolButton", &type_info, 0);
+				     g_intern_static_string ("GtkRadioToolButton"), &type_info, 0);
     }
   return type;
 }

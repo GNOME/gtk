@@ -144,7 +144,7 @@ gtk_hsv_get_type (void)
       (GInstanceInitFunc) gtk_hsv_init,
     };
     
-    hsv_type = g_type_register_static (GTK_TYPE_WIDGET, "GtkHSV",
+    hsv_type = g_type_register_static (GTK_TYPE_WIDGET, g_intern_static_string ("GtkHSV"),
 				       &hsv_info, 0);
   }
   

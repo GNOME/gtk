@@ -93,7 +93,7 @@ gtk_image_menu_item_get_type (void)
       };
 
       image_menu_item_type =
-	g_type_register_static (GTK_TYPE_MENU_ITEM, "GtkImageMenuItem",
+	g_type_register_static (GTK_TYPE_MENU_ITEM, g_intern_static_string ("GtkImageMenuItem"),
 				&image_menu_item_info, 0);
     }
 

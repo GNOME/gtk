@@ -294,7 +294,7 @@ gtk_menu_get_type (void)
 	(GInstanceInitFunc) gtk_menu_init,
       };
       
-      menu_type = g_type_register_static (GTK_TYPE_MENU_SHELL, "GtkMenu",
+      menu_type = g_type_register_static (GTK_TYPE_MENU_SHELL, g_intern_static_string ("GtkMenu"),
 					  &menu_info, 0);
     }
   

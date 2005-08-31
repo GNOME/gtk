@@ -317,7 +317,7 @@ gtk_window_get_type (void)
 	(GInstanceInitFunc) gtk_window_init,
       };
 
-      window_type = g_type_register_static (GTK_TYPE_BIN, "GtkWindow",
+      window_type = g_type_register_static (GTK_TYPE_BIN, g_intern_static_string ("GtkWindow"),
 					    &window_info, 0);
     }
 
@@ -6940,7 +6940,8 @@ gtk_window_group_get_type (void)
 	(GInstanceInitFunc) NULL,
       };
 
-      window_group_type = g_type_register_static (G_TYPE_OBJECT, "GtkWindowGroup", &window_group_info, 0);
+      window_group_type = g_type_register_static (G_TYPE_OBJECT, g_intern_static_string ("GtkWindowGroup"), 
+						  &window_group_info, 0);
     }
 
   return window_group_type;

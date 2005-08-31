@@ -171,7 +171,7 @@ gtk_entry_completion_get_type (void)
       };
 
       entry_completion_type =
-        g_type_register_static (G_TYPE_OBJECT, "GtkEntryCompletion",
+        g_type_register_static (G_TYPE_OBJECT, g_intern_static_string ("GtkEntryCompletion"),
                                 &entry_completion_info, 0);
 
       g_type_add_interface_static (entry_completion_type,

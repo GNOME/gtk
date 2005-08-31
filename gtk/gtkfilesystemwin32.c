@@ -223,7 +223,7 @@ gtk_file_system_win32_get_type (void)
       };
 
       file_system_win32_type = g_type_register_static (G_TYPE_OBJECT,
-						       "GtkFileSystemWin32",
+						       g_intern_static_string ("GtkFileSystemWin32"),
 						       &file_system_win32_info, 0);
       g_type_add_interface_static (file_system_win32_type,
 				   GTK_TYPE_FILE_SYSTEM,
@@ -1342,7 +1342,7 @@ gtk_file_folder_win32_get_type (void)
       };
 
       file_folder_win32_type = g_type_register_static (G_TYPE_OBJECT,
-						      "GtkFileFolderWin32",
+						       g_intern_static_string ("GtkFileFolderWin32"),
 						      &file_folder_win32_info, 0);
       g_type_add_interface_static (file_folder_win32_type,
 				   GTK_TYPE_FILE_FOLDER,

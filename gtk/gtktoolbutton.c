@@ -116,7 +116,7 @@ gtk_tool_button_get_type (void)
 	};
 
       type = g_type_register_static (GTK_TYPE_TOOL_ITEM,
-				     "GtkToolButton",
+				     g_intern_static_string ("GtkToolButton"),
 				     &type_info, 0);
     }
   return type;

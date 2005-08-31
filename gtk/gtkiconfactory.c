@@ -1537,7 +1537,7 @@ gtk_icon_set_get_type (void)
   static GType our_type = 0;
   
   if (our_type == 0)
-    our_type = g_boxed_type_register_static ("GtkIconSet",
+    our_type = g_boxed_type_register_static (g_intern_static_string ("GtkIconSet"),
 					     (GBoxedCopyFunc) gtk_icon_set_ref,
 					     (GBoxedFreeFunc) gtk_icon_set_unref);
 

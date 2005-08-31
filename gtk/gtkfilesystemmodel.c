@@ -233,7 +233,7 @@ _gtk_file_system_model_get_type (void)
       };
 
       file_system_model_type = g_type_register_static (G_TYPE_OBJECT,
-						      "GtkFileSystemModel",
+						       g_intern_static_string ("GtkFileSystemModel"),
 						      &file_system_model_info, 0);
       g_type_add_interface_static (file_system_model_type,
 				   GTK_TYPE_TREE_MODEL,

@@ -46,7 +46,7 @@ gtk_cell_editable_get_type (void)
       };
 
       cell_editable_type =
-	g_type_register_static (G_TYPE_INTERFACE, "GtkCellEditable",
+	g_type_register_static (G_TYPE_INTERFACE, g_intern_static_string ("GtkCellEditable"),
 				&cell_editable_info, 0);
 
       g_type_interface_add_prerequisite (cell_editable_type, GTK_TYPE_WIDGET);

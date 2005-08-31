@@ -484,7 +484,7 @@ gtk_tree_view_get_type (void)
       };
 
       tree_view_type =
-	g_type_register_static (GTK_TYPE_CONTAINER, "GtkTreeView",
+	g_type_register_static (GTK_TYPE_CONTAINER, g_intern_static_string ("GtkTreeView"),
 				&tree_view_info, 0);
     }
 

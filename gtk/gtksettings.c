@@ -137,7 +137,7 @@ gtk_settings_get_type (void)
 	(GInstanceInitFunc) gtk_settings_init,
       };
       
-      settings_type = g_type_register_static (G_TYPE_OBJECT, "GtkSettings",
+      settings_type = g_type_register_static (G_TYPE_OBJECT, g_intern_static_string ("GtkSettings"),
 					      &settings_info, 0);
     }
   

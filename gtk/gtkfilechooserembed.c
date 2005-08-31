@@ -138,7 +138,7 @@ _gtk_file_chooser_embed_get_type (void)
       };
 
       file_chooser_embed_type = g_type_register_static (G_TYPE_INTERFACE,
-							"GtkFileChooserEmbed",
+							g_intern_static_string ("GtkFileChooserEmbed"),
 							&file_chooser_embed_info, 0);
 
       g_type_interface_add_prerequisite (file_chooser_embed_type, GTK_TYPE_WIDGET);

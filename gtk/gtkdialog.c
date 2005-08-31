@@ -114,7 +114,7 @@ gtk_dialog_get_type (void)
 	(GInstanceInitFunc) gtk_dialog_init,
       };
 
-      dialog_type = g_type_register_static (GTK_TYPE_WINDOW, "GtkDialog",
+      dialog_type = g_type_register_static (GTK_TYPE_WINDOW, g_intern_static_string ("GtkDialog"),
 					    &dialog_info, 0);
     }
 

@@ -122,7 +122,7 @@ gtk_tool_item_get_type (void)
 	};
 
       type = g_type_register_static (GTK_TYPE_BIN,
-				     "GtkToolItem",
+				     g_intern_static_string ("GtkToolItem"),
 				     &type_info, 0);
     }
   return type;

@@ -60,7 +60,7 @@ gtk_hbutton_box_get_type (void)
       };
 
       hbutton_box_type =
-	g_type_register_static (GTK_TYPE_BUTTON_BOX, "GtkHButtonBox",
+	g_type_register_static (GTK_TYPE_BUTTON_BOX, g_intern_static_string ("GtkHButtonBox"),
 				&hbutton_box_info, 0);
     }
 

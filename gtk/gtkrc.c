@@ -945,7 +945,7 @@ gtk_rc_style_get_type (void)
         (GInstanceInitFunc) gtk_rc_style_init,
       };
       
-      rc_style_type = g_type_register_static (G_TYPE_OBJECT, "GtkRcStyle",
+      rc_style_type = g_type_register_static (G_TYPE_OBJECT, g_intern_static_string ("GtkRcStyle"),
 					      &rc_style_info, 0);
     }
   

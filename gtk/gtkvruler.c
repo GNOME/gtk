@@ -69,7 +69,7 @@ gtk_vruler_get_type (void)
 	(GInstanceInitFunc) gtk_vruler_init,
       };
 
-      vruler_type = g_type_register_static (GTK_TYPE_RULER, "GtkVRuler",
+      vruler_type = g_type_register_static (GTK_TYPE_RULER, g_intern_static_string ("GtkVRuler"),
 					    &vruler_info, 0);
     }
 

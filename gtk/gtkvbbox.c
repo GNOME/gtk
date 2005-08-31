@@ -60,7 +60,7 @@ gtk_vbutton_box_get_type (void)
       };
 
       vbutton_box_type =
-	g_type_register_static (GTK_TYPE_BUTTON_BOX, "GtkVButtonBox",
+	g_type_register_static (GTK_TYPE_BUTTON_BOX, g_intern_static_string ("GtkVButtonBox"),
 				&vbutton_box_info, 0);
     }
 

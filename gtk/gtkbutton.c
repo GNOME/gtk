@@ -165,7 +165,7 @@ gtk_button_get_type (void)
 	(GInstanceInitFunc) gtk_button_init,
       };
 
-      button_type = g_type_register_static (GTK_TYPE_BIN, "GtkButton",
+      button_type = g_type_register_static (GTK_TYPE_BIN, g_intern_static_string ("GtkButton"),
 					    &button_info, 0);
     }
 

@@ -75,7 +75,7 @@ gtk_toggle_action_get_type (void)
       };
 
       type = g_type_register_static (GTK_TYPE_ACTION,
-                                     "GtkToggleAction",
+                                     g_intern_static_string ("GtkToggleAction"),
                                      &type_info, 0);
     }
   return type;

@@ -376,7 +376,7 @@ gtk_style_get_type (void)
         (GInstanceInitFunc) gtk_style_init,
       };
       
-      style_type = g_type_register_static (G_TYPE_OBJECT, "GtkStyle",
+      style_type = g_type_register_static (G_TYPE_OBJECT, g_intern_static_string ("GtkStyle"),
 					   &style_info, 0);
     }
   
@@ -6402,7 +6402,7 @@ gtk_border_get_type (void)
   static GType our_type = 0;
   
   if (our_type == 0)
-    our_type = g_boxed_type_register_static ("GtkBorder",
+    our_type = g_boxed_type_register_static (g_intern_static_string ("GtkBorder"),
 					     (GBoxedCopyFunc) gtk_border_copy,
 					     (GBoxedFreeFunc) gtk_border_free);
 

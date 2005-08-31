@@ -581,7 +581,7 @@ gtk_layout_get_type (void)
 	(GInstanceInitFunc) gtk_layout_init,
       };
 
-      layout_type = g_type_register_static (GTK_TYPE_CONTAINER, "GtkLayout",
+      layout_type = g_type_register_static (GTK_TYPE_CONTAINER, g_intern_static_string ("GtkLayout"),
 					    &layout_info, 0);
     }
 

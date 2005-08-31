@@ -66,7 +66,7 @@ gtk_tree_selection_get_type (void)
       };
 
       selection_type =
-	g_type_register_static (G_TYPE_OBJECT, "GtkTreeSelection",
+	g_type_register_static (G_TYPE_OBJECT, g_intern_static_string ("GtkTreeSelection"),
 				&selection_info, 0);
     }
 

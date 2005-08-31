@@ -170,7 +170,7 @@ gtk_handle_box_get_type (void)
 	(GInstanceInitFunc) gtk_handle_box_init,
       };
 
-      handle_box_type = g_type_register_static (GTK_TYPE_BIN, "GtkHandleBox",
+      handle_box_type = g_type_register_static (GTK_TYPE_BIN, g_intern_static_string ("GtkHandleBox"),
 						&handle_box_info, 0);
     }
 

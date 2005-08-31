@@ -159,7 +159,7 @@ gtk_color_button_get_type (void)
       };
       
       color_button_type =
-        g_type_register_static (GTK_TYPE_BUTTON, "GtkColorButton",
+        g_type_register_static (GTK_TYPE_BUTTON, g_intern_static_string ("GtkColorButton"),
                                 &color_button_info, 0);
     }
   

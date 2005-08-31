@@ -149,7 +149,7 @@ gtk_cell_view_get_type (void)
          NULL
        };
 
-      cell_view_type = g_type_register_static (GTK_TYPE_WIDGET, "GtkCellView",
+      cell_view_type = g_type_register_static (GTK_TYPE_WIDGET, g_intern_static_string ("GtkCellView"),
                                                &cell_view_info, 0);
 
       g_type_add_interface_static (cell_view_type, GTK_TYPE_CELL_LAYOUT,

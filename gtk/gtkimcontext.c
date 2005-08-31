@@ -75,7 +75,7 @@ gtk_im_context_get_type (void)
       };
       
       im_context_type =
-	g_type_register_static (G_TYPE_OBJECT, "GtkIMContext",
+	g_type_register_static (G_TYPE_OBJECT, g_intern_static_string ("GtkIMContext"),
 				&im_context_info, G_TYPE_FLAG_ABSTRACT);
     }
 

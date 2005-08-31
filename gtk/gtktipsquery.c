@@ -105,6 +105,7 @@ gtk_tips_query_get_type (void)
 	(GtkClassInitFunc) NULL,
       };
 
+      g_intern_static_string ("GtkTipsQuery");
       tips_query_type = gtk_type_unique (gtk_label_get_type (), &tips_query_info);
     }
 

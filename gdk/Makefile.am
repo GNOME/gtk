@@ -250,7 +250,7 @@ gdkenumtypes.c: @REBUILD@ $(gdk_public_h_sources) Makefile
 			--ftail "\n#define __GDK_ENUM_TYPES_C__\n#include \"gdkaliasdef.c\"\n" \
 			--vhead "GType\n@enum_name@_get_type (void)\n{\n  static GType etype = 0;\n  if (etype == 0) {\n    static const G@Type@Value values[] = {" \
 			--vprod "      { @VALUENAME@, \"@VALUENAME@\", \"@valuenick@\" }," \
-			--vtail "      { 0, NULL, NULL }\n    };\n    etype = g_@type@_register_static (\"@EnumName@\", values);\n  }\n  return etype;\n}\n" \
+			--vtail "      { 0, NULL, NULL }\n    };\n    etype = g_@type@_register_static (g_intern_static_string (\"@EnumName@\"), values);\n  }\n  return etype;\n}\n" \
 		$(gdk_public_h_sources) ) > xgen-getc \
 	&& cp xgen-getc gdkenumtypes.c  \
 	&& rm -f xgen-getc

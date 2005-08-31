@@ -82,7 +82,7 @@ gtk_aspect_frame_get_type (void)
       };
       
       aspect_frame_type =
-	g_type_register_static (GTK_TYPE_FRAME, "GtkAspectFrame",
+	g_type_register_static (GTK_TYPE_FRAME, g_intern_static_string ("GtkAspectFrame"),
 				&aspect_frame_info, 0);
     }
   

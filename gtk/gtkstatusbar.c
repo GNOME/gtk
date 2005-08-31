@@ -117,7 +117,7 @@ gtk_statusbar_get_type (void)
         (GInstanceInitFunc) gtk_statusbar_init,
       };
 
-      statusbar_type = g_type_register_static (GTK_TYPE_HBOX, "GtkStatusbar",
+      statusbar_type = g_type_register_static (GTK_TYPE_HBOX, g_intern_static_string ("GtkStatusbar"),
 					       &statusbar_info, 0);
     }
 

@@ -185,7 +185,7 @@ gtk_tree_view_column_get_type (void)
       };
 
       tree_column_type =
-	g_type_register_static (GTK_TYPE_OBJECT, "GtkTreeViewColumn",
+	g_type_register_static (GTK_TYPE_OBJECT, g_intern_static_string ("GtkTreeViewColumn"),
 				&tree_column_info, 0);
 
       g_type_add_interface_static (tree_column_type,

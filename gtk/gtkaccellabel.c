@@ -85,7 +85,7 @@ gtk_accel_label_get_type (void)
       };
       
       accel_label_type =
-	g_type_register_static (GTK_TYPE_LABEL, "GtkAccelLabel",
+	g_type_register_static (GTK_TYPE_LABEL, g_intern_static_string ("GtkAccelLabel"),
 				&accel_label_info, 0);
     }
   

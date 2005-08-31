@@ -393,7 +393,7 @@ gdk-pixbuf-enum-types.c: @REBUILD@ $(gdk_pixbuf_headers) Makefile
 		--ftail "\n#define __GDK_PIXBUF_ENUM_TYPES_C__\n#include \"gdk-pixbuf-aliasdef.c\"" \
 		--vhead "GType\n@enum_name@_get_type (void)\n{\n  static GType etype = 0;\n  if (etype == 0) {\n    static const G@Type@Value values[] = {"       \
 		--vprod "      { @VALUENAME@, \"@VALUENAME@\", \"@valuenick@\" }," \
-		--vtail "      { 0, NULL, NULL }\n    };\n    etype = g_@type@_register_static (\"@EnumName@\", values);\n  }\n  return etype;\n}\n" \
+		--vtail "      { 0, NULL, NULL }\n    };\n    etype = g_@type@_register_static (g_intern_static_string (\"@EnumName@\"), values);\n  }\n  return etype;\n}\n" \
 		  $(gdk_pixbuf_headers)) > gdk-pixbuf-enum-types.c
 
 #

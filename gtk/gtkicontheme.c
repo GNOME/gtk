@@ -256,7 +256,7 @@ gtk_icon_theme_get_type (void)
 	  (GInstanceInitFunc) gtk_icon_theme_init,
 	};
 
-      type = g_type_register_static (G_TYPE_OBJECT, "GtkIconTheme", &info, 0);
+      type = g_type_register_static (G_TYPE_OBJECT, g_intern_static_string ("GtkIconTheme"), &info, 0);
     }
 
   return type;
@@ -2265,7 +2265,7 @@ gtk_icon_info_get_type (void)
   static GType our_type = 0;
   
   if (our_type == 0)
-    our_type = g_boxed_type_register_static ("GtkIconInfo",
+    our_type = g_boxed_type_register_static (g_intern_static_string ("GtkIconInfo"),
 					     (GBoxedCopyFunc) gtk_icon_info_copy,
 					     (GBoxedFreeFunc) gtk_icon_info_free);
 

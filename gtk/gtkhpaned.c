@@ -57,7 +57,7 @@ gtk_hpaned_get_type (void)
 	(GInstanceInitFunc) gtk_hpaned_init,
       };
 
-      hpaned_type = g_type_register_static (GTK_TYPE_PANED, "GtkHPaned",
+      hpaned_type = g_type_register_static (GTK_TYPE_PANED, g_intern_static_string ("GtkHPaned"),
 					    &hpaned_info, 0);
     }
 

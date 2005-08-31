@@ -488,6 +488,7 @@ gtk_clist_get_type (void)
 	(GtkClassInitFunc) NULL,
       };
 
+      g_intern_static_string ("GtkCList");
       clist_type = gtk_type_unique (GTK_TYPE_CONTAINER, &clist_info);
     }
 

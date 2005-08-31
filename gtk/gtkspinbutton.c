@@ -176,7 +176,7 @@ gtk_spin_button_get_type (void)
       };
 
       spin_button_type =
-	g_type_register_static (GTK_TYPE_ENTRY, "GtkSpinButton",
+	g_type_register_static (GTK_TYPE_ENTRY, g_intern_static_string ("GtkSpinButton"),
 				&spin_button_info, 0);
 
       g_type_add_interface_static (spin_button_type,

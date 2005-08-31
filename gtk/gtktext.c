@@ -540,6 +540,7 @@ gtk_text_get_type (void)
 	NULL  /* interface_data */
       };
       
+      g_intern_static_string ("GtkText");
       text_type = gtk_type_unique (GTK_TYPE_OLD_EDITABLE, &text_info);
       g_type_add_interface_static (text_type,
 				   GTK_TYPE_EDITABLE,

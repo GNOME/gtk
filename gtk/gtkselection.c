@@ -2746,7 +2746,7 @@ gtk_selection_data_get_type (void)
   static GType our_type = 0;
   
   if (our_type == 0)
-    our_type = g_boxed_type_register_static ("GtkSelectionData",
+    our_type = g_boxed_type_register_static (g_intern_static_string ("GtkSelectionData"),
 					     (GBoxedCopyFunc) gtk_selection_data_copy,
 					     (GBoxedFreeFunc) gtk_selection_data_free);
 

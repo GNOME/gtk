@@ -390,7 +390,7 @@ gtk_entry_get_type (void)
 	NULL                                                  /* interface_data */
       };
       
-      entry_type = g_type_register_static (GTK_TYPE_WIDGET, "GtkEntry",
+      entry_type = g_type_register_static (GTK_TYPE_WIDGET, g_intern_static_string ("GtkEntry"),
 					   &entry_info, 0);
 
       g_type_add_interface_static (entry_type,

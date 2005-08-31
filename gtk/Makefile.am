@@ -658,7 +658,7 @@ gtktypebuiltins.c: @REBUILD@ $(gtk_public_h_sources) Makefile
 			--fprod "\n/* enumerations from \"@filename@\" */" \
 			--vhead "GType\n@enum_name@_get_type (void)\n{\n  static GType etype = 0;\n  if (etype == 0) {\n    static const G@Type@Value values[] = {" \
 			--vprod "      { @VALUENAME@, \"@VALUENAME@\", \"@valuenick@\" }," \
-			--vtail "      { 0, NULL, NULL }\n    };\n    etype = g_@type@_register_static (\"@EnumName@\", values);\n  }\n  return etype;\n}\n" \
+			--vtail "      { 0, NULL, NULL }\n    };\n    etype = g_@type@_register_static (g_intern_static_string (\"@EnumName@\"), values);\n  }\n  return etype;\n}\n" \
 		$(gtk_public_h_sources) ) > xgen-gtbc \
 	&& cp xgen-gtbc gtktypebuiltins.c  \
 	&& rm -f xgen-gtbc

@@ -68,7 +68,7 @@ gtk_hruler_get_type (void)
 	(GInstanceInitFunc) gtk_hruler_init,
       };
 
-      hruler_type = g_type_register_static (GTK_TYPE_RULER, "GtkHRuler",
+      hruler_type = g_type_register_static (GTK_TYPE_RULER, g_intern_static_string ("GtkHRuler"),
 					    &hruler_info, 0);
     }
 

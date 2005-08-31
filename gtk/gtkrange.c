@@ -208,7 +208,7 @@ gtk_range_get_type (void)
 	NULL,		/* value_table */
       };
 
-      range_type = g_type_register_static (GTK_TYPE_WIDGET, "GtkRange",
+      range_type = g_type_register_static (GTK_TYPE_WIDGET, g_intern_static_string ("GtkRange"),
 					   &range_info, G_TYPE_FLAG_ABSTRACT);
     }
 

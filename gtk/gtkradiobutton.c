@@ -81,7 +81,7 @@ gtk_radio_button_get_type (void)
       };
 
       radio_button_type =
-	g_type_register_static (GTK_TYPE_CHECK_BUTTON, "GtkRadioButton",
+	g_type_register_static (GTK_TYPE_CHECK_BUTTON, g_intern_static_string ("GtkRadioButton"),
 				&radio_button_info, 0);
     }
 

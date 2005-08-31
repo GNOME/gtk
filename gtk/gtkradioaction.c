@@ -96,7 +96,7 @@ gtk_radio_action_get_type (void)
       };
 
       type = g_type_register_static (GTK_TYPE_TOGGLE_ACTION,
-                                     "GtkRadioAction",
+                                     g_intern_static_string ("GtkRadioAction"),
                                      &type_info, 0);
     }
   return type;

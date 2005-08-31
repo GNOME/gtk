@@ -135,7 +135,7 @@ gtk_font_button_get_type (void)
       };
       
       font_button_type =
-        g_type_register_static (GTK_TYPE_BUTTON, "GtkFontButton",
+        g_type_register_static (GTK_TYPE_BUTTON, g_intern_static_string ("GtkFontButton"),
                                 &font_button_info, 0);
     }
   

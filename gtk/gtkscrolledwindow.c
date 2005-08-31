@@ -158,7 +158,7 @@ gtk_scrolled_window_get_type (void)
       };
 
       scrolled_window_type =
-	g_type_register_static (GTK_TYPE_BIN, "GtkScrolledWindow",
+	g_type_register_static (GTK_TYPE_BIN, g_intern_static_string ("GtkScrolledWindow"),
 				&scrolled_window_info, 0);
     }
 

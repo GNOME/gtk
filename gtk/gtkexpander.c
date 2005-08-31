@@ -142,7 +142,7 @@ gtk_expander_get_type (void)
       };
       
       expander_type = g_type_register_static (GTK_TYPE_BIN,
-					      "GtkExpander",
+					      g_intern_static_string ("GtkExpander"),
 					      &expander_info, 0);
     }
   

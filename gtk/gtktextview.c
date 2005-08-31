@@ -441,7 +441,7 @@ gtk_text_view_get_type (void)
 	(GInstanceInitFunc) gtk_text_view_init,
       };
 
-      our_type = g_type_register_static (GTK_TYPE_CONTAINER, "GtkTextView",
+      our_type = g_type_register_static (GTK_TYPE_CONTAINER, g_intern_static_string ("GtkTextView"),
 					 &our_info, 0);
     }
 

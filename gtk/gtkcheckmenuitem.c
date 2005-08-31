@@ -90,7 +90,7 @@ gtk_check_menu_item_get_type (void)
       };
 
       check_menu_item_type =
-	g_type_register_static (GTK_TYPE_MENU_ITEM, "GtkCheckMenuItem",
+	g_type_register_static (GTK_TYPE_MENU_ITEM, g_intern_static_string ("GtkCheckMenuItem"),
 				&check_menu_item_info, 0);
     }
 

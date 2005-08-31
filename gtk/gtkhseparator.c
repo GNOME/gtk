@@ -56,7 +56,7 @@ gtk_hseparator_get_type (void)
       };
 
       hseparator_type =
-	g_type_register_static (GTK_TYPE_SEPARATOR, "GtkHSeparator",
+	g_type_register_static (GTK_TYPE_SEPARATOR, g_intern_static_string ("GtkHSeparator"),
 				&hseparator_info, 0);
     }
 

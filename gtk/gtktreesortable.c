@@ -46,7 +46,7 @@ gtk_tree_sortable_get_type (void)
       };
 
       tree_sortable_type =
-	g_type_register_static (G_TYPE_INTERFACE, "GtkTreeSortable",
+	g_type_register_static (G_TYPE_INTERFACE, g_intern_static_string ("GtkTreeSortable"),
 				&tree_sortable_info, 0);
 
       g_type_interface_add_prerequisite (tree_sortable_type, GTK_TYPE_TREE_MODEL);

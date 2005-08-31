@@ -78,7 +78,7 @@ gtk_text_tag_table_get_type (void)
         (GInstanceInitFunc) gtk_text_tag_table_init
       };
 
-      our_type = g_type_register_static (G_TYPE_OBJECT, "GtkTextTagTable",
+      our_type = g_type_register_static (G_TYPE_OBJECT, g_intern_static_string ("GtkTextTagTable"),
                                          &our_info, 0);
     }
 

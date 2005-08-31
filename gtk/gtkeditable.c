@@ -49,7 +49,7 @@ gtk_editable_get_type (void)
 	NULL,			    /* base_finalize */
       };
 
-      editable_type = g_type_register_static (G_TYPE_INTERFACE, "GtkEditable",
+      editable_type = g_type_register_static (G_TYPE_INTERFACE, g_intern_static_string ("GtkEditable"),
 					      &editable_info, 0);
     }
 

@@ -55,7 +55,7 @@ gtk_separator_get_type (void)
       };
 
       separator_type =
-	g_type_register_static (GTK_TYPE_WIDGET, "GtkSeparator",
+	g_type_register_static (GTK_TYPE_WIDGET, g_intern_static_string ("GtkSeparator"),
 				&separator_info, G_TYPE_FLAG_ABSTRACT);
     }
 

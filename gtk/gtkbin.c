@@ -66,7 +66,7 @@ gtk_bin_get_type (void)
 	NULL,		/* value_table */
       };
 
-      bin_type = g_type_register_static (GTK_TYPE_CONTAINER, "GtkBin", 
+      bin_type = g_type_register_static (GTK_TYPE_CONTAINER, g_intern_static_string ("GtkBin"), 
 					 &bin_info, G_TYPE_FLAG_ABSTRACT);
     }
 

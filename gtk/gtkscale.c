@@ -105,7 +105,7 @@ gtk_scale_get_type (void)
 	NULL,		/* value_table */
       };
 
-      scale_type = g_type_register_static (GTK_TYPE_RANGE, "GtkScale",
+      scale_type = g_type_register_static (GTK_TYPE_RANGE, g_intern_static_string ("GtkScale"),
 					   &scale_info, G_TYPE_FLAG_ABSTRACT);
     }
 

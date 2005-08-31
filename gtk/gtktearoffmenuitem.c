@@ -65,7 +65,7 @@ gtk_tearoff_menu_item_get_type (void)
       };
 
       tearoff_menu_item_type =
-	g_type_register_static (GTK_TYPE_MENU_ITEM, "GtkTearoffMenuItem",
+	g_type_register_static (GTK_TYPE_MENU_ITEM, g_intern_static_string ("GtkTearoffMenuItem"),
 			        &tearoff_menu_item_info, 0);
     }
 

@@ -1837,7 +1837,7 @@ gtk_color_selection_get_type (void)
       };
       
       color_selection_type =
-	g_type_register_static (GTK_TYPE_VBOX, "GtkColorSelection",
+	g_type_register_static (GTK_TYPE_VBOX, g_intern_static_string ("GtkColorSelection"),
 				&color_selection_info, 0);
     }
   

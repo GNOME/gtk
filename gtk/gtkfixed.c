@@ -87,7 +87,7 @@ gtk_fixed_get_type (void)
 	(GInstanceInitFunc) gtk_fixed_init,
       };
 
-      fixed_type = g_type_register_static (GTK_TYPE_CONTAINER, "GtkFixed",
+      fixed_type = g_type_register_static (GTK_TYPE_CONTAINER, g_intern_static_string ("GtkFixed"),
 					   &fixed_info, 0);
     }
 

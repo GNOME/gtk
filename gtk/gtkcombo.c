@@ -1042,7 +1042,7 @@ gtk_combo_get_type (void)
 	(GInstanceInitFunc) gtk_combo_init,
       };
 
-      combo_type = g_type_register_static (GTK_TYPE_HBOX, "GtkCombo",
+      combo_type = g_type_register_static (GTK_TYPE_HBOX, g_intern_static_string ("GtkCombo"),
 					   &combo_info, 0);
     }
 

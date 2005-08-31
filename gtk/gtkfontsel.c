@@ -190,7 +190,7 @@ gtk_font_selection_get_type (void)
       };
       
       font_selection_type =
-	g_type_register_static (GTK_TYPE_VBOX, "GtkFontSelection",
+	g_type_register_static (GTK_TYPE_VBOX, g_intern_static_string ("GtkFontSelection"),
 				&fontsel_type_info, 0);
     }
   
@@ -1322,7 +1322,7 @@ gtk_font_selection_dialog_get_type (void)
       };
       
       font_selection_dialog_type =
-	g_type_register_static (GTK_TYPE_DIALOG, "GtkFontSelectionDialog",
+	g_type_register_static (GTK_TYPE_DIALOG, g_intern_static_string ("GtkFontSelectionDialog"),
 				&fontsel_diag_info, 0);
     }
   

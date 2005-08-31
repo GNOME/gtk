@@ -126,7 +126,7 @@ gtk_item_factory_get_type (void)
       };
       
       item_factory_type =
-	g_type_register_static (GTK_TYPE_OBJECT, "GtkItemFactory",
+	g_type_register_static (GTK_TYPE_OBJECT, g_intern_static_string ("GtkItemFactory"),
 				&item_factory_info, 0);
     }
   

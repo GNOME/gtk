@@ -158,7 +158,7 @@ gtk_old_editable_get_type (void)
 	NULL			                                 /* interface_data */
       };
 
-      old_editable_type = g_type_register_static (GTK_TYPE_WIDGET, "GtkOldEditable",
+      old_editable_type = g_type_register_static (GTK_TYPE_WIDGET, g_intern_static_string ("GtkOldEditable"),
 						  &old_editable_info, G_TYPE_FLAG_ABSTRACT);
       g_type_add_interface_static (old_editable_type,
 				   GTK_TYPE_EDITABLE,

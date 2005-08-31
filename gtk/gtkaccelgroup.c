@@ -78,7 +78,7 @@ gtk_accel_group_get_type (void)
 	(GInstanceInitFunc) gtk_accel_group_init,
       };
 
-      object_type = g_type_register_static (G_TYPE_OBJECT, "GtkAccelGroup",
+      object_type = g_type_register_static (G_TYPE_OBJECT, g_intern_static_string ("GtkAccelGroup"),
 					    &object_info, 0);
     }
 

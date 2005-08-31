@@ -98,6 +98,7 @@ gtk_tree_get_type (void)
         (GtkClassInitFunc) NULL,
       };
       
+      g_intern_static_string ("GtkTree");
       tree_type = gtk_type_unique (gtk_container_get_type (), &tree_info);
     }
   

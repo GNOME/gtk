@@ -103,7 +103,7 @@ gtk_file_filter_get_type (void)
 	NULL            /* init */
       };
       
-      file_filter_type = g_type_register_static (GTK_TYPE_OBJECT, "GtkFileFilter",
+      file_filter_type = g_type_register_static (GTK_TYPE_OBJECT, g_intern_static_string ("GtkFileFilter"),
 						 &file_filter_info, 0);
     }
 

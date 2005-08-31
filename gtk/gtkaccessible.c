@@ -49,7 +49,7 @@ gtk_accessible_get_type (void)
       };
 
       accessible_type =
-	g_type_register_static (ATK_TYPE_OBJECT, "GtkAccessible",
+	g_type_register_static (ATK_TYPE_OBJECT, g_intern_static_string ("GtkAccessible"),
 				&accessible_info, 0);
     }
 

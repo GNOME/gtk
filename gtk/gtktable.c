@@ -123,7 +123,7 @@ gtk_table_get_type (void)
 	(GInstanceInitFunc) gtk_table_init,
       };
       
-      table_type = g_type_register_static (GTK_TYPE_CONTAINER, "GtkTable",
+      table_type = g_type_register_static (GTK_TYPE_CONTAINER, g_intern_static_string ("GtkTable"),
 					   &table_info, 0);
     }
   

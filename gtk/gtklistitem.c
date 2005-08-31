@@ -93,6 +93,7 @@ gtk_list_item_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
+      g_intern_static_string ("GtkListItem");
       list_item_type = gtk_type_unique (gtk_item_get_type (), &list_item_info);
     }
 

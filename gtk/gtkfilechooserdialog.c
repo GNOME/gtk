@@ -97,7 +97,7 @@ gtk_file_chooser_dialog_get_type (void)
 	NULL			                                    /* interface_data */
       };
 
-      file_chooser_dialog_type = g_type_register_static (GTK_TYPE_DIALOG, "GtkFileChooserDialog",
+      file_chooser_dialog_type = g_type_register_static (GTK_TYPE_DIALOG, g_intern_static_string ("GtkFileChooserDialog"),
 							 &file_chooser_dialog_info, 0);
       g_type_add_interface_static (file_chooser_dialog_type,
 				   GTK_TYPE_FILE_CHOOSER,

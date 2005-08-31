@@ -8058,7 +8058,7 @@ gtk_icon_view_item_accessible_get_type (void)
       };
 
       type = g_type_register_static (ATK_TYPE_OBJECT,
-                                     "GtkIconViewItemAccessible", &tinfo, 0);
+                                     g_intern_static_string ("GtkIconViewItemAccessible"), &tinfo, 0);
       g_type_add_interface_static (type, ATK_TYPE_COMPONENT,
                                    &atk_component_info);
       g_type_add_interface_static (type, ATK_TYPE_ACTION,

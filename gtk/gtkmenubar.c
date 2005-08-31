@@ -109,7 +109,7 @@ gtk_menu_bar_get_type (void)
 	NULL,		/* instance_init */
       };
 
-      menu_bar_type = g_type_register_static (GTK_TYPE_MENU_SHELL, "GtkMenuBar",
+      menu_bar_type = g_type_register_static (GTK_TYPE_MENU_SHELL, g_intern_static_string ("GtkMenuBar"),
 					      &menu_bar_info, 0);
     }
 

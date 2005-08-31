@@ -141,7 +141,7 @@ gtk_option_menu_get_type (void)
       };
 
       option_menu_type =
-	g_type_register_static (GTK_TYPE_BUTTON, "GtkOptionMenu",
+	g_type_register_static (GTK_TYPE_BUTTON, g_intern_static_string ("GtkOptionMenu"),
 				&option_menu_info, 0);
     }
 

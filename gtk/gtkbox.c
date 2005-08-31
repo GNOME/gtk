@@ -100,7 +100,7 @@ gtk_box_get_type (void)
 	NULL,		/* value_table */
       };
 
-      box_type = g_type_register_static (GTK_TYPE_CONTAINER, "GtkBox", 
+      box_type = g_type_register_static (GTK_TYPE_CONTAINER, g_intern_static_string ("GtkBox"), 
 					 &box_info, G_TYPE_FLAG_ABSTRACT);
     }
 

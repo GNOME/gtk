@@ -85,7 +85,7 @@ gtk_adjustment_get_type (void)
       };
 
       adjustment_type =
-	g_type_register_static (GTK_TYPE_OBJECT, "GtkAdjustment",
+	g_type_register_static (GTK_TYPE_OBJECT, g_intern_static_string ("GtkAdjustment"),
 				&adjustment_info, 0);
     }
 

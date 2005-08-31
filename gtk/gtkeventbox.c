@@ -90,7 +90,7 @@ gtk_event_box_get_type (void)
 	(GInstanceInitFunc) gtk_event_box_init,
       };
 
-      event_box_type = g_type_register_static (GTK_TYPE_BIN, "GtkEventBox",
+      event_box_type = g_type_register_static (GTK_TYPE_BIN, g_intern_static_string ("GtkEventBox"),
 					       &event_box_info, 0);
     }
 

@@ -57,7 +57,7 @@ gtk_hbox_get_type (void)
 	(GInstanceInitFunc) gtk_hbox_init,
       };
 
-      hbox_type = g_type_register_static (GTK_TYPE_BOX, "GtkHBox",
+      hbox_type = g_type_register_static (GTK_TYPE_BOX, g_intern_static_string ("GtkHBox"),
 					  &hbox_info, 0);
     }
 

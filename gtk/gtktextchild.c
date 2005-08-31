@@ -329,7 +329,7 @@ gtk_text_child_anchor_get_type (void)
         (GInstanceInitFunc) gtk_text_child_anchor_init,
       };
 
-      object_type = g_type_register_static (G_TYPE_OBJECT, "GtkTextChildAnchor",
+      object_type = g_type_register_static (G_TYPE_OBJECT, g_intern_static_string ("GtkTextChildAnchor"),
                                             &object_info, 0);
     }
 

@@ -184,7 +184,7 @@ gtk_text_layout_get_type (void)
         (GInstanceInitFunc) gtk_text_layout_init
       };
 
-      our_type = g_type_register_static (G_TYPE_OBJECT, "GtkTextLayout",
+      our_type = g_type_register_static (G_TYPE_OBJECT, g_intern_static_string ("GtkTextLayout"),
                                          &our_info, 0);
     }
 

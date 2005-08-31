@@ -97,7 +97,7 @@ gtk_cell_renderer_get_type (void)
 	NULL,		/* value_table */
       };
 
-      cell_type = g_type_register_static (GTK_TYPE_OBJECT, "GtkCellRenderer", 
+      cell_type = g_type_register_static (GTK_TYPE_OBJECT, g_intern_static_string ("GtkCellRenderer"), 
 					  &cell_info, G_TYPE_FLAG_ABSTRACT);
     }
 

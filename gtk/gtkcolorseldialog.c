@@ -65,7 +65,7 @@ gtk_color_selection_dialog_get_type (void)
       };
       
       color_selection_dialog_type =
-	g_type_register_static (GTK_TYPE_DIALOG, "GtkColorSelectionDialog",
+	g_type_register_static (GTK_TYPE_DIALOG, g_intern_static_string ("GtkColorSelectionDialog"),
 				&colorsel_diag_info, 0);
     }
   

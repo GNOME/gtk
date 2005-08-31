@@ -528,7 +528,7 @@ gtk_file_selection_get_type (void)
       };
 
       file_selection_type =
-	g_type_register_static (GTK_TYPE_DIALOG, "GtkFileSelection",
+	g_type_register_static (GTK_TYPE_DIALOG, g_intern_static_string ("GtkFileSelection"),
 				&filesel_info, 0);
     }
 

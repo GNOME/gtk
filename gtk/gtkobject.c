@@ -95,7 +95,7 @@ gtk_object_get_type (void)
 	NULL,		/* value_table */
       };
       
-      object_type = g_type_register_static (G_TYPE_OBJECT, "GtkObject", 
+      object_type = g_type_register_static (G_TYPE_OBJECT, g_intern_static_string ("GtkObject"), 
 					    &object_info, G_TYPE_FLAG_ABSTRACT);
     }
 

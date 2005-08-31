@@ -227,7 +227,7 @@ gtk_menu_shell_get_type (void)
       };
 
       menu_shell_type =
-	g_type_register_static (GTK_TYPE_CONTAINER, "GtkMenuShell",
+	g_type_register_static (GTK_TYPE_CONTAINER, g_intern_static_string ("GtkMenuShell"),
 				&menu_shell_info, G_TYPE_FLAG_ABSTRACT);
     }
 

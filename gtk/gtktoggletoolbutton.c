@@ -93,7 +93,7 @@ gtk_toggle_tool_button_get_type (void)
 	};
 
       type = g_type_register_static (GTK_TYPE_TOOL_BUTTON,
-				     "GtkToggleToolButton", &type_info, 0);
+				     g_intern_static_string ("GtkToggleToolButton"), &type_info, 0);
     }
   return type;
 }

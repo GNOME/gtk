@@ -135,7 +135,7 @@ gtk_container_get_type (void)
       };
 
       container_type =
-	g_type_register_static (GTK_TYPE_WIDGET, "GtkContainer", 
+	g_type_register_static (GTK_TYPE_WIDGET, g_intern_static_string ("GtkContainer"), 
 				&container_info, G_TYPE_FLAG_ABSTRACT);
     }
 

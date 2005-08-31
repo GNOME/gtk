@@ -76,7 +76,7 @@ gtk_arrow_get_type (void)
 	(GInstanceInitFunc) gtk_arrow_init,
       };
 
-      arrow_type = g_type_register_static (GTK_TYPE_MISC, "GtkArrow",
+      arrow_type = g_type_register_static (GTK_TYPE_MISC, g_intern_static_string ("GtkArrow"),
 					   &arrow_info, 0);
     }
 

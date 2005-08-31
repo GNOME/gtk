@@ -100,7 +100,7 @@ gtk_curve_get_type (void)
 	(GInstanceInitFunc) gtk_curve_init,
       };
 
-      curve_type = g_type_register_static (GTK_TYPE_DRAWING_AREA, "GtkCurve",
+      curve_type = g_type_register_static (GTK_TYPE_DRAWING_AREA, g_intern_static_string ("GtkCurve"),
 					   &curve_info, 0);
     }
   return curve_type;

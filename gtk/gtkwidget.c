@@ -288,7 +288,7 @@ gtk_widget_get_type (void)
         NULL /* interface data */
       };
 
-      widget_type = g_type_register_static (GTK_TYPE_OBJECT, "GtkWidget", 
+      widget_type = g_type_register_static (GTK_TYPE_OBJECT, g_intern_static_string ("GtkWidget"), 
 					    &widget_info, G_TYPE_FLAG_ABSTRACT);
 
       g_type_add_interface_static (widget_type, ATK_TYPE_IMPLEMENTOR,
@@ -7519,7 +7519,7 @@ gtk_requisition_get_type (void)
   static GType our_type = 0;
   
   if (our_type == 0)
-    our_type = g_boxed_type_register_static ("GtkRequisition",
+    our_type = g_boxed_type_register_static (g_intern_static_string ("GtkRequisition"),
 					     (GBoxedCopyFunc) gtk_requisition_copy,
 					     (GBoxedFreeFunc) gtk_requisition_free);
 

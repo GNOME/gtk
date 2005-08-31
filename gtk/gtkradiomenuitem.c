@@ -77,7 +77,7 @@ gtk_radio_menu_item_get_type (void)
       };
 
       radio_menu_item_type =
-	g_type_register_static (GTK_TYPE_CHECK_MENU_ITEM, "GtkRadioMenuItem",
+	g_type_register_static (GTK_TYPE_CHECK_MENU_ITEM, g_intern_static_string ("GtkRadioMenuItem"),
 				&radio_menu_item_info, 0);
     }
 

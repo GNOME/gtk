@@ -91,7 +91,7 @@ gtk_plug_get_type (void)
 	(GInstanceInitFunc) gtk_plug_init,
       };
 
-      plug_type = g_type_register_static (GTK_TYPE_WINDOW, "GtkPlug",
+      plug_type = g_type_register_static (GTK_TYPE_WINDOW, g_intern_static_string ("GtkPlug"),
 					  &plug_info, 0);
     }
 

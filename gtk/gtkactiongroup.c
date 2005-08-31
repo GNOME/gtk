@@ -106,7 +106,7 @@ gtk_action_group_get_type (void)
         (GInstanceInitFunc) gtk_action_group_init,
       };
 
-      type = g_type_register_static (G_TYPE_OBJECT, "GtkActionGroup",
+      type = g_type_register_static (G_TYPE_OBJECT, g_intern_static_string ("GtkActionGroup"),
 				     &type_info, 0);
     }
 

@@ -93,7 +93,7 @@ gtk_toggle_button_get_type (void)
       };
 
       toggle_button_type =
-	g_type_register_static (GTK_TYPE_BUTTON, "GtkToggleButton",
+	g_type_register_static (GTK_TYPE_BUTTON, g_intern_static_string ("GtkToggleButton"),
 				&toggle_button_info, 0);
     }
 

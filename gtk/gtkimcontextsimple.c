@@ -962,7 +962,7 @@ gtk_im_context_simple_get_type (void)
       };
       
       im_context_simple_type =
-	g_type_register_static (GTK_TYPE_IM_CONTEXT, "GtkIMContextSimple",
+	g_type_register_static (GTK_TYPE_IM_CONTEXT, g_intern_static_string ("GtkIMContextSimple"),
 				&im_context_simple_info, 0);
     }
 

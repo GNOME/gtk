@@ -324,7 +324,7 @@ gtk_toolbar_get_type (void)
 	};
       
       type = g_type_register_static (GTK_TYPE_CONTAINER,
-				     "GtkToolbar",
+				     g_intern_static_string ("GtkToolbar"),
 				     &type_info, 0);
     }
   

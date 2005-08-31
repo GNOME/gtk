@@ -92,7 +92,7 @@ gtk_tooltips_get_type (void)
 	(GInstanceInitFunc) gtk_tooltips_init,
       };
 
-      tooltips_type = g_type_register_static (GTK_TYPE_OBJECT, "GtkTooltips",
+      tooltips_type = g_type_register_static (GTK_TYPE_OBJECT, g_intern_static_string ("GtkTooltips"),
 					      &tooltips_info, 0);
     }
 

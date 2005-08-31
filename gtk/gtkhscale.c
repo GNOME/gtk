@@ -63,7 +63,7 @@ gtk_hscale_get_type (void)
         (GInstanceInitFunc) gtk_hscale_init,
       };
       
-      hscale_type = g_type_register_static (GTK_TYPE_SCALE, "GtkHScale",
+      hscale_type = g_type_register_static (GTK_TYPE_SCALE, g_intern_static_string ("GtkHScale"),
 					    &hscale_info, 0);
     }
   

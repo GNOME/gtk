@@ -119,7 +119,7 @@ gtk_menu_item_get_type (void)
 	(GInstanceInitFunc) gtk_menu_item_init,
       };
 
-      menu_item_type = g_type_register_static (GTK_TYPE_ITEM, "GtkMenuItem",
+      menu_item_type = g_type_register_static (GTK_TYPE_ITEM, g_intern_static_string ("GtkMenuItem"),
 					       &menu_item_info, 0);
     }
 

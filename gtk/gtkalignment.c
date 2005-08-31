@@ -91,7 +91,7 @@ gtk_alignment_get_type (void)
 	(GInstanceInitFunc) gtk_alignment_init,
       };
 
-      alignment_type = g_type_register_static (GTK_TYPE_BIN, "GtkAlignment",
+      alignment_type = g_type_register_static (GTK_TYPE_BIN, g_intern_static_string ("GtkAlignment"),
 					       &alignment_info, 0);
     }
 

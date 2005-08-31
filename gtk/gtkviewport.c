@@ -93,7 +93,7 @@ gtk_viewport_get_type (void)
 	(GInstanceInitFunc) gtk_viewport_init,
       };
 
-      viewport_type = g_type_register_static (GTK_TYPE_BIN, "GtkViewport",
+      viewport_type = g_type_register_static (GTK_TYPE_BIN, g_intern_static_string ("GtkViewport"),
 					      &viewport_info, 0);
     }
 

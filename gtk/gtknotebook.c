@@ -314,7 +314,7 @@ gtk_notebook_get_type (void)
 	(GInstanceInitFunc) gtk_notebook_init,
       };
 
-      notebook_type = g_type_register_static (GTK_TYPE_CONTAINER, "GtkNotebook",
+      notebook_type = g_type_register_static (GTK_TYPE_CONTAINER, g_intern_static_string ("GtkNotebook"),
 					      &notebook_info, 0);
     }
 

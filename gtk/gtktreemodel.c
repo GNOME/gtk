@@ -115,7 +115,7 @@ gtk_tree_model_get_type (void)
       };
 
       tree_model_type =
-	g_type_register_static (G_TYPE_INTERFACE, "GtkTreeModel",
+	g_type_register_static (G_TYPE_INTERFACE, g_intern_static_string ("GtkTreeModel"),
 				&tree_model_info, 0);
 
       g_type_interface_add_prerequisite (tree_model_type, G_TYPE_OBJECT);
@@ -599,7 +599,7 @@ gtk_tree_path_get_type (void)
   static GType our_type = 0;
   
   if (our_type == 0)
-    our_type = g_boxed_type_register_static ("GtkTreePath",
+    our_type = g_boxed_type_register_static (g_intern_static_string ("GtkTreePath"),
 					     (GBoxedCopyFunc) gtk_tree_path_copy,
 					     (GBoxedFreeFunc) gtk_tree_path_free);
 
@@ -827,7 +827,7 @@ gtk_tree_iter_get_type (void)
   static GType our_type = 0;
   
   if (our_type == 0)
-    our_type = g_boxed_type_register_static ("GtkTreeIter",
+    our_type = g_boxed_type_register_static (g_intern_static_string ("GtkTreeIter"),
 					     (GBoxedCopyFunc) gtk_tree_iter_copy,
 					     (GBoxedFreeFunc) gtk_tree_iter_free);
 
@@ -1577,7 +1577,7 @@ gtk_tree_row_reference_get_type (void)
   static GType our_type = 0;
   
   if (our_type == 0)
-    our_type = g_boxed_type_register_static ("GtkTreeRowReference",
+    our_type = g_boxed_type_register_static (g_intern_static_string ("GtkTreeRowReference"),
 					     (GBoxedCopyFunc) gtk_tree_row_reference_copy,
 					     (GBoxedFreeFunc) gtk_tree_row_reference_free);
 

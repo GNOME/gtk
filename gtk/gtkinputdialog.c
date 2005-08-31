@@ -143,7 +143,7 @@ gtk_input_dialog_get_type (void)
       };
 
       input_dialog_type =
-	g_type_register_static (GTK_TYPE_DIALOG, "GtkInputDialog",
+	g_type_register_static (GTK_TYPE_DIALOG, g_intern_static_string ("GtkInputDialog"),
 				&input_dialog_info, 0);
     }
 

@@ -60,7 +60,7 @@ gtk_scrollbar_get_type (void)
       };
 
       scrollbar_type =
-	g_type_register_static (GTK_TYPE_RANGE, "GtkScrollbar",
+	g_type_register_static (GTK_TYPE_RANGE, g_intern_static_string ("GtkScrollbar"),
 			        &scrollbar_info, G_TYPE_FLAG_ABSTRACT);
     }
 

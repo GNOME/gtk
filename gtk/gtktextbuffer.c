@@ -155,7 +155,7 @@ gtk_text_buffer_get_type (void)
         (GInstanceInitFunc) gtk_text_buffer_init
       };
 
-      our_type = g_type_register_static (G_TYPE_OBJECT, "GtkTextBuffer",
+      our_type = g_type_register_static (G_TYPE_OBJECT, g_intern_static_string ("GtkTextBuffer"),
                                          &our_info, 0);
     }
 

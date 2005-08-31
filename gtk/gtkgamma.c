@@ -233,7 +233,7 @@ gtk_gamma_curve_get_type (void)
 	(GInstanceInitFunc) gtk_gamma_curve_init,
       };
       
-      gamma_curve_type = g_type_register_static (GTK_TYPE_VBOX, "GtkGammaCurve",
+      gamma_curve_type = g_type_register_static (GTK_TYPE_VBOX, g_intern_static_string ("GtkGammaCurve"),
 						 &gamma_curve_info, 0);
     }
   return gamma_curve_type;

@@ -171,7 +171,7 @@ gtk_cell_renderer_text_get_type (void)
       };
 
       cell_text_type =
-	g_type_register_static (GTK_TYPE_CELL_RENDERER, "GtkCellRendererText",
+	g_type_register_static (GTK_TYPE_CELL_RENDERER, g_intern_static_string ("GtkCellRendererText"),
 				&cell_text_info, 0);
     }
 

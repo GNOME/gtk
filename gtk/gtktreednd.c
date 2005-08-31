@@ -42,7 +42,7 @@ gtk_tree_drag_source_get_type (void)
 	NULL
       };
 
-      our_type = g_type_register_static (G_TYPE_INTERFACE, "GtkTreeDragSource",
+      our_type = g_type_register_static (G_TYPE_INTERFACE, g_intern_static_string ("GtkTreeDragSource"),
 					 &our_info, 0);
     }
   
@@ -70,7 +70,7 @@ gtk_tree_drag_dest_get_type (void)
 	NULL
       };
 
-      our_type = g_type_register_static (G_TYPE_INTERFACE, "GtkTreeDragDest", &our_info, 0);
+      our_type = g_type_register_static (G_TYPE_INTERFACE, g_intern_static_string ("GtkTreeDragDest"), &our_info, 0);
     }
   
   return our_type;
