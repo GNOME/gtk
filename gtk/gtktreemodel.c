@@ -392,7 +392,7 @@ gtk_tree_path_new_from_string (const gchar *path)
  *
  * Creates a new path with @first_index and @varargs as indices.
  *
- * Return value: A newly created GtkTreePath.
+ * Return value: A newly created #GtkTreePath.
  *
  * Since: 2.2
  **/
@@ -726,7 +726,8 @@ gtk_tree_path_next (GtkTreePath *path)
  * gtk_tree_path_prev:
  * @path: A #GtkTreePath.
  *
- * Moves the @path to point to the previous node at the current depth, if it exists.
+ * Moves the @path to point to the previous node at the current depth, 
+ * if it exists.
  *
  * Return value: %TRUE if @path has a previous node, and the move was made.
  **/
@@ -839,7 +840,7 @@ gtk_tree_iter_get_type (void)
  *
  * Returns a set of flags supported by this interface.  The flags are a bitwise
  * combination of #GtkTreeModelFlags.  The flags supported should not change
- * during the lifecycle of the tree_model.
+ * during the lifecycle of the @tree_model.
  *
  * Return value: The flags supported by this interface.
  **/
@@ -1108,9 +1109,9 @@ gtk_tree_model_iter_next (GtkTreeModel  *tree_model,
  * @iter: The new #GtkTreeIter to be set to the child.
  * @parent: The #GtkTreeIter, or %NULL
  *
- * Sets @iter to point to the first child of @parent.  If @parent has no children,
- * %FALSE is returned and @iter is set to be invalid.  @parent will remain a valid
- * node after this function has been called.
+ * Sets @iter to point to the first child of @parent.  If @parent has no 
+ * children, %FALSE is returned and @iter is set to be invalid.  @parent 
+ * will remain a valid node after this function has been called.
  *
  * If @parent is %NULL returns the first node, equivalent to
  * <literal>gtk_tree_model_get_iter_first (tree_model, iter);</literal>
@@ -1259,8 +1260,8 @@ gtk_tree_model_iter_parent (GtkTreeModel *tree_model,
  * implement.  To be more specific, models may ignore this call as it exists
  * primarily for performance reasons.
  * 
- * This function is primarily meant as a way for views to let caching model know
- * when nodes are being displayed (and hence, whether or not to cache that
+ * This function is primarily meant as a way for views to let caching model 
+ * know when nodes are being displayed (and hence, whether or not to cache that
  * node.)  For example, a file-system based model would not want to keep the
  * entire file-hierarchy in memory, just the sections that are currently being
  * displayed by every current view.
@@ -1458,9 +1459,9 @@ gtk_tree_model_row_has_child_toggled (GtkTreeModel *tree_model,
  * @path: A #GtkTreePath pointing to the previous location of the deleted row.
  * 
  * Emits the "row_deleted" signal on @tree_model.  This should be called by
- * models after a row has been removed.  The location pointed to by @path should
- * be the location that the row previously was at.  It may not be a valid
- * location anymore.
+ * models after a row has been removed.  The location pointed to by @path 
+ * should be the location that the row previously was at.  It may not be a 
+ * valid location anymore.
  **/
 void
 gtk_tree_model_row_deleted (GtkTreeModel *tree_model,
@@ -1475,8 +1476,10 @@ gtk_tree_model_row_deleted (GtkTreeModel *tree_model,
 /**
  * gtk_tree_model_rows_reordered:
  * @tree_model: A #GtkTreeModel
- * @path: A #GtkTreePath pointing to the tree node whose children have been reordered
- * @iter: A valid #GtkTreeIter pointing to the node whose children have been reordered
+ * @path: A #GtkTreePath pointing to the tree node whose children have been 
+ *      reordered
+ * @iter: A valid #GtkTreeIter pointing to the node whose children have been 
+ *      reordered
  * @new_order: an array of integers mapping the current position of each child
  *      to its old position before the re-ordering,
  *      i.e. @new_order<literal>[newpos] = oldpos</literal>.
@@ -1533,9 +1536,9 @@ gtk_tree_model_foreach_helper (GtkTreeModel            *model,
  * @user_data: User data to passed to func.
  * 
  * Calls func on each node in model in a depth-first fashion.  If func returns
- * %TRUE, then the tree ceases to be walked, and gtk_tree_model_foreach() returns.
+ * %TRUE, then the tree ceases to be walked, and gtk_tree_model_foreach() 
+ * returns.
  **/
-
 void
 gtk_tree_model_foreach (GtkTreeModel            *model,
 			GtkTreeModelForeachFunc  func,
@@ -1812,8 +1815,8 @@ gtk_tree_row_reference_unref_path (GtkTreePath  *path,
  * @model: A #GtkTreeModel
  * @path: A valid #GtkTreePath to monitor
  * 
- * Creates a row reference based on @path.  This reference will keep pointing to
- * the node pointed to by @path, so long as it exists.  It listens to all
+ * Creates a row reference based on @path.  This reference will keep pointing 
+ * to the node pointed to by @path, so long as it exists.  It listens to all
  * signals emitted by @model, and updates its path appropriately.  If @path
  * isn't a valid path in @model, then %NULL is returned.
  * 
@@ -1840,8 +1843,8 @@ gtk_tree_row_reference_new (GtkTreeModel *model,
  * @path: A valid #GtkTreePath to monitor
  * 
  * You do not need to use this function.  Creates a row reference based on
- * @path.  This reference will keep pointing to the node pointed to by @path, so
- * long as it exists.  If @path isn't a valid path in @model, then %NULL is
+ * @path.  This reference will keep pointing to the node pointed to by @path, 
+ * so long as it exists.  If @path isn't a valid path in @model, then %NULL is
  * returned.  However, unlike references created with
  * gtk_tree_row_reference_new(), it does not listen to the model for changes.
  * The creator of the row reference must do this explicitly using
@@ -1857,7 +1860,7 @@ gtk_tree_row_reference_new (GtkTreeModel *model,
  * doesn't work for reasons of internal implementation.
  *
  * This type of row reference is primarily meant by structures that need to
- * carefully monitor exactly when a row_reference updates itself, and is not
+ * carefully monitor exactly when a row reference updates itself, and is not
  * generally needed by most applications.
  *
  * Return value: A newly allocated #GtkTreeRowReference, or %NULL
@@ -1946,10 +1949,9 @@ gtk_tree_row_reference_get_path (GtkTreeRowReference *reference)
  * gtk_tree_row_reference_get_model:
  * @reference: A #GtkTreeRowReference
  *
- * Returns the model which @reference is monitoring in order to appropriately
- * the path.
+ * Returns the model that the row reference is monitoring.
  *
- * Return value: The model, or %NULL.
+ * Return value: the model
  *
  * Since: 2.8
  */
@@ -1963,12 +1965,12 @@ gtk_tree_row_reference_get_model (GtkTreeRowReference *reference)
 
 /**
  * gtk_tree_row_reference_valid:
- * @reference: A #GtkTreeRowReference, or NULL
+ * @reference: A #GtkTreeRowReference, or %NULL
  * 
- * Returns TRUE if the %reference is non-NULL and refers to a current valid
+ * Returns %TRUE if the @reference is non-%NULL and refers to a current valid
  * path.
  * 
- * Return value: TRUE if %reference points to a valid path.
+ * Return value: %TRUE if @reference points to a valid path.
  **/
 gboolean
 gtk_tree_row_reference_valid (GtkTreeRowReference *reference)
@@ -2000,9 +2002,9 @@ gtk_tree_row_reference_copy (GtkTreeRowReference *reference)
 
 /**
  * gtk_tree_row_reference_free:
- * @reference: A #GtkTreeRowReference, or NULL
+ * @reference: A #GtkTreeRowReference, or %NULL
  * 
- * Free's %reference.  %reference may be NULL.
+ * Free's @reference. @reference may be %NULL.
  **/
 void
 gtk_tree_row_reference_free (GtkTreeRowReference *reference)

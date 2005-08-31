@@ -1,5 +1,8 @@
 2005-08-31  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreemodel.c: Some documentation fixes.  (#314882,
+	Guillaume Cottenceau)
+
 	* gtk/gtktextiter.c (gtk_text_iter_backward_visible_cursor_positions): 
 	Fix a typo in the docs.  (#314878, Guillaume Cottenceau)
 
