@@ -2271,7 +2271,7 @@ update_node (GtkUIManager *self,
 		gtk_menu_shell_append (GTK_MENU_SHELL (menu), tearoff);
 		filler = gtk_menu_item_new_with_label (_("Empty"));
 		g_object_set_data (G_OBJECT (filler),
-				   "gtk-empty-menu-item",
+				   g_intern_static_string ("gtk-empty-menu-item"),
 				   GINT_TO_POINTER (TRUE));
 		gtk_widget_set_sensitive (filler, FALSE);
 		gtk_widget_set_no_show_all (filler, TRUE);
@@ -2371,7 +2371,7 @@ update_node (GtkUIManager *self,
 	      g_object_ref (info->proxy);
 	      gtk_object_sink (GTK_OBJECT (info->proxy));
 	      g_object_set_data (G_OBJECT (info->proxy),
-				 "gtk-separator-mode",
+				 g_intern_static_string ("gtk-separator-mode"),
 				 GINT_TO_POINTER (SEPARATOR_MODE_HIDDEN));
 	      gtk_widget_set_no_show_all (info->proxy, TRUE);
 	      gtk_menu_shell_insert (GTK_MENU_SHELL (menushell),
@@ -2381,7 +2381,7 @@ update_node (GtkUIManager *self,
 	      g_object_ref (info->extra);
 	      gtk_object_sink (GTK_OBJECT (info->extra));
 	      g_object_set_data (G_OBJECT (info->extra),
-				 "gtk-separator-mode",
+				 g_intern_static_string ("gtk-separator-mode"),
 				 GINT_TO_POINTER (SEPARATOR_MODE_HIDDEN));
 	      gtk_widget_set_no_show_all (info->extra, TRUE);
 	      gtk_menu_shell_insert (GTK_MENU_SHELL (menushell),
@@ -2424,7 +2424,7 @@ update_node (GtkUIManager *self,
 	      g_object_ref (info->proxy);
 	      gtk_object_sink (GTK_OBJECT (info->proxy));
 	      g_object_set_data (G_OBJECT (info->proxy),
-				 "gtk-separator-mode",
+				 g_intern_static_string ("gtk-separator-mode"),
 				 GINT_TO_POINTER (SEPARATOR_MODE_HIDDEN));
 	      gtk_widget_set_no_show_all (info->proxy, TRUE);
 	      
@@ -2434,7 +2434,7 @@ update_node (GtkUIManager *self,
 	      g_object_ref (info->extra);
 	      gtk_object_sink (GTK_OBJECT (info->extra));
 	      g_object_set_data (G_OBJECT (info->extra),
-				 "gtk-separator-mode",
+				 g_intern_static_string ("gtk-separator-mode"),
 				 GINT_TO_POINTER (SEPARATOR_MODE_HIDDEN));
 	      gtk_widget_set_no_show_all (info->extra, TRUE);
 	    }
@@ -2574,7 +2574,7 @@ update_node (GtkUIManager *self,
 		  separator_mode = SEPARATOR_MODE_SMART;
 
 	      g_object_set_data (G_OBJECT (info->proxy),
-				 "gtk-separator-mode",
+				 g_intern_static_string ("gtk-separator-mode"),
 				 GINT_TO_POINTER (separator_mode));
 	      gtk_widget_show (info->proxy);
 	    }
@@ -2599,7 +2599,7 @@ update_node (GtkUIManager *self,
 	      gtk_object_sink (GTK_OBJECT (info->proxy));
 	      gtk_widget_set_no_show_all (info->proxy, TRUE);
 	      g_object_set_data (G_OBJECT (info->proxy),
-				 "gtk-separator-mode",
+				 g_intern_static_string ("gtk-separator-mode"),
 				 GINT_TO_POINTER (SEPARATOR_MODE_SMART));
 	      gtk_menu_shell_insert (GTK_MENU_SHELL (menushell),
 				     info->proxy, pos);

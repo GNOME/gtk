@@ -299,7 +299,7 @@ _gtk_anchored_child_set_layout (GtkWidget     *child,
                                 GtkTextLayout *layout)
 {
   g_object_set_data (G_OBJECT (child),
-                     "gtk-text-child-anchor-layout",
+                     g_intern_static_string ("gtk-text-child-anchor-layout"),
                      layout);  
 }
      

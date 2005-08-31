@@ -1797,7 +1797,7 @@ gtk_button_screen_changed (GtkWidget *widget,
     g_signal_connect (settings, "notify::gtk-button-images",
 		      G_CALLBACK (gtk_button_setting_changed), 0);
   g_object_set_data (G_OBJECT (settings), 
-		     "gtk-button-connection",
+		     g_intern_static_string ("gtk-button-connection"),
 		     GUINT_TO_POINTER (show_image_connection));
 
   show_image_change_notify (GTK_BUTTON (widget));

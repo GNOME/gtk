@@ -1731,7 +1731,7 @@ gtk_window_add_embedded_xid (GtkWindow *window, guint xid)
   embedded_windows = g_list_prepend (embedded_windows,
 				     GUINT_TO_POINTER (xid));
 
-  g_object_set_data_full (G_OBJECT (window), "gtk-embedded", 
+  g_object_set_data_full (G_OBJECT (window), g_intern_static_string ("gtk-embedded"), 
 			  embedded_windows,
 			  embedded_windows ?
 			    (GDestroyNotify) g_list_free : NULL);
@@ -1757,7 +1757,7 @@ gtk_window_remove_embedded_xid (GtkWindow *window, guint xid)
       g_list_free_1 (node);
     }
   
-  g_object_set_data_full (G_OBJECT (window), "gtk-embedded",
+  g_object_set_data_full (G_OBJECT (window), g_intern_static_string ("gtk-embedded"),
 			  embedded_windows,
 			  embedded_windows ?
 			    (GDestroyNotify) g_list_free : NULL);
@@ -2558,7 +2558,7 @@ ensure_icon_info (GtkWindow *window)
     {
       info = g_new0 (GtkWindowIconInfo, 1);
       g_object_set_data_full (G_OBJECT (window),
-                              "gtk-window-icon-info",
+                              g_intern_static_string ("gtk-window-icon-info"),
                               info,
                               (GDestroyNotify)free_icon_info);
     }
@@ -2580,7 +2580,7 @@ get_screen_icon_info (GdkScreen *screen)
   if (!info)
     {
       info = g_new0 (ScreenIconInfo, 1);
-      g_object_set_data (G_OBJECT (screen), "gtk-window-default-icon-pixmap", info);
+      g_object_set_data (G_OBJECT (screen), g_intern_static_string ("gtk-window-default-icon-pixmap"), info);
     }
 
   if (info->serial != default_icon_serial)
@@ -7523,7 +7523,7 @@ gtk_window_get_key_hash (GtkWindow *window)
   key_hash = _gtk_key_hash_new (gdk_keymap_get_for_display (gdk_screen_get_display (screen)),
 				(GDestroyNotify)g_free);
   _gtk_window_keys_foreach (window, add_to_key_hash, key_hash);
-  g_object_set_data (G_OBJECT (window), "gtk-window-key-hash", key_hash);
+  g_object_set_data (G_OBJECT (window), g_intern_static_string ("gtk-window-key-hash"), key_hash);
 
   return key_hash;
 }

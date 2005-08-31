@@ -4465,7 +4465,7 @@ append_action_signal (GtkEntry     *entry,
 {
   GtkWidget *menuitem = gtk_image_menu_item_new_from_stock (stock_id, NULL);
 
-  g_object_set_data (G_OBJECT (menuitem), "gtk-signal", (char *)signal);
+  g_object_set_data (G_OBJECT (menuitem), g_intern_static_string ("gtk-signal"), (char *)signal);
   g_signal_connect (menuitem, "activate",
 		    G_CALLBACK (activate_cb), entry);
 
@@ -5426,7 +5426,7 @@ gtk_entry_set_completion (GtkEntry           *entry,
 
   if (!completion)
     {
-      g_object_set_data (G_OBJECT (entry), GTK_ENTRY_COMPLETION_KEY, NULL);
+      g_object_set_data (G_OBJECT (entry), g_intern_static_string (GTK_ENTRY_COMPLETION_KEY), NULL);
       return;
     }
 
@@ -5435,7 +5435,7 @@ gtk_entry_set_completion (GtkEntry           *entry,
 
   connect_completion_signals (entry, completion);    
   completion->priv->entry = GTK_WIDGET (entry);
-  g_object_set_data (G_OBJECT (entry), GTK_ENTRY_COMPLETION_KEY, completion);
+  g_object_set_data (G_OBJECT (entry), g_intern_static_string (GTK_ENTRY_COMPLETION_KEY), completion);
 }
 
 /**

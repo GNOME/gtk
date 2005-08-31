@@ -798,7 +798,7 @@ connect_proxy (GtkAction     *action,
 	       GtkWidget     *proxy)
 {
   g_object_ref (action);
-  g_object_set_data_full (G_OBJECT (proxy), "gtk-action", action,
+  g_object_set_data_full (G_OBJECT (proxy), g_intern_static_string ("gtk-action"), action,
 			  g_object_unref);
 
   /* add this widget to the list of proxies */
@@ -982,7 +982,7 @@ static void
 disconnect_proxy (GtkAction *action, 
 		  GtkWidget *proxy)
 {
-  g_object_set_data (G_OBJECT (proxy), "gtk-action", NULL);
+  g_object_set_data (G_OBJECT (proxy), g_intern_static_string ("gtk-action"), NULL);
 
   /* remove proxy from list of proxies */
   g_signal_handlers_disconnect_by_func (proxy,

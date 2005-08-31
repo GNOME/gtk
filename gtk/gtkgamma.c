@@ -274,7 +274,7 @@ gtk_gamma_curve_init (GtkGammaCurve *curve)
   for (i = 0; i < 3; ++i)
     {
       curve->button[i] = gtk_toggle_button_new ();
-      g_object_set_data (G_OBJECT (curve->button[i]), "_GtkGammaCurveIndex",
+      g_object_set_data (G_OBJECT (curve->button[i]), g_intern_static_string ("_GtkGammaCurveIndex"),
 			 GINT_TO_POINTER (i));
       gtk_container_add (GTK_CONTAINER (vbox), curve->button[i]);
       g_signal_connect (curve->button[i], "realize",
@@ -288,7 +288,7 @@ gtk_gamma_curve_init (GtkGammaCurve *curve)
   for (i = 3; i < 5; ++i)
     {
       curve->button[i] = gtk_button_new ();
-      g_object_set_data (G_OBJECT (curve->button[i]), "_GtkGammaCurveIndex",
+      g_object_set_data (G_OBJECT (curve->button[i]), g_intern_static_string ("_GtkGammaCurveIndex"),
 			 GINT_TO_POINTER (i));
       gtk_container_add (GTK_CONTAINER (vbox), curve->button[i]);
       g_signal_connect (curve->button[i], "realize",

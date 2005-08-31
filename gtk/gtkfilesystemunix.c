@@ -716,7 +716,7 @@ icon_theme_changed (GtkIconTheme *icon_theme)
   cache = g_hash_table_new_full (g_str_hash, g_str_equal,
 				 (GDestroyNotify)g_free,
 				 (GDestroyNotify)icon_cache_element_free);
-  g_object_set_data_full (G_OBJECT (icon_theme), "gtk-file-icon-cache",
+  g_object_set_data_full (G_OBJECT (icon_theme), g_intern_static_string ("gtk-file-icon-cache"),
 			  cache, (GDestroyNotify)g_hash_table_destroy);
 }
 
@@ -735,7 +735,7 @@ get_cached_icon (GtkWidget   *widget,
 				     (GDestroyNotify)g_free,
 				     (GDestroyNotify)icon_cache_element_free);
 
-      g_object_set_data_full (G_OBJECT (icon_theme), "gtk-file-icon-cache",
+      g_object_set_data_full (G_OBJECT (icon_theme), g_intern_static_string ("gtk-file-icon-cache"),
 			      cache, (GDestroyNotify)g_hash_table_destroy);
       g_signal_connect (icon_theme, "changed",
 			G_CALLBACK (icon_theme_changed), NULL);

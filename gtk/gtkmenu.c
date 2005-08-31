@@ -319,7 +319,7 @@ get_attach_info (GtkWidget *child)
   if (!ai)
     {
       ai = g_new0 (AttachInfo, 1);
-      g_object_set_data_full (object, ATTACH_INFO_KEY, ai, g_free);
+      g_object_set_data_full (object, g_intern_static_string (ATTACH_INFO_KEY), ai, g_free);
     }
 
   return ai;
@@ -1053,13 +1053,13 @@ gtk_menu_attach_to_widget (GtkMenu	       *menu,
   attach_widget_screen_changed (attach_widget, NULL, menu);
   
   data->detacher = detacher;
-  g_object_set_data (G_OBJECT (menu), attach_data_key, data);
+  g_object_set_data (G_OBJECT (menu), g_intern_static_string (attach_data_key), data);
   list = g_object_steal_data (G_OBJECT (attach_widget), ATTACHED_MENUS);
   if (!g_list_find (list, menu))
     {
       list = g_list_prepend (list, menu);
     }
-  g_object_set_data_full (G_OBJECT (attach_widget), ATTACHED_MENUS, list, (GtkDestroyNotify) g_list_free);
+  g_object_set_data_full (G_OBJECT (attach_widget), g_intern_static_string (ATTACHED_MENUS), list, (GtkDestroyNotify) g_list_free);
   
   if (GTK_WIDGET_STATE (menu) != GTK_STATE_NORMAL)
     gtk_widget_set_state (GTK_WIDGET (menu), GTK_STATE_NORMAL);
@@ -1101,7 +1101,7 @@ gtk_menu_detach (GtkMenu *menu)
       g_warning ("gtk_menu_detach(): menu is not attached");
       return;
     }
-  g_object_set_data (G_OBJECT (menu), attach_data_key, NULL);
+  g_object_set_data (G_OBJECT (menu), g_intern_static_string (attach_data_key), NULL);
   
   g_signal_handlers_disconnect_by_func (data->attach_widget,
 					(gpointer) attach_widget_screen_changed,
@@ -1111,9 +1111,9 @@ gtk_menu_detach (GtkMenu *menu)
   list = g_object_steal_data (G_OBJECT (data->attach_widget), ATTACHED_MENUS);
   list = g_list_remove (list, menu);
   if (list)
-    g_object_set_data_full (G_OBJECT (data->attach_widget), ATTACHED_MENUS, list, (GtkDestroyNotify) g_list_free);
+    g_object_set_data_full (G_OBJECT (data->attach_widget), g_intern_static_string (ATTACHED_MENUS), list, (GtkDestroyNotify) g_list_free);
   else
-    g_object_set_data (G_OBJECT (data->attach_widget), ATTACHED_MENUS, NULL);
+    g_object_set_data (G_OBJECT (data->attach_widget), g_intern_static_string (ATTACHED_MENUS), NULL);
   
   if (GTK_WIDGET_REALIZED (menu))
     gtk_widget_unrealize (GTK_WIDGET (menu));
@@ -1148,7 +1148,7 @@ gtk_menu_remove (GtkContainer *container,
     }
 
   GTK_CONTAINER_CLASS (parent_class)->remove (container, widget);
-  g_object_set_data (G_OBJECT (widget), ATTACH_INFO_KEY, NULL);
+  g_object_set_data (G_OBJECT (widget), g_intern_static_string (ATTACH_INFO_KEY), NULL);
 
   menu_queue_resize (menu);
 }
@@ -1935,10 +1935,10 @@ gtk_menu_set_title (GtkMenu     *menu,
   g_return_if_fail (GTK_IS_MENU (menu));
 
   if (title)
-    g_object_set_data_full (G_OBJECT (menu), "gtk-menu-title",
+    g_object_set_data_full (G_OBJECT (menu), g_intern_static_string ("gtk-menu-title"),
 			    g_strdup (title), (GtkDestroyNotify) g_free);
   else
-    g_object_set_data (G_OBJECT (menu), "gtk-menu-title", NULL);
+    g_object_set_data (G_OBJECT (menu), g_intern_static_string ("gtk-menu-title"), NULL);
     
   gtk_menu_update_title (menu);
   g_object_notify (G_OBJECT (menu), "tearoff-title");
@@ -2121,7 +2121,7 @@ menu_grab_transfer_window_get (GtkMenu *menu)
 
       gdk_window_show (window);
 
-      g_object_set_data (G_OBJECT (menu), "gtk-menu-transfer-window", window);
+      g_object_set_data (G_OBJECT (menu), g_intern_static_string ("gtk-menu-transfer-window"), window);
     }
 
   return window;
@@ -2135,7 +2135,7 @@ menu_grab_transfer_window_destroy (GtkMenu *menu)
     {
       gdk_window_set_user_data (window, NULL);
       gdk_window_destroy (window);
-      g_object_set_data (G_OBJECT (menu), "gtk-menu-transfer-window", NULL);
+      g_object_set_data (G_OBJECT (menu), g_intern_static_string ("gtk-menu-transfer-window"), NULL);
     }
 }
 
@@ -3965,7 +3965,7 @@ gtk_menu_set_screen (GtkMenu   *menu,
   g_return_if_fail (GTK_IS_MENU (menu));
   g_return_if_fail (!screen || GDK_IS_SCREEN (screen));
 
-  g_object_set_data (G_OBJECT (menu), "gtk-menu-explicit-screen", screen);
+  g_object_set_data (G_OBJECT (menu), g_intern_static_string ("gtk-menu-explicit-screen"), screen);
 
   if (screen)
     {

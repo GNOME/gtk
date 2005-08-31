@@ -225,7 +225,7 @@ gtk_socket_init (GtkSocket *socket)
   socket->active = FALSE;
 
   socket->accel_group = gtk_accel_group_new ();
-  g_object_set_data (G_OBJECT (socket->accel_group), "gtk-socket", socket);
+  g_object_set_data (G_OBJECT (socket->accel_group), g_intern_static_string ("gtk-socket"), socket);
 }
 
 /**

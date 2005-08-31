@@ -539,7 +539,7 @@ get_response_data (GtkWidget *widget,
       ad = g_new (ResponseData, 1);
       
       g_object_set_data_full (G_OBJECT (widget),
-                              "gtk-dialog-response-data",
+                              g_intern_static_string ("gtk-dialog-response-data"),
                               ad,
                               g_free);
     }

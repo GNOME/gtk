@@ -422,7 +422,7 @@ gtk_object_set_property (GObject      *object,
   switch (property_id)
     {
     case PROP_USER_DATA:
-      g_object_set_data (G_OBJECT (object), "user_data", g_value_get_pointer (value));
+      g_object_set_data (G_OBJECT (object), g_intern_static_string ("user_data"), g_value_get_pointer (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);

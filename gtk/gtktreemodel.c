@@ -1913,7 +1913,7 @@ gtk_tree_row_reference_new_proxy (GObject      *proxy,
       refs->list = NULL;
 
       g_object_set_data_full (G_OBJECT (proxy),
-			      ROW_REF_DATA_STRING,
+			      g_intern_static_string (ROW_REF_DATA_STRING),
                               refs, release_row_references);
     }
 
@@ -2027,7 +2027,7 @@ gtk_tree_row_reference_free (GtkTreeRowReference *reference)
   if (refs->list == NULL)
     {
       g_object_set_data (G_OBJECT (reference->proxy),
-			 ROW_REF_DATA_STRING,
+			 g_intern_static_string (ROW_REF_DATA_STRING),
 			 NULL);
     }
 

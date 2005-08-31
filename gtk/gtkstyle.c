@@ -6541,7 +6541,7 @@ style_unrealize_cursor_gcs (GtkStyle *style)
 	gtk_gc_release (cursor_info->secondary_gc);
       
       g_free (cursor_info);
-      g_object_set_data (G_OBJECT (style), "gtk-style-cursor-info", NULL);
+      g_object_set_data (G_OBJECT (style), g_intern_static_string ("gtk-style-cursor-info"), NULL);
     }
 }
 
@@ -6579,7 +6579,7 @@ get_insertion_cursor_gc (GtkWidget *widget,
   if (!cursor_info)
     {
       cursor_info = g_new (CursorInfo, 1);
-      g_object_set_data (G_OBJECT (widget->style), "gtk-style-cursor-info", cursor_info);
+      g_object_set_data (G_OBJECT (widget->style), g_intern_static_string ("gtk-style-cursor-info"), cursor_info);
       cursor_info->primary_gc = NULL;
       cursor_info->secondary_gc = NULL;
       cursor_info->for_type = G_TYPE_INVALID;

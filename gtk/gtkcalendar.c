@@ -2886,7 +2886,7 @@ set_status_pending (GdkDragContext *context,
                     GdkDragAction   suggested_action)
 {
   g_object_set_data (G_OBJECT (context),
-                     "gtk-calendar-status-pending",
+                     g_intern_static_string ("gtk-calendar-status-pending"),
                      GINT_TO_POINTER (suggested_action));
 }
 

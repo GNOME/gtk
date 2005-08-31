@@ -366,7 +366,7 @@ gtk_combo_func (GtkListItem * li)
   GtkWidget *label;
   gchar *ltext = NULL;
 
-  ltext = g_object_get_data (G_OBJECT (li), gtk_combo_string_key);
+  ltext = g_object_get_data (G_OBJECT (li), g_intern_static_string (gtk_combo_string_key));
   if (!ltext)
     {
       label = GTK_BIN (li)->child;
@@ -1151,7 +1151,7 @@ gtk_combo_set_item_string (GtkCombo * combo, GtkItem * item, const gchar * item_
   g_return_if_fail (GTK_IS_COMBO (combo));
   g_return_if_fail (item != NULL);
 
-  g_object_set_data_full (G_OBJECT (item), gtk_combo_string_key,
+  g_object_set_data_full (G_OBJECT (item), g_intern_static_string (gtk_combo_string_key),
 			  g_strdup (item_value), g_free);
 }
 

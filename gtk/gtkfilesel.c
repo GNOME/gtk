@@ -985,7 +985,7 @@ filenames_dropped (GtkWidget        *widget,
 					 "Are you sure that you want to select it?"), filename_utf8, hostname);
       g_free (filename_utf8);
 
-      g_object_set_data_full (G_OBJECT (dialog), "gtk-fs-dnd-filename", g_strdup (filename), g_free);
+      g_object_set_data_full (G_OBJECT (dialog), g_intern_static_string ("gtk-fs-dnd-filename"), g_strdup (filename), g_free);
       
       g_signal_connect_data (dialog, "response",
 			     (GCallback) dnd_really_drop, 

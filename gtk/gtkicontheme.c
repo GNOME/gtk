@@ -339,7 +339,7 @@ gtk_icon_theme_get_for_screen (GdkScreen *screen)
       priv = icon_theme->priv;
       priv->is_screen_singleton = TRUE;
 
-      g_object_set_data (G_OBJECT (screen), "gtk-icon-theme", icon_theme);
+      g_object_set_data (G_OBJECT (screen), g_intern_static_string ("gtk-icon-theme"), icon_theme);
     }
 
   return icon_theme;
@@ -389,7 +389,7 @@ display_closed (GdkDisplay   *display,
 
   if (was_screen_singleton)
     {
-      g_object_set_data (G_OBJECT (screen), "gtk-icon-theme", NULL);
+      g_object_set_data (G_OBJECT (screen), g_intern_static_string ("gtk-icon-theme"), NULL);
       priv->is_screen_singleton = FALSE;
     }
 

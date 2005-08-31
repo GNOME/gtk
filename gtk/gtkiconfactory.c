@@ -119,7 +119,7 @@ gtk_icon_factory_get_type (void)
       };
       
       icon_factory_type =
-	g_type_register_static (G_TYPE_OBJECT, "GtkIconFactory",
+	g_type_register_static (G_TYPE_OBJECT, g_intern_static_string ("GtkIconFactory"),
 				&icon_factory_info, 0);
     }
   

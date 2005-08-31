@@ -5491,7 +5491,7 @@ set_source_row (GdkDragContext *context,
                 GtkTreePath    *source_row)
 {
   g_object_set_data_full (G_OBJECT (context),
-                          "gtk-tree-view-source-row",
+                          g_intern_static_string ("gtk-tree-view-source-row"),
                           source_row ? gtk_tree_row_reference_new (model, source_row) : NULL,
                           (GDestroyNotify) (source_row ? gtk_tree_row_reference_free : NULL));
 }
@@ -5539,7 +5539,7 @@ set_dest_row (GdkDragContext *context,
 
   if (!dest_row)
     {
-      g_object_set_data_full (G_OBJECT (context), "gtk-tree-view-dest-row",
+      g_object_set_data_full (G_OBJECT (context), g_intern_static_string ("gtk-tree-view-dest-row"),
                               NULL, NULL);
       return;
     }
@@ -5551,7 +5551,7 @@ set_dest_row (GdkDragContext *context,
   dr->empty_view_drop = empty_view_drop;
   dr->drop_append_mode = drop_append_mode;
 
-  g_object_set_data_full (G_OBJECT (context), "gtk-tree-view-dest-row",
+  g_object_set_data_full (G_OBJECT (context), g_intern_static_string ("gtk-tree-view-dest-row"),
                           dr, (GDestroyNotify) dest_row_free);
 }
 
@@ -5594,7 +5594,7 @@ set_status_pending (GdkDragContext *context,
                     GdkDragAction   suggested_action)
 {
   g_object_set_data (G_OBJECT (context),
-                     "gtk-tree-view-status-pending",
+                     g_intern_static_string ("gtk-tree-view-status-pending"),
                      GINT_TO_POINTER (suggested_action));
 }
 
@@ -5649,7 +5649,7 @@ ensure_info (GtkTreeView *tree_view)
       di = g_new0 (TreeViewDragInfo, 1);
 
       g_object_set_data_full (G_OBJECT (tree_view),
-                              "gtk-tree-view-drag-info",
+                              g_intern_static_string ("gtk-tree-view-drag-info"),
                               di,
                               (GDestroyNotify) destroy_info);
     }
@@ -5660,7 +5660,7 @@ ensure_info (GtkTreeView *tree_view)
 static void
 remove_info (GtkTreeView *tree_view)
 {
-  g_object_set_data (G_OBJECT (tree_view), "gtk-tree-view-drag-info", NULL);
+  g_object_set_data (G_OBJECT (tree_view), g_intern_static_string ("gtk-tree-view-drag-info"), NULL);
 }
 
 #if 0

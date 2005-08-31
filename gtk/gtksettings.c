@@ -426,7 +426,7 @@ gtk_settings_get_for_screen (GdkScreen *screen)
     {
       settings = g_object_new (GTK_TYPE_SETTINGS, NULL);
       settings->screen = screen;
-      g_object_set_data (G_OBJECT (screen), "gtk-settings", settings);
+      g_object_set_data (G_OBJECT (screen), g_intern_static_string ("gtk-settings"), settings);
 
       gtk_rc_reparse_all_for_settings (settings, TRUE);
       settings_update_double_click (settings);

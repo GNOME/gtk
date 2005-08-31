@@ -682,7 +682,7 @@ gtk_selection_target_list_get (GtkWidget    *widget,
   sellist->list = gtk_target_list_new (NULL, 0);
 
   lists = g_list_prepend (lists, sellist);
-  g_object_set_data (G_OBJECT (widget), gtk_selection_handler_key, lists);
+  g_object_set_data (G_OBJECT (widget), g_intern_static_string (gtk_selection_handler_key), lists);
 
   return sellist->list;
 }
@@ -708,7 +708,7 @@ gtk_selection_target_list_remove (GtkWidget    *widget)
     }
 
   g_list_free (lists);
-  g_object_set_data (G_OBJECT (widget), gtk_selection_handler_key, NULL);
+  g_object_set_data (G_OBJECT (widget), g_intern_static_string (gtk_selection_handler_key), NULL);
 }
 
 /**
@@ -748,7 +748,7 @@ gtk_selection_clear_targets (GtkWidget *widget,
       tmp_list = tmp_list->next;
     }
   
-  g_object_set_data (G_OBJECT (widget), gtk_selection_handler_key, lists);
+  g_object_set_data (G_OBJECT (widget), g_intern_static_string (gtk_selection_handler_key), lists);
 }
 
 /**

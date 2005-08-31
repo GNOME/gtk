@@ -2072,7 +2072,7 @@ chain_widget_destroyed (GtkWidget *widget,
                                         user_data);
   
   g_object_set_data (G_OBJECT (container),
-                     "gtk-container-focus-chain",
+                     g_intern_static_string ("gtk-container-focus-chain"),
                      chain);  
 }
 
@@ -2129,7 +2129,7 @@ gtk_container_set_focus_chain (GtkContainer *container,
   chain = g_list_reverse (chain);
   
   g_object_set_data (G_OBJECT (container),
-                     "gtk-container-focus-chain",
+                     g_intern_static_string ("gtk-container-focus-chain"),
                      chain);
 }
 
@@ -2188,7 +2188,8 @@ gtk_container_unset_focus_chain (GtkContainer  *container)
       
       container->has_focus_chain = FALSE;
       
-      g_object_set_data (G_OBJECT (container), "gtk-container-focus-chain",
+      g_object_set_data (G_OBJECT (container), 
+                         g_intern_static_string ("gtk-container-focus-chain"),
                          NULL);
 
       tmp_list = chain;

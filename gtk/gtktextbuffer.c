@@ -2811,7 +2811,7 @@ create_clipboard_contents_buffer (GtkTextBuffer *buffer)
 
   contents = gtk_text_buffer_new (gtk_text_buffer_get_tag_table (buffer));
 
-  g_object_set_data (G_OBJECT (contents), "gtk-text-buffer-clipboard", GINT_TO_POINTER (1));
+  g_object_set_data (G_OBJECT (contents), g_intern_static_string ("gtk-text-buffer-clipboard"), GINT_TO_POINTER (1));
   
   return contents;
 }

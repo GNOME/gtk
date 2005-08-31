@@ -116,7 +116,7 @@ gtk_gc_get_drawable_ht (GdkScreen *screen)
 				  (GEqualFunc) gtk_gc_drawable_equal,
 				  NULL, free_gc_drawable);
       g_object_set_data_full (G_OBJECT (screen), 
-			      "gtk-gc-drawable-ht", ht, 
+			      g_intern_static_string ("gtk-gc-drawable-ht"), ht, 
 			      (GDestroyNotify)g_hash_table_destroy);
     }
   

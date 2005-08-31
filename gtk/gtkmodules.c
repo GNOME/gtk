@@ -428,7 +428,7 @@ display_closed_cb (GdkDisplay *display,
       settings = gtk_settings_get_for_screen (screen);
 
       g_object_set_data_full (G_OBJECT (settings),
-			      "gtk-modules",
+			      g_intern_static_string ("gtk-modules"),
 			      NULL, NULL);
     }  
 }
@@ -535,7 +535,7 @@ _gtk_modules_settings_changed (GtkSettings *settings,
     new_modules = load_modules (modules);
 
   g_object_set_data_full (G_OBJECT (settings),
-			  "gtk-modules",
+			  g_intern_static_string ("gtk-modules"),
 			  new_modules,
 			  settings_destroy_notify);
 }

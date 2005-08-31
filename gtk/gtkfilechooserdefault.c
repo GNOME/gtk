@@ -3713,7 +3713,7 @@ create_file_list (GtkFileChooserDefault *impl)
   /* Tree/list view */
 
   impl->browse_files_tree_view = gtk_tree_view_new ();
-  g_object_set_data (G_OBJECT (impl->browse_files_tree_view), "GtkFileChooserDefault", impl);
+  g_object_set_data (G_OBJECT (impl->browse_files_tree_view), g_intern_static_string ("GtkFileChooserDefault"), impl);
   atk_object_set_name (gtk_widget_get_accessible (impl->browse_files_tree_view), _("Files"));
 
   gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (impl->browse_files_tree_view), TRUE);

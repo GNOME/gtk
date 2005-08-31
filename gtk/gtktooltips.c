@@ -148,7 +148,7 @@ gtk_tooltips_destroy_data (GtkTooltipsData *tooltipsdata)
 					gtk_tooltips_widget_remove,
 					tooltipsdata);
 
-  g_object_set_data (G_OBJECT (tooltipsdata->widget), tooltips_data_key, NULL);
+  g_object_set_data (G_OBJECT (tooltipsdata->widget), g_intern_static_string (tooltips_data_key), NULL);
   g_object_unref (tooltipsdata->widget);
   g_free (tooltipsdata);
 }
@@ -361,7 +361,7 @@ gtk_tooltips_set_tip (GtkTooltips *tooltips,
                               G_CALLBACK (gtk_tooltips_event_handler),
 			      tooltipsdata);
 
-      g_object_set_data (G_OBJECT (widget), tooltips_data_key,
+      g_object_set_data (G_OBJECT (widget), g_intern_static_string (tooltips_data_key),
                          tooltipsdata);
 
       g_signal_connect (widget, "unmap",
@@ -415,7 +415,7 @@ gtk_tooltips_draw_tips (GtkTooltips *tooltips)
   style = tooltips->tip_window->style;
   
   widget = tooltips->active_tips_data->widget;
-  g_object_set_data (G_OBJECT (tooltips->tip_window), tooltips_info_key,
+  g_object_set_data (G_OBJECT (tooltips->tip_window), g_intern_static_string (tooltips_info_key),
                      tooltips);
 
   keyboard_mode = get_keyboard_mode (widget);
@@ -588,7 +588,7 @@ start_keyboard_mode (GtkWidget *widget)
     {
       GtkWidget *focus = GTK_WINDOW (toplevel)->focus_widget;
 
-      g_object_set_data (G_OBJECT (toplevel), "gtk-tooltips-keyboard-mode", GUINT_TO_POINTER (TRUE));
+      g_object_set_data (G_OBJECT (toplevel), g_intern_static_string ("gtk-tooltips-keyboard-mode"), GUINT_TO_POINTER (TRUE));
 
       if (focus)
 	gtk_tooltips_show_tip (focus);
@@ -605,7 +605,7 @@ stop_keyboard_mode (GtkWidget *widget)
       if (focus)
 	gtk_tooltips_hide_tip (focus);
       
-      g_object_set_data (G_OBJECT (toplevel), "gtk-tooltips-keyboard-mode", GUINT_TO_POINTER (FALSE));
+      g_object_set_data (G_OBJECT (toplevel), g_intern_static_string ("gtk-tooltips-keyboard-mode"), GUINT_TO_POINTER (FALSE));
     }
 }
 

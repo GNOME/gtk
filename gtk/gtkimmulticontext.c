@@ -555,7 +555,7 @@ gtk_im_multicontext_append_menuitems (GtkIMMulticontext *context,
       
       group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (menuitem));
       
-      g_object_set_data (G_OBJECT (menuitem), "gtk-context-id",
+      g_object_set_data (G_OBJECT (menuitem), g_intern_static_string ("gtk-context-id"),
 			 (char *)contexts[i]->context_id);
       g_signal_connect (menuitem, "activate",
 			G_CALLBACK (activate_cb), context);

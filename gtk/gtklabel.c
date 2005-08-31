@@ -919,7 +919,7 @@ gtk_label_setup_mnemonic (GtkLabel *label,
     }
   
  done:
-  g_object_set_data (G_OBJECT (label), "gtk-mnemonic-menu", mnemonic_menu);
+  g_object_set_data (G_OBJECT (label), g_intern_static_string ("gtk-mnemonic-menu"), mnemonic_menu);
 }
 
 static void
@@ -1749,7 +1749,7 @@ get_label_wrap_width (GtkLabel *label)
   if (!wrap_width)
     {
       wrap_width = g_new0 (LabelWrapWidth, 1);
-      g_object_set_data_full (G_OBJECT (style), "gtk-label-wrap-width",
+      g_object_set_data_full (G_OBJECT (style), g_intern_static_string ("gtk-label-wrap-width"),
 			      wrap_width, label_wrap_width_free);
     }
 
@@ -3889,7 +3889,7 @@ append_action_signal (GtkLabel     *label,
 {
   GtkWidget *menuitem = gtk_image_menu_item_new_from_stock (stock_id, NULL);
 
-  g_object_set_data (G_OBJECT (menuitem), "gtk-signal", (char *)signal);
+  g_object_set_data (G_OBJECT (menuitem), g_intern_static_string ("gtk-signal"), (char *)signal);
   g_signal_connect (menuitem, "activate",
 		    G_CALLBACK (activate_cb), label);
 

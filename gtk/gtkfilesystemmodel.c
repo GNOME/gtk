@@ -1493,7 +1493,7 @@ file_model_node_get_children (GtkFileSystemModel *model,
 	  g_signal_connect (node->folder, "files-removed",
 			    G_CALLBACK (files_removed_callback), node);
 
-	  g_object_set_data (G_OBJECT (node->folder), "model-node", node);
+	  g_object_set_data (G_OBJECT (node->folder), g_intern_static_string ("model-node"), node);
 	}
       
       if (is_folder && !has_children)

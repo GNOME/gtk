@@ -209,7 +209,7 @@ gtk_im_context_real_get_surrounding (GtkIMContext *context,
   if (!info)
     {
       info = &local_info;
-      g_object_set_data (G_OBJECT (context), "gtk-im-surrounding-info", info);
+      g_object_set_data (G_OBJECT (context), g_intern_static_string ("gtk-im-surrounding-info"), info);
       info_is_local = TRUE;
     }
   
@@ -231,7 +231,7 @@ gtk_im_context_real_get_surrounding (GtkIMContext *context,
   if (info_is_local)
     {
       g_free (info->text);
-      g_object_set_data (G_OBJECT (context), "gtk-im-surrounding-info", NULL);
+      g_object_set_data (G_OBJECT (context), g_intern_static_string ("gtk-im-surrounding-info"), NULL);
     }
   
   return result;

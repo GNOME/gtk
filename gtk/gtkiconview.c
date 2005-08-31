@@ -5579,7 +5579,7 @@ set_status_pending (GdkDragContext *context,
                     GdkDragAction   suggested_action)
 {
   g_object_set_data (G_OBJECT (context),
-                     "gtk-icon-view-status-pending",
+                     g_intern_static_string ("gtk-icon-view-status-pending"),
                      GINT_TO_POINTER (suggested_action));
 }
 
@@ -5627,12 +5627,12 @@ set_source_row (GdkDragContext *context,
 {
   if (source_row)
     g_object_set_data_full (G_OBJECT (context),
-			    "gtk-icon-view-source-row",
+			    g_intern_static_string ("gtk-icon-view-source-row"),
 			    gtk_tree_row_reference_new (model, source_row),
 			    (GDestroyNotify) gtk_tree_row_reference_free);
   else
     g_object_set_data_full (G_OBJECT (context),
-			    "gtk-icon-view-source-row",
+			    g_intern_static_string ("gtk-icon-view-source-row"),
 			    NULL, NULL);
 }
 
@@ -5677,7 +5677,7 @@ set_dest_row (GdkDragContext *context,
   if (!dest_row)
     {
       g_object_set_data_full (G_OBJECT (context),
-			      "gtk-icon-view-dest-row",
+			      g_intern_static_string ("gtk-icon-view-dest-row"),
 			      NULL, NULL);
       return;
     }
@@ -5688,7 +5688,7 @@ set_dest_row (GdkDragContext *context,
   dr->empty_view_drop = empty_view_drop;
   dr->drop_append_mode = drop_append_mode;
   g_object_set_data_full (G_OBJECT (context),
-                          "gtk-icon-view-dest-row",
+                          g_intern_static_string ("gtk-icon-view-dest-row"),
                           dr, (GDestroyNotify) dest_row_free);
 }
 

@@ -6899,7 +6899,7 @@ append_action_signal (GtkTextView  *text_view,
 {
   GtkWidget *menuitem = gtk_image_menu_item_new_from_stock (stock_id, NULL);
 
-  g_object_set_data (G_OBJECT (menuitem), "gtk-signal", (char *)signal);
+  g_object_set_data (G_OBJECT (menuitem), g_intern_static_string ("gtk-signal"), (char *)signal);
   g_signal_connect (menuitem, "activate",
 		    G_CALLBACK (activate_cb), text_view);
 
@@ -8087,7 +8087,7 @@ text_view_child_new_anchored (GtkWidget          *child,
   g_object_ref (vc->anchor);
 
   g_object_set_data (G_OBJECT (child),
-                     "gtk-text-view-child",
+                     g_intern_static_string ("gtk-text-view-child"),
                      vc);
 
   gtk_text_child_anchor_register_child (anchor, child, layout);
@@ -8118,7 +8118,7 @@ text_view_child_new_window (GtkWidget          *child,
   vc->y = y;
 
   g_object_set_data (G_OBJECT (child),
-                     "gtk-text-view-child",
+                     g_intern_static_string ("gtk-text-view-child"),
                      vc);
   
   return vc;
@@ -8128,7 +8128,7 @@ static void
 text_view_child_free (GtkTextViewChild *child)
 {
   g_object_set_data (G_OBJECT (child->widget),
-                     "gtk-text-view-child", NULL);
+                     g_intern_static_string ("gtk-text-view-child"), NULL);
 
   if (child->anchor)
     {
