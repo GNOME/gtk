@@ -105,7 +105,7 @@ gdk_pixbuf_animation_get_type (void)
                 };
                 
                 object_type = g_type_register_static (G_TYPE_OBJECT,
-                                                      "GdkPixbufAnimation",
+                                                      g_intern_static_string ("GdkPixbufAnimation"),
                                                       &object_info, 0);
         }
   

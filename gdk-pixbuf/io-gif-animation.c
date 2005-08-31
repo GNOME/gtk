@@ -63,7 +63,7 @@ gdk_pixbuf_gif_anim_get_type (void)
                 };
                 
                 object_type = g_type_register_static (GDK_TYPE_PIXBUF_ANIMATION,
-                                                      "GdkPixbufGifAnim",
+                                                      g_intern_static_string ("GdkPixbufGifAnim"),
                                                       &object_info, 0);
         }
         
@@ -219,7 +219,7 @@ gdk_pixbuf_gif_anim_iter_get_type (void)
                 };
                 
                 object_type = g_type_register_static (GDK_TYPE_PIXBUF_ANIMATION_ITER,
-                                                      "GdkPixbufGifAnimIter",
+                                                      g_intern_static_string ("GdkPixbufGifAnimIter"),
                                                       &object_info, 0);
         }
         

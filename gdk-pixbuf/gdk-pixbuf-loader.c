@@ -98,7 +98,7 @@ gdk_pixbuf_loader_get_type (void)
                         };
       
                         loader_type = g_type_register_static (G_TYPE_OBJECT,
-                                                              "GdkPixbufLoader",
+                                                              g_intern_static_string ("GdkPixbufLoader"),
                                                               &loader_info,
                                                               0);
                 }

@@ -1,3 +1,15 @@
+2005-08-31  Matthias Clasen  <mclasen@redhat.com>
+
+	* io-ani-animation.c (gdk_pixbuf_ani_anim_iter_get_type) 
+	(gdk_pixbuf_ani_anim_get_type): 
+	* io-gif-animation.c (gdk_pixbuf_gif_anim_get_type) 
+	(gdk_pixbuf_gif_anim_iter_get_type): 
+	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_get_type): 
+	* gdk-pixbuf.c (gdk_pixbuf_get_type): 
+	* gdk-pixbuf-animation.c (gdk_pixbuf_animation_get_type): 
+	Intern type names before registering the type to avoid 
+	unnecessary copies.
+
 2005-08-30  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk-pixbuf-io.c (format_check): Make this work again.
