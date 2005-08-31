@@ -3737,7 +3737,7 @@ gtk_text_iter_forward_visible_cursor_positions (GtkTextIter *iter,
  * @count: number of positions to move
  *
  * Moves up to @count visible cursor positions. See
- * gtk_text_iter_forward_cursor_position() for details.
+ * gtk_text_iter_backward_cursor_position() for details.
  * 
  * Return value: %TRUE if we moved and the new position is dereferenceable
  * 
