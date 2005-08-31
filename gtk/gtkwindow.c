@@ -1843,6 +1843,10 @@ gtk_window_unset_transient_for  (GtkWindow *window)
 {
   if (window->transient_parent)
     {
+      if (window->transient_parent->group)
+	gtk_window_group_remove_window (window->transient_parent->group,
+					window);
+
       g_signal_handlers_disconnect_by_func (window->transient_parent,
 					    gtk_window_transient_parent_realized,
 					    window);
@@ -1927,6 +1931,9 @@ gtk_window_set_transient_for  (GtkWindow *window,
 	  GTK_WIDGET_REALIZED (parent))
 	gtk_window_transient_parent_realized (GTK_WIDGET (parent),
 					      GTK_WIDGET (window));
+
+      if (parent->group)
+	gtk_window_group_add_window (parent->group, window);
     }
 }
 

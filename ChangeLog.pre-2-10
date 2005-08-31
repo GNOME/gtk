@@ -1,5 +1,8 @@
 2005-08-31  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkwindow.c (gtk_window_set_transient_for): Inherit window
+	groups across transient parents.  (#312918, Christian Persch)
+
 	* gtk/gtktreemodel.c: Some documentation fixes.  (#314882,
 	Guillaume Cottenceau)
 
