@@ -1,5 +1,8 @@
 2005-08-31  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktoolbar.c: Undeprecate gtk_toolbar_set_icon_size(),
+	and add icon-size and icon-size-set properties.  (#314172)	
+
 	* gtk/gtkwindow.c (gtk_window_set_transient_for): Inherit window
 	groups across transient parents.  (#312918, Christian Persch)
 

@@ -85,7 +85,9 @@ enum {
   PROP_ORIENTATION,
   PROP_TOOLBAR_STYLE,
   PROP_SHOW_ARROW,
-  PROP_TOOLTIPS
+  PROP_TOOLTIPS,
+  PROP_ICON_SIZE,
+  PROP_ICON_SIZE_SET
 };
 
 /* Child properties */
@@ -543,6 +545,44 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
 							 TRUE,
 							 GTK_PARAM_READWRITE));
   
+
+  /**
+   * GtkToolbar:icon-size:
+   *
+   * The size of the icons in a toolbar is normally determined by
+   * the toolbar-icon-size setting. When this property is set, it 
+   * overrides the setting. 
+   * 
+   * This should only be used for special-purpose toolbars, normal
+   * application toolbars should respect the user preferences for the
+   * size of icons.
+   *
+   * Since: 2.10
+   */
+  g_object_class_install_property (gobject_class,
+				   PROP_ICON_SIZE,
+				   g_param_spec_enum ("icon-size",
+						      P_("Icon size"),
+						      P_("Size of icons in this toolbar"),
+						      GTK_TYPE_ICON_SIZE,
+						      DEFAULT_ICON_SIZE,
+						      GTK_PARAM_READWRITE));  
+
+  /**
+   * GtkToolbar:icon-size-set:
+   *
+   * Is %TRUE if the icon-size property has been set.
+   *
+   * Since: 2.10
+   */
+  g_object_class_install_property (gobject_class,
+				   PROP_ICON_SIZE_SET,
+				   g_param_spec_boolean ("icon-size-set",
+							 P_("Icon size set"),
+							 P_("Whether the icon-size property has been set"),
+							 FALSE,
+							 GTK_PARAM_READWRITE));  
+
   /* child properties */
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_EXPAND,
@@ -710,6 +750,15 @@ gtk_toolbar_set_property (GObject      *object,
     case PROP_TOOLTIPS:
       gtk_toolbar_set_tooltips (toolbar, g_value_get_boolean (value));
       break;
+    case PROP_ICON_SIZE:
+      gtk_toolbar_set_icon_size (toolbar, g_value_get_enum (value));
+      break;
+    case PROP_ICON_SIZE_SET:
+      if (g_value_get_boolean (value))
+	toolbar->icon_size_set = TRUE;
+      else
+	gtk_toolbar_unset_icon_size (toolbar);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -738,6 +787,12 @@ gtk_toolbar_get_property (GObject    *object,
       break;
     case PROP_TOOLTIPS:
       g_value_set_boolean (value, gtk_toolbar_get_tooltips (toolbar));
+      break;
+    case PROP_ICON_SIZE:
+      g_value_set_enum (value, gtk_toolbar_get_icon_size (toolbar));
+      break;
+    case PROP_ICON_SIZE_SET:
+      g_value_set_boolean (value, toolbar->icon_size_set);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -2958,7 +3013,7 @@ gtk_toolbar_get_nth_item (GtkToolbar *toolbar,
  * gtk_toolbar_get_icon_size:
  * @toolbar: a #GtkToolbar
  *
- * Retrieves the icon size fo the toolbar. See gtk_toolbar_set_icon_size().
+ * Retrieves the icon size for the toolbar. See gtk_toolbar_set_icon_size().
  *
  * Return value: the current icon size for the icons on the toolbar.
  **/
@@ -3114,10 +3169,6 @@ gtk_toolbar_finalize (GObject *object)
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
-/*
- * Deprecated API
- */
-
 /**
  * gtk_toolbar_set_icon_size:
  * @toolbar: A #GtkToolbar
@@ -3128,21 +3179,28 @@ gtk_toolbar_finalize (GObject *object)
  * added. The size you set will override user preferences for the default
  * icon size.
  * 
- * Deprecated: Applications should respect the user preferences for
- *   the size of icons in toolbars.
+ * This should only be used for special-purpose toolbars, normal
+ * application toolbars should respect the user preferences for the
+ * size of icons.
  **/
 void
 gtk_toolbar_set_icon_size (GtkToolbar  *toolbar,
 			   GtkIconSize  icon_size)
 {
   g_return_if_fail (GTK_IS_TOOLBAR (toolbar));
+  g_return_if_fail (icon_size != GTK_ICON_SIZE_INVALID);
   
-  toolbar->icon_size_set = TRUE;
-  
+  if (!toolbar->icon_size_set)
+    {
+      toolbar->icon_size_set = TRUE;  
+      g_object_notify (G_OBJECT (toolbar), "icon-size-set");
+    }
+
   if (toolbar->icon_size == icon_size)
     return;
   
   toolbar->icon_size = icon_size;
+  g_object_notify (G_OBJECT (toolbar), "icon-size");
   
   gtk_toolbar_reconfigured (toolbar);
   
@@ -3177,11 +3235,19 @@ gtk_toolbar_unset_icon_size (GtkToolbar *toolbar)
 	size = DEFAULT_ICON_SIZE;
       
       if (size != toolbar->icon_size)
-	gtk_toolbar_set_icon_size (toolbar, size);
+	{
+	  gtk_toolbar_set_icon_size (toolbar, size);
+	  g_object_notify (G_OBJECT (toolbar), "icon-size");	  
+	}
       
       toolbar->icon_size_set = FALSE;
+      g_object_notify (G_OBJECT (toolbar), "icon-size-set");      
     }
 }
+
+/*
+ * Deprecated API
+ */
 
 /**
  * gtk_toolbar_append_item:
