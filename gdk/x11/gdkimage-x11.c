@@ -97,7 +97,7 @@ gdk_image_get_type (void)
       };
       
       object_type = g_type_register_static (G_TYPE_OBJECT,
-                                            "GdkImage",
+                                            g_intern_static_string ("GdkImage"),
                                             &object_info, 0);
     }
   

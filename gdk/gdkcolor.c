@@ -314,7 +314,7 @@ gdk_color_get_type (void)
   static GType our_type = 0;
   
   if (our_type == 0)
-    our_type = g_boxed_type_register_static ("GdkColor",
+    our_type = g_boxed_type_register_static (g_intern_static_string ("GdkColor"),
 					     (GBoxedCopyFunc)gdk_color_copy,
 					     (GBoxedFreeFunc)gdk_color_free);
   return our_type;

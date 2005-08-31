@@ -80,7 +80,7 @@ _gdk_gc_x11_get_type (void)
       };
       
       object_type = g_type_register_static (GDK_TYPE_GC,
-                                            "GdkGCX11",
+                                            g_intern_static_string ("GdkGCX11"),
                                             &object_info, 0);
     }
   

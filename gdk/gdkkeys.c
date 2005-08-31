@@ -61,7 +61,7 @@ gdk_keymap_get_type (void)
       };
       
       object_type = g_type_register_static (G_TYPE_OBJECT,
-                                            "GdkKeymap",
+                                            g_intern_static_string ("GdkKeymap"),
                                             &object_info, 0);
     }
   

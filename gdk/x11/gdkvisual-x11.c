@@ -97,7 +97,7 @@ gdk_visual_get_type (void)
       };
       
       object_type = g_type_register_static (G_TYPE_OBJECT,
-                                            "GdkVisual",
+                                            g_intern_static_string ("GdkVisual"),
                                             &object_info, 0);
     }
   

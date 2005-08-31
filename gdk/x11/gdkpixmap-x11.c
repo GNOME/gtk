@@ -87,7 +87,7 @@ gdk_pixmap_impl_x11_get_type (void)
       };
       
       object_type = g_type_register_static (GDK_TYPE_DRAWABLE_IMPL_X11,
-                                            "GdkPixmapImplX11",
+                                            g_intern_static_string ("GdkPixmapImplX11"),
                                             &object_info, 0);
     }
   

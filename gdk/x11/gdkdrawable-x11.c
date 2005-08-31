@@ -167,7 +167,7 @@ _gdk_drawable_impl_x11_get_type (void)
       };
       
       object_type = g_type_register_static (GDK_TYPE_DRAWABLE,
-                                            "GdkDrawableImplX11",
+                                            g_intern_static_string ("GdkDrawableImplX11"),
                                             &object_info, 0);
     }
   

@@ -115,7 +115,7 @@ _gdk_display_x11_get_type (void)
 	};
       
       object_type = g_type_register_static (GDK_TYPE_DISPLAY,
-					    "GdkDisplayX11",
+					    g_intern_static_string ("GdkDisplayX11"),
 					    &object_info, 0);
     }
   

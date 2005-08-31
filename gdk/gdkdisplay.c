@@ -107,7 +107,7 @@ gdk_display_get_type (void)
 	(GInstanceInitFunc) gdk_display_init
       };
       object_type = g_type_register_static (G_TYPE_OBJECT,
-					    "GdkDisplay", &object_info, 0);
+					    g_intern_static_string ("GdkDisplay"), &object_info, 0);
     }
 
   return object_type;

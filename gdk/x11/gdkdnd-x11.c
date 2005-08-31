@@ -166,7 +166,7 @@ gdk_drag_context_get_type (void)
       };
       
       object_type = g_type_register_static (G_TYPE_OBJECT,
-                                            "GdkDragContext",
+                                            g_intern_static_string ("GdkDragContext"),
                                             &object_info, 0);
     }
   

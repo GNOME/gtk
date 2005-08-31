@@ -80,7 +80,7 @@ _gdk_screen_x11_get_type (void)
 	  (GInstanceInitFunc) NULL,
 	};
       object_type = g_type_register_static (GDK_TYPE_SCREEN,
-					    "GdkScreenX11",
+					    g_intern_static_string ("GdkScreenX11"),
 					    &object_info, 0);
     }
   return object_type;

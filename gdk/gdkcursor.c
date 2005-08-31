@@ -36,7 +36,7 @@ gdk_cursor_get_type (void)
   static GType our_type = 0;
   
   if (our_type == 0)
-    our_type = g_boxed_type_register_static ("GdkCursor",
+    our_type = g_boxed_type_register_static (g_intern_static_string ("GdkCursor"),
 					     (GBoxedCopyFunc)gdk_cursor_ref,
 					     (GBoxedFreeFunc)gdk_cursor_unref);
   return our_type;

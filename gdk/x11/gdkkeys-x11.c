@@ -126,7 +126,7 @@ gdk_keymap_x11_get_type (void)
 	};
       
       object_type = g_type_register_static (GDK_TYPE_KEYMAP,
-                                            "GdkKeymapX11",
+                                            g_intern_static_string ("GdkKeymapX11"),
                                             &object_info, 0);
     }
   

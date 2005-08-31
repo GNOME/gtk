@@ -85,7 +85,7 @@ gdk_drawable_get_type (void)
       };
       
       object_type = g_type_register_static (G_TYPE_OBJECT,
-                                            "GdkDrawable",
+                                            g_intern_static_string ("GdkDrawable"),
                                             &object_info, 
 					    G_TYPE_FLAG_ABSTRACT);
     }  

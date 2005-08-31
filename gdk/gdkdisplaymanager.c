@@ -88,7 +88,7 @@ gdk_display_manager_get_type (void)
       };
       
       object_type = g_type_register_static (G_TYPE_OBJECT,
-                                            "GdkDisplayManager",
+                                            g_intern_static_string ("GdkDisplayManager"),
                                             &object_info, 0);
     }
   

@@ -215,7 +215,7 @@ gdk_window_object_get_type (void)
       };
       
       object_type = g_type_register_static (GDK_TYPE_DRAWABLE,
-                                            "GdkWindow",
+                                            g_intern_static_string ("GdkWindow"),
                                             &object_info, 0);
     }
   

@@ -180,7 +180,7 @@ gdk_pixmap_get_type (void)
       };
       
       object_type = g_type_register_static (GDK_TYPE_DRAWABLE,
-                                            "GdkPixmap",
+                                            g_intern_static_string ("GdkPixmap"),
                                             &object_info, 0);
     }
   

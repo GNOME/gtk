@@ -80,7 +80,7 @@ gdk_screen_get_type (void)
 	};
       
       object_type = g_type_register_static (G_TYPE_OBJECT,
-					    "GdkScreen", &object_info, 0);
+					    g_intern_static_string ("GdkScreen"), &object_info, 0);
     }
 
   return object_type;
