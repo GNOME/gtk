@@ -77,7 +77,7 @@ gtk_radio_menu_item_get_type (void)
       };
 
       radio_menu_item_type =
-	g_type_register_static (GTK_TYPE_CHECK_MENU_ITEM, g_intern_static_string ("GtkRadioMenuItem"),
+	g_type_register_static (GTK_TYPE_CHECK_MENU_ITEM, I_("GtkRadioMenuItem"),
 				&radio_menu_item_info, 0);
     }
 
@@ -397,7 +397,7 @@ gtk_radio_menu_item_class_init (GtkRadioMenuItemClass *klass)
    *
    * Since: 2.4
    */
-  group_changed_signal = g_signal_new ("group-changed",
+  group_changed_signal = g_signal_new (I_("group-changed"),
 				       G_OBJECT_CLASS_TYPE (object_class),
 				       G_SIGNAL_RUN_FIRST,
 				       G_STRUCT_OFFSET (GtkRadioMenuItemClass, group_changed),

@@ -26,6 +26,7 @@
 
 #include <config.h>
 #include "gtkhbox.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 
@@ -57,7 +58,7 @@ gtk_hbox_get_type (void)
 	(GInstanceInitFunc) gtk_hbox_init,
       };
 
-      hbox_type = g_type_register_static (GTK_TYPE_BOX, g_intern_static_string ("GtkHBox"),
+      hbox_type = g_type_register_static (GTK_TYPE_BOX, I_("GtkHBox"),
 					  &hbox_info, 0);
     }
 

@@ -21,6 +21,7 @@
 #include <config.h>
 #include "gtkcelleditable.h"
 #include "gtkmarshalers.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 static void gtk_cell_editable_base_init (gpointer g_class);
@@ -46,7 +47,7 @@ gtk_cell_editable_get_type (void)
       };
 
       cell_editable_type =
-	g_type_register_static (G_TYPE_INTERFACE, g_intern_static_string ("GtkCellEditable"),
+	g_type_register_static (G_TYPE_INTERFACE, I_("GtkCellEditable"),
 				&cell_editable_info, 0);
 
       g_type_interface_add_prerequisite (cell_editable_type, GTK_TYPE_WIDGET);
@@ -62,14 +63,14 @@ gtk_cell_editable_base_init (gpointer g_class)
 
   if (! initialized)
     {
-      g_signal_new ("editing_done",
+      g_signal_new (I_("editing_done"),
                     GTK_TYPE_CELL_EDITABLE,
                     G_SIGNAL_RUN_LAST,
                     G_STRUCT_OFFSET (GtkCellEditableIface, editing_done),
                     NULL, NULL,
                     _gtk_marshal_VOID__VOID,
                     G_TYPE_NONE, 0);
-      g_signal_new ("remove_widget",
+      g_signal_new (I_("remove_widget"),
                     GTK_TYPE_CELL_EDITABLE,
                     G_SIGNAL_RUN_LAST,
                     G_STRUCT_OFFSET (GtkCellEditableIface, remove_widget),

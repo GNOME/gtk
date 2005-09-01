@@ -35,6 +35,7 @@
 #define GTK_ENABLE_BROKEN
 #include "gtktree.h"
 #include "gtktreeitem.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 enum {
@@ -98,7 +99,7 @@ gtk_tree_get_type (void)
         (GtkClassInitFunc) NULL,
       };
       
-      g_intern_static_string ("GtkTree");
+      I_("GtkTree");
       tree_type = gtk_type_unique (gtk_container_get_type (), &tree_info);
     }
   
@@ -142,14 +143,14 @@ gtk_tree_class_init (GtkTreeClass *class)
   class->unselect_child = gtk_real_tree_unselect_child;
 
   tree_signals[SELECTION_CHANGED] =
-    gtk_signal_new ("selection_changed",
+    gtk_signal_new (I_("selection_changed"),
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkTreeClass, selection_changed),
 		    _gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   tree_signals[SELECT_CHILD] =
-    gtk_signal_new ("select_child",
+    gtk_signal_new (I_("select_child"),
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkTreeClass, select_child),
@@ -157,7 +158,7 @@ gtk_tree_class_init (GtkTreeClass *class)
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_WIDGET);
   tree_signals[UNSELECT_CHILD] =
-    gtk_signal_new ("unselect_child",
+    gtk_signal_new (I_("unselect_child"),
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkTreeClass, unselect_child),

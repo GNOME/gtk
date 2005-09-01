@@ -87,7 +87,7 @@ gtk_ruler_get_type (void)
 	(GInstanceInitFunc) gtk_ruler_init,
       };
 
-      ruler_type = g_type_register_static (GTK_TYPE_WIDGET, g_intern_static_string ("GtkRuler"),
+      ruler_type = g_type_register_static (GTK_TYPE_WIDGET, I_("GtkRuler"),
 					   &ruler_info, 0);
     }
 

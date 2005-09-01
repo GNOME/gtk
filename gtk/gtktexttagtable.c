@@ -28,6 +28,7 @@
 #include "gtktexttagtable.h"
 #include "gtkmarshalers.h"
 #include "gtktextbuffer.h" /* just for the lame notify_will_remove_tag hack */
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 #include <stdlib.h>
@@ -78,7 +79,7 @@ gtk_text_tag_table_get_type (void)
         (GInstanceInitFunc) gtk_text_tag_table_init
       };
 
-      our_type = g_type_register_static (G_TYPE_OBJECT, g_intern_static_string ("GtkTextTagTable"),
+      our_type = g_type_register_static (G_TYPE_OBJECT, I_("GtkTextTagTable"),
                                          &our_info, 0);
     }
 
@@ -98,7 +99,7 @@ gtk_text_tag_table_class_init (GtkTextTagTableClass *klass)
   object_class->finalize = gtk_text_tag_table_finalize;
   
   signals[TAG_CHANGED] =
-    g_signal_new ("tag_changed",
+    g_signal_new (I_("tag_changed"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTextTagTableClass, tag_changed),
@@ -110,7 +111,7 @@ gtk_text_tag_table_class_init (GtkTextTagTableClass *klass)
                   G_TYPE_BOOLEAN);  
 
   signals[TAG_ADDED] =
-    g_signal_new ("tag_added",
+    g_signal_new (I_("tag_added"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTextTagTableClass, tag_added),
@@ -121,7 +122,7 @@ gtk_text_tag_table_class_init (GtkTextTagTableClass *klass)
                   GTK_TYPE_TEXT_TAG);
 
   signals[TAG_REMOVED] =
-    g_signal_new ("tag_removed",                   
+    g_signal_new (I_("tag_removed"),  
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTextTagTableClass, tag_removed),

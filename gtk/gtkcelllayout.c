@@ -19,6 +19,7 @@
 
 #include <config.h>
 #include "gtkcelllayout.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 GType
@@ -42,7 +43,7 @@ gtk_cell_layout_get_type (void)
       };
 
       cell_layout_type =
-        g_type_register_static (G_TYPE_INTERFACE, g_intern_static_string ("GtkCellLayout"),
+        g_type_register_static (G_TYPE_INTERFACE, I_("GtkCellLayout"),
                                 &cell_layout_info, 0);
 
       g_type_interface_add_prerequisite (cell_layout_type, G_TYPE_OBJECT);

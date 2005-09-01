@@ -390,7 +390,7 @@ gtk_entry_get_type (void)
 	NULL                                                  /* interface_data */
       };
       
-      entry_type = g_type_register_static (GTK_TYPE_WIDGET, g_intern_static_string ("GtkEntry"),
+      entry_type = g_type_register_static (GTK_TYPE_WIDGET, I_("GtkEntry"),
 					   &entry_info, 0);
 
       g_type_add_interface_static (entry_type,
@@ -598,7 +598,7 @@ gtk_entry_class_init (GtkEntryClass *class)
 						       GTK_PARAM_READWRITE));
   
   signals[POPULATE_POPUP] =
-    g_signal_new ("populate_popup",
+    g_signal_new (I_("populate_popup"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkEntryClass, populate_popup),
@@ -610,7 +610,7 @@ gtk_entry_class_init (GtkEntryClass *class)
  /* Action signals */
   
   signals[ACTIVATE] =
-    g_signal_new ("activate",
+    g_signal_new (I_("activate"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkEntryClass, activate),
@@ -620,7 +620,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   widget_class->activate_signal = signals[ACTIVATE];
 
   signals[MOVE_CURSOR] = 
-    g_signal_new ("move_cursor",
+    g_signal_new (I_("move_cursor"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkEntryClass, move_cursor),
@@ -632,7 +632,7 @@ gtk_entry_class_init (GtkEntryClass *class)
 		  G_TYPE_BOOLEAN);
 
   signals[INSERT_AT_CURSOR] = 
-    g_signal_new ("insert_at_cursor",
+    g_signal_new (I_("insert_at_cursor"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkEntryClass, insert_at_cursor),
@@ -642,7 +642,7 @@ gtk_entry_class_init (GtkEntryClass *class)
 		  G_TYPE_STRING);
 
   signals[DELETE_FROM_CURSOR] = 
-    g_signal_new ("delete_from_cursor",
+    g_signal_new (I_("delete_from_cursor"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkEntryClass, delete_from_cursor),
@@ -653,7 +653,7 @@ gtk_entry_class_init (GtkEntryClass *class)
 		  G_TYPE_INT);
 
   signals[BACKSPACE] =
-    g_signal_new ("backspace",
+    g_signal_new (I_("backspace"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkEntryClass, backspace),
@@ -662,7 +662,7 @@ gtk_entry_class_init (GtkEntryClass *class)
 		  G_TYPE_NONE, 0);
 
   signals[CUT_CLIPBOARD] =
-    g_signal_new ("cut_clipboard",
+    g_signal_new (I_("cut_clipboard"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkEntryClass, cut_clipboard),
@@ -671,7 +671,7 @@ gtk_entry_class_init (GtkEntryClass *class)
 		  G_TYPE_NONE, 0);
 
   signals[COPY_CLIPBOARD] =
-    g_signal_new ("copy_clipboard",
+    g_signal_new (I_("copy_clipboard"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkEntryClass, copy_clipboard),
@@ -680,7 +680,7 @@ gtk_entry_class_init (GtkEntryClass *class)
 		  G_TYPE_NONE, 0);
 
   signals[PASTE_CLIPBOARD] =
-    g_signal_new ("paste_clipboard",
+    g_signal_new (I_("paste_clipboard"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkEntryClass, paste_clipboard),
@@ -689,7 +689,7 @@ gtk_entry_class_init (GtkEntryClass *class)
 		  G_TYPE_NONE, 0);
 
   signals[TOGGLE_OVERWRITE] =
-    g_signal_new ("toggle_overwrite",
+    g_signal_new (I_("toggle_overwrite"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkEntryClass, toggle_overwrite),
@@ -4465,7 +4465,7 @@ append_action_signal (GtkEntry     *entry,
 {
   GtkWidget *menuitem = gtk_image_menu_item_new_from_stock (stock_id, NULL);
 
-  g_object_set_data (G_OBJECT (menuitem), g_intern_static_string ("gtk-signal"), (char *)signal);
+  g_object_set_data (G_OBJECT (menuitem), I_("gtk-signal"), (char *)signal);
   g_signal_connect (menuitem, "activate",
 		    G_CALLBACK (activate_cb), entry);
 
@@ -5426,7 +5426,7 @@ gtk_entry_set_completion (GtkEntry           *entry,
 
   if (!completion)
     {
-      g_object_set_data (G_OBJECT (entry), g_intern_static_string (GTK_ENTRY_COMPLETION_KEY), NULL);
+      g_object_set_data (G_OBJECT (entry), I_(GTK_ENTRY_COMPLETION_KEY), NULL);
       return;
     }
 
@@ -5435,7 +5435,7 @@ gtk_entry_set_completion (GtkEntry           *entry,
 
   connect_completion_signals (entry, completion);    
   completion->priv->entry = GTK_WIDGET (entry);
-  g_object_set_data (G_OBJECT (entry), g_intern_static_string (GTK_ENTRY_COMPLETION_KEY), completion);
+  g_object_set_data (G_OBJECT (entry), I_(GTK_ENTRY_COMPLETION_KEY), completion);
 }
 
 /**

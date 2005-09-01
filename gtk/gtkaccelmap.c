@@ -23,6 +23,7 @@
 
 #include "gtkmarshalers.h"
 #include "gtkwindow.h"  /* in lack of GtkAcceleratable */
+#include "gtkintl.h" 
 #include "gtkalias.h"
 
 #include <glib/gstdio.h>
@@ -953,7 +954,7 @@ gtk_accel_map_class_init (GtkAccelMapClass *accel_map_class)
    *
    * Since: 2.4
    */
-  accel_map_signals[CHANGED] = g_signal_new ("changed",
+  accel_map_signals[CHANGED] = g_signal_new (I_("changed"),
 					     G_TYPE_FROM_CLASS (accel_map_class),
 					     G_SIGNAL_DETAILED|G_SIGNAL_RUN_LAST,
 					     0,

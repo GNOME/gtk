@@ -21,6 +21,7 @@
 #include <config.h>
 #include "gtktreesortable.h"
 #include "gtkmarshalers.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 static void gtk_tree_sortable_base_init (gpointer g_class);
@@ -46,7 +47,7 @@ gtk_tree_sortable_get_type (void)
       };
 
       tree_sortable_type =
-	g_type_register_static (G_TYPE_INTERFACE, g_intern_static_string ("GtkTreeSortable"),
+	g_type_register_static (G_TYPE_INTERFACE, I_("GtkTreeSortable"),
 				&tree_sortable_info, 0);
 
       g_type_interface_add_prerequisite (tree_sortable_type, GTK_TYPE_TREE_MODEL);
@@ -62,7 +63,7 @@ gtk_tree_sortable_base_init (gpointer g_class)
 
   if (! initialized)
     {
-      g_signal_new ("sort_column_changed",
+      g_signal_new (I_("sort_column_changed"),
                     GTK_TYPE_TREE_SORTABLE,
                     G_SIGNAL_RUN_LAST,
                     G_STRUCT_OFFSET (GtkTreeSortableIface, sort_column_changed),

@@ -85,7 +85,7 @@ gtk_adjustment_get_type (void)
       };
 
       adjustment_type =
-	g_type_register_static (GTK_TYPE_OBJECT, g_intern_static_string ("GtkAdjustment"),
+	g_type_register_static (GTK_TYPE_OBJECT, I_("GtkAdjustment"),
 				&adjustment_info, 0);
     }
 
@@ -213,7 +213,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
   
 
   adjustment_signals[CHANGED] =
-    g_signal_new ("changed",
+    g_signal_new (I_("changed"),
 		  G_OBJECT_CLASS_TYPE (class),
 		  G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE,
 		  G_STRUCT_OFFSET (GtkAdjustmentClass, changed),
@@ -221,7 +221,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
   adjustment_signals[VALUE_CHANGED] =
-    g_signal_new ("value_changed",
+    g_signal_new (I_("value_changed"),
 		  G_OBJECT_CLASS_TYPE (class),
 		  G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE,
 		  G_STRUCT_OFFSET (GtkAdjustmentClass, value_changed),

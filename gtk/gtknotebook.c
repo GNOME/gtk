@@ -314,7 +314,7 @@ gtk_notebook_get_type (void)
 	(GInstanceInitFunc) gtk_notebook_init,
       };
 
-      notebook_type = g_type_register_static (GTK_TYPE_CONTAINER, g_intern_static_string ("GtkNotebook"),
+      notebook_type = g_type_register_static (GTK_TYPE_CONTAINER, I_("GtkNotebook"),
 					      &notebook_info, 0);
     }
 
@@ -589,7 +589,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                                                                    GTK_PARAM_READABLE));
 
   notebook_signals[SWITCH_PAGE] =
-    g_signal_new ("switch_page",
+    g_signal_new (I_("switch_page"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkNotebookClass, switch_page),
@@ -599,7 +599,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 		  G_TYPE_POINTER,
 		  G_TYPE_UINT);
   notebook_signals[FOCUS_TAB] = 
-    g_signal_new ("focus_tab",
+    g_signal_new (I_("focus_tab"),
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkNotebookClass, focus_tab),
@@ -608,7 +608,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                   G_TYPE_BOOLEAN, 1,
                   GTK_TYPE_NOTEBOOK_TAB);
   notebook_signals[SELECT_PAGE] = 
-    g_signal_new ("select_page",
+    g_signal_new (I_("select_page"),
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkNotebookClass, select_page),
@@ -617,7 +617,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                   G_TYPE_BOOLEAN, 1,
                   G_TYPE_BOOLEAN);
   notebook_signals[CHANGE_CURRENT_PAGE] = 
-    g_signal_new ("change_current_page",
+    g_signal_new (I_("change_current_page"),
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkNotebookClass, change_current_page),
@@ -626,7 +626,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                   G_TYPE_NONE, 1,
                   G_TYPE_INT);
   notebook_signals[MOVE_FOCUS_OUT] =
-    g_signal_new ("move_focus_out",
+    g_signal_new (I_("move_focus_out"),
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkNotebookClass, move_focus_out),

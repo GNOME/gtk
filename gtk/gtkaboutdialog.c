@@ -1139,7 +1139,7 @@ gtk_about_dialog_set_website (GtkAboutDialog *about,
       if (activate_url_hook != NULL)
 	{
 	  g_object_set_data_full (G_OBJECT (priv->website_button), 
-				  g_intern_static_string ("url"), 
+				  I_("url"), 
 				  g_strdup (website), g_free);  
 	  if (priv->website_label == NULL) 
 	    gtk_about_dialog_set_website_label (about, website);
@@ -1158,7 +1158,7 @@ gtk_about_dialog_set_website (GtkAboutDialog *about,
     {
       priv->website = NULL;
       g_object_set_data (G_OBJECT (priv->website_button), 
-			 g_intern_static_string ("url"), NULL);
+			 I_("url"), NULL);
       gtk_widget_hide (priv->website_button);
     }
   g_free (tmp);
@@ -1696,7 +1696,7 @@ create_link_button (GtkWidget *about,
   gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
 
   g_object_set_data_full (G_OBJECT (button), 
-			  g_intern_static_string ("url"), 
+			  I_("url"), 
                           g_strdup (url), g_free);
   set_link_button_text (about, button, text);
   
@@ -1991,10 +1991,10 @@ add_credits_page (GtkAboutDialog *about,
 		{
 		  q1++;
 		  q0++;
-		  link_type = g_intern_static_string ("email");
+		  link_type = I_("email");
 		}
 	      else 
-		link_type = g_intern_static_string ("url");
+		link_type = I_("url");
 	      
 	      link = g_strndup (q1, q2 - q1);
 	      tag = gtk_text_buffer_create_tag (buffer, NULL, 
@@ -2297,7 +2297,7 @@ gtk_show_about_dialog (GtkWindow   *parent,
 	  gtk_window_set_transient_for (GTK_WINDOW (dialog), parent);
 	  gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
 	  g_object_set_data_full (G_OBJECT (parent), 
-                                  g_intern_static_string ("gtk-about-dialog"), 
+                                  I_("gtk-about-dialog"), 
 				  dialog, g_object_unref);
 	}
       else 

@@ -176,7 +176,7 @@ gtk_spin_button_get_type (void)
       };
 
       spin_button_type =
-	g_type_register_static (GTK_TYPE_ENTRY, g_intern_static_string ("GtkSpinButton"),
+	g_type_register_static (GTK_TYPE_ENTRY, I_("GtkSpinButton"),
 				&spin_button_info, 0);
 
       g_type_add_interface_static (spin_button_type,
@@ -317,7 +317,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
 								     GTK_PARAM_READABLE),
 						  gtk_rc_property_parse_enum);
   spinbutton_signals[INPUT] =
-    g_signal_new ("input",
+    g_signal_new (I_("input"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkSpinButtonClass, input),
@@ -327,7 +327,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
 		  G_TYPE_POINTER);
 
   spinbutton_signals[OUTPUT] =
-    g_signal_new ("output",
+    g_signal_new (I_("output"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkSpinButtonClass, output),
@@ -336,7 +336,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
 		  G_TYPE_BOOLEAN, 0);
 
   spinbutton_signals[VALUE_CHANGED] =
-    g_signal_new ("value_changed",
+    g_signal_new (I_("value_changed"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkSpinButtonClass, value_changed),
@@ -346,7 +346,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
 
   /* Action signals */
   spinbutton_signals[CHANGE_VALUE] =
-    g_signal_new ("change_value",
+    g_signal_new (I_("change_value"),
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkSpinButtonClass, change_value),

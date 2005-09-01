@@ -81,7 +81,7 @@ gtk_radio_button_get_type (void)
       };
 
       radio_button_type =
-	g_type_register_static (GTK_TYPE_CHECK_BUTTON, g_intern_static_string ("GtkRadioButton"),
+	g_type_register_static (GTK_TYPE_CHECK_BUTTON, I_("GtkRadioButton"),
 				&radio_button_info, 0);
     }
 
@@ -138,7 +138,7 @@ gtk_radio_button_class_init (GtkRadioButtonClass *class)
    *
    * Since: 2.4
    */
-  group_changed_signal = g_signal_new ("group-changed",
+  group_changed_signal = g_signal_new (I_("group-changed"),
 				       G_OBJECT_CLASS_TYPE (object_class),
 				       G_SIGNAL_RUN_FIRST,
 				       G_STRUCT_OFFSET (GtkRadioButtonClass, group_changed),

@@ -90,7 +90,7 @@ gtk_combo_box_entry_get_type (void)
         };
 
       combo_box_entry_type = g_type_register_static (GTK_TYPE_COMBO_BOX,
-                                                     g_intern_static_string ("GtkComboBoxEntry"),
+                                                     I_("GtkComboBoxEntry"),
                                                      &combo_box_entry_info,
                                                      0);
     }

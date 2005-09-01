@@ -93,7 +93,7 @@ gtk_image_menu_item_get_type (void)
       };
 
       image_menu_item_type =
-	g_type_register_static (GTK_TYPE_MENU_ITEM, g_intern_static_string ("GtkImageMenuItem"),
+	g_type_register_static (GTK_TYPE_MENU_ITEM, I_("GtkImageMenuItem"),
 				&image_menu_item_info, 0);
     }
 
@@ -650,7 +650,7 @@ gtk_image_menu_item_screen_changed (GtkWidget *widget,
     g_signal_connect (settings, "notify::gtk-menu-images",
 		      G_CALLBACK (gtk_image_menu_item_setting_changed), 0);
   g_object_set_data (G_OBJECT (settings), 
-		     g_intern_static_string ("gtk-image-menu-item-connection"),
+		     I_("gtk-image-menu-item-connection"),
 		     GUINT_TO_POINTER (show_image_connection));
 
   show_image_change_notify (GTK_IMAGE_MENU_ITEM (widget));

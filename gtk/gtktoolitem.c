@@ -122,7 +122,7 @@ gtk_tool_item_get_type (void)
 	};
 
       type = g_type_register_static (GTK_TYPE_BIN,
-				     g_intern_static_string ("GtkToolItem"),
+				     I_("GtkToolItem"),
 				     &type_info, 0);
     }
   return type;
@@ -206,7 +206,7 @@ gtk_tool_item_class_init (GtkToolItemClass *klass)
  * Return value: %TRUE if the signal was handled, %FALSE if not
  **/
   toolitem_signals[CREATE_MENU_PROXY] =
-    g_signal_new ("create_menu_proxy",
+    g_signal_new (I_("create_menu_proxy"),
 		  G_OBJECT_CLASS_TYPE (klass),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkToolItemClass, create_menu_proxy),
@@ -231,7 +231,7 @@ gtk_tool_item_class_init (GtkToolItemClass *klass)
  * themselves accordingly.
  **/
   toolitem_signals[TOOLBAR_RECONFIGURED] =
-    g_signal_new ("toolbar_reconfigured",
+    g_signal_new (I_("toolbar_reconfigured"),
 		  G_OBJECT_CLASS_TYPE (klass),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkToolItemClass, toolbar_reconfigured),
@@ -252,7 +252,7 @@ gtk_tool_item_class_init (GtkToolItemClass *klass)
  * Return value: %TRUE if the signal was handled, %FALSE if not
  **/
   toolitem_signals[SET_TOOLTIP] =
-    g_signal_new ("set_tooltip",
+    g_signal_new (I_("set_tooltip"),
 		  G_OBJECT_CLASS_TYPE (klass),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkToolItemClass, set_tooltip),

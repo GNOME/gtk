@@ -116,7 +116,7 @@ gtk_tool_button_get_type (void)
 	};
 
       type = g_type_register_static (GTK_TYPE_TOOL_ITEM,
-				     g_intern_static_string ("GtkToolButton"),
+				     I_("GtkToolButton"),
 				     &type_info, 0);
     }
   return type;
@@ -242,7 +242,7 @@ gtk_tool_button_class_init (GtkToolButtonClass *klass)
  * or activated with the keyboard.
  **/
   toolbutton_signals[CLICKED] =
-    g_signal_new ("clicked",
+    g_signal_new (I_("clicked"),
 		  G_OBJECT_CLASS_TYPE (klass),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkToolButtonClass, clicked),

@@ -88,7 +88,7 @@ gtk_menu_tool_button_get_type (void)
 	};
 
       type = g_type_register_static (GTK_TYPE_TOOL_BUTTON,
-                                     g_intern_static_string ("GtkMenuToolButton"),
+                                     I_("GtkMenuToolButton"),
                                      &info, 0);
     }
 
@@ -256,7 +256,7 @@ gtk_menu_tool_button_class_init (GtkMenuToolButtonClass *klass)
   toolitem_class->toolbar_reconfigured = gtk_menu_tool_button_toolbar_reconfigured;
 
   signals[SHOW_MENU] =
-    g_signal_new ("show-menu",
+    g_signal_new (I_("show-menu"),
                   G_OBJECT_CLASS_TYPE (klass),
                   G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GtkMenuToolButtonClass, show_menu),

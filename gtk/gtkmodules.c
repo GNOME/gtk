@@ -26,6 +26,7 @@
 #include "gtksettings.h"
 #include "gtkdebug.h"
 #include "gtkprivate.h" /* GTK_LIBDIR */
+#include "gtkintl.h" 
 
 #include <gmodule.h>
 #include <pango/pango-utils.h>	/* For pango_split_file_list */
@@ -428,7 +429,7 @@ display_closed_cb (GdkDisplay *display,
       settings = gtk_settings_get_for_screen (screen);
 
       g_object_set_data_full (G_OBJECT (settings),
-			      g_intern_static_string ("gtk-modules"),
+			      I_("gtk-modules"),
 			      NULL, NULL);
     }  
 }
@@ -535,7 +536,7 @@ _gtk_modules_settings_changed (GtkSettings *settings,
     new_modules = load_modules (modules);
 
   g_object_set_data_full (G_OBJECT (settings),
-			  g_intern_static_string ("gtk-modules"),
+			  I_("gtk-modules"),
 			  new_modules,
 			  settings_destroy_notify);
 }

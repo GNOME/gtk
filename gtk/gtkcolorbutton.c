@@ -159,7 +159,7 @@ gtk_color_button_get_type (void)
       };
       
       color_button_type =
-        g_type_register_static (GTK_TYPE_BUTTON, g_intern_static_string ("GtkColorButton"),
+        g_type_register_static (GTK_TYPE_BUTTON, I_("GtkColorButton"),
                                 &color_button_info, 0);
     }
   
@@ -261,7 +261,7 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
    *
    * Since: 2.4
    */
-  color_button_signals[COLOR_SET] = g_signal_new ("color_set",
+  color_button_signals[COLOR_SET] = g_signal_new (I_("color_set"),
 						  G_TYPE_FROM_CLASS (gobject_class),
 						  G_SIGNAL_RUN_FIRST,
 						  G_STRUCT_OFFSET (GtkColorButtonClass, color_set),

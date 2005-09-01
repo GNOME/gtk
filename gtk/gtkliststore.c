@@ -25,6 +25,7 @@
 #include "gtktreedatalist.h"
 #include "gtktreednd.h"
 #include "gtksequence.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 #define GTK_LIST_STORE_IS_SORTED(list) (GTK_LIST_STORE (list)->sort_column_id != GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID)
@@ -166,7 +167,7 @@ gtk_list_store_get_type (void)
 	NULL
       };
 
-      list_store_type = g_type_register_static (G_TYPE_OBJECT, g_intern_static_string ("GtkListStore"),
+      list_store_type = g_type_register_static (G_TYPE_OBJECT, I_("GtkListStore"),
 						&list_store_info, 0);
 
       g_type_add_interface_static (list_store_type,

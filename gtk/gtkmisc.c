@@ -74,7 +74,7 @@ gtk_misc_get_type (void)
 	NULL,		/* value_table */
       };
 
-      misc_type = g_type_register_static (GTK_TYPE_WIDGET, g_intern_static_string ("GtkMisc"),
+      misc_type = g_type_register_static (GTK_TYPE_WIDGET, I_("GtkMisc"),
 					  &misc_info, G_TYPE_FLAG_ABSTRACT);
     }
 

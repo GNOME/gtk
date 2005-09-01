@@ -21,6 +21,7 @@
 #include <config.h>
 #include "gtkfilechooserembed.h"
 #include "gtkmarshalers.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 static void gtk_file_chooser_embed_class_init (gpointer g_iface);
@@ -76,7 +77,7 @@ _gtk_file_chooser_embed_set_delegate (GtkFileChooserEmbed *receiver,
   g_return_if_fail (GTK_IS_FILE_CHOOSER_EMBED (receiver));
   g_return_if_fail (GTK_IS_FILE_CHOOSER_EMBED (delegate));
   
-  g_object_set_data (G_OBJECT (receiver), g_intern_static_string ("gtk-file-chooser-embed-delegate"), delegate);
+  g_object_set_data (G_OBJECT (receiver), I_("gtk-file-chooser-embed-delegate"), delegate);
 
   g_signal_connect (delegate, "default_size_changed",
 		    G_CALLBACK (delegate_default_size_changed), receiver);
@@ -138,7 +139,7 @@ _gtk_file_chooser_embed_get_type (void)
       };
 
       file_chooser_embed_type = g_type_register_static (G_TYPE_INTERFACE,
-							g_intern_static_string ("GtkFileChooserEmbed"),
+							I_("GtkFileChooserEmbed"),
 							&file_chooser_embed_info, 0);
 
       g_type_interface_add_prerequisite (file_chooser_embed_type, GTK_TYPE_WIDGET);
@@ -152,7 +153,7 @@ gtk_file_chooser_embed_class_init (gpointer g_iface)
 {
   GType iface_type = G_TYPE_FROM_INTERFACE (g_iface);
 
-  g_signal_new ("default-size-changed",
+  g_signal_new (I_("default-size-changed"),
 		iface_type,
 		G_SIGNAL_RUN_LAST,
 		G_STRUCT_OFFSET (GtkFileChooserEmbedIface, default_size_changed),

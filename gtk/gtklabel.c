@@ -218,7 +218,7 @@ gtk_label_get_type (void)
 	(GInstanceInitFunc) gtk_label_init,
       };
 
-      label_type = g_type_register_static (GTK_TYPE_MISC, g_intern_static_string ("GtkLabel"),
+      label_type = g_type_register_static (GTK_TYPE_MISC, I_("GtkLabel"),
 					   &label_info, 0);
     }
   
@@ -286,7 +286,7 @@ gtk_label_class_init (GtkLabelClass *class)
   class->copy_clipboard = gtk_label_copy_clipboard;
   
   signals[MOVE_CURSOR] = 
-    g_signal_new ("move_cursor",
+    g_signal_new (I_("move_cursor"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkLabelClass, move_cursor),
@@ -298,7 +298,7 @@ gtk_label_class_init (GtkLabelClass *class)
 		  G_TYPE_BOOLEAN);
   
   signals[COPY_CLIPBOARD] =
-    g_signal_new ("copy_clipboard",
+    g_signal_new (I_("copy_clipboard"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkLabelClass, copy_clipboard),
@@ -307,7 +307,7 @@ gtk_label_class_init (GtkLabelClass *class)
 		  G_TYPE_NONE, 0);
   
   signals[POPULATE_POPUP] =
-    g_signal_new ("populate_popup",
+    g_signal_new (I_("populate_popup"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkLabelClass, populate_popup),
@@ -919,7 +919,7 @@ gtk_label_setup_mnemonic (GtkLabel *label,
     }
   
  done:
-  g_object_set_data (G_OBJECT (label), g_intern_static_string ("gtk-mnemonic-menu"), mnemonic_menu);
+  g_object_set_data (G_OBJECT (label), I_("gtk-mnemonic-menu"), mnemonic_menu);
 }
 
 static void
@@ -1749,7 +1749,7 @@ get_label_wrap_width (GtkLabel *label)
   if (!wrap_width)
     {
       wrap_width = g_new0 (LabelWrapWidth, 1);
-      g_object_set_data_full (G_OBJECT (style), g_intern_static_string ("gtk-label-wrap-width"),
+      g_object_set_data_full (G_OBJECT (style), I_("gtk-label-wrap-width"),
 			      wrap_width, label_wrap_width_free);
     }
 
@@ -3889,7 +3889,7 @@ append_action_signal (GtkLabel     *label,
 {
   GtkWidget *menuitem = gtk_image_menu_item_new_from_stock (stock_id, NULL);
 
-  g_object_set_data (G_OBJECT (menuitem), g_intern_static_string ("gtk-signal"), (char *)signal);
+  g_object_set_data (G_OBJECT (menuitem), I_("gtk-signal"), (char *)signal);
   g_signal_connect (menuitem, "activate",
 		    G_CALLBACK (activate_cb), label);
 

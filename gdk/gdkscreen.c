@@ -103,7 +103,8 @@ gdk_screen_class_init (GdkScreenClass *klass)
 				   g_param_spec_pointer ("font-options",
 							 P_("Font options"),
 							 P_("The default font options for the screen"),
-							 G_PARAM_READWRITE));
+							 G_PARAM_READWRITE|G_PARAM_STATIC_NAME|
+							G_PARAM_STATIC_NICK|G_PARAM_STATIC_BLURB));
 
   g_object_class_install_property (object_class,
 				   PROP_RESOLUTION,
@@ -113,7 +114,8 @@ gdk_screen_class_init (GdkScreenClass *klass)
 							-G_MAXDOUBLE,
 							G_MAXDOUBLE,
 							-1.0,
-							G_PARAM_READWRITE));
+							G_PARAM_READWRITE|G_PARAM_STATIC_NAME|
+							G_PARAM_STATIC_NICK|G_PARAM_STATIC_BLURB));
 
   /**
    * GdkScreen::size-changed:
@@ -125,7 +127,7 @@ gdk_screen_class_init (GdkScreenClass *klass)
    * Since: 2.2
    */
   signals[SIZE_CHANGED] =
-    g_signal_new ("size_changed",
+    g_signal_new (g_intern_static_string ("size_changed"),
                   G_OBJECT_CLASS_TYPE (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GdkScreenClass, size_changed),

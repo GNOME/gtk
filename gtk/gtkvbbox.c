@@ -26,6 +26,7 @@
 
 #include <config.h>
 #include "gtkvbbox.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 
@@ -60,7 +61,7 @@ gtk_vbutton_box_get_type (void)
       };
 
       vbutton_box_type =
-	g_type_register_static (GTK_TYPE_BUTTON_BOX, g_intern_static_string ("GtkVButtonBox"),
+	g_type_register_static (GTK_TYPE_BUTTON_BOX, I_("GtkVButtonBox"),
 				&vbutton_box_info, 0);
     }
 

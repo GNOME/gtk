@@ -29,6 +29,7 @@
 #include <string.h>
 #include <stdio.h>
 #include "gtkobject.h"
+#include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtksignal.h"
 #include "gtkprivate.h"
@@ -95,7 +96,7 @@ gtk_object_get_type (void)
 	NULL,		/* value_table */
       };
       
-      object_type = g_type_register_static (G_TYPE_OBJECT, g_intern_static_string ("GtkObject"), 
+      object_type = g_type_register_static (G_TYPE_OBJECT, I_("GtkObject"), 
 					    &object_info, G_TYPE_FLAG_ABSTRACT);
     }
 
@@ -329,11 +330,12 @@ gtk_object_class_init (GtkObjectClass *class)
 
   g_object_class_install_property (gobject_class,
 				   PROP_USER_DATA,
-				   g_param_spec_pointer ("user-data", "User Data",
-							 "Anonymous User Data Pointer",
+				   g_param_spec_pointer ("user-data", 
+							 P_("User Data"),
+							 P_("Anonymous User Data Pointer"),
 							 GTK_PARAM_READWRITE));
   object_signals[DESTROY] =
-    g_signal_new ("destroy",
+    g_signal_new (I_("destroy"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_CLEANUP | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
 		  G_STRUCT_OFFSET (GtkObjectClass, destroy),
@@ -422,7 +424,7 @@ gtk_object_set_property (GObject      *object,
   switch (property_id)
     {
     case PROP_USER_DATA:
-      g_object_set_data (G_OBJECT (object), g_intern_static_string ("user_data"), g_value_get_pointer (value));
+      g_object_set_data (G_OBJECT (object), I_("user_data"), g_value_get_pointer (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);

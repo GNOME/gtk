@@ -282,7 +282,7 @@ gtk_tree_model_sort_get_type (void)
       };
 
       tree_model_sort_type =
-	g_type_register_static (G_TYPE_OBJECT, g_intern_static_string ("GtkTreeModelSort"),
+	g_type_register_static (G_TYPE_OBJECT, I_("GtkTreeModelSort"),
 				&tree_model_sort_info, 0);
 
       g_type_add_interface_static (tree_model_sort_type,

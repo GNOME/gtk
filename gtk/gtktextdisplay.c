@@ -77,6 +77,7 @@
 #define GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
 #include <config.h>
 #include "gtktextdisplay.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
 /* DO NOT go putting private headers in here. This file should only
  * use the semi-public headers, as with gtktextview.c.
@@ -651,7 +652,7 @@ on_renderer_display_closed (GdkDisplay       *display,
   g_signal_handlers_disconnect_by_func (text_renderer->screen,
 					(gpointer)on_renderer_display_closed,
 					text_renderer);
-  g_object_set_data (G_OBJECT (text_renderer->screen), g_intern_static_string ("gtk-text-renderer"), NULL);
+  g_object_set_data (G_OBJECT (text_renderer->screen), I_("gtk-text-renderer"), NULL);
 }
 
 static GtkTextRenderer *
@@ -667,7 +668,7 @@ get_text_renderer (GdkScreen *screen)
       text_renderer = g_object_new (GTK_TYPE_TEXT_RENDERER, "screen", screen, NULL);
       text_renderer->screen = screen;
       
-      g_object_set_data_full (G_OBJECT (screen), g_intern_static_string ("gtk-text-renderer"), text_renderer,
+      g_object_set_data_full (G_OBJECT (screen), I_("gtk-text-renderer"), text_renderer,
 			      (GDestroyNotify)g_object_unref);
 
       g_signal_connect (gdk_screen_get_display (screen), "closed",

@@ -117,7 +117,7 @@ gtk_statusbar_get_type (void)
         (GInstanceInitFunc) gtk_statusbar_init,
       };
 
-      statusbar_type = g_type_register_static (GTK_TYPE_HBOX, g_intern_static_string ("GtkStatusbar"),
+      statusbar_type = g_type_register_static (GTK_TYPE_HBOX, I_("GtkStatusbar"),
 					       &statusbar_info, 0);
     }
 
@@ -180,7 +180,7 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
  							 TRUE,
  							 GTK_PARAM_READWRITE));
   statusbar_signals[SIGNAL_TEXT_PUSHED] =
-    g_signal_new ("text_pushed",
+    g_signal_new (I_("text_pushed"),
 		  G_OBJECT_CLASS_TYPE (class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkStatusbarClass, text_pushed),
@@ -190,7 +190,7 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
 		  G_TYPE_UINT,
 		  G_TYPE_STRING);
   statusbar_signals[SIGNAL_TEXT_POPPED] =
-    g_signal_new ("text_popped",
+    g_signal_new (I_("text_popped"),
 		  G_OBJECT_CLASS_TYPE (class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkStatusbarClass, text_popped),

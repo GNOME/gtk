@@ -111,7 +111,7 @@ gtk_im_multicontext_get_type (void)
       };
       
       im_multicontext_type =
-	g_type_register_static (GTK_TYPE_IM_CONTEXT, g_intern_static_string ("GtkIMMulticontext"),
+	g_type_register_static (GTK_TYPE_IM_CONTEXT, I_("GtkIMMulticontext"),
 				&im_multicontext_info, 0);
     }
 
@@ -555,7 +555,7 @@ gtk_im_multicontext_append_menuitems (GtkIMMulticontext *context,
       
       group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (menuitem));
       
-      g_object_set_data (G_OBJECT (menuitem), g_intern_static_string ("gtk-context-id"),
+      g_object_set_data (G_OBJECT (menuitem), I_("gtk-context-id"),
 			 (char *)contexts[i]->context_id);
       g_signal_connect (menuitem, "activate",
 			G_CALLBACK (activate_cb), context);

@@ -256,7 +256,7 @@ gtk_icon_theme_get_type (void)
 	  (GInstanceInitFunc) gtk_icon_theme_init,
 	};
 
-      type = g_type_register_static (G_TYPE_OBJECT, g_intern_static_string ("GtkIconTheme"), &info, 0);
+      type = g_type_register_static (G_TYPE_OBJECT, I_("GtkIconTheme"), &info, 0);
     }
 
   return type;
@@ -339,7 +339,7 @@ gtk_icon_theme_get_for_screen (GdkScreen *screen)
       priv = icon_theme->priv;
       priv->is_screen_singleton = TRUE;
 
-      g_object_set_data (G_OBJECT (screen), g_intern_static_string ("gtk-icon-theme"), icon_theme);
+      g_object_set_data (G_OBJECT (screen), I_("gtk-icon-theme"), icon_theme);
     }
 
   return icon_theme;
@@ -362,7 +362,7 @@ gtk_icon_theme_class_init (GtkIconThemeClass *klass)
  * that a change has occurred in the contents of the current
  * icon theme.
  **/
-  signal_changed = g_signal_new ("changed",
+  signal_changed = g_signal_new (I_("changed"),
 				 G_TYPE_FROM_CLASS (klass),
 				 G_SIGNAL_RUN_LAST,
 				 G_STRUCT_OFFSET (GtkIconThemeClass, changed),
@@ -389,7 +389,7 @@ display_closed (GdkDisplay   *display,
 
   if (was_screen_singleton)
     {
-      g_object_set_data (G_OBJECT (screen), g_intern_static_string ("gtk-icon-theme"), NULL);
+      g_object_set_data (G_OBJECT (screen), I_("gtk-icon-theme"), NULL);
       priv->is_screen_singleton = FALSE;
     }
 
@@ -2265,7 +2265,7 @@ gtk_icon_info_get_type (void)
   static GType our_type = 0;
   
   if (our_type == 0)
-    our_type = g_boxed_type_register_static (g_intern_static_string ("GtkIconInfo"),
+    our_type = g_boxed_type_register_static (I_("GtkIconInfo"),
 					     (GBoxedCopyFunc) gtk_icon_info_copy,
 					     (GBoxedFreeFunc) gtk_icon_info_free);
 

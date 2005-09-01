@@ -495,7 +495,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
 							 GTK_PARAM_READWRITE));
 
   gtk_calendar_signals[MONTH_CHANGED_SIGNAL] =
-    g_signal_new ("month_changed",
+    g_signal_new (I_("month_changed"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkCalendarClass, month_changed),
@@ -503,7 +503,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
   gtk_calendar_signals[DAY_SELECTED_SIGNAL] =
-    g_signal_new ("day_selected",
+    g_signal_new (I_("day_selected"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkCalendarClass, day_selected),
@@ -511,7 +511,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
   gtk_calendar_signals[DAY_SELECTED_DOUBLE_CLICK_SIGNAL] =
-    g_signal_new ("day_selected_double_click",
+    g_signal_new (I_("day_selected_double_click"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkCalendarClass, day_selected_double_click),
@@ -519,7 +519,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
   gtk_calendar_signals[PREV_MONTH_SIGNAL] =
-    g_signal_new ("prev_month",
+    g_signal_new (I_("prev_month"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkCalendarClass, prev_month),
@@ -527,7 +527,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
   gtk_calendar_signals[NEXT_MONTH_SIGNAL] =
-    g_signal_new ("next_month",
+    g_signal_new (I_("next_month"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkCalendarClass, next_month),
@@ -535,7 +535,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
   gtk_calendar_signals[PREV_YEAR_SIGNAL] =
-    g_signal_new ("prev_year",
+    g_signal_new (I_("prev_year"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkCalendarClass, prev_year),
@@ -543,7 +543,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
   gtk_calendar_signals[NEXT_YEAR_SIGNAL] =
-    g_signal_new ("next_year",
+    g_signal_new (I_("next_year"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkCalendarClass, next_year),
@@ -2886,7 +2886,7 @@ set_status_pending (GdkDragContext *context,
                     GdkDragAction   suggested_action)
 {
   g_object_set_data (G_OBJECT (context),
-                     g_intern_static_string ("gtk-calendar-status-pending"),
+                     I_("gtk-calendar-status-pending"),
                      GINT_TO_POINTER (suggested_action));
 }
 

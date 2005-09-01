@@ -100,7 +100,7 @@ gtk_curve_get_type (void)
 	(GInstanceInitFunc) gtk_curve_init,
       };
 
-      curve_type = g_type_register_static (GTK_TYPE_DRAWING_AREA, g_intern_static_string ("GtkCurve"),
+      curve_type = g_type_register_static (GTK_TYPE_DRAWING_AREA, I_("GtkCurve"),
 					   &curve_info, 0);
     }
   return curve_type;
@@ -164,7 +164,7 @@ gtk_curve_class_init (GtkCurveClass *class)
 						       GTK_PARAM_READWRITE));
 
   curve_type_changed_signal =
-    g_signal_new ("curve_type_changed",
+    g_signal_new (I_("curve_type_changed"),
 		   G_OBJECT_CLASS_TYPE (gobject_class),
 		   G_SIGNAL_RUN_FIRST,
 		   G_STRUCT_OFFSET (GtkCurveClass, curve_type_changed),

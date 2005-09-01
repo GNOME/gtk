@@ -33,6 +33,7 @@
 #include "gtklist.h"
 #include "gtkmarshalers.h"
 #include "gtksignal.h"
+#include "gtkintl.h"
 #include <gdk/gdkkeysyms.h>
 #include "gtkalias.h"
 
@@ -93,7 +94,7 @@ gtk_list_item_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      g_intern_static_string ("GtkListItem");
+      I_("GtkListItem");
       list_item_type = gtk_type_unique (gtk_item_get_type (), &list_item_info);
     }
 
@@ -137,56 +138,56 @@ gtk_list_item_class_init (GtkListItemClass *class)
   class->toggle_add_mode = NULL;
 
   list_item_signals[TOGGLE_FOCUS_ROW] =
-    gtk_signal_new ("toggle_focus_row",
+    gtk_signal_new (I_("toggle_focus_row"),
                     GTK_RUN_LAST | GTK_RUN_ACTION,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkListItemClass, toggle_focus_row),
                     _gtk_marshal_VOID__VOID,
                     GTK_TYPE_NONE, 0);
   list_item_signals[SELECT_ALL] =
-    gtk_signal_new ("select_all",
+    gtk_signal_new (I_("select_all"),
                     GTK_RUN_LAST | GTK_RUN_ACTION,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkListItemClass, select_all),
                     _gtk_marshal_VOID__VOID,
                     GTK_TYPE_NONE, 0);
   list_item_signals[UNSELECT_ALL] =
-    gtk_signal_new ("unselect_all",
+    gtk_signal_new (I_("unselect_all"),
                     GTK_RUN_LAST | GTK_RUN_ACTION,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkListItemClass, unselect_all),
                     _gtk_marshal_VOID__VOID,
                     GTK_TYPE_NONE, 0);
   list_item_signals[UNDO_SELECTION] =
-    gtk_signal_new ("undo_selection",
+    gtk_signal_new (I_("undo_selection"),
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkListItemClass, undo_selection),
 		    _gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   list_item_signals[START_SELECTION] =
-    gtk_signal_new ("start_selection",
+    gtk_signal_new (I_("start_selection"),
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkListItemClass, start_selection),
 		    _gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   list_item_signals[END_SELECTION] =
-    gtk_signal_new ("end_selection",
+    gtk_signal_new (I_("end_selection"),
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkListItemClass, end_selection),
 		    _gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   list_item_signals[TOGGLE_ADD_MODE] =
-    gtk_signal_new ("toggle_add_mode",
+    gtk_signal_new (I_("toggle_add_mode"),
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkListItemClass, toggle_add_mode),
 		    _gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   list_item_signals[EXTEND_SELECTION] =
-    gtk_signal_new ("extend_selection",
+    gtk_signal_new (I_("extend_selection"),
                     GTK_RUN_LAST | GTK_RUN_ACTION,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkListItemClass, extend_selection),
@@ -194,14 +195,14 @@ gtk_list_item_class_init (GtkListItemClass *class)
                     GTK_TYPE_NONE, 3,
 		    GTK_TYPE_SCROLL_TYPE, GTK_TYPE_FLOAT, GTK_TYPE_BOOL);
   list_item_signals[SCROLL_VERTICAL] =
-    gtk_signal_new ("scroll_vertical",
+    gtk_signal_new (I_("scroll_vertical"),
                     GTK_RUN_LAST | GTK_RUN_ACTION,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkListItemClass, scroll_vertical),
                     _gtk_marshal_VOID__ENUM_FLOAT,
                     GTK_TYPE_NONE, 2, GTK_TYPE_SCROLL_TYPE, GTK_TYPE_FLOAT);
   list_item_signals[SCROLL_HORIZONTAL] =
-    gtk_signal_new ("scroll_horizontal",
+    gtk_signal_new (I_("scroll_horizontal"),
                     GTK_RUN_LAST | GTK_RUN_ACTION,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkListItemClass, scroll_horizontal),

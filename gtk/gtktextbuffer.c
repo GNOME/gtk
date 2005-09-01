@@ -155,7 +155,7 @@ gtk_text_buffer_get_type (void)
         (GInstanceInitFunc) gtk_text_buffer_init
       };
 
-      our_type = g_type_register_static (G_TYPE_OBJECT, g_intern_static_string ("GtkTextBuffer"),
+      our_type = g_type_register_static (G_TYPE_OBJECT, I_("GtkTextBuffer"),
                                          &our_info, 0);
     }
 
@@ -209,7 +209,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                                                         GTK_PARAM_READWRITE));
 
   signals[INSERT_TEXT] =
-    g_signal_new ("insert_text",
+    g_signal_new (I_("insert_text"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTextBufferClass, insert_text),
@@ -222,7 +222,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   G_TYPE_INT);
 
   signals[INSERT_PIXBUF] =
-    g_signal_new ("insert_pixbuf",
+    g_signal_new (I_("insert_pixbuf"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTextBufferClass, insert_pixbuf),
@@ -234,7 +234,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   GDK_TYPE_PIXBUF);
 
   signals[INSERT_CHILD_ANCHOR] =
-    g_signal_new ("insert_child_anchor",
+    g_signal_new (I_("insert_child_anchor"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTextBufferClass, insert_child_anchor),
@@ -259,7 +259,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
    * those don't have access to the deleted text.
    */
   signals[DELETE_RANGE] =
-    g_signal_new ("delete_range",
+    g_signal_new (I_("delete_range"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTextBufferClass, delete_range),
@@ -271,7 +271,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   GTK_TYPE_TEXT_ITER | G_SIGNAL_TYPE_STATIC_SCOPE);
 
   signals[CHANGED] =
-    g_signal_new ("changed",
+    g_signal_new (I_("changed"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,                   
                   G_STRUCT_OFFSET (GtkTextBufferClass, changed),
@@ -281,7 +281,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   0);
 
   signals[MODIFIED_CHANGED] =
-    g_signal_new ("modified_changed",
+    g_signal_new (I_("modified_changed"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTextBufferClass, modified_changed),
@@ -291,7 +291,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   0);
 
   signals[MARK_SET] =
-    g_signal_new ("mark_set",
+    g_signal_new (I_("mark_set"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,                   
                   G_STRUCT_OFFSET (GtkTextBufferClass, mark_set),
@@ -303,7 +303,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   GTK_TYPE_TEXT_MARK);
 
   signals[MARK_DELETED] =
-    g_signal_new ("mark_deleted",
+    g_signal_new (I_("mark_deleted"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,                   
                   G_STRUCT_OFFSET (GtkTextBufferClass, mark_deleted),
@@ -314,7 +314,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   GTK_TYPE_TEXT_MARK);
   
   signals[APPLY_TAG] =
-    g_signal_new ("apply_tag",
+    g_signal_new (I_("apply_tag"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTextBufferClass, apply_tag),
@@ -327,7 +327,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   GTK_TYPE_TEXT_ITER);
 
   signals[REMOVE_TAG] =
-    g_signal_new ("remove_tag",
+    g_signal_new (I_("remove_tag"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTextBufferClass, remove_tag),
@@ -340,7 +340,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   GTK_TYPE_TEXT_ITER);
 
   signals[BEGIN_USER_ACTION] =
-    g_signal_new ("begin_user_action",
+    g_signal_new (I_("begin_user_action"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,                   
                   G_STRUCT_OFFSET (GtkTextBufferClass, begin_user_action),
@@ -350,7 +350,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   0);
 
   signals[END_USER_ACTION] =
-    g_signal_new ("end_user_action",
+    g_signal_new (I_("end_user_action"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,                   
                   G_STRUCT_OFFSET (GtkTextBufferClass, end_user_action),
@@ -2811,7 +2811,7 @@ create_clipboard_contents_buffer (GtkTextBuffer *buffer)
 
   contents = gtk_text_buffer_new (gtk_text_buffer_get_tag_table (buffer));
 
-  g_object_set_data (G_OBJECT (contents), g_intern_static_string ("gtk-text-buffer-clipboard"), GINT_TO_POINTER (1));
+  g_object_set_data (G_OBJECT (contents), I_("gtk-text-buffer-clipboard"), GINT_TO_POINTER (1));
   
   return contents;
 }

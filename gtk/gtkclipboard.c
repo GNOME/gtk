@@ -27,6 +27,7 @@
 #include "gtkinvisible.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 #ifdef GDK_WINDOWING_X11
@@ -160,7 +161,7 @@ gtk_clipboard_get_type (void)
 	(GInstanceInitFunc) NULL,
       };
       
-      clipboard_type = g_type_register_static (G_TYPE_OBJECT, g_intern_static_string ("GtkClipboard"),
+      clipboard_type = g_type_register_static (G_TYPE_OBJECT, I_("GtkClipboard"),
 					       &clipboard_info, 0);
     }
   
@@ -179,7 +180,7 @@ gtk_clipboard_class_init (GtkClipboardClass *class)
   class->owner_change = gtk_clipboard_owner_change;
 
   clipboard_signals[OWNER_CHANGE] =
-    g_signal_new ("owner_change",
+    g_signal_new (I_("owner_change"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkClipboardClass, owner_change),
@@ -208,7 +209,7 @@ gtk_clipboard_finalize (GObject *object)
   
   clipboards = g_object_get_data (G_OBJECT (clipboard->display), "gtk-clipboard-list");
   clipboards = g_slist_remove (clipboards, clipboard);
-  g_object_set_data (G_OBJECT (clipboard->display), g_intern_static_string ("gtk-clipboard-list"), clipboards);
+  g_object_set_data (G_OBJECT (clipboard->display), I_("gtk-clipboard-list"), clipboards);
 
   if (g_main_loop_is_running (clipboard->store_loop))
     {
@@ -237,7 +238,7 @@ clipboard_display_closed (GdkDisplay   *display,
   clipboards = g_object_get_data (G_OBJECT (display), "gtk-clipboard-list");
   g_object_run_dispose (G_OBJECT (clipboard));
   clipboards = g_slist_remove (clipboards, clipboard);
-  g_object_set_data (G_OBJECT (display), g_intern_static_string ("gtk-clipboard-list"), clipboards);
+  g_object_set_data (G_OBJECT (display), I_("gtk-clipboard-list"), clipboards);
   g_object_unref (clipboard);
 }
 
@@ -372,7 +373,7 @@ get_clipboard_widget (GdkDisplay *display)
   if (!clip_widget)
     {
       clip_widget = make_clipboard_widget (display, TRUE);
-      g_object_set_data (G_OBJECT (display), g_intern_static_string ("gtk-clipboard-widget"), clip_widget);
+      g_object_set_data (G_OBJECT (display), I_("gtk-clipboard-widget"), clip_widget);
     }
 
   return clip_widget;
@@ -1502,7 +1503,7 @@ clipboard_peek (GdkDisplay *display,
       clipboard->n_cached_targets = -1;
       clipboard->n_storable_targets = -1;
       clipboards = g_slist_prepend (clipboards, clipboard);
-      g_object_set_data (G_OBJECT (display), g_intern_static_string ("gtk-clipboard-list"), clipboards);
+      g_object_set_data (G_OBJECT (display), I_("gtk-clipboard-list"), clipboards);
       g_signal_connect (display, "closed",
 			G_CALLBACK (clipboard_display_closed), clipboard);
       gdk_display_request_selection_notification (display, selection);

@@ -143,7 +143,7 @@ gtk_input_dialog_get_type (void)
       };
 
       input_dialog_type =
-	g_type_register_static (GTK_TYPE_DIALOG, g_intern_static_string ("GtkInputDialog"),
+	g_type_register_static (GTK_TYPE_DIALOG, I_("GtkInputDialog"),
 				&input_dialog_info, 0);
     }
 
@@ -199,7 +199,7 @@ gtk_input_dialog_class_init (GtkInputDialogClass *klass)
   klass->disable_device = NULL;
 
   input_dialog_signals[ENABLE_DEVICE] =
-    g_signal_new ("enable_device",
+    g_signal_new (I_("enable_device"),
 		  G_OBJECT_CLASS_TYPE (klass),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkInputDialogClass, enable_device),
@@ -209,7 +209,7 @@ gtk_input_dialog_class_init (GtkInputDialogClass *klass)
 		  GDK_TYPE_DEVICE);
 
   input_dialog_signals[DISABLE_DEVICE] =
-    g_signal_new ("disable_device",
+    g_signal_new (I_("disable_device"),
 		  G_OBJECT_CLASS_TYPE (klass),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkInputDialogClass, disable_device),

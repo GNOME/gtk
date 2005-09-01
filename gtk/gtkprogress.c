@@ -92,7 +92,7 @@ gtk_progress_get_type (void)
 	(GInstanceInitFunc) gtk_progress_init,
       };
 
-      progress_type = g_type_register_static (GTK_TYPE_WIDGET, g_intern_static_string ("GtkProgress"),
+      progress_type = g_type_register_static (GTK_TYPE_WIDGET, I_("GtkProgress"),
 					      &progress_info, 0);
     }
 

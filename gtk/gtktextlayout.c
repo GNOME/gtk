@@ -82,6 +82,7 @@
 #include "gtktextlayout.h"
 #include "gtktextbtree.h"
 #include "gtktextiterprivate.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 #include <stdlib.h>
@@ -184,7 +185,7 @@ gtk_text_layout_get_type (void)
         (GInstanceInitFunc) gtk_text_layout_init
       };
 
-      our_type = g_type_register_static (G_TYPE_OBJECT, g_intern_static_string ("GtkTextLayout"),
+      our_type = g_type_register_static (G_TYPE_OBJECT, I_("GtkTextLayout"),
                                          &our_info, 0);
     }
 
@@ -205,7 +206,7 @@ gtk_text_layout_class_init (GtkTextLayoutClass *klass)
   klass->free_line_data = gtk_text_layout_real_free_line_data;
 
   signals[INVALIDATED] =
-    g_signal_new ("invalidated",
+    g_signal_new (I_("invalidated"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTextLayoutClass, invalidated),
@@ -215,7 +216,7 @@ gtk_text_layout_class_init (GtkTextLayoutClass *klass)
                   0);
 
   signals[CHANGED] =
-    g_signal_new ("changed",
+    g_signal_new (I_("changed"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTextLayoutClass, changed),
@@ -228,7 +229,7 @@ gtk_text_layout_class_init (GtkTextLayoutClass *klass)
                   G_TYPE_INT);
 
   signals[ALLOCATE_CHILD] =
-    g_signal_new ("allocate_child",
+    g_signal_new (I_("allocate_child"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTextLayoutClass, allocate_child),

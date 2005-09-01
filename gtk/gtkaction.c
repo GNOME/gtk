@@ -132,7 +132,7 @@ gtk_action_get_type (void)
       };
 
       type = g_type_register_static (G_TYPE_OBJECT,
-				     g_intern_static_string ("GtkAction"),
+				     I_("GtkAction"),
 				     &type_info, 0);
     }
   return type;
@@ -308,7 +308,7 @@ gtk_action_class_init (GtkActionClass *klass)
    * Since: 2.4
    */
   action_signals[ACTIVATE] =
-    g_signal_new ("activate",
+    g_signal_new (I_("activate"),
 		  G_OBJECT_CLASS_TYPE (klass),
 		  G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE,
 		  G_STRUCT_OFFSET (GtkActionClass, activate),  NULL, NULL,
@@ -798,7 +798,7 @@ connect_proxy (GtkAction     *action,
 	       GtkWidget     *proxy)
 {
   g_object_ref (action);
-  g_object_set_data_full (G_OBJECT (proxy), g_intern_static_string ("gtk-action"), action,
+  g_object_set_data_full (G_OBJECT (proxy), I_("gtk-action"), action,
 			  g_object_unref);
 
   /* add this widget to the list of proxies */
@@ -982,7 +982,7 @@ static void
 disconnect_proxy (GtkAction *action, 
 		  GtkWidget *proxy)
 {
-  g_object_set_data (G_OBJECT (proxy), g_intern_static_string ("gtk-action"), NULL);
+  g_object_set_data (G_OBJECT (proxy), I_("gtk-action"), NULL);
 
   /* remove proxy from list of proxies */
   g_signal_handlers_disconnect_by_func (proxy,

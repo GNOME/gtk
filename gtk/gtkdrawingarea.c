@@ -26,6 +26,7 @@
 
 #include <config.h>
 #include "gtkdrawingarea.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 
@@ -58,7 +59,7 @@ gtk_drawing_area_get_type (void)
       };
 
       drawing_area_type =
-	g_type_register_static (GTK_TYPE_WIDGET, g_intern_static_string ("GtkDrawingArea"),
+	g_type_register_static (GTK_TYPE_WIDGET, I_("GtkDrawingArea"),
 				&drawing_area_info, 0);
     }
 

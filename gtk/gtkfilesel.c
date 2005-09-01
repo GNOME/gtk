@@ -528,7 +528,7 @@ gtk_file_selection_get_type (void)
       };
 
       file_selection_type =
-	g_type_register_static (GTK_TYPE_DIALOG, g_intern_static_string ("GtkFileSelection"),
+	g_type_register_static (GTK_TYPE_DIALOG, I_("GtkFileSelection"),
 				&filesel_info, 0);
     }
 
@@ -985,7 +985,7 @@ filenames_dropped (GtkWidget        *widget,
 					 "Are you sure that you want to select it?"), filename_utf8, hostname);
       g_free (filename_utf8);
 
-      g_object_set_data_full (G_OBJECT (dialog), g_intern_static_string ("gtk-fs-dnd-filename"), g_strdup (filename), g_free);
+      g_object_set_data_full (G_OBJECT (dialog), I_("gtk-fs-dnd-filename"), g_strdup (filename), g_free);
       
       g_signal_connect_data (dialog, "response",
 			     (GCallback) dnd_really_drop, 

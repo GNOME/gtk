@@ -114,7 +114,7 @@ gtk_dialog_get_type (void)
 	(GInstanceInitFunc) gtk_dialog_init,
       };
 
-      dialog_type = g_type_register_static (GTK_TYPE_WINDOW, g_intern_static_string ("GtkDialog"),
+      dialog_type = g_type_register_static (GTK_TYPE_WINDOW, I_("GtkDialog"),
 					    &dialog_info, 0);
     }
 
@@ -152,7 +152,7 @@ gtk_dialog_class_init (GtkDialogClass *class)
                                                          GTK_PARAM_READWRITE));
   
   dialog_signals[RESPONSE] =
-    g_signal_new ("response",
+    g_signal_new (I_("response"),
 		  G_OBJECT_CLASS_TYPE (class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkDialogClass, response),
@@ -162,7 +162,7 @@ gtk_dialog_class_init (GtkDialogClass *class)
 		  G_TYPE_INT);
 
   dialog_signals[CLOSE] =
-    g_signal_new ("close",
+    g_signal_new (I_("close"),
 		  G_OBJECT_CLASS_TYPE (class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkDialogClass, close),
@@ -539,7 +539,7 @@ get_response_data (GtkWidget *widget,
       ad = g_new (ResponseData, 1);
       
       g_object_set_data_full (G_OBJECT (widget),
-                              g_intern_static_string ("gtk-dialog-response-data"),
+                              I_("gtk-dialog-response-data"),
                               ad,
                               g_free);
     }

@@ -378,7 +378,7 @@ gtk_cell_renderer_combo_start_editing (GtkCellRenderer     *cell,
 
   g_object_set (combo, "has-frame", FALSE, NULL);
   g_object_set_data_full (G_OBJECT (combo),
-			  g_intern_static_string (GTK_CELL_RENDERER_COMBO_PATH),
+			  I_(GTK_CELL_RENDERER_COMBO_PATH),
 			  g_strdup (path), g_free);
 
   gtk_widget_show (combo);

@@ -23,6 +23,7 @@
 #include "gtktreeprivate.h"
 #include "gtkrbtree.h"
 #include "gtkmarshalers.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 static void gtk_tree_selection_init              (GtkTreeSelection      *selection);
@@ -66,7 +67,7 @@ gtk_tree_selection_get_type (void)
       };
 
       selection_type =
-	g_type_register_static (G_TYPE_OBJECT, g_intern_static_string ("GtkTreeSelection"),
+	g_type_register_static (G_TYPE_OBJECT, I_("GtkTreeSelection"),
 				&selection_info, 0);
     }
 
@@ -85,7 +86,7 @@ gtk_tree_selection_class_init (GtkTreeSelectionClass *class)
   class->changed = NULL;
 
   tree_selection_signals[CHANGED] =
-    g_signal_new ("changed",
+    g_signal_new (I_("changed"),
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkTreeSelectionClass, changed),

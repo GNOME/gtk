@@ -270,7 +270,7 @@ gtk_file_system_unix_get_type (void)
       };
 
       file_system_unix_type = g_type_register_static (G_TYPE_OBJECT,
-						      g_intern_static_string ("GtkFileSystemUnix"),
+						      I_("GtkFileSystemUnix"),
 						      &file_system_unix_info, 0);
       g_type_add_interface_static (file_system_unix_type,
 				   GTK_TYPE_FILE_SYSTEM,
@@ -716,7 +716,7 @@ icon_theme_changed (GtkIconTheme *icon_theme)
   cache = g_hash_table_new_full (g_str_hash, g_str_equal,
 				 (GDestroyNotify)g_free,
 				 (GDestroyNotify)icon_cache_element_free);
-  g_object_set_data_full (G_OBJECT (icon_theme), g_intern_static_string ("gtk-file-icon-cache"),
+  g_object_set_data_full (G_OBJECT (icon_theme), I_("gtk-file-icon-cache"),
 			  cache, (GDestroyNotify)g_hash_table_destroy);
 }
 
@@ -735,7 +735,7 @@ get_cached_icon (GtkWidget   *widget,
 				     (GDestroyNotify)g_free,
 				     (GDestroyNotify)icon_cache_element_free);
 
-      g_object_set_data_full (G_OBJECT (icon_theme), g_intern_static_string ("gtk-file-icon-cache"),
+      g_object_set_data_full (G_OBJECT (icon_theme), I_("gtk-file-icon-cache"),
 			      cache, (GDestroyNotify)g_hash_table_destroy);
       g_signal_connect (icon_theme, "changed",
 			G_CALLBACK (icon_theme_changed), NULL);
@@ -1746,7 +1746,7 @@ gtk_file_folder_unix_get_type (void)
       };
 
       file_folder_unix_type = g_type_register_static (G_TYPE_OBJECT,
-						      g_intern_static_string ("GtkFileFolderUnix"),
+						      I_("GtkFileFolderUnix"),
 						      &file_folder_unix_info, 0);
       g_type_add_interface_static (file_folder_unix_type,
 				   GTK_TYPE_FILE_FOLDER,

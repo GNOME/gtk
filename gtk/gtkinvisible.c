@@ -81,7 +81,7 @@ gtk_invisible_get_type (void)
 	(GInstanceInitFunc) gtk_invisible_init,
       };
 
-      invisible_type = g_type_register_static (GTK_TYPE_WIDGET, g_intern_static_string ("GtkInvisible"),
+      invisible_type = g_type_register_static (GTK_TYPE_WIDGET, I_("GtkInvisible"),
 					       &invisible_info, 0);
     }
 

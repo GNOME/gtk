@@ -233,7 +233,7 @@ _gtk_file_system_model_get_type (void)
       };
 
       file_system_model_type = g_type_register_static (G_TYPE_OBJECT,
-						       g_intern_static_string ("GtkFileSystemModel"),
+						       I_("GtkFileSystemModel"),
 						      &file_system_model_info, 0);
       g_type_add_interface_static (file_system_model_type,
 				   GTK_TYPE_TREE_MODEL,
@@ -256,7 +256,7 @@ gtk_file_system_model_class_init (GtkFileSystemModelClass *class)
   gobject_class->finalize = gtk_file_system_model_finalize;
 
   file_system_model_signals[FINISHED_LOADING] =
-    g_signal_new ("finished-loading",
+    g_signal_new (I_("finished-loading"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkFileSystemModelClass, finished_loading),
@@ -1493,7 +1493,7 @@ file_model_node_get_children (GtkFileSystemModel *model,
 	  g_signal_connect (node->folder, "files-removed",
 			    G_CALLBACK (files_removed_callback), node);
 
-	  g_object_set_data (G_OBJECT (node->folder), g_intern_static_string ("model-node"), node);
+	  g_object_set_data (G_OBJECT (node->folder), I_("model-node"), node);
 	}
       
       if (is_folder && !has_children)

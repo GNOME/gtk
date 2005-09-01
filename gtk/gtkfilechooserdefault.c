@@ -584,7 +584,7 @@ _gtk_file_chooser_default_get_type (void)
 	NULL			                                       /* interface_data */
       };
 
-      file_chooser_default_type = g_type_register_static (GTK_TYPE_VBOX, g_intern_static_string ("GtkFileChooserDefault"),
+      file_chooser_default_type = g_type_register_static (GTK_TYPE_VBOX, I_("GtkFileChooserDefault"),
 							 &file_chooser_default_info, 0);
 
       g_type_add_interface_static (file_chooser_default_type,
@@ -620,7 +620,7 @@ gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
   widget_class->screen_changed = gtk_file_chooser_default_screen_changed;
 
   signals[LOCATION_POPUP] =
-    _gtk_binding_signal_new ("location-popup",
+    _gtk_binding_signal_new (I_("location-popup"),
 			     G_OBJECT_CLASS_TYPE (class),
 			     G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
 			     G_CALLBACK (location_popup_handler),
@@ -628,7 +628,7 @@ gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
 			     _gtk_marshal_VOID__STRING,
 			     G_TYPE_NONE, 1, G_TYPE_STRING);
   signals[UP_FOLDER] =
-    _gtk_binding_signal_new ("up-folder",
+    _gtk_binding_signal_new (I_("up-folder"),
 			     G_OBJECT_CLASS_TYPE (class),
 			     G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
 			     G_CALLBACK (up_folder_handler),
@@ -636,7 +636,7 @@ gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
 			     _gtk_marshal_VOID__VOID,
 			     G_TYPE_NONE, 0);
   signals[DOWN_FOLDER] =
-    _gtk_binding_signal_new ("down-folder",
+    _gtk_binding_signal_new (I_("down-folder"),
 			     G_OBJECT_CLASS_TYPE (class),
 			     G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
 			     G_CALLBACK (down_folder_handler),
@@ -644,7 +644,7 @@ gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
 			     _gtk_marshal_VOID__VOID,
 			     G_TYPE_NONE, 0);
   signals[HOME_FOLDER] =
-    _gtk_binding_signal_new ("home-folder",
+    _gtk_binding_signal_new (I_("home-folder"),
 			     G_OBJECT_CLASS_TYPE (class),
 			     G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
 			     G_CALLBACK (home_folder_handler),
@@ -3713,7 +3713,7 @@ create_file_list (GtkFileChooserDefault *impl)
   /* Tree/list view */
 
   impl->browse_files_tree_view = gtk_tree_view_new ();
-  g_object_set_data (G_OBJECT (impl->browse_files_tree_view), g_intern_static_string ("GtkFileChooserDefault"), impl);
+  g_object_set_data (G_OBJECT (impl->browse_files_tree_view), I_("GtkFileChooserDefault"), impl);
   atk_object_set_name (gtk_widget_get_accessible (impl->browse_files_tree_view), _("Files"));
 
   gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (impl->browse_files_tree_view), TRUE);

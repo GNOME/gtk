@@ -36,6 +36,7 @@
 #include "gtkmarshalers.h"
 #include "gtkselection.h"
 #include "gtksignal.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 #define MIN_EDITABLE_WIDTH  150
@@ -158,7 +159,7 @@ gtk_old_editable_get_type (void)
 	NULL			                                 /* interface_data */
       };
 
-      old_editable_type = g_type_register_static (GTK_TYPE_WIDGET, g_intern_static_string ("GtkOldEditable"),
+      old_editable_type = g_type_register_static (GTK_TYPE_WIDGET, I_("GtkOldEditable"),
 						  &old_editable_info, G_TYPE_FLAG_ABSTRACT);
       g_type_add_interface_static (old_editable_type,
 				   GTK_TYPE_EDITABLE,
@@ -209,7 +210,7 @@ gtk_old_editable_class_init (GtkOldEditableClass *class)
   class->set_position = NULL;
 
   editable_signals[ACTIVATE] =
-    gtk_signal_new ("activate",
+    gtk_signal_new (I_("activate"),
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkOldEditableClass, activate),
@@ -218,7 +219,7 @@ gtk_old_editable_class_init (GtkOldEditableClass *class)
   widget_class->activate_signal = editable_signals[ACTIVATE];
 
   editable_signals[SET_EDITABLE] =
-    gtk_signal_new ("set-editable",
+    gtk_signal_new (I_("set-editable"),
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkOldEditableClass, set_editable),
@@ -227,7 +228,7 @@ gtk_old_editable_class_init (GtkOldEditableClass *class)
 		    GTK_TYPE_BOOL);
 
   editable_signals[MOVE_CURSOR] =
-    gtk_signal_new ("move_cursor",
+    gtk_signal_new (I_("move_cursor"),
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkOldEditableClass, move_cursor),
@@ -237,7 +238,7 @@ gtk_old_editable_class_init (GtkOldEditableClass *class)
 		    GTK_TYPE_INT);
 
   editable_signals[MOVE_WORD] =
-    gtk_signal_new ("move_word",
+    gtk_signal_new (I_("move_word"),
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkOldEditableClass, move_word),
@@ -246,7 +247,7 @@ gtk_old_editable_class_init (GtkOldEditableClass *class)
 		    GTK_TYPE_INT);
 
   editable_signals[MOVE_PAGE] =
-    gtk_signal_new ("move_page",
+    gtk_signal_new (I_("move_page"),
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkOldEditableClass, move_page),
@@ -256,7 +257,7 @@ gtk_old_editable_class_init (GtkOldEditableClass *class)
 		    GTK_TYPE_INT);
 
   editable_signals[MOVE_TO_ROW] =
-    gtk_signal_new ("move_to_row",
+    gtk_signal_new (I_("move_to_row"),
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkOldEditableClass, move_to_row),
@@ -265,7 +266,7 @@ gtk_old_editable_class_init (GtkOldEditableClass *class)
 		    GTK_TYPE_INT);
 
   editable_signals[MOVE_TO_COLUMN] =
-    gtk_signal_new ("move_to_column",
+    gtk_signal_new (I_("move_to_column"),
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkOldEditableClass, move_to_column),
@@ -274,7 +275,7 @@ gtk_old_editable_class_init (GtkOldEditableClass *class)
 		    GTK_TYPE_INT);
 
   editable_signals[KILL_CHAR] =
-    gtk_signal_new ("kill_char",
+    gtk_signal_new (I_("kill_char"),
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkOldEditableClass, kill_char),
@@ -283,7 +284,7 @@ gtk_old_editable_class_init (GtkOldEditableClass *class)
 		    GTK_TYPE_INT);
 
   editable_signals[KILL_WORD] =
-    gtk_signal_new ("kill_word",
+    gtk_signal_new (I_("kill_word"),
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkOldEditableClass, kill_word),
@@ -292,7 +293,7 @@ gtk_old_editable_class_init (GtkOldEditableClass *class)
 		    GTK_TYPE_INT);
 
   editable_signals[KILL_LINE] =
-    gtk_signal_new ("kill_line",
+    gtk_signal_new (I_("kill_line"),
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkOldEditableClass, kill_line),
@@ -301,7 +302,7 @@ gtk_old_editable_class_init (GtkOldEditableClass *class)
 		    GTK_TYPE_INT);
 
   editable_signals[CUT_CLIPBOARD] =
-    gtk_signal_new ("cut_clipboard",
+    gtk_signal_new (I_("cut_clipboard"),
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkOldEditableClass, cut_clipboard),
@@ -309,7 +310,7 @@ gtk_old_editable_class_init (GtkOldEditableClass *class)
 		    GTK_TYPE_NONE, 0);
 
   editable_signals[COPY_CLIPBOARD] =
-    gtk_signal_new ("copy_clipboard",
+    gtk_signal_new (I_("copy_clipboard"),
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkOldEditableClass, copy_clipboard),
@@ -317,7 +318,7 @@ gtk_old_editable_class_init (GtkOldEditableClass *class)
 		    GTK_TYPE_NONE, 0);
 
   editable_signals[PASTE_CLIPBOARD] =
-    gtk_signal_new ("paste_clipboard",
+    gtk_signal_new (I_("paste_clipboard"),
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkOldEditableClass, paste_clipboard),

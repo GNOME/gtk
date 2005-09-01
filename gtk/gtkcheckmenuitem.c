@@ -90,7 +90,7 @@ gtk_check_menu_item_get_type (void)
       };
 
       check_menu_item_type =
-	g_type_register_static (GTK_TYPE_MENU_ITEM, g_intern_static_string ("GtkCheckMenuItem"),
+	g_type_register_static (GTK_TYPE_MENU_ITEM, I_("GtkCheckMenuItem"),
 				&check_menu_item_info, 0);
     }
 
@@ -157,7 +157,7 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
   klass->draw_indicator = gtk_real_check_menu_item_draw_indicator;
 
   check_menu_item_signals[TOGGLED] =
-    g_signal_new ("toggled",
+    g_signal_new (I_("toggled"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkCheckMenuItemClass, toggled),

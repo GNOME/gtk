@@ -88,7 +88,7 @@ gtk_separator_tool_item_get_type (void)
 	};
       
       type = g_type_register_static (GTK_TYPE_TOOL_ITEM,
-				     g_intern_static_string ("GtkSeparatorToolItem"), &type_info, 0);
+				     I_("GtkSeparatorToolItem"), &type_info, 0);
     }
   return type;
 }

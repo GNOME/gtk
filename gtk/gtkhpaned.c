@@ -26,6 +26,7 @@
 
 #include <config.h>
 #include "gtkhpaned.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 static void     gtk_hpaned_class_init     (GtkHPanedClass *klass);
@@ -57,7 +58,7 @@ gtk_hpaned_get_type (void)
 	(GInstanceInitFunc) gtk_hpaned_init,
       };
 
-      hpaned_type = g_type_register_static (GTK_TYPE_PANED, g_intern_static_string ("GtkHPaned"),
+      hpaned_type = g_type_register_static (GTK_TYPE_PANED, I_("GtkHPaned"),
 					    &hpaned_info, 0);
     }
 

@@ -23,6 +23,7 @@
 #include <gdk/gdkkeysyms.h>
 #include "gtkaccelgroup.h"
 #include "gtkimcontextsimple.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 typedef struct _GtkComposeTable GtkComposeTable;
@@ -962,7 +963,7 @@ gtk_im_context_simple_get_type (void)
       };
       
       im_context_simple_type =
-	g_type_register_static (GTK_TYPE_IM_CONTEXT, g_intern_static_string ("GtkIMContextSimple"),
+	g_type_register_static (GTK_TYPE_IM_CONTEXT, I_("GtkIMContextSimple"),
 				&im_context_simple_info, 0);
     }
 

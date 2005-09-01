@@ -105,7 +105,7 @@ gtk_scale_get_type (void)
 	NULL,		/* value_table */
       };
 
-      scale_type = g_type_register_static (GTK_TYPE_RANGE, g_intern_static_string ("GtkScale"),
+      scale_type = g_type_register_static (GTK_TYPE_RANGE, I_("GtkScale"),
 					   &scale_info, G_TYPE_FLAG_ABSTRACT);
     }
 
@@ -129,9 +129,9 @@ single_string_accumulator (GSignalInvocationHint *ihint,
 }
 
 
-#define add_slider_binding(binding_set, keyval, mask, scroll)          \
-  gtk_binding_entry_add_signal (binding_set, keyval, mask,             \
-                                "move_slider", 1,                      \
+#define add_slider_binding(binding_set, keyval, mask, scroll)              \
+  gtk_binding_entry_add_signal (binding_set, keyval, mask,                 \
+                                I_("move_slider"), 1, \
                                 GTK_TYPE_SCROLL_TYPE, scroll)
 
 static void
@@ -158,7 +158,7 @@ gtk_scale_class_init (GtkScaleClass *class)
   range_class->get_range_border = gtk_scale_get_range_border;
   
   signals[FORMAT_VALUE] =
-    g_signal_new ("format_value",
+    g_signal_new (I_("format_value"),
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkScaleClass, format_value),

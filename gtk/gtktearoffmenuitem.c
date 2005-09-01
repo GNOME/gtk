@@ -28,6 +28,7 @@
 
 #include "gtkmenu.h"
 #include "gtktearoffmenuitem.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 #define ARROW_SIZE 10
@@ -65,7 +66,7 @@ gtk_tearoff_menu_item_get_type (void)
       };
 
       tearoff_menu_item_type =
-	g_type_register_static (GTK_TYPE_MENU_ITEM, g_intern_static_string ("GtkTearoffMenuItem"),
+	g_type_register_static (GTK_TYPE_MENU_ITEM, I_("GtkTearoffMenuItem"),
 			        &tearoff_menu_item_info, 0);
     }
 

@@ -78,7 +78,7 @@ gtk_accel_group_get_type (void)
 	(GInstanceInitFunc) gtk_accel_group_init,
       };
 
-      object_type = g_type_register_static (G_TYPE_OBJECT, g_intern_static_string ("GtkAccelGroup"),
+      object_type = g_type_register_static (G_TYPE_OBJECT, I_("GtkAccelGroup"),
 					    &object_info, 0);
     }
 
@@ -111,7 +111,7 @@ gtk_accel_group_class_init (GtkAccelGroupClass *class)
    * Returns: %TRUE if the accelerator was activated
    */
   signal_accel_activate =
-    g_signal_new ("accel_activate",
+    g_signal_new (I_("accel_activate"),
 		  G_OBJECT_CLASS_TYPE (class),
 		  G_SIGNAL_DETAILED,
 		  0,
@@ -136,7 +136,7 @@ gtk_accel_group_class_init (GtkAccelGroupClass *class)
    * their visual representation if the @accel_closure is theirs.
    */
   signal_accel_changed =
-    g_signal_new ("accel_changed",
+    g_signal_new (I_("accel_changed"),
 		  G_OBJECT_CLASS_TYPE (class),
 		  G_SIGNAL_RUN_FIRST | G_SIGNAL_DETAILED,
 		  G_STRUCT_OFFSET (GtkAccelGroupClass, accel_changed),

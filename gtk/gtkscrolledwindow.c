@@ -158,7 +158,7 @@ gtk_scrolled_window_get_type (void)
       };
 
       scrolled_window_type =
-	g_type_register_static (GTK_TYPE_BIN, g_intern_static_string ("GtkScrolledWindow"),
+	g_type_register_static (GTK_TYPE_BIN, I_("GtkScrolledWindow"),
 				&scrolled_window_info, 0);
     }
 
@@ -291,7 +291,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
 							     GTK_PARAM_READABLE));
 
   signals[SCROLL_CHILD] =
-    g_signal_new ("scroll_child",
+    g_signal_new (I_("scroll_child"),
                   G_TYPE_FROM_CLASS (object_class),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkScrolledWindowClass, scroll_child),
@@ -301,7 +301,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
                   GTK_TYPE_SCROLL_TYPE,
 		  G_TYPE_BOOLEAN);
   signals[MOVE_FOCUS_OUT] =
-    g_signal_new ("move_focus_out",
+    g_signal_new (I_("move_focus_out"),
                   G_TYPE_FROM_CLASS (object_class),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkScrolledWindowClass, move_focus_out),

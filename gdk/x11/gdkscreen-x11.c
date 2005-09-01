@@ -97,7 +97,7 @@ gdk_screen_x11_class_init (GdkScreenX11Class *klass)
   parent_class = g_type_class_peek_parent (klass);
 
   signals[WINDOW_MANAGER_CHANGED] =
-    g_signal_new ("window_manager_changed",
+    g_signal_new (g_intern_static_string ("window_manager_changed"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GdkScreenX11Class, window_manager_changed),

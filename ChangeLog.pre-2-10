@@ -1,5 +1,17 @@
+2005-09-01  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/*.c: Intern some more strings.
+	* gtk/gtkintl.h: 
+	* gtk/*.c: Define an I_() macro and use it instead of the 
+	bulky g_intern_static_string().
+
 2005-08-31  Matthias Clasen  <mclasen@redhat.com>
-	
+
+	* gtk/gtkbindings.c (binding_signal_new): Intern the signal name
+	instead of copying it.
+
+	* gtk/gtktypeutils.c (gtk_identifier_get_type): Some more string interning.
+
 	* gtk/*.c: Also intern static strings passed to 
 	g_object_set_data().
 

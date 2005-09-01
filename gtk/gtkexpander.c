@@ -142,7 +142,7 @@ gtk_expander_get_type (void)
       };
       
       expander_type = g_type_register_static (GTK_TYPE_BIN,
-					      g_intern_static_string ("GtkExpander"),
+					      I_("GtkExpander"),
 					      &expander_info, 0);
     }
   
@@ -261,7 +261,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
 							     GTK_PARAM_READABLE));
 
   widget_class->activate_signal =
-    g_signal_new ("activate",
+    g_signal_new (I_("activate"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkExpanderClass, activate),

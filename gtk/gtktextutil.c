@@ -110,7 +110,7 @@ _gtk_text_util_append_special_char_menuitems (GtkMenuShell              *menushe
       info->data = data;
       
       menuitem = gtk_menu_item_new_with_mnemonic (_(bidi_menu_entries[i].label));
-      g_object_set_data (G_OBJECT (menuitem), g_intern_static_string ("gtk-unicode-menu-entry"),
+      g_object_set_data (G_OBJECT (menuitem), I_("gtk-unicode-menu-entry"),
                          (gpointer)&bidi_menu_entries[i]);
       
       g_signal_connect_data (menuitem, "activate",

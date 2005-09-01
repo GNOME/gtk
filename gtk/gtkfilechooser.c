@@ -48,7 +48,7 @@ gtk_file_chooser_get_type (void)
       };
 
       file_chooser_type = g_type_register_static (G_TYPE_INTERFACE,
-						  g_intern_static_string ("GtkFileChooser"),
+						  I_("GtkFileChooser"),
 						  &file_chooser_info, 0);
 
       g_type_interface_add_prerequisite (file_chooser_type, GTK_TYPE_WIDGET);
@@ -96,7 +96,7 @@ gtk_file_chooser_class_init (gpointer g_iface)
    * gtk_file_chooser_set_current_folder_uri(),
    * gtk_file_chooser_get_current_folder_uri().
    */
-  g_signal_new ("current-folder-changed",
+  g_signal_new (I_("current-folder-changed"),
 		iface_type,
 		G_SIGNAL_RUN_LAST,
 		G_STRUCT_OFFSET (GtkFileChooserIface, current_folder_changed),
@@ -123,7 +123,7 @@ gtk_file_chooser_class_init (gpointer g_iface)
    * gtk_file_chooser_unselect_uri(), gtk_file_chooser_get_uri(),
    * gtk_file_chooser_get_uris().
    */
-  g_signal_new ("selection-changed",
+  g_signal_new (I_("selection-changed"),
 		iface_type,
 		G_SIGNAL_RUN_LAST,
 		G_STRUCT_OFFSET (GtkFileChooserIface, selection_changed),
@@ -157,7 +157,7 @@ gtk_file_chooser_class_init (gpointer g_iface)
    * gtk_file_chooser_get_preview_filename(),
    * gtk_file_chooser_get_preview_uri().
    */
-  g_signal_new ("update-preview",
+  g_signal_new (I_("update-preview"),
 		iface_type,
 		G_SIGNAL_RUN_LAST,
 		G_STRUCT_OFFSET (GtkFileChooserIface, update_preview),
@@ -181,7 +181,7 @@ gtk_file_chooser_class_init (gpointer g_iface)
    * gtk_file_chooser_get_filenames(), gtk_file_chooser_get_uri(),
    * gtk_file_chooser_get_uris().
    */
-  g_signal_new ("file-activated",
+  g_signal_new (I_("file-activated"),
 		iface_type,
 		G_SIGNAL_RUN_LAST,
 		G_STRUCT_OFFSET (GtkFileChooserIface, file_activated),
@@ -190,7 +190,7 @@ gtk_file_chooser_class_init (gpointer g_iface)
 		G_TYPE_NONE, 0);
 
   /* Documented in the docbook files */
-  g_signal_new ("confirm-overwrite",
+  g_signal_new (I_("confirm-overwrite"),
 		iface_type,
 		G_SIGNAL_RUN_LAST,
 		G_STRUCT_OFFSET (GtkFileChooserIface, confirm_overwrite),

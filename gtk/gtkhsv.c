@@ -30,6 +30,7 @@
 #include "gtkbindings.h"
 #include "gtkcontainer.h"
 #include "gtkmarshalers.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 /*
@@ -144,7 +145,7 @@ gtk_hsv_get_type (void)
       (GInstanceInitFunc) gtk_hsv_init,
     };
     
-    hsv_type = g_type_register_static (GTK_TYPE_WIDGET, g_intern_static_string ("GtkHSV"),
+    hsv_type = g_type_register_static (GTK_TYPE_WIDGET, I_("GtkHSV"),
 				       &hsv_info, 0);
   }
   
@@ -184,7 +185,7 @@ gtk_hsv_class_init (GtkHSVClass *class)
   hsv_class->move = gtk_hsv_move;
   
   hsv_signals[CHANGED] =
-    g_signal_new ("changed",
+    g_signal_new (I_("changed"),
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkHSVClass, changed),
@@ -193,7 +194,7 @@ gtk_hsv_class_init (GtkHSVClass *class)
 		  G_TYPE_NONE, 0);
 
   hsv_signals[MOVE] =
-    g_signal_new ("move",
+    g_signal_new (I_("move"),
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkHSVClass, move),

@@ -135,7 +135,7 @@ gtk_font_button_get_type (void)
       };
       
       font_button_type =
-        g_type_register_static (GTK_TYPE_BUTTON, g_intern_static_string ("GtkFontButton"),
+        g_type_register_static (GTK_TYPE_BUTTON, I_("GtkFontButton"),
                                 &font_button_info, 0);
     }
   
@@ -266,7 +266,7 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
    *
    * Since: 2.4
    */
-  font_button_signals[FONT_SET] = g_signal_new ("font-set",
+  font_button_signals[FONT_SET] = g_signal_new (I_("font-set"),
                                                 G_TYPE_FROM_CLASS (gobject_class),
                                                 G_SIGNAL_RUN_FIRST,
                                                 G_STRUCT_OFFSET (GtkFontButtonClass, font_set),

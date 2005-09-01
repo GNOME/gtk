@@ -165,7 +165,7 @@ gtk_button_get_type (void)
 	(GInstanceInitFunc) gtk_button_init,
       };
 
-      button_type = g_type_register_static (GTK_TYPE_BIN, g_intern_static_string ("GtkButton"),
+      button_type = g_type_register_static (GTK_TYPE_BIN, I_("GtkButton"),
 					    &button_info, 0);
     }
 
@@ -323,7 +323,7 @@ gtk_button_class_init (GtkButtonClass *klass)
    * @Deprecated: Use the GtkWidget::button-press-event signal.
    */ 
   button_signals[PRESSED] =
-    g_signal_new ("pressed",
+    g_signal_new (I_("pressed"),
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkButtonClass, pressed),
@@ -340,7 +340,7 @@ gtk_button_class_init (GtkButtonClass *klass)
    * @Deprecated: Use the GtkWidget::button-release-event signal.
    */ 
   button_signals[RELEASED] =
-    g_signal_new ("released",
+    g_signal_new (I_("released"),
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkButtonClass, released),
@@ -355,7 +355,7 @@ gtk_button_class_init (GtkButtonClass *klass)
    * Emitted when the button has been activated (pressed and released).
    */ 
   button_signals[CLICKED] =
-    g_signal_new ("clicked",
+    g_signal_new (I_("clicked"),
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkButtonClass, clicked),
@@ -372,7 +372,7 @@ gtk_button_class_init (GtkButtonClass *klass)
    * @Deprecated: Use the GtkWidget::enter-notify-event signal.
    */ 
   button_signals[ENTER] =
-    g_signal_new ("enter",
+    g_signal_new (I_("enter"),
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkButtonClass, enter),
@@ -389,7 +389,7 @@ gtk_button_class_init (GtkButtonClass *klass)
    * @Deprecated: Use the GtkWidget::leave-notify-event signal.
    */ 
   button_signals[LEAVE] =
-    g_signal_new ("leave",
+    g_signal_new (I_("leave"),
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkButtonClass, leave),
@@ -407,7 +407,7 @@ gtk_button_class_init (GtkButtonClass *klass)
    * "clicked" signal.
    */
   button_signals[ACTIVATE] =
-    g_signal_new ("activate",
+    g_signal_new (I_("activate"),
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkButtonClass, activate),
@@ -1797,7 +1797,7 @@ gtk_button_screen_changed (GtkWidget *widget,
     g_signal_connect (settings, "notify::gtk-button-images",
 		      G_CALLBACK (gtk_button_setting_changed), 0);
   g_object_set_data (G_OBJECT (settings), 
-		     g_intern_static_string ("gtk-button-connection"),
+		     I_("gtk-button-connection"),
 		     GUINT_TO_POINTER (show_image_connection));
 
   show_image_change_notify (GTK_BUTTON (widget));

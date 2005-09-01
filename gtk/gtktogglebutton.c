@@ -93,7 +93,7 @@ gtk_toggle_button_get_type (void)
       };
 
       toggle_button_type =
-	g_type_register_static (GTK_TYPE_BUTTON, g_intern_static_string ("GtkToggleButton"),
+	g_type_register_static (GTK_TYPE_BUTTON, I_("GtkToggleButton"),
 				&toggle_button_info, 0);
     }
 
@@ -154,7 +154,7 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
 							 GTK_PARAM_READWRITE));
 
   toggle_button_signals[TOGGLED] =
-    g_signal_new ("toggled",
+    g_signal_new (I_("toggled"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkToggleButtonClass, toggled),

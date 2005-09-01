@@ -581,7 +581,7 @@ gtk_layout_get_type (void)
 	(GInstanceInitFunc) gtk_layout_init,
       };
 
-      layout_type = g_type_register_static (GTK_TYPE_CONTAINER, g_intern_static_string ("GtkLayout"),
+      layout_type = g_type_register_static (GTK_TYPE_CONTAINER, I_("GtkLayout"),
 					    &layout_info, 0);
     }
 
@@ -678,7 +678,7 @@ gtk_layout_class_init (GtkLayoutClass *class)
   class->set_scroll_adjustments = gtk_layout_set_adjustments;
 
   widget_class->set_scroll_adjustments_signal =
-    g_signal_new ("set_scroll_adjustments",
+    g_signal_new (I_("set_scroll_adjustments"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkLayoutClass, set_scroll_adjustments),

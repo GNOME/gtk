@@ -24,6 +24,7 @@
 #include "gtkfilechooserutils.h"
 #include "gtktypebuiltins.h"
 #include "gtkfilechooserembed.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 struct _GtkFileChooserWidgetPrivate
@@ -87,7 +88,7 @@ gtk_file_chooser_widget_get_type (void)
 	NULL			                                          /* interface_data */
       };
 
-      file_chooser_widget_type = g_type_register_static (GTK_TYPE_VBOX, g_intern_static_string ("GtkFileChooserWidget"),
+      file_chooser_widget_type = g_type_register_static (GTK_TYPE_VBOX, I_("GtkFileChooserWidget"),
 							 &file_chooser_widget_info, 0);
 
       g_type_add_interface_static (file_chooser_widget_type,

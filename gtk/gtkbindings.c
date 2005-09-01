@@ -67,7 +67,7 @@ binding_signal_new (const gchar *signal_name,
   
   signal = g_new (GtkBindingSignal, 1);
   signal->next = NULL;
-  signal->signal_name = g_strdup (signal_name);
+  signal->signal_name = g_intern_string (signal_name);
   signal->n_args = n_args;
   signal->args = g_new0 (GtkBindingArg, n_args);
   
@@ -85,7 +85,6 @@ binding_signal_free (GtkBindingSignal *sig)
 	g_free (sig->args[i].d.string_data);
     }
   g_free (sig->args);
-  g_free (sig->signal_name);
   g_free (sig);
 }
 

@@ -75,7 +75,7 @@ gtk_check_button_get_type (void)
       };
       
       check_button_type =
-	g_type_register_static (GTK_TYPE_TOGGLE_BUTTON, g_intern_static_string ("GtkCheckButton"),
+	g_type_register_static (GTK_TYPE_TOGGLE_BUTTON, I_("GtkCheckButton"),
 				&check_button_info, 0);
     }
   

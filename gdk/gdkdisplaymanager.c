@@ -113,7 +113,7 @@ gdk_display_manager_class_init (GdkDisplayManagerClass *klass)
    * Since: 2.2
    */
   signals[DISPLAY_OPENED] =
-    g_signal_new ("display_opened",
+    g_signal_new (g_intern_static_string ("display_opened"),
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GdkDisplayManagerClass, display_opened),

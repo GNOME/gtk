@@ -171,7 +171,7 @@ gtk_cell_renderer_text_get_type (void)
       };
 
       cell_text_type =
-	g_type_register_static (GTK_TYPE_CELL_RENDERER, g_intern_static_string ("GtkCellRendererText"),
+	g_type_register_static (GTK_TYPE_CELL_RENDERER, I_("GtkCellRendererText"),
 				&cell_text_info, 0);
     }
 
@@ -564,7 +564,7 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
                 P_("Whether this tag affects the ellipsize mode"));
 
   text_cell_renderer_signals [EDITED] =
-    g_signal_new ("edited",
+    g_signal_new (I_("edited"),
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkCellRendererTextClass, edited),
@@ -1806,7 +1806,7 @@ gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
 
   if (celltext->text)
     gtk_entry_set_text (GTK_ENTRY (priv->entry), celltext->text);
-  g_object_set_data_full (G_OBJECT (priv->entry), g_intern_static_string (GTK_CELL_RENDERER_TEXT_PATH), g_strdup (path), g_free);
+  g_object_set_data_full (G_OBJECT (priv->entry), I_(GTK_CELL_RENDERER_TEXT_PATH), g_strdup (path), g_free);
   
   gtk_editable_select_region (GTK_EDITABLE (priv->entry), 0, -1);
   

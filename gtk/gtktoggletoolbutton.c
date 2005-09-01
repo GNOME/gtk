@@ -93,7 +93,7 @@ gtk_toggle_tool_button_get_type (void)
 	};
 
       type = g_type_register_static (GTK_TYPE_TOOL_BUTTON,
-				     g_intern_static_string ("GtkToggleToolButton"), &type_info, 0);
+				     I_("GtkToggleToolButton"), &type_info, 0);
     }
   return type;
 }
@@ -140,7 +140,7 @@ gtk_toggle_tool_button_class_init (GtkToggleToolButtonClass *klass)
  * Emitted whenever the toggle tool button changes state.
  **/
   toggle_signals[TOGGLED] =
-    g_signal_new ("toggled",
+    g_signal_new (I_("toggled"),
 		  G_OBJECT_CLASS_TYPE (klass),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkToggleToolButtonClass, toggled),

@@ -134,7 +134,7 @@ gdk_display_class_init (GdkDisplayClass *class)
    * Since: 2.2
    */   
   signals[CLOSED] =
-    g_signal_new ("closed",
+    g_signal_new (g_intern_static_string ("closed"),
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GdkDisplayClass, closed),

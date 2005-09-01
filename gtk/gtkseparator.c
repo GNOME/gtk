@@ -26,6 +26,7 @@
 
 #include <config.h>
 #include "gtkseparator.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 
@@ -55,7 +56,7 @@ gtk_separator_get_type (void)
       };
 
       separator_type =
-	g_type_register_static (GTK_TYPE_WIDGET, g_intern_static_string ("GtkSeparator"),
+	g_type_register_static (GTK_TYPE_WIDGET, I_("GtkSeparator"),
 				&separator_info, G_TYPE_FLAG_ABSTRACT);
     }
 

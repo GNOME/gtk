@@ -93,7 +93,7 @@ gtk_viewport_get_type (void)
 	(GInstanceInitFunc) gtk_viewport_init,
       };
 
-      viewport_type = g_type_register_static (GTK_TYPE_BIN, g_intern_static_string ("GtkViewport"),
+      viewport_type = g_type_register_static (GTK_TYPE_BIN, I_("GtkViewport"),
 					      &viewport_info, 0);
     }
 
@@ -157,7 +157,7 @@ gtk_viewport_class_init (GtkViewportClass *class)
 						      GTK_PARAM_READWRITE));
 
   widget_class->set_scroll_adjustments_signal =
-    g_signal_new ("set_scroll_adjustments",
+    g_signal_new (I_("set_scroll_adjustments"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkViewportClass, set_scroll_adjustments),

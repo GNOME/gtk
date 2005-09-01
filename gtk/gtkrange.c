@@ -208,7 +208,7 @@ gtk_range_get_type (void)
 	NULL,		/* value_table */
       };
 
-      range_type = g_type_register_static (GTK_TYPE_WIDGET, g_intern_static_string ("GtkRange"),
+      range_type = g_type_register_static (GTK_TYPE_WIDGET, I_("GtkRange"),
 					   &range_info, G_TYPE_FLAG_ABSTRACT);
     }
 
@@ -258,7 +258,7 @@ gtk_range_class_init (GtkRangeClass *class)
   class->stepper_detail = "stepper";
 
   signals[VALUE_CHANGED] =
-    g_signal_new ("value_changed",
+    g_signal_new (I_("value_changed"),
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkRangeClass, value_changed),
@@ -267,7 +267,7 @@ gtk_range_class_init (GtkRangeClass *class)
                   G_TYPE_NONE, 0);
   
   signals[ADJUST_BOUNDS] =
-    g_signal_new ("adjust_bounds",
+    g_signal_new (I_("adjust_bounds"),
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkRangeClass, adjust_bounds),
@@ -277,7 +277,7 @@ gtk_range_class_init (GtkRangeClass *class)
                   G_TYPE_DOUBLE);
   
   signals[MOVE_SLIDER] =
-    g_signal_new ("move_slider",
+    g_signal_new (I_("move_slider"),
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkRangeClass, move_slider),
@@ -313,7 +313,7 @@ gtk_range_class_init (GtkRangeClass *class)
    * Since: 2.6
    */
   signals[CHANGE_VALUE] =
-    g_signal_new ("change_value",
+    g_signal_new (I_("change_value"),
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkRangeClass, change_value),

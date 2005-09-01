@@ -171,7 +171,7 @@ gtk_entry_completion_get_type (void)
       };
 
       entry_completion_type =
-        g_type_register_static (G_TYPE_OBJECT, g_intern_static_string ("GtkEntryCompletion"),
+        g_type_register_static (G_TYPE_OBJECT, I_("GtkEntryCompletion"),
                                 &entry_completion_info, 0);
 
       g_type_add_interface_static (entry_completion_type,
@@ -216,7 +216,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    * Since: 2.6
    */ 
   entry_completion_signals[INSERT_PREFIX] =
-    g_signal_new ("insert_prefix",
+    g_signal_new (I_("insert_prefix"),
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkEntryCompletionClass, insert_prefix),
@@ -241,7 +241,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    * Since: 2.4
    */ 
   entry_completion_signals[MATCH_SELECTED] =
-    g_signal_new ("match_selected",
+    g_signal_new (I_("match_selected"),
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkEntryCompletionClass, match_selected),
@@ -261,7 +261,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    * Since: 2.4
    */
   entry_completion_signals[ACTION_ACTIVATED] =
-    g_signal_new ("action_activated",
+    g_signal_new (I_("action_activated"),
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkEntryCompletionClass, action_activated),

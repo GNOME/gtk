@@ -26,6 +26,7 @@
 #include "gtkentry.h"
 #include "gtkfilechooserentry.h"
 #include "gtkmain.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 typedef struct _GtkFileChooserEntryClass GtkFileChooserEntryClass;
@@ -134,7 +135,7 @@ _gtk_file_chooser_entry_get_type (void)
       };
 
 
-      file_chooser_entry_type = g_type_register_static (GTK_TYPE_ENTRY, g_intern_static_string ("GtkFileChooserEntry"),
+      file_chooser_entry_type = g_type_register_static (GTK_TYPE_ENTRY, I_("GtkFileChooserEntry"),
 							&file_chooser_entry_info, 0);
       g_type_add_interface_static (file_chooser_entry_type,
 				   GTK_TYPE_EDITABLE,

@@ -35,6 +35,7 @@
 #include "gtksignal.h"
 #include "gtklabel.h"
 #include "gtkmarshalers.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 enum {
@@ -194,7 +195,7 @@ gtk_list_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      g_intern_static_string ("GtkList");
+      I_("GtkList");
       list_type = gtk_type_unique (GTK_TYPE_CONTAINER, &list_info);
     }
 
@@ -246,14 +247,14 @@ gtk_list_class_init (GtkListClass *class)
   class->unselect_child = gtk_real_list_unselect_child;
 
   list_signals[SELECTION_CHANGED] =
-    gtk_signal_new ("selection_changed",
+    gtk_signal_new (I_("selection_changed"),
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkListClass, selection_changed),
 		    _gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   list_signals[SELECT_CHILD] =
-    gtk_signal_new ("select_child",
+    gtk_signal_new (I_("select_child"),
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkListClass, select_child),
@@ -261,7 +262,7 @@ gtk_list_class_init (GtkListClass *class)
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_WIDGET);
   list_signals[UNSELECT_CHILD] =
-    gtk_signal_new ("unselect_child",
+    gtk_signal_new (I_("unselect_child"),
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkListClass, unselect_child),

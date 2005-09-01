@@ -58,6 +58,7 @@
 
 #include "gtkmain.h"
 #include "gtkselection.h"
+#include "gtkintl.h"
 #include "gdk-pixbuf/gdk-pixbuf.h"
 
 #ifdef GDK_WINDOWING_X11
@@ -682,7 +683,7 @@ gtk_selection_target_list_get (GtkWidget    *widget,
   sellist->list = gtk_target_list_new (NULL, 0);
 
   lists = g_list_prepend (lists, sellist);
-  g_object_set_data (G_OBJECT (widget), g_intern_static_string (gtk_selection_handler_key), lists);
+  g_object_set_data (G_OBJECT (widget), I_(gtk_selection_handler_key), lists);
 
   return sellist->list;
 }
@@ -708,7 +709,7 @@ gtk_selection_target_list_remove (GtkWidget    *widget)
     }
 
   g_list_free (lists);
-  g_object_set_data (G_OBJECT (widget), g_intern_static_string (gtk_selection_handler_key), NULL);
+  g_object_set_data (G_OBJECT (widget), I_(gtk_selection_handler_key), NULL);
 }
 
 /**
@@ -748,7 +749,7 @@ gtk_selection_clear_targets (GtkWidget *widget,
       tmp_list = tmp_list->next;
     }
   
-  g_object_set_data (G_OBJECT (widget), g_intern_static_string (gtk_selection_handler_key), lists);
+  g_object_set_data (G_OBJECT (widget), I_(gtk_selection_handler_key), lists);
 }
 
 /**
@@ -2746,7 +2747,7 @@ gtk_selection_data_get_type (void)
   static GType our_type = 0;
   
   if (our_type == 0)
-    our_type = g_boxed_type_register_static (g_intern_static_string ("GtkSelectionData"),
+    our_type = g_boxed_type_register_static (I_("GtkSelectionData"),
 					     (GBoxedCopyFunc) gtk_selection_data_copy,
 					     (GBoxedFreeFunc) gtk_selection_data_free);
 

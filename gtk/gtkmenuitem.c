@@ -37,6 +37,7 @@
 #include "gtkmenuitem.h"
 #include "gtkseparatormenuitem.h"
 #include "gtkprivate.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 #define MENU_ITEM_CLASS(w)  GTK_MENU_ITEM_CLASS (GTK_OBJECT (w)->klass)
@@ -119,7 +120,7 @@ gtk_menu_item_get_type (void)
 	(GInstanceInitFunc) gtk_menu_item_init,
       };
 
-      menu_item_type = g_type_register_static (GTK_TYPE_ITEM, g_intern_static_string ("GtkMenuItem"),
+      menu_item_type = g_type_register_static (GTK_TYPE_ITEM, I_("GtkMenuItem"),
 					       &menu_item_info, 0);
     }
 
@@ -167,7 +168,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
   klass->hide_on_activate = TRUE;
 
   menu_item_signals[ACTIVATE] =
-    g_signal_new ("activate",
+    g_signal_new (I_("activate"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkMenuItemClass, activate),
@@ -177,7 +178,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
   widget_class->activate_signal = menu_item_signals[ACTIVATE];
 
   menu_item_signals[ACTIVATE_ITEM] =
-    g_signal_new ("activate_item",
+    g_signal_new (I_("activate_item"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkMenuItemClass, activate_item),
@@ -186,7 +187,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
 		  G_TYPE_NONE, 0);
 
   menu_item_signals[TOGGLE_SIZE_REQUEST] =
-    g_signal_new ("toggle_size_request",
+    g_signal_new (I_("toggle_size_request"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkMenuItemClass, toggle_size_request),
@@ -196,7 +197,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
 		  G_TYPE_POINTER);
 
   menu_item_signals[TOGGLE_SIZE_ALLOCATE] =
-    g_signal_new ("toggle_size_allocate",
+    g_signal_new (I_("toggle_size_allocate"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_FIRST,
  		  G_STRUCT_OFFSET (GtkMenuItemClass, toggle_size_allocate),

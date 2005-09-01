@@ -119,7 +119,7 @@ gtk_icon_factory_get_type (void)
       };
       
       icon_factory_type =
-	g_type_register_static (G_TYPE_OBJECT, g_intern_static_string ("GtkIconFactory"),
+	g_type_register_static (G_TYPE_OBJECT, I_("GtkIconFactory"),
 				&icon_factory_info, 0);
     }
   
@@ -1537,7 +1537,7 @@ gtk_icon_set_get_type (void)
   static GType our_type = 0;
   
   if (our_type == 0)
-    our_type = g_boxed_type_register_static (g_intern_static_string ("GtkIconSet"),
+    our_type = g_boxed_type_register_static (I_("GtkIconSet"),
 					     (GBoxedCopyFunc) gtk_icon_set_ref,
 					     (GBoxedFreeFunc) gtk_icon_set_unref);
 

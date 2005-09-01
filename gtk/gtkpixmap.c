@@ -34,6 +34,7 @@
 #include <math.h>
 #include "gtkcontainer.h"
 #include "gtkpixmap.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 
@@ -65,7 +66,7 @@ gtk_pixmap_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      g_intern_static_string ("GtkPixmap");
+      I_("GtkPixmap");
       pixmap_type = gtk_type_unique (GTK_TYPE_MISC, &pixmap_info);
     }
 

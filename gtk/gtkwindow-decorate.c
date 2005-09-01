@@ -148,7 +148,7 @@ gtk_decorated_window_init (GtkWindow   *window)
   deco->maximizable = FALSE;
   deco->real_inner_move = FALSE;
  
-  g_object_set_data_full (G_OBJECT (window), g_intern_static_string ("gtk-window-decoration"), deco,
+  g_object_set_data_full (G_OBJECT (window), I_("gtk-window-decoration"), deco,
 			  (GDestroyNotify) gtk_decoration_free);
   
   gtk_window_set_has_frame (window, TRUE);

@@ -26,6 +26,7 @@
 
 #include <config.h>
 #include "gtkvbox.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 
@@ -57,7 +58,7 @@ gtk_vbox_get_type (void)
 	(GInstanceInitFunc) gtk_vbox_init,
       };
 
-      vbox_type = g_type_register_static (GTK_TYPE_BOX, g_intern_static_string ("GtkVBox"),
+      vbox_type = g_type_register_static (GTK_TYPE_BOX, I_("GtkVBox"),
 					  &vbox_info, 0);
     }
 

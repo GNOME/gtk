@@ -109,7 +109,7 @@ gtk_menu_bar_get_type (void)
 	NULL,		/* instance_init */
       };
 
-      menu_bar_type = g_type_register_static (GTK_TYPE_MENU_SHELL, g_intern_static_string ("GtkMenuBar"),
+      menu_bar_type = g_type_register_static (GTK_TYPE_MENU_SHELL, I_("GtkMenuBar"),
 					      &menu_bar_info, 0);
     }
 
@@ -608,7 +608,7 @@ static void
 set_menu_bars (GtkWindow *window,
 	       GList     *menubars)
 {
-  g_object_set_data (G_OBJECT (window), g_intern_static_string ("gtk-menu-bar-list"), menubars);
+  g_object_set_data (G_OBJECT (window), I_("gtk-menu-bar-list"), menubars);
 }
 
 static gboolean

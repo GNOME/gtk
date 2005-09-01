@@ -24,6 +24,7 @@
 #include "gtktreestore.h"
 #include "gtktreedatalist.h"
 #include "gtktreednd.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 #define G_NODE(node) ((GNode *)node)
@@ -185,7 +186,7 @@ gtk_tree_store_get_type (void)
 	NULL
       };
 
-      tree_store_type = g_type_register_static (G_TYPE_OBJECT, g_intern_static_string ("GtkTreeStore"),
+      tree_store_type = g_type_register_static (G_TYPE_OBJECT, I_("GtkTreeStore"),
 						&tree_store_info, 0);
 
       g_type_add_interface_static (tree_store_type,

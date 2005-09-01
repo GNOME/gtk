@@ -188,7 +188,7 @@ gtk_im_module_get_type (void)
       };
 
       im_module_type =
-	g_type_register_static (G_TYPE_TYPE_MODULE, g_intern_static_string ("GtkIMModule"),
+	g_type_register_static (G_TYPE_TYPE_MODULE, I_("GtkIMModule"),
 				&im_module_info, 0);
     }
   

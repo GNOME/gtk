@@ -29,6 +29,7 @@
 #include <glib/gprintf.h>
 #include <string.h>
 #include "gtkhruler.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 
@@ -68,7 +69,7 @@ gtk_hruler_get_type (void)
 	(GInstanceInitFunc) gtk_hruler_init,
       };
 
-      hruler_type = g_type_register_static (GTK_TYPE_RULER, g_intern_static_string ("GtkHRuler"),
+      hruler_type = g_type_register_static (GTK_TYPE_RULER, I_("GtkHRuler"),
 					    &hruler_info, 0);
     }
 

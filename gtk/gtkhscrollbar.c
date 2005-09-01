@@ -55,7 +55,7 @@ gtk_hscrollbar_get_type (void)
       };
       
       hscrollbar_type =
-	g_type_register_static (GTK_TYPE_SCROLLBAR, g_intern_static_string ("GtkHScrollbar"),
+	g_type_register_static (GTK_TYPE_SCROLLBAR, I_("GtkHScrollbar"),
 				&hscrollbar_info, 0);
     }
   

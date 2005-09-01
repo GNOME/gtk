@@ -23,6 +23,7 @@
 #include "gtkfilesystem.h"
 #include "gtkicontheme.h"
 #include "gtkmodules.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 #include <string.h>
@@ -59,7 +60,7 @@ gtk_file_info_get_type (void)
   static GType our_type = 0;
   
   if (our_type == 0)
-    our_type = g_boxed_type_register_static (g_intern_static_string ("GtkFileInfo"),
+    our_type = g_boxed_type_register_static (I_("GtkFileInfo"),
 					     (GBoxedCopyFunc) gtk_file_info_copy,
 					     (GBoxedFreeFunc) gtk_file_info_free);
 
@@ -269,7 +270,7 @@ gtk_file_system_get_type (void)
       };
 
       file_system_type = g_type_register_static (G_TYPE_INTERFACE,
-						 g_intern_static_string ("GtkFileSystem"),
+						 I_("GtkFileSystem"),
 						 &file_system_info, 0);
 
       g_type_interface_add_prerequisite (file_system_type, G_TYPE_OBJECT);
@@ -287,14 +288,14 @@ gtk_file_system_base_init (gpointer g_class)
     {
       GType iface_type = G_TYPE_FROM_INTERFACE (g_class);
 
-      g_signal_new ("volumes-changed",
+      g_signal_new (I_("volumes-changed"),
 		    iface_type,
 		    G_SIGNAL_RUN_LAST,
 		    G_STRUCT_OFFSET (GtkFileSystemIface, volumes_changed),
 		    NULL, NULL,
 		    g_cclosure_marshal_VOID__VOID,
 		    G_TYPE_NONE, 0);
-      g_signal_new ("bookmarks-changed",
+      g_signal_new (I_("bookmarks-changed"),
 		    iface_type,
 		    G_SIGNAL_RUN_LAST,
 		    G_STRUCT_OFFSET (GtkFileSystemIface, bookmarks_changed),
@@ -843,7 +844,7 @@ gtk_file_folder_get_type (void)
       };
 
       file_folder_type = g_type_register_static (G_TYPE_INTERFACE,
-						 g_intern_static_string ("GtkFileFolder"),
+						 I_("GtkFileFolder"),
 						 &file_folder_info, 0);
       
       g_type_interface_add_prerequisite (file_folder_type, G_TYPE_OBJECT);
@@ -861,14 +862,14 @@ gtk_file_folder_base_init (gpointer g_class)
     {
       GType iface_type = G_TYPE_FROM_INTERFACE (g_class);
 
-      g_signal_new ("deleted",
+      g_signal_new (I_("deleted"),
 		    iface_type,
 		    G_SIGNAL_RUN_LAST,
 		    G_STRUCT_OFFSET (GtkFileFolderIface, deleted),
 		    NULL, NULL,
 		    g_cclosure_marshal_VOID__VOID,
 		    G_TYPE_NONE, 0);
-      g_signal_new ("files-added",
+      g_signal_new (I_("files-added"),
 		    iface_type,
 		    G_SIGNAL_RUN_LAST,
 		    G_STRUCT_OFFSET (GtkFileFolderIface, files_added),
@@ -876,7 +877,7 @@ gtk_file_folder_base_init (gpointer g_class)
 		    g_cclosure_marshal_VOID__POINTER,
 		    G_TYPE_NONE, 1,
 		    G_TYPE_POINTER);
-      g_signal_new ("files-changed",
+      g_signal_new (I_("files-changed"),
 		    iface_type,
 		    G_SIGNAL_RUN_LAST,
 		    G_STRUCT_OFFSET (GtkFileFolderIface, files_changed),
@@ -884,7 +885,7 @@ gtk_file_folder_base_init (gpointer g_class)
 		    g_cclosure_marshal_VOID__POINTER,
 		    G_TYPE_NONE, 1,
 		    G_TYPE_POINTER);
-      g_signal_new ("files-removed",
+      g_signal_new (I_("files-removed"),
 		    iface_type,
 		    G_SIGNAL_RUN_LAST,
 		    G_STRUCT_OFFSET (GtkFileFolderIface, files_removed),
@@ -892,7 +893,7 @@ gtk_file_folder_base_init (gpointer g_class)
 		    g_cclosure_marshal_VOID__POINTER,
 		    G_TYPE_NONE, 1,
 		    G_TYPE_POINTER);
-      g_signal_new ("finished-loading",
+      g_signal_new (I_("finished-loading"),
 		    iface_type,
 		    G_SIGNAL_RUN_LAST,
 		    G_STRUCT_OFFSET (GtkFileFolderIface, finished_loading),
@@ -976,7 +977,7 @@ gtk_file_path_get_type (void)
   static GType our_type = 0;
   
   if (our_type == 0)
-    our_type = g_boxed_type_register_static (g_intern_static_string ("GtkFilePath"),
+    our_type = g_boxed_type_register_static (I_("GtkFilePath"),
 					     (GBoxedCopyFunc) gtk_file_path_real_copy,
 					     (GBoxedFreeFunc) gtk_file_path_real_free);
 

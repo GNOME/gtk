@@ -55,7 +55,7 @@ gtk_vscrollbar_get_type (void)
       };
       
       vscrollbar_type =
-	g_type_register_static (GTK_TYPE_SCROLLBAR, g_intern_static_string ("GtkVScrollbar"),
+	g_type_register_static (GTK_TYPE_SCROLLBAR, I_("GtkVScrollbar"),
 				&vscrollbar_info, 0);
     }
   

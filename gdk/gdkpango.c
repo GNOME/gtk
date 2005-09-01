@@ -546,7 +546,8 @@ on_renderer_display_closed (GdkDisplay       *display,
   g_signal_handlers_disconnect_by_func (renderer->priv->screen,
 					(gpointer)on_renderer_display_closed,
 					renderer);
-  g_object_set_data (G_OBJECT (renderer->priv->screen), "gdk-pango-renderer", NULL);
+  g_object_set_data (G_OBJECT (renderer->priv->screen), 
+                     g_intern_static_string ("gdk-pango-renderer"), NULL);
 }
 
 /**
@@ -579,7 +580,8 @@ gdk_pango_renderer_get_default (GdkScreen *screen)
   if (!renderer)
     {
       renderer = gdk_pango_renderer_new (screen);
-      g_object_set_data_full (G_OBJECT (screen), "gdk-pango-renderer", renderer,
+      g_object_set_data_full (G_OBJECT (screen), 
+                              g_intern_static_string ("gdk-pango-renderer"), renderer,
 			      (GDestroyNotify)g_object_unref);
 
       g_signal_connect (gdk_screen_get_display (screen), "closed",

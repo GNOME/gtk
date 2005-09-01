@@ -96,7 +96,7 @@ gtk_radio_action_get_type (void)
       };
 
       type = g_type_register_static (GTK_TYPE_TOGGLE_ACTION,
-                                     g_intern_static_string ("GtkRadioAction"),
+                                     I_("GtkRadioAction"),
                                      &type_info, 0);
     }
   return type;
@@ -171,7 +171,7 @@ gtk_radio_action_class_init (GtkRadioActionClass *klass)
    * Since: 2.4
    */
   radio_action_signals[CHANGED] =
-    g_signal_new ("changed",
+    g_signal_new (I_("changed"),
 		  G_OBJECT_CLASS_TYPE (klass),
 		  G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE,
 		  G_STRUCT_OFFSET (GtkRadioActionClass, changed),  NULL, NULL,

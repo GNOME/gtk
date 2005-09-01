@@ -52,6 +52,7 @@
 #include "gtktextchild.h"
 #include "gtktextbtree.h"
 #include "gtktextlayout.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 #define CHECK_IN_BUFFER(anchor)                                                            \
@@ -299,7 +300,7 @@ _gtk_anchored_child_set_layout (GtkWidget     *child,
                                 GtkTextLayout *layout)
 {
   g_object_set_data (G_OBJECT (child),
-                     g_intern_static_string ("gtk-text-child-anchor-layout"),
+                     I_("gtk-text-child-anchor-layout"),
                      layout);  
 }
      
@@ -329,7 +330,7 @@ gtk_text_child_anchor_get_type (void)
         (GInstanceInitFunc) gtk_text_child_anchor_init,
       };
 
-      object_type = g_type_register_static (G_TYPE_OBJECT, g_intern_static_string ("GtkTextChildAnchor"),
+      object_type = g_type_register_static (G_TYPE_OBJECT, I_("GtkTextChildAnchor"),
                                             &object_info, 0);
     }
 

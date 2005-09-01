@@ -97,7 +97,7 @@ gtk_cell_renderer_get_type (void)
 	NULL,		/* value_table */
       };
 
-      cell_type = g_type_register_static (GTK_TYPE_OBJECT, g_intern_static_string ("GtkCellRenderer"), 
+      cell_type = g_type_register_static (GTK_TYPE_OBJECT, I_("GtkCellRenderer"), 
 					  &cell_info, G_TYPE_FLAG_ABSTRACT);
     }
 
@@ -145,7 +145,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
    * Since: 2.4
    */
   cell_renderer_signals[EDITING_CANCELED] =
-    g_signal_new ("editing-canceled",
+    g_signal_new (I_("editing-canceled"),
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkCellRendererClass, editing_canceled),
@@ -190,7 +190,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
    * Since: 2.6
    */
   cell_renderer_signals[EDITING_STARTED] =
-    g_signal_new ("editing-started",
+    g_signal_new (I_("editing-started"),
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkCellRendererClass, editing_started),

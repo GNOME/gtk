@@ -105,7 +105,7 @@ gtk_tips_query_get_type (void)
 	(GtkClassInitFunc) NULL,
       };
 
-      g_intern_static_string ("GtkTipsQuery");
+      I_("GtkTipsQuery");
       tips_query_type = gtk_type_unique (gtk_label_get_type (), &tips_query_info);
     }
 
@@ -141,21 +141,21 @@ gtk_tips_query_class_init (GtkTipsQueryClass *class)
   gtk_object_add_arg_type ("GtkTipsQuery::label-no-tip", GTK_TYPE_STRING, GTK_ARG_READWRITE | G_PARAM_STATIC_NAME, ARG_LABEL_NO_TIP);
 
   tips_query_signals[SIGNAL_START_QUERY] =
-    gtk_signal_new ("start_query",
+    gtk_signal_new (I_("start_query"),
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkTipsQueryClass, start_query),
 		    _gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   tips_query_signals[SIGNAL_STOP_QUERY] =
-    gtk_signal_new ("stop_query",
+    gtk_signal_new (I_("stop_query"),
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkTipsQueryClass, stop_query),
 		    _gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   tips_query_signals[SIGNAL_WIDGET_ENTERED] =
-    gtk_signal_new ("widget_entered",
+    gtk_signal_new (I_("widget_entered"),
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkTipsQueryClass, widget_entered),
@@ -165,7 +165,7 @@ gtk_tips_query_class_init (GtkTipsQueryClass *class)
 		    GTK_TYPE_STRING,
 		    GTK_TYPE_STRING);
   tips_query_signals[SIGNAL_WIDGET_SELECTED] =
-    g_signal_new ("widget_selected",
+    g_signal_new (I_("widget_selected"),
                   G_TYPE_FROM_CLASS(object_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET(GtkTipsQueryClass, widget_selected),

@@ -50,6 +50,7 @@
 #define GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
 #include <config.h>
 #include "gtktextbtree.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 static void gtk_text_mark_init       (GtkTextMark      *mark);
@@ -79,7 +80,7 @@ gtk_text_mark_get_type (void)
         (GInstanceInitFunc) gtk_text_mark_init,
       };
 
-      object_type = g_type_register_static (G_TYPE_OBJECT, g_intern_static_string ("GtkTextMark"),
+      object_type = g_type_register_static (G_TYPE_OBJECT, I_("GtkTextMark"),
                                             &object_info, 0);
     }
 

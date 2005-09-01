@@ -540,7 +540,7 @@ gtk_text_get_type (void)
 	NULL  /* interface_data */
       };
       
-      g_intern_static_string ("GtkText");
+      I_("GtkText");
       text_type = gtk_type_unique (GTK_TYPE_OLD_EDITABLE, &text_info);
       g_type_add_interface_static (text_type,
 				   GTK_TYPE_EDITABLE,
@@ -634,7 +634,7 @@ gtk_text_class_init (GtkTextClass *class)
 							 GTK_PARAM_READWRITE));
 
   widget_class->set_scroll_adjustments_signal =
-    gtk_signal_new ("set_scroll_adjustments",
+    gtk_signal_new (I_("set_scroll_adjustments"),
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkTextClass, set_scroll_adjustments),

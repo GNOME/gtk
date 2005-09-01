@@ -65,7 +65,7 @@ gtk_vscale_get_type (void)
 	(GInstanceInitFunc) gtk_vscale_init,
       };
       
-      vscale_type = g_type_register_static (GTK_TYPE_SCALE, g_intern_static_string ("GtkVScale"),
+      vscale_type = g_type_register_static (GTK_TYPE_SCALE, I_("GtkVScale"),
 					    &vscale_info, 0);
     }
   

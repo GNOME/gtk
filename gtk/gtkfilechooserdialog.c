@@ -25,6 +25,7 @@
 #include "gtkfilechooserembed.h"
 #include "gtkfilesystem.h"
 #include "gtktypebuiltins.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 #include <stdarg.h>
@@ -97,7 +98,7 @@ gtk_file_chooser_dialog_get_type (void)
 	NULL			                                    /* interface_data */
       };
 
-      file_chooser_dialog_type = g_type_register_static (GTK_TYPE_DIALOG, g_intern_static_string ("GtkFileChooserDialog"),
+      file_chooser_dialog_type = g_type_register_static (GTK_TYPE_DIALOG, I_("GtkFileChooserDialog"),
 							 &file_chooser_dialog_info, 0);
       g_type_add_interface_static (file_chooser_dialog_type,
 				   GTK_TYPE_FILE_CHOOSER,

@@ -21,6 +21,7 @@
 #include <string.h>
 
 #include "gtkwidget.h"
+#include "gtkintl.h"
 #include "gtkaccessible.h"
 #include "gtkalias.h"
 
@@ -49,7 +50,7 @@ gtk_accessible_get_type (void)
       };
 
       accessible_type =
-	g_type_register_static (ATK_TYPE_OBJECT, g_intern_static_string ("GtkAccessible"),
+	g_type_register_static (ATK_TYPE_OBJECT, I_("GtkAccessible"),
 				&accessible_info, 0);
     }
 

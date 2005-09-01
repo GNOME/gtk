@@ -28,6 +28,7 @@
 #include <math.h>
 #include <string.h>
 #include "gtkvruler.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 #include <glib/gprintf.h>
@@ -69,7 +70,7 @@ gtk_vruler_get_type (void)
 	(GInstanceInitFunc) gtk_vruler_init,
       };
 
-      vruler_type = g_type_register_static (GTK_TYPE_RULER, g_intern_static_string ("GtkVRuler"),
+      vruler_type = g_type_register_static (GTK_TYPE_RULER, I_("GtkVRuler"),
 					    &vruler_info, 0);
     }
 

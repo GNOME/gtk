@@ -43,6 +43,7 @@
 #include	"gtk/gtkimage.h"
 #include	"gtk/gtkstock.h"
 #include	"gtk/gtkiconfactory.h"
+#include	"gtkintl.h"
 #include	<string.h>
 #include	<fcntl.h>
 #ifdef HAVE_UNISTD_H
@@ -126,7 +127,7 @@ gtk_item_factory_get_type (void)
       };
       
       item_factory_type =
-	g_type_register_static (GTK_TYPE_OBJECT, g_intern_static_string ("GtkItemFactory"),
+	g_type_register_static (GTK_TYPE_OBJECT, I_("GtkItemFactory"),
 				&item_factory_info, 0);
     }
   

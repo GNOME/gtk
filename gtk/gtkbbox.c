@@ -89,7 +89,7 @@ gtk_button_box_get_type (void)
       };
 
       button_box_type =
-	g_type_register_static (GTK_TYPE_BOX, g_intern_static_string ("GtkButtonBox"),
+	g_type_register_static (GTK_TYPE_BOX, I_("GtkButtonBox"),
 				&button_box_info, G_TYPE_FLAG_ABSTRACT);
     }
 

@@ -99,7 +99,7 @@ gtk_frame_get_type (void)
 	(GInstanceInitFunc) gtk_frame_init,
       };
 
-      frame_type = g_type_register_static (GTK_TYPE_BIN, g_intern_static_string ("GtkFrame"),
+      frame_type = g_type_register_static (GTK_TYPE_BIN, I_("GtkFrame"),
 					   &frame_info, 0);
     }
 

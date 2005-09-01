@@ -24,6 +24,7 @@
 #include "gtkfilechooser.h"
 #include "gtkfilesystem.h"
 #include "gtktypebuiltins.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 static gboolean       delegate_set_current_folder     (GtkFileChooser    *chooser,
@@ -168,7 +169,7 @@ _gtk_file_chooser_set_delegate (GtkFileChooser *receiver,
   g_return_if_fail (GTK_IS_FILE_CHOOSER (receiver));
   g_return_if_fail (GTK_IS_FILE_CHOOSER (delegate));
 
-  g_object_set_data (G_OBJECT (receiver), g_intern_static_string ("gtk-file-chooser-delegate"), delegate);
+  g_object_set_data (G_OBJECT (receiver), I_("gtk-file-chooser-delegate"), delegate);
   g_signal_connect (delegate, "notify",
 		    G_CALLBACK (delegate_notify), receiver);
   g_signal_connect (delegate, "current-folder-changed",

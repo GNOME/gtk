@@ -75,7 +75,7 @@ gtk_toggle_action_get_type (void)
       };
 
       type = g_type_register_static (GTK_TYPE_ACTION,
-                                     g_intern_static_string ("GtkToggleAction"),
+                                     I_("GtkToggleAction"),
                                      &type_info, 0);
     }
   return type;
@@ -134,7 +134,7 @@ gtk_toggle_action_class_init (GtkToggleActionClass *klass)
                                                          GTK_PARAM_READWRITE));
 
   action_signals[TOGGLED] =
-    g_signal_new ("toggled",
+    g_signal_new (I_("toggled"),
                   G_OBJECT_CLASS_TYPE (klass),
                   G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GtkToggleActionClass, toggled),

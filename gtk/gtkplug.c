@@ -28,6 +28,7 @@
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkplug.h"
+#include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkplugprivate.h"
 
@@ -91,7 +92,7 @@ gtk_plug_get_type (void)
 	(GInstanceInitFunc) gtk_plug_init,
       };
 
-      plug_type = g_type_register_static (GTK_TYPE_WINDOW, g_intern_static_string ("GtkPlug"),
+      plug_type = g_type_register_static (GTK_TYPE_WINDOW, I_("GtkPlug"),
 					  &plug_info, 0);
     }
 
@@ -131,7 +132,7 @@ gtk_plug_class_init (GtkPlugClass *class)
   window_class->keys_changed = gtk_plug_keys_changed;
 
   plug_signals[EMBEDDED] =
-    g_signal_new ("embedded",
+    g_signal_new (I_("embedded"),
 		  G_OBJECT_CLASS_TYPE (class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkPlugClass, embedded),

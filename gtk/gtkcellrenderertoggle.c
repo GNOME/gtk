@@ -106,7 +106,7 @@ gtk_cell_renderer_toggle_get_type (void)
       };
 
       cell_toggle_type =
-	g_type_register_static (GTK_TYPE_CELL_RENDERER, g_intern_static_string ("GtkCellRendererToggle"),
+	g_type_register_static (GTK_TYPE_CELL_RENDERER, I_("GtkCellRendererToggle"),
 				&cell_toggle_info, 0);
     }
 
@@ -179,7 +179,7 @@ gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class)
    * The ::toggled signal is emitted when the cell is toggled. 
    **/
   toggle_cell_signals[TOGGLED] =
-    g_signal_new ("toggled",
+    g_signal_new (I_("toggled"),
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkCellRendererToggleClass, toggled),

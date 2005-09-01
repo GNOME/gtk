@@ -112,7 +112,7 @@ gtk_progress_bar_get_type (void)
       };
 
       progress_bar_type =
-	g_type_register_static (GTK_TYPE_PROGRESS, g_intern_static_string ("GtkProgressBar"),
+	g_type_register_static (GTK_TYPE_PROGRESS, I_("GtkProgressBar"),
 				&progress_bar_info, 0);
     }
 

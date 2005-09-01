@@ -94,7 +94,7 @@ gtk_preview_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      g_intern_static_string ("GtkPreview");
+      I_("GtkPreview");
       preview_type = gtk_type_unique (GTK_TYPE_WIDGET, &preview_info);
     }
 

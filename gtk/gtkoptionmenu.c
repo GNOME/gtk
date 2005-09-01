@@ -141,7 +141,7 @@ gtk_option_menu_get_type (void)
       };
 
       option_menu_type =
-	g_type_register_static (GTK_TYPE_BUTTON, g_intern_static_string ("GtkOptionMenu"),
+	g_type_register_static (GTK_TYPE_BUTTON, I_("GtkOptionMenu"),
 				&option_menu_info, 0);
     }
 
@@ -166,7 +166,7 @@ gtk_option_menu_class_init (GtkOptionMenuClass *class)
   parent_class = g_type_class_peek_parent (class);
 
   signals[CHANGED] =
-    g_signal_new ("changed",
+    g_signal_new (I_("changed"),
                   G_OBJECT_CLASS_TYPE (class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkOptionMenuClass, changed),
