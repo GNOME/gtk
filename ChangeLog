@@ -1,3 +1,8 @@
+2005-09-01  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkaction.c (gtk_action_get_accel_closure): Fix doc
+	typo.  (#314921, Guillaume Cottenceau)
+
 2005-08-31  Baris Cicek <baris@teamforce.name.tr>
 
 	* configure.in: Added ku to ALL_LINGUAS

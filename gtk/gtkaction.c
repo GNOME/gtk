@@ -1500,7 +1500,7 @@ gtk_action_get_accel_path (GtkAction *action)
  * Since: 2.8
  *
  * Returns: the accel closure for this action. The returned closure is
- *          owned by GTK+ must and not be unrefed or modified.
+ *          owned by GTK+ and must not be unreffed or modified.
  */
 GClosure *
 gtk_action_get_accel_closure (GtkAction *action)
