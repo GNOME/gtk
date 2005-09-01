@@ -1,5 +1,8 @@
 2005-09-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkaction.c (gtk_action_get_accel_closure): Fix doc
+	typo.  (#314921, Guillaume Cottenceau)
+
 	* gdk/*.c: Intern some more strings.
 	* gtk/gtkintl.h: 
 	* gtk/*.c: Define an I_() macro and use it instead of the 

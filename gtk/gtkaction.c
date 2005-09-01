@@ -1477,7 +1477,7 @@ gtk_action_set_accel_path (GtkAction   *action,
  * Since: 2.6
  *
  * Returns: the accel path for this action, or %NULL
- *   if none is set. The returned string is owned by GTK+
+ *   if none is set. The returned string is owned by GTK+ 
  *   and must not be freed or modified.
  */
 G_CONST_RETURN gchar *
@@ -1500,7 +1500,7 @@ gtk_action_get_accel_path (GtkAction *action)
  * Since: 2.8
  *
  * Returns: the accel closure for this action. The returned closure is
- *          owned by GTK+ must and not be unrefed or modified.
+ *          owned by GTK+ and must not be unreffed or modified.
  */
 GClosure *
 gtk_action_get_accel_closure (GtkAction *action)
