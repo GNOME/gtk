@@ -1,5 +1,9 @@
 2005-09-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilesystemunix.c: Pass statbufs down to 
+	xdg_mime_get_mime_type_for_file() where possible, to avoid
+	useless re-stating.  
+	
 	* gtk/gtkaction.c (gtk_action_get_accel_closure): Fix doc
 	typo.  (#314921, Guillaume Cottenceau)
 

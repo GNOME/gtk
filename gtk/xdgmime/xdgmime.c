@@ -447,14 +447,15 @@ xdg_mime_get_mime_type_for_data (const void *data,
 }
 
 const char *
-xdg_mime_get_mime_type_for_file (const char *file_name)
+xdg_mime_get_mime_type_for_file (const char  *file_name,
+                                 struct stat *statbuf)
 {
   const char *mime_type;
   FILE *file;
   unsigned char *data;
   int max_extent;
   int bytes_read;
-  struct stat statbuf;
+  struct stat buf;
   const char *base_name;
 
   if (file_name == NULL)
@@ -473,10 +474,17 @@ xdg_mime_get_mime_type_for_file (const char *file_name)
   if (mime_type != XDG_MIME_TYPE_UNKNOWN)
     return mime_type;
 
-  if (stat (file_name, &statbuf) != 0)
-    return XDG_MIME_TYPE_UNKNOWN;
+  if (!statbuf)
+    {
+      if (stat (file_name, &buf) != 0)
+	return XDG_MIME_TYPE_UNKNOWN;
 
-  if (!S_ISREG (statbuf.st_mode))
+      statbuf = &buf;
+    }
+  else
+    printf ("don't restat\n");
+
+  if (!S_ISREG (statbuf->st_mode))
     return XDG_MIME_TYPE_UNKNOWN;
 
   /* FIXME: Need to make sure that max_extent isn't totally broken.  This could

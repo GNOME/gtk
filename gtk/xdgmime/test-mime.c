@@ -108,7 +108,7 @@ main (int argc, char *argv[])
   for (i = 1; i < argc; i++)
     {
       file_name = argv[i];
-      result = xdg_mime_get_mime_type_for_file (file_name);
+      result = xdg_mime_get_mime_type_for_file (file_name, NULL);
       printf ("File \"%s\" has a mime-type of %s\n", file_name, result);
     }
 

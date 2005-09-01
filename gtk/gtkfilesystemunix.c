@@ -1224,7 +1224,7 @@ get_icon_type_from_path (GtkFileSystemUnix *system_unix,
 
   icon_type = get_icon_type (filename, NULL);
   if (icon_type == ICON_REGULAR)
-    *mime_type = xdg_mime_get_mime_type_for_file (filename);
+    *mime_type = xdg_mime_get_mime_type_for_file (filename, NULL);
 
   return icon_type;
 }
@@ -1923,7 +1923,7 @@ create_stat_info_entry_and_emit_add (GtkFileFolderUnix *folder_unix,
     entry->statbuf = *statbuf;
 
   if ((folder_unix->types & GTK_FILE_INFO_MIME_TYPE) != 0)
-    entry->mime_type = g_strdup (xdg_mime_get_mime_type_for_file (filename));
+    entry->mime_type = g_strdup (xdg_mime_get_mime_type_for_file (filename, statbuf));
 
   g_hash_table_insert (folder_unix->stat_info,
 		       g_strdup (basename),
@@ -2002,7 +2002,7 @@ gtk_file_folder_unix_get_info (GtkFileFolder      *folder,
 	}
 
       if ((types & GTK_FILE_INFO_MIME_TYPE) != 0)
-	mime_type = xdg_mime_get_mime_type_for_file (filename);
+	mime_type = xdg_mime_get_mime_type_for_file (filename, &statbuf);
       else
 	mime_type = NULL;
 
@@ -2150,9 +2150,12 @@ cb_fill_in_mime_type (gpointer key, gpointer value, gpointer user_data)
   struct stat_info_entry *entry = value;
   GtkFileFolderUnix *folder_unix = user_data;
   char *fullname = g_build_filename (folder_unix->filename, basename, NULL);
+  struct stat *statbuf = NULL;
 
-  /* FIXME: Should not need to re-stat.  */
-  const char *mime_type = xdg_mime_get_mime_type_for_file (fullname);
+  if (folder_unix->have_stat)
+    statbuf = &entry->statbuf;
+
+  const char *mime_type = xdg_mime_get_mime_type_for_file (fullname, statbuf);
   entry->mime_type = g_strdup (mime_type);
 
   g_free (fullname);
