@@ -1,3 +1,7 @@
+2005-09-02  Jordi Mallach  <jordi@sindominio.net>
+
+	* ku.po: Added empty file to fix GTK+ build.
+
 2005-09-01  Leonid kanter <leon@asplinux.ru>
 
 	* ru.po: Updated Russian translation
