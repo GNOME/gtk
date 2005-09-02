@@ -1,6 +1,10 @@
 2005-09-02  Matthias Clasen  <mclasen@redhat.com>
 
-	* gtk/gtkentry.c (gtk_entry_class_init): 
+	* gtk/gtkentry.c (gtk_entry_destroy): Disconnect idle handlers
+	on destroy to avoid problems when they are called on a destroyed
+	widget.  (#315135, John Cupitt)
+	
+	* gtk/gtkentry.c (gtk_entry_class_init):
 	* gtk/gtktextview.c (gtk_text_view_class_init): Add bindings
 	for Ctrl-Shift-A to unselect all.  (#309301, Kathy Fernandes)
 
