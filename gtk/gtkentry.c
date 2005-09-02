@@ -1049,6 +1049,18 @@ gtk_entry_destroy (GtkObject *object)
   gtk_entry_reset_im_context (entry);
   gtk_entry_reset_layout (entry);
 
+  if (entry->blink_timeout)
+    {
+      g_source_remove (entry->blink_timeout);
+      entry->blink_timeout = 0;
+    }
+
+  if (entry->recompute_idle)
+    {
+      g_source_remove (entry->recompute_idle);
+      entry->recompute_idle = 0;
+    }
+
   if (!entry->visible)
     {
       /* We want to trash the text here because the entry might be leaked.  */
