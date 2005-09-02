@@ -1,5 +1,20 @@
 2005-09-02  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkimcontextsimple.c: Rework the Unicode hex input
+	code. Now we only steal a single key combination, Ctrl-Shift-U,
+	instead of sixteen. 
+	A hex Unicode sequence must be started with Ctrl-Shift-U, followed
+	by a sequence of hex digits entered with Ctrl-Shift still held.
+	Releasing one of the modifiers or pressing space while the modifiers
+	are still held commits the character. It is possible to erase
+	digits using backspace.
+	As an extension to the above, we also allow to start the sequence
+	with Ctrl-Shift-U, then release the modifiers before typing any
+	digits, and enter the digits without modifiers.
+	(#82011, Owen Taylor)
+	
+2005-09-02  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkmain.c (gtk_get_event_widget): If the window is destroyed,
 	we still need to deliver the destroy event.  (#314980, Chris Lahey)
 
