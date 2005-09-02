@@ -3881,6 +3881,7 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
       /* this won't actually insert the newline if the cursor isn't
        * editable
        */
+      gtk_text_view_reset_im_context (text_view);
       gtk_text_view_commit_text (text_view, "\n");
 
       obscure = TRUE;
@@ -3896,6 +3897,7 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
        */
       if (text_view->accepts_tab && text_view->editable)
 	{
+	  gtk_text_view_reset_im_context (text_view);
 	  gtk_text_view_commit_text (text_view, "\t");
 	  obscure = TRUE;
 	}
