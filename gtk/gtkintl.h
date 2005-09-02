@@ -1,7 +1,6 @@
 #ifndef __GTKINTL_H__
 #define __GTKINTL_H__
 
-#include "config.h"
 #include <glib/gi18n-lib.h>
 
 #ifdef ENABLE_NLS

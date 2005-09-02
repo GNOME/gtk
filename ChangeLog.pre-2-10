@@ -1,3 +1,20 @@
+2005-09-02  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate): Keep track of
+	cursor position also in root window coordinates. Prune out
+	superfluous WM_MOUSEMOVE events even earlier, based on root window
+	coordinates. Windows sends WM_MOUSEMOVE messages after a new
+	window has ben mapped below the cursor even if the mouse doesn't
+	move. We used to generate GDK_MOTION_NOTIFY in these cases. This
+	confused at least gtk_menu_motion_notify(). (#314995)
+
+	* gtk/gtkintl.h: No need to include config.h here. It caused
+	warnings about GTK_LOCALEDIR being redefined on Win32 when
+	compiling files where gtkintl.h is included after gtkprivate.h
+	(which #undefines and re-#defines GTK_LOCALEDIR on Win32).
+
+	* gtk/gtkplug.c: Include config.h.
+
 2005-09-01  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilesystemunix.c: Pass statbufs down to 

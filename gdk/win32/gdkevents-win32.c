@@ -140,6 +140,7 @@ GPollFD event_poll_fd;
 
 static GdkWindow *current_window = NULL;
 static gint current_x, current_y;
+static gint current_root_x, current_root_y;
 static UINT msh_mousewheel;
 static UINT client_message;
 
@@ -2731,6 +2732,17 @@ gdk_event_translate (MSG  *msg,
 			 msg->wParam,
 			 GET_X_LPARAM (msg->lParam), GET_Y_LPARAM (msg->lParam)));
 
+      /* If we haven't moved, don't create any GDK event. Windows
+       * sends WM_MOUSEMOVE messages after a new window is shows under
+       * the mouse, even if the mouse hasn't moved. This disturbs gtk.
+       */
+      if (msg->pt.x + _gdk_offset_x == current_root_x &&
+	  msg->pt.y + _gdk_offset_y == current_root_y)
+	break;
+
+      current_root_x = msg->pt.x + _gdk_offset_x;
+      current_root_y = msg->pt.y + _gdk_offset_y;
+
       assign_object (&window, find_window_for_mouse_event (window, msg));
 
       if (p_grab_window != NULL)
@@ -2757,15 +2769,6 @@ gdk_event_translate (MSG  *msg,
       if (window != orig_window)
 	translate_mouse_coords (orig_window, window, msg);
 
-      /* If we haven't moved, don't create any event.
-       * Windows sends WM_MOUSEMOVE messages after button presses
-       * even if the mouse doesn't move. This disturbs gtk.
-       */
-      if (window == current_window &&
-	  GET_X_LPARAM (msg->lParam) == current_x &&
-	  GET_Y_LPARAM (msg->lParam) == current_y)
-	break;
-
       event = gdk_event_new (GDK_MOTION_NOTIFY);
       event->motion.window = window;
       event->motion.time = _gdk_win32_get_next_tick (msg->time);
@@ -2774,8 +2777,8 @@ gdk_event_translate (MSG  *msg,
       _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
       event->motion.x += xoffset;
       event->motion.y += yoffset;
-      event->motion.x_root = msg->pt.x + _gdk_offset_x;
-      event->motion.y_root = msg->pt.y + _gdk_offset_y;
+      event->motion.x_root = current_root_x;
+      event->motion.y_root = current_root_y;
       event->motion.axes = NULL;
       event->motion.state = build_pointer_event_state (msg);
       event->motion.is_hint = FALSE;
