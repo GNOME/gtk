@@ -966,6 +966,10 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 				 "select_all", 1,
 				 G_TYPE_BOOLEAN, FALSE);
 
+  gtk_binding_entry_add_signal (binding_set, GDK_a, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
+				 "select_all", 1,
+				 G_TYPE_BOOLEAN, FALSE);
+
   /* Deleting text */
   gtk_binding_entry_add_signal (binding_set, GDK_Delete, 0,
 				"delete_from_cursor", 2,

@@ -782,6 +782,11 @@ gtk_entry_class_init (GtkEntryClass *class)
                                 GTK_TYPE_MOVEMENT_STEP, GTK_MOVEMENT_VISUAL_POSITIONS,
                                 G_TYPE_INT, 0,
 				G_TYPE_BOOLEAN, FALSE);
+  gtk_binding_entry_add_signal (binding_set, GDK_a, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
+                                "move_cursor", 3,
+                                GTK_TYPE_MOVEMENT_STEP, GTK_MOVEMENT_VISUAL_POSITIONS,
+                                G_TYPE_INT, 0,
+				G_TYPE_BOOLEAN, FALSE);
 
   /* Activate
    */

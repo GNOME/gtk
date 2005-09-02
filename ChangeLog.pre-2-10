@@ -1,5 +1,9 @@
 2005-09-02  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkentry.c (gtk_entry_class_init): 
+	* gtk/gtktextview.c (gtk_text_view_class_init): Add bindings
+	for Ctrl-Shift-A to unselect all.  (#309301, Kathy Fernandes)
+
 	* gtk/gtkimcontextsimple.c: Rework the Unicode hex input
 	code. Now we only steal a single key combination, Ctrl-Shift-U,
 	instead of sixteen. 
