@@ -1,5 +1,8 @@
 2005-09-02  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkmain.c (gtk_get_event_widget): If the window is destroyed,
+	we still need to deliver the destroy event.  (#314980, Chris Lahey)
+
 	* gtk/gtktextview.c (gtk_text_view_key_press_event): Reset 
 	im context before committing \n or \t.
 

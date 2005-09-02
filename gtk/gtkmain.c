@@ -2044,7 +2044,7 @@ gtk_get_event_widget (GdkEvent *event)
 
   widget = NULL;
   if (event && event->any.window && 
-      !GDK_WINDOW_DESTROYED (event->any.window))
+      (event->type == GDK_DESTROY || !GDK_WINDOW_DESTROYED (event->any.window)))
     gdk_window_get_user_data (event->any.window, (void**) &widget);
   
   return widget;
