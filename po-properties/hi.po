@@ -68,6 +68,33 @@
 # translation of gtk+-properties.gtk-2-8.hi.po to Hindi
 # translation of gtk+-properties.gtk-2-8.hi.po to Hindi
 # translation of gtk+-properties.gtk-2-8.hi.po to Hindi
+# translation of gtk+-properties.gtk-2-8.hi.po to Hindi
+# translation of gtk+-properties.gtk-2-8.hi.po to Hindi
+# translation of gtk+-properties.gtk-2-8.hi.po to Hindi
+# translation of gtk+-properties.gtk-2-8.hi.po to Hindi
+# translation of gtk+-properties.gtk-2-8.hi.po to Hindi
+# translation of gtk+-properties.gtk-2-8.hi.po to Hindi
+# translation of gtk+-properties.gtk-2-8.hi.po to Hindi
+# translation of gtk+-properties.gtk-2-8.hi.po to Hindi
+# translation of gtk+-properties.gtk-2-8.hi.po to Hindi
+# translation of gtk+-properties.gtk-2-8.hi.po to Hindi
+# translation of gtk+-properties.gtk-2-8.hi.po to Hindi
+# translation of gtk+-properties.gtk-2-8.hi.po to Hindi
+# translation of gtk+-properties.gtk-2-8.hi.po to Hindi
+# translation of gtk+-properties.gtk-2-8.hi.po to Hindi
+# translation of gtk+-properties.gtk-2-8.hi.po to Hindi
+# translation of gtk+-properties.gtk-2-8.hi.po to Hindi
+# translation of gtk+-properties.gtk-2-8.hi.po to Hindi
+# translation of gtk+-properties.gtk-2-8.hi.po to Hindi
+# translation of gtk+-properties.gtk-2-8.hi.po to Hindi
+# translation of gtk+-properties.gtk-2-8.hi.po to Hindi
+# translation of gtk+-properties.gtk-2-8.hi.po to Hindi
+# translation of gtk+-properties.gtk-2-8.hi.po to Hindi
+# translation of gtk+-properties.gtk-2-8.hi.po to Hindi
+# translation of gtk+-properties.gtk-2-8.hi.po to Hindi
+# translation of gtk+-properties.gtk-2-8.hi.po to Hindi
+# translation of gtk+-properties.gtk-2-8.hi.po to Hindi
+# translation of gtk+-properties.gtk-2-8.hi.po to Hindi
 # translation of gtk+-properties.HEAD.hi.po to Hindi
 # translation of gtk+-properties.HEAD.hi.po to Hindi
 # translation of gtk+-properties.HEAD.hi.po to Hindi
@@ -593,8 +620,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.gtk-2-8.hi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-09-01 08:51+0000\n"
-"PO-Revision-Date: 2005-09-01 19:40+0530\n"
+"POT-Creation-Date: 2005-09-02 06:40+0000\n"
+"PO-Revision-Date: 2005-09-02 13:39+0530\n"
 "Last-Translator: Rajesh Ranjan <rranjan@redhat.com>\n"
 "Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
 "MIME-Version: 1.0\n"
@@ -602,6 +629,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.9.1\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n\n"
+"\n"
 "\n"
 "\n"
 "\n"
@@ -1043,7 +1071,7 @@ msgstr "उर्ध्वाधर पैमाना"
 msgid ""
 "If available vertical space is bigger than needed for the child, how much of "
 "it to use for the child. 0.0 means none, 1.0 means all"
-msgstr ""
+msgstr "अगर उपलब्ध लंबवत स्थान संतति के लिये जरूरी से बड़ा है, संतति के लिये कितना प्रयोग किया जाना है. 0.0 का मतलब कुछ नहीं, 1.0 का मतलब सारा."
 
 #: ../gtk/gtkalignment.c:165
 msgid "Top Padding"
@@ -1177,7 +1205,7 @@ msgstr "द्वितीयक"
 msgid ""
 "If TRUE, the child appears in a secondary group of children, suitable for, e."
 "g., help buttons"
-msgstr ""
+msgstr "अगर सही है, संतति संतति के दूसरे समूह में प्रकट होता है, के लिये उपयुक्त, उदा., सहायता बटन"
 
 #: ../gtk/gtkbox.c:131 ../gtk/gtkexpander.c:230 ../gtk/gtkiconview.c:628
 #: ../gtk/gtktreeviewcolumn.c:251
@@ -1213,7 +1241,7 @@ msgstr "भरें"
 msgid ""
 "Whether extra space given to the child should be allocated to the child or "
 "used as padding"
-msgstr ""
+msgstr "क्या संतति को दिया गया अतिरिक्त स्थान संतति को संभाजित किया जाना चाहिये या पैडिंग के रूप में प्रयुक्त"
 
 #: ../gtk/gtkbox.c:163
 msgid "Padding"
@@ -1231,7 +1259,7 @@ msgstr "पैक प्रकार"
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
-msgstr ""
+msgstr "एक GtkPackType दिखाता है कि क्या संतति संदर्भ के साथ पैक किया जाता है जनक के शुरू और अंत में"
 
 #: ../gtk/gtkbox.c:177 ../gtk/gtknotebook.c:499 ../gtk/gtkpaned.c:245
 #: ../gtk/gtkruler.c:142
@@ -1246,7 +1274,7 @@ msgstr "जनक में चाइल्ड की सूची"
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
-msgstr ""
+msgstr "बटन के अंदर लेबल का पाठ, अगर बटन में लेबल विजेट समाहित है"
 
 #: ../gtk/gtkbutton.c:234 ../gtk/gtkexpander.c:214 ../gtk/gtklabel.c:343
 #: ../gtk/gtktoolbutton.c:194
@@ -1257,7 +1285,7 @@ msgstr "अन्डरलाइन का प्रयोग करें"
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
-msgstr ""
+msgstr "अगर सेट है, पाठ में रेखांकित बताता है कि अगला संप्रतीक को न्यूमोनिक त्वरक कुंजी के लिये प्रयुक्त होता है"
 
 #: ../gtk/gtkbutton.c:242
 msgid "Use stock"
@@ -1317,7 +1345,7 @@ msgstr "मूलभूत बाहरी दूरी"
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
-msgstr ""
+msgstr "CAN_DEFAULT बटन के लिये अतिरिक्त स्थान सीमा के बाहर"
 
 #: ../gtk/gtkbutton.c:434
 msgid "Child X Displacement"
@@ -1325,7 +1353,7 @@ msgstr "चाइल्ड X स्थानांतरण"
 
 #: ../gtk/gtkbutton.c:435
 msgid "How far in the x direction to move the child when the button is depressed"
-msgstr ""
+msgstr "संतति को x दिशा में कितना आगे बढ़ाना है जब बटन दबाया जाता है"
 
 #: ../gtk/gtkbutton.c:442
 msgid "Child Y Displacement"
@@ -1792,7 +1820,7 @@ msgid ""
 "The language this text is in, as an ISO code. Pango can use this as a hint "
 "when rendering the text. If you don't understand this parameter, you "
 "probably don't need it"
-msgstr ""
+msgstr "भाषा जिसमें यह पाठ है, ISO कोड के रूप में. Pango को एक हिंट के रूप में प्रयोग किया जाता है जब पाठ का रेंडरिंग किया जाता है. अगर आप इस पैरामीटर को नहीं समझता हो, आपको संभवतः आवश्यकता नहीं है"
 
 #: ../gtk/gtkcellrenderertext.c:435 ../gtk/gtklabel.c:435
 #: ../gtk/gtkprogressbar.c:243
@@ -1803,7 +1831,7 @@ msgstr "Ellipsize"
 msgid ""
 "The preferred place to ellipsize the string, if the cell renderer does not "
 "have enough room to display the entire string, if at all"
-msgstr ""
+msgstr "स्ट्रिंग लपटने के लिये वरीयता स्थान , अगर सेल रेंडरर पूरे स्ट्रिंग को दिखाने के लिये पर्याप्त स्थान नहीं है, अगर है"
 
 #: ../gtk/gtkcellrenderertext.c:455 ../gtk/gtkfilechooserbutton.c:367
 #: ../gtk/gtklabel.c:455
@@ -1822,7 +1850,7 @@ msgstr "व्रैप मोड"
 msgid ""
 "How to break the string into multiple lines, if the cell renderer does not "
 "have enough room to display the entire string"
-msgstr ""
+msgstr "स्ट्रिंग को कैसे कई पंक्तियों में तोड़ना है , अगर सेल रेंडरर पूरे स्ट्रिंग को दिखाने के लिये पर्याप्त स्थान नहीं है, अगर है"
 
 #: ../gtk/gtkcellrenderertext.c:494 ../gtk/gtkcombobox.c:573
 msgid "Wrap width"
@@ -2469,7 +2497,7 @@ msgstr "शिशु के ऊपर"
 msgid ""
 "Whether the event-trapping window of the eventbox is above the window of the "
 "child widget as opposed to below it."
-msgstr ""
+msgstr "क्या घटना लाने वाले विंडो घटनाबाक्स का संतति के विंडो से ऊपर है इसके नीचे के बजाय."
 
 #: ../gtk/gtkexpander.c:198
 msgid "Expanded"
@@ -2604,7 +2632,7 @@ msgid ""
 "Whether a file chooser in GTK_FILE_CHOOSER_ACTION_SAVE will present an "
 "overwrite confirmation dialog if the user selects a file name that already "
 "exists."
-msgstr ""
+msgstr "क्या GTK_FILE_CHOOSER_ACTION_SAVE में फाइल चयनक एक संपुष्टि संवाद देगा अगर उपयोक्ता एक फाइल नाम चुनता है जो कि पहले से मौजूद है."
 
 #: ../gtk/gtkfilechooserbutton.c:338
 msgid "Dialog"
@@ -2791,7 +2819,7 @@ msgstr "किनारे की फोटो"
 msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
 "handlebox"
-msgstr ""
+msgstr "हेंडलबाक्स का कनारा जो कि हेंडल बाक्स को डाक करने के लिये डाकिंग बिंदू के साथ है"
 
 #: ../gtk/gtkhandlebox.c:235
 msgid "Snap edge set"
@@ -2801,7 +2829,7 @@ msgstr "किनारा सेट की छवि"
 msgid ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
-msgstr ""
+msgstr "क्या snap_edge property या handle_position से उत्पन्न मान को प्रयोग किया जाना हैहै"
 
 #: ../gtk/gtkiconview.c:512
 msgid "Selection mode"
@@ -3042,7 +3070,7 @@ msgstr "पैटर्न"
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline"
-msgstr ""
+msgstr "स्थिति में संप्रतीक के साथ स्ट्रिंग रेखांकित पाठ के सहवर्ती है (_c)"
 
 #: ../gtk/gtklabel.c:368
 msgid "Line wrap"
@@ -3080,7 +3108,7 @@ msgstr "जब लेबल की मेमोनिक कुंजी को 
 msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string, if at all"
-msgstr ""
+msgstr "स्ट्रिंग लपटने के लिये वरीयता स्थान, अगर लेबल के पास पर्याप्त स्थान पूरे स्ट्रिंग को देने के लिये नहीं है, अगर पूरी तरह से है"
 
 #: ../gtk/gtklabel.c:476
 msgid "Single Line Mode"
@@ -3232,7 +3260,7 @@ msgstr "उपमेनू के छुपाने के पहले वि�
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
-msgstr ""
+msgstr "एक उपमेनू को छुपाने के पहले समय जब एक संकेतक उपमेनू की ओर जाता है"
 
 #: ../gtk/gtkmenubar.c:201
 msgid "Pack direction"
@@ -3589,7 +3617,7 @@ msgstr "Text-x alignment"
 msgid ""
 "A number between 0.0 and 1.0 specifying the horizontal alignment of the text "
 "in the progress widget"
-msgstr ""
+msgstr "0.0 और 1.0 के बीच उपमेनू प्रगति विजेट में क्षैतिज पंक्तिबद्धता के साथ"
 
 #: ../gtk/gtkprogress.c:157
 msgid "Text y alignment"
@@ -3599,7 +3627,7 @@ msgstr "Text y alignment"
 msgid ""
 "A number between 0.0 and 1.0 specifying the vertical alignment of the text "
 "in the progress widget"
-msgstr ""
+msgstr "0.0 और 1.0 के बीच संख्या पाठ के लंबवत समायोजन को निर्दिष्ट करता प्रगति विजेट में"
 
 #: ../gtk/gtkprogressbar.c:145 ../gtk/gtkrange.c:338
 #: ../gtk/gtkspinbutton.c:243
@@ -3638,9 +3666,7 @@ msgstr "क्रिया के हिस्से"
 msgid ""
 "The number of blocks which can fit in the progress bar area in activity mode "
 "(Deprecated)"
-msgstr ""
-"क्रियाकलाप मोड में ब्लॉक की संख्या जो प्रगति बार में फिट हो सकता है"
-"(पदावनत)"
+msgstr "क्रियाकलाप मोड में ब्लॉक की संख्या जो प्रगति बार में फिट हो सकता है(पदावनत)"
 
 #: ../gtk/gtkprogressbar.c:191
 msgid "Discrete Blocks"
@@ -3650,9 +3676,7 @@ msgstr "आरक्षित खंड"
 msgid ""
 "The number of discrete blocks in a progress bar (when shown in the discrete "
 "style)"
-msgstr ""
-"प्रगति बार में अलग खंड की संख्या (when shown in the discrete "
-"style)"
+msgstr "प्रगति बार में अलग खंड की संख्या (when shown in the discrete style)"
 
 #: ../gtk/gtkprogressbar.c:201
 msgid "Fraction"
@@ -3678,7 +3702,7 @@ msgstr "प्रदर्शित होने वाला पाठ प्�
 msgid ""
 "The preferred place to ellipsize the string, if the progressbar does not "
 "have enough room to display the entire string, if at all"
-msgstr ""
+msgstr "स्ट्रिंग लपटने के लिये वरीयता स्थान , अगर प्रगतिबार पूरे स्ट्रिंग को दिखाने के लिये पर्याप्त स्थान नहीं है, अगर है"
 
 #: ../gtk/gtkradioaction.c:140
 msgid "The value"
@@ -3688,7 +3712,9 @@ msgstr "मान"
 msgid ""
 "The value returned by gtk_radio_action_get_current_value() when this action "
 "is the current action of its group."
-msgstr "gtk_radio_action_get_current_value() के द्वारा दिया मान जब यह क्रिया इस समूह का मौजूदा क्रिया है."
+msgstr ""
+"gtk_radio_action_get_current_value() के द्वारा दिया मान जब यह क्रिया इस समूह का "
+"मौजूदा क्रिया है."
 
 #: ../gtk/gtkradioaction.c:157 ../gtk/gtkradiobutton.c:114
 msgid "Group"
@@ -3949,8 +3975,8 @@ msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
 msgstr ""
-"दो क्लिक के बीच की अधिकतम समय सीमा जिससे दो-बार क्लिक (डबल क्लिक) को "
-"निर्धारित किया जा सके (पिक्सेल में)"
+"दो क्लिक के बीच की अधिकतम समय सीमा जिससे दो-बार क्लिक (डबल क्लिक) को निर्धारित "
+"किया जा सके (पिक्सेल में)"
 
 #: ../gtk/gtksettings.c:216
 msgid "Cursor Blink"
@@ -4064,7 +4090,9 @@ msgstr "Xft संकेत शैली"
 
 #: ../gtk/gtksettings.c:333
 msgid "What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"
-msgstr "हिंटिंग का कौन डिग्री प्रयोग किया जाना है; hintnone, hintslight, hintmedium, या hintfull"
+msgstr ""
+"हिंटिंग का कौन डिग्री प्रयोग किया जाना है; hintnone, hintslight, hintmedium, या "
+"hintfull"
 
 #: ../gtk/gtksettings.c:342
 msgid "Xft RGBA"
@@ -4398,7 +4426,7 @@ msgstr "PangoVariant के रूप में फंट चर, उदा. PAN
 msgid ""
 "Font weight as an integer, see predefined values in PangoWeight; for "
 "example, PANGO_WEIGHT_BOLD"
-msgstr ""
+msgstr "एक पूर्णांक के रूप में फंट भार, PangoWeight में पूर्वनिर्धारित मान देखें; फदाहरण के लिये, PANGO_WEIGHT_BOLD"
 
 #: ../gtk/gtktexttag.c:342
 msgid "Font stretch as a PangoStretch, e.g. PANGO_STRETCH_CONDENSED"
@@ -4413,7 +4441,7 @@ msgid ""
 "Font size as a scale factor relative to the default font size. This properly "
 "adapts to theme changes etc. so is recommended. Pango predefines some scales "
 "such as PANGO_SCALE_X_LARGE"
-msgstr ""
+msgstr "मूलभूत फंट आकार के स्केल फेक्टर सापेक्ष के रूप में फंट आकार. यह थीम बदलाव को ठीक से अनुकूलित करता है इसलिये अनुशंसित है. Pango PANGO_SCALE_X_LARGE जैसे कुछ स्केल को पूर्वनिर्धारित करता है"
 
 #: ../gtk/gtktexttag.c:381 ../gtk/gtktextview.c:596
 msgid "Left, right, or center justification"
@@ -4423,7 +4451,7 @@ msgstr "बायाँ, दांया या मध्य न्यायस�
 msgid ""
 "The language this text is in, as an ISO code. Pango can use this as a hint "
 "when rendering the text. If not set, an appropriate default will be used."
-msgstr ""
+msgstr "भाषा जिसमें पाठ है, एक ISO कोड के रूप में. Pango पाठ रेंडर करने के दौरान इसे एक संकेत के रूप में प्रयोग कर सकता है. अगर सेट नहीं है, एख उचित मूलभूत प्रयोग किया जायेगा."
 
 #: ../gtk/gtktexttag.c:397
 msgid "Left margin"
@@ -4807,7 +4835,7 @@ msgstr "मद में दिखाने के लिये पाठ"
 msgid ""
 "If set, an underline in the label property indicates that the next character "
 "should be used for the mnemonic accelerator key in the overflow menu"
-msgstr ""
+msgstr "अगर सेट है, लेबल गुण में रेखांकन बताता है कि अगला संप्रतीक को न्यूमोनिक त्वरक के लिये ओवरफ्लो मेनू में प्रयुक्त किया जाता है."
 
 #: ../gtk/gtktoolbutton.c:202
 msgid "Widget to use as the item label"
@@ -4841,7 +4869,7 @@ msgstr "मद में दिखाने के लिये आइकन व
 msgid ""
 "Whether the toolbar item is considered important. When TRUE, toolbar buttons "
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
-msgstr ""
+msgstr "क्या टूलबार मद को महत्वपूर्ण माना जा सकता है. जब सही हो, टूलबार बटन को GTK_TOOLBAR_BOTH_HORIZ मोड में पाठ दिखाता है"
 
 #: ../gtk/gtktreemodelsort.c:331
 msgid "TreeModelSort Model"
@@ -5143,7 +5171,9 @@ msgstr "चौड़ाई निवेदित"
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
-msgstr "विजेट के निवेदन चौड़ाई को अध्यारोहित करें, या -1 अगर प्राकृति आग्रह प्रयुक्त किया जाना चाहिये"
+msgstr ""
+"विजेट के निवेदन चौड़ाई को अध्यारोहित करें, या -1 अगर प्राकृति आग्रह प्रयुक्त किया जाना "
+"चाहिये"
 
 #: ../gtk/gtkwidget.c:439
 msgid "Height request"
@@ -5153,7 +5183,9 @@ msgstr "ऊंचाई आग्रह"
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
-msgstr "विजेट की ऊंचाई निवेदन के लिये अध्यारोहित करें, या -1 अगर प्राकृतिक निवेदन प्रयोग किया जाता है"
+msgstr ""
+"विजेट की ऊंचाई निवेदन के लिये अध्यारोहित करें, या -1 अगर प्राकृतिक निवेदन प्रयोग किया "
+"जाता है"
 
 #: ../gtk/gtkwidget.c:449
 msgid "Whether the widget is visible"
@@ -5235,9 +5267,7 @@ msgstr "शैली"
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
-msgstr ""
-"विजेट की शैली, जो सूचना समाहित करती है कि कैसे यह दिखेगा"
-"(colors etc)"
+msgstr "विजेट की शैली, जो सूचना समाहित करती है कि कैसे यह दिखेगा(colors etc)"
 
 #: ../gtk/gtkwidget.c:525
 msgid "Events"
@@ -5311,7 +5341,7 @@ msgstr "द्वितीयक संकेतक रंग"
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
-msgstr ""
+msgstr "रंग जिसके साथ द्वितीयक कर्सर खींचना है जब मिश्रित दायें से बायें और बायें से दायें पाठ का संपादन कर रहे हो"
 
 #: ../gtk/gtkwidget.c:1486
 msgid "Cursor line aspect ratio"
