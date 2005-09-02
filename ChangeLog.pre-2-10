@@ -1,3 +1,9 @@
+2005-09-02  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkfilechooserdefault.c: (shortcuts_add_volumes),
+	(shortcuts_activate_volume):
+	Handle base_path being null in the rest of the cases (#310270)
+
 2005-09-02  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkevents-win32.c (gdk_event_translate): Keep track of
