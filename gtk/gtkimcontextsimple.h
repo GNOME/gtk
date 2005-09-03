@@ -50,6 +50,7 @@ struct _GtkIMContextSimple
   gint tentative_match_len;
 
   guint in_hex_sequence : 1;
+  guint modifiers_dropped : 1;
 };
 
 struct _GtkIMContextSimpleClass

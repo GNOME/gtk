@@ -1,5 +1,9 @@
 2005-09-02  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtkimcontextsimple.h: Add a modifiers_dropped bit
+
+2005-09-02  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkentry.c (gtk_entry_destroy): Disconnect idle handlers
 	on destroy to avoid problems when they are called on a destroyed
 	widget.  (#315135, John Cupitt)
