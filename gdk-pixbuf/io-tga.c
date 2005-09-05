@@ -632,18 +632,14 @@ static gboolean parse_rle_data(TGAContext *ctx, GError **err)
 {
 	guint rows = 0;
 	guint count = 0;
-	guint pbuf_count = 0;
 	guint bytes_done_before = ctx->pbuf_bytes_done;
-	if (ctx->hdr->type == TGA_TYPE_RLE_PSEUDOCOLOR) {
+
+	if (ctx->hdr->type == TGA_TYPE_RLE_PSEUDOCOLOR)
 		count = parse_rle_data_pseudocolor(ctx);
-		pbuf_count = count * ctx->pbuf->n_channels;
-	} else if (ctx->hdr->type == TGA_TYPE_RLE_TRUECOLOR) {
+	else if (ctx->hdr->type == TGA_TYPE_RLE_TRUECOLOR)
 		count = parse_rle_data_truecolor(ctx);
-		pbuf_count = count;
-	} else if (ctx->hdr->type == TGA_TYPE_RLE_GRAYSCALE) {
+	else if (ctx->hdr->type == TGA_TYPE_RLE_GRAYSCALE)
 		count = parse_rle_data_grayscale(ctx);
-		pbuf_count = count * (ctx->pbuf->n_channels == 4 ? 2 : 3);
-	}
 
 	if (ctx->hdr->flags & TGA_ORIGIN_RIGHT) {
 		guchar *row = ctx->pbuf->pixels + (bytes_done_before / ctx->pbuf->rowstride) * ctx->pbuf->rowstride;
