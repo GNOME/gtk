@@ -1,3 +1,8 @@
+2005-09-05  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkaction.c (connect_proxy): Set the label of a button
+	if it has no child.  (#315253, John Finlay)
+
 2005-09-02  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtkimcontextsimple.h: Add a modifiers_dropped bit

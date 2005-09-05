@@ -955,7 +955,8 @@ connect_proxy (GtkAction     *action,
 				   G_CALLBACK (gtk_action_sync_button_stock_id),
 				   proxy, 0);
 	}
-      else if (GTK_IS_LABEL(GTK_BIN(proxy)->child))
+      else if (GTK_BIN (proxy)->child == NULL || 
+	       GTK_IS_LABEL (GTK_BIN (proxy)->child))
 	{
 	  /* synchronise the label */
 	  g_object_set (proxy,
