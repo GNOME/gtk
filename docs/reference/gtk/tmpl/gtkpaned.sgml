@@ -201,7 +201,7 @@ Adds a child to the top or left pane.
 @paned: a paned widget
 @child: the child to add
 @resize: should this child expand when the paned widget is resized.
-@shrink: can this child be made smaller than its requsition.
+@shrink: can this child be made smaller than its requisition.
 
 
 <!-- ##### FUNCTION gtk_paned_pack2 ##### -->
@@ -212,7 +212,7 @@ Adds a child to the bottom or right pane.
 @paned: a paned widget
 @child: the child to add
 @resize: should this child expand when the paned widget is resized.
-@shrink: can this child be made smaller than its requsition.
+@shrink: can this child be made smaller than its requisition.
 
 
 <!-- ##### FUNCTION gtk_paned_get_child1 ##### -->

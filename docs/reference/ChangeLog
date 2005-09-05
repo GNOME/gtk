@@ -1,3 +1,8 @@
+2005-09-05  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtkpaned.sgml: Fix some typos.
+	(#315208, Vincent Untz)
+
 2005-08-30  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-sections.txt: Add gtk_window_[sg]et_deletable.
