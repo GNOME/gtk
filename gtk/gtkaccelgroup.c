@@ -963,6 +963,41 @@ is_release (const gchar *string)
 	  (string[8] == '>'));
 }
 
+static inline gboolean
+is_meta (const gchar *string)
+{
+  return ((string[0] == '<') &&
+	  (string[1] == 'm' || string[1] == 'M') &&
+	  (string[2] == 'e' || string[2] == 'E') &&
+	  (string[3] == 't' || string[3] == 'T') &&
+	  (string[4] == 'a' || string[4] == 'A') &&
+	  (string[5] == '>'));
+}
+
+static inline gboolean
+is_super (const gchar *string)
+{
+  return ((string[0] == '<') &&
+	  (string[1] == 's' || string[1] == 'S') &&
+	  (string[2] == 'u' || string[2] == 'U') &&
+	  (string[3] == 'p' || string[3] == 'P') &&
+	  (string[4] == 'e' || string[4] == 'E') &&
+	  (string[5] == 'r' || string[5] == 'R') &&
+	  (string[6] == '>'));
+}
+
+static inline gboolean
+is_hyper (const gchar *string)
+{
+  return ((string[0] == '<') &&
+	  (string[1] == 'h' || string[1] == 'H') &&
+	  (string[2] == 'y' || string[2] == 'Y') &&
+	  (string[3] == 'p' || string[3] == 'P') &&
+	  (string[4] == 'e' || string[4] == 'E') &&
+	  (string[5] == 'r' || string[5] == 'R') &&
+	  (string[6] == '>'));
+}
+
 /**
  * gtk_accelerator_parse:
  * @accelerator:      string representing an accelerator
@@ -1052,7 +1087,25 @@ gtk_accelerator_parse (const gchar     *accelerator,
 	    {
 	      accelerator += 5;
 	      len -= 5;
-	      mods |= GDK_MOD1_MASK;
+	      mods |= GDK_ALT_MASK;
+	    }
+          else if (len >= 6 && is_meta (accelerator))
+	    {
+	      accelerator += 6;
+	      len -= 6;
+	      mods |= GDK_META_MASK;
+	    }
+          else if (len >= 7 && is_hyper (accelerator))
+	    {
+	      accelerator += 7;
+	      len -= 7;
+	      mods |= GDK_HYPER_MASK;
+	    }
+          else if (len >= 7 && is_super (accelerator))
+	    {
+	      accelerator += 7;
+	      len -= 7;
+	      mods |= GDK_SUPER_MASK;
 	    }
 	  else
 	    {
@@ -1108,6 +1161,9 @@ gtk_accelerator_name (guint           accelerator_key,
   static const gchar text_mod3[] = "<Mod3>";
   static const gchar text_mod4[] = "<Mod4>";
   static const gchar text_mod5[] = "<Mod5>";
+  static const gchar text_meta[] = "<Meta>";
+  static const gchar text_super[] = "<Super>";
+  static const gchar text_hyper[] = "<Hyper>";
   guint l;
   gchar *keyval_name;
   gchar *accelerator;
@@ -1136,6 +1192,12 @@ gtk_accelerator_name (guint           accelerator_key,
   if (accelerator_mods & GDK_MOD5_MASK)
     l += sizeof (text_mod5) - 1;
   l += strlen (keyval_name);
+  if (accelerator_mods & GDK_META_MASK)
+    l += sizeof (text_meta) - 1;
+  if (accelerator_mods & GDK_HYPER_MASK)
+    l += sizeof (text_hyper) - 1;
+  if (accelerator_mods & GDK_SUPER_MASK)
+    l += sizeof (text_super) - 1;
 
   accelerator = g_new (gchar, l + 1);
 
@@ -1180,6 +1242,21 @@ gtk_accelerator_name (guint           accelerator_key,
     {
       strcpy (accelerator + l, text_mod5);
       l += sizeof (text_mod5) - 1;
+    }
+  if (accelerator_mods & GDK_META_MASK)
+    {
+      strcpy (accelerator + l, text_meta);
+      l += sizeof (text_meta) - 1;
+    }
+  if (accelerator_mods & GDK_HYPER_MASK)
+    {
+      strcpy (accelerator + l, text_hyper);
+      l += sizeof (text_hyper) - 1;
+    }
+  if (accelerator_mods & GDK_SUPER_MASK)
+    {
+      strcpy (accelerator + l, text_super);
+      l += sizeof (text_super) - 1;
     }
   strcpy (accelerator + l, keyval_name);
 

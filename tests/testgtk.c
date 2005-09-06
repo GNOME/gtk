@@ -4647,6 +4647,14 @@ create_key_lookup (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), button, FALSE, FALSE, 0);
       button = gtk_button_new_with_mnemonic ("Button 11 (_!)");
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), button, FALSE, FALSE, 0);
+      button = accel_button_new (accel_group, "Button 12", "<Super>a");
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), button, FALSE, FALSE, 0);
+      button = accel_button_new (accel_group, "Button 13", "<Hyper>a");
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), button, FALSE, FALSE, 0);
+      button = accel_button_new (accel_group, "Button 14", "<Meta>a");
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), button, FALSE, FALSE, 0);
+      button = accel_button_new (accel_group, "Button 15", "<Shift><Mod4>b");
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), button, FALSE, FALSE, 0);
       
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
       g_signal_connect (window, "response", G_CALLBACK (gtk_object_destroy), NULL);
@@ -13476,6 +13484,13 @@ main (int argc, char *argv[])
 
   gtk_init (&argc, &argv);
 
+  gtk_accelerator_set_default_mod_mask (GDK_SHIFT_MASK |
+					GDK_CONTROL_MASK |
+					GDK_ALT_MASK | 
+					GDK_META_MASK |
+					GDK_SUPER_MASK |
+					GDK_HYPER_MASK |
+					GDK_MOD4_MASK);
   /*  benchmarking
    */
   for (i = 1; i < argc; i++)

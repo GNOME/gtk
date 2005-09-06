@@ -556,11 +556,85 @@ _gtk_accel_label_class_get_accelerator_label (GtkAccelLabelClass *klass,
       g_string_append (gstring, klass->mod_name_control);
       seen_mod = TRUE;
     }
-  if (accelerator_mods & GDK_MOD1_MASK)
+  if (accelerator_mods & GDK_ALT_MASK)
     {
       if (seen_mod)
 	g_string_append (gstring, klass->mod_separator);
       g_string_append (gstring, klass->mod_name_alt);
+      seen_mod = TRUE;
+    }
+  if (accelerator_mods & GDK_MOD2_MASK)
+    {
+      if (seen_mod)
+	g_string_append (gstring, klass->mod_separator);
+
+      g_string_append (gstring, "Mod2");
+      seen_mod = TRUE;
+    }
+  if (accelerator_mods & GDK_MOD3_MASK)
+    {
+      if (seen_mod)
+	g_string_append (gstring, klass->mod_separator);
+
+      g_string_append (gstring, "Mod3");
+      seen_mod = TRUE;
+    }
+  if (accelerator_mods & GDK_MOD4_MASK)
+    {
+      if (seen_mod)
+	g_string_append (gstring, klass->mod_separator);
+
+      g_string_append (gstring, "Mod4");
+      seen_mod = TRUE;
+    }
+  if (accelerator_mods & GDK_MOD5_MASK)
+    {
+      if (seen_mod)
+	g_string_append (gstring, klass->mod_separator);
+
+      g_string_append (gstring, "Mod5");
+      seen_mod = TRUE;
+    }
+  if (accelerator_mods & GDK_SUPER_MASK)
+    {
+      if (seen_mod)
+	g_string_append (gstring, klass->mod_separator);
+
+      /* This is the text that should appear next to menu accelerators
+       * that use the super key. If the text on this key isn't typically
+       * translated on keyboards used for your language, don't translate
+       * this.
+       * And do not translate the part before the |.
+       */
+      g_string_append (gstring, Q_("keyboard label|Super"));
+      seen_mod = TRUE;
+    }
+  if (accelerator_mods & GDK_HYPER_MASK)
+    {
+      if (seen_mod)
+	g_string_append (gstring, klass->mod_separator);
+
+      /* This is the text that should appear next to menu accelerators
+       * that use the hyper key. If the text on this key isn't typically
+       * translated on keyboards used for your language, don't translate
+       * this.
+       * And do not translate the part before the |.
+       */
+      g_string_append (gstring, Q_("keyboard label|Hyper"));
+      seen_mod = TRUE;
+    }
+  if (accelerator_mods & GDK_META_MASK)
+    {
+      if (seen_mod)
+	g_string_append (gstring, klass->mod_separator);
+
+      /* This is the text that should appear next to menu accelerators
+       * that use the meta key. If the text on this key isn't typically
+       * translated on keyboards used for your language, don't translate
+       * this.
+       * And do not translate the part before the |.
+       */
+      g_string_append (gstring, Q_("keyboard label|Meta"));
       seen_mod = TRUE;
     }
   if (seen_mod)

@@ -1,5 +1,15 @@
 2005-09-06  Matthias Clasen  <mclasen@redhat.com>
 
+	* tests/testgtk.c (create_key_lookup): Add tests for extra virtual
+	modifiers.
+
+	* gtk/gtkkeyhash.c (_gtk_key_hash_lookup): Try to match both against
+	Mod2 - Mod5 and against Super, Hyper, Meta.
+
+	* gtk/gtkaccellabel.c (_gtk_accel_label_class_get_accelerator_label): 
+	* gtk/gtkaccelgroup.c (gtk_accelerator_parse) 
+	(gtk_accelerator_name): Support Super, Hyper Meta and Mod2 - Mod5.
+
 	Add support for extra virtual modifiers:  (#85780, Owen Taylor)
 	
 	* gdk/x11/gdkkeys-x11.c (struct _GdkKeymapX11): Add a 

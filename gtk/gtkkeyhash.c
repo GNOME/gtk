@@ -358,8 +358,17 @@ _gtk_key_hash_lookup (GtkKeyHash      *key_hash,
       while (tmp_list)
 	{
 	  GtkKeyHashEntry *entry = tmp_list->data;
+	  GdkModifierType xmods, vmods;
+	  
+	  /* If the virtual super, hyper or meta modifiers are present, 
+	   * they will also be mapped to some of the mod2 - mod5 modifiers, 
+	   * so we compare them twice, ignoring either set.
+	   */
+	  xmods = GDK_MOD2_MASK|GDK_MOD3_MASK|GDK_MOD4_MASK|GDK_MOD5_MASK;
+	  vmods = GDK_SUPER_MASK|GDK_HYPER_MASK|GDK_META_MASK;
 
-	  if ((entry->modifiers & ~consumed_modifiers & mask) == (state & ~consumed_modifiers & mask))
+	  if ((entry->modifiers & ~consumed_modifiers & mask & ~vmods) == (state & ~consumed_modifiers & mask & ~vmods) ||
+	      (entry->modifiers & ~consumed_modifiers & mask & ~xmods) == (state & ~consumed_modifiers & mask & ~xmods))
 	    {
 	      gint i;
 
