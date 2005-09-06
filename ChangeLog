@@ -1,3 +1,25 @@
+2005-09-06  Matthias Clasen  <mclasen@redhat.com>
+
+	Add support for extra virtual modifiers:  (#85780, Owen Taylor)
+	
+	* gdk/x11/gdkkeys-x11.c (struct _GdkKeymapX11): Add a 
+	modmap to maintain the information which X modifiers map to
+	virtual modifiers.
+	(get_xkb): Set up the modmap from the XKB tables.
+	(update_keymaps): Set up the modmap from the information returned
+	by XGetModifierMapping in the non-XKB case.
+
+	* gdk/x11/gdkprivate-x11.h: 
+	* gdk/x11/gdkkeys-x11.c (_gdk_keymap_add_virtual_modifiers): New 
+	function to set the virtual modifiers in the state.
+
+	* gdk/x11/gdkevents-x11.c (translate_key_event): Call 
+	_gdk_keymap_add_virtual_modifiers here.
+
+	* gdk/gdktypes.h (GdkModifierType): Add bits for virtual Super, 
+	Hyper and Meta modifiers. Also add GDK_ALT_MASK as an alias
+	for GDK_MOD1_MASK.
+
 2005-09-05  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkaction.c (connect_proxy): Set the label of a button

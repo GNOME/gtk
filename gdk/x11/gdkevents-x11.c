@@ -610,6 +610,8 @@ translate_key_event (GdkDisplay *display,
 				       &event->key.keyval,
 				       NULL, NULL, NULL);
 
+  _gdk_keymap_add_virtual_modifiers (keymap, &event->key.state);
+
   /* Fill in event->string crudely, since various programs
    * depend on it.
    */
