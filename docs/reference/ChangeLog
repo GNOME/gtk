@@ -1,3 +1,7 @@
+2005-09-06  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/tmpl/windows.sgml: Document new modifier bits.
+
 2005-09-05  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkpaned.sgml: Fix some typos.

@@ -1164,6 +1164,11 @@ Hyper, Alt, Compose, Apple, CapsLock or ShiftLock.
 <para>
 Like the X Window System, GDK supports 8 modifier keys and 5 mouse buttons.
 </para>
+<para>
+Since 2.10, GDK recognizes which of the Meta, Super or Hyper keys are mapped 
+to Mod2 - Mod5, and indicates this by setting %GDK_SUPER_MASK, %GDK_HYPER_MASK
+or %GDK_META_MASK in the state field of key events.
+</para>
 
 @GDK_SHIFT_MASK: the Shift key.
 @GDK_LOCK_MASK: a Lock key (depending on the modifier mapping of the 
@@ -1185,6 +1190,9 @@ Like the X Window System, GDK supports 8 modifier keys and 5 mouse buttons.
 @GDK_BUTTON3_MASK: the third mouse button.
 @GDK_BUTTON4_MASK: the fourth mouse button.
 @GDK_BUTTON5_MASK: the fifth mouse button.
+@GDK_SUPER_MASK: the Super modifier. Since 2.10
+@GDK_HYPER_MASK: the Hyper modifier. Since 2.10
+@GDK_META_MASK: the Meta modifier. Since 2.10
 @GDK_RELEASE_MASK: not used in GDK itself. GTK+ uses it to differentiate 
   between (keyval, modifiers) pairs from key press and release events.
 @GDK_MODIFIER_MASK: a mask covering all modifier types.
