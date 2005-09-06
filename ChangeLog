@@ -1,5 +1,8 @@
 2005-09-06  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/Makefile.am: Rename gtkstatusicon-x11.c and gtktrayicon.c
+	to gtkstatusicon.c and gtktrayicon-x11.c
+
 	* gtk/gtkaccelgroup.c: Include Super, Hyper and Meta in the
 	default accel mod mask.
 
