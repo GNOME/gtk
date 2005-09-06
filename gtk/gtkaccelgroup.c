@@ -51,7 +51,10 @@ static guint		 signal_accel_changed = 0;
 static guint		 quark_acceleratable_groups = 0;
 static guint		 default_accel_mod_mask = (GDK_SHIFT_MASK |
 						   GDK_CONTROL_MASK |
-						   GDK_MOD1_MASK);
+						   GDK_MOD1_MASK |
+						   GDK_SUPER_MASK |
+						   GDK_HYPER_MASK |
+						   GDK_META_MASK);
 
 
 /* --- functions --- */
@@ -1297,10 +1300,12 @@ gtk_accelerator_get_label (guint           accelerator_key,
  *
  * Sets the modifiers that will be considered significant for keyboard
  * accelerators. The default mod mask is #GDK_CONTROL_MASK |
- * #GDK_SHIFT_MASK | #GDK_MOD1_MASK, that is, Control, Shift, and Alt.
- * Other modifiers will by default be ignored by #GtkAccelGroup.
- * You must include at least the three default modifiers in any
- * value you pass to this function.
+ * #GDK_SHIFT_MASK | #GDK_MOD1_MASK | #GDK_SUPER_MASK | 
+ * #GDK_HYPER_MASK | #GDK_META_MASK, that is, Control, Shift, Alt, 
+ * Super, Hyper and Meta. Other modifiers will by default be ignored 
+ * by #GtkAccelGroup.
+ * You must include at least the three modifiers Control, Shift
+ * and Alt in any value you pass to this function.
  *
  * The default mod mask should be changed on application startup,
  * before using any accelerator groups.

@@ -1,5 +1,8 @@
 2005-09-06  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkaccelgroup.c: Include Super, Hyper and Meta in the
+	default accel mod mask.
+
 	* gtk/gtkaccelgroup.c (gtk_accelerator_parse): 
 	* gtk/gtkaccellabel.c (_gtk_accel_label_class_get_accelerator_label): 
 	Don't use GDK_ALT_MASK.
