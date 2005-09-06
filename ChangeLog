@@ -6,9 +6,6 @@
 
 	* gdk/gdktypes.h: No need to introduce GDK_ALT_MASK
 
-	* gdk/gdkpixbuf-drawable.c (convert_real_slow): Remove a dead
-	variable.
-
 2005-09-06  Matthias Clasen  <mclasen@redhat.com>
 
 	Add support for extra virtual modifiers:  (#85780, Owen Taylor)
