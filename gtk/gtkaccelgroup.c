@@ -1087,7 +1087,7 @@ gtk_accelerator_parse (const gchar     *accelerator,
 	    {
 	      accelerator += 5;
 	      len -= 5;
-	      mods |= GDK_ALT_MASK;
+	      mods |= GDK_MOD1_MASK;
 	    }
           else if (len >= 6 && is_meta (accelerator))
 	    {

@@ -119,7 +119,6 @@ typedef enum
   GDK_LOCK_MASK	    = 1 << 1,
   GDK_CONTROL_MASK  = 1 << 2,
   GDK_MOD1_MASK	    = 1 << 3,
-  GDK_ALT_MASK      = GDK_MOD1_MASK,
   GDK_MOD2_MASK	    = 1 << 4,
   GDK_MOD3_MASK	    = 1 << 5,
   GDK_MOD4_MASK	    = 1 << 6,

@@ -556,7 +556,7 @@ _gtk_accel_label_class_get_accelerator_label (GtkAccelLabelClass *klass,
       g_string_append (gstring, klass->mod_name_control);
       seen_mod = TRUE;
     }
-  if (accelerator_mods & GDK_ALT_MASK)
+  if (accelerator_mods & GDK_MOD1_MASK)
     {
       if (seen_mod)
 	g_string_append (gstring, klass->mod_separator);

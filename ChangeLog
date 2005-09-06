@@ -1,5 +1,18 @@
 2005-09-06  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkaccelgroup.c (gtk_accelerator_parse): 
+	* gtk/gtkaccellabel.c (_gtk_accel_label_class_get_accelerator_label): 
+	Don't use GDK_ALT_MASK.
+
+	* gdk/gdktypes.h: No need to introduce GDK_ALT_MASK
+
+	* gdk/gdkpixbuf-drawable.c (convert_real_slow): Remove a dead
+	variable.
+
+2005-09-06  Matthias Clasen  <mclasen@redhat.com>
+
+	Add support for extra virtual modifiers:  (#85780, Owen Taylor)
+	
 	* tests/testgtk.c (create_key_lookup): Add tests for extra virtual
 	modifiers.
 
@@ -10,8 +23,6 @@
 	* gtk/gtkaccelgroup.c (gtk_accelerator_parse) 
 	(gtk_accelerator_name): Support Super, Hyper Meta and Mod2 - Mod5.
 
-	Add support for extra virtual modifiers:  (#85780, Owen Taylor)
-	
 	* gdk/x11/gdkkeys-x11.c (struct _GdkKeymapX11): Add a 
 	modmap to maintain the information which X modifiers map to
 	virtual modifiers.
