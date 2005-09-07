@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.8.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-09-07 22:52+0200\n"
+"POT-Creation-Date: 2005-09-07 22:58+0200\n"
 "PO-Revision-Date: 2005-09-07 22:43+0200\n"
 "Last-Translator: Christophe Merlet (RedFox) <redfox@redfoxcenter.org>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
@@ -505,8 +505,8 @@ msgstr ""
 #, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
 msgstr ""
-"La valeur pour le chunk texte PNG %s ne peut être converti dans le codage "
-"ISO-8859-1."
+"La valeur pour le chunk texte PNG %s ne peut pas être converti dans le "
+"codage ISO-8859-1."
 
 #: ../gdk-pixbuf/io-png.c:1026
 msgid "The PNG image format"
@@ -1344,15 +1344,15 @@ msgstr "Impossible de supprimer le signet"
 
 #: ../gtk/gtkfilechooserdefault.c:1033
 msgid "The folder could not be created"
-msgstr "Le dossier ne peut être créé"
+msgstr "Le dossier ne peut pas être créé"
 
 #: ../gtk/gtkfilechooserdefault.c:1046
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
 msgstr ""
-"Le dossier ne peut être créé car un fichier avec le même nom existe déjà. "
-"Essayez d'utiliser un nom différent pour le dossier ou de renommer le "
+"Le dossier ne peut pas être créé car un fichier avec le même nom existe "
+"déjà. Essayez d'utiliser un nom différent pour le dossier ou de renommer le "
 "fichier en premier."
 
 #: ../gtk/gtkfilechooserdefault.c:1059
@@ -1361,7 +1361,7 @@ msgstr "Nom de fichier non valide"
 
 #: ../gtk/gtkfilechooserdefault.c:1069
 msgid "The folder contents could not be displayed"
-msgstr "Le contenu du dossier ne peut être affiché"
+msgstr "Le contenu du dossier ne peut pas être affiché"
 
 #: ../gtk/gtkfilechooserdefault.c:1289
 #, c-format
