@@ -1381,7 +1381,8 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
   if (!have_hex_mods ||
       (n_compose > 0 && !context_simple->in_hex_sequence) || 
       (n_compose == 0 && !context_simple->in_hex_sequence && !is_hex_start) ||
-      (context_simple->in_hex_sequence && !hex_keyval && !is_space && !is_backspace))
+      (context_simple->in_hex_sequence && !hex_keyval && 
+       !is_hex_start && !is_space && !is_backspace))
     {
       if (event->state & (gtk_accelerator_get_default_mod_mask () & ~GDK_SHIFT_MASK))
 	return FALSE;
@@ -1406,8 +1407,28 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
       return TRUE;
     }
 
+  if (context_simple->in_hex_sequence && have_hex_mods && is_hex_start)
+    {
+      if (context_simple->tentative_match &&
+	  g_unichar_validate (context_simple->tentative_match))
+	{
+	  gtk_im_context_simple_commit_char (context, context_simple->tentative_match);
+	  context_simple->compose_buffer[0] = 0;
+	}
+      else 
+	{
+	  /* invalid hex sequence */
+	  if (n_compose > 0)
+	    gdk_display_beep (gdk_drawable_get_display (event->window));
+	  
+	  context_simple->tentative_match = 0;
+	  context_simple->in_hex_sequence = FALSE;
+	  context_simple->compose_buffer[0] = 0;
+	}
+    }
+
   /* Check for hex sequence start */
-  if (n_compose == 0 && !context_simple->in_hex_sequence && have_hex_mods && is_hex_start)
+  if (!context_simple->in_hex_sequence && have_hex_mods && is_hex_start)
     {
       context_simple->compose_buffer[0] = 0;
       context_simple->in_hex_sequence = TRUE;
