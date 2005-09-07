@@ -1,5 +1,9 @@
 2005-09-06  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/x11/gdkkeys-x11.c (update_modmap): Make the modmap reflexive.
+	(_gdk_keymap_add_virtual_modifiers): Don't add both Alt and Meta
+	if they are mapped to the same modifier.
+
 	* gtk/Makefile.am: Rename gtkstatusicon-x11.c and gtktrayicon.c
 	to gtkstatusicon.c and gtktrayicon-x11.c
 

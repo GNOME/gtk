@@ -190,6 +190,9 @@ update_modmap (Display      *display,
     for (i = 0; vmods[i].name; i++)
       vmods[i].atom = XInternAtom (display, vmods[i].name, FALSE);
 
+  for (i = 0; i < 8; i++)
+    keymap_x11->modmap[i] = 1 << i;
+
   for (i = 0; i < XkbNumVirtualMods; i++)
     {
       for (j = 0; vmods[j].atom; j++)
@@ -366,6 +369,9 @@ update_keymaps (GdkKeymapX11 *keymap_x11)
       keymap_x11->lock_keysym = GDK_VoidSymbol;
       keymap_x11->group_switch_mask = 0;
       keymap_x11->num_lock_mask = 0;
+
+      for (i = 0; i < 8; i++)
+	keymap_x11->modmap[i] = 1 << i;
       
       /* There are 8 sets of modifiers, with each set containing
        * max_keypermod keycodes.
@@ -1507,7 +1513,7 @@ _gdk_x11_get_group_for_state (GdkDisplay      *display,
 
 void
 _gdk_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
-				   GdkModifierType  *modifiers)
+				   GdkModifierType *modifiers)
 {
   GdkKeymapX11 *keymap_x11;
   int i;
@@ -1519,7 +1525,9 @@ _gdk_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
     {
       if ((1 << i) & *modifiers)
         {
-	  if (keymap_x11->modmap[i] & GDK_SUPER_MASK)
+	  if (keymap_x11->modmap[i] & GDK_MOD1_MASK)
+	    *modifiers |= GDK_MOD1_MASK;
+	  else if (keymap_x11->modmap[i] & GDK_SUPER_MASK)
 	    *modifiers |= GDK_SUPER_MASK;
 	  else if (keymap_x11->modmap[i] & GDK_HYPER_MASK)
 	    *modifiers |= GDK_HYPER_MASK;
