@@ -1026,7 +1026,7 @@ msgstr "La licence du programme"
 #. Add the credits button
 #: ../gtk/gtkaboutdialog.c:509
 msgid "C_redits"
-msgstr "C_rédits"
+msgstr "_Crédits"
 
 #. Add the license button
 #: ../gtk/gtkaboutdialog.c:519
