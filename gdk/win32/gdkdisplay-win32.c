@@ -316,7 +316,7 @@ gdk_display_get_screen (GdkDisplay *display,
 			gint        screen_num)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-  g_return_val_if_fail (screen_num != 0, NULL);
+  g_return_val_if_fail (screen_num == 0, NULL);
 
   return _gdk_screen;
 }
