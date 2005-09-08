@@ -236,6 +236,9 @@ gdk_display_open (const gchar *display_name)
   _gdk_input_init (_gdk_display);
   _gdk_dnd_init ();
 
+  /* Precalculate display name */
+  (void) gdk_display_get_name (_gdk_display);
+
   g_signal_emit_by_name (gdk_display_manager_get (),
 			 "display_opened", _gdk_display);
 
@@ -253,9 +256,13 @@ gdk_display_get_name (GdkDisplay *display)
   HWINSTA hwinsta = GetProcessWindowStation ();
   char *window_station_name;
   DWORD n;
-  DWORD session_id;
   char *display_name;
-  const char *retval;
+  static const char *display_name_cache = NULL;
+
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+  
+  if (display_name_cache != NULL)
+    return display_name_cache;
 
   n = 0;
   GetUserObjectInformation (hdesk, UOI_NAME, &dummy, 0, &n);
@@ -285,22 +292,22 @@ gdk_display_get_name (GdkDisplay *display)
 	window_station_name = "WinSta0";
     }
 
-  display_name = g_strdup_printf ("%ld\\%s\\%s",
+  display_name = g_strdup_printf ("%d\\%s\\%s",
 				  get_session_id (), window_station_name,
 				  desktop_name);
 
-  retval = g_quark_to_string (g_quark_from_string (display_name));
+  GDK_NOTE (MISC, g_print ("gdk_display_get_name: %s\n", display_name));
 
-  g_free (display_name);
+  display_name_cache = display_name;
 
-  GDK_NOTE (MISC, g_print ("gdk_display_get_name: %s\n", retval));
-
-  return retval;
+  return display_name_cache;
 }
 
 gint
 gdk_display_get_n_screens (GdkDisplay *display)
 {
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), 0);
+  
   return 1;
 }
 
@@ -308,12 +315,17 @@ GdkScreen *
 gdk_display_get_screen (GdkDisplay *display,
 			gint        screen_num)
 {
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+  g_return_val_if_fail (screen_num != 0, NULL);
+
   return _gdk_screen;
 }
 
 GdkScreen *
 gdk_display_get_default_screen (GdkDisplay *display)
 {
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+
   return _gdk_screen;
 }
 

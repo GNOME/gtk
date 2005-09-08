@@ -1,3 +1,20 @@
+2005-09-09  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkdisplay-win32.c (gdk_display_get_name): Cache the
+	display name. There is only one GdkDisplay on Win32, and
+	constructing the display name isn't entirely trivial, so cacheing
+	is probably worth it. For instance GIMP calls this function a lot.
+	(gdk_display_open): Call gdk_display_get_name() to prime the
+	cached name.
+	(gdk_display_get_n_screens, gdk_display_get_screen,
+	gdk_display_get_default_screen): Verify parameter correctness like
+	the X11 backend does.
+
+	* gdk/win32/gdkscreen-win32.c (gdk_screen_make_display_name):
+	Return a freshly allocated string, as the API specifies. Fixes a
+	heap corruption problem that caused random errors and crashes in
+	GIMP, for instance.
+
 2005-09-05  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkaction.c (connect_proxy): Set the label of a button
