@@ -1,5 +1,8 @@
 2005-09-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkwindow.c (gtk_window_parse_geometry): Don't set
+	unsigned ints to -1.  (#315481, Kjartan Maraas)
+
 	* gtk/gtkcalendar.c (gtk_calendar_init): first_weekday is relative
 	to week_1stday, not to Sunday. Gotta love the ISO 14652 guys...
 	(#314473, Stanislav Brabec)

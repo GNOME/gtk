@@ -5080,21 +5080,20 @@ clamp_window_to_rectangle (gint               *x,
                            gint                h,
                            const GdkRectangle *rect)
 {
-  gint outside_w, outside_h;
-  
-  outside_w = (*x + w) - (rect->x + rect->width);
-  if (outside_w > 0)
-    *x -= outside_w;
-
-  outside_h = (*y + h) - (rect->y + rect->height);
-  if (outside_h > 0)
-    *y -= outside_h; 
-
   /* if larger than the screen, center on the screen. */
-  if (*x < rect->x)
-    *x += (rect->x - *x) / 2;
-  if (*y < rect->y)
-    *y += (rect->y - *y) / 2;
+  if (w > rect->width)
+    *x = rect->x - (w - rect->width) / 2;
+  else if (*x < rect->x)
+    *x = rect->x;
+  else if (*x + w > rect->x + rect->width)
+    *x = rect->x + rect->width - w;
+
+  if (h > rect->height)
+    *y = rect->y - (h - rect->height) / 2;
+  else if (*y < rect->y)
+    *y = rect->y;
+  else if (*y + h > rect->y + rect->height)
+    *y = rect->y + rect->height - h;
 }
 
 
@@ -7232,17 +7231,13 @@ gtk_window_parse_geometry (GtkWindow   *window,
   
   result = gtk_XParseGeometry (geometry, &x, &y, &w, &h);
 
-  if ((result & WidthValue) == 0 ||
-      w < 0)
-    w = -1;
-  if ((result & HeightValue) == 0 ||
-      h < 0)
-    h = -1;
-
   size_set = FALSE;
   if ((result & WidthValue) || (result & HeightValue))
     {
-      gtk_window_set_default_size_internal (window, TRUE, w, TRUE, h, TRUE);
+      gtk_window_set_default_size_internal (window, 
+					    TRUE, result & WidthValue ? w : -1,
+					    TRUE, result & HeightValue ? h : -1, 
+					    TRUE);
       size_set = TRUE;
     }
 
