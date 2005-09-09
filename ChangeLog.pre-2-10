@@ -1,5 +1,8 @@
 2005-09-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfontsel.c (gtk_font_selection_set_font_name): Handle 
+	invalid fontnames better. (#136926, Michael R. Walton)
+
 	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_start_editing): 
 	Use connect_after to connect to the focus_out event. This
 	ensures that the entry has already stopped blinking by the time
