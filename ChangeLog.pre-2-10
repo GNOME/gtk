@@ -1,4 +1,6 @@
 2005-09-09  Matthias Clasen  <mclasen@redhat.com>
+	
+	* tests/testgtk.c: Use GDK_MOD1_MASK, not GDK_ALT_MASK.
 
 	* gtk/gtkwindow.c (gtk_window_parse_geometry): Don't set
 	unsigned ints to -1.  (#315481, Kjartan Maraas)
