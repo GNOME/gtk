@@ -11787,6 +11787,8 @@ gtk_tree_view_tree_to_widget_coords (GtkTreeView *tree_view,
  * Sets @start_path and @end_path to be the first and last visible path.
  * Note that there may be invisible paths in between.
  *
+ * The paths should be freed with gtk_tree_path_free() after use.
+ *
  * Returns: %TRUE, if valid paths were placed in @start_path and @end_path.
  *
  * Since: 2.8

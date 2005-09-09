@@ -1,5 +1,8 @@
 2005-09-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeview.c (gtk_tree_view_get_visible_range): Document
+	memory handling.  (#314975, Torsten Schoenfeld)
+
 	* gtk/gtkiconview.c (gtk_icon_view_class_init): 
 	* gtk/gtkfilesel.c (gtk_file_selection_class_init): 
 	* gtk/gtkcombobox.c (gtk_combo_box_class_init): 
