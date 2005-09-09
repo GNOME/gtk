@@ -1,5 +1,10 @@
 2005-09-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_start_editing): 
+	Use connect_after to connect to the focus_out event. This
+	ensures that the entry has already stopped blinking by the time
+	we emit the edited signal.  (#315229, Thomas Leonard)
+
 	* gtk/gtkwindow.c (gtk_window_parse_geometry): Don't set
 	unsigned ints to -1.  (#315481, Kjartan Maraas)
 

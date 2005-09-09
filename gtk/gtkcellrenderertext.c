@@ -1822,9 +1822,9 @@ gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
 		    "editing_done",
 		    G_CALLBACK (gtk_cell_renderer_text_editing_done),
 		    celltext);
-  priv->focus_out_id = g_signal_connect (priv->entry, "focus_out_event",
-		         G_CALLBACK (gtk_cell_renderer_text_focus_out_event),
-		         celltext);
+  priv->focus_out_id = g_signal_connect_after (priv->entry, "focus_out_event",
+					       G_CALLBACK (gtk_cell_renderer_text_focus_out_event),
+					       celltext);
   priv->populate_popup_id =
     g_signal_connect (priv->entry, "populate_popup",
                       G_CALLBACK (gtk_cell_renderer_text_populate_popup),
