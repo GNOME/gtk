@@ -1,3 +1,8 @@
+2005-09-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_get_visible_range): Document
+	memory handling.  (#314975, Torsten Schoenfeld)
+
 2005-09-09  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkdisplay-win32.c (gdk_display_get_name): Cache the
