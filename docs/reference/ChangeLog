@@ -1,3 +1,7 @@
+2005-09-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/tmpl/event_structs.sgml: Document GdkEventKey.is_modifier.
+
 2005-09-06  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/tmpl/windows.sgml: Document new modifier bits.

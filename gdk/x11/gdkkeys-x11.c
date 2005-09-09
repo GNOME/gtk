@@ -219,7 +219,7 @@ get_xkb (GdkKeymapX11 *keymap_x11)
   
   if (keymap_x11->xkb_desc == NULL)
     {
-      keymap_x11->xkb_desc = XkbGetMap (xdisplay, XkbKeySymsMask | XkbKeyTypesMask | XkbVirtualModsMask, XkbUseCoreKbd);
+      keymap_x11->xkb_desc = XkbGetMap (xdisplay, XkbKeySymsMask | XkbKeyTypesMask | XkbModifierMapMask | XkbVirtualModsMask, XkbUseCoreKbd);
       if (keymap_x11->xkb_desc == NULL)
 	g_error ("Failed to get keymap");
 
@@ -229,7 +229,7 @@ get_xkb (GdkKeymapX11 *keymap_x11)
     }
   else if (keymap_x11->current_serial != display_x11->keymap_serial)
     {
-      XkbGetUpdatedMap (xdisplay, XkbKeySymsMask | XkbKeyTypesMask | XkbVirtualModsMask,
+      XkbGetUpdatedMap (xdisplay, XkbKeySymsMask | XkbKeyTypesMask | XkbModifierMapMask | XkbVirtualModsMask,
 			keymap_x11->xkb_desc);
       XkbGetNames (xdisplay, XkbGroupNamesMask | XkbVirtualModNamesMask, keymap_x11->xkb_desc);
 
@@ -1535,6 +1535,41 @@ _gdk_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
 	    *modifiers |= GDK_META_MASK;
         }
     }
+}
+
+gboolean
+_gdk_keymap_key_is_modifier (GdkKeymap *keymap,
+			     guint      keycode)
+{
+  GdkKeymapX11 *keymap_x11;
+  gint i;
+
+  keymap = GET_EFFECTIVE_KEYMAP (keymap);  
+  keymap_x11 = GDK_KEYMAP_X11 (keymap);
+
+  if (keycode < keymap_x11->min_keycode ||
+      keycode > keymap_x11->max_keycode)
+    return FALSE;
+
+#ifdef HAVE_XKB
+  if (KEYMAP_USE_XKB (keymap))
+    {
+      XkbDescRec *xkb = get_xkb (keymap_x11);
+      
+      if (xkb->map->modmap[keycode] != 0)
+	return TRUE;
+    }
+  else
+#endif
+    {
+      for (i = 0; i < 8 * keymap_x11->mod_keymap->max_keypermod; i++)
+	{
+	  if (keycode == keymap_x11->mod_keymap->modifiermap[i])
+	    return TRUE;
+	}
+    }
+
+  return FALSE;
 }
 
 

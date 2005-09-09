@@ -342,6 +342,7 @@ struct _GdkEventKey
   gchar *string;
   guint16 hardware_keycode;
   guint8 group;
+  guint is_modifier : 1;
 };
 
 struct _GdkEventCrossing

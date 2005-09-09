@@ -108,6 +108,8 @@ NUL byte, in which case looking at @length is necessary to distinguish
 it from the an empty translation.
 @hardware_keycode: the raw code of the key that was pressed or released.
 @group: the keyboard group.
+@is_modifier: a flag that indicates if @hardware_keycode is mapped to a
+  modifier. Since 2.10
 
 <!-- ##### STRUCT GdkEventButton ##### -->
 <para>

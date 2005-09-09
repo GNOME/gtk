@@ -145,6 +145,8 @@ gint _gdk_x11_get_group_for_state (GdkDisplay      *display,
 				   GdkModifierType  state);
 void _gdk_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
 					GdkModifierType *modifiers);
+gboolean _gdk_keymap_key_is_modifier   (GdkKeymap       *keymap,
+					guint            keycode);
 
 GC _gdk_x11_gc_flush (GdkGC *gc);
 

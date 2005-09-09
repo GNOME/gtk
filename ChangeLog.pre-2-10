@@ -1,5 +1,26 @@
 2005-09-09  Matthias Clasen  <mclasen@redhat.com>
 
+	Make it possible to determine if a key event is for a
+	modifier key:
+	
+ 	* gdk/x11/gdkprivate-x11.h: 
+	* gdk/x11/gdkkeys-x11.c (_gdk_keymap_key_is_modifier): 
+	New function to determine if a keycode is mapped to a modifier.
+	(get_xkb): Get the modmap.
+
+	* gdk/x11/gdkevents-x11.c (translate_key_event): Set the 
+	is_modifier bit by calling _gdk_keymap_key_is_modifier().
+
+	* gdk/gdkevents.h (struct _GdkEventKey): Add an is_modifier
+	bit.
+
+2005-09-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/gdkpixbuf-drawable.c (convert_real_slow): Remove an 
+	unused variable, noticed by Kjartan Maraas.
+
+2005-09-09  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_button_event): 
 	Make drag reordering work properly for columns other than the
 	first.  (#315054, Dan Winship)
