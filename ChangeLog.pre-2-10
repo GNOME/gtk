@@ -1,5 +1,11 @@
 2005-09-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcalendar.c (gtk_calendar_init): first_weekday is relative
+	to week_1stday, not to Sunday. Gotta love the ISO 14652 guys...
+	(#314473, Stanislav Brabec)
+
+2005-09-09  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtktreeview.c (gtk_tree_view_get_visible_range): Document
 	memory handling.  (#314975, Torsten Schoenfeld)
 

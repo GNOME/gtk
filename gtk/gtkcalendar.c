@@ -565,8 +565,9 @@ gtk_calendar_init (GtkCalendar *calendar)
   time_t tmp_time;
   GtkCalendarPrivate *priv;
   gchar *year_before;
-  gchar *week_start;
-  
+  gchar *week_start, week_startsub = 1;
+  guint week_origin;
+
   priv = calendar->priv = G_TYPE_INSTANCE_GET_PRIVATE (calendar,
 						       GTK_TYPE_CALENDAR,
 						       GtkCalendarPrivate);
@@ -652,7 +653,15 @@ gtk_calendar_init (GtkCalendar *calendar)
 
 #ifdef HAVE__NL_TIME_FIRST_WEEKDAY
   week_start = nl_langinfo (_NL_TIME_FIRST_WEEKDAY);
-  priv->week_start = (*((unsigned char *) week_start) - 1) % 7;
+  week_origin = GPOINTER_TO_INT (nl_langinfo (_NL_TIME_WEEK_1STDAY));
+  if (week_origin == 19971130)
+    week_startsub = 0;
+  else if (week_origin == 19971201)
+    week_startsub = 1;
+  else
+    g_warning ("Unknown value of _NL_TIME_WEEK_1STDAY.\n");
+
+  priv->week_start = (*((unsigned char *) week_start) - week_startsub) % 7;
 #else
   /* Translate to calendar:week_start:0 if you want Sunday to be the
    * first day of the week to calendar:week_start:1 if you want Monday
@@ -2169,8 +2178,11 @@ calendar_paint_day (GtkCalendar *calendar,
       
       gtk_paint_focus (widget->style, 
 		       priv->main_win,
+	               state,
+#if 0
 		       (calendar->selected_day == day) 
 		          ? GTK_STATE_SELECTED : GTK_STATE_NORMAL, 
+#endif
 		       NULL, widget, "calendar-day",
 		       day_rect.x,     day_rect.y, 
 		       day_rect.width, day_rect.height);
