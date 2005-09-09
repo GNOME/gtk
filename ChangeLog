@@ -1,3 +1,13 @@
+2005-09-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkiconview.c (gtk_icon_view_class_init): 
+	* gtk/gtkfilesel.c (gtk_file_selection_class_init): 
+	* gtk/gtkcombobox.c (gtk_combo_box_class_init): 
+	* gtk/gtklabel.c (gtk_label_class_init): 
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_class_init): 
+	Stylistic improvements and clarifications for some blurbs. 
+	(#315520, Clytie Siddall)
+
 2005-09-09  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkdisplay-win32.c (gdk_display_get_name): Cache the

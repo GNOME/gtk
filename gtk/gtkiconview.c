@@ -658,7 +658,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
                                    PROP_COLUMN_SPACING,
                                    g_param_spec_int ("column-spacing",
 						     P_("Column Spacing"),
-						     P_("Space which is inserted between grid column"),
+						     P_("Space which is inserted between grid columns"),
 						     0, G_MAXINT, 6,
 						     GTK_PARAM_READWRITE));
 

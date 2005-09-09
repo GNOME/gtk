@@ -569,7 +569,7 @@ gtk_file_selection_class_init (GtkFileSelectionClass *class)
   g_object_class_install_property (gobject_class,
 				   PROP_SELECT_MULTIPLE,
 				   g_param_spec_boolean ("select-multiple",
-							 P_("Select multiple"),
+							 P_("Select Multiple"),
 							 P_("Whether to allow multiple files to be selected"),
 							 FALSE,
 							 GTK_PARAM_READWRITE));

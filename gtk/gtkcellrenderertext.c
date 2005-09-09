@@ -435,7 +435,7 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
 						      P_("Ellipsize"),
 						      P_("The preferred place to ellipsize the string, "
 							 "if the cell renderer does not have enough room "
-							 "to display the entire string, if at all"),
+							 "to display the entire string"),
 						      PANGO_TYPE_ELLIPSIZE_MODE,
 						      PANGO_ELLIPSIZE_NONE,
 						      GTK_PARAM_READWRITE));

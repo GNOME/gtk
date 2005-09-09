@@ -571,7 +571,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                    PROP_WRAP_WIDTH,
                                    g_param_spec_int ("wrap-width",
                                                      P_("Wrap width"),
-                                                     P_("Wrap width for layouting the items in a grid"),
+                                                     P_("Wrap width for laying out the items in a grid"),
                                                      0,
                                                      G_MAXINT,
                                                      0,
