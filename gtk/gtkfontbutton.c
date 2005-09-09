@@ -869,7 +869,7 @@ gtk_font_button_update_font_info (GtkFontButton *font_button)
 #endif
 
   style = NULL;
-  if (font_button->priv->show_style) 
+  if (font_button->priv->show_style && family) 
     {
       PangoFontFamily **families;
       PangoFontFace **faces;

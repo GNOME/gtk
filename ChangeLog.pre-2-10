@@ -1,5 +1,8 @@
 2005-09-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfontbutton.c (gtk_font_button_update_font_info): Handle
+	invalid fontnames better.  (#315187, Ed Catmur)
+
 	* gtk/gtkfontsel.c (gtk_font_selection_set_font_name): Handle 
 	invalid fontnames better. (#136926, Michael R. Walton)
 
