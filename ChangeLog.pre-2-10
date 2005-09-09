@@ -1,5 +1,19 @@
 2005-09-09  Matthias Clasen  <mclasen@redhat.com>
+
+	Stop cursor blinking in non-editable regions of a text view.
+	(#311508, Torbjörn Andersson)
 	
+	* gtk/gtktextview.c (gtk_text_view_check_cursor_blink): 
+	(cursor_blinks): Take editability into account when deciding
+	whether the cursor blinks.
+	(gtk_text_view_button_release_event): 
+	(gtk_text_view_move_cursor_internal): Update cursor blinking here.
+
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_start_editing): 
+	Use connect_after to connect to the focus_out event. This
+	ensures that the entry has already stopped blinking by the time
+	we emit the edited signal.  (#315229, Thomas Leonard)
+
 	* tests/testgtk.c: Use GDK_MOD1_MASK, not GDK_ALT_MASK.
 
 	* gtk/gtkwindow.c (gtk_window_parse_geometry): Don't set

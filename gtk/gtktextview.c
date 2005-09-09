@@ -4076,7 +4076,8 @@ gtk_text_view_button_release_event (GtkWidget *widget, GdkEventButton *event)
 					     event->y + text_view->yoffset);
 
 	  gtk_text_buffer_place_cursor (get_buffer (text_view), &iter);
-
+	  gtk_text_view_check_cursor_blink (text_view);
+	  
           text_view->pending_place_cursor_button = 0;
           
           return FALSE;
@@ -4456,14 +4457,23 @@ cursor_blinks (GtkTextView *text_view)
 #endif
   if (gtk_debug_flags & GTK_DEBUG_UPDATES)
     return FALSE;
-  
+
   if (text_view->editable)
     {
-      g_object_get (settings, "gtk-cursor-blink", &blink, NULL);
-      return blink;
+      GtkTextMark *insert;
+      GtkTextIter iter;
+      
+      insert = gtk_text_buffer_get_insert (get_buffer (text_view));
+      gtk_text_buffer_get_iter_at_mark (get_buffer (text_view), &iter, insert);
+      
+      if (gtk_text_iter_editable (&iter, text_view->editable))
+	{
+	  g_object_get (settings, "gtk-cursor-blink", &blink, NULL);
+	  return blink;
+	}
     }
-  else
-    return FALSE;
+
+  return FALSE;
 }
 
 static gint
@@ -4551,42 +4561,34 @@ gtk_text_view_check_cursor_blink (GtkTextView *text_view)
 {
   if (text_view->layout != NULL &&
       text_view->cursor_visible &&
-      GTK_WIDGET_HAS_FOCUS (text_view))
+      GTK_WIDGET_HAS_FOCUS (text_view) &&
+      cursor_blinks (text_view))
     {
-      if (cursor_blinks (text_view))
+      if (text_view->blink_timeout == 0)
 	{
-	  if (text_view->blink_timeout == 0)
-	    {
-	      gtk_text_layout_set_cursor_visible (text_view->layout, TRUE);
-	      
-	      text_view->blink_timeout = g_timeout_add (get_cursor_time (text_view) * CURSOR_OFF_MULTIPLIER,
-							blink_cb,
-							text_view);
-	    }
+	  gtk_text_layout_set_cursor_visible (text_view->layout, TRUE);
+	  
+	  text_view->blink_timeout = g_timeout_add (get_cursor_time (text_view) * CURSOR_OFF_MULTIPLIER,
+						    blink_cb,
+						    text_view);
 	}
-      else
-	gtk_text_layout_set_cursor_visible (text_view->layout, TRUE);	
     }
   else
     {
       gtk_text_view_stop_cursor_blink (text_view);
+      gtk_text_layout_set_cursor_visible (text_view->layout, TRUE);	
     }
 }
 
 static void
-gtk_text_view_pend_cursor_blink(GtkTextView *text_view)
+gtk_text_view_pend_cursor_blink (GtkTextView *text_view)
 {
   if (text_view->layout != NULL &&
       text_view->cursor_visible &&
       GTK_WIDGET_HAS_FOCUS (text_view) &&
       cursor_blinks (text_view))
     {
-      if (text_view->blink_timeout != 0)
-	{
-	  g_source_remove (text_view->blink_timeout);
-	  text_view->blink_timeout = 0;
-	}
-      
+      gtk_text_view_stop_cursor_blink (text_view);
       gtk_text_layout_set_cursor_visible (text_view->layout, TRUE);
       
       text_view->blink_timeout = g_timeout_add (get_cursor_time (text_view) * CURSOR_PEND_MULTIPLIER,
@@ -4632,8 +4634,9 @@ move_cursor (GtkTextView       *text_view,
                                        "insert",
                                        new_location);
   else
-    gtk_text_buffer_place_cursor (get_buffer (text_view),
-                                  new_location);
+      gtk_text_buffer_place_cursor (get_buffer (text_view),
+				    new_location);
+  gtk_text_view_check_cursor_blink (text_view);
 }
 
 static void
@@ -4690,12 +4693,14 @@ gtk_text_view_move_cursor_internal (GtkTextView     *text_view,
   if (step == GTK_MOVEMENT_PAGES)
     {
       gtk_text_view_scroll_pages (text_view, count, extend_selection);
+      gtk_text_view_check_cursor_blink (text_view);
       gtk_text_view_pend_cursor_blink (text_view);
       return;
     }
   else if (step == GTK_MOVEMENT_HORIZONTAL_PAGES)
     {
       gtk_text_view_scroll_hpages (text_view, count, extend_selection);
+      gtk_text_view_check_cursor_blink (text_view);
       gtk_text_view_pend_cursor_blink (text_view);
       return;
     }
@@ -4815,6 +4820,7 @@ gtk_text_view_move_cursor_internal (GtkTextView     *text_view,
         gtk_text_view_set_virtual_cursor_pos (text_view, cursor_x_pos, -1);
     }
 
+  gtk_text_view_check_cursor_blink (text_view);
   gtk_text_view_pend_cursor_blink (text_view);
 }
 
@@ -5735,7 +5741,8 @@ gtk_text_view_start_selection_drag (GtkTextView       *text_view,
     }
 
   gtk_text_buffer_select_range (buffer, &end, &start);
-
+  gtk_text_view_check_cursor_blink (text_view);
+  
   text_view->selection_drag_handler = g_signal_connect (text_view,
                                                         "motion_notify_event",
                                                         G_CALLBACK (selection_motion_event_handler),
