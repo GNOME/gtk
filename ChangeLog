@@ -1,5 +1,9 @@
 2005-09-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_button_event): 
+	Make drag reordering work properly for columns other than the
+	first.  (#315054, Dan Winship)
+
 	* gtk/gtkfontbutton.c (gtk_font_button_update_font_info): Handle
 	invalid fontnames better.  (#315187, Ed Catmur)
 
