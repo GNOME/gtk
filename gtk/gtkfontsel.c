@@ -1198,13 +1198,18 @@ gtk_font_selection_set_font_name (GtkFontSelection *fontsel,
   GtkTreeIter iter;
   GtkTreeIter match_iter;
   gboolean valid;
+  const gchar *new_family_name;
   
   g_return_val_if_fail (GTK_IS_FONT_SELECTION (fontsel), FALSE);
   
   new_desc = pango_font_description_from_string (fontname);
+  new_family_name = pango_font_description_get_family (new_desc);
 
-  /* Check to make sure that this is in the list of allowed fonts */
+  if (!new_family_name)
+    return FALSE;
 
+  /* Check to make sure that this is in the list of allowed fonts 
+   */
   model = gtk_tree_view_get_model (GTK_TREE_VIEW (fontsel->family_list));
   for (valid = gtk_tree_model_get_iter_first (model, &iter);
        valid;
@@ -1215,7 +1220,7 @@ gtk_font_selection_set_font_name (GtkFontSelection *fontsel,
       gtk_tree_model_get (model, &iter, FAMILY_COLUMN, &family, -1);
       
       if (g_ascii_strcasecmp (pango_font_family_get_name (family),
-			      pango_font_description_get_family (new_desc)) == 0)
+			      new_family_name) == 0)
 	new_family = family;
       
       g_object_unref (family);
