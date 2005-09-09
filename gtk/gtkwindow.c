@@ -7339,17 +7339,13 @@ gtk_window_parse_geometry (GtkWindow   *window,
   
   result = gtk_XParseGeometry (geometry, &x, &y, &w, &h);
 
-  if ((result & WidthValue) == 0 ||
-      w < 0)
-    w = -1;
-  if ((result & HeightValue) == 0 ||
-      h < 0)
-    h = -1;
-
   size_set = FALSE;
   if ((result & WidthValue) || (result & HeightValue))
     {
-      gtk_window_set_default_size_internal (window, TRUE, w, TRUE, h, TRUE);
+      gtk_window_set_default_size_internal (window, 
+					    TRUE, result & WidthValue ? w : -1,
+					    TRUE, result & HeightValue ? h : -1, 
+					    TRUE);
       size_set = TRUE;
     }
 
