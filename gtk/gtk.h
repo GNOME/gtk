@@ -49,6 +49,7 @@
 #include <gtk/gtkcelllayout.h>
 #include <gtk/gtkcellrenderer.h>
 #include <gtk/gtkcellrenderercombo.h>
+#include <gtk/gtkcellrendererkeys.h>
 #include <gtk/gtkcellrendererpixbuf.h>
 #include <gtk/gtkcellrendererprogress.h>
 #include <gtk/gtkcellrenderertext.h>

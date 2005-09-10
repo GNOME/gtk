@@ -1,5 +1,18 @@
 2005-09-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcellrendererkeys.h: 
+	* gtk/gtkcellrendererkeys.c: Add a cell renderer for displaying
+	and editing accelerators, a port of EggCellRendererKeys .
+
+	* gtk/gtk.symbols:
+	* gtk/gtk.h:
+	* gtk/Makefile.am: Add the keys cell renderer.
+
+	* tests/Makefile.am: 
+	* tests/testkeys.c: Test GtkCellRendererKeys
+
+2005-09-09  Matthias Clasen  <mclasen@redhat.com>
+
 	Make it possible to determine if a key event is for a
 	modifier key:
 	

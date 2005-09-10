@@ -42,6 +42,7 @@ noinst_PROGRAMS =			\
 	testicontheme			\
 	testimage			\
 	testinput			\
+	testkeys			\
 	testmenus			\
 	testmenubars			\
 	testmultidisplay		\
@@ -87,6 +88,7 @@ testfilechooserbutton_DEPENDENCIES = $(TEST_DEPS)
 testgtk_DEPENDENCIES = $(TEST_DEPS)
 testinput_DEPENDENCIES = $(TEST_DEPS)
 testimage_DEPENDENCIES = $(TEST_DEPS)
+testkeys_DEPENDENCIES = $(TEST_DEPS)
 testmenus_DEPENDENCIES = $(TEST_DEPS)
 testmenubars_DEPENDENCIES = $(TEST_DEPS)
 testmultidisplay_DEPENDENCIES = $(TEST_DEPS)
@@ -126,6 +128,7 @@ testicontheme_LDADD = $(LDADDS)
 testiconview_LDADD = $(LDADDS)
 testinput_LDADD = $(LDADDS)
 testimage_LDADD = $(LDADDS)
+testkeys_LDADD = $(LDADDS)
 testmenus_LDADD = $(LDADDS)
 testmenubars_LDADD = $(LDADDS)
 testmultidisplay_LDADD = $(LDADDS)
