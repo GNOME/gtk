@@ -2782,13 +2782,13 @@ clipboard_get_selection_cb (GtkClipboard     *clipboard,
   if (gtk_text_buffer_get_selection_bounds (buffer, &start, &end))
     {
       if (selection_data->target ==
-          gdk_atom_intern ("GTK_TEXT_BUFFER_CONTENTS", FALSE))
+          gdk_atom_intern_static_string ("GTK_TEXT_BUFFER_CONTENTS"))
         {
           /* Provide the address of the buffer; this will only be
            * used within-process
            */
           gtk_selection_data_set (selection_data,
-                                  gdk_atom_intern ("GTK_TEXT_BUFFER_CONTENTS", FALSE),
+                                  gdk_atom_intern_static_string ("GTK_TEXT_BUFFER_CONTENTS"),
                                   8, /* bytes */
                                   (void*)&buffer,
                                   sizeof (buffer));
@@ -2830,13 +2830,13 @@ clipboard_get_contents_cb (GtkClipboard     *clipboard,
   g_assert (contents); /* This should never be called unless we own the clipboard */
 
   if (selection_data->target ==
-      gdk_atom_intern ("GTK_TEXT_BUFFER_CONTENTS", FALSE))
+      gdk_atom_intern_static_string ("GTK_TEXT_BUFFER_CONTENTS"))
     {
       /* Provide the address of the clipboard buffer; this will only
        * be used within-process. OK to supply a NULL value for contents.
        */
       gtk_selection_data_set (selection_data,
-                              gdk_atom_intern ("GTK_TEXT_BUFFER_CONTENTS", FALSE),
+                              gdk_atom_intern_static_string ("GTK_TEXT_BUFFER_CONTENTS"),
                               8, /* bytes */
                               (void*)&contents,
                               sizeof (contents));
@@ -2987,7 +2987,7 @@ selection_data_get_buffer (GtkSelectionData *selection_data,
   if (gdk_window_get_window_type (owner) == GDK_WINDOW_FOREIGN)
     return NULL;
  
-  if (selection_data->type != gdk_atom_intern ("GTK_TEXT_BUFFER_CONTENTS", FALSE))
+  if (selection_data->type != gdk_atom_intern_static_string ("GTK_TEXT_BUFFER_CONTENTS"))
     return NULL;
 
   if (selection_data->length != sizeof (src_buffer))
@@ -3310,7 +3310,7 @@ gtk_text_buffer_paste_clipboard (GtkTextBuffer *buffer,
     data->replace_selection = TRUE;
 
   gtk_clipboard_request_contents (clipboard,
-				  gdk_atom_intern ("GTK_TEXT_BUFFER_CONTENTS", FALSE),
+				  gdk_atom_intern_static_string ("GTK_TEXT_BUFFER_CONTENTS"),
 				  clipboard_clipboard_buffer_received, data);
 }
 

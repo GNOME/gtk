@@ -868,14 +868,13 @@ gtk_drag_finish (GdkDragContext *context,
 
   if (success && del)
     {
-      target = gdk_atom_intern ("DELETE", FALSE);
+      target = gdk_atom_intern_static_string ("DELETE");
     }
   else if (context->protocol == GDK_DRAG_PROTO_MOTIF)
     {
-      target = gdk_atom_intern (success ? 
-				  "XmTRANSFER_SUCCESS" : 
-				  "XmTRANSFER_FAILURE",
-				FALSE);
+      target = gdk_atom_intern_static_string (success ? 
+					      "XmTRANSFER_SUCCESS" : 
+					      "XmTRANSFER_FAILURE");
     }
 
   if (target != GDK_NONE)
@@ -1455,12 +1454,12 @@ gtk_drag_selection_received (GtkWidget        *widget,
       return;
     }
 
-  if (selection_data->target == gdk_atom_intern ("DELETE", FALSE))
+  if (selection_data->target == gdk_atom_intern_static_string ("DELETE"))
     {
       gtk_drag_finish (context, TRUE, FALSE, time);
     }
-  else if ((selection_data->target == gdk_atom_intern ("XmTRANSFER_SUCCESS", FALSE)) ||
-	   (selection_data->target == gdk_atom_intern ("XmTRANSFER_FAILURE", FALSE)))
+  else if ((selection_data->target == gdk_atom_intern_static_string ("XmTRANSFER_SUCCESS")) ||
+	   (selection_data->target == gdk_atom_intern_static_string ("XmTRANSFER_FAILURE")))
     {
       /* Do nothing */
     }
@@ -3256,17 +3255,17 @@ gtk_drag_source_check_selection (GtkDragSourceInfo *info,
     {
       gtk_selection_add_target (info->ipc_widget,
 				selection,
-				gdk_atom_intern ("XmTRANSFER_SUCCESS", FALSE),
+				gdk_atom_intern_static_string ("XmTRANSFER_SUCCESS"),
 				TARGET_MOTIF_SUCCESS);
       gtk_selection_add_target (info->ipc_widget,
 				selection,
-				gdk_atom_intern ("XmTRANSFER_FAILURE", FALSE),
+				gdk_atom_intern_static_string ("XmTRANSFER_FAILURE"),
 				TARGET_MOTIF_FAILURE);
     }
 
   gtk_selection_add_target (info->ipc_widget,
 			    selection,
-			    gdk_atom_intern ("DELETE", FALSE),
+			    gdk_atom_intern_static_string ("DELETE"),
 			    TARGET_DELETE);
 }
 
@@ -3366,8 +3365,8 @@ gtk_drag_drop (GtkDragSourceInfo *info,
       /* GTK+ traditionally has used application/x-rootwin-drop, but the
        * XDND spec specifies x-rootwindow-drop.
        */
-      GdkAtom target1 = gdk_atom_intern ("application/x-rootwindow-drop", FALSE);
-      GdkAtom target2 = gdk_atom_intern ("application/x-rootwin-drop", FALSE);
+      GdkAtom target1 = gdk_atom_intern_static_string ("application/x-rootwindow-drop");
+      GdkAtom target2 = gdk_atom_intern_static_string ("application/x-rootwin-drop");
       
       tmp_list = info->target_list->list;
       while (tmp_list)
@@ -3495,7 +3494,7 @@ gtk_drag_selection_get (GtkWidget        *widget,
   guint target_info;
 
   if (!null_atom)
-    null_atom = gdk_atom_intern ("NULL", FALSE);
+    null_atom = gdk_atom_intern_static_string ("NULL");
 
   switch (sel_info)
     {

@@ -295,17 +295,17 @@ init_atoms (void)
 
   if (!utf8_atom)
     {
-      utf8_atom = gdk_atom_intern ("UTF8_STRING", FALSE);
-      text_atom = gdk_atom_intern ("TEXT", FALSE);
-      ctext_atom = gdk_atom_intern ("COMPOUND_TEXT", FALSE);
-      text_plain_atom = gdk_atom_intern ("text/plain", FALSE);
-      text_plain_utf8_atom = gdk_atom_intern ("text/plain;charset=utf-8", FALSE);
+      utf8_atom = gdk_atom_intern_static_string ("UTF8_STRING");
+      text_atom = gdk_atom_intern_static_string ("TEXT");
+      ctext_atom = gdk_atom_intern_static_string ("COMPOUND_TEXT");
+      text_plain_atom = gdk_atom_intern_static_string ("text/plain");
+      text_plain_utf8_atom = gdk_atom_intern_static_string ("text/plain;charset=utf-8");
       g_get_charset (&charset);
       tmp = g_strdup_printf ("text/plain;charset=%s", charset);
       text_plain_locale_atom = gdk_atom_intern (tmp, FALSE);
       g_free (tmp);
 
-      text_uri_list_atom = gdk_atom_intern ("text/uri-list", FALSE);
+      text_uri_list_atom = gdk_atom_intern_static_string ("text/uri-list");
     }
 }
 
@@ -1793,10 +1793,10 @@ gtk_selection_data_targets_include_uri (GtkSelectionData *selection_data)
 static void
 gtk_selection_init (void)
 {
-  gtk_selection_atoms[INCR] = gdk_atom_intern ("INCR", FALSE);
-  gtk_selection_atoms[MULTIPLE] = gdk_atom_intern ("MULTIPLE", FALSE);
-  gtk_selection_atoms[TIMESTAMP] = gdk_atom_intern ("TIMESTAMP", FALSE);
-  gtk_selection_atoms[TARGETS] = gdk_atom_intern ("TARGETS", FALSE);
+  gtk_selection_atoms[INCR] = gdk_atom_intern_static_string ("INCR");
+  gtk_selection_atoms[MULTIPLE] = gdk_atom_intern_static_string ("MULTIPLE");
+  gtk_selection_atoms[TIMESTAMP] = gdk_atom_intern_static_string ("TIMESTAMP");
+  gtk_selection_atoms[TARGETS] = gdk_atom_intern_static_string ("TARGETS");
 
   initialize = FALSE;
 }
@@ -1941,7 +1941,7 @@ _gtk_selection_request (GtkWidget *widget,
        */
 #ifdef GDK_WINDOWING_X11
       if (type != GDK_SELECTION_TYPE_ATOM &&
-	  type != gdk_atom_intern ("ATOM_PAIR", FALSE))
+	  type != gdk_atom_intern_static_string ("ATOM_PAIR"))
 	{
 	  info->num_conversions = length / (2*sizeof (glong));
 	  info->conversions = g_new (GtkIncrConversion, info->num_conversions);
@@ -2073,7 +2073,7 @@ _gtk_selection_request (GtkWidget *widget,
 	}
       
       gdk_property_change (info->requestor, event->property,
-			   gdk_atom_intern ("ATOM_PAIR", FALSE), 32, 
+			   gdk_atom_intern_static_string ("ATOM_PAIR"), 32, 
 			   GDK_PROP_MODE_REPLACE,
 			   (guchar *)mult_atoms, 2*info->num_conversions);
       g_free (mult_atoms);
@@ -2407,7 +2407,7 @@ _gtk_selection_property_notify (GtkWidget	*widget,
 
 #if defined(GDK_WINDOWING_WIN32) || defined(GDK_WINDOWING_X11)
   if ((event->state != GDK_PROPERTY_NEW_VALUE) ||  /* property was deleted */
-      (event->atom != gdk_atom_intern ("GDK_SELECTION", FALSE))) /* not the right property */
+      (event->atom != gdk_atom_intern_static_string ("GDK_SELECTION"))) /* not the right property */
 #endif
     return FALSE;
   

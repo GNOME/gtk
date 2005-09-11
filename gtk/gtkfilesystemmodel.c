@@ -660,7 +660,7 @@ drag_source_drag_data_get (GtkTreeDragSource *drag_source,
   uris = g_strconcat (uri, "\r\n", NULL);
 
   gtk_selection_data_set (selection_data,
-			  gdk_atom_intern ("text/uri-list", FALSE),
+			  gdk_atom_intern_static_string ("text/uri-list"),
 			  8,
 			  uris,
 			  strlen (uris) + 1);

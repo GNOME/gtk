@@ -5969,7 +5969,7 @@ gtk_ctree_drag_motion (GtkWidget      *widget,
   if (GTK_CLIST_REORDERABLE (clist))
     {
       GList *list;
-      GdkAtom atom = gdk_atom_intern ("gtk-clist-drag-reorder", FALSE);
+      GdkAtom atom = gdk_atom_intern_static_string ("gtk-clist-drag-reorder");
 
       list = context->targets;
       while (list)
@@ -6057,7 +6057,7 @@ gtk_ctree_drag_data_received (GtkWidget        *widget,
   if (GTK_CLIST_REORDERABLE (clist) &&
       gtk_drag_get_source_widget (context) == widget &&
       selection_data->target ==
-      gdk_atom_intern ("gtk-clist-drag-reorder", FALSE) &&
+      gdk_atom_intern_static_string ("gtk-clist-drag-reorder") &&
       selection_data->format == 8 &&
       selection_data->length == sizeof (GtkCListCellInfo))
     {

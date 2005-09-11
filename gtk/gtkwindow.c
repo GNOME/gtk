@@ -1827,7 +1827,7 @@ gtk_window_transient_parent_unrealized (GtkWidget *parent,
 {
   if (GTK_WIDGET_REALIZED (window))
     gdk_property_delete (window->window, 
-			 gdk_atom_intern ("WM_TRANSIENT_FOR", FALSE));
+			 gdk_atom_intern_static_string ("WM_TRANSIENT_FOR"));
 }
 
 static void
@@ -4788,8 +4788,8 @@ gtk_window_client_event (GtkWidget	*widget,
 {
   if (!atom_rcfiles)
     {
-      atom_rcfiles = gdk_atom_intern ("_GTK_READ_RCFILES", FALSE);
-      atom_iconthemes = gdk_atom_intern ("_GTK_LOAD_ICONTHEMES", FALSE);
+      atom_rcfiles = gdk_atom_intern_static_string ("_GTK_READ_RCFILES");
+      atom_iconthemes = gdk_atom_intern_static_string ("_GTK_LOAD_ICONTHEMES");
     }
 
   if (event->message_type == atom_rcfiles) 

@@ -4672,7 +4672,7 @@ gtk_entry_do_popup (GtkEntry       *entry,
     }
 
   gtk_clipboard_request_contents (gtk_widget_get_clipboard (GTK_WIDGET (entry), GDK_SELECTION_CLIPBOARD),
-				  gdk_atom_intern ("TARGETS", FALSE),
+				  gdk_atom_intern_static_string ("TARGETS"),
 				  popup_targets_received,
 				  info);
 }

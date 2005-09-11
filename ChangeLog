@@ -6,14 +6,9 @@
 	New function to avoid pointless strdups when creating atoms
 	from static strings.  
 
-	* gdk/x11/gdkdisplay-x11.c:
-	* gdk/x11/gdkdnd-x11.c:
-	* gdk/x11/gdkevents-x11.c:
-	* gdk/x11/gdkmain-x11.c:
-	* gdk/x11/gdkproperty-x11.c:
-	* gdk/x11/gdkselection-x11.c:
-	* gdk/x11/gdkwindow-x11.c: Use gdk_atom_intern_static_string()
-	where appropriate.
+	* gdk/x11/*.c:
+	* gtk/*.c:  Use gdk_atom_intern_static_string() where 
+	appropriate.
 
 2005-09-09  Matthias Clasen  <mclasen@redhat.com>
 

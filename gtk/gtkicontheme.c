@@ -1150,7 +1150,7 @@ ensure_valid_themes (GtkIconTheme *icon_theme)
 	  int i;
 
 	  if (!atom_iconthemes)
-	    atom_iconthemes = gdk_atom_intern ("_GTK_LOAD_ICONTHEMES", FALSE);
+	    atom_iconthemes = gdk_atom_intern_static_string ("_GTK_LOAD_ICONTHEMES");
 
 	  for (i = 0; i < 5; i++)
 	    event->client.data.l[i] = 0;

@@ -6113,7 +6113,7 @@ gtk_icon_view_drag_data_get (GtkWidget        *widget,
     goto done;
 
   /* If drag_data_get does nothing, try providing row data. */
-  if (selection_data->target == gdk_atom_intern ("GTK_TREE_MODEL_ROW", FALSE))
+  if (selection_data->target == gdk_atom_intern_static_string ("GTK_TREE_MODEL_ROW"))
     gtk_tree_set_row_drag_data (selection_data,
 				model,
 				source_row);
@@ -6209,7 +6209,7 @@ gtk_icon_view_drag_motion (GtkWidget      *widget,
 	    g_timeout_add (50, drag_scroll_timeout, icon_view);
 	}
 
-      if (target == gdk_atom_intern ("GTK_TREE_MODEL_ROW", FALSE))
+      if (target == gdk_atom_intern_static_string ("GTK_TREE_MODEL_ROW"))
         {
           /* Request data so we can use the source row when
            * determining whether to accept the drop

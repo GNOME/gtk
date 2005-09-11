@@ -934,14 +934,14 @@ request_text_received_func (GtkClipboard     *clipboard,
        * if we asked for compound_text and didn't get it, try string;
        * If we asked for anything else and didn't get it, give up.
        */
-      if (selection_data->target == gdk_atom_intern ("UTF8_STRING", FALSE))
+      if (selection_data->target == gdk_atom_intern_static_string ("UTF8_STRING"))
 	{
 	  gtk_clipboard_request_contents (clipboard,
-					  gdk_atom_intern ("COMPOUND_TEXT", FALSE), 
+					  gdk_atom_intern_static_string ("COMPOUND_TEXT"), 
 					  request_text_received_func, info);
 	  return;
 	}
-      else if (selection_data->target == gdk_atom_intern ("COMPOUND_TEXT", FALSE))
+      else if (selection_data->target == gdk_atom_intern_static_string ("COMPOUND_TEXT"))
 	{
 	  gtk_clipboard_request_contents (clipboard,
 					  GDK_TARGET_STRING, 
@@ -986,7 +986,7 @@ gtk_clipboard_request_text (GtkClipboard                *clipboard,
   info->callback = callback;
   info->user_data = user_data;
 
-  gtk_clipboard_request_contents (clipboard, gdk_atom_intern ("UTF8_STRING", FALSE),
+  gtk_clipboard_request_contents (clipboard, gdk_atom_intern_static_string ("UTF8_STRING"),
 				  request_text_received_func,
 				  info);
 }
@@ -1008,24 +1008,24 @@ request_image_received_func (GtkClipboard     *clipboard,
        * if we asked for image/gif and didn't get it, try image/bmp;
        * If we asked for anything else and didn't get it, give up.
        */
-      if (selection_data->target == gdk_atom_intern ("image/png", FALSE))
+      if (selection_data->target == gdk_atom_intern_static_string ("image/png"))
 	{
 	  gtk_clipboard_request_contents (clipboard,
-					  gdk_atom_intern ("image/jpeg", FALSE), 
+					  gdk_atom_intern_static_string ("image/jpeg"), 
 					  request_image_received_func, info);
 	  return;
 	}
-      else if (selection_data->target == gdk_atom_intern ("image/jpeg", FALSE))
+      else if (selection_data->target == gdk_atom_intern_static_string ("image/jpeg"))
 	{
 	  gtk_clipboard_request_contents (clipboard,
-					  gdk_atom_intern ("image/gif", FALSE), 
+					  gdk_atom_intern_static_string ("image/gif"), 
 					  request_image_received_func, info);
 	  return;
 	}
-      else if (selection_data->target == gdk_atom_intern ("image/gif", FALSE))
+      else if (selection_data->target == gdk_atom_intern_static_string ("image/gif"))
 	{
 	  gtk_clipboard_request_contents (clipboard,
-					  gdk_atom_intern ("image/bmp", FALSE), 
+					  gdk_atom_intern_static_string ("image/bmp"), 
 					  request_image_received_func, info);
 	  return;
 	}
@@ -1071,7 +1071,7 @@ gtk_clipboard_request_image (GtkClipboard                  *clipboard,
   info->user_data = user_data;
 
   gtk_clipboard_request_contents (clipboard, 
-				  gdk_atom_intern ("image/png", FALSE),
+				  gdk_atom_intern_static_string ("image/png"),
 				  request_image_received_func,
 				  info);
 }
@@ -1131,7 +1131,7 @@ gtk_clipboard_request_targets (GtkClipboard                *clipboard,
   info->callback = callback;
   info->user_data = user_data;
 
-  gtk_clipboard_request_contents (clipboard, gdk_atom_intern ("TARGETS", FALSE),
+  gtk_clipboard_request_contents (clipboard, gdk_atom_intern_static_string ("TARGETS"),
 				  request_targets_received_func,
 				  info);
 }
@@ -1348,7 +1348,7 @@ gtk_clipboard_wait_is_text_available (GtkClipboard *clipboard)
   GtkSelectionData *data;
   gboolean result = FALSE;
 
-  data = gtk_clipboard_wait_for_contents (clipboard, gdk_atom_intern ("TARGETS", FALSE));
+  data = gtk_clipboard_wait_for_contents (clipboard, gdk_atom_intern_static_string ("TARGETS"));
   if (data)
     {
       result = gtk_selection_data_targets_include_text (data);
@@ -1383,7 +1383,7 @@ gtk_clipboard_wait_is_image_available (GtkClipboard *clipboard)
   gboolean result = FALSE;
 
   data = gtk_clipboard_wait_for_contents (clipboard, 
-					  gdk_atom_intern ("TARGETS", FALSE));
+					  gdk_atom_intern_static_string ("TARGETS"));
   if (data)
     {
       result = gtk_selection_data_targets_include_image (data, FALSE);
@@ -1441,7 +1441,7 @@ gtk_clipboard_wait_for_targets (GtkClipboard  *clipboard,
   if (targets)
     *targets = NULL;      
 
-  data = gtk_clipboard_wait_for_contents (clipboard, gdk_atom_intern ("TARGETS", FALSE));
+  data = gtk_clipboard_wait_for_contents (clipboard, gdk_atom_intern_static_string ("TARGETS"));
 
   if (data)
     {
@@ -1657,7 +1657,7 @@ gtk_clipboard_selection_notify (GtkWidget         *widget,
 				GdkEventSelection *event,
 				GtkClipboard      *clipboard)
 {
-  if (event->selection == gdk_atom_intern ("CLIPBOARD_MANAGER", FALSE) &&
+  if (event->selection == gdk_atom_intern_static_string ("CLIPBOARD_MANAGER") &&
       clipboard->storing_selection)
     g_main_loop_quit (clipboard->store_loop);
 

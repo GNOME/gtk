@@ -6088,12 +6088,12 @@ gtk_text_view_drag_data_get (GtkWidget        *widget,
 
   text_view = GTK_TEXT_VIEW (widget);
 
-  if (selection_data->target == gdk_atom_intern ("GTK_TEXT_BUFFER_CONTENTS", FALSE))
+  if (selection_data->target == gdk_atom_intern_static_string ("GTK_TEXT_BUFFER_CONTENTS"))
     {
       GtkTextBuffer *buffer = gtk_text_view_get_buffer (text_view);
 
       gtk_selection_data_set (selection_data,
-                              gdk_atom_intern ("GTK_TEXT_BUFFER_CONTENTS", FALSE),
+                              gdk_atom_intern_static_string ("GTK_TEXT_BUFFER_CONTENTS"),
                               8, /* bytes */
                               (void*)&buffer,
                               sizeof (buffer));
@@ -6340,7 +6340,7 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
 
   gtk_text_buffer_begin_user_action (buffer);
 
-  if (selection_data->target == gdk_atom_intern ("GTK_TEXT_BUFFER_CONTENTS", FALSE))
+  if (selection_data->target == gdk_atom_intern_static_string ("GTK_TEXT_BUFFER_CONTENTS"))
     {
       GtkTextBuffer *src_buffer = NULL;
       GtkTextIter start, end;
@@ -7218,7 +7218,7 @@ gtk_text_view_do_popup (GtkTextView    *text_view,
 
   gtk_clipboard_request_contents (gtk_widget_get_clipboard (GTK_WIDGET (text_view),
 							    GDK_SELECTION_CLIPBOARD),
-				  gdk_atom_intern ("TARGETS", FALSE),
+				  gdk_atom_intern_static_string ("TARGETS"),
 				  popup_targets_received,
 				  info);
 }
