@@ -925,7 +925,6 @@ convert_real_slow (GdkImage    *image,
 		   gboolean     alpha)
 {
   int xx, yy;
-  int bpl;
   guint8 *orow = pixels;
   guint8 *o;
   guint32 pixel;
@@ -933,8 +932,7 @@ convert_real_slow (GdkImage    *image,
   guint8 component;
   int i;
 
-  bpl = image->bpl;
-  v = gdk_colormap_get_visual(cmap);
+  v = gdk_colormap_get_visual (cmap);
 
   if (image->depth != v->depth)
     {
@@ -954,7 +952,7 @@ convert_real_slow (GdkImage    *image,
       o = orow;
       for (xx = x1; xx < x2; xx++)
 	{
-	  pixel = gdk_image_get_pixel(image, xx, yy);
+	  pixel = gdk_image_get_pixel (image, xx, yy);
 	  switch (v->type)
 	    {
 				/* I assume this is right for static & greyscale's too? */

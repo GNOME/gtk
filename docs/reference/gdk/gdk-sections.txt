@@ -825,6 +825,7 @@ gdk_utf8_to_string_target
 gdk_utf8_to_compound_text
 gdk_utf8_to_compound_text_for_display
 gdk_atom_intern
+gdk_atom_intern_static_string
 gdk_atom_name
 gdk_property_get
 gdk_property_change
