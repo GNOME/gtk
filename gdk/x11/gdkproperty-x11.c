@@ -219,7 +219,7 @@ _gdk_x11_precache_atoms (GdkDisplay          *display,
   n_xatoms = 0;
   for (i = 0; i < n_atoms; i++)
     {
-      GdkAtom atom = gdk_atom_intern (atom_names[i], FALSE);
+      GdkAtom atom = gdk_atom_intern_static_string (atom_names[i]);
       if (lookup_cached_xatom (display, atom) == None)
 	{
 	  atoms[n_xatoms] = atom;
@@ -354,9 +354,9 @@ virtual_atom_check_init (void)
     }
 }
 
-GdkAtom
-gdk_atom_intern (const gchar *atom_name, 
-		 gboolean     only_if_exists)
+static GdkAtom
+intern_atom (const gchar *atom_name, 
+	     gboolean     dup)
 {
   GdkAtom result;
 
@@ -367,7 +367,7 @@ gdk_atom_intern (const gchar *atom_name,
     {
       result = INDEX_TO_ATOM (virtual_atom_array->len);
       
-      g_ptr_array_add (virtual_atom_array, g_strdup (atom_name));
+      g_ptr_array_add (virtual_atom_array, dup ? g_strdup (atom_name) : atom_name);
       g_hash_table_insert (virtual_atom_hash, 
 			   g_ptr_array_index (virtual_atom_array,
 					      ATOM_TO_INDEX (result)),
@@ -375,6 +375,38 @@ gdk_atom_intern (const gchar *atom_name,
     }
 
   return result;
+}
+
+GdkAtom
+gdk_atom_intern (const gchar *atom_name, 
+		 gboolean     only_if_exists)
+{
+  return intern_atom (atom_name, TRUE);
+}
+
+/**
+ * gdk_atom_intern_static_string:
+ * @atom_name: a static string
+ *
+ * Finds or creates an atom corresponding to a given string.
+ *
+ * Note that this function is identical to gdk_atom_intern() except
+ * that if a new #GdkAtom is created the string itself is used rather 
+ * than a copy. This saves memory, but can only be used if the string 
+ * will <emphasis>always</emphasis> exist. It can be used with statically
+ * allocated strings in the main program, but not with statically 
+ * allocated memory in dynamically loaded modules, if you expect to
+ * ever unload the module again (e.g. do not use this function in
+ * GTK+ theme engines).
+ *
+ * Returns: the atom corresponding to @atom_name
+ * 
+ * Since: 2.10
+ */
+GdkAtom
+gdk_atom_intern_static_string (const gchar *atom_name)
+{
+  return intern_atom (atom_name, FALSE);
 }
 
 static G_CONST_RETURN char *

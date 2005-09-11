@@ -101,7 +101,7 @@ _gdk_windowing_init (void)
   XSetErrorHandler (gdk_x_error);
   XSetIOErrorHandler (gdk_x_io_error);
 
-  _gdk_selection_property = gdk_atom_intern ("GDK_SELECTION", FALSE);
+  _gdk_selection_property = gdk_atom_intern_static_string ("GDK_SELECTION");
 }
 
 void

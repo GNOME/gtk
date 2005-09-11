@@ -222,7 +222,7 @@ _gdk_events_init (GdkDisplay *display)
   display_sources = g_list_prepend (display_sources,display_source);
 
   gdk_display_add_client_message_filter (display,
-					 gdk_atom_intern ("WM_PROTOCOLS", FALSE), 
+					 gdk_atom_intern_static_string ("WM_PROTOCOLS"), 
 					 gdk_wm_protocols_filter,   
 					 NULL);
 }

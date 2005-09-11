@@ -2042,7 +2042,7 @@ gdk_x11_window_move_to_current_desktop (GdkWindow *window)
     return;
 
   if (gdk_x11_screen_supports_net_wm_hint (GDK_WINDOW_SCREEN (window),
-					   gdk_atom_intern ("_NET_WM_DESKTOP", FALSE)))
+					   gdk_atom_intern_static_string ("_NET_WM_DESKTOP")))
     {
       XEvent xev;
       Atom type;
@@ -2116,7 +2116,7 @@ gdk_window_focus (GdkWindow *window,
   display = GDK_WINDOW_DISPLAY (window);
 
   if (gdk_x11_screen_supports_net_wm_hint (GDK_WINDOW_SCREEN (window),
-					   gdk_atom_intern ("_NET_ACTIVE_WINDOW", FALSE)))
+					   gdk_atom_intern_static_string ("_NET_ACTIVE_WINDOW")))
     {
       XEvent xev;
 
@@ -2341,7 +2341,7 @@ gdk_window_set_modal_hint (GdkWindow *window,
 
   if (GDK_WINDOW_IS_MAPPED (window))
     gdk_wmspec_change_state (modal, window,
-			     gdk_atom_intern ("_NET_WM_STATE_MODAL", FALSE), 
+			     gdk_atom_intern_static_string ("_NET_WM_STATE_MODAL"), 
 			     NULL);
 }
 
@@ -2376,7 +2376,7 @@ gdk_window_set_skip_taskbar_hint (GdkWindow *window,
 
   if (GDK_WINDOW_IS_MAPPED (window))
     gdk_wmspec_change_state (skips_taskbar, window,
-			     gdk_atom_intern ("_NET_WM_STATE_SKIP_TASKBAR", FALSE), 
+			     gdk_atom_intern_static_string ("_NET_WM_STATE_SKIP_TASKBAR"), 
 			     NULL);
 }
 
@@ -2413,7 +2413,7 @@ gdk_window_set_skip_pager_hint (GdkWindow *window,
   
   if (GDK_WINDOW_IS_MAPPED (window))
     gdk_wmspec_change_state (skips_pager, window,
-			     gdk_atom_intern ("_NET_WM_STATE_SKIP_PAGER", FALSE), 
+			     gdk_atom_intern_static_string ("_NET_WM_STATE_SKIP_PAGER"), 
 			     NULL);
 }
 
@@ -4279,7 +4279,7 @@ gdk_window_stick (GdkWindow *window)
 
       /* Request stick during viewport scroll */
       gdk_wmspec_change_state (TRUE, window,
-			       gdk_atom_intern ("_NET_WM_STATE_STICKY", FALSE),
+			       gdk_atom_intern_static_string ("_NET_WM_STATE_STICKY"),
 			       NULL);
 
       /* Request desktop 0xFFFFFFFF */
@@ -4340,7 +4340,7 @@ gdk_window_unstick (GdkWindow *window)
       
       /* Request unstick from viewport */
       gdk_wmspec_change_state (FALSE, window,
-			       gdk_atom_intern ("_NET_WM_STATE_STICKY", FALSE),
+			       gdk_atom_intern_static_string ("_NET_WM_STATE_STICKY"),
 			       NULL);
 
       /* Get current desktop, then set it; this is a race, but not
@@ -4413,8 +4413,8 @@ gdk_window_maximize (GdkWindow *window)
 
   if (GDK_WINDOW_IS_MAPPED (window))
     gdk_wmspec_change_state (TRUE, window,
-			     gdk_atom_intern ("_NET_WM_STATE_MAXIMIZED_VERT", FALSE),
-			     gdk_atom_intern ("_NET_WM_STATE_MAXIMIZED_HORZ", FALSE));
+			     gdk_atom_intern_static_string ("_NET_WM_STATE_MAXIMIZED_VERT"),
+			     gdk_atom_intern_static_string ("_NET_WM_STATE_MAXIMIZED_HORZ"));
   else
     gdk_synthesize_window_state (window,
 				 0,
@@ -4448,8 +4448,8 @@ gdk_window_unmaximize (GdkWindow *window)
 
   if (GDK_WINDOW_IS_MAPPED (window))
     gdk_wmspec_change_state (FALSE, window,
-			     gdk_atom_intern ("_NET_WM_STATE_MAXIMIZED_VERT", FALSE),
-			     gdk_atom_intern ("_NET_WM_STATE_MAXIMIZED_HORZ", FALSE));
+			     gdk_atom_intern_static_string ("_NET_WM_STATE_MAXIMIZED_VERT"),
+			     gdk_atom_intern_static_string ("_NET_WM_STATE_MAXIMIZED_HORZ"));
   else
     gdk_synthesize_window_state (window,
 				 GDK_WINDOW_STATE_MAXIMIZED,
@@ -4486,7 +4486,7 @@ gdk_window_fullscreen (GdkWindow *window)
 
   if (GDK_WINDOW_IS_MAPPED (window))
     gdk_wmspec_change_state (TRUE, window,
-			     gdk_atom_intern ("_NET_WM_STATE_FULLSCREEN", FALSE),
+			     gdk_atom_intern_static_string ("_NET_WM_STATE_FULLSCREEN"),
                              GDK_NONE);
 
   else
@@ -4522,7 +4522,7 @@ gdk_window_unfullscreen (GdkWindow *window)
 
   if (GDK_WINDOW_IS_MAPPED (window))
     gdk_wmspec_change_state (FALSE, window,
-			     gdk_atom_intern ("_NET_WM_STATE_FULLSCREEN", FALSE),
+			     gdk_atom_intern_static_string ("_NET_WM_STATE_FULLSCREEN"),
                              GDK_NONE);
 
   else
@@ -4560,10 +4560,10 @@ gdk_window_set_keep_above (GdkWindow *window, gboolean setting)
     {
       if (setting)
 	gdk_wmspec_change_state (FALSE, window,
-				 gdk_atom_intern ("_NET_WM_STATE_BELOW", FALSE),
+				 gdk_atom_intern_static_string ("_NET_WM_STATE_BELOW"),
 				 GDK_NONE);
       gdk_wmspec_change_state (setting, window,
-			       gdk_atom_intern ("_NET_WM_STATE_ABOVE", FALSE),
+			       gdk_atom_intern_static_string ("_NET_WM_STATE_ABOVE"),
 			       GDK_NONE);
     }
   else
@@ -4601,10 +4601,10 @@ gdk_window_set_keep_below (GdkWindow *window, gboolean setting)
     {
       if (setting)
 	gdk_wmspec_change_state (FALSE, window,
-				 gdk_atom_intern ("_NET_WM_STATE_ABOVE", FALSE),
+				 gdk_atom_intern_static_string ("_NET_WM_STATE_ABOVE"),
 				 GDK_NONE);
       gdk_wmspec_change_state (setting, window,
-			       gdk_atom_intern ("_NET_WM_STATE_BELOW", FALSE),
+			       gdk_atom_intern_static_string ("_NET_WM_STATE_BELOW"),
 			       GDK_NONE);
     }
   else
@@ -5881,7 +5881,7 @@ gdk_window_begin_resize_drag (GdkWindow     *window,
     return;
 
   if (gdk_x11_screen_supports_net_wm_hint (GDK_WINDOW_SCREEN (window),
-					   gdk_atom_intern ("_NET_WM_MOVERESIZE", FALSE)))
+					   gdk_atom_intern_static_string ("_NET_WM_MOVERESIZE")))
     wmspec_resize_drag (window, edge, button, root_x, root_y, timestamp);
   else
     emulate_resize_drag (window, edge, button, root_x, root_y, timestamp);
@@ -5916,7 +5916,7 @@ gdk_window_begin_move_drag (GdkWindow *window,
     return;
 
   if (gdk_x11_screen_supports_net_wm_hint (GDK_WINDOW_SCREEN (window),
-					   gdk_atom_intern ("_NET_WM_MOVERESIZE", FALSE)))
+					   gdk_atom_intern_static_string ("_NET_WM_MOVERESIZE")))
     wmspec_moveresize (window, _NET_WM_MOVERESIZE_MOVE, root_x, root_y,
 		       timestamp);
   else

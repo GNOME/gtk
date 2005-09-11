@@ -1919,7 +1919,7 @@ xdnd_initialize_actions (void)
   
   xdnd_actions_initialized = TRUE;
   for (i=0; i < xdnd_n_actions; i++)
-    xdnd_actions_table[i].atom = gdk_atom_intern (xdnd_actions_table[i].name, FALSE);
+    xdnd_actions_table[i].atom = gdk_atom_intern_static_string (xdnd_actions_table[i].name);
 }
 
 static GdkDragAction
@@ -2938,14 +2938,14 @@ _gdk_dnd_init (GdkDisplay *display)
 
   gdk_display_add_client_message_filter (
 	display,
-	gdk_atom_intern ("_MOTIF_DRAG_AND_DROP_MESSAGE", FALSE),
+	gdk_atom_intern_static_string ("_MOTIF_DRAG_AND_DROP_MESSAGE"),
 	motif_dnd_filter, NULL);
   
   for (i = 0; i < G_N_ELEMENTS (xdnd_filters); i++)
     {
       gdk_display_add_client_message_filter (
 	display,
-	gdk_atom_intern (xdnd_filters[i].atom_name, FALSE),
+	gdk_atom_intern_static_string (xdnd_filters[i].atom_name),
 	xdnd_filters[i].func, NULL);
     }
 }		      
@@ -3408,8 +3408,8 @@ gdk_drag_motion (GdkDragContext *context,
 		/* GTK+ traditionally has used application/x-rootwin-drop,
 		 * but the XDND spec specifies x-rootwindow-drop.
 		 */
-		GdkAtom target1 = gdk_atom_intern ("application/x-rootwindow-drop", FALSE);
-		GdkAtom target2 = gdk_atom_intern ("application/x-rootwin-drop", FALSE);
+		GdkAtom target1 = gdk_atom_intern_static_string ("application/x-rootwindow-drop");
+		GdkAtom target2 = gdk_atom_intern_static_string ("application/x-rootwin-drop");
 
 		if (g_list_find (context->targets,
 				 GDK_ATOM_TO_POINTER (target1)) ||
@@ -3798,7 +3798,7 @@ gdk_drag_get_selection (GdkDragContext *context)
     return gdk_x11_xatom_to_atom_for_display (GDK_DRAWABLE_DISPLAY (context->source_window),
 					      (PRIVATE_DATA (context))->motif_selection);
   else if (context->protocol == GDK_DRAG_PROTO_XDND)
-    return gdk_atom_intern ("XdndSelection", FALSE);
+    return gdk_atom_intern_static_string ("XdndSelection");
   else
     return GDK_NONE;
 }

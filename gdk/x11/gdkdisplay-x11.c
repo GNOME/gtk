@@ -896,7 +896,7 @@ _gdk_windowing_set_default_display (GdkDisplay *display)
 		       gdk_x11_get_xatom_by_name_for_display (display, "_NET_STARTUP_ID"),
 		       gdk_x11_get_xatom_by_name_for_display (display, "UTF8_STRING"), 8,
 		       PropModeReplace,
-		       startup_id, strlen (startup_id));
+		       (guchar *)startup_id, strlen (startup_id));
     }
 }
 
