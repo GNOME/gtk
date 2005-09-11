@@ -822,7 +822,7 @@ msgstr "Những cờ gỡ lỗi Gdk cần bỏ đặt"
 
 #: ../gdk/keyname-table.h:3940
 msgid "keyboard label|BackSpace"
-msgstr "Lùi_một"
+msgstr "BackSpace"
 
 #: ../gdk/keyname-table.h:3941
 msgid "keyboard label|Tab"
@@ -830,63 +830,63 @@ msgstr "Tab"
 
 #: ../gdk/keyname-table.h:3942
 msgid "keyboard label|Return"
-msgstr "Trở_về"
+msgstr "Enter"
 
 #: ../gdk/keyname-table.h:3943
 msgid "keyboard label|Pause"
-msgstr "Tạm"
+msgstr "Pause"
 
 #: ../gdk/keyname-table.h:3944
 msgid "keyboard label|Scroll_Lock"
-msgstr "Khóa_cuộn"
+msgstr "Scroll_Lock"
 
 #: ../gdk/keyname-table.h:3945
 msgid "keyboard label|Sys_Req"
-msgstr "HĐH_cần"
+msgstr "Sys_Req"
 
 #: ../gdk/keyname-table.h:3946
 msgid "keyboard label|Escape"
-msgstr "Thoát"
+msgstr "ESC"
 
 #: ../gdk/keyname-table.h:3947
 msgid "keyboard label|Multi_key"
-msgstr "Đa_phím"
+msgstr "Multi_key"
 
 #: ../gdk/keyname-table.h:3948
 msgid "keyboard label|Home"
-msgstr "Về"
+msgstr "Home"
 
 #: ../gdk/keyname-table.h:3949
 msgid "keyboard label|Page_Up"
-msgstr "Trang_lên"
+msgstr "Page_Up"
 
 #: ../gdk/keyname-table.h:3950
 msgid "keyboard label|Page_Down"
-msgstr "Trang_xuống"
+msgstr "Page_Down"
 
 #: ../gdk/keyname-table.h:3951
 msgid "keyboard label|End"
-msgstr "Cuối"
+msgstr "End"
 
 #: ../gdk/keyname-table.h:3952
 msgid "keyboard label|Begin"
-msgstr "Đầu"
+msgstr "Begin"
 
 #: ../gdk/keyname-table.h:3953
 msgid "keyboard label|Print"
-msgstr "In"
+msgstr "Print"
 
 #: ../gdk/keyname-table.h:3954
 msgid "keyboard label|Insert"
-msgstr "Chèn"
+msgstr "Insert"
 
 #: ../gdk/keyname-table.h:3955
 msgid "keyboard label|Num_Lock"
-msgstr "Khóa_số"
+msgstr "Num_Lock"
 
 #: ../gdk/keyname-table.h:3956
 msgid "keyboard label|KP_Space"
-msgstr "KP_Cách"
+msgstr "KP_Khoảng_Trắng"
 
 #: ../gdk/keyname-table.h:3957
 msgid "keyboard label|KP_Tab"
@@ -894,63 +894,63 @@ msgstr "KP_Tab"
 
 #: ../gdk/keyname-table.h:3958
 msgid "keyboard label|KP_Enter"
-msgstr "KP_Nhập"
+msgstr "KP_Enter"
 
 #: ../gdk/keyname-table.h:3959
 msgid "keyboard label|KP_Home"
-msgstr "KP_Về"
+msgstr "KP_Home"
 
 #: ../gdk/keyname-table.h:3960
 msgid "keyboard label|KP_Left"
-msgstr "KP_Trái"
+msgstr "KP_Left"
 
 #: ../gdk/keyname-table.h:3961
 msgid "keyboard label|KP_Up"
-msgstr "KP_Lên"
+msgstr "KP_Up"
 
 #: ../gdk/keyname-table.h:3962
 msgid "keyboard label|KP_Right"
-msgstr "KP_Phải"
+msgstr "KP_Right"
 
 #: ../gdk/keyname-table.h:3963
 msgid "keyboard label|KP_Down"
-msgstr "KP_Xuống"
+msgstr "KP_Down"
 
 #: ../gdk/keyname-table.h:3964
 msgid "keyboard label|KP_Page_Up"
-msgstr "KP_Trang_lên"
+msgstr "KP_Page_Up"
 
 #: ../gdk/keyname-table.h:3965
 msgid "keyboard label|KP_Prior"
-msgstr "KP_Trước"
+msgstr "KP_Prior"
 
 #: ../gdk/keyname-table.h:3966
 msgid "keyboard label|KP_Page_Down"
-msgstr "KP_Trang_xuống"
+msgstr "KP_Page_Down"
 
 #: ../gdk/keyname-table.h:3967
 msgid "keyboard label|KP_Next"
-msgstr "KP_Kế"
+msgstr "KP_Next"
 
 #: ../gdk/keyname-table.h:3968
 msgid "keyboard label|KP_End"
-msgstr "KP_Cuối"
+msgstr "KP_End"
 
 #: ../gdk/keyname-table.h:3969
 msgid "keyboard label|KP_Begin"
-msgstr "KP_Đầu"
+msgstr "KP_Begin"
 
 #: ../gdk/keyname-table.h:3970
 msgid "keyboard label|KP_Insert"
-msgstr "KP_Chèn"
+msgstr "KP_Insert"
 
 #: ../gdk/keyname-table.h:3971
 msgid "keyboard label|KP_Delete"
-msgstr "KP_Xóa_bỏ"
+msgstr "KP_Delete"
 
 #: ../gdk/keyname-table.h:3972
 msgid "keyboard label|Delete"
-msgstr "Xóa_bỏ"
+msgstr "Delete"
 
 #. Description of --sync in --help output
 #: ../gdk/win32/gdkmain-win32.c:60
@@ -1063,7 +1063,7 @@ msgstr "Alt"
 #. do not translate the part before the |
 #: ../gtk/gtkaccellabel.c:577
 msgid "keyboard label|Space"
-msgstr "Space"
+msgstr "Khoảng trắng"
 
 #. do not translate the part before the |
 #: ../gtk/gtkaccellabel.c:581
@@ -1200,7 +1200,7 @@ msgstr "Độ sáng của màu."
 
 #: ../gtk/gtkcolorsel.c:1994
 msgid "_Red:"
-msgstr "_Đỏ :"
+msgstr "Đỏ:"
 
 #: ../gtk/gtkcolorsel.c:1995
 msgid "Amount of red light in the color."
@@ -1216,7 +1216,7 @@ msgstr "Lượng sắc xanh lá cây trong màu."
 
 #: ../gtk/gtkcolorsel.c:1998
 msgid "_Blue:"
-msgstr "Xanh _nước:"
+msgstr "Xanh _lục:"
 
 #: ../gtk/gtkcolorsel.c:1999
 msgid "Amount of blue light in the color."
@@ -1279,12 +1279,12 @@ msgstr "Chọn tập tin"
 #: ../gtk/gtkfilechooserbutton.c:68 ../gtk/gtkfilechooserdefault.c:1423
 #: ../gtk/gtkpathbar.c:1020
 msgid "Home"
-msgstr "Về"
+msgstr "Thư mục cá nhân"
 
 #: ../gtk/gtkfilechooserbutton.c:69 ../gtk/gtkfilechooserdefault.c:1458
 #: ../gtk/gtkpathbar.c:1022
 msgid "Desktop"
-msgstr "Bàn làm việc"
+msgstr "Màn hình nền"
 
 #: ../gtk/gtkfilechooserbutton.c:70
 msgid "(None)"
@@ -1370,7 +1370,7 @@ msgstr "Thư mục"
 
 #: ../gtk/gtkfilechooserdefault.c:3327 ../gtk/gtkstock.c:317
 msgid "_Add"
-msgstr "Th_êm"
+msgstr "T_hêm"
 
 #: ../gtk/gtkfilechooserdefault.c:3334
 msgid "Add the selected folder to the Bookmarks"
@@ -1395,11 +1395,11 @@ msgstr "Không thể chọn tập tin « %s » vì nó không phải là đườ
 
 #: ../gtk/gtkfilechooserdefault.c:3574
 msgid "_Add to Bookmarks"
-msgstr "Th_êm vào Đánh dấu"
+msgstr "T_hêm vào Đánh dấu"
 
 #: ../gtk/gtkfilechooserdefault.c:3584
 msgid "Open _Location"
-msgstr "Mở _Địa điểm"
+msgstr "Mở Đị_a điểm"
 
 #: ../gtk/gtkfilechooserdefault.c:3596
 msgid "Show _Hidden Files"
@@ -1415,11 +1415,11 @@ msgstr "Tên"
 
 #: ../gtk/gtkfilechooserdefault.c:3790
 msgid "Size"
-msgstr "Cỡ"
+msgstr "Kích thước"
 
 #: ../gtk/gtkfilechooserdefault.c:3803
 msgid "Modified"
-msgstr "Đã sửa đổi"
+msgstr "Lúc thay đổi"
 
 #: ../gtk/gtkfilechooserdefault.c:3835
 msgid "Select which types of files are shown"
@@ -1540,7 +1540,7 @@ msgstr "Lưu vào Địa điểm"
 
 #: ../gtk/gtkfilechooserdefault.c:7271
 msgid "_Location:"
-msgstr "_Địa điểm:"
+msgstr "Đị_a điểm:"
 
 #: ../gtk/gtkfilesel.c:727
 msgid "Folders"
@@ -1580,7 +1580,7 @@ msgstr "_Xóa bỏ tập tin"
 
 #: ../gtk/gtkfilesel.c:1136
 msgid "_Rename File"
-msgstr "_Đổi tên tập tin"
+msgstr "Đổ_i tên tập tin"
 
 #: ../gtk/gtkfilesel.c:1438
 #, c-format
@@ -1688,7 +1688,7 @@ msgstr "Đổi tên tập tin « %s » thành:"
 
 #: ../gtk/gtkfilesel.c:1790
 msgid "_Rename"
-msgstr "_Đổi tên"
+msgstr "Đổ_i tên"
 
 #: ../gtk/gtkfilesel.c:2222
 msgid "_Selection: "
@@ -1737,7 +1737,7 @@ msgstr "Hệ thống tập tin này không hỗ trợ gắn kết"
 
 #: ../gtk/gtkfilesystemunix.c:639
 msgid "File System"
-msgstr "Hệ thống Tập tin"
+msgstr "Hệ tập tin"
 
 #: ../gtk/gtkfilesystemunix.c:796
 #, c-format
@@ -1788,7 +1788,7 @@ msgstr "Chọn phông chữ"
 #. Initialize fields
 #: ../gtk/gtkfontbutton.c:286
 msgid "Sans 12"
-msgstr "Không chân 12"
+msgstr "Sans 12"
 
 #: ../gtk/gtkfontbutton.c:804
 msgid "Font"
@@ -1810,7 +1810,7 @@ msgstr "_Kiểu:"
 
 #: ../gtk/gtkfontsel.c:373
 msgid "Si_ze:"
-msgstr "_Cỡ :"
+msgstr "_Cỡ:"
 
 #. create the text entry widget
 #: ../gtk/gtkfontsel.c:549
@@ -1823,7 +1823,7 @@ msgstr "Chọn phông chữ"
 
 #: ../gtk/gtkgamma.c:401
 msgid "Gamma"
-msgstr "Gamma (γ)"
+msgstr "Gamma"
 
 #: ../gtk/gtkgamma.c:411
 msgid "_Gamma value"
@@ -1974,7 +1974,7 @@ msgstr "Các cờ gỡ lỗi GTK+ cần bỏ đặt"
 #.
 #: ../gtk/gtkmain.c:493
 msgid "default:LTR"
-msgstr "mặc_định:LTR"
+msgstr "default:LTR"
 
 #: ../gtk/gtkmain.c:576
 msgid "GTK+ Options"
@@ -2058,7 +2058,7 @@ msgstr "_Xóa"
 
 #: ../gtk/gtkstock.c:323
 msgid "_Close"
-msgstr "_Đóng"
+msgstr "Đón_g"
 
 #: ../gtk/gtkstock.c:324
 msgid "_Convert"
@@ -2082,7 +2082,7 @@ msgstr "Chạ_y"
 
 #: ../gtk/gtkstock.c:329
 msgid "_Edit"
-msgstr "_HIệu chỉnh"
+msgstr "_Hiệu chỉnh"
 
 #: ../gtk/gtkstock.c:330
 msgid "_Find"
@@ -2102,7 +2102,7 @@ msgstr "_Toàn màn hình"
 
 #: ../gtk/gtkstock.c:334
 msgid "_Leave Fullscreen"
-msgstr "_Rời Toàn màn hình"
+msgstr "_Ngưng Toàn màn hình"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:336
@@ -2112,7 +2112,7 @@ msgstr "Đá_y"
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:338
 msgid "Navigation|_First"
-msgstr "_Đầu"
+msgstr "Đầ_u"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:340
@@ -2154,7 +2154,7 @@ msgstr "Trợ _giúp"
 
 #: ../gtk/gtkstock.c:353
 msgid "_Home"
-msgstr "_Về"
+msgstr "_Gốc"
 
 #: ../gtk/gtkstock.c:354
 msgid "Increase Indent"
@@ -2254,7 +2254,7 @@ msgstr "_Không"
 
 #: ../gtk/gtkstock.c:388
 msgid "_OK"
-msgstr "_Được"
+msgstr "Đồ_ng ý"
 
 #: ../gtk/gtkstock.c:389
 msgid "_Open"
@@ -2314,7 +2314,7 @@ msgstr "_Phông chữ"
 
 #: ../gtk/gtkstock.c:404
 msgid "_Ascending"
-msgstr "T_ăng dần"
+msgstr "_Tăng dần"
 
 #: ../gtk/gtkstock.c:405
 msgid "_Descending"
@@ -2338,7 +2338,7 @@ msgstr "_Phục hồi"
 
 #: ../gtk/gtkstock.c:410
 msgid "_Underline"
-msgstr "Gạch ch_ân"
+msgstr "Gạch c_hân"
 
 #: ../gtk/gtkstock.c:411
 msgid "_Undo"
@@ -2382,7 +2382,7 @@ msgstr "RLE N_húng Phải-sang-trái"
 
 #: ../gtk/gtktextutil.c:57
 msgid "LRO Left-to-right _override"
-msgstr "LRO _Đè Trái-sang-phải"
+msgstr "_LRO Đè Trái-sang-phải"
 
 #: ../gtk/gtktextutil.c:58
 msgid "RLO Right-to-left o_verride"
