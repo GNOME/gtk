@@ -1,5 +1,9 @@
 2005-09-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkiconview.c (gtk_icon_view_class_init):
+	(gtk_icon_view_get_dest_item_at_pos):  Fix typos in the 
+	docs.  (#316008, #316027, #316121, Guillaume Cottenceau)
+
 	* gtk/gtkdnd.c (gtk_drag_set_icon_name): Fix a copy-and-paste
 	mistake in the docs.  (#315993, Guillaume Cottenceau)
 
