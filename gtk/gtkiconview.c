@@ -6651,7 +6651,13 @@ gtk_icon_view_create_drag_icon (GtkIconView *icon_view,
   gint index;
   GdkRectangle area;
 
+  g_return_val_if_fail (GTK_IS_ICON_VIEW (icon_view), NULL);
+  g_return_val_if_fail (path != NULL, NULL);
+
   widget = GTK_WIDGET (icon_view);
+
+  if (!GTK_WIDGET_REALIZED (widget))
+    return NULL;
 
   index = gtk_tree_path_get_indices (path)[0];
 
