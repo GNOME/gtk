@@ -111,6 +111,12 @@ create_simple_completion_model (void)
   gtk_list_store_set (store, &iter, 0, "Totipalmi", -1);
   gtk_list_store_append (store, &iter);
   gtk_list_store_set (store, &iter, 0, "zombie", -1);
+  gtk_list_store_append (store, &iter);
+  gtk_list_store_set (store, &iter, 0, "a\303\246x", -1);
+  gtk_list_store_append (store, &iter);
+  gtk_list_store_set (store, &iter, 0, "a\303\246y", -1);
+  gtk_list_store_append (store, &iter);
+  gtk_list_store_set (store, &iter, 0, "a\303\246z", -1);
  
   return GTK_TREE_MODEL (store);
 }
@@ -314,6 +320,7 @@ main (int argc, char *argv[])
   
   /* Create the completion object */
   completion = gtk_entry_completion_new ();
+  gtk_entry_completion_set_inline_completion (completion, TRUE);
   
   /* Assign the completion to the entry */
   gtk_entry_set_completion (GTK_ENTRY (entry), completion);
