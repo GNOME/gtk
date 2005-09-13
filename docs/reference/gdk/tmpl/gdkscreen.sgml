@@ -41,6 +41,16 @@ when GDK gets multihead support.
 
 @gdkscreen: the object which received the signal.
 
+<!-- ##### ARG GdkScreen:font-options ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GdkScreen:resolution ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gdk_screen_get_default ##### -->
 <para>
 
@@ -273,6 +283,42 @@ when GDK gets multihead support.
 @name: 
 @value: 
 @Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_get_font_options ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_set_font_options ##### -->
+<para>
+
+</para>
+
+@screen: 
+@options: 
+
+
+<!-- ##### FUNCTION gdk_screen_get_resolution ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_set_resolution ##### -->
+<para>
+
+</para>
+
+@screen: 
+@dpi: 
 
 
 <!-- ##### FUNCTION gdk_spawn_on_screen ##### -->

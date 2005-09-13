@@ -235,6 +235,15 @@ Finds or creates an atom corresponding to a given string.
 @Returns: the atom corresponding to @atom_name.
 
 
+<!-- ##### FUNCTION gdk_atom_intern_static_string ##### -->
+<para>
+
+</para>
+
+@atom_name: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_atom_name ##### -->
 <para>
 Determines the string corresponding to an atom.

@@ -1,3 +1,8 @@
+Tue Sep 13 14:16:27 2005  Tim Janik  <timj@imendio.com>
+
+	* gtk/tmpl/gtkrc.sgml: fixed wording and typos in some places.
+	added a new section "Optimizing RC Style Matches".
+
 2005-09-11  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/gdk-sections.txt: Add gdk_intern_static_string.

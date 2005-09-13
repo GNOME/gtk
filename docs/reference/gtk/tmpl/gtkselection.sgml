@@ -332,6 +332,46 @@ selection handling code.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_selection_data_targets_include_uri ##### -->
+<para>
+
+</para>
+
+@selection_data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_targets_include_image ##### -->
+<para>
+
+</para>
+
+@targets: 
+@n_targets: 
+@writable: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_targets_include_text ##### -->
+<para>
+
+</para>
+
+@targets: 
+@n_targets: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_targets_include_uri ##### -->
+<para>
+
+</para>
+
+@targets: 
+@n_targets: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_selection_remove_all ##### -->
 <para>
 </para>

@@ -99,6 +99,11 @@ Toplevel which can contain other widgets
 
 </para>
 
+<!-- ##### ARG GtkWindow:deletable ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkWindow:destroy-with-parent ##### -->
 <para>
 
@@ -688,6 +693,15 @@ Deprecated alias for gtk_window_set_position().
 @setting: 
 
 
+<!-- ##### FUNCTION gtk_window_set_deletable ##### -->
+<para>
+
+</para>
+
+@window: 
+@setting: 
+
+
 <!-- ##### FUNCTION gtk_window_set_frame_dimensions ##### -->
 <para>
 
@@ -782,6 +796,15 @@ Deprecated alias for gtk_window_set_position().
 
 
 <!-- ##### FUNCTION gtk_window_get_decorated ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_get_deletable ##### -->
 <para>
 
 </para>

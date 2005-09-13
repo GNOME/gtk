@@ -102,6 +102,16 @@ accessed through the function described below.
 @toolbar: 
 @style: 
 
+<!-- ##### ARG GtkToolbar:icon-size ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolbar:icon-size-set ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkToolbar:orientation ##### -->
 <para>
 

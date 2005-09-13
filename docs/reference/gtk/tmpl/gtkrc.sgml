@@ -51,14 +51,18 @@ attaches them to particular widgets. The attachment is done
 by the <literal>widget</literal>, <literal>widget_class</literal>,
 and <literal>class</literal> declarations. As an example
 of such a statement:
+
 <informalexample><programlisting>
 widget "mywindow.*.GtkEntry" style "my-entry-class"
 </programlisting></informalexample>
+
 attaches the style <literal>"my-entry-class"</literal>
-to all widgets whose <firstterm>widget class</firstterm>
+to all widgets whose <firstterm>widget path</firstterm>
 matches the <firstterm>pattern</firstterm>
-<literal>"mywindow.*.GtkEntry"</literal>.
+<literal>"mywindow.*.GtkEntry"</literal>. That is, all
+#GtkEntry widgets which are part of a #GtkWindow named <literal>"mywindow"</literal>.
 </para>
+
 <para>
 The patterns here are given in the standard shell glob
 syntax. The <literal>"?"</literal> wildcard matches
@@ -66,7 +70,7 @@ any character, while <literal>"*"</literal> matches
 zero or more of any character. The three types of
 matching are against the widget path, the
 <firstterm>class path</firstterm> and the class
-hierarchy. Both the widget and the class paths consists of a
+hierarchy. Both the widget path and the class path consist of a
 <literal>"."</literal> separated list of all the
 parents of the widget and the widget itself from
 outermost to innermost. The difference is that in
@@ -77,9 +81,9 @@ for the class path, the class name is always used.
 </para>
 <para>
 So, if you have a #GtkEntry named
-<literal>"myentry"</literal>, inside of a of a window
+<literal>"myentry"</literal>, inside of a horizontal box in a window
 named <literal>"mywindow"</literal>, then the
-widget path is: <literal>"mwindow.GtkHBox.myentry"</literal>
+widget path is: <literal>"mywindow.GtkHBox.myentry"</literal>
 while the class path is: <literal>"GtkWindow.GtkHBox.GtkEntry"</literal>.
 </para>
 <para>
@@ -117,6 +121,80 @@ up, and <literal>gtk</literal> is used for styles
 that GTK+ creates internally.
 </para>
 
+</refsect2>
+
+<refsect2><title>Optimizing RC Style Matches</title>
+<para>
+Everytime a widget is created and added to the layout hierarchy of a #GtkWindow
+("anchored" to be exact), a list of matching RC styles out of all RC styles read
+in so far is composed.
+For this, every RC style is matched against the widgets class path,
+the widgets name path and widgets inheritance hierarchy.
+As a consequence, significant slowdown can be caused by utilization of many
+RC styles and by using RC sytle patterns that are slow or complicated to match
+against a given widget.
+The following ordered list provides a number of advices (prioritized by effectiveness)
+to reduce the performance overhead associated with RC style matches:
+
+<orderedlist>
+
+  <listitem><para>
+  Move RC styles for specific applications into RC files dedicated to those
+  applications and parse application specific RC files only from
+  applications that are affected by them.
+  This reduces the overall amount of RC styles that have to be considered
+  for a match across a group of applications.
+  </para></listitem>
+
+  <listitem><para>
+  Merge multiple styles which use the same matching rule, for instance:
+<informalexample><programlisting>
+     style "Foo" { foo_content }
+     class "X" style "Foo"
+     style "Bar" { bar_content }
+     class "X" style "Bar"
+</programlisting></informalexample>
+   is faster to match as:
+<informalexample><programlisting>
+     style "FooBar" { foo_content bar_content }
+     class "X" style "FooBar"
+</programlisting></informalexample>
+  </para></listitem>
+
+  <listitem><para>
+  Use of wildcards should be avoided, this can reduce the individual RC style
+  match to a single integer comparison in most cases.
+  </para></listitem>
+
+  <listitem><para>
+  To avoid complex recursive matching, specification of full class names
+  (for <literal>class</literal> matches) or full path names (for
+  <literal>widget</literal> and <literal>widget_class</literal> matches)
+  is to be preferred over shortened names
+  containing <literal>"*"</literal> or <literal>"?"</literal>.
+  </para></listitem>
+
+  <listitem><para>
+  If at all necessary, wildcards should only be used at the tail or head
+  of a pattern. This reduces the match complexity to a string comparison
+  per RC style.
+  </para></listitem>
+
+  <listitem><para>
+  When using wildcards, use of <literal>"?"</literal> should be preferred
+  over <literal>"*"</literal>. This can reduce the matching complexity from
+  O(n^2) to O(n). For example <literal>"Gtk*Box"</literal> can be turned into
+  <literal>"Gtk?Box"</literal> and will still match #GtkHBox and #GtkVBox.
+  </para></listitem>
+
+  <listitem><para>
+  The use of <literal>"*"</literal> wildcards should be restricted as much
+  as possible, because matching <literal>"A*B*C*RestString"</literal> can
+  result in matching complexities worse than O(n^2) in the length of strings.
+  </para></listitem>
+</orderedlist>
+
+</para>
 </refsect2>
 
 <refsect2><title>Toplevel declarations</title>

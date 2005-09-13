@@ -773,6 +773,7 @@ The "Save As" item.
 </para>
 
 
+
 <!-- ##### MACRO GTK_STOCK_SELECT_ALL ##### -->
 <para>
 The "Select All" item.
@@ -780,6 +781,7 @@ The "Select All" item.
 </para>
 
 @Since: 2.10
+
 
 <!-- ##### MACRO GTK_STOCK_SELECT_COLOR ##### -->
 <para>
