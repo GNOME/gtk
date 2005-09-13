@@ -3011,7 +3011,7 @@ gtk_drag_set_icon_pixmap (GdkDragContext    *context,
  * @hot_x: the X offset of the hotspot within the icon
  * @hot_y: the Y offset of the hotspot within the icon
  * 
- * Sets the icon for the window from a named themed icon. See
+ * Sets the icon for a given drag from a named themed icon. See
  * the docs for #GtkIconTheme for more details. Note that the
  * size of the icon depends on the icon theme (the icon is
  * loaded at the symbolic size #GTK_ICON_SIZE_DND), thus 

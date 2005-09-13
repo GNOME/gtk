@@ -1,5 +1,8 @@
 2005-09-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkdnd.c (gtk_drag_set_icon_name): Fix a copy-and-paste
+	mistake in the docs.  (#315993, Guillaume Cottenceau)
+
 	* tests/testentrycompletion.c (create_simple_completion_model): Add
 	some strings containing multibyte characters.
 
