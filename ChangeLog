@@ -1,5 +1,8 @@
 2005-09-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooser.c (gtk_file_chooser_class_init): Add some docs.
+	(#316001, Guillaume Cottenceau)
+
 	* gtk/gtkdnd.c (gtk_drag_set_icon_name): Fix a copy-and-paste
 	mistake in the docs.  (#315993, Guillaume Cottenceau)
 
