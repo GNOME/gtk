@@ -181,10 +181,6 @@ gtk_item_factory_class_init (GtkItemFactoryClass  *class)
 static void
 gtk_item_factory_init (GtkItemFactory	    *ifactory)
 {
-  GtkObject *object;
-
-  object = GTK_OBJECT (ifactory);
-
   ifactory->path = NULL;
   ifactory->accel_group = NULL;
   ifactory->widget = NULL;
@@ -1322,13 +1318,10 @@ void
 gtk_item_factory_delete_item (GtkItemFactory         *ifactory,
 			      const gchar            *path)
 {
-  GtkItemFactoryClass *class;
   GtkWidget *widget;
 
   g_return_if_fail (GTK_IS_ITEM_FACTORY (ifactory));
   g_return_if_fail (path != NULL);
-
-  class = GTK_ITEM_FACTORY_GET_CLASS (ifactory);
 
   widget = gtk_item_factory_get_widget (ifactory, path);
 

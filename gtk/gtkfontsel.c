@@ -681,8 +681,10 @@ gtk_font_selection_select_font (GtkTreeSelection *selection,
   GtkFontSelection *fontsel;
   GtkTreeModel *model;
   GtkTreeIter iter;
+#ifdef INCLUDE_FONT_ENTRIES
   const gchar *family_name;
-  
+#endif
+
   fontsel = GTK_FONT_SELECTION (data);
 
   if (gtk_tree_selection_get_selected (selection, &model, &iter))
@@ -694,9 +696,8 @@ gtk_font_selection_select_font (GtkTreeSelection *selection,
 	{
 	  fontsel->family = family;
 	  
-	  family_name = pango_font_family_get_name (fontsel->family);
-	  
 #ifdef INCLUDE_FONT_ENTRIES
+	  family_name = pango_font_family_get_name (fontsel->family);
 	  gtk_entry_set_text (GTK_ENTRY (fontsel->font_entry), family_name);
 #endif
 	  
@@ -936,12 +937,10 @@ gtk_font_selection_show_available_sizes (GtkFontSelection *fontsel,
 {
   gint i;
   GtkListStore *model;
-  GtkTreeSelection *selection;
   gchar buffer[128];
   gchar *p;
       
   model = GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (fontsel->size_list)));
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (fontsel->size_list));
 
   /* Insert the standard font sizes */
   if (first_time)

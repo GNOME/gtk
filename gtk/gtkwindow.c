@@ -2854,10 +2854,7 @@ static void
 gtk_window_unrealize_icon (GtkWindow *window)
 {
   GtkWindowIconInfo *info;
-  GtkWidget *widget;
 
-  widget = GTK_WIDGET (window);
-  
   info = get_icon_info (window);
 
   if (info == NULL)
@@ -3575,12 +3572,9 @@ gtk_window_get_size (GtkWindow *window,
                      gint      *height)
 {
   gint w, h;
-  GtkWidget *widget;
   
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-  widget = GTK_WIDGET (window);
-  
   if (width == NULL && height == NULL)
     return;
 
@@ -5225,7 +5219,7 @@ gtk_window_compute_configure_request (GtkWindow    *window,
   screen = gtk_window_check_screen (window);
   
   gtk_widget_size_request (widget, NULL);
-  gtk_window_compute_configure_request_size (window, &w, &h);
+  gtk_window_compute_configure_request_size (window, (guint *)&w, (guint *)&h);
   
   gtk_window_compute_hints (window, &new_geometry, &new_flags);
   gtk_window_constrain_size (window,
@@ -7326,7 +7320,7 @@ gboolean
 gtk_window_parse_geometry (GtkWindow   *window,
                            const gchar *geometry)
 {
-  gint result, x, y;
+  gint result, x = 0, y = 0;
   guint w, h;
   GdkGravity grav;
   gboolean size_set, pos_set;
@@ -7349,7 +7343,7 @@ gtk_window_parse_geometry (GtkWindow   *window,
       size_set = TRUE;
     }
 
-  gtk_window_get_size (window, &w, &h);
+  gtk_window_get_size (window, (gint *)&w, (gint *)&h);
   
   grav = GDK_GRAVITY_NORTH_WEST;
 

@@ -1290,8 +1290,6 @@ mouse_release (GtkWidget      *invisible,
 	       gpointer        data)
 {
   GtkColorSelection *colorsel = data;
-  ColorSelectionPrivate *priv;
-  priv = colorsel->private_data;  
 
   if (event->button != 1)
     return FALSE;
@@ -1394,8 +1392,6 @@ mouse_press (GtkWidget      *invisible,
 	     gpointer        data)
 {
   GtkColorSelection *colorsel = data;
-  ColorSelectionPrivate *priv;
-  priv = colorsel->private_data;
   
   if (event->type == GDK_BUTTON_PRESS &&
       event->button == 1)
@@ -2335,7 +2331,6 @@ gtk_color_selection_set_current_color (GtkColorSelection *colorsel,
 {
   ColorSelectionPrivate *priv;
   gint i;
-  gboolean previous_changed;
   
   g_return_if_fail (GTK_IS_COLOR_SELECTION (colorsel));
   g_return_if_fail (color != NULL);
@@ -2353,7 +2348,6 @@ gtk_color_selection_set_current_color (GtkColorSelection *colorsel,
 		  &priv->color[COLORSEL_VALUE]);
   if (priv->default_set == FALSE)
     {
-      previous_changed = TRUE;
       for (i = 0; i < COLORSEL_NUM_CHANNELS; i++)
 	priv->old_color[i] = priv->color[i];
     }

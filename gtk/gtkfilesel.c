@@ -653,7 +653,6 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   GtkWidget *entry_vbox;
   GtkWidget *label;
   GtkWidget *list_hbox, *list_container;
-  GtkWidget *confirm_area;
   GtkWidget *pulldown_hbox;
   GtkWidget *scrolled_win;
   GtkWidget *eventbox;
@@ -797,7 +796,6 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   gtk_widget_show (filesel->action_area);
   
   /*  The OK/Cancel button area */
-  confirm_area = dialog->action_area;
 
   /*  The Cancel button  */
   filesel->cancel_button = gtk_dialog_add_button (dialog,
@@ -3557,12 +3555,11 @@ static PossibleCompletion*
 attempt_homedir_completion (gchar           *text_to_complete,
 			    CompletionState *cmpl_state)
 {
-  gint index, length;
+  gint index;
 
   if (!cmpl_state->user_dir_name_buffer &&
       !get_pwdb (cmpl_state))
     return NULL;
-  length = strlen (text_to_complete) - 1;
 
   cmpl_state->user_completion_index += 1;
 

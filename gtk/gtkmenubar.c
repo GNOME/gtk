@@ -120,7 +120,6 @@ static void
 gtk_menu_bar_class_init (GtkMenuBarClass *class)
 {
   GObjectClass *gobject_class;
-  GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkMenuShellClass *menu_shell_class;
 
@@ -129,7 +128,6 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
   parent_class = g_type_class_peek_parent (class);
   
   gobject_class = (GObjectClass*) class;
-  object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
   menu_shell_class = (GtkMenuShellClass*) class;
 

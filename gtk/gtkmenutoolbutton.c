@@ -238,7 +238,6 @@ gtk_menu_tool_button_class_init (GtkMenuToolButtonClass *klass)
   GtkObjectClass *gtk_object_class;
   GtkWidgetClass *widget_class;
   GtkToolItemClass *toolitem_class;
-  GtkToolButtonClass *toolbutton_class;
 
   parent_class = g_type_class_peek_parent (klass);
 
@@ -246,7 +245,6 @@ gtk_menu_tool_button_class_init (GtkMenuToolButtonClass *klass)
   gtk_object_class = (GtkObjectClass *)klass;
   widget_class = (GtkWidgetClass *)klass;
   toolitem_class = (GtkToolItemClass *)klass;
-  toolbutton_class = (GtkToolButtonClass *)klass;
 
   object_class->set_property = gtk_menu_tool_button_set_property;
   object_class->get_property = gtk_menu_tool_button_get_property;

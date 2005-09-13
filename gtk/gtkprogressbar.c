@@ -574,7 +574,6 @@ gtk_progress_bar_act_mode_enter (GtkProgress *progress)
 {
   GtkProgressBar *pbar;
   GtkWidget *widget;
-  gint size;
   GtkProgressBarOrientation orientation;
 
   pbar = GTK_PROGRESS_BAR (progress);
@@ -594,8 +593,6 @@ gtk_progress_bar_act_mode_enter (GtkProgress *progress)
   if (orientation == GTK_PROGRESS_LEFT_TO_RIGHT ||
       orientation == GTK_PROGRESS_RIGHT_TO_LEFT)
     {
-      size = MAX (2, widget->allocation.width / pbar->activity_blocks);
-
       if (orientation == GTK_PROGRESS_LEFT_TO_RIGHT)
 	{
 	  pbar->activity_pos = widget->style->xthickness;
@@ -611,8 +608,6 @@ gtk_progress_bar_act_mode_enter (GtkProgress *progress)
     }
   else
     {
-      size = MAX (2, widget->allocation.height / pbar->activity_blocks);
-
       if (orientation == GTK_PROGRESS_TOP_TO_BOTTOM)
 	{
 	  pbar->activity_pos = widget->style->ythickness;

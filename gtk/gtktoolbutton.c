@@ -126,13 +126,11 @@ static void
 gtk_tool_button_class_init (GtkToolButtonClass *klass)
 {
   GObjectClass *object_class;
-  GtkWidgetClass *widget_class;
   GtkToolItemClass *tool_item_class;
   
   parent_class = g_type_class_peek_parent (klass);
   
   object_class = (GObjectClass *)klass;
-  widget_class = (GtkWidgetClass *)klass;
   tool_item_class = (GtkToolItemClass *)klass;
   
   object_class->set_property = gtk_tool_button_set_property;

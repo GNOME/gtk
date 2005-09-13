@@ -198,7 +198,6 @@ gtk_hbutton_box_size_allocate (GtkWidget     *widget,
 {
   GtkBox *base_box;
   GtkButtonBox *box;
-  GtkHButtonBox *hbox;
   GtkBoxChild *child;
   GList *children;
   GtkAllocation child_allocation;
@@ -217,7 +216,6 @@ gtk_hbutton_box_size_allocate (GtkWidget     *widget,
   
   base_box = GTK_BOX (widget);
   box = GTK_BUTTON_BOX (widget);
-  hbox = GTK_HBUTTON_BOX (widget);
   spacing = base_box->spacing;
   layout = box->layout_style != GTK_BUTTONBOX_DEFAULT_STYLE
 	  ? box->layout_style : default_layout_style;

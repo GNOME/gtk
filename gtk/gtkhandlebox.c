@@ -667,11 +667,9 @@ gtk_handle_box_size_allocate (GtkWidget     *widget,
 
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
     {
-      GtkWidget *child;
       GtkAllocation child_allocation;
       guint border_width;
 
-      child = bin->child;
       border_width = GTK_CONTAINER (widget)->border_width;
 
       child_allocation.x = border_width;
@@ -904,8 +902,7 @@ gtk_handle_box_paint (GtkWidget      *widget,
 {
   GtkBin *bin;
   GtkHandleBox *hb;
-  guint width;
-  guint height;
+  guint width, height;
   GdkRectangle rect;
   GdkRectangle dest;
   gint handle_position;

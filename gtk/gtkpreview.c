@@ -105,10 +105,8 @@ static void
 gtk_preview_class_init (GtkPreviewClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-  GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
 
-  object_class = (GtkObjectClass*) klass;
   widget_class = (GtkWidgetClass*) klass;
 
   parent_class = gtk_type_class (GTK_TYPE_WIDGET);
@@ -247,7 +245,6 @@ gtk_preview_put (GtkPreview   *preview,
 		 gint          width,
 		 gint          height)
 {
-  GtkWidget *widget;
   GdkRectangle r1, r2, r3;
   guchar *src;
   guint bpp;
@@ -258,8 +255,6 @@ gtk_preview_put (GtkPreview   *preview,
 
   if (!preview->buffer)
     return;
-
-  widget = GTK_WIDGET (preview);
 
   r1.x = 0;
   r1.y = 0;

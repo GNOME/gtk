@@ -201,10 +201,6 @@ gtk_text_tag_table_set_property (GObject      *object,
                                  const GValue *value,
                                  GParamSpec   *pspec)
 {
-  GtkTextTagTable *table;
-
-  table = GTK_TEXT_TAG_TABLE (object);
-
   switch (prop_id)
     {
 
@@ -221,10 +217,6 @@ gtk_text_tag_table_get_property (GObject      *object,
                                  GValue       *value,
                                  GParamSpec   *pspec)
 {
-  GtkTextTagTable *table;
-
-  table = GTK_TEXT_TAG_TABLE (object);
-
   switch (prop_id)
     {
 

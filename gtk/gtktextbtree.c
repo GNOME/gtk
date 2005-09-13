@@ -2091,7 +2091,6 @@ _gtk_text_btree_get_line_at_char (GtkTextBTree      *tree,
   GtkTextLineSegment *seg;
   int chars_left;
   int chars_in_line;
-  int bytes_in_line;
 
   node = tree->root_node;
 
@@ -2137,7 +2136,6 @@ _gtk_text_btree_get_line_at_char (GtkTextBTree      *tree,
    */
 
   chars_in_line = 0;
-  bytes_in_line = 0;
   seg = NULL;
   for (line = node->children.line; line != NULL; line = line->next)
     {
@@ -2177,13 +2175,11 @@ _gtk_text_btree_get_tags (const GtkTextIter *iter,
   int src, dst, index;
   TagInfo tagInfo;
   GtkTextLine *line;
-  GtkTextBTree *tree;
   gint byte_index;
 
 #define NUM_TAG_INFOS 10
 
   line = _gtk_text_iter_get_text_line (iter);
-  tree = _gtk_text_iter_get_btree (iter);
   byte_index = gtk_text_iter_get_line_index (iter);
 
   tagInfo.numTags = 0;
@@ -2371,7 +2367,6 @@ _gtk_text_btree_get_text (const GtkTextIter *start_orig,
   GtkTextLineSegment *seg;
   GtkTextLineSegment *end_seg;
   GString *retval;
-  GtkTextBTree *tree;
   gchar *str;
   GtkTextIter iter;
   GtkTextIter start;
@@ -2388,8 +2383,6 @@ _gtk_text_btree_get_text (const GtkTextIter *start_orig,
   gtk_text_iter_order (&start, &end);
 
   retval = g_string_new (NULL);
-
-  tree = _gtk_text_iter_get_btree (&start);
 
   end_seg = _gtk_text_iter_get_indexable_segment (&end);
   iter = start;
@@ -3913,7 +3906,6 @@ _gtk_text_line_byte_locate (GtkTextLine *line,
                             gint *line_byte_offset)
 {
   GtkTextLineSegment *seg;
-  GtkTextLineSegment *after_prev_indexable;
   GtkTextLineSegment *after_last_indexable;
   GtkTextLineSegment *last_indexable;
   gint offset;
@@ -3930,7 +3922,6 @@ _gtk_text_line_byte_locate (GtkTextLine *line,
 
   last_indexable = NULL;
   after_last_indexable = line->segments;
-  after_prev_indexable = line->segments;
   seg = line->segments;
 
   /* The loop ends when we're inside a segment;
@@ -3943,7 +3934,6 @@ _gtk_text_line_byte_locate (GtkTextLine *line,
           offset -= seg->byte_count;
           bytes_in_line += seg->byte_count;
           last_indexable = seg;
-          after_prev_indexable = after_last_indexable;
           after_last_indexable = last_indexable->next;
         }
 
@@ -3993,7 +3983,6 @@ _gtk_text_line_char_locate     (GtkTextLine     *line,
                                 gint             *line_char_offset)
 {
   GtkTextLineSegment *seg;
-  GtkTextLineSegment *after_prev_indexable;
   GtkTextLineSegment *after_last_indexable;
   GtkTextLineSegment *last_indexable;
   gint offset;
@@ -4010,7 +3999,6 @@ _gtk_text_line_char_locate     (GtkTextLine     *line,
 
   last_indexable = NULL;
   after_last_indexable = line->segments;
-  after_prev_indexable = line->segments;
   seg = line->segments;
 
   /* The loop ends when we're inside a segment;
@@ -4023,7 +4011,6 @@ _gtk_text_line_char_locate     (GtkTextLine     *line,
           offset -= seg->char_count;
           chars_in_line += seg->char_count;
           last_indexable = seg;
-          after_prev_indexable = after_last_indexable;
           after_last_indexable = last_indexable->next;
         }
 

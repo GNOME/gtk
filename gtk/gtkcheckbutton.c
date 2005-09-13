@@ -330,11 +330,9 @@ static gint
 gtk_check_button_expose (GtkWidget      *widget,
 			 GdkEventExpose *event)
 {
-  GtkCheckButton *check_button;
   GtkToggleButton *toggle_button;
   GtkBin *bin;
   
-  check_button = GTK_CHECK_BUTTON (widget);
   toggle_button = GTK_TOGGLE_BUTTON (widget);
   bin = GTK_BIN (widget);
   

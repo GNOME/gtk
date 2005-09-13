@@ -187,7 +187,6 @@ _gtk_text_util_create_drag_icon (GtkWidget *widget,
   PangoLayout  *layout;
   gint          pixmap_height, pixmap_width;
   gint          layout_width, layout_height;
-  gint          n_lines;
 
   g_return_val_if_fail (widget != NULL, NULL);
   g_return_val_if_fail (text != NULL, NULL);
@@ -201,7 +200,6 @@ _gtk_text_util_create_drag_icon (GtkWidget *widget,
 
   layout_width = MIN (layout_width, DRAG_ICON_MAX_WIDTH * PANGO_SCALE);
   pango_layout_set_width (layout, layout_width);
-  n_lines = pango_layout_get_line_count (layout);
 
   limit_layout_lines (layout);
 

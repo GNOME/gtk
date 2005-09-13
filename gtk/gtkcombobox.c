@@ -486,12 +486,9 @@ static void
 gtk_combo_box_class_init (GtkComboBoxClass *klass)
 {
   GObjectClass *object_class;
-  GtkBindingSet *binding_set;
   GtkObjectClass *gtk_object_class;
   GtkContainerClass *container_class;
   GtkWidgetClass *widget_class;
-
-  binding_set = gtk_binding_set_by_class (klass);
 
   klass->get_active_text = gtk_combo_box_real_get_active_text;
 

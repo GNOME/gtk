@@ -293,10 +293,6 @@ static void
 disconnect_proxy (GtkAction *action, 
 		  GtkWidget *proxy)
 {
-  GtkToggleAction *toggle_action;
-
-  toggle_action = GTK_TOGGLE_ACTION (action);
-
   (* GTK_ACTION_CLASS (parent_class)->disconnect_proxy) (action, proxy);
 }
 

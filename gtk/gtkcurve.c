@@ -427,7 +427,6 @@ gtk_curve_graph_events (GtkWidget *widget, GdkEvent *event, GtkCurve *c)
 {
   GdkCursorType new_type = c->cursor_type;
   gint i, src, dst, leftbound, rightbound;
-  GdkEventButton *bevent;
   GdkEventMotion *mevent;
   GtkWidget *w;
   gint tx, ty;
@@ -481,7 +480,6 @@ gtk_curve_graph_events (GtkWidget *widget, GdkEvent *event, GtkCurve *c)
     case GDK_BUTTON_PRESS:
       gtk_grab_add (widget);
 
-      bevent = (GdkEventButton *) event;
       new_type = GDK_TCROSS;
 
       switch (c->curve_type)

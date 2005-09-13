@@ -154,13 +154,11 @@ gtk_option_menu_class_init (GtkOptionMenuClass *class)
   GObjectClass *gobject_class;
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
-  GtkButtonClass *button_class;
   GtkContainerClass *container_class;
 
   gobject_class = (GObjectClass*) class;
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
-  button_class = (GtkButtonClass*) class;
   container_class = (GtkContainerClass*) class;
 
   parent_class = g_type_class_peek_parent (class);

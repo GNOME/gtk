@@ -632,12 +632,9 @@ compute_sv (GtkHSV  *hsv,
 	    gdouble *s,
 	    gdouble *v)
 {
-  HSVPrivate *priv;
   int ihx, ihy, isx, isy, ivx, ivy;
   double hx, hy, sx, sy, vx, vy;
   double center;
-  
-  priv = hsv->priv;
   
   compute_triangle (hsv, &ihx, &ihy, &isx, &isy, &ivx, &ivy);
   center = GTK_WIDGET (hsv)->requisition.width / 2.0;
@@ -736,12 +733,9 @@ compute_v (GtkHSV *hsv,
 	   gdouble x,
 	   gdouble y)
 {
-  HSVPrivate *priv;
   double center;
   double dx, dy;
   double angle;
-  
-  priv = hsv->priv;
   
   center = GTK_WIDGET (hsv)->requisition.width / 2.0;
   dx = x - center;

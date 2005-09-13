@@ -131,9 +131,6 @@ gtk_scrollbar_class_init (GtkScrollbarClass *class)
 static void
 gtk_scrollbar_init (GtkScrollbar *scrollbar)
 {
-  GtkRange *range;
-
-  range = GTK_RANGE (scrollbar);
 }
 
 static void

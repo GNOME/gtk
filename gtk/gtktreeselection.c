@@ -560,8 +560,6 @@ gint
 gtk_tree_selection_count_selected_rows (GtkTreeSelection *selection)
 {
   gint count = 0;
-  GtkRBTree *tree;
-  GtkRBNode *node;
 
   g_return_val_if_fail (GTK_IS_TREE_SELECTION (selection), 0);
   g_return_val_if_fail (selection->tree_view != NULL, 0);
@@ -578,9 +576,6 @@ gtk_tree_selection_count_selected_rows (GtkTreeSelection *selection)
       else
 	return 0;
     }
-
-  tree = selection->tree_view->priv->tree;
-  node = selection->tree_view->priv->tree->root;
 
   _gtk_rbtree_traverse (selection->tree_view->priv->tree,
                         selection->tree_view->priv->tree->root,

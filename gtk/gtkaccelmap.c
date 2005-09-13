@@ -387,8 +387,6 @@ internal_change_entry (const gchar    *accel_path,
   
   if (change_accel && !simulate)
     {
-      guint old_accel_key, old_accel_mods;
-      
       /* ref accel groups */
       for (slist = group_list; slist; slist = slist->next)
 	g_object_ref (slist->data);
@@ -398,8 +396,6 @@ internal_change_entry (const gchar    *accel_path,
 	internal_change_entry (g_quark_to_string (GPOINTER_TO_UINT (slist->data)), 0, 0, FALSE, FALSE);
 
       /* 9) install new accelerator */
-      old_accel_key = entry->accel_key;
-      old_accel_mods = entry->accel_mods;
       entry->accel_key = accel_key;
       entry->accel_mods = accel_mods;
       entry->changed = TRUE;

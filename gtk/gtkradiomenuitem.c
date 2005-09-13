@@ -129,10 +129,6 @@ gtk_radio_menu_item_get_property (GObject    *object,
 				  GValue     *value,
 				  GParamSpec *pspec)
 {
-  GtkRadioMenuItem *radio_menu_item;
-
-  radio_menu_item = GTK_RADIO_MENU_ITEM (object);
-
   switch (prop_id)
     {
     default:

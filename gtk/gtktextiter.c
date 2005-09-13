@@ -1547,13 +1547,10 @@ gtk_text_iter_starts_line (const GtkTextIter   *iter)
 gboolean
 gtk_text_iter_ends_line (const GtkTextIter   *iter)
 {
-  GtkTextRealIter *real;
   gunichar wc;
   
   g_return_val_if_fail (iter != NULL, FALSE);
 
-  real = gtk_text_iter_make_real (iter);
-  
   check_invariants (iter);
 
   /* Only one character has type G_UNICODE_PARAGRAPH_SEPARATOR in

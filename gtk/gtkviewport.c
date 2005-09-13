@@ -699,12 +699,10 @@ gtk_viewport_expose (GtkWidget      *widget,
 		     GdkEventExpose *event)
 {
   GtkViewport *viewport;
-  GtkBin *bin;
 
   if (GTK_WIDGET_DRAWABLE (widget))
     {
       viewport = GTK_VIEWPORT (widget);
-      bin = GTK_BIN (widget);
 
       if (event->window == widget->window)
 	gtk_viewport_paint (widget, &event->area);
@@ -742,11 +740,9 @@ static void
 gtk_viewport_size_request (GtkWidget      *widget,
 			   GtkRequisition *requisition)
 {
-  GtkViewport *viewport;
   GtkBin *bin;
   GtkRequisition child_requisition;
 
-  viewport = GTK_VIEWPORT (widget);
   bin = GTK_BIN (widget);
 
   requisition->width = (GTK_CONTAINER (widget)->border_width +

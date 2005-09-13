@@ -974,7 +974,6 @@ static void
 gtk_real_menu_item_activate_item (GtkMenuItem *menu_item)
 {
   GtkWidget *widget;
-  GtkMenuShell *submenu; 
 
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
 
@@ -996,7 +995,6 @@ gtk_real_menu_item_activate_item (GtkMenuItem *menu_item)
 	  _gtk_menu_item_popup_submenu (widget); 
 
 	  gtk_menu_shell_select_first (GTK_MENU_SHELL (menu_item->submenu), TRUE);
-	  submenu = GTK_MENU_SHELL (menu_item->submenu);
 	}
     }
 }
@@ -1443,13 +1441,11 @@ gtk_menu_item_forall (GtkContainer *container,
 		      gpointer      callback_data)
 {
   GtkBin *bin;
-  GtkMenuItem *menu_item;
 
   g_return_if_fail (GTK_IS_MENU_ITEM (container));
   g_return_if_fail (callback != NULL);
 
   bin = GTK_BIN (container);
-  menu_item = GTK_MENU_ITEM (container);
 
   if (bin->child)
     callback (bin->child, callback_data);

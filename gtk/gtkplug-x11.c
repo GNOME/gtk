@@ -233,7 +233,7 @@ _gtk_plug_windowing_filter_func (GdkXEvent *gdk_xevent,
 	   * root window as the reliable end of the embedding protocol
 	   */
 
-	  return GDK_FILTER_REMOVE;
+	  return_val = GDK_FILTER_REMOVE;
 	}
       break;
     case ReparentNotify:
@@ -324,5 +324,5 @@ _gtk_plug_windowing_filter_func (GdkXEvent *gdk_xevent,
       }
     }
 
-  return GDK_FILTER_CONTINUE;
+  return return_val;
 }

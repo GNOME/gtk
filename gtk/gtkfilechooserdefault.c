@@ -1484,10 +1484,8 @@ shortcuts_append_paths (GtkFileChooserDefault *impl,
   for (; paths; paths = paths->next)
     {
       GtkFilePath *path;
-      GError *error;
 
       path = paths->data;
-      error = NULL;
 
       if (impl->local_only &&
 	  !gtk_file_system_path_is_local (impl->file_system, path))

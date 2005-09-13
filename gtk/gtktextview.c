@@ -2553,12 +2553,9 @@ static void
 gtk_text_view_destroy (GtkObject *object)
 {
   GtkTextView *text_view;
-  GtkTextLayout *layout;
   
   text_view = GTK_TEXT_VIEW (object);
 
-  layout = text_view->layout;
-  
   gtk_text_view_remove_validate_idles (text_view);
   gtk_text_view_set_buffer (text_view, NULL);
   gtk_text_view_destroy_layout (text_view);
@@ -3775,9 +3772,6 @@ emit_event_on_tags (GtkWidget   *widget,
   GSList *tags;
   GSList *tmp;
   gboolean retval = FALSE;
-  GtkTextView *text_view;
-
-  text_view = GTK_TEXT_VIEW (widget);
 
   tags = gtk_text_iter_get_tags (iter);
 
@@ -4331,11 +4325,9 @@ static gboolean
 gtk_text_view_focus (GtkWidget        *widget,
                      GtkDirectionType  direction)
 {
-  GtkTextView *text_view;
   GtkContainer *container;
   gboolean result;
   
-  text_view = GTK_TEXT_VIEW (widget);
   container = GTK_CONTAINER (widget);  
 
   if (!gtk_widget_is_focus (widget) &&
@@ -6041,7 +6033,6 @@ gtk_text_view_start_selection_dnd (GtkTextView       *text_view,
                                    const GtkTextIter *iter,
                                    GdkEventMotion    *event)
 {
-  GdkDragContext *context;
   GtkTargetList  *target_list;
 
   text_view->drag_start_x = -1;
@@ -6054,9 +6045,9 @@ gtk_text_view_start_selection_dnd (GtkTextView       *text_view,
 
   g_signal_connect (text_view, "drag-begin", 
                     G_CALLBACK (drag_begin_cb), NULL);
-  context = gtk_drag_begin (GTK_WIDGET (text_view), target_list,
-                            GDK_ACTION_COPY | GDK_ACTION_MOVE,
-                            1, (GdkEvent*)event);
+  gtk_drag_begin (GTK_WIDGET (text_view), target_list,
+		  GDK_ACTION_COPY | GDK_ACTION_MOVE,
+		  1, (GdkEvent*)event);
 
   gtk_target_list_unref (target_list);
 }
@@ -6072,9 +6063,6 @@ static void
 gtk_text_view_drag_end (GtkWidget        *widget,
                         GdkDragContext   *context)
 {
-  GtkTextView *text_view;
-
-  text_view = GTK_TEXT_VIEW (widget);
 }
 
 static void
@@ -6125,10 +6113,6 @@ static void
 gtk_text_view_drag_data_delete (GtkWidget        *widget,
                                 GdkDragContext   *context)
 {
-  GtkTextView *text_view;
-
-  text_view = GTK_TEXT_VIEW (widget);
-
   gtk_text_buffer_delete_selection (GTK_TEXT_VIEW (widget)->buffer,
                                     TRUE, GTK_TEXT_VIEW (widget)->editable);
 }

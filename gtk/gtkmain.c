@@ -1550,7 +1550,6 @@ void
 gtk_grab_add (GtkWidget *widget)
 {
   GtkWindowGroup *group;
-  gboolean was_grabbed;
   
   g_return_if_fail (widget != NULL);
   
@@ -1560,8 +1559,6 @@ gtk_grab_add (GtkWidget *widget)
       
       group = gtk_main_get_window_group (widget);
 
-      was_grabbed = (group->grabs != NULL);
-      
       g_object_ref (widget);
       group->grabs = g_slist_prepend (group->grabs, widget);
 

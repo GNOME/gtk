@@ -1747,7 +1747,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
 	  new_states[i] == NORMAL)
 	{
 	  GtkAllocation alloc;
-	  GtkAllocation start_allocation;
+	  GtkAllocation start_allocation = { 0, };
 	  GtkAllocation goal_allocation;
 
 	  if (priv->is_sliding)
@@ -3722,9 +3722,7 @@ internal_insert_element (GtkToolbar          *toolbar,
 {
   GtkWidget *box;
   ToolbarContent *content;
-  GtkToolbarPrivate *priv;
   char *free_me = NULL;
-  gboolean is_button = FALSE;
 
   GtkWidget *child_widget;
   GtkWidget *child_label;
@@ -3740,8 +3738,6 @@ internal_insert_element (GtkToolbar          *toolbar,
   
   if (!gtk_toolbar_check_old_api (toolbar))
     return NULL;
-  
-  priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
   
   child_widget = NULL;
   child_label = NULL;
@@ -3759,7 +3755,6 @@ internal_insert_element (GtkToolbar          *toolbar,
     case GTK_TOOLBAR_CHILD_BUTTON:
     case GTK_TOOLBAR_CHILD_TOGGLEBUTTON:
     case GTK_TOOLBAR_CHILD_RADIOBUTTON:
-      is_button = TRUE;
       if (type == GTK_TOOLBAR_CHILD_BUTTON)
 	{
 	  child_widget = gtk_button_new ();
@@ -4815,12 +4810,10 @@ _gtk_toolbar_paint_space_line (GtkWidget       *widget,
   const double start_fraction = (SPACE_LINE_START / SPACE_LINE_DIVISION);
   const double end_fraction = (SPACE_LINE_END / SPACE_LINE_DIVISION);
   
-  GtkToolbarSpaceStyle space_style;
   GtkOrientation orientation;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   
-  space_style = toolbar? get_space_style (toolbar) : DEFAULT_SPACE_STYLE;
   orientation = toolbar? toolbar->orientation : GTK_ORIENTATION_HORIZONTAL;
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)

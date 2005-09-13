@@ -1107,7 +1107,7 @@ gboolean
 gtk_text_forward_delete (GtkText *text,
 			 guint    nchars)
 {
-  guint old_lines, old_height;
+  guint old_lines = 0, old_height = 0;
   GtkOldEditable *old_editable = GTK_OLD_EDITABLE (text);
   gboolean frozen = FALSE;
   
@@ -1601,13 +1601,11 @@ gtk_text_size_allocate (GtkWidget     *widget,
 			GtkAllocation *allocation)
 {
   GtkText *text;
-  GtkOldEditable *old_editable;
   
   g_return_if_fail (GTK_IS_TEXT (widget));
   g_return_if_fail (allocation != NULL);
   
   text = GTK_TEXT (widget);
-  old_editable = GTK_OLD_EDITABLE (widget);
   
   widget->allocation = *allocation;
   if (GTK_WIDGET_REALIZED (widget))
@@ -2368,7 +2366,7 @@ fetch_lines (GtkText* text,
 static void
 fetch_lines_backward (GtkText* text)
 {
-  GList* new_lines = NULL, *new_line_start;
+  GList *new_line_start;
   GtkPropertyMark mark;
   
   if (CACHE_DATA(text->line_start_cache).start.index == 0)
@@ -2378,7 +2376,7 @@ fetch_lines_backward (GtkText* text)
 				    CACHE_DATA(text->line_start_cache).start.index - 1,
 				    &CACHE_DATA(text->line_start_cache).start);
   
-  new_line_start = new_lines = fetch_lines (text, &mark, NULL, FetchLinesCount, 1);
+  new_line_start = fetch_lines (text, &mark, NULL, FetchLinesCount, 1);
   
   while (new_line_start->next)
     new_line_start = new_line_start->next;
@@ -5106,11 +5104,7 @@ drawn_cursor_min (GtkText* text)
 static gint
 drawn_cursor_max (GtkText* text)
 {
-  GdkFont* font;
-  
   g_assert(text->cursor_mark.property);
-  
-  font = MARK_CURRENT_FONT(text, &text->cursor_mark);
   
   return text->cursor_pos_y - text->cursor_char_offset;
 }

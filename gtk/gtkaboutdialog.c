@@ -179,11 +179,9 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
 {
   GObjectClass *object_class;
   GtkWidgetClass *widget_class;
-  GtkDialogClass *dialog_class;
 	
   object_class = (GObjectClass *)klass;
   widget_class = (GtkWidgetClass *)klass;
-  dialog_class = (GtkDialogClass *)klass;
 	
   object_class->set_property = gtk_about_dialog_set_property;
   object_class->get_property = gtk_about_dialog_get_property;

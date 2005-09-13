@@ -544,14 +544,10 @@ static gint
 gtk_list_item_expose (GtkWidget      *widget,
 		      GdkEventExpose *event)
 {
-  GtkBin *bin;
-
   g_return_val_if_fail (widget != NULL, FALSE);
 
   if (GTK_WIDGET_DRAWABLE (widget))
     {
-      bin = GTK_BIN (widget);
-
       if (widget->state == GTK_STATE_NORMAL)
         {
           gdk_window_set_back_pixmap (widget->window, NULL, TRUE);

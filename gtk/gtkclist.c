@@ -2814,7 +2814,7 @@ static void
 real_remove_row (GtkCList *clist,
 		 gint      row)
 {
-  gint was_visible, was_selected;
+  gint was_visible;
   GList *list;
   GtkCListRow *clist_row;
 
@@ -2825,7 +2825,6 @@ real_remove_row (GtkCList *clist,
     return;
 
   was_visible = (gtk_clist_row_is_visible (clist, row) != GTK_VISIBILITY_NONE);
-  was_selected = 0;
 
   /* get the row we're going to delete */
   list = ROW_ELEMENT (clist, row);

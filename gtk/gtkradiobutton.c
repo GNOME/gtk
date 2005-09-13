@@ -196,10 +196,6 @@ gtk_radio_button_get_property (GObject    *object,
 			       GValue     *value,
 			       GParamSpec *pspec)
 {
-  GtkRadioButton *radio_button;
-
-  radio_button = GTK_RADIO_BUTTON (object);
-
   switch (prop_id)
     {
     default:

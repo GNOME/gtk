@@ -3451,12 +3451,10 @@ gtk_drag_source_event_cb (GtkWidget      *widget,
 	  if (gtk_drag_check_threshold (widget, site->x, site->y,
 					event->motion.x, event->motion.y))
 	    {
-	      GdkDragContext *context;
-	      
 	      site->state = 0;
-	      context = gtk_drag_begin_internal (widget, site, site->target_list,
-						 site->actions, 
-						 i, event);
+	      gtk_drag_begin_internal (widget, site, site->target_list,
+				       site->actions, 
+				       i, event);
 
 	      retval = TRUE;
 	    }

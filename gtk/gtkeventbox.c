@@ -266,12 +266,10 @@ gtk_event_box_set_visible_window (GtkEventBox *event_box,
 				  gboolean visible_window)
 {
   GtkWidget *widget;
-  GtkEventBoxPrivate *priv;
 
   g_return_if_fail (GTK_IS_EVENT_BOX (event_box));
 
   widget = GTK_WIDGET (event_box);
-  priv = GTK_EVENT_BOX_GET_PRIVATE (event_box);
 
   visible_window = visible_window != FALSE;
 
@@ -470,10 +468,8 @@ gtk_event_box_realize (GtkWidget *widget)
 static void
 gtk_event_box_unrealize (GtkWidget *widget)
 {
-  GtkEventBox *event_box;
   GtkEventBoxPrivate *priv;
   
-  event_box = GTK_EVENT_BOX (widget);
   priv = GTK_EVENT_BOX_GET_PRIVATE (widget);
   
   if (priv->event_window != NULL)

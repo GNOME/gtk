@@ -760,11 +760,8 @@ static void
 calendar_set_year_next (GtkCalendar *calendar)
 {
   gint month_len;
-  GtkWidget *widget;
   
   g_return_if_fail (GTK_IS_WIDGET (calendar));
-  
-  widget = GTK_WIDGET (calendar);
   
   calendar->year++;
   calendar_compute_days (calendar);
@@ -1678,16 +1675,10 @@ gtk_calendar_size_allocate (GtkWidget	  *widget,
   GtkCalendarPrivate *priv = GTK_CALENDAR_GET_PRIVATE (widget);
   gint xthickness = widget->style->xthickness;
   gint ythickness = widget->style->xthickness;
-  gboolean year_left;
   guint i;
   
   widget->allocation = *allocation;
-  
-  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR) 
-    year_left = priv->year_before;
-  else
-    year_left = !priv->year_before;
-  
+    
   if (calendar->display_flags & GTK_CALENDAR_SHOW_WEEK_NUMBERS)
     {
       priv->day_width = (priv->min_day_width
@@ -1789,7 +1780,7 @@ calendar_paint_header (GtkCalendar *calendar)
   cairo_t *cr;
   char buffer[255];
   int x, y;
-  gint header_width, cal_height;
+  gint header_width;
   gint max_month_width;
   gint max_year_width;
   PangoLayout *layout;
@@ -1807,7 +1798,6 @@ calendar_paint_header (GtkCalendar *calendar)
   cr = gdk_cairo_create (priv->header_win);
   
   header_width = widget->allocation.width - 2 * widget->style->xthickness;
-  cal_height = widget->allocation.height;
   
   max_month_width = priv->max_month_width;
   max_year_width = priv->max_year_width;
@@ -1896,7 +1886,6 @@ calendar_paint_day_names (GtkCalendar *calendar)
   char buffer[255];
   int day,i;
   int day_width, cal_width;
-  gint cal_height;
   int day_wid_sep;
   PangoLayout *layout;
   PangoRectangle logical_rect;
@@ -1912,7 +1901,6 @@ calendar_paint_day_names (GtkCalendar *calendar)
   
   day_width = priv->day_width;
   cal_width = widget->allocation.width;
-  cal_height = widget->allocation.height;
   day_wid_sep = day_width + DAY_XSEP;
   
   /*
@@ -2125,14 +2113,14 @@ calendar_paint_day (GtkCalendar *calendar,
     } 
   else 
     {
-      /*
+#if 0      
       if (calendar->highlight_row == row && calendar->highlight_col == col)
 	{
 	  cairo_set_source_color (cr, HIGHLIGHT_BG_COLOR (widget));
 	  gdk_cairo_rectangle (cr, &day_rect);
 	  cairo_fill (cr);
 	}
-      */
+#endif     
       if (calendar->selected_day == day)
 	{
 	  gdk_cairo_set_source_color (cr, SELECTED_BG_COLOR (widget));

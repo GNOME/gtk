@@ -1774,14 +1774,11 @@ gtk_label_ensure_layout (GtkLabel *label)
 {
   GtkWidget *widget;
   PangoRectangle logical_rect;
-  gint rwidth, rheight;
   gboolean rtl;
 
   widget = GTK_WIDGET (label);
 
   rtl = gtk_widget_get_direction(widget) == GTK_TEXT_DIR_RTL;
-  rwidth = label->misc.xpad * 2;
-  rheight = label->misc.ypad * 2;
 
   if (!label->layout)
     {
@@ -2084,10 +2081,8 @@ gtk_label_size_allocate (GtkWidget     *widget,
                          GtkAllocation *allocation)
 {
   GtkLabel *label;
-  GtkLabelPrivate *priv;
 
   label = GTK_LABEL (widget);
-  priv = GTK_LABEL_GET_PRIVATE (widget);
 
   (* GTK_WIDGET_CLASS (parent_class)->size_allocate) (widget, allocation);
 
@@ -2910,16 +2905,15 @@ gtk_label_motion (GtkWidget      *widget,
 				    label->select_info->drag_start_y,
 				    event->x, event->y))
 	{
-	  GdkDragContext *context;
 	  GtkTargetList *target_list = gtk_target_list_new (NULL, 0);
 
 	  gtk_target_list_add_text_targets (target_list, 0);
 	  
           g_signal_connect (widget, "drag-begin", 
                             G_CALLBACK (drag_begin_cb), NULL);
-	  context = gtk_drag_begin (widget, target_list, 
-				    GDK_ACTION_COPY,
-				    1, (GdkEvent *)event);
+	  gtk_drag_begin (widget, target_list, 
+			  GDK_ACTION_COPY,
+			  1, (GdkEvent *)event);
 	  
 	  label->select_info->in_drag = FALSE;
 	  
@@ -3708,10 +3702,7 @@ gtk_label_move_backward_word (GtkLabel *label,
 {
   gint new_pos = g_utf8_pointer_to_offset (label->text,
 					   label->text + start);
-  gint length;
 
-  length = g_utf8_strlen (label->text, -1);
-  
   if (new_pos > 0)
     {
       PangoLogAttr *log_attrs;

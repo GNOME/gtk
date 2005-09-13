@@ -932,7 +932,6 @@ gtk_menu_destroy (GtkObject *object)
 {
   GtkMenu *menu;
   GtkMenuAttachData *data;
-  GtkMenuPrivate *priv;
 
   g_return_if_fail (GTK_IS_MENU (object));
 
@@ -969,8 +968,6 @@ gtk_menu_destroy (GtkObject *object)
     gtk_widget_destroy (menu->toplevel);
   if (menu->tearoff_window)
     gtk_widget_destroy (menu->tearoff_window);
-
-  priv = gtk_menu_get_private (menu);
 
   GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
@@ -1131,13 +1128,11 @@ gtk_menu_remove (GtkContainer *container,
 		 GtkWidget    *widget)
 {
   GtkMenu *menu;
-  GtkMenuPrivate *priv;
 
   g_return_if_fail (GTK_IS_MENU (container));
   g_return_if_fail (GTK_IS_MENU_ITEM (widget));
 
   menu = GTK_MENU (container);
-  priv = gtk_menu_get_private (menu);
 
   /* Clear out old_active_menu_item if it matches the item we are removing
    */
@@ -2781,7 +2776,6 @@ gtk_menu_motion_notify  (GtkWidget	   *widget,
   GtkWidget *menu_item;
   GtkMenu *menu;
   GtkMenuShell *menu_shell;
-  GtkMenuPrivate *priv;
 
   gboolean need_enter;
 
@@ -2804,8 +2798,6 @@ gtk_menu_motion_notify  (GtkWidget	   *widget,
 
   menu_shell = GTK_MENU_SHELL (menu_item->parent);
   menu = GTK_MENU (menu_shell);
-
-  priv = gtk_menu_get_private (GTK_MENU (widget));
 
   if (definitely_within_item (menu_item, event->x, event->y))
     menu_shell->activate_time = 0;

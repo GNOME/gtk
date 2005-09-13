@@ -497,7 +497,6 @@ gtk_container_child_set_valist (GtkContainer *container,
 				const gchar  *first_property_name,
 				va_list       var_args)
 {
-  GObject *object;
   GObjectNotifyQueue *nqueue;
   const gchar *name;
 
@@ -508,7 +507,6 @@ gtk_container_child_set_valist (GtkContainer *container,
   g_object_ref (container);
   g_object_ref (child);
 
-  object = G_OBJECT (container);
   nqueue = g_object_notify_queue_freeze (G_OBJECT (child), _gtk_widget_child_property_notify_context);
   name = first_property_name;
   while (name)
@@ -572,7 +570,6 @@ gtk_container_child_set_property (GtkContainer *container,
 				  const gchar  *property_name,
 				  const GValue *value)
 {
-  GObject *object;
   GObjectNotifyQueue *nqueue;
   GParamSpec *pspec;
 
@@ -585,7 +582,6 @@ gtk_container_child_set_property (GtkContainer *container,
   g_object_ref (container);
   g_object_ref (child);
 
-  object = G_OBJECT (container);
   nqueue = g_object_notify_queue_freeze (G_OBJECT (child), _gtk_widget_child_property_notify_context);
   pspec = g_param_spec_pool_lookup (_gtk_widget_child_property_pool, property_name,
 				    G_OBJECT_TYPE (container), TRUE);

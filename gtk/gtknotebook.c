@@ -1937,13 +1937,10 @@ gtk_notebook_leave_notify (GtkWidget        *widget,
 			   GdkEventCrossing *event)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-  GtkNotebookArrow arrow;
   gint x, y;
 
   if (!get_widget_coordinates (widget, (GdkEvent *)event, &x, &y))
     return FALSE;
-
-  arrow = gtk_notebook_get_arrow (notebook, x, y);
 
   if (notebook->in_child)
     {
@@ -3906,7 +3903,6 @@ gtk_notebook_switch_focus_tab (GtkNotebook *notebook,
 			       GList       *new_child)
 {
   GList *old_child;
-  GtkNotebookPage *old_page = NULL;
   GtkNotebookPage *page;
 
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
@@ -3922,9 +3918,6 @@ gtk_notebook_switch_focus_tab (GtkNotebook *notebook,
 
   if (!notebook->show_tabs || !notebook->focus_tab)
     return;
-
-  if (old_child)
-    old_page = old_child->data;
 
   page = notebook->focus_tab->data;
   if (GTK_WIDGET_MAPPED (page->tab_label))

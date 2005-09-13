@@ -1127,13 +1127,11 @@ static void
 gtk_entry_realize (GtkWidget *widget)
 {
   GtkEntry *entry;
-  GtkEditable *editable;
   GdkWindowAttr attributes;
   gint attributes_mask;
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
   entry = GTK_ENTRY (widget);
-  editable = GTK_EDITABLE (widget);
 
   attributes.window_type = GDK_WINDOW_CHILD;
   
@@ -1704,12 +1702,7 @@ drag_begin_cb (GtkWidget      *widget,
                GdkDragContext *context,
                gpointer        data)
 {
-  GtkEntry *entry;
-
   g_signal_handlers_disconnect_by_func (widget, drag_begin_cb, NULL);
-
-  entry = GTK_ENTRY (widget);
-
 }
 
 static gint

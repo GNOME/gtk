@@ -1141,10 +1141,6 @@ static void
 gtk_layout_adjustment_changed (GtkAdjustment *adjustment,
 			       GtkLayout     *layout)
 {
-  GtkWidget *widget;
-
-  widget = GTK_WIDGET (layout);
-
   if (layout->freeze_count)
     return;
 

@@ -501,7 +501,6 @@ get_expander_bounds (GtkExpander  *expander,
 		     GdkRectangle *rect)
 {
   GtkWidget *widget;
-  GtkBin *bin;
   GtkExpanderPrivate *priv;
   gint border_width;
   gint expander_size;
@@ -512,7 +511,6 @@ get_expander_bounds (GtkExpander  *expander,
   gboolean ltr;
 
   widget = GTK_WIDGET (expander);
-  bin = GTK_BIN (expander);
   priv = expander->priv;
 
   border_width = GTK_CONTAINER (expander)->border_width;

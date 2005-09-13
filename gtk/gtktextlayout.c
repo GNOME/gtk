@@ -1505,7 +1505,6 @@ add_child_attrs (GtkTextLayout      *layout,
 {
   PangoAttribute *attr;
   PangoRectangle logical_rect;
-  GtkTextChildAnchor *anchor;
   gint width, height;
   GSList *tmp_list;
   GtkWidget *widget;
@@ -1513,8 +1512,6 @@ add_child_attrs (GtkTextLayout      *layout,
   width = 1;
   height = 1;
   
-  anchor = seg->body.child.obj;
-
   tmp_list = seg->body.child.widgets;
   while (tmp_list != NULL)
     {

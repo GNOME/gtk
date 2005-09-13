@@ -855,7 +855,6 @@ insert_range_untagged (GtkTextBuffer     *buffer,
   GtkTextIter range_start;
   GtkTextIter range_end;
   GtkTextIter start, end;
-  GtkTextBuffer *src_buffer;
   Range *r;
   
   if (gtk_text_iter_equal (orig_start, orig_end))
@@ -863,8 +862,6 @@ insert_range_untagged (GtkTextBuffer     *buffer,
 
   start = *orig_start;
   end = *orig_end;
-  
-  src_buffer = gtk_text_iter_get_buffer (&start);
   
   range_start = start;
   range_end = start;
@@ -971,12 +968,9 @@ insert_range_not_inside_self (GtkTextBuffer     *buffer,
   GtkTextIter end = *orig_end;
   GtkTextIter range_start;
   GtkTextIter range_end;
-  GtkTextBuffer *src_buffer;
   
   if (gtk_text_iter_equal (orig_start, orig_end))
     return;
-  
-  src_buffer = gtk_text_iter_get_buffer (orig_start);
   
   gtk_text_iter_order (&start, &end);
 

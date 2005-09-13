@@ -82,11 +82,9 @@ gtk_tearoff_menu_item_new (void)
 static void
 gtk_tearoff_menu_item_class_init (GtkTearoffMenuItemClass *klass)
 {
-  GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkMenuItemClass *menu_item_class;
 
-  object_class = (GtkObjectClass*) klass;
   widget_class = (GtkWidgetClass*) klass;
   menu_item_class = (GtkMenuItemClass*) klass;
 
@@ -107,10 +105,6 @@ static void
 gtk_tearoff_menu_item_size_request (GtkWidget      *widget,
 				    GtkRequisition *requisition)
 {
-  GtkTearoffMenuItem *tearoff;
-  
-  tearoff = GTK_TEAROFF_MENU_ITEM (widget);
-  
   requisition->width = (GTK_CONTAINER (widget)->border_width +
 			widget->style->xthickness +
 			BORDER_SPACING) * 2;
@@ -132,7 +126,6 @@ gtk_tearoff_menu_item_paint (GtkWidget   *widget,
 			     GdkRectangle *area)
 {
   GtkMenuItem *menu_item;
-  GtkTearoffMenuItem *tearoff_item;
   GtkShadowType shadow_type;
   gint width, height;
   gint x, y;
@@ -143,7 +136,6 @@ gtk_tearoff_menu_item_paint (GtkWidget   *widget,
   if (GTK_WIDGET_DRAWABLE (widget))
     {
       menu_item = GTK_MENU_ITEM (widget);
-      tearoff_item = GTK_TEAROFF_MENU_ITEM (widget);
 
       direction = gtk_widget_get_direction (widget);
 

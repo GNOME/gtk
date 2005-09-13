@@ -1124,13 +1124,9 @@ static void
 gtk_file_chooser_button_style_set (GtkWidget *widget,
 				   GtkStyle  *old_style)
 {
-  GtkFileChooserButtonPrivate *priv;
-
   if (GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->style_set)
     (*GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->style_set) (widget,
 									   old_style);
-
-  priv = GTK_FILE_CHOOSER_BUTTON_GET_PRIVATE (widget);
 
   if (gtk_widget_has_screen (widget))
     change_icon_theme (GTK_FILE_CHOOSER_BUTTON (widget));

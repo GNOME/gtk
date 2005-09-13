@@ -848,7 +848,7 @@ gtk_tree_model_filter_remove_node (GtkTreeModelFilter *filter,
 {
   FilterElt *elt, *parent;
   FilterLevel *level, *parent_level;
-  gint offset, i, length, level_refcount;
+  gint i, length, level_refcount;
 
   /* FIXME: this function is very ugly. I need to rethink and
    * rewrite it someday.
@@ -860,7 +860,6 @@ gtk_tree_model_filter_remove_node (GtkTreeModelFilter *filter,
   parent = level->parent_elt;
   parent_level = level->parent_level;
   length = level->array->len;
-  offset = elt->offset;
 
   /* ref counting */
   while (elt->ref_count > 0)
@@ -1191,7 +1190,7 @@ gtk_tree_model_filter_row_inserted (GtkTreeModel *c_model,
   FilterLevel *level;
   FilterLevel *parent_level;
 
-  gint i = 0, offset, index = -1;
+  gint i = 0, offset;
 
   gboolean free_c_path = FALSE;
 
@@ -1334,7 +1333,6 @@ gtk_tree_model_filter_row_inserted (GtkTreeModel *c_model,
           break;
 
       g_array_insert_val (level->array, i, felt);
-      index = i;
 
       if (!level->parent_level)
         filter->priv->root_level_visible++;

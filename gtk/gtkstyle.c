@@ -3025,12 +3025,7 @@ gtk_default_draw_arrow (GtkStyle      *style,
 			gint           width,
 			gint           height)
 {
-  gint original_width, original_x;
-  
   sanitize_size (window, &width, &height);
-
-  original_width = width;
-  original_x = x;
 
   calculate_arrow_geometry (arrow_type, &x, &y, &width, &height);
 
@@ -3192,12 +3187,8 @@ gtk_default_draw_string (GtkStyle      *style,
                          gint           y,
                          const gchar   *string)
 {
-  GdkDisplay *display;
-  
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (window != NULL);
-  
-  display = gdk_drawable_get_display (window);
   
   if (area)
     {

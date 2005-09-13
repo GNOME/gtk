@@ -441,11 +441,9 @@ static void
 gtk_alignment_size_request (GtkWidget      *widget,
 			    GtkRequisition *requisition)
 {
-  GtkAlignment *alignment;
   GtkBin *bin;
   GtkAlignmentPrivate *priv;
 
-  alignment = GTK_ALIGNMENT (widget);
   bin = GTK_BIN (widget);
   priv = GTK_ALIGNMENT_GET_PRIVATE (widget);
 

@@ -146,11 +146,9 @@ gtk_font_button_get_type (void)
 static void
 gtk_font_button_class_init (GtkFontButtonClass *klass)
 {
-  GtkObjectClass *object_class;
   GObjectClass *gobject_class;
   GtkButtonClass *button_class;
   
-  object_class = (GtkObjectClass *) klass;
   gobject_class = (GObjectClass *) klass;
   button_class = (GtkButtonClass *) klass;
 

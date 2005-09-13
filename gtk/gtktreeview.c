@@ -1514,7 +1514,6 @@ gtk_tree_view_realize (GtkWidget *widget)
 {
   GList *tmp_list;
   GtkTreeView *tree_view;
-  GdkGCValues values;
   GdkWindowAttr attributes;
   gint attributes_mask;
 
@@ -1575,12 +1574,6 @@ gtk_tree_view_realize (GtkWidget *widget)
   tree_view->priv->header_window = gdk_window_new (widget->window,
 						   &attributes, attributes_mask);
   gdk_window_set_user_data (tree_view->priv->header_window, widget);
-
-
-  values.foreground = (widget->style->white.pixel==0 ?
-		       widget->style->black:widget->style->white);
-  values.function = GDK_XOR;
-  values.subwindow_mode = GDK_INCLUDE_INFERIORS;
 
   /* Add them all up. */
   widget->style = gtk_style_attach (widget->style, widget->window);
@@ -3454,7 +3447,7 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
   GtkRBTree *drag_highlight_tree = NULL;
   GtkTreeIter iter;
   gint new_y;
-  gint y_offset, x_offset, cell_offset;
+  gint y_offset, cell_offset;
   gint max_height;
   gint depth;
   GdkRectangle background_area;
@@ -3588,7 +3581,6 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 
       max_height = ROW_HEIGHT (tree_view, BACKGROUND_HEIGHT (node));
 
-      x_offset = -event->area.x;
       cell_offset = 0;
       highlight_x = 0; /* should match x coord of first cell */
 
@@ -6206,10 +6198,6 @@ gtk_tree_view_drag_leave (GtkWidget      *widget,
                           GdkDragContext *context,
                           guint             time)
 {
-  TreeViewDragInfo *di;
-
-  di = get_info (GTK_TREE_VIEW (widget));
-
   /* unset any highlight row */
   gtk_tree_view_set_drag_dest_row (GTK_TREE_VIEW (widget),
                                    NULL,
@@ -6229,7 +6217,6 @@ gtk_tree_view_drag_motion (GtkWidget        *widget,
 {
   gboolean empty;
   GtkTreePath *path = NULL;
-  GtkTreeModel *model;
   GtkTreeViewDropPosition pos;
   GtkTreeView *tree_view;
   GdkDragAction suggested_action = 0;
@@ -6243,7 +6230,6 @@ gtk_tree_view_drag_motion (GtkWidget        *widget,
   gtk_tree_view_get_drag_dest_row (tree_view, &path, &pos);
 
   /* we only know this *after* set_desination_row */
-  model = gtk_tree_view_get_model (tree_view);
   empty = tree_view->priv->empty_view_drop;
 
   if (path == NULL && !empty)
@@ -6676,7 +6662,6 @@ gtk_tree_view_header_focus (GtkTreeView      *tree_view,
 			    GtkDirectionType  dir)
 {
   GtkWidget *focus_child;
-  GtkContainer *container;
 
   GList *last_column, *first_column;
   GList *tmp_list;
@@ -6686,7 +6671,6 @@ gtk_tree_view_header_focus (GtkTreeView      *tree_view,
     return FALSE;
 
   focus_child = GTK_CONTAINER (tree_view)->focus_child;
-  container = GTK_CONTAINER (tree_view);
 
   first_column = tree_view->priv->columns;
   while (first_column)
@@ -10851,7 +10835,6 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
   gboolean collapse;
   gint x, y;
   GList *list;
-  GdkDisplay *display;
   GdkWindow *child, *parent;
 
   remove_auto_expand_timeout (tree_view);
@@ -11002,7 +10985,6 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
       /* now that we've collapsed all rows, we want to try to set the prelight
        * again. To do this, we fake a motion event and send it to ourselves. */
 
-      display = gdk_drawable_get_display (tree_view->priv->bin_window);
       child = tree_view->priv->bin_window;
       parent = gdk_window_get_parent (child);
 

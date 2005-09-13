@@ -308,10 +308,8 @@ gtk_image_set_property (GObject      *object,
 			GParamSpec   *pspec)
 {
   GtkImage *image;
-  GtkImagePrivate *priv;
 
   image = GTK_IMAGE (object);
-  priv = GTK_IMAGE_GET_PRIVATE (image);
   
   switch (prop_id)
     {

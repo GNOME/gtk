@@ -2025,7 +2025,6 @@ update_smart_separators (GtkWidget *proxy)
       gboolean empty;
       GList *children, *cur, *last;
       GtkWidget *filler;
-      gint i;
 
       children = gtk_container_get_children (GTK_CONTAINER (parent));
       
@@ -2034,7 +2033,6 @@ update_smart_separators (GtkWidget *proxy)
       empty = TRUE;
       filler = NULL;
 
-      i = 0;
       cur = children;
       while (cur) 
 	{

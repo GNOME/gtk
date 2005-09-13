@@ -1,5 +1,7 @@
 2005-09-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/*.c: Various cleanups.  (#315360, Kjartan Maraas)
+
 	* gdk/*.c: Various cleanups.  (#315359, Kjartan Maraas)
 	
 2005-09-13  Matthias Clasen  <mclasen@redhat.com>

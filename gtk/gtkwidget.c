@@ -4671,13 +4671,9 @@ void
 gtk_widget_modify_style (GtkWidget      *widget,
 			 GtkRcStyle     *style)
 {
-  GtkRcStyle *old_style;
-
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (GTK_IS_RC_STYLE (style));
   
-  old_style = g_object_get_qdata (G_OBJECT (widget), quark_rc_style);
-
   g_object_set_qdata_full (G_OBJECT (widget),
 			   quark_rc_style,
 			   gtk_rc_style_copy (style),

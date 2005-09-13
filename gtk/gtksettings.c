@@ -1385,8 +1385,6 @@ settings_update_font_options (GtkSettings *settings)
   cairo_antialias_t antialias_mode = CAIRO_ANTIALIAS_DEFAULT;
   gchar *rgba_str;
   cairo_subpixel_order_t subpixel_order = CAIRO_SUBPIXEL_ORDER_DEFAULT;
-  gint dpi_int;
-  double dpi;
   cairo_font_options_t *options;
   
   g_object_get (settings,
@@ -1394,13 +1392,7 @@ settings_update_font_options (GtkSettings *settings)
 		"gtk-xft-hinting", &hinting,
 		"gtk-xft-hintstyle", &hint_style_str,
 		"gtk-xft-rgba", &rgba_str,
-		"gtk-xft-dpi", &dpi_int,
 		NULL);
-
-  if (dpi_int > 0)
-    dpi = dpi_int / 1024.;
-  else
-    dpi = -1.;
 
   options = cairo_font_options_create ();
   

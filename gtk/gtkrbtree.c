@@ -1213,7 +1213,6 @@ _gtk_rbtree_remove_node (GtkRBTree *tree,
   GtkRBNode *x, *y;
   GtkRBTree *tmp_tree;
   GtkRBNode *tmp_node;
-  gint node_height;
   gint y_height;
   
   g_return_if_fail (tree != NULL);
@@ -1259,7 +1258,6 @@ _gtk_rbtree_remove_node (GtkRBTree *tree,
 
   /* offsets and parity adjust all the way up through parent trees */
   y_height = GTK_RBNODE_GET_HEIGHT (y);
-  node_height = GTK_RBNODE_GET_HEIGHT (node) + (node->children?node->children->root->offset:0);
 
   tmp_tree = tree;
   tmp_node = y;

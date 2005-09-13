@@ -1741,7 +1741,7 @@ gtk_icon_view_set_cursor (GtkIconView     *icon_view,
 			  GtkCellRenderer *cell,
 			  gboolean         start_editing)
 {
-  GtkIconViewItem *item;
+  GtkIconViewItem *item = NULL;
   GtkIconViewCellInfo *info =  NULL;
   GList *l;
   gint i, cell_pos;
@@ -2361,7 +2361,6 @@ gtk_icon_view_layout_single_row (GtkIconView *icon_view,
 				 gint        *maximum_width)
 {
   gint focus_width;
-  gint spacing;
   gint x, current_width;
   GList *items, *last_item;
   gint col;
@@ -2381,8 +2380,6 @@ gtk_icon_view_layout_single_row (GtkIconView *icon_view,
   gtk_widget_style_get (GTK_WIDGET (icon_view),
 			"focus-line-width", &focus_width,
 			NULL);
-
-  spacing = icon_view->priv->spacing;
 
   x += icon_view->priv->margin + focus_width;
   current_width += 2 * (icon_view->priv->margin + focus_width);
@@ -2777,12 +2774,11 @@ gtk_icon_view_paint_item (GtkIconView     *icon_view,
 			  gboolean         draw_focus)
 {
   gint focus_width, focus_pad;
-  gint spacing, padding;
+  gint padding;
   GdkRectangle cell_area, box;
   GList *l;
   gint i;
   GtkStateType state;
-  gboolean rtl;
   GtkCellRendererState flags;
       
   if (icon_view->priv->model == NULL)
@@ -2790,14 +2786,11 @@ gtk_icon_view_paint_item (GtkIconView     *icon_view,
   
   gtk_icon_view_set_cell_data (icon_view, item);
 
-  rtl = gtk_widget_get_direction (GTK_WIDGET (icon_view)) == GTK_TEXT_DIR_RTL;
-  
   gtk_widget_style_get (GTK_WIDGET (icon_view),
 			"focus-line-width", &focus_width,
 			"focus-padding", &focus_pad,
 			NULL);
   
-  spacing = icon_view->priv->spacing;
   padding = focus_width; 
   
   if (item->selected)
@@ -3245,7 +3238,7 @@ gtk_icon_view_row_inserted (GtkTreeModel *model,
 			    GtkTreeIter  *iter,
 			    gpointer      data)
 {
-  gint length, index;
+  gint index;
   GtkIconViewItem *item;
   gboolean iters_persist;
   GtkIconView *icon_view;
@@ -3255,7 +3248,6 @@ gtk_icon_view_row_inserted (GtkTreeModel *model,
 
   iters_persist = gtk_tree_model_get_flags (icon_view->priv->model) & GTK_TREE_MODEL_ITERS_PERSIST;
   
-  length = gtk_tree_model_iter_n_children (model, NULL);
   index = gtk_tree_path_get_indices(path)[0];
 
   item = gtk_icon_view_item_new ();
@@ -3995,7 +3987,7 @@ gtk_icon_view_scroll_to_path (GtkIconView *icon_view,
 
   if (use_align)
     {
-      gint x, y, width, height;
+      gint x, y;
       gint focus_width;
       gfloat offset, value;
 
@@ -4464,7 +4456,6 @@ gtk_icon_view_get_visible_range (GtkIconView  *icon_view,
 {
   gint start_index = -1;
   gint end_index = -1;
-  GtkIconViewItem *item;
   GList *icons;
 
   g_return_val_if_fail (GTK_IS_ICON_VIEW (icon_view), FALSE);
@@ -6178,7 +6169,6 @@ gtk_icon_view_drag_motion (GtkWidget      *widget,
 			   guint           time)
 {
   GtkTreePath *path = NULL;
-  GtkTreeModel *model;
   GtkIconViewDropPosition pos;
   GtkIconView *icon_view;
   GdkDragAction suggested_action = 0;
@@ -6193,7 +6183,6 @@ gtk_icon_view_drag_motion (GtkWidget      *widget,
   gtk_icon_view_get_drag_dest_item (icon_view, &path, &pos);
 
   /* we only know this *after* set_desination_row */
-  model = gtk_icon_view_get_model (icon_view);
   empty = icon_view->priv->empty_view_drop;
 
   if (path == NULL && !empty)
@@ -6870,7 +6859,6 @@ gtk_icon_view_item_accessible_action_do_action (AtkAction *action,
                                                 gint       i)
 {
   GtkIconViewItemAccessible *item;
-  GtkIconView *icon_view;
 
   if (i < 0 || i >= LAST_ACTION) 
     return FALSE;
@@ -6882,8 +6870,6 @@ gtk_icon_view_item_accessible_action_do_action (AtkAction *action,
 
   if (atk_state_set_contains_state (item->state_set, ATK_STATE_DEFUNCT))
     return FALSE;
-
-  icon_view = GTK_ICON_VIEW (item->widget);
 
   switch (i)
     {
@@ -7148,6 +7134,7 @@ gtk_icon_view_item_accessible_text_get_character_at_offset (AtkText *text,
   return unichar;
 }
 
+#if 0
 static void
 get_pango_text_offsets (PangoLayout     *layout,
                         GtkTextBuffer   *buffer,
@@ -7270,6 +7257,7 @@ get_pango_text_offsets (PangoLayout     *layout,
   gtk_text_buffer_get_iter_at_offset (buffer, start_iter, *start_offset);
   gtk_text_buffer_get_iter_at_offset (buffer, end_iter, *end_offset);
 }
+#endif
 
 static gchar*
 gtk_icon_view_item_accessible_text_get_text_before_offset (AtkText         *text,
@@ -7281,7 +7269,9 @@ gtk_icon_view_item_accessible_text_get_text_before_offset (AtkText         *text
   GtkIconViewItemAccessible *item;
   GtkTextIter start, end;
   GtkTextBuffer *buffer;
+#if 0
   GtkIconView *icon_view;
+#endif
 
   item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (text);
 
@@ -7356,8 +7346,8 @@ gtk_icon_view_item_accessible_text_get_text_before_offset (AtkText         *text
       break;
    case ATK_TEXT_BOUNDARY_LINE_START:
    case ATK_TEXT_BOUNDARY_LINE_END:
-      icon_view = GTK_ICON_VIEW (item->widget);
 #if 0
+      icon_view = GTK_ICON_VIEW (item->widget);
       /* FIXME we probably have to use GailTextCell to salvage this */
       gtk_icon_view_update_item_text (icon_view, item->item);
       get_pango_text_offsets (icon_view->priv->layout,
@@ -7389,7 +7379,9 @@ gtk_icon_view_item_accessible_text_get_text_at_offset (AtkText         *text,
   GtkIconViewItemAccessible *item;
   GtkTextIter start, end;
   GtkTextBuffer *buffer;
+#if 0
   GtkIconView *icon_view;
+#endif
 
   item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (text);
 
@@ -7462,8 +7454,8 @@ gtk_icon_view_item_accessible_text_get_text_at_offset (AtkText         *text,
       break;
    case ATK_TEXT_BOUNDARY_LINE_START:
    case ATK_TEXT_BOUNDARY_LINE_END:
-      icon_view = GTK_ICON_VIEW (item->widget);
 #if 0
+      icon_view = GTK_ICON_VIEW (item->widget);
       /* FIXME we probably have to use GailTextCell to salvage this */
       gtk_icon_view_update_item_text (icon_view, item->item);
       get_pango_text_offsets (icon_view->priv->layout,
@@ -7496,7 +7488,9 @@ gtk_icon_view_item_accessible_text_get_text_after_offset (AtkText         *text,
   GtkIconViewItemAccessible *item;
   GtkTextIter start, end;
   GtkTextBuffer *buffer;
+#if 0
   GtkIconView *icon_view;
+#endif
 
   item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (text);
 
@@ -7576,8 +7570,8 @@ gtk_icon_view_item_accessible_text_get_text_after_offset (AtkText         *text,
       break;
    case ATK_TEXT_BOUNDARY_LINE_START:
    case ATK_TEXT_BOUNDARY_LINE_END:
-      icon_view = GTK_ICON_VIEW (item->widget);
 #if 0
+      icon_view = GTK_ICON_VIEW (item->widget);
       /* FIXME we probably have to use GailTextCell to salvage this */
       gtk_icon_view_update_item_text (icon_view, item->item);
       get_pango_text_offsets (icon_view->priv->layout,
@@ -7624,10 +7618,12 @@ gtk_icon_view_item_accessible_text_get_character_extents (AtkText      *text,
                                                           AtkCoordType coord_type)
 {
   GtkIconViewItemAccessible *item;
+#if 0
   GtkIconView *icon_view;
   PangoRectangle char_rect;
   const gchar *item_text;
   gint index;
+#endif
 
   item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (text);
 
@@ -7637,8 +7633,8 @@ gtk_icon_view_item_accessible_text_get_character_extents (AtkText      *text,
   if (atk_state_set_contains_state (item->state_set, ATK_STATE_DEFUNCT))
     return;
 
-  icon_view = GTK_ICON_VIEW (item->widget);
 #if 0
+  icon_view = GTK_ICON_VIEW (item->widget);
       /* FIXME we probably have to use GailTextCell to salvage this */
   gtk_icon_view_update_item_text (icon_view, item->item);
   item_text = pango_layout_get_text (icon_view->priv->layout);
@@ -7662,11 +7658,13 @@ gtk_icon_view_item_accessible_text_get_offset_at_point (AtkText      *text,
                                                         AtkCoordType coord_type)
 {
   GtkIconViewItemAccessible *item;
+  gint offset = 0;
+#if 0
   GtkIconView *icon_view;
   const gchar *item_text;
   gint index;
-  gint offset;
   gint l_x, l_y;
+#endif
 
   item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (text);
 
@@ -7676,8 +7674,8 @@ gtk_icon_view_item_accessible_text_get_offset_at_point (AtkText      *text,
   if (atk_state_set_contains_state (item->state_set, ATK_STATE_DEFUNCT))
     return -1;
 
-  icon_view = GTK_ICON_VIEW (item->widget);
 #if 0
+  icon_view = GTK_ICON_VIEW (item->widget);
       /* FIXME we probably have to use GailTextCell to salvage this */
   gtk_icon_view_update_item_text (icon_view, item->item);
   atk_component_get_position (ATK_COMPONENT (text), &l_x, &l_y, coord_type);
@@ -8565,14 +8563,12 @@ gtk_icon_view_accessible_notify_gtk (GObject *obj,
   GtkIconView *icon_view;
   GtkWidget *widget;
   AtkObject *atk_obj;
-  GtkIconViewAccessible *view;
   GtkIconViewAccessiblePrivate *priv;
 
   if (strcmp (pspec->name, "model") == 0)
     {
       widget = GTK_WIDGET (obj); 
       atk_obj = gtk_widget_get_accessible (widget);
-      view = GTK_ICON_VIEW_ACCESSIBLE (atk_obj);
       priv = gtk_icon_view_accessible_get_priv (atk_obj);
       if (priv->model)
         {

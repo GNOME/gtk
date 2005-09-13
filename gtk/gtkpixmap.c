@@ -77,10 +77,8 @@ static void
 gtk_pixmap_class_init (GtkPixmapClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
-  GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
 
-  object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
   parent_class = gtk_type_class (gtk_misc_get_type ());
 

@@ -81,7 +81,7 @@ gtk_color_selection_dialog_class_init (GtkColorSelectionDialogClass *klass)
 static void
 gtk_color_selection_dialog_init (GtkColorSelectionDialog *colorseldiag)
 {
-  GtkWidget *action_area_button_box, *frame;  
+  GtkWidget *frame;  
   
   frame = gtk_frame_new (NULL);
   gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_NONE);
@@ -95,8 +95,6 @@ gtk_color_selection_dialog_init (GtkColorSelectionDialog *colorseldiag)
   gtk_container_add (GTK_CONTAINER (frame), colorseldiag->colorsel);
   gtk_widget_show (colorseldiag->colorsel);
   
-  action_area_button_box = GTK_DIALOG (colorseldiag)->action_area;
-
   colorseldiag->cancel_button = gtk_dialog_add_button (GTK_DIALOG (colorseldiag),
                                                        GTK_STOCK_CANCEL,
                                                        GTK_RESPONSE_CANCEL);

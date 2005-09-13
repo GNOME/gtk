@@ -1642,7 +1642,6 @@ do_files_changed (GtkFileSystemModel *model,
 {
   GtkTreeModel *tree_model = GTK_TREE_MODEL (model);
   FileModelNode *children;
-  FileModelNode *prev = NULL;
   GtkTreeIter iter;
   GtkTreePath *path;
   GSList *sorted_paths;
@@ -1666,7 +1665,6 @@ do_files_changed (GtkFileSystemModel *model,
   
   if (parent_node && parent_node->has_dummy)
     {
-      prev = children;
       children = children->next;
       gtk_tree_path_next (path);
     }
@@ -1678,7 +1676,6 @@ do_files_changed (GtkFileSystemModel *model,
       while (children &&
 	     (!children->path || gtk_file_path_compare (children->path, file_path) < 0))
 	{
-	  prev = children;
 	  if (children->is_visible)
 	    gtk_tree_path_next (path);
 	  

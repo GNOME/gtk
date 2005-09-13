@@ -170,12 +170,10 @@ static void
 gtk_color_button_class_init (GtkColorButtonClass *klass)
 {
   GObjectClass *gobject_class;
-  GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkButtonClass *button_class;
 
   gobject_class = G_OBJECT_CLASS (klass);
-  object_class = GTK_OBJECT_CLASS (klass);
   widget_class = GTK_WIDGET_CLASS (klass);
   button_class = GTK_BUTTON_CLASS (klass);
 

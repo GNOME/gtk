@@ -398,7 +398,6 @@ gtk_tooltips_draw_tips (GtkTooltips *tooltips)
 {
   GtkRequisition requisition;
   GtkWidget *widget;
-  GtkStyle *style;
   gint x, y, w, h;
   GtkTooltipsData *data;
   gboolean keyboard_mode;
@@ -413,7 +412,6 @@ gtk_tooltips_draw_tips (GtkTooltips *tooltips)
     g_get_current_time (&tooltips->last_popdown);
 
   gtk_widget_ensure_style (tooltips->tip_window);
-  style = tooltips->tip_window->style;
   
   widget = tooltips->active_tips_data->widget;
   g_object_set_data (G_OBJECT (tooltips->tip_window), I_(tooltips_info_key),

@@ -332,14 +332,12 @@ gtk_misc_get_padding (GtkMisc *misc,
 static void
 gtk_misc_realize (GtkWidget *widget)
 {
-  GtkMisc *misc;
   GdkWindowAttr attributes;
   gint attributes_mask;
 
   g_return_if_fail (GTK_IS_MISC (widget));
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
-  misc = GTK_MISC (widget);
 
   if (GTK_WIDGET_NO_WINDOW (widget))
     {
