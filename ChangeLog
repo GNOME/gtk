@@ -1,3 +1,10 @@
+2005-09-13  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_create_row_drag_icon): 
+	* gtk/gtkiconview.c (gtk_icon_view_create_drag_icon): Silently
+	return NULL if the widget is not realized.  (#316023,
+	Guillaume Cottenceau)
+
 2005-09-11  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/gdk.symbols: 

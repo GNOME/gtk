@@ -12190,8 +12190,8 @@ gtk_tree_view_get_dest_row_at_pos (GtkTreeView             *tree_view,
  * @tree_view: a #GtkTreeView
  * @path: a #GtkTreePath in @tree_view
  *
- * Creates a #GdkPixmap representation of the row at @path.  This image is used
- * for a drag icon.
+ * Creates a #GdkPixmap representation of the row at @path.  
+ * This image is used for a drag icon.
  *
  * Return value: a newly-allocated pixmap of the drag icon.
  **/
@@ -12214,7 +12214,13 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
   gint bin_window_width;
   gboolean is_separator = FALSE;
 
+  g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), NULL);
+  g_return_val_if_fail (path != NULL, NULL);
+
   widget = GTK_WIDGET (tree_view);
+
+  if (!GTK_WIDGET_REALIZED (tree_view))
+    return NULL;
 
   depth = gtk_tree_path_get_depth (path);
 
