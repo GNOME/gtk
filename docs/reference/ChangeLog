@@ -1,3 +1,9 @@
+2005-09-13  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtkeditable.sgml: Clarify docs
+	for ::insert-text signal.  (#316094, Tommi
+	Komulainen)
+
 Tue Sep 13 14:16:27 2005  Tim Janik  <timj@imendio.com>
 
 	* gtk/tmpl/gtkrc.sgml: fixed wording and typos in some places.

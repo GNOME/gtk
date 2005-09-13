@@ -125,11 +125,12 @@ it from being inserted entirely.
 
 @editable: the object which received the signal.
 @new_text: the new text to insert.
-@new_text_length: the length of the new text.
-@position: the position at which to insert the new text.
-           this is an in-out paramter. After the signal
-           emission is finished, it should point after   
-           the newly inserted text.
+@new_text_length: the length of the new text, in bytes, 
+  or -1 if new_text is nul-terminated
+@position: the position, in characters, at which to insert 
+           the new text. this is an in-out parameter. 
+           After the signal emission is finished, it should 
+           point after the newly inserted text.
 
 <!-- ##### FUNCTION gtk_editable_select_region ##### -->
 <para>
