@@ -547,7 +547,7 @@ _gdk_windowing_display_set_sm_client_id (GdkDisplay  *display,
     {
       XChangeProperty (display_x11->xdisplay, display_x11->leader_window,
 		       gdk_x11_get_xatom_by_name_for_display (display, "SM_CLIENT_ID"),
-		       XA_STRING, 8, PropModeReplace, sm_client_id,
+		       XA_STRING, 8, PropModeReplace, (guchar *)sm_client_id,
 		       strlen (sm_client_id));
     }
   else

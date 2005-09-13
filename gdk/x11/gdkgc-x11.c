@@ -411,7 +411,7 @@ gdk_x11_gc_set_dashes (GdkGC *gc,
   g_return_if_fail (dash_list != NULL);
 
   XSetDashes (GDK_GC_XDISPLAY (gc), GDK_GC_XGC (gc),
-	      dash_offset, dash_list, n);
+	      dash_offset, (char *)dash_list, n);
 }
 
 static void

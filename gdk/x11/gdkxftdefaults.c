@@ -129,7 +129,6 @@ get_integer_default (Display *dpy,
 		     gchar   *option,
 		     gint    *value)
 {
-  gint i;
   gchar *v, *e;
   
   v = XGetDefault (dpy, "Xft", option);
@@ -138,7 +137,7 @@ get_integer_default (Display *dpy,
       if (FcNameConstant ((FcChar8 *) v, value))
 	return TRUE;
       
-      i = strtol (v, &e, 0);
+      *value = strtol (v, &e, 0);
       if (e != v)
 	return TRUE;
     }

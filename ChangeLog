@@ -1,5 +1,9 @@
 2005-09-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/*.c: Various cleanups.  (#315359, Kjartan Maraas)
+	
+2005-09-13  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkimcontextsimple.c (gtk_im_context_simple_filter_keypress): 
 	Let GDK_Return pass through in some more cases.
 

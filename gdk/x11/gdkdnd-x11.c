@@ -539,7 +539,7 @@ get_client_window_at_coords_recurse (GdkDisplay *display,
   unsigned int nchildren;
   int i;
   gboolean found_child = FALSE;
-  GdkChildInfoX11 child;
+  GdkChildInfoX11 child = { 0, };
   gboolean has_wm_state = FALSE;
 
   if (!_gdk_x11_get_window_child_info (display, win, TRUE,
@@ -2394,7 +2394,7 @@ xdnd_send_motion (GdkDragContext *context,
 static guint32
 xdnd_check_dest (GdkDisplay *display,
 		 Window      win,
-		 gint       *xdnd_version)
+		 guint      *xdnd_version)
 {
   gboolean retval = FALSE;
   Atom type = None;
@@ -3012,7 +3012,7 @@ static guint32
 _gdk_drag_get_protocol_for_display (GdkDisplay      *display,
 				    guint32          xid,
 				    GdkDragProtocol *protocol,
-				    gint            *version)
+				    guint           *version)
 
 {
   GdkWindow *window;

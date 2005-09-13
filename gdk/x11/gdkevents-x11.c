@@ -592,7 +592,7 @@ translate_key_event (GdkDisplay *display,
 {
   GdkKeymap *keymap = gdk_keymap_get_for_display (display);
   gunichar c = 0;
-  guchar buf[7];
+  gchar buf[7];
 
   event->key.type = xevent->xany.type == KeyPress ? GDK_KEY_PRESS : GDK_KEY_RELEASE;
   event->key.time = xevent->xkey.time;
@@ -2627,7 +2627,7 @@ gdk_x11_screen_get_window_manager_name (GdkScreen *screen)
           gint format;
           gulong n_items;
           gulong bytes_after;
-          guchar *name;
+          gchar *name;
           
           name = NULL;
 

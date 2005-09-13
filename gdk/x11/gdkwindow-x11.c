@@ -358,12 +358,10 @@ static GdkColormap*
 gdk_window_impl_x11_get_colormap (GdkDrawable *drawable)
 {
   GdkDrawableImplX11 *drawable_impl;
-  GdkWindowImplX11 *window_impl;
   
   g_return_val_if_fail (GDK_IS_WINDOW_IMPL_X11 (drawable), NULL);
 
   drawable_impl = GDK_DRAWABLE_IMPL_X11 (drawable);
-  window_impl = GDK_WINDOW_IMPL_X11 (drawable);
 
   if (!((GdkWindowObject *) drawable_impl->wrapper)->input_only && 
       drawable_impl->colormap == NULL)
@@ -388,12 +386,10 @@ static void
 gdk_window_impl_x11_set_colormap (GdkDrawable *drawable,
                                   GdkColormap *cmap)
 {
-  GdkWindowImplX11 *impl;
   GdkDrawableImplX11 *draw_impl;
   
   g_return_if_fail (GDK_IS_WINDOW_IMPL_X11 (drawable));
 
-  impl = GDK_WINDOW_IMPL_X11 (drawable);
   draw_impl = GDK_DRAWABLE_IMPL_X11 (drawable);
 
   if (cmap && GDK_WINDOW_DESTROYED (draw_impl->wrapper))
@@ -1846,7 +1842,6 @@ gdk_window_reparent (GdkWindow *window,
 		     gint       x,
 		     gint       y)
 {
-  GdkDisplay *display;
   GdkWindowObject *window_private;
   GdkWindowObject *parent_private;
   GdkWindowObject *old_parent_private;
@@ -1866,8 +1861,6 @@ gdk_window_reparent (GdkWindow *window,
   if (!new_parent)
     new_parent = gdk_screen_get_root_window (GDK_WINDOW_SCREEN (window));
 
-  display = GDK_WINDOW_DISPLAY (window);
-  
   window_private = (GdkWindowObject*) window;
   old_parent_private = (GdkWindowObject*)window_private->parent;
   parent_private = (GdkWindowObject*) new_parent;
@@ -2662,7 +2655,7 @@ set_text_property (GdkDisplay  *display,
 		   Atom         property,
 		   const gchar *utf8_str)
 {
-  guchar *prop_text = NULL;
+  gchar *prop_text = NULL;
   Atom prop_type;
   gint prop_length;
   gint prop_format;
@@ -2682,7 +2675,7 @@ set_text_property (GdkDisplay  *display,
       
       gdk_utf8_to_compound_text_for_display (display,
 					     utf8_str, &gdk_type, &prop_format,
-					     &prop_text, &prop_length);
+					     (guchar **)&prop_text, &prop_length);
       prop_type = gdk_x11_atom_to_xatom_for_display (display, gdk_type);
       is_compound_text = TRUE;
     }
@@ -2693,11 +2686,11 @@ set_text_property (GdkDisplay  *display,
 		       xwindow,
 		       property,
 		       prop_type, prop_format,
-		       PropModeReplace, prop_text,
+		       PropModeReplace, (guchar *)prop_text,
 		       prop_length);
 
       if (is_compound_text)
-	gdk_free_compound_text (prop_text);
+	gdk_free_compound_text ((guchar *)prop_text);
       else
 	g_free (prop_text);
     }
@@ -2713,7 +2706,7 @@ set_wm_name (GdkDisplay  *display,
   XChangeProperty (GDK_DISPLAY_XDISPLAY (display), xwindow,
 		   gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_NAME"),
 		   gdk_x11_get_xatom_by_name_for_display (display, "UTF8_STRING"), 8,
-		   PropModeReplace, name, strlen (name));
+		   PropModeReplace, (guchar *)name, strlen (name));
   
   set_text_property (display, xwindow,
 		     gdk_x11_get_xatom_by_name_for_display (display, "WM_NAME"),
@@ -2756,7 +2749,7 @@ gdk_window_set_title (GdkWindow   *window,
       XChangeProperty (xdisplay, xwindow,
 		       gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_ICON_NAME"),
 		       gdk_x11_get_xatom_by_name_for_display (display, "UTF8_STRING"), 8,
-		       PropModeReplace, title, strlen (title));
+		       PropModeReplace, (guchar *)title, strlen (title));
       
       set_text_property (display, xwindow,
 			 gdk_x11_get_xatom_by_name_for_display (display, "WM_ICON_NAME"),
@@ -2798,7 +2791,7 @@ gdk_window_set_role (GdkWindow   *window,
       if (role)
 	XChangeProperty (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XID (window),
 			 gdk_x11_get_xatom_by_name_for_display (display, "WM_WINDOW_ROLE"),
-			 XA_STRING, 8, PropModeReplace, role, strlen (role));
+			 XA_STRING, 8, PropModeReplace, (guchar *)role, strlen (role));
       else
 	XDeleteProperty (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XID (window),
 			 gdk_x11_get_xatom_by_name_for_display (display, "WM_WINDOW_ROLE"));
@@ -2823,13 +2816,7 @@ void
 gdk_window_set_transient_for (GdkWindow *window, 
 			      GdkWindow *parent)
 {
-  GdkWindowObject *private;
-  GdkWindowObject *parent_private;
-  
   g_return_if_fail (GDK_IS_WINDOW (window));
-  
-  private = (GdkWindowObject*) window;
-  parent_private = (GdkWindowObject*) parent;
   
   if (!GDK_WINDOW_DESTROYED (window) && !GDK_WINDOW_DESTROYED (parent))
     XSetTransientForHint (GDK_WINDOW_XDISPLAY (window), 
@@ -4165,7 +4152,7 @@ gdk_window_set_icon_name (GdkWindow   *window,
 		   GDK_WINDOW_XID (window),
 		   gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_ICON_NAME"),
 		   gdk_x11_get_xatom_by_name_for_display (display, "UTF8_STRING"), 8,
-		   PropModeReplace, name, strlen (name));
+		   PropModeReplace, (guchar *)name, strlen (name));
   
   set_text_property (display, GDK_WINDOW_XID (window),
 		     gdk_x11_get_xatom_by_name_for_display (display, "WM_ICON_NAME"),
@@ -4186,14 +4173,10 @@ gdk_window_set_icon_name (GdkWindow   *window,
 void
 gdk_window_iconify (GdkWindow *window)
 {
-  GdkWindowObject *private;
-  
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
-
-  private = (GdkWindowObject*) window;
 
   if (GDK_WINDOW_IS_MAPPED (window))
     {  
@@ -4224,14 +4207,10 @@ gdk_window_iconify (GdkWindow *window)
 void
 gdk_window_deiconify (GdkWindow *window)
 {
-  GdkWindowObject *private;
-  
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
-
-  private = (GdkWindowObject*) window;
 
   if (GDK_WINDOW_IS_MAPPED (window))
     {  
