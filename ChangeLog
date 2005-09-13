@@ -1,3 +1,8 @@
+2005-09-13  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c: Turn off profiling for the stable
+	branch (#undef PROFILE_FILE_CHOOSER).
+
 2005-09-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkiconview.c (gtk_icon_view_class_init):

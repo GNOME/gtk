@@ -83,7 +83,7 @@
 
 /* Profiling stuff */
 
-#define PROFILE_FILE_CHOOSER
+#undef PROFILE_FILE_CHOOSER
 #ifdef PROFILE_FILE_CHOOSER
 
 #ifdef HAVE_UNISTD_H
