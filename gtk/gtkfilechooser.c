@@ -260,7 +260,16 @@ gtk_file_chooser_class_init (gpointer g_iface)
 							     P_("Whether the hidden files and folders should be displayed"),
 							     FALSE,
 							     GTK_PARAM_READWRITE));
-
+  
+  /**
+   * GtkFileChooser:do-overwrite-confirmation:
+   *
+   * Whether a file chooser in GTK_FILE_CHOOSER_ACTION_SAVE
+   * will present an overwrite confirmation dialog if the user
+   * selects a file name that already exists.
+   * 
+   * Since: 2.8
+   */
   g_object_interface_install_property (g_iface,
 				       g_param_spec_boolean ("do-overwrite-confirmation",
 							     P_("Do overwrite confirmation"),
