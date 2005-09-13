@@ -1893,16 +1893,20 @@ gtk_entry_key_press (GtkWidget   *widget,
 	}
     }
 
-  if (event->keyval == GDK_Return || event->keyval == GDK_ISO_Enter
-      || event->keyval == GDK_Escape)
+  if (event->keyval == GDK_Return || 
+      event->keyval == GDK_KP_Enter || 
+      event->keyval == GDK_ISO_Enter || 
+      event->keyval == GDK_Escape)
     {
       GtkEntryCompletion *completion = gtk_entry_get_completion (entry);
-
+      
       if (completion && completion->priv->completion_timeout)
         {
           g_source_remove (completion->priv->completion_timeout);
           completion->priv->completion_timeout = 0;
         }
+
+      gtk_entry_reset_im_context (entry);
     }
 
   if (GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event))

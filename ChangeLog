@@ -1,5 +1,11 @@
 2005-09-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkimcontextsimple.c (gtk_im_context_simple_filter_keypress): 
+	Let GDK_Return pass through in some more cases.
+
+	* gtk/gtkentry.c (gtk_entry_key_press): Reset the im context before
+	activating the entry. 
+
 	* gtk/gtkiconview.c (gtk_icon_view_class_init):
 	(gtk_icon_view_get_dest_item_at_pos):  Fix typos in the 
 	docs.  (#316008, #316027, #316121, Guillaume Cottenceau)
