@@ -697,7 +697,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 						      GTK_PARAM_READWRITE));
 
   /**
-   * GtkIconView:orientation:
+   * GtkIconView:reorderable:
    *
    * The reorderable property specifies if the items can be reordered
    * by DND.
@@ -6576,7 +6576,7 @@ gtk_icon_view_get_drag_dest_item (GtkIconView              *icon_view,
  * @icon_view: a #GtkIconView
  * @drag_x: the position to determine the destination item for
  * @drag_y: the position to determine the destination item for
- * @path: Return location for the path of the highlighted item, or %NULL.
+ * @path: Return location for the path of the item, or %NULL.
  * @pos: Return location for the drop position, or %NULL
  * 
  * Determines the destination item for a given position.
