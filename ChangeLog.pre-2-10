@@ -1,5 +1,12 @@
 2005-09-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* tests/testentrycompletion.c (create_simple_completion_model): Add
+	some strings containing multibyte characters.
+
+	* gtk/gtkentrycompletion.c (gtk_entry_completion_real_insert_prefix): 
+	Fix prefix insertion for multibyte characters.  (#316095,
+	Tommi Komulainen)
+
 	* gtk/gtktreeview.c (gtk_tree_view_create_row_drag_icon): 
 	* gtk/gtkiconview.c (gtk_icon_view_create_drag_icon): Silently
 	return NULL if the widget is not realized.  (#316023,
