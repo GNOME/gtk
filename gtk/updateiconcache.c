@@ -144,9 +144,9 @@ foreach_remove_func (gpointer key, gpointer value, gpointer user_data)
   if (image->flags == HAS_ICON_FILE)
     {
       g_free (key);
-      g_free (image);
       g_free (image->attach_points);
       g_strfreev (image->display_names);
+      g_free (image);
 
       return TRUE;
     }

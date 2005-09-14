@@ -1,3 +1,8 @@
+2005-09-14  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/updateiconcache.c (foreach_remove_func): Fix
+	a use-after-free bug.  (#316256, Alexander Nedotsukov)
+
 2005-09-13  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserdefault.c: Turn off profiling for the stable
