@@ -214,7 +214,7 @@ gtk_label_get_type (void)
 	NULL,           /* class_finalize */
 	NULL,           /* class_data */
 	sizeof (GtkLabel),
-	32,             /* n_preallocs */
+	0,             /* n_preallocs */
 	(GInstanceInitFunc) gtk_label_init,
       };
 

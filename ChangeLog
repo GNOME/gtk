@@ -1,5 +1,10 @@
 2005-09-14  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtklabel.c (gtk_label_get_type): 
+	* gtk/gtkbutton.c (gtk_button_get_type): 
+	* gtk/gtkwindow.c (gtk_window_group_get_type): No point in 
+	using a mem chunk for window groups, buttons, labels.
+
 	* gtk/updateiconcache.c (foreach_remove_func): Fix
 	a use-after-free bug.  (#316256, Alexander Nedotsukov)
 
