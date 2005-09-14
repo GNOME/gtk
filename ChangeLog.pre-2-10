@@ -1,3 +1,7 @@
+2005-09-14  Tristan Van Berkom <tvb@cvs.gnome.org>
+
+	* gtk/gtkcolorbutton.c: Check "color" argument in gtk_color_button_set_color ()
+
 2005-09-14  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtklabel.c (gtk_label_get_type): 

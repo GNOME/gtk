@@ -780,6 +780,7 @@ gtk_color_button_set_color (GtkColorButton *color_button,
 			    const GdkColor *color)
 {
   g_return_if_fail (GTK_IS_COLOR_BUTTON (color_button));
+  g_return_if_fail (color != NULL);
 
   color_button->priv->color.red = color->red;
   color_button->priv->color.green = color->green;
