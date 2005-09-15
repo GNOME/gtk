@@ -19,6 +19,7 @@
  */
 
 #include <config.h>
+#include "gtkfilechooserprivate.h"
 #include "gtkfilechooserdialog.h"
 #include "gtkfilechooserwidget.h"
 #include "gtkfilechooserutils.h"
@@ -29,19 +30,6 @@
 #include "gtkalias.h"
 
 #include <stdarg.h>
-
-struct _GtkFileChooserDialogPrivate
-{
-  GtkWidget *widget;
-  
-  char *file_system;
-
-  /* for use with GtkFileChooserEmbed */
-  gint default_width;
-  gint default_height;
-  gboolean resize_horizontally;
-  gboolean resize_vertically;
-};
 
 #define GTK_FILE_CHOOSER_DIALOG_GET_PRIVATE(o)  (GTK_FILE_CHOOSER_DIALOG (o)->priv)
 

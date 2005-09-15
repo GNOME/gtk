@@ -23,6 +23,13 @@
 
 #include "gtkfilechooser.h"
 #include "gtkfilesystem.h"
+#include "gtkfilesystemmodel.h"
+#include "gtkliststore.h"
+#include "gtktooltips.h"
+#include "gtktreemodelsort.h"
+#include "gtktreestore.h"
+#include "gtktreeview.h"
+#include "gtkvbox.h"
 
 G_BEGIN_DECLS
 
@@ -92,6 +99,202 @@ gboolean       _gtk_file_chooser_add_shortcut_folder     (GtkFileChooser    *cho
 gboolean       _gtk_file_chooser_remove_shortcut_folder  (GtkFileChooser    *chooser,
 							  const GtkFilePath *path,
 							  GError           **error);
+
+/* GtkFileChooserDialog private */
+
+struct _GtkFileChooserDialogPrivate
+{
+  GtkWidget *widget;
+  
+  char *file_system;
+
+  /* for use with GtkFileChooserEmbed */
+  gint default_width;
+  gint default_height;
+  gboolean resize_horizontally;
+  gboolean resize_vertically;
+};
+
+
+/* GtkFileChooserWidget private */
+
+struct _GtkFileChooserWidgetPrivate
+{
+  GtkWidget *impl;
+
+  char *file_system;
+};
+
+
+/* GtkFileChooserDefault private */
+
+typedef enum {
+  LOAD_EMPTY,			/* There is no model */
+  LOAD_PRELOAD,			/* Model is loading and a timer is running; model isn't inserted into the tree yet */
+  LOAD_LOADING,			/* Timeout expired, model is inserted into the tree, but not fully loaded yet */
+  LOAD_FINISHED			/* Model is fully loaded and inserted into the tree */
+} LoadState;
+
+struct _GtkFileChooserDefault
+{
+  GtkVBox parent_instance;
+
+  GtkFileChooserAction action;
+
+  GtkFileSystem *file_system;
+
+  /* Save mode widgets */
+  GtkWidget *save_widgets;
+
+  GtkWidget *save_file_name_entry;
+  GtkWidget *save_folder_label;
+  GtkWidget *save_folder_combo;
+  GtkWidget *save_expander;
+
+  /* The file browsing widgets */
+  GtkWidget *browse_widgets;
+  GtkWidget *browse_shortcuts_tree_view;
+  GtkWidget *browse_shortcuts_add_button;
+  GtkWidget *browse_shortcuts_remove_button;
+  GtkWidget *browse_shortcuts_popup_menu;
+  GtkWidget *browse_shortcuts_popup_menu_remove_item;
+  GtkWidget *browse_shortcuts_popup_menu_rename_item;
+  GtkWidget *browse_files_tree_view;
+  GtkWidget *browse_files_popup_menu;
+  GtkWidget *browse_files_popup_menu_add_shortcut_item;
+  GtkWidget *browse_files_popup_menu_hidden_files_item;
+  GtkWidget *browse_new_folder_button;
+  GtkWidget *browse_path_bar;
+
+  GtkFileSystemModel *browse_files_model;
+
+  GtkWidget *filter_combo_hbox;
+  GtkWidget *filter_combo;
+  GtkWidget *preview_box;
+  GtkWidget *preview_label;
+  GtkWidget *preview_widget;
+  GtkWidget *extra_align;
+  GtkWidget *extra_widget;
+
+  GtkListStore *shortcuts_model;
+  GtkTreeModel *shortcuts_filter_model;
+
+  GtkTreeModelSort *sort_model;
+
+  LoadState load_state;
+  guint load_timeout_id;
+
+  GSList *pending_select_paths;
+
+  GtkFileFilter *current_filter;
+  GSList *filters;
+
+  GtkTooltips *tooltips;
+
+  gboolean has_home;
+  gboolean has_desktop;
+
+  int num_volumes;
+  int num_shortcuts;
+  int num_bookmarks;
+
+  gulong volumes_changed_id;
+  gulong bookmarks_changed_id;
+
+  GtkFilePath *current_volume_path;
+  GtkFilePath *current_folder;
+  GtkFilePath *preview_path;
+  char *preview_display_name;
+
+  GtkTreeViewColumn *list_name_column;
+  GtkCellRenderer *list_name_renderer;
+
+  GSource *edited_idle;
+  char *edited_new_text;
+
+  gulong settings_signal_id;
+  int icon_size;
+
+  gulong toplevel_set_focus_id;
+  GtkWidget *toplevel_last_focus_widget;
+
+#if 0
+  GdkDragContext *shortcuts_drag_context;
+  GSource *shortcuts_drag_outside_idle;
+#endif
+
+  /* Flags */
+
+  guint local_only : 1;
+  guint preview_widget_active : 1;
+  guint use_preview_label : 1;
+  guint select_multiple : 1;
+  guint show_hidden : 1;
+  guint do_overwrite_confirmation : 1;
+  guint list_sort_ascending : 1;
+  guint changing_folder : 1;
+  guint shortcuts_current_folder_active : 1;
+
+#if 0
+  guint shortcuts_drag_outside : 1;
+#endif
+};
+
+
+/* GtkFileSystemModel private */
+
+typedef struct _FileModelNode           FileModelNode;
+
+struct _GtkFileSystemModel
+{
+  GObject parent_instance;
+
+  GtkFileSystem  *file_system;
+  GtkFileInfoType types;
+  FileModelNode  *roots;
+  GtkFileFolder  *root_folder;
+  GtkFilePath    *root_path;
+
+  GtkFileSystemModelFilter filter_func;
+  gpointer filter_data;
+
+  GSList *idle_clears;
+  GSource *idle_clear_source;
+  GSource *idle_finished_loading_source;
+
+  gushort max_depth;
+  
+  guint show_hidden : 1;
+  guint show_folders : 1;
+  guint show_files : 1;
+  guint folders_only : 1;
+  guint has_editable : 1;
+};
+
+struct _FileModelNode
+{
+  GtkFilePath *path;
+  FileModelNode *next;
+
+  GtkFileInfo *info;
+  GtkFileFolder *folder;
+  
+  FileModelNode *children;
+  FileModelNode *parent;
+  GtkFileSystemModel *model;
+
+  guint ref_count;
+  guint n_referenced_children;
+
+  gushort depth;
+
+  guint has_dummy : 1;
+  guint is_dummy : 1;
+  guint is_visible : 1;
+  guint loaded : 1;
+  guint idle_clear : 1;
+};
+
 
 G_END_DECLS
 

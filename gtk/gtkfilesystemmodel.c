@@ -21,6 +21,7 @@
 #include <config.h>
 #include <string.h>
 
+#include "gtkfilechooserprivate.h"
 #include "gtkfilesystemmodel.h"
 #include "gtkfilesystem.h"
 #include "gtkintl.h"
@@ -30,7 +31,6 @@
 #include "gtkalias.h"
 
 typedef struct _GtkFileSystemModelClass GtkFileSystemModelClass;
-typedef struct _FileModelNode           FileModelNode;
 
 #define GTK_FILE_SYSTEM_MODEL_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_FILE_SYSTEM_MODEL, GtkFileSystemModelClass))
 #define GTK_IS_FILE_SYSTEM_MODEL_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_FILE_SYSTEM_MODEL))
@@ -45,55 +45,6 @@ struct _GtkFileSystemModelClass
   void (*finished_loading) (GtkFileSystemModel *model);
 };
 
-struct _GtkFileSystemModel
-{
-  GObject parent_instance;
-
-  GtkFileSystem  *file_system;
-  GtkFileInfoType types;
-  FileModelNode  *roots;
-  GtkFileFolder  *root_folder;
-  GtkFilePath    *root_path;
-
-  GtkFileSystemModelFilter filter_func;
-  gpointer filter_data;
-
-  GSList *idle_clears;
-  GSource *idle_clear_source;
-  GSource *idle_finished_loading_source;
-
-  gushort max_depth;
-  
-  guint show_hidden : 1;
-  guint show_folders : 1;
-  guint show_files : 1;
-  guint folders_only : 1;
-  guint has_editable : 1;
-};
-
-struct _FileModelNode
-{
-  GtkFilePath *path;
-  FileModelNode *next;
-
-  GtkFileInfo *info;
-  GtkFileFolder *folder;
-  
-  FileModelNode *children;
-  FileModelNode *parent;
-  GtkFileSystemModel *model;
-
-  guint ref_count;
-  guint n_referenced_children;
-
-  gushort depth;
-
-  guint has_dummy : 1;
-  guint is_dummy : 1;
-  guint is_visible : 1;
-  guint loaded : 1;
-  guint idle_clear : 1;
-};
 
 static void gtk_file_system_model_class_init   (GtkFileSystemModelClass *class);
 static void gtk_file_system_model_iface_init   (GtkTreeModelIface       *iface);

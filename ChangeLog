@@ -1,3 +1,26 @@
+2005-09-15  Federico Mena Quintero  <federico@ximian.com>
+
+	* tests/autotestfilechooser.c: Start a set of automated tests for
+	the file chooser.  The only test in there right now doesn't pass
+	yet.  It specifies the intended behavior of the first optimization
+	of a series which I'll do on the file chooser (see
+	http://primates.ximian.com/~federico/news-2005-09.html#14 for the
+	details of this optimization).
+
+	* tests/Makefile.am: Added autotestfilechooser.c.
+
+	* gtk/gtkfilechooserprivate.h (struct
+	_GtkFileChooserDialogPrivate): Move all the file chooser's private
+	structures to here, so that they can be accessed by
+	tests/autotestfilechooser.c:  _GtkFileChooserDialogPrivate,
+	_GtkFileChooserWidgetPrivate, LoadState, _GtkFileChooserDefault.
+
+	* gtk/gtkfilechooserdialog.c: See above.
+
+	* gtk/gtkfilechooserwidget.c: See above.
+
+	* gtk/gtkfilechooserdefault.c: See above.
+
 Thu Sep 15 15:27:55 2005  Tim Janik  <timj@imendio.com>
 
 	* gtk/gtkwindow.c: 

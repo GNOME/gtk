@@ -32,6 +32,7 @@
 #include "gtkentry.h"
 #include "gtkeventbox.h"
 #include "gtkexpander.h"
+#include "gtkfilechooserprivate.h"
 #include "gtkfilechooserdefault.h"
 #include "gtkfilechooserembed.h"
 #include "gtkfilechooserentry.h"
@@ -59,11 +60,7 @@
 #include "gtktable.h"
 #include "gtktreednd.h"
 #include "gtktreeprivate.h"
-#include "gtktreeview.h"
-#include "gtktreemodelsort.h"
 #include "gtktreeselection.h"
-#include "gtktreestore.h"
-#include "gtktooltips.h"
 #include "gtktypebuiltins.h"
 #include "gtkvbox.h"
 
@@ -145,123 +142,11 @@ typedef struct _GtkFileChooserDefaultClass GtkFileChooserDefaultClass;
 #define GTK_IS_FILE_CHOOSER_DEFAULT_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_FILE_CHOOSER_DEFAULT))
 #define GTK_FILE_CHOOSER_DEFAULT_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_FILE_CHOOSER_DEFAULT, GtkFileChooserDefaultClass))
 
-typedef enum {
-  LOAD_EMPTY,			/* There is no model */
-  LOAD_PRELOAD,			/* Model is loading and a timer is running; model isn't inserted into the tree yet */
-  LOAD_LOADING,			/* Timeout expired, model is inserted into the tree, but not fully loaded yet */
-  LOAD_FINISHED			/* Model is fully loaded and inserted into the tree */
-} LoadState;
-
 #define MAX_LOADING_TIME 500
 
 struct _GtkFileChooserDefaultClass
 {
   GtkVBoxClass parent_class;
-};
-
-struct _GtkFileChooserDefault
-{
-  GtkVBox parent_instance;
-
-  GtkFileChooserAction action;
-
-  GtkFileSystem *file_system;
-
-  /* Save mode widgets */
-  GtkWidget *save_widgets;
-
-  GtkWidget *save_file_name_entry;
-  GtkWidget *save_folder_label;
-  GtkWidget *save_folder_combo;
-  GtkWidget *save_expander;
-
-  /* The file browsing widgets */
-  GtkWidget *browse_widgets;
-  GtkWidget *browse_shortcuts_tree_view;
-  GtkWidget *browse_shortcuts_add_button;
-  GtkWidget *browse_shortcuts_remove_button;
-  GtkWidget *browse_shortcuts_popup_menu;
-  GtkWidget *browse_shortcuts_popup_menu_remove_item;
-  GtkWidget *browse_shortcuts_popup_menu_rename_item;
-  GtkWidget *browse_files_tree_view;
-  GtkWidget *browse_files_popup_menu;
-  GtkWidget *browse_files_popup_menu_add_shortcut_item;
-  GtkWidget *browse_files_popup_menu_hidden_files_item;
-  GtkWidget *browse_new_folder_button;
-  GtkWidget *browse_path_bar;
-
-  GtkFileSystemModel *browse_files_model;
-
-  GtkWidget *filter_combo_hbox;
-  GtkWidget *filter_combo;
-  GtkWidget *preview_box;
-  GtkWidget *preview_label;
-  GtkWidget *preview_widget;
-  GtkWidget *extra_align;
-  GtkWidget *extra_widget;
-
-  GtkListStore *shortcuts_model;
-  GtkTreeModel *shortcuts_filter_model;
-
-  GtkTreeModelSort *sort_model;
-
-  LoadState load_state;
-  guint load_timeout_id;
-
-  GSList *pending_select_paths;
-
-  GtkFileFilter *current_filter;
-  GSList *filters;
-
-  GtkTooltips *tooltips;
-
-  gboolean has_home;
-  gboolean has_desktop;
-
-  int num_volumes;
-  int num_shortcuts;
-  int num_bookmarks;
-
-  gulong volumes_changed_id;
-  gulong bookmarks_changed_id;
-
-  GtkFilePath *current_volume_path;
-  GtkFilePath *current_folder;
-  GtkFilePath *preview_path;
-  char *preview_display_name;
-
-  GtkTreeViewColumn *list_name_column;
-  GtkCellRenderer *list_name_renderer;
-
-  GSource *edited_idle;
-  char *edited_new_text;
-
-  gulong settings_signal_id;
-  int icon_size;
-
-  gulong toplevel_set_focus_id;
-  GtkWidget *toplevel_last_focus_widget;
-
-#if 0
-  GdkDragContext *shortcuts_drag_context;
-  GSource *shortcuts_drag_outside_idle;
-#endif
-
-  /* Flags */
-
-  guint local_only : 1;
-  guint preview_widget_active : 1;
-  guint use_preview_label : 1;
-  guint select_multiple : 1;
-  guint show_hidden : 1;
-  guint do_overwrite_confirmation : 1;
-  guint list_sort_ascending : 1;
-  guint changing_folder : 1;
-  guint shortcuts_current_folder_active : 1;
-
-#if 0
-  guint shortcuts_drag_outside : 1;
-#endif
 };
 
 /* Signal IDs */

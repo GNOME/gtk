@@ -19,6 +19,7 @@
  */
 
 #include <config.h>
+#include "gtkfilechooserprivate.h"
 #include "gtkfilechooserwidget.h"
 #include "gtkfilechooserdefault.h"
 #include "gtkfilechooserutils.h"
@@ -26,13 +27,6 @@
 #include "gtkfilechooserembed.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
-
-struct _GtkFileChooserWidgetPrivate
-{
-  GtkWidget *impl;
-
-  char *file_system;
-};
 
 #define GTK_FILE_CHOOSER_WIDGET_GET_PRIVATE(o)  (GTK_FILE_CHOOSER_WIDGET (o)->priv)
 

@@ -27,6 +27,7 @@ endif
 
 
 noinst_PROGRAMS =			\
+	autotestfilechooser		\
 	simple				\
 	testcairo			\
 	testcalendar			\
@@ -73,6 +74,7 @@ noinst_PROGRAMS =			\
 	testmerge			\
 	testactions
 
+autotestfilechooser_DEPENDENCIES = $(TEST_DEPS)
 simple_DEPENDENCIES = $(TEST_DEPS)
 testicontheme_DEPENDENCIES = $(TEST_DEPS)
 testiconview_DEPENDENCIES = $(TEST_DEPS)
@@ -113,6 +115,7 @@ testxinerama_DEPENDENCIES = $(TEST_DEPS)
 testmerge_DEPENDENCIES = $(TEST_DEPS)
 testactions_DEPENDENCIES = $(TEST_DEPS)
 
+autotestfilechooser_LDADD = $(LDADDS)
 simple_LDADD = $(LDADDS)
 testcairo_LDADD = $(LDADDS)
 testcalendar_LDADD = $(LDADDS)
@@ -159,6 +162,9 @@ pixbuf_random_LDADD = $(LDADDS)
 pixbuf_threads_LDADD = $(LDADDS) $(GLIB_LIBS)
 testmerge_LDADD = $(LDADDS)
 testactions_LDADD = $(LDADDS)
+
+autotestfilechooser_SOURCES =	\
+	autotestfilechooser.c
 
 testfilechooser_SOURCES = 	\
 	prop-editor.c		\
