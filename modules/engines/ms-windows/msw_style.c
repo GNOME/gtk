@@ -1724,24 +1724,23 @@ draw_extension(GtkStyle *style,
                gint height,
                GtkPositionType gap_side)
 {
-  if (detail && !strcmp(detail, "tab"))
+  if (GTK_IS_NOTEBOOK(widget) && detail && !strcmp(detail, "tab"))
     {
       GtkNotebook *notebook = GTK_NOTEBOOK(widget);
-      GtkPositionType pos_type = gtk_notebook_get_tab_pos(notebook);
-	  gint x2, y2, w2, h2;
+      gint x2, y2, w2, h2;
 
-	  x2 = x; y2 = y; w2 = width; h2 = height;
-      if (pos_type == GTK_POS_TOP && state_type == GTK_STATE_NORMAL) {
+      x2 = x; y2 = y; w2 = width; h2 = height;
+      if (gap_side == GTK_POS_TOP && state_type == GTK_STATE_NORMAL) {
           /*h2 += XP_EDGE_SIZE;*/
 	  }
-      else if (pos_type == GTK_POS_BOTTOM && state_type == GTK_STATE_NORMAL) {
+      else if (gap_side == GTK_POS_BOTTOM && state_type == GTK_STATE_NORMAL) {
           /*h2 += XP_EDGE_SIZE;*/
 	  }
-      else if (pos_type == GTK_POS_LEFT && state_type == GTK_STATE_NORMAL) {
+      else if (gap_side == GTK_POS_LEFT && state_type == GTK_STATE_NORMAL) {
           x2 += 1;
           w2 -= XP_EDGE_SIZE;
 	  }
-      else if (pos_type == GTK_POS_RIGHT && state_type == GTK_STATE_NORMAL) {
+      else if (gap_side == GTK_POS_RIGHT && state_type == GTK_STATE_NORMAL) {
           w2 -= (XP_EDGE_SIZE + 1);
 	  }
 
@@ -1766,12 +1765,10 @@ draw_box_gap (GtkStyle *style, GdkWindow *window, GtkStateType state_type,
               gint y, gint width, gint height, GtkPositionType gap_side,
               gint gap_x, gint gap_width)
 {
-  if (detail && !strcmp(detail, "notebook"))
+  if (GTK_IS_NOTEBOOK(widget) && detail && !strcmp(detail, "notebook"))
     {
-      GtkNotebook *notebook = GTK_NOTEBOOK(widget);
-
       /* FIXME: pos != TOP to be implemented */
-      if (gtk_notebook_get_tab_pos(notebook) == GTK_POS_TOP && xp_theme_draw(window, XP_THEME_ELEMENT_TAB_PANE, style,  x, y, width, height,
+      if (gap_side == GTK_POS_TOP && xp_theme_draw(window, XP_THEME_ELEMENT_TAB_PANE, style,  x, y, width, height,
 			state_type, area))
         {
           return;

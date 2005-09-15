@@ -1,3 +1,10 @@
+2005-09-16  Tor Lillqvist  <tml@novell.com>
+
+	* modules/engines/ms-windows/msw_style.c (draw_extension,
+	draw_box_gap): Check whether the widget actually is a GtkNotebook
+	before treating it as such. Drop some unneeded local variables,
+	use parameter with same information instead. (#316412)
+
 2005-09-15  Federico Mena Quintero  <federico@ximian.com>
 
 	* tests/autotestfilechooser.c: Start a set of automated tests for
