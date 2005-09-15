@@ -1,3 +1,11 @@
+2005-09-14  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_init): Add
+	an easy-to-find profiling marker when starting to create a file
+	chooser.
+	(browse_files_model_finished_loading_cb): Likewise, for when the
+	chooser is finished loading.
+
 2005-09-14  Tristan Van Berkom <tvb@cvs.gnome.org>
 
 	* gtk/gtkcolorbutton.c: Check "color" argument in gtk_color_button_set_color ()

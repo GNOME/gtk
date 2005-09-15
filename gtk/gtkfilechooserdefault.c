@@ -738,6 +738,10 @@ gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
 {
   profile_start ("start", NULL);
 
+#ifdef PROFILE_FILE_CHOOSER
+  access ("MARK: *** CREATE FILE CHOOSER", F_OK);
+#endif
+
   impl->local_only = TRUE;
   impl->preview_widget_active = TRUE;
   impl->use_preview_label = TRUE;
@@ -5197,6 +5201,10 @@ browse_files_model_finished_loading_cb (GtkFileSystemModel    *model,
 
   pending_select_paths_process (impl);
   set_busy_cursor (impl, FALSE);
+
+#ifdef PROFILE_FILE_CHOOSER
+  access ("MARK: *** FINISHED LOADING", F_OK);
+#endif
 
   profile_end ("end", NULL);
 }
