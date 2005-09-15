@@ -1,3 +1,10 @@
+2005-09-15  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/tmpl/gtkfilechooser.sgml: List all the default key bindings.
+	Fix the documentation for the "location-popup" binding signal; its
+	"path" argument was not listed.  Mention a tip to have a crude
+	form of bookmarks accessible through key bindings.
+
 2005-09-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkeditable.sgml: Clarify docs

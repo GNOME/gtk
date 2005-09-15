@@ -204,15 +204,27 @@ update_preview_cb (GtkFileChooser *file_chooser, gpointer data)
 	    <tbody>
 	      <row>
 		<entry>Signal name</entry>
-		<entry>Key</entry>
+		<entry>Default key combinations</entry>
 	      </row>
 	      <row>
 		<entry>location-popup</entry>
-		<entry><keycombo><keycap>Control</keycap><keycap>L</keycap></keycombo></entry>
+		<entry>
+		  <keycombo><keycap>Control</keycap><keycap>L</keycap></keycombo>;
+		  <keycap>/</keycap>
+		</entry>
 	      </row>
 	      <row>
 		<entry>up-folder</entry>
-		<entry><keycombo><keycap>Alt</keycap><keycap>Up</keycap></keycombo></entry>
+		<entry>
+		  <keycombo><keycap>Alt</keycap><keycap>Up</keycap></keycombo><footnote>
+		    <para>
+		      Both the individual Up key and the numeric
+		      keypad's Up key are supported.
+		    </para>
+		  </footnote>
+		  ;
+		  <keycap>Backspace</keycap>
+		</entry>
 	      </row>
 	      <row>
 		<entry>down-folder</entry>
@@ -227,16 +239,14 @@ update_preview_cb (GtkFileChooser *file_chooser, gpointer data)
 	</informaltable>
 
 	<para>
-	  To change these defaults to something else, you could
-	  include the following fragment in your
-	  <filename>.gtkrc-2.0</filename> file:
+	  You can change these defaults to something else.  For
+	  example, to add a <keycap>Shift</keycap> modifier to a few
+	  of the default bindings, you can include the following
+	  fragment in your <filename>.gtkrc-2.0</filename> file:
 	</para>
 
 	<programlisting>
 binding "my-own-gtkfilechooser-bindings" {
-	bind "&lt;Alt&gt;&lt;Shift&gt;l" {
-		"location-popup" ()
-	}
 	bind "&lt;Alt&gt;&lt;Shift&gt;Up" {
 		"up-folder" ()
 	}
@@ -244,7 +254,7 @@ binding "my-own-gtkfilechooser-bindings" {
 		"down-folder" ()
 	}
 	bind "&lt;Alt&gt;&lt;Shift&gt;Home" {
-		"home-folder-folder" ()
+		"home-folder" ()
 	}
 }
 
@@ -257,14 +267,22 @@ class "GtkFileChooserDefault" binding "my-own-gtkfilechooser-bindings"
 
 	<programlisting>
           void user_function (GtkFileChooserDefault *chooser,
+                              const char            *path,
                               <link linkend="gpointer">gpointer</link> user_data);
 	</programlisting>
 
 	<para>
 	  This is used to make the file chooser show a "Location"
 	  dialog which the user can use to manually type the name of
-	  the file he wishes to select.  By default this is bound to
-	  <keycombo><keycap>Control</keycap><keycap>L</keycap></keycombo>.
+	  the file he wishes to select.  The
+	  <parameter>path</parameter> argument is a string that gets
+	  put in the text entry for the file name.  By default this is bound to
+	  <keycombo><keycap>Control</keycap><keycap>L</keycap></keycombo>
+	  with a <parameter>path</parameter> string of "" (the empty
+	  string); it is also bound to <keycap>/</keycap> with a
+	  <parameter>path</parameter> string of "<literal>/</literal>"
+	  (a slash):  this lets you type <keycap>/</keycap> and
+	  immediately type a path name.
 	</para>
 
 	<variablelist role="params">
@@ -277,6 +295,14 @@ class "GtkFileChooserDefault" binding "my-own-gtkfilechooser-bindings"
 	    </listitem>
 	  </varlistentry>
 	  <varlistentry>
+	    <term><parameter>path</parameter>&nbsp;:</term>
+	    <listitem>
+	      <simpara>
+		default contents for the text entry for the file name
+	      </simpara>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
 	    <term><parameter>user_data</parameter>&nbsp;:</term>
 	    <listitem>
 	      <simpara>
@@ -285,6 +311,30 @@ class "GtkFileChooserDefault" binding "my-own-gtkfilechooser-bindings"
 	    </listitem>
 	  </varlistentry>
 	</variablelist>
+
+	<tip>
+	  <para>
+	    You can create your own bindings for the
+	    <symbol>location-popup</symbol> signal with custom
+	    <parameter>path</parameter> strings, and have a crude form
+	    of easily-to-type bookmarks.  For example, say you access
+	    the path <filename>/home/username/misc</filename> very
+	    frequently.  You could then create an <keycombo>
+	    <keycap>Alt</keycap> <keycap>M</keycap> </keycombo>
+	    shortcut by including the following in your
+	    <filename>.gtkrc-2.0</filename>:
+	  </para>
+
+	  <programlisting>
+binding "misc-shortcut" {
+	bind "&lt;Alt&gt;M" {
+		"location-popup" ("/home/username/misc")
+	}
+}
+
+class "GtkFileChooserDefault" binding "misc-shortcut"
+	  </programlisting>
+	</tip>
       </refsect3>
 
       <refsect3 id="GtkFileChooserDefault-up-folder">
@@ -298,8 +348,9 @@ class "GtkFileChooserDefault" binding "my-own-gtkfilechooser-bindings"
 	<para>
 	  This is used to make the file chooser go to the parent of
 	  the current folder in the file hierarchy.  By default this
-	  is bound to
-	  <keycombo><keycap>Alt</keycap><keycap>Up</keycap></keycombo>.
+	  is bound to <keycap>Backspace</keycap> and
+	  <keycombo><keycap>Alt</keycap><keycap>Up</keycap></keycombo>
+	  (the Up key in the numeric keypad also works).
 	</para>
 
 	<variablelist role="params">
@@ -338,7 +389,8 @@ class "GtkFileChooserDefault" binding "my-own-gtkfilechooser-bindings"
 	  "/foo/<emphasis>bar/</emphasis>baz", then this will cause
 	  the file chooser to switch to the "baz" subfolder.  By
 	  default this is bound to
-	  <keycombo><keycap>Alt</keycap><keycap>Down</keycap></keycombo>.
+	  <keycombo><keycap>Alt</keycap><keycap>Down</keycap></keycombo>
+	  (the Down key in the numeric keypad also works).
 	</para>
 
 	<variablelist role="params">
@@ -372,7 +424,8 @@ class "GtkFileChooserDefault" binding "my-own-gtkfilechooser-bindings"
 	<para>
 	  This is used to make the file chooser show the user's home
 	  folder in the file list.  By default this is bound to
-	  <keycombo><keycap>Alt</keycap><keycap>Home</keycap></keycombo>.
+	  <keycombo><keycap>Alt</keycap><keycap>Home</keycap></keycombo>
+	  (the Home key in the numeric keypad also works).
 	</para>
 
 	<variablelist role="params">
