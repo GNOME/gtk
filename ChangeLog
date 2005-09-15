@@ -1,3 +1,9 @@
+Thu Sep 15 15:27:55 2005  Tim Janik  <timj@imendio.com>
+
+	* gtk/gtkwindow.c: 
+	gtk_window_map_event(): new function to work around lost unmap requests.
+	fixes bug #316180.
+
 2005-09-14  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_init): Add
