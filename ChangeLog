@@ -1,3 +1,8 @@
+Fri Sep 16 14:00:20 2005  Tim Janik  <timj@imendio.com>
+
+        * gtk/gtkwindow.c: fix bug #316180.
+        gtk_window_map_event(): new function to work around lost unmap requests.
+
 2005-09-16  Tor Lillqvist  <tml@novell.com>
 
 	* modules/engines/ms-windows/msw_style.c (draw_extension,
