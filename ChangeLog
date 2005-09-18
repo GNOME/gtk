@@ -1,5 +1,10 @@
 2005-09-18  Hans Breuer  <hans@breuer.org>
 
+	* gtk/gtktrayicon-win32.c : now handling events by hard-coded 
+	g_signal_emit_by_name() - will break when gtkstatusicon.c changes.
+
+2005-09-18  Hans Breuer  <hans@breuer.org>
+
 	* gdk/gdk.symbols gdk/win32/gdkwin32.h gdk/win32/gdkcursorwin32.c : export
 	_gdk_win32_pixbuf_to_hicon() as gdk_win32_pixbuf_to_hicon_libgtk_only()
 	* gtk/gtktrayicon-win32.c : a lot of debug spew but it has started to show
