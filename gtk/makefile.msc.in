@@ -10,7 +10,7 @@ TOP = ..\..
 ################################################################
 
 # Not the real version but the one used in the DLL names
-GTK_VER = 2,0
+GTK_VER = 2.0
 GDK_PIXBUF_VER = 2.0
 
 
@@ -31,7 +31,9 @@ DEPCFLAGS = $(PANGO_CFLAGS) $(GLIB_CFLAGS) $(LIBICONV_CFLAGS) \
 LDFLAGS = $(ATK_LIBS) /link /machine:ix86 $(LINKDEBUG)
 # Some files use near as an identifier
 # Don't define GTK_COMPILATION here, because it's for gtk-x.x.dll only
-DEFINES = $(G_DEBUGGING) -DGTK_DISABLE_COMPAT_H -DG_LOG_DOMAIN=\"Gtk\" -Dnear=xxnear \
+DEFINES = \
+	-DHAVE_CONFIG_H \
+	$(G_DEBUGGING) -DGTK_DISABLE_COMPAT_H -DG_LOG_DOMAIN=\"Gtk\" -Dnear=xxnear \
 	-DPANGO_ENABLE_BACKEND \
 	-DGTK_VERSION=\"$(GTK_VER)\" -DGTK_BINARY_VERSION=\"$(GTK_BINARY_VERSION)\" \
 	-DGTK_HOST=\"win32\" \
@@ -196,6 +198,7 @@ gtk_OBJECTS = 					\
 	gtksocket.obj				\
 	gtksocket-win32.obj				\
 	gtkspinbutton.obj			\
+	gtkstatusicon.obj	\
 	gtkstyle.obj				\
 	gtkstatusbar.obj			\
 	gtkstock.obj				\
@@ -224,6 +227,7 @@ gtk_OBJECTS = 					\
 	gtktoolbutton.obj				\
 	gtktoolitem.obj				\
 	gtktooltips.obj				\
+	gtktrayicon-win32.obj	\
 	gtktree.obj				\
 	gtktreedatalist.obj	\
 	gtktreednd.obj				\
@@ -276,6 +280,7 @@ gtk_public_h_sources =		\
 	gtkcelllayout.h		\
 	gtkcellrenderer.h	\
 	gtkcellrendererpixbuf.h	\
+	gtkcellrendererkeys.h	\
 	gtkcellrenderertext.h	\
 	gtkcellrenderertoggle.h	\
 	gtkcellview.h \
@@ -322,6 +327,7 @@ gtk_public_h_sources =		\
 	gtkhscale.h		\
 	gtkhscrollbar.h		\
 	gtkhseparator.h		\
+	gtkstatusicon.h		\
 	gtkhsv.h		\
 	gtkiconfactory.h	\
 	gtkicontheme.h		\
