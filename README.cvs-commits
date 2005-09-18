@@ -28,7 +28,7 @@ to ask people commiting to GTK+ to follow a few rules:
 2) There must be a ChangeLog for every commit. (If you discover that
    you only committed half the files you meant to and need to fix that
    up, or something, you don't need a new ChangeLog entry. But in general,
-   ChangeLog entries are mandatory.) Changes with out ChangeLog entries
+   ChangeLog entries are mandatory.) Changes without ChangeLog entries
    will be reverted.
 
 3) There _must_ be a ChangeLog for every commit.
@@ -38,7 +38,7 @@ Notes:
 * If you are going to be changing many files in an experimental fashion,
   it probably is a good idea to create a separate branch for your changes.
 
-* The ChangeLog entries should preferrably match in date format
+* The ChangeLog entries should preferably match in date format
   with the existing entries. You can set how emacs does this
   by using customize mode:
 

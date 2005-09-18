@@ -1,3 +1,7 @@
+2005-09-18  Guilherme de S. Pastore  <gpastore@cvs.gnome.org>
+
+	* README.cvs-commits: fixed some tiny typos
+
 2005-09-16  Tor Lillqvist  <tml@novell.com>
 
 	* modules/engines/ms-windows/msw_style.c (draw_extension,
