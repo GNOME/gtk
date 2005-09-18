@@ -143,6 +143,8 @@ VARIABLES2 = \
 	stock_search_24		stock_search_24.png	\
 	stock_search_replace_16		stock_search_replace_16.png	\
 	stock_search_replace_24		stock_search_replace_24.png	\
+	stock_select_all_16	stock_select_all_16.png \
+	stock_select_all_24	stock_select_all_24.png \
 	stock_sort_ascending_16		stock_sort_ascending_16.png	\
 	stock_sort_ascending_24		stock_sort_ascending_24.png	\
 	stock_sort_descending_16		stock_sort_descending_16.png	\

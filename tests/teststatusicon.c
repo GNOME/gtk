@@ -25,11 +25,11 @@
 
 typedef enum
 {
-  TEST_STATUS_FILE,
-  TEST_STATUS_DIRECTORY
+  TEST_STATUS_INFO,
+  TEST_STATUS_QUESTION
 } TestStatus;
 
-static TestStatus status = TEST_STATUS_FILE;
+static TestStatus status = TEST_STATUS_INFO;
 static gint timeout = 0;
 
 static void
@@ -38,15 +38,15 @@ update_icon (GtkStatusIcon *status_icon)
   gchar *icon_name;
   gchar *tooltip;
 
-  if (status == TEST_STATUS_FILE)
+  if (status == TEST_STATUS_INFO)
     {
-      icon_name = "gnome-fs-regular";
-      tooltip = "Regular File";
+      icon_name = GTK_STOCK_DIALOG_INFO;
+      tooltip = "Some Infromation ...";
     }
   else
     {
-      icon_name = "gnome-fs-directory";
-      tooltip = "Directory";
+      icon_name = GTK_STOCK_DIALOG_QUESTION;
+      tooltip = "Some Question ...";
     }
 
   gtk_status_icon_set_from_icon_name (status_icon, icon_name);
@@ -58,10 +58,10 @@ timeout_handler (gpointer data)
 {
   GtkStatusIcon *icon = GTK_STATUS_ICON (data);
 
-  if (status == TEST_STATUS_FILE)
-    status = TEST_STATUS_DIRECTORY;
+  if (status == TEST_STATUS_INFO)
+    status = TEST_STATUS_QUESTION;
   else
-    status = TEST_STATUS_FILE;
+    status = TEST_STATUS_INFO;
 
   update_icon (icon);
 

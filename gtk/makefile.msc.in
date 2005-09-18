@@ -455,7 +455,9 @@ generated : $(GENERATED)
 
 gtk.def: gtk.symbols makefile.msc
 	echo EXPORTS > gtk.def
-	cl /EP -DINCLUDE_VARIABLES -DG_OS_WIN32 -DALL_FILES gtk.symbols >> gtk.def
+	cl /EP -DINCLUDE_VARIABLES -DG_OS_WIN32 -DALL_FILES \
+		-DG_GNUC_CONST= -DG_GNUC_NULL_TERMINATED= \
+		gtk.symbols >> gtk.def
 
 gtkalias.h: gtk.symbols
 	cl /EP -DG_OS_WIN32 -DGTK_WINDOWING_WIN32 -DINCLUDE_INTERNAL_SYMBOLS gtk.symbols | $(PERL) makegtkalias.pl > gtkalias.h

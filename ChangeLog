@@ -1,3 +1,23 @@
+2005-09-18  Hans Breuer  <hans@breuer.org>
+
+	* gtk/makefile.msc.in : fix typo for GTK_VER; define HAVE_CONFIG_H
+	cause gtkprogressbar.c has #include <config.h> conditionally; less
+	noise from generated gtk.def
+	* gtk/stock-icons/makefile.msc gdk/makefile.msc tests/makefile.msc : updated
+	
+	* gtk/gtktrayicon-win32.c : dummy implmentation to make gtk compile.
+	For me it works as well as the *NIX implemenation, that is not at all.
+
+	* gdk/win32/gdkproperty-win32.c : implement gdk_atom_intern_static_string()
+
+	* gdk/win32/gdkwindow-win32.c(gdk_window_set_urgency_hint) : only use
+	only use (WINVER >= 0x0500) when available from the SDK. Otherwise fall
+	back to true dynamic linking of FlashWindowEx. Makes gtk+ work on NT4.0
+	again - if compiled properly.
+
+	* tests/teststatusicon.c : don't use GNOME icons for testing, but icons
+	already coming with Gtk+. Makes it compile on win32.
+
 2005-09-18  Guilherme de S. Pastore  <gpastore@cvs.gnome.org>
 
 	* README.cvs-commits: fixed some tiny typos

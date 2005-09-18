@@ -53,7 +53,7 @@ TESTAPPS = \
 	testtext testtextbuffer testtoolbar \
 	testtreecolumns testtreeedit testtreeflow testtreefocus \
 	testtreesort testtreeview treestoretest \
-	testsocket testsocket_child \
+	testsocket testsocket_child teststatusicon \
 	testthreads testxinerama \
 	simple 
 

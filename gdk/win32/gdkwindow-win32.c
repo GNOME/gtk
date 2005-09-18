@@ -29,9 +29,6 @@
 #include <config.h>
 #include <stdlib.h>
 
-#define _WIN32_WINNT 0x0500
-#define WINVER _WIN32_WINNT
-
 #include "gdk.h" /* gdk_rectangle_intersect */
 #include "gdkevents.h"
 #include "gdkpixmap.h"
@@ -1574,6 +1571,8 @@ void
 gdk_window_set_urgency_hint (GdkWindow *window,
 			     gboolean   urgent)
 {
+#if (WINVER >= 0x0500)
+
   FLASHWINFO flashwinfo;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -1592,6 +1591,35 @@ gdk_window_set_urgency_hint (GdkWindow *window,
   flashwinfo.dwTimeout = 0;
 
   FlashWindowEx (&flashwinfo);
+#else
+  struct _FLASHWINDOW
+  {
+    UINT cbSize;
+    HWND hwnd;
+    DWORD dwFlags;
+    UINT uCount;
+    DWORD dwTimeout;
+  } flashwindow = { sizeof(flashwindow), GDK_WINDOW_HWND (window), urgent ? 0x07 : 0x0, 0, 0 };
+  typedef BOOL (*PFN_FlashWindowEx) (struct _FLASHWINDOW);
+  PFN_FlashWindowEx flashWindowEx = NULL;
+  gboolean once = TRUE;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD);
+  
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  if (once)
+    {
+      flashWindowEx = (PFN_FlashWindowEx)GetProcAddress (GetModuleHandle ("user32.dll"), "FlashWindowEx");
+      once = FALSE;
+    }
+  if (flashWindowEx)
+    flashWindowEx(flashwindow);
+  else
+    FlashWindow (GDK_WINDOW_HWND (window), urgent);
+#endif
 }
 
 void 

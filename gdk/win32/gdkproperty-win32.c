@@ -84,6 +84,15 @@ gdk_atom_intern (const gchar *atom_name,
   return retval;
 }
 
+GdkAtom
+gdk_atom_intern_static_string (const gchar *atom_name)
+{
+  /* on X11 this is supposed to save memory. On win32 there seems to be
+   * no way to make a difference ?
+   */
+  return gdk_atom_intern (atom_name, FALSE);
+}
+
 gchar *
 gdk_atom_name (GdkAtom atom)
 {
