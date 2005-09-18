@@ -818,3 +818,9 @@ _gdk_win32_pixbuf_to_hicon_supports_alpha (void)
     }
   return is_win_xp;
 }
+
+HICON
+gdk_win32_pixbuf_to_hicon_libgtk_only (GdkPixbuf *pixbuf)
+{
+  return _gdk_win32_pixbuf_to_hicon (pixbuf);
+}

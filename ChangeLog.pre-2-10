@@ -1,5 +1,12 @@
 2005-09-18  Hans Breuer  <hans@breuer.org>
 
+	* gdk/gdk.symbols gdk/win32/gdkwin32.h gdk/win32/gdkcursorwin32.c : export
+	_gdk_win32_pixbuf_to_hicon() as gdk_win32_pixbuf_to_hicon_libgtk_only()
+	* gtk/gtktrayicon-win32.c : a lot of debug spew but it has started to show
+	the icon and is blinking with teststatusicon. More to come ...
+
+2005-09-18  Hans Breuer  <hans@breuer.org>
+
 	* gtk/makefile.msc.in : fix typo for GTK_VER; define HAVE_CONFIG_H
 	cause gtkprogressbar.c has #include <config.h> conditionally; less
 	noise from generated gtk.def

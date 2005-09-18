@@ -1076,6 +1076,7 @@ gdk_win32_handle_table_lookup
 #if IN_HEADER(__GDK_WIN32_H__)
 #if IN_FILE(__GDK_CURSOR_WIN32_C__)
 gdk_win32_icon_to_pixbuf_libgtk_only
+gdk_win32_pixbuf_to_hicon_libgtk_only
 #endif
 #endif
 
