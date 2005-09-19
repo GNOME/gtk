@@ -6480,7 +6480,7 @@ gtk_icon_view_unset_model_drag_dest (GtkIconView *icon_view)
  * gtk_icon_view_set_drag_dest_item:
  * @icon_view: a #GtkIconView
  * @path: The path of the item to highlight, or %NULL.
- * @pos: Specifies whether to drop, relative to the item
+ * @pos: Specifies where to drop, relative to the item
  * 
  * Sets the item that is highlighted for feedback.
  *
