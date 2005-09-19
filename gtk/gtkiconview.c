@@ -3929,7 +3929,7 @@ gtk_icon_view_move_cursor_start_end (GtkIconView *icon_view,
  * @path: The path of the item to move to.
  * @use_align: whether to use alignment arguments, or %FALSE.
  * @row_align: The vertical alignment of the item specified by @path.
- * @col_align: The horizontal alignment of the item specified by @column.
+ * @col_align: The horizontal alignment of the item specified by @path.
  *
  * Moves the alignments of @icon_view to the position specified by @path.  
  * @row_align determines where the row is placed, and @col_align determines where 
