@@ -1,3 +1,9 @@
+2005-09-19  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkiconview.c: Use g_list_nth_data() instead of g_list_nth()->data
+	in multiple places to avoid segfaults if the index is out of range.  
+	(#316422, Guillaume Cottenceau)
+
 2005-09-18  Hans Breuer  <hans@breuer.org>
 
 	* gtk/gtktrayicon-win32.c : now handling events by hard-coded 
