@@ -1746,8 +1746,8 @@ gtk_icon_view_set_cursor (GtkIconView     *icon_view,
   gtk_icon_view_stop_editing (icon_view, TRUE);
 
   if (gtk_tree_path_get_depth (path) == 1)
-    item = g_list_nth (icon_view->priv->items,
-		       gtk_tree_path_get_indices(path)[0])->data;
+    item = g_list_nth_data (icon_view->priv->items,
+			    gtk_tree_path_get_indices(path)[0]);
   
   if (!item)
     return;
@@ -5074,8 +5074,8 @@ gtk_icon_view_unselect_path (GtkIconView *icon_view,
   g_return_if_fail (icon_view->priv->model != NULL);
   g_return_if_fail (path != NULL);
 
-  item = g_list_nth (icon_view->priv->items,
-		     gtk_tree_path_get_indices(path)[0])->data;
+  item = g_list_nth_data (icon_view->priv->items,
+			  gtk_tree_path_get_indices(path)[0]);
 
   if (!item)
     return;
@@ -5207,8 +5207,8 @@ gtk_icon_view_path_is_selected (GtkIconView *icon_view,
   g_return_val_if_fail (icon_view->priv->model != NULL, FALSE);
   g_return_val_if_fail (path != NULL, FALSE);
   
-  item = g_list_nth (icon_view->priv->items,
-		     gtk_tree_path_get_indices(path)[0])->data;
+  item = g_list_nth_data (icon_view->priv->items,
+			  gtk_tree_path_get_indices(path)[0]);
 
   if (!item)
     return FALSE;
@@ -8475,7 +8475,6 @@ gtk_icon_view_accessible_model_rows_reordered (GtkTreeModel *tree_model,
   GtkIconView *icon_view;
   GtkIconViewItemAccessible *item;
   GList *items;
-  GList *tmp_list;
   AtkObject *atk_obj;
 
   atk_obj = gtk_widget_get_accessible (GTK_WIDGET (user_data));
@@ -8484,14 +8483,12 @@ gtk_icon_view_accessible_model_rows_reordered (GtkTreeModel *tree_model,
   priv = gtk_icon_view_accessible_get_priv (atk_obj);
 
   items = priv->items;
-  tmp_list = NULL;
   while (items)
     {
       info = items->data;
       item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (info->item);
       info->index = new_order[info->index];
-      tmp_list = g_list_nth (icon_view->priv->items, info->index);
-      item->item = tmp_list->data;
+      item->item = g_list_nth_data (icon_view->priv->items, info->index);
       items = items->next;
     }
   priv->items = g_list_sort (priv->items, 
@@ -8758,7 +8755,6 @@ gtk_icon_view_accessible_add_selection (AtkSelection *selection,
   GtkWidget *widget;
   GtkIconView *icon_view;
   GtkIconViewItem *item;
-  GList *l;
 
   widget = GTK_ACCESSIBLE (selection)->widget;
   if (widget == NULL)
@@ -8766,11 +8762,11 @@ gtk_icon_view_accessible_add_selection (AtkSelection *selection,
 
   icon_view = GTK_ICON_VIEW (widget);
 
-  l = g_list_nth (icon_view->priv->items, i);
-  if (!l)
+  item = g_list_nth_data (icon_view->priv->items, i);
+
+  if (!item)
     return FALSE;
 
-  item = l->data;
   gtk_icon_view_select_item (icon_view, item);
 
   return TRUE;
@@ -8868,11 +8864,10 @@ gtk_icon_view_accessible_is_child_selected (AtkSelection *selection,
     return FALSE;
 
   icon_view = GTK_ICON_VIEW (widget);
-  l = g_list_nth (icon_view->priv->items, i);
-  if (!l)
-    return FALSE;
 
-  item = l->data;
+  item = g_list_nth_data (icon_view->priv->items, i);
+  if (!item)
+    return FALSE;
 
   return item->selected;
 }
