@@ -3,7 +3,9 @@
 	* gtk/gtkiconview.c: Use g_list_nth_data() instead of g_list_nth()->data
 	in multiple places to avoid segfaults if the index is out of range.  
 	(#316422, Guillaume Cottenceau)
-
+	(gtk_icon_view_scroll_to_path): Fix a typo in the docs.  (#316419,
+	Guillaume Cottenceau)
+	
 Fri Sep 16 14:00:20 2005  Tim Janik  <timj@imendio.com>
 
         * gtk/gtkwindow.c: fix bug #316180.
