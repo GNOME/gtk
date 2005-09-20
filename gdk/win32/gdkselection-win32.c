@@ -1117,7 +1117,6 @@ _gdk_win32_selection_convert_to_dib (HGLOBAL  hdata,
   if (!(target_name = gdk_atom_name (target)))
     {
       GlobalFree (hdata);
-      g_free (target_name);
       return NULL;
     }
 
