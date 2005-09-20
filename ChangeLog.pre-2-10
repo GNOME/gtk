@@ -1,3 +1,8 @@
+2005-09-20  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/gtkentry.c (gtk_entry_set_completion): Mention NULL in 
+	documentation.
+
 2005-09-20  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkselection-win32.c

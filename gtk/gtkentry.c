@@ -5399,11 +5399,12 @@ connect_completion_signals (GtkEntry           *entry,
 /**
  * gtk_entry_set_completion:
  * @entry: A #GtkEntry.
- * @completion: The #GtkEntryCompletion.
+ * @completion: The #GtkEntryCompletion or %NULL.
  *
  * Sets @completion to be the auxiliary completion object to use with @entry.
  * All further configuration of the completion mechanism is done on
- * @completion using the #GtkEntryCompletion API.
+ * @completion using the #GtkEntryCompletion API. Completion is disabled if
+ * @completion is set to %NULL.
  *
  * Since: 2.4
  */
