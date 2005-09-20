@@ -280,14 +280,15 @@ gdk_selection_owner_get_for_display (GdkDisplay *display,
   g_return_val_if_fail (display == _gdk_display, NULL);
   g_return_val_if_fail (selection != GDK_NONE, NULL);
 
-  /* Return NULL for CLIPBOARD, because otherwise cut&paste inside the
-   * same application doesn't work. We must pretend to gtk that we
-   * don't have the selection, so that we always fetch it from the
-   * Windows clipboard. See also comments in
-   * gdk_selection_send_notify().
-   */
   if (selection == GDK_SELECTION_CLIPBOARD)
-    return NULL;
+    {
+      HWND owner = GetClipboardOwner ();
+
+      if (owner == NULL)
+	return NULL;
+
+      return gdk_win32_handle_table_lookup ((GdkNativeWindow) owner);
+    }
 
   window = gdk_window_lookup ((GdkNativeWindow) g_hash_table_lookup (sel_owner_table, selection));
 
@@ -746,7 +747,9 @@ gdk_selection_send_notify_for_display (GdkDisplay *display,
                                        GdkAtom     property,
                                        guint32     time)
 {
+#ifdef G_ENABLE_DEBUG
   gchar *sel_name, *tgt_name, *prop_name;
+#endif
 
   g_return_if_fail (display == _gdk_display);
 
@@ -754,7 +757,7 @@ gdk_selection_send_notify_for_display (GdkDisplay *display,
 	    (sel_name = gdk_atom_name (selection),
 	     tgt_name = gdk_atom_name (target),
 	     prop_name = gdk_atom_name (property),
-	     g_print ("gdk_selection_send_notify: %#x %#x (%s) %#x (%s) %#x (%s)\n",
+	     g_print ("gdk_selection_send_notify_for_display: %#x %#x (%s) %#x (%s) %#x (%s)\n",
 		      requestor,
 		      (guint) selection, sel_name,
 		      (guint) target, tgt_name,
