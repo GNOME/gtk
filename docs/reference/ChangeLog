@@ -1,3 +1,8 @@
+Tue Sep 20 17:16:50 2005  Tim Janik  <timj@imendio.com>
+
+	* gtk/tmpl/gtkrc.sgml: added anchor. complexity doesn't get worse
+	than O(n^2) with recent glib.
+
 2005-09-15  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/tmpl/gtkfilechooser.sgml: List all the default key bindings.

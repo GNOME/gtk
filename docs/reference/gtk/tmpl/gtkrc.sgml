@@ -123,7 +123,9 @@ that GTK+ creates internally.
 
 </refsect2>
 
-<refsect2><title>Optimizing RC Style Matches</title>
+<refsect2>
+<anchor id="optimizing-rc-style-matches"/>
+<title>Optimizing RC Style Matches</title>
 <para>
 Everytime a widget is created and added to the layout hierarchy of a #GtkWindow
 ("anchored" to be exact), a list of matching RC styles out of all RC styles read
@@ -190,7 +192,7 @@ to reduce the performance overhead associated with RC style matches:
   <listitem><para>
   The use of <literal>"*"</literal> wildcards should be restricted as much
   as possible, because matching <literal>"A*B*C*RestString"</literal> can
-  result in matching complexities worse than O(n^2) in the length of strings.
+  result in matching complexities of O(n^2) worst case.
   </para></listitem>
 </orderedlist>
 
