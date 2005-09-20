@@ -1,3 +1,17 @@
+2005-09-20  Matthias Clasen  <mclasen@redhat.com>
+
+	Avoid unnecessary XkbGetState() calls and XkbStateNotify
+	events.  (#151555, Søren Sandmann)
+
+	* gdk/x11/gdkdisplay-x11.c (gdk_display_open): Use 
+	XkbSelectEventDetails() to select XkbStateNotify events
+	for only the state we care about.
+
+	* gdk/x11/gdkprivate-x11.h:
+	* gdk/x11/gdkkeys-x11.c (_gdk_keymap_state_changed): Pass
+	the event into the function and update the keymap state from
+	the state information contained in the event. Adjust all callers.
+	
 2005-09-19  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkiconview.c: Use g_list_nth_data() instead of g_list_nth()->data

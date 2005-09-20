@@ -536,16 +536,12 @@ get_direction (XkbDescRec *xkb,
 }
 
 static void
-update_direction (GdkKeymapX11 *keymap_x11)
+update_direction (GdkKeymapX11 *keymap_x11,
+		  gint          group)
 {
   XkbDescRec *xkb = get_xkb (keymap_x11);
-  XkbStateRec state_rec;
-  GdkDisplay *display = GDK_KEYMAP (keymap_x11)->display;
-  gint group;
   Atom group_atom;
 
-  XkbGetState (GDK_DISPLAY_XDISPLAY (display), XkbUseCoreKbd, &state_rec);
-  group = XkbGroupLock (&state_rec);
   group_atom = xkb->names->groups[group];
 
   /* a group change? */
@@ -609,32 +605,29 @@ update_direction (GdkKeymapX11 *keymap_x11)
     }
 }
 
-static void
-_gdk_keymap_direction_changed (GdkKeymapX11 *keymap_x11)
-{
-  gboolean had_direction;
-  PangoDirection direction;
-
-  had_direction = keymap_x11->have_direction;
-  direction = keymap_x11->current_direction;
-
-  update_direction (keymap_x11);
-  
-  if (!had_direction || direction != keymap_x11->current_direction)
-    g_signal_emit_by_name (keymap_x11, "direction_changed");
-}
-
-
+/* keep this in sync with the XkbSelectEventDetails() call 
+ * in gdk_display_open()
+ */
 void
-_gdk_keymap_state_changed (GdkDisplay *display)
+_gdk_keymap_state_changed (GdkDisplay *display,
+			   XEvent     *xevent)
 {
   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
+  XkbEvent *xkb_event = (XkbEvent *)xevent;
   
   if (display_x11->keymap)
     {
       GdkKeymapX11 *keymap_x11 = GDK_KEYMAP_X11 (display_x11->keymap);
+      gboolean had_direction;
+      PangoDirection direction;
       
-      _gdk_keymap_direction_changed (keymap_x11);
+      had_direction = keymap_x11->have_direction;
+      direction = keymap_x11->current_direction;
+      
+      update_direction (keymap_x11, xkb_event->state.locked_group);
+      
+      if (!had_direction || direction != keymap_x11->current_direction)
+	g_signal_emit_by_name (keymap_x11, "direction_changed");      
     }
 }
 
@@ -660,9 +653,16 @@ gdk_keymap_get_direction (GdkKeymap *keymap)
   if (KEYMAP_USE_XKB (keymap))
     {
       GdkKeymapX11 *keymap_x11 = GDK_KEYMAP_X11 (keymap);
-      
+
       if (!keymap_x11->have_direction)
-	update_direction (keymap_x11);
+	{
+	  GdkDisplay *display = GDK_KEYMAP (keymap_x11)->display;
+	  XkbStateRec state_rec;
+
+	  XkbGetState (GDK_DISPLAY_XDISPLAY (display), XkbUseCoreKbd, 
+		       &state_rec);
+	  update_direction (keymap_x11, XkbGroupLock (&state_rec));
+	}
   
       return keymap_x11->current_direction;
     }

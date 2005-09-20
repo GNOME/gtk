@@ -2050,7 +2050,7 @@ gdk_event_translate (GdkDisplay *display,
 	      break;
 	      
 	    case XkbStateNotify:
-	      _gdk_keymap_state_changed (display);
+	      _gdk_keymap_state_changed (display, xevent);
 	      break;
 	    }
 	}

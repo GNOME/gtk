@@ -281,6 +281,11 @@ gdk_display_open (const gchar *display_name)
                              XkbNewKeyboardNotifyMask | XkbMapNotifyMask | XkbStateNotifyMask,
                              XkbNewKeyboardNotifyMask | XkbMapNotifyMask | XkbStateNotifyMask);
 
+	    /* keep this in sync with _gdk_keymap_state_changed() */ 
+	    XkbSelectEventDetails (display_x11->xdisplay,
+				   XkbUseCoreKbd, XkbStateNotify,
+				   XkbGroupLockMask, XkbGroupLockMask);
+
 	    XkbSetDetectableAutoRepeat (display_x11->xdisplay,
 					True,
 					&detectable_autorepeat_supported);
