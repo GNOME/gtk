@@ -614,11 +614,14 @@ gdk_selection_convert (GdkWindow *requestor,
     }
   else if (selection == GDK_SELECTION_CLIPBOARD)
     {
-      const char *targetname = gdk_atom_name (target);
+      char *target_name;
       UINT fmt = 0;
 
       if (!API_CALL (OpenClipboard, (GDK_WINDOW_HWND (requestor))))
 	return;
+
+      target_name = gdk_atom_name (target);
+
       /* Check if it's available. In fact, we can simply call
        * GetClipboardData (RegisterClipboardFormat (targetname)), but
        * the global custom format ID space is limited,
@@ -630,7 +633,7 @@ gdk_selection_convert (GdkWindow *requestor,
           char sFormat[80];
 
           if (GetClipboardFormatName (fmt, sFormat, 80) > 0 && 
-              strcmp (sFormat, targetname) == 0)
+              strcmp (sFormat, target_name) == 0)
             {
               if ((hdata = GetClipboardData (fmt)) != NULL)
 	        {
@@ -642,7 +645,7 @@ gdk_selection_convert (GdkWindow *requestor,
                     {
                       length = GlobalSize (hdata);
 	      
-                      GDK_NOTE (DND, g_print ("... %s: %d bytes\n", targetname, length));
+                      GDK_NOTE (DND, g_print ("... %s: %d bytes\n", target_name, length));
 	      
                       _gdk_selection_property_store (requestor, target, 8,
 					             g_memdup (ptr, length), length);
@@ -652,6 +655,7 @@ gdk_selection_convert (GdkWindow *requestor,
                 }
             }
         }
+      g_free (target_name);
       API_CALL (CloseClipboard, ());
     }
   else if (selection == _gdk_win32_dropfiles)
@@ -779,16 +783,15 @@ gdk_text_property_to_text_list_for_display (GdkDisplay   *display,
 					    gint          length,
 					    gchar      ***list)
 {
-  GError *error = NULL;
   gchar *enc_name;
   gchar *result;
   const gchar *charset;
-  const gchar *source_charset = NULL;
+  gchar *source_charset;
 
   g_return_val_if_fail (display == _gdk_display, 0);
 
   GDK_NOTE (DND, (enc_name = gdk_atom_name (encoding),
-		  g_print ("gdk_text_property_to_text_list: %s %d %.20s %d\n",
+		  g_print ("gdk_text_property_to_text_list_for_display: %s %d %.20s %d\n",
 			   enc_name, format, text, length),
 		  g_free (enc_name)));
 
@@ -796,21 +799,20 @@ gdk_text_property_to_text_list_for_display (GdkDisplay   *display,
     return 0;
 
   if (encoding == GDK_TARGET_STRING)
-    source_charset = "ISO-8859-1";
+    source_charset = g_strdup ("ISO-8859-1");
   else if (encoding == _utf8_string)
-    source_charset = "UTF-8";
+    source_charset = g_strdup ("UTF-8");
   else
     source_charset = gdk_atom_name (encoding);
     
   g_get_charset (&charset);
 
   result = g_convert (text, length, charset, source_charset,
-		      NULL, NULL, &error);
+		      NULL, NULL, NULL);
+  g_free (source_charset);
+
   if (!result)
-    {
-      g_error_free (error);
-      return 0;
-    }
+    return 0;
 
   *list = g_new (gchar *, 1);
   **list = result;
@@ -918,7 +920,10 @@ gdk_text_property_to_utf8_list_for_display (GdkDisplay    *display,
     }
   else
     {
-      g_warning ("gdk_text_property_to_utf8_list_for_display: encoding %s not handled\n", gdk_atom_name (encoding));
+      gchar *enc_name = gdk_atom_name (encoding);
+
+      g_warning ("gdk_text_property_to_utf8_list_for_display: encoding %s not handled\n", enc_name);
+      g_free (enc_name);
 
       if (list)
 	*list = NULL;
@@ -1011,7 +1016,6 @@ gdk_win32_selection_add_targets (GdkWindow  *owner,
 				 GdkAtom    *targets)
 {
   HWND hwnd;
-  const gchar *target_name;
   guint formatid;
   gint i;
   GSList *convertable_formats, *format;
@@ -1033,6 +1037,8 @@ gdk_win32_selection_add_targets (GdkWindow  *owner,
   convertable_formats = gdk_pixbuf_get_formats ();
   for (i = 0; i < n_targets; ++i)
     {
+      gchar *target_name;
+
       if (targets[i] == _utf8_string)
 	continue;
 
@@ -1040,6 +1046,7 @@ gdk_win32_selection_add_targets (GdkWindow  *owner,
       if (!(formatid = RegisterClipboardFormat (target_name))) {
 	WIN32_API_FAILED ("RegisterClipboardFormat");
 	API_CALL (CloseClipboard, ());
+	g_free (target_name);
 	return;
       }
       g_hash_table_replace (_format_atom_table, GINT_TO_POINTER (formatid), targets[i]);
@@ -1062,6 +1069,7 @@ gdk_win32_selection_add_targets (GdkWindow  *owner,
 	    has_set_dib = TRUE;
 	  }
 	  has_real_dib = TRUE;
+	  g_free (target_name);
 	  continue;
 	}
 
@@ -1083,6 +1091,7 @@ gdk_win32_selection_add_targets (GdkWindow  *owner,
 		}
 	    }
 	}
+      g_free (target_name);
     }
   g_slist_free (convertable_formats);
 
@@ -1099,7 +1108,7 @@ _gdk_win32_selection_convert_to_dib (HGLOBAL  hdata,
 {
   GdkPixbufLoader *loader;
   GdkPixbuf *pixbuf;
-  const gchar *target_name;
+  gchar *target_name;
   guchar *ptr;
   gchar *bmp_buf;
   gsize size;
@@ -1108,6 +1117,7 @@ _gdk_win32_selection_convert_to_dib (HGLOBAL  hdata,
   if (!(target_name = gdk_atom_name (target)))
     {
       GlobalFree (hdata);
+      g_free (target_name);
       return NULL;
     }
 
@@ -1118,6 +1128,7 @@ _gdk_win32_selection_convert_to_dib (HGLOBAL  hdata,
       /* No conversion is needed, just strip the BITMAPFILEHEADER */
       HGLOBAL hdatanew;
 
+      g_free (target_name);
       size = GlobalSize (hdata) - 1 - sizeof (BITMAPFILEHEADER);
       ptr = GlobalLock (hdata);
       memmove (ptr, ptr + sizeof (BITMAPFILEHEADER), size);
@@ -1136,8 +1147,10 @@ _gdk_win32_selection_convert_to_dib (HGLOBAL  hdata,
   if (!(loader = gdk_pixbuf_loader_new_with_mime_type (target_name, NULL)))
     {
       GlobalFree (hdata);
+      g_free (target_name);
       return NULL;
     }
+  g_free (target_name);
 
   ptr = GlobalLock (hdata);
   ok = gdk_pixbuf_loader_write (loader, ptr, GlobalSize (hdata) - 1, NULL) &&

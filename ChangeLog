@@ -1,3 +1,14 @@
+2005-09-21  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkselection-win32.c (gdk_selection_convert,
+	gdk_text_property_to_text_list_for_display,
+	gdk_text_property_to_utf8_list_for_display,
+	gdk_win32_selection_add_targets,
+	_gdk_win32_selection_convert_to_dib): Free return value from
+	gdk_atom_name().
+	(gdk_text_property_to_text_list_for_display): Drop GError variable
+	that isn't actually used after being set.
+
 2005-09-20  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkselection-win32.c
