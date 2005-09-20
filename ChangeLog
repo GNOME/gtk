@@ -1,3 +1,13 @@
+2005-09-20  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkselection-win32.c
+	(gdk_selection_owner_get_for_display): Do return the correct owner
+	for CLIPBOARD (i.e., the owner of the Windows Clipboard, if it is
+	a window GDK knows about). The reason to return NULL seems to have
+	gone when in the fix for bug #163702 the artificial
+	GDK_SELECTION_CLEAR event generation was removed from
+	gdk_selection_send_notify_for_display(). Fixes bug #316552.
+
 2005-09-19  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkiconview.c: Use g_list_nth_data() instead of g_list_nth()->data
