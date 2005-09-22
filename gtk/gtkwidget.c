@@ -1328,7 +1328,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_BOOLEAN, 1,
 		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   /**
-   * GtkWidget::grab-broken:
+   * GtkWidget::grab-broken-event:
    * @widget: the object which received the signal
    * @event: the #GdkEventGrabBroken event
    *
