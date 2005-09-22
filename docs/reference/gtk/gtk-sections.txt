@@ -4355,20 +4355,20 @@ GtkCellRendererProgressPrivate
 </SECTION>
 
 <SECTION>
-<FILE>gtkcellrendererkeys</FILE>
-<TITLE>GtkCellRendererKeys</TITLE>
-GtkCellRendererKeys
-gtk_cell_renderer_keys_new
+<FILE>gtkcellrendereraccel</FILE>
+<TITLE>GtkCellRendererAccel</TITLE>
+GtkCellRendererAccel
+gtk_cell_renderer_accel_new
 
 <SUBSECTION Standard>
-GTK_TYPE_CELL_RENDERER_KEYS
-GTK_CELL_RENDERER_KEYS
-GTK_CELL_RENDERER_KEYS_CLASS
-GTK_IS_CELL_RENDERER_KEYS
-GTK_IS_CELL_RENDERER_KEYS_CLASS
-GTK_CELL_RENDERER_KEYS_GET_CLASS
+GTK_TYPE_CELL_RENDERER_ACCEL
+GTK_CELL_RENDERER_ACCEL
+GTK_CELL_RENDERER_ACCEL_CLASS
+GTK_IS_CELL_RENDERER_ACCEL
+GTK_IS_CELL_RENDERER_ACCEL_CLASS
+GTK_CELL_RENDERER_ACCEL_GET_CLASS
 <SUBSECTION Private>
-gtk_cell_renderer_keys_get_type
+gtk_cell_renderer_accel_get_type
 </SECTION>
 
 <SECTION>
