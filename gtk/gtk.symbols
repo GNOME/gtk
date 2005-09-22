@@ -466,17 +466,17 @@ gtk_cell_renderer_stop_editing
 #endif
 #endif
 
+#if IN_HEADER(__GTK_CELL_RENDERER_ACCEL_H__)
+#if IN_FILE(__GTK_CELL_RENDERER_ACCEL_C__)
+gtk_cell_renderer_accel_get_type G_GNUC_CONST
+gtk_cell_renderer_accel_new
+#endif
+#endif
+
 #if IN_HEADER(__GTK_CELL_RENDERER_COMBO_H__)
 #if IN_FILE(__GTK_CELL_RENDERER_COMBO_C__)
 gtk_cell_renderer_combo_get_type G_GNUC_CONST
 gtk_cell_renderer_combo_new
-#endif
-#endif
-
-#if IN_HEADER(__GTK_CELL_RENDERER_KEYS_H__)
-#if IN_FILE(__GTK_CELL_RENDERER_KEYS_C__)
-gtk_cell_renderer_keys_get_type G_GNUC_CONST
-gtk_cell_renderer_keys_new
 #endif
 #endif
 

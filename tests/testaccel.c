@@ -1,4 +1,4 @@
-/* gtkcellrendererkeys.h
+/* gtkcellrendereraccel.h
  * Copyright (C) 2000  Red Hat, Inc.,  Jonathan Blandford <jrb@redhat.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -63,9 +63,9 @@ key_test (void)
 	tv = gtk_tree_view_new_with_model (GTK_TREE_MODEL (store));
 	gtk_container_add (GTK_CONTAINER (sw), tv);
 	column = gtk_tree_view_column_new ();
-	rend = gtk_cell_renderer_keys_new ();
+	rend = gtk_cell_renderer_accel_new ();
 	g_object_set (G_OBJECT (rend), 
-		      "accel-mode", GTK_CELL_RENDERER_KEYS_MODE_GTK, 
+		      "accel-mode", GTK_CELL_RENDERER_ACCEL_MODE_GTK, 
                       "editable", TRUE, 
 		      NULL);
 	g_signal_connect (G_OBJECT (rend),

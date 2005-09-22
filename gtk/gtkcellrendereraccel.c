@@ -1,4 +1,4 @@
-/* gtkcellrendererkeys.h
+/* gtkcellrendereraccel.h
  * Copyright (C) 2000  Red Hat, Inc.,  Jonathan Blandford <jrb@redhat.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -21,7 +21,7 @@
 #include "gtkintl.h"
 #include "gtkaccelgroup.h"
 #include "gtkmarshalers.h"
-#include "gtkcellrendererkeys.h"
+#include "gtkcellrendereraccel.h"
 #include "gtklabel.h"
 #include "gtkeventbox.h"
 #include "gtkprivate.h"
@@ -29,30 +29,30 @@
 #include "gtkalias.h"
 
 
-static void             gtk_cell_renderer_keys_finalize      (GObject             *object);
-static GtkCellEditable *gtk_cell_renderer_keys_start_editing (GtkCellRenderer          *cell,
-							      GdkEvent                 *event,
-							      GtkWidget                *widget,
-							      const gchar              *path,
-							      GdkRectangle             *background_area,
-							      GdkRectangle             *cell_area,
-							      GtkCellRendererState      flags);
+static void             gtk_cell_renderer_accel_finalize      (GObject             *object);
+static GtkCellEditable *gtk_cell_renderer_accel_start_editing (GtkCellRenderer          *cell,
+                                                               GdkEvent                 *event,
+                                                               GtkWidget                *widget,
+                                                               const gchar              *path,
+                                                               GdkRectangle             *background_area,
+                                                               GdkRectangle             *cell_area,
+                                                               GtkCellRendererState      flags);
 
-static void gtk_cell_renderer_keys_get_property (GObject         *object,
-						 guint            param_id,
-						 GValue          *value,
-						 GParamSpec      *pspec);
-static void gtk_cell_renderer_keys_set_property (GObject         *object,
-						 guint            param_id,
-						 const GValue    *value,
-						 GParamSpec      *pspec);
-static void gtk_cell_renderer_keys_get_size     (GtkCellRenderer *cell,
-						 GtkWidget       *widget,
-						 GdkRectangle    *cell_area,
-						 gint            *x_offset,
-						 gint            *y_offset,
-						 gint            *width,
-						 gint            *height);
+static void gtk_cell_renderer_accel_get_property (GObject         *object,
+                                                  guint            param_id,
+                                                  GValue          *value,
+                                                  GParamSpec      *pspec);
+static void gtk_cell_renderer_accel_set_property (GObject         *object,
+                                                  guint            param_id,
+                                                  const GValue    *value,
+                                                  GParamSpec      *pspec);
+static void gtk_cell_renderer_accel_get_size     (GtkCellRenderer *cell,
+                                                  GtkWidget       *widget,
+                                                  GdkRectangle    *cell_area,
+                                                  gint            *x_offset,
+                                                  gint            *y_offset,
+                                                  gint            *width,
+                                                  gint            *height);
 
 enum {
   ACCEL_EDITED,
@@ -70,32 +70,32 @@ enum {
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GtkCellRendererKeys, gtk_cell_renderer_keys, GTK_TYPE_CELL_RENDERER_TEXT);
+G_DEFINE_TYPE (GtkCellRendererAccel, gtk_cell_renderer_accel, GTK_TYPE_CELL_RENDERER_TEXT);
 
 static void
-gtk_cell_renderer_keys_init (GtkCellRendererKeys *cell_keys)
+gtk_cell_renderer_accel_init (GtkCellRendererAccel *cell_accel)
 {
 }
 
 static void
-gtk_cell_renderer_keys_class_init (GtkCellRendererKeysClass *cell_keys_class)
+gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
 {
   GObjectClass *object_class;
   GtkCellRendererClass *cell_renderer_class;
 
-  object_class = G_OBJECT_CLASS (cell_keys_class);
-  cell_renderer_class = GTK_CELL_RENDERER_CLASS (cell_keys_class);
+  object_class = G_OBJECT_CLASS (cell_accel_class);
+  cell_renderer_class = GTK_CELL_RENDERER_CLASS (cell_accel_class);
   
-  GTK_CELL_RENDERER_CLASS (cell_keys_class)->start_editing = gtk_cell_renderer_keys_start_editing;
+  GTK_CELL_RENDERER_CLASS (cell_accel_class)->start_editing = gtk_cell_renderer_accel_start_editing;
 
-  object_class->set_property = gtk_cell_renderer_keys_set_property;
-  object_class->get_property = gtk_cell_renderer_keys_get_property;
-  cell_renderer_class->get_size = gtk_cell_renderer_keys_get_size;
+  object_class->set_property = gtk_cell_renderer_accel_set_property;
+  object_class->get_property = gtk_cell_renderer_accel_get_property;
+  cell_renderer_class->get_size = gtk_cell_renderer_accel_get_size;
 
-  object_class->finalize = gtk_cell_renderer_keys_finalize;
+  object_class->finalize = gtk_cell_renderer_accel_finalize;
 
   /**
-   * GtkCellRendererKeys:accel-key:
+   * GtkCellRendererAccel:accel-key:
    *
    * The keyval of the accelerator.
    *
@@ -112,7 +112,7 @@ gtk_cell_renderer_keys_class_init (GtkCellRendererKeysClass *cell_keys_class)
                                                       GTK_PARAM_READWRITE));
   
   /**
-   * GtkCellRendererKeys:accel-mods:
+   * GtkCellRendererAccel:accel-mods:
    *
    * The modifier mask of the accelerator.
    *
@@ -128,7 +128,7 @@ gtk_cell_renderer_keys_class_init (GtkCellRendererKeysClass *cell_keys_class)
                                                        GTK_PARAM_READWRITE));
 
   /**
-   * GtkCellRendererKeys:keycode:
+   * GtkCellRendererAccel:keycode:
    *
    * The hardware keycode of the accelerator. Note that the hardware keycode is
    * only relevant if the key does not have a keyval. Normally, the keyboard
@@ -147,7 +147,7 @@ gtk_cell_renderer_keys_class_init (GtkCellRendererKeysClass *cell_keys_class)
 						      GTK_PARAM_READWRITE));
 
   /**
-   * GtkCellRendererKeys:accel-mode:
+   * GtkCellRendererAccel:accel-mode:
    *
    * Determines if the edited accelerators are GTK+ accelerators. If
    * they are, consumed modifiers are suppressed, only accelerators
@@ -161,13 +161,13 @@ gtk_cell_renderer_keys_class_init (GtkCellRendererKeysClass *cell_keys_class)
                                    g_param_spec_enum ("accel-mode",
 						      P_("Accelerator Mode"),
 						      P_("The type of accelerators"),
-						      GTK_TYPE_CELL_RENDERER_KEYS_MODE,
-						      GTK_CELL_RENDERER_KEYS_MODE_GTK,
+						      GTK_TYPE_CELL_RENDERER_ACCEL_MODE,
+						      GTK_CELL_RENDERER_ACCEL_MODE_GTK,
 						      GTK_PARAM_READWRITE));
   
   /**
-   * GtkCellRendererKeys::accel-edited:
-   * @keys: the object reveiving the signal
+   * GtkCellRendererAccel::accel-edited:
+   * @accel: the object reveiving the signal
    * @path_string: the path identifying the row of the edited cell
    * @accel_key: the new accelerator keyval
    * @accel_mods: the new acclerator modifier mask
@@ -178,9 +178,9 @@ gtk_cell_renderer_keys_class_init (GtkCellRendererKeysClass *cell_keys_class)
    * Since: 2.10
    */
   signals[ACCEL_EDITED] = g_signal_new (I_("accel-edited"),
-					GTK_TYPE_CELL_RENDERER_KEYS,
+					GTK_TYPE_CELL_RENDERER_ACCEL,
 					G_SIGNAL_RUN_LAST,
-					G_STRUCT_OFFSET (GtkCellRendererKeysClass, accel_edited),
+					G_STRUCT_OFFSET (GtkCellRendererAccelClass, accel_edited),
 					NULL, NULL,
 					_gtk_marshal_VOID__STRING_UINT_FLAGS_UINT,
 					G_TYPE_NONE, 4,
@@ -190,8 +190,8 @@ gtk_cell_renderer_keys_class_init (GtkCellRendererKeysClass *cell_keys_class)
 					G_TYPE_UINT);
 
   /**
-   * GtkCellRendererKeys::accel-cleared:
-   * @keys: the object reveiving the signal
+   * GtkCellRendererAccel::accel-cleared:
+   * @accel: the object reveiving the signal
    * @path_string: the path identifying the row of the edited cell
    *
    * Gets emitted when the user has removed the accelerator.
@@ -199,9 +199,9 @@ gtk_cell_renderer_keys_class_init (GtkCellRendererKeysClass *cell_keys_class)
    * Since: 2.10
    */
   signals[ACCEL_CLEARED] = g_signal_new (I_("accel-cleared"),
-					 GTK_TYPE_CELL_RENDERER_KEYS,
+					 GTK_TYPE_CELL_RENDERER_ACCEL,
 					 G_SIGNAL_RUN_LAST,
-					 G_STRUCT_OFFSET (GtkCellRendererKeysClass, accel_cleared),
+					 G_STRUCT_OFFSET (GtkCellRendererAccelClass, accel_cleared),
 					 NULL, NULL,
 					 g_cclosure_marshal_VOID__STRING,
 					 G_TYPE_NONE, 1,
@@ -210,32 +210,32 @@ gtk_cell_renderer_keys_class_init (GtkCellRendererKeysClass *cell_keys_class)
 
 
 /**
- * gtk_cell_renderer_keys_new:
+ * gtk_cell_renderer_accel_new:
  *
- * Creates a new #GtkCellRendererKeys.
+ * Creates a new #GtkCellRendererAccel.
  * 
  * Returns: the new cell renderer
  *
  * Since: 2.10
  */
 GtkCellRenderer *
-gtk_cell_renderer_keys_new (void)
+gtk_cell_renderer_accel_new (void)
 {
-  return GTK_CELL_RENDERER (g_object_new (GTK_TYPE_CELL_RENDERER_KEYS, NULL));
+  return GTK_CELL_RENDERER (g_object_new (GTK_TYPE_CELL_RENDERER_ACCEL, NULL));
 }
 
 static void
-gtk_cell_renderer_keys_finalize (GObject *object)
+gtk_cell_renderer_accel_finalize (GObject *object)
 {
   
-  (* G_OBJECT_CLASS (gtk_cell_renderer_keys_parent_class)->finalize) (object);
+  (* G_OBJECT_CLASS (gtk_cell_renderer_accel_parent_class)->finalize) (object);
 }
 
 static gchar *
-convert_keysym_state_to_string (GtkCellRendererKeys *keys,
-				guint                keysym,
-                                GdkModifierType      mask,
-				guint                keycode)
+convert_keysym_state_to_string (GtkCellRendererAccel *accel,
+				guint                 keysym,
+                                GdkModifierType       mask,
+				guint                 keycode)
 {
   if (keysym == 0 && keycode == 0)
     /* This label is displayed in a treeview cell displaying
@@ -245,7 +245,7 @@ convert_keysym_state_to_string (GtkCellRendererKeys *keys,
     return g_strdup (Q_("Accelerator|Disabled"));
   else 
     {
-      if (keys->accel_mode == GTK_CELL_RENDERER_KEYS_MODE_GTK)
+      if (accel->accel_mode == GTK_CELL_RENDERER_ACCEL_MODE_GTK)
 	return gtk_accelerator_get_label (keysym, mask);
       else 
 	{
@@ -267,29 +267,29 @@ convert_keysym_state_to_string (GtkCellRendererKeys *keys,
 }
 
 static void
-gtk_cell_renderer_keys_get_property  (GObject    *object,
-                                      guint       param_id,
-                                      GValue     *value,
-                                      GParamSpec *pspec)
+gtk_cell_renderer_accel_get_property  (GObject    *object,
+                                       guint       param_id,
+                                       GValue     *value,
+                                       GParamSpec *pspec)
 {
-  GtkCellRendererKeys *keys;
+  GtkCellRendererAccel *accel;
 
-  g_return_if_fail (GTK_IS_CELL_RENDERER_KEYS (object));
+  g_return_if_fail (GTK_IS_CELL_RENDERER_ACCEL (object));
 
-  keys = GTK_CELL_RENDERER_KEYS (object);
+  accel = GTK_CELL_RENDERER_ACCEL (object);
   
   switch (param_id)
     {
     case PROP_ACCEL_KEY:
-      g_value_set_uint (value, keys->accel_key);
+      g_value_set_uint (value, accel->accel_key);
       break;
 
     case PROP_ACCEL_MODS:
-      g_value_set_flags (value, keys->accel_mods);
+      g_value_set_flags (value, accel->accel_mods);
       break;
 
     case PROP_ACCEL_MODE:
-      g_value_set_enum (value, keys->accel_mode);
+      g_value_set_enum (value, accel->accel_mode);
       break;
 
     default:
@@ -298,17 +298,17 @@ gtk_cell_renderer_keys_get_property  (GObject    *object,
 }
 
 static void
-gtk_cell_renderer_keys_set_property  (GObject      *object,
-                                      guint         param_id,
-                                      const GValue *value,
-                                      GParamSpec   *pspec)
+gtk_cell_renderer_accel_set_property  (GObject      *object,
+                                       guint         param_id,
+                                       const GValue *value,
+                                       GParamSpec   *pspec)
 {
-  GtkCellRendererKeys *keys;
+  GtkCellRendererAccel *accel;
   gboolean changed = FALSE;
 
-  g_return_if_fail (GTK_IS_CELL_RENDERER_KEYS (object));
+  g_return_if_fail (GTK_IS_CELL_RENDERER_ACCEL (object));
 
-  keys = GTK_CELL_RENDERER_KEYS (object);
+  accel = GTK_CELL_RENDERER_ACCEL (object);
   
   switch (param_id)
     {
@@ -316,9 +316,9 @@ gtk_cell_renderer_keys_set_property  (GObject      *object,
       {
 	guint accel_key = g_value_get_uint (value);
 
-	if (keys->accel_key != accel_key)
+	if (accel->accel_key != accel_key)
 	  {
-	    keys->accel_key = accel_key;
+	    accel->accel_key = accel_key;
 	    changed = TRUE;
 	  }
       }
@@ -328,9 +328,9 @@ gtk_cell_renderer_keys_set_property  (GObject      *object,
       {
 	guint accel_mods = g_value_get_flags (value);
 
-	if (keys->accel_mods != accel_mods)
+	if (accel->accel_mods != accel_mods)
 	  {
-	    keys->accel_mods = accel_mods;
+	    accel->accel_mods = accel_mods;
 	    changed = TRUE;
 	  }
       }
@@ -339,16 +339,16 @@ gtk_cell_renderer_keys_set_property  (GObject      *object,
       {
 	guint keycode = g_value_get_uint (value);
 
-	if (keys->keycode != keycode)
+	if (accel->keycode != keycode)
 	  {
-	    keys->keycode = keycode;
+	    accel->keycode = keycode;
 	    changed = TRUE;
 	  }
       }
       break;
 
     case PROP_ACCEL_MODE:
-      keys->accel_mode = g_value_get_enum (value);
+      accel->accel_mode = g_value_get_enum (value);
       break;
       
     default:
@@ -360,32 +360,32 @@ gtk_cell_renderer_keys_set_property  (GObject      *object,
       GtkCellRendererText *celltext;
       gchar *text;
 
-      celltext = GTK_CELL_RENDERER_TEXT (keys);
-      text = convert_keysym_state_to_string (keys, keys->accel_key, keys->accel_mods, keys->keycode);
-      g_object_set (keys, "text", text, NULL);
+      celltext = GTK_CELL_RENDERER_TEXT (accel);
+      text = convert_keysym_state_to_string (accel, accel->accel_key, accel->accel_mods, accel->keycode);
+      g_object_set (accel, "text", text, NULL);
       g_free (text);
     }
 }
 
 static void
-gtk_cell_renderer_keys_get_size (GtkCellRenderer *cell,
-				 GtkWidget       *widget,
-				 GdkRectangle    *cell_area,
-				 gint            *x_offset,
-				 gint            *y_offset,
-				 gint            *width,
-				 gint            *height)
+gtk_cell_renderer_accel_get_size (GtkCellRenderer *cell,
+                                  GtkWidget       *widget,
+                                  GdkRectangle    *cell_area,
+                                  gint            *x_offset,
+                                  gint            *y_offset,
+                                  gint            *width,
+                                  gint            *height)
 
 {
-  GtkCellRendererKeys *keys = (GtkCellRendererKeys *) cell;
+  GtkCellRendererAccel *accel = (GtkCellRendererAccel *) cell;
   GtkRequisition requisition;
 
-  if (keys->sizing_label == NULL)
-    keys->sizing_label = gtk_label_new (_("New accelerator..."));
+  if (accel->sizing_label == NULL)
+    accel->sizing_label = gtk_label_new (_("New accelerator..."));
 
-  gtk_widget_size_request (keys->sizing_label, &requisition);
-  (* GTK_CELL_RENDERER_CLASS (gtk_cell_renderer_keys_parent_class)->get_size) (cell, widget, cell_area, 
-									       x_offset, y_offset, width, height);
+  gtk_widget_size_request (accel->sizing_label, &requisition);
+  (* GTK_CELL_RENDERER_CLASS (gtk_cell_renderer_accel_parent_class)->get_size) (cell, widget, cell_area, 
+                                                                                x_offset, y_offset, width, height);
   /* FIXME: need to take the cell_area et al. into account */
   if (width)
     *width = MAX (*width, requisition.width);
@@ -400,14 +400,14 @@ grab_key_callback (GtkWidget    *widget,
 {
   GdkModifierType accel_mods = 0;
   guint accel_key;
-  GtkCellRendererKeys *keys;
+  GtkCellRendererAccel *accel;
   char *path;
   gboolean edited;
   gboolean cleared;
   GdkModifierType consumed_modifiers;  
   GdkDisplay *display;
   
-  keys = GTK_CELL_RENDERER_KEYS (data);
+  accel = GTK_CELL_RENDERER_ACCEL (data);
 
   display = gtk_widget_get_display (widget);
   
@@ -431,7 +431,7 @@ grab_key_callback (GtkWidget    *widget,
 
   /* Filter consumed modifiers 
    */
-  if (keys->accel_mode == GTK_CELL_RENDERER_KEYS_MODE_GTK)
+  if (accel->accel_mode == GTK_CELL_RENDERER_ACCEL_MODE_GTK)
     accel_mods &= ~consumed_modifiers;
   
   /* Put shift back if it changed the case of the key, not otherwise.
@@ -454,7 +454,7 @@ grab_key_callback (GtkWidget    *widget,
 	}
     }
 
-  if (keys->accel_mode == GTK_CELL_RENDERER_KEYS_MODE_GTK)
+  if (accel->accel_mode == GTK_CELL_RENDERER_ACCEL_MODE_GTK)
     {
       if (!gtk_accelerator_valid (accel_key, accel_mods))
 	{
@@ -470,18 +470,18 @@ grab_key_callback (GtkWidget    *widget,
   gdk_keyboard_ungrab (event->time);
   gdk_pointer_ungrab (event->time);
   
-  path = g_strdup (g_object_get_data (G_OBJECT (keys->edit_widget), "gtk-cell-renderer-text"));
+  path = g_strdup (g_object_get_data (G_OBJECT (accel->edit_widget), "gtk-cell-renderer-text"));
 
-  gtk_cell_editable_editing_done (GTK_CELL_EDITABLE (keys->edit_widget));
-  gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE (keys->edit_widget));
-  keys->edit_widget = NULL;
-  keys->grab_widget = NULL;
+  gtk_cell_editable_editing_done (GTK_CELL_EDITABLE (accel->edit_widget));
+  gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE (accel->edit_widget));
+  accel->edit_widget = NULL;
+  accel->grab_widget = NULL;
   
   if (edited)
-    g_signal_emit (keys, signals[ACCEL_EDITED], 0, path, 
+    g_signal_emit (accel, signals[ACCEL_EDITED], 0, path, 
 		   accel_key, accel_mods, event->hardware_keycode);
   else if (cleared)
-    g_signal_emit (keys, signals[ACCEL_CLEARED], 0, path);
+    g_signal_emit (accel, signals[ACCEL_CLEARED], 0, path);
 
   g_free (path);
 
@@ -489,14 +489,15 @@ grab_key_callback (GtkWidget    *widget,
 }
 
 static void
-ungrab_stuff (GtkWidget *widget, gpointer data)
+ungrab_stuff (GtkWidget *widget,
+              gpointer   data)
 {
-  GtkCellRendererKeys *keys = GTK_CELL_RENDERER_KEYS (data);
+  GtkCellRendererAccel *accel = GTK_CELL_RENDERER_ACCEL (data);
 
   gdk_keyboard_ungrab (GDK_CURRENT_TIME);
   gdk_pointer_ungrab (GDK_CURRENT_TIME);
 
-  g_signal_handlers_disconnect_by_func (G_OBJECT (keys->grab_widget),
+  g_signal_handlers_disconnect_by_func (G_OBJECT (accel->grab_widget),
                                         G_CALLBACK (grab_key_callback), data);
 }
 
@@ -532,21 +533,21 @@ _gtk_cell_editable_event_box_init (GtkCellEditableEventBox *box)
 }
 
 static GtkCellEditable *
-gtk_cell_renderer_keys_start_editing (GtkCellRenderer      *cell,
-				      GdkEvent             *event,
-				      GtkWidget            *widget,
-				      const gchar          *path,
-				      GdkRectangle         *background_area,
-				      GdkRectangle         *cell_area,
-				      GtkCellRendererState  flags)
+gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
+                                       GdkEvent             *event,
+                                       GtkWidget            *widget,
+                                       const gchar          *path,
+                                       GdkRectangle         *background_area,
+                                       GdkRectangle         *cell_area,
+                                       GtkCellRendererState  flags)
 {
   GtkCellRendererText *celltext;
-  GtkCellRendererKeys *keys;
+  GtkCellRendererAccel *accel;
   GtkWidget *label;
   GtkWidget *eventbox;
   
   celltext = GTK_CELL_RENDERER_TEXT (cell);
-  keys = GTK_CELL_RENDERER_KEYS (cell);
+  accel = GTK_CELL_RENDERER_ACCEL (cell);
 
   /* If the cell isn't editable we return NULL. */
   if (celltext->editable == FALSE)
@@ -567,16 +568,16 @@ gtk_cell_renderer_keys_start_editing (GtkCellRenderer      *cell,
       return NULL;
     }
   
-  keys->grab_widget = widget;
+  accel->grab_widget = widget;
 
   g_signal_connect (G_OBJECT (widget), "key_press_event",
                     G_CALLBACK (grab_key_callback),
-                    keys);
+                    accel);
 
   eventbox = g_object_new (_gtk_cell_editable_event_box_get_type (), NULL);
-  keys->edit_widget = eventbox;
-  g_object_add_weak_pointer (G_OBJECT (keys->edit_widget),
-                             (void**) &keys->edit_widget);
+  accel->edit_widget = eventbox;
+  g_object_add_weak_pointer (G_OBJECT (accel->edit_widget),
+                             (void**) &accel->edit_widget);
   
   label = gtk_label_new (NULL);
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
@@ -595,17 +596,17 @@ gtk_cell_renderer_keys_start_editing (GtkCellRenderer      *cell,
 
   gtk_container_add (GTK_CONTAINER (eventbox), label);
   
-  g_object_set_data_full (G_OBJECT (keys->edit_widget), "gtk-cell-renderer-text",
+  g_object_set_data_full (G_OBJECT (accel->edit_widget), "gtk-cell-renderer-text",
                           g_strdup (path), g_free);
   
-  gtk_widget_show_all (keys->edit_widget);
+  gtk_widget_show_all (accel->edit_widget);
 
-  g_signal_connect (G_OBJECT (keys->edit_widget), "unrealize",
-                    G_CALLBACK (ungrab_stuff), keys);
+  g_signal_connect (G_OBJECT (accel->edit_widget), "unrealize",
+                    G_CALLBACK (ungrab_stuff), accel);
   
-  return GTK_CELL_EDITABLE (keys->edit_widget);
+  return GTK_CELL_EDITABLE (accel->edit_widget);
 }
 
 
-#define __GTK_CELL_RENDERER_KEYS_C__
+#define __GTK_CELL_RENDERER_ACCEL_C__
 #include "gtkaliasdef.c"

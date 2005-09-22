@@ -131,8 +131,8 @@ gtk_public_h_sources =          \
 	gtkcelleditable.h	\
 	gtkcelllayout.h		\
 	gtkcellrenderer.h	\
+	gtkcellrendereraccel.h	\
 	gtkcellrenderercombo.h	\
-	gtkcellrendererkeys.h	\
 	gtkcellrendererpixbuf.h	\
 	gtkcellrendererprogress.h \
 	gtkcellrenderertext.h	\
@@ -346,8 +346,8 @@ gtk_c_sources =                 \
 	gtkcelleditable.c	\
 	gtkcelllayout.c		\
 	gtkcellrenderer.c	\
+	gtkcellrendereraccel.c	\
 	gtkcellrenderercombo.c	\
-	gtkcellrendererkeys.c	\
 	gtkcellrendererpixbuf.c	\
 	gtkcellrendererprogress.c \
 	gtkcellrenderertext.c	\

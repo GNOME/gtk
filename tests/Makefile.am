@@ -29,6 +29,7 @@ endif
 noinst_PROGRAMS =			\
 	autotestfilechooser		\
 	simple				\
+	testaccel			\
 	testcairo			\
 	testcalendar			\
 	testcombo			\
@@ -43,7 +44,6 @@ noinst_PROGRAMS =			\
 	testicontheme			\
 	testimage			\
 	testinput			\
-	testkeys			\
 	testmenus			\
 	testmenubars			\
 	testmultidisplay		\
@@ -78,6 +78,7 @@ autotestfilechooser_DEPENDENCIES = $(TEST_DEPS)
 simple_DEPENDENCIES = $(TEST_DEPS)
 testicontheme_DEPENDENCIES = $(TEST_DEPS)
 testiconview_DEPENDENCIES = $(TEST_DEPS)
+testaccel_DEPENDENCIES = $(TEST_DEPS)
 testcairo_DEPENDENCIES = $(TEST_DEPS)
 testcalendar_DEPENDENCIES = $(TEST_DEPS)
 testcombo_DEPENDENCIES = $(TEST_DEPS)
@@ -90,7 +91,6 @@ testfilechooserbutton_DEPENDENCIES = $(TEST_DEPS)
 testgtk_DEPENDENCIES = $(TEST_DEPS)
 testinput_DEPENDENCIES = $(TEST_DEPS)
 testimage_DEPENDENCIES = $(TEST_DEPS)
-testkeys_DEPENDENCIES = $(TEST_DEPS)
 testmenus_DEPENDENCIES = $(TEST_DEPS)
 testmenubars_DEPENDENCIES = $(TEST_DEPS)
 testmultidisplay_DEPENDENCIES = $(TEST_DEPS)
@@ -117,6 +117,7 @@ testactions_DEPENDENCIES = $(TEST_DEPS)
 
 autotestfilechooser_LDADD = $(LDADDS)
 simple_LDADD = $(LDADDS)
+testaccel_LDADD = $(LDADDS)
 testcairo_LDADD = $(LDADDS)
 testcalendar_LDADD = $(LDADDS)
 testcombo_LDADD = $(LDADDS)
@@ -131,7 +132,6 @@ testicontheme_LDADD = $(LDADDS)
 testiconview_LDADD = $(LDADDS)
 testinput_LDADD = $(LDADDS)
 testimage_LDADD = $(LDADDS)
-testkeys_LDADD = $(LDADDS)
 testmenus_LDADD = $(LDADDS)
 testmenubars_LDADD = $(LDADDS)
 testmultidisplay_LDADD = $(LDADDS)

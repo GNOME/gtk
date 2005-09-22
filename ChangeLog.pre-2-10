@@ -1,3 +1,19 @@
+2005-09-22  Michael Natterer  <mitch@imendio.com>
+
+	Renamed GtkCellRendererKeys to GtkCellRendererAccel to be
+	consistent with GTK+ terminology:
+
+	* gtk/gtkcellrendererkeys.[ch]
+	* tests/testkeys.c: removed...
+
+	* gtk/gtkcellrendereraccel.[ch]
+	* tests/testaccel.c: ...and added.
+
+	* gtk/Makefile.am
+	* gtk/gtk.h
+	* gtk/gtk.symbols
+	* tests/Makefile.am: changed accordingly.
+
 2005-09-22  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_class_init): Fix the documentation
