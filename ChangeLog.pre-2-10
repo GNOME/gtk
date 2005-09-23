@@ -1,3 +1,8 @@
+2005-09-23  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcellrendererpixbuf.c (gtk_cell_renderer_pixbuf_finalize): 
+	Don't leak expander pixbufs.  (#316946, Tommi Komulainen)
+
 2005-09-22  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_class_init): Fix the documentation

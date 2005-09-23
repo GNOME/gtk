@@ -238,6 +238,10 @@ gtk_cell_renderer_pixbuf_finalize (GObject *object)
   
   if (cellpixbuf->pixbuf)
     g_object_unref (cellpixbuf->pixbuf);
+  if (cellpixbuf->pixbuf_expander_open)
+    g_object_unref (cellpixbuf->pixbuf_expander_open);
+  if (cellpixbuf->pixbuf_expander_closed)
+    g_object_unref (cellpixbuf->pixbuf_expander_closed);
 
   g_free (priv->stock_id);
   g_free (priv->stock_detail);
