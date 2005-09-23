@@ -1,3 +1,8 @@
+2005-09-23  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcellrendererpixbuf.c (gtk_cell_renderer_pixbuf_finalize):
+	Don't leak expander pixbufs.  (#316946, Tommi Komulainen)
+
 2005-09-22  Michael Natterer  <mitch@imendio.com>
 
 	Renamed GtkCellRendererKeys to GtkCellRendererAccel to be
