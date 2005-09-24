@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.8\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-07-22 06:41+0000\n"
-"PO-Revision-Date: 2005-08-23 09:19+0300\n"
+"PO-Revision-Date: 2005-09-22 13:09+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -673,7 +673,7 @@ msgstr "TIFF-faili avamiseks pole piisavalt mälu"
 
 #: ../gdk-pixbuf/io-tiff.c:251 ../gdk-pixbuf/io-tiff.c:294
 msgid "Failed to load RGB data from TIFF file"
-msgstr ""
+msgstr "Tõrge RGB andmete lugemise TIFF-failist"
 
 #: ../gdk-pixbuf/io-tiff.c:361
 msgid "Failed to open TIFF image"
