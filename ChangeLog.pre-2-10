@@ -1,3 +1,10 @@
+2005-09-26  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_shape_combine_mask): Set
+	the shaped flag here, too. (#316871)
+	(gdk_window_shape_combine_region): Currently unimplemented, so
+	don't do anything to the shaped flag here.
+
 2005-09-26  Matthias Clasen  <mclasen@redhat.com>
 
 	Fix #316871, reported by Dan Winship:
