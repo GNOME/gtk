@@ -2363,7 +2363,8 @@ gdk_window_shape_combine_mask (GdkWindow *window,
 			       GdkBitmap *mask,
 			       gint x, gint y)
 {
-  g_return_if_fail (window != NULL);
+  GdkWindowObject *private = (GdkWindowObject *)window;
+
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (!mask)
@@ -2371,6 +2372,8 @@ gdk_window_shape_combine_mask (GdkWindow *window,
       GDK_NOTE (MISC, g_print ("gdk_window_shape_combine_mask: %p: none\n",
 			       GDK_WINDOW_HWND (window)));
       SetWindowRgn (GDK_WINDOW_HWND (window), NULL, TRUE);
+
+      private->shaped = FALSE;
     }
   else
     {
@@ -2398,6 +2401,8 @@ gdk_window_shape_combine_mask (GdkWindow *window,
 	}
       
       SetWindowRgn (GDK_WINDOW_HWND (window), hrgn, TRUE);
+
+      private->shaped = TRUE;
     }
 }
 
