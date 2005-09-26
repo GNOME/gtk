@@ -1,3 +1,15 @@
+2005-09-26  Matthias Clasen  <mclasen@redhat.com>
+
+	Fix #316871, reported by Dan Winship:
+	
+	* gdk/gdkwindow.h (struct _GdkWindowObject): Add a shaped flag.
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_shape_combine_mask) 
+	(gdk_window_shape_combine_region): Set it here.
+
+	* gdk/gdkwindow.c (gdk_window_invalidate_maybe_recurse): Don't
+	remove the child area for shaped windows.
+
 2005-09-23  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcellrendererpixbuf.c (gtk_cell_renderer_pixbuf_finalize): 

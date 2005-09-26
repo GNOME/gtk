@@ -2450,7 +2450,7 @@ gdk_window_invalidate_maybe_recurse (GdkWindow *window,
 	  child_region = gdk_region_rectangle (&child_rect);
 	  
 	  /* remove child area from the invalid area of the parent */
-	  if (GDK_WINDOW_IS_MAPPED (child))
+	  if (GDK_WINDOW_IS_MAPPED (child) && !child->shaped)
 	    gdk_region_subtract (visible_region, child_region);
 	  
 	  if (child_func && (*child_func) ((GdkWindow *)child, user_data))

@@ -3685,6 +3685,7 @@ gdk_window_shape_combine_mask (GdkWindow *window,
 			       GdkBitmap *mask,
 			       gint x, gint y)
 {
+  GdkWindowObject *private = (GdkWindowObject *)window;
   Pixmap pixmap;
   gint xoffset, yoffset;
   
@@ -3707,12 +3708,16 @@ gdk_window_shape_combine_mask (GdkWindow *window,
       if (mask)
 	{
 	  pixmap = GDK_PIXMAP_XID (mask);
+	  
+	  private->shaped = TRUE;
 	}
       else
 	{
 	  x = 0;
 	  y = 0;
 	  pixmap = None;
+
+	  private->shaped = FALSE;
 	}
       
       XShapeCombineMask (GDK_WINDOW_XDISPLAY (window),
@@ -3754,7 +3759,8 @@ gdk_window_shape_combine_region (GdkWindow *window,
                                  GdkRegion *shape_region,
                                  gint       offset_x,
                                  gint       offset_y)
-{
+{ 
+  GdkWindowObject *private = (GdkWindowObject *)window;
   gint xoffset, yoffset;
   
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -3782,6 +3788,8 @@ gdk_window_shape_combine_region (GdkWindow *window,
     {
       gint n_rects = 0;
       XRectangle *xrects = NULL;
+
+      private->shaped = TRUE;
 
       _gdk_region_get_xrectangles (shape_region,
                                    0, 0,
