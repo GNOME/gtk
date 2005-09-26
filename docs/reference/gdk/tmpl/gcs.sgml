@@ -170,7 +170,7 @@ useful. For bitmaps, %GDK_AND and %GDK_OR are also useful.
 This function is obsolete and should not be used.
 </para>
 
-@Deprecated: Use gdk_object_unref() instead
+@Deprecated: Use g_object_unref() instead
 <!-- # Unused Parameters # -->
 @gc: a #GdkGC.
 
