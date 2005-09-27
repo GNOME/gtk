@@ -2,6 +2,32 @@
 
 	Merged from HEAD:
 
+	Do not create the save mode-specific widgets in the open modes, so
+	that we don't carry their baggage around.
+
+	* gtk/gtkfilechooserdefault.c
+	(gtk_file_chooser_default_constructor): Don't create the
+	save_widgets here.
+	(save_widgets_create): Set the impl->save_widgets directly here,
+	instead of passing the widgets back to the caller.  Also, pack
+	them into the impl's box.
+	(update_appearance): Create or destroy the save widgets as
+	appropriate.  Set the action of the save_file_name_entry here.
+	(shortcuts_add_current_folder): Set the active item in the
+	save_folder_combo only if it exists.
+	(gtk_file_chooser_default_set_property): Don't set the action of
+	the save_file_name_entry here.
+	(gtk_file_chooser_default_update_current_folder): Set the base
+	folder of the save_file_name_entry only if the entry exists.
+	(shortcuts_drag_data_received_cb): Cast the selection_data->data
+	to (const char *) since that's what shortcuts_drop_uris() expects.
+	(file_list_drag_data_received_cb): Likewise, for
+	g_uri_list_extract_uris().
+
+2005-09-27  Federico Mena Quintero  <federico@ximian.com>
+
+	Merged from HEAD:
+
 	* gtk/gtkfilechooserdefault.c (update_chooser_entry): If the
 	selection is empty, clear the file name entry only if we are in
 	CREATE_FOLDER mode.  In SAVE mode, nothing will be selected when

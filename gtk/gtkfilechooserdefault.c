@@ -1801,7 +1801,7 @@ shortcuts_add_current_folder (GtkFileChooserDefault *impl)
       impl->shortcuts_current_folder_active = success;
     }
 
-  if (success)
+  if (success && impl->save_folder_combo != NULL)
     gtk_combo_box_set_active (GTK_COMBO_BOX (impl->save_folder_combo), pos);
 }
 
@@ -3908,6 +3908,7 @@ file_pane_create (GtkFileChooserDefault *impl,
 
   return vbox;
 }
+
 /* Callback used when the "Browse for more folders" expander is toggled */
 static void
 expander_changed_cb (GtkExpander           *expander,
@@ -3971,13 +3972,16 @@ save_folder_combo_create (GtkFileChooserDefault *impl)
 }
 
 /* Creates the widgets specific to Save mode */
-static GtkWidget *
+static void
 save_widgets_create (GtkFileChooserDefault *impl)
 {
   GtkWidget *vbox;
   GtkWidget *table;
   GtkWidget *widget;
   GtkWidget *alignment;
+
+  if (impl->save_widgets != NULL)
+    return;
 
   vbox = gtk_vbox_new (FALSE, 12);
 
@@ -4036,7 +4040,25 @@ save_widgets_create (GtkFileChooserDefault *impl)
 		    impl);
   gtk_widget_show_all (alignment);
 
-  return vbox;
+  impl->save_widgets = vbox;
+  gtk_box_pack_start (GTK_BOX (impl), impl->save_widgets, FALSE, FALSE, 0);
+  gtk_box_reorder_child (GTK_BOX (impl), impl->save_widgets, 0);
+  gtk_widget_show (impl->save_widgets);
+}
+
+/* Destroys the widgets specific to Save mode */
+static void
+save_widgets_destroy (GtkFileChooserDefault *impl)
+{
+  if (impl->save_widgets == NULL)
+    return;
+
+  gtk_widget_destroy (impl->save_widgets);
+  impl->save_widgets = NULL;
+  impl->save_file_name_entry = NULL;
+  impl->save_folder_label = NULL;
+  impl->save_folder_combo = NULL;
+  impl->save_expander = NULL;
 }
 
 /* Creates the main hpaned with the widgets shared by Open and Save mode */
@@ -4088,10 +4110,6 @@ gtk_file_chooser_default_constructor (GType                  type,
   /* Shortcuts model */
 
   shortcuts_model_create (impl);
-
-  /* Widgets for Save mode */
-  impl->save_widgets = save_widgets_create (impl);
-  gtk_box_pack_start (GTK_BOX (impl), impl->save_widgets, FALSE, FALSE, 0);
 
   /* The browse widgets */
   impl->browse_widgets = browse_widgets_create (impl);
@@ -4281,7 +4299,7 @@ update_appearance (GtkFileChooserDefault *impl)
     {
       const char *text;
 
-      gtk_widget_show (impl->save_widgets);
+      save_widgets_create (impl);
 
       if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
 	text = _("Save in _folder:");
@@ -4289,6 +4307,8 @@ update_appearance (GtkFileChooserDefault *impl)
 	text = _("Create in _folder:");
 
       gtk_label_set_text_with_mnemonic (GTK_LABEL (impl->save_folder_label), text);
+
+      _gtk_file_chooser_entry_set_action (GTK_FILE_CHOOSER_ENTRY (impl->save_file_name_entry), impl->action);
 
       if (gtk_expander_get_expanded (GTK_EXPANDER (impl->save_expander)))
 	{
@@ -4315,7 +4335,7 @@ update_appearance (GtkFileChooserDefault *impl)
   else if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
 	   impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
     {
-      gtk_widget_hide (impl->save_widgets);
+      save_widgets_destroy (impl);
       gtk_widget_show (impl->browse_widgets);
     }
 
@@ -4324,6 +4344,9 @@ update_appearance (GtkFileChooserDefault *impl)
   else
     gtk_widget_show (impl->browse_new_folder_button);
 
+  /* This *is* needed; we need to redraw the file list because the "sensitivity"
+   * of files may change depending whether we are in a file or folder-only mode.
+   */
   gtk_widget_queue_draw (impl->browse_files_tree_view);
 
   g_signal_emit_by_name (impl, "default-size-changed");
@@ -4359,10 +4382,6 @@ gtk_file_chooser_default_set_property (GObject      *object,
 	    impl->action = action;
 	    update_appearance (impl);
 	  }
-	
-	if (impl->save_file_name_entry)
-	  _gtk_file_chooser_entry_set_action (GTK_FILE_CHOOSER_ENTRY (impl->save_file_name_entry),
-					      action);
       }
       break;
 
@@ -5365,8 +5384,9 @@ gtk_file_chooser_default_update_current_folder (GtkFileChooser    *chooser,
 
   /* Set the folder on the save entry */
 
-  _gtk_file_chooser_entry_set_base_folder (GTK_FILE_CHOOSER_ENTRY (impl->save_file_name_entry),
-					   impl->current_folder);
+  if (impl->save_file_name_entry)
+    _gtk_file_chooser_entry_set_base_folder (GTK_FILE_CHOOSER_ENTRY (impl->save_file_name_entry),
+					     impl->current_folder);
 
   /* Create a new list model.  This is slightly evil; we store the result value
    * but perform more actions rather than returning immediately even if it
@@ -6345,7 +6365,7 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
 	  g_assert_not_reached ();
 	}
     }
-  else if (current_focus == impl->save_file_name_entry)
+  else if ((impl->save_file_name_entry != NULL) && (current_focus == impl->save_file_name_entry))
     {
       GtkFilePath *path;
       gboolean is_well_formed, is_empty, is_file_part_empty;
