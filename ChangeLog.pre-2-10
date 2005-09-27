@@ -1,3 +1,9 @@
+2005-09-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkentrycompletion.c (_gtk_entry_completion_resize_popup):
+	Pop below the entry if there's more free space below the entry
+	than above.  (#316948, Tommi Komulainen)
+
 2005-09-26  Federico Mena Quintero  <federico@ximian.com>
 
 	Do not create the save mode-specific widgets in the open modes, so
