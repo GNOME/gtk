@@ -1,3 +1,15 @@
+2005-09-27  Federico Mena Quintero  <federico@ximian.com>
+
+	Merged from HEAD:
+
+	* gtk/gtkfilechooserdefault.c (update_chooser_entry): If the
+	selection is empty, clear the file name entry only if we are in
+	CREATE_FOLDER mode.  In SAVE mode, nothing will be selected when
+	the user starts typeahead in the treeview, and we don't want to
+	clear the file name entry in that case --- the user could be
+	typing-ahead to look for a folder name.  Fixes bug #308332, patch
+	by Jürg Billeter.
+
 2005-09-27  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump version

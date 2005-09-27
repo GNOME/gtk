@@ -5271,7 +5271,14 @@ update_chooser_entry (GtkFileChooserDefault *impl)
 
   if (!gtk_tree_selection_get_selected (selection, NULL, &iter))
     {
-      _gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (impl->save_file_name_entry), "");
+      /* If nothing is selected, we only reset the file name entry if we are in
+       * CREATE_FOLDER mode.  In SAVE mode, nothing will be selected when the
+       * user starts typeahead in the treeview, and we don't want to clear the
+       * file name entry in that case --- the user could be typing-ahead to look
+       * for a folder name.  See http://bugzilla.gnome.org/show_bug.cgi?id=308332
+       */
+      if (impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
+	_gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (impl->save_file_name_entry), "");
       return;
     }
 
