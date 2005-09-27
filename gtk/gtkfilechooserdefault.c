@@ -3985,6 +3985,8 @@ gtk_file_chooser_default_constructor (GType                  type,
   GtkFileChooserDefault *impl;
   GObject *object;
 
+  profile_start ("start", NULL);
+
   object = parent_class->constructor (type,
 				      n_construct_properties,
 				      construct_params);
@@ -4008,6 +4010,8 @@ gtk_file_chooser_default_constructor (GType                  type,
 
   gtk_widget_pop_composite_child ();
   update_appearance (impl);
+
+  profile_end ("end", NULL);
 
   return object;
 }
@@ -4496,6 +4500,8 @@ change_icon_theme (GtkFileChooserDefault *impl)
   GtkSettings *settings;
   gint width, height;
 
+  profile_start ("start", NULL);
+
   settings = gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (impl)));
 
   if (gtk_icon_size_lookup_for_settings (settings, GTK_ICON_SIZE_MENU, &width, &height))
@@ -4505,6 +4511,8 @@ change_icon_theme (GtkFileChooserDefault *impl)
 
   shortcuts_reload_icons (impl);
   gtk_widget_queue_resize (impl->browse_files_tree_view);
+
+  profile_end ("end", NULL);
 }
 
 /* Callback used when a GtkSettings value changes */
@@ -4515,11 +4523,15 @@ settings_notify_cb (GObject               *object,
 {
   const char *name;
 
+  profile_start ("start", NULL);
+
   name = g_param_spec_get_name (pspec);
 
   if (strcmp (name, "gtk-icon-theme-name") == 0
       || strcmp (name, "gtk-icon-sizes") == 0)
     change_icon_theme (impl);
+
+  profile_end ("end", NULL);
 }
 
 /* Installs a signal handler for GtkSettings so that we can monitor changes in
@@ -4530,8 +4542,13 @@ check_icon_theme (GtkFileChooserDefault *impl)
 {
   GtkSettings *settings;
 
+  profile_start ("start", NULL);
+
   if (impl->settings_signal_id)
-    return;
+    {
+      profile_end ("end", NULL);
+      return;
+    }
 
   if (gtk_widget_has_screen (GTK_WIDGET (impl)))
     {
@@ -4541,6 +4558,8 @@ check_icon_theme (GtkFileChooserDefault *impl)
 
       change_icon_theme (impl);
     }
+
+  profile_end ("end", NULL);
 }
 
 static void
@@ -4570,6 +4589,8 @@ gtk_file_chooser_default_screen_changed (GtkWidget *widget,
 {
   GtkFileChooserDefault *impl;
 
+  profile_start ("start", NULL);
+
   impl = GTK_FILE_CHOOSER_DEFAULT (widget);
 
   if (GTK_WIDGET_CLASS (parent_class)->screen_changed)
@@ -4579,6 +4600,8 @@ gtk_file_chooser_default_screen_changed (GtkWidget *widget,
   check_icon_theme (impl);
 
   g_signal_emit_by_name (widget, "default-size-changed");
+
+  profile_end ("end", NULL);
 }
 
 static gboolean
@@ -5181,7 +5204,14 @@ update_chooser_entry (GtkFileChooserDefault *impl)
 
   if (!gtk_tree_selection_get_selected (selection, NULL, &iter))
     {
-      _gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (impl->save_file_name_entry), "");
+      /* If nothing is selected, we only reset the file name entry if we are in
+       * CREATE_FOLDER mode.  In SAVE mode, nothing will be selected when the
+       * user starts typeahead in the treeview, and we don't want to clear the
+       * file name entry in that case --- the user could be typing-ahead to look
+       * for a folder name.  See http://bugzilla.gnome.org/show_bug.cgi?id=308332
+       */
+      if (impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
+	_gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (impl->save_file_name_entry), "");
       return;
     }
 

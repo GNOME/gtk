@@ -1,3 +1,19 @@
+2005-09-27  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c
+	(gtk_file_chooser_default_constructor): Mark the entry/exit of
+	this function for profiling.
+	(check_icon_theme): Likewise.
+	(change_icon_theme): Likewise.
+	(settings_notify_cb): Likewise.
+	(gtk_file_chooser_default_screen_changed): Likewise.
+	(update_chooser_entry): If the selection is empty, clear the file
+	name entry only if we are in CREATE_FOLDER mode.  In SAVE mode,
+	nothing will be selected when the user starts typeahead in the
+	treeview, and we don't want to clear the file name entry in that
+	case --- the user could be typing-ahead to look for a folder name.
+	Fixes bug #308332, patch by Jürg Billeter.
+
 2005-09-27  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkentrycompletion.c (_gtk_entry_completion_resize_popup):
