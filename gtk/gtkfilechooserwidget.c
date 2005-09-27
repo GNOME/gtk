@@ -139,7 +139,6 @@ gtk_file_chooser_widget_constructor (GType                  type,
 {
   GtkFileChooserWidgetPrivate *priv;
   GObject *object;
-  gchar *current_folder;
   
   object = parent_class->constructor (type,
 				      n_construct_properties,
@@ -152,10 +151,6 @@ gtk_file_chooser_widget_constructor (GType                  type,
   
   gtk_box_pack_start (GTK_BOX (object), priv->impl, TRUE, TRUE, 0);
   gtk_widget_show (priv->impl);
-
-  current_folder = g_get_current_dir ();
-  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (priv->impl), current_folder);
-  g_free (current_folder);
 
   _gtk_file_chooser_set_delegate (GTK_FILE_CHOOSER (object),
 				  GTK_FILE_CHOOSER (priv->impl));

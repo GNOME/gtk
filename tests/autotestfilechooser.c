@@ -63,20 +63,17 @@ get_action_name (GtkFileChooserAction action)
   return enum_value->value_name;
 }
 
-static gboolean
-test_widgets_for_current_action (GtkFileChooserDialog *dialog,
-				 GtkFileChooserAction  expected_action)
+static GtkFileChooserDefault *
+get_impl_from_dialog (GtkWidget *dialog)
 {
+  GtkFileChooserDialog *d;
   GtkFileChooserDialogPrivate *dialog_priv;
   GtkFileChooserWidget *chooser_widget;
   GtkFileChooserWidgetPrivate *widget_priv;
   GtkFileChooserDefault *impl;
-  gboolean passed;
 
-  if (gtk_file_chooser_get_action (GTK_FILE_CHOOSER (dialog)) != expected_action)
-    return FALSE;
-
-  dialog_priv = dialog->priv;
+  d = GTK_FILE_CHOOSER_DIALOG (dialog);
+  dialog_priv = d->priv;
   chooser_widget = GTK_FILE_CHOOSER_WIDGET (dialog_priv->widget);
   if (!chooser_widget)
     g_error ("BUG: dialog_priv->widget is not a GtkFileChooserWidget");
@@ -85,6 +82,21 @@ test_widgets_for_current_action (GtkFileChooserDialog *dialog,
   impl = (GtkFileChooserDefault *) (widget_priv->impl);
   if (!impl)
     g_error ("BUG: widget_priv->impl is not a GtkFileChooserDefault");
+
+  return impl;
+}
+
+static gboolean
+test_widgets_for_current_action (GtkFileChooserDialog *dialog,
+				 GtkFileChooserAction  expected_action)
+{
+  GtkFileChooserDefault *impl;
+  gboolean passed;
+
+  if (gtk_file_chooser_get_action (GTK_FILE_CHOOSER (dialog)) != expected_action)
+    return FALSE;
+
+  impl = get_impl_from_dialog (GTK_WIDGET (dialog));
 
   g_assert (impl->action == expected_action);
 
@@ -208,31 +220,11 @@ switch_from_action_cb (GtkFileChooserDialog *dialog,
 }
 
 static gboolean
-test_action_widgets (GtkFileChooserDialog *dialog)
-{
-  GtkFileChooserAction action;
-  gboolean passed;
-
-  action = gtk_file_chooser_get_action (GTK_FILE_CHOOSER (dialog));
-
-  passed = test_widgets_for_current_action (dialog, action);
-  log_test (passed, "test_action_widgets(): widgets for initial action %s", get_action_name (action));
-  if (!passed)
-    return FALSE;
-
-  passed = foreach_action (dialog, switch_from_action_cb, NULL);
-  log_test (passed, "test_action_widgets(): all transitions through property change");
-
-  return passed;
-}
-
-
-int
-main (int argc, char **argv)
+test_action_widgets (void)
 {
   GtkWidget *dialog;
-
-  gtk_init (&argc, &argv);
+  GtkFileChooserAction action;
+  gboolean passed;
 
   dialog = gtk_file_chooser_dialog_new ("Test file chooser",
 					NULL,
@@ -244,9 +236,138 @@ main (int argc, char **argv)
 					NULL);
   gtk_widget_show (dialog);
 
-  test_action_widgets (GTK_FILE_CHOOSER_DIALOG (dialog));
+  action = gtk_file_chooser_get_action (GTK_FILE_CHOOSER (dialog));
+
+  passed = test_widgets_for_current_action (GTK_FILE_CHOOSER_DIALOG (dialog), action);
+  log_test (passed, "test_action_widgets(): widgets for initial action %s", get_action_name (action));
+  if (!passed)
+    return FALSE;
+
+  passed = foreach_action (GTK_FILE_CHOOSER_DIALOG (dialog), switch_from_action_cb, NULL);
+  log_test (passed, "test_action_widgets(): all transitions through property change");
 
   gtk_widget_destroy (dialog);
+
+  return passed;
+}
+
+static gboolean
+test_reload_sequence (gboolean set_folder_before_map)
+{
+  GtkWidget *dialog;
+  GtkFileChooserDefault *impl;
+  gboolean passed;
+
+  passed = TRUE;
+
+  dialog = gtk_file_chooser_dialog_new ("Test file chooser",
+					NULL,
+					GTK_FILE_CHOOSER_ACTION_OPEN,
+					GTK_STOCK_CANCEL,
+					GTK_RESPONSE_CANCEL,
+					GTK_STOCK_OK,
+					GTK_RESPONSE_ACCEPT,
+					NULL);
+  impl = get_impl_from_dialog (dialog);
+
+  if (set_folder_before_map)
+    {
+      gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), g_get_home_dir ());
+
+      passed = (impl->current_folder != NULL
+		&& impl->browse_files_model != NULL
+		&& (impl->load_state == LOAD_PRELOAD || impl->load_state == LOAD_LOADING || impl->load_state == LOAD_FINISHED)
+		&& impl->reload_state == RELOAD_HAS_FOLDER
+		&& (impl->load_state == LOAD_PRELOAD ? (impl->load_timeout_id != 0) : TRUE)
+		&& ((impl->load_state == LOAD_LOADING || impl->load_state == LOAD_FINISHED)
+		    ? (impl->load_timeout_id == 0 && impl->sort_model != NULL)
+		    : TRUE));
+    }
+  else
+    {
+      /* Initially, no folder is not loaded or pending */
+      passed = passed && (impl->current_folder == NULL
+			  && impl->sort_model == NULL
+			  && impl->browse_files_model == NULL
+			  && impl->load_state == LOAD_EMPTY
+			  && impl->reload_state == RELOAD_EMPTY
+			  && impl->load_timeout_id == 0);
+    }
+
+  if (!passed)
+    return FALSE;
+
+  /* After mapping, it is loading some folder, either the one that was explicitly set or the default one */
+
+  gtk_widget_show (dialog);
+
+  passed = (impl->current_folder != NULL
+	    && impl->browse_files_model != NULL
+	    && (impl->load_state == LOAD_PRELOAD || impl->load_state == LOAD_LOADING || impl->load_state == LOAD_FINISHED)
+	    && impl->reload_state == RELOAD_HAS_FOLDER
+	    && (impl->load_state == LOAD_PRELOAD ? (impl->load_timeout_id != 0) : TRUE)
+	    && ((impl->load_state == LOAD_LOADING || impl->load_state == LOAD_FINISHED)
+		? (impl->load_timeout_id == 0 && impl->sort_model != NULL)
+		: TRUE));
+  if (!passed)
+    return FALSE;
+
+  /* Unmap it; we should still have a folder */
+
+  gtk_widget_hide (dialog);
+
+  passed = (impl->current_folder != NULL
+	    && impl->browse_files_model != NULL
+	    && (impl->load_state == LOAD_PRELOAD || impl->load_state == LOAD_LOADING || impl->load_state == LOAD_FINISHED)
+	    && impl->reload_state == RELOAD_WAS_UNMAPPED
+	    && (impl->load_state == LOAD_PRELOAD ? (impl->load_timeout_id != 0) : TRUE)
+	    && ((impl->load_state == LOAD_LOADING || impl->load_state == LOAD_FINISHED)
+		? (impl->load_timeout_id == 0 && impl->sort_model != NULL)
+		: TRUE));
+
+  /* Map it again! */
+
+  gtk_widget_show (dialog);
+  
+  passed = (impl->current_folder != NULL
+	    && impl->browse_files_model != NULL
+	    && (impl->load_state == LOAD_PRELOAD || impl->load_state == LOAD_LOADING || impl->load_state == LOAD_FINISHED)
+	    && impl->reload_state == RELOAD_HAS_FOLDER
+	    && (impl->load_state == LOAD_PRELOAD ? (impl->load_timeout_id != 0) : TRUE)
+	    && ((impl->load_state == LOAD_LOADING || impl->load_state == LOAD_FINISHED)
+		? (impl->load_timeout_id == 0 && impl->sort_model != NULL)
+		: TRUE));
+  if (!passed)
+    return FALSE;
+
+  gtk_widget_destroy (dialog);
+
+  return passed;
+}
+
+static gboolean
+test_reload (void)
+{
+  gboolean passed;
+
+  passed = test_reload_sequence (FALSE);
+  log_test (passed, "test_reload(): create and use the default folder");
+  if (!passed)
+    return FALSE;
+
+  passed = test_reload_sequence (TRUE);
+  log_test (passed, "test_reload(): set a folder explicitly before mapping");
+
+  return passed;
+}
+
+int
+main (int argc, char **argv)
+{
+  gtk_init (&argc, &argv);
+
+  test_action_widgets ();
+  test_reload ();
 
   return 0;
 }

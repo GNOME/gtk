@@ -258,6 +258,7 @@ static void     gtk_file_chooser_default_get_property (GObject               *ob
 static void     gtk_file_chooser_default_dispose      (GObject               *object);
 static void     gtk_file_chooser_default_show_all       (GtkWidget             *widget);
 static void     gtk_file_chooser_default_map            (GtkWidget             *widget);
+static void     gtk_file_chooser_default_unmap          (GtkWidget             *widget);
 static void     gtk_file_chooser_default_hierarchy_changed (GtkWidget          *widget,
 							    GtkWidget          *previous_toplevel);
 static void     gtk_file_chooser_default_style_set      (GtkWidget             *widget,
@@ -500,6 +501,7 @@ gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
 
   widget_class->show_all = gtk_file_chooser_default_show_all;
   widget_class->map = gtk_file_chooser_default_map;
+  widget_class->unmap = gtk_file_chooser_default_unmap;
   widget_class->hierarchy_changed = gtk_file_chooser_default_hierarchy_changed;
   widget_class->style_set = gtk_file_chooser_default_style_set;
   widget_class->screen_changed = gtk_file_chooser_default_screen_changed;
@@ -634,6 +636,7 @@ gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
   impl->show_hidden = FALSE;
   impl->icon_size = FALLBACK_ICON_SIZE;
   impl->load_state = LOAD_EMPTY;
+  impl->reload_state = RELOAD_EMPTY;
   impl->pending_select_paths = NULL;
 
   gtk_box_set_spacing (GTK_BOX (impl), 12);
@@ -1749,7 +1752,6 @@ shortcuts_model_create (GtkFileChooserDefault *impl)
       shortcuts_append_home (impl);
       shortcuts_append_desktop (impl);
       shortcuts_add_volumes (impl);
-      shortcuts_add_bookmarks (impl);
     }
 
   impl->shortcuts_filter_model = shortcuts_model_filter_new (impl,
@@ -4656,6 +4658,7 @@ static void
 gtk_file_chooser_default_map (GtkWidget *widget)
 {
   GtkFileChooserDefault *impl;
+  char *current_working_dir;
 
   profile_start ("start", NULL);
 
@@ -4663,15 +4666,47 @@ gtk_file_chooser_default_map (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (parent_class)->map (widget);
 
-  if (impl->current_folder)
+  switch (impl->reload_state)
     {
+    case RELOAD_EMPTY:
+      /* The user didn't explicitly give us a folder to display, so we'll use the cwd */
+      current_working_dir = g_get_current_dir ();
+      gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (impl), current_working_dir);
+      g_free (current_working_dir);
+      break;
+
+    case RELOAD_HAS_FOLDER:
+      /* Nothing; we are already loading or loaded, so we don't need to reload */
+      break;
+
+    case RELOAD_WAS_UNMAPPED:
+      /* Just reload the current folder */
+      g_assert (impl->current_folder != NULL);
+
       pending_select_paths_store_selection (impl);
       change_folder_and_display_error (impl, impl->current_folder);
+      break;
+
+    default:
+      g_assert_not_reached ();
     }
 
   bookmarks_changed_cb (impl->file_system, impl);
 
   profile_end ("end", NULL);
+}
+
+/* GtkWidget::unmap method */
+static void
+gtk_file_chooser_default_unmap (GtkWidget *widget)
+{
+  GtkFileChooserDefault *impl;
+
+  impl = GTK_FILE_CHOOSER_DEFAULT (widget);
+
+  GTK_WIDGET_CLASS (parent_class)->unmap (widget);
+
+  impl->reload_state = RELOAD_WAS_UNMAPPED;
 }
 
 static gboolean
@@ -5283,6 +5318,8 @@ gtk_file_chooser_default_update_current_folder (GtkFileChooser    *chooser,
 	gtk_file_path_free (impl->current_folder);
 
       impl->current_folder = gtk_file_path_copy (path);
+
+      impl->reload_state = RELOAD_HAS_FOLDER;
     }
 
   /* Update the widgets that may trigger a folder change themselves.  */

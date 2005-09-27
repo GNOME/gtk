@@ -1,5 +1,36 @@
 2005-09-27  Federico Mena Quintero  <federico@ximian.com>
 
+	Don't reload the current folder unnecessarily on ::map().
+
+	* gtk/gtkfilechooserprivate.h (ReloadState): New enum to represent
+	the reloading state.
+	(struct _GtkFileChooserDefault): Added a "reload_state" field.
+
+	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_init):
+	Initialize impl->reload_state.
+	(gtk_file_chooser_default_map): Check the impl->reload_state; load
+	a default folder if no folder has been set, or reload the current
+	one only if we had been unmapped first.
+	(gtk_file_chooser_default_update_current_folder): Set the
+	reload_state to RELOAD_HAS_FOLDER.
+	(gtk_file_chooser_default_unmap): Implement, and set the
+	reload_state to RELOAD_WAS_UNMAPPED.
+	(shortcuts_model_create): Don't call shortcuts_add_bookmarks()
+	here; they'll get (re)loaded on ::map() anyway.
+
+	* gtk/gtkfilechooserwidget.c
+	(gtk_file_chooser_widget_constructor): Don't set a default folder here.
+
+	* tests/autotestfilechooser.c (test_action_widgets): Don't take in
+	a dialog; build it ourselves.
+	(test_reload): New test to ensure that we don't load the default
+	folder more than once, and that we reload it when
+	unmapping/remapping.
+	(get_impl_from_dialog): New utility function.
+	(test_widgets_for_current_action): Use get_impl_from_dialog().
+
+2005-09-27  Federico Mena Quintero  <federico@ximian.com>
+
 	* gtk/gtkfilechooserdefault.c
 	(gtk_file_chooser_default_constructor): Mark the entry/exit of
 	this function for profiling.
